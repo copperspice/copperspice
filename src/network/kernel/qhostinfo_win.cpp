@@ -45,16 +45,14 @@ struct qt_addrinfo {
    qt_addrinfo *ai_next;
 };
 
-//###
-#define QT_SOCKLEN_T int
 #ifndef NI_MAXHOST // already defined to 1025 in ws2tcpip.h?
 #define NI_MAXHOST 1024
 #endif
 
-typedef int (__stdcall *getnameinfoProto)(const sockaddr *, QT_SOCKLEN_T, const char *, DWORD, const char *, DWORD,
-      int);
+typedef int (__stdcall *getnameinfoProto)(const sockaddr *, int, const char *, DWORD, const char *, DWORD, int);
 typedef int (__stdcall *getaddrinfoProto)(const char *, const char *, const qt_addrinfo *, qt_addrinfo **);
 typedef int (__stdcall *freeaddrinfoProto)(qt_addrinfo *);
+
 static getnameinfoProto local_getnameinfo = 0;
 static getaddrinfoProto local_getaddrinfo = 0;
 static freeaddrinfoProto local_freeaddrinfo = 0;
@@ -118,7 +116,8 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          sockaddr_in sa4;
          sockaddr_in6 sa6;
          sockaddr *sa;
-         QT_SOCKLEN_T saSize;
+
+         int saSize;
 
          if (address.protocol() == QAbstractSocket::IPv4Protocol) {
             sa = (sockaddr *)&sa4;

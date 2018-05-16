@@ -63,11 +63,12 @@ static void resolveLibraryInternal()
    QLibrary lib;
 
 #ifdef LIBRESOLV_SO
-   lib.setFileName(QStringLiteral(LIBRESOLV_SO));
-   if (!lib.load())
+   lib.setFileName(LIBRESOLV_SO);
+
+   if (! lib.load())
 #endif
    {
-      lib.setFileName(QLatin1String("resolv"));
+      lib.setFileName("resolv");
       if (!lib.load()) {
          return;
       }
@@ -221,9 +222,11 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
    }
 
    // Skip the query host, type (2 bytes) and class (2 bytes).
-   char host[PACKETSZ], answer[PACKETSZ];
+   char host[PACKETSZ];
+   char answer[PACKETSZ];
    unsigned char *p = response + sizeof(HEADER);
    int status = local_dn_expand(response, response + responseLength, p, host, sizeof(host));
+
    if (status < 0) {
       reply->error = QDnsLookup::InvalidReplyError;
       reply->errorString = tr("Could not expand domain name");
@@ -233,14 +236,16 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
 
    // Extract results.
    int answerIndex = 0;
+
    while ((p < response + responseLength) && (answerIndex < answerCount)) {
       status = local_dn_expand(response, response + responseLength, p, host, sizeof(host));
+
       if (status < 0) {
          reply->error = QDnsLookup::InvalidReplyError;
          reply->errorString = tr("Could not expand domain name");
          return;
       }
-      const QString name = QUrl::fromAce(host);
+      const QString name = QUrl::fromAce(QString::fromUtf8(host));
 
       p += status;
       const quint16 type = (p[0] << 8) | p[1];
@@ -284,8 +289,9 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
          QDnsDomainNameRecord record;
          record.d->name = name;
          record.d->timeToLive = ttl;
-         record.d->value = QUrl::fromAce(answer);
+         record.d->value = QUrl::fromAce(QString::fromUtf8(answer));
          reply->canonicalNameRecords.append(record);
+
       } else if (type == QDnsLookup::NS) {
          status = local_dn_expand(response, response + responseLength, p, answer, sizeof(answer));
          if (status < 0) {
@@ -296,8 +302,9 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
          QDnsDomainNameRecord record;
          record.d->name = name;
          record.d->timeToLive = ttl;
-         record.d->value = QUrl::fromAce(answer);
+         record.d->value = QUrl::fromAce(QString::fromUtf8(answer));
          reply->nameServerRecords.append(record);
+
       } else if (type == QDnsLookup::PTR) {
          status = local_dn_expand(response, response + responseLength, p, answer, sizeof(answer));
          if (status < 0) {
@@ -308,8 +315,9 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
          QDnsDomainNameRecord record;
          record.d->name = name;
          record.d->timeToLive = ttl;
-         record.d->value = QUrl::fromAce(answer);
+         record.d->value = QUrl::fromAce(QString::fromUtf8(answer));
          reply->pointerRecords.append(record);
+
       } else if (type == QDnsLookup::MX) {
          const quint16 preference = (p[0] << 8) | p[1];
          status = local_dn_expand(response, response + responseLength, p + 2, answer, sizeof(answer));
@@ -319,11 +327,12 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
             return;
          }
          QDnsMailExchangeRecord record;
-         record.d->exchange = QUrl::fromAce(answer);
+         record.d->exchange = QUrl::fromAce(QString::fromUtf8(answer));
          record.d->name = name;
          record.d->preference = preference;
          record.d->timeToLive = ttl;
          reply->mailExchangeRecords.append(record);
+
       } else if (type == QDnsLookup::SRV) {
          const quint16 priority = (p[0] << 8) | p[1];
          const quint16 weight = (p[2] << 8) | p[3];
@@ -336,7 +345,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
          }
          QDnsServiceRecord record;
          record.d->name = name;
-         record.d->target = QUrl::fromAce(answer);
+         record.d->target = QUrl::fromAce(QString::fromUtf8(answer));
          record.d->port = port;
          record.d->priority = priority;
          record.d->timeToLive = ttl;

@@ -300,7 +300,8 @@ void QHttpNetworkConnectionPrivate::prepareRequest(HttpMessagePair &messagePair)
    value = request.headerField("accept-language");
 
    if (value.isEmpty()) {
-      QString systemLocale = QLocale::system().name().replace(QChar::fromLatin1('_'), QChar::fromLatin1('-'));
+
+      QString systemLocale = QLocale::system().name().replace('_', '-');
       QString acceptLanguage;
 
       if (systemLocale == "C") {

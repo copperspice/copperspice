@@ -29,8 +29,6 @@
 #include <qsettings.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 void QLocalServerPrivate::init()
 {
    Q_Q(QLocalServer);
@@ -39,25 +37,28 @@ void QLocalServerPrivate::init()
 
 bool QLocalServerPrivate::listen(const QString &requestedServerName)
 {
-   if (!tcpServer.listen(QHostAddress::LocalHost)) {
+   if (! tcpServer.listen(QHostAddress::LocalHost)) {
       return false;
    }
 
-   const QLatin1String prefix("QLocalServer/");
+   const QString prefix("QLocalServer/");
+
    if (requestedServerName.startsWith(prefix)) {
       fullServerName = requestedServerName;
    } else {
       fullServerName = prefix + requestedServerName;
    }
 
-   QSettings settings(QLatin1String("CopperSpice"), QLatin1String("CS"));
+   QSettings settings("CopperSpice", "CS");
+
    if (settings.contains(fullServerName)) {
-      qWarning("QLocalServer::listen: server name is already in use.");
+      qWarning("QLocalServer::listen(): server name is already in use.");
       tcpServer.close();
       return false;
    }
 
    settings.setValue(fullServerName, tcpServer.serverPort());
+
    return true;
 }
 
@@ -67,8 +68,9 @@ bool QLocalServerPrivate::listen(qintptr socketDescriptor)
 }
 void QLocalServerPrivate::closeServer()
 {
-   QSettings settings(QLatin1String("CopperSpice"), QLatin1String("CS"));
-   if (fullServerName == QLatin1String("QLocalServer")) {
+   QSettings settings("CopperSpice", "CS");
+
+   if (fullServerName == "QLocalServer") {
       settings.setValue(fullServerName, QVariant());
    } else {
       settings.remove(fullServerName);
@@ -88,8 +90,9 @@ void QLocalServerPrivate::waitForNewConnection(int msec, bool *timedOut)
 void QLocalServerPrivate::_q_onNewConnection()
 {
    Q_Q(QLocalServer);
+
    QTcpSocket *tcpSocket = tcpServer.nextPendingConnection();
-   if (!tcpSocket) {
+   if (! tcpSocket) {
       qWarning("QLocalServer: no pending connection");
       return;
    }
@@ -102,6 +105,7 @@ void QLocalServerPrivate::_q_onNewConnection()
 bool QLocalServerPrivate::removeServer(const QString &name)
 {
    const QLatin1String prefix("QLocalServer/");
+
    QString serverName;
    if (name.startsWith(prefix)) {
       serverName = name;
@@ -109,12 +113,11 @@ bool QLocalServerPrivate::removeServer(const QString &name)
       serverName = prefix + name;
    }
 
-   QSettings settings(QLatin1String("CopperSpice"), QLatin1String("CS"));
+   QSettings settings("CopperSpice", "CS");
+
    if (settings.contains(serverName)) {
       settings.remove(serverName);
    }
 
    return true;
 }
-
-QT_END_NAMESPACE

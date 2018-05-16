@@ -1314,46 +1314,23 @@ qint64 QAbstractSocket::bytesAvailable() const
    return available;
 }
 
-/*!
-    Returns the host port number (in native byte order) of the local
-    socket if available; otherwise returns 0.
-
-    \sa localAddress(), peerPort(), setLocalPort()
-*/
 quint16 QAbstractSocket::localPort() const
 {
    Q_D(const QAbstractSocket);
    return d->localPort;
 }
 
-/*!
-    Returns the host address of the local socket if available;
-    otherwise returns QHostAddress::Null.
-
-    This is normally the main IP address of the host, but can be
-    QHostAddress::LocalHost (127.0.0.1) for connections to the
-    local host.
-
-    \sa localPort(), peerAddress(), setLocalAddress()
-*/
 QHostAddress QAbstractSocket::localAddress() const
 {
    Q_D(const QAbstractSocket);
    return d->localAddress;
 }
 
-/*!
-    Returns the port of the connected peer if the socket is in
-    ConnectedState; otherwise returns 0.
-
-    \sa peerAddress(), localPort(), setPeerPort()
-*/
 quint16 QAbstractSocket::peerPort() const
 {
    Q_D(const QAbstractSocket);
    return d->peerPort;
 }
-
 
 QHostAddress QAbstractSocket::peerAddress() const
 {
@@ -1367,7 +1344,6 @@ QString QAbstractSocket::peerName() const
    Q_D(const QAbstractSocket);
    return d->peerName.isEmpty() ? d->hostName : d->peerName;
 }
-
 
 bool QAbstractSocket::canReadLine() const
 {

@@ -2336,7 +2336,7 @@ void QNetworkReplyHttpImpl::_q_startOperation()
 bool QNetworkReplyHttpImpl::start(const QNetworkRequest &un_named_arg1)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->start(un_named_arg1);
+   return d->start(un_named_arg1);
 }
 
 void QNetworkReplyHttpImpl::_q_cacheLoadReadyRead()

@@ -191,8 +191,10 @@ bool QLocalServerPrivate::listen(qintptr socketDescriptor)
 
 #ifdef Q_OS_LINUX
    struct ::sockaddr_un addr;
+
    QT_SOCKLEN_T len = sizeof(addr);
    memset(&addr, 0, sizeof(addr));
+
    if (0 == ::getsockname(listenSocket, (sockaddr *)&addr, &len)) {
       // check for absract sockets
       if (addr.sun_family == PF_UNIX && addr.sun_path[0] == 0) {

@@ -335,11 +335,14 @@ void QFtpDTP::connectToHost(const QString &host, quint16 port)
       socket = 0;
    }
    socket = new QTcpSocket(this);
+
 #ifndef QT_NO_BEARERMANAGEMENT
-   //copy network session down to the socket
+   // copy network session down to the socket
    socket->setProperty("_q_networksession", property("_q_networksession"));
 #endif
-   socket->setObjectName(QLatin1String("QFtpDTP Passive state socket"));
+
+   socket->setObjectName("QFtpDTP Passive state socket");
+
    connect(socket, SIGNAL(connected()),          this,   SLOT(socketConnected()));
    connect(socket, SIGNAL(readyRead()),          this,   SLOT(socketReadyRead()));
 
@@ -355,13 +358,14 @@ int QFtpDTP::setupListener(const QHostAddress &address)
 {
 
 #ifndef QT_NO_BEARERMANAGEMENT
-   //copy network session down to the socket
+   // copy network session down to the socket
    listener.setProperty("_q_networksession", property("_q_networksession"));
 #endif
 
-   if (!listener.isListening() && !listener.listen(address, 0)) {
+   if (! listener.isListening() && ! listener.listen(address, 0)) {
       return -1;
    }
+
    return listener.serverPort();
 }
 
@@ -382,15 +386,17 @@ QTcpSocket::SocketState QFtpDTP::state() const
 
 qint64 QFtpDTP::bytesAvailable() const
 {
-   if (!socket || socket->state() != QTcpSocket::ConnectedState) {
+   if (! socket || socket->state() != QTcpSocket::ConnectedState) {
       return (qint64) bytesFromSocket.size();
    }
+
    return socket->bytesAvailable();
 }
 
 qint64 QFtpDTP::read(char *data, qint64 maxlen)
 {
    qint64 read;
+
    if (socket && socket->state() == QTcpSocket::ConnectedState) {
       read = socket->read(data, maxlen);
    } else {
@@ -423,9 +429,11 @@ void QFtpDTP::writeData()
    }
 
    if (is_ba) {
+
 #if defined(QFTPDTP_DEBUG)
       qDebug("QFtpDTP::writeData: write %d bytes", data.ba->size());
 #endif
+
       if (data.ba->size() == 0) {
          emit dataTransferProgress(0, bytesTotal);
       } else {
@@ -435,14 +443,17 @@ void QFtpDTP::writeData()
       socket->close();
 
       clearData();
+
    } else if (data.dev) {
       callWriteData = false;
       const qint64 blockSize = 16 * 1024;
       char buf[16 * 1024];
       qint64 read = data.dev->read(buf, blockSize);
+
 #if defined(QFTPDTP_DEBUG)
       qDebug("QFtpDTP::writeData: write() of size %lli bytes", read);
 #endif
+
       if (read > 0) {
          socket->write(buf, read);
       } else if (read == -1 || (!data.dev->isSequential() && data.dev->atEnd())) {

@@ -144,7 +144,7 @@ inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid
    }
 
    bool ok;
-   uint id = scopeid.toUInt(&ok);
+   uint id = scopeid.toInteger<uint>(&ok);
 
 #ifndef QT_NO_IPV6IFNAME
    if (! ok) {

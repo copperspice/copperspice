@@ -246,31 +246,33 @@ class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
    bool fetchConnectionParameters();
    static uint scopeIdFromString(const QString &scopeid);
 
-    /*! \internal
-        Sets \a address and \a port in the \a aa sockaddr structure and the size in \a sockAddrSize.
-        The address \a is converted to IPv6 if the current socket protocol is also IPv6.
-    */
-    void setPortAndAddress(quint16 port, const QHostAddress &address, qt_sockaddr *aa, QT_SOCKLEN_T *sockAddrSize) {
+#ifdef Q_OS_WIN
+   void setPortAndAddress(quint16 port, const QHostAddress &address, qt_sockaddr *sa_struct, int *sockAddrSize) {
+#else
+   void setPortAndAddress(quint16 port, const QHostAddress &address, qt_sockaddr *sa_struct, QT_SOCKLEN_T *sockAddrSize) {
+#endif
 
         if (address.protocol() == QAbstractSocket::IPv6Protocol
                   || address.protocol() == QAbstractSocket::AnyIPProtocol
                   || socketProtocol == QAbstractSocket::IPv6Protocol
                   || socketProtocol == QAbstractSocket::AnyIPProtocol) {
 
-            memset(&aa->a6, 0, sizeof(sockaddr_in6));
-            aa->a6.sin6_family = AF_INET6;
-            aa->a6.sin6_scope_id = scopeIdFromString(address.scopeId());
-            aa->a6.sin6_port = htons(port);
+            memset(&sa_struct->a6, 0, sizeof(sockaddr_in6));
+            sa_struct->a6.sin6_family = AF_INET6;
+            sa_struct->a6.sin6_scope_id = scopeIdFromString(address.scopeId());
+            sa_struct->a6.sin6_port = htons(port);
 
             Q_IPV6ADDR tmp = address.toIPv6Address();
-            memcpy(&aa->a6.sin6_addr, &tmp, sizeof(tmp));
+            memcpy(&sa_struct->a6.sin6_addr, &tmp, sizeof(tmp));
+
             *sockAddrSize = sizeof(sockaddr_in6);
 
         } else {
-            memset(&aa->a, 0, sizeof(sockaddr_in));
-            aa->a4.sin_family = AF_INET;
-            aa->a4.sin_port = htons(port);
-            aa->a4.sin_addr.s_addr = htonl(address.toIPv4Address());
+            memset(&sa_struct->a, 0, sizeof(sockaddr_in));
+            sa_struct->a4.sin_family = AF_INET;
+            sa_struct->a4.sin_port = htons(port);
+            sa_struct->a4.sin_addr.s_addr = htonl(address.toIPv4Address());
+
             *sockAddrSize = sizeof(sockaddr_in);
         }
     }

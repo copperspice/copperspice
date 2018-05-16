@@ -195,21 +195,21 @@ void verboseWSErrorDebug(int r)
          qDebug("WSA error : Unknown");
          break;
    }
+
    qErrnoWarning(r, "more details");
 }
 
-/*
-    Returns a human readable representation of the first \a len
-    characters in \a data.
-*/
 static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
 {
-   if (!data) {
+   if (! data) {
       return "(null)";
    }
+
    QByteArray out;
+
    for (int i = 0; i < len; ++i) {
       char c = data[i];
+
       if (isprint(int(uchar(c)))) {
          out += c;
       } else switch (c) {
@@ -236,17 +236,15 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
    return out;
 }
 
-
 #define WS_ERROR_DEBUG(x) verboseWSErrorDebug(x);
 
 #else
-
 #define WS_ERROR_DEBUG(x) Q_UNUSED(x)
 
 #endif
 
 #ifndef AF_INET6
-#define AF_INET6        23              /* Internetwork Version 6 */
+#define AF_INET6   23              /* Internetwork Version 6 */
 #endif
 
 #ifndef SO_EXCLUSIVEADDRUSE
@@ -379,7 +377,7 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
 static inline QAbstractSocket::SocketType qt_socket_getType(qintptr socketDescriptor)
 {
    int value = 0;
-   QT_SOCKLEN_T valueSize = sizeof(value);
+   int valueSize = sizeof(value);
 
    if (::getsockopt(socketDescriptor, SOL_SOCKET, SO_TYPE, (char *) &value, &valueSize) != 0) {
       WS_ERROR_DEBUG(WSAGetLastError());
@@ -632,8 +630,14 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
 */
 bool QNativeSocketEnginePrivate::fetchConnectionParameters()
 {
+
+// broom
+qDebug("\n BROOM fetchConnectionParameters()  GOOD RUN   L-637");
+
+
    localPort = 0;
    localAddress.clear();
+
    peerPort = 0;
    peerAddress.clear();
 
@@ -642,12 +646,14 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
    }
 
    qt_sockaddr sa;
-   QT_SOCKLEN_T sockAddrSize = sizeof(sa);
+   int sockAddrSize = sizeof(sa);
 
    // Determine local address
    memset(&sa, 0, sizeof(sa));
+
    if (::getsockname(socketDescriptor, &sa.a, &sockAddrSize) == 0) {
       qt_socket_getPortAndAddress(socketDescriptor, &sa, &localPort, &localAddress);
+
       // Determine protocol family
       switch (sa.a.sa_family) {
          case AF_INET:
@@ -662,6 +668,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
             socketProtocol = QAbstractSocket::UnknownNetworkLayerProtocol;
             break;
       }
+
    } else {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
@@ -708,6 +715,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)
    QString socketProtocolStr = "UnknownProtocol";
+
    if (socketProtocol == QAbstractSocket::IPv4Protocol) {
       socketProtocolStr = "IPv4Protocol";
    } else if (socketProtocol == QAbstractSocket::IPv6Protocol) {
@@ -715,20 +723,21 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
    }
 
    QString socketTypeStr = "UnknownSocketType";
+
    if (socketType == QAbstractSocket::TcpSocket) {
       socketTypeStr = "TcpSocket";
    } else if (socketType == QAbstractSocket::UdpSocket) {
       socketTypeStr = "UdpSocket";
    }
 
-   qDebug("QNativeSocketEnginePrivate::fetchConnectionParameters() localAddress == %s, localPort = %i, peerAddress == %s, peerPort = %i, socketProtocol == %s, socketType == %s",
+   qDebug("QNativeSocketEnginePrivate::fetchConnectionParameters() localAddress == %s, "
+          "localPort = %i, peerAddress == %s, peerPort = %i, socketProtocol == %s, socketType == %s",
           localAddress.toString().toLatin1().constData(), localPort, peerAddress.toString().toLatin1().constData(), peerPort,
           socketProtocolStr.toLatin1().constData(), socketTypeStr.toLatin1().constData());
 #endif
 
    return true;
 }
-
 
 bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quint16 port)
 {
@@ -738,12 +747,14 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
 #endif
 
    qt_sockaddr aa;
-   QT_SOCKLEN_T sockAddrSize = 0;
+   int sockAddrSize = 0;
 
    setPortAndAddress(port, address, &aa, &sockAddrSize);
 
-   if ((socketProtocol == QAbstractSocket::IPv6Protocol || socketProtocol == QAbstractSocket::AnyIPProtocol) && address.toIPv4Address()) {
-      //IPV6_V6ONLY option must be cleared to connect to a V4 mapped address
+   if ((socketProtocol == QAbstractSocket::IPv6Protocol || socketProtocol == QAbstractSocket::AnyIPProtocol)
+                  && address.toIPv4Address()) {
+
+      // IPV6_V6ONLY option must be cleared to connect to a V4 mapped address
       if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0) {
          DWORD ipv6only = 0;
          ipv6only = ::setsockopt(socketDescriptor, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6only, sizeof(ipv6only) );
@@ -752,6 +763,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
 
    forever {
       int connectResult = ::WSAConnect(socketDescriptor, &aa.a, sockAddrSize, 0, 0, 0, 0);
+
       if (connectResult == SOCKET_ERROR)    {
          int err = WSAGetLastError();
          WS_ERROR_DEBUG(err);
@@ -767,10 +779,11 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
                // If WSAConnect returns WSAEWOULDBLOCK on the second
                // connection attempt, we have to check SO_ERROR's
                // value to detect ECONNREFUSED. If we don't get
-               // ECONNREFUSED, we'll have to treat it as an
-               // unfinished operation.
+               // ECONNREFUSED, we'll have to treat it as an unfinished operation.
+
                int value = 0;
-               QT_SOCKLEN_T valueSize = sizeof(value);
+               int valueSize = sizeof(value);
+
                bool tryAgain = false;
                bool errorDetected = false;
                int tries = 0;
@@ -872,10 +885,10 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
    return true;
 }
 
-
-bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &a, quint16 port)
+bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &addr, quint16 port)
 {
-   QHostAddress address = a;
+   QHostAddress address = addr;
+
    if (address.protocol() == QAbstractSocket::IPv4Protocol) {
       if ((address.toIPv4Address() & 0xffff0000) == 0xefff0000) {
          // binding to a multicast address
@@ -883,49 +896,87 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &a, quint16 port)
       }
    }
 
-   qt_sockaddr aa;
-   QT_SOCKLEN_T sockAddrSize = 0;
-   setPortAndAddress(port, address, &aa, &sockAddrSize);
+   qt_sockaddr sa_struct;
+   int sockAddrSize = 0;
 
-   if (aa.a.sa_family == AF_INET6) {
-      // The default may change in future, so set it explicitly
+   setPortAndAddress(port, address, &sa_struct, &sockAddrSize);
+
+   if (sa_struct.a.sa_family == AF_INET6) {
+      // default may change in future, so set it explicitly
       int ipv6only = 0;
+
       if (address.protocol() == QAbstractSocket::IPv6Protocol) {
          ipv6only = 1;
       }
+
       ::setsockopt(socketDescriptor, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6only, sizeof(ipv6only) );
    }
-   int bindResult = ::bind(socketDescriptor, &aa.a, sockAddrSize);
-   if (bindResult == SOCKET_ERROR && WSAGetLastError() == WSAEAFNOSUPPORT
-         && address.protocol() == QAbstractSocket::AnyIPProtocol) {
+
+qDebug("\n  BROOM  nativeBind()  915 sa_struct address = %d  size = %llu", sa_struct.a.sa_family, (uint64_t)sockAddrSize );
+
+
+   int bindResult = ::bind(socketDescriptor, &sa_struct.a, sockAddrSize);
+
+
+// BROOM
+int err = WSAGetLastError();
+
+qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false  error # = %d   (%s)",
+           address.toString().toLatin1().constData(), port, err, socketErrorString.toLatin1().constData());
+
+
+//   BROOM - put back in !
+//   if (bindResult == SOCKET_ERROR && WSAGetLastError() == WSAEAFNOSUPPORT
+//         && address.protocol() == QAbstractSocket::AnyIPProtocol) {
+
+
+   if (bindResult == SOCKET_ERROR) {
       // retry with v4
-      aa.a4.sin_family = AF_INET;
-      aa.a4.sin_port = htons(port);
-      aa.a4.sin_addr.s_addr = htonl(address.toIPv4Address());
-      sockAddrSize = sizeof(aa.a4);
-      bindResult = ::bind(socketDescriptor, &aa.a, sockAddrSize);
+
+qDebug("\n**  BROOM  nativeBind()  RETRY v4" );
+
+
+      sa_struct.a4.sin_family      = AF_INET;
+      sa_struct.a4.sin_port        = htons(port);
+      sa_struct.a4.sin_addr.s_addr = htonl(address.toIPv4Address());
+
+      sockAddrSize = sizeof(sa_struct.a4);
+      bindResult   = ::bind(socketDescriptor, &sa_struct.a, sockAddrSize);
    }
 
    if (bindResult == SOCKET_ERROR) {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
+
       switch (err) {
+
          case WSANOTINITIALISED:
-            //###
             break;
+
          case WSAEADDRINUSE:
          case WSAEINVAL:
             setError(QAbstractSocket::AddressInUseError, AddressInuseErrorString);
             break;
+
          case WSAEACCES:
             setError(QAbstractSocket::SocketAccessError, AddressProtectedErrorString);
             break;
+
          case WSAEADDRNOTAVAIL:
             setError(QAbstractSocket::SocketAddressNotAvailableError, AddressNotAvailableErrorString);
             break;
+
          default:
             break;
       }
+
+
+// BROOM
+qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false  error # = %d   (%s)",
+           address.toString().toLatin1().constData(), port, err, socketErrorString.toLatin1().constData());
+
+
+
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)
       qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false (%s)",
@@ -936,10 +987,15 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &a, quint16 port)
    }
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)
-   qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == true",
-          address.toString().toLatin1().constData(), port);
+   qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == true", address.toString().toLatin1().constData(), port);
 #endif
+
+
+qDebug("\n**  BROOM  nativeBind() GOOD %d", port );
+
+
    socketState = QAbstractSocket::BoundState;
+
    return true;
 }
 
@@ -1212,7 +1268,8 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
 {
    // Create a sockaddr struct and reset its port number.
    qt_sockaddr storage;
-   QT_SOCKLEN_T storageSize = sizeof(storage);
+
+   int storageSize = sizeof(storage);
    memset(&storage, 0, storageSize);
 
    bool result = false;
@@ -1430,12 +1487,9 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
 
    memset(&msg, 0, sizeof(msg));
    memset(&aa, 0, sizeof(aa));
-#if !defined(Q_OS_WINCE)
+
    buf.buf = len ? (char *)data : 0;
-#else
-   char tmp;
-   buf.buf = len ? (char *)data : &tmp;
-#endif
+
    msg.lpBuffers = &buf;
    msg.dwBufferCount = 1;
    msg.name = &aa.a;

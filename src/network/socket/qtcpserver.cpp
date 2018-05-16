@@ -34,7 +34,7 @@
 #include <qnetworkproxy.h>
 
 #define Q_CHECK_SOCKETENGINE(returnValue) do { \
-    if (!d->socketEngine) { \
+    if (! d->socketEngine) { \
         return returnValue; \
     } } while (0)
 
@@ -334,12 +334,6 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
    return true;
 }
 
-/*!
-    Returns the server's port if the server is listening for
-    connections; otherwise returns 0.
-
-    \sa serverAddress(), listen()
-*/
 quint16 QTcpServer::serverPort() const
 {
    Q_D(const QTcpServer);
@@ -347,23 +341,18 @@ quint16 QTcpServer::serverPort() const
    return d->socketEngine->localPort();
 }
 
-/*!
-    Returns the server's address if the server is listening for
-    connections; otherwise returns QHostAddress::Null.
-
-    \sa serverPort(), listen()
-*/
 QHostAddress QTcpServer::serverAddress() const
 {
    Q_D(const QTcpServer);
+
    Q_CHECK_SOCKETENGINE(QHostAddress(QHostAddress::Null));
    return d->socketEngine->localAddress();
 }
 
-
 bool QTcpServer::waitForNewConnection(int msec, bool *timedOut)
 {
    Q_D(QTcpServer);
+
    if (d->state != QAbstractSocket::ListeningState) {
       return false;
    }

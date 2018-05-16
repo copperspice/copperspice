@@ -261,7 +261,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
    } else {
       results.setError(QHostInfo::UnknownError);
-      results.setErrorString(QString::fromLocal8Bit(gai_strerror(result)));
+      results.setErrorString(QString::fromUtf8(gai_strerror(result)));
    }
 
 #else
@@ -331,10 +331,12 @@ QString QHostInfo::localDomainName()
       memset(state, 0, sizeof(*state));
       local_res_ninit(state);
 
-      QString domainName = QUrl::fromAce(state->defdname);
+      QString domainName = QUrl::fromAce(QString::fromUtf8(state->defdname));
+
       if (domainName.isEmpty()) {
-         domainName = QUrl::fromAce(state->dnsrch[0]);
+         domainName = QUrl::fromAce(QString::fromUtf8(state->dnsrch[0]));
       }
+
       local_res_nclose(state);
       free(state);
 
@@ -349,21 +351,24 @@ QString QHostInfo::localDomainName()
       // So, for systems without getaddrinfo (which is thread-safe), we lock the mutex too
       QMutexLocker locker(&getHostByNameMutex);
 #endif
+
       local_res_init();
-      QString domainName = QUrl::fromAce(local_res->defdname);
+      QString domainName = QUrl::fromAce(QString::fromUtf8(local_res->defdname));
       if (domainName.isEmpty()) {
-         domainName = QUrl::fromAce(local_res->dnsrch[0]);
+         domainName = QUrl::fromAce(QString::fromUtf8(local_res->dnsrch[0]));
       }
       return domainName;
    }
 
    // nothing worked, try doing it by ourselves:
    QFile resolvconf;
+
 #if defined(_PATH_RESCONF)
    resolvconf.setFileName(QFile::decodeName(_PATH_RESCONF));
 #else
-   resolvconf.setFileName(QLatin1String("/etc/resolv.conf"));
+   resolvconf.setFileName("/etc/resolv.conf");
 #endif
+
    if (! resolvconf.open(QIODevice::ReadOnly)) {
       return QString();   // failure
    }
@@ -371,6 +376,7 @@ QString QHostInfo::localDomainName()
    QString domainName;
    while (!resolvconf.atEnd()) {
       QByteArray line = resolvconf.readLine().trimmed();
+
       if (line.startsWith("domain ")) {
          return QUrl::fromAce(line.mid(sizeof "domain " - 1).trimmed());
       }
@@ -378,6 +384,7 @@ QString QHostInfo::localDomainName()
       // in case there's no "domain" line, fall back to the first "search" entry
       if (domainName.isEmpty() && line.startsWith("search ")) {
          QByteArray searchDomain = line.mid(sizeof "search " - 1).trimmed();
+
          int pos = searchDomain.indexOf(' ');
          if (pos != -1) {
             searchDomain.truncate(pos);
