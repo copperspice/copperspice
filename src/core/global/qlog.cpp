@@ -41,12 +41,12 @@ static QtMsgHandler s_handler = nullptr;          // pointer to debug handler
 namespace {
    static inline QString fromstrerror_helper(int, const QByteArray &buf)
    {
-      return QString::fromLocal8Bit(buf);
+      return QString::fromUtf8(buf);
    }
 
    static inline QString fromstrerror_helper(const char *str, const QByteArray &)
    {
-      return QString::fromLocal8Bit(str);
+      return QString::fromUtf8(str);
    }
 }
 #endif

@@ -503,8 +503,7 @@ QProxyFontEngine::~QProxyFontEngine()
    delete engine;
 }
 
-bool QProxyFontEngine::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                                    QTextEngine::ShaperFlags flags) const
+bool QProxyFontEngine::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
    if (*nglyphs < len) {
       *nglyphs = len;

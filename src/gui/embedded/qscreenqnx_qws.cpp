@@ -22,7 +22,7 @@
 
 #include <qscreenqnx_qws.h>
 #include <qapplication.h>
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 
 #include <gf/gf.h>
 

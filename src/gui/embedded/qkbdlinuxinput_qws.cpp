@@ -96,7 +96,7 @@ QWSLinuxInputKbPrivate::QWSLinuxInputKbPrivate(QWSLinuxInputKeyboardHandler *h, 
       }
    }
 
-   m_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDWR, 0);
+   m_fd = QT_OPEN(dev.toUtf8().constData(), O_RDWR, 0);
    if (m_fd >= 0) {
       ::ioctl(m_fd, EVIOCGRAB, grab);
       if (repeat_delay > 0 && repeat_rate > 0) {

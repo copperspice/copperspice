@@ -32,7 +32,7 @@
 #include <qdebug.h>
 
 #ifndef QT_NO_REGEXP
-# include <QRegularExpression.h>
+# include <qregularexpression.h>
 #endif
 
 #ifndef QT_NO_DATASTREAM

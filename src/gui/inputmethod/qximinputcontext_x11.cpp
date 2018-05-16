@@ -160,7 +160,7 @@ extern "C" {
             return 0;
          }
 
-         QString s = QString::fromLocal8Bit(str);
+         QString s = QString::fromUtf8(str);
 
          if (text->encoding_is_wchar) {
             delete [] str;
@@ -572,7 +572,7 @@ void QXIMInputContext::reset()
       char *mb = XmbResetIC(data->ic);
       QInputMethodEvent e;
       if (mb) {
-         e.setCommitString(QString::fromLocal8Bit(mb));
+         e.setCommitString(QString::fromUtf8(mb));
          XFree(mb);
          data->preeditEmpty = false; // force sending an event
       }

@@ -38,17 +38,13 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <qfontengine_x11_p.h>
-
-#ifndef QT_NO_FONTCONFIG
 #include <ft2build.h>
+
 #include FT_FREETYPE_H
 
 #if FC_VERSION >= 20402
 #include <fontconfig/fcfreetype.h>
 #endif
-#endif
-
-QT_BEGIN_NAMESPACE
 
 // from qfont_x11.cpp
 extern double qt_pointSize(double pixelSize, int dpi);
@@ -578,12 +574,13 @@ bool qt_fillFontDef(const QByteArray &xlfd, QFontDef *fd, int dpi, QtFontDesc *d
    fd->styleStrategy |= QFont::NoAntialias;
    fd->family = QString::fromLatin1(tokens[Family]);
    QString foundry = QString::fromLatin1(tokens[Foundry]);
+
    if (! foundry.isEmpty() && foundry != QLatin1String("*") && (!desc || desc->family->count > 1))
-      fd->family +=
-         QLatin1String(" [") + foundry + QLatin1Char(']');
+      fd->family += " [" + foundry + ']';
 
    if (qstrlen(tokens[AddStyle]) > 0) {
       fd->addStyle = QString::fromLatin1(tokens[AddStyle]);
+
    } else {
       fd->addStyle.clear();
    }
@@ -593,16 +590,20 @@ bool qt_fillFontDef(const QByteArray &xlfd, QFontDef *fd, int dpi, QtFontDesc *d
 
    char slant = tolower((uchar) tokens[Slant][0]);
    fd->style = (slant == 'o' ? QFont::StyleOblique : (slant == 'i' ? QFont::StyleItalic : QFont::StyleNormal));
+
    char fixed = tolower((uchar) tokens[Spacing][0]);
    fd->fixedPitch = (fixed == 'm' || fixed == 'c');
-   fd->weight = getFontWeight(QLatin1String(tokens[Weight]));
+
+   fd->weight = getFontWeight(QString::fromLatin1(tokens[Weight]));
 
    int r = atoi(tokens[ResolutionY]);
    fd->pixelSize = atoi(tokens[PixelSize]);
+
    // not "0" or "*", or required DPI
    if (r && fd->pixelSize && r != dpi) {
       // calculate actual pointsize for display DPI
       fd->pointSize = qt_pointSize(fd->pixelSize, dpi);
+
    } else if (fd->pixelSize == 0 && fd->pointSize) {
       // calculate pixel size from pointsize/dpi
       fd->pixelSize = qRound(qt_pixelSize(fd->pointSize, dpi));
@@ -656,12 +657,12 @@ static QtFontStyle::Key getStyle(char **tokens)
       key.style = QFont::StyleItalic;
    }
 
-   key.weight = getFontWeight(QLatin1String(tokens[Weight]));
+   key.weight = getFontWeight(QString::fromLatin1(tokens[Weight]));
 
    if (qstrcmp(tokens[Width], "normal") == 0) {
       key.stretch = 100;
-   } else if (qstrcmp(tokens[Width], "semi condensed") == 0 ||
-              qstrcmp(tokens[Width], "semicondensed") == 0) {
+
+   } else if (qstrcmp(tokens[Width], "semi condensed") == 0 || qstrcmp(tokens[Width], "semicondensed") == 0) {
       key.stretch = 90;
    } else if (qstrcmp(tokens[Width], "condensed") == 0) {
       key.stretch = 80;
@@ -672,14 +673,13 @@ static QtFontStyle::Key getStyle(char **tokens)
    return key;
 }
 
-
 static bool xlfdsFullyLoaded = false;
 static unsigned char encodingLoaded[numEncodings];
 
 static void loadXlfds(const char *reqFamily, int encoding_id)
 {
    QFontDatabasePrivate *db = privateDb();
-   QtFontFamily *fontFamily = reqFamily ? db->family(QLatin1String(reqFamily)) : 0;
+   QtFontFamily *fontFamily = reqFamily ? db->family(QString::fromLatin1(reqFamily)) : nullptr;
 
    // make sure we don't load twice
    if ((encoding_id == -1 && xlfdsFullyLoaded)
@@ -746,10 +746,10 @@ static void loadXlfds(const char *reqFamily, int encoding_id)
          continue;
       }
 
-      QtFontFamily *family = fontFamily ? fontFamily : db->family(QLatin1String(familyName), true);
+      QtFontFamily *family = fontFamily ? fontFamily : db->family(QString::fromLatin1(familyName), true);
       family->fontFileIndex = -1;
       family->symbol_checked = true;
-      QtFontFoundry *foundry = family->foundry(QLatin1String(foundryName), true);
+      QtFontFoundry *foundry = family->foundry(QString::fromLatin1(foundryName), true);
       QtFontStyle *style = foundry->style(styleKey, QString(), true);
 
       delete [] style->weightName;
@@ -794,9 +794,6 @@ static void loadXlfds(const char *reqFamily, int encoding_id)
 
    XFreeFontNames(fontList);
 }
-
-
-#ifndef QT_NO_FONTCONFIG
 
 #ifndef FC_WIDTH
 #define FC_WIDTH "width"
@@ -1404,8 +1401,9 @@ static void loadFontConfig()
    };
 
    const FcDefaultFont *f = defaults;
+
    while (f->qtname) {
-      QtFontFamily *family = db->family(QLatin1String(f->qtname), true);
+      QtFontFamily *family = db->family(QString::fromLatin1(f->qtname), true);
       family->fixedPitch = f->fixed;
       family->synthetic = true;
       QtFontFoundry *foundry = family->foundry(QString(), true);
@@ -1433,7 +1431,6 @@ static void loadFontConfig()
       ++f;
    }
 }
-#endif // QT_NO_FONTCONFIG
 
 static void initializeDb();
 
@@ -1449,15 +1446,19 @@ static void load(const QString &family = QString(), int script = -1, bool forceX
    t.start();
 #endif
 
-   if (family.isNull() && script == -1) {
+   if (family.isEmpty() && script == -1) {
       loadXlfds(0, -1);
+
    } else {
-      if (family.isNull()) {
+
+      if (family.isEmpty()) {
          // load all families in all writing systems that match \a script
          for (int ws = 1; ws < QFontDatabase::WritingSystemsCount; ++ws) {
+
             if (scriptForWritingSystem[ws] != script) {
                continue;
             }
+
             for (int i = 0; i < numEncodings; ++i) {
                if (writingSystems_for_xlfd_encoding[i][ws]) {
                   loadXlfds(0, i);
@@ -1513,17 +1514,16 @@ static void checkSymbolFont(QtFontFamily *family)
 
 static void checkSymbolFonts(const QString &family = QString())
 {
-#ifndef QT_NO_FONTCONFIG
    QFontDatabasePrivate *d = privateDb();
 
    if (family.isEmpty()) {
       for (int i = 0; i < d->count; ++i) {
          checkSymbolFont(d->families[i]);
       }
+
    } else {
       checkSymbolFont(d->family(family));
    }
-#endif
 }
 
 static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt);
@@ -1538,7 +1538,6 @@ static void initializeDb()
    QElapsedTimer t;
    t.start();
 
-#ifndef QT_NO_FONTCONFIG
    if (db->reregisterAppFonts) {
       db->reregisterAppFonts = false;
       for (int i = 0; i < db->applicationFonts.count(); ++i)
@@ -1549,14 +1548,14 @@ static void initializeDb()
 
    loadFontConfig();
    FD_DEBUG("QFontDatabase: loaded FontConfig: %d ms", int(t.elapsed()));
-#endif
 
    t.start();
 
-#ifndef QT_NO_FONTCONFIG
    for (int i = 0; i < db->count; i++) {
+
       for (int j = 0; j < db->families[i]->count; ++j) {        // each foundry
          QtFontFoundry *foundry = db->families[i]->foundries[j];
+
          for (int k = 0; k < foundry->count; ++k) {
             QtFontStyle *style = foundry->styles[k];
             if (style->key.style != QFont::StyleNormal) {
@@ -1601,21 +1600,20 @@ static void initializeDb()
          }
       }
    }
-#endif
-
 
 #ifdef QFONTDATABASE_DEBUG
-#ifndef QT_NO_FONTCONFIG
-   if (!X11->has_fontconfig)
-#endif
+
+   if (!X11->has_fontconfig) {
       // load everything at startup in debug mode.
       loadXlfds(0, -1);
+   }
 
    // print the database
    for (int f = 0; f < db->count; f++) {
       QtFontFamily *family = db->families[f];
       FD_DEBUG("'%s' %s  fixed=%s", family->name.latin1(), (family->fixedPitch ? "fixed" : ""),
                (family->fixedPitch ? "yes" : "no"));
+
       for (int i = 0; i < QFontDatabase::WritingSystemsCount; ++i) {
          QFontDatabase::WritingSystem ws = QFontDatabase::WritingSystem(i);
          FD_DEBUG("\t%s: %s", QFontDatabase::writingSystemName(ws).toLatin1().constData(),
@@ -1683,8 +1681,6 @@ static const char *styleHint(const QFontDef &request)
    }
    return stylehint;
 }
-
-#ifndef QT_NO_FONTCONFIG
 
 void qt_addPatternProps(FcPattern *pattern, int screen, int script, const QFontDef &request)
 {
@@ -2025,7 +2021,6 @@ static FcPattern *queryFont(const FcChar8 *file, const QByteArray &data, int id,
    return pattern;
 #endif
 }
-#endif // QT_NO_FONTCONFIG
 
 static QFontEngine *loadRaw(const QFontPrivate *fp, const QFontDef &request)
 {
@@ -2244,18 +2239,20 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
          if (mainThread) {
             fe = loadRaw(d, req);
          }
-#ifndef QT_NO_FONTCONFIG
+
       } else if (X11->has_fontconfig) {
          fe = loadFc(d, script, req);
-#endif
+
       } else if (mainThread && qt_is_gui_used) {
          fe = loadXlfd(d->screen, script, req);
       }
+
       if (!fe) {
          fe = new QFontEngineBox(req.pixelSize);
          fe->fontDef = QFontDef();
       }
    }
+
    if (fe->symbol || (d->request.styleStrategy & QFont::NoFontMerging)) {
       for (int i = 0; i < QChar::ScriptCount; ++i) {
          if (!d->engineData->engines[i]) {
@@ -2277,10 +2274,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
 
 static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
 {
-#if defined(QT_NO_FONTCONFIG)
-   return;
-#else
-   if (!X11->has_fontconfig) {
+   if (! X11->has_fontconfig) {
       return;
    }
 
@@ -2299,6 +2293,7 @@ static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
    }
 
    QString fileNameForQuery = fnt->fileName;
+
 #if FC_VERSION < 20402
    QTemporaryFile tmp;
 
@@ -2312,7 +2307,7 @@ static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
    }
 #endif
 
-   int id = 0;
+   int id    = 0;
    FcBlanks *blanks = FcConfigGetBlanks(0);
    int count = 0;
 
@@ -2357,14 +2352,10 @@ static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
    } while (pattern && id < count);
 
    fnt->families = families;
-#endif
 }
 
 bool QFontDatabase::removeApplicationFont(int handle)
 {
-#if defined(QT_NO_FONTCONFIG)
-   return false;
-#else
    QMutexLocker locker(fontDatabaseMutex());
 
    QFontDatabasePrivate *db = privateDb();
@@ -2379,14 +2370,10 @@ bool QFontDatabase::removeApplicationFont(int handle)
    db->reregisterAppFonts = true;
    db->invalidate();
    return true;
-#endif
 }
 
 bool QFontDatabase::removeAllApplicationFonts()
 {
-#if defined(QT_NO_FONTCONFIG)
-   return false;
-#else
    QMutexLocker locker(fontDatabaseMutex());
 
    QFontDatabasePrivate *db = privateDb();
@@ -2397,26 +2384,20 @@ bool QFontDatabase::removeAllApplicationFonts()
    FcConfigAppFontClear(0);
    db->applicationFonts.clear();
    db->invalidate();
+
    return true;
-#endif
 }
 
 bool QFontDatabase::supportsThreadedFontRendering()
 {
-#if defined(QT_NO_FONTCONFIG)
-   return false;
-#else
    return X11->has_fontconfig;
-#endif
 }
 
 QString QFontDatabase::resolveFontFamilyAlias(const QString &family)
 {
-#if defined(QT_NO_FONTCONFIG)
-   return family;
-#else
    FcPattern *pattern = FcPatternCreate();
-   if (!pattern) {
+
+   if (! pattern) {
       return family;
    }
 
@@ -2431,7 +2412,4 @@ QString QFontDatabase::resolveFontFamilyAlias(const QString &family)
    FcPatternDestroy(pattern);
 
    return resolved;
-#endif
 }
-
-QT_END_NAMESPACE

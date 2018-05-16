@@ -178,7 +178,8 @@ bool QProcessPrivate::openChannel(Channel &channel)
 
          } else {
             channel.notifier = new QSocketNotifier(channel.pipe[0], QSocketNotifier::Read, q);
-            const char *receiver;
+            QString receiver;
+
             if (&channel == &stdoutChannel) {
                receiver = SLOT(_q_canReadStandardOutput());
             } else {
@@ -190,6 +191,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
       }
 
       return true;
+
    } else if (channel.type == Channel::Redirect) {
       // we're redirecting the channel to/from a file
       QByteArray fname = QFile::encodeName(channel.file);
@@ -202,8 +204,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
             return true;   // success
          }
 
-         setErrorAndEmit(QProcess::FailedToStart,
-                         QProcess::tr("Could not open input redirection for reading"));
+         setErrorAndEmit(QProcess::FailedToStart, QProcess::tr("Could not open input redirection for reading"));
 
       } else {
          int mode = O_WRONLY | O_CREAT;
@@ -422,11 +423,11 @@ void QProcessPrivate::startProcess()
    char **path = 0;
    int pathc = 0;
 
-   if (! program.contains(QLatin1Char('/'))) {
-      const QString pathEnv = QString::fromLocal8Bit(::getenv("PATH"));
+   if (! program.contains('/')) {
+      const QString pathEnv = QString::fromUtf8(::getenv("PATH"));
 
       if (!pathEnv.isEmpty()) {
-         QStringList pathEntries = pathEnv.split(QLatin1Char(':'), QString::SkipEmptyParts);
+         QStringList pathEntries = pathEnv.split(':', QStringParser::SkipEmptyParts);
 
          if (!pathEntries.isEmpty()) {
             pathc = pathEntries.size();
@@ -1085,13 +1086,14 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
          for (int i = 0; i < arguments.size(); ++i) {
             argv[i + 1] = ::strdup(QFile::encodeName(arguments.at(i)).constData());
          }
-
          argv[arguments.size() + 1] = 0;
 
          if (!program.contains(QLatin1Char('/'))) {
-            const QString path = QString::fromLocal8Bit(::getenv("PATH"));
+            const QString path = QString::fromUtf8(::getenv("PATH"));
+
             if (!path.isEmpty()) {
-               QStringList pathEntries = path.split(QLatin1Char(':'));
+               QStringList pathEntries = path.split(':');
+
                for (int k = 0; k < pathEntries.size(); ++k) {
                   QByteArray tmp = QFile::encodeName(pathEntries.at(k));
 

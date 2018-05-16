@@ -117,7 +117,7 @@ void QWSSocket::forwardStateChange(QUnixSocket::SocketState st  )
 bool QWSSocket::connectToLocalFile(const QString &file)
 {
 #ifndef QT_NO_SXE
-   bool result = QUnixSocket::connect( file.toLocal8Bit() );
+   bool result = QUnixSocket::connect( file.toUtf8() );
    if ( !result ) {
       perror( "QWSSocketAuth::connectToLocalFile could not connect:" );
       emit error(QAbstractSocket::ConnectionRefusedError);
@@ -132,7 +132,7 @@ bool QWSSocket::connectToLocalFile(const QString &file)
    struct sockaddr_un a;
    memset(&a, 0, sizeof(a));
    a.sun_family = PF_LOCAL;
-   strncpy(a.sun_path, file.toLocal8Bit().constData(), sizeof(a.sun_path) - 1);
+   strncpy(a.sun_path, file.toUtf8().constData(), sizeof(a.sun_path) - 1);
    int r = ::connect(s, (struct sockaddr *)&a, SUN_LEN(&a));
    if (r == 0) {
       setSocketDescriptor(s);
@@ -165,7 +165,7 @@ QWSServerSocket::QWSServerSocket(const QString &file, QObject *parent)
 void QWSServerSocket::init(const QString &file)
 {
 #ifndef QT_NO_SXE
-   QByteArray fn = file.toLocal8Bit();
+   QByteArray fn = file.toUtf8();
    bool result = QUnixSocketServer::listen( fn );
    if ( !result ) {
       QUnixSocketServer::ServerError err = serverError();
@@ -193,7 +193,7 @@ void QWSServerSocket::init(const QString &file)
       return;
    }
 
-   QByteArray fn = file.toLocal8Bit();
+   QByteArray fn = file.toUtf8();
    unlink(fn.constData()); // doesn't have to succeed
 
    // bind socket

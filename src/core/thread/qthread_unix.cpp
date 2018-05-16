@@ -231,22 +231,18 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
 }
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-static void setCurrentThreadName(pthread_t threadId, const char *name)
 
+static void setCurrentThreadName(pthread_t threadId, const QString &name)
 {
-#  if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
-   Q_UNUSED(threadId);
-   prctl(PR_SET_NAME, (unsigned long)name, 0, 0, 0);
+#if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
+   prctl(PR_SET_NAME, (unsigned long)name.constData(), 0, 0, 0);
 
-#  elif defined(Q_OS_MAC)
-   Q_UNUSED(threadId);
+#elif defined(Q_OS_MAC)
+   pthread_setname_np(name.constData());
 
-   if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_6) {
-      pthread_setname_np(name);
-   }
-
-#  endif
+#endif
 }
+
 #endif
 
 void *QThreadPrivate::start(void *arg)
@@ -278,10 +274,10 @@ void *QThreadPrivate::start(void *arg)
    // sets the name of the current thread.
    QString objectName = thr->objectName();
 
-   if (Q_LIKELY(objectName.isEmpty())) {
+   if (objectName.isEmpty()) {
       setCurrentThreadName(thr->d_func()->thread_id, thr->metaObject()->className());
    } else {
-      setCurrentThreadName(thr->d_func()->thread_id, objectName.toUtf8().constData());
+      setCurrentThreadName(thr->d_func()->thread_id, objectName);
    }
 
 #endif

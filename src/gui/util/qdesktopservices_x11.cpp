@@ -37,21 +37,22 @@ QT_BEGIN_NAMESPACE
 
 inline static bool launch(const QUrl &url, const QString &client)
 {
-#if !defined(QT_NO_PROCESS)
-   return (QProcess::startDetached(client + QLatin1Char(' ') + QString::fromLatin1(url.toEncoded().constData())));
+   QString data = client + ' ' + QString::fromUtf8(url.toEncoded());
+
+#if ! defined(QT_NO_PROCESS)
+   return QProcess::startDetached(data);
 #else
-   return (::system((client + QLatin1Char(' ') + QString::fromLatin1(
-                        url.toEncoded().constData())).toLocal8Bit().constData()) != -1);
+   return ::system(data.constData()) != -1;
 #endif
 }
 
 static bool openDocument(const QUrl &url)
 {
-   if (!url.isValid()) {
+   if (! url.isValid()) {
       return false;
    }
 
-   if (launch(url, QLatin1String("xdg-open"))) {
+   if (launch(url, "xdg-open")) {
       return true;
    }
 
@@ -86,17 +87,19 @@ static bool launchWebBrowser(const QUrl &url)
    if (!url.isValid()) {
       return false;
    }
-   if (url.scheme() == QLatin1String("mailto")) {
+   if (url.scheme() == "mailto") {
       return openDocument(url);
    }
 
-   if (launch(url, QLatin1String("xdg-open"))) {
+   if (launch(url, "xdg-open")) {
       return true;
    }
-   if (launch(url, QString::fromLocal8Bit(getenv("DEFAULT_BROWSER")))) {
+
+   if (launch(url, QString::fromUtf8(getenv("DEFAULT_BROWSER")))) {
       return true;
    }
-   if (launch(url, QString::fromLocal8Bit(getenv("BROWSER")))) {
+
+   if (launch(url, QString::fromUtf8(getenv("BROWSER")))) {
       return true;
    }
 
@@ -104,6 +107,7 @@ static bool launchWebBrowser(const QUrl &url)
    //  otherwise just attempt to launch command regardless of the desktop environment
    if ((!X11 || (X11 && X11->desktopEnvironment == DE_GNOME)) && launch(url, QLatin1String("gnome-open"))) {
       return true;
+
    } else {
       if ((!X11 || (X11 && X11->desktopEnvironment == DE_KDE)) && launch(url, QLatin1String("kfmclient openURL"))) {
          return true;
@@ -163,27 +167,28 @@ QString QDesktopServices::storageLocation(StandardLocation type)
    QString xdgConfigHome = QString::fromUtf8(qgetenv("XDG_CONFIG_HOME"));
 
    if (xdgConfigHome.isEmpty()) {
-      xdgConfigHome = QDir::homePath() + QLatin1String("/.config");
+      xdgConfigHome = QDir::homePath() + "/.config";
    }
 
-   QFile file(xdgConfigHome + QLatin1String("/user-dirs.dirs"));
+   QFile file(xdgConfigHome + "/user-dirs.dirs");
 
    if (file.exists() && file.open(QIODevice::ReadOnly)) {
       QHash<QString, QString> lines;
       QTextStream stream(&file);
 
       // Only look for lines like: XDG_DESKTOP_DIR="$HOME/Desktop"
-      QRegularExpression exp("^XDG_(.*)_DIR=(.*)$");
+      QRegularExpression regExp("^XDG_(.*)_DIR=(.*)$");
+
 
       while (! stream.atEnd()) {
          QString line = stream.readLine();
+         QRegularExpressionMatch match = regExp.match(line);
 
-         if (exp.indexIn(line) != -1) {
-            QStringList lst = exp.capturedTexts();
-            QString key     = lst.at(1);
-            QString value   = lst.at(2);
+         if (match.hasMatch()) {
+            QString key     = match.captured(1);
+            QString value   = match.captured(2);
 
-            if (value.length() > 2 && value.startsWith(QLatin1Char('\"')) && value.endsWith(QLatin1Char('\"'))) {
+            if (value.length() > 2 && value.startsWith('\"') && value.endsWith('\"')) {
                value = value.mid(1, value.length() - 2);
             }
 
@@ -193,6 +198,7 @@ QString QDesktopServices::storageLocation(StandardLocation type)
       }
 
       QString key;
+
       switch (type) {
          case DesktopLocation:
             key = QLatin1String("DESKTOP");
@@ -212,6 +218,7 @@ QString QDesktopServices::storageLocation(StandardLocation type)
          default:
             break;
       }
+
       if (!key.isEmpty() && lines.contains(key)) {
          QString value = lines[key];
          // value can start with $HOME

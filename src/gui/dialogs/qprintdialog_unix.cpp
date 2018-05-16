@@ -658,12 +658,13 @@ QUnixPrintWidgetPrivate::QUnixPrintWidgetPrivate(QUnixPrintWidget *p)
    if (QCUPSSupport::isAvailable()) {
       cupsPPD = cups->currentPPD();
       cupsPrinterCount = cups->availablePrintersCount();
-      cupsPrinters = cups->availablePrinters();
+      cupsPrinters     = cups->availablePrinters();
 
       for (int i = 0; i < cupsPrinterCount; ++i) {
-         QString printerName(QString::fromLocal8Bit(cupsPrinters[i].name));
+         QString printerName(QString::fromUtf8(cupsPrinters[i].name));
+
          if (cupsPrinters[i].instance) {
-            printerName += QLatin1Char('/') + QString::fromLocal8Bit(cupsPrinters[i].instance);
+            printerName += '/' + QString::fromUtf8(cupsPrinters[i].instance);
          }
 
          widget.printers->addItem(printerName);
@@ -679,6 +680,7 @@ QUnixPrintWidgetPrivate::QUnixPrintWidgetPrivate(QUnixPrintWidget *p)
       currentPrinterIndex = cups->currentPrinterIndex();
    } else {
 #endif
+
       currentPrinterIndex = qt_getLprPrinters(lprPrinters);
       // populating printer combo
       QList<QPrinterDescription>::const_iterator i = lprPrinters.constBegin();
@@ -798,17 +800,19 @@ void QUnixPrintWidgetPrivate::_q_printerChanged(int index)
       const cups_option_t *opt = cups->printerOption(QString::fromLatin1("printer-location"));
       QString location;
       if (opt) {
-         location = QString::fromLocal8Bit(opt->value);
+         location = QString::fromUtf8(opt->value);
       }
       widget.location->setText(location);
 
       cupsPPD = cups->currentPPD();
       // set printer type line
       QString type;
+
       if (cupsPPD) {
-         type = QString::fromLocal8Bit(cupsPPD->manufacturer) + QLatin1String(" - ") + QString::fromLocal8Bit(
+         type = QString::fromUtf8(cupsPPD->manufacturer) + " - " + QString::fromUtf8(
                    cupsPPD->modelname);
       }
+
       widget.type->setText(type);
       if (propertiesDialog) {
          propertiesDialog->selectPrinter();
@@ -870,7 +874,9 @@ void QUnixPrintWidgetPrivate::applyPrinterProperties(QPrinter *p)
    if (p == 0) {
       return;
    }
+
    printer = p;
+
    if (p->outputFileName().isEmpty()) {
       QString home = QString::fromUtf8(qgetenv("HOME"));
       QString cur  = QDir::currentPath();
@@ -885,33 +891,42 @@ void QUnixPrintWidgetPrivate::applyPrinterProperties(QPrinter *p)
       if (cur.left(home.length()) != home) {
          cur = home;
       }
+
 #ifdef Q_WS_X11
       if (p->docName().isEmpty()) {
          if (p->outputFormat() == QPrinter::PostScriptFormat) {
-            cur += QLatin1String("print.ps");
+            cur += "print.ps";
          } else {
-            cur += QLatin1String("print.pdf");
+            cur += "print.pdf";
          }
+
       } else {
-         QRegularExpression re(QString::fromLatin1("(.*)\\.\\S+"));
-         if (re.exactMatch(p->docName())) {
-            cur += re.cap(1);
+         QRegularExpression regExp("(.*)\\.\\S+", QPatternOption::ExactMatchOption);
+         QRegularExpressionMatch match = regExp.match(p->docName());
+
+         if (match.hasMatch()) {
+            cur += match.captured(1);
          } else {
             cur += p->docName();
          }
+
          if (p->outputFormat() == QPrinter::PostScriptFormat) {
-            cur += QLatin1String(".ps");
+            cur += ".ps";
          } else {
-            cur += QLatin1String(".pdf");
+            cur += ".pdf";
          }
       }
 #endif
+
       widget.filename->setText(cur);
+
    } else {
       widget.filename->setText( p->outputFileName() );
    }
+
    QString printer = p->printerName();
-   if (!printer.isEmpty()) {
+
+   if (! printer.isEmpty()) {
       for (int i = 0; i < widget.printers->count(); ++i) {
          if (widget.printers->itemText(i) == printer) {
             widget.printers->setCurrentIndex(i);
@@ -1306,7 +1321,7 @@ void QPPDOptionsEditor::setEditorData(QWidget *editor, const QModelIndex &index)
    }
 
    for (int i = 0; i < itm->childItems.count(); ++i) {
-      cb->addItem(QString::fromLocal8Bit(itm->childItems.at(i)->description));
+      cb->addItem(QString::fromUtf8(itm->childItems.at(i)->description));
    }
 
    if (itm->selected > -1) {

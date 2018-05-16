@@ -485,37 +485,39 @@ bool QX11Data::xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data
    bool ret = false;
    *atomFormat = a;
    *dataFormat = 8;
+
    QString atomName = xdndMimeAtomToString(a);
+
    if (QInternalMimeData::hasFormatHelper(atomName, mimeData)) {
       *data = QInternalMimeData::renderDataHelper(atomName, mimeData);
-      if (atomName == QLatin1String("application/x-color")) {
+
+      if (atomName == "application/x-color") {
          *dataFormat = 16;
       }
       ret = true;
+
    } else {
-      if ((a == ATOM(UTF8_STRING) || a == XA_STRING
-            || a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT))
-            && QInternalMimeData::hasFormatHelper(QLatin1String("text/plain"), mimeData)) {
+      if ((a == ATOM(UTF8_STRING) || a == XA_STRING || a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT))
+            && QInternalMimeData::hasFormatHelper("text/plain", mimeData)) {
+
          if (a == ATOM(UTF8_STRING)) {
-            *data = QInternalMimeData::renderDataHelper(QLatin1String("text/plain"), mimeData);
+            *data = QInternalMimeData::renderDataHelper("text/plain", mimeData);
             ret = true;
+
          } else if (a == XA_STRING) {
-            *data = QString::fromUtf8(QInternalMimeData::renderDataHelper(
-                                         QLatin1String("text/plain"), mimeData)).toLocal8Bit();
+            *data = QInternalMimeData::renderDataHelper("text/plain", mimeData);
             ret = true;
+
          } else if (a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT)) {
             // the ICCCM states that TEXT and COMPOUND_TEXT are in the
             // encoding of choice, so we choose the encoding of the locale
-            QByteArray strData = QString::fromUtf8(QInternalMimeData::renderDataHelper(
-                  QLatin1String("text/plain"), mimeData)).toLocal8Bit();
+            QByteArray strData = QInternalMimeData::renderDataHelper("text/plain", mimeData);
             char *list[] = { strData.data(), NULL };
 
-            XICCEncodingStyle style = (a == ATOM(COMPOUND_TEXT))
-                                      ? XCompoundTextStyle : XStdICCTextStyle;
+            XICCEncodingStyle style = (a == ATOM(COMPOUND_TEXT)) ? XCompoundTextStyle : XStdICCTextStyle;
             XTextProperty textprop;
-            if (list[0] != NULL
-                  && XmbTextListToTextProperty(X11->display, list, 1, style,
-                                               &textprop) == Success) {
+
+            if (list[0] != NULL && XmbTextListToTextProperty(X11->display, list, 1, style, &textprop) == Success) {
                *atomFormat = textprop.encoding;
                *dataFormat = textprop.format;
                *data = QByteArray((const char *) textprop.value, textprop.nitems * textprop.format / 8);
@@ -535,13 +537,15 @@ bool QX11Data::xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data
          }
 
       } else if (atomName == "text/x-moz-url" && QInternalMimeData::hasFormatHelper("text/uri-list", mimeData)) {
-
          QByteArray uri = QInternalMimeData::renderDataHelper("text/uri-list", mimeData).split('\n').first();
 
          QString mozUri = QString::fromLatin1(uri.constData(), uri.size());
          mozUri += '\n';
 
-         *data = QByteArray(reinterpret_cast<const char *>(mozUri.utf16()), mozUri.length() * 2);
+
+         QString16 tmp = mozUri.toUtf16();
+         *data = QByteArray((const char *)tmp.constData(), tmp.size_storage() * 2);
+
          ret   = true;
 
       } else if ((a == XA_PIXMAP || a == XA_BITMAP) && mimeData->hasImage()) {
@@ -550,7 +554,7 @@ bool QX11Data::xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data
          if (a == XA_BITMAP && pm.depth() != 1) {
             QImage img = pm.toImage();
             img = img.convertToFormat(QImage::Format_MonoLSB);
-            pm = QPixmap::fromImage(img);
+            pm  = QPixmap::fromImage(img);
          }
 
          QDragManager *dm = QDragManager::self();
@@ -601,20 +605,20 @@ QList<Atom> QX11Data::xdndMimeAtomsForFormat(const QString &format)
    return atoms;
 }
 
-//$$$
 QVariant QX11Data::xdndMimeConvertToFormat(Atom a, const QByteArray &data, const QString &format,
-      QVariant::Type requestedType, const QByteArray &encoding)
+                  QVariant::Type requestedType, const QByteArray &encoding)
 {
    QString atomName = xdndMimeAtomToString(a);
+
    if (atomName == format) {
       return data;
    }
 
-   if (!encoding.isEmpty()
-         && atomName == format + QLatin1String(";charset=") + QString::fromLatin1(encoding)) {
+   if (! encoding.isEmpty() && atomName == format + ";charset=" + QString::fromLatin1(encoding)) {
 
       if (requestedType == QVariant::String) {
          QTextCodec *codec = QTextCodec::codecForName(encoding);
+
          if (codec) {
             return codec->toUnicode(data);
          }
@@ -624,7 +628,8 @@ QVariant QX11Data::xdndMimeConvertToFormat(Atom a, const QByteArray &data, const
    }
 
    // special cases for string types
-   if (format == QLatin1String("text/plain")) {
+   if (format == "text/plain") {
+
       if (a == ATOM(UTF8_STRING)) {
          return QString::fromUtf8(data);
       }
@@ -633,24 +638,22 @@ QVariant QX11Data::xdndMimeConvertToFormat(Atom a, const QByteArray &data, const
          return QString::fromLatin1(data);
       }
 
-      if (a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT))
+      if (a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT)) {
          // #### might be wrong for COMPUND_TEXT
-      {
-         return QString::fromLocal8Bit(data.constData(), data.size());
+         return QString::fromUtf8(data);
       }
    }
 
    // special case for uri types
-   if (format == QLatin1String("text/uri-list")) {
-      if (atomName == QLatin1String("text/x-moz-url")) {
+   if (format == "text/uri-list") {
+
+      if (atomName == "text/x-moz-url") {
          // we expect this as utf16 <url><space><title>
          // the first part is a url that should only contain ascci char
-         // so it should be safe to check that the second char is 0
-         // to verify that it is utf16
+         // it should be safe to check that the second char is 0 to verify that it is utf16
 
          if (data.size() > 1 && data.at(1) == 0)
-            return QString::fromRawData((const QChar *)data.constData(),
-                                        data.size() / 2).split(QLatin1Char('\n')).first().toLatin1();
+            return QString::fromUtf16((const char16_t *)data.constData(), data.size() / 2).split('\n').first().toLatin1();
       }
    }
 
@@ -658,24 +661,28 @@ QVariant QX11Data::xdndMimeConvertToFormat(Atom a, const QByteArray &data, const
    if (format == QLatin1String("image/ppm")) {
       if (a == XA_PIXMAP && data.size() == sizeof(Pixmap)) {
          Pixmap xpm = *((Pixmap *)data.data());
+
          if (!xpm) {
             return QByteArray();
          }
+
          QPixmap qpm = QPixmap::fromX11Pixmap(xpm);
          QImageWriter imageWriter;
          imageWriter.setFormat("PPMRAW");
+
          QImage imageToWrite = qpm.toImage();
          QBuffer buf;
+
          buf.open(QIODevice::WriteOnly);
          imageWriter.setDevice(&buf);
          imageWriter.write(imageToWrite);
+
          return buf.buffer();
       }
    }
    return QVariant();
 }
 
-//$$$ middle of xdndObtainData
 Atom QX11Data::xdndMimeAtomForFormat(const QString &format, QVariant::Type requestedType,
                   const QList<Atom> &atoms, QByteArray *encoding)
 {
@@ -686,12 +693,15 @@ Atom QX11Data::xdndMimeAtomForFormat(const QString &format, QVariant::Type reque
       if (atoms.contains(ATOM(UTF8_STRING))) {
          return ATOM(UTF8_STRING);
       }
+
       if (atoms.contains(ATOM(COMPOUND_TEXT))) {
          return ATOM(COMPOUND_TEXT);
       }
+
       if (atoms.contains(ATOM(TEXT))) {
          return ATOM(TEXT);
       }
+
       if (atoms.contains(XA_STRING)) {
          return XA_STRING;
       }
@@ -1207,10 +1217,7 @@ void QX11Data::xdndHandleDrop(QWidget *, const XEvent *xe, bool passive)
    if (l[2] != 0) {
       // Some X server/client combination swallow the first 32 bit and
       // interpret a set bit 31 as negative sign.
-      qt_xdnd_target_current_time = X11->userTime =
-                                       ((sizeof(Time) == 8 && xe->xclient.data.l[2] < 0)
-                                        ? uint(l[2])
-                                        :  l[2]);
+      qt_xdnd_target_current_time = X11->userTime = ((sizeof(Time) == 8 && xe->xclient.data.l[2] < 0) ? uint(l[2]) :  l[2]);
    }
 
    if (!passive) {
@@ -1219,13 +1226,15 @@ void QX11Data::xdndHandleDrop(QWidget *, const XEvent *xe, bool passive)
       // based on the timestamp for this drop.
       QMimeData *dropData = 0;
       const int at = findXdndDropTransactionByTime(qt_xdnd_target_current_time);
+
       if (at != -1) {
          dropData = QDragManager::dragPrivate(X11->dndDropTransactions.at(at).object)->data;
-         // Can't use the source QMimeData if we need the image conversion code from xdndObtainData
+
          if (dropData && dropData->hasImage()) {
             dropData = 0;
          }
       }
+
       // if we can't find it, then use the data in the drag manager
       if (!dropData) {
          if (manager->object && !manager->dragPrivate()->data->hasImage()) {
@@ -1969,12 +1978,11 @@ void QX11Data::xdndHandleSelectionRequest(const XSelectionRequestEvent *req)
    // reset manager->object in case we modified it above
    manager->object = currentObject;
 
-   // ### this can die if req->requestor crashes at the wrong
-   // ### moment
+   // this can die if req->requestor crashes at the wrong moment
    XSendEvent(X11->display, req->requestor, False, 0, &evt);
 }
 
-static QVariant xdndObtainData(const char *format, QVariant::Type requestedType)
+static QVariant xdndObtainData(const QString &format, QVariant::Type requestedType)
 {
    QByteArray result;
 
@@ -1982,21 +1990,21 @@ static QVariant xdndObtainData(const char *format, QVariant::Type requestedType)
    QDragManager *manager = QDragManager::self();
 
    if (qt_xdnd_dragsource_xid && manager->object && (w = QWidget::find(qt_xdnd_dragsource_xid))
-         && (!(w->windowType() == Qt::Desktop) || w->acceptDrops())) {
+         && (! (w->windowType() == Qt::Desktop) || w->acceptDrops())) {
 
       QDragPrivate *o = QDragManager::self()->dragPrivate();
-      const QString mimeType = QString::fromLatin1(format);
 
-      if (o->data->hasFormat(mimeType)) {
-         result = o->data->data(mimeType);
+      if (o->data->hasFormat(format)) {
+         result = o->data->data(format);
 
-      } else if (mimeType.startsWith(QLatin1String("image/")) && o->data->hasImage()) {
-         // ### duplicated from QInternalMimeData::renderDataHelper
+      } else if (format.startsWith("image/") && o->data->hasImage()) {
+         // duplicated from QInternalMimeData::renderDataHelper
+
          QImage image = qvariant_cast<QImage>(o->data->imageData());
          QBuffer buf(&result);
 
          buf.open(QBuffer::WriteOnly);
-         image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toLatin1().toUpper().constData());
+         image.save(&buf, format.mid(format.indexOf('/') + 1).toUpper().constData());
       }
 
       return result;
@@ -2004,13 +2012,16 @@ static QVariant xdndObtainData(const char *format, QVariant::Type requestedType)
 
    QList<Atom> atoms;
    int i = 0;
-   while ((qt_xdnd_types[i])) {
+
+   while (qt_xdnd_types[i]) {
       atoms.append(qt_xdnd_types[i]);
       ++i;
    }
+
    QByteArray encoding;
-   Atom a = X11->xdndMimeAtomForFormat(QLatin1String(format), requestedType, atoms, &encoding);
-   if (!a) {
+   Atom a = X11->xdndMimeAtomForFormat(format, requestedType, atoms, &encoding);
+
+   if (! a) {
       return result;
    }
 
@@ -2036,16 +2047,18 @@ static QVariant xdndObtainData(const char *format, QVariant::Type requestedType)
          if (type == ATOM(INCR)) {
             int nbytes = result.size() >= 4 ? *((int *)result.data()) : 0;
             result = X11->clipboardReadIncrementalProperty(tw->effectiveWinId(), ATOM(XdndSelection), nbytes, false);
+
          } else if (type != a && type != XNone) {
             DEBUG("Qt clipboard: unknown atom %ld", type);
          }
       }
    }
-   if (!qt_xdnd_current_widget || (qt_xdnd_current_widget->windowType() == Qt::Desktop)) {
+
+   if (! qt_xdnd_current_widget || (qt_xdnd_current_widget->windowType() == Qt::Desktop)) {
       delete tw;
    }
 
-   return X11->xdndMimeConvertToFormat(a, result, QLatin1String(format), requestedType, encoding);
+   return X11->xdndMimeConvertToFormat(a, result, format, requestedType, encoding);
 }
 
 
@@ -2194,10 +2207,7 @@ void QDragManager::updatePixmap()
 
 QVariant QDropData::retrieveData_sys(const QString &mimetype, QVariant::Type requestedType) const
 {
-   QByteArray mime = mimetype.toLatin1();
-
-   QVariant data = X11->motifdnd_active ? X11->motifdndObtainData(mime.constData())
-                   : xdndObtainData(mime.constData(), requestedType);
+   QVariant data = X11->motifdnd_active ? X11->motifdndObtainData(mimetype) : xdndObtainData(mimetype, requestedType);
 
    return data;
 }

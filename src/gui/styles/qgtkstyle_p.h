@@ -41,8 +41,6 @@ typedef unsigned long XID;
 #define GTK_OBJECT_FLAGS(obj)(((GtkObject*)(obj))->flags)
 #define Q_GTK_IS_WIDGET(widget) widget && GTK_CHECK_TYPE ((widget), QGtkStylePrivate::gtk_widget_get_type())
 
-#define QLS(x) QLatin1String(x)
-
 QT_BEGIN_NAMESPACE
 
 class QHashableLatin1Literal

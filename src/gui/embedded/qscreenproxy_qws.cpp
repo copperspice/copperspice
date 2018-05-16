@@ -24,7 +24,7 @@
 
 #ifndef QT_NO_QWS_PROXYSCREEN
 
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 
 QT_BEGIN_NAMESPACE
 #ifndef QT_NO_QWS_CURSOR

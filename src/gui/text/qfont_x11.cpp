@@ -212,20 +212,24 @@ FT_Face QFont::freetypeFace() const
 {
 #ifndef QT_NO_FREETYPE
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
+
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
    }
-#ifndef QT_NO_FONTCONFIG
+
    if (engine->type() == QFontEngine::Freetype) {
       const QFontEngineFT *ft = static_cast<const QFontEngineFT *>(engine);
       return ft->non_locked_face();
-   } else
-#endif
+
+   } else {
       if (engine->type() == QFontEngine::XLFD) {
          const QFontEngineXLFD *xlfd = static_cast<const QFontEngineXLFD *>(engine);
          return xlfd->non_locked_face();
       }
+
+   }
 #endif
+
    return 0;
 }
 
@@ -327,6 +331,7 @@ static bool fontExists(const QString &fontName)
 {
    int count;
    char **fontNames = XListFonts(QX11Info::display(), (char *)fontName.toLatin1().constData(), 32768, &count);
+
    if (fontNames) {
       XFreeFontNames(fontNames);
    }
@@ -339,7 +344,7 @@ QString QFont::lastResortFont() const
    static QString last;
 
    // already found
-   if (! last.isNull()) {
+   if (! last.empty()) {
       return last;
    }
 

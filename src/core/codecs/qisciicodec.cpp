@@ -148,7 +148,7 @@ static const uchar uni_to_iscii_pairs[] = {
    0x64, 0x64  // 0x965
 };
 
-QByteArray QIsciiCodec::convertFromUnicode(const QStringView &str, ConverterState *state) const
+QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
    char replacement = '?';
    bool halant      = false;
@@ -243,7 +243,7 @@ QString QIsciiCodec::convertToUnicode(const char *chars, int len, ConverterState
       ushort ch = (uchar) chars[i];
 
       if (ch < 0xa0) {
-         result.append(ch);
+         result.append(chars[i]);
 
       } else {
          ushort c = iscii_to_uni_table[ch - 0xa0];
@@ -262,9 +262,8 @@ QString QIsciiCodec::convertToUnicode(const char *chars, int len, ConverterState
          }
       }
 
-      halant = ((uchar)chars[i] == 0xe8);
+      halant = (ch == 0xe8);
    }
-
 
    if (state) {
       state->state_data[0] = halant;

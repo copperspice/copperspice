@@ -101,22 +101,25 @@ class QProcEnvValue
    QProcEnvValue(const QProcEnvValue &other) {
       *this = other;
    }
+
    explicit QProcEnvValue(const QString &value) : stringValue(value) {}
    explicit QProcEnvValue(const QByteArray &value) : byteValue(value) {}
+
    bool operator==(const QProcEnvValue &other) const {
       return byteValue.isEmpty() && other.byteValue.isEmpty()
              ? stringValue == other.stringValue
              : bytes() == other.bytes();
    }
+
    QByteArray bytes() const {
-      if (byteValue.isEmpty() && !stringValue.isEmpty()) {
-         byteValue = stringValue.toLocal8Bit();
+      if (byteValue.isEmpty() && ! stringValue.isEmpty()) {
+         byteValue = stringValue.toUtf8();
       }
       return byteValue;
    }
    QString string() const {
-      if (stringValue.isEmpty() && !byteValue.isEmpty()) {
-         stringValue = QString::fromLocal8Bit(byteValue);
+      if (stringValue.isEmpty() && ! byteValue.isEmpty()) {
+         stringValue = QString::fromUtf8(byteValue);
       }
       return stringValue;
    }
@@ -168,12 +171,12 @@ class QProcessEnvironmentPrivate: public QSharedData
     inline Key prepareName(const QString &name) const  {
         Key &ent = nameMap[name];
         if (ent.key.isEmpty())
-            ent = Key(name.toLocal8Bit());
+            ent = Key(name.toUtf8());
         return ent;
     }
 
     inline QString nameToString(const Key &name) const  {
-      const QString sname = QString::fromLocal8Bit(name.key);
+      const QString sname = QString::fromUtf8(name.key);
       nameMap[sname] = name;
       return sname;
    }

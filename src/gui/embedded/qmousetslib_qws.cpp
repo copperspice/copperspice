@@ -131,12 +131,12 @@ QWSTslibMouseHandlerPrivate::QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h
    if (devName.isNull()) {
       const char *str = getenv("TSLIB_TSDEVICE");
       if (str) {
-         devName = QString::fromLocal8Bit(str);
+         devName = QString::fromUtf8(str);
       }
    }
 
    if (devName.isNull()) {
-      devName = QLatin1String("/dev/ts");
+      devName = "/dev/ts";
    }
 
    if (!open()) {
@@ -158,7 +158,7 @@ QWSTslibMouseHandlerPrivate::~QWSTslibMouseHandlerPrivate()
 
 bool QWSTslibMouseHandlerPrivate::open()
 {
-   dev = ts_open(devName.toLocal8Bit().constData(), 1);
+   dev = ts_open(devName.toUtf8().constData(), 1);
    if (!dev) {
       qCritical("QWSTslibMouseHandlerPrivate: ts_open() failed"
                 " with error: '%s'", strerror(errno));

@@ -22,6 +22,7 @@
 #define CS_BASIC_REGEX_H
 
 #include <cassert>
+#include <climits>
 #include <functional>
 #include <memory>
 #include <vector>

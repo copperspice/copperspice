@@ -168,7 +168,7 @@ QString qws_dataDir()
       return result;
    }
    result = QT_VFB_DATADIR(qws_display_id);
-   QByteArray dataDir = result.toLocal8Bit();
+   QByteArray dataDir = result.toUtf8();
 
    if (QT_MKDIR(dataDir, 0700)) {
       if (errno != EEXIST) {
@@ -1942,7 +1942,7 @@ static void qt_set_qws_resources()
    }
 
    if (appFont) {
-      QApplication::setFont(QFont(QString::fromLocal8Bit(appFont)));
+      QApplication::setFont(QFont(QString::fromUtf8(appFont)));
    }
 
    if (appBGCol || appBTNCol || appFGCol) {
@@ -2264,7 +2264,7 @@ void qt_init(QApplicationPrivate *priv, int type)
 
    if (argv && *argv) { //apparently, we allow people to pass 0 on the other platforms
       p = strrchr(argv[0], '/');
-      appName = QString::fromLocal8Bit(p ? p + 1 : argv[0]);
+      appName = QString::fromUtf8(p ? p + 1 : argv[0]);
    }
 
    // Get command line params
@@ -2295,7 +2295,7 @@ void qt_init(QApplicationPrivate *priv, int type)
          }
       } else if (arg == "-name") {
          if (++i < argc) {
-            appName = QString::fromLocal8Bit(argv[i]);
+            appName = QString::fromUtf8(argv[i]);
          }
       } else if (arg == "-title") {
          if (++i < argc) {
@@ -2315,32 +2315,42 @@ void qt_init(QApplicationPrivate *priv, int type)
          qws_savefonts = false;
       } else if (arg == "-swcursor") {
          qws_sw_cursor = true;
+
       } else if (arg == "-noswcursor") {
          qws_sw_cursor = false;
+
       } else if (arg == "-keyboard") {
          flags &= ~QWSServer::DisableKeyboard;
+
       } else if (arg == "-nokeyboard") {
          flags |= QWSServer::DisableKeyboard;
+
       } else if (arg == "-mouse") {
          flags &= ~QWSServer::DisableMouse;
+
       } else if (arg == "-nomouse") {
          flags |= QWSServer::DisableMouse;
+
       } else if (arg == "-qws") {
          type = QApplication::GuiServer;
+
       } else if (arg == "-interlaced") {
          qws_screen_is_interlaced = true;
+
       } else if (arg == "-display") {
          if (++i < argc) {
             qws_display_spec = argv[i];
          }
+
       } else if (arg == "-decoration") {
          if (++i < argc) {
-            decoration = QString::fromLocal8Bit(argv[i]);
+            decoration = QString::fromUtf8(argv[i]);
          }
       } else {
          argv[j++] = argv[i];
       }
    }
+
    if (j < priv->argc) {
       priv->argv[j] = 0;
       priv->argc = j;
@@ -2624,16 +2634,21 @@ static int parseGeometry(const char *string,
 void QApplicationPrivate::applyQWSSpecificCommandLineArguments(QWidget *main_widget)
 {
    static bool beenHereDoneThat = false;
+
    if (beenHereDoneThat) {
       return;
    }
+
    beenHereDoneThat = true;
+
    if (qApp->windowIcon().isNull() && main_widget->testAttribute(Qt::WA_SetWindowIcon)) {
       qApp->setWindowIcon(main_widget->windowIcon());
    }
+
    if (mwTitle) { //  && main_widget->windowTitle().isEmpty())
-      main_widget->setWindowTitle(QString::fromLocal8Bit(mwTitle));
+      main_widget->setWindowTitle(QString::fromUtf8(mwTitle));
    }
+
    if (mwGeometry) { // parse geometry
       int x = 0;
       int y = 0;

@@ -32,7 +32,7 @@
 #include <qwidget.h>
 #include <qbuffer.h>
 #include <qimage.h>
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 #include <qdir.h>
 #include <qdnd_p.h>
 #include <qimagereader.h>

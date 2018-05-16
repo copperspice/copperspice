@@ -687,12 +687,11 @@ QByteArray QX11Data::motifdndFormat(int n)
    return ("x-motif-dnd/" + X11->xdndAtomToString(target));
 }
 
-
-QVariant QX11Data::motifdndObtainData(const char *mimeType)
+QVariant QX11Data::motifdndObtainData(const QString &mimeType)
 {
    QByteArray result;
 
-   if (Dnd_selection == 0 || !dropWidget) {
+   if (Dnd_selection == 0 || ! dropWidget) {
       return result;
    }
 
@@ -701,23 +700,32 @@ QVariant QX11Data::motifdndObtainData(const char *mimeType)
 
    int n = 0;
    QByteArray f;
+
    do {
       f = motifdndFormat(n);
+
       if (f.isEmpty()) {
          return result;
       }
+
       n++;
-   } while (qstricmp(mimeType, f.data()));
+
+   } while (qstricmp(mimeType.constData(), f.constData()));
 
    Atom conversion_type = XNone;
+
    if (f == "text/plain;charset=ISO-8859-1") {
       conversion_type = XA_STRING;
+
    } else if (f == "text/plain;charset=UTF-8") {
       conversion_type = ATOM(UTF8_STRING);
+
    } else if (f == (QByteArray("text/plain;charset=") + QTextCodec::codecForLocale()->name())) {
       conversion_type = ATOM(COMPOUND_TEXT);
+
    } else if (f == "text/plain") {
       conversion_type = ATOM(TEXT);
+
    } else if (f.startsWith("x-motif-dnd/")) {
       // strip off the "x-motif-dnd/" prefix
       conversion_type = X11->xdndStringToAtom(f.remove(0, 12).constData());

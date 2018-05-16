@@ -115,7 +115,7 @@ QWSTtyKbPrivate::QWSTtyKbPrivate(QWSTtyKeyboardHandler *h, const QString &device
       }
    }
 
-   m_tty_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDWR, 0);
+   m_tty_fd = QT_OPEN(dev.toUtf8().constData(), O_RDWR, 0);
    if (m_tty_fd >= 0) {
       if (repeat_delay > 0 && repeat_rate > 0) {
 #if defined(Q_OS_LINUX)

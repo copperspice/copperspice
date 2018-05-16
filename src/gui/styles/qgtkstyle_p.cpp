@@ -28,8 +28,7 @@
 //
 // Additionally we create a map of common GTK widgets that we can pass
 // to the GTK theme engine as many engines resort to querying the
-// actual widget pointers for details that are not covered by the
-// state flags
+// actual widget pointers for details that are not covered by the state flags
 
 #include <qglobal.h>
 
@@ -296,7 +295,7 @@ GtkStyle *QGtkStylePrivate::gtkStyle(const QHashableLatin1Literal &path)
 void QGtkStylePrivate::resolveGtk() const
 {
    // enforce the "0" suffix, so we'll open libgtk-x11-2.0.so.0
-   QLibrary libgtk(QLS("gtk-x11-2.0"), 0, 0);
+   QLibrary libgtk("gtk-x11-2.0", 0, 0);
    libgtk.setLoadHints(QLibrary::ImprovedSearchHeuristics);
 
    gtk_init = (Ptr_gtk_init)libgtk.resolve("gtk_init");
@@ -429,8 +428,8 @@ void QGtkStylePrivate::resolveGtk() const
    pango_font_description_get_style = (Ptr_pango_font_description_get_style)
                                       libgtk.resolve("pango_font_description_get_style");
 
-   gnome_icon_lookup_sync = (Ptr_gnome_icon_lookup_sync)QLibrary::resolve(QLS("gnomeui-2"), 0, "gnome_icon_lookup_sync");
-   gnome_vfs_init = (Ptr_gnome_vfs_init)QLibrary::resolve(QLS("gnomevfs-2"), 0, "gnome_vfs_init");
+   gnome_icon_lookup_sync = (Ptr_gnome_icon_lookup_sync)QLibrary::resolve("gnomeui-2", 0, "gnome_icon_lookup_sync");
+   gnome_vfs_init = (Ptr_gnome_vfs_init)QLibrary::resolve("gnomevfs-2", 0, "gnome_vfs_init");
 }
 
 /* \internal
@@ -489,27 +488,29 @@ void QGtkStylePrivate::initGtkWidgets() const
    uid_t rgid = getgid ();
    uid_t euid = geteuid ();
    uid_t egid = getegid ();
+
    if (ruid != euid || rgid != egid) {
-      qWarning("\nThis process is currently running setuid or setgid.\nGTK+ does not allow this "
-               "therefore Qt cannot use the GTK+ integration.\nTry launching your app using \'gksudo\', "
+      qWarning("\nThis process is currently running setuid or setgid.\nGTK+ does not allow this, "
+               "the GTK+ integration will not be used.\nLaunch this app using \'gksudo\', "
                "\'kdesudo\' or a similar tool.\n\n"
                "See http://www.gtk.org/setuid.html for more information.\n");
       return;
    }
 
    static QString themeName;
+
    if (! gtkWidgetMap()->contains("GtkWindow") && themeName.isEmpty()) {
       themeName = getThemeName();
 
-      if (themeName == QLS("Qt") || themeName == QLS("Qt4")) {
+      if (themeName == "Qt" || themeName == "Qt4") {
          // cannot support the GTK_Qt Gtk engine
-         qWarning("QGtkStyle cannot be used together with the GTK_Qt engine.");
+         qWarning("QGtkStyle can not be used together with the GTK_Qt engine.");
          return;
       }
    }
 
    if (QGtkStylePrivate::gtk_init) {
-      // Gtk will set the Qt error handler so we have to reset it afterwards
+      // Gtk will set the error handler so we have to reset it afterwards
       x11ErrorHandler qt_x_errhandler = XSetErrorHandler(0);
       QGtkStylePrivate::gtk_init (NULL, NULL);
       XSetErrorHandler(qt_x_errhandler);
@@ -600,12 +601,14 @@ void QGtkStylePrivate::cleanupGtkWidgets()
 
 static bool resolveGConf()
 {
-   if (!QGtkStylePrivate::gconf_client_get_default) {
-      QGtkStylePrivate::gconf_client_get_default = (Ptr_gconf_client_get_default)QLibrary::resolve(QLS("gconf-2"), 4,
+   if (! QGtkStylePrivate::gconf_client_get_default) {
+      QGtkStylePrivate::gconf_client_get_default = (Ptr_gconf_client_get_default)QLibrary::resolve("gconf-2", 4,
             "gconf_client_get_default");
-      QGtkStylePrivate::gconf_client_get_string =  (Ptr_gconf_client_get_string)QLibrary::resolve(QLS("gconf-2"), 4,
+
+      QGtkStylePrivate::gconf_client_get_string =  (Ptr_gconf_client_get_string)QLibrary::resolve("gconf-2", 4,
             "gconf_client_get_string");
-      QGtkStylePrivate::gconf_client_get_bool =  (Ptr_gconf_client_get_bool)QLibrary::resolve(QLS("gconf-2"), 4,
+
+      QGtkStylePrivate::gconf_client_get_bool =  (Ptr_gconf_client_get_bool)QLibrary::resolve("gconf-2", 4,
             "gconf_client_get_bool");
    }
    return (QGtkStylePrivate::gconf_client_get_default != 0);
@@ -614,16 +617,19 @@ static bool resolveGConf()
 QString QGtkStylePrivate::getGConfString(const QString &value, const QString &fallback)
 {
    QString retVal = fallback;
+
    if (resolveGConf()) {
-      g_type_init();
       GConfClient *client = gconf_client_get_default();
       GError *err = 0;
       char *str = gconf_client_get_string(client, qPrintable(value), &err);
+
       if (!err) {
          retVal = QString::fromUtf8(str);
          g_free(str);
       }
+
       g_object_unref(client);
+
       if (err) {
          g_error_free (err);
       }
@@ -635,11 +641,12 @@ bool QGtkStylePrivate::getGConfBool(const QString &key, bool fallback)
 {
    bool retVal = fallback;
    if (resolveGConf()) {
-      g_type_init();
       GConfClient *client = gconf_client_get_default();
       GError *err = 0;
       bool result = gconf_client_get_bool(client, qPrintable(key), &err);
+
       g_object_unref(client);
+
       if (!err) {
          retVal = result;
       } else {
@@ -652,22 +659,26 @@ bool QGtkStylePrivate::getGConfBool(const QString &key, bool fallback)
 QString QGtkStylePrivate::getThemeName()
 {
    QString themeName;
-   // We try to parse the gtkrc file first
-   // primarily to avoid resolving Gtk functions if
+   // We try to parse the gtkrc file first primarily to avoid resolving Gtk functions if
    // the KDE 3 "Qt" style is currently in use
-   QString rcPaths = QString::fromLocal8Bit(qgetenv("GTK2_RC_FILES"));
-   if (!rcPaths.isEmpty()) {
-      QStringList paths = rcPaths.split(QLS(":"));
+
+   QString rcPaths = QString::fromUtf8(qgetenv("GTK2_RC_FILES"));
+
+   if (! rcPaths.isEmpty()) {
+      QStringList paths = rcPaths.split(":");
 
       for (const QString & rcPath : paths) {
-         if (!rcPath.isEmpty()) {
+         if (! rcPath.isEmpty()) {
             QFile rcFile(rcPath);
+
             if (rcFile.exists() && rcFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                QTextStream in(&rcFile);
+
                while (!in.atEnd()) {
                   QString line = in.readLine();
-                  if (line.contains(QLS("gtk-theme-name"))) {
-                     line = line.right(line.length() - line.indexOf(QLatin1Char('=')) - 1);
+
+                  if (line.contains("gtk-theme-name")) {
+                     line = line.right(line.length() - line.indexOf('=') - 1);
                      line.remove(QLatin1Char('\"'));
                      line = line.trimmed();
                      themeName = line;
@@ -676,6 +687,7 @@ QString QGtkStylePrivate::getThemeName()
                }
             }
          }
+
          if (!themeName.isEmpty()) {
             break;
          }
@@ -684,7 +696,7 @@ QString QGtkStylePrivate::getThemeName()
 
    // Fall back to gconf
    if (themeName.isEmpty() && resolveGConf()) {
-      themeName = getGConfString(QLS("/desktop/gnome/interface/gtk_theme"));
+      themeName = getGConfString("/desktop/gnome/interface/gtk_theme");
    }
 
    return themeName;
@@ -694,14 +706,17 @@ QString QGtkStylePrivate::getIconThemeName()
 {
    if (!gtk_settings_get_default) {
       // enforce the "0" suffix, so we'll open libgtk-x11-2.0.so.0
-      QLibrary libgtk(QLS("gtk-x11-2.0"), 0, 0);
+      QLibrary libgtk("gtk-x11-2.0", 0, 0);
       libgtk.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+
       gtk_init = (Ptr_gtk_init)libgtk.resolve("gtk_init");
       gtk_settings_get_default = (Ptr_gtk_settings_get_default)libgtk.resolve("gtk_settings_get_default");
    }
+
    if (!gtk_settings_get_default) {
       return QString();
    }
+
    x11ErrorHandler qt_x_errhandler = XSetErrorHandler(0);
    gtk_init(NULL, NULL);
    XSetErrorHandler(qt_x_errhandler);
@@ -834,7 +849,7 @@ QPalette QGtkStylePrivate::gtkWidgetPalette(const QHashableLatin1Literal &gtkWid
 
 void QGtkStyleUpdateScheduler::updateTheme()
 {
-   static QString oldTheme(QLS("qt_not_set"));
+   static QString oldTheme("qt_not_set");
    QPixmapCache::clear();
 
    QFont font = QGtkStylePrivate::getThemeFont();
@@ -910,19 +925,21 @@ QFont QGtkStylePrivate::getThemeFont()
    return font;
 }
 
-
 // ----------- Native file dialogs -----------
 
 // Extract filter list from expressions of type: foo (*.a *.b *.c)"
 QStringList QGtkStylePrivate::extract_filter(const QString &rawFilter)
 {
    QString result = rawFilter;
-   QRegularExpression r(QString::fromLatin1("^([^()]*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$"));
-   int index = r.indexIn(result);
-   if (index >= 0) {
-      result = r.cap(2);
+
+   QRegularExpression regExp("^([^()]*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$");
+   QRegularExpressionMatch match = regExp.match(result);
+
+   if (match.hasMatch()) {
+      result = match.captured(2);
    }
-   return result.split(QLatin1Char(' '));
+
+   return result.split(' ');
 }
 
 extern QStringList qt_make_filter_list(const QString &filter);
@@ -935,21 +952,26 @@ void QGtkStylePrivate::setupGtkFileChooser(GtkWidget *gtkFileChooser, QWidget *p
    g_object_set(gtkFileChooser, "do-overwrite-confirmation", gboolean(!(options & QFileDialog::DontConfirmOverwrite)),
                 NULL);
    g_object_set(gtkFileChooser, "local_only", gboolean(true), NULL);
+
    if (!filter.isEmpty()) {
       QStringList filters = qt_make_filter_list(filter);
+
       for (const QString & rawfilter : filters) {
          GtkFileFilter *gtkFilter = QGtkStylePrivate::gtk_file_filter_new ();
+
          QString name = rawfilter.left(rawfilter.indexOf(QLatin1Char('(')));
          QStringList extensions = extract_filter(rawfilter);
-         QGtkStylePrivate::gtk_file_filter_set_name(gtkFilter, qPrintable(name.isEmpty() ? extensions.join(QLS(", ")) : name));
+         QGtkStylePrivate::gtk_file_filter_set_name(gtkFilter, qPrintable(name.isEmpty() ? extensions.join(", ") : name));
 
          for (const QString & fileExtension : extensions) {
             // Note Gtk file dialogs are by default case sensitive
             // and only supports basic glob syntax so we
             // rewrite .xyz to .[xX][yY][zZ]
             QString caseInsensitive;
+
             for (int i = 0 ; i < fileExtension.length() ; ++i) {
                QChar ch = fileExtension.at(i);
+
                if (ch.isLetter()) {
                   caseInsensitive.append(
                      QLatin1Char('[') +

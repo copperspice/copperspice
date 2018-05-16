@@ -47,7 +47,7 @@ static QString qdlerror()
 #else
    const char *err = strerror(errno);
 #endif
-   return err ? QLatin1Char('(') + QString::fromLocal8Bit(err) + QLatin1Char(')') : QString();
+   return err ? QString('(' + QString::fromUtf8(err) + ')') : QString();
 }
 
 bool QLibraryPrivate::load_sys()
@@ -253,12 +253,12 @@ Q_CORE_EXPORT void *qt_mac_resolve_sys(void *handle, const char *symbol)
 }
 #endif
 
-void *QLibraryPrivate::resolve_sys(const char *symbol)
+void *QLibraryPrivate::resolve_sys(const QString &symbol)
 {
 
 #if defined(QT_HPUX_LD)
    void *address = 0;
-   if (shl_findsym((shl_t *)&pHnd, symbol, TYPE_UNDEFINED, &address) < 0) {
+   if (shl_findsym((shl_t *)&pHnd, symbol.constData(), TYPE_UNDEFINED, &address) < 0) {
       address = 0;
    }
 
@@ -266,13 +266,12 @@ void *QLibraryPrivate::resolve_sys(const char *symbol)
    void *address = 0;
 
 #else
-   void *address = dlsym(pHnd, symbol);
+   void *address = dlsym(pHnd, symbol.constData());
 
 #endif
 
-   if (!address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(
-                       QString::fromLatin1(symbol)).formatArg(fileName).formatArg(qdlerror());
+   if (! address) {
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(symbol).formatArg(fileName).formatArg(qdlerror());
    } else {
       errorString.clear();
    }

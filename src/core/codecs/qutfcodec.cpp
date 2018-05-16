@@ -20,7 +20,6 @@
 *
 ***********************************************************************/
 
-
 #include <qutfcodec_p.h>
 #include <qendian.h>
 #include <qlist.h>
@@ -34,7 +33,7 @@ static inline bool isUnicodeNonCharacter(uint ucs4)
    return (ucs4 & 0xfffe) == 0xfffe || (ucs4 - 0xfdd0U) < 16;
 }
 
-QByteArray QUtf8::convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *state)
+QByteArray QUtf8::convertFromUnicode(QStringView str, QTextCodec::ConverterState *state)
 {
    QByteArray retval;
 
@@ -86,7 +85,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
    }
 
    while (src != end) {
-      uint8_t byte = *src;
+      uint32_t byte = uchar(*src);
       ++src;
 
       if (bytesLeft > 0 && (byte < 0x80 || byte > 0xBF)) {
@@ -97,13 +96,17 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
       }
 
       if (byte <= 0x7F) {
+         // asc
          data = byte;
 
       } else if (byte <= 0xBF) {
+         // continuation char
+
          data = (data << 6) | (byte & 0x3F);
          --bytesLeft;
 
       } else if (byte <= 0xDF) {
+         // start of 2 byte seq
          data = (byte & 0x1F);
 
          if (data == 0) {
@@ -115,6 +118,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
          bytesLeft = 1;
 
       } else if (byte <= 0xEF) {
+         // start of 3 byte seq
          data = (byte & 0x0F);
 
          if (data == 0) {
@@ -126,6 +130,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
          bytesLeft = 2;
 
       } else if (byte <= 0xF4) {
+         // start of 4 byte seq
          data = (byte & 0x07);
 
          if (data == 0) {
@@ -161,7 +166,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
             continue;
          }
 
-         retval.append(char32_t(data));
+         retval.append( QChar(char32_t(data)) );
       }
    }
 
@@ -190,7 +195,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
    return retval;
 }
 
-QByteArray QUtf16::convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *state, DataEndianness e)
+QByteArray QUtf16::convertFromUnicode(QStringView str, QTextCodec::ConverterState *state, DataEndianness e)
 {
    QByteArray retval;
 
@@ -382,7 +387,7 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
    return retval;
 }
 
-QByteArray QUtf32::convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *state, DataEndianness e)
+QByteArray QUtf32::convertFromUnicode(QStringView str, QTextCodec::ConverterState *state, DataEndianness e)
 {
    QByteArray retval;
 
@@ -528,7 +533,7 @@ QUtf8Codec::~QUtf8Codec()
 {
 }
 
-QByteArray QUtf8Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
+QByteArray QUtf8Codec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
    return QUtf8::convertFromUnicode(str, state);
 }
@@ -557,7 +562,7 @@ QUtf16Codec::~QUtf16Codec()
 {
 }
 
-QByteArray QUtf16Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
+QByteArray QUtf16Codec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
    return QUtf16::convertFromUnicode(str, state, e);
 }
@@ -618,7 +623,7 @@ QUtf32Codec::~QUtf32Codec()
 {
 }
 
-QByteArray QUtf32Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
+QByteArray QUtf32Codec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
    return QUtf32::convertFromUnicode(str, state, e);
 }

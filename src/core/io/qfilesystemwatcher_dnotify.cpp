@@ -376,7 +376,8 @@ void QDnotifyFileSystemWatcherEngine::refresh(int fd)
    QHash<int, Directory>::iterator iter = fdToDirectory.find(fd);
 
    if (iter == fdToDirectory.end()) {
-      QHash<int, int>::Iterator pIter = parentToFD.find(fd);
+      QHash<int, int>::iterator pIter = parentToFD.find(fd);
+
       if (pIter == parentToFD.end()) {
          return;
       }

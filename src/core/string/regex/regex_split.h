@@ -25,6 +25,8 @@ namespace cs_regex_ns {
 
 namespace cs_regex_detail_ns {
 
+#include <climits>
+
 template <class charT, class traits>
 const basic_regex<charT, traits> &get_default_expression(charT)
 {

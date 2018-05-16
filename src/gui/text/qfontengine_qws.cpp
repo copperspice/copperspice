@@ -357,7 +357,7 @@ QFontEngineQPF1::~QFontEngineQPF1()
 }
 
 
-bool QFontEngineQPF1::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+bool QFontEngineQPF1::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs,
                                    QTextEngine::ShaperFlags flags) const
 {
    if (*nglyphs < len) {

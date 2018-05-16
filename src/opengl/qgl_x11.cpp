@@ -328,30 +328,34 @@ static void find_trans_colors()
   QGLFormat UNIX/GLX-specific code
  *****************************************************************************/
 
-void *qglx_getProcAddress(const char *procName)
+void *qglx_getProcAddress(const QString &procName)
 {
    // On systems where the GL driver is pluggable (like Mesa), we have to use
    // the glXGetProcAddressARB extension to resolve other function pointers as
    // the symbols wont be in the GL library, but rather in a plugin loaded by
    // the GL library.
+
    typedef void *(*qt_glXGetProcAddressARB)(const char *);
    static qt_glXGetProcAddressARB glXGetProcAddressARB = 0;
    static bool triedResolvingGlxGetProcAddress = false;
-   if (!triedResolvingGlxGetProcAddress) {
+
+   if (! triedResolvingGlxGetProcAddress) {
       triedResolvingGlxGetProcAddress = true;
-      QGLExtensionMatcher extensions(glXGetClientString(QX11Info::display(), GLX_EXTENSIONS));
+      QGLExtensionMatcher extensions(QString::fromUtf8(glXGetClientString(QX11Info::display(), GLX_EXTENSIONS)));
+
       if (extensions.match("GLX_ARB_get_proc_address")) {
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
          void *handle = dlopen(NULL, RTLD_LAZY);
+
          if (handle) {
             glXGetProcAddressARB = (qt_glXGetProcAddressARB) dlsym(handle, "glXGetProcAddressARB");
             dlclose(handle);
          }
-         if (!glXGetProcAddressARB)
+
+         if (! glXGetProcAddressARB)
 #endif
          {
-
             extern const QString qt_gl_library_name();
             QLibrary lib(qt_gl_library_name());
             lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
@@ -363,15 +367,16 @@ void *qglx_getProcAddress(const char *procName)
 
    void *procAddress = 0;
    if (glXGetProcAddressARB) {
-      procAddress = glXGetProcAddressARB(procName);
+      procAddress = glXGetProcAddressARB(procName.constData());
    }
 
    // If glXGetProcAddress didn't work, try looking the symbol up in the GL library
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
-   if (!procAddress) {
+   if (! procAddress) {
       void *handle = dlopen(NULL, RTLD_LAZY);
+
       if (handle) {
-         procAddress = dlsym(handle, procName);
+         procAddress = dlsym(handle, procName.constData());
          dlclose(handle);
       }
    }
@@ -380,6 +385,7 @@ void *qglx_getProcAddress(const char *procName)
    if (!procAddress) {
       extern const QString qt_gl_library_name();
       QLibrary lib(qt_gl_library_name());
+
       lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
       procAddress = lib.resolve(procName);
    }
@@ -430,9 +436,11 @@ static bool buildSpec(int *spec, const QGLFormat &f, QPaintDevice *paintDevice,
 #if defined(GLX_VERSION_1_1) && defined(GLX_EXT_visual_info)
    static bool useTranspExt = false;
    static bool useTranspExtChecked = false;
+
    if (f.plane() && !useTranspExtChecked && paintDevice) {
-      QGLExtensionMatcher extensions(glXQueryExtensionsString(xinfo->display(), xinfo->screen()));
+      QGLExtensionMatcher extensions(QString::fromUtf8(glXQueryExtensionsString(xinfo->display(), xinfo->screen())));
       useTranspExt = extensions.match("GLX_EXT_visual_info");
+
       //# (A bit simplistic; that could theoretically be a substring)
       if (useTranspExt) {
          QByteArray cstr(glXGetClientString(xinfo->display(), GLX_VENDOR));
@@ -733,21 +741,23 @@ bool QGLContext::chooseContext(const QGLContext *shareContext)
    if (!d->cx) {
       return false;
    }
+
    d->glFormat.setDirectRendering(glXIsDirect(disp, (GLXContext)d->cx));
+
    if (deviceIsPixmap()) {
 #if defined(GLX_MESA_pixmap_colormap) && defined(QGL_USE_MESA_EXT)
-      d->gpm = glXCreateGLXPixmapMESA(disp, (XVisualInfo *)d->vi,
-                                      qt_x11Handle(d->paintDevice),
+      d->gpm = glXCreateGLXPixmapMESA(disp, (XVisualInfo *)d->vi, qt_x11Handle(d->paintDevice),
                                       qt_gl_choose_cmap(disp, (XVisualInfo *)d->vi));
 #else
-      d->gpm = (quint32)glXCreateGLXPixmap(disp, (XVisualInfo *)d->vi,
-                                           qt_x11Handle(d->paintDevice));
+      d->gpm = (quint32)glXCreateGLXPixmap(disp, (XVisualInfo *)d->vi, qt_x11Handle(d->paintDevice));
 #endif
       if (!d->gpm) {
          return false;
       }
    }
-   QGLExtensionMatcher extensions(glXQueryExtensionsString(xinfo->display(), xinfo->screen()));
+
+   QGLExtensionMatcher extensions(QString::fromUtf8(glXQueryExtensionsString(xinfo->display(), xinfo->screen())));
+
    if (extensions.match("GLX_SGI_video_sync")) {
       if (d->glFormat.swapInterval() == -1) {
          d->glFormat.setSwapInterval(0);
@@ -965,28 +975,36 @@ void QGLContext::doneCurrent()
 void QGLContext::swapBuffers() const
 {
    Q_D(const QGLContext);
+
    if (!d->valid) {
       return;
    }
+
    if (!deviceIsPixmap()) {
       int interval = d->glFormat.swapInterval();
+
       if (interval > 0) {
          typedef int (*qt_glXGetVideoSyncSGI)(uint *);
          typedef int (*qt_glXWaitVideoSyncSGI)(int, int, uint *);
          static qt_glXGetVideoSyncSGI glXGetVideoSyncSGI = 0;
          static qt_glXWaitVideoSyncSGI glXWaitVideoSyncSGI = 0;
          static bool resolved = false;
+
          if (!resolved) {
             const QX11Info *xinfo = qt_x11Info(d->paintDevice);
-            QGLExtensionMatcher extensions(glXQueryExtensionsString(xinfo->display(), xinfo->screen()));
+
+            QGLExtensionMatcher extensions(QString::fromUtf8(glXQueryExtensionsString(xinfo->display(), xinfo->screen())));
+
             if (extensions.match("GLX_SGI_video_sync")) {
-               glXGetVideoSyncSGI =  (qt_glXGetVideoSyncSGI)qglx_getProcAddress("glXGetVideoSyncSGI");
+               glXGetVideoSyncSGI  = (qt_glXGetVideoSyncSGI)qglx_getProcAddress("glXGetVideoSyncSGI");
                glXWaitVideoSyncSGI = (qt_glXWaitVideoSyncSGI)qglx_getProcAddress("glXWaitVideoSyncSGI");
             }
             resolved = true;
          }
+
          if (glXGetVideoSyncSGI && glXWaitVideoSyncSGI) {
             uint counter;
+
             if (!glXGetVideoSyncSGI(&counter)) {
                glXWaitVideoSyncSGI(interval + 1, (counter + interval) % (interval + 1), &counter);
             }
@@ -1221,8 +1239,10 @@ void *QGLContext::getProcAddress(const QString &proc) const
    if (resolved && !glXGetProcAddressARB) {
       return 0;
    }
-   if (!glXGetProcAddressARB) {
-      QGLExtensionMatcher extensions(glXGetClientString(QX11Info::display(), GLX_EXTENSIONS));
+
+   if (! glXGetProcAddressARB) {
+      QGLExtensionMatcher extensions(QString::fromUtf8(glXGetClientString(QX11Info::display(), GLX_EXTENSIONS)));
+
       if (extensions.match("GLX_ARB_get_proc_address")) {
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
          void *handle = dlopen(NULL, RTLD_LAZY);
@@ -1770,8 +1790,10 @@ void QGLWidget::setColormap(const QGLColormap &c)
 
 // Solaris defines glXBindTexImageEXT as part of the GL library
 #if defined(GLX_VERSION_1_3) && !defined(Q_OS_HPUX)
+
 typedef void (*qt_glXBindTexImageEXT)(Display *, GLXDrawable, int, const int *);
 typedef void (*qt_glXReleaseTexImageEXT)(Display *, GLXDrawable, int);
+
 static qt_glXBindTexImageEXT glXBindTexImageEXT = 0;
 static qt_glXReleaseTexImageEXT glXReleaseTexImageEXT = 0;
 
@@ -1783,8 +1805,8 @@ static bool qt_resolveTextureFromPixmap(QPaintDevice *paintDevice)
       resolvedTextureFromPixmap = true;
 
       // Check to see if we have NPOT texture support
-      if ( !(QGLExtensions::glExtensions() & QGLExtensions::NPOTTextures) &&
-            !(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0)) {
+      if ( ! (QGLExtensions::glExtensions() & QGLExtensions::NPOTTextures) &&
+            ! (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0)) {
          return false; // Can't use TFP without NPOT
       }
 
@@ -1792,8 +1814,9 @@ static bool qt_resolveTextureFromPixmap(QPaintDevice *paintDevice)
       Display *display = xinfo ? xinfo->display() : X11->display;
       int screen = xinfo ? xinfo->screen() : X11->defaultScreen;
 
-      QGLExtensionMatcher serverExtensions(glXQueryExtensionsString(display, screen));
-      QGLExtensionMatcher clientExtensions(glXGetClientString(display, GLX_EXTENSIONS));
+      QGLExtensionMatcher serverExtensions(QString::fromUtf8(glXQueryExtensionsString(display, screen)));
+      QGLExtensionMatcher clientExtensions(QString::fromUtf8(glXGetClientString(display, GLX_EXTENSIONS)));
+
       if (serverExtensions.match("GLX_EXT_texture_from_pixmap")
             && clientExtensions.match("GLX_EXT_texture_from_pixmap")) {
          glXBindTexImageEXT = (qt_glXBindTexImageEXT) qglx_getProcAddress("glXBindTexImageEXT");

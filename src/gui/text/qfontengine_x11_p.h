@@ -104,8 +104,6 @@ class QFontEngineXLFD : public QFontEngine
    mutable int synth;
 };
 
-#ifndef QT_NO_FONTCONFIG
-
 class Q_GUI_EXPORT QFontEngineMultiFT : public QFontEngineMulti
 {
  public:
@@ -142,8 +140,4 @@ class Q_GUI_EXPORT QFontEngineX11FT : public QFontEngineFT
    void freeServerGlyphSet(unsigned long id) override;
 };
 
-#endif // QT_NO_FONTCONFIG
-
-QT_END_NAMESPACE
-
-#endif // QFONTENGINE_X11_P_H
+#endif

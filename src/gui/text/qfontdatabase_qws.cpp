@@ -292,7 +292,7 @@ static void initializeDb()
 
    if (!QFile::exists(fontpath)) {
       qFatal("QFontDatabase: Cannot find font directory %s - is Qt installed correctly?",
-             fontpath.toLocal8Bit().constData());
+             fontpath.toUtf8().constData());
    }
 
    const bool loaded = db->loadFromCache(fontpath);
@@ -318,7 +318,7 @@ static void initializeDb()
    //    qDebug() << "creating binary database at" << binaryDb.fileName();
 
    // Load in font definition file
-   FILE *fontdef = fopen(fontDirFile.toLocal8Bit().constData(), "r");
+   FILE *fontdef = fopen(fontDirFile.toUtf8().constData(), "r");
    if (fontdef) {
       char buf[200] = "";
       char name[200] = "";
@@ -648,7 +648,7 @@ QFontEngine *loadSingleEngine(int script, const QFontPrivate *fp,
 
          if ((engine.isNull() && !file.isEmpty() && QFile::exists(file)) || privateDb()->isApplicationFont(file)) {
             QFontEngine::FaceId faceId;
-            faceId.filename = file.toLocal8Bit();
+            faceId.filename = file.toUtf8();
             faceId.index = size->fileIndex;
 
 #ifndef QT_NO_FREETYPE

@@ -141,26 +141,26 @@ QString QStandardPaths::writableLocation(StandardLocation type)
    QString xdgConfigHome = QFile::decodeName(qgetenv("XDG_CONFIG_HOME"));
 
    if (xdgConfigHome.isEmpty()) {
-      xdgConfigHome = QDir::homePath() + QLatin1String("/.config");
+      xdgConfigHome = QDir::homePath() + "/.config";
    }
 
-   QFile file(xdgConfigHome + QLatin1String("/user-dirs.dirs"));
+   QFile file(xdgConfigHome + "/user-dirs.dirs");
 
    if (!isTestModeEnabled() && file.open(QIODevice::ReadOnly)) {
       QHash<QString, QString> lines;
       QTextStream stream(&file);
 
       // Only look for lines like: XDG_DESKTOP_DIR="$HOME/Desktop"
-      QRegularExpression8 exp("^XDG_(.*)_DIR=(.*)$");
+      QRegularExpression exp("^XDG_(.*)_DIR=(.*)$");
+      QRegularExpressionMatch match;
 
       while (! stream.atEnd()) {
          const QString &line = stream.readLine();
+         match = exp.match(line);
 
-         if (exp.indexIn(line) != -1) {
-            const QStringList lst = exp.capturedTexts();
-            const QString key     = lst.at(1);
-
-            QString value = lst.at(2);
+         if (match.hasMatch()) {
+            const QString key = match.captured(1);
+            QString value     = match.captured(2);
 
             if (value.length() > 2 && value.startsWith('\"') && value.endsWith('\"')) {
                value = value.mid(1, value.length() - 2);
@@ -194,11 +194,14 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          default:
             break;
       }
+
       if (!key.isEmpty()) {
          QString value = lines.value(key);
+
          if (!value.isEmpty()) {
             // value can start with $HOME
-            if (value.startsWith(QLatin1String("$HOME"))) {
+
+            if (value.startsWith("$HOME")) {
                value = QDir::homePath() + value.mid(5);
             }
             return value;

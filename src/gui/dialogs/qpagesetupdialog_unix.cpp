@@ -381,8 +381,9 @@ void QPageSetupWidget::selectPrinter(QCUPSSupport *cups)
       int cupsDefaultSize = 0;
       QSize qtPreferredSize = m_printer->paperSize(QPrinter::Point).toSize();
       bool preferredSizeMatched = false;
+
       for (int i = 0; i < numChoices; ++i) {
-         widget.paperSize->addItem(QString::fromLocal8Bit(pageSizes->choices[i].text), QByteArray(pageSizes->choices[i].choice));
+         widget.paperSize->addItem(QString::fromUtf8(pageSizes->choices[i].text), QByteArray(pageSizes->choices[i].choice));
          if (static_cast<int>(pageSizes->choices[i].marked) == 1) {
             cupsDefaultSize = i;
          }

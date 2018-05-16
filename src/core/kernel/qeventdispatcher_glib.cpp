@@ -285,16 +285,22 @@ static GSourceFuncs postEventSourceFuncs = {
 QEventDispatcherGlibPrivate::QEventDispatcherGlibPrivate(GMainContext *context)
    : mainContext(context)
 {
+#if GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32
    if (qgetenv("QT_NO_THREADED_GLIB").isEmpty()) {
-      static int dummyValue = 0; // only used for its address
+      static int dummyValue = 0;
+
       QMutexLocker locker(QMutexPool::instance()->get(&dummyValue));
-      if (!g_thread_supported()) {
+
+      if (! g_thread_supported()) {
          g_thread_init(NULL);
       }
    }
+#endif
+
 
    if (mainContext) {
       g_main_context_ref(mainContext);
+
    } else {
       QCoreApplication *app = QCoreApplication::instance();
       if (app && QThread::currentThread() == app->thread()) {
@@ -310,24 +316,22 @@ QEventDispatcherGlibPrivate::QEventDispatcherGlibPrivate(GMainContext *context)
 #endif
 
    // setup post event source
-   postEventSource = reinterpret_cast<GPostEventSource *>(g_source_new(&postEventSourceFuncs,
-                     sizeof(GPostEventSource)));
+   postEventSource = reinterpret_cast<GPostEventSource *>(g_source_new(&postEventSourceFuncs, sizeof(GPostEventSource)));
    postEventSource->serialNumber = 1;
    postEventSource->d = this;
    g_source_set_can_recurse(&postEventSource->source, true);
    g_source_attach(&postEventSource->source, mainContext);
 
    // setup socketNotifierSource
-   socketNotifierSource =
-      reinterpret_cast<GSocketNotifierSource *>(g_source_new(&socketNotifierSourceFuncs,
+   socketNotifierSource = reinterpret_cast<GSocketNotifierSource *>(g_source_new(&socketNotifierSourceFuncs,
             sizeof(GSocketNotifierSource)));
+
    (void) new (&socketNotifierSource->pollfds) QList<GPollFDWithQSocketNotifier *>();
    g_source_set_can_recurse(&socketNotifierSource->source, true);
    g_source_attach(&socketNotifierSource->source, mainContext);
 
    // setup normal and idle timer sources
-   timerSource = reinterpret_cast<GTimerSource *>(g_source_new(&timerSourceFuncs,
-                 sizeof(GTimerSource)));
+   timerSource = reinterpret_cast<GTimerSource *>(g_source_new(&timerSourceFuncs, sizeof(GTimerSource)));
    (void) new (&timerSource->timerList) QTimerInfoList();
    timerSource->processEventsFlags = QEventLoop::AllEvents;
    timerSource->runWithIdlePriority = false;

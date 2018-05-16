@@ -441,24 +441,19 @@ extern bool qt_xdnd_dragging;
 // gui or non-gui from qapplication.cpp
 extern bool qt_is_gui_used;
 
-/*!
-    \internal
-    Try to resolve a \a symbol from \a library with the version specified
-    by \a vernum.
 
-    Note that, in the case of the Xfixes library, \a vernum is not the same as
-    \c XFIXES_MAJOR - it is a part of soname and may differ from the Xfixes
-    version.
-*/
-static void *qt_load_library_runtime(const char *library, int vernum,
-                                     int highestVernum, const char *symbol)
+// internal
+static void *qt_load_library_runtime(const QString &library, int vernum, int highestVernum, const QString &symbol)
 {
    QList<int> versions;
+
    // we try to load in the following order:
    // explicit version -> the default one -> (from the highest (highestVernum) to the lowest (vernum) )
+
    if (vernum != -1) {
       versions << vernum;
    }
+
    versions << -1;
    if (vernum != -1) {
       for (int i = highestVernum; i > vernum; --i) {
@@ -467,14 +462,17 @@ static void *qt_load_library_runtime(const char *library, int vernum,
    }
 
    for (int version : versions) {
-      QLatin1String libName(library);
+      QString libName(library);
       QLibrary xfixesLib(libName, version);
+
       xfixesLib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
       void *ptr = xfixesLib.resolve(symbol);
+
       if (ptr) {
          return ptr;
       }
    }
+
    return 0;
 }
 
@@ -955,15 +953,15 @@ bool QApplicationPrivate::x11_apply_settings()
    }
 
    // read new QStyle
-   QString stylename = settings.value(QLatin1String("style")).toString();
+   QString stylename = settings.value("style").toString();
 
-   if (stylename.isEmpty() && QApplicationPrivate::styleOverride.isNull() && X11->use_xrender) {
+   if (stylename.isEmpty() && QApplicationPrivate::styleOverride.isEmpty() && X11->use_xrender) {
       stylename = qt_guiPlatformPlugin()->styleName();
    }
 
    static QString currentStyleName = stylename;
    if (QCoreApplication::startingUp()) {
-      if (!stylename.isEmpty() && QApplicationPrivate::styleOverride.isNull()) {
+      if (!stylename.isEmpty() && QApplicationPrivate::styleOverride.isEmpty()) {
          QApplicationPrivate::styleOverride = stylename;
       }
    } else {
@@ -1170,11 +1168,13 @@ static void qt_set_x11_resources(const char *font = 0, const char *fg = 0,
             res = QString();
             break;
          }
+
          if (type == XA_STRING) {
             res += QString::fromLatin1((char *)data);
          } else {
-            res += QString::fromLocal8Bit((char *)data);
+            res += QString::fromUtf8((char *)data);
          }
+
          offset += 2048; // offset is in 32bit quantities... 8192/4 == 2048
          if (data) {
             XFree((char *)data);
@@ -1183,8 +1183,8 @@ static void qt_set_x11_resources(const char *font = 0, const char *fg = 0,
 
       QString key, value;
       int l = 0, r;
-      QString apn = QString::fromLocal8Bit(appName);
-      QString apc = QString::fromLocal8Bit(appClass);
+      QString apn = QString::fromUtf8(appName);
+      QString apc = QString::fromUtf8(appClass);
       int apnl = apn.length();
       int apcl = apc.length();
       int resl = res.length();
@@ -1260,16 +1260,16 @@ static void qt_set_x11_resources(const char *font = 0, const char *fg = 0,
       resFont = sysFont;
    }
    if (resFont.isEmpty()) {
-      resFont = QString::fromLocal8Bit(font);
+      resFont = QString::fromUtf8(font);
    }
    if (resFG.isEmpty()) {
-      resFG = QString::fromLocal8Bit(fg);
+      resFG = QString::fromUtf8(fg);
    }
    if (resBG.isEmpty()) {
-      resBG = QString::fromLocal8Bit(bg);
+      resBG = QString::fromUtf8(bg);
    }
    if (resButton.isEmpty()) {
-      resButton = QString::fromLocal8Bit(button);
+      resButton = QString::fromUtf8(button);
    }
    if (!resFont.isEmpty()
          && !X11->has_fontconfig
@@ -1616,14 +1616,9 @@ static PtrWacomConfigCloseDevice ptrWacomConfigCloseDevice = 0;
 static PtrWacomConfigTerm ptrWacomConfigTerm = 0;
 Q_GLOBAL_STATIC(QByteArray, wacomDeviceName)
 
-
 #endif
 
-/*****************************************************************************
-  qt_init() - initializes Qt for X11
- *****************************************************************************/
 
-#if !defined(QT_NO_FONTCONFIG)
 static void getXDefault(const char *group, const char *key, int *val)
 {
    char *str = XGetDefault(X11->display, group, key);
@@ -1679,7 +1674,6 @@ static void getXDefault(const char *group, const char *key, bool *val)
       }
    }
 }
-#endif
 
 #if defined(QT_DEBUG) && defined(Q_OS_LINUX)
 // Find out if our parent process is gdb by looking at the 'exe' symlink under /proc,.
@@ -1691,6 +1685,7 @@ bool runningUnderDebugger()
    if (parentProcExe.isSymLink()) {
       return parentProcExe.symLinkTarget().endsWith(QLatin1String("/gdb"));
    }
+
    QFile f(parentProc + QLatin1String("/cmdline"));
    if (!f.open(QIODevice::ReadOnly)) {
       return false;
@@ -1784,12 +1779,11 @@ void qt_init(QApplicationPrivate *priv, int,
 
    // Fontconfig
    X11->has_fontconfig = false;
-#if !defined(QT_NO_FONTCONFIG)
+
    if (qgetenv("QT_X11_NO_FONTCONFIG").isNull()) {
       X11->has_fontconfig = FcInit();
    }
    X11->fc_antialias = true;
-#endif
 
 #ifndef QT_NO_XRENDER
    memset(X11->solid_fills, 0, sizeof(X11->solid_fills));
@@ -1895,7 +1889,7 @@ void qt_init(QApplicationPrivate *priv, int,
          }
       } else if (arg == "-visual") {  // xv and netscape use this name
          if (++i < argc && !X11->visual) {
-            QString s = QString::fromLocal8Bit(argv[i]).toLower();
+            QString s = QString::fromUtf8(argv[i]).toLower();
             if (s == QLatin1String("staticgray")) {
                X11->visual_class = StaticGray;
             } else if (s == QLatin1String("grayscale")) {
@@ -1915,7 +1909,7 @@ void qt_init(QApplicationPrivate *priv, int,
 #ifndef QT_NO_XIM
       } else if (arg == "-inputstyle") {
          if (++i < argc) {
-            QString s = QString::fromLocal8Bit(argv[i]).toLower();
+            QString s = QString::fromUtf8(argv[i]).toLower();
             if (s == QLatin1String("onthespot"))
                qt_xim_preferred_style = XIMPreeditCallbacks |
                                         XIMStatusNothing;
@@ -1994,7 +1988,7 @@ void qt_init(QApplicationPrivate *priv, int,
 
       for (int s = 0; s < X11->screenCount; s++) {
          QX11InfoData *screen = X11->screens + s;
-         screen->ref = 1; // ensures it doesn't get deleted
+         screen->ref = 1;    // ensures it does not get deleted
          screen->screen = s;
 
          int widthMM = DisplayWidthMM(X11->display, s);
@@ -2019,26 +2013,26 @@ void qt_init(QApplicationPrivate *priv, int,
 #ifndef QT_NO_XRENDER
       int xrender_eventbase,  xrender_errorbase;
       // See if XRender is supported on the connected display
-      if (XQueryExtension(X11->display, "RENDER", &X11->xrender_major,
-                          &xrender_eventbase, &xrender_errorbase)
-            && XRenderQueryExtension(X11->display, &xrender_eventbase,
-                                     &xrender_errorbase)) {
+      if (XQueryExtension(X11->display, "RENDER", &X11->xrender_major, &xrender_eventbase, &xrender_errorbase)
+            && XRenderQueryExtension(X11->display, &xrender_eventbase, &xrender_errorbase)) {
+
          // Check the version as well - we need v0.4 or higher
          int major = 0;
          int minor = 0;
          XRenderQueryVersion(X11->display, &major, &minor);
+
          if (qgetenv("QT_X11_NO_XRENDER").isNull()) {
             X11->use_xrender = (major >= 0 && minor >= 5);
             X11->xrender_version = major * 100 + minor;
-            // workaround for broken XServer on Ubuntu Breezy (6.8 compiled with 7.0
-            // protocol headers)
-            if (X11->xrender_version == 10
-                  && VendorRelease(X11->display) < 60900000
+
+            // workaround for broken XServer on Ubuntu Breezy (6.8 compiled with 7.0 protocol headers)
+            if (X11->xrender_version == 10 && VendorRelease(X11->display) < 60900000
                   && QByteArray(ServerVendor(X11->display)).contains("X.Org")) {
                X11->xrender_version = 9;
             }
          }
       }
+
 #endif // QT_NO_XRENDER
 
 #ifndef QT_NO_MITSHM
@@ -2047,19 +2041,21 @@ void qt_init(QApplicationPrivate *priv, int,
       int mitshm_eventbase;
       int mitshm_errorbase;
       int mitshm_pixmaps;
-      if (XQueryExtension(X11->display, "MIT-SHM", &X11->mitshm_major,
-                          &mitshm_eventbase, &mitshm_errorbase)
-            && XShmQueryVersion(X11->display, &mitshm_major, &mitshm_minor,
-                                &mitshm_pixmaps)) {
-         QString displayName = QLatin1String(XDisplayName(NULL));
+
+      if (XQueryExtension(X11->display, "MIT-SHM", &X11->mitshm_major, &mitshm_eventbase, &mitshm_errorbase)
+            && XShmQueryVersion(X11->display, &mitshm_major, &mitshm_minor, &mitshm_pixmaps)) {
+
+         QString displayName = QString::fromLatin1(XDisplayName(nullptr));
 
          // MITSHM only works for local displays, so do a quick check here
          // to determine whether the display is local or not (not 100 % accurate).
          // BGR server layouts are not supported either, since it requires the raster
          // engine to work on a QImage with BGR layout.
-         bool local = displayName.isEmpty() || displayName.lastIndexOf(QLatin1Char(':')) == 0;
+         bool local = displayName.isEmpty() || displayName.lastIndexOf(':') == 0;
+
          if (local && (qgetenv("QT_X11_NO_MITSHM").toInt() == 0)) {
             Visual *defaultVisual = DefaultVisual(X11->display, DefaultScreen(X11->display));
+
             X11->use_mitshm = ((defaultVisual->red_mask == 0xff0000
                                 || defaultVisual->red_mask == 0xf800)
                                && (defaultVisual->green_mask == 0xff00
@@ -2272,8 +2268,6 @@ void qt_init(QApplicationPrivate *priv, int,
       }
 #endif
 
-
-#if !defined(QT_NO_FONTCONFIG)
       int dpi = 0;
       getXDefault("Xft", FC_DPI, &dpi);
       if (dpi) {
@@ -2285,8 +2279,10 @@ void qt_init(QApplicationPrivate *priv, int,
       double fc_scale = 1.;
       getXDefault("Xft", FC_SCALE, &fc_scale);
       X11->fc_scale = fc_scale;
+
       for (int s = 0; s < ScreenCount(X11->display); ++s) {
          int subpixel = FC_RGBA_UNKNOWN;
+
 #if !defined(QT_NO_XRENDER) && (RENDER_MAJOR > 0 || RENDER_MINOR >= 6)
          if (X11->use_xrender) {
             int rsp = XRenderQuerySubpixelOrder(X11->display, s);
@@ -2342,7 +2338,7 @@ void qt_init(QApplicationPrivate *priv, int,
       getXDefault("Xft", FC_HINT_STYLE, &X11->fc_hint_style);
 #endif
 
-#endif // QT_NO_XRENDER
+
 
       // initialize key mapper
       QKeyMapper::changeKeyboard();
@@ -2356,7 +2352,7 @@ void qt_init(QApplicationPrivate *priv, int,
    QFont::initialize();
 
    if (qt_is_gui_used) {
-      qApp->setObjectName(QString::fromLocal8Bit(appName));
+      qApp->setObjectName(QString::fromUtf8(appName));
 
       int screen;
       for (screen = 0; screen < X11->screenCount; ++screen) {
@@ -2367,7 +2363,7 @@ void qt_init(QApplicationPrivate *priv, int,
          if (X11->use_xrandr) {
             X11->ptrXRRSelectInput(X11->display, QX11Info::appRootWindow(screen), True);
          }
-#endif // QT_NO_XRANDR
+#endif
       }
    }
 
@@ -2865,7 +2861,7 @@ bool qt_wstate_iconified(WId winid)
 
 QString QApplicationPrivate::appName() const
 {
-   return QString::fromLocal8Bit(QT_PREPEND_NAMESPACE(appName));
+   return QString::fromUtf8(QT_PREPEND_NAMESPACE(appName));
 }
 
 const char *QX11Info::appClass()                // get application class
@@ -2895,12 +2891,15 @@ void QApplicationPrivate::applyX11SpecificCommandLineArguments(QWidget *main_wid
    }
    beenHereDoneThat = true;
    Q_ASSERT(main_widget->testAttribute(Qt::WA_WState_Created));
+
    if (mwTitle) {
       XStoreName(X11->display, main_widget->effectiveWinId(), (char *)mwTitle);
-      QByteArray net_wm_name = QString::fromLocal8Bit(mwTitle).toUtf8();
+      QByteArray net_wm_name = QString::fromUtf8(mwTitle).toUtf8();
+
       XChangeProperty(X11->display, main_widget->effectiveWinId(), ATOM(_NET_WM_NAME), ATOM(UTF8_STRING), 8,
                       PropModeReplace, (unsigned char *)net_wm_name.data(), net_wm_name.size());
    }
+
    if (mwGeometry) { // parse geometry
       int x, y;
       int w, h;
@@ -6014,7 +6013,7 @@ QSessionManager::QSessionManager(QApplication *app, QString &id, QString &key)
    id = QString::fromLatin1(myId);
    ::free(myId); // it was allocated by C
 
-   QString error = QString::fromLocal8Bit(cerror);
+   QString error = QString::fromUtf8(cerror);
    if (!smcConnection) {
       qWarning("Qt: Session management error: %s", qPrintable(error));
    } else {

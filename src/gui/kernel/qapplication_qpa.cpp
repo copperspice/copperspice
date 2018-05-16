@@ -482,7 +482,7 @@ static void init_platform(const QString &name, const QString &platformPluginPath
          fatalMessage.append(key + QString::fromLatin1("\n"));
       }
 
-      qFatal("%s", fatalMessage.toLocal8Bit().constData());
+      qFatal("%s", fatalMessage.toUtf8().constData());
 
    }
 
@@ -543,7 +543,7 @@ void qt_init(QApplicationPrivate *priv, int type)
 
    if (argv && *argv) { //apparently, we allow people to pass 0 on the other platforms
       p = strrchr(argv[0], '/');
-      appName = QString::fromLocal8Bit(p ? p + 1 : argv[0]);
+      appName = QString::fromUtf8(p ? p + 1 : argv[0]);
    }
 
    QList<QByteArray> pluginList;
@@ -564,28 +564,34 @@ void qt_init(QApplicationPrivate *priv, int type)
    // Get command line params
 
    int j = argc ? 1 : 0;
+
    for (int i = 1; i < argc; i++) {
       if (argv[i] && *argv[i] != '-') {
          argv[j++] = argv[i];
          continue;
       }
+
       QByteArray arg = argv[i];
       if (arg == "-fn" || arg == "-font") {
          if (++i < argc) {
-            appFont = QString::fromLocal8Bit(argv[i]);
+            appFont = QString::fromUtf8(argv[i]);
          }
+
       } else if (arg == "-platformpluginpath") {
          if (++i < argc) {
             platformPluginPath = QLatin1String(argv[i]);
          }
+
       } else if (arg == "-platform") {
          if (++i < argc) {
             platformName = argv[i];
          }
+
       } else if (arg == "-plugin") {
          if (++i < argc) {
             pluginList << argv[i];
          }
+
       } else {
          argv[j++] = argv[i];
       }

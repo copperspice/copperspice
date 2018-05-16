@@ -236,9 +236,11 @@ void QPlatformFontDatabase::populateFontDatabase()
    QDir dir(fontpath);
    dir.setNameFilters(QStringList() << QLatin1String("*.qpf2"));
    dir.refresh();
+
    for (int i = 0; i < int(dir.count()); ++i) {
       const QByteArray fileName = QFile::encodeName(dir.absoluteFilePath(dir[i]));
-      QFile file(QString::fromLocal8Bit(fileName));
+      QFile file(QString::fromUtf8(fileName));
+
       if (file.open(QFile::ReadOnly)) {
          const QByteArray fileData = file.readAll();
          QByteArray *fileDataPtr = new QByteArray(fileData);

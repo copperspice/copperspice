@@ -59,8 +59,6 @@
 
 #include <qhexstring_p.h>
 
-QT_BEGIN_NAMESPACE
-
 extern Drawable qt_x11Handle(const QPaintDevice *pd);
 extern const QX11Info *qt_x11Info(const QPaintDevice *pd);
 extern QPixmap qt_pixmapForBrush(int brushStyle, bool invert); //in qbrush.cpp
@@ -160,7 +158,7 @@ static inline void x11SetClipRegion(Display *dpy, GC gc, GC gc2,
    }
 #else
    Q_UNUSED(picture);
-#endif // QT_NO_XRENDER
+#endif
 }
 
 
@@ -187,7 +185,7 @@ static inline void x11ClearClipRegion(Display *dpy, GC gc, GC gc2,
    }
 #else
    Q_UNUSED(picture);
-#endif // QT_NO_XRENDER
+#endif
 }
 
 
@@ -214,7 +212,7 @@ static const uchar base_dither_matrix[DITHER_SIZE][DITHER_SIZE] = {
 static QPixmap qt_patternForAlpha(uchar alpha, int screen)
 {
    QPixmap pm;
-   QString key = "$cs_alpha_brush$" % HexString<uchar>(alpha) % HexString<int>(screen);
+   QString key = "$cs_alpha_brush$" + HexString<uchar>(alpha) + HexString<int>(screen);
 
    if (! QPixmapCache::find(key, pm)) {
       // #### why not use a mono image here?
@@ -439,12 +437,6 @@ static QPaintEngine::PaintEngineFeatures qt_decide_features()
       features |= QPaintEngine::Antialiasing;
       features |= QPaintEngine::PorterDuff;
       features |= QPaintEngine::MaskedBrush;
-#if 0
-      if (X11->xrender_version > 10) {
-         features |= QPaintEngine::LinearGradientFill;
-         // ###
-      }
-#endif
    }
 
    return features;
@@ -480,6 +472,7 @@ bool QX11PaintEngine::begin(QPaintDevice *pdev)
    d->xinfo = qt_x11Info(pdev);
    QWidget *w = d->pdev->devType() == QInternal::Widget ? static_cast<QWidget *>(d->pdev) : 0;
    const bool isAlienWidget = w && !w->internalWinId() && w->testAttribute(Qt::WA_WState_Created);
+
 #ifndef QT_NO_XRENDER
    if (w) {
       if (isAlienWidget) {
@@ -498,6 +491,7 @@ bool QX11PaintEngine::begin(QPaintDevice *pdev)
 #else
    d->picture = 0;
 #endif
+
    d->hd = !isAlienWidget ? qt_x11Handle(pdev) : qt_x11Handle(w->nativeParentWidget());
 
    Q_ASSERT(d->xinfo != 0);
@@ -1348,6 +1342,7 @@ void QX11PaintEngine::updateBrush(const QBrush &brush, const QPointF &origin)
    d->cbrush = brush;
    d->bg_origin = origin;
    d->adapted_brush_origin = false;
+
 #if !defined(QT_NO_XRENDER)
    d->current_brush = 0;
 #endif
@@ -2309,14 +2304,15 @@ void QX11PaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
       case QFontEngine::Box:
          d_func()->drawBoxTextItem(p, ti);
          break;
+
       case QFontEngine::XLFD:
          drawXLFD(p, ti);
          break;
-#ifndef QT_NO_FONTCONFIG
+
       case QFontEngine::Freetype:
          drawFreetype(p, ti);
          break;
-#endif
+
       default:
          Q_ASSERT(false);
    }
@@ -2363,7 +2359,6 @@ void QX11PaintEngine::drawXLFD(const QPointF &p, const QTextItemInt &ti)
    }
 }
 
-#ifndef QT_NO_FONTCONFIG
 static QPainterPath path_for_glyphs(const QVarLengthArray<glyph_t> &glyphs,
                                     const QVarLengthArray<QFixedPoint> &positions,
                                     const QFontEngineFT *ft)
@@ -2571,6 +2566,4 @@ void QX11PaintEngine::drawFreetype(const QPointF &p, const QTextItemInt &ti)
    }
 
 }
-#endif // !QT_NO_XRENDER
 
-QT_END_NAMESPACE

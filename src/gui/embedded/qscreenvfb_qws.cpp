@@ -178,7 +178,7 @@ bool QVFbScreen::connect(const QString &displaySpec)
       grayscale = true;
    }
 
-   key_t key = ftok(QT_VFB_MOUSE_PIPE(displayId).toLocal8Bit(), 'b');
+   key_t key = ftok(QT_VFB_MOUSE_PIPE(displayId).toUtf8(), 'b');
 
    if (key == -1) {
       return false;

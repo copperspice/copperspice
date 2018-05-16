@@ -28,7 +28,7 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qvariant.h>
 
-// necessary to work around breakage in many versions of XFree86's Xlib.h 
+// necessary to work around breakage in many versions of XFree86's Xlib.h
 
 #if defined(_XLIB_H_)    // crude hack
 #error "Can not include <X11/Xlib.h> before this file"
@@ -76,13 +76,13 @@ extern "C" {
 
 #ifndef QT_NO_XSYNC
 extern "C" {
-#  include "X11/extensions/sync.h"         // do not change to < > 
+#  include "X11/extensions/sync.h"         // do not change to < >
 }
 #endif
 
 #ifndef QT_NO_XKB
 #  include <X11/XKBlib.h>
-#endif 
+#endif
 
 #if ! defined(XlibSpecificationRelease)
 #  define X11R4
@@ -168,9 +168,7 @@ extern "C" char *XSetIMValues(XIM /* im */, ...);
 
 #endif
 
-#ifndef QT_NO_FONTCONFIG
 #include <fontconfig/fontconfig.h>
-#endif
 
 #ifndef QT_NO_XIM
 // some platforms (eg. Solaris 2.51) don't have these defines in Xlib.h
@@ -264,17 +262,19 @@ struct QX11Data {
    QStringList xdndMimeFormatsForAtom(Atom a);
    bool xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data, Atom *atomFormat, int *dataFormat);
    QList<Atom> xdndMimeAtomsForFormat(const QString &format);
+
    QVariant xdndMimeConvertToFormat(Atom a, const QByteArray &data, const QString &format, QVariant::Type requestedType,
-                                    const QByteArray &encoding);
+                  const QByteArray &encoding);
+
    Atom xdndMimeAtomForFormat(const QString &format, QVariant::Type requestedType, const QList<Atom> &atoms,
-                              QByteArray *requestedEncoding);
+                  QByteArray *requestedEncoding);
 
    QList<QXdndDropTransaction> dndDropTransactions;
 
    // from qmotifdnd_x11.cpp
    void motifdndHandle(QWidget *, const XEvent *, bool);
    void motifdndEnable(QWidget *, bool);
-   QVariant motifdndObtainData(const char *format);
+   QVariant motifdndObtainData(const QString &format);
    QByteArray motifdndFormat(int n);
    bool motifdnd_active;
 
