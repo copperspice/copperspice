@@ -280,12 +280,12 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       using CsString::CsString_utf16::operator+=;     // internal
 
       // methods
-      QString16 &append(QChar32 c)  {
+      QString16 &append(char32_t c)  {
          CsString::CsString_utf16::append(c);
          return *this;
       }
 
-      QString16 &append(char c)  {
+      QString16 &append(QChar32 c)  {
          CsString::CsString_utf16::append(c);
          return *this;
       }
@@ -428,6 +428,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       const_iterator indexOfFast(const QRegularExpression16 &regExp, const_iterator from) const;
 
+      // using iterators (last)
       const_iterator lastIndexOfFast(QChar32 c) const {
          return lastIndexOfFast(c, cend(), Qt::CaseSensitive);
       }
@@ -456,7 +457,6 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
             return cs_internal_rfind_fast(str, from);
          }
       }
-
 
       const_iterator lastIndexOfFast(QStringView16 str, const_iterator from, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
 
@@ -497,6 +497,21 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          }
       }
 
+      size_type indexOf(const QRegularExpression16 &regExp, size_type from = 0) const {
+         if (from < 0) {
+            from = 0;
+         }
+
+         const_iterator iter = indexOfFast(regExp, begin() + from);
+
+         if (iter == end()) {
+            return -1;
+         }
+
+         return iter - begin();
+      }
+
+      // using index (last)
       size_type lastIndexOf(QChar32 c, size_type from = -1, Qt::CaseSensitivity cs  = Qt::CaseSensitive) const  {
 
          if (cs == Qt::CaseSensitive) {
@@ -519,6 +534,27 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          }
       }
 
+      size_type lastIndexOf(const QRegularExpression16 &regExp, size_type from = -1) const {
+         const_iterator iter;
+
+         if (from < 0) {
+            iter = end();
+
+         } else {
+            iter = begin() + from;
+
+         }
+
+         iter = lastIndexOfFast(regExp, iter);
+
+         if (iter == end()) {
+            return -1;
+         }
+
+         return iter - begin();
+      }
+
+      //
       QString16 &insert (size_type indexStart, const QString16 &str)  {
          CsString::CsString_utf16::insert(indexStart, str);
          return *this;
@@ -600,6 +636,11 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return *this;
       }
 
+      QString16 &prepend(char32_t c) {
+         CsString::CsString_utf16::insert(begin(), c);
+         return *this;
+      }
+
       QString16 &prepend(QChar32 c) {
          CsString::CsString_utf16::insert(begin(), c);
          return *this;
@@ -607,11 +648,6 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       QString16 &prepend(const QChar32 *data, size_type numOfChars)  {
          CsString::CsString_utf16::insert(begin(), data, data + numOfChars);
-         return *this;
-      }
-
-      QString16 &prepend(char c) {
-         CsString::CsString_utf16::insert(begin(), c);
          return *this;
       }
 

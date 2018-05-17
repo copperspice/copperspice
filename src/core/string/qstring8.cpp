@@ -789,10 +789,10 @@ int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
 #elif defined (Q_OS_MAC)
 
    const CFStringRef mac_str1 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
-                  reinterpret_cast<const UInit8 *>(str1.charData()), str1.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);
+                  reinterpret_cast<const UInt8 *>(str1.charData()), str1.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);
 
    const CFStringRef mac_str2 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
-                  reinterpret_cast<const UInit8 *>(str2,charData()), str2.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);
+                  reinterpret_cast<const UInt8 *>(str2.charData()), str2.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);
 
    const int result = CFStringCompare(mac_str1, mac_str2, kCFCompareLocalized);
 
@@ -804,8 +804,8 @@ int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
 #elif defined(Q_OS_UNIX)
    // may be a bit slow however it is correct
 
-   std::wstring tmp1(str1.toStdWString());
-   std::wstring tmp2(str2.toStdWString());
+   std::wstring tmp1(str1.toString().toStdWString());
+   std::wstring tmp2(str2.toString().toStdWString());
 
    int delta = wcscoll(tmp1.c_str(), tmp2.c_str());
 

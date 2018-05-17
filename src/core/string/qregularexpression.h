@@ -556,8 +556,10 @@ class Q_CORE_EXPORT QRegularExpressionMatch
 template <typename S>
 QRegularExpression<S>::QRegularExpression(const S &pattern, QPatternOptionFlags options)
 {
+   S regex_pattern = cs_internal_regexp_toCanonical(pattern, options);
+
    m_patternOptions = options;
-   setPattern(pattern);
+   setPattern(regex_pattern);
 }
 
 template <typename S>

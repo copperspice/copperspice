@@ -38,6 +38,31 @@
 #include <qlocale.h>
 #include <qmap.h>
 
+// returns an integer data type for use with an output stream
+template <typename V>
+struct CS_SpecialInt
+{
+   using type = V;
+};
+
+template <>
+struct CS_SpecialInt<char>
+{
+   using type = typename std::conditional<std::numeric_limits<char>::is_signed, int, uint>::type;
+};
+
+template <>
+struct CS_SpecialInt<uchar>
+{
+   using type = uint;
+};
+
+template <>
+struct CS_SpecialInt<signed char>
+{
+   using type = int;
+};
+
 class Q_CORE_EXPORT QStringParser
 {
    public:
@@ -62,7 +87,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("Warning: QStringParser::formatArg() is missing place marker '%%n'\n"
-                  "String to format: %s, Argument value: %d\n", str.toUtf8().constData(), value);
+                  "String to format: %s, Argument value: %d\n", str.toLatin1().constData(), value);
 
             return str;
          }
@@ -121,7 +146,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("Warning: QStringParser::formatArg() is missing place marker '%%n'\n"
-                  "String to format: %s, Argument value: %f\n", str.toUtf8().constData(), value);
+                  "String to format: %s, Argument value: %f\n", str.toLatin1().constData(), value);
 
             return str;
          }
@@ -219,7 +244,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("Warning: QStringParser::formatArg() is missing place marker '%%n'\n"
-                  "String to format: %s, Argument value: %s\n", str.toUtf8().constData(), tmp.toUtf8().constData());
+                  "String to format: %s, Argument value: %s\n", str.toLatin1().constData(), tmp.toLatin1().constData());
 
             return str;
          }
@@ -231,7 +256,7 @@ class Q_CORE_EXPORT QStringParser
       template <typename T, typename ...Ts>
       static T formatArgs(const T &str, Ts... args)
       {
-         const QVector<T> argList = { args... };
+         const QVector<T> argList = { T(args)... };
          return multiArg(str, argList);
       }
 
@@ -250,7 +275,7 @@ class Q_CORE_EXPORT QStringParser
 
          std::basic_ostringstream<char> stream;
          stream << std::setbase(base);
-         stream << value;
+         stream << typename CS_SpecialInt<V>::type(value);
 
          std::string s1 = stream.str();
          const char *s2 = s1.c_str();
@@ -312,7 +337,8 @@ class Q_CORE_EXPORT QStringParser
       }
 
       template <typename T, int N>
-      static T section(const T &str, const char (&separator)[N], int firstSection, int lastSection = -1, SectionFlags flags = SectionDefault) {
+      static T section(const T &str, const char (&separator)[N], int firstSection, int lastSection = -1,
+                  SectionFlags flags = SectionDefault) {
          return section(str, T(separator), firstSection, lastSection, flags);
       }
 
@@ -351,6 +377,10 @@ class Q_CORE_EXPORT QStringParser
          stream >> std::setbase(base);
          stream >> retval;
 
+         if (ok != nullptr) {
+            *ok = ! stream.fail();
+         }
+
          return retval;
       }
 
@@ -362,6 +392,10 @@ class Q_CORE_EXPORT QStringParser
          std::istringstream stream(str.toLatin1().constData());
          stream >> retval;
 
+         if (ok != nullptr) {
+            *ok = ! stream.fail();
+         }
+
          return retval;
       }
 
@@ -372,6 +406,10 @@ class Q_CORE_EXPORT QStringParser
 
          std::istringstream stream(str.toLatin1().constData());
          stream >> retval;
+
+         if (ok != nullptr) {
+            *ok = ! stream.fail();
+         }
 
          return retval;
       }
@@ -395,7 +433,7 @@ class Q_CORE_EXPORT QStringParser
          const auto begin = str.cbegin();
          const auto end   = str.cend();
 
-         // populate the numbersUsed map with the %n's that actually occur in the string
+         // populate the numbersUsed map with the %n's that occur in the string
          for (auto iter = begin; iter != end; ++iter) {
 
             if (*iter == QChar32('%')) {
@@ -424,7 +462,9 @@ class Q_CORE_EXPORT QStringParser
          }
 
          if (argCount > cnt) {
-            qWarning("Warning: Format string is missing %% values\n%s", str.toUtf8().constData());
+            qWarning("Warning: Format string has %n arguments and %n place holders.\n%s",
+                  argCount, cnt, str.toLatin1().constData());
+
             argCount = cnt;
          }
 
@@ -837,6 +877,33 @@ QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &sep
 {
    QList<T> retval;
 
+   if (! separator.isValid()) {
+      qWarning("QStringParser::split: Invalid QRegularExpression");
+      return retval;
+   }
+
+   typename T::const_iterator start_iter = str.begin();
+   typename T::const_iterator end_iter;
+
+   Cs::QRegularExpressionMatch<T> match = separator.match(str);
+
+   while (match.hasMatch())  {
+      end_iter = match.capturedStart();
+
+      if (start_iter != end_iter || behavior == QStringParser::KeepEmptyParts) {
+         retval.append( T(start_iter, end_iter) );
+      }
+
+      start_iter = match.capturedEnd();
+
+      // redo the match
+      match = separator.match(str, start_iter);
+   }
+
+   // pick up remaining text
+   if (start_iter != str.end() || behavior == QStringParser::KeepEmptyParts)  {
+      retval.append( T(start_iter, str.end()) );
+   }
 
    return retval;
 }

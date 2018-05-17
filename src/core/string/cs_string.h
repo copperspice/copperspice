@@ -43,6 +43,8 @@ class CsBasicString
 {
    public:
       using size_type              = std::ptrdiff_t;
+      using value_type             = CsChar;
+
       using const_iterator         = CsStringIterator<E, A>;
       using iterator               = CsStringIterator<E, A>;
       using const_reverse_iterator = CsStringReverseIterator<const_iterator>;

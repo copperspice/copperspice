@@ -30,14 +30,12 @@ class CsBasicStringView
 {
    public:
       using size_type              = std::ptrdiff_t;
+      using value_type             = typename S::value_type;
 
       using const_iterator         = typename S::const_iterator;
       using iterator               = typename S::const_iterator;
-
       using const_reverse_iterator = typename S::const_reverse_iterator;
       using reverse_iterator       = typename S::const_reverse_iterator;
-
-      using value_type             = typename S::value_type;
 
       static constexpr const size_type npos = -1;
 
