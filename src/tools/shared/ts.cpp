@@ -309,7 +309,7 @@ bool TSReader::read(Translator &translator)
                      msg.setContext(context);
                      msg.setType(TranslatorMessage::Finished);
                      msg.setPlural(attributes().value(strnumerus) == stryes);
-                     const QStringRef &utf8Attr = attributes().value(strutf8);
+                     const QStringView &utf8Attr = attributes().value(strutf8);
                      msg.setNonUtf8(utf8Attr == strboth);
                      msg.setUtf8(msg.isNonUtf8() || utf8Attr == strtrue
                                  ||  attributes().value(strencoding) == strUtf8);
@@ -380,7 +380,7 @@ bool TSReader::read(Translator &translator)
                         } else if (elementStarts(strtranslation)) {
                            // <translation>
                            QXmlStreamAttributes atts = attributes();
-                           QStringRef type = atts.value(strtype);
+                           QStringView type = atts.value(strtype);
                            if (type == strunfinished) {
                               msg.setType(TranslatorMessage::Unfinished);
                            } else if (type == strobsolete) {

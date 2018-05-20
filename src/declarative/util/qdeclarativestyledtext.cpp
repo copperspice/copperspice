@@ -51,8 +51,8 @@ class QDeclarativeStyledTextPrivate
    bool parseCloseTag(const QChar *&ch, const QString &textIn);
    void parseEntity(const QChar *&ch, const QString &textIn, QString &textOut);
    bool parseFontAttributes(const QChar *&ch, const QString &textIn, QTextCharFormat &format);
-   QPair<QStringRef, QStringRef> parseAttribute(const QChar *&ch, const QString &textIn);
-   QStringRef parseValue(const QChar *&ch, const QString &textIn);
+   QPair<QStringView, QStringView> parseAttribute(const QChar *&ch, const QString &textIn);
+   QStringView parseValue(const QChar *&ch, const QString &textIn);
 
    inline void skipSpace(const QChar *&ch) {
       while (ch->isSpace() && !ch->isNull()) {
@@ -115,7 +115,7 @@ void QDeclarativeStyledTextPrivate::parse()
    while (!ch->isNull()) {
       if (*ch == lessThan) {
          if (textLength) {
-            drawText.append(QStringRef(&text, textStart, textLength));
+            drawText.append(QStringView(&text, textStart, textLength));
          }
          if (rangeStart != drawText.length() && formatStack.count()) {
             QTextLayout::FormatRange formatRange;
@@ -146,7 +146,7 @@ void QDeclarativeStyledTextPrivate::parse()
          textLength = 0;
       } else if (*ch == ampersand) {
          ++ch;
-         drawText.append(QStringRef(&text, textStart, textLength));
+         drawText.append(QStringView(&text, textStart, textLength));
          parseEntity(ch, text, drawText);
          textStart = ch - text.constData() + 1;
          textLength = 0;
@@ -158,7 +158,7 @@ void QDeclarativeStyledTextPrivate::parse()
       }
    }
    if (textLength) {
-      drawText.append(QStringRef(&text, textStart, textLength));
+      drawText.append(QStringView(&text, textStart, textLength));
    }
    if (rangeStart != drawText.length() && formatStack.count()) {
       QTextLayout::FormatRange formatRange;
@@ -181,7 +181,7 @@ bool QDeclarativeStyledTextPrivate::parseTag(const QChar *&ch, const QString &te
    int tagLength = 0;
    while (!ch->isNull()) {
       if (*ch == greaterThan) {
-         QStringRef tag(&textIn, tagStart, tagLength);
+         QStringView tag(&textIn, tagStart, tagLength);
          const QChar char0 = tag.at(0);
          if (char0 == QLatin1Char('b')) {
             if (tagLength == 1) {
@@ -198,7 +198,7 @@ bool QDeclarativeStyledTextPrivate::parseTag(const QChar *&ch, const QString &te
          return true;
       } else if (ch->isSpace()) {
          // may have params.
-         QStringRef tag(&textIn, tagStart, tagLength);
+         QStringView tag(&textIn, tagStart, tagLength);
          if (tag == QLatin1String("font")) {
             return parseFontAttributes(ch, textIn, format);
          }
@@ -222,7 +222,7 @@ bool QDeclarativeStyledTextPrivate::parseCloseTag(const QChar *&ch, const QStrin
    int tagLength = 0;
    while (!ch->isNull()) {
       if (*ch == greaterThan) {
-         QStringRef tag(&textIn, tagStart, tagLength);
+         QStringView tag(&textIn, tagStart, tagLength);
          const QChar char0 = tag.at(0);
          if (char0 == QLatin1Char('b')) {
             if (tagLength == 1) {
@@ -253,7 +253,7 @@ void QDeclarativeStyledTextPrivate::parseEntity(const QChar *&ch, const QString 
    int entityLength = 0;
    while (!ch->isNull()) {
       if (*ch == QLatin1Char(';')) {
-         QStringRef entity(&textIn, entityStart, entityLength);
+         QStringView entity(&textIn, entityStart, entityLength);
          if (entity == QLatin1String("gt")) {
             textOut += QChar(62);
          } else if (entity == QLatin1String("lt")) {
@@ -272,7 +272,7 @@ bool QDeclarativeStyledTextPrivate::parseFontAttributes(const QChar *&ch, const 
       QTextCharFormat &format)
 {
    bool valid = false;
-   QPair<QStringRef, QStringRef> attr;
+   QPair<QStringView, QStringView> attr;
    do {
       attr = parseAttribute(ch, textIn);
       if (attr.first == QLatin1String("color")) {
@@ -294,7 +294,7 @@ bool QDeclarativeStyledTextPrivate::parseFontAttributes(const QChar *&ch, const 
    return valid;
 }
 
-QPair<QStringRef, QStringRef> QDeclarativeStyledTextPrivate::parseAttribute(const QChar *&ch, const QString &textIn)
+QPair<QStringView, QStringView> QDeclarativeStyledTextPrivate::parseAttribute(const QChar *&ch, const QString &textIn)
 {
    skipSpace(ch);
 
@@ -315,10 +315,10 @@ QPair<QStringRef, QStringRef> QDeclarativeStyledTextPrivate::parseAttribute(cons
          if (!attrLength) {
             break;
          }
-         QStringRef attr(&textIn, attrStart, attrLength);
-         QStringRef val = parseValue(ch, textIn);
+         QStringView attr(&textIn, attrStart, attrLength);
+         QStringView val = parseValue(ch, textIn);
          if (!val.isEmpty()) {
-            return QPair<QStringRef, QStringRef>(attr, val);
+            return QPair<QStringView, QStringView>(attr, val);
          }
          break;
       } else {
@@ -327,10 +327,10 @@ QPair<QStringRef, QStringRef> QDeclarativeStyledTextPrivate::parseAttribute(cons
       ++ch;
    }
 
-   return QPair<QStringRef, QStringRef>();
+   return QPair<QStringView, QStringView>();
 }
 
-QStringRef QDeclarativeStyledTextPrivate::parseValue(const QChar *&ch, const QString &textIn)
+QStringView QDeclarativeStyledTextPrivate::parseValue(const QChar *&ch, const QString &textIn)
 {
    int valStart = ch - textIn.constData();
    int valLength = 0;
@@ -339,11 +339,11 @@ QStringRef QDeclarativeStyledTextPrivate::parseValue(const QChar *&ch, const QSt
       ++ch;
    }
    if (ch->isNull()) {
-      return QStringRef();
+      return QStringView();
    }
    ++ch; // skip quote
 
-   return QStringRef(&textIn, valStart, valLength);
+   return QStringView(&textIn, valStart, valLength);
 }
 
 QT_END_NAMESPACE

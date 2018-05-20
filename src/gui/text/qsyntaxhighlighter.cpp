@@ -33,8 +33,6 @@
 #include <qtextedit.h>
 #include <qtimer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSyntaxHighlighterPrivate
 {
    Q_DECLARE_PUBLIC(QSyntaxHighlighter)
@@ -343,68 +341,11 @@ void QSyntaxHighlighter::rehighlightBlock(const QTextBlock &block)
    }
 }
 
-/*!
-    \fn void QSyntaxHighlighter::highlightBlock(const QString &text)
 
-    Highlights the given text block. This function is called when
-    necessary by the rich text engine, i.e. on text blocks which have
-    changed.
-
-    To provide your own syntax highlighting, you must subclass
-    QSyntaxHighlighter and reimplement highlightBlock(). In your
-    reimplementation you should parse the block's \a text and call
-    setFormat() as often as necessary to apply any font and color
-    changes that you require. For example:
-
-    \snippet doc/src/snippets/code/src_gui_text_qsyntaxhighlighter.cpp 3
-
-    Some syntaxes can have constructs that span several text
-    blocks. For example, a C++ syntax highlighter should be able to
-    cope with \c{/}\c{*...*}\c{/} multiline comments. To deal with
-    these cases it is necessary to know the end state of the previous
-    text block (e.g. "in comment").
-
-    Inside your highlightBlock() implementation you can query the end
-    state of the previous text block using the previousBlockState()
-    function. After parsing the block you can save the last state
-    using setCurrentBlockState().
-
-    The currentBlockState() and previousBlockState() functions return
-    an int value. If no state is set, the returned value is -1. You
-    can designate any other value to identify any given state using
-    the setCurrentBlockState() function. Once the state is set the
-    QTextBlock keeps that value until it is set set again or until the
-    corresponding paragraph of text gets deleted.
-
-    For example, if you're writing a simple C++ syntax highlighter,
-    you might designate 1 to signify "in comment". For a text block
-    that ended in the middle of a comment you'd set 1 using
-    setCurrentBlockState, and for other paragraphs you'd set 0.
-    In your parsing code if the return value of previousBlockState()
-    is 1, you would highlight the text as a C++ comment until you
-    reached the closing \c{*}\c{/}.
-
-    \sa previousBlockState(), setFormat(), setCurrentBlockState()
-*/
-
-/*!
-    This function is applied to the syntax highlighter's current text
-    block (i.e. the text that is passed to the highlightBlock()
-    function).
-
-    The specified \a format is applied to the text from the \a start
-    position for a length of \a count characters (if \a count is 0,
-    nothing is done). The formatting properties set in \a format are
-    merged at display time with the formatting information stored
-    directly in the document, for example as previously set with
-    QTextCursor's functions. Note that the document itself remains
-    unmodified by the format set through this function.
-
-    \sa format(), highlightBlock()
-*/
 void QSyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &format)
 {
    Q_D(QSyntaxHighlighter);
+
    if (start < 0 || start >= d->formatChanges.count()) {
       return;
    }
@@ -415,17 +356,6 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &
    }
 }
 
-/*!
-    \overload
-
-    The specified \a color is applied to the current text block from
-    the \a start position for a length of \a count characters.
-
-    The other attributes of the current text block, e.g. the font and
-    background color, are reset to default values.
-
-    \sa format(), highlightBlock()
-*/
 void QSyntaxHighlighter::setFormat(int start, int count, const QColor &color)
 {
    QTextCharFormat format;
@@ -433,17 +363,6 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QColor &color)
    setFormat(start, count, format);
 }
 
-/*!
-    \overload
-
-    The specified \a font is applied to the current text block from
-    the \a start position for a length of \a count characters.
-
-    The other attributes of the current text block, e.g. the font and
-    background color, are reset to default values.
-
-    \sa format(), highlightBlock()
-*/
 void QSyntaxHighlighter::setFormat(int start, int count, const QFont &font)
 {
    QTextCharFormat format;
@@ -451,12 +370,6 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QFont &font)
    setFormat(start, count, format);
 }
 
-/*!
-    \fn QTextCharFormat QSyntaxHighlighter::format(int position) const
-
-    Returns the format at \a position inside the syntax highlighter's
-    current text block.
-*/
 QTextCharFormat QSyntaxHighlighter::format(int pos) const
 {
    Q_D(const QSyntaxHighlighter);
@@ -466,13 +379,6 @@ QTextCharFormat QSyntaxHighlighter::format(int pos) const
    return d->formatChanges.at(pos);
 }
 
-/*!
-    Returns the end state of the text block previous to the
-    syntax highlighter's current block. If no value was
-    previously set, the returned value is -1.
-
-    \sa highlightBlock(), setCurrentBlockState()
-*/
 int QSyntaxHighlighter::previousBlockState() const
 {
    Q_D(const QSyntaxHighlighter);
@@ -517,40 +423,6 @@ void QSyntaxHighlighter::setCurrentBlockState(int newState)
    d->currentBlock.setUserState(newState);
 }
 
-/*!
-    Attaches the given \a data to the current text block.  The
-    ownership is passed to the underlying text document, i.e. the
-    provided QTextBlockUserData object will be deleted if the
-    corresponding text block gets deleted.
-
-    QTextBlockUserData can be used to store custom settings. In the
-    case of syntax highlighting, it is in particular interesting as
-    cache storage for information that you may figure out while
-    parsing the paragraph's text.
-
-    For example while parsing the text, you can keep track of
-    parenthesis characters that you encounter ('{[(' and the like),
-    and store their relative position and the actual QChar in a simple
-    class derived from QTextBlockUserData:
-
-    \snippet doc/src/snippets/code/src_gui_text_qsyntaxhighlighter.cpp 4
-
-    During cursor navigation in the associated editor, you can ask the
-    current QTextBlock (retrieved using the QTextCursor::block()
-    function) if it has a user data object set and cast it to your \c
-    BlockData object. Then you can check if the current cursor
-    position matches with a previously recorded parenthesis position,
-    and, depending on the type of parenthesis (opening or closing),
-    find the next opening or closing parenthesis on the same level.
-
-    In this way you can do a visual parenthesis matching and highlight
-    from the current cursor position to the matching parenthesis. That
-    makes it easier to spot a missing parenthesis in your code and to
-    find where a corresponding opening/closing parenthesis is when
-    editing parenthesis intensive code.
-
-    \sa QTextBlock::setUserData()
-*/
 void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData *data)
 {
    Q_D(QSyntaxHighlighter);
@@ -561,12 +433,6 @@ void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData *data)
    d->currentBlock.setUserData(data);
 }
 
-/*!
-    Returns the QTextBlockUserData object previously attached to the
-    current text block.
-
-    \sa QTextBlock::userData(), setCurrentBlockUserData()
-*/
 QTextBlockUserData *QSyntaxHighlighter::currentBlockUserData() const
 {
    Q_D(const QSyntaxHighlighter);
@@ -577,11 +443,6 @@ QTextBlockUserData *QSyntaxHighlighter::currentBlockUserData() const
    return d->currentBlock.userData();
 }
 
-/*!
-    \since 4.4
-
-    Returns the current text block.
-*/
 QTextBlock QSyntaxHighlighter::currentBlock() const
 {
    Q_D(const QSyntaxHighlighter);
@@ -599,7 +460,5 @@ void QSyntaxHighlighter::_q_delayedRehighlight()
    Q_D(QSyntaxHighlighter);
    d->_q_delayedRehighlight();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SYNTAXHIGHLIGHTER

@@ -82,11 +82,11 @@ class Q_CORE_EXPORT QSystemLocale
       PMText, // QString
       FirstDayOfWeek, // Qt::DayOfWeek
       Weekdays, // QList<Qt::DayOfWeek>
-      CurrencySymbol, // QString in: CurrencyToStringArgument
-      CurrencyToString, // QString in: qlonglong, qulonglong or double
-      UILanguages, // QStringList
-      StringToStandardQuotation, // QString in: QStringRef to quote
-      StringToAlternateQuotation, // QString in: QStringRef to quote
+      CurrencySymbol,                  // QString in: CurrencyToStringArgument
+      CurrencyToString,                // QString in: qlonglong, qulonglong or double
+      UILanguages,                     // QStringList
+      StringToStandardQuotation,       // QString in: QStringView to quote
+      StringToAlternateQuotation,      // QString in: QStringView to quote
       ScriptId, // uint
       ListToSeparatedString, // QString
       LocaleChanged, // system locale changed

@@ -221,16 +221,18 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
          if (oldState == Stopped) {
             d->setDefaultStartEndValue(d->targetValue->property(d->propertyName));
 
-            //let's check if we have a start value and an end value
-            if (!startValue().isValid() && (d->direction == Backward || !d->defaultStartEndValue.isValid())) {
+            // check if we have a start value and an end value
+            if (! startValue().isValid() && (d->direction == Backward || !d->defaultStartEndValue.isValid())) {
+
                qWarning("QPropertyAnimation::updateState (%s, %s, %s): starting an animation without start value",
-                        d->propertyName.constData(), d->target.data()->metaObject()->className(),
+                        d->propertyName.constData(), csPrintable(d->target.data()->metaObject()->className()),
                         csPrintable(d->target.data()->objectName()));
             }
 
             if (!endValue().isValid() && (d->direction == Forward || !d->defaultStartEndValue.isValid())) {
+
                qWarning("QPropertyAnimation::updateState (%s, %s, %s): starting an animation without end value",
-                        d->propertyName.constData(), d->target.data()->metaObject()->className(),
+                        d->propertyName.constData(), csPrintable(d->target.data()->metaObject()->className()),
                         csPrintable(d->target.data()->objectName()));
             }
          }

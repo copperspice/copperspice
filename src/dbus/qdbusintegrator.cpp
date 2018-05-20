@@ -440,7 +440,7 @@ static bool findObject(const QDBusConnectionPrivate::ObjectTreeNode *root,
             break;
         int end = fullpath.indexOf(QLatin1Char('/'), start);
         end = (end == -1 ? length : end);
-        QStringRef pathComponent(&fullpath, start, end - start);
+        QStringView pathComponent(&fullpath, start, end - start);
 
         QDBusConnectionPrivate::ObjectTreeNode::DataList::ConstIterator it =
             std::lower_bound(node->children.constBegin(), node->children.constEnd(), pathComponent);
@@ -484,7 +484,7 @@ static QObject *findChildObject(const QDBusConnectionPrivate::ObjectTreeNode *ro
 
             int pos = fullpath.indexOf(QLatin1Char('/'), start);
             pos = (pos == -1 ? length : pos);
-            QStringRef pathComponent(&fullpath, start, pos - start);
+            QStringView pathComponent(&fullpath, start, pos - start);
 
             const QObjectList children = obj->children();
 

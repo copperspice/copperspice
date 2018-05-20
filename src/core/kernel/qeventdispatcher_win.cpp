@@ -63,7 +63,7 @@ extern uint qGlobalPostedEventsCount();
 #endif // QT_NO_GESTURES
 
 enum {
-   WM_QT_SOCKETNOTIFIER = WM_USER,
+   WM_QT_SOCKETNOTIFIER   = WM_USER,
    WM_QT_SENDPOSTEDEVENTS = WM_USER + 1,
    SendPostedEventsWindowsTimerId = ~1u
 };
@@ -283,12 +283,13 @@ LRESULT QT_WIN_CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPA
       return 0;
 
    } else if (message == WM_QT_SENDPOSTEDEVENTS
-                  || (message == WM_TIMER && d->sendPostedEventsWindowsTimerId != 0 && wp == (uint)d->sendPostedEventsWindowsTimerId)) {
+                  || (message == WM_TIMER && d->sendPostedEventsWindowsTimerId != 0 &&
+                  wp == (uint)d->sendPostedEventsWindowsTimerId)) {
 
       // we also use a Windows timer to send posted events when the message queue is full
       int localSerialNumber = d->serialNumber.load();
 
-      // calling a method in the private class 12/30/2013
+      // calling a method in the private class 12/2013
       QThreadData *threadData = d->get_m_ThreadData();
 
       if (localSerialNumber != d->lastSerialNumber) {
@@ -570,7 +571,7 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
       HANDLE pHandles[MAXIMUM_WAIT_OBJECTS - 1];
       QVarLengthArray<MSG> processedTimers;
 
-      while (!d->interrupt) {
+      while (! d->interrupt) {
          DWORD nCount = d->winEventNotifierList.count();
          Q_ASSERT(nCount < MAXIMUM_WAIT_OBJECTS - 1);
 
@@ -591,10 +592,8 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
             haveMessage = PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
 
             if (haveMessage && (flags & QEventLoop::ExcludeUserInputEvents)
-                  && ((msg.message >= WM_KEYFIRST
-                       && msg.message <= WM_KEYLAST)
-                      || (msg.message >= WM_MOUSEFIRST
-                          && msg.message <= WM_MOUSELAST)
+                  && ((msg.message >= WM_KEYFIRST && msg.message <= WM_KEYLAST)
+                      || (msg.message >= WM_MOUSEFIRST && msg.message <= WM_MOUSELAST)
                       || msg.message == WM_MOUSEWHEEL
                       || msg.message == WM_MOUSEHWHEEL
                       || msg.message == WM_TOUCH
@@ -623,6 +622,7 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
             }
 
             waitRet = MsgWaitForMultipleObjectsEx(nCount, pHandles, 0, QS_ALLINPUT, MWMO_ALERTABLE);
+
             if ((haveMessage = (waitRet == WAIT_OBJECT_0 + nCount))) {
                // a new message has arrived, process it
                continue;
@@ -673,11 +673,12 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
             // nothing todo so break
             break;
          }
+
          retVal = true;
       }
 
       // still nothing - wait for message or signalled objects
-      canWait = (! retVal && !d->interrupt && (flags & QEventLoop::WaitForMoreEvents));
+      canWait = (! retVal && ! d->interrupt && (flags & QEventLoop::WaitForMoreEvents));
 
       if (canWait) {
          DWORD nCount = d->winEventNotifierList.count();

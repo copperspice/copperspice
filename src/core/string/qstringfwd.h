@@ -65,7 +65,4 @@ using QStringView    = Cs::QStringView<QString8>;
 using QStringView8   = Cs::QStringView<QString8>;
 using QStringView16  = Cs::QStringView<QString16>;
 
-// backwards compatibility ( broom )
-using QStringRef     = Cs::QStringView<QString8>;
-
 #endif

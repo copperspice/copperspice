@@ -83,7 +83,8 @@ void QLineEditPrivate::_q_completionHighlighted(QString newText)
 void QLineEditPrivate::_q_handleWindowActivate()
 {
    Q_Q(QLineEdit);
-   if (!q->hasFocus() && control->hasSelectedText()) {
+
+   if (! q->hasFocus() && control->hasSelectedText()) {
       control->deselect();
    }
 }
@@ -92,6 +93,7 @@ void QLineEditPrivate::_q_textEdited(const QString &text)
 {
    Q_Q(QLineEdit);
    emit q->textEdited(text);
+
 #ifndef QT_NO_COMPLETER
    if (control->completer()
          && control->completer()->completionMode() != QCompleter::InlineCompletion) {

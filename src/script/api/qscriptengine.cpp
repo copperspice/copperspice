@@ -1741,21 +1741,26 @@ void QScriptEnginePrivate::setProperty(JSC::ExecState *exec, JSC::JSValue object
             qWarning("QScriptValue::setProperty(): getter/setter must be a function");
          }
       }
+
    } else {
       // setting the value
       if (getter && getter.isObject() && !(setter && setter.isObject())) {
          qWarning("QScriptValue::setProperty() failed: "
-                  "property '%s' has a getter but no setter", qPrintable(QString(id.ustring())));   // BROOM
+                  "property '%s' has a getter but no setter", csPrintable(id.ustring()));
          return;
       }
+
       if (!value) {
          // ### check if it's a getter/setter property
          thisObject->deleteProperty(exec, id);
+
       } else if (flags != QScriptValue::KeepExistingFlags) {
          if (thisObject->hasOwnProperty(exec, id)) {
-            thisObject->deleteProperty(exec, id);   // ### hmmm - can't we just update the attributes?
+            thisObject->deleteProperty(exec, id);   // ### can't we just update the attributes?
          }
+
          thisObject->putWithAttributes(exec, id, value, propertyFlagsToJSCAttributes(flags));
+
       } else {
          JSC::PutPropertySlot slot;
          thisObject->put(exec, id, value, slot);

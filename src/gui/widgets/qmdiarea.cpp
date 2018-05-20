@@ -1410,12 +1410,13 @@ QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
 */
 void QMdiAreaPrivate::disconnectSubWindow(QObject *subWindow)
 {
-   if (!subWindow) {
+   if (! subWindow) {
       return;
    }
 
    Q_Q(QMdiArea);
-   QObject::disconnect(subWindow, 0, q, 0);
+
+   QObject::disconnect(subWindow, "", q, "");
    subWindow->removeEventFilter(q);
 }
 

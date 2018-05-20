@@ -311,31 +311,6 @@ bool QSqlQuery::isNull(int field) const
    return true;
 }
 
-/*!
-
-  Executes the SQL in \a query. Returns true and sets the query state
-  to \l{isActive()}{active} if the query was successful; otherwise
-  returns false. The \a query string must use syntax appropriate for
-  the SQL database being queried (for example, standard SQL).
-
-  After the query is executed, the query is positioned on an \e
-  invalid record and must be navigated to a valid record before data
-  values can be retrieved (for example, using next()).
-
-  Note that the last error for this query is reset when exec() is
-  called.
-
-  For SQLite, the query string can contain only one statement at a time.
-  If more than one statements is give, the function returns false.
-
-  Example:
-
-  \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 34
-
-  \sa isActive(), isValid(), next(), previous(), first(), last(),
-  seek()
-*/
-
 bool QSqlQuery::exec(const QString &query)
 {
    if (d->ref.load() != 1) {
@@ -343,6 +318,7 @@ bool QSqlQuery::exec(const QString &query)
       *this = QSqlQuery(driver()->createResult());
       d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
       setForwardOnly(fo);
+
    } else {
       d->sqlResult->clear();
       d->sqlResult->setActive(false);
@@ -350,39 +326,25 @@ bool QSqlQuery::exec(const QString &query)
       d->sqlResult->setAt(QSql::BeforeFirstRow);
       d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
    }
+
    d->sqlResult->setQuery(query.trimmed());
-   if (!driver()->isOpen() || driver()->isOpenError()) {
+
+   if (! driver()->isOpen() || driver()->isOpenError()) {
       qWarning("QSqlQuery::exec: database not open");
       return false;
    }
+
    if (query.isEmpty()) {
       qWarning("QSqlQuery::exec: empty query");
       return false;
    }
+
 #ifdef QT_DEBUG_SQL
-   qDebug("\n QSqlQuery: %s", query.toLocal8Bit().constData());
+   qDebug("\n QSqlQuery: %s", query.toUtf8().constData());
 #endif
+
    return d->sqlResult->reset(query);
 }
-
-/*!
-    Returns the value of field \a index in the current record.
-
-    The fields are numbered from left to right using the text of the
-    \c SELECT statement, e.g. in
-
-    \snippet doc/src/snippets/code/src_sql_kernel_qsqlquery.cpp 0
-
-    field 0 is \c forename and field 1 is \c
-    surname. Using \c{SELECT *} is not recommended because the order
-    of the fields in the query is undefined.
-
-    An invalid QVariant is returned if field \a index does not
-    exist, if the query is inactive, or if the query is positioned on
-    an invalid record.
-
-    \sa previous() next() first() last() seek() isActive() isValid()
-*/
 
 QVariant QSqlQuery::value(int index) const
 {
@@ -393,26 +355,10 @@ QVariant QSqlQuery::value(int index) const
    return QVariant();
 }
 
-/*!
-    Returns the current internal position of the query. The first
-    record is at position zero. If the position is invalid, the
-    function returns QSql::BeforeFirstRow or
-    QSql::AfterLastRow, which are special negative values.
-
-    \sa previous() next() first() last() seek() isActive() isValid()
-*/
-
 int QSqlQuery::at() const
 {
    return d->sqlResult->at();
 }
-
-/*!
-    Returns the text of the current query being used, or an empty
-    string if there is no current query text.
-
-    \sa executedQuery()
-*/
 
 QString QSqlQuery::lastQuery() const
 {

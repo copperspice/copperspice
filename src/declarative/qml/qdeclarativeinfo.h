@@ -100,13 +100,11 @@ class Q_DECLARATIVE_EXPORT QDeclarativeInfo : public QDebug
       QDebug::operator<<(t.toLocal8Bit().constData());
       return *this;
    }
-   inline QDeclarativeInfo &operator<<(const QStringRef &t) {
+
+   inline QDeclarativeInfo &operator<<(QStringView t) {
       return operator<<(t.toString());
    }
-   inline QDeclarativeInfo &operator<<(const QLatin1String &t) {
-      QDebug::operator<<(t.latin1());
-      return *this;
-   }
+
    inline QDeclarativeInfo &operator<<(const QByteArray &t) {
       QDebug::operator<<(t);
       return *this;

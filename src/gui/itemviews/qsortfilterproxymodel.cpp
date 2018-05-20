@@ -2119,8 +2119,6 @@ void QSortFilterProxyModel::setFilterFixedString(const QString &pattern)
 {
    Q_D(QSortFilterProxyModel);
 
-// BROOM - fix this area
-
    d->filter_regexp.setPatternOptions(QPatternOption::NoPatternOption);
    d->filter_regexp.setPattern(pattern);
    d->filter_changed();
@@ -2137,6 +2135,7 @@ void QSortFilterProxyModel::setDynamicSortFilter(bool enable)
    Q_D(QSortFilterProxyModel);
 
    d->dynamic_sortfilter = enable;
+
    if (enable) {
       d->sort();
    }
@@ -2190,13 +2189,6 @@ void QSortFilterProxyModel::clear()
    emit layoutChanged();
 }
 
-/*!
-   \since 4.3
-
-    Invalidates the current sorting and filtering.
-
-    \sa invalidateFilter()
-*/
 void QSortFilterProxyModel::invalidate()
 {
    Q_D(QSortFilterProxyModel);

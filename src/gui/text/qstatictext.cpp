@@ -434,14 +434,16 @@ void QStaticTextPrivate::paintText(const QPointF &topLeftPosition, QPainter *p)
 
       actualSize = textLayout.boundingRect().size();
       textLayout.draw(p, topLeftPosition);
+
    } else {
       QTextDocument document;
+
 #ifndef QT_NO_CSSPARSER
       QColor color = p->pen().color();
       document.setDefaultStyleSheet(QString::fromLatin1("body { color: #%1%2%3 }")
-                                    .formatArg(QString::number(color.red(), 16), 2, QLatin1Char('0'))
+                                    .formatArg(QString::number(color.red(), 16),   2, QLatin1Char('0'))
                                     .formatArg(QString::number(color.green(), 16), 2, QLatin1Char('0'))
-                                    .formatArg(QString::number(color.blue(), 16), 2, QLatin1Char('0')));
+                                    .formatArg(QString::number(color.blue(), 16),  2, QLatin1Char('0')));
 #endif
       document.setDefaultFont(font);
       document.setDocumentMargin(0.0);

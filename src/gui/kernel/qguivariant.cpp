@@ -631,10 +631,8 @@ const QVariant::Handler qt_gui_variant_handler = {
    construct,
    clear,
    isNull,
-#ifndef QT_NO_DATASTREAM
    0,
    0,
-#endif
    compare,
    convert,
    0,

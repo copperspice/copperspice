@@ -195,7 +195,7 @@ QDeclarativePropertyCache::Data QDeclarativePropertyCache::create(const QMetaObj
 
       int parenIdx = methodName.indexOf(QLatin1Char('('));
       Q_ASSERT(parenIdx != -1);
-      QStringRef methodNameRef = methodName.leftRef(parenIdx);
+      QStringView methodNameRef = methodName.leftRef(parenIdx);
 
       if (methodNameRef == property) {
          rv.load(m);

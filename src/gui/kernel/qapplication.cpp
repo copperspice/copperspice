@@ -1900,7 +1900,7 @@ void QApplication::syncX()
 
 void QApplication::setActiveWindow(QWidget *act)
 {
-   QWidget *window = act ? act->window() : 0;
+   QWidget *window = act ? act->window() : nullptr;
 
    if (QApplicationPrivate::active_window == window) {
       return;
@@ -1919,12 +1919,15 @@ void QApplication::setActiveWindow(QWidget *act)
    if (QApplicationPrivate::active_window) {
       if (style()->styleHint(QStyle::SH_Widget_ShareActivation, 0, QApplicationPrivate::active_window)) {
          QWidgetList list = topLevelWidgets();
+
          for (int i = 0; i < list.size(); ++i) {
             QWidget *w = list.at(i);
+
             if (w->isVisible() && w->isActiveWindow()) {
                toBeDeactivated.append(w);
             }
          }
+
       } else {
          toBeDeactivated.append(QApplicationPrivate::active_window);
       }
@@ -1942,6 +1945,7 @@ void QApplication::setActiveWindow(QWidget *act)
 
          for (int i = 0; i < list.size(); ++i) {
             QWidget *w = list.at(i);
+
             if (w->isVisible() && w->isActiveWindow()) {
                toBeActivated.append(w);
             }
@@ -1959,7 +1963,7 @@ void QApplication::setActiveWindow(QWidget *act)
    QEvent windowDeactivate(QEvent::WindowDeactivate);
 
 #if ! defined(Q_OS_MAC)
-   if (!previousActiveWindow) {
+   if (! previousActiveWindow) {
       QEvent appActivate(QEvent::ApplicationActivate);
       sendSpontaneousEvent(qApp, &appActivate);
    }
@@ -1985,31 +1989,39 @@ void QApplication::setActiveWindow(QWidget *act)
    }
 
 #if ! defined(Q_OS_MAC)
-   if (!QApplicationPrivate::active_window) {
+   if (! QApplicationPrivate::active_window) {
       QEvent appDeactivate(QEvent::ApplicationDeactivate);
       sendSpontaneousEvent(qApp, &appDeactivate);
    }
 #endif
 
-   if (QApplicationPrivate::popupWidgets == 0) { // !inPopupMode()
+   if (QApplicationPrivate::popupWidgets == 0) {
       // then focus events
-      if (!QApplicationPrivate::active_window && QApplicationPrivate::focus_widget) {
+      if (! QApplicationPrivate::active_window && QApplicationPrivate::focus_widget) {
          QApplicationPrivate::setFocusWidget(0, Qt::ActiveWindowFocusReason);
+
       } else if (QApplicationPrivate::active_window) {
          QWidget *w = QApplicationPrivate::active_window->focusWidget();
-         if (w && w->isVisible() /*&& w->focusPolicy() != QWidget::NoFocus*/) {
+
+         if (w && w->isVisible()) {
             w->setFocus(Qt::ActiveWindowFocusReason);
+
          } else {
             w = QApplicationPrivate::focusNextPrevChild_helper(QApplicationPrivate::active_window, true);
+
             if (w) {
                w->setFocus(Qt::ActiveWindowFocusReason);
+
             } else {
                // If the focus widget is not in the activate_window, clear the focus
                w = QApplicationPrivate::focus_widget;
+
                if (!w && QApplicationPrivate::active_window->focusPolicy() != Qt::NoFocus) {
                   QApplicationPrivate::setFocusWidget(QApplicationPrivate::active_window, Qt::ActiveWindowFocusReason);
+
                } else if (!QApplicationPrivate::active_window->isAncestorOf(w)) {
                   QApplicationPrivate::setFocusWidget(0, Qt::ActiveWindowFocusReason);
+
                }
             }
          }

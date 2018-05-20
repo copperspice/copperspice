@@ -51,7 +51,7 @@ IoUtils::FileType IoUtils::fileType(const QString &fileName)
 #else
    struct ::stat st;
 
-   if (::stat(fileName.toLocal8Bit().constData(), &st)) {
+   if (::stat(fileName.constData(), &st)) {
       return FileNotFound;
    }
 
@@ -61,24 +61,28 @@ IoUtils::FileType IoUtils::fileType(const QString &fileName)
 
 bool IoUtils::isRelativePath(const QString &path)
 {
-   if (path.startsWith(QLatin1Char('/'))) {
+   if (path.startsWith('/')) {
       return false;
    }
+
 #ifdef Q_OS_WIN
-   if (path.startsWith(QLatin1Char('\\'))) {
+   if (path.startsWith('\\')) {
       return false;
    }
+
    // Unlike QFileInfo, this won't accept a relative path with a drive letter.
    // Such paths result in a royal mess anyway ...
-   if (path.length() >= 3 && path.at(1) == QLatin1Char(':') && path.at(0).isLetter()
-         && (path.at(2) == QLatin1Char('/') || path.at(2) == QLatin1Char('\\'))) {
+
+   if (path.length() >= 3 && path.at(1) == ':' && path.at(0).isLetter()
+         && (path.at(2) == '/' || path.at(2) == '\\')) {
       return false;
    }
+
 #endif
    return true;
 }
 
-QStringRef IoUtils::fileName(const QString &fileName)
+QStringView IoUtils::fileName(const QString &fileName)
 {
    return fileName.midView(fileName.lastIndexOf('/') + 1);
 }
@@ -93,5 +97,5 @@ QString IoUtils::resolvePath(const QString &baseDir, const QString &fileName)
       return QDir::cleanPath(fileName);
    }
 
-   return QDir::cleanPath(baseDir + QLatin1Char('/') + fileName);
+   return QDir::cleanPath(baseDir + '/' + fileName);
 }

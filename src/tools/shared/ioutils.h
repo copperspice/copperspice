@@ -48,7 +48,7 @@ class IoUtils
    static bool isAbsolutePath(const QString &fileName) {
       return !isRelativePath(fileName);
    }
-   static QStringRef fileName(const QString &fileName); // Requires normalized path
+   static QStringView fileName(const QString &fileName); // Requires normalized path
    static QString resolvePath(const QString &baseDir, const QString &fileName);
 };
 

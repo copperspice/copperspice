@@ -1134,7 +1134,8 @@ bool QObject::setProperty(const QString8 &name, const QVariant &value)
 
    if (! retval) {
       qWarning("%s::setProperty() Set property \"%s\" failed. Passed value is of type %s, property is of type %s",
-               csPrintable(metaObj->className()), csPrintable(name), value.typeName(), p.typeName() );
+               csPrintable(metaObj->className()), csPrintable(name), csPrintable(value.typeName()),
+               csPrintable(p.typeName()) );
    }
 
    return retval;

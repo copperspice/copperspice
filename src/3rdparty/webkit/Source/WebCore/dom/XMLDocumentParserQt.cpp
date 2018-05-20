@@ -470,10 +470,11 @@ void XMLDocumentParser::startDocument()
     if (!m_parsingFragment) {
         document()->setXMLStandalone(m_stream.isStandaloneDocument(), ec);
 
-        QStringRef version = m_stream.documentVersion();
+        QStringView version = m_stream.documentVersion();
         if (!version.isEmpty())
             document()->setXMLVersion(version, ec);
-        QStringRef encoding = m_stream.documentEncoding();
+
+        QStringView encoding = m_stream.documentEncoding();
         if (!encoding.isEmpty())
             document()->setXMLEncoding(encoding);
     }
@@ -695,9 +696,9 @@ bool XMLDocumentParser::hasError() const
 
 void XMLDocumentParser::parseDtd()
 {
-    QStringRef name = m_stream.dtdName();
-    QStringRef publicId = m_stream.dtdPublicId();
-    QStringRef systemId = m_stream.dtdSystemId();
+    QStringView name     = m_stream.dtdName();
+    QStringView publicId = m_stream.dtdPublicId();
+    QStringView systemId = m_stream.dtdSystemId();
 
     //qDebug() << dtd << name << publicId << systemId;
     if ((publicId == QLatin1String("-//W3C//DTD XHTML 1.0 Transitional//EN"))

@@ -1018,7 +1018,7 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
     the given byte array, \a ba, by checking the BOM (Byte Order Mark)
     and the content-type meta header and returns a QTextCodec instance
     that is capable of decoding the html to unicode. If the codec cannot
-    be detected, this overload returns a Latin-1 QTextCodec.
+    be detected, this overload returns a Latin1 QTextCodec.
 */
 QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba)
 {
@@ -1081,7 +1081,7 @@ QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaul
     Tries to detect the encoding of the provided snippet \a ba by
     using the BOM (Byte Order Mark) and returns a QTextCodec instance
     that is capable of decoding the text to unicode. If the codec
-    cannot be detected, this overload returns a Latin-1 QTextCodec.
+    cannot be detected, this overload returns a Latin1 QTextCodec.
 
     \sa codecForHtml()
 */

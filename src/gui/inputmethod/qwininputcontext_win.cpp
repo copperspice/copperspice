@@ -332,9 +332,11 @@ void QWinInputContext::TranslateMessage(const MSG *msg)
 LRESULT QWinInputContext::DefWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
    LRESULT retval;
-   if (!aimm || aimm->OnDefWindowProc(hwnd, msg, wParam, lParam, &retval) != S_OK) {
+
+   if (! aimm || aimm->OnDefWindowProc(hwnd, msg, wParam, lParam, &retval) != S_OK) {
       retval = ::DefWindowProc(hwnd, msg, wParam, lParam);
    }
+
    return retval;
 }
 
@@ -342,6 +344,7 @@ LRESULT QWinInputContext::DefWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPAR
 void QWinInputContext::update()
 {
    QWidget *w = focusWidget();
+
    if (!w) {
       return;
    }
@@ -413,7 +416,7 @@ bool QWinInputContext::endComposition()
 {
    QWidget *fw = focusWidget();
 #ifdef Q_IME_DEBUG
-   qDebug() << "endComposition! fw=" <<  fw;
+   qDebug() << "endComposition fw=" <<  fw;
 #endif
    bool result = true;
    if (imePosition == -1 || recursionGuard) {
@@ -606,7 +609,7 @@ bool QWinInputContext::composition(LPARAM lParam)
       releaseContext(fw->effectiveWinId(), imc);
    }
 #ifdef Q_IME_DEBUG
-   qDebug("imecomposition: cursor pos at %d, str=%x", imePosition, str[0].unicode());
+   qDebug("ime composition: cursor pos at %d, str=%x", imePosition, str[0].unicode());
 #endif
    return result;
 }

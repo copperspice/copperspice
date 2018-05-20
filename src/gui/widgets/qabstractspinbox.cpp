@@ -1471,10 +1471,10 @@ QVariant QAbstractSpinBoxPrivate::bound(const QVariant &val, const QVariant &old
     of \a ep it will also emit signals.
 */
 
-void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep,
-                                       bool doUpdate)
+void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep, bool doUpdate)
 {
    Q_Q(QAbstractSpinBox);
+
    const QVariant old = value;
    value = bound(val);
    pendingEmit = false;
@@ -1482,6 +1482,7 @@ void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep,
    if (doUpdate) {
       updateEdit();
    }
+
    q->update();
 
    if (ep == AlwaysEmit || (ep == EmitIfChanged && old != value)) {
@@ -1512,7 +1513,7 @@ void QAbstractSpinBoxPrivate::updateEdit()
    const bool sb = edit->blockSignals(true);
    edit->setText(newText);
 
-   if (!specialValue()) {
+   if (! specialValue()) {
       cursor = qBound(prefix.size(), cursor, edit->displayText().size() - suffix.size());
 
       if (selsize > 0) {
@@ -1521,6 +1522,7 @@ void QAbstractSpinBoxPrivate::updateEdit()
          edit->setCursorPosition(empty ? prefix.size() : cursor);
       }
    }
+
    edit->blockSignals(sb);
    q->update();
 }

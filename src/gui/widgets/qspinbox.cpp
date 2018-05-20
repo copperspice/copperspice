@@ -88,103 +88,6 @@ class QDoubleSpinBoxPrivate : public QAbstractSpinBoxPrivate
    double actualMax;
 };
 
-
-/*!
-    \class QSpinBox
-    \brief The QSpinBox class provides a spin box widget.
-
-    \ingroup basicwidgets
-
-
-    QSpinBox is designed to handle integers and discrete sets of
-    values (e.g., month names); use QDoubleSpinBox for floating point
-    values.
-
-    QSpinBox allows the user to choose a value by clicking the up/down
-    buttons or pressing up/down on the keyboard to increase/decrease
-    the value currently displayed. The user can also type the value in
-    manually. The spin box supports integer values but can be extended to
-    use different strings with validate(), textFromValue() and valueFromText().
-
-    Every time the value changes QSpinBox emits the valueChanged()
-    signals. The current value can be fetched with value() and set
-    with setValue().
-
-    Clicking the up/down buttons or using the keyboard accelerator's
-    up and down arrows will increase or decrease the current value in
-    steps of size singleStep(). If you want to change this behaviour you
-    can reimplement the virtual function stepBy(). The minimum and
-    maximum value and the step size can be set using one of the
-    constructors, and can be changed later with setMinimum(),
-    setMaximum() and setSingleStep().
-
-    Most spin boxes are directional, but QSpinBox can also operate as
-    a circular spin box, i.e. if the range is 0-99 and the current
-    value is 99, clicking "up" will give 0 if wrapping() is set to
-    true. Use setWrapping() if you want circular behavior.
-
-    The displayed value can be prepended and appended with arbitrary
-    strings indicating, for example, currency or the unit of
-    measurement. See setPrefix() and setSuffix(). The text in the spin
-    box is retrieved with text() (which includes any prefix() and
-    suffix()), or with cleanText() (which has no prefix(), no suffix()
-    and no leading or trailing whitespace).
-
-    It is often desirable to give the user a special (often default)
-    choice in addition to the range of numeric values. See
-    setSpecialValueText() for how to do this with QSpinBox.
-
-    \table 100%
-    \row \o \inlineimage windowsxp-spinbox.png Screenshot of a Windows XP spin box
-         \o A spin box shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-    \row \o \inlineimage plastique-spinbox.png Screenshot of a Plastique spin box
-         \o A spin box shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-    \row \o \inlineimage macintosh-spinbox.png Screenshot of a Macintosh spin box
-         \o A spin box shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-    \endtable
-
-    \section1 Subclassing QSpinBox
-
-    If using prefix(), suffix(), and specialValueText() don't provide
-    enough control, you subclass QSpinBox and reimplement
-    valueFromText() and textFromValue(). For example, here's the code
-    for a custom spin box that allows the user to enter icon sizes
-    (e.g., "32 x 32"):
-
-    \snippet examples/widgets/icons/iconsizespinbox.cpp 1
-    \codeline
-    \snippet examples/widgets/icons/iconsizespinbox.cpp 2
-
-    See the \l{widgets/icons}{Icons} example for the full source
-    code.
-
-    \sa QDoubleSpinBox, QDateTimeEdit, QSlider, {Spin Boxes Example}
-*/
-
-/*!
-    \fn void QSpinBox::valueChanged(int i)
-
-    This signal is emitted whenever the spin box's value is changed.
-    The new value's integer value is passed in \a i.
-*/
-
-/*!
-    \fn void QSpinBox::valueChanged(const QString &text)
-
-    \overload
-
-    The new value is passed literally in \a text with no prefix() or
-    suffix().
-*/
-
-/*!
-    Constructs a spin box with 0 as minimum value and 99 as maximum value, a
-    step value of 1. The value is initially set to 0. It is parented to \a
-    parent.
-
-    \sa setMinimum(), setMaximum(), setSingleStep()
-*/
-
 QSpinBox::QSpinBox(QWidget *parent)
    : QAbstractSpinBox(*new QSpinBoxPrivate, parent)
 {
@@ -193,15 +96,6 @@ QSpinBox::QSpinBox(QWidget *parent)
 
    connect(this, static_cast<void (QSpinBox::*)(int)> (&QSpinBox::valueChanged), this, &QSpinBox::cs_valueChanged);
 }
-
-
-/*!
-    \property QSpinBox::value
-    \brief the value of the spin box
-
-    setValue() will emit valueChanged() if the new value is different
-    from the old one.
-*/
 
 int QSpinBox::value() const
 {
@@ -215,24 +109,6 @@ void QSpinBox::setValue(int value)
    d->setValue(QVariant(value), EmitIfChanged);
 }
 
-/*!
-    \property QSpinBox::prefix
-    \brief the spin box's prefix
-
-    The prefix is prepended to the start of the displayed value.
-    Typical use is to display a unit of measurement or a currency
-    symbol. For example:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qspinbox.cpp 0
-
-    To turn off the prefix display, set this property to an empty
-    string. The default is no prefix. The prefix is not displayed when
-    value() == minimum() and specialValueText() is set.
-
-    If no prefix is set, prefix() returns an empty string.
-
-    \sa suffix(), setSuffix(), specialValueText(), setSpecialValueText()
-*/
 
 QString QSpinBox::prefix() const
 {
@@ -251,24 +127,7 @@ void QSpinBox::setPrefix(const QString &prefix)
    updateGeometry();
 }
 
-/*!
-    \property QSpinBox::suffix
-    \brief the suffix of the spin box
 
-    The suffix is appended to the end of the displayed value. Typical
-    use is to display a unit of measurement or a currency symbol. For
-    example:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qspinbox.cpp 1
-
-    To turn off the suffix display, set this property to an empty
-    string. The default is no suffix. The suffix is not displayed for
-    the minimum() if specialValueText() is set.
-
-    If no suffix is set, suffix() returns an empty string.
-
-    \sa prefix(), setPrefix(), specialValueText(), setSpecialValueText()
-*/
 
 QString QSpinBox::suffix() const
 {
@@ -386,40 +245,11 @@ void QSpinBox::setMaximum(int maximum)
    d->setRange((d->variantCompare(d->minimum, m) < 0 ? d->minimum : m), m);
 }
 
-/*!
-    Convenience function to set the \a minimum, and \a maximum values
-    with a single function call.
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qspinbox.cpp 2
-    is equivalent to:
-    \snippet doc/src/snippets/code/src_gui_widgets_qspinbox.cpp 3
-
-    \sa minimum maximum
-*/
-
 void QSpinBox::setRange(int minimum, int maximum)
 {
    Q_D(QSpinBox);
    d->setRange(QVariant(minimum), QVariant(maximum));
 }
-
-/*!
-    This virtual function is used by the spin box whenever it needs to
-    display the given \a value. The default implementation returns a
-    string containing \a value printed in the standard way using
-    QWidget::locale().toString(), but with the thousand separator
-    removed. Reimplementations may return anything. (See the example
-    in the detailed description.)
-
-    Note: QSpinBox does not call this function for specialValueText()
-    and that neither prefix() nor suffix() should be included in the
-    return value.
-
-    If you reimplement this, you may also need to reimplement
-    valueFromText() and validate()
-
-    \sa valueFromText(), validate(), QLocale::groupSeparator()
-*/
 
 QString QSpinBox::textFromValue(int value) const
 {
@@ -430,21 +260,6 @@ QString QSpinBox::textFromValue(int value) const
 
    return str;
 }
-
-/*!
-    \fn int QSpinBox::valueFromText(const QString &text) const
-
-    This virtual function is used by the spin box whenever it needs to
-    interpret \a text entered by the user as a value.
-
-    Subclasses that need to display spin box values in a non-numeric
-    way need to reimplement this function.
-
-    Note: QSpinBox handles specialValueText() separately; this
-    function is only concerned with the other values.
-
-    \sa textFromValue(), validate()
-*/
 
 int QSpinBox::valueFromText(const QString &text) const
 {
@@ -477,84 +292,6 @@ void QSpinBox::fixup(QString &input) const
    input.remove(locale().groupSeparator());
 }
 
-
-// --- QDoubleSpinBox ---
-
-/*!
-    \class QDoubleSpinBox
-    \brief The QDoubleSpinBox class provides a spin box widget that
-    takes doubles.
-
-    \ingroup basicwidgets
-
-
-    QDoubleSpinBox allows the user to choose a value by clicking the
-    up and down buttons or by pressing Up or Down on the keyboard to
-    increase or decrease the value currently displayed. The user can
-    also type the value in manually. The spin box supports double
-    values but can be extended to use different strings with
-    validate(), textFromValue() and valueFromText().
-
-    Every time the value changes QDoubleSpinBox emits the
-    valueChanged() signal. The current value can be fetched with
-    value() and set with setValue().
-
-    Note: QDoubleSpinBox will round numbers so they can be displayed
-    with the current precision. In a QDoubleSpinBox with decimals set
-    to 2, calling setValue(2.555) will cause value() to return 2.56.
-
-    Clicking the up and down buttons or using the keyboard accelerator's
-    Up and Down arrows will increase or decrease the current value in
-    steps of size singleStep(). If you want to change this behavior you
-    can reimplement the virtual function stepBy(). The minimum and
-    maximum value and the step size can be set using one of the
-    constructors, and can be changed later with setMinimum(),
-    setMaximum() and setSingleStep(). The spinbox has a default
-    precision of 2 decimal places but this can be changed using
-    setDecimals().
-
-    Most spin boxes are directional, but QDoubleSpinBox can also
-    operate as a circular spin box, i.e. if the range is 0.0-99.9 and
-    the current value is 99.9, clicking "up" will give 0 if wrapping()
-    is set to true. Use setWrapping() if you want circular behavior.
-
-    The displayed value can be prepended and appended with arbitrary
-    strings indicating, for example, currency or the unit of
-    measurement. See setPrefix() and setSuffix(). The text in the spin
-    box is retrieved with text() (which includes any prefix() and
-    suffix()), or with cleanText() (which has no prefix(), no suffix()
-    and no leading or trailing whitespace).
-
-    It is often desirable to give the user a special (often default)
-    choice in addition to the range of numeric values. See
-    setSpecialValueText() for how to do this with QDoubleSpinBox.
-
-    \sa QSpinBox, QDateTimeEdit, QSlider, {Spin Boxes Example}
-*/
-
-/*!
-    \fn void QDoubleSpinBox::valueChanged(double d);
-
-    This signal is emitted whenever the spin box's value is changed.
-    The new value is passed in \a d.
-*/
-
-/*!
-    \fn void QDoubleSpinBox::valueChanged(const QString &text);
-
-    \overload
-
-    The new value is passed literally in \a text with no prefix() or
-    suffix().
-*/
-
-/*!
-    Constructs a spin box with 0.0 as minimum value and 99.99 as maximum value,
-    a step value of 1.0 and a precision of 2 decimal places. The value is
-    initially set to 0.00. The spin box has the given \a parent.
-
-    \sa setMinimum(), setMaximum(), setSingleStep()
-*/
 QDoubleSpinBox::QDoubleSpinBox(QWidget *parent)
    : QAbstractSpinBox(*new QDoubleSpinBoxPrivate, parent)
 {
@@ -565,18 +302,6 @@ QDoubleSpinBox::QDoubleSpinBox(QWidget *parent)
            this, &QDoubleSpinBox::cs_valueChanged);
 }
 
-/*!
-    \property QDoubleSpinBox::value
-    \brief the value of the spin box
-
-    setValue() will emit valueChanged() if the new value is different
-    from the old one.
-
-    Note: The value will be rounded so it can be displayed with the
-    current setting of decimals.
-
-    \sa decimals
-*/
 double QDoubleSpinBox::value() const
 {
    Q_D(const QDoubleSpinBox);
@@ -818,46 +543,18 @@ void QDoubleSpinBox::setDecimals(int decimals)
    setValue(value());
 }
 
-/*!
-    This virtual function is used by the spin box whenever it needs to
-    display the given \a value. The default implementation returns a string
-    containing \a value printed using QWidget::locale().toString(\a value,
-    QLatin1Char('f'), decimals()) and will remove the thousand
-    separator. Reimplementations may return anything.
-
-    Note: QDoubleSpinBox does not call this function for
-    specialValueText() and that neither prefix() nor suffix() should
-    be included in the return value.
-
-    If you reimplement this, you may also need to reimplement
-    valueFromText().
-
-    \sa valueFromText(), QLocale::groupSeparator()
-*/
-
-
 QString QDoubleSpinBox::textFromValue(double value) const
 {
    Q_D(const QDoubleSpinBox);
    QString str = locale().toString(value, 'f', d->decimals);
+
    if (qAbs(value) >= 1000.0) {
       str.remove(locale().groupSeparator());
    }
+
    return str;
 }
 
-/*!
-    This virtual function is used by the spin box whenever it needs to
-    interpret \a text entered by the user as a value.
-
-    Subclasses that need to display spin box values in a non-numeric
-    way need to reimplement this function.
-
-    Note: QDoubleSpinBox handles specialValueText() separately; this
-    function is only concerned with the other values.
-
-    \sa textFromValue(), validate()
-*/
 double QDoubleSpinBox::valueFromText(const QString &text) const
 {
    Q_D(const QDoubleSpinBox);
@@ -1071,7 +768,8 @@ QVariant QDoubleSpinBoxPrivate::valueFromText(const QString &f) const
 
 double QDoubleSpinBoxPrivate::round(double value) const
 {
-   return QString::number(value, 'f', decimals).toDouble();
+   QString tmp = QString::number(value, 'f', decimals);
+   return tmp.toDouble();
 }
 
 
@@ -1239,36 +937,6 @@ QString QDoubleSpinBoxPrivate::textFromValue(const QVariant &f) const
    Q_Q(const QDoubleSpinBox);
    return q->textFromValue(f.toDouble());
 }
-
-/*!
-    \fn void QSpinBox::setLineStep(int step)
-
-    Use setSingleStep() instead.
-*/
-
-/*!
-    \fn void QSpinBox::setMaxValue(int value)
-
-    Use setMaximum() instead.
-*/
-
-/*!
-    \fn void QSpinBox::setMinValue(int value)
-
-    Use setMinimum() instead.
-*/
-
-/*!
-    \fn int QSpinBox::maxValue() const
-
-    Use maximum() instead.
-*/
-
-/*!
-    \fn int QSpinBox::minValue() const
-
-    Use minimum() instead.
-*/
 
 /*! \reimp */
 bool QSpinBox::event(QEvent *event)

@@ -1474,15 +1474,9 @@ void QTextCursor::insertText(const QString &text)
    insertText(text, fmt);
 }
 
-/*!
-    \fn void QTextCursor::insertText(const QString &text, const QTextCharFormat &format)
-    \overload
-
-    Inserts \a text at the current position with the given \a format.
-*/
 void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format)
 {
-   if (!d || !d->priv) {
+   if (! d || ! d->priv) {
       return;
    }
 
@@ -1499,38 +1493,31 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
       d->remove();
    }
 
-   if (!text.isEmpty()) {
+   if (! text.isEmpty()) {
       QTextFormatCollection *formats = d->priv->formatCollection();
       int formatIdx = formats->indexForFormat(format);
       Q_ASSERT(formats->format(formatIdx).isCharFormat());
 
       QTextBlockFormat blockFmt = blockFormat();
-
-
-      int textStart = d->priv->text.length();
+      int textStart  = d->priv->text.length();
       int blockStart = 0;
+
       d->priv->text += text;
-      int textEnd = d->priv->text.length();
+      int textEnd = d->priv->text.length(); 
 
       for (int i = 0; i < text.length(); ++i) {
          QChar ch = text.at(i);
-
          const int blockEnd = i;
 
-         if (ch == QLatin1Char('\r')
-               && (i + 1) < text.length()
-               && text.at(i + 1) == QLatin1Char('\n')) {
+         if (ch == '\r' && (i + 1) < text.length() && text.at(i + 1) == '\n') {
             ++i;
             ch = text.at(i);
          }
 
-         if (ch == QLatin1Char('\n')
-               || ch == QChar::ParagraphSeparator
-               || ch == QTextBeginningOfFrame
-               || ch == QTextEndOfFrame
-               || ch == QLatin1Char('\r')) {
+         if (ch == '\n' || ch == QChar::ParagraphSeparator
+               || ch == QTextBeginningOfFrame || ch == QTextEndOfFrame || ch == '\r') {
 
-            if (!hasEditBlock) {
+            if (! hasEditBlock) {
                hasEditBlock = true;
                d->priv->beginEditBlock();
             }
@@ -1543,13 +1530,16 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
             blockStart = i + 1;
          }
       }
+
       if (textStart + blockStart < textEnd) {
          d->priv->insert(d->position, textStart + blockStart, textEnd - textStart - blockStart, formatIdx);
       }
    }
+
    if (hasEditBlock) {
       d->priv->endEditBlock();
    }
+
    d->setX();
 }
 

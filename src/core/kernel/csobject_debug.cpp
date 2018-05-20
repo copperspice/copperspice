@@ -35,7 +35,8 @@ static void dumpRecursive(int level, QObject *object)
          buffer += "    ";
       }
 
-      qDebug("%s%s::%s", buffer.constData(), csPrintable(object->metaObject()->className()), csPrintable(object->objectName()));
+      qDebug("%s%s::%s", buffer.constData(), csPrintable(object->metaObject()->className()),
+                  csPrintable(object->objectName()) );
 
       QList<QObject *> children = object->children();
 
@@ -62,7 +63,9 @@ void QObject::dumpObjectInfo()
 
 #if defined(QT_DEBUG)
    qDebug("\n--  dumpObjectInfo  --\n");
-   qDebug("  OBJECT %s::%s", this->metaObject()->className(), objectName().isEmpty() ? "unnamed" : objectName().toUtf8().constData());
+   qDebug("  OBJECT %s::%s", csPrintable(this->metaObject()->className()), objectName().isEmpty() ? "unnamed" :
+                  csPrintable(objectName()) );
+
    qDebug("  SIGNAL LIST - CONNECTED TO WHICH RECEIVERS");
 
    const QMetaObject *metaObject = this->metaObject();
@@ -81,7 +84,7 @@ void QObject::dumpObjectInfo()
 
       // look for connections where "this" object is the sender
       for (auto receiver : receiverList) {
-         qDebug("        signal name: %s", signalMetaMethod.methodSignature().constData());
+         qDebug("        signal name: %s", csPrintable(signalMetaMethod.methodSignature()) );
 
          QObject *obj = dynamic_cast<QObject *>(receiver);
 
@@ -117,8 +120,7 @@ void QObject::dumpObjectInfo()
       if (obj) {
          const QMetaObject *senderMetaObject = obj->metaObject();
 
-         qDebug("          <-- %s::%s",
-                senderMetaObject->className(),
+         qDebug("          <-- %s::%s", csPrintable(senderMetaObject->className()),
                 obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()));
 
          //   qDebug("          <-- %s::%s  %s",

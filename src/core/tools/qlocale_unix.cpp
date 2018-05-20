@@ -222,10 +222,10 @@ QVariant QSystemLocale::query(QueryType type, QVariant in) const
       }
 
       case StringToStandardQuotation:
-         return lc_messages.quoteString(in.value<QStringRef>());
+         return lc_messages.quoteString(in.value<QStringView>());
 
       case StringToAlternateQuotation:
-         return lc_messages.quoteString(in.value<QStringRef>(), QLocale::AlternateQuotation);
+         return lc_messages.quoteString(in.value<QStringView>(), QLocale::AlternateQuotation);
 
       case ListToSeparatedString:
          return lc_messages.createSeparatedList(in.value<QStringList>());

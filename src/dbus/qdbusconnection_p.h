@@ -123,10 +123,12 @@ public:
         inline ObjectTreeNode(const QString &n) // intentionally implicit
             : name(n), obj(0), flags(0) { }
         inline ~ObjectTreeNode() { }
+
         inline bool operator<(const QString &other) const
             { return name < other; }
-        inline bool operator<(const QStringRef &other) const
-            { return QStringRef(&name) < other; }
+
+        inline bool operator<(QStringView other) const
+            { return QStringView(&name) < other; }
 
         QString name;
         union {
@@ -234,31 +236,31 @@ protected:
 public :
     // public slots
     CS_SLOT_1(Public, void doDispatch())
-    CS_SLOT_2(doDispatch) 
+    CS_SLOT_2(doDispatch)
     CS_SLOT_1(Public, void socketRead(int un_named_arg1))
-    CS_SLOT_2(socketRead) 
+    CS_SLOT_2(socketRead)
     CS_SLOT_1(Public, void socketWrite(int un_named_arg1))
-    CS_SLOT_2(socketWrite) 
+    CS_SLOT_2(socketWrite)
     CS_SLOT_1(Public, void objectDestroyed(QObject * o))
-    CS_SLOT_2(objectDestroyed) 
+    CS_SLOT_2(objectDestroyed)
     CS_SLOT_1(Public, void relaySignal(QObject * obj,const QMetaObject * un_named_arg2,int signalId,const QVariantList & args))
-    CS_SLOT_2(relaySignal) 
+    CS_SLOT_2(relaySignal)
 
 private :
     CS_SLOT_1(Private, void serviceOwnerChangedNoLock(const QString & name,const QString & oldOwner,const QString & newOwner))
-    CS_SLOT_2(serviceOwnerChangedNoLock) 
+    CS_SLOT_2(serviceOwnerChangedNoLock)
     CS_SLOT_1(Private, void registerServiceNoLock(const QString & serviceName))
-    CS_SLOT_2(registerServiceNoLock) 
+    CS_SLOT_2(registerServiceNoLock)
     CS_SLOT_1(Private, void unregisterServiceNoLock(const QString & serviceName))
-    CS_SLOT_2(unregisterServiceNoLock) 
+    CS_SLOT_2(unregisterServiceNoLock)
 
 public:
     CS_SIGNAL_1(Public, void serviceOwnerChanged(const QString & name,const QString & oldOwner,const QString & newOwner))
-    CS_SIGNAL_2(serviceOwnerChanged,name,oldOwner,newOwner) 
+    CS_SIGNAL_2(serviceOwnerChanged,name,oldOwner,newOwner)
     CS_SIGNAL_1(Public, void callWithCallbackFailed(const QDBusError & error,const QDBusMessage & message))
-    CS_SIGNAL_2(callWithCallbackFailed,error,message) 
+    CS_SIGNAL_2(callWithCallbackFailed,error,message)
     CS_SIGNAL_1(Public, void newServerConnection(const QDBusConnection & connection))
-    CS_SIGNAL_2(newServerConnection,connection) 
+    CS_SIGNAL_2(newServerConnection,connection)
 
 public:
     QAtomicInt ref;

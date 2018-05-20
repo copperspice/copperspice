@@ -373,7 +373,7 @@ T QObject::property(const QString &name) const
       const int k = m_extra_propertyNames.indexOf(name);
 
       if (k < 0) {
-         std::string msg = std::string(meta->className()) + "::property() Property " + csPrintable(name) +
+         std::string msg = meta->className().toStdString() + "::property() Property " + csPrintable(name) +
                   " is invalid or does not exist";
          throw std::invalid_argument(msg);
       }
@@ -384,7 +384,7 @@ T QObject::property(const QString &name) const
          return data.value<T>();
 
       } else {
-         std::string msg = std::string(meta->className()) + "::property() Property " + csPrintable(name) +
+         std::string msg = meta->className().toStdString() + "::property() Property " + csPrintable(name) +
                   " is not the correct type";
          throw std::invalid_argument(msg);
       }
@@ -423,7 +423,7 @@ inline QVariant QObject::property<QVariant>(const QString &name) const
    QMetaProperty p = metaObj->property(index);
 
    if (! p.isReadable()) {
-      qWarning("%s::property() Property \"%s\" is invalid or does not exist", metaObj->className(), csPrintable(name));
+      qWarning("%s::property() Property \"%s\" is invalid or does not exist", csPrintable(metaObj->className()), csPrintable(name));
    }
 
    return p.read(this);
