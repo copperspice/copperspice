@@ -1063,7 +1063,7 @@ QDataStream &operator>>(QDataStream &s, QPicture &r)
 
 #ifndef QT_NO_PICTUREIO
 
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 #include <qapplication.h>
 #include <qpictureformatplugin.h>
 

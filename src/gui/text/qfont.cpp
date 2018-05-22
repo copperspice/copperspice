@@ -1983,7 +1983,7 @@ static void initFontSubst()
       return;
    }
 
-#if defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)
+#if defined(Q_WS_X11)
    if (X11->has_fontconfig) {
       return;
    }

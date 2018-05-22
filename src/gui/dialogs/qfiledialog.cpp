@@ -682,25 +682,30 @@ QString qt_tildeExpansion(const QString &path, bool *expanded = 0)
    } else {
       QString userName = tokens.first();
       userName.remove(0, 1);
+
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
       passwd pw;
       passwd *tmpPw;
       char buf[200];
       const int bufSize = sizeof(buf);
-      int err = getpwnam_r(userName.toLocal8Bit().constData(), &pw, buf, bufSize, &tmpPw);
+      int err = getpwnam_r(userName.toUtf8().constData(), &pw, buf, bufSize, &tmpPw);
       if (err || !tmpPw) {
          return ret;
       }
-      const QString homePath = QString::fromLocal8Bit(pw.pw_dir);
+
+      const QString homePath = QString::fromUtf8(pw.pw_dir);
 #else
-      passwd *pw = getpwnam(userName.toLocal8Bit().constData());
+      passwd *pw = getpwnam(userName.toUtf8().constData());
+
       if (!pw) {
          return ret;
       }
-      const QString homePath = QString::fromLocal8Bit(pw->pw_dir);
+
+      const QString homePath = QString::fromUtf8(pw->pw_dir);
 #endif
       ret.replace(0, tokens.first().length(), homePath);
    }
+
    if (expanded != 0) {
       *expanded = true;
    }
@@ -1504,63 +1509,8 @@ extern QStringList qt_win_get_open_file_names(const QFileDialogArgs &args,
 extern QString qt_win_get_existing_directory(const QFileDialogArgs &args);
 #endif
 
-/*!
-    This is a convenience static function that returns an existing file
-    selected by the user. If the user presses Cancel, it returns a null string.
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qfiledialog.cpp 8
-
-    The function creates a modal file dialog with the given \a parent widget.
-    If \a parent is not 0, the dialog will be shown centered over the parent
-    widget.
-
-    The file dialog's working directory will be set to \a dir. If \a dir
-    includes a file name, the file will be selected. Only files that match the
-    given \a filter are shown. The filter selected is set to \a selectedFilter.
-    The parameters \a dir, \a selectedFilter, and \a filter may be empty
-    strings. If you want multiple filters, separate them with ';;', for
-    example:
-
-    \code
-    "Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
-    \endcode
-
-    The \a options argument holds various options about how to run the dialog,
-    see the QFileDialog::Option enum for more information on the flags you can
-    pass.
-
-    The dialog's caption is set to \a caption. If \a caption is not specified
-    then a default caption will be used.
-
-    On Windows, Mac OS X and Symbian^3, this static function will use the
-    native file dialog and not a QFileDialog.
-
-    On Windows the dialog will spin a blocking modal event loop that will not
-    dispatch any QTimers, and if \a parent is not 0 then it will position the
-    dialog just below the parent's title bar.
-
-    On Unix/X11, the normal behavior of the file dialog is to resolve and
-    follow symlinks. For example, if \c{/usr/tmp} is a symlink to \c{/var/tmp},
-    the file dialog will change to \c{/var/tmp} after entering \c{/usr/tmp}. If
-    \a options includes DontResolveSymlinks, the file dialog will treat
-    symlinks as regular directories.
-
-    On Symbian^3 the parameter \a selectedFilter has no meaning and the
-    \a options parameter is only used to define if the native file dialog is
-    used.
-
-    \warning Do not delete \a parent during the execution of the dialog. If you
-    want to do this, you should create the dialog yourself using one of the
-    QFileDialog constructors.
-
-    \sa getOpenFileNames(), getSaveFileName(), getExistingDirectory()
-*/
-QString QFileDialog::getOpenFileName(QWidget *parent,
-                                     const QString &caption,
-                                     const QString &dir,
-                                     const QString &filter,
-                                     QString *selectedFilter,
-                                     Options options)
+QString QFileDialog::getOpenFileName(QWidget *parent, const QString &caption,
+          const QString &dir, const QString &filter, QString *selectedFilter, Options options)
 {
    if (qt_filedialog_open_filename_hook && !(options & DontUseNativeDialog)) {
       return qt_filedialog_open_filename_hook(parent, caption, dir, filter, selectedFilter, options);
@@ -1574,14 +1524,16 @@ QString QFileDialog::getOpenFileName(QWidget *parent,
    args.filter = filter;
    args.mode = ExistingFile;
    args.options = options;
+
 #if defined(Q_OS_WIN)
    if (qt_use_native_dialogs && !(args.options & DontUseNativeDialog)) {
       return qt_win_get_open_file_name(args, &(args.directory), selectedFilter);
    }
 #endif
 
-   // create a qt dialog
+   // create a  dialog
    QFileDialog dialog(args);
+
    if (selectedFilter && !selectedFilter->isEmpty()) {
       dialog.selectNameFilter(*selectedFilter);
    }
@@ -1609,28 +1561,29 @@ QUrl QFileDialog::getOpenFileUrl(QWidget *parent, const QString &caption, const 
 QStringList QFileDialog::getOpenFileNames(QWidget *parent, const QString &caption, const QString &dir,
                   const QString &filter, QString *selectedFilter, Options options)
 {
-   if (qt_filedialog_open_filenames_hook && !(options & DontUseNativeDialog)) {
+   if (qt_filedialog_open_filenames_hook && ! (options & DontUseNativeDialog)) {
       return qt_filedialog_open_filenames_hook(parent, caption, dir, filter, selectedFilter, options);
    }
 
    QFileDialogArgs args;
-   args.parent = parent;
-   args.caption = caption;
+   args.parent    = parent;
+   args.caption   = caption;
    args.directory = QFileDialogPrivate::workingDirectory(dir);
    args.selection = QFileDialogPrivate::initialSelection(dir);
-   args.filter = filter;
-   args.mode = ExistingFiles;
-   args.options = options;
+   args.filter    = filter;
+   args.mode      = ExistingFiles;
+   args.options   = options;
 
 #if defined(Q_OS_WIN)
-   if (qt_use_native_dialogs && !(args.options & DontUseNativeDialog)) {
+   if (qt_use_native_dialogs && ! (args.options & DontUseNativeDialog)) {
       return qt_win_get_open_file_names(args, &(args.directory), selectedFilter);
    }
 #endif
 
-   // create a qt dialog
+   // create a dialog
    QFileDialog dialog(args);
-   if (selectedFilter && !selectedFilter->isEmpty()) {
+
+   if (selectedFilter && ! selectedFilter->isEmpty()) {
       dialog.selectNameFilter(*selectedFilter);
    }
 
@@ -1640,6 +1593,7 @@ QStringList QFileDialog::getOpenFileNames(QWidget *parent, const QString &captio
       }
       return dialog.selectedFiles();
    }
+
    return QStringList();
 }
 

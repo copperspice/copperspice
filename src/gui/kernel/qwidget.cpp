@@ -764,9 +764,10 @@ void QWidgetPrivate::createRecursively()
    q->create(0, true, true);
 
    for (int i = 0; i < q->children().size(); ++i) {
+
       QWidget *child = qobject_cast<QWidget *>(q->children().at(i));
 
-      if (child && !child->isHidden() && !child->isWindow() && !child->testAttribute(Qt::WA_WState_Created)) {
+      if (child && ! child->isHidden() && !child->isWindow() && ! child->testAttribute(Qt::WA_WState_Created)) {
          child->d_func()->createRecursively();
       }
    }
@@ -5179,16 +5180,19 @@ void QWidget::setUpdatesEnabled(bool enable)
 void QWidgetPrivate::show_recursive()
 {
    Q_Q(QWidget);
+
    // polish if necessary
 
-   if (!q->testAttribute(Qt::WA_WState_Created)) {
+   if (! q->testAttribute(Qt::WA_WState_Created)) {
       createRecursively();
    }
+
    q->ensurePolished();
 
-   if (!q->isWindow() && q->parentWidget()->d_func()->layout && !q->parentWidget()->data->in_show) {
+   if (! q->isWindow() && q->parentWidget()->d_func()->layout && !q->parentWidget()->data->in_show) {
       q->parentWidget()->d_func()->layout->activate();
    }
+
    // activate our layout before we and our children become visible
    if (layout) {
       layout->activate();
@@ -5273,7 +5277,9 @@ void QWidgetPrivate::activateChildLayoutsRecursively()
 void QWidgetPrivate::show_helper()
 {
    Q_Q(QWidget);
+
    data.in_show = true; // qws optimization
+
    // make sure we receive pending move and resize events
    sendPendingMoveAndResizeEvents();
 
@@ -5293,6 +5299,7 @@ void QWidgetPrivate::show_helper()
          if (q->parentWidget() && q->parentWidget()->window()->testAttribute(Qt::WA_KeyboardFocusChange)) {
             q->setAttribute(Qt::WA_KeyboardFocusChange);
          }
+
       } else {
          while (QApplication::activePopupWidget()) {
             if (!QApplication::activePopupWidget()->close()) {
@@ -5305,10 +5312,12 @@ void QWidgetPrivate::show_helper()
    // Automatic embedding of child windows of widgets already embedded into
    // QGraphicsProxyWidget when they are shown the first time.
    bool isEmbedded = false;
+
 #ifndef QT_NO_GRAPHICSVIEW
    if (q->isWindow()) {
       isEmbedded = q->graphicsProxyWidget() ? true : false;
-      if (!isEmbedded && !bypassGraphicsProxyWidget(q)) {
+
+      if (! isEmbedded && !bypassGraphicsProxyWidget(q)) {
          QGraphicsProxyWidget *ancestorProxy = nearestGraphicsProxyWidget(q->parentWidget());
          if (ancestorProxy) {
             isEmbedded = true;
@@ -5324,7 +5333,7 @@ void QWidgetPrivate::show_helper()
    // stores the correct old focus widget even if it's stolen in the showevent
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
-   if (!isEmbedded && q->windowType() == Qt::Popup) {
+   if (! isEmbedded && q->windowType() == Qt::Popup) {
       qApp->d_func()->openPopup(q);
    }
 #endif
@@ -5333,13 +5342,11 @@ void QWidgetPrivate::show_helper()
    QShowEvent showEvent;
    QApplication::sendEvent(q, &showEvent);
 
-   if (!isEmbedded && q->isModal() && q->isWindow())
+   if (!isEmbedded && q->isModal() && q->isWindow()) {
       // QApplicationPrivate::enterModal *before* show, otherwise the initial
-      // stacking might be wrong
-   {
+      // stacking might be wrong   
       QApplicationPrivate::enterModal(q);
    }
-
 
    show_sys();
 
@@ -5448,22 +5455,24 @@ void QWidget::setVisible(bool visible)
    if (visible) {
       // show
 
-      if (testAttribute(Qt::WA_WState_ExplicitShowHide) && !testAttribute(Qt::WA_WState_Hidden)) {
+      if (testAttribute(Qt::WA_WState_ExplicitShowHide) && ! testAttribute(Qt::WA_WState_Hidden)) {
          return;
       }
 
       Q_D(QWidget);
 
       // Designer uses a trick to make grabWidget work without showing
-      if (!isWindow() && parentWidget() && parentWidget()->isVisible()
-            && !parentWidget()->testAttribute(Qt::WA_WState_Created)) {
+      if (! isWindow() && parentWidget() && parentWidget()->isVisible()
+            && ! parentWidget()->testAttribute(Qt::WA_WState_Created)) {
+
          parentWidget()->window()->d_func()->createRecursively();
       }
 
       //we have to at least create toplevels before applyX11SpecificCommandLineArguments
       //but not children of non-visible parents
+
       QWidget *pw = parentWidget();
-      if (!testAttribute(Qt::WA_WState_Created)
+      if (! testAttribute(Qt::WA_WState_Created)
             && (isWindow() || pw->testAttribute(Qt::WA_WState_Created))) {
          create();
       }
@@ -5518,8 +5527,7 @@ void QWidget::setVisible(bool visible)
       }
 
       // adjust size if necessary
-      if (!wasResized
-            && (isWindow() || !parentWidget()->d_func()->layout))  {
+      if (! wasResized && (isWindow() || !parentWidget()->d_func()->layout))  {
          if (isWindow()) {
             adjustSize();
             if (windowState() != initialWindowState) {
@@ -5539,9 +5547,10 @@ void QWidget::setVisible(bool visible)
 
          d->show_helper();
 
-#if defined(Q_oS_WIN) || defined(Q_WS_X11) || defined (Q_WS_QWS) || defined(Q_OS_MAC) || defined(Q_WS_QPA)
+#if defined(Q_OS_WIN) || defined(Q_WS_X11) || defined (Q_WS_QWS) || defined(Q_OS_MAC) || defined(Q_WS_QPA)
          qApp->d_func()->sendSyntheticEnterLeave(this);
 #endif
+
       }
 
       QEvent showToParentEvent(QEvent::ShowToParent);

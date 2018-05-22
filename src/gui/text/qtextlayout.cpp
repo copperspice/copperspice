@@ -1445,6 +1445,7 @@ int QTextLine::textLength() const
          && eng->block.isValid() && i == eng->lines.count() - 1) {
       return eng->lines[i].length - 1;
    }
+
    return eng->lines[i].length + eng->lines[i].trailingSpaces;
 }
 
@@ -1775,10 +1776,8 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
 
    bool noText = (selection && selection->format.property(SuppressText).toBool());
 
-   if (!line.length) {
-      if (selection
-            && selection->start <= line.from
-            && selection->start + selection->length > line.from) {
+   if (! line.length) {
+      if (selection && selection->start <= line.from && selection->start + selection->length > line.from) {
 
          const qreal lineHeight = line.height().toReal();
          QRectF r(pos.x() + line.x.toReal(), pos.y() + line.y.toReal(),
@@ -1796,7 +1795,8 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
    const QFixed y = QFixed::fromReal(pos.y()) + line.y + lineBase;
 
    bool suppressColors = (eng->option.flags() & QTextOption::SuppressColors);
-   while (!iterator.atEnd()) {
+
+   while (! iterator.atEnd()) {
       QScriptItem &si = iterator.next();
 
       if (selection && selection->start >= 0 && iterator.isOutsideSelection()) {
@@ -1814,11 +1814,13 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
 
       if (eng->hasFormats() || selection) {
          format = eng->format(&si);
+
          if (suppressColors) {
             format.clearForeground();
             format.clearBackground();
             format.clearProperty(QTextFormat::TextUnderlineColor);
          }
+
          if (selection) {
             format.merge(selection->format);
          }
@@ -1827,11 +1829,14 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
                                  iterator.itemWidth.toReal(), line.height().toReal()));
 
          QTextCharFormat::VerticalAlignment valign = format.verticalAlignment();
+
          if (valign == QTextCharFormat::AlignSuperScript || valign == QTextCharFormat::AlignSubScript) {
             QFontEngine *fe = f.d->engineForScript(si.analysis.script);
             QFixed height = fe->ascent() + fe->descent();
+
             if (valign == QTextCharFormat::AlignSubScript) {
                itemBaseLine += height / 6;
+
             } else if (valign == QTextCharFormat::AlignSuperScript) {
                itemBaseLine -= height / 2;
             }
@@ -1842,13 +1847,16 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
 
          if (eng->hasFormats()) {
             p->save();
+
             if (si.analysis.flags == QScriptAnalysis::Object && eng->block.docHandle()) {
                QFixed itemY = y - si.ascent;
+
                if (format.verticalAlignment() == QTextCharFormat::AlignTop) {
                   itemY = y - lineBase;
                }
 
-               QRectF itemRect(iterator.x.toReal(), itemY.toReal(), iterator.itemWidth.toReal(), si.height().toReal());
+               QRectF itemRect(iterator.x.toReal(), itemY.toReal(), iterator.itemWidth.toReal(),
+                  si.height().toReal());
 
                eng->docLayout()->drawInlineObject(p, itemRect, QTextInlineObject(iterator.item, eng),
                                                   si.position + eng->block.position(), format);
@@ -1862,6 +1870,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
                      p->fillRect(itemRect, c);
                   }
                }
+
             } else { // si.isTab
                QFont f = eng->font(si);
 
@@ -1895,10 +1904,11 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
       }
 
       unsigned short *logClusters = eng->logClusters(&si);
-      QGlyphLayout glyphs = eng->shapedGlyphs(&si);
+      QGlyphLayout glyphsLayout = eng->shapedGlyphs(&si);
 
-      QTextItemInt gf(glyphs.mid(iterator.glyphsStart, iterator.glyphsEnd - iterator.glyphsStart), &f,
-                  eng->layoutData->string.begin() + iterator.itemStart, eng->layoutData->string.begin() + iterator.itemEnd,
+      QTextItemInt gf(glyphsLayout.mid(iterator.glyphsStart, iterator.glyphsEnd - iterator.glyphsStart), &f,
+                  eng->layoutData->string.begin() + iterator.itemStart, 
+                  eng->layoutData->string.begin() + iterator.itemEnd,
                   eng->fontEngine(si), format);
 
       gf.logClusters = logClusters + iterator.itemStart - si.position;
@@ -1922,6 +1932,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
             if (gf.glyphs.numGlyphs) {
                gf.fontEngine->addOutlineToPath(pos.x(), pos.y(), gf.glyphs, &path, gf.flags);
             }
+
             if (gf.flags) {
                const QFontEngine *fe = gf.fontEngine;
                const qreal lw = fe->lineThickness().toReal();
@@ -1930,10 +1941,12 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
                   qreal offs = fe->underlinePosition().toReal();
                   path.addRect(pos.x(), pos.y() + offs, gf.width.toReal(), lw);
                }
+
                if (gf.flags & QTextItem::Overline) {
                   qreal offs = fe->ascent().toReal() + 1;
                   path.addRect(pos.x(), pos.y() - offs, gf.width.toReal(), lw);
                }
+
                if (gf.flags & QTextItem::StrikeOut) {
                   qreal offs = fe->ascent().toReal() / 3;
                   path.addRect(pos.x(), pos.y() - offs, gf.width.toReal(), lw);
@@ -1942,8 +1955,10 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
 
             p->save();
             p->setRenderHint(QPainter::Antialiasing);
+
             //Currently QPen with a Qt::NoPen style still returns a default
             //QBrush which != Qt::NoBrush so we need this specialcase to reset it
+
             if (p->pen().style() == Qt::NoPen) {
                p->setBrush(Qt::NoBrush);
             } else {
@@ -1953,25 +1968,27 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
             p->setPen(format.textOutline());
             p->drawPath(path);
             p->restore();
+
          } else {
             if (noText) {
                gf.glyphs.numGlyphs = 0;   // slightly less elegant than it should be
             }
+
             p->drawTextItem(pos, gf);
          }
       }
-      if (si.analysis.flags == QScriptAnalysis::Space
-            && (eng->option.flags() & QTextOption::ShowTabsAndSpaces)) {
+
+      if (si.analysis.flags == QScriptAnalysis::Space && (eng->option.flags() & QTextOption::ShowTabsAndSpaces)) {
          QBrush c = format.foreground();
          if (c.style() != Qt::NoBrush) {
             p->setPen(c.color());
          }
+
          QChar visualSpace((ushort)0xb7);
          p->drawText(QPointF(iterator.x.toReal(), itemBaseLine.toReal()), visualSpace);
          p->setPen(pen);
       }
    }
-
 
    if (eng->hasFormats()) {
       p->setPen(pen);

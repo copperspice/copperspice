@@ -81,7 +81,7 @@ extern "C" {
 
    void *HB_Library_Resolve(const char *library, int version, const char *symbol)
    {
-      return QLibrary::resolve(QString::fromUtf8(library), version, symbol);
+      return QLibrary::resolve(QString::fromUtf8(library), version, QString::fromUtf8(symbol));
    }
 
 } // extern "C"

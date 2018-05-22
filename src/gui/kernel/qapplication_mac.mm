@@ -1252,7 +1252,7 @@ void QApplicationPrivate::enterModal_sys(QWidget *widget)
 #ifdef DEBUG_MODAL_EVENTS
    Q_ASSERT(widget);
    qDebug("Entering modal state with %s::%s::%p (%d)", widget->metaObject()->className(),
-          widget->objectName().toLocal8Bit().constData(),
+          widget->objectName().toUtf8().constData(),
           widget, qt_modal_stack ? (int)qt_modal_stack->count() : -1);
 #endif
 
@@ -1278,22 +1278,28 @@ void QApplicationPrivate::enterModal_sys(QWidget *widget)
 void QApplicationPrivate::leaveModal_sys(QWidget *widget)
 {
    if (qt_modal_stack && qt_modal_stack->removeAll(widget)) {
+
 #ifdef DEBUG_MODAL_EVENTS
       qDebug("Leaving modal state with %s::%s::%p (%d)", widget->metaObject()->className(),
-             widget->objectName().toLocal8Bit().constData(),
+             widget->objectName().toUtf8().constData(),
              widget, qt_modal_stack->count());
 #endif
+
       if (qt_modal_stack->isEmpty()) {
          delete qt_modal_stack;
          qt_modal_stack = 0;
+
          QPoint p(QCursor::pos());
          app_do_modal = false;
+
          QWidget *w = 0;
+
          if (QWidget *grabber = QWidget::mouseGrabber()) {
             w = grabber;
          } else {
             w = QApplication::widgetAt(p.x(), p.y());
          }
+
          dispatchEnterLeave(w, qt_last_mouse_receiver); // send synthetic enter event
          qt_last_mouse_receiver = w;
       }
@@ -1306,11 +1312,11 @@ void QApplicationPrivate::leaveModal_sys(QWidget *widget)
 
 #ifdef DEBUG_MODAL_EVENTS
    else qDebug("Failure to remove %s::%s::%p -- %p", widget->metaObject()->className(),
-                  widget->objectName().toLocal8Bit().constData(), widget, qt_modal_stack);
+                  widget->objectName().toUtf8().constData(), widget, qt_modal_stack);
 #endif
 
    app_do_modal = (qt_modal_stack != 0);
-   if (!app_do_modal) {
+   if (! app_do_modal) {
       qt_event_request_menubarupdate();
    }
 }

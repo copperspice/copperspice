@@ -29,7 +29,7 @@
 #include <qt_windows.h>
 #include <qapplication_p.h>
 #include <qtextcodec.h>
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 #include <qalgorithms.h>
 #include <qmap.h>
 #include <qdnd_p.h>

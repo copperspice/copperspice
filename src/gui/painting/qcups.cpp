@@ -378,13 +378,16 @@ void QCUPSSupport::collectMarkedOptions(QStringList &list, const ppd_group_t *gr
 void QCUPSSupport::collectMarkedOptionsHelper(QStringList &list, const ppd_group_t *group) const
 {
    for (int i = 0; i < group->num_options; ++i) {
+
       for (int j = 0; j < group->options[i].num_choices; ++j) {
+
          if (group->options[i].choices[j].marked == 1 &&
                qstrcmp(group->options[i].choices[j].choice, group->options[i].defchoice) != 0) {
-            list << QString::fromLocal8Bit(group->options[i].keyword) << QString::fromLocal8Bit(
-                    group->options[i].choices[j].choice);
+            list << QString::fromUtf8(group->options[i].keyword) << QString::fromUtf8(group->options[i].choices[j].choice);
          }
+
       }
+
    }
 }
 
@@ -392,7 +395,8 @@ QPair<int, QString> QCUPSSupport::tempFd()
 {
    char filename[512];
    int fd = _cupsTempFd(filename, 512);
-   return QPair<int, QString>(fd, QString::fromLocal8Bit(filename));
+
+   return QPair<int, QString>(fd, QString::fromUtf8(filename));
 }
 
 // Prints the given file and returns a job id.

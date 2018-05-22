@@ -44,7 +44,7 @@
 #include <qdatetime.h>
 #include <qapplication_p.h>
 #include <qtextcodec.h>
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 #include <qurl.h>
 #include <qmap.h>
 #include <qt_mac_p.h>

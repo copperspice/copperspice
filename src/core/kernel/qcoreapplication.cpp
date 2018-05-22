@@ -99,6 +99,7 @@ extern QString qAppFileName();
 
 
 #if ! defined(Q_OS_WIN)
+
 #ifdef Q_OS_MAC
 QString QCoreApplicationPrivate::macMenuBarName()
 {
@@ -116,7 +117,7 @@ QString QCoreApplicationPrivate::appName() const
 {
    QMutexLocker locker(QMutexPool::globalInstanceGet(&applicationName));
 
-   if (applicationName.isNull()) {
+   if (applicationName.isEmpty()) {
 
 #ifdef Q_OS_MAC
       applicationName = macMenuBarName();
@@ -124,7 +125,7 @@ QString QCoreApplicationPrivate::appName() const
 
       if (applicationName.isEmpty() && argv[0]) {
          char *p = strrchr(argv[0], '/');
-         applicationName = QString::fromLocal8Bit(p ? p + 1 : argv[0]);
+         applicationName = QString::fromUtf8(p ? p + 1 : argv[0]);
       }
    }
 
@@ -1038,7 +1039,8 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
              || (!quintptr(pe.event->d) && data->loopLevel > 0)
              || (event_type == QEvent::DeferredDelete
                  && quintptr(pe.event->d) == unsigned(data->loopLevel)));
-         if (!allowDeferredDelete) {
+
+         if (! allowDeferredDelete) {
             // cannot send deferred delete
             if (!event_type && !receiver) {
                // don't lose the event
@@ -1076,6 +1078,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
 
          // uglehack: copied from below
          --data->postEventList.recursion;
+
          if (!data->postEventList.recursion && !data->canWait && data->eventDispatcher) {
             data->eventDispatcher->wakeUp();
          }
@@ -1180,7 +1183,7 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
 
 void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
 {
-   if (! event || !event->posted) {
+   if (! event || ! event->posted) {
       return;
    }
 
@@ -1204,7 +1207,8 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
 
 #ifndef QT_NO_DEBUG
          qWarning("QCoreApplication::removePostedEvent: Event of type %d deleted while posted to %s %s",
-                  event->type(), pe.receiver->metaObject()->className(), pe.receiver->objectName().toUtf8().data());
+                  event->type(), csPrintable(pe.receiver->metaObject()->className()),
+                  csPrintable(pe.receiver->objectName()) );
 #endif
 
          CSInternalEvents::decr_PostedEvents(pe.receiver);
@@ -1418,7 +1422,7 @@ QString QCoreApplication::applicationFilePath()
       // Otherwise, the file path has to be determined using the PATH environment variable.
       QByteArray pEnv   = qgetenv("PATH");
       QDir currentDir   = QDir::current();
-      QStringList paths = QString::fromLocal8Bit(pEnv.constData()).split(QLatin1Char(':'));
+      QStringList paths = QString::fromUtf8(pEnv.constData()).split(QLatin1Char(':'));
 
       for (QStringList::const_iterator p = paths.constBegin(); p != paths.constEnd(); ++p) {
          if ((*p).isEmpty()) {
@@ -1527,7 +1531,7 @@ QStringList QCoreApplication::arguments()
    char **const av = self->d_func()->argv;
 
    for (int a = 0; a < ac; ++a) {
-      list << QString::fromLocal8Bit(av[a]);
+      list << QString::fromUtf8(av[a]);
    }
 #endif
 

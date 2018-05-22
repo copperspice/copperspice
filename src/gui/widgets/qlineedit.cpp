@@ -1301,31 +1301,11 @@ void QLineEdit::cut()
       del();
    }
 }
-
-
-/*!
-    Copies the selected text to the clipboard, if there is any, and if
-    echoMode() is \l Normal.
-
-    \sa cut() paste()
-*/
-
 void QLineEdit::copy() const
 {
    Q_D(const QLineEdit);
    d->control->copy();
 }
-
-/*!
-    Inserts the clipboard's text at the cursor position, deleting any
-    selected text, providing the line edit is not \link
-    QLineEdit::readOnly read-only\endlink.
-
-    If the end result would not be acceptable to the current
-    \link setValidator() validator\endlink, nothing happens.
-
-    \sa copy() cut()
-*/
 
 void QLineEdit::paste()
 {
@@ -1333,10 +1313,8 @@ void QLineEdit::paste()
    d->control->paste();
 }
 
-#endif // !QT_NO_CLIPBOARD
+#endif // ! QT_NO_CLIPBOARD
 
-/*! \reimp
-*/
 bool QLineEdit::event(QEvent *e)
 {
    Q_D(QLineEdit);
@@ -1344,15 +1322,11 @@ bool QLineEdit::event(QEvent *e)
    if (e->type() == QEvent::Timer) {
       // should be timerEvent, is here for binary compatibility
       int timerId = ((QTimerEvent *)e)->timerId();
-      if (false) {
 
-#ifndef QT_NO_DRAGANDDROP
-      } else if (timerId == d->dndTimer.timerId()) {
+      if (timerId == d->dndTimer.timerId()) {
          d->drag();
-#endif
-      }
 
-      else if (timerId == d->tripleClickTimer.timerId()) {
+      } else if (timerId == d->tripleClickTimer.timerId()) {
          d->tripleClickTimer.stop();
       }
 
@@ -1363,7 +1337,6 @@ bool QLineEdit::event(QEvent *e)
          return true;
       }
 #endif
-      //d->separate();
 
    } else if (e->type() == QEvent::WindowActivate) {
       QTimer::singleShot(0, this, SLOT(_q_handleWindowActivate()));
@@ -1381,7 +1354,7 @@ bool QLineEdit::event(QEvent *e)
          QStyleOptionFrameV2 opt;
          initStyleOption(&opt);
 
-         if ((!hasSelectedText() && d->control->preeditAreaText().isEmpty())
+         if ((! hasSelectedText() && d->control->preeditAreaText().isEmpty())
                || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this)) {
             d->setCursorVisible(true);
          }
@@ -1395,15 +1368,18 @@ bool QLineEdit::event(QEvent *e)
          end(false);
          d->setCursorVisible(true);
          d->control->setCursorBlinkPeriod(QApplication::cursorFlashTime());
+
       } else if (e->type() == QEvent::LeaveEditFocus) {
          d->setCursorVisible(false);
          d->control->setCursorBlinkPeriod(0);
+
          if (d->control->hasAcceptableInput() || d->control->fixup()) {
             emit editingFinished();
          }
       }
    }
 #endif
+
    return QWidget::event(e);
 }
 

@@ -130,13 +130,12 @@ bool QLibraryPrivate::unload_sys()
    return true;
 }
 
-void *QLibraryPrivate::resolve_sys(const char *symbol)
+void *QLibraryPrivate::resolve_sys(const QString &symbol)
 {
-   void *address = (void *)GetProcAddress(pHnd, symbol);
+   void *address = (void *)GetProcAddress(pHnd, symbol.constData());
 
    if (! address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(
-                       QString::fromLatin1(symbol)).formatArg(fileName).formatArg(qt_error_string());
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(symbol).formatArg(fileName).formatArg(qt_error_string());
 
    } else {
       errorString.clear();

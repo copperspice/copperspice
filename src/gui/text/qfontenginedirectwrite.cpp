@@ -187,7 +187,7 @@ void QFontEngineDirectWrite::collectMetrics()
       m_unitsPerEm = metrics.designUnitsPerEm;
 
       m_lineThickness = DESIGN_TO_LOGICAL(metrics.underlineThickness);
-      m_ascent = DESIGN_TO_LOGICAL(metrics.ascent);
+      m_ascent  = DESIGN_TO_LOGICAL(metrics.ascent);
       m_descent = DESIGN_TO_LOGICAL(metrics.descent);
       m_xHeight = DESIGN_TO_LOGICAL(metrics.xHeight);
       m_lineGap = DESIGN_TO_LOGICAL(metrics.lineGap);
@@ -212,9 +212,7 @@ bool QFontEngineDirectWrite::getSfntTableData(uint tag, uchar *buffer, uint *len
       void *tableContext = 0;
       UINT32 tableSize;
       BOOL exists;
-      HRESULT hr = m_directWriteFontFace->TryGetFontTable(
-                      t, &tableData, &tableSize, &tableContext, &exists
-                   );
+      HRESULT hr = m_directWriteFontFace->TryGetFontTable(t, &tableData, &tableSize, &tableContext, &exists);
 
       if (SUCCEEDED(hr)) {
          if (!exists) {
@@ -232,6 +230,7 @@ bool QFontEngineDirectWrite::getSfntTableData(uint tag, uchar *buffer, uint *len
          m_directWriteFontFace->ReleaseFontTable(tableContext);
 
          return true;
+
       } else {
          qErrnoWarning("QFontEngineDirectWrite::getSfntTableData: TryGetFontTable failed");
       }
@@ -252,29 +251,35 @@ QFixed QFontEngineDirectWrite::emSquareSize() const
 inline unsigned int getChar(const QChar *str, int &i, const int len)
 {
    uint ucs4 = str[i].unicode();
+
    if (str[i].isHighSurrogate() && i < len - 1 && str[i + 1].isLowSurrogate()) {
       ++i;
       ucs4 = QChar::surrogateToUcs4( ucs4, str[i].unicode());
    }
+
    return ucs4;
 }
 
-bool QFontEngineDirectWrite::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs,
+bool QFontEngineDirectWrite::stringToCMap(QStringView str, QGlyphLayout *glyphs,
       int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
+   // broom - fix code for DirectWrite
+
+   int len = str.length();
+
    if (m_directWriteFontFace != 0) {
       QVarLengthArray<UINT32> codePoints(len);
+
       for (int i = 0; i < len; ++i) {
          codePoints[i] = getChar(str, i, len);
+
          if (flags & QTextEngine::RightToLeft) {
             codePoints[i] = QChar::mirroredChar(codePoints[i]);
          }
       }
 
       QVarLengthArray<UINT16> glyphIndices(len);
-      HRESULT hr = m_directWriteFontFace->GetGlyphIndicesW(codePoints.data(),
-                   len,
-                   glyphIndices.data());
+      HRESULT hr = m_directWriteFontFace->GetGlyphIndicesW(codePoints.data(), len, glyphIndices.data());
 
       if (SUCCEEDED(hr)) {
          for (int i = 0; i < len; ++i) {
@@ -283,11 +288,12 @@ bool QFontEngineDirectWrite::stringToCMap(const QChar *str, int len, QGlyphLayou
 
          *nglyphs = len;
 
-         if (!(flags & QTextEngine::GlyphIndicesOnly)) {
+         if (! (flags & QTextEngine::GlyphIndicesOnly)) {
             recalcAdvances(glyphs, 0);
          }
 
          return true;
+
       } else {
          qErrnoWarning("QFontEngineDirectWrite::stringToCMap: GetGlyphIndicesW failed");
       }

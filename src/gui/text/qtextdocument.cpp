@@ -28,7 +28,7 @@
 #include <qtexttable.h>
 #include <qtextlist.h>
 #include <qdebug.h>
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 #include <qvarlengtharray.h>
 #include <qtextcodec.h>
 #include <qthread.h>

@@ -59,8 +59,8 @@ static HB_Bool hb_stringToGlyphs(HB_Font font, const HB_UChar16 *string, hb_uint
    QFontEngine *fe = (QFontEngine *)font->userData;
 
    QVarLengthGlyphLayoutArray qglyphs(*numGlyphs);
-
    QTextEngine::ShaperFlags shaperFlags(QTextEngine::GlyphIndicesOnly);
+
    if (rightToLeft) {
       shaperFlags |= QTextEngine::RightToLeft;
    }
@@ -441,17 +441,17 @@ glyph_metrics_t QFontEngine::tightBoundingBox(const QGlyphLayout &glyphs)
    return overall;
 }
 
-
 void QFontEngine::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path,
                                    QTextItem::RenderFlags flags)
 {
-   if (!glyphs.numGlyphs) {
+   if (! glyphs.numGlyphs) {
       return;
    }
 
    QVarLengthArray<QFixedPoint> positions;
    QVarLengthArray<glyph_t> positioned_glyphs;
    QTransform matrix = QTransform::fromTranslate(x, y);
+
    getGlyphPositions(glyphs, matrix, flags, positioned_glyphs, positions);
    addGlyphsToPath(positioned_glyphs.data(), positions.data(), positioned_glyphs.size(), path, flags);
 }
@@ -762,17 +762,23 @@ void QFontEngine::getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metr
 QByteArray QFontEngine::getSfntTable(uint tag) const
 {
    QByteArray table;
+
    uint len = 0;
-   if (!getSfntTableData(tag, 0, &len)) {
+
+   if (! getSfntTableData(tag, 0, &len)) {
       return table;
    }
-   if (!len) {
+
+   if (! len) {
       return table;
    }
+
    table.resize(len);
-   if (!getSfntTableData(tag, reinterpret_cast<uchar *>(table.data()), &len)) {
+
+   if (! getSfntTableData(tag, reinterpret_cast<uchar *>(table.data()), &len)) {
       return QByteArray();
    }
+
    return table;
 }
 
@@ -868,7 +874,7 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
 
    unsigned short version = qFromBigEndian<quint16>(table);
    if (version != 0) {
-      //        qDebug("wrong version");
+      // qDebug("wrong version");
       return;
    }
 
@@ -877,7 +883,7 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
       int offset = 4;
       for (int i = 0; i < numTables; ++i) {
          if (offset + 6 > tab.size()) {
-            //                qDebug("offset out of bounds");
+            // qDebug("offset out of bounds");
             goto end;
          }
          const uchar *header = table + offset;
@@ -885,7 +891,9 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
          ushort version = qFromBigEndian<quint16>(header);
          ushort length = qFromBigEndian<quint16>(header + 2);
          ushort coverage = qFromBigEndian<quint16>(header + 4);
-         //            qDebug("subtable: version=%d, coverage=%x",version, coverage);
+
+         //  qDebug("subtable: version=%d, coverage=%x",version, coverage);
+
          if (version == 0 && coverage == 0x0001) {
             if (offset + length > tab.size()) {
                //                    qDebug("length ouf ot bounds");
@@ -895,7 +903,7 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
 
             ushort nPairs = qFromBigEndian<quint16>(data);
             if (nPairs * 6 + 8 > length - 6) {
-               //                    qDebug("corrupt table!");
+               // qDebug("corrupt table!");
                // corrupt table
                goto end;
             }
@@ -1064,7 +1072,7 @@ resolveTable:
 
       // Check that at least one symbol char is in the unicode table
       bool unicodeTableHasSymbols = false;
-      if (!unicodeTableHasLatin1) {
+      if (! unicodeTableHasLatin1) {
          for (int uc = 0xf000; uc < 0xf100; ++uc) {
             if (getTrueTypeGlyphIndex(selectedTable, uc) != 0) {
                unicodeTableHasSymbols = true;
@@ -1087,22 +1095,26 @@ resolveTable:
 quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
 {
    unsigned short format = qFromBigEndian<quint16>(cmap);
+
    if (format == 0) {
       if (unicode < 256) {
          return (int) * (cmap + 6 + unicode);
       }
+
    } else if (format == 4) {
-      /* some fonts come with invalid cmap tables, where the last segment
-         specified end = start = rangeoffset = 0xffff, delta = 0x0001
-         Since 0xffff is never a valid Unicode char anyway, we just get rid of the issue
-         by returning 0 for 0xffff
+      /* some fonts come with invalid cmap tables where the last segment specified 
+         end = start = rangeoffset = 0xffff, delta = 0x0001
+         Since 0xffff is never a valid Unicode char ignore the issue by returning 0 for 0xffff
       */
+
       if (unicode >= 0xffff) {
          return 0;
       }
+
       quint16 segCountX2 = qFromBigEndian<quint16>(cmap + 6);
       const unsigned char *ends = cmap + 14;
       int i = 0;
+
       for (; i < segCountX2 / 2 && qFromBigEndian<quint16>(ends + 2 * i) < unicode; i++) {}
 
       const unsigned char *idx = ends + segCountX2 + 2 + 2 * i;
@@ -1115,20 +1127,24 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
       idx += segCountX2;
       qint16 idDelta = (qint16)qFromBigEndian<quint16>(idx);
       idx += segCountX2;
-      quint16 idRangeoffset_t = (quint16)qFromBigEndian<quint16>(idx);
 
+      quint16 idRangeoffset_t = (quint16)qFromBigEndian<quint16>(idx);
       quint16 glyphIndex;
+
       if (idRangeoffset_t) {
          quint16 id = qFromBigEndian<quint16>(idRangeoffset_t + 2 * (unicode - startIndex) + idx);
+
          if (id) {
             glyphIndex = (idDelta + id) % 0x10000;
          } else {
             glyphIndex = 0;
          }
+
       } else {
          glyphIndex = (idDelta + unicode) % 0x10000;
       }
       return glyphIndex;
+
    } else if (format == 6) {
       quint16 tableSize = qFromBigEndian<quint16>(cmap + 2);
 
@@ -1149,6 +1165,7 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
 
       quint16 entryIndex6 = unicode - firstCode6;
       return qFromBigEndian<quint16>(cmap + 10 + (entryIndex6 * 2));
+
    } else if (format == 12) {
       quint32 nGroups = qFromBigEndian<quint32>(cmap + 12);
 
@@ -1161,6 +1178,7 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
          quint32 startCharCode = qFromBigEndian<quint32>(cmap + 12 * middle);
          if (unicode < startCharCode) {
             right = middle - 1;
+
          } else {
             quint32 endCharCode = qFromBigEndian<quint32>(cmap + 12 * middle + 4);
             if (unicode <= endCharCode) {
@@ -1169,6 +1187,7 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
             left = middle + 1;
          }
       }
+
    } else {
       qDebug("cmap table of format %d not implemented", format);
    }

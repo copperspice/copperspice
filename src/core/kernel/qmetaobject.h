@@ -400,7 +400,7 @@ void QMetaObject_T<T>::register_method_s2(const QString &name, U method, QMetaMe
          QString msg = T::staticMetaObject().className();
          msg += "::" + name + " Unable to register overloaded method pointer, verify signal/slot";
 
-         qDebug("%s", msg);
+         qDebug("%s", csPrintable(msg));
          throw std::logic_error(std::string {msg.constData()});
 
       } else {
@@ -426,12 +426,11 @@ void QMetaObject_T<T>::register_method_s2(const QString &name, U method, QMetaMe
          QString msg = T::staticMetaObject().className();
          msg += "::" + name + " Unable to register method pointer, verify signal/slot";
 
-         qDebug("%s", msg);
+         qDebug("%s", csPrintable(msg));
          throw std::logic_error(std::string {msg.constData()});
       }
 
       for (auto index = itemL; index != itemU; ++index)  {
-
          // retrieve existing obj
          QString key = index.key();
          data = index.value();

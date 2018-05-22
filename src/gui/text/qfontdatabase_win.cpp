@@ -232,13 +232,13 @@ static QString getEnglishName(const QString &familyName)
    }
 
    i18n_name = getEnglishName(table, bytes);
+
 error:
    delete [] table;
    SelectObject( hdc, oldobj );
    DeleteObject( hfont );
    ReleaseDC( 0, hdc );
 
-   //qDebug("got i18n name of '%s' for font '%s'", i18n_name.latin1(), familyName.toLocal8Bit().data());
    return i18n_name;
 }
 

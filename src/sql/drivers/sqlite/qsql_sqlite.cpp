@@ -61,28 +61,28 @@ static QVariant::Type qGetColumnType(const QString &tpName)
 {
    const QString typeName = tpName.toLower();
 
-   if (typeName == QLatin1String("integer")
-         || typeName == QLatin1String("int")) {
+   if (typeName == QLatin1String("integer") || typeName == QLatin1String("int")) {
       return QVariant::Int;
    }
+
    if (typeName == QLatin1String("double")
          || typeName == QLatin1String("float")
          || typeName == QLatin1String("real")
          || typeName.startsWith(QLatin1String("numeric"))) {
       return QVariant::Double;
    }
-   if (typeName == QLatin1String("blob")) {
+
+   if (typeName == "blob") {
       return QVariant::ByteArray;
    }
+
    return QVariant::String;
 }
 
 static QSqlError qMakeError(sqlite3 *access, const QString &descr, QSqlError::ErrorType type,
                             int errorCode = -1)
 {
-   return QSqlError(descr,
-                    QString(reinterpret_cast<const QChar *>(sqlite3_errmsg16(access))),
-                    type, errorCode);
+   return QSqlError(descr, QString::fromUtf8(sqlite3_errmsg(access)), type, errorCode);
 }
 
 class QSQLiteDriverPrivate
@@ -151,13 +151,11 @@ void QSQLiteResultPrivate::initColumns(bool emptyResultset)
    q->init(nCols);
 
    for (int i = 0; i < nCols; ++i) {
-      QString colName = QString(reinterpret_cast<const QChar *>(
-                                   sqlite3_column_name16(stmt, i))
-                               ).remove(QLatin1Char('"'));
+      QString colName = QString::fromUtf8(sqlite3_column_name(stmt, i)).remove('"');
 
       // must use typeName for resolving the type to match QSqliteDriver::record
-      QString typeName = QString(reinterpret_cast<const QChar *>(
-                                    sqlite3_column_decltype16(stmt, i)));
+      QString typeName = QString::fromUtf8(sqlite3_column_decltype(stmt, i));
+
       // sqlite3_column_type is documented to have undefined behavior if the result set is empty
       int stp = emptyResultset ? -1 : sqlite3_column_type(stmt, i);
 
@@ -165,6 +163,7 @@ void QSQLiteResultPrivate::initColumns(bool emptyResultset)
 
       if (!typeName.isEmpty()) {
          fieldType = qGetColumnType(typeName);
+
       } else {
          // Get the proper type for the field based on stp value
          switch (stp) {
@@ -258,26 +257,30 @@ bool QSQLiteResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int i
                         break;
                   };
                   break;
+
                case SQLITE_NULL:
                   values[i + idx] = QVariant(QVariant::String);
                   break;
+
                default:
-                  values[i + idx] = QString(reinterpret_cast<const QChar *>(
-                                               sqlite3_column_text16(stmt, i)),
-                                            sqlite3_column_bytes16(stmt, i) / sizeof(QChar));
+                  values[i + idx] = QString::fromUtf8((const char *) sqlite3_column_text(stmt, i),
+                                        sqlite3_column_bytes(stmt, i));
                   break;
             }
          }
          return true;
+
       case SQLITE_DONE:
          if (rInf.isEmpty())
             // must be first call.
          {
             initColumns(true);
          }
+
          q->setAt(QSql::AfterLastRow);
          sqlite3_reset(stmt);
          return false;
+
       case SQLITE_CONSTRAINT:
       case SQLITE_ERROR:
          // SQLITE_ERROR is a generic error code and we must call sqlite3_reset()
@@ -333,7 +336,7 @@ void QSQLiteResult::virtual_hook(int id, void *data)
 
 bool QSQLiteResult::reset(const QString &query)
 {
-   if (!prepare(query)) {
+   if (! prepare(query)) {
       return false;
    }
    return exec();
@@ -341,7 +344,7 @@ bool QSQLiteResult::reset(const QString &query)
 
 bool QSQLiteResult::prepare(const QString &query)
 {
-   if (!driver() || !driver()->isOpen() || driver()->isOpenError()) {
+   if (! driver() || ! driver()->isOpen() || driver()->isOpenError()) {
       return false;
    }
 
@@ -349,27 +352,31 @@ bool QSQLiteResult::prepare(const QString &query)
 
    setSelect(false);
 
-   const void *pzTail = NULL;
+   const char *pzTail = nullptr;
 
 #if (SQLITE_VERSION_NUMBER >= 3003011)
-   int res = sqlite3_prepare16_v2(d->access, query.constData(), (query.size() + 1) * sizeof(QChar),
-                                  &d->stmt, &pzTail);
+   int res = sqlite3_prepare_v2(d->access, query.constData(), (query.size_storage() + 1),
+                  &d->stmt, &pzTail);
 #else
-   int res = sqlite3_prepare16(d->access, query.constData(), (query.size() + 1) * sizeof(QChar),
-                               &d->stmt, &pzTail);
+   int res = sqlite3_prepare(d->access, query.constData(), (query.size_storage() + 1),
+                  &d->stmt, &pzTail);
 #endif
 
    if (res != SQLITE_OK) {
       setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
-                              "Unable to execute statement"), QSqlError::StatementError, res));
+                  "Unable to execute statement"), QSqlError::StatementError, res));
+
       d->finalize();
       return false;
-   } else if (pzTail && !QString(reinterpret_cast<const QChar *>(pzTail)).trimmed().isEmpty()) {
+
+   } else if (pzTail && ! QString::fromUtf8(pzTail).trimmed().isEmpty()) {
       setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
-                              "Unable to execute multiple statements at a time"), QSqlError::StatementError, SQLITE_MISUSE));
+                  "Unable to execute multiple statements at a time"), QSqlError::StatementError, SQLITE_MISUSE));
+
       d->finalize();
       return false;
    }
+
    return true;
 }
 

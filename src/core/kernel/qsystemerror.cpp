@@ -55,12 +55,15 @@ static QString windowsErrorString(int errorCode)
    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                  NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buffer, 0, NULL);
 
-   ret = QString::fromStdWString(std::wstring(buffer));
-   LocalFree((HLOCAL)buffer);
+   if (buffer != nullptr) {
+      ret = QString::fromStdWString(std::wstring(buffer));
+      LocalFree((HLOCAL)buffer);
+   }
 
    if (ret.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
       ret = QString("The specified module could not be found.");
    }
+
    return ret;
 }
 #endif

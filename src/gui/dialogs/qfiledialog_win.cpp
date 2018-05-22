@@ -31,7 +31,7 @@
 #include <qapplication_p.h>
 #include <qt_windows.h>
 #include <qglobal.h>
-#include <QRegularExpression.h>
+#include <qregularexpression.h>
 #include <qbuffer.h>
 #include <qdir.h>
 #include <qstringlist.h>

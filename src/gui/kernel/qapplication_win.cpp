@@ -36,17 +36,13 @@
 #include <qpixmapcache.h>
 #include <qsessionmanager.h>
 #include <qstyle.h>
-#include <qwhatsthis.h>       // ######## dependency
+#include <qwhatsthis.h>
 #include <qwidget.h>
 #include <qcolormap.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qt_windows.h>
 #include <qscrollbar.h>
-
-#if defined(QT_NON_COMMERCIAL)
-#include <qnc_win.h>
-#endif
 
 #include <qwininputcontext_p.h>
 #include <qcursor_p.h>
@@ -60,7 +56,7 @@
 #include <qsystemlibrary_p.h>
 #include <qevent_p.h>
 
-//#define ALIEN_DEBUG
+// #define ALIEN_DEBUG
 
 #include <qmutex.h>
 
@@ -944,10 +940,10 @@ const QString qt_reg_winclass(QWidget *w)        // register window class
       style |= CS_OWNDC;
    }
 
-   // since multiple Qt versions can be used in one process
+   // since multiple versions can be used in one process
    // each one has to have window class names with a unique name
    // The first instance gets the unmodified name; if the class
-   // has already been registered by another instance of Qt then
+   // has already been registered by another instance then
    // add an instance-specific ID, the address of the window proc.
    static int classExists = -1;
 
@@ -1320,20 +1316,23 @@ void QApplication::winFocus(QWidget *widget, bool gotFocus)
    if (d_func()->inPopupMode()) { // some delayed focus event to ignore
       return;
    }
+
    if (gotFocus) {
       setActiveWindow(widget);
-      if (QApplicationPrivate::active_window
-            && (QApplicationPrivate::active_window->windowType() == Qt::Dialog)) {
+
+      if (QApplicationPrivate::active_window && (QApplicationPrivate::active_window->windowType() == Qt::Dialog)) {
          // raise the entire application, not just the dialog
          QWidget *mw = QApplicationPrivate::active_window;
 
          while (mw->parentWidget() && (mw->windowType() == Qt::Dialog)) {
             mw = mw->parentWidget()->window();
          }
+
          if (mw->testAttribute(Qt::WA_WState_Created) && mw != QApplicationPrivate::active_window) {
             SetWindowPos(mw->internalWinId(), HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
          }
       }
+
    } else {
       setActiveWindow(0);
    }
@@ -1346,8 +1345,6 @@ void QApplication::winFocus(QWidget *widget, bool gotFocus)
 
 static bool inLoop = false;
 static int inputcharset = CP_ACP;
-
-#define RETURN(x) { inLoop=false;return x; }
 
 static bool qt_is_translatable_mouse_event(UINT message)
 {
@@ -1368,22 +1365,29 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
    int nPackets;        // the number of packets we get from the queue
 
    long res = 0;
-   if (!qApp)                                // unstable app state
+   if (! qApp)  {                              // unstable app state
+
 #ifndef QT_NO_IM
-      RETURN(QWinInputContext::DefWindowProc(hwnd, message, wParam, lParam))
+      inLoop = false;
+      return (QWinInputContext::DefWindowProc(hwnd, message, wParam, lParam));
+
 #else
       return res;
-#endif // QT_NO_IM
-      QScopedLoopLevelCounter loopLevelCounter(QThreadData::get2(qApp->thread()));
+#endif
+
+   }
+
+   QScopedLoopLevelCounter loopLevelCounter(QThreadData::get2(qApp->thread()));
    inLoop = true;
 
    MSG msg;
-   msg.hwnd = hwnd;                                // create MSG structure
+   msg.hwnd    = hwnd;                           // create MSG structure
    msg.message = message;                        // time and pt fields ignored
-   msg.wParam = wParam;
-   msg.lParam = lParam;
-   msg.pt.x = GET_X_LPARAM(lParam);
-   msg.pt.y = GET_Y_LPARAM(lParam);
+   msg.wParam  = wParam;
+   msg.lParam  = lParam;
+   msg.pt.x    = GET_X_LPARAM(lParam);
+   msg.pt.y    = GET_Y_LPARAM(lParam);
+
    // If it's a non-client-area message the coords are screen coords, otherwise they are
    // client coords.
 
@@ -1403,11 +1407,6 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
        }
    }
    */
-
-#if defined(QT_NON_COMMERCIAL)
-   QT_NC_WNDPROC
-#endif
-
    // send through app filter
    if (qApp->filterEvent(&msg, &res)) {
       return res;
@@ -1427,20 +1426,27 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
 
 #ifndef QT_NO_SESSIONMANAGER
       case WM_QUERYENDSESSION: {
-         if (sm_smActive) { // bogus message from windows
-            RETURN(true);
+         if (sm_smActive) {
+            // bogus message from windows
+
+            inLoop = false;
+            return true;
          }
 
          sm_smActive = true;
-         sm_blockUserInput = true; // prevent user-interaction outside interaction windows
-         sm_cancel = false;
+         sm_blockUserInput = true;    // prevent user-interaction outside interaction windows
+         sm_cancel   = false;
+
          if (qt_session_manager_self) {
             qApp->commitData(*qt_session_manager_self);
          }
+
          if (lParam & ENDSESSION_LOGOFF) {
             _flushall();
          }
-         RETURN(!sm_cancel);
+
+         inLoop = false;
+         return ! sm_cancel;
       }
 
       case WM_ENDSESSION: {
@@ -1462,7 +1468,8 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             QApplication::quit();
          }
 
-         RETURN(0);
+         inLoop = false;
+         return 0;
       }
 #endif
       case WM_DISPLAYCHANGE:
@@ -1518,6 +1525,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          }
 
          break;
+
       case WM_SYSCOLORCHANGE:
          if (QApplication::type() == QApplication::Tty) {
             break;
@@ -1549,12 +1557,14 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
       case WM_XBUTTONUP:
          if (qt_win_ignoreNextMouseReleaseEvent) {
             qt_win_ignoreNextMouseReleaseEvent = false;
+
             if (qt_button_down && qt_button_down->internalWinId() == autoCaptureWnd) {
                releaseAutoCapture();
                qt_button_down = 0;
             }
 
-            RETURN(0);
+            inLoop = false;
+            return 0;
          }
          break;
 
@@ -1562,23 +1572,26 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          break;
    }
 
-   if (!widget) {
+   if (! widget) {
       widget = (QETWidget *)QWidget::find(hwnd);
    }
-   if (!widget) {                              // don't know this widget
+
+   if (! widget) {                                   //  don't know this widget
       goto do_default;
    }
 
    if (app_do_modal)        {                        // modal event handling
       int ret = 0;
       if (!qt_try_modal(widget, &msg, ret)) {
-         RETURN(ret);
+         inLoop = false;
+         return ret;
       }
    }
 
    res = 0;
    if (widget->winEvent(&msg, &res)) {              // send through widget filter
-      RETURN(res);
+     inLoop = false;
+     return res;
    }
 
    if (qt_is_translatable_mouse_event(message)) {
@@ -1590,32 +1603,30 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          }
       }
 
-      if (!qt_tabletChokeMouse) {
+      if (! qt_tabletChokeMouse) {
          result = widget->translateMouseEvent(msg);        // mouse event
 
       } else {
-         // Sometimes we only get a WM_MOUSEMOVE message
-         // and sometimes we get both a WM_MOUSEMOVE and
-         // a WM_LBUTTONDOWN/UP, this creates a spurious mouse
-         // press/release event, using the PeekMessage
-         // will help us fix this.  This leaves us with a
-         // question:
-         //    This effectively kills using the mouse AND the
-         //    tablet simultaneously, well creates wacky input.
+         // Sometimes we only get a WM_MOUSEMOVE message and sometimes we get both a WM_MOUSEMOVE and
+         // a WM_LBUTTONDOWN/UP, this creates a spurious mouse press/release event, using the PeekMessage
+         // will help us fix this.  This leaves us with a question:
+         //    effectively kills using the mouse AND the tablet simultaneously, may create wacky input
          //    Is this going to be a problem? (probably not)
+
          bool next_is_button = false;
-         bool is_mouse_move = (message == WM_MOUSEMOVE);
+         bool is_mouse_move  = (message == WM_MOUSEMOVE);
+
          if (is_mouse_move) {
             MSG msg1;
-            if (PeekMessage(&msg1, msg.hwnd, WM_MOUSEFIRST,
-                            WM_MOUSELAST, PM_NOREMOVE))
-               next_is_button = (msg1.message == WM_LBUTTONUP
-                                 || msg1.message == WM_LBUTTONDOWN);
+            if (PeekMessage(&msg1, msg.hwnd, WM_MOUSEFIRST, WM_MOUSELAST, PM_NOREMOVE))
+               next_is_button = (msg1.message == WM_LBUTTONUP || msg1.message == WM_LBUTTONDOWN);
          }
-         if (!is_mouse_move || (is_mouse_move && !next_is_button)) {
+
+         if (! is_mouse_move || (is_mouse_move && !next_is_button)) {
             qt_tabletChokeMouse = false;
          }
       }
+
    } else {
       switch (message) {
          case WM_TOUCH:
@@ -1836,16 +1847,19 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          }
 
          case WM_SETTINGCHANGE:
-            if ( QApplication::type() == QApplication::Tty ) {
+            if (QApplication::type() == QApplication::Tty) {
                break;
             }
 
-            if ( !msg.wParam) {
+            if (! msg.wParam) {
+               QString area;
 
-               std::wstring tmp((wchar_t *)msg.lParam);
-               QString area = QString::fromStdWString(tmp);
+               if (msg.lParam != 0)  {
+                  std::wstring tmp((wchar_t *)msg.lParam);
+                  area = QString::fromStdWString(tmp);
+               }
 
-               if (area == QLatin1String("intl")) {
+               if (area == "intl") {
 
                   QLocalePrivate::updateSystemPrivate();
                   if (! widget->testAttribute(Qt::WA_SetLocale)) {
@@ -1896,9 +1910,11 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          case WM_ACTIVATEAPP:
             if (wParam == FALSE) {
                QApplication::setActiveWindow(0);
+
                // Another application was activated while our popups are open,
                // then close all popups.  In case some popup refuses to close,
                // we give up after 1024 attempts (to avoid an infinite loop).
+
                int maxiter = 1024;
                QWidget *popup;
                while ((popup = QApplication::activePopupWidget()) && maxiter--) {
@@ -1908,26 +1924,31 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             break;
 
          case WM_ACTIVATE:
-            if ( QApplication::type() == QApplication::Tty ) {
+
+            if (QApplication::type() == QApplication::Tty) {
                break;
             }
 
             if (ptrWTOverlap && ptrWTEnable) {
                // cooperate with other tablet applications, but when
-               // we get focus, I want to use the tablet...
+               // we get focus, use the tablet
+
                if (qt_tablet_context && GET_WM_ACTIVATE_STATE(wParam, lParam)) {
                   if (ptrWTEnable(qt_tablet_context, true)) {
                      ptrWTOverlap(qt_tablet_context, true);
                   }
                }
             }
+
             if (QApplication::activePopupWidget() && LOWORD(wParam) == WA_INACTIVE &&
                   QWidget::find((HWND)lParam) == 0) {
                // Another application was activated while our popups are open,
                // then close all popups.  In case some popup refuses to close,
                // we give up after 1024 attempts (to avoid an infinite loop).
+
                int maxiter = 1024;
                QWidget *popup;
+
                while ((popup = QApplication::activePopupWidget()) && maxiter--) {
                   popup->close();
                }
@@ -1938,8 +1959,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                // loses focus. Doing it here would result in the widget getting focus to not know
                // where it got it from; it would simply get a 0 value as the old focus widget.
 
-               if (!(widget->windowState() & Qt::WindowMinimized)) {
-
+               if (! (widget->windowState() & Qt::WindowMinimized)) {
                   // Ignore the activate message send by WindowsXP to a minimized window
                   qApp->winFocus(widget, true);
 
@@ -1952,12 +1972,15 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             // This happens when restoring an application after "Show Desktop"
             if (app_do_modal && LOWORD(wParam) == WA_ACTIVE) {
                QWidget *top = 0;
+
                if (!QApplicationPrivate::tryModalHelper(widget, &top) && top && widget != top) {
                   if (top->isVisible()) {
                      top->activateWindow();
+
                   } else {
-                     // This is the case when native file dialogs are shown
+                     // this is the case when native file dialogs are shown
                      QWidget *p = (top->parentWidget() ? top->parentWidget()->window() : 0);
+
                      if (p && p->isVisible()) {
                         p->activateWindow();
                      }
@@ -1965,7 +1988,6 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                }
             }
             break;
-
 
          case WM_MOUSEACTIVATE:
             if (widget->window()->windowType() == Qt::Tool) {
@@ -1989,42 +2011,53 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                            }
                            pw = pw->parentWidget();
                         }
-                        RETURN(MA_NOACTIVATE);
+
+                        inLoop = false;
+                        return MA_NOACTIVATE;
+
                      }
                      w = w->parentWidget();
                   }
                }
             }
-            RETURN(MA_ACTIVATE);
-            break;
+
+            inLoop = false;
+            return MA_ACTIVATE;
 
          case WM_SHOWWINDOW:
             if (lParam == SW_PARENTOPENING) {
                if (widget->testAttribute(Qt::WA_WState_Hidden)) {
-                  RETURN(0);
+                  inLoop = false;
+                  return 0;
                }
             }
+
             if (widget->isWindow() && widget->testAttribute(Qt::WA_WState_Visible)
-                  && !widget->testWindowState(Qt::WindowMinimized)) {
+                  && ! widget->testWindowState(Qt::WindowMinimized)) {
+
                if (lParam == SW_PARENTOPENING) {
                   QShowEvent e;
                   qt_sendSpontaneousEvent(widget, &e);
                   widget->showChildren(true);
+
                } else if (lParam == SW_PARENTCLOSING) {
                   QHideEvent e;
                   qt_sendSpontaneousEvent(widget, &e);
                   widget->hideChildren(true);
                }
             }
-            if  (!wParam && autoCaptureWnd == widget->internalWinId()) {
+
+            if  (! wParam && autoCaptureWnd == widget->internalWinId()) {
                releaseAutoCapture();
             }
+
             result = false;
             break;
 
          case WM_PALETTECHANGED:                        // our window changed palette
             if (QColormap::hPal() && (WId)wParam == widget->internalWinId()) {
-               RETURN(0);
+               inLoop = false;
+               return 0;
             }
 
          // FALL THROUGH
@@ -2035,21 +2068,26 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                HDC hdc = GetDC(widget->internalWinId());
                HPALETTE hpalOld = SelectPalette(hdc, QColormap::hPal(), FALSE);
                uint n = RealizePalette(hdc);
+
                if (n) {
                   InvalidateRect(widget->internalWinId(), 0, TRUE);
                }
+
                SelectPalette(hdc, hpalOld, TRUE);
                RealizePalette(hdc);
                ReleaseDC(widget->internalWinId(), hdc);
-               RETURN(n);
+               inLoop = false;
+
+               return n;
             }
             break;
 
          case WM_CLOSE:                                // close window
             widget->translateCloseEvent(msg);
-            RETURN(0);                                // always handled
+            inLoop = false;
+            return 0;                                  // always handled
 
-         case WM_DESTROY:                        // destroy window
+         case WM_DESTROY:                              // destroy window
             if (hwnd == curWin) {
                QWidget *enter = QWidget::mouseGrabber();
                if (enter == widget) {
@@ -2102,9 +2140,11 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                   winPos->y = newRect.y() - fs.top();
                   winPos->cx = newRect.width() + fs.left() + fs.right();
                   winPos->cy = newRect.height() + fs.top() + fs.bottom();
+                  inLoop = false;
 
-                  RETURN(0);
+                  return 0;
                }
+
                if (widget->windowFlags() & Qt::WindowStaysOnBottomHint) {
                   winPos->hwndInsertAfter = HWND_BOTTOM;
                }
@@ -2136,7 +2176,9 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                if ( maxh < QWIDGETSIZE_MAX ) {
                   mmi->ptMaxTrackSize.y = maxh + fs.top() + fs.bottom();
                }
-               RETURN(0);
+
+               inLoop = false;
+               return 0;
             }
             break;
 
@@ -2198,8 +2240,11 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                   } else {
                      return ret;
                   }
+
                } else if (wParam == IMR_CONFIRMRECONVERTSTRING) {
-                  RETURN(TRUE);
+                  inLoop = false;
+                  return true;
+
                } else {
                   // in all other cases, call DefWindowProc()
                   result = false;
@@ -2208,6 +2253,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             break;
          }
 #endif // QT_NO_IM
+
          case WM_CHANGECBCHAIN:
          case WM_DRAWCLIPBOARD:
          case WM_RENDERFORMAT:
@@ -2217,11 +2263,14 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             if (qt_clipboard) {
                QClipboardEvent e(reinterpret_cast<QEventPrivate *>(&msg));
                qt_sendSpontaneousEvent(qt_clipboard, &e);
-               RETURN(0);
+               inLoop = false;
+               return 0;
+
             }
             result = false;
+
             break;
-#endif //QT_NO_CLIPBOARD
+#endif
 
 #ifndef QT_NO_ACCESSIBILITY
          case WM_GETOBJECT: {
@@ -2257,7 +2306,8 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                iface->Release(); // the client will release the object again, and then it will destroy itself
 
                if (res > 0) {
-                  RETURN(res);
+                  inLoop = false;
+                  return res;
                }
             }
 
@@ -2288,10 +2338,14 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                   result = false;
                   break;
                }
-               RETURN(ret);
+
+               inLoop = false;
+               return ret;
             }
+
             result = false;
             break;
+
 #endif
          case WT_PACKET:
             if (ptrWTPacketsGet) {
@@ -2398,19 +2452,25 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          case WM_MOUSELEAVE:
             // We receive a mouse leave for curWin, meaning
             // the mouse was moved outside our widgets
+
             if (widget->internalWinId() == curWin) {
-               bool dispatch = !widget->underMouse();
+               bool dispatch = ! widget->underMouse();
+
                // hasMouse is updated when dispatching enter/leave,
                // so test if it is actually up-to-date
-               if (!dispatch) {
+
+               if (! dispatch) {
                   QRect geom = widget->geometry();
-                  if (widget->parentWidget() && !widget->isWindow()) {
+
+                  if (widget->parentWidget() && ! widget->isWindow()) {
                      QPoint gp = widget->parentWidget()->mapToGlobal(widget->pos());
                      geom.setX(gp.x());
                      geom.setY(gp.y());
                   }
+
                   QPoint cpos = QCursor::pos();
                   dispatch = !geom.contains(cpos);
+
                   if ( !dispatch && !QWidget::mouseGrabber()) {
                      QWidget *hittest = QApplication::widgetAt(cpos);
                      dispatch = !hittest || hittest->internalWinId() != curWin;
@@ -2510,10 +2570,13 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
 #ifndef QT_NO_CURSOR
          case WM_SETCURSOR: {
             QCursor *ovr = QApplication::overrideCursor();
+
             if (ovr) {
                SetCursor(ovr->handle());
-               RETURN(TRUE);
+               inLoop = false;
+               return true;
             }
+
             result = false;
             break;
          }
@@ -2530,33 +2593,38 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
    }
 
    if (result) {
-      RETURN(false);
+      inLoop = false;
+      return false;
    }
 
 do_default:
+
+
 #ifndef QT_NO_IM
-   RETURN(QWinInputContext::DefWindowProc(hwnd, message, wParam, lParam))
+   inLoop = false;
+   return (QWinInputContext::DefWindowProc(hwnd, message, wParam, lParam));
+
 #else
-   RETURN(TRUE);
+   inLoop = false;
+   return true;
+
 #endif
+
 }
 
 
 /*****************************************************************************
-  Modal widgets; We have implemented our own modal widget mechanism
-  to get total control.
+  Modal widgets; We have implemented our own modal widget mechanism to get total control.
   A modal widget without a parent becomes application-modal.
   A modal widget with a parent becomes modal to its parent and grandparents..
 
   QApplicationPrivate::enterModal()
         Enters modal state
-        Arguments:
-            QWidget *widget        A modal widget
+        Arguments: QWidget *widget        A modal widget
 
   QApplicationPrivate::leaveModal()
         Leaves modal state for a widget
-        Arguments:
-            QWidget *widget        A modal widget
+        Arguments: QWidget *widget        A modal widget
  *****************************************************************************/
 
 bool QApplicationPrivate::modalState()

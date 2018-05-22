@@ -786,14 +786,14 @@ void QPrinter::setPrinterName(const QString &name)
    ABORT_IF_ACTIVE("QPrinter::setPrinterName");
 
 #if defined(Q_OS_UNIX) && !defined(QT_NO_CUPS)
-   if (d->use_default_engine
-         && d->outputFormat == QPrinter::NativeFormat) {
-      if (QCUPSSupport::cupsVersion() >= 10200
-            && QCUPSSupport::printerHasPPD(name.toLocal8Bit().constData())) {
+   if (d->use_default_engine && d->outputFormat == QPrinter::NativeFormat) {
+
+      if (QCUPSSupport::cupsVersion() >= 10200 && QCUPSSupport::printerHasPPD(name.toUtf8().constData())) {
          setOutputFormat(QPrinter::PdfFormat);
       } else {
          setOutputFormat(QPrinter::PostScriptFormat);
       }
+
       d->outputFormat = QPrinter::NativeFormat;
    }
 #endif

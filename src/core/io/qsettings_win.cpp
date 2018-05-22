@@ -119,9 +119,11 @@ static QString errorCodeToString(DWORD errorCode)
 {
    wchar_t *data = nullptr;
    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errorCode, 0, (LPTSTR)&data, 0, 0);
-   QString result = QString::fromStdWString(std::wstring(data));
+
+   QString result;
 
    if (data != nullptr) {
+      result = QString::fromStdWString(std::wstring(data));
       LocalFree(data);
    }
 

@@ -792,6 +792,7 @@ void QWidgetPrivate::determineWindowClass()
       ADD_DEBUG_WINDOW_NAME(kWindowCloseBoxAttribute),
       ADD_DEBUG_WINDOW_NAME(kWindowHideOnSuspendAttribute),
       { 0, 0 }
+
    }, known_classes[] = {
       ADD_DEBUG_WINDOW_NAME(kHelpWindowClass),
       ADD_DEBUG_WINDOW_NAME(kPlainWindowClass),
@@ -807,29 +808,33 @@ void QWidgetPrivate::determineWindowClass()
       ADD_DEBUG_WINDOW_NAME(kModalWindowClass),
       { 0, 0 }
    };
-   qDebug("Qt: internal: ************* Creating new window %p (%s::%s)", q, q->metaObject()->className(),
-          q->objectName().toLocal8Bit().constData());
+
+   qDebug("Internal Issue:  Creating new window %p (%s::%s)", q, q->metaObject()->className(),
+          q->objectName().toUtf8().constData());
+
    bool found_class = false;
+
    for (int i = 0; known_classes[i].name; i++) {
       if (wclass == known_classes[i].tag) {
          found_class = true;
-         qDebug("Qt: internal: ** Class: %s", known_classes[i].name);
+         qDebug("Internal Issue: Class %s", known_classes[i].name);
          break;
       }
    }
    if (!found_class) {
-      qDebug("Qt: internal: !! Class: Unknown! (%d)", (int)wclass);
+      qDebug("Internal Issue: Class Unknown (%d)", (int)wclass);
    }
    if (wattr) {
       WindowAttributes tmp_wattr = wattr;
-      qDebug("Qt: internal: ** Attributes:");
+      qDebug("Internal Issue:  Attributes:");
+
       for (int i = 0; tmp_wattr && known_attribs[i].name; i++) {
          if ((tmp_wattr & known_attribs[i].tag) == known_attribs[i].tag) {
             tmp_wattr ^= known_attribs[i].tag;
          }
       }
       if (tmp_wattr) {
-         qDebug("Qt: internal: !! Attributes: Unknown (%d)", (int)tmp_wattr);
+         qDebug("Internal Issue: Attributes Unknown (%d)", (int)tmp_wattr);
       }
    }
 #endif
@@ -851,8 +856,10 @@ void QWidgetPrivate::setWindowLevel()
          OSWindowRef parentRef = qt_mac_window_for(primaryWindow);
          winLevel = qMax([parentRef level], winLevel);
       }
+
    } else if (q->windowType() == Qt::Tool) {
       winLevel = NSFloatingWindowLevel;
+
    } else if (q->windowType() == Qt::Dialog) {
       // Correct modality level (NSModalPanelWindowLevel) will be
       // set by cocoa when creating a modal session later.

@@ -143,22 +143,21 @@ uint QCoreTextFontEngineMulti::fontIndexForFont(CTFontRef font) const
    return engines.count() - 1;
 }
 
-bool QCoreTextFontEngineMulti::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs,
-      int *nglyphs, QTextEngine::ShaperFlags flags,
-      unsigned short *logClusters, const HB_CharAttributes *,
-      QScriptItem *si) const
+bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs,
+      QTextEngine::ShaperFlags flags, unsigned short *logClusters, const HB_CharAttributes *, QScriptItem *si) const
 {
    QCFType<CFStringRef> cfstring = CFStringCreateWithCharactersNoCopy(0,
                                    reinterpret_cast<const UniChar *>(str),
                                    len, kCFAllocatorNull);
+
    QCFType<CFAttributedStringRef> attributedString = CFAttributedStringCreate(0, cfstring, attributeDict);
    QCFType<CTTypesetterRef> typeSetter;
-
 
    if (flags & QTextEngine::RightToLeft) {
       const void *optionKeys[] = { kCTTypesetterOptionForcedEmbeddingLevel };
       const short rtlForcedEmbeddingLevelValue = 1;
       const void *rtlOptionValues[] = { CFNumberCreate(kCFAllocatorDefault, kCFNumberShortType, &rtlForcedEmbeddingLevelValue) };
+
       QCFType<CFDictionaryRef> options = CFDictionaryCreate(kCFAllocatorDefault, optionKeys, rtlOptionValues, 1,
                                          &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
       typeSetter = CTTypesetterCreateWithAttributedStringAndOptions(attributedString, options);
@@ -329,7 +328,7 @@ bool QCoreTextFontEngineMulti::stringToCMap(const QChar *str, int len, QGlyphLay
    return !outOBounds;
 }
 
-bool QCoreTextFontEngineMulti::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs,
+bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs,
       int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
    *nglyphs = len;
@@ -482,7 +481,7 @@ void QCoreTextFontEngine::init()
    }
 }
 
-bool QCoreTextFontEngine::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs,
+bool QCoreTextFontEngine::stringToCMap(QStringView str, QGlyphLayout *glyphs,
                                        int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
    *nglyphs = len;
@@ -842,7 +841,7 @@ QFontEngine::FaceId QCoreTextFontEngine::faceId() const
 bool QCoreTextFontEngine::canRender(QStringView str)
 {
    QVarLengthArray<CGGlyph> cgGlyphs(len);
-   return CTFontGetGlyphsForCharacters(ctfont, (const UniChar *) str, cgGlyphs.data(), len);  // BROOM
+   return CTFontGetGlyphsForCharacters(ctfont, (const UniChar *) str, cgGlyphs.data(), len);
 }
 
 bool QCoreTextFontEngine::getSfntTableData(uint tag, uchar *buffer, uint *length) const

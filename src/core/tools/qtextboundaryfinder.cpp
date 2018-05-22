@@ -86,16 +86,16 @@ static void init(QTextBoundaryFinder::BoundaryType type, const QString &str, HB_
       scriptItems.append(item);
    }
 
-   std::wstring tmp(str.toStdWString());
-   const HB_UChar16 *utf16_string = reinterpret_cast<const HB_UChar16 *>(&tmp[0]);
+   QString16 tmp = str.toUtf16();
+   const HB_UChar16 *utf16_string = reinterpret_cast<const HB_UChar16 *>(tmp.constData());
 
-   qGetCharAttributes(utf16_string, tmp.size(), scriptItems.data(), scriptItems.count(), attributes);
+   qGetCharAttributes(utf16_string, tmp.size_storage(), scriptItems.data(), scriptItems.count(), attributes);
 
    if (type == QTextBoundaryFinder::Word) {
-      HB_GetWordBoundaries(utf16_string, tmp.size(), scriptItems.data(), scriptItems.count(), attributes);
+      HB_GetWordBoundaries(utf16_string, tmp.size_storage(), scriptItems.data(), scriptItems.count(), attributes);
 
    } else if (type == QTextBoundaryFinder::Sentence) {
-      HB_GetSentenceBoundaries(utf16_string, tmp.size(), scriptItems.data(), scriptItems.count(), attributes);
+      HB_GetSentenceBoundaries(utf16_string, tmp.size_storage(), scriptItems.data(), scriptItems.count(), attributes);
    }
 }
 

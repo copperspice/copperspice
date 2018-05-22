@@ -75,8 +75,7 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
       }
    };
 
-   bool populate(QFontEngine *fontEngine, int numGlyphs, const glyph_t *glyphs,
-                 const QFixedPoint *positions);
+   bool populate(QFontEngine *fontEngine, int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions);
    void fillInPendingGlyphs();
 
    virtual void createTextureData(int width, int height) = 0;

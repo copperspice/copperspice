@@ -185,13 +185,13 @@ void QFontEngineWin::getCMap()
    }
 
    if (! cmap) {
-      ttf = false;
+      ttf  = false;
       symb = false;
    }
 
    symbol = symb;
    designToDevice = 1;
-   _faceId.index = 0;
+   _faceId.index  = 0;
 
    if (cmap) {
       OUTLINETEXTMETRIC *otm = getOutlineTextMetric(hdc);
@@ -201,7 +201,6 @@ void QFontEngineWin::getCMap()
       x_height       = (int)otm->otmsXHeight;
       loadKerningPairs(designToDevice);
 
-      // BROOM
       _faceId.filename = QString::fromStdWString((wchar_t *)((char *)otm + (quintptr)otm->otmpFullName)).toLatin1();
 
       lineWidth = otm->otmsUnderscoreSize;
@@ -268,7 +267,7 @@ int QFontEngineWin::getGlyphIndexes(QStringView str, QGlyphLayout *glyphs, bool 
 
             glyphs->glyphs[i] = getTrueTypeGlyphIndex(cmap, uc);
 
-            if (!glyphs->glyphs[glyph_pos] && uc < 0x100) {
+            if (! glyphs->glyphs[glyph_pos] && uc < 0x100) {
                glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, uc + 0xf000);
             }
 
@@ -285,7 +284,7 @@ int QFontEngineWin::getGlyphIndexes(QStringView str, QGlyphLayout *glyphs, bool 
 
       } else {
          wchar_t first = tm.tmFirstChar;
-         wchar_t last = tm.tmLastChar;
+         wchar_t last  = tm.tmLastChar;
 
          for (QChar c : str) {
             char32_t uc = c.unicode();
@@ -306,17 +305,14 @@ int QFontEngineWin::getGlyphIndexes(QStringView str, QGlyphLayout *glyphs, bool 
    return glyph_pos;
 }
 
-
 QFontEngineWin::QFontEngineWin(const QString &name, HFONT _hfont, bool stockFont, LOGFONT lf)
 {
-   //qDebug("regular windows font engine created: font='%s', size=%d", name, lf.lfHeight);
-
-   _name = name;
-
-   cmap = 0;
-   hfont = _hfont;
+   _name   = name;
+   cmap    = 0;
+   hfont   = _hfont;
    logfont = lf;
    HDC hdc = shared_dc();
+
    SelectObject(hdc, hfont);
    this->stockFont = stockFont;
    fontDef.pixelSize = -lf.lfHeight;
@@ -329,7 +325,8 @@ QFontEngineWin::QFontEngineWin(const QString &name, HFONT _hfont, bool stockFont
 
    BOOL res = GetTextMetrics(hdc, &tm);
    fontDef.fixedPitch = !(tm.tmPitchAndFamily & TMPF_FIXED_PITCH);
-   if (!res) {
+
+   if (! res) {
       qErrnoWarning("QFontEngineWin: GetTextMetrics failed");
       ZeroMemory(&tm, sizeof(TEXTMETRIC));
    }
@@ -337,9 +334,9 @@ QFontEngineWin::QFontEngineWin(const QString &name, HFONT _hfont, bool stockFont
    cache_cost = tm.tmHeight * tm.tmAveCharWidth * 2000;
    getCMap();
 
-   widthCache = 0;
-   widthCacheSize = 0;
-   designAdvances = 0;
+   widthCache         = 0;
+   widthCacheSize     = 0;
+   designAdvances     = 0;
    designAdvancesSize = 0;
 
    if (! resolvedGetCharWidthI) {
@@ -357,26 +354,28 @@ QFontEngineWin::~QFontEngineWin()
       free(widthCache);
    }
 
-   // make sure we aren't by accident still selected
+   // make sure we are not by accident still selected
    SelectObject(shared_dc(), (HFONT)GetStockObject(SYSTEM_FONT));
 
    if (!stockFont) {
-      if (!DeleteObject(hfont)) {
-         qErrnoWarning("QFontEngineWin: failed to delete non-stock font...");
+      if (! DeleteObject(hfont)) {
+         qErrnoWarning("QFontEngineWin: failed to delete non-stock font.");
       }
    }
 }
 
 HGDIOBJ QFontEngineWin::selectDesignFont() const
 {
-   LOGFONT f = logfont;
+   LOGFONT f  = logfont;
    f.lfHeight = unitsPerEm;
-   f.lfWidth = 0;
+   f.lfWidth  = 0;
    HFONT designFont = CreateFontIndirect(&f);
+
    return SelectObject(shared_dc(), designFont);
 }
 
-bool QFontEngineWin::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const
+bool QFontEngineWin::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, 
+                  QTextEngine::ShaperFlags flags) const
 {
    int len = str.length();
 
@@ -414,15 +413,16 @@ void QFontEngineWin::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFla
 
          if (int(glyph) >= designAdvancesSize) {
             int newSize = (glyph + 256) >> 8 << 8;
-            designAdvances = q_check_ptr((QFixed *)realloc(designAdvances,
-                                         newSize * sizeof(QFixed)));
+            designAdvances = q_check_ptr((QFixed *)realloc(designAdvances, newSize * sizeof(QFixed)));
+
             for (int i = designAdvancesSize; i < newSize; ++i) {
                designAdvances[i] = -1000000;
             }
             designAdvancesSize = newSize;
          }
+
          if (designAdvances[glyph] < -999999) {
-            if (!oldFont) {
+            if (! oldFont) {
                oldFont = selectDesignFont();
             }
 
@@ -433,9 +433,11 @@ void QFontEngineWin::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFla
          glyphs->advances_x[i] = designAdvances[glyph];
          glyphs->advances_y[i] = 0;
       }
+
       if (oldFont) {
          DeleteObject(SelectObject(hdc, oldFont));
       }
+
    } else {
       for (int i = 0; i < glyphs->numGlyphs; i++) {
          unsigned int glyph = glyphs->glyphs[i];
@@ -547,6 +549,7 @@ bool QFontEngineWin::getOutlineMetrics(glyph_t glyph, const QTransform &t, glyph
       *metrics = glyph_metrics_t(gm.gmptGlyphOrigin.x, -gm.gmptGlyphOrigin.y,
                                  (int)gm.gmBlackBoxX, (int)gm.gmBlackBoxY, gm.gmCellIncX, gm.gmCellIncY);
       return true;
+
    } else {
       return false;
    }
@@ -554,7 +557,6 @@ bool QFontEngineWin::getOutlineMetrics(glyph_t glyph, const QTransform &t, glyph
 
 glyph_metrics_t QFontEngineWin::boundingBox(glyph_t glyph, const QTransform &t)
 {
-
    HDC hdc = shared_dc();
    SelectObject(hdc, hfont);
 
@@ -588,7 +590,6 @@ QFixed QFontEngineWin::leading() const
 {
    return tm.tmExternalLeading;
 }
-
 
 QFixed QFontEngineWin::xHeight() const
 {
@@ -919,6 +920,7 @@ void QFontEngineWin::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, in
    // hinted cell height. This ensures that we get linear matching, and we need this for
    // paths since we later on apply a scaling transform to the glyph outline to get the
    // font at the correct pixel size.
+
    lf.lfHeight = -unitsPerEm;
    lf.lfWidth = 0;
    HFONT hf = CreateFontIndirect(&lf);
@@ -945,10 +947,10 @@ void QFontEngineWin::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyp
    if (tm.tmPitchAndFamily & (TMPF_TRUETYPE | TMPF_VECTOR)) {
       hasOutline = true;
       QFontEngine::addOutlineToPath(x, y, glyphs, path, flags);
+
       if (hasOutline)  {
          // has_outline is set to false if addGlyphToPath gets
-         // false from GetGlyphOutline, meaning its not an outline
-         // font.
+         // false from GetGlyphOutline, meaning its not an outline font.
          return;
       }
    }
@@ -1074,10 +1076,13 @@ bool QFontEngineWin::getSfntTableData(uint tag, uchar *buffer, uint *length) con
    if (!ttf && !cffTable) {
       return false;
    }
+
    HDC hdc = shared_dc();
    SelectObject(hdc, hfont);
+
    DWORD t = qbswap<quint32>(tag);
    *length = GetFontData(hdc, t, 0, buffer, *length);
+
    return *length != GDI_ERROR;
 }
 

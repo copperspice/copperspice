@@ -23,11 +23,11 @@
 #ifndef QSORTFILTERPROXYMODEL_H
 #define QSORTFILTERPROXYMODEL_H
 
-#include <QtGui/qabstractproxymodel.h>
+#include <qabstractproxymodel.h>
 
 #ifndef QT_NO_SORTFILTERPROXYMODEL
 
-#include <QtCore/QRegularExpression.h>
+#include <qregularexpression.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -689,12 +689,14 @@ class QFontDatabasePrivate
    }
 
    int count;
-#if defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)
+
+#if defined(Q_WS_X11)
    QString systemLang;
 #endif
+
    QtFontFamily **families;
 
-#if defined(Q_OS_WIN) && !defined(QT_NO_DIRECTWRITE)
+#if defined(Q_OS_WIN) && ! defined(QT_NO_DIRECTWRITE)
    IDWriteFactory *directWriteFactory;
    IDWriteGdiInterop *directWriteGdiInterop;
 #endif
@@ -947,12 +949,13 @@ int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSystem)
 }
 
 
-#if defined Q_WS_QWS || (defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)) || defined(Q_OS_WIN)
+#if defined Q_WS_QWS || defined(Q_WS_X11) || defined(Q_OS_WIN)
 static inline bool requiresOpenType(int writingSystem)
 {
    return ((writingSystem >= QFontDatabase::Syriac && writingSystem <= QFontDatabase::Sinhala)
            || writingSystem == QFontDatabase::Khmer || writingSystem == QFontDatabase::Nko);
 }
+
 static inline bool scriptRequiresOpenType(int script)
 {
    return ((script >= QChar::Script_Syriac && script <= QChar::Script_Sinhala)
