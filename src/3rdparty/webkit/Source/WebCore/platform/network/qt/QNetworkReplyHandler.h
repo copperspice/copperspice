@@ -86,15 +86,15 @@ public:
 
 private :
     WEB_CS_SLOT_1(Private, void receiveMetaData())
-    WEB_CS_SLOT_2(receiveMetaData) 
+    WEB_CS_SLOT_2(receiveMetaData)
     WEB_CS_SLOT_1(Private, void didReceiveFinished())
-    WEB_CS_SLOT_2(didReceiveFinished) 
+    WEB_CS_SLOT_2(didReceiveFinished)
     WEB_CS_SLOT_1(Private, void didReceiveReadyRead())
-    WEB_CS_SLOT_2(didReceiveReadyRead) 
+    WEB_CS_SLOT_2(didReceiveReadyRead)
     WEB_CS_SLOT_1(Private, void receiveSniffedMIMEType())
-    WEB_CS_SLOT_2(receiveSniffedMIMEType) 
+    WEB_CS_SLOT_2(receiveSniffedMIMEType)
     WEB_CS_SLOT_1(Private, void setFinished())
-    WEB_CS_SLOT_2(setFinished) 
+    WEB_CS_SLOT_2(setFinished)
 
     void resetConnections();
     void emitMetaDataChanged();
@@ -137,7 +137,7 @@ public:
 
 private :
     WEB_CS_SLOT_1(Private, void uploadProgress(qint64 bytesSent,qint64 bytesTotal))
-    WEB_CS_SLOT_2(uploadProgress) 
+    WEB_CS_SLOT_2(uploadProgress)
 
     void start();
     String httpMethod() const;
@@ -155,7 +155,7 @@ private :
 	    }
 	}
     };
-    
+
     std::unique_ptr<QNetworkReplyWrapper, Deleter> m_replyWrapper;
     ResourceHandle* m_resourceHandle;
     LoadType m_loadType;
@@ -168,30 +168,31 @@ private :
     QNetworkReplyHandlerCallQueue m_queue;
 };
 
-// Self destructing QIODevice for FormData
+//  Self destructing QIODevice for FormData
 //  For QNetworkAccessManager::put we will have to gurantee that the
 //  QIODevice is valid as long finished() of the QNetworkReply has not
 //  been emitted. With the presence of QNetworkReplyHandler::release I do
 //  not want to gurantee this.
+
 class FormDataIODevice : public QIODevice {
     WEB_CS_OBJECT(FormDataIODevice)
+
 public:
     FormDataIODevice(FormData*);
     ~FormDataIODevice();
 
-    bool isSequential() const;
+    bool isSequential() const override;
     qint64 getFormDataSize() const { return m_fileSize + m_dataSize; }
 
 protected:
-    qint64 readData(char*, qint64);
-    qint64 writeData(const char*, qint64);
+    qint64 readData(char*, qint64) override;
+    qint64 writeData(const char*, qint64) override;
 
 private:
     void moveToNextElement();
     qint64 computeSize();
     void openFileForCurrentElement();
 
-private:
     Vector<FormDataElement> m_formElements;
     QFile* m_currentFile;
     qint64 m_currentDelta;

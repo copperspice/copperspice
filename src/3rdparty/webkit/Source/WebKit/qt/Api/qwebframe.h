@@ -205,7 +205,7 @@ public:
 
     QWebHitTestResult hitTestContent(const QPoint &pos) const;
 
-    virtual bool event(QEvent *);
+    bool event(QEvent *) override;
 
     QWebSecurityOrigin securityOrigin() const;
 

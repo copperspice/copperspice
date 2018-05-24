@@ -49,12 +49,12 @@ public:
     void stop();
 
 protected:
-    void timerEvent(QTimerEvent* ev);
+    void timerEvent(QTimerEvent* ev) override;
 
 private:
     WEB_CS_SLOT_1(Private,void destroy())
     WEB_CS_SLOT_2(destroy)
-    
+
     SharedTimerQt();
     ~SharedTimerQt();
     QBasicTimer m_timer;

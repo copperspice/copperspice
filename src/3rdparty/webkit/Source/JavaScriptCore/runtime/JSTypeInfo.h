@@ -1,4 +1,3 @@
-// -*- mode: c++; c-basic-offset: 4 -*-
 /*
  * Copyright (C) 2008 Apple Inc. All rights reserved.
  *
@@ -21,14 +20,14 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef JSTypeInfo_h
 #define JSTypeInfo_h
 
 // This file would be called TypeInfo.h, but that conflicts with <typeinfo.h>
-// in the STL on systems without case-sensitive file systems. 
+// in the STL on systems without case-sensitive file systems.
 
 #include "JSType.h"
 
@@ -48,13 +47,12 @@ namespace JSC {
     class TypeInfo {
     public:
         TypeInfo(JSType type, unsigned flags = 0)
-            : m_type(type)
-            , m_flags(flags & 0xFF)
-            , m_flags2(flags >> 8)
+            : m_type(type), m_flags(flags & 0xFF) , m_flags2(flags >> 8)
         {
             ASSERT(flags <= 0x1FF);
-            ASSERT(type <= 0xFF);
-            ASSERT(type >= CompoundType || !(flags & OverridesVisitChildren));
+            ASSERT(static_cast<unsigned int>(type) <= 0xFF);
+            ASSERT(type >= CompoundType || ! (flags & OverridesVisitChildren));
+
             // ImplementsDefaultHasInstance means (ImplementsHasInstance & !OverridesHasInstance)
             if ((m_flags & (ImplementsHasInstance | OverridesHasInstance)) == ImplementsHasInstance)
                 m_flags |= ImplementsDefaultHasInstance;

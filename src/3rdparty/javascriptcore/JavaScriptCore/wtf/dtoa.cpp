@@ -290,7 +290,7 @@ struct BigInt {
         sign = 0;
         m_words.clear();
     }
-    
+
     size_t size() const
     {
         return m_words.size();
@@ -300,7 +300,7 @@ struct BigInt {
     {
         m_words.resize(s);
     }
-            
+
     uint32_t* words()
     {
         return m_words.data();
@@ -310,12 +310,12 @@ struct BigInt {
     {
         return m_words.data();
     }
-    
+
     void append(uint32_t w)
     {
         m_words.append(w);
     }
-    
+
     Vector<uint32_t, 16> m_words;
 };
 
@@ -407,6 +407,7 @@ static int hi0bits(uint32_t x)
     }
     if (!(x & 0x80000000)) {
         k++;
+
         if (!(x & 0x40000000))
             return 32;
     }
@@ -421,37 +422,47 @@ static int lo0bits (uint32_t* y)
     if (x & 7) {
         if (x & 1)
             return 0;
+
         if (x & 2) {
             *y = x >> 1;
             return 1;
         }
+
         *y = x >> 2;
         return 2;
     }
+
     k = 0;
-    if (!(x & 0xffff)) {
+    if (! (x & 0xffff)) {
         k = 16;
         x >>= 16;
     }
-    if (!(x & 0xff)) {
+
+    if (! (x & 0xff)) {
         k += 8;
         x >>= 8;
     }
-    if (!(x & 0xf)) {
+
+    if (! (x & 0xf)) {
         k += 4;
         x >>= 4;
     }
-    if (!(x & 0x3)) {
+
+    if (! (x & 0x3)) {
         k += 2;
         x >>= 2;
     }
-    if (!(x & 1)) {
+
+    if (! (x & 1)) {
         k++;
         x >>= 1;
-        if (!x & 1)
+
+        if ((!x) & 1)
             return 32;
     }
+
     *y = x;
+
     return k;
 }
 
@@ -482,7 +493,7 @@ static void mult(BigInt& aRef, const BigInt& bRef)
         a = b;
         b = tmp;
     }
-    
+
     wa = a->size();
     wb = b->size();
     wc = wa + wb;
@@ -565,7 +576,7 @@ struct P5Node : Noncopyable {
     BigInt val;
     P5Node* next;
 };
-    
+
 static P5Node* p5s;
 static int p5s_count;
 
@@ -618,7 +629,7 @@ static ALWAYS_INLINE void pow5mult(BigInt& b, int k)
                 mult(p5->next->val, p5->next->val);
                 ++p5s_count;
             }
-            
+
             p5s_count_local = p5s_count;
 #if ENABLE(JSC_MULTIPLE_THREADS)
             s_dtoaP5Mutex->unlock();

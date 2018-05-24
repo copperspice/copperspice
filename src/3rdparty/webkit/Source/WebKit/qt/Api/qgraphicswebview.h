@@ -22,12 +22,12 @@
 
 #include "qwebkitglobal.h"
 #include "qwebpage.h"
-#include <QtCore/qurl.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qgraphicswidget.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qpainter.h>
-#include <QtNetwork/qnetworkaccessmanager.h>
+#include <qurl.h>
+#include <qevent.h>
+#include <qgraphicswidget.h>
+#include <qicon.h>
+#include <qpainter.h>
+#include <qnetworkaccessmanager.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -59,7 +59,7 @@ class QWEBKIT_EXPORT QGraphicsWebView : public QGraphicsWidget
     WEB_CS_PROPERTY_WRITE(tiledBackingStoreFrozen, setTiledBackingStoreFrozen)
 
     WEB_CS_PROPERTY_READ(renderHints, renderHints)
-    WEB_CS_PROPERTY_WRITE(renderHints, setRenderHints)    
+    WEB_CS_PROPERTY_WRITE(renderHints, setRenderHints)
 
 public:
     explicit QGraphicsWebView(QGraphicsItem* parent = 0);
@@ -97,19 +97,19 @@ public:
 
     bool resizesToContents() const;
     void setResizesToContents(bool enabled);
-    
+
     bool isTiledBackingStoreFrozen() const;
     void setTiledBackingStoreFrozen(bool frozen);
 
-    virtual void setGeometry(const QRectF& rect);
-    virtual void updateGeometry();
-    virtual void paint(QPainter*, const QStyleOptionGraphicsItem* options, QWidget* widget = 0);
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
-    virtual bool event(QEvent*);
+    void setGeometry(const QRectF& rect) override;
+    void updateGeometry() override;
+    void paint(QPainter*, const QStyleOptionGraphicsItem* options, QWidget* widget = 0) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+    bool event(QEvent*) override;
 
-    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint) const;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint) const override;
 
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
     QPainter::RenderHints renderHints() const;
     void setRenderHints(QPainter::RenderHints);
@@ -117,61 +117,61 @@ public:
 
 public :
     WEB_CS_SLOT_1(Public, void stop())
-    WEB_CS_SLOT_2(stop) 
+    WEB_CS_SLOT_2(stop)
     WEB_CS_SLOT_1(Public, void back())
-    WEB_CS_SLOT_2(back) 
+    WEB_CS_SLOT_2(back)
     WEB_CS_SLOT_1(Public, void forward())
-    WEB_CS_SLOT_2(forward) 
+    WEB_CS_SLOT_2(forward)
     WEB_CS_SLOT_1(Public, void reload())
-    WEB_CS_SLOT_2(reload) 
+    WEB_CS_SLOT_2(reload)
 
     WEB_CS_SIGNAL_1(Public, void loadStarted())
-    WEB_CS_SIGNAL_2(loadStarted) 
+    WEB_CS_SIGNAL_2(loadStarted)
     WEB_CS_SIGNAL_1(Public, void loadFinished(bool un_named_arg1))
-    WEB_CS_SIGNAL_2(loadFinished,un_named_arg1) 
+    WEB_CS_SIGNAL_2(loadFinished,un_named_arg1)
 
     WEB_CS_SIGNAL_1(Public, void loadProgress(int progress))
-    WEB_CS_SIGNAL_2(loadProgress,progress) 
+    WEB_CS_SIGNAL_2(loadProgress,progress)
     WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(urlChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_2(urlChanged,un_named_arg1)
     WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & un_named_arg1))
-    WEB_CS_SIGNAL_2(titleChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_2(titleChanged,un_named_arg1)
     WEB_CS_SIGNAL_1(Public, void iconChanged())
-    WEB_CS_SIGNAL_2(iconChanged) 
+    WEB_CS_SIGNAL_2(iconChanged)
     WEB_CS_SIGNAL_1(Public, void statusBarMessage(const QString & message))
-    WEB_CS_SIGNAL_2(statusBarMessage,message) 
+    WEB_CS_SIGNAL_2(statusBarMessage,message)
     WEB_CS_SIGNAL_1(Public, void linkClicked(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(linkClicked,un_named_arg1) 
+    WEB_CS_SIGNAL_2(linkClicked,un_named_arg1)
 
 protected:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
-    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
 #ifndef QT_NO_WHEELEVENT
-    virtual void wheelEvent(QGraphicsSceneWheelEvent*);
+    void wheelEvent(QGraphicsSceneWheelEvent*) override;
 #endif
 
-    virtual void keyPressEvent(QKeyEvent*);
-    virtual void keyReleaseEvent(QKeyEvent*);
+    void keyPressEvent(QKeyEvent*) override;
+    void keyReleaseEvent(QKeyEvent*) override;
 
 #ifndef QT_NO_CONTEXTMENU
-    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 #endif
 
-    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dropEvent(QGraphicsSceneDragDropEvent*);
-    virtual void focusInEvent(QFocusEvent*);
-    virtual void focusOutEvent(QFocusEvent*);
-    virtual void inputMethodEvent(QInputMethodEvent*);
-    virtual bool focusNextPrevChild(bool next);
+    void dragEnterEvent(QGraphicsSceneDragDropEvent*) override;
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent*) override;
+    void dragMoveEvent(QGraphicsSceneDragDropEvent*) override;
+    void dropEvent(QGraphicsSceneDragDropEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
+    void focusOutEvent(QFocusEvent*) override;
+    void inputMethodEvent(QInputMethodEvent*) override;
+    bool focusNextPrevChild(bool next) override;
 
-    virtual bool sceneEvent(QEvent*);
+    bool sceneEvent(QEvent*) override;
 
 private:
     WEB_CS_SLOT_1(Private, void _q_doLoadFinished(bool success))

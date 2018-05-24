@@ -173,9 +173,9 @@ public:
     virtual ~GraphicsLayerQtImpl();
 
     // reimps from QGraphicsItem
-    virtual QPainterPath opaqueArea() const;
-    virtual QRectF boundingRect() const;
-    virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+    QPainterPath opaqueArea() const override;
+    QRectF boundingRect() const override;
+    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
     // We manage transforms ourselves because transform-origin acts differently in webkit and in Qt,
     // and we need it as a fallback in case we encounter an un-invertible matrix.
@@ -212,7 +212,7 @@ public:
 
     void drawLayerContent(QPainter*, const QRect&);
 
-public: 
+public:
     WEB_CS_SLOT_1(Public,void notifyAnimationStarted())
     WEB_CS_SLOT_2(notifyAnimationStarted)
 
@@ -624,8 +624,9 @@ QRectF GraphicsLayerQtImpl::boundingRect() const
 void GraphicsLayerQtImpl::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 #if ENABLE(TILED_BACKING_STORE)
-    // FIXME: There's currently no Qt API to know if a new region of an item is exposed outside of the paint event.
+    // FIXME: There's currently no API to know if a new region of an item is exposed outside of the paint event.
     // Suggested for Qt: http://bugreports.qt.nokia.com/browse/QTBUG-14877.
+
     if (m_tiledBackingStore)
         m_tiledBackingStore->adjustVisibleRect();
 #endif
@@ -634,28 +635,34 @@ void GraphicsLayerQtImpl::paint(QPainter* painter, const QStyleOptionGraphicsIte
         painter->fillRect(option->exposedRect, QColor(m_currentContent.backgroundColor));
 
     switch (m_currentContent.contentType) {
-    case HTMLContentType:
-        if (m_state.drawsContent) {
-            if (!allowAcceleratedCompositingCache())
-                drawLayerContent(painter, option->exposedRect.toRect());
-            else {
-                QPixmap backingStore;
-                // We might need to recache, in case we try to paint and the cache was purged (e.g. if it was full).
-                if (!QPixmapCache::find(m_backingStore.key, &backingStore) || backingStore.size() != m_size.toSize())
-                    backingStore = recache(QRegion(m_state.contentsRect));
-                painter->drawPixmap(0, 0, backingStore);
-            }
-        }
-        break;
-    case PixmapContentType:
-        painter->drawPixmap(m_state.contentsRect, m_currentContent.pixmap);
-        break;
-    case ColorContentType:
-        painter->fillRect(m_state.contentsRect, m_currentContent.contentsBackgroundColor);
-        break;
-    case MediaContentType:
-        // we don't need to paint anything: we have a QGraphicsItem from the media element
-        break;
+       case HTMLContentType:
+           if (m_state.drawsContent) {
+               if (!allowAcceleratedCompositingCache())
+                   drawLayerContent(painter, option->exposedRect.toRect());
+               else {
+                   QPixmap backingStore;
+                   // We might need to recache, in case we try to paint and the cache was purged (e.g. if it was full).
+                   if (!QPixmapCache::find(m_backingStore.key, &backingStore) || backingStore.size() != m_size.toSize())
+                       backingStore = recache(QRegion(m_state.contentsRect));
+                   painter->drawPixmap(0, 0, backingStore);
+               }
+           }
+           break;
+
+       case PixmapContentType:
+           painter->drawPixmap(m_state.contentsRect, m_currentContent.pixmap);
+           break;
+
+       case ColorContentType:
+           painter->fillRect(m_state.contentsRect, m_currentContent.contentsBackgroundColor);
+           break;
+
+       case MediaContentType:
+           // we don't need to paint anything: we have a QGraphicsItem from the media element
+           break;
+
+       default:
+           break;
     }
 }
 
@@ -757,7 +764,9 @@ void GraphicsLayerQtImpl::flushChanges(bool recursive, bool forceUpdateTransform
         if (scene())
             scene()->update();
 
-    if (m_changeMask & (ChildrenTransformChange | Preserves3DChange | TransformChange | AnchorPointChange | SizeChange | BackfaceVisibilityChange | PositionChange | ParentChange)) {
+    if (m_changeMask & (ChildrenTransformChange | Preserves3DChange | TransformChange | AnchorPointChange | SizeChange |
+                  BackfaceVisibilityChange | PositionChange | ParentChange)) {
+
         // Due to the differences between the way WebCore handles transforms and the way Qt handles transforms,
         // all these elements affect the transforms of all the descendants.
         forceUpdateTransform = true;
@@ -765,35 +774,38 @@ void GraphicsLayerQtImpl::flushChanges(bool recursive, bool forceUpdateTransform
 
     if (m_changeMask & (ContentChange | DrawsContentChange | MaskLayerChange)) {
         switch (m_pendingContent.contentType) {
-        case PixmapContentType:
-            update();
-            setFlag(ItemHasNoContents, false);
-            break;
+           case PixmapContentType:
+               update();
+               setFlag(ItemHasNoContents, false);
+               break;
 
-        case MediaContentType:
-            setFlag(ItemHasNoContents, true);
-            m_pendingContent.mediaLayer.data()->setParentItem(this);
-            break;
+           case MediaContentType:
+               setFlag(ItemHasNoContents, true);
+               m_pendingContent.mediaLayer.data()->setParentItem(this);
+               break;
 
-        case ColorContentType:
-            if (m_pendingContent.contentType != m_currentContent.contentType
-                || m_pendingContent.contentsBackgroundColor != m_currentContent.contentsBackgroundColor)
-                update();
-            m_state.drawsContent = false;
-            setFlag(ItemHasNoContents, false);
+           case ColorContentType:
+               if (m_pendingContent.contentType != m_currentContent.contentType
+                   || m_pendingContent.contentsBackgroundColor != m_currentContent.contentsBackgroundColor)
+                   update();
+               m_state.drawsContent = false;
+               setFlag(ItemHasNoContents, false);
 
-            // Only use ItemUsesExtendedStyleOption for HTML content as colors don't gain much from that.
-            setFlag(QGraphicsItem::ItemUsesExtendedStyleOption, false);
-            break;
+               // Only use ItemUsesExtendedStyleOption for HTML content as colors don't gain much from that.
+               setFlag(QGraphicsItem::ItemUsesExtendedStyleOption, false);
+               break;
 
-        case HTMLContentType:
-            if (m_pendingContent.contentType != m_currentContent.contentType)
-                update();
-            else if (!m_state.drawsContent && m_layer->drawsContent())
-                update();
+           case HTMLContentType:
+               if (m_pendingContent.contentType != m_currentContent.contentType)
+                   update();
+               else if (!m_state.drawsContent && m_layer->drawsContent())
+                   update();
 
-            setFlag(ItemHasNoContents, !m_layer->drawsContent());
-            break;
+               setFlag(ItemHasNoContents, !m_layer->drawsContent());
+               break;
+
+           default:
+              break;
         }
     }
 
@@ -975,14 +987,18 @@ void GraphicsLayerQt::setNeedsDisplayInRect(const FloatRect& rect)
 void GraphicsLayerQt::setContentsNeedsDisplay()
 {
     switch (m_impl->m_pendingContent.contentType) {
-    case GraphicsLayerQtImpl::MediaContentType:
-        if (!m_impl->m_pendingContent.mediaLayer)
-            return;
-        m_impl->m_pendingContent.mediaLayer.data()->update();
-        break;
-    default:
-        setNeedsDisplay();
-        break;
+
+       case GraphicsLayerQtImpl::MediaContentType:
+           if (!m_impl->m_pendingContent.mediaLayer) {
+               return;
+           }
+
+           m_impl->m_pendingContent.mediaLayer.data()->update();
+           break;
+
+       default:
+           setNeedsDisplay();
+           break;
     }
 }
 
@@ -1654,14 +1670,14 @@ bool GraphicsLayerQt::addAnimation(const KeyframeValueList& values, const IntSiz
 
     if (!newAnim) {
         switch (values.property()) {
-        case AnimatedPropertyOpacity:
-            newAnim = new OpacityAnimationQt(m_impl.get(), values, boxSize, anim, keyframesName);
-            break;
-        case AnimatedPropertyWebkitTransform:
-            newAnim = new TransformAnimationQt(m_impl.get(), values, boxSize, anim, keyframesName);
-            break;
-        default:
-            return false;
+           case AnimatedPropertyOpacity:
+               newAnim = new OpacityAnimationQt(m_impl.get(), values, boxSize, anim, keyframesName);
+               break;
+           case AnimatedPropertyWebkitTransform:
+               newAnim = new TransformAnimationQt(m_impl.get(), values, boxSize, anim, keyframesName);
+               break;
+           default:
+               return false;
         }
 
         // We make sure WebCore::Animation and QAnimation are on the same terms.

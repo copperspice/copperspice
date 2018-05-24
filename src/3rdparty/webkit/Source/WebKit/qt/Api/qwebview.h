@@ -99,9 +99,9 @@ public:
     void setTextInteractionFlag(Qt::TextInteractionFlag flag);
     */
 
-    QVariant inputMethodQuery(Qt::InputMethodQuery property) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery property) const override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     qreal zoomFactor() const;
     void setZoomFactor(qreal factor);
@@ -115,7 +115,7 @@ public:
 
     bool findText(const QString& subString, QWebPage::FindFlags options = 0);
 
-    virtual bool event(QEvent*);
+    bool event(QEvent*) override;
 
 public :
     WEB_CS_SLOT_1(Public, void stop())
@@ -161,36 +161,35 @@ public :
     WEB_CS_SIGNAL_2(urlChanged,un_named_arg1)
 
 protected:
-    void resizeEvent(QResizeEvent*);
-    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*) override;
+    void paintEvent(QPaintEvent*) override;
 
     virtual QWebView *createWindow(QWebPage::WebWindowType type);
 
-    virtual void changeEvent(QEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseDoubleClickEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
+    void changeEvent(QEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseDoubleClickEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
 
 #ifndef QT_NO_CONTEXTMENU
-    virtual void contextMenuEvent(QContextMenuEvent*);
+    void contextMenuEvent(QContextMenuEvent*) override;
 #endif
 
 #ifndef QT_NO_WHEELEVENT
-    virtual void wheelEvent(QWheelEvent*);
+    void wheelEvent(QWheelEvent*) override;
 #endif
 
-    virtual void keyPressEvent(QKeyEvent*);
-    virtual void keyReleaseEvent(QKeyEvent*);
-    virtual void dragEnterEvent(QDragEnterEvent*);
-    virtual void dragLeaveEvent(QDragLeaveEvent*);
-    virtual void dragMoveEvent(QDragMoveEvent*);
-    virtual void dropEvent(QDropEvent*);
-    virtual void focusInEvent(QFocusEvent*);
-    virtual void focusOutEvent(QFocusEvent*);
-    virtual void inputMethodEvent(QInputMethodEvent*);
-
-    virtual bool focusNextPrevChild(bool next);
+    void keyPressEvent(QKeyEvent*) override;
+    void keyReleaseEvent(QKeyEvent*) override;
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dragLeaveEvent(QDragLeaveEvent*) override;
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dropEvent(QDropEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
+    void focusOutEvent(QFocusEvent*) override;
+    void inputMethodEvent(QInputMethodEvent*) override;
+    bool focusNextPrevChild(bool next) override;
 
 private:
     friend class QWebPage;
@@ -201,4 +200,4 @@ private:
 
 };
 
-#endif // QWEBVIEW_H
+#endif

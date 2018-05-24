@@ -36,14 +36,14 @@ public:
     void setPage(QWebPage* page);
     QWebPage* page() const;
 
-    QSize sizeHint() const;
-    bool event(QEvent*);
+    QSize sizeHint() const override;
+    bool event(QEvent*) override;
 
 protected:
-    void resizeEvent(QResizeEvent* event);
-    void showEvent(QShowEvent* event);
-    void hideEvent(QHideEvent* event);
-    void closeEvent(QCloseEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
+    void showEvent(QShowEvent* event) override;
+    void hideEvent(QHideEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private:
     QWebInspectorPrivate* d;
