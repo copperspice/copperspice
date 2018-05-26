@@ -45,7 +45,7 @@ enum {
    MedianSize = 7
 };
 
-#if defined(Q_OS_MAC)
+#ifdef Q_OS_DARWIN
 
 static qint64 getticks()
 {

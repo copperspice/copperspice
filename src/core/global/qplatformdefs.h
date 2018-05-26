@@ -130,15 +130,15 @@
 
 #if ! defined(_WIN32_WINNT) || (_WIN32_WINNT-0 < 0x0500)
 typedef enum {
-    NameUnknown           = 0, 
-    NameFullyQualifiedDN  = 1, 
-    NameSamCompatible     = 2, 
-    NameDisplay           = 3, 
-    NameUniqueId          = 6, 
-    NameCanonical         = 7, 
-    NameUserPrincipal     = 8, 
-    NameCanonicalEx       = 9, 
-    NameServicePrincipal  = 10, 
+    NameUnknown           = 0,
+    NameFullyQualifiedDN  = 1,
+    NameSamCompatible     = 2,
+    NameDisplay           = 3,
+    NameUniqueId          = 6,
+    NameCanonical         = 7,
+    NameUserPrincipal     = 8,
+    NameCanonicalEx       = 9,
+    NameServicePrincipal  = 10,
     NameDnsDomain         = 12
 } EXTENDED_NAME_FORMAT, *PEXTENDED_NAME_FORMAT;
 #endif
@@ -262,11 +262,11 @@ typedef enum {
 
 
 // ***********
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
 
 #include <qplatformposix.h>
 
-#undef QT_OPEN_LARGEFILE                             
+#undef QT_OPEN_LARGEFILE
 #define QT_OPEN_LARGEFILE     0
 
 #undef QT_SOCKLEN_T

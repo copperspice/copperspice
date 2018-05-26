@@ -5497,7 +5497,7 @@ Q_OPENGL_EXPORT const QString qt_gl_library_name()
 {
    if (qt_gl_lib_name()->isEmpty()) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       // BROOM (can wait) consider changing the path
       return "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib";
 #else

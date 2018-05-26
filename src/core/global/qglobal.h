@@ -83,21 +83,15 @@
 
 #endif
 
-// **
-#if defined(Q_OS_MAC) && ! defined(Q_CC_INTEL)
-#define QT_BEGIN_INCLUDE_HEADER     }
-#define QT_END_INCLUDE_HEADER     extern "C++" {
-
-#else
-#define QT_BEGIN_INCLUDE_HEADER
-#define QT_END_INCLUDE_HEADER     extern "C++"
-
-#endif
 
 // **
 #if defined(__APPLE__) && defined(__GNUC__)
 #  define Q_OS_DARWIN
 #  define Q_OS_BSD4
+
+#elif defined(__ANDROID__) || defined(ANDROID)
+#  define Q_OS_ANDROID
+#  define Q_OS_LINUX
 
 #elif defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
 #  define Q_OS_WIN32
@@ -140,7 +134,13 @@
 #endif
 
 #if defined(Q_OS_DARWIN)
+
+// backward compatibility
 #  define Q_OS_MAC
+
+// ensure IOS is not defined at this time
+#  undef Q_OS_IOS
+
 #endif
 
 #if defined(Q_OS_WIN)
@@ -150,6 +150,18 @@
 #  define Q_OS_UNIX
 
 #endif
+
+// **
+#if defined(Q_OS_DARWIN) && ! defined(Q_CC_INTEL)
+#define QT_BEGIN_INCLUDE_HEADER     }
+#define QT_END_INCLUDE_HEADER     extern "C++" {
+
+#else
+#define QT_BEGIN_INCLUDE_HEADER
+#define QT_END_INCLUDE_HEADER     extern "C++"
+
+#endif
+
 
 #if defined(Q_OS_DARWIN) && ! defined(QT_LARGEFILE_SUPPORT)
 #  define QT_LARGEFILE_SUPPORT 64
@@ -519,11 +531,24 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
 }
 
 #if defined(Q_OS_MAC)
+
 #  ifndef QMAC_QMENUBAR_NO_EVENT
 #    define QMAC_QMENUBAR_NO_EVENT
 #  endif
-#endif
 
+// Implemented in qcore_mac_objc.mm
+class Q_CORE_EXPORT QMacAutoReleasePool
+{
+   public:
+      QMacAutoReleasePool();
+      ~QMacAutoReleasePool();
+
+   private:
+      QMacAutoReleasePool(const QMacAutoReleasePool &) = delete;
+      void *pool;
+};
+
+#endif
 
 #define QT_TRY       try
 #define QT_CATCH(A)  catch (A)
@@ -585,10 +610,9 @@ class Q_CORE_EXPORT QSysInfo
 
    static const WinVersion WindowsVersion;
    static WinVersion windowsVersion();
-
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    enum MacVersion {
       MV_Unknown = 0x0000,
 
@@ -619,18 +643,26 @@ class Q_CORE_EXPORT QSysInfo
       MV_MOUNTAINLION = MV_10_8,
       MV_MAVERICKS    = MV_10_9,
       MV_YOSEMITE     = MV_10_10,
-      MV_EL_CAPITAN   = MV_10_11,
+      MV_EL_CAPITAN   = MV_10_11,                // supported from here
       MV_SIERRA       = MV_10_12,
-      MV_HIGH_SIERRA  = MV_10_13
+      MV_HIGH_SIERRA  = MV_10_13,
+
+      MV_IOS       = 1 << 8,                     // unknown version
+      MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
+      MV_IOS_9_1   = MV_IOS | 9  << 4 | 1,
+      MV_IOS_9_2   = MV_IOS | 9  << 4 | 2,
+      MV_IOS_9_3   = MV_IOS | 9  << 4 | 3,
+      MV_IOS_10_0  = MV_IOS | 10 << 4 | 0,
+      MV_IOS_11_0  = MV_IOS | 11 << 4 | 0
    };
 
    static const MacVersion MacintoshVersion;
-
 #endif
 
    static QString buildCpuArchitecture();
    static QString machineHostName();
 };
+
 
 Q_CORE_EXPORT const char *qVersion();
 

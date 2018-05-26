@@ -144,7 +144,7 @@ static bool isInterfaceIgnored(QAInterface interface)
    }
 
    if (QObject *const object = interface.object()) {
-      const QString className = QLatin1String(object->metaObject()->className());
+      const QString className = object->metaObject()->className();
 
       // Prevent VoiceOver from focusing on tool tips by ignoring those
       // interfaces. Shifting VoiceOver focus to the tool tip is confusing

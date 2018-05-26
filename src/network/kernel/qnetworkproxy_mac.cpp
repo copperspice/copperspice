@@ -58,8 +58,6 @@
  *
  */
 
-
-
 static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
 {
    if (host.isEmpty()) {
@@ -93,10 +91,15 @@ static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
 
       if (isIpAddress && ipAddress.isInSubnet(QHostAddress::parseSubnet(entry))) {
          return true;        // excluded
+
       } else {
          // do wildcard matching
-         QRegExp rx(entry, Qt::CaseInsensitive, QRegExp::Wildcard);
-         if (rx.exactMatch(host)) {
+         QRegularExpression rx(entry, QPatternOption:CaseInsensitiveOption | QPatternOption:WildcardOption
+                  | QPatternOption:ExactMatchOption);
+
+         QRegularExpressionMatch match = rx.match(host);
+
+         if (match.hasMatch()) {
             return true;
          }
       }

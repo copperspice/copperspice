@@ -66,16 +66,7 @@ static void qt_releaseSecureTransportContext(SSLContextRef context)
       return;
    }
 
-   if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-      CFRelease(context);
-
-   } else {
-
-      const OSStatus errCode = SSLDisposeContext(context);
-      if (errCode != noErr) {
-         qWarning() << "SSLDisposeContext failed with error:" << errCode;
-      }
-   }
+   CFRelease(context);
 }
 
 static bool qt_setSessionProtocol(SSLContextRef context, const QSslConfigurationPrivate &configuration, QTcpSocket *plainSocket)
@@ -163,9 +154,6 @@ static bool qt_setSessionProtocol(SSLContextRef context, const QSslConfiguration
 
 static bool qt_setSessionProtocolOSX(SSLContextRef context, const QSslConfigurationPrivate &configuration, QTcpSocket *plainSocket)
 {
-   // This function works with (now) deprecated API that does not even exist on
-   // iOS but is the only API we have on OS X below 10.8
-
    // Without SSLSetProtocolVersionMin/Max functions it's quite difficult
    // to have the required result:
    // If we use SSLSetProtocolVersion - any constant except the ones with 'Only' suffix -
@@ -606,7 +594,7 @@ void QSslSocketBackendPrivate::transmit()
                             QSslSocket::tr("The TLS/SSL connection has been closed"));
             break;
          } else if (err != noErr && err != errSSLWouldBlock) {
-            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLRead failed: %1").formatA(err));
+            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLRead failed: %1").formatArg(err));
             break;
          }
 
@@ -861,7 +849,7 @@ bool QSslSocketBackendPrivate::initSslContext()
    const OSStatus err = SSLSetIOFuncs(context, reinterpret_cast<SSLReadFunc>(&_q_SSLRead), reinterpret_cast<SSLWriteFunc>(&_q_SSLWrite));
    if (err != noErr) {
       destroySslContext();
-      setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLSetIOFuncs failed: %1").formatA(err));
+      setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLSetIOFuncs failed: %1").formatArg(err));
       return false;
    }
 
@@ -903,7 +891,7 @@ bool QSslSocketBackendPrivate::initSslContext()
 
       if (err != noErr) {
          destroySslContext();
-         setErrorAndEmit(QSslSocket::SslInternalError, QString("SSLSetSessionOption failed: %1").formatA(err));
+         setErrorAndEmit(QSslSocket::SslInternalError, QString("SSLSetSessionOption failed: %1").formatArg(err));
          return false;
       }
 

@@ -31,8 +31,6 @@
 #include <Security/SecCode.h>
 #include <Security/SecRequirement.h>
 
-QT_BEGIN_NAMESPACE
-
 static const CFStringRef hostNames[2] = { kCFPreferencesCurrentHost, kCFPreferencesAnyHost };
 static const int numHostNames = 2;
 
@@ -53,13 +51,19 @@ static QString rotateSlashesDotsAndMiddots(const QString &key, int shift)
    QString result = key;
 
    for (int i = 0; i < result.size(); ++i) {
+
       for (int j = 0; j < NumKnights; ++j) {
-         if (result.at(i) == QLatin1Char(knightsOfTheRoundTable[j])) {
-            result[i] = QLatin1Char(knightsOfTheRoundTable[(j + shift) % NumKnights]).unicode();
+
+         if (result.at(i) == knightsOfTheRoundTable[j]) {
+            QChar tmp = char32_t(knightsOfTheRoundTable[(j + shift) % NumKnights]);
+            result.replace(i, 1, tmp);
+
             break;
          }
+
       }
    }
+
    return result;
 }
 
@@ -79,9 +83,11 @@ static CFArrayRef macList(const QList<QVariant> &list)
 {
    int n = list.size();
    QVarLengthArray<QCFType<CFPropertyListRef> > cfvalues(n);
+
    for (int i = 0; i < n; ++i) {
       cfvalues[i] = macValue(list.at(i));
    }
+
    return CFArrayCreate(kCFAllocatorDefault, reinterpret_cast<const void **>(cfvalues.data()),
                         CFIndex(n), &kCFTypeArrayCallBacks);
 }
@@ -97,6 +103,7 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
                                CFIndex(ba.size()));
       }
       break;
+
       // should be same as below (look for LIST)
       case QVariant::List:
       case QVariant::StringList:
@@ -174,7 +181,7 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
 
       case QVariant::Int:
       case QVariant::UInt: {
-         int n  = value.toInteger<int>();
+         int n  = value.toInt();
          result = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &n);
       }
 
@@ -193,14 +200,15 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
       case QVariant::String:
       string_case:
       default:
-         result = QCFString::toCFStringRef(QSettingsPrivate::variantToString(value));
+         QString string = QSettingsPrivate::variantToString(value);
+         result = QCFString::toCFStringRef(string);
    }
    return result;
 }
 
 static QVariant qtValue(CFPropertyListRef cfvalue)
 {
-   if (!cfvalue) {
+   if (! cfvalue) {
       return QVariant();
    }
 
@@ -221,17 +229,21 @@ static QVariant qtValue(CFPropertyListRef cfvalue)
          int i;
          qint64 ll;
 
-         if (CFNumberGetValue(cfnumber, kCFNumberIntType, &i)) {
-            return i;
-         }
+         if (CFNumberGetType(cfnumber) == kCFNumberIntType) {
+             CFNumberGetValue(cfnumber, kCFNumberIntType, &i);
+             return i;
+          }
+
          CFNumberGetValue(cfnumber, kCFNumberLongLongType, &ll);
          return ll;
       }
+
    } else if (typeId == CFArrayGetTypeID()) {
       CFArrayRef cfarray = static_cast<CFArrayRef>(cfvalue);
       QList<QVariant> list;
       CFIndex size = CFArrayGetCount(cfarray);
       bool metNonString = false;
+
       for (CFIndex i = 0; i < size; ++i) {
          QVariant value = qtValue(CFArrayGetValueAtIndex(cfarray, i));
          if (value.type() != QVariant::String) {
@@ -246,8 +258,10 @@ static QVariant qtValue(CFPropertyListRef cfvalue)
       }
    } else if (typeId == CFBooleanGetTypeID()) {
       return (bool)CFBooleanGetValue(static_cast<CFBooleanRef>(cfvalue));
+
    } else if (typeId == CFDataGetTypeID()) {
       CFDataRef cfdata = static_cast<CFDataRef>(cfvalue);
+
       return QByteArray(reinterpret_cast<const char *>(CFDataGetBytePtr(cfdata)),
                         CFDataGetLength(cfdata));
    } else if (typeId == CFDictionaryGetTypeID()) {
@@ -321,9 +335,11 @@ static QString comify(const QString &organization)
    }
    domain = domain.simplified();
    domain.replace(QLatin1Char(' '), QLatin1Char('-'));
+
    if (!domain.isEmpty()) {
       domain.append(QLatin1String(".com"));
    }
+
    return domain;
 }
 
@@ -332,7 +348,7 @@ class QMacSettingsPrivate : public QSettingsPrivate
  public:
    QMacSettingsPrivate(QSettings::Scope scope, const QString &organization,
                        const QString &application);
-   QMacSettingsPrivate(CFStringRef bundleIdentifier);
+
    ~QMacSettingsPrivate();
 
    void remove(const QString &key);
@@ -368,19 +384,43 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
 
    QString domainName = comify(organization);
    if (domainName.isEmpty()) {
-      setStatus(QSettings::AccessError);
-      domainName = QLatin1String("unknown-organization.copperspice.com");
+        CFBundleRef main_bundle = CFBundleGetMainBundle();
+
+        if (main_bundle != NULL) {
+            CFStringRef main_bundle_identifier = CFBundleGetIdentifier(main_bundle);
+
+            if (main_bundle_identifier != NULL) {
+                QString bundle_identifier(qtKey(main_bundle_identifier));
+
+                // CFBundleGetIdentifier returns identifier separated by slashes rather than periods.
+                QStringList bundle_identifier_components = bundle_identifier.split(QLatin1Char('/'));
+
+                // pre-reverse them so that when they get reversed again below, they are in the com.company.product format.
+                QStringList bundle_identifier_components_reversed;
+                for (int i=0; i<bundle_identifier_components.size(); ++i) {
+                    const QString &bundle_identifier_component = bundle_identifier_components.at(i);
+                    bundle_identifier_components_reversed.push_front(bundle_identifier_component);
+                }
+                domainName = bundle_identifier_components_reversed.join(QLatin1Char('.'));
+            }
+        }
+    }
+    // if no bundle identifier yet. use a hard coded string.
+    if (domainName.isEmpty()) {
+      domainName = "unknown-organization.copperspice.com";
    }
 
    while ((nextDot = domainName.indexOf(QLatin1Char('.'), curPos)) != -1) {
-      javaPackageName.prepend(domainName.mid(curPos, nextDot - curPos));
+      javaPackageName.prepend(domainName.midView(curPos, nextDot - curPos));
       javaPackageName.prepend(QLatin1Char('.'));
       curPos = nextDot + 1;
    }
-   javaPackageName.prepend(domainName.mid(curPos));
+
+   javaPackageName.prepend(domainName.midView(curPos));
    javaPackageName = javaPackageName.toLower();
+
    if (curPos == 0) {
-      javaPackageName.prepend(QLatin1String("com."));
+      javaPackageName.prepend("com.");
    }
    suiteId = javaPackageName;
 
@@ -391,7 +431,7 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
    if (application.isEmpty()) {
       spec |= F_Organization;
    } else {
-      javaPackageName += QLatin1Char('.');
+      javaPackageName += '.';
       javaPackageName += application;
       applicationId = javaPackageName;
    }
@@ -401,6 +441,7 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
       for (int j = (spec & F_Organization) ? 1 : 0; j < 3; ++j) {
          SearchDomain &domain = domains[numDomains++];
          domain.userName = (i == 0) ? kCFPreferencesCurrentUser : kCFPreferencesAnyUser;
+
          if (j == 0) {
             domain.applicationOrSuiteId = applicationId;
          } else if (j == 1) {
@@ -412,22 +453,6 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
    }
 
    hostName = (scope == QSettings::SystemScope) ? kCFPreferencesCurrentHost : kCFPreferencesAnyHost;
-   sync();
-}
-
-QMacSettingsPrivate::QMacSettingsPrivate(CFStringRef bundleIdentifier)
-   : QSettingsPrivate(QSettings::NativeFormat, QSettings::UserScope, QString(), QString())
-{
-   // applicationId and suiteId are QCFStrings and take ownership, retain to prevent double deletes.
-   CFRetain(bundleIdentifier);
-   applicationId = bundleIdentifier;
-   CFRetain(bundleIdentifier);
-   suiteId = bundleIdentifier;
-
-   numDomains = 1;
-   domains[0].userName = kCFPreferencesCurrentUser;
-   domains[0].applicationOrSuiteId = bundleIdentifier;
-   hostName = kCFPreferencesAnyHost;
    sync();
 }
 
@@ -496,13 +521,13 @@ QStringList QMacSettingsPrivate::children(const QString &prefix, ChildSpec spec)
                QString currentKey =
                   qtKey(static_cast<CFStringRef>(CFArrayGetValueAtIndex(cfarray, k)));
                if (currentKey.startsWith(prefix)) {
-                  processChild(currentKey.mid(startPos), spec, result);
+                  processChild(currentKey.midView(startPos), spec, result);
                }
             }
          }
       }
 
-      if (!fallbacks) {
+      if (! fallbacks) {
          break;
       }
    }
@@ -520,31 +545,14 @@ void QMacSettingsPrivate::clear()
 void QMacSettingsPrivate::sync()
 {
    for (int i = 0; i < numDomains; ++i) {
+
       for (int j = 0; j < numHostNames; ++j) {
          Boolean ok = CFPreferencesSynchronize(domains[i].applicationOrSuiteId,
                                                domains[i].userName, hostNames[j]);
+
          // only report failures for the primary file (the one we write to)
          if (!ok && i == 0 && hostNames[j] == hostName && status == QSettings::NoError) {
-
-            // work around what seems to be a bug in CFPreferences:
-            // don't report an error if there are no preferences for the application
-            QCFType<CFArrayRef> appIds = CFPreferencesCopyApplicationList(domains[i].userName,
-                                         hostNames[j]);
-
-            // iterate through all the applications and see if we're there
-            CFIndex size = CFArrayGetCount(appIds);
-            for (CFIndex k = 0; k < size; ++k) {
-               const void *cfvalue = CFArrayGetValueAtIndex(appIds, k);
-               if (CFGetTypeID(cfvalue) == CFStringGetTypeID()) {
-                  if (CFStringCompare(static_cast<CFStringRef>(cfvalue),
-                                      domains[i].applicationOrSuiteId,
-                                      kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
-                     setStatus(QSettings::AccessError);
-                     break;
-                  }
-               }
-            }
-
+            setStatus(QSettings::AccessError);
          }
       }
    }
@@ -576,9 +584,11 @@ bool QMacSettingsPrivate::isWritable() const
 QString QMacSettingsPrivate::fileName() const
 {
    QString result;
+
    if ((spec & F_System) == 0) {
       result = QDir::homePath();
    }
+
    result += QLatin1String("/Library/Preferences/");
    result += QCFString::toQString(domains[0].applicationOrSuiteId);
    result += QLatin1String(".plist");
@@ -590,62 +600,25 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
       const QString &organization,
       const QString &application)
 {
-   static bool useAppLocalStorage = false;
-   static bool initialized = false;
+   if (organization == QLatin1String("Qt"))   {
+        QString organizationDomain = QCoreApplication::organizationDomain();
+        QString applicationName = QCoreApplication::applicationName();
 
-   if (!initialized) {
-      bool inSandbox = false;
+        QSettingsPrivate *newSettings;
+        if (format == QSettings::NativeFormat) {
+            newSettings = new QMacSettingsPrivate(scope, organizationDomain, applicationName);
+        } else {
+            newSettings = new QConfFileSettingsPrivate(format, scope, organizationDomain, applicationName);
+        }
 
-      // If we are running on at least 10.7.0 and have the com.apple.security.app-sandbox
-      // entitlement, we are in a sandbox
+        newSettings->beginGroupOrArray(QSettingsGroup(normalizedKey(organization)));
+        if (!application.isEmpty())
+            newSettings->beginGroupOrArray(QSettingsGroup(normalizedKey(application)));
 
-      SInt32 version = 0;
-      Gestalt(gestaltSystemVersion, &version);
-      SecCodeRef secCodeSelf;
-
-      if (version >= 0x1070 && SecCodeCopySelf(kSecCSDefaultFlags, &secCodeSelf) == errSecSuccess) {
-         SecRequirementRef sandboxReq;
-         CFStringRef entitlement = CFSTR("entitlement [\"com.apple.security.app-sandbox\"]");
-         if (SecRequirementCreateWithString(entitlement, kSecCSDefaultFlags, &sandboxReq) == errSecSuccess) {
-            if (SecCodeCheckValidity(secCodeSelf, kSecCSDefaultFlags, sandboxReq) == errSecSuccess) {
-               inSandbox = true;
-            }
-            CFRelease(sandboxReq);
-         }
-         CFRelease(secCodeSelf);
-      }
-
-      bool forAppStore = false;
-      if (!inSandbox) {
-         CFTypeRef val = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), CFSTR("ForAppStore"));
-         forAppStore = (val &&
-                        CFGetTypeID(val) == CFStringGetTypeID() &&
-                        CFStringCompare(CFStringRef(val), CFSTR("yes"), kCFCompareCaseInsensitive) == 0);
-      }
-
-      useAppLocalStorage = inSandbox || forAppStore;
-      initialized = true;
+        return newSettings;
    }
 
-   if (useAppLocalStorage) {
-      // Ensure that the global and app-local settings go to the same file, since that's
-      // what we really want
-      if (organization == QLatin1String("Qt") ||
-            organization.isEmpty() ||
-            (organization == qApp->organizationDomain() && application == qApp->applicationName()) ||
-            (organization == qApp->organizationName() && application == qApp->applicationName())) {
-         CFStringRef bundleIdentifier = CFBundleGetIdentifier(CFBundleGetMainBundle());
-         if (!bundleIdentifier) {
-            qWarning("QSettingsPrivate::create: You must set the bundle identifier when using ForAppStore");
-         } else {
-            QSettingsPrivate *settings = new QMacSettingsPrivate(bundleIdentifier);
-            if (organization == QLatin1String("Qt")) {
-               settings->beginGroupOrArray(QSettingsGroup("QtLibrarySettings"));
-            }
-            return settings;
-         }
-      }
-   }
+
 
    if (format == QSettings::NativeFormat) {
       return new QMacSettingsPrivate(scope, organization, application);
@@ -664,7 +637,8 @@ bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSett
 {
    QCFType<CFDataRef> resource;
    SInt32 code;
-   if (!CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, urlFromFileName(fileName),
+
+   if (! CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, urlFromFileName(fileName),
          &resource, 0, 0, &code)) {
       return false;
    }
@@ -716,10 +690,11 @@ bool QConfFileSettingsPrivate::writePlistFile(const QString &fileName,
                          &kCFTypeDictionaryKeyCallBacks,
                          &kCFTypeDictionaryValueCallBacks);
 
-   QCFType<CFDataRef> xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, propertyList);
+    QCFType<CFDataRef> xmlData = CFPropertyListCreateData(
+                 kCFAllocatorDefault, propertyList, kCFPropertyListXMLFormat_v1_0, 0, 0);
 
    SInt32 code;
    return CFURLWriteDataAndPropertiesToResource(urlFromFileName(fileName), xmlData, 0, &code);
 }
 
-QT_END_NAMESPACE
+

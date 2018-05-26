@@ -40,9 +40,8 @@
 #include <qstringparser.h>
 #include <qvariant.h>
 
-#if ! defined(QWS) && defined(Q_OS_MAC)
+#if ! defined(QWS) && defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
-#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 #if defined(Q_OS_WIN)
@@ -179,6 +178,7 @@ QLocale::Country QLocalePrivate::codeToCountry(const QString &code)
    ushort uc3 = len > 2 ? code[2].toUpper()[0].unicode() : 0;
 
    const unsigned char *c = country_code_list;
+
    for (; *c != 0; c += 3) {
       if (uc1 == c[0] && uc2 == c[1] && uc3 == c[2]) {
          return QLocale::Country((c - country_code_list) / 3);
@@ -200,13 +200,12 @@ QString QLocalePrivate::languageCode(QLocale::Language language)
 
    const unsigned char *c = language_code_list + 3 * (uint(language));
 
-   QString code(c[2] == 0 ? 2 : 3, Qt::Uninitialized);
-
-   code[0] = ushort(c[0]);
-   code[1] = ushort(c[1]);
+   QString code;
+   code.append(c[0]);
+   code.append(c[1]);
 
    if (c[2] != 0) {
-      code[2] = ushort(c[2]);
+      code.append(c[2]);
    }
 
    return code;
@@ -230,13 +229,13 @@ QString QLocalePrivate::countryCode(QLocale::Country country)
 
    const unsigned char *c = country_code_list + 3 * (uint(country));
 
-   QString code(c[2] == 0 ? 2 : 3, Qt::Uninitialized);
+   QString code;
+   code.append(c[0]);
+   code.append(c[1]);
 
-   code[0] = ushort(c[0]);
-   code[1] = ushort(c[1]);
 
    if (c[2] != 0) {
-      code[2] = ushort(c[2]);
+      code.append(c[2]);
    }
 
    return code;
@@ -248,6 +247,7 @@ static bool addLikelySubtags(QLocaleId &localeId)
    const int likely_subtags_count = sizeof(likely_subtags) / sizeof(likely_subtags[0]);
    const QLocaleId *p = likely_subtags;
    const QLocaleId *const e = p + likely_subtags_count;
+
    for ( ; p < e; p += 2) {
       if (localeId == p[0]) {
          localeId = p[1];
@@ -665,11 +665,12 @@ static const QSystemLocale *systemLocale()
 void QLocalePrivate::updateSystemPrivate()
 {
    const QSystemLocale *sys_locale = systemLocale();
-   if (!system_data) {
+
+   if (! system_data) {
       system_data = globalLocaleData();
    }
 
-   // tell the object that the system locale has changed.
+   // tell the object the system locale has changed.
    sys_locale->query(QSystemLocale::LocaleChanged, QVariant());
 
    *system_data = *sys_locale->fallbackUiLocale().d->m_data;
@@ -715,7 +716,7 @@ void QLocalePrivate::updateSystemPrivate()
    }
 
    res = sys_locale->query(QSystemLocale::PositiveSign, QVariant());
-   if (!res.isNull()) {
+   if (! res.isNull()) {
       system_data->m_plus = res.toString().at(0).unicode();
    }
 }
@@ -900,7 +901,7 @@ QString QLocale::quoteString(const QString &str, QuotationStyle style) const
    return quoteString(str, style);
 }
 
-QString QLocale::quoteString(const QStringView &str, QuotationStyle style) const
+QString QLocale::quoteString(QStringView str, QuotationStyle style) const
 {
 #ifndef QT_NO_SYSTEMLOCALE
    if (d->m_data == systemData()) {
@@ -1015,6 +1016,7 @@ QString QLocale::name() const
 
    result.append('_');
    result.append(d->countryCode());
+
 
    return result;
 }
@@ -1482,44 +1484,14 @@ QString QLocale::toString(double i, char f, int prec) const
    return d->m_data->doubleToString(i, prec, form, -1, flags);
 }
 
-/*!
-    \fn QLocale QLocale::c()
-
-    Returns a QLocale object initialized to the "C" locale.
-
-    \sa system()
-*/
-
-/*!
-    Returns a QLocale object initialized to the system locale.
-
-    On Windows and Mac, this locale will use the decimal/grouping characters and date/time
-    formats specified in the system configuration panel.
-
-    \sa c()
-*/
-
 QLocale QLocale::system()
 {
    return QLocale(*QLocalePrivate::create(systemData()));
 }
 
-
-/*!
-    \since 4.8
-
-    Returns a list of valid locale objects that match the given \a language, \a
-    script and \a country.
-
-    Getting a list of all locales:
-    QList<QLocale> allLocales = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
-*/
-QList<QLocale> QLocale::matchingLocales(QLocale::Language language,
-                                        QLocale::Script script,
-                                        QLocale::Country country)
+QList<QLocale> QLocale::matchingLocales(QLocale::Language language, QLocale::Script script, QLocale::Country country)
 {
-   if (uint(language) > QLocale::LastLanguage || uint(script) > QLocale::LastScript ||
-         uint(country) > QLocale::LastCountry) {
+   if (uint(language) > QLocale::LastLanguage || uint(script) > QLocale::LastScript || uint(country) > QLocale::LastCountry) {
       return QList<QLocale>();
    }
 

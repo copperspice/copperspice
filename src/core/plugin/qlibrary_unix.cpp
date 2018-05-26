@@ -26,7 +26,7 @@
 #include <qcoreapplication.h>
 #include <qfilesystementry_p.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #endif
 

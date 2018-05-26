@@ -25,25 +25,24 @@
 #include <qvariant.h>
 #include <qdatetime.h>
 
-#if !defined(QWS) && defined(Q_OS_MAC)
+#if ! defined(QWS) && defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
-#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-/******************************************************************************
-** Wrappers for Mac locale system functions
-*/
 
 static QByteArray envVarLocale()
 {
    static QByteArray lang = 0;
+
 #ifdef Q_OS_UNIX
    lang = qgetenv("LC_ALL");
+
    if (lang.isEmpty()) {
       lang = qgetenv("LC_NUMERIC");
    }
+
    if (lang.isEmpty())
 #endif
       lang = qgetenv("LANG");
@@ -55,12 +54,15 @@ static QByteArray getMacLocaleName()
    QByteArray result = envVarLocale();
 
    QString lang, script, cntry;
+
    if (result.isEmpty() ||
-         (result != "C" && !qt_splitLocaleName(QString::fromLocal8Bit(result), lang, script, cntry))) {
+         (result != "C" && !qt_splitLocaleName(QString::fromUtf8(result), lang, script, cntry))) {
+
       QCFType<CFLocaleRef> l = CFLocaleCopyCurrent();
       CFStringRef locale = CFLocaleGetIdentifier(l);
       result = QCFString::toQString(locale).toUtf8();
    }
+
    return result;
 }
 
@@ -107,12 +109,13 @@ static QString macDayName(int day, bool short_format)
 static QString macDateToString(const QDate &date, bool short_format)
 {
    CFGregorianDate macGDate;
-   macGDate.year = date.year();
-   macGDate.month = date.month();
-   macGDate.day = date.day();
-   macGDate.hour = 0;
+   macGDate.year   = date.year();
+   macGDate.month  = date.month();
+   macGDate.day    = date.day();
+   macGDate.hour   = 0;
    macGDate.minute = 0;
    macGDate.second = 0.0;
+
    QCFType<CFDateRef> myDate
       = CFDateCreate(0, CFGregorianDateGetAbsoluteTime(macGDate,
                      QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
@@ -380,30 +383,29 @@ static QString macFormatCurrency(const QSystemLocale::CurrencyToStringArgument &
    return QCFString::toQString(result);
 }
 
-static QVariant macQuoteString(QSystemLocale::QueryType type, const QStringRef &str)
+static QVariant macQuoteString(QSystemLocale::QueryType type, QStringView str)
 {
-#if ! defined(Q_OS_IOS)
-   if (QSysInfo::MacintoshVersion < QSysInfo::MV_10_6) {
-      return QVariant();
-   }
 
+#if ! defined(Q_OS_IOS)
    QString begin, end;
    QCFType<CFLocaleRef> locale = CFLocaleCopyCurrent();
+
    switch (type) {
       case QSystemLocale::StringToStandardQuotation:
          begin = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleQuotationBeginDelimiterKey)));
-         end = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleQuotationEndDelimiterKey)));
-         return QString(begin % str % end);
+         end   = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleQuotationEndDelimiterKey)));
+         return QString(begin + str + end);
+
       case QSystemLocale::StringToAlternateQuotation:
-         begin = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale,
-                                      kCFLocaleAlternateQuotationBeginDelimiterKey)));
-         end = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale,
-                                    kCFLocaleAlternateQuotationEndDelimiterKey)));
-         return QString(begin % str % end);
+         begin = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleAlternateQuotationBeginDelimiterKey)));
+         end   = QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleAlternateQuotationEndDelimiterKey)));
+         return QString(begin + str + end);
+
       default:
          break;
    }
 #endif
+
    return QVariant();
 }
 #endif //QT_NO_SYSTEMLOCALE
@@ -424,10 +426,12 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
          QString value = getCFLocaleValue(kCFLocaleDecimalSeparator);
          return value.isEmpty() ? QVariant() : value;
       }
+
       case GroupSeparator: {
          QString value = getCFLocaleValue(kCFLocaleGroupingSeparator);
          return value.isEmpty() ? QVariant() : value;
       }
+
       case DateFormatLong:
       case DateFormatShort:
          return getMacDateFormat(type == DateFormatShort
@@ -482,6 +486,7 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
                kCFPreferencesAnyApplication,
                kCFPreferencesCurrentUser,
                kCFPreferencesAnyHost);
+
          QStringList result;
          if (!languages) {
             return QVariant(result);
@@ -490,23 +495,28 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
          CFTypeID typeId = CFGetTypeID(languages);
          if (typeId == CFArrayGetTypeID()) {
             const int cnt = CFArrayGetCount(languages.as<CFArrayRef>());
-            result.reserve(cnt);
+
             for (int i = 0; i < cnt; ++i) {
                const QString lang = QCFString::toQString(
                                        static_cast<CFStringRef>(CFArrayGetValueAtIndex(languages.as<CFArrayRef>(), i)));
                result.append(lang);
             }
+
          } else if (typeId == CFStringGetTypeID()) {
             result = QStringList(QCFString::toQString(languages.as<CFStringRef>()));
+
          } else {
-            qWarning("QLocale::uiLanguages(): CFPreferencesCopyValue returned unhandled type \"%s\"; please report to http://bugreports.qt-project.org",
-                     qPrintable(QCFString::toQString(CFCopyTypeIDDescription(typeId))));
+            qWarning("QLocale::uiLanguages(): CFPreferencesCopyValue returned unhandled type \"%s\". "
+                  "Report to info@copperspice.com",
+                   qPrintable(QCFString::toQString(CFCopyTypeIDDescription(typeId))));
          }
          return QVariant(result);
       }
+
       case StringToStandardQuotation:
       case StringToAlternateQuotation:
-         return macQuoteString(type, in.value<QStringRef>());
+         return macQuoteString(type, in.value<QStringView>());
+
       default:
          break;
    }

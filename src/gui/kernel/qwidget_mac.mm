@@ -809,7 +809,7 @@ void QWidgetPrivate::determineWindowClass()
       { 0, 0 }
    };
 
-   qDebug("Internal Issue:  Creating new window %p (%s::%s)", q, q->metaObject()->className(),
+   qDebug("Internal Issue:  Creating new window %p (%s::%s)", q, csPrintable(q->metaObject()->className()),
           q->objectName().toUtf8().constData());
 
    bool found_class = false;

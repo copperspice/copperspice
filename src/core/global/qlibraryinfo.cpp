@@ -28,7 +28,7 @@
 #include <qregularexpression.h>
 #include <cs_build_info.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #  include "qcore_mac_p.h"
 #endif
 
@@ -49,7 +49,7 @@ QSettings *QLibraryInfo::findConfiguration()
 
    if (! QFile::exists(qtconfig) && QCoreApplication::instance()) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       CFBundleRef bundleRef = CFBundleGetMainBundle();
 
       if (bundleRef) {

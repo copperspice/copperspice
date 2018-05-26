@@ -1286,7 +1286,7 @@ class Q_CORE_EXPORT Qt
    };
    using MatchFlags = QFlags<MatchFlag>;
 
-#if defined(Q_OS_MAC)
+#ifdef Q_OS_DARWIN
    typedef void *HANDLE;
 
 #elif defined(Q_OS_WIN)

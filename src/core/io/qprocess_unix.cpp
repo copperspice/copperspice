@@ -77,7 +77,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 #include <qprocess_p.h>
 #include <qcore_unix_p.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #endif
 

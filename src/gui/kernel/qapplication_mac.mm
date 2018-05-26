@@ -1251,12 +1251,11 @@ void QApplicationPrivate::enterModal_sys(QWidget *widget)
 
 #ifdef DEBUG_MODAL_EVENTS
    Q_ASSERT(widget);
-   qDebug("Entering modal state with %s::%s::%p (%d)", widget->metaObject()->className(),
-          widget->objectName().toUtf8().constData(),
-          widget, qt_modal_stack ? (int)qt_modal_stack->count() : -1);
+   qDebug("Entering modal state with %s::%s::%p (%d)", csPrintable(widget->metaObject()->className()),
+          csPrintable(widget->objectName()), widget, qt_modal_stack ? (int)qt_modal_stack->count() : -1);
 #endif
 
-   if (!qt_modal_stack) {
+   if (! qt_modal_stack) {
       qt_modal_stack = new QWidgetList;
    }
 
@@ -1280,9 +1279,8 @@ void QApplicationPrivate::leaveModal_sys(QWidget *widget)
    if (qt_modal_stack && qt_modal_stack->removeAll(widget)) {
 
 #ifdef DEBUG_MODAL_EVENTS
-      qDebug("Leaving modal state with %s::%s::%p (%d)", widget->metaObject()->className(),
-             widget->objectName().toUtf8().constData(),
-             widget, qt_modal_stack->count());
+      qDebug("Leaving modal state with %s::%s::%p (%d)", csPrintable(widget->metaObject()->className()),
+             csPrintable(widget->objectName()), widget, qt_modal_stack->count());
 #endif
 
       if (qt_modal_stack->isEmpty()) {

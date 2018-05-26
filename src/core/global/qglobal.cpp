@@ -32,7 +32,7 @@
 #include <qsystemlibrary_p.h>
 #include <qthreadstorage.h>
 
-#if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
+#if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
 #endif
 
@@ -46,23 +46,36 @@ const char *qVersion()
 }
 
 // ** OSX
-#if ! defined(QWS) && defined(Q_OS_MAC)
+#if ! defined(QWS) && defined(Q_OS_DARWIN)
 
 #include <qcore_mac_p.h>
 #include <qnamespace.h>
 
 static QSysInfo::MacVersion macVersion()
 {
-#if ! defined(Q_OS_IOS)
-   SInt32 gestalt_version;
-   if (Gestalt(gestaltSystemVersionMinor, &gestalt_version) == noErr) {
-      // add 2 because OS X 10.0 is 0x02 in the enum
-      return QSysInfo::MacVersion(gestalt_version + 2);
+   // qcore_mac_objc.mm
+   const QAppleOperatingSystemVersion version = qt_apple_os_version();
+
+#if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
+
+   if (version.major == 10) {
+      return QSysInfo::MacVersion(version.minor + 2);
+
+   } else {
+      return QSysInfo::MV_Unknown;
+
    }
+
+#elif defined(Q_OS_IOS)
+   return QSysInfo::MV_IOS;
+
+#else
+   return QSysInfo::MV_Unknown;
+
 #endif
 
-   return QSysInfo::MV_Unknown;
 }
+
 const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
 
 

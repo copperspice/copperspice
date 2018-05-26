@@ -49,7 +49,7 @@
 #  define QDT_DEBUGN if (false) qDebug
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #endif
 

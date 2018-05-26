@@ -380,7 +380,6 @@ inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
    return debug.space();
 }
 
-//
 inline QDebug qDebug()
 {
    return QDebug(QtDebugMsg);
@@ -395,5 +394,64 @@ inline QDebug qWarning()
 {
    return QDebug(QtWarningMsg);
 }
+
+
+#ifdef Q_OS_DARWIN
+
+// provide QDebug stream operators for commonly used Core Foundation
+// and Core Graphics types, as well as NSObject. Additional CF/CG types
+// may be added by the user, using Q_DECLARE_QDEBUG_OPERATOR_FOR_CF_TYPE.
+
+#ifdef __OBJC__
+   @class NSObject;
+#else
+   using NSObject = struct objc_object;
+#endif
+
+using CFStringRef     = const struct __CFString *;
+using CFErrorRef      = struct __CFError *;
+using CFBundleRef     = struct __CFBundle *;
+
+using CGPathRef       = const struct CGPath *;
+
+using CFArrayRef      = const struct __CFArray *;
+using CFURLRef        = const struct __CFURL *;
+using CFDataRef       = const struct __CFData *;
+using CFNumberRef     = const struct __CFNumber *;
+using CFDictionaryRef = const struct __CFDictionary *;
+using CFLocaleRef     = const struct __CFLocale *;
+using CFDateRef       = const struct __CFDate *;
+using CFBooleanRef    = const struct __CFBoolean *;
+using CFTimeZoneRef   = const struct __CFTimeZone *;
+
+using CGColorSpaceRef = struct CGColorSpace *;
+using CGImageRef      = struct CGImage *;
+using CGFontRef       = struct CGFont *;
+using CGColorRef      = struct CGColor *;
+
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFArrayRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFURLRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFDataRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFNumberRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFDictionaryRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFLocaleRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFBooleanRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFTimeZoneRef);
+
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFErrorRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFBundleRef);
+
+Q_CORE_EXPORT QDebug operator<<(QDebug, CGPathRef);
+
+Q_CORE_EXPORT QDebug operator<<(QDebug, CGColorSpaceRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CGImageRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CGFontRef);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CGColorRef);
+
+// Defined in qcore_mac_objc.mm
+Q_CORE_EXPORT QDebug operator<<(QDebug, const NSObject *);
+Q_CORE_EXPORT QDebug operator<<(QDebug, CFStringRef);
+
+#endif // Q_OS_DARWIN
 
 #endif

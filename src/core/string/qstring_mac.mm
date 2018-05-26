@@ -24,48 +24,45 @@
 
 #import <Foundation/Foundation.h>
 
-QString QString::fromCFString(CFStringRef string)
+QString8 QString8::fromCFString(CFStringRef str)
 {
-    if (! string) {
-        return QString();
-    }
-
-    CFIndex length = CFStringGetLength(string);
-
-    // Fast path: CFStringGetCharactersPtr does not copy but may
-    // return null for any and no reason.
-    const UniChar *chars = CFStringGetCharactersPtr(string);
-
-    if (chars) {
-        return QString(reinterpret_cast<const QChar *>(chars), length);
-    }
-
-    QString ret(length, Qt::Uninitialized);
-
-    CFStringGetCharacters(string, CFRangeMake(0, length), reinterpret_cast<UniChar *>(ret.data()));
-    return ret;
-}
-
-CFStringRef QString::toCFString() const
-{
-    return CFStringCreateWithCharacters(0, reinterpret_cast<const UniChar *>(unicode()), length());
-}
-
-QString QString::fromNSString(const NSString *string)
-{
-    if (! string) {
-        return QString();
+   if (! str) {
+      return QString();
    }
 
-   QString qstring;
-   qstring.resize([string length]);
+   CFIndex length = CFStringGetLength(str);
+   if (length == 0) {
+      return QString();
+   }
 
-   [string getCharacters: reinterpret_cast<unichar*>(qstring.data()) range: NSMakeRange(0, [string length])];
-   return qstring;
+   const UniChar *chars = CFStringGetCharactersPtr(str);
+   if (chars) {
+      return QString::fromUtf16(reinterpret_cast<const char16_t *>(chars), length);
+   }
+
+   std::vector<UniChar> tmp(length);
+   CFStringGetCharacters(str, CFRangeMake(0, length), &tmp[0]);
+
+   return QString::fromUtf16(reinterpret_cast<const char16_t *>(&tmp[0]), length);
 }
 
-NSString *QString::toNSString() const
+CFStringRef QString8::toCFString() const
 {
-    return [NSString stringWithCharacters: reinterpret_cast<const UniChar*>(unicode()) length: length()];
+   return CFStringCreateWithBytes(kCFAllocatorDefault,
+                  reinterpret_cast<const UInt8 *>(this->constData()), this->size_storage(), kCFStringEncodingUTF8, false);
+}
+
+QString8 QString8::fromNSString(const NSString *str)
+{
+   if (! str) {
+      return QString();
+   }
+
+   return QString::fromUtf8([str UTF8String]);
+}
+
+NSString *QString8::toNSString() const
+{
+   return [[NSString alloc] initWithBytes: constData() length:size_storage() encoding:NSUTF8StringEncoding];
 }
 

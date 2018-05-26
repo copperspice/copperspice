@@ -32,6 +32,10 @@
 #include <qt_windows.h>
 #endif
 
+#ifdef Q_OS_DARWIN
+#include <CoreFoundation/CFString.h>
+#endif
+
 static bool cs_internal_quickCheck(QString8::const_iterator &first_iter, QString8::const_iterator last_iter,
                   QString8::NormalizationForm mode);
 
@@ -786,7 +790,7 @@ int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
          return 0;
    }
 
-#elif defined (Q_OS_MAC)
+#elif defined (Q_OS_DARWIN)
 
    const CFStringRef mac_str1 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
                   reinterpret_cast<const UInt8 *>(str1.charData()), str1.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);

@@ -52,15 +52,13 @@ extern QStringList qt_clean_filter_list(const QString &filter);  // qfiledialog.
 extern const QString qt_file_dialog_filter_reg_exp;              // qfiledialog.cpp
 extern bool qt_mac_is_macsheet(const QWidget *w);                // qwidget_mac.mm
 
-QT_END_NAMESPACE
-
+#include <qstringfwd.h>
 QT_FORWARD_DECLARE_CLASS(QFileDialogPrivate)
-QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QStringList)
 QT_FORWARD_DECLARE_CLASS(QWidget)
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QFileInfo)
-QT_USE_NAMESPACE
+
 
 @class QT_MANGLE_NAMESPACE(QNSOpenSavePanelDelegate);
 

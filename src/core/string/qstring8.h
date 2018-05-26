@@ -42,7 +42,7 @@ class QStringParser;
    using CFStringRef = const struct __CFString *;
 
 #  ifdef __OBJC__
-   @class NSString;
+      @class NSString;
 #  endif
 #endif
 

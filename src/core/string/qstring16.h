@@ -38,6 +38,14 @@
 
 class QStringParser;
 
+#ifdef Q_OS_DARWIN
+   using CFStringRef = const struct __CFString *;
+
+#  ifdef __OBJC__
+      @class NSString;
+#  endif
+#endif
+
 class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 {
    public:

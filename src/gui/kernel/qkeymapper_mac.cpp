@@ -245,10 +245,10 @@ void qt_mac_send_modifiers_changed(quint32 modifiers, QObject *object)
 #ifdef DEBUG_KEY_BINDINGS_MODIFIERS
       qDebug("KeyEvent (modif): Sending %s to %s::%s: %d - 0x%08x",
              etype == QEvent::KeyRelease ? "KeyRelease" : "KeyPress",
-             object ? object->metaObject()->className() : "none",
-             object ? object->objectName().toLatin1().constData() : "",
-             key, (int)modifiers);
+             object ? csPrintable(object->metaObject()->className()) : "none",
+             object ? csPrintable(object->objectName()) : "", key, (int)modifiers);
 #endif
+
       QKeyEvent ke(etype, key, qt_mac_get_modifiers(modifiers ^ (1 << i)), QLatin1String(""));
       qt_sendSpontaneousEvent(object, &ke);
    }
@@ -862,13 +862,14 @@ bool QKeyMapper::sendKeyEvent(QWidget *widget, bool grab,
 #if defined(DEBUG_KEY_BINDINGS) || defined(DEBUG_KEY_BINDINGS_MODIFIERS)
          qDebug("KeyEvent: Sending %s to %s::%s: %s 0x%08x%s",
                 type == QEvent::KeyRelease ? "KeyRelease" : "KeyPress",
-                widget ? widget->metaObject()->className() : "none",
-                widget ? widget->objectName().toLatin1().constData() : "",
-                text.toLatin1().constData(), int(modifiers),
-                autorepeat ? " Repeat" : "");
+                widget ? csPrintable(widget->metaObject()->className()) : "none",
+                widget ? csPrintable(widget->objectName()) : "",
+                csPrintable(text), int(modifiers), autorepeat ? " Repeat" : "");
 #endif
+
          QKeyEventEx ke(type, code, modifiers, text, autorepeat, qMax(1, text.length()),
                         nativeScanCode, nativeVirtualKey, nativeModifiers);
+
          bool retMe = qt_sendSpontaneousEvent(widget, &ke);
          if (isAccepted) {
             *isAccepted = ke.isAccepted();

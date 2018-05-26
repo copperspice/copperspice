@@ -26,11 +26,12 @@
 #include <qevent.h>
 #import  <Cocoa/Cocoa.h>
 
+#include <qstringfwd.h>
+
 @class QT_MANGLE_NAMESPACE(QCocoaView);
 QT_FORWARD_DECLARE_CLASS(QWidgetPrivate);
 QT_FORWARD_DECLARE_CLASS(QWidget);
 QT_FORWARD_DECLARE_CLASS(QEvent);
-QT_FORWARD_DECLARE_CLASS(QString);
 QT_FORWARD_DECLARE_CLASS(QStringList);
 
 Q_GUI_EXPORT

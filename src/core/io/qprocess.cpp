@@ -1795,7 +1795,7 @@ bool QProcess::startDetached(const QString &program)
 }
 
 
-#if defined(Q_OS_MAC)
+#ifdef Q_OS_DARWIN
 #include <crt_externs.h>
 #define environ (*_NSGetEnviron())
 

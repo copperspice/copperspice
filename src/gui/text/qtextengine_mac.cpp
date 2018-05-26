@@ -24,34 +24,31 @@
 #include <qfontengine_coretext_p.h>
 #include <qfontengine_mac_p.h>
 
-QT_BEGIN_NAMESPACE
-
 // set the glyph attributes heuristically. Assumes a 1 to 1 relationship between chars and glyphs
-// and no reordering.
-// also computes logClusters heuristically
-static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayout *glyphs, unsigned short *logClusters,
-                                        int num_glyphs)
+// and no reordering, also computes logClusters heuristically
+static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayout *glyphs,
+                  unsigned short *logClusters, int num_glyphs)
 {
-   // ### zeroWidth and justification are missing here!!!!!
+   // ### zeroWidth and justification are missing here
 
    Q_UNUSED(num_glyphs);
 
-   //     qDebug("QScriptEngine::heuristicSetGlyphAttributes, num_glyphs=%d", item->num_glyphs);
-
-   const bool symbolFont = false; // ####
+   const bool symbolFont = false;
    glyphs->attributes[0].mark = false;
    glyphs->attributes[0].clusterStart = true;
    glyphs->attributes[0].dontPrint = (!symbolFont && uc[0].unicode() == 0x00ad) || qIsControlChar(uc[0].unicode());
 
    int pos = 0;
    int lastCat = QChar::category(uc[0].unicode());
+
    for (int i = 1; i < length; ++i) {
-      if (logClusters[i] == pos)
+      if (logClusters[i] == pos) {
          // same glyph
-      {
          continue;
       }
+
       ++pos;
+
       while (pos < logClusters[i]) {
          ++pos;
       }
@@ -67,6 +64,7 @@ static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayou
       // one gets an inter character justification point if the current char is not a non spacing mark.
       // as then the current char belongs to the last one and one gets a space justification point
       // after the space char.
+
       if (lastCat == QChar::Separator_Space) {
          glyphs->attributes[pos - 1].justification = HB_Space;
       } else if (cat != QChar::Mark_NonSpacing) {
@@ -77,7 +75,9 @@ static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayou
 
       lastCat = cat;
    }
+
    pos = logClusters[length - 1];
+
    if (lastCat == QChar::Separator_Space) {
       glyphs->attributes[pos].justification = HB_Space;
    } else {
@@ -101,12 +101,13 @@ enum QArabicShape {
 };
 
 
-// these groups correspond to the groups defined in the Unicode standard.
+// these groups correspond to the groups defined in the Unicode standard
 // Some of these groups are equal with regards to both joining and line breaking behaviour,
 // and thus have the same enum value
 //
 // I'm not sure the mapping of syriac to arabic enums is correct with regards to justification, but as
-// I couldn't find any better document I'll hope for the best.
+// I could not find any better document I'll hope for the best.
+
 enum ArabicGroup {
    // NonJoining
    ArabicNone,
@@ -405,26 +406,26 @@ are those in table 6.6 of the UNICODE 2.0 book.
 
 PrioritY        Glyph                   Condition                                       Kashida Location
 
-Arabic_Kashida        User inserted Kashida   The user entered a Kashida in a position.       After the user
-                (Shift+j or Shift+[E with hat])    Thus, it is the highest priority to insert an   inserted kashida
+Arabic_Kashida    User inserted Kashida   The user entered a Kashida in a position.       After the user
+                  (Shift+j or Shift+[E with hat])    Thus, it is the highest priority to insert an   inserted kashida
                                         automatic kashida.
 
-Arabic_Seen        Seen, Sad               Connecting to the next character.               After the character.
+Arabic_Seen       Seen, Sad               Connecting to the next character.            After the character.
                                         (Initial or medial form).
 
-Arabic_HaaDal        Teh Marbutah, Haa, Dal  Connecting to previous character.               Before the final form
-                                                                                        of these characters.
+Arabic_HaaDal     Teh Marbutah, Haa, Dal  Connecting to previous character.          Before the final form
+                                                                                     of these characters.
 
-Arabic_Alef     Alef, Tah, Lam,         Connecting to previous character.               Before the final form
-                Kaf and Gaf                                                             of these characters.
+Arabic_Alef       Alef, Tah, Lam,         Connecting to previous character.          Before the final form
+                  Kaf and Gaf                                                        of these characters.
 
-Arabic_BaRa     Reh, Yeh                Connected to medial Beh                         Before preceding medial Baa
+Arabic_BaRa       Reh, Yeh                Connected to medial Beh                    Before preceding medial Baa
 
-Arabic_Waw        Waw, Ain, Qaf, Feh      Connecting to previous character.               Before the final form of
-                                                                                        these characters.
+Arabic_Waw        Waw, Ain, Qaf, Feh      Connecting to previous character.          Before the final form of
+                                                                                     these characters.
 
-Arabic_Normal   Other connecting        Connecting to previous character.               Before the final form
-                characters                                                              of these characters.
+Arabic_Normal     Other connecting        Connecting to previous character.          Before the final form
+                  characters                                                         of these characters.
 
 
 
@@ -444,7 +445,7 @@ void qt_getArabicProperties(const unsigned short *chars, int len, QArabicPropert
    properties[0].justification = HB_NoJustification;
 
    for (int i = 1; i < len; ++i) {
-      // #### fix handling for spaces and punktuation
+      // #### fix handling for spaces and punctuation
       properties[i].justification = HB_NoJustification;
 
       group = arabicGroup(chars[i]);
@@ -551,6 +552,11 @@ void qt_getArabicProperties(const unsigned short *chars, int len, QArabicPropert
 
 void QTextEngine::shapeTextMac(int item) const
 {
+
+
+// broom - fix here
+
+
    QScriptItem &si = layoutData->items[item];
 
    si.glyph_data_offset = layoutData->used;
@@ -575,14 +581,19 @@ void QTextEngine::shapeTextMac(int item) const
 
    const int len = length(item);
    int num_glyphs = length(item);
+
    const QChar *str = layoutData->string.unicode() + si.position;
    ushort upperCased[256];
+
    if (si.analysis.flags == QScriptAnalysis::SmallCaps || si.analysis.flags == QScriptAnalysis::Uppercase
          || si.analysis.flags == QScriptAnalysis::Lowercase) {
+
       ushort *uc = upperCased;
+
       if (len > 256) {
          uc = new ushort[len];
       }
+
       for (int i = 0; i < len; ++i) {
          if (si.analysis.flags == QScriptAnalysis::Lowercase) {
             uc[i] = str[i].toLower().unicode();
@@ -590,6 +601,7 @@ void QTextEngine::shapeTextMac(int item) const
             uc[i] = str[i].toUpper().unicode();
          }
       }
+
       str = reinterpret_cast<const QChar *>(uc);
    }
 
@@ -597,19 +609,18 @@ void QTextEngine::shapeTextMac(int item) const
    num_glyphs = layoutData->glyphLayout.numGlyphs - layoutData->used;
 
    QGlyphLayout g = availableGlyphs(&si);
-   g.numGlyphs = num_glyphs;
+   g.numGlyphs    = num_glyphs;
    unsigned short *log_clusters = logClusters(&si);
 
    bool stringToCMapFailed = false;
 
-   if (!fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si)) {
+   if (! fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si)) {
       ensureSpace(num_glyphs);
       g = availableGlyphs(&si);
-      stringToCMapFailed = !fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters,
-                                             attributes(), &si);
+      stringToCMapFailed = !fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si);
    }
 
-   if (!stringToCMapFailed) {
+   if (! stringToCMapFailed) {
       heuristicSetGlyphAttributes(str, len, &g, log_clusters, num_glyphs);
 
       si.num_glyphs = num_glyphs;
@@ -646,10 +657,8 @@ cleanUp:
    const ushort *uc = reinterpret_cast<const ushort *>(str);
 
    if ((si.analysis.flags == QScriptAnalysis::SmallCaps || si.analysis.flags == QScriptAnalysis::Uppercase
-         || si.analysis.flags == QScriptAnalysis::Lowercase)
-         && uc != upperCased) {
+         || si.analysis.flags == QScriptAnalysis::Lowercase) && uc != upperCased) {
       delete [] uc;
    }
 }
 
-QT_END_NAMESPACE

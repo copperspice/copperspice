@@ -504,7 +504,9 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
    if ((widg && widg->testAttribute(Qt::WA_SetFont)) || !QApplication::desktopSettingsAware()) {
       // If you're using a custom font and it's bigger than the default font,
       // then no constraints for you. If you are smaller, we can try to help you out
+
       QFont font = qt_app_fonts_hash()->value(widg->metaObject()->className(), QFont());
+
       if (widg->font().pointSize() > font.pointSize()) {
          return ret;
       }
@@ -964,12 +966,14 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
       } else if (sz == &mini) {
          size_desc = "Mini";
       }
+
       qDebug("%s - %s: %s taken (%d, %d) [%d, %d]",
-             widg ? widg->objectName().toLatin1().constData() : "*Unknown*",
-             widg ? widg->metaObject()->className() : "*Unknown*", size_desc, widg->width(), widg->height(),
+             widg ? csPrintable(widg->objectName()) : "*Unknown*",
+             widg ? csPrintable(widg->metaObject()->className()) : "*Unknown*", size_desc, widg->width(), widg->height(),
              sz->width(), sz->height());
    }
 #endif
+
    return ret;
 
 #else

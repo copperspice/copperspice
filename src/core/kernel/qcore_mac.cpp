@@ -23,23 +23,9 @@
 #include <qcore_mac_p.h>
 #include <new>
 
-QT_BEGIN_NAMESPACE
-
 QString QCFString::toQString(CFStringRef str)
 {
-   if (!str) {
-      return QString();
-   }
-
-   CFIndex length = CFStringGetLength(str);
-   if (length == 0) {
-      return QString();
-   }
-
-   QString string(length, Qt::Uninitialized);
-   CFStringGetCharacters(str, CFRangeMake(0, length), reinterpret_cast<UniChar *>(const_cast<QChar *>(string.unicode())));
-
-   return string;
+   return QString::fromCFString(str);
 }
 
 QCFString::operator QString() const
@@ -47,60 +33,23 @@ QCFString::operator QString() const
    if (string.isEmpty() && type) {
       const_cast<QCFString *>(this)->string = toQString(type);
    }
+
    return string;
 }
 
 CFStringRef QCFString::toCFStringRef(const QString &string)
 {
-   return CFStringCreateWithCharacters(0, reinterpret_cast<const UniChar *>(string.unicode()),
-                                       string.length());
+   return string.toCFString();
 }
 
 QCFString::operator CFStringRef() const
 {
-   if (!type) {
-      const_cast<QCFString *>(this)->type =
-         CFStringCreateWithCharactersNoCopy(0,
-                                            reinterpret_cast<const UniChar *>(string.unicode()),
-                                            string.length(),
-                                            kCFAllocatorNull);
+   if (! type) {
+      const_cast<QCFString *>(this)->type = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
+                  reinterpret_cast<const UInt8 *>(string.constData()), string.size_storage(),
+                  kCFStringEncodingUTF8, false, kCFAllocatorNull);
    }
+
    return type;
 }
 
-
-#if !defined(Q_OS_IOS)
-void qt_mac_to_pascal_string(const QString &s, Str255 str, TextEncoding encoding, int len)
-{
-   if (len == -1) {
-      len = s.length();
-   }
-
-   Q_UNUSED(encoding);
-   CFStringGetPascalString(QCFString(s), str, 256, CFStringGetSystemEncoding());
-
-}
-
-QString qt_mac_from_pascal_string(const Str255 pstr)
-{
-   return QCFString(CFStringCreateWithPascalString(0, pstr, CFStringGetSystemEncoding()));
-}
-
-OSErr qt_mac_create_fsref(const QString &file, FSRef *fsref)
-{
-   return FSPathMakeRef(reinterpret_cast<const UInt8 *>(file.toUtf8().constData()), fsref, 0);
-}
-
-// Don't use this function, it won't work in 10.5 (Leopard) and up
-OSErr qt_mac_create_fsspec(const QString &file, FSSpec *spec)
-{
-   FSRef fsref;
-   OSErr ret = qt_mac_create_fsref(file, &fsref);
-   if (ret == noErr) {
-      ret = FSGetCatalogInfo(&fsref, kFSCatInfoNone, 0, 0, spec, 0);
-   }
-   return ret;
-}
-#endif // !defined(Q_OS_IOS)
-
-QT_END_NAMESPACE

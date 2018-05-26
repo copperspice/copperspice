@@ -191,6 +191,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac_objc.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreapplication_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix.cpp

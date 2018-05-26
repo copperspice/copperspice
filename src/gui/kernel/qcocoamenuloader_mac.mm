@@ -30,14 +30,12 @@
 #include <qmenubar_p.h>
 #include <qmenubar.h>
 #include <qt_cocoa_helpers_mac_p.h>
+#include <qstringfwd.h>
 
 QT_FORWARD_DECLARE_CLASS(QCFString)
-QT_FORWARD_DECLARE_CLASS(QString)
 
 #ifndef QT_NO_TRANSLATION
-QT_BEGIN_NAMESPACE
 extern QString qt_mac_applicationmenu_string(int type);
-QT_END_NAMESPACE
 #endif
 
 QT_USE_NAMESPACE

@@ -736,15 +736,14 @@ bool isItInteresting(const QAInterface &interface)
    // state, so we disable the interface here
 
    const QAccessible::State state = interface.state();
-   if (state & QAccessible::Invisible ||
-         state & QAccessible::Offscreen ) {
+   if (state & QAccessible::Invisible || state & QAccessible::Offscreen ) {
       return false;
    }
 
    const QAccessible::Role role = interface.role();
 
    if (QObject *const object = interface.object()) {
-      const QString className = QLatin1String(object->metaObject()->className());
+      const QString className = object->metaObject()->className();
 
       // VoiceOver focusing on tool tips can be confusing. The contents of the tool tip is avalible
       // through the description attribute anyway, so we disable accessibility for tool tips.

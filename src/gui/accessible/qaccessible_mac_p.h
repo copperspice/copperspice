@@ -294,11 +294,11 @@ class QAInterface : public QAccessible
    }
 
    inline QString className() const {
-      if (!checkValid()) {
+      if (! checkValid()) {
          return QString();
       }
 
-      return QLatin1String(base.interface->object()->metaObject()->className());
+      return base.interface->object()->metaObject()->className();
    }
 
    inline int id() const {

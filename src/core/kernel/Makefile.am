@@ -202,6 +202,7 @@ endif
 if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/kernel/qcore_mac.cpp \
+	src/core/kernel/qcore_mac_objc.mm \
 	src/core/kernel/qcore_unix.cpp \
 	src/core/kernel/qcoreapplication_mac.cpp \
 	src/core/kernel/qeventdispatcher_unix.cpp \
