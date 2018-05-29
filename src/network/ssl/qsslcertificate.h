@@ -113,7 +113,7 @@ public:
    QString toText() const;
 
    static QList<QSslCertificate> fromPath(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QPatternOptionFlags syntax = QPatternOption::WildcardOption);
+                  QPatternOption syntax = QPatternOption::WildcardOption);
 
    static QList<QSslCertificate> fromDevice(QIODevice *device, QSsl::EncodingFormat format = QSsl::Pem);
    static QList<QSslCertificate> fromData(const QByteArray &data, QSsl::EncodingFormat format = QSsl::Pem);

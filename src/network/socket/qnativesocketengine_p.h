@@ -258,9 +258,9 @@ class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
                   || socketProtocol == QAbstractSocket::AnyIPProtocol) {
 
             memset(&sa_struct->a6, 0, sizeof(sockaddr_in6));
-            sa_struct->a6.sin6_family = AF_INET6;
+            sa_struct->a6.sin6_family   = AF_INET6;
             sa_struct->a6.sin6_scope_id = scopeIdFromString(address.scopeId());
-            sa_struct->a6.sin6_port = htons(port);
+            sa_struct->a6.sin6_port     = htons(port);
 
             Q_IPV6ADDR tmp = address.toIPv6Address();
             memcpy(&sa_struct->a6.sin6_addr, &tmp, sizeof(tmp));
@@ -269,8 +269,8 @@ class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
 
         } else {
             memset(&sa_struct->a, 0, sizeof(sockaddr_in));
-            sa_struct->a4.sin_family = AF_INET;
-            sa_struct->a4.sin_port = htons(port);
+            sa_struct->a4.sin_family      = AF_INET;
+            sa_struct->a4.sin_port        = htons(port);
             sa_struct->a4.sin_addr.s_addr = htonl(address.toIPv4Address());
 
             *sockAddrSize = sizeof(sockaddr_in);

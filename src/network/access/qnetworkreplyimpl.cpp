@@ -564,7 +564,7 @@ void QNetworkReplyImplPrivate::setCachingEnabled(bool enable)
       // someone told us to turn on, then back off?
       // ok... but you should make up your mind
       qDebug("QNetworkReplyImpl: setCachingEnabled(true) called after setCachingEnabled(false) -- "
-             "backend %s probably needs to be fixed", backend->metaObject()->className());
+             "backend %s probably needs to be fixed", csPrintable(backend->metaObject()->className())) ;
 
       networkCache()->remove(url);
       cacheSaveDevice = 0;
@@ -572,8 +572,6 @@ void QNetworkReplyImplPrivate::setCachingEnabled(bool enable)
 
    }
 }
-
-
 
 void QNetworkReplyImplPrivate::completeCacheSave()
 {
@@ -646,10 +644,10 @@ void QNetworkReplyImplPrivate::initCacheSaveDevice()
 
    cacheSaveDevice = networkCache()->prepare(metaData);
 
-   if (!cacheSaveDevice || (cacheSaveDevice && !cacheSaveDevice->isOpen())) {
+   if (! cacheSaveDevice || (cacheSaveDevice && !cacheSaveDevice->isOpen())) {
       if (cacheSaveDevice && !cacheSaveDevice->isOpen())
          qCritical("QNetworkReplyImpl::initCacheSaveDevice() Network cache returned a device that is not open -- "
-                   "class %s probably needs to be fixed", networkCache()->metaObject()->className());
+                   "class %s probably needs to be fixed", csPrintable(networkCache()->metaObject()->className()));
 
       networkCache()->remove(url);
       cacheSaveDevice = 0;

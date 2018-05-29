@@ -212,16 +212,20 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
 
       if (isprint(int(uchar(c)))) {
          out += c;
+
       } else switch (c) {
             case '\n':
                out += "\\n";
                break;
+
             case '\r':
                out += "\\r";
                break;
+
             case '\t':
                out += "\\t";
                break;
+
             default:
                QString tmp;
                tmp.sprintf("\\%o", c);
@@ -251,10 +255,6 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
 #define SO_EXCLUSIVEADDRUSE ((int)(~SO_REUSEADDR)) /* disallow local address reuse */
 #endif
 
-/*
-    Extracts the port and address from a sockaddr, and stores them in
-    \a port and \a addr if they are non-null.
-*/
 static inline void qt_socket_getPortAndAddress(SOCKET socketDescriptor, const qt_sockaddr *sa, quint16 *port,
       QHostAddress *address)
 {
@@ -409,13 +409,18 @@ static inline QAbstractSocket::SocketType qt_socket_getType(qintptr socketDescri
 // keep inline
 inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid)
 {
+   if (scopeid.isEmpty())  {
+      return 0;
+   }
+
    return scopeid.toInteger<uint>();
 }
 
-bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType socketType, QAbstractSocket::NetworkLayerProtocol &socketProtocol)
+bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType socketType,
+                  QAbstractSocket::NetworkLayerProtocol &socketProtocol)
 {
+   //### no ip6 support on winsocket 1.1 but we will try not to use this
 
-   //### no ip6 support on winsocket 1.1 but we will try not to use this !!!!!!!!!!!!1
    /*
    if (winsockVersion < 0x20 && socketProtocol == QAbstractSocket::IPv6Protocol) {
        //### no ip6 support
@@ -429,7 +434,9 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    int protocol = (socketProtocol == QAbstractSocket::IPv6Protocol
                    || (socketProtocol == QAbstractSocket::AnyIPProtocol &&
                        osver >= QSysInfo::WV_6_0)) ? AF_INET6 : AF_INET;
+
    int type = (socketType == QAbstractSocket::UdpSocket) ? SOCK_DGRAM : SOCK_STREAM;
+
    // MSDN KB179942 states that on winnt 4 WSA_FLAG_OVERLAPPED is needed if socket is to be non blocking
    // and recomends alwasy doing it for cross windows version comapablity.
 
@@ -438,6 +445,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
 #ifndef WSA_FLAG_NO_HANDLE_INHERIT
 #define WSA_FLAG_NO_HANDLE_INHERIT 0x80
 #endif
+
    SOCKET socket = INVALID_SOCKET;
    // Windows 7 or later, try the new API
    if ((osver & QSysInfo::WV_NT_based) >= QSysInfo::WV_6_1) {
@@ -630,11 +638,6 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
 */
 bool QNativeSocketEnginePrivate::fetchConnectionParameters()
 {
-
-// broom
-qDebug("\n BROOM fetchConnectionParameters()  GOOD RUN   L-637");
-
-
    localPort = 0;
    localAddress.clear();
 
@@ -912,29 +915,10 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &addr, quint16 po
       ::setsockopt(socketDescriptor, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6only, sizeof(ipv6only) );
    }
 
-qDebug("\n  BROOM  nativeBind()  915 sa_struct address = %d  size = %llu", sa_struct.a.sa_family, (uint64_t)sockAddrSize );
-
-
    int bindResult = ::bind(socketDescriptor, &sa_struct.a, sockAddrSize);
 
-
-// BROOM
-int err = WSAGetLastError();
-
-qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false  error # = %d   (%s)",
-           address.toString().toLatin1().constData(), port, err, socketErrorString.toLatin1().constData());
-
-
-//   BROOM - put back in !
-//   if (bindResult == SOCKET_ERROR && WSAGetLastError() == WSAEAFNOSUPPORT
-//         && address.protocol() == QAbstractSocket::AnyIPProtocol) {
-
-
-   if (bindResult == SOCKET_ERROR) {
-      // retry with v4
-
-qDebug("\n**  BROOM  nativeBind()  RETRY v4" );
-
+   if (bindResult == SOCKET_ERROR && WSAGetLastError() == WSAEAFNOSUPPORT
+         && address.protocol() == QAbstractSocket::AnyIPProtocol) {
 
       sa_struct.a4.sin_family      = AF_INET;
       sa_struct.a4.sin_port        = htons(port);
@@ -970,14 +954,6 @@ qDebug("\n**  BROOM  nativeBind()  RETRY v4" );
             break;
       }
 
-
-// BROOM
-qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false  error # = %d   (%s)",
-           address.toString().toLatin1().constData(), port, err, socketErrorString.toLatin1().constData());
-
-
-
-
 #if defined (QNATIVESOCKETENGINE_DEBUG)
       qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false (%s)",
              address.toString().toLatin1().constData(), port, socketErrorString.toLatin1().constData());
@@ -989,10 +965,6 @@ qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false  error # = %d   
 #if defined (QNATIVESOCKETENGINE_DEBUG)
    qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == true", address.toString().toLatin1().constData(), port);
 #endif
-
-
-qDebug("\n**  BROOM  nativeBind() GOOD %d", port );
-
 
    socketState = QAbstractSocket::BoundState;
 

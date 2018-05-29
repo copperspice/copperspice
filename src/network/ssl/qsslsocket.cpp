@@ -470,8 +470,7 @@ QSslKey QSslSocket::privateKey() const
    return d->configuration.privateKey;
 }
 
-bool QSslSocket::addCaCertificates(const QString &path, QSsl::EncodingFormat format,
-                                   QRegExp::PatternSyntax syntax)
+bool QSslSocket::addCaCertificates(const QString &path, QSsl::EncodingFormat format, QPatternOption syntax)
 {
    Q_D(QSslSocket);
    QList<QSslCertificate> certs = QSslCertificate::fromPath(path, format, syntax);
@@ -497,7 +496,7 @@ void QSslSocket::addCaCertificates(const QList<QSslCertificate> &certificates)
 }
 
 bool QSslSocket::addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat encoding,
-      QRegExp::PatternSyntax syntax)
+      QPatternOption syntax)
 {
    return QSslSocketPrivate::addDefaultCaCertificates(path, encoding, syntax);
 }
@@ -1009,10 +1008,11 @@ void QSslSocketPrivate::setDefaultCaCertificates(const QList<QSslCertificate> &c
     \internal
 */
 bool QSslSocketPrivate::addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format,
-      QRegExp::PatternSyntax syntax)
+      QPatternOption syntax)
 {
    QSslSocketPrivate::ensureInitialized();
    QList<QSslCertificate> certs = QSslCertificate::fromPath(path, format, syntax);
+
    if (certs.isEmpty()) {
       return false;
    }
@@ -1020,6 +1020,7 @@ bool QSslSocketPrivate::addDefaultCaCertificates(const QString &path, QSsl::Enco
    QMutexLocker locker(&globalData()->mutex);
    globalData()->config.detach();
    globalData()->config->caCertificates += certs;
+
    return true;
 }
 
@@ -1529,23 +1530,23 @@ bool QSslSocketPrivate::isMatchingHostname(const QString &cn, const QString &hos
    }
 
    // Check only one star
-   if (cn.lastIndexOf(QLatin1Char('*')) != wildcard) {
+   if (cn.lastIndexOf('*') != wildcard) {
       return false;
    }
 
    // Check characters preceding * (if any) match
-   if (wildcard && (hostname.leftRef(wildcard) != cn.leftRef(wildcard))) {
+   if (wildcard && (hostname.leftView(wildcard) != cn.leftView(wildcard))) {
       return false;
    }
 
    // Check characters following first . match
-   if (hostname.midRef(hostname.indexOf(QLatin1Char('.'))) != cn.midRef(firstCnDot)) {
+   if (hostname.midView(hostname.indexOf('.')) != cn.midView(firstCnDot)) {
       return false;
    }
 
    // Check if the hostname is an IP address, if so then wildcards are not allowed
    QHostAddress addr(hostname);
-   if (!addr.isNull()) {
+   if (! addr.isNull()) {
       return false;
    }
 

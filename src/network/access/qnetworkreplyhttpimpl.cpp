@@ -1014,7 +1014,7 @@ void QNetworkReplyHttpImplPrivate::initCacheSaveDevice()
       if (cacheSaveDevice && !cacheSaveDevice->isOpen())
          qCritical("QNetworkReplyImpl: network cache returned a device that is not open -- "
                    "class %s probably needs to be fixed",
-                   managerPrivate->networkCache->metaObject()->className());
+                   csPrintable(managerPrivate->networkCache->metaObject()->className()));
 
       managerPrivate->networkCache->remove(url);
       cacheSaveDevice = 0;

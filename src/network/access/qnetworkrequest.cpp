@@ -533,8 +533,8 @@ void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders heade
       QByteArray rawValue = headerValue(header, value);
 
       if (rawValue.isEmpty()) {
-         qWarning("QNetworkRequest::setHeader: QVariant of type %s can not be used with header %s", value.typeName(),
-                  name.constData());
+         qWarning("QNetworkRequest::setHeader: QVariant of type %s can not be used with header %s",
+                  csPrintable(value.typeName()), name.constData());
          return;
       }
 

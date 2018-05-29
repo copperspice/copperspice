@@ -93,7 +93,7 @@ class QNetworkReplyImpl: public QNetworkReply
 
 #ifdef QT_SSL
 protected:
-   virtual void ignoreSslErrors();
+   virtual void ignoreSslErrors() override;
    virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors) override;
 
    void sslConfigurationImplementation(QSslConfiguration &configuration) const override;

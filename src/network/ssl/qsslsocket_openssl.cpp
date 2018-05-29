@@ -633,8 +633,9 @@ QString QSslSocketPrivate::sslLibraryBuildVersionString()
 {
    // store the version string as unicode and avoid false positives from Google
    // searching the playstore for old SSL versions
-   return QStringLiteral(OPENSSL_VERSION_TEXT);
+   return OPENSSL_VERSION_TEXT;
 }
+
 /*!
     \internal
 

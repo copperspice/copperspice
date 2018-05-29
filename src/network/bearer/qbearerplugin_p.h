@@ -45,9 +45,9 @@ class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngin
  public:
    explicit QBearerEnginePlugin(QObject *parent = nullptr);
    virtual ~QBearerEnginePlugin();
-   virtual QBearerEngine *create(const QString &key) const = 0;
+   QBearerEngine *create(const QString &key) const override = 0;
 };
 
 #endif // QT_NO_BEARERMANAGEMENT
 
-#endif // QBEARERPLUGIN_P_H
+#endif

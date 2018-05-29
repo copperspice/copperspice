@@ -75,8 +75,8 @@ typedef struct {
 } qt_sockaddr_in6;
 
 #else
-#define qt_sockaddr_in6 sockaddr_in6
-#define qt_s6_addr s6_addr
+#define qt_sockaddr_in6  sockaddr_in6
+#define qt_s6_addr       s6_addr
 #endif
 
 
@@ -123,7 +123,7 @@ void QHostAddressPrivate::setAddress(quint32 a_)
    protocol = QAbstractSocket::IPv4Protocol;
    isParsed = true;
 
-   //create mapped address, except for a_ == 0 (any)
+   // create mapped address, except for a_ == 0 (any)
    a6_64.c[0] = 0;
 
    if (a) {
@@ -142,14 +142,17 @@ static bool convertToIpv4(quint32 &a, const Q_IPV6ADDR &a6)
    if (qFromUnaligned<quint64>(ptr) != 0) {
       return false;
    }
+
    if (qFromBigEndian<quint32>(ptr + 8) == 0) {
       // is it AnyIPv6?
       a = 0;
       return qFromBigEndian<quint32>(ptr + 12) == 0;
    }
+
    if (qFromBigEndian<quint32>(ptr + 8) != 0xFFFF) {
       return false;
    }
+
    a = qFromBigEndian<quint32>(ptr + 12);
    return true;
 }
@@ -181,7 +184,7 @@ static bool parseIp6(const QString &address, QIPAddressUtils::IPv6Address &addr,
       scopeId->clear();
    }
 
-   return QIPAddressUtils::parseIp6(addr, tmp.constBegin(), tmp.constEnd()) == tmp.end();
+   return QIPAddressUtils::parseIp6(addr, tmp.constBegin(), tmp.constEnd()) == tmp.constEnd();
 }
 
 bool QHostAddressPrivate::parse()
@@ -552,6 +555,7 @@ QString QHostAddress::scopeId() const
 void QHostAddress::setScopeId(const QString &id)
 {
    QT_ENSURE_PARSED(this);
+
    if (d->protocol == QAbstractSocket::IPv6Protocol) {
       d->scopeId = id;
    }
@@ -797,6 +801,7 @@ bool QHostAddress::isLoopback() const
 
    return false;
 }
+
 bool QHostAddress::isMulticast() const
 {
    QT_ENSURE_PARSED(this);
@@ -810,6 +815,7 @@ bool QHostAddress::isMulticast() const
 
    return false;
 }
+
 QDebug operator<<(QDebug d, const QHostAddress &address)
 {
    // QDebugStateSaver saver(d);

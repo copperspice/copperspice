@@ -547,10 +547,6 @@ bool QNativeSocketEngine::bind(const QHostAddress &address, quint16 port)
    Q_D(QNativeSocketEngine);
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::bind(), false);
 
-
-qDebug("\n  BROOM  about to call fetchConnection   561");
-
-
    if (! d->checkProxy(address)) {
       return false;
    }
@@ -558,9 +554,6 @@ qDebug("\n  BROOM  about to call fetchConnection   561");
    Q_CHECK_STATE(QNativeSocketEngine::bind(), QAbstractSocket::UnconnectedState, false);
 
    if (! d->nativeBind(d->adjustAddressProtocol(address), port)) {
-
-qDebug("\n  BROOM  about to call fetchConnection   578   FALSE");
-
       return false;
    }
 
@@ -576,10 +569,9 @@ bool QNativeSocketEngine::listen()
    Q_CHECK_STATE(QNativeSocketEngine::listen(), QAbstractSocket::BoundState, false);
    Q_CHECK_TYPE(QNativeSocketEngine::listen(), QAbstractSocket::TcpSocket, false);
 
-   // We're using a backlog of 50. Most modern kernels support TCP
+   // Wevare using a backlog of 50. Most modern kernels support TCP
    // syncookies by default, and if they do, the backlog is ignored.
-   // When there is no support for TCP syncookies, this value is
-   // fine.
+   // When there is no support for TCP syncookies, this value is fine.
    return d->nativeListen(50);
 }
 

@@ -101,35 +101,30 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    }
 
    QHostInfo results;
-
-#if defined(QHOSTINFO_DEBUG)
-   qDebug("QHostInfoAgent::fromName(): looking up \"%s\" (IPv6 support is %s)",
-          hostName.toLatin1().constData(),
-          (local_getaddrinfo && local_freeaddrinfo) ? "enabled" : "disabled");
-#endif
-
    QHostAddress address;
 
    if (address.setAddress(hostName)) {
       // Reverse lookup
       if (local_getnameinfo) {
-         sockaddr_in sa4;
+         sockaddr_in  sa4;
          sockaddr_in6 sa6;
          sockaddr *sa;
 
          int saSize;
 
          if (address.protocol() == QAbstractSocket::IPv4Protocol) {
-            sa = (sockaddr *)&sa4;
+            sa     = (sockaddr *)&sa4;
             saSize = sizeof(sa4);
             memset(&sa4, 0, sizeof(sa4));
+
             sa4.sin_family = AF_INET;
             sa4.sin_addr.s_addr = htonl(address.toIPv4Address());
 
          } else {
-            sa = (sockaddr *)&sa6;
+            sa     = (sockaddr *)&sa6;
             saSize = sizeof(sa6);
             memset(&sa6, 0, sizeof(sa6));
+
             sa6.sin6_family = AF_INET6;
             memcpy(&sa6.sin6_addr, address.toIPv6Address().c, sizeof(sa6.sin6_addr));
          }
@@ -153,6 +148,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       }
 
       results.setAddresses(QList<QHostAddress>() << address);
+
       return results;
    }
 
@@ -181,7 +177,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
                   QHostAddress addr;
                   addr.setAddress(ntohl(((sockaddr_in *) p->ai_addr)->sin_addr.s_addr));
 
-                  if (!addresses.contains(addr)) {
+                  if (! addresses.contains(addr)) {
                      addresses.append(addr);
                   }
                }
@@ -213,7 +209,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       }
 
    } else {
-      // Fall back to gethostbyname, which only supports IPv4.
+      // Fall back to gethostbyname, which only supports IPv4
       hostent *ent = gethostbyname(aceHostname.constData());
 
       if (ent) {
@@ -260,6 +256,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    }
 
 #endif
+
    return results;
 }
 

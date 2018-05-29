@@ -55,7 +55,7 @@ class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEn
 
    inline void exceptionNotification() override {}
 
-   inline void closeNotification() {
+   inline void closeNotification() override {
       canCloseNotification();
    }
 

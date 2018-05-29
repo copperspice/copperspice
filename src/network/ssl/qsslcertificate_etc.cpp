@@ -489,16 +489,19 @@ bool QSslCertificatePrivate::parseExtension(const QByteArray &data, QSslCertific
 
       QVariantMap result;
       QVector<QAsn1Element> items = val.toVector();
+
       if (items.size() > 0) {
-         result[QStringLiteral("ca")] = items.at(0).toBool(&ok);
+         result["ca"] = items.at(0).toBool(&ok);
+
          if (!ok) {
             return false;
          }
+
       } else {
-         result[QStringLiteral("ca")] = false;
+         result["ca"] = false;
       }
       if (items.size() > 1) {
-         result[QStringLiteral("pathLenConstraint")] = items.at(1).toInteger(&ok);
+         result["pathLenConstraint"] = items.at(1).toInteger(&ok);
          if (!ok) {
             return false;
          }
@@ -513,9 +516,9 @@ bool QSslCertificatePrivate::parseExtension(const QByteArray &data, QSslCertific
       QVariantMap result;
       for (const QAsn1Element &el : val.toVector()) {
          if (el.type() == 0x80) {
-            result[QStringLiteral("keyid")] = el.value().toHex();
+            result["keyid"] = el.value().toHex();
          } else if (el.type() == 0x82) {
-            result[QStringLiteral("serial")] = colonSeparatedHex(el.value());
+            result["serial"] = colonSeparatedHex(el.value());
          }
       }
       value = result;

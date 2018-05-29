@@ -89,8 +89,7 @@ QByteArray QSslCertificate::digest(QCryptographicHash::Algorithm algorithm) cons
    return QCryptographicHash::hash(toDer(), algorithm);
 }
 
-QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
-                  QSsl::EncodingFormat format, QPatternOptionFlags syntax)
+QList<QSslCertificate> QSslCertificate::fromPath(const QString &path, QSsl::EncodingFormat format, QPatternOption syntax)
 {
    // $, (,), *, +, ., ?, [, ,], ^, {, | and }.
    // make sure to use the same path separators on Windows and Unix like systems.
@@ -102,15 +101,11 @@ QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
    // Check if the path contains any special chars
    int pos = -1;
 
+   if (syntax == QPatternOption::WildcardOption) {
+      pos = pathPrefix.indexOf(QRegularExpression("[*?[]"));
 
-// BROOM - fix this
-
-
-   if (syntax == QRegExp::Wildcard) {
-      pos = pathPrefix.indexOf(QRegExp("[*?[]"));
-
-   } else if (syntax != QRegExp::FixedString) {
-      pos = sourcePath.indexOf(QRegExp("[\\$\\(\\)\\*\\+\\.\\?\\[\\]\\^\\{\\}\\|]"));
+   } else if (syntax != QPatternOption::FixedStringOption) {
+      pos = sourcePath.indexOf(QRegularExpression("[\\$\\(\\)\\*\\+\\.\\?\\[\\]\\^\\{\\}\\|]"));
    }
 
    if (pos != -1) {
@@ -143,24 +138,28 @@ QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
 
    // Special case - if the prefix ends up being nothing, use "." instead.
    int startIndex = 0;
+
    if (pathPrefix.isEmpty()) {
-      pathPrefix = QLatin1String(".");
+      pathPrefix = ".";
       startIndex = 2;
    }
 
-   // The path can be a file or directory.
+   // path can be a file or directory.
    QList<QSslCertificate> certs;
-   QRegExp pattern(sourcePath, Qt::CaseSensitive, syntax);
+
+   QRegularExpression pattern(sourcePath, syntax | QPatternOption::ExactMatchOption);
    QDirIterator it(pathPrefix, QDir::Files, QDirIterator::FollowSymlinks | QDirIterator::Subdirectories);
 
    while (it.hasNext()) {
       QString filePath = startIndex == 0 ? it.next() : it.next().mid(startIndex);
-      if (! pattern.exactMatch(filePath)) {
+
+      if (! pattern.match(filePath).hasMatch()) {
          continue;
       }
 
       QFile file(filePath);
       QIODevice::OpenMode openMode = QIODevice::ReadOnly;
+
       if (format == QSsl::Pem) {
          openMode |= QIODevice::Text;
       }
@@ -179,6 +178,7 @@ QList<QSslCertificate> QSslCertificate::fromDevice(QIODevice *device, QSsl::Enco
       qWarning("QSslCertificate::fromDevice: can not read from a null device");
       return QList<QSslCertificate>();
    }
+
    return fromData(device->readAll(), format);
 }
 

@@ -189,10 +189,11 @@ static bool isBypassed(const QString &host, const QStringList &bypassList)
 
    // does it match the list of exclusions?
    for (const QString &entry : bypassList) {
-      if (entry == QLatin1String("<local>")) {
+      if (entry == "<local>") {
          if (isSimple) {
             return true;
          }
+
          if (isIpAddress) {
             //exclude all local subnets
             for (const QNetworkInterface &iface : QNetworkInterface::allInterfaces()) {
@@ -209,9 +210,12 @@ static bool isBypassed(const QString &host, const QStringList &bypassList)
 
       } else {
          // do wildcard matching
-         QRegularExpression rx(entry, Qt::CaseInsensitive, QRegExp::Wildcard);
+         QRegularExpression rx(entry, QPatternOption:CaseInsensitiveOption | QPatternOption:WildcardOption
+                     | QPatternOption:ExactMatchOption);
 
-         if (rx.exactMatch(host)) {
+         QRegularExpressionMatch match = rx.match(host);
+
+         if (match.hasMatch()) {
             return true;
          }
       }
@@ -297,28 +301,32 @@ static QList<QNetworkProxy> parseServerList(const QNetworkProxyQuery &query, con
       quint16 port = 8080;
 
       int pos = entry.indexOf(QLatin1Char('='));
-      QStringRef scheme;
-      QStringRef protocolTag;
+
+      QStringView scheme;
+      QStringView protocolTag;
+
       if (pos != -1) {
-         scheme = protocolTag = entry.leftRef(pos);
+         scheme = protocolTag = entry.leftView(pos);
          server = pos + 1;
       }
-      pos = entry.indexOf(QLatin1String("://"), server);
+      pos = entry.indexOf("://", server);
       if (pos != -1) {
-         scheme = entry.midRef(server, pos - server);
+         scheme = entry.midView(server, pos - server);
          server = pos + 3;
       }
 
       if (!scheme.isEmpty()) {
-         if (scheme == QLatin1String("http") || scheme == QLatin1String("https")) {
-            // no-op
-            // defaults are above
-         } else if (scheme == QLatin1String("socks") || scheme == QLatin1String("socks5")) {
+         if (scheme == "http" || scheme == "https") {
+            // no-op, defaults are above
+
+         } else if (scheme == "socks" || scheme == "socks5") {
             proxyType = QNetworkProxy::Socks5Proxy;
             port = 1080;
-         } else if (scheme == QLatin1String("ftp")) {
+
+         } else if (scheme == "ftp") {
             proxyType = QNetworkProxy::FtpCachingProxy;
             port = 2121;
+
          } else {
             // unknown proxy type
             continue;
@@ -494,15 +502,15 @@ initialized = true;
 
 reset();
 proxySettingsWatcher.clear(); // needs reset to trigger a new detection
-proxySettingsWatcher.addLocation(HKEY_CURRENT_USER,  QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"));
-proxySettingsWatcher.addLocation(HKEY_LOCAL_MACHINE, QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"));
-proxySettingsWatcher.addLocation(HKEY_LOCAL_MACHINE, QStringLiteral("Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"));
+proxySettingsWatcher.addLocation(HKEY_CURRENT_USER,  "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
+proxySettingsWatcher.addLocation(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
+proxySettingsWatcher.addLocation(HKEY_LOCAL_MACHINE, "Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
 
 
 // load the winhttp.dll library
 QSystemLibrary lib(L"winhttp");
 
-if (!lib.load())
+if (! lib.load())
 {
    return;   // failed to load
 }

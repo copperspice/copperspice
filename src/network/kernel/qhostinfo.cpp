@@ -116,13 +116,11 @@ void QHostInfo::abortHostLookup(int id)
 
 QHostInfo QHostInfo::fromName(const QString &name)
 {
-#if defined QHOSTINFO_DEBUG
-   qDebug("QHostInfo::fromName(\"%s\")", name.toLatin1().constData());
-#endif
-
    QHostInfo hostInfo = QHostInfoAgent::fromName(name);
+
    QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
    manager->cache.put(name, hostInfo);
+
    return hostInfo;
 }
 
@@ -235,6 +233,7 @@ QHostInfoRunnable::QHostInfoRunnable(const QString &hn, int i) : toBeLookedUp(hn
 void QHostInfoRunnable::run()
 {
    QHostInfoLookupManager *manager = theHostInfoLookupManager();
+
    // check aborted
    if (manager->wasAborted(id)) {
       manager->lookupFinished(this);
@@ -250,11 +249,13 @@ void QHostInfoRunnable::run()
       // check the cache first
       bool valid = false;
       hostInfo = manager->cache.get(toBeLookedUp, &valid);
+
       if (!valid) {
          // not in cache, we need to do the lookup and store the result in the cache
          hostInfo = QHostInfoAgent::fromName(toBeLookedUp);
          manager->cache.put(toBeLookedUp, hostInfo);
       }
+
    } else {
       // cache is not enabled, just do the lookup and continue
       hostInfo = QHostInfoAgent::fromName(toBeLookedUp);

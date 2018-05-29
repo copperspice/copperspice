@@ -139,13 +139,13 @@ public:
 
    // CA settings.
    bool addCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QRegularExpression::PatternSyntax syntax = QRegularExpression::FixedString);
+                  QPatternOption syntax = QPatternOption::FixedStringOption);
 
    void addCaCertificate(const QSslCertificate &certificate);
    void addCaCertificates(const QList<QSslCertificate> &certificates);
 
    static bool addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QRegularExpression::PatternSyntax syntax = QRegularExpression::FixedString);
+                  QPatternOption syntax = QPatternOption::FixedStringOption);
 
    static void addDefaultCaCertificate(const QSslCertificate &certificate);
    static void addDefaultCaCertificates(const QList<QSslCertificate> &certificates);
