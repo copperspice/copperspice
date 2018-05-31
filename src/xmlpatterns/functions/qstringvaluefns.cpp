@@ -205,13 +205,15 @@ Expression::Ptr NormalizeUnicodeFN::compress(const StaticContext::Ptr &context)
 
    if (m_operands.count() == 1) {
       m_normForm = QString::NormalizationForm_C;
-   } else if (m_operands.last()->is(IDStringValue)) {
-      m_normForm = static_cast<QString::NormalizationForm>(
-                      determineNormalizationForm(context->dynamicContext()));
 
-      if (m_normForm == -1) {
+   } else if (m_operands.last()->is(IDStringValue)) {
+      int tmp = determineNormalizationForm(context->dynamicContext());
+
+      if (tmp == -1) {
          return m_operands.first();
       }
+
+      m_normForm = static_cast<QString::NormalizationForm>(tmp);
 
       /* Remove the operand since we don't need it anymore. */
       m_operands.removeLast();
