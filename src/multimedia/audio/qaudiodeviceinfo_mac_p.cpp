@@ -20,26 +20,25 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qstringlist.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qdatastream.h>
-#include <QtCore/qdebug.h>
+#include <qstringlist.h>
+#include <qlist.h>
+#include <qdebug.h>
 #include <qcore_mac_p.h>
-#include <QtMultimedia/qaudiodeviceinfo.h>
+#include <qaudiodeviceinfo.h>
 #include <qaudio_mac_p.h>
 #include <qaudiodeviceinfo_mac_p.h>
 
-QT_BEGIN_NAMESPACE
-
-QAudioDeviceInfoInternal::QAudioDeviceInfoInternal(QByteArray const &handle, QAudio::Mode)
+QAudioDeviceInfoInternal::QAudioDeviceInfoInternal(const QString &handle, QAudio::Mode)
 {
-   QDataStream ds(handle);
-   quint32 did, tm;
+   auto iter_s = handle.indexOfFast(":");
+   quint32 t_id = QString(handle.constBegin(), iter_s).toInteger<quint32>();
 
-   ds >> did >> tm >> name;
-   deviceId = AudioDeviceID(did);
-   mode = QAudio::Mode(tm);
+   auto iter_e = handle.indexOfFast(":", iter_s);
+   quint32 t_mode = QString(iter_s + 1, iter_e).toInteger<quint32>();
+
+   deviceId = AudioDeviceID(t_id);
+   mode     = QAudio::Mode(t_mode);
+   name     = QString(iter_e + 1, handle.constEnd());
 }
 
 bool QAudioDeviceInfoInternal::isFormatSupported(const QAudioFormat &format) const
@@ -47,7 +46,7 @@ bool QAudioDeviceInfoInternal::isFormatSupported(const QAudioFormat &format) con
    QAudioDeviceInfoInternal *self = const_cast<QAudioDeviceInfoInternal *>(this);
 
    return format.isValid()
-          && format.codec() == QString::fromLatin1("audio/pcm")
+          && format.codec() == "audio/pcm"
           && self->frequencyList().contains(format.frequency())
           && self->channelsList().contains(format.channels())
           && self->sampleSizeList().contains(format.sampleSize());
@@ -59,12 +58,8 @@ QAudioFormat QAudioDeviceInfoInternal::preferredFormat() const
 
    UInt32  propSize = 0;
 
-   if (AudioDeviceGetPropertyInfo(deviceId,
-                                  0,
-                                  mode == QAudio::AudioInput,
-                                  kAudioDevicePropertyStreams,
-                                  &propSize,
-                                  0) == noErr) {
+   if (AudioDeviceGetPropertyInfo(deviceId, 0, mode == QAudio::AudioInput, kAudioDevicePropertyStreams,
+                  &propSize, 0) == noErr) {
 
       const int sc = propSize / sizeof(AudioStreamID);
 
@@ -108,27 +103,31 @@ QAudioFormat QAudioDeviceInfoInternal::preferredFormat() const
 
 QAudioFormat QAudioDeviceInfoInternal::nearestFormat(const QAudioFormat &format) const
 {
-   QAudioFormat    rc(format);
-   QAudioFormat    target = preferredFormat();
+   QAudioFormat rc(format);
+   QAudioFormat target = preferredFormat();
 
-   if (!format.codec().isEmpty() && format.codec() != QString::fromLatin1("audio/pcm")) {
+   if (! format.codec().isEmpty() && format.codec() != "audio/pcm") {
       return QAudioFormat();
    }
 
-   rc.setCodec(QString::fromLatin1("audio/pcm"));
+   rc.setCodec("audio/pcm");
 
    if (rc.frequency() != target.frequency()) {
       rc.setFrequency(target.frequency());
    }
+
    if (rc.channels() != target.channels()) {
       rc.setChannels(target.channels());
    }
+
    if (rc.sampleSize() != target.sampleSize()) {
       rc.setSampleSize(target.sampleSize());
    }
+
    if (rc.byteOrder() != target.byteOrder()) {
       rc.setByteOrder(target.byteOrder());
    }
+
    if (rc.sampleType() != target.sampleType()) {
       rc.setSampleType(target.sampleType());
    }
@@ -197,22 +196,14 @@ QList<int> QAudioDeviceInfoInternal::channelsList()
    UInt32  propSize = 0;
    int     channels = 0;
 
-   if (AudioDeviceGetPropertyInfo(deviceId,
-                                  0,
-                                  mode == QAudio::AudioInput,
-                                  kAudioDevicePropertyStreamConfiguration,
-                                  &propSize,
-                                  0) == noErr) {
+   if (AudioDeviceGetPropertyInfo(deviceId, 0, mode == QAudio::AudioInput, kAudioDevicePropertyStreamConfiguration,
+                  &propSize, 0) == noErr) {
 
       AudioBufferList *audioBufferList = static_cast<AudioBufferList *>(qMalloc(propSize));
 
       if (audioBufferList != 0) {
-         if (AudioDeviceGetProperty(deviceId,
-                                    0,
-                                    mode == QAudio::AudioInput,
-                                    kAudioDevicePropertyStreamConfiguration,
-                                    &propSize,
-                                    audioBufferList) == noErr) {
+         if (AudioDeviceGetProperty(deviceId, 0, mode == QAudio::AudioInput, kAudioDevicePropertyStreamConfiguration,
+                  &propSize, audioBufferList) == noErr) {
 
             for (int i = 0; i < int(audioBufferList->mNumberBuffers); ++i) {
                channels += audioBufferList->mBuffers[i].mNumberChannels;
@@ -242,25 +233,24 @@ QList<QAudioFormat::SampleType> QAudioDeviceInfoInternal::sampleTypeList()
    return QList<QAudioFormat::SampleType>() << QAudioFormat::SignedInt << QAudioFormat::UnSignedInt << QAudioFormat::Float;
 }
 
-static QByteArray get_device_info(AudioDeviceID audioDevice, QAudio::Mode mode)
+static QString get_device_info(AudioDeviceID audioDevice, QAudio::Mode mode)
 {
-   UInt32      size;
-   QByteArray  device;
-   QDataStream ds(&device, QIODevice::WriteOnly);
-   AudioStreamBasicDescription     sf;
+   UInt32  size;
+   QString device;
+
+   AudioStreamBasicDescription sf;
+
    CFStringRef name;
    Boolean     isInput = mode == QAudio::AudioInput;
 
-   // Id
-   ds << quint32(audioDevice);
+   // Id - audioDevice
 
    // Mode
    size = sizeof(AudioStreamBasicDescription);
    if (AudioDeviceGetProperty(audioDevice, 0, isInput, kAudioDevicePropertyStreamFormat,
                               &size, &sf) != noErr) {
-      return QByteArray();
+      return QString();
    }
-   ds << quint32(mode);
 
    // Name
    size = sizeof(CFStringRef);
@@ -268,49 +258,47 @@ static QByteArray get_device_info(AudioDeviceID audioDevice, QAudio::Mode mode)
                               &size, &name) != noErr) {
       qWarning() << "QAudioDeviceInfo: Unable to find device name";
    }
-   ds << QCFString::toQString(name);
+
+   device = QString("%1:%2:%3").formatArg(quint32(audioDevice)).formatArg(quint32(mode)).formatArg(QCFString::toQString(name));
 
    CFRelease(name);
 
    return device;
 }
 
-QByteArray QAudioDeviceInfoInternal::defaultInputDevice()
+QString QAudioDeviceInfoInternal::defaultInputDevice()
 {
    AudioDeviceID   audioDevice;
    UInt32          size = sizeof(audioDevice);
 
-   if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &size,
-                                &audioDevice) != noErr) {
+   if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &size, &audioDevice) != noErr) {
       qWarning() << "QAudioDeviceInfo: Unable to find default input device";
-      return QByteArray();
+      return QString();
    }
 
    return get_device_info(audioDevice, QAudio::AudioInput);
 }
 
-QByteArray QAudioDeviceInfoInternal::defaultOutputDevice()
+QString QAudioDeviceInfoInternal::defaultOutputDevice()
 {
    AudioDeviceID audioDevice;
-   UInt32        size = sizeof(audioDevice);
+   UInt32 size = sizeof(audioDevice);
 
-   if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size,
-                                &audioDevice) != noErr) {
+   if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &audioDevice) != noErr) {
       qWarning() << "QAudioDeviceInfo: Unable to find default output device";
-      return QByteArray();
+      return QString();
    }
 
    return get_device_info(audioDevice, QAudio::AudioOutput);
 }
 
-QList<QByteArray> QAudioDeviceInfoInternal::availableDevices(QAudio::Mode mode)
+QList<QString> QAudioDeviceInfoInternal::availableDevices(QAudio::Mode mode)
 {
-   QList<QByteArray>   devices;
+   QList<QString> devices;
 
    UInt32  propSize = 0;
 
    if (AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &propSize, 0) == noErr) {
-
       const int dc = propSize / sizeof(AudioDeviceID);
 
       if (dc > 0) {
@@ -318,8 +306,9 @@ QList<QByteArray> QAudioDeviceInfoInternal::availableDevices(QAudio::Mode mode)
 
          if (AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &propSize, audioDevices) == noErr) {
             for (int i = 0; i < dc; ++i) {
-               QByteArray info = get_device_info(audioDevices[i], mode);
-               if (!info.isNull()) {
+               QString info = get_device_info(audioDevices[i], mode);
+
+               if (! info.isEmpty()) {
                   devices << info;
                }
             }
@@ -332,6 +321,4 @@ QList<QByteArray> QAudioDeviceInfoInternal::availableDevices(QAudio::Mode mode)
    return devices;
 }
 
-
-QT_END_NAMESPACE
 

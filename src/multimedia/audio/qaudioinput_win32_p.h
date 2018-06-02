@@ -38,14 +38,13 @@
 #include <QtMultimedia/qaudiodeviceinfo.h>
 #include <QtMultimedia/qaudioengine.h>
 
-
 QT_BEGIN_NAMESPACE
 
 class QAudioInputPrivate : public QAbstractAudioInput
 {
    MULTI_CS_OBJECT(QAudioInputPrivate)
  public:
-   QAudioInputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
+   QAudioInputPrivate(const QString &device, const QAudioFormat &audioFormat);
    ~QAudioInputPrivate();
 
    qint64 read(char *data, qint64 len);
@@ -76,7 +75,9 @@ class QAudioInputPrivate : public QAbstractAudioInput
    qint32 buffer_size;
    qint32 period_size;
    qint32 header;
-   QByteArray m_device;
+
+   QString m_device;
+
    int bytesAvailable;
    int intervalTime;
    QTime timeStamp;

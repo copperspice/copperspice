@@ -23,12 +23,9 @@
 #ifndef QAUDIODEVICEFACTORY_P_H
 #define QAUDIODEVICEFACTORY_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qlist.h>
-#include <QtMultimedia/qaudiodeviceinfo.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qlist.h>
+#include <qaudiodeviceinfo.h>
 
 class QAbstractAudioInput;
 class QAbstractAudioOutput;
@@ -42,7 +39,7 @@ class QAudioDeviceFactory
    static QAudioDeviceInfo defaultInputDevice();
    static QAudioDeviceInfo defaultOutputDevice();
 
-   static QAbstractAudioDeviceInfo *audioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode);
+   static QAbstractAudioDeviceInfo *audioDeviceInfo(const QString &realm, const QString &handle, QAudio::Mode mode);
 
    static QAbstractAudioInput *createDefaultInputDevice(QAudioFormat const &format);
    static QAbstractAudioOutput *createDefaultOutputDevice(QAudioFormat const &format);
@@ -54,7 +51,5 @@ class QAudioDeviceFactory
    static QAbstractAudioOutput *createNullOutput();
 };
 
-QT_END_NAMESPACE
-
-#endif // QAUDIODEVICEFACTORY_P_H
+#endif
 

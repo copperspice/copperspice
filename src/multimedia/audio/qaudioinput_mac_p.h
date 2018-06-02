@@ -73,7 +73,7 @@ class QAudioInputPrivate : public QAbstractAudioInput
    AudioStreamBasicDescription deviceFormat;
    QAbstractAudioDeviceInfo *audioDeviceInfo;
 
-   QAudioInputPrivate(const QByteArray &device, QAudioFormat const &format);
+   QAudioInputPrivate(const QString &device, QAudioFormat const &format);
    ~QAudioInputPrivate();
 
    bool open();

@@ -46,12 +46,12 @@ class QAudioInputPrivate : public QAbstractAudioInput
    MULTI_CS_OBJECT(QAudioInputPrivate)
 
  public:
-   QAudioInputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
+   QAudioInputPrivate(const QString &device, const QAudioFormat &audioFormat);
    ~QAudioInputPrivate();
 
    qint64 read(char *data, qint64 len);
 
-   QIODevice *start(QIODevice *device = 0) override; 
+   QIODevice *start(QIODevice *device = 0) override;
    void stop() override;
    void reset() override;
    void suspend() override;
@@ -97,7 +97,9 @@ class QAudioInputPrivate : public QAbstractAudioInput
    int intervalTime;
    char *audioBuffer;
    int bytesAvailable;
-   QByteArray m_device;
+
+   QString  m_device;
+
    bool pullMode;
    int buffer_size;
    int period_size;

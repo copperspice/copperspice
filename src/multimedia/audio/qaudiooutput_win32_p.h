@@ -45,7 +45,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    MULTI_CS_OBJECT(QAudioOutputPrivate)
 
  public:
-   QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
+   QAudioOutputPrivate(const QString &device, const QAudioFormat &audioFormat);
    ~QAudioOutputPrivate();
 
    qint64 write( const char *data, qint64 len );
@@ -65,7 +65,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    qint64 processedUSecs() const  override;
    qint64 elapsedUSecs() const  override;
    QAudio::Error error() const  override;
-   QAudio::State state() const  override; 
+   QAudio::State state() const  override;
 
    QIODevice *audioSource;
    QAudioFormat settings;
@@ -78,7 +78,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    MULTI_CS_SLOT_1(Private, bool deviceReady())
    MULTI_CS_SLOT_2(deviceReady)
 
-   QByteArray m_device;
+   QString  m_device;
    bool resuming;
    int bytesAvailable;
    QTime timeStamp;

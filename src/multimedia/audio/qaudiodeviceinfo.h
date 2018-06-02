@@ -25,7 +25,6 @@
 
 #include <QtCore/qobject.h>
 #include <QtCore/qglobal.h>
-#include <QtCore/qbytearray.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qlist.h>
@@ -71,9 +70,9 @@ class Q_MULTIMEDIA_EXPORT QAudioDeviceInfo
    static QList<QAudioDeviceInfo> availableDevices(QAudio::Mode mode);
 
  private:
-   QAudioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode);
+   QAudioDeviceInfo(const QString &realm, const QString &handle, QAudio::Mode mode);
    QString realm() const;
-   QByteArray handle() const;
+   QString handle() const;
    QAudio::Mode mode() const;
 
    QSharedDataPointer<QAudioDeviceInfoPrivate> d;

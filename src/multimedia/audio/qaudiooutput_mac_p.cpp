@@ -226,27 +226,33 @@ class MacOutputDevice : public QIODevice
 };
 
 
-QAudioOutputPrivate::QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &format):
-   audioFormat(format)
+QAudioOutputPrivate::QAudioOutputPrivate(const QString  &device, const QAudioFormat &format)
+   : audioFormat(format)
 {
-   QDataStream ds(device);
-   quint32 did, mode;
+   auto iter_s = device.indexOfFast(":");
+   quint32 t_id = QString(device.constBegin(), iter_s).toInteger<quint32>();
 
-   ds >> did >> mode;
+   auto iter_e = device.indexOfFast(":", iter_s);
+   quint32 t_mode = QString(iter_s + 1, iter_e).toInteger<quint32>();
 
-   if (QAudio::Mode(mode) == QAudio::AudioInput) {
+   // (not used)  name = QString(iter_e + 1, device.constEnd());
+
+   if (QAudio::Mode(t_mode) == QAudio::AudioInput) {
       errorCode = QAudio::OpenError;
+
    } else {
       audioDeviceInfo = new QAudioDeviceInfoInternal(device, QAudio::AudioOutput);
       isOpen = false;
-      audioDeviceId = AudioDeviceID(did);
-      audioUnit = 0;
-      audioIO = 0;
-      startTime = 0;
-      totalFrames = 0;
-      audioBuffer = 0;
+
+      audioDeviceId = AudioDeviceID(t_id);
+      audioUnit     = 0;
+      audioIO       = 0;
+      startTime     = 0;
+      totalFrames   = 0;
+      audioBuffer   = 0;
+
       internalBufferSize = QtMultimediaInternal::default_buffer_size;
-      clockFrequency = AudioGetHostClockFrequency() / 1000;
+      clockFrequency     = AudioGetHostClockFrequency() / 1000;
       errorCode = QAudio::NoError;
       stateCode = QAudio::StoppedState;
       audioThreadState = Stopped;

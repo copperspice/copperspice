@@ -46,7 +46,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    MULTI_CS_OBJECT(QAudioOutputPrivate)
 
  public:
-   QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
+   QAudioOutputPrivate(const QString &device, const QAudioFormat &audioFormat);
    ~QAudioOutputPrivate();
 
    qint64 write( const char *data, qint64 len );
@@ -107,7 +107,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    void close();
 
    QTimer *timer;
-   QByteArray m_device;
+   QString m_device;
    int bytesAvailable;
    QElapsedTimer timeStamp;
    QElapsedTimer clockStamp;

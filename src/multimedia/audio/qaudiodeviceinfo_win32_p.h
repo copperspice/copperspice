@@ -23,7 +23,6 @@
 #ifndef QAUDIODEVICEINFO_WIN32_P_H
 #define QAUDIODEVICEINFO_WIN32_P_H
 
-#include <QtCore/qbytearray.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qdebug.h>
@@ -42,7 +41,7 @@ class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
    MULTI_CS_OBJECT(QAudioDeviceInfoInternal)
 
  public:
-   QAudioDeviceInfoInternal(QByteArray dev, QAudio::Mode mode);
+   QAudioDeviceInfoInternal(QString dev, QAudio::Mode mode);
    ~QAudioDeviceInfoInternal();
 
    bool open();
@@ -61,9 +60,9 @@ class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
    QList<QAudioFormat::Endian> byteOrderList() override;
    QList<QAudioFormat::SampleType> sampleTypeList() override;
 
-   static QByteArray defaultInputDevice();
-   static QByteArray defaultOutputDevice();
-   static QList<QByteArray> availableDevices(QAudio::Mode);
+   static QString  defaultInputDevice();
+   static QString  defaultOutputDevice();
+   static QList<QString > availableDevices(QAudio::Mode);
 
  private:
    QAudio::Mode mode;

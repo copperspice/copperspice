@@ -74,7 +74,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    QAudio::Error    errorCode;
    QAudio::State    stateCode;
 
-   QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &format);
+   QAudioOutputPrivate(const QString &device, const QAudioFormat &format);
    ~QAudioOutputPrivate();
 
    bool open();

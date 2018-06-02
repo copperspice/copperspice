@@ -26,8 +26,8 @@ QT_BEGIN_NAMESPACE
 
 //#define DEBUG_AUDIO 1
 
-QAudioInputPrivate::QAudioInputPrivate(const QByteArray &device, const QAudioFormat &audioFormat):
-   settings(audioFormat)
+QAudioInputPrivate::QAudioInputPrivate(const QString &device, const QAudioFormat &audioFormat)
+   : settings(audioFormat)
 {
    bytesAvailable = 0;
    buffer_size = 0;
@@ -239,11 +239,11 @@ bool QAudioInputPrivate::open()
    unsigned long iNumDevs, ii;
    iNumDevs = waveInGetNumDevs();
    for (ii = 0; ii < iNumDevs; ii++) {
-      if (waveInGetDevCaps(ii, &wic, sizeof(WAVEINCAPS))
-            == MMSYSERR_NOERROR) {
+      if (waveInGetDevCaps(ii, &wic, sizeof(WAVEINCAPS)) == MMSYSERR_NOERROR) {
          QString tmp;
          tmp = QString((const QChar *)wic.szPname);
-         if (tmp.compare(QLatin1String(m_device)) == 0) {
+
+         if (device == "default") {
             devId = ii;
             break;
          }

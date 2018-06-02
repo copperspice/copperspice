@@ -26,13 +26,11 @@
 
 #include <qmap.h>
 
-QT_BEGIN_NAMESPACE
-
 class QAudioDeviceInfoPrivate : public QSharedData
 {
  public:
    QAudioDeviceInfoPrivate(): info(0) {}
-   QAudioDeviceInfoPrivate(const QString &r, const QByteArray &h, QAudio::Mode m):
+   QAudioDeviceInfoPrivate(const QString &r, const QString &h, QAudio::Mode m):
       realm(r), handle(h), mode(m) {
       info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
    }
@@ -57,8 +55,8 @@ class QAudioDeviceInfoPrivate : public QSharedData
       delete info;
    }
 
-   QString     realm;
-   QByteArray  handle;
+   QString  realm;
+   QString  handle;
    QAudio::Mode mode;
    QAbstractAudioDeviceInfo   *info;
 };
@@ -166,8 +164,7 @@ QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
    }
 
    QAudioFormat nearest = settings;
-
-   nearest.setCodec(QLatin1String("audio/pcm"));
+   nearest.setCodec("audio/pcm");
 
    if (nearest.sampleType() == QAudioFormat::Unknown) {
       QAudioFormat preferred = preferredFormat();
@@ -345,43 +342,28 @@ QList<QAudioDeviceInfo> QAudioDeviceInfo::availableDevices(QAudio::Mode mode)
    return QAudioDeviceFactory::availableDevices(mode);
 }
 
-
-/*!
-    \internal
-*/
-
-QAudioDeviceInfo::QAudioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode):
+// internal
+QAudioDeviceInfo::QAudioDeviceInfo(const QString &realm, const QString &handle, QAudio::Mode mode):
    d(new QAudioDeviceInfoPrivate(realm, handle, mode))
 {
 }
 
-/*!
-    \internal
-*/
-
+// internal
 QString QAudioDeviceInfo::realm() const
 {
    return d->realm;
 }
 
-/*!
-    \internal
-*/
-
-QByteArray QAudioDeviceInfo::handle() const
+// internal
+QString QAudioDeviceInfo::handle() const
 {
    return d->handle;
 }
 
-
-/*!
-    \internal
-*/
-
+// internal
 QAudio::Mode QAudioDeviceInfo::mode() const
 {
    return d->mode;
 }
 
-QT_END_NAMESPACE
 

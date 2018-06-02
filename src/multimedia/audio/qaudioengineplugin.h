@@ -33,10 +33,10 @@
 QT_BEGIN_NAMESPACE
 
 struct Q_MULTIMEDIA_EXPORT QAudioEngineFactoryInterface : public QFactoryInterface {
-   virtual QList<QByteArray> availableDevices(QAudio::Mode) const = 0;
-   virtual QAbstractAudioInput *createInput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
-   virtual QAbstractAudioOutput *createOutput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
-   virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QByteArray &device, QAudio::Mode mode) = 0;
+   virtual QList<QString > availableDevices(QAudio::Mode) const = 0;
+   virtual QAbstractAudioInput *createInput(const QString  &device, const QAudioFormat &format = QAudioFormat()) = 0;
+   virtual QAbstractAudioOutput *createOutput(const QString  &device, const QAudioFormat &format = QAudioFormat()) = 0;
+   virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QString  &device, QAudio::Mode mode) = 0;
 };
 
 #define QAudioEngineFactoryInterface_iid  "com.copperspice.QAudioEngineFactoryInterface"
@@ -49,7 +49,7 @@ class Q_MULTIMEDIA_EXPORT QAudioEnginePlugin : public QObject, public QAudioEngi
 
  public:
    QAudioEnginePlugin(QObject *parent = nullptr);
-   ~QAudioEnginePlugin();   
+   ~QAudioEnginePlugin();
 };
 
 QT_END_NAMESPACE

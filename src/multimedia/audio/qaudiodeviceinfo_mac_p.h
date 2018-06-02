@@ -24,18 +24,16 @@
 #define QAUDIODEVICEINFO_MAC_P_H
 
 #include <CoreAudio/CoreAudio.h>
-#include <QtMultimedia/qaudioengine.h>
-
-QT_BEGIN_NAMESPACE
+#include <qaudioengine.h>
 
 class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
 {
  public:
-   AudioDeviceID   deviceId;
-   QString         name;
+   AudioDeviceID  deviceId;
+   QString        name;
    QAudio::Mode   mode;
 
-   QAudioDeviceInfoInternal(QByteArray const &handle, QAudio::Mode mode);
+   QAudioDeviceInfoInternal(const QString &handle, QAudio::Mode mode);
 
    bool isFormatSupported(const QAudioFormat &format) const;
    QAudioFormat preferredFormat() const;
@@ -50,12 +48,10 @@ class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
    QList<QAudioFormat::Endian> byteOrderList();
    QList<QAudioFormat::SampleType> sampleTypeList();
 
-   static QByteArray defaultInputDevice();
-   static QByteArray defaultOutputDevice();
+   static QString defaultInputDevice();
+   static QString defaultOutputDevice();
 
-   static QList<QByteArray> availableDevices(QAudio::Mode mode);
+   static QList<QString> availableDevices(QAudio::Mode mode);
 };
 
-QT_END_NAMESPACE
-
-#endif  // QDEVICEINFO_MAC_P_H
+#endif

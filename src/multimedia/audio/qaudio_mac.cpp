@@ -22,8 +22,6 @@
 
 #include <qaudio_mac_p.h>
 
-QT_BEGIN_NAMESPACE
-
 // Debugging
 QDebug operator<<(QDebug dbg, const QAudioFormat &audioFormat)
 {
@@ -42,14 +40,16 @@ QDebug operator<<(QDebug dbg, const QAudioFormat &audioFormat)
 // Conversion
 QAudioFormat toQAudioFormat(AudioStreamBasicDescription const &sf)
 {
-   QAudioFormat    audioFormat;
+   QAudioFormat audioFormat;
 
    audioFormat.setFrequency(sf.mSampleRate);
    audioFormat.setChannels(sf.mChannelsPerFrame);
    audioFormat.setSampleSize(sf.mBitsPerChannel);
-   audioFormat.setCodec(QString::fromLatin1("audio/pcm"));
+   audioFormat.setCodec("audio/pcm");
+
    audioFormat.setByteOrder((sf.mFormatFlags & kAudioFormatFlagIsBigEndian) != 0 ? QAudioFormat::BigEndian :
                             QAudioFormat::LittleEndian);
+
    QAudioFormat::SampleType type = QAudioFormat::UnSignedInt;
    if ((sf.mFormatFlags & kAudioFormatFlagIsSignedInteger) != 0) {
       type = QAudioFormat::SignedInt;
@@ -129,7 +129,4 @@ void QAudioRingBuffer::reset()
    m_writePos = 0;
    m_bufferUsed.store(0);
 }
-
-QT_END_NAMESPACE
-
 

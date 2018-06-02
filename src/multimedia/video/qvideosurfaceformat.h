@@ -54,10 +54,9 @@ class Q_MULTIMEDIA_EXPORT QVideoSurfaceFormat
    };
 
    QVideoSurfaceFormat();
-   QVideoSurfaceFormat(
-      const QSize &size,
-      QVideoFrame::PixelFormat pixelFormat,
+   QVideoSurfaceFormat(const QSize &size, QVideoFrame::PixelFormat pixelFormat,
       QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle);
+
    QVideoSurfaceFormat(const QVideoSurfaceFormat &format);
    ~QVideoSurfaceFormat();
 
@@ -96,9 +95,9 @@ class Q_MULTIMEDIA_EXPORT QVideoSurfaceFormat
 
    QSize sizeHint() const;
 
-   QList<QByteArray> propertyNames() const;
-   QVariant property(const char *name) const;
-   void setProperty(const char *name, const QVariant &value);
+   QList<QString > propertyNames() const;
+   QVariant property(QStringView name) const;
+   void setProperty(QStringView name, const QVariant &value);
 
  private:
    QSharedDataPointer<QVideoSurfaceFormatPrivate> d;

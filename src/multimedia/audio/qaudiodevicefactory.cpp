@@ -44,11 +44,8 @@
 #endif
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if !defined(QT_NO_SETTINGS)
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                          (QAudioEngineFactoryInterface_iid, QLatin1String("/audio"), Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QAudioEngineFactoryInterface_iid, "/audio", Qt::CaseInsensitive))
 #endif
 
 class QNullDeviceInfo : public QAbstractAudioDeviceInfo
@@ -204,8 +201,8 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   for (const QByteArray & handle : QAudioDeviceInfoInternal::availableDevices(mode)) {
-      devices << QAudioDeviceInfo(QLatin1String("builtin"), handle, mode);
+   for (const QString & handle : QAudioDeviceInfoInternal::availableDevices(mode)) {
+      devices << QAudioDeviceInfo("builtin", handle, mode);
    }
 #endif
 #endif
@@ -217,7 +214,7 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
       QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(l->instance(key));
 
       if (plugin) {
-         for (QByteArray const & handle : plugin->availableDevices(mode)) {
+         for (QString const & handle : plugin->availableDevices(mode)) {
             devices << QAudioDeviceInfo(key, handle, mode);
          }
       }
@@ -231,20 +228,20 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
 QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 {
 #if !defined(QT_NO_SETTINGS)
-   QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance(
-         QLatin1String("default")));
+   QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance("default"));
 
    if (plugin) {
-      QList<QByteArray> list = plugin->availableDevices(QAudio::AudioInput);
+      QList<QString> list = plugin->availableDevices(QAudio::AudioInput);
+
       if (list.size() > 0) {
-         return QAudioDeviceInfo(QLatin1String("default"), list.at(0), QAudio::AudioInput);
+         return QAudioDeviceInfo("default", list.at(0), QAudio::AudioInput);
       }
    }
 #endif
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   return QAudioDeviceInfo(QLatin1String("builtin"), QAudioDeviceInfoInternal::defaultInputDevice(), QAudio::AudioInput);
+   return QAudioDeviceInfo("builtin", QAudioDeviceInfoInternal::defaultInputDevice(), QAudio::AudioInput);
 #endif
 #endif
    return QAudioDeviceInfo();
@@ -253,46 +250,47 @@ QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 QAudioDeviceInfo QAudioDeviceFactory::defaultOutputDevice()
 {
 #if !defined(QT_NO_SETTINGS)
-   QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance(
-         QLatin1String("default")));
+   QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance("default"));
 
    if (plugin) {
-      QList<QByteArray> list = plugin->availableDevices(QAudio::AudioOutput);
+      QList<QString> list = plugin->availableDevices(QAudio::AudioOutput);
+
       if (list.size() > 0) {
-         return QAudioDeviceInfo(QLatin1String("default"), list.at(0), QAudio::AudioOutput);
+         return QAudioDeviceInfo("default", list.at(0), QAudio::AudioOutput);
       }
    }
 #endif
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   return QAudioDeviceInfo(QLatin1String("builtin"), QAudioDeviceInfoInternal::defaultOutputDevice(), QAudio::AudioOutput);
+   return QAudioDeviceInfo("builtin", QAudioDeviceInfoInternal::defaultOutputDevice(), QAudio::AudioOutput);
 #endif
 #endif
 
    return QAudioDeviceInfo();
 }
 
-QAbstractAudioDeviceInfo *QAudioDeviceFactory::audioDeviceInfo(const QString &realm, const QByteArray &handle,
+QAbstractAudioDeviceInfo *QAudioDeviceFactory::audioDeviceInfo(const QString &realm, const QString &handle,
       QAudio::Mode mode)
 {
    QAbstractAudioDeviceInfo *rc = 0;
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   if (realm == QLatin1String("builtin")) {
+   if (realm == "builtin") {
       return new QAudioDeviceInfoInternal(handle, mode);
    }
 #endif
 #endif
+
 #if !defined(QT_NO_SETTINGS)
-   QAudioEngineFactoryInterface *plugin =
-      qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance(realm));
+   QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance(realm));
 
    if (plugin) {
       rc = plugin->createDeviceInfo(handle, mode);
    }
 #endif
+
    return rc == 0 ? new QNullDeviceInfo() : rc;
 }
 
@@ -315,7 +313,7 @@ QAbstractAudioInput *QAudioDeviceFactory::createInputDevice(QAudioDeviceInfo con
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   if (deviceInfo.realm() == QLatin1String("builtin")) {
+   if (deviceInfo.realm() == "builtin") {
       return new QAudioInputPrivate(deviceInfo.handle(), format);
    }
 #endif
@@ -341,15 +339,14 @@ QAbstractAudioOutput *QAudioDeviceFactory::createOutputDevice(QAudioDeviceInfo c
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   if (deviceInfo.realm() == QLatin1String("builtin")) {
+   if (deviceInfo.realm() == "builtin") {
       return new QAudioOutputPrivate(deviceInfo.handle(), format);
    }
 #endif
 #endif
 
 #if  !defined(QT_NO_SETTINGS)
-   QAudioEngineFactoryInterface *plugin =
-      qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance(deviceInfo.realm()));
+   QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(loader()->instance(deviceInfo.realm()));
 
    if (plugin) {
       return plugin->createOutput(deviceInfo.handle(), format);
@@ -357,6 +354,4 @@ QAbstractAudioOutput *QAudioDeviceFactory::createOutputDevice(QAudioDeviceInfo c
 #endif
    return new QNullOutputDevice();
 }
-
-QT_END_NAMESPACE
 

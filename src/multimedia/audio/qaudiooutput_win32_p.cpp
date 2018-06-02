@@ -72,8 +72,8 @@ typedef const WAVEFORMATEXTENSIBLE *LPCWAVEFORMATEXTENSIBLE;
 
 QT_BEGIN_NAMESPACE
 
-QAudioOutputPrivate::QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat):
-   settings(audioFormat)
+QAudioOutputPrivate::QAudioOutputPrivate(const QString &device, const QAudioFormat &audioFormat)
+   : settings(audioFormat)
 {
    bytesAvailable = 0;
    buffer_size = 0;
@@ -287,11 +287,11 @@ bool QAudioOutputPrivate::open()
    unsigned long iNumDevs, ii;
    iNumDevs = waveOutGetNumDevs();
    for (ii = 0; ii < iNumDevs; ii++) {
-      if (waveOutGetDevCaps(ii, &woc, sizeof(WAVEOUTCAPS))
-            == MMSYSERR_NOERROR) {
-         QString tmp;
-         tmp = QString((const QChar *)woc.szPname);
-         if (tmp.compare(QLatin1String(m_device)) == 0) {
+
+      if (waveOutGetDevCaps(ii, &woc, sizeof(WAVEOUTCAPS)) == MMSYSERR_NOERROR) {
+         QString tmp = QString::fromStdWString(std::wstring(woc.szPname));
+
+         if (device == "default") {
             devId = ii;
             break;
          }

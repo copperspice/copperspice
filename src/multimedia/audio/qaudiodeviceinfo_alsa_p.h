@@ -25,16 +25,12 @@
 
 #include <alsa/asoundlib.h>
 
-#include <QtCore/qbytearray.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qdebug.h>
-
 #include <QtMultimedia/qaudio.h>
 #include <QtMultimedia/qaudiodeviceinfo.h>
 #include <QtMultimedia/qaudioengine.h>
-
-QT_BEGIN_NAMESPACE
 
 const unsigned int MAX_SAMPLE_RATES = 5;
 const unsigned int SAMPLE_RATES[] =
@@ -45,7 +41,7 @@ class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
    MULTI_CS_OBJECT(QAudioDeviceInfoInternal)
 
  public:
-   QAudioDeviceInfoInternal(QByteArray dev, QAudio::Mode mode);
+   QAudioDeviceInfoInternal(QString dev, QAudio::Mode mode);
    ~QAudioDeviceInfoInternal();
 
    bool testSettings(const QAudioFormat &format) const;
@@ -61,9 +57,9 @@ class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
    QList<QAudioFormat::Endian> byteOrderList() override;
    QList<QAudioFormat::SampleType> sampleTypeList() override;
 
-   static QByteArray defaultInputDevice();
-   static QByteArray defaultOutputDevice();
-   static QList<QByteArray> availableDevices(QAudio::Mode);
+   static QString defaultInputDevice();
+   static QString defaultOutputDevice();
+   static QList<QString> availableDevices(QAudio::Mode);
 
  private:
    bool open();
@@ -88,8 +84,6 @@ class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
    snd_pcm_t *handle;
    snd_pcm_hw_params_t *params;
 };
-
-QT_END_NAMESPACE
 
 #endif
 
