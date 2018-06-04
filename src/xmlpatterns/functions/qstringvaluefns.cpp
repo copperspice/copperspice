@@ -190,8 +190,7 @@ Item NormalizeUnicodeFN::evaluateSingleton(const DynamicContext::Ptr &context) c
       }
    }
 
-   return AtomicString::fromValue(arg.stringValue().normalized(
-                                     static_cast<QString::NormalizationForm>(normForm)));
+   return AtomicString::fromValue(arg.stringValue().normalized(static_cast<QString::NormalizationForm>(normForm)));
 }
 
 Expression::Ptr NormalizeUnicodeFN::compress(const StaticContext::Ptr &context)
@@ -227,30 +226,34 @@ int NormalizeUnicodeFN::determineNormalizationForm(const DynamicContext::Ptr &co
    const QString strRepr(m_operands.last()->evaluateSingleton(context).stringValue().trimmed().toUpper());
 
    /* TODO. Put these values in a QHash for faster lookup. Keep thread safety in mind. */
+
    if (strRepr.isEmpty()) {
       return -1;
-   } else if (strRepr == QLatin1String("NFC")) {
+
+   } else if (strRepr == "NFC") {
       return QString::NormalizationForm_C;
-   } else if (strRepr == QLatin1String("NFD")) {
+
+   } else if (strRepr == "NFD") {
       return QString::NormalizationForm_D;
-   } else if (strRepr == QLatin1String("NFKC")) {
+
+   } else if (strRepr == "NFKC") {
       return QString::NormalizationForm_KC;
-   } else if (strRepr == QLatin1String("NFKD")) {
+
+   } else if (strRepr == "NFKD") {
       return QString::NormalizationForm_KD;
+
    } else {
       /* What form is FULLY_NORMALIZED? Is a code path available for that somewhere? */
-      context->error(QtXmlPatterns::tr("The normalization form %1 is "
-                                       "unsupported. The supported forms are "
-                                       "%2, %3, %4, and %5, and none, i.e. "
-                                       "the empty string (no normalization).")
-                     .formatArg(formatKeyword(strRepr))
-                     .formatArg(formatKeyword("NFC"))
-                     .formatArg(formatKeyword("NFD"))
-                     .formatArg(formatKeyword("NFKC"))
-                     .formatArg(formatKeyword("NFKD")),
-                     ReportContext::FOCH0003,
-                     this);
-      return QString::NormalizationForm_C; /* Silence compiler warning. */
+      context->error(QtXmlPatterns::tr("The normalization form %1 is unsupported. The supported forms are "
+                  "%2, %3, %4, %5, and no normalization.")
+                  .formatArg(formatKeyword(strRepr))
+                  .formatArg(formatKeyword("NFC"))
+                  .formatArg(formatKeyword("NFD"))
+                  .formatArg(formatKeyword("NFKC"))
+                  .formatArg(formatKeyword("NFKD")),
+                  ReportContext::FOCH0003, this);
+
+      return QString::NormalizationForm_C;
    }
 }
 

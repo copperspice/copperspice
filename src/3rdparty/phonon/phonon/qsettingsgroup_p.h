@@ -41,16 +41,12 @@ class QSettingsGroup
 {
     public:
         inline QSettingsGroup(QSettings *settings, const QString &name)
-            : m_mutableSettings(settings),
-            m_settings(settings),
-            m_group(name + QLatin1Char('/'))
+            : m_mutableSettings(settings), m_settings(settings), m_group(name + '/')
         {
         }
 
         inline QSettingsGroup(const QSettings *settings, const QString &name)
-            : m_mutableSettings(0),
-            m_settings(settings),
-            m_group(name + QLatin1Char('/'))
+            : m_mutableSettings(0), m_settings(settings), m_group(name + '/')
         {
         }
 

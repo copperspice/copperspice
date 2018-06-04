@@ -51,12 +51,12 @@ class QSslContext
    void setSessionASN1(const QByteArray &sessionASN1);
    int sessionTicketLifeTimeHint() const;
 
-#if OPENSSL_VERSION_NUMBER >= 0x1000100fL && !defined(OPENSSL_NO_NEXTPROTONEG)
+#if OPENSSL_VERSION_NUMBER >= 0x1000100fL && ! defined(OPENSSL_NO_NEXTPROTONEG)
    // must be public because we want to use it from an OpenSSL callback
 
    struct NPNContext {
-      NPNContext() : data(0), len(0),
-         status(QSslConfiguration::NextProtocolNegotiationNone)
+      NPNContext()
+         : data(0), len(0), status(QSslConfiguration::NextProtocolNegotiationNone)
       {
       }
 

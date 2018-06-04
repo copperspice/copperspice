@@ -407,7 +407,7 @@ class QXmlSimpleReaderPrivate
 
    // The limit to the amount of times the DTD parsing functions can be called
    // for the DTD currently being parsed.
-   static const int dtdRecursionLimit = 2;
+   constexpr static int dtdRecursionLimit = 2;
 
    // The maximum amount of characters an entity value may contain, after expansion.
    static const int entityCharacterLimit = 1024;
@@ -496,63 +496,9 @@ class QXmlSimpleReaderPrivate
    friend class QXmlSimpleReaderLocator;
 };
 
-/*!
-    \class QXmlParseException
-    \reentrant
-    \brief The QXmlParseException class is used to report errors with
-    the QXmlErrorHandler interface.
+constexpr int QXmlSimpleReaderPrivate::dtdRecursionLimit;
 
-    \inmodule QtXml
-    \ingroup xml-tools
-
-    The XML subsystem constructs an instance of this class when it
-    detects an error. You can retrieve the place where the error
-    occurred using systemId(), publicId(), lineNumber() and
-    columnNumber(), along with the error message(). The possible error
-    messages are:
-
-
-    \list
-        \o "no error occurred"
-        \o "error triggered by consumer"
-        \o "unexpected end of file"
-        \o "more than one document type definition"
-        \o "error occurred while parsing element"
-        \o "tag mismatch"
-        \o "error occurred while parsing content"
-        \o "unexpected character"
-        \o "invalid name for processing instruction"
-        \o "version expected while reading the XML declaration"
-        \o "wrong value for standalone declaration"
-        \o "encoding declaration or standalone declaration expected while reading the XML declaration"
-        \o "standalone declaration expected while reading the XML declaration"
-        \o "error occurred while parsing document type definition"
-        \o "letter is expected"
-        \o "error occurred while parsing comment"
-        \o "error occurred while parsing reference"
-        \o "internal general entity reference not allowed in DTD"
-        \o "external parsed general entity reference not allowed in attribute value"
-        \o "external parsed general entity reference not allowed in DTD"
-        \o "unparsed entity reference n wrong context"
-        \o "recursive entities"
-        \o "error in the text declaration of an external entity"
-    \endlist
-
-    Note that, if you want to display these error messages to your
-    application's users, they will be displayed in English unless
-    they are explicitly translated.
-
-    \sa QXmlErrorHandler, QXmlReader
-*/
-
-/*!
-    Constructs a parse exception with the error string \a name for
-    column \a c and line \a l for the public identifier \a p and the
-    system identifier \a s.
-*/
-
-QXmlParseException::QXmlParseException(const QString &name, int c, int l,
-                                       const QString &p, const QString &s)
+QXmlParseException::QXmlParseException(const QString &name, int c, int l, const QString &p, const QString &s)
    : d(new QXmlParseExceptionPrivate)
 {
    d->msg = name;
@@ -562,102 +508,47 @@ QXmlParseException::QXmlParseException(const QString &name, int c, int l,
    d->sys = s;
 }
 
-/*!
-    Creates a copy of \a other.
-*/
 QXmlParseException::QXmlParseException(const QXmlParseException &other) :
    d(new QXmlParseExceptionPrivate(*other.d))
 {
-
 }
 
-/*!
-    Destroys the QXmlParseException.
-*/
 QXmlParseException::~QXmlParseException()
 {
 }
 
-/*!
-    Returns the error message.
-*/
 QString QXmlParseException::message() const
 {
    return d->msg;
 }
-/*!
-    Returns the column number where the error occurred.
-*/
+
 int QXmlParseException::columnNumber() const
 {
    return d->column;
 }
-/*!
-    Returns the line number where the error occurred.
-*/
+
 int QXmlParseException::lineNumber() const
 {
    return d->line;
 }
-/*!
-    Returns the public identifier where the error occurred.
-*/
+
 QString QXmlParseException::publicId() const
 {
    return d->pub;
 }
-/*!
-    Returns the system identifier where the error occurred.
-*/
+
 QString QXmlParseException::systemId() const
 {
    return d->sys;
 }
 
-
-/*!
-    \class QXmlLocator
-    \reentrant
-    \brief The QXmlLocator class provides the XML handler classes with
-    information about the parsing position within a file.
-
-    \inmodule QtXml
-    \ingroup xml-tools
-
-    The reader reports a QXmlLocator to the content handler before it
-    starts to parse the document. This is done with the
-    QXmlContentHandler::setDocumentLocator() function. The handler
-    classes can now use this locator to get the position (lineNumber()
-    and columnNumber()) that the reader has reached.
-*/
-
-/*!
-    Constructor.
-*/
 QXmlLocator::QXmlLocator()
 {
 }
 
-/*!
-    Destructor.
-*/
 QXmlLocator::~QXmlLocator()
 {
 }
-
-/*!
-    \fn int QXmlLocator::columnNumber() const
-
-    Returns the column number (starting at 1) or -1 if there is no
-    column number available.
-*/
-
-/*!
-    \fn int QXmlLocator::lineNumber() const
-
-    Returns the line number (starting at 1) or -1 if there is no line
-    number available.
-*/
 
 class QXmlSimpleReaderLocator : public QXmlLocator
 {
@@ -705,37 +596,11 @@ class QXmlNamespaceSupportPrivate
    NamespaceMap ns;
 };
 
-/*!
-    \class QXmlNamespaceSupport
-    \since 4.4
-    \reentrant
-    \brief The QXmlNamespaceSupport class is a helper class for XML
-    readers which want to include namespace support.
-
-    \inmodule QtXml
-    \ingroup xml-tools
-
-    You can set the prefix for the current namespace with setPrefix(),
-    and get the list of current prefixes (or those for a given URI)
-    with prefixes(). The namespace URI is available from uri(). Use
-    pushContext() to start a new namespace context, and popContext()
-    to return to the previous namespace context. Use splitName() or
-    processName() to split a name into its prefix and local name.
-
-    \sa {Namespace Support via Features}
-*/
-
-/*!
-    Constructs a QXmlNamespaceSupport.
-*/
 QXmlNamespaceSupport::QXmlNamespaceSupport()
 {
    d = new QXmlNamespaceSupportPrivate;
 }
 
-/*!
-    Destroys a QXmlNamespaceSupport.
-*/
 QXmlNamespaceSupport::~QXmlNamespaceSupport()
 {
    delete d;
@@ -760,7 +625,8 @@ QString QXmlNamespaceSupport::prefix(const QString &uri) const
          return itc.key();
       }
    }
-   return QLatin1String("");
+
+   return QString();
 }
 
 QString QXmlNamespaceSupport::uri(const QString &prefix) const

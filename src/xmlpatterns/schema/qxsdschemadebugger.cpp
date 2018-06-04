@@ -124,11 +124,13 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
       }
 
       const XsdAttributeUse::List uses = complexType->attributeUses();
-      qDebug("   %d attributes", uses.count());
+      qDebug("   %ld attributes", uses.count());
+
       for (int i = 0; i < uses.count(); ++i) {
          qDebug("      attr: %s", qPrintable(uses.at(i)->attribute()->displayName(m_namePool)));
       }
       qDebug("   has attribute wildcard: %s", complexType->attributeWildcard() ? "yes" : "no");
+
       if (complexType->attributeWildcard()) {
          dumpWildcard(complexType->attributeWildcard());
       }
@@ -136,6 +138,7 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
       if (complexType->contentType()->particle()) {
          dumpParticle(complexType->contentType()->particle(), 5);
       }
+
    } else {
       qDebug("\n+++ Simple Type +++");
       qDebug("Name: %s", qPrintable(type->displayName(m_namePool)));

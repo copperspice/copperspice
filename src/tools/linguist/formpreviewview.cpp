@@ -276,7 +276,7 @@ static void retranslateTargets(
       text = msg->translation();
    }
    if (text.isEmpty() && !tsv.value().isEmpty()) {
-      text = QLatin1Char('#') + sourceText;
+      text = '#' + sourceText;
    }
 
    for (const TranslatableEntry & target : targets) {

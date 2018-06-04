@@ -2453,8 +2453,8 @@ bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex
    int absSlotIndex = slotCounter + metaObject()->methodOffset();
 
 
-   /*  BROOM (script)
-       bool ok = QMetaObject::connect(sender, signalIndex, this, absSlotIndex, type);
+   /* BROOM (script)
+      bool ok = QMetaObject::connect(sender, signalIndex, this, absSlotIndex, type);
    */
 
    // temp value, remove when above code comes back in
