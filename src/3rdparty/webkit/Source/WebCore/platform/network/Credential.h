@@ -20,14 +20,14 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #ifndef Credential_h
 #define Credential_h
 
 #include "PlatformString.h"
 
-#define CERTIFICATE_CREDENTIALS_SUPPORTED ((PLATFORM(MAC) || PLATFORM(IOS)) && !defined(BUILDING_ON_LEOPARD))
+#define CERTIFICATE_CREDENTIALS_SUPPORTED (PLATFORM(MAC) || PLATFORM(IOS))
 
 #if CERTIFICATE_CREDENTIALS_SUPPORTED
 #include <Security/SecBase.h>
@@ -58,20 +58,20 @@ public:
 #if CERTIFICATE_CREDENTIALS_SUPPORTED
     Credential(SecIdentityRef identity, CFArrayRef certificates, CredentialPersistence);
 #endif
-    
+
     bool isEmpty() const;
-    
+
     const String& user() const;
     const String& password() const;
     bool hasPassword() const;
     CredentialPersistence persistence() const;
-    
+
 #if CERTIFICATE_CREDENTIALS_SUPPORTED
     SecIdentityRef identity() const;
     CFArrayRef certificates() const;
     CredentialType type() const;
-#endif    
-    
+#endif
+
 private:
     String m_user;
     String m_password;
@@ -85,6 +85,6 @@ private:
 
 bool operator==(const Credential& a, const Credential& b);
 inline bool operator!=(const Credential& a, const Credential& b) { return !(a == b); }
-    
+
 };
 #endif

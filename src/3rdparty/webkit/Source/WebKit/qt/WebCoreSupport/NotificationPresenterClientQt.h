@@ -60,16 +60,16 @@ public:
 
     void close();
     void close(Timer<NotificationWrapper>*);
-    const QString title() const;
-    const QString message() const;
-    const QByteArray iconData() const;
-    const QUrl openerPageUrl() const;
+    const QString title() const override;
+    const QString message() const override;
+    const QByteArray iconData() const override;
+    const QUrl openerPageUrl() const override;
 
 public :
     WEB_CS_SLOT_1(Public, void notificationClosed())
-    WEB_CS_SLOT_2(notificationClosed) 
+    WEB_CS_SLOT_2(notificationClosed)
     WEB_CS_SLOT_1(Public, void notificationClicked())
-    WEB_CS_SLOT_2(notificationClicked) 
+    WEB_CS_SLOT_2(notificationClicked)
 
 public:
 #ifndef QT_NO_SYSTEMTRAYICON
