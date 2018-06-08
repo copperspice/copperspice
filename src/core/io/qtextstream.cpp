@@ -700,7 +700,8 @@ inline void QTextStreamPrivate::write(const QString &data)
 
    } else {
       writeBuffer += data;
-      if (writeBuffer.size() > QTEXTSTREAM_BUFFERSIZE) {
+
+      if (writeBuffer.size_storage() > QTEXTSTREAM_BUFFERSIZE) {
          flushWriteBuffer();
       }
    }
