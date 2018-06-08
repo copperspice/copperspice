@@ -80,6 +80,11 @@ class QIODevicePrivateLinearBuffer
 
    int read(char *target, int size) {
       int r = qMin(size, len);
+
+      if (r == 0) {
+         return 0;
+      }
+
       memcpy(target, first, r);
       len   -= r;
       first += r;
@@ -171,7 +176,11 @@ class QIODevicePrivateLinearBuffer
       if (newCapacity > capacity) {
          // allocate more space
          char *newBuf = new char[newCapacity];
-         memmove(newBuf + moveOffset, first, len);
+
+         if (first != nullptr && len != 0) {
+            memmove(newBuf + moveOffset, first, len);
+         }
+
          delete [] buf;
 
          buf = newBuf;
