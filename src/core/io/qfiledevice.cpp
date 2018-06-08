@@ -302,14 +302,18 @@ qint64 QFileDevice::readLineData(char *data, qint64 maxlen)
 qint64 QFileDevice::readData(char *data, qint64 len)
 {
    Q_D(QFileDevice);
+
    unsetError();
-   if (!d->ensureFlushed()) {
+
+   if (! d->ensureFlushed()) {
       return -1;
    }
 
    const qint64 read = d->fileEngine->read(data, len);
+
    if (read < 0) {
       QFileDevice::FileError err = d->fileEngine->error();
+
       if (err == QFileDevice::UnspecifiedError) {
          err = QFileDevice::ReadError;
       }

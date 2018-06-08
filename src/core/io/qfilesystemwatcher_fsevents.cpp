@@ -39,7 +39,7 @@
 #include <CoreFoundation/CFRunLoop.h>
 #include <CoreFoundation/CFUUID.h>
 
-#if !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
 #endif
 
@@ -88,9 +88,11 @@ static void addPathToHash(PathHash &pathHash, const QString &key, const QFileInf
 static void removePathFromHash(PathHash &pathHash, const QString &key, const QString &path)
 {
    PathInfoList &list = pathHash[key];
+
    // We make the assumption that the list contains unique paths
    PathInfoList::iterator End = list.end();
-   PathInfoList::iterator it = list.begin();
+   PathInfoList::iterator it  = list.begin();
+
    while (it != End) {
       if (it->originalPath == path) {
          list.erase(it);
@@ -115,8 +117,8 @@ static QString createFSStreamPath(const QString &absolutePath)
 {
    // The path returned has a trailing slash, so ensure that here.
    QString string = absolutePath;
-   string.reserve(string.size() + 1);
-   string.append(QLatin1Char('/'));
+   string.append('/');
+
    return string;
 }
 

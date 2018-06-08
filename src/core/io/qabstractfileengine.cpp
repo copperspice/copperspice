@@ -739,10 +739,6 @@ qint64 QAbstractFileEngine::read(char *data, qint64 maxlen)
    return -1;
 }
 
-/*!
-    Writes \a len bytes from \a data to the file. Returns the number
-    of characters written on success; otherwise returns -1.
-*/
 qint64 QAbstractFileEngine::write(const char *data, qint64 len)
 {
    Q_UNUSED(data);
@@ -750,26 +746,26 @@ qint64 QAbstractFileEngine::write(const char *data, qint64 len)
    return -1;
 }
 
-/*!
-    This function reads one line, terminated by a '\n' character, from the
-    file info \a data. At most \a maxlen characters will be read. The
-    end-of-line character is included.
-*/
 qint64 QAbstractFileEngine::readLine(char *data, qint64 maxlen)
 {
    qint64 readSoFar = 0;
+
    while (readSoFar < maxlen) {
       char c;
       qint64 readResult = read(&c, 1);
+
       if (readResult <= 0) {
          return (readSoFar > 0) ? readSoFar : -1;
       }
+
       ++readSoFar;
       *data++ = c;
+
       if (c == '\n') {
          return readSoFar;
       }
    }
+
    return readSoFar;
 }
 

@@ -257,6 +257,7 @@ bool QFSFileEnginePrivate::nativeSeek(qint64 pos)
    LARGE_INTEGER currentFilePos;
    LARGE_INTEGER offset;
    offset.QuadPart = pos;
+
    if (!::SetFilePointerEx(fileHandle, offset, &currentFilePos, FILE_BEGIN)) {
       q->setError(QFile::UnspecifiedError, qt_error_string());
       return false;
@@ -294,10 +295,12 @@ qint64 QFSFileEnginePrivate::nativeRead(char *data, qint64 maxlen)
    static const DWORD maxBlockSize = 32 * 1024 * 1024;
 
    qint64 totalRead = 0;
+
    do {
       DWORD blockSize = qMin(bytesToRead, maxBlockSize);
       DWORD bytesRead;
-      if (!ReadFile(fileHandle, data + totalRead, blockSize, &bytesRead, NULL)) {
+
+      if (! ReadFile(fileHandle, data + totalRead, blockSize, &bytesRead, NULL)) {
          if (totalRead == 0) {
             // Note: only return failure if the first ReadFile fails.
             q->setError(QFile::ReadError, qt_error_string());
@@ -305,12 +308,16 @@ qint64 QFSFileEnginePrivate::nativeRead(char *data, qint64 maxlen)
          }
          break;
       }
+
       if (bytesRead == 0) {
          break;
       }
+
       totalRead += bytesRead;
       bytesToRead -= bytesRead;
+
    } while (totalRead < maxlen);
+
    return qint64(totalRead);
 }
 

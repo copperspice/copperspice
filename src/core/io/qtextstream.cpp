@@ -477,7 +477,7 @@ void QTextStreamPrivate::flushWriteBuffer()
    QFileDevice *file = qobject_cast<QFileDevice *>(device);
    bool flushed = !file || file->flush();
 
-   if (!flushed || bytesWritten != qint64(data.size())) {
+   if (! flushed || bytesWritten != qint64(data.size())) {
       status = QTextStream::WriteFailed;
    }
 }
@@ -485,9 +485,11 @@ void QTextStreamPrivate::flushWriteBuffer()
 QString QTextStreamPrivate::read(int maxlen)
 {
    QString ret;
+
    if (m_string) {
       lastTokenSize = qMin(maxlen, m_string->size() - stringOffset);
       ret = m_string->mid(stringOffset, lastTokenSize);
+
    } else {
       while (readBuffer.size() - readBufferOffset < maxlen && fillReadBuffer()) ;
       lastTokenSize = qMin(maxlen, readBuffer.size() - readBufferOffset);
@@ -678,11 +680,13 @@ inline void QTextStreamPrivate::restoreToSavedConverterState()
       // we have a saved state
       // that means the converter can be copied
       copyConverterStateHelper(&readConverterState, readConverterSavedState);
+
    } else {
       // the only state we could save was the initial
       // so reset to that
       resetCodecConverterStateHelper(&readConverterState);
    }
+
 #endif
 }
 
@@ -693,6 +697,7 @@ inline void QTextStreamPrivate::write(const QString &data)
    if (m_string) {
       // ### What about seek()??
       m_string->append(data);
+
    } else {
       writeBuffer += data;
       if (writeBuffer.size() > QTEXTSTREAM_BUFFERSIZE) {
@@ -705,16 +710,18 @@ inline void QTextStreamPrivate::write(const QString &data)
 */
 inline bool QTextStreamPrivate::getChar(QChar *ch)
 {
-   if ((m_string && stringOffset == m_string->size())
-         || (device && readBuffer.isEmpty() && !fillReadBuffer())) {
+   if ((m_string && stringOffset == m_string->size()) || (device && readBuffer.isEmpty() && ! fillReadBuffer())) {
+
       if (ch) {
          *ch = 0;
       }
       return false;
    }
+
    if (ch) {
       *ch = *readPtr();
    }
+
    consume(1);
    return true;
 }
@@ -982,11 +989,13 @@ qint64 QTextStream::pos() const
       // Rewind the device to get to the current position Ensure that
       // readBufferOffset is unaffected by fillReadBuffer()
       int oldReadBufferOffset = d->readBufferOffset + d->readConverterSavedStateOffset;
+
       while (d->readBuffer.size() < oldReadBufferOffset) {
-         if (!thatd->fillReadBuffer(1)) {
+         if (! thatd->fillReadBuffer(1)) {
             return qint64(-1);
          }
       }
+
       thatd->readBufferOffset = oldReadBufferOffset;
       thatd->readConverterSavedStateOffset = 0;
 

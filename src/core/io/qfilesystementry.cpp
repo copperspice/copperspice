@@ -346,7 +346,7 @@ bool QFileSystemEntry::isRoot() const
 {
    resolveFilePath();
 
-  if (m_filePath == QLatin1String("/")) {
+  if (m_filePath == "/") {
       return true;
    }
 

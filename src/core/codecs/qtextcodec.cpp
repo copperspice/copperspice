@@ -718,10 +718,13 @@ QList<QByteArray> QTextCodec::availableCodecs()
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
    QFactoryLoader *l = loader();
-   QStringList keys = l->keys();
+   QStringList keys  = l->keys();
+
    for (int i = 0; i < keys.size(); ++i) {
-      if (!keys.at(i).startsWith(QLatin1String("MIB: "))) {
+
+      if (!keys.at(i).startsWith("MIB: ")) {
          QByteArray name = keys.at(i).toLatin1();
+
          if (!codecs.contains(name)) {
             codecs += name;
          }
@@ -761,8 +764,9 @@ QList<int> QTextCodec::availableMibs()
    QStringList keys = l->keys();
 
    for (int i = 0; i < keys.size(); ++i) {
-      if (keys.at(i).startsWith(QLatin1String("MIB: "))) {
+      if (keys.at(i).startsWith("MIB: ")) {
          int mib = keys.at(i).mid(5).toInteger<int>();
+
          if (!codecs.contains(mib)) {
             codecs += mib;
          }

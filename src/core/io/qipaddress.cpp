@@ -250,7 +250,7 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
 
          IPv4Address ip4;
 
-         if (!parseIp4Internal(ip4, ptr, false)) {
+         if (! parseIp4Internal(ip4, ptr, false)) {
             return begin + (ptr - buffer.data());
          }
 
