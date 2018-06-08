@@ -68,6 +68,7 @@ static bool parseIp4Internal(IPv4Address &address, Buffer::const_iterator iter, 
 bool parseIp4(IPv4Address &address, const QString::const_iterator begin, QString::const_iterator end)
 {
    Q_ASSERT(begin != end);
+
    Buffer buffer;
 
    if (checkedToAscii(buffer, begin, end) != end) {
@@ -157,8 +158,8 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
    Buffer buffer;
    QString::const_iterator iter = checkedToAscii(buffer, begin, end);
 
-   if (iter == end) {
-      return end;
+   if (iter != end) {
+      return iter;
    }
 
    const char *ptr = buffer.data();
@@ -179,13 +180,13 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
 
    // IPv4-in-IPv6 addresses are stricter in what they accept
    if (dotCount != 0 && dotCount != 3) {
-      return end;
+      return begin;
    }
 
    memset(address, 0, sizeof address);
    if (colonCount == 2 && end - begin == 2) {
       // "::"
-      return end;
+      return begin;
    }
 
    // if there's a double colon ("::"), this is how many zeroes it means
@@ -198,7 +199,7 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
       zeroWordsToFill = 9 - colonCount;
 
    } else if (colonCount < 2 || colonCount > 7) {
-      return end;
+      return begin;
 
    } else {
       zeroWordsToFill = 8 - colonCount;
