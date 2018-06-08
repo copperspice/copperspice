@@ -56,8 +56,9 @@ class QResourceRoot
    }
 
    int hash(int node) const;
-   QString name(int node) const;
+   QString getName(int node) const;
    short flags(int node) const;
+
  public:
    mutable QAtomicInt ref;
 
@@ -465,26 +466,25 @@ inline int QResourceRoot::hash(int node) const
                   (names[name_offset + 2] << 8) + (names[name_offset + 3] << 0);
 }
 
-inline QString QResourceRoot::name(int node) const
+inline QString QResourceRoot::getName(int node) const
 {
    if (! node) {
-      // root
       return QString();
    }
-   const int offset = findOffset(node);
 
    QString retval;
 
-   int name_offset         = (tree[offset + 0] << 24) + (tree[offset + 1] << 16) + (tree[offset + 2] << 8) + (tree[offset + 3] << 0);
+   const int offset = findOffset(node);
+
+   int name_offset  = (tree[offset + 0] << 24) + (tree[offset + 1] << 16)
+                  + (tree[offset + 2] << 8) + (tree[offset + 3] << 0);
+
    const short name_length = (names[name_offset + 0] << 8) + (names[name_offset + 1] << 0);
 
    name_offset += 2;
    name_offset += 4;    // jump past hash
 
-   for (int i = 0; i < name_length * 2; i += 2) {
-      char32_t tmp = static_cast<char32_t>(names[name_offset + i]) << 8 | names[name_offset + i + 1];
-      retval.append(tmp);
-   }
+   retval = QString::fromUtf8((const char *)names + name_offset, name_length);
 
    return retval;
 }
@@ -573,7 +573,7 @@ int QResourceRoot::findNode(const QString &xPath, const QLocale &locale) const
 
          for (; sub_node < child + child_count && hash(sub_node) == hashValue; ++sub_node) {
 
-            if (name(sub_node) == segment) {
+            if (getName(sub_node) == segment) {
                found = true;
 
                int offset = findOffset(sub_node);
@@ -687,7 +687,7 @@ QStringList QResourceRoot::children(int node) const
                             (tree[offset + 2] << 8) + (tree[offset + 3] << 0);
 
       for (int i = child_off; i < child_off + child_count; ++i) {
-         ret << name(i);
+         ret << getName(i);
       }
    }
    return ret;
