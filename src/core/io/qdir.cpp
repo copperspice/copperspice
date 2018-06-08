@@ -1491,9 +1491,9 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
 
    QString retval;
 
-   auto len     = name.size();
-   int up       = 0;
-   int prefix   = 0;
+   auto len    = name.size();
+   int up      = 0;
+   int prefix  = 0;
 
    QString::const_iterator iter = name.begin();
    QString::const_iterator end  = name.end() - 1;
@@ -1503,7 +1503,6 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
       prefix = 2;
 
 #ifdef Q_OS_WIN
-
    } else if (len >= 2 && name[1] == ':') {
       // ignore the drive letter
       prefix = (len > 2 && name[2] == '/') ? 3 : 2;
@@ -1518,8 +1517,17 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
    iter += prefix;
 
    if (name.endsWith('/')) {
+
+      if (iter == name.end()) {
+         // entire path is the prefix
+         return name;
+      }
+
       retval.prepend('/');
-      --end;
+
+      if (iter != end) {
+         --end;
+      }
    }
 
    bool done = false;
@@ -1547,11 +1555,11 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
          continue;
       }
 
-      // detect up dir
+      // detect up directory
       if (end != iter && *end == '.' && *(end - 1) == '.' && (end == iter + 1 || *(end - 2) == '/')) {
          ++up;
 
-         if (end == iter || end -1 == iter) {
+         if (end == iter || end - 1 == iter) {
             break;
          }
 
@@ -1560,7 +1568,7 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
       }
 
       // prepend a slash before copying when not empty
-      if (! up && ! retval.isEmpty() && ! retval.startsWith('/')) {
+      if (up == 0 && ! retval.isEmpty() && ! retval.startsWith('/')) {
          retval.prepend('/');
       }
 
@@ -1579,7 +1587,7 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
             break;
          }
 
-         if (! up) {
+         if (up == 0) {
             retval.prepend(*end);
          }
 
@@ -1591,8 +1599,8 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
          --end;
       }
 
-      // decrement up after copying/skipping
-      if (up) {
+      // decrement after copying/skipping
+      if (up != 0) {
          --up;
       }
    }
