@@ -108,7 +108,6 @@ QJsonValue QJsonValue::fromVariant(const QVariant &variant)
       case QVariant::Bool:
          return QJsonValue(variant.toBool());
 
-      case QMetaType::Float:
       case QVariant::Int:
       case QVariant::Double:
       case QVariant::LongLong:
@@ -131,16 +130,16 @@ QJsonValue QJsonValue::fromVariant(const QVariant &variant)
       case QVariant::Map:
          return QJsonValue(QJsonObject::fromVariantMap(variant.toMap()));
 
-      case QMetaType::QJsonValue:
+      case QVariant::JsonValue:
          return variant.toJsonValue();
 
-      case QMetaType::QJsonObject:
+      case QVariant::JsonObject:
          return variant.toJsonObject();
 
-      case QMetaType::QJsonArray:
+      case QVariant::JsonArray:
          return variant.toJsonArray();
 
-      case QMetaType::QJsonDocument: {
+      case QVariant::JsonDocument: {
             QJsonDocument doc = variant.toJsonDocument();
             return doc.isArray() ? QJsonValue(doc.array()) : QJsonValue(doc.object());
          }
@@ -175,6 +174,9 @@ QVariant QJsonValue::toVariant() const
 
       case Type::Object:
          return toObject().toVariantMap();
+
+      default:
+         break;
    }
 
    return QVariant();
