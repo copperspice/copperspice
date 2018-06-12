@@ -377,7 +377,7 @@ static bool isNull(const QVariant::Private *d)
    switch (d->type) {
 
       case QVariant::Char32:
-         return v_cast<QChar32>(d) == '\0';
+         return *v_cast<QChar32>(d) == '\0';
          break;
 
       case QVariant::String8:
@@ -1532,10 +1532,8 @@ const QVariant::Handler qt_kernel_variant_handler = {
    construct,
    clear,
    isNull,
-#ifndef QT_NO_DATASTREAM
    0,
    0,
-#endif
    compare,
    convert,
    0,
@@ -1600,20 +1598,17 @@ QVariant::QVariant(const QVariant &p)
    if (d.is_shared) {
       d.data.shared->ref.ref();
 
-   } else if (p.d.type > Char && p.d.type < QVariant::UserType) {
+   } else if (p.d.type >= QVariant::FirstConstructedType && p.d.type < QVariant::UserType) {
       handler->construct(&d, p.constData());
       d.is_null = p.d.is_null;
    }
 }
-
-#ifndef QT_NO_DATASTREAM
 
 QVariant::QVariant(QDataStream &s)
 {
    d.is_null = true;
    s >> *this;
 }
-#endif
 
 QVariant::QVariant(Type type)
 {
@@ -1919,7 +1914,7 @@ QVariant &QVariant::operator=(const QVariant &variant)
       variant.d.data.shared->ref.ref();
       d = variant.d;
 
-   } else if (variant.d.type > Char && variant.d.type < UserType) {
+   } else if (variant.d.type >= QVariant::FirstConstructedType && variant.d.type < UserType) {
       d.type = variant.d.type;
       handler->construct(&d, variant.constData());
       d.is_null = variant.d.is_null;
@@ -1956,7 +1951,9 @@ const QString8 &QVariant::typeName() const
 
 void QVariant::clear()
 {
-   if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type < UserType && d.type > Char)) {
+   if ((d.is_shared && ! d.data.shared->ref.deref()) || (! d.is_shared &&
+                  d.type >= QVariant::FirstConstructedType && d.type < QVariant::UserType)) {
+
       handler->clear(&d);
    }
 
@@ -2146,7 +2143,7 @@ QDataStream &operator<<(QDataStream &s, const QVariant::Type p)
 
 
 template <typename T>
-inline T qVariantToHelper(const QVariant::Private &d, QVariant::Type t, const QVariant::Handler *handler, T * = 0)
+inline T qVariantToHelper(const QVariant::Private &d, QVariant::Type t, const QVariant::Handler *handler, T * = nullptr)
 {
    if (d.type == t) {
       return *v_cast<T>(&d);
@@ -2154,6 +2151,7 @@ inline T qVariantToHelper(const QVariant::Private &d, QVariant::Type t, const QV
 
    T ret;
    handler->convert(&d, t, &ret, 0);
+
    return ret;
 }
 
@@ -2508,12 +2506,11 @@ bool QVariant::canConvert(Type t) const
    } else if (qCanConvertMatrix[t] & (1 << currentType)) {
       // found a match in the matrix
       return true;
-
    }
 
    if (currentType == QMetaType::QJsonValue) {
 
-      switch (t) {
+      switch (static_cast<uint>(t)) {
          case QMetaType::QString:
          case QMetaType::Bool:
          case QMetaType::Int:
@@ -2546,7 +2543,6 @@ bool QVariant::canConvert(Type t) const
    }
 
    switch (t) {
-
       case QVariant::Int:
          return currentType == QVariant::KeySequence || currentType == QMetaType::ULong  ||
                 currentType == QMetaType::Long  || currentType == QMetaType::UShort  ||
@@ -2579,9 +2575,16 @@ bool QVariant::canConvert(Type t) const
       case QVariant::Brush:
          return currentType == QVariant::Color || currentType == QVariant::Pixmap;
 
-      case QMetaType::Long:
-      case QMetaType::Char:
+      case QVariant::Char:
+         return qCanConvertMatrix[QVariant::Int] & (1 << currentType) || currentType == QVariant::Int;
+
+      default:
+         break;
+   }
+
+   switch (static_cast<uint>(t)) {
       case QMetaType::UChar:
+      case QMetaType::Long:
       case QMetaType::ULong:
       case QMetaType::Short:
       case QMetaType::UShort:
@@ -2643,7 +2646,8 @@ bool QVariant::cmp(const QVariant &v) const
             return toLongLong() == v.toLongLong();
          }
       }
-      if (!v2.canConvert(Type(d.type)) || !v2.convert(Type(d.type))) {
+
+      if (! v2.canConvert(Type(d.type)) || ! v2.convert(Type(d.type))) {
          return false;
       }
    }

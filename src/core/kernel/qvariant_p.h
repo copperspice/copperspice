@@ -23,14 +23,13 @@
 #ifndef QVARIANT_P_H
 #define QVARIANT_P_H
 
-// takes a type, returns the internal void* pointer cast
-// to a pointer of the input type
+// takes a type, returns the internal void* pointer cast to a pointer of the input type
 
 #include <qglobal.h>
 #include <qvariant.h>
 
 template <typename T>
-inline const T *v_cast(const QVariant::Private *d, T * = 0)
+inline const T *v_cast(const QVariant::Private *d, T * = nullptr)
 {
    return ((sizeof(T) > sizeof(QVariant::Private::Data))
            ? static_cast<const T *>(d->data.shared->ptr)
@@ -38,7 +37,7 @@ inline const T *v_cast(const QVariant::Private *d, T * = 0)
 }
 
 template <typename T>
-inline T *v_cast(QVariant::Private *d, T * = 0)
+inline T *v_cast(QVariant::Private *d, T * = nullptr)
 {
    return ((sizeof(T) > sizeof(QVariant::Private::Data))
            ? static_cast<T *>(d->data.shared->ptr)
@@ -46,7 +45,7 @@ inline T *v_cast(QVariant::Private *d, T * = 0)
 }
 
 
-//a simple template that avoids to allocate 2 memory chunks when creating a QVariant
+// simple template that avoids to allocate 2 memory chunks when creating a QVariant
 template <class T> class QVariantPrivateSharedEx : public QVariant::PrivateShared
 {
  public:
@@ -57,51 +56,53 @@ template <class T> class QVariantPrivateSharedEx : public QVariant::PrivateShare
    T m_t;
 };
 
-// constructs a new variant if copy is 0, otherwise copy-constructs
-template <class T>
-inline void v_construct(QVariant::Private *x, const void *copy, T * = 0)
+// constructs a new variant if copy is nullptr, otherwise copy-constructs
+template <class T, typename = typename std::enable_if<(sizeof(T) > sizeof(QVariant::Private::Data))>::type>
+inline void v_construct(QVariant::Private *x, const void *copy, T * = nullptr)
 {
-   if (sizeof(T) > sizeof(QVariant::Private::Data)) {
-      x->data.shared = copy ? new QVariantPrivateSharedEx<T>(*static_cast<const T *>(copy))
-                       : new QVariantPrivateSharedEx<T>;
-      x->is_shared = true;
+   x->data.shared = copy ? new QVariantPrivateSharedEx<T>(*static_cast<const T *>(copy)) : new QVariantPrivateSharedEx<T>;
+   x->is_shared   = true;
+}
+
+template <class T, typename = typename std::enable_if<sizeof(T) <= sizeof(QVariant::Private::Data)>::type, typename = void>
+inline void v_construct(QVariant::Private *x, const void *copy, T * = nullptr)
+{
+   if (copy) {
+      new (&x->data.ptr) T(*static_cast<const T *>(copy));
 
    } else {
-      if (copy) {
-         new (&x->data.ptr) T(*static_cast<const T *>(copy));
-      } else {
-         new (&x->data.ptr) T;
-      }
+      new (&x->data.ptr) T;
+
    }
 }
 
-template <class T>
+template <class T, typename = typename std::enable_if<(sizeof(T) > sizeof(QVariant::Private::Data))>::type>
 inline void v_construct(QVariant::Private *x, const T &t)
 {
-   if (sizeof(T) > sizeof(QVariant::Private::Data)) {
-      x->data.shared = new QVariantPrivateSharedEx<T>(t);
-      x->is_shared = true;
-   } else {
-      new (&x->data.ptr) T(t);
-   }
+   x->data.shared = new QVariantPrivateSharedEx<T>(t);
+   x->is_shared   = true;
+}
+
+template <class T, typename = typename std::enable_if<sizeof(T) <= sizeof(QVariant::Private::Data)>::type, typename = void>
+inline void v_construct(QVariant::Private *x, const T &t)
+{
+   new (&x->data.ptr) T(t);
 }
 
 // deletes the internal structures
-template <class T>
-inline void v_clear(QVariant::Private *d, T * = 0)
+template <class T, typename = typename std::enable_if<(sizeof(T) > sizeof(QVariant::Private::Data))>::type>
+inline void v_clear(QVariant::Private *d, T * = nullptr)
 {
+   // now we need to cast because QVariant::PrivateShared does not have a virtual destructor
+   delete static_cast<QVariantPrivateSharedEx<T>*>(d->data.shared);
+}
 
-   if (sizeof(T) > sizeof(QVariant::Private::Data)) {
-      //now we need to cast
-      //because QVariant::PrivateShared doesn't have a virtual destructor
-      delete static_cast<QVariantPrivateSharedEx<T>*>(d->data.shared);
-
-   } else {
-      v_cast<T>(d)->~T();
-   }
-
+template <class T, typename = typename std::enable_if<sizeof(T) <= sizeof(QVariant::Private::Data)>::type, typename = void>
+inline void v_clear(QVariant::Private *d, T * = nullptr)
+{
+   v_cast<T>(d)->~T();
 }
 
 Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler();
 
-#endif // QVARIANT_P_H
+#endif

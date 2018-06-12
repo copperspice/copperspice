@@ -78,6 +78,9 @@ class Q_CORE_EXPORT QVariant
       ULongLong  = QMetaType::ULongLong,
       Double     = QMetaType::Double,
 
+      // used for range checking
+      FirstConstructedType = QMetaType::QByteArray,
+
       ByteArray  = QMetaType::QByteArray,
       BitArray   = QMetaType::QBitArray,
 
@@ -91,35 +94,35 @@ class Q_CORE_EXPORT QVariant
       RegularExpression = QMetaType::QRegularExpression,
       StringView        = QMetaType::QStringView,
 
-      StringList = QMetaType::QStringList,
-      List       = QMetaType::QVariantList,
-      Map        = QMetaType::QVariantMap,
-      MultiMap   = QMetaType::QVariantMultiMap,
-      Hash       = QMetaType::QVariantHash,
-      MultiHash  = QMetaType::QVariantMultiHash,
+      StringList   = QMetaType::QStringList,
+      List         = QMetaType::QVariantList,
+      Map          = QMetaType::QVariantMap,
+      MultiMap     = QMetaType::QVariantMultiMap,
+      Hash         = QMetaType::QVariantHash,
+      MultiHash    = QMetaType::QVariantMultiHash,
 
-      Date       = QMetaType::QDate,
-      Time       = QMetaType::QTime,
-      DateTime   = QMetaType::QDateTime,
-      Url        = QMetaType::QUrl,
-      Locale     = QMetaType::QLocale,
+      Date         = QMetaType::QDate,
+      Time         = QMetaType::QTime,
+      DateTime     = QMetaType::QDateTime,
+      Url          = QMetaType::QUrl,
+      Locale       = QMetaType::QLocale,
 
-      Rect = QMetaType::QRect,
-      RectF = QMetaType::QRectF,
-      Size = QMetaType::QSize,
-      SizeF = QMetaType::QSizeF,
-      Line = QMetaType::QLine,
-      LineF = QMetaType::QLineF,
-      Point = QMetaType::QPoint,
-      PointF = QMetaType::QPointF,
-      EasingCurve = QMetaType::QEasingCurve,
-      Uuid = QMetaType::QUuid,
-      ModelIndex = QMetaType::QModelIndex,
+      Rect         = QMetaType::QRect,
+      RectF        = QMetaType::QRectF,
+      Size         = QMetaType::QSize,
+      SizeF        = QMetaType::QSizeF,
+      Line         = QMetaType::QLine,
+      LineF        = QMetaType::QLineF,
+      Point        = QMetaType::QPoint,
+      PointF       = QMetaType::QPointF,
+      EasingCurve  = QMetaType::QEasingCurve,
+      Uuid         = QMetaType::QUuid,
+      ModelIndex   = QMetaType::QModelIndex,
 
       JsonValue    = QMetaType::QJsonValue,
       JsonArray    = QMetaType::QJsonArray,
-      JsonObject   = QMetaType::QJsonValue,
-      JsonDocument = QMetaType::QJsonValue,
+      JsonObject   = QMetaType::QJsonObject,
+      JsonDocument = QMetaType::QJsonDocument,
 
       Font = QMetaType::QFont,
       Pixmap = QMetaType::QPixmap,
@@ -450,12 +453,14 @@ inline bool QVariant::isValid() const
 template<typename T>
 inline void QVariant::setValue(const T &v)
 {
-   // if possible we reuse the current QVariant private
+   // reuse the current QVariant private if possible
    const uint type = qMetaTypeId<T>(static_cast<T *>(nullptr));
 
    QVariant::Private &d = data_ptr();
 
-   if (isDetached() && (type == d.type || (type <= uint(QVariant::Char) && d.type <= uint(QVariant::Char)))) {
+   if (isDetached() && (type == d.type || (type < uint(QVariant::FirstConstructedType) &&
+                  d.type < uint(QVariant::FirstConstructedType)))) {
+
       d.type    = type;
       d.is_null = false;
       T *old    = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
