@@ -359,8 +359,7 @@ class Q_CORE_EXPORT cs_typeName_internal
    { \
       static QString retval(#dataType); \
       return retval; \
-   } \
-   template const QString &cs_typeName_internal<dataType,void>::typeName();
+   }
 
 
 #define CS_REGISTER_TEMPLATE(dataType) \

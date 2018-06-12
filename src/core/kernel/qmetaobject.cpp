@@ -109,7 +109,8 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
 
    for (int slotIndex = 0; slotIndex < metaObj->methodCount(); ++slotIndex) {
 
-      const QString &slotName = metaObj->method(slotIndex).methodSignature();
+      QMetaMethod slotMethod = metaObj->method(slotIndex);
+      const QString &slotName = slotMethod.methodSignature();
 
       if (! slotName.startsWith("on_")) {
          continue;
