@@ -52,7 +52,7 @@ QString QSharedMemoryPrivate::makePlatformSafeKey(const QString &key, const QStr
    result.append(part1);
 
    QByteArray hex = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha1).toHex();
-   result.append(QLatin1String(hex));
+   result.append(QString(hex));
 
 #ifdef Q_OS_WIN
    return result;
@@ -288,7 +288,8 @@ bool QSharedMemory::detach()
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
    QSharedMemoryLocker lock(this);
-   if (!d->key.isEmpty() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::detach"))) {
+
+   if (! d->key.isEmpty() && !d->tryLocker(&lock, "QSharedMemory::detach")) {
       return false;
    }
 #endif

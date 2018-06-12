@@ -245,7 +245,7 @@ static bool qt_unix_query(const QString &library, uint *version, bool *debug, QL
    const char *filedata = nullptr;
 
    ulong fdlen = file.size();
-   filedata    = (char *) file.map(nullptr, fdlen);
+   filedata    = (char *) file.map(0, fdlen);      // first parameter must be zero, not nullptr
 
    if (filedata == nullptr) {
       // try reading the data into memory instead
@@ -600,7 +600,7 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
    // from wrongly caching plugin load failures when the archs don't match.
 
 #if defined(__x86_64__)
-   regkey += ("-x86_64";
+   regkey += "-x86_64";
 
 #elif defined(__i386__)
    regkey += "-i386";
@@ -679,8 +679,7 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
 
 #else
             QtPluginQueryVerificationDataFunction qtPluginQueryVerificationDataFunction = NULL;
-            qtPluginQueryVerificationDataFunction =
-               (QtPluginQueryVerificationDataFunction) resolve("cs_plugin_query_verification_data");
+            qtPluginQueryVerificationDataFunction = (QtPluginQueryVerificationDataFunction) resolve("cs_plugin_query_verification_data");
 #endif
 
             bool exceptionThrown = false;
@@ -759,12 +758,12 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
       if (qt_debug_component()) {
          qWarning("In %s:\n"
                   "  Plugin uses incompatible CopperSpice library (%d.%d.%d) [%s]", QFile::encodeName(fileName).constData(),
-                  (cs_version & 0xff0000) >> 16, (cs_version & 0xff00) >> 8, cs_version & 0xff, debug ? QString("debug") : QString("release") );
+                  (cs_version & 0xff0000) >> 16, (cs_version & 0xff00) >> 8, cs_version & 0xff, debug ? "debug" : "release" );
       }
 
       errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library. (%2.%3.%4) [%5]")
-                  .formatArg(fileName).formatArg((cs_version & 0xff0000) >> 16).formatArg((cs_version & 0xff00) >> 8).formatArg(cs_version & 0xff)
-                  .formatArg(debug ? QString("debug") : QString("release") );
+                  .formatArg(fileName).formatArg((cs_version & 0xff0000) >> 16).formatArg((cs_version & 0xff00) >> 8)
+                  .formatArg(cs_version & 0xff).formatArg(debug ? QString("debug") : QString("release") );
 
 #ifndef QT_NO_DEBUG_PLUGIN_CHECK
 
@@ -898,9 +897,10 @@ void QLibrary::setFileNameAndVersion(const QString &fileName, const QString &ver
 
 void *QLibrary::resolve(const char *symbol)
 {
-   if (!isLoaded() && !load()) {
+   if (! isLoaded() && ! load()) {
       return 0;
    }
+
    return d->resolve(symbol);
 }
 

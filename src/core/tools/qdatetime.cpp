@@ -3198,7 +3198,7 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
    last.pos = -1;
 
    QDT_DEBUG << newFormat << displayFormat;
-   QDT_DEBUGN("separators:\n'%s'", separators.join(QLatin1String("\n")).toLatin1().constData());
+   QDT_DEBUGN("separators:\n'%s'", separators.join("\n").toLatin1().constData());
 
    return true;
 }
@@ -3836,7 +3836,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
       }
 
       QDT_DEBUGN("'%s' => '%s'(%s)", input.toLatin1().constData(),
-                 newCurrentValue.toString(QLatin1String("yyyy/MM/dd hh:mm:ss.zzz")).toLatin1().constData(),
+                 newCurrentValue.toString("yyyy/MM/dd hh:mm:ss.zzz").toLatin1().constData(),
                  stateName(state).toLatin1().constData());
    }
 
@@ -3850,12 +3850,15 @@ end:
                      qPrintable(newCurrentValue.toString()), qPrintable(minimum.toString()));
 
          bool done = false;
-         state = Invalid;
+         state     = Invalid;
+
          for (int i = 0; i < sectionNodesCount && !done; ++i) {
             const SectionNode &sn = sectionNodes.at(i);
             QString t = sectionText(input, i, sn.pos).toLower();
+
             if ((t.size() < sectionMaxSize(i) && (((int)fieldInfo(i) & (FixedWidth | Numeric)) != Numeric))
                   || t.contains(space)) {
+
                switch (sn.type) {
                   case AmPmSection:
                      switch (findAmPm(t, i)) {

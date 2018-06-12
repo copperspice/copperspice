@@ -2172,7 +2172,7 @@ QString QLocaleData::doubleToString(const QChar _zero, const QChar plus, const Q
          ++pr;
       }
 
-      char *rve = 0;
+      char *rve  = 0;
       char *buff = 0;
 
       try {

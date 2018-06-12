@@ -1543,7 +1543,7 @@ void QStateMachinePrivate::registerSignalTransition(QSignalTransition *transitio
    std::unique_ptr<CSBento<void (QSignalEventGenerator::*)()>> slotBento =
                   CsSignal::Internal::make_unique<CSBento<void (QSignalEventGenerator::*)()>>(&QSignalEventGenerator::execute);
 
-   // BROOM (on hold, statemachine passed data is missing, change this form CsSignal to QObject)
+   // broom (on hold, statemachine passed data is missing, change this form CsSignal to QObject)
    CsSignal::connect(*sender, std::move(signalBento), *m_signalEventGenerator, std::move(slotBento),
                   CsSignal::ConnectionKind::AutoConnection, true);
 }
@@ -1561,7 +1561,7 @@ void QStateMachinePrivate::unregisterSignalTransition(QSignalTransition *transit
    CsSignal::Internal::BentoAbstract *signalBento = transition->get_signalBento();
 
 /*
-   // BROOM (on hold, statemachine passed data missing)
+   // broom (on hold, statemachine passed data missing)
    QObject::disconnect(sender, signalBento, m_signalEventGenerator, &QSignalEventGenerator::execute);
 
 */
@@ -1603,7 +1603,7 @@ void QSignalEventGenerator::execute()
    QObject *sender = this->sender();
    QStateMachine *machine = dynamic_cast<QStateMachine *>(parent());
 
-   // BROOM (on hold, statemachine passed data missing)
+   // broom (on hold, statemachine passed data missing)
    QStateMachinePrivate::get(machine)->handleTransitionSignal(sender, sender_signalIndex);
 }
 
