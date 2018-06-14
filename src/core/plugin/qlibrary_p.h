@@ -59,7 +59,7 @@ class QLibraryPrivate
    bool loadPlugin(); // loads and resolves instance
    bool unload();
    void release();
-   void *resolve(const char *);
+   void *resolve(const QString &symbol);
 
    static QLibraryPrivate *findOrCreate(const QString &fileName, const QString &version = QString());
 
@@ -79,7 +79,7 @@ class QLibraryPrivate
 
    bool load_sys();
    bool unload_sys();
-   void *resolve_sys(const char *);
+   void *resolve_sys(const QString &symbol);
 
    QAtomicInt libraryRefCount;
    QAtomicInt libraryUnloadCount;

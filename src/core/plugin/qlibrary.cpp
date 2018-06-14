@@ -352,7 +352,7 @@ QLibraryPrivate::~QLibraryPrivate()
    }
 }
 
-void *QLibraryPrivate::resolve(const char *symbol)
+void *QLibraryPrivate::resolve(const QString &symbol)
 {
    if (! pHnd) {
       return 0;
@@ -512,7 +512,7 @@ bool QLibrary::isLibrary(const QString &fileName)
    bool valid = suffixPos != -1;
    for (int i = suffixPos + 1; i < suffixes.count() && valid; ++i)
       if (i != suffixPos) {
-         suffixes.at(i).toInt(&valid);
+         suffixes.at(i).toInteger<int>(&valid);
       }
    return valid;
 # endif
@@ -895,7 +895,7 @@ void QLibrary::setFileNameAndVersion(const QString &fileName, const QString &ver
    d->loadHints = lh;
 }
 
-void *QLibrary::resolve(const char *symbol)
+void *QLibrary::resolve(const QString &symbol)
 {
    if (! isLoaded() && ! load()) {
       return 0;
@@ -904,19 +904,19 @@ void *QLibrary::resolve(const char *symbol)
    return d->resolve(symbol);
 }
 
-void *QLibrary::resolve(const QString &fileName, const char *symbol)
+void *QLibrary::resolve(const QString &fileName, const QString &symbol)
 {
    QLibrary library(fileName);
    return library.resolve(symbol);
 }
 
-void *QLibrary::resolve(const QString &fileName, int verNum, const char *symbol)
+void *QLibrary::resolve(const QString &fileName, int verNum, const QString &symbol)
 {
    QLibrary library(fileName, verNum);
    return library.resolve(symbol);
 }
 
-void *QLibrary::resolve(const QString &fileName, const QString &version, const char *symbol)
+void *QLibrary::resolve(const QString &fileName, const QString &version, const QString &symbol)
 {
    QLibrary library(fileName, version);
    return library.resolve(symbol);
@@ -933,6 +933,7 @@ void QLibrary::setLoadHints(LoadHints hints)
       d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
       d->errorString.clear();
    }
+
    d->loadHints = hints;
 }
 
