@@ -21,6 +21,8 @@
 #ifndef CS_SUB_MATCH_H
 #define CS_SUB_MATCH_H
 
+#include <string>
+
 namespace cs_regex_ns {
 
 template <class BidiIterator>

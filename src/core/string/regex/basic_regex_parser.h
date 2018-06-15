@@ -1901,7 +1901,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
          std::ptrdiff_t len = std::min(static_cast<std::ptrdiff_t>(std::distance(m_position, m_end)), static_cast<std::ptrdiff_t>(4));
          typename traits::string_type::const_iterator bp = m_position;
 
-         char32_t val = this->m_traits.toi(bp, bp + 1, 8);
+         intmax_t val = this->m_traits.toi(bp, bp + 1, 8);
 
          if (val != 0) {
             // Rewind to start of escape:
@@ -1930,7 +1930,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
             return result;
          }
 
-         return static_cast<charT>(val);
+         return charT(static_cast<char32_t>(val));
       }
 
       case regex_constants::escape_type_named_char: {
