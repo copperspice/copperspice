@@ -68,27 +68,43 @@ static int qt_hash_block_size(QCryptographicHash::Algorithm method)
     switch (method) {
     case QCryptographicHash::Md4:
         return 64;
+
     case QCryptographicHash::Md5:
         return 64;
+
     case QCryptographicHash::Sha1:
         return SHA1_Message_Block_Size;
+
     case QCryptographicHash::Sha224:
         return SHA224_Message_Block_Size;
+
     case QCryptographicHash::Sha256:
         return SHA256_Message_Block_Size;
+
     case QCryptographicHash::Sha384:
         return SHA384_Message_Block_Size;
+
     case QCryptographicHash::Sha512:
         return SHA512_Message_Block_Size;
+
     case QCryptographicHash::Sha3_224:
+    case QCryptographicHash::Keccak_224:
         return 144;
+
     case QCryptographicHash::Sha3_256:
+    case QCryptographicHash::Keccak_256:
         return 136;
+
     case QCryptographicHash::Sha3_384:
+    case QCryptographicHash::Keccak_384:
         return 104;
+
     case QCryptographicHash::Sha3_512:
+    case QCryptographicHash::Keccak_512:
         return 72;
+
     }
+
     return 0;
 }
 
