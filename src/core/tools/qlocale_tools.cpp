@@ -50,6 +50,8 @@
 #   define ULLONG_MAX Q_UINT64_C(0xffffffffffffffff)
 #endif
 
+static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp);
+
 
 quint64 qstrtoull(const char *nptr, const char **endptr, int base, bool *ok)
 {
@@ -320,7 +322,7 @@ __RCSID("$NetBSD: strtod.c,v 1.26 1998/02/03 18:44:21 perry Exp $");
 
 static inline ULong getWord0(const double x)
 {
-   char buffer[sizeof(double)];
+   uchar buffer[sizeof(double)];
    memcpy(buffer, &x, sizeof(double));
 
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
@@ -334,7 +336,7 @@ static inline ULong getWord0(const double x)
 
 static inline void setWord0(double *x, ULong l)
 {
-   char buffer[sizeof(double)];
+   uchar buffer[sizeof(double)];
    memcpy(buffer, x, sizeof(double));
 
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
@@ -355,7 +357,7 @@ static inline void setWord0(double *x, ULong l)
 
 static inline ULong getWord1(const double x)
 {
-   char buffer[sizeof(double)];
+   uchar buffer[sizeof(double)];
    memcpy(buffer, &x, sizeof(double));
 
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
@@ -367,7 +369,7 @@ static inline ULong getWord1(const double x)
 
 static inline void setWord1(double *x, ULong l)
 {
-   char buffer[sizeof(double)];
+   uchar buffer[sizeof(double)];
    memcpy(buffer, x, sizeof(double));
 
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
@@ -678,7 +680,7 @@ static int lo0bits(ULong *y)
    if (!(x & 1)) {
       k++;
       x >>= 1;
-      if (!x & 1) {
+      if ((!x) & 1) {
          return 32;
       }
    }
@@ -1239,16 +1241,16 @@ static const double tens[] = {
 };
 
 #ifdef IEEE_Arith
-static const double bigtens[] = { 1e16, 1e32, 1e64, 1e128, 1e256 };
+static const double bigtens[]  = { 1e16, 1e32, 1e64, 1e128, 1e256 };
 static const double tinytens[] = { 1e-16, 1e-32, 1e-64, 1e-128, 1e-256 };
 #define n_bigtens 5
 #else
 #ifdef IBM
-static const double bigtens[] = { 1e16, 1e32, 1e64 };
+static const double bigtens[]  = { 1e16, 1e32, 1e64 };
 static const double tinytens[] = { 1e-16, 1e-32, 1e-64 };
 #define n_bigtens 3
 #else
-static const double bigtens[] = { 1e16, 1e32 };
+static const double bigtens[]  = { 1e16, 1e32 };
 static const double tinytens[] = { 1e-16, 1e-32 };
 #define n_bigtens 2
 #endif
@@ -1866,12 +1868,14 @@ static int quorem(Bigint *b, Bigint *S)
 #endif
 
    n = S->wds;
+
 #ifdef BSD_QDTOA_DEBUG
    /*debug*/ if (b->wds > n)
       /*debug*/{
       Bug("oversize b in quorem");
    }
 #endif
+
    if (b->wds < n) {
       return 0;
    }
@@ -1993,7 +1997,7 @@ static int quorem(Bigint *b, Bigint *S)
  *           calculation.
  */
 
-#if defined(Q_OS_WIN) && defined (Q_CC_GNU) && !defined(_clear87) // See QTBUG-7576
+#if defined(Q_OS_WIN) && defined (Q_CC_GNU) && !defined(_clear87)
 extern "C" {
    __attribute__ ((dllimport)) unsigned int __cdecl __MINGW_NOTHROW _control87 (unsigned int unNew, unsigned int unMask);
    __attribute__ ((dllimport)) unsigned int __cdecl __MINGW_NOTHROW _clearfp (void); /* Clear the FPU status word */
@@ -2001,10 +2005,10 @@ extern "C" {
 #  define _clear87 _clearfp
 #endif
 
-/* This actually sometimes returns a pointer to a string literal
-   cast to a char*. Do NOT try to modify the return value. */
 
-Q_CORE_EXPORT char *qdtoa ( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
+
+// sometimes returns a pointer to a string literal cast to a char*. Do NOT try to modify the return value
+Q_CORE_EXPORT char *qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
 {
    // Some values of the floating-point control word can cause _qdtoa to crash with an underflow.
    // We set a safe value here.
@@ -2021,7 +2025,6 @@ Q_CORE_EXPORT char *qdtoa ( double d, int mode, int ndigits, int *decpt, int *si
 #    endif
 #endif
 
-
    _control87(MCW_EM, MCW_EM);
 #endif
 
@@ -2030,7 +2033,7 @@ Q_CORE_EXPORT char *qdtoa ( double d, int mode, int ndigits, int *decpt, int *si
    feholdexcept(&envp);
 #endif
 
-   char *s = qdtoa(d, mode, ndigits, decpt, sign, rve, resultp);
+   char *s = _qdtoa(d, mode, ndigits, decpt, sign, rve, resultp);
 
 #ifdef Q_OS_WIN
    _clear87();
@@ -2060,7 +2063,7 @@ Q_CORE_EXPORT char *qdtoa ( double d, int mode, int ndigits, int *decpt, int *si
    return s;
 }
 
-static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
+char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
 {
    int bbits, b2, b5, be, dig, i, ieps, ilim0, j, j1, k, k0, k_check, leftright, m2, m5, s2, s5, try_quick;
 
@@ -2076,8 +2079,10 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
    Bigint *mlo = NULL; /* pacify gcc */
 
    double d2;
-   double ds, eps;
-   char *s, *s0;
+   double ds;
+   double eps;
+   char *s;
+   char *s0;
 
    if (getWord0(d) & Sign_bit) {
       /* set sign for everything, including 0's and NaNs */
@@ -2139,7 +2144,6 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
    if (i != 0) {
 #endif
 
-
       d2 = d;
       setWord0(&d2, getWord0(d2) & Frac_mask1);
       setWord0(&d2, getWord0(d2) | Exp_11);
@@ -2156,6 +2160,7 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
       i <<= 2;
       i += j;
 #endif
+
 #ifndef Sudden_Underflow
       denorm = 0;
 
@@ -2175,6 +2180,7 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
 
    ds = (d2 - 1.5) * 0.289529654602168 + 0.1760912590558 + i * 0.301029995663981;
    k = int(ds);
+
    if (ds < 0. && ds != k) {
       k--;   /* want k = floor(ds) */
    }
@@ -2189,6 +2195,7 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
    }
 
    j = bbits - i - 1;
+
    if (j >= 0) {
       b2 = 0;
       s2 = j;
@@ -2218,6 +2225,7 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
    }
 
    leftright = 1;
+
    switch (mode) {
       case 0:
       case 1:
@@ -2225,8 +2233,10 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
          i = 18;
          ndigits = 0;
          break;
+
       case 2:
          leftright = 0;
+
       /* no break */
       case 4:
          if (ndigits <= 0) {
@@ -2236,6 +2246,7 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
          break;
       case 3:
          leftright = 0;
+
       /* no break */
       case 5:
          i = ndigits + k + 1;
@@ -2245,47 +2256,59 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
             i = 1;
          }
    }
+
    QT_TRY {
       *resultp = static_cast<char *>(malloc(i + 1));
       Q_CHECK_PTR(*resultp);
+
    } QT_CATCH(...) {
       Bfree(b);
       QT_RETHROW;
    }
+
    s = s0 = *resultp;
 
    if (ilim >= 0 && ilim <= Quick_max && try_quick) {
 
-      /* Try to get by with floating-point arithmetic. */
+      // Try to get by with floating-point arithmetic.
 
-      i = 0;
-      d2 = d;
-      k0 = k;
+      i     = 0;
+      d2    = d;
+      k0    = k;
       ilim0 = ilim;
-      ieps = 2; /* conservative */
+      ieps  = 2;             // conservative
+
       if (k > 0) {
          ds = tens[k & 0xf];
-         j = k >> 4;
+         j  = k >> 4;
+
          if (j & Bletch) {
-            /* prevent overflows */
+            // prevent overflows
             j &= Bletch - 1;
             d /= bigtens[n_bigtens - 1];
             ieps++;
          }
-         for (; j; j >>= 1, i++)
+
+         for (; j; j >>= 1, i++) {
             if (j & 1) {
                ieps++;
                ds *= bigtens[i];
             }
+         }
+
          d /= ds;
+
       } else if ((j1 = -k) != 0) {
          d *= tens[j1 & 0xf];
-         for (j = j1 >> 4; j; j >>= 1, i++)
+
+         for (j = j1 >> 4; j != 0; j >>= 1, i++)  {
             if (j & 1) {
                ieps++;
                d *= bigtens[i];
             }
+         }
       }
+
       if (k_check && d < 1. && ilim > 0) {
          if (ilim1 <= 0) {
             goto fast_failed;
@@ -2295,8 +2318,11 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
          d *= 10.;
          ieps++;
       }
+
       eps = ieps * d + 7.;
+
       setWord0(&eps, getWord0(eps) - (P - 1)*Exp_msk1);
+
       if (ilim == 0) {
          S = mhi = 0;
          d -= 5.;
@@ -2308,6 +2334,7 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
          }
          goto fast_failed;
       }
+
 #ifndef No_leftright
       if (leftright) {
          /* Use Steele & White method of only
@@ -2407,12 +2434,14 @@ static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, cha
    m2 = b2;
    m5 = b5;
    mhi = mlo = 0;
+
    if (leftright) {
       if (mode < 2) {
          i =
 #ifndef Sudden_Underflow
             denorm ? be + (Bias + (P - 1) - 1 + 1) :
 #endif
+
 #ifdef IBM
             1 + 4 * P - 3 - bbits + ((bbits + be - 1) & 3);
 #else
