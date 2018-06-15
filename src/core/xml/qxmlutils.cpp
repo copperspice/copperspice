@@ -200,7 +200,7 @@ bool QXmlUtils::isBaseChar(const QChar c)
 
 bool QXmlUtils::isEncName(const QString &encName)
 {
-   static const QRegularExpression8 encNameRegExp("^[A-Za-z][A-Za-z0-9._\\-]*$");
+   static const QRegularExpression encNameRegExp("^[A-Za-z][A-Za-z0-9._\\-]*$");
    Q_ASSERT(encNameRegExp.isValid());
 
    return encName.contains(encNameRegExp);

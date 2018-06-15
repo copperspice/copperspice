@@ -56,24 +56,23 @@ class Q_CORE_EXPORT QXmlStreamAttribute
    }
 
    inline QStringView prefix() const {
-      auto iter_qualName = m_qualifiedName.end();
-      auto iter_name     = m_name.begin();
 
-      if (iter_name != m_name.end()) {
-         ++iter_name;
-
-         while (iter_name != m_name.end()) {
-
-            if (iter_qualName == m_qualifiedName.begin()) {
-               break;
-            }
-
-            --iter_qualName;
-            ++iter_name;
-         }
+      if (m_qualifiedName.isEmpty()) {
+         return QStringView();
       }
 
-      return QStringView(m_qualifiedName.begin(), iter_qualName);
+      auto iter = m_qualifiedName.end() - 1;
+
+      for (auto c : m_name) {
+
+         if (iter == m_qualifiedName.begin()) {
+            break;
+         }
+
+         --iter;
+      }
+
+      return QStringView(m_qualifiedName.begin(), iter);
    }
 
    inline QStringView value() const {

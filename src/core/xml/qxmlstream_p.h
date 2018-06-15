@@ -957,7 +957,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
 
    uchar  firstByte;
    qint64 nbytesread;
-   int    readBufferPos;
+   QString::const_iterator readBuffer_Iter;
 
    short  token;
    ushort token_char;
@@ -1095,7 +1095,7 @@ bool QXmlStreamReaderPrivate::parse()
 
    act = state_stack[tos];
 
-   forever {
+   while (true) {
       if (token == -1 && - TERMINAL_COUNT != action_index[act]) {
          uint cu = getChar();
          token = NOTOKEN;
@@ -1115,7 +1115,7 @@ bool QXmlStreamReaderPrivate::parse()
                   if (cu == '\r') {
                      if ((token_char = filterCarriageReturn())) {
                         ++lineNumber;
-                        lastLineStart = characterOffset + readBufferPos;
+                        lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
                         break;
                      }
                   } else {
@@ -1124,7 +1124,7 @@ bool QXmlStreamReaderPrivate::parse()
                // fall through
                case '\0': {
                   token = EOF_SYMBOL;
-                  if (!tagsDone && !inParseEntity) {
+                  if (!tagsDone && ! inParseEntity) {
                      int a = t_action(act, token);
                      if (a < 0) {
                         raiseError(QXmlStreamReader::PrematureEndOfDocumentError);
@@ -1136,7 +1136,7 @@ bool QXmlStreamReaderPrivate::parse()
                break;
                case '\n':
                   ++lineNumber;
-                  lastLineStart = characterOffset + readBufferPos;
+                  lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
                case ' ':
                case '\t':
                   token = SPACE;

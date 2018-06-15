@@ -53,6 +53,7 @@ QString QXmlStreamReaderPrivate::resolveUndeclaredEntity(const QString &name)
    if (entityResolver) {
       return entityResolver->resolveUndeclaredEntity(name);
    }
+
    return QString();
 }
 
@@ -116,50 +117,34 @@ QXmlStreamReader::~QXmlStreamReader()
 void QXmlStreamReader::setDevice(QIODevice *device)
 {
    Q_D(QXmlStreamReader);
+
    if (d->deleteDevice) {
       delete d->device;
       d->deleteDevice = false;
    }
+
    d->device = device;
    d->init();
-
 }
 
-/*!
-    Returns the current device associated with the QXmlStreamReader,
-    or 0 if no device has been assigned.
-
-    \sa setDevice()
-*/
 QIODevice *QXmlStreamReader::device() const
 {
    Q_D(const QXmlStreamReader);
    return d->device;
 }
 
-
-/*!
-  Adds more \a data for the reader to read. This function does
-  nothing if the reader has a device().
-
-  \sa readNext(), clear()
- */
 void QXmlStreamReader::addData(const QByteArray &data)
 {
    Q_D(QXmlStreamReader);
+
    if (d->device) {
       qWarning("QXmlStreamReader: addData() with device()");
       return;
    }
+
    d->dataBuffer += data;
 }
 
-/*!
-  Adds more \a data for the reader to read. This function does
-  nothing if the reader has a device().
-
-  \sa readNext(), clear()
- */
 void QXmlStreamReader::addData(const QString &data)
 {
    Q_D(QXmlStreamReader);
@@ -167,97 +152,59 @@ void QXmlStreamReader::addData(const QString &data)
    addData(d->codec->fromUnicode(data));
 }
 
-/*!
-  Adds more \a data for the reader to read. This function does
-  nothing if the reader has a device().
-
-  \sa readNext(), clear()
- */
 void QXmlStreamReader::addData(const char *data)
 {
    addData(QByteArray(data));
 }
 
-/*!
-    Removes any device() or data from the reader and resets its
-    internal state to the initial state.
-
-    \sa addData()
- */
 void QXmlStreamReader::clear()
 {
    Q_D(QXmlStreamReader);
    d->init();
+
    if (d->device) {
       if (d->deleteDevice) {
          delete d->device;
       }
+
       d->device = 0;
    }
 }
 
-/*!
-    Returns true if the reader has read until the end of the XML
-    document, or if an error() has occurred and reading has been
-    aborted. Otherwise, it returns false.
-
-    When atEnd() and hasError() return true and error() returns
-    PrematureEndOfDocumentError, it means the XML has been well-formed
-    so far, but a complete XML document has not been parsed. The next
-    chunk of XML can be added with addData(), if the XML is being read
-    from a QByteArray, or by waiting for more data to arrive if the
-    XML is being read from a QIODevice. Either way, atEnd() will
-    return false once more data is available.
-
-    \sa hasError(), error(), device(), QIODevice::atEnd()
- */
 bool QXmlStreamReader::atEnd() const
 {
    Q_D(const QXmlStreamReader);
-   if (d->atEnd
-         && ((d->type == QXmlStreamReader::Invalid && d->error == PrematureEndOfDocumentError)
+
+   if (d->atEnd && ((d->type == QXmlStreamReader::Invalid && d->error == PrematureEndOfDocumentError)
              || (d->type == QXmlStreamReader::EndDocument))) {
+
       if (d->device) {
          return d->device->atEnd();
       } else {
          return !d->dataBuffer.size();
       }
    }
+
    return (d->atEnd || d->type == QXmlStreamReader::Invalid);
 }
 
-
-/*!
-  Reads the next token and returns its type.
-
-  With one exception, once an error() is reported by readNext(),
-  further reading of the XML stream is not possible. Then atEnd()
-  returns true, hasError() returns true, and this function returns
-  QXmlStreamReader::Invalid.
-
-  The exception is when error() returns PrematureEndOfDocumentError.
-  This error is reported when the end of an otherwise well-formed
-  chunk of XML is reached, but the chunk doesn't represent a complete
-  XML document.  In that case, parsing \e can be resumed by calling
-  addData() to add the next chunk of XML, when the stream is being
-  read from a QByteArray, or by waiting for more data to arrive when
-  the stream is being read from a device().
-
-  \sa tokenType(), tokenString()
- */
 QXmlStreamReader::TokenType QXmlStreamReader::readNext()
 {
    Q_D(QXmlStreamReader);
+
    if (d->type != Invalid) {
-      if (!d->hasCheckedStartDocument)
+      if (!d->hasCheckedStartDocument) {
          if (!d->checkStartDocument()) {
             return d->type;   // synthetic StartDocument or error
          }
+      }
+
       d->parse();
+
       if (d->atEnd && d->type != EndDocument && d->type != Invalid) {
          d->raiseError(PrematureEndOfDocumentError);
 
-      } else if (!d->atEnd && d->type == EndDocument) {
+      } else if (! d->atEnd && d->type == EndDocument) {
          d->raiseWellFormedError(QXmlStream::tr("Extra content at end of document."));
       }
 
@@ -268,48 +215,16 @@ QXmlStreamReader::TokenType QXmlStreamReader::readNext()
       d->token = -1;
       return readNext();
    }
+
    return d->type;
 }
 
-
-/*!
-  Returns the type of the current token.
-
-  The current token can also be queried with the convenience functions
-  isStartDocument(), isEndDocument(), isStartElement(),
-  isEndElement(), isCharacters(), isComment(), isDTD(),
-  isEntityReference(), and isProcessingInstruction().
-
-  \sa tokenString()
- */
 QXmlStreamReader::TokenType QXmlStreamReader::tokenType() const
 {
    Q_D(const QXmlStreamReader);
    return d->type;
 }
 
-/*!
-  Reads until the next start element within the current element. Returns true
-  when a start element was reached. When the end element was reached, or when
-  an error occurred, false is returned.
-
-  The current element is the element matching the most recently parsed start
-  element of which a matching end element has not yet been reached. When the
-  parser has reached the end element, the current element becomes the parent
-  element.
-
-  You can traverse a document by repeatedly calling this function while
-  ensuring that the stream reader is not at the end of the document:
-
-  \snippet doc/src/snippets/xml/streamreader/traverse.cpp traverse document
-
-  This is a convenience function for when you're only concerned with parsing
-  XML elements. The \l{QXmlStream Bookmarks Example} makes extensive use of
-  this function.
-
-  \since 4.6
-  \sa readNext()
- */
 bool QXmlStreamReader::readNextStartElement()
 {
    while (readNext() != Invalid) {
@@ -322,20 +237,10 @@ bool QXmlStreamReader::readNextStartElement()
    return false;
 }
 
-/*!
-  Reads until the end of the current element, skipping any child nodes.
-  This function is useful for skipping unknown elements.
-
-  The current element is the element matching the most recently parsed start
-  element of which a matching end element has not yet been reached. When the
-  parser has reached the end element, the current element becomes the parent
-  element.
-
-  \since 4.6
- */
 void QXmlStreamReader::skipCurrentElement()
 {
    int depth = 1;
+
    while (depth && readNext() != Invalid) {
       if (isEndElement()) {
          --depth;
@@ -469,7 +374,6 @@ void QXmlStreamReaderPrivate::init()
    attributes.clear();
    attributes.reserve(16);
    lineNumber = lastLineStart = characterOffset = 0;
-   readBufferPos = 0;
    nbytesread = 0;
 
    codec = QTextCodec::codecForMib(106);       // utf8
@@ -492,9 +396,11 @@ void QXmlStreamReaderPrivate::init()
    namespaceProcessing = true;
    rawReadBuffer.clear();
    dataBuffer.clear();
-   readBuffer.clear();
 
-   type = QXmlStreamReader::NoToken;
+   readBuffer.clear();
+   readBuffer_Iter = readBuffer.begin();
+
+   type  = QXmlStreamReader::NoToken;
    error = QXmlStreamReader::NoError;
 }
 
@@ -517,8 +423,9 @@ void QXmlStreamReaderPrivate::parseEntity(const QString &value)
       entityParser->init();
    }
    entityParser->inParseEntity = true;
-   entityParser->readBuffer = value;
+   entityParser->readBuffer    = value;
    entityParser->injectToken(PARSE_ENTITY);
+
    while (!entityParser->atEnd && entityParser->type != QXmlStreamReader::Invalid) {
       entityParser->parse();
    }
@@ -551,37 +458,37 @@ QXmlStreamReaderPrivate::~QXmlStreamReaderPrivate()
 inline uint QXmlStreamReaderPrivate::filterCarriageReturn()
 {
    uint peekc = peekChar();
+
    if (peekc == '\n') {
       if (putStack.size()) {
          putStack.pop();
       } else {
-         ++readBufferPos;
+         ++readBuffer_Iter;
       }
       return peekc;
    }
+
    if (peekc == 0) {
       putChar('\r');
       return 0;
    }
+
    return '\n';
 }
 
-/*!
- \internal
- If the end of the file is encountered, 0 is returned.
- */
 inline uint QXmlStreamReaderPrivate::getChar()
 {
    uint c;
-   if (putStack.size()) {
+   if (putStack.size() != 0) {
       c = atEnd ? 0 : putStack.pop();
 
+   } else if (readBuffer_Iter != readBuffer.end() ) {
+      c = readBuffer_Iter->unicode();
+      ++readBuffer_Iter;
+
    } else {
-      if (readBufferPos < readBuffer.size()) {
-         c = readBuffer.at(readBufferPos++).unicode();
-      } else {
-         c = getChar_helper();
-      }
+      c = getChar_helper();
+
    }
 
    return c;
@@ -591,31 +498,23 @@ inline uint QXmlStreamReaderPrivate::peekChar()
 {
    uint c;
 
-   if (putStack.size()) {
+   if (putStack.size() != 0) {
       c = putStack.top();
-   } else if (readBufferPos < readBuffer.size()) {
-      c = readBuffer.at(readBufferPos).unicode();
+
+   } else if (readBuffer_Iter != readBuffer.end() ) {
+         c = readBuffer_Iter->unicode();
+
    } else {
-      if ((c = getChar_helper())) {
-         --readBufferPos;
+      c = getChar_helper();
+
+      if (c != 0) {
+         --readBuffer_Iter;
       }
    }
 
    return c;
 }
 
-/*!
-  \internal
-
-  Scans characters until str is encountered, and validates the characters
-  as according to the Char[2] production and do the line-ending normalization.
-  If any character is invalid, false is returned, otherwise true upon success.
-
-  If \a tokenToInject is not less than zero, injectToken() is called with
-  \a tokenToInject when \a str is found.
-
-  If any error occurred, false is returned, otherwise true.
-  */
 bool QXmlStreamReaderPrivate::scanUntil(const char *str, short tokenToInject)
 {
    int pos = textBuffer.size();
@@ -633,7 +532,7 @@ bool QXmlStreamReaderPrivate::scanUntil(const char *str, short tokenToInject)
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + readBufferPos;
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
 
          // fall through
          case '\t':
@@ -835,7 +734,7 @@ inline int QXmlStreamReaderPrivate::fastScanLiteralContent()
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + readBufferPos;
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
 
          // fall through
          case ' ':
@@ -882,7 +781,7 @@ inline int QXmlStreamReaderPrivate::fastScanSpace()
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + readBufferPos;
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
 
          // fall through
          case ' ':
@@ -947,7 +846,7 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + readBufferPos;
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
          // fall through
          case ' ':
          case '\t':
@@ -1173,8 +1072,8 @@ void QXmlStreamReaderPrivate::putReplacementInAttributeValue(const QString &s)
 ushort QXmlStreamReaderPrivate::getChar_helper()
 {
    const int BUFFER_SIZE = 8192;
-   characterOffset += readBufferPos;
-   readBufferPos = 0;
+
+   characterOffset = characterOffset + (readBuffer_Iter - readBuffer.begin());
    readBuffer.resize(0);
 
    if (decoder)
@@ -1244,15 +1143,21 @@ ushort QXmlStreamReaderPrivate::getChar_helper()
    }
 
    decoder->toUnicode(&readBuffer, rawReadBuffer.constData(), nbytesread);
+   readBuffer_Iter = readBuffer.begin();
 
    if (lockEncoding && decoder->hasFailure()) {
       raiseWellFormedError(QXmlStream::tr("Encountered incorrectly encoded content."));
+
       readBuffer.clear();
+      readBuffer_Iter = readBuffer.begin();
+
       return 0;
    }
 
-   if (readBufferPos < readBuffer.size()) {
-      ushort c = readBuffer.at(readBufferPos++).unicode();
+   if (readBuffer_Iter != readBuffer.end()) {
+      ushort c = readBuffer_Iter->unicode();
+      ++readBuffer_Iter;
+
       return c;
    }
 
@@ -1580,6 +1485,8 @@ void QXmlStreamReaderPrivate::startDocument()
 
                decoder = codec->makeDecoder();
                decoder->toUnicode(&readBuffer, rawReadBuffer.data(), nbytesread);
+               readBuffer_Iter = readBuffer.begin();
+
             }
          }
 
@@ -1722,7 +1629,7 @@ qint64 QXmlStreamReader::lineNumber() const
 qint64 QXmlStreamReader::columnNumber() const
 {
    Q_D(const QXmlStreamReader);
-   return d->characterOffset - d->lastLineStart + d->readBufferPos;
+   return d->characterOffset - d->lastLineStart + (d->readBuffer_Iter - d->readBuffer.begin());
 }
 
 /*! Returns the current character offset, starting with 0.
@@ -1732,7 +1639,7 @@ qint64 QXmlStreamReader::columnNumber() const
 qint64 QXmlStreamReader::characterOffset() const
 {
    Q_D(const QXmlStreamReader);
-   return d->characterOffset + d->readBufferPos;
+   return d->characterOffset + (d->readBuffer_Iter - d->readBuffer.begin());
 }
 
 
@@ -1755,9 +1662,11 @@ QStringView QXmlStreamReader::text() const
 QXmlStreamNotationDeclarations QXmlStreamReader::notationDeclarations() const
 {
    Q_D(const QXmlStreamReader);
+
    if (d->notationDeclarations.size()) {
       const_cast<QXmlStreamReaderPrivate *>(d)->resolveDtd();
    }
+
    return d->publicNotationDeclarations;
 }
 
