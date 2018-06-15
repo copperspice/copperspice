@@ -227,6 +227,17 @@ class QMultiMap
 
       friend class QMultiMap<Key, Val, C>;
 
+      // free functions
+      friend bool operator==(iterator iter1, const_iterator iter2)
+      {
+         return (iter2 == iter1);
+      }
+
+      friend bool operator!=(iterator iter1, const_iterator iter2)
+      {
+         return (iter2 != iter1);
+      }
+
     private:
       typename std::multimap<Key, Val, C>::const_iterator m_iter;
    };
@@ -572,6 +583,8 @@ class QMultiMap
    std::multimap<Key, Val, C> m_data;
 
 };
+
+// methods
 
 template <class Key, class Val, class C>
 bool QMultiMap<Key, Val, C>::contains(const Key &key, const Val &value) const

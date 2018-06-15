@@ -211,6 +211,17 @@ class QMultiHash
 
       friend class QMultiHash<Key, Val, Hash, KeyEqual>;
 
+      // free functions
+      friend bool operator==(iterator iter1, const_iterator iter2)
+      {
+         return (iter2 == iter1);
+      }
+
+      friend bool operator!=(iterator iter1, const_iterator iter2)
+      {
+         return (iter2 != iter1);
+      }
+
     private:
       typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator m_iter;
    };
