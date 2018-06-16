@@ -21,29 +21,32 @@
 ***********************************************************************/
 
 #include <qstring.h>
+#include <qstring16.h>
 
 #import <Foundation/Foundation.h>
+
+// QString 8
 
 QString8 QString8::fromCFString(CFStringRef str)
 {
    if (! str) {
-      return QString();
+      return QString8();
    }
 
    CFIndex length = CFStringGetLength(str);
    if (length == 0) {
-      return QString();
+      return QString8();
    }
 
    const UniChar *chars = CFStringGetCharactersPtr(str);
    if (chars) {
-      return QString::fromUtf16(reinterpret_cast<const char16_t *>(chars), length);
+      return QString8::fromUtf16(reinterpret_cast<const char16_t *>(chars), length);
    }
 
    std::vector<UniChar> tmp(length);
    CFStringGetCharacters(str, CFRangeMake(0, length), &tmp[0]);
 
-   return QString::fromUtf16(reinterpret_cast<const char16_t *>(&tmp[0]), length);
+   return QString8::fromUtf16(reinterpret_cast<const char16_t *>(&tmp[0]), length);
 }
 
 CFStringRef QString8::toCFString() const
@@ -55,14 +58,58 @@ CFStringRef QString8::toCFString() const
 QString8 QString8::fromNSString(const NSString *str)
 {
    if (! str) {
-      return QString();
+      return QString8();
    }
 
-   return QString::fromUtf8([str UTF8String]);
+   return QString8::fromUtf8([str UTF8String]);
 }
 
 NSString *QString8::toNSString() const
 {
    return [[NSString alloc] initWithBytes: constData() length:size_storage() encoding:NSUTF8StringEncoding];
+}
+
+// QString 16
+
+QString16 QString16::fromCFString(CFStringRef str)
+{
+   if (! str) {
+      return QString16();
+   }
+
+   CFIndex length = CFStringGetLength(str);
+   if (length == 0) {
+      return QString16();
+   }
+
+   const UniChar *chars = CFStringGetCharactersPtr(str);
+   if (chars) {
+      return QString16::fromUtf16(reinterpret_cast<const char16_t *>(chars), length);
+   }
+
+   std::vector<UniChar> tmp(length);
+   CFStringGetCharacters(str, CFRangeMake(0, length), &tmp[0]);
+
+   return QString16::fromUtf16(reinterpret_cast<const char16_t *>(&tmp[0]), length);
+}
+
+CFStringRef QString16::toCFString() const
+{
+   return CFStringCreateWithCharacters(kCFAllocatorDefault,
+                  reinterpret_cast<const UniChar *>(this->constData()), this->size_storage());
+}
+
+QString16 QString16::fromNSString(const NSString *str)
+{
+   if (! str) {
+      return QString16();
+   }
+
+   return QString16::fromUtf8([str UTF8String]);
+}
+
+NSString *QString16::toNSString() const
+{
+   return [[NSString alloc] initWithCharacters: reinterpret_cast<const unichar *>(constData()) length:size_storage()];
 }
 
