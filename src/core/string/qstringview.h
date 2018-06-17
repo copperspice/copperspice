@@ -42,9 +42,9 @@ template <typename S>
 class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
 {
    public:
-      using difference_type = std::ptrdiff_t;
-      using value_type      = const QChar32;
-      using size_type       = std::ptrdiff_t;
+      using difference_type = typename S::difference_type;
+      using size_type       = typename S::difference_type;
+      using value_type      = typename S::value_type;
 
       using const_iterator  = typename S::const_iterator;
       using iterator        = typename S::const_iterator;
@@ -78,14 +78,31 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
          return reinterpret_cast<const typename S::storage_type *>(&(begin().codePointBegin())[0]);
       }
 
-      QStringView<S> chopped(size_type numOfChars) const;
+      void chop(size_type numOfChars);
+
+      size_type count() const {
+         return CsString::CsString::size();
+      }
+
+      size_type count(value_type c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const S &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const QRegularExpression<S> &regExp) const;
+
+      bool contains(value_type c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      bool contains(const S &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      bool contains(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
+      bool contains(const QRegularExpression<S> &regExp) const {
+         return indexOfFast(regExp) != end();
+      }
 
       bool empty() const {
          return CsString::CsBasicStringView<S>::empty();
       }
 
       template <typename C = value_type>
-      bool endsWith(value_type ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      bool endsWith(value_type c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       bool endsWith(S str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
          return endsWith(QStringView<S>(str), cs);
@@ -206,7 +223,7 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       }
 
       template <typename C = value_type>
-      bool startsWith(value_type ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      bool startsWith(value_type c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       bool startsWith(S str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
          return startsWith(QStringView<S>(str), cs);
@@ -231,8 +248,8 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       QStringView<S> trimmed() const;
       value_type operator[](size_type n) const;
 
-      QStringView &operator=(const QStringView &other) = default;         // not documented
-      QStringView &operator=(QStringView &&other) = default;              // not documented
+      QStringView &operator=(const QStringView &other) = default;
+      QStringView &operator=(QStringView &&other) = default;
 
       // iterators
       iterator begin() {
@@ -292,15 +309,20 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       }
 
    private:
+      template<typename C = value_type>
       const_iterator cs_internal_find_fast(value_type c,  const_iterator iter_begin) const;
-      const_iterator cs_internal_find_fast(const S &str,  const_iterator iter_begin) const;
+
+      template<typename C = value_type>
       const_iterator cs_internal_rfind_fast(value_type c, const_iterator iter_begin) const;
+
+      const_iterator cs_internal_find_fast(const S &str,  const_iterator iter_begin) const;
       const_iterator cs_internal_rfind_fast(const S &str, const_iterator iter_begin) const;
 
       S convertCase(int trait) const;
 };
 
 template <typename S>
+template<typename C>
 typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(value_type c, const_iterator iter_begin) const
 {
    const_iterator iter_end = cend();
@@ -310,7 +332,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(va
    }
 
    auto iter = iter_begin;
-   S strFolded = c.toCaseFolded();
+   S strFolded = C(c).toCaseFolded();
 
    if (strFolded.size() == 1) {
       char32_t value = strFolded.first().unicode();
@@ -351,13 +373,13 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(co
    while (iter != iter_end)   {
       // review: account for code points which expand when folded
 
-      if (iter->toCaseFolded() == QString8(strFolded[0]))  {
+      if (iter->toCaseFolded() == S(strFolded[0]))  {
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
          while (text_iter != iter_end && pattern_iter != str.cend())  {
 
-            if (text_iter->toCaseFolded() == QString8(*pattern_iter))  {
+            if (text_iter->toCaseFolded() == S(*pattern_iter))  {
                ++text_iter;
                ++pattern_iter;
 
@@ -380,6 +402,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(co
 }
 
 template <typename S>
+template<typename C>
 typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(value_type c, const_iterator iter_begin) const
 {
    const_iterator iter_end = cend();
@@ -389,7 +412,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(v
    }
 
    auto iter = iter_begin;
-   S strFolded = c.toCaseFolded();
+   S strFolded = C(c).toCaseFolded();
 
    if (strFolded.size() == 1) {
       char32_t value = strFolded.first().unicode();
@@ -430,13 +453,13 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(c
    while (iter != iter_end)   {
       // review: account for code points which expand when folded
 
-      if (iter->toCaseFolded() == QString8(strFolded[0]))  {
+      if (iter->toCaseFolded() == S(strFolded[0]))  {
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
          while (text_iter != iter_end && pattern_iter != str.cend())  {
 
-            if (text_iter->toCaseFolded() == QString8(*pattern_iter))  {
+            if (text_iter->toCaseFolded() == S(*pattern_iter))  {
                ++text_iter;
                ++pattern_iter;
 
@@ -459,20 +482,147 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(c
 }
 
 // methods
+
 template <typename S>
-QStringView<S> QStringView<S>::chopped(size_type numOfChars) const
+void QStringView<S>::chop(size_type numOfChars)
 {
-   if (numOfChars < 0) {
-      return QStringView<S>(cbegin(), cend());
+   if (numOfChars > 0) {
+      auto iter = end() - numOfChars;
+      erase(iter, end());
+   }
+}
+
+template <typename S>
+typename QStringView<S>::size_type QStringView<S>::count(value_type c, Qt::CaseSensitivity cs) const
+{
+   size_type retval = 0;
+
+   if (cs == Qt::CaseSensitive) {
+      for (auto uc : *this) {
+         if (uc == c) {
+            ++retval;
+         }
+      }
+
+   } else {
+      S tmp = c.toCaseFolded();
+
+      for (auto uc : *this) {
+         if (uc.toCaseFolded() == tmp) {
+            ++retval;
+         }
+      }
    }
 
-   const_iterator iter = cend();
+   return retval;
+}
 
-   for (size_type i = 0; i < numOfChars && iter != cbegin(); ++i)  {
-      --iter;
+template <typename S>
+typename QStringView<S>::size_type QStringView<S>::count(const S &str, Qt::CaseSensitivity cs) const
+{
+   size_type retval = 0;
+
+   const_iterator iter      = this->cbegin();
+   const_iterator iter_end  = this->cend();
+
+   iter = indexOfFast(str, iter, cs);
+
+   while (iter != iter_end) {
+      ++retval;
+      iter = indexOfFast(str, iter+1, cs);
    }
 
-   return QStringView<S>(cbegin(), iter);
+   return retval;
+}
+
+template <typename S>
+typename QStringView<S>::size_type QStringView<S>::count(QStringView<S> str, Qt::CaseSensitivity cs) const
+{
+   size_type retval = 0;
+
+   const_iterator iter      = cbegin();
+   const_iterator iter_end  = cend();
+
+   iter = indexOfFast(str, iter, cs);
+
+   while (iter != iter_end) {
+      ++retval;
+      iter = indexOfFast(str, iter+1, cs);
+   }
+
+   return retval;
+}
+
+template <typename S>
+typename QStringView<S>::size_type QStringView<S>::count(const QRegularExpression<S> &regExp) const
+{
+   size_type retval = 0;
+
+   const_iterator iter     = cbegin();
+   const_iterator iter_end = cend();
+
+   QRegularExpressionMatch<S> match;
+
+   while (iter != iter_end) {                      // count overlapping matches
+      match = regExp.match(*this, iter);
+
+      if (! match.hasMatch()) {
+         break;
+      }
+
+      retval++;
+
+      iter = match.capturedStart(0);
+      ++iter;
+   }
+
+   return retval;
+}
+
+template <typename S>
+bool QStringView<S>::contains(value_type c, Qt::CaseSensitivity cs) const
+{
+   const_iterator iter      = this->cbegin();
+   const_iterator iter_end  = this->cend();
+
+   S other = S(c);
+   iter = indexOfFast(other, iter, cs);
+
+   if (iter != iter_end) {
+      return true;
+   }
+
+   return false;
+}
+
+template <typename S>
+bool QStringView<S>::contains(const S &other, Qt::CaseSensitivity cs) const
+{
+   const_iterator iter      = this->cbegin();
+   const_iterator iter_end  = this->cend();
+
+   iter = indexOfFast(other, iter, cs);
+
+   if (iter != iter_end) {
+      return true;
+   }
+
+   return false;
+}
+
+template <typename S>
+bool QStringView<S>::contains(QStringView<S> str, Qt::CaseSensitivity cs) const
+{
+   const_iterator iter      = this->cbegin();
+   const_iterator iter_end  = this->cend();
+
+   iter = indexOfFast(str, iter, cs);
+
+   if (iter != iter_end) {
+      return true;
+   }
+
+   return false;
 }
 
 template <typename S>

@@ -75,6 +75,7 @@ class CsChar
 
       CsChar &operator=(char c);
       CsChar &operator=(char32_t c);
+      CsChar &operator=(CsChar c) &;
 
       uint32_t unicode() const;
 
@@ -122,6 +123,12 @@ inline CsChar &CsChar::operator=(char c)
 inline CsChar &CsChar::operator=(char32_t c)
 {
    m_char = c;
+   return *this;
+}
+
+inline CsChar &CsChar::operator=(CsChar c) &
+{
+   m_char = c.m_char;
    return *this;
 }
 

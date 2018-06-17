@@ -235,13 +235,11 @@ QString8::const_iterator QString8::cs_internal_rfind_fast(const QString8 &str, c
    return iter_end;
 }
 
-
-
 // methods
-void QString8::chop(size_type n)
+void QString8::chop(size_type numOfChars)
 {
-   if (n > 0) {
-      auto iter = end() - n;
+   if (numOfChars > 0) {
+      auto iter = end() - numOfChars;
       erase(iter, end());
    }
 }
@@ -393,7 +391,6 @@ bool QString8::contains(QChar32 c, Qt::CaseSensitivity cs) const
 
 bool QString8::contains(const QString8 &other, Qt::CaseSensitivity cs) const
 {
-
    const_iterator iter      = this->cbegin();
    const_iterator iter_end  = this->cend();
 
@@ -408,11 +405,10 @@ bool QString8::contains(const QString8 &other, Qt::CaseSensitivity cs) const
 
 bool QString8::contains(QStringView8 str, Qt::CaseSensitivity cs) const
 {
-
    const_iterator iter      = this->cbegin();
    const_iterator iter_end  = this->cend();
 
-   iter = indexOfFast(str, iter, cs);      // PERTH str was other
+   iter = indexOfFast(str, iter, cs);
 
    if (iter != iter_end) {
       return true;
@@ -636,7 +632,7 @@ QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
       }
    }
 
-   // broom -- partial, pending surrogates
+   // BROOM-NOW -- partial, pending surrogates
 
    QString8 retval;
 
@@ -692,17 +688,6 @@ QString8 QString8::fromStdString(const std::string &str, size_type numOfChars)
 QString8::const_iterator QString8::indexOfFast(const QRegularExpression8 &regExp, const_iterator from) const
 {
    QRegularExpressionMatch8 match = regExp.match(*this, from);
-
-   if (match.hasMatch())  {
-      return match.capturedStart(0);
-   }
-
-   return end();
-}
-
-QString8::const_iterator QString8::lastIndexOfFast(const QRegularExpression8 &regExp, const_iterator from) const
-{
-   QRegularExpressionMatch8 match = regExp.rmatch(*this, from);
 
    if (match.hasMatch())  {
       return match.capturedStart(0);
@@ -830,6 +815,11 @@ QString8 QString8::mid(size_type indexStart, size_type numOfChars) const
    return substr(indexStart, numOfChars);
 }
 
+QString8 QString8::mid(const_iterator iter, size_type numOfChars) const
+{
+   return midView(iter, numOfChars);
+}
+
 QStringView8 QString8::midView(size_type indexStart, size_type numOfChars) const
 {
    const_iterator iter_begin = cbegin();
@@ -840,7 +830,7 @@ QStringView8 QString8::midView(size_type indexStart, size_type numOfChars) const
    }
 
    if (iter_begin == cend()) {
-      // index > size()
+      // indexStart > length()
       return QStringView8();
    }
 
@@ -857,6 +847,30 @@ QStringView8 QString8::midView(size_type indexStart, size_type numOfChars) const
    }
 
    return QStringView8(iter_begin, iter_end);
+}
+
+QStringView8 QString8::midView(const_iterator iter, size_type numOfChars) const
+{
+   const_iterator iter_end;
+
+   if (iter == cend()) {
+      // index > size()
+      return QStringView8();
+   }
+
+   if (numOfChars >= 0) {
+      iter_end = iter;
+
+      for (size_type i = 0; i < numOfChars && iter_end != cend(); ++i)  {
+         ++iter_end;
+      }
+
+   } else {
+      iter_end = cend();
+
+   }
+
+   return QStringView8(iter, iter_end);
 }
 
 QString8 QString8::normalized(QString8::NormalizationForm mode, QChar32::UnicodeVersion version) const

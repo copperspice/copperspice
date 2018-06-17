@@ -90,8 +90,6 @@ class LIB_CS_STRING_EXPORT utf8
                      break;
                   }
                }
-
-               // inside of the for loop
             }
          }
 

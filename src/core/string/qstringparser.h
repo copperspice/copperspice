@@ -84,10 +84,10 @@ class Q_CORE_EXPORT QStringParser
          ArgEscapeData d = findArgEscapes(str);
 
          if (d.occurrences == 0) {
-            // T must have a toUtf8() method
+            // T must have a toUtf8() method, can not use csPrintable()
 
-            qWarning("Warning: QStringParser::formatArg() is missing place marker '%%n'\n"
-                  "String to format: %s, Argument value: %d\n", str.toLatin1().constData(), value);
+            qWarning("Warning: QStringParser::formatArg() is missing a place marker \n"
+                  "Format string: %s, Argument value: %lld\n", str.toLatin1().constData(), static_cast<long long>(value) );
 
             return str;
          }
@@ -146,7 +146,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("Warning: QStringParser::formatArg() is missing place marker '%%n'\n"
-                  "String to format: %s, Argument value: %f\n", str.toLatin1().constData(), value);
+                  "Format string: %s, Argument value: %f\n", str.toLatin1().constData(), value);
 
             return str;
          }
@@ -177,7 +177,13 @@ class Q_CORE_EXPORT QStringParser
                break;
 
             default:
-               qWarning("Warning: QStringParser::formatArg() invalid format '%c'", format);
+               if (format <= 32) {
+                  qWarning("Warning: QStringParser::formatArg() invalid format '%d'", format);
+
+               } else {
+                  qWarning("Warning: QStringParser::formatArg() invalid format '%c'", format);
+               }
+
                break;
          }
 
@@ -244,7 +250,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("Warning: QStringParser::formatArg() is missing place marker '%%n'\n"
-                  "String to format: %s, Argument value: %s\n", str.toLatin1().constData(), tmp.toLatin1().constData());
+                  "Format string: %s, Argument value: %s\n", str.toLatin1().constData(), tmp.toLatin1().constData());
 
             return str;
          }
@@ -381,6 +387,10 @@ class Q_CORE_EXPORT QStringParser
             *ok = ! stream.fail();
          }
 
+         if (stream.fail()) {
+            return 0;
+         }
+
          return retval;
       }
 
@@ -396,6 +406,10 @@ class Q_CORE_EXPORT QStringParser
             *ok = ! stream.fail();
          }
 
+         if (stream.fail()) {
+            return 0;
+         }
+
          return retval;
       }
 
@@ -409,6 +423,10 @@ class Q_CORE_EXPORT QStringParser
 
          if (ok != nullptr) {
             *ok = ! stream.fail();
+         }
+
+         if (stream.fail()) {
+            return 0;
          }
 
          return retval;
@@ -462,8 +480,8 @@ class Q_CORE_EXPORT QStringParser
          }
 
          if (argCount > cnt) {
-            qWarning("Warning: Format string has %n arguments and %n place holders.\n%s",
-                  argCount, cnt, str.toLatin1().constData());
+            qWarning("Warning: Format string has %d arguments and %d place holders.\n%s",
+                  int(argCount), cnt, csPrintable(str) );
 
             argCount = cnt;
          }

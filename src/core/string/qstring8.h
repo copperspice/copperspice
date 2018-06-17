@@ -335,20 +335,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::back();
       }
 
-      void chop(size_type n);
+      void chop(size_type numOfChars);
 
       void clear() {
          CsString::CsString::clear();
       }
-
-      size_type count() const {
-         return CsString::CsString::size();
-      }
-
-      size_type count(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(const QRegularExpression8 &regExp) const;
 
       int compare(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
          return compare(QStringView8(*this), QStringView8(str), cs);
@@ -375,6 +366,15 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       bool contains(const QRegularExpression8 &regExp) const {
          return indexOfFast(regExp) != end();
       }
+
+      size_type count() const {
+         return CsString::CsString::size();
+      }
+
+      size_type count(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const QRegularExpression8 &regExp) const;
 
       const char *data() const {
          return constData();
@@ -480,12 +480,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          }
       }
 
-      const_iterator lastIndexOfFast(const QRegularExpression8 &regExp) const {
-         return lastIndexOfFast(regExp, end());
-      }
-
-      const_iterator lastIndexOfFast(const QRegularExpression8 &regExp, const_iterator from) const;
-
       // using indexes
       size_type indexOf(QChar32 c, size_type from = 0, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
 
@@ -544,26 +538,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             QString8 tmp1 = this->toCaseFolded();
             return tmp1.CsString::CsString::rfind(str.toCaseFolded(), from);
          }
-      }
-
-      size_type lastIndexOf(const QRegularExpression8 &regExp, size_type from = -1) const {
-         const_iterator iter;
-
-         if (from < 0) {
-            iter = end();
-
-         } else {
-            iter = begin() + from;
-
-         }
-
-         iter = lastIndexOfFast(regExp, iter);
-
-         if (iter == end()) {
-            return -1;
-         }
-
-         return iter - begin();
       }
 
       //
@@ -637,9 +611,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       static int localeAwareCompare(QStringView8 str1, QStringView8 str2);
 
-
       QString8 mid(size_type indexStart, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+      QString8 mid(const_iterator iter, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+
       QStringView8 midView (size_type indexStart, size_type numOfChars = -1) const;
+      QStringView8 midView (const_iterator iter, size_type numOfChars = -1) const;
 
       QString8 normalized(QString8::NormalizationForm mode, QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned)
                   const Q_REQUIRED_RESULT;
@@ -1053,6 +1029,12 @@ inline QString8 operator+(const QString8 &str1, const QString8 &str2)
    QString8 t(str1);
    t += str2;
    return t;
+}
+
+inline QString8::const_iterator operator+(QString8::size_type n, QString8::const_iterator iter)
+{
+   iter += n;
+   return iter;
 }
 
 inline QString8 &&operator+(QString8 &&str1, const QString8 &str2)

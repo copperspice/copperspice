@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <array>
+
 #include <qstring16.h>
 #include <qdatastream.h>
 #include <qregularexpression.h>
@@ -233,10 +235,10 @@ QString16::const_iterator QString16::cs_internal_rfind_fast(const QString16 &str
 }
 
 // methods
-void QString16::chop(size_type n)
+void QString16::chop(size_type numOfChars)
 {
-   if (n > 0) {
-      auto iter = end() - n;
+   if (numOfChars > 0) {
+      auto iter = end() - numOfChars;
       erase(iter, end());
    }
 }
@@ -407,7 +409,7 @@ bool QString16::contains(QStringView16 str, Qt::CaseSensitivity cs) const
    const_iterator iter      = this->cbegin();
    const_iterator iter_end  = this->cend();
 
-   iter = indexOfFast(str, iter, cs);      // PERTH str was other
+   iter = indexOfFast(str, iter, cs);
 
    if (iter != iter_end) {
       return true;
@@ -631,7 +633,7 @@ QString16 QString16::fromUtf16(const char16_t *str, size_type numOfChars)
       }
    }
 
-   // broom -- partial, pending surrogates
+   // BROOM-NOW -- partial, pending surrogates
 
    QString16 retval;
 
@@ -687,17 +689,6 @@ QString16 QString16::fromStdString(const std::string &str, size_type numOfChars)
 QString16::const_iterator QString16::indexOfFast(const QRegularExpression16 &regExp, const_iterator from) const
 {
    QRegularExpressionMatch16 match = regExp.match(*this, from);
-
-   if (match.hasMatch())  {
-      return match.capturedStart(0);
-   }
-
-   return end();
-}
-
-QString16::const_iterator QString16::lastIndexOfFast(const QRegularExpression16 &regExp, const_iterator from) const
-{
-   QRegularExpressionMatch16 match = regExp.rmatch(*this, from);
 
    if (match.hasMatch())  {
       return match.capturedStart(0);
@@ -825,6 +816,11 @@ QString16 QString16::mid(size_type indexStart, size_type numOfChars) const
    return substr(indexStart, numOfChars);
 }
 
+QString16 QString16::mid(const_iterator iter, size_type numOfChars) const
+{
+   return midView(iter, numOfChars);
+}
+
 QStringView16 QString16::midView(size_type indexStart, size_type numOfChars) const
 {
    const_iterator iter_begin = cbegin();
@@ -852,6 +848,30 @@ QStringView16 QString16::midView(size_type indexStart, size_type numOfChars) con
    }
 
    return QStringView16(iter_begin, iter_end);
+}
+
+QStringView16 QString16::midView(const_iterator iter, size_type numOfChars) const
+{
+   const_iterator iter_end;
+
+   if (iter == cend()) {
+      // index > size()
+      return QStringView16();
+   }
+
+   if (numOfChars >= 0) {
+      iter_end = iter;
+
+      for (size_type i = 0; i < numOfChars && iter_end != cend(); ++i)  {
+         ++iter_end;
+      }
+
+   } else {
+      iter_end = cend();
+
+   }
+
+   return QStringView16(iter, iter_end);
 }
 
 QString16 QString16::normalized(QString16::NormalizationForm mode, QChar32::UnicodeVersion version) const

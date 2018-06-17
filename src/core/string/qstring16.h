@@ -331,20 +331,11 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return CsString::CsString_utf16::back();
       }
 
-      void chop(size_type n);
+      void chop(size_type numOfChars);
 
       void clear() {
          CsString::CsString_utf16::clear();
       }
-
-      size_type count() const {
-         return CsString::CsString_utf16::size();
-      }
-
-      size_type count(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(QStringView16 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(const QRegularExpression16 &regExp) const;
 
       int compare(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
          return compare(QStringView16(*this), QStringView16(str), cs);
@@ -371,6 +362,15 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       bool contains(const QRegularExpression16 &regExp) const {
          return indexOfFast(regExp) != end();
       }
+
+      size_type count() const {
+         return CsString::CsString_utf16::size();
+      }
+
+      size_type count(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(QStringView16 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const QRegularExpression16 &regExp) const;
 
       const char16_t *data() const {
          return constData();
@@ -476,12 +476,6 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          }
       }
 
-      const_iterator lastIndexOfFast(const QRegularExpression16 &regExp) const {
-         return lastIndexOfFast(regExp, end());
-      }
-
-      const_iterator lastIndexOfFast(const QRegularExpression16 &regExp, const_iterator from) const;
-
       // using indexes
       size_type indexOf(QChar32 c, size_type from = 0, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
 
@@ -540,26 +534,6 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
             QString16 tmp1 = this->toCaseFolded();
             return tmp1.CsString::CsString_utf16::rfind(str.toCaseFolded(), from);
          }
-      }
-
-      size_type lastIndexOf(const QRegularExpression16 &regExp, size_type from = -1) const {
-         const_iterator iter;
-
-         if (from < 0) {
-            iter = end();
-
-         } else {
-            iter = begin() + from;
-
-         }
-
-         iter = lastIndexOfFast(regExp, iter);
-
-         if (iter == end()) {
-            return -1;
-         }
-
-         return iter - begin();
       }
 
       //
@@ -634,7 +608,10 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       static int localeAwareCompare(QStringView16 str1, QStringView16 str2);
 
       QString16 mid(size_type indexStart, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+      QString16 mid(const_iterator iter, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+
       QStringView16 midView (size_type indexStart, size_type numOfChars = -1) const;
+      QStringView16 midView (const_iterator iter, size_type numOfChars = -1) const;
 
       QString16 normalized(QString16::NormalizationForm mode, QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned)
                   const Q_REQUIRED_RESULT;
@@ -1053,6 +1030,12 @@ inline QString16 &&operator+(QString16 &&str1, const QString16 &str2)
 {
    str1 += str2;
    return std::move(str1);
+}
+
+inline QString16::const_iterator operator+(QString16::size_type n, QString16::const_iterator iter)
+{
+   iter += n;
+   return iter;
 }
 
 inline QString16 operator+(QChar32 c, const QString16 &str)

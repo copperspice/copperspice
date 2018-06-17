@@ -29,7 +29,8 @@ template <typename S>
 class CsBasicStringView
 {
    public:
-      using size_type              = std::ptrdiff_t;
+      using difference_type        = typename S::difference_type;
+      using size_type              = typename S::difference_type;
       using value_type             = typename S::value_type;
 
       using const_iterator         = typename S::const_iterator;
@@ -57,11 +58,11 @@ class CsBasicStringView
       CsBasicStringView<S> &operator=(const CsBasicStringView &str) = default;
       CsBasicStringView<S> &operator=(CsBasicStringView &&str) = default;
 
-      CsChar operator[](size_type index) const;
+      value_type operator[](size_type index) const;
 
       // methods
-      CsChar at(size_type index) const;
-      CsChar back() const;
+      value_type at(size_type index) const;
+      value_type back() const;
 
       int compare(CsBasicStringView str) const;
 
@@ -109,7 +110,7 @@ class CsBasicStringView
       const_iterator rfind_fast(CsBasicStringView str) const;
       const_iterator rfind_fast(CsBasicStringView str, const_iterator iter_end) const;
 
-      CsChar front() const;
+      value_type front() const;
       size_type length()  const;
 
       size_type size() const;
@@ -222,7 +223,7 @@ inline bool operator>=(CsBasicStringView<S> &str1, CsBasicStringView<S> &str2)
 
 // operators
 template <typename S>
-CsChar CsBasicStringView<S>::operator[](size_type index) const
+typename CsBasicStringView<S>::value_type CsBasicStringView<S>::operator[](size_type index) const
 {
    const_iterator iter = begin();
    std::advance(iter, index);
@@ -232,7 +233,7 @@ CsChar CsBasicStringView<S>::operator[](size_type index) const
 
 // methods
 template <typename S>
-CsChar CsBasicStringView<S>::at(size_type index) const
+typename CsBasicStringView<S>::value_type CsBasicStringView<S>::at(size_type index) const
 {
    const_iterator iter = begin();
    std::advance(iter, index);
@@ -241,7 +242,7 @@ CsChar CsBasicStringView<S>::at(size_type index) const
 }
 
 template <typename S>
-CsChar CsBasicStringView<S>::back() const
+typename CsBasicStringView<S>::value_type CsBasicStringView<S>::back() const
 {
    return *(--end());
 }
@@ -336,7 +337,7 @@ typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(Cs
 
    auto iter = iter_begin;
 
-   while (iter != iter_end)   {
+   while (iter != iter_end) {
 
       if (*iter == str[0])  {
          auto text_iter    = iter + 1;
@@ -373,7 +374,7 @@ typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(co
                   size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
-   static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
+   static_assert(! std::is_same<T, T>::value, "Unsafe operations not allowed, unknown encoding for this operation");
 #endif
 
    const_iterator iter_end = end();
@@ -490,7 +491,7 @@ template <typename T,  typename>
 typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(const T &str, const_iterator iter_begin) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
-   static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
+   static_assert(! std::is_same<T, T>::value, "Unsafe operations not allowed, unknown encoding for this operation");
 #endif
 
    const_iterator iter_end = end();
@@ -705,7 +706,7 @@ typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::rfind_fast(C
 }
 
 template <typename S>
-CsChar CsBasicStringView<S>::front() const
+typename CsBasicStringView<S>::value_type CsBasicStringView<S>::front() const
 {
    return *begin();
 }
