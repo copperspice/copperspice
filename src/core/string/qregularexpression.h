@@ -45,6 +45,7 @@ enum class QPatternOption {
    DontCaptureOption             = 0x0020,
    WildcardOption                = 0x0040,
    WildcardUnixOption            = 0x0080,
+   FixedStringOption             = 0x0100,
 };
 Q_DECLARE_FLAGS(QPatternOptionFlags, QPatternOption)
 
@@ -128,9 +129,10 @@ class QRegexTraits
          return c;
       }
 
+      template<typename C = QChar32>
       QChar32 translate_nocase(QChar32 c) const {
-         // broom -- modify for case insensitive
-         return c;
+         // broom -modify for case insensitive when multiple chars are returned
+         return C(c).toCaseFolded()[0];
       }
 
       template<typename Iter>
@@ -145,8 +147,8 @@ class QRegexTraits
 
       template<typename Iter>
       string_type lookup_collatename(Iter first, Iter last)  const {
-         // broom -- modify for case insensitive
-         return S();
+         string_type retval(first, last);
+         return retval;
       }
 
       template<typename Iter>
@@ -208,9 +210,9 @@ class QRegexTraits
          return Char_Category::categoryNone;
       }
 
+      template<typename C = QChar32>
       bool isctype(QChar32 c, char_class_type cType) const {
          // does the character c belong to the class_type t
-
          bool retval = false;
 
          if (cType & Char_Category::categoryAlpha) {
@@ -234,8 +236,11 @@ class QRegexTraits
          }
 
          if (cType & Char_Category::categoryHexDigit) {
-            // broom - categoryHexDigit
-//          retval = retval || c.isX();
+            QChar tmp = C(c).toLower()[0];
+
+            if (tmp.isDigit() || (tmp >= 'a' && tmp <= 'f')) {
+               retval = true;
+            }
          }
 
          if (cType & Char_Category::categoryBlank) {
@@ -376,22 +381,6 @@ class Q_CORE_EXPORT QRegularExpression
 
       QRegularExpressionMatch<S> match(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType = QMatchType::NormalMatch, QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
-
-
-      QRegularExpressionMatch<S> rmatch(const S &str) const {
-         return rmatch(str, str.end());
-      }
-
-      QRegularExpressionMatch<S> rmatch(const S &str, typename S::const_iterator offset, QMatchType matchType = QMatchType::NormalMatch,
-                  QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
-
-      QRegularExpressionMatch<S> rmatch(QStringView<S> str) const {
-         return rmatch(str, str.end());
-      }
-
-      QRegularExpressionMatch<S> rmatch(QStringView<S> str, typename S::const_iterator offset,
-                  QMatchType matchType = QMatchType::NormalMatch,
-                  QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
       QList<S> namedCaptureGroups() const;
 
@@ -753,32 +742,6 @@ QRegularExpressionMatch<S> QRegularExpression<S>::match(QStringView<S> str, type
 }
 
 template <typename S>
-QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const S &str, typename S::const_iterator offset, QMatchType matchType,
-                  QMatchOptionFlags matchOptions) const
-{
-   if (m_valid) {
-      // broom -- implementation pending rmatch
-      return QRegularExpressionMatch<S>();
-
-   } else {
-      return QRegularExpressionMatch<S>();
-   }
-}
-
-template <typename S>
-QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(QStringView<S> str, typename S::const_iterator offset,
-                  QMatchType matchType, QMatchOptionFlags matchOptions) const
-{
-   if (m_valid) {
-      // broom -- implementation pending rmatch
-      return QRegularExpressionMatch<S>();
-
-   } else {
-      return QRegularExpressionMatch<S>();
-   }
-}
-
-template <typename S>
 QList<S> QRegularExpression<S>::namedCaptureGroups() const
 {
    if (m_valid) {
@@ -799,6 +762,7 @@ void QRegularExpression<S>::setPattern(const S &pattern)
 
    // declare flags
    typename cs_regex_ns::basic_regex<QChar32, QRegexTraits<S>>::flag_type flags;
+   flags = 0;
 
    if (m_patternOptions & QPatternOption::CaseInsensitiveOption) {
       flags |= cs_regex_ns::regex_constants::icase;
@@ -1359,6 +1323,9 @@ S cs_internal_regexp_toCanonical(const S &pattern, QPatternOptionFlags flags)
 
    } else if (flags & QPatternOption::WildcardUnixOption) {
       return wc2rx(pattern, true);
+
+   } else if (flags & QPatternOption::FixedStringOption) {
+      return Cs::QRegularExpression<S>::escape(pattern);
 
    } else {
       return pattern;
