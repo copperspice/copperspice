@@ -134,11 +134,10 @@ QString QStyledItemDelegate::displayText(const QVariant &value, const QLocale &l
       default:
          // convert new lines into line separators
          text = value.toString();
-         for (int i = 0; i < text.count(); ++i) {
-            if (text.at(i) == QLatin1Char('\n')) {
-               text[i] = QChar::LineSeparator;
-            }
-         }
+
+         const QChar ch = QChar::LineSeparator;
+         text.replace('\n', ch);
+
          break;
    }
 

@@ -687,9 +687,11 @@ void QWinInputContext::updateImeStatus(QWidget *w, bool hasFocus)
    bool e = w->testAttribute(Qt::WA_InputMethodEnabled) && w->isEnabled()
             && !(focusProxyWidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText));
    bool hasIme = e && hasFocus;
+
 #ifdef Q_IME_DEBUG
-   qDebug("%s HasFocus = %d hasIme = %d e = %d ", w->metaObject()->className(), hasFocus, hasIme, e);
+   qDebug("%s HasFocus = %d hasIme = %d e = %d ", csPrintable(w->metaObject()->className()), hasFocus, hasIme, e);
 #endif
+
    if (hasFocus || e) {
       if (isInPopup(w)) {
          QWinInputContext::enablePopupChild(w, hasIme);

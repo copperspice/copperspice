@@ -188,14 +188,17 @@ QDeclarativePropertyCache::Data QDeclarativePropertyCache::create(const QMetaObj
    int methodCount = metaObject->methodCount();
    for (int ii = methodCount - 1; ii >= 3; --ii) { // >=3 to block the destroyed signal and deleteLater() slot
       QMetaMethod m = metaObject->method(ii);
+
       if (m.access() == QMetaMethod::Private) {
          continue;
       }
+
       QString methodName = QString::fromUtf8(m.signature());
 
       int parenIdx = methodName.indexOf(QLatin1Char('('));
       Q_ASSERT(parenIdx != -1);
-      QStringView methodNameRef = methodName.leftRef(parenIdx);
+
+      QStringView methodNameRef = methodName.leftView(parenIdx);
 
       if (methodNameRef == property) {
          rv.load(m);

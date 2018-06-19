@@ -250,7 +250,8 @@ static NSMenuItem *qt_mac_menu_merge_action(OSMenuRef merge, QMacMenuAction *act
       t.remove(st, t.length() - st);
    }
 
-   t.replace(QRegExp(QString::fromLatin1("\\.*$")), QLatin1String("")); //no ellipses
+   static QRegularExpression regExp("\\.+$");
+   t.replace(regExp, "");                         // no ellipses
 
    NSMenuItem *ret = 0;
    QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *loader = getMenuLoader();
@@ -283,9 +284,11 @@ static NSMenuItem *qt_mac_menu_merge_action(OSMenuRef merge, QMacMenuAction *act
 
       case QAction::TextHeuristicRole: {
          QString aboutString = QMenuBar::tr("About").toLower();
-         if (t.startsWith(aboutString) || t.endsWith(aboutString)) {
 
-            if (t.indexOf(QRegExp(QString::fromLatin1("qt$"), Qt::CaseInsensitive)) == -1) {
+         if (t.startsWith(aboutString) || t.endsWith(aboutString)) {
+            static QRegularExpression regExp("qt$", QPatternOption::CaseInsensitiveOption);
+
+            if (! t.contains(regExp)) {
                ret = [loader aboutMenuItem];
 
             } else {
@@ -345,10 +348,12 @@ static QString qt_mac_menu_merge_text(QMacMenuAction *action)
       } else {
          ret = action->action->text();
       }
+
    } else if (action->menuItem == [loader preferencesMenuItem]) {
       ret = qt_mac_applicationmenu_string(4);
+
    } else if (action->menuItem == [loader quitMenuItem]) {
-      ret = qt_mac_applicationmenu_string(5).arg(qAppName());
+      ret = qt_mac_applicationmenu_string(5).formatArg(qAppName());
    }
 
    return ret;
@@ -527,13 +532,16 @@ QMenuPrivate::QMacMenuPrivate::addAction(QMacMenuAction *action, QMacMenuAction 
 // return an autoreleased string given a QKeySequence (currently only looks at the first one).
 NSString *keySequenceToKeyEqivalent(const QKeySequence &accel)
 {
-   quint32 accel_key = (accel[0] & ~(Qt::MODIFIER_MASK | Qt::UNICODE_ACCEL));
+   char32_t accel_key = (accel[0] & ~(Qt::MODIFIER_MASK | Qt::UNICODE_ACCEL));
    extern QChar qtKey2CocoaKey(Qt::Key key);
-   QChar cocoa_key = qtKey2CocoaKey(Qt::Key(accel_key));
-   if (cocoa_key.isNull()) {
-      cocoa_key = QChar(accel_key).toLower().unicode();
+
+   QString cocoa_key = qtKey2CocoaKey(Qt::Key(accel_key));
+
+   if (cocoa_key.isEmpty()) {
+      cocoa_key = QChar(accel_key).toLower();
    }
-   return [NSString stringWithCharacters: &cocoa_key.unicode() length: 1];
+
+   return cocoa_key.toNSString();
 }
 
 // return the cocoa modifier mask for the QKeySequence (currently only looks at the first one).

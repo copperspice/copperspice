@@ -1786,29 +1786,32 @@ bool QPdfBaseEnginePrivate::openPrintDevice()
             if (!selectionOption.isEmpty()) {
                pr.prepend(selectionOption);
             } else {
-               pr.prepend(QLatin1String("-P"));
+               pr.prepend("-P");
             }
-            (void)execlp(printProgram.toLocal8Bit().data(), printProgram.toLocal8Bit().data(),
-                         pr.toLocal8Bit().data(), (char *)0);
+
+            (void)execlp(printProgram.toUtf8().data(), printProgram.toUtf8().data(), pr.toUtf8().data(), (char *)0);
+
          } else {
             // if no print program has been specified, be smart
             // about the option string too.
             QList<QByteArray> lprhack;
             QList<QByteArray> lphack;
             QByteArray media;
+
             if (!pr.isEmpty() || !selectionOption.isEmpty()) {
                if (!selectionOption.isEmpty()) {
                   QStringList list = selectionOption.split(QLatin1Char(' '));
                   for (int i = 0; i < list.size(); ++i) {
-                     lprhack.append(list.at(i).toLocal8Bit());
+                     lprhack.append(list.at(i).toUtf8());
                   }
                   lphack = lprhack;
                } else {
                   lprhack.append("-P");
                   lphack.append("-d");
                }
-               lprhack.append(pr.toLocal8Bit());
-               lphack.append(pr.toLocal8Bit());
+
+               lprhack.append(pr.toUtf8());
+               lphack.append(pr.toUtf8());
             }
             lphack.append("-s");
 
@@ -1816,6 +1819,7 @@ bool QPdfBaseEnginePrivate::openPrintDevice()
             char lp[] = "lp";
             lpargs[0] = lp;
             int i;
+
             for (i = 0; i < lphack.size(); ++i) {
                lpargs[i + 1] = (char *)lphack.at(i).constData();
             }
@@ -1900,7 +1904,7 @@ void QPdfBaseEnginePrivate::closePrintDevice()
       QVector<cups_option_t> cupsOptStruct;
 
       if (!printerName.isEmpty()) {
-         prnName = printerName.toLocal8Bit();
+         prnName = printerName.toUtf8();
       } else {
          QPrinterInfo def = QPrinterInfo::defaultPrinter();
          if (def.isNull()) {
@@ -1908,15 +1912,15 @@ void QPdfBaseEnginePrivate::closePrintDevice()
             QFile::remove(tempFile);
             return;
          }
-         prnName = def.printerName().toLocal8Bit();
+         prnName = def.printerName().toUtf8();
       }
 
       if (!cupsStringPageSize.isEmpty()) {
-         options.append(QPair<QByteArray, QByteArray>("media", cupsStringPageSize.toLocal8Bit()));
+         options.append(QPair<QByteArray, QByteArray>("media", cupsStringPageSize.toUtf8()));
       }
 
       if (copies > 1) {
-         options.append(QPair<QByteArray, QByteArray>("copies", QString::number(copies).toLocal8Bit()));
+         options.append(QPair<QByteArray, QByteArray>("copies", QString::number(copies).toUtf8()));
       }
 
       if (collate) {
@@ -1948,7 +1952,7 @@ void QPdfBaseEnginePrivate::closePrintDevice()
 
       QStringList::const_iterator it = cupsOptions.constBegin();
       while (it != cupsOptions.constEnd()) {
-         options.append(QPair<QByteArray, QByteArray>((*it).toLocal8Bit(), (*(it + 1)).toLocal8Bit()));
+         options.append(QPair<QByteArray, QByteArray>((*it).toUtf8(), (*(it + 1)).toUtf8()));
          it += 2;
       }
 
@@ -1961,8 +1965,8 @@ void QPdfBaseEnginePrivate::closePrintDevice()
 
       // Print the file.
       cups_option_t *optPtr = cupsOptStruct.size() ? &cupsOptStruct.first() : 0;
-      cups.printFile(prnName.constData(), tempFile.toLocal8Bit().constData(),
-                     title.toLocal8Bit().constData(), cupsOptStruct.size(), optPtr);
+      cups.printFile(prnName.constData(), tempFile.toUtf8().constData(),
+                     title.toUtf8().constData(), cupsOptStruct.size(), optPtr);
 
       QFile::remove(tempFile);
    }

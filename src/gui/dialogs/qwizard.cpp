@@ -795,7 +795,7 @@ void QWizardPrivate::addField(const QWizardField &field)
    myField.resolve(defaultPropertyTable);
 
    if (fieldIndexMap.contains(myField.name)) {
-      qWarning("QWizardPage::addField: Duplicate field '%s'", qPrintable(myField.name));
+      qWarning("QWizardPage::addField: Duplicate field '%s'", csPrintable(myField.name));
       return;
    }
 
@@ -2542,7 +2542,7 @@ void QWizard::setField(const QString &name, const QVariant &value)
       return;
    }
 
-   qWarning("QWizard::setField: No such field '%s'", qPrintable(name));
+   qWarning("QWizard::setField: No such field '%s'", csPrintable(name));
 }
 
 /*!
@@ -2562,7 +2562,7 @@ QVariant QWizard::field(const QString &name) const
       return field.object->property(field.property);
    }
 
-   qWarning("QWizard::field: No such field '%s'", qPrintable(name));
+   qWarning("QWizard::field: No such field '%s'", csPrintable(name));
    return QVariant();
 }
 

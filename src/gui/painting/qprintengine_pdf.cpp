@@ -993,10 +993,13 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
    //qDebug() << "embedFont" << font->object_id;
    int fontObject = font->object_id;
    QByteArray fontData = font->toTruetype();
+
 #ifdef FONT_DUMP
    static int i = 0;
+
    QString fileName("font%1.ttf");
    fileName = fileName.formatArg(i++);
+
    QFile ff(fileName);
    ff.open(QFile::WriteOnly);
    ff.write(fontData);
@@ -1013,16 +1016,20 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
    {
       qreal scale = 1000 / properties.emSquare.toReal();
       addXrefEntry(fontDescriptor);
+
       QByteArray descriptor;
       QPdf::ByteStream s(&descriptor);
+
       s << "<< /Type /FontDescriptor\n"
         "/FontName /Q";
       int tag = fontDescriptor;
+
       for (int i = 0; i < 5; ++i) {
          s << (char)('A' + (tag % 26));
          tag /= 26;
       }
-      s <<  '+' << properties.postscriptName << "\n"
+
+      s <<  '+' << properties.postscriptName.toUtf8() << "\n"
         "/Flags " << 4 << "\n"
         "/FontBBox ["
         << properties.boundingBox.x()*scale
@@ -1038,6 +1045,7 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
         ">> endobj\n";
       write(descriptor);
    }
+
    {
       addXrefEntry(fontstream);
       QByteArray header;
@@ -1047,26 +1055,30 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
       s << "<<\n"
         "/Length1 " << fontData.size() << "\n"
         "/Length " << length_object << "0 R\n";
+
       if (do_compress) {
          s << "/Filter /FlateDecode\n";
       }
-      s << ">>\n"
-        "stream\n";
+
+      s << ">>\nstream\n";
+
       write(header);
       int len = writeCompressed(fontData);
-      write("endstream\n"
-            "endobj\n");
+
+      write("endstream\nendobj\n");
+
       addXrefEntry(length_object);
-      xprintf("%d\n"
-              "endobj\n", len);
+      xprintf("%d\nendobj\n", len);
    }
+
    {
       addXrefEntry(cidfont);
       QByteArray cid;
       QPdf::ByteStream s(&cid);
+
       s << "<< /Type /Font\n"
         "/Subtype /CIDFontType2\n"
-        "/BaseFont /" << properties.postscriptName << "\n"
+        "/BaseFont /" << properties.postscriptName.toUtf8() << "\n"
         "/CIDSystemInfo << /Registry (Adobe) /Ordering (Identity) /Supplement 0 >>\n"
         "/FontDescriptor " << fontDescriptor << "0 R\n"
         "/CIDToGIDMap /Identity\n"
@@ -1075,22 +1087,24 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
         "endobj\n";
       write(cid);
    }
+
    {
       addXrefEntry(toUnicode);
       QByteArray touc = font->createToUnicodeMap();
-      xprintf("<< /Length %d >>\n"
-              "stream\n", touc.length());
+      xprintf("<< /Length %d >>\nstream\n", touc.length());
+
       write(touc);
-      write("endstream\n"
-            "endobj\n");
+      write("endstream\nendobj\n");
    }
+
    {
       addXrefEntry(fontObject);
       QByteArray font;
       QPdf::ByteStream s(&font);
+
       s << "<< /Type /Font\n"
         "/Subtype /Type0\n"
-        "/BaseFont /" << properties.postscriptName << "\n"
+        "/BaseFont /" << properties.postscriptName.toUtf8() << "\n"
         "/Encoding /Identity-H\n"
         "/DescendantFonts [" << cidfont << "0 R]\n"
         "/ToUnicode " << toUnicode << "0 R"
@@ -1099,7 +1113,6 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
       write(font);
    }
 }
-
 
 void QPdfEnginePrivate::writeFonts()
 {

@@ -97,7 +97,7 @@ QWSLinuxInputMousePrivate::QWSLinuxInputMousePrivate(QWSLinuxInputMouseHandler *
       m_notify = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
       connect(m_notify, SIGNAL(activated(int)), this, SLOT(readMouseData()));
    } else {
-      qWarning("Cannot open mouse input device '%s': %s", qPrintable(dev), strerror(errno));
+      qWarning("Cannot open mouse input device '%s': %s", csPrintable(dev), strerror(errno));
       return;
    }
 }

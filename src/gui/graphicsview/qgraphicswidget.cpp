@@ -839,10 +839,10 @@ void QGraphicsWidget::setLayout(QGraphicsLayout *l)
 
    // Prevent assigning a layout that is already assigned to another widget.
    QGraphicsLayoutItem *oldParent = l->parentLayoutItem();
+
    if (oldParent && oldParent != this) {
       qWarning("QGraphicsWidget::setLayout: Attempting to set a layout on %s"
-               " \"%s\", when the layout already has a parent",
-               metaObject()->className(), qPrintable(objectName()));
+               " \"%s\", when the layout already has a parent", csPrintable(metaObject()->className()), csPrintable(objectName()));
       return;
    }
 

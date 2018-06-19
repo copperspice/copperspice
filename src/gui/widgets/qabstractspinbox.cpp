@@ -1714,25 +1714,32 @@ void QSpinBoxValidator::fixup(QString &input) const
 QVariant operator+(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
+
    if (arg1.type() != arg2.type())
       qWarning("QAbstractSpinBox: Internal error: Different types (%s vs %s) (%s:%d)",
-               arg1.typeName(), arg2.typeName(), __FILE__, __LINE__);
+               csPrintable(arg1.typeName()), csPrintable(arg2.typeName()),  __FILE__, __LINE__);
+
    switch (arg1.type()) {
       case QVariant::Int:
          ret = QVariant(arg1.toInt() + arg2.toInt());
          break;
+
       case QVariant::Double:
          ret = QVariant(arg1.toDouble() + arg2.toDouble());
          break;
+
       case QVariant::DateTime: {
          QDateTime a2 = arg2.toDateTime();
          QDateTime a1 = arg1.toDateTime().addDays(QDATETIMEEDIT_DATETIME_MIN.daysTo(a2));
          a1.setTime(a1.time().addMSecs(QTime().msecsTo(a2.time())));
          ret = QVariant(a1);
       }
+      break;
+
       default:
          break;
    }
+
    return ret;
 }
 
@@ -1745,24 +1752,31 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
 QVariant operator-(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
+
    if (arg1.type() != arg2.type())
       qWarning("QAbstractSpinBox: Internal error: Different types (%s vs %s) (%s:%d)",
-               arg1.typeName(), arg2.typeName(), __FILE__, __LINE__);
+               csPrintable(arg1.typeName()), csPrintable(arg2.typeName()),  __FILE__, __LINE__);
+
    switch (arg1.type()) {
       case QVariant::Int:
          ret = QVariant(arg1.toInt() - arg2.toInt());
          break;
+
       case QVariant::Double:
          ret = QVariant(arg1.toDouble() - arg2.toDouble());
          break;
+
       case QVariant::DateTime: {
          QDateTime a1 = arg1.toDateTime();
          QDateTime a2 = arg2.toDateTime();
+
          int days = a2.daysTo(a1);
          int secs = a2.secsTo(a1);
          int msecs = qMax(0, a1.time().msec() - a2.time().msec());
+
          if (days < 0 || secs < 0 || msecs < 0) {
             ret = arg1;
+
          } else {
             QDateTime dt = a2.addDays(days).addSecs(secs);
             if (msecs > 0) {
@@ -1771,9 +1785,12 @@ QVariant operator-(const QVariant &arg1, const QVariant &arg2)
             ret = QVariant(dt);
          }
       }
+      break;
+
       default:
          break;
    }
+
    return ret;
 }
 

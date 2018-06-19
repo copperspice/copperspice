@@ -85,11 +85,9 @@ class QItemDelegatePrivate
    }
 
    inline static QString replaceNewLine(QString text) {
-      const QChar nl = QLatin1Char('\n');
-      for (int i = 0; i < text.count(); ++i)
-         if (text.at(i) == nl) {
-            text[i] = QChar::LineSeparator;
-         }
+      const QChar ch = QChar::LineSeparator;
+      text.replace('\n', ch);
+
       return text;
    }
 

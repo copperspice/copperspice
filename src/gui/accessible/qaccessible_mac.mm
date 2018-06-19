@@ -937,7 +937,7 @@ static QString nameForEventKind(UInt32 kind)
         case kEventAccessibleGetAllActionNames:     return QString("GetAllActionNames");    break;
         case kEventAccessibleGetFocusedChild:       return QString("GetFocusedChild");      break;
         default:
-            return QString("Unknown accessibility event type: %1").arg(kind);
+            return QString("Unknown accessibility event type: %1").formatArg(kind);
         break;
     };
 }

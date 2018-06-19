@@ -200,8 +200,10 @@ void QWSServerSocket::init(const QString &file)
    struct sockaddr_un a;
    memset(&a, 0, sizeof(a));
    a.sun_family = PF_LOCAL;
+
    strncpy(a.sun_path, fn.constData(), sizeof(a.sun_path) - 1);
    int r = ::bind(s, (struct sockaddr *)&a, SUN_LEN(&a));
+
    if (r < 0) {
       perror("QWSServerSocket::init");
       qWarning("QWSServerSocket: could not bind to file %s", fn.constData());
@@ -219,8 +221,9 @@ void QWSServerSocket::init(const QString &file)
    // listen
    if (::listen(s, backlog) == 0) {
       if (!setSocketDescriptor(s)) {
-         qWarning( "QWSServerSocket could not set descriptor %d : %s", s, errorString().toLatin1().constData());
+         qWarning("QWSServerSocket could not set descriptor %d : %s", s, csPrintable(errorString()));
       }
+
    } else {
       perror("QWSServerSocket::init");
       qWarning("QWSServerSocket: could not listen to file %s", fn.constData());

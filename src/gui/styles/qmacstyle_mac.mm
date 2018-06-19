@@ -371,7 +371,6 @@ static int getControlSize(const QStyleOption *option, const QWidget *widget)
    return QAquaSizeLarge;
 }
 
-
 static inline bool isTreeView(const QWidget *widget)
 {
    return (widget && widget->parentWidget() &&
@@ -380,27 +379,29 @@ static inline bool isTreeView(const QWidget *widget)
 
 QString qt_mac_removeMnemonics(const QString &original)
 {
-   QString returnText(original.size(), 0);
-   int finalDest = 0;
-   int currPos = 0;
-   int l = original.length();
+   QString retval;
 
-   while (l) {
-      if (original.at(currPos) == QLatin1Char('&')
-            && (l == 1 || original.at(currPos + 1) != QLatin1Char('&'))) {
+   int currPos = 0;
+   int len     = original.length();
+
+   while (len != 0) {
+      if (original.at(currPos) == '&' && (len == 1 || original.at(currPos + 1) != '&')) {
+
          ++currPos;
-         --l;
-         if (l == 0) {
+         --len;
+
+         if (len == 0) {
             break;
          }
       }
-      returnText[finalDest] = original.at(currPos);
+
+      retval.append(original.at(currPos));
+
       ++currPos;
-      ++finalDest;
-      --l;
+      --len;
    }
-   returnText.truncate(finalDest);
-   return returnText;
+
+   return retval;
 }
 
 static inline ThemeTabDirection getTabDirection(QTabBar::Shape shape)
@@ -674,12 +675,15 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
                      width = qMax(width, qMax(iconSize.width(), pmSize.width()));
                      height = qMax(height, qMax(iconSize.height(), pmSize.height()));
                   }
-                  if (!bt->text().isNull() && bt->toolButtonStyle() != Qt::ToolButtonIconOnly) {
+
+                  if (!bt->text().isEmpty() && bt->toolButtonStyle() != Qt::ToolButtonIconOnly) {
                      int text_width = bt->fontMetrics().width(bt->text()),
                          text_height = bt->fontMetrics().height();
+
                      if (bt->toolButtonStyle() == Qt::ToolButtonTextUnderIcon) {
                         width = qMax(width, text_width);
                         height += text_height;
+
                      } else {
                         width += text_width;
                         width = qMax(height, text_height);
@@ -1295,9 +1299,11 @@ void QMacStylePrivate::drawCombobox(const HIRect &outerBounds, const HIThemeButt
       // We have an unscaled combobox, or popup-button; use Carbon directly.
       HIRect innerBounds = QMacStylePrivate::comboboxInnerBounds(outerBounds, bdi.kind);
       CS_HIThemeDrawButton(&innerBounds, &bdi, QMacCGContext(p), kHIThemeOrientationNormal, 0);
+
    } else {
       QPixmap buffer;
-      QString key = QString(QLatin1String("$qt_cbox%1-%2")).arg(int(bdi.state)).arg(int(bdi.adornment));
+      QString key = QString("$qt_cbox%1-%2").formatArg(int(bdi.state)).formatArg(int(bdi.adornment));
+
       if (!QPixmapCache::find(key, buffer)) {
          HIRect innerBoundsSmallCombo = {{3, 3}, {29, 25}};
          buffer = QPixmap(35, 28);
@@ -1349,9 +1355,10 @@ void QMacStylePrivate::drawTableHeader(const HIRect &outerBounds,
    Q_UNUSED(err);
 
    QPixmap buffer;
-   QString key = QString(QLatin1String("$qt_tableh%1-%2-%3")).arg(int(bdi.state)).arg(int(bdi.adornment)).arg(int(
-                    bdi.value));
-   if (!QPixmapCache::find(key, buffer)) {
+   QString key = QString(QLatin1String("$qt_tableh%1-%2-%3")).formatArg(int(bdi.state)).formatArg(int(bdi.adornment))
+                  .formatArg(int(bdi.value));
+
+   if (! QPixmapCache::find(key, buffer)) {
       HIRect headerNormalRect = {{0., 0.}, {16., CGFloat(headerHeight)}};
       buffer = QPixmap(headerNormalRect.size.width, headerNormalRect.size.height);
       buffer.fill(Qt::transparent);

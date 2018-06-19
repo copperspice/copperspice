@@ -333,9 +333,11 @@ static void qt_mac_debug_palette(const QPalette &pal, const QPalette &pal2, cons
                                  "Text", "BrightText", "ButtonText", "Base", "Window", "Shadow",
                                  "Highlight", "HighlightedText", "Link", "LinkVisited"
                                };
-   if (!where.isNull()) {
-      qDebug("qt-internal: %s", where.toLatin1().constData());
+
+   if (! where.isEmpty()) {
+      qDebug("qt-internal: %s", csPrintable(here));
    }
+
    for (int grp = 0; grp < QPalette::NColorGroups; grp++) {
       for (int role = 0; role < QPalette::NColorRoles; role++) {
          QBrush b = pal.brush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role);

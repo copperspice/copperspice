@@ -505,10 +505,13 @@ QT_FORWARD_DECLARE_CLASS(QFileInfo)
 
 - (QString)removeExtensions: (const QString &)filter
 {
-   QRegExp regExp(QT_PREPEND_NAMESPACE(QString::fromLatin1)(QT_PREPEND_NAMESPACE(qt_file_dialog_filter_reg_exp)));
-   if (regExp.indexIn(filter) != -1) {
-      return regExp.cap(1).trimmed();
+   QRegularExpression regExp(qt_file_dialog_filter_reg_exp);
+   QRegularExpressionMatch match = regExp.match(filter);
+
+   if (match.hasMatch()) {
+      return match.captured(1).trimmed();
    }
+
    return filter;
 }
 

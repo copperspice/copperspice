@@ -492,7 +492,7 @@ bool QTransportAuth::authorizeRequest( QTransportAuth::Data &d, const QString &r
          QFile log( logFilePath() );
 
          if (!log.open(QIODevice::WriteOnly | QIODevice::Append)) {
-            qWarning("Could not write to log in discovery mode: %s", qPrintable(logFilePath()));
+            qWarning("Could not write to log in discovery mode: %s", csPrintable(logFilePath()));
 
          } else {
             QTextStream ts( &log );
@@ -550,7 +550,7 @@ inline bool __fileOpen( QFile *f )
       qDebug( "Opened file: %s\n", qPrintable( f->fileName() ));
       return true;
    } else {
-      qWarning( "Could not open file: %s\n", qPrintable( f->fileName() ));
+      qWarning( "Could not open file: %s\n", csPrintable( f->fileName() ));
       return false;
    }
 #else

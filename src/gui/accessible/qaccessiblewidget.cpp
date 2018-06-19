@@ -235,7 +235,7 @@ QRect QAccessibleWidget::rect(int child) const
 {
    if (child) {
       qWarning("QAccessibleWidget::rect: This implementation does not support subelements! "
-               "(ID %d unknown for %s)", child, widget()->metaObject()->className());
+               "(ID %d unknown for %s)", child, csPrintable(widget()->metaObject()->className()));
    }
 
    QWidget *w = widget();
@@ -271,7 +271,7 @@ void QAccessibleWidget::addControllingSignal(const QString &signal)
    QString s = QMetaObject::normalizedSignature(signal);
 
    if (object()->metaObject()->indexOfSignal(s) < 0) {
-      qWarning("Signal %s unknown in %s", csPrintable(s), object()->metaObject()->className());
+      qWarning("Signal %s unknown in %s", csPrintable(s), csPrintable(object()->metaObject()->className()));
    }
 
    d->primarySignals << s;
