@@ -183,7 +183,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
                   const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
    static void about(QWidget *parent, const QString &title, const QString &text);
-
    static void aboutCs(QWidget *parent);
    static void aboutQt(QWidget *parent);
 

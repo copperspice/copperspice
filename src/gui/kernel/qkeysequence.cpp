@@ -1081,22 +1081,6 @@ bool QKeySequence::isEmpty() const
    return !d->key[0];
 }
 
-
-/*!
-    Returns the shortcut key sequence for the mnemonic in \a text,
-    or an empty key sequence if no mnemonics are found.
-
-    For example, mnemonic("E&xit") returns \c{Qt::ALT+Qt::Key_X},
-    mnemonic("&Quit") returns \c{ALT+Key_Q}, and mnemonic("Quit")
-    returns an empty QKeySequence.
-
-    We provide a \l{accelerators.html}{list of common mnemonics}
-    in English. At the time of writing, Microsoft and Open Group do
-    not appear to have issued equivalent recommendations for other
-    languages.
-
-    \sa qt_set_sequence_auto_mnemonic()
-*/
 QKeySequence QKeySequence::mnemonic(const QString &text)
 {
    QKeySequence ret;
@@ -1109,13 +1093,13 @@ QKeySequence QKeySequence::mnemonic(const QString &text)
    int p = 0;
 
    while (p >= 0) {
-      p = text.indexOf(QLatin1Char('&'), p) + 1;
+      p = text.indexOf('&', p) + 1;
 
       if (p <= 0 || p >= (int)text.length()) {
          break;
       }
 
-      if (text.at(p) != QLatin1Char('&')) {
+      if (text.at(p) != '&') {
          QChar c = text.at(p);
 
          if (c.isPrint()) {

@@ -98,11 +98,13 @@ static int qt_accAmpIndex(const QString &text)
 
    int fa = 0;
    QChar ac;
-   while ((fa = text.indexOf(QLatin1Char('&'), fa)) != -1) {
+
+   while ((fa = text.indexOf('&', fa)) != -1) {
       ++fa;
+
       if (fa < text.length()) {
          // ignore "&&"
-         if (text.at(fa) == QLatin1Char('&')) {
+         if (text.at(fa) == '&') {
             ++fa;
             continue;
          } else {

@@ -388,8 +388,8 @@ bool QFileDialogPrivate::canBeNativeDialog()
       return false;
    }
 
-   QLatin1String staticName(QFileDialog::staticMetaObject().className());
-   QLatin1String dynamicName(q->metaObject()->className());
+   QString staticName(QFileDialog::staticMetaObject().className());
+   QString dynamicName(q->metaObject()->className());
 
    return (staticName == dynamicName);
 }
@@ -640,27 +640,36 @@ void QFileDialog::selectFile(const QString &filename)
 
    QModelIndex index = d->model->index(filename);
    QString file;
-   if (!index.isValid()) {
+
+   if (! index.isValid()) {
       // save as dialog where we want to input a default value
       QString text = filename;
+
       if (QFileInfo(filename).isAbsolute()) {
          QString current = d->rootPath();
          text.remove(current);
-         if (text.at(0) == QDir::separator()
+
 #ifdef Q_OS_WIN
-               //On Windows both cases can happen
-               || text.at(0) == QLatin1Char('/')
+         if (text.first() == QDir::separator() || text.startsWith('/')) {
+            // On Windows both cases can happen
+
+#else
+         if (text.first() == QDir::separator()) {
+
 #endif
-            ) {
+
             text = text.remove(0, 1);
          }
       }
       file = text;
+
    } else {
       file = index.data().toString();
    }
+
    d->qFileDialogUi->listView->selectionModel()->clear();
-   if (!isVisible() || !d->lineEdit()->hasFocus()) {
+
+   if (! isVisible() || ! d->lineEdit()->hasFocus()) {
       d->lineEdit()->setText(file);
    }
 }

@@ -113,145 +113,6 @@ void QLineEdit::initStyleOption(QStyleOptionFrame *option) const
    }
 }
 
-/*!
-    \class QLineEdit
-    \brief The QLineEdit widget is a one-line text editor.
-
-    \ingroup basicwidgets
-
-
-    A line edit allows the user to enter and edit a single line of
-    plain text with a useful collection of editing functions,
-    including undo and redo, cut and paste, and drag and drop.
-
-    By changing the echoMode() of a line edit, it can also be used as
-    a "write-only" field, for inputs such as passwords.
-
-    The length of the text can be constrained to maxLength(). The text
-    can be arbitrarily constrained using a validator() or an
-    inputMask(), or both. When switching between a validator and an input mask
-    on the same line edit, it is best to clear the validator or input mask to
-    prevent undefined behavior.
-
-
-    A related class is QTextEdit which allows multi-line, rich text
-    editing.
-
-    You can change the text with setText() or insert(). The text is
-    retrieved with text(); the displayed text (which may be different,
-    see \l{EchoMode}) is retrieved with displayText(). Text can be
-    selected with setSelection() or selectAll(), and the selection can
-    be cut(), copy()ied and paste()d. The text can be aligned with
-    setAlignment().
-
-    When the text changes the textChanged() signal is emitted; when
-    the text changes other than by calling setText() the textEdited()
-    signal is emitted; when the cursor is moved the
-    cursorPositionChanged() signal is emitted; and when the Return or
-    Enter key is pressed the returnPressed() signal is emitted.
-
-    When editing is finished, either because the line edit lost focus
-    or Return/Enter is pressed the editingFinished() signal is
-    emitted.
-
-    Note that if there is a validator set on the line edit, the
-    returnPressed()/editingFinished() signals will only be emitted if
-    the validator returns QValidator::Acceptable.
-
-    By default, QLineEdits have a frame as specified by the Windows
-    and Motif style guides; you can turn it off by calling
-    setFrame(false).
-
-    The default key bindings are described below. The line edit also
-    provides a context menu (usually invoked by a right mouse click)
-    that presents some of these editing options.
-    \target desc
-    \table
-    \header \i Keypress \i Action
-    \row \i Left Arrow \i Moves the cursor one character to the left.
-    \row \i Shift+Left Arrow \i Moves and selects text one character to the left.
-    \row \i Right Arrow \i Moves the cursor one character to the right.
-    \row \i Shift+Right Arrow \i Moves and selects text one character to the right.
-    \row \i Home \i Moves the cursor to the beginning of the line.
-    \row \i End \i Moves the cursor to the end of the line.
-    \row \i Backspace \i Deletes the character to the left of the cursor.
-    \row \i Ctrl+Backspace \i Deletes the word to the left of the cursor.
-    \row \i Delete \i Deletes the character to the right of the cursor.
-    \row \i Ctrl+Delete \i Deletes the word to the right of the cursor.
-    \row \i Ctrl+A \i Select all.
-    \row \i Ctrl+C \i Copies the selected text to the clipboard.
-    \row \i Ctrl+Insert \i Copies the selected text to the clipboard.
-    \row \i Ctrl+K \i Deletes to the end of the line.
-    \row \i Ctrl+V \i Pastes the clipboard text into line edit.
-    \row \i Shift+Insert \i Pastes the clipboard text into line edit.
-    \row \i Ctrl+X \i Deletes the selected text and copies it to the clipboard.
-    \row \i Shift+Delete \i Deletes the selected text and copies it to the clipboard.
-    \row \i Ctrl+Z \i Undoes the last operation.
-    \row \i Ctrl+Y \i Redoes the last undone operation.
-    \endtable
-
-    Any other key sequence that represents a valid character, will
-    cause the character to be inserted into the line edit.
-
-    \table 100%
-    \row \o \inlineimage macintosh-lineedit.png Screenshot of a Macintosh style line edit
-         \o A line edit shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-    \row \o \inlineimage windows-lineedit.png Screenshot of a Windows XP style line edit
-         \o A line edit shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-    \row \o \inlineimage plastique-lineedit.png Screenshot of a Plastique style line edit
-         \o A line edit shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-    \endtable
-
-    \sa QTextEdit, QLabel, QComboBox, {fowler}{GUI Design Handbook: Field, Entry}, {Line Edits Example}
-*/
-
-
-/*!
-    \fn void QLineEdit::textChanged(const QString &text)
-
-    This signal is emitted whenever the text changes. The \a text
-    argument is the new text.
-
-    Unlike textEdited(), this signal is also emitted when the text is
-    changed programmatically, for example, by calling setText().
-*/
-
-/*!
-    \fn void QLineEdit::textEdited(const QString &text)
-
-    This signal is emitted whenever the text is edited. The \a text
-    argument is the new text.
-
-    Unlike textChanged(), this signal is not emitted when the text is
-    changed programmatically, for example, by calling setText().
-*/
-
-/*!
-    \fn void QLineEdit::cursorPositionChanged(int old, int new)
-
-    This signal is emitted whenever the cursor moves. The previous
-    position is given by \a old, and the new position by \a new.
-
-    \sa setCursorPosition(), cursorPosition()
-*/
-
-/*!
-    \fn void QLineEdit::selectionChanged()
-
-    This signal is emitted whenever the selection changes.
-
-    \sa hasSelectedText(), selectedText()
-*/
-
-/*!
-    Constructs a line edit with no text.
-
-    The maximum text length is set to 32767 characters.
-
-    The \a parent argument is sent to the QWidget constructor.
-
-    \sa setText(), setMaxLength()
-*/
 QLineEdit::QLineEdit(QWidget *parent)
    : QWidget(*new QLineEditPrivate, parent, 0)
 {
@@ -259,17 +120,7 @@ QLineEdit::QLineEdit(QWidget *parent)
    d->init(QString());
 }
 
-/*!
-    Constructs a line edit containing the text \a contents.
 
-    The cursor position is set to the end of the line and the maximum
-    text length to 32767 characters.
-
-    The \a parent and argument is sent to the QWidget
-    constructor.
-
-    \sa text(), setMaxLength()
-*/
 QLineEdit::QLineEdit(const QString &contents, QWidget *parent)
    : QWidget(*new QLineEditPrivate, parent, 0)
 {
@@ -277,31 +128,10 @@ QLineEdit::QLineEdit(const QString &contents, QWidget *parent)
    d->init(contents);
 }
 
-
-/*!
-    Destroys the line edit.
-*/
-
 QLineEdit::~QLineEdit()
 {
 }
 
-
-/*!
-    \property QLineEdit::text
-    \brief the line edit's text
-
-    Setting this property clears the selection, clears the undo/redo
-    history, moves the cursor to the end of the line and resets the
-    \l modified property to false. The text is not validated when
-    inserted with setText().
-
-    The text is truncated to maxLength() length.
-
-    By default, this property contains an empty string.
-
-    \sa insert(), clear()
-*/
 QString QLineEdit::text() const
 {
    Q_D(const QLineEdit);
@@ -493,32 +323,13 @@ void QLineEdit::setEchoMode(EchoMode mode)
 #endif
 }
 
-
 #ifndef QT_NO_VALIDATOR
-/*!
-    Returns a pointer to the current input validator, or 0 if no
-    validator has been set.
-
-    \sa setValidator()
-*/
 
 const QValidator *QLineEdit::validator() const
 {
    Q_D(const QLineEdit);
    return d->control->validator();
 }
-
-/*!
-    Sets this line edit to only accept input that the validator, \a v,
-    will accept. This allows you to place any arbitrary constraints on
-    the text which may be entered.
-
-    If \a v == 0, setValidator() removes the current input validator.
-    The initial setting is to have no input validator (i.e. any input
-    is accepted up to maxLength()).
-
-    \sa validator() QIntValidator QDoubleValidator QRegularExpressionValidator
-*/
 
 void QLineEdit::setValidator(const QValidator *v)
 {
@@ -528,22 +339,7 @@ void QLineEdit::setValidator(const QValidator *v)
 #endif // QT_NO_VALIDATOR
 
 #ifndef QT_NO_COMPLETER
-/*!
-    \since 4.2
 
-    Sets this line edit to provide auto completions from the completer, \a c.
-    The completion mode is set using QCompleter::setCompletionMode().
-
-    To use a QCompleter with a QValidator or QLineEdit::inputMask, you need to
-    ensure that the model provided to QCompleter contains valid entries. You can
-    use the QSortFilterProxyModel to ensure that the QCompleter's model contains
-    only valid entries.
-
-    If \a c == 0, setCompleter() removes the current completer, effectively
-    disabling auto completion.
-
-    \sa QCompleter
-*/
 void QLineEdit::setCompleter(QCompleter *c)
 {
    Q_D(QLineEdit);

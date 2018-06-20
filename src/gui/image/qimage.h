@@ -64,7 +64,8 @@ class Q_GUI_EXPORT QImageTextKeyLang
       return !operator==(other);
    }
 };
-#endif //QT_NO_IMAGE_TEXT
+
+#endif
 
 
 class Q_GUI_EXPORT QImage : public QPaintDevice
@@ -100,14 +101,14 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QImage(uchar *data, int width, int height, int bytesPerLine, Format format);
    QImage(const uchar *data, int width, int height, int bytesPerLine, Format format);
 
+   QImage(const QImage &);
+
+   explicit QImage(const QString &fileName, const char *format = 0);
+
 #ifndef QT_NO_IMAGEFORMAT_XPM
    explicit QImage(const char *const xpm[]);
 #endif
 
-   explicit QImage(const QString &fileName, const char *format = 0);
-   explicit QImage(const char *fileName, const char *format = 0);
-
-   QImage(const QImage &);
    ~QImage();
 
    QImage &operator=(const QImage &);

@@ -271,7 +271,7 @@ QList<int> QKeyMapperPrivate::possibleKeysXKB(QKeyEvent *event)
          return QList<int>();
       }
 
-      baseCode = text.at(0).unicode();
+      baseCode = text.first().unicode();
    }
 
    if (baseCode && baseCode < 0xfffe) {
@@ -314,13 +314,14 @@ QList<int> QKeyMapperPrivate::possibleKeysXKB(QKeyEvent *event)
       int code = -1;
       chars.clear();
       count = 0;
+
       // mask out the modifiers needed to translate keycode
       text = translateKeySym(sym, xmodifiers & ~val, code, modifiers, chars, count);
       if (code == -1) {
          if (text.isEmpty()) {
             continue;
          }
-         code = text.at(0).unicode();
+         code = text.first().unicode();
       }
 
       if (code && code < 0xfffe) {
@@ -378,7 +379,7 @@ QList<int> QKeyMapperPrivate::possibleKeysCore(QKeyEvent *event)
       if (text.isEmpty()) {
          return QList<int>();
       }
-      baseCode = text.at(0).unicode();
+      baseCode = text.first().unicode();
    }
 
    if (baseCode && baseCode < 0xfffe) {
@@ -428,7 +429,7 @@ QList<int> QKeyMapperPrivate::possibleKeysCore(QKeyEvent *event)
          if (text.isEmpty()) {
             continue;
          }
-         code = text.at(0).unicode();
+         code = text.first().unicode();
       }
 
       if (code && code < 0xfffe) {
@@ -1423,16 +1424,12 @@ static QString translateKeySym(KeySym keysym, uint xmodifiers, int &code, Qt::Ke
             chars.resize(1);
          }
 
-         chars[0] = (unsigned char) (keysym & 0xff); // get only the fourth bit for conversion later
+         chars[0] = (unsigned char) (keysym & 0xff);    // get only the fourth bit for conversion later
          count++;
       }
 
    } else if (keysym >= 0x1000000 && keysym <= 0x100ffff) {
-
-
-      // broom - fix this
-      converted = (ushort) (keysym - 0x1000000);
-
+      converted = char32_t(keysym);
       mapper = 0;
    }
 

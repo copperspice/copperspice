@@ -3104,14 +3104,6 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
-   Q_D(QRasterPaintEngine);
-
-   fprintf(stderr, " - QRasterPaintEngine::drawTextItem(), (%.2f,%.2f), string=%s ct=%d\n",
-           p.x(), p.y(), QString::fromRawData(ti.chars, ti.num_chars).toLatin1().data(),
-           d->glyphCacheType);
-#endif
-
    ensurePen();
    ensureState();
 
@@ -3144,8 +3136,8 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
    if (s->matrix.type() < QTransform::TxScale
          && (fontEngine->type() == QFontEngine::QPF1 || fontEngine->type() == QFontEngine::QPF2
              || (fontEngine->type() == QFontEngine::Proxy
-                 && !(static_cast<QProxyFontEngine *>(fontEngine)->drawAsOutline()))
-            )) {
+                 && !(static_cast<QProxyFontEngine *>(fontEngine)->drawAsOutline())) )) {
+
       fontEngine->draw(this, qFloor(p.x() + aliasedCoordinateDelta), qFloor(p.y() + aliasedCoordinateDelta), ti);
       return;
    }
@@ -3170,7 +3162,8 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
       for (int i = 0; i < glyphs.size(); i++) {
          QImage img = fontEngine->alphaMapForGlyph(glyphs[i]);
          glyph_metrics_t metrics = fontEngine->boundingBox(glyphs[i]);
-         // ### hm, perhaps an QFixed offs = QFixed::fromReal(aliasedCoordinateDelta) is needed here?
+
+         // ### perhaps a QFixed offs = QFixed::fromReal(aliasedCoordinateDelta) is needed here?
          alphaPenBlt(img.bits(), img.bytesPerLine(), img.depth(),
                      qRound(positions[i].x + metrics.x),
                      qRound(positions[i].y + metrics.y),
@@ -3185,6 +3178,7 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
 #if defined(Q_WS_QWS) && !defined(QT_NO_QWS_QPF2)
    if (fontEngine->type() == QFontEngine::QPF2) {
       QFontEngine *renderingEngine = static_cast<QFontEngineQPF *>(fontEngine)->renderingEngine();
+
       if (renderingEngine) {
          fontEngine = renderingEngine;
       }

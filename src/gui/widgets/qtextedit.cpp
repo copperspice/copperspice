@@ -996,6 +996,7 @@ void QTextEdit::keyPressEvent(QKeyEvent *e)
                d->vbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
             }
             break;
+
          default:
             d->sendControlEvent(e);
             if (!e->isAccepted() && e->modifiers() == Qt::NoModifier) {
@@ -1018,19 +1019,20 @@ void QTextEdit::keyPressEvent(QKeyEvent *e)
    {
       QTextCursor cursor = d->control->textCursor();
       const QString text = e->text();
-      if (cursor.atBlockStart()
-            && (d->autoFormatting & AutoBulletList)
-            && (text.length() == 1)
-            && (text.at(0) == QLatin1Char('-') || text.at(0) == QLatin1Char('*'))
-            && (!cursor.currentList())) {
 
-         d->createAutoBulletList();
-         e->accept();
-         return;
+      if (cursor.atBlockStart() && (d->autoFormatting & AutoBulletList && text.length() == 1)) {
+         QChar ch = text.first();
+
+         if ((ch == '-' || ch == '*') && (! cursor.currentList())) {
+            d->createAutoBulletList();
+            e->accept();
+            return;
+         }
       }
    }
 
    d->sendControlEvent(e);
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (!e->isAccepted()) {
       switch (e->key()) {
@@ -2081,9 +2083,11 @@ void QTextEdit::setText(const QString &text)
 void QTextEdit::append(const QString &text)
 {
    Q_D(QTextEdit);
-   const bool atBottom = isReadOnly() ?  d->verticalOffset() >= d->vbar->maximum() :
-                         d->control->textCursor().atEnd();
+   const bool atBottom = isReadOnly() ?  d->verticalOffset() >= d->vbar->maximum()
+         : d->control->textCursor().atEnd();
+
    d->control->append(text);
+
    if (atBottom) {
       d->vbar->setValue(d->vbar->maximum());
    }

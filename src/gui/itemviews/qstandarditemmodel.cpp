@@ -2109,10 +2109,11 @@ QStandardItemModel::QStandardItemModel(int rows, int columns, QObject *parent)
 {
    Q_D(QStandardItemModel);
    d->init();
+
    d->root->insertColumns(0, columns);
-   d->columnHeaderItems.insert(0, columns, 0);
+   d->columnHeaderItems.insert(0, columns, nullptr);
    d->root->insertRows(0, rows);
-   d->rowHeaderItems.insert(0, rows, 0);
+   d->rowHeaderItems.insert(0, rows, nullptr);
    d->root->d_func()->setModel(this);
 }
 

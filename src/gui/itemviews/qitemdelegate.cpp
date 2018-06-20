@@ -71,12 +71,14 @@ class QItemDelegatePrivate
    }
 
    inline QIcon::Mode iconMode(QStyle::State state) const {
-      if (!(state & QStyle::State_Enabled)) {
+      if (! (state & QStyle::State_Enabled)) {
          return QIcon::Disabled;
       }
+
       if (state & QStyle::State_Selected) {
          return QIcon::Selected;
       }
+
       return QIcon::Normal;
    }
 

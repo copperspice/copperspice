@@ -158,6 +158,7 @@ class
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
    void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &sr) override;
+
    void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
 
    void drawLines(const QLine *line, int lineCount) override;
@@ -358,10 +359,10 @@ class
 
 #ifdef Q_WS_QWS
    class Q_GUI_EXPORT QClipData
-#else 
+#else
    class QClipData
 #endif
-   
+
 {
  public:
    QClipData(int height);

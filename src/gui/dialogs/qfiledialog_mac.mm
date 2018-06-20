@@ -49,8 +49,9 @@ QT_BEGIN_NAMESPACE
 
 extern QStringList qt_make_filter_list(const QString &filter);   // qfiledialog.cpp
 extern QStringList qt_clean_filter_list(const QString &filter);  // qfiledialog.cpp
-extern const QString qt_file_dialog_filter_reg_exp;              // qfiledialog.cpp
 extern bool qt_mac_is_macsheet(const QWidget *w);                // qwidget_mac.mm
+
+static const QString qt_file_dialog_filter_reg_exp = "^(.*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$";
 
 #include <qstringfwd.h>
 QT_FORWARD_DECLARE_CLASS(QFileDialogPrivate)
@@ -446,7 +447,8 @@ QT_FORWARD_DECLARE_CLASS(QFileInfo)
    Q_UNUSED(sender);
    if (mPriv && [mSavePanel isVisible]) {
       QString selection = QT_PREPEND_NAMESPACE(qt_mac_NSStringToQString([mSavePanel filename]));
-      if (selection != mCurrentSelection) {
+
+      if (selection != *mCurrentSelection) {
          *mCurrentSelection = selection;
          mPriv->QNSOpenSavePanelDelegate_selectionChanged(selection);
       }
@@ -457,7 +459,9 @@ QT_FORWARD_DECLARE_CLASS(QFileInfo)
 {
    Q_UNUSED(panel);
    Q_UNUSED(contextInfo);
+
    mReturnCode = returnCode;
+
    if (mPriv) {
       mPriv->QNSOpenSavePanelDelegate_panelClosed(returnCode == NSOKButton);
    }
@@ -490,12 +494,15 @@ QT_FORWARD_DECLARE_CLASS(QFileInfo)
 - (QStringList)acceptableExtensionsForSave
 {
    QStringList result;
+
    for (int i = 0; i < mSelectedNameFilter->count(); ++i) {
       const QString &filter = mSelectedNameFilter->at(i);
-      if (filter.startsWith(QLatin1String("*."))
-            && !filter.contains(QLatin1Char('?'))
+
+      if (filter.startsWith(QLatin1String("*.")) && !filter.contains(QLatin1Char('?'))
             && filter.count(QLatin1Char('*')) == 1) {
+
          result += filter.mid(2);
+
       } else {
          return QStringList(); // Accept everything
       }
@@ -519,8 +526,10 @@ QT_FORWARD_DECLARE_CLASS(QFileInfo)
 {
    NSRect textRect = { { 0.0, 3.0 }, { 100.0, 25.0 } };
    mTextField = [[NSTextField alloc] initWithFrame: textRect];
+
    [[mTextField cell] setFont: [NSFont systemFontOfSize:
-                                [NSFont systemFontSizeForControlSize: NSRegularControlSize]]];
+                               [NSFont systemFontSizeForControlSize: NSRegularControlSize]]];
+
    [mTextField setAlignment: NSRightTextAlignment];
    [mTextField setEditable: false];
    [mTextField setSelectable: false];

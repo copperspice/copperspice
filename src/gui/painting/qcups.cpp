@@ -244,10 +244,12 @@ const ppd_option_t *QCUPSSupport::ppdOption(const char *key) const
 const cups_option_t *QCUPSSupport::printerOption(const QString &key) const
 {
    for (int i = 0; i < printers[currPrinterIndex].num_options; ++i) {
-      if (QLatin1String(printers[currPrinterIndex].options[i].name) == key) {
+
+      if (QString::fromLatin1(printers[currPrinterIndex].options[i].name) == key) {
          return &printers[currPrinterIndex].options[i];
       }
    }
+
    return 0;
 }
 

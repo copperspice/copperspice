@@ -504,20 +504,25 @@ void QFontDialogPrivate::updateSizes()
 {
    Q_Q(QFontDialog);
 
-   if (!familyList->currentText().isEmpty()) {
+   if (! familyList->currentText().isEmpty()) {
       QList<int> sizes = fdb.pointSizes(familyList->currentText(), styleList->currentText());
 
-      int i = 0;
+      int i       = 0;
       int current = -1;
       QStringList str_sizes;
-      for (QList<int>::const_iterator it = sizes.constBegin(); it != sizes.constEnd(); ++it) {
-         str_sizes.append(QString::number(*it));
-         if (current == -1 && *it >= size) {
+
+      for (auto item : sizes) {
+         str_sizes.append(QString::number(item));
+
+         if (current == -1 && item >= size) {
             current = i;
          }
+
          ++i;
       }
+
       sizeList->model()->setStringList(str_sizes);
+
       if (current == -1) {
          // we request a size bigger than the ones in the list, select the biggest one
          current = sizeList->count() - 1;
@@ -526,11 +531,13 @@ void QFontDialogPrivate::updateSizes()
 
       sizeEdit->blockSignals(true);
       sizeEdit->setText((smoothScalable ? QString::number(size) : sizeList->currentText()));
-      if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, 0, q)
-            && sizeList->hasFocus()) {
+
+      if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, 0, q) && sizeList->hasFocus()) {
          sizeEdit->selectAll();
       }
+
       sizeEdit->blockSignals(false);
+
    } else {
       sizeEdit->clear();
    }
@@ -943,8 +950,9 @@ bool QFontDialogPrivate::canBeNativeDialog()
       return false;
    }
 
-   QLatin1String staticName(QFontDialog::staticMetaObject().className());
-   QLatin1String dynamicName(q->metaObject()->className());
+   QString staticName(QFontDialog::staticMetaObject().className());
+   QString dynamicName(q->metaObject()->className());
+
    return (staticName == dynamicName);
 }
 #endif

@@ -60,13 +60,14 @@ class QProxyFontEngine : public QFontEngine
    virtual qreal minRightBearing() const;
    virtual int glyphCount() const;
 
-   virtual bool canRender(QStringView str) override;
+   bool canRender(QStringView str) override;
 
-   virtual const char *name() const override {
-      return "proxy engine";
+   const QString &fontEngineName() const override {
+      static QString retval("proxy engine");
+      return retval;
    }
 
-   virtual Type type() const override {
+   Type type() const override {
       return Proxy;
    }
 

@@ -9378,7 +9378,7 @@ QPixmap QGraphicsItemEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QP
 
 QDebug operator<<(QDebug debug, QGraphicsItem *item)
 {
-   if (!item) {
+   if (! item) {
       debug << "QGraphicsItem(0)";
       return debug;
    }
@@ -9388,11 +9388,13 @@ QDebug operator<<(QDebug debug, QGraphicsItem *item)
    } else {
       debug << "QGraphicsItem";
    }
+
    debug << "(this =" << (void *)item
          << ", parent =" << (void *)item->parentItem()
          << ", pos =" << item->pos()
          << ", z =" << item->zValue() << ", flags = "
          << item->flags() << ")";
+
    return debug;
 }
 
@@ -9404,13 +9406,16 @@ QDebug operator<<(QDebug debug, QGraphicsObject *item)
    }
 
    debug.nospace() << item->metaObject()->className() << '(' << (void *)item;
-   if (!item->objectName().isEmpty()) {
+
+   if (! item->objectName().isEmpty()) {
       debug << ", name = " << item->objectName();
    }
+
    debug.nospace() << ", parent = " << ((void *)item->parentItem())
                    << ", pos = " << item->pos()
                    << ", z = " << item->zValue() << ", flags = "
                    << item->flags() << ')';
+
    return debug.space();
 }
 

@@ -75,16 +75,21 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutItem &item, QStri
         << "pos: " << item.pos << " size:" << item.size
         << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
         << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize) << '\n';
+
    indent += QLatin1String("  ");
+
    if (item.widgetItem != 0) {
       qout << indent << "widget: "
            << item.widgetItem->widget()->metaObject()->className()
            << ' ' << item.widgetItem->widget()->windowTitle() << '\n';
+
    } else if (item.subinfo != 0) {
       qout << indent << "subinfo:\n";
       dumpLayout(qout, *item.subinfo, indent + QLatin1String("  "));
+
    } else if (item.placeHolderItem != 0) {
       QRect r = item.placeHolderItem->topLevelRect;
+
       qout << indent << "placeHolder: "
            << "pos: " << item.pos << " size:" << item.size
            << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)

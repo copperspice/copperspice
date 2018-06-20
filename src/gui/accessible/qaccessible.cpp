@@ -97,39 +97,24 @@ QAccessible::RootObjectHandler QAccessible::installRootObjectHandler(RootObjectH
    return old;
 }
 
-/*!
-    If a QAccessibleInterface implementation exists for the given \a object,
-    this function returns a pointer to the implementation; otherwise it
-    returns 0.
-
-    The function calls all installed factory functions (from most
-    recently installed to least recently installed) until one is found
-    that provides an interface for the class of \a object. If no
-    factory can provide an accessibility implementation for the class
-    the function loads installed accessibility plugins, and tests if
-    any of the plugins can provide the implementation.
-
-    If no implementation for the object's class is available, the
-    function tries to find an implementation for the object's parent
-    class, using the above strategy.
-
-    \warning The caller is responsible for deleting the returned
-    interface after use.
-*/
 QAccessibleInterface *QAccessible::queryAccessibleInterface(QObject *object)
 {
    accessibility_active = true;
+
    QAccessibleInterface *iface = 0;
    if (!object) {
       return 0;
    }
 
    const QMetaObject *mo = object->metaObject();
+
    while (mo) {
-      const QLatin1String cn(mo->className());
+      const QString cn(mo->className());
+
       for (int i = qAccessibleFactories()->count(); i > 0; --i) {
          InterfaceFactory factory = qAccessibleFactories()->at(i - 1);
          iface = factory(cn, object);
+
          if (iface) {
             return iface;
          }

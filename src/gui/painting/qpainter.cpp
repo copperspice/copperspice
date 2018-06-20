@@ -5629,7 +5629,7 @@ void QPainter::drawText(const QRectF &r, const QString &text, const QTextOption 
       return;
    }
 
-   if (!d->extended) {
+   if (! d->extended) {
       d->updateState(d->state);
    }
 
@@ -5671,6 +5671,7 @@ static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
       // This is to protect against making the line too fat, as happens on Mac OS X
       // due to it having a rather thick width for the regular underline.
       const qreal maxPenWidth = .8 * radius;
+
       if (wavePen.widthF() > maxPenWidth) {
          wavePen.setWidth(maxPenWidth);
       }
@@ -6768,7 +6769,7 @@ Q_GLOBAL_STATIC(QAtomicInt, globalRedirectionAtomic)
     \threadsafe
     \obsolete
 
-    Please use QWidget::render() instead.  
+    Please use QWidget::render() instead.
 */
 void QPainter::setRedirected(const QPaintDevice *device, QPaintDevice *replacement, const QPoint &offset)
 {
@@ -7012,7 +7013,7 @@ start_lengthVariant:
    for (; offset < text.length(); offset++) {
       QChar chr = text.at(offset);
 
-      if (chr == '\r' || (singleline && chr == '\n')) {        
+      if (chr == '\r' || (singleline && chr == '\n')) {
          text.replace(offset, 1, ' ');
 
       } else if (chr == '\n') {
@@ -7026,7 +7027,7 @@ start_lengthVariant:
             text.replace(offset, 1, ' ');
 
          } else if (!tabarraylen && ! tabstops) {
-            tabstops = qRound(fm.width(QLatin1Char('x')) * 8);
+            tabstops = qRound(fm.width('x') * 8);
          }
 
       } else if (chr == QChar(ushort(0x9c))) {

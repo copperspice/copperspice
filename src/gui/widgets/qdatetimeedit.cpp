@@ -1898,16 +1898,20 @@ QDateTime QDateTimeEditPrivate::validateAndInterpret(QString &input, int &positi
          state = QValidator::Invalid;
       }
       return getZeroVariant().toDateTime();
+
    } else if (cachedText == input && !fixup) {
       state = cachedState;
       return cachedValue.toDateTime();
+
    } else if (!specialValueText.isEmpty()) {
       bool changeCase = false;
       const int max = qMin(specialValueText.size(), input.size());
       int i;
+
       for (i = 0; i < max; ++i) {
          const QChar ic = input.at(i);
          const QChar sc = specialValueText.at(i);
+
          if (ic != sc) {
             if (sc.toLower() == ic.toLower()) {
                changeCase = true;
@@ -1916,6 +1920,7 @@ QDateTime QDateTimeEditPrivate::validateAndInterpret(QString &input, int &positi
             }
          }
       }
+
       if (i == max) {
          state = specialValueText.size() == input.size() ? QValidator::Acceptable : QValidator::Intermediate;
          if (changeCase) {
@@ -1924,6 +1929,7 @@ QDateTime QDateTimeEditPrivate::validateAndInterpret(QString &input, int &positi
          return minimum.toDateTime();
       }
    }
+
    StateNode tmp = parse(input, position, value.toDateTime(), fixup);
    input = tmp.input;
    state = QValidator::State(int(tmp.state));

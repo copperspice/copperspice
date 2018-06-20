@@ -49,10 +49,6 @@
 #include <qmap.h>
 #include <qt_mac_p.h>
 
-QT_BEGIN_NAMESPACE
-
-
-// #define DEBUG_MIME_MAPS
 
 extern CGImageRef qt_mac_createCGImageFromQImage(const QImage &img,
       const QImage **imagePtr = 0); // qpaintengine_mac.cpp
@@ -119,26 +115,27 @@ class QMacPasteboardMimeAny : public QMacPasteboardMime
 
 QString QMacPasteboardMimeAny::convertorName()
 {
-   return QLatin1String("Any-Mime");
+   return QString("Any-Mime");
 }
 
 QString QMacPasteboardMimeAny::flavorFor(const QString &mime)
 {
    // do not handle the mime type name in the drag pasteboard
-   if (mime == QLatin1String("application/x-qt-mime-type-name")) {
+   if (mime == "application/x-qt-mime-type-name") {
       return QString();
    }
 
-   QString ret = QLatin1String("com.copperspice.anymime.") + mime;
-   return ret.replace(QLatin1Char('/'), QLatin1String("--"));
+   QString ret = "com.copperspice.anymime." + mime;
+
+   return ret.replace(QChar('/'), QString("--"));
 }
 
 QString QMacPasteboardMimeAny::mimeFor(QString flav)
 {
-   const QString any_prefix = QLatin1String("com.copperspice.anymime.");
+   const QString any_prefix = "com.copperspice.anymime.";
 
    if (flav.size() > any_prefix.length() && flav.startsWith(any_prefix)) {
-      return flav.mid(any_prefix.length()).replace(QLatin1String("--"), QLatin1String("/"));
+      return flav.mid(any_prefix.length()).replace(QString("--"), QString("/"));
    }
 
    return QString();
@@ -156,22 +153,25 @@ QVariant QMacPasteboardMimeAny::convertToMime(const QString &mime, QList<QByteAr
    }
 
    QVariant ret;
-   if (mime == QLatin1String("text/plain")) {
+
+   if (mime == "text/plain") {
       ret = QString::fromUtf8(data.first());
    } else {
       ret = data.first();
    }
+
    return ret;
 }
 
 QList<QByteArray> QMacPasteboardMimeAny::convertFromMime(const QString &mime, QVariant data, QString)
 {
    QList<QByteArray> ret;
-   if (mime == QLatin1String("text/plain")) {
+   if (mime == "text/plain") {
       ret.append(data.toString().toUtf8());
    } else {
       ret.append(data.toByteArray());
    }
+
    return ret;
 }
 
@@ -194,13 +194,13 @@ class QMacPasteboardMimeTypeName : public QMacPasteboardMime
 
 QString QMacPasteboardMimeTypeName::convertorName()
 {
-   return QLatin1String("Qt-Mime-Type");
+   return QString("Qt-Mime-Type");
 }
 
 QString QMacPasteboardMimeTypeName::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("application/x-qt-mime-type-name")) {
-      return QLatin1String("com.copperspice.MimeTypeName");
+   if (mime == "application/x-qt-mime-type-name") {
+      return QString("com.copperspice.MimeTypeName");
    }
 
    return QString();
@@ -244,22 +244,24 @@ class QMacPasteboardMimePlainText : public QMacPasteboardMime
 
 QString QMacPasteboardMimePlainText::convertorName()
 {
-   return QLatin1String("PlainText");
+   return QString("PlainText");
 }
 
 QString QMacPasteboardMimePlainText::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("text/plain")) {
-      return QLatin1String("com.apple.traditional-mac-plain-text");
+   if (mime == "text/plain") {
+      return QString("com.apple.traditional-mac-plain-text");
    }
+
    return QString();
 }
 
 QString QMacPasteboardMimePlainText::mimeFor(QString flav)
 {
-   if (flav == QLatin1String("com.apple.traditional-mac-plain-text")) {
-      return QLatin1String("text/plain");
+   if (flav == "com.apple.traditional-mac-plain-text") {
+      return QString("text/plain");
    }
+
    return QString();
 }
 
@@ -275,11 +277,13 @@ QVariant QMacPasteboardMimePlainText::convertToMime(const QString &mimetype, QLi
    }
    const QByteArray &firstData = data.first();
    QVariant ret;
-   if (flavor == QCFString(QLatin1String("com.apple.traditional-mac-plain-text"))) {
+   if (flavor == QCFString(QString("com.apple.traditional-mac-plain-text"))) {
+
       QCFString str(CFStringCreateWithBytes(kCFAllocatorDefault,
                                             reinterpret_cast<const UInt8 *>(firstData.constData()),
                                             firstData.size(), CFStringGetSystemEncoding(), false));
       ret = QString(str);
+
    } else {
       qWarning("QMime::convertToMime: unhandled mimetype: %s", qPrintable(mimetype));
    }
@@ -290,9 +294,11 @@ QList<QByteArray> QMacPasteboardMimePlainText::convertFromMime(const QString &, 
 {
    QList<QByteArray> ret;
    QString string = data.toString();
-   if (flavor == QCFString(QLatin1String("com.apple.traditional-mac-plain-text"))) {
+
+   if (flavor == QCFString(QString("com.apple.traditional-mac-plain-text"))) {
       ret.append(string.toLatin1());
    }
+
    return ret;
 }
 
@@ -311,26 +317,32 @@ class QMacPasteboardMimeUnicodeText : public QMacPasteboardMime
 
 QString QMacPasteboardMimeUnicodeText::convertorName()
 {
-   return QLatin1String("UnicodeText");
+   return QString("UnicodeText");
 }
 
 QString QMacPasteboardMimeUnicodeText::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("text/plain")) {
-      return QLatin1String("public.utf16-plain-text");
+   if (mime == "text/plain") {
+      return QString("public.utf16-plain-text");
    }
-   int i = mime.indexOf(QLatin1String("charset="));
+
+   int i = mime.indexOf("charset=");
+
    if (i >= 0) {
+
       QString cs(mime.mid(i + 8).toLower());
-      i = cs.indexOf(QLatin1Char(';'));
+      i = cs.indexOf(';');
+
       if (i >= 0) {
          cs = cs.left(i);
       }
-      if (cs == QLatin1String("system")) {
+
+      if (cs == "system") {
          return QLatin1String("public.utf8-plain-text");
-      } else if (cs == QLatin1String("iso-10646-ucs-2")
-                 || cs == QLatin1String("utf16")) {
+
+      } else if (cs == "iso-10646-ucs-2" || cs == "utf16") {
          return QLatin1String("public.utf16-plain-text");
+
       }
    }
    return QString();
@@ -362,9 +374,9 @@ QVariant QMacPasteboardMimeUnicodeText::convertToMime(const QString &mimetype, Q
                                             reinterpret_cast<const UInt8 *>(firstData.constData()),
                                             firstData.size(), CFStringGetSystemEncoding(), false));
       ret = QString(str);
-   } else if (flavor == QLatin1String("public.utf16-plain-text")) {
-      ret = QString(reinterpret_cast<const QChar *>(firstData.constData()),
-                    firstData.size() / sizeof(QChar));
+
+   } else if (flavor == "public.utf16-plain-text") {
+      ret = QString(reinterpret_cast<const QChar *>(firstData.constData()), firstData.size() / sizeof(QChar));
    } else {
       qWarning("QMime::convertToMime: unhandled mimetype: %s", qPrintable(mimetype));
    }
@@ -375,11 +387,16 @@ QList<QByteArray> QMacPasteboardMimeUnicodeText::convertFromMime(const QString &
 {
    QList<QByteArray> ret;
    QString string = data.toString();
-   if (flavor == QLatin1String("public.utf8-plain-text")) {
+
+   if (flavor == "public.utf8-plain-text") {
       ret.append(string.toUtf8());
-   } else if (flavor == QLatin1String("public.utf16-plain-text")) {
-      ret.append(QByteArray((char *)string.utf16(), string.length() * 2));
+
+   } else if (flavor == "public.utf16-plain-text") {
+      QString16 tmp = string.toUtf16();
+
+      ret.append( QByteArray((char *)tmp.constData(), tmp.size_storage() * 2));
    }
+
    return ret;
 }
 
@@ -403,17 +420,19 @@ QString QMacPasteboardMimeHTMLText::convertorName()
 
 QString QMacPasteboardMimeHTMLText::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("text/html")) {
-      return QLatin1String("public.html");
+   if (mime == "text/html") {
+      return QString("public.html");
    }
+
    return QString();
 }
 
 QString QMacPasteboardMimeHTMLText::mimeFor(QString flav)
 {
-   if (flav == QLatin1String("public.html")) {
-      return QLatin1String("text/html");
+   if (flav == "public.html") {
+      return QString("text/html");
    }
+
    return QString();
 }
 
@@ -734,28 +753,32 @@ bool QMacPasteboardMimeVCard::canConvert(const QString &mime, QString flav)
 
 QString QMacPasteboardMimeVCard::flavorFor(const QString &mime)
 {
-   if (mime.startsWith(QLatin1String("text/plain"))) {
-      return QLatin1String("public.vcard");
+   if (mime.startsWith("text/plain")) {
+      return QString("public.vcard");
    }
+
    return QString();
 }
 
 QString QMacPasteboardMimeVCard::mimeFor(QString flav)
 {
-   if (flav == QLatin1String("public.vcard")) {
+   if (flav == "public.vcard") {
       return QLatin1String("text/plain");
    }
+
    return QString();
 }
 
 QVariant QMacPasteboardMimeVCard::convertToMime(const QString &mime, QList<QByteArray> data, QString)
 {
    QByteArray cards;
-   if (mime == QLatin1String("text/plain")) {
+
+   if (mime == "text/plain") {
       for (int i = 0; i < data.size(); ++i) {
          cards += data[i];
       }
    }
+
    return QVariant(cards);
 }
 
@@ -791,133 +814,48 @@ void QMacPasteboardMime::initialize()
    }
 }
 
-/*!
-  Returns the most-recently created QMacPasteboardMime of type \a t that can convert
-  between the \a mime and \a flav formats.  Returns 0 if no such convertor
-  exists.
-*/
-QMacPasteboardMime *
-QMacPasteboardMime::convertor(uchar t, const QString &mime, QString flav)
+QMacPasteboardMime * QMacPasteboardMime::convertor(uchar t, const QString &mime, QString flav)
 {
    MimeList *mimes = globalMimeList();
+
    for (MimeList::const_iterator it = mimes->constBegin(); it != mimes->constEnd(); ++it) {
-#ifdef DEBUG_MIME_MAPS
-      qDebug("QMacPasteboardMime::convertor: seeing if %s (%d) can convert %s to %d[%c%c%c%c] [%d]",
-             (*it)->convertorName().toLatin1().constData(),
-             (*it)->type & t, mime.toLatin1().constData(),
-             flav, (flav >> 24) & 0xFF, (flav >> 16) & 0xFF, (flav >> 8) & 0xFF, (flav) & 0xFF,
-             (*it)->canConvert(mime, flav));
-      for (int i = 0; i < (*it)->countFlavors(); ++i) {
-         int f = (*it)->flavor(i);
-         qDebug("  %d) %d[%c%c%c%c] [%s]", i, f,
-                (f >> 24) & 0xFF, (f >> 16) & 0xFF, (f >> 8) & 0xFF, (f) & 0xFF,
-                (*it)->convertorName().toLatin1().constData());
-      }
-#endif
       if (((*it)->type & t) && (*it)->canConvert(mime, flav)) {
          return (*it);
       }
    }
+
    return 0;
 }
-/*!
-  Returns a MIME type of type \a t for \a flav, or 0 if none exists.
-*/
+
 QString QMacPasteboardMime::flavorToMime(uchar t, QString flav)
 {
    MimeList *mimes = globalMimeList();
-   for (MimeList::const_iterator it = mimes->constBegin(); it != mimes->constEnd(); ++it) {
-#ifdef DEBUG_MIME_MAPS
-      qDebug("QMacMIme::flavorToMime: attempting %s (%d) for flavor %d[%c%c%c%c] [%s]",
-             (*it)->convertorName().toLatin1().constData(),
-             (*it)->type & t, flav, (flav >> 24) & 0xFF, (flav >> 16) & 0xFF, (flav >> 8) & 0xFF, (flav) & 0xFF,
-             (*it)->mimeFor(flav).toLatin1().constData());
 
-#endif
+   for (MimeList::const_iterator it = mimes->constBegin(); it != mimes->constEnd(); ++it) {
+
       if ((*it)->type & t) {
          QString mimeType = (*it)->mimeFor(flav);
-         if (!mimeType.isNull()) {
+
+         if (! mimeType.isEmpty()) {
             return mimeType;
          }
       }
    }
+
    return QString();
 }
 
-/*!
-  Returns a list of all currently defined QMacPasteboardMime objects of type \a t.
-*/
 QList<QMacPasteboardMime *> QMacPasteboardMime::all(uchar t)
 {
    MimeList ret;
    MimeList *mimes = globalMimeList();
+
    for (MimeList::const_iterator it = mimes->constBegin(); it != mimes->constEnd(); ++it) {
       if ((*it)->type & t) {
          ret.append((*it));
       }
    }
+
    return ret;
 }
 
-
-/*!
-  \fn QString QMacPasteboardMime::convertorName()
-
-  Returns a name for the convertor.
-
-  All subclasses must reimplement this pure virtual function.
-*/
-
-/*!
-  \fn bool QMacPasteboardMime::canConvert(const QString &mime, QString flav)
-
-  Returns true if the convertor can convert (both ways) between
-  \a mime and \a flav; otherwise returns false.
-
-  All subclasses must reimplement this pure virtual function.
-*/
-
-/*!
-  \fn QString QMacPasteboardMime::mimeFor(QString flav)
-
-  Returns the MIME UTI used for Mac flavor \a flav, or 0 if this
-  convertor does not support \a flav.
-
-  All subclasses must reimplement this pure virtual function.
-*/
-
-/*!
-  \fn QString QMacPasteboardMime::flavorFor(const QString &mime)
-
-  Returns the Mac UTI used for MIME type \a mime, or 0 if this
-  convertor does not support \a mime.
-
-  All subclasses must reimplement this pure virtual function.
-*/
-
-/*!
-    \fn QVariant QMacPasteboardMime::convertToMime(const QString &mime, QList<QByteArray> data, QString flav)
-
-    Returns \a data converted from Mac UTI \a flav to MIME type \a
-    mime.
-
-    Note that Mac flavors must all be self-terminating. The input \a
-    data may contain trailing data.
-
-    All subclasses must reimplement this pure virtual function.
-*/
-
-/*!
-  \fn QList<QByteArray> QMacPasteboardMime::convertFromMime(const QString &mime, QVariant data, QString flav)
-
-  Returns \a data converted from MIME type \a mime
-    to Mac UTI \a flav.
-
-  Note that Mac flavors must all be self-terminating.  The return
-  value may contain trailing data.
-
-  All subclasses must reimplement this pure virtual function.
-*/
-
-
-QT_END_NAMESPACE

@@ -681,7 +681,7 @@ bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widge
    int keyLength = [keyChars length];
 
    if (keyLength == 0) {
-      return false;   // Dead Key, nothing to do!
+      return false;   // Dead Key, nothing to do
    }
 
    bool ignoreText = false;
@@ -690,10 +690,13 @@ bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widge
 
    if (keyLength == 1) {
       QChar ch([keyChars characterAtIndex: 0]);
+
       if (ch.isLower()) {
-         ch = ch.toUpper();
+         ch = ch.toUpper()[0];
       }
-      qtKey = cocoaKey2QtKey(ch);
+
+      qtKey = cocoaKey2QtKey(ch)
+;
       // Do not set the text for Function-Key Unicodes characters (0xF700–0xF8FF).
       ignoreText = (ch.unicode() >= 0xF700 && ch.unicode() <= 0xF8FF);
    }
