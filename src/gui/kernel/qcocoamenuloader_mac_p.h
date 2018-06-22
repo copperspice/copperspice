@@ -34,7 +34,7 @@
    IBOutlet NSMenuItem *quitItem;
    IBOutlet NSMenuItem *preferencesItem;
    IBOutlet NSMenuItem *aboutItem;
-   IBOutlet NSMenuItem *aboutQtItem;
+   IBOutlet NSMenuItem *aboutCsItem;
    IBOutlet NSMenuItem *hideItem;
    NSMenuItem *lastAppSpecificItem;
    NSMenuItem *servicesItem;
@@ -48,7 +48,7 @@
 - (NSMenuItem *)quitMenuItem;
 - (NSMenuItem *)preferencesMenuItem;
 - (NSMenuItem *)aboutMenuItem;
-- (NSMenuItem *)aboutQtMenuItem;
+- (NSMenuItem *)aboutCsMenuItem;
 - (NSMenuItem *)hideMenuItem;
 - (NSMenuItem *)appSpecificMenuItem: (NSInteger)tag;
 - (IBAction)terminate: (id)sender;

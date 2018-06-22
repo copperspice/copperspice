@@ -147,9 +147,9 @@ QT_USE_NAMESPACE
    return [[aboutItem retain] autorelease];
 }
 
-- (NSMenuItem *)aboutQtMenuItem
+- (NSMenuItem *)aboutCsMenuItem
 {
-   return [[aboutQtItem retain] autorelease];
+   return [[aboutCsItem retain] autorelease];
 }
 
 - (NSMenuItem *)hideMenuItem
@@ -172,11 +172,12 @@ QT_USE_NAMESPACE
 
    NSInteger location;
    if (lastAppSpecificItem == nil) {
-      location = [appMenu indexOfItem: aboutQtItem];
+      location = [appMenu indexOfItem: aboutCsItem];
    } else {
       location = [appMenu indexOfItem: lastAppSpecificItem];
       [lastAppSpecificItem release];
    }
+
    lastAppSpecificItem = item;  // Keep track of this for later (i.e., don't release it)
    [appMenu insertItem: item atIndex: location + 1];
 
@@ -222,12 +223,12 @@ QT_USE_NAMESPACE
 {
 #ifndef QT_NO_TRANSLATION
    [servicesItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(0))];
-   [hideItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(1).arg(qAppName()))];
+   [hideItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(1).formatArg(qAppName()))];
    [hideAllOthersItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(2))];
    [showAllItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(3))];
    [preferencesItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(4))];
-   [quitItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(5).arg(qAppName()))];
-   [aboutItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(6).arg(qAppName()))];
+   [quitItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(5).formatArg(qAppName()))];
+   [aboutItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(6).formatArg(qAppName()))];
 #endif
 }
 

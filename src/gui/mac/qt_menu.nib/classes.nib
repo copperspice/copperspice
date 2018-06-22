@@ -28,7 +28,7 @@
 			<dict>
 				<key>aboutItem</key>
 				<string>NSMenuItem</string>
-				<key>aboutQtItem</key>
+				<key>aboutCsItem</key>
 				<string>NSMenuItem</string>
 				<key>appMenu</key>
 				<string>NSMenu</string>
