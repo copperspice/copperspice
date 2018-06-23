@@ -25,11 +25,10 @@
 #ifndef QHEXSTRING_P_H
 #define QHEXSTRING_P_H
 
-// converts an integer value to an unique string token
-
+// converts an integer or double to an unique string token
 template <typename T>
-struct HexString {
-
+struct HexString
+{
    HexString(const T t)
       : m_data(t)
    { }
@@ -40,6 +39,36 @@ struct HexString {
 
    const T m_data;
 };
+
+template <>
+inline QString HexString<double>::toString() const {
+
+   uchar buffer[sizeof(double)];
+   memcpy(buffer, &m_data, sizeof(double));
+
+   QString retval;
+
+   for (int i = 0; i < sizeof(double); ++i) {
+      retval += QString("%1").formatArg(buffer[i], 2, 16, '0');
+   }
+
+   return retval;
+}
+
+template <>
+inline QString HexString<float>::toString() const {
+
+   uchar buffer[sizeof(float)];
+   memcpy(buffer, &m_data, sizeof(float));
+
+   QString retval;
+
+   for (int i = 0; i < sizeof(float); ++i) {
+      retval += QString("%1").formatArg(buffer[i], 2, 16, '0');
+   }
+
+   return retval;
+}
 
 template <typename T>
 QString operator+(QString str, HexString<T> hex)
