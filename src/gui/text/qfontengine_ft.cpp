@@ -204,13 +204,18 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id,
    } else {
       QScopedPointer<QFreetypeFace> newFreetype(new QFreetypeFace);
       FT_Face face;
-      if (!face_id.filename.isEmpty()) {
-         QFile file(QString::fromUtf8(face_id.filename));
+
+      if (! face_id.filename.isEmpty()) {
+         QFile file(face_id.filename);
+
          if (face_id.filename.startsWith(":qmemoryfonts/")) {
             // from qfontdatabase.cpp
+
             extern QByteArray qt_fontdata_from_index(int);
-            QByteArray idx = face_id.filename;
-            idx.remove(0, 14); // remove ':qmemoryfonts/'
+
+            QString idx = face_id.filename;
+            idx.remove(0, 14);                      // remove ':qmemoryfonts/'
+
             bool ok = false;
             newFreetype->fontData = qt_fontdata_from_index(idx.toInt(&ok));
             if (!ok) {

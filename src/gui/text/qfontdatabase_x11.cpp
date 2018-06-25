@@ -1345,7 +1345,7 @@ static void loadFontConfig()
       }
 #endif
 
-      QByteArray file((const char *)file_value);
+      QString file = QString::fromUtf8((const char *)file_value);
       family->fontFilename = file;
       family->fontFileIndex = index_value;
 
@@ -1493,9 +1493,10 @@ static void checkSymbolFont(QtFontFamily *family)
    id.filename = family->fontFilename;
    id.index = family->fontFileIndex;
    QFreetypeFace *f = QFreetypeFace::getFace(id);
-   if (!f) {
-      qWarning("checkSymbolFonts: Couldn't open face %s (%s/%d)",
-               qPrintable(family->name), family->fontFilename.data(), family->fontFileIndex);
+
+   if (! f) {
+      qWarning("checkSymbolFonts: Could not open face %s (%s/%d)",
+               csPrintable(family->name), csPrintable(family->fontFilename), family->fontFileIndex);
       return;
    }
    for (int i = 0; i < f->face->num_charmaps; ++i) {

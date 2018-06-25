@@ -50,7 +50,7 @@ class QFontEngineMultiXLFD : public QFontEngineMulti
 class QFontEngineXLFD : public QFontEngine
 {
  public:
-   QFontEngineXLFD(XFontStruct *f, const QByteArray &name, int mib);
+   QFontEngineXLFD(XFontStruct *f, const QString &name, int mib);
    ~QFontEngineXLFD();
 
    QFontEngine::FaceId faceId() const override;
@@ -75,7 +75,7 @@ class QFontEngineXLFD : public QFontEngine
    QImage alphaMapForGlyph(glyph_t) override;
 
    bool canRender(QStringView str) override;
-   const char *name() const override;
+   const QString &fontEngineName() const override;
 
    Type type() const override {
       return QFontEngine::XLFD;
@@ -95,8 +95,9 @@ class QFontEngineXLFD : public QFontEngine
    QBitmap bitmapForGlyphs(const QGlyphLayout &glyphs, const glyph_metrics_t &metrics, QTextItem::RenderFlags flags = 0);
 
    XFontStruct *_fs;
-   QByteArray _name;
-   QTextCodec *_codec;
+   QString     _name;
+   QTextCodec  *_codec;
+
    int _cmap;
    int lbearing, rbearing;
    mutable QFontEngine::FaceId face_id;

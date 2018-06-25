@@ -221,7 +221,7 @@ class Q_GUI_EXPORT QFontEngine : public QObject
    virtual void getGlyphBearings(glyph_t glyph, qreal *leftBearing = 0, qreal *rightBearing = 0);
 
    virtual bool canRender(QStringView str) = 0;
-   virtual const char *name() const = 0;
+   virtual const QString &fontEngineName() const = 0;
    virtual Type type() const = 0;
 
    virtual int glyphCount() const;
@@ -242,7 +242,7 @@ class Q_GUI_EXPORT QFontEngine : public QObject
    static const uchar *getCMap(const uchar *table, uint tableSize, bool *isSymbolFont, int *cmapSize);
    static quint32 getTrueTypeGlyphIndex(const uchar *cmap, uint unicode);
 
-   static QByteArray convertToPostscriptFontFamilyName(const QByteArray &fontFamily);
+   static QString convertToPostscriptFontFamilyName(const QString &fontFamily);
 
    QAtomicInt ref;
    QFontDef fontDef;
@@ -333,8 +333,9 @@ class QFontEngineQPF1 : public QFontEngine
 
    bool canRender(QStringView str) override;
 
-   const char *name() const override {
-      return 0;
+   const QString &fontEngineName() const override {
+      static QString retval("");
+      return retval;
    }
 
    Type type() const override;
@@ -387,7 +388,7 @@ class QFontEngineBox : public QFontEngine
 #endif
 
    bool canRender(QStringView str) override;
-   const char *name() const override;
+   const QString &fontEngineName() const override;
    Type type() const override;
 
    int size() const {
@@ -430,8 +431,9 @@ class QFontEngineMulti : public QFontEngine
 
    bool canRender(QStringView str) override;
 
-   const char *name() const override {
-      return "Multi";
+   const QString &fontEngineName() const override {
+      static QString retval("Multi");
+      return retval;
    }
 
    Type type() const override {

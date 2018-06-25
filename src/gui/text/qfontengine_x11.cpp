@@ -629,9 +629,9 @@ qreal QFontEngineXLFD::minRightBearing() const
    return rbearing;
 }
 
-const char *QFontEngineXLFD::name() const
+const QString &QFontEngineXLFD::fontEngineName() const
 {
-   return _name.constData();
+   return _name;
 }
 
 bool QFontEngineXLFD::canRender(QStringView str)

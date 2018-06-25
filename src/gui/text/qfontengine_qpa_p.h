@@ -150,8 +150,9 @@ class Q_GUI_EXPORT QFontEngineQPA : public QFontEngine
 
    bool canRender(QStringView str) override;
 
-   inline const char *name() const override {
-      return "QPF2";
+   const QString &fontEngineName() const override {
+      static QString retval("QPF2");
+      return retval;
    }
 
    Type type() const override;

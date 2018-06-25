@@ -732,7 +732,8 @@ void QFontEngine::removeGlyphFromCache(glyph_t)
 QFontEngine::Properties QFontEngine::properties() const
 {
    Properties p;
-   QByteArray psname = QFontEngine::convertToPostscriptFontFamilyName(fontDef.family.toUtf8());
+   QString psname = QFontEngine::convertToPostscriptFontFamilyName(fontDef.family);
+
    psname += '-';
    psname += QByteArray::number(fontDef.style);
    psname += '-';
@@ -1195,9 +1196,10 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
    return 0;
 }
 
-QByteArray QFontEngine::convertToPostscriptFontFamilyName(const QByteArray &family)
+QString QFontEngine::convertToPostscriptFontFamilyName(const QString &family)
 {
-   QByteArray f = family;
+   QString f = family;
+
    f.replace(' ', "");
    f.replace('(', "");
    f.replace(')', "");
@@ -1374,9 +1376,9 @@ int QFontEngineBox::cmap() const
 }
 #endif
 
-const char *QFontEngineBox::name() const
-{
-   return "null";
+const QString &QFontEngineBox::fontEngineName() const {
+   static QString retval("null");
+   return retval;
 }
 
 bool QFontEngineBox::canRender(QStringView str)

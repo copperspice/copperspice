@@ -323,9 +323,9 @@ static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
 
    if (fnt->data.isEmpty()) {
 
-
       FSRef ref;
-      if (qt_mac_create_fsref(fnt->fileName, &ref) != noErr) {
+
+      if (FSPathMakeRef(reinterpret_cast<const UInt8 *>(fnt->fileName.constData()), &ref, 0) != noErr) {
          return;
       }
 

@@ -73,7 +73,7 @@ class QFontEngineDirectWrite : public QFontEngine
    QFontEngine *cloneWithSize(qreal pixelSize) const;
 
    bool canRender(QStringView str) override;
-   const char *name() const override;
+   const QString &fontEngineName() const override;
    Type type() const override;
 
  private:

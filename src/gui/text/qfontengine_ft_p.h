@@ -201,8 +201,9 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
 
    bool canRender(QStringView str) override;
 
-   const char *name() const override {
-      return "freetype";
+   const QString &fontEngineName() const override {
+      static QString retval("freetype");
+      return retval;
    }
 
    Type type() const override {

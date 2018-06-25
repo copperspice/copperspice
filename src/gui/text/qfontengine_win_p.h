@@ -70,7 +70,7 @@ class QFontEngineWin : public QFontEngine
    qreal minRightBearing() const override;
 
    bool canRender(QStringView str) override;
-   const char *name() const override;
+   const QString &fontEngineName() const override;
    Type type() const override;
 
    QImage alphaMapForGlyph(glyph_t t) override {

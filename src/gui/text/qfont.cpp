@@ -2726,7 +2726,7 @@ QFontEngine *QFontCache::findEngine(const Key &key)
             "  %p: timestamp %4u hits %3u ref %2d/%2d, type '%s'",
             it.value().data, it.value().timestamp, it.value().hits,
             it.value().data->ref.load(), it.value().data->cache_count,
-            it.value().data->name());
+            csPrintable(it.value().data->fontEngineName()));
 
    return it.value().data;
 }
@@ -2847,7 +2847,7 @@ void QFontCache::cleanupPrinterFonts()
       FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
                it.value().data, it.value().timestamp, it.value().hits,
                it.value().data->ref.load(), it.value().data->cache_count,
-               it.value().data->name());
+               it.value().data->fontEngineName());
 
       if (--it.value().data->cache_count == 0) {
          FC_DEBUG("    DELETE: last occurrence in cache");
@@ -3033,7 +3033,7 @@ void QFontCache::timerEvent(QTimerEvent *)
 	 FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
 		  it.value().data, it.value().timestamp, it.value().hits,
 		  it.value().data->ref.load(), it.value().data->cache_count,
-		  it.value().data->name());
+		  csPrintable(it.value().data->fontEngineName()));
 
 	 if (--it.value().data->cache_count == 0) {
 	    FC_DEBUG("    DELETE: last occurrence in cache");

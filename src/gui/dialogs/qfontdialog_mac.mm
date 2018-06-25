@@ -491,7 +491,7 @@ void QFontDialogPrivate::setFont(void *delegate, const QFont &font)
    NSFontManager *mgr   = [NSFontManager sharedFontManager];
    const NSFont *nsFont = 0;
 
-   if (fe->name() == "CoreText") {
+   if (fe->fontEngineName() == "CoreText") {
       nsFont = reinterpret_cast<const NSFont *>(static_cast<QCoreTextFontEngineMulti *>(fe)->ctfont);
    } else
 

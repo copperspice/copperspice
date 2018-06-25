@@ -727,9 +727,10 @@ qreal QFontEngineWin::minRightBearing() const
    return rbearing;
 }
 
-const char *QFontEngineWin::name() const
+const QString &QFontEngineWin::fontEngineName() const
 {
-   return 0;
+   static const QString retval("");
+   return retval;
 }
 
 bool QFontEngineWin::canRender(QStringView str)

@@ -458,13 +458,16 @@ struct  QtFontFamily {
 #endif
 
    QString name;
+
 #if defined(Q_WS_X11) && !defined(QT_NO_FREETYPE)
-   QByteArray fontFilename;
+   QString fontFilename;
    int fontFileIndex;
 #endif
+
 #ifdef Q_OS_WIN
    QString english_name;
 #endif
+
    int count;
    QtFontFoundry **foundries;
 
@@ -1465,6 +1468,7 @@ static void match(int script, const QFontDef &request,
             family_name.isEmpty() ? "-- first in script --" : family_name.toLatin1().constData(),
             foundry_name.isEmpty() ? "-- any --" : foundry_name.toLatin1().constData(),
             script, request.weight, request.style, request.stretch, request.pixelSize, pitch);
+
 #if defined(FONT_MATCH_DEBUG) && defined(Q_WS_X11)
    if (force_encoding_id >= 0) {
       FM_DEBUG("    required encoding: %d", force_encoding_id);

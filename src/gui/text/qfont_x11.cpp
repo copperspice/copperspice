@@ -241,7 +241,7 @@ QString QFont::rawName() const
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
    }
    if (engine->type() == QFontEngine::XLFD) {
-      return QString::fromLatin1(engine->name());
+      return engine->fontEngineName();
    }
    return QString();
 }

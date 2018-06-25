@@ -61,8 +61,9 @@ class QCoreTextFontEngine : public QFontEngine
 
    virtual bool canRender(QStringView str) override;
 
-   virtual const char *name() const override {
-      return "QCoreTextFontEngine";
+   const QString &fontEngineName() const override {
+      static QString retval("QCoreTextFontEngine");
+      return retval;
    }
 
    virtual Type type() const override {
@@ -138,8 +139,9 @@ class QCoreTextFontEngineMulti : public QFontEngineMulti
    bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags,
                      unsigned short *logClusters, const HB_CharAttributes *charAttributes, QScriptItem *si) const;
 
-   virtual const char *name() const {
-      return "CoreText";
+   const QString &fontEngineName() const override {
+      static QString retval("CoreText");
+      return retval;
    }
 
    inline CTFontRef macFontID() const {
