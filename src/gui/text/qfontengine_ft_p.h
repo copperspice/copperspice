@@ -35,11 +35,7 @@
 #endif
 
 #include <unistd.h>
-
-#ifndef QT_NO_FONTCONFIG
 #include <fontconfig/fontconfig.h>
-#endif
-
 #include <qmutex.h>
 #include <harfbuzz-shaper.h>
 
@@ -56,23 +52,23 @@ struct QFreetypeFace {
    QFontEngine::Properties properties() const;
    bool getSfntTable(uint tag, uchar *buffer, uint *length) const;
 
-   static QFreetypeFace *getFace(const QFontEngine::FaceId &face_id,
-                                 const QByteArray &fontData = QByteArray());
+   static QFreetypeFace *getFace(const QFontEngine::FaceId &face_id, const QByteArray &fontData = QByteArray());
    void release(const QFontEngine::FaceId &face_id);
 
    // locks the struct for usage. Any read/write operations require locking.
    void lock() {
       _lock.lock();
    }
+
    void unlock() {
       _lock.unlock();
    }
 
    FT_Face face;
    HB_Face hbFace;
-#ifndef QT_NO_FONTCONFIG
+
    FcCharSet *charset;
-#endif
+
    int xsize; // 26.6
    int ysize; // 26.6
    FT_Matrix matrix;

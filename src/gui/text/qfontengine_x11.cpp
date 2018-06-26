@@ -203,7 +203,7 @@ static QStringList fontPath()
 static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **freetype, int *synth)
 {
    *freetype = 0;
-   *synth = 0;
+   *synth    = 0;
 
    QByteArray xname = _xname.toLower();
 
@@ -225,11 +225,13 @@ static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **fr
    QByteArray best_mapping;
 
    for (QStringList::const_iterator it = fontpath.constBegin(); it != fontpath.constEnd(); ++it) {
-      if (!(*it).startsWith(QLatin1Char('/'))) {
+      if (! (*it).startsWith('/')) {
          continue;   // not a path name, a font server
       }
+
       QString fontmapname;
       int num = 0;
+
       // search font.dir and font.scale for the right file
       while (num < 2) {
          if (num == 0) {
@@ -238,6 +240,7 @@ static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **fr
             fontmapname = (*it) + QLatin1String("/fonts.dir");
          }
          ++num;
+
          //qWarning(fontmapname);
          QFile fontmap(fontmapname);
          if (!fontmap.open(QIODevice::ReadOnly)) {
@@ -314,19 +317,22 @@ static inline XCharStruct *charStruct(XFontStruct *xfs, uint ch)
    XCharStruct *xcs = 0;
    unsigned char r = ch >> 8;
    unsigned char c = ch & 0xff;
+
    if (xfs->per_char &&
          r >= xfs->min_byte1 &&
          r <= xfs->max_byte1 &&
          c >= xfs->min_char_or_byte2 &&
          c <= xfs->max_char_or_byte2) {
+
       xcs = xfs->per_char + ((r - xfs->min_byte1) *
-                             (xfs->max_char_or_byte2 -
-                              xfs->min_char_or_byte2 + 1)) +
-            (c - xfs->min_char_or_byte2);
+                             (xfs->max_char_or_byte2 - xfs->min_char_or_byte2 + 1)) +
+                             (c - xfs->min_char_or_byte2);
+
       if (xcs->width == 0 && xcs->ascent == 0 &&  xcs->descent == 0) {
          xcs = 0;
       }
    }
+
    return xcs;
 }
 
@@ -622,6 +628,7 @@ qreal QFontEngineXLFD::minRightBearing() const
          }
 
          ((QFontEngineXLFD *)this)->rbearing = mx;
+
       } else {
          ((QFontEngineXLFD *)this)->rbearing = _fs->min_bounds.rbearing;
       }
@@ -717,6 +724,7 @@ QFontEngine::FaceId QFontEngineXLFD::faceId() const
 #ifndef QT_NO_FREETYPE
    if (face_id.index == -1) {
       face_id = fontFile(_name, &freetype, &synth);
+
       if (_codec) {
          face_id.encoding = _codec->mibEnum();
       }
@@ -985,11 +993,8 @@ void QFontEngineMultiFT::loadEngine(int at)
    engines[at] = fontEngine;
 }
 
-// ------------------------------------------------------------------
+
 // X11 FT engine
-// ------------------------------------------------------------------
-
-
 
 Q_GUI_EXPORT void qt_x11ft_convert_pattern(FcPattern *pattern, QByteArray *file_name, int *index, bool *antialias)
 {
@@ -1009,25 +1014,28 @@ Q_GUI_EXPORT void qt_x11ft_convert_pattern(FcPattern *pattern, QByteArray *file_
 QFontEngineX11FT::QFontEngineX11FT(FcPattern *pattern, const QFontDef &fd, int screen)
    : QFontEngineFT(fd)
 {
-   //     FcPatternPrint(pattern);
+   // FcPatternPrint(pattern);
 
    bool antialias = X11->fc_antialias;
    QByteArray file_name;
    int face_index;
+
    qt_x11ft_convert_pattern(pattern, &file_name, &face_index, &antialias);
+
    QFontEngine::FaceId face_id;
    face_id.filename = file_name;
-   face_id.index = face_index;
+   face_id.index    = face_index;
 
-   canUploadGlyphsToServer = QApplication::testAttribute(Qt::AA_X11InitThreads) ||
-                             (qApp->thread() == QThread::currentThread());
+   canUploadGlyphsToServer = QApplication::testAttribute(Qt::AA_X11InitThreads) || (qApp->thread() == QThread::currentThread());
 
    subpixelType = Subpixel_None;
    if (antialias) {
       int subpixel = X11->display ? X11->screens[screen].subpixel : FC_RGBA_UNKNOWN;
+
       if (subpixel == FC_RGBA_UNKNOWN) {
          (void) FcPatternGetInteger(pattern, FC_RGBA, 0, &subpixel);
       }
+
       if (!antialias || subpixel == FC_RGBA_UNKNOWN) {
          subpixel = FC_RGBA_NONE;
       }
@@ -1055,18 +1063,21 @@ QFontEngineX11FT::QFontEngineX11FT(FcPattern *pattern, const QFontDef &fd, int s
 
    if (fd.hintingPreference != QFont::PreferDefaultHinting) {
       switch (fd.hintingPreference) {
+
          case QFont::PreferNoHinting:
             default_hint_style = HintNone;
             break;
          case QFont::PreferVerticalHinting:
             default_hint_style = HintLight;
             break;
+
          case QFont::PreferFullHinting:
          default:
             default_hint_style = HintFull;
             break;
       }
    }
+
 #ifdef FC_HINT_STYLE
    else {
       int hint_style = 0;

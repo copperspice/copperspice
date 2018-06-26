@@ -23,9 +23,10 @@
 #ifndef QTEXTOBJECT_H
 #define QTEXTOBJECT_H
 
-#include <QtCore/qobject.h>
-#include <QtGui/qtextformat.h>
-#include <QtGui/qglyphrun.h>
+#include <qobject.h>
+#include <qtextformat.h>
+#include <qglyphrun.h>
+
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -137,6 +138,7 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
       friend class QTextTableCell;
       friend class QTextDocumentLayoutPrivate;
       iterator(QTextFrame *frame, int block, int begin, int end);
+
     public:
       iterator();
       iterator(const iterator &o);
@@ -174,7 +176,7 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
    };
 
    friend class iterator;
-   // more Qt
+
    typedef iterator Iterator;
 
    iterator begin() const;
@@ -203,17 +205,15 @@ class Q_GUI_EXPORT QTextBlockUserData
 
 class Q_GUI_EXPORT QTextBlock
 {
-   friend class QSyntaxHighlighter;
-
  public:
-   inline QTextBlock(QTextDocumentPrivate *priv, int b) : p(priv), n(b) {}
-   inline QTextBlock() : p(0), n(0) {}
-   inline QTextBlock(const QTextBlock &o) : p(o.p), n(o.n) {}
-   inline QTextBlock &operator=(const QTextBlock &o) {
-      p = o.p;
-      n = o.n;
-      return *this;
-   }
+   inline QTextBlock(QTextDocumentPrivate *priv, int b)
+      : p(priv), n(b)  {}
+
+   inline QTextBlock()
+      : p(0), n(0)  {}
+
+   inline QTextBlock(const QTextBlock &o) = default;
+   inline QTextBlock &operator=(const QTextBlock &o) = default;
 
    inline bool isValid() const {
       return p != 0 && n != 0;
@@ -222,9 +222,11 @@ class Q_GUI_EXPORT QTextBlock
    inline bool operator==(const QTextBlock &o) const {
       return p == o.p && n == o.n;
    }
+
    inline bool operator!=(const QTextBlock &o) const {
       return p != o.p || n != o.n;
    }
+
    inline bool operator<(const QTextBlock &o) const {
       return position() < o.position();
    }
@@ -268,15 +270,22 @@ class Q_GUI_EXPORT QTextBlock
 
    class Q_GUI_EXPORT iterator
    {
+      friend class QTextBlock;
+
       const QTextDocumentPrivate *p;
+
       int b;
       int e;
       int n;
-      friend class QTextBlock;
-      iterator(const QTextDocumentPrivate *priv, int begin, int end, int f) : p(priv), b(begin), e(end), n(f) {}
+
+      iterator(const QTextDocumentPrivate *priv, int begin, int end, int f)
+         : p(priv), b(begin), e(end), n(f) {}
+
     public:
-      iterator() : p(0), b(0), e(0), n(0) {}
-      iterator(const iterator &o) : p(o.p), b(o.b), e(o.e), n(o.n) {}
+      iterator()
+         : p(0), b(0), e(0), n(0) {}
+
+      iterator(const iterator &o) = default;
 
       QTextFragment fragment() const;
 
@@ -287,15 +296,18 @@ class Q_GUI_EXPORT QTextBlock
       inline bool operator==(const iterator &o) const {
          return p == o.p && n == o.n;
       }
+
       inline bool operator!=(const iterator &o) const {
          return p != o.p || n != o.n;
       }
+
       iterator &operator++();
       inline iterator operator++(int) {
          iterator tmp = *this;
          operator++();
          return tmp;
       }
+
       iterator &operator--();
       inline iterator operator--(int) {
          iterator tmp = *this;
@@ -304,7 +316,6 @@ class Q_GUI_EXPORT QTextBlock
       }
    };
 
-   // more Qt
    typedef iterator Iterator;
 
    iterator begin() const;
@@ -316,6 +327,7 @@ class Q_GUI_EXPORT QTextBlock
    inline QTextDocumentPrivate *docHandle() const {
       return p;
    }
+
    inline int fragmentIndex() const {
       return n;
    }
@@ -323,8 +335,10 @@ class Q_GUI_EXPORT QTextBlock
  private:
    QTextDocumentPrivate *p;
    int n;
+
    friend class QTextDocumentPrivate;
    friend class QTextLayout;
+   friend class QSyntaxHighlighter;
 };
 
 Q_DECLARE_TYPEINFO(QTextBlock, Q_MOVABLE_TYPE);

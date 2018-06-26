@@ -64,6 +64,7 @@ class QTextCursorPrivate : public QSharedData
    inline QTextBlock block() const {
       return QTextBlock(priv, priv->blockMap().findNode(position));
    }
+
    inline QTextBlockFormat blockFormat() const {
       return block().blockFormat();
    }

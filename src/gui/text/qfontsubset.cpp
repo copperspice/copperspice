@@ -1719,12 +1719,14 @@ static const char *helvetica_styles[4] = {
    "Helvetica-Oblique",
    "Helvetica-BoldOblique"
 };
+
 static const char *times_styles[4] = {
    "Times-Regular",
    "Times-Bold",
    "Times-Italic",
    "Times-BoldItalic"
 };
+
 static const char *courier_styles[4] = {
    "Courier",
    "Courier-Bold",
@@ -1749,11 +1751,14 @@ QByteArray QFontSubset::toType1() const
 
 #ifndef QT_NO_FREETYPE
    FT_Face face = ft_face(fontEngine);
+
    if (face && !FT_IS_SCALABLE(face)) {
       int style = 0;
+
       if (fontEngine->fontDef.style) {
          style += 2;
       }
+
       if (fontEngine->fontDef.weight >= QFont::Bold) {
          style++;
       }
@@ -1768,8 +1773,10 @@ QByteArray QFontSubset::toType1() const
          standard_font = true;
       }
    }
+
 #endif
    s << "/F" << id << "-Base\n";
+
    if (standard_font) {
       s << '/' << psname << " findfont\n"
         "0 dict copy dup /NumGlyphs 0 put dup /CMap 256 array put def\n";
@@ -1778,6 +1785,7 @@ QByteArray QFontSubset::toType1() const
       if (!psname.isEmpty()) {
          s << "/FontName /" << psname << '\n';
       }
+
       s << "/FontInfo <</FsType " << (int)fontEngine->fsType << ">>\n"
         "/FontType 1\n"
         "/PaintType 0\n"
@@ -1794,6 +1802,7 @@ QByteArray QFontSubset::toType1() const
         "/CMap 256 array\n"
         ">> def\n";
    }
+
    s << type1AddedGlyphs();
    downloaded_glyphs = glyph_indices.size();
 

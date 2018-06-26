@@ -1028,7 +1028,10 @@ static const char *specialLanguages[] = {
 };
 enum { SpecialLanguageCount = sizeof(specialLanguages) / sizeof(const char *) };
 
-static const ushort specialChars[] = {         // broom, might be missing values
+
+// might be missing values, verify with unicode tables
+
+static const ushort specialChars[] = {
    0,      // Any
    0,      // Latin
    0,      // Greek
@@ -1351,12 +1354,15 @@ static void loadFontConfig()
 
       QtFontStyle::Key styleKey;
       QString styleName = style_value ? QString::fromUtf8((const char *) style_value) : QString();
+
       styleKey.style = (slant_value == FC_SLANT_ITALIC)
                        ? QFont::StyleItalic
                        : ((slant_value == FC_SLANT_OBLIQUE)
                           ? QFont::StyleOblique
                           : QFont::StyleNormal);
+
       styleKey.weight = getFCWeight(weight_value);
+
       if (!scalable) {
          int width = 100;
          FcPatternGetInteger (fonts->fonts[i], FC_WIDTH, 0, &width);
@@ -1483,7 +1489,7 @@ static void load(const QString &family = QString(), int script = -1, bool forceX
 
 static void checkSymbolFont(QtFontFamily *family)
 {
-   if (!family || family->symbol_checked || family->fontFilename.isEmpty()) {
+   if (! family || family->symbol_checked || family->fontFilename.isEmpty()) {
       return;
    }
 
@@ -1491,7 +1497,8 @@ static void checkSymbolFont(QtFontFamily *family)
 
    QFontEngine::FaceId id;
    id.filename = family->fontFilename;
-   id.index = family->fontFileIndex;
+   id.index    = family->fontFileIndex;
+
    QFreetypeFace *f = QFreetypeFace::getFace(id);
 
    if (! f) {
@@ -1501,15 +1508,19 @@ static void checkSymbolFont(QtFontFamily *family)
    }
    for (int i = 0; i < f->face->num_charmaps; ++i) {
       FT_CharMap cm = f->face->charmaps[i];
+
       if (cm->encoding == FT_ENCODING_ADOBE_CUSTOM
             || cm->encoding == FT_ENCODING_MS_SYMBOL) {
+
          for (int x = QFontDatabase::Latin; x < QFontDatabase::Other; ++x) {
             family->writingSystems[x] = QtFontFamily::Unsupported;
          }
+
          family->writingSystems[QFontDatabase::Other] = QtFontFamily::Supported;
          break;
       }
    }
+
    f->release(id);
 }
 

@@ -103,12 +103,13 @@ class Itemizer
          // purpose of splitting up text. This is important because, for example, a fullstop
          // (0x2E) can be used to indicate an abbreviation and so must be treated as part of a
          // word.  Thus it must be passed along with the word in languages that have to calculate
-         // word breaks.  For example the thai word "ครม." has no word breaks but the word "ครม"
-         // does.
+         // word breaks.  For example the thai word "ครม." has no word breaks but the word "ครม" does.
+
          // Unfortuntely because we split up the strings for both wordwrapping and for setting
          // the font and because Japanese and Chinese are also aliases of the script "Common",
          // doing this would break too many things.  So instead we only pass the full stop
          // along, and nothing else.
+
          if (m_analysis[i].bidiLevel == m_analysis[start].bidiLevel
                && m_analysis[i].flags == m_analysis[start].flags
                && (m_analysis[i].script == m_analysis[start].script || m_string[i] == QLatin1Char('.'))
@@ -957,7 +958,7 @@ void QTextEngine::shapeLine(const QScriptLine &line)
    }
 }
 
-#if !defined(QT_ENABLE_HARFBUZZ_FOR_MAC) && defined(Q_OS_MAC)
+#if ! defined(QT_ENABLE_HARFBUZZ_FOR_MAC) && defined(Q_OS_MAC)
 static bool enableHarfBuzz()
 {
    static enum { Yes, No, Unknown } status = Unknown;
@@ -987,7 +988,7 @@ void QTextEngine::shapeText(int item) const
 
 #if defined(Q_OS_MAC)
 
-#if !defined(QT_ENABLE_HARFBUZZ_FOR_MAC)
+#if ! defined(QT_ENABLE_HARFBUZZ_FOR_MAC)
    if (enableHarfBuzz()) {
 #endif
 
@@ -998,6 +999,7 @@ void QTextEngine::shapeText(int item) const
 
       HB_Face face = actualFontEngine->harfbuzzFace();
       HB_Script script = (HB_Script) si.analysis.script;
+
       if (face->supported_scripts[script]) {
          shapeTextWithHarfbuzz(item);
       } else {
@@ -1016,15 +1018,17 @@ void QTextEngine::shapeText(int item) const
 
    si.width = 0;
 
-   if (!si.num_glyphs) {
+   if (! si.num_glyphs) {
       return;
    }
+
    QGlyphLayout glyphs = shapedGlyphs(&si);
 
    QFont font = this->font(si);
    bool letterSpacingIsAbsolute = font.d->letterSpacingIsAbsolute;
+
    QFixed letterSpacing = font.d->letterSpacing;
-   QFixed wordSpacing = font.d->wordSpacing;
+   QFixed wordSpacing   = font.d->wordSpacing;
 
    if (letterSpacingIsAbsolute && letterSpacing.value()) {
       letterSpacing *= font.d->dpi / qt_defaultDpiY();
@@ -1535,38 +1539,48 @@ void QTextEngine::itemize() const
    Itemizer itemizer(layoutData->string, scriptAnalysis.data(), layoutData->items);
 
    const QTextDocumentPrivate *p = block.docHandle();
+
    if (p) {
       SpecialData *s = specialData;
 
       QTextDocumentPrivate::FragmentIterator it = p->find(block.position());
-      QTextDocumentPrivate::FragmentIterator end = p->find(block.position() + block.length() -
-            1); // -1 to omit the block separator char
+
+      // -1 to omit the block separator char
+      QTextDocumentPrivate::FragmentIterator end = p->find(block.position() + block.length() - 1);
       int format = it.value()->format;
 
       int prevPosition = 0;
       int position = prevPosition;
-      while (1) {
+
+      while (true) {
          const QTextFragmentData *const frag = it.value();
+
          if (it == end || format != frag->format) {
+
             if (s && position >= s->preeditPosition) {
                position += s->preeditText.length();
                s = 0;
             }
+
             Q_ASSERT(position <= length);
             itemizer.generate(prevPosition, position - prevPosition,
                               formats()->charFormat(format).fontCapitalization());
+
             if (it == end) {
                if (position < length)
                   itemizer.generate(position, length - position,
-                                    formats()->charFormat(format).fontCapitalization());
+                              formats()->charFormat(format).fontCapitalization());
                break;
             }
+
             format = frag->format;
             prevPosition = position;
          }
+
          position += frag->size_array[0];
          ++it;
       }
+
    } else {
       itemizer.generate(0, length, static_cast<QFont::Capitalization> (fnt.d->capital));
    }
@@ -2366,11 +2380,15 @@ int QTextEngine::formatIndex(const QScriptItem *si) const
    if (specialData && !specialData->resolvedFormatIndices.isEmpty()) {
       return specialData->resolvedFormatIndices.at(si - &layoutData->items[0]);
    }
+
    QTextDocumentPrivate *p = block.docHandle();
+
    if (!p) {
       return -1;
    }
+
    int pos = si->position;
+
    if (specialData && si->position >= specialData->preeditPosition) {
       if (si->position < specialData->preeditPosition + specialData->preeditText.length()) {
          pos = qMax(qMin(block.length(), specialData->preeditPosition) - 1, 0);
@@ -2378,6 +2396,7 @@ int QTextEngine::formatIndex(const QScriptItem *si) const
          pos -= specialData->preeditText.length();
       }
    }
+
    QTextDocumentPrivate::FragmentIterator it = p->find(block.position() + pos);
    return it.value()->format;
 }

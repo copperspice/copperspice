@@ -501,24 +501,27 @@ void QTextHtmlParser::dumpHtml()
 QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
 {
    QTextHtmlParserNode *lastNode = &nodes.last();
-   QTextHtmlParserNode *newNode = 0;
+   QTextHtmlParserNode *newNode  = 0;
 
    bool reuseLastNode = true;
 
    if (nodes.count() == 1) {
       reuseLastNode = false;
+
    } else if (lastNode->tag.isEmpty()) {
 
       if (lastNode->text.isEmpty()) {
          reuseLastNode = true;
+
       } else { // last node is a text node (empty tag) with some text
 
-         if (lastNode->text.length() == 1 && lastNode->text.at(0).isSpace()) {
+         if (lastNode->text.length() == 1 && lastNode->text.first().isSpace()) {
 
             int lastSibling = count() - 2;
-            while (lastSibling
-                   && at(lastSibling).parent != lastNode->parent
+
+            while (lastSibling && at(lastSibling).parent != lastNode->parent
                    && at(lastSibling).displayMode == QTextHtmlElement::DisplayInline) {
+
                lastSibling = at(lastSibling).parent;
             }
 
@@ -527,6 +530,7 @@ QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
             } else {
                reuseLastNode = true;
             }
+
          } else {
             // text node with real (non-whitespace) text -> nothing to re-use
             reuseLastNode = false;

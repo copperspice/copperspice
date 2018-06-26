@@ -287,9 +287,11 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
 
       writer.writeAttribute(textNS, QString::fromLatin1("style-name"), QString::fromLatin1("c%1")
                             .formatArg(frag.fragment().charFormatIndex()));
+
       bool escapeNextSpace = true;
       int precedingSpaces = 0;
       int exportedIndex = 0;
+
       for (int i = 0; i <= fragmentText.count(); ++i) {
          bool isSpace = false;
          QChar character = fragmentText[i];

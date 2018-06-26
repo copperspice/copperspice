@@ -34,11 +34,9 @@
 #include <qtextlayout.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 enum {
    AdjustPrev = 0x1,
-   AdjustUp = 0x3,
+   AdjustUp   = 0x3,
    AdjustNext = 0x4,
    AdjustDown = 0x12
 };
@@ -144,6 +142,7 @@ void QTextCursorPrivate::remove()
    int pos1 = position;
    int pos2 = adjusted_anchor;
    QTextUndoCommand::Operation op = QTextUndoCommand::KeepCursor;
+
    if (pos1 > pos2) {
       pos1 = adjusted_anchor;
       pos2 = position;
@@ -152,6 +151,7 @@ void QTextCursorPrivate::remove()
 
    // deleting inside table? -> delete only content
    QTextTable *table = complexSelectionTable();
+
    if (table) {
       priv->beginEditBlock();
       int startRow, startCol, numRows, numCols;
@@ -159,6 +159,7 @@ void QTextCursorPrivate::remove()
       clearCells(table, startRow, startCol, numRows, numCols, op);
       adjusted_anchor = anchor = position;
       priv->endEditBlock();
+
    } else {
       priv->remove(pos1, pos2 - pos1, op);
       adjusted_anchor = anchor = position;
@@ -172,7 +173,8 @@ void QTextCursorPrivate::clearCells(QTextTable *table, int startRow, int startCo
 {
    priv->beginEditBlock();
 
-   for (int row = startRow; row < startRow + numRows; ++row)
+   for (int row = startRow; row < startRow + numRows; ++row) {
+
       for (int col = startCol; col < startCol + numCols; ++col) {
          QTextTableCell cell = table->cellAt(row, col);
          const int startPos = cell.firstPosition();
@@ -180,6 +182,7 @@ void QTextCursorPrivate::clearCells(QTextTable *table, int startRow, int startCo
          Q_ASSERT(startPos <= endPos);
          priv->remove(startPos, endPos - startPos, op);
       }
+   }
 
    priv->endEditBlock();
 }
@@ -209,25 +212,29 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
    }
 
    QTextFrame *f_position = priv->frameAt(position);
-   QTextFrame *f_anchor = priv->frameAt(adjusted_anchor);
+   QTextFrame *f_anchor   = priv->frameAt(adjusted_anchor);
 
    if (f_position != f_anchor) {
       // find common parent frame
       QList<QTextFrame *> positionChain;
       QList<QTextFrame *> anchorChain;
       QTextFrame *f = f_position;
+
       while (f) {
          positionChain.prepend(f);
          f = f->parentFrame();
       }
       f = f_anchor;
+
       while (f) {
          anchorChain.prepend(f);
          f = f->parentFrame();
       }
       Q_ASSERT(positionChain.at(0) == anchorChain.at(0));
+
       int i = 1;
       int l = qMin(positionChain.size(), anchorChain.size());
+
       for (; i < l; ++i) {
          if (positionChain.at(i) != anchorChain.at(i)) {
             break;
@@ -264,10 +271,12 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
 
    QTextTableCell c_position = table->cellAt(position);
    QTextTableCell c_anchor = table->cellAt(adjusted_anchor);
+
    if (c_position != c_anchor) {
       bool before;
       int col_position = c_position.column();
       int col_anchor = c_anchor.column();
+
       if (col_position == col_anchor) {
          before = c_position.row() < c_anchor.row();
       } else {
@@ -292,13 +301,15 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
          adjusted_anchor = c_anchor.firstPosition();
       }
    }
+
    currentCharFormat = -1;
 }
 
 void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
 {
    Q_ASSERT(from <= to);
-   if (position == anchor) {
+   if (position == anchor
+) {
       return;
    }
 
@@ -323,9 +334,12 @@ void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
 
    if (cellStart.row() >= removedCellFrom.row() && cellEnd.row() <= removedCellEnd.row()
          && cellStart.column() >= removedCellFrom.column()
-         && cellEnd.column() <= removedCellEnd.column()) { // selection is completely removed
+         && cellEnd.column() <= removedCellEnd.column()) {
+
+      // selection is completely removed
       // find a new position, as close as possible to where we were.
       QTextTableCell cell;
+
       if (removedCellFrom.row() == 0 && removedCellEnd.row() == t->rows() - 1) { // removed n columns
          cell = t->cellAt(cellStart.row(), removedCellEnd.column() + 1);
       } else if (removedCellFrom.column() == 0 && removedCellEnd.column() == t->columns() - 1) { // removed n rows
@@ -771,8 +785,9 @@ void QTextCursorPrivate::selectedTableCells(int *firstRow, int *numRows, int *fi
 static void setBlockCharFormatHelper(QTextDocumentPrivate *priv, int pos1, int pos2,
                                      const QTextCharFormat &format, QTextDocumentPrivate::FormatChangeMode changeMode)
 {
-   QTextBlock it = priv->blocksFind(pos1);
+   QTextBlock it  = priv->blocksFind(pos1);
    QTextBlock end = priv->blocksFind(pos2);
+
    if (end.isValid()) {
       end = end.next();
    }
@@ -940,173 +955,6 @@ QTextLayout *QTextCursorPrivate::blockLayout(QTextBlock &block) const
    return tl;
 }
 
-/*!
-    \class QTextCursor
-    \reentrant
-
-    \brief The QTextCursor class offers an API to access and modify QTextDocuments.
-
-    \ingroup richtext-processing
-    \ingroup shared
-
-    Text cursors are objects that are used to access and modify the
-    contents and underlying structure of text documents via a
-    programming interface that mimics the behavior of a cursor in a
-    text editor. QTextCursor contains information about both the
-    cursor's position within a QTextDocument and any selection that it
-    has made.
-
-    QTextCursor is modeled on the way a text cursor behaves in a text
-    editor, providing a programmatic means of performing standard
-    actions through the user interface. A document can be thought of
-    as a single string of characters. The cursor's current position()
-    then is always either \e between two consecutive characters in the
-    string, or else \e before the very first character or \e after the
-    very last character in the string.  Documents can also contain
-    tables, lists, images, and other objects in addition to text but,
-    from the developer's point of view, the document can be treated as
-    one long string.  Some portions of that string can be considered
-    to lie within particular blocks (e.g. paragraphs), or within a
-    table's cell, or a list's item, or other structural elements. When
-    we refer to "current character" we mean the character immediately
-    \e before the cursor position() in the document. Similarly, the
-    "current block" is the block that contains the cursor position().
-
-    A QTextCursor also has an anchor() position. The text that is
-    between the anchor() and the position() is the selection. If
-    anchor() == position() there is no selection.
-
-    The cursor position can be changed programmatically using
-    setPosition() and movePosition(); the latter can also be used to
-    select text. For selections see selectionStart(), selectionEnd(),
-    hasSelection(), clearSelection(), and removeSelectedText().
-
-    If the position() is at the start of a block atBlockStart()
-    returns true; and if it is at the end of a block atBlockEnd() returns
-    true. The format of the current character is returned by
-    charFormat(), and the format of the current block is returned by
-    blockFormat().
-
-    Formatting can be applied to the current text document using the
-    setCharFormat(), mergeCharFormat(), setBlockFormat() and
-    mergeBlockFormat() functions. The 'set' functions will replace the
-    cursor's current character or block format, while the 'merge'
-    functions add the given format properties to the cursor's current
-    format. If the cursor has a selection the given format is applied
-    to the current selection. Note that when only parts of a block is
-    selected the block format is applied to the entire block. The text
-    at the current character position can be turned into a list using
-    createList().
-
-    Deletions can be achieved using deleteChar(),
-    deletePreviousChar(), and removeSelectedText().
-
-    Text strings can be inserted into the document with the insertText()
-    function, blocks (representing new paragraphs) can be inserted with
-    insertBlock().
-
-    Existing fragments of text can be inserted with insertFragment() but,
-    if you want to insert pieces of text in various formats, it is usually
-    still easier to use insertText() and supply a character format.
-
-    Various types of higher-level structure can also be inserted into the
-    document with the cursor:
-
-    \list
-    \i Lists are ordered sequences of block elements that are decorated with
-       bullet points or symbols. These are inserted in a specified format
-       with insertList().
-    \i Tables are inserted with the insertTable() function, and can be
-       given an optional format. These contain an array of cells that can
-       be traversed using the cursor.
-    \i Inline images are inserted with insertImage(). The image to be
-       used can be specified in an image format, or by name.
-    \i Frames are inserted by calling insertFrame() with a specified format.
-    \endlist
-
-    Actions can be grouped (i.e. treated as a single action for
-    undo/redo) using beginEditBlock() and endEditBlock().
-
-    Cursor movements are limited to valid cursor positions. In Latin
-    writing this is between any two consecutive characters in the
-    text, before the first character, or after the last character. In
-    some other writing systems cursor movements are limited to
-    "clusters" (e.g. a syllable in Devanagari, or a base letter plus
-    diacritics).  Functions such as movePosition() and deleteChar()
-    limit cursor movement to these valid positions.
-
-    \sa \link richtext.html Rich Text Processing\endlink
-
-*/
-
-/*!
-    \enum QTextCursor::MoveOperation
-
-    \value NoMove Keep the cursor where it is
-
-    \value Start Move to the start of the document.
-    \value StartOfLine Move to the start of the current line.
-    \value StartOfBlock Move to the start of the current block.
-    \value StartOfWord Move to the start of the current word.
-    \value PreviousBlock Move to the start of the previous block.
-    \value PreviousCharacter Move to the previous character.
-    \value PreviousWord Move to the beginning of the previous word.
-    \value Up Move up one line.
-    \value Left Move left one character.
-    \value WordLeft Move left one word.
-
-    \value End Move to the end of the document.
-    \value EndOfLine Move to the end of the current line.
-    \value EndOfWord Move to the end of the current word.
-    \value EndOfBlock Move to the end of the current block.
-    \value NextBlock Move to the beginning of the next block.
-    \value NextCharacter Move to the next character.
-    \value NextWord Move to the next word.
-    \value Down Move down one line.
-    \value Right Move right one character.
-    \value WordRight Move right one word.
-
-    \value NextCell  Move to the beginning of the next table cell inside the
-           current table. If the current cell is the last cell in the row, the
-           cursor will move to the first cell in the next row.
-    \value PreviousCell  Move to the beginning of the previous table cell
-           inside the current table. If the current cell is the first cell in
-           the row, the cursor will move to the last cell in the previous row.
-    \value NextRow  Move to the first new cell of the next row in the current
-           table.
-    \value PreviousRow  Move to the last cell of the previous row in the
-           current table.
-
-    \sa movePosition()
-*/
-
-/*!
-    \enum QTextCursor::MoveMode
-
-    \value MoveAnchor Moves the anchor to the same position as the cursor itself.
-    \value KeepAnchor Keeps the anchor where it is.
-
-    If the anchor() is kept where it is and the position() is moved,
-    the text in between will be selected.
-*/
-
-/*!
-    \enum QTextCursor::SelectionType
-
-    This enum describes the types of selection that can be applied with the
-    select() function.
-
-    \value Document         Selects the entire document.
-    \value BlockUnderCursor Selects the block of text under the cursor.
-    \value LineUnderCursor  Selects the line of text under the cursor.
-    \value WordUnderCursor  Selects the word under the cursor. If the cursor
-           is not positioned within a string of selectable characters, no
-           text is selected.
-*/
-
-/*!
-    Constructs a null cursor.
- */
 QTextCursor::QTextCursor()
    : d(0)
 {
@@ -1277,29 +1125,12 @@ int QTextCursor::anchor() const
    return d->anchor;
 }
 
-/*!
-    \fn bool QTextCursor::movePosition(MoveOperation operation, MoveMode mode, int n)
-
-    Moves the cursor by performing the given \a operation \a n times, using the specified
-    \a mode, and returns true if all operations were completed successfully; otherwise
-    returns false.
-
-    For example, if this function is repeatedly used to seek to the end of the next
-    word, it will eventually fail when the end of the document is reached.
-
-    By default, the move operation is performed once (\a n = 1).
-
-    If \a mode is \c KeepAnchor, the cursor selects the text it moves
-    over. This is the same effect that the user achieves when they
-    hold down the Shift key and move the cursor with the cursor keys.
-
-    \sa setVisualNavigation()
-*/
 bool QTextCursor::movePosition(MoveOperation op, MoveMode mode, int n)
 {
    if (!d || !d->priv) {
       return false;
    }
+
    switch (op) {
       case Start:
       case StartOfLine:
@@ -1342,32 +1173,11 @@ bool QTextCursor::movePosition(MoveOperation op, MoveMode mode, int n)
    return true;
 }
 
-/*!
-  \since 4.4
-
-  Returns true if the cursor does visual navigation; otherwise
-  returns false.
-
-  Visual navigation means skipping over hidden text pragraphs. The
-  default is false.
-
-  \sa setVisualNavigation(), movePosition()
- */
 bool QTextCursor::visualNavigation() const
 {
    return d ? d->visualNavigation : false;
 }
 
-/*!
-  \since 4.4
-
-  Sets visual navigation to \a b.
-
-  Visual navigation means skipping over hidden text pragraphs. The
-  default is false.
-
-  \sa visualNavigation(), movePosition()
- */
 void QTextCursor::setVisualNavigation(bool b)
 {
    if (d) {
@@ -1375,21 +1185,6 @@ void QTextCursor::setVisualNavigation(bool b)
    }
 }
 
-
-/*!
-  \since 4.7
-
-  Sets the visual x position for vertical cursor movements to \a x.
-
-  The vertical movement x position is cleared automatically when the cursor moves horizontally, and kept
-  unchanged when the cursor moves vertically. The mechanism allows the cursor to move up and down on a
-  visually straight line with proportional fonts, and to gently "jump" over short lines.
-
-  A value of -1 indicates no predefined x position. It will then be set automatically the next time the
-  cursor moves up or down.
-
-  \sa verticalMovementX()
-  */
 void QTextCursor::setVerticalMovementX(int x)
 {
    if (d) {
@@ -1397,51 +1192,16 @@ void QTextCursor::setVerticalMovementX(int x)
    }
 }
 
-/*! \since 4.7
-
-  Returns the visual x position for vertical cursor movements.
-
-  A value of -1 indicates no predefined x position. It will then be set automatically the next time the
-  cursor moves up or down.
-
-  \sa setVerticalMovementX()
-  */
 int QTextCursor::verticalMovementX() const
 {
    return d ? d->x : -1;
 }
 
-/*!
-  \since 4.7
-
-  Returns whether the cursor should keep its current position when text gets inserted at the position of the
-  cursor.
-
-  The default is false;
-
-  \sa setKeepPositionOnInsert()
- */
 bool QTextCursor::keepPositionOnInsert() const
 {
    return d ? d->keepPositionOnInsert : false;
 }
 
-/*!
-  \since 4.7
-
-  Defines whether the cursor should keep its current position when text gets inserted at the current position of the
-  cursor.
-
-  If \a b is true, the cursor keeps its current position when text gets inserted at the positing of the cursor.
-  If \a b is false, the cursor moves along with the inserted text.
-
-  The default is false.
-
-  Note that a cursor always moves when text is inserted before the current position of the cursor, and it
-  always keeps its position when text is inserted after the current position of the cursor.
-
-  \sa keepPositionOnInsert()
- */
 void QTextCursor::setKeepPositionOnInsert(bool b)
 {
    if (d) {
@@ -1449,24 +1209,6 @@ void QTextCursor::setKeepPositionOnInsert(bool b)
    }
 }
 
-
-
-/*!
-    Inserts \a text at the current position, using the current
-    character format.
-
-    If there is a selection, the selection is deleted and replaced by
-    \a text, for example:
-    \snippet doc/src/snippets/code/src_gui_text_qtextcursor.cpp 0
-    This clears any existing selection, selects the word at the cursor
-    (i.e. from position() forward), and replaces the selection with
-    the phrase "Hello World".
-
-    Any ASCII linefeed characters (\\n) in the inserted text are transformed
-    into unicode block separators, corresponding to insertBlock() calls.
-
-    \sa charFormat() hasSelection()
-*/
 void QTextCursor::insertText(const QString &text)
 {
    QTextCharFormat fmt = charFormat();
@@ -1496,26 +1238,33 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
    if (! text.isEmpty()) {
       QTextFormatCollection *formats = d->priv->formatCollection();
       int formatIdx = formats->indexForFormat(format);
+
       Q_ASSERT(formats->format(formatIdx).isCharFormat());
 
       QTextBlockFormat blockFmt = blockFormat();
+
       int textStart  = d->priv->text.length();
       int blockStart = 0;
 
       d->priv->text += text;
-      int textEnd = d->priv->text.length(); 
 
-      for (int i = 0; i < text.length(); ++i) {
-         QChar ch = text.at(i);
+      int textEnd = d->priv->text.length();
+      int i = 0;
+
+      QString::const_iterator nextCh = text.constBegin() + 1;
+
+      for (auto ch : text) {
          const int blockEnd = i;
 
-         if (ch == '\r' && (i + 1) < text.length() && text.at(i + 1) == '\n') {
+         if (ch == '\r' && nextCh < text.constEnd() && *nextCh == '\n') {
             ++i;
-            ch = text.at(i);
+            ++nextCh;
+
+            continue;
          }
 
-         if (ch == '\n' || ch == QChar::ParagraphSeparator
-               || ch == QTextBeginningOfFrame || ch == QTextEndOfFrame || ch == '\r') {
+         if (ch == '\n' || ch == '\r' || ch == QChar::ParagraphSeparator || ch == QTextBeginningOfFrame
+                  || ch == QTextEndOfFrame) {
 
             if (! hasEditBlock) {
                hasEditBlock = true;
@@ -1529,6 +1278,9 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
             d->insertBlock(blockFmt, format);
             blockStart = i + 1;
          }
+
+         ++i;
+         ++nextCh;
       }
 
       if (textStart + blockStart < textEnd) {
@@ -1543,12 +1295,6 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
    d->setX();
 }
 
-/*!
-    If there is no selected text, deletes the character \e at the
-    current cursor position; otherwise deletes the selected text.
-
-    \sa deletePreviousChar() hasSelection() clearSelection()
-*/
 void QTextCursor::deleteChar()
 {
    if (!d || !d->priv) {
@@ -1563,8 +1309,8 @@ void QTextCursor::deleteChar()
    if (!d->canDelete(d->position)) {
       return;
    }
-   d->adjusted_anchor = d->anchor =
-                           d->priv->nextCursorPosition(d->anchor, QTextLayout::SkipCharacters);
+
+   d->adjusted_anchor = d->anchor = d->priv->nextCursorPosition(d->anchor, QTextLayout::SkipCharacters);
    d->remove();
    d->setX();
 }
@@ -1613,6 +1359,7 @@ void QTextCursor::select(SelectionType selection)
          movePosition(StartOfLine);
          movePosition(EndOfLine, KeepAnchor);
          break;
+
       case WordUnderCursor:
          movePosition(StartOfWord);
          movePosition(EndOfWord, KeepAnchor);
@@ -1629,6 +1376,7 @@ void QTextCursor::select(SelectionType selection)
          }
          movePosition(EndOfBlock, KeepAnchor);
          break;
+
       case Document:
          movePosition(Start);
          movePosition(End, KeepAnchor);
@@ -1636,22 +1384,11 @@ void QTextCursor::select(SelectionType selection)
    }
 }
 
-/*!
-    Returns true if the cursor contains a selection; otherwise returns false.
-*/
 bool QTextCursor::hasSelection() const
 {
    return !!d && d->position != d->anchor;
 }
 
-
-/*!
-    Returns true if the cursor contains a selection that is not simply a
-    range from selectionStart() to selectionEnd(); otherwise returns false.
-
-    Complex selections are ones that span at least two cells in a table;
-    their extent is specified by selectedTableCells().
-*/
 bool QTextCursor::hasComplexSelection() const
 {
    if (!d) {
@@ -1661,20 +1398,12 @@ bool QTextCursor::hasComplexSelection() const
    return d->complexSelectionTable() != 0;
 }
 
-/*!
-    If the selection spans over table cells, \a firstRow is populated
-    with the number of the first row in the selection, \a firstColumn
-    with the number of the first column in the selection, and \a
-    numRows and \a numColumns with the number of rows and columns in
-    the selection. If the selection does not span any table cells the
-    results are harmless but undefined.
-*/
 void QTextCursor::selectedTableCells(int *firstRow, int *numRows, int *firstColumn, int *numColumns) const
 {
-   *firstRow = -1;
+   *firstRow    = -1;
    *firstColumn = -1;
-   *numRows = -1;
-   *numColumns = -1;
+   *numRows     = -1;
+   *numColumns  = -1;
 
    if (!d || d->position == d->anchor) {
       return;
@@ -1683,14 +1412,6 @@ void QTextCursor::selectedTableCells(int *firstRow, int *numRows, int *firstColu
    d->selectedTableCells(firstRow, numRows, firstColumn, numColumns);
 }
 
-
-/*!
-    Clears the current selection by setting the anchor to the cursor position.
-
-    Note that it does \bold{not} delete the text of the selection.
-
-    \sa removeSelectedText() hasSelection()
-*/
 void QTextCursor::clearSelection()
 {
    if (!d) {
@@ -1799,17 +1520,6 @@ QString QTextCursor::selectedText() const
    return text;
 }
 
-/*!
-    Returns the current selection (which may be empty) with all its
-    formatting information. If you just want the selected text (i.e.
-    plain text) use selectedText() instead.
-
-    \note Unlike QTextDocumentFragment::toPlainText(),
-    selectedText() may include special unicode characters such as
-    QChar::ParagraphSeparator.
-
-    \sa QTextDocumentFragment::toPlainText()
-*/
 QTextDocumentFragment QTextCursor::selection() const
 {
    return QTextDocumentFragment(*this);
@@ -1826,11 +1536,6 @@ QTextBlock QTextCursor::block() const
    return d->block();
 }
 
-/*!
-    Returns the block format of the block the cursor is in.
-
-    \sa setBlockFormat() charFormat()
- */
 QTextBlockFormat QTextCursor::blockFormat() const
 {
    if (!d || !d->priv) {
@@ -1840,12 +1545,6 @@ QTextBlockFormat QTextCursor::blockFormat() const
    return d->block().blockFormat();
 }
 
-/*!
-    Sets the block format of the current block (or all blocks that
-    are contained in the selection) to \a format.
-
-    \sa blockFormat(), mergeBlockFormat()
-*/
 void QTextCursor::setBlockFormat(const QTextBlockFormat &format)
 {
    if (!d || !d->priv) {
@@ -1855,13 +1554,6 @@ void QTextCursor::setBlockFormat(const QTextBlockFormat &format)
    d->setBlockFormat(format, QTextDocumentPrivate::SetFormat);
 }
 
-/*!
-    Modifies the block format of the current block (or all blocks that
-    are contained in the selection) with the block format specified by
-    \a modifier.
-
-    \sa setBlockFormat(), blockFormat()
-*/
 void QTextCursor::mergeBlockFormat(const QTextBlockFormat &modifier)
 {
    if (!d || !d->priv) {
@@ -1871,14 +1563,6 @@ void QTextCursor::mergeBlockFormat(const QTextBlockFormat &modifier)
    d->setBlockFormat(modifier, QTextDocumentPrivate::MergeFormat);
 }
 
-/*!
-    Returns the block character format of the block the cursor is in.
-
-    The block char format is the format used when inserting text at the
-    beginning of an empty block.
-
-    \sa setBlockCharFormat()
- */
 QTextCharFormat QTextCursor::blockCharFormat() const
 {
    if (!d || !d->priv) {
@@ -1888,12 +1572,6 @@ QTextCharFormat QTextCursor::blockCharFormat() const
    return d->block().charFormat();
 }
 
-/*!
-    Sets the block char format of the current block (or all blocks that
-    are contained in the selection) to \a format.
-
-    \sa blockCharFormat()
-*/
 void QTextCursor::setBlockCharFormat(const QTextCharFormat &format)
 {
    if (!d || !d->priv) {
@@ -1903,13 +1581,6 @@ void QTextCursor::setBlockCharFormat(const QTextCharFormat &format)
    d->setBlockCharFormat(format, QTextDocumentPrivate::SetFormatAndPreserveObjectIndices);
 }
 
-/*!
-    Modifies the block char format of the current block (or all blocks that
-    are contained in the selection) with the block format specified by
-    \a modifier.
-
-    \sa setBlockCharFormat()
-*/
 void QTextCursor::mergeBlockCharFormat(const QTextCharFormat &modifier)
 {
    if (!d || !d->priv) {
@@ -1919,14 +1590,6 @@ void QTextCursor::mergeBlockCharFormat(const QTextCharFormat &modifier)
    d->setBlockCharFormat(modifier, QTextDocumentPrivate::MergeFormat);
 }
 
-/*!
-    Returns the format of the character immediately before the cursor
-    position(). If the cursor is positioned at the beginning of a text
-    block that is not empty then the format of the character
-    immediately after the cursor is returned.
-
-    \sa insertText(), blockFormat()
- */
 QTextCharFormat QTextCursor::charFormat() const
 {
    if (!d || !d->priv) {
@@ -2681,21 +2344,3 @@ QTextDocument *QTextCursor::document() const
    }
    return 0; // document went away
 }
-
-/*!
-    \enum Qt::CursorMoveStyle
-    \since 4.8
-
-    This enum describes the movement style available to text cursors. The options
-    are:
-
-    \value LogicalMoveStyle Within a left-to-right text block, decrease cursor
-    position when pressing left arrow key, increase cursor position when pressing
-    the right arrow key. If the text block is right-to-left, the opposite behavior
-    applies.
-    \value VisualMoveStyle Pressing the left arrow key will always cause the cursor
-    to move left, regardless of the text's writing direction. Pressing the right
-    arrow key will always cause the cursor to move right.
-*/
-
-QT_END_NAMESPACE

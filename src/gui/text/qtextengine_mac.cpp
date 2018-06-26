@@ -62,8 +62,7 @@ static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayou
       int cat = prop->category;
 
       // one gets an inter character justification point if the current char is not a non spacing mark.
-      // as then the current char belongs to the last one and one gets a space justification point
-      // after the space char.
+      // as then the current char belongs to the last one and one gets a space justification point after the space char.
 
       if (lastCat == QChar::Separator_Space) {
          glyphs->attributes[pos - 1].justification = HB_Space;
@@ -101,12 +100,11 @@ enum QArabicShape {
 };
 
 
-// these groups correspond to the groups defined in the Unicode standard
-// Some of these groups are equal with regards to both joining and line breaking behaviour,
-// and thus have the same enum value
+// these groups correspond to the groups defined in the Unicode standard, some of these groups are equal
+// with regards to both joining and line breaking behaviour, and thus have the same enum value
 //
-// I'm not sure the mapping of syriac to arabic enums is correct with regards to justification, but as
-// I could not find any better document I'll hope for the best.
+// not sure the mapping of syriac to arabic enums is correct with regards to justification,
+// could not find any better document
 
 enum ArabicGroup {
    // NonJoining

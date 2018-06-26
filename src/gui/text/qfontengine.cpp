@@ -717,6 +717,7 @@ QImage QFontEngine::alphaMapForGlyph(glyph_t glyph)
    for (int y = 0; y < im.height(); ++y) {
       uchar *dst = (uchar *) indexed.scanLine(y);
       uint *src = (uint *) im.scanLine(y);
+
       for (int x = 0; x < im.width(); ++x) {
          dst[x] = qAlpha(src[x]);
       }
@@ -740,14 +741,15 @@ QFontEngine::Properties QFontEngine::properties() const
    psname += QByteArray::number(fontDef.weight);
 
    p.postscriptName = psname;
-   p.ascent = ascent();
-   p.descent = descent();
-   p.leading = leading();
-   p.emSquare = p.ascent;
+   p.ascent      = ascent();
+   p.descent     = descent();
+   p.leading     = leading();
+   p.emSquare    = p.ascent;
    p.boundingBox = QRectF(0, -p.ascent.toReal(), maxCharWidth(), (p.ascent + p.descent).toReal());
    p.italicAngle = 0;
-   p.capHeight = p.ascent;
-   p.lineWidth = lineThickness();
+   p.capHeight   = p.ascent;
+   p.lineWidth   = lineThickness();
+
    return p;
 }
 
@@ -1103,7 +1105,7 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, uint unicode)
       }
 
    } else if (format == 4) {
-      /* some fonts come with invalid cmap tables where the last segment specified 
+      /* some fonts come with invalid cmap tables where the last segment specified
          end = start = rangeoffset = 0xffff, delta = 0x0001
          Since 0xffff is never a valid Unicode char ignore the issue by returning 0 for 0xffff
       */
@@ -1211,12 +1213,14 @@ QString QFontEngine::convertToPostscriptFontFamilyName(const QString &family)
    f.replace('}', "");
    f.replace('/', "");
    f.replace('%', "");
+
    return f;
 }
 
 Q_GLOBAL_STATIC_WITH_INITIALIZER(QVector<QRgb>, qt_grayPalette, {
    x->resize(256);
    QRgb *it = x->data();
+
    for (int i = 0; i < x->size(); ++i, ++it)
       *it = 0xff000000 | i | (i << 8) | (i << 16);
 })

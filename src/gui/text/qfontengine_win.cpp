@@ -374,7 +374,7 @@ HGDIOBJ QFontEngineWin::selectDesignFont() const
    return SelectObject(shared_dc(), designFont);
 }
 
-bool QFontEngineWin::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, 
+bool QFontEngineWin::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs,
                   QTextEngine::ShaperFlags flags) const
 {
    int len = str.length();

@@ -132,10 +132,10 @@ struct QGlyphLayoutInstance {
 
 struct QGlyphLayout {
    // init to 0 not needed, done when shaping
-   QFixedPoint *offsets; // 8 bytes per element
-   HB_Glyph *glyphs; // 4 bytes per element
-   QFixed *advances_x; // 4 bytes per element
-   QFixed *advances_y; // 4 bytes per element
+   QFixedPoint *offsets;   // 8 bytes per element
+   HB_Glyph *glyphs;       // 4 bytes per element
+   QFixed *advances_x;     // 4 bytes per element
+   QFixed *advances_y;     // 4 bytes per element
    QGlyphJustification *justifications; // 4 bytes per element
    HB_GlyphAttributes *attributes; // 2 bytes per element
 
@@ -146,14 +146,19 @@ struct QGlyphLayout {
    inline explicit QGlyphLayout(char *address, int totalGlyphs) {
       offsets = reinterpret_cast<QFixedPoint *>(address);
       int offset = totalGlyphs * sizeof(HB_FixedPoint);
+
       glyphs = reinterpret_cast<HB_Glyph *>(address + offset);
       offset += totalGlyphs * sizeof(HB_Glyph);
+
       advances_x = reinterpret_cast<QFixed *>(address + offset);
       offset += totalGlyphs * sizeof(QFixed);
+
       advances_y = reinterpret_cast<QFixed *>(address + offset);
       offset += totalGlyphs * sizeof(QFixed);
+
       justifications = reinterpret_cast<QGlyphJustification *>(address + offset);
       offset += totalGlyphs * sizeof(QGlyphJustification);
+
       attributes = reinterpret_cast<HB_GlyphAttributes *>(address + offset);
       numGlyphs = totalGlyphs;
    }
@@ -210,9 +215,10 @@ struct QGlyphLayout {
       if (last == -1) {
          last = numGlyphs;
       }
-      if (first == 0 && last == numGlyphs
-            && reinterpret_cast<char *>(offsets + numGlyphs) == reinterpret_cast<char *>(glyphs)) {
+
+      if (first == 0 && last == numGlyphs && reinterpret_cast<char *>(offsets + numGlyphs) == reinterpret_cast<char *>(glyphs)) {
          memset(offsets, 0, spaceNeededForGlyphLayout(numGlyphs));
+
       } else {
          const int num = last - first;
          memset(offsets + first, 0, num * sizeof(QFixedPoint));
@@ -235,6 +241,7 @@ class QVarLengthGlyphLayoutArray : private QVarLengthArray<void *>, public QGlyp
 {
  private:
    typedef QVarLengthArray<void *> Array;
+
  public:
    QVarLengthGlyphLayoutArray(int totalGlyphs)
       : Array(spaceNeededForGlyphLayout(totalGlyphs) / sizeof(void *) + 1)
@@ -302,7 +309,7 @@ class QTextItemInt : public QTextItem
    QFontEngine *fontEngine;
 };
 
-inline bool qIsControlChar(ushort uc)
+inline bool qIsControlChar(QChar uc)
 {
    return uc >= 0x200b && uc <= 0x206f
           && (uc <= 0x200f /* ZW Space, ZWNJ, ZWJ, LRM and RLM */

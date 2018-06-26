@@ -23,29 +23,28 @@
 #ifndef QTEXTDOCUMENT_P_H
 #define QTEXTDOCUMENT_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qlist.h>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qvector.h>
+
 #include <qfragmentmap_p.h>
-#include <QtGui/qtextlayout.h>
-#include <QtGui/qtextoption.h>
-#include <qtextformat_p.h>
-#include <QtGui/qtextdocument.h>
-#include <QtGui/qtextobject.h>
-#include <QtGui/qtextcursor.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qurl.h>
 #include <qcssparser_p.h>
+#include <qtextlayout.h>
+#include <qtextoption.h>
+#include <qtextformat_p.h>
+#include <qtextdocument.h>
+#include <qtextobject.h>
+#include <qtextcursor.h>
+#include <qurl.h>
+#include <qvariant.h>
 
 // #define QT_QMAP_DEBUG
 
 #ifdef QT_QMAP_DEBUG
 #include <iostream>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QTextFormatCollection;
 class QTextFormat;
@@ -54,6 +53,7 @@ class QTextCursorPrivate;
 class QAbstractTextDocumentLayout;
 class QTextDocument;
 class QTextFrame;
+class QAbstractUndoItem;
 
 #define QTextBeginningOfFrame QChar(0xfdd0)
 #define QTextEndOfFrame QChar(0xfdd1)
@@ -72,31 +72,33 @@ class QTextBlockData : public QFragment<3>
 {
  public:
    inline void initialize() {
-      layout = 0;
-      userData = 0;
+      layout    = 0;
+      userData  = 0;
       userState = -1;
-      revision = 0;
-      hidden = 0;
+      revision  = 0;
+      hidden    = 0;
    }
+
    void invalidate() const;
+
    inline void free() {
       delete layout;
       layout = 0;
+
       delete userData;
       userData = 0;
    }
 
    mutable int format;
-   // ##### probably store a QTextEngine * here!
+
+   // ##### probably store a QTextEngine * here
    mutable QTextLayout *layout;
    mutable QTextBlockUserData *userData;
+
    mutable int userState;
    mutable int revision : 31;
    mutable uint hidden : 1;
 };
-
-
-class QAbstractUndoItem;
 
 class QTextUndoCommand
 {
@@ -114,6 +116,7 @@ class QTextUndoCommand
       CursorMoved = 9,
       Custom = 256
    };
+
    enum Operation {
       KeepCursor = 0,
       MoveCursor = 1
@@ -138,6 +141,7 @@ class QTextUndoCommand
 
    bool tryMerge(const QTextUndoCommand &other);
 };
+
 Q_DECLARE_TYPEINFO(QTextUndoCommand, Q_PRIMITIVE_TYPE);
 
 class QTextDocumentPrivate
@@ -161,6 +165,7 @@ class QTextDocumentPrivate
    void insert(int pos, int strPos, int strLength, int format);
    int insertBlock(int pos, int blockFormat, int charFormat,
                    QTextUndoCommand::Operation = QTextUndoCommand::MoveCursor);
+
    int insertBlock(const QChar &blockSeparator, int pos, int blockFormat, int charFormat,
                    QTextUndoCommand::Operation op = QTextUndoCommand::MoveCursor);
 
@@ -182,24 +187,30 @@ class QTextDocumentPrivate
    void emitRedoAvailable(bool available);
 
    int undoRedo(bool undo);
+
    inline void undo() {
       undoRedo(true);
    }
+
    inline void redo() {
       undoRedo(false);
    }
+
    void appendUndoItem(QAbstractUndoItem *);
+
    inline void beginEditBlock() {
       if (0 == editBlock++) {
          ++revision;
       }
    }
+
    void joinPreviousEditBlock();
    void endEditBlock();
    void finishEdit();
    inline bool isInEditBlock() const {
       return editBlock;
    }
+
    void enableUndoRedo(bool enable);
    inline bool isUndoRedoEnabled() const {
       return undoEnabled;
@@ -208,6 +219,7 @@ class QTextDocumentPrivate
    inline bool isUndoAvailable() const {
       return undoEnabled && undoState > 0;
    }
+
    inline bool isRedoAvailable() const {
       return undoEnabled && undoState < undoStack.size();
    }
@@ -215,6 +227,7 @@ class QTextDocumentPrivate
    inline int availableUndoSteps() const {
       return undoEnabled ? undoState : 0;
    }
+
    inline int availableRedoSteps() const {
       return undoEnabled ? qMax(undoStack.size() - undoState - 1, 0) : 0;
    }
@@ -222,7 +235,9 @@ class QTextDocumentPrivate
    inline QString buffer() const {
       return text;
    }
+
    QString plainText() const;
+
    inline int length() const {
       return fragments.length();
    }
@@ -230,9 +245,11 @@ class QTextDocumentPrivate
    inline QTextFormatCollection *formatCollection() {
       return &formats;
    }
+
    inline const QTextFormatCollection *formatCollection() const {
       return &formats;
    }
+
    inline QAbstractTextDocumentLayout *layout() const {
       return lout;
    }
@@ -240,9 +257,11 @@ class QTextDocumentPrivate
    inline FragmentIterator find(int pos) const {
       return fragments.find(pos);
    }
+
    inline FragmentIterator begin() const {
       return fragments.begin();
    }
+
    inline FragmentIterator end() const {
       return fragments.end();
    }
@@ -250,12 +269,15 @@ class QTextDocumentPrivate
    inline QTextBlock blocksBegin() const {
       return QTextBlock(const_cast<QTextDocumentPrivate *>(this), blocks.firstNode());
    }
+
    inline QTextBlock blocksEnd() const {
       return QTextBlock(const_cast<QTextDocumentPrivate *>(this), 0);
    }
+
    inline QTextBlock blocksFind(int pos) const {
       return QTextBlock(const_cast<QTextDocumentPrivate *>(this), blocks.findNode(pos));
    }
+
    int blockCharFormatIndex(int node) const;
 
    inline int numBlocks() const {
@@ -265,12 +287,15 @@ class QTextDocumentPrivate
    const BlockMap &blockMap() const {
       return blocks;
    }
+
    const FragmentMap &fragmentMap() const {
       return fragments;
    }
+
    BlockMap &blockMap() {
       return blocks;
    }
+
    FragmentMap &fragmentMap() {
       return fragments;
    }
@@ -287,6 +312,7 @@ class QTextDocumentPrivate
    void changeObjectFormat(QTextObject *group, int format);
 
    void setModified(bool m);
+
    inline bool isModified() const {
       return modified;
    }
@@ -294,6 +320,7 @@ class QTextDocumentPrivate
    inline QFont defaultFont() const {
       return formats.defaultFont();
    }
+
    inline void setDefaultFont(const QFont &f) {
       formats.setDefaultFont(f);
    }
@@ -305,6 +332,7 @@ class QTextDocumentPrivate
    inline void addCursor(QTextCursorPrivate *c) {
       cursors.append(c);
    }
+
    inline void removeCursor(QTextCursorPrivate *c) {
       cursors.removeAll(c);
    }
@@ -322,6 +350,7 @@ class QTextDocumentPrivate
    QTextDocument *document() {
       return q_func();
    }
+
    const QTextDocument *document() const {
       return q_func();
    }
@@ -375,9 +404,7 @@ class QTextDocumentPrivate
    QTextDocumentPrivate &operator= (const QTextDocumentPrivate &m);
 
    void appendUndoItem(const QTextUndoCommand &c);
-
    void contentsChanged();
-
    void compressPieceTable();
 
    QString text;
@@ -402,20 +429,25 @@ class QTextDocumentPrivate
    QTextFormatCollection formats;
    mutable QTextFrame *rtFrame;
    QAbstractTextDocumentLayout *lout;
+
    FragmentMap fragments;
    BlockMap blocks;
+
    int initialBlockCharFormatIndex;
 
    QList<QTextCursorPrivate *> cursors;
+
    QMap<int, QTextObject *> objects;
    QMap<QUrl, QVariant> resources;
    QMap<QUrl, QVariant> cachedResources;
+
    QString defaultStyleSheet;
 
    int lastBlockCount;
 };
 
 class QTextTable;
+
 class QTextHtmlExporter
 {
  public:
@@ -460,6 +492,4 @@ class QTextHtmlExporter
    bool fragmentMarkers;
 };
 
-QT_END_NAMESPACE
-
-#endif // QTEXTDOCUMENT_P_H
+#endif

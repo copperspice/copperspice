@@ -1297,18 +1297,22 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
    else if (e == QKeySequence::Delete) {
       QTextCursor localCursor = cursor;
       localCursor.deleteChar();
+
    } else if (e == QKeySequence::DeleteEndOfWord) {
       if (!cursor.hasSelection()) {
          cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
       }
       cursor.removeSelectedText();
+
    } else if (e == QKeySequence::DeleteStartOfWord) {
       if (!cursor.hasSelection()) {
          cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
       }
       cursor.removeSelectedText();
+
    } else if (e == QKeySequence::DeleteEndOfLine) {
       QTextBlock block = cursor.block();
+
       if (cursor.position() == block.position() + block.length() - 2) {
          cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
       } else {
@@ -1317,6 +1321,7 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
       cursor.removeSelectedText();
    }
 #endif // QT_NO_SHORTCUT
+
    else {
       goto process;
    }
@@ -1324,17 +1329,19 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
 
 process: {
       QString text = e->text();
-      if (!text.isEmpty() && (text.at(0).isPrint() || text.at(0) == QLatin1Char('\t'))) {
-         if (overwriteMode
-               // no need to call deleteChar() if we have a selection, insertText
-               // does it already
-               && !cursor.hasSelection()
-               && !cursor.atBlockEnd()) {
+
+      if (! text.isEmpty() && (text.first().isPrint() || text.first() == '\t')) {
+
+         if (overwriteMode && ! cursor.hasSelection() && !cursor.atBlockEnd()) {
+            // no need to call deleteChar() if we have a selection, insertText
+            // does it already
+
             cursor.deleteChar();
          }
 
          cursor.insertText(text);
          selectionChanged();
+
       } else {
          e->ignore();
          return;
@@ -1342,7 +1349,6 @@ process: {
    }
 
 accept:
-
    e->accept();
    cursorOn = true;
 
@@ -3030,6 +3036,7 @@ bool QTextControl::find(const QString &exp, QTextDocument::FindFlags options)
 {
    Q_D(QTextControl);
    QTextCursor search = d->doc->find(exp, d->cursor, options);
+
    if (search.isNull()) {
       return false;
    }
@@ -3037,8 +3044,6 @@ bool QTextControl::find(const QString &exp, QTextDocument::FindFlags options)
    setTextCursor(search);
    return true;
 }
-
-
 
 void QTextControlPrivate::append(const QString &text, Qt::TextFormat format)
 {

@@ -199,7 +199,7 @@ static QFontEngine *loadFromDatabase(QFontDef &req, const QFontPrivate *d)
 
    const char *stylehint = styleHint(req);
    if (stylehint) {
-      family_list << QLatin1String(stylehint);
+      family_list << QString::fromLatin1(stylehint);
    }
 
    // add QFont::defaultFamily() to the list, for compatibility with previous versions
@@ -207,9 +207,11 @@ static QFontEngine *loadFromDatabase(QFontDef &req, const QFontPrivate *d)
 
    QMutexLocker locker(fontDatabaseMutex());
    QFontDatabasePrivate *db = privateDb();
+
    if (!db->count) {
       initializeDb();
    }
+
    for (int i = 0; i < family_list.size(); ++i) {
       for (int k = 0; k < db->count; ++k) {
          if (db->families[k]->name.compare(family_list.at(i), Qt::CaseInsensitive) == 0) {
@@ -329,9 +331,7 @@ static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
          return;
       }
 
-      ATSFontActivateFromFileReference(&ref, kATSFontContextLocal, kATSFontFormatUnspecified, 0, kATSOptionFlagsDefault,
-                                       &handle);
-
+      ATSFontActivateFromFileReference(&ref, kATSFontContextLocal, kATSFontFormatUnspecified, 0, kATSOptionFlagsDefault, &handle);
 
    } else {
       e = ATSFontActivateFromMemory((void *)fnt->data.constData(), fnt->data.size(), kATSFontContextLocal,

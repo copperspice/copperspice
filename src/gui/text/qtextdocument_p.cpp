@@ -301,8 +301,7 @@ void QTextDocumentPrivate::setLayout(QAbstractTextDocumentLayout *layout)
 
 void QTextDocumentPrivate::insert_string(int pos, int strPos, uint length, int format, QTextUndoCommand::Operation op)
 {
-   // ##### optimize when only appending to the fragment!
-   Q_ASSERT(noBlockInString(text.mid(strPos, length)));
+   // ##### optimize when only appending to the fragment
 
    split(pos);
    uint x = fragments.insert_single(pos, length);
@@ -322,6 +321,7 @@ void QTextDocumentPrivate::insert_string(int pos, int strPos, uint length, int f
    Q_ASSERT(blocks.length() == fragments.length());
 
    QTextFrame *frame = qobject_cast<QTextFrame *>(objectForFormat(format));
+
    if (frame) {
       frame->d_func()->fragmentAdded(text.at(strPos), x);
       framesDirty = true;
@@ -1570,16 +1570,19 @@ void QTextDocumentPrivate::scan_frames(int pos, int charsRemoved, int charsAdded
          Q_ASSERT(f == frame);
          Q_ASSERT(frame->d_func()->fragment_end == it.n || frame->d_func()->fragment_end == 0);
          f = frame->d_func()->parentFrame;
+
       } else if (ch == QChar::ObjectReplacementCharacter) {
          Q_ASSERT(f != frame);
          Q_ASSERT(frame->d_func()->fragment_start == it.n || frame->d_func()->fragment_start == 0);
          Q_ASSERT(frame->d_func()->fragment_end == it.n || frame->d_func()->fragment_end == 0);
          frame->d_func()->parentFrame = f;
          f->d_func()->childFrames.append(frame);
+
       } else {
          Q_ASSERT(false);
       }
    }
+
    Q_ASSERT(f == rtFrame);
    framesDirty = false;
 }
@@ -1587,7 +1590,8 @@ void QTextDocumentPrivate::scan_frames(int pos, int charsRemoved, int charsAdded
 void QTextDocumentPrivate::insert_frame(QTextFrame *f)
 {
    int start = f->firstPosition();
-   int end = f->lastPosition();
+   int end   = f->lastPosition();
+
    QTextFrame *parent = frameAt(start - 1);
    Q_ASSERT(parent == frameAt(end + 1));
 
@@ -1595,6 +1599,7 @@ void QTextDocumentPrivate::insert_frame(QTextFrame *f)
       // iterator over the parent and move all children contained in my frame to myself
       for (int i = 0; i < parent->d_func()->childFrames.size(); ++i) {
          QTextFrame *c = parent->d_func()->childFrames.at(i);
+
          if (start < c->firstPosition() && end > c->lastPosition()) {
             parent->d_func()->childFrames.removeAt(i);
             f->d_func()->childFrames.append(c);
@@ -1602,6 +1607,7 @@ void QTextDocumentPrivate::insert_frame(QTextFrame *f)
          }
       }
    }
+
    // insert at the correct position
    int i = 0;
    for (; i < parent->d_func()->childFrames.size(); ++i) {
@@ -1610,6 +1616,7 @@ void QTextDocumentPrivate::insert_frame(QTextFrame *f)
          break;
       }
    }
+
    parent->d_func()->childFrames.insert(i, f);
    f->d_func()->parentFrame = parent;
 }

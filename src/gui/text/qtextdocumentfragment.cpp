@@ -420,15 +420,15 @@ QTextHtmlImporter::QTextHtmlImporter(QTextDocument *_doc, const QString &_html, 
    wsm = QTextHtmlParserNode::WhiteSpaceNormal;
 
    QString html = _html;
-   const int startFragmentPos = html.indexOf(QLatin1String("<!--StartFragment-->"));
+   const int startFragmentPos = html.indexOf("<!--StartFragment-->");
 
    if (startFragmentPos != -1) {
-      QString qt3RichTextHeader(QLatin1String("<meta name=\"qrichtext\" content=\"1\" />"));
+      QString qt3RichTextHeader("<meta name=\"qrichtext\" content=\"1\" />");
 
       // backward compaitbitly for Qt3 RTF file format
       const bool hasQtRichtextMetaTag = html.contains(qt3RichTextHeader);
 
-      const int endFragmentPos = html.indexOf(QLatin1String("<!--EndFragment-->"));
+      const int endFragmentPos = html.indexOf("<!--EndFragment-->");
       if (startFragmentPos < endFragmentPos) {
          html = html.mid(startFragmentPos, endFragmentPos - startFragmentPos);
       } else {
@@ -568,8 +568,7 @@ bool QTextHtmlImporter::appendNodeText()
    QString text = currentNode->text;
    QString textToInsert;
 
-   for (int i = 0; i < text.length(); ++i) {
-      QChar ch = text.at(i);
+   for (QChar ch : text) {
 
       if (ch.isSpace() && ch != QChar::Nbsp && ch != QChar::ParagraphSeparator) {
 
@@ -582,20 +581,22 @@ bool QTextHtmlImporter::appendNodeText()
 
          if (wsm == QTextHtmlParserNode::WhiteSpacePre || textEditMode) {
 
-            if (ch == QLatin1Char('\n')) {
+            if (ch == '\n') {
                if (textEditMode) {
                   continue;
                }
-            } else if (ch == QLatin1Char('\r')) {
+
+            } else if (ch == '\r') {
                continue;
             }
 
          } else if (wsm != QTextHtmlParserNode::WhiteSpacePreWrap) {
             compressNextWhitespace = RemoveWhiteSpace;
+
             if (wsm == QTextHtmlParserNode::WhiteSpaceNoWrap) {
                ch = QChar::Nbsp;
             } else {
-               ch = QLatin1Char(' ');
+               ch = ' ';
             }
          }
 
@@ -603,9 +604,9 @@ bool QTextHtmlImporter::appendNodeText()
          compressNextWhitespace = PreserveWhiteSpace;
       }
 
-      if (ch == QLatin1Char('\n') || ch == QChar::ParagraphSeparator) {
+      if (ch == '\n' || ch == QChar::ParagraphSeparator) {
 
-         if (!textToInsert.isEmpty()) {
+         if (! textToInsert.isEmpty()) {
             cursor.insertText(textToInsert, format);
             textToInsert.clear();
          }
@@ -620,9 +621,10 @@ bool QTextHtmlImporter::appendNodeText()
 
          fmt.clearProperty(QTextFormat::BlockTopMargin);
          appendBlock(fmt, cursor.charFormat());
+
       } else {
-         if (!namedAnchors.isEmpty()) {
-            if (!textToInsert.isEmpty()) {
+         if (! namedAnchors.isEmpty()) {
+            if (! textToInsert.isEmpty()) {
                cursor.insertText(textToInsert, format);
                textToInsert.clear();
             }
@@ -633,13 +635,14 @@ bool QTextHtmlImporter::appendNodeText()
             namedAnchors.clear();
             format.clearProperty(QTextFormat::IsAnchor);
             format.clearProperty(QTextFormat::AnchorName);
+
          } else {
             textToInsert += ch;
          }
       }
    }
 
-   if (!textToInsert.isEmpty()) {
+   if (! textToInsert.isEmpty()) {
       cursor.insertText(textToInsert, format);
    }
 
