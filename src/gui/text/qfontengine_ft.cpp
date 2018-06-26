@@ -1577,11 +1577,12 @@ void QFontEngineFT::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int
    unlockFace();
 }
 
-bool QFontEngineFT::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                                 QTextEngine::ShaperFlags flags) const
+bool QFontEngineFT::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *num_glyphs, QTextEngine::ShaperFlags flags) const
 {
-   if (*nglyphs < len) {
-      *nglyphs = len;
+   int len = str.length();
+
+   if (*num_glyphs < len) {
+      *num_glyphs = len;
       return false;
    }
 

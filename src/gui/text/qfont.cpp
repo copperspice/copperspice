@@ -2512,16 +2512,19 @@ bool QFontInfo::fixedPitch() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
 #ifdef Q_OS_MAC
    if (!engine->fontDef.fixedPitchComputed) {
-      QChar ch[2] = { QLatin1Char('i'), QLatin1Char('m') };
       QGlyphLayoutArray<2> g;
       int l = 2;
-      engine->stringToCMap(ch, 2, &g, &l, 0);
+
+      engine->stringToCMap(QString("im"), &g, &l, 0);
+
       engine->fontDef.fixedPitch = g.advances_x[0] == g.advances_x[1];
       engine->fontDef.fixedPitchComputed = true;
    }
 #endif
+
    return engine->fontDef.fixedPitch;
 }
 

@@ -612,10 +612,11 @@ void QTextEngine::shapeTextMac(int item) const
 
    bool stringToCMapFailed = false;
 
-   if (! fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si)) {
+   if (! fe->stringToCMap(str, &g, &num_glyphs, flags, log_clusters, attributes(), &si)) {
       ensureSpace(num_glyphs);
       g = availableGlyphs(&si);
-      stringToCMapFailed = !fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si);
+
+      stringToCMapFailed = ! fe->stringToCMap(str, &g, &num_glyphs, flags, log_clusters, attributes(), &si);
    }
 
    if (! stringToCMapFailed) {
