@@ -147,9 +147,8 @@ uint QCoreTextFontEngineMulti::fontIndexForFont(CTFontRef font) const
 bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs,
       QTextEngine::ShaperFlags flags, unsigned short *logClusters, const HB_CharAttributes *, QScriptItem *si) const
 {
-   QCFType<CFStringRef> cfstring = CFStringCreateWithCharactersNoCopy(0,
-                                   reinterpret_cast<const UniChar *>(str),
-                                   len, kCFAllocatorNull);
+   QString tmp = str;
+   QCFType<CFStringRef> cfstring = tmp.toCFString();
 
    QCFType<CFAttributedStringRef> attributedString = CFAttributedStringCreate(0, cfstring, attributeDict);
    QCFType<CTTypesetterRef> typeSetter;
@@ -185,6 +184,8 @@ bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyph
    if (arraySize == 0) {
       // CoreText failed to shape the text we gave it, so we assume one glyph
       // per character and build a list of invalid glyphs with zero advance
+
+      int len  = str.size();
       *nglyphs = len;
 
       for (int i = 0; i < len; ++i) {
@@ -219,7 +220,8 @@ bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyph
       int prepend = 0;
 
       UniChar endGlyph = CFStringGetCharacterAtIndex(cfstring, stringRange.location + stringRange.length - 1);
-      bool endWithPDF = QChar::direction(endGlyph) == QChar::DirPDF;
+      bool endWithPDF = QChar(char32_t(endGlyph)).direction() == QChar::DirPDF;
+
       if (endWithPDF) {
          glyphCount++;
       }
@@ -350,22 +352,31 @@ bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyph
 
 bool QCoreTextFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
+   int len = str.size();
    *nglyphs = len;
+
    QCFType<CFStringRef> cfstring;
 
    QVarLengthArray<CGGlyph> cgGlyphs(len);
-   CTFontGetGlyphsForCharacters(ctfont, (const UniChar *)str, cgGlyphs.data(), len);
+
+   QString16 tmp = QString16(str.constBegin(), str.constEnd());
+   CTFontGetGlyphsForCharacters(ctfont, (const UniChar *)tmp.constData(), cgGlyphs.data(), len);
 
    for (int i = 0; i < len; ++i) {
       if (cgGlyphs[i]) {
          glyphs->glyphs[i] = cgGlyphs[i];
+
       } else {
-         if (!cfstring) {
-            cfstring = CFStringCreateWithCharactersNoCopy(0, reinterpret_cast<const UniChar *>(str), len, kCFAllocatorNull);
+
+         if (! cfstring) {
+            cfstring = tmp.toCFString();
          }
+
          QCFType<CTFontRef> substituteFont = CTFontCreateForString(ctfont, cfstring, CFRangeMake(i, 1));
          CGGlyph substituteGlyph = 0;
-         CTFontGetGlyphsForCharacters(substituteFont, (const UniChar *)str + i, &substituteGlyph, 1);
+
+         CTFontGetGlyphsForCharacters(substituteFont, (const UniChar *)tmp.constData() + i, &substituteGlyph, 1);
+
          if (substituteGlyph) {
             const uint fontIndex = (fontIndexForFont(substituteFont) << 24);
             glyphs->glyphs[i] = substituteGlyph | fontIndex;
@@ -508,15 +519,25 @@ void QCoreTextFontEngine::init()
 
 bool QCoreTextFontEngine::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
+   int len = str.length();
+
+   if (*nglyphs < len) {
+      *nglyphs = len;
+      return false;
+   }
+
    *nglyphs = len;
 
    QVarLengthArray<CGGlyph> cgGlyphs(len);
-   CTFontGetGlyphsForCharacters(ctfont, (const UniChar *)str, cgGlyphs.data(), len);
 
-   for (int i = 0; i < len; ++i)
+   QString16 tmp = QString16(str.constBegin(), str.constEnd());
+   CTFontGetGlyphsForCharacters(ctfont, (const UniChar *)tmp.constData(), cgGlyphs.data(), len);
+
+   for (int i = 0; i < len; ++i) {
       if (cgGlyphs[i]) {
          glyphs->glyphs[i] = cgGlyphs[i];
       }
+   }
 
    if (flags & QTextEngine::GlyphIndicesOnly) {
       return true;
@@ -851,15 +872,18 @@ QFontEngine::FaceId QCoreTextFontEngine::faceId() const
    result.index = 0;
 
    QCFString name = CTFontCopyName(ctfont, kCTFontUniqueNameKey);
-   result.filename = QCFString::toQString(name).toUtf8();
+   result.filename = QCFString::toQString(name);
 
    return result;
 }
 
 bool QCoreTextFontEngine::canRender(QStringView str)
 {
+   int len = str.size();
    QVarLengthArray<CGGlyph> cgGlyphs(len);
-   return CTFontGetGlyphsForCharacters(ctfont, (const UniChar *) str, cgGlyphs.data(), len);
+
+   QString16 tmp = QString16(str.constBegin(), str.constEnd());
+   return CTFontGetGlyphsForCharacters(ctfont, (const UniChar *)tmp.constData(), cgGlyphs.data(), len);
 }
 
 bool QCoreTextFontEngine::getSfntTableData(uint tag, uchar *buffer, uint *length) const
@@ -897,6 +921,7 @@ void QCoreTextFontEngine::getUnscaledGlyph(glyph_t glyph, QPainterPath *path, gl
    CGPathApply(cgpath, &info, convertCGPathToQPainterPath);
 
    *metric = boundingBox(glyph);
+
    // scale the metrics too
    metric->width  = QFixed::fromReal(metric->width.toReal() * scale);
    metric->height = QFixed::fromReal(metric->height.toReal() * scale);
@@ -908,7 +933,7 @@ void QCoreTextFontEngine::getUnscaledGlyph(glyph_t glyph, QPainterPath *path, gl
 
 QFixed QCoreTextFontEngine::emSquareSize() const
 {
-   return QFixed::QFixed(int(CTFontGetUnitsPerEm(ctfont)));
+   return QFixed(int(CTFontGetUnitsPerEm(ctfont)));
 }
 
 QFontEngine *QCoreTextFontEngine::cloneWithSize(qreal pixelSize) const
@@ -927,9 +952,11 @@ QFontEngine::Properties QCoreTextFontEngine::properties() const
     QCFString psName;
     QCFString copyright;
 
+    psName    = CTFontCopyPostScriptName(ctfont);
     copyright = CTFontCopyName(ctfont, kCTFontCopyrightNameKey);
-    result.postscriptName = QCFString::toQString(psName).toUtf8();
-    result.copyright = QCFString::toQString(copyright).toUtf8();
+
+    result.postscriptName = QCFString::toQString(psName);
+    result.copyright      = QCFString::toQString(copyright);
 
     qreal emSquare = CTFontGetUnitsPerEm(ctfont);
     qreal scale = emSquare / CTFontGetSize(ctfont);
