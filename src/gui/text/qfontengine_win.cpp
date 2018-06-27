@@ -201,7 +201,7 @@ void QFontEngineWin::getCMap()
       x_height       = (int)otm->otmsXHeight;
       loadKerningPairs(designToDevice);
 
-      _faceId.filename = QString::fromStdWString((wchar_t *)((char *)otm + (quintptr)otm->otmpFullName)).toLatin1();
+      _faceId.filename = QString::fromStdWString((wchar_t *)((char *)otm + (quintptr)otm->otmpFullName));
 
       lineWidth = otm->otmsUnderscoreSize;
       fsType    = otm->otmfsType;

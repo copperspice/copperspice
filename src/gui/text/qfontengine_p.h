@@ -103,9 +103,11 @@ class Q_GUI_EXPORT QFontEngine : public QObject
 
    // all of these are in unscaled metrics if the engine supports uncsaled metrics,
    // otherwise in design metrics
+
    struct Properties {
-      QByteArray postscriptName;
-      QByteArray copyright;
+      QString postscriptName;
+      QString copyright;
+
       QRectF boundingBox;
       QFixed emSquare;
       QFixed ascent;
@@ -126,8 +128,11 @@ class Q_GUI_EXPORT QFontEngine : public QObject
    }
 
    struct FaceId {
-      FaceId() : index(0), encoding(0) {}
-      QByteArray filename;
+      FaceId()
+         : index(0), encoding(0)
+      { }
+
+      QString filename;
       QByteArray uuid;
       int index;
       int encoding;

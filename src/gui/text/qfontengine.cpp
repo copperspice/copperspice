@@ -736,9 +736,9 @@ QFontEngine::Properties QFontEngine::properties() const
    QString psname = QFontEngine::convertToPostscriptFontFamilyName(fontDef.family);
 
    psname += '-';
-   psname += QByteArray::number(fontDef.style);
+   psname += QString::number(fontDef.style);
    psname += '-';
-   psname += QByteArray::number(fontDef.weight);
+   psname += QString::number(fontDef.weight);
 
    p.postscriptName = psname;
    p.ascent      = ascent();

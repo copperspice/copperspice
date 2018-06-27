@@ -218,8 +218,9 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id,
             idx.remove(0, 14);                      // remove ':qmemoryfonts/'
 
             bool ok = false;
-            newFreetype->fontData = qt_fontdata_from_index(idx.toInt(&ok));
-            if (!ok) {
+            newFreetype->fontData = qt_fontdata_from_index(idx.toInteger<int>(&ok));
+
+            if (! ok) {
                newFreetype->fontData = QByteArray();
             }
 
@@ -1287,46 +1288,29 @@ qreal QFontEngineFT::maxCharWidth() const
    return metrics.max_advance >> 6;
 }
 
-static const ushort char_table[] = {
-   40,
-   67,
-   70,
-   75,
-   86,
-   88,
-   89,
-   91,
-   102,
-   114,
-   124,
-   127,
-   205,
-   645,
-   884,
-   922,
-   1070,
-   12386
-};
-
-static const int char_table_entries = sizeof(char_table) / sizeof(ushort);
-
-
 qreal QFontEngineFT::minLeftBearing() const
 {
    if (lbearing == SHRT_MIN) {
       (void) minRightBearing();   // calculates both
    }
+
    return lbearing.toReal();
 }
+
+static const QString str_table = QString::fromUtf8(u8"(CFKVXY[fr|\u007F\u00CD\u0285\u0374\u039A\u042E\u3062");
+constexpr int str_table_size = 18;
 
 qreal QFontEngineFT::minRightBearing() const
 {
    if (rbearing == SHRT_MIN) {
-      lbearing = rbearing = 0;
-      const QChar *ch = (const QChar *)(const void *)char_table;
-      QGlyphLayoutArray<char_table_entries> glyphs;
-      int ng = char_table_entries;
-      stringToCMap(ch, char_table_entries, &glyphs, &ng, QTextEngine::GlyphIndicesOnly);
+      lbearing = 0;
+      rbearing = 0;
+
+      QGlyphLayoutArray<str_table_size> glyphs;
+      int ng = str_table_size;
+
+      stringToCMap(str_table, &glyphs, &ng, QTextEngine::GlyphIndicesOnly);
+
       while (--ng) {
          if (glyphs.glyphs[ng]) {
             glyph_metrics_t gi = const_cast<QFontEngineFT *>(this)->boundingBox(glyphs.glyphs[ng]);
@@ -1335,6 +1319,7 @@ qreal QFontEngineFT::minRightBearing() const
          }
       }
    }
+
    return rbearing.toReal();
 }
 
@@ -1502,24 +1487,12 @@ void QFontEngineFT::getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_me
    unlockFace();
 }
 
-static inline unsigned int getChar(const QChar *str, int &i, const int len)
-{
-   uint ucs4 = str[i].unicode();
-   if (str[i].isHighSurrogate() && i < len - 1 && str[i + 1].isLowSurrogate()) {
-      ++i;
-      ucs4 = QChar::surrogateToUcs4(ucs4, str[i].unicode());
-   }
-   return ucs4;
-}
-
 bool QFontEngineFT::canRender(QStringView str)
 {
    FT_Face face = freetype->face;
 
-   for ( int i = 0; i < len; i++ ) {
-      unsigned int uc = getChar(str, i, len);
-
-      if (! FT_Get_Char_Index(face, uc)) {
+   for (const QChar c : str) {
+      if (! FT_Get_Char_Index(face, c.unicode())) {
          return false;
       }
    }

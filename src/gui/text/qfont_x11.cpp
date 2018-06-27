@@ -237,12 +237,15 @@ QString QFont::rawName() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
    }
+
    if (engine->type() == QFontEngine::XLFD) {
       return engine->fontEngineName();
    }
+
    return QString();
 }
 struct QtFontDesc;
@@ -254,11 +257,12 @@ void QFont::setRawName(const QString &name)
    // from qfontdatabase_x11.cpp
    extern bool qt_fillFontDef(const QByteArray & xlfd, QFontDef * fd, int dpi, QtFontDesc * desc);
 
-   if (!qt_fillFontDef(qt_fixXLFD(name.toLatin1()), &d->request, d->dpi, 0)) {
-      qWarning("QFont::setRawName: Invalid XLFD: \"%s\"", name.toLatin1().constData());
+   if (! qt_fillFontDef(qt_fixXLFD(name.toLatin1()), &d->request, d->dpi, 0)) {
+      qWarning("QFont::setRawName: Invalid XLFD: \"%s\"", csPrintable(name));
 
       setFamily(name);
       setRawMode(true);
+
    } else {
       resolve_mask = QFont::AllPropertiesResolved;
    }

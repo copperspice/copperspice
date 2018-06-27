@@ -200,29 +200,33 @@ static QStringList fontPath()
    return fontpath;
 }
 
-static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **freetype, int *synth)
+static QFontEngine::FaceId fontFile(const QString &_xname, QFreetypeFace **freetype, int *synth)
 {
    *freetype = 0;
    *synth    = 0;
 
-   QByteArray xname = _xname.toLower();
+   QString xname = _xname.toLower();
 
    int pos = 0;
    int minus = 0;
+
    while (minus < 5 && (pos = xname.indexOf('-', pos + 1))) {
       ++minus;
    }
-   QByteArray searchname = xname.left(pos);
+
+   QString  searchname = xname.left(pos);
    while (minus < 12 && (pos = xname.indexOf('-', pos + 1))) {
       ++minus;
    }
-   QByteArray encoding = xname.mid(pos + 1);
+
+   QString  encoding = xname.mid(pos + 1);
    //qDebug("xname='%s', searchname='%s', encoding='%s'", xname.data(), searchname.data(), encoding.data());
+
    QStringList fontpath = fontPath();
    QFontEngine::FaceId face_id;
    face_id.index = 0;
 
-   QByteArray best_mapping;
+   QString best_mapping;
 
    for (QStringList::const_iterator it = fontpath.constBegin(); it != fontpath.constEnd(); ++it) {
       if (! (*it).startsWith('/')) {
@@ -243,50 +247,60 @@ static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **fr
 
          //qWarning(fontmapname);
          QFile fontmap(fontmapname);
+
          if (!fontmap.open(QIODevice::ReadOnly)) {
             continue;
          }
-         while (!fontmap.atEnd()) {
-            QByteArray mapping = fontmap.readLine();
-            QByteArray lmapping = mapping.toLower();
+         while (! fontmap.atEnd()) {
 
-            //qWarning(xfontname);
-            //qWarning(mapping);
-            if (!lmapping.contains(searchname)) {
+            QString mapping  = fontmap.readLine();
+            QString mapLower = mapping.toLower();
+
+            if (! mapLower.contains(searchname)) {
                continue;
             }
-            int index = mapping.indexOf(' ');
-            QByteArray ffn = mapping.mid(0, index);
+
+            auto index = mapping.indexOfFast(' ');
+            QStringView ffn = QStringView(mapping.constBegin(), index);
+
             // remove bitmap formats freetype can't handle
             if (ffn.contains(".spd") || ffn.contains(".phont")) {
                continue;
             }
+
             bool best_match = false;
-            if (!best_mapping.isEmpty()) {
-               if (lmapping.contains("-0-0-0-0-")) { // scalable font
+
+            if (! best_mapping.isEmpty()) {
+               if (mapLower.contains("-0-0-0-0-")) {
+                   // scalable font
                   best_match = true;
                   goto found;
                }
-               if (lmapping.contains(encoding) && !best_mapping.toLower().contains(encoding)) {
+
+               if (mapLower.contains(encoding) && ! best_mapping.toLower().contains(encoding)) {
                   goto found;
                }
                continue;
             }
 
          found:
-            int colon = ffn.lastIndexOf(':');
-            if (colon != -1) {
-               QByteArray s = ffn.left(colon);
-               ffn = ffn.mid(colon + 1);
+            auto colon = ffn.lastIndexOfFast(':');
+
+            if (colon != ffn.constEnd()) {
+
+               QStringView s = QStringView(ffn.constBegin(), colon);
+               ffn = QStringView(colon + 1, ffn.constEnd());
+
                if (s.contains("ds=")) {
                   *synth |= QFontEngine::SynthesizedBold;
                }
+
                if (s.contains("ai=")) {
                   *synth |= QFontEngine::SynthesizedItalic;
                }
             }
 
-            face_id.filename = (*it).toUtf8() + '/' + ffn;
+            face_id.filename = *it + '/' + ffn;
             best_mapping = mapping;
 
             if (best_match) {
@@ -295,14 +309,18 @@ static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **fr
          }
       }
    }
+
 end:
    //     qDebug("fontfile for %s is from '%s'\n    got %s synth=%d", xname.data(),
    //            best_mapping.data(), face_id.filename.data(), *synth);
+
    *freetype = QFreetypeFace::getFace(face_id);
+
    if (!*freetype) {
-      face_id.index = 0;
-      face_id.filename = QByteArray();
+      face_id.index    = 0;
+      face_id.filename = QString();
    }
+
    return face_id;
 }
 
@@ -336,7 +354,7 @@ static inline XCharStruct *charStruct(XFontStruct *xfs, uint ch)
    return xcs;
 }
 
-QFontEngineXLFD::QFontEngineXLFD(XFontStruct *fs, const QByteArray &name, int mib)
+QFontEngineXLFD::QFontEngineXLFD(XFontStruct *fs, const QString &name, int mib)
    : _fs(fs), _name(name), _codec(0), _cmap(mib)
 {
    if (_cmap) {
@@ -996,20 +1014,21 @@ void QFontEngineMultiFT::loadEngine(int at)
 
 // X11 FT engine
 
-Q_GUI_EXPORT void qt_x11ft_convert_pattern(FcPattern *pattern, QByteArray *file_name, int *index, bool *antialias)
+Q_GUI_EXPORT void qt_x11ft_convert_pattern(FcPattern *pattern, QString *file_name, int *index, bool *antialias)
 {
    FcChar8 *fileName;
    FcPatternGetString(pattern, FC_FILE, 0, &fileName);
-   *file_name = (const char *)fileName;
-   if (!FcPatternGetInteger(pattern, FC_INDEX, 0, index)) {
+   *file_name = QString::fromUtf8((const char *)fileName);
+
+   if (! FcPatternGetInteger(pattern, FC_INDEX, 0, index)) {
       index = 0;
    }
+
    FcBool b;
    if (FcPatternGetBool(pattern, FC_ANTIALIAS, 0, &b) == FcResultMatch) {
       *antialias = b;
    }
 }
-
 
 QFontEngineX11FT::QFontEngineX11FT(FcPattern *pattern, const QFontDef &fd, int screen)
    : QFontEngineFT(fd)
@@ -1017,7 +1036,7 @@ QFontEngineX11FT::QFontEngineX11FT(FcPattern *pattern, const QFontDef &fd, int s
    // FcPatternPrint(pattern);
 
    bool antialias = X11->fc_antialias;
-   QByteArray file_name;
+   QString file_name;
    int face_index;
 
    qt_x11ft_convert_pattern(pattern, &file_name, &face_index, &antialias);

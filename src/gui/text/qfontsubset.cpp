@@ -1743,8 +1743,9 @@ QByteArray QFontSubset::toType1() const
    QByteArray font;
    QPdf::ByteStream s(&font);
 
-   QByteArray id = QByteArray::number(object_id);
-   QByteArray psname = properties.postscriptName;
+   QByteArray id  = QByteArray::number(object_id);
+
+   QString psname = properties.postscriptName;
    psname.replace(' ', "");
 
    standard_font = false;
@@ -1762,14 +1763,17 @@ QByteArray QFontSubset::toType1() const
       if (fontEngine->fontDef.weight >= QFont::Bold) {
          style++;
       }
-      if (fontEngine->fontDef.family.contains(QLatin1String("Helvetica"))) {
-         psname = helvetica_styles[style];
+
+      if (fontEngine->fontDef.family.contains("Helvetica")) {
+         psname = QString::fromLatin1(helvetica_styles[style]);
          standard_font = true;
-      } else if (fontEngine->fontDef.family.contains(QLatin1String("Times"))) {
-         psname = times_styles[style];
+
+      } else if (fontEngine->fontDef.family.contains("Times")) {
+         psname = QString::fromLatin1(times_styles[style]);
          standard_font = true;
-      } else if (fontEngine->fontDef.family.contains(QLatin1String("Courier"))) {
-         psname = courier_styles[style];
+
+      } else if (fontEngine->fontDef.family.contains("Courier")) {
+         psname = QString::fromLatin1(courier_styles[style]);
          standard_font = true;
       }
    }
@@ -1778,12 +1782,14 @@ QByteArray QFontSubset::toType1() const
    s << "/F" << id << "-Base\n";
 
    if (standard_font) {
-      s << '/' << psname << " findfont\n"
+      s << '/' << psname.toUtf8() << " findfont\n"
         "0 dict copy dup /NumGlyphs 0 put dup /CMap 256 array put def\n";
+
    } else {
       s << "<<\n";
-      if (!psname.isEmpty()) {
-         s << "/FontName /" << psname << '\n';
+
+      if (! psname.isEmpty()) {
+         s << "/FontName /" << psname.toUtf8() << '\n';
       }
 
       s << "/FontInfo <</FsType " << (int)fontEngine->fsType << ">>\n"
