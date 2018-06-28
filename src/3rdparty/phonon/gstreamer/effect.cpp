@@ -82,12 +82,12 @@ void Effect::setupEffectParams()
             GParamSpec *param = property_specs[i];
 
             if (param->flags & G_PARAM_WRITABLE) {
-                QString propertyName = g_param_spec_get_name (param);
+                QString propertyName = QString::fromLatin1(g_param_spec_get_name(param));
 
                 // These properties should not be exposed to the front-end
                 if (propertyName == "qos" || propertyName == "name" || propertyName == "async-handling")
                     continue;
- 
+
                 switch(param->value_type) {
                     case G_TYPE_UINT:
                         m_parameterList.append(Phonon::EffectParameter(i, propertyName,
@@ -100,7 +100,7 @@ void Effect::setupEffectParams()
                     case G_TYPE_STRING:
                         m_parameterList.append(Phonon::EffectParameter(i, propertyName,
                             0,   //hints
-                            QString(G_PARAM_SPEC_STRING(param)->default_value),
+                            QString::fromLatin1(G_PARAM_SPEC_STRING(param)->default_value),
                             0,
                             0));
                         break;
@@ -130,7 +130,7 @@ void Effect::setupEffectParams()
                         break;
 
                     case G_TYPE_BOOLEAN:
-                        m_parameterList.append(Phonon::EffectParameter(i, propertyName, 
+                        m_parameterList.append(Phonon::EffectParameter(i, propertyName,
                             Phonon::EffectParameter::ToggledHint,   //hints
                             QVariant(static_cast<bool>(G_PARAM_SPEC_BOOLEAN(param)->default_value)),
                             QVariant(static_cast<bool>(false)), QVariant(static_cast<bool>(true)) ));

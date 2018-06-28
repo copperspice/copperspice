@@ -239,10 +239,13 @@ GstElement *DeviceManager::createAudioSink(Category category)
             //do nothing as a fakesink will be created by default
         } else if (m_audioSink == "artssink") {
             sink = GST_ELEMENT(g_object_new(arts_sink_get_type(), NULL));
+
         } else if (!m_audioSink.isEmpty()) { //Use a custom sink
             sink = gst_element_factory_make (m_audioSink.constData(), NULL);
+
             if (canOpenDevice(sink))
-                m_backend->logMessage(QString("AudioOutput using %0").arg(QString::fromUtf8(m_audioSink)));
+                m_backend->logMessage(QString("AudioOutput using %0").formatArg(QString::fromUtf8(m_audioSink)));
+
             else if (sink) {
                 gst_object_unref(sink);
                 sink = 0;
@@ -361,7 +364,7 @@ void DeviceManager::updateDeviceList()
                 // This is a new device, add it
                 m_audioDeviceList.append(AudioDevice(this, gstId));
                 emit deviceAdded(deviceId(gstId));
-                m_backend->logMessage(QString("Found new audio device %0").arg(QString::fromUtf8(gstId)), Backend::Debug, this);
+                m_backend->logMessage(QString("Found new audio device %0").formatArg(QString::fromUtf8(gstId)), Backend::Debug, this);
             }
         }
 
@@ -370,14 +373,15 @@ void DeviceManager::updateDeviceList()
             for (int i = m_audioDeviceList.size() -1 ; i >= 0 ; --i) {
                 QByteArray currId = m_audioDeviceList[i].gstId;
                 bool found = false;
+
                 for (int k = list.size() -1  ; k >= 0 ; --k) {
                     if (currId == list[k]) {
                         found = true;
                         break;
                     }
                 }
-                if (!found) {
-                    m_backend->logMessage(QString("Audio device lost %0").arg(QString::fromUtf8(currId)), Backend::Debug, this);
+                if (! found) {
+                    m_backend->logMessage(QString("Audio device lost %0").formatArg(QString::fromUtf8(currId)), Backend::Debug, this);
                     emit deviceRemoved(deviceId(currId));
                     m_audioDeviceList.removeAt(i);
                 }

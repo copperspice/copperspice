@@ -23,9 +23,11 @@
 #ifndef GSTREAMER_ABSTRACTRENDERER_H
 #define GSTREAMER_ABSTRACTRENDERER_H
 
-#include <gstreamer/backend.h>
-#include <gstreamer/common.h>
-#include <gstreamer/medianode.h>
+// located in gstreamer
+#include <backend.h>
+#include <common.h>
+#include <medianode.h>
+
 #include <phonon/videowidget.h>
 #include <qstringfwd.h>
 

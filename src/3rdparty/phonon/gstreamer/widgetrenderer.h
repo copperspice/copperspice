@@ -23,8 +23,10 @@
 #ifndef GSTREAMER_WIDGETRENDERER_H
 #define GSTREAMER_WIDGETRENDERER_H
 
-#include <gstreamer/common.h>
-#include <gstreamer/videowidget.h>
+// located in gstreamer
+#include <common.h>
+#include <videowidget.h>
+
 #include <qstringfwd.h>
 
 #ifndef QT_NO_OPENGL

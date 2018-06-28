@@ -84,19 +84,23 @@ Backend::Backend(QObject *parent, const QVariantList &)
 
     //check if we should enable debug output
     QString debugLevelString = qgetenv("PHONON_GST_DEBUG");
-    int debugLevel = debugLevelString.toInt();
+    int debugLevel = debugLevelString.toInteger<int>();
+
     if (debugLevel > 3) //3 is maximum
         debugLevel = 3;
+
     m_debugLevel = (DebugLevel)debugLevel;
 
     if (wasInit) {
         m_isValid = checkDependencies();
         gchar *versionString = gst_version_string();
-        logMessage(QString("Using %0").arg(versionString));
+        logMessage(QString("Using %0").formatArg(QString::fromLatin1(versionString)));
         g_free(versionString);
     }
-    if (!m_isValid)
+
+    if (! m_isValid) {
         qWarning("Phonon::GStreamer::Backend: Failed to initialize GStreamer");
+    }
 
     m_deviceManager = new DeviceManager(this);
     m_effectManager = new EffectManager(this);
@@ -222,9 +226,11 @@ QStringList Backend::availableMimeTypes() const
 
     // Iterate over all audio and video decoders and extract mime types from sink caps
     GList* factoryList = gst_registry_get_feature_list(gst_registry_get_default (), GST_TYPE_ELEMENT_FACTORY);
+
     for (GList* iter = g_list_first(factoryList) ; iter != NULL ; iter = g_list_next(iter)) {
+
         GstPluginFeature *feature = GST_PLUGIN_FEATURE(iter->data);
-        QString klass = gst_element_factory_get_klass(GST_ELEMENT_FACTORY(feature));
+        QString klass = QString::fromLatin1(gst_element_factory_get_klass(GST_ELEMENT_FACTORY(feature)));
 
         if (klass == QLatin1String("Codec/Decoder") ||
             klass == QLatin1String("Codec/Decoder/Audio") ||
@@ -242,6 +248,7 @@ QStringList Backend::availableMimeTypes() const
 
             for (; static_templates != NULL ; static_templates = static_templates->next) {
                 GstStaticPadTemplate *padTemplate = (GstStaticPadTemplate *) static_templates->data;
+
                 if (padTemplate && padTemplate->direction == GST_PAD_SINK) {
                     GstCaps *caps = gst_static_pad_template_get_caps (padTemplate);
 
@@ -250,7 +257,8 @@ QStringList Backend::availableMimeTypes() const
 
                             const GstStructure* capsStruct = gst_caps_get_structure (caps, struct_idx);
                             QString mime = QString::fromUtf8(gst_structure_get_name (capsStruct));
-                            if (!availableMimeTypes.contains(mime))
+
+                            if (! availableMimeTypes.contains(mime))
                                 availableMimeTypes.append(mime);
                         }
                     }
@@ -258,7 +266,9 @@ QStringList Backend::availableMimeTypes() const
             }
         }
     }
+
     g_list_free(factoryList);
+
     if (availableMimeTypes.contains("audio/x-vorbis")
         && availableMimeTypes.contains("application/x-ogm-audio")) {
         if (!availableMimeTypes.contains("audio/x-vorbis+ogg"))
@@ -279,7 +289,7 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 {
     QList<int> list;
 
-    if (!isValid())
+    if (! isValid())
         return list;
 
     switch (type) {
@@ -369,12 +379,16 @@ bool Backend::connectNodes(QObject *source, QObject *sink)
         if (sourceNode && sinkNode) {
             if (sourceNode->connectNode(sink)) {
                 sourceNode->root()->invalidateGraph();
-                logMessage(QString("Backend connected %0 to %1").arg(source->metaObject()->className()).arg(sink->metaObject()->className()));
+
+                logMessage(QString("Backend connected %0 to %1")
+                     .formatArg(source->metaObject()->className()).formatArg(sink->metaObject()->className()));
                 return true;
             }
         }
     }
-    logMessage(QString("Linking %0 to %1 failed").arg(source->metaObject()->className()).arg(sink->metaObject()->className()), Warning);
+
+    logMessage(QString("Linking %0 to %1 failed")
+         .formatArg(source->metaObject()->className()).formatArg(sink->metaObject()->className()), Warning);
     return false;
 }
 
@@ -471,20 +485,23 @@ void Backend::logMessage(const QString &message, int priority, QObject *obj) con
 {
     if (debugLevel() > 0) {
         QString output;
+
         if (obj) {
             // Strip away namespace from className
             QString className(obj->metaObject()->className());
+
             int nameLength = className.length() - className.lastIndexOf(':') - 1;
             className = className.right(nameLength);
-            output.sprintf("%s %s (%s %p)", message.toLatin1().constData(),
-                                          obj->objectName().toLatin1().constData(),
-                                          className.toLatin1().constData(), obj);
+
+            output = QString("%1 %2 %3").formatArgs(message, obj->objectName(), className);
         }
+
         else {
             output = message;
         }
+
         if (priority <= (int)debugLevel()) {
-            qDebug() << QString("PGST(%1): %2").arg(priority).arg(output);
+            qDebug() << QString("PGST(%1): %2").formatArg(priority).formatArg(output);
         }
     }
 }

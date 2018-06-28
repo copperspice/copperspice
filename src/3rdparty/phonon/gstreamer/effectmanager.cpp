@@ -68,21 +68,21 @@ EffectManager::EffectManager(Backend *backend)
             // "audioinvert" Only works for some streams, should be invesigated
             // "lpwsinc" Crashes for large values of filter kernel
             // "name" Crashes for large values of filter kernel
-            
+
             // Seems to be working, but not well tested:
             // name == "rglimiter" Seems functional
             // name == "rgvolume" Seems to be working
 
             QString pluginString = qgetenv("PHONON_GST_ALL_EFFECTS");
-            bool acceptAll = pluginString.toInt();
+            bool acceptAll = pluginString.toInteger<int>();
 
-            if (acceptAll 
+            if (acceptAll
                 // Plugins that have been accepted so far
-                 || name == "audiopanorama" 
-                 || name == "audioamplify" 
-                 || name == "audiodynamic" 
-                 || name == "equalizer-10bands" 
-                 || name == "speed") 
+                 || name == "audiopanorama"
+                 || name == "audioamplify"
+                 || name == "audiodynamic"
+                 || name == "equalizer-10bands"
+                 || name == "speed")
                 {
                     description = gst_element_factory_get_description (GST_ELEMENT_FACTORY(feature));
                     author = gst_element_factory_get_author (GST_ELEMENT_FACTORY(feature));

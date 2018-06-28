@@ -35,11 +35,11 @@
 #include "streamreader.h"
 #include "phononsrc.h"
 #include <QtCore>
-#include <QtCore/QTimer>
-#include <QtCore/QVector>
-#include <QtCore/QFile>
-#include <QtCore/QByteRef>
-#include <QtCore/QStringList>
+#include <QTimer>
+#include <QVector>
+#include <QFile>
+#include <QByteRef>
+#include <QStringList>
 #include <qcoreevent.h>
 #include <QApplication>
 
@@ -183,7 +183,7 @@ void MediaObject::newPadAvailable (GstPad *pad)
     caps = gst_pad_get_caps (pad);
     if (caps) {
         str = gst_caps_get_structure (caps, 0);
-        QString mediaString(gst_structure_get_name (str));
+        QString mediaString = QString::fromLatin1((gst_structure_get_name(str)));
 
         if (mediaString.startsWith("video")) {
             connectVideo(pad);
@@ -192,6 +192,7 @@ void MediaObject::newPadAvailable (GstPad *pad)
         } else {
             m_backend->logMessage("Could not connect pad", Backend::Warning);
         }
+
         gst_caps_unref (caps);
     }
 }
@@ -232,7 +233,7 @@ void MediaObject::noMorePadsAvailable ()
                 setError(tr("Missing codec helper script assistant."), Phonon::FatalError );
             else
                 setError(tr("Plugin codec installation failed for codec: %0")
-                        .arg(m_missingCodecs[0].split("|")[3]), error);
+                        .formatArg(m_missingCodecs[0].split("|")[3]), error);
         }
         m_missingCodecs.clear();
 #else
@@ -242,7 +243,7 @@ void MediaObject::noMorePadsAvailable ()
             m_hasVideo = false;
             emit hasVideoChanged(false);
         }
-        setError(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0").arg(codecs), error);
+        setError(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0").formatArg(codecs), error);
         m_missingCodecs.clear();
 #endif
     }
@@ -294,9 +295,9 @@ void MediaObject::cb_unknown_type (GstElement *decodebin, GstPad *pad, GstCaps *
 
 #ifdef PLUGIN_INSTALL_API
     QString plugins = QString("gstreamer|0.10|%0|%1|decoder-%2")
-        .arg( qApp->applicationName() )
-        .arg( value )
-        .arg( QString::fromUtf8(gst_caps_to_string (caps) ) );
+        .formatArg( qApp->applicationName() )
+        .formatArg( value )
+        .formatArg( QString::fromUtf8(gst_caps_to_string (caps) ) );
     media->addMissingCodecName( plugins );
 #else
     media->addMissingCodecName( value );
@@ -415,7 +416,7 @@ bool MediaObject::createPipefromURL(const QUrl &url)
 
     // Verify that the uri can be parsed
     if (!url.isValid()) {
-        m_backend->logMessage(QString("%1 is not a valid URI").arg(url.toString()));
+        m_backend->logMessage(QString("%1 is not a valid URI").formatArg(url.toString()));
         return false;
     }
 
@@ -718,7 +719,7 @@ void MediaObject::setState(State newstate)
 
     case Phonon::ErrorState:
         m_backend->logMessage("phonon state request : Error", Backend::Warning, this);
-        m_backend->logMessage(QString("Last error : %0").arg(errorString()) , Backend::Warning, this);
+        m_backend->logMessage(QString("Last error : %0").formatArg(errorString()) , Backend::Warning, this);
         changeState(Phonon::ErrorState); //immediately set error state
         break;
 
@@ -1078,7 +1079,7 @@ void MediaObject::getStreamInfo()
                 m_availableTitles = (int)titleCount;
                 if (m_availableTitles != oldAvailableTitles) {
                     emit availableTitlesChanged(m_availableTitles);
-                    m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
+                    m_backend->logMessage(QString("Available titles changed: %0").formatArg(m_availableTitles), Backend::Info, this);
                 }
             }
         }
@@ -1120,7 +1121,7 @@ void MediaObject::seek(qint64 time)
         case Phonon::StoppedState:
         case Phonon::PausedState:
         case Phonon::BufferingState:
-            m_backend->logMessage(QString("Seek to pos %0").arg(time), Backend::Info, this);
+            m_backend->logMessage(QString("Seek to pos %0").formatArg(time), Backend::Info, this);
 
             if (time <= 0)
                 m_atStartOfStream = true;
@@ -1194,6 +1195,7 @@ void foreach_tag_function(const GstTagList *list, const gchar *tag, gpointer use
     TagMap *newData = static_cast<TagMap *>(user_data);
     QString value;
     GType type = gst_tag_get_type(tag);
+
     switch (type) {
     case G_TYPE_STRING: {
             char *str = 0;
@@ -1243,8 +1245,9 @@ void foreach_tag_function(const GstTagList *list, const gchar *tag, gpointer use
         break;
     }
 
-    QString key = QString(tag).toUpper();
+    QString key = QString::fromLatin1(tag).toUpper();
     QString currVal = newData->value(key);
+
     if (!value.isEmpty() && !(newData->contains(key) && currVal == value))
         newData->insert(key, value);
 }
@@ -1265,7 +1268,7 @@ void MediaObject::beginPlay()
 void MediaObject::handleBusMessage(const Message &message)
 {
 
-    if (!isValid())
+    if (! isValid())
         return;
 
     GstMessage *gstMessage = message.rawMessage();
@@ -1274,7 +1277,10 @@ void MediaObject::handleBusMessage(const Message &message)
     if (m_backend->debugLevel() >= Backend::Debug) {
         int type = GST_MESSAGE_TYPE(gstMessage);
         gchar* name = gst_element_get_name(gstMessage->src);
-        QString msgString = QString("Bus: %0 (%1)").arg(gst_message_type_get_name ((GstMessageType)type)).arg(name);
+
+        QString msgString = QString("Bus: %0 (%1)")
+               .formatArg(QString::fromLatin1(gst_message_type_get_name((GstMessageType)type))).formatArg(QString::fromLatin1(name));
+
         g_free(name);
         m_backend->logMessage(msgString, Backend::Debug, this);
     }
@@ -1462,10 +1468,15 @@ void MediaObject::handleBusMessage(const Message &message)
     case GST_MESSAGE_ERROR: {
             gchar *debug;
             GError *err;
+
             QString logMessage;
             gst_message_parse_error (gstMessage, &err, &debug);
             gchar *errorMessage = gst_error_get_message (err->domain, err->code);
-            logMessage.sprintf("Error: %s Message:%s (%s) Code:%d", debug, err->message, errorMessage, err->code);
+
+            logMessage = QString("Error: %1 Message:%2 (%3) Code:%4")
+                  .formatArg(QString::fromLatin1(debug)).formatArg(QString::fromLatin1(err->message))
+                  .formatArg(QString::fromLatin1(errorMessage)).formatArg(err->code);
+
             m_backend->logMessage(logMessage, Backend::Warning);
             g_free(errorMessage);
             g_free (debug);
@@ -1473,24 +1484,30 @@ void MediaObject::handleBusMessage(const Message &message)
             if (err->domain == GST_RESOURCE_ERROR) {
                 if (err->code == GST_RESOURCE_ERROR_NOT_FOUND) {
                     setError(tr("Could not locate media source."), Phonon::FatalError);
+
                 } else if (err->code == GST_RESOURCE_ERROR_OPEN_READ) {
                     setError(tr("Could not open media source."), Phonon::FatalError);
+
                 } else if (err->code == GST_RESOURCE_ERROR_BUSY) {
-                   // We need to check if this comes from an audio device by looking at sink caps
+                   // need to check if this comes from an audio device by looking at sink caps
                    GstPad* sinkPad = gst_element_get_static_pad(GST_ELEMENT(gstMessage->src), "sink");
+
                    if (sinkPad) {
                         GstCaps *caps = gst_pad_get_caps (sinkPad);
                         GstStructure *str = gst_caps_get_structure (caps, 0);
+
                         if (g_strrstr (gst_structure_get_name (str), "audio"))
                             setError(tr("Could not open audio device. The device is already in use."), Phonon::NormalError);
                         else
-                            setError(err->message, Phonon::FatalError);
+                            setError(QString::fromLatin1(err->message), Phonon::FatalError);
+
                         gst_caps_unref (caps);
                         gst_object_unref (sinkPad);
                    }
                } else {
-                    setError(QString(err->message), Phonon::FatalError);
+                    setError(QString::fromLatin1(err->message), Phonon::FatalError);
                }
+
            } else if (err->domain == GST_STREAM_ERROR) {
                 switch (err->code) {
                 case GST_STREAM_ERROR_WRONG_TYPE:
@@ -1502,7 +1519,7 @@ void MediaObject::handleBusMessage(const Message &message)
                     break;
                 }
            } else {
-                setError(QString(err->message), Phonon::FatalError);
+                setError(QString::fromLatin1(err->message), Phonon::FatalError);
             }
             g_error_free (err);
             break;
@@ -1511,18 +1528,22 @@ void MediaObject::handleBusMessage(const Message &message)
     case GST_MESSAGE_WARNING: {
             gchar *debug;
             GError *err;
+
             gst_message_parse_warning(gstMessage, &err, &debug);
-            QString msgString;
-            msgString.sprintf("Warning: %s\nMessage:%s", debug, err->message);
+            QString msgString = QString("Warning: %1\nMessage:%2")
+                     .formatArgs(QString::fromLatin1(debug), QString::fromLatin1(err->message));
+
             m_backend->logMessage(msgString, Backend::Warning);
             g_free (debug);
             g_error_free (err);
+
             break;
         }
 
     case GST_MESSAGE_ELEMENT: {
             GstMessage *gstMessage = message.rawMessage();
             const GstStructure *gstStruct = gst_message_get_structure(gstMessage); //do not free this
+
             if (g_strrstr (gst_structure_get_name (gstStruct), "prepare-xwindow-id")) {
                 MediaNodeEvent videoHandleEvent(MediaNodeEvent::VideoHandleRequest);
                 notify(&videoHandleEvent);
@@ -1542,7 +1563,7 @@ void MediaObject::handleBusMessage(const Message &message)
 
             if (m_bufferPercent != percent) {
                 emit bufferStatus(percent);
-                m_backend->logMessage(QString("Stream buffering %0").arg(percent), Backend::Debug, this);
+                m_backend->logMessage(QString("Stream buffering %0").formatArg(percent), Backend::Debug, this);
                 m_bufferPercent = percent;
             }
 
@@ -1552,6 +1573,7 @@ void MediaObject::handleBusMessage(const Message &message)
                 emit stateChanged(Phonon::BufferingState, m_state);
             break;
         }
+
         //case GST_MESSAGE_INFO:
         //case GST_MESSAGE_STREAM_STATUS:
         //case GST_MESSAGE_CLOCK_PROVIDE:
@@ -1586,7 +1608,8 @@ void MediaObject::handleEndOfStream()
 
     if (m_nextSource.type() != MediaSource::Invalid
         && m_nextSource.type() != MediaSource::Empty) {  // We only emit finish when the queue is actually empty
-        QTimer::singleShot (qMax(0, transitionTime()), this, SLOT(beginPlay()));
+        QTimer::singleShot(qMax(0, transitionTime()), this, SLOT(beginPlay()));
+
     } else {
         m_pendingState = Phonon::PausedState;
         emit finished();
@@ -1670,7 +1693,7 @@ int MediaObject::_iface_currentTitle() const
 
 void MediaObject::_iface_setCurrentTitle(int title)
 {
-    m_backend->logMessage(QString("setCurrentTitle %0").arg(title), Backend::Info, this);
+    m_backend->logMessage(QString("setCurrentTitle %0").formatArg(title), Backend::Info, this);
     if ((title == m_currentTitle) || (title == m_pendingTitle))
         return;
 
@@ -1691,7 +1714,7 @@ void MediaObject::setTrack(int title)
 
     //let's seek to the beginning of the song
     GstFormat trackFormat = gst_format_get_by_nick("track");
-    m_backend->logMessage(QString("setTrack %0").arg(title), Backend::Info, this);
+    m_backend->logMessage(QString("setTrack %0").formatArg(title), Backend::Info, this);
     if (gst_element_seek_simple(m_pipeline, trackFormat, GST_SEEK_FLAG_FLUSH, title - 1)) {
         m_currentTitle = title;
         updateTotalTime();

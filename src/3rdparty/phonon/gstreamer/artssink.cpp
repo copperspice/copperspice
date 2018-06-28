@@ -132,8 +132,8 @@ static gboolean arts_sink_prepare(GstAudioSink *sink, GstRingBufferSpec *spec)
     asink->bytes_per_sample = spec->bytes_per_sample;
 
     static int id = 0;
-    asink->stream = p_arts_play_stream(spec->rate, spec->depth, spec->channels,
-                                        QString("gstreamer-%0").arg(id++).toLatin1().constData());
+    asink->stream = p_arts_play_stream(spec->rate, spec->depth, spec->channels, QString("gstreamer-%0").formatArg(id++).constData());
+
     if (asink->stream)
         connected = true;
 

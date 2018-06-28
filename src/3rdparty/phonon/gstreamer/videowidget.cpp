@@ -169,7 +169,7 @@ void VideoWidget::setVisible(bool val) {
         root()->invalidateGraph();
         root()->setState(root()->state());
     }
-    QWidget::setVisible(val);    
+    QWidget::setVisible(val);
 }
 
 bool VideoWidget::event(QEvent *event)
@@ -365,9 +365,10 @@ void VideoWidget::setSaturation(qreal newValue)
 
 void VideoWidget::setMovieSize(const QSize &size)
 {
-    m_backend->logMessage(QString("New video size %0 x %1").arg(size.width()).arg(size.height()), Backend::Info);
+    m_backend->logMessage(QString("New video size %0 x %1").formatArg(size.width()).formatArg(size.height()), Backend::Info);
     if (size == m_movieSize)
         return;
+
     m_movieSize = size;
     widget()->updateGeometry();
     widget()->update();

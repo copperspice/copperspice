@@ -26,11 +26,13 @@
 #include <phonon/videowidget.h>
 #include <phonon/videowidgetinterface.h>
 
-#include <gstreamer/backend.h>
-#include <gstreamer/common.h>
-#include <gstreamer/medianode.h>
-#include <gstreamer/abstractrenderer.h>
-#include <gstreamer/videowidget.h>
+// located in gstreamer
+#include <backend.h>
+#include <common.h>
+#include <medianode.h>
+#include <abstractrenderer.h>
+#include <videowidget.h>
+
 #include <qstringfwd.h>
 #include <gst/gst.h>
 
