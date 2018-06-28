@@ -331,7 +331,7 @@ void QTextDocumentPrivate::insert_string(int pos, int strPos, uint length, int f
 }
 
 int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int blockFormat,
-                                       QTextUndoCommand::Operation op, int command)
+                  QTextUndoCommand::Operation op, int command)
 {
    split(pos);
    uint x = fragments.insert_single(pos, 1);
@@ -351,17 +351,21 @@ int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int bloc
    }
 
    int size = 1;
-   int n = blocks.findNode(block_pos);
-   int key = n ? blocks.position(n) : blocks.length();
+   int n    = blocks.findNode(block_pos);
+   int key  = n ? blocks.position(n) : blocks.length();
 
-   Q_ASSERT(n || (!n && block_pos == blocks.length()));
+   Q_ASSERT(n || (! n && block_pos == blocks.length()));
+
    if (key != block_pos) {
       Q_ASSERT(key < block_pos);
+
       int oldSize = blocks.size(n);
       blocks.setSize(n, block_pos - key);
       size += oldSize - (block_pos - key);
    }
+
    int b = blocks.insert_single(block_pos, size);
+
    QTextBlockData *B = blocks.fragment(b);
    B->format = blockFormat;
 
@@ -382,8 +386,8 @@ int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int bloc
    return x;
 }
 
-int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
-                                      int pos, int blockFormat, int charFormat, QTextUndoCommand::Operation op)
+int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator, int pos, int blockFormat,
+                  int charFormat, QTextUndoCommand::Operation op)
 {
    Q_ASSERT(formats.format(blockFormat).isBlockFormat());
    Q_ASSERT(formats.format(charFormat).isCharFormat());
@@ -396,14 +400,14 @@ int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
    text.append(blockSeparator);
 
    int ob = blocks.findNode(pos);
-   bool atBlockEnd = true;
+   bool atBlockEnd   = true;
    bool atBlockStart = true;
-   int oldRevision = 0;
+   int oldRevision   = 0;
 
    if (ob) {
-      atBlockEnd = (pos - blocks.position(ob) == blocks.size(ob) - 1);
+      atBlockEnd   = (pos - blocks.position(ob) == blocks.size(ob) - 1);
       atBlockStart = ((int)blocks.position(ob) == pos);
-      oldRevision = blocks.fragment(ob)->revision;
+      oldRevision  = blocks.fragment(ob)->revision;
    }
 
    const int fragment = insert_block(pos, strPos, charFormat, blockFormat, op, QTextUndoCommand::BlockRemoved);
@@ -422,6 +426,7 @@ int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
    // update revision numbers of the modified blocks.
    B->revision = (atBlockEnd && !atBlockStart) ? oldRevision : revision;
    b = blocks.next(b);
+
    if (b) {
       B = blocks.fragment(b);
       B->revision = atBlockStart ? oldRevision : revision;

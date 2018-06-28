@@ -26,10 +26,7 @@
 #include <qobject.h>
 #include <qtextformat.h>
 #include <qglyphrun.h>
-
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
 
 class QTextObjectPrivate;
 class QTextDocument;
@@ -380,7 +377,7 @@ class Q_GUI_EXPORT QTextFragment
    int charFormatIndex() const;
    QString text() const;
 
-#if !defined(QT_NO_RAWFONT)
+#if ! defined(QT_NO_RAWFONT)
    QList<QGlyphRun> glyphRuns() const;
 #endif
 
@@ -392,6 +389,4 @@ class Q_GUI_EXPORT QTextFragment
 
 Q_DECLARE_TYPEINFO(QTextFragment, Q_MOVABLE_TYPE);
 
-QT_END_NAMESPACE
-
-#endif // QTEXTOBJECT_H
+#endif

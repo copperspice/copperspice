@@ -733,20 +733,19 @@ Qt::LayoutDirection QTextBlock::textDirection() const
 
 QString QTextBlock::text() const
 {
-   if (! p || ! n) {
-      return QString();
-   }
-
-   const QString buffer = p->buffer();
    QString text;
 
+   if (! p || ! n) {
+      return text;
+   }
+
+   const QString &buffer = p->buffer();
+
    const int pos = position();
-   QTextDocumentPrivate::FragmentIterator it  = p->find(pos);
-   QTextDocumentPrivate::FragmentIterator end = p->find(pos + length() - 1); // -1 to omit the block separator char
+   QTextDocumentPrivate::FragmentIterator iter_end = p->find(pos + length() - 1);    // -1 to omit the block separator char
 
-   for (; it != end; ++it) {
-      const QTextFragmentData *const frag = it.value();
-
+   for (auto iter = p->find(pos); iter != iter_end; ++iter) {
+      const QTextFragmentData *frag = iter.value();
       text += buffer.midView(frag->stringPosition, frag->size_array[0]);
    }
 
@@ -760,7 +759,7 @@ const QTextDocument *QTextBlock::document() const
 
 QTextList *QTextBlock::textList() const
 {
-   if (!isValid()) {
+   if (! isValid()) {
       return 0;
    }
 
@@ -772,7 +771,7 @@ QTextList *QTextBlock::textList() const
 
 QTextBlockUserData *QTextBlock::userData() const
 {
-   if (!p || !n) {
+   if (! p || ! n) {
       return 0;
    }
 

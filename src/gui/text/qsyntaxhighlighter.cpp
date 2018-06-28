@@ -61,9 +61,10 @@ class QSyntaxHighlighterPrivate
    }
 
    inline void _q_delayedRehighlight() {
-      if (!rehighlightPending) {
+      if (! rehighlightPending) {
          return;
       }
+
       rehighlightPending = false;
       q_func()->rehighlight();
    }
@@ -170,7 +171,7 @@ void QSyntaxHighlighterPrivate::applyFormatChanges()
 
 void QSyntaxHighlighterPrivate::_q_reformatBlocks(int from, int charsRemoved, int charsAdded)
 {
-   if (!inReformatBlocks) {
+   if (! inReformatBlocks) {
       reformatBlocks(from, charsRemoved, charsAdded);
    }
 }
@@ -180,12 +181,13 @@ void QSyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int c
    rehighlightPending = false;
 
    QTextBlock block = doc->findBlock(from);
-   if (!block.isValid()) {
+   if (! block.isValid()) {
       return;
    }
 
    int endPosition;
    QTextBlock lastBlock = doc->findBlock(from + charsAdded + (charsRemoved > 0 ? 1 : 0));
+
    if (lastBlock.isValid()) {
       endPosition = lastBlock.position() + lastBlock.length();
    } else {
@@ -198,7 +200,6 @@ void QSyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int c
       const int stateBeforeHighlight = block.userState();
 
       reformatBlock(block);
-
       forceHighlightOfNextBlock = (block.userState() != stateBeforeHighlight);
 
       block = block.next();
@@ -210,32 +211,24 @@ void QSyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int c
 void QSyntaxHighlighterPrivate::reformatBlock(const QTextBlock &block)
 {
    Q_Q(QSyntaxHighlighter);
-
-   Q_ASSERT_X(!currentBlock.isValid(), "QSyntaxHighlighter::reformatBlock()", "reFormatBlock() called recursively");
+   Q_ASSERT_X(! currentBlock.isValid(), "QSyntaxHighlighter::reformatBlock()", "reFormatBlock() called recursively");
 
    currentBlock = block;
-
    formatChanges.fill(QTextCharFormat(), block.length() - 1);
+
    q->highlightBlock(block.text());
    applyFormatChanges();
 
    currentBlock = QTextBlock();
 }
 
-/*!
-    Constructs a QSyntaxHighlighter with the given \a parent.
-*/
 QSyntaxHighlighter::QSyntaxHighlighter(QObject *parent)
    : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Constructs a QSyntaxHighlighter and installs it on \a parent.
-    The specified QTextDocument also becomes the owner of the
-    QSyntaxHighlighter.
-*/
+
 QSyntaxHighlighter::QSyntaxHighlighter(QTextDocument *parent)
    : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)
 {
@@ -299,13 +292,6 @@ QTextDocument *QSyntaxHighlighter::document() const
    return d->doc;
 }
 
-/*!
-    \since 4.2
-
-    Reapplies the highlighting to the whole document.
-
-    \sa rehighlightBlock()
-*/
 void QSyntaxHighlighter::rehighlight()
 {
    Q_D(QSyntaxHighlighter);
@@ -317,13 +303,6 @@ void QSyntaxHighlighter::rehighlight()
    d->rehighlight(cursor, QTextCursor::End);
 }
 
-/*!
-    \since 4.6
-
-    Reapplies the highlighting to the given QTextBlock \a block.
-
-    \sa rehighlight()
-*/
 void QSyntaxHighlighter::rehighlightBlock(const QTextBlock &block)
 {
    Q_D(QSyntaxHighlighter);
@@ -408,11 +387,6 @@ int QSyntaxHighlighter::currentBlockState() const
    return d->currentBlock.userState();
 }
 
-/*!
-    Sets the state of the current text block to \a newState.
-
-    \sa highlightBlock()
-*/
 void QSyntaxHighlighter::setCurrentBlockState(int newState)
 {
    Q_D(QSyntaxHighlighter);
