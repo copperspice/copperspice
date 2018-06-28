@@ -992,6 +992,10 @@ QTextCursor QTextDocument::find(const QString &subString, const QTextCursor &fro
 static bool findInBlock(const QTextBlock &block, const QRegularExpression &expression, int offset,
                         QTextDocument::FindFlags options, QTextCursor &cursor)
 {
+   if (offset < 0) {
+      return false;
+   }
+
    QRegularExpression expr(expression);
 
    if (options & QTextDocument::FindWholeWords) {
@@ -1001,12 +1005,8 @@ static bool findInBlock(const QTextBlock &block, const QRegularExpression &expre
       expr.setPattern(pattern);
    }
 
-   QRegularExpressionMatch match;
-
    QString text = block.text();
    text.replace(QChar::Nbsp, ' ');
-
-   QString::const_iterator iter;
 
    bool goBackwards;
 
@@ -1016,12 +1016,37 @@ static bool findInBlock(const QTextBlock &block, const QRegularExpression &expre
       goBackwards = false;
    }
 
-   iter = text.begin() + offset;
+   if (offset <= text.length()) {
 
-   while (offset >= 0 && offset <= text.length()) {
+      QString::const_iterator iter = text.begin() + offset;
+      QRegularExpressionMatch match;
+      QRegularExpressionMatch match_hold;
 
       if (goBackwards) {
-         match = expr.rmatch(text, iter);
+         // simulates an rmatch()
+         QString::const_iterator iter_i = text.begin();
+
+         while (true)  {
+            match = expr.match(text, iter_i);
+
+            if (match.hasMatch() && match.capturedEnd() <= iter) {
+
+               // save the match in case we need it
+               match_hold = match;
+
+               // handles overlapping matches
+               iter_i = match.capturedStart() + 1;
+
+               if (iter_i > iter) {
+                  break;
+               }
+
+            } else {
+               break;
+            }
+         }
+
+         match = match_hold;
 
       } else {
          match = expr.match(text, iter);
@@ -1032,18 +1057,14 @@ static bool findInBlock(const QTextBlock &block, const QRegularExpression &expre
          return false;
       }
 
-      // we have a hit, return the cursor for that
-      break;
+      // we have a hit, return the cursor for it
+      cursor = QTextCursor(block.docHandle(), block.position() + (match.capturedStart() - text.begin()));
+      cursor.setPosition(cursor.position() + match.capturedLength(0), QTextCursor::KeepAnchor);
+
+      return true;
    }
 
-   if (! match.hasMatch()) {
-      return false;
-   }
-
-   cursor = QTextCursor(block.docHandle(), block.position() + (iter - text.begin()));
-   cursor.setPosition(cursor.position() + match.capturedLength(0), QTextCursor::KeepAnchor);
-
-   return true;
+   return false;
 }
 
 QTextCursor QTextDocument::find(const QRegularExpression &expr, int from, FindFlags options) const
