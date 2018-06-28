@@ -293,7 +293,7 @@ Q_INLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::reserve(int asize)
 }
 
 template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::append(const T *abuf, int increment)
+void QVarLengthArray<T, Prealloc>::append(const T *abuf, int increment)
 {
    Q_ASSERT(abuf);
    if (increment <= 0) {
@@ -318,7 +318,7 @@ Q_OUTOFLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::append(const T *abuf, in
 }
 
 template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
+void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
 {
    Q_ASSERT(aalloc >= asize);
    T *oldPtr = ptr;
@@ -384,7 +384,7 @@ Q_OUTOFLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::realloc(int asize, int a
 }
 
 template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE T QVarLengthArray<T, Prealloc>::value(int i) const
+T QVarLengthArray<T, Prealloc>::value(int i) const
 {
    if (i < 0 || i >= size()) {
       return T();
@@ -393,7 +393,7 @@ Q_OUTOFLINE_TEMPLATE T QVarLengthArray<T, Prealloc>::value(int i) const
 }
 
 template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE T QVarLengthArray<T, Prealloc>::value(int i, const T &defaultValue) const
+T QVarLengthArray<T, Prealloc>::value(int i, const T &defaultValue) const
 {
    return (i < 0 || i >= size()) ? defaultValue : at(i);
 }
@@ -441,7 +441,7 @@ inline void QVarLengthArray<T, Prealloc>::replace(int i, const T &t)
 }
 
 template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(
+typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(
    iterator before, size_type n, const T &t)
 {
    int offset = int(before - ptr);
@@ -472,7 +472,7 @@ Q_OUTOFLINE_TEMPLATE typename QVarLengthArray<T, Prealloc>::iterator QVarLengthA
 }
 
 template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::erase(
+typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::erase(
    iterator abegin, iterator aend)
 {
    int f = int(abegin - ptr);

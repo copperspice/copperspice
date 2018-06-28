@@ -299,13 +299,13 @@ Q_INLINE_TEMPLATE QSharedDataPointer<T>::QSharedDataPointer(T *adata) : d(adata)
 }
 
 template <class T>
-Q_INLINE_TEMPLATE T *QSharedDataPointer<T>::clone()
+inline T *QSharedDataPointer<T>::clone()
 {
    return new T(*d);
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE void QSharedDataPointer<T>::detach_helper()
+void QSharedDataPointer<T>::detach_helper()
 {
    T *x = clone();
    x->ref.ref();
@@ -316,13 +316,13 @@ Q_OUTOFLINE_TEMPLATE void QSharedDataPointer<T>::detach_helper()
 }
 
 template <class T>
-Q_INLINE_TEMPLATE T *QExplicitlySharedDataPointer<T>::clone()
+inline T *QExplicitlySharedDataPointer<T>::clone()
 {
    return new T(*d);
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE void QExplicitlySharedDataPointer<T>::detach_helper()
+void QExplicitlySharedDataPointer<T>::detach_helper()
 {
    T *x = clone();
    x->ref.ref();

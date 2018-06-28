@@ -226,7 +226,7 @@ class QProcessEnvironmentPrivate: public QSharedData
 /**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 
 template<>
-Q_INLINE_TEMPLATE void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
+inline void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
 {
    if (d && d->ref.load() == 1) {
       return;

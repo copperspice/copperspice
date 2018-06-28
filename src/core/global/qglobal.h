@@ -300,10 +300,6 @@
 #  elif defined(__sgi)
 #    define Q_CC_MIPS
 
-#    if defined(_COMPILER_VERSION) && (_COMPILER_VERSION >= 740)
-#      define Q_OUTOFLINE_TEMPLATE inline
-#      pragma set woff 3624,3625,3649          // turn off some harmless warnings
-#    endif
 #  endif
 
 
@@ -666,12 +662,7 @@ class Q_CORE_EXPORT QSysInfo
 
 Q_CORE_EXPORT const char *qVersion();
 
-// not needed, used 115 times
-#ifndef Q_OUTOFLINE_TEMPLATE
-#  define Q_OUTOFLINE_TEMPLATE
-#endif
-
-// not needed, used over 400 times
+// not needed, used over 40 times
 #ifndef Q_INLINE_TEMPLATE
 #  define Q_INLINE_TEMPLATE inline
 #endif
@@ -862,9 +853,9 @@ class QTypeInfo<T *>
    enum {
       isPointer = true,
       isComplex = false,
-      isStatic = false,
-      isLarge = false,
-      isDummy = false
+      isStatic  = false,
+      isLarge   = false,
+      isDummy   = false
    };
 };
 
@@ -873,7 +864,7 @@ class QTypeInfo<T *>
    Specialize a specific type with: Q_DECLARE_TYPEINFO(type, flags);
 
    where 'type' is the name of the type to specialize and 'flags' is
-   logically-OR'ed combination of the flags below.
+   logically-OR'ed combination of the flags below
 */
 enum { /* TYPEINFO flags */
    Q_COMPLEX_TYPE   = 0,

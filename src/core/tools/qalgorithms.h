@@ -26,7 +26,7 @@
 #include <QtCore/qglobal.h>
 
 template <typename ForwardIterator>
-Q_OUTOFLINE_TEMPLATE void qDeleteAll(ForwardIterator begin, ForwardIterator end)
+void qDeleteAll(ForwardIterator begin, ForwardIterator end)
 {
    while (begin != end) {
       delete *begin;

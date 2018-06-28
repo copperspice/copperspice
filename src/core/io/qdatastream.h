@@ -354,7 +354,7 @@ QDataStream &operator<<(QDataStream &out, const QSet<T> &set)
 }
 
 template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QHash<Key, T> &hash)
+QDataStream &operator>>(QDataStream &in, QHash<Key, T> &hash)
 {
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();

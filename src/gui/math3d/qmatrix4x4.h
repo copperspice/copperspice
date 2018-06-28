@@ -224,8 +224,7 @@ inline QMatrix4x4::QMatrix4x4
 }
 
 template <int N, int M>
-Q_INLINE_TEMPLATE QMatrix4x4::QMatrix4x4
-(const QGenericMatrix<N, M, qreal> &matrix)
+inline QMatrix4x4::QMatrix4x4(const QGenericMatrix<N, M, qreal> &matrix)
 {
    const qreal *values = matrix.constData();
    for (int matrixCol = 0; matrixCol < 4; ++matrixCol) {
