@@ -243,7 +243,7 @@ bool QAudioInputPrivate::open()
          QString tmp;
          tmp = QString((const QChar *)wic.szPname);
 
-         if (device == "default") {
+         if (m_device == "default") {
             devId = ii;
             break;
          }

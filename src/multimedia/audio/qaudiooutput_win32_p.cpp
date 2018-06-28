@@ -291,7 +291,7 @@ bool QAudioOutputPrivate::open()
       if (waveOutGetDevCaps(ii, &woc, sizeof(WAVEOUTCAPS)) == MMSYSERR_NOERROR) {
          QString tmp = QString::fromStdWString(std::wstring(woc.szPname));
 
-         if (device == "default") {
+         if (m_device == "default") {
             devId = ii;
             break;
          }

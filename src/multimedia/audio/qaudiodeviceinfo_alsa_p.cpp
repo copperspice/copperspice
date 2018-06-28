@@ -469,8 +469,8 @@ QList<QString> QAudioDeviceInfoInternal::availableDevices(QAudio::Mode mode)
          io    = snd_device_name_get_hint(*n, "IOID");
 
          if ((descr != NULL) && ((io == NULL) || (io == filter))) {
-            QString deviceName        = name;
-            QString deviceDescription = descr;
+            QString deviceName        = QString::fromLatin1(name);
+            QString deviceDescription = QString::fromLatin1(descr);
 
             allDevices.append(deviceName);
 
