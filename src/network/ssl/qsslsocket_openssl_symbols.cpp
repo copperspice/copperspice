@@ -426,10 +426,10 @@ struct NumericallyLess {
    result_type operator()(const QString &lhs, const QString &rhs) const {
       bool ok = false;
       int b = 0;
-      int a = lhs.toInt(&ok);
+      int a = lhs.toInteger<int>(&ok);
 
       if (ok) {
-         b = rhs.toInt(&ok);
+         b = rhs.toInteger<int>(&ok);
       }
 
       if (ok) {
@@ -466,7 +466,7 @@ static int dlIterateCallback(struct dl_phdr_info *info, size_t size, void *data)
    }
 
    QSet<QString> *paths = (QSet<QString> *)data;
-   QString path = QString::fromLocal8Bit(info->dlpi_name);
+   QString path = QString::fromUtf8(info->dlpi_name);
 
    if (! path.isEmpty()) {
 
@@ -487,7 +487,7 @@ static QStringList libraryPathList()
    QStringList paths;
 
 #  ifdef Q_OS_DARWIN
-   paths = QString::fromLatin1(qgetenv("DYLD_LIBRARY_PATH")).split(QLatin1Char(':'), QString::SkipEmptyParts);
+   paths = QString::fromLatin1(qgetenv("DYLD_LIBRARY_PATH")).split(':', QStringParser::SkipEmptyParts);
 
    // search in .app/Contents/Frameworks
    UInt32 packageType;
@@ -500,8 +500,7 @@ static QStringList libraryPathList()
    }
 
 #  else
-   paths = QString::fromLatin1(qgetenv("LD_LIBRARY_PATH"))
-           .split(QLatin1Char(':'), QString::SkipEmptyParts);
+   paths = QString::fromLatin1(qgetenv("LD_LIBRARY_PATH")).split(':', QStringParser::SkipEmptyParts);
 
 #  endif
    paths << QLatin1String("/lib")   << QLatin1String("/usr/lib")   << QLatin1String("/usr/local/lib");

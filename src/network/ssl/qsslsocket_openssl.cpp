@@ -198,7 +198,8 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSL_CIPHER(SSL_CIPHER *ciph
    char buf [256];
    QString descriptionOneLine = QString::fromLatin1(q_SSL_CIPHER_description(cipher, buf, sizeof(buf)));
 
-   QStringList descriptionList = descriptionOneLine.split(QLatin1Char(' '), QString::SkipEmptyParts);
+   QStringList descriptionList = descriptionOneLine.split(' ', QStringParser::SkipEmptyParts);
+
    if (descriptionList.size() > 5) {
       // ### crude code.
       ciph.d->isNull = false;
