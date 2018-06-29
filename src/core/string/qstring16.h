@@ -218,7 +218,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
 
-      QString16() = default;
+      QString16() {};
       QString16(const QString16 &other) = default;
       QString16(QString16 &&other) = default;
 

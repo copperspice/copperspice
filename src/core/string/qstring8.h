@@ -218,7 +218,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
 
-      QString8() = default;
+      QString8() {};
       QString8(const QString8 &other) = default;
       QString8(QString8 &&other) = default;
 

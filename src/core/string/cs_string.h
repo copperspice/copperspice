@@ -42,6 +42,7 @@ template <typename E, typename A>
 class CsBasicString
 {
    public:
+      using difference_type        = std::ptrdiff_t;
       using size_type              = std::ptrdiff_t;
       using value_type             = CsChar;
 
@@ -714,8 +715,13 @@ CsBasicString<E, A>::CsBasicString(const CsBasicString &str, size_type indexStar
    const_iterator iter_begin = str.cbegin();
    const_iterator iter_end   = str.cend();
 
-   for (size_type i = 0; i < indexStart && iter_begin != iter_end; ++i)  {
+   for (size_type i = 0; i < indexStart && iter_begin != str.cend(); ++i)  {
       ++iter_begin;
+   }
+
+   if (iter_begin == str.cend()) {
+      // index_start > length
+      return;
    }
 
    append(iter_begin, iter_end);
@@ -733,7 +739,7 @@ CsBasicString<E, A>::CsBasicString(const CsBasicString &str, size_type indexStar
    }
 
    if (iter_begin == str.cend()) {
-      // indexStart > length()
+      // indexStart > length
       return;
    }
 
@@ -786,7 +792,7 @@ CsBasicString<E, A>::CsBasicString(CsBasicStringView<U> str, size_type indexStar
    }
 
    if (iter_begin == str.cend()) {
-      // indexStart > length()
+      // indexStart > length
       return;
    }
 
@@ -1664,22 +1670,26 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(con
 template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(CsChar c, size_type indexStart) const
 {
-   size_type stringLen = this->size();
+   const_iterator iter_begin = cbegin();
 
-   if (indexStart >= stringLen) {
+   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+      ++iter_begin;
+   }
+
+   if (iter_begin == cend()) {
+      // indexStart > length
       return -1;
    }
 
    size_type retval = indexStart;
-   auto iter        = begin() + indexStart;
 
-   while (iter != end())   {
+   while (iter_begin != end())   {
 
-      if (*iter == c)  {
+      if (*iter_begin == c)  {
          return retval;
       }
 
-      ++iter;
+      ++iter_begin;
       ++retval;
    }
 
@@ -3888,12 +3898,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -3930,12 +3941,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -3980,12 +3992,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -4016,12 +4029,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -4077,12 +4091,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -4110,12 +4125,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -4166,12 +4182,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -4210,12 +4227,13 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
+   size_type i;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
-   if (iter_begin == cend()) {
+   if (i != indexStart) {
       throw std::out_of_range("CsString::replace index out of range");
    }
 
@@ -4299,25 +4317,13 @@ auto CsBasicString<E, A>::size_storage() const -> size_type
 template <typename E, typename A>
 auto CsBasicString<E, A>::size_codePoints() const -> size_type
 {
-   size_type retval = 0;
-
-   for (auto item = begin(); item != end(); ++item) {
-      ++retval;
-   }
-
-   return retval;
+   return size();
 }
 
 template <typename E, typename A>
 auto CsBasicString<E, A>::size() const -> size_type
 {
-   size_type retval = 0;
-
-   for (auto item = begin(); item != end(); ++item) {
-      ++retval;
-   }
-
-   return retval;
+   return E::distance(m_string.cbegin(), m_string.cend() - 1);
 }
 
 template <typename E, typename A>
@@ -4337,7 +4343,7 @@ CsBasicString<E, A> CsBasicString<E, A>::substr(size_type indexStart, size_type 
    }
 
    if (iter_begin == cend()) {
-      // index_start > length()
+      // indexStart > length
       return CsBasicString();
    }
 

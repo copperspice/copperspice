@@ -193,26 +193,16 @@ CsStringIterator<E,A> CsStringIterator<E,A>::operator-(size_type x) const
 template <typename E, typename A>
 typename CsStringIterator<E, A>::size_type CsStringIterator <E,A>::operator-(CsStringIterator other) const
 {
-   size_type retval = 0;
-
    CsStringIterator a = *this;
    CsStringIterator b = other;
 
    if (a < b) {
-
-      while (a != b) {
-         ++a;
-         --retval;
-      }
+      return 0 - E::distance(a.m_iter, b.m_iter);
 
    } else {
-      while (a != b) {
-         ++b;
-         ++retval;
-      }
-   }
+      return E::distance(b.m_iter, a.m_iter);
 
-   return retval;
+   }
 }
 
 template <typename E, typename A>

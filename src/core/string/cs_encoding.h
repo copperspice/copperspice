@@ -26,6 +26,23 @@ class LIB_CS_STRING_EXPORT utf8
    public:
       using storage_unit = uint8_t;
 
+      template <typename Iterator>
+      static int distance(Iterator iter_begin, Iterator iter_end)
+      {
+         int retval = 0;
+
+         for (auto iter = iter_begin; iter != iter_end; ++iter) {
+            storage_unit value = *iter;
+
+            if (value < 0x80 || value > 0xBF) {
+               // ascii or first byte of a multi byte sequence
+               ++retval;
+            }
+         }
+
+         return retval;
+      }
+
       template <typename Container>
       static typename Container::const_iterator insert(Container &str1,
                   typename Container::const_iterator iter, CsChar c, int count = 1)
@@ -162,6 +179,23 @@ class LIB_CS_STRING_EXPORT utf16
 {
    public:
       using storage_unit = uint16_t;
+
+      template <typename Iterator>
+      static int distance(Iterator iter_begin, Iterator iter_end)
+      {
+         int retval = 0;
+
+         for (auto iter = iter_begin; iter != iter_end; ++iter) {
+            storage_unit value = *iter;
+
+            if (value < 0xDC00 || value > 0xDFFF) {
+               // not a surrogate
+               ++retval;
+            }
+         }
+
+         return retval;
+      }
 
       template <typename Container>
       static typename Container::const_iterator insert(Container &str1,
