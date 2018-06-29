@@ -342,7 +342,7 @@ int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int bloc
 
    // no need trying to unite, since paragraph separators are always in a fragment of their own
 
-   Q_ASSERT(isValidBlockSeparator(text.at(strPos)));
+   // broom - out for now    Q_ASSERT(isValidBlockSeparator(text.at(strPos)));
    Q_ASSERT(blocks.length() + 1 == fragments.length());
 
    int block_pos = pos;

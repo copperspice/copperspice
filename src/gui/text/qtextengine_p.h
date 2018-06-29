@@ -402,10 +402,12 @@ class Q_GUI_EXPORT QTextEngine
       InLayout,
       LayoutFailed,
    };
+
    struct LayoutData {
       LayoutData(const QString &str, void **stack_memory, int mem_size);
       LayoutData();
       ~LayoutData();
+
       mutable QScriptItemArray items;
       int allocated;
       int available_glyphs;
@@ -464,15 +466,19 @@ class Q_GUI_EXPORT QTextEngine
       const QScriptItem &si = layoutData->items[item];
       int from = si.position;
       item++;
-      return (item < layoutData->items.size() ? layoutData->items[item].position : layoutData->string.length()) - from;
+
+      return (item < layoutData->items.size() ? layoutData->items[item].position : layoutData->string.size()) - from;
    }
+
    int length(const QScriptItem *si) const {
       int end;
+
       if (si + 1 < layoutData->items.constData() + layoutData->items.size()) {
          end = (si + 1)->position;
       } else {
-         end = layoutData->string.length();
+         end = layoutData->string.size();
       }
+
       return end - si->position;
    }
 
