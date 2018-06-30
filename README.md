@@ -1,13 +1,11 @@
 ## CopperSpice
 
 ### Introduction
-CopperSpice is of a set of libraries used to develop cross-platform software applications in C++. This is an open source project
-released under the LGPL V2.1 license.
-
-CopperSpice is a set of C++ libraries derived from the Qt framework. Our motivation for developing CopperSpice was to
+CopperSpice is of a set of C++ libraries used to develop cross-platform software applications. This is an open source project
+released under the LGPL V2.1 license. CopperSpice was derived from the Qt framework. Our motivation for developing CopperSpice was to
 change the core design and leverage modern C++ functionality.
 
-CopperSpice consists of the following libraries:
+The libraies provided in CopperSpice include:
 
  * CsCore
  * CsGui
@@ -22,7 +20,8 @@ CopperSpice consists of the following libraries:
  * CsXml
  * CsXmlPatterns
 
-The following open source BSD licensed libraries are used in the CopperSpice libraries:
+There are also three open source BSD licensed libraries which are used by CopperSpice and available as stand alone libraries
+for anyone developing a C++ application.
 
  * CsSignal
  * CsString
