@@ -2770,7 +2770,6 @@ WEBKIT_INTERNAL_INCLUDES= \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/UnicodeMacrosFromICU.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/brew/UnicodeBrew.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/glib/UnicodeGLib.h \
-	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/icu/UnicodeIcu.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/qt4/UnicodeQt4.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/url/api/ParsedURL.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/url/api/URLString.h \
