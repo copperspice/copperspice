@@ -102,7 +102,9 @@ class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError &error);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError::SslError &error);
 
+#else
 
+class QSslError {};
 
 #endif
 

@@ -22,6 +22,7 @@
 
 //#define QHOSTINFO_DEBUG
 
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <netdb.h>
