@@ -23,10 +23,8 @@
 #ifndef QEASINGCURVE_H
 #define QEASINGCURVE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include <qobject.h>
-
-QT_BEGIN_NAMESPACE
 
 class QEasingCurvePrivate;
 
@@ -85,20 +83,13 @@ class Q_CORE_EXPORT QEasingCurve
 
    friend Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
 
-#ifndef QT_NO_DATASTREAM
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QEasingCurve &);
-#endif
-
 };
 
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QEasingCurve &);
-#endif
-
-QT_END_NAMESPACE
 
 #endif

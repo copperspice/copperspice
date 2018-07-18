@@ -25,9 +25,8 @@
 
 #include <qbytearray.h>
 
-QT_BEGIN_NAMESPACE
-
 class QBitRef;
+
 class Q_CORE_EXPORT QBitArray
 {
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
@@ -39,6 +38,7 @@ class Q_CORE_EXPORT QBitArray
    inline QBitArray() {}
    explicit QBitArray(int size, bool val = false);
    QBitArray(const QBitArray &other) : d(other.d) {}
+
    inline QBitArray &operator=(const QBitArray &other) {
       d = other.d;
       return *this;
@@ -224,15 +224,10 @@ inline QBitRef QBitArray::operator[](uint i)
    return QBitRef(*this, i);
 }
 
-
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &);
-#endif
 
 Q_DECLARE_TYPEINFO(QBitArray, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QBitArray)
 
-QT_END_NAMESPACE
-
-#endif // QBITARRAY_H
+#endif

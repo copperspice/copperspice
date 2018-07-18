@@ -24,8 +24,6 @@
 #include <qdatastream.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 void QSize::transpose()
 {
    int tmp = wd;
@@ -113,8 +111,6 @@ void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
    }
 }
 
-#ifndef QT_NO_DATASTREAM
-
 QDataStream &operator<<(QDataStream &s, const QSizeF &sz)
 {
    s << double(sz.width()) << double(sz.height());
@@ -130,7 +126,6 @@ QDataStream &operator>>(QDataStream &s, QSizeF &sz)
    sz.setHeight(qreal(h));
    return s;
 }
-#endif
 
 QDebug operator<<(QDebug dbg, const QSizeF &s)
 {
@@ -138,4 +133,3 @@ QDebug operator<<(QDebug dbg, const QSizeF &s)
    return dbg.space();
 }
 
-QT_END_NAMESPACE

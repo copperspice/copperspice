@@ -141,11 +141,8 @@ class Q_CORE_EXPORT QDate
    friend class QDateTime;
    friend class QDateTimePrivate;
 
-#ifndef QT_NO_DATASTREAM
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
-#endif
-
 };
 Q_DECLARE_TYPEINFO(QDate, Q_MOVABLE_TYPE);
 
@@ -226,11 +223,8 @@ class Q_CORE_EXPORT QTime
    friend class QDateTime;
    friend class QDateTimePrivate;
 
-#ifndef QT_NO_DATASTREAM
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
-#endif
-
 };
 Q_DECLARE_TYPEINFO(QTime, Q_MOVABLE_TYPE);
 
@@ -336,22 +330,18 @@ class Q_CORE_EXPORT QDateTime
    void detach();
    QExplicitlySharedDataPointer<QDateTimePrivate> d;
 
-#ifndef QT_NO_DATASTREAM
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
-#endif
 };
 
 Q_DECLARE_TYPEINFO(QDateTime, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
-#endif
 
 #if ! defined(QT_NO_DATESTRING)
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDate &);
@@ -359,5 +349,4 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
 #endif
 
-
-#endif // QDATETIME_H
+#endif

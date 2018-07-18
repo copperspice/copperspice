@@ -96,8 +96,6 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
 
 Q_DECLARE_TYPEINFO(QStringList, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
-
 inline QDataStream &operator>>(QDataStream &in, QStringList &list)
 {
    return operator>>(in, static_cast<QList<QString> &>(list));
@@ -108,6 +106,5 @@ inline QDataStream &operator<<(QDataStream &out, const QStringList &list)
    return operator<<(out, static_cast<const QList<QString> &>(list));
 }
 
-#endif
 
 #endif

@@ -23,10 +23,7 @@
 #include <qeasingcurve.h>
 #include <qdebug.h>
 #include <qstring.h>
-
-#ifndef QT_NO_DATASTREAM
-#include <QtCore/qdatastream.h>
-#endif
+#include <qdatastream.h>
 
 #include "../../3rdparty/easing/easing.cpp"
 
@@ -581,17 +578,6 @@ QDebug operator<<(QDebug debug, const QEasingCurve &item)
    return debug;
 }
 
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QEasingCurve &easing)
-    \relates QEasingCurve
-
-    Writes the given \a easing curve to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &stream, const QEasingCurve &easing)
 {
    stream << quint8(easing.d_ptr->type);
@@ -606,16 +592,6 @@ QDataStream &operator<<(QDataStream &stream, const QEasingCurve &easing)
    }
    return stream;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QEasingCurve &easing)
-    \relates QQuaternion
-
-    Reads an easing curve from the given \a stream into the given \a
-    easing curve and returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &stream, QEasingCurve &easing)
 {
@@ -640,5 +616,3 @@ QDataStream &operator>>(QDataStream &stream, QEasingCurve &easing)
    }
    return stream;
 }
-#endif // QT_NO_DATASTREAM
-

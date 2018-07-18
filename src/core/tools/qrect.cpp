@@ -26,8 +26,6 @@
 #include <qmath.h>
 #include <math.h>
 
-QT_BEGIN_NAMESPACE
-
 QRect QRect::normalized() const
 {
    QRect r;
@@ -810,26 +808,6 @@ bool QRectF::intersects(const QRectF &r) const
    return true;
 }
 
-/*!
-    \fn QRect QRectF::toRect() const
-
-    Returns a QRect based on the values of this rectangle.  Note that the
-    coordinates in the returned rectangle are rounded to the nearest integer.
-
-    \sa QRectF(), toAlignedRect()
-*/
-
-/*!
-    \fn QRect QRectF::toAlignedRect() const
-    \since 4.3
-
-    Returns a QRect based on the values of this rectangle that is the
-    smallest possible integer rectangle that completely contains this
-    rectangle.
-
-    \sa toRect()
-*/
-
 QRect QRectF::toAlignedRect() const
 {
    int xmin = int(qFloor(xp));
@@ -838,22 +816,6 @@ QRect QRectF::toAlignedRect() const
    int ymax = int(qCeil(yp + h));
    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
-
-
-/*****************************************************************************
-  QRectF stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QRectF &rectangle)
-
-    \relates QRectF
-
-    Writes the \a rectangle to the \a stream, and returns a reference to the
-    stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &s, const QRectF &r)
 {
@@ -872,14 +834,9 @@ QDataStream &operator>>(QDataStream &s, QRectF &r)
    return s;
 }
 
-#endif // QT_NO_DATASTREAM
-
-
 QDebug operator<<(QDebug dbg, const QRectF &r)
 {
    dbg.nospace() << "QRectF(" << r.x() << ',' << r.y() << ' '
                  << r.width() << 'x' << r.height() << ')';
    return dbg.space();
 }
-
-QT_END_NAMESPACE
