@@ -46,9 +46,6 @@
 
 #ifndef QT_NO_PRINTPREVIEWDIALOG
 
-QT_BEGIN_NAMESPACE
-
-namespace {
 class QPrintPreviewMainWindow : public QMainWindow
 {
  public:
@@ -126,10 +123,6 @@ void LineEdit::handleReturnPressed()
 {
    origText = text();
 }
-
-
-} // anonymous namespace
-
 
 class QPrintPreviewDialogPrivate : public QDialogPrivate
 {
@@ -797,8 +790,6 @@ void QPrintPreviewDialog::_q_zoomFactorChanged()
    Q_D(QPrintPreviewDialog);
    d->_q_zoomFactorChanged();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTPREVIEWDIALOG
 

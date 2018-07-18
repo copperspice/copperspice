@@ -24,18 +24,15 @@
 #include <qwidget_p.h>
 #include <qprinter_p.h>
 
-#include <QtCore/qmath.h>
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qgraphicsitem.h>
-#include <QtGui/qgraphicsview.h>
-#include <QtGui/qscrollbar.h>
-#include <QtGui/qstyleoption.h>
+#include <qmath.h>
+#include <qboxlayout.h>
+#include <qgraphicsitem.h>
+#include <qgraphicsview.h>
+#include <qscrollbar.h>
+#include <qstyleoption.h>
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
 
-QT_BEGIN_NAMESPACE
-
-namespace {
 class PageItem : public QGraphicsItem
 {
  public:
@@ -141,8 +138,6 @@ class GraphicsView : public QGraphicsView
       emit resized();
    }
 };
-
-} // anonymous namespace
 
 class QPrintPreviewWidgetPrivate : public QWidgetPrivate
 {
@@ -428,80 +423,6 @@ void QPrintPreviewWidgetPrivate::setZoomFactor(qreal _zoomFactor)
                        zoomFactor * (dpi_y / float(printer_dpi_y)));
 }
 
-///////////////////////////////////////
-
-/*!
-    \class QPrintPreviewWidget
-    \since 4.4
-
-    \brief The QPrintPreviewWidget class provides a widget for
-    previewing page layouts for printer output.
-
-    \ingroup printing
-
-    QPrintPreviewDialog uses a QPrintPreviewWidget internally, and the
-    purpose of QPrintPreviewWidget is to make it possible to embed the
-    preview into other widgets. It also makes it possible to build a different
-    user interface around it than the default one provided with QPrintPreviewDialog.
-
-    Using QPrintPreviewWidget is straightforward:
-
-    \list 1
-    \o Create the QPrintPreviewWidget
-
-    Construct the QPrintPreviewWidget either by passing in an
-    existing QPrinter object, or have QPrintPreviewWidget create a
-    default constructed QPrinter object for you.
-
-    \o Connect the paintRequested() signal to a slot.
-
-    When the widget needs to generate a set of preview pages, a
-    paintRequested() signal will be emitted from the widget. Connect a
-    slot to this signal, and draw onto the QPrinter passed in as a
-    signal parameter. Call QPrinter::newPage(), to start a new
-    page in the preview.
-
-    \endlist
-
-    \sa QPrinter, QPrintDialog, QPageSetupDialog, QPrintPreviewDialog
-*/
-
-
-/*!
-    \enum QPrintPreviewWidget::ViewMode
-
-    This enum is used to describe the view mode of the preview widget.
-
-    \value SinglePageView   A mode where single pages in the preview
-                            is viewed.
-
-    \value FacingPagesView  A mode where the facing pages in the preview
-                            is viewed.
-
-    \value AllPagesView     A view mode where all the pages in the preview
-                            is viewed.
-*/
-
-/*!
-    \enum QPrintPreviewWidget::ZoomMode
-
-    This enum is used to describe zoom mode of the preview widget.
-
-    \value CustomZoom  The zoom is set to a custom zoom value.
-
-    \value FitToWidth  This mode fits the current page to the width of the view.
-
-    \value FitInView   This mode fits the current page inside the view.
-
-*/
-
-/*!
-    Constructs a QPrintPreviewWidget based on \a printer and with \a
-    parent as the parent widget. The widget flags \a flags are passed on
-    to the QWidget constructor.
-
-    \sa QWidget::setWindowFlags()
-*/
 QPrintPreviewWidget::QPrintPreviewWidget(QPrinter *printer, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
 {
@@ -511,13 +432,6 @@ QPrintPreviewWidget::QPrintPreviewWidget(QPrinter *printer, QWidget *parent, Qt:
    d->init();
 }
 
-/*!
-    \overload
-
-    This will cause QPrintPreviewWidget to create an internal, default
-    constructed QPrinter object, which will be used to generate the
-    preview.
-*/
 QPrintPreviewWidget::QPrintPreviewWidget(QWidget *parent, Qt::WindowFlags flags)
    : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
 {
@@ -659,10 +573,6 @@ int QPrintPreviewWidget::numPages() const
    return d->pages.size();
 }
 
-/*!
-    \since 4.6
-    Returns the number of pages in the preview.
-*/
 int QPrintPreviewWidget::pageCount() const
 {
    Q_D(const QPrintPreviewWidget);
@@ -706,11 +616,6 @@ void QPrintPreviewWidget::fitInView()
    setZoomMode(FitInView);
 }
 
-/*!
-    Sets the zoom mode to \a zoomMode. The default zoom mode is FitInView.
-
-    \sa zoomMode(), viewMode(), setViewMode()
-*/
 void QPrintPreviewWidget::setZoomMode(QPrintPreviewWidget::ZoomMode zoomMode)
 {
    Q_D(QPrintPreviewWidget);
@@ -723,11 +628,6 @@ void QPrintPreviewWidget::setZoomMode(QPrintPreviewWidget::ZoomMode zoomMode)
    }
 }
 
-/*!
-    Returns the current zoom mode.
-
-    \sa setZoomMode(), viewMode(), setViewMode()
-*/
 QPrintPreviewWidget::ZoomMode QPrintPreviewWidget::zoomMode() const
 {
    Q_D(const QPrintPreviewWidget);
@@ -779,11 +679,6 @@ void QPrintPreviewWidget::setAllPagesViewMode()
    setViewMode(AllPagesView);
 }
 
-
-/*!
-    This function updates the preview, which causes the
-    paintRequested() signal to be emitted.
-*/
 void QPrintPreviewWidget::updatePreview()
 {
    Q_D(QPrintPreviewWidget);
@@ -814,8 +709,5 @@ void QPrintPreviewWidget::_q_updateCurrentPage()
    Q_D(QPrintPreviewWidget);
    d->_q_updateCurrentPage();
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTPREVIEWWIDGET
