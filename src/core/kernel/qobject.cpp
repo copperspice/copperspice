@@ -86,10 +86,9 @@ QObject::~QObject()
 
    } catch (...) {
       // all signal/slots connections are still in place
-      // quit now, as the app will crash soon
+      // program will crash soon
 
       qWarning("QObject:~QObject() Detected an unexpected exception while emitting destroyed()");
-      throw;
    }
 
    // this line needs to be located after the emit destroyed

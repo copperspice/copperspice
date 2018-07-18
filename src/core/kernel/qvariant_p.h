@@ -68,10 +68,10 @@ template <class T, typename = typename std::enable_if<sizeof(T) <= sizeof(QVaria
 inline void v_construct(QVariant::Private *x, const void *copy, T * = nullptr)
 {
    if (copy) {
-      new (&x->data.ptr) T(*static_cast<const T *>(copy));
+      new (&x->data) T(*static_cast<const T *>(copy));
 
    } else {
-      new (&x->data.ptr) T;
+      new (&x->data) T;
 
    }
 }
@@ -86,7 +86,7 @@ inline void v_construct(QVariant::Private *x, const T &t)
 template <class T, typename = typename std::enable_if<sizeof(T) <= sizeof(QVariant::Private::Data)>::type, typename = void>
 inline void v_construct(QVariant::Private *x, const T &t)
 {
-   new (&x->data.ptr) T(t);
+   new (&x->data) T(t);
 }
 
 // deletes the internal structures

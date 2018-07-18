@@ -34,8 +34,8 @@
 void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
                                const QHostAddress &nameserver, QDnsLookupReply *reply)
 {
-   // Perform DNS query.
-   PDNS_RECORD dns_records   = 0;
+   // Perform DNS query
+   _DnsRecordA *dns_records  = nullptr;
    const QString requestName = QString::fromUtf8(name.data(), name.size());
 
    IP4_ARRAY srvList;
@@ -44,14 +44,14 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
 
    if (!nameserver.isNull()) {
       if (nameserver.protocol() == QAbstractSocket::IPv4Protocol) {
-         // The below code is referenced from: http://support.microsoft.com/kb/831226
+         // code below is referenced from: http://support.microsoft.com/kb/831226
          srvList.AddrCount = 1;
          srvList.AddrArray[0] = htonl(nameserver.toIPv4Address());
 
       } else if (nameserver.protocol() == QAbstractSocket::IPv6Protocol) {
-         // For supoprting IPv6 nameserver addresses, we'll need to switch
-         // from DnsQuey() to DnsQueryEx() as it supports passing an IPv6
-         // address in the nameserver list
+         // For supoprting IPv6 nameserver addresses, we will need to switch from DnsQuey() to DnsQueryEx()
+         // as it supports passing an IPv6 address in the nameserver list
+
          qWarning("%s", QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
          reply->error = QDnsLookup::ResolverError;
          reply->errorString = tr(QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
@@ -93,7 +93,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
    }
 
    // Extract results.
-   for (PDNS_RECORD ptr = dns_records; ptr != NULL; ptr = ptr->pNext) {
+   for (_DnsRecordA *ptr = dns_records; ptr != NULL; ptr = ptr->pNext) {
 
       const QString name = QUrl::fromAce(QString::fromUtf8(reinterpret_cast<const char *>(ptr->pName)));
 
@@ -119,14 +119,14 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
          record.d->name = name;
          record.d->timeToLive = ptr->dwTtl;
 
-         record.d->value = QUrl::fromAce(QString::fromStdWString(std::wstring(ptr->Data.Cname.pNameHost)));
+         record.d->value = QUrl::fromAce(QString::fromUtf8(ptr->Data.Cname.pNameHost));
 
          reply->canonicalNameRecords.append(record);
 
       } else if (ptr->wType == QDnsLookup::MX) {
          QDnsMailExchangeRecord record;
          record.d->name = name;
-         record.d->exchange = QUrl::fromAce(QString::fromStdWString(std::wstring(ptr->Data.Mx.pNameExchange)));
+         record.d->exchange = QUrl::fromAce(QString::fromUtf8(ptr->Data.Mx.pNameExchange));
          record.d->preference = ptr->Data.Mx.wPreference;
          record.d->timeToLive = ptr->dwTtl;
          reply->mailExchangeRecords.append(record);
@@ -135,20 +135,20 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
          QDnsDomainNameRecord record;
          record.d->name = name;
          record.d->timeToLive = ptr->dwTtl;
-         record.d->value = QUrl::fromAce(QString::fromStdWString(std::wstring(ptr->Data.Ns.pNameHost)));
+         record.d->value = QUrl::fromAce(QString::fromUtf8(ptr->Data.Ns.pNameHost));
          reply->nameServerRecords.append(record);
 
       } else if (ptr->wType == QDnsLookup::PTR) {
          QDnsDomainNameRecord record;
          record.d->name = name;
          record.d->timeToLive = ptr->dwTtl;
-         record.d->value = QUrl::fromAce(QString::fromStdWString(std::wstring(ptr->Data.Ptr.pNameHost)));
+         record.d->value = QUrl::fromAce(QString::fromUtf8(ptr->Data.Ptr.pNameHost));
          reply->pointerRecords.append(record);
 
       } else if (ptr->wType == QDnsLookup::SRV) {
          QDnsServiceRecord record;
          record.d->name = name;
-         record.d->target = QUrl::fromAce(QString::fromStdWString(std::wstring(ptr->Data.Srv.pNameTarget)));
+         record.d->target = QUrl::fromAce(QString::fromUtf8(ptr->Data.Srv.pNameTarget));
          record.d->port = ptr->Data.Srv.wPort;
          record.d->priority = ptr->Data.Srv.wPriority;
          record.d->timeToLive = ptr->dwTtl;
@@ -161,7 +161,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
          record.d->timeToLive = ptr->dwTtl;
 
          for (unsigned int i = 0; i < ptr->Data.Txt.dwStringCount; ++i) {
-            record.d->values << QString::fromStdWString(std::wstring(ptr->Data.Txt.pStringArray[i])).toLatin1();
+            record.d->values << QString::fromUtf8(ptr->Data.Txt.pStringArray[i]).toLatin1();
          }
          reply->textRecords.append(record);
       }
