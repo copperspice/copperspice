@@ -1706,31 +1706,36 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const T &str, 
 #endif
 
    // str is a const char *
-   size_type stringLen = this->size();
+   const_iterator iter_begin = cbegin();
+   size_type i;
+
+   for (i = 0; i < indexStart && iter_begin != cend(); ++i)  {
+      ++iter_begin;
+   }
 
    if (str == nullptr || *str == '\0') {
 
-      if (indexStart > stringLen) {
+      if (i != indexStart) {
          return -1;
       } else {
          return indexStart;
       }
    }
 
-   if (indexStart >= stringLen) {
+   if (iter_begin == cend()) {
+      // indexStart > length
       return -1;
    }
 
    size_type retval = indexStart;
-   auto iter        = begin() + indexStart;
-   auto ch          = str[0];
+   auto ch  = str[0];
 
-   while (iter != end())   {
+   while (iter_begin != end())   {
 
-      if (*iter == ch)  {
+      if (*iter_begin == ch)  {
 
          size_type count   = 1;
-         auto text_iter    = iter + 1;
+         auto text_iter    = iter_begin + 1;
          auto pattern_iter = str  + 1;
 
          while (text_iter != end() && *pattern_iter != '\0' && count < size)  {
@@ -1752,7 +1757,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const T &str, 
          }
       }
 
-      ++iter;
+      ++iter_begin;
       ++retval;
    }
 
