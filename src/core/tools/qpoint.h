@@ -34,26 +34,26 @@ class Q_CORE_EXPORT QPoint
    QPoint();
    QPoint(int xpos, int ypos);
 
-   bool isNull() const;
+   inline bool isNull() const;
 
-   int x() const;
-   int y() const;
-   void setX(int x);
-   void setY(int y);
+   inline int x() const;
+   inline int y() const;
+   inline void setX(int x);
+   inline void setY(int y);
 
    int manhattanLength() const;
 
-   int &rx();
-   int &ry();
+   inline int &rx();
+   inline int &ry();
 
-   QPoint &operator+=(const QPoint &p);
-   QPoint &operator-=(const QPoint &p);
+   inline QPoint &operator+=(const QPoint &p);
+   inline QPoint &operator-=(const QPoint &p);
 
-   QPoint &operator*=(float c);
-   QPoint &operator*=(double c);
-   QPoint &operator*=(int c);
+   inline QPoint &operator*=(float c);
+   inline QPoint &operator*=(double c);
+   inline QPoint &operator*=(int c);
 
-   QPoint &operator/=(qreal c);
+   inline QPoint &operator/=(qreal c);
 
    friend inline bool operator==(const QPoint &, const QPoint &);
    friend inline bool operator!=(const QPoint &, const QPoint &);
@@ -242,20 +242,20 @@ class Q_CORE_EXPORT QPointF
 
    qreal manhattanLength() const;
 
-   bool isNull() const;
+   inline bool isNull() const;
 
-   qreal x() const;
-   qreal y() const;
-   void setX(qreal x);
-   void setY(qreal y);
+   inline qreal x() const;
+   inline qreal y() const;
+   inline void setX(qreal x);
+   inline void setY(qreal y);
 
-   qreal &rx();
-   qreal &ry();
+   inline qreal &rx();
+   inline qreal &ry();
 
-   QPointF &operator+=(const QPointF &p);
-   QPointF &operator-=(const QPointF &p);
-   QPointF &operator*=(qreal c);
-   QPointF &operator/=(qreal c);
+   inline QPointF &operator+=(const QPointF &p);
+   inline QPointF &operator-=(const QPointF &p);
+   inline QPointF &operator*=(qreal c);
+   inline QPointF &operator/=(qreal c);
 
    friend inline bool operator==(const QPointF &, const QPointF &);
    friend inline bool operator!=(const QPointF &, const QPointF &);
@@ -266,7 +266,7 @@ class Q_CORE_EXPORT QPointF
    friend inline const QPointF operator-(const QPointF &);
    friend inline const QPointF operator/(const QPointF &, qreal);
 
-   QPoint toPoint() const;
+   inline QPoint toPoint() const;
 
  private:
    friend class QMatrix;

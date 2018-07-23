@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QColor
    QColor(const QColor &color);
    QColor(Spec spec);
 
-   bool isValid() const;
+   inline bool isValid() const;
 
    QString name() const;
    void setNamedColor(const QString &name);
@@ -163,9 +163,9 @@ class Q_GUI_EXPORT QColor
    static QColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
    QColor light(int f = 150) const;
-   QColor lighter(int f = 150) const;
+   inline QColor lighter(int f = 150) const;
    QColor dark(int f = 200) const;
-   QColor darker(int f = 200) const;
+   inline QColor darker(int f = 200) const;
 
    QColor &operator=(const QColor &);
    QColor &operator=(Qt::GlobalColor color);

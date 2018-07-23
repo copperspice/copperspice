@@ -98,7 +98,7 @@ class Q_CORE_EXPORT QDataStream
    QDataStream(const QByteArray &);
    virtual ~QDataStream();
 
-   QIODevice *device() const;
+   inline QIODevice *device() const;
    void setDevice(QIODevice *);
    void unsetDevice();
 
@@ -111,20 +111,20 @@ class Q_CORE_EXPORT QDataStream
    FloatingPointPrecision floatingPointPrecision() const;
    void setFloatingPointPrecision(FloatingPointPrecision precision);
 
-   ByteOrder byteOrder() const;
+   inline ByteOrder byteOrder() const;
    void setByteOrder(ByteOrder);
 
-   int version() const;
-   void setVersion(int);
+   inline int version() const;
+   inline void setVersion(int);
 
    QDataStream &operator>>(qint8 &i);
-   QDataStream &operator>>(quint8 &i);
+   inline QDataStream &operator>>(quint8 &i);
    QDataStream &operator>>(qint16 &i);
-   QDataStream &operator>>(quint16 &i);
+   inline QDataStream &operator>>(quint16 &i);
    QDataStream &operator>>(qint32 &i);
-   QDataStream &operator>>(quint32 &i);
+   inline QDataStream &operator>>(quint32 &i);
    QDataStream &operator>>(qint64 &i);
-   QDataStream &operator>>(quint64 &i);
+   inline QDataStream &operator>>(quint64 &i);
    QDataStream &operator>>(bool &i);
    QDataStream &operator>>(float &f);
    QDataStream &operator>>(double &f);
@@ -133,13 +133,13 @@ class Q_CORE_EXPORT QDataStream
    QDataStream &operator>>(char *&str);
 
    QDataStream &operator<<(qint8 i);
-   QDataStream &operator<<(quint8 i);
+   inline QDataStream &operator<<(quint8 i);
    QDataStream &operator<<(qint16 i);
-   QDataStream &operator<<(quint16 i);
+   inline QDataStream &operator<<(quint16 i);
    QDataStream &operator<<(qint32 i);
-   QDataStream &operator<<(quint32 i);
+   inline QDataStream &operator<<(quint32 i);
    QDataStream &operator<<(qint64 i);
-   QDataStream &operator<<(quint64 i);
+   inline QDataStream &operator<<(quint64 i);
    QDataStream &operator<<(bool i);
    QDataStream &operator<<(float f);
    QDataStream &operator<<(double f);

@@ -52,7 +52,7 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    operator QVariant() const;
 
    void translate(int dx, int dy);
-   void translate(const QPoint &offset);
+   inline void translate(const QPoint &offset);
 
    QPolygon translated(int dx, int dy) const;
    inline QPolygon translated(const QPoint &offset) const;
@@ -60,9 +60,9 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QRect boundingRect() const;
 
    void point(int i, int *x, int *y) const;
-   QPoint point(int i) const;
-   void setPoint(int index, int x, int y);
-   void setPoint(int index, const QPoint &p);
+   inline QPoint point(int i) const;
+   inline void setPoint(int index, int x, int y);
+   inline void setPoint(int index, const QPoint &p);
    void setPoints(int nPoints, const int *points);
    void setPoints(int nPoints, int firstx, int firsty, ...);
    void putPoints(int index, int nPoints, const int *points);

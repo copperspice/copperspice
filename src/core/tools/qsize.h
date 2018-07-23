@@ -35,29 +35,29 @@ class Q_CORE_EXPORT QSize
    QSize();
    QSize(int w, int h);
 
-   bool isNull() const;
-   bool isEmpty() const;
-   bool isValid() const;
+   inline bool isNull() const;
+   inline bool isEmpty() const;
+   inline bool isValid() const;
 
-   int width() const;
-   int height() const;
-   void setWidth(int w);
-   void setHeight(int h);
+   inline int width() const;
+   inline int height() const;
+   inline void setWidth(int w);
+   inline void setHeight(int h);
    void transpose();
 
-   void scale(int w, int h, Qt::AspectRatioMode mode);
+   inline void scale(int w, int h, Qt::AspectRatioMode mode);
    void scale(const QSize &s, Qt::AspectRatioMode mode);
 
-   QSize expandedTo(const QSize &) const;
-   QSize boundedTo(const QSize &) const;
+   inline QSize expandedTo(const QSize &) const;
+   inline QSize boundedTo(const QSize &) const;
 
-   int &rwidth();
-   int &rheight();
+   inline int &rwidth();
+   inline int &rheight();
 
-   QSize &operator+=(const QSize &);
-   QSize &operator-=(const QSize &);
-   QSize &operator*=(qreal c);
-   QSize &operator/=(qreal c);
+   inline QSize &operator+=(const QSize &);
+   inline QSize &operator-=(const QSize &);
+   inline QSize &operator*=(qreal c);
+   inline QSize &operator/=(qreal c);
 
    friend inline bool operator==(const QSize &, const QSize &);
    friend inline bool operator!=(const QSize &, const QSize &);
@@ -223,29 +223,29 @@ class Q_CORE_EXPORT QSizeF
    QSizeF(const QSize &sz);
    QSizeF(qreal w, qreal h);
 
-   bool isNull() const;
-   bool isEmpty() const;
-   bool isValid() const;
+   inline bool isNull() const;
+   inline bool isEmpty() const;
+   inline bool isValid() const;
 
-   qreal width() const;
-   qreal height() const;
-   void setWidth(qreal w);
-   void setHeight(qreal h);
+   inline qreal width() const;
+   inline qreal height() const;
+   inline void setWidth(qreal w);
+   inline void setHeight(qreal h);
    void transpose();
 
-   void scale(qreal w, qreal h, Qt::AspectRatioMode mode);
+   inline void scale(qreal w, qreal h, Qt::AspectRatioMode mode);
    void scale(const QSizeF &s, Qt::AspectRatioMode mode);
 
-   QSizeF expandedTo(const QSizeF &) const;
-   QSizeF boundedTo(const QSizeF &) const;
+   inline QSizeF expandedTo(const QSizeF &) const;
+   inline QSizeF boundedTo(const QSizeF &) const;
 
-   qreal &rwidth();
-   qreal &rheight();
+   inline qreal &rwidth();
+   inline qreal &rheight();
 
-   QSizeF &operator+=(const QSizeF &);
-   QSizeF &operator-=(const QSizeF &);
-   QSizeF &operator*=(qreal c);
-   QSizeF &operator/=(qreal c);
+   inline QSizeF &operator+=(const QSizeF &);
+   inline QSizeF &operator-=(const QSizeF &);
+   inline QSizeF &operator*=(qreal c);
+   inline QSizeF &operator/=(qreal c);
 
    friend inline bool operator==(const QSizeF &, const QSizeF &);
    friend inline bool operator!=(const QSizeF &, const QSizeF &);
@@ -262,7 +262,6 @@ class Q_CORE_EXPORT QSizeF
    qreal ht;
 };
 Q_DECLARE_TYPEINFO(QSizeF, Q_MOVABLE_TYPE);
-
 
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSizeF &);

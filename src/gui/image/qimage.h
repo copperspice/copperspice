@@ -23,14 +23,12 @@
 #ifndef QIMAGE_H
 #define QIMAGE_H
 
-#include <QtGui/qtransform.h>
-#include <QtGui/qpaintdevice.h>
-#include <QtGui/qrgb.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qstring.h>
-
-QT_BEGIN_NAMESPACE
+#include <qtransform.h>
+#include <qpaintdevice.h>
+#include <qrgb.h>
+#include <qbytearray.h>
+#include <qrect.h>
+#include <qstring.h>
 
 class QIODevice;
 class QStringList;
@@ -184,16 +182,16 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    int bytesPerLine() const;
 
    bool valid(int x, int y) const;
-   bool valid(const QPoint &pt) const;
+   inline bool valid(const QPoint &pt) const;
 
    int pixelIndex(int x, int y) const;
-   int pixelIndex(const QPoint &pt) const;
+   inline int pixelIndex(const QPoint &pt) const;
 
    QRgb pixel(int x, int y) const;
-   QRgb pixel(const QPoint &pt) const;
+   inline QRgb pixel(const QPoint &pt) const;
 
    void setPixel(int x, int y, uint index_or_rgb);
-   void setPixel(const QPoint &pt, uint index_or_rgb);
+   inline void setPixel(const QPoint &pt, uint index_or_rgb);
 
    QVector<QRgb> colorTable() const;
    void setColorTable(const QVector<QRgb> colors);
@@ -230,7 +228,6 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QImage mirrored(bool horizontally = false, bool vertically = true) const;
    QImage rgbSwapped() const;
    void invertPixels(InvertMode = InvertRgb);
-
 
    bool load(QIODevice *device, const char *format);
    bool load(const QString &fileName, const char *format = 0);
@@ -272,6 +269,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QT_DEPRECATED QString text(const QImageTextKeyLang &) const;
    QT_DEPRECATED void setText(const char *key, const char *lang, const QString &);
 #endif
+
 #endif
 
    typedef QImageData *DataPtr;
@@ -297,8 +295,6 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 Q_DECLARE_SHARED(QImage)
 Q_DECLARE_TYPEINFO(QImage, Q_MOVABLE_TYPE);
 
-// Inline functions...
-
 inline bool QImage::valid(const QPoint &pt) const
 {
    return valid(pt.x(), pt.y());
@@ -316,13 +312,9 @@ inline void QImage::setPixel(const QPoint &pt, uint index_or_rgb)
    setPixel(pt.x(), pt.y(), index_or_rgb);
 }
 
-// QImage stream functions
-
 #if !defined(QT_NO_DATASTREAM)
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QImage &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QImage &);
 #endif
 
-QT_END_NAMESPACE
-
-#endif // QIMAGE_H
+#endif

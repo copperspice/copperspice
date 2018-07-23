@@ -23,8 +23,8 @@
 #ifndef QPAINTDEVICE_H
 #define QPAINTDEVICE_H
 
-#include <QtGui/qwindowdefs.h>
-#include <QtCore/qrect.h>
+#include <qwindowdefs.h>
+#include <qrect.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -52,8 +52,8 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
 
    virtual ~QPaintDevice();
 
-   virtual int devType() const;
-   bool paintingActive() const;
+   inline virtual int devType() const;
+   inline bool paintingActive() const;
    virtual QPaintEngine *paintEngine() const = 0;
 
 #if defined(Q_WS_QWS)
