@@ -150,10 +150,8 @@ Q_DECLARE_TYPEINFO(QRect, Q_MOVABLE_TYPE);
 inline bool operator==(const QRect &, const QRect &);
 inline bool operator!=(const QRect &, const QRect &);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QRect &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRect &);
-#endif
 
 
 inline QRect::QRect(int aleft, int atop, int awidth, int aheight)
@@ -655,18 +653,8 @@ Q_DECLARE_TYPEINFO(QRectF, Q_MOVABLE_TYPE);
 inline bool operator==(const QRectF &, const QRectF &);
 inline bool operator!=(const QRectF &, const QRectF &);
 
-
-/*****************************************************************************
-  QRectF stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QRectF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRectF &);
-#endif
-
-/*****************************************************************************
-  QRectF inline member functions
- *****************************************************************************/
 
 inline QRectF::QRectF(qreal aleft, qreal atop, qreal awidth, qreal aheight)
    : xp(aleft), yp(atop), w(awidth), h(aheight)

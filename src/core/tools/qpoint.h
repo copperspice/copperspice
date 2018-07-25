@@ -77,10 +77,8 @@ class Q_CORE_EXPORT QPoint
 
 Q_DECLARE_TYPEINFO(QPoint, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPoint &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPoint &);
-#endif
 
 inline QPoint::QPoint()
 {
@@ -278,10 +276,8 @@ class Q_CORE_EXPORT QPointF
 
 Q_DECLARE_TYPEINFO(QPointF, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPointF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPointF &);
-#endif
 
 inline QPointF::QPointF() : xp(0), yp(0) { }
 

@@ -239,8 +239,6 @@ inline int qMetaTypeId_Query()
    return csTypeQuery<T>::query();
 }
 
-#ifndef QT_NO_DATASTREAM
-
 template <typename T>
 void qRegisterMetaTypeStreamOperators(const QString &typeName, T * = nullptr )
 {
@@ -251,7 +249,8 @@ void qRegisterMetaTypeStreamOperators(const QString &typeName, T * = nullptr )
    LoadPtr lptr = qMetaTypeLoadHelper<T>;
 
    qRegisterMetaType<T>(typeName);
-   QMetaType::registerStreamOperators(typeName, reinterpret_cast<QMetaType::SaveOperator>(sptr), reinterpret_cast<QMetaType::LoadOperator>(lptr));
+   QMetaType::registerStreamOperators(typeName, reinterpret_cast<QMetaType::SaveOperator>(sptr),
+                  reinterpret_cast<QMetaType::LoadOperator>(lptr));
 }
 
 template <typename T>
@@ -264,11 +263,11 @@ inline int qRegisterMetaTypeStreamOperators()
    LoadPtr lptr = qMetaTypeLoadHelper<T>;
 
    int id = qMetaTypeId<T>();
-   QMetaType::registerStreamOperators(id, reinterpret_cast<QMetaType::SaveOperator>(sptr), reinterpret_cast<QMetaType::LoadOperator>(lptr));
+   QMetaType::registerStreamOperators(id, reinterpret_cast<QMetaType::SaveOperator>(sptr),
+                  reinterpret_cast<QMetaType::LoadOperator>(lptr));
 
    return id;
 }
-#endif
 
 #define Q_DECLARE_METATYPE(TYPE)                                      \
    template <>                                                        \

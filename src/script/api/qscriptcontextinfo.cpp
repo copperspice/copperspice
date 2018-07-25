@@ -462,14 +462,6 @@ bool QScriptContextInfo::operator!=(const QScriptContextInfo &other) const
    return !(*this == other);
 }
 
-#ifndef QT_NO_DATASTREAM
-/*!
-  \fn QDataStream &operator<<(QDataStream &stream, const QScriptContextInfo &info)
-  \since 4.4
-  \relates QScriptContextInfo
-
-  Writes the given \a info to the specified \a stream.
-*/
 QDataStream &operator<<(QDataStream &out, const QScriptContextInfo &info)
 {
    out << info.scriptId();
@@ -488,14 +480,6 @@ QDataStream &operator<<(QDataStream &out, const QScriptContextInfo &info)
    return out;
 }
 
-/*!
-  \fn QDataStream &operator>>(QDataStream &stream, QScriptContextInfo &info)
-  \since 4.4
-  \relates QScriptContextInfo
-
-  Reads a QScriptContextInfo from the specified \a stream into the
-  given \a info.
-*/
 Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &in, QScriptContextInfo &info)
 {
    if (!info.d_ptr) {
@@ -534,6 +518,3 @@ Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &in, QScriptContextInfo &inf
 
    return in;
 }
-#endif
-
-

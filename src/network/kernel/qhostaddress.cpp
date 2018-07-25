@@ -34,10 +34,7 @@
 #include <qplatformdefs.h>
 #include <qstringlist.h>
 #include <qendian.h>
-
-#ifndef QT_NO_DATASTREAM
 #include <qdatastream.h>
-#endif
 
 #ifdef __SSE2__
 #  include <qsimd_p.h>
@@ -46,8 +43,6 @@
 #ifdef QT_LINUXBASE
 #  include <arpa/inet.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 #define QT_ENSURE_PARSED(a) \
     do { \
@@ -836,8 +831,6 @@ uint qHash(const QHostAddress &key, uint seed)
    return qHashBits(key.d->a6.c, 16, seed);
 }
 
-#ifndef QT_NO_DATASTREAM
-
 QDataStream &operator<<(QDataStream &out, const QHostAddress &address)
 {
    qint8 prot;
@@ -901,7 +894,3 @@ QDataStream &operator>>(QDataStream &in, QHostAddress &address)
    }
    return in;
 }
-
-#endif //QT_NO_DATASTREAM
-
-QT_END_NAMESPACE

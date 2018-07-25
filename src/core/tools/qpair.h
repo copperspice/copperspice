@@ -24,7 +24,6 @@
 #define QPAIR_H
 
 #include <utility>
-
 #include <qdatastream.h>
 
 template <class T1, class T2>
@@ -36,7 +35,6 @@ QPair<T1, T2> qMakePair(const T1 &x, const T2 &y)
    return QPair<T1, T2>(x, y);
 }
 
-#ifndef QT_NO_DATASTREAM
 template <class T1, class T2>
 inline QDataStream &operator>>(QDataStream &s, QPair<T1, T2> &p)
 {
@@ -50,6 +48,5 @@ inline QDataStream &operator<<(QDataStream &s, const QPair<T1, T2> &p)
    s << p.first << p.second;
    return s;
 }
-#endif
 
 #endif

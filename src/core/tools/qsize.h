@@ -73,10 +73,8 @@ class Q_CORE_EXPORT QSize
 };
 Q_DECLARE_TYPEINFO(QSize, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
-#endif
 
 inline QSize::QSize()
 {
@@ -263,10 +261,8 @@ class Q_CORE_EXPORT QSizeF
 };
 Q_DECLARE_TYPEINFO(QSizeF, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSizeF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSizeF &);
-#endif
 
 inline QSizeF::QSizeF()
 {

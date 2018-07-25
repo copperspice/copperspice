@@ -2000,8 +2000,6 @@ QVariant::Type QVariant::nameToType(const QString8 &name)
    return Type(metaType);
 }
 
-#ifndef QT_NO_DATASTREAM
-
 enum { MapFromThreeCount = 36 };
 
 static const ushort map_from_three[MapFromThreeCount] = {
@@ -2138,9 +2136,6 @@ QDataStream &operator<<(QDataStream &s, const QVariant::Type p)
 
    return s;
 }
-
-#endif //QT_NO_DATASTREAM
-
 
 template <typename T>
 inline T qVariantToHelper(const QVariant::Private &d, QVariant::Type t, const QVariant::Handler *handler, T * = nullptr)

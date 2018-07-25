@@ -27,12 +27,7 @@
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_DATASTREAM
 class QDataStream;
-#endif
-
 class QScriptContext;
 class QScriptContextInfoPrivate;
 
@@ -40,10 +35,8 @@ class Q_SCRIPT_EXPORT QScriptContextInfo
 {
 
  public:
-#ifndef QT_NO_DATASTREAM
    friend Q_SCRIPT_EXPORT QDataStream &operator<<(QDataStream &, const QScriptContextInfo &);
    friend Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &, QScriptContextInfo &);
-#endif
 
    enum FunctionType {
       ScriptFunction,
@@ -90,11 +83,7 @@ class Q_SCRIPT_EXPORT QScriptContextInfo
 
 typedef QList<QScriptContextInfo> QScriptContextInfoList;
 
-#ifndef QT_NO_DATASTREAM
 Q_SCRIPT_EXPORT QDataStream &operator<<(QDataStream &, const QScriptContextInfo &);
 Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &, QScriptContextInfo &);
-#endif
-
-QT_END_NAMESPACE
 
 #endif

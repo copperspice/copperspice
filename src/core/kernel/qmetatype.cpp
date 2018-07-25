@@ -201,26 +201,16 @@ class QCustomTypeInfo
 {
  public:
 
-#ifndef QT_NO_DATASTREAM
    QCustomTypeInfo()
       : typeName(), constr(0), destr(0), saveOp(0), loadOp(0) {
    }
-
-#else
-   QCustomTypeInfo()
-      : typeName(), constr(0), destr(0) {
-   }
-
-#endif
 
    QString8 typeName;
    QMetaType::Constructor constr;
    QMetaType::Destructor destr;
 
-#ifndef QT_NO_DATASTREAM
    QMetaType::SaveOperator saveOp;
    QMetaType::LoadOperator loadOp;
-#endif
 
    int alias;
 };
@@ -228,8 +218,6 @@ class QCustomTypeInfo
 Q_DECLARE_TYPEINFO(QCustomTypeInfo, Q_MOVABLE_TYPE);
 Q_GLOBAL_STATIC(QVector<QCustomTypeInfo>, customTypes)
 Q_GLOBAL_STATIC(QReadWriteLock, customTypesLock)
-
-#ifndef QT_NO_DATASTREAM
 
 // internal
 void QMetaType::registerStreamOperators(const NS::QString8 &typeName, SaveOperator saveOp, LoadOperator loadOp)
@@ -263,9 +251,6 @@ void QMetaType::registerStreamOperators(int idx, SaveOperator saveOp, LoadOperat
    inf.saveOp = saveOp;
    inf.loadOp = loadOp;
 }
-
-#endif
-
 
 // internal
 static inline int qMetaTypeStaticType(const NS::QString8 &typeName)
@@ -960,9 +945,6 @@ const NS::QString8 &QMetaType::typeName(int typeId)
    return retval;
 }
 
-// **
-#ifndef QT_NO_DATASTREAM
-
 bool QMetaType::save(QDataStream &stream, int type, const void *data)
 {
    if (! data || !isRegistered(type)) {
@@ -1436,6 +1418,3 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
 
    return true;
 }
-
-#endif
-

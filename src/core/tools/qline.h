@@ -171,10 +171,8 @@ inline bool QLine::operator==(const QLine &d) const
 
 Q_CORE_EXPORT QDebug operator<<(QDebug d, const QLine &p);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLine &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLine &);
-#endif
 
 class Q_CORE_EXPORT QLineF
 {
@@ -369,9 +367,7 @@ inline bool QLineF::operator==(const QLineF &d) const
 
 Q_CORE_EXPORT QDebug operator<<(QDebug d, const QLineF &p);
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLineF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLineF &);
-#endif
 
 #endif

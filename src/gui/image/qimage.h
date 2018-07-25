@@ -312,9 +312,7 @@ inline void QImage::setPixel(const QPoint &pt, uint index_or_rgb)
    setPixel(pt.x(), pt.y(), index_or_rgb);
 }
 
-#if !defined(QT_NO_DATASTREAM)
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QImage &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QImage &);
-#endif
 
 #endif
