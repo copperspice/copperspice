@@ -43,19 +43,18 @@ class LIB_CS_STRING_EXPORT CsStringIterator
 
    public:
       using difference_type   = std::ptrdiff_t;
-      using value_type        = CsChar;
       using pointer           = CsChar *;
       using reference         = CsChar;
-      using iterator_category = std::random_access_iterator_tag;
-
       using size_type         = std::ptrdiff_t;
+      using value_type        = CsChar;
+      using iterator_category = std::random_access_iterator_tag;
 
       CsStringIterator() = default;
 
       CsChar operator*() const;
       CsCharArrow operator->() const;
 
-      CsChar operator[](size_type x) const;
+      CsChar operator[](size_type n) const;
 
       // comparisons
       bool operator!=(const CsStringIterator &other) const;
@@ -66,14 +65,14 @@ class LIB_CS_STRING_EXPORT CsStringIterator
       bool operator>=(const CsStringIterator &other) const;
 
       // math
-      CsStringIterator &operator+=(size_type x);
-      CsStringIterator &operator-=(size_type x);
+      CsStringIterator &operator+=(size_type n);
+      CsStringIterator &operator-=(size_type n);
 
-      CsStringIterator operator+(size_type x) const;
+      CsStringIterator operator+(size_type n) const;
       CsStringIterator &operator++();
       CsStringIterator operator++(int);
 
-      CsStringIterator operator-(size_type x) const;
+      CsStringIterator operator-(size_type n) const;
       size_type operator-(CsStringIterator other) const;
       CsStringIterator &operator--();
       CsStringIterator operator--(int);
@@ -102,10 +101,10 @@ CsCharArrow CsStringIterator<E,A>::operator->() const
 }
 
 template <typename E, typename A>
-CsChar CsStringIterator<E,A>:: operator[](size_type x) const
+CsChar CsStringIterator<E,A>:: operator[](size_type n) const
 {
    // calls operator+()
-   return *(*this + x);
+   return *(*this + n);
 }
 
 // comparisons
@@ -147,23 +146,23 @@ bool CsStringIterator <E,A>::operator>=(const CsStringIterator &other) const
 
 // math
 template <typename E, typename A>
-CsStringIterator<E,A> &CsStringIterator<E,A>::operator+=(size_type x)
+CsStringIterator<E,A> &CsStringIterator<E,A>::operator+=(size_type n)
 {
-   m_iter += E::walk(x, m_iter);
+   m_iter += E::walk(n, m_iter);
    return *this;
 }
 
 template <typename E, typename A>
-CsStringIterator<E,A> &CsStringIterator<E,A>::operator-=(size_type x)
+CsStringIterator<E,A> &CsStringIterator<E,A>::operator-=(size_type n)
 {
-   m_iter += E::walk(-x, m_iter);
+   m_iter += E::walk(-n, m_iter);
    return *this;
 }
 
 template <typename E, typename A>
-CsStringIterator<E,A> CsStringIterator<E,A>::operator+(size_type x) const
+CsStringIterator<E,A> CsStringIterator<E,A>::operator+(size_type n) const
 {
-   auto iter = m_iter + E::walk(x, m_iter);
+   auto iter = m_iter + E::walk(n, m_iter);
    return CsStringIterator(iter);
 }
 
@@ -184,9 +183,9 @@ CsStringIterator<E,A> CsStringIterator<E,A>::operator++(int)
 }
 
 template <typename E, typename A>
-CsStringIterator<E,A> CsStringIterator<E,A>::operator-(size_type x) const
+CsStringIterator<E,A> CsStringIterator<E,A>::operator-(size_type n) const
 {
-   auto iter = m_iter + E::walk(-x, m_iter);
+   auto iter = m_iter + E::walk(-n, m_iter);
    return CsStringIterator(iter);
 }
 
