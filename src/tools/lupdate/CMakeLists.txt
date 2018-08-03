@@ -29,11 +29,21 @@ set(LUPDATE_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/qdeclarative.cpp
 )
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+   set(EXTRA_LUPDATE_LDFLAGS  ${EXTRA_LUPDATE_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "DARWIN")
+   set(EXTRA_LUPDATE_LDFLAGS  ${EXTRA_LUPDATE_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+   set(EXTRA_LUPDATE_LDFLAGS  ${EXTRA_LUPDATE_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+endif()
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(EXTRA_LUPDATE_LIBS
-        ${EXTRA_LUPDATE_LIBS}
-        uuid
-    )
+    set(EXTRA_LUPDATE_LIBS ${EXTRA_LUPDATE_LIBS} uuid)
+
     set(LUPDATE_SOURCES
         ${LUPDATE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/lupdate.exe.manifest

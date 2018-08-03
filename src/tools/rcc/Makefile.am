@@ -10,7 +10,19 @@ bin_rcc_SOURCES = \
 
 bin_rcc_LDFLAGS= -lpthread
 
-$(bin_rcc_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
+if OSTYPE_BSD
+bin_rcc_LDFLAGS+='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_DARWIN
+bin_rcc_LDFLAGS+='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_LINUX
+bin_rcc_LDFLAGS+='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+$(bin_rcc_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED)
 
 bin_rcc_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)  -I$(top_srcdir)/src/tools/rcc  \
     -Iinclude/QtCore -Iinclude/QtXml \

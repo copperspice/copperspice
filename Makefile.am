@@ -43,11 +43,8 @@ EXTRA_DIST= \
 	src/tools/uic/CMakeLists.txt \
 	src/webkit/CMakeLists.txt
 
-
 SUBDIRS = . src/webkit
 DIST_SUBDIRS = src/webkit
-
-# Do not alter lines above this comment
 
 if OSTYPE_LINUX
 AM_LDFLAGS += -avoid-version
@@ -65,7 +62,6 @@ if OSTYPE_DARWIN
 AM_LDFLAGS += -avoid-version
 endif
 
-# set other flags
 if OSTYPE_WIN
 AM_CFLAGS += -DUNICODE
 endif
@@ -116,29 +112,29 @@ include src/xml/Makefile.am
 include src/xmlpatterns/Makefile.am
 #out for now   include src/declarative/Makefile.am
 
-# Extra files that need to be distributed
+# extra files for distribution
 EXTRA_DIST+= autotools/build-aux/git-version-gen \
 	include/.empty-directory include/qt-acconfig.h.in \
 	$(wildcard $(top_srcdir)/translations/*.ts) \
 	$(wildcard $(top_srcdir)/translations/*.qph)
 DISTCLEANFILES = .version.cpp .version.o .build-stamp-*
 
-# Tag the distribution
+# tag the distribution
 dist-hook:
 	echo $(VERSION) > $(distdir)/autotools/.tarball-version	
 	find $(distdir) -name qrc_\*.cpp -exec rm -f '{}' ';'
 
-# Workaround automake issue with large distributions
-# This requires GNU make
+# workaround automake issue with large distributions
+# requires GNU make
 write_entries_to_file_split=50
 DISTFILES.list:
 	$(shell rm -f DISTFILES.list || :) $(shell touch DISTFILES.list) \
 	$(foreach range, \
-	 $(shell i=1; while test $$i -le $(words $(DISTFILES)); do \
-	  echo $$i; i=`expr $$i + $(write_entries_to_file_split)`; done), \
+	  $(shell i=1; while test $$i -le $(words $(DISTFILES)); do \
+	    echo $$i; i=`expr $$i + $(write_entries_to_file_split)`; done), \
 	$(shell echo $(wordlist $(range), \
-	 $(shell expr $(range) + $(write_entries_to_file_split) - 1), $(DISTFILES)) \
-	  | tr ' ' '\n' >> DISTFILES.list))
+	  $(shell expr $(range) + $(write_entries_to_file_split) - 1), $(DISTFILES)) \
+	    | tr ' ' '\n' >> DISTFILES.list))
 
 
 .PHONY:DISTFILES.list
@@ -228,7 +224,7 @@ lib/libCsWebKit@BUILD_ABI@.la: webkit-headers
 	-cd src/webkit && $(MAKE) ../../lib/libCsWebKit@BUILD_ABI@.la
 
 
-# Stamp the build with the correct version
+# add version number to source distribution file
 .version.cpp: .build-stamp-$(VERSION)
 	echo 'const char* copperspice_version = "copperspice $(VERSION)";' > .version.cpp
 .build-stamp-$(VERSION):

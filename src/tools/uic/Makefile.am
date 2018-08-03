@@ -40,6 +40,18 @@ bin_uic_SOURCES = \
 
 bin_uic_LDFLAGS= -lpthread
 
+if OSTYPE_BSD
+bin_uic_LDFLAGS+='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_DARWIN
+bin_uic_LDFLAGS+='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_LINUX
+bin_uic_LDFLAGS+='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
 $(bin_uic_SOURCES) : $(CORE_HEADERS_INSTALLED)
 
 bin_uic_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS) -I$(top_srcdir)/src/tools/uic/cpp -I$(top_srcdir)/src/tools/uic \

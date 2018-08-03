@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.4.3 FATAL_ERROR)
 
-# silence a warning about rpath on OS X
-cmake_policy(SET CMP0042 OLD)
-
+cmake_policy(SET CMP0042 NEW)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 project(copperspice)
@@ -17,7 +15,7 @@ include(FeatureSummary)
 include(CopperSpiceBuildMacros)
 include(TestLargeFiles)
 
-# file locations for installing
+# location deploy or install
 if(UNIX)
     include(GNUInstallDirs)
 else()
@@ -31,10 +29,10 @@ set(BUILD_MINOR "5")
 set(BUILD_MICRO "0")
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
-# required
+# required library
 set(BUILD_COMPONENTS "Core")
 
-# may add DBus, Declarative and ScriptTools
+# might add DBus, Declarative and ScriptTools later
 set(_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Phonon Script Sql Svg WebKit Xml XmlPatterns)
 
 set(PACKAGE "copperspice")
@@ -48,8 +46,6 @@ set(PACKAGE_URL "http://www.copperspice.com/")
 # used in cs_build_info.h.in
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION "${PACKAGE_VERSION}")
-
-# used in cs_build_info.h.in
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")

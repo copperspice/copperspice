@@ -27,7 +27,19 @@ bin_lupdate_SOURCES = \
 
 #	src/tools/lupdate/qdeclarative.cpp
 
-$(bin_lupdate_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
+if OSTYPE_BSD
+bin_lupdate_LDFLAGS='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_DARWIN
+bin_lupdate_LDFLAGS='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_LINUX
+bin_lupdate_LDFLAGS='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+$(bin_lupdate_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED)
 
 bin_lupdate_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS) \
    -Iinclude/QtCore  -Iinclude/QtXml   \

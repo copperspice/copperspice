@@ -1,6 +1,6 @@
 AC_INIT([copperspice], [1.5.0], [info@copperspice.com])
 
-# derive CS hex version from "@PACKAGE_VERSION@"
+# derive CS hex version from "@PACKAGE_VERSION@" for cs_build_info.h.in
 HEX_VERSION=$(printf "0x%02x%02x%02x" `echo $PACKAGE_VERSION | tr '.' ' '`)
 BUILD_ABI=$(echo $PACKAGE_VERSION | cut -d. -f1-2)
 AC_SUBST([HEX_VERSION])

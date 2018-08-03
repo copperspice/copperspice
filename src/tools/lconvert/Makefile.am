@@ -16,7 +16,19 @@ bin_lconvert_SOURCES = \
 	src/tools/shared/xliff.cpp \
 	src/tools/lconvert/main.cpp
 
-$(bin_lconvert_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
+if OSTYPE_BSD
+bin_lconvert_LDFLAGS='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_DARWIN
+bin_lconvert_LDFLAGS='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+if OSTYPE_LINUX
+bin_lconvert_LDFLAGS='-Wl,-rpath,$$ORIGIN/../lib'
+endif
+
+$(bin_lconvert_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED)
 
 bin_lconvert_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)   \
    -DPROEVALUATOR_CUMULATIVE -DPROEVALUATOR_INIT_PROPS  \
