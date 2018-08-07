@@ -702,7 +702,13 @@ QString8 QString8::left(size_type numOfChars) const
       return *this;
    }
 
-   return QString8(substr(0, numOfChars));
+   const_iterator iter = cbegin();
+
+   for (size_type i = 0; i < numOfChars && iter != cend(); ++i)  {
+      ++iter;
+   }
+
+   return QString8(cbegin(), iter);
 }
 
 QStringView8 QString8::leftView(size_type numOfChars) const
@@ -1205,7 +1211,15 @@ QString8 QString8::right(size_type numOfChars) const
       return *this;
    }
 
-   auto iter = cend() - numOfChars;
+   const_iterator iter = cend();
+
+   for (size_type i = 0; i < numOfChars; ++i) {
+      if (iter == cbegin()) {
+         break;
+      }
+
+      --iter;
+   }
 
    return QString8(iter, cend());
 }
@@ -1218,7 +1232,11 @@ QStringView8 QString8::rightView(size_type numOfChars) const
 
    const_iterator iter = cend();
 
-   for (size_type i = 0; i < numOfChars && iter != cbegin(); ++i)  {
+   for (size_type i = 0; i < numOfChars; ++i) {
+      if (iter == cbegin()) {
+         break;
+      }
+
       --iter;
    }
 

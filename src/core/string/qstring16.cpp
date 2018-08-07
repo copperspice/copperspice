@@ -703,7 +703,13 @@ QString16 QString16::left(size_type numOfChars) const
       return *this;
    }
 
-   return QString16(substr(0, numOfChars));
+   const_iterator iter = cbegin();
+
+   for (size_type i = 0; i < numOfChars && iter != cend(); ++i)  {
+      ++iter;
+   }
+
+   return QString16(cbegin(), iter);
 }
 
 QStringView16 QString16::leftView(size_type numOfChars) const
@@ -1206,7 +1212,15 @@ QString16 QString16::right(size_type numOfChars) const
       return *this;
    }
 
-   auto iter = cend() - numOfChars;
+   const_iterator iter = cend();
+
+   for (size_type i = 0; i < numOfChars; ++i) {
+      if (iter == cbegin()) {
+         break;
+      }
+
+      --iter;
+   }
 
    return QString16(iter, cend());
 }
@@ -1219,7 +1233,11 @@ QStringView16 QString16::rightView(size_type numOfChars) const
 
    const_iterator iter = cend();
 
-   for (size_type i = 0; i < numOfChars && iter != cbegin(); ++i)  {
+   for (size_type i = 0; i < numOfChars; ++i) {
+      if (iter == cbegin()) {
+         break;
+      }
+
       --iter;
    }
 
