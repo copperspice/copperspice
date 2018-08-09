@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef WTF_MathExtras_h
@@ -40,9 +40,6 @@
 #endif
 
 #if COMPILER(MSVC)
-#if OS(WINCE)
-#include <stdlib.h>
-#endif
 #include <limits>
 #endif
 
@@ -96,36 +93,15 @@ inline bool signbit(double x) { struct ieee_double *p = (struct ieee_double *)&x
 
 #endif
 
-#if COMPILER(MSVC) || COMPILER(RVCT)
-
-// We must not do 'num + 0.5' or 'num - 0.5' because they can cause precision loss.
-static double round(double num)
-{
-    double integer = ceil(num);
-    if (num > 0)
-        return integer - num > 0.5 ? integer - 1.0 : integer;
-    return integer - num >= 0.5 ? integer - 1.0 : integer;
-}
-static float roundf(float num)
-{
-    float integer = ceilf(num);
-    if (num > 0)
-        return integer - num > 0.5f ? integer - 1.0f : integer;
-    return integer - num >= 0.5f ? integer - 1.0f : integer;
-}
+#if COMPILER(MSVC)
 inline long long llround(double num) { return static_cast<long long>(round(num)); }
 inline long long llroundf(float num) { return static_cast<long long>(roundf(num)); }
 inline long lround(double num) { return static_cast<long>(round(num)); }
 inline long lroundf(float num) { return static_cast<long>(roundf(num)); }
 inline double trunc(double num) { return num > 0 ? floor(num) : ceil(num); }
 
-#endif
-
-#if COMPILER(MSVC)
-
 inline bool isinf(double num) { return !_finite(num) && !_isnan(num); }
 inline bool isnan(double num) { return !!_isnan(num); }
-inline bool signbit(double num) { return _copysign(1.0, num) < 0; }
 
 inline double nextafter(double x, double y) { return _nextafter(x, y); }
 inline float nextafterf(float x, float y) { return x > y ? x - FLT_EPSILON : x + FLT_EPSILON; }
@@ -186,4 +162,4 @@ inline float deg2turn(float d) { return d / 360.0f; }
 inline float rad2grad(float r) { return r * 200.0f / piFloat; }
 inline float grad2rad(float g) { return g * piFloat / 200.0f; }
 
-#endif // #ifndef WTF_MathExtras_h
+#endif
