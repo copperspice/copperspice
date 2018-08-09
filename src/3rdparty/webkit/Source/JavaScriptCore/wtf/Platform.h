@@ -42,7 +42,7 @@
 #define CPU(WTF_FEATURE) (defined WTF_CPU_##WTF_FEATURE  && WTF_CPU_##WTF_FEATURE)
 /* HAVE() - specific system features (headers, functions or similar) that are present or not */
 #define HAVE(WTF_FEATURE) (defined HAVE_##WTF_FEATURE  && HAVE_##WTF_FEATURE)
-/* OS() - underlying operating system; only to be used for mandated low-level services like 
+/* OS() - underlying operating system; only to be used for mandated low-level services like
    virtual memory, not to choose a GUI toolkit */
 #define OS(WTF_FEATURE) (defined WTF_OS_##WTF_FEATURE  && WTF_OS_##WTF_FEATURE)
 
@@ -58,16 +58,8 @@
 
 /* ==== COMPILER() - the compiler being used to build the project ==== */
 
-/* COMPILER(MSVC) Microsoft Visual C++ */
-/* COMPILER(MSVC7_OR_LOWER) Microsoft Visual C++ 2003 or lower*/
-/* COMPILER(MSVC9_OR_LOWER) Microsoft Visual C++ 2008 or lower*/
 #if defined(_MSC_VER)
 #define WTF_COMPILER_MSVC 1
-#if _MSC_VER < 1400
-#define WTF_COMPILER_MSVC7_OR_LOWER 1
-#elif _MSC_VER < 1600
-#define WTF_COMPILER_MSVC9_OR_LOWER 1
-#endif
 #endif
 
 /* COMPILER(RVCT)  - ARM RealView Compilation Tools */
@@ -338,7 +330,7 @@
 
 
 /* CPU(ARMV5_OR_LOWER) - ARM instruction set v5 or earlier */
-/* On ARMv5 and below the natural alignment is required. 
+/* On ARMv5 and below the natural alignment is required.
    And there are some other differences for v5 or earlier. */
 #if !defined(ARMV5_OR_LOWER) && !WTF_ARM_ARCH_AT_LEAST(6)
 #define WTF_CPU_ARMV5_OR_LOWER 1
@@ -373,7 +365,7 @@
 #define WTF_CPU_NEEDS_ALIGNED_ACCESS 1
 #endif
 
-/* ==== OS() - underlying operating system; only to be used for mandated low-level services like 
+/* ==== OS() - underlying operating system; only to be used for mandated low-level services like
    virtual memory, not to choose a GUI toolkit ==== */
 
 /* OS(ANDROID) - Android */
@@ -494,29 +486,34 @@
 /* PLATFORM(HAIKU) */
 /* PLATFORM(MAC) */
 /* PLATFORM(WIN) */
+
 #if defined(BUILDING_CHROMIUM__)
 #define WTF_PLATFORM_CHROMIUM 1
-#elif defined(BUILDING_QT__)
+
+#elif defined(BUILDING_CS)
 #define WTF_PLATFORM_QT 1
-#elif defined(BUILDING_WX__)
-#define WTF_PLATFORM_WX 1
+
 #elif defined(BUILDING_GTK__)
 #define WTF_PLATFORM_GTK 1
-#elif defined(BUILDING_HAIKU__)
-#define WTF_PLATFORM_HAIKU 1
+
 #elif defined(BUILDING_BREWMP__)
 #define WTF_PLATFORM_BREWMP 1
+
 #if defined(AEE_SIMULATOR)
 #define WTF_PLATFORM_BREWMP_SIMULATOR 1
 #else
 #define WTF_PLATFORM_BREWMP_SIMULATOR 0
 #endif
+
 #undef WTF_OS_WINDOWS
 #undef WTF_PLATFORM_WIN
+
 #elif OS(DARWIN)
 #define WTF_PLATFORM_MAC 1
+
 #elif OS(WINDOWS)
 #define WTF_PLATFORM_WIN 1
+
 #endif
 
 /* PLATFORM(IOS) */
@@ -1222,7 +1219,7 @@
 #include "GTypedefs.h"
 #endif
 
-/* FIXME: This define won't be needed once #27551 is fully landed. However, 
+/* FIXME: This define won't be needed once #27551 is fully landed. However,
    since most ports try to support sub-project independence, adding new headers
    to WTF causes many ports to break, and so this way we can address the build
    breakages one port at a time. */

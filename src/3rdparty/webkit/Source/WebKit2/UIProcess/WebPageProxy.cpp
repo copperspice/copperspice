@@ -253,7 +253,7 @@ void WebPageProxy::reattachToWebProcessWithItem(WebBackForwardListItem* item)
 {
     if (item && item != m_backForwardList->currentItem())
         m_backForwardList->goToItem(item);
-    
+
     reattachToWebProcess();
 
     if (!item)
@@ -339,7 +339,7 @@ void WebPageProxy::close()
     m_activePopupMenu = 0;
 
     m_estimatedProgress = 0.0;
-    
+
     m_loaderClient.initialize(0);
     m_policyClient.initialize(0);
     m_uiClient.initialize(0);
@@ -507,7 +507,7 @@ void WebPageProxy::goToBackForwardItem(WebBackForwardListItem* item)
         reattachToWebProcessWithItem(item);
         return;
     }
-    
+
     setPendingAPIRequestURL(item->url());
 
     SandboxExtension::Handle sandboxExtensionHandle;
@@ -526,7 +526,7 @@ void WebPageProxy::shouldGoToBackForwardListItem(uint64_t itemID, bool& shouldGo
     WebBackForwardListItem* item = process()->webBackForwardItem(itemID);
     shouldGoToBackForwardItem = item && m_loaderClient.shouldGoToBackForwardListItem(this, item);
 }
-    
+
 bool WebPageProxy::canShowMIMEType(const String& mimeType) const
 {
     if (MIMETypeRegistry::isSupportedNonImageMIMEType(mimeType))
@@ -647,7 +647,7 @@ void WebPageProxy::setWindowResizerSize(const IntSize& windowResizerSize)
         return;
     process()->send(Messages::WebPage::SetWindowResizerSize(windowResizerSize), m_pageID);
 }
-    
+
 void WebPageProxy::clearSelection()
 {
     if (!isValid())
@@ -671,7 +671,7 @@ void WebPageProxy::setMaintainsInactiveSelection(bool newValue)
 {
     m_maintainsInactiveSelection = newValue;
 }
-    
+
 void WebPageProxy::executeEditCommand(const String& commandName)
 {
     if (!isValid())
@@ -679,7 +679,7 @@ void WebPageProxy::executeEditCommand(const String& commandName)
 
     process()->send(Messages::WebPage::ExecuteEditCommand(commandName), m_pageID);
 }
-    
+
 #if PLATFORM(WIN)
 IntRect WebPageProxy::firstRectForCharacterInSelectedRange(int characterPosition)
 {
@@ -780,7 +780,7 @@ void WebPageProxy::didPerformDragControllerAction(uint64_t resultOperation)
 
 #if PLATFORM(WIN)
 
-void WebPageProxy::startDragDrop(const IntPoint& imageOrigin, const IntPoint& dragPoint, uint64_t okEffect, 
+void WebPageProxy::startDragDrop(const IntPoint& imageOrigin, const IntPoint& dragPoint, uint64_t okEffect,
     const HashMap<UINT, Vector<String> >& dataMap, const IntSize& dragImageSize, const SharedMemory::Handle& dragImageHandle, bool isLinkDrag)
 {
     COMPtr<WCDataObject> dataObject;
@@ -899,7 +899,7 @@ void WebPageProxy::handleWheelEvent(const NativeWebWheelEvent& event)
         m_nextWheelEvent = coalesceWheelEvents(m_nextWheelEvent.get(), event);
         return;
     }
-    
+
     m_currentlyProcessedWheelEvent = adoptPtr(new NativeWebWheelEvent(event));
 
     process()->responsivenessTimer()->start();
@@ -933,7 +933,7 @@ void WebPageProxy::handleTouchEvent(const WebTouchEvent& event)
 {
     if (!isValid())
         return;
-    process()->send(Messages::WebPage::TouchEvent(event), m_pageID); 
+    process()->send(Messages::WebPage::TouchEvent(event), m_pageID);
 }
 #endif
 
@@ -956,8 +956,8 @@ void WebPageProxy::receivedPolicyDecision(PolicyAction action, WebFrameProxy* fr
         downloadID = m_process->context()->createDownloadProxy()->downloadID();
     }
 
-    // If we received a policy decision while in decidePolicyForMIMEType the decision will 
-    // be sent back to the web process by decidePolicyForMIMEType. 
+    // If we received a policy decision while in decidePolicyForMIMEType the decision will
+    // be sent back to the web process by decidePolicyForMIMEType.
     if (m_inDecidePolicyForMIMEType) {
         m_syncMimeTypePolicyActionIsValid = true;
         m_syncMimeTypePolicyAction = action;
@@ -965,15 +965,15 @@ void WebPageProxy::receivedPolicyDecision(PolicyAction action, WebFrameProxy* fr
         return;
     }
 
-    // If we received a policy decision while in decidePolicyForNavigationAction the decision will 
-    // be sent back to the web process by decidePolicyForNavigationAction. 
+    // If we received a policy decision while in decidePolicyForNavigationAction the decision will
+    // be sent back to the web process by decidePolicyForNavigationAction.
     if (m_inDecidePolicyForNavigationAction) {
         m_syncNavigationActionPolicyActionIsValid = true;
         m_syncNavigationActionPolicyAction = action;
         m_syncNavigationActionPolicyDownloadID = downloadID;
         return;
     }
-    
+
     process()->send(Messages::WebPage::DidReceivePolicyDecision(frame->frameID(), listenerID, action, downloadID), m_pageID);
 }
 
@@ -1049,8 +1049,8 @@ void WebPageProxy::terminateProcess()
     process()->terminate();
 }
 
-#if !USE(CF) || defined(BUILDING_QT__)
-PassRefPtr<WebData> WebPageProxy::sessionStateData(WebPageProxySessionStateFilterCallback, void* context) const
+#if ! USE(CF) || defined(BUILDING_CS)
+PassRefPtr<WebData> WebPageProxy::sessionStateData(WebPageProxySessionStateFilterCallback, void *context) const
 {
     // FIXME: Return session state data for saving Page state.
     return 0;
@@ -1073,7 +1073,7 @@ bool WebPageProxy::supportsTextZoom() const
 
     return true;
 }
- 
+
 void WebPageProxy::setTextZoomFactor(double zoomFactor)
 {
     if (!isValid())
@@ -1086,7 +1086,7 @@ void WebPageProxy::setTextZoomFactor(double zoomFactor)
         return;
 
     m_textZoomFactor = zoomFactor;
-    process()->send(Messages::WebPage::SetTextZoomFactor(m_textZoomFactor), m_pageID); 
+    process()->send(Messages::WebPage::SetTextZoomFactor(m_textZoomFactor), m_pageID);
 }
 
 double WebPageProxy::pageZoomFactor() const
@@ -1108,7 +1108,7 @@ void WebPageProxy::setPageZoomFactor(double zoomFactor)
         return;
 
     m_pageZoomFactor = zoomFactor;
-    process()->send(Messages::WebPage::SetPageZoomFactor(m_pageZoomFactor), m_pageID); 
+    process()->send(Messages::WebPage::SetPageZoomFactor(m_pageZoomFactor), m_pageID);
 }
 
 void WebPageProxy::setPageAndTextZoomFactors(double pageZoomFactor, double textZoomFactor)
@@ -1126,7 +1126,7 @@ void WebPageProxy::setPageAndTextZoomFactors(double pageZoomFactor, double textZ
 
     m_pageZoomFactor = pageZoomFactor;
     m_textZoomFactor = textZoomFactor;
-    process()->send(Messages::WebPage::SetPageAndTextZoomFactors(m_pageZoomFactor, m_textZoomFactor), m_pageID); 
+    process()->send(Messages::WebPage::SetPageAndTextZoomFactors(m_pageZoomFactor, m_textZoomFactor), m_pageID);
 }
 
 void WebPageProxy::scaleWebView(double scale, const IntPoint& origin)
@@ -1226,7 +1226,7 @@ void WebPageProxy::getRenderTreeExternalRepresentation(PassRefPtr<StringCallback
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_stringCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::GetRenderTreeExternalRepresentation(callbackID), m_pageID);
@@ -1239,7 +1239,7 @@ void WebPageProxy::getSourceForFrame(WebFrameProxy* frame, PassRefPtr<StringCall
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_loadDependentStringCallbackIDs.add(callbackID);
     m_stringCallbacks.set(callbackID, callback.get());
@@ -1253,7 +1253,7 @@ void WebPageProxy::getContentsAsString(PassRefPtr<StringCallback> prpCallback)
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_loadDependentStringCallbackIDs.add(callbackID);
     m_stringCallbacks.set(callbackID, callback.get());
@@ -1267,7 +1267,7 @@ void WebPageProxy::getSelectionOrContentsAsString(PassRefPtr<StringCallback> prp
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_stringCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::GetSelectionOrContentsAsString(callbackID), m_pageID);
@@ -1280,7 +1280,7 @@ void WebPageProxy::getMainResourceDataOfFrame(WebFrameProxy* frame, PassRefPtr<D
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_dataCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::GetMainResourceDataOfFrame(frame->frameID(), callbackID), m_pageID);
@@ -1293,7 +1293,7 @@ void WebPageProxy::getResourceDataFromFrame(WebFrameProxy* frame, WebURL* resour
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_dataCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::GetResourceDataFromFrame(frame->frameID(), resourceURL->string(), callbackID), m_pageID);
@@ -1306,7 +1306,7 @@ void WebPageProxy::getWebArchiveOfFrame(WebFrameProxy* frame, PassRefPtr<DataCal
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_dataCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::GetWebArchiveOfFrame(frame->frameID(), callbackID), m_pageID);
@@ -1322,7 +1322,7 @@ void WebPageProxy::forceRepaint(PassRefPtr<VoidCallback> prpCallback)
 
     uint64_t callbackID = callback->callbackID();
     m_voidCallbacks.set(callbackID, callback.get());
-    process()->send(Messages::WebPage::ForceRepaint(callbackID), m_pageID); 
+    process()->send(Messages::WebPage::ForceRepaint(callbackID), m_pageID);
 }
 
 void WebPageProxy::preferencesDidChange()
@@ -1418,7 +1418,7 @@ void WebPageProxy::didCreateSubframe(uint64_t frameID, uint64_t parentFrameID)
     MESSAGE_CHECK(parentFrame->isDescendantOf(m_mainFrame.get()));
 
     MESSAGE_CHECK(process()->canCreateFrame(frameID));
-    
+
     RefPtr<WebFrameProxy> subFrame = WebFrameProxy::create(this, frameID);
 
     // Add the frame to the process wide map.
@@ -1475,7 +1475,7 @@ double WebPageProxy::estimatedProgress() const
 {
     if (!pendingAPIRequestURL().isNull())
         return initialProgressValue;
-    return m_estimatedProgress; 
+    return m_estimatedProgress;
 }
 
 void WebPageProxy::didStartProgress()
@@ -1664,7 +1664,7 @@ void WebPageProxy::didReceiveTitleForFrame(uint64_t frameID, const String& title
     MESSAGE_CHECK(frame);
 
     frame->didChangeTitle(title);
-    
+
     m_loaderClient.didReceiveTitleForFrame(this, title, frame, userData.get());
 }
 
@@ -1762,14 +1762,14 @@ void WebPageProxy::decidePolicyForNavigationAction(uint64_t frameID, uint32_t op
     NavigationType navigationType = static_cast<NavigationType>(opaqueNavigationType);
     WebEvent::Modifiers modifiers = static_cast<WebEvent::Modifiers>(opaqueModifiers);
     WebMouseEvent::Button mouseButton = static_cast<WebMouseEvent::Button>(opaqueMouseButton);
-    
+
     RefPtr<WebFramePolicyListenerProxy> listener = frame->setUpPolicyListenerProxy(listenerID);
 
     ASSERT(!m_inDecidePolicyForNavigationAction);
 
     m_inDecidePolicyForNavigationAction = true;
     m_syncNavigationActionPolicyActionIsValid = false;
-    
+
     if (!m_policyClient.decidePolicyForNavigationAction(this, frame, navigationType, modifiers, mouseButton, request, listener.get(), userData.get()))
         listener->use();
 
@@ -1838,7 +1838,7 @@ void WebPageProxy::unableToImplementPolicy(uint64_t frameID, const WebCore::Reso
     WebContextUserMessageDecoder messageDecoder(userData, m_process->context());
     if (!arguments->decode(messageDecoder))
         return;
-    
+
     WebFrameProxy* frame = process()->webFrame(frameID);
     MESSAGE_CHECK(frame);
 
@@ -1926,7 +1926,7 @@ void WebPageProxy::createNewPage(const WindowFeatures& windowFeatures, uint32_t 
     } else
         newPageID = 0;
 }
-    
+
 void WebPageProxy::showPage()
 {
     m_uiClient.showPage(this);
@@ -2054,7 +2054,7 @@ void WebPageProxy::windowToScreen(const IntRect& viewRect, IntRect& result)
 {
     result = m_pageClient->windowToScreen(viewRect);
 }
-    
+
 void WebPageProxy::runBeforeUnloadConfirmPanel(const String& message, uint64_t frameID, bool& shouldClose)
 {
     WebFrameProxy* frame = process()->webFrame(frameID);
@@ -2221,7 +2221,7 @@ void WebPageProxy::setComposition(const String& compositionString, Vector<WebCor
     process()->send(Messages::WebPage::SetComposition(compositionString, underlines, cursorPosition), m_pageID);
 }
 #endif
-    
+
 // Undo management
 
 void WebPageProxy::registerEditCommandForUndo(uint64_t commandID, uint32_t editAction)
@@ -2314,7 +2314,7 @@ void WebPageProxy::hidePopupMenu()
 void WebPageProxy::showContextMenu(const IntPoint& menuLocation, const ContextMenuState& contextMenuState, const Vector<WebContextMenuItemData>& proposedItems, CoreIPC::ArgumentDecoder* arguments)
 {
     internalShowContextMenu(menuLocation, contextMenuState, proposedItems, arguments);
-    
+
     // No matter the result of internalShowContextMenu, always notify the WebProcess that the menu is hidden so it starts handling mouse events again.
     process()->send(Messages::WebPage::ContextMenuHidden(), m_pageID);
 }
@@ -2382,7 +2382,7 @@ void WebPageProxy::contextMenuItemSelected(const WebContextMenuItemData& item)
     if (item.action() == ContextMenuItemTagCorrectSpellingAutomatically) {
         TextChecker::setAutomaticSpellingCorrectionEnabled(!TextChecker::state().isAutomaticSpellingCorrectionEnabled);
         process()->updateTextCheckerState();
-        return;        
+        return;
     }
     if (item.action() == ContextMenuItemTagShowSubstitutions) {
         TextChecker::toggleSubstitutionsPanelIsShowing();
@@ -2391,7 +2391,7 @@ void WebPageProxy::contextMenuItemSelected(const WebContextMenuItemData& item)
 #endif
     if (item.action() == ContextMenuItemTagDownloadImageToDisk) {
         m_process->context()->download(this, KURL(KURL(), m_activeContextMenuState.absoluteImageURLString));
-        return;    
+        return;
     }
     if (item.action() == ContextMenuItemTagDownloadLinkToDisk) {
         m_process->context()->download(this, KURL(KURL(), m_activeContextMenuState.absoluteLinkURLString));
@@ -2446,7 +2446,7 @@ void WebPageProxy::didCancelForOpenPanel()
         return;
 
     process()->send(Messages::WebPage::DidCancelForOpenPanel(), m_pageID);
-    
+
     m_openPanelResultListener->invalidate();
     m_openPanelResultListener = 0;
 }
@@ -2918,7 +2918,7 @@ void WebPageProxy::canAuthenticateAgainstProtectionSpaceInFrame(uint64_t frameID
     MESSAGE_CHECK(frame);
 
     RefPtr<WebProtectionSpace> protectionSpace = WebProtectionSpace::create(coreProtectionSpace);
-    
+
     canAuthenticate = m_loaderClient.canAuthenticateAgainstProtectionSpaceInFrame(this, frame, protectionSpace.get());
 }
 
@@ -2928,7 +2928,7 @@ void WebPageProxy::didReceiveAuthenticationChallenge(uint64_t frameID, const Web
     MESSAGE_CHECK(frame);
 
     RefPtr<AuthenticationChallengeProxy> authenticationChallenge = AuthenticationChallengeProxy::create(coreChallenge, challengeID, process());
-    
+
     m_loaderClient.didReceiveAuthenticationChallengeInFrame(this, frame, authenticationChallenge.get());
 }
 
@@ -3053,7 +3053,7 @@ void WebPageProxy::drawRectToPDF(WebFrameProxy* frame, const IntRect& rect, Pass
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_dataCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::DrawRectToPDF(frame->frameID(), rect, callbackID), m_pageID, m_isPerformingDOMPrintOperation ? CoreIPC::DispatchMessageEvenWhenWaitingForSyncReply : 0);
@@ -3066,7 +3066,7 @@ void WebPageProxy::drawPagesToPDF(WebFrameProxy* frame, uint32_t first, uint32_t
         callback->invalidate();
         return;
     }
-    
+
     uint64_t callbackID = callback->callbackID();
     m_dataCallbacks.set(callbackID, callback.get());
     process()->send(Messages::WebPage::DrawPagesToPDF(frame->frameID(), first, count, callbackID), m_pageID, m_isPerformingDOMPrintOperation ? CoreIPC::DispatchMessageEvenWhenWaitingForSyncReply : 0);

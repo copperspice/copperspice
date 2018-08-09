@@ -17,7 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  *
- */ 
+ */
 
 #if defined(HAVE_CONFIG_H) && HAVE_CONFIG_H
 #ifdef BUILDING_WITH_CMAKE
@@ -45,7 +45,7 @@
 #define JS_EXPORTDATA JS_EXPORT_PRIVATE
 #define JS_EXPORTCLASS JS_EXPORT_PRIVATE
 
-#if defined(BUILDING_WebCore) || defined(BUILDING_WebKit)
+#if defined(BUILDING_WebCore) || defined(BUILDING_WEBKIT)
 #define WEBKIT_EXPORTDATA WTF_EXPORT
 #else
 #define WEBKIT_EXPORTDATA WTF_IMPORT
@@ -53,20 +53,25 @@
 
 #else /* !USE(EXPORT_MACROS) */
 
-#if !PLATFORM(CHROMIUM) && OS(WINDOWS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
+#if ! PLATFORM(CHROMIUM) && OS(WINDOWS) && COMPILER(MSVC)
+
 #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
-#define JS_EXPORTDATA __declspec(dllexport)
+#define JS_EXPORTDATA
+#define JS_EXPORTCLASS   __declspec(dllexport)
 #else
-#define JS_EXPORTDATA __declspec(dllimport)
+#define JS_EXPORTDATA
+#define JS_EXPORTCLASS   __declspec(dllimport)
 #endif
-#if defined(BUILDING_WebCore) || defined(BUILDING_WebKit)
+
+#if defined(BUILDING_WebCore) || defined(BUILDING_WEBKIT)
 #define WEBKIT_EXPORTDATA __declspec(dllexport)
 #else
 #define WEBKIT_EXPORTDATA __declspec(dllimport)
 #endif
+
 #define WTF_EXPORT_PRIVATE
 #define JS_EXPORT_PRIVATE
-#define JS_EXPORTCLASS JS_EXPORTDATA
+
 #else
 #define JS_EXPORTDATA
 #define JS_EXPORTCLASS
@@ -164,7 +169,7 @@
 // Also generates errors on wx on Windows, presumably because these functions
 // are used from wx headers. On GTK+ for Mac many GTK+ files include <libintl.h>
 // or <glib/gi18n-lib.h>, which in turn include <xlocale/_ctype.h> which uses
-// isacii(). 
+// isacii().
 #if !PLATFORM(QT) && !PLATFORM(WX) && !PLATFORM(CHROMIUM) && !(OS(DARWIN) && PLATFORM(GTK))
 #include <wtf/DisallowCType.h>
 #endif

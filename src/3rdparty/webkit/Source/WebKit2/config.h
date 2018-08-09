@@ -22,7 +22,7 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 #if defined (BUILDING_GTK__)
 #include <autotoolsconfig.h>
@@ -51,7 +51,7 @@ static const type& name() \
     return name##Value; \
 }
 
-#if defined(BUILDING_QT__) || defined(BUILDING_GTK__)
+#if defined(BUILDING_CS) || defined(BUILDING_GTK__)
 
 #define WTF_USE_JSC 1
 #define WTF_USE_V8 0
