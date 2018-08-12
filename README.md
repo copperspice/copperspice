@@ -1,4 +1,6 @@
-## CopperSpice
+## CopperSpice on Visual Studio 2017 Community Edition 15.7.6
+
+
 
 ### Introduction
 CopperSpice is of a set of C++ libraries used to develop cross-platform software applications. This is an open source project
