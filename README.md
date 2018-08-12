@@ -1,6 +1,8 @@
 ## CopperSpice on Visual Studio 2017 Community Edition 15.7.6
 
+Here is kitchensink compiled with Visual Studio 2017 Community Edition 15.7.6, in x86 release configuration.
 
+[![Kitchensink](art/cop1.png)](https://github.com/copperspice/copperspice)
 
 ### Introduction
 CopperSpice is of a set of C++ libraries used to develop cross-platform software applications. This is an open source project
