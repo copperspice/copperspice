@@ -1,7 +1,7 @@
 #
 # Copyright (C) 2012-2018 Barbara Geller
 # Copyright (C) 2012-2018 Ansel Sermersheim
-# All rights reserved.    
+# All rights reserved.
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -98,6 +98,7 @@ macro(MACRO_WINDOWS_RESOURCES RESOURCES RSCNAME)
     foreach(resource ${RESOURCES})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)
+
         if(${rscext} MATCHES ".manifest" AND NOT MINGW)
             set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname})
             execute_process(
@@ -108,8 +109,9 @@ macro(MACRO_WINDOWS_RESOURCES RESOURCES RSCNAME)
                 message(SEND_ERROR "running ${MT_EXECUTABLE} on ${resource} failed")
             endif()
             set(${RSCNAME} ${rscout})
+
         elseif(${rscext} STREQUAL ".rc" AND MSVC)
-            # MinGW, manifest alternative on Windows host
+            # manifest alternative on Windows host
             set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.res)
             execute_process(
                 COMMAND ${WINDRES_EXECUTABLE} --input ${resource} --output ${rscout}
@@ -119,6 +121,7 @@ macro(MACRO_WINDOWS_RESOURCES RESOURCES RSCNAME)
                 message(SEND_ERROR "running ${WINDRES_EXECUTABLE} on ${resource} failed")
             endif()
             set(${RSCNAME} ${rscout})
+
         elseif(${rscext} STREQUAL ".rc")
             # MinGW, manifest alternative on GNU host
             set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.o)
@@ -131,15 +134,16 @@ macro(MACRO_WINDOWS_RESOURCES RESOURCES RSCNAME)
             endif()
             set(${RSCNAME} ${rscout})
         endif()
+
     endforeach()
 endmacro()
 
 macro(MACRO_GENERATE_PACKAGE PC_NAME PC_REALNAME PC_CFLAGS PC_REQUIRES)
-    if(UNIX)       
+    if(UNIX)
         # set again, otherwise the behaviour is undefined
         set(PC_NAME ${PC_NAME})
         set(PC_REALNAME ${PC_REALNAME})
-        set(PC_CFLAGS ${PC_CFLAGS})        
+        set(PC_CFLAGS ${PC_CFLAGS})
         set(PC_REQUIRES ${PC_REQUIRES})
         configure_file(
             ${CMAKE_SOURCE_DIR}/cmake/pkgconfig.cmake

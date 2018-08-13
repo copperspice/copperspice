@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = subdir-objects nostdinc
 ACLOCAL_AMFLAGS = -I autotools/m4 --install
-AM_CFLAGS =  -DQT_SHARED
+AM_CFLAGS =  -DQT_SHARED  -UHAVE_CONFIG_H
 AM_CXXFLAGS = $(AM_CFLAGS)
 
 # for objective c

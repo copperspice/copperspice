@@ -59,12 +59,17 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
         message(SEND_ERROR "Failed to obtain machine from ${CMAKE_CXX_COMPILER}")
     endif()
     set(target "${DUMPMACHINE_OUTPUT}")
+
+elseif(MSVC)
+   enable_language(ASM_MASM)
+   set(target "MSVC")
+
 else()
     message(WARNING
         "Your compiler (${CMAKE_CXX_COMPILER}) may not be supported. "
         "The plugin key which will be used is: ${CMAKE_SYSTEM}"
     )
-    # more compiler handlers may be required, review CMAKE_LANG_COMPILER_ID
+
     set(target "${CMAKE_SYSTEM}")
 endif()
 
@@ -89,17 +94,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 14)
 
 if(APPLE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-undefined,error")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-undefined,error")
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-undefined,error")
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-undefined,error")
+   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-undefined,error")
+   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-undefined,error")
 else()
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined")
+   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
+   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
 endif()
 
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
-add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
+add_definitions(-DQT_SHARED -DBUILD_DATE="${BUILD_DATE}")
 set(TOOLS_SUFFIX)
 
 check_include_file(cups/cups.h HAVE_CUPS_CUPS_H)
@@ -159,14 +164,6 @@ set_package_properties(OpenSSL PROPERTIES
     TYPE RECOMMENDED
 )
 
-find_package(Security)
-set_package_properties(Security PROPERTIES
-    PURPOSE "Required for HTTPS support"
-    DESCRIPTION "Support for secure network communications using Secure Trasnport for SSL and TLS"
-    URL "https://developer.apple.com/documentation/security/secure_transport"
-    TYPE RECOMMENDED
-)
-
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     PURPOSE "Required for compression support"
@@ -215,6 +212,16 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         URL "http://www.gtk.org"
         TYPE RECOMMENDED
     )
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   find_package(Security)
+   set_package_properties(Security PROPERTIES
+       PURPOSE "Required for HTTPS support"
+       DESCRIPTION "Support for secure network communications using Secure Trasnport for SSL and TLS"
+       URL "https://developer.apple.com/documentation/security/secure_transport"
+       TYPE RECOMMENDED
+   )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
