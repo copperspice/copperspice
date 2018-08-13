@@ -16,12 +16,15 @@
  PNG_DFN "/* Derived from: scripts/pnglibconf.dfa */"
  PNG_DFN "#ifndef PNGLCONF_H"
  PNG_DFN "#define PNGLCONF_H"
-#if defined(HAVE_CONFIG_H) && !defined(PNG_NO_CONFIG_H)
+
+#if defined(HAVE_CONFIG_H) && ! defined(PNG_NO_CONFIG_H)
 # include "config.h"
 #endif
+
 #ifdef PNG_USER_CONFIG
 # include "pngusr.h"
 #endif
+
 #ifdef __WATCOMC__
 # ifndef PNG_API_RULE
 # define PNG_API_RULE 2 /* Use Watcom calling conventions */

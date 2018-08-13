@@ -217,6 +217,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz.cpp
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-buffer.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gdef.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gsub.c
@@ -225,7 +226,6 @@ set(CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-open.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-stream.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz.cpp
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")

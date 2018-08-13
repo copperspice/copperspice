@@ -84,8 +84,6 @@ void QStringList::sort()
    std::sort(this->begin(), this->end());
 }
 
-#ifndef QT_NO_REGEXP
-
 QStringList QStringList::filter(const QRegularExpression8 &rx) const
 {
    QStringList res;
@@ -147,8 +145,6 @@ int QStringList::lastIndexOf( const QRegularExpression8 &regExp, int from) const
 
    return -1;
 }
-
-#endif
 
 int QStringList::removeDuplicates()
 {

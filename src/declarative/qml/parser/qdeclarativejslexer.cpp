@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#if 0			// #ifdef HAVE_CONFIG_H  CopperSpice, unsure if required
+#ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 

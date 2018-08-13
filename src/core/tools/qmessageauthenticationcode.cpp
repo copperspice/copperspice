@@ -24,10 +24,10 @@
 #include "qvarlengtharray.h"
 
 /*
-    These #defines replace the typedefs needed by the RFC6234 code. Normally
-    the typedefs would come from from stdint.h, but since this header is not
-    available on all platforms (MSVC 2008, for example), we #define them to the
-    Qt equivalents.
+   These #defines replace the typedefs needed by the RFC6234 code.
+   Normally the typedefs would come from from stdint.h, but since this header is not available on all
+   platforms define them here
+
 */
 
 #ifdef uint64_t

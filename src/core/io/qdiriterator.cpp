@@ -90,8 +90,6 @@ QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QS
    : dirEntry(entry), nameFilters(nameFilters.contains("*") ? QStringList() : nameFilters)
    , filters(QDir::NoFilter == filters ? QDir::AllEntries : filters), iteratorFlags(flags)
 {
-
-#ifndef QT_NO_REGEXP
    nameRegExps.reserve(nameFilters.size());
 
    for (int i = 0; i < nameFilters.size(); ++i) {
@@ -104,7 +102,6 @@ QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QS
       QRegularExpression regExp(nameFilters.at(i), options);
       nameRegExps.append(regExp);
    }
-#endif
 
    QFileSystemMetaData metaData;
 
@@ -288,8 +285,6 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // name filter
-
-#ifndef QT_NO_REGEXP
    // Pass all entries through name filters, except dirs if the AllDirs
 
    if (! nameFilters.isEmpty() && ! ((filters & QDir::AllDirs) && fi.isDir())) {
@@ -306,7 +301,6 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
          return false;
       }
    }
-#endif
 
    // skip symlinks
    const bool skipSymlinks  = (filters & QDir::NoSymLinks);
