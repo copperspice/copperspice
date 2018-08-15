@@ -39,7 +39,7 @@ namespace Cs {
 #endif
 
 template <typename S>
-class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
+class QStringView : public CsString::CsBasicStringView<S>
 {
    public:
       using difference_type = typename S::difference_type;

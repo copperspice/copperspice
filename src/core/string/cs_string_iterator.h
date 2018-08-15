@@ -37,7 +37,7 @@ class LIB_CS_STRING_EXPORT CsCharArrow
 };
 
 template <typename E, typename A>
-class LIB_CS_STRING_EXPORT CsStringIterator
+class CsStringIterator
 {
    using v_iter = typename std::vector<typename E::storage_unit, A>::const_iterator;
 
@@ -247,7 +247,7 @@ auto CsStringIterator<E,A>::codePointEnd() const -> v_iter
 
 // reverse iterator defreference needs to return by value
 template <typename T>
-class LIB_CS_STRING_EXPORT CsStringReverseIterator : public std::reverse_iterator<T>
+class CsStringReverseIterator : public std::reverse_iterator<T>
 {
    public:
       CsStringReverseIterator() = default;
