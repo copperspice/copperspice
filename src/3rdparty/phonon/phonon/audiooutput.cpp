@@ -573,14 +573,13 @@ void AudioOutput::_k_deviceChanged(QString streamUuid,int device)
 
 
 template <>
-const QString &cs_typeName_internal<Phonon::AudioOutputDevice, void>::typeName()
+PHONON_EXPORT const QString &cs_typeName_internal<Phonon::AudioOutputDevice, void>::typeName()
 {
-   static QString retval = QString("AudioOutputDevice");
+   static const QString retval = QString("AudioOutputDevice");
    return retval;
 }
 
-template
-const QString &cs_typeName_internal<Phonon::AudioOutputDevice,void>::typeName();
+template const QString &cs_typeName_internal<Phonon::AudioOutputDevice,void>::typeName();
 
 
 #undef PHONON_CLASSNAME
