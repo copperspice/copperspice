@@ -245,8 +245,13 @@ void QAbstractScrollAreaPrivate::replaceScrollBar(QScrollBar *scrollBar, Qt::Ori
    scrollBar->setValue(oldBar->value());
    delete oldBar;
 
-   QObject::connect(scrollBar, SIGNAL(valueChanged(int)),
-                    q, horizontal ? SLOT(_q_hslide(int)) : SLOT(_q_vslide(int)));
+   if (horizontal) {
+      QObject::connect(scrollBar, SIGNAL(valueChanged(int)), q, SLOT(_q_hslide(int)));
+
+   } else {
+      QObject::connect(scrollBar, SIGNAL(valueChanged(int)), q, SLOT(_q_vslide(int)));
+
+   }
 
    QObject::connect(scrollBar, SIGNAL(rangeChanged(int, int)),
                     q, SLOT(_q_showOrHideScrollBars()), Qt::QueuedConnection);
@@ -961,7 +966,7 @@ bool QAbstractScrollArea::event(QEvent *e)
          d->layoutChildren();
 
          // fall through
-      
+
       default:
          return QFrame::event(e);
    }
