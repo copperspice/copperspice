@@ -35,7 +35,7 @@ class QVariant;
 class QObject;
 class QDateTime;
 
-struct QMetaObject;
+class QMetaObject;
 
 typedef QList<QScriptValue> QScriptValueList;
 

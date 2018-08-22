@@ -30,7 +30,7 @@
 QT_BEGIN_NAMESPACE
 
 class QObject;
-struct QMetaObject;
+class QMetaObject;
 
 #ifndef QDECLARATIVELISTPROPERTY
 #define QDECLARATIVELISTPROPERTY
