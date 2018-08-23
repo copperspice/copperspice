@@ -22,6 +22,8 @@
 
 //#define QNETWORKACCESSCACHEBACKEND_DEBUG
 
+#include <qassert.h>
+
 #include <qnetworkaccesscachebackend_p.h>
 #include <qurlinfo_p.h>
 
