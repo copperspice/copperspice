@@ -50,8 +50,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-macro_windows_resources("${LUPDATE_SOURCES}" lupdate_manifest)
-
 function_variable_fixup("${EXTRA_LUPDATE_CXXFLAGS}" EXTRA_LUPDATE_CXXFLAGS)
 function_variable_fixup("${EXTRA_LUPDATE_LDFLAGS}" EXTRA_LUPDATE_LDFLAGS)
 

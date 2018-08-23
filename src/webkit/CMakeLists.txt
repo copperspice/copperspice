@@ -1,8 +1,8 @@
 add_definitions(
     -DWTF_CHANGES
-    -UHAVE_CONFIG_H
     -DBUILDING_WEBKIT
-    -DBUILDING_QT__=1
+    -DBUILDING_WTF
+    -DBUILDING_CS=1
     -DWTF_PLATFORM_QT=1
     -DENABLE_WORKERS=1
     -DENABLE_JAVASCRIPT_DEBUGGER=1
@@ -32,7 +32,11 @@ set(EXTRA_WEBKIT_LIBS
     CsNetwork${BUILD_ABI}
     CsScript${BUILD_ABI}
 )
-set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC) # that's not always wanted!
+
+if(NOT MSVC)
+   set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC)
+endif()
+
 set(EXTRA_WEBKIT_LDFLAGS)
 
 include_directories(
@@ -2343,6 +2347,7 @@ set(WEBKITE_SOURCES
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/win)
     add_definitions(-DUNICODE)
+
     set(WEBKIT_SOURCES
         ${WEBKIT_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorWin.cpp
@@ -2356,6 +2361,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/win/BitmapInfo.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/win/WebCoreInstanceHandle.cpp
     )
+
+    if(MSVC)
+       set(WEBKIT_SOURCES
+          ${WEBKIT_SOURCES}
+          ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/win/PaintHooks.asm
+       )
+    endif()
+
     set(EXTRA_WEBKIT_LIBS
         ${EXTRA_WEBKIT_LIBS}
         gdi32
@@ -2363,19 +2376,23 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         shlwapi
         version
     )
+
     set(EXTRA_WEBKIT_LDFLAGS
         ${EXTRA_WEBKIT_LDFLAGS}
         -Wl,-s
     )
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     add_definitions(-DXP_UNIX
         -DENABLE_NETSCAPE_PLUGIN_METADATA_CACHE=1
         -DENABLE_NETSCAPE_PLUGIN_API=1
     )
+
     # TODO: move this to global scope as noted in the top-level CMake file?
     if(HAVE_PTHREAD_NP_H)
         add_definitions(-DHAVE_PTHREAD_NP_H)
     endif()
+
     set(WEBKIT_SOURCES
         ${WEBKIT_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorPosix.cpp
@@ -2384,6 +2401,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
     )
     include_directories(${X11_X11_INCLUDE_PATH})
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/mac)
 
