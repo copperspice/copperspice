@@ -575,9 +575,10 @@ S QRegularExpression<S>::escape(const S &str)
          result.append('\\');
          result.append('0');
 
-      } else if ( (ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') &&
-                  (ch < '0' || ch > '9') && (ch != '_') )  {
+      } else if (ch == '.'  || ch == '[' || ch == '{' || ch == '}' || ch == '(' || ch == ')' ||
+                 ch == '\\' || ch == '*' || ch == '+' || ch == '?' || ch == '|' || ch == '^' || ch == '$')  {
 
+         // must escaped exactly these chars
          result.append('\\');
          result.append(ch);
 
