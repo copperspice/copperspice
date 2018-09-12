@@ -930,8 +930,6 @@ class cs_number<0>
 #define CORE_CS_SLOT_2(slotName)
 #define CORE_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define CORE_CS_SIGNAL_1(access, ...)               Q_DECL_IMPORT __VA_ARGS__;
-
 #define CORE_CS_SIGNAL_1(access, ...)                          __VA_ARGS__;
 #define CORE_CS_SIGNAL_2(signalName, ...)
 #define CORE_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1008,8 +1006,6 @@ class cs_number<0>
 #define GUI_CS_SLOT_2(slotName)
 #define GUI_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define GUI_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
-
 #define GUI_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define GUI_CS_SIGNAL_2(signalName, ...)
 #define GUI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1059,8 +1055,6 @@ class cs_number<0>
 #define MULTI_CS_SLOT_1(access, ...)                              __VA_ARGS__;
 #define MULTI_CS_SLOT_2(slotName)
 #define MULTI_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-// BROOM   #define MULTI_CS_SIGNAL_1(access, ...)                 Q_DECL_IMPORT __VA_ARGS__;
 
 #define MULTI_CS_SIGNAL_1(access, ...)                            __VA_ARGS__;
 #define MULTI_CS_SIGNAL_2(signalName, ...)
@@ -1115,8 +1109,6 @@ class cs_number<0>
 #define NET_CS_SLOT_2(slotName)
 #define NET_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define NET_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
-
 #define NET_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define NET_CS_SIGNAL_2(signalName, ...)
 #define NET_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1169,8 +1161,6 @@ class cs_number<0>
 #define OPENGL_CS_SLOT_1(access, ...)                             __VA_ARGS__;
 #define OPENGL_CS_SLOT_2(slotName)
 #define OPENGL_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-// BROOM   #define OPENGL_CS_SIGNAL_1(access, ...)                Q_DECL_IMPORT __VA_ARGS__;
 
 #define OPENGL_CS_SIGNAL_1(access, ...)                           __VA_ARGS__;
 #define OPENGL_CS_SIGNAL_2(signalName, ...)
@@ -1225,8 +1215,6 @@ class cs_number<0>
 #define PHN_CS_SLOT_2(slotName)
 #define PHN_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define PHN_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
-
 #define PHN_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define PHN_CS_SIGNAL_2(signalName, ...)
 #define PHN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1278,8 +1266,6 @@ class cs_number<0>
 #define SCRIPT_CS_SLOT_2(slotName)
 #define SCRIPT_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define SCRIPT_CS_SIGNAL_1(access, ...)                Q_DECL_IMPORT __VA_ARGS__;
-
 #define SCRIPT_CS_SIGNAL_1(access, ...)                           __VA_ARGS__;
 
 #define SCRIPT_CS_SIGNAL_2(signalName, ...)
@@ -1311,8 +1297,6 @@ class cs_number<0>
 #define SCRIPT_T_CS_SLOT_2(slotName)
 #define SCRIPT_T_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define SCRIPT_T_CS_SIGNAL_1(access, ...)              Q_DECL_IMPORT __VA_ARGS__;
-
 #define SCRIPT_T_CS_SIGNAL_1(access, ...)                         __VA_ARGS__;
 #define SCRIPT_T_CS_SIGNAL_2(signalName, ...)
 #define SCRIPT_T_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1342,8 +1326,6 @@ class cs_number<0>
 #define SQL_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define SQL_CS_SLOT_2(slotName)
 #define SQL_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-// BROOM   #define SQL_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
 
 #define SQL_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define SQL_CS_SIGNAL_2(signalName, ...)
@@ -1394,8 +1376,6 @@ class cs_number<0>
 #define SVG_CS_SLOT_OVERLOAD(slotName, argTypes)
 #define SVG_CS_SLOT_OVERLOAD_BOOL(slotName, argTypes)
 
-// BROOM   #define SVG_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
-
 #define SVG_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define SVG_CS_SIGNAL_2(signalName, ...)
 #define SVG_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1442,8 +1422,6 @@ class cs_number<0>
 #define XMLP_CS_SLOT_1(access, ...)                               __VA_ARGS__;
 #define XMLP_CS_SLOT_2(slotName)
 #define XMLP_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-// BROOM   #define XMLP_CS_SIGNAL_1(access, ...)                  Q_DECL_IMPORT __VA_ARGS__;
 
 #define XMLP_CS_SIGNAL_1(access, ...)                             __VA_ARGS__;
 #define XMLP_CS_SIGNAL_2(signalName, ...)
@@ -1497,8 +1475,6 @@ class cs_number<0>
 #define WEB_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define WEB_CS_SLOT_2(slotName)
 #define WEB_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-// BROOM   #define WEB_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
 
 #define WEB_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define WEB_CS_SIGNAL_2(signalName, ...)
@@ -1580,8 +1556,6 @@ class cs_number<0>
 #define DECL_CS_SLOT_2(slotName)
 #define DECL_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define DECL_CS_SIGNAL_1(access, ...)                  Q_DECL_IMPORT __VA_ARGS__;
-
 #define DECL_CS_SIGNAL_1(access, ...)                             __VA_ARGS__;
 #define DECL_CS_SIGNAL_2(signalName, ...)
 #define DECL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1637,8 +1611,6 @@ class cs_number<0>
 #define GSTRM_CS_SLOT_2(slotName)
 #define GSTRM_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define GSTRM_CS_SIGNAL_1(access, ...)                 Q_DECL_IMPORT __VA_ARGS__;
-
 #define GSTRM_CS_SIGNAL_1(access, ...)                            __VA_ARGS__;
 #define GSTRM_CS_SIGNAL_2(signalName, ...)
 #define GSTRM_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1670,8 +1642,6 @@ class cs_number<0>
 #define DS9_CS_SLOT_2(slotName)
 #define DS9_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-// BROOM   #define DS9_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
-
 #define DS9_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define DS9_CS_SIGNAL_2(signalName, ...)
 #define DS9_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
@@ -1702,8 +1672,6 @@ class cs_number<0>
 #define QT7_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define QT7_CS_SLOT_2(slotName)
 #define QT7_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-// BROOM   #define QT7_CS_SIGNAL_1(access, ...)                   Q_DECL_IMPORT __VA_ARGS__;
 
 #define QT7_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
 #define QT7_CS_SIGNAL_2(signalName, ...)

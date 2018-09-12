@@ -633,7 +633,7 @@ QString16 QString16::fromUtf16(const char16_t *str, size_type numOfChars)
       }
    }
 
-   // BROOM-NOW -- partial, pending surrogates
+   // broom - partial, pending surrogates
 
    QString16 retval;
 
