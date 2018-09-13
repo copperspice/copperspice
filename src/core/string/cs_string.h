@@ -4281,6 +4281,10 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::replace(const_iterat
 template <typename E, typename A>
 void CsBasicString<E, A>::resize(size_type size)
 {
+   if (size < 0) {
+      size = 0;
+   }
+
    size_type stringLen = this->size();
    size_type count     = size - stringLen;
 
@@ -4291,7 +4295,7 @@ void CsBasicString<E, A>::resize(size_type size)
 
    } else if (count < 0) {
       auto end   = this->end();
-      auto begin = end + (size - stringLen);
+      auto begin = end + count;
 
       erase(begin, end);
    }
@@ -4300,6 +4304,10 @@ void CsBasicString<E, A>::resize(size_type size)
 template <typename E, typename A>
 void CsBasicString<E, A>::resize(size_type size, CsChar c)
 {
+   if (size < 0) {
+      size = 0;
+   }
+
    size_type stringLen = this->size();
    size_type count     = size - stringLen;
 
