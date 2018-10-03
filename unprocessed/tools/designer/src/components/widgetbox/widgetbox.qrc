@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/trolltech/widgetbox">
-        <file>widgetbox.xml</file>
-    </qresource>
-</RCC>

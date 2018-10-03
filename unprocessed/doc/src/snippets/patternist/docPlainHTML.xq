@@ -1,1 +1,0 @@
-doc("myPlainHTML.html")/body

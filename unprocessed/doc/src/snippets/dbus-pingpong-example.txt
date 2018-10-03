@@ -1,3 +1,0 @@
-$ ./pong &
-$ ./ping Hello
-Reply was: ping("Hello") got called
