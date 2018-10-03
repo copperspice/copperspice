@@ -402,8 +402,8 @@ static const struct {
    { 0, 0 }
 };
 
-//Table of key bindings. It must be sorted on key sequence.
-//A priority of 1 indicates that this is the primary key binding when multiple are defined.
+// Table of key bindings. It must be sorted on key sequence.
+// A priority of 1 indicates that this is the primary key binding when multiple are defined.
 
 const QKeyBinding QKeySequencePrivate::keyBindings[] = {
    //   StandardKey                        Priority    Key Sequence                            Platforms
@@ -422,7 +422,6 @@ const QKeyBinding QKeySequencePrivate::keyBindings[] = {
    {QKeySequence::MoveToPreviousPage,      1,          Qt::Key_PageUp,                         QApplicationPrivate::KB_All},
    {QKeySequence::MoveToNextPage,          1,          Qt::Key_PageDown,                       QApplicationPrivate::KB_All},
    {QKeySequence::HelpContents,            0,          Qt::Key_F1,                             QApplicationPrivate::KB_Win | QApplicationPrivate::KB_X11},
-   {QKeySequence::HelpContents,            0,          Qt::Key_F2,                             QApplicationPrivate::KB_S60},
    {QKeySequence::FindNext,                0,          Qt::Key_F3,                             QApplicationPrivate::KB_X11},
    {QKeySequence::FindNext,                1,          Qt::Key_F3,                             QApplicationPrivate::KB_Win},
    {QKeySequence::Refresh,                 0,          Qt::Key_F5,                             QApplicationPrivate::KB_Win | QApplicationPrivate::KB_X11},
@@ -433,7 +432,6 @@ const QKeyBinding QKeySequencePrivate::keyBindings[] = {
    {QKeySequence::PreviousChild,           0,          Qt::Key_Back,                           QApplicationPrivate::KB_All},
    {QKeySequence::NextChild,               0,          Qt::Key_Forward,                        QApplicationPrivate::KB_All},
    {QKeySequence::Forward,                 0,          Qt::SHIFT | Qt::Key_Backspace,          QApplicationPrivate::KB_Win},
-   {QKeySequence::Delete,                  0,          Qt::SHIFT | Qt::Key_Backspace,          QApplicationPrivate::KB_S60},
    {QKeySequence::InsertLineSeparator,     0,          Qt::SHIFT | Qt::Key_Return,             QApplicationPrivate::KB_All},
    {QKeySequence::InsertLineSeparator,     0,          Qt::SHIFT | Qt::Key_Enter,              QApplicationPrivate::KB_All},
    {QKeySequence::Paste,                   0,          Qt::SHIFT | Qt::Key_Insert,             QApplicationPrivate::KB_Win | QApplicationPrivate::KB_X11},
@@ -471,7 +469,10 @@ const QKeyBinding QKeySequencePrivate::keyBindings[] = {
    {QKeySequence::New,                     1,          Qt::CTRL | Qt::Key_N,                   QApplicationPrivate::KB_All},
    {QKeySequence::Open,                    1,          Qt::CTRL | Qt::Key_O,                   QApplicationPrivate::KB_All},
    {QKeySequence::Print,                   1,          Qt::CTRL | Qt::Key_P,                   QApplicationPrivate::KB_All},
-   {QKeySequence::Quit,                    0,          Qt::CTRL | Qt::Key_Q,                   QApplicationPrivate::KB_Gnome | QApplicationPrivate::KB_KDE | QApplicationPrivate::KB_Mac},
+
+   {QKeySequence::Quit,                    0,          Qt::CTRL | Qt::Key_Q,                   QApplicationPrivate::KB_X11 | QApplicationPrivate::KB_Gnome |
+                                                                                               QApplicationPrivate::KB_KDE | QApplicationPrivate::KB_Mac},
+
    {QKeySequence::Refresh,                 1,          Qt::CTRL | Qt::Key_R,                   QApplicationPrivate::KB_Gnome | QApplicationPrivate::KB_Mac},
    {QKeySequence::Replace,                 0,          Qt::CTRL | Qt::Key_R,                   QApplicationPrivate::KB_KDE},
    {QKeySequence::Save,                    1,          Qt::CTRL | Qt::Key_S,                   QApplicationPrivate::KB_All},
@@ -670,35 +671,30 @@ void QKeySequence::setKey(int key, int index)
    d->key[index] = key;
 }
 
-/*!
-    Returns the number of keys in the key sequence.
-    The maximum is 4.
- */
-uint QKeySequence::count() const
+int QKeySequence::count() const
 {
-   if (!d->key[0]) {
+   if (! d->key[0]) {
       return 0;
    }
+
    if (!d->key[1]) {
       return 1;
    }
-   if (!d->key[2]) {
+
+   if (! d->key[2]) {
       return 2;
    }
-   if (!d->key[3]) {
+
+   if (! d->key[3]) {
       return 3;
    }
+
    return 4;
 }
 
-
-/*!
-    Returns true if the key sequence is empty; otherwise returns
-    false.
-*/
 bool QKeySequence::isEmpty() const
 {
-   return !d->key[0];
+   return ! d->key[0];
 }
 
 QKeySequence QKeySequence::mnemonic(const QString &text)
@@ -753,15 +749,14 @@ int QKeySequence::assign(const QString &ks, QKeySequence::SequenceFormat format)
    QString keyseq = ks;
    QString part;
    int n = 0;
-   int p = 0, diff = 0;
+   int p = 0;
+   int diff = 0;
 
-   // Run through the whole string, but stop
-   // if we have 4 keys before the end.
+   // Run through the whole string, but stop if we have 4 keys before the end.
 
    while (keyseq.length() && n < 4) {
-      // We MUST use something to separate each sequence, and space
-      // does not cut it, since some of the key names have space
-      // in them.. (Let's hope no one translate with a comma in it:)
+      // We MUST use something to separate each sequence, and space does not work since some of the key names
+      // have space in them
       p = keyseq.indexOf(',');
 
       if (-1 != p) {
@@ -787,6 +782,7 @@ int QKeySequence::assign(const QString &ks, QKeySequence::SequenceFormat format)
       d->key[n] = QKeySequencePrivate::decodeString(part, format);
       ++n;
    }
+
    return n;
 }
 
