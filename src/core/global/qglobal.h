@@ -689,13 +689,8 @@ class Q_CORE_EXPORT QSysInfo
 
 Q_CORE_EXPORT const char *qVersion();
 
-// not needed, used over 40 times
-#ifndef Q_INLINE_TEMPLATE
-#  define Q_INLINE_TEMPLATE inline
-#endif
-
 // avoid "unused parameter" warnings
-#  define Q_UNUSED(x) (void)x;
+#define Q_UNUSED(x) (void)x;
 
 
 // Debugging and error handling

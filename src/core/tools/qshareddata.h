@@ -26,8 +26,6 @@
 #include <qglobal.h>
 #include <qatomic.h>
 
-QT_BEGIN_NAMESPACE
-
 template <class T> class QSharedDataPointer;
 
 class Q_CORE_EXPORT QSharedData
@@ -291,7 +289,7 @@ template <class T> class QExplicitlySharedDataPointer
 };
 
 template <class T>
-Q_INLINE_TEMPLATE QSharedDataPointer<T>::QSharedDataPointer(T *adata) : d(adata)
+inline QSharedDataPointer<T>::QSharedDataPointer(T *adata) : d(adata)
 {
    if (d) {
       d->ref.ref();
@@ -333,7 +331,7 @@ void QExplicitlySharedDataPointer<T>::detach_helper()
 }
 
 template <class T>
-Q_INLINE_TEMPLATE QExplicitlySharedDataPointer<T>::QExplicitlySharedDataPointer(T *adata) : d(adata)
+inline QExplicitlySharedDataPointer<T>::QExplicitlySharedDataPointer(T *adata) : d(adata)
 {
    if (d) {
       d->ref.ref();
@@ -341,13 +339,13 @@ Q_INLINE_TEMPLATE QExplicitlySharedDataPointer<T>::QExplicitlySharedDataPointer(
 }
 
 template <class T>
-Q_INLINE_TEMPLATE void qSwap(QSharedDataPointer<T> &p1, QSharedDataPointer<T> &p2)
+inline void qSwap(QSharedDataPointer<T> &p1, QSharedDataPointer<T> &p2)
 {
    p1.swap(p2);
 }
 
 template <class T>
-Q_INLINE_TEMPLATE void qSwap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPointer<T> &p2)
+inline void qSwap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPointer<T> &p2)
 {
    p1.swap(p2);
 }
@@ -356,14 +354,14 @@ Q_INLINE_TEMPLATE void qSwap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySha
 QT_END_NAMESPACE
 namespace std {
 template <class T>
-Q_INLINE_TEMPLATE void swap(QT_PREPEND_NAMESPACE(QSharedDataPointer)<T> &p1,
+inline void swap(QT_PREPEND_NAMESPACE(QSharedDataPointer)<T> &p1,
                             QT_PREPEND_NAMESPACE(QSharedDataPointer)<T> &p2)
 {
    p1.swap(p2);
 }
 
 template <class T>
-Q_INLINE_TEMPLATE void swap(QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p1,
+inline void swap(QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p1,
                             QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p2)
 {
    p1.swap(p2);
@@ -374,6 +372,4 @@ QT_BEGIN_NAMESPACE
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedDataPointer<T>, Q_MOVABLE_TYPE);
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QExplicitlySharedDataPointer<T>, Q_MOVABLE_TYPE);
 
-QT_END_NAMESPACE
-
-#endif // QSHAREDDATA_H
+#endif

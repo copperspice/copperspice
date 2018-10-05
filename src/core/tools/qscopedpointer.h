@@ -150,7 +150,7 @@ inline bool operator!=(const QScopedPointer<T, Cleanup> &lhs, const QScopedPoint
 }
 
 template <class T, class Cleanup>
-Q_INLINE_TEMPLATE void qSwap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2)
+inline void qSwap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2)
 {
    p1.swap(p2);
 }
@@ -159,7 +159,7 @@ Q_INLINE_TEMPLATE void qSwap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, C
 QT_END_NAMESPACE
 namespace std {
 template <class T, class Cleanup>
-Q_INLINE_TEMPLATE void swap(QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p1,
+inline void swap(QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p1,
                             QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p2)
 {
    p1.swap(p2);

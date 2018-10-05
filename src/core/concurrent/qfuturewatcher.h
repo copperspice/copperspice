@@ -142,7 +142,7 @@ class QFutureWatcher : public QFutureWatcherBase
 };
 
 template <typename T>
-Q_INLINE_TEMPLATE void QFutureWatcher<T>::setFuture(const QFuture<T> &_future)
+inline void QFutureWatcher<T>::setFuture(const QFuture<T> &_future)
 {
    if (_future == m_future) {
       return;
@@ -181,7 +181,7 @@ class QFutureWatcher<void> : public QFutureWatcherBase
    }
 };
 
-Q_INLINE_TEMPLATE void QFutureWatcher<void>::setFuture(const QFuture<void> &_future)
+inline void QFutureWatcher<void>::setFuture(const QFuture<void> &_future)
 {
    if (_future == m_future) {
       return;

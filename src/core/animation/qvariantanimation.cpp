@@ -44,7 +44,8 @@ static QVariant defaultInterpolator(const void *, const void *, qreal)
    return QVariant();
 }
 
-template<> Q_INLINE_TEMPLATE QRect _q_interpolate(const QRect &f, const QRect &t, qreal progress)
+template<>
+inline QRect _q_interpolate(const QRect &f, const QRect &t, qreal progress)
 {
    QRect ret;
    ret.setCoords(_q_interpolate(f.left(), t.left(), progress),
@@ -54,7 +55,8 @@ template<> Q_INLINE_TEMPLATE QRect _q_interpolate(const QRect &f, const QRect &t
    return ret;
 }
 
-template<> Q_INLINE_TEMPLATE QRectF _q_interpolate(const QRectF &f, const QRectF &t, qreal progress)
+template<>
+inline QRectF _q_interpolate(const QRectF &f, const QRectF &t, qreal progress)
 {
    qreal x1, y1, w1, h1;
    f.getRect(&x1, &y1, &w1, &h1);
@@ -64,12 +66,14 @@ template<> Q_INLINE_TEMPLATE QRectF _q_interpolate(const QRectF &f, const QRectF
                  _q_interpolate(w1, w2, progress), _q_interpolate(h1, h2, progress));
 }
 
-template<> Q_INLINE_TEMPLATE QLine _q_interpolate(const QLine &f, const QLine &t, qreal progress)
+template<>
+inline QLine _q_interpolate(const QLine &f, const QLine &t, qreal progress)
 {
    return QLine( _q_interpolate(f.p1(), t.p1(), progress), _q_interpolate(f.p2(), t.p2(), progress));
 }
 
-template<> Q_INLINE_TEMPLATE QLineF _q_interpolate(const QLineF &f, const QLineF &t, qreal progress)
+template<>
+inline QLineF _q_interpolate(const QLineF &f, const QLineF &t, qreal progress)
 {
    return QLineF( _q_interpolate(f.p1(), t.p1(), progress), _q_interpolate(f.p2(), t.p2(), progress));
 }

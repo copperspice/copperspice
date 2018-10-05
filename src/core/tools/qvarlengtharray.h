@@ -259,7 +259,7 @@ class QVarLengthArray
 };
 
 template <class T, int Prealloc>
-Q_INLINE_TEMPLATE QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
+inline QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
    : s(asize)
 {
    if (s > Prealloc) {
@@ -279,13 +279,13 @@ Q_INLINE_TEMPLATE QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
 }
 
 template <class T, int Prealloc>
-Q_INLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::resize(int asize)
+inline void QVarLengthArray<T, Prealloc>::resize(int asize)
 {
    realloc(asize, qMax(asize, a));
 }
 
 template <class T, int Prealloc>
-Q_INLINE_TEMPLATE void QVarLengthArray<T, Prealloc>::reserve(int asize)
+inline void QVarLengthArray<T, Prealloc>::reserve(int asize)
 {
    if (asize > a) {
       realloc(s, asize);
