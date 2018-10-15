@@ -23,35 +23,35 @@
 #include <qstringview.h>
 #include <qunicodetables_p.h>
 
-std::pair<int32_t,  const ushort *> cs_internal_convertCaseTrait(int trait, const uint32_t value)
+std::pair<char32_t, const char32_t *> cs_internal_convertCaseTrait(int trait, char32_t value)
 {
-   int32_t caseDiff          = 0;
-   const ushort *specialCase = nullptr;
-
-
-   const QUnicodeTables::Properties *prop = QUnicodeTables::properties(value);
+   char32_t caseValue = value;
+   const char32_t *caseSpecial = nullptr;
 
    if (trait == 1)  {
-      caseDiff = QUnicodeTables::CasefoldTraits::caseDiff(prop);
+      caseValue = QUnicodeTables::CaseFoldTraits::caseValue(value);
 
-      if (QUnicodeTables::CasefoldTraits::caseSpecial(prop)) {
-         specialCase = QUnicodeTables::specialCaseMap + caseDiff;
+      if (caseValue == 0 && value != 0) {
+         // special char
+         caseSpecial = QUnicodeTables::CaseFoldTraits::caseSpecial(value);
       }
 
    } else if (trait == 2) {
-      caseDiff = QUnicodeTables::LowercaseTraits::caseDiff(prop);
+      caseValue = QUnicodeTables::LowerCaseTraits::caseValue(value);
 
-      if (QUnicodeTables::LowercaseTraits::caseSpecial(prop)) {
-         specialCase = QUnicodeTables::specialCaseMap + caseDiff;
+      if (caseValue == 0 && value != 0) {
+         // special char
+         caseSpecial = QUnicodeTables::LowerCaseTraits::caseSpecial(value);
       }
 
    } else if (trait == 3) {
-      caseDiff = QUnicodeTables::UppercaseTraits::caseDiff(prop);
+      caseValue = QUnicodeTables::UpperCaseTraits::caseValue(value);
 
-      if (QUnicodeTables::UppercaseTraits::caseSpecial(prop)) {
-         specialCase = QUnicodeTables::specialCaseMap + caseDiff;
+      if (caseValue == 0 && value != 0) {
+         // special char
+         caseSpecial = QUnicodeTables::UpperCaseTraits::caseSpecial(value);
       }
    }
 
-   return std::make_pair(caseDiff, specialCase);
+   return { caseValue, caseSpecial };
 }

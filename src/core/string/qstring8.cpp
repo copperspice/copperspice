@@ -1,4 +1,4 @@
-/***********************************************************************
+ /***********************************************************************
 *
 * Copyright (c) 2012-2018 Barbara Geller
 * Copyright (c) 2012-2018 Ansel Sermersheim
@@ -423,25 +423,17 @@ static T convertCase(const T &str)
    T retval;
 
    for (auto c : str)  {
-      uint32_t value = c.unicode();
+      uint32_t value     = c.unicode();
+      char32_t caseValue = TRAITS::caseValue(value);
 
-      const QUnicodeTables::Properties *prop = QUnicodeTables::properties(value);
-      int32_t caseDiff = TRAITS::caseDiff(prop);
+      if (caseValue == 0 && value != 0) {
+         // special char
 
-      if (TRAITS::caseSpecial(prop)) {
-
-         const ushort *specialCase = QUnicodeTables::specialCaseMap + caseDiff;
-
-         ushort length = *specialCase;
-         ++specialCase;
-
-         for (ushort cnt; cnt < length; ++cnt)  {
-            retval += QChar32(specialCase[cnt]);
-         }
-
+         const char32_t *data = TRAITS::caseSpecial(value);
+         retval += data;
 
       } else {
-         retval += QChar32( static_cast<char32_t>(value + caseDiff) );
+         retval += QChar32(caseValue);
 
       }
    }
@@ -1590,12 +1582,12 @@ bool QString8::startsWith(QStringView8 str, Qt::CaseSensitivity cs) const
 
 QString8 QString8::toCaseFolded() const &
 {
-   return convertCase<QUnicodeTables::CasefoldTraits>(*this);
+   return convertCase<QUnicodeTables::CaseFoldTraits>(*this);
 }
 
 QString8 QString8::toCaseFolded() &&
 {
-   return convertCase<QUnicodeTables::CasefoldTraits>(*this);
+   return convertCase<QUnicodeTables::CaseFoldTraits>(*this);
 }
 
 QString8 QString8::toHtmlEscaped() const
@@ -1626,22 +1618,22 @@ QString8 QString8::toHtmlEscaped() const
 
 QString8 QString8::toLower() const &
 {
-    return convertCase<QUnicodeTables::LowercaseTraits>(*this);
+    return convertCase<QUnicodeTables::LowerCaseTraits>(*this);
 }
 
 QString8 QString8::toLower() &&
 {
-    return convertCase<QUnicodeTables::LowercaseTraits>(*this);
+    return convertCase<QUnicodeTables::LowerCaseTraits>(*this);
 }
 
 QString8 QString8::toUpper() const &
 {
-    return convertCase<QUnicodeTables::UppercaseTraits>(*this);
+    return convertCase<QUnicodeTables::UpperCaseTraits>(*this);
 }
 
 QString8 QString8::toUpper() &&
 {
-    return convertCase<QUnicodeTables::UppercaseTraits>(*this);
+    return convertCase<QUnicodeTables::UpperCaseTraits>(*this);
 }
 
 QByteArray QString8::toLatin1() const
@@ -1838,17 +1830,17 @@ bool cs_internal_quickCheck(QString8::const_iterator &first_iter, QString8::cons
 }
 
 // buffer has to have a length of 3, required for Hangul decomposition
-static const uint16_t * cs_internal_decompose_2(uint ucs4, int *length, int *tag, unsigned short *buffer)
+static const char32_t * cs_internal_decompose_2(uint ucs4, int *length, int *tag, char32_t *buffer)
 {
-    if (ucs4 >= Hangul_SBase && ucs4 < Hangul_SBase + Hangul_SCount) {
+    if (ucs4 >= Hangul_Constants::Hangul_SBase && ucs4 < Hangul_Constants::Hangul_SBase + Hangul_Constants::Hangul_SCount) {
         // compute Hangul syllable decomposition as per UAX #15
 
-        const uint SIndex = ucs4 - Hangul_SBase;
-        buffer[0] = Hangul_LBase + SIndex / Hangul_NCount;                   // L
-        buffer[1] = Hangul_VBase + (SIndex % Hangul_NCount) / Hangul_TCount; // V
-        buffer[2] = Hangul_TBase + SIndex % Hangul_TCount;                   // T
+        const uint SIndex = ucs4 - Hangul_Constants::Hangul_SBase;
+        buffer[0] = Hangul_Constants::Hangul_LBase + SIndex / Hangul_Constants::Hangul_NCount;                                     // L
+        buffer[1] = Hangul_Constants::Hangul_VBase + (SIndex % Hangul_Constants::Hangul_NCount) / Hangul_Constants::Hangul_TCount; // V
+        buffer[2] = Hangul_Constants::Hangul_TBase + SIndex % Hangul_Constants::Hangul_TCount;                                     // T
 
-        *length = buffer[2] == Hangul_TBase ? 2 : 3;
+        *length = buffer[2] == Hangul_Constants::Hangul_TBase ? 2 : 3;
         *tag = QChar32::Canonical;
 
         return buffer;
@@ -1861,7 +1853,7 @@ static const uint16_t * cs_internal_decompose_2(uint ucs4, int *length, int *tag
         return 0;
     }
 
-    const unsigned short *decomposition = QUnicodeTables::uc_decomposition_map + index;
+    const char32_t *decomposition = QUnicodeTables::uc_decomposition_map + index;
     *tag    = (*decomposition) & 0xff;
     *length = (*decomposition) >> 8;
 
@@ -1877,7 +1869,7 @@ QString8 cs_internal_decompose(QString8::const_iterator first_iter, QString8::co
    int length;
    int tag;
 
-   unsigned short buffer[3];
+   char32_t buffer[3];
 
    if (first_iter == last_iter) {
       return retval;
@@ -1891,7 +1883,7 @@ QString8 cs_internal_decompose(QString8::const_iterator first_iter, QString8::co
         continue;
       }
 
-      const uint16_t *strDecomp = cs_internal_decompose_2(uc.unicode(), &length, &tag, buffer);
+      const char32_t *strDecomp = cs_internal_decompose_2(uc.unicode(), &length, &tag, buffer);
 
       if (! strDecomp || (canonical && tag != QChar32::Canonical)) {
          retval.append(uc);
@@ -1968,25 +1960,25 @@ QString8 cs_internal_canonicalOrder(const QString8 &str, QChar32::UnicodeVersion
 
 static char32_t inline cs_internal_ligature(uint u1, uint u2)
 {
-   if (u1 >= Hangul_LBase && u1 <= Hangul_SBase + Hangul_SCount) {
+   if (u1 >= Hangul_Constants::Hangul_LBase && u1 <= Hangul_Constants::Hangul_SBase + Hangul_Constants::Hangul_SCount) {
      // compute Hangul syllable composition as per UAX #15
      // hangul L-V pair
-     const uint LIndex = u1 - Hangul_LBase;
+     const uint LIndex = u1 - Hangul_Constants::Hangul_LBase;
 
-     if (LIndex < Hangul_LCount) {
-         const uint VIndex = u2 - Hangul_VBase;
+     if (LIndex < Hangul_Constants::Hangul_LCount) {
+         const uint VIndex = u2 - Hangul_Constants::Hangul_VBase;
 
-         if (VIndex < Hangul_VCount) {
-            return Hangul_SBase + (LIndex * Hangul_VCount + VIndex) * Hangul_TCount;
+         if (VIndex < Hangul_Constants::Hangul_VCount) {
+            return Hangul_Constants::Hangul_SBase + (LIndex * Hangul_Constants::Hangul_VCount + VIndex) * Hangul_Constants::Hangul_TCount;
          }
      }
 
      // hangul LV-T pair
-     const uint SIndex = u1 - Hangul_SBase;
-     if (SIndex < Hangul_SCount && (SIndex % Hangul_TCount) == 0) {
-         const uint TIndex = u2 - Hangul_TBase;
+     const uint SIndex = u1 - Hangul_Constants::Hangul_SBase;
+     if (SIndex < Hangul_Constants::Hangul_SCount && (SIndex % Hangul_Constants::Hangul_TCount) == 0) {
+         const uint TIndex = u2 - Hangul_Constants::Hangul_TBase;
 
-         if (TIndex <= Hangul_TCount) {
+         if (TIndex <= Hangul_Constants::Hangul_TCount) {
             return u1 + TIndex;
          }
      }
@@ -1997,9 +1989,10 @@ static char32_t inline cs_internal_ligature(uint u1, uint u2)
       return 0;
    }
 
-   const unsigned short *ligatures = QUnicodeTables::uc_ligature_map + index;
+   const char32_t *ligatures = QUnicodeTables::uc_ligature_map + index;
    ushort length = *ligatures++;
 
+   // broom - review ligature
    const UCS2Pair *data = reinterpret_cast<const UCS2Pair *>(ligatures);
    const UCS2Pair *r    = std::lower_bound(data, data + length, ushort(u1));
 

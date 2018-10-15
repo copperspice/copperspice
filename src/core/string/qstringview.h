@@ -32,7 +32,7 @@
 #include <qchar32.h>
 #include <qstringfwd.h>
 
-Q_CORE_EXPORT std::pair<int32_t, const ushort *> cs_internal_convertCaseTrait(int trait, const uint32_t value);
+Q_CORE_EXPORT std::pair<char32_t, const char32_t *> cs_internal_convertCaseTrait(int trait, char32_t value);
 
 #if ! defined (CS_DOXYPRESS)
 namespace Cs {
@@ -809,7 +809,7 @@ bool QStringView<S>::startsWith(QStringView<S> str, Qt::CaseSensitivity cs) cons
             return false;
          }
 
-         if ( iter->toCaseFolded() != uc.toCaseFolded()) {
+         if (iter->toCaseFolded() != uc.toCaseFolded()) {
             return false;
          }
 
@@ -826,24 +826,16 @@ S QStringView<S>::convertCase(int trait) const
    S retval;
 
    for (auto c : *this)  {
-      uint32_t value = c.unicode();
+      char32_t value = c.unicode();
+      std::pair<char32_t, const char32_t *> unicodeLookUp = cs_internal_convertCaseTrait(trait, value);
 
-      std::pair<int32_t, const ushort *> unicodeLookUp = cs_internal_convertCaseTrait(trait, value);
+      char32_t caseValue = unicodeLookUp.first;
 
-      int32_t caseDiff          = unicodeLookUp.first;
-      const ushort *specialCase = unicodeLookUp.second;
-
-      if (specialCase != nullptr) {
-
-         ushort length = *specialCase;
-         ++specialCase;
-
-         for (ushort cnt; cnt < length; ++cnt)  {
-            retval += value_type(specialCase[cnt]);
-         }
+      if (caseValue == 0 && value != 0) {
+         retval += unicodeLookUp.second;
 
       } else {
-         retval += value_type( static_cast<char32_t>(value + caseDiff) );
+         retval += value_type(caseValue);
 
       }
    }
