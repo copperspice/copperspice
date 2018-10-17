@@ -1889,7 +1889,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const char (&s
    // make this safe
    size_type stringLen = this->size();
 
-   if (str == nullptr || *str == '\0') {
+   if (*str == '\0') {
 
       if (indexStart > stringLen) {
          return -1;
@@ -2595,7 +2595,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
 
    size_type stringLen = this->size();
 
-   if (str == nullptr || *str == '\0') {
+   if (*str == '\0') {
 
       if (indexStart >= stringLen) {
          return -1;
@@ -2904,7 +2904,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(co
 
    size_type stringLen = this->size();
 
-   if (str == nullptr || *str == '\0') {
+   if (*str == '\0') {
 
       if (indexStart > stringLen || indexStart == -1) {
          return stringLen - 1;
