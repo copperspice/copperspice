@@ -996,6 +996,7 @@ static const char *specialLanguages[] = {
     "sa",    // Sharada
     "srb",   // SoraSompeng
     "doi",   // Takri
+
     "lez",   // CaucasianAlbanian
     "bsq",   // BassaVah
     "fr",    // Duployan
@@ -1019,17 +1020,35 @@ static const char *specialLanguages[] = {
     "sd",    // Khudawadi
     "mai",   // Tirhuta
     "hoc",   // WarangCiti
+
     "",      // Ahom
     "",      // AnatolianHieroglyphs
     "",      // Hatran
     "",      // Multani
     "",      // OldHungarian
-    ""       // SignWriting
+    "",      // SignWriting
+
+    "",      // Adlam,
+    "",      // Bhaiksuki
+    "",      // Marchen
+    "",      // Newa
+    "",      // Osage
+    "",      // Tangut
+
+    "",      // MasaramGondi
+    "",      // Nushu
+    "",      // Soyombo
+    "",      // ZanabazarSquare
+
+    "",      // HanifiRohingya
+    "",      // OldSogdian
+    "",      // Sogdian
+    "",      // Dogra
+    "",      // GunjalaGondi
+    "",      // Makasar
+    "",      // Medefaidrin
 };
 enum { SpecialLanguageCount = sizeof(specialLanguages) / sizeof(const char *) };
-
-
-// might be missing values, verify with unicode tables
 
 static const ushort specialChars[] = {
    0,      // Any
@@ -1149,9 +1168,8 @@ static const ushort sampleCharForWritingSystem[] = {
 };
 enum { SampleCharCount = sizeof(sampleCharForWritingSystem) / sizeof(ushort) };
 
-// Newer FontConfig let's us sort out fonts that contain certain glyphs, but no
-// open type tables for is directly. Do this so we don't pick some strange
-// pseudo unicode font
+// Newer FontConfig - sort out fonts that contain certain glyphs, but no
+// open type tables for is directly. Do this so we do not pick strange pseudo unicode font
 static const char *openType[] = {
     0,       // Any
     0,       // Latin
