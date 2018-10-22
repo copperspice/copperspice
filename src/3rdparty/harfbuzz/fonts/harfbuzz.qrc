@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/copperspice/harfbuzz">
+   <file>DejaVuSans.ttf</file>
+</qresource>
+</RCC>
