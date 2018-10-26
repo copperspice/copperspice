@@ -23,6 +23,7 @@
 #ifndef QTEXTBOUNDARYFINDER_H
 #define QTEXTBOUNDARYFINDER_H
 
+#include <qchar.h>
 #include <qstring.h>
 
 class QTextBoundaryFinderPrivate;
@@ -33,15 +34,17 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    enum BoundaryType {
       Grapheme,
       Word,
-      Line,
-      Sentence
+      Sentence,
+      Line
    };
 
    enum BoundaryReason {
-      NotAtBoundary = 0,
-      StartWord     = 1,
-      EndWord       = 2
-      // Hyphen
+      NotAtBoundary      = 0,
+      BreakOpportunity   = 0x1f,
+      StartOfItem        = 0x20,
+      EndOfItem          = 0x40,
+      MandatoryBreak     = 0x80,
+      SoftHyphen         = 0x100
    };
    using BoundaryReasons = QFlags<BoundaryReason>;
 
@@ -58,7 +61,7 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    }
 
    inline BoundaryType type() const {
-      return t;
+      return m_type;
    }
 
    QString string() const;
@@ -75,7 +78,7 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    BoundaryReasons boundaryReasons() const;
 
  private:
-   BoundaryType t;
+   BoundaryType m_type;
 
    QString m_str;
    QString::const_iterator iter_pos;
@@ -83,10 +86,12 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    bool m_valid = true;
 
    uint freePrivate : 1;
-   uint unused : 31;
+   uint unused      : 31;
 
    QTextBoundaryFinderPrivate *d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(QTextBoundaryFinder::BoundaryReasons)
 
 #endif
 

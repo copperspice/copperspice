@@ -21,134 +21,140 @@
 ***********************************************************************/
 
 #include <qtextboundaryfinder.h>
-#include <qvarlengtharray.h>
-#include <qunicodetables_p.h>
-#include <qdebug.h>
-#include <qharfbuzz_p.h>
+#include <qunicodetools_p.h>
 
 class QTextBoundaryFinderPrivate
 {
  public:
-   HB_CharAttributes attributes[1];
+   QCharAttributes attributes[1];
 };
 
-static void init(QTextBoundaryFinder::BoundaryType type, const QString &str, HB_CharAttributes *attributes)
+static void init(QTextBoundaryFinder::BoundaryType type, const QString &str, QCharAttributes *attributes)
 {
-   QVarLengthArray<HB_ScriptItem> scriptItems;
+   QVector<QUnicodeTools::ScriptItem> scriptItems;
 
-   // correctly assign script, isTab, and isObject to the script analysis
-   QString::const_iterator uc    = str.begin();
-   QString::const_iterator start = uc;
+   {
+      auto length = str.size();
 
-   QString::const_iterator end = str.end();
+      QVector<QChar::Script> scriptIds(length);
+      QUnicodeTools::initScripts(str, scriptIds);
 
-   QChar::Script script     = QChar::Script_Common;
-   QChar::Script lastScript = QChar::Script_Common;
+      int start = 0;
 
-   while (uc < end) {
-      QChar::Script s = uc->script();
+      for (int k = start + 1; k <= length; ++k) {
+         if (k == length || scriptIds[k] != scriptIds[start]) {
 
-      if (s != QChar::Script_Inherited) {
-         script = s;
-      }
-
-      if (*uc == QChar::ObjectReplacementCharacter || *uc == QChar::LineSeparator || *uc == QChar::Tabulation) {
-         script = QChar::Script_Common;
-      }
-
-      if (script != lastScript) {
-
-         if (uc != start) {
-            HB_ScriptItem item;
-
-            item.pos       = start - str.begin();
-            item.length    = uc - start;
-            item.script    = (HB_Script)lastScript;
-            item.bidiLevel = 0;                       // ### what's the proper value?
+            QUnicodeTools::ScriptItem item;
+            item.position = start;
+            item.script   = scriptIds[start];
 
             scriptItems.append(item);
-            start = uc;
+            start = k;
          }
-
-         lastScript = script;
       }
-      ++uc;
    }
 
-   if (uc != start) {
-      HB_ScriptItem item;
+   QUnicodeTools::CharAttributeOptions options = 0;
 
-      item.pos       = start - str.begin();
-      item.length    = uc - start;
-      item.script    = (HB_Script)lastScript;
-      item.bidiLevel = 0;                             // ### what's the proper value?
+   switch (type) {
+      case QTextBoundaryFinder::Grapheme:
+         options |= QUnicodeTools::GraphemeBreaks;
+         break;
 
-      scriptItems.append(item);
+      case QTextBoundaryFinder::Word:
+         options |= QUnicodeTools::WordBreaks;
+         break;
+
+      case QTextBoundaryFinder::Sentence:
+         options |= QUnicodeTools::SentenceBreaks;
+         break;
+
+      case QTextBoundaryFinder::Line:
+         options |= QUnicodeTools::LineBreaks;
+         break;
+
+      default:
+         break;
    }
 
-   QString16 tmp = str.toUtf16();
-   const HB_UChar16 *utf16_string = reinterpret_cast<const HB_UChar16 *>(tmp.constData());
-
-   qGetCharAttributes(utf16_string, tmp.size_storage(), scriptItems.data(), scriptItems.count(), attributes);
-
-   if (type == QTextBoundaryFinder::Word) {
-      HB_GetWordBoundaries(utf16_string, tmp.size_storage(), scriptItems.data(), scriptItems.count(), attributes);
-
-   } else if (type == QTextBoundaryFinder::Sentence) {
-      HB_GetSentenceBoundaries(utf16_string, tmp.size_storage(), scriptItems.data(), scriptItems.count(), attributes);
-   }
+   QUnicodeTools::initCharAttributes(str, scriptItems, attributes, options);
 }
 
 QTextBoundaryFinder::QTextBoundaryFinder()
-   : t(Grapheme), freePrivate(true), m_valid(false), d(nullptr)
+    : m_type(Grapheme), m_valid(false), freePrivate(true), d(nullptr)
 {
 }
 
-QTextBoundaryFinder::QTextBoundaryFinder(const QTextBoundaryFinder &other)
-   : t(other.t), m_str(other.m_str), iter_pos(other.iter_pos), m_valid(other.m_valid), freePrivate(true)
+QTextBoundaryFinder::QTextBoundaryFinder(BoundaryType type, const QString &str)
+    : m_type(type), m_str(str), iter_pos(m_str.begin()), m_valid(true), freePrivate(true), d(nullptr)
 {
-   d = (QTextBoundaryFinderPrivate *) malloc(m_str.size() * sizeof(HB_CharAttributes));
-   Q_CHECK_PTR(d);
+   auto length = m_str.size();
 
-   memcpy(d, other.d, m_str.size() * sizeof(HB_CharAttributes));
+    if (length > 0) {
+       d = (QTextBoundaryFinderPrivate *) malloc((length + 1) * sizeof(QCharAttributes));
+       Q_CHECK_PTR(d);
+
+       init(m_type, m_str, d->attributes);
+    }
+}
+
+QTextBoundaryFinder::QTextBoundaryFinder(const QTextBoundaryFinder &other)
+    : m_type(other.m_type), m_str(other.m_str), iter_pos(other.iter_pos), m_valid(other.m_valid), freePrivate(true), d(nullptr)
+{
+   if (other.d) {
+      auto length = m_str.size();
+
+      Q_ASSERT(length > 0);
+      d = (QTextBoundaryFinderPrivate *) malloc((length + 1) * sizeof(QCharAttributes));
+
+      Q_CHECK_PTR(d);
+      memcpy(d, other.d, (length + 1) * sizeof(QCharAttributes));
+   }
 }
 
 QTextBoundaryFinder &QTextBoundaryFinder::operator=(const QTextBoundaryFinder &other)
 {
-   if (&other == this) {
-      return *this;
-   }
+    if (&other == this) {
+       return *this;
+    }
 
-   t        = other.t;
-   m_str    = other.m_str;
-   iter_pos = other.iter_pos;
-   m_valid  = other.m_valid;
+    auto length = other.m_str.size();
 
-   QTextBoundaryFinderPrivate *newD = (QTextBoundaryFinderPrivate *)
-                                      realloc(freePrivate ? d : nullptr, m_str.size() * sizeof(HB_CharAttributes));
-   Q_CHECK_PTR(newD);
-   freePrivate = true;
-   d           = newD;
+    if (other.d) {
+        Q_ASSERT(length > 0);
 
-   memcpy(d, other.d, m_str.size() * sizeof(HB_CharAttributes));
+        uint newCapacity = (length + 1) * sizeof(QCharAttributes);
+        QTextBoundaryFinderPrivate *newD = (QTextBoundaryFinderPrivate *) realloc(freePrivate ? d : nullptr, newCapacity);
 
-   return *this;
+        Q_CHECK_PTR(newD);
+        freePrivate = true;
+        d           = newD;
+    }
+
+    m_type   = other.m_type;
+    m_str    = other.m_str;
+    iter_pos = other.iter_pos;
+    m_valid  = other.m_valid;
+
+    if (other.d) {
+        memcpy(d, other.d, (length + 1) * sizeof(QCharAttributes));
+
+    } else {
+        if (freePrivate) {
+           free(d);
+        }
+
+        d = nullptr;
+    }
+
+    return *this;
 }
 
 QTextBoundaryFinder::~QTextBoundaryFinder()
 {
-   if (freePrivate) {
-      free(d);
-   }
-}
-
-QTextBoundaryFinder::QTextBoundaryFinder(BoundaryType type, const QString &str)
-   : t(type), m_str(str), iter_pos(m_str.begin()), freePrivate(true)
-{
-   d = (QTextBoundaryFinderPrivate *) malloc(m_str.size() * sizeof(HB_CharAttributes));
-   Q_CHECK_PTR(d);
-
-   init(t, m_str, d->attributes);
+    if (freePrivate) {
+       free(d);
+    }
 }
 
 void QTextBoundaryFinder::toStart()
@@ -194,43 +200,42 @@ int QTextBoundaryFinder::toNextBoundary()
 
    ++iter_pos;
    int index = iter_pos - m_str.begin();
-   int max   = m_str.size();
 
-   if (index == max) {
+   if (iter_pos == m_str.end()) {
       return index;
    }
 
-   switch (t) {
+   switch(m_type) {
       case Grapheme:
-         while (index < max && ! d->attributes[index].charStop) {
-            ++index;
+        while (iter_pos != m_str.end() && ! d->attributes[index].graphemeBoundary) {
             ++iter_pos;
-         }
-         break;
+            ++index;
+        }
+        break;
 
       case Word:
-         while (index < max && ! d->attributes[index].wordBoundary) {
-            ++index;
+        while (iter_pos != m_str.end() && ! d->attributes[index].wordBreak) {
             ++iter_pos;
-         }
-         break;
+            ++index;
+        }
+        break;
 
       case Sentence:
-         while (index < max && !d->attributes[index].sentenceBoundary) {
-            ++index;
+        while (iter_pos != m_str.end() && ! d->attributes[index].sentenceBoundary) {
             ++iter_pos;
-         }
-         break;
+            ++index;
+        }
+        break;
 
       case Line:
-         while (index < max && d->attributes[index - 1].lineBreakType < HB_Break) {
-            ++index;
+        while (iter_pos != m_str.end() && ! d->attributes[index].lineBreak) {
             ++iter_pos;
-         }
-         break;
+            ++index;
+        }
+        break;
    }
 
-   return index;
+    return index;
 }
 
 int QTextBoundaryFinder::toPreviousBoundary()
@@ -248,46 +253,46 @@ int QTextBoundaryFinder::toPreviousBoundary()
    --iter_pos;
    int index = iter_pos - m_str.begin();
 
-   if (index == 0) {
-      return 0;
+   if (iter_pos == m_str.begin()) {
+      return index;
    }
 
-   switch (t) {
+   switch(m_type) {
       case Grapheme:
-         while (index > 0 && ! d->attributes[index].charStop) {
-            --index;
+         while (iter_pos != m_str.begin() && ! d->attributes[index].graphemeBoundary) {
             --iter_pos;
+            --index;
          }
          break;
 
       case Word:
-         while (index > 0 && ! d->attributes[index].wordBoundary) {
-            --index;
+         while (iter_pos != m_str.begin() && ! d->attributes[index].wordBreak) {
             --iter_pos;
+            --index;
          }
          break;
 
       case Sentence:
-         while (index > 0 && ! d->attributes[index].sentenceBoundary) {
-            --index;
+         while (iter_pos != m_str.begin() && ! d->attributes[index].sentenceBoundary) {
             --iter_pos;
+            --index;
          }
          break;
 
       case Line:
-         while (index > 0 && d->attributes[index - 1].lineBreakType < HB_Break) {
-            --index;
+         while (iter_pos != m_str.begin() && !d ->attributes[index].lineBreak) {
             --iter_pos;
+            --index;
          }
          break;
-   }
+    }
 
-   return index;
+    return index;
 }
 
 bool QTextBoundaryFinder::isAtBoundary() const
 {
-   if (! d  || ! m_valid) {
+   if (! d || ! m_valid) {
       return false;
    }
 
@@ -297,18 +302,18 @@ bool QTextBoundaryFinder::isAtBoundary() const
 
    int index = iter_pos - m_str.begin();
 
-   switch (t) {
-      case Grapheme:
-         return d->attributes[index].charStop;
+   switch(m_type) {
+       case Grapheme:
+           return d->attributes[index].graphemeBoundary;
 
-      case Word:
-         return d->attributes[index].wordBoundary;
+       case Word:
+           return d->attributes[index].wordBreak;
 
-      case Line:
-         return (index > 0) ? d->attributes[index - 1].lineBreakType >= HB_Break : true;
+       case Sentence:
+           return d->attributes[index].sentenceBoundary;
 
-      case Sentence:
-         return d->attributes[index].sentenceBoundary;
+       case Line:
+           return d->attributes[index].lineBreak || index == 0;
    }
 
    return false;
@@ -316,46 +321,82 @@ bool QTextBoundaryFinder::isAtBoundary() const
 
 QTextBoundaryFinder::BoundaryReasons QTextBoundaryFinder::boundaryReasons() const
 {
-   if (! d) {
-      return NotAtBoundary;
-   }
+   BoundaryReasons reasons = NotAtBoundary;
 
-   if (! isAtBoundary()) {
-      return NotAtBoundary;
-   }
-
-   if (iter_pos == m_str.begin()) {
-      if (d->attributes[0].whiteSpace) {
-         return NotAtBoundary;
-      }
-
-      return StartWord;
-   }
-
-   if (iter_pos == m_str.end()) {
-      if (d->attributes[m_str.size() - 1].whiteSpace) {
-         return NotAtBoundary;
-      }
-
-      return EndWord;
+   if (! m_valid) {
+      return reasons;
    }
 
    int index = iter_pos - m_str.begin();
 
-   const bool nextIsSpace = d->attributes[index].whiteSpace;
-   const bool prevIsSpace = d->attributes[index - 1].whiteSpace;
+   const QCharAttributes attr = d->attributes[index];
 
-   if (prevIsSpace && !nextIsSpace) {
-      return StartWord;
+   switch (m_type) {
+      case Grapheme:
+         if (attr.graphemeBoundary) {
+            reasons |= BreakOpportunity | StartOfItem | EndOfItem;
 
-   } else if (! prevIsSpace && nextIsSpace) {
-      return EndWord;
+            if (index == 0) {
+               reasons &= (~EndOfItem);
 
-   } else if (! prevIsSpace && ! nextIsSpace) {
-      return BoundaryReasons(StartWord | EndWord);
+            } else if (iter_pos == m_str.end()) {
+               reasons &= (~StartOfItem);
 
-   } else {
-      return NotAtBoundary;
+            }
+         }
+         break;
+
+      case Word:
+         if (attr.wordBreak) {
+            reasons |= BreakOpportunity;
+
+            if (attr.wordStart) {
+               reasons |= StartOfItem;
+            }
+
+            if (attr.wordEnd) {
+               reasons |= EndOfItem;
+            }
+         }
+         break;
+
+      case Sentence:
+         if (attr.sentenceBoundary) {
+            reasons |= BreakOpportunity | StartOfItem | EndOfItem;
+
+            if (index == 0) {
+               reasons &= (~EndOfItem);
+
+            } else if (iter_pos == m_str.end()) {
+               reasons &= (~StartOfItem);
+            }
+         }
+         break;
+
+      case Line:
+         if (attr.lineBreak || index == 0) {
+            reasons |= BreakOpportunity;
+
+            if (attr.mandatoryBreak || index == 0) {
+               reasons |= MandatoryBreak | StartOfItem | EndOfItem;
+
+               if (index == 0) {
+                  reasons &= (~EndOfItem);
+
+               } else if (iter_pos == m_str.end()) {
+                  reasons &= (~StartOfItem);
+               }
+
+            } else if (index > 0 && iter_pos[-1].unicode() == QChar::SoftHyphen) {
+               reasons |= SoftHyphen;
+            }
+         }
+         break;
+
+      default:
+         break;
    }
+
+   return reasons;
 }
 
