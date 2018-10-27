@@ -1,3 +1,17 @@
+# Harfbuzz settings
+add_definitions(
+   -DHAVE_ATEXIT
+   -DHB_EXTERN=
+   -DHB_NO_UNICODE_FUNCS
+   -DHB_NDEBUG
+)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+   add_definitions(
+      -DHB_NO_WIN1256
+   )
+endif()
+
 set(CORE_PUBLIC_INCLUDES
     ${CORE_PUBLIC_INCLUDES}
     QArrayData
@@ -180,7 +194,7 @@ set(CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtools_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetables_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetools_p.h
 )
 
 set(CORE_SOURCES
@@ -216,16 +230,46 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetools.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvector.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-buffer.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gdef.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gsub.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gpos.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-impl.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-open.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-stream.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp
+
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp
+
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-common.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-font.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-face.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-font.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-layout.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
+
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hebrew.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-khmer.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-myanmar.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
