@@ -23,11 +23,9 @@
 #ifndef QABSTRACTEVENTDISPATCHER_H
 #define QABSTRACTEVENTDISPATCHER_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qeventloop.h>
+#include <qobject.h>
+#include <qeventloop.h>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
 
 class QAbstractEventDispatcherPrivate;
 class QSocketNotifier;
@@ -80,6 +78,4 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
 
 };
 
-QT_END_NAMESPACE
-
-#endif // QABSTRACTEVENTDISPATCHER_H
+#endif

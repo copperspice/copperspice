@@ -1138,11 +1138,13 @@ QColorShower::QColorShower(QColorDialog *parent)
    lab->setMinimumWidth(60);
 
 
-   // In S60, due to small screen and different screen layouts need to re-arrange the widgets.
+   // On mobile, due to small screen and different screen layouts need to re-arrange the widgets.
    // For QVGA screens only the comboboxes and color label are visible.
    // For nHD screens only color and luminence pickers and color label are visible.
-#if !defined(QT_SMALL_COLORDIALOG)
+
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lab, 0, 0, -1, 1);
+
 #else
    if (nonTouchUI) {
       gl->addWidget(lab, 0, 0, 1, -1);
