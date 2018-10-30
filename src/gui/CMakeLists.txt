@@ -30,6 +30,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/math3d
     ${CMAKE_CURRENT_SOURCE_DIR}/painting
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform
     ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
     ${CMAKE_CURRENT_SOURCE_DIR}/styles
     ${CMAKE_CURRENT_SOURCE_DIR}/text
@@ -61,6 +62,7 @@ include(itemviews/itemviews.cmake)
 include(kernel/kernel.cmake)
 include(math3d/math3d.cmake)
 include(painting/painting.cmake)
+include(platform/platform.cmake)
 include(statemachine/statemachine.cmake)
 include(styles/styles.cmake)
 include(text/text.cmake)

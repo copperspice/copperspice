@@ -88,7 +88,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard_win.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/qrc_qprintdialog.cpp
+	     ${CMAKE_CURRENT_BINARY_DIR}/qrc_qprintdialog.cpp
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
@@ -110,6 +110,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qcolordialog_mac.mm
-	${CMAKE_CURRENT_BINARY_DIR}/qrc_qprintdialog.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/qrc_qprintdialog.cpp
     )
 endif()

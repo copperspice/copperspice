@@ -51,20 +51,8 @@ set(GUI_PUBLIC_INCLUDES
     QPalette
     QPanGesture
     QPinchGesture
-    QPlatformClipboard
-    QPlatformCursor
-    QPlatformCursorImage
-    QPlatformCursorPrivate
-    QPlatformEventLoopIntegration
-    QPlatformGLContext
-    QPlatformIntegration
-    QPlatformIntegrationFactoryInterface
-    QPlatformIntegrationPlugin
-    QPlatformNativeInterface
-    QPlatformScreen
-    QPlatformWindow
-    QPlatformWindowFormat
     QResizeEvent
+    QScreen
     QSessionManager
     QShortcut
     QShortcutEvent
@@ -162,29 +150,8 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpalette.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpangesture.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpinchgesture.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformclipboard.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformclipboard_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformcursor.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformcursor_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformcursorimage.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformcursorprivate.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformeventloopintegration.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformeventloopintegration_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformglcontext.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformglcontext_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegration.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegrationfactoryinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegrationplugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegrationplugin_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformnativeinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformnativeinterface_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformscreen.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformscreen_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformwindow.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformwindow_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformwindowformat.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformwindowformat_qpa.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qresizeevent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcut.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutevent.h
@@ -267,6 +234,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnsframeview_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultitouch_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures_p.h
@@ -277,6 +245,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling_p.h
 )
 
 set(GUI_SOURCES
@@ -298,6 +267,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpalette.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcut.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstackedlayout.cpp
@@ -314,6 +284,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling.cpp
 )
 
 if(X11_FOUND)

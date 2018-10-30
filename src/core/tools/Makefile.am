@@ -245,18 +245,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-ot-layout.cc \
    src/3rdparty/harfbuzz/src/hb-ot-map.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-tag.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-var.cc \
-   src/3rdparty/harfbuzz/src/hb-set.cc \
-   src/3rdparty/harfbuzz/src/hb-shape.cc \
-   src/3rdparty/harfbuzz/src/hb-shape-plan.cc \
-   src/3rdparty/harfbuzz/src/hb-shaper.cc \
-   src/3rdparty/harfbuzz/src/hb-static.cc \
-   src/3rdparty/harfbuzz/src/hb-unicode.cc \
-   \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc \
@@ -267,7 +255,18 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-myanmar.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc
+   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-tag.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-var.cc \
+   src/3rdparty/harfbuzz/src/hb-set.cc \
+   src/3rdparty/harfbuzz/src/hb-shape.cc \
+   src/3rdparty/harfbuzz/src/hb-shape-plan.cc \
+   src/3rdparty/harfbuzz/src/hb-shaper.cc \
+   src/3rdparty/harfbuzz/src/hb-static.cc \
+   src/3rdparty/harfbuzz/src/hb-unicode.cc
 
 
 if OSTYPE_WIN

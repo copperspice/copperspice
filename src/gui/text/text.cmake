@@ -10,7 +10,6 @@ set(GUI_PUBLIC_INCLUDES
     QFontMetricsF
     QGlyphRun
     QRawFont
-    QPlatformFontDatabase
     QStaticText
     QSupportedWritingSystems
     QSyntaxHighlighter
@@ -55,8 +54,6 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontmetrics.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontmetricsf.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qplatformfontdatabase.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qplatformfontdatabase_qpa.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qsupportedwritingsystems.h
@@ -129,6 +126,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase_win.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontenginedirectwrite_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssscanner.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_p.h
 )
 
 set(GUI_SOURCES
@@ -162,6 +160,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz.cpp
 )
 
 if(X11_FOUND)

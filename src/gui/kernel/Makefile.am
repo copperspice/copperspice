@@ -52,20 +52,8 @@ GUI_PUBLIC_INCLUDES += \
 	QPalette \
 	QPanGesture \
 	QPinchGesture \
-	QPlatformClipboard \
-	QPlatformCursor \
-	QPlatformCursorImage \
-	QPlatformCursorPrivate \
-	QPlatformEventLoopIntegration \
-	QPlatformGLContext \
-	QPlatformIntegration \
-	QPlatformIntegrationFactoryInterface \
-	QPlatformIntegrationPlugin \
-	QPlatformNativeInterface \
-	QPlatformScreen \
-	QPlatformWindow \
-	QPlatformWindowFormat \
 	QResizeEvent \
+   QScreen \
 	QSessionManager \
 	QShortcut \
 	QShortcutEvent \
@@ -161,29 +149,8 @@ GUI_KERNEL_INCLUDES = \
 	qpalette.h \
 	qpangesture.h \
 	qpinchgesture.h \
-	qplatformclipboard.h \
-	qplatformclipboard_qpa.h \
-	qplatformcursor.h \
-	qplatformcursor_qpa.h \
-	qplatformcursorimage.h \
-	qplatformcursorprivate.h \
-	qplatformeventloopintegration.h \
-	qplatformeventloopintegration_qpa.h \
-	qplatformglcontext.h \
-	qplatformglcontext_qpa.h \
-	qplatformintegration.h \
-	qplatformintegrationfactoryinterface.h \
-	qplatformintegrationplugin.h \
-	qplatformintegrationplugin_qpa.h \
-	qplatformnativeinterface.h \
-	qplatformnativeinterface_qpa.h \
-	qplatformscreen.h \
-	qplatformscreen_qpa.h \
-	qplatformwindow.h \
-	qplatformwindow_qpa.h \
-	qplatformwindowformat.h \
-	qplatformwindowformat_qpa.h \
 	qresizeevent.h \
+	qscreen.h \
 	qsessionmanager.h \
 	qshortcut.h \
 	qshortcutevent.h \
@@ -264,6 +231,7 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qnsframeview_mac_p.h \
 	qmacgesturerecognizer_mac_p.h \
 	qmultitouch_mac_p.h \
+	qscreen_p.h \
 	qshortcutmap_p.h \
 	qsound_p.h \
 	qstandardgestures_p.h \
@@ -274,8 +242,8 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qwidget_p.h \
 	qwidgetaction_p.h \
 	qwinnativepangesturerecognizer_win_p.h \
-	cs_carbon_wrapper_p.h
-
+	cs_carbon_wrapper_p.h \
+   qhighdpiscaling_p.h
 
 GUI_INCLUDES += $(GUI_KERNEL_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_KERNEL_PRIVATE_INCLUDES)
@@ -301,6 +269,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qlayoutitem.cpp \
 	src/gui/kernel/qmime.cpp \
 	src/gui/kernel/qpalette.cpp \
+	src/gui/kernel/qscreen.cpp \
 	src/gui/kernel/qshortcut.cpp \
 	src/gui/kernel/qshortcutmap.cpp \
 	src/gui/kernel/qstackedlayout.cpp \
@@ -316,7 +285,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qgesturemanager.cpp \
 	src/gui/kernel/qdesktopwidget.cpp \
 	src/gui/kernel/qguiplatformplugin.cpp \
-	src/gui/kernel/qsound.cpp
+	src/gui/kernel/qsound.cpp \
+   src/gui/kernel/qhighdpiscaling.cpp
 
 EXTRA_DIST+= \
 	src/3rdparty/wintab/wintab.h \
