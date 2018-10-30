@@ -288,11 +288,6 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
    return canonicalFilePath().compare(fileinfo.canonicalFilePath(), sensitive) == 0;
 }
 
-bool QFileInfo::operator==(const QFileInfo &fileinfo)
-{
-   return const_cast<const QFileInfo *>(this)->operator==(fileinfo);
-}
-
 QFileInfo &QFileInfo::operator=(const QFileInfo &fileinfo)
 {
    d_ptr = fileinfo.d_ptr;
@@ -582,6 +577,21 @@ bool QFileInfo::isHidden() const
    }
 
    return d->getFileFlags(QAbstractFileEngine::HiddenFlag);
+}
+
+bool QFileInfo::isNativePath() const
+{
+   Q_D(const QFileInfo);
+
+   if (d->isDefaultConstructed) {
+      return false;
+   }
+
+   if (d->fileEngine == nullptr) {
+      return true;
+   }
+
+   return d->getFileFlags(QAbstractFileEngine::LocalDiskFlag);
 }
 
 bool QFileInfo::isFile() const

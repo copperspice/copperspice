@@ -46,6 +46,7 @@ class Q_CORE_EXPORT QFileInfo
    QFileInfo(const QFile &file);
    QFileInfo(const QDir &dir, const QString &file);
    QFileInfo(const QFileInfo &fileinfo);
+
    ~QFileInfo();
 
    QFileInfo &operator=(const QFileInfo &fileinfo);
@@ -55,12 +56,7 @@ class Q_CORE_EXPORT QFileInfo
       return *this;
    }
 
-   bool operator==(const QFileInfo &fileinfo); // 5.0 - remove me
    bool operator==(const QFileInfo &fileinfo) const;
-
-   inline bool operator!=(const QFileInfo &fileinfo) {
-      return !(operator==(fileinfo));   // 5.0 - remove me
-   }
 
    inline bool operator!=(const QFileInfo &fileinfo) const {
       return !(operator==(fileinfo));
@@ -92,6 +88,8 @@ class Q_CORE_EXPORT QFileInfo
    bool isWritable() const;
    bool isExecutable() const;
    bool isHidden() const;
+
+   bool isNativePath() const;
 
    bool isRelative() const;
    inline bool isAbsolute() const {
