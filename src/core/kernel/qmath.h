@@ -24,9 +24,7 @@
 #define QMATH_H
 
 #include <math.h>
-#include <QtCore/qglobal.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
 
 #define QT_SINE_TABLE_SIZE 256
 
@@ -206,6 +204,60 @@ inline qreal qFastCos(qreal x)
    return qt_sine_table[si] - (qt_sine_table[ci] + 0.5 * qt_sine_table[si] * d) * d;
 }
 
-QT_END_NAMESPACE
+#if defined(Q_CC_GNU)
 
-#endif // QMATH_H
+inline quint32 qNextPowerOfTwo(quint32 v)
+{
+   if (v == 0) {
+      return 1;
+   }
+
+   return 2U << (31 ^ __builtin_clz(v));
+}
+
+inline quint64 qNextPowerOfTwo(quint64 v)
+{
+   if (v == 0) {
+      return 1;
+   }
+
+   return Q_UINT64_C(2) << (63 ^ __builtin_clzll(v));
+}
+
+#else
+
+inline quint32 qNextPowerOfTwo(quint32 v)
+{
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    ++v;
+    return v;
+}
+
+inline quint64 qNextPowerOfTwo(quint64 v)
+{
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v |= v >> 32;
+    ++v;
+    return v;
+}
+#endif
+
+inline quint32 qNextPowerOfTwo(qint32 v)
+{
+    return qNextPowerOfTwo(quint32(v));
+}
+
+inline quint64 qNextPowerOfTwo(qint64 v)
+{
+    return qNextPowerOfTwo(quint64(v));
+}
+
+#endif
