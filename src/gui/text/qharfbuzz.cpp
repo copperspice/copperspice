@@ -1,0 +1,695 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#include <qharfbuzz_p.h>
+
+#include <qstring.h>
+#include <qvector.h>
+#include <qfontengine_p.h>
+
+static const hb_script_t cs_internal_scriptTable[] = {
+   HB_SCRIPT_UNKNOWN,
+   HB_SCRIPT_INHERITED,
+   HB_SCRIPT_COMMON,
+
+   HB_SCRIPT_LATIN,
+   HB_SCRIPT_GREEK,
+   HB_SCRIPT_CYRILLIC,
+   HB_SCRIPT_ARMENIAN,
+   HB_SCRIPT_HEBREW,
+   HB_SCRIPT_ARABIC,
+   HB_SCRIPT_SYRIAC,
+   HB_SCRIPT_THAANA,
+   HB_SCRIPT_DEVANAGARI,
+   HB_SCRIPT_BENGALI,
+   HB_SCRIPT_GURMUKHI,
+   HB_SCRIPT_GUJARATI,
+   HB_SCRIPT_ORIYA,
+   HB_SCRIPT_TAMIL,
+   HB_SCRIPT_TELUGU,
+   HB_SCRIPT_KANNADA,
+   HB_SCRIPT_MALAYALAM,
+   HB_SCRIPT_SINHALA,
+   HB_SCRIPT_THAI,
+   HB_SCRIPT_LAO,
+   HB_SCRIPT_TIBETAN,
+   HB_SCRIPT_MYANMAR,
+   HB_SCRIPT_GEORGIAN,
+   HB_SCRIPT_HANGUL,
+   HB_SCRIPT_ETHIOPIC,
+   HB_SCRIPT_CHEROKEE,
+   HB_SCRIPT_CANADIAN_ABORIGINAL,
+   HB_SCRIPT_OGHAM,
+   HB_SCRIPT_RUNIC,
+   HB_SCRIPT_KHMER,
+   HB_SCRIPT_MONGOLIAN,
+   HB_SCRIPT_HIRAGANA,
+   HB_SCRIPT_KATAKANA,
+   HB_SCRIPT_BOPOMOFO,
+   HB_SCRIPT_HAN,
+   HB_SCRIPT_YI,
+   HB_SCRIPT_OLD_ITALIC,
+   HB_SCRIPT_GOTHIC,
+   HB_SCRIPT_DESERET,
+   HB_SCRIPT_TAGALOG,
+   HB_SCRIPT_HANUNOO,
+   HB_SCRIPT_BUHID,
+   HB_SCRIPT_TAGBANWA,
+   HB_SCRIPT_COPTIC,
+
+   // Unicode 4.0
+   HB_SCRIPT_LIMBU,
+   HB_SCRIPT_TAI_LE,
+   HB_SCRIPT_LINEAR_B,
+   HB_SCRIPT_UGARITIC,
+   HB_SCRIPT_SHAVIAN,
+   HB_SCRIPT_OSMANYA,
+   HB_SCRIPT_CYPRIOT,
+   HB_SCRIPT_BRAILLE,
+
+   // Unicode 4.1
+   HB_SCRIPT_BUGINESE,
+   HB_SCRIPT_NEW_TAI_LUE,
+   HB_SCRIPT_GLAGOLITIC,
+   HB_SCRIPT_TIFINAGH,
+   HB_SCRIPT_SYLOTI_NAGRI,
+   HB_SCRIPT_OLD_PERSIAN,
+   HB_SCRIPT_KHAROSHTHI,
+
+   // Unicode 5.0
+   HB_SCRIPT_BALINESE,
+   HB_SCRIPT_CUNEIFORM,
+   HB_SCRIPT_PHOENICIAN,
+   HB_SCRIPT_PHAGS_PA,
+   HB_SCRIPT_NKO,
+
+   // Unicode 5.1
+   HB_SCRIPT_SUNDANESE,
+   HB_SCRIPT_LEPCHA,
+   HB_SCRIPT_OL_CHIKI,
+   HB_SCRIPT_VAI,
+   HB_SCRIPT_SAURASHTRA,
+   HB_SCRIPT_KAYAH_LI,
+   HB_SCRIPT_REJANG,
+   HB_SCRIPT_LYCIAN,
+   HB_SCRIPT_CARIAN,
+   HB_SCRIPT_LYDIAN,
+   HB_SCRIPT_CHAM,
+
+   // Unicode 5.2
+   HB_SCRIPT_TAI_THAM,
+   HB_SCRIPT_TAI_VIET,
+   HB_SCRIPT_AVESTAN,
+   HB_SCRIPT_EGYPTIAN_HIEROGLYPHS,
+   HB_SCRIPT_SAMARITAN,
+   HB_SCRIPT_LISU,
+   HB_SCRIPT_BAMUM,
+   HB_SCRIPT_JAVANESE,
+   HB_SCRIPT_MEETEI_MAYEK,
+   HB_SCRIPT_IMPERIAL_ARAMAIC,
+   HB_SCRIPT_OLD_SOUTH_ARABIAN,
+   HB_SCRIPT_INSCRIPTIONAL_PARTHIAN,
+   HB_SCRIPT_INSCRIPTIONAL_PAHLAVI,
+   HB_SCRIPT_OLD_TURKIC,
+   HB_SCRIPT_KAITHI,
+
+   // Unicode 6.0
+   HB_SCRIPT_BATAK,
+   HB_SCRIPT_BRAHMI,
+   HB_SCRIPT_MANDAIC,
+
+   // Unicode 6.1
+   HB_SCRIPT_CHAKMA,
+   HB_SCRIPT_MEROITIC_CURSIVE,
+   HB_SCRIPT_MEROITIC_HIEROGLYPHS,
+   HB_SCRIPT_MIAO,
+   HB_SCRIPT_SHARADA,
+   HB_SCRIPT_SORA_SOMPENG,
+   HB_SCRIPT_TAKRI,
+
+   // Unicode 7.0
+   HB_SCRIPT_CAUCASIAN_ALBANIAN,
+   HB_SCRIPT_BASSA_VAH,
+   HB_SCRIPT_DUPLOYAN,
+   HB_SCRIPT_ELBASAN,
+   HB_SCRIPT_GRANTHA,
+   HB_SCRIPT_PAHAWH_HMONG,
+   HB_SCRIPT_KHOJKI,
+   HB_SCRIPT_LINEAR_A,
+   HB_SCRIPT_MAHAJANI,
+   HB_SCRIPT_MANICHAEAN,
+   HB_SCRIPT_MENDE_KIKAKUI,
+   HB_SCRIPT_MODI,
+   HB_SCRIPT_MRO,
+   HB_SCRIPT_OLD_NORTH_ARABIAN,
+   HB_SCRIPT_NABATAEAN,
+   HB_SCRIPT_PALMYRENE,
+   HB_SCRIPT_PAU_CIN_HAU,
+   HB_SCRIPT_OLD_PERMIC,
+   HB_SCRIPT_PSALTER_PAHLAVI,
+   HB_SCRIPT_SIDDHAM,
+   HB_SCRIPT_KHUDAWADI,
+   HB_SCRIPT_TIRHUTA,
+   HB_SCRIPT_WARANG_CITI,
+
+   // Unicode 8.0
+   HB_SCRIPT_AHOM,
+   HB_SCRIPT_ANATOLIAN_HIEROGLYPHS,
+   HB_SCRIPT_HATRAN,
+   HB_SCRIPT_MULTANI,
+   HB_SCRIPT_OLD_HUNGARIAN,
+   HB_SCRIPT_SIGNWRITING,
+
+   // Unicode 9.0
+   HB_SCRIPT_ADLAM,
+   HB_SCRIPT_BHAIKSUKI,
+   HB_SCRIPT_MARCHEN,
+   HB_SCRIPT_NEWA,
+   HB_SCRIPT_OSAGE,
+   HB_SCRIPT_TANGUT,
+
+   // Unicode 10.0
+   HB_SCRIPT_MASARAM_GONDI,
+   HB_SCRIPT_NUSHU,
+   HB_SCRIPT_SOYOMBO,
+   HB_SCRIPT_ZANABAZAR_SQUARE,
+
+   // Unicode 11.0
+   HB_SCRIPT_HANIFI_ROHINGYA,
+   HB_SCRIPT_OLD_SOGDIAN,
+   HB_SCRIPT_SOGDIAN,
+   HB_SCRIPT_DOGRA,
+   HB_SCRIPT_GUNJALA_GONDI,
+   HB_SCRIPT_MAKASAR,
+   HB_SCRIPT_MEDEFAIDRIN
+};
+static_assert(QChar::ScriptCount == sizeof(cs_internal_scriptTable) / sizeof(cs_internal_scriptTable[0]));
+
+static const hb_unicode_general_category_t cs_internal_categoryTable[] = {
+   HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK,    //   Mn
+   HB_UNICODE_GENERAL_CATEGORY_SPACING_MARK,        //   Mc
+   HB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK,      //   Me
+
+   HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER,      //   Nd
+   HB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER,       //   Nl
+   HB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER,        //   No
+
+   HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR,     //   Zs
+   HB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR,      //   Zl
+   HB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR, //   Zp
+
+   HB_UNICODE_GENERAL_CATEGORY_CONTROL,             //   Cc
+   HB_UNICODE_GENERAL_CATEGORY_FORMAT,              //   Cf
+   HB_UNICODE_GENERAL_CATEGORY_SURROGATE,           //   Cs
+   HB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE,         //   Co
+   HB_UNICODE_GENERAL_CATEGORY_UNASSIGNED,          //   Cn
+
+   HB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER,    //   Lu
+   HB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER,    //   Ll
+   HB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER,    //   Lt
+   HB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER,     //   Lm
+   HB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER,        //   Lo
+
+   HB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION, //   Pc
+   HB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION,    //   Pd
+   HB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION,    //   Ps
+   HB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION,   //   Pe
+   HB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION, //   Pi
+   HB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION,   //   Pf
+   HB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION,   //   Po
+
+   HB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL,         //   Sm
+   HB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL,     //   Sc
+   HB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL,     //   Sk
+   HB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL         //   So
+};
+static_assert(QChar::CategoryCount == sizeof(cs_internal_categoryTable) / sizeof(cs_internal_categoryTable[0]));
+
+
+hb_script_t cs_script_to_hb_script(QChar::Script script)
+{
+   return cs_internal_scriptTable[script];
+}
+
+static hb_unicode_combining_class_t cs_combining_class(hb_unicode_funcs_t *, hb_codepoint_t unicode, void *)
+{
+   return hb_unicode_combining_class_t(QChar(char32_t(unicode)).combiningClass());
+}
+
+static hb_codepoint_t cs_mirroring(hb_unicode_funcs_t *, hb_codepoint_t unicode, void *)
+{
+   return QChar(char32_t(unicode)).mirroredChar().unicode();
+}
+
+static hb_unicode_general_category_t cs_category(hb_unicode_funcs_t *, hb_codepoint_t unicode, void *)
+{
+   return cs_internal_categoryTable[QChar(char32_t(unicode)).category()];
+}
+
+static hb_script_t cs_script(hb_unicode_funcs_t *, hb_codepoint_t unicode, void *)
+{
+   return cs_internal_scriptTable[QChar(char32_t(unicode)).script()];
+}
+
+static hb_bool_t cs_compose(hb_unicode_funcs_t *, hb_codepoint_t a, hb_codepoint_t b, hb_codepoint_t *ab, void *)
+{
+   QString s = QString(char32_t(a)) + QString(char32_t(b));
+
+   QString normalized = s.normalized(QString::NormalizationForm_C);
+   Q_ASSERT(! normalized.empty());
+
+   *ab = normalized[0].unicode();
+
+   return normalized.size() == 1;
+}
+
+static hb_bool_t cs_decompose(hb_unicode_funcs_t *, hb_codepoint_t ab, hb_codepoint_t *a, hb_codepoint_t *b, void *)
+{
+   QChar ch_ab = QChar(char32_t(ab));
+
+   if (ch_ab.decompositionTag() != QChar::Canonical) {
+      return false;
+   }
+
+   QString normalized = ch_ab.decomposition();
+   if (normalized.isEmpty()) {
+      return false;
+   }
+
+   *a = normalized[0].unicode();
+
+   if (normalized.size() == 1) {
+      *b = 0;
+      return *a != ab;
+   }
+
+   *b = normalized[1].unicode();
+
+   if (normalized.size() == 2) {
+      // if ab decomposes to a single character and that character decomposes again,
+      // we have to detect and undo the second part
+
+      const QString recomposed = normalized.normalized(QString::NormalizationForm_C);
+      Q_ASSERT(! recomposed.isEmpty());
+
+      const hb_codepoint_t c = recomposed[0].unicode();
+
+      if (c != *a && c != ab) {
+         *a = c;
+         *b = 0;
+      }
+
+      return true;
+   }
+
+   // If decomposed to more than two characters, take the last one and recompose the rest to get the first component
+
+   *b = normalized.last().unicode();
+   normalized.chop(1);
+
+   const QString recomposed = normalized.normalized(QString::NormalizationForm_C);
+   Q_ASSERT(recomposed.size() == 1);
+
+   // expect that recomposed has exactly one character now
+   *a = recomposed[0].unicode();
+
+   return true;
+}
+
+static unsigned int cs_decompose_compatibility(hb_unicode_funcs_t *, hb_codepoint_t u,
+                  hb_codepoint_t *decomposed, void *)
+{
+   const QString normalized = QChar(char32_t(u)).decomposition();
+
+   uint outlen = 0;
+
+   for (QChar ch : normalized) {
+      Q_ASSERT(outlen < HB_UNICODE_MAX_DECOMPOSITION_LEN);
+      decomposed[outlen++] = ch.unicode();
+   }
+
+   return outlen;
+}
+
+struct cs_hb_funcs_t {
+
+   cs_hb_funcs_t() {
+      funcs = hb_unicode_funcs_create(NULL);
+
+      hb_unicode_funcs_set_combining_class_func(funcs,         cs_combining_class, NULL, NULL);
+      hb_unicode_funcs_set_general_category_func(funcs,        cs_category, NULL, NULL);
+      hb_unicode_funcs_set_mirroring_func(funcs,               cs_mirroring, NULL, NULL);
+      hb_unicode_funcs_set_script_func(funcs,                  cs_script, NULL, NULL);
+      hb_unicode_funcs_set_compose_func(funcs,                 cs_compose, NULL, NULL);
+      hb_unicode_funcs_set_decompose_func(funcs,               cs_decompose, NULL, NULL);
+
+      // deprecated hb_unicode_funcs_set_decompose_compatibility_func(funcs, cs_decompose_compatibility, NULL, NULL);
+   }
+
+   ~cs_hb_funcs_t() {
+      hb_unicode_funcs_destroy(funcs);
+   }
+
+   hb_unicode_funcs_t *funcs;
+};
+Q_GLOBAL_STATIC(cs_hb_funcs_t, cs_ufuncs)
+
+hb_unicode_funcs_t *cs_get_unicode_funcs()
+{
+   return cs_ufuncs()->funcs;
+}
+
+
+// Font routines
+static hb_bool_t cs_font_get_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode, hb_codepoint_t,
+                  hb_codepoint_t *glyph, void *)
+{
+   QFontEngine *fe = static_cast<QFontEngine *>(font_data);
+   Q_ASSERT(fe);
+
+   *glyph = fe->glyphIndex(unicode);
+
+   return true;
+}
+
+static hb_position_t cs_font_get_glyph_h_advance(hb_font_t *font, void *font_data, hb_codepoint_t glyph, void *)
+{
+   QFontEngine *fe = static_cast<QFontEngine *>(font_data);
+   Q_ASSERT(fe);
+
+   QFixed advance;
+
+   QGlyphLayout g;
+   g.numGlyphs = 1;
+   g.glyphs = &glyph;
+   g.advances = &advance;
+
+   fe->recalcAdvances(&g, QFontEngine::ShaperFlags(cs_font_get_use_design_metrics(font)));
+
+   return advance.value();
+}
+
+static hb_position_t cs_font_get_glyph_v_advance(hb_font_t *font, void *font_Data,
+                  hb_codepoint_t glyph, void *user_data)
+{
+   qCritical("cs_font_get_glyph_v_advance: vertical writing is not supported");
+   return 0;
+}
+
+static hb_bool_t cs_font_get_glyph_h_origin(hb_font_t *font, void *font_data,
+                  hb_codepoint_t, hb_position_t *x, hb_position_t *y, void *user_data)
+{
+   // always work in the horizontal coordinates
+   return true;
+}
+
+static hb_bool_t cs_font_get_glyph_v_origin(hb_font_t *font, void *font_data,
+                  hb_codepoint_t glyph, hb_position_t *x, hb_position_t *y, void *user_data)
+{
+   qCritical("cs_font_get_glyph_v_origin: vertical writing is not supported");
+   return false;
+}
+
+static hb_position_t cs_font_get_glyph_h_kerning(hb_font_t *font, void *font_data,
+      hb_codepoint_t first_glyph, hb_codepoint_t second_glyph, void *)
+{
+   QFontEngine *fe = static_cast<QFontEngine *>(font_data);
+   Q_ASSERT(fe);
+
+   glyph_t glyphs[2] = { first_glyph, second_glyph };
+   QFixed advance;
+
+   QGlyphLayout g;
+   g.numGlyphs = 2;
+   g.glyphs = glyphs;
+   g.advances = &advance;
+
+   fe->doKerning(&g, QFontEngine::ShaperFlags(cs_font_get_use_design_metrics(font)));
+
+   return advance.value();
+}
+
+static hb_position_t cs_font_get_glyph_v_kerning(hb_font_t *, void *, hb_codepoint_t , hb_codepoint_t , void *)
+{
+   qCritical("hb_qt_get_glyph_v_kerning: vertical writing is not supported");
+   return 0;
+}
+
+static hb_bool_t cs_font_get_glyph_extents(hb_font_t *, void *font_data,
+                  hb_codepoint_t glyph, hb_glyph_extents_t *extents, void *)
+{
+   QFontEngine *fe = static_cast<QFontEngine *>(font_data);
+   Q_ASSERT(fe);
+
+   glyph_metrics_t gm = fe->boundingBox(glyph);
+
+   extents->x_bearing = gm.x.value();
+   extents->y_bearing = gm.y.value();
+   extents->width = gm.width.value();
+   extents->height = gm.height.value();
+
+   return true;
+}
+
+static hb_bool_t cs_font_get_glyph_contour_point(hb_font_t *, void *font_data, hb_codepoint_t glyph,
+                  unsigned int point_index, hb_position_t *x, hb_position_t *y, void *)
+{
+   QFontEngine *fe = static_cast<QFontEngine *>(font_data);
+   Q_ASSERT(fe);
+
+   QFixed xpos, ypos;
+   quint32 numPoints = 1;
+
+   if (fe->getPointInOutline(glyph, 0, point_index, &xpos, &ypos, &numPoints) == 0) {
+      *x = xpos.value();
+      *y = ypos.value();
+      return true;
+   }
+
+   *x = *y = 0;
+   return false;
+}
+
+static hb_bool_t cs_font_get_glyph_name(hb_font_t *font, void *font_data,
+      hb_codepoint_t glyph, char *name, unsigned int size, void *user_data)
+{
+   qCritical("hb_qt_font_get_glyph_name: not implemented");
+
+   if (size) {
+      *name = '\0';
+   }
+
+   return false;
+}
+
+static hb_bool_t cs_font_get_glyph_from_name(hb_font_t *font, void *font_data, const char *name, int len,
+                  hb_codepoint_t *glyph, void *user_data)
+{
+   qCritical("hb_qt_font_get_glyph_from_name: not implemented");
+
+   *glyph = 0;
+   return false;
+}
+
+
+static hb_user_data_key_t internal_useDesignMetricsKey;
+
+void cs_font_set_use_design_metrics(hb_font_t *font, uint value)
+{
+   hb_font_set_user_data(font, &internal_useDesignMetricsKey, (void *)quintptr(value), NULL, true);
+}
+
+uint cs_font_get_use_design_metrics(hb_font_t *font)
+{
+   return quintptr(hb_font_get_user_data(font, &internal_useDesignMetricsKey));
+}
+
+
+struct internal_hb_font_funcs_t {
+   internal_hb_font_funcs_t() {
+      funcs = hb_font_funcs_create();
+
+//  BROOM - fix
+//      hb_font_funcs_set_glyph_func(funcs,               cs_font_get_glyph, NULL, NULL);
+
+//      use    hb_font_funcs_set_nominal_gylph_func()
+//      use    hb_font_funcs_set_variation_gylph_func()
+
+
+      hb_font_funcs_set_glyph_h_advance_func(funcs,     cs_font_get_glyph_h_advance, NULL, NULL);
+      hb_font_funcs_set_glyph_v_advance_func(funcs,     cs_font_get_glyph_v_advance, NULL, NULL);
+
+      hb_font_funcs_set_glyph_h_origin_func(funcs,      cs_font_get_glyph_h_origin, NULL, NULL);
+      hb_font_funcs_set_glyph_v_origin_func(funcs,      cs_font_get_glyph_v_origin, NULL, NULL);
+
+      hb_font_funcs_set_glyph_h_kerning_func(funcs,     cs_font_get_glyph_h_kerning, NULL, NULL);
+      hb_font_funcs_set_glyph_v_kerning_func(funcs,     cs_font_get_glyph_v_kerning, NULL, NULL);
+      hb_font_funcs_set_glyph_extents_func(funcs,       cs_font_get_glyph_extents, NULL, NULL);
+
+      hb_font_funcs_set_glyph_contour_point_func(funcs, cs_font_get_glyph_contour_point, NULL, NULL);
+      hb_font_funcs_set_glyph_name_func(funcs,          cs_font_get_glyph_name, NULL, NULL);
+      hb_font_funcs_set_glyph_from_name_func(funcs,     cs_font_get_glyph_from_name, NULL, NULL);
+   }
+
+   ~internal_hb_font_funcs_t() {
+      hb_font_funcs_destroy(funcs);
+   }
+
+   hb_font_funcs_t *funcs;
+};
+
+Q_GLOBAL_STATIC(internal_hb_font_funcs_t, qt_ffuncs)
+
+hb_font_funcs_t *cs_get_font_funcs()
+{
+   return qt_ffuncs()->funcs;
+}
+
+static hb_blob_t *internal_hb_reference_table(hb_face_t * /*face*/, hb_tag_t tag, void *user_data)
+{
+   QFontEngine::FaceData *data = static_cast<QFontEngine::FaceData *>(user_data);
+   Q_ASSERT(data);
+
+   qt_get_font_table_func_ptr funcPtr = data->font_table_func_ptr;
+   Q_ASSERT(funcPtr);
+
+   uint length = 0;
+   if (! funcPtr(data->user_data, tag, 0, &length)) {
+      return hb_blob_get_empty();
+   }
+
+   char *buffer = static_cast<char *>(malloc(length));
+   Q_CHECK_PTR(buffer);
+
+   if (! funcPtr(data->user_data, tag, reinterpret_cast<uchar *>(buffer), &length)) {
+      length = 0;
+   }
+
+   return hb_blob_create(const_cast<const char *>(buffer), length, HB_MEMORY_MODE_READONLY, buffer, free);
+}
+
+static inline hb_face_t *internal_hb_face_create(QFontEngine *fe)
+{
+   QFontEngine::FaceData *data = static_cast<QFontEngine::FaceData *>(malloc(sizeof(QFontEngine::FaceData)));
+   Q_CHECK_PTR(data);
+
+   data->user_data           = fe->faceData.user_data;
+   data->font_table_func_ptr = fe->faceData.font_table_func_ptr;
+
+   hb_face_t *face = hb_face_create_for_tables(internal_hb_reference_table, (void *)data, free);
+   if (hb_face_is_immutable(face)) {
+      hb_face_destroy(face);
+      return NULL;
+   }
+
+   hb_face_set_index(face, fe->faceId().index);
+   hb_face_set_upem(face,  fe->emSquareSize().truncate());
+
+   return face;
+}
+
+static void internal_hb_face_release(void *user_data)
+{
+   if (user_data) {
+      hb_face_destroy(static_cast<hb_face_t *>(user_data));
+   }
+}
+
+hb_face_t *hb_face_get_for_engine(QFontEngine *fe)
+{
+   Q_ASSERT(fe && fe->type() != QFontEngine::Multi);
+
+   if (! fe->face_) {
+      fe->face_ = internal_hb_face_create(fe);
+
+      if (! fe->face_) {
+         return NULL;
+      }
+
+      fe->face_destroy_func_ptr = internal_hb_face_release;
+   }
+
+   return static_cast<hb_face_t *>(fe->face_);
+}
+
+static inline hb_font_t *internal_hb_font_create(QFontEngine *fe)
+{
+   hb_face_t *face = cs_face_get_for_engine(fe);
+
+   if (! face) {
+      return NULL;
+   }
+
+   hb_font_t *font = hb_font_create(face);
+
+   if (hb_font_is_immutable(font)) {
+      hb_font_destroy(font);
+      return NULL;
+   }
+
+   const int y_ppem = fe->fontDef.pixelSize;
+   const int x_ppem = (fe->fontDef.pixelSize * fe->fontDef.stretch) / 100;
+
+   hb_font_set_funcs(font, cs_get_font_funcs(), (void *)fe, NULL);
+
+#ifdef Q_OS_MAC
+   hb_font_set_scale(font, QFixed(x_ppem).value(),  QFixed(y_ppem).value());
+#else
+   hb_font_set_scale(font, QFixed(x_ppem).value(), -QFixed(y_ppem).value());
+#endif
+
+   hb_font_set_ppem(font, x_ppem, y_ppem);
+
+   return font;
+}
+
+static void internal_hb_font_release(void *user_data)
+{
+   if (user_data) {
+      hb_font_destroy(static_cast<hb_font_t *>(user_data));
+   }
+}
+
+hb_font_t *hb_font_get_for_engine(QFontEngine *fe)
+{
+   Q_ASSERT(fe && fe->type() != QFontEngine::Multi);
+
+   if (! fe->font_) {
+      fe->font_ = internal_hb_font_create(fe);
+
+      if (fe->font_) {
+         return NULL;
+      }
+
+      fe->font_destroy_func_ptr = internal_hb_font_release;
+   }
+
+   return static_cast<hb_font_t *>(fe->font_);
+}
+
+/* broom - may not be used
+
+void qHBFreeFace(HB_Face face) {
+   HB_FreeFace(face);
+}
+
+*/
