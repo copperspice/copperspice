@@ -560,6 +560,7 @@ class Q_CORE_EXPORT CSInternalThreadData
    static std::atomic<QThreadData *> &get_AtomicThreadData(QObject *object);
 
    friend class QApplication;
+   friend class QApplicationPrivate;
    friend class QAbstractEventDispatcher;
    friend class QAbstractEventDispatcherPrivate;
    friend class QAbstractSocket;

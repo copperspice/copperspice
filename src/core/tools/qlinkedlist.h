@@ -23,6 +23,8 @@
 #ifndef QLINKEDLIST_H
 #define QLINKEDLIST_H
 
+#include <qassert.h>
+
 #include <iterator>
 #include <list>
 

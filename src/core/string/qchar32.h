@@ -115,7 +115,9 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
         Symbol_Math,              //   Sm
         Symbol_Currency,          //   Sc
         Symbol_Modifier,          //   Sk
-        Symbol_Other              //   So
+        Symbol_Other,             //   So
+
+        CategoryCount
       };
 
       enum Script
