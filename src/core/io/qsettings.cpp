@@ -1116,29 +1116,36 @@ static void initDefaultPaths(QMutexLocker *locker)
 #else
       QString userPath;
       char *env = getenv("XDG_CONFIG_HOME");
+
       if (env == 0) {
          userPath = homePath;
          userPath += QLatin1Char('/');
-#if defined(Q_WS_QWS) || defined(Q_WS_QPA)
+
+#if defined(Q_WS_QPA)
          userPath += QLatin1String("Settings");
 #else
          userPath += QLatin1String(".config");
 #endif
+
       } else if (*env == '/') {
+
          userPath = QFile::decodeName(env);
       } else {
          userPath = homePath;
          userPath += QLatin1Char('/');
          userPath += QFile::decodeName(env);
       }
+
       userPath += QLatin1Char('/');
 
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::SystemScope), systemPath);
+
 #ifndef Q_OS_MAC
       pathHash->insert(pathHashKey(QSettings::NativeFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::NativeFormat, QSettings::SystemScope), systemPath);
 #endif
+
 #endif
    }
 }

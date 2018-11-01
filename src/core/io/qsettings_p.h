@@ -35,9 +35,7 @@
 #include <QtCore/qt_windows.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
-#if defined(Q_WS_QWS) || defined(Q_WS_QPA)
+#if defined(Q_WS_QPA)
 #define QT_QSETTINGS_ALWAYS_CASE_SENSITIVE_AND_FORGET_ORIGINAL_KEY_ORDER
 #endif
 
@@ -295,6 +293,4 @@ class QConfFileSettingsPrivate : public QSettingsPrivate
    int nextPosition;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSETTINGS_P_H
+#endif
