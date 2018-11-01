@@ -832,7 +832,7 @@ int QWinInputContext::reconvertString(RECONVERTSTRING *reconv)
    bounds.setPosition(pos);
 
    if (bounds.isAtBoundary()) {
-      if (QTextBoundaryFinder::EndWord == bounds.boundaryReasons()) {
+      if (QTextBoundaryFinder::EndOfItem == bounds.boundaryReasons()) {
          bounds.toPreviousBoundary();
       }
    } else {
