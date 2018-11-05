@@ -64,7 +64,6 @@ EXTRA_DIST += src/gui/mac/macresources.qrc \
 	src/gui/effects/effects.cmake \
 	src/gui/graphicsview/graphicsview.cmake \
 	src/gui/image/image.cmake \
-	src/gui/inputmethod/inputmethod.cmake \
 	src/gui/itemviews/itemviews.cmake \
 	src/gui/kernel/kernel.cmake \
 	src/gui/math3d/math3d.cmake \
@@ -87,7 +86,6 @@ include src/gui/dialogs/Makefile.am
 include src/gui/effects/Makefile.am
 include src/gui/graphicsview/Makefile.am
 include src/gui/image/Makefile.am
-include src/gui/inputmethod/Makefile.am
 include src/gui/itemviews/Makefile.am
 include src/gui/kernel/Makefile.am
 include src/gui/math3d/Makefile.am
@@ -98,9 +96,6 @@ include src/gui/styles/Makefile.am
 include src/gui/text/Makefile.am
 include src/gui/util/Makefile.am
 include src/gui/widgets/Makefile.am
-
-# currently unused
-# include src/gui/embedded/Makefile.am
 
 GUI_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtGui/%,$(GUI_INCLUDES)) \

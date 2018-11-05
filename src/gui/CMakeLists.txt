@@ -25,7 +25,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/effects
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview
     ${CMAKE_CURRENT_SOURCE_DIR}/image
-    ${CMAKE_CURRENT_SOURCE_DIR}/inputmethod
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/math3d
@@ -51,13 +50,8 @@ include(accessible/accessible.cmake)
 include(animation/animation.cmake)
 include(dialogs/dialogs.cmake)
 include(effects/effects.cmake)
-
-# unused
-# include(embedded/embedded.cmake)
-
 include(graphicsview/graphicsview.cmake)
 include(image/image.cmake)
-include(inputmethod/inputmethod.cmake)
 include(itemviews/itemviews.cmake)
 include(kernel/kernel.cmake)
 include(math3d/math3d.cmake)
