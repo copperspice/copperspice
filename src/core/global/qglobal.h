@@ -50,10 +50,33 @@
 
 // ** detect target architecture
 #if defined(__x86_64__) || defined(_M_AMD64)
-#define QT_ARCH_X86_64
+// 64-bit x86
+#  define QT_ARCH_X86_64
+#  define Q_PROCESSOR_X86_64
+
+#  define Q_PROCESSOR_X86      6
 
 #elif defined(__i386__) || defined(_M_IX86)
-#define QT_ARCH_I386
+// 32-bit x86
+#  define QT_ARCH_I386
+#  define Q_PROCESSOR_X86_32
+
+#  if defined(_M_IX86)
+#    define Q_PROCESSOR_X86     (_M_IX86/100)
+
+#  elif defined(__i686__) || defined(__athlon__) || defined(__SSE__)
+#    define Q_PROCESSOR_X86     6
+
+#  elif defined(__i586__) || defined(__k6__)
+#    define Q_PROCESSOR_X86     5
+
+#  elif defined(__i486__)
+#    define Q_PROCESSOR_X86     4
+
+#  else
+#    define Q_PROCESSOR_X86     3
+
+#  endif
 
 #else
 #error Unable to detect system architecture, contact CopperSpice development
@@ -383,10 +406,10 @@
 
 #elif defined(Q_OS_UNIX)
 
-#  if defined(Q_OS_MAC) && ! defined(__USE_WS_X11__) && ! defined(Q_WS_QWS) && ! defined(Q_WS_QPA)
+#  if defined(Q_OS_MAC) && ! defined(__USE_WS_X11__) && ! defined(Q_WS_QPA)
 #    define Q_OS_MAC
 
-#  elif ! defined(Q_WS_QWS) && ! defined(Q_WS_QPA)
+#  elif ! defined(Q_WS_QPA)
 #    define Q_WS_X11
 #  endif
 
@@ -490,8 +513,7 @@ using ulong     = unsigned long;
 typedef int QNoImplicitBoolCast;
 
 #if defined(QT_ARCH_ARM) || defined(QT_ARCH_ARMV6) || defined(QT_ARCH_AVR32) ||  \
-       (defined(QT_ARCH_MIPS) && (defined(Q_WS_QWS) || defined(Q_WS_QPA))) ||    \
-        defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A)
+     defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A) || (defined(QT_ARCH_MIPS) || defined(Q_WS_QPA))
 
 #define QT_NO_FPU
 #endif
