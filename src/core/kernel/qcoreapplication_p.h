@@ -47,6 +47,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    mutable QString applicationName;
 
    virtual void createEventDispatcher();
+   virtual void eventDispatcherReady();
    static void removePostedEvent(QEvent *);
 
 #ifdef Q_OS_WIN
@@ -57,8 +58,17 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    static QString macMenuBarName();
 #endif
 
+   QAtomicInt quitLockRef;
+
+   virtual bool shouldQuit() {
+      return true;
+   }
+
+   void maybeQuit();
+
    static QThread *theMainThread;
    static QThread *mainThread();
+
    static bool checkInstance(const char *method);
    static void sendPostedEvents(QObject *receiver, int event_type, QThreadData *data);
 
@@ -105,4 +115,4 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
 
 };
 
-#endif // QCOREAPPLICATION_P_H
+#endif

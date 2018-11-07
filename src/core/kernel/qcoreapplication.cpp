@@ -294,7 +294,7 @@ QAbstractEventDispatcher *QCoreApplicationPrivate::eventDispatcher = 0;
 uint QCoreApplicationPrivate::attribs;
 
 #ifdef Q_OS_UNIX
-Qt::HANDLE qt_application_thread_id = 0;
+   Qt::HANDLE qt_application_thread_id = 0;
 #endif
 
 struct QCoreApplicationData {
@@ -319,6 +319,8 @@ struct QCoreApplicationData {
 };
 
 Q_GLOBAL_STATIC(QCoreApplicationData, coreappdata)
+
+static bool quitLockRefEnabled = true;
 
 QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint flags)
    : argc(aargc), argv(aargv), application_type(0), eventFilter(0),
@@ -401,6 +403,10 @@ void QCoreApplicationPrivate::createEventDispatcher()
 
 }
 
+void QCoreApplicationPrivate::eventDispatcherReady()
+{
+}
+
 QThread *QCoreApplicationPrivate::theMainThread = 0;
 QThread *QCoreApplicationPrivate::mainThread()
 {
@@ -408,7 +414,7 @@ QThread *QCoreApplicationPrivate::mainThread()
    return theMainThread;
 }
 
-#if !defined (QT_NO_DEBUG) || defined (QT_MAC_FRAMEWORK_BUILD)
+#if ! defined (QT_NO_DEBUG) || defined (QT_MAC_FRAMEWORK_BUILD)
 void QCoreApplicationPrivate::checkReceiverThread(QObject *receiver)
 {
    QThread *currentThread = QThread::currentThread();
@@ -422,9 +428,6 @@ void QCoreApplicationPrivate::checkReceiverThread(QObject *receiver)
               .formatArg(receiver->metaObject()->className())
               .formatArg(QString::number((quintptr) thr, 16))
               .toUtf8().constData());
-
-   Q_UNUSED(currentThread);
-   Q_UNUSED(thr);
 }
 #endif
 
@@ -779,15 +782,19 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int m
    if (!data->eventDispatcher) {
       return;
    }
+
    QElapsedTimer start;
    start.start();
+
    if (flags & QEventLoop::DeferredDeletion) {
       QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
    }
+
    while (data->eventDispatcher->processEvents(flags & ~QEventLoop::WaitForMoreEvents)) {
       if (start.elapsed() > maxtime) {
          break;
       }
+
       if (flags & QEventLoop::DeferredDeletion) {
          QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
       }
@@ -813,8 +820,9 @@ int QCoreApplication::exec()
    }
 
    threadData->quitNow = false;
+
    QEventLoop eventLoop;
-   self->d_func()->in_exec = true;
+   self->d_func()->in_exec            = true;
    self->d_func()->aboutToQuitEmitted = false;
    int returnCode = eventLoop.exec();
    threadData->quitNow = false;
@@ -1232,6 +1240,13 @@ bool QCoreApplication::event(QEvent *e)
    }
 
    return QObject::event(e);
+}
+
+void QCoreApplicationPrivate::maybeQuit()
+{
+   if (quitLockRef.load() == 0 && in_exec && quitLockRefEnabled && shouldQuit()) {
+      QCoreApplication::postEvent(QCoreApplication::instance(), new QEvent(QEvent::Quit));
+   }
 }
 
 void QCoreApplication::quit()
