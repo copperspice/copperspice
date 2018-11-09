@@ -4,6 +4,7 @@ set(GUI_PUBLIC_INCLUDES
     QActionEvent
     QActionGroup
     QApplication
+    QGuiApplication
     QBoxLayout
     QClipboard
     QClipboardEvent
@@ -24,7 +25,6 @@ set(GUI_PUBLIC_INCLUDES
     QFormLayout
     QGenericPlugin
     QGenericPluginFactory
-    QGenericPluginFactoryInterface
     QGesture
     QGestureEvent
     QGestureRecognizer
@@ -88,7 +88,6 @@ set(GUI_PUBLIC_INCLUDES
     QX11EmbedContainer
     QX11EmbedWidget
     QX11Info
-    QtEvents
     QtGui
 )
 
@@ -98,6 +97,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qactionevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qactiongroup.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiapplication.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qboxlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboardevent.h
@@ -118,10 +118,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfocusevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qformlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericplugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericplugin_qpa.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactory_qpa.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactory.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactoryinterface.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgestureevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.h
@@ -187,7 +184,6 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsmime.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowstatechangeevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface_qpa.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embed_x11.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embedcontainer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embedwidget.h
@@ -201,6 +197,7 @@ set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qaction_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiapplication_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplication_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplicationdelegate_mac_p.h
@@ -324,7 +321,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win.cpp
     )
     add_definitions(-DQT_NO_DIRECTDRAW)
-# FIXME: check for COCOA instead?
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}

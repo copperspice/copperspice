@@ -5,6 +5,7 @@ GUI_PUBLIC_INCLUDES += \
 	QActionEvent \
 	QActionGroup \
 	QApplication \
+	QGuiApplication \
 	QBoxLayout \
 	QClipboard \
 	QClipboardEvent \
@@ -25,7 +26,6 @@ GUI_PUBLIC_INCLUDES += \
 	QFormLayout \
 	QGenericPlugin \
 	QGenericPluginFactory \
-	QGenericPluginFactoryInterface \
 	QGesture \
 	QGestureEvent \
 	QGestureRecognizer \
@@ -89,7 +89,6 @@ GUI_PUBLIC_INCLUDES += \
 	QX11EmbedContainer \
 	QX11EmbedWidget \
 	QX11Info \
-	QtEvents \
 	QtGui
 
 GUI_KERNEL_INCLUDES = \
@@ -97,6 +96,7 @@ GUI_KERNEL_INCLUDES = \
 	qactionevent.h \
 	qactiongroup.h \
 	qapplication.h \
+	qguiapplication.h \
 	qboxlayout.h \
 	qclipboard.h \
 	qclipboardevent.h \
@@ -117,10 +117,7 @@ GUI_KERNEL_INCLUDES = \
 	qfocusevent.h \
 	qformlayout.h \
 	qgenericplugin.h \
-	qgenericplugin_qpa.h \
-	qgenericpluginfactory_qpa.h \
 	qgenericpluginfactory.h \
-	qgenericpluginfactoryinterface.h \
 	qgesture.h \
 	qgestureevent.h \
 	qgesturerecognizer.h \
@@ -186,18 +183,19 @@ GUI_KERNEL_INCLUDES = \
 	qwindowsmime.h \
 	qwindowstatechangeevent.h \
 	qwindowsysteminterface.h \
-	qwindowsysteminterface_qpa.h \
 	qx11embed_x11.h \
 	qx11embedcontainer.h \
 	qx11embedwidget.h \
 	qx11info.h \
 	qx11info_x11.h \
-	cs_carbon_wrapper.h
+	cs_carbon_wrapper.h \
+	qtgui.h
 
 
 GUI_KERNEL_PRIVATE_INCLUDES = \
 	qaction_p.h \
 	qapplication_p.h \
+	qguiapplication_p.h \
 	qclipboard_p.h \
 	qcocoaapplication_mac_p.h \
 	qcocoaapplicationdelegate_mac_p.h \
@@ -238,7 +236,6 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qt_cocoa_helpers_mac_p.h \
 	qt_x11_p.h \
 	qt_mac_p.h \
-	qtgui.h \
 	qwidget_p.h \
 	qwidgetaction_p.h \
 	qwinnativepangesturerecognizer_win_p.h \
