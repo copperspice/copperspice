@@ -23,11 +23,13 @@
 #ifndef QPRINTER_H
 #define QPRINTER_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtGui/qpaintdevice.h>
+#include <qstring.h>
+#include <qscopedpointer.h>
+#include <qpagedpaintdevice.h>
+#include <qpagelayout.h>
+#include <qtprintsupportglobal.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_PRINTER
 
@@ -39,8 +41,10 @@ class QPrinterPrivate;
 class QPaintEngine;
 class QPrintEngine;
 class QPrinterInfo;
+class QPageSize;
+class QPageMargins;
 
-class Q_GUI_EXPORT QPrinter : public QPaintDevice
+class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
 {
    Q_DECLARE_PRIVATE(QPrinter)
 
@@ -55,12 +59,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
 
    enum Orientation { Portrait, Landscape };
 
-   enum PageSize { A4, B5, Letter, Legal, Executive,
-                   A0, A1, A2, A3, A5, A6, A7, A8, A9, B0, B1,
-                   B10, B2, B3, B4, B6, B7, B8, B9, C5E, Comm10E,
-                   DLE, Folio, Ledger, Tabloid, Custom, NPageSize = Custom, NPaperSize = Custom
-                 };
-   typedef PageSize PaperSize;
+   using PaperSize = QPagedPaintDevice::PageSize;
 
 
    enum PageOrder   { FirstPageFirst,
@@ -84,7 +83,10 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
                       LargeCapacity,
                       Cassette,
                       FormSource,
-                      MaxPageSource
+                       MaxPageSource, // Deprecated
+                       CustomSource,
+                       LastPaperSource = CustomSource,
+                       Upper = OnlyOne  // As defined in Windows
                     };
 
    enum PrinterState { Idle,
@@ -93,7 +95,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
                        Error
                      };
 
-   enum OutputFormat { NativeFormat, PdfFormat, PostScriptFormat };
+   enum OutputFormat { NativeFormat, PdfFormat };
 
    // Keep in sync with QAbstractPrintDialog::PrintRange
    enum PrintRange { AllPages, Selection, PageRange, CurrentPage };
@@ -135,17 +137,22 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    void setCreator(const QString &);
    QString creator() const;
 
+   using QPagedPaintDevice::setPageSize;
+   using QPagedPaintDevice::setPageMargins;
    void setOrientation(Orientation);
    Orientation orientation() const;
 
-   void setPageSize(PageSize);
+   void setPageSize(PageSize) override;
    PageSize pageSize() const;
 
+   void setPageSizeMM(const QSizeF &size) Q_DECL_OVERRIDE;
    void setPaperSize(PaperSize);
    PaperSize paperSize() const;
 
    void setPaperSize(const QSizeF &paperSize, Unit unit);
    QSizeF paperSize(Unit unit) const;
+    void setPaperName(const QString &paperName);
+    QString paperName() const;
 
    void setPageOrder(PageOrder);
    PageOrder pageOrder() const;
@@ -189,10 +196,10 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    void setDoubleSidedPrinting(bool enable);
    bool doubleSidedPrinting() const;
 
-#ifdef Q_OS_WIN
+
    void setWinPageSize(int winPageSize);
    int winPageSize() const;
-#endif
+
 
    QRect paperRect() const;
    QRect pageRect() const;
@@ -204,7 +211,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    void setPrinterSelectionOption(const QString &);
 #endif
 
-   bool newPage();
+   bool newPage() override;
    bool abort();
 
    PrinterState printerState() const;
@@ -212,10 +219,6 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    QPaintEngine *paintEngine() const override;
    QPrintEngine *printEngine() const;
 
-#ifdef Q_OS_WIN
-   HDC getDC() const override;
-   void releaseDC(HDC hdc) const override;
-#endif
 
    void setFromTo(int fromPage, int toPage);
    int fromPage() const;
@@ -224,6 +227,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    void setPrintRange(PrintRange range);
    PrintRange printRange() const;
 
+   void setMargins(const Margins &m) override;
    void setPageMargins(qreal left, qreal top, qreal right, qreal bottom, Unit unit);
    void getPageMargins(qreal *left, qreal *top, qreal *right, qreal *bottom, Unit unit) const;
 
@@ -232,8 +236,6 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    void setEngines(QPrintEngine *printEngine, QPaintEngine *paintEngine);
 
  private:
-   void init(PrinterMode mode);
-
    Q_DISABLE_COPY(QPrinter)
 
    QScopedPointer<QPrinterPrivate> d_ptr;
@@ -248,6 +250,5 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
 
 #endif // QT_NO_PRINTER
 
-QT_END_NAMESPACE
 
-#endif // QPRINTER_H
+#endif

@@ -26,7 +26,7 @@
 #include <QtCore/qvariant.h>
 #include <QtGui/qprinter.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_PRINTER
 
@@ -56,7 +56,6 @@ class Q_GUI_EXPORT QPrintEngine
 
       PPK_WindowsPageSize,
       PPK_FontEmbedding,
-      PPK_SuppressSystemPrintStatus,
 
       PPK_Duplex,
 
@@ -65,6 +64,10 @@ class Q_GUI_EXPORT QPrintEngine
       PPK_PageMargins,
       PPK_CopyCount,
       PPK_SupportsMultipleCopies,
+      PPK_PaperName,
+      PPK_QPageSize,
+      PPK_QPageMargins,
+      PPK_QPageLayout,
       PPK_PaperSize = PPK_PageSize,
 
       PPK_CustomBase = 0xff00
@@ -80,17 +83,10 @@ class Q_GUI_EXPORT QPrintEngine
 
    virtual QPrinter::PrinterState printerState() const = 0;
 
-#ifdef Q_OS_WIN
-   virtual HDC getPrinterDC() const {
-      return 0;
-   }
-   virtual void releasePrinterDC(HDC) const { }
-#endif
-
 };
 
 #endif // QT_NO_PRINTER
 
-QT_END_NAMESPACE
+
 
 #endif // QPRINTENGINE_H

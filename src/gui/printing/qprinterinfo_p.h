@@ -23,57 +23,21 @@
 #ifndef QPRINTERINFO_P_H
 #define QPRINTERINFO_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_PRINTER
 
-#include <QtCore/qlist.h>
-
-QT_BEGIN_NAMESPACE
+#include <qprintdevice_p.h>
 
 class QPrinterInfoPrivate
 {
  public:
-   QPrinterInfoPrivate(const QString &name = QString()) :
-      name(name), isDefault(false)
+    QPrinterInfoPrivate(const QString& id = QString());
+    ~QPrinterInfoPrivate();
 
-#if (defined(Q_OS_UNIX) && !defined(Q_OS_MAC)) || defined(Q_WS_QPA)
-#if !defined(QT_NO_CUPS)
-      , cupsPrinterIndex(0), hasPaperSizes(false)
-#endif
-#endif
-
-   {}
-   ~QPrinterInfoPrivate() {
-   }
-
-   static QPrinterInfoPrivate shared_null;
-
-   QString name;
-   bool isDefault;
-
-#if (defined(Q_OS_UNIX) && !defined(Q_OS_MAC)) || defined(Q_WS_QPA)
-#if !defined(QT_NO_CUPS)
-   int cupsPrinterIndex;
-   mutable bool hasPaperSizes;
-   mutable QList<QPrinter::PaperSize> paperSizes;
-#endif
-#endif
+    QPrintDevice m_printDevice;
 };
-
-
-class QPrinterInfoPrivateDeleter
-{
- public:
-   static inline void cleanup(QPrinterInfoPrivate *d) {
-      if (d != &QPrinterInfoPrivate::shared_null) {
-         delete d;
-      }
-   }
-};
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTER
 
-#endif // QPRINTERINFO_P_H
+#endif

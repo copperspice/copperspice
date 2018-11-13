@@ -23,13 +23,18 @@
 #ifndef QPRINTENGINE_WIN_P_H
 #define QPRINTENGINE_WIN_P_H
 
+#include <qglobal.h>
 #ifndef QT_NO_PRINTER
 
-#include <QtGui/qprinter.h>
-#include <QtGui/qprintengine.h>
-#include <QtGui/qpaintengine.h>
-#include <QtCore/qt_windows.h>
+
+#include <qpaintengine.h>
+#include <qpagelayout.h>
+#include <qprinter.h>
+#include <qprintengine.h>
+#include <qt_windows.h>
+
 #include <qpaintengine_alpha_p.h>
+#include <qprintdevice_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -40,6 +45,7 @@ class QPainterState;
 class QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
 {
    Q_DECLARE_PRIVATE(QWin32PrintEngine)
+
  public:
    QWin32PrintEngine(QPrinter::PrinterMode mode);
 
@@ -74,13 +80,10 @@ class QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
    HDC getDC() const override;
    void releaseDC(HDC) const override;
 
-   HDC getPrinterDC() const override {
-      return getDC();
-   }
-
-   void releasePrinterDC(HDC dc) const override {
-      releaseDC(dc);
-   }
+   /* Used by print/page setup dialogs */
+   void setGlobalDevMode(HGLOBAL globalDevNames, HGLOBAL globalDevMode);
+   HGLOBAL *createGlobalDevNames();
+   HGLOBAL globalDevMode();
 
  private:
    friend class QPrintDialog;
@@ -97,24 +100,27 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
       globalDevMode(0),
       devMode(0),
       pInfo(0),
+       hMem(0),
       hdc(0),
+      ownsDevMode(false),
       mode(QPrinter::ScreenResolution),
       state(QPrinter::Idle),
       resolution(0),
-      pageMarginsSet(false),
+      m_pageLayout(QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
+      stretch_x(1), stretch_y(1), origin_x(0), origin_y(0),
+      dpi_x(96), dpi_y(96), dpi_display(96),
       num_copies(1),
       printToFile(false),
-      fullPage(false),
+
       reinit(false),
-      has_custom_paper_size(false) {
+      complex_xform(false), has_pen(false), has_brush(false), has_custom_paper_size(false),
+      embed_fonts(true),
+      txop(0 /* QTransform::TxNone */)
+   {
    }
 
    ~QWin32PrintEnginePrivate();
 
-
-   /* Reads the default printer name and its driver (printerProgram) into
-      the engines private data. */
-   void queryDefault();
 
    /* Initializes the printer data based on the current printer name. This
       function creates a DEVMODE struct, HDC and a printer handle. If these
@@ -130,25 +136,13 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
       etc and resets the corresponding members to 0. */
    void release();
 
-   /* Queries the resolutions for the current printer, and returns them
-      in a list. */
-   QList<QVariant> queryResolutions() const;
-
    /* Resets the DC with changes in devmode. If the printer is active
       this function only sets the reinit variable to true so it
       is handled in the next begin or newpage. */
    void doReinit();
 
-   /* Used by print/page setup dialogs */
-   HGLOBAL *createDevNames();
 
-   void readDevmode(HGLOBAL globalDevmode);
-   void readDevnames(HGLOBAL globalDevnames);
-
-   inline bool resetDC() {
-      hdc = ResetDC(hdc, devMode);
-      return hdc != 0;
-   }
+   bool resetDC();
 
    void strokePath(const QPainterPath &path, const QColor &color);
    void fillPath(const QPainterPath &path, const QColor &color);
@@ -157,12 +151,11 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    void fillPath_dev(const QPainterPath &path, const QColor &color);
    void strokePath_dev(const QPainterPath &path, const QColor &color, qreal width);
 
-   void updateOrigin();
+   void setPageSize(const QPageSize &pageSize);
+   void updatePageLayout();
 
-   void initDevRects();
-   void setPageMargins(int margin_left, int margin_top, int margin_right, int margin_bottom);
-   QRect getPageMargins() const;
-   void updateCustomPaperSize();
+   void updateMetrics();
+   void debugMetrics() const;
 
    // Windows GDI printer references.
    HANDLE hPrinter;
@@ -174,33 +167,27 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
 
    HDC hdc;
 
+   // True if devMode was allocated separately from pInfo.
+   bool ownsDevMode;
    QPrinter::PrinterMode mode;
 
    // Printer info
-   QString name;
-   QString program;
-   QString port;
+   QPrintDevice m_printDevice;
 
    // Document info
    QString docName;
+   QString m_creator;
    QString fileName;
 
    QPrinter::PrinterState state;
    int resolution;
 
-   // This QRect is used to store the exact values
-   // entered into the PageSetup Dialog because those are
-   // entered in mm but are since converted to device coordinates.
-   // If they were to be converted back when displaying the dialog
-   // again, there would be inaccuracies so when the user entered 10
-   // it may show up as 9.99 the next time the dialog is opened.
-   // We don't want that confusion.
-   QRect previousDialogMargins;
+   // Page Layout
+   QPageLayout m_pageLayout;
 
-   bool pageMarginsSet;
-   QRect devPageRect;
-   QRect devPhysicalPageRect;
-   QRect devPaperRect;
+   // Page metrics cache
+   QRect m_paintRectPixels;
+   QSize m_paintSizeMM;
    qreal stretch_x;
    qreal stretch_y;
    int origin_x;
@@ -212,13 +199,14 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    int num_copies;
 
    uint printToFile : 1;
-   uint fullPage : 1;
+
    uint reinit : 1;
 
    uint complex_xform : 1;
    uint has_pen : 1;
    uint has_brush : 1;
    uint has_custom_paper_size : 1;
+   uint embed_fonts : 1;
 
    uint txop;
 
@@ -230,8 +218,6 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    QTransform painterMatrix;
    QTransform matrix;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTER
 

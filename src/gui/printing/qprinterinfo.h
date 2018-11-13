@@ -23,42 +23,68 @@
 #ifndef QPRINTERINFO_H
 #define QPRINTERINFO_H
 
-#include <QtCore/QList>
-#include <QtGui/QPrinter>
+#include <qprinter.h>
+#include <QList>
+#include <QPair>
+#include <qpagesize.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_PRINTER
 class QPrinterInfoPrivate;
 class QPrinterInfoPrivateDeleter;
-
+class QDebug;
 class Q_GUI_EXPORT QPrinterInfo
 {
  public:
    QPrinterInfo();
    QPrinterInfo(const QPrinterInfo &other);
-   QPrinterInfo(const QPrinter &printer);
+   explicit QPrinterInfo(const QPrinter &printer);
    ~QPrinterInfo();
 
    QPrinterInfo &operator=(const QPrinterInfo &other);
 
    QString printerName() const;
+    QString description() const;
+    QString location() const;
+    QString makeAndModel() const;
    bool isNull() const;
    bool isDefault() const;
-   QList<QPrinter::PaperSize> supportedPaperSizes() const;
+    bool isRemote() const;
 
-   static QList<QPrinterInfo> availablePrinters();
-   static QPrinterInfo defaultPrinter();
+    QPrinter::PrinterState state() const;
 
+    QList<QPageSize> supportedPageSizes() const;
+    QPageSize defaultPageSize() const;
+
+    bool supportsCustomPageSizes() const;
+
+    QPageSize minimumPhysicalPageSize() const;
+    QPageSize maximumPhysicalPageSize() const;
+
+
+    QList<int> supportedResolutions() const;
+
+    QPrinter::DuplexMode defaultDuplexMode() const;
+    QList<QPrinter::DuplexMode> supportedDuplexModes() const;
+
+    static QStringList availablePrinterNames();
+    static QList<QPrinterInfo> availablePrinters();
+
+    static QString defaultPrinterName();
+    static QPrinterInfo defaultPrinter();
+
+    static QPrinterInfo printerInfo(const QString &printerName);
  private:
-   QPrinterInfo(const QString &name);
+    explicit QPrinterInfo(const QString &name);
 
+   friend class QPlatformPrinterSupport;
+   friend Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QPrinterInfo &);
    Q_DECLARE_PRIVATE(QPrinterInfo)
    QScopedPointer<QPrinterInfoPrivate, QPrinterInfoPrivateDeleter> d_ptr;
 };
 
 #endif // QT_NO_PRINTER
 
-QT_END_NAMESPACE
 
 #endif // QPRINTERINFO_H
