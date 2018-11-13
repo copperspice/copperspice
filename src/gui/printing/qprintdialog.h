@@ -25,42 +25,12 @@
 
 #include <qabstractprintdialog.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PRINTDIALOG
 
 class QPrintDialogPrivate;
 class QPushButton;
 class QPrinter;
-
-#if defined (Q_OS_UNIX) && ! defined(Q_OS_MAC)
-class QUnixPrintWidgetPrivate;
-
-class Q_GUI_EXPORT QUnixPrintWidget : public QWidget
-{
-   GUI_CS_OBJECT(QUnixPrintWidget)
-
- public:
-   QUnixPrintWidget(QPrinter *printer, QWidget *parent = nullptr);
-   ~QUnixPrintWidget();
-   void updatePrinter();
-
- private:
-   friend class QPrintDialogPrivate;
-   friend class QUnixPrintWidgetPrivate;
-   QUnixPrintWidgetPrivate *d;
-
-   GUI_CS_SLOT_1(Private, void _q_printerChanged(int un_named_arg1))
-   GUI_CS_SLOT_2(_q_printerChanged)
-
-   GUI_CS_SLOT_1(Private, void _q_btnBrowseClicked())
-   GUI_CS_SLOT_2(_q_btnBrowseClicked)
-
-   GUI_CS_SLOT_1(Private, void _q_btnPropertiesClicked())
-   GUI_CS_SLOT_2(_q_btnPropertiesClicked)
-
-};
-#endif
 
 class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 {
@@ -69,7 +39,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
    GUI_CS_ENUM(PrintDialogOption)
 
-   GUI_CS_PROPERTY_READ(options, options)
+   GUI_CS_PROPERTY_READ(options,  options)
    GUI_CS_PROPERTY_WRITE(options, setOptions)
 
  public:
@@ -90,7 +60,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
    PrintDialogOptions options() const;
 
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#if defined(Q_OS_UNIX) || defined(Q_OS_WIN)
    void setVisible(bool visible) override;
 #endif
 
@@ -102,24 +72,26 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
    GUI_CS_SIGNAL_OVERLOAD(accepted, (QPrinter *), printer)
 
  private:
-   GUI_CS_SLOT_1(Private, void _q_chbPrintLastFirstToggled(bool un_named_arg1))
-   GUI_CS_SLOT_2(_q_chbPrintLastFirstToggled)
 
-#if defined (Q_OS_UNIX) && !defined (Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
+
+   GUI_CS_SLOT_1(Private, void _q_togglePageSetCombo(bool arg1))
+   GUI_CS_SLOT_2(_q_togglePageSetCombo)
+
    GUI_CS_SLOT_1(Private, void _q_collapseOrExpandDialog())
    GUI_CS_SLOT_2(_q_collapseOrExpandDialog)
-#endif
 
-#if defined(Q_OS_UNIX) && !defined (Q_OS_MAC) && !defined(QT_NO_MESSAGEBOX)
+
    GUI_CS_SLOT_1(Private, void _q_checkFields())
    GUI_CS_SLOT_2(_q_checkFields)
-#endif
 
    friend class QUnixPrintWidget;
+#endif
+
 };
 
 #endif // QT_NO_PRINTDIALOG
 
-QT_END_NAMESPACE
 
-#endif // QPRINTDIALOG_H
+
+#endif

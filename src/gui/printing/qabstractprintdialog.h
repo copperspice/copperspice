@@ -97,4 +97,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractPrintDialog::PrintDialogOptions)
 
 #endif // QT_NO_PRINTER
 
-#endif // QABSTRACTPRINTDIALOG_H
+#endif

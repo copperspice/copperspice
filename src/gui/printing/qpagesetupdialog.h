@@ -23,45 +23,23 @@
 #ifndef QPAGESETUPDIALOG_H
 #define QPAGESETUPDIALOG_H
 
-#include <QtGui/qabstractpagesetupdialog.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
+class QPrinter;
 class QPageSetupDialogPrivate;
 
-class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
+class Q_GUI_EXPORT QPageSetupDialog : public QDialog
 {
    GUI_CS_OBJECT(QPageSetupDialog)
    Q_DECLARE_PRIVATE(QPageSetupDialog)
 
-   GUI_CS_ENUM(PageSetupDialogOption)
-   GUI_CS_PROPERTY_READ(options, options)
-   GUI_CS_PROPERTY_WRITE(options, setOptions)
-
  public:
-   enum PageSetupDialogOption {
-      None                    = 0x00000000, // internal
-      DontUseSheet            = 0x00000001,
-      OwnsPrinter             = 0x80000000  // internal
-   };
-
-   using PageSetupDialogOptions = QFlags<PageSetupDialogOption>;
-
    explicit QPageSetupDialog(QPrinter *printer, QWidget *parent = nullptr);
    explicit QPageSetupDialog(QWidget *parent = nullptr);
 
-   // obsolete
-   void addEnabledOption(PageSetupDialogOption option);
-   void setEnabledOptions(PageSetupDialogOptions options);
-   PageSetupDialogOptions enabledOptions() const;
-   bool isOptionEnabled(PageSetupDialogOption option) const;
-
-   void setOption(PageSetupDialogOption option, bool on = true);
-   bool testOption(PageSetupDialogOption option) const;
-   void setOptions(PageSetupDialogOptions options);
-   PageSetupDialogOptions options() const;
+  ~QPageSetupDialog();
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
    void setVisible(bool visible) override;
@@ -72,13 +50,11 @@ class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
    using QDialog::open;
    void open(QObject *receiver, const QString &member);
 
-   QPrinter *printer() {
-      return QAbstractPageSetupDialog::printer();
-   }
+   void done(int result) override;
+   QPrinter *printer();
 };
 
-#endif
+#endif // QT_NO_PRINTDIALOG
 
-QT_END_NAMESPACE
 
 #endif

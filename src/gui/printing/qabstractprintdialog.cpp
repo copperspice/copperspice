@@ -24,13 +24,13 @@
 #include <qcoreapplication.h>
 #include <qprintdialog.h>
 #include <qprinter.h>
+
 #include <qprinter_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-QT_BEGIN_NAMESPACE
 
-// hack - awful implementation
+// awful implementation
 class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 {
 };
@@ -40,7 +40,11 @@ QAbstractPrintDialog::QAbstractPrintDialog(QPrinter *printer, QWidget *parent)
 {
    Q_D(QAbstractPrintDialog);
    setWindowTitle(QCoreApplication::translate("QPrintDialog", "Print"));
+
    d->setPrinter(printer);
+   d->minPage = printer->fromPage();
+   int to = printer->toPage();
+   d->maxPage = to > 0 ? to : INT_MAX;
 }
 
 /*!
@@ -96,7 +100,7 @@ void QPrintDialog::setOptions(PrintDialogOptions options)
    Q_D(QPrintDialog);
 
    PrintDialogOptions changed = (options ^ d->options);
-   if (!changed) {
+   if (! changed) {
       return;
    }
 
@@ -159,7 +163,7 @@ bool QAbstractPrintDialog::isOptionEnabled(PrintDialogOption option) const
 void QAbstractPrintDialog::setPrintRange(PrintRange range)
 {
    Q_D(QAbstractPrintDialog);
-   d->pd->printRange = QPrinter::PrintRange(range);
+   d->printer->setPrintRange(QPrinter::PrintRange(range));
 }
 
 /*!
@@ -180,8 +184,9 @@ void QAbstractPrintDialog::setMinMax(int min, int max)
    Q_D(QAbstractPrintDialog);
    Q_ASSERT_X(min <= max, "QAbstractPrintDialog::setMinMax",
               "'min' must be less than or equal to 'max'");
-   d->pd->minPage = min;
-   d->pd->maxPage = max;
+
+   d->minPage = min;
+   d->maxPage = max;
    d->options |= PrintPageRange;
 }
 
@@ -192,7 +197,7 @@ void QAbstractPrintDialog::setMinMax(int min, int max)
 int QAbstractPrintDialog::minPage() const
 {
    Q_D(const QAbstractPrintDialog);
-   return d->pd->minPage;
+   return d->minPage;
 }
 
 /*!
@@ -203,7 +208,7 @@ int QAbstractPrintDialog::minPage() const
 int QAbstractPrintDialog::maxPage() const
 {
    Q_D(const QAbstractPrintDialog);
-   return d->pd->maxPage;
+   return d->maxPage;
 }
 
 /*!
@@ -214,10 +219,10 @@ void QAbstractPrintDialog::setFromTo(int from, int to)
    Q_D(QAbstractPrintDialog);
    Q_ASSERT_X(from <= to, "QAbstractPrintDialog::setFromTo",
               "'from' must be less than or equal to 'to'");
-   d->pd->fromPage = from;
-   d->pd->toPage = to;
 
-   if (d->pd->minPage == 0 && d->pd->maxPage == 0) {
+   d->printer->setFromTo(from, to);
+
+   if (d->minPage == 0 && d->maxPage == 0) {
       setMinMax(1, to);
    }
 }
@@ -229,7 +234,7 @@ void QAbstractPrintDialog::setFromTo(int from, int to)
 int QAbstractPrintDialog::fromPage() const
 {
    Q_D(const QAbstractPrintDialog);
-   return d->pd->fromPage;
+   return d->printer->fromPage();
 }
 
 /*!
@@ -239,7 +244,7 @@ int QAbstractPrintDialog::fromPage() const
 int QAbstractPrintDialog::toPage() const
 {
    Q_D(const QAbstractPrintDialog);
-   return d->pd->toPage;
+   return d->printer->toPage();
 }
 
 
@@ -304,6 +309,6 @@ void QPrintDialog::open(QObject *receiver, const QString &member)
    QDialog::open();
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_PRINTDIALOG

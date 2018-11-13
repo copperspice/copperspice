@@ -20,49 +20,39 @@
 *
 ***********************************************************************/
 
-#ifndef QABSTRACTPRINTDIALOG_P_H
-#define QABSTRACTPRINTDIALOG_P_H
+#ifndef QPAGESETUPDIALOG_P_H
+#define QPAGESETUPDIALOG_P_H
+
+
 
 #include <qdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include <QtGui/qabstractprintdialog.h>
+#include "qbytearray.h"
+#include "qpagesetupdialog.h"
+#include "qpointer.h"
 
-QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PRINTER
 
 class QPrinter;
-class QPrinterPrivate;
 
-class QAbstractPrintDialogPrivate : public QDialogPrivate
+class QPageSetupDialogPrivate : public QDialogPrivate
 {
-   Q_DECLARE_PUBLIC(QAbstractPrintDialog)
+    Q_DECLARE_PUBLIC(QPageSetupDialog)
 
- public:
-   QAbstractPrintDialogPrivate()
-      : printer(0), pd(0), ownsPrinter(false)
-      , options(QAbstractPrintDialog::PrintToFile | QAbstractPrintDialog::PrintPageRange |
-                QAbstractPrintDialog::PrintCollateCopies | QAbstractPrintDialog::PrintShowPageSize) {
-   }
+public:
+    QPageSetupDialogPrivate(QPrinter *printer);
 
-   QPrinter *printer;
-   QPrinterPrivate *pd;
-   bool ownsPrinter;
-   QPointer<QObject> receiverToDisconnectOnClose;
-   QString memberToDisconnectOnClose;
+    void setPrinter(QPrinter *newPrinter);
 
-   QAbstractPrintDialog::PrintDialogOptions options;
-
-   virtual void setTabs(const QList<QWidget *> &) {}
-   void setPrinter(QPrinter *newPrinter);
+    QPrinter *printer;
+    bool ownsPrinter;
+    QPointer<QObject> receiverToDisconnectOnClose;
+    QString memberToDisconnectOnClose;
 };
 
-#endif //QT_NO_PRINTER
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTDIALOG
 
-#endif // QABSTRACTPRINTDIALOG_P_H
+#endif

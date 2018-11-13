@@ -42,7 +42,7 @@
 #include <QtGui/qformlayout.h>
 #include <QtCore/QCoreApplication>
 
-#include <math.h>
+
 
 #ifndef QT_NO_PRINTPREVIEWDIALOG
 
@@ -51,7 +51,7 @@ class QPrintPreviewMainWindow : public QMainWindow
  public:
    QPrintPreviewMainWindow(QWidget *parent) : QMainWindow(parent) {}
 
-   QMenu *createPopupMenu() override{
+   QMenu *createPopupMenu() override {
       return nullptr;
    }
 };
@@ -192,7 +192,6 @@ class QPrintPreviewDialogPrivate : public QDialogPrivate
    QActionGroup *printerGroup;
    QAction *printAction;
    QAction *pageSetupAction;
-
 
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
@@ -338,7 +337,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
    preview->setFocus();
 }
 
-static inline void qt_setupActionIcon(QAction *action, const QLatin1String &name)
+static inline void qt_setupActionIcon(QAction *action, const QString &name)
 {
    QLatin1String imagePrefix(":/copperspice/dialogs/qprintpreviewdialog/images/");
    QIcon icon;
@@ -573,15 +572,10 @@ void QPrintPreviewDialogPrivate::_q_print()
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
    if (printer->outputFormat() != QPrinter::NativeFormat) {
-      QString title;
-      QString suffix;
-      if (printer->outputFormat() == QPrinter::PdfFormat) {
-         title = QCoreApplication::translate("QPrintPreviewDialog", "Export to PDF");
-         suffix = QLatin1String(".pdf");
-      } else {
-         title = QCoreApplication::translate("QPrintPreviewDialog", "Export to PostScript");
-         suffix = QLatin1String(".ps");
-      }
+
+      QString title = QCoreApplication::translate("QPrintPreviewDialog", "Export to PDF");
+      QString suffix = QLatin1String(".pdf");
+
       QString fileName = QFileDialog::getSaveFileName(q, title, printer->outputFileName(),
                          QLatin1Char('*') + suffix);
       if (!fileName.isEmpty()) {

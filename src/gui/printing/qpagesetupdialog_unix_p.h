@@ -27,57 +27,73 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
+#include <qprinter.h>
+#include <qpagelayout.h>
 #include <ui_qpagesetupwidget.h>
 
 QT_BEGIN_NAMESPACE
 
 class QPrinter;
 class QPagePreview;
-class QCUPSSupport;
+
 
 class QPageSetupWidget : public QWidget
 {
    GUI_CS_OBJECT(QPageSetupWidget)
+
  public:
    QPageSetupWidget(QWidget *parent = nullptr);
    QPageSetupWidget(QPrinter *printer, QWidget *parent = nullptr);
    void setPrinter(QPrinter *printer);
 
-   /// copy information from the widget and apply that to the printer
    void setupPrinter() const;
-   void selectPrinter(QCUPSSupport *m_cups);
-   void selectPdfPsPrinter(const QPrinter *p);
 
  private :
-   GUI_CS_SLOT_1(Private, void _q_pageOrientationChanged())
-   GUI_CS_SLOT_2(_q_pageOrientationChanged)
-   GUI_CS_SLOT_1(Private, void _q_paperSizeChanged())
-   GUI_CS_SLOT_2(_q_paperSizeChanged)
-   GUI_CS_SLOT_1(Private, void unitChanged(int item))
+   GUI_CS_SLOT_1(Private, void pageOrientationChanged())
+   GUI_CS_SLOT_2(_pageOrientationChanged)
+
+   GUI_CS_SLOT_1(Private, void pageSizeChanged())
+   GUI_CS_SLOT_2(pageSizeChanged)
+
+   GUI_CS_SLOT_1(Private, void pagesPerSheetChanged())
+   GUI_CS_SLOT_2(pagesPerSheetChanged)
+
+   GUI_CS_SLOT_1(Private, void unitChanged())
    GUI_CS_SLOT_2(unitChanged)
-   GUI_CS_SLOT_1(Private, void setTopMargin(double newValue))
-   GUI_CS_SLOT_2(setTopMargin)
-   GUI_CS_SLOT_1(Private, void setBottomMargin(double newValue))
-   GUI_CS_SLOT_2(setBottomMargin)
-   GUI_CS_SLOT_1(Private, void setLeftMargin(double newValue))
-   GUI_CS_SLOT_2(setLeftMargin)
-   GUI_CS_SLOT_1(Private, void setRightMargin(double newValue))
-   GUI_CS_SLOT_2(setRightMargin)
- 
-   Ui::QPageSetupWidget widget;
+
+   GUI_CS_SLOT_1(Private, void topMarginChanged(double newValue))
+   GUI_CS_SLOT_2(topMarginChanged)
+
+   GUI_CS_SLOT_1(Private, void bottomMarginChanged(double newValue))
+   GUI_CS_SLOT_2(bottomMarginChanged)
+
+   GUI_CS_SLOT_1(Private, void leftMarginChanged(double newValue))
+   GUI_CS_SLOT_2(leftMarginChanged)
+
+   GUI_CS_SLOT_1(Private, void rightMarginChanged(double newValue))
+   GUI_CS_SLOT_2(rightMarginChanged)
+
+   void updateWidget();
+   void initUnits();
+   void initPagesPerSheet();
+   void initPageSizes();
+
+   Ui::QPageSetupWidget m_ui;
    QPagePreview *m_pagePreview;
    QPrinter *m_printer;
-   qreal m_leftMargin;
-   qreal m_topMargin;
-   qreal m_rightMargin;
-   qreal m_bottomMargin;
-   QSizeF m_paperSize;
-   qreal m_currentMultiplier;
+
+   QPrinter::OutputFormat m_outputFormat;
+
+   QString m_printerName;
+   QPageLayout m_pageLayout;
+   QPageLayout::Unit m_units;
    bool m_blockSignals;
-   QCUPSSupport *m_cups;
+
+   friend class QUnixPrintWidgetPrivate;  // Needed by checkFields()
+
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_PRINTDIALOG
 #endif
