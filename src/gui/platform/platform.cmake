@@ -1,70 +1,40 @@
 set(GUI_PUBLIC_INCLUDES
    ${GUI_PUBLIC_INCLUDES}
-   QPlatformFontDatabase
-   QPlatformIntegration
-   QPlatformScreen
-
-# none of the following at this time
-#    QPlatformClipboard
-#    QPlatformCursor
-#    QPlatformCursorImage
-#    QPlatformCursorPrivate
-#    QPlatformEventLoopIntegration
-#    QPlatformGLContextQPlatformIntegration
-#    QPlatformIntegrationFactoryInterface
-#    QPlatformIntegrationPlugin
-#    QPlatformNativeInterface
-#    QPlatformWindow
-#    QPlatformWindowFormat
+	QPlatform_Accessibility
+	QPlatform_BackingStore
+	QPlatform_Clipboard
+	QPlatform_Cursor
+	QPlatform_Drag
+	QPlatform_FontDatabase
+	QPlatform_Integration
+	QPlatform_NativeInterface
+	QPlatform_OpenGLContext
+	QPlatform_Pixmap
+	QPlatform_Screen
+	QPlatform_Theme
+	QPlatform_Window
+	QPlatform_WindowFormat
 )
 
 set(GUI_INCLUDES
     ${GUI_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformdatabase.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformintegration.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformscreen.h
-
-# none of the following at this time
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformclipboard.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformclipboard_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformcursor.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformcursor_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformcursorimage.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformcursorprivate.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformeventloopintegration.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformeventloopintegration_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformglcontext.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformglcontext_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformintegration.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformintegrationfactoryinterface.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformintegrationplugin.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformintegrationplugin_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformnativeinterface.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformnativeinterface_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformwindow.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformwindow_qpa.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformwindowformat.h
-#    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformwindowformat_qpa.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_database.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.h
 )
 
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformscreen_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen_p.h
 )
 
 set(GUI_SOURCES
     ${GUI_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformfontdatabase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformintegration.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatformscreen.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_fontdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.cpp
 )
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-
-    set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS}
-        -framework AppKit
-    )
-endif()
