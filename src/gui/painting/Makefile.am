@@ -1,6 +1,7 @@
 GUI_DIRS += src/gui/painting
 
 GUI_PUBLIC_INCLUDES += \
+   QBackingStore \
 	QBrush \
 	QBrushData \
 	QColor \
@@ -33,6 +34,7 @@ GUI_PUBLIC_INCLUDES += \
 	QTransform
 
 GUI_PAINTING_INCLUDES = \
+	qbackingstore.h \
 	qbrush.h \
 	qbrushdata.h \
 	qcolor.h \
@@ -66,7 +68,6 @@ GUI_PAINTING_INCLUDES = \
 	qtransform.h
 
 GUI_PAINTING_PRIVATE_INCLUDES = \
-	qbackingstore_p.h \
 	qbezier_p.h \
 	qblendfunctions_p.h \
 	qblittable_p.h \
@@ -87,7 +88,6 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qgraphicssystemplugin_p.h \
 	qgraphicssystem_mac_p.h \
 	qgraphicssystem_raster_p.h \
-	qgraphicssystem_runtime_p.h \
 	qgraphicssystemex_p.h \
 	qgraphicssystemfactory_p.h \
 	qgrayraster_p.h \
@@ -125,11 +125,6 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qtextureglyphcache_p.h \
 	qunifiedtoolbarsurface_mac_p.h \
 	qvectorpath_p.h \
-	qwindowsurface_p.h \
-	qwindowsurface_mac_p.h \
-	qunifiedtoolbarsurface_mac_p.h \
-	qwindowsurface_raster_p.h \
-	qwindowsurface_x11_p.h \
 	qregion_x11.cpp \
 	qregion_win.cpp
 
@@ -153,7 +148,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qgraphicssystem.cpp \
 	src/gui/painting/qgraphicssystem_raster.cpp \
 	src/gui/painting/qgraphicssystemfactory.cpp \
-	src/gui/painting/qgraphicssystem_runtime.cpp \
 	src/gui/painting/qmatrix.cpp \
 	src/gui/painting/qmemrotate.cpp \
 	src/gui/painting/qoutlinemapper.cpp \
@@ -179,7 +173,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qtessellator.cpp \
 	src/gui/painting/qtextureglyphcache.cpp \
 	src/gui/painting/qtransform.cpp \
-	src/gui/painting/qwindowsurface.cpp \
 	src/gui/painting/qpaintbuffer.cpp \
 	src/gui/painting/qpaintengine_raster.cpp \
 	src/gui/painting/qdrawhelper.cpp \
@@ -188,8 +181,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qgraphicssystemplugin.cpp \
 	src/gui/painting/qpaintengine_blitter.cpp \
 	src/gui/painting/qblittable.cpp \
-	src/gui/painting/qbackingstore.cpp \
-	src/gui/painting/qwindowsurface_raster.cpp
+	src/gui/painting/qbackingstore.cpp
+
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
@@ -207,8 +200,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qpaintdevice_x11.cpp \
 	src/gui/painting/qpaintengine_x11.cpp \
 	src/gui/painting/qprinterinfo_unix.cpp \
-	src/gui/painting/qcups.cpp \
-	src/gui/painting/qwindowsurface_x11.cpp
+	src/gui/painting/qcups.cpp
 endif
 
 if COCOA
@@ -220,6 +212,5 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qgraphicssystem_mac.cpp \
 	src/gui/painting/qprinterinfo_mac.cpp \
 	src/gui/painting/qprintengine_mac.mm \
-	src/gui/painting/qwindowsurface_mac.cpp \
 	src/gui/painting/qunifiedtoolbarsurface_mac.cpp
 endif

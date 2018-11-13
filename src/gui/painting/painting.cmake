@@ -1,5 +1,6 @@
 set(GUI_PUBLIC_INCLUDES
     ${GUI_PUBLIC_INCLUDES}
+    QBackingStore
     QBrush
     QBrushData
     QColor
@@ -34,6 +35,7 @@ set(GUI_PUBLIC_INCLUDES
 
 set(GUI_INCLUDES
     ${GUI_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbackingstore.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbrush.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbrushdata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolor.h
@@ -69,7 +71,6 @@ set(GUI_INCLUDES
 
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbackingstore_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbezier_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qblendfunctions_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qblittable_p.h
@@ -90,7 +91,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemplugin_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_raster_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_runtime_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemex_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemfactory_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgrayraster_p.h
@@ -128,11 +128,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtextureglyphcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qunifiedtoolbarsurface_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qvectorpath_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qunifiedtoolbarsurface_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_raster_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qregion_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qregion_win.cpp
 )
@@ -151,7 +146,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_raster.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemfactory.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_runtime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmatrix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmemrotate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qoutlinemapper.cpp
@@ -177,7 +171,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtessellator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtextureglyphcache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtransform.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintbuffer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_raster.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper.cpp
@@ -187,7 +180,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_blitter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qblittable.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbackingstore.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_raster.cpp
 )
 
 if(X11_FOUND)
@@ -198,7 +190,6 @@ if(X11_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcups.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_x11.cpp
     )
 endif()
 
@@ -226,7 +217,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qunifiedtoolbarsurface_mac.cpp
     )
 endif()
