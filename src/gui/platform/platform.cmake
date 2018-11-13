@@ -18,7 +18,7 @@ set(GUI_PUBLIC_INCLUDES
 
 set(GUI_INCLUDES
     ${GUI_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_database.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_fontdatabase.h
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.h
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.h
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.h
