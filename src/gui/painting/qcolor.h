@@ -26,6 +26,7 @@
 #include <qrgb.h>
 #include <qnamespace.h>
 #include <qstringlist.h>
+#include <qrgba64.h>
 
 class QColor;
 class QColormap;
@@ -39,19 +40,22 @@ class Q_GUI_EXPORT QColor
 {
  public:
    enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl };
+   enum NameFormat { HexRgb, HexArgb };
 
    QColor();
    QColor(Qt::GlobalColor color);
    QColor(int r, int g, int b, int a = 255);
    QColor(QRgb rgb);
+   QColor(QRgba64 rgba64);
    QColor(const QString &name);
    QColor(const char *name);
-   QColor(const QColor &color);
    QColor(Spec spec);
 
-   inline bool isValid() const;
+   QColor &operator=(Qt::GlobalColor color);
 
-   QString name() const;
+   bool isValid() const;
+
+   QString name(NameFormat format = HexRgb) const;
    void setNamedColor(const QString &name);
 
    static QStringList colorNames();
@@ -80,14 +84,16 @@ class Q_GUI_EXPORT QColor
    void setGreenF(qreal green);
    void setBlueF(qreal blue);
 
-   void getRgb(int *r, int *g, int *b, int *a = 0) const;
+   void getRgb(int *r, int *g, int *b, int *a = nullptr) const;
    void setRgb(int r, int g, int b, int a = 255);
 
-   void getRgbF(qreal *r, qreal *g, qreal *b, qreal *a = 0) const;
+   void getRgbF(qreal *r, qreal *g, qreal *b, qreal *a = nullptr) const;
    void setRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
 
    QRgb rgba() const;
    void setRgba(QRgb rgba);
+   QRgba64 rgba64() const;
+   void setRgba64(QRgba64 rgba);
 
    QRgb rgb() const;
    void setRgb(QRgb rgb);
@@ -104,10 +110,10 @@ class Q_GUI_EXPORT QColor
    qreal hsvSaturationF() const;
    qreal valueF() const;
 
-   void getHsv(int *h, int *s, int *v, int *a = 0) const;
+   void getHsv(int *h, int *s, int *v, int *a = nullptr) const;
    void setHsv(int h, int s, int v, int a = 255);
 
-   void getHsvF(qreal *h, qreal *s, qreal *v, qreal *a = 0) const;
+   void getHsvF(qreal *h, qreal *s, qreal *v, qreal *a = nullptr) const;
    void setHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
 
    int cyan() const;
@@ -120,10 +126,10 @@ class Q_GUI_EXPORT QColor
    qreal yellowF() const;
    qreal blackF() const;
 
-   void getCmyk(int *c, int *m, int *y, int *k, int *a = 0);
+   void getCmyk(int *c, int *m, int *y, int *k, int *a = nullptr);
    void setCmyk(int c, int m, int y, int k, int a = 255);
 
-   void getCmykF(qreal *c, qreal *m, qreal *y, qreal *k, qreal *a = 0);
+   void getCmykF(qreal *c, qreal *m, qreal *y, qreal *k, qreal *a = nullptr);
    void setCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
 
    int hslHue() const; // 0 <= hue < 360
@@ -134,10 +140,10 @@ class Q_GUI_EXPORT QColor
    qreal hslSaturationF() const;
    qreal lightnessF() const;
 
-   void getHsl(int *h, int *s, int *l, int *a = 0) const;
+   void getHsl(int *h, int *s, int *l, int *a = nullptr) const;
    void setHsl(int h, int s, int l, int a = 255);
 
-   void getHslF(qreal *h, qreal *s, qreal *l, qreal *a = 0) const;
+   void getHslF(qreal *h, qreal *s, qreal *l, qreal *a = nullptr) const;
    void setHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
    QColor toRgb() const;
@@ -153,6 +159,8 @@ class Q_GUI_EXPORT QColor
    static QColor fromRgb(int r, int g, int b, int a = 255);
    static QColor fromRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
 
+   static QColor fromRgba64(ushort r, ushort g, ushort b, ushort a = USHRT_MAX);
+   static QColor fromRgba64(QRgba64 rgba);
    static QColor fromHsv(int h, int s, int v, int a = 255);
    static QColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
 
@@ -163,12 +171,10 @@ class Q_GUI_EXPORT QColor
    static QColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
    QColor light(int f = 150) const;
-   inline QColor lighter(int f = 150) const;
+   QColor lighter(int f = 150) const;
    QColor dark(int f = 200) const;
-   inline QColor darker(int f = 200) const;
+   QColor darker(int f = 200) const;
 
-   QColor &operator=(const QColor &);
-   QColor &operator=(Qt::GlobalColor color);
 
    bool operator==(const QColor &c) const;
    bool operator!=(const QColor &c) const;
@@ -179,8 +185,6 @@ class Q_GUI_EXPORT QColor
    static bool allowX11ColorNames();
    static void setAllowX11ColorNames(bool enabled);
 #endif
-
-
 
    static bool isValidColor(const QString &name);
 
@@ -248,12 +252,6 @@ inline QColor::QColor(const QString &aname)
    setNamedColor(aname);
 }
 
-inline QColor::QColor(const QColor &acolor)
-   : cspec(acolor.cspec)
-{
-   ct.argb = acolor.ct.argb;
-}
-
 inline bool QColor::isValid() const
 {
    return cspec != Invalid;
@@ -269,4 +267,4 @@ inline QColor QColor::darker(int f) const
    return dark(f);
 }
 
-#endif // QCOLOR_H
+#endif

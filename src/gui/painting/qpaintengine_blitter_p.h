@@ -26,20 +26,20 @@
 #include <qpaintengine_raster_p.h>
 
 #ifndef QT_NO_BLITTABLE
-QT_BEGIN_NAMESPACE
+
 
 class QBlitterPaintEnginePrivate;
-class QBlittablePixmapData;
+class QBlittablePlatformPixmap;
 class QBlittable;
 
 class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
 {
-   Q_DECLARE_PRIVATE(QBlitterPaintEngine);
+   Q_DECLARE_PRIVATE(QBlitterPaintEngine)
 
  public:
-   QBlitterPaintEngine(QBlittablePixmapData *p);
+    QBlitterPaintEngine(QBlittablePlatformPixmap *p);
 
-   QPaintEngine::Type type() const  override{
+   QPaintEngine::Type type() const  override {
       return Blitter;
    }
 
@@ -82,9 +82,10 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void drawPoints(const QPoint *points, int pointCount) override;
    void stroke(const QVectorPath &path, const QPen &pen) override;
    void drawStaticTextItem(QStaticTextItem *) override;
+
+   bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine);
 };
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_BLITTABLE
 #endif // QPAINTENGINE_BLITTER_P_H

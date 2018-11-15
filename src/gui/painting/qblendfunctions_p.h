@@ -26,11 +26,15 @@
 #include <qmath.h>
 #include <qdrawhelper_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 template <typename SRC, typename T>
-void qt_scale_image_16bit(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int sh,
-                          const QRectF &targetRect, const QRectF &srcRect, const QRect &clip, T blender)
+void qt_scale_image_16bit(uchar *destPixels, int dbpl,
+                          const uchar *srcPixels, int sbpl, int srch,
+                          const QRectF &targetRect,
+                          const QRectF &srcRect,
+                          const QRect &clip,
+                          T blender)
 {
    qreal sx = targetRect.width() / (qreal) srcRect.width();
    qreal sy = targetRect.height() / (qreal) srcRect.height();
@@ -89,7 +93,6 @@ void qt_scale_image_16bit(uchar *destPixels, int dbpl, const uchar *srcPixels, i
    int h = ty2 - ty1;
    int w = tx2 - tx1;
 
-
    quint32 basex;
    quint32 srcy;
 
@@ -113,7 +116,7 @@ void qt_scale_image_16bit(uchar *destPixels, int dbpl, const uchar *srcPixels, i
    // this bounds check here is required as floating point rounding above might in some cases lead to
    // w/h values that are one pixel too large, falling outside of the valid image area.
    int yend = (srcy + iy * (h - 1)) >> 16;
-   if (yend < 0 || yend >= sh) {
+   if (yend < 0 || yend >= srch) {
       --h;
    }
    int xend = (basex + ix * (w - 1)) >> 16;
@@ -154,7 +157,7 @@ void qt_scale_image_16bit(uchar *destPixels, int dbpl, const uchar *srcPixels, i
 }
 
 template <typename T> void qt_scale_image_32bit(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl, int sh,
+      const uchar *srcPixels, int sbpl, int srch,
       const QRectF &targetRect,
       const QRectF &srcRect,
       const QRect &clip,
@@ -217,6 +220,9 @@ template <typename T> void qt_scale_image_32bit(uchar *destPixels, int dbpl,
    int h = ty2 - ty1;
    int w = tx2 - tx1;
 
+   if (!w || !h)
+      return;
+
    quint32 basex;
    quint32 srcy;
 
@@ -240,7 +246,7 @@ template <typename T> void qt_scale_image_32bit(uchar *destPixels, int dbpl,
    // this bounds check here is required as floating point rounding above might in some cases lead to
    // w/h values that are one pixel too large, falling outside of the valid image area.
    int yend = (srcy + iy * (h - 1)) >> 16;
-   if (yend < 0 || yend >= sh) {
+   if (yend < 0 || yend >= srch) {
       --h;
    }
    int xend = (basex + ix * (w - 1)) >> 16;
@@ -267,11 +273,15 @@ struct QTransformImageVertex {
 };
 
 template <class SrcT, class DestT, class Blender>
-void qt_transform_image_rasterize(DestT *destPixels, int dbpl, const SrcT *srcPixels, int sbpl,
+void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
+                                  const SrcT *srcPixels, int sbpl,
                                   const QTransformImageVertex &topLeft, const QTransformImageVertex &bottomLeft,
                                   const QTransformImageVertex &topRight, const QTransformImageVertex &bottomRight,
-                                  const QRect &sourceRect, const QRect &clip, qreal topY, qreal bottomY,
-                                  int dudx, int dvdx, int dudy, int dvdy, int u0, int v0, Blender blender)
+                                  const QRect &sourceRect,
+                                  const QRect &clip,
+                                  qreal topY, qreal bottomY,
+                                  int dudx, int dvdx, int dudy, int dvdy, int u0, int v0,
+                                  Blender blender)
 {
    int fromY = qMax(qRound(topY), clip.top());
    int toY = qMin(qRound(bottomY), clip.top() + clip.height());
@@ -452,8 +462,13 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl, const SrcT *srcPi
 }
 
 template <class SrcT, class DestT, class Blender>
-void qt_transform_image(DestT *destPixels, int dbpl, const SrcT *srcPixels, int sbpl, const QRectF &targetRect,
-                        const QRectF &sourceRect, const QRect &clip, const QTransform &targetRectTransform, Blender blender)
+void qt_transform_image(DestT *destPixels, int dbpl,
+                        const SrcT *srcPixels, int sbpl,
+                        const QRectF &targetRect,
+                        const QRectF &sourceRect,
+                        const QRect &clip,
+                        const QTransform &targetRectTransform,
+                        Blender blender)
 {
    enum Corner {
       TopLeft,
@@ -562,6 +577,6 @@ void qt_transform_image(DestT *destPixels, int dbpl, const SrcT *srcPixels, int 
    }
 }
 
-QT_END_NAMESPACE
 
-#endif // QBLENDFUNCTIONS_P_H
+
+#endif

@@ -23,11 +23,11 @@
 #ifndef QSTROKER_P_H
 #define QSTROKER_P_H
 
-#include <QtGui/qpainterpath.h>
+#include <qpainterpath.h>
 #include <qdatabuffer_p.h>
 #include <qnumeric_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #if defined QFIXED_IS_26_6
 typedef int qfixed;
@@ -151,6 +151,7 @@ class Q_GUI_EXPORT QStrokerOps
    QRectF clipRect() const {
       return m_clip_rect;
    }
+
    void setClipRect(const QRectF &clip) {
       m_clip_rect = clip;
    }
@@ -164,6 +165,7 @@ class Q_GUI_EXPORT QStrokerOps
    void setCurveThreshold(qfixed threshold) {
       m_curveThreshold = threshold;
    }
+
    qfixed curveThreshold() const {
       return m_curveThreshold;
    }
@@ -414,6 +416,6 @@ inline void QDashStroker::end()
    }
 }
 
-QT_END_NAMESPACE
 
-#endif // QSTROKER_P_H
+
+#endif

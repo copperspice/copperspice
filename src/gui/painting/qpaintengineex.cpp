@@ -30,13 +30,9 @@
 #include <qvarlengtharray.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
-/*******************************************************************************
- *
- * class QVectorPath
- *
- */
+#if !defined(QT_MAX_CACHED_GLYPH_SIZE)
+#  define QT_MAX_CACHED_GLYPH_SIZE 64
+#endif
 QVectorPath::~QVectorPath()
 {
    if (m_hints & ShouldUseCacheHint) {
@@ -157,7 +153,7 @@ void QPaintEngineExPrivate::replayClipOperations()
    Q_Q(QPaintEngineEx);
 
    QPainter *p = q->painter();
-   if (!p || !p->d_ptr) {
+   if (! p || ! p->d_ptr) {
       return;
    }
 
@@ -225,7 +221,7 @@ bool QPaintEngineExPrivate::hasClipOperations() const
  *
  */
 
-static QPainterPath::ElementType qpaintengineex_ellipse_types[] = {
+static const QPainterPath::ElementType qpaintengineex_ellipse_types[] = {
    QPainterPath::MoveToElement,
    QPainterPath::CurveToElement,
    QPainterPath::CurveToDataElement,
@@ -244,7 +240,7 @@ static QPainterPath::ElementType qpaintengineex_ellipse_types[] = {
    QPainterPath::CurveToDataElement
 };
 
-static QPainterPath::ElementType qpaintengineex_line_types_16[] = {
+static const QPainterPath::ElementType qpaintengineex_line_types_16[] = {
    QPainterPath::MoveToElement, QPainterPath::LineToElement,
    QPainterPath::MoveToElement, QPainterPath::LineToElement,
    QPainterPath::MoveToElement, QPainterPath::LineToElement,
@@ -263,7 +259,7 @@ static QPainterPath::ElementType qpaintengineex_line_types_16[] = {
    QPainterPath::MoveToElement, QPainterPath::LineToElement
 };
 
-static QPainterPath::ElementType qpaintengineex_rect4_types_32[] = {
+static const QPainterPath::ElementType qpaintengineex_rect4_types_32[] = {
    QPainterPath::MoveToElement, QPainterPath::LineToElement, QPainterPath::LineToElement, QPainterPath::LineToElement, // 1
    QPainterPath::MoveToElement, QPainterPath::LineToElement, QPainterPath::LineToElement, QPainterPath::LineToElement, // 2
    QPainterPath::MoveToElement, QPainterPath::LineToElement, QPainterPath::LineToElement, QPainterPath::LineToElement, // 3
@@ -299,7 +295,7 @@ static QPainterPath::ElementType qpaintengineex_rect4_types_32[] = {
 };
 
 
-static QPainterPath::ElementType qpaintengineex_roundedrect_types[] = {
+static const QPainterPath::ElementType qpaintengineex_roundedrect_types[] = {
    QPainterPath::MoveToElement,
    QPainterPath::LineToElement,
    QPainterPath::CurveToElement,
@@ -364,9 +360,10 @@ QPaintEngineEx::QPaintEngineEx(QPaintEngineExPrivate &data)
 
 QPainterState *QPaintEngineEx::createState(QPainterState *orig) const
 {
-   if (!orig) {
+   if (! orig) {
       return new QPainterState;
    }
+
    return new QPainterState(orig);
 }
 
@@ -420,7 +417,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
    }
 
    if (pen.style() > Qt::SolidLine) {
-      if (pen.isCosmetic()) {
+      if (qt_pen_is_cosmetic(pen, state()->renderHints)){
          d->activeStroker->setClipRect(d->exDeviceRect);
       } else {
          QRectF clipRect = state()->matrix.inverted().mapRect(QRectF(d->exDeviceRect));
@@ -449,7 +446,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
    }
 
    // ### Perspective Xforms are currently not supported...
-   if (!pen.isCosmetic()) {
+   if (!qt_pen_is_cosmetic(pen, state()->renderHints)) {
       // We include cosmetic pens in this case to avoid having to
       // change the current transform. Normal transformed,
       // non-cosmetic pens will be transformed as part of fill
@@ -498,7 +495,8 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
       }
       d->activeStroker->end();
 
-      if (!d->strokeHandler->types.size()) { // an empty path...
+      if (! d->strokeHandler->types.size()) {
+         // an empty path
          return;
       }
 
@@ -519,23 +517,23 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
             while (points < lastPoint) {
                switch (*types) {
                   case QPainterPath::MoveToElement: {
-                     QPointF pt = (*(QPointF *) points) * state()->matrix;
+                     QPointF pt = (*(const QPointF *) points) * state()->matrix;
                      d->activeStroker->moveTo(pt.x(), pt.y());
                      points += 2;
                      ++types;
                      break;
                   }
                   case QPainterPath::LineToElement: {
-                     QPointF pt = (*(QPointF *) points) * state()->matrix;
+                     QPointF pt = (*(const QPointF *) points) * state()->matrix;
                      d->activeStroker->lineTo(pt.x(), pt.y());
                      points += 2;
                      ++types;
                      break;
                   }
                   case QPainterPath::CurveToElement: {
-                     QPointF c1 = ((QPointF *) points)[0] * state()->matrix;
-                     QPointF c2 = ((QPointF *) points)[1] * state()->matrix;
-                     QPointF e =  ((QPointF *) points)[2] * state()->matrix;
+                     QPointF c1 = ((const QPointF *) points)[0] * state()->matrix;
+                     QPointF c2 = ((const QPointF *) points)[1] * state()->matrix;
+                     QPointF e =  ((const QPointF *) points)[2] * state()->matrix;
                      d->activeStroker->cubicTo(c1.x(), c1.y(), c2.x(), c2.y(), e.x(), e.y());
                      points += 6;
                      types += 3;
@@ -547,22 +545,24 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
                }
             }
             if (path.hasImplicitClose()) {
-               QPointF pt = * ((QPointF *) path.points()) * state()->matrix;
+               QPointF pt = * ((const QPointF *) path.points()) * state()->matrix;
                d->activeStroker->lineTo(pt.x(), pt.y());
             }
 
          } else {
-            QPointF p = ((QPointF *)points)[0] * state()->matrix;
+            QPointF p = ((const QPointF *)points)[0] * state()->matrix;
             d->activeStroker->moveTo(p.x(), p.y());
             points += 2;
             while (points < lastPoint) {
-               QPointF p = ((QPointF *)points)[0] * state()->matrix;
+               QPointF p = ((const QPointF *)points)[0] * state()->matrix;
                d->activeStroker->lineTo(p.x(), p.y());
                points += 2;
             }
+
             if (path.hasImplicitClose()) {
                d->activeStroker->lineTo(p.x(), p.y());
             }
+
          }
          d->activeStroker->end();
       }
@@ -751,8 +751,8 @@ void QPaintEngineEx::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yR
    qreal y2 = rect.bottom();
 
    if (mode == Qt::RelativeSize) {
-      xRadius = xRadius * rect.width() / qreal(200.);
-      yRadius = yRadius * rect.height() / qreal(200.);
+      xRadius = xRadius * rect.width() / 200.;
+      yRadius = yRadius * rect.height() / 200.;
    }
 
    xRadius = qMin(xRadius, rect.width() / 2);
@@ -791,16 +791,10 @@ void QPaintEngineEx::drawLines(const QLine *lines, int lineCount)
 
       qreal pts[64];
       int count2 = count << 1;
-#ifdef Q_OS_MAC
-      for (int i = 0; i < count2; i += 2) {
-         pts[i] = ((int *) lines)[i + 1];
-         pts[i + 1] = ((int *) lines)[i];
-      }
-#else
+
       for (int i = 0; i < count2; ++i) {
-         pts[i] = ((int *) lines)[i];
+         pts[i] = ((const int *) lines)[i];
       }
-#endif
 
       QVectorPath path(pts, count, qpaintengineex_line_types_16, QVectorPath::LinesHint);
       stroke(path, state()->pen);
@@ -816,7 +810,7 @@ void QPaintEngineEx::drawLines(const QLineF *lines, int lineCount)
    while (elementCount > 0) {
       int count = qMin(elementCount, 32);
 
-      QVectorPath path((qreal *) lines, count, qpaintengineex_line_types_16,
+      QVectorPath path((const qreal *) lines, count, qpaintengineex_line_types_16,
                        QVectorPath::LinesHint);
       stroke(path, state()->pen);
 
@@ -836,6 +830,11 @@ void QPaintEngineEx::drawEllipse(const QRectF &r)
 
    int point_count = 0;
    x.points[0] = qt_curves_for_arc(r, 0, -360, x.points + 1, &point_count);
+
+   if (point_count == 0) {
+      return;
+   }
+
    QVectorPath vp((qreal *) pts, point_count + 1, qpaintengineex_ellipse_types, QVectorPath::EllipseHint);
    draw(vp);
 }
@@ -868,7 +867,7 @@ void QPaintEngineEx::drawPoints(const QPointF *points, int pointCount)
          for (int i = 0; i < count; ++i) {
             pts[++oset] = points[i].x();
             pts[++oset] = points[i].y();
-            pts[++oset] = points[i].x() + 1 / qreal(63.);
+            pts[++oset] = points[i].x() + 1/63.;
             pts[++oset] = points[i].y();
          }
          QVectorPath path(pts, count * 2, qpaintengineex_line_types_16, QVectorPath::LinesHint);
@@ -878,7 +877,7 @@ void QPaintEngineEx::drawPoints(const QPointF *points, int pointCount)
       }
    } else {
       for (int i = 0; i < pointCount; ++i) {
-         qreal pts[] = { points[i].x(), points[i].y(), points[i].x() + 1 / qreal(63.), points[i].y() };
+         qreal pts[] = { points[i].x(), points[i].y(), points[i].x() + qreal(1/63.), points[i].y() };
          QVectorPath path(pts, 2, 0);
          stroke(path, pen);
       }
@@ -900,7 +899,7 @@ void QPaintEngineEx::drawPoints(const QPoint *points, int pointCount)
          for (int i = 0; i < count; ++i) {
             pts[++oset] = points[i].x();
             pts[++oset] = points[i].y();
-            pts[++oset] = points[i].x() + 1 / qreal(63.);
+            pts[++oset] = points[i].x() + 1/63.;
             pts[++oset] = points[i].y();
          }
          QVectorPath path(pts, count * 2, qpaintengineex_line_types_16, QVectorPath::LinesHint);
@@ -911,8 +910,8 @@ void QPaintEngineEx::drawPoints(const QPoint *points, int pointCount)
    } else {
       for (int i = 0; i < pointCount; ++i) {
          qreal pts[] = { qreal(points[i].x()), qreal(points[i].y()),
-                         qreal(points[i].x() + 1 / qreal(63.)), qreal(points[i].y())
-                       };
+                  qreal(points[i].x() +1/63.), qreal(points[i].y()) };
+
          QVectorPath path(pts, 2, 0);
          stroke(path, pen);
       }
@@ -922,7 +921,7 @@ void QPaintEngineEx::drawPoints(const QPoint *points, int pointCount)
 
 void QPaintEngineEx::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
-   QVectorPath path((qreal *) points, pointCount, 0, QVectorPath::polygonFlags(mode));
+   QVectorPath path((const qreal *) points, pointCount, 0, QVectorPath::polygonFlags(mode));
 
    if (mode == PolylineMode) {
       stroke(path, state()->pen);
@@ -936,16 +935,9 @@ void QPaintEngineEx::drawPolygon(const QPoint *points, int pointCount, PolygonDr
    int count = pointCount << 1;
    QVarLengthArray<qreal> pts(count);
 
-#ifdef Q_OS_MAC
-   for (int i = 0; i < count; i += 2) {
-      pts[i] = ((int *) points)[i + 1];
-      pts[i + 1] = ((int *) points)[i];
-   }
-#else
    for (int i = 0; i < count; ++i) {
-      pts[i] = ((int *) points)[i];
+      pts[i] = ((const int *) points)[i];
    }
-#endif
 
    QVectorPath path(pts.data(), pointCount, 0, QVectorPath::polygonFlags(mode));
 
@@ -954,17 +946,16 @@ void QPaintEngineEx::drawPolygon(const QPoint *points, int pointCount, PolygonDr
    } else {
       draw(path);
    }
-
 }
 
 void QPaintEngineEx::drawPixmap(const QPointF &pos, const QPixmap &pm)
 {
-   drawPixmap(QRectF(pos, pm.size()), pm, pm.rect());
+   drawPixmap(QRectF(pos, pm.size() / pm.devicePixelRatio()), pm, pm.rect());
 }
 
 void QPaintEngineEx::drawImage(const QPointF &pos, const QImage &image)
 {
-   drawImage(QRectF(pos, image.size()), image, image.rect());
+   drawImage(QRectF(pos, image.size() / image.devicePixelRatio()), image, image.rect());
 }
 
 void QPaintEngineEx::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s)
@@ -1015,6 +1006,7 @@ void QPaintEngineEx::drawPixmapFragments(const QPainter::PixmapFragment *fragmen
    transformChanged();
 }
 
+// broom - may not be used
 void QPaintEngineEx::drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
       const QPixmap &pixmap, QPainter::PixmapFragmentHints /*hints*/)
 {
@@ -1094,9 +1086,7 @@ Q_GUI_EXPORT QPainterPath qt_painterPathFromVectorPath(const QVectorPath &path)
 void QPaintEngineEx::drawStaticTextItem(QStaticTextItem *staticTextItem)
 {
    QPainterPath path;
-#ifndef Q_OS_MAC
    path.setFillRule(Qt::WindingFill);
-#endif
 
    if (staticTextItem->numGlyphs == 0) {
       return;
@@ -1117,7 +1107,7 @@ void QPaintEngineEx::drawStaticTextItem(QStaticTextItem *staticTextItem)
          changedHints = true;
       }
 
-      fill(qtVectorPathForPath(path), s->pen.color());
+      fill(qtVectorPathForPath(path), s->pen.brush());
 
       if (changedHints) {
          s->renderHints = oldHints;
@@ -1126,15 +1116,17 @@ void QPaintEngineEx::drawStaticTextItem(QStaticTextItem *staticTextItem)
    }
 }
 
-bool QPaintEngineEx::supportsTransformations(qreal pixelSize, const QTransform &m) const
+bool QPaintEngineEx::requiresPretransformedGlyphPositions(QFontEngine *, const QTransform &) const
 {
-   Q_UNUSED(pixelSize);
-
-   if (!m.isAffine()) {
-      return true;
-   }
-
-   return false;
+    return false;
 }
 
-QT_END_NAMESPACE
+bool QPaintEngineEx::shouldDrawCachedGlyphs(QFontEngine *fontEngine, const QTransform &m) const
+{
+    if (fontEngine->glyphFormat == QFontEngine::Format_ARGB)
+        return true;
+
+    qreal pixelSize = fontEngine->fontDef.pixelSize;
+    return (pixelSize * pixelSize * qAbs(m.determinant())) <
+            QT_MAX_CACHED_GLYPH_SIZE * QT_MAX_CACHED_GLYPH_SIZE;
+}

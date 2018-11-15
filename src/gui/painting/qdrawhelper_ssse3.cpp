@@ -22,11 +22,9 @@
 
 #include <qdrawhelper_x86_p.h>
 
-#ifdef QT_HAVE_SSSE3
+#ifdef __SSSE3__
 
 #include <qdrawingprimitive_sse2_p.h>
-
-QT_BEGIN_NAMESPACE
 
 inline static void blend_pixel(quint32 &dst, const quint32 src)
 {
@@ -160,6 +158,4 @@ void qt_blend_argb32_on_argb32_ssse3(uchar *destPixels, int dbpl,
    }
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_HAVE_SSSE3
+#endif

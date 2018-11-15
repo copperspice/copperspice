@@ -25,7 +25,7 @@
 
 #include <qdrawhelper_mmx_p.h>
 
-#ifdef QT_HAVE_SSE
+#ifdef __SSE__
 
 #ifdef QT_LINUXBASE
 
@@ -38,8 +38,6 @@
 #else
 #  include <xmmintrin.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 #ifndef _MM_SHUFFLE
 #define _MM_SHUFFLE(fp3,fp2,fp1,fp0) \
@@ -158,7 +156,5 @@ inline void qt_bitmapblit16_sse_template(QRasterBuffer *rasterBuffer,
    MM::end();
 }
 
-QT_END_NAMESPACE
-
 #endif // QT_HAVE_SSE
-#endif // QDRAWHELPER_SSE_P_H
+#endif

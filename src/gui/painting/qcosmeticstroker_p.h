@@ -28,7 +28,7 @@
 #include <qpaintengine_raster_p.h>
 #include <qpen.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QCosmeticStroker;
 
@@ -47,9 +47,9 @@ class QCosmeticStroker
    };
 
    enum Caps {
-      NoCaps = 0,
+      NoCaps   = 0,
       CapBegin = 0x1,
-      CapEnd = 0x2,
+      CapEnd   = 0x2,
    };
 
    // used to avoid drop outs or duplicated points
@@ -71,6 +71,7 @@ class QCosmeticStroker
         patternSize(0),
         patternLength(0),
         patternOffset(0),
+        legacyRounding(false),
         current_span(0),
         lastDir(LeftToRight),
         lastAxisAligned(false) {
@@ -80,6 +81,10 @@ class QCosmeticStroker
    ~QCosmeticStroker() {
       free(pattern);
       free(reversePattern);
+   }
+
+   void setLegacyRoundingEnabled(bool legacyRoundingEnabled) {
+      legacyRounding = legacyRoundingEnabled;
    }
 
    void drawLine(const QPointF &p1, const QPointF &p2);
@@ -103,6 +108,7 @@ class QCosmeticStroker
    int patternSize;
    int patternLength;
    int patternOffset;
+   bool legacyRounding;
 
    enum { NSPANS = 255 };
    QT_FT_Span spans[NSPANS];
@@ -119,6 +125,7 @@ class QCosmeticStroker
    Point lastPixel;
    bool lastAxisAligned;
 
+   // broom - may not be used
    bool clipLine(qreal &x1, qreal &y1, qreal &x2, qreal &y2);
 
  private:
@@ -128,9 +135,9 @@ class QCosmeticStroker
    void renderCubicSubdivision(PointF *points, int level, int caps);
    // used for closed subpaths
    void calculateLastPoint(qreal rx1, qreal ry1, qreal rx2, qreal ry2);
-   
+
 };
 
-QT_END_NAMESPACE
 
-#endif // QCOSMETICLINE_H
+
+#endif

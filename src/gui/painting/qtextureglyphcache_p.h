@@ -27,6 +27,7 @@
 #include <qimage.h>
 #include <qobject.h>
 #include <qtransform.h>
+
 #include <qfontengineglyphcache_p.h>
 
 #ifndef QT_DEFAULT_TEXTURE_GLYPH_CACHE_WIDTH
@@ -36,19 +37,17 @@
 struct glyph_metrics_t;
 typedef unsigned int glyph_t;
 
-QT_BEGIN_NAMESPACE
-
 class QTextItemInt;
 
 class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
 {
  public:
-   QTextureGlyphCache(QFontEngineGlyphCache::Type type, const QTransform &matrix)
-      : QFontEngineGlyphCache(matrix, type), m_current_fontengine(0),
+   QTextureGlyphCache(QFontEngine::GlyphFormat format, const QTransform &matrix)
+      : QFontEngineGlyphCache(format, matrix), m_current_fontengine(0),
         m_w(0), m_h(0), m_cx(0), m_cy(0), m_currentRowHeight(0), m_subPixelPositionCount(0) {
    }
 
-   virtual ~QTextureGlyphCache() { }
+   virtual ~QTextureGlyphCache();
 
    struct GlyphAndSubPixelPosition {
       GlyphAndSubPixelPosition(glyph_t g, QFixed spp) : glyph(g), subPixelPosition(spp) {}
@@ -80,9 +79,7 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
 
    virtual void createTextureData(int width, int height) = 0;
    virtual void resizeTextureData(int width, int height) = 0;
-   virtual int glyphMargin() const {
-      return 0;
-   }
+
    virtual int glyphPadding() const {
       return 0;
    }
@@ -109,6 +106,7 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
    virtual int maxTextureWidth() const {
       return QT_DEFAULT_TEXTURE_GLYPH_CACHE_WIDTH;
    }
+
    virtual int maxTextureHeight() const {
       return -1;
    }
@@ -136,14 +134,14 @@ inline uint qHash(const QTextureGlyphCache::GlyphAndSubPixelPosition &g)
    return (g.glyph << 8)  | (g.subPixelPosition * 10).round().toInt();
 }
 
-
 class Q_GUI_EXPORT QImageTextureGlyphCache : public QTextureGlyphCache
 {
  public:
-   QImageTextureGlyphCache(QFontEngineGlyphCache::Type type, const QTransform &matrix)
-      : QTextureGlyphCache(type, matrix) { }
+   QImageTextureGlyphCache(QFontEngine::GlyphFormat format, const QTransform &matrix)
+      : QTextureGlyphCache(format, matrix) { }
 
-   int glyphMargin() const override;
+   ~QImageTextureGlyphCache();
+
    void createTextureData(int width, int height) override;
    void resizeTextureData(int width, int height) override;
    void fillTexture(const Coord &c, glyph_t glyph, QFixed subPixelPosition) override;
@@ -155,7 +153,5 @@ class Q_GUI_EXPORT QImageTextureGlyphCache : public QTextureGlyphCache
  private:
    QImage m_image;
 };
-
-QT_END_NAMESPACE
 
 #endif

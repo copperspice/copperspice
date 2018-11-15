@@ -87,23 +87,20 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    static void clearColorSpace(QWidget *w);
 
    QPainter::RenderHints supportedRenderHints() const;
- 
+
    using QPaintEngine::drawLines;
    using QPaintEngine::drawRects;
    using QPaintEngine::drawPoints;
    using QPaintEngine::drawEllipse;
    using QPaintEngine::drawPolygon;
 
-   bool supportsTransformations(qreal, const QTransform &) const {
-      return true;
-   }
 
  protected:
    friend class QMacPrintEngine;
    friend class QMacPrintEnginePrivate;
    friend void qt_mac_display_change_callbk(CGDirectDisplayID, CGDisplayChangeSummaryFlags, void *);
    friend void qt_color_profile_changed(CFNotificationCenterRef center, void *,
-                                        CFStringRef , const void *, CFDictionaryRef);
+                                        CFStringRef, const void *, CFDictionaryRef);
    QCoreGraphicsPaintEngine(QPaintEnginePrivate &dptr);
 
  private:

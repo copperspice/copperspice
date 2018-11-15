@@ -25,8 +25,6 @@
 
 #include <qdrawhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 // 1
 #ifdef QT_HAVE_MMX
 extern CompositionFunction qt_functionForMode_MMX[];
@@ -55,7 +53,7 @@ extern CompositionFunction qt_functionForMode_SSE3DNOW[];
 extern CompositionFunctionSolid qt_functionForModeSolid_SSE3DNOW[];
 
 void qt_memfill32_sse3dnow(quint32 *dest, quint32 value, int count);
-void qt_bitmapblit16_sse3dnow(QRasterBuffer *rasterBuffer, int x, int y, quint32 color, const uchar *src, 
+void qt_bitmapblit16_sse3dnow(QRasterBuffer *rasterBuffer, int x, int y, quint32 color, const uchar *src,
                               int width, int height, int stride);
 void qt_blend_color_argb_sse3dnow(int count, const QSpan *spans, void *userData);
 #endif
@@ -75,23 +73,32 @@ extern CompositionFunctionSolid qt_functionForModeSolid_SSE[];
 #endif
 
 // 4
-#ifdef QT_HAVE_SSE2
-void qt_memfill32_sse2(quint32 *dest, quint32 value, int count);
-void qt_memfill16_sse2(quint16 *dest, quint16 value, int count);
-void qt_bitmapblit32_sse2(QRasterBuffer *rasterBuffer, int x, int y, quint32 color,
+#ifdef __SSE2__
+void qt_memfill32(quint32 *dest, quint32 value, int count);
+void qt_memfill16(quint16 *dest, quint16 value, int count);
+void qt_bitmapblit32_sse2(QRasterBuffer *rasterBuffer, int x, int y,
+                          const QRgba64 &color,
                           const uchar *src, int width, int height, int stride);
 
-void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y, quint32 color,
+void qt_bitmapblit8888_sse2(QRasterBuffer *rasterBuffer, int x, int y,
+                          const QRgba64 &color,
                           const uchar *src, int width, int height, int stride);
 
-void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                    int w, int h, int const_alpha);
+void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y,
+                          const QRgba64 &color,
+                          const uchar *src, int width, int height, int stride);
 
-void qt_blend_rgb32_on_rgb32_sse2(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                  int w, int h, int const_alpha);
+void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
+                          const uchar *srcPixels, int sbpl,
+                          int w, int h,
+                          int const_alpha);
 
-extern CompositionFunction qt_functionForMode_onlySSE2[];
-extern CompositionFunctionSolid qt_functionForModeSolid_onlySSE2[];
+void qt_blend_rgb32_on_rgb32_sse2(uchar *destPixels, int dbpl,
+                          const uchar *srcPixels, int sbpl,
+                          int w, int h, int const_alpha);
+
+extern CompositionFunction qt_functionForModeSSE2[];
+extern CompositionFunctionSolid qt_functionForModeSolidSSE2[];
 #endif
 
 #ifdef QT_HAVE_IWMMXT
@@ -101,8 +108,6 @@ extern CompositionFunction qt_functionForMode_IWMMXT[];
 extern CompositionFunctionSolid qt_functionForModeSolid_IWMMXT[];
 #endif
 
-static const int numCompositionFunctions = 33;
+static const int numCompositionFunctions = 38;
 
-QT_END_NAMESPACE
-
-#endif // QDRAWHELPER_X86_P_H
+#endif
