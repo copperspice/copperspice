@@ -27,7 +27,7 @@
 #include <QtGui/qdialog.h>
 #include <QtGui/qfont.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_FONTDIALOG
 
@@ -39,16 +39,22 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    Q_DECLARE_PRIVATE(QFontDialog)
 
    GUI_CS_ENUM(FontDialogOption)
+
    GUI_CS_PROPERTY_READ(currentFont, currentFont)
    GUI_CS_PROPERTY_WRITE(currentFont, setCurrentFont)
    GUI_CS_PROPERTY_NOTIFY(currentFont, currentFontChanged)
+
    GUI_CS_PROPERTY_READ(options, options)
    GUI_CS_PROPERTY_WRITE(options, setOptions)
 
  public:
    enum FontDialogOption {
       NoButtons           = 0x00000001,
-      DontUseNativeDialog = 0x00000002
+      DontUseNativeDialog = 0x00000002,
+      ScalableFonts       = 0x00000004,
+      NonScalableFonts    = 0x00000008,
+      MonospacedFonts     = 0x00000010,
+      ProportionalFonts   = 0x00000020
    };
 
    using FontDialogOptions = QFlags<FontDialogOption>;
@@ -73,7 +79,7 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    void setVisible(bool visible) override;
 
    static QFont getFont(bool *ok, const QFont &initial, QWidget *parent = nullptr, const QString &title = QString(),
-         FontDialogOptions options = FontDialogOptions());
+      FontDialogOptions options = FontDialogOptions());
 
    static QFont getFont(bool *ok, QWidget *parent = nullptr);
 
@@ -110,10 +116,7 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    GUI_CS_SLOT_1(Private, void _q_updateSample())
    GUI_CS_SLOT_2(_q_updateSample)
 
-#if defined(Q_OS_MAC)
-   GUI_CS_SLOT_1(Private, void _q_macRunNativeAppModalPanel())
-   GUI_CS_SLOT_2(_q_macRunNativeAppModalPanel)
-#endif
+
 
 };
 
@@ -121,6 +124,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QFontDialog::FontDialogOptions)
 
 #endif // QT_NO_FONTDIALOG
 
-QT_END_NAMESPACE
 
 #endif // QFONTDIALOG_H

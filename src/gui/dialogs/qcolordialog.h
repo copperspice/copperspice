@@ -32,6 +32,8 @@ class QColorDialogPrivate;
 class Q_GUI_EXPORT QColorDialog : public QDialog
 {
    GUI_CS_OBJECT(QColorDialog)
+
+   GUI_CS_ENUM(ColorDialogOption)
    Q_DECLARE_PRIVATE(QColorDialog)
 
    GUI_CS_ENUM(ColorDialogOption)
@@ -70,11 +72,15 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
    void setVisible(bool visible) override;
 
    static QColor getColor(const QColor &initial = Qt::white, QWidget *parent = nullptr,
-                  const QString &title = QString(),  ColorDialogOptions options = 0);
+      const QString &title = QString(),  ColorDialogOptions options = ColorDialogOptions());
+
+   // obsolete
+   static QRgb getRgba(QRgb rgba = 0xffffffff, bool *ok = nullptr, QWidget *parent = nullptr);
 
    static int customCount();
    static QColor customColor(int index);
    static void setCustomColor(int index, QColor color);
+   static QColor standardColor(int index);
    static void setStandardColor(int index, QColor color);
 
    GUI_CS_SIGNAL_1(Public, void currentColorChanged(const QColor &color))
@@ -96,21 +102,20 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
    GUI_CS_SLOT_1(Private, void _q_newHsv(int h, int s, int v))
    GUI_CS_SLOT_2(_q_newHsv)
 
-   GUI_CS_SLOT_1(Private, void _q_newColorTypedIn(const QRgb &rgb))
+   GUI_CS_SLOT_1(Private, void _q_newColorTypedIn(QRgb rgb))
    GUI_CS_SLOT_2(_q_newColorTypedIn)
 
-   GUI_CS_SLOT_1(Private, void _q_newCustom(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_newCustom(int arg1, int arg2))
    GUI_CS_SLOT_2(_q_newCustom)
 
-   GUI_CS_SLOT_1(Private, void _q_newStandard(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_newStandard(int arg1, int arg2))
    GUI_CS_SLOT_2(_q_newStandard)
 
-#if defined(Q_OS_MAC)
-   GUI_CS_SLOT_1(Private, void _q_macRunNativeAppModalPanel())
-   GUI_CS_SLOT_2(_q_macRunNativeAppModalPanel)
-#endif
+   GUI_CS_SLOT_1(Private, void _q_pickScreenColor())
+   GUI_CS_SLOT_2(_q_pickScreenColor)
 
-   friend class QColorShower;
+   GUI_CS_SLOT_1(Private, void _q_updateColorPicking())
+   GUI_CS_SLOT_2(_q_updateColorPicking)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QColorDialog::ColorDialogOptions)

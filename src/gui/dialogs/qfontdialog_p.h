@@ -23,13 +23,15 @@
 #ifndef QFONTDIALOG_P_H
 #define QFONTDIALOG_P_H
 
-#include <qdialog_p.h>
+
 #include <qfontdatabase.h>
 #include <qfontdialog.h>
+#include <qplatform_dialoghelper.h>
+#include <qsharedpointer.h>
+
+#include <qdialog_p.h>
 
 #ifndef QT_NO_FONTDIALOG
-
-QT_BEGIN_NAMESPACE
 
 class QBoxLayout;
 class QCheckBox;
@@ -45,8 +47,11 @@ class QFontDialogPrivate : public QDialogPrivate
    Q_DECLARE_PUBLIC(QFontDialog)
 
  public:
-   inline QFontDialogPrivate()
-      : writingSystem(QFontDatabase::Any) {
+   QFontDialogPrivate();
+   ~QFontDialogPrivate();
+
+   QPlatformFontDialogHelper *platformFontDialogHelper() const {
+      return static_cast<QPlatformFontDialogHelper *>(platformHelper());
    }
 
    void updateFamilies();
@@ -54,7 +59,7 @@ class QFontDialogPrivate : public QDialogPrivate
    void updateSizes();
 
    static QFont getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title,
-                        QFontDialog::FontDialogOptions options);
+      QFontDialog::FontDialogOptions options);
 
    void init();
    void _q_sizeChanged(const QString &);
@@ -102,39 +107,19 @@ class QFontDialogPrivate : public QDialogPrivate
    QString style;
    int size;
    bool smoothScalable;
+
    QFont selectedFont;
-   QFontDialog::FontDialogOptions opts;
+   QSharedPointer<QFontDialogOptions> options;
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
 
-#ifdef Q_OS_MAC
-   static void setFont(void *delegate, const QFont &font);
-
-   inline void done(int result) {
-      q_func()->done(result);
-   }
-
-   inline QFontDialog *fontDialog() {
-      return q_func();
-   }
-
-   void *delegate;
-   void closeCocoaFontPanel();
-   bool nativeDialogInUse;
-   bool canBeNativeDialog();
-   bool setVisible_sys(bool visible);
-   void createNSFontPanelDelegate();
-   void _q_macRunNativeAppModalPanel();
-   void mac_nativeDialogModalHelp();
-   bool showCocoaFontPanel();
-   bool hideCocoaFontPanel();
-
-   static bool sharedFontPanelAvailable;
-#endif
+   bool canBeNativeDialog() const override;
+   void _q_runNativeAppModalPanel();
+ private:
+   virtual void initHelper(QPlatformDialogHelper *) override;
+   virtual void helperPrepareShow(QPlatformDialogHelper *) override;
 };
 
 #endif // QT_NO_FONTDIALOG
 
-QT_END_NAMESPACE
-
-#endif // QFONTDIALOG_P_H
+#endif

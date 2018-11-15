@@ -27,6 +27,7 @@
 #include <qabstractspinbox.h>
 #include <qalgorithms.h>
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qboxlayout.h>
 #include <qlayoutitem.h>
 #include <qdesktopwidget.h>
@@ -36,13 +37,16 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
+
 #include <qset.h>
 #include <qstyle.h>
 #include <qvarlengtharray.h>
+#include <qwindow.h>
 
 #if defined(Q_OS_MAC)
 #include <qt_mac_p.h>
 #include <qlibrary.h>
+#include <qplatform_nativeinterface.h>
 
 #elif ! defined(QT_NO_STYLE_WINDOWSVISTA)
 #include <qwizard_win_p.h>
@@ -51,8 +55,9 @@
 #endif
 
 #include <qdialog_p.h>
-#include <qdebug.h>
+
 #include <string.h>
+#include <algorithm>
 
 // These terms were needed a few places to obtain pixel-perfect results
 const int GapBetweenLogoAndRightEdge = 5;
@@ -67,7 +72,7 @@ const int MacLayoutBottomMargin = 17;
 static void changeSpacerSize(QLayout *layout, int index, int width, int height)
 {
    QSpacerItem *spacer = layout->itemAt(index)->spacerItem();
-   if (!spacer) {
+   if (! spacer) {
       return;
    }
    spacer->changeSize(width, height);
@@ -80,7 +85,7 @@ static QWidget *iWantTheFocus(QWidget *ancestor)
    QWidget *candidate = ancestor;
    for (int i = 0; i < MaxIterations; ++i) {
       candidate = candidate->nextInFocusChain();
-      if (!candidate) {
+      if (! candidate) {
          break;
       }
 
@@ -112,29 +117,61 @@ static bool objectInheritsXAndXIsCloserThanY(const QObject *object, const QStrin
    return false;
 }
 
+
 // If you modify this list, make sure to update the documentation (and the auto test)
-const int NFallbackDefaultProperties = 7;
+const size_t NFallbackDefaultProperties = 7;
 
 struct FallbackData {
 
-   FallbackData(const char *var1, const char *var2, const char *var3)
-      : className(QString::fromLatin1(var1)), property(QString::fromLatin1(var2)), changedSignal(QString::fromLatin1(var3))
+   FallbackData(const char *var1, const char *var2)
+      : className(QString::fromLatin1(var1)), property(QString::fromLatin1(var2))
    { }
 
    const QString className;
    const QString property;
-   const QString changedSignal;
 };
 
 const FallbackData fallbackProperties[NFallbackDefaultProperties] = {
-   { "QAbstractButton", "checked",       "toggled(bool)"              },
-   { "QAbstractSlider", "value",         "valueChanged(int)"          },
-   { "QComboBox",       "currentIndex",  "currentIndexChanged(int)"   },
-   { "QDateTimeEdit",   "dateTime",      "dateTimeChanged(QDateTime)" },
-   { "QLineEdit",       "text",          "textChanged(QString)"       },
-   { "QListWidget",     "currentRow",    "currentRowChanged(int)"     },
-   { "QSpinBox",        "value",         "valueChanged(int))"         }
+   { "QAbstractButton", "checked"       },
+   { "QAbstractSlider", "value"         },
+   { "QComboBox",       "currentIndex"  },
+   { "QDateTimeEdit",   "dateTime"      },
+   { "QLineEdit",       "text"          },
+   { "QListWidget",     "currentRow"    },
+   { "QSpinBox",        "value"         }
 };
+
+static QString changed_signal(int which)
+{
+   QString retval;
+
+   switch (which) {
+      case 0:
+         retval = SLOT(toggled(bool));
+
+      case 1:
+         retval = SLOT(valueChanged(int));
+
+      case 2:
+         retval = SLOT(currentIndexChanged(int));
+
+      case 3:
+         retval = SLOT(dateTimeChanged(QDateTime));
+
+      case 4:
+         retval = SLOT(textChanged(QString));
+
+      case 5:
+         retval = SLOT(currentRowChanged(int));
+
+      case 6:
+         retval = SLOT(valueChanged(int));
+   };
+
+   static_assert(7 == NFallbackDefaultProperties);
+
+   return retval;
+}
 
 class QWizardDefaultProperty
 {
@@ -170,7 +207,7 @@ class QWizardField
 };
 
 QWizardField::QWizardField(QWizardPage *page, const QString &spec, QObject *object,
-                           const QString &property, const QString &changedSignal)
+   const QString &property, const QString &changedSignal)
 
    : page(page), object(object), mandatory(false), name(spec), property(property), changedSignal(changedSignal)
 {
@@ -241,23 +278,23 @@ class QWizardLayoutInfo
 bool QWizardLayoutInfo::operator==(const QWizardLayoutInfo &other)
 {
    return topLevelMarginLeft == other.topLevelMarginLeft
-          && topLevelMarginRight == other.topLevelMarginRight
-          && topLevelMarginTop == other.topLevelMarginTop
-          && topLevelMarginBottom == other.topLevelMarginBottom
-          && childMarginLeft == other.childMarginLeft
-          && childMarginRight == other.childMarginRight
-          && childMarginTop == other.childMarginTop
-          && childMarginBottom == other.childMarginBottom
-          && hspacing == other.hspacing
-          && vspacing == other.vspacing
-          && buttonSpacing == other.buttonSpacing
-          && wizStyle == other.wizStyle
-          && header == other.header
-          && watermark == other.watermark
-          && title == other.title
-          && subTitle == other.subTitle
-          && extension == other.extension
-          && sideWidget == other.sideWidget;
+      && topLevelMarginRight == other.topLevelMarginRight
+      && topLevelMarginTop == other.topLevelMarginTop
+      && topLevelMarginBottom == other.topLevelMarginBottom
+      && childMarginLeft == other.childMarginLeft
+      && childMarginRight == other.childMarginRight
+      && childMarginTop == other.childMarginTop
+      && childMarginBottom == other.childMarginBottom
+      && hspacing == other.hspacing
+      && vspacing == other.vspacing
+      && buttonSpacing == other.buttonSpacing
+      && wizStyle == other.wizStyle
+      && header == other.header
+      && watermark == other.watermark
+      && title == other.title
+      && subTitle == other.subTitle
+      && extension == other.extension
+      && sideWidget == other.sideWidget;
 }
 
 class QWizardHeader : public QWidget
@@ -265,15 +302,16 @@ class QWizardHeader : public QWidget
  public:
    enum RulerType { Ruler };
 
-   inline QWizardHeader(RulerType /* ruler */, QWidget *parent = nullptr)
+   inline QWizardHeader(RulerType ruler, QWidget *parent = nullptr)
       : QWidget(parent) {
       setFixedHeight(2);
    }
+
    QWizardHeader(QWidget *parent = nullptr);
 
    void setup(const QWizardLayoutInfo &info, const QString &title,
-              const QString &subTitle, const QPixmap &logo, const QPixmap &banner,
-              Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat);
+      const QString &subTitle, const QPixmap &logo, const QPixmap &banner,
+      Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat);
 
  protected:
    void paintEvent(QPaintEvent *event) override;
@@ -342,16 +380,16 @@ bool QWizardHeader::vistaDisabled() const
 #endif
 
 void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
-                          const QString &subTitle, const QPixmap &logo, const QPixmap &banner,
-                          Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat)
+   const QString &subTitle, const QPixmap &logo, const QPixmap &banner,
+   Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat)
 {
    bool modern = ((info.wizStyle == QWizard::ModernStyle)
 
 #if ! defined(QT_NO_STYLE_WINDOWSVISTA)
-                  || ((info.wizStyle == QWizard::AeroStyle && QVistaHelper::vistaState() == QVistaHelper::Classic) || vistaDisabled())
+         || ((info.wizStyle == QWizard::AeroStyle && QVistaHelper::vistaState() == QVistaHelper::Classic) || vistaDisabled())
 #endif
 
-                 );
+      );
 
    layout->setRowMinimumHeight(0, modern ? ModernHeaderTopMargin : 0);
    layout->setRowMinimumHeight(1, modern ? info.topLevelMarginTop - ModernHeaderTopMargin - 1 : 0);
@@ -359,7 +397,7 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
 
    int minColumnWidth0 = modern ? info.topLevelMarginLeft + info.topLevelMarginRight : 0;
    int minColumnWidth1 = modern ? info.topLevelMarginLeft + info.topLevelMarginRight + 1
-                         : info.topLevelMarginLeft + ClassicHMargin;
+      : info.topLevelMarginLeft + ClassicHMargin;
    layout->setColumnMinimumWidth(0, minColumnWidth0);
    layout->setColumnMinimumWidth(1, minColumnWidth1);
 
@@ -385,8 +423,7 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
       int candidateSubTitleWidth = qMin(512, 2 * QApplication::desktop()->width() / 3);
       int delta = candidateSubTitleWidth >> 1;
       while (delta > 0) {
-         if (subTitleLabel->heightForWidth(candidateSubTitleWidth - delta)
-               <= desiredSubTitleHeight) {
+         if (subTitleLabel->heightForWidth(candidateSubTitleWidth - delta) <= desiredSubTitleHeight) {
             candidateSubTitleWidth -= delta;
          }
          delta >>= 1;
@@ -516,18 +553,27 @@ void QWizardPagePrivate::_q_updateCachedCompleteState()
 
 class QWizardAntiFlickerWidget : public QWidget
 {
-   QWizard *wizard;
+
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
+ public:
    QWizardPrivate *wizardPrivate;
 
- public:
    QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *wizardPrivate)
-      : QWidget(wizard)
-      , wizard(wizard)
-      , wizardPrivate(wizardPrivate) {}
-#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
+      : QWidget(wizard), wizardPrivate(wizardPrivate)
+   {}
+
  protected:
-   void paintEvent(QPaintEvent *) override;
+   void paintEvent(QPaintEvent *);
+
+#else
+
+ public:
+   QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *)
+      : QWidget(wizard)
+   {}
+
 #endif
+
 };
 
 class QWizardPrivate : public QDialogPrivate
@@ -549,6 +595,7 @@ class QWizardPrivate : public QDialogPrivate
       , canContinue(false)
       , canFinish(false)
       , disableUpdatesCount(0)
+      , wizStyle(QWizard::ClassicStyle)
       , opts(0)
       , buttonsHaveCustomLayout(false)
       , titleFmt(Qt::AutoText)
@@ -558,10 +605,12 @@ class QWizardPrivate : public QDialogPrivate
       , headerWidget(0)
       , watermarkLabel(0)
       , sideWidget(0)
+      , pageFrame(0)
       , titleLabel(0)
       , subTitleLabel(0)
       , bottomRuler(0)
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
+      , vistaHelper(0)
       , vistaInitPending(false)
       , vistaState(QVistaHelper::Dirty)
       , vistaStateChanged(false)
@@ -570,11 +619,12 @@ class QWizardPrivate : public QDialogPrivate
       , minimumWidth(0)
       , minimumHeight(0)
       , maximumWidth(QWIDGETSIZE_MAX)
-      , maximumHeight(QWIDGETSIZE_MAX) {
-      for (int i = 0; i < QWizard::NButtons; ++i) {
-         btns[i] = 0;
-      }
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+      , maximumHeight(QWIDGETSIZE_MAX)
+
+   {
+      std::fill(btns, btns + QWizard::NButtons, static_cast<QAbstractButton *>(0));
+
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
       if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)) {
          vistaInitPending = true;
       }
@@ -600,10 +650,10 @@ class QWizardPrivate : public QDialogPrivate
    bool buttonLayoutContains(QWizard::WizardButton which);
    void updatePixmap(QWizard::WizardPixmap which);
 
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
    bool vistaDisabled() const;
    bool isVistaThemeEnabled(QVistaHelper::VistaState state) const;
-   void handleAeroStyleChange();
+   bool handleAeroStyleChange();
 #endif
 
    bool isVistaThemeEnabled() const;
@@ -695,9 +745,11 @@ static QString buttonDefaultText(int wstyle, int which, const QWizardPrivate *wi
       case QWizard::NextButton:
          if (macStyle) {
             return QWizard::tr("Continue");
-         } else
+         } else {
             return wizardPrivate->isVistaThemeEnabled()
-                   ? QWizard::tr("&Next") : QWizard::tr("&Next >");
+               ? QWizard::tr("&Next") : QWizard::tr("&Next >");
+         }
+
       case QWizard::CommitButton:
          return QWizard::tr("Commit");
       case QWizard::FinishButton:
@@ -748,10 +800,12 @@ void QWizardPrivate::init()
 
    updateButtonLayout();
 
-   for (int i = 0; i < NFallbackDefaultProperties; ++i)
+   defaultPropertyTable.reserve(NFallbackDefaultProperties);
+
+   for (uint i = 0; i < NFallbackDefaultProperties; ++i) {
       defaultPropertyTable.append(QWizardDefaultProperty(fallbackProperties[i].className,
-                                  fallbackProperties[i].property,
-                                  fallbackProperties[i].changedSignal));
+            fallbackProperties[i].property, changed_signal(i)));
+   }
 }
 
 void QWizardPrivate::reset()
@@ -880,11 +934,13 @@ void QWizardPrivate::switchToPage(int newId, Direction direction)
        can handle it. If there is no such child, give the focus to
        Next or Finish.
    */
+
    if ((opts & QWizard::NoDefaultButton) && nextOrFinishButton->isEnabled()) {
       candidate = nextOrFinishButton;
    } else if (newPage) {
       candidate = iWantTheFocus(newPage);
    }
+
    if (!candidate) {
       candidate = nextOrFinishButton;
    }
@@ -901,9 +957,36 @@ void QWizardPrivate::switchToPage(int newId, Direction direction)
 }
 
 // keep in sync with QWizard::WizardButton
-static const QString buttonSlots[QWizard::NStandardButtons] = {
-   "back()", "next()", "next()", "accept()", "reject()", "helpRequested()"
-};
+static QString buttonSlots(QWizard::WizardButton which)
+{
+   switch (which) {
+      case QWizard::BackButton:
+         return SLOT(back());
+
+      case QWizard::NextButton:
+      case QWizard::CommitButton:
+         return SLOT(next());
+
+      case QWizard::FinishButton:
+         return SLOT(accept());
+
+      case QWizard::CancelButton:
+         return SLOT(reject());
+
+      case QWizard::HelpButton:
+         return SLOT(helpRequested());
+
+      case QWizard::CustomButton1:
+      case QWizard::CustomButton2:
+      case QWizard::CustomButton3:
+      case QWizard::Stretch:
+      case QWizard::NoButton:
+         // error, may want to throw
+         break;
+   }
+
+   return QString();
+}
 
 QWizardLayoutInfo QWizardPrivate::layoutInfoForCurrentPage()
 {
@@ -923,21 +1006,21 @@ QWizardLayoutInfo QWizardPrivate::layoutInfoForCurrentPage()
    info.childMarginBottom = style->pixelMetric(QStyle::PM_LayoutBottomMargin, 0, titleLabel);
 
    info.hspacing = (layoutHorizontalSpacing == -1)
-                   ? style->layoutSpacing(QSizePolicy::DefaultType, QSizePolicy::DefaultType, Qt::Horizontal) : layoutHorizontalSpacing;
+      ? style->layoutSpacing(QSizePolicy::DefaultType, QSizePolicy::DefaultType, Qt::Horizontal) : layoutHorizontalSpacing;
 
    info.vspacing = style->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
 
    info.buttonSpacing = (layoutHorizontalSpacing == -1)
-                        ? style->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal) : layoutHorizontalSpacing;
+      ? style->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal) : layoutHorizontalSpacing;
 
    if (wizStyle == QWizard::MacStyle) {
       info.buttonSpacing = 12;
    }
 
    info.wizStyle = wizStyle;
-
 #if defined(QT_NO_STYLE_WINDOWSVISTA)
    if (info.wizStyle == QWizard::AeroStyle) {
+
 #else
    if ( (info.wizStyle == QWizard::AeroStyle) && (QVistaHelper::vistaState() == QVistaHelper::Classic ||
          vistaDisabled()) ) {
@@ -958,10 +1041,10 @@ QWizardLayoutInfo QWizardPrivate::layoutInfoForCurrentPage()
    }
 
    info.header = (info.wizStyle == QWizard::ClassicStyle || info.wizStyle == QWizard::ModernStyle)
-                 && !(opts & QWizard::IgnoreSubTitles) && !subTitleText.isEmpty();
+      && !(opts & QWizard::IgnoreSubTitles) && !subTitleText.isEmpty();
    info.sideWidget = sideWidget;
    info.watermark = (info.wizStyle != QWizard::MacStyle) && (info.wizStyle != QWizard::AeroStyle)
-                    && !watermarkPixmap.isNull();
+      && !watermarkPixmap.isNull();
    info.title = !info.header && !titleText.isEmpty();
    info.subTitle = !(opts & QWizard::IgnoreSubTitles) && !info.header && !subTitleText.isEmpty();
    info.extension = (info.watermark || info.sideWidget) && (opts & QWizard::ExtendedWatermarkPixmap);
@@ -1026,12 +1109,12 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
          mainLayout->setMargin(0);
          mainLayout->setSpacing(0);
          pageVBoxLayout->setContentsMargins(deltaMarginLeft, deltaMarginTop,
-                                            deltaMarginRight, deltaMarginBottom);
+            deltaMarginRight, deltaMarginBottom);
          buttonLayout->setContentsMargins(info.topLevelMarginLeft, info.topLevelMarginTop,
-                                          info.topLevelMarginRight, info.topLevelMarginBottom);
+            info.topLevelMarginRight, info.topLevelMarginBottom);
       } else {
          mainLayout->setContentsMargins(info.topLevelMarginLeft, info.topLevelMarginTop,
-                                        info.topLevelMarginRight, info.topLevelMarginBottom);
+            info.topLevelMarginRight, info.topLevelMarginBottom);
          mainLayout->setHorizontalSpacing(info.hspacing);
          mainLayout->setVerticalSpacing(info.vspacing);
          pageVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -1121,8 +1204,8 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
          subTitleLabel = new QLabel(pageFrame);
          subTitleLabel->setWordWrap(true);
 
-         subTitleLabel->setContentsMargins(info.childMarginLeft , 0,
-                                           info.childMarginRight , 0);
+         subTitleLabel->setContentsMargins(info.childMarginLeft, 0,
+            info.childMarginRight, 0);
 
          pageVBoxLayout->insertWidget(1, subTitleLabel);
       }
@@ -1248,7 +1331,7 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
          watermarkEndRow = row;
       }
       mainLayout->addWidget(watermarkLabel, watermarkStartRow, 0,
-                            watermarkEndRow - watermarkStartRow, 1);
+         watermarkEndRow - watermarkStartRow, 1);
    }
 
    mainLayout->setColumnMinimumWidth(0, mac && !info.watermark ? 181 : 0);
@@ -1307,8 +1390,8 @@ void QWizardPrivate::updateLayout()
    if (info.header) {
       Q_ASSERT(page);
       headerWidget->setup(info, page->title(), page->subTitle(),
-                          page->pixmap(QWizard::LogoPixmap), page->pixmap(QWizard::BannerPixmap),
-                          titleFmt, subTitleFmt);
+         page->pixmap(QWizard::LogoPixmap), page->pixmap(QWizard::BannerPixmap),
+         titleFmt, subTitleFmt);
    }
 
    if (info.watermark || info.sideWidget) {
@@ -1320,8 +1403,9 @@ void QWizardPrivate::updateLayout()
             pix = q->pixmap(QWizard::WatermarkPixmap);
          }
       }
-      watermarkLabel->setPixmap(
-         pix); // in case there is no watermark and we show the side widget we need to clear the watermark
+
+      // in case there is no watermark and we show the side widget we need to clear the watermark
+      watermarkLabel->setPixmap(pix);
    }
 
    if (info.title) {
@@ -1344,11 +1428,13 @@ void QWizardPrivate::updateMinMaxSizes(const QWizardLayoutInfo &info)
    Q_Q(QWizard);
 
    int extraHeight = 0;
+
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
    if (isVistaThemeEnabled()) {
       extraHeight = vistaHelper->titleBarSize() + vistaHelper->topOffset();
    }
 #endif
+
    QSize minimumSize = mainLayout->totalMinimumSize() + QSize(0, extraHeight);
    QSize maximumSize = mainLayout->totalMaximumSize();
    if (info.header && headerWidget->maximumWidth() != QWIDGETSIZE_MAX) {
@@ -1357,7 +1443,6 @@ void QWizardPrivate::updateMinMaxSizes(const QWizardLayoutInfo &info)
    }
    if (info.watermark && !info.sideWidget) {
       minimumSize.setHeight(mainLayout->totalSizeHint().height());
-      maximumSize.setHeight(mainLayout->totalSizeHint().height());
    }
    if (q->minimumWidth() == minimumWidth) {
       minimumWidth = minimumSize.width();
@@ -1396,10 +1481,13 @@ static QString object_name_for_button(QWizard::WizardButton which)
    switch (which) {
       case QWizard::CommitButton:
          return QLatin1String("qt_wizard_") + QLatin1String("commit");
+
       case QWizard::FinishButton:
          return QLatin1String("qt_wizard_") + QLatin1String("finish");
+
       case QWizard::CancelButton:
          return QLatin1String("qt_wizard_") + QLatin1String("cancel");
+
       case QWizard::BackButton:
       case QWizard::NextButton:
       case QWizard::HelpButton:
@@ -1408,13 +1496,16 @@ static QString object_name_for_button(QWizard::WizardButton which)
       case QWizard::CustomButton3:
          // Make navigation buttons detectable as passive interactor in designer
          return QLatin1String("__qt__passive_wizardbutton") + QString::number(which);
+
       case QWizard::Stretch:
       case QWizard::NoButton:
          //case QWizard::NStandardButtons:
          //case QWizard::NButtons:
          ;
    }
-   //Q_UNREACHABLE();
+
+   // error, may want to throw
+
    return QString();
 }
 
@@ -1428,7 +1519,9 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
    if (!btns[which]) {
       QPushButton *pushButton = new QPushButton(antiFlickerWidget);
       QStyle *style = q->style();
-      if (style != QApplication::style()) { // Propagate style
+
+      if (style != QApplication::style()) {
+         // Propagate style
          pushButton->setStyle(style);
       }
       pushButton->setObjectName(object_name_for_button(which));
@@ -1454,7 +1547,7 @@ void QWizardPrivate::connectButton(QWizard::WizardButton which) const
    Q_Q(const QWizard);
 
    if (which < QWizard::NStandardButtons) {
-      QObject::connect(btns[which], SIGNAL(clicked()), q, buttonSlots[which]);
+      QObject::connect(btns[which], SIGNAL(clicked()), q, buttonSlots(which));
    } else {
       QObject::connect(btns[which], SIGNAL(clicked()), q, SLOT(_q_emitCustomButtonClicked()));
    }
@@ -1476,12 +1569,16 @@ void QWizardPrivate::updateButtonTexts()
 
       }
    }
+   if (btns[QWizard::NextButton]) {
+      btns[QWizard::NextButton]->setShortcut(isVistaThemeEnabled() ? QKeySequence(Qt::ALT | Qt::Key_Right) : QKeySequence());
+   }
 }
 
 void QWizardPrivate::updateButtonLayout()
 {
    if (buttonsHaveCustomLayout) {
-      QVarLengthArray<QWizard::WizardButton> array(buttonsCustomLayout.count());
+      QVarLengthArray<QWizard::WizardButton, QWizard::NButtons> array(buttonsCustomLayout.count());
+
       for (int i = 0; i < buttonsCustomLayout.count(); ++i) {
          array[i] = buttonsCustomLayout.at(i);
       }
@@ -1545,7 +1642,7 @@ void QWizardPrivate::setButtonLayout(const QWizard::WizardButton *array, int siz
 
          // Back, Next, Commit, and Finish are handled in _q_updateButtonStates()
          if (which != QWizard::BackButton && which != QWizard::NextButton
-               && which != QWizard::CommitButton && which != QWizard::FinishButton) {
+            && which != QWizard::CommitButton && which != QWizard::FinishButton) {
             btns[which]->show();
          }
 
@@ -1590,41 +1687,58 @@ bool QWizardPrivate::isVistaThemeEnabled(QVistaHelper::VistaState state) const
    return wizStyle == QWizard::AeroStyle && QVistaHelper::vistaState() == state && !vistaDisabled();
 }
 
-void QWizardPrivate::handleAeroStyleChange()
+bool QWizardPrivate::handleAeroStyleChange()
 {
    Q_Q(QWizard);
 
    if (inHandleAeroStyleChange) {
-      return;   // prevent recursion
+      return false;   // prevent recursion
    }
 
+   // DWM changes. Delay aero initialization to the show event handling if
+   // it does not exist. If we are a child, skip DWM and just make room by
+   // moving the antiFlickerWidget.
+   const bool isWindow = q->isWindow();
+   if (isWindow && (!q->windowHandle() || !q->windowHandle()->handle())) {
+      return false;
+   }
    inHandleAeroStyleChange = true;
 
    vistaHelper->disconnectBackButton();
    q->removeEventFilter(vistaHelper);
 
+   bool vistaMargins = false;
    if (isVistaThemeEnabled()) {
       if (isVistaThemeEnabled(QVistaHelper::VistaAero)) {
-         vistaHelper->setDWMTitleBar(QVistaHelper::ExtendedTitleBar);
-         q->installEventFilter(vistaHelper);
+         if (isWindow) {
+            vistaHelper->setDWMTitleBar(QVistaHelper::ExtendedTitleBar);
+            q->installEventFilter(vistaHelper);
+         }
          q->setMouseTracking(true);
 
          antiFlickerWidget->move(0, vistaHelper->titleBarSize() + vistaHelper->topOffset());
          vistaHelper->backButton()->move(
             0, vistaHelper->topOffset() // ### should ideally work without the '+ 1'
             - qMin(vistaHelper->topOffset(), vistaHelper->topPadding() + 1));
-
+         vistaMargins = true;
+         vistaHelper->backButton()->show();
       } else {
-         vistaHelper->setDWMTitleBar(QVistaHelper::NormalTitleBar);
+         if (isWindow) {
+            vistaHelper->setDWMTitleBar(QVistaHelper::NormalTitleBar);
+         }
          q->setMouseTracking(true);
          antiFlickerWidget->move(0, vistaHelper->topOffset());
          vistaHelper->backButton()->move(0, -1); // ### should ideally work with (0, 0)
       }
 
-      vistaHelper->setTitleBarIconAndCaptionVisible(false);
+      if (isWindow) {
+         vistaHelper->setTitleBarIconAndCaptionVisible(false);
+      }
+
       QObject::connect(
-         vistaHelper->backButton(), SIGNAL(clicked()), q, buttonSlots[QWizard::BackButton]);
+         vistaHelper->backButton(), SIGNAL(clicked()), q, buttonSlots(QWizard::BackButton));
       vistaHelper->backButton()->show();
+
    } else {
       q->setMouseTracking(true); // ### original value possibly different
 #ifndef QT_NO_CURSOR
@@ -1632,16 +1746,18 @@ void QWizardPrivate::handleAeroStyleChange()
 #endif
       antiFlickerWidget->move(0, 0);
       vistaHelper->hideBackButton();
-      vistaHelper->setTitleBarIconAndCaptionVisible(true);
+      if (isWindow) {
+         vistaHelper->setTitleBarIconAndCaptionVisible(true);
+      }
    }
 
    _q_updateButtonStates();
 
-   if (q->isVisible()) {
-      vistaHelper->setWindowPosHack();
-   }
+   vistaHelper->updateCustomMargins(vistaMargins);
+
 
    inHandleAeroStyleChange = false;
+   return true;
 }
 #endif
 
@@ -1649,7 +1765,7 @@ bool QWizardPrivate::isVistaThemeEnabled() const
 {
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
    return isVistaThemeEnabled(QVistaHelper::VistaAero)
-          || isVistaThemeEnabled(QVistaHelper::VistaBasic);
+      || isVistaThemeEnabled(QVistaHelper::VistaBasic);
 #else
    return false;
 #endif
@@ -1695,24 +1811,27 @@ void QWizardPrivate::_q_updateButtonStates()
    bool complete = page && page->isComplete();
 
    btn.back->setEnabled(history.count() > 1
-                        && !q->page(history.at(history.count() - 2))->isCommitPage()
-                        && (!canFinish || !(opts & QWizard::DisabledBackButtonOnLastPage)));
+      && !q->page(history.at(history.count() - 2))->isCommitPage()
+      && (!canFinish || !(opts & QWizard::DisabledBackButtonOnLastPage)));
    btn.next->setEnabled(canContinue && complete);
    btn.commit->setEnabled(canContinue && complete);
    btn.finish->setEnabled(canFinish && complete);
 
    const bool backButtonVisible = buttonLayoutContains(QWizard::BackButton)
-                                  && (history.count() > 1 || !(opts & QWizard::NoBackButtonOnStartPage))
-                                  && (canContinue || !(opts & QWizard::NoBackButtonOnLastPage));
+      && (history.count() > 1 || !(opts & QWizard::NoBackButtonOnStartPage))
+      && (canContinue || !(opts & QWizard::NoBackButtonOnLastPage));
    bool commitPage = page && page->isCommitPage();
    btn.back->setVisible(backButtonVisible);
    btn.next->setVisible(buttonLayoutContains(QWizard::NextButton) && !commitPage
-                        && (canContinue || (opts & QWizard::HaveNextButtonOnLastPage)));
+      && (canContinue || (opts & QWizard::HaveNextButtonOnLastPage)));
    btn.commit->setVisible(buttonLayoutContains(QWizard::CommitButton) && commitPage
-                          && canContinue);
+      && canContinue);
    btn.finish->setVisible(buttonLayoutContains(QWizard::FinishButton)
-                          && (canFinish || (opts & QWizard::HaveFinishButtonOnEarlyPages)));
+      && (canFinish || (opts & QWizard::HaveFinishButtonOnEarlyPages)));
 
+   if (!(opts & QWizard::NoCancelButton))
+      btn.cancel->setVisible(buttonLayoutContains(QWizard::CancelButton)
+         && (canContinue || !(opts & QWizard::NoCancelButtonOnLastPage)));
    bool useDefault = !(opts & QWizard::NoDefaultButton);
    if (QPushButton *nextPush = qobject_cast<QPushButton *>(btn.next)) {
       nextPush->setDefault(canContinue && useDefault && !commitPage);
@@ -1778,35 +1897,21 @@ void QWizardPrivate::setStyle(QStyle *style)
 
 QPixmap QWizardPrivate::findDefaultBackgroundPixmap()
 {
-   QCFType<CFURLRef> url;
-   const int ExpectedImageWidth = 242;
-   const int ExpectedImageHeight = 414;
-
-   if (LSFindApplicationForInfo(kLSUnknownCreator,
-                                CFSTR("com.apple.KeyboardSetupAssistant"), 0, 0, &url) == noErr) {
-
-      QCFType<CFBundleRef> bundle = CFBundleCreate(kCFAllocatorDefault, url);
-
-      if (bundle) {
-         url = CFBundleCopyResourceURL(bundle, CFSTR("Background"), CFSTR("tif"), 0);
-
-         if (url) {
-            QCFType<CGImageSourceRef> imageSource = CGImageSourceCreateWithURL(url, 0);
-            QCFType<CGImageRef> image = CGImageSourceCreateImageAtIndex(imageSource, 0, 0);
-
-            if (image) {
-               int width  = CGImageGetWidth(image);
-               int height = CGImageGetHeight(image);
-
-               if (width == ExpectedImageWidth && height == ExpectedImageHeight) {
-                  return QPixmap::fromMacCGImageRef(image);
-               }
-            }
-         }
-      }
+   QGuiApplication *app = qobject_cast<QGuiApplication *>(QCoreApplication::instance());
+   if (!app) {
+      return QPixmap();
    }
-   return QPixmap();
-
+   QPlatformNativeInterface *platformNativeInterface = app->platformNativeInterface();
+   int at = platformNativeInterface->metaObject()->indexOfMethod("defaultBackgroundPixmapForQWizard()");
+   if (at == -1) {
+      return QPixmap();
+   }
+   QMetaMethod defaultBackgroundPixmapForQWizard = platformNativeInterface->metaObject()->method(at);
+   QPixmap result;
+   if (!defaultBackgroundPixmapForQWizard.invoke(platformNativeInterface, Q_RETURN_ARG(QPixmap, result))) {
+      return QPixmap();
+   }
+   return result;
 }
 
 #endif
@@ -1824,6 +1929,7 @@ void QWizardAntiFlickerWidget::paintEvent(QPaintEvent *)
       painter.fillRect(0, buttonLayoutTop, width(), height() - buttonLayoutTop, brush);
       painter.setPen(QPen(QBrush(QColor(223, 223, 223)), 0)); // ### hardcoded for now
       painter.drawLine(0, buttonLayoutTop, width(), buttonLayoutTop);
+
       if (wizardPrivate->isVistaThemeEnabled(QVistaHelper::VistaBasic)) {
          if (window()->isActiveWindow()) {
             painter.setPen(QPen(QBrush(QColor(169, 191, 214)), 0));   // ### hardcoded for now
@@ -1836,397 +1942,13 @@ void QWizardAntiFlickerWidget::paintEvent(QPaintEvent *)
 }
 #endif
 
-/*!
-    \class QWizard
-    \since 4.3
-    \brief The QWizard class provides a framework for wizards.
 
-    A wizard (also called an assistant on Mac OS X) is a special type
-    of input dialog that consists of a sequence of pages. A wizard's
-    purpose is to guide the user through a process step by step.
-    Wizards are useful for complex or infrequent tasks that users may
-    find difficult to learn.
 
-    QWizard inherits QDialog and represents a wizard. Each page is a
-    QWizardPage (a QWidget subclass). To create your own wizards, you
-    can use these classes directly, or you can subclass them for more
-    control.
 
-    Topics:
 
-    \tableofcontents
 
-    \section1 A Trivial Example
 
-    The following example illustrates how to create wizard pages and
-    add them to a wizard. For more advanced examples, see
-    \l{dialogs/classwizard}{Class Wizard} and \l{dialogs/licensewizard}{License
-    Wizard}.
 
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 1
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 3
-    \dots
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 4
-    \codeline
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 5
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 7
-    \dots
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 8
-    \codeline
-    \snippet examples/dialogs/trivialwizard/trivialwizard.cpp 10
-
-    \section1 Wizard Look and Feel
-
-    QWizard supports four wizard looks:
-
-    \list
-    \o ClassicStyle
-    \o ModernStyle
-    \o MacStyle
-    \o AeroStyle
-    \endlist
-
-    You can explicitly set the look to use using setWizardStyle()
-    (e.g., if you want the same look on all platforms).
-
-    \table
-    \header \o ClassicStyle
-            \o ModernStyle
-            \o MacStyle
-            \o AeroStyle
-    \row    \o \inlineimage qtwizard-classic1.png
-            \o \inlineimage qtwizard-modern1.png
-            \o \inlineimage qtwizard-mac1.png
-            \o \inlineimage qtwizard-aero1.png
-    \row    \o \inlineimage qtwizard-classic2.png
-            \o \inlineimage qtwizard-modern2.png
-            \o \inlineimage qtwizard-mac2.png
-            \o \inlineimage qtwizard-aero2.png
-    \endtable
-
-    Note: AeroStyle has effect only on a Windows Vista system with alpha compositing enabled.
-    ModernStyle is used as a fallback when this condition is not met.
-
-    In addition to the wizard style, there are several options that
-    control the look and feel of the wizard. These can be set using
-    setOption() or setOptions(). For example, HaveHelpButton makes
-    QWizard show a \gui Help button along with the other wizard
-    buttons.
-
-    You can even change the order of the wizard buttons to any
-    arbitrary order using setButtonLayout(), and you can add up to
-    three custom buttons (e.g., a \gui Print button) to the button
-    row. This is achieved by calling setButton() or setButtonText()
-    with CustomButton1, CustomButton2, or CustomButton3 to set up the
-    button, and by enabling the HaveCustomButton1, HaveCustomButton2,
-    or HaveCustomButton3 options. Whenever the user clicks a custom
-    button, customButtonClicked() is emitted. For example:
-
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 29
-
-    \section1 Elements of a Wizard Page
-
-    Wizards consist of a sequence of \l{QWizardPage}s. At any time,
-    only one page is shown. A page has the following attributes:
-
-    \list
-    \o A \l{QWizardPage::}{title}.
-    \o A \l{QWizardPage::}{subTitle}.
-    \o A set of pixmaps, which may or may not be honored, depending
-       on the wizard's style:
-        \list
-        \o WatermarkPixmap (used by ClassicStyle and ModernStyle)
-        \o BannerPixmap (used by ModernStyle)
-        \o LogoPixmap (used by ClassicStyle and ModernStyle)
-        \o BackgroundPixmap (used by MacStyle)
-        \endlist
-    \endlist
-
-    The diagram belows shows how QWizard renders these attributes,
-    assuming they are all present and ModernStyle is used:
-
-    \image qtwizard-nonmacpage.png
-
-    When a \l{QWizardPage::}{subTitle} is set, QWizard displays it
-    in a header, in which case it also uses the BannerPixmap and the
-    LogoPixmap to decorate the header. The WatermarkPixmap is
-    displayed on the left side, below the header. At the bottom,
-    there is a row of buttons allowing the user to navigate through
-    the pages.
-
-    The page itself (the \l{QWizardPage} widget) occupies the area
-    between the header, the watermark, and the button row. Typically,
-    the page is a QWizardPage on which a QGridLayout is installed,
-    with standard child widgets (\l{QLabel}s, \l{QLineEdit}s, etc.).
-
-    If the wizard's style is MacStyle, the page looks radically
-    different:
-
-    \image qtwizard-macpage.png
-
-    The watermark, banner, and logo pixmaps are ignored by the
-    MacStyle. If the BackgroundPixmap is set, it is used as the
-    background for the wizard; otherwise, a default "assistant" image
-    is used.
-
-    The title and subtitle are set by calling
-    QWizardPage::setTitle() and QWizardPage::setSubTitle() on the
-    individual pages. They may be plain text or HTML (see titleFormat
-    and subTitleFormat). The pixmaps can be set globally for the
-    entire wizard using setPixmap(), or on a per-page basis using
-    QWizardPage::setPixmap().
-
-    \target field mechanism
-    \section1 Registering and Using Fields
-
-    In many wizards, the contents of a page may affect the default
-    values of the fields of a later page. To make it easy to
-    communicate between pages, QWizard supports a "field" mechanism
-    that allows you to register a field (e.g., a QLineEdit) on a page
-    and to access its value from any page. It is also possible to
-    specify mandatory fields (i.e., fields that must be filled before
-    the user can advance to the next page).
-
-    To register a field, call QWizardPage::registerField() field.
-    For example:
-
-    \snippet examples/dialogs/classwizard/classwizard.cpp 8
-    \dots
-    \snippet examples/dialogs/classwizard/classwizard.cpp 10
-    \snippet examples/dialogs/classwizard/classwizard.cpp 11
-    \dots
-    \snippet examples/dialogs/classwizard/classwizard.cpp 13
-
-    The above code registers three fields, \c className, \c
-    baseClass, and \c qobjectMacro, which are associated with three
-    child widgets. The asterisk (\c *) next to \c className denotes a
-    mandatory field.
-
-    \target initialize page
-    The fields of any page are accessible from any other page. For
-    example:
-
-    \snippet examples/dialogs/classwizard/classwizard.cpp 17
-
-    Here, we call QWizardPage::field() to access the contents of the
-    \c className field (which was defined in the \c ClassInfoPage)
-    and use it to initialize the \c OuputFilePage. The field's
-    contents is returned as a QVariant.
-
-    When we create a field using QWizardPage::registerField(), we
-    pass a unique field name and a widget. We can also provide a Qt
-    property name and a "changed" signal (a signal that is emitted
-    when the property changes) as third and fourth arguments;
-    however, this is not necessary for the most common Qt widgets,
-    such as QLineEdit, QCheckBox, and QComboBox, because QWizard
-    knows which properties to look for.
-
-    \target mandatory fields
-
-    If an asterisk (\c *) is appended to the name when the property
-    is registered, the field is a \e{mandatory field}. When a page has
-    mandatory fields, the \gui Next and/or \gui Finish buttons are
-    enabled only when all mandatory fields are filled.
-
-    To consider a field "filled", QWizard simply checks that the
-    field's current value doesn't equal the original value (the value
-    it had when initializePage() was called). For QLineEdit and
-    QAbstractSpinBox subclasses, QWizard also checks that
-    \l{QLineEdit::hasAcceptableInput()}{hasAcceptableInput()} returns
-    true, to honor any validator or mask.
-
-    QWizard's mandatory field mechanism is provided for convenience.
-    A more powerful (but also more cumbersome) alternative is to
-    reimplement QWizardPage::isComplete() and to emit the
-    QWizardPage::completeChanged() signal whenever the page becomes
-    complete or incomplete.
-
-    The enabled/disabled state of the \gui Next and/or \gui Finish
-    buttons is one way to perform validation on the user input.
-    Another way is to reimplement validateCurrentPage() (or
-    QWizardPage::validatePage()) to perform some last-minute
-    validation (and show an error message if the user has entered
-    incomplete or invalid information). If the function returns true,
-    the next page is shown (or the wizard finishes); otherwise, the
-    current page stays up.
-
-    \section1 Creating Linear Wizards
-
-    Most wizards have a linear structure, with page 1 followed by
-    page 2 and so on until the last page. The \l{dialogs/classwizard}{Class
-    Wizard} example is such a wizard. With QWizard, linear wizards
-    are created by instantiating the \l{QWizardPage}s and inserting
-    them using addPage(). By default, the pages are shown in the
-    order in which they were added. For example:
-
-    \snippet examples/dialogs/classwizard/classwizard.cpp 0
-    \dots
-    \snippet examples/dialogs/classwizard/classwizard.cpp 2
-
-    When a page is about to be shown, QWizard calls initializePage()
-    (which in turn calls QWizardPage::initializePage()) to fill the
-    page with default values. By default, this function does nothing,
-    but it can be reimplemented to initialize the page's contents
-    based on other pages' fields (see the \l{initialize page}{example
-    above}).
-
-    If the user presses \gui Back, cleanupPage() is called (which in
-    turn calls QWizardPage::cleanupPage()). The default
-    implementation resets the page's fields to their original values
-    (the values they had before initializePage() was called). If you
-    want the \gui Back button to be non-destructive and keep the
-    values entered by the user, simply enable the IndependentPages
-    option.
-
-    \section1 Creating Non-Linear Wizards
-
-    Some wizards are more complex in that they allow different
-    traversal paths based on the information provided by the user.
-    The \l{dialogs/licensewizard}{License Wizard} example illustrates this.
-    It provides five wizard pages; depending on which options are
-    selected, the user can reach different pages.
-
-    \image licensewizard-flow.png
-
-    In complex wizards, pages are identified by IDs. These IDs are
-    typically defined using an enum. For example:
-
-    \snippet examples/dialogs/licensewizard/licensewizard.h 0
-    \dots
-    \snippet examples/dialogs/licensewizard/licensewizard.h 2
-    \dots
-    \snippet examples/dialogs/licensewizard/licensewizard.h 3
-
-    The pages are inserted using setPage(), which takes an ID and an
-    instance of QWizardPage (or of a subclass):
-
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 1
-    \dots
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 8
-
-    By default, the pages are shown in increasing ID order. To
-    provide a dynamic order that depends on the options chosen by the
-    user, we must reimplement QWizardPage::nextId(). For example:
-
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 18
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 23
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 24
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 25
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 26
-
-    It would also be possible to put all the logic in one place, in a
-    QWizard::nextId() reimplementation. For example:
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qwizard.cpp 0
-
-    To start at another page than the page with the lowest ID, call
-    setStartId().
-
-    To test whether a page has been visited or not, call
-    hasVisitedPage(). For example:
-
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 27
-
-    \sa QWizardPage, {Class Wizard Example}, {License Wizard Example}
-*/
-
-/*!
-    \enum QWizard::WizardButton
-
-    This enum specifies the buttons in a wizard.
-
-    \value BackButton  The \gui Back button (\gui {Go Back} on Mac OS X)
-    \value NextButton  The \gui Next button (\gui Continue on Mac OS X)
-    \value CommitButton  The \gui Commit button
-    \value FinishButton  The \gui Finish button (\gui Done on Mac OS X)
-    \value CancelButton  The \gui Cancel button (see also NoCancelButton)
-    \value HelpButton    The \gui Help button (see also HaveHelpButton)
-    \value CustomButton1  The first user-defined button (see also HaveCustomButton1)
-    \value CustomButton2  The second user-defined button (see also HaveCustomButton2)
-    \value CustomButton3  The third user-defined button (see also HaveCustomButton3)
-
-    The following value is only useful when calling setButtonLayout():
-
-    \value Stretch  A horizontal stretch in the button layout
-
-    \omitvalue NoButton
-    \omitvalue NStandardButtons
-    \omitvalue NButtons
-
-    \sa setButton(), setButtonText(), setButtonLayout(), customButtonClicked()
-*/
-
-/*!
-    \enum QWizard::WizardPixmap
-
-    This enum specifies the pixmaps that can be associated with a page.
-
-    \value WatermarkPixmap  The tall pixmap on the left side of a ClassicStyle or ModernStyle page
-    \value LogoPixmap  The small pixmap on the right side of a ClassicStyle or ModernStyle page header
-    \value BannerPixmap  The pixmap that occupies the background of a ModernStyle page header
-    \value BackgroundPixmap  The pixmap that occupies the background of a MacStyle wizard
-
-    \omitvalue NPixmaps
-
-    \sa setPixmap(), QWizardPage::setPixmap(), {Elements of a Wizard Page}
-*/
-
-/*!
-    \enum QWizard::WizardStyle
-
-    This enum specifies the different looks supported by QWizard.
-
-    \value ClassicStyle  Classic Windows look
-    \value ModernStyle  Modern Windows look
-    \value MacStyle  Mac OS X look
-    \value AeroStyle  Windows Aero look
-
-    \omitvalue NStyles
-
-    \sa setWizardStyle(), WizardOption, {Wizard Look and Feel}
-*/
-
-/*!
-    \enum QWizard::WizardOption
-
-    This enum specifies various options that affect the look and feel
-    of a wizard.
-
-    \value IndependentPages  The pages are independent of each other
-                             (i.e., they don't derive values from each
-                             other).
-    \value IgnoreSubTitles  Don't show any subtitles, even if they are set.
-    \value ExtendedWatermarkPixmap  Extend any WatermarkPixmap all the
-                                    way down to the window's edge.
-    \value NoDefaultButton  Don't make the \gui Next or \gui Finish button the
-                            dialog's \l{QPushButton::setDefault()}{default button}.
-    \value NoBackButtonOnStartPage  Don't show the \gui Back button on the start page.
-    \value NoBackButtonOnLastPage   Don't show the \gui Back button on the last page.
-    \value DisabledBackButtonOnLastPage  Disable the \gui Back button on the last page.
-    \value HaveNextButtonOnLastPage  Show the (disabled) \gui Next button on the last page.
-    \value HaveFinishButtonOnEarlyPages  Show the (disabled) \gui Finish button on non-final pages.
-    \value NoCancelButton  Don't show the \gui Cancel button.
-    \value CancelButtonOnLeft  Put the \gui Cancel button on the left of \gui Back (rather than on
-                               the right of \gui Finish or \gui Next).
-    \value HaveHelpButton  Show the \gui Help button.
-    \value HelpButtonOnRight  Put the \gui Help button on the far right of the button layout
-                              (rather than on the far left).
-    \value HaveCustomButton1  Show the first user-defined button (CustomButton1).
-    \value HaveCustomButton2  Show the second user-defined button (CustomButton2).
-    \value HaveCustomButton3  Show the third user-defined button (CustomButton3).
-
-    \sa setOptions(), setOption(), testOption()
-*/
-
-/*!
-    Constructs a wizard with the given \a parent and window \a flags.
-
-    \sa parent(), windowFlags()
-*/
 QWizard::QWizard(QWidget *parent, Qt::WindowFlags flags)
    : QDialog(*new QWizardPrivate, parent, flags)
 {
@@ -2399,70 +2121,33 @@ void QWizard::removePage(int id)
    }
 }
 
-/*!
-    \fn QWizardPage *QWizard::page(int id) const
 
-    Returns the page with the given \a id, or 0 if there is no such
-    page.
-
-    \sa addPage(), setPage()
-*/
 QWizardPage *QWizard::page(int theid) const
 {
    Q_D(const QWizard);
    return d->pageMap.value(theid);
 }
 
-/*!
-    \fn bool QWizard::hasVisitedPage(int id) const
 
-    Returns true if the page history contains page \a id; otherwise,
-    returns false.
-
-    Pressing \gui Back marks the current page as "unvisited" again.
-
-    \sa visitedPages()
-*/
 bool QWizard::hasVisitedPage(int theid) const
 {
    Q_D(const QWizard);
    return d->history.contains(theid);
 }
 
-/*!
-    Returns the list of IDs of visited pages, in the order in which the pages
-    were visited.
-
-    Pressing \gui Back marks the current page as "unvisited" again.
-
-    \sa hasVisitedPage()
-*/
 QList<int> QWizard::visitedPages() const
 {
    Q_D(const QWizard);
    return d->history;
 }
 
-/*!
-    Returns the list of page IDs.
-   \since 4.5
-*/
+
 QList<int> QWizard::pageIds() const
 {
    Q_D(const QWizard);
    return d->pageMap.keys();
 }
 
-/*!
-    \property QWizard::startId
-    \brief the ID of the first page
-
-    If this property isn't explicitly set, this property defaults to
-    the lowest page ID in this wizard, or -1 if no page has been
-    inserted yet.
-
-    \sa restart(), nextId()
-*/
 void QWizard::setStartId(int theid)
 {
    Q_D(QWizard);
@@ -2538,7 +2223,7 @@ void QWizard::setField(const QString &name, const QVariant &value)
       const QWizardField &field = d->fields.at(index);
       if (!field.object->setProperty(field.property, value))
          qWarning("QWizard::setField: Couldn't write to property '%s'",
-                  field.property.constData());
+            field.property.constData());
       return;
    }
 
@@ -2593,18 +2278,30 @@ void QWizard::setWizardStyle(WizardStyle style)
 
    if (styleChange
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
-         || aeroStyleChange
+      || aeroStyleChange
 #endif
-      ) {
+   ) {
       d->disableUpdates();
       d->wizStyle = style;
       d->updateButtonTexts();
+
+#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+      if (aeroStyleChange) {
+         //Send a resizeevent since the antiflicker widget probably needs a new size
+         //because of the backbutton in the window title
+         QResizeEvent ev(geometry().size(), geometry().size());
+         QApplication::sendEvent(this, &ev);
+      }
+#endif
+
       d->updateLayout();
       updateGeometry();
       d->enableUpdates();
+
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
-      if (aeroStyleChange) {
-         d->handleAeroStyleChange();
+      // Delay initialization when activating Aero style fails due to missing native window.
+      if (aeroStyleChange && !d->handleAeroStyleChange() && d->wizStyle == AeroStyle) {
+         d->vistaInitPending = true;
       }
 #endif
    }
@@ -2673,12 +2370,13 @@ void QWizard::setOptions(WizardOptions options)
    }
 
    if (changed & (NoDefaultButton | HaveHelpButton | HelpButtonOnRight | NoCancelButton
-                  | CancelButtonOnLeft | HaveCustomButton1 | HaveCustomButton2
-                  | HaveCustomButton3)) {
+         | CancelButtonOnLeft | HaveCustomButton1 | HaveCustomButton2
+         | HaveCustomButton3)) {
       d->updateButtonLayout();
+
    } else if (changed & (NoBackButtonOnStartPage | NoBackButtonOnLastPage
-                         | HaveNextButtonOnLastPage | HaveFinishButtonOnEarlyPages
-                         | DisabledBackButtonOnLastPage)) {
+         | HaveNextButtonOnLastPage | HaveFinishButtonOnEarlyPages
+         | DisabledBackButtonOnLastPage | NoCancelButtonOnLastPage)) {
       d->_q_updateButtonStates();
    }
 
@@ -2692,23 +2390,6 @@ QWizard::WizardOptions QWizard::options() const
    return d->opts;
 }
 
-/*!
-    Sets the text on button \a which to be \a text.
-
-    By default, the text on buttons depends on the wizardStyle. For
-    example, on Mac OS X, the \gui Next button is called \gui
-    Continue.
-
-    To add extra buttons to the wizard (e.g., a \gui Print button),
-    one way is to call setButtonText() with CustomButton1,
-    CustomButton2, or CustomButton3 to set their text, and make the
-    buttons visible using the HaveCustomButton1, HaveCustomButton2,
-    and/or HaveCustomButton3 options.
-
-    Button texts may also be set on a per-page basis using QWizardPage::setButtonText().
-
-    \sa setButton(), button(), setButtonLayout(), setOptions(), QWizardPage::setButtonText()
-*/
 void QWizard::setButtonText(WizardButton which, const QString &text)
 {
    Q_D(QWizard);
@@ -2724,18 +2405,6 @@ void QWizard::setButtonText(WizardButton which, const QString &text)
    }
 }
 
-/*!
-    Returns the text on button \a which.
-
-    If a text has ben set using setButtonText(), this text is returned.
-
-    By default, the text on buttons depends on the wizardStyle. For
-    example, on Mac OS X, the \gui Next button is called \gui
-    Continue.
-
-    \sa button(), setButton(), setButtonText(), QWizardPage::buttonText(),
-    QWizardPage::setButtonText()
-*/
 QString QWizard::buttonText(WizardButton which) const
 {
    Q_D(const QWizard);
@@ -2756,24 +2425,7 @@ QString QWizard::buttonText(WizardButton which) const
    return d->btns[which]->text();
 }
 
-/*!
-    Sets the order in which buttons are displayed to \a layout, where
-    \a layout is a list of \l{WizardButton}s.
 
-    The default layout depends on the options (e.g., whether
-    HelpButtonOnRight) that are set. You can call this function if
-    you need more control over the buttons' layout than what \l
-    options already provides.
-
-    You can specify horizontal stretches in the layout using \l
-    Stretch.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qwizard.cpp 1
-
-    \sa setButton(), setButtonText(), setOptions()
-*/
 void QWizard::setButtonLayout(const QList<WizardButton> &layout)
 {
    Q_D(QWizard);
@@ -2839,14 +2491,11 @@ void QWizard::setButton(WizardButton which, QAbstractButton *button)
    d->updateButtonLayout();
 }
 
-/*!
-    Returns the button corresponding to role \a which.
 
-    \sa setButton(), setButtonText()
-*/
 QAbstractButton *QWizard::button(WizardButton which) const
 {
    Q_D(const QWizard);
+
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
    if (d->wizStyle == AeroStyle && which == BackButton) {
       return d->vistaHelper->backButton();
@@ -2858,14 +2507,7 @@ QAbstractButton *QWizard::button(WizardButton which) const
    return d->btns[which];
 }
 
-/*!
-    \property QWizard::titleFormat
-    \brief the text format used by page titles
 
-    The default format is Qt::AutoText.
-
-    \sa QWizardPage::title, subTitleFormat
-*/
 void QWizard::setTitleFormat(Qt::TextFormat format)
 {
    Q_D(QWizard);
@@ -2879,14 +2521,7 @@ Qt::TextFormat QWizard::titleFormat() const
    return d->titleFmt;
 }
 
-/*!
-    \property QWizard::subTitleFormat
-    \brief the text format used by page subtitles
 
-    The default format is Qt::AutoText.
-
-    \sa QWizardPage::title, titleFormat
-*/
 void QWizard::setSubTitleFormat(Qt::TextFormat format)
 {
    Q_D(QWizard);
@@ -2900,18 +2535,7 @@ Qt::TextFormat QWizard::subTitleFormat() const
    return d->subTitleFmt;
 }
 
-/*!
-    Sets the pixmap for role \a which to \a pixmap.
 
-    The pixmaps are used by QWizard when displaying a page. Which
-    pixmaps are actually used depend on the \l{Wizard Look and
-    Feel}{wizard style}.
-
-    Pixmaps can also be set for a specific page using
-    QWizardPage::setPixmap().
-
-    \sa QWizardPage::setPixmap(), {Elements of a Wizard Page}
-*/
 void QWizard::setPixmap(WizardPixmap which, const QPixmap &pixmap)
 {
    Q_D(QWizard);
@@ -2932,6 +2556,7 @@ QPixmap QWizard::pixmap(WizardPixmap which) const
 {
    Q_D(const QWizard);
    Q_ASSERT(uint(which) < NPixmaps);
+
 #ifdef Q_OS_MAC
    if (which == BackgroundPixmap && d->defaultPixmaps[BackgroundPixmap].isNull()) {
       d->defaultPixmaps[BackgroundPixmap] = d->findDefaultBackgroundPixmap();
@@ -2940,31 +2565,6 @@ QPixmap QWizard::pixmap(WizardPixmap which) const
    return d->defaultPixmaps[which];
 }
 
-/*!
-    Sets the default property for \a className to be \a property,
-    and the associated change signal to be \a changedSignal.
-
-    The default property is used when an instance of \a className (or
-    of one of its subclasses) is passed to
-    QWizardPage::registerField() and no property is specified.
-
-    QWizard knows the most common Qt widgets. For these (or their
-    subclasses), you don't need to specify a \a property or a \a
-    changedSignal. The table below lists these widgets:
-
-    \table
-    \header \o Widget          \o Property                            \o Change Notification Signal
-    \row    \o QAbstractButton \o bool \l{QAbstractButton::}{checked} \o \l{QAbstractButton::}{toggled()}
-    \row    \o QAbstractSlider \o int \l{QAbstractSlider::}{value}    \o \l{QAbstractSlider::}{valueChanged()}
-    \row    \o QComboBox       \o int \l{QComboBox::}{currentIndex}   \o \l{QComboBox::}{currentIndexChanged()}
-    \row    \o QDateTimeEdit   \o QDateTime \l{QDateTimeEdit::}{dateTime} \o \l{QDateTimeEdit::}{dateTimeChanged()}
-    \row    \o QLineEdit       \o QString \l{QLineEdit::}{text}       \o \l{QLineEdit::}{textChanged()}
-    \row    \o QListWidget     \o int \l{QListWidget::}{currentRow}   \o \l{QListWidget::}{currentRowChanged()}
-    \row    \o QSpinBox        \o int \l{QSpinBox::}{value}           \o \l{QSpinBox::}{valueChanged()}
-    \endtable
-
-    \sa QWizardPage::registerField()
-*/
 void QWizard::setDefaultProperty(const QString &className, const QString &property, const QString &changedSignal)
 {
    Q_D(QWizard);
@@ -3047,85 +2647,8 @@ QSize QWizard::sizeHint() const
    return result.expandedTo(extra);
 }
 
-/*!
-    \fn void QWizard::currentIdChanged(int id)
 
-    This signal is emitted when the current page changes, with the new
-    current \a id.
 
-    \sa currentId(), currentPage()
-*/
-
-/*!
-    \fn void QWizard::pageAdded(int id)
-
-    \since 4.7
-
-    This signal is emitted whenever a page is added to the
-    wizard. The page's \a id is passed as parameter.
-
-    \sa addPage(), setPage(), startId()
-*/
-
-/*!
-    \fn void QWizard::pageRemoved(int id)
-
-    \since 4.7
-
-    This signal is emitted whenever a page is removed from the
-    wizard. The page's \a id is passed as parameter.
-
-    \sa removePage(), startId()
-*/
-
-/*!
-    \fn void QWizard::helpRequested()
-
-    This signal is emitted when the user clicks the \gui Help button.
-
-    By default, no \gui Help button is shown. Call
-    setOption(HaveHelpButton, true) to have one.
-
-    Example:
-
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 0
-    \dots
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 5
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 7
-    \dots
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 8
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 10
-    \dots
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 12
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 14
-    \codeline
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 15
-
-    \sa customButtonClicked()
-*/
-
-/*!
-    \fn void QWizard::customButtonClicked(int which)
-
-    This signal is emitted when the user clicks a custom button. \a
-    which can be CustomButton1, CustomButton2, or CustomButton3.
-
-    By default, no custom button is shown. Call setOption() with
-    HaveCustomButton1, HaveCustomButton2, or HaveCustomButton3 to have
-    one, and use setButtonText() or setButton() to configure it.
-
-    \sa helpRequested()
-*/
-
-/*!
-    Goes back to the previous page.
-
-    This is equivalent to pressing the \gui Back button.
-
-    \sa next(), accept(), reject(), restart()
-*/
 void QWizard::back()
 {
    Q_D(QWizard);
@@ -3167,12 +2690,7 @@ void QWizard::next()
    }
 }
 
-/*!
-    Restarts the wizard at the start page. This function is called automatically when the
-    wizard is shown.
 
-    \sa startId()
-*/
 void QWizard::restart()
 {
    Q_D(QWizard);
@@ -3192,25 +2710,31 @@ bool QWizard::event(QEvent *event)
       d->setStyle(style());
       d->updateLayout();
    }
+
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
+
    else if (event->type() == QEvent::Show && d->vistaInitPending) {
       d->vistaInitPending = false;
-      d->wizStyle = AeroStyle;
+      if (QVistaHelper::vistaState() != QVistaHelper::Classic) {
+         d->wizStyle = AeroStyle;
+      }
+
       d->handleAeroStyleChange();
+
    } else if (d->isVistaThemeEnabled()) {
       if (event->type() == QEvent::Resize
-            || event->type() == QEvent::LayoutDirectionChange) {
+         || event->type() == QEvent::LayoutDirectionChange) {
          const int buttonLeft = (layoutDirection() == Qt::RightToLeft
-                                 ? width() - d->vistaHelper->backButton()->sizeHint().width()
-                                 : 0);
+               ? width() - d->vistaHelper->backButton()->sizeHint().width()
+               : 0);
 
-         d->vistaHelper->backButton()->move(buttonLeft,
-                                            d->vistaHelper->backButton()->y());
+         d->vistaHelper->backButton()->move(buttonLeft, d->vistaHelper->backButton()->y());
       }
 
       d->vistaHelper->mouseEvent(event);
    }
 #endif
+
    return QDialog::event(event);
 }
 
@@ -3221,6 +2745,7 @@ void QWizard::resizeEvent(QResizeEvent *event)
 {
    Q_D(QWizard);
    int heightOffset = 0;
+
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
    if (d->isVistaThemeEnabled()) {
       heightOffset = d->vistaHelper->topOffset();
@@ -3253,6 +2778,7 @@ void QWizard::paintEvent(QPaintEvent *event)
       QPainter painter(this);
       painter.drawPixmap(0, (height() - backgroundPixmap.height()) / 2, backgroundPixmap);
    }
+
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
    else if (d->isVistaThemeEnabled()) {
       if (d->isVistaThemeEnabled(QVistaHelper::VistaBasic)) {
@@ -3262,8 +2788,6 @@ void QWizard::paintEvent(QPaintEvent *event)
       }
       d->vistaHelper->paintEvent(event);
    }
-#else
-   Q_UNUSED(event);
 #endif
 }
 
@@ -3271,24 +2795,30 @@ void QWizard::paintEvent(QPaintEvent *event)
 /*!
     \reimp
 */
-bool QWizard::winEvent(MSG *message, long *result)
+bool QWizard::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
    Q_D(QWizard);
-   if (d->isVistaThemeEnabled()) {
-      const bool winEventResult = d->vistaHelper->handleWinEvent(message, result);
+
+   if (d->isVistaThemeEnabled() && eventType == "windows_generic_MSG") {
+      MSG *windowsMessage = static_cast<MSG *>(message);
+      const bool winEventResult = d->vistaHelper->handleWinEvent(windowsMessage, result);
+
       if (QVistaHelper::vistaState() != d->vistaState) {
          d->vistaState = QVistaHelper::vistaState();
          d->vistaStateChanged = true;
          setWizardStyle(AeroStyle);
       }
       return winEventResult;
+
    } else {
-      return QDialog::winEvent(message, result);
+      return QDialog::nativeEvent(eventType, message, result);
    }
+
 #else
-   return QDialog::winEvent(message, result);
+   return QDialog::nativeEvent(eventType, message, result);
 #endif
+
 }
 #endif
 
@@ -3309,24 +2839,7 @@ void QWizard::done(int result)
    QDialog::done(result);
 }
 
-/*!
-    \fn void QWizard::initializePage(int id)
 
-    This virtual function is called by QWizard to prepare page \a id
-    just before it is shown either as a result of QWizard::restart()
-    being called, or as a result of the user clicking \gui Next. (However, if the \l
-    QWizard::IndependentPages option is set, this function is only
-    called the first time the page is shown.)
-
-    By reimplementing this function, you can ensure that the page's
-    fields are properly initialized based on fields from previous
-    pages.
-
-    The default implementation calls QWizardPage::initializePage() on
-    page(\a id).
-
-    \sa QWizardPage::initializePage(), cleanupPage()
-*/
 void QWizard::initializePage(int theid)
 {
    QWizardPage *page = this->page(theid);
@@ -3335,17 +2848,6 @@ void QWizard::initializePage(int theid)
    }
 }
 
-/*!
-    \fn void QWizard::cleanupPage(int id)
-
-    This virtual function is called by QWizard to clean up page \a id just before the
-    user leaves it by clicking \gui Back (unless the \l QWizard::IndependentPages option is set).
-
-    The default implementation calls QWizardPage::cleanupPage() on
-    page(\a id).
-
-    \sa QWizardPage::cleanupPage(), initializePage()
-*/
 void QWizard::cleanupPage(int theid)
 {
    QWizardPage *page = this->page(theid);
@@ -3354,22 +2856,7 @@ void QWizard::cleanupPage(int theid)
    }
 }
 
-/*!
-    This virtual function is called by QWizard when the user clicks
-    \gui Next or \gui Finish to perform some last-minute validation.
-    If it returns true, the next page is shown (or the wizard
-    finishes); otherwise, the current page stays up.
 
-    The default implementation calls QWizardPage::validatePage() on
-    the currentPage().
-
-    When possible, it is usually better style to disable the \gui
-    Next or \gui Finish button (by specifying \l{mandatory fields} or
-    by reimplementing QWizardPage::isComplete()) than to reimplement
-    validateCurrentPage().
-
-    \sa QWizardPage::validatePage(), currentPage()
-*/
 bool QWizard::validateCurrentPage()
 {
    QWizardPage *page = currentPage();
@@ -3380,20 +2867,7 @@ bool QWizard::validateCurrentPage()
    return page->validatePage();
 }
 
-/*!
-    This virtual function is called by QWizard to find out which page
-    to show when the user clicks the \gui Next button.
 
-    The return value is the ID of the next page, or -1 if no page follows.
-
-    The default implementation calls QWizardPage::nextId() on the
-    currentPage().
-
-    By reimplementing this function, you can specify a dynamic page
-    order.
-
-    \sa QWizardPage::nextId(), currentPage()
-*/
 int QWizard::nextId() const
 {
    const QWizardPage *page = currentPage();
@@ -3404,105 +2878,23 @@ int QWizard::nextId() const
    return page->nextId();
 }
 
-/*!
-    \class QWizardPage
-    \since 4.3
-    \brief The QWizardPage class is the base class for wizard pages.
 
-    QWizard represents a wizard. Each page is a QWizardPage. When
-    you create your own wizards, you can use QWizardPage directly,
-    or you can subclass it for more control.
 
-    A page has the following attributes, which are rendered by
-    QWizard: a \l title, a \l subTitle, and a \l{setPixmap()}{set of
-    pixmaps}. See \l{Elements of a Wizard Page} for details. Once a
-    page is added to the wizard (using QWizard::addPage() or
-    QWizard::setPage()), wizard() returns a pointer to the
-    associated QWizard object.
-
-    Page provides five virtual functions that can be reimplemented to
-    provide custom behavior:
-
-    \list
-    \o initializePage() is called to initialize the page's contents
-       when the user clicks the wizard's \gui Next button. If you
-       want to derive the page's default from what the user entered
-       on previous pages, this is the function to reimplement.
-    \o cleanupPage() is called to reset the page's contents when the
-       user clicks the wizard's \gui Back button.
-    \o validatePage() validates the page when the user clicks \gui
-       Next or \gui Finish. It is often used to show an error message
-       if the user has entered incomplete or invalid information.
-    \o nextId() returns the ID of the next page. It is useful when
-       \l{creating non-linear wizards}, which allow different
-       traversal paths based on the information provided by the user.
-    \o isComplete() is called to determine whether the \gui Next
-       and/or \gui Finish button should be enabled or disabled. If
-       you reimplement isComplete(), also make sure that
-       completeChanged() is emitted whenever the complete state
-       changes.
-    \endlist
-
-    Normally, the \gui Next button and the \gui Finish button of a
-    wizard are mutually exclusive. If isFinalPage() returns true, \gui
-    Finish is available; otherwise, \gui Next is available. By
-    default, isFinalPage() is true only when nextId() returns -1. If
-    you want to show \gui Next and \gui Final simultaneously for a
-    page (letting the user perform an "early finish"), call
-    setFinalPage(true) on that page. For wizards that support early
-    finishes, you might also want to set the
-    \l{QWizard::}{HaveNextButtonOnLastPage} and
-    \l{QWizard::}{HaveFinishButtonOnEarlyPages} options on the
-    wizard.
-
-    In many wizards, the contents of a page may affect the default
-    values of the fields of a later page. To make it easy to
-    communicate between pages, QWizard supports a \l{Registering and
-    Using Fields}{"field" mechanism} that allows you to register a
-    field (e.g., a QLineEdit) on a page and to access its value from
-    any page. Fields are global to the entire wizard and make it easy
-    for any single page to access information stored by another page,
-    without having to put all the logic in QWizard or having the
-    pages know explicitly about each other. Fields are registered
-    using registerField() and can be accessed at any time using
-    field() and setField().
-
-    \sa QWizard, {Class Wizard Example}, {License Wizard Example}
-*/
-
-/*!
-    Constructs a wizard page with the given \a parent.
-
-    When the page is inserted into a wizard using QWizard::addPage()
-    or QWizard::setPage(), the parent is automatically set to be the
-    wizard.
-
-    \sa wizard()
-*/
 QWizardPage::QWizardPage(QWidget *parent)
    : QWidget(*new QWizardPagePrivate, parent, 0)
 {
    connect(this, SIGNAL(completeChanged()), this, SLOT(_q_updateCachedCompleteState()));
 }
 
-/*!
-    \property QWizardPage::title
-    \brief the title of the page
+QWizardPage::~QWizardPage()
+{
+}
 
-    The title is shown by the QWizard, above the actual page. All
-    pages should have a title.
-
-    The title may be plain text or HTML, depending on the value of the
-    \l{QWizard::titleFormat} property.
-
-    By default, this property contains an empty string.
-
-    \sa subTitle, {Elements of a Wizard Page}
-*/
 void QWizardPage::setTitle(const QString &title)
 {
    Q_D(QWizardPage);
    d->title = title;
+
    if (d->wizard && d->wizard->currentPage() == this) {
       d->wizard->d_func()->updateLayout();
    }
@@ -3514,29 +2906,12 @@ QString QWizardPage::title() const
    return d->title;
 }
 
-/*!
-    \property QWizardPage::subTitle
-    \brief the subtitle of the page
 
-    The subtitle is shown by the QWizard, between the title and the
-    actual page. Subtitles are optional. In
-    \l{QWizard::ClassicStyle}{ClassicStyle} and
-    \l{QWizard::ModernStyle}{ModernStyle}, using subtitles is
-    necessary to make the header appear. In
-    \l{QWizard::MacStyle}{MacStyle}, the subtitle is shown as a text
-    label just above the actual page.
-
-    The subtitle may be plain text or HTML, depending on the value of
-    the \l{QWizard::subTitleFormat} property.
-
-    By default, this property contains an empty string.
-
-    \sa title, QWizard::IgnoreSubTitles, {Elements of a Wizard Page}
-*/
 void QWizardPage::setSubTitle(const QString &subTitle)
 {
    Q_D(QWizardPage);
    d->subTitle = subTitle;
+
    if (d->wizard && d->wizard->currentPage() == this) {
       d->wizard->d_func()->updateLayout();
    }
@@ -3548,19 +2923,6 @@ QString QWizardPage::subTitle() const
    return d->subTitle;
 }
 
-/*!
-    Sets the pixmap for role \a which to \a pixmap.
-
-    The pixmaps are used by QWizard when displaying a page. Which
-    pixmaps are actually used depend on the \l{Wizard Look and
-    Feel}{wizard style}.
-
-    Pixmaps can also be set for the entire wizard using
-    QWizard::setPixmap(), in which case they apply for all pages that
-    don't specify a pixmap.
-
-    \sa QWizard::setPixmap(), {Elements of a Wizard Page}
-*/
 void QWizardPage::setPixmap(QWizard::WizardPixmap which, const QPixmap &pixmap)
 {
    Q_D(QWizardPage);
@@ -3597,38 +2959,10 @@ QPixmap QWizardPage::pixmap(QWizard::WizardPixmap which) const
    return pixmap;
 }
 
-/*!
-    This virtual function is called by QWizard::initializePage() to
-    prepare the page just before it is shown either as a result of QWizard::restart()
-    being called, or as a result of the user clicking \gui Next.
-    (However, if the \l QWizard::IndependentPages option is set, this function is only
-    called the first time the page is shown.)
-
-    By reimplementing this function, you can ensure that the page's
-    fields are properly initialized based on fields from previous
-    pages. For example:
-
-    \snippet examples/dialogs/classwizard/classwizard.cpp 17
-
-    The default implementation does nothing.
-
-    \sa QWizard::initializePage(), cleanupPage(), QWizard::IndependentPages
-*/
 void QWizardPage::initializePage()
 {
 }
 
-/*!
-    This virtual function is called by QWizard::cleanupPage() when
-    the user leaves the page by clicking \gui Back (unless the \l QWizard::IndependentPages
-    option is set).
-
-    The default implementation resets the page's fields to their
-    original values (the values they had before initializePage() was
-    called).
-
-    \sa QWizard::cleanupPage(), initializePage(), QWizard::IndependentPages
-*/
 void QWizardPage::cleanupPage()
 {
    Q_D(QWizardPage);
@@ -3643,40 +2977,12 @@ void QWizardPage::cleanupPage()
    }
 }
 
-/*!
-    This virtual function is called by QWizard::validateCurrentPage()
-    when the user clicks \gui Next or \gui Finish to perform some
-    last-minute validation. If it returns true, the next page is shown
-    (or the wizard finishes); otherwise, the current page stays up.
-
-    The default implementation returns true.
-
-    When possible, it is usually better style to disable the \gui
-    Next or \gui Finish button (by specifying \l{mandatory fields} or
-    reimplementing isComplete()) than to reimplement validatePage().
-
-    \sa QWizard::validateCurrentPage(), isComplete()
-*/
 bool QWizardPage::validatePage()
 {
    return true;
 }
 
-/*!
-    This virtual function is called by QWizard to determine whether
-    the \gui Next or \gui Finish button should be enabled or
-    disabled.
 
-    The default implementation returns true if all \l{mandatory
-    fields} are filled; otherwise, it returns false.
-
-    If you reimplement this function, make sure to emit completeChanged(),
-    from the rest of your implementation, whenever the value of isComplete()
-    changes. This ensures that QWizard updates the enabled or disabled state of
-    its buttons.
-
-    \sa completeChanged(), isFinalPage()
-*/
 bool QWizardPage::isComplete() const
 {
    Q_D(const QWizardPage);
@@ -3713,18 +3019,7 @@ bool QWizardPage::isComplete() const
    return true;
 }
 
-/*!
-    Explicitly sets this page to be final if \a finalPage is true.
 
-    After calling setFinalPage(true), isFinalPage() returns true and the \gui
-    Finish button is visible (and enabled if isComplete() returns
-    true).
-
-    After calling setFinalPage(false), isFinalPage() returns true if
-    nextId() returns -1; otherwise, it returns false.
-
-    \sa isComplete(), QWizard::HaveFinishButtonOnEarlyPages
-*/
 void QWizardPage::setFinalPage(bool finalPage)
 {
    Q_D(QWizardPage);
@@ -3763,20 +3058,7 @@ bool QWizardPage::isFinalPage() const
    }
 }
 
-/*!
-    Sets this page to be a commit page if \a commitPage is true; otherwise,
-    sets it to be a normal page.
 
-    A commit page is a page that represents an action which cannot be undone
-    by clicking \gui Back or \gui Cancel.
-
-    A \gui Commit button replaces the \gui Next button on a commit page. Clicking this
-    button simply calls QWizard::next() just like clicking \gui Next does.
-
-    A page entered directly from a commit page has its \gui Back button disabled.
-
-    \sa isCommitPage()
-*/
 void QWizardPage::setCommitPage(bool commitPage)
 {
    Q_D(QWizardPage);
@@ -3787,25 +3069,14 @@ void QWizardPage::setCommitPage(bool commitPage)
    }
 }
 
-/*!
-    Returns true if this page is a commit page; otherwise returns false.
 
-    \sa setCommitPage()
-*/
 bool QWizardPage::isCommitPage() const
 {
    Q_D(const QWizardPage);
    return d->commit;
 }
 
-/*!
-    Sets the text on button \a which to be \a text on this page.
 
-    By default, the text on buttons depends on the QWizard::wizardStyle,
-    but may be redefined for the wizard as a whole using QWizard::setButtonText().
-
-    \sa buttonText(), QWizard::setButtonText(), QWizard::buttonText()
-*/
 void QWizardPage::setButtonText(QWizard::WizardButton which, const QString &text)
 {
    Q_D(QWizardPage);
@@ -3951,6 +3222,5 @@ void QWizardPage::_q_updateCachedCompleteState()
    d->_q_updateCachedCompleteState();
 }
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_WIZARD

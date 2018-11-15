@@ -33,7 +33,7 @@
 #include <qwidget_p.h>
 #include <qstylehelper_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QVistaBackButton : public QAbstractButton
 {
@@ -41,7 +41,7 @@ class QVistaBackButton : public QAbstractButton
    QVistaBackButton(QWidget *widget);
 
    QSize sizeHint() const override;
-   inline QSize minimumSizeHint() const override{
+   inline QSize minimumSizeHint() const override {
       return sizeHint();
    }
 
@@ -58,12 +58,15 @@ class QVistaHelper : public QObject
    QVistaHelper(QWizard *wizard);
    ~QVistaHelper();
    enum TitleBarChangeType { NormalTitleBar, ExtendedTitleBar };
+
+   void updateCustomMargins(bool vistaMargins);
    bool setDWMTitleBar(TitleBarChangeType type);
    void setTitleBarIconAndCaptionVisible(bool visible);
    void mouseEvent(QEvent *event);
    bool handleWinEvent(MSG *message, long *result);
    void resizeEvent(QResizeEvent *event);
    void paintEvent(QPaintEvent *event);
+
    QVistaBackButton *backButton() const {
       return backButton_;
    }
@@ -75,43 +78,48 @@ class QVistaHelper : public QObject
       }
    }
 
-   void setWindowPosHack();
    QColor basicWindowFrameColor();
    enum VistaState { VistaAero, VistaBasic, Classic, Dirty };
    static VistaState vistaState();
+
    static int titleBarSize() {
-      return frameSize() + captionSize();
+      return QVistaHelper::titleBarSizeDp() / QVistaHelper::m_devicePixelRatio;
    }
 
-   static int topPadding() { // padding under text
-      return int(QStyleHelper::dpiScaled(
-                    QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7 ? 4 : 6));
+   static int titleBarSizeDp() {
+      return QVistaHelper::frameSizeDp() + QVistaHelper::captionSizeDp();
+   }
+
+   static int topPadding() {
+      // padding under text
+      return int(QStyleHelper::dpiScaled(QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7 ? 4 : 6));
    }
 
    static int topOffset();
-
+   static HDC backingStoreDC(const QWidget *wizard, QPoint *offset);
  private:
-   static HFONT getCaptionFont(HANDLE hTheme);
+   HWND wizardHWND() const;
    bool drawTitleText(QPainter *painter, const QString &text, const QRect &rect, HDC hdc);
    static bool drawBlackRect(const QRect &rect, HDC hdc);
 
    static int frameSize() {
-      return GetSystemMetrics(SM_CYSIZEFRAME);
+      return QVistaHelper::frameSizeDp() / QVistaHelper::m_devicePixelRatio;
    }
 
+   static int frameSizeDp();
+   static int captionSizeDp();
+
    static int captionSize() {
-      return GetSystemMetrics(SM_CYCAPTION);
+      return QVistaHelper::captionSizeDp() / QVistaHelper::m_devicePixelRatio;
    }
 
    static int backButtonSize() {
       return int(QStyleHelper::dpiScaled(30));
    }
-   static int iconSize() {
-      return 16;   // Standard Aero
-   }
-   static int glowSize() {
-      return 10;
-   }
+
+   static int iconSize();
+   static int glowSize();
+
    int leftMargin() {
       return backButton_->isVisible() ? backButtonSize() + iconSpacing : 0;
    }
@@ -143,11 +151,11 @@ class QVistaHelper : public QObject
    int titleBarOffset;  // Extra spacing above the text
    int iconSpacing;    // Space between button and icon
    int textSpacing;    // Space between icon and text
+   static int m_devicePixelRatio;
 };
 
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_STYLE_WINDOWSVISTA
 #endif // QT_NO_WIZARD
-#endif // QWIZARD_WIN_P_H
+#endif

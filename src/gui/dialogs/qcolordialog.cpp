@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <qcolordialog_p.h>
+#include <qcolordialog.h>
 
 #ifndef QT_NO_COLORDIALOG
 
@@ -29,6 +29,7 @@
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qimage.h>
+#include <qdrag.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -37,17 +38,118 @@
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qsettings.h>
+#include <qsharedpointer.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qvalidator.h>
 #include <qmime.h>
 #include <qspinbox.h>
 #include <qdialogbuttonbox.h>
-#include <qguiplatformplugin_p.h>
+#include <qscreen.h>
+#include <qcursor.h>
+#include <qtimer.h>
+#include <qwindow.h>
 
-QT_BEGIN_NAMESPACE
+#include <qdialog_p.h>
 
-struct QWellArrayData;
+#include <algorithm>
+
+class QColorLuminancePicker;
+class QColorPicker;
+class QColorShower;
+class QWellArray;
+class QColorPickingEventFilter;
+
+class QColorDialogPrivate : public QDialogPrivate
+{
+   Q_DECLARE_PUBLIC(QColorDialog)
+
+ public:
+   enum SetColorMode {
+      ShowColor = 0x1,
+      SelectColor = 0x2,
+      SetColorAll = ShowColor | SelectColor
+   };
+
+   QColorDialogPrivate() : options(new QColorDialogOptions)
+#ifdef Q_OS_WIN32
+      , updateTimer(0)
+#endif
+   {}
+
+   QPlatformColorDialogHelper *platformColorDialogHelper() const {
+      return static_cast<QPlatformColorDialogHelper *>(platformHelper());
+   }
+
+   void init(const QColor &initial);
+   void initWidgets();
+   QRgb currentColor() const;
+   QColor currentQColor() const;
+   void setCurrentColor(const QColor &color, SetColorMode setColorMode = SetColorAll);
+   void setCurrentRgbColor(QRgb rgb);
+   void setCurrentQColor(const QColor &color);
+   bool selectColor(const QColor &color);
+   QColor grabScreenColor(const QPoint &p);
+
+   int currentAlpha() const;
+   void setCurrentAlpha(int a);
+   void showAlpha(bool b);
+   bool isAlphaVisible() const;
+   void retranslateStrings();
+
+   void _q_addCustom();
+
+   void _q_newHsv(int h, int s, int v);
+   void _q_newColorTypedIn(QRgb rgb);
+   void _q_nextCustom(int, int);
+   void _q_newCustom(int, int);
+   void _q_newStandard(int, int);
+   void _q_pickScreenColor();
+   void _q_updateColorPicking();
+   void updateColorLabelText(const QPoint &);
+   void updateColorPicking(const QPoint &pos);
+   void releaseColorPicking();
+   bool handleColorPickingMouseMove(QMouseEvent *e);
+   bool handleColorPickingMouseButtonRelease(QMouseEvent *e);
+   bool handleColorPickingKeyPress(QKeyEvent *e);
+
+   bool canBeNativeDialog() const override;
+
+   QWellArray *custom;
+   QWellArray *standard;
+
+   QDialogButtonBox *buttons;
+   QVBoxLayout *leftLay;
+   QColorPicker *cp;
+   QColorLuminancePicker *lp;
+   QColorShower *cs;
+   QLabel *lblBasicColors;
+   QLabel *lblCustomColors;
+   QLabel *lblScreenColorInfo;
+   QPushButton *ok;
+   QPushButton *cancel;
+   QPushButton *addCusBt;
+   QPushButton *screenColorPickerButton;
+   QColor selectedQColor;
+   int nextCust;
+   bool smallDisplay;
+   bool screenColorPicking;
+   QColorPickingEventFilter *colorPickingEventFilter;
+   QRgb beforeScreenColorPicking;
+   QSharedPointer<QColorDialogOptions> options;
+
+   QPointer<QObject> receiverToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
+
+#ifdef Q_OS_WIN32
+   QTimer *updateTimer;
+   QWindow dummyTransparentWindow;
+#endif
+
+ private:
+   virtual void initHelper(QPlatformDialogHelper *h) override;
+   virtual void helperPrepareShow(QPlatformDialogHelper *h) override;
+};
 
 class QWellArray : public QWidget
 {
@@ -62,16 +164,17 @@ class QWellArray : public QWidget
 
    QString cellContent(int row, int col) const;
 
-   inline int selectedColumn() const;
-   inline int selectedRow() const;
+   int selectedColumn() const {
+      return selCol;
+   }
+   int selectedRow() const {
+      return selRow;
+   }
 
    virtual void setCurrent(int row, int col);
    virtual void setSelected(int row, int col);
 
    QSize sizeHint() const override;
-
-   virtual void setCellBrush(int row, int col, const QBrush &);
-   QBrush cellBrush(int row, int col);
 
    inline int cellWidth() const {
       return cellw;
@@ -134,6 +237,9 @@ class QWellArray : public QWidget
    GUI_CS_SIGNAL_1(Public, void selected(int row, int col))
    GUI_CS_SIGNAL_2(selected, row, col)
 
+   GUI_CS_SIGNAL_1(Public, void currentChanged(int row, int col))
+   GUI_CS_SIGNAL_2(currentChanged, row, col)
+
  protected:
    virtual void paintCell(QPainter *, int row, int col, const QRect &);
    virtual void paintCellContents(QPainter *, int row, int col, const QRect &);
@@ -156,18 +262,8 @@ class QWellArray : public QWidget
    int curCol;
    int selRow;
    int selCol;
-   QWellArrayData *d;
+
 };
-
-int QWellArray::selectedColumn() const
-{
-   return selCol;
-}
-
-int QWellArray::selectedRow() const
-{
-   return selRow;
-}
 
 void QWellArray::paintEvent(QPaintEvent *e)
 {
@@ -190,7 +286,6 @@ void QWellArray::paintEvent(QPaintEvent *e)
    QPainter painter(this);
    QPainter *p = &painter;
    QRect rect(0, 0, cellWidth(), cellHeight());
-
 
    if (collast < 0 || collast >= ncols) {
       collast = ncols - 1;
@@ -218,14 +313,10 @@ void QWellArray::paintEvent(QPaintEvent *e)
    }
 }
 
-struct QWellArrayData {
-   QBrush *brush;
-};
 
 QWellArray::QWellArray(int rows, int cols, QWidget *parent)
    : QWidget(parent), nrows(rows), ncols(cols)
 {
-   d = 0;
    setFocusPolicy(Qt::StrongFocus);
    cellw = 28;
    cellh = 24;
@@ -272,14 +363,12 @@ void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
 //  Reimplement this function to change the contents of the well array.
 void QWellArray::paintCellContents(QPainter *p, int row, int col, const QRect &r)
 {
-   if (d) {
-      p->fillRect(r, d->brush[row * numCols() + col]);
-   } else {
-      p->fillRect(r, Qt::white);
-      p->setPen(Qt::black);
-      p->drawLine(r.topLeft(), r.bottomRight());
-      p->drawLine(r.topRight(), r.bottomLeft());
-   }
+
+   p->fillRect(r, Qt::white);
+   p->setPen(Qt::black);
+   p->drawLine(r.topLeft(), r.bottomRight());
+   p->drawLine(r.topRight(), r.bottomLeft());
+
 }
 
 void QWellArray::mousePressEvent(QMouseEvent *e)
@@ -319,6 +408,7 @@ void QWellArray::setCurrent(int row, int col)
 
    updateCell(oldRow, oldCol);
    updateCell(curRow, curCol);
+   emit currentChanged(curRow, curCol);
 }
 
 /*
@@ -355,38 +445,12 @@ void QWellArray::setSelected(int row, int col)
 void QWellArray::focusInEvent(QFocusEvent *)
 {
    updateCell(curRow, curCol);
+   emit currentChanged(curRow, curCol);
 }
-
-void QWellArray::setCellBrush(int row, int col, const QBrush &b)
-{
-   if (!d) {
-      d = new QWellArrayData;
-      int i = numRows() * numCols();
-      d->brush = new QBrush[i];
-   }
-   if (row >= 0 && row < numRows() && col >= 0 && col < numCols()) {
-      d->brush[row * numCols() + col] = b;
-   }
-}
-
-/*
-  Returns the brush set for the cell at \a row, \a column. If no brush is
-  set, Qt::NoBrush is returned.
-*/
-
-QBrush QWellArray::cellBrush(int row, int col)
-{
-   if (d && row >= 0 && row < numRows() && col >= 0 && col < numCols()) {
-      return d->brush[row * numCols() + col];
-   }
-   return Qt::NoBrush;
-}
-
 
 
 /*!\reimp
 */
-
 void QWellArray::focusOutEvent(QFocusEvent *)
 {
    updateCell(curRow, curCol);
@@ -396,13 +460,13 @@ void QWellArray::focusOutEvent(QFocusEvent *)
 */
 void QWellArray::keyPressEvent(QKeyEvent *e)
 {
-   switch (e->key()) {                       // Look at the key code
-      case Qt::Key_Left:                                // If 'left arrow'-key,
+   switch (e->key()) {                         // Look at the key code
+      case Qt::Key_Left:                       // If 'left arrow'-key,
          if (curCol > 0) {                     // and cr't not in leftmost col
-            setCurrent(curRow, curCol - 1);   // set cr't to next left column
+            setCurrent(curRow, curCol - 1);    // set cr't to next left column
          }
          break;
-      case Qt::Key_Right:                                // Correspondingly...
+      case Qt::Key_Right:                      // Correspondingly...
          if (curCol < numCols() - 1) {
             setCurrent(curRow, curCol + 1);
          }
@@ -427,70 +491,53 @@ void QWellArray::keyPressEvent(QKeyEvent *e)
 
 }
 
-static bool initrgb = false;
-static QRgb s_standardRGB[6 * 8];
-static QRgb s_customRGB[2 * 8];
-static bool customSet = false;
-
-
-static void initRGB()
+// Event filter to be installed on the dialog while in color-picking mode.
+class QColorPickingEventFilter : public QObject
 {
-   if (initrgb) {
-      return;
+ public:
+   explicit QColorPickingEventFilter(QColorDialogPrivate *dp, QObject *parent = 0) : QObject(parent), m_dp(dp) {}
+
+   bool eventFilter(QObject *, QEvent *event) override {
+      switch (event->type()) {
+         case QEvent::MouseMove:
+            return m_dp->handleColorPickingMouseMove(static_cast<QMouseEvent *>(event));
+         case QEvent::MouseButtonRelease:
+            return m_dp->handleColorPickingMouseButtonRelease(static_cast<QMouseEvent *>(event));
+         case QEvent::KeyPress:
+            return m_dp->handleColorPickingKeyPress(static_cast<QKeyEvent *>(event));
+         default:
+            break;
+      }
+      return false;
    }
 
-   initrgb = true;
-   int i = 0;
+ private:
+   QColorDialogPrivate *m_dp;
+};
 
-   for (int g = 0; g < 4; g++)
-      for (int r = 0;  r < 4; r++)
-         for (int b = 0; b < 3; b++) {
-            s_standardRGB[i++] = qRgb(r * 255 / 3, g * 255 / 3, b * 255 / 2);
-         }
-
-   for (i = 0; i < 2 * 8; i++) {
-      s_customRGB[i] = 0xffffffff;
-   }
-}
-
-/*!
-    Returns the number of custom colors supported by QColorDialog. All
-    color dialogs share the same custom colors.
-*/
 int QColorDialog::customCount()
 {
-   return 2 * 8;
+   return QColorDialogOptions::customColorCount();
 }
 
 QColor QColorDialog::customColor(int index)
 {
-   if (uint(index) >= uint(customCount())) {
-      return qRgb(255, 255, 255);
-   }
-
-   initRGB();
-   return s_customRGB[index];
+   return QColor(QColorDialogOptions::customColor(index));
 }
 
 void QColorDialog::setCustomColor(int index, QColor color)
 {
-   if (uint(index) >= uint(customCount())) {
-      return;
-   }
+   QColorDialogOptions::setCustomColor(index, color.rgba());
+}
 
-   initRGB();
-   customSet = true;
-   s_customRGB[index] = color.rgb();
+QColor QColorDialog::standardColor(int index)
+{
+   return QColor(QColorDialogOptions::standardColor(index));
 }
 
 void QColorDialog::setStandardColor(int index, QColor color)
 {
-   if (uint(index) >= uint(6 * 8)) {
-      return;
-   }
-
-   initRGB();
-   s_standardRGB[index] = color.rgb();
+   QColorDialogOptions::setStandardColor(index, color.rgba());
 }
 
 static inline void rgb2hsv(QRgb rgb, int &h, int &s, int &v)
@@ -499,6 +546,7 @@ static inline void rgb2hsv(QRgb rgb, int &h, int &s, int &v)
    c.setRgb(rgb);
    c.getHsv(&h, &s, &v);
 }
+
 
 class QColorWell : public QWellArray
 {
@@ -628,12 +676,13 @@ class QColorPicker : public QFrame
    QColorPicker(QWidget *parent);
    ~QColorPicker();
 
+   void setCrossVisible(bool visible);
+
    GUI_CS_SIGNAL_1(Public, void newCol(int h, int s))
    GUI_CS_SIGNAL_2(newCol, h, s)
 
    GUI_CS_SLOT_1(Public, void setCol(int h, int s))
    GUI_CS_SLOT_OVERLOAD(setCol, (int, int))
-
  protected:
    QSize sizeHint() const override;
    void paintEvent(QPaintEvent *) override;
@@ -651,6 +700,7 @@ class QColorPicker : public QFrame
    void setCol(const QPoint &pt);
 
    QPixmap pix;
+   bool crossVisible;
 };
 
 static int pWidth = 220;
@@ -711,6 +761,7 @@ QColorLuminancePicker::QColorLuminancePicker(QWidget *parent)
    val = 100;
    sat = 100;
    pix = 0;
+
    //    setAttribute(WA_NoErase, true);
 }
 
@@ -733,9 +784,11 @@ void QColorLuminancePicker::setVal(int v)
    if (val == v) {
       return;
    }
+
    val = qMax(0, qMin(v, 255));
    delete pix;
    pix = 0;
+
    repaint();
    emit newHsv(hue, sat, val);
 }
@@ -754,24 +807,27 @@ void QColorLuminancePicker::paintEvent(QPaintEvent *)
    QRect r(0, foff, w, height() - 2 * foff);
    int wi = r.width() - 2;
    int hi = r.height() - 2;
+
    if (!pix || pix->height() != hi || pix->width() != wi) {
       delete pix;
+
       QImage img(wi, hi, QImage::Format_RGB32);
       int y;
       uint *pixel = (uint *) img.scanLine(0);
+
       for (y = 0; y < hi; y++) {
-         const uint *end = pixel + wi;
-         while (pixel < end) {
-            QColor c;
-            c.setHsv(hue, sat, y2val(y + coff));
-            *pixel = c.rgb();
-            ++pixel;
-         }
+         uint *end = pixel + wi;
+
+         std::fill(pixel, end, QColor::fromHsv(hue, sat, y2val(y + coff)).rgb());
+         pixel = end;
       }
+
       pix = new QPixmap(QPixmap::fromImage(img));
    }
+
    QPainter p(this);
    p.drawPixmap(1, coff, *pix);
+
    const QPalette &g = palette();
    qDrawShadePanel(&p, r, g, true);
    p.setPen(g.foreground().color());
@@ -783,7 +839,7 @@ void QColorLuminancePicker::paintEvent(QPaintEvent *)
    p.drawPolygon(a);
 }
 
-void QColorLuminancePicker::setCol(int h, int s , int v)
+void QColorLuminancePicker::setCol(int h, int s, int v)
 {
    val = v;
    hue = h;
@@ -817,7 +873,7 @@ void QColorPicker::setCol(const QPoint &pt)
 }
 
 QColorPicker::QColorPicker(QWidget *parent)
-   : QFrame(parent)
+   : QFrame(parent), crossVisible(true)
 {
    hue = 0;
    sat = 0;
@@ -829,6 +885,14 @@ QColorPicker::QColorPicker(QWidget *parent)
 
 QColorPicker::~QColorPicker()
 {
+}
+
+void QColorPicker::setCrossVisible(bool visible)
+{
+   if (crossVisible != visible) {
+      crossVisible = visible;
+      update();
+   }
 }
 
 QSize QColorPicker::sizeHint() const
@@ -874,11 +938,13 @@ void QColorPicker::paintEvent(QPaintEvent *)
    QRect r = contentsRect();
 
    p.drawPixmap(r.topLeft(), pix);
-   QPoint pt = colPt() + r.topLeft();
-   p.setPen(Qt::black);
+   if (crossVisible) {
+      QPoint pt = colPt() + r.topLeft();
+      p.setPen(Qt::black);
 
-   p.fillRect(pt.x() - 9, pt.y(), 20, 2, Qt::black);
-   p.fillRect(pt.x(), pt.y() - 9, 2, 20, Qt::black);
+      p.fillRect(pt.x() - 9, pt.y(), 20, 2, Qt::black);
+      p.fillRect(pt.x(), pt.y() - 9, 2, 20, Qt::black);
+   }
 
 }
 
@@ -917,6 +983,7 @@ class QColSpinBox : public QSpinBox
    }
    void setValue(int i) {
       bool block = signalsBlocked();
+
       blockSignals(true);
       QSpinBox::setValue(i);
       blockSignals(block);
@@ -957,13 +1024,13 @@ class QColorShower : public QWidget
    void retranslateStrings();
    void updateQColor();
 
-   GUI_CS_SIGNAL_1(Public, void newCol(const QRgb &rgb))
+   GUI_CS_SIGNAL_1(Public, void newCol(QRgb rgb))
    GUI_CS_SIGNAL_2(newCol, rgb)
 
    GUI_CS_SIGNAL_1(Public, void currentColorChanged(const QColor &color))
    GUI_CS_SIGNAL_2(currentColorChanged, color)
 
-   GUI_CS_SLOT_1(Public, void setRgb(const QRgb &rgb))
+   GUI_CS_SLOT_1(Public, void setRgb(QRgb rgb))
    GUI_CS_SLOT_2(setRgb)
 
  private:
@@ -973,7 +1040,11 @@ class QColorShower : public QWidget
    GUI_CS_SLOT_1(Private, void hsvEd())
    GUI_CS_SLOT_2(hsvEd)
 
+   GUI_CS_SLOT_1(Private, void htmlEd())
+   GUI_CS_SLOT_2(htmlEd)
+
    void showCurrentColor();
+
    int hue, sat, val;
    QRgb curCol;
    QColor curQColor;
@@ -983,6 +1054,7 @@ class QColorShower : public QWidget
    QLabel *lblRed;
    QLabel *lblGreen;
    QLabel *lblBlue;
+   QLabel *lblHtml;
    QColSpinBox *hEd;
    QColSpinBox *sEd;
    QColSpinBox *vEd;
@@ -991,10 +1063,12 @@ class QColorShower : public QWidget
    QColSpinBox *bEd;
    QColSpinBox *alphaEd;
    QLabel *alphaLab;
+   QLineEdit *htEd;
    QColorShowLabel *lab;
    bool rgbOriginal;
 
    QColorDialog *colorDialog;
+   QGridLayout *gl;
 
    friend class QColorDialog;
    friend class QColorDialogPrivate;
@@ -1014,8 +1088,8 @@ class QColorShowLabel : public QFrame
       col = c;
    }
 
-   GUI_CS_SIGNAL_1(Public, void colorDropped(const QRgb &un_named_arg1))
-   GUI_CS_SIGNAL_2(colorDropped, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void colorDropped(QRgb arg))
+   GUI_CS_SIGNAL_2(colorDropped, arg)
 
  protected:
    void paintEvent(QPaintEvent *) override;
@@ -1067,6 +1141,7 @@ void QColorShowLabel::mouseMoveEvent(QMouseEvent *e)
    if (!mousePressed) {
       return;
    }
+
    if ((pressPos - e->pos()).manhattanLength() > QApplication::startDragDistance()) {
       QMimeData *mime = new QMimeData;
       mime->setColorData(col);
@@ -1128,7 +1203,7 @@ QColorShower::QColorShower(QColorDialog *parent)
    curCol = qRgb(255, 255, 255);
    curQColor = Qt::white;
 
-   QGridLayout *gl = new QGridLayout(this);
+   gl = new QGridLayout(this);
    gl->setMargin(gl->spacing());
    lab = new QColorShowLabel(this);
 
@@ -1146,15 +1221,12 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(lab, 0, 0, -1, 1);
 
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lab, 0, 0, 1, -1);
-   } else {
-      gl->addWidget(lab, 0, 0, -1, 1);
-   }
+   gl->addWidget(lab, 0, 0, 1, -1);
+
 #endif
 
-   connect(lab, SIGNAL(colorDropped(const QRgb &)), this, SLOT(newCol(const QRgb &)));
-   connect(lab, SIGNAL(colorDropped(const QRgb &)), this, SLOT(setRgb(const QRgb &)));
+   connect(lab, SIGNAL(colorDropped(QRgb)), this, SLOT(newCol(QRgb)));
+   connect(lab, SIGNAL(colorDropped(QRgb)), this, SLOT(setRgb(QRgb)));
 
    hEd = new QColSpinBox(this);
    hEd->setRange(0, 359);
@@ -1165,36 +1237,30 @@ QColorShower::QColorShower(QColorDialog *parent)
 #endif
 
    lblHue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
 #if !defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblHue, 0, 1);
    gl->addWidget(hEd, 0, 2);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lblHue, 1, 0);
-      gl->addWidget(hEd, 2, 0);
-   } else {
-      lblHue->hide();
-      hEd->hide();
-   }
+   gl->addWidget(lblHue, 1, 0);
+   gl->addWidget(hEd, 2, 0);
 #endif
 
    sEd = new QColSpinBox(this);
    lblSat = new QLabel(this);
+
 #ifndef QT_NO_SHORTCUT
    lblSat->setBuddy(sEd);
 #endif
+
    lblSat->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
 #if !defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblSat, 1, 1);
    gl->addWidget(sEd, 1, 2);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lblSat, 1, 1);
-      gl->addWidget(sEd, 2, 1);
-   } else {
-      lblSat->hide();
-      sEd->hide();
-   }
+   gl->addWidget(lblSat, 1, 1);
+   gl->addWidget(sEd, 2, 1);
 #endif
 
    vEd = new QColSpinBox(this);
@@ -1207,32 +1273,27 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(lblVal, 2, 1);
    gl->addWidget(vEd, 2, 2);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lblVal, 1, 2);
-      gl->addWidget(vEd, 2, 2);
-   } else {
-      lblVal->hide();
-      vEd->hide();
-   }
+   gl->addWidget(lblVal, 1, 2);
+   gl->addWidget(vEd, 2, 2);
 #endif
 
    rEd = new QColSpinBox(this);
    lblRed = new QLabel(this);
+
 #ifndef QT_NO_SHORTCUT
    lblRed->setBuddy(rEd);
 #endif
+
    lblRed->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
 #if !defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblRed, 0, 3);
    gl->addWidget(rEd, 0, 4);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lblRed, 3, 0);
-      gl->addWidget(rEd, 4, 0);
-   } else {
-      lblRed->hide();
-      rEd->hide();
-   }
+
+   gl->addWidget(lblRed, 3, 0);
+   gl->addWidget(rEd, 4, 0);
+
 #endif
 
    gEd = new QColSpinBox(this);
@@ -1245,13 +1306,8 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(lblGreen, 1, 3);
    gl->addWidget(gEd, 1, 4);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lblGreen, 3, 1);
-      gl->addWidget(gEd, 4, 1);
-   } else {
-      lblGreen->hide();
-      gEd->hide();
-   }
+   gl->addWidget(lblGreen, 3, 1);
+   gl->addWidget(gEd, 4, 1);
 #endif
 
    bEd = new QColSpinBox(this);
@@ -1264,13 +1320,8 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(lblBlue, 2, 3);
    gl->addWidget(bEd, 2, 4);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(lblBlue, 3, 2);
-      gl->addWidget(bEd, 4, 2);
-   } else {
-      lblBlue->hide();
-      bEd->hide();
-   }
+   gl->addWidget(lblBlue, 3, 2);
+   gl->addWidget(bEd, 4, 2);
 #endif
 
    alphaEd = new QColSpinBox(this);
@@ -1283,17 +1334,37 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(alphaLab, 3, 1, 1, 3);
    gl->addWidget(alphaEd, 3, 4);
 #else
-   if (nonTouchUI) {
-      gl->addWidget(alphaLab, 1, 3, 3, 1);
-      gl->addWidget(alphaEd, 4, 3);
-   } else {
-      alphaLab->hide();
-      alphaEd->hide();
-   }
+
+   gl->addWidget(alphaLab, 1, 3, 3, 1);
+   gl->addWidget(alphaEd, 4, 3);
+
 #endif
+
    alphaEd->hide();
    alphaLab->hide();
 
+   lblHtml = new QLabel(this);
+   htEd = new QLineEdit(this);
+
+
+#ifndef QT_NO_SHORTCUT
+   lblHtml->setBuddy(htEd);
+#endif
+
+   QRegularExpression regExp("#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
+   QRegularExpressionValidator *validator = new QRegularExpressionValidator(regExp, this);
+
+   htEd->setValidator(validator);
+   htEd->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+   lblHtml->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+#if defined(QT_SMALL_COLORDIALOG)
+   gl->addWidget(lblHtml, 5, 0);
+   gl->addWidget(htEd, 5, 1, 1, /*colspan=*/ 2);
+#else
+   gl->addWidget(lblHtml, 5, 1);
+   gl->addWidget(htEd, 5, 2, 1, /*colspan=*/ 3);
+#endif
    connect(hEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
    connect(sEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
    connect(vEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
@@ -1302,26 +1373,26 @@ QColorShower::QColorShower(QColorDialog *parent)
    connect(gEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(bEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(alphaEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
+   connect(htEd, SIGNAL(textEdited(QString)), this, SLOT(htmlEd()));
 
    retranslateStrings();
 }
 
-inline QRgb QColorDialogPrivate::currentColor() const
-{
-   return cs->currentColor();
-}
 inline int QColorDialogPrivate::currentAlpha() const
 {
    return cs->currentAlpha();
 }
+
 inline void QColorDialogPrivate::setCurrentAlpha(int a)
 {
    cs->setCurrentAlpha(a);
 }
+
 inline void QColorDialogPrivate::showAlpha(bool b)
 {
    cs->showAlpha(b);
 }
+
 inline bool QColorDialogPrivate::isAlphaVisible() const
 {
    return cs->isAlphaVisible();
@@ -1329,6 +1400,9 @@ inline bool QColorDialogPrivate::isAlphaVisible() const
 
 QColor QColorDialogPrivate::currentQColor() const
 {
+   if (nativeDialogInUse) {
+      return platformColorDialogHelper()->currentColor();
+   }
    return cs->currentQColor();
 }
 
@@ -1348,6 +1422,7 @@ void QColorShower::rgbEd()
    hEd->setValue(hue);
    sEd->setValue(sat);
    vEd->setValue(val);
+   htEd->setText(QColor(curCol).name());
 
    showCurrentColor();
    emit newCol(currentColor());
@@ -1369,12 +1444,38 @@ void QColorShower::hsvEd()
    gEd->setValue(qGreen(currentColor()));
    bEd->setValue(qBlue(currentColor()));
 
+   htEd->setText(c.name());
    showCurrentColor();
    emit newCol(currentColor());
    updateQColor();
 }
 
-void QColorShower::setRgb(const QRgb &rgb)
+void QColorShower::htmlEd()
+{
+   QColor c;
+   QString t = htEd->text();
+   c.setNamedColor(t);
+
+   if (!c.isValid()) {
+      return;
+   }
+
+   curCol = qRgba(c.red(), c.green(), c.blue(), currentAlpha());
+   rgb2hsv(curCol, hue, sat, val);
+
+   hEd->setValue(hue);
+   sEd->setValue(sat);
+   vEd->setValue(val);
+
+   rEd->setValue(qRed(currentColor()));
+   gEd->setValue(qGreen(currentColor()));
+   bEd->setValue(qBlue(currentColor()));
+
+   showCurrentColor();
+   emit newCol(currentColor());
+   updateQColor();
+}
+void QColorShower::setRgb(QRgb rgb)
 {
    rgbOriginal = true;
    curCol = rgb;
@@ -1389,6 +1490,7 @@ void QColorShower::setRgb(const QRgb &rgb)
    gEd->setValue(qGreen(currentColor()));
    bEd->setValue(qBlue(currentColor()));
 
+   htEd->setText(QColor(rgb).name());
    showCurrentColor();
    updateQColor();
 }
@@ -1403,6 +1505,7 @@ void QColorShower::setHsv(int h, int s, int v)
    hue = h;
    val = v;
    sat = s;
+
    QColor c;
    c.setHsv(hue, sat, val);
    curCol = c.rgb();
@@ -1414,6 +1517,7 @@ void QColorShower::setHsv(int h, int s, int v)
    rEd->setValue(qRed(currentColor()));
    gEd->setValue(qGreen(currentColor()));
    bEd->setValue(qBlue(currentColor()));
+   htEd->setText(c.name());
 
    showCurrentColor();
    updateQColor();
@@ -1428,6 +1532,7 @@ void QColorShower::retranslateStrings()
    lblGreen->setText(QColorDialog::tr("&Green:"));
    lblBlue->setText(QColorDialog::tr("Bl&ue:"));
    alphaLab->setText(QColorDialog::tr("A&lpha channel:"));
+   lblHtml->setText(QColorDialog::tr("&HTML:"));
 }
 
 void QColorShower::updateQColor()
@@ -1443,16 +1548,20 @@ void QColorShower::updateQColor()
 //sets all widgets to display h,s,v
 void QColorDialogPrivate::_q_newHsv(int h, int s, int v)
 {
-   cs->setHsv(h, s, v);
-   cp->setCol(h, s);
-   lp->setCol(h, s, v);
+   if (!nativeDialogInUse) {
+      cs->setHsv(h, s, v);
+      cp->setCol(h, s);
+      lp->setCol(h, s, v);
+   }
 }
 
 // sets all widgets to display rgb
-void QColorDialogPrivate::setCurrentColor(QRgb rgb)
+void QColorDialogPrivate::setCurrentRgbColor(QRgb rgb)
 {
-   cs->setRgb(rgb);
-   _q_newColorTypedIn(rgb);
+   if (!nativeDialogInUse) {
+      cs->setRgb(rgb);
+      _q_newColorTypedIn(rgb);
+   }
 }
 
 // hack; doesn't keep curCol in sync, so use with care
@@ -1466,56 +1575,83 @@ void QColorDialogPrivate::setCurrentQColor(const QColor &color)
    }
 }
 
+// size of standard and custom color selector
+enum {
+   colorColumns = 8,
+   standardColorRows = 6,
+   customColorRows = 2
+};
+
 bool QColorDialogPrivate::selectColor(const QColor &col)
 {
    QRgb color = col.rgb();
-   int i = 0, j = 0;
+
    // Check standard colors
    if (standard) {
-      for (i = 0; i < 6; i++) {
-         for (j = 0; j < 8; j++) {
-            if (color == s_standardRGB[i + j * 6]) {
-               _q_newStandard(i, j);
-               standard->setCurrent(i, j);
-               standard->setSelected(i, j);
-               standard->setFocus();
-               return true;
-            }
-         }
+      const QRgb *standardColors = QColorDialogOptions::standardColors();
+      const QRgb *standardColorsEnd = standardColors + standardColorRows * colorColumns;
+      const QRgb *match = std::find(standardColors, standardColorsEnd, color);
+
+      if (match != standardColorsEnd) {
+         const int index = int(match - standardColors);
+         const int column = index / standardColorRows;
+         const int row = index % standardColorRows;
+         _q_newStandard(row, column);
+         standard->setCurrent(row, column);
+         standard->setSelected(row, column);
+         standard->setFocus();
+         return true;
       }
    }
 
+
    // Check custom colors
    if (custom) {
-      for (i = 0; i < 2; i++) {
-         for (j = 0; j < 8; j++) {
-            if (color == s_customRGB[i + j * 2]) {
-               _q_newCustom(i, j);
-               custom->setCurrent(i, j);
-               custom->setSelected(i, j);
-               custom->setFocus();
-               return true;
-            }
-         }
+      const QRgb *customColors = QColorDialogOptions::customColors();
+      const QRgb *customColorsEnd = customColors + customColorRows * colorColumns;
+      const QRgb *match = std::find(customColors, customColorsEnd, color);
+      if (match != customColorsEnd) {
+         const int index = int(match - customColors);
+         const int column = index / customColorRows;
+         const int row = index % customColorRows;
+         _q_newCustom(row, column);
+         custom->setCurrent(row, column);
+         custom->setSelected(row, column);
+         custom->setFocus();
+         return true;
       }
    }
    return false;
 }
-
-//sets all widgets except cs to display rgb
-void QColorDialogPrivate::_q_newColorTypedIn(const QRgb &rgb)
+QColor QColorDialogPrivate::grabScreenColor(const QPoint &p)
 {
-   int h, s, v;
-   rgb2hsv(rgb, h, s, v);
-   cp->setCol(h, s);
-   lp->setCol(h, s, v);
+   const QDesktopWidget *desktop = QApplication::desktop();
+   const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber())->grabWindow(desktop->winId(),
+         p.x(), p.y(), 1, 1);
+   QImage i = pixmap.toImage();
+   return i.pixel(0, 0);
 }
 
+//sets all widgets except cs to display rgb
+void QColorDialogPrivate::_q_newColorTypedIn(QRgb rgb)
+{
+   if (!nativeDialogInUse) {
+      int h, s, v;
+      rgb2hsv(rgb, h, s, v);
+      cp->setCol(h, s);
+      lp->setCol(h, s, v);
+   }
+}
+
+void QColorDialogPrivate::_q_nextCustom(int r, int c)
+{
+   nextCust = r + customColorRows * c;
+}
 void QColorDialogPrivate::_q_newCustom(int r, int c)
 {
-   int i = r + 2 * c;
-   setCurrentColor(s_customRGB[i]);
-   nextCust = i;
+   const int i = r + customColorRows * c;
+   setCurrentRgbColor(QColorDialogOptions::customColor(i));
+
    if (standard) {
       standard->setSelected(-1, -1);
    }
@@ -1523,11 +1659,66 @@ void QColorDialogPrivate::_q_newCustom(int r, int c)
 
 void QColorDialogPrivate::_q_newStandard(int r, int c)
 {
-   setCurrentColor(s_standardRGB[r + c * 6]);
+   setCurrentRgbColor(QColorDialogOptions::standardColor(r + c * 6));
 
    if (custom) {
       custom->setSelected(-1, -1);
    }
+}
+
+
+void QColorDialogPrivate::_q_pickScreenColor()
+{
+   Q_Q(QColorDialog);
+   if (!colorPickingEventFilter) {
+      colorPickingEventFilter = new QColorPickingEventFilter(this);
+   }
+   q->installEventFilter(colorPickingEventFilter);
+   // If user pushes Escape, the last color before picking will be restored.
+   beforeScreenColorPicking = cs->currentColor();
+#ifndef QT_NO_CURSOR
+   q->grabMouse(Qt::CrossCursor);
+#else
+   q->grabMouse();
+#endif
+#ifdef Q_OS_WIN32 // excludes WinRT
+   updateTimer->start(30);
+   dummyTransparentWindow.show();
+#endif
+   q->grabKeyboard();
+   q->setMouseTracking(true);
+   addCusBt->setDisabled(true);
+   buttons->setDisabled(true);
+   screenColorPickerButton->setDisabled(true);
+   const QPoint globalPos = QCursor::pos();
+   q->setCurrentColor(grabScreenColor(globalPos));
+   updateColorLabelText(globalPos);
+}
+
+void QColorDialogPrivate::updateColorLabelText(const QPoint &globalPos)
+{
+   lblScreenColorInfo->setText(QColorDialog::tr("Cursor at %1, %2\nPress ESC to cancel")
+      .formatArg(globalPos.x())
+      .formatArg(globalPos.y()));
+}
+void QColorDialogPrivate::releaseColorPicking()
+{
+   Q_Q(QColorDialog);
+   cp->setCrossVisible(true);
+   q->removeEventFilter(colorPickingEventFilter);
+   q->releaseMouse();
+
+#ifdef Q_OS_WIN32
+   updateTimer->stop();
+   dummyTransparentWindow.setVisible(false);
+#endif
+
+   q->releaseKeyboard();
+   q->setMouseTracking(false);
+   lblScreenColorInfo->setText(QLatin1String("\n"));
+   addCusBt->setDisabled(false);
+   buttons->setDisabled(false);
+   screenColorPickerButton->setDisabled(false);
 }
 
 void QColorDialogPrivate::init(const QColor &initial)
@@ -1537,9 +1728,23 @@ void QColorDialogPrivate::init(const QColor &initial)
    q->setSizeGripEnabled(false);
    q->setWindowTitle(QColorDialog::tr("Select Color"));
 
-   nativeDialogInUse = false;
-
+   nativeDialogInUse = (platformColorDialogHelper() != 0);
+   colorPickingEventFilter = 0;
    nextCust = 0;
+   if (!nativeDialogInUse) {
+      initWidgets();
+   }
+
+#ifdef Q_OS_WIN32
+   dummyTransparentWindow.resize(1, 1);
+   dummyTransparentWindow.setFlags(Qt::Tool | Qt::FramelessWindowHint);
+#endif
+
+   q->setCurrentColor(initial);
+}
+void QColorDialogPrivate::initWidgets()
+{
+   Q_Q(QColorDialog);
    QVBoxLayout *mainLay = new QVBoxLayout(q);
 
    // there's nothing in this dialog that benefits from sizing up
@@ -1553,53 +1758,44 @@ void QColorDialogPrivate::init(const QColor &initial)
 #if defined(QT_SMALL_COLORDIALOG)
    smallDisplay = true;
    const int lumSpace = 20;
+
 #else
    // small displays (e.g. PDAs) cannot fit the full color dialog,
    // so just use the color picker.
    smallDisplay = (QApplication::desktop()->width() < 480 || QApplication::desktop()->height() < 350);
    const int lumSpace = topLay->spacing() / 2;
+
 #endif
 
    if (! smallDisplay) {
       leftLay = new QVBoxLayout;
       topLay->addLayout(leftLay);
-   }
 
-   initRGB();
-
-#ifndef QT_NO_SETTINGS
-   if (! customSet) {
-      QSettings settings(QSettings::UserScope, "CopperSpice");
-
-      for (int i = 0; i < 2 * 8; ++i) {
-         QVariant v = settings.value("CS/customColors/" + QString::number(i));
-
-         if (v.isValid()) {
-            QRgb rgb = v.toUInt();
-            s_customRGB[i] = rgb;
-         }
-      }
-   }
-#endif
-
-   if (! smallDisplay) {
-      standard = new QColorWell(q, 6, 8, s_standardRGB);
+      standard = new QColorWell(q, standardColorRows, colorColumns, QColorDialogOptions::standardColors());
       lblBasicColors = new QLabel(q);
-
 #ifndef QT_NO_SHORTCUT
       lblBasicColors->setBuddy(standard);
 #endif
-
-      q->connect(standard, SIGNAL(selected(int, int)), q, SLOT(_q_newStandard(int, int)));
+      q->connect(standard, SIGNAL(selected(int, int)), SLOT(_q_newStandard(int, int)));
       leftLay->addWidget(lblBasicColors);
       leftLay->addWidget(standard);
+
+#if ! defined(QT_SMALL_COLORDIALOG)
+      // The screen color picker button
+      screenColorPickerButton = new QPushButton();
+      leftLay->addWidget(screenColorPickerButton);
+      lblScreenColorInfo = new QLabel(QLatin1String("\n"));
+      leftLay->addWidget(lblScreenColorInfo);
+      q->connect(screenColorPickerButton, SIGNAL(clicked()), SLOT(_q_pickScreenColor()));
+#endif
       leftLay->addStretch();
 
-      custom = new QColorWell(q, 2, 8, s_customRGB);
+
+      custom = new QColorWell(q, customColorRows, colorColumns, QColorDialogOptions::customColors());
       custom->setAcceptDrops(true);
 
-      q->connect(custom, SIGNAL(selected(int, int)), q, SLOT(_q_newCustom(int, int)));
-
+      q->connect(custom, SIGNAL(selected(int, int)), SLOT(_q_newCustom(int, int)));
+      q->connect(custom, SIGNAL(currentChanged(int, int)), SLOT(_q_nextCustom(int, int)));
       lblCustomColors = new QLabel(q);
 
 #ifndef QT_NO_SHORTCUT
@@ -1645,12 +1841,8 @@ void QColorDialogPrivate::init(const QColor &initial)
    cp->setFrameStyle(QFrame::Panel + QFrame::Sunken);
 
 #if defined(QT_SMALL_COLORDIALOG)
-   if (!nonTouchUI) {
-      pickLay->addWidget(cp);
-      cLay->addSpacing(lumSpace);
-   } else {
-      cp->hide();
-   }
+   cp->hide();
+
 #else
    cLay->addSpacing(lumSpace);
    cLay->addWidget(cp);
@@ -1661,20 +1853,13 @@ void QColorDialogPrivate::init(const QColor &initial)
    lp = new QColorLuminancePicker(q);
 
 #if defined(QT_SMALL_COLORDIALOG)
-   QSize screenSize = QApplication::desktop()->availableGeometry(QCursor::pos()).size();
-   const int minDimension = qMin(screenSize.height(), screenSize.width());
-   //set picker to be finger-usable
-   int pickerWidth = !nonTouchUI ? minDimension / 9 : minDimension / 12;
-   lp->setFixedWidth(pickerWidth);
+   lp->hide();
 
-   if (!nonTouchUI) {
-      pickLay->addWidget(lp);
-   } else {
-      lp->hide();
-   }
 #else
    lp->setFixedWidth(20);
+   pickLay->addSpacing(10);
    pickLay->addWidget(lp);
+   pickLay->addStretch();
 #endif
 
    QObject::connect(cp, SIGNAL(newCol(int, int)), lp, SLOT(setCol(int, int)));
@@ -1683,16 +1868,18 @@ void QColorDialogPrivate::init(const QColor &initial)
    rightLay->addStretch();
 
    cs = new QColorShower(q);
-   QObject::connect(cs, SIGNAL(newCol(const QRgb &)), q, SLOT(_q_newColorTypedIn(const QRgb &)));
-   QObject::connect(cs, SIGNAL(currentColorChanged(const QColor &)), q, SLOT(currentColorChanged(const QColor &)));
+   pickLay->setMargin(cs->gl->margin());
+
+   QObject::connect(cs, SIGNAL(newCol(QRgb)), q, SLOT(_q_newColorTypedIn(QRgb)));
+   QObject::connect(cs, SIGNAL(currentColorChanged(QColor)), q, SLOT(currentColorChanged(QColor)));
 
 #if defined(QT_SMALL_COLORDIALOG)
-   if (! nonTouchUI) {
-      pWidth -= cp->size().width();
-   }
    topLay->addWidget(cs);
 #else
    rightLay->addWidget(cs);
+   if (leftLay) {
+      leftLay->addSpacing(cs->gl->margin());
+   }
 #endif
 
    buttons = new QDialogButtonBox(q);
@@ -1704,21 +1891,34 @@ void QColorDialogPrivate::init(const QColor &initial)
    cancel = buttons->addButton(QDialogButtonBox::Cancel);
    QObject::connect(cancel, SIGNAL(clicked()), q, SLOT(reject()));
 
-   retranslateStrings();
-
-#ifdef Q_OS_MAC
-   delegate = 0;
+#ifdef Q_OS_WIN32
+   updateTimer = new QTimer(q);
+   QObject::connect(updateTimer, SIGNAL(timeout()), q, SLOT(_q_updateColorPicking()));
 #endif
+   retranslateStrings();
+}
 
-   q->setCurrentColor(initial);
+void QColorDialogPrivate::initHelper(QPlatformDialogHelper *h)
+{
+   QColorDialog *d = q_func();
+   QObject::connect(h, SIGNAL(currentColorChanged(QColor)), d, SLOT(currentColorChanged(QColor)));
+   QObject::connect(h, SIGNAL(colorSelected(QColor)), d,  SLOT(colorSelected(QColor)));
+
+   static_cast<QPlatformColorDialogHelper *>(h)->setOptions(options);
+}
+
+void QColorDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
+{
+   options->setWindowTitle(q_func()->windowTitle());
 }
 
 void QColorDialogPrivate::_q_addCustom()
 {
-   s_customRGB[nextCust] = cs->currentColor();
+   QColorDialogOptions::setCustomColor(nextCust, cs->currentColor());
    if (custom) {
       custom->update();
    }
+
    nextCust = (nextCust + 1) % 16;
 }
 
@@ -1728,11 +1928,35 @@ void QColorDialogPrivate::retranslateStrings()
       lblBasicColors->setText(QColorDialog::tr("&Basic colors"));
       lblCustomColors->setText(QColorDialog::tr("&Custom colors"));
       addCusBt->setText(QColorDialog::tr("&Add to Custom Colors"));
+      screenColorPickerButton->setText(QColorDialog::tr("&Pick Screen Color"));
    }
 
    cs->retranslateStrings();
 }
 
+bool QColorDialogPrivate::canBeNativeDialog() const
+{
+   // Don't use Q_Q here! This function is called from ~QDialog,
+   // so Q_Q calling q_func() invokes undefined behavior (invalid cast in q_func()).
+   const QDialog *const q = static_cast<const QDialog *>(q_ptr);
+
+   if (nativeDialogInUse) {
+      return true;
+   }
+
+   if (q->testAttribute(Qt::WA_DontShowOnScreen)) {
+      return false;
+   }
+
+   if (options->options() & QColorDialog::DontUseNativeDialog) {
+      return false;
+   }
+
+   QString staticName(QColorDialog::staticMetaObject().className());
+   QString dynamicName(q->metaObject()->className());
+
+   return (staticName == dynamicName);
+}
 static const Qt::WindowFlags DefaultWindowFlags =
    Qt::Dialog | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint
    | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
@@ -1753,20 +1977,24 @@ QColorDialog::QColorDialog(const QColor &initial, QWidget *parent)
    d->init(initial);
 }
 
+void QColorDialogPrivate::setCurrentColor(const QColor &color,  SetColorMode setColorMode)
+{
+   if (nativeDialogInUse) {
+      platformColorDialogHelper()->setCurrentColor(color);
+      return;
+   }
+   if (setColorMode & ShowColor) {
+      setCurrentRgbColor(color.rgb());
+      setCurrentAlpha(color.alpha());
+   }
+   if (setColorMode & SelectColor) {
+      selectColor(color);
+   }
+}
 void QColorDialog::setCurrentColor(const QColor &color)
 {
    Q_D(QColorDialog);
-   d->setCurrentColor(color.rgb());
-   d->selectColor(color);
-   d->setCurrentAlpha(color.alpha());
-
-#ifdef Q_OS_MAC
-   d->setCurrentQColor(color);
-   d->setCocoaPanelColor(color);
-#endif
-   if (d->nativeDialogInUse) {
-      qt_guiPlatformPlugin()->colorDialogSetCurrentColor(this, color);
-   }
+   d->setCurrentColor(color);
 }
 
 QColor QColorDialog::currentColor() const
@@ -1775,85 +2003,51 @@ QColor QColorDialog::currentColor() const
    return d->currentQColor();
 }
 
-
-/*!
-    Returns the color that the user selected by clicking the \gui{OK}
-    or equivalent button.
-
-    \note This color is not always the same as the color held by the
-    \l currentColor property since the user can choose different colors
-    before finally selecting the one to use.
-*/
 QColor QColorDialog::selectedColor() const
 {
    Q_D(const QColorDialog);
    return d->selectedQColor;
 }
 
-/*!
-    Sets the given \a option to be enabled if \a on is true;
-    otherwise, clears the given \a option.
-
-    \sa options, testOption()
-*/
 void QColorDialog::setOption(ColorDialogOption option, bool on)
 {
-   Q_D(QColorDialog);
-   if (!(d->opts & option) != !on) {
-      setOptions(d->opts ^ option);
+   const QColorDialog::ColorDialogOptions previousOptions = options();
+   if (!(previousOptions & option) != !on) {
+      setOptions(previousOptions ^ option);
    }
 }
 
-/*!
-    \since 4.5
-
-    Returns true if the given \a option is enabled; otherwise, returns
-    false.
-
-    \sa options, setOption()
-*/
 bool QColorDialog::testOption(ColorDialogOption option) const
 {
    Q_D(const QColorDialog);
-   return (d->opts & option) != 0;
+   return d->options->testOption(static_cast<QColorDialogOptions::ColorDialogOption>(option));
 }
 
-/*!
-    \property QColorDialog::options
-    \brief the various options that affect the look and feel of the dialog
-
-    By default, all options are disabled.
-
-    Options should be set before showing the dialog. Setting them while the
-    dialog is visible is not guaranteed to have an immediate effect on the
-    dialog (depending on the option and on the platform).
-
-    \sa setOption(), testOption()
-*/
 void QColorDialog::setOptions(ColorDialogOptions options)
 {
    Q_D(QColorDialog);
 
-   ColorDialogOptions changed = (options ^ d->opts);
-   if (!changed) {
+   if (QColorDialog::options() == options) {
       return;
    }
 
-   d->opts = options;
-   d->buttons->setVisible(!(options & NoButtons));
-   d->showAlpha(options & ShowAlphaChannel);
+   d->options->setOptions(QColorDialogOptions::ColorDialogOptions(int(options)));
+   if ((options & DontUseNativeDialog) && d->nativeDialogInUse) {
+      d->nativeDialogInUse = false;
+      d->initWidgets();
+   }
+   if (!d->nativeDialogInUse) {
+      d->buttons->setVisible(!(options & NoButtons));
+      d->showAlpha(options & ShowAlphaChannel);
+   }
 }
 
 QColorDialog::ColorDialogOptions QColorDialog::options() const
 {
    Q_D(const QColorDialog);
-   return d->opts;
+   return QColorDialog::ColorDialogOptions(int(d->options->options()));
 }
 
-#ifdef Q_OS_MAC
-// can only have one Cocoa color panel active
-bool QColorDialogPrivate::sharedColorPanelAvailable = true;
-#endif
 
 void QColorDialog::setVisible(bool visible)
 {
@@ -1871,34 +2065,14 @@ void QColorDialog::setVisible(bool visible)
       d->selectedQColor = QColor();
    }
 
-#if defined(Q_OS_MAC)
-   if (visible) {
-      if (d->delegate || (QColorDialogPrivate::sharedColorPanelAvailable &&
-                          !(testAttribute(Qt::WA_DontShowOnScreen) || (d->opts & DontUseNativeDialog)))) {
-         d->openCocoaColorPanel(currentColor(), parentWidget(), windowTitle(), options());
-         QColorDialogPrivate::sharedColorPanelAvailable = false;
-         setAttribute(Qt::WA_DontShowOnScreen);
-      }
-      setWindowFlags(windowModality() == Qt::WindowModal ? Qt::Sheet : DefaultWindowFlags);
-   } else {
-      if (d->delegate) {
-         d->closeCocoaColorPanel();
-         QColorDialogPrivate::sharedColorPanelAvailable = true;
-         setAttribute(Qt::WA_DontShowOnScreen, false);
-      }
-   }
-#else
-
-   if (!(d->opts & DontUseNativeDialog) && qt_guiPlatformPlugin()->colorDialogSetVisible(this, visible)) {
-      d->nativeDialogInUse = true;
+   if (d->nativeDialogInUse) {
+      d->setNativeDialogVisible(visible);
       // Set WA_DontShowOnScreen so that QDialog::setVisible(visible) below
       // updates the state correctly, but skips showing the non-native version:
       setAttribute(Qt::WA_DontShowOnScreen);
    } else {
-      d->nativeDialogInUse = false;
       setAttribute(Qt::WA_DontShowOnScreen, false);
    }
-#endif
 
    QDialog::setVisible(visible);
 }
@@ -1907,7 +2081,7 @@ void QColorDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QColorDialog);
 
-   connect(this, SIGNAL(colorSelected(const QColor &)), receiver, member);
+   connect(this, SIGNAL(colorSelected(QColor)), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
    d->memberToDisconnectOnClose   = member;
 
@@ -1929,36 +2103,19 @@ QColor QColorDialog::getColor(const QColor &initial, QWidget *parent, const QStr
    return dlg.selectedColor();
 }
 
+QRgb QColorDialog::getRgba(QRgb initial, bool *ok, QWidget *parent)
+{
+   const QColor color = getColor(QColor::fromRgba(initial), parent, QString(),
+         ShowAlphaChannel);
+   QRgb result = color.isValid() ? color.rgba() : initial;
+   if (ok) {
+      *ok = color.isValid();
+   }
+   return result;
+}
 QColorDialog::~QColorDialog()
 {
-   Q_D(QColorDialog);
-
-#if defined(Q_OS_MAC)
-   if (d->delegate) {
-      d->releaseCocoaColorPanelDelegate();
-      QColorDialogPrivate::sharedColorPanelAvailable = true;
-   }
-#endif
-
-#ifndef QT_NO_SETTINGS
-   if (!customSet) {
-      QSettings settings(QSettings::UserScope, QLatin1String("CopperSpice"));
-
-      for (int i = 0; i < 2 * 8; ++i) {
-         settings.setValue(QLatin1String("CS/customColors/") + QString::number(i), s_customRGB[i]);
-      }
-   }
-#endif
-   if (d->nativeDialogInUse) {
-      qt_guiPlatformPlugin()->colorDialogDelete(this);
-   }
-
 }
-
-
-/*!
-    \reimp
-*/
 void QColorDialog::changeEvent(QEvent *e)
 {
    Q_D(QColorDialog);
@@ -1966,6 +2123,63 @@ void QColorDialog::changeEvent(QEvent *e)
       d->retranslateStrings();
    }
    QDialog::changeEvent(e);
+}
+void QColorDialogPrivate::_q_updateColorPicking()
+{
+#ifndef QT_NO_CURSOR
+   Q_Q(QColorDialog);
+   static QPoint lastGlobalPos;
+   QPoint newGlobalPos = QCursor::pos();
+   if (lastGlobalPos == newGlobalPos) {
+      return;
+   }
+   lastGlobalPos = newGlobalPos;
+   if (!q->rect().contains(q->mapFromGlobal(
+            newGlobalPos))) { // Inside the dialog mouse tracking works, handleColorPickingMouseMove will be called
+      updateColorPicking(newGlobalPos);
+#ifdef Q_OS_WIN32
+      dummyTransparentWindow.setPosition(newGlobalPos);
+#endif
+   }
+#endif // ! QT_NO_CURSOR
+
+}
+void QColorDialogPrivate::updateColorPicking(const QPoint &globalPos)
+{
+   const QColor color = grabScreenColor(globalPos);
+   setCurrentColor(color, ShowColor);
+   updateColorLabelText(globalPos);
+}
+
+bool QColorDialogPrivate::handleColorPickingMouseMove(QMouseEvent *e)
+{
+   cp->setCrossVisible(!cp->geometry().contains(e->pos()));
+
+   updateColorPicking(e->globalPos());
+   return true;
+}
+bool QColorDialogPrivate::handleColorPickingMouseButtonRelease(QMouseEvent *e)
+{
+   setCurrentColor(grabScreenColor(e->globalPos()), SetColorAll);
+   releaseColorPicking();
+   return true;
+}
+
+/*!
+    \reimp
+*/
+bool QColorDialogPrivate::handleColorPickingKeyPress(QKeyEvent *e)
+{
+   Q_Q(QColorDialog);
+   if (e->matches(QKeySequence::Cancel)) {
+      releaseColorPicking();
+      q->setCurrentColor(beforeScreenColorPicking);
+   } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
+      q->setCurrentColor(grabScreenColor(QCursor::pos()));
+      releaseColorPicking();
+   }
+   e->accept();
+   return true;
 }
 
 /*!
@@ -1979,7 +2193,7 @@ void QColorDialog::done(int result)
 {
    Q_D(QColorDialog);
 
-   QDialog::done(result);
+
 
    if (result == Accepted) {
       d->selectedQColor = d->currentQColor();
@@ -1989,8 +2203,10 @@ void QColorDialog::done(int result)
       d->selectedQColor = QColor();
    }
 
+   QDialog::done(result);
+
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(colorSelected(const QColor &)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      disconnect(this, SIGNAL(colorSelected(QColor)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
 
       d->receiverToDisconnectOnClose = 0;
    }
@@ -2010,7 +2226,7 @@ void QColorDialog::_q_newHsv(int h, int s, int v)
    d->_q_newHsv(h, s, v);
 }
 
-void QColorDialog::_q_newColorTypedIn(const QRgb &rgb)
+void QColorDialog::_q_newColorTypedIn(QRgb rgb)
 {
    Q_D(QColorDialog);
    d->_q_newColorTypedIn(rgb);
@@ -2035,9 +2251,6 @@ void QColorDialog::_q_macRunNativeAppModalPanel()
    d->_q_macRunNativeAppModalPanel();
 }
 #endif
-
-QT_END_NAMESPACE
-
 
 #endif // QT_NO_COLORDIALOG
 

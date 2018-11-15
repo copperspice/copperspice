@@ -24,15 +24,15 @@
 #define QFSCOMPLETER_P_H
 
 #include <qcompleter.h>
-#include <QtGui/qfilesystemmodel.h>
-QT_BEGIN_NAMESPACE
+#include <qfilesystemmodel.h>
+
 #ifndef QT_NO_FSCOMPLETER
 
 //  QCompleter which can deal with QFileSystemModel
 class QFSCompleter :  public QCompleter
 {
  public:
-   QFSCompleter(QFileSystemModel *model, QObject *parent = nullptr)
+   explicit QFSCompleter(QFileSystemModel *model, QObject *parent = nullptr)
       : QCompleter(model, parent), proxyModel(0), sourceModel(model) {
 #if defined(Q_OS_WIN)
       setCaseSensitivity(Qt::CaseInsensitive);
@@ -45,7 +45,7 @@ class QFSCompleter :  public QCompleter
    QFileSystemModel *sourceModel;
 };
 #endif // QT_NO_FSCOMPLETER
-QT_END_NAMESPACE
 
-#endif // QFSCOMPLETOR_P_H
+
+#endif
 

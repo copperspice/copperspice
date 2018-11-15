@@ -23,9 +23,7 @@
 #ifndef QWIZARD_H
 #define QWIZARD_H
 
-#include <QtGui/qdialog.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
 
 #ifndef QT_NO_WIZARD
 
@@ -44,14 +42,19 @@ class Q_GUI_EXPORT QWizard : public QDialog
 
    GUI_CS_PROPERTY_READ(wizardStyle, wizardStyle)
    GUI_CS_PROPERTY_WRITE(wizardStyle, setWizardStyle)
+
    GUI_CS_PROPERTY_READ(options, options)
    GUI_CS_PROPERTY_WRITE(options, setOptions)
+
    GUI_CS_PROPERTY_READ(titleFormat, titleFormat)
    GUI_CS_PROPERTY_WRITE(titleFormat, setTitleFormat)
+
    GUI_CS_PROPERTY_READ(subTitleFormat, subTitleFormat)
    GUI_CS_PROPERTY_WRITE(subTitleFormat, setSubTitleFormat)
+
    GUI_CS_PROPERTY_READ(startId, startId)
    GUI_CS_PROPERTY_WRITE(startId, setStartId)
+
    GUI_CS_PROPERTY_READ(currentId, currentId)
    GUI_CS_PROPERTY_NOTIFY(currentId, currentIdChanged)
 
@@ -105,12 +108,13 @@ class Q_GUI_EXPORT QWizard : public QDialog
       HelpButtonOnRight               = 0x00001000,
       HaveCustomButton1               = 0x00002000,
       HaveCustomButton2               = 0x00004000,
-      HaveCustomButton3               = 0x00008000
+      HaveCustomButton3               = 0x00008000,
+      NoCancelButtonOnLastPage        = 0x00010000
    };
 
    using WizardOptions = QFlags<WizardOption>;
 
-   explicit QWizard(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+   explicit QWizard(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
    ~QWizard();
 
    int addPage(QWizardPage *page);
@@ -162,19 +166,25 @@ class Q_GUI_EXPORT QWizard : public QDialog
 
    GUI_CS_SIGNAL_1(Public, void currentIdChanged(int id))
    GUI_CS_SIGNAL_2(currentIdChanged, id)
+
    GUI_CS_SIGNAL_1(Public, void helpRequested())
    GUI_CS_SIGNAL_2(helpRequested)
+
    GUI_CS_SIGNAL_1(Public, void customButtonClicked(int which))
    GUI_CS_SIGNAL_2(customButtonClicked, which)
+
    GUI_CS_SIGNAL_1(Public, void pageAdded(int id))
    GUI_CS_SIGNAL_2(pageAdded, id)
+
    GUI_CS_SIGNAL_1(Public, void pageRemoved(int id))
    GUI_CS_SIGNAL_2(pageRemoved, id)
 
    GUI_CS_SLOT_1(Public, void back())
    GUI_CS_SLOT_2(back)
+
    GUI_CS_SLOT_1(Public, void next())
    GUI_CS_SLOT_2(next)
+
    GUI_CS_SLOT_1(Public, void restart())
    GUI_CS_SLOT_2(restart)
 
@@ -184,8 +194,9 @@ class Q_GUI_EXPORT QWizard : public QDialog
    void paintEvent(QPaintEvent *event) override;
 
 #if defined(Q_OS_WIN)
-   bool winEvent(MSG *message, long *result) override;
+   bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
 #endif
+
    void done(int result) override;
    virtual void initializePage(int id);
    virtual void cleanupPage(int id);
@@ -214,11 +225,13 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
 
    GUI_CS_PROPERTY_READ(title, title)
    GUI_CS_PROPERTY_WRITE(title, setTitle)
+
    GUI_CS_PROPERTY_READ(subTitle, subTitle)
    GUI_CS_PROPERTY_WRITE(subTitle, setSubTitle)
 
  public:
-   QWizardPage(QWidget *parent = nullptr);
+   explicit QWizardPage(QWidget *parent = nullptr);
+   ~QWizardPage();
 
    void setTitle(const QString &title);
    QString title() const;
@@ -245,7 +258,8 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
  protected:
    void setField(const QString &name, const QVariant &value);
    QVariant field(const QString &name) const;
-   void registerField(const QString &name, QWidget *widget, const QString &property = QString(), const QString &changedSignal = QString());
+   void registerField(const QString &name, QWidget *widget, const QString &property = QString(),
+      const QString &changedSignal = QString());
    QWizard *wizard() const;
 
  private:
@@ -262,9 +276,6 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
    friend class QWizardPrivate;
 };
 
-QT_END_NAMESPACE
-
-
 #endif // QT_NO_WIZARD
 
-#endif // QWIZARD_H
+#endif
