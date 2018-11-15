@@ -22,12 +22,10 @@ GUI_PUBLIC_INCLUDES += \
 	QPen \
 	QPolygon \
 	QPolygonF \
-	QPrintEngine \
-	QPrinter \
-	QPrinterInfo \
 	QRadialGradient \
 	QRegion \
 	QRgb \
+	QRgba64 \
 	QStylePainter \
 	QTextItem \
 	QTileRules \
@@ -56,12 +54,10 @@ GUI_PAINTING_INCLUDES = \
 	qpen.h \
 	qpolygon.h \
 	qpolygonf.h \
-	qprintengine.h \
-	qprinter.h \
-	qprinterinfo.h \
 	qradialgradient.h \
 	qregion.h \
 	qrgb.h \
+	qrgba64.h \
 	qstylepainter.h \
 	qtextitem.h \
 	qtilerules.h \
@@ -82,14 +78,9 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qdrawhelper_p.h \
 	qdrawhelper_sse_p.h \
 	qdrawhelper_x86_p.h \
+	qdrawingprimitive_sse2_p.h \
 	qemulationpaintengine_p.h \
 	qfixed_p.h \
-	qgraphicssystem_p.h \
-	qgraphicssystemplugin_p.h \
-	qgraphicssystem_mac_p.h \
-	qgraphicssystem_raster_p.h \
-	qgraphicssystemex_p.h \
-	qgraphicssystemfactory_p.h \
 	qgrayraster_p.h \
 	qimagescale_p.h \
 	qmath_p.h \
@@ -109,25 +100,22 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qpdf_p.h \
 	qpen_p.h \
 	qpolygonclipper_p.h \
-	qprintengine_pdf_p.h \
 	qprintengine_mac_p.h \
-        qpaintbuffer_p.h \
+	qpaintbuffer_p.h \
 	qprintengine_ps_p.h \
-	qprintengine_win_p.h \
-	qprinter_p.h \
-	qprinterinfo_p.h \
 	qprinterinfo_unix_p.h \
 	qrasterdefs_p.h \
 	qrasterizer_p.h \
 	qregion_mac.cpp \
+	qrgba64_p.h \
 	qstroker_p.h \
 	qtessellator_p.h \
 	qtextureglyphcache_p.h \
 	qunifiedtoolbarsurface_mac_p.h \
 	qvectorpath_p.h \
 	qregion_x11.cpp \
-	qregion_win.cpp
-
+	qregion_win.cpp \
+   qwidgetbackingstore_p.h
 
 GUI_INCLUDES += $(GUI_PAINTING_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_PAINTING_PRIVATE_INCLUDES)
@@ -144,10 +132,10 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcosmeticstroker.cpp \
 	src/gui/painting/qcssutil.cpp \
 	src/gui/painting/qdrawutil.cpp \
+	src/gui/painting/qdrawhelper.cpp \
+	src/gui/painting/qdrawhelper_sse2.cpp \
+	src/gui/painting/qdrawhelper_ssse3.cpp \
 	src/gui/painting/qemulationpaintengine.cpp \
-	src/gui/painting/qgraphicssystem.cpp \
-	src/gui/painting/qgraphicssystem_raster.cpp \
-	src/gui/painting/qgraphicssystemfactory.cpp \
 	src/gui/painting/qmatrix.cpp \
 	src/gui/painting/qmemrotate.cpp \
 	src/gui/painting/qoutlinemapper.cpp \
@@ -162,10 +150,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qpdf.cpp \
 	src/gui/painting/qpen.cpp \
 	src/gui/painting/qpolygon.cpp \
-	src/gui/painting/qprintengine_pdf.cpp \
 	src/gui/painting/qprintengine_ps.cpp \
-	src/gui/painting/qprinter.cpp \
-	src/gui/painting/qprinterinfo.cpp \
 	src/gui/painting/qrasterizer.cpp \
 	src/gui/painting/qregion.cpp \
 	src/gui/painting/qstroker.cpp \
@@ -178,17 +163,16 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qdrawhelper.cpp \
 	src/gui/painting/qimagescale.cpp \
 	src/gui/painting/qgrayraster.c \
-	src/gui/painting/qgraphicssystemplugin.cpp \
 	src/gui/painting/qpaintengine_blitter.cpp \
 	src/gui/painting/qblittable.cpp \
-	src/gui/painting/qbackingstore.cpp
+	src/gui/painting/qbackingstore.cpp \
+	src/gui/painting/qwidgetbackingstore.cpp
 
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolormap_win.cpp \
 	src/gui/painting/qpaintdevice_win.cpp \
-	src/gui/painting/qprintengine_win.cpp \
 	src/gui/painting/qprinterinfo_win.cpp
 
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lmsimg32
@@ -209,7 +193,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolormap_mac.cpp \
 	src/gui/painting/qpaintdevice_mac.cpp \
 	src/gui/painting/qpaintengine_mac.cpp \
-	src/gui/painting/qgraphicssystem_mac.cpp \
 	src/gui/painting/qprinterinfo_mac.cpp \
 	src/gui/painting/qprintengine_mac.mm \
 	src/gui/painting/qunifiedtoolbarsurface_mac.cpp

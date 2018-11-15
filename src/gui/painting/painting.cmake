@@ -21,12 +21,10 @@ set(GUI_PUBLIC_INCLUDES
     QPen
     QPolygon
     QPolygonF
-    QPrintEngine
-    QPrinter
-    QPrinterInfo
     QRadialGradient
     QRegion
     QRgb
+    QRgba64
     QStylePainter
     QTextItem
     QTileRules
@@ -57,9 +55,6 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpen.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygon.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygonf.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinter.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qradialgradient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qregion.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrgb.h
@@ -67,6 +62,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtextitem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtilerules.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtransform.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrgba64.h
 )
 
 set(GUI_PRIVATE_INCLUDES
@@ -85,14 +81,9 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_sse_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_x86_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawingprimitive_sse2_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qemulationpaintengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qfixed_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemplugin_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_raster_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemex_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemfactory_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgrayraster_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qimagescale_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmath_p.h
@@ -112,13 +103,9 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpdf_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpen_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygonclipper_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_pdf_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintbuffer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_ps_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_win_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_unix_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrasterdefs_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrasterizer_p.h
@@ -128,8 +115,10 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtextureglyphcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qunifiedtoolbarsurface_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qvectorpath_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrgba64_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qregion_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qregion_win.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwidgetbackingstore_p.h
 )
 
 set(GUI_SOURCES
@@ -142,10 +131,10 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcosmeticstroker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcssutil.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawutil.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_sse2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_ssse3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qemulationpaintengine.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_raster.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemfactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmatrix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmemrotate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qoutlinemapper.cpp
@@ -160,10 +149,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpdf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpen.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygon.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_pdf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_ps.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrasterizer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qregion.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qstroker.cpp
@@ -176,10 +162,10 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qimagescale.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgrayraster.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystemplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_blitter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qblittable.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbackingstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwidgetbackingstore.cpp
 )
 
 if(X11_FOUND)
@@ -198,7 +184,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_win.cpp
     )
     set(EXTRA_GUI_LIBS
@@ -214,7 +199,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgraphicssystem_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qunifiedtoolbarsurface_mac.cpp
