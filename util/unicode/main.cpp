@@ -1622,12 +1622,16 @@ static void readDerivedNormalizationProps()
             QString::NormalizationForm form;
             if (propName == "NFD_QC") {
                form = QString::NormalizationForm_D;
+
             } else if (propName == "NFC_QC") {
                form = QString::NormalizationForm_C;
+
             } else if (propName == "NFKD_QC") {
                form = QString::NormalizationForm_KD;
+
             } else { // if (propName == "NFKC_QC")
                form = QString::NormalizationForm_KC;
+
             }
 
             Q_ASSERT(l.size() == 3);
@@ -1960,7 +1964,6 @@ static void readCaseFolding()
 
       l[1] = l[1].trimmed();
 
-
       QList<QByteArray> fold = l[2].trimmed().split(' ');
       QList<char32_t> foldMap;
 
@@ -2000,7 +2003,7 @@ static void readGraphemeBreak()
 
    f.open(QFile::ReadOnly);
 
-   while (!f.atEnd()) {
+   while (! f.atEnd()) {
       QByteArray line = f.readLine();
       line = line.trimmed();
 
@@ -2538,9 +2541,10 @@ static QByteArray create_PropertyTables()
 
    // trip 2
    out += "char32_t uc_caseFold(char32_t value)\n";
-   out += "{\n    ";
+   out += "{\n   ";
 
    int oldDiff = 0;
+   int count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2550,16 +2554,35 @@ static QByteArray create_PropertyTables()
 
       if (flags.caseFoldSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
+
+         ++count;
 
       } else if (flags.caseFoldDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
 
          oldDiff = flags.caseFoldDiff;
+         ++count;
       }
    }
 
@@ -2571,9 +2594,10 @@ static QByteArray create_PropertyTables()
 
    // trip 3
    out += "char32_t uc_lowerCase(char32_t value)\n";
-   out += "{\n    ";
+   out += "{\n   ";
 
    oldDiff = 0;
+   count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2583,16 +2607,25 @@ static QByteArray create_PropertyTables()
 
       if (flags.lowerCaseSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+         out += "   } else ";
 
       } else if (flags.lowerCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
 
          oldDiff = flags.lowerCaseDiff;
+         ++count;
       }
    }
 
@@ -2604,9 +2637,10 @@ static QByteArray create_PropertyTables()
 
    // trip 4
    out += "char32_t uc_titleCase(char32_t value)\n";
-   out += "{\n    ";
+   out += "{\n   ";
 
    oldDiff = 0;
+   count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2616,16 +2650,25 @@ static QByteArray create_PropertyTables()
 
       if (flags.titleCaseSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+         out += "   } else ";
 
       } else if (flags.titleCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
 
          oldDiff = flags.titleCaseDiff;
+         ++count;
       }
    }
 
@@ -2639,6 +2682,7 @@ static QByteArray create_PropertyTables()
    out += "{\n    ";
 
    oldDiff = 0;
+   count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2648,16 +2692,35 @@ static QByteArray create_PropertyTables()
 
       if (flags.upperCaseSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
+
+         ++count;
 
       } else if (flags.upperCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
 
          oldDiff = flags.upperCaseDiff;
+         ++count;
       }
    }
 
