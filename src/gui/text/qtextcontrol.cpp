@@ -25,47 +25,47 @@
 
 #ifndef QT_NO_TEXTCONTROL
 
-#include <qfont.h>
-#include <qpainter.h>
-#include <qevent.h>
-#include <qdebug.h>
-#include <qmime.h>
-#include <qdrag.h>
+#include <qaccessible.h>
+#include <qapplication.h>
+#include <qbuffer.h>
 #include <qclipboard.h>
+#include <qdatetime.h>
+#include <qdesktopservices.h>
+#include <qdebug.h>
+#include <qdrag.h>
+#include <qevent.h>
+#include <qfont.h>
+#include <qgraphicssceneevent.h>
+#include <qinputmethod.h>
+#include <qlineedit.h>
 #include <qmenu.h>
+#include <qprinter.h>
+#include <qpainter.h>
 #include <qstyle.h>
+#include <qstyleoption.h>
 #include <qtimer.h>
+#include <qtextformat.h>
+#include <qtextdocumentwriter.h>
+#include <qtooltip.h>
+#include <qtexttable.h>
+#include <qvariant.h>
+#include <qurl.h>
+
+#include <qtextcursor_p.h>
 #include <qtextdocumentlayout_p.h>
 #include <qabstracttextdocumentlayout_p.h>
 #include <qtextedit_p.h>
 #include <qtextdocument.h>
 #include <qtextdocument_p.h>
-#include <qtextlist.h>
 #include <qtextcontrol_p.h>
-#include <qgraphicssceneevent.h>
-#include <qprinter.h>
-#include <qtextdocumentwriter.h>
-#include <qtextcursor_p.h>
 
-#include <qtextformat.h>
-#include <qdatetime.h>
-#include <qbuffer.h>
-#include <qapplication.h>
 #include <limits.h>
-#include <qtexttable.h>
-#include <qvariant.h>
-#include <qurl.h>
-#include <qdesktopservices.h>
-#include <qinputcontext.h>
-#include <qtooltip.h>
-#include <qstyleoption.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qaccessible.h>
 
 #ifndef QT_NO_SHORTCUT
+#include <qkeysequence.h>
+
 #include <qapplication_p.h>
 #include <qshortcutmap_p.h>
-#include <qkeysequence.h>
 
 #define ACCEL_KEY(k)   (! qApp->d_func()->shortcutMap.hasShortcutForKeySequence(k) ?  \
                         QLatin1Char('\t') + QKeySequence(k).toString(QKeySequence::NativeText) : QString())
@@ -73,13 +73,9 @@
 #define ACCEL_KEY(k)   QString()
 #endif
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
-#ifndef QT_NO_CONTEXTMENU
-#if defined(Q_OS_WIN) || defined(Q_WS_X11)
-extern bool qt_use_rtl_extensions;
-#endif
-#endif
+
 
 // could go into QTextCursor...
 static QTextLine currentTextLine(const QTextCursor &cursor)
@@ -100,12 +96,16 @@ static QTextLine currentTextLine(const QTextCursor &cursor)
 
 QTextControlPrivate::QTextControlPrivate()
    : doc(0), cursorOn(false), cursorIsFocusIndicator(false),
-     interactionFlags(Qt::TextEditorInteraction),
+     interactionFlags(Qt::TextEditable | Qt::TextSelectableByKeyboard),
      dragEnabled(true),
+
 #ifndef QT_NO_DRAGANDDROP
      mousePressed(false), mightStartDrag(false),
 #endif
-     lastSelectionState(false), ignoreAutomaticScrollbarAdjustement(false),
+
+     lastSelectionPosition(0),
+     lastSelectionAnchor(0),
+     ignoreAutomaticScrollbarAdjustement(false),
      overwriteMode(false),
      acceptRichText(true),
      preeditCursor(0), hideCursor(false),
@@ -138,10 +138,9 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
    QTextCursor::MoveMode mode = QTextCursor::MoveAnchor;
    QTextCursor::MoveOperation op = QTextCursor::NoMove;
 
-#ifdef QT_NO_SHORTCUT
-  return false;
 
-#else
+#ifndef QT_NO_SHORTCUT
+
    if (e == QKeySequence::MoveToNextChar) {
       op = QTextCursor::Right;
    } else if (e == QKeySequence::MoveToPreviousChar) {
@@ -203,8 +202,6 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
       op = QTextCursor::Down;
    } else if (e == QKeySequence::MoveToPreviousLine) {
       op = QTextCursor::Up;
-   } else if (e == QKeySequence::MoveToPreviousLine) {
-      op = QTextCursor::Up;
    } else if (e == QKeySequence::MoveToStartOfLine) {
       op = QTextCursor::StartOfLine;
    } else if (e == QKeySequence::MoveToEndOfLine) {
@@ -214,13 +211,13 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 
    } else if (e == QKeySequence::MoveToEndOfDocument) {
       op = QTextCursor::End;
+#endif // QT_NO_SHORTCUT
 
    } else {
       return false;
 
    }
 
-#endif // QT_NO_SHORTCUT
 
 
    // Except for pageup and pagedown, Mac OS X has very different behavior, we don't do it all, but
@@ -381,6 +378,7 @@ void QTextControlPrivate::init(Qt::TextFormat format, const QString &text, QText
    setContent(format, text, document);
 
    doc->setUndoRedoEnabled(interactionFlags & Qt::TextEditable);
+    q->setCursorWidth(-1);
 }
 
 void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text, QTextDocument *document)
@@ -421,6 +419,9 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
    if (!document) {
       doc->setUndoRedoEnabled(false);
    }
+
+   static int contentsChangedIndex = QMetaMethod::fromSignal(&QTextDocument::contentsChanged).methodIndex();
+   static int textChangedIndex     = QMetaMethod::fromSignal(&QWidgetTextControl::textChanged).methodIndex();
 
    // avoid multiple textChanged() signals being emitted
    QObject::disconnect(doc, "contentsChanged()", q, "textChanged()");
@@ -471,6 +472,7 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
 
    q->ensureCursorVisible();
    emit q->cursorPositionChanged();
+   QObject::connect(doc, SIGNAL(contentsChange(int,int,int)), q, SLOT(_q_contentsChanged(int,int,int)), Qt::UniqueConnection);
 }
 
 void QTextControlPrivate::startDrag()
@@ -548,6 +550,10 @@ void QTextControlPrivate::repaintOldAndNewSelection(const QTextCursor &oldSelect
       emit q->updateRequest(q->selectionRect() | cursorRectPlusUnicodeDirectionMarkers(cursor));
    }
 }
+
+// BROOM - from here DOWN
+
+
 
 void QTextControlPrivate::selectionChanged(bool forceEmitSelectionChanged /*=false*/)
 {
@@ -3045,6 +3051,27 @@ bool QTextControl::find(const QString &exp, QTextDocument::FindFlags options)
    return true;
 }
 
+bool QTextControl::find(const QRegExp &exp, QTextDocument::FindFlags options)
+{
+    Q_D(QWidgetTextControl);
+    QTextCursor search = d->doc->find(exp, d->cursor, options);
+    if (search.isNull())
+        return false;
+
+    setTextCursor(search);
+    return true;
+}
+
+QString QWidgetTextControl::toPlainText() const
+{
+    return document()->toPlainText();
+}
+#ifndef QT_NO_TEXTHTMLPARSER
+QString QWidgetTextControl::toHtml() const
+{
+    return document()->toHtml();
+}
+#endif
 void QTextControlPrivate::append(const QString &text, Qt::TextFormat format)
 {
    QTextCursor tmp(doc);
@@ -3068,7 +3095,8 @@ void QTextControlPrivate::append(const QString &text, Qt::TextFormat format)
    }
 #else
    tmp.insertText(text);
-#endif // QT_NO_TEXTHTMLPARSER
+#endif
+
    if (!cursor.hasSelection()) {
       cursor.setCharFormat(oldCharFormat);
    }

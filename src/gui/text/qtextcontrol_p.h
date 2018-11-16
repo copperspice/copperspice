@@ -23,29 +23,30 @@
 #ifndef QTEXTCONTROL_P_H
 #define QTEXTCONTROL_P_H
 
-#include <QtGui/qtextdocument.h>
-#include <QtGui/qtextoption.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qtextformat.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qmenu.h>
-#include <QtCore/qrect.h>
-#include <QtGui/qabstracttextdocumentlayout.h>
-#include <QtGui/qtextdocumentfragment.h>
-#include <QtGui/qclipboard.h>
-#include <qtextblock.h>
-#include <QScopedPointer>
+#include <qtextdocument.h>
+#include <qtextoption.h>
+#include <qtextcursor.h>
+#include <qtextformat.h>
+#include <qtextedit.h>
+#include <qmenu.h>
+#include <qrect.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qtextdocumentfragment.h>
+#include <qclipboard.h>
+#include <qmimedata.h>
+#include <qinputcontrol_p.h>
 
-QT_BEGIN_NAMESPACE
 
+
+class QAbstractScrollArea;
+class QMenu;
 class QStyleSheet;
 class QTextDocument;
-class QMenu;
 class QTextControlPrivate;
-class QMimeData;
-class QAbstractScrollArea;
+
 class QEvent;
 class QTimerEvent;
+class QPagedPaintDevice;
 
 class Q_GUI_EXPORT QTextControl : public QObject
 {
@@ -61,14 +62,19 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    GUI_CS_PROPERTY_READ(overwriteMode, overwriteMode)
    GUI_CS_PROPERTY_WRITE(overwriteMode, setOverwriteMode)
+
    GUI_CS_PROPERTY_READ(acceptRichText, acceptRichText)
    GUI_CS_PROPERTY_WRITE(acceptRichText, setAcceptRichText)
+
    GUI_CS_PROPERTY_READ(cursorWidth, cursorWidth)
    GUI_CS_PROPERTY_WRITE(cursorWidth, setCursorWidth)
+
    GUI_CS_PROPERTY_READ(textInteractionFlags, textInteractionFlags)
    GUI_CS_PROPERTY_WRITE(textInteractionFlags, setTextInteractionFlags)
+
    GUI_CS_PROPERTY_READ(openExternalLinks, openExternalLinks)
    GUI_CS_PROPERTY_WRITE(openExternalLinks, setOpenExternalLinks)
+
    GUI_CS_PROPERTY_READ(ignoreUnusedNavigationEvents, ignoreUnusedNavigationEvents)
    GUI_CS_PROPERTY_WRITE(ignoreUnusedNavigationEvents, setIgnoreUnusedNavigationEvents)
 
@@ -94,12 +100,14 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    bool find(const QString &exp, QTextDocument::FindFlags options = 0);
 
+   // broom - fix regex
+   bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = 0);
    inline QString toPlainText() const {
       return document()->toPlainText();
    }
 
 #ifndef QT_NO_TEXTHTMLPARSER
-   inline QString toHtml() const;
+   QString toHtml() const;
 #endif
 
    virtual void ensureCursorVisible();
@@ -116,7 +124,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
    QRectF selectionRect(const QTextCursor &cursor) const;
    QRectF selectionRect() const;
 
-   QString anchorAt(const QPointF &pos) const;
+   virtual QString anchorAt(const QPointF &pos) const;
    QPointF anchorPosition(const QString &name) const;
 
    QString anchorAtCursor() const;
@@ -158,9 +166,8 @@ class Q_GUI_EXPORT QTextControl : public QObject
    bool isWordSelectionEnabled() const;
    void setWordSelectionEnabled(bool enabled);
 
-#ifndef QT_NO_PRINTER
-   void print(QPrinter *printer) const;
-#endif
+   bool isPreediting();
+   void print(QPagedPaintDevice *printer) const;
 
    virtual int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
    virtual QRectF blockBoundingRect(const QTextBlock &block) const;
@@ -191,6 +198,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
+
    GUI_CS_SLOT_1(Public, void selectAll())
    GUI_CS_SLOT_2(selectAll)
 
@@ -204,8 +212,10 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    GUI_CS_SLOT_1(Public, void append(const QString &text))
    GUI_CS_SLOT_2(append)
+
    GUI_CS_SLOT_1(Public, void appendHtml(const QString &html))
    GUI_CS_SLOT_2(appendHtml)
+
    GUI_CS_SLOT_1(Public, void appendPlainText(const QString &text))
    GUI_CS_SLOT_2(appendPlainText)
 
@@ -214,16 +224,22 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    GUI_CS_SIGNAL_1(Public, void textChanged())
    GUI_CS_SIGNAL_2(textChanged)
+
    GUI_CS_SIGNAL_1(Public, void undoAvailable(bool b))
    GUI_CS_SIGNAL_2(undoAvailable, b)
+
    GUI_CS_SIGNAL_1(Public, void redoAvailable(bool b))
    GUI_CS_SIGNAL_2(redoAvailable, b)
+
    GUI_CS_SIGNAL_1(Public, void currentCharFormatChanged(const QTextCharFormat &format))
    GUI_CS_SIGNAL_2(currentCharFormatChanged, format)
+
    GUI_CS_SIGNAL_1(Public, void copyAvailable(bool b))
    GUI_CS_SIGNAL_2(copyAvailable, b)
+
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
+
    GUI_CS_SIGNAL_1(Public, void cursorPositionChanged())
    GUI_CS_SIGNAL_2(cursorPositionChanged)
 
@@ -231,8 +247,8 @@ class Q_GUI_EXPORT QTextControl : public QObject
    GUI_CS_SIGNAL_1(Public, void updateRequest(const QRectF &rect = QRectF()))
    GUI_CS_SIGNAL_2(updateRequest, rect)
 
-   GUI_CS_SIGNAL_1(Public, void documentSizeChanged(const QSizeF &un_named_arg1))
-   GUI_CS_SIGNAL_2(documentSizeChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void documentSizeChanged(const QSizeF &size))
+   GUI_CS_SIGNAL_2(documentSizeChanged, size)
 
    GUI_CS_SIGNAL_1(Public, void blockCountChanged(int newBlockCount))
    GUI_CS_SIGNAL_2(blockCountChanged, newBlockCount)
@@ -264,7 +280,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    void setFocus(bool focus, Qt::FocusReason = Qt::OtherFocusReason);
 
-   virtual QVariant inputMethodQuery(Qt::InputMethodQuery property) const;
+   virtual QVariant inputMethodQuery(Qt::InputMethodQuery property, QVariant argument) const;
 
    virtual QMimeData *createMimeDataFromSelection() const;
    virtual bool canInsertFromMimeData(const QMimeData *source) const;
@@ -279,7 +295,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
    bool event(QEvent *e) override;
 
    QScopedPointer<QTextControlPrivate> d_ptr;
- 
+
  private:
    Q_DISABLE_COPY(QTextControl)
 
@@ -300,8 +316,9 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    GUI_CS_SLOT_1(Private, void _q_documentLayoutChanged())
    GUI_CS_SLOT_2(_q_documentLayoutChanged)
- 
-};
+
+   GUI_CS_SLOT_1(Private, void _q_contentsChanged(int, int, int))
+   GUI_CS_SLOT_2(_q_contentsChanged)};
 
 
 #ifndef QT_NO_CONTEXTMENU
@@ -339,13 +356,5 @@ class QTextEditMimeData : public QMimeData
 };
 
 
-#ifndef QT_NO_TEXTHTMLPARSER
-QString QTextControl::toHtml() const
-{
-   return document()->toHtml();
-}
-#endif
-
-QT_END_NAMESPACE
 
 #endif // QTEXTCONTROL_H

@@ -32,11 +32,11 @@
 #include <QtCore/qbasictimer.h>
 #include <QtCore/qpointer.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QMimeData;
 class QAbstractScrollArea;
-class QInputContext;
+
 
 class QTextControlPrivate
 {
@@ -82,6 +82,7 @@ class QTextControlPrivate
 #endif
 
    void _q_emitCursorPosChanged(const QTextCursor &someCursor);
+   void _q_contentsChanged(int from, int charsRemoved, int charsAdded);
 
    void setBlinkingCursorEnabled(bool enable);
 
@@ -123,10 +124,11 @@ class QTextControlPrivate
 #ifdef QT_KEYPAD_NAVIGATION
    void editFocusEvent(QEvent *e);
 #endif
+
    bool dragEnterEvent(QEvent *e, const QMimeData *mimeData);
    void dragLeaveEvent();
    bool dragMoveEvent(QEvent *e, const QMimeData *mimeData, const QPointF &pos);
-   bool dropEvent(const QMimeData *mimeData, const QPointF &pos, Qt::DropAction dropAction, QWidget *source);
+   bool dropEvent(const QMimeData *mimeData, const QPointF &pos, Qt::DropAction dropAction, QObject *source);
 
    void inputMethodEvent(QInputMethodEvent *);
 
@@ -136,9 +138,9 @@ class QTextControlPrivate
    void showToolTip(const QPoint &globalPos, const QPointF &pos, QWidget *contextWidget);
 #endif
 
+   bool isPreediting() const;
+   void commitPreedit();
    void append(const QString &text, Qt::TextFormat format = Qt::AutoText);
-
-   QInputContext *inputContext();
 
    QTextDocument *doc;
    bool cursorOn;
@@ -159,10 +161,11 @@ class QTextControlPrivate
    bool mousePressed;
 
    bool mightStartDrag;
-   QPoint dragStartPos;
+   QPoint mousePressPos;
    QPointer<QWidget> contextWidget;
 
-   bool lastSelectionState;
+   int lastSelectionPosition;
+   int lastSelectionAnchor;
 
    bool ignoreAutomaticScrollbarAdjustement;
 
@@ -203,7 +206,5 @@ class QTextControlPrivate
  protected:
    QTextControl *q_ptr;
 };
-
-QT_END_NAMESPACE
 
 #endif // QTEXTCONTROL_P_H
