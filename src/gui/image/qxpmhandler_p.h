@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
 
-QT_BEGIN_NAMESPACE
+
 
 class QXpmHandler : public QImageIOHandler
 {
@@ -66,8 +66,8 @@ class QXpmHandler : public QImageIOHandler
    QString fileName;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_IMAGEFORMAT_XPM
 
-#endif // QXPMHANDLER_P_H
+#endif

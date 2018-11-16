@@ -35,16 +35,13 @@
 #include <qwidget_p.h>
 #include <qdrawhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
-const uchar qt_pixmap_bit_mask[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 
 QPixmap qt_toRasterPixmap(const QImage &image)
 {
-   QPixmapData *data =
-      new QRasterPixmapData(image.depth() == 1
-                            ? QPixmapData::BitmapType
-                            : QPixmapData::PixmapType);
+   QPlatformPixmap *data =
+      new QRasterPlatformPixmap(image.depth() == 1
+      ? QPlatformPixmap::BitmapType
+      : QPlatformPixmap::PixmapType);
 
    data->fromImage(image, Qt::AutoColor);
 
@@ -57,48 +54,37 @@ QPixmap qt_toRasterPixmap(const QPixmap &pixmap)
       return QPixmap();
    }
 
-   if (QPixmap(pixmap).data_ptr()->classId() == QPixmapData::RasterClass) {
+   if (QPixmap(pixmap).data_ptr()->classId() == QPlatformPixmap::RasterClass) {
       return pixmap;
    }
 
    return qt_toRasterPixmap(pixmap.toImage());
 }
 
-QRasterPixmapData::QRasterPixmapData(PixelType type)
-   : QPixmapData(type, RasterClass)
+QRasterPlatformPixmap::QRasterPlatformPixmap(PixelType type)
+   : QPlatformPixmap(type, RasterClass)
 {
 }
 
-QRasterPixmapData::~QRasterPixmapData()
+QRasterPlatformPixmap::~QRasterPlatformPixmap()
 {
 }
 
-QPixmapData *QRasterPixmapData::createCompatiblePixmapData() const
+QPlatformPixmap *QRasterPlatformPixmap::createCompatiblePlatformPixmap() const
 {
-   return new QRasterPixmapData(pixelType());
+   return new QRasterPlatformPixmap(pixelType());
 }
 
-void QRasterPixmapData::resize(int width, int height)
+void QRasterPlatformPixmap::resize(int width, int height)
 {
    QImage::Format format;
-#ifdef Q_WS_QWS
-   if (pixelType() == BitmapType) {
-      format = QImage::Format_Mono;
-   } else {
-      format = QScreen::instance()->pixelFormat();
-      if (format == QImage::Format_Invalid) {
-         format = QImage::Format_ARGB32_Premultiplied;
-      } else if (format == QImage::Format_Indexed8) { // currently not supported
-         format = QImage::Format_RGB444;
-      }
-   }
-#else
+
    if (pixelType() == BitmapType) {
       format = QImage::Format_MonoLSB;
    } else {
       format = QNativeImage::systemFormat();
    }
-#endif
+
 
    image = QImage(width, height, format);
    w = width;
@@ -112,16 +98,17 @@ void QRasterPixmapData::resize(int width, int height)
       image.setColor(1, QColor(Qt::color1).rgba());
    }
 
-   setSerialNumber(image.serialNumber());
+   setSerialNumber(image.cacheKey() >> 32);
 }
 
-bool QRasterPixmapData::fromData(const uchar *buffer, uint len, const char *format,
-                                 Qt::ImageConversionFlags flags)
+bool QRasterPlatformPixmap::fromData(const uchar *buffer, uint len, const char *format,
+   Qt::ImageConversionFlags flags)
 {
    QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(buffer), len);
    QBuffer b(&a);
    b.open(QIODevice::ReadOnly);
    QImage image = QImageReader(&b, format).read();
+
    if (image.isNull()) {
       return false;
    }
@@ -130,19 +117,25 @@ bool QRasterPixmapData::fromData(const uchar *buffer, uint len, const char *form
    return !isNull();
 }
 
-void QRasterPixmapData::fromImage(const QImage &sourceImage,
-                                  Qt::ImageConversionFlags flags)
+void QRasterPlatformPixmap::fromImage(const QImage &sourceImage,
+   Qt::ImageConversionFlags flags)
 {
-   Q_UNUSED(flags);
+
    QImage image = sourceImage;
    createPixmapForImage(image, flags, /* inplace = */false);
 }
 
-void QRasterPixmapData::fromImageReader(QImageReader *imageReader,
-                                        Qt::ImageConversionFlags flags)
+void QRasterPlatformPixmap::fromImageInPlace(QImage &sourceImage,
+   Qt::ImageConversionFlags flags)
+{
+   createPixmapForImage(sourceImage, flags, /* inplace = */true);
+}
+void QRasterPlatformPixmap::fromImageReader(QImageReader *imageReader,
+   Qt::ImageConversionFlags flags)
 {
    Q_UNUSED(flags);
    QImage image = imageReader->read();
+
    if (image.isNull()) {
       return;
    }
@@ -153,12 +146,12 @@ void QRasterPixmapData::fromImageReader(QImageReader *imageReader,
 // from qwindowsurface.cpp
 extern void qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &offset);
 
-void QRasterPixmapData::copy(const QPixmapData *data, const QRect &rect)
+void QRasterPlatformPixmap::copy(const QPlatformPixmap *data, const QRect &rect)
 {
    fromImage(data->toImage(rect).copy(), Qt::NoOpaqueDetection);
 }
 
-bool QRasterPixmapData::scroll(int dx, int dy, const QRect &rect)
+bool QRasterPlatformPixmap::scroll(int dx, int dy, const QRect &rect)
 {
    if (!image.isNull()) {
       qt_scrollRectInImage(image, rect, QPoint(dx, dy));
@@ -166,7 +159,7 @@ bool QRasterPixmapData::scroll(int dx, int dy, const QRect &rect)
    return true;
 }
 
-void QRasterPixmapData::fill(const QColor &color)
+void QRasterPlatformPixmap::fill(const QColor &color)
 {
    uint pixel;
 
@@ -178,23 +171,13 @@ void QRasterPixmapData::fill(const QColor &color)
       } else {
          pixel = 1;
       }
+
    } else if (image.depth() >= 15) {
       int alpha = color.alpha();
+
       if (alpha != 255) {
          if (!image.hasAlphaChannel()) {
-            QImage::Format toFormat;
-#if !(defined(QT_HAVE_NEON) || defined(QT_ALWAYS_HAVE_SSE2))
-            if (image.format() == QImage::Format_RGB16) {
-               toFormat = QImage::Format_ARGB8565_Premultiplied;
-            } else if (image.format() == QImage::Format_RGB666) {
-               toFormat = QImage::Format_ARGB6666_Premultiplied;
-            } else if (image.format() == QImage::Format_RGB555) {
-               toFormat = QImage::Format_ARGB8555_Premultiplied;
-            } else if (image.format() == QImage::Format_RGB444) {
-               toFormat = QImage::Format_ARGB4444_Premultiplied;
-            } else
-#endif
-               toFormat = QImage::Format_ARGB32_Premultiplied;
+            QImage::Format toFormat = qt_alphaVersionForPainting(image.format());
 
             if (!image.isNull() && qt_depthForFormat(image.format()) == qt_depthForFormat(toFormat)) {
                image.detach();
@@ -204,105 +187,38 @@ void QRasterPixmapData::fill(const QColor &color)
             }
          }
 
-         switch (image.format()) {
-            case QImage::Format_ARGB8565_Premultiplied:
-               pixel = qargb8565(color.rgba()).rawValue();
-               break;
-            case QImage::Format_ARGB8555_Premultiplied:
-               pixel = qargb8555(color.rgba()).rawValue();
-               break;
-            case QImage::Format_ARGB6666_Premultiplied:
-               pixel = qargb6666(color.rgba()).rawValue();
-               break;
-            case QImage::Format_ARGB4444_Premultiplied:
-               pixel = qargb4444(color.rgba()).rawValue();
-               break;
-            default:
-               pixel = PREMUL(color.rgba());
-               break;
-         }
-      } else {
-         switch (image.format()) {
-            case QImage::Format_RGB16:
-               pixel = qt_colorConvert<quint16, quint32>(color.rgba(), 0);
-               break;
-            case QImage::Format_RGB444:
-               pixel = qrgb444(color.rgba()).rawValue();
-               break;
-            case QImage::Format_RGB555:
-               pixel = qrgb555(color.rgba()).rawValue();
-               break;
-            case QImage::Format_RGB666:
-               pixel = qrgb666(color.rgba()).rawValue();
-               break;
-            case QImage::Format_RGB888:
-               pixel = qrgb888(color.rgba()).rawValue();
-               break;
-            default:
-               pixel = color.rgba();
-               break;
-         }
       }
+
+      pixel = qPremultiply(color.rgba());
+      const QPixelLayout *layout = &qPixelLayouts[image.format()];
+      layout->convertFromARGB32PM(&pixel, &pixel, 1, layout, 0);
+
+   } else if (image.format() == QImage::Format_Alpha8) {
+      pixel = qAlpha(color.rgba());
+
+   } else if (image.format() == QImage::Format_Grayscale8) {
+      pixel = qGray(color.rgba());
+
    } else {
       pixel = 0;
-      // ### what about 8 bits
+
    }
 
    image.fill(pixel);
 }
 
-void QRasterPixmapData::setMask(const QBitmap &mask)
-{
-   if (mask.size().isEmpty()) {
-      if (image.depth() != 1) { // hw: ????
-         image = image.convertToFormat(QImage::Format_RGB32);
-      }
-   } else {
-      const int w = image.width();
-      const int h = image.height();
 
-      switch (image.depth()) {
-         case 1: {
-            const QImage imageMask = mask.toImage().convertToFormat(image.format());
-            for (int y = 0; y < h; ++y) {
-               const uchar *mscan = imageMask.scanLine(y);
-               uchar *tscan = image.scanLine(y);
-               int bytesPerLine = image.bytesPerLine();
-               for (int i = 0; i < bytesPerLine; ++i) {
-                  tscan[i] &= mscan[i];
-               }
-            }
-            break;
-         }
-         default: {
-            const QImage imageMask = mask.toImage().convertToFormat(QImage::Format_MonoLSB);
-            image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-            for (int y = 0; y < h; ++y) {
-               const uchar *mscan = imageMask.scanLine(y);
-               QRgb *tscan = (QRgb *)image.scanLine(y);
-               for (int x = 0; x < w; ++x) {
-                  if (!(mscan[x >> 3] & qt_pixmap_bit_mask[x & 7])) {
-                     tscan[x] = 0;
-                  }
-               }
-            }
-            break;
-         }
-      }
-   }
-}
-
-bool QRasterPixmapData::hasAlphaChannel() const
+bool QRasterPlatformPixmap::hasAlphaChannel() const
 {
    return image.hasAlphaChannel();
 }
 
-QImage QRasterPixmapData::toImage() const
+QImage QRasterPlatformPixmap::toImage() const
 {
    if (!image.isNull()) {
       QImageData *data = const_cast<QImage &>(image).data_ptr();
       if (data->paintEngine && data->paintEngine->isActive()
-            && data->paintEngine->paintDevice() == &image) {
+         && data->paintEngine->paintDevice() == &image) {
          return image.copy();
       }
    }
@@ -310,7 +226,7 @@ QImage QRasterPixmapData::toImage() const
    return image;
 }
 
-QImage QRasterPixmapData::toImage(const QRect &rect) const
+QImage QRasterPlatformPixmap::toImage(const QRect &rect) const
 {
    if (rect.isNull()) {
       return image;
@@ -318,26 +234,26 @@ QImage QRasterPixmapData::toImage(const QRect &rect) const
 
    QRect clipped = rect.intersected(QRect(0, 0, w, h));
    const uint du = uint(d);
-   if ((du % 8 == 0) && (((uint(clipped.x()) * du)) % 32 == 0))
-      return QImage(image.scanLine(clipped.y()) + clipped.x() * (du / 8),
-                    clipped.width(), clipped.height(),
-                    image.bytesPerLine(), image.format());
-   else {
+
+   if ((du % 8 == 0) && (((uint(clipped.x()) * du)) % 32 == 0)) {
+      QImage newImage(image.scanLine(clipped.y()) + clipped.x() * (du / 8),
+         clipped.width(), clipped.height(),
+         image.bytesPerLine(), image.format());
+
+      newImage.setDevicePixelRatio(image.devicePixelRatio());
+      return newImage;
+
+   } else {
       return image.copy(clipped);
    }
 }
 
-void QRasterPixmapData::setAlphaChannel(const QPixmap &alphaChannel)
-{
-   image.setAlphaChannel(alphaChannel.toImage());
-}
-
-QPaintEngine *QRasterPixmapData::paintEngine() const
+QPaintEngine *QRasterPlatformPixmap::paintEngine() const
 {
    return image.paintEngine();
 }
 
-int QRasterPixmapData::metric(QPaintDevice::PaintDeviceMetric metric) const
+int QRasterPlatformPixmap::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
    QImageData *d = image.d;
    if (!d) {
@@ -359,105 +275,75 @@ int QRasterPixmapData::metric(QPaintDevice::PaintDeviceMetric metric) const
       case QPaintDevice::PdmDepth:
          return this->d;
       case QPaintDevice::PdmDpiX: // fall-through
+         return qt_defaultDpiX();
       case QPaintDevice::PdmPhysicalDpiX:
          return qt_defaultDpiX();
       case QPaintDevice::PdmDpiY: // fall-through
+         return qt_defaultDpiX();
       case QPaintDevice::PdmPhysicalDpiY:
          return qt_defaultDpiY();
+      case QPaintDevice::PdmDevicePixelRatio:
+         return image.devicePixelRatio();
+      case QPaintDevice::PdmDevicePixelRatioScaled:
+         return image.devicePixelRatio() * QPaintDevice::devicePixelRatioFScale();
       default:
-         qWarning("QRasterPixmapData::metric(): Unhandled metric type %d", metric);
+         qWarning("QRasterPlatformPixmap::metric(): Unhandled metric type %d", metric);
          break;
    }
 
    return 0;
 }
 
-void QRasterPixmapData::createPixmapForImage(QImage &sourceImage, Qt::ImageConversionFlags flags, bool inPlace)
+void QRasterPlatformPixmap::createPixmapForImage(QImage &sourceImage, Qt::ImageConversionFlags flags, bool inPlace)
 {
    QImage::Format format;
    if (flags & Qt::NoFormatConversion) {
       format = sourceImage.format();
    } else
-#ifdef Q_WS_QWS
-      if (pixelType() == BitmapType) {
-         format = QImage::Format_Mono;
-      } else {
-         format = QScreen::instance()->pixelFormat();
-         if (format == QImage::Format_Invalid) {
-            format = QImage::Format_ARGB32_Premultiplied;
-         } else if (format == QImage::Format_Indexed8) { // currently not supported
-            format = QImage::Format_RGB444;
-         }
-      }
 
-   if (sourceImage.hasAlphaChannel()
-         && ((flags & Qt::NoOpaqueDetection)
-             || const_cast<QImage &>(sourceImage).data_ptr()->checkForAlphaPixels())) {
-      switch (format) {
-         case QImage::Format_RGB16:
-            format = QImage::Format_ARGB8565_Premultiplied;
-            break;
-         case QImage::Format_RGB666:
-            format = QImage::Format_ARGB6666_Premultiplied;
-            break;
-         case QImage::Format_RGB555:
-            format = QImage::Format_ARGB8555_Premultiplied;
-            break;
-         case QImage::Format_RGB444:
-            format = QImage::Format_ARGB4444_Premultiplied;
-            break;
-         default:
-            format = QImage::Format_ARGB32_Premultiplied;
-            break;
-      }
-   } else if (format == QImage::Format_Invalid) {
-      format = QImage::Format_ARGB32_Premultiplied;
-   }
-#else
       if (pixelType() == BitmapType) {
          format = QImage::Format_MonoLSB;
       } else {
          if (sourceImage.depth() == 1) {
             format = sourceImage.hasAlphaChannel()
-                     ? QImage::Format_ARGB32_Premultiplied
-                     : QImage::Format_RGB32;
+               ? QImage::Format_ARGB32_Premultiplied
+               : QImage::Format_RGB32;
          } else {
             QImage::Format opaqueFormat = QNativeImage::systemFormat();
-            QImage::Format alphaFormat = QImage::Format_ARGB32_Premultiplied;
-
-#if !defined(QT_HAVE_NEON) && !defined(QT_ALWAYS_HAVE_SSE2)
-            switch (opaqueFormat) {
-               case QImage::Format_RGB16:
-                  alphaFormat = QImage::Format_ARGB8565_Premultiplied;
-                  break;
-               default: // We don't care about the others...
-                  break;
-            }
-#endif
+            QImage::Format alphaFormat = qt_alphaVersionForPainting(opaqueFormat);
 
             if (!sourceImage.hasAlphaChannel()) {
                format = opaqueFormat;
+
             } else if ((flags & Qt::NoOpaqueDetection) == 0
-                       && !const_cast<QImage &>(sourceImage).data_ptr()->checkForAlphaPixels()) {
+               && !const_cast<QImage &>(sourceImage).data_ptr()->checkForAlphaPixels()) {
                // image has alpha format but is really opaque, so try to do a
                // more efficient conversion
-               if (sourceImage.format() == QImage::Format_ARGB32
-                     || sourceImage.format() == QImage::Format_ARGB32_Premultiplied) {
-                  if (!inPlace) {
-                     sourceImage.detach();
-                  }
-                  sourceImage.d->format = QImage::Format_RGB32;
-               }
+
                format = opaqueFormat;
             } else {
                format = alphaFormat;
             }
          }
       }
-#endif
 
-   if (inPlace && sourceImage.d->convertInPlace(format, flags)) {
+
+   if (format == QImage::Format_RGB32 && (sourceImage.format() == QImage::Format_ARGB32
+         || sourceImage.format() == QImage::Format_ARGB32_Premultiplied)) {
+
+      inPlace = inPlace && sourceImage.isDetached();
       image = sourceImage;
+      if (!inPlace) {
+         image.detach();
+      }
+
+      if (image.d) {
+         image.d->format = QImage::Format_RGB32;
+      }
+
+   } else if (inPlace && sourceImage.d->convertInPlace(format, flags)) {
+      image = sourceImage;
+
    } else {
       image = sourceImage.convertToFormat(format);
    }
@@ -471,12 +357,30 @@ void QRasterPixmapData::createPixmapForImage(QImage &sourceImage, Qt::ImageConve
    }
    is_null = (w <= 0 || h <= 0);
 
-   setSerialNumber(image.serialNumber());
+   if (image.d) {
+      image.d->devicePixelRatio = sourceImage.devicePixelRatio();
+   }
+
+   //ensure the pixmap and the image resulting from toImage() have the same cacheKey();
+   setSerialNumber(image.cacheKey() >> 32);
+
+   if (image.d) {
+      setDetachNumber(image.d->detach_no);
+   }
 }
 
-QImage *QRasterPixmapData::buffer()
+QImage *QRasterPlatformPixmap::buffer()
 {
    return &image;
 }
 
-QT_END_NAMESPACE
+qreal QRasterPlatformPixmap::devicePixelRatio() const
+{
+   return image.devicePixelRatio();
+}
+
+void QRasterPlatformPixmap::setDevicePixelRatio(qreal scaleFactor)
+{
+   image.setDevicePixelRatio(scaleFactor);
+}
+

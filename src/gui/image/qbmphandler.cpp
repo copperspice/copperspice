@@ -28,8 +28,6 @@
 #include <qvariant.h>
 #include <qvector.h>
 
-QT_BEGIN_NAMESPACE
-
 static void swapPixel01(QImage *image)        // 1-bpp: swap 0 and 1 pixels
 {
    int i;
@@ -161,7 +159,7 @@ static bool read_dib_infoheader(QDataStream &s, BMP_INFOHDR &bi)
    int nbits = bi.biBitCount;
    int comp = bi.biCompression;
    if (!(nbits == 1 || nbits == 4 || nbits == 8 || nbits == 16 || nbits == 24 || nbits == 32) ||
-         bi.biPlanes != 1 || comp > BMP_BITFIELDS) {
+      bi.biPlanes != 1 || comp > BMP_BITFIELDS) {
       return false;   // weird BMP image
    }
    if (!(comp == BMP_RGB || (nbits == 4 && comp == BMP_RLE4) ||
@@ -184,57 +182,18 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
    uint red_mask = 0;
    uint green_mask = 0;
    uint blue_mask = 0;
+   uint alpha_mask = 0;
    int red_shift = 0;
    int green_shift = 0;
    int blue_shift = 0;
+   int alpha_shift = 0;
    int red_scale = 0;
    int green_scale = 0;
    int blue_scale = 0;
-
-   int ncols = 0;
-   int depth = 0;
-   QImage::Format format;
-   switch (nbits) {
-      case 32:
-      case 24:
-      case 16:
-         depth = 32;
-         format = QImage::Format_RGB32;
-         break;
-      case 8:
-      case 4:
-         depth = 8;
-         format = QImage::Format_Indexed8;
-         break;
-      default:
-         depth = 1;
-         format = QImage::Format_Mono;
-   }
-
-   if (bi.biHeight < 0) {
-      h = -h;   // support images with negative height
-   }
-
-   if (image.size() != QSize(w, h) || image.format() != format) {
-      image = QImage(w, h, format);
-      if (image.isNull()) {                      // could not create image
-         return false;
-      }
-   }
-
-   if (depth != 32) {
-      ncols = bi.biClrUsed ? bi.biClrUsed : 1 << nbits;
-      if (ncols > 256) { // sanity check - don't run out of mem if color table is broken
-         return false;
-      }
-      image.setColorCount(ncols);
-   }
-
-   image.setDotsPerMeterX(bi.biXPelsPerMeter);
-   image.setDotsPerMeterY(bi.biYPelsPerMeter);
+   int alpha_scale = 0;
 
    if (!d->isSequential()) {
-      d->seek(startpos + BMP_FILEHDR_SIZE + (bi.biSize >= BMP_WIN4 ? BMP_WIN : bi.biSize));   // goto start of colormap
+      d->seek(startpos + BMP_FILEHDR_SIZE + (bi.biSize >= BMP_WIN4 ? BMP_WIN : bi.biSize));   // goto start of colormap or masks
    }
 
    if (bi.biSize >= BMP_WIN4 || (comp == BMP_BITFIELDS && (nbits == 16 || nbits == 32))) {
@@ -250,7 +209,6 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
 
       // Read BMP v4+ header
       if (bi.biSize >= BMP_WIN4) {
-         int alpha_mask   = 0;
          int CSType       = 0;
          int gamma_red    = 0;
          int gamma_green  = 0;
@@ -298,7 +256,55 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
       }
    }
 
+   bool transp = (comp == BMP_BITFIELDS) && alpha_mask;
+   int ncols = 0;
+   int depth = 0;
+   QImage::Format format;
+   switch (nbits) {
+      case 32:
+      case 24:
+      case 16:
+         depth = 32;
+         format = transp ? QImage::Format_ARGB32 : QImage::Format_RGB32;
+         break;
+      case 8:
+      case 4:
+         depth = 8;
+         format = QImage::Format_Indexed8;
+         break;
+      default:
+         depth = 1;
+         format = QImage::Format_Mono;
+   }
+
+   if (depth != 32) {
+      ncols = bi.biClrUsed ? bi.biClrUsed : 1 << nbits;
+      if (ncols < 1 || ncols > 256) { // sanity check - don't run out of mem if color table is broken
+         return false;
+      }
+   }
+   if (bi.biHeight < 0) {
+      h = -h;   // support images with negative height
+   }
+
+   if (image.size() != QSize(w, h) || image.format() != format) {
+      image = QImage(w, h, format);
+      if (image.isNull()) {                        // could not create image
+         return false;
+      }
+
+      if (ncols) {
+         image.setColorCount(ncols);   // Ensure valid QImage
+      }
+   }
+
+   image.setDotsPerMeterX(bi.biXPelsPerMeter);
+   image.setDotsPerMeterY(bi.biYPelsPerMeter);
+
+
+
    if (ncols > 0) {                                // read color table
+      image.setColorCount(ncols);
       uchar rgb[4];
       int   rgb_len = t == BMP_OLD ? 3 : 4;
       for (int i = 0; i < ncols; i++) {
@@ -326,6 +332,11 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
          return false;
       }
       blue_scale = 256 / ((blue_mask >> blue_shift) + 1);
+      alpha_shift = calc_shift(alpha_mask);
+      if (((alpha_mask >> alpha_shift) + 1) == 0) {
+         return false;
+      }
+      alpha_scale = 256 / ((alpha_mask >> alpha_shift) + 1);
    } else if (comp == BMP_RGB && (nbits == 24 || nbits == 32)) {
       blue_mask = 0x000000ff;
       green_mask = 0x0000ff00;
@@ -375,14 +386,18 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
          quint8 b;
          uchar *p = data + (h - 1) * bpl;
          const uchar *endp = p + w;
+
          while (y < h) {
             if (!d->getChar((char *)&b)) {
                break;
             }
+
+
             if (b == 0) {                        // escape code
                if (!d->getChar((char *)&b) || b == 1) {
                   y = h;                // exit loop
-               } else switch (b) {
+               } else
+                  switch (b) {
                      case 0:                        // end of line
                         x = 0;
                         y++;
@@ -403,15 +418,14 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
                      if ((uint)y >= (uint)h) {
                         y = h - 1;
                      }
-
                      p = data + (h - y - 1) * bpl + x;
                      break;
+
                      default:                // absolute mode
                         // Protection
                         if (p + b > endp) {
                            b = endp - p;
                         }
-
                         i = (c = b) / 2;
                         while (i--) {
                            d->getChar((char *)&b);
@@ -429,11 +443,9 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
                         x += c;
                   }
             } else {                        // encoded mode
-               // Protection
                if (p + b > endp) {
                   b = endp - p;
                }
-
                i = (c = b) / 2;
                d->getChar((char *)&b);                // 2 pixels to be repeated
                while (i--) {
@@ -464,9 +476,7 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
          }
       }
       delete [] buf;
-   }
-
-   else if (nbits == 8) {                        // 8 bit BMP image
+   } else if (nbits == 8) {                      // 8 bit BMP image
       if (comp == BMP_RLE8) {                // run length compression
          int x = 0, y = 0;
          quint8 b;
@@ -479,36 +489,32 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
             if (b == 0) {                        // escape code
                if (!d->getChar((char *)&b) || b == 1) {
                   y = h;                // exit loop
-               } else switch (b) {
+               } else
+                  switch (b) {
                      case 0:                        // end of line
                         x = 0;
                         y++;
                         p = data + (h - y - 1) * bpl;
                         break;
-                     case 2:                        // delta (jump)
-                        {
-                           quint8 tmp;
-                           d->getChar((char *)&tmp);
-                           x += tmp;
-                           d->getChar((char *)&tmp);
-                           y += tmp;
-                        }
-
-                        // Protection
-                        if ((uint)x >= (uint)w) {
-                           x = w - 1;
-                        }
-                        if ((uint)y >= (uint)h) {
-                           y = h - 1;
-                        }
-                        p = data + (h - y - 1) * bpl + x;
-                        break;
+                     case 2: {                      // delta (jump)
+                        quint8 tmp;
+                        d->getChar((char *)&tmp);
+                        x += tmp;
+                        d->getChar((char *)&tmp);
+                        y += tmp;
+                     }
+                     if ((uint)x >= (uint)w) {
+                        x = w - 1;
+                     }
+                     if ((uint)y >= (uint)h) {
+                        y = h - 1;
+                     }
+                     p = data + (h - y - 1) * bpl + x;
+                     break;
                      default:                // absolute mode
-                        // Protection
                         if (p + b > endp) {
                            b = endp - p;
                         }
-
                         if (d->read((char *)p, b) != b) {
                            return false;
                         }
@@ -518,6 +524,7 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
                         x += b;
                         p += b;
                   }
+
             } else {                        // encoded mode
                // Protection
                if (p + b > endp) {
@@ -557,12 +564,16 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
          b = buf24;
          while (p < end) {
             c = *(uchar *)b | (*(uchar *)(b + 1) << 8);
-            if (nbits != 16) {
+            if (nbits > 16) {
                c |= *(uchar *)(b + 2) << 16;
             }
-            *p++ = qRgb(((c & red_mask) >> red_shift) * red_scale,
-                        ((c & green_mask) >> green_shift) * green_scale,
-                        ((c & blue_mask) >> blue_shift) * blue_scale);
+            if (nbits > 24) {
+               c |= *(uchar *)(b + 3) << 24;
+            }
+            *p++ = qRgba(((c & red_mask) >> red_shift) * red_scale,
+                  ((c & green_mask) >> green_shift) * green_scale,
+                  ((c & blue_mask) >> blue_shift) * blue_scale,
+                  transp ? ((c & alpha_mask) >> alpha_shift) * alpha_scale : 0xff);
             b += nbits / 8;
          }
       }
@@ -587,9 +598,9 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
 // this is also used in qmime_win.cpp
 bool qt_write_dib(QDataStream &s, QImage image)
 {
-   int        nbits;
-   int        bpl_bmp;
-   int        bpl = image.bytesPerLine();
+   int nbits;
+   int bpl_bmp;
+   int bpl = image.bytesPerLine();
 
    QIODevice *d = s.device();
    if (!d->isWritable()) {
@@ -602,12 +613,7 @@ bool qt_write_dib(QDataStream &s, QImage image)
    } else if (image.depth() == 32) {
       bpl_bmp = ((image.width() * 24 + 31) / 32) * 4;
       nbits = 24;
-#ifdef Q_WS_QWS
-   } else if (image.depth() == 1 || image.depth() == 8) {
-      // Qt for Embedded Linux doesn't word align.
-      bpl_bmp = ((image.width() * image.depth() + 31) / 32) * 4;
-      nbits = image.depth();
-#endif
+
    } else {
       bpl_bmp = bpl;
       nbits = image.depth();
@@ -622,11 +628,12 @@ bool qt_write_dib(QDataStream &s, QImage image)
    bi.biCompression   = BMP_RGB;
    bi.biSizeImage     = bpl_bmp * image.height();
    bi.biXPelsPerMeter = image.dotsPerMeterX() ? image.dotsPerMeterX()
-                        : 2834; // 72 dpi default
+      : 2834; // 72 dpi default
    bi.biYPelsPerMeter = image.dotsPerMeterY() ? image.dotsPerMeterY() : 2834;
    bi.biClrUsed       = image.colorCount();
    bi.biClrImportant  = image.colorCount();
-   s << bi;                                        // write info header
+   s << bi;
+   // write info header
    if (s.status() != QDataStream::Ok) {
       return false;
    }
@@ -654,33 +661,26 @@ bool qt_write_dib(QDataStream &s, QImage image)
 
    int y;
 
-   if (nbits == 1 || nbits == 8) {                // direct output
-#ifdef Q_WS_QWS
-      // Qt for Embedded Linux doesn't word align.
-      int pad = bpl_bmp - bpl;
-      char padding[4];
-#endif
+   if (nbits == 1 || nbits == 8) {
+      // direct output
+
       for (y = image.height() - 1; y >= 0; y--) {
-         if (d->write((char *)image.scanLine(y), bpl) == -1) {
+         if (d->write((const char *)image.constScanLine(y), bpl) == -1) {
             return false;
          }
-#ifdef Q_WS_QWS
-         if (d->write(padding, pad) == -1) {
-            return false;
-         }
-#endif
       }
+
       return true;
    }
 
-   uchar *buf        = new uchar[bpl_bmp];
+   uchar *buf = new uchar[bpl_bmp];
    uchar *b, *end;
-   uchar *p;
+   const uchar *p;
 
    memset(buf, 0, bpl_bmp);
    for (y = image.height() - 1; y >= 0; y--) {  // write the image bits
       if (nbits == 4) {                        // convert 8 -> 4 bits
-         p = image.scanLine(y);
+         p = image.constScanLine(y);
          b = buf;
          end = b + image.width() / 2;
          while (b < end) {
@@ -690,9 +690,10 @@ bool qt_write_dib(QDataStream &s, QImage image)
          if (image.width() & 1) {
             *b = *p << 4;
          }
+
       } else {                                // 32 bits
-         QRgb *p   = (QRgb *)image.scanLine(y);
-         QRgb *end = p + image.width();
+         const QRgb *p   = (const QRgb *)image.constScanLine(y);
+         const QRgb *end = p + image.width();
          b = buf;
          while (p < end) {
             *b++ = qBlue(*p);
@@ -717,12 +718,18 @@ bool qt_read_dib(QDataStream &s, QImage &image)
    if (!read_dib_infoheader(s, bi)) {
       return false;
    }
+
    return read_dib_body(s, bi, -1, -BMP_FILEHDR_SIZE, image);
 }
 
-QBmpHandler::QBmpHandler()
-   : state(Ready)
+QBmpHandler::QBmpHandler(InternalFormat fmt)
+   : m_format(fmt), state(Ready)
 {
+}
+
+QByteArray QBmpHandler::formatName() const
+{
+   return m_format == BmpFormat ? "bmp" : "dib";
 }
 
 bool QBmpHandler::readHeader()
@@ -737,7 +744,7 @@ bool QBmpHandler::readHeader()
    s.setByteOrder(QDataStream::LittleEndian);
 
    // read BMP file header
-   if (!read_dib_fileheader(s, fileHeader)) {
+   if (m_format == BmpFormat && !read_dib_fileheader(s, fileHeader)) {
       return false;
    }
 
@@ -752,12 +759,12 @@ bool QBmpHandler::readHeader()
 
 bool QBmpHandler::canRead() const
 {
-   if (state == Ready && !canRead(device())) {
+   if (m_format == BmpFormat && state == Ready && !canRead(device())) {
       return false;
    }
 
    if (state != Error) {
-      setFormat("bmp");
+      setFormat(formatName());
       return true;
    }
 
@@ -802,9 +809,13 @@ bool QBmpHandler::read(QImage *image)
    s.setByteOrder(QDataStream::LittleEndian);
 
    // read image
-   if (!read_dib_body(s, infoHeader, fileHeader.bfOffBits, startpos, *image)) {
+   const bool readSuccess = m_format == BmpFormat ?
+      read_dib_body(s, infoHeader, fileHeader.bfOffBits, startpos, *image) :
+      read_dib_body(s, infoHeader, -1, startpos - BMP_FILEHDR_SIZE, *image);
+   if (!readSuccess) {
       return false;
    }
+
 
    state = Ready;
    return true;
@@ -812,23 +823,32 @@ bool QBmpHandler::read(QImage *image)
 
 bool QBmpHandler::write(const QImage &img)
 {
+   if (m_format == DibFormat) {
+      QDataStream dibStream(device());
+      dibStream.setByteOrder(QDataStream::LittleEndian); // Intel byte order
+      return qt_write_dib(dibStream, img);
+   }
    QImage image;
    switch (img.format()) {
-      case QImage::Format_ARGB8565_Premultiplied:
-      case QImage::Format_ARGB8555_Premultiplied:
-      case QImage::Format_ARGB6666_Premultiplied:
-      case QImage::Format_ARGB4444_Premultiplied:
-         image = img.convertToFormat(QImage::Format_ARGB32);
+      case QImage::Format_Mono:
+      case QImage::Format_MonoLSB:
+      case QImage::Format_Indexed8:
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+         image = img;
          break;
-      case QImage::Format_RGB16:
-      case QImage::Format_RGB888:
-      case QImage::Format_RGB666:
-      case QImage::Format_RGB555:
-      case QImage::Format_RGB444:
-         image = img.convertToFormat(QImage::Format_RGB32);
+      case QImage::Format_Alpha8:
+      case QImage::Format_Grayscale8:
+
+         image = img.convertToFormat(QImage::Format_Indexed8);
          break;
       default:
-         image = img;
+         if (img.hasAlphaChannel()) {
+            image = img.convertToFormat(QImage::Format_ARGB32);
+         } else {
+            image = img.convertToFormat(QImage::Format_RGB32);
+         }
+         break;
    }
 
    QIODevice *d = device();
@@ -866,7 +886,7 @@ bool QBmpHandler::write(const QImage &img)
 bool QBmpHandler::supportsOption(ImageOption option) const
 {
    return option == Size
-          || option == ImageFormat;
+      || option == ImageFormat;
 }
 
 QVariant QBmpHandler::option(ImageOption option) const
@@ -913,9 +933,9 @@ void QBmpHandler::setOption(ImageOption option, const QVariant &value)
 
 QByteArray QBmpHandler::name() const
 {
-   return "bmp";
+   return formatName();
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_IMAGEFORMAT_BMP

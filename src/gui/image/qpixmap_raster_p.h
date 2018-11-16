@@ -23,39 +23,38 @@
 #ifndef QPIXMAP_RASTER_P_H
 #define QPIXMAP_RASTER_P_H
 
-#include <qpixmapdata_p.h>
-#include <qpixmapdatafactory_p.h>
+#include <qplatform_pixmap.h>
 
-#ifdef Q_OS_WIN
-# include <qt_windows.h>
-#endif
 
-QT_BEGIN_NAMESPACE
-
-class Q_GUI_EXPORT QRasterPixmapData : public QPixmapData
+class Q_GUI_EXPORT QRasterPlatformPixmap : public QPlatformPixmap
 {
  public:
-   QRasterPixmapData(PixelType type);
-   ~QRasterPixmapData();
+   QRasterPlatformPixmap(PixelType type);
+   ~QRasterPlatformPixmap();
 
-   QPixmapData *createCompatiblePixmapData() const override;
+   QPlatformPixmap *createCompatiblePlatformPixmap() const override;
 
    void resize(int width, int height) override;
-   void fromFile(const QString &filename, Qt::ImageConversionFlags flags);
+
    bool fromData(const uchar *buffer, uint len, const char *format, Qt::ImageConversionFlags flags) override;
    void fromImage(const QImage &image, Qt::ImageConversionFlags flags) override;
+
+   void fromImageInPlace(QImage &image, Qt::ImageConversionFlags flags) override;
    void fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags) override;
 
-   void copy(const QPixmapData *data, const QRect &rect) override;
+   void copy(const QPlatformPixmap *data, const QRect &rect) override;
    bool scroll(int dx, int dy, const QRect &rect) override;
    void fill(const QColor &color) override;
-   void setMask(const QBitmap &mask) override;
+
    bool hasAlphaChannel() const override;
-   void setAlphaChannel(const QPixmap &alphaChannel) override;
+
    QImage toImage() const override;
    QImage toImage(const QRect &rect) const override;
    QPaintEngine *paintEngine() const override;
+
    QImage *buffer() override;
+   qreal devicePixelRatio() const override;
+   void setDevicePixelRatio(qreal scaleFactor) override;
 
  protected:
    int metric(QPaintDevice::PaintDeviceMetric metric) const override;
@@ -70,8 +69,5 @@ class Q_GUI_EXPORT QRasterPixmapData : public QPixmapData
    friend class QRasterPaintEngine;
 };
 
-QT_END_NAMESPACE
-
-#endif // QPIXMAPDATA_RASTER_P_H
-
+#endif
 

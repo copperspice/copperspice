@@ -23,11 +23,11 @@
 #ifndef QIMAGEIOHANDLER_H
 #define QIMAGEIOHANDLER_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
-#include <QtCore/qscopedpointer.h>
+#include <qiodevice.h>
+#include <qplugin.h>
+#include <qfactoryinterface.h>
+#include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
 
 class QImage;
 class QRect;
@@ -71,8 +71,25 @@ class Q_GUI_EXPORT QImageIOHandler
       Endianness,
       Animation,
       BackgroundColor,
-      ImageFormat
+      ImageFormat,
+      SupportedSubTypes,
+      OptimizedWrite,
+      ProgressiveScanWrite,
+      ImageTransformation
    };
+   enum Transformation {
+      TransformationNone = 0,
+      TransformationMirror = 1,
+      TransformationFlip = 2,
+      TransformationRotate180 = TransformationMirror | TransformationFlip,
+      TransformationRotate90 = 4,
+      TransformationMirrorAndRotate90 = TransformationMirror | TransformationRotate90,
+      TransformationFlipAndRotate90 = TransformationFlip | TransformationRotate90,
+      TransformationRotate270 = TransformationRotate180 | TransformationRotate90
+   };
+
+   using Transformations = QFlags<Transformation>;
+
    virtual QVariant option(ImageOption option) const;
    virtual void setOption(ImageOption option, const QVariant &value);
    virtual bool supportsOption(ImageOption option) const;
@@ -94,17 +111,13 @@ class Q_GUI_EXPORT QImageIOHandler
    Q_DISABLE_COPY(QImageIOHandler)
 };
 
-struct Q_GUI_EXPORT QImageIOHandlerFactoryInterface : public QFactoryInterface {
-   virtual QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const = 0;
-};
 
-#define QImageIOHandlerFactoryInterface_iid "com.copperspice.QImageIOHandlerFactoryInterface"
-CS_DECLARE_INTERFACE(QImageIOHandlerFactoryInterface, QImageIOHandlerFactoryInterface_iid)
 
-class Q_GUI_EXPORT QImageIOPlugin : public QObject, public QImageIOHandlerFactoryInterface
+#define QImageIOHandlerFactoryInterface_iid "org.qt-project.Qt.QImageIOHandlerFactoryInterface"
+
+class Q_GUI_EXPORT QImageIOPlugin : public QObject
 {
-   GUI_CS_OBJECT_MULTIPLE(QImageIOPlugin, QObject)
-   CS_INTERFACES(QImageIOHandlerFactoryInterface, QFactoryInterface)
+   GUI_CS_OBJECT(QImageIOPlugin)
 
  public:
    explicit QImageIOPlugin(QObject *parent = nullptr);
@@ -118,10 +131,11 @@ class Q_GUI_EXPORT QImageIOPlugin : public QObject, public QImageIOHandlerFactor
    using Capabilities = QFlags<Capability>;
 
    virtual Capabilities capabilities(QIODevice *device, const QByteArray &format) const = 0;
+   virtual QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const = 0;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QImageIOPlugin::Capabilities)
 
-QT_END_NAMESPACE
 
-#endif // QIMAGEIOHANDLER_H
+
+#endif

@@ -27,7 +27,7 @@
 #include <QtCore/QSize>
 #include <QtCore/QRect>
 
-QT_BEGIN_NAMESPACE
+
 
 class QJpegHandlerPrivate;
 class QJpegHandler : public QImageIOHandler
@@ -52,6 +52,6 @@ class QJpegHandler : public QImageIOHandler
    QJpegHandlerPrivate *d;
 };
 
-QT_END_NAMESPACE
 
-#endif // QJPEGHANDLER_P_H
+
+#endif

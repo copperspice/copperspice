@@ -23,11 +23,10 @@
 #ifndef QBMPHANDLER_P_H
 #define QBMPHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
+#include <qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_BMP
 
-QT_BEGIN_NAMESPACE
 
 struct BMP_FILEHDR {                    // BMP file header
    char   bfType[2];                    // "BM"
@@ -54,7 +53,13 @@ struct BMP_INFOHDR {                    // BMP information header
 class QBmpHandler : public QImageIOHandler
 {
  public:
-   QBmpHandler();
+   enum InternalFormat {
+      DibFormat,
+      BmpFormat
+   };
+
+   explicit QBmpHandler(InternalFormat fmt = BmpFormat);
+
    bool canRead() const override;
    bool read(QImage *image) override;
    bool write(const QImage &image) override;
@@ -69,12 +74,14 @@ class QBmpHandler : public QImageIOHandler
 
  private:
    bool readHeader();
+   inline QByteArray formatName() const;
 
    enum State {
       Ready,
       ReadHeader,
       Error
    };
+   const InternalFormat m_format;
    State state;
 
    BMP_FILEHDR fileHeader;
@@ -82,8 +89,8 @@ class QBmpHandler : public QImageIOHandler
    int startpos;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_IMAGEFORMAT_BMP
 
-#endif // QBMPHANDLER_P_H
+#endif

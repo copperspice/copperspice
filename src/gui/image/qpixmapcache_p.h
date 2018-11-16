@@ -29,7 +29,6 @@
 #include <qpixmap_raster_p.h>
 #include <qcache.h>
 
-QT_BEGIN_NAMESPACE
 
 uint qHash(const QPixmapCache::Key &k);
 
@@ -51,11 +50,11 @@ class QPixmapCacheEntry : public QPixmap
 {
  public:
    QPixmapCacheEntry(const QPixmapCache::Key &key, const QPixmap &pix) : QPixmap(pix), key(key) {
-      QPixmapData *pd = pixmapData();
-      if (pd && pd->classId() == QPixmapData::RasterClass) {
-         QRasterPixmapData *d = static_cast<QRasterPixmapData *>(pd);
+      QPlatformPixmap *pd = handle();
+      if (pd && pd->classId() == QPlatformPixmap::RasterClass) {
+         QRasterPlatformPixmap *d = static_cast<QRasterPlatformPixmap *>(pd);
          if (!d->image.isNull() && d->image.d->paintEngine
-               && !d->image.d->paintEngine->isActive()) {
+            && !d->image.d->paintEngine->isActive()) {
             delete d->image.d->paintEngine;
             d->image.d->paintEngine = 0;
          }
@@ -65,6 +64,5 @@ class QPixmapCacheEntry : public QPixmap
    QPixmapCache::Key key;
 };
 
-QT_END_NAMESPACE
 
-#endif // QPIXMAPCACHE_P_H
+#endif

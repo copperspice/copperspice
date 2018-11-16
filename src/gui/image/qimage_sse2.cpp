@@ -26,13 +26,11 @@
 #include <qdrawhelper_p.h>
 #include <qdrawingprimitive_sse2_p.h>
 
-#ifdef QT_HAVE_SSE2
-
-QT_BEGIN_NAMESPACE
+#ifdef __SSE2__
 
 bool convert_ARGB_to_ARGB_PM_inplace_sse2(QImageData *data, Qt::ImageConversionFlags)
 {
-   Q_ASSERT(data->format == QImage::Format_ARGB32);
+   Q_ASSERT(data->format == QImage::Format_ARGB32 || data->format == QImage::Format_RGBA8888);
 
    // extra pixels on each line
    const int spare = data->width & 3;
@@ -47,6 +45,7 @@ bool convert_ARGB_to_ARGB_PM_inplace_sse2(QImageData *data, Qt::ImageConversionF
    const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
 
    __m128i *d = reinterpret_cast<__m128i *>(data->data);
+
    while (height--) {
       const __m128i *end = d + iter;
 
@@ -71,21 +70,25 @@ bool convert_ARGB_to_ARGB_PM_inplace_sse2(QImageData *data, Qt::ImageConversionF
 
       QRgb *p = reinterpret_cast<QRgb *>(d);
       QRgb *pe = p + spare;
+
       for (; p != pe; ++p) {
          if (*p < 0x00ffffff) {
             *p = 0;
          } else if (*p < 0xff000000) {
-            *p = PREMUL(*p);
+            *p = qPremultiply(*p);
          }
       }
 
       d = reinterpret_cast<__m128i *>(p + pad);
    }
 
-   data->format = QImage::Format_ARGB32_Premultiplied;
+   if (data->format == QImage::Format_ARGB32) {
+      data->format = QImage::Format_ARGB32_Premultiplied;
+   } else {
+      data->format = QImage::Format_RGBA8888_Premultiplied;
+   }
+
    return true;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_HAVE_SSE2
+#endif

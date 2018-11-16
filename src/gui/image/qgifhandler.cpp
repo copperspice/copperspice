@@ -48,7 +48,7 @@ class QGIFFormat
    ~QGIFFormat();
 
    int decode(QImage *image, const uchar *buffer, int length,
-              int *nextFrameDelay, int *loopCount);
+      int *nextFrameDelay, int *loopCount);
    static void scan(QIODevice *device, QVector<QSize> *imageSizes, int *loopCount);
 
    bool newFrame;
@@ -190,7 +190,7 @@ void QGIFFormat::disposePrevious(QImage *image)
             fillRect(image, l, t, r - l + 1, b - t + 1, color(bgcol));
          } else {
             // Impossible:  We don't know of a bgcol - use pixel 0
-            QRgb *bits = (QRgb *)image->bits();
+            const QRgb *bits = reinterpret_cast<const QRgb *>(image->constBits());
             fillRect(image, l, t, r - l + 1, b - t + 1, bits[0]);
          }
          // ### Changed: QRect(l, t, r-l+1, b-t+1)
@@ -199,8 +199,8 @@ void QGIFFormat::disposePrevious(QImage *image)
          if (frame >= 0) {
             for (int ln = t; ln <= b; ln++) {
                memcpy(image->scanLine(ln) + l,
-                      backingstore.scanLine(ln - t),
-                      (r - l + 1)*sizeof(QRgb));
+                  backingstore.constScanLine(ln - t),
+                  (r - l + 1)*sizeof(QRgb));
             }
             // ### Changed: QRect(l, t, r-l+1, b-t+1)
          }
@@ -217,7 +217,7 @@ void QGIFFormat::disposePrevious(QImage *image)
     Returns the number of bytes consumed.
 */
 int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
-                       int *nextFrameDelay, int *loopCount)
+   int *nextFrameDelay, int *loopCount)
 {
    // We are required to state that
    //    "The Graphics Interchange Format(c) is the Copyright property of
@@ -346,7 +346,10 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                   (*image) = QImage(swidth, sheight, format);
                   bpl = image->bytesPerLine();
                   bits = image->bits();
-                  memset(bits, 0, image->byteCount());
+
+                  if (bits) {
+                     memset(bits, 0, image->byteCount());
+                  }
                }
 
                // Check if the previous attempt to create the image failed. If it
@@ -403,18 +406,22 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                   int h = b - t + 1;
 
                   if (backingstore.width() < w
-                        || backingstore.height() < h) {
+                     || backingstore.height() < h) {
                      // We just use the backing store as a byte array
                      backingstore = QImage(qMax(backingstore.width(), w),
-                                           qMax(backingstore.height(), h),
-                                           QImage::Format_RGB32);
-                     memset(bits, 0, image->byteCount());
+                           qMax(backingstore.height(), h),
+                           QImage::Format_RGB32);
+                     if (backingstore.isNull()) {
+                        state = Error;
+                        return -1;
+                     }
+                     memset(backingstore.bits(), 0, backingstore.byteCount());
                   }
                   const int dest_bpl = backingstore.bytesPerLine();
                   unsigned char *dest_data = backingstore.bits();
                   for (int ln = 0; ln < h; ln++) {
                      memcpy(FAST_SCAN_LINE(dest_data, dest_bpl, ln),
-                            FAST_SCAN_LINE(bits, bpl, t + ln) + l, w * sizeof(QRgb));
+                        FAST_SCAN_LINE(bits, bpl, t + ln) + l, w * sizeof(QRgb));
                   }
                }
 
@@ -491,6 +498,7 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                         ((QRgb *)FAST_SCAN_LINE(bits, bpl, y))[x] = color(firstcode);
                      }
                      x++;
+
                      if (x >= swidth) {
                         out_of_bounds = true;
                      }
@@ -534,7 +542,7 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                         table[1][code] = firstcode;
                         max_code++;
                         if ((max_code >= max_code_size)
-                              && (max_code_size < (1 << max_lzw_bits))) {
+                           && (max_code_size < (1 << max_lzw_bits))) {
                            max_code_size *= 2;
                            code_size++;
                         }
@@ -680,7 +688,7 @@ void QGIFFormat::scan(QIODevice *device, QVector<QSize> *imageSizes, int *loopCo
    }
 
    qint64 oldPos = device->pos();
-   if (!device->seek(0)) {
+   if (device->isSequential() || !device->seek(0)) {
       return;
    }
 
@@ -966,7 +974,7 @@ void QGIFFormat::fillRect(QImage *image, int col, int row, int w, int h, QRgb co
 void QGIFFormat::nextY(unsigned char *bits, int bpl)
 {
    if (out_of_bounds) {
-     return;
+      return;
    }
    int my;
    switch (interlace) {
@@ -983,7 +991,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          if (trans_index < 0) {
             for (i = 1; i <= my; i++) {
                memcpy(FAST_SCAN_LINE(bits, bpl, y + i) + left * sizeof(QRgb), FAST_SCAN_LINE(bits, bpl, y) + left * sizeof(QRgb),
-                      (right - left + 1)*sizeof(QRgb));
+                  (right - left + 1)*sizeof(QRgb));
             }
          }
 
@@ -996,6 +1004,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          if (y > bottom) {
             interlace++;
             y = top + 4;
+
             if (y > bottom) { // for really broken GIFs with bottom < 5
                interlace = 2;
                y = top + 2;
@@ -1014,7 +1023,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          if (trans_index < 0) {
             for (i = 1; i <= my; i++) {
                memcpy(FAST_SCAN_LINE(bits, bpl, y + i) + left * sizeof(QRgb), FAST_SCAN_LINE(bits, bpl, y) + left * sizeof(QRgb),
-                      (right - left + 1)*sizeof(QRgb));
+                  (right - left + 1)*sizeof(QRgb));
             }
          }
 
@@ -1040,7 +1049,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          if (trans_index < 0) {
             for (i = 1; i <= my; i++) {
                memcpy(FAST_SCAN_LINE(bits, bpl, y + i) + left * sizeof(QRgb), FAST_SCAN_LINE(bits, bpl, y) + left * sizeof(QRgb),
-                      (right - left + 1)*sizeof(QRgb));
+                  (right - left + 1)*sizeof(QRgb));
             }
          }
          // if (!out_of_bounds) {
@@ -1078,8 +1087,6 @@ inline QRgb QGIFFormat::color(uchar index) const
 }
 
 //-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 QGifHandler::QGifHandler()
 {
@@ -1110,7 +1117,7 @@ bool QGifHandler::imageIsComing() const
       }
 
       int decoded = gifFormat->decode(&lastImage, (const uchar *)buffer.constData(), buffer.size(),
-                                      &nextDelay, &loopCnt);
+            &nextDelay, &loopCnt);
       if (decoded == -1) {
          break;
       }
@@ -1139,7 +1146,7 @@ bool QGifHandler::canRead(QIODevice *device)
    char head[6];
    if (device->peek(head, sizeof(head)) == sizeof(head))
       return qstrncmp(head, "GIF87a", 6) == 0
-             || qstrncmp(head, "GIF89a", 6) == 0;
+         || qstrncmp(head, "GIF89a", 6) == 0;
    return false;
 }
 
@@ -1156,7 +1163,7 @@ bool QGifHandler::read(QImage *image)
       }
 
       int decoded = gifFormat->decode(&lastImage, (const uchar *)buffer.constData(), buffer.size(),
-                                      &nextDelay, &loopCnt);
+            &nextDelay, &loopCnt);
       if (decoded == -1) {
          break;
       }
@@ -1185,7 +1192,7 @@ bool QGifHandler::supportsOption(ImageOption option) const
       return option == Animation;
    } else
       return option == Size
-             || option == Animation;
+         || option == Animation;
 }
 
 QVariant QGifHandler::option(ImageOption option) const
@@ -1257,4 +1264,3 @@ QByteArray QGifHandler::name() const
    return "gif";
 }
 
-QT_END_NAMESPACE

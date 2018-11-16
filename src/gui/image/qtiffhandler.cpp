@@ -152,7 +152,7 @@ bool QTiffHandler::canRead(QIODevice *device)
    }
 
    return header == QByteArray::fromRawData("\x49\x49\x2A\x00", 4)
-          || header == QByteArray::fromRawData("\x4D\x4D\x00\x2A", 4);
+      || header == QByteArray::fromRawData("\x4D\x4D\x00\x2A", 4);
 }
 
 bool QTiffHandler::read(QImage *image)
@@ -162,15 +162,15 @@ bool QTiffHandler::read(QImage *image)
    }
 
    TIFF *const tiff = TIFFClientOpen("foo",
-                                     "r",
-                                     this,
-                                     qtiffReadProc,
-                                     qtiffWriteProc,
-                                     qtiffSeekProc,
-                                     qtiffCloseProc,
-                                     qtiffSizeProc,
-                                     qtiffMapProc,
-                                     qtiffUnmapProc);
+         "r",
+         this,
+         qtiffReadProc,
+         qtiffWriteProc,
+         qtiffSeekProc,
+         qtiffCloseProc,
+         qtiffSizeProc,
+         qtiffMapProc,
+         qtiffUnmapProc);
 
    if (!tiff) {
       return false;
@@ -179,8 +179,8 @@ bool QTiffHandler::read(QImage *image)
    uint32 height;
    uint16 photometric;
    if (!TIFFGetField(tiff, TIFFTAG_IMAGEWIDTH, &width)
-         || !TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &height)
-         || !TIFFGetField(tiff, TIFFTAG_PHOTOMETRIC, &photometric)) {
+      || !TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &height)
+      || !TIFFGetField(tiff, TIFFTAG_PHOTOMETRIC, &photometric)) {
       TIFFClose(tiff);
       return false;
    }
@@ -270,7 +270,7 @@ bool QTiffHandler::read(QImage *image)
          if (!image->isNull()) {
             const int stopOnError = 1;
             if (TIFFReadRGBAImageOriented(tiff, width, height, reinterpret_cast<uint32 *>(image->bits()), ORIENTATION_TOPLEFT,
-                                          stopOnError)) {
+                  stopOnError)) {
                for (uint32 y = 0; y < height; ++y) {
                   convert32BitOrder(image->scanLine(y), width);
                }
@@ -295,7 +295,7 @@ bool QTiffHandler::read(QImage *image)
    }
 
    if (TIFFGetField(tiff, TIFFTAG_XRESOLUTION, &resX)
-         && TIFFGetField(tiff, TIFFTAG_YRESOLUTION, &resY)) {
+      && TIFFGetField(tiff, TIFFTAG_YRESOLUTION, &resY)) {
       switch (resUnit) {
          case RESUNIT_CENTIMETER:
             image->setDotsPerMeterX(qRound(resX * 100));
@@ -388,7 +388,7 @@ static bool checkGrayscale(const QVector<QRgb> &colorTable)
    const bool increasing = (colorTable.at(0) == 0xff000000);
    for (int i = 0; i < 256; ++i) {
       if ((increasing && colorTable.at(i) != qRgb(i, i, i))
-            || (!increasing && colorTable.at(i) != qRgb(255 - i, 255 - i, 255 - i))) {
+         || (!increasing && colorTable.at(i) != qRgb(255 - i, 255 - i, 255 - i))) {
          return false;
       }
    }
@@ -402,15 +402,15 @@ bool QTiffHandler::write(const QImage &image)
    }
 
    TIFF *const tiff = TIFFClientOpen("foo",
-                                     "w",
-                                     this,
-                                     qtiffReadProc,
-                                     qtiffWriteProc,
-                                     qtiffSeekProc,
-                                     qtiffCloseProc,
-                                     qtiffSizeProc,
-                                     qtiffMapProc,
-                                     qtiffUnmapProc);
+         "w",
+         this,
+         qtiffReadProc,
+         qtiffWriteProc,
+         qtiffSeekProc,
+         qtiffCloseProc,
+         qtiffSizeProc,
+         qtiffMapProc,
+         qtiffUnmapProc);
    if (!tiff) {
       return false;
    }
@@ -419,8 +419,8 @@ bool QTiffHandler::write(const QImage &image)
    const int height = image.height();
 
    if (!TIFFSetField(tiff, TIFFTAG_IMAGEWIDTH, width)
-         || !TIFFSetField(tiff, TIFFTAG_IMAGELENGTH, height)
-         || !TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG)) {
+      || !TIFFSetField(tiff, TIFFTAG_IMAGELENGTH, height)
+      || !TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG)) {
       TIFFClose(tiff);
       return false;
    }
@@ -430,14 +430,14 @@ bool QTiffHandler::write(const QImage &image)
    const int dotPerMeterX = image.dotsPerMeterX();
    const int dotPerMeterY = image.dotsPerMeterY();
    if ((dotPerMeterX % 100) == 0
-         && (dotPerMeterY % 100) == 0) {
+      && (dotPerMeterY % 100) == 0) {
       resolutionSet = TIFFSetField(tiff, TIFFTAG_RESOLUTIONUNIT, RESUNIT_CENTIMETER)
-                      && TIFFSetField(tiff, TIFFTAG_XRESOLUTION, dotPerMeterX / 100.0)
-                      && TIFFSetField(tiff, TIFFTAG_YRESOLUTION, dotPerMeterY / 100.0);
+         && TIFFSetField(tiff, TIFFTAG_XRESOLUTION, dotPerMeterX / 100.0)
+         && TIFFSetField(tiff, TIFFTAG_YRESOLUTION, dotPerMeterY / 100.0);
    } else {
       resolutionSet = TIFFSetField(tiff, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH)
-                      && TIFFSetField(tiff, TIFFTAG_XRESOLUTION, static_cast<float>(image.logicalDpiX()))
-                      && TIFFSetField(tiff, TIFFTAG_YRESOLUTION, static_cast<float>(image.logicalDpiY()));
+         && TIFFSetField(tiff, TIFFTAG_XRESOLUTION, static_cast<float>(image.logicalDpiX()))
+         && TIFFSetField(tiff, TIFFTAG_YRESOLUTION, static_cast<float>(image.logicalDpiY()));
    }
    if (!resolutionSet) {
       TIFFClose(tiff);
@@ -452,8 +452,8 @@ bool QTiffHandler::write(const QImage &image)
          photometric = PHOTOMETRIC_MINISWHITE;
       }
       if (!TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, photometric)
-            || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_CCITTRLE)
-            || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 1)) {
+         || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_CCITTRLE)
+         || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 1)) {
          TIFFClose(tiff);
          return false;
       }
@@ -486,15 +486,15 @@ bool QTiffHandler::write(const QImage &image)
             photometric = PHOTOMETRIC_MINISWHITE;
          }
          if (!TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, photometric)
-               || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_PACKBITS)
-               || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8)) {
+            || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_PACKBITS)
+            || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8)) {
             TIFFClose(tiff);
             return false;
          }
       } else {
          if (!TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE)
-               || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_PACKBITS)
-               || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8)) {
+            || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_PACKBITS)
+            || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8)) {
             TIFFClose(tiff);
             return false;
          }
@@ -556,9 +556,9 @@ bool QTiffHandler::write(const QImage &image)
 
    } else {
       if (!TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB)
-            || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_LZW)
-            || !TIFFSetField(tiff, TIFFTAG_SAMPLESPERPIXEL, 4)
-            || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8)) {
+         || !TIFFSetField(tiff, TIFFTAG_COMPRESSION, compression == NoCompression ? COMPRESSION_NONE : COMPRESSION_LZW)
+         || !TIFFSetField(tiff, TIFFTAG_SAMPLESPERPIXEL, 4)
+         || !TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8)) {
          TIFFClose(tiff);
          return false;
       }
@@ -603,15 +603,15 @@ QVariant QTiffHandler::option(ImageOption option) const
       QSize imageSize;
       qint64 pos = device()->pos();
       TIFF *tiff = TIFFClientOpen("foo",
-                                  "r",
-                                  const_cast<QTiffHandler *>(this),
-                                  qtiffReadProc,
-                                  qtiffWriteProc,
-                                  qtiffSeekProc,
-                                  qtiffCloseProc,
-                                  qtiffSizeProc,
-                                  qtiffMapProc,
-                                  qtiffUnmapProc);
+            "r",
+            const_cast<QTiffHandler *>(this),
+            qtiffReadProc,
+            qtiffWriteProc,
+            qtiffSeekProc,
+            qtiffCloseProc,
+            qtiffSizeProc,
+            qtiffMapProc,
+            qtiffUnmapProc);
 
       if (tiff) {
          uint32 width = 0;
@@ -643,8 +643,8 @@ void QTiffHandler::setOption(ImageOption option, const QVariant &value)
 bool QTiffHandler::supportsOption(ImageOption option) const
 {
    return option == CompressionRatio
-          || option == Size
-          || option == ImageFormat;
+      || option == Size
+      || option == ImageFormat;
 }
 
 void QTiffHandler::convert32BitOrder(void *buffer, int width)
@@ -654,9 +654,9 @@ void QTiffHandler::convert32BitOrder(void *buffer, int width)
       uint32 p = target[x];
       // convert between ARGB and ABGR
       target[x] = (p & 0xff000000)
-                  | ((p & 0x00ff0000) >> 16)
-                  | (p & 0x0000ff00)
-                  | ((p & 0x000000ff) << 16);
+         | ((p & 0x00ff0000) >> 16)
+         | (p & 0x0000ff00)
+         | ((p & 0x000000ff) << 16);
    }
 }
 
@@ -666,9 +666,9 @@ void QTiffHandler::convert32BitOrderBigEndian(void *buffer, int width)
    for (int32 x = 0; x < width; ++x) {
       uint32 p = target[x];
       target[x] = (p & 0xff000000) >> 24
-                  | (p & 0x00ff0000) << 8
-                  | (p & 0x0000ff00) << 8
-                  | (p & 0x000000ff) << 8;
+         | (p & 0x00ff0000) << 8
+         | (p & 0x0000ff00) << 8
+         | (p & 0x000000ff) << 8;
    }
 }
 

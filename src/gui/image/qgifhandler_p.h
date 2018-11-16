@@ -27,7 +27,7 @@
 #include <QtGui/qimage.h>
 #include <QtCore/qbytearray.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QGIFFormat;
 
@@ -68,6 +68,6 @@ class QGifHandler : public QImageIOHandler
    mutable bool scanIsCached;
 };
 
-QT_END_NAMESPACE
 
-#endif // QGIFHANDLER_P_H
+
+#endif

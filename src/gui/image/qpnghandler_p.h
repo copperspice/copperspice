@@ -23,11 +23,9 @@
 #ifndef QPNGHANDLER_P_H
 #define QPNGHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
+#include <qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_PNG
-
-QT_BEGIN_NAMESPACE
 
 class QPngHandlerPrivate;
 
@@ -53,7 +51,6 @@ class QPngHandler : public QImageIOHandler
    QPngHandlerPrivate *d;
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_IMAGEFORMAT_PNG
-#endif // QPNGHANDLER_P_H
+#endif

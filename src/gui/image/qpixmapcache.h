@@ -23,13 +23,7 @@
 #ifndef QPIXMAPCACHE_H
 #define QPIXMAPCACHE_H
 
-#include <QtGui/qpixmap.h>
-
-#ifdef Q_TEST_QPIXMAPCACHE
-#include <QtCore/qpair.h>
-#endif
-
-QT_BEGIN_NAMESPACE
+#include <qpixmap.h>
 
 class Q_GUI_EXPORT QPixmapCache
 {
@@ -41,12 +35,26 @@ class Q_GUI_EXPORT QPixmapCache
     public:
       Key();
       Key(const Key &other);
+      Key(Key &&other) : d(other.d) {
+         other.d = nullptr;
+      }
+
       ~Key();
+
       bool operator ==(const Key &key) const;
       inline bool operator !=(const Key &key) const {
          return !operator==(key);
       }
+
+      Key &operator =(Key &&other) {
+         swap(other);
+         return *this;
+      }
+
       Key &operator =(const Key &other);
+      void swap(Key &other) {
+         qSwap(d, other.d);
+      }
 
     private:
       KeyData *d;
@@ -67,13 +75,9 @@ class Q_GUI_EXPORT QPixmapCache
    static void remove(const Key &key);
    static void clear();
 
-#ifdef Q_TEST_QPIXMAPCACHE
-   static void flushDetachedPixmaps();
-   static int totalUsed();
-   static QList< QPair<QString, QPixmap> > allPixmaps();
-#endif
+
+
 };
 
-QT_END_NAMESPACE
 
-#endif // QPIXMAPCACHE_H
+#endif

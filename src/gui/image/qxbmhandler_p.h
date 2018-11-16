@@ -23,11 +23,11 @@
 #ifndef QXBMHANDLER_P_H
 #define QXBMHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
+#include <qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_XBM
 
-QT_BEGIN_NAMESPACE
+
 
 class QXbmHandler : public QImageIOHandler
 {
@@ -61,7 +61,7 @@ class QXbmHandler : public QImageIOHandler
    QString fileName;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_IMAGEFORMAT_XBM
 

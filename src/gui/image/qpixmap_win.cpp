@@ -21,219 +21,211 @@
 ***********************************************************************/
 
 #include <qpixmap.h>
-#include <qpixmap_raster_p.h>
 
+#include <qglobal.h>
 #include <qbitmap.h>
-#include <qimage.h>
-#include <qwidget.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qbuffer.h>
-#include <qapplication.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdatetime.h>
-#include <qpixmapcache.h>
-#include <qimagereader.h>
-#include <qimagewriter.h>
-#include <qdebug.h>
+#include <qplatform_pixmap.h>
+#include <qscopedarraypointer.h>
 #include <qt_windows.h>
 
-#ifndef CAPTUREBLT
-#define CAPTUREBLT ((DWORD)0x40000000)
-#endif
+#include <qpixmap_raster_p.h>
 
-QT_BEGIN_NAMESPACE
 
-QPixmap QPixmap::grabWindow(WId winId, int x, int y, int w, int h )
+
+
+
+
+
+
+
+
+
+
+static inline void initBitMapInfoHeader(int width, int height, bool topToBottom, BITMAPINFOHEADER *bih)
 {
-   RECT r;
-   GetClientRect(winId, &r);
-
-   if (w < 0) {
-      w = r.right - r.left;
-   }
-   if (h < 0) {
-      h = r.bottom - r.top;
-   }
-
-   // Create and setup bitmap
-   HDC display_dc = GetDC(0);
-   HDC bitmap_dc = CreateCompatibleDC(display_dc);
-   HBITMAP bitmap = CreateCompatibleBitmap(display_dc, w, h);
-   HGDIOBJ null_bitmap = SelectObject(bitmap_dc, bitmap);
-
-   // copy data
-   HDC window_dc = GetDC(winId);
-   BitBlt(bitmap_dc, 0, 0, w, h, window_dc, x, y, SRCCOPY
-         );
-
-   // clean up all but bitmap
-   ReleaseDC(winId, window_dc);
-   SelectObject(bitmap_dc, null_bitmap);
-   DeleteDC(bitmap_dc);
-
-   QPixmap pixmap = QPixmap::fromWinHBITMAP(bitmap);
-
-   DeleteObject(bitmap);
-   ReleaseDC(0, display_dc);
-
-   return pixmap;
+   memset(bih, 0, sizeof(BITMAPINFOHEADER));
+   bih->biSize        = sizeof(BITMAPINFOHEADER);
+   bih->biWidth       = width;
+   bih->biHeight      = topToBottom ? -height : height;
+   bih->biPlanes      = 1;
+   bih->biBitCount    = 32;
+   bih->biCompression = BI_RGB;
+   bih->biSizeImage   = width * height * 4;
+}
+static inline void initBitMapInfo(int width, int height, bool topToBottom, BITMAPINFO *bmi)
+{
+   initBitMapInfoHeader(width, height, topToBottom, &bmi->bmiHeader);
+   memset(bmi->bmiColors, 0, sizeof(RGBQUAD));
 }
 
-HBITMAP QPixmap::toWinHBITMAP(HBitmapFormat format) const
+static inline uchar *getDiBits(HDC hdc, HBITMAP bitmap, int width, int height, bool topToBottom = true)
 {
-   if (isNull()) {
+   BITMAPINFO bmi;
+   initBitMapInfo(width, height, topToBottom, &bmi);
+   uchar *result = new uchar[bmi.bmiHeader.biSizeImage];
+   if (!GetDIBits(hdc, bitmap, 0, height, result, &bmi, DIB_RGB_COLORS)) {
+      delete [] result;
+      qErrnoWarning("%s: GetDIBits() failed to get bitmap bits.", __FUNCTION__);
+      return 0;
+   }
+   return result;
+}
+static inline void copyImageDataCreateAlpha(const uchar *data, QImage *target)
+{
+   const uint mask = target->format() == QImage::Format_RGB32 ? 0xff000000 : 0;
+   const int height = target->height();
+   const int width = target->width();
+   const int bytesPerLine = width * int(sizeof(QRgb));
+   for (int y = 0; y < height; ++y) {
+      QRgb *dest = reinterpret_cast<QRgb *>(target->scanLine(y));
+      const QRgb *src = reinterpret_cast<const QRgb *>(data + y * bytesPerLine);
+      for (int x = 0; x < width; ++x) {
+         const uint pixel = src[x];
+         if ((pixel & 0xff000000) == 0 && (pixel & 0x00ffffff) != 0) {
+            dest[x] = pixel | 0xff000000;
+         } else {
+            dest[x] = pixel | mask;
+         }
+      }
+   }
+}
+static inline void copyImageData(const uchar *data, QImage *target)
+{
+   const int height = target->height();
+   const int bytesPerLine = target->bytesPerLine();
+   for (int y = 0; y < height; ++y) {
+      void *dest = static_cast<void *>(target->scanLine(y));
+      const void *src = data + y * bytesPerLine;
+      memcpy(dest, src, bytesPerLine);
+   }
+
+}
+
+enum HBitmapFormat {
+   HBitmapNoAlpha,
+   HBitmapPremultipliedAlpha,
+   HBitmapAlpha
+};
+Q_GUI_EXPORT HBITMAP qt_createIconMask(const QBitmap &bitmap)
+{
+   QImage bm = bitmap.toImage().convertToFormat(QImage::Format_Mono);
+   const int w = bm.width();
+   const int h = bm.height();
+   const int bpl = ((w + 15) / 16) * 2; // bpl, 16 bit alignment
+   QScopedArrayPointer<uchar> bits(new uchar[bpl * h]);
+   bm.invertPixels();
+   for (int y = 0; y < h; ++y) {
+      memcpy(bits.data() + y * bpl, bm.constScanLine(y), bpl);
+   }
+   HBITMAP hbm = CreateBitmap(w, h, 1, 1, bits.data());
+   return hbm;
+}
+Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat = 0)
+{
+   if (p.isNull()) {
       return 0;
    }
 
    HBITMAP bitmap = 0;
-   if (data->classId() == QPixmapData::RasterClass) {
-      QRasterPixmapData *d = static_cast<QRasterPixmapData *>(data.data());
-      int w = d->image.width();
-      int h = d->image.height();
-
-      HDC display_dc = GetDC(0);
-
-      // Define the header
-      BITMAPINFO bmi;
-      memset(&bmi, 0, sizeof(bmi));
-      bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-      bmi.bmiHeader.biWidth       = w;
-      bmi.bmiHeader.biHeight      = -h;
-      bmi.bmiHeader.biPlanes      = 1;
-      bmi.bmiHeader.biBitCount    = 32;
-      bmi.bmiHeader.biCompression = BI_RGB;
-      bmi.bmiHeader.biSizeImage   = w * h * 4;
-
-      // Create the pixmap
-      uchar *pixels = 0;
-      bitmap = CreateDIBSection(display_dc, &bmi, DIB_RGB_COLORS, (void **) &pixels, 0, 0);
-      ReleaseDC(0, display_dc);
-      if (!bitmap) {
-         qErrnoWarning("QPixmap::toWinHBITMAP(), failed to create dibsection");
-         return 0;
-      }
-      if (!pixels) {
-         qErrnoWarning("QPixmap::toWinHBITMAP(), did not allocate pixel data");
-         return 0;
-      }
-
-      // Copy over the data
-      QImage::Format imageFormat = QImage::Format_ARGB32;
-      if (format == NoAlpha) {
-         imageFormat = QImage::Format_RGB32;
-      } else if (format == PremultipliedAlpha) {
-         imageFormat = QImage::Format_ARGB32_Premultiplied;
-      }
-      const QImage image = d->image.convertToFormat(imageFormat);
-      int bytes_per_line = w * 4;
-      for (int y = 0; y < h; ++y) {
-         memcpy(pixels + y * bytes_per_line, image.scanLine(y), bytes_per_line);
-      }
-
-   } else {
-      QPixmapData *data = new QRasterPixmapData(depth() == 1 ?
-            QPixmapData::BitmapType : QPixmapData::PixmapType);
-      data->fromImage(toImage(), Qt::AutoColor);
-      return QPixmap(data).toWinHBITMAP(format);
+   if (p.handle()->classId() != QPlatformPixmap::RasterClass) {
+      QRasterPlatformPixmap *data = new QRasterPlatformPixmap(p.depth() == 1 ?
+         QRasterPlatformPixmap::BitmapType : QRasterPlatformPixmap::PixmapType);
+      data->fromImage(p.toImage(), Qt::AutoColor);
+      return qt_pixmapToWinHBITMAP(QPixmap(data), hbitmapFormat);
    }
+
+   QRasterPlatformPixmap *d = static_cast<QRasterPlatformPixmap *>(p.handle());
+   const QImage *rasterImage = d->buffer();
+   const int w = rasterImage->width();
+   const int h = rasterImage->height();
+
+   HDC display_dc = GetDC(0);
+
+   // Define the header
+   BITMAPINFO bmi;
+   initBitMapInfo(w, h, true, &bmi);
+   // Create the pixmap
+   uchar *pixels = 0;
+   bitmap = CreateDIBSection(display_dc, &bmi, DIB_RGB_COLORS, (void **) &pixels, 0, 0);
+   ReleaseDC(0, display_dc);
+   if (!bitmap) {
+      qErrnoWarning("%s, failed to create dibsection", __FUNCTION__);
+      return 0;
+   }
+   if (!pixels) {
+      qErrnoWarning("%s, did not allocate pixel data", __FUNCTION__);
+      return 0;
+   }
+
+   // Copy over the data
+   QImage::Format imageFormat = QImage::Format_RGB32;
+   if (hbitmapFormat == HBitmapAlpha) {
+      imageFormat = QImage::Format_ARGB32;
+   } else if (hbitmapFormat == HBitmapPremultipliedAlpha) {
+      imageFormat = QImage::Format_ARGB32_Premultiplied;
+   }
+   const QImage image = rasterImage->convertToFormat(imageFormat);
+   const int bytes_per_line = w * 4;
+   for (int y = 0; y < h; ++y) {
+      memcpy(pixels + y * bytes_per_line, image.scanLine(y), bytes_per_line);
+   }
+
    return bitmap;
 }
 
-QPixmap QPixmap::fromWinHBITMAP(HBITMAP bitmap, HBitmapFormat format)
+Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0)
 {
    // Verify size
    BITMAP bitmap_info;
    memset(&bitmap_info, 0, sizeof(BITMAP));
 
-   int res = GetObject(bitmap, sizeof(BITMAP), &bitmap_info);
+   const int res = GetObject(bitmap, sizeof(BITMAP), &bitmap_info);
    if (!res) {
       qErrnoWarning("QPixmap::fromWinHBITMAP(), failed to get bitmap info");
       return QPixmap();
    }
-   int w = bitmap_info.bmWidth;
-   int h = bitmap_info.bmHeight;
+   const int w = bitmap_info.bmWidth;
+   const int h = bitmap_info.bmHeight;
 
-   BITMAPINFO bmi;
-   memset(&bmi, 0, sizeof(bmi));
-   bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-   bmi.bmiHeader.biWidth       = w;
-   bmi.bmiHeader.biHeight      = -h;
-   bmi.bmiHeader.biPlanes      = 1;
-   bmi.bmiHeader.biBitCount    = 32;
-   bmi.bmiHeader.biCompression = BI_RGB;
-   bmi.bmiHeader.biSizeImage   = w * h * 4;
-
-   QImage result;
    // Get bitmap bits
-   uchar *data = (uchar *) qMalloc(bmi.bmiHeader.biSizeImage);
-
    HDC display_dc = GetDC(0);
-   if (GetDIBits(display_dc, bitmap, 0, h, data, &bmi, DIB_RGB_COLORS)) {
-
-      QImage::Format imageFormat = QImage::Format_ARGB32_Premultiplied;
-      uint mask = 0;
-      if (format == NoAlpha) {
-         imageFormat = QImage::Format_RGB32;
-         mask = 0xff000000;
-      }
-
-      // Create image and copy data into image.
-      QImage image(w, h, imageFormat);
-      if (!image.isNull()) { // failed to alloc?
-         int bytes_per_line = w * sizeof(QRgb);
-         for (int y = 0; y < h; ++y) {
-            QRgb *dest = (QRgb *) image.scanLine(y);
-            const QRgb *src = (const QRgb *) (data + y * bytes_per_line);
-            for (int x = 0; x < w; ++x) {
-               const uint pixel = src[x];
-               if ((pixel & 0xff000000) == 0 && (pixel & 0x00ffffff) != 0) {
-                  dest[x] = pixel | 0xff000000;
-               } else {
-                  dest[x] = pixel | mask;
-               }
-            }
-         }
-      }
-      result = image;
-   } else {
-      qWarning("QPixmap::fromWinHBITMAP(), failed to get bitmap bits");
+   QScopedArrayPointer<uchar> data(getDiBits(display_dc, bitmap, w, h, true));
+   if (data.isNull()) {
+      ReleaseDC(0, display_dc);
+      return QPixmap();
    }
+
+   const QImage::Format imageFormat = hbitmapFormat == HBitmapNoAlpha ?
+      QImage::Format_RGB32 : QImage::Format_ARGB32_Premultiplied;
+
+   // Create image and copy data into image.
+   QImage image(w, h, imageFormat);
+   if (image.isNull()) { // failed to alloc?
+      ReleaseDC(0, display_dc);
+      qWarning("%s, failed create image of %dx%d", __FUNCTION__, w, h);
+      return QPixmap();
+   }
+   copyImageDataCreateAlpha(data.data(), &image);
    ReleaseDC(0, display_dc);
-   qFree(data);
-   return fromImage(result);
+   return QPixmap::fromImage(image);
 }
 
-HBITMAP qt_createIconMask(const QBitmap &bitmap)
+Q_GUI_EXPORT HICON qt_pixmapToWinHICON(const QPixmap &p)
 {
-   QImage bm = bitmap.toImage().convertToFormat(QImage::Format_Mono);
-   int w = bm.width();
-   int h = bm.height();
-   int bpl = ((w + 15) / 16) * 2;                  // bpl, 16 bit alignment
-   uchar *bits = new uchar[bpl * h];
-   bm.invertPixels();
-   for (int y = 0; y < h; y++) {
-      memcpy(bits + y * bpl, bm.scanLine(y), bpl);
+   if (p.isNull()) {
+      return 0;
    }
-   HBITMAP hbm = CreateBitmap(w, h, 1, 1, bits);
-   delete [] bits;
-   return hbm;
-}
 
-HICON QPixmap::toWinHICON() const
-{
-   QBitmap maskBitmap = mask();
+   QBitmap maskBitmap = p.mask();
    if (maskBitmap.isNull()) {
-      maskBitmap = QBitmap(size());
+      maskBitmap = QBitmap(p.size());
       maskBitmap.fill(Qt::color1);
    }
 
    ICONINFO ii;
    ii.fIcon    = true;
    ii.hbmMask  = qt_createIconMask(maskBitmap);
-   ii.hbmColor = toWinHBITMAP(QPixmap::Alpha);
+   ii.hbmColor = qt_pixmapToWinHBITMAP(p, HBitmapAlpha);
    ii.xHotspot = 0;
    ii.yHotspot = 0;
 
@@ -245,95 +237,81 @@ HICON QPixmap::toWinHICON() const
    return hIcon;
 }
 
-#ifdef Q_OS_WIN
-
-static QImage qt_fromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
+Q_GUI_EXPORT QImage qt_imageFromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
 {
-   BITMAPINFO bmi;
-   memset(&bmi, 0, sizeof(bmi));
-   bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-   bmi.bmiHeader.biWidth       = w;
-   bmi.bmiHeader.biHeight      = -h;
-   bmi.bmiHeader.biPlanes      = 1;
-   bmi.bmiHeader.biBitCount    = 32;
-   bmi.bmiHeader.biCompression = BI_RGB;
-   bmi.bmiHeader.biSizeImage   = w * h * 4;
-
    QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
    if (image.isNull()) {
       return image;
    }
-
-   // Get bitmap bits
-   uchar *data = (uchar *) qMalloc(bmi.bmiHeader.biSizeImage);
-
-   if (GetDIBits(hdc, bitmap, 0, h, data, &bmi, DIB_RGB_COLORS)) {
-      // Create image and copy data into image.
-      for (int y = 0; y < h; ++y) {
-         void *dest = (void *) image.scanLine(y);
-         void *src = data + y * image.bytesPerLine();
-         memcpy(dest, src, image.bytesPerLine());
-      }
-   } else {
-      qWarning("qt_fromWinHBITMAP(), failed to get bitmap bits");
+   QScopedArrayPointer<uchar> data(getDiBits(hdc, bitmap, w, h, true));
+   if (data.isNull()) {
+      return QImage();
    }
-   qFree(data);
-
+   copyImageDataCreateAlpha(data.data(), &image);
    return image;
 }
 
-QPixmap QPixmap::fromWinHICON(HICON icon)
+static QImage qt_imageFromWinIconHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
 {
-   bool foundAlpha = false;
+   QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
+   if (image.isNull()) {
+      return image;
+   }
+   QScopedArrayPointer<uchar> data(getDiBits(hdc, bitmap, w, h, true));
+   if (data.isNull()) {
+      return QImage();
+   }
+   copyImageData(data.data(), &image);
+   return image;
+}
+static inline bool hasAlpha(const QImage &image)
+{
+   const int w = image.width();
+   const int h = image.height();
+   for (int y = 0; y < h; ++y) {
+      const QRgb *scanLine = reinterpret_cast<const QRgb *>(image.scanLine(y));
+      for (int x = 0; x < w; ++x) {
+         if (qAlpha(scanLine[x]) != 0) {
+            return true;
+         }
+      }
+   }
+   return false;
+}
+
+Q_GUI_EXPORT QPixmap qt_pixmapFromWinHICON(HICON icon)
+{
    HDC screenDevice = GetDC(0);
    HDC hdc = CreateCompatibleDC(screenDevice);
    ReleaseDC(0, screenDevice);
 
    ICONINFO iconinfo;
-   bool result = GetIconInfo(icon, &iconinfo); //x and y Hotspot describes the icon center
+   const bool result = GetIconInfo(icon, &iconinfo); //x and y Hotspot describes the icon center
    if (!result) {
-      qWarning("QPixmap::fromWinHICON(), failed to GetIconInfo()");
+      qErrnoWarning("QPixmap::fromWinHICON(), failed to GetIconInfo()");
+      DeleteDC(hdc);
+      return QPixmap();
    }
 
-   int w = iconinfo.xHotspot * 2;
-   int h = iconinfo.yHotspot * 2;
+   const int w = iconinfo.xHotspot * 2;
+   const int h = iconinfo.yHotspot * 2;
 
    BITMAPINFOHEADER bitmapInfo;
-   bitmapInfo.biSize        = sizeof(BITMAPINFOHEADER);
-   bitmapInfo.biWidth       = w;
-   bitmapInfo.biHeight      = h;
-   bitmapInfo.biPlanes      = 1;
-   bitmapInfo.biBitCount    = 32;
-   bitmapInfo.biCompression = BI_RGB;
-   bitmapInfo.biSizeImage   = 0;
-   bitmapInfo.biXPelsPerMeter = 0;
-   bitmapInfo.biYPelsPerMeter = 0;
-   bitmapInfo.biClrUsed       = 0;
-   bitmapInfo.biClrImportant  = 0;
+   initBitMapInfoHeader(w, h, false, &bitmapInfo);
    DWORD *bits;
 
    HBITMAP winBitmap = CreateDIBSection(hdc, (BITMAPINFO *)&bitmapInfo, DIB_RGB_COLORS, (VOID **)&bits, NULL, 0);
    HGDIOBJ oldhdc = (HBITMAP)SelectObject(hdc, winBitmap);
    DrawIconEx( hdc, 0, 0, icon, iconinfo.xHotspot * 2, iconinfo.yHotspot * 2, 0, 0, DI_NORMAL);
-   QImage image = qt_fromWinHBITMAP(hdc, winBitmap, w, h);
+   QImage image = qt_imageFromWinIconHBITMAP(hdc, winBitmap, w, h);
 
-   for (int y = 0 ; y < h && !foundAlpha ; y++) {
-      QRgb *scanLine = reinterpret_cast<QRgb *>(image.scanLine(y));
-      for (int x = 0; x < w ; x++) {
-         if (qAlpha(scanLine[x]) != 0) {
-            foundAlpha = true;
-            break;
-         }
-      }
-   }
-   if (!foundAlpha) {
-      //If no alpha was found, we use the mask to set alpha values
+   if (!image.isNull() && !hasAlpha(image)) { //If no alpha was found, we use the mask to set alpha values
       DrawIconEx( hdc, 0, 0, icon, w, h, 0, 0, DI_MASK);
-      QImage mask = qt_fromWinHBITMAP(hdc, winBitmap, w, h);
+      const QImage mask = qt_imageFromWinIconHBITMAP(hdc, winBitmap, w, h);
 
       for (int y = 0 ; y < h ; y++) {
          QRgb *scanlineImage = reinterpret_cast<QRgb *>(image.scanLine(y));
-         QRgb *scanlineMask = mask.isNull() ? 0 : reinterpret_cast<QRgb *>(mask.scanLine(y));
+         const QRgb *scanlineMask = mask.isNull() ? 0 : reinterpret_cast<const QRgb *>(mask.scanLine(y));
          for (int x = 0; x < w ; x++) {
             if (scanlineMask && qRed(scanlineMask[x]) != 0) {
                scanlineImage[x] = 0;   //mask out this pixel
@@ -353,6 +331,4 @@ QPixmap QPixmap::fromWinHICON(HICON icon)
    return QPixmap::fromImage(image);
 }
 
-#endif
 
-QT_END_NAMESPACE

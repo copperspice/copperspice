@@ -24,9 +24,7 @@
 #include <qimage_p.h>
 #include <qsimd_p.h>
 
-#ifdef QT_HAVE_SSSE3
-
-QT_BEGIN_NAMESPACE
+#ifdef __SSSE3__
 
 // Convert a scanline of RGB888 (src) to RGB32 (dst)
 // src must be at least len * 3 bytes
@@ -46,15 +44,15 @@ Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, con
    }
 
    // Mask the 4 first colors of the RGB888 vector
-   const __m128i shuffleMask = _mm_set_epi8(0xff, 9, 10, 11, 0xff, 6, 7, 8, 0xff, 3, 4, 5, 0xff, 0, 1, 2);
+   const __m128i shuffleMask = _mm_set_epi8(char(0xff), 9, 10, 11, char(0xff), 6, 7, 8, char(0xff), 3, 4, 5, char(0xff), 0, 1, 2);
 
    // Mask the 4 last colors of a RGB888 vector with an offset of 1 (so the last 3 bytes are RGB)
-   const __m128i shuffleMaskEnd = _mm_set_epi8(0xff, 13, 14, 15, 0xff, 10, 11, 12, 0xff, 7, 8, 9, 0xff, 4, 5, 6);
+   const __m128i shuffleMaskEnd = _mm_set_epi8(char(0xff), 13, 14, 15, char(0xff), 10, 11, 12, char(0xff), 7, 8, 9, char(0xff), 4, 5, 6);
 
    // Mask to have alpha = 0xff
    const __m128i alphaMask = _mm_set1_epi32(0xff000000);
 
-   __m128i *inVectorPtr = (__m128i *)src;
+   const __m128i *inVectorPtr = (const __m128i *)src;
    __m128i *dstVectorPtr = (__m128i *)dst;
 
    const int simdRoundCount = (len - prologLength) / 16; // one iteration in the loop converts 16 pixels
@@ -99,7 +97,7 @@ Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, con
       _mm_store_si128(dstVectorPtr, _mm_or_si128(outputVector, alphaMask));
       ++dstVectorPtr;
    }
-   src = (uchar *)inVectorPtr;
+   src = (const uchar *)inVectorPtr;
    dst = (quint32 *)dstVectorPtr;
 
    while (dst != end) {
@@ -112,7 +110,8 @@ void convert_RGB888_to_RGB32_ssse3(QImageData *dest, const QImageData *src, Qt::
 {
    Q_ASSERT(src->format == QImage::Format_RGB888);
    Q_ASSERT(dest->format == QImage::Format_RGB32 || dest->format == QImage::Format_ARGB32 ||
-            dest->format == QImage::Format_ARGB32_Premultiplied);
+      dest->format == QImage::Format_ARGB32_Premultiplied);
+
    Q_ASSERT(src->width == dest->width);
    Q_ASSERT(src->height == dest->height);
 
@@ -126,6 +125,4 @@ void convert_RGB888_to_RGB32_ssse3(QImageData *dest, const QImageData *src, Qt::
    }
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_HAVE_SSSE3
+#endif
