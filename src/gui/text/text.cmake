@@ -95,15 +95,17 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase_mac.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_coretext_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_win_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_x11_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengineglyphcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfragmentmap_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextcontrol_p.h
@@ -133,9 +135,11 @@ set(GUI_SOURCES
     ${GUI_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontmetrics.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextcontrol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextlayout.cpp

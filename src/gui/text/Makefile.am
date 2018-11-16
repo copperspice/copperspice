@@ -104,15 +104,17 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qfont_p.h \
 	qfontdatabase_mac.cpp \
 	qfontengine_coretext_p.h \
+   qfontengine_ft_p.h \
 	qfontengine_mac_p.h \
 	qfontengine_p.h \
+   qfontengine_qpf2_p.h \
 	qfontengine_win_p.h \
 	qfontengine_x11_p.h \
-	qfontengine_ft_p.h \
 	qfontengineglyphcache_p.h \
 	qfontsubset_p.h \
 	qfragmentmap_p.h \
 	qglyphrun_p.h \
+	qinputcontrol_p.h \
 	qrawfont_p.h \
 	qstatictext_p.h \
 	qtextcontrol_p.h \
@@ -258,9 +260,11 @@ noinst_HEADERS+=$(patsubst %,src/gui/text/%,$(GUI_TEXT_INCLUDES)) \
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont.cpp \
 	src/gui/text/qfontengine.cpp \
+   src/gui/text/qfontengine_qpf2.cpp \
 	src/gui/text/qfontsubset.cpp \
 	src/gui/text/qfontmetrics.cpp \
 	src/gui/text/qfontdatabase.cpp \
+	src/gui/text/qinputcontrol.cpp \
 	src/gui/text/qtextcontrol.cpp \
 	src/gui/text/qtextengine.cpp \
 	src/gui/text/qtextlayout.cpp \
