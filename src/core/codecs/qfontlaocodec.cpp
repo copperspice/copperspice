@@ -55,14 +55,13 @@ static unsigned char const unicode_to_mulelao[256] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-
 QFontLaoCodec::~QFontLaoCodec()
 {
 }
 
-QByteArray QFontLaoCodec::name() const
+QString QFontLaoCodec::name() const
 {
-   return "mulelao-1";
+   return QString("mulelao-1");
 }
 
 int QFontLaoCodec::mibEnum() const

@@ -24,9 +24,8 @@
 #define QTEXTCODEC_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qlist.h>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_TEXTCODEC
 
@@ -40,13 +39,14 @@ class Q_CORE_EXPORT QTextCodec
    Q_DISABLE_COPY(QTextCodec)
 
  public:
-   static QTextCodec *codecForName(const QByteArray &name);
+   static QTextCodec *codecForName(const QString &name);
+
    static QTextCodec *codecForName(const char *name) {
-      return codecForName(QByteArray(name));
+      return codecForName(QString::fromUtf8(name));
    }
    static QTextCodec *codecForMib(int mib);
 
-   static QList<QByteArray> availableCodecs();
+   static QStringList availableCodecs();
    static QList<int> availableMibs();
 
    static QTextCodec *codecForLocale();
@@ -111,8 +111,8 @@ class Q_CORE_EXPORT QTextCodec
    QTextDecoder *makeDecoder(ConversionFlags flags = DefaultConversion) const;
    QTextEncoder *makeEncoder(ConversionFlags flags = DefaultConversion) const;
 
-   virtual QByteArray name() const = 0;
-   virtual QList<QByteArray> aliases() const;
+   virtual QString name() const = 0;
+   virtual QStringList aliases() const;
    virtual int mibEnum() const = 0;
 
  protected:
@@ -175,7 +175,5 @@ class Q_CORE_EXPORT QTextDecoder
 };
 
 #endif // QT_NO_TEXTCODEC
-
-QT_END_NAMESPACE
 
 #endif // QTEXTCODEC_H

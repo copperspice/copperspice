@@ -64,14 +64,15 @@ QByteArray QLatin1Codec::convertFromUnicode(QStringView str, ConverterState *sta
    return retval;
 }
 
-QByteArray QLatin1Codec::name() const
+QString QLatin1Codec::name() const
 {
-   return "ISO-8859-1";
+   return QString("ISO-8859-1");
 }
 
-QList<QByteArray> QLatin1Codec::aliases() const
+QStringList QLatin1Codec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
+
    list << "latin1"
         << "CP819"
         << "IBM819"
@@ -251,15 +252,16 @@ QByteArray QLatin15Codec::convertFromUnicode(QStringView str, ConverterState *st
    return retval;
 }
 
-QByteArray QLatin15Codec::name() const
+QString QLatin15Codec::name() const
 {
-   return "ISO-8859-15";
+   return QString("ISO-8859-15");
 }
 
-QList<QByteArray> QLatin15Codec::aliases() const
+QStringList QLatin15Codec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
    list << "latin9";
+
    return list;
 }
 

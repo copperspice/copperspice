@@ -820,19 +820,22 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
    return retval;
 }
 
-QByteArray QSimpleTextCodec::name() const
+QString QSimpleTextCodec::name() const
 {
-   return unicodevalues[forwardIndex].mime;
+   return QString::fromLatin1(unicodevalues[forwardIndex].mime);
 }
 
-QList<QByteArray> QSimpleTextCodec::aliases() const
+QStringList QSimpleTextCodec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
+
    const char *const *a = unicodevalues[forwardIndex].aliases;
+
    while (*a) {
-      list << *a;
+      list.append( QString::fromLatin1(*a));
       ++a;
    }
+
    return list;
 }
 

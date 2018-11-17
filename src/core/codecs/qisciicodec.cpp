@@ -48,9 +48,9 @@ QIsciiCodec::~QIsciiCodec()
 {
 }
 
-QByteArray QIsciiCodec::name() const
+QString QIsciiCodec::name() const
 {
-   return codecs[idx].name;
+   return QString::fromLatin1(codecs[idx].name);
 }
 
 int QIsciiCodec::mibEnum() const

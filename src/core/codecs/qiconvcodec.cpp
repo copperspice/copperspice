@@ -452,9 +452,9 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
    return ba;
 }
 
-QByteArray QIconvCodec::name() const
+QString QIconvCodec::name() const
 {
-   return "System";
+   return QString("System");
 }
 
 int QIconvCodec::mibEnum() const

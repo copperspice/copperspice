@@ -37,7 +37,7 @@ class Q_CORE_EXPORT QFontLaoCodec : public QTextCodec
    QString convertToUnicode(const char *, int, ConverterState *) const override;
    QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
-   QByteArray name() const override;
+   QString name() const override;
    int mibEnum() const override;
 };
 

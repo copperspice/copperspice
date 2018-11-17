@@ -52,9 +52,9 @@ class Q_CORE_EXPORT QTextCodecPlugin : public QObject, public QTextCodecFactoryI
    explicit QTextCodecPlugin(QObject *parent = nullptr);
    ~QTextCodecPlugin();
 
-   virtual QList<QByteArray> names() const = 0;
-   virtual QList<QByteArray> aliases() const = 0;
-   virtual QTextCodec *createForName(const QByteArray &name) = 0;
+   virtual QStringList names() const = 0;
+   virtual QStringList aliases() const = 0;
+   virtual QTextCodec *createForName(const QString &name) = 0;
 
    virtual QList<int> mibEnums() const = 0;
    virtual QTextCodec *createForMib(int mib) = 0;

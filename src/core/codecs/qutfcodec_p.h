@@ -58,7 +58,7 @@ class QUtf8Codec : public QTextCodec
    QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
    void convertToUnicode(QString *target, const char *, int, ConverterState *) const;
 
-   QByteArray name() const override;
+   QString name() const override;
    int mibEnum() const override;
 };
 
@@ -71,8 +71,8 @@ class QUtf16Codec : public QTextCodec
    }
    ~QUtf16Codec();
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
@@ -89,8 +89,8 @@ class QUtf16BECodec : public QUtf16Codec
       e = BigEndianness;
    }
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 };
 
@@ -101,8 +101,8 @@ class QUtf16LECodec : public QUtf16Codec
       e = LittleEndianness;
    }
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 };
 
@@ -115,8 +115,8 @@ class QUtf32Codec : public QTextCodec
 
    ~QUtf32Codec();
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
@@ -133,8 +133,8 @@ class QUtf32BECodec : public QUtf32Codec
       e = BigEndianness;
    }
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 };
 
@@ -145,8 +145,8 @@ class QUtf32LECodec : public QUtf32Codec
       e = LittleEndianness;
    }
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 };
 

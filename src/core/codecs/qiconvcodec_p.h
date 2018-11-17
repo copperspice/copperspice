@@ -47,7 +47,7 @@ class QIconvCodec: public QTextCodec
    QString convertToUnicode(const char *, int, ConverterState *) const override;
    QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
-   QByteArray name() const override;
+   QString name() const override;
    int mibEnum() const override;
 
    static iconv_t createIconv_t(const char *to, const char *from);

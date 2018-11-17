@@ -42,8 +42,8 @@ class QSimpleTextCodec: public QTextCodec
    QString convertToUnicode(const char *, int, ConverterState *) const override;
    QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
-   QByteArray name() const override;
-   QList<QByteArray> aliases() const override;
+   QString name() const override;
+   QStringList aliases() const override;
    int mibEnum() const override;
 
  private:

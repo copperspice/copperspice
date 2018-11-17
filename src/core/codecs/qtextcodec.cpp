@@ -36,6 +36,7 @@
 #include <qlocale.h>
 #include <qfile.h>
 #include <qhash.h>
+#include <qmap.h>
 #include <qlist.h>
 #include <qmutex.h>
 #include <qstringlist.h>
@@ -79,69 +80,68 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QTextCodecFactoryInterface_ii
 #endif
 
 // Cache for QTextCodec::codecForName and codecForMib.
-typedef QHash<QByteArray, QTextCodec *> QTextCodecCache;
+using QTextCodecCache = QHash<QString, QTextCodec *>;
 Q_GLOBAL_STATIC(QTextCodecCache, qTextCodecCache)
 
-static char qtolower(char c)
-{
-   if (c >= 'A' && c <= 'Z') {
-      return c + 0x20;
-   }
-   return c;
-}
-static bool qisalnum(char c)
-{
-   return (c >= '0' && c <= '9') || ((c | 0x20) >= 'a' && (c | 0x20) <= 'z');
-}
-
-static bool nameMatch(const QByteArray &name, const QByteArray &test)
+static bool nameMatch(QStringView name, QStringView test)
 {
    // if they are the same, return a perfect score
-   if (qstricmp(name.constData(), test.constData()) == 0) {
+   if (QString::compare(name, test, Qt::CaseInsensitive) == 0) {
       return true;
    }
 
-   const char *n = name.constData();
-   const char *h = test.constData();
+   auto iter_name = name.constBegin();
+   auto iter_test = test.constBegin();
 
    // if the letters and numbers are the same, we have a match
-   while (*n != '\0') {
-      if (qisalnum(*n)) {
-         for (;;) {
-            if (*h == '\0') {
+   while (iter_name != name.constEnd()) {
+
+      if (iter_name->isLetterOrNumber()) {
+
+         while (true) {
+            if (iter_test == test.constEnd()) {
                return false;
             }
-            if (qisalnum(*h)) {
+
+            if (iter_test->isLetterOrNumber()) {
                break;
             }
-            ++h;
+
+            ++iter_test;
          }
-         if (qtolower(*n) != qtolower(*h)) {
+
+         if (iter_name->toLower() != iter_test->toLower()) {
             return false;
          }
-         ++h;
+
+         ++iter_test;
       }
-      ++n;
+
+      ++iter_name;
    }
 
-   while (*h && !qisalnum(*h)) {
-      ++h;
+   while (iter_test != test.constEnd() && ! iter_test->isLetterOrNumber()) {
+      ++iter_test;
    }
-   return (*h == '\0');
+
+   return (iter_test == test.constEnd());
 }
 
-static QTextCodec *createForName(const QByteArray &name)
+static QTextCodec *createForName(QStringView name)
 {
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
    QFactoryLoader *l = loader();
-   QStringList keys = l->keys();
+   QMultiMap<int, QString> keyMap = l->keyMap();
 
-   for (int i = 0; i < keys.size(); ++i) {
-      if (nameMatch(name, keys.at(i).toLatin1())) {
-         QString realName = keys.at(i);
+   for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
 
-         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(l->instance(realName))) {
+      if (nameMatch(name, iter.value())) {
+
+         int id           = iter.key();
+         QString realName = iter.value();
+
+         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(l->instance(id))) {
             return factory->create(realName);
          }
       }
@@ -157,9 +157,22 @@ static QTextCodec *createForMib(int mib)
 #ifndef QT_NO_TEXTCODECPLUGIN
    QString name = "MIB: " + QString::number(mib);
 
-   if (QTextCodecFactoryInterface *factory = qobject_cast<QTextCodecFactoryInterface *>(loader()->instance(name))) {
-      return factory->create(name);
+   QFactoryLoader *l = loader();
+   QMultiMap<int, QString> keyMap = l->keyMap();
+
+   for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
+
+      if (name == iter.value()) {
+
+         int id           = iter.key();
+         QString realName = iter.value();
+
+         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(l->instance(id))) {
+            return factory->create(realName);
+         }
+      }
    }
+
 #endif
 
    return 0;
@@ -167,7 +180,7 @@ static QTextCodec *createForMib(int mib)
 
 static QList<QTextCodec *> *all = 0;
 static QTextCodec *localeMapper = 0;
-QTextCodec *QTextCodec::cftr = 0;
+QTextCodec *QTextCodec::cftr    = 0;
 
 class QTextCodecCleanup
 {
@@ -580,13 +593,14 @@ QTextCodec::~QTextCodec()
 
       all->removeAll(this);
       QTextCodecCache *cache = qTextCodecCache();
+
       if (cache) {
          cache->clear();
       }
    }
 }
 
-QTextCodec *QTextCodec::codecForName(const QByteArray &name)
+QTextCodec *QTextCodec::codecForName(const QString &name)
 {
    if (name.isEmpty()) {
       return 0;
@@ -595,7 +609,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
    QMutexLocker locker(textCodecsMutex());
    setup();
 
-   if (!validCodecs()) {
+   if (! validCodecs()) {
       return 0;
    }
 
@@ -603,6 +617,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
    QTextCodec *codec;
    if (cache) {
       codec = cache->value(name);
+
       if (codec) {
          return codec;
       }
@@ -610,6 +625,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
 
    for (int i = 0; i < all->size(); ++i) {
       QTextCodec *cursor = all->at(i);
+
       if (nameMatch(cursor->name(), name)) {
          if (cache) {
             cache->insert(name, cursor);
@@ -617,7 +633,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
          return cursor;
       }
 
-      QList<QByteArray> aliases = cursor->aliases();
+      QStringList aliases = cursor->aliases();
       for (int y = 0; y < aliases.size(); ++y)
          if (nameMatch(aliases.at(y), name)) {
             if (cache) {
@@ -628,6 +644,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
    }
 
    codec = createForName(name);
+
    if (codec && cache) {
       cache->insert(name, codec);
    }
@@ -688,23 +705,14 @@ QTextCodec *QTextCodec::codecForMib(int mib)
    return codec;
 }
 
-/*!
-    Returns the list of all available codecs, by name. Call
-    QTextCodec::codecForName() to obtain the QTextCodec for the name.
-
-    The list may contain many mentions of the same codec
-    if the codec has aliases.
-
-    \sa availableMibs(), name(), aliases()
-*/
-QList<QByteArray> QTextCodec::availableCodecs()
+QStringList QTextCodec::availableCodecs()
 {
+   QStringList codecs;
+
    QMutexLocker locker(textCodecsMutex());
    setup();
 
-   QList<QByteArray> codecs;
-
-   if (!validCodecs()) {
+   if (! validCodecs()) {
       return codecs;
    }
 
@@ -715,19 +723,19 @@ QList<QByteArray> QTextCodec::availableCodecs()
 
    locker.unlock();
 
-
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
    QFactoryLoader *l = loader();
-   QStringList keys  = l->keys();
+   QMultiMap<int, QString> keyMap = l->keyMap();
 
-   for (int i = 0; i < keys.size(); ++i) {
+   for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
+      QString name = iter.value();
 
-      if (!keys.at(i).startsWith("MIB: ")) {
-         QByteArray name = keys.at(i).toLatin1();
+      if (! name.startsWith("MIB: ")) {
 
-         if (!codecs.contains(name)) {
-            codecs += name;
+         if (! codecs.contains(name)) {
+            codecs.append(name);
          }
+
       }
    }
 #endif
@@ -735,20 +743,14 @@ QList<QByteArray> QTextCodec::availableCodecs()
    return codecs;
 }
 
-/*!
-    Returns the list of MIBs for all available codecs. Call
-    QTextCodec::codecForMib() to obtain the QTextCodec for the MIB.
-
-    \sa availableCodecs(), mibEnum()
-*/
 QList<int> QTextCodec::availableMibs()
 {
+   QList<int> codecs;
+
    QMutexLocker locker(textCodecsMutex());
    setup();
 
-   QList<int> codecs;
-
-   if (!validCodecs()) {
+   if (! validCodecs()) {
       return codecs;
    }
 
@@ -758,18 +760,20 @@ QList<int> QTextCodec::availableMibs()
 
    locker.unlock();
 
-
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
    QFactoryLoader *l = loader();
-   QStringList keys = l->keys();
+   QMultiMap<int, QString> keyMap = l->keyMap();
 
-   for (int i = 0; i < keys.size(); ++i) {
-      if (keys.at(i).startsWith("MIB: ")) {
-         int mib = keys.at(i).mid(5).toInteger<int>();
+  for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
+      QString name = iter.value();
 
-         if (!codecs.contains(mib)) {
-            codecs += mib;
+      if (name.startsWith("MIB: ")) {
+         int id = name.mid(5).toInteger<int>();
+
+         if (! codecs.contains(id)) {
+            codecs.append(id);
          }
+
       }
    }
 #endif
@@ -777,16 +781,6 @@ QList<int> QTextCodec::availableMibs()
    return codecs;
 }
 
-/*!
-    Set the codec to \a c; this will be returned by
-    codecForLocale(). If \a c is a null pointer, the codec is reset to
-    the default.
-
-    This might be needed for some applications that want to use their
-    own mechanism for setting the locale.
-
-    \sa codecForLocale()
-*/
 void QTextCodec::setCodecForLocale(QTextCodec *c)
 {
    QMutexLocker locker(textCodecsMutex());
@@ -822,23 +816,9 @@ QTextCodec *QTextCodec::codecForLocale()
    return localeMapper;
 }
 
-
-/*!
-    \fn QByteArray QTextCodec::name() const
-
-    QTextCodec subclasses must reimplement this function. It returns
-    the name of the encoding supported by the subclass.
-
-    If the codec is registered as a character set in the
-    \l{IANA character-sets encoding file} this method should
-    return the preferred mime name for the codec if defined,
-    otherwise its name.
-*/
-
-
-QList<QByteArray> QTextCodec::aliases() const
+QStringList QTextCodec::aliases() const
 {
-   return QList<QByteArray>();
+   return QStringList();
 }
 
 QTextDecoder *QTextCodec::makeDecoder(QTextCodec::ConversionFlags flags) const
@@ -1105,34 +1085,5 @@ bool QTextDecoder::hasFailure() const
 {
    return state.invalidChars != 0;
 }
-
-/*!
-    \fn QTextCodec *QTextCodec::codecForContent(const char *str, int size)
-
-    This functionality is no longer provided by Qt. This
-    compatibility function always returns a null pointer.
-*/
-
-/*!
-    \fn QTextCodec *QTextCodec::codecForName(const char *hint, int accuracy)
-
-    Use the codecForName(const QByteArray &) overload instead.
-*/
-
-/*!
-    \fn QTextCodec *QTextCodec::codecForIndex(int i)
-
-    Use availableCodecs() or availableMibs() instead and iterate
-    through the resulting list.
-*/
-
-
-/*!
-    \fn QByteArray QTextCodec::mimeName() const
-
-    Use name() instead.
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTCODEC

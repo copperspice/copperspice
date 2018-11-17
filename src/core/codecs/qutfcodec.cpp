@@ -548,9 +548,9 @@ QString QUtf8Codec::convertToUnicode(const char *chars, int len, ConverterState 
    return QUtf8::convertToUnicode(chars, len, state);
 }
 
-QByteArray QUtf8Codec::name() const
+QString QUtf8Codec::name() const
 {
-   return "UTF-8";
+   return QString("UTF-8");
 }
 
 int QUtf8Codec::mibEnum() const
@@ -577,14 +577,14 @@ int QUtf16Codec::mibEnum() const
    return 1015;
 }
 
-QByteArray QUtf16Codec::name() const
+QString QUtf16Codec::name() const
 {
-   return "UTF-16";
+   return QString("UTF-16");
 }
 
-QList<QByteArray> QUtf16Codec::aliases() const
+QStringList QUtf16Codec::aliases() const
 {
-   return QList<QByteArray>();
+   return QStringList();
 }
 
 int QUtf16BECodec::mibEnum() const
@@ -592,14 +592,14 @@ int QUtf16BECodec::mibEnum() const
    return 1013;
 }
 
-QByteArray QUtf16BECodec::name() const
+QString QUtf16BECodec::name() const
 {
-   return "UTF-16BE";
+   return QString("UTF-16BE");
 }
 
-QList<QByteArray> QUtf16BECodec::aliases() const
+QStringList QUtf16BECodec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
    return list;
 }
 
@@ -608,14 +608,14 @@ int QUtf16LECodec::mibEnum() const
    return 1014;
 }
 
-QByteArray QUtf16LECodec::name() const
+QString QUtf16LECodec::name() const
 {
-   return "UTF-16LE";
+   return QString("UTF-16LE");
 }
 
-QList<QByteArray> QUtf16LECodec::aliases() const
+QStringList QUtf16LECodec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
    return list;
 }
 
@@ -638,15 +638,14 @@ int QUtf32Codec::mibEnum() const
    return 1017;
 }
 
-QByteArray QUtf32Codec::name() const
+QString QUtf32Codec::name() const
 {
-   return "UTF-32";
+   return QString("UTF-32");
 }
 
-QList<QByteArray> QUtf32Codec::aliases() const
+QStringList QUtf32Codec::aliases() const
 {
-   QList<QByteArray> list;
-   return list;
+   return QStringList();
 }
 
 int QUtf32BECodec::mibEnum() const
@@ -654,14 +653,14 @@ int QUtf32BECodec::mibEnum() const
    return 1018;
 }
 
-QByteArray QUtf32BECodec::name() const
+QString QUtf32BECodec::name() const
 {
-   return "UTF-32BE";
+   return QString("UTF-32BE");
 }
 
-QList<QByteArray> QUtf32BECodec::aliases() const
+QStringList QUtf32BECodec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
    return list;
 }
 
@@ -670,14 +669,14 @@ int QUtf32LECodec::mibEnum() const
    return 1019;
 }
 
-QByteArray QUtf32LECodec::name() const
+QString QUtf32LECodec::name() const
 {
-   return "UTF-32LE";
+   return QString("UTF-32LE");
 }
 
-QList<QByteArray> QUtf32LECodec::aliases() const
+QStringList QUtf32LECodec::aliases() const
 {
-   QList<QByteArray> list;
+   QStringList list;
    return list;
 }
 
