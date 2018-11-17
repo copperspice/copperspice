@@ -76,6 +76,7 @@ CORE_IO_PRIVATE_INCLUDES = \
 	qabstractfileengine_p.h \
 	qdatastream_p.h \
 	qdataurl_p.h \
+	qdebug_p.h \
 	qdir_p.h \
 	qfileinfo_p.h \
 	qfile_p.h \

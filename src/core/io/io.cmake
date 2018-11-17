@@ -77,6 +77,7 @@ set(CORE_INCLUDES
 set(CORE_PRIVATE_INCLUDES
     ${CORE_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qabstractfileengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdebug_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qdatastream_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qdataurl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qdir_p.h
