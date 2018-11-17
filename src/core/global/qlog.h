@@ -47,11 +47,11 @@ class QNoDebug;
 
 enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMsg = QtCriticalMsg };
 
-using QtMsgHandler = void (*)(QtMsgType, const char*);
+using QtMsgHandler = void (*)(QtMsgType, QStringView);
 
 Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
 Q_CORE_EXPORT QString      qt_error_string(int errorCode = -1);
-Q_CORE_EXPORT void         qt_message_output(QtMsgType, const char *buf);
+Q_CORE_EXPORT void         qt_message_output(QtMsgType, QStringView str);
 Q_CORE_EXPORT void         qErrnoWarning(int code, const char *msg, ...);
 Q_CORE_EXPORT void         qErrnoWarning(const char *msg, ...);
 

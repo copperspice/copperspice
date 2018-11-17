@@ -32,14 +32,16 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 #include <qtextcodec.h>
 #endif
 
-#include <locale.h>
 #include <qlocale_p.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <new>
 
-#if defined QTEXTSTREAM_DEBUG
 #include <ctype.h>
+#include <limits.h>
+#include <locale.h>
+#include <new>
+#include <stdlib.h>
+
+
+
 
 // Returns a human readable representation of the first \a len characters in \a data.
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
@@ -59,12 +61,15 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
             case '\n':
                out += "\\n";
                break;
+
             case '\r':
                out += "\\r";
                break;
+
             case '\t':
                out += "\\t";
                break;
+
             default:
                QString tmp = QString("\\x%1").formatArg((unsigned int)c, 0, 16);
                out += tmp.toLatin1();
@@ -78,7 +83,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
    return out;
 }
 
-#endif
+
 
 // A precondition macro
 #define Q_VOID
@@ -288,8 +293,36 @@ static void copyConverterStateHelper(QTextCodec::ConverterState *dest, const QTe
 }
 #endif
 
-/*! \internal
-*/
+QTextStream::Params QTextStream::getParams() const
+{
+   Q_D(const QTextStream);
+
+   Params retval;
+
+   retval.p_realNumberPrecision = d->realNumberPrecision;
+   retval.p_integerBase         = d->integerBase;
+   retval.p_fieldWidth          = d->fieldWidth;
+   retval.p_padChar             = d->padChar;
+   retval.p_fieldAlignment      = d->fieldAlignment;
+   retval.p_realNumberNotation  = d->realNumberNotation;
+   retval.p_numberFlags         = d->numberFlags;
+
+   return retval;
+}
+
+void QTextStream::setParams(const Params &data)
+{
+   Q_D(QTextStream);
+
+   d->realNumberPrecision = data.p_realNumberPrecision;
+   d->integerBase         = data.p_integerBase;
+   d->fieldWidth          = data.p_fieldWidth;
+   d->padChar             = data.p_padChar;
+   d->fieldAlignment      = data.p_fieldAlignment;
+   d->realNumberNotation  = data.p_realNumberNotation;
+   d->numberFlags         = data.p_numberFlags;
+}
+
 void QTextStreamPrivate::reset()
 {
    realNumberPrecision = 6;
@@ -361,6 +394,14 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
       }
    }
 
+   // reset the Text flag.
+   if (textModeEnabled)
+        device->setTextModeEnabled(true);
+
+   if (bytesRead <= 0)  {
+        return false;
+   }
+
 #ifndef QT_NO_TEXTCODEC
    // codec auto detection, explicitly defaults to locale encoding if the codec has been set to 0.
 
@@ -376,9 +417,7 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    }
 #endif
 
-   if (bytesRead <= 0) {
-      return false;
-   }
+
 
    int oldReadBufferSize = readBuffer.size();
 
@@ -391,10 +430,7 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    tmpBuffer = QString::fromUtf8(buf, bytesRead);
 #endif
 
-   // reset the Text flag
-   if (textModeEnabled) {
-      device->setTextModeEnabled(true);
-   }
+
 
    if (! tmpBuffer.isEmpty() && textModeEnabled) {
       tmpBuffer.replace("\r", "");
@@ -461,10 +497,7 @@ void QTextStreamPrivate::flushWriteBuffer()
    // write raw data to the device
    qint64 bytesWritten = device->write(data);
 
-   if (bytesWritten <= 0) {
-      status = QTextStream::WriteFailed;
-      return;
-   }
+
 
 #if defined (Q_OS_WIN)
    // replace the text flag
@@ -472,6 +505,11 @@ void QTextStreamPrivate::flushWriteBuffer()
       device->setTextModeEnabled(true);
    }
 #endif
+
+   if (bytesWritten <= 0) {
+      status = QTextStream::WriteFailed;
+      return;
+   }
 
    // flush the file
    QFileDevice *file = qobject_cast<QFileDevice *>(device);
@@ -821,9 +859,7 @@ QTextStream::QTextStream(QByteArray *array, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
 
-#if defined (QTEXTSTREAM_DEBUG)
-   qDebug("QTextStream::QTextStream(QByteArray *array == *%p, openMode = %d)", array, int(openMode));
-#endif
+
 
    Q_D(QTextStream);
    d->device = new QBuffer(array);
@@ -875,7 +911,7 @@ QTextStream::~QTextStream()
    qDebug("QTextStream::~QTextStream()");
 #endif
 
-   if (!d->writeBuffer.isEmpty()) {
+   if (! d->writeBuffer.isEmpty()) {
       d->flushWriteBuffer();
    }
 }
@@ -898,21 +934,14 @@ void QTextStream::reset()
    d->numberFlags = 0;
 }
 
-/*!
-    Flushes any buffered data waiting to be written to the device.
 
-    If QTextStream operates on a string, this function does nothing.
-*/
 void QTextStream::flush()
 {
    Q_D(QTextStream);
    d->flushWriteBuffer();
 }
 
-/*!
-    Seeks to the position \a pos in the device. Returns true on
-    success; otherwise returns false.
-*/
+
 bool QTextStream::seek(qint64 pos)
 {
    Q_D(QTextStream);
@@ -1306,11 +1335,7 @@ int QTextStream::realNumberPrecision() const
    return d->realNumberPrecision;
 }
 
-/*!
-    Returns the status of the text stream.
 
-    \sa QTextStream::Status, setStatus(), resetStatus()
-*/
 
 QTextStream::Status QTextStream::status() const
 {
@@ -1318,13 +1343,7 @@ QTextStream::Status QTextStream::status() const
    return d->status;
 }
 
-/*!
-    \since 4.1
 
-    Resets the status of the text stream.
-
-    \sa QTextStream::Status, status(), setStatus()
-*/
 void QTextStream::resetStatus()
 {
    Q_D(QTextStream);
@@ -1344,6 +1363,7 @@ void QTextStream::resetStatus()
 void QTextStream::setStatus(Status status)
 {
    Q_D(QTextStream);
+
    if (d->status == Ok) {
       d->status = status;
    }
@@ -1632,6 +1652,7 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(quint64 *r
    if (ret) {
       *ret = val;
    }
+
    return npsOk;
 }
 
@@ -2086,12 +2107,6 @@ QTextStream &QTextStream::operator<<(bool b)
    return *this << int(b);
 }
 
-/*!
-    Writes the character \a c to the stream, then returns a reference
-    to the QTextStream.
-
-    \sa setFieldWidth()
-*/
 QTextStream &QTextStream::operator<<(QChar c)
 {
    Q_D(QTextStream);
@@ -2113,14 +2128,7 @@ QTextStream &QTextStream::operator<<(char c)
    return *this;
 }
 
-/*!
-    Writes the integer number \a i to the stream, then returns a
-    reference to the QTextStream. By default, the number is stored in
-    decimal form, but you can also set the base by calling
-    setIntegerBase().
 
-    \sa setFieldWidth(), setNumberFlags()
-*/
 QTextStream &QTextStream::operator<<(signed short i)
 {
    Q_D(QTextStream);
@@ -2280,6 +2288,9 @@ QTextStream &QTextStream::operator<<(double f)
       flags |= QLocaleData::Alternate;
    }
 
+    if (locale() != QLocale::c() && !(locale().numberOptions() & QLocale::OmitGroupSeparator))
+        flags |= QLocaleData::ThousandsGroup;
+
    const QLocaleData *dd = d->locale.d->m_data;
    QString num = dd->doubleToString(f, d->realNumberPrecision, form, -1, flags);
    d->putString(num, true);
@@ -2290,17 +2301,29 @@ QTextStream &QTextStream::operator<<(double f)
 QTextStream &QTextStream::operator<<(const QString &str)
 {
    Q_D(QTextStream);
+
    CHECK_VALID_STREAM(*this);
    d->putString(str);
 
    return *this;
 }
 
+QTextStream &QTextStream::operator<<(const QStringView &str)
+{
+    Q_D(QTextStream);
+
+    CHECK_VALID_STREAM(*this);
+    d->putString(str);
+
+    return *this;
+}
 QTextStream &QTextStream::operator<<(const QByteArray &array)
 {
    Q_D(QTextStream);
+
    CHECK_VALID_STREAM(*this);
    d->putString(QString::fromLatin1(array.constData(), array.length()));
+
    return *this;
 }
 
@@ -2308,6 +2331,7 @@ QTextStream &QTextStream::operator<<(const void *ptr)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
+
    int oldBase = d->integerBase;
    NumberFlags oldFlags = d->numberFlags;
    d->integerBase = 16;
@@ -2315,17 +2339,11 @@ QTextStream &QTextStream::operator<<(const void *ptr)
    d->putNumber(reinterpret_cast<quintptr>(ptr), false);
    d->integerBase = oldBase;
    d->numberFlags = oldFlags;
+
    return *this;
 }
 
-/*!
-    \relates QTextStream
 
-    Calls QTextStream::setIntegerBase(2) on \a stream and returns \a
-    stream.
-
-    \sa oct(), dec(), hex(), {QTextStream manipulators}
-*/
 QTextStream &bin(QTextStream &stream)
 {
    stream.setIntegerBase(2);

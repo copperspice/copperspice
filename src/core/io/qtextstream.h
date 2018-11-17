@@ -51,18 +51,21 @@ class Q_CORE_EXPORT QTextStream
       FixedNotation,
       ScientificNotation
    };
+
    enum FieldAlignment {
       AlignLeft,
       AlignRight,
       AlignCenter,
       AlignAccountingStyle
    };
+
    enum Status {
       Ok,
       ReadPastEnd,
       ReadCorruptData,
       WriteFailed
    };
+
    enum NumberFlag {
       ShowBase = 0x1,
       ForcePoint = 0x2,
@@ -71,6 +74,19 @@ class Q_CORE_EXPORT QTextStream
       UppercaseDigits = 0x10
    };
    using NumberFlags = QFlags<NumberFlag>;
+
+   class Params {
+      int   p_realNumberPrecision;
+      int   p_integerBase;
+      int   p_fieldWidth;
+      QChar p_padChar;
+
+      QTextStream::FieldAlignment     p_fieldAlignment;
+      QTextStream::RealNumberNotation p_realNumberNotation;
+      QTextStream::NumberFlags        p_numberFlags;
+
+      friend class QTextStream;
+   };
 
    QTextStream();
    explicit QTextStream(QIODevice *device);
@@ -89,6 +105,9 @@ class Q_CORE_EXPORT QTextStream
    void setGenerateByteOrderMark(bool generate);
    bool generateByteOrderMark() const;
 #endif
+
+   Params getParams() const;
+   void setParams(const Params &data);
 
    void setLocale(const QLocale &locale);
    QLocale locale() const;
@@ -112,6 +131,7 @@ class Q_CORE_EXPORT QTextStream
    void skipWhiteSpace();
 
    QString readLine(qint64 maxlen = 0);
+   bool readLineInto(QString *line, qint64 maxlen = 0);
    QString readAll();
    QString read(qint64 maxlen);
 
@@ -164,17 +184,25 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator<<(quint64 i);
    QTextStream &operator<<(float f);
    QTextStream &operator<<(double f);
+
    QTextStream &operator<<(const QString &s);
+   QTextStream &operator<<(const QStringView &s);
    QTextStream &operator<<(const QByteArray &array);
+
    QTextStream &operator<<(const void *ptr);
 
    QTextStream &operator<<(const char *s) {
       return *this << QString::fromLatin1(s);
    }
 
+ protected:
+   QScopedPointer<QTextStreamPrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QTextStream)
-   QScopedPointer<QTextStreamPrivate> d_ptr;
+
+   friend class QDebugStateSaverPrivate;
+   friend class QDebug;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextStream::NumberFlags)
@@ -282,6 +310,6 @@ inline QTextStreamManipulator qSetRealNumberPrecision(int precision)
    return QTextStreamManipulator(func, precision);
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QTEXTSTREAM_H

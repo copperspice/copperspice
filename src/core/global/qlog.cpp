@@ -32,7 +32,7 @@
 
 #if defined(Q_OS_WIN) && defined(QT_BUILD_CORE_LIB)
 extern bool usingWinMain;
-extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char *str);
+extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, QStringView str);
 #endif
 
 static QtMsgHandler s_handler = nullptr;          // pointer to debug handler
@@ -137,13 +137,13 @@ QtMsgHandler qInstallMsgHandler(QtMsgHandler h)
 
 
 // internal
-void qt_message_output(QtMsgType msgType, const char *buf)
+void qt_message_output(QtMsgType msgType, QStringView str)
 {
    if (s_handler) {
-      (*s_handler)(msgType, buf);
+      (*s_handler)(msgType, str);
 
    } else {
-      fprintf(stderr, "%s\n", buf);
+      fprintf(stderr, "%s\n", str);
       fflush(stderr);
    }
 
@@ -168,7 +168,7 @@ static void qEmergencyOut(QtMsgType msgType, const char *msg, va_list ap)
       std::vsnprintf(emergency_buf, 255, msg, ap);
    }
 
-   qt_message_output(msgType, emergency_buf);
+   qt_message_output(msgType, QString::fromUtf8(emergency_buf));
 }
 
 // internal
@@ -201,7 +201,7 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
       }
    }
 
-   qt_message_output(msgType, buffer.constData());
+   qt_message_output(msgType, QString::fromUtf8(buffer));
 }
 
 //
