@@ -4,10 +4,7 @@ set(GUI_PUBLIC_INCLUDES
     QIcon
     QIconEngine
     QIconEngineFactoryInterface
-    QIconEngineFactoryInterfaceV2
     QIconEnginePlugin
-    QIconEnginePluginV2
-    QIconEngineV2
     QIconSet
     QImage
     QImageIOHandler
@@ -31,10 +28,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qicon.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengine.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginefactoryinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginefactoryinterfacev2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengineplugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginepluginv2.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginev2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconset.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageiohandler.h
@@ -61,25 +55,17 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagepixmapcleanuphooks_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qjpeghandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmnghandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qnativeimage_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qnativeimagehandleprovider_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qgifhandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpaintengine_pic_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpicture_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_blitter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_raster_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapcache_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdata_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdatafactory_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapfilter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpnghandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qppmhandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qtiffhandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimage_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimagedata_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qxbmhandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qxpmhandler_p.h
 )
@@ -99,8 +85,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpictureformatplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapcache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdata.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdatafactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapfilter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengineplugin.cpp
@@ -109,7 +93,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_blitter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qnativeimage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagepixmapcleanuphooks.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qgifhandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qicohandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpnghandler.cpp
@@ -118,8 +101,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qxbmhandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qppmhandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qtiffhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmnghandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimagedata.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_conversions.cpp
 
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jaricom.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcapimin.c
@@ -243,25 +225,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
         ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_win.cpp
     )
+
 else()
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_unix.c
-    )
-endif()
-
-if(X11_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_x11.cpp
-    )
-endif()
-
-# FIXME: check for COCOA instead?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_mac.cpp
     )
 endif()
 

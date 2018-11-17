@@ -5,10 +5,7 @@ GUI_PUBLIC_INCLUDES += \
 	QIcon \
 	QIconEngine \
 	QIconEngineFactoryInterface \
-	QIconEngineFactoryInterfaceV2 \
 	QIconEnginePlugin \
-	QIconEnginePluginV2 \
-	QIconEngineV2 \
 	QIconSet \
 	QImage \
 	QImageIOHandler \
@@ -30,10 +27,7 @@ GUI_IMAGE_INCLUDES = \
 	qicon.h \
 	qiconengine.h \
 	qiconenginefactoryinterface.h \
-	qiconenginefactoryinterfacev2.h \
 	qiconengineplugin.h \
-	qiconenginepluginv2.h \
-	qiconenginev2.h \
 	qiconset.h \
 	qimage.h \
 	qimageiohandler.h \
@@ -58,25 +52,17 @@ GUI_IMAGE_PRIVATE_INCLUDES = \
 	qimage_p.h \
 	qimagepixmapcleanuphooks_p.h \
 	qjpeghandler_p.h \
-	qmnghandler_p.h \
 	qnativeimage_p.h \
-	qnativeimagehandleprovider_p.h \
 	qgifhandler_p.h \
 	qpaintengine_pic_p.h \
 	qpicture_p.h \
 	qpixmap_blitter_p.h \
 	qpixmap_raster_p.h \
-	qpixmap_mac_p.h \
-	qpixmap_x11_p.h \
 	qpixmapcache_p.h \
-	qpixmapdata_p.h \
-	qpixmapdatafactory_p.h \
 	qpixmapfilter_p.h \
 	qpnghandler_p.h \
 	qppmhandler_p.h \
 	qtiffhandler_p.h \
-	qvolatileimage_p.h \
-	qvolatileimagedata_p.h \
 	qxbmhandler_p.h \
 	qxpmhandler_p.h
 
@@ -100,8 +86,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpictureformatplugin.cpp \
 	src/gui/image/qpixmap.cpp \
 	src/gui/image/qpixmapcache.cpp \
-	src/gui/image/qpixmapdata.cpp \
-	src/gui/image/qpixmapdatafactory.cpp \
 	src/gui/image/qpixmapfilter.cpp \
 	src/gui/image/qiconengine.cpp \
 	src/gui/image/qiconengineplugin.cpp \
@@ -110,7 +94,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpixmap_blitter.cpp \
 	src/gui/image/qnativeimage.cpp \
 	src/gui/image/qimagepixmapcleanuphooks.cpp \
-	src/gui/image/qvolatileimage.cpp \
 	src/gui/image/qgifhandler.cpp \
 	src/gui/image/qicohandler.cpp \
 	src/gui/image/qpnghandler.cpp \
@@ -119,8 +102,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qxbmhandler.cpp \
 	src/gui/image/qppmhandler.cpp \
 	src/gui/image/qtiffhandler.cpp \
-	src/gui/image/qmnghandler.cpp \
-	src/gui/image/qvolatileimagedata.cpp
+	src/gui/image/qimage_conversions.cpp
 
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/libjpeg/jaricom.c \
@@ -314,12 +296,3 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpixmap_win.cpp
 endif
 
-if X11
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/image/qpixmap_x11.cpp
-endif
-
-if COCOA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/image/qpixmap_mac.cpp
-endif
