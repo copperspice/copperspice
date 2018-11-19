@@ -1229,9 +1229,6 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
    }
 }
 
-/*!\reimp
-
-*/
 bool QCoreApplication::event(QEvent *e)
 {
    if (e->type() == QEvent::Quit) {
@@ -1240,6 +1237,12 @@ bool QCoreApplication::event(QEvent *e)
    }
 
    return QObject::event(e);
+}
+
+void QCoreApplication::cs_internal_maybeQuit()
+{
+   Q_D(QCoreApplication);
+   d->maybeQuit();
 }
 
 void QCoreApplicationPrivate::maybeQuit()

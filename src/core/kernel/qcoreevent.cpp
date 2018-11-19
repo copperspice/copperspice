@@ -24,94 +24,112 @@
 #include <qcoreapplication.h>
 #include <qcoreapplication_p.h>
 
-#include <qmutex.h>
-#include <qset.h>
+#include <limits>
+#include <atomic>
 
-QT_BEGIN_NAMESPACE
 
 QEvent::QEvent(Type type)
    : d(0), t(type), posted(false), spont(false), m_accept(true)
 {}
 
-/*!
-    Destroys the event. If it was \link
-    QCoreApplication::postEvent() posted \endlink,
-    it will be removed from the list of events to be posted.
-*/
+QEvent::QEvent(const QEvent &other)
+    : d(other.d), t(other.t), posted(other.posted), spont(other.spont),
+      m_accept(other.m_accept)
+{
+    Q_ASSERT_X(!d, "QEvent", "Impossible, this can't happen: QEventPrivate isn't defined anywhere");
+}
+QEvent &QEvent::operator=(const QEvent &other)
+{
+    Q_ASSERT_X(!other.d, "QEvent", "Impossible, this can't happen: QEventPrivate isn't defined anywhere");
+    t = other.t;
+    posted = other.posted;
+    spont = other.spont;
+    m_accept = other.m_accept;
+    return *this;
+}
 
 QEvent::~QEvent()
 {
    if (posted && QCoreApplication::instance()) {
       QCoreApplicationPrivate::removePostedEvent(this);
    }
+
+    Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
 }
 
-class QEventUserEventRegistration
-{
- public:
-   QMutex mutex;
-   QSet<int> set;
+namespace {
+
+template <size_t N>
+struct QBasicAtomicBitField {
+    enum {
+        BitsPerInt = std::numeric_limits<uint>::digits,
+        NumInts = (N + BitsPerInt - 1) / BitsPerInt,
+        NumBits = N
+    };
+
+    // atomic int points to the next (possibly) free ID saving
+    // the otherwise necessary scan through 'data':
+    std::atomic<uint> next;
+    std::atomic<uint> data[NumInts];
+
+    bool allocateSpecific(int which)
+    {
+      std::atomic<uint> &entry = data[which / BitsPerInt];
+
+      uint old = entry.load();
+      const uint bit = 1U << (which % BitsPerInt);
+
+      return !(old & bit) && entry.compare_exchange_strong(old, old | bit, std::memory_order_relaxed);
+   }
+
+    int allocateNext()
+    {
+        // Unroll loop to iterate over ints, then bits? Would save
+        // potentially a lot of cmpxchgs, because we can scan the
+        // whole int before having to load it again.
+
+        // this should never execute many iterations, so leave like this for now
+        for (uint i = next.load(); i < NumBits; ++i) {
+            if (allocateSpecific(i)) {
+                // remember next (possibly) free id
+                uint oldNext = next.load();
+
+                next.compare_exchange_strong(oldNext, qMax(i + 1, oldNext), std::memory_order_relaxed);
+                return i;
+            }
+        }
+        return -1;
+    }
 };
-Q_GLOBAL_STATIC(QEventUserEventRegistration, userEventRegistrationHelper)
 
-int QEvent::registerEventType(int hint)
+} // unnamed namespace
+
+using UserEventTypeRegistry = QBasicAtomicBitField<QEvent::MaxUser - QEvent::User + 1>;
+
+static UserEventTypeRegistry userEventTypeRegistry;
+
+static inline int registerEventTypeZeroBased(int id)
 {
-   QEventUserEventRegistration *userEventRegistration
-      = userEventRegistrationHelper();
-   if (!userEventRegistration) {
-      return -1;
-   }
-
-   QMutexLocker locker(&userEventRegistration->mutex);
-
-   // if the type hint hasn't been registered yet, take it
-   if (hint >= QEvent::User && hint <= QEvent::MaxUser && !userEventRegistration->set.contains(hint)) {
-      userEventRegistration->set.insert(hint);
-      return hint;
-   }
-
-   // find a free event type, starting at MaxUser and decreasing
-   int id = QEvent::MaxUser;
-   while (userEventRegistration->set.contains(id) && id >= QEvent::User) {
-      --id;
-   }
-   if (id >= QEvent::User) {
-      userEventRegistration->set.insert(id);
+   // if the type hint has not been registered yet, take it
+   if (id < UserEventTypeRegistry::NumBits && id >= 0 && userEventTypeRegistry.allocateSpecific(id)) {
       return id;
    }
-   return -1;
+
+   // otherwise ignore hint
+   return userEventTypeRegistry.allocateNext();
+}
+int QEvent::registerEventType(int hint)
+{
+    const int result = registerEventTypeZeroBased(QEvent::MaxUser - hint);
+    return result < 0 ? -1 : QEvent::MaxUser - result ;
 }
 
-/*!
-    \class QTimerEvent
-    \brief The QTimerEvent class contains parameters that describe a
-    timer event.
 
-    \ingroup events
-
-    Timer events are sent at regular intervals to objects that have
-    started one or more timers. Each timer has a unique identifier. A
-    timer is started with QObject::startTimer().
-
-    The QTimer class provides a high-level programming interface that
-    uses signals instead of events. It also provides single-shot timers.
-
-    The event handler QObject::timerEvent() receives timer events.
-
-    \sa QTimer, QObject::timerEvent(), QObject::startTimer(),
-    QObject::killTimer()
-*/
-
-/*!
-    Constructs a timer event object with the timer identifier set to
-    \a timerId.
-*/
 QTimerEvent::QTimerEvent(int timerId)
    : QEvent(Timer), id(timerId)
 {}
 
-/*! \internal
-*/
+//  internal
 QTimerEvent::~QTimerEvent()
 {
 }
@@ -120,8 +138,8 @@ QChildEvent::QChildEvent(Type type, QObject *child)
    : QEvent(type), c(child)
 {}
 
-/*! \internal
-*/
+//  internal
+
 QChildEvent::~QChildEvent()
 {
 }
@@ -131,20 +149,15 @@ QDynamicPropertyChangeEvent::QDynamicPropertyChangeEvent(const QByteArray &name)
 {
 }
 
-/*!
-    \internal
-*/
+
+//  internal
 QDynamicPropertyChangeEvent::~QDynamicPropertyChangeEvent()
 {
 }
 
-/*!
-    \fn QByteArray QDynamicPropertyChangeEvent::propertyName() const
-
-    Returns the name of the dynamic property that was added, changed or
-    removed.
-
-    \sa QObject::setProperty(), QObject::dynamicPropertyNames()
-*/
-
-QT_END_NAMESPACE
+QDeferredDeleteEvent::QDeferredDeleteEvent()
+    : QEvent(QEvent::DeferredDelete)
+    , level(0)
+{ }
+QDeferredDeleteEvent::~QDeferredDeleteEvent()
+{ }

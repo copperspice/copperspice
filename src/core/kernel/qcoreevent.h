@@ -28,13 +28,13 @@
 #include <qnamespace.h>
 #include <qbytearray.h>
 
-QT_BEGIN_NAMESPACE
-
 class QEventPrivate;
 
 class Q_CORE_EXPORT QEvent           // event base class
 {
    CORE_CS_GADGET(QEvent)
+
+   CORE_CS_ENUM(Type)
 
  public:
    enum Type {
@@ -109,7 +109,6 @@ class Q_CORE_EXPORT QEvent           // event base class
       DeactivateControl = 81,                 // ActiveX deactivation
       ContextMenu = 82,                       // context popup menu
       InputMethod = 83,                       // input method
-      AccessibilityPrepare = 86,              // accessibility information is requested
       TabletMove = 87,                        // Wacom tablet event
       LocaleChange = 88,                      // the system locale changed
       LanguageChange = 89,                    // the application language changed
@@ -165,10 +164,6 @@ class Q_CORE_EXPORT QEvent           // event base class
       HoverEnter = 127,                       // mouse cursor enters a hover widget
       HoverLeave = 128,                       // mouse cursor leaves a hover widget
       HoverMove = 129,                        // mouse cursor move inside a hover widget
-
-      // may not be used
-      AccessibilityHelp = 119,                // accessibility help text request
-      AccessibilityDescription = 130,         // accessibility description text request
 
       // last event id used = 132
 
@@ -247,10 +242,26 @@ class Q_CORE_EXPORT QEvent           // event base class
       CloseSoftwareInputPanel = 200,
 
       WinIdChange = 203,
+      ScrollPrepare = 204,
+      Scroll = 205,
+
+      Expose = 206,
+
+      InputMethodQuery = 207,
+      OrientationChange = 208,                // Screen orientation has changed
+
+      TouchCancel = 209,
+
+      ThemeChange = 210,
 
       SockClose = 211,                        // socket closed
       PlatformPanel = 212,
 
+      StyleAnimationUpdate = 213,             // style animation target should be updated
+      ApplicationStateChange = 214,
+      WindowChangeInternal = 215,             // internal for QQuickWidget
+      ScreenChangeInternal = 216,
+      PlatformSurface = 217,                  // Platform surface created or about to be destroyed
       // 512 reserved for Qt Jambi's MetaCall event
       // 513 reserved for Qt Jambi's DeleteOnMainThread event
 
@@ -258,10 +269,13 @@ class Q_CORE_EXPORT QEvent           // event base class
       MaxUser = 65535                         // last user event id
    };
 
-   CORE_CS_ENUM(Type)
 
-   QEvent(Type type);
+   explicit QEvent(Type type);
+   QEvent(const QEvent &other);
    virtual ~QEvent();
+
+   QEvent &operator=(const QEvent &other);
+
    inline Type type() const {
       return static_cast<Type>(t);
    }
@@ -293,6 +307,11 @@ class Q_CORE_EXPORT QEvent           // event base class
    ushort t;
 
  private:
+
+   void setSpontaneous() {
+      spont = true;
+   }
+
    ushort posted : 1;
    ushort spont : 1;
    ushort m_accept : 1;
@@ -302,26 +321,24 @@ class Q_CORE_EXPORT QEvent           // event base class
    friend class QCoreApplicationPrivate;
    friend class QThreadData;
    friend class QApplication;
-   friend class QApplicationPrivate;
+
    friend class QShortcutMap;
-   friend class QETWidget;
+
    friend class QGraphicsView;
-   friend class QGraphicsViewPrivate;
+
    friend class QGraphicsScene;
    friend class QGraphicsScenePrivate;
 
-#ifndef QT_NO_GESTURES
-   friend class QGestureManager;
-#endif
-
+   friend class QSpontaneKeyEvent;
 };
 
 
 class Q_CORE_EXPORT QTimerEvent : public QEvent
 {
  public:
-   QTimerEvent( int timerId );
+   explicit QTimerEvent( int timerId );
    ~QTimerEvent();
+
    int timerId() const {
       return id;
    }
@@ -335,15 +352,19 @@ class Q_CORE_EXPORT QChildEvent : public QEvent
  public:
    QChildEvent( Type type, QObject *child );
    ~QChildEvent();
+
    QObject *child() const {
       return c;
    }
+
    bool added() const {
       return type() == ChildAdded;
    }
+
    bool polished() const {
       return type() == ChildPolished;
    }
+
    bool removed() const {
       return type() == ChildRemoved;
    }
@@ -351,11 +372,10 @@ class Q_CORE_EXPORT QChildEvent : public QEvent
    QObject *c;
 };
 
-
 class Q_CORE_EXPORT QDynamicPropertyChangeEvent : public QEvent
 {
  public:
-   QDynamicPropertyChangeEvent(const QByteArray &name);
+   explicit QDynamicPropertyChangeEvent(const QByteArray &name);
    ~QDynamicPropertyChangeEvent();
 
    inline QByteArray propertyName() const {
@@ -366,6 +386,17 @@ class Q_CORE_EXPORT QDynamicPropertyChangeEvent : public QEvent
    QByteArray n;
 };
 
-QT_END_NAMESPACE
+class Q_CORE_EXPORT QDeferredDeleteEvent : public QEvent
+{
+public:
+    explicit QDeferredDeleteEvent();
+    ~QDeferredDeleteEvent();
+
+    int loopLevel() const { return level; }
+
+private:
+    int level;
+    friend class QCoreApplication;
+};
 
 #endif // QCOREEVENT_H

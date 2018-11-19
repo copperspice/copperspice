@@ -28,13 +28,11 @@
 
 #include <qcoreevent.h>
 #include <qeventloop.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #if defined(Q_OS_WIN) && ! defined(tagMSG)
 typedef struct tagMSG MSG;
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QCoreApplicationPrivate;
 class QTextCodec;
@@ -156,6 +154,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    EventFilter setEventFilter(EventFilter filter);
    bool filterEvent(void *message, long *result);
 
+   void cs_internal_maybeQuit();
+
    CORE_CS_SLOT_1(Public, static void quit())
    CORE_CS_SLOT_2(quit)
 
@@ -167,9 +167,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
  protected:
    bool event(QEvent *) override;
-
    virtual bool compressEvent(QEvent *, QObject *receiver, QPostEventList *);
-
    QCoreApplication(QCoreApplicationPrivate &p);
 
    QScopedPointer<QCoreApplicationPrivate> d_ptr;
@@ -195,7 +193,6 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    friend Q_CORE_EXPORT QString qAppName();
    friend class QClassFactory;
 };
-
 
 void QCoreApplication::cs_setApplicationName(const QString &application)
 {
@@ -270,10 +267,8 @@ inline QString QCoreApplication::translate(const char *, const char *sourceText,
    if (encoding == UnicodeUTF8) {
       return QString::fromUtf8(sourceText);
    }
-#else
-   Q_UNUSED(encoding)
-
 #endif
+
    return QString::fromLatin1(sourceText);
 }
 
@@ -322,6 +317,4 @@ Q_CORE_EXPORT QString decodeMSG(const MSG &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
 #endif
 
-QT_END_NAMESPACE
-
-#endif // QCOREAPPLICATION_H
+#endif

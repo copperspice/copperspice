@@ -130,10 +130,8 @@ class QWinMsgHandlerCriticalSection
    }
 };
 
-Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char *str)
+Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, QStringView str)
 {
-   Q_UNUSED(t);
-
    // OutputDebugString is not threadsafe.
 
    // cannot use QMutex here, because qWarning()s in the QMutex
@@ -141,13 +139,14 @@ Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char *str)
 
    static QWinMsgHandlerCriticalSection staticCriticalSection;
 
-   if (! str) {
-      str = "(null)";
+   if (str.isEmpty()) {
+      static QString tmp = "(null)";
+      str = tmp;
    }
 
    staticCriticalSection.lock();
 
-   QString16 tmpString(QString16::fromUtf8(str));
+   QString16 tmpString(str.cbegin(), str.cend());
 
    tmpString += '\n';
    OutputDebugString((wchar_t *)tmpString.constData());
@@ -161,9 +160,8 @@ Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char *str)
  *****************************************************************************/
 
 
-Q_CORE_EXPORT
-void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdParam,
-              int cmdShow, int &argc, QVector<char *> &argv)
+Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdParam,
+                  int cmdShow, int &argc, QVector<char *> &argv)
 {
    static bool already_called = false;
 
@@ -171,6 +169,7 @@ void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdParam,
       qWarning("Internal error: qWinMain should be called only once");
       return;
    }
+
    already_called = true;
    usingWinMain = true;
 

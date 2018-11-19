@@ -747,6 +747,5 @@ bool CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::checkReturnType
    return false;
 }
 
-
 #endif
 
