@@ -24,7 +24,9 @@
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qmath.h>
-#include <math.h>
+
+#include <qdebug_p.h>
+
 
 QRect QRect::normalized() const
 {
@@ -44,16 +46,6 @@ QRect QRect::normalized() const
       r.y2 = y2;
    }
    return r;
-}
-
-void QRect::moveCenter(const QPoint &p)
-{
-   int w = x2 - x1;
-   int h = y2 - y1;
-   x1 = p.x() - w / 2;
-   y1 = p.y() - h / 2;
-   x2 = x1 + w;
-   y2 = y1 + h;
 }
 
 bool QRect::contains(const QPoint &p, bool proper) const
@@ -259,37 +251,7 @@ QRect QRect::operator&(const QRect &r) const
    return tmp;
 }
 
-/*!
-    \fn QRect QRect::intersect(const QRect &rectangle) const
-    \obsolete
 
-    Use intersected(\a rectangle) instead.
-*/
-
-/*!
-    \fn QRect QRect::intersected(const QRect &rectangle) const
-    \since 4.2
-
-    Returns the intersection of this rectangle and the given \a
-    rectangle. Note that \c{r.intersected(s)} is equivalent to \c{r & s}.
-
-    \image qrect-intersect.png
-
-    \sa intersects(), united(), operator&=()
-*/
-
-/*!
-    \fn bool QRect::intersects(const QRect &rectangle) const
-
-    Returns true if this rectangle intersects with the given \a
-    rectangle (i.e., there is at least one pixel that is within both
-    rectangles), otherwise returns false.
-
-    The intersection rectangle can be retrieved using the intersected()
-    function.
-
-    \sa  contains()
-*/
 
 bool QRect::intersects(const QRect &r) const
 {
@@ -364,9 +326,12 @@ QDataStream &operator>>(QDataStream &s, QRect &r)
 
 QDebug operator<<(QDebug dbg, const QRect &r)
 {
-   dbg.nospace() << "QRect(" << r.x() << ',' << r.y() << ' '
-                 << r.width() << 'x' << r.height() << ')';
-   return dbg.space();
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    dbg << "QRect" << '(';
+    QtDebugUtils::formatQRect(dbg, r);
+    dbg << ')';
+    return dbg;
 }
 
 QRectF QRectF::normalized() const
@@ -419,21 +384,7 @@ bool QRectF::contains(const QPointF &p) const
 }
 
 
-/*!
-    \fn bool QRectF::contains(qreal x, qreal y) const
-    \overload
 
-    Returns true if the point (\a x, \a y) is inside or on the edge of
-    the rectangle; otherwise returns false.
-*/
-
-/*!
-    \fn bool QRectF::contains(const QRectF &rectangle) const
-    \overload
-
-    Returns true if the given \a rectangle is inside this rectangle;
-    otherwise returns false.
-*/
 
 bool QRectF::contains(const QRectF &r) const
 {
@@ -492,96 +443,8 @@ bool QRectF::contains(const QRectF &r) const
    return true;
 }
 
-/*!
-    \fn qreal QRectF::left() const
-
-    Returns the x-coordinate of the rectangle's left edge. Equivalent
-    to x().
-
-    \sa setLeft(), topLeft(), bottomLeft()
-*/
-
-/*!
-    \fn qreal QRectF::top() const
-
-    Returns the y-coordinate of the rectangle's top edge. Equivalent
-    to y().
-
-    \sa setTop(), topLeft(), topRight()
-*/
-
-/*!
-    \fn qreal QRectF::right() const
-
-    Returns the x-coordinate of the rectangle's right edge.
-
-    \sa setRight(), topRight(), bottomRight()
-*/
-
-/*!
-    \fn qreal QRectF::bottom() const
-
-    Returns the y-coordinate of the rectangle's bottom edge.
-
-    \sa setBottom(), bottomLeft(), bottomRight()
-*/
-
-/*!
-    \fn QPointF QRectF::topLeft() const
-
-    Returns the position of the rectangle's top-left corner.
-
-    \sa setTopLeft(), top(), left()
-*/
-
-/*!
-    \fn QPointF QRectF::bottomRight() const
-
-    Returns the position of the rectangle's  bottom-right corner.
-
-    \sa setBottomRight(), bottom(), right()
-*/
-
-/*!
-    \fn QPointF QRectF::topRight() const
-
-    Returns the position of the rectangle's top-right corner.
-
-    \sa setTopRight(), top(), right()
-*/
-
-/*!
-    \fn QPointF QRectF::bottomLeft() const
-
-    Returns the position of the rectangle's  bottom-left corner.
-
-    \sa setBottomLeft(),  bottom(), left()
-*/
-
-/*!
-    \fn QRectF& QRectF::operator|=(const QRectF &rectangle)
-
-    Unites this rectangle with the given \a rectangle.
-
-    \sa united(), operator|()
-*/
-
-/*!
-    \fn QRectF& QRectF::operator&=(const QRectF &rectangle)
-
-    Intersects this rectangle with the given \a rectangle.
-
-    \sa intersected(), operator|=()
-*/
 
 
-/*!
-    \fn QRectF QRectF::operator|(const QRectF &rectangle) const
-
-    Returns the bounding rectangle of this rectangle and the given \a rectangle.
-
-    \sa united(), operator|=()
-*/
 
 QRectF QRectF::operator|(const QRectF &r) const
 {
@@ -836,7 +699,10 @@ QDataStream &operator>>(QDataStream &s, QRectF &r)
 
 QDebug operator<<(QDebug dbg, const QRectF &r)
 {
-   dbg.nospace() << "QRectF(" << r.x() << ',' << r.y() << ' '
-                 << r.width() << 'x' << r.height() << ')';
-   return dbg.space();
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    dbg << "QRectF" << '(';
+    QtDebugUtils::formatQRect(dbg, r);
+    dbg << ')';
+    return dbg;
 }
