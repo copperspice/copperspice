@@ -25,7 +25,7 @@
 
 #include <QtCore/qobject.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QLibraryPrivate;
 
@@ -44,7 +44,8 @@ class Q_CORE_EXPORT QLibrary : public QObject
       ResolveAllSymbolsHint     = 0x01,
       ExportExternalSymbolsHint = 0x02,
       LoadArchiveMemberHint     = 0x04,
-      ImprovedSearchHeuristics  = 0x08
+      PreventUnloadHint = 0x08,
+      DeepBindHint = 0x10
    };
    using LoadHints = QFlags<LoadHint>;
 
@@ -85,6 +86,6 @@ class Q_CORE_EXPORT QLibrary : public QObject
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QLibrary::LoadHints)
 
-QT_END_NAMESPACE
+
 
 #endif //QLIBRARY_H

@@ -21,8 +21,18 @@
 ***********************************************************************/
 
 #include <quuid.h>
+
+#include <qdebug.h>
 #include <qdatastream.h>
 #include <qendian.h>
+#include <qcryptographichash.h>
+#include <qdatetime.h>
+#include <qfile.h>
+#include <qthreadstorage.h>
+
+#include <qtools_p.h>
+
+#include <stdlib.h>                // for RAND_MAX
 
 template <class Char, class Integral>
 void _q_toHex(Char *&dst, Integral value)
@@ -105,11 +115,11 @@ bool _q_uuidFromHex(const char *src, uint &d1, ushort &d2, ushort &d3, uchar (&d
    }
 
    if (! _q_fromHex(src, d1)
-         || *src++ != '-'  || ! _q_fromHex(src, d2)
-         || *src++ != '-'  || ! _q_fromHex(src, d3)
-         || *src++ != '-'  || ! _q_fromHex(src, d4[0]) || ! _q_fromHex(src, d4[1])
-         || *src++ != '-'  || ! _q_fromHex(src, d4[2]) || ! _q_fromHex(src, d4[3])
-         || !_q_fromHex(src, d4[4]) || !_q_fromHex(src, d4[5]) || !_q_fromHex(src, d4[6]) || !_q_fromHex(src, d4[7])) {
+      || *src++ != '-'  || ! _q_fromHex(src, d2)
+      || *src++ != '-'  || ! _q_fromHex(src, d3)
+      || *src++ != '-'  || ! _q_fromHex(src, d4[0]) || ! _q_fromHex(src, d4[1])
+      || *src++ != '-'  || ! _q_fromHex(src, d4[2]) || ! _q_fromHex(src, d4[3])
+      || !_q_fromHex(src, d4[4]) || !_q_fromHex(src, d4[5]) || !_q_fromHex(src, d4[6]) || !_q_fromHex(src, d4[7])) {
 
       return false;
    }
@@ -117,6 +127,28 @@ bool _q_uuidFromHex(const char *src, uint &d1, ushort &d2, ushort &d3, uchar (&d
    return true;
 }
 
+static QUuid createFromName(const QUuid &ns, const QByteArray &baseData, QCryptographicHash::Algorithm algorithm, int version)
+{
+   QByteArray hashResult;
+
+   // create a scope so later resize won't reallocate
+   {
+      QCryptographicHash hash(algorithm);
+      hash.addData(ns.toRfc4122());
+      hash.addData(baseData);
+      hashResult = hash.result();
+   }
+   hashResult.resize(16); // Sha1 will be too long
+
+   QUuid result = QUuid::fromRfc4122(hashResult);
+
+   result.data3 &= 0x0FFF;
+   result.data3 |= (version << 12);
+   result.data4[0] &= 0x3F;
+   result.data4[0] |= 0x80;
+
+   return result;
+}
 QUuid::QUuid(const QString &text)
 {
    if (text.length() < 36) {
@@ -166,6 +198,15 @@ QUuid::QUuid(const QByteArray &text)
    }
 }
 
+QUuid QUuid::createUuidV3(const QUuid &ns, const QByteArray &baseData)
+{
+   return createFromName(ns, baseData, QCryptographicHash::Md5, 3);
+}
+
+QUuid QUuid::createUuidV5(const QUuid &ns, const QByteArray &baseData)
+{
+   return createFromName(ns, baseData, QCryptographicHash::Sha1, 5);
+}
 QUuid QUuid::fromRfc4122(const QByteArray &bytes)
 {
    if (bytes.isEmpty() || bytes.length() != 16) {
@@ -302,8 +343,8 @@ QDataStream &operator>>(QDataStream &s, QUuid &id)
 bool QUuid::isNull() const
 {
    return data4[0] == 0 && data4[1] == 0 && data4[2] == 0 && data4[3] == 0 &&
-          data4[4] == 0 && data4[5] == 0 && data4[6] == 0 && data4[7] == 0 &&
-          data1 == 0 && data2 == 0 && data3 == 0;
+      data4[4] == 0 && data4[5] == 0 && data4[6] == 0 && data4[7] == 0 &&
+      data1 == 0 && data2 == 0 && data3 == 0;
 }
 
 QUuid::Variant QUuid::variant() const
@@ -334,9 +375,9 @@ QUuid::Version QUuid::version() const
    // Check the 4 MSB of data3
    Version ver = (Version)(data3 >> 12);
    if (isNull()
-         || (variant() != DCE)
-         || ver < Time
-         || ver > Random) {
+      || (variant() != DCE)
+      || ver < Time
+      || ver > Sha1) {
       return VerUnknown;
    }
    return ver;
@@ -380,7 +421,7 @@ bool QUuid::operator>(const QUuid &other) const
    return false;
 }
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
 
 #include <objbase.h> // For CoCreateGuid
 
@@ -392,12 +433,9 @@ QUuid QUuid::createUuid()
    return result;
 }
 
-#else // ! Q_OS_WIN32
+#else // ! Q_OS_WIN
 
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qthreadstorage.h>
-#include <stdlib.h>                // for RAND_MAX
+
 
 #if defined(Q_OS_UNIX)
 Q_GLOBAL_STATIC(QThreadStorage<QFile *>, devUrandomStorage);
@@ -450,7 +488,7 @@ QUuid QUuid::createUuid()
          static QAtomicInt serial = QAtomicInt {2};
 
          qsrand(*pseed = QDateTime::currentDateTime().toTime_t()
-                         + quintptr(&pseed) + serial.fetchAndAddRelaxed(1));
+               + quintptr(&pseed) + serial.fetchAndAddRelaxed(1));
 
          uuidseed.setLocalData(pseed);
       }
@@ -468,17 +506,24 @@ QUuid QUuid::createUuid()
    }
 
    result.data4[0] = (result.data4[0] & 0x3F) | 0x80;        // UV_DCE
-   result.data3 = (result.data3 & 0x0FFF) | 0x4000;        // UV_Random
+   result.data3 = (result.data3 & 0x0FFF) | 0x4000;          // UV_Random
 
    return result;
 }
-#endif // !Q_OS_WIN32
+#endif // !Q_OS_WIN
+
+QDebug operator<<(QDebug dbg, const QUuid &id)
+{
+   QDebugStateSaver saver(dbg);
+   dbg.nospace() << "QUuid(" << id.toString() << ')';
+   return dbg;
+}
 
 uint qHash(const QUuid &uuid, uint seed)
 {
    return uuid.data1 ^ uuid.data2 ^ (uuid.data3 << 16)
-          ^ ((uuid.data4[0] << 24) | (uuid.data4[1] << 16) | (uuid.data4[2] << 8) | uuid.data4[3])
-          ^ ((uuid.data4[4] << 24) | (uuid.data4[5] << 16) | (uuid.data4[6] << 8) | uuid.data4[7])
-          ^ seed;
+      ^ ((uuid.data4[0] << 24) | (uuid.data4[1] << 16) | (uuid.data4[2] << 8) | uuid.data4[3])
+      ^ ((uuid.data4[4] << 24) | (uuid.data4[5] << 16) | (uuid.data4[6] << 8) | uuid.data4[7])
+      ^ seed;
 }
 

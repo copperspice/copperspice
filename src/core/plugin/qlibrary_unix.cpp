@@ -26,15 +26,15 @@
 #include <qcoreapplication.h>
 #include <qfilesystementry_p.h>
 
-#ifdef Q_OS_DARWIN
-#include <qcore_mac_p.h>
+#ifdef Q_OS_MAC
+#  include <qcore_mac_p.h>
 #endif
 
 #if defined (Q_OS_NACL)
 #define QT_NO_DYNAMIC_LIBRARY
 #endif
 
-#if !defined(QT_HPUX_LD) && !defined(QT_NO_DYNAMIC_LIBRARY)
+#if ! defined(QT_NO_DYNAMIC_LIBRARY)
 #include <dlfcn.h>
 #endif
 
@@ -42,91 +42,71 @@ static QString qdlerror()
 {
 #if defined(QT_NO_DYNAMIC_LIBRARY)
    const char *err = "This platform does not support dynamic libraries.";
-#elif !defined(QT_HPUX_LD)
-   const char *err = dlerror();
+
 #else
    const char *err = strerror(errno);
 #endif
+
    return err ? QString('(' + QString::fromUtf8(err) + ')') : QString();
+}
+
+QStringList QLibraryPrivate::suffixes_sys(const QString &fullVersion)
+{
+   QStringList suffixes;
+
+   if (! fullVersion.isEmpty()) {
+      suffixes << QString::fromLatin1(".so.%1").formatArg(fullVersion);
+   } else {
+      suffixes << QLatin1String(".so");
+   }
+
+# ifdef Q_OS_MAC
+   if (!fullVersion.isEmpty()) {
+      suffixes << QString::fromLatin1(".%1.bundle").arg(fullVersion);
+      suffixes << QString::fromLatin1(".%1.dylib").arg(fullVersion);
+   } else {
+      suffixes << QLatin1String(".bundle") << QLatin1String(".dylib");
+   }
+#endif
+
+   return suffixes;
+}
+
+QStringList QLibraryPrivate::prefixes_sys()
+{
+   return QStringList() << "lib";
 }
 
 bool QLibraryPrivate::load_sys()
 {
    QString attempt;
-#if !defined(QT_NO_DYNAMIC_LIBRARY)
+
+#if ! defined(QT_NO_DYNAMIC_LIBRARY)
    QFileSystemEntry fsEntry(fileName);
 
    QString path = fsEntry.path();
    QString name = fsEntry.fileName();
 
-   if (path == QLatin1String(".") && !fileName.startsWith(path)) {
+   if (path == "." && ! fileName.startsWith(path)) {
       path.clear();
+
    } else {
-      path += QLatin1Char('/');
+      path += '/';
    }
 
-   // The first filename we want to attempt to load is the filename as the callee specified.
-   // Thus, the first attempt we do must be with an empty prefix and empty suffix.
-   QStringList suffixes(QLatin1String("")), prefixes(QLatin1String(""));
+   QStringList suffixes;
+   QStringList prefixes;
+
    if (pluginState != IsAPlugin) {
-
-      prefixes << QLatin1String("lib");
-
-#if defined(Q_OS_HPUX)
-      // according to
-      // http://docs.hp.com/en/B2355-90968/linkerdifferencesiapa.htm
-
-      // In PA-RISC (PA-32 and PA-64) shared libraries are suffixed
-      // with .sl. In IPF (32-bit and 64-bit), the shared libraries
-      // are suffixed with .so. For compatibility, the IPF linker
-      // also supports the .sl suffix.
-
-      // But since we don't know if we are built on HPUX or HPUXi,
-      // we support both .sl (and .<version>) and .so suffixes but
-      // .so is preferred.
-# if defined(__ia64)
-      if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".so.%1").formatArg(fullVersion);
-      } else {
-         suffixes << QLatin1String(".so");
-      }
-# endif
-      if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".sl.%1").formatArg(fullVersion);
-         suffixes << QString::fromLatin1(".%1").formatArg(fullVersion);
-      } else {
-         suffixes << QLatin1String(".sl");
-      }
-#else
-
-      if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".so.%1").formatArg(fullVersion);
-      } else {
-         suffixes << QLatin1String(".so");
-      }
-#endif // Q_OS_HPUX
-
-# ifdef Q_OS_MAC
-      if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".%1.bundle").formatArg(fullVersion);
-         suffixes << QString::fromLatin1(".%1.dylib").formatArg(fullVersion);
-      } else {
-         suffixes << QLatin1String(".bundle") << QLatin1String(".dylib");
-      }
-#endif
+      prefixes = prefixes_sys();
+      suffixes = suffixes_sys(fullVersion);
    }
+
    int dlFlags = 0;
 
-#if defined(QT_HPUX_LD)
-   dlFlags = DYNAMIC_PATH | BIND_NONFATAL;
 
-   if (loadHints & QLibrary::ResolveAllSymbolsHint) {
-      dlFlags |= BIND_IMMEDIATE;
-   } else {
-      dlFlags |= BIND_DEFERRED;
-   }
+   int loadHints = this->loadHints();
 
-#else
    if (loadHints & QLibrary::ResolveAllSymbolsHint) {
       dlFlags |= RTLD_NOW;
    } else {
@@ -135,33 +115,40 @@ bool QLibraryPrivate::load_sys()
 
    if (loadHints & QLibrary::ExportExternalSymbolsHint) {
       dlFlags |= RTLD_GLOBAL;
-   }
 
-   else {
-
-#if defined(Q_OS_MAC)
-      if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_4)
-#endif
-         dlFlags |= RTLD_LOCAL;
-   }
-
-
-#endif // QT_HPUX_LD
-   // If using the new search heuristics we do:
-   //
-   //   If the filename is an absolute path then we want to try that first as it is most likely
-   //   what the callee wants. If we have been given a non-absolute path then lets try the
-   //   native library name first to avoid unnecessary calls to dlopen().
-   //
-   // otherwise:
-   //
-   //   We use the old behaviour which is to always try the specified filename first
-   if ((loadHints & QLibrary::ImprovedSearchHeuristics) && !fsEntry.isAbsolute()) {
-      suffixes.append(QLatin1String(""));
-      prefixes.append(QLatin1String(""));
    } else {
-      suffixes.prepend(QLatin1String(""));
-      prefixes.prepend(QLatin1String(""));
+      dlFlags |= RTLD_LOCAL;
+   }
+
+#if defined(RTLD_DEEPBIND)
+   if (loadHints & QLibrary::DeepBindHint) {
+      dlFlags |= RTLD_DEEPBIND;
+   }
+#endif
+
+   // Provide access to RTLD_NODELETE flag on Unix
+   // From GNU documentation on RTLD_NODELETE:
+   // Do not unload the library during dlclose(). Consequently, the
+   // library's specific static variables are not reinitialized if the
+   // library is reloaded with dlopen() at a later time.
+
+#ifdef RTLD_NODELETE
+   if (loadHints & QLibrary::PreventUnloadHint) {
+      dlFlags |= RTLD_NODELETE;
+   }
+#endif
+
+   // If the filename is an absolute path then we want to try that first as it is most likely
+   // what the callee wants. If we have been given a non-absolute path then lets try the
+   // native library name first to avoid unnecessary calls to dlopen().
+
+   if (fsEntry.isAbsolute()) {
+      suffixes.prepend(QString());
+      prefixes.prepend(QString());
+
+   } else {
+      suffixes.append(QString());
+      prefixes.append(QString());
    }
 
    bool retry = true;
@@ -183,11 +170,8 @@ bool QLibraryPrivate::load_sys()
          } else {
             attempt = path + prefixes.at(prefix) + name + suffixes.at(suffix);
          }
-#if defined(QT_HPUX_LD)
-         pHnd = (void *)shl_load(QFile::encodeName(attempt), dlFlags, 0);
-#else
+
          pHnd = dlopen(QFile::encodeName(attempt).constData(), dlFlags);
-#endif
 
          if (!pHnd && fileName.startsWith(QLatin1Char('/')) && QFile::exists(attempt)) {
             // We only want to continue if dlopen failed due to that the shared library did not exist.
@@ -204,7 +188,7 @@ bool QLibraryPrivate::load_sys()
    if (!pHnd) {
       QByteArray utf8Bundle = fileName.toUtf8();
       QCFType<CFURLRef> bundleUrl = CFURLCreateFromFileSystemRepresentation(NULL,
-                                    reinterpret_cast<const UInt8 *>(utf8Bundle.data()), utf8Bundle.length(), true);
+            reinterpret_cast<const UInt8 *>(utf8Bundle.data()), utf8Bundle.length(), true);
 
       QCFType<CFBundleRef> bundle = CFBundleCreate(NULL, bundleUrl);
 
@@ -219,6 +203,7 @@ bool QLibraryPrivate::load_sys()
       }
    }
 #endif
+
 #endif // ! defined(QT_NO_DYNAMIC_LIBRARY)
 
    if (pHnd) {
@@ -232,19 +217,23 @@ bool QLibraryPrivate::load_sys()
 
 bool QLibraryPrivate::unload_sys()
 {
-#if !defined(QT_NO_DYNAMIC_LIBRARY)
-#  if defined(QT_HPUX_LD)
-   if (shl_unload((shl_t)pHnd)) {
-#  else
+#if ! defined(QT_NO_DYNAMIC_LIBRARY)
+
    if (dlclose(pHnd)) {
-#  endif
-      errorString = QLibrary::tr("Cannot unload library %1: %2").formatArg(fileName).formatArg(qdlerror());
+      errorString = QLibrary::tr("Can not unload library %1: %2").formatArg(fileName).formatArg(qdlerror());
       return false;
    }
 #endif
    errorString.clear();
    return true;
 }
+
+#if defined(Q_OS_LINUX) && ! defined(QT_NO_DYNAMIC_LIBRARY)
+Q_CORE_EXPORT void *qt_linux_find_symbol_sys(const char *symbol)
+{
+   return dlsym(RTLD_DEFAULT, symbol);
+}
+#endif
 
 #ifdef Q_OS_MAC
 Q_CORE_EXPORT void *qt_mac_resolve_sys(void *handle, const char *symbol)
@@ -256,13 +245,7 @@ Q_CORE_EXPORT void *qt_mac_resolve_sys(void *handle, const char *symbol)
 void *QLibraryPrivate::resolve_sys(const QString &symbol)
 {
 
-#if defined(QT_HPUX_LD)
-   void *address = 0;
-   if (shl_findsym((shl_t *)&pHnd, symbol.constData(), TYPE_UNDEFINED, &address) < 0) {
-      address = 0;
-   }
-
-#elif defined (QT_NO_DYNAMIC_LIBRARY)
+#if defined (QT_NO_DYNAMIC_LIBRARY)
    void *address = 0;
 
 #else
@@ -271,7 +254,8 @@ void *QLibraryPrivate::resolve_sys(const QString &symbol)
 #endif
 
    if (! address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(symbol).formatArg(fileName).formatArg(qdlerror());
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2:%3").formatArg(symbol).formatArg(fileName).formatArg(qdlerror());
+
    } else {
       errorString.clear();
    }

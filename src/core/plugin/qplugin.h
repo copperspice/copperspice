@@ -25,8 +25,9 @@
 
 #include <QtCore/qobject.h>
 #include <QtCore/qpointer.h>
+#include <QtCore/qjsonobject.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef Q_EXTERN_C
 #  ifdef __cplusplus
@@ -37,16 +38,45 @@ QT_BEGIN_NAMESPACE
 #endif
 
 typedef QObject *(*QtPluginInstanceFunction)();
+typedef const char *(*QtPluginMetaDataFunction)();
 
-void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunction function);
+struct Q_CORE_EXPORT QStaticPlugin {
+   QtPluginInstanceFunction instance;
+   QtPluginMetaDataFunction rawMetaData;
 
+
+
+   QJsonObject metaData() const;
+};
+
+Q_DECLARE_TYPEINFO(QStaticPlugin, Q_PRIMITIVE_TYPE);
+void Q_CORE_EXPORT qRegisterStaticPluginFunction(QStaticPlugin staticPlugin);
+
+#if (defined(Q_OF_ELF) || defined(Q_OS_WIN)) && (defined (Q_CC_GNU) || defined(Q_CC_CLANG))
+#  define QT_PLUGIN_METADATA_SECTION \
+    __attribute__ ((section (".qtmetadata"))) __attribute__((used))
+
+#elif defined(Q_OS_MAC)
+
+#  define QT_PLUGIN_METADATA_SECTION \
+    __attribute__ ((section ("__TEXT,qtmetadata"))) __attribute__((used))
+
+#elif defined(Q_CC_MSVC)
+
+#pragma section(".qtmetadata",read,shared)
+#  define QT_PLUGIN_METADATA_SECTION \
+    __declspec(allocate(".qtmetadata"))
+
+#else
+#  define QT_PLUGIN_VERIFICATION_SECTION
+#  define QT_PLUGIN_METADATA_SECTION
+#endif
 #define Q_IMPORT_PLUGIN(PLUGIN) \
-        extern QT_PREPEND_NAMESPACE(QObject) *qt_plugin_instance_##PLUGIN(); \
+        extern const QT_PREPEND_NAMESPACE(QStaticPlugin) qt_static_plugin_##PLUGIN(); \
         class Static##PLUGIN##PluginInstance{ \
         public: \
-                Static##PLUGIN##PluginInstance()  \
-                { \
-                   qRegisterStaticPluginInstanceFunction(qt_plugin_instance_##PLUGIN); \
+                Static##PLUGIN##PluginInstance() { \
+                    qRegisterStaticPluginFunction(qt_static_plugin_##PLUGIN()); \
                 } \
         }; \
        static Static##PLUGIN##PluginInstance static##PLUGIN##Instance;
@@ -59,60 +89,16 @@ void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunctio
             return _instance; \
         }
 
-#define Q_EXPORT_PLUGIN(PLUGIN)         Q_EXPORT_PLUGIN2(PLUGIN, PLUGIN)
-#define Q_EXPORT_STATIC_PLUGIN(PLUGIN)  Q_EXPORT_STATIC_PLUGIN2(PLUGIN, PLUGIN)
 
-#if defined(QT_STATICPLUGIN)
-
-#  define Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS) \
-            QT_PREPEND_NAMESPACE(QObject) *qt_plugin_instance_##PLUGIN()  Q_PLUGIN_INSTANCE(PLUGINCLASS)
-
-#  define Q_EXPORT_STATIC_PLUGIN2(PLUGIN, PLUGINCLASS)   Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)
-
-#else
-
-// NOTE: if you change the variable "pattern", this MUST also be modified in qlibrary.cpp and qplugin.cpp
-// should probably remove the entire pattern concept
-
-#  ifdef QPLUGIN_DEBUG_STR
-#    undef QPLUGIN_DEBUG_STR
-#  endif
-
-#  ifdef QT_NO_DEBUG
-#    define QPLUGIN_DEBUG_STR "false"
-#    define QPLUGIN_SECTION_DEBUG_STR ""
-#  else
-#    define QPLUGIN_DEBUG_STR "true"
-#    define QPLUGIN_SECTION_DEBUG_STR ".debug"
-#  endif
-
-#  define Q_PLUGIN_VERIFICATION_DATA \
-    static const char qt_plugin_verification_data[] = \
-      "pattern=CS_PLUGIN_VERIFICATION_DATA\n" \
-      "version=" CS_VERSION_STR "\n" \
-      "debug=" QPLUGIN_DEBUG_STR;
-
-#  if defined (Q_OF_ELF) && defined (Q_CC_GNU)
-#  define Q_PLUGIN_VERIFICATION_SECTION \
-    __attribute__ ((section (".qtplugin"))) __attribute__((used))
-#  else
-#  define Q_PLUGIN_VERIFICATION_SECTION
-#  endif
-
-#define Q_STANDARD_CALL
-
+#define Q_EXPORT_PLUGIN(PLUGIN) \
+            Q_EXPORT_PLUGIN2(PLUGIN, PLUGIN)
 #  define Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)      \
-            Q_PLUGIN_VERIFICATION_SECTION Q_PLUGIN_VERIFICATION_DATA \
-            Q_EXTERN_C Q_DECL_EXPORT \
-            const char * Q_STANDARD_CALL cs_plugin_query_verification_data() \
-                { return qt_plugin_verification_data; } \
-            Q_EXTERN_C Q_DECL_EXPORT QT_PREPEND_NAMESPACE(QObject) * Q_STANDARD_CALL qt_plugin_instance() \
-            Q_PLUGIN_INSTANCE(PLUGINCLASS)
+    Q_STATIC_ASSERT_X(false, "Old plugin system used")
 
-#  define Q_EXPORT_STATIC_PLUGIN2(PLUGIN, PLUGINCLASS)
+#  define Q_EXPORT_STATIC_PLUGIN2(PLUGIN, PLUGINCLASS) \
+    Q_STATIC_ASSERT_X(false, "Old plugin system used")
 
-#endif
 
-QT_END_NAMESPACE
+
 
 #endif // Q_PLUGIN_H

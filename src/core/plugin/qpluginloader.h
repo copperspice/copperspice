@@ -24,10 +24,10 @@
 #define QPLUGINLOADER_H
 
 #include <QtCore/qlibrary.h>
-
-QT_BEGIN_NAMESPACE
+#include <QtCore/qplugin.h>
 
 class QLibraryPrivate;
+class QJsonObject;
 
 class Q_CORE_EXPORT QPluginLoader : public QObject
 {
@@ -35,6 +35,7 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
 
    CORE_CS_PROPERTY_READ(fileName, fileName)
    CORE_CS_PROPERTY_WRITE(fileName, setFileName)
+
    CORE_CS_PROPERTY_READ(loadHints, loadHints)
    CORE_CS_PROPERTY_WRITE(loadHints, setLoadHints)
 
@@ -44,8 +45,10 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
    ~QPluginLoader();
 
    QObject *instance();
+   QJsonObject metaData() const;
 
    static QObjectList staticInstances();
+   static QVector<QStaticPlugin> staticPlugins();
 
    bool load();
    bool unload();
@@ -65,6 +68,5 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
    Q_DISABLE_COPY(QPluginLoader)
 };
 
-QT_END_NAMESPACE
 
-#endif //QPLUGINLOADER_H
+#endif

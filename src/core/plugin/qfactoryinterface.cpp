@@ -20,17 +20,11 @@
 *
 ***********************************************************************/
 
-#ifndef QFACTORYINTERFACE_H
-#define QFACTORYINTERFACE_H
+#include <qfactoryinterface.h>
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstringlist.h>
+QFactoryInterface::~QFactoryInterface()
+{
 
-struct Q_CORE_EXPORT QFactoryInterface {
-   virtual ~QFactoryInterface();
-   virtual QStringList keys() const = 0;
-};
+}
 
-CS_DECLARE_INTERFACE(QFactoryInterface, "com.copperspice.CS.QFactoryInterface")
 
-#endif

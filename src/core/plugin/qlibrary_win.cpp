@@ -25,18 +25,22 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qdir.h>
-#include <qfilesystementry_p.h>
-#include <qstringparser.h>
-
-#if defined(QT_NO_LIBRARY) && defined(Q_OS_WIN)
-#undef QT_NO_LIBRARY
-#pragma message("QT_NO_LIBRARY is not supported on Windows")
-#endif
-
 #include <qt_windows.h>
 
+#include <qfilesystementry_p.h>
+
+
 extern QString qt_error_string(int code);
+
+QStringList QLibraryPrivate::suffixes_sys(const QString &fullVersion)
+{
+   return QStringList(".dll");
+}
+
+QStringList QLibraryPrivate::prefixes_sys()
+{
+   return QStringList();
+}
 
 bool QLibraryPrivate::load_sys()
 {
@@ -60,30 +64,21 @@ bool QLibraryPrivate::load_sys()
    // NB If it's a plugin we do not ever try the ".dll" extension
 
    QStringList attempts;
+   if (pluginState != IsAPlugin) {
+      attempts.append(fileName + QLatin1String(".dll"));
+   }
    QFileSystemEntry fsEntry(fileName);
 
-   if (loadHints & QLibrary::ImprovedSearchHeuristics) {
-      if (pluginState != IsAPlugin) {
-         attempts.append(fileName + ".dll");
-      }
-
-      // If the fileName is an absolute path we try that first, otherwise we
-      // use the system-specific suffix first
-      if (fsEntry.isAbsolute()) {
-         attempts.prepend(fileName);
-      } else {
-         attempts.append(fileName);
-      }
+   if (fsEntry.isAbsolute()) {
+      attempts.prepend(fileName);
 
    } else {
       attempts.append(fileName);
-
-      if (pluginState != IsAPlugin) {
-         attempts.append(fileName + QLatin1String(".dll"));
-      }
    }
 
-   for (const QString & attempt : attempts) {
+
+
+   for (const QString &attempt : attempts) {
       pHnd = LoadLibrary(&QDir::toNativeSeparators(attempt).toStdWString()[0]);
 
       // If we have a handle or the last error is something other than "unable
@@ -135,7 +130,8 @@ void *QLibraryPrivate::resolve_sys(const QString &symbol)
    void *address = (void *)GetProcAddress(pHnd, symbol.constData());
 
    if (! address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(symbol).formatArg(fileName).formatArg(qt_error_string());
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(symbol).formatArg(fileName).formatArg(
+            qt_error_string());
 
    } else {
       errorString.clear();

@@ -21,14 +21,16 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
-#include <qplugin.h>
-#include <qpluginloader.h>
-#include <qfileinfo.h>
-#include <qlibrary_p.h>
+
+#include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qdir.h>
+#include <qfileinfo.h>
+#include <qplugin.h>
+#include <qpluginloader.h>
+#include <qstringview.h>
 
-QT_BEGIN_NAMESPACE
+#include <qlibrary_p.h>
 
 QPluginLoader::QPluginLoader(QObject *parent)
    : QObject(parent), d(0), did_load(false)
@@ -39,6 +41,7 @@ QPluginLoader::QPluginLoader(const QString &fileName, QObject *parent)
    : QObject(parent), d(0), did_load(false)
 {
    setFileName(fileName);
+   setLoadHints(QLibrary::PreventUnloadHint);
 }
 
 /*!
@@ -56,47 +59,27 @@ QPluginLoader::~QPluginLoader()
    }
 }
 
-/*!
-    Returns the root component object of the plugin. The plugin is
-    loaded if necessary. The function returns 0 if the plugin could
-    not be loaded or if the root component object could not be
-    instantiated.
-
-    If the root component object was destroyed, calling this function
-    creates a new instance.
-
-    The root component, returned by this function, is not deleted when
-    the QPluginLoader is destroyed. If you want to ensure that the root
-    component is deleted, you should call unload() as soon you don't
-    need to access the core component anymore.  When the library is
-    finally unloaded, the root component will automatically be deleted.
-
-    The component object is a QObject. Use qobject_cast() to access
-    interfaces you are interested in.
-
-    \sa load()
-*/
 QObject *QPluginLoader::instance()
 {
-   if (!load()) {
+   if (!isLoaded() && !load()) {
       return 0;
    }
+
    if (!d->inst && d->instance) {
       d->inst = d->instance();
    }
    return d->inst.data();
+
+}
+QJsonObject QPluginLoader::metaData() const
+{
+   if (!d) {
+      return QJsonObject();
+   }
+   return d->metaData;
 }
 
-/*!
-    Loads the plugin and returns true if the plugin was loaded
-    successfully; otherwise returns false. Since instance() always
-    calls this function before resolving any symbols it is not
-    necessary to call it explicitly. In some situations you might want
-    the plugin loaded in advance, in which case you would use this
-    function.
 
-    \sa unload()
-*/
 bool QPluginLoader::load()
 {
    if (! d || d->fileName.isEmpty()) {
@@ -111,10 +94,9 @@ bool QPluginLoader::load()
       return false;
    }
 
-   bool retval = d->loadPlugin();
-   did_load = true;
 
-   return retval;
+   did_load = true;
+   return d->loadPlugin();
 }
 
 bool QPluginLoader::unload()
@@ -134,33 +116,88 @@ bool QPluginLoader::isLoaded() const
    return d && d->pHnd && d->instance;
 }
 
+#if ! defined(QT_STATIC)
+
+static QString locatePlugin(const QString &fileName)
+{
+   const bool isAbsolute = QDir::isAbsolutePath(fileName);
+
+   if (isAbsolute) {
+      QFileInfo fi(fileName);
+      if (fi.isFile()) {
+         return fi.canonicalFilePath();
+      }
+   }
+
+   QStringList prefixes = QLibraryPrivate::prefixes_sys();
+   prefixes.prepend(QString());
+
+   QStringList suffixes = QLibraryPrivate::suffixes_sys(QString());
+   suffixes.prepend(QString());
+
+   // Split up "subdir/filename"
+   const int slash = fileName.lastIndexOf('/');
+
+   const QStringView baseName = fileName.midView(slash + 1);
+   const QStringView basePath  = isAbsolute ? QStringView() : fileName.leftView(slash + 1);    // keep the '/'
+
+   const bool debug = qt_debug_component();
+
+   QStringList paths;
+   if (isAbsolute) {
+      paths.append(fileName.left(slash));         // don't include the '/'
+   } else {
+      paths = QCoreApplication::libraryPaths();
+      paths.prepend(".");                         // search in current dir first
+   }
+
+   for (const QString &path : paths) {
+      for (const QString &prefix : prefixes) {
+         for (const QString &suffix : suffixes) {
+            const QString fn = path + '/' + basePath + prefix + baseName + suffix;
+
+            if (debug) {
+               qDebug() << "Trying..." << fn;
+            }
+            if (QFileInfo(fn).isFile()) {
+               return fn;
+            }
+         }
+      }
+   }
+
+   if (debug) {
+      qDebug() << fileName << "not found";
+   }
+   return QString();
+}
+#endif
+
 void QPluginLoader::setFileName(const QString &fileName)
 {
 #if ! defined(QT_STATIC)
-   QLibrary::LoadHints lh;
+   QLibrary::LoadHints lh = QLibrary::PreventUnloadHint;
 
    if (d) {
-      lh = d->loadHints;
+      lh = d->loadHints();
       d->release();
       d = 0;
       did_load = false;
    }
 
-   QString fn = QFileInfo(fileName).canonicalFilePath();
-   d = QLibraryPrivate::findOrCreate(fn);
-   d->loadHints = lh;
+   const QString fn = locatePlugin(fileName);
 
-   if (fn.isEmpty()) {
-      d->errorString = QLibrary::tr("The shared library was not found.");
+   d = QLibraryPrivate::findOrCreate(fn, QString(), lh);
+   if (! fn.isEmpty()) {
+      d->updatePluginState();
    }
 
 #else
    if (qt_debug_component()) {
       qWarning("Can not load %s into a statically linked CopperSpice library.",
-               QFile::encodeName(fileName).constData() );
+         QFile::encodeName(fileName).constData() );
    }
 
-   Q_UNUSED(fileName);
 #endif
 }
 
@@ -177,8 +214,8 @@ QString QPluginLoader::errorString() const
    return (!d || d->errorString.isEmpty()) ? tr("Unknown error") : d->errorString;
 }
 
-typedef QList<QtPluginInstanceFunction> StaticInstanceFunctionList;
-Q_GLOBAL_STATIC(StaticInstanceFunctionList, staticInstanceFunctionList)
+typedef QVector<QStaticPlugin> StaticPluginList;
+Q_GLOBAL_STATIC(StaticPluginList, staticPluginList)
 
 void QPluginLoader::setLoadHints(QLibrary::LoadHints loadHints)
 {
@@ -187,36 +224,50 @@ void QPluginLoader::setLoadHints(QLibrary::LoadHints loadHints)
       d->errorString.clear();
    }
 
-   d->loadHints = loadHints;
+   d->setLoadHints(loadHints);
 }
 
 QLibrary::LoadHints QPluginLoader::loadHints() const
 {
-   if (!d) {
-      QPluginLoader *that = const_cast<QPluginLoader *>(this);
-      that->d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
-      that->d->errorString.clear();
-   }
-   return d->loadHints;
+   return d ? d->loadHints() : QLibrary::LoadHints();
 }
 
-void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunction function)
+
+
+void Q_CORE_EXPORT qRegisterStaticPluginFunction(QStaticPlugin plugin)
 {
-   staticInstanceFunctionList()->append(function);
+   staticPluginList()->append(plugin);
 }
 
 QObjectList QPluginLoader::staticInstances()
 {
    QObjectList instances;
-   StaticInstanceFunctionList *functions = staticInstanceFunctionList();
+   const StaticPluginList *plugins = staticPluginList();
 
-   if (functions) {
-      for (int i = 0; i < functions->count(); ++i) {
-         instances.append((*functions)[i]());
+   if (plugins) {
+      const int numPlugins = plugins->size();
+
+      for (int i = 0; i < numPlugins; ++i) {
+         instances += plugins->at(i).instance();
       }
    }
 
    return instances;
+
 }
 
-QT_END_NAMESPACE
+
+QVector<QStaticPlugin> QPluginLoader::staticPlugins()
+{
+   StaticPluginList *plugins = staticPluginList();
+   if (plugins) {
+      return *plugins;
+   }
+   return QVector<QStaticPlugin>();
+}
+
+QJsonObject QStaticPlugin::metaData() const
+{
+   return QLibraryPrivate::fromRawMetaData(rawMetaData()).object();
+}
+

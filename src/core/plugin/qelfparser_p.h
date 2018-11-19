@@ -39,7 +39,7 @@ typedef quintptr qelfaddr_t;
 class QElfParser
 {
  public:
-   enum {Ok = 0, NotElf = 1, NoQtSection = 2, Corrupt = 3};
+   enum { QtMetaDataSection, NoQtSection, NotElf, Corrupt };
    enum {ElfLittleEndian = 0, ElfBigEndian = 1};
 
    struct ElfSectionHeader {
@@ -68,4 +68,4 @@ class QElfParser
 
 #endif // defined(Q_OF_ELF) && defined(Q_CC_GNU)
 
-#endif // QELFPARSER_P_H
+#endif

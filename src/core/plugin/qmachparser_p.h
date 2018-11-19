@@ -20,17 +20,24 @@
 *
 ***********************************************************************/
 
-#ifndef QFACTORYINTERFACE_H
-#define QFACTORYINTERFACE_H
+#ifndef QMACHPARSER_P_H
+#define QMACHPARSER_P_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstringlist.h>
+#include <qendian.h>
+#include <qglobal.h>
+#include <qstring.h>
 
-struct Q_CORE_EXPORT QFactoryInterface {
-   virtual ~QFactoryInterface();
-   virtual QStringList keys() const = 0;
+#if defined(Q_OF_MACH_O)
+
+class QLibraryPrivate;
+
+class Q_AUTOTEST_EXPORT QMachOParser
+{
+ public:
+   enum { QtMetaDataSection, NoQtSection, NotSuitable };
+   static int parse(const char *m_s, ulong fdlen, const QString &library, QString *errorString, long *pos, ulong *sectionlen);
 };
 
-CS_DECLARE_INTERFACE(QFactoryInterface, "com.copperspice.CS.QFactoryInterface")
+#endif // defined(Q_OF_ELF) && defined(Q_CC_GNU)
 
 #endif
