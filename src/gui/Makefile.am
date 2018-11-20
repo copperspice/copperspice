@@ -10,7 +10,7 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui 
     -I$(top_srcdir)/src/3rdparty/libmng  -I$(top_srcdir)/src/3rdparty/libjpeg  \
     -I$(top_srcdir)/src/gui/kernel \
     -Isrc/gui/graphicsview  -Isrc/gui/itemviews  -Isrc/gui/dialogs \
-    -Isrc/gui/image  -Isrc/gui/kernel  -Isrc/gui/painting  -Isrc/gui/platform \
+    -Isrc/gui/image  -Isrc/gui/kernel  -Isrc/gui/painting  -Isrc/gui/platform  -Isrc/gui/printing \
     -Isrc/gui/styles -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets \
     -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
     -DQT_BUILD_GUI_LIB           \
@@ -69,6 +69,7 @@ EXTRA_DIST += src/gui/mac/macresources.qrc \
 	src/gui/math3d/math3d.cmake \
 	src/gui/painting/painting.cmake \
 	src/gui/platform/platform.cmake \
+	src/gui/printing/printing.cmake \
 	src/gui/statemachine/statemachine.cmake \
 	src/gui/styles/styles.cmake \
 	src/gui/text/text.cmake \
@@ -91,6 +92,7 @@ include src/gui/kernel/Makefile.am
 include src/gui/math3d/Makefile.am
 include src/gui/painting/Makefile.am
 include src/gui/platform/Makefile.am
+include src/gui/printing/Makefile.am
 include src/gui/statemachine/Makefile.am
 include src/gui/styles/Makefile.am
 include src/gui/text/Makefile.am
