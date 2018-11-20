@@ -21,10 +21,8 @@
 ***********************************************************************/
 
 #include "qfontjpcodec.h"
-
 #include "qjpunicode.h"
 
-QT_BEGIN_NAMESPACE
 
 #ifdef Q_WS_X11
 // JIS X 0201
@@ -33,9 +31,9 @@ QFontJis0201Codec::QFontJis0201Codec()
 {
 }
 
-QByteArray QFontJis0201Codec::_name()
+QString QFontJis0201Codec::_name()
 {
-    return "jisx0201*-0";
+    return QString("jisx0201*-0");
 }
 
 int QFontJis0201Codec::_mibEnum()
@@ -82,9 +80,9 @@ QFontJis0208Codec::~QFontJis0208Codec()
 }
 
 
-QByteArray QFontJis0208Codec::_name()
+QString QFontJis0208Codec::_name()
 {
-    return "jisx0208*-0";
+    return QString("jisx0208*-0");
 }
 
 
@@ -123,4 +121,4 @@ QByteArray QFontJis0208Codec::convertFromUnicode(const QChar *uc, int len, Conve
 
 #endif
 
-QT_END_NAMESPACE
+

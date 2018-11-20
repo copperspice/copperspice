@@ -34,12 +34,12 @@ class QFontJis0201Codec : public QTextCodec
 public:
     QFontJis0201Codec();
 
-    static QByteArray _name();
-    static QList<QByteArray> _aliases() { return QList<QByteArray>(); }
+    static QString _name();
+    static QStringList _aliases() { return QStringList(); }
     static int _mibEnum();
 
-    QByteArray name() const override { return _name(); }
-    QList<QByteArray> aliases() const override { return _aliases(); }
+    QString name() const override { return _name(); }
+    QStringList aliases() const override { return _aliases(); }
     int mibEnum() const override { return _mibEnum(); }
 
     QString convertToUnicode(const char *in, int len,  ConverterState *) const override;
@@ -53,12 +53,12 @@ public:
     QFontJis0208Codec();
     ~QFontJis0208Codec();
 
-    static QByteArray _name();
-    static QList<QByteArray> _aliases() { return QList<QByteArray>(); }
+    static QString _name();
+    static QStringList _aliases() { return QStringList(); }
     static int _mibEnum();
 
-    QByteArray name() const override { return _name(); }
-    QList<QByteArray> aliases() const override { return _aliases(); }
+    QString name() const override { return _name(); }
+    QStringList aliases() const override { return _aliases(); }
     int mibEnum() const override { return _mibEnum(); }
 
     QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
