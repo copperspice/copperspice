@@ -21,30 +21,57 @@
 ***********************************************************************/
 
 #include <qaccessible.h>
+#include <qaccessiblecache_p.h>
+
+#include <qapplication.h>
+#include <qaccessibleplugin.h>
+#include <qaccessibleobject.h>
+#include <qaccessiblebridge.h>
+#include <qclipboard.h>
+#include <qdebug.h>
+#include <qhash.h>
+#include <qmetaobject.h>
+#include <qtextcursor.h>
+#include <qtextboundaryfinder.h>
+#include <qplatform_accessibility.h>
+#include <qplatform_integration.h>
+
+#include <qguiapplication_p.h>
+#include <qfactoryloader_p.h>
+
+QAccessibleInterface::~QAccessibleInterface()
+{
+}
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include <qaccessibleplugin.h>
-#include <qaccessiblewidget.h>
-#include <qapplication.h>
-#include <qhash.h>
-#include <qmetaobject.h>
-#include <qmutex.h>
-#include <qfactoryloader_p.h>
-#include <qwidget.h>
-
-QT_BEGIN_NAMESPACE
-
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QAccessibleFactoryInterface_iid, QLatin1String("/accessible")))
+typedef QHash<QString, QAccessiblePlugin *> QAccessiblePluginsHash;
+Q_GLOBAL_STATIC(QAccessiblePluginsHash, qAccessiblePlugins)
 Q_GLOBAL_STATIC(QList<QAccessible::InterfaceFactory>, qAccessibleFactories)
+Q_GLOBAL_STATIC(QList<QAccessible::ActivationObserver *>, qAccessibleActivationObservers)
 
 QAccessible::UpdateHandler QAccessible::updateHandler = 0;
 QAccessible::RootObjectHandler QAccessible::rootObjectHandler = 0;
 
-static bool accessibility_active = false;
 static bool cleanupAdded = false;
+
+static QPlatformAccessibility *platformAccessibility()
+{
+   QPlatformIntegration *pfIntegration = QGuiApplicationPrivate::platformIntegration();
+   return pfIntegration ? pfIntegration->accessibility() : 0;
+}
+
+void QAccessible::cleanup()
+{
+   if (QPlatformAccessibility *pfAccessibility = platformAccessibility()) {
+      pfAccessibility->cleanup();
+   }
+}
+
 static void qAccessibleCleanup()
 {
+   qAccessibleActivationObservers()->clear();
    qAccessibleFactories()->clear();
 }
 
@@ -64,9 +91,6 @@ void QAccessible::installFactory(InterfaceFactory factory)
    qAccessibleFactories()->append(factory);
 }
 
-/*!
-    Removes \a factory from the list of installed InterfaceFactories.
-*/
 void QAccessible::removeFactory(InterfaceFactory factory)
 {
    qAccessibleFactories()->removeAll(factory);
@@ -86,10 +110,6 @@ QAccessible::UpdateHandler QAccessible::installUpdateHandler(UpdateHandler handl
    return old;
 }
 
-/*!
-    Installs the given \a handler as the function to be used by setRootObject(),
-    and returns the previously installed handler.
-*/
 QAccessible::RootObjectHandler QAccessible::installRootObjectHandler(RootObjectHandler handler)
 {
    RootObjectHandler old = rootObjectHandler;
@@ -97,13 +117,39 @@ QAccessible::RootObjectHandler QAccessible::installRootObjectHandler(RootObjectH
    return old;
 }
 
+QAccessible::ActivationObserver::~ActivationObserver()
+{
+}
+void QAccessible::installActivationObserver(QAccessible::ActivationObserver *observer)
+{
+   if (!observer) {
+      return;
+   }
+   if (!cleanupAdded) {
+      qAddPostRoutine(qAccessibleCleanup);
+      cleanupAdded = true;
+   }
+
+   if (qAccessibleActivationObservers()->contains(observer)) {
+      return;
+   }
+
+   qAccessibleActivationObservers()->append(observer);
+}
+
+void QAccessible::removeActivationObserver(ActivationObserver *observer)
+{
+   qAccessibleActivationObservers()->removeAll(observer);
+}
+
 QAccessibleInterface *QAccessible::queryAccessibleInterface(QObject *object)
 {
-   accessibility_active = true;
-
-   QAccessibleInterface *iface = 0;
-   if (!object) {
+   if (! object) {
       return 0;
+   }
+
+   if (Id id = QAccessibleCache::instance()->objectToId.value(object)) {
+      return QAccessibleCache::instance()->interfaceForId(id);
    }
 
    const QMetaObject *mo = object->metaObject();
@@ -113,573 +159,892 @@ QAccessibleInterface *QAccessible::queryAccessibleInterface(QObject *object)
 
       for (int i = qAccessibleFactories()->count(); i > 0; --i) {
          InterfaceFactory factory = qAccessibleFactories()->at(i - 1);
-         iface = factory(cn, object);
 
-         if (iface) {
+         if (QAccessibleInterface *iface = factory(cn, object)) {
+            QAccessibleCache::instance()->insert(object, iface);
+            Q_ASSERT(QAccessibleCache::instance()->objectToId.contains(object));
             return iface;
          }
       }
 
-      QAccessibleFactoryInterface *factory = qobject_cast<QAccessibleFactoryInterface *>(loader()->instance(cn));
-      if (factory) {
-         iface = factory->create(cn, object);
-         if (iface) {
-            return iface;
+      // Find a QAccessiblePlugin (factory) for the class name. If there's
+      // no entry in the cache try to create it using the plugin loader.
+      if (! qAccessiblePlugins()->contains(cn)) {
+         QAccessiblePlugin *factory = 0;                // 0 means "no plugin found". This is cached as well
+         const int index = loader()->indexOf(cn);
+
+         if (index != -1) {
+            factory = qobject_cast<QAccessiblePlugin *>(loader()->instance(index));
          }
+
+         qAccessiblePlugins()->insert(cn, factory);
+      }
+
+      // At this point the cache should contain a valid factory pointer or 0:
+      Q_ASSERT(qAccessiblePlugins()->contains(cn));
+
+      QAccessiblePlugin *factory = qAccessiblePlugins()->value(cn);
+
+      if (factory) {
+         QAccessibleInterface *result = factory->create(cn, object);
+
+         if (result) {
+            // Need this condition because of QDesktopScreenWidget
+            QAccessibleCache::instance()->insert(object, result);
+            Q_ASSERT(QAccessibleCache::instance()->objectToId.contains(object));
+         }
+         return result;
       }
 
       mo = mo->superClass();
    }
 
-   QWidget *widget = qobject_cast<QWidget *>(object);
-   if (widget) {
-      return new QAccessibleWidget(widget);
-   } else if (object == qApp) {
-      return new QAccessibleApplication();
+
+   if (object == qApp) {
+      QAccessibleInterface *appInterface = new QAccessibleApplication;
+      QAccessibleCache::instance()->insert(object, appInterface);
+      Q_ASSERT(QAccessibleCache::instance()->objectToId.contains(qApp));
+      return appInterface;
    }
 
    return 0;
 }
 
-/*!
-    Returns true if an accessibility implementation has been requested
-    during the runtime of the application; otherwise returns false.
+QAccessible::Id QAccessible::registerAccessibleInterface(QAccessibleInterface *iface)
+{
+   Q_ASSERT(iface);
+   return QAccessibleCache::instance()->insert(iface->object(), iface);
+}
 
-    Use this function to prevent potentially expensive notifications via
-    updateAccessibility().
-*/
+void QAccessible::deleteAccessibleInterface(Id id)
+{
+   QAccessibleCache::instance()->deleteInterface(id);
+}
+
+QAccessible::Id QAccessible::uniqueId(QAccessibleInterface *iface)
+{
+   Id id = QAccessibleCache::instance()->idForInterface(iface);
+   if (!id) {
+      id = registerAccessibleInterface(iface);
+   }
+   return id;
+}
+QAccessibleInterface *QAccessible::accessibleInterface(Id id)
+{
+   return QAccessibleCache::instance()->interfaceForId(id);
+}
+
 bool QAccessible::isActive()
 {
-   return accessibility_active;
-}
-
-/*!
-  \fn void QAccessible::setRootObject(QObject *object)
-
-  Sets the root accessible object of this application to \a object.
-  All other accessible objects in the application can be reached by the
-  client using object navigation.
-
-  You should never need to call this function. Qt sets the QApplication
-  object as the root object immediately before the event loop is entered
-  in QApplication::exec().
-
-  Use QAccessible::installRootObjectHandler() to redirect the function
-  call to a customized handler function.
-
-  \sa queryAccessibleInterface()
-*/
-
-/*!
-  \fn void QAccessible::updateAccessibility(QObject *object, int child, Event reason)
-
-  Notifies accessibility clients about a change in \a object's
-  accessibility information.
-
-  \a reason specifies the cause of the change, for example,
-  \c ValueChange when the position of a slider has been changed. \a
-  child is the (1-based) index of the child element that has changed.
-  When \a child is 0, the object itself has changed.
-
-  Call this function whenever the state of your accessible object or
-  one of its sub-elements has been changed either programmatically
-  (e.g. by calling QLabel::setText()) or by user interaction.
-
-  If there are no accessibility tools listening to this event, the
-  performance penalty for calling this function is small, but if determining
-  the parameters of the call is expensive you can test isActive() to
-  avoid unnecessary computations.
-*/
-
-
-/*!
-    \class QAccessibleInterface
-    \brief The QAccessibleInterface class defines an interface that exposes information
-    about accessible objects.
-
-    \ingroup accessibility
-
-    Accessibility tools (also called AT Clients), such as screen readers
-    or braille displays, require high-level information about
-    accessible objects in an application. Accessible objects provide
-    specialized input and output methods, making it possible for users
-    to use accessibility tools with enabled applications (AT Servers).
-
-    Every element that the user needs to interact with or react to is
-    an accessible object, and should provide this information. These
-    are mainly visual objects, such as widgets and widget elements, but
-    can also be content, such as sounds.
-
-    The AT client uses three basic concepts to acquire information
-    about any accessible object in an application:
-    \list
-    \i \e Properties The client can read information about
-    accessible objects. In some cases the client can also modify these
-    properties; such as text in a line edit.
-    \i \e Actions The client can invoke actions like pressing a button
-    or .
-    \i \e{Relationships and Navigation} The client can traverse from one
-    accessible object to another, using the relationships between objects.
-    \endlist
-
-    The QAccessibleInterface defines the API for these three concepts.
-
-    \section1 Relationships and Navigation
-
-    The functions childCount() and indexOfChild() return the number of
-    children of an accessible object and the index a child object has
-    in its parent. The childAt() function returns the index of a child
-    at a given position.
-
-    The relationTo() function provides information about how two
-    different objects relate to each other, and navigate() allows
-    traversing from one object to another object with a given
-    relationship.
-
-    \section1 Properties
-
-    The central property of an accessible objects is what role() it
-    has. Different objects can have the same role, e.g. both the "Add
-    line" element in a scroll bar and the \c OK button in a dialog have
-    the same role, "button". The role implies what kind of
-    interaction the user can perform with the user interface element.
-
-    An object's state() property is a combination of different state
-    flags and can describe both how the object's state differs from a
-    "normal" state, e.g. it might be unavailable, and also how it
-    behaves, e.g. it might be selectable.
-
-    The text() property provides textual information about the object.
-    An object usually has a name, but can provide extended information
-    such as a description, help text, or information about any
-    keyboard accelerators it provides. Some objects allow changing the
-    text() property through the setText() function, but this
-    information is in most cases read-only.
-
-    The rect() property provides information about the geometry of an
-    accessible object. This information is usually only available for
-    visual objects.
-
-    \section1 Actions and Selection
-
-    To enable the user to interact with an accessible object the
-    object must expose information about the actions that it can
-    perform. userActionCount() returns the number of actions supported by
-    an accessible object, and actionText() returns textual information
-    about those actions. doAction() invokes an action.
-
-    Objects that support selections can define actions to change the selection.
-
-    \section2 Objects and children
-
-    A QAccessibleInterface provides information about the accessible
-    object, and can also provide information for the children of that
-    object if those children don't provide a QAccessibleInterface
-    implementation themselves. This is practical if the object has
-    many similar children (e.g. items in a list view), or if the
-    children are an integral part of the object itself, for example, the
-    different sections in a scroll bar.
-
-    If an accessible object provides information about its children
-    through one QAccessibleInterface, the children are referenced
-    using indexes. The index is 1-based for the children, i.e. 0
-    refers to the object itself, 1 to the first child, 2 to the second
-    child, and so on.
-
-    All functions in QAccessibleInterface that take a child index
-    relate to the object itself if the index is 0, or to the child
-    specified. If a child provides its own interface implementation
-    (which can be retrieved through navigation) asking the parent for
-    information about that child will usually not succeed.
-
-    \sa QAccessible
-*/
-
-/*!
-    \fn bool QAccessibleInterface::isValid() const
-
-    Returns true if all the data necessary to use this interface
-    implementation is valid (e.g. all pointers are non-null);
-    otherwise returns false.
-
-    \sa object()
-*/
-
-/*!
-    \fn QObject *QAccessibleInterface::object() const
-
-    Returns a pointer to the QObject this interface implementation provides
-    information for.
-
-    \sa isValid()
-*/
-
-/*!
-    \fn int QAccessibleInterface::childCount() const
-
-    Returns the number of children that belong to this object. A child
-    can provide accessibility information on its own (e.g. a child
-    widget), or be a sub-element of this accessible object.
-
-    All objects provide this information.
-
-    \sa indexOfChild()
-*/
-
-/*!
-    \fn int QAccessibleInterface::indexOfChild(const QAccessibleInterface *child) const
-
-    Returns the 1-based index of the object \a child in this object's
-    children list, or -1 if \a child is not a child of this object. 0
-    is not a possible return value.
-
-    All objects provide this information about their children.
-
-    \sa childCount()
-*/
-
-/*!
-    \fn QAccessible::Relation QAccessibleInterface::relationTo(int child,
-const QAccessibleInterface *other, int otherChild) const
-
-    Returns the relationship between this object's \a child and the \a
-    other object's \a otherChild. If \a child is 0 the object's own relation
-    is returned.
-
-    The returned value indicates the relation of the called object to
-    the \a other object, e.g. if this object is a child of \a other
-    the return value will be \c Child.
-
-    The return value is a combination of the bit flags in the
-    QAccessible::Relation enumeration.
-
-    All objects provide this information.
-
-    \sa indexOfChild(), navigate()
-*/
-
-/*!
-    \fn int QAccessibleInterface::childAt(int x, int y) const
-
-    Returns the 1-based index of the child that contains the screen
-    coordinates (\a x, \a y). This function returns 0 if the point is
-    positioned on the object itself. If the tested point is outside
-    the boundaries of the object this function returns -1.
-
-    This function is only relyable for visible objects (invisible
-    object might not be laid out correctly).
-
-    All visual objects provide this information.
-
-    \sa rect()
-*/
-
-/*!
-    \fn int QAccessibleInterface::navigate(RelationFlag relation, int entry, QAccessibleInterface
-**target) const
-
-    Navigates from this object to an object that has a relationship
-    \a relation to this object, and returns the respective object in
-    \a target. It is the caller's responsibility to delete *\a target
-    after use.
-
-    If an object is found, \a target is set to point to the object, and
-    the index of the child of \a target is returned. The return value
-    is 0 if \a target itself is the requested object. \a target is set
-    to null if this object is the target object (i.e. the requested
-    object is a handled by this object).
-
-    If no object is found \a target is set to null, and the return
-    value is -1.
-
-    The \a entry parameter has two different meanings:
-    \list
-    \i \e{Hierarchical and Logical relationships} -- if multiple objects with
-    the requested relationship exist \a entry specifies which one to
-    return. \a entry is 1-based, e.g. use 1 to get the first (and
-    possibly only) object with the requested relationship.
-
-    The following code demonstrates how to use this function to
-    navigate to the first child of an object:
-
-    \snippet doc/src/snippets/code/src_gui_accessible_qaccessible.cpp 0
-
-    \i \e{Geometric relationships} -- the index of the child from
-    which to start navigating in the specified direction. \a entry
-    can be 0 to navigate to a sibling of this object, or non-null to
-    navigate within contained children that don't provide their own
-    accessible information.
-    \endlist
-
-    Note that the \c Descendent value for \a relation is not supported.
-
-    All objects support navigation.
-
-    \sa relationTo(), childCount()
-*/
-
-/*!
-    \fn QString QAccessibleInterface::text(Text t, int child) const
-
-    Returns the value of the text property \a t of the object, or of
-    the object's child if \a child is not 0.
-
-    The \l Name is a string used by clients to identify, find, or
-    announce an accessible object for the user. All objects must have
-    a name that is unique within their container. The name can be
-    used differently by clients, so the name should both give a
-    short description of the object and be unique.
-
-    An accessible object's \l Description provides textual information
-    about an object's visual appearance. The description is primarily
-    used to provide greater context for vision-impaired users, but is
-    also used for context searching or other applications. Not all
-    objects have a description. An "OK" button would not need a
-    description, but a tool button that shows a picture of a smiley
-    would.
-
-    The \l Value of an accessible object represents visual information
-    contained by the object, e.g. the text in a line edit. Usually,
-    the value can be modified by the user. Not all objects have a
-    value, e.g. static text labels don't, and some objects have a
-    state that already is the value, e.g. toggle buttons.
-
-    The \l Help text provides information about the function and
-    usage of an accessible object. Not all objects provide this
-    information.
-
-    The \l Accelerator is a keyboard shortcut that activates the
-    object's default action. A keyboard shortcut is the underlined
-    character in the text of a menu, menu item or widget, and is
-    either the character itself, or a combination of this character
-    and a modifier key like Alt, Ctrl or Shift. Command controls like
-    tool buttons also have shortcut keys and usually display them in
-    their tooltip.
-
-    All objects provide a string for \l Name.
-
-    \sa role(), state()
-*/
-
-/*!
-    \fn void QAccessibleInterface::setText(Text t, int child, const QString &text)
-
-    Sets the text property \a t of the object, or of the object's
-    child if \a child is not 0, to \a text.
-
-    Note that the text properties of most objects are read-only.
-
-    \sa text()
-*/
-
-/*!
-    \fn QRect QAccessibleInterface::rect(int child) const
-
-    Returns the geometry of the object, or of the object's child if \a child
-    is not 0. The geometry is in screen coordinates.
-
-    This function is only reliable for visible objects (invisible
-    objects might not be laid out correctly).
-
-    All visual objects provide this information.
-
-    \sa childAt()
-*/
-
-/*!
-    \fn QAccessible::Role QAccessibleInterface::role(int child) const
-
-    Returns the role of the object, or of the object's child if \a child
-    is not 0. The role of an object is usually static.
-
-    All accessible objects have a role.
-
-    \sa text(), state()
-*/
-
-/*!
-    \fn QAccessible::State QAccessibleInterface::state(int child) const
-
-    Returns the current state of the object, or of the object's child if
-    \a child is not 0. The returned value is a combination of the flags in
-    the QAccessible::StateFlag enumeration.
-
-    All accessible objects have a state.
-
-    \sa text(), role()
-*/
-
-/*!
-    \fn int QAccessibleInterface::userActionCount(int child) const
-
-    Returns the number of custom actions of the object, or of the
-    object's child if \a child is not 0.
-
-    The \c Action type enumerates predefined actions: these
-    are not included in the returned value.
-
-    \sa actionText(), doAction()
-*/
-
-/*!
-    \fn QString QAccessibleInterface::actionText(int action, Text t, int child) const
-
-    Returns the text property \a t of the action \a action supported by
-    the object, or of the object's child if \a child is not 0.
-
-    \sa text(), userActionCount()
-*/
-
-/*!
-    \fn bool QAccessibleInterface::doAction(int action, int child, const QVariantList &params)
-
-    Asks the object, or the object's \a child if \a child is not 0, to
-    execute \a action using the parameters, \a params. Returns true if
-    the action could be executed; otherwise returns false.
-
-    \a action can be a predefined or a custom action.
-
-    \sa userActionCount(), actionText()
-*/
-
-/*!
-    \fn QColor QAccessibleInterface::backgroundColor()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleEditableTextInterface *QAccessibleInterface::editableTextInterface()
-    \internal
-*/
-
-/*!
-    \fn QColor QAccessibleInterface::foregroundColor()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleTextInterface *QAccessibleInterface::textInterface()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleValueInterface *QAccessibleInterface::valueInterface()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleTableInterface *QAccessibleInterface::tableInterface()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleTable2Interface *QAccessibleInterface::table2Interface()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleActionInterface *QAccessibleInterface::actionInterface()
-    \internal
-*/
-
-/*!
-    \fn QAccessibleImageInterface *QAccessibleInterface::imageInterface()
-    \internal
-*/
-
-/*!
-    \class QAccessibleEvent
-    \brief The QAccessibleEvent class is used to query addition
-    accessibility information about complex widgets.
-
-    The event can be of type QEvent::AccessibilityDescription or
-    QEvent::AccessibilityHelp.
-
-    Some QAccessibleInterface implementations send QAccessibleEvents
-    to the widget they wrap to obtain the description or help text of
-    a widget or of its children. The widget can answer by calling
-    setValue() with the requested information.
-
-    The default QWidget::event() implementation simply sets the text
-    to be the widget's \l{QWidget::toolTip}{tooltip} (for \l
-    AccessibilityDescription event) or its
-    \l{QWidget::whatsThis}{"What's This?" text} (for \l
-    AccessibilityHelp event).
-
-    \ingroup accessibility
-    \ingroup events
-*/
-
-/*!
-    \fn QAccessibleEvent::QAccessibleEvent(Type type, int child)
-
-    Constructs an accessibility event of the given \a type, which
-    must be QEvent::AccessibilityDescription or
-    QEvent::AccessibilityHelp.
-
-    \a child is the (1-based) index of the child to which the request
-    applies. If \a child is 0, the request is for the widget itself.
-
-    \sa child()
-*/
-
-/*!
-    \fn int QAccessibleEvent::child() const
-
-    Returns the (1-based) index of the child to which the request
-    applies. If the child is 0, the request is for the widget itself.
-*/
-
-/*!
-    \fn QString QAccessibleEvent::value() const
-
-    Returns the text set using setValue().
-
-    \sa setValue()
-*/
-
-/*!
-    \fn void QAccessibleEvent::setValue(const QString &text)
-
-    Set the description or help text for the given child() to \a
-    text, thereby answering the request.
-
-    \sa value()
-*/
-
-/*!
-    \since 4.2
-
-    Invokes a \a method on \a child with the given parameters \a params
-    and returns the result of the operation as QVariant.
-
-    Note that the type of the returned QVariant depends on the action.
-
-    Returns an invalid QVariant if the object doesn't support the action.
-*/
-QVariant QAccessibleInterface::invokeMethod(Method method, int child, const QVariantList &params)
-{
-   if (!(state(0) & HasInvokeExtension)) {
-      return QVariant();
+   if (QPlatformAccessibility *pfAccessibility = platformAccessibility()) {
+      return pfAccessibility->isActive();
    }
 
-   return static_cast<QAccessibleInterfaceEx *>(this)->invokeMethodEx(method, child, params);
+   return false;
 }
 
-QVariant QAccessibleInterfaceEx::virtual_hook(const QVariant &)
+void QAccessible::setActive(bool active)
 {
-   return QVariant();
-}
-
-/*! \internal */
-QAccessible2Interface *QAccessibleInterface::cast_helper(QAccessible2::InterfaceType t)
-{
-   if (state(0) & HasInvokeExtension) {
-      return static_cast<QAccessibleInterfaceEx *>(this)->interface_cast(t);
+   for (int i = 0; i < qAccessibleActivationObservers()->count() ; ++i) {
+      qAccessibleActivationObservers()->at(i)->accessibilityActiveChanged(active);
    }
+}
+
+
+
+void QAccessible::setRootObject(QObject *object)
+{
+   if (rootObjectHandler) {
+      rootObjectHandler(object);
+      return;
+   }
+
+   if (QPlatformAccessibility *pfAccessibility = platformAccessibility()) {
+      pfAccessibility->setRootObject(object);
+   }
+}
+void QAccessible::updateAccessibility(QAccessibleEvent *event)
+{
+   // NOTE: Querying for the accessibleInterface below will result in
+   // resolving and caching the interface, which in some cases will
+   // cache the wrong information as updateAccessibility is called
+   // during construction of widgets. If you see cases where the
+   // cache seems wrong, this call is "to blame", but the code that
+   // caches dynamic data should be updated to handle change events.
+   QAccessibleInterface *iface = event->accessibleInterface();
+   if (isActive() && iface) {
+      if (event->type() == QAccessible::TableModelChanged) {
+         if (iface->tableInterface()) {
+            iface->tableInterface()->modelChange(static_cast<QAccessibleTableModelChangeEvent *>(event));
+         }
+      }
+
+      if (updateHandler) {
+         updateHandler(event);
+         return;
+      }
+   }
+
+   if (QPlatformAccessibility *pfAccessibility = platformAccessibility()) {
+      pfAccessibility->notifyAccessibilityUpdate(event);
+   }
+}
+/*!
+    \internal
+    \brief getBoundaries is a helper function to find the accessible text boundaries for QTextCursor based documents.
+    \param documentCursor a valid cursor bound to the document (not null). It needs to ba at the position to look for the boundary
+    \param boundaryType the type of boundary to find
+    \return the boundaries as pair
+*/
+QPair< int, int > QAccessible::qAccessibleTextBoundaryHelper(const QTextCursor &offsetCursor, TextBoundaryType boundaryType)
+{
+   Q_ASSERT(!offsetCursor.isNull());
+
+   QTextCursor endCursor = offsetCursor;
+   endCursor.movePosition(QTextCursor::End);
+   int characterCount = endCursor.position();
+
+   QPair<int, int> result;
+   QTextCursor cursor = offsetCursor;
+   switch (boundaryType) {
+      case CharBoundary:
+         result.first = cursor.position();
+         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+         result.second = cursor.position();
+         break;
+      case WordBoundary:
+         cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::MoveAnchor);
+         result.first = cursor.position();
+         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+         result.second = cursor.position();
+         break;
+      case SentenceBoundary: {
+         // QCursor does not provide functionality to move to next sentence.
+         // We therefore find the current block, then go through the block using
+         // QTextBoundaryFinder and find the sentence the \offset represents
+         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+         result.first = cursor.position();
+         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+         result.second = cursor.position();
+         QString blockText = cursor.selectedText();
+         const int offsetWithinBlockText = offsetCursor.position() - result.first;
+         QTextBoundaryFinder sentenceFinder(QTextBoundaryFinder::Sentence, blockText);
+         sentenceFinder.setPosition(offsetWithinBlockText);
+         int prevBoundary = offsetWithinBlockText;
+         int nextBoundary = offsetWithinBlockText;
+         if (!(sentenceFinder.boundaryReasons() & QTextBoundaryFinder::StartOfItem)) {
+            prevBoundary = sentenceFinder.toPreviousBoundary();
+         }
+         nextBoundary = sentenceFinder.toNextBoundary();
+         if (nextBoundary != -1) {
+            result.second = result.first + nextBoundary;
+         }
+         if (prevBoundary != -1) {
+            result.first += prevBoundary;
+         }
+         break;
+      }
+      case LineBoundary:
+         cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+         result.first = cursor.position();
+         cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+         result.second = cursor.position();
+         break;
+      case ParagraphBoundary:
+         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+         result.first = cursor.position();
+         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+         result.second = cursor.position();
+         break;
+      case NoBoundary:
+         result.first = 0;
+         result.second = characterCount;
+         break;
+   }
+   return result;
+}
+QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> QAccessibleInterface::relations(
+      QAccessible::Relation /*match = QAccessible::AllRelations*/) const
+{
+   return QVector<QPair<QAccessibleInterface *, QAccessible::Relation>>();
+}
+
+QAccessibleInterface *QAccessibleInterface::focusChild() const
+{
    return 0;
 }
 
-QT_END_NAMESPACE
 
-#endif
+
+
+
+QColor QAccessibleInterface::foregroundColor() const
+{
+   return QColor();
+}
+QColor QAccessibleInterface::backgroundColor() const
+{
+   return QColor();
+}
+QAccessibleEvent::~QAccessibleEvent()
+{
+}
+
+
+QAccessible::Id QAccessibleEvent::uniqueId() const
+{
+   if (!m_object) {
+      return m_uniqueId;
+   }
+
+   QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(m_object);
+
+   if (!iface) {
+      return 0;
+   }
+
+   if (m_child != -1) {
+      iface = iface->child(m_child);
+   }
+
+   return QAccessible::uniqueId(iface);
+}
+
+QAccessibleValueChangeEvent::~QAccessibleValueChangeEvent()
+{
+}
+
+QAccessibleStateChangeEvent::~QAccessibleStateChangeEvent()
+{
+}
+
+QAccessibleTableModelChangeEvent::~QAccessibleTableModelChangeEvent()
+{
+}
+
+QAccessibleTextCursorEvent::~QAccessibleTextCursorEvent()
+{
+}
+
+QAccessibleTextInsertEvent::~QAccessibleTextInsertEvent()
+{
+}
+
+QAccessibleTextRemoveEvent::~QAccessibleTextRemoveEvent()
+{
+}
+
+QAccessibleTextUpdateEvent::~QAccessibleTextUpdateEvent()
+{
+}
+QAccessibleTextSelectionEvent::~QAccessibleTextSelectionEvent()
+{
+}
+
+QAccessibleInterface *QAccessibleEvent::accessibleInterface() const
+{
+   if (m_object == 0) {
+      return QAccessible::accessibleInterface(m_uniqueId);
+   }
+
+   QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(m_object);
+   if (!iface || !iface->isValid()) {
+      return 0;
+   }
+
+   if (m_child >= 0) {
+      QAccessibleInterface *child = iface->child(m_child);
+      if (child) {
+         iface = child;
+      } else {
+         qWarning() << "Cannot creat accessible child interface for object: " << m_object << " index: " << m_child;
+      }
+   }
+   return iface;
+}
+
+QWindow *QAccessibleInterface::window() const
+{
+   return 0;
+}
+
+void QAccessibleInterface::virtual_hook(int /*id*/, void * /*data*/)
+{
+}
+
+QString qAccessibleRoleString(QAccessible::Role role)
+{
+   if (role >= QAccessible::UserRole) {
+      role = QAccessible::UserRole;
+   }
+
+   static int roleEnum = QAccessible::staticMetaObject().indexOfEnumerator("Role");
+
+   return QAccessible::staticMetaObject().enumerator(roleEnum).valueToKey(role);
+}
+
+QString qAccessibleEventString(QAccessible::Event event)
+{
+   static int eventEnum = QAccessible::staticMetaObject().indexOfEnumerator("Event");
+   return QAccessible::staticMetaObject().enumerator(eventEnum).valueToKey(event);
+}
+
+bool operator==(const QAccessible::State &first, const QAccessible::State &second)
+{
+   return memcmp(&first, &second, sizeof(QAccessible::State)) == 0;
+}
+
+Q_GUI_EXPORT QDebug operator<<(QDebug d, const QAccessibleInterface *iface)
+{
+   QDebugStateSaver saver(d);
+
+   if (! iface) {
+      d << "QAccessibleInterface(null)";
+      return d;
+   }
+
+   d.nospace();
+   d << "QAccessibleInterface(" << hex << (const void *) iface << dec;
+
+   if (iface->isValid()) {
+      d << " name=" << iface->text(QAccessible::Name) << ' ';
+      d << "role=" << qAccessibleRoleString(iface->role()) << ' ';
+      if (iface->childCount()) {
+         d << "childc=" << iface->childCount() << ' ';
+      }
+      if (iface->object()) {
+         d << "obj=" << iface->object();
+      }
+      QStringList stateStrings;
+      QAccessible::State st = iface->state();
+      if (st.focusable) {
+         stateStrings << QLatin1String("focusable");
+      }
+      if (st.focused) {
+         stateStrings << QLatin1String("focused");
+      }
+      if (st.selected) {
+         stateStrings << QLatin1String("selected");
+      }
+      if (st.invisible) {
+         stateStrings << QLatin1String("invisible");
+      }
+
+      if (!stateStrings.isEmpty()) {
+         d << stateStrings.join(QLatin1Char('|'));
+      }
+
+      if (!st.invisible) {
+         d << "rect=" << iface->rect();
+      }
+
+   } else {
+      d << " invalid";
+   }
+   d << ')';
+   return d;
+}
+
+QDebug operator<<(QDebug d, const QAccessibleEvent &ev)
+{
+   QDebugStateSaver saver(d);
+   d.nospace() << "QAccessibleEvent(";
+   if (ev.object()) {
+      d.nospace() << "object=" << hex << ev.object() << dec;
+      d.nospace() << "child=" << ev.child();
+   } else {
+      d.nospace() << "no object, uniqueId=" << ev.uniqueId();
+   }
+   d << " event=" << qAccessibleEventString(ev.type());
+   if (ev.type() == QAccessible::StateChanged) {
+      QAccessible::State changed = static_cast<const QAccessibleStateChangeEvent *>(&ev)->changedStates();
+      d << "State changed:";
+      if (changed.disabled) {
+         d << "disabled";
+      }
+      if (changed.selected) {
+         d << "selected";
+      }
+      if (changed.focusable) {
+         d << "focusable";
+      }
+      if (changed.focused) {
+         d << "focused";
+      }
+      if (changed.pressed) {
+         d << "pressed";
+      }
+      if (changed.checkable) {
+         d << "checkable";
+      }
+      if (changed.checked) {
+         d << "checked";
+      }
+      if (changed.checkStateMixed) {
+         d << "checkStateMixed";
+      }
+      if (changed.readOnly) {
+         d << "readOnly";
+      }
+      if (changed.hotTracked) {
+         d << "hotTracked";
+      }
+      if (changed.defaultButton) {
+         d << "defaultButton";
+      }
+      if (changed.expanded) {
+         d << "expanded";
+      }
+      if (changed.collapsed) {
+         d << "collapsed";
+      }
+      if (changed.busy) {
+         d << "busy";
+      }
+      if (changed.expandable) {
+         d << "expandable";
+      }
+      if (changed.marqueed) {
+         d << "marqueed";
+      }
+      if (changed.animated) {
+         d << "animated";
+      }
+      if (changed.invisible) {
+         d << "invisible";
+      }
+      if (changed.offscreen) {
+         d << "offscreen";
+      }
+      if (changed.sizeable) {
+         d << "sizeable";
+      }
+      if (changed.movable) {
+         d << "movable";
+      }
+      if (changed.selfVoicing) {
+         d << "selfVoicing";
+      }
+      if (changed.selectable) {
+         d << "selectable";
+      }
+      if (changed.linked) {
+         d << "linked";
+      }
+      if (changed.traversed) {
+         d << "traversed";
+      }
+      if (changed.multiSelectable) {
+         d << "multiSelectable";
+      }
+      if (changed.extSelectable) {
+         d << "extSelectable";
+      }
+      if (changed.passwordEdit) {
+         d << "passwordEdit";   // used to be Protected
+      }
+      if (changed.hasPopup) {
+         d << "hasPopup";
+      }
+      if (changed.modal) {
+         d << "modal";
+      }
+
+      // IA2 - we chose to not add some IA2 states for now
+      // Below the ones that seem helpful
+      if (changed.active) {
+         d << "active";
+      }
+      if (changed.invalid) {
+         d << "invalid";   // = defuncts
+      }
+      if (changed.editable) {
+         d << "editable";
+      }
+      if (changed.multiLine) {
+         d << "multiLine";
+      }
+      if (changed.selectableText) {
+         d << "selectableText";
+      }
+      if (changed.supportsAutoCompletion) {
+         d << "supportsAutoCompletion";
+      }
+
+   }
+
+   d << ')';
+   return d;
+}
+
+QAccessibleTextInterface::~QAccessibleTextInterface()
+{
+}
+
+static QString textLineBoundary(int beforeAtAfter, const QString &text, int offset, int *startOffset, int *endOffset)
+{
+   Q_ASSERT(beforeAtAfter >= -1 && beforeAtAfter <= 1);
+   Q_ASSERT(*startOffset == -1 && *endOffset == -1);
+
+   int length = text.length();
+   Q_ASSERT(offset >= 0 && offset <= length);
+
+   if (beforeAtAfter == 1) {
+      offset = text.indexOf(QChar(QChar::LineFeed), qMin(offset, length - 1));
+
+      if (offset < 0) {
+         return QString();   // after the last line comes nothing
+      }
+
+      ++offset; // move after the newline
+
+   } else if (beforeAtAfter == -1) {
+      offset = text.lastIndexOf(QChar(QChar::LineFeed), qMax(offset - 1, 0));
+
+      if (offset < 0) {
+         return QString();   // before first line comes nothing
+      }
+   }
+
+   if (offset > 0) {
+      *startOffset = text.lastIndexOf(QChar(QChar::LineFeed), offset - 1);
+   }
+
+   ++*startOffset; // move to the char after the newline (0 if lastIndexOf returned -1)
+
+   *endOffset = text.indexOf(QChar(QChar::LineFeed), qMin(offset, length - 1)) + 1; // include newline char
+
+   if (*endOffset <= 0 || *endOffset > length) {
+      *endOffset = length;   // if the text doesn't end with a newline it ends at length
+   }
+
+   return text.mid(*startOffset, *endOffset - *startOffset);
+}
+QString QAccessibleTextInterface::textBeforeOffset(int offset, QAccessible::TextBoundaryType boundaryType,
+   int *startOffset, int *endOffset) const
+{
+   const QString txt = text(0, characterCount());
+
+   if (offset == -1) {
+      offset = txt.length();
+   }
+
+   *startOffset = *endOffset = -1;
+
+   if (txt.isEmpty() || offset <= 0 || offset > txt.length()) {
+      return QString();
+   }
+
+   QTextBoundaryFinder::BoundaryType type = QTextBoundaryFinder::Grapheme;
+   switch (boundaryType) {
+      case QAccessible::CharBoundary:
+         type = QTextBoundaryFinder::Grapheme;
+         break;
+      case QAccessible::WordBoundary:
+         type = QTextBoundaryFinder::Word;
+         break;
+      case QAccessible::SentenceBoundary:
+         type = QTextBoundaryFinder::Sentence;
+         break;
+      case QAccessible::LineBoundary:
+      case QAccessible::ParagraphBoundary:
+         return textLineBoundary(-1, txt, offset, startOffset, endOffset);
+      case QAccessible::NoBoundary:
+         return QString();
+      default:
+         // error, may want to throw
+         break;
+   }
+
+   // keep behavior in sync with QTextCursor::movePosition()!
+
+   QTextBoundaryFinder boundary(type, txt);
+   boundary.setPosition(offset);
+
+   do {
+      if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+         break;
+      }
+   } while (boundary.toPreviousBoundary() > 0);
+   Q_ASSERT(boundary.position() >= 0);
+   *endOffset = boundary.position();
+
+   while (boundary.toPreviousBoundary() > 0) {
+      if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+         break;
+      }
+   }
+   Q_ASSERT(boundary.position() >= 0);
+   *startOffset = boundary.position();
+
+   return txt.mid(*startOffset, *endOffset - *startOffset);
+}
+QString QAccessibleTextInterface::textAfterOffset(int offset, QAccessible::TextBoundaryType boundaryType,
+   int *startOffset, int *endOffset) const
+{
+   const QString txt = text(0, characterCount());
+
+   if (offset == -1) {
+      offset = txt.length();
+   }
+
+   *startOffset = *endOffset = -1;
+   if (txt.isEmpty() || offset < 0 || offset >= txt.length()) {
+      return QString();
+   }
+
+   // type initialized just to silence a compiler warning [-Werror=maybe-uninitialized]
+   QTextBoundaryFinder::BoundaryType type = QTextBoundaryFinder::Grapheme;
+   switch (boundaryType) {
+      case QAccessible::CharBoundary:
+         type = QTextBoundaryFinder::Grapheme;
+         break;
+      case QAccessible::WordBoundary:
+         type = QTextBoundaryFinder::Word;
+         break;
+      case QAccessible::SentenceBoundary:
+         type = QTextBoundaryFinder::Sentence;
+         break;
+      case QAccessible::LineBoundary:
+      case QAccessible::ParagraphBoundary:
+         // Lines can not use QTextBoundaryFinder since Line there means any potential line-break.
+         return textLineBoundary(1, txt, offset, startOffset, endOffset);
+      case QAccessible::NoBoundary:
+         // return empty, this function currently only supports single lines, so there can be no line after
+         return QString();
+      default:
+         // error, may want to throw
+         break;
+   }
+
+   // keep behavior in sync with QTextCursor::movePosition()!
+
+   QTextBoundaryFinder boundary(type, txt);
+   boundary.setPosition(offset);
+
+   while (true) {
+      int toNext = boundary.toNextBoundary();
+      if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+         break;
+      }
+      if (toNext < 0 || toNext >= txt.length()) {
+         break;   // not found, the boundary might not exist
+      }
+   }
+   Q_ASSERT(boundary.position() <= txt.length());
+   *startOffset = boundary.position();
+
+   while (true) {
+      int toNext = boundary.toNextBoundary();
+      if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+         break;
+      }
+      if (toNext < 0 || toNext >= txt.length()) {
+         break;   // not found, the boundary might not exist
+      }
+   }
+   Q_ASSERT(boundary.position() <= txt.length());
+   *endOffset = boundary.position();
+
+   if ((*startOffset == -1) || (*endOffset == -1) || (*startOffset == *endOffset)) {
+      *endOffset = -1;
+      *startOffset = -1;
+   }
+
+   return txt.mid(*startOffset, *endOffset - *startOffset);
+}
+QString QAccessibleTextInterface::textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType,
+   int *startOffset, int *endOffset) const
+{
+   const QString txt = text(0, characterCount());
+   if (offset == -1) {
+      offset = txt.length();
+   }
+   *startOffset = *endOffset = -1;
+   if (txt.isEmpty() || offset < 0 || offset > txt.length()) {
+      return QString();
+   }
+   if (offset == txt.length() && boundaryType == QAccessible::CharBoundary) {
+      return QString();
+   }
+   QTextBoundaryFinder::BoundaryType type = QTextBoundaryFinder::Grapheme;
+   switch (boundaryType) {
+      case QAccessible::CharBoundary:
+         type = QTextBoundaryFinder::Grapheme;
+         break;
+      case QAccessible::WordBoundary:
+         type = QTextBoundaryFinder::Word;
+         break;
+      case QAccessible::SentenceBoundary:
+         type = QTextBoundaryFinder::Sentence;
+         break;
+      case QAccessible::LineBoundary:
+      case QAccessible::ParagraphBoundary:
+         return textLineBoundary(0, txt, offset, startOffset, endOffset);
+      case QAccessible::NoBoundary:
+         *startOffset = 0;
+         *endOffset = txt.length();
+         return txt;
+      default:
+         // error, may want to throw
+         break;
+   }
+   QTextBoundaryFinder boundary(type, txt);
+   boundary.setPosition(offset);
+   do {
+      if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+         break;
+      }
+   } while (boundary.toPreviousBoundary() > 0);
+   Q_ASSERT(boundary.position() >= 0);
+   *startOffset = boundary.position();
+   while (boundary.toNextBoundary() < txt.length()) {
+      if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+         break;
+      }
+   }
+   Q_ASSERT(boundary.position() <= txt.length());
+   *endOffset = boundary.position();
+   return txt.mid(*startOffset, *endOffset - *startOffset);
+}
+QAccessibleEditableTextInterface::~QAccessibleEditableTextInterface()
+{
+}
+QAccessibleValueInterface::~QAccessibleValueInterface()
+{
+}
+QAccessibleImageInterface::~QAccessibleImageInterface()
+{
+}
+
+QAccessibleTableCellInterface::~QAccessibleTableCellInterface()
+{
+}
+QAccessibleTableInterface::~QAccessibleTableInterface()
+{
+}
+QAccessibleActionInterface::~QAccessibleActionInterface()
+{
+}
+struct QAccessibleActionStrings {
+   QAccessibleActionStrings() :
+      pressAction(        QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Press")),
+      increaseAction(     QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Increase")),
+      decreaseAction(     QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Decrease")),
+      showMenuAction(     QT_TRANSLATE_NOOP("QAccessibleActionInterface", "ShowMenu")),
+      setFocusAction(     QT_TRANSLATE_NOOP("QAccessibleActionInterface", "SetFocus")),
+      toggleAction(       QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Toggle")),
+      scrollLeftAction(   QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Scroll Left")),
+      scrollRightAction(  QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Scroll Right")),
+      scrollUpAction(     QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Scroll Up")),
+      scrollDownAction(   QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Scroll Down")),
+      previousPageAction( QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Previous Page")),
+      nextPageAction(     QT_TRANSLATE_NOOP("QAccessibleActionInterface", "Next Page"))
+   {}
+
+   const QString pressAction;
+   const QString increaseAction;
+   const QString decreaseAction;
+   const QString showMenuAction;
+   const QString setFocusAction;
+   const QString toggleAction;
+   const QString scrollLeftAction;
+   const QString scrollRightAction;
+   const QString scrollUpAction;
+   const QString scrollDownAction;
+   const QString previousPageAction;
+   const QString nextPageAction;
+   QString localizedDescription(const QString &actionName) {
+      if (actionName == pressAction) {
+         return QAccessibleActionInterface::tr("Triggers the action");
+      } else if (actionName == increaseAction) {
+         return QAccessibleActionInterface::tr("Increase the value");
+      } else if (actionName == decreaseAction) {
+         return QAccessibleActionInterface::tr("Decrease the value");
+      } else if (actionName == showMenuAction) {
+         return QAccessibleActionInterface::tr("Shows the menu");
+      } else if (actionName == setFocusAction) {
+         return QAccessibleActionInterface::tr("Sets the focus");
+      } else if (actionName == toggleAction) {
+         return QAccessibleActionInterface::tr("Toggles the state");
+      } else if (actionName == scrollLeftAction) {
+         return QAccessibleActionInterface::tr("Scrolls to the left");
+      } else if (actionName == scrollRightAction) {
+         return QAccessibleActionInterface::tr("Scrolls to the right");
+      } else if (actionName == scrollUpAction) {
+         return QAccessibleActionInterface::tr("Scrolls up");
+      } else if (actionName == scrollDownAction) {
+         return QAccessibleActionInterface::tr("Scrolls down");
+      } else if (actionName == previousPageAction) {
+         return QAccessibleActionInterface::tr("Goes back a page");
+      } else if (actionName == nextPageAction) {
+         return QAccessibleActionInterface::tr("Goes to the next page");
+      }
+      return QString();
+   }
+};
+Q_GLOBAL_STATIC(QAccessibleActionStrings, accessibleActionStrings)
+
+QString QAccessibleActionInterface::localizedActionName(const QString &actionName) const
+{
+   return QAccessibleActionInterface::tr(qPrintable(actionName));
+}
+QString QAccessibleActionInterface::localizedActionDescription(const QString &actionName) const
+{
+   return accessibleActionStrings()->localizedDescription(actionName);
+}
+const QString &QAccessibleActionInterface::pressAction()
+{
+   return accessibleActionStrings()->pressAction;
+}
+const QString &QAccessibleActionInterface::increaseAction()
+{
+   return accessibleActionStrings()->increaseAction;
+}
+const QString &QAccessibleActionInterface::decreaseAction()
+{
+   return accessibleActionStrings()->decreaseAction;
+}
+const QString &QAccessibleActionInterface::showMenuAction()
+{
+   return accessibleActionStrings()->showMenuAction;
+}
+const QString &QAccessibleActionInterface::setFocusAction()
+{
+   return accessibleActionStrings()->setFocusAction;
+}
+const QString &QAccessibleActionInterface::toggleAction()
+{
+   return accessibleActionStrings()->toggleAction;
+}
+QString QAccessibleActionInterface::scrollLeftAction()
+{
+   return accessibleActionStrings()->scrollLeftAction;
+}
+QString QAccessibleActionInterface::scrollRightAction()
+{
+   return accessibleActionStrings()->scrollRightAction;
+}
+QString QAccessibleActionInterface::scrollUpAction()
+{
+   return accessibleActionStrings()->scrollUpAction;
+}
+QString QAccessibleActionInterface::scrollDownAction()
+{
+   return accessibleActionStrings()->scrollDownAction;
+}
+QString QAccessibleActionInterface::previousPageAction()
+{
+   return accessibleActionStrings()->previousPageAction;
+}
+QString QAccessibleActionInterface::nextPageAction()
+{
+   return accessibleActionStrings()->nextPageAction;
+}
+QString qAccessibleLocalizedActionDescription(const QString &actionName)
+{
+   return accessibleActionStrings()->localizedDescription(actionName);
+}
+
+#endif // QT_NO_ACCESSIBILITY
+

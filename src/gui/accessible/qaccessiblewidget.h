@@ -23,37 +23,43 @@
 #ifndef QACCESSIBLEWIDGET_H
 #define QACCESSIBLEWIDGET_H
 
-#include <QtGui/qaccessibleobject.h>
-#include <QPicture>
-
-QT_BEGIN_NAMESPACE
+#include <qaccessibleobject.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAccessibleWidgetPrivate;
 
-class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject
+class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject, public QAccessibleActionInterface
 {
  public:
-   explicit QAccessibleWidget(QWidget *o, Role r = Client, const QString &name = QString());
+   explicit QAccessibleWidget(QWidget *o, QAccessible::Role r = QAccessible::Client, const QString &name = QString());
 
+   bool isValid() const override;
+   QWindow *window() const override;
    int childCount() const override;
    int indexOfChild(const QAccessibleInterface *child) const override;
-   Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const override;
 
-   int childAt(int x, int y) const override;
-   QRect rect(int child) const override;
-   int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const override;
+   QVector<QPair<QAccessibleInterface *, QAccessible::Relation>>
+         relations(QAccessible::Relation match = QAccessible::AllRelations) const override;
 
-   QString text(Text t, int child) const override;
-   Role role(int child) const override;
-   State state(int child) const override;
+   QAccessibleInterface *focusChild() const override;
 
-#ifndef QT_NO_ACTION
-   int userActionCount(int child) const override;
-   QString actionText(int action, Text t, int child) const override;
-   bool doAction(int action, int child, const QVariantList &params) override;
-#endif
+   QRect rect() const override;
+
+   QAccessibleInterface *parent() const override;
+   QAccessibleInterface *child(int index) const override;
+
+   QString text(QAccessible::Text t) const override;
+   QAccessible::Role role() const override;
+   QAccessible::State state() const override;
+
+   QColor foregroundColor() const override;
+   QColor backgroundColor() const override;
+
+   void *interface_cast(QAccessible::InterfaceType t) override;
+   QStringList actionNames() const override;
+   void doAction(const QString &actionName) override;
+   QStringList keyBindingsForAction(const QString &actionName) const override;
 
  protected:
    ~QAccessibleWidget();
@@ -61,57 +67,12 @@ class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject
    QObject *parentObject() const;
 
    void addControllingSignal(const QString &signal);
-   void setValue(const QString &value);
-   void setDescription(const QString &desc);
-   void setHelp(const QString &help);
-   void setAccelerator(const QString &accel);
 
  private:
-   friend class QAccessibleWidgetEx;
    QAccessibleWidgetPrivate *d;
    Q_DISABLE_COPY(QAccessibleWidget)
 };
 
-class Q_GUI_EXPORT QAccessibleWidgetEx : public QAccessibleObjectEx
-{
- public:
-   explicit QAccessibleWidgetEx(QWidget *o, Role r = Client, const QString &name = QString());
-
-   int childCount() const override;
-   int indexOfChild(const QAccessibleInterface *child) const override;
-   Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const override;
-
-   int childAt(int x, int y) const override;
-   QRect rect(int child) const override;
-   int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const override;
-
-   QString text(Text t, int child) const override;
-   Role role(int child) const override;
-   State state(int child) const override;
-
-   QString actionText(int action, Text t, int child) const override;
-   bool doAction(int action, int child, const QVariantList &params) override;
-
-   QVariant invokeMethodEx(Method method, int child, const QVariantList &params) override;
-
- protected:
-   ~QAccessibleWidgetEx();
-   QWidget *widget() const;
-   QObject *parentObject() const;
-
-   void addControllingSignal(const QString &signal);
-   void setValue(const QString &value);
-   void setDescription(const QString &desc);
-   void setHelp(const QString &help);
-   void setAccelerator(const QString &accel);
-
- private:
-   QAccessibleWidgetPrivate *d;
-   Q_DISABLE_COPY(QAccessibleWidgetEx)
-};
-
 #endif
-
-QT_END_NAMESPACE
 
 #endif // QACCESSIBLEWIDGET_H

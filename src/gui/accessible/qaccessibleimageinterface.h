@@ -1,1 +1,1 @@
-#include <qaccessible2.h>
+#include <qaccessible.h>

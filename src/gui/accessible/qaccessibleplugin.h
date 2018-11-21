@@ -23,37 +23,30 @@
 #ifndef QACCESSIBLEPLUGIN_H
 #define QACCESSIBLEPLUGIN_H
 
-#include <QtGui/qaccessible.h>
-#include <QtCore/qfactoryinterface.h>
-
-QT_BEGIN_NAMESPACE
+#include <qaccessible.h>
+#include <qfactoryinterface.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
 class QStringList;
 class QAccessibleInterface;
 
-struct Q_GUI_EXPORT QAccessibleFactoryInterface : public QAccessible, public QFactoryInterface {
-   virtual QAccessibleInterface *create(const QString &key, QObject *object) = 0;
-};
-
 #define QAccessibleFactoryInterface_iid "com.copperspice.QAccessibleFactoryInterface"
-CS_DECLARE_INTERFACE(QAccessibleFactoryInterface, QAccessibleFactoryInterface_iid)
 
 class QAccessiblePluginPrivate;
 
-class Q_GUI_EXPORT QAccessiblePlugin : public QObject, public QAccessibleFactoryInterface
+class Q_GUI_EXPORT QAccessiblePlugin : public QObject
 {
-   GUI_CS_OBJECT_MULTIPLE(QAccessiblePlugin, QObject)
-   CS_INTERFACES(QAccessibleFactoryInterface, QFactoryInterface)
+   GUI_CS_OBJECT(QAccessiblePlugin)
 
  public:
    explicit QAccessiblePlugin(QObject *parent = nullptr);
-   ~QAccessiblePlugin();  
+   ~QAccessiblePlugin();
+   virtual QAccessibleInterface *create(const QString &key, QObject *object) = 0;
 };
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE
 
-#endif // QACCESSIBLEPLUGIN_H
+
+#endif

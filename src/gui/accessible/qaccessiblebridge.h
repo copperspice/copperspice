@@ -26,39 +26,35 @@
 #include <QtCore/qplugin.h>
 #include <QtCore/qfactoryinterface.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAccessibleInterface;
+class QAccessibleEvent;
 
 class QAccessibleBridge
 {
  public:
    virtual ~QAccessibleBridge() {}
    virtual void setRootObject(QAccessibleInterface *) = 0;
-   virtual void notifyAccessibilityUpdate(int, QAccessibleInterface *, int) = 0;
+   virtual void notifyAccessibilityUpdate(QAccessibleEvent *event) = 0;
 };
 
-struct Q_GUI_EXPORT QAccessibleBridgeFactoryInterface : public QFactoryInterface {
-   virtual QAccessibleBridge *create(const QString &name) = 0;
-};
 
 #define QAccessibleBridgeFactoryInterface_iid "com.copperspice.QAccessibleBridgeFactoryInterface"
-CS_DECLARE_INTERFACE(QAccessibleBridgeFactoryInterface, QAccessibleBridgeFactoryInterface_iid)
-
-class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject, public QAccessibleBridgeFactoryInterface
+class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject
 {
    GUI_CS_OBJECT(QAccessibleBridgePlugin)
-   CS_INTERFACES(QAccessibleBridgeFactoryInterface, QFactoryInterface)
 
  public:
    explicit QAccessibleBridgePlugin(QObject *parent = nullptr);
    ~QAccessibleBridgePlugin();
+   virtual QAccessibleBridge *create(const QString &key) = 0;
 };
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE
 
-#endif // QACCESSIBLEBRIDGE_H
+
+#endif

@@ -26,7 +26,7 @@
 
 #include <qaccessible.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QAccessiblePlugin::QAccessiblePlugin(QObject *parent)
    : QObject(parent)
@@ -37,26 +37,5 @@ QAccessiblePlugin::~QAccessiblePlugin()
 {
 }
 
-/*!
-    \fn QStringList QAccessiblePlugin::keys() const
-
-    Returns the list of keys this plugin supports.
-
-    These keys must be the class names that this plugin provides
-    an accessibility implementation for.
-
-    \sa create()
-*/
-
-/*!
-    \fn QAccessibleInterface *QAccessiblePlugin::create(const QString &key, QObject *object)
-
-    Creates and returns a QAccessibleInterface implementation for the
-    class \a key and the object \a object. Keys are case sensitive.
-
-    \sa keys()
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACCESSIBILITY
