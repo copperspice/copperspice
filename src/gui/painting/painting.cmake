@@ -73,7 +73,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolor_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcosmeticstroker_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcssutil_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcups_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdatabuffer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_arm_simd_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_mmx_p.h
@@ -175,7 +174,6 @@ if(X11_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_unix.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcups.cpp
     )
 endif()
 
@@ -191,11 +189,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         msimg32
     )
 
-# FIXME: check for COCOA instead?
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcups.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_mac.cpp

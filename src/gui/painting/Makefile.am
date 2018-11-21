@@ -70,7 +70,6 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qcolor_p.h \
 	qcosmeticstroker_p.h \
 	qcssutil_p.h \
-	qcups_p.h \
 	qdatabuffer_p.h \
 	qdrawhelper_arm_simd_p.h \
 	qdrawhelper_mmx_p.h \
@@ -183,13 +182,11 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolormap_x11.cpp \
 	src/gui/painting/qpaintdevice_x11.cpp \
 	src/gui/painting/qpaintengine_x11.cpp \
-	src/gui/painting/qprinterinfo_unix.cpp \
-	src/gui/painting/qcups.cpp
+	src/gui/painting/qprinterinfo_unix.cpp
 endif
 
 if COCOA
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/painting/qcups.cpp \
 	src/gui/painting/qcolormap_mac.cpp \
 	src/gui/painting/qpaintdevice_mac.cpp \
 	src/gui/painting/qpaintengine_mac.cpp \

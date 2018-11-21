@@ -31,7 +31,7 @@ set(GUI_INCLUDES
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qabstractprintdialog_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcups.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcups_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_unix_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinter_p.h
