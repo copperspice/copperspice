@@ -281,7 +281,17 @@ class QVector
      m_data.pop_back();
    }
 
-   bool removeOne(const T &value);
+   bool removeOne(const T &value) {
+     auto iter = std::find(m_data.begin(), m_data.end(), value);
+
+     if (iter != m_data.end()) {
+       m_data.erase(iter);
+       return true;
+     }
+
+     return false;
+   }
+
    void replace(size_type i, const T &value);
 
    void reserve(size_type size) {
