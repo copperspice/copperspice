@@ -6140,7 +6140,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
 #else
       const QTextCodec *const codec = s.codec();
       Q_ASSERT_X(codec, "QDomNode::save()", "A codec must be specified in the text stream.");
-      const QByteArray codecName = codec->name();
+      const QString codecName = codec->name();
 #endif
 
       s << "<?xml version=\"1.0\" encoding=\""
