@@ -250,22 +250,24 @@ class QSvgPaintEngine : public QPaintEngine
          if (!constantAlpha) {
             const qreal spacing = qreal(0.02);
             QGradientStops newStops;
-            QRgb fromColor = PREMUL(stops.at(0).second.rgba());
+            QRgb fromColor = qPremultiply(stops.at(0).second.rgba());
             QRgb toColor;
+
             for (int i = 0; i + 1 < stops.size(); ++i) {
                int parts = qCeil((stops.at(i + 1).first - stops.at(i).first) / spacing);
                newStops.append(stops.at(i));
-               toColor = PREMUL(stops.at(i + 1).second.rgba());
+               toColor = qPremultiply(stops.at(i + 1).second.rgba());
 
                if (parts > 1) {
                   qreal step = (stops.at(i + 1).first - stops.at(i).first) / parts;
                   for (int j = 1; j < parts; ++j) {
-                     QRgb color = INV_PREMUL(INTERPOLATE_PIXEL_256(fromColor, 256 - 256 * j / parts, toColor, 256 * j / parts));
+                     QRgb color = qUnpremultiply(INTERPOLATE_PIXEL_256(fromColor, 256 - 256 * j / parts, toColor, 256 * j / parts));
                      newStops.append(QGradientStop(stops.at(i).first + j * step, QColor::fromRgba(color)));
                   }
                }
                fromColor = toColor;
             }
+
             newStops.append(stops.back());
             stops = newStops;
          }
@@ -274,9 +276,10 @@ class QSvgPaintEngine : public QPaintEngine
       for (QGradientStop stop : stops) {
          QString color =
             QString::fromLatin1("#%1%2%3")
-            .formatArg(stop.second.red(), 2, 16, QLatin1Char('0'))
+            .formatArg(stop.second.red(), 2, 16,   QLatin1Char('0'))
             .formatArg(stop.second.green(), 2, 16, QLatin1Char('0'))
-            .formatArg(stop.second.blue(), 2, 16, QLatin1Char('0'));
+            .formatArg(stop.second.blue(), 2, 16,  QLatin1Char('0'));
+
          str << QLatin1String("    <stop offset=\"") << stop.first << QLatin1String("\" ")
              << QLatin1String("stop-color=\"") << color << QLatin1String("\" ")
              << QLatin1String("stop-opacity=\"") << stop.second.alphaF() << QLatin1String("\" />\n");
