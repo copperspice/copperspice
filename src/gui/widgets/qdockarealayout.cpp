@@ -2754,6 +2754,7 @@ void QDockAreaLayout::getGrid(QVector<QLayoutStruct> *_ver_struct_list,
 {
    QSize center_hint(0, 0);
    QSize center_min(0, 0);
+   QSize center_max(0, 0);
    const bool have_central = centralWidgetItem != 0 && !centralWidgetItem->isEmpty();
    if (have_central) {
       center_hint = centralWidgetRect.size();
@@ -2761,6 +2762,7 @@ void QDockAreaLayout::getGrid(QVector<QLayoutStruct> *_ver_struct_list,
          center_hint = centralWidgetItem->sizeHint();
       }
       center_min = centralWidgetItem->minimumSize();
+      center_max = centralWidgetItem->maximumSize();
    }
 
    QRect center_rect = rect;
@@ -2846,7 +2848,7 @@ void QDockAreaLayout::getGrid(QVector<QLayoutStruct> *_ver_struct_list,
       left = (tl_significant && bl_significant) ? left_min.height() : 0;
       right = (tr_significant && br_significant) ? right_min.height() : 0;
       ver_struct_list[1].minimumSize = qMax(left, center_min.height(), right);
-      ver_struct_list[1].maximumSize = have_central ? QWIDGETSIZE_MAX : 0;
+      ver_struct_list[1].maximumSize = center_max.height();
       ver_struct_list[1].expansive = have_central;
       ver_struct_list[1].empty = docks[QInternal::LeftDock].isEmpty()
                                  && !have_central
@@ -2868,6 +2870,9 @@ void QDockAreaLayout::getGrid(QVector<QLayoutStruct> *_ver_struct_list,
       for (int i = 0; i < 3; ++i) {
          ver_struct_list[i].sizeHint
             = qMax(ver_struct_list[i].sizeHint, ver_struct_list[i].minimumSize);
+      }
+      if (have_central && ver_struct_list[0].empty && ver_struct_list[2].empty) {
+         ver_struct_list[1].maximumSize = QWIDGETSIZE_MAX;
       }
    }
 
@@ -2906,8 +2911,7 @@ void QDockAreaLayout::getGrid(QVector<QLayoutStruct> *_ver_struct_list,
       top = (tl_significant && tr_significant) ? top_min.width() : 0;
       bottom = (bl_significant && br_significant) ? bottom_min.width() : 0;
       hor_struct_list[1].minimumSize = qMax(top, center_min.width(), bottom);
-
-      hor_struct_list[1].maximumSize = have_central ? QWIDGETSIZE_MAX : 0;
+      hor_struct_list[1].maximumSize = center_max.width();
       hor_struct_list[1].expansive = have_central;
       hor_struct_list[1].empty = !have_central;
       hor_struct_list[1].pos = center_rect.left();
@@ -2927,6 +2931,9 @@ void QDockAreaLayout::getGrid(QVector<QLayoutStruct> *_ver_struct_list,
       for (int i = 0; i < 3; ++i) {
          hor_struct_list[i].sizeHint
             = qMax(hor_struct_list[i].sizeHint, hor_struct_list[i].minimumSize);
+      }
+      if (have_central && hor_struct_list[0].empty && hor_struct_list[2].empty) {
+         hor_struct_list[1].maximumSize = QWIDGETSIZE_MAX;
       }
    }
 }
