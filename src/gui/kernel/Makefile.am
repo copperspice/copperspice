@@ -21,6 +21,7 @@ GUI_PUBLIC_INCLUDES += \
 	QDragMoveEvent \
 	QDragResponseEvent \
 	QDropEvent \
+	QEvent \
 	QFileOpenEvent \
 	QFocusEvent \
 	QFormLayout \
@@ -36,6 +37,7 @@ GUI_PUBLIC_INCLUDES += \
 	QHoverEvent \
 	QIconDragEvent \
 	QInputEvent \
+	QInputMethod \
 	QInputMethodEvent \
 	QKeyEvent \
 	QKeySequence \
@@ -48,12 +50,18 @@ GUI_PUBLIC_INCLUDES += \
 	QMimeSource \
 	QMouseEvent \
 	QMoveEvent \
+	QOffscreenSurface \
+	QOpenGLContext \
+	QOpenGLWindow \
+	QPaintDeviceWindow \
 	QPaintEvent \
 	QPalette \
 	QPanGesture \
 	QPinchGesture \
+	QPixelFormat \
+	QRasterWindow \
 	QResizeEvent \
-   QScreen \
+	QScreen \
 	QSessionManager \
 	QShortcut \
 	QShortcutEvent \
@@ -63,12 +71,16 @@ GUI_PUBLIC_INCLUDES += \
 	QSpacerItem \
 	QStackedLayout \
 	QStatusTipEvent \
+	QStyleHints \
+	QSurface \
+	QSurfaceFormat \
 	QSwipeGesture \
 	QTabletEvent \
 	QTapAndHoldGesture \
 	QTapGesture \
 	QToolBarChangeEvent \
 	QToolTip \
+	QTouchDevice \
 	QTouchEvent \
 	QUpdateLaterEvent \
 	QVBoxLayout \
@@ -83,12 +95,10 @@ GUI_PUBLIC_INCLUDES += \
 	QWidgetList \
 	QWidgetMapper \
 	QWidgetSet \
+	QWindow \
 	QWindowStateChangeEvent \
 	QWindowSystemInterface \
 	QWindowsMime \
-	QX11EmbedContainer \
-	QX11EmbedWidget \
-	QX11Info \
 	QtGui
 
 GUI_KERNEL_INCLUDES = \
@@ -128,6 +138,7 @@ GUI_KERNEL_INCLUDES = \
 	qhoverevent.h \
 	qicondragevent.h \
 	qinputevent.h \
+	qinputmethod.h \
 	qinputmethodevent.h \
 	qkeyevent.h \
 	qkeysequence.h \
@@ -142,10 +153,16 @@ GUI_KERNEL_INCLUDES = \
 	qmimesource.h \
 	qmouseevent.h \
 	qmoveevent.h \
+	qoffscreensurface.h \
+	qopenglcontext.h \
+	qopenglwindow.h \
+	qpaintdevicewindow.h \
 	qpaintevent.h \
 	qpalette.h \
 	qpangesture.h \
 	qpinchgesture.h \
+	qpixelformat.h \
+	qrasterwindow.h \
 	qresizeevent.h \
 	qscreen.h \
 	qsessionmanager.h \
@@ -157,6 +174,9 @@ GUI_KERNEL_INCLUDES = \
 	qspaceritem.h \
 	qstackedlayout.h \
 	qstatustipevent.h \
+	qstylehints.h \
+	qsurface.h \
+	qsurfaceformat.h \
 	qswipegesture.h \
 	qtabletevent.h \
 	qtapandholdgesture.h \
@@ -164,6 +184,7 @@ GUI_KERNEL_INCLUDES = \
 	qtevents.h \
 	qtoolbarchangeevent.h \
 	qtooltip.h \
+	qtouchdevice.h \
 	qtouchevent.h \
 	qupdatelaterevent.h \
 	qvboxlayout.h \
@@ -178,16 +199,12 @@ GUI_KERNEL_INCLUDES = \
 	qwidgetlist.h \
 	qwidgetmapper.h \
 	qwidgetset.h \
+	qwindow.h \
 	qwindowdefs.h \
 	qwindowdefs_win.h \
 	qwindowsmime.h \
 	qwindowstatechangeevent.h \
 	qwindowsysteminterface.h \
-	qx11embed_x11.h \
-	qx11embedcontainer.h \
-	qx11embedwidget.h \
-	qx11info.h \
-	qx11info_x11.h \
 	cs_carbon_wrapper.h \
 	qtgui.h
 
@@ -208,6 +225,7 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qcocoawindowdelegate_mac_p.h \
 	qcocoawindowcustomthemeframe_mac_p.h \
 	qcursor_p.h \
+	qdesktopwidget_p.h \
 	qdesktopwidget_mac_p.h \
 	qdnd_p.h \
 	qevent_p.h \
@@ -219,6 +237,9 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qguieventdispatcher_glib_p.h \
 	qguiplatformplugin_p.h \
 	qhexstring_p.h \
+	qhighdpiscaling_p.h \
+	qinputdevicemanager_p.h \
+	qinputmethod_p.h \
 	qkde_p.h \
 	qkeymapper_p.h \
 	qkeysequence_p.h \
@@ -227,20 +248,28 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qnsthemeframe_mac_p.h \
 	qnstitledframe_mac_p.h \
 	qnsframeview_mac_p.h \
-	qmacgesturerecognizer_mac_p.h \
+	qmacgesturerecognizer_p.h \
 	qmultitouch_mac_p.h \
+	qopenglcontext_p.h \
+	qpaintdevicewindow_p.h \
 	qscreen_p.h \
+	qshapedpixmapdndwindow_p.h \
+	qsimpledrag_p.h \
+	qsessionmanager_p.h \
 	qshortcutmap_p.h \
 	qsound_p.h \
 	qstandardgestures_p.h \
+	qtouchdevice_p.h \
 	qt_cocoa_helpers_mac_p.h \
 	qt_x11_p.h \
 	qt_mac_p.h \
 	qwidget_p.h \
 	qwidgetaction_p.h \
-	qwinnativepangesturerecognizer_win_p.h \
-	cs_carbon_wrapper_p.h \
-   qhighdpiscaling_p.h
+	qwindow_p.h \
+	qwindowcontainer_p.h \
+	qwindowsysteminterface_p.h \
+	cs_carbon_wrapper_p.h
+
 
 GUI_INCLUDES += $(GUI_KERNEL_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_KERNEL_PRIVATE_INCLUDES)
@@ -257,33 +286,50 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qcursor.cpp \
 	src/gui/kernel/qdrag.cpp \
 	src/gui/kernel/qdnd.cpp \
+	src/gui/kernel/qdesktopwidget.cpp \
 	src/gui/kernel/qevent.cpp \
 	src/gui/kernel/qformlayout.cpp \
+	src/gui/kernel/qgesture.cpp \
+	src/gui/kernel/qgesturerecognizer.cpp \
+	src/gui/kernel/qgesturemanager.cpp \
 	src/gui/kernel/qgridlayout.cpp \
+	src/gui/kernel/qguivariant.cpp \
+	src/gui/kernel/qhighdpiscaling.cpp \
+	src/gui/kernel/qinputdevicemanager.cpp \
+	src/gui/kernel/qinputmethod.cpp \
+	src/gui/kernel/qkeymapper.cpp \
 	src/gui/kernel/qkeysequence.cpp \
 	src/gui/kernel/qlayout.cpp \
 	src/gui/kernel/qlayoutengine.cpp \
 	src/gui/kernel/qlayoutitem.cpp \
 	src/gui/kernel/qmime.cpp \
+	src/gui/kernel/qoffscreensurface.cpp \
+	src/gui/kernel/qopenglcontext.cpp \
+	src/gui/kernel/qopenglwindow.cpp \
+	src/gui/kernel/qpaintdevicewindow.cpp \
 	src/gui/kernel/qpalette.cpp \
+	src/gui/kernel/qrasterwindow.cpp \
+	src/gui/kernel/qsimpledrag.cpp \
+	src/gui/kernel/qshapedpixmapdndwindow.cpp \
 	src/gui/kernel/qscreen.cpp \
 	src/gui/kernel/qshortcut.cpp \
 	src/gui/kernel/qshortcutmap.cpp \
 	src/gui/kernel/qstackedlayout.cpp \
+	src/gui/kernel/qstandardgestures.cpp \
+	src/gui/kernel/qstylehints.cpp \
+	src/gui/kernel/qsurface.cpp \
+	src/gui/kernel/qsurfaceformat.cpp \
 	src/gui/kernel/qtooltip.cpp \
-	src/gui/kernel/qguivariant.cpp \
+	src/gui/kernel/qtouchdevice.cpp \
 	src/gui/kernel/qwhatsthis.cpp \
 	src/gui/kernel/qwidget.cpp \
 	src/gui/kernel/qwidgetaction.cpp \
-	src/gui/kernel/qkeymapper.cpp \
-	src/gui/kernel/qgesture.cpp \
-	src/gui/kernel/qstandardgestures.cpp \
-	src/gui/kernel/qgesturerecognizer.cpp \
-	src/gui/kernel/qgesturemanager.cpp \
-	src/gui/kernel/qdesktopwidget.cpp \
+	src/gui/kernel/qwindow.cpp \
+	src/gui/kernel/qwindowsysteminterface.cpp \
+	src/gui/kernel/qwindowcontainer.cpp \
 	src/gui/kernel/qguiplatformplugin.cpp \
 	src/gui/kernel/qsound.cpp \
-   src/gui/kernel/qhighdpiscaling.cpp
+	src/gui/kernel/qpixelformat.cpp
 
 EXTRA_DIST+= \
 	src/3rdparty/wintab/wintab.h \
@@ -293,17 +339,13 @@ EXTRA_DIST+= \
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/kernel/qapplication_win.cpp \
 	src/gui/kernel/qclipboard_win.cpp \
 	src/gui/kernel/qcursor_win.cpp \
 	src/gui/kernel/qdesktopwidget_win.cpp \
 	src/gui/kernel/qdnd_win.cpp \
 	src/gui/kernel/qmime_win.cpp \
 	src/gui/kernel/qsound_win.cpp \
-	src/gui/kernel/qwidget_win.cpp \
 	src/gui/kernel/qole_win.cpp \
-	src/gui/kernel/qkeymapper_win.cpp \
-	src/gui/kernel/qwinnativepangesturerecognizer_win.cpp
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_DIRECTDRAW
 endif
 
@@ -316,10 +358,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qdesktopwidget_x11.cpp \
 	src/gui/kernel/qmotifdnd_x11.cpp \
 	src/gui/kernel/qsound_x11.cpp \
-	src/gui/kernel/qwidget_x11.cpp \
 	src/gui/kernel/qwidgetcreate_x11.cpp \
-	src/gui/kernel/qx11embed_x11.cpp \
-	src/gui/kernel/qx11info_x11.cpp \
 	src/gui/kernel/qkeymapper_x11.cpp \
 	src/gui/kernel/qkde.cpp \
 	src/gui/kernel/qeventdispatcher_x11.cpp \

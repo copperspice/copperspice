@@ -20,6 +20,7 @@ set(GUI_PUBLIC_INCLUDES
     QDragMoveEvent
     QDragResponseEvent
     QDropEvent
+    QEvent
     QFileOpenEvent
     QFocusEvent
     QFormLayout
@@ -35,6 +36,7 @@ set(GUI_PUBLIC_INCLUDES
     QHoverEvent
     QIconDragEvent
     QInputEvent
+    QInputMethod
     QInputMethodEvent
     QKeyEvent
     QKeySequence
@@ -47,10 +49,16 @@ set(GUI_PUBLIC_INCLUDES
     QMimeSource
     QMouseEvent
     QMoveEvent
+    QOffscreenSurface
+    QOpenGLContext
+    QOpenGLWindow
+    QPaintDeviceWindow
     QPaintEvent
     QPalette
     QPanGesture
     QPinchGesture
+    QPixelFormat
+    QRasterWindow
     QResizeEvent
     QScreen
     QSessionManager
@@ -62,12 +70,16 @@ set(GUI_PUBLIC_INCLUDES
     QSpacerItem
     QStackedLayout
     QStatusTipEvent
+    QStyleHints
+    QSurface
+    QSurfaceFormat
     QSwipeGesture
     QTabletEvent
     QTapAndHoldGesture
     QTapGesture
     QToolBarChangeEvent
     QToolTip
+    QTouchDevice
     QTouchEvent
     QUpdateLaterEvent
     QVBoxLayout
@@ -82,12 +94,10 @@ set(GUI_PUBLIC_INCLUDES
     QWidgetList
     QWidgetMapper
     QWidgetSet
+    QWindow
     QWindowStateChangeEvent
     QWindowSystemInterface
     QWindowsMime
-    QX11EmbedContainer
-    QX11EmbedWidget
-    QX11Info
     QtGui
 )
 
@@ -129,6 +139,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhoverevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qicondragevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputevent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethodevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeyevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence.h
@@ -143,10 +154,16 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmimesource.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmouseevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmoveevent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwindow.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpalette.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpangesture.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpinchgesture.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpixelformat.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qrasterwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qresizeevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager.h
@@ -158,6 +175,9 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qspaceritem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstackedlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstatustipevent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstylehints.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurfaceformat.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qswipegesture.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtabletevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtapandholdgesture.h
@@ -165,6 +185,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtevents.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtoolbarchangeevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtooltip.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qupdatelaterevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvboxlayout.h
@@ -179,16 +200,12 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetlist.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetmapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetset.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowdefs.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowdefs_win.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsmime.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowstatechangeevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embed_x11.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embedcontainer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embedwidget.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtgui.h
 )
@@ -210,6 +227,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowdelegate_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowcustomthemeframe_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent_p.h
@@ -221,6 +239,9 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguieventdispatcher_glib_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhexstring_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputdevicemanager_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkde_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence_p.h
@@ -229,20 +250,26 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnsthemeframe_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnstitledframe_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnsframeview_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultitouch_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshapedpixmapdndwindow_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsimpledrag_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_cocoa_helpers_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowcontainer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling_p.h
 )
 
 set(GUI_SOURCES
@@ -255,33 +282,50 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdrag.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qformlayout.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturemanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgridlayout.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguivariant.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputdevicemanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpalette.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qrasterwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsimpledrag.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshapedpixmapdndwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcut.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstackedlayout.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstylehints.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurfaceformat.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtooltip.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguivariant.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthis.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturemanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowcontainer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpixelformat.cpp
 )
 
 if(X11_FOUND)
@@ -294,10 +338,7 @@ if(X11_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmotifdnd_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetcreate_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embed_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkde.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11.cpp
@@ -308,17 +349,13 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qole_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win.cpp
     )
     add_definitions(-DQT_NO_DIRECTDRAW)
 
