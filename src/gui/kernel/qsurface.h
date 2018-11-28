@@ -20,31 +20,49 @@
 *
 ***********************************************************************/
 
-#ifndef QWINNATIVEPANGESTURERECOGNIZER_WIN_P_H
-#define QWINNATIVEPANGESTURERECOGNIZER_WIN_P_H
+#ifndef QSURFACE_H
+#define QSURFACE_H
 
-#include <QGestureRecognizer>
+#include <qnamespace.h>
+#include <qsurfaceformat.h>
+#include <qmetatype.h>
+#include <qsize.h>
 
-#ifndef QT_NO_GESTURES
+class QPlatformSurface;
+class QSurfacePrivate;
 
-QT_BEGIN_NAMESPACE
-
-#if ! defined(QT_NO_NATIVE_GESTURES)
-
-class QWinNativePanGestureRecognizer : public QGestureRecognizer
+class Q_GUI_EXPORT QSurface
 {
- public:
-   QWinNativePanGestureRecognizer();
+public:
+    enum SurfaceClass {
+        Window,
+        Offscreen
+    };
 
-   QGesture *create(QObject *target) override;
-   QGestureRecognizer::Result recognize(QGesture *state, QObject *watched, QEvent *event) override;
-   void reset(QGesture *state) override;
+    enum SurfaceType {
+        RasterSurface,
+        OpenGLSurface,
+        RasterGLSurface
+    };
+
+    virtual ~QSurface();
+
+    SurfaceClass surfaceClass() const;
+
+    virtual QSurfaceFormat format() const = 0;
+    virtual QPlatformSurface *surfaceHandle() const = 0;
+
+    virtual SurfaceType surfaceType() const = 0;
+    bool supportsOpenGL() const;
+
+    virtual QSize size() const = 0;
+
+protected:
+    explicit QSurface(SurfaceClass type);
+
+    SurfaceClass m_type;
+
+    QSurfacePrivate *m_reserved;
 };
 
-#endif // QT_NO_NATIVE_GESTURES
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_GESTURES
-
-#endif // QWINNATIVEPANGESTURERECOGNIZER_WIN_P_H
+#endif
