@@ -23,12 +23,12 @@
 #ifndef QFILEDIALOG_P_H
 #define QFILEDIALOG_P_H
 
+#include <qglobal.h>
 #ifndef QT_NO_FILEDIALOG
 
 #include <qfiledialog.h>
 #include <qdialog_p.h>
 #include <qplatformdefs.h>
-#include <qfilesystemmodel_p.h>
 #include <qlistview.h>
 #include <qtreeview.h>
 #include <qcombobox.h>
@@ -43,15 +43,14 @@
 #include <qcompleter.h>
 #include <qpointer.h>
 #include <qdebug.h>
+
+#include <qfilesystemmodel_p.h>
 #include <qsidebar_p.h>
 #include <qfscompleter_p.h>
-#include <qguiplatformplugin_p.h>
 
 #if defined (Q_OS_UNIX)
 #include <unistd.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QFileDialogListView;
 class QFileDialogTreeView;
@@ -60,13 +59,14 @@ class QGridLayout;
 class QCompleter;
 class QHBoxLayout;
 class Ui_QFileDialog;
+class QPlatformDialogHelper;
 
 struct QFileDialogArgs {
    QFileDialogArgs() : parent(0), mode(QFileDialog::AnyFile) {}
 
    QWidget *parent;
    QString caption;
-   QString directory;
+   QUrl directory;
    QString selection;
    QString filter;
    QFileDialog::FileMode mode;
@@ -82,18 +82,32 @@ class QFileDialogPrivate : public QDialogPrivate
  public:
    QFileDialogPrivate();
 
+   QPlatformFileDialogHelper *platformFileDialogHelper() const {
+      return static_cast<QPlatformFileDialogHelper *>(platformHelper());
+   }
    void createToolButtons();
    void createMenuActions();
    void createWidgets();
 
-   void init(const QString &directory = QString(), const QString &nameFilter = QString(), const QString &caption = QString());
+   void init(const QUrl &directory = QUrl(), const QString &nameFilter = QString(),
+      const QString &caption = QString());
    bool itemViewKeyboardEvent(QKeyEvent *event);
    QString getEnvironmentVariable(const QString &string);
-   static QString workingDirectory(const QString &path);
-   static QString initialSelection(const QString &path);
+   static QUrl workingDirectory(const QUrl &path);
+   static QString initialSelection(const QUrl &path);
+
    QStringList typedFiles() const;
-   QStringList addDefaultSuffixToFiles(const QStringList filesToFix) const;
+   QList<QUrl> userSelectedFiles() const;
+   QStringList addDefaultSuffixToFiles(const QStringList &filesToFix) const;
+   QList<QUrl> addDefaultSuffixToUrls(const QList<QUrl> &urlsToFix) const;
+
    bool removeDirectory(const QString &path);
+   void setLabelTextControl(QFileDialog::DialogLabel label, const QString &text);
+   inline void updateLookInLabel();
+   inline void updateFileNameLabel();
+   inline void updateFileTypeLabel();
+   void updateOkButtonText(bool saveAsOnFolder = false);
+   void updateCancelButtonText();
 
    inline QModelIndex mapToSource(const QModelIndex &index) const;
    inline QModelIndex mapFromSource(const QModelIndex &index) const;
@@ -104,27 +118,7 @@ class QFileDialogPrivate : public QDialogPrivate
 
    QLineEdit *lineEdit() const;
 
-   int maxNameLength(const QString &path) {
-
-#if defined(Q_OS_UNIX)
-      return ::pathconf(QFile::encodeName(path).data(), _PC_NAME_MAX);
-
-#elif defined(Q_OS_WIN)
-      DWORD maxLength;
-      QString drive = path.left(3);
-
-      if (::GetVolumeInformation(&drive.toStdWString()[0], NULL, 0, NULL, &maxLength, NULL, NULL, 0) == FALSE) {
-         return -1;
-      }
-
-      return maxLength;
-
-#else
-      Q_UNUSED(path);
-#endif
-
-      return -1;
-   }
+   static int maxNameLength(const QString &path);
 
    QString basename(const QString &path) const {
       int separator = QDir::toNativeSeparators(path).lastIndexOf(QDir::separator());
@@ -135,6 +129,8 @@ class QFileDialogPrivate : public QDialogPrivate
    }
 
    QDir::Filters filterForMode(QDir::Filters filters) const {
+      const QFileDialog::FileMode fileMode = q_func()->fileMode();
+
       if (fileMode == QFileDialog::DirectoryOnly) {
          filters |= QDir::Drives | QDir::AllDirs | QDir::Dirs;
          filters &= ~QDir::Files;
@@ -150,20 +146,23 @@ class QFileDialogPrivate : public QDialogPrivate
 #if defined(Q_OS_WIN)
       QString n(path);
 
-      for (int i = 0; i < (int)n.length(); ++i)
-         if (n[i] == QLatin1Char('\\')) {
-            n[i] = QLatin1Char('/');
-         }
+      n.replace('\\', '/');
+
 
       return n;
 
-#else // the compile should optimize this
+#else
       return path;
 #endif
 
    }
 
-   void setLastVisitedDirectory(const QString &dir);
+#ifndef QT_NO_SETTINGS
+   void saveSettings();
+   bool restoreFromSettings();
+#endif
+   bool restoreWidgetState(QStringList &history, int splitterPosition);
+   static void setLastVisitedDirectory(const QUrl &dir);
    void retranslateWindowTitle();
    void retranslateStrings();
    void emitFilesSelected(const QStringList &files);
@@ -184,6 +183,10 @@ class QFileDialogPrivate : public QDialogPrivate
    void _q_updateOkButton();
    void _q_currentChanged(const QModelIndex &index);
    void _q_enterDirectory(const QModelIndex &index);
+   void _q_emitUrlSelected(const QUrl &file);
+   void _q_emitUrlsSelected(const QList<QUrl> &files);
+   void _q_nativeCurrentChanged(const QUrl &file);
+   void _q_nativeEnterDirectory(const QUrl &directory);
    void _q_goToDirectory(const QString &);
    void _q_useNameFilter(int index);
    void _q_selectionChanged();
@@ -204,11 +207,6 @@ class QFileDialogPrivate : public QDialogPrivate
 #ifndef QT_NO_FSCOMPLETER
    QFSCompleter *completer;
 #endif
-
-   QFileDialog::FileMode fileMode;
-   QFileDialog::AcceptMode acceptMode;
-   bool confirmOverwrite;
-   QString defaultSuffix;
    QString setWindowTitle;
 
    QStringList currentHistory;
@@ -221,43 +219,21 @@ class QFileDialogPrivate : public QDialogPrivate
 
    bool useDefaultCaption;
    bool defaultFileTypes;
-   bool fileNameLabelExplicitlySat;
-   QStringList nameFilters;
-
-   // Members for using native dialogs:
-   bool nativeDialogInUse;
 
    // setVisible_sys returns true if it ends up showing a native
    // dialog. Returning false means that a non-native dialog must be used instead
-   bool canBeNativeDialog();
-   bool setVisible_sys(bool visible);
-   void deleteNativeDialog_sys();
-   QDialog::DialogCode dialogResultCode_sys();
+   bool canBeNativeDialog() const override;
+   inline bool usingWidgets() const;
 
-   void setDirectory_sys(const QString &directory);
-   QString directory_sys() const;
-   void selectFile_sys(const QString &filename);
-   QStringList selectedFiles_sys() const;
+   void setDirectory_sys(const QUrl &directory);
+   QUrl directory_sys() const;
+   void selectFile_sys(const QUrl &filename);
+   QList<QUrl> selectedFiles_sys() const;
+
    void setFilter_sys();
-   void setNameFilters_sys(const QStringList &filters);
    void selectNameFilter_sys(const QString &filter);
    QString selectedNameFilter_sys() const;
 
-
-#if defined(Q_OS_MAC)
-   void *mDelegate;
-
-   bool showCocoaFilePanel();
-   bool hideCocoaFilePanel();
-
-   void createNSOpenSavePanelDelegate();
-   void QNSOpenSavePanelDelegate_selectionChanged(const QString &newPath);
-   void QNSOpenSavePanelDelegate_panelClosed(bool accepted);
-   void QNSOpenSavePanelDelegate_directoryEntered(const QString &newDir);
-   void QNSOpenSavePanelDelegate_filterSelected(int menuIndex);
-   void _q_macRunNativeAppModalPanel();
-   void mac_nativeDialogModalHelp();
-#endif
 
    QScopedPointer<Ui_QFileDialog> qFileDialogUi;
 
@@ -267,18 +243,25 @@ class QFileDialogPrivate : public QDialogPrivate
    QString memberToDisconnectOnClose;
    QString signalToDisconnectOnClose;
 
-   QFileDialog::Options opts;
+   QSharedPointer<QFileDialogOptions> options;
 
+   // Memory of what was read from QSettings in restoreState() in case widgets are not used
+   QByteArray splitterState;
+   QByteArray headerData;
+   QList<QUrl> sidebarUrls;
    ~QFileDialogPrivate();
 
  private:
+   virtual void initHelper(QPlatformDialogHelper *) override;
+   virtual void helperPrepareShow(QPlatformDialogHelper *) override;
+   virtual void helperDone(QDialog::DialogCode, QPlatformDialogHelper *) override;
    Q_DISABLE_COPY(QFileDialogPrivate)
 };
 
 class QFileDialogLineEdit : public QLineEdit
 {
  public:
-   QFileDialogLineEdit(QWidget *parent = nullptr) : QLineEdit(parent), hideOnEsc(false), d_ptr(0) {}
+   QFileDialogLineEdit(QWidget *parent = nullptr) : QLineEdit(parent), d_ptr(0) {}
 
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer) {
       d_ptr = d_pointer;
@@ -359,70 +342,72 @@ inline QModelIndex QFileDialogPrivate::mapFromSource(const QModelIndex &index) c
 
 inline QString QFileDialogPrivate::rootPath() const
 {
-   return model->rootPath();
+   return (model ? model->rootPath() : QString("/"));
 }
 
-#ifndef Q_OS_MAC
-// Dummies for platforms which do not use native dialogs
-inline void QFileDialogPrivate::deleteNativeDialog_sys()
+inline void QFileDialogPrivate::setDirectory_sys(const QUrl &directory)
 {
-   qt_guiPlatformPlugin()->fileDialogDelete(q_func());
+   QPlatformFileDialogHelper *helper = platformFileDialogHelper();
+   if (! helper) {
+      return;
+   }
+   if (helper->isSupportedUrl(directory)) {
+      helper->setDirectory(directory);
+   }
 }
 
-inline bool QFileDialogPrivate::setVisible_sys(bool visible)
+inline QUrl QFileDialogPrivate::directory_sys() const
 {
-   return qt_guiPlatformPlugin()->fileDialogSetVisible(q_func(), visible);
+   if (QPlatformFileDialogHelper *helper = platformFileDialogHelper()) {
+      return helper->directory();
+   }
+   return QUrl();
 }
 
-inline QDialog::DialogCode QFileDialogPrivate::dialogResultCode_sys()
+inline void QFileDialogPrivate::selectFile_sys(const QUrl &filename)
 {
-   return qt_guiPlatformPlugin()->fileDialogResultCode(q_func());
+   QPlatformFileDialogHelper *helper = platformFileDialogHelper();
+
+   if (!helper) {
+      return;
+   }
+
+   if (helper->isSupportedUrl(filename)) {
+      helper->selectFile(filename);
+   }
 }
 
-inline void QFileDialogPrivate::setDirectory_sys(const QString &directory)
+inline QList<QUrl> QFileDialogPrivate::selectedFiles_sys() const
 {
-   qt_guiPlatformPlugin()->fileDialogSetDirectory(q_func(), directory);
-}
-
-inline QString QFileDialogPrivate::directory_sys() const
-{
-   return qt_guiPlatformPlugin()->fileDialogDirectory(q_func());
-}
-
-inline void QFileDialogPrivate::selectFile_sys(const QString &filename)
-{
-   qt_guiPlatformPlugin()->fileDialogSelectFile(q_func(), filename);
-}
-
-inline QStringList QFileDialogPrivate::selectedFiles_sys() const
-{
-   return qt_guiPlatformPlugin()->fileDialogSelectedFiles(q_func());
+   if (QPlatformFileDialogHelper *helper = platformFileDialogHelper()) {
+      return helper->selectedFiles();
+   }
+   return QList<QUrl>();
 }
 
 inline void QFileDialogPrivate::setFilter_sys()
 {
-   qt_guiPlatformPlugin()->fileDialogSetFilter(q_func());
-}
-
-inline void QFileDialogPrivate::setNameFilters_sys(const QStringList &filters)
-{
-   qt_guiPlatformPlugin()->fileDialogSetNameFilters(q_func(), filters);
+   if (QPlatformFileDialogHelper *helper = platformFileDialogHelper()) {
+      helper->setFilter();
+   }
 }
 
 inline void QFileDialogPrivate::selectNameFilter_sys(const QString &filter)
 {
-   qt_guiPlatformPlugin()->fileDialogSelectNameFilter(q_func(), filter);
+   if (QPlatformFileDialogHelper *helper = platformFileDialogHelper()) {
+      helper->selectNameFilter(filter);
+   }
 }
+
 
 inline QString QFileDialogPrivate::selectedNameFilter_sys() const
 {
-   return qt_guiPlatformPlugin()->fileDialogSelectedNameFilter(q_func());
+   if (QPlatformFileDialogHelper *helper = platformFileDialogHelper()) {
+      return helper->selectedNameFilter();
+   }
+   return QString();
 }
-
-#endif
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILEDIALOG
 
-#endif // QFILEDIALOG_P_H
+#endif

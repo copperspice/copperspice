@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <comment>***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+* http://www.copperpsice.com
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* http://www.gnu.org/licenses/
+*
+***********************************************************************</comment>
  <class>QFileDialog</class>
  <widget class="QDialog" name="QFileDialog">
   <property name="geometry">
@@ -50,6 +72,9 @@
        <property name="accessibleDescription">
         <string>Go back</string>
        </property>
+       <property name="shortcut">
+        <string>Alt+Left</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -63,6 +88,9 @@
        <property name="accessibleDescription">
         <string>Go forward</string>
        </property>
+       <property name="shortcut">
+        <string>Alt+Right</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -75,6 +103,9 @@
        </property>
        <property name="accessibleDescription">
         <string>Go to the parent directory</string>
+       </property>
+       <property name="shortcut">
+        <string>Alt+Up</string>
        </property>
       </widget>
      </item>
@@ -129,6 +160,9 @@
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
      </property>
      <widget class="QSidebar" name="sidebar">
       <property name="accessibleName">

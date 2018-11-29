@@ -23,11 +23,9 @@
 #ifndef QINPUTDIALOG_H
 #define QINPUTDIALOG_H
 
-#include <QtGui/qdialog.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qlineedit.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
+#include <qstring.h>
+#include <qlineedit.h>
 
 #ifndef QT_NO_INPUTDIALOG
 
@@ -37,10 +35,6 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
 {
    GUI_CS_OBJECT(QInputDialog)
    Q_DECLARE_PRIVATE(QInputDialog)
-
-   //  Q_ENUMS(InputMode InputDialogOption) commented out by Qt
-
-   // following 37 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(inputMode, inputMode)
    GUI_CS_PROPERTY_WRITE(inputMode, setInputMode)
    GUI_CS_PROPERTY_READ(labelText, labelText)
@@ -82,7 +76,8 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
  public:
    enum InputDialogOption {
       NoButtons                   = 0x00000001,
-      UseListViewForComboBoxItems = 0x00000002
+      UseListViewForComboBoxItems  = 0x00000002,
+      UsePlainTextEditForTextInput = 0x00000004
    };
 
    using InputDialogOptions = QFlags<InputDialogOption>;
@@ -93,7 +88,7 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
       DoubleInput
    };
 
-   QInputDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+   QInputDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
    ~QInputDialog();
 
    void setInputMode(InputMode mode);
@@ -162,48 +157,58 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    void setVisible(bool visible) override;
 
    static QString getText(QWidget *parent, const QString &title, const QString &label, QLineEdit::EchoMode echo = QLineEdit::Normal,
-                          const QString &text = QString(), bool *ok = 0, Qt::WindowFlags flags = 0);
+      const QString &text = QString(), bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags(),
+      Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
-   static QString getItem(QWidget *parent, const QString &title, const QString &label, const QStringList &items,
-                          int current = 0, bool editable = true,bool *ok = 0, Qt::WindowFlags flags = 0);
+   static QString getMultiLineText(QWidget *parent, const QString &title, const QString &label,
+      const QString &text = QString(), bool *ok = nullptr,
+      Qt::WindowFlags flags = Qt::WindowFlags(),
+      Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
-   static QString getText(QWidget *parent, const QString &title, const QString &label, QLineEdit::EchoMode echo,
-                          const QString &text, bool *ok, Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints);
+   static QString getItem(QWidget *parent, const QString &title, const QString &label,
+      const QStringList &items,
+      int current = 0, bool editable = true, bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags(),
+      Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
-   static QString getItem(QWidget *parent, const QString &title, const QString &label, const QStringList &items,
-                          int current, bool editable, bool *ok, Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints);
 
-   static int getInt(QWidget *parent, const QString &title, const QString &label, int value = 0, int minValue = -2147483647,
-                     int maxValue = 2147483647, int step = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
+
+   static int getInt(QWidget *parent, const QString &title, const QString &label, int value = 0,
+      int minValue = -2147483647, int maxValue = 2147483647,
+      int step = 1, bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
    static double getDouble(QWidget *parent, const QString &title, const QString &label, double value = 0,
-                           double minValue = -2147483647, double maxValue = 2147483647, int decimals = 1,
-                           bool *ok = 0, Qt::WindowFlags flags = 0);
+      double minValue = -2147483647, double maxValue = 2147483647, int decimals = 1,
+      bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
-   // obsolete
-   static int getInteger(QWidget *parent, const QString &title, const QString &label, int value = 0,
-                         int minValue = -2147483647, int maxValue = 2147483647, int step = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
 
    GUI_CS_SIGNAL_1(Public, void textValueChanged(const QString &text))
    GUI_CS_SIGNAL_2(textValueChanged, text)
+
    GUI_CS_SIGNAL_1(Public, void textValueSelected(const QString &text))
    GUI_CS_SIGNAL_2(textValueSelected, text)
+
    GUI_CS_SIGNAL_1(Public, void intValueChanged(int value))
    GUI_CS_SIGNAL_2(intValueChanged, value)
+
    GUI_CS_SIGNAL_1(Public, void intValueSelected(int value))
    GUI_CS_SIGNAL_2(intValueSelected, value)
+
    GUI_CS_SIGNAL_1(Public, void doubleValueChanged(double value))
    GUI_CS_SIGNAL_2(doubleValueChanged, value)
+
    GUI_CS_SIGNAL_1(Public, void doubleValueSelected(double value))
    GUI_CS_SIGNAL_2(doubleValueSelected, value)
 
-   void done(int result)override;       // ### Qt5/Make protected
+   void done(int result) override;
 
  private:
    Q_DISABLE_COPY(QInputDialog)
 
    GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_textChanged)
+
+   GUI_CS_SLOT_1(Private, void _q_plainTextEditTextChanged())
+   GUI_CS_SLOT_2(_q_plainTextEditTextChanged)
 
    GUI_CS_SLOT_1(Private, void _q_currentRowChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2))
    GUI_CS_SLOT_2(_q_currentRowChanged)
@@ -213,6 +218,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QInputDialog::InputDialogOptions)
 
 #endif // QT_NO_INPUTDIALOG
 
-QT_END_NAMESPACE
 
-#endif // QINPUTDIALOG_H
+
+#endif

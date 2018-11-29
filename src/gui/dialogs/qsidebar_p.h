@@ -73,6 +73,7 @@ class QUrlModel : public QStandardItemModel
  private :
    GUI_CS_SLOT_1(Private, void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))
    GUI_CS_SLOT_2(dataChanged)
+
    GUI_CS_SLOT_1(Private, void layoutChanged())
    GUI_CS_SLOT_2(layoutChanged)
 
@@ -80,7 +81,7 @@ class QUrlModel : public QStandardItemModel
    void changed(const QString &path);
    void addIndexToWatch(const QString &path, const QModelIndex &index);
    QFileSystemModel *fileSystemModel;
-   QList<QPair<QModelIndex, QString> > watching;
+   QList<QPair<QModelIndex, QString>> watching;
    QList<QUrl> invalidUrls;
 };
 
@@ -131,12 +132,11 @@ class QSidebar : public QListView
    GUI_CS_SLOT_2(removeEntry)
 
    QUrlModel *urlModel;
-   int m_selectUrl_processing;
 };
 
 QT_END_NAMESPACE
 
 #endif // QT_NO_FILEDIALOG
 
-#endif // QSIDEBAR_H
+#endif
 

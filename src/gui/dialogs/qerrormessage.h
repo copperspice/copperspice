@@ -23,7 +23,7 @@
 #ifndef QERRORMESSAGE_H
 #define QERRORMESSAGE_H
 
-#include <QtGui/qdialog.h>
+#include <qdialog.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -60,4 +60,4 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
 
 QT_END_NAMESPACE
 
-#endif // QERRORMESSAGE_H
+#endif

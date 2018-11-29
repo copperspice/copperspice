@@ -29,7 +29,7 @@
 #include <QtGui/qicon.h>
 #include <QtCore/qdiriterator.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
@@ -43,8 +43,10 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
    GUI_CS_PROPERTY_READ(resolveSymlinks, resolveSymlinks)
    GUI_CS_PROPERTY_WRITE(resolveSymlinks, setResolveSymlinks)
+
    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
+
    GUI_CS_PROPERTY_READ(nameFilterDisables, nameFilterDisables)
    GUI_CS_PROPERTY_WRITE(nameFilterDisables, setNameFilterDisables)
 
@@ -69,6 +71,9 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
    QModelIndex index(const QString &path, int column = 0) const;
    QModelIndex parent(const QModelIndex &child) const override;
+
+   using QObject::parent;
+
    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
    bool canFetchMore(const QModelIndex &parent) const override;
    void fetchMore(const QModelIndex &parent) override;
@@ -90,7 +95,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
 
    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent) override;
+      int row, int column, const QModelIndex &parent) override;
 
    Qt::DropActions supportedDropActions() const override;
 
@@ -128,7 +133,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    inline QString fileName(const QModelIndex &index) const;
    inline QIcon fileIcon(const QModelIndex &index) const;
    QFile::Permissions permissions(const QModelIndex &index) const;
-   inline QFileInfo fileInfo(const QModelIndex &index) const;
+   QFileInfo fileInfo(const QModelIndex &index) const;
    bool remove(const QModelIndex &index) const;
 
  protected:
@@ -147,7 +152,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    GUI_CS_SLOT_2(_q_performDelayedSort)
 
    GUI_CS_SLOT_1(Private, void _q_fileSystemChanged(const QString &path,
-                 const QList <QPair <QString, QFileInfo>> &un_named_arg2))
+         const QVector<QPair <QString, QFileInfo>> &un_named_arg2))
    GUI_CS_SLOT_2(_q_fileSystemChanged)
 
    GUI_CS_SLOT_1(Private, void _q_resolvedName(const QString &fileName, const QString &resolvedName))
@@ -166,14 +171,9 @@ inline QIcon QFileSystemModel::fileIcon(const QModelIndex &aindex) const
    return qvariant_cast<QIcon>(aindex.data(Qt::DecorationRole));
 }
 
-inline QFileInfo QFileSystemModel::fileInfo(const QModelIndex &aindex) const
-{
-   return QFileInfo(filePath(aindex));
-}
-
 #endif // QT_NO_FILESYSTEMMODEL
 
-QT_END_NAMESPACE
 
-#endif // QFILESYSTEMMODEL_H
+
+#endif
 

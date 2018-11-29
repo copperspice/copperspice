@@ -39,7 +39,7 @@
 #include <qtimer.h>
 #include <qhash.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class ExtendedInformation;
 class QFileSystemModelPrivate;
@@ -50,26 +50,29 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    Q_DECLARE_PUBLIC(QFileSystemModel)
 
  public:
+   static constexpr int NumColumns = 4;
    class QFileSystemNode
    {
-      class FileNameCompare {
-         public:
-            bool operator()(const QString &a, const QString &b) const {
+      class FileNameCompare
+      {
+       public:
+         bool operator()(const QString &a, const QString &b) const {
+
 #ifdef Q_OS_WIN
-               return a.compare(b, Qt::CaseInsensitive) < 0;         
+            return a.compare(b, Qt::CaseInsensitive) < 0;
 #else
-               return a < b;
+            return a < b;
 #endif
-            }
+         }
       };
 
     public:
-      QFileSystemNode(const QString &filename = QString(), QFileSystemNode *p = 0)
+      explicit QFileSystemNode(const QString &filename = QString(), QFileSystemNode *p = 0)
          : fileName(filename), populatedChildren(false), isVisible(false), dirtyChildrenIndex(-1), parent(p), info(0) {}
 
-      ~QFileSystemNode() {         
+      ~QFileSystemNode() {
          for (auto i : children) {
-            delete i;           
+            delete i;
          }
 
          delete info;
@@ -84,35 +87,41 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
 #endif
 
       inline qint64 size() const {
-         if (info && !info->isDir()) {
+         if (info && ! info->isDir()) {
             return info->size();
          }
          return 0;
       }
+
       inline QString type() const {
          if (info) {
             return info->displayType;
          }
-         return QLatin1String("");
+         return QString("");
       }
+
       inline QDateTime lastModified() const {
          if (info) {
             return info->lastModified();
          }
          return QDateTime();
       }
+
       inline QFile::Permissions permissions() const {
          if (info) {
             return info->permissions();
          }
          return 0;
       }
+
       inline bool isReadable() const {
          return ((permissions() & QFile::ReadUser) != 0);
       }
+
       inline bool isWritable() const {
          return ((permissions() & QFile::WriteUser) != 0);
       }
+
       inline bool isExecutable() const {
          return ((permissions() & QFile::ExeUser) != 0);
       }
@@ -121,10 +130,18 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          if (info) {
             return info->isDir();
          }
+
          if (children.count() > 0) {
             return true;
          }
          return false;
+      }
+
+      inline QFileInfo fileInfo() const {
+         if (info) {
+            return info->fileInfo();
+         }
+         return QFileInfo();
       }
 
       inline bool isFile() const {
@@ -179,6 +196,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          }
          return QString::compare(fileName, name, Qt::CaseInsensitive) > 0;
       }
+
       inline bool operator <(const QString &name) const {
          if (caseSensitive()) {
             return fileName < name;
@@ -196,6 +214,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          }
          return QString::compare(fileName, name, Qt::CaseInsensitive) == 0;
       }
+
       bool operator ==(const QExtendedInformation &fileInfo) const {
          return info && (*info == fileInfo);
       }
@@ -212,7 +231,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       }
 
       // children shouldn't normally be accessed directly, use node()
-      inline int visibleLocation(QString childName) {
+      inline int visibleLocation(const QString &childName) {
          return visibleChildren.indexOf(childName);
       }
 
@@ -220,15 +239,15 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          if (info) {
             info->icon = iconProvider->icon(QFileInfo(path));
          }
-        
+
          for (auto i : children) {
             //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
 
             if (! path.isEmpty()) {
-               if (path.endsWith(QLatin1Char('/'))) {
+               if (path.endsWith('/')) {
                   i->updateIcon(iconProvider, path + i->fileName);
                } else {
-                  i->updateIcon(iconProvider, path + QLatin1Char('/') + i->fileName);
+                  i->updateIcon(iconProvider, path + '/' + i->fileName);
                }
 
             } else {
@@ -241,15 +260,15 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          if (info) {
             info->displayType = iconProvider->type(QFileInfo(path));
          }
-        
+
          for (auto i : children) {
 
             //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
             if (! path.isEmpty()) {
-               if (path.endsWith(QLatin1Char('/'))) {
+               if (path.endsWith('/')) {
                   i->retranslateStrings(iconProvider, path + i->fileName);
                } else {
-                  i->retranslateStrings(iconProvider, path + QLatin1Char('/') + i->fileName);
+                  i->retranslateStrings(iconProvider, path + '/' + i->fileName);
                }
             } else {
                i->retranslateStrings(iconProvider, i->fileName);
@@ -267,7 +286,6 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       QFileSystemNode *parent;
 
       QExtendedInformation *info;
-
    };
 
    QFileSystemModelPrivate() :
@@ -295,11 +313,11 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    QFileSystemNode *node(const QModelIndex &index) const;
    QFileSystemNode *node(const QString &path, bool fetch = true) const;
 
-   inline QModelIndex index(const QString &path) {
-      return index(node(path));
+   inline QModelIndex index(const QString &path, int column = 0) {
+      return index(node(path), column);
    }
 
-   QModelIndex index(const QFileSystemNode *node) const;
+   QModelIndex index(const QFileSystemNode *node, int column = 0) const;
    bool filtersAcceptsNode(const QFileSystemNode *node) const;
    bool passNameFilters(const QFileSystemNode *node) const;
    void removeNode(QFileSystemNode *parentNode, const QString &name);
@@ -347,7 +365,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    }
 
    static bool nodeCaseInsensitiveLessThan(const QFileSystemModelPrivate::QFileSystemNode &s1,
-                                           const QFileSystemModelPrivate::QFileSystemNode &s2) {
+      const QFileSystemModelPrivate::QFileSystemNode &s2) {
       return QString::compare(s1.fileName, s2.fileName, Qt::CaseInsensitive) < 0;
    }
 
@@ -362,7 +380,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
 
    void _q_directoryChanged(const QString &directory, const QStringList &list);
    void _q_performDelayedSort();
-   void _q_fileSystemChanged(const QString &path, const QList<QPair<QString, QFileInfo> > &);
+   void _q_fileSystemChanged(const QString &path, const QVector<QPair<QString, QFileInfo>> &);
    void _q_resolvedName(const QString &fileName, const QString &resolvedName);
 
    static int naturalCompare(const QString &s1, const QString &s2, Qt::CaseSensitivity cs);
@@ -388,11 +406,10 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    //we sort only what we see.
    bool disableRecursiveSort;
 
-#ifndef QT_NO_REGEXP
-   QList<QRegularExpression> nameFilters;
-#endif
 
-   // ### Qt5 resolvedSymLinks goes away
+   QList<QRegularExpression> nameFilters;
+
+
    QHash<QString, QString> resolvedSymLinks;
 
    QFileSystemNode root;
@@ -408,7 +425,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
 };
 #endif // QT_NO_FILESYSTEMMODEL
 
-QT_END_NAMESPACE
+
 
 #endif
 

@@ -30,6 +30,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qplaintextedit.h>
+
 #include <qlistwidget.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
@@ -38,30 +40,51 @@
 #include <qevent.h>
 #include <qdialog_p.h>
 
-QT_USE_NAMESPACE
+enum CandidateSignal {
+   TextValueSelectedSignal,
+   IntValueSelectedSignal,
+   DoubleValueSelectedSignal,
 
-static const QString &signalForMember(const QString &member)
+   NumCandidateSignals
+};
+
+static QString candidateSignal(int which)
 {
-   static const int NumCandidates = 4;
+   QString retval;
 
-   static const QString candidateSignals[NumCandidates] = {
-      "textValueSelected(QString)",
-      "intValueSelected(int)",
-      "doubleValueSelected(double)",
-      "accepted()"
-   };
+   switch (CandidateSignal(which)) {
+      case TextValueSelectedSignal:
+         retval = SLOT(textValueSelected(QString));
 
-   QString normalizedMember(QMetaObject::normalizedSignature(member));
-   int i = 0;
+      case IntValueSelectedSignal:
+         retval = SLOT(intValueSelected(int));
 
-   while (i < NumCandidates - 1) {
-      if (QMetaObject::checkConnectArgs(candidateSignals[i], normalizedMember)) {
+      case DoubleValueSelectedSignal:
+         retval = SLOT(doubleValueSelected(double));
+
+      case NumCandidateSignals:
+      // fall through
+
+      default:
+         // error, may want to throw
          break;
-      }
-      ++i;
    }
 
-   return candidateSignals[i];
+   return retval;
+}
+
+static QString signalForMember(const QString &member)
+{
+   QString normalizedMember(QMetaObject::normalizedSignature(member));
+
+   for (int i = 0; i < NumCandidateSignals; ++i) {
+      if (QMetaObject::checkConnectArgs(candidateSignal(i), normalizedMember)) {
+         return candidateSignal(i);
+      }
+   }
+
+   // use fit-all accepted signal
+   return QString( SLOT(accepted()) );
 }
 
 /*
@@ -77,7 +100,7 @@ class QInputDialogSpinBox : public QSpinBox
  public:
    QInputDialogSpinBox(QWidget *parent)
       : QSpinBox(parent) {
-      connect(lineEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(notifyTextChanged()));
+      connect(lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(notifyTextChanged()));
       connect(this, SIGNAL(editingFinished()), this, SLOT(notifyTextChanged()));
    }
 
@@ -159,6 +182,7 @@ class QInputDialogPrivate : public QDialogPrivate
 
    void ensureLayout();
    void ensureLineEdit();
+   void ensurePlainTextEdit();
    void ensureComboBox();
    void ensureListView();
    void ensureIntSpinBox();
@@ -169,18 +193,23 @@ class QInputDialogPrivate : public QDialogPrivate
    void setComboBoxText(const QString &text);
    void setListViewText(const QString &text);
    QString listViewText() const;
+
    void ensureLayout() const {
       const_cast<QInputDialogPrivate *>(this)->ensureLayout();
    }
+
    bool useComboBoxOrListView() const {
       return comboBox && comboBox->count() > 0;
    }
+
    void _q_textChanged(const QString &text);
+   void _q_plainTextEditTextChanged();
    void _q_currentRowChanged(const QModelIndex &newIndex, const QModelIndex &oldIndex);
 
    mutable QLabel *label;
    mutable QDialogButtonBox *buttonBox;
    mutable QLineEdit *lineEdit;
+   mutable QPlainTextEdit *plainTextEdit;
    mutable QSpinBox *intSpinBox;
    mutable QDoubleSpinBox *doubleSpinBox;
    mutable QComboBox *comboBox;
@@ -194,8 +223,8 @@ class QInputDialogPrivate : public QDialogPrivate
 };
 
 QInputDialogPrivate::QInputDialogPrivate()
-   : label(0), buttonBox(0), lineEdit(0), intSpinBox(0), doubleSpinBox(0), comboBox(0), listView(0),
-     inputWidget(0), mainLayout(0)
+   : label(0), buttonBox(0), lineEdit(0), plainTextEdit(0), intSpinBox(0), doubleSpinBox(0),
+     comboBox(0), listView(0), inputWidget(0), mainLayout(0)
 {
 }
 
@@ -215,9 +244,11 @@ void QInputDialogPrivate::ensureLayout()
    if (!label) {
       label = new QLabel(QInputDialog::tr("Enter a value:"), q);
    }
+
 #ifndef QT_NO_SHORTCUT
    label->setBuddy(inputWidget);
 #endif
+
    label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, q);
@@ -236,13 +267,31 @@ void QInputDialogPrivate::ensureLayout()
 void QInputDialogPrivate::ensureLineEdit()
 {
    Q_Q(QInputDialog);
+
    if (!lineEdit) {
       lineEdit = new QLineEdit(q);
+
 #ifndef QT_NO_IM
       qt_widget_private(lineEdit)->inheritsInputMethodHints = 1;
 #endif
       lineEdit->hide();
-      QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), q, SLOT(_q_textChanged(const QString &)));
+      QObject::connect(lineEdit, SIGNAL(textChanged(QString)), q, SLOT(_q_textChanged(QString)));
+   }
+}
+void QInputDialogPrivate::ensurePlainTextEdit()
+{
+   Q_Q(QInputDialog);
+
+   if (!plainTextEdit) {
+      plainTextEdit = new QPlainTextEdit(q);
+      plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
+
+#ifndef QT_NO_IM
+      qt_widget_private(plainTextEdit)->inheritsInputMethodHints = 1;
+#endif
+
+      plainTextEdit->hide();
+      QObject::connect(plainTextEdit, SIGNAL(textChanged()), q, SLOT(_q_plainTextEditTextChanged()));
    }
 }
 
@@ -255,8 +304,8 @@ void QInputDialogPrivate::ensureComboBox()
       qt_widget_private(comboBox)->inheritsInputMethodHints = 1;
 #endif
       comboBox->hide();
-      QObject::connect(comboBox, SIGNAL(editTextChanged(const QString &)), q, SLOT(_q_textChanged(const QString &)));
-      QObject::connect(comboBox, SIGNAL(currentIndexChanged(const QString &)), q, SLOT(_q_textChanged(const QString &)));
+      QObject::connect(comboBox, SIGNAL(editTextChanged(QString)), q, SLOT(_q_textChanged(QString)));
+      QObject::connect(comboBox, SIGNAL(currentIndexChanged(QString)), q, SLOT(_q_textChanged(QString)));
    }
 }
 
@@ -273,8 +322,8 @@ void QInputDialogPrivate::ensureListView()
       listView->setModel(comboBox->model());
       listView->setCurrentIndex(QModelIndex());
 
-      QObject::connect(listView->selectionModel(), SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
-                       q, SLOT(_q_currentRowChanged(const QModelIndex &, const QModelIndex &)));
+      QObject::connect(listView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+         q, SLOT(_q_currentRowChanged(QModelIndex, QModelIndex)));
    }
 }
 
@@ -334,12 +383,16 @@ void QInputDialogPrivate::setInputWidget(QWidget *widget)
 
    inputWidget = widget;
 
-   // synchronize the text shown in the new text editor with the current
-   // textValue
+   // synchronize the text shown in the new text editor with the current textValue
    if (widget == lineEdit) {
       lineEdit->setText(textValue);
+
+   } else if (widget == plainTextEdit) {
+      plainTextEdit->setPlainText(textValue);
+
    } else if (widget == comboBox) {
       setComboBoxText(textValue);
+
    } else if (widget == listView) {
       setListViewText(textValue);
       ensureLayout();
@@ -358,6 +411,11 @@ void QInputDialogPrivate::chooseRightTextInputWidget()
       } else {
          widget = comboBox;
       }
+
+   } else if (opts & QInputDialog::UsePlainTextEditForTextInput) {
+      ensurePlainTextEdit();
+      widget = plainTextEdit;
+
    } else {
       ensureLineEdit();
       widget = lineEdit;
@@ -388,7 +446,7 @@ void QInputDialogPrivate::setListViewText(const QString &text)
    if (row != -1) {
       QModelIndex index(comboBox->model()->index(row, 0));
       listView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Clear
-            | QItemSelectionModel::SelectCurrent);
+         | QItemSelectionModel::SelectCurrent);
    }
 }
 
@@ -411,8 +469,17 @@ void QInputDialogPrivate::_q_textChanged(const QString &text)
    }
 }
 
+void QInputDialogPrivate::_q_plainTextEditTextChanged()
+{
+   Q_Q(QInputDialog);
+   QString text = plainTextEdit->toPlainText();
+   if (textValue != text) {
+      textValue = text;
+      emit q->textValueChanged(text);
+   }
+}
 void QInputDialogPrivate::_q_currentRowChanged(const QModelIndex &newIndex,
-      const QModelIndex & /* oldIndex */)
+   const QModelIndex & /* oldIndex */)
 {
    _q_textChanged(comboBox->model()->data(newIndex).toString());
    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
@@ -431,77 +498,15 @@ void QInputDialog::_q_currentRowChanged(const QModelIndex &un_named_arg1, const 
 }
 
 
-/*!
-    \class QInputDialog
-    \brief The QInputDialog class provides a simple convenience dialog to get a
-    single value from the user.
-    \ingroup standard-dialogs
-
-
-    The input value can be a string, a number or an item from a list. A label
-    must be set to tell the user what they should enter.
-
-    Four static convenience functions are provided: getText(), getInt(),
-    getDouble(), and getItem(). All the functions can be used in a similar way,
-    for example:
-
-    \snippet examples/dialogs/standarddialogs/dialog.cpp 3
-
-    The \c ok variable is set to true if the user clicks \gui OK; otherwise it
-    is set to false.
-
-    \img inputdialogs.png Input Dialogs
-
-    The \l{dialogs/standarddialogs}{Standard Dialogs} example shows how to use
-    QInputDialog as well as other built-in Qt dialogs.
-
-    \sa QMessageBox, {Standard Dialogs Example}
-*/
-
-/*!
-    \enum QInputDialog::InputMode
-    \since 4.5
-
-    This enum describes the different modes of input that can be selected for
-    the dialog.
-
-    \value TextInput   Used to input text strings.
-    \value IntInput    Used to input integers.
-    \value DoubleInput Used to input floating point numbers with double
-                       precision accuracy.
-
-    \sa inputMode
-*/
-
-/*!
-    \since 4.5
-
-    Constructs a new input dialog with the given \a parent and window \a flags.
-*/
 QInputDialog::QInputDialog(QWidget *parent, Qt::WindowFlags flags)
    : QDialog(*new QInputDialogPrivate, parent, flags)
 {
 }
 
-/*!
-    \since 4.5
-
-    Destroys the input dialog.
-*/
 QInputDialog::~QInputDialog()
 {
 }
 
-/*!
-    \since 4.5
-
-    \property QInputDialog::inputMode
-
-    \brief the mode used for input
-
-    This property help determines which widget is used for entering input into
-    the dialog.
-*/
 void QInputDialog::setInputMode(InputMode mode)
 {
    Q_D(QInputDialog);
@@ -571,27 +576,7 @@ QString QInputDialog::labelText() const
    return d->label->text();
 }
 
-/*!
-    \enum QInputDialog::InputDialogOption
 
-    \since 4.5
-
-    This enum specifies various options that affect the look and feel
-    of an input dialog.
-
-    \value NoButtons Don't display \gui{OK} and \gui{Cancel} buttons. (Useful for "live dialogs".)
-    \value UseListViewForComboBoxItems Use a QListView rather than a non-editable QComboBox for
-                                       displaying the items set with setComboBoxItems().
-
-    \sa options, setOption(), testOption()
-*/
-
-/*!
-    Sets the given \a option to be enabled if \a on is true;
-    otherwise, clears the given \a option.
-
-    \sa options, testOption()
-*/
 void QInputDialog::setOption(InputDialogOption option, bool on)
 {
    Q_D(QInputDialog);
@@ -636,7 +621,12 @@ void QInputDialog::setOptions(InputDialogOptions options)
    if (changed & NoButtons) {
       d->buttonBox->setVisible(!(options & NoButtons));
    }
+
    if ((changed & UseListViewForComboBoxItems) && inputMode() == TextInput) {
+      d->chooseRightTextInputWidget();
+   }
+
+   if ((changed & UsePlainTextEditForTextInput) && inputMode() == TextInput) {
       d->chooseRightTextInputWidget();
    }
 }
@@ -647,25 +637,21 @@ QInputDialog::InputDialogOptions QInputDialog::options() const
    return d->opts;
 }
 
-/*!
-    \since 4.5
-
-    \property QInputDialog::textValue
-
-    \brief the text value for the input dialog
-
-    This property is only relevant when the input dialog is used in
-    TextInput mode.
-*/
 void QInputDialog::setTextValue(const QString &text)
 {
    Q_D(QInputDialog);
 
    setInputMode(TextInput);
+
    if (d->inputWidget == d->lineEdit) {
       d->lineEdit->setText(text);
+
+   } else if (d->inputWidget == d->plainTextEdit) {
+      d->plainTextEdit->setPlainText(text);
+
    } else if (d->inputWidget == d->comboBox) {
       d->setComboBoxText(text);
+
    } else {
       d->setListViewText(text);
    }
@@ -677,16 +663,7 @@ QString QInputDialog::textValue() const
    return d->textValue;
 }
 
-/*!
-    \since 4.5
 
-    \property QInputDialog::textEchoMode
-
-    \brief the echo mode for the text value
-
-    This property is only relevant when the input dialog is used in
-    TextInput mode.
-*/
 void QInputDialog::setTextEchoMode(QLineEdit::EchoMode mode)
 {
    Q_D(QInputDialog);
@@ -704,13 +681,7 @@ QLineEdit::EchoMode QInputDialog::textEchoMode() const
    }
 }
 
-/*!
-    \since 4.5
 
-    \property QInputDialog::comboBoxEditable
-
-    \brief whether or not the combo box is used in the input dialog is editable
-*/
 void QInputDialog::setComboBoxEditable(bool editable)
 {
    Q_D(QInputDialog);
@@ -731,13 +702,6 @@ bool QInputDialog::isComboBoxEditable() const
    }
 }
 
-/*!
-    \since 4.5
-
-    \property QInputDialog::comboBoxItems
-
-    \brief the items used in the combobox for the input dialog
-*/
 void QInputDialog::setComboBoxItems(const QStringList &items)
 {
    Q_D(QInputDialog);
@@ -766,14 +730,7 @@ QStringList QInputDialog::comboBoxItems() const
    return result;
 }
 
-/*!
-    \property QInputDialog::intValue
-    \since 4.5
-    \brief the current integer value accepted as input
 
-    This property is only relevant when the input dialog is used in
-    IntInput mode.
-*/
 void QInputDialog::setIntValue(int value)
 {
    Q_D(QInputDialog);
@@ -791,14 +748,7 @@ int QInputDialog::intValue() const
    }
 }
 
-/*!
-    \property QInputDialog::intMinimum
-    \since 4.5
-    \brief the minimum integer value accepted as input
 
-    This property is only relevant when the input dialog is used in
-    IntInput mode.
-*/
 void QInputDialog::setIntMinimum(int min)
 {
    Q_D(QInputDialog);
@@ -816,14 +766,7 @@ int QInputDialog::intMinimum() const
    }
 }
 
-/*!
-    \property QInputDialog::intMaximum
-    \since 4.5
-    \brief the maximum integer value accepted as input
 
-    This property is only relevant when the input dialog is used in
-    IntInput mode.
-*/
 void QInputDialog::setIntMaximum(int max)
 {
    Q_D(QInputDialog);
@@ -841,11 +784,6 @@ int QInputDialog::intMaximum() const
    }
 }
 
-/*!
-    Sets the range of integer values accepted by the dialog when used in
-    IntInput mode, with minimum and maximum values specified by \a min and
-    \a max respectively.
-*/
 void QInputDialog::setIntRange(int min, int max)
 {
    Q_D(QInputDialog);
@@ -878,14 +816,7 @@ int QInputDialog::intStep() const
    }
 }
 
-/*!
-    \property QInputDialog::doubleValue
-    \since 4.5
-    \brief the current double precision floating point value accepted as input
 
-    This property is only relevant when the input dialog is used in
-    DoubleInput mode.
-*/
 void QInputDialog::setDoubleValue(double value)
 {
    Q_D(QInputDialog);
@@ -903,14 +834,7 @@ double QInputDialog::doubleValue() const
    }
 }
 
-/*!
-    \property QInputDialog::doubleMinimum
-    \since 4.5
-    \brief the minimum double precision floating point value accepted as input
 
-    This property is only relevant when the input dialog is used in
-    DoubleInput mode.
-*/
 void QInputDialog::setDoubleMinimum(double min)
 {
    Q_D(QInputDialog);
@@ -928,14 +852,6 @@ double QInputDialog::doubleMinimum() const
    }
 }
 
-/*!
-    \property QInputDialog::doubleMaximum
-    \since 4.5
-    \brief the maximum double precision floating point value accepted as input
-
-    This property is only relevant when the input dialog is used in
-    DoubleInput mode.
-*/
 void QInputDialog::setDoubleMaximum(double max)
 {
    Q_D(QInputDialog);
@@ -953,11 +869,7 @@ double QInputDialog::doubleMaximum() const
    }
 }
 
-/*!
-    Sets the range of double precision floating point values accepted by the
-    dialog when used in DoubleInput mode, with minimum and maximum values
-    specified by \a min and \a max respectively.
-*/
+
 void QInputDialog::setDoubleRange(double min, double max)
 {
    Q_D(QInputDialog);
@@ -985,13 +897,6 @@ int QInputDialog::doubleDecimals() const
    }
 }
 
-/*!
-    \since 4.5
-
-    \property QInputDialog::okButtonText
-
-    \brief the text for the button used to accept the entry in the dialog
-*/
 void QInputDialog::setOkButtonText(const QString &text)
 {
    Q_D(const QInputDialog);
@@ -1006,12 +911,7 @@ QString QInputDialog::okButtonText() const
    return d->buttonBox->button(QDialogButtonBox::Ok)->text();
 }
 
-/*!
-    \since 4.5
 
-    \property QInputDialog::cancelButtonText
-    \brief the text for the button used to cancel the dialog
-*/
 void QInputDialog::setCancelButtonText(const QString &text)
 {
    Q_D(const QInputDialog);
@@ -1026,23 +926,6 @@ QString QInputDialog::cancelButtonText() const
    return d->buttonBox->button(QDialogButtonBox::Cancel)->text();
 }
 
-/*!
-    \since 4.5
-    \overload
-
-    This function connects one of its signals to the slot specified by \a receiver
-    and \a member. The specific signal depends on the arguments that are specified
-    in \a member. These are:
-
-    \list
-      \o textValueSelected() if \a member has a QString for its first argument.
-      \o intValueSelected() if \a member has an int for its first argument.
-      \o doubleValueSelected() if \a member has a double for its first argument.
-      \o accepted() if \a member has NO arguments.
-    \endlist
-
-    The signal will be disconnected from the slot when the dialog is closed.
-*/
 void QInputDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QInputDialog);
@@ -1083,10 +966,16 @@ void QInputDialog::setVisible(bool visible)
    if (visible) {
       d->ensureLayout();
       d->inputWidget->setFocus();
+
       if (d->inputWidget == d->lineEdit) {
          d->lineEdit->selectAll();
+
+      } else if (d->inputWidget == d->plainTextEdit) {
+         d->plainTextEdit->selectAll();
+
       } else if (d->inputWidget == d->intSpinBox) {
          d->intSpinBox->selectAll();
+
       } else if (d->inputWidget == d->doubleSpinBox) {
          d->doubleSpinBox->selectAll();
       }
@@ -1094,13 +983,7 @@ void QInputDialog::setVisible(bool visible)
    QDialog::setVisible(visible);
 }
 
-/*!
-  Closes the dialog and sets its result code to \a result. If this dialog
-  is shown with exec(), done() causes the local event loop to finish,
-  and exec() to return \a result.
 
-  \sa QDialog::done()
-*/
 void QInputDialog::done(int result)
 {
    Q_D(QInputDialog);
@@ -1124,7 +1007,7 @@ void QInputDialog::done(int result)
 
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, signalForMember(d->memberToDisconnectOnClose), d->receiverToDisconnectOnClose,
-                  d->memberToDisconnectOnClose);
+         d->memberToDisconnectOnClose);
 
       d->receiverToDisconnectOnClose = 0;
    }
@@ -1133,20 +1016,23 @@ void QInputDialog::done(int result)
 }
 
 QString QInputDialog::getText(QWidget *parent, const QString &title, const QString &label,
-                  QLineEdit::EchoMode mode, const QString &text, bool *ok,
-                  Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
+   QLineEdit::EchoMode mode, const QString &text, bool *ok,
+   Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
 {
    QInputDialog dialog(parent, flags);
+
    dialog.setWindowTitle(title);
    dialog.setLabelText(label);
    dialog.setTextValue(text);
    dialog.setTextEchoMode(mode);
    dialog.setInputMethodHints(inputMethodHints);
 
-   int ret = dialog.exec();
+   const int ret = dialog.exec();
+
    if (ok) {
       *ok = !!ret;
    }
+
    if (ret) {
       return dialog.textValue();
    } else {
@@ -1154,18 +1040,35 @@ QString QInputDialog::getText(QWidget *parent, const QString &title, const QStri
    }
 }
 
-/*!
-    \internal
-*/
-// ### Qt5: Use only the version above.
-QString QInputDialog::getText(QWidget *parent, const QString &title, const QString &label,
-                  QLineEdit::EchoMode mode, const QString &text, bool *ok, Qt::WindowFlags flags)
+QString QInputDialog::getMultiLineText(QWidget *parent, const QString &title, const QString &label,
+   const QString &text, bool *ok, Qt::WindowFlags flags,
+   Qt::InputMethodHints inputMethodHints)
 {
-   return getText(parent, title, label, mode, text, ok, flags, Qt::ImhNone);
+   QInputDialog dialog(parent, flags);
+   dialog.setOptions(QInputDialog::UsePlainTextEditForTextInput);
+   dialog.setWindowTitle(title);
+   dialog.setLabelText(label);
+   dialog.setTextValue(text);
+   dialog.setInputMethodHints(inputMethodHints);
+
+   const int ret = dialog.exec();
+
+   if (ok) {
+      *ok = !!ret;
+   }
+
+   if (ret) {
+      return dialog.textValue();
+   } else {
+      return QString();
+   }
 }
 
+
+
+
 int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &label, int value,
-                  int min, int max, int step, bool *ok, Qt::WindowFlags flags)
+   int min, int max, int step, bool *ok, Qt::WindowFlags flags)
 {
    QInputDialog dialog(parent, flags);
    dialog.setWindowTitle(title);
@@ -1186,7 +1089,7 @@ int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &l
 }
 
 double QInputDialog::getDouble(QWidget *parent, const QString &title, const QString &label,
-                  double value, double min, double max, int decimals, bool *ok, Qt::WindowFlags flags)
+   double value, double min, double max, int decimals, bool *ok, Qt::WindowFlags flags)
 {
    QInputDialog dialog(parent, flags);
    dialog.setWindowTitle(title);
@@ -1195,10 +1098,7 @@ double QInputDialog::getDouble(QWidget *parent, const QString &title, const QStr
    dialog.setDoubleRange(min, max);
    dialog.setDoubleValue(value);
 
-
-
-
-   int ret = dialog.exec();
+   const int ret = dialog.exec();
 
    if (ok) {
       *ok = !!ret;
@@ -1212,8 +1112,8 @@ double QInputDialog::getDouble(QWidget *parent, const QString &title, const QStr
 }
 
 QString QInputDialog::getItem(QWidget *parent, const QString &title, const QString &label,
-                              const QStringList &items, int current, bool editable, bool *ok,
-                              Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
+   const QStringList &items, int current, bool editable, bool *ok,
+   Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
 {
    QString text(items.value(current));
 
@@ -1225,7 +1125,8 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
    dialog.setComboBoxEditable(editable);
    dialog.setInputMethodHints(inputMethodHints);
 
-   int ret = dialog.exec();
+   const int ret = dialog.exec();
+
    if (ok) {
       *ok = !!ret;
    }
@@ -1236,28 +1137,7 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
    }
 }
 
-/*!
-    \internal
-*/
-// ### Qt5: Use only the version above.
-QString QInputDialog::getItem(QWidget *parent, const QString &title, const QString &label,
-                              const QStringList &items, int current, bool editable, bool *ok,
-                              Qt::WindowFlags flags)
-{
-   return getItem(parent, title, label, items, current, editable, ok, flags, Qt::ImhNone);
-}
 
-/*!
-    \obsolete
-
-    Use getInt() instead.
-*/
-int QInputDialog::getInteger(QWidget *parent, const QString &title, const QString &label,
-                             int value, int min, int max, int step, bool *ok,
-                             Qt::WindowFlags flags)
-{
-   return getInt(parent, title, label, value, min, max, step, ok, flags);
-}
 
 
 #endif
