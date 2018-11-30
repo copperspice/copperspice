@@ -27,6 +27,31 @@ class LIB_CS_STRING_EXPORT utf8
       using storage_unit = uint8_t;
 
       template <typename Iterator>
+      static Iterator advance(Iterator iter_begin, Iterator iter_end, int count)
+      {
+         auto iter = iter_begin;
+         storage_unit value = 0;
+
+         while (iter != iter_end && count != 0)  {
+
+            value = *iter;
+            if (value < 0x80 || value > 0xBf) {
+               --count;
+            }
+
+            ++iter;
+         }
+
+         if (value >= 0xBF) {
+            while (iter != iter_end && *iter >= 0x80 && *iter <= 0xBF) {
+               ++iter;
+            }
+         }
+
+         return iter;
+      }
+
+      template <typename Iterator>
       static int distance(Iterator iter_begin, Iterator iter_end)
       {
          int retval = 0;
@@ -179,6 +204,29 @@ class LIB_CS_STRING_EXPORT utf16
 {
    public:
       using storage_unit = uint16_t;
+
+      template <typename Iterator>
+      static Iterator advance(Iterator iter_begin, Iterator iter_end, int count)
+      {
+         auto iter = iter_begin;
+         storage_unit value = 0;
+
+         while (iter != iter_end && count != 0)  {
+
+            value = *iter;
+            if (value < 0xDC00 || value > 0xDFFF) {
+               --count;
+            }
+
+            ++iter;
+         }
+
+         if (value >= 0xD800 && value <= 0xDBFF) {
+            ++iter;
+         }
+
+         return iter;
+      }
 
       template <typename Iterator>
       static int distance(Iterator iter_begin, Iterator iter_end)

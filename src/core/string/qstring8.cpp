@@ -823,21 +823,15 @@ QStringView8 QString8::midView(size_type indexStart, size_type numOfChars) const
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
-      ++iter_begin;
-   }
+   iter_begin = advance(iter_begin, indexStart);
 
    if (iter_begin == cend()) {
-      // indexStart > length()
       return QStringView8();
    }
 
    if (numOfChars >= 0) {
       iter_end = iter_begin;
-
-      for (size_type i = 0; i < numOfChars && iter_end != cend(); ++i)  {
-         ++iter_end;
-      }
+      iter_end = advance(iter_begin, numOfChars);
 
    } else {
       iter_end = cend();
@@ -852,7 +846,6 @@ QStringView8 QString8::midView(const_iterator iter, size_type numOfChars) const
    const_iterator iter_end;
 
    if (iter == cend()) {
-      // index > size()
       return QStringView8();
    }
 

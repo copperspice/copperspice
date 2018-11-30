@@ -824,21 +824,15 @@ QStringView16 QString16::midView(size_type indexStart, size_type numOfChars) con
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
 
-   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
-      ++iter_begin;
-   }
+   iter_begin = advance(iter_begin, indexStart);
 
    if (iter_begin == cend()) {
-      // index > size()
       return QStringView16();
    }
 
    if (numOfChars >= 0) {
       iter_end = iter_begin;
-
-      for (size_type i = 0; i < numOfChars && iter_end != cend(); ++i)  {
-         ++iter_end;
-      }
+      iter_end = advance(iter_begin, numOfChars);
 
    } else {
       iter_end = cend();

@@ -158,6 +158,8 @@ class CsBasicString
 
       CsChar operator[](size_type index) const;
 
+      const_iterator advance(const_iterator begin, size_type count) const;
+      iterator advance(iterator begin, size_type count);
 
       // ** methods
       CsBasicString &append(const CsBasicString &str);
@@ -914,6 +916,18 @@ CsChar CsBasicString<E, A>::operator[](size_type index) const
 
 
 // methods
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::advance(const_iterator begin, size_type count) const
+{
+   return const_iterator(E::advance(begin.codePointBegin(), cend().codePointBegin(), count));
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::advance(iterator begin, size_type count)
+{
+   return iterator(E::advance(begin.codePointBegin(), end().codePointBegin(), count));
+}
+
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::append(const CsBasicString &str)
 {
