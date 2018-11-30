@@ -28,14 +28,15 @@
 #include <qwaitcondition.h>
 #include <qfilesystemwatcher.h>
 #include <qfileiconprovider.h>
-#include <qfsfileengine.h>
+
 #include <qpair.h>
 #include <qstack.h>
 #include <qdatetime.h>
 #include <qdir.h>
 #include <qelapsedtimer.h>
 
-QT_BEGIN_NAMESPACE
+#include <qfilesystemengine_p.h>
+
 
 class QFileIconProvider;
 
@@ -65,8 +66,7 @@ class QExtendedInformation
 
 #ifndef QT_NO_FSFILEENGINE
    bool isCaseSensitive() const {
-      QFSFileEngine fe(mFileInfo.absoluteFilePath());
-      return fe.caseSensitive();
+      return QFileSystemEngine::isCaseSensitive();
    }
 #endif
 
@@ -137,7 +137,7 @@ class QFileInfoGatherer : public QThread
    GUI_CS_OBJECT(QFileInfoGatherer)
 
  public:
-   GUI_CS_SIGNAL_1(Public, void updates(const QString &directory, const QList <QPair <QString, QFileInfo>> &updates))
+   GUI_CS_SIGNAL_1(Public, void updates(const QString &directory, const QVector <QPair <QString, QFileInfo>> &updates))
    GUI_CS_SIGNAL_2(updates, directory, updates)
 
    GUI_CS_SIGNAL_1(Public, void newListOfFiles(const QString &directory, const QStringList &listOfFiles))
@@ -149,13 +149,15 @@ class QFileInfoGatherer : public QThread
    GUI_CS_SIGNAL_1(Public, void directoryLoaded(const QString &path))
    GUI_CS_SIGNAL_2(directoryLoaded, path)
 
-   QFileInfoGatherer(QObject *parent = nullptr);
+   explicit QFileInfoGatherer(QObject *parent = nullptr);
    ~QFileInfoGatherer();
 
    void clear();
    void removePath(const QString &path);
    QExtendedInformation getInfo(const QFileInfo &info) const;
- 
+   QFileIconProvider *iconProvider() const;
+   bool resolveSymlinks() const;
+
    GUI_CS_SLOT_1(Public, void list(const QString &directoryPath))
    GUI_CS_SLOT_2(list)
 
@@ -168,27 +170,19 @@ class QFileInfoGatherer : public QThread
    GUI_CS_SLOT_1(Public, void setResolveSymlinks(bool enable))
    GUI_CS_SLOT_2(setResolveSymlinks)
 
-   GUI_CS_SLOT_1(Public, bool resolveSymlinks() const)
-   GUI_CS_SLOT_2(resolveSymlinks)
-
    GUI_CS_SLOT_1(Public, void setIconProvider(QFileIconProvider *provider))
    GUI_CS_SLOT_2(setIconProvider)
 
-   GUI_CS_SLOT_1(Public, QFileIconProvider *iconProvider() const)
-   GUI_CS_SLOT_2(iconProvider)
-
- protected:
-   void run() override;
-   void getFileInfos(const QString &path, const QStringList &files);
-
  private:
-   void fetch(const QFileInfo &info, QElapsedTimer &base, bool &firstTime, QList<QPair<QString, QFileInfo> > &updatedFiles,
-              const QString &path);
-   QString translateDriveName(const QFileInfo &drive) const;
+   void run() override;
 
-   QMutex mutex;
+   void getFileInfos(const QString &path, const QStringList &files);
+   void fetch(const QFileInfo &info, QElapsedTimer &base, bool &firstTime, QVector<QPair<QString, QFileInfo>> &updatedFiles,
+      const QString &path);
+
+   mutable QMutex mutex;
    QWaitCondition condition;
-   volatile bool abort;
+   QAtomicInt abort;
 
    QStack<QString> path;
    QStack<QStringList> files;
@@ -197,19 +191,16 @@ class QFileInfoGatherer : public QThread
    QFileSystemWatcher *watcher;
 #endif
 
-   bool m_resolveSymlinks;
-   QFileIconProvider *m_iconProvider;
-   QFileIconProvider defaultProvider;
-
-#ifndef Q_OS_WIN
-   uint userId;
-   uint groupId;
+#ifdef Q_OS_WIN
+   bool m_resolveSymlinks; // not accessed by run()
 #endif
 
+   QFileIconProvider *m_iconProvider;
+   QFileIconProvider defaultProvider;
 };
 #endif // QT_NO_FILESYSTEMMODEL
 
 
-QT_END_NAMESPACE
-#endif // QFILEINFOGATHERER_H
+
+#endif
 

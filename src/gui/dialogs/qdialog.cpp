@@ -21,31 +21,130 @@
 ***********************************************************************/
 
 #include <qdialog.h>
-#include <qevent.h>
-#include <qdesktopwidget.h>
-#include <qpushbutton.h>
+
 #include <qapplication.h>
+#include <qcolordialog.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qerrormessage.h>
+#include <qfontdialog.h>
+#include <qfiledialog.h>
+#include <qevent.h>
 #include <qlayout.h>
+#include <qplatform_theme.h>
+#include <qpushbutton.h>
+#include <qmenu.h>
+#include "qmessagebox.h"
 #include <qsizegrip.h>
 #include <qwhatsthis.h>
-#include <qmenu.h>
-#include <qcursor.h>
+
+#include <qguiapplication_p.h>
 #include <qdialog_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
-#if defined(Q_WS_X11)
-#include <qt_x11_p.h>
+static inline int themeDialogType(const QDialog *dialog)
+{
+#ifndef QT_NO_FILEDIALOG
+   if (qobject_cast<const QFileDialog *>(dialog)) {
+      return QPlatformTheme::FileDialog;
+   }
 #endif
-
-#ifndef SPI_GETSNAPTODEFBUTTON
-#define SPI_GETSNAPTODEFBUTTON  95
+#ifndef QT_NO_COLORDIALOG
+   if (qobject_cast<const QColorDialog *>(dialog)) {
+      return QPlatformTheme::ColorDialog;
+   }
 #endif
+#ifndef QT_NO_FONTDIALOG
+   if (qobject_cast<const QFontDialog *>(dialog)) {
+      return QPlatformTheme::FontDialog;
+   }
+#endif
+#ifndef QT_NO_MESSAGEBOX
+   if (qobject_cast<const QMessageBox *>(dialog)) {
+      return QPlatformTheme::MessageDialog;
+   }
+#endif
+#ifndef QT_NO_ERRORMESSAGE
+   if (qobject_cast<const QErrorMessage *>(dialog)) {
+      return QPlatformTheme::MessageDialog;
+   }
+#endif
+   return -1;
+}
 
-QT_BEGIN_NAMESPACE
+QPlatformDialogHelper *QDialogPrivate::platformHelper() const
+{
+   // Delayed creation of the platform, ensuring that
+   // that qobject_cast<> on the dialog works in the plugin.
+   if (!m_platformHelperCreated) {
+      m_platformHelperCreated = true;
+      QDialogPrivate *ncThis = const_cast<QDialogPrivate *>(this);
+      QDialog *dialog = ncThis->q_func();
+      const int type = themeDialogType(dialog);
+      if (type >= 0) {
+         m_platformHelper = QGuiApplicationPrivate::platformTheme()
+            ->createPlatformDialogHelper(static_cast<QPlatformTheme::DialogType>(type));
+         if (m_platformHelper) {
+            QObject::connect(m_platformHelper, SIGNAL(accept()), dialog, SLOT(accept()));
+            QObject::connect(m_platformHelper, SIGNAL(reject()), dialog, SLOT(reject()));
+            ncThis->initHelper(m_platformHelper);
+         }
+      }
+   }
+   return m_platformHelper;
+}
 
+bool QDialogPrivate::canBeNativeDialog() const
+{
+   QDialogPrivate *ncThis = const_cast<QDialogPrivate *>(this);
+   QDialog *dialog = ncThis->q_func();
+   const int type = themeDialogType(dialog);
+   if (type >= 0)
+      return QGuiApplicationPrivate::platformTheme()
+         ->usePlatformNativeDialog(static_cast<QPlatformTheme::DialogType>(type));
+   return false;
+}
+
+QWindow *QDialogPrivate::parentWindow() const
+{
+   if (const QWidget *parent = q_func()->nativeParentWidget()) {
+      return parent->windowHandle();
+   }
+   return 0;
+}
+
+bool QDialogPrivate::setNativeDialogVisible(bool visible)
+{
+   if (QPlatformDialogHelper *helper = platformHelper()) {
+      if (visible) {
+         Q_Q(QDialog);
+         helperPrepareShow(helper);
+         nativeDialogInUse = helper->show(q->windowFlags(), q->windowModality(), parentWindow());
+      } else if (nativeDialogInUse) {
+         helper->hide();
+      }
+   }
+   return nativeDialogInUse;
+}
+
+QVariant QDialogPrivate::styleHint(QPlatformDialogHelper::StyleHint hint) const
+{
+   if (const QPlatformDialogHelper *helper = platformHelper()) {
+      return helper->styleHint(hint);
+   }
+   return QPlatformDialogHelper::defaultStyleHint(hint);
+}
+
+void QDialogPrivate::deletePlatformHelper()
+{
+   delete m_platformHelper;
+   m_platformHelper = 0;
+   m_platformHelperCreated = false;
+   nativeDialogInUse = false;
+}
 QDialog::QDialog(QWidget *parent, Qt::WindowFlags f)
    : QWidget(*new QDialogPrivate, parent, f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
@@ -60,11 +159,6 @@ QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f)
    : QWidget(dd, parent, f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
 }
-
-/*!
-  Destroys the QDialog, deleting all its children.
-*/
-
 QDialog::~QDialog()
 {
    QT_TRY {
@@ -203,15 +297,15 @@ int QDialog::exec()
 
    show();
 
-#ifdef Q_OS_MAC
-   d->mac_nativeDialogModalHelp();
-#endif
-
-   QEventLoop eventLoop;
-   d->eventLoop = &eventLoop;
    QPointer<QDialog> guard = this;
+   if (d->nativeDialogInUse) {
+      d->platformHelper()->exec();
+   } else {
+      QEventLoop eventLoop;
+      d->eventLoop = &eventLoop;
 
-   (void) eventLoop.exec(QEventLoop::DialogExec);
+      (void) eventLoop.exec(QEventLoop::DialogExec);
+   }
 
    if (guard.isNull()) {
       return QDialog::Rejected;
@@ -221,6 +315,11 @@ int QDialog::exec()
    setAttribute(Qt::WA_ShowModal, wasShowModal);
 
    int res = result();
+
+   if (d->nativeDialogInUse) {
+      d->helperDone(static_cast<QDialog::DialogCode>(res), d->platformHelper());
+   }
+
    if (deleteOnClose) {
       delete this;
    }
@@ -260,22 +359,10 @@ void QDialog::done(int r)
    }
 }
 
-/*!
-  Hides the modal dialog and sets the result code to \c Accepted.
-
-  \sa reject() done()
-*/
-
 void QDialog::accept()
 {
    done(Accepted);
 }
-
-/*!
-  Hides the modal dialog and sets the result code to \c Rejected.
-
-  \sa accept() done()
-*/
 
 void QDialog::reject()
 {
@@ -309,12 +396,14 @@ void QDialog::contextMenuEvent(QContextMenuEvent *e)
    while (w && w->whatsThis().size() == 0 && !w->testAttribute(Qt::WA_CustomWhatsThis)) {
       w = w->isWindow() ? 0 : w->parentWidget();
    }
+
    if (w) {
-      QWeakPointer<QMenu> p = new QMenu(this);
+      QPointer<QMenu> p = new QMenu(this);
       QAction *wt = p.data()->addAction(tr("What's This?"));
+
       if (p.data()->exec(e->globalPos()) == wt) {
          QHelpEvent e(QEvent::WhatsThis, w->rect().center(),
-                      w->mapToGlobal(w->rect().center()));
+            w->mapToGlobal(w->rect().center()));
          QApplication::sendEvent(w, &e);
       }
       delete p.data();
@@ -329,11 +418,12 @@ void QDialog::keyPressEvent(QKeyEvent *e)
    //   Calls reject() if Escape is pressed. Simulates a button
    //   click for the default button if Enter is pressed. Move focus
    //   for the arrow keys. Ignore the rest.
-#ifdef Q_OS_MAC
-   if (e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_Period) {
+
+   if (e->matches(QKeySequence::Cancel)) {
       reject();
+
    } else
-#endif
+
       if (!e->modifiers() || (e->modifiers() & Qt::KeypadModifier && e->key() == Qt::Key_Enter)) {
          switch (e->key()) {
             case Qt::Key_Enter:
@@ -349,10 +439,9 @@ void QDialog::keyPressEvent(QKeyEvent *e)
                   }
                }
             }
+
             break;
-            case Qt::Key_Escape:
-               reject();
-               break;
+
             default:
                e->ignore();
                return;
@@ -391,19 +480,15 @@ void QDialog::closeEvent(QCloseEvent *e)
 void QDialog::setVisible(bool visible)
 {
    Q_D(QDialog);
+   if (!testAttribute(Qt::WA_DontShowOnScreen) && d->canBeNativeDialog() && d->setNativeDialogVisible(visible)) {
+      return;
+   }
    if (visible) {
       if (testAttribute(Qt::WA_WState_ExplicitShowHide) && !testAttribute(Qt::WA_WState_Hidden)) {
          return;
       }
 
-      if (!testAttribute(Qt::WA_Moved)) {
-         Qt::WindowStates state = windowState();
-         adjustPosition(parentWidget());
-         setAttribute(Qt::WA_Moved, false); // not really an explicit position
-         if (state != windowState()) {
-            setWindowState(state);
-         }
-      }
+
       QWidget::setVisible(visible);
       showExtension(d->doShowExtension);
       QWidget *fw = window()->focusWidget();
@@ -445,7 +530,8 @@ void QDialog::setVisible(bool visible)
       }
 
 #ifndef QT_NO_ACCESSIBILITY
-      QAccessible::updateAccessibility(this, 0, QAccessible::DialogStart);
+      QAccessibleEvent event(this, QAccessible::DialogStart);
+      QAccessible::updateAccessibility(&event);
 #endif
 
    } else {
@@ -455,26 +541,28 @@ void QDialog::setVisible(bool visible)
 
 #ifndef QT_NO_ACCESSIBILITY
       if (isVisible()) {
-         QAccessible::updateAccessibility(this, 0, QAccessible::DialogEnd);
+         QAccessibleEvent event(this, QAccessible::DialogEnd);
+         QAccessible::updateAccessibility(&event);
       }
 #endif
 
       // Reimplemented to exit a modal event loop when the dialog is hidden.
       QWidget::setVisible(visible);
+
       if (d->eventLoop) {
          d->eventLoop->exit();
       }
+
    }
-#ifdef Q_OS_WIN
-   if (d->mainDef && isActiveWindow()) {
-      BOOL snapToDefault = false;
-      if (SystemParametersInfo(SPI_GETSNAPTODEFBUTTON, 0, &snapToDefault, 0)) {
-         if (snapToDefault) {
-            QCursor::setPos(d->mainDef->mapToGlobal(d->mainDef->rect().center()));
-         }
-      }
+
+   const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
+
+   if (d->mainDef && isActiveWindow()
+      && theme->themeHint(QPlatformTheme::DialogSnapToDefaultButton).toBool()) {
+      QCursor::setPos(d->mainDef->mapToGlobal(d->mainDef->rect().center()));
    }
-#endif
+
+
 }
 
 /*!\reimp */
@@ -493,12 +581,11 @@ void QDialog::showEvent(QShowEvent *event)
 /*! \internal */
 void QDialog::adjustPosition(QWidget *w)
 {
-#ifdef Q_WS_X11
-   // if the WM advertises that it will place the windows properly for us, let it do it :)
-   if (X11->isSupportedByWM(ATOM(_NET_WM_FULL_PLACEMENT))) {
-      return;
-   }
-#endif
+   if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme())
+      if (theme->themeHint(QPlatformTheme::WindowAutoPlacement).toBool()) {
+         return;
+      }
+
 
    QPoint p(0, 0);
    int extraw = 0, extrah = 0, scrn = 0;
@@ -536,24 +623,29 @@ void QDialog::adjustPosition(QWidget *w)
 
 
    if (w) {
-      // Use mapToGlobal rather than geometry() in case w might
-      // be embedded in another application
-      QPoint pp = w->mapToGlobal(QPoint(0, 0));
-      p = QPoint(pp.x() + w->width() / 2,
-                 pp.y() + w->height() / 2);
+      // Use pos() if the widget is embedded into a native window
+      QPoint pp;
+
+      if (w->windowHandle() && w->windowHandle()->property("_q_embedded_native_parent_handle").value<WId>()) {
+         pp = w->pos();
+      } else {
+         pp = w->mapToGlobal(QPoint(0, 0));
+      }
+
+      p = QPoint(pp.x() + w->width() / 2, pp.y() + w->height() / 2);
+
    } else {
       // p = middle of the desktop
       p = QPoint(desk.x() + desk.width() / 2, desk.y() + desk.height() / 2);
    }
 
    // p = origin of this
-   p = QPoint(p.x() - width() / 2 - extraw,
-              p.y() - height() / 2 - extrah);
-
+   p = QPoint(p.x() - width() / 2 - extraw, p.y() - height() / 2 - extrah);
 
    if (p.x() + extraw + width() > desk.x() + desk.width()) {
       p.setX(desk.x() + desk.width() - width() - extraw);
    }
+
    if (p.x() < desk.x()) {
       p.setX(desk.x());
    }
@@ -561,64 +653,33 @@ void QDialog::adjustPosition(QWidget *w)
    if (p.y() + extrah + height() > desk.y() + desk.height()) {
       p.setY(desk.y() + desk.height() - height() - extrah);
    }
+
    if (p.y() < desk.y()) {
       p.setY(desk.y());
+   }
+
+   if (scrn >= 0) {
+      if (QWindow *window = windowHandle()) {
+         window->setScreen(QGuiApplication::screens().at(scrn));
+      }
    }
 
    move(p);
 }
 
-/*!
-    \obsolete
 
-    If \a orientation is Qt::Horizontal, the extension will be displayed
-    to the right of the dialog's main area. If \a orientation is
-    Qt::Vertical, the extension will be displayed below the dialog's main
-    area.
-
-    Instead of using this functionality, we recommend that you simply call
-    show() or hide() on the part of the dialog that you want to use as an
-    extension. See the \l{Extension Example} for details.
-
-    \sa setExtension()
-*/
 void QDialog::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QDialog);
    d->orientation = orientation;
 }
 
-/*!
-    \obsolete
-
-    Returns the dialog's extension orientation.
-
-    Instead of using this functionality, we recommend that you simply call
-    show() or hide() on the part of the dialog that you want to use as an
-    extension. See the \l{Extension Example} for details.
-
-    \sa extension()
-*/
 Qt::Orientation QDialog::orientation() const
 {
    Q_D(const QDialog);
    return d->orientation;
 }
 
-/*!
-    \obsolete
-
-    Sets the widget, \a extension, to be the dialog's extension,
-    deleting any previous extension. The dialog takes ownership of the
-    extension. Note that if 0 is passed any existing extension will be
-    deleted. This function must only be called while the dialog is hidden.
-
-    Instead of using this functionality, we recommend that you simply call
-    show() or hide() on the part of the dialog that you want to use as an
-    extension. See the \l{Extension Example} for details.
-
-    \sa showExtension(), setOrientation()
-*/
 void QDialog::setExtension(QWidget *extension)
 {
    Q_D(QDialog);
@@ -635,18 +696,7 @@ void QDialog::setExtension(QWidget *extension)
    extension->hide();
 }
 
-/*!
-    \obsolete
 
-    Returns the dialog's extension or 0 if no extension has been
-    defined.
-
-    Instead of using this functionality, we recommend that you simply call
-    show() or hide() on the part of the dialog that you want to use as an
-    extension. See the \l{Extension Example} for details.
-
-    \sa showExtension(), setOrientation()
-*/
 QWidget *QDialog::extension() const
 {
    Q_D(const QDialog);
@@ -654,18 +704,6 @@ QWidget *QDialog::extension() const
 }
 
 
-/*!
-    \obsolete
-
-    If \a showIt is true, the dialog's extension is shown; otherwise the
-    extension is hidden.
-
-    Instead of using this functionality, we recommend that you simply call
-    show() or hide() on the part of the dialog that you want to use as an
-    extension. See the \l{Extension Example} for details.
-
-    \sa show(), setExtension(), setOrientation()
-*/
 void QDialog::showExtension(bool showIt)
 {
    Q_D(QDialog);
@@ -688,8 +726,8 @@ void QDialog::showExtension(bool showIt)
          layout()->setEnabled(false);
       }
       QSize s(d->extension->sizeHint()
-              .expandedTo(d->extension->minimumSize())
-              .boundedTo(d->extension->maximumSize()));
+         .expandedTo(d->extension->minimumSize())
+         .boundedTo(d->extension->maximumSize()));
       if (d->orientation == Qt::Horizontal) {
          int h = qMax(height(), s.height());
          d->extension->setGeometry(width(), 0, s.width(), h);
@@ -730,11 +768,12 @@ QSize QDialog::sizeHint() const
 
    if (d->extension) {
 
-      if (d->orientation == Qt::Horizontal) {
-         return QSize(QWidget::sizeHint().width(), qMax(QWidget::sizeHint().height(), d->extension->sizeHint().height()));
-      } else {
-         return QSize(qMax(QWidget::sizeHint().width(), d->extension->sizeHint().width()), QWidget::sizeHint().height());
-      }
+      if (d->orientation == Qt::Horizontal)
+         return QSize(QWidget::sizeHint().width(),
+               qMax(QWidget::sizeHint().height(), d->extension->sizeHint().height()));
+      else
+         return QSize(qMax(QWidget::sizeHint().width(), d->extension->sizeHint().width()),
+               QWidget::sizeHint().height());
    }
 
    return QWidget::sizeHint();
@@ -748,28 +787,16 @@ QSize QDialog::minimumSizeHint() const
    if (d->extension) {
       if (d->orientation == Qt::Horizontal)
          return QSize(QWidget::minimumSizeHint().width(),
-                      qMax(QWidget::minimumSizeHint().height(), d->extension->minimumSizeHint().height()));
+               qMax(QWidget::minimumSizeHint().height(), d->extension->minimumSizeHint().height()));
       else
          return QSize(qMax(QWidget::minimumSizeHint().width(), d->extension->minimumSizeHint().width()),
-                      QWidget::minimumSizeHint().height());
+               QWidget::minimumSizeHint().height());
    }
 
    return QWidget::minimumSizeHint();
 }
 
-/*!
-    \property QDialog::modal
-    \brief whether show() should pop up the dialog as modal or modeless
 
-    By default, this property is false and show() pops up the dialog
-    as modeless. Setting his property to true is equivalent to setting
-    QWidget::windowModality to Qt::ApplicationModal.
-
-    exec() ignores the value of this property and always pops up the
-    dialog as modal.
-
-    \sa QWidget::windowModality, show(), exec()
-*/
 
 void QDialog::setModal(bool modal)
 {
@@ -790,16 +817,16 @@ bool QDialog::isSizeGripEnabled() const
 
 void QDialog::setSizeGripEnabled(bool enabled)
 {
-#ifdef QT_NO_SIZEGRIP
-   Q_UNUSED(enabled);
-#else
+
    Q_D(QDialog);
+
 #ifndef QT_NO_SIZEGRIP
    d->sizeGripEnabled = enabled;
    if (enabled && d->doShowExtension) {
       return;
    }
 #endif
+
    if (!enabled != !d->resizer) {
       if (enabled) {
          d->resizer = new QSizeGrip(this);
@@ -817,7 +844,7 @@ void QDialog::setSizeGripEnabled(bool enabled)
          d->resizer = 0;
       }
    }
-#endif //QT_NO_SIZEGRIP
+
 }
 
 
@@ -837,47 +864,4 @@ void QDialog::resizeEvent(QResizeEvent *)
 #endif
 }
 
-/*! \fn void QDialog::finished(int result)
-    \since 4.1
-
-    This signal is emitted when the dialog's \a result code has been
-    set, either by the user or by calling done(), accept(), or
-    reject().
-
-    Note that this signal is \e not emitted when hiding the dialog
-    with hide() or setVisible(false). This includes deleting the
-    dialog while it is visible.
-
-    \sa accepted(), rejected()
-*/
-
-/*! \fn void QDialog::accepted()
-    \since 4.1
-
-    This signal is emitted when the dialog has been accepted either by
-    the user or by calling accept() or done() with the
-    QDialog::Accepted argument.
-
-    Note that this signal is \e not emitted when hiding the dialog
-    with hide() or setVisible(false). This includes deleting the
-    dialog while it is visible.
-
-    \sa finished(), rejected()
-*/
-
-/*! \fn void QDialog::rejected()
-    \since 4.1
-
-    This signal is emitted when the dialog has been rejected either by
-    the user or by calling reject() or done() with the
-    QDialog::Rejected argument.
-
-    Note that this signal is \e not emitted when hiding the dialog
-    with hide() or setVisible(false). This includes deleting the
-    dialog while it is visible.
-
-    \sa finished(), accepted()
-*/
-
-QT_END_NAMESPACE
 

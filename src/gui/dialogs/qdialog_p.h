@@ -24,12 +24,12 @@
 #define QDIALOG_P_H
 
 #include <qwidget_p.h>
-#include <QtCore/qeventloop.h>
-#include <QtCore/qpointer.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qpushbutton.h>
+#include <qeventloop.h>
+#include <qpointer.h>
+#include <qdialog.h>
+#include <qpushbutton.h>
+#include <qplatform_dialoghelper.h>
 
-QT_BEGIN_NAMESPACE
 
 class QSizeGrip;
 
@@ -45,9 +45,18 @@ class QDialogPrivate : public QWidgetPrivate
         resizer(0),
         sizeGripEnabled(false),
 #endif
-        rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0) {
+        rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0),
+        nativeDialogInUse(false), m_platformHelper(0), m_platformHelperCreated(false)
+   {}
+
+   ~QDialogPrivate() {
+      delete m_platformHelper;
    }
 
+   QWindow *parentWindow() const;
+   bool setNativeDialogVisible(bool visible);
+   QVariant styleHint(QPlatformDialogHelper::StyleHint hint) const;
+   void deletePlatformHelper();
    QPointer<QPushButton> mainDef;
    Qt::Orientation orientation;
    QWidget *extension;
@@ -66,17 +75,25 @@ class QDialogPrivate : public QWidgetPrivate
    void hideDefault();
    void resetModalitySetByOpen();
 
-#ifdef Q_OS_MAC
-   virtual void mac_nativeDialogModalHelp() {}
-#endif
+
 
    int rescode;
    int resetModalityTo;
    bool wasModalitySet;
 
    QPointer<QEventLoop> eventLoop;
+   bool nativeDialogInUse;
+   QPlatformDialogHelper *platformHelper() const;
+   virtual bool canBeNativeDialog() const;
+
+ private:
+   virtual void initHelper(QPlatformDialogHelper *) {}
+   virtual void helperPrepareShow(QPlatformDialogHelper *) {}
+   virtual void helperDone(QDialog::DialogCode, QPlatformDialogHelper *) {}
+
+   mutable QPlatformDialogHelper *m_platformHelper;
+   mutable bool m_platformHelperCreated;
 };
 
-QT_END_NAMESPACE
 
-#endif // QDIALOG_P_H
+#endif

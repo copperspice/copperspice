@@ -35,13 +35,14 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_OBJECT(QDialog)
    friend class QPushButton;
 
-   GUI_CS_PROPERTY_READ(sizeGripEnabled, isSizeGripEnabled)
+   GUI_CS_PROPERTY_READ(sizeGripEnabled,  isSizeGripEnabled)
    GUI_CS_PROPERTY_WRITE(sizeGripEnabled, setSizeGripEnabled)
-   GUI_CS_PROPERTY_READ(modal, isModal)
+
+   GUI_CS_PROPERTY_READ(modal,  isModal)
    GUI_CS_PROPERTY_WRITE(modal, setModal)
 
  public:
-   explicit QDialog(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+   explicit QDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
    ~QDialog();
 
    enum DialogCode { Rejected, Accepted };
@@ -74,13 +75,13 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_SIGNAL_1(Public, void rejected())
    GUI_CS_SIGNAL_2(rejected)
 
-   GUI_CS_SLOT_1(Public, void open())
+   GUI_CS_SLOT_1(Public, virtual void open())
    GUI_CS_SLOT_2(open)
 
-   GUI_CS_SLOT_1(Public, int exec())
+   GUI_CS_SLOT_1(Public, virtual int exec())
    GUI_CS_SLOT_2(exec)
 
-   GUI_CS_SLOT_1(Public, virtual void done(int un_named_arg1))
+   GUI_CS_SLOT_1(Public, virtual void done(int arg1))
    GUI_CS_SLOT_2(done)
 
    GUI_CS_SLOT_1(Public, virtual void accept())
@@ -89,11 +90,11 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_SLOT_1(Public, virtual void reject())
    GUI_CS_SLOT_2(reject)
 
-   GUI_CS_SLOT_1(Public, void showExtension(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void showExtension(bool arg1))
    GUI_CS_SLOT_2(showExtension)
 
  protected:
-   QDialog(QDialogPrivate &, QWidget *parent, Qt::WindowFlags f = 0);
+   QDialog(QDialogPrivate &, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
 
    void keyPressEvent(QKeyEvent *) override;
    void closeEvent(QCloseEvent *) override;
@@ -113,6 +114,5 @@ class Q_GUI_EXPORT QDialog : public QWidget
 
 };
 
-QT_END_NAMESPACE
 
-#endif // QDIALOG_H
+#endif
