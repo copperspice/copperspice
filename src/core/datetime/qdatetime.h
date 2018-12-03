@@ -27,7 +27,23 @@
 #include <qnamespace.h>
 #include <qsharedpointer.h>
 
-class QDebug;
+#include <limits>
+
+class QTimeZone;
+
+#ifdef Q_OS_MAC
+
+using CFDateRef = const struct __CFDate *;
+
+#ifdef __OBJC__
+@class NSDate;
+
+#else
+class NSDate;
+
+#endif
+
+#endif
 
 class Q_CORE_EXPORT QDate
 {
@@ -37,15 +53,18 @@ class Q_CORE_EXPORT QDate
       StandaloneFormat
    };
 
-   QDate() {
-      jd = 0;
-   }
+   constexpr QDate() : jd(nullJd())
+   {}
+
    QDate(int y, int m, int d);
 
    bool isNull() const {
-      return jd == 0;
+      return ! isValid();
    }
-   bool isValid() const;
+
+   bool isValid() const {
+      return jd >= minJd() && jd <= maxJd();
+   }
 
    int year() const;
    int month() const;
@@ -54,18 +73,13 @@ class Q_CORE_EXPORT QDate
    int dayOfYear() const;
    int daysInMonth() const;
    int daysInYear() const;
-   int weekNumber(int *yearNum = 0) const;
+   int weekNumber(int *yearNum = nullptr) const;
 
 #ifndef QT_NO_TEXTDATE
-   // ### Qt5/merge these functions
-   static QString shortMonthName(int month);
-   static QString shortMonthName(int month, MonthNameType type);
-   static QString shortDayName(int weekday);
-   static QString shortDayName(int weekday, MonthNameType type);
-   static QString longMonthName(int month);
-   static QString longMonthName(int month, MonthNameType type);
-   static QString longDayName(int weekday);
-   static QString longDayName(int weekday, MonthNameType type);
+   static QString shortMonthName(int month, MonthNameType type = DateFormat);
+   static QString shortDayName(int weekday, MonthNameType type = DateFormat);
+   static QString longMonthName(int month, MonthNameType type = DateFormat);
+   static QString longDayName(int weekday, MonthNameType type = DateFormat);
 #endif
 
 #ifndef QT_NO_DATESTRING
@@ -73,15 +87,13 @@ class Q_CORE_EXPORT QDate
    QString toString(const QString &format) const;
 #endif
 
-   bool setYMD(int y, int m, int d);
    bool setDate(int year, int month, int day);
-
    void getDate(int *year, int *month, int *day);
 
-   QDate addDays(int days) const;
-   QDate addMonths(int months) const;
-   QDate addYears(int years) const;
-   int daysTo(const QDate &) const;
+   QDate addDays(qint64 days) const;
+   QDate addMonths(qint64 months) const;
+   QDate addYears(qint64 years) const;
+   qint64 daysTo(const QDate &) const;
 
    bool operator==(const QDate &other) const {
       return jd == other.jd;
@@ -112,27 +124,27 @@ class Q_CORE_EXPORT QDate
    static bool isValid(int y, int m, int d);
    static bool isLeapYear(int year);
 
-   // ### Qt5/remove these two functions
-   static uint gregorianToJulian(int y, int m, int d);
-   static void julianToGregorian(uint jd, int &y, int &m, int &d);
-
-   static inline QDate fromJulianDay(int jd) {
-      QDate d;
-      d.jd = jd;
-      return d;
+   static constexpr QDate fromJulianDay(qint64 dayNumber) {
+      return dayNumber >= minJd() && dayNumber <= maxJd() ? QDate(dayNumber) : QDate();
    }
-   inline int toJulianDay() const {
+
+   constexpr qint64 toJulianDay() const {
       return jd;
    }
 
  private:
-   static inline qint64 nullJd() {
-      return std::numeric_limits<qint64>::lowest();
+   explicit constexpr QDate(qint64 julianDay) : jd(julianDay)
+   {}
+
+   static constexpr qint64 nullJd() {
+      return std::numeric_limits<qint64>::min();
    }
-   static inline qint64 minJd() {
+
+   static constexpr qint64 minJd() {
       return Q_INT64_C(-784350574879);
    }
-   static inline qint64 maxJd() {
+
+   static constexpr qint64 maxJd() {
       return Q_INT64_C( 784354017364);
    }
 
@@ -148,16 +160,21 @@ Q_DECLARE_TYPEINFO(QDate, Q_MOVABLE_TYPE);
 
 class Q_CORE_EXPORT QTime
 {
+   explicit constexpr QTime(int ms)
+      : mds(ms)
+   { }
+
  public:
-   QTime()
-      : mds(NullTime) {
-   }
+   constexpr QTime()
+      : mds(NullTime)
+   { }
 
    QTime(int h, int m, int s = 0, int ms = 0);
 
-   bool isNull() const {
+   constexpr bool isNull() const {
       return mds == NullTime;
    }
+
    bool isValid() const;
 
    int hour() const;
@@ -201,12 +218,21 @@ class Q_CORE_EXPORT QTime
       return mds >= other.mds;
    }
 
+   static QTime fromMSecsSinceStartOfDay(int msecs) {
+      return QTime(msecs);
+   }
+
+   int msecsSinceStartOfDay() const {
+      return mds == NullTime ? 0 : mds;
+   }
+
    static QTime currentTime();
 
 #ifndef QT_NO_DATESTRING
    static QTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QTime fromString(const QString &s, const QString &format);
 #endif
+
    static bool isValid(int h, int m, int s, int ms = 0);
 
    void start();
@@ -215,9 +241,11 @@ class Q_CORE_EXPORT QTime
 
  private:
    enum TimeFlag { NullTime = -1 };
-   inline int ds() const {
+
+   constexpr int ds() const {
       return mds == -1 ? 0 : mds;
    }
+
    int mds;
 
    friend class QDateTime;
@@ -235,14 +263,22 @@ class Q_CORE_EXPORT QDateTime
  public:
    QDateTime();
    explicit QDateTime(const QDate &);
-   QDateTime(const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime);
+   QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec = Qt::LocalTime, int offsetSeconds = 0);
 
-   // ### Qt5: Merge with above with default offsetSeconds = 0
-   QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec, int offsetSeconds);
+   QDateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone);
    QDateTime(const QDateTime &other);
    ~QDateTime();
 
+   QDateTime &operator=(QDateTime &&other) {
+      swap(other);
+      return *this;
+   }
+
    QDateTime &operator=(const QDateTime &other);
+
+   void swap(QDateTime &other) {
+      qSwap(d, other.d);
+   }
 
    bool isNull() const;
    bool isValid() const;
@@ -251,62 +287,66 @@ class Q_CORE_EXPORT QDateTime
    QTime time() const;
    Qt::TimeSpec timeSpec() const;
    int offsetFromUtc() const;
+  QTimeZone timeZone() const;
+  QString timeZoneAbbreviation() const;
+  bool isDaylightTime() const;
 
    qint64 toMSecsSinceEpoch() const;
-   uint toTime_t() const;
+   quint64 toTime_t() const;
 
    void setDate(const QDate &date);
    void setTime(const QTime &time);
    void setTimeSpec(Qt::TimeSpec spec);
    void setOffsetFromUtc(int offsetSeconds);
+   void setTimeZone(const QTimeZone &toZone);
    void setMSecsSinceEpoch(qint64 msecs);
-   void setTime_t(uint secs);
+   void setTime_t(quint64 secsSince1Jan1970UTC);
 
 #ifndef QT_NO_DATESTRING
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
 #endif
 
-   QDateTime addDays(int days) const;
-   QDateTime addMonths(int months) const;
-   QDateTime addYears(int years) const;
-   QDateTime addSecs(int secs) const;
+   QDateTime addDays(qint64 days) const;
+   QDateTime addMonths(qint64 months) const;
+   QDateTime addYears(qint64 years) const;
+   QDateTime addSecs(qint64 secs) const;
    QDateTime addMSecs(qint64 msecs) const;
 
    QDateTime toTimeSpec(Qt::TimeSpec spec) const;
-   inline QDateTime toLocalTime() const {
+
+   QDateTime toLocalTime() const {
       return toTimeSpec(Qt::LocalTime);
    }
 
-   inline QDateTime toUTC() const {
+   QDateTime toUTC() const {
       return toTimeSpec(Qt::UTC);
    }
-   QDateTime toOffsetFromUtc(int offsetSeconds) const;
+
+   QDateTime toOffsetFromUtc(qint64 offsetSeconds) const;
+   QDateTime toTimeZone(const QTimeZone &toZone) const;
 
    qint64 daysTo(const QDateTime &) const;
    qint64 secsTo(const QDateTime &) const;
    qint64 msecsTo(const QDateTime &) const;
 
    bool operator==(const QDateTime &other) const;
-   inline bool operator!=(const QDateTime &other) const {
+   bool operator!=(const QDateTime &other) const {
       return !(*this == other);
    }
 
    bool operator<(const QDateTime &other) const;
-   inline bool operator<=(const QDateTime &other) const {
+   bool operator<=(const QDateTime &other) const {
       return !(other < *this);
    }
 
-   inline bool operator>(const QDateTime &other) const {
+   bool operator>(const QDateTime &other) const {
       return other < *this;
    }
 
    inline bool operator>=(const QDateTime &other) const {
       return !(*this < other);
    }
-
-   void setUtcOffset(int seconds);
-   int utcOffset() const;
 
    static QDateTime currentDateTime();
    static QDateTime currentDateTimeUtc();
@@ -315,23 +355,32 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QDateTime fromString(const QString &s, const QString &format);
 #endif
-   static QDateTime fromTime_t(uint secs);
+   static QDateTime fromTime_t(quint64 secsSince1Jan1970UTC, Qt::TimeSpec spec = Qt::LocalTime, int offsetFromUtc = 0);
+   static QDateTime fromTime_t(quint64 secsSince1Jan1970UTC, const QTimeZone &timeZone);
 
-   // ### Qt5: Merge with above with default spec = Qt::LocalTime
-   static QDateTime fromTime_t(uint secs, Qt::TimeSpec spec, int offsetFromUtc = 0);
-   static QDateTime fromMSecsSinceEpoch(qint64 msecs);
-
-   // ### Qt5: Merge with above with default spec = Qt::LocalTime
-   static QDateTime fromMSecsSinceEpoch(qint64 msecs, Qt::TimeSpec spec, int offsetFromUtc = 0);
+   static QDateTime fromMSecsSinceEpoch(qint64 msecs, Qt::TimeSpec spec = Qt::LocalTime, int offsetFromUtc = 0);
+   static QDateTime fromMSecsSinceEpoch(qint64 msecs, const QTimeZone &timeZone);
    static qint64 currentMSecsSinceEpoch();
 
+#if defined(Q_OS_MAC)
+    static QDateTime fromCFDate(CFDateRef date);
+    CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED;
+
+#  if defined(__OBJC__)
+    static QDateTime fromNSDate(const NSDate *date);
+    NSDate *toNSDate() const Q_DECL_NS_RETURNS_AUTORELEASED;
+#  endif
+
+#endif
  private:
    friend class QDateTimePrivate;
-   void detach();
-   QExplicitlySharedDataPointer<QDateTimePrivate> d;
+
+   // emerald - for performance add the qdatetimePrivate data members directly into this class
+   QSharedDataPointer<QDateTimePrivate> d;
 
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
+    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
 };
 
 Q_DECLARE_TYPEINFO(QDateTime, Q_MOVABLE_TYPE);
@@ -349,4 +398,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
 #endif
 
+Q_CORE_EXPORT uint qHash(const QDateTime &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QDate &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QTime &key, uint seed = 0);
 #endif
