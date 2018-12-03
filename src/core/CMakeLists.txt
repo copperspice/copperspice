@@ -35,6 +35,8 @@ include_directories(
 include(animation/animation.cmake)
 include(codecs/codecs.cmake)
 include(concurrent/concurrent.cmake)
+include(containers/containers.cmake)
+include(datetime/datetime.cmake)
 include(global/global.cmake)
 include(io/io.cmake)
 include(json/json.cmake)

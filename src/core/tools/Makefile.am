@@ -18,47 +18,20 @@ CORE_PUBLIC_INCLUDES += \
    QBitRef \
    QByteArray \
    QByteRef \
-   QCache \
-   QContiguousCache \
-   QContiguousCacheData \
-   QContiguousCacheTypedData \
    QCommandLineOption \
    QCommandLineParser \
    QCryptographicHash \
-   QDate \
-   QDateTime \
    QEasingCurve \
    QElapsedTimer \
    QExplicitlySharedDataPointer \
-   QFlatMap \
-   QHash \
-   QHashIterator \
    QLine \
    QLineF \
-   QLinkedList \
-   QLinkedListData \
-   QLinkedListIterator \
-   QLinkedListNode \
-   QList \
-   QListIterator \
    QLocale \
-   QMap \
-   QMapIterator \
    QMargins \
    QMessageAuthenticationCode \
-   QMultiHash \
-   QMultiMap \
-   QMutableHashIterator \
-   QMutableLinkedListIterator \
-   QMutableListIterator \
-   QMutableMapIterator \
-   QMutableSetIterator \
-   QMutableStringListIterator \
-   QMutableVectorIterator \
    QPair \
    QPoint \
    QPointF \
-   QQueue \
    QRect \
    QRectF \
    QScopedArrayPointer \
@@ -67,28 +40,17 @@ CORE_PUBLIC_INCLUDES += \
    QScopedPointerDeleter \
    QScopedPointerPodDeleter \
    QScopedValueRollback \
-   QSet \
-   QSetIterator \
    QSharedData \
    QSharedDataPointer \
    QSharedPointer \
    QSize \
    QSizeF \
-   QStack \
-   QStringList \
-   QStringListIterator \
    QSystemLocale \
    QTextBoundaryFinder \
-   QTime \
    QTimeLine \
    QVarLengthArray \
-   QVector \
-   QVectorData \
-   QVectorIterator \
-   QVectorTypedData \
    QWeakPointer \
-   QtAlgorithms \
-   QtContainerFwd
+   QtAlgorithms
 
 CORE_TOOLS_INCLUDES = \
    qalgorithms.h \
@@ -98,51 +60,20 @@ CORE_TOOLS_INCLUDES = \
    qbitref.h \
    qbytearray.h \
    qbyteref.h \
-   qcache.h \
-   qcontainerfwd.h \
-   qcontiguouscache.h \
-   qcontiguouscachedata.h \
-   qcontiguouscachetypeddata.h \
    qcommandlineoption.h \
    qcommandlineparser.h \
    qcryptographichash.h \
-   qdate.h \
-   qdatetime.h \
    qeasingcurve.h \
    qelapsedtimer.h \
    qexplicitlyshareddatapointer.h \
-   qflatmap.h \
-   qhash.h \
-   qhashfunc.h \
-   qhashfwd.h \
-   qhashiterator.h \
    qline.h \
    qlinef.h \
-   qlinkedlist.h \
-   qlinkedlistdata.h \
-   qlinkedlistiterator.h \
-   qlinkedlistnode.h \
-   qlist.h \
-   qlistiterator.h \
    qlocale.h \
-   qmap.h \
-   qmapfunc.h \
-   qmapiterator.h \
    qmargins.h \
    qmessageauthenticationcode.h \
-   qmultihash.h \
-   qmultimap.h \
-   qmutablehashiterator.h \
-   qmutablelinkedlistiterator.h \
-   qmutablelistiterator.h \
-   qmutablemapiterator.h \
-   qmutablesetiterator.h \
-   qmutablestringlistiterator.h \
-   qmutablevectoriterator.h \
    qpair.h \
    qpoint.h \
    qpointf.h \
-   qqueue.h \
    qrect.h \
    qrectf.h \
    qrefcount.h \
@@ -152,33 +83,21 @@ CORE_TOOLS_INCLUDES = \
    qscopedpointerdeleter.h \
    qscopedpointerpoddeleter.h \
    qscopedvaluerollback.h \
-   qset.h \
-   qsetiterator.h \
    qshareddata.h \
    qshareddatapointer.h \
    qsharedpointer.h \
    qsharedpointer_impl.h \
    qsize.h \
    qsizef.h \
-   qstack.h \
-   qstringlist.h \
-   qstringlistiterator.h \
    qsystemlocale.h \
    qtalgorithms.h \
-   qtcontainerfwd.h \
    qtextboundaryfinder.h \
-   qtime.h \
    qtimeline.h \
    qvarlengtharray.h \
-   qvector.h \
-   qvectordata.h \
-   qvectoriterator.h \
-   qvectortypeddata.h \
    qweakpointer.h
 
 CORE_TOOLS_PRIVATE_INCLUDES = \
    qbytedata_p.h \
-   qdatetime_p.h \
    qfreelist_p.h \
    qlocale_data_p.h \
    qlocale_p.h \
@@ -201,22 +120,15 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/tools/qbitarray.cpp \
    src/core/tools/qbytearray.cpp \
    src/core/tools/qcryptographichash.cpp \
-   src/core/tools/qdatetime.cpp \
    src/core/tools/qeasingcurve.cpp \
    src/core/tools/qelapsedtimer.cpp \
    src/core/tools/qfreelist.cpp \
-   src/core/tools/qflatmap.cpp \
-   src/core/tools/qhash.cpp \
    src/core/tools/qline.cpp \
-   src/core/tools/qlinkedlist.cpp \
-   src/core/tools/qlist.cpp \
    src/core/tools/qlocale.cpp \
    src/core/tools/qlocale_tools.cpp \
    src/core/tools/qpoint.cpp \
-   src/core/tools/qmap.cpp \
    src/core/tools/qmargins.cpp \
    src/core/tools/qmessageauthenticationcode.cpp \
-   src/core/tools/qcontiguouscache.cpp \
    src/core/tools/qcommandlineoption.cpp \
    src/core/tools/qcommandlineparser.cpp \
    src/core/tools/qrect.cpp \
@@ -225,11 +137,9 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/tools/qsharedpointer.cpp \
    src/core/tools/qsimd.cpp \
    src/core/tools/qsize.cpp \
-   src/core/tools/qstringlist.cpp \
    src/core/tools/qtextboundaryfinder.cpp \
    src/core/tools/qtimeline.cpp \
    src/core/tools/qunicodetools.cpp \
-   src/core/tools/qvector.cpp \
    \
    src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp \
    \
@@ -289,9 +199,10 @@ endif
 
 if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
+   src/core/tools/qbytearray_mac.mm \
    src/core/tools/qelapsedtimer_mac.cpp \
-   src/core/tools/qlocale_mac.mm \
-   src/core/tools/qbytearray_mac.mm
+   src/core/tools/qlocale_mac.mm
+
 endif
 
 noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \

@@ -69,6 +69,8 @@ CORE_DIRS =
 include src/core/animation/Makefile.am
 include src/core/codecs/Makefile.am
 include src/core/concurrent/Makefile.am
+include src/core/containers/Makefile.am
+include src/core/datetime/Makefile.am
 include src/core/global/Makefile.am
 include src/core/io/Makefile.am
 include src/core/json/Makefile.am
