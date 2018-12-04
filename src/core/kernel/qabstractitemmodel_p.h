@@ -23,9 +23,9 @@
 #ifndef QABSTRACTITEMMODEL_P_H
 #define QABSTRACTITEMMODEL_P_H
 
-#include <QtCore/qstack.h>
-#include <QtCore/qset.h>
-#include <QtCore/qhash.h>
+#include <qstack.h>
+#include <qset.h>
+#include <qmultihash.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -47,11 +47,11 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
 
  public:
    QAbstractItemModelPrivate() : supportedDragActions(-1), roleNames(defaultRoleNames()) {}
-   virtual ~QAbstractItemModelPrivate() {}
+   virtual ~QAbstractItemModelPrivate();
 
 
    void removePersistentIndexData(QPersistentModelIndexData *data);
-   void movePersistentIndexes(QVector<QPersistentModelIndexData *> indexes, int change,
+   void movePersistentIndexes(const QVector<QPersistentModelIndexData *> &indexes, int change,
                   const QModelIndex &parent, Qt::Orientation orientation);
 
    void rowsAboutToBeInserted(const QModelIndex &parent, int first, int last);
@@ -146,8 +146,8 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
 
    Qt::DropActions supportedDragActions;
 
-   QHash<int, QByteArray> roleNames;
-   static const QHash<int, QByteArray> &defaultRoleNames();
+   QMultiHash<int, QString> roleNames;
+   static const QMultiHash<int, QString> &defaultRoleNames();
 
  protected:
    QAbstractItemModel *q_ptr;
