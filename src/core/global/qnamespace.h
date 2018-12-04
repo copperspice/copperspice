@@ -1267,13 +1267,13 @@ class Q_CORE_EXPORT Qt
    };
 
    enum InputMethodQuery {
-      ImEnabled = 0x1,
-      ImCursorRectangle = 0x2,
-      ImMicroFocus = 0x2, // deprecated
-      ImFont = 0x4,
-      ImCursorPosition = 0x8,
-      ImSurroundingText = 0x10,
-      ImCurrentSelection = 0x20,
+      ImEnabled           = 0x1,
+      ImCursorRectangle   = 0x2,
+      ImMicroFocus        = 0x2, // deprecated
+      ImFont              = 0x4,
+      ImCursorPosition    = 0x8,
+      ImSurroundingText   = 0x10,
+      ImCurrentSelection  = 0x20,
       ImMaximumTextLength = 0x40,
       ImAnchorPosition = 0x80,
       ImHints = 0x100,
@@ -1419,6 +1419,7 @@ class Q_CORE_EXPORT Qt
       ItemIsUserCheckable = 16,
       ItemIsEnabled = 32,
       ItemIsTristate = 64,
+      ItemIsAutoTristate = ItemIsTristate,
       ItemNeverHasChildren = 128,
       ItemIsUserTristate = 256
    };

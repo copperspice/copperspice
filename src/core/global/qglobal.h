@@ -23,10 +23,12 @@
 #ifndef QGLOBAL_H
 #define QGLOBAL_H
 
+
 #include <stddef.h>
 #include <stdint.h>
 
 #include <cs_build_info.h>
+
 #include <qexport.h>
 #include <qfeatures.h>
 
@@ -36,6 +38,8 @@
 #if defined(__cplusplus)
 
 #include <algorithm>
+#include <type_traits>
+
 #include <qstringfwd.h>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
@@ -371,7 +375,6 @@
 #  define QT_STRINGIFY2(x)  #x
 #  define QT_STRINGIFY1(x)  QT_STRINGIFY2(x)
 #endif
-
 
 #ifndef Q_CONSTRUCTOR_FUNCTION
 # define Q_CONSTRUCTOR_FUNCTION0(AFUNC)    static const int AFUNC ## __init_variable__ = AFUNC();
@@ -864,12 +867,28 @@ class QTypeInfo
 {
  public:
    enum {
-      isPointer = false,
-      isComplex = true,
-      isStatic  = true,
-      isLarge   = (sizeof(T) > sizeof(void *)),
-      isDummy   = false
-   };
+      isPointer  = false,
+      isIntegral = std::is_integral<T>::value,
+      isComplex  = true,
+      isStatic   = true,
+      isLarge    = (sizeof(T) > sizeof(void *)),
+
+      sizeOf     = sizeof(T)
+    };
+};
+template<>
+class QTypeInfo<void>
+{
+public:
+    enum {
+        isPointer  = false,
+        isIntegral = false,
+        isComplex  = false,
+        isStatic   = false,
+        isLarge    = false,
+
+        sizeOf     = 0
+    };
 };
 
 template <typename T>
@@ -877,11 +896,12 @@ class QTypeInfo<T *>
 {
  public:
    enum {
-      isPointer = true,
-      isComplex = false,
-      isStatic  = false,
-      isLarge   = false,
-      isDummy   = false
+      isPointer  = true,
+      isIntegral = false,
+      isComplex  = false,
+      isStatic   = false,
+      isLarge    = false,
+      sizeOf     = sizeof(T*)
    };
 };
 
@@ -905,11 +925,12 @@ class QTypeInfo<TYPE> \
 { \
 public: \
    enum { \
-      isComplex = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
-      isStatic  = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
-      isLarge   = (sizeof(TYPE)>sizeof(void*)), \
-      isPointer = false, \
-      isDummy   = (((FLAGS) & Q_DUMMY_TYPE) != 0) \
+      isComplex  = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
+      isStatic   = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
+      isLarge    = (sizeof(TYPE)>sizeof(void*)), \
+      isPointer  = false, \
+      isIntegral = std::is_integral< TYPE >::value, \
+      sizeOf = sizeof(TYPE) \
    }; \
     static inline const char *name() { return #TYPE; } \
 }
