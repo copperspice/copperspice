@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 #include <QStringList>
+#include <QTimeZone>
 
 #include "qbuiltintypes_p.h"
 #include "qitem_p.h"
@@ -28,8 +29,6 @@
 #include "qvalidationerror_p.h"
 
 #include "qabstractdatetime_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -250,7 +249,7 @@ void AbstractDateTime::setUtcOffset(QDateTime &result,
       result.setTimeSpec(Qt::LocalTime);
    } else {
       Q_ASSERT(zoResult == Offset);
-      result.setUtcOffset(zoOffset);
+      result.setOffsetFromUtc(zoOffset);
    }
 }
 
@@ -313,8 +312,9 @@ QString AbstractDateTime::zoneOffsetToString() const
       default: {
          Q_ASSERT(m_dateTime.timeSpec() == Qt::OffsetFromUTC);
 
-         const int zoneOffset = m_dateTime.utcOffset();
+         const int zoneOffset = m_dateTime.offsetFromUtc();
          Q_ASSERT(zoneOffset != 0);
+
          const int posZoneOffset = qAbs(zoneOffset);
 
          /* zoneOffset is in seconds. */
@@ -343,8 +343,14 @@ void AbstractDateTime::copyTimeSpec(const QDateTime &from,
          return;
       }
       case Qt::OffsetFromUTC: {
-         to.setUtcOffset(from.utcOffset());
+         to.setOffsetFromUtc(from.offsetFromUtc());
          Q_ASSERT(to.timeSpec() == Qt::OffsetFromUTC);
+
+         return;
+      }
+
+      case Qt::TimeZone: {
+         to.setTimeZone(from.timeZone());
          return;
       }
    }
@@ -355,4 +361,4 @@ Item AbstractDateTime::fromValue(const QDateTime &) const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return Item();
 }
-QT_END_NAMESPACE
+

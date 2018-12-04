@@ -87,7 +87,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
           * the empty sequence, then the result is $arg with $timezone as
           * the timezone component." */
          //dt.setTimeSpec(QDateTime::Spec(QDateTime::OffsetFromUTC, tzSecs));
-         dt.setUtcOffset(tzSecs);
+            dt.setOffsetFromUtc(tzSecs);
          Q_ASSERT(dt.isValid());
          return createValue(dt);
       } else {
@@ -97,7 +97,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
          dt = dt.toUTC();
          dt = dt.addSecs(tzSecs);
          //dt.setTimeSpec(QDateTime::Spec(QDateTime::OffsetFromUTC, tzSecs));
-         dt.setUtcOffset(tzSecs);
+            dt.setOffsetFromUtc(tzSecs);
          Q_ASSERT(dt.isValid());
          return createValue(dt);
       }
@@ -134,4 +134,3 @@ Item AdjustTimeToTimezoneFN::createValue(const QDateTime &dt) const
    return SchemaTime::fromDateTime(dt);
 }
 
-QT_END_NAMESPACE

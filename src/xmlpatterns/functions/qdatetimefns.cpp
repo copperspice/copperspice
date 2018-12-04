@@ -100,8 +100,10 @@ Item TimezoneFromAbstractDateTimeFN::extract(const QDateTime &dt) const
 {
    if (dt.timeSpec() == Qt::UTC) {
       return toItem(CommonValues::DayTimeDurationZero);
+
    } else if (dt.timeSpec() == Qt::OffsetFromUTC) {
-      return toItem(DayTimeDuration::fromSeconds(dt.utcOffset()));
+      return toItem(DayTimeDuration::fromSeconds(dt.offsetFromUtc()));
+
    } else {
       return Item();
    }
