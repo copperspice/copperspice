@@ -555,25 +555,29 @@ static const int features_count = (sizeof features_indices) / (sizeof features_i
 static const quint64 minFeature = qCompilerCpuFeatures;
 
 #ifdef Q_OS_WIN
+
 #if defined(Q_CC_GNU)
 #  define ffsll __builtin_ffsll
 #else
+
 int ffsll(quint64 i)
 {
 #if defined(Q_OS_WIN64)
    unsigned long result;
    return _BitScanForward64(&result, i) ? result : 0;
-#elif !defined(Q_OS_WINCE)
+
+#else
    unsigned long result;
    return _BitScanForward(&result, i) ? result :
           _BitScanForward(&result, i >> 32) ? result + 32 : 0;
-#else
-   return 0;
+
 #endif
 }
 #endif
-#elif defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD) || defined(Q_OS_ANDROID) || defined(Q_OS_QNX) || defined(Q_OS_OSX) || defined(Q_OS_HAIKU)
+
+#elif defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD) || defined(Q_OS_ANDROID) || defined(Q_OS_OSX)
 # define ffsll __builtin_ffsll
+
 #endif
 
 Q_CORE_EXPORT std::atomic<quint64> cs_cpu_features{ 0 };

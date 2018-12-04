@@ -20,18 +20,16 @@
 *
 ***********************************************************************/
 
-#include <stdlib.h>
-
 #include <qglobal.h>
-#include <qlocale_data_p.h>
 
 #include <qlocale.h>
 #include <qlocale_p.h>
+#include <qlocale_data_p.h>
 #include <qlocale_tools_p.h>
 
 #include <qplatformdefs.h>
 #include <qdatastream.h>
-#include <qdatetime_p.h>
+
 #include <qdatetime.h>
 #include <qhashfunc.h>
 #include <qnamespace.h>
@@ -39,6 +37,11 @@
 #include <qstringlist.h>
 #include <qstringparser.h>
 #include <qvariant.h>
+
+#include <qdatetime_p.h>
+#include <qdatetimeparser_p.h>
+#include <qnumeric_p.h>
+#include <qsystemlibrary_p.h>
 
 #if ! defined(QWS) && defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
@@ -49,8 +52,8 @@
 #include <time.h>
 #endif
 
-#include <qnumeric_p.h>
-#include <qsystemlibrary_p.h>
+#include <stdlib.h>
+
 
 #ifndef QT_NO_SYSTEMLOCALE
 
@@ -637,7 +640,7 @@ QSystemLocale::QSystemLocale()
    }
 }
 
-/*! \internal */
+
 QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_private_tag unused)
 {
 }
@@ -1359,8 +1362,7 @@ QTime QLocale::toTime(const QString &string, const QString &format) const
 
    QDateTimeParser dt(QVariant::Time, QDateTimeParser::FromString);
 
-// dt.setDefaultLocale(*this);
-   dt.defaultLocale = *this;
+   dt.setDefaultLocale(*this);
 
    if (dt.parseFormat(format)) {
       dt.fromString(string, 0, &time);
@@ -1375,8 +1377,7 @@ QDate QLocale::toDate(const QString &string, const QString &format) const
 
    QDateTimeParser dt(QVariant::Date, QDateTimeParser::FromString);
 
-// dt.setDefaultLocale(*this);
-   dt.defaultLocale = *this;
+   dt.setDefaultLocale(*this);
 
    if (dt.parseFormat(format)) {
       dt.fromString(string, &date, 0);
@@ -1392,8 +1393,7 @@ QDateTime QLocale::toDateTime(const QString &string, const QString &format) cons
 
    QDateTimeParser dt(QVariant::DateTime, QDateTimeParser::FromString);
 
-// dt.setDefaultLocale(*this);
-   dt.defaultLocale = *this;
+   dt.setDefaultLocale(*this);
 
    if (dt.parseFormat(format) && dt.fromString(string, &date, &time)) {
       return QDateTime(date, time);
@@ -2089,14 +2089,11 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                used = true;
                repeat = 1;
 
-/* broom - ok to have on hold until new dateTime changes
                if (formatDate) {
                   result.append(datetime.timeZoneAbbreviation());
                } else {
                   result.append(QDateTime::currentDateTime().timeZoneAbbreviation());
                }
-*/
-               result.append(timeZone());
 
                break;
 

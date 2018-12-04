@@ -43,10 +43,16 @@ class Q_CORE_EXPORT QSize
    inline int height() const;
    inline void setWidth(int w);
    inline void setHeight(int h);
+
    void transpose();
+   inline QSize transposed() const;
 
    inline void scale(int w, int h, Qt::AspectRatioMode mode);
-   void scale(const QSize &s, Qt::AspectRatioMode mode);
+   inline void scale(const QSize &s, Qt::AspectRatioMode mode);
+
+   QSize scaled(int w, int h, Qt::AspectRatioMode mode) const;
+   QSize scaled(const QSize &s, Qt::AspectRatioMode mode) const;
+
 
    inline QSize expandedTo(const QSize &) const;
    inline QSize boundedTo(const QSize &) const;
@@ -71,6 +77,7 @@ class Q_CORE_EXPORT QSize
    int wd;
    int ht;
 };
+
 Q_DECLARE_TYPEINFO(QSize, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
@@ -122,10 +129,26 @@ inline void QSize::setHeight(int h)
    ht = h;
 }
 
+inline QSize QSize::transposed() const
+{
+   return QSize(ht, wd);
+}
+
 inline void QSize::scale(int w, int h, Qt::AspectRatioMode mode)
 {
    scale(QSize(w, h), mode);
 }
+
+inline void QSize::scale(const QSize &s, Qt::AspectRatioMode mode)
+{
+   *this = scaled(s, mode);
+}
+
+inline QSize QSize::scaled(int w, int h, Qt::AspectRatioMode mode) const
+{
+   return scaled(QSize(w, h), mode);
+}
+
 
 inline int &QSize::rwidth()
 {
@@ -229,10 +252,15 @@ class Q_CORE_EXPORT QSizeF
    inline qreal height() const;
    inline void setWidth(qreal w);
    inline void setHeight(qreal h);
+
    void transpose();
+   inline QSizeF transposed() const;
 
    inline void scale(qreal w, qreal h, Qt::AspectRatioMode mode);
-   void scale(const QSizeF &s, Qt::AspectRatioMode mode);
+   inline void scale(const QSizeF &s, Qt::AspectRatioMode mode);
+
+   QSizeF scaled(qreal w, qreal h, Qt::AspectRatioMode mode) const;
+   QSizeF scaled(const QSizeF &s, Qt::AspectRatioMode mode) const;
 
    inline QSizeF expandedTo(const QSizeF &) const;
    inline QSizeF boundedTo(const QSizeF &) const;
@@ -315,10 +343,26 @@ inline void QSizeF::setHeight(qreal h)
    ht = h;
 }
 
+inline QSizeF QSizeF::transposed() const
+{
+   return QSizeF(ht, wd);
+}
+
 inline void QSizeF::scale(qreal w, qreal h, Qt::AspectRatioMode mode)
 {
    scale(QSizeF(w, h), mode);
 }
+
+inline void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
+{
+   *this = scaled(s, mode);
+}
+
+inline QSizeF QSizeF::scaled(qreal w, qreal h, Qt::AspectRatioMode mode) const
+{
+   return scaled(QSizeF(w, h), mode);
+}
+
 
 inline qreal &QSizeF::rwidth()
 {

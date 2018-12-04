@@ -22,7 +22,7 @@
 
 #include <qsize.h>
 #include <qdatastream.h>
-#include <qdebug.h>
+#include <qdebug_p.h>
 
 void QSize::transpose()
 {
@@ -31,11 +31,11 @@ void QSize::transpose()
    ht = tmp;
 }
 
-void QSize::scale(const QSize &s, Qt::AspectRatioMode mode)
+QSize QSize::scaled(const QSize &s, Qt::AspectRatioMode mode) const
 {
    if (mode == Qt::IgnoreAspectRatio || wd == 0 || ht == 0) {
-      wd = s.wd;
-      ht = s.ht;
+     return s;
+
    } else {
       bool useHeight;
       qint64 rw = qint64(s.ht) * qint64(wd) / qint64(ht);
@@ -47,11 +47,10 @@ void QSize::scale(const QSize &s, Qt::AspectRatioMode mode)
       }
 
       if (useHeight) {
-         wd = rw;
-         ht = s.ht;
+            return QSize(rw, s.ht);
       } else {
-         ht = qint32(qint64(s.wd) * qint64(ht) / qint64(wd));
-         wd = s.wd;
+            return QSize(s.wd,
+                         qint32(qint64(s.wd) * qint64(ht) / qint64(wd)));
       }
    }
 }
@@ -76,8 +75,12 @@ QDataStream &operator>>(QDataStream &s, QSize &sz)
 
 QDebug operator<<(QDebug dbg, const QSize &s)
 {
-   dbg.nospace() << "QSize(" << s.width() << ", " << s.height() << ')';
-   return dbg.space();
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    dbg << "QSize(";
+    QtDebugUtils::formatQSize(dbg, s);
+    dbg << ')';
+    return dbg;
 }
 
 void QSizeF::transpose()
@@ -86,11 +89,10 @@ void QSizeF::transpose()
    wd = ht;
    ht = tmp;
 }
-void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
+QSizeF QSizeF::scaled(const QSizeF &s, Qt::AspectRatioMode mode) const
 {
    if (mode == Qt::IgnoreAspectRatio || qIsNull(wd) || qIsNull(ht)) {
-      wd = s.wd;
-      ht = s.ht;
+        return s;
    } else {
       bool useHeight;
       qreal rw = s.ht * wd / ht;
@@ -102,11 +104,9 @@ void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
       }
 
       if (useHeight) {
-         wd = rw;
-         ht = s.ht;
+            return QSizeF(rw, s.ht);
       } else {
-         ht = s.wd * ht / wd;
-         wd = s.wd;
+            return QSizeF(s.wd, s.wd * ht / wd);
       }
    }
 }
@@ -129,7 +129,11 @@ QDataStream &operator>>(QDataStream &s, QSizeF &sz)
 
 QDebug operator<<(QDebug dbg, const QSizeF &s)
 {
-   dbg.nospace() << "QSizeF(" << s.width() << ", " << s.height() << ')';
-   return dbg.space();
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    dbg << "QSizeF(";
+    QtDebugUtils::formatQSize(dbg, s);
+    dbg << ')';
+    return dbg;
 }
 
