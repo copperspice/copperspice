@@ -29,11 +29,9 @@
 #include "qatomicstring_p.h"
 #include "qcommonvalues_p.h"
 #include "qcompressedwhitespace_p.h"
-#include "qdebug_p.h"
+#include "qxmlpatterns_debug_p.h"
 #include "quntypedatomic_p.h"
 #include "qxpathhelper_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -53,7 +51,8 @@ class AccelTreePrivate : public QAbstractXmlNodeModelPrivate
  private:
    AccelTree *m_accelTree;
 };
-}
+
+} // namespace
 
 AccelTree::AccelTree(const QUrl &docURI, const QUrl &bURI)
    : QAbstractXmlNodeModel(new AccelTreePrivate(this)), m_documentURI(docURI), m_baseURI(bURI)
@@ -68,10 +67,8 @@ void AccelTree::printStats(const NamePool::Ptr &np) const
 {
    Q_ASSERT(np);
 
-#ifdef QT_NO_DEBUG
-   Q_UNUSED(np); /* Needed when compiling in release mode. */
+#if ! defined(QT_NO_DEBUG)
 
-#else
    const int len = basicData.count();
 
    pDebug() << "AccelTree stats for" << (m_documentURI.isEmpty() ? QString::fromLatin1("<empty URI>") :
@@ -93,15 +90,6 @@ void AccelTree::printStats(const NamePool::Ptr &np) const
                                isCompressed(i)) ? CompressedWhitespace::decompress(data.value(i))
                               : data.value(i))
                << "\t|";
-
-      /*
-      pDebug() << '|' << QString().formatArg(i, 14)
-               << '|' << QString().formatArg(v.depth(), 6)
-               << '|' << QString().formatArg(v.size(), 6)
-               << '|' << QString().formatArg(postNumber(i), 14)
-               << '|' << QString().formatArg(v.kind(), 6)
-               << '|';
-               */
    }
 
    pDebug() << "+---------------+-------+-------+---------------+-------+--------------+";
@@ -702,5 +690,4 @@ QVector<QXmlNodeModelIndex> AccelTree::nodesByIdref(const QXmlName &) const
    return QVector<QXmlNodeModelIndex>();
 }
 
-QT_END_NAMESPACE
 

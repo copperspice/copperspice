@@ -49,7 +49,7 @@
 
 #include <qurl.h>
 #include <qstring.h>
-#include <qdebug_p.h>
+#include <qxmlpatterns_debug_p.h>
 
 #include "qabstractfloat_p.h"
 #include "qandexpression_p.h"

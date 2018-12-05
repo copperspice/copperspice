@@ -20,8 +20,8 @@
 *
 ***********************************************************************/
 
-#include "qdebug_p.h"
-#include "qsourcelocation.h"
+#include <qxmlpatterns_debug_p.h>
+#include <qsourcelocation.h>
 
 QSourceLocation::QSourceLocation() : m_line(-1), m_column(-1)
 {

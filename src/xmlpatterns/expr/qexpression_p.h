@@ -26,7 +26,7 @@
 #include <QFlags>
 #include <QSharedData>
 #include <qcppcastinghelper_p.h>
-#include <qdebug_p.h>
+#include <qxmlpatterns_debug_p.h>
 #include <qdynamiccontext_p.h>
 #include <qexpressiondispatch_p.h>
 #include <qitem_p.h>

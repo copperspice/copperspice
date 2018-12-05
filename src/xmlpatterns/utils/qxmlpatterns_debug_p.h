@@ -20,17 +20,15 @@
 *
 ***********************************************************************/
 
-#ifndef QDebug_P_H
-#define QDebug_P_H
+#ifndef QXmlPatterns_Debug_P_H
+#define QXmlPatterns_Debug_P_H
 
 #include <QDebug>
-
-QT_BEGIN_NAMESPACE
 
 #define Patternist_DEBUG_PARSER
 #define Patternist_DEBUG
 
-#undef Patternist_DEBUG // disable it for now
+#undef Patternist_DEBUG          // disable it for release
 
 #ifdef QT_NO_DEBUG
 #   undef Patternist_DEBUG_PARSER
@@ -38,18 +36,21 @@ QT_BEGIN_NAMESPACE
 #endif
 
 namespace QPatternist {
+
 #ifdef Patternist_DEBUG
+
 inline QDebug pDebug()
 {
    return qDebug();
 }
 #else
+
 inline QNoDebug pDebug()
 {
    return QNoDebug();
 }
 #endif
+
 }
 
-QT_END_NAMESPACE
 #endif

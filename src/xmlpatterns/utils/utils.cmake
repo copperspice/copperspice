@@ -2,7 +2,7 @@ set(XMLPATTERNS_PRIVATE_INCLUDES
     ${XMLPATTERNS_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/qcommonnamespaces_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/qcppcastinghelper_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/utils/qdebug_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/qxmlpatterns_debug_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/qgenericnamespaceresolver_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/qpatternistlocale_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/qnamepool_p.h
