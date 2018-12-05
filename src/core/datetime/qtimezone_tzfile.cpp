@@ -23,11 +23,12 @@
 #include <qtimezone.h>
 #include <qtimezone_p.h>
 
-#include <QFile>
-#include <QHash>
-#include <QDataStream>
-#include <QDateTime>
+#include <qfile.h>
+#include <qhash.h>
+#include <qdatastream.h>
+#include <qdatetime.h>
 #include <qdebug.h>
+#include <qstringlist.h>
 
 #include <qlocale_tools_p.h>
 
@@ -58,11 +59,13 @@ static QTzTimeZoneHash loadTzTimeZones()
     QTextStream ts(&tzif);
     while (!ts.atEnd()) {
         const QString line = ts.readLine();
+
         // Comment lines are prefixed with a #
         if (!line.isEmpty() && line.at(0) != '#') {
             // Data rows are tab-separated columns Region, Coordinates, ID, Optional Comments
             const QStringList parts = line.split('\t');
             QTzTimeZone zone;
+
             zone.country = QLocalePrivate::codeToCountry(parts.at(0));
             if (parts.size() > 3)
                 zone.comment = parts.at(3).toUtf8();
@@ -573,18 +576,12 @@ static QVector<QTimeZonePrivate::Data> calculatePosixTransitions(const QByteArra
 
 // Create the system default time zone
 QTzTimeZonePrivate::QTzTimeZonePrivate()
-#ifdef QT_USE_ICU
-    : m_icu(0)
-#endif // QT_USE_ICU
 {
     init(systemTimeZoneId());
 }
 
 // Create a named time zone
 QTzTimeZonePrivate::QTzTimeZonePrivate(const QByteArray &ianaId)
-#ifdef QT_USE_ICU
-    : m_icu(0)
-#endif // QT_USE_ICU
 {
     init(ianaId);
 }
@@ -592,9 +589,6 @@ QTzTimeZonePrivate::QTzTimeZonePrivate(const QByteArray &ianaId)
 QTzTimeZonePrivate::QTzTimeZonePrivate(const QTzTimeZonePrivate &other)
                   : QTimeZonePrivate(other), m_tranTimes(other.m_tranTimes),
                     m_tranRules(other.m_tranRules), m_abbreviations(other.m_abbreviations),
-#ifdef QT_USE_ICU
-                    m_icu(other.m_icu),
-#endif // QT_USE_ICU
                     m_posixRule(other.m_posixRule)
 {
 }
@@ -615,15 +609,16 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
         // Open system tz
         tzif.setFileName("/etc/localtime");
 
-        if (!tzif.open(QIODevice::ReadOnly))
+        if (! tzif.open(QIODevice::ReadOnly)) {
             return;
+        }
 
     } else {
         // Open named tz, try modern path first, if fails try legacy path
-        tzif.setFileName(QLatin1String("/usr/share/zoneinfo/") + QString::fromLocal8Bit(ianaId));
+        tzif.setFileName("/usr/share/zoneinfo/" + QString::fromUtf8(ianaId));
 
         if (!tzif.open(QIODevice::ReadOnly)) {
-            tzif.setFileName(QLatin1String("/usr/lib/zoneinfo/") + QString::fromLocal8Bit(ianaId));
+            tzif.setFileName(QLatin1String("/usr/lib/zoneinfo/") + QString::fromUtf8(ianaId));
             if (!tzif.open(QIODevice::ReadOnly))
                 return;
         }
@@ -737,48 +732,21 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
 
 QLocale::Country QTzTimeZonePrivate::country() const
 {
-    return tzZones->value(m_id).country;
+    return tzZones()->value(m_id).country;
 }
 
 QString QTzTimeZonePrivate::comment() const
 {
-    return QString::fromUtf8(tzZones->value(m_id).comment);
+    return QString::fromUtf8(tzZones()->value(m_id).comment);
 }
 
-QString QTzTimeZonePrivate::displayName(qint64 atMSecsSinceEpoch,
-                                        QTimeZone::NameType nameType,
-                                        const QLocale &locale) const
+QString QTzTimeZonePrivate::displayName(qint64 atMSecsSinceEpoch, QTimeZone::NameType nameType, const QLocale &locale) const
 {
-#ifdef QT_USE_ICU
-    if (!m_icu)
-        m_icu = new QIcuTimeZonePrivate(m_id);
-    // TODO small risk may not match if tran times differ due to outdated files
-    // TODO Some valid TZ names are not valid ICU names, use translation table?
-    if (m_icu->isValid())
-        return m_icu->displayName(atMSecsSinceEpoch, nameType, locale);
-#else
-    Q_UNUSED(nameType)
-    Q_UNUSED(locale)
-#endif // QT_USE_ICU
     return abbreviation(atMSecsSinceEpoch);
 }
 
-QString QTzTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
-                                        QTimeZone::NameType nameType,
-                                        const QLocale &locale) const
+QString QTzTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType, const QLocale &locale) const
 {
-#ifdef QT_USE_ICU
-    if (!m_icu)
-        m_icu = new QIcuTimeZonePrivate(m_id);
-    // TODO small risk may not match if tran times differ due to outdated files
-    // TODO Some valid TZ names are not valid ICU names, use translation table?
-    if (m_icu->isValid())
-        return m_icu->displayName(timeType, nameType, locale);
-#else
-    Q_UNUSED(timeType)
-    Q_UNUSED(nameType)
-    Q_UNUSED(locale)
-#endif // QT_USE_ICU
     // If no ICU available then have to use abbreviations instead
     // Abbreviations don't have GenericTime
     if (timeType == QTimeZone::GenericTime)
@@ -1036,19 +1004,21 @@ QByteArray QTzTimeZonePrivate::systemTimeZoneId() const
 
 QList<QByteArray> QTzTimeZonePrivate::availableTimeZoneIds() const
 {
-    QList<QByteArray> result = tzZones->keys();
+    QList<QByteArray> result = tzZones()->keys();
     std::sort(result.begin(), result.end());
+
     return result;
 }
 
 QList<QByteArray> QTzTimeZonePrivate::availableTimeZoneIds(QLocale::Country country) const
 {
-    // TODO AnyCountry
     QList<QByteArray> result;
-    foreach (const QByteArray &key, tzZones->keys()) {
-        if (tzZones->value(key).country == country)
+
+    for (const QByteArray &key : tzZones()->keys()) {
+        if (tzZones()->value(key).country == country)
             result << key;
     }
+
     std::sort(result.begin(), result.end());
     return result;
 }

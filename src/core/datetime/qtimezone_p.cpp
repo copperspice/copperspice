@@ -570,7 +570,7 @@ template<> QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone()
 }
 
 /*
-    UTC Offset implementation, used when QT_NO_SYSTEMLOCALE set and QT_USE_ICU not set,
+    UTC Offset implementation, used when QT_NO_SYSTEMLOCALE set
     or for QDateTimes with a Qt:Spec of Qt::OffsetFromUtc.
 */
 

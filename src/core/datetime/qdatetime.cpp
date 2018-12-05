@@ -26,7 +26,6 @@
 #include <qplatformdefs.h>
 #include <qdatastream.h>
 #include <qdebug.h>
-#include <qlocale.h>
 #include <qset.h>
 #include <qregularexpression.h>
 #include <qstringlist.h>
@@ -35,9 +34,10 @@
 #include <qtimezone_p.h>
 #include <qdatetimeparser_p.h>
 
-#ifndef Q_OS_WIN
-#include <locale.h>
+#ifdef Q_OS_WIN
 #include <qt_windows.h>
+#else
+#include <locale.h>
 #endif
 
 #include <cmath>
