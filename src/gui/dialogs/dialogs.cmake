@@ -46,6 +46,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qerrormessage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfileinfogatherer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfilesystemmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfontdialog.cpp

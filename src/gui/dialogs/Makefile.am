@@ -48,6 +48,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qdialog.cpp \
 	src/gui/dialogs/qerrormessage.cpp \
 	src/gui/dialogs/qfiledialog.cpp \
+	src/gui/dialogs/qfiledialog_p.cpp \
 	src/gui/dialogs/qfileinfogatherer.cpp \
 	src/gui/dialogs/qfilesystemmodel.cpp \
 	src/gui/dialogs/qfontdialog.cpp \
