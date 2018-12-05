@@ -74,7 +74,6 @@ static res_state_ptr local_res = 0;
 static void resolveLibraryInternal()
 {
    QLibrary lib(QLatin1String("resolv"));
-   lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
 
    if (!lib.load()) {
       return;
