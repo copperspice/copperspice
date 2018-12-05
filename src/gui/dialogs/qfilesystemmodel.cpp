@@ -1905,7 +1905,7 @@ void QFileSystemModelPrivate::init()
 {
    Q_Q(QFileSystemModel);
 
-   qRegisterMetaType<QVector<QPair<QString, QFileInfo>>>("QVector<QPair<QString,QFileInfo> >");
+   qRegisterMetaType<QVector<QPair<QString, QFileInfo>>>("QVector<QPair<QString,QFileInfo>>");
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
@@ -1923,13 +1923,11 @@ void QFileSystemModelPrivate::init()
 
    q->connect(&delayedSortTimer, SIGNAL(timeout()), q, SLOT(_q_performDelayedSort()), Qt::QueuedConnection);
 
-   QHash<int, QByteArray> roles = q->roleNames();
-   roles.insert(QFileSystemModel::FileIconRole,      "fileIcon");
-   roles.insert(QFileSystemModel::FilePathRole,      "filePath");
-   roles.insert(QFileSystemModel::FileNameRole,      "fileName");
-   roles.insert(QFileSystemModel::FilePermissions,   "filePermissions");
+   roleNames.insertMulti(QFileSystemModel::FileIconRole, "fileIcon");
+   roleNames.insert(QFileSystemModel::FilePathRole,      "filePath");
+   roleNames.insert(QFileSystemModel::FileNameRole,      "fileName");
+   roleNames.insert(QFileSystemModel::FilePermissions,   "filePermissions");
 
-   q->setRoleNames(roles);
 }
 
 bool QFileSystemModelPrivate::filtersAcceptsNode(const QFileSystemNode *node) const

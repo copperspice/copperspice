@@ -37,6 +37,7 @@
 #include <QtGui/qevent.h>
 
 #include <stdlib.h>
+
 class QAccessibleInterface;
 class QAccessibleEvent;
 class QAccessibleTextInterface;
@@ -358,6 +359,7 @@ class Q_GUI_EXPORT QAccessible
    static void cleanup();
 
    static QPair< int, int > qAccessibleTextBoundaryHelper(const QTextCursor &cursor, TextBoundaryType boundaryType);
+
  private:
    static UpdateHandler updateHandler;
    static RootObjectHandler rootObjectHandler;
@@ -368,7 +370,6 @@ class Q_GUI_EXPORT QAccessible
 Q_GUI_EXPORT bool operator==(const QAccessible::State &first, const QAccessible::State &second);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAccessible::Relation)
-
 
 
 class Q_GUI_EXPORT QAccessibleInterface
@@ -474,6 +475,7 @@ class Q_GUI_EXPORT QAccessibleTextInterface
    virtual void scrollToSubstring(int startIndex, int endIndex) = 0;
    virtual QString attributes(int offset, int *startOffset, int *endOffset) const = 0;
 };
+
 class Q_GUI_EXPORT QAccessibleEditableTextInterface
 {
  public:
@@ -482,6 +484,7 @@ class Q_GUI_EXPORT QAccessibleEditableTextInterface
    virtual void insertText(int offset, const QString &text) = 0;
    virtual void replaceText(int startOffset, int endOffset, const QString &text) = 0;
 };
+
 class Q_GUI_EXPORT QAccessibleValueInterface
 {
  public:
@@ -492,6 +495,7 @@ class Q_GUI_EXPORT QAccessibleValueInterface
    virtual QVariant minimumValue() const = 0;
    virtual QVariant minimumStepSize() const = 0;
 };
+
 class Q_GUI_EXPORT QAccessibleTableCellInterface
 {
  public:
@@ -505,6 +509,7 @@ class Q_GUI_EXPORT QAccessibleTableCellInterface
    virtual int rowExtent() const = 0;
    virtual QAccessibleInterface *table() const = 0;
 };
+
 class Q_GUI_EXPORT QAccessibleTableInterface
 {
  public:
@@ -529,13 +534,16 @@ class Q_GUI_EXPORT QAccessibleTableInterface
    virtual bool unselectRow(int row) = 0;
    virtual bool unselectColumn(int column) = 0;
    virtual void modelChange(QAccessibleTableModelChangeEvent *event) = 0;
+
  protected:
    friend class QAbstractItemView;
    friend class QAbstractItemViewPrivate;
 };
+
 class Q_GUI_EXPORT QAccessibleActionInterface
 {
    Q_DECLARE_TR_FUNCTIONS(QAccessibleActionInterface)
+
  public:
    virtual ~QAccessibleActionInterface();
    virtual QStringList actionNames() const = 0;
@@ -556,6 +564,7 @@ class Q_GUI_EXPORT QAccessibleActionInterface
    static QString nextPageAction();
    static QString previousPageAction();
 };
+
 class Q_GUI_EXPORT QAccessibleImageInterface
 {
  public:
@@ -564,14 +573,16 @@ class Q_GUI_EXPORT QAccessibleImageInterface
    virtual QSize imageSize() const = 0;
    virtual QPoint imagePosition() const = 0;
 };
+
 class Q_GUI_EXPORT QAccessibleEvent
 {
    Q_DISABLE_COPY(QAccessibleEvent)
  public:
 
-   inline QAccessibleEvent(QObject *obj, QAccessible::Event typ)
-      : m_type(typ), m_object(obj), m_child(-1) {
+   inline QAccessibleEvent(QObject *obj, QAccessible::Event type)
+      : m_type(type), m_object(obj), m_child(-1) {
       Q_ASSERT(obj);
+
       // All events below have a subclass of QAccessibleEvent.
       // Use the subclass, since it's expected that it's possible to cast to that.
       Q_ASSERT(m_type != QAccessible::ValueChanged);
@@ -584,8 +595,9 @@ class Q_GUI_EXPORT QAccessibleEvent
       Q_ASSERT(m_type != QAccessible::TableModelChanged);
    }
 
-   inline QAccessibleEvent(QAccessibleInterface *iface, QAccessible::Event typ)
-      : m_type(typ), m_object(nullptr) {
+   inline QAccessibleEvent(QAccessibleInterface *iface, QAccessible::Event type)
+      : m_type(type), m_object(nullptr) {
+
       Q_ASSERT(iface);
       Q_ASSERT(m_type != QAccessible::ValueChanged);
       Q_ASSERT(m_type != QAccessible::StateChanged);
@@ -603,14 +615,17 @@ class Q_GUI_EXPORT QAccessibleEvent
    QAccessible::Event type() const {
       return m_type;
    }
+
    QObject *object() const {
       return m_object;
    }
+
    QAccessible::Id uniqueId() const;
 
    void setChild(int chld) {
       m_child = chld;
    }
+
    int child() const {
       return m_child;
    }

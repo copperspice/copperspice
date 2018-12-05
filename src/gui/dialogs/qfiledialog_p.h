@@ -104,15 +104,15 @@ class QFileDialogPrivate : public QDialogPrivate
    bool removeDirectory(const QString &path);
    void setLabelTextControl(QFileDialog::DialogLabel label, const QString &text);
    inline void updateLookInLabel();
-   inline void updateFileNameLabel();
+   void updateFileNameLabel();
    inline void updateFileTypeLabel();
    void updateOkButtonText(bool saveAsOnFolder = false);
    void updateCancelButtonText();
 
    inline QModelIndex mapToSource(const QModelIndex &index) const;
    inline QModelIndex mapFromSource(const QModelIndex &index) const;
-   inline QModelIndex rootIndex() const;
-   inline void setRootIndex(const QModelIndex &index) const;
+   QModelIndex rootIndex() const;
+   void setRootIndex(const QModelIndex &index) const;
    inline QModelIndex select(const QModelIndex &index) const;
    inline QString rootPath() const;
 
@@ -223,7 +223,7 @@ class QFileDialogPrivate : public QDialogPrivate
    // setVisible_sys returns true if it ends up showing a native
    // dialog. Returning false means that a non-native dialog must be used instead
    bool canBeNativeDialog() const override;
-   inline bool usingWidgets() const;
+   bool usingWidgets() const;
 
    void setDirectory_sys(const QUrl &directory);
    QUrl directory_sys() const;
@@ -233,7 +233,6 @@ class QFileDialogPrivate : public QDialogPrivate
    void setFilter_sys();
    void selectNameFilter_sys(const QString &filter);
    QString selectedNameFilter_sys() const;
-
 
    QScopedPointer<Ui_QFileDialog> qFileDialogUi;
 

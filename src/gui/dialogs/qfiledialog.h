@@ -29,10 +29,7 @@
 #include <qurl.h>
 #include <QModelIndex>
 
-
 #ifndef QT_NO_FILEDIALOG
-
-
 
 class QAbstractItemDelegate;
 class QAbstractProxyModel;
@@ -41,7 +38,6 @@ class QFileDialogPrivate;
 class QItemSelection;
 
 struct QFileDialogArgs;
-
 
 class Q_GUI_EXPORT QFileDialog : public QDialog
 {
