@@ -77,5 +77,6 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/containers/qqueue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/containers/qstringlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/containers/qvector.cpp
+)
 
 

@@ -19,7 +19,7 @@ set(CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qdatetime_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qdatetimeparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qtimezone_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qtimezone_data.hs
+    ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qtimezone_data.h
 )
 
 set(CORE_SOURCES
