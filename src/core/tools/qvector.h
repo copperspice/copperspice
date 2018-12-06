@@ -122,14 +122,23 @@ class QVector
    }
 
    T *data() {
+      if(isEmpty()) {
+	return nullptr;
+      }
       return &m_data[0];
    }
 
    const T *data() const {
+      if(isEmpty()) {
+	 return nullptr;
+      }
       return &m_data[0];
    }
 
    const T *constData() const {
+      if(isEmpty()) {
+	 return nullptr;
+      }
       return &m_data[0];
    }
 
