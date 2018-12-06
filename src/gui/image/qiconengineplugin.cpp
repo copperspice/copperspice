@@ -23,7 +23,7 @@
 #include <qiconengineplugin.h>
 #include <qiconengine.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QIconEnginePlugin::QIconEnginePlugin(QObject *parent)
    : QObject(parent)
@@ -34,13 +34,4 @@ QIconEnginePlugin::~QIconEnginePlugin()
 {
 }
 
-QIconEnginePluginV2::QIconEnginePluginV2(QObject *parent)
-   : QObject(parent)
-{
-}
 
-QIconEnginePluginV2::~QIconEnginePluginV2()
-{
-}
-
-QT_END_NAMESPACE

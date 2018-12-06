@@ -20,8 +20,6 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qpicture.h>
 #include <qpicture_p.h>
 
@@ -30,6 +28,7 @@
 #include <qfactoryloader_p.h>
 #include <qpaintengine_pic_p.h>
 #include <qfont_p.h>
+#include <qguiapplication.h>
 #include <qdatastream.h>
 #include <qfile.h>
 #include <qimage.h>
@@ -40,53 +39,15 @@
 #include <qregion.h>
 #include <qdebug.h>
 
+#include <algorithm>
 QT_BEGIN_NAMESPACE
 
 void qt_format_text(const QFont &fnt, const QRectF &_r,
-                    int tf, const QTextOption *opt, const QString &str, QRectF *brect,
-                    int tabstops, int *, int tabarraylen,
-                    QPainter *painter);
-
-/*!
-    \class QPicture
-    \brief The QPicture class is a paint device that records and
-    replays QPainter commands.
-
-    \ingroup painting
-    \ingroup shared
+   int tf, const QTextOption *opt, const QString &str, QRectF *brect,
+   int tabstops, int *, int tabarraylen,
+   QPainter *painter);
 
 
-    A picture serializes painter commands to an IO device in a
-    platform-independent format. They are sometimes referred to as meta-files.
-
-    Qt pictures use a proprietary binary format. Unlike native picture
-    (meta-file) formats on many window systems, Qt pictures have no
-    limitations regarding their contents. Everything that can be
-    painted on a widget or pixmap (e.g., fonts, pixmaps, regions,
-    transformed graphics, etc.)  can also be stored in a picture.
-
-    QPicture is resolution independent, i.e. a QPicture can be
-    displayed on different devices (for example svg, pdf, ps, printer
-    and screen) looking the same. This is, for instance, needed for
-    WYSIWYG print preview. QPicture runs in the default system dpi,
-    and scales the painter to match differences in resolution
-    depending on the window system.
-
-    Example of how to record a picture:
-    \snippet doc/src/snippets/picture/picture.cpp 0
-
-    Note that the list of painter commands is reset on each call to
-    the QPainter::begin() function.
-
-    Example of how to replay a picture:
-    \snippet doc/src/snippets/picture/picture.cpp 1
-
-    Pictures can also be drawn using play(). Some basic data about a
-    picture is available, for example, size(), isNull() and
-    boundingRect().
-
-    \sa QMovie
-*/
 
 const char  *qt_mfhdr_tag = "QPIC"; // header tag
 static const quint16 mfhdr_maj = 11; // major version #
@@ -171,6 +132,8 @@ bool QPicture::load(const QString &fileName, const QString &format)
    QFile f(fileName);
 
    if (! f.open(QIODevice::ReadOnly)) {
+      operator=(QPicture());
+
       return false;
    }
 
@@ -184,20 +147,14 @@ bool QPicture::load(QIODevice *dev, const QString &format)
 
 #ifndef QT_NO_PICTUREIO
       QPictureIO io(dev, format);
-      bool result = io.read();
-
-      if (result) {
+      if (io.read()) {
          operator=(io.picture());
-
-      } else if (! format.isEmpty())
-#else
-      bool result = false;
-#endif
-      {
-         qWarning("QPicture::load: No such picture format: %s", csPrintable(format));
+         return true;
       }
-
-      return result;
+#endif
+      qWarning("QPicture::load: No such picture format: %s", format);
+      operator=(QPicture());
+      return false;
    }
 
    detach();
@@ -415,7 +372,7 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
 
    QTransform worldMatrix = painter->transform();
    worldMatrix.scale(qreal(painter->device()->logicalDpiX()) / qreal(qt_defaultDpiX()),
-                     qreal(painter->device()->logicalDpiY()) / qreal(qt_defaultDpiY()));
+      qreal(painter->device()->logicalDpiY()) / qreal(qt_defaultDpiY()));
    painter->setTransform(worldMatrix);
 
    while (nrecords-- && !s.atEnd()) {
@@ -610,10 +567,10 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
                QFontMetrics fm(fnt);
                QPointF pt(p.x(), p.y() - fm.ascent());
                qt_format_text(fnt, QRectF(pt, size), flags, /*opt*/0,
-                              str, /*brect=*/0, /*tabstops=*/0, /*...*/0, /*tabarraylen=*/0, painter);
+                  str, /*brect=*/0, /*tabstops=*/0, /*...*/0, /*tabarraylen=*/0, painter);
             } else {
                qt_format_text(font, QRectF(p, QSizeF(1, 1)), Qt::TextSingleLine | Qt::TextDontClip, /*opt*/0,
-                              str, /*brect=*/0, /*tabstops=*/0, /*...*/0, /*tabarraylen=*/0, painter);
+                  str, /*brect=*/0, /*tabstops=*/0, /*...*/0, /*tabarraylen=*/0, painter);
             }
 
             break;
@@ -796,9 +753,9 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
          case QPicturePrivate::PdcSetRenderHint:
             s >> ul;
             painter->setRenderHint(QPainter::Antialiasing,
-                                   bool(ul & QPainter::Antialiasing));
+               bool(ul & QPainter::Antialiasing));
             painter->setRenderHint(QPainter::SmoothPixmapTransform,
-                                   bool(ul & QPainter::SmoothPixmapTransform));
+               bool(ul & QPainter::SmoothPixmapTransform));
             break;
          case QPicturePrivate::PdcSetCompositionMode:
             s >> ul;
@@ -868,6 +825,12 @@ int QPicture::metric(PaintDeviceMetric m) const
          break;
       case PdmDepth:
          val = 24;
+         break;
+      case PdmDevicePixelRatio:
+         val = 1;
+         break;
+      case PdmDevicePixelRatioScaled:
+         val = 1 * QPaintDevice::devicePixelRatioFScale();
          break;
       default:
          val = 0;
@@ -947,7 +910,7 @@ bool QPicturePrivate::checkFormat()
    s.readRawData(mf_id, 4);                      // read actual tag
 
    if (memcmp(mf_id, qt_mfhdr_tag, 4) != 0) {    // wrong header id
-      qWarning("QPicturePaintEngine::checkFormat(): Incorrect header");
+      qWarning("QPicturePaintEngine::checkFormat, Incorrect header");
       pictb.close();
       return false;
    }
@@ -961,7 +924,7 @@ bool QPicturePrivate::checkFormat()
    ccs = (quint16) qChecksum(buf.constData() + data_start, buf.size() - data_start);
    if (ccs != cs) {
       qWarning("QPicturePaintEngine::checkFormat: Invalid checksum %x, %x expected",
-               ccs, cs);
+         ccs, cs);
       pictb.close();
       return false;
    }
@@ -1064,7 +1027,6 @@ QDataStream &operator>>(QDataStream &s, QPicture &r)
 #ifndef QT_NO_PICTUREIO
 
 #include <qregularexpression.h>
-#include <qapplication.h>
 #include <qpictureformatplugin.h>
 
 QString QPicture::pictureFormat(const QString &fileName)
@@ -1140,7 +1102,7 @@ void QPictureIO::init()
 QPictureIO::~QPictureIO()
 {
    if (d->parameters) {
-      delete [] (char *)d->parameters;
+      delete [] d->parameters;
    }
    delete d;
 }
@@ -1149,7 +1111,7 @@ class QPictureHandler
 {
  public:
    QPictureHandler(const QString &f, const QString &h, const QString &fl,
-                  picture_io_handler r, picture_io_handler w);
+      picture_io_handler r, picture_io_handler w);
 
    QString  format;                           // picture format
    QRegularExpression  header;                           // picture header pattern
@@ -1162,7 +1124,7 @@ class QPictureHandler
 };
 
 QPictureHandler::QPictureHandler(const QString &f, const QString &h, const QString &fl,
-                 picture_io_handler r, picture_io_handler w)
+   picture_io_handler r, picture_io_handler w)
    : format(f), header(h)
 {
    text_mode = Untranslated;
@@ -1183,18 +1145,20 @@ QPictureHandler::QPictureHandler(const QString &f, const QString &h, const QStri
 typedef QList<QPictureHandler *> QPHList;
 Q_GLOBAL_STATIC(QPHList, pictureHandlers)
 
-Q_GLOBAL_STATIC(QMutex, mutex)
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, factoryLoader, (QPictureFormatInterface_iid, "/pictureformats"))
-
 void qt_init_picture_plugins()
 {
-   QMutexLocker locker(mutex());
-   QFactoryLoader *loader = factoryLoader();
-   QStringList keys       = loader->keys();
+   using PluginKeyMap = QMultiMap<int, QString>;
 
-   for (int i = 0; i < keys.count(); ++i)  {
-      if (QPictureFormatInterface *format = qobject_cast<QPictureFormatInterface *>(loader->instance(keys.at(i)))) {
-         format->installIOHandler(keys.at(i));
+   static QMutex mutex;
+   QMutexLocker locker(&mutex);
+   static QFactoryLoader loader(QPictureFormatInterface_iid, "/pictureformats");
+
+   const PluginKeyMap keyMap = loader.keyMap();
+   auto cend = keyMap.constEnd();
+
+   for (auto iter = keyMap.constBegin(); iter != cend; ++iter) {
+      if (QPictureFormatPlugin *format = qobject_cast<QPictureFormatPlugin *>(loader.instance(iter.key()))) {
+         format->installIOHandler(iter.value());
       }
    }
 }
@@ -1235,7 +1199,7 @@ static QPictureHandler *get_picture_handler(const QString &format)
 }
 
 void QPictureIO::defineIOHandler(const QString &format, const QString &header, const char *flags,
-                  picture_io_handler readPicture, picture_io_handler writePicture)
+   picture_io_handler readPicture, picture_io_handler writePicture)
 {
    qt_init_picture_handlers();
 
@@ -1319,7 +1283,7 @@ const char *QPictureIO::parameters() const
 void QPictureIO::setParameters(const char *parameters)
 {
    if (d->parameters) {
-      delete [] (char *)d->parameters;
+      delete [] d->parameters;
    }
    d->parameters = qstrdup(parameters);
 }
@@ -1528,7 +1492,7 @@ bool QPictureIO::write()
       bool translate = h->text_mode == QPictureHandler::TranslateInOut;
 
       QIODevice::OpenMode fmode = translate ? QIODevice::WriteOnly | QIODevice::Text : QIODevice::OpenMode(
-                  QIODevice::WriteOnly);
+            QIODevice::WriteOnly);
 
       if (! file.open(fmode)) {              // could not create file
          return false;
@@ -1547,7 +1511,6 @@ bool QPictureIO::write()
 }
 #endif //QT_NO_PICTUREIO
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_PICTURE
 

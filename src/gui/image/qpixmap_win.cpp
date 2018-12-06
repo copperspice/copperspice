@@ -30,17 +30,6 @@
 
 #include <qpixmap_raster_p.h>
 
-
-
-
-
-
-
-
-
-
-
-
 static inline void initBitMapInfoHeader(int width, int height, bool topToBottom, BITMAPINFOHEADER *bih)
 {
    memset(bih, 0, sizeof(BITMAPINFOHEADER));
@@ -120,6 +109,7 @@ Q_GUI_EXPORT HBITMAP qt_createIconMask(const QBitmap &bitmap)
    HBITMAP hbm = CreateBitmap(w, h, 1, 1, bits.data());
    return hbm;
 }
+
 Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat = 0)
 {
    if (p.isNull()) {
@@ -128,8 +118,10 @@ Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat =
 
    HBITMAP bitmap = 0;
    if (p.handle()->classId() != QPlatformPixmap::RasterClass) {
+
       QRasterPlatformPixmap *data = new QRasterPlatformPixmap(p.depth() == 1 ?
          QRasterPlatformPixmap::BitmapType : QRasterPlatformPixmap::PixmapType);
+
       data->fromImage(p.toImage(), Qt::AutoColor);
       return qt_pixmapToWinHBITMAP(QPixmap(data), hbitmapFormat);
    }

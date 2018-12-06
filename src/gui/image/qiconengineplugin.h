@@ -23,49 +23,23 @@
 #ifndef QICONENGINEPLUGIN_H
 #define QICONENGINEPLUGIN_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
-
-QT_BEGIN_NAMESPACE
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
 class QIconEngine;
-class QIconEngineV2;
-
-struct Q_GUI_EXPORT QIconEngineFactoryInterface : public QFactoryInterface {
-   virtual QIconEngine *create(const QString &filename) = 0;
-};
 
 #define QIconEngineFactoryInterface_iid "com.copperspice.QIconEngineFactoryInterface"
-CS_DECLARE_INTERFACE(QIconEngineFactoryInterface, QIconEngineFactoryInterface_iid)
 
-class Q_GUI_EXPORT QIconEnginePlugin : public QObject, public QIconEngineFactoryInterface
+class Q_GUI_EXPORT QIconEnginePlugin : public QObject
 {
-   GUI_CS_OBJECT_MULTIPLE(QIconEnginePlugin, QObject)
-   CS_INTERFACES(QIconEngineFactoryInterface, QFactoryInterface)
+   GUI_CS_OBJECT(QIconEnginePlugin)
 
  public:
    QIconEnginePlugin(QObject *parent = nullptr);
    ~QIconEnginePlugin();
+
+   virtual QIconEngine *create(const QString &filename = QString()) = 0;
 };
 
-// ### Qt5/remove version 2
-struct Q_GUI_EXPORT QIconEngineFactoryInterfaceV2 : public QFactoryInterface {
-   virtual QIconEngineV2 *create(const QString &filename = QString()) = 0;
-};
 
-#define QIconEngineFactoryInterfaceV2_iid "com.copperspice.QIconEngineFactoryInterfaceV2"
-CS_DECLARE_INTERFACE(QIconEngineFactoryInterfaceV2, QIconEngineFactoryInterfaceV2_iid)
-
-class Q_GUI_EXPORT QIconEnginePluginV2 : public QObject, public QIconEngineFactoryInterfaceV2
-{
-   GUI_CS_OBJECT_MULTIPLE(QIconEnginePluginV2, QObject)
-   CS_INTERFACES(QIconEngineFactoryInterfaceV2, QFactoryInterface)
-
- public:
-   QIconEnginePluginV2(QObject *parent = nullptr);
-   ~QIconEnginePluginV2();
-};
-
-QT_END_NAMESPACE
-
-#endif // QICONENGINEPLUGIN_H
+#endif

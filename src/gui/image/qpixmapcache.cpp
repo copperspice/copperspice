@@ -20,16 +20,12 @@
 *
 ***********************************************************************/
 
-
 #include <qpixmapcache.h>
 #include <qobject.h>
 #include <qdebug.h>
 #include <qpixmapcache_p.h>
 
-
-
 static int cache_limit = 10240;    // 10 MB cache limit for desktop
-
 
 QPixmapCache::Key::Key() : d(0)
 {
@@ -350,8 +346,6 @@ QPixmapCache::KeyData *QPMCache::getKeyData(QPixmapCache::Key *key)
    return key->d;
 }
 
-
-
 int q_QPixmapCache_keyHashSize()
 {
    return pm_cache()->size();
@@ -362,34 +356,15 @@ QPixmapCacheEntry::~QPixmapCacheEntry()
    pm_cache()->releaseKey(key);
 }
 
-
 QPixmap *QPixmapCache::find(const QString &key)
 {
    return pm_cache()->object(key);
 }
 
-
-/*!
-    \obsolete
-
-    Use bool find(const QString&, QPixmap*) instead.
-*/
-
 bool QPixmapCache::find(const QString &key, QPixmap &pixmap)
 {
    return find(key, &pixmap);
 }
-
-/*!
-    Looks for a cached pixmap associated with the given \a key in the cache.
-    If the pixmap is found, the function sets \a pixmap to that pixmap and
-    returns true; otherwise it leaves \a pixmap alone and returns false.
-
-    \since 4.6
-
-    Example:
-    \snippet doc/src/snippets/code/src_gui_image_qpixmapcache.cpp 1
-*/
 
 bool QPixmapCache::find(const QString &key, QPixmap *pixmap)
 {
@@ -400,15 +375,6 @@ bool QPixmapCache::find(const QString &key, QPixmap *pixmap)
    return ptr != 0;
 }
 
-/*!
-    Looks for a cached pixmap associated with the given \a key in the cache.
-    If the pixmap is found, the function sets \a pixmap to that pixmap and
-    returns true; otherwise it leaves \a pixmap alone and returns false. If
-    the pixmap is not found, it means that the \a key is no longer valid,
-    so it will be released for the next insertion.
-
-    \since 4.6
-*/
 bool QPixmapCache::find(const Key &key, QPixmap *pixmap)
 {
    //The key is not valid anymore, a flush happened before probably
@@ -422,8 +388,6 @@ bool QPixmapCache::find(const Key &key, QPixmap *pixmap)
    }
    return ptr != 0;
 }
-
-
 
 bool QPixmapCache::insert(const QString &key, const QPixmap &pixmap)
 {
@@ -446,13 +410,10 @@ bool QPixmapCache::replace(const Key &key, const QPixmap &pixmap)
    return pm_cache()->replace(key, pixmap, pixmap.width() * pixmap.height() * pixmap.depth() / 8);
 }
 
-
-
 int QPixmapCache::cacheLimit()
 {
    return cache_limit;
 }
-
 
 void QPixmapCache::setCacheLimit(int n)
 {
@@ -460,54 +421,28 @@ void QPixmapCache::setCacheLimit(int n)
    pm_cache()->setMaxCost(1024 * cache_limit);
 }
 
-/*!
-  Removes the pixmap associated with \a key from the cache.
-*/
 void QPixmapCache::remove(const QString &key)
 {
    pm_cache()->remove(key);
 }
 
-/*!
-  Removes the pixmap associated with \a key from the cache and releases
-  the key for a future insertion.
-
-  \since 4.6
-*/
 void QPixmapCache::remove(const Key &key)
 {
-   //The key is not valid anymore, a flush happened before probably
+   // key is not valid anymore, a flush happened before
    if (!key.d || !key.d->isValid) {
       return;
    }
    pm_cache()->remove(key);
 }
 
-/*!
-    Removes all pixmaps from the cache.
-*/
-
 void QPixmapCache::clear()
 {
-   QT_TRY {
-      if (pm_cache.exists())
-      {
-         pm_cache->clear();
-      }
+  try {
+      pm_cache()->clear();
 
-   } QT_CATCH(const std::bad_alloc &) {
+   } catch (const std::bad_alloc &) {
       // if we ran out of memory during pm_cache(), it's no leak,
       // so just ignore it.
    }
-}
-
-void QPixmapCache::flushDetachedPixmaps()
-{
-   pm_cache()->flushDetachedPixmaps(true);
-}
-
-int QPixmapCache::totalUsed()
-{
-   return (pm_cache()->totalCost() + 1023) / 1024;
 }
 

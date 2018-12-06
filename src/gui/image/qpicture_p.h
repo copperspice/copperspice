@@ -23,15 +23,17 @@
 #ifndef QPICTURE_P_H
 #define QPICTURE_P_H
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qbuffer.h>
-#include <QtGui/qpicture.h>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qpen.h>
-#include <QtGui/qbrush.h>
-#include <QtCore/qrect.h>
+#include <qatomic.h>
+#include <qbuffer.h>
+#include <qobject.h>
+#include <qvector.h>
+#include <qpicture.h>
+#include <qpixmap.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qrect.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QPaintEngine;
 
@@ -126,12 +128,13 @@ class QPicturePrivate
    QRect override_rect;
    QScopedPointer<QPaintEngine> paintEngine;
    bool in_memory_only;
-   QList<QImage> image_list;
-   QList<QPixmap> pixmap_list;
+
+   QVector<QImage> image_list;
+   QVector<QPixmap> pixmap_list;
    QList<QBrush> brush_list;
    QList<QPen> pen_list;
 };
 
-QT_END_NAMESPACE
 
-#endif // QPICTURE_P_H
+
+#endif

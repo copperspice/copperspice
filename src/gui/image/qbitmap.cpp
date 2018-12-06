@@ -21,79 +21,47 @@
 ***********************************************************************/
 
 #include <qbitmap.h>
-#include <qpixmapdata_p.h>
+
 #include <qimage.h>
-#include <qvariant.h>
 #include <qpainter.h>
-#include <qgraphicssystem_p.h>
+#include <qplatform_integration.h>
+#include <qplatform_pixmap.h>
+#include <qscreen.h>
+#include <qvariant.h>
+
+
 #include <qapplication_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QBitmap::QBitmap()
-   : QPixmap(QSize(0, 0), QPixmapData::BitmapType)
+   : QPixmap(QSize(0, 0), QPlatformPixmap::BitmapType)
 {
 }
 
 QBitmap::QBitmap(int w, int h)
-   : QPixmap(QSize(w, h), QPixmapData::BitmapType)
+   : QPixmap(QSize(w, h), QPlatformPixmap::BitmapType)
 {
 }
 
-/*!
-    Constructs a bitmap with the given \a size.  The pixels in the
-    bitmap are uninitialized.
 
-    \sa clear()
-*/
 
 QBitmap::QBitmap(const QSize &size)
-   : QPixmap(size, QPixmapData::BitmapType)
+   : QPixmap(size, QPlatformPixmap::BitmapType)
 {
 }
 
-/*!
-    \fn QBitmap::clear()
 
-    Clears the bitmap, setting all its bits to Qt::color0.
-*/
-
-/*!
-    Constructs a bitmap that is a copy of the given \a pixmap.
-
-    If the pixmap has a depth greater than 1, the resulting bitmap
-    will be dithered automatically.
-
-    \sa QPixmap::depth(), fromImage(), fromData()
-*/
 
 QBitmap::QBitmap(const QPixmap &pixmap)
 {
    QBitmap::operator=(pixmap);
 }
 
-/*!
-    \fn QBitmap::QBitmap(const QImage &image)
 
-    Constructs a bitmap that is a copy of the given \a image.
-
-    Use the static fromImage() function instead.
-*/
-
-/*!
-    Constructs a bitmap from the file specified by the given \a
-    fileName. If the file does not exist, or has an unknown format,
-    the bitmap becomes a null bitmap.
-
-    The \a fileName and \a format parameters are passed on to the
-    QPixmap::load() function. If the file format uses more than 1 bit
-    per pixel, the resulting bitmap will be dithered automatically.
-
-    \sa QPixmap::isNull(), QImageReader::imageFormat()
-*/
 
 QBitmap::QBitmap(const QString &fileName, const char *format)
-   : QPixmap(QSize(0, 0), QPixmapData::BitmapType)
+   : QPixmap(QSize(0, 0), QPlatformPixmap::BitmapType)
 {
    load(fileName, format, Qt::MonoOnly);
 }
@@ -113,8 +81,7 @@ QBitmap::QBitmap(const QString &fileName, const char *format)
 QBitmap &QBitmap::operator=(const QPixmap &pixmap)
 {
    if (pixmap.isNull()) {                        // a null pixmap
-      QBitmap bm(0, 0);
-      QBitmap::operator=(bm);
+      QBitmap(0, 0).swap(*this);
    } else if (pixmap.depth() == 1) {                // 1-bit pixmap
       QPixmap::operator=(pixmap);                // shallow assignment
    } else {                                        // n-bit depth pixmap
@@ -182,26 +149,13 @@ QBitmap QBitmap::fromImage(const QImage &image, Qt::ImageConversionFlags flags)
       img.setColor(1, c0);
    }
 
-   QGraphicsSystem *gs = QApplicationPrivate::graphicsSystem();
-   QScopedPointer<QPixmapData> data(gs ? gs->createPixmapData(QPixmapData::BitmapType)
-                                    : QGraphicsSystem::createDefaultPixmapData(QPixmapData::BitmapType));
+   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(QPlatformPixmap::BitmapType));
 
    data->fromImage(img, flags | Qt::MonoOnly);
    return QPixmap(data.take());
 }
 
-/*!
-    Constructs a bitmap with the given \a size, and sets the contents to
-    the \a bits supplied.
 
-    The bitmap data has to be byte aligned and provided in in the bit
-    order specified by \a monoFormat. The mono format must be either
-    QImage::Format_Mono or QImage::Format_MonoLSB. Use
-    QImage::Format_Mono to specify data on the XBM format.
-
-    \sa fromImage()
-
-*/
 QBitmap QBitmap::fromData(const QSize &size, const uchar *bits, QImage::Format monoFormat)
 {
    Q_ASSERT(monoFormat == QImage::Format_Mono || monoFormat == QImage::Format_MonoLSB);
@@ -243,4 +197,3 @@ QBitmap QBitmap::transformed(const QMatrix &matrix) const
    return transformed(QTransform(matrix));
 }
 
-QT_END_NAMESPACE

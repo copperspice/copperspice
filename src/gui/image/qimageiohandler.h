@@ -75,7 +75,8 @@ class Q_GUI_EXPORT QImageIOHandler
       SupportedSubTypes,
       OptimizedWrite,
       ProgressiveScanWrite,
-      ImageTransformation
+      ImageTransformation,
+      TransformedByDefault
    };
    enum Transformation {
       TransformationNone = 0,

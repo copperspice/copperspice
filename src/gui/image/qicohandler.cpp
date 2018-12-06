@@ -63,7 +63,7 @@ typedef struct {                    // BMP information header
    quint32 biYPelsPerMeter;       // vertical resolution
    quint32 biClrUsed;             // number of colors used
    quint32 biClrImportant;        // number of important colors
-} BMP_INFOHDR , *LPBMP_INFOHDR;
+} BMP_INFOHDR, *LPBMP_INFOHDR;
 #define BMP_INFOHDR_SIZE 40
 
 class ICOReader
@@ -245,12 +245,12 @@ bool ICOReader::canRead(QIODevice *iodev)
             readBytes += ICONDIRENTRY_SIZE;
             // ICO format does not have a magic identifier, so we read 6 different values, which will hopefully be enough to identify the file.
             if (   ikonDir.idReserved == 0
-                   && ikonDir.idType == 1
-                   && ikonDir.idEntries[0].bReserved == 0
-                   && ikonDir.idEntries[0].wPlanes <= 1
-                   && ikonDir.idEntries[0].wBitCount <= 32     // Bits per pixel
-                   && ikonDir.idEntries[0].dwBytesInRes >= 40  // Must be over 40, since sizeof (infoheader) == 40
-               ) {
+               && ikonDir.idType == 1
+               && ikonDir.idEntries[0].bReserved == 0
+               && ikonDir.idEntries[0].wPlanes <= 1
+               && ikonDir.idEntries[0].wBitCount <= 32     // Bits per pixel
+               && ikonDir.idEntries[0].dwBytesInRes >= 40  // Must be over 40, since sizeof (infoheader) == 40
+            ) {
                isProbablyICO = true;
             }
 
@@ -566,7 +566,7 @@ QImage ICOReader::iconAt(int index)
                      if (!mask.isNull()) {
                         mask.setColorCount(2);
                         mask.setColor(0, qRgba(255, 255, 255, 0xff));
-                        mask.setColor(1, qRgba(0  , 0  , 0  , 0xff));
+                        mask.setColor(1, qRgba(0, 0, 0, 0xff));
                         read1BitBMP(mask);
                         if (!mask.isNull()) {
                            img = QImage(image.width(), image.height(), QImage::Format_ARGB32 );
@@ -664,11 +664,11 @@ bool ICOReader::write(QIODevice *device, const QList<QImage> &images)
          entries[i].bHeight = image.height();
          entries[i].bWidth = image.width();
          entries[i].dwBytesInRes = BMP_INFOHDR_SIZE + (bpl_bmp * image.height())
-                                   + (maskImage.bytesPerLine() * maskImage.height());
+            + (maskImage.bytesPerLine() * maskImage.height());
          entries[i].wPlanes = 1;
          if (i == 0)
             entries[i].dwImageOffset = origOffset + ICONDIR_SIZE
-                                       + (id.idCount * ICONDIRENTRY_SIZE);
+               + (id.idCount * ICONDIRENTRY_SIZE);
          else {
             entries[i].dwImageOffset = entries[i - 1].dwImageOffset + entries[i - 1].dwBytesInRes;
          }

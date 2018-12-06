@@ -23,9 +23,8 @@
 #ifndef QBITMAP_H
 #define QBITMAP_H
 
-#include <QtGui/qpixmap.h>
+#include <qpixmap.h>
 
-QT_BEGIN_NAMESPACE
 
 class QVariant;
 
@@ -37,7 +36,7 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
    QBitmap(const QPixmap &);
    QBitmap(int w, int h);
    explicit QBitmap(const QSize &);
-   explicit QBitmap(const QString &fileName, const char *format = 0);
+   explicit QBitmap(const QString &fileName, const char *format = nullptr);
    ~QBitmap();
 
    QBitmap &operator=(const QPixmap &);
@@ -52,15 +51,15 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
 
    static QBitmap fromImage(const QImage &image, Qt::ImageConversionFlags flags = Qt::AutoColor);
    static QBitmap fromData(const QSize &size, const uchar *bits,
-                           QImage::Format monoFormat = QImage::Format_MonoLSB);
+      QImage::Format monoFormat = QImage::Format_MonoLSB);
 
    QBitmap transformed(const QMatrix &) const;
    QBitmap transformed(const QTransform &matrix) const;
 
-   typedef QExplicitlySharedDataPointer<QPixmapData> DataPtr;
+   using DataPtr = QExplicitlySharedDataPointer<QPlatformPixmap>;
 };
-Q_DECLARE_SHARED(QBitmap)
 
-QT_END_NAMESPACE
 
-#endif // QBITMAP_H
+
+
+#endif

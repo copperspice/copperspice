@@ -23,11 +23,10 @@
 #ifndef QICOHANDLER_P_H
 #define QICOHANDLER_P_H
 
-#include <QtGui/QImageIOHandler>
-
-QT_BEGIN_NAMESPACE
+#include <QImageIOHandler>
 
 class ICOReader;
+
 class QIcoHandler: public QImageIOHandler
 {
  public:
@@ -57,7 +56,5 @@ class QIcoHandler: public QImageIOHandler
 
 };
 
-QT_END_NAMESPACE
-
-#endif /* QTICOHANDLER_H */
+#endif
 

@@ -29,11 +29,9 @@
 
 #include <QtCore/qbytearray.h>
 #include <QtCore/qlist.h>
-#include <QtCore/qobject.h>
 #include <QtGui/qimagereader.h>
-#include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 class QByteArray;
 class QColor;
@@ -70,7 +68,7 @@ class Q_GUI_EXPORT QMovie : public QObject
       CacheAll
    };
 
-   QMovie(QObject *parent = nullptr);
+   explicit QMovie(QObject *parent = nullptr);
    explicit QMovie(QIODevice *device, const QByteArray &format = QByteArray(), QObject *parent = nullptr);
    explicit QMovie(const QString &fileName, const QByteArray &format = QByteArray(), QObject *parent = nullptr);
    ~QMovie();
@@ -158,7 +156,7 @@ class Q_GUI_EXPORT QMovie : public QObject
    GUI_CS_SLOT_2(_q_loadNextFrame)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_MOVIE
 

@@ -23,11 +23,12 @@
 #ifndef QPICTURE_H
 #define QPICTURE_H
 
+#include <QtCore/qiodevice.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsharedpointer.h>
 #include <QtGui/qpaintdevice.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_PICTURE
 
@@ -62,7 +63,7 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 
    QPicture &operator=(const QPicture &p);
 
-   inline QPicture &operator=(QPicture && other) {
+   inline QPicture &operator=(QPicture &&other) {
       qSwap(d_ptr, other.d_ptr);
       return *this;
    }
@@ -105,12 +106,10 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 
 };
 
-Q_DECLARE_SHARED(QPicture)
-
-
 #ifndef QT_NO_PICTUREIO
 class QIODevice;
 class QPictureIO;
+
 typedef void (*picture_io_handler)(QPictureIO *); // picture IO handler
 
 struct QPictureIOData;
@@ -153,7 +152,7 @@ class Q_GUI_EXPORT QPictureIO
    static QStringList outputFormats();
 
    static void defineIOHandler(const QString &format, const QString &header, const char *flags,
-                  picture_io_handler read_picture, picture_io_handler write_picture);
+      picture_io_handler read_picture, picture_io_handler write_picture);
 
  private:
    Q_DISABLE_COPY(QPictureIO)
@@ -165,13 +164,11 @@ class Q_GUI_EXPORT QPictureIO
 #endif //QT_NO_PICTUREIO
 
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPicture &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
-#endif
+
 
 #endif // QT_NO_PICTURE
 
-QT_END_NAMESPACE
-
-#endif // QPICTURE_H
+#endif

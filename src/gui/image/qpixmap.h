@@ -27,20 +27,21 @@
 #include <cs_carbon_wrapper.h>
 #endif
 
-#include <QtGui/qpaintdevice.h>
-#include <QtGui/qcolor.h>
-#include <QtCore/qnamespace.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qsharedpointer.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qtransform.h>
+#include <qpaintdevice.h>
+#include <qcolor.h>
+#include <qnamespace.h>
+#include <qstring.h>
+#include <qsharedpointer.h>
+#include <qimage.h>
+#include <qtransform.h>
 
 class QImageWriter;
 class QImageReader;
 class QColor;
 class QVariant;
-
 class QPlatformPixmap;
+
+enum QPlatformPixmap_ClassId : int;
 
 class Q_GUI_EXPORT QPixmap : public QPaintDevice
 {
@@ -155,9 +156,12 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
 
    QPaintEngine *paintEngine() const override;
 
-   inline bool operator!() const {
+   bool operator!() const {
       return isNull();
    }
+
+   QPlatformPixmap_ClassId classId() const;
+   QPlatformPixmap *handle() const;
 
  protected:
    int metric(PaintDeviceMetric) const override;
@@ -171,26 +175,23 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    QPixmap(const QSize &s, int type);
    void doInit(int, int, int);
 
-   QPlatformPixmap *handle() const;
-
    using DataPtr = QExplicitlySharedDataPointer<QPlatformPixmap>;
    inline DataPtr &data_ptr() {
       return data;
    }
 
-   friend class QPlatformPixmap;
    friend class QBitmap;
+   friend class QImagePixmapCleanupHooks;
+   friend class QOpenGLWidget;
+   friend class QPlatformPixmap;
+   friend class QPixmapCacheEntry;
    friend class QPaintDevice;
    friend class QPainter;
-   friend class QOpenGLWidget;
-
-   friend class QWidgetPrivate;
    friend class QRasterBuffer;
+   friend class QWidgetPrivate;
 
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &);
-
 };
-
 
 inline QPixmap QPixmap::copy(int ax, int ay, int awidth, int aheight) const
 {

@@ -22,10 +22,10 @@
 
 #include <qpictureformatplugin.h>
 
-#if !defined(QT_NO_PICTURE)
+#if ! defined(QT_NO_PICTURE)
 #include <qpicture.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QPictureFormatPlugin::QPictureFormatPlugin(QObject *parent)
    : QObject(parent)
@@ -38,27 +38,17 @@ QPictureFormatPlugin::~QPictureFormatPlugin()
 
 bool QPictureFormatPlugin::loadPicture(const QString &format, const QString &fileName, QPicture *picture)
 {
-   Q_UNUSED(format)
-   Q_UNUSED(fileName)
-   Q_UNUSED(picture)
+
    return false;
 }
 
-/*!
-    Saves the given \a picture into the file called \a fileName,
-    using the specified \a format. Returns true on success; otherwise
-    returns false.
 
-    \sa loadPicture()
-*/
 bool QPictureFormatPlugin::savePicture(const QString &format, const QString &fileName, const QPicture &picture)
 {
-   Q_UNUSED(format)
-   Q_UNUSED(fileName)
-   Q_UNUSED(picture)
+
    return false;
 }
 
 #endif // QT_NO_PICTURE
 
-QT_END_NAMESPACE
+

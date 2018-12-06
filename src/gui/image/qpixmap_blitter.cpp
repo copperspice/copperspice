@@ -33,7 +33,6 @@
 
 #ifndef QT_NO_BLITTABLE
 
-
 static int global_ser_no = 0;
 
 QBlittablePlatformPixmap::QBlittablePlatformPixmap()
@@ -42,7 +41,7 @@ QBlittablePlatformPixmap::QBlittablePlatformPixmap()
    , m_devicePixelRatio(1.0)
 #ifdef QT_BLITTER_RASTEROVERLAY
    , m_rasterOverlay(0), m_unmergedCopy(0)
-#endif //QT_BLITTER_RASTEROVERLAY
+#endif
 {
    setSerialNumber(++global_ser_no);
 }

@@ -20,12 +20,11 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
-
 #include <qpixmap.h>
 
 #include <qbitmap.h>
 #include <qdebug.h>
+#include <qglobal.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qdatastream.h>
@@ -40,7 +39,6 @@
 #include <qpaintengine.h>
 #include <qscreen.h>
 #include <qthread.h>
-
 #include <qplatform_integration.h>
 #include <qplatform_pixmap.h>
 
@@ -48,7 +46,6 @@
 #include <qapplication_p.h>
 #include <qpixmap_raster_p.h>
 #include <qhexstring_p.h>
-
 
 static bool qt_pixmap_thread_test()
 {
@@ -84,15 +81,12 @@ void QPixmap::doInit(int w, int h, int type)
 }
 
 
-
-
 QPixmap::QPixmap()
    : QPaintDevice()
 {
    (void) qt_pixmap_thread_test();
    doInit(0, 0, QPlatformPixmap::PixmapType);
 }
-
 
 QPixmap::QPixmap(int w, int h)
    : QPaintDevice()
@@ -878,9 +872,6 @@ void QPixmap::detach()
 
 }
 
-
-
-
 QPixmap QPixmap::fromImage(const QImage &image, Qt::ImageConversionFlags flags)
 {
    if (image.isNull()) {
@@ -926,6 +917,11 @@ QPlatformPixmap *QPixmap::handle() const
 {
    return data.data();
 }
+
+QPlatformPixmap::ClassId QPixmap::classId() const {
+   return data->classId();
+}
+
 QDebug operator<<(QDebug dbg, const QPixmap &r)
 {
    QDebugStateSaver saver(dbg);
@@ -943,11 +939,6 @@ QDebug operator<<(QDebug dbg, const QPixmap &r)
    dbg << ')';
    return dbg;
 }
-
-
-
-
-
 
 
 

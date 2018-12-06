@@ -25,9 +25,6 @@
 
 #include <qplatform_pixmap.h>
 
-
-
-
 Q_GLOBAL_STATIC(QImagePixmapCleanupHooks, qt_image_and_pixmap_cleanup_hooks)
 
 QImagePixmapCleanupHooks *QImagePixmapCleanupHooks::instance()
@@ -91,19 +88,17 @@ void QImagePixmapCleanupHooks::executePlatformPixmapDestructionHooks(QPlatformPi
    if (!h) {
       return;
    }
+
    for (int i = 0; i < h->pixmapDestructionHooks.count(); ++i) {
       h->pixmapDestructionHooks[i](pmd);
    }
-
-
 }
 
 void QImagePixmapCleanupHooks::executeImageHooks(qint64 key)
 {
    QImagePixmapCleanupHooks *h = qt_image_and_pixmap_cleanup_hooks();
    // the global destructor for the pixmap and image hooks might have
-   // been called already if the app is "leaking" global
-   // pixmaps/images
+   // been called already if the app is "leaking" global pixmaps/images
 
    if (!h) {
       return;
@@ -114,7 +109,6 @@ void QImagePixmapCleanupHooks::executeImageHooks(qint64 key)
    }
 }
 
-
 void QImagePixmapCleanupHooks::enableCleanupHooks(QPlatformPixmap *handle)
 {
    handle->is_cached = true;
@@ -122,7 +116,8 @@ void QImagePixmapCleanupHooks::enableCleanupHooks(QPlatformPixmap *handle)
 
 void QImagePixmapCleanupHooks::enableCleanupHooks(const QPixmap &pixmap)
 {
-   enableCleanupHooks(const_cast<QPixmap &>(pixmap).data_ptr().data());
+   auto tmp = const_cast<QPixmap &>(pixmap).data_ptr().data();
+   enableCleanupHooks(tmp);
 }
 
 void QImagePixmapCleanupHooks::enableCleanupHooks(const QImage &image)

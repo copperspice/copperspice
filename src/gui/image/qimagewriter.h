@@ -24,10 +24,10 @@
 #define QIMAGEWRITER_H
 
 #include <QtCore/qbytearray.h>
+#include <QtCore/qcoreapplication.h>
 #include <QtCore/qlist.h>
 #include <QtGui/qimageiohandler.h>
 
-QT_BEGIN_NAMESPACE
 
 class QIODevice;
 class QImage;
@@ -35,6 +35,7 @@ class QImageWriterPrivate;
 
 class Q_GUI_EXPORT QImageWriter
 {
+   Q_DECLARE_TR_FUNCTIONS(QImageWriter)
 
  public:
    enum ImageWriterError {
@@ -66,6 +67,15 @@ class Q_GUI_EXPORT QImageWriter
    void setGamma(float gamma);
    float gamma() const;
 
+   void setSubType(const QByteArray &type);
+   QByteArray subType() const;
+   QList<QByteArray> supportedSubTypes() const;
+   void setOptimizedWrite(bool optimize);
+   bool optimizedWrite() const;
+   void setProgressiveScanWrite(bool progressive);
+   bool progressiveScanWrite() const;
+   QImageIOHandler::Transformations transformation() const;
+   void setTransformation(QImageIOHandler::Transformations orientation);
    // Obsolete as of 4.1
    void setDescription(const QString &description);
    QString description() const;
@@ -81,12 +91,13 @@ class Q_GUI_EXPORT QImageWriter
    bool supportsOption(QImageIOHandler::ImageOption option) const;
 
    static QList<QByteArray> supportedImageFormats();
+   static QList<QByteArray> supportedMimeTypes();
 
  private:
    Q_DISABLE_COPY(QImageWriter)
    QImageWriterPrivate *d;
 };
 
-QT_END_NAMESPACE
 
-#endif // QIMAGEWRITER_H
+
+#endif

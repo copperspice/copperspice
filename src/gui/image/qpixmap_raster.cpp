@@ -35,7 +35,6 @@
 #include <qwidget_p.h>
 #include <qdrawhelper_p.h>
 
-
 QPixmap qt_toRasterPixmap(const QImage &image)
 {
    QPlatformPixmap *data =
@@ -54,7 +53,7 @@ QPixmap qt_toRasterPixmap(const QPixmap &pixmap)
       return QPixmap();
    }
 
-   if (QPixmap(pixmap).data_ptr()->classId() == QPlatformPixmap::RasterClass) {
+   if (pixmap.classId() == QPlatformPixmap::RasterClass) {
       return pixmap;
    }
 
@@ -207,7 +206,6 @@ void QRasterPlatformPixmap::fill(const QColor &color)
    image.fill(pixel);
 }
 
-
 bool QRasterPlatformPixmap::hasAlphaChannel() const
 {
    return image.hasAlphaChannel();
@@ -215,10 +213,10 @@ bool QRasterPlatformPixmap::hasAlphaChannel() const
 
 QImage QRasterPlatformPixmap::toImage() const
 {
-   if (!image.isNull()) {
+   if (! image.isNull()) {
       QImageData *data = const_cast<QImage &>(image).data_ptr();
-      if (data->paintEngine && data->paintEngine->isActive()
-         && data->paintEngine->paintDevice() == &image) {
+
+      if (data->paintEngine && data->paintEngine->isActive() && data->paintEngine->paintDevice() == &image) {
          return image.copy();
       }
    }

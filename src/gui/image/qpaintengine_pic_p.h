@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_PICTURE
 
-QT_BEGIN_NAMESPACE
+
 
 class QPicturePaintEnginePrivate;
 class QBuffer;
@@ -67,7 +67,7 @@ class QPicturePaintEngine : public QPaintEngine
    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
    void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
    void drawImage(const QRectF &r, const QImage &image, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor) override;
+      Qt::ImageConversionFlags flags = Qt::AutoColor) override;
    void drawTextItem(const QPointF &p, const QTextItem &ti) override;
 
    Type type() const override {
@@ -83,7 +83,7 @@ class QPicturePaintEngine : public QPaintEngine
    void writeCmdLength(int pos, const QRectF &r, bool corr);
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_PICTURE
 

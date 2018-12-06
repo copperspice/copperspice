@@ -39,7 +39,7 @@
 
 #define QMOVIE_INVALID_DELAY -1
 
-QT_BEGIN_NAMESPACE
+
 
 class QFrameInfo
 {
@@ -393,7 +393,7 @@ void QMoviePrivate::_q_loadNextFrame(bool starting)
 bool QMoviePrivate::isValid() const
 {
    return (greatestFrameNumber >= 0) // have we seen valid data
-          || reader->canRead(); // or does the reader see valid data
+      || reader->canRead(); // or does the reader see valid data
 }
 
 /*!
@@ -886,26 +886,13 @@ QSize QMovie::scaledSize()
    return d->reader->scaledSize();
 }
 
-/*!
-    \since 4.1
-
-    Sets the scaled frame size to \a size.
-
-    \sa QImageReader::setScaledSize()
-*/
 void QMovie::setScaledSize(const QSize &size)
 {
    Q_D(QMovie);
    d->reader->setScaledSize(size);
 }
 
-/*!
-    \since 4.1
 
-    Returns the list of image formats supported by QMovie.
-
-    \sa QImageReader::supportedImageFormats()
-*/
 QList<QByteArray> QMovie::supportedFormats()
 {
    QList<QByteArray> list = QImageReader::supportedImageFormats();
@@ -921,26 +908,6 @@ QList<QByteArray> QMovie::supportedFormats()
    return list;
 }
 
-/*!
-    \property QMovie::cacheMode
-    \brief the movie's cache mode
-
-    Caching frames can be useful when the underlying animation format handler
-    that QMovie relies on to decode the animation data does not support
-    jumping to particular frames in the animation, or even "rewinding" the
-    animation to the beginning (for looping). Furthermore, if the image data
-    comes from a sequential device, it is not possible for the underlying
-    animation handler to seek back to frames whose data has already been read
-    (making looping altogether impossible).
-
-    To aid in such situations, a QMovie object can be instructed to cache the
-    frames, at the added memory cost of keeping the frames in memory for the
-    lifetime of the object.
-
-    By default, this property is set to \l CacheNone.
-
-    \sa QMovie::CacheMode
-*/
 
 QMovie::CacheMode QMovie::cacheMode() const
 {
@@ -961,7 +928,6 @@ void QMovie::_q_loadNextFrame()
 }
 
 
-QT_END_NAMESPACE
 
 
 #endif // QT_NO_MOVIE

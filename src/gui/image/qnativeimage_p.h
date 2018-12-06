@@ -25,25 +25,17 @@
 
 #include <qimage.h>
 
-#ifdef Q_OS_WIN
-#include <qt_windows.h>
 
-#elif defined(Q_WS_X11)
-#include <qt_x11_p.h>
 
-#elif defined(Q_OS_MAC)
-#include <qt_mac_p.h>
 
-#endif
 
-QT_BEGIN_NAMESPACE
 
-class QWidget;
+class QWindow;
 
 class QNativeImage
 {
  public:
-   QNativeImage(int width, int height, QImage::Format format, bool isTextBuffer = false, QWidget *widget = 0);
+   QNativeImage(int width, int height, QImage::Format format, bool isTextBuffer = false, QWindow *window = nullptr);
    ~QNativeImage();
 
    inline int width() const;
@@ -52,21 +44,6 @@ class QNativeImage
    QImage image;
 
    static QImage::Format systemFormat();
-
-#ifdef Q_OS_WIN
-   HDC hdc;
-   HBITMAP bitmap;
-   HBITMAP null_bitmap;
-
-#elif defined(Q_WS_X11) && !defined(QT_NO_MITSHM)
-   XImage *xshmimg;
-   Pixmap xshmpm;
-   XShmSegmentInfo xshminfo;
-
-#elif defined(Q_OS_MAC)
-   CGContextRef cg;
-#endif
-
  private:
    Q_DISABLE_COPY(QNativeImage)
 };
@@ -75,11 +52,10 @@ inline int QNativeImage::width() const
 {
    return image.width();
 }
+
 inline int QNativeImage::height() const
 {
    return image.height();
 }
 
-QT_END_NAMESPACE
-
-#endif // QNATIVEIMAGE_P_H
+#endif

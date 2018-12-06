@@ -25,11 +25,8 @@
 
 #include <qpixmap.h>
 
-
-
 typedef void (*_qt_image_cleanup_hook_64)(qint64);
 typedef void (*_qt_pixmap_cleanup_hook_pmd)(QPlatformPixmap *);
-
 
 class QImagePixmapCleanupHooks;
 
@@ -67,7 +64,5 @@ class Q_GUI_EXPORT QImagePixmapCleanupHooks
    QList<_qt_pixmap_cleanup_hook_pmd> pixmapModificationHooks;
    QList<_qt_pixmap_cleanup_hook_pmd> pixmapDestructionHooks;
 };
-
-
 
 #endif

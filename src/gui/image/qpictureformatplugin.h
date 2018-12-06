@@ -33,26 +33,19 @@ class QPicture;
 class QImage;
 class QStringList;
 
-struct Q_GUI_EXPORT QPictureFormatInterface : public QFactoryInterface {
-   virtual bool loadPicture(const QString &format, const QString &filename, QPicture *) = 0;
-   virtual bool savePicture(const QString &format, const QString &filename, const QPicture &) = 0;
-   virtual bool installIOHandler(const QString &format) = 0;
-};
-
 #define QPictureFormatInterface_iid "com.copperspice.QPictureFormatInterface"
-CS_DECLARE_INTERFACE(QPictureFormatInterface, QPictureFormatInterface_iid)
 
-class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatInterface
+class Q_GUI_EXPORT QPictureFormatPlugin : public QObject
 {
    GUI_CS_OBJECT(QPictureFormatPlugin)
-   CS_INTERFACES(QPictureFormatInterface, QFactoryInterface)
 
  public:
    explicit QPictureFormatPlugin(QObject *parent = nullptr);
    ~QPictureFormatPlugin();
 
-   bool loadPicture(const QString &format, const QString &filename, QPicture *pic) override;
-   bool savePicture(const QString &format, const QString &filename, const QPicture &pic) override;
+   virtual bool loadPicture(const QString &format, const QString &filename, QPicture *pic);
+   virtual bool savePicture(const QString &format, const QString &filename, const QPicture &pic);
+   virtual bool installIOHandler(const QString &format) = 0;
 };
 
 #endif

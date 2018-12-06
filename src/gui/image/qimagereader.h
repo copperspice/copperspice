@@ -24,10 +24,10 @@
 #define QIMAGEREADER_H
 
 #include <QtCore/qbytearray.h>
+#include <QtCore/qcoreapplication.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qimageiohandler.h>
 
-QT_BEGIN_NAMESPACE
 
 class QColor;
 class QIODevice;
@@ -38,6 +38,7 @@ class QImageReaderPrivate;
 
 class Q_GUI_EXPORT QImageReader
 {
+   Q_DECLARE_TR_FUNCTIONS(QImageReader)
 
  public:
    enum ImageReaderError {
@@ -92,6 +93,13 @@ class Q_GUI_EXPORT QImageReader
 
    bool supportsAnimation() const;
 
+   QImageIOHandler::Transformations transformation() const;
+   void setAutoTransform(bool enabled);
+   bool autoTransform() const;
+   void setGamma(float gamma);
+   float gamma() const;
+   QByteArray subType() const;
+   QList<QByteArray> supportedSubTypes() const;
    bool canRead() const;
    QImage read();
    bool read(QImage *image);
@@ -112,12 +120,12 @@ class Q_GUI_EXPORT QImageReader
    static QByteArray imageFormat(const QString &fileName);
    static QByteArray imageFormat(QIODevice *device);
    static QList<QByteArray> supportedImageFormats();
+   static QList<QByteArray> supportedMimeTypes();
 
  private:
    Q_DISABLE_COPY(QImageReader)
    QImageReaderPrivate *d;
 };
 
-QT_END_NAMESPACE
 
-#endif // QIMAGEREADER_H
+#endif

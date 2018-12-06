@@ -40,7 +40,6 @@
 //#define QT_PICTURE_DEBUG
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
 
 class QPicturePaintEnginePrivate : public QPaintEnginePrivate
 {
@@ -94,7 +93,7 @@ bool QPicturePaintEngine::begin(QPaintDevice *pd)
    if (d->pic_d->formatMajor >= 4) {
       QRect r = pic->boundingRect();
       d->s << (qint32) r.left() << (qint32) r.top() << (qint32) r.width()
-           << (qint32) r.height();
+         << (qint32) r.height();
    }
    d->pic_d->trecs = 0;
    d->s << (quint32)d->pic_d->trecs; // total number of records
@@ -119,7 +118,7 @@ bool QPicturePaintEngine::end()
    if (d->pic_d->formatMajor >= 4) { // bounding rectangle
       QRect r = static_cast<QPicture *>(d->pdev)->boundingRect();
       d->s << (qint32) r.left() << (qint32) r.top() << (qint32) r.width()
-           << (qint32) r.height();
+         << (qint32) r.height();
    }
    d->s << (quint32) d->pic_d->trecs;                        // write number of records
    d->pic_d->pictb.seek(cs_start);
@@ -142,7 +141,7 @@ void QPicturePaintEngine::updatePen(const QPen &pen)
    Q_D(QPicturePaintEngine);
 #ifdef QT_PICTURE_DEBUG
    qDebug() << " -> updatePen(): width:" << pen.width() << "style:"
-            << pen.style() << "color:" << pen.color();
+      << pen.style() << "color:" << pen.color();
 #endif
    int pos;
    SERIALIZE_CMD(QPicturePrivate::PdcSetPen);
@@ -268,7 +267,7 @@ void QPicturePaintEngine::updateClipRegion(const QRegion &region, Qt::ClipOperat
    Q_D(QPicturePaintEngine);
 #ifdef QT_PICTURE_DEBUG
    qDebug() << " -> updateClipRegion(): op:" << op
-            << "bounding rect:" << region.boundingRect();
+      << "bounding rect:" << region.boundingRect();
 #endif
    int pos;
    SERIALIZE_CMD(QPicturePrivate::PdcSetClipRegion);
@@ -281,7 +280,7 @@ void QPicturePaintEngine::updateClipPath(const QPainterPath &path, Qt::ClipOpera
    Q_D(QPicturePaintEngine);
 #ifdef QT_PICTURE_DEBUG
    qDebug() << " -> updateClipPath(): op:" << op
-            << "bounding rect:" << path.boundingRect();
+      << "bounding rect:" << path.boundingRect();
 #endif
    int pos;
 
@@ -327,11 +326,11 @@ void QPicturePaintEngine::writeCmdLength(int pos, const QRectF &r, bool corr)
       if (corr) {                             // widen bounding rect
          int w2 = painter()->pen().width() / 2;
          br.setCoords(br.left() - w2, br.top() - w2,
-                      br.right() + w2, br.bottom() + w2);
+            br.right() + w2, br.bottom() + w2);
       }
       br = painter()->transform().mapRect(br);
       if (painter()->hasClipping()) {
-         QRect cr = painter()->clipRegion().boundingRect();
+         QRectF cr = painter()->clipBoundingRect();
          br &= cr;
       }
 
@@ -441,7 +440,7 @@ void QPicturePaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap
 }
 
 void QPicturePaintEngine::drawImage(const QRectF &r, const QImage &image, const QRectF &sr,
-                                    Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    Q_D(QPicturePaintEngine);
 #ifdef QT_PICTURE_DEBUG
@@ -462,7 +461,7 @@ void QPicturePaintEngine::drawImage(const QRectF &r, const QImage &image, const 
    writeCmdLength(pos, r, false);
 }
 
-void QPicturePaintEngine::drawTextItem(const QPointF &p , const QTextItem &ti)
+void QPicturePaintEngine::drawTextItem(const QPointF &p, const QTextItem &ti)
 {
    Q_D(QPicturePaintEngine);
 
@@ -473,6 +472,7 @@ void QPicturePaintEngine::drawTextItem(const QPointF &p , const QTextItem &ti)
    const QTextItemInt &si = static_cast<const QTextItemInt &>(ti);
 
    if (si.m_iter == si.m_end) {
+
       QPaintEngine::drawTextItem(p, ti);   // Draw as path
    }
 
@@ -548,6 +548,6 @@ void QPicturePaintEngine::updateState(const QPaintEngineState &state)
    }
 }
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_PICTURE
+
+#endif
