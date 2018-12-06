@@ -25,16 +25,16 @@
 #include "ui4.h"
 #include "uic.h"
 #include "databaseinfo.h"
-#include <qstring.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTextStream>
+#include <qstring.h>
+#include <QDebug>
+#include <QFileInfo>
+#include <QTextStream>
 
 #include <stdio.h>
 
-enum { debugWriteIncludes = 0 };
-enum { warnHeaderGeneration = 0 };
+constexpr int debugWriteIncludes   = 0;
+constexpr int warnHeaderGeneration = 0;
 
 struct ClassInfoEntry {
    const char *klass;
@@ -44,6 +44,7 @@ struct ClassInfoEntry {
 
 static const ClassInfoEntry qclass_lib_map[] = {
 #define QT_CLASS_LIB(klass, module, header) { #klass, #module, #header },
+
 #include "qclass_lib_map.h"
 
 #undef QT_CLASS_LIB
@@ -109,12 +110,12 @@ void WriteIncludes::acceptUI(DomUI *node)
    add("QVariant");
    add("QAction");
 
-   add(QLatin1String("QButtonGroup")); // ### only if it is really necessary
-   add(QLatin1String("QHeaderView"));
+   add("QButtonGroup");
+   add("QHeaderView");
 
    if (m_uic->databaseInfo()->connections().size()) {
-      add(QLatin1String("QSqlDatabase"));
-      add(QLatin1String("QSqlRecord"));
+      add("QSqlDatabase");
+      add("QSqlRecord");
    }
 
    TreeWalker::acceptUI(node);
@@ -144,18 +145,20 @@ void WriteIncludes::acceptLayout(DomLayout *node)
 
 void WriteIncludes::acceptSpacer(DomSpacer *node)
 {
-   add(QLatin1String("QSpacerItem"));
+   add("QSpacerItem");
    TreeWalker::acceptSpacer(node);
 }
 
 void WriteIncludes::acceptProperty(DomProperty *node)
 {
    if (node->kind() == DomProperty::Date) {
-      add(QLatin1String("QDate"));
+      add("QDate");
    }
+
    if (node->kind() == DomProperty::Locale) {
-      add(QLatin1String("QLocale"));
+      add("QLocale");
    }
+
    TreeWalker::acceptProperty(node);
 }
 
@@ -181,11 +184,14 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
       // Quick check by class name to detect includehints provided for custom widgets.
       // Remove namespaces
       QString lowerClassName = className.toLower();
-      static const QString namespaceSeparator = QLatin1String("::");
+
+      static const QString namespaceSeparator = "::";
       const int namespaceIndex = lowerClassName.lastIndexOf(namespaceSeparator);
+
       if (namespaceIndex != -1) {
          lowerClassName.remove(0, namespaceIndex + namespaceSeparator.size());
       }
+
       if (m_includeBaseNames.contains(lowerClassName)) {
          header.clear();
          break;
@@ -195,16 +201,17 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
       if (!m_uic->option().implicitIncludes) {
          break;
       }
-      header = lowerClassName;
-      header += QLatin1String(".h");
+
+      header =  lowerClassName;
+      header += ".h";
+
       if (warnHeaderGeneration) {
          qWarning("%s: Warning: generated header '%s' for class '%s'.",
-                  qPrintable(m_uic->option().messagePrefix()),
-                  qPrintable(header), qPrintable(className));
-
+                  csPrintable(m_uic->option().messagePrefix()), csPrintable(header), csPrintable(className));
       }
 
       global = true;
+
    } while (false);
 
    if (!header.isEmpty()) {
@@ -224,12 +231,12 @@ void WriteIncludes::add(const QString &className, bool determineHeader, const QS
 
    m_knownClasses.insert(className);
 
-   if (!m_laidOut && m_uic->customWidgetsInfo()->extends(className, QLatin1String("QToolBox"))) {
-      add(QLatin1String("QLayout"));   // spacing property of QToolBox)
+   if (! m_laidOut && m_uic->customWidgetsInfo()->extends(className, "QToolBox")) {
+      add("QLayout");   // spacing property of QToolBox)
    }
 
-   if (className == QLatin1String("Line")) { // ### hmm, deprecate me!
-      add(QLatin1String("QFrame"));
+   if (className == "Line") {
+      add("QFrame");
       return;
    }
 
@@ -241,6 +248,7 @@ void WriteIncludes::add(const QString &className, bool determineHeader, const QS
 void WriteIncludes::acceptCustomWidget(DomCustomWidget *node)
 {
    const QString className = node->elementClass();
+
    if (className.isEmpty()) {
       return;
    }
@@ -252,12 +260,14 @@ void WriteIncludes::acceptCustomWidget(DomCustomWidget *node)
 
    if (!node->elementHeader() || node->elementHeader()->text().isEmpty()) {
       add(className, false); // no header specified
+
    } else {
       // custom header unless it is a built-in qt class
       QString header;
       bool global = false;
+
       if (!m_classToHeader.contains(className)) {
-         global = node->elementHeader()->attributeLocation().toLower() == QLatin1String("global");
+         global = node->elementHeader()->attributeLocation().toLower() == "global";
          header = node->elementHeader()->text();
       }
       add(className, true, header, global);
@@ -266,7 +276,6 @@ void WriteIncludes::acceptCustomWidget(DomCustomWidget *node)
 
 void WriteIncludes::acceptCustomWidgets(DomCustomWidgets *node)
 {
-   Q_UNUSED(node);
 }
 
 void WriteIncludes::acceptIncludes(DomIncludes *node)
@@ -277,22 +286,25 @@ void WriteIncludes::acceptIncludes(DomIncludes *node)
 void WriteIncludes::acceptInclude(DomInclude *node)
 {
    bool global = true;
+
    if (node->hasAttributeLocation()) {
-      global = node->attributeLocation() == QLatin1String("global");
+      global = node->attributeLocation() == "global";
    }
+
    insertInclude(node->text(), global);
 }
 
 void WriteIncludes::insertInclude(const QString &header, bool global)
 {
    if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s %d\n", Q_FUNC_INFO, qPrintable(header), global);
+      fprintf(stderr, "%s %s %d\n", Q_FUNC_INFO, csPrintable(header), global);
    }
 
    OrderedSet &includes = global ?  m_globalIncludes : m_localIncludes;
    if (includes.contains(header)) {
       return;
    }
+
    // Insert. Also remember base name for quick check of suspicious custom plugins
    includes.insert(header, false);
    const QString lowerBaseName = QFileInfo(header).completeBaseName ().toLower();
@@ -301,16 +313,19 @@ void WriteIncludes::insertInclude(const QString &header, bool global)
 
 void WriteIncludes::writeHeaders(const OrderedSet &headers, bool global)
 {
-   const QChar openingQuote = global ? QLatin1Char('<') : QLatin1Char('"');
-   const QChar closingQuote = global ? QLatin1Char('>') : QLatin1Char('"');
+   const QChar openingQuote = global ? QChar('<') : QChar('"');
+   const QChar closingQuote = global ? QChar('>') : QChar('"');
 
    // Check for the old headers 'qslider.h' and replace by 'QtGui/QSlider'
    const OrderedSet::const_iterator cend = headers.constEnd();
+
    for (OrderedSet::const_iterator sit = headers.constBegin(); sit != cend; ++sit) {
       const StringMap::const_iterator hit = m_oldHeaderToNewHeader.constFind(sit.key());
-      const bool mapped =  hit != m_oldHeaderToNewHeader.constEnd();
+
+      const bool mapped     =  hit != m_oldHeaderToNewHeader.constEnd();
       const  QString header =  mapped ? hit.value() : sit.key();
-      if (!header.trimmed().isEmpty()) {
+
+      if (! header.trimmed().isEmpty()) {
          m_output << "#include " << openingQuote << header << closingQuote << QLatin1Char('\n');
       }
    }
@@ -325,11 +340,12 @@ void WriteIncludes::acceptWidgetScripts(const DomScripts &scripts, DomWidget *, 
 
 void WriteIncludes::activateScripts()
 {
-   if (!m_scriptsActivated) {
-      add(QLatin1String("QScriptEngine"));
-      add(QLatin1String("QDebug"));
+   if (!  m_scriptsActivated) {
+      add("QScriptEngine");
+      add("QDebug");
       m_scriptsActivated = true;
    }
 }
+
 } // namespace CPP
 
