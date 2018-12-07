@@ -45,38 +45,38 @@ class Q_GUI_EXPORT QPrinterInfo
    QPrinterInfo &operator=(const QPrinterInfo &other);
 
    QString printerName() const;
-    QString description() const;
-    QString location() const;
-    QString makeAndModel() const;
+   QString description() const;
+   QString location() const;
+   QString makeAndModel() const;
    bool isNull() const;
    bool isDefault() const;
-    bool isRemote() const;
+   bool isRemote() const;
 
-    QPrinter::PrinterState state() const;
+   QPrinter::PrinterState state() const;
 
-    QList<QPageSize> supportedPageSizes() const;
-    QPageSize defaultPageSize() const;
+   QList<QPageSize> supportedPageSizes() const;
+   QPageSize defaultPageSize() const;
 
-    bool supportsCustomPageSizes() const;
+   bool supportsCustomPageSizes() const;
 
-    QPageSize minimumPhysicalPageSize() const;
-    QPageSize maximumPhysicalPageSize() const;
+   QPageSize minimumPhysicalPageSize() const;
+   QPageSize maximumPhysicalPageSize() const;
 
 
-    QList<int> supportedResolutions() const;
+   QList<int> supportedResolutions() const;
 
-    QPrinter::DuplexMode defaultDuplexMode() const;
-    QList<QPrinter::DuplexMode> supportedDuplexModes() const;
+   QPrinter::DuplexMode defaultDuplexMode() const;
+   QList<QPrinter::DuplexMode> supportedDuplexModes() const;
 
-    static QStringList availablePrinterNames();
-    static QList<QPrinterInfo> availablePrinters();
+   static QStringList availablePrinterNames();
+   static QList<QPrinterInfo> availablePrinters();
 
-    static QString defaultPrinterName();
-    static QPrinterInfo defaultPrinter();
+   static QString defaultPrinterName();
+   static QPrinterInfo defaultPrinter();
 
-    static QPrinterInfo printerInfo(const QString &printerName);
+   static QPrinterInfo printerInfo(const QString &printerName);
  private:
-    explicit QPrinterInfo(const QString &name);
+   explicit QPrinterInfo(const QString &name);
 
    friend class QPlatformPrinterSupport;
    friend Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QPrinterInfo &);

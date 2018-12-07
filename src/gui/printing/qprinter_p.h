@@ -23,15 +23,16 @@
 #ifndef QPRINTER_P_H
 #define QPRINTER_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_PRINTER
 
-#include <printer.h>
+#include <qprinter.h>
 #include <qprinterinfo.h>
 #include <qprintengine.h>
 #include <qpointer.h>
 #include <qset.h>
+
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE
@@ -45,36 +46,35 @@ class QPrinterPrivate
    Q_DECLARE_PUBLIC(QPrinter)
 
  public:
-    QPrinterPrivate(QPrinter *printer)
-        : printEngine(0),
-          paintEngine(0),
-          realPrintEngine(0),
-          realPaintEngine(0),
+   QPrinterPrivate(QPrinter *printer)
+      : printEngine(0),
+        paintEngine(0),
+        realPrintEngine(0),
+        realPaintEngine(0),
 #ifndef QT_NO_PRINTPREVIEWWIDGET
-          previewEngine(0),
+        previewEngine(0),
 #endif
-          q_ptr(printer),
-          printRange(QPrinter::AllPages),
-          use_default_engine(true),
-          validPrinter(false)
-    {
-    }
+        q_ptr(printer),
+        printRange(QPrinter::AllPages),
+        use_default_engine(true),
+        validPrinter(false) {
+   }
 
    ~QPrinterPrivate() {
 
    }
 
-    void init(const QPrinterInfo &printer, QPrinter::PrinterMode mode);
+   void init(const QPrinterInfo &printer, QPrinter::PrinterMode mode);
 
-    QPrinterInfo findValidPrinter(const QPrinterInfo &printer = QPrinterInfo());
-    void initEngines(QPrinter::OutputFormat format, const QPrinterInfo &printer);
-    void changeEngines(QPrinter::OutputFormat format, const QPrinterInfo &printer);
+   QPrinterInfo findValidPrinter(const QPrinterInfo &printer = QPrinterInfo());
+   void initEngines(QPrinter::OutputFormat format, const QPrinterInfo &printer);
+   void changeEngines(QPrinter::OutputFormat format, const QPrinterInfo &printer);
 #ifndef QT_NO_PRINTPREVIEWWIDGET
    QList<const QPicture *> previewPages() const;
    void setPreviewMode(bool);
 #endif
 
-    void setProperty(QPrintEngine::PrintEnginePropertyKey key, const QVariant &value);
+   void setProperty(QPrintEngine::PrintEnginePropertyKey key, const QVariant &value);
 
    QPrinter::PrinterMode printerMode;
    QPrinter::OutputFormat outputFormat;
@@ -100,7 +100,7 @@ class QPrinterPrivate
 
 
    // Used to remember which properties have been manually set by the user.
-    QSet<QPrintEngine::PrintEnginePropertyKey> m_properties;
+   QSet<QPrintEngine::PrintEnginePropertyKey> m_properties;
 };
 
 

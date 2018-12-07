@@ -27,9 +27,6 @@
 #include <qscopedpointer.h>
 #include <qpagedpaintdevice.h>
 #include <qpagelayout.h>
-#include <qtprintsupportglobal.h>
-
-
 
 #ifndef QT_NO_PRINTER
 
@@ -63,37 +60,37 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
 
 
    enum PageOrder   { FirstPageFirst,
-                      LastPageFirst
-                    };
+      LastPageFirst
+   };
 
    enum ColorMode   { GrayScale,
-                      Color
-                    };
+      Color
+   };
 
    enum PaperSource { OnlyOne,
-                      Lower,
-                      Middle,
-                      Manual,
-                      Envelope,
-                      EnvelopeManual,
-                      Auto,
-                      Tractor,
-                      SmallFormat,
-                      LargeFormat,
-                      LargeCapacity,
-                      Cassette,
-                      FormSource,
-                       MaxPageSource, // Deprecated
-                       CustomSource,
-                       LastPaperSource = CustomSource,
-                       Upper = OnlyOne  // As defined in Windows
-                    };
+      Lower,
+      Middle,
+      Manual,
+      Envelope,
+      EnvelopeManual,
+      Auto,
+      Tractor,
+      SmallFormat,
+      LargeFormat,
+      LargeCapacity,
+      Cassette,
+      FormSource,
+      MaxPageSource, // Deprecated
+      CustomSource,
+      LastPaperSource = CustomSource,
+      Upper = OnlyOne  // As defined in Windows
+   };
 
    enum PrinterState { Idle,
-                       Active,
-                       Aborted,
-                       Error
-                     };
+      Active,
+      Aborted,
+      Error
+   };
 
    enum OutputFormat { NativeFormat, PdfFormat };
 
@@ -145,14 +142,14 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setPageSize(PageSize) override;
    PageSize pageSize() const;
 
-   void setPageSizeMM(const QSizeF &size) Q_DECL_OVERRIDE;
+   void setPageSizeMM(const QSizeF &size) override;
    void setPaperSize(PaperSize);
    PaperSize paperSize() const;
 
    void setPaperSize(const QSizeF &paperSize, Unit unit);
    QSizeF paperSize(Unit unit) const;
-    void setPaperName(const QString &paperName);
-    QString paperName() const;
+   void setPaperName(const QString &paperName);
+   QString paperName() const;
 
    void setPageOrder(PageOrder);
    PageOrder pageOrder() const;
@@ -206,10 +203,8 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    QRectF paperRect(Unit) const;
    QRectF pageRect(Unit) const;
 
-#if ! defined(Q_OS_WIN)
    QString printerSelectionOption() const;
    void setPrinterSelectionOption(const QString &);
-#endif
 
    bool newPage() override;
    bool abort();

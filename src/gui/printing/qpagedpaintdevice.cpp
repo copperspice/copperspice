@@ -23,30 +23,12 @@
 #include <qpagedpaintdevice_p.h>
 #include <qpagedpaintdevice.h>
 
-QT_BEGIN_NAMESPACE
-
 QPagedPaintDevicePrivate::~QPagedPaintDevicePrivate()
 {
 }
 
-/*!
-    \class QPagedPaintDevice
-    \inmodule QtGui
-
-    \brief The QPagedPaintDevice class is a represents a paintdevice that supports
-    multiple pages.
-
-    \ingroup painting
-
-    Paged paint devices are used to generate output for printing or for formats like PDF.
-    QPdfWriter and QPrinter inherit from it.
-  */
-
-/*!
-  Constructs a new paged paint device.
-  */
 QPagedPaintDevice::QPagedPaintDevice()
-    : d(new QPagedPaintDevicePrivate)
+   : d_devicePtr(new QPagedPaintDevicePrivate)
 {
 }
 
@@ -55,7 +37,7 @@ QPagedPaintDevice::QPagedPaintDevice()
     Constructs a new paged paint device with the derived private class.
 */
 QPagedPaintDevice::QPagedPaintDevice(QPagedPaintDevicePrivate *dd)
-    : d(dd)
+   : d_devicePtr(dd)
 {
 }
 
@@ -64,7 +46,7 @@ QPagedPaintDevice::QPagedPaintDevice(QPagedPaintDevicePrivate *dd)
   */
 QPagedPaintDevice::~QPagedPaintDevice()
 {
-    delete d;
+   delete d_devicePtr;
 }
 
 /*!
@@ -73,7 +55,7 @@ QPagedPaintDevice::~QPagedPaintDevice()
 */
 QPagedPaintDevicePrivate *QPagedPaintDevice::dd()
 {
-    return d;
+   return d_devicePtr;
 }
 
 /*!
@@ -234,7 +216,7 @@ QPagedPaintDevicePrivate *QPagedPaintDevice::dd()
   */
 void QPagedPaintDevice::setPageSize(PageSize size)
 {
-    d->m_pageLayout.setPageSize(QPageSize(QPageSize::PageSizeId(size)));
+   d_devicePtr->m_pageLayout.setPageSize(QPageSize(QPageSize::PageSizeId(size)));
 }
 
 /*!
@@ -242,7 +224,7 @@ void QPagedPaintDevice::setPageSize(PageSize size)
   */
 QPagedPaintDevice::PageSize QPagedPaintDevice::pageSize() const
 {
-    return PageSize(d->m_pageLayout.pageSize().id());
+   return PageSize(d_devicePtr->m_pageLayout.pageSize().id());
 }
 
 /*!
@@ -253,7 +235,7 @@ QPagedPaintDevice::PageSize QPagedPaintDevice::pageSize() const
 */
 void QPagedPaintDevice::setPageSizeMM(const QSizeF &size)
 {
-    d->m_pageLayout.setPageSize(QPageSize(size, QPageSize::Millimeter));
+   d_devicePtr->m_pageLayout.setPageSize(QPageSize(size, QPageSize::Millimeter));
 }
 
 /*!
@@ -261,7 +243,7 @@ void QPagedPaintDevice::setPageSizeMM(const QSizeF &size)
   */
 QSizeF QPagedPaintDevice::pageSizeMM() const
 {
-    return d->m_pageLayout.pageSize().size(QPageSize::Millimeter);
+   return d_devicePtr->m_pageLayout.pageSize().size(QPageSize::Millimeter);
 }
 
 /*!
@@ -276,8 +258,8 @@ QSizeF QPagedPaintDevice::pageSizeMM() const
   */
 void QPagedPaintDevice::setMargins(const Margins &margins)
 {
-    d->m_pageLayout.setUnits(QPageLayout::Millimeter);
-    d->m_pageLayout.setMargins(QMarginsF(margins.left, margins.top, margins.right, margins.bottom));
+   d_devicePtr->m_pageLayout.setUnits(QPageLayout::Millimeter);
+   d_devicePtr->m_pageLayout.setMargins(QMarginsF(margins.left, margins.top, margins.right, margins.bottom));
 }
 
 /*!
@@ -289,13 +271,14 @@ void QPagedPaintDevice::setMargins(const Margins &margins)
   */
 QPagedPaintDevice::Margins QPagedPaintDevice::margins() const
 {
-    QMarginsF margins = d->m_pageLayout.margins(QPageLayout::Millimeter);
-    Margins result;
-    result.left = margins.left();
-    result.top = margins.top();
-    result.right = margins.right();
-    result.bottom = margins.bottom();
-    return result;
+   QMarginsF margins = d_devicePtr->m_pageLayout.margins(QPageLayout::Millimeter);
+   Margins result;
+   result.left = margins.left();
+   result.top = margins.top();
+   result.right = margins.right();
+   result.bottom = margins.bottom();
+
+   return result;
 }
 
 /*!
@@ -315,7 +298,7 @@ QPagedPaintDevice::Margins QPagedPaintDevice::margins() const
 
 bool QPagedPaintDevice::setPageLayout(const QPageLayout &newPageLayout)
 {
-    return d->setPageLayout(newPageLayout);
+   return d_devicePtr->setPageLayout(newPageLayout);
 }
 
 /*!
@@ -337,7 +320,7 @@ bool QPagedPaintDevice::setPageLayout(const QPageLayout &newPageLayout)
 
 bool QPagedPaintDevice::setPageSize(const QPageSize &pageSize)
 {
-    return d->setPageSize(pageSize);
+   return d_devicePtr->setPageSize(pageSize);
 }
 
 /*!
@@ -362,7 +345,7 @@ bool QPagedPaintDevice::setPageSize(const QPageSize &pageSize)
 
 bool QPagedPaintDevice::setPageOrientation(QPageLayout::Orientation orientation)
 {
-    return d->setPageOrientation(orientation);
+   return d_devicePtr->setPageOrientation(orientation);
 }
 
 /*!
@@ -384,7 +367,7 @@ bool QPagedPaintDevice::setPageOrientation(QPageLayout::Orientation orientation)
 
 bool QPagedPaintDevice::setPageMargins(const QMarginsF &margins)
 {
-    return d->setPageMargins(margins);
+   return d_devicePtr->setPageMargins(margins);
 }
 
 /*!
@@ -406,7 +389,7 @@ bool QPagedPaintDevice::setPageMargins(const QMarginsF &margins)
 
 bool QPagedPaintDevice::setPageMargins(const QMarginsF &margins, QPageLayout::Unit units)
 {
-    return d->setPageMargins(margins, units);
+   return d_devicePtr->setPageMargins(margins, units);
 }
 
 /*!
@@ -423,7 +406,7 @@ bool QPagedPaintDevice::setPageMargins(const QMarginsF &margins, QPageLayout::Un
 
 QPageLayout QPagedPaintDevice::pageLayout() const
 {
-    return d->pageLayout();
+   return d_devicePtr->pageLayout();
 }
 
 /*!
@@ -434,7 +417,7 @@ QPageLayout QPagedPaintDevice::pageLayout() const
 
 QPageLayout QPagedPaintDevice::devicePageLayout() const
 {
-    return d->m_pageLayout;
+   return d_devicePtr->m_pageLayout;
 }
 
 /*!
@@ -445,7 +428,7 @@ QPageLayout QPagedPaintDevice::devicePageLayout() const
 
 QPageLayout &QPagedPaintDevice::devicePageLayout()
 {
-    return d->m_pageLayout;
+   return d_devicePtr->m_pageLayout;
 }
 
-QT_END_NAMESPACE
+

@@ -77,8 +77,8 @@ class QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
       return Windows;
    }
 
-   HDC getDC() const override;
-   void releaseDC(HDC) const override;
+   HDC getDC() const;
+   void releaseDC(HDC) const;
 
    /* Used by print/page setup dialogs */
    void setGlobalDevMode(HGLOBAL globalDevNames, HGLOBAL globalDevMode);
@@ -100,7 +100,7 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
       globalDevMode(0),
       devMode(0),
       pInfo(0),
-       hMem(0),
+      hMem(0),
       hdc(0),
       ownsDevMode(false),
       mode(QPrinter::ScreenResolution),
@@ -115,8 +115,7 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
       reinit(false),
       complex_xform(false), has_pen(false), has_brush(false), has_custom_paper_size(false),
       embed_fonts(true),
-      txop(0 /* QTransform::TxNone */)
-   {
+      txop(0 /* QTransform::TxNone */) {
    }
 
    ~QWin32PrintEnginePrivate();

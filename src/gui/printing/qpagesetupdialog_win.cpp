@@ -34,15 +34,15 @@
 QPageSetupDialog::QPageSetupDialog(QPrinter *printer, QWidget *parent)
    : QDialog(*(new QPageSetupDialogPrivate(printer)), parent)
 {
-    setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
-    setAttribute(Qt::WA_DontShowOnScreen);
+   setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
+   setAttribute(Qt::WA_DontShowOnScreen);
 }
 
 QPageSetupDialog::QPageSetupDialog(QWidget *parent)
-    : QDialog(*(new QPageSetupDialogPrivate(0)), parent)
+   : QDialog(*(new QPageSetupDialogPrivate(0)), parent)
 {
-    setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
-    setAttribute(Qt::WA_DontShowOnScreen);
+   setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
+   setAttribute(Qt::WA_DontShowOnScreen);
 }
 
 int QPageSetupDialog::exec()
@@ -77,68 +77,69 @@ int QPageSetupDialog::exec()
       psd.hDevMode = engine->globalDevMode();
    }
 
-    HGLOBAL *tempDevNames = engine->createGlobalDevNames();
+   HGLOBAL *tempDevNames = engine->createGlobalDevNames();
    psd.hDevNames = tempDevNames;
 
    QWidget *parent = parentWidget();
    parent = parent ? parent->window() : QApplication::activeWindow();
    Q_ASSERT(!parent || parent->testAttribute(Qt::WA_WState_Created));
-    QWindow *parentWindow = parent ? parent->windowHandle() : 0;
-    psd.hwndOwner = parentWindow ? (HWND)QGuiApplication::platformNativeInterface()->nativeResourceForWindow("handle", parentWindow) : 0;
+   QWindow *parentWindow = parent ? parent->windowHandle() : 0;
+   psd.hwndOwner = parentWindow ? (HWND)QGuiApplication::platformNativeInterface()->nativeResourceForWindow("handle", parentWindow) : 0;
 
    psd.Flags = PSD_MARGINS;
-    QPageLayout layout = d->printer->pageLayout();
-    switch (layout.units()) {
-    case QPageLayout::Millimeter:
-    case QPageLayout::Inch:
-        break;
-    case QPageLayout::Point:
-    case QPageLayout::Pica:
-    case QPageLayout::Didot:
-    case QPageLayout::Cicero:
-        layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ? QPageLayout::Millimeter
-                                                                                       : QPageLayout::Inch);
-        break;
-    }
-    qreal multiplier = 1.0;
-    if (layout.units() == QPageLayout::Millimeter) {
-         psd.Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
-        multiplier = 100.0;
-    } else { // QPageLayout::Inch)
-         psd.Flags |= PSD_INTHOUSANDTHSOFINCHES;
-        multiplier = 1000.0;
+   QPageLayout layout = d->printer->pageLayout();
+   switch (layout.units()) {
+      case QPageLayout::Millimeter:
+      case QPageLayout::Inch:
+         break;
+      case QPageLayout::Point:
+      case QPageLayout::Pica:
+      case QPageLayout::Didot:
+      case QPageLayout::Cicero:
+         layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ? QPageLayout::Millimeter
+            : QPageLayout::Inch);
+         break;
+   }
+   qreal multiplier = 1.0;
+   if (layout.units() == QPageLayout::Millimeter) {
+      psd.Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
+      multiplier = 100.0;
+   } else { // QPageLayout::Inch)
+      psd.Flags |= PSD_INTHOUSANDTHSOFINCHES;
+      multiplier = 1000.0;
    }
 
 
-    psd.rtMargin.left   = layout.margins().left() * multiplier;
-    psd.rtMargin.top    = layout.margins().top() * multiplier;
-    psd.rtMargin.right  = layout.margins().right() * multiplier;
-    psd.rtMargin.bottom = layout.margins().bottom() * multiplier;
+   psd.rtMargin.left   = layout.margins().left() * multiplier;
+   psd.rtMargin.top    = layout.margins().top() * multiplier;
+   psd.rtMargin.right  = layout.margins().right() * multiplier;
+   psd.rtMargin.bottom = layout.margins().bottom() * multiplier;
 
    QDialog::setVisible(true);
    bool result = PageSetupDlg(&psd);
    QDialog::setVisible(false);
 
    if (result) {
-        engine->setGlobalDevMode(psd.hDevNames, psd.hDevMode);
-        const QMarginsF margins(psd.rtMargin.left, psd.rtMargin.top, psd.rtMargin.right, psd.rtMargin.bottom);
+      engine->setGlobalDevMode(psd.hDevNames, psd.hDevMode);
+      const QMarginsF margins(psd.rtMargin.left, psd.rtMargin.top, psd.rtMargin.right, psd.rtMargin.bottom);
 
-        d->printer->setPageMargins(margins / multiplier, layout.units());
+      d->printer->setPageMargins(margins / multiplier, layout.units());
 
 
-        if (!engine->globalDevMode() && hDevMode) {
-      // copy from our temp DEVMODE struct
-            if (ep->ownsDevMode && ep->devMode)
-                free(ep->devMode);
-            ep->devMode = (DEVMODE *) malloc(devModeSize);
-            ep->ownsDevMode = true;
+      if (!engine->globalDevMode() && hDevMode) {
+         // copy from our temp DEVMODE struct
+         if (ep->ownsDevMode && ep->devMode) {
+            free(ep->devMode);
+         }
+         ep->devMode = (DEVMODE *) malloc(devModeSize);
+         ep->ownsDevMode = true;
          void *src = GlobalLock(hDevMode);
          memcpy(ep->devMode, src, devModeSize);
          GlobalUnlock(hDevMode);
       }
    }
 
-    if (!engine->globalDevMode() && hDevMode) {
+   if (!engine->globalDevMode() && hDevMode) {
       GlobalFree(hDevMode);
    }
 

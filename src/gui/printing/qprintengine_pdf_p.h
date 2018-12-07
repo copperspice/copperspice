@@ -26,13 +26,14 @@
 #include <qprintengine.h>
 
 #ifndef QT_NO_PRINTER
-#include <QtCore/qmap.h>
-#include <QtGui/qmatrix.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qvector.h>
-#include <QtGui/qpaintengine.h>
-#include <QtGui/qpainterpath.h>
-#include <QtCore/qdatastream.h>
+
+#include <qmap.h>
+#include <qmatrix.h>
+#include <qstring.h>
+#include <qvector.h>
+#include <qpaintengine.h>
+#include <qpainterpath.h>
+#include <qdatastream.h>
 #include <qfontengine_p.h>
 #include <qpdf_p.h>
 #include <qpaintengine_p.h>
@@ -46,7 +47,7 @@ class QPointF;
 class QRegion;
 class QFile;
 
-class QPdfEnginePrivate;
+class QPdfPrintEnginePrivate;
 
 class QPdfPrintEngine: public QPdfEngine, public QPrintEngine
 {
@@ -57,8 +58,8 @@ class QPdfPrintEngine: public QPdfEngine, public QPrintEngine
    virtual ~QPdfPrintEngine();
 
    // reimplementations QPaintEngine
-   bool begin(QPaintDevice *pdev) Q_DECL_OVERRIDE;
-   bool end() Q_DECL_OVERRIDE;
+   bool begin(QPaintDevice *pdev) override;
+   bool end() override;
 
    // reimplementations QPrintEngine
    bool abort() override {
@@ -66,6 +67,7 @@ class QPdfPrintEngine: public QPdfEngine, public QPrintEngine
    }
 
    bool newPage() override;
+
    QPrinter::PrinterState printerState() const override {
       return state;
    }
@@ -74,41 +76,43 @@ class QPdfPrintEngine: public QPdfEngine, public QPrintEngine
    virtual void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
    virtual QVariant property(PrintEnginePropertyKey key) const override;
 
-    QPrinter::PrinterState state;
+   QPrinter::PrinterState state;
+
  protected:
-    QPdfPrintEngine(QPdfPrintEnginePrivate &p);
+   QPdfPrintEngine(QPdfPrintEnginePrivate &p);
 
  private:
-    Q_DISABLE_COPY(QPdfPrintEngine)
+   Q_DISABLE_COPY(QPdfPrintEngine)
 
 };
 
 class Q_GUI_EXPORT QPdfPrintEnginePrivate : public QPdfEnginePrivate
 {
-    Q_DECLARE_PUBLIC(QPdfPrintEngine)
+   Q_DECLARE_PUBLIC(QPdfPrintEngine)
 
  public:
-    QPdfPrintEnginePrivate(QPrinter::PrinterMode m);
-    ~QPdfPrintEnginePrivate();
+   QPdfPrintEnginePrivate(QPrinter::PrinterMode m);
+   ~QPdfPrintEnginePrivate();
 
+   virtual bool openPrintDevice();
+   virtual void closePrintDevice();
 
-    virtual bool openPrintDevice();
-    virtual void closePrintDevice();
  private:
-    Q_DISABLE_COPY(QPdfPrintEnginePrivate)
+   Q_DISABLE_COPY(QPdfPrintEnginePrivate)
 
 
-    friend class QCupsPrintEngine;
-    friend class QCupsPrintEnginePrivate;
-    QString printerName;
-    QString printProgram;
-    QString selectionOption;
-    QPrint::DuplexMode duplex;
-    bool collate;
-    int copies;
-    QPrinter::PageOrder pageOrder;
-    QPrinter::PaperSource paperSource;
+   friend class QCupsPrintEngine;
+   friend class QCupsPrintEnginePrivate;
+   QString printerName;
+   QString printProgram;
+   QString selectionOption;
+   QPrint::DuplexMode duplex;
+   bool collate;
+   int copies;
+   QPrinter::PageOrder pageOrder;
+   QPrinter::PaperSource paperSource;
 
+    int fd;
 };
 
 #endif // QT_NO_PRINTER

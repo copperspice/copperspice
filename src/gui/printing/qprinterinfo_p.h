@@ -32,10 +32,10 @@
 class QPrinterInfoPrivate
 {
  public:
-    QPrinterInfoPrivate(const QString& id = QString());
-    ~QPrinterInfoPrivate();
+   QPrinterInfoPrivate(const QString &id = QString());
+   ~QPrinterInfoPrivate();
 
-    QPrintDevice m_printDevice;
+   QPrintDevice m_printDevice;
 };
 
 #endif // QT_NO_PRINTER

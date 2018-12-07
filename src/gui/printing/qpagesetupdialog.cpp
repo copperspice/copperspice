@@ -29,22 +29,24 @@
 
 QPageSetupDialogPrivate::QPageSetupDialogPrivate(QPrinter *prntr) : printer(0), ownsPrinter(false)
 {
-    setPrinter(prntr);
+   setPrinter(prntr);
 }
 void QPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
 {
-    if (printer && ownsPrinter)
-        delete printer;
-    if (newPrinter) {
-        printer = newPrinter;
-        ownsPrinter = false;
-    } else {
-        printer = new QPrinter;
-        ownsPrinter = true;
-    }
+   if (printer && ownsPrinter) {
+      delete printer;
+   }
+   if (newPrinter) {
+      printer = newPrinter;
+      ownsPrinter = false;
+   } else {
+      printer = new QPrinter;
+      ownsPrinter = true;
+   }
 
-    if (printer->outputFormat() != QPrinter::NativeFormat)
-        qWarning("QPageSetupDialog: Can not be used on non-native printers");
+   if (printer->outputFormat() != QPrinter::NativeFormat) {
+      qWarning("QPageSetupDialog: Can not be used on non-native printers");
+   }
 
 }
 
@@ -62,25 +64,26 @@ void QPageSetupDialog::open(QObject *receiver, const QString &member)
 
 QPageSetupDialog::~QPageSetupDialog()
 {
-    Q_D(QPageSetupDialog);
-    if (d->ownsPrinter)
-        delete d->printer;
+   Q_D(QPageSetupDialog);
+   if (d->ownsPrinter) {
+      delete d->printer;
+   }
 }
 QPrinter *QPageSetupDialog::printer()
 {
-    Q_D(QPageSetupDialog);
-    return d->printer;
+   Q_D(QPageSetupDialog);
+   return d->printer;
 }
 void QPageSetupDialog::done(int result)
 {
-    Q_D(QPageSetupDialog);
-    QDialog::done(result);
-    if (d->receiverToDisconnectOnClose) {
-        disconnect(this, SIGNAL(accepted()),
-                   d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-        d->receiverToDisconnectOnClose = 0;
-    }
-    d->memberToDisconnectOnClose.clear();
+   Q_D(QPageSetupDialog);
+   QDialog::done(result);
+   if (d->receiverToDisconnectOnClose) {
+      disconnect(this, SIGNAL(accepted()),
+         d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      d->receiverToDisconnectOnClose = 0;
+   }
+   d->memberToDisconnectOnClose.clear();
 }
 
 

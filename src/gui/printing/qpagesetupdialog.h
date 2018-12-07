@@ -39,7 +39,7 @@ class Q_GUI_EXPORT QPageSetupDialog : public QDialog
    explicit QPageSetupDialog(QPrinter *printer, QWidget *parent = nullptr);
    explicit QPageSetupDialog(QWidget *parent = nullptr);
 
-  ~QPageSetupDialog();
+   ~QPageSetupDialog();
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
    void setVisible(bool visible) override;

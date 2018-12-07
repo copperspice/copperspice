@@ -183,7 +183,7 @@ void QAbstractPrintDialog::setMinMax(int min, int max)
 {
    Q_D(QAbstractPrintDialog);
    Q_ASSERT_X(min <= max, "QAbstractPrintDialog::setMinMax",
-              "'min' must be less than or equal to 'max'");
+      "'min' must be less than or equal to 'max'");
 
    d->minPage = min;
    d->maxPage = max;
@@ -218,7 +218,7 @@ void QAbstractPrintDialog::setFromTo(int from, int to)
 {
    Q_D(QAbstractPrintDialog);
    Q_ASSERT_X(from <= to, "QAbstractPrintDialog::setFromTo",
-              "'from' must be less than or equal to 'to'");
+      "'from' must be less than or equal to 'to'");
 
    d->printer->setFromTo(from, to);
 

@@ -79,7 +79,7 @@ class ZoomFactorValidator : public QDoubleValidator
       if (state == Intermediate) {
          int i = input.indexOf(QLocale::system().decimalPoint());
          if ((i == -1 && input.size() > num_size)
-               || (i != -1 && i > num_size)) {
+            || (i != -1 && i > num_size)) {
             return Invalid;
          }
       }
@@ -328,9 +328,9 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
    if (! printer->isValid()
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
-         || printer->outputFormat() != QPrinter::NativeFormat
+      || printer->outputFormat() != QPrinter::NativeFormat
 #endif
-      ) {
+   ) {
       pageSetupAction->setEnabled(false);
    }
 
@@ -398,7 +398,7 @@ void QPrintPreviewDialogPrivate::setupActions()
    singleModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show single page"));
    facingModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show facing pages"));
    overviewModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",
-                        "Show overview of all pages"));
+            "Show overview of all pages"));
    qt_setupActionIcon(singleModeAction, QLatin1String("view-page-one"));
    qt_setupActionIcon(facingModeAction, QLatin1String("view-page-sided"));
    qt_setupActionIcon(overviewModeAction, QLatin1String("view-page-multi"));
@@ -433,7 +433,7 @@ void QPrintPreviewDialogPrivate::setupActions()
 bool QPrintPreviewDialogPrivate::isFitting()
 {
    return (fitGroup->isExclusive()
-           && (fitWidthAction->isChecked() || fitPageAction->isChecked()));
+         && (fitWidthAction->isChecked() || fitPageAction->isChecked()));
 }
 
 void QPrintPreviewDialogPrivate::setFitting(bool on)
@@ -577,7 +577,7 @@ void QPrintPreviewDialogPrivate::_q_print()
       QString suffix = QLatin1String(".pdf");
 
       QString fileName = QFileDialog::getSaveFileName(q, title, printer->outputFileName(),
-                         QLatin1Char('*') + suffix);
+            QLatin1Char('*') + suffix);
       if (!fileName.isEmpty()) {
          if (QFileInfo(fileName).suffix().isEmpty()) {
             fileName.append(suffix);

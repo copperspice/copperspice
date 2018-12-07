@@ -58,8 +58,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 };
 
 static void qt_win_setup_PRINTDLGEX(PRINTDLGEX *pd, QWidget *parent,
-                                    QPrintDialog *pdlg,
-                                    QPrintDialogPrivate *d, HGLOBAL *tempDevNames)
+   QPrintDialog *pdlg, QPrintDialogPrivate *d, HGLOBAL *tempDevNames)
 {
    DEVMODE *devMode = d->ep->devMode;
 
@@ -150,7 +149,7 @@ static void qt_win_read_back_PRINTDLGEX(PRINTDLGEX *pd, QPrintDialog *pdlg, QPri
 
    d->ep->printToFile = (pd->Flags & PD_PRINTTOFILE) != 0;
 
-    d->engine->setGlobalDevMode(pd->hDevNames, pd->hDevMode);
+   d->engine->setGlobalDevMode(pd->hDevNames, pd->hDevMode);
 
 
    if (d->ep->printToFile && d->ep->fileName.isEmpty()) {
@@ -204,7 +203,7 @@ QPrintDialog::~QPrintDialog()
 
 int QPrintDialog::exec()
 {
-   if (!w arnIfNotNative(printer())) {
+   if (! warnIfNotNative(printer())) {
       return 0;
    }
 
@@ -247,10 +246,10 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
       doPrinting = false;
       result = (PrintDlgEx(&pd) == S_OK);
       if (result && (pd.dwResultAction == PD_RESULT_PRINT
-                     || pd.dwResultAction == PD_RESULT_APPLY)) {
+            || pd.dwResultAction == PD_RESULT_APPLY)) {
          doPrinting = (pd.dwResultAction == PD_RESULT_PRINT);
          if ((pd.Flags & PD_PAGENUMS)
-               && (pd.lpPageRanges[0].nFromPage > pd.lpPageRanges[0].nToPage)) {
+            && (pd.lpPageRanges[0].nFromPage > pd.lpPageRanges[0].nToPage)) {
             pd.lpPageRanges[0].nFromPage = 1;
             pd.lpPageRanges[0].nToPage = 1;
             done = false;
@@ -262,8 +261,8 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
 
       if (!done) {
          QMessageBox::warning(0, QPrintDialog::tr("Print"),
-                              QPrintDialog::tr("The 'From' value cannot be greater than the 'To' value."),
-                              QPrintDialog::tr("OK"));
+            QPrintDialog::tr("The 'From' value cannot be greater than the 'To' value."),
+            QPrintDialog::tr("OK"));
       }
    } while (!done);
 
@@ -272,7 +271,7 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
 
    // write values back...
    if (result && (pd.dwResultAction == PD_RESULT_PRINT
-                  || pd.dwResultAction == PD_RESULT_APPLY)) {
+         || pd.dwResultAction == PD_RESULT_APPLY)) {
       qt_win_read_back_PRINTDLGEX(&pd, q, this);
 
       // update printer validity
