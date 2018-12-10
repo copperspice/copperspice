@@ -5,11 +5,13 @@ set(GUI_PUBLIC_INCLUDES
     QPageSetupDialog
     QPageSize
     QPagedPaintDevice
+    QPdfWriter
     QPrinter
     QPrinterInfo
     QPrintDialog
     QPrintEngine
     QPrintPreviewDialog
+    QPrintPreviewWidget
     QUnixPrintWidget
 )
 
@@ -20,11 +22,13 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesize.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagedpaintdevice.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpdfwriter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintengine.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinterinfo.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdialog.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintpreviewdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintpreviewwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qunixprintwidget.h
 )
 
@@ -34,6 +38,9 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcups_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_unix_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpdf_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprint_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdevice_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinterinfo_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintengine_pdf_p.h
@@ -47,9 +54,11 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagelayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesize.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdevice.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinterinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintpreviewdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintpreviewwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintengine_pdf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdialog.qrc
 )

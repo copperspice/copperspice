@@ -6,17 +6,20 @@ GUI_PUBLIC_INCLUDES += \
 	QPageSetupDialog \
 	QPageSize \
 	QPagedPaintDevice \
+	QPdfWriter \
 	QPrinter \
 	QPrintDialog \
 	QPrintEngine \
 	QPrinterInfo\
 	QPrintPreviewDialog \
+	QPrintPreviewWidget \
 	QUnixPrintWidget
 
 GUI_PRINTING_INCLUDES = \
 	qabstractprintdialog.h \
 	qpagelayout.h \
 	qpagesize.h \
+	qpdfwriter.h \
 	qpagesetupdialog.h \
 	qpagedpaintdevice.h \
 	qprinter.h \
@@ -24,6 +27,7 @@ GUI_PRINTING_INCLUDES = \
 	qprintengine.h \
 	qprinterinfo.h \
 	qprintpreviewdialog.h \
+	qprintpreviewwidget.h \
 	qunixprintwidget.h
 
 GUI_PRINTING_PRIVATE_INCLUDES = \
@@ -32,6 +36,9 @@ GUI_PRINTING_PRIVATE_INCLUDES = \
 	qpagesetupdialog_p.h \
 	qpagedpaintdevice_p.h \
 	qpagesetupdialog_unix_p.h \
+	qpdf_p.h \
+	qprint_p.h \
+	qprintdevice_p.h \
 	qprinter_p.h \
 	qprinterinfo_p.h \
 	qprintengine_pdf_p.h \
@@ -41,7 +48,7 @@ GUI_PRINTING_PRIVATE_INCLUDES = \
 GUI_INCLUDES += $(GUI_PRINTING_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_PRINTING_PRIVATE_INCLUDES)
 
-noinst_HEADERS+=$(patsubst %,src/gui/printing/%,$(GUI_DIALOGS_INCLUDES)) \
+noinst_HEADERS+=$(patsubst %,src/gui/printing/%,$(GUI_PRINTING_INCLUDES)) \
 		$(patsubst %,src/gui/printing/%,$(GUI_PRINTING_PRIVATE_INCLUDES)) \
 		src/gui/printing/qpagesetupwidget.ui
 
@@ -52,10 +59,14 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/printing/qpagelayout.cpp \
 	src/gui/printing/qpagesetupdialog.cpp \
 	src/gui/printing/qpagesize.cpp \
+	src/gui/printing/qpdf.cpp \
+	src/gui/printing/qpdfwriter.cpp \
 	src/gui/printing/qprintengine_pdf.cpp \
+	src/gui/printing/qprintdevice.cpp \
 	src/gui/printing/qprinter.cpp \
 	src/gui/printing/qprinterinfo.cpp \
-	src/gui/printing/qprintpreviewdialog.cpp
+	src/gui/printing/qprintpreviewdialog.cpp \
+	src/gui/printing/qprintpreviewwidget.cpp
 
 nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES +=
 
