@@ -25,8 +25,6 @@
 
 #include <QtCore/qstringlist.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_STANDARDPATHS
 
 class Q_CORE_EXPORT QStandardPaths
@@ -50,7 +48,10 @@ class Q_CORE_EXPORT QStandardPaths
       ConfigLocation,
       DownloadLocation,
       GenericCacheLocation,
-      GenericConfigLocation
+      GenericConfigLocation,
+      AppDataLocation,
+      AppConfigLocation,
+      AppLocalDataLocation = DataLocation
    };
 
    static QString writableLocation(StandardLocation type);
@@ -68,7 +69,7 @@ class Q_CORE_EXPORT QStandardPaths
 
    static QString findExecutable(const QString &executableName, const QStringList &paths = QStringList());
 
-   static void enableTestMode(bool testMode);
+
    static void setTestModeEnabled(bool testMode);
    static bool isTestModeEnabled();
 
@@ -79,7 +80,5 @@ class Q_CORE_EXPORT QStandardPaths
 };
 
 #endif // QT_NO_STANDARDPATHS
-
-QT_END_NAMESPACE
 
 #endif // QSTANDARDPATHS_H

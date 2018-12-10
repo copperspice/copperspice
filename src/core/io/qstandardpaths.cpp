@@ -31,8 +31,6 @@
 
 #ifndef QT_NO_STANDARDPATHS
 
-QT_BEGIN_NAMESPACE
-
 static bool existsAsSpecified(const QString &path, QStandardPaths::LocateOptions options)
 {
    if (options & QStandardPaths::LocateDirectory) {
@@ -210,8 +208,6 @@ QString QStandardPaths::displayName(StandardLocation type)
          return QCoreApplication::translate("QStandardPaths", "Temporary Directory");
       case HomeLocation:
          return QCoreApplication::translate("QStandardPaths", "Home");
-      case DataLocation:
-         return QCoreApplication::translate("QStandardPaths", "Application Data");
       case CacheLocation:
          return QCoreApplication::translate("QStandardPaths", "Cache");
       case GenericDataLocation:
@@ -226,6 +222,11 @@ QString QStandardPaths::displayName(StandardLocation type)
          return QCoreApplication::translate("QStandardPaths", "Shared Cache");
       case DownloadLocation:
          return QCoreApplication::translate("QStandardPaths", "Download");
+    case AppDataLocation:
+    case AppLocalDataLocation:
+        return QCoreApplication::translate("QStandardPaths", "Application Data");
+    case AppConfigLocation:
+        return QCoreApplication::translate("QStandardPaths", "Application Configuration");
    }
    // not reached
    return QString();
@@ -260,10 +261,6 @@ QString QStandardPaths::displayName(StandardLocation type)
 
 static bool qsp_testMode = false;
 
-void QStandardPaths::enableTestMode(bool testMode)
-{
-   qsp_testMode = testMode;
-}
 
 void QStandardPaths::setTestModeEnabled(bool testMode)
 {
@@ -284,6 +281,6 @@ bool QStandardPaths::isTestModeEnabled()
 }
 
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_STANDARDPATHS
