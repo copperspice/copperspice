@@ -81,7 +81,7 @@ class QStringView : public CsString::CsBasicStringView<S>
       void chop(size_type numOfChars);
 
       size_type count() const {
-         return CsString::CsString::size();
+         return CsString::CsBasicStringView<S>::size();
       }
 
       size_type count(value_type c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
