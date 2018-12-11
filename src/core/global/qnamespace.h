@@ -297,6 +297,7 @@ class Q_CORE_EXPORT Qt
       WA_Disabled = 0,
       WA_UnderMouse = 1,
       WA_MouseTracking = 2,
+      WA_ContentsPropagated = 3,       // may be deprecated
       WA_OpaquePaintEvent = 4,
       WA_StaticContents = 5,
       WA_LaidOut = 7,
@@ -304,7 +305,7 @@ class Q_CORE_EXPORT Qt
       WA_NoSystemBackground = 9,
       WA_UpdatesDisabled = 10,
       WA_Mapped = 11,
-      WA_MacNoClickThrough = 12, // Mac only
+      WA_MacNoClickThrough = 12,       // Mac only
       WA_PaintOutsidePaintEvent = 13,
       WA_InputMethodEnabled = 14,
       WA_WState_Visible = 15,

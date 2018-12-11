@@ -185,10 +185,10 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    T findChild(const QString &aName = QString()) const;
 
    template<class T>
-   QList<T> findChildren(const QString &objName = QString()) const;
+   QList<T> findChildren(const QString &objName = QString(), Qt::FindChildOptions options = Qt::FindChildrenRecursively) const;
 
    template<class T>
-   QList<T> findChildren(const QRegularExpression &regExp) const;
+   QList<T> findChildren(const QRegularExpression &regExp, Qt::FindChildOptions options = Qt::FindChildrenRecursively) const;
 
    template<class T = QVariant>
    T property(const QString &name) const;
@@ -268,7 +268,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static bool check_parent_thread(QObject *parent, QThreadData *parentThreadData, QThreadData *currentThreadData);
 
    template<class T>
-   void findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list) const;
+   void findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
+                  Qt::FindChildOptions options) const;
 
    CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList< std::pair<int, int> > timerList))
    CORE_CS_SLOT_2(internal_reregisterTimers)
@@ -311,25 +312,26 @@ T QObject::findChild(const QString &childName) const
 }
 
 template<class T>
-QList<T> QObject::findChildren(const QString &objName) const
+QList<T> QObject::findChildren(const QString &objName, Qt::FindChildOptions options) const
 {
    QList<T> list;
-   this->findChildren_helper<T>(objName, nullptr, list);
+   this->findChildren_helper<T>(objName, nullptr, list, options);
 
    return list;
 }
 
 template<typename T>
-QList<T> QObject::findChildren(const QRegularExpression &regExp) const
+QList<T> QObject::findChildren(const QRegularExpression &regExp, Qt::FindChildOptions options) const
 {
    QList<T> list;
-   this->findChildren_helper<T>(QString(), &regExp, list);
+   this->findChildren_helper<T>(QString(), &regExp, list, options);
 
    return list;
 }
 
 template<class T>
-void QObject::findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list) const
+void QObject::findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
+                  Qt::FindChildOptions options) const
 {
    QObject *temp;
 
@@ -353,7 +355,9 @@ void QObject::findChildren_helper(const QString &name, const QRegularExpression 
          }
       }
 
-      temp->findChildren_helper<T>(name, regExp, list);
+      if (options & Qt::FindChildrenRecursively) {
+         temp->findChildren_helper<T>(name, regExp, list, options);
+      }
    }
 }
 
