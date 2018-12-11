@@ -23,29 +23,42 @@
 #include <qsqlerror.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 QDebug operator<<(QDebug dbg, const QSqlError &s)
 {
-   dbg.nospace() << "QSqlError(" << s.number() << ", " << s.driverText() <<
-                 ", " << s.databaseText() << ')';
-   return dbg.space();
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   dbg << "QSqlError(" << s.nativeErrorCode() << ", " << s.driverText()
+      << ", " << s.databaseText() << ')';
+   return dbg;
 }
 
-QSqlError::QSqlError(const QString &driverText, const QString &databaseText, ErrorType type,
-                     int number)
-   : driverError(driverText), databaseError(databaseText), errorType(type), errorNumber(number)
+class QSqlErrorPrivate
 {
+ public:
+   QString driverError;
+   QString databaseError;
+   QSqlError::ErrorType errorType;
+   QString errorCode;
+};
+QSqlError::QSqlError(const QString &driverText, const QString &databaseText,
+   ErrorType type, const QString &code)
+{
+   d = new QSqlErrorPrivate;
+
+   d->driverError = driverText;
+   d->databaseError = databaseText;
+   d->errorType = type;
+   d->errorCode = code;
 }
 
 /*!
     Creates a copy of \a other.
 */
 QSqlError::QSqlError(const QSqlError &other)
-   : driverError(other.driverError), databaseError(other.databaseError),
-     errorType(other.errorType),
-     errorNumber(other.errorNumber)
 {
+   d = new QSqlErrorPrivate;
+
+   *d = *other.d;
 }
 
 /*!
@@ -54,10 +67,8 @@ QSqlError::QSqlError(const QSqlError &other)
 
 QSqlError &QSqlError::operator=(const QSqlError &other)
 {
-   driverError = other.driverError;
-   databaseError = other.databaseError;
-   errorType = other.errorType;
-   errorNumber = other.errorNumber;
+   *d = *other.d;
+
    return *this;
 }
 
@@ -65,9 +76,9 @@ QSqlError &QSqlError::operator=(const QSqlError &other)
     Compare the \a other error's values to this error and returns true, if it equal.
 */
 
-bool QSqlError::operator==(const QSqlError &other)
+bool QSqlError::operator==(const QSqlError &other) const
 {
-   return (errorType == other.errorType);
+   return (d->errorType == other.d->errorType);
 }
 
 
@@ -75,9 +86,9 @@ bool QSqlError::operator==(const QSqlError &other)
     Compare the \a other error's values to this error and returns true if it is not equal.
 */
 
-bool QSqlError::operator!=(const QSqlError &other)
+bool QSqlError::operator!=(const QSqlError &other) const
 {
-   return (errorType != other.errorType);
+   return (d->errorType != other.d->errorType);
 }
 
 
@@ -87,6 +98,7 @@ bool QSqlError::operator!=(const QSqlError &other)
 
 QSqlError::~QSqlError()
 {
+   delete d;
 }
 
 /*!
@@ -97,119 +109,46 @@ QSqlError::~QSqlError()
 */
 QString QSqlError::driverText() const
 {
-   return driverError;
+   return d->driverError;
 }
 
-/*!
-    Sets the driver error text to the value of \a driverText.
 
-    \sa driverText() setDatabaseText() text()
-*/
 
-void QSqlError::setDriverText(const QString &driverText)
-{
-   driverError = driverText;
-}
-
-/*!
-    Returns the text of the error as reported by the database. This
-    may contain database-specific descriptions; it may be empty.
-
-    \sa setDatabaseText() driverText() text()
-*/
 
 QString QSqlError::databaseText() const
 {
-   return databaseError;
+   return d->databaseError;
 }
 
-/*!
-    Sets the database error text to the value of \a databaseText.
 
-    \sa databaseText() setDriverText() text()
-*/
-
-void QSqlError::setDatabaseText(const QString &databaseText)
-{
-   databaseError = databaseText;
-}
-
-/*!
-    Returns the error type, or -1 if the type cannot be determined.
-
-    \sa setType()
-*/
 
 QSqlError::ErrorType QSqlError::type() const
 {
-   return errorType;
+   return d->errorType;
 }
 
-/*!
-    Sets the error type to the value of \a type.
 
-    \sa type()
-*/
 
-void QSqlError::setType(ErrorType type)
+QString QSqlError::nativeErrorCode() const
 {
-   errorType = type;
+   return d->errorCode;
 }
 
-/*!
-    Returns the database-specific error number, or -1 if it cannot be
-    determined.
-
-    \sa setNumber()
-*/
-
-int QSqlError::number() const
-{
-   return errorNumber;
-}
-
-/*!
-    Sets the database-specific error number to \a number.
-
-    \sa number()
-*/
-
-void QSqlError::setNumber(int number)
-{
-   errorNumber = number;
-}
-
-/*!
-    This is a convenience function that returns databaseText() and
-    driverText() concatenated into a single string.
-
-    \sa driverText() databaseText()
-*/
 
 QString QSqlError::text() const
 {
-   QString result = databaseError;
-
-   if (! databaseError.endsWith("\n")) {
-      result += ' ';
+   QString result = d->databaseError;
+   if (!d->databaseError.endsWith(QLatin1String("\n"))) {
+      result += QLatin1Char(' ');
    }
-
-   result += driverError;
-
+   result += d->driverError;
    return result;
 }
 
-/*!
-    Returns true if an error is set, otherwise false.
 
-    Example:
-    \snippet doc/src/snippets/code/src_sql_kernel_qsqlerror.cpp 0
-
-    \sa type()
-*/
 bool QSqlError::isValid() const
 {
-   return errorType != NoError;
+   return d->errorType != NoError;
 }
 
-QT_END_NAMESPACE
+

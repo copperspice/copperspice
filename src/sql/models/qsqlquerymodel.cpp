@@ -79,6 +79,13 @@ void QSqlQueryModelPrivate::initColOffsets(int size)
    memset(colOffsets.data(), 0, colOffsets.size() * sizeof(int));
 }
 
+int QSqlQueryModelPrivate::columnInQuery(int modelColumn) const
+{
+   if (modelColumn < 0 || modelColumn >= rec.count() || !rec.isGenerated(modelColumn) || modelColumn >= colOffsets.size()) {
+      return -1;
+   }
+   return modelColumn - colOffsets[modelColumn];
+}
 /*!
     \class QSqlQueryModel
     \brief The QSqlQueryModel class provides a read-only data model for SQL
@@ -192,6 +199,79 @@ bool QSqlQueryModel::canFetchMore(const QModelIndex &parent) const
    return (!parent.isValid() && !d->atEnd);
 }
 
+void QSqlQueryModel::beginInsertRows(const QModelIndex &parent, int first, int last)
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::beginInsertRows(parent, first, last);
+   }
+}
+void QSqlQueryModel::endInsertRows()
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::endInsertRows();
+   }
+}
+void QSqlQueryModel::beginRemoveRows(const QModelIndex &parent, int first, int last)
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::beginRemoveRows(parent, first, last);
+   }
+}
+void QSqlQueryModel::endRemoveRows()
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::endRemoveRows();
+   }
+}
+void QSqlQueryModel::beginInsertColumns(const QModelIndex &parent, int first, int last)
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::beginInsertColumns(parent, first, last);
+   }
+}
+void QSqlQueryModel::endInsertColumns()
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::endInsertColumns();
+   }
+}
+void QSqlQueryModel::beginRemoveColumns(const QModelIndex &parent, int first, int last)
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::beginRemoveColumns(parent, first, last);
+   }
+}
+void QSqlQueryModel::endRemoveColumns()
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::endRemoveColumns();
+   }
+}
+void QSqlQueryModel::beginResetModel()
+{
+   Q_D(QSqlQueryModel);
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::beginResetModel();
+   }
+   ++d->nestedResetLevel;
+}
+void QSqlQueryModel::endResetModel()
+{
+   Q_D(QSqlQueryModel);
+   --d->nestedResetLevel;
+   if (!d->nestedResetLevel) {
+      QAbstractTableModel::endResetModel();
+   }
+}
+
 /*! \fn int QSqlQueryModel::rowCount(const QModelIndex &parent) const
     \since 4.1
 
@@ -269,11 +349,7 @@ QVariant QSqlQueryModel::headerData(int section, Qt::Orientation orientation, in
       if (val.isValid()) {
          return val;
       }
-
-      // See if it's an inserted column (iiq.column() != -1)
-      QModelIndex dItem = indexInQuery(createIndex(0, section));
-
-      if (role == Qt::DisplayRole && d->rec.count() > section && dItem.column() != -1) {
+      if (role == Qt::DisplayRole && d->rec.count() > section && d->columnInQuery(section) != -1) {
          return d->rec.fieldName(section);
       }
    }
@@ -308,64 +384,48 @@ void QSqlQueryModel::queryChange()
 void QSqlQueryModel::setQuery(const QSqlQuery &query)
 {
    Q_D(QSqlQueryModel);
+   beginResetModel();
+
    QSqlRecord newRec = query.record();
    bool columnsChanged = (newRec != d->rec);
-   bool hasQuerySize = query.driver()->hasFeature(QSqlDriver::QuerySize);
-   bool hasNewData = (newRec != QSqlRecord()) || !query.lastError().isValid();
 
    if (d->colOffsets.size() != newRec.count() || columnsChanged) {
       d->initColOffsets(newRec.count());
    }
 
-   bool mustClearModel = d->bottom.isValid();
-   if (mustClearModel) {
-      d->atEnd = true;
-      beginRemoveRows(QModelIndex(), 0, qMax(d->bottom.row(), 0));
-      d->bottom = QModelIndex();
-   }
-
+   d->bottom = QModelIndex();
    d->error = QSqlError();
    d->query = query;
    d->rec = newRec;
+   d->atEnd = true;
 
-   if (mustClearModel) {
-      endRemoveRows();
-   }
-
-   d->atEnd = false;
-
-   if (columnsChanged && hasNewData) {
-      reset();
-   }
-
-   if (!query.isActive() || query.isForwardOnly()) {
-      d->atEnd = true;
-      d->bottom = QModelIndex();
-      if (query.isForwardOnly())
-         d->error = QSqlError(QLatin1String("Forward-only queries "
-                                            "cannot be used in a data model"),
-                              QString(), QSqlError::ConnectionError);
-      else {
-         d->error = query.lastError();
-      }
+   if (query.isForwardOnly()) {
+      d->error = QSqlError(QLatin1String("Forward-only queries "
+               "cannot be used in a data model"),
+            QString(), QSqlError::ConnectionError);
+      endResetModel();
       return;
    }
-   QModelIndex newBottom;
-   if (hasQuerySize && d->query.size() > 0) {
-      newBottom = createIndex(d->query.size() - 1, d->rec.count() - 1);
-      beginInsertRows(QModelIndex(), 0, qMax(0, newBottom.row()));
-      d->bottom = createIndex(d->query.size() - 1, columnsChanged ? 0 : d->rec.count() - 1);
-      d->atEnd = true;
-      endInsertRows();
-   } else {
-      newBottom = createIndex(-1, d->rec.count() - 1);
-   }
-   d->bottom = newBottom;
 
-   queryChange();
+   if (!query.isActive()) {
+      d->error = query.lastError();
+      endResetModel();
+      return;
+   }
+
+   if (query.driver()->hasFeature(QSqlDriver::QuerySize) && d->query.size() > 0) {
+      d->bottom = createIndex(d->query.size() - 1, d->rec.count() - 1);
+   } else {
+      d->bottom = createIndex(-1, d->rec.count() - 1);
+      d->atEnd = false;
+   }
+
 
    // fetchMore does the rowsInserted stuff for incremental models
    fetchMore();
+
+   endResetModel();
+   queryChange();
 }
 
 /*! \overload
@@ -393,6 +453,7 @@ void QSqlQueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 void QSqlQueryModel::clear()
 {
    Q_D(QSqlQueryModel);
+   beginResetModel();
    d->error = QSqlError();
    d->atEnd = true;
    d->query.clear();
@@ -400,6 +461,7 @@ void QSqlQueryModel::clear()
    d->colOffsets.clear();
    d->bottom = QModelIndex();
    d->headers.clear();
+   endResetModel();
 }
 
 /*!
@@ -417,7 +479,7 @@ void QSqlQueryModel::clear()
     \sa data()
  */
 bool QSqlQueryModel::setHeaderData(int section, Qt::Orientation orientation,
-                                   const QVariant &value, int role)
+   const QVariant &value, int role)
 {
    Q_D(QSqlQueryModel);
    if (orientation != Qt::Horizontal || section < 0 || columnCount() <= section) {
@@ -594,13 +656,13 @@ bool QSqlQueryModel::removeColumns(int column, int count, const QModelIndex &par
 QModelIndex QSqlQueryModel::indexInQuery(const QModelIndex &item) const
 {
    Q_D(const QSqlQueryModel);
-   if (item.column() < 0 || item.column() >= d->rec.count()
-         || !d->rec.isGenerated(item.column())
-         || item.column() >= d->colOffsets.size()) {
+   int modelColumn = d->columnInQuery(item.column());
+
+   if (modelColumn < 0) {
       return QModelIndex();
    }
-   return createIndex(item.row(), item.column() - d->colOffsets[item.column()],
-                      item.internalPointer());
+   return createIndex(item.row(), modelColumn, item.internalPointer());
+
 }
 
 QT_END_NAMESPACE

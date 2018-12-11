@@ -75,6 +75,7 @@ class Q_SQL_EXPORT QSqlRecord
    void clear();
    void clearValues();
    int count() const;
+   QSqlRecord keyValues(const QSqlRecord &keyFields) const;
 
  private:
    void detach();

@@ -25,7 +25,7 @@
 
 #include <QtSql/qsqltablemodel.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QSqlRelationalTableModelPrivate;
 
@@ -97,6 +97,6 @@ class Q_SQL_EXPORT QSqlRelationalTableModel: public QSqlTableModel
    Q_DECLARE_PRIVATE(QSqlRelationalTableModel)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QSQLRELATIONALTABLEMODEL_H

@@ -35,8 +35,16 @@
 #include <qsqltablemodel_p.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
 
+class QSqlRelationalTableModelSql: public QSqlTableModelSql
+{
+ public:
+   inline const static QString relTablePrefix(int i) {
+      return QString::number(i).prepend(QLatin1String("relTblAl_"));
+   }
+};
+
+typedef QSqlRelationalTableModelSql Sql;
 class QRelatedTableModel;
 
 struct QRelation {
@@ -186,35 +194,20 @@ class QSqlRelationalTableModelPrivate: public QSqlTableModelPrivate
       : QSqlTableModelPrivate(),
         joinMode( QSqlRelationalTableModel::InnerJoin ) {
    }
-   QString relationField(const QString &tableName, const QString &fieldName) const;
+
+   QString fullyQualifiedFieldName(const QString &tableName, const QString &fieldName) const;
 
    int nameToIndex(const QString &name) const override;
    mutable QVector<QRelation> relations;
    QSqlRecord baseRec;                   // the record without relations
    void clearChanges();
-   void clearEditBuffer() override;
+
    void clearCache() override;
    void revertCachedRow(int row) override;
 
-   void translateFieldNames(int row, QSqlRecord &values) const;
+   void translateFieldNames(QSqlRecord &values) const;
    QSqlRelationalTableModel::JoinMode joinMode;
 };
-
-static void qAppendWhereClause(QString &query, const QString &clause1, const QString &clause2)
-{
-   if (clause1.isEmpty() && clause2.isEmpty()) {
-      return;
-   }
-
-   if (clause1.isEmpty() || clause2.isEmpty()) {
-      query.append(QLatin1String(" WHERE (")).append(clause1).append(clause2);
-
-   } else
-      query.append(QLatin1String(" WHERE (")).append(clause1).append(
-         QLatin1String(") AND (")).append(clause2);
-
-      query.append(QLatin1String(") "));
-}
 
 void QSqlRelationalTableModelPrivate::clearChanges()
 {
@@ -231,22 +224,16 @@ void QSqlRelationalTableModelPrivate::revertCachedRow(int row)
 
 int QSqlRelationalTableModelPrivate::nameToIndex(const QString &name) const
 {
-   QString fieldname = name;
-   if (db.driver()->isIdentifierEscaped(fieldname, QSqlDriver::FieldName)) {
-      fieldname = db.driver()->stripDelimiters(fieldname, QSqlDriver::FieldName);
+
+   const QString fieldname = strippedFieldName(name);
+   int idx = baseRec.indexOf(fieldname);
+   if (idx == -1) {
+      // If the name is an alias we can find it here.
+      idx = QSqlTableModelPrivate::nameToIndex(name);
    }
-   return baseRec.indexOf(fieldname);
+   return idx;
 }
 
-void QSqlRelationalTableModelPrivate::clearEditBuffer()
-{
-   editBuffer = baseRec;
-   clearGenerated(editBuffer);
-}
-
-/*!
-    \reimp
-*/
 void QSqlRelationalTableModelPrivate::clearCache()
 {
    for (int i = 0; i < relations.count(); ++i) {
@@ -364,7 +351,7 @@ QVariant QSqlRelationalTableModel::data(const QModelIndex &index, int role) cons
    Q_D(const QSqlRelationalTableModel);
 
    if (role == Qt::DisplayRole && index.column() >= 0 && index.column() < d->relations.count() &&
-         d->relations.value(index.column()).isValid()) {
+      d->relations.value(index.column()).isValid()) {
       QRelation &relation = d->relations[index.column()];
       if (!relation.isDictionaryInitialized()) {
          relation.populateDictionary();
@@ -374,25 +361,16 @@ QVariant QSqlRelationalTableModel::data(const QModelIndex &index, int role) cons
       //when the value at index has been changed or added.
       //At an unmodified index, the underlying model will
       //already have the correct display value.
-      QVariant v;
-      switch (d->strategy) {
-         case OnFieldChange:
-            break;
-         case OnRowChange:
-            if ((index.row() == d->editIndex || index.row() == d->insertIndex)
-                  && d->editBuffer.isGenerated(index.column())) {
-               v = d->editBuffer.value(index.column());
+      if (d->strategy != OnFieldChange) {
+         const QSqlTableModelPrivate::ModifiedRow row = d->cache.value(index.row());
+         if (row.op() != QSqlTableModelPrivate::None && row.rec().isGenerated(index.column())) {
+            if (d->strategy == OnManualSubmit || row.op() != QSqlTableModelPrivate::Delete) {
+               QVariant v = row.rec().value(index.column());
+               if (v.isValid()) {
+                  return relation.dictionary[v.toString()];
+               }
             }
-            break;
-         case OnManualSubmit:
-            const QSqlTableModelPrivate::ModifiedRow row = d->cache.value(index.row());
-            if (row.op != QSqlTableModelPrivate::None && row.rec.isGenerated(index.column())) {
-               v = row.rec.value(index.column());
-            }
-            break;
-      }
-      if (v.isValid()) {
-         return relation.dictionary[v.toString()];
+         }
       }
    }
    return QSqlTableModel::data(index, role);
@@ -414,11 +392,11 @@ QVariant QSqlRelationalTableModel::data(const QModelIndex &index, int role) cons
     \sa editStrategy(), data(), submit(), revertRow()
 */
 bool QSqlRelationalTableModel::setData(const QModelIndex &index, const QVariant &value,
-                                       int role)
+   int role)
 {
    Q_D(QSqlRelationalTableModel);
    if ( role == Qt::EditRole && index.column() > 0 && index.column() < d->relations.count()
-         && d->relations.value(index.column()).isValid()) {
+      && d->relations.value(index.column()).isValid()) {
       QRelation &relation = d->relations[index.column()];
       if (!relation.isDictionaryInitialized()) {
          relation.populateDictionary();
@@ -459,49 +437,39 @@ void QSqlRelationalTableModel::setRelation(int column, const QSqlRelation &relat
    }
    d->relations[column].init(this, relation);
 }
+
 QSqlRelation QSqlRelationalTableModel::relation(int column) const
 {
    Q_D(const QSqlRelationalTableModel);
    return d->relations.value(column).rel;
 }
 
-QString QSqlRelationalTableModelPrivate::relationField(const QString &tableName,
-      const QString &fieldName) const
+QString QSqlRelationalTableModelPrivate::fullyQualifiedFieldName(const QString &tableName,
+   const QString &fieldName) const
 {
    QString retval;
-   retval.append(tableName).append('.').append(fieldName);
+   retval.append(tableName).append(QLatin1Char('.')).append(fieldName);
 
    return retval;
 }
 
-/*!
-    \reimp
-*/
+
 QString QSqlRelationalTableModel::selectStatement() const
 {
    Q_D(const QSqlRelationalTableModel);
-   QString query;
 
    if (tableName().isEmpty()) {
-      return query;
+      return QString();
    }
    if (d->relations.isEmpty()) {
       return QSqlTableModel::selectStatement();
    }
 
-   QString tList;
-   QString fList;
-   QString where;
-
-   QSqlRecord rec = d->baseRec;
-   QStringList tables;
-   const QRelation nullRelation;
-
    // Count how many times each field name occurs in the record
    QHash<QString, int> fieldNames;
    QStringList fieldList;
-   for (int i = 0; i < rec.count(); ++i) {
-      QSqlRelation relation = d->relations.value(i, nullRelation).rel;
+   for (int i = 0; i < d->baseRec.count(); ++i) {
+      QSqlRelation relation = d->relations.value(i).rel;
       QString name;
       if (relation.isValid()) {
          // Count the display column name, not the original foreign key
@@ -510,7 +478,7 @@ QString QSqlRelationalTableModel::selectStatement() const
             name = d->db.driver()->stripDelimiters(name, QSqlDriver::FieldName);
          }
 
-         QSqlRecord rec = database().record(relation.tableName());
+         const QSqlRecord rec = database().record(relation.tableName());
          for (int i = 0; i < rec.count(); ++i) {
             if (name.compare(rec.fieldName(i), Qt::CaseInsensitive) == 0) {
                name = rec.fieldName(i);
@@ -518,28 +486,24 @@ QString QSqlRelationalTableModel::selectStatement() const
             }
          }
       } else {
-         name = rec.fieldName(i);
+         name = d->baseRec.fieldName(i);
       }
-      fieldNames.insert(name, fieldNames.value(name, 0) + 1);
+      fieldNames[name] = fieldNames.value(name, 0) + 1;
       fieldList.append(name);
    }
 
-   for (int i = 0; i < rec.count(); ++i) {
-      QSqlRelation relation = d->relations.value(i, nullRelation).rel;
-
+   QString fList;
+   QString conditions;
+   QString from = Sql::from(tableName());
+   for (int i = 0; i < d->baseRec.count(); ++i) {
+      QSqlRelation relation = d->relations.value(i).rel;
+      const QString tableField = d->fullyQualifiedFieldName(tableName(), d->db.driver()->escapeIdentifier(d->baseRec.fieldName(i),
+               QSqlDriver::FieldName));
       if (relation.isValid()) {
-         QString relTableAlias = QString::fromLatin1("relTblAl_%1").formatArg(i);
-
-         if (!fList.isEmpty()) {
-            fList.append(QLatin1String(", "));
-         }
-
-         fList.append(d->relationField(relTableAlias, relation.displayColumn()));
-
-         // If there are duplicate field names they must be aliased
+         const QString relTableAlias = Sql::relTablePrefix(i);
+         QString displayTableField = d->fullyQualifiedFieldName(relTableAlias, relation.displayColumn());
          if (fieldNames.value(fieldList[i]) > 1) {
             QString relTableName = relation.tableName().section(QChar::fromLatin1('.'), -1, -1);
-
             if (d->db.driver()->isIdentifierEscaped(relTableName, QSqlDriver::TableName)) {
                relTableName = d->db.driver()->stripDelimiters(relTableName, QSqlDriver::TableName);
             }
@@ -550,71 +514,40 @@ QString QSqlRelationalTableModel::selectStatement() const
                displayColumn = d->db.driver()->stripDelimiters(displayColumn, QSqlDriver::FieldName);
             }
 
-            fList.append(QString::fromLatin1(" AS %1_%2_%3").formatArg(relTableName).formatArg(displayColumn).formatArg(fieldNames.value(fieldList[i])));
-            fieldNames.insert(fieldList[i], fieldNames.value(fieldList[i]) - 1);
+            const QString alias = QString("%1_%2_%3").formatArg(relTableName).formatArg(displayColumn).formatArg(fieldNames.value(fieldList[i]));
+
+            displayTableField = Sql::as(displayTableField, alias);
+            --fieldNames[fieldList[i]];
          }
 
+         fList = Sql::comma(fList, displayTableField);
+
+         const QString tblexpr = Sql::concat(relation.tableName(), relTableAlias);
+         const QString relTableField = d->fullyQualifiedFieldName(relTableAlias, relation.indexColumn());
+         const QString cond = Sql::eq(tableField, relTableField);
          if (d->joinMode == QSqlRelationalTableModel::InnerJoin) {
             // this needs fixing!! the below if is borken.
             // Use LeftJoin mode if you want correct behavior
-            tables.append(relation.tableName().append(QLatin1Char(' ')).append(relTableAlias));
-            if (!where.isEmpty()) {
-               where.append(QLatin1String(" AND "));
-            }
-            where.append(d->relationField(tableName(), d->db.driver()->escapeIdentifier(rec.fieldName(i), QSqlDriver::FieldName)));
-            where.append(QLatin1String(" = "));
-            where.append(d->relationField(relTableAlias, relation.indexColumn()));
+            from = Sql::comma(from, tblexpr);
+            conditions = Sql::et(conditions, cond);
          } else {
-            tables.append(QLatin1String(" LEFT JOIN"));
-            tables.append(relation.tableName().append(QLatin1Char(' ')).append(relTableAlias));
-            tables.append(QLatin1String("ON"));
-
-            QString clause;
-            clause.append(d->relationField(tableName(), d->db.driver()->escapeIdentifier(rec.fieldName(i), QSqlDriver::FieldName)));
-            clause.append(QLatin1String(" = "));
-            clause.append(d->relationField(relTableAlias, relation.indexColumn()));
-
-            tables.append(clause);
+            from = Sql::concat(from, Sql::leftJoin(tblexpr));
+            from = Sql::concat(from, Sql::on(cond));
          }
       } else {
-         if (!fList.isEmpty()) {
-            fList.append(QLatin1String(", "));
-         }
-         fList.append(d->relationField(tableName(), d->db.driver()->escapeIdentifier(rec.fieldName(i), QSqlDriver::FieldName)));
+         fList = Sql::comma(fList, tableField);
       }
    }
 
-   if (d->joinMode == QSqlRelationalTableModel::InnerJoin && !tables.isEmpty()) {
-      tList.append(tables.join(QLatin1String(", ")));
-      if (!tList.isEmpty()) {
-         tList.prepend(QLatin1String(", "));
-      }
-   } else {
-      tList.append(tables.join(QLatin1String(" ")));
+   if (fList.isEmpty())
+
+   {
+      return QString();
    }
 
-   if (fList.isEmpty()) {
-      return query;
-   }
-
-   tList.prepend(tableName());
-   query.append(QLatin1String("SELECT "));
-   query.append(fList).append(QLatin1String(" FROM ")).append(tList);
-
-   if (d->joinMode == QSqlRelationalTableModel::InnerJoin) {
-      qAppendWhereClause(query, where, filter());
-   } else if (!filter().isEmpty()) {
-      query.append(QLatin1String(" WHERE ("));
-      query.append(filter());
-      query.append(QLatin1String(")"));
-   }
-
-   QString orderBy = orderByClause();
-   if (!orderBy.isEmpty()) {
-      query.append(QLatin1Char(' ')).append(orderBy);
-   }
-
-   return query;
+   const QString stmt = Sql::concat(Sql::select(fList), from);
+   const QString where = Sql::where(Sql::et(Sql::paren(conditions), Sql::paren(filter())));
+   return Sql::concat(Sql::concat(stmt, where), orderByClause());
 }
 
 /*!
@@ -658,9 +591,11 @@ void QSqlRelationalTableModel::revertRow(int row)
 void QSqlRelationalTableModel::clear()
 {
    Q_D(QSqlRelationalTableModel);
+   beginResetModel();
    d->clearChanges();
    d->relations.clear();
    QSqlTableModel::clear();
+   endResetModel();
 }
 
 
@@ -717,16 +652,13 @@ void QSqlRelationalTableModel::setTable(const QString &table)
 
 /*! \internal
  */
-void QSqlRelationalTableModelPrivate::translateFieldNames(int row, QSqlRecord &values) const
+void QSqlRelationalTableModelPrivate::translateFieldNames(QSqlRecord &values) const
 {
-   Q_Q(const QSqlRelationalTableModel);
-
    for (int i = 0; i < values.count(); ++i) {
-      int realCol = q->indexInQuery(q->createIndex(row, i)).column();
-      if (realCol != -1 && relations.value(realCol).isValid()) {
+      if (relations.value(i).isValid()) {
          QVariant v = values.value(i);
          bool gen = values.isGenerated(i);
-         values.replace(i, baseRec.field(realCol));
+         values.replace(i, baseRec.field(i));
          values.setValue(i, v);
          values.setGenerated(i, gen);
       }
@@ -741,7 +673,7 @@ bool QSqlRelationalTableModel::updateRowInTable(int row, const QSqlRecord &value
    Q_D(QSqlRelationalTableModel);
 
    QSqlRecord rec = values;
-   d->translateFieldNames(row, rec);
+   d->translateFieldNames(rec);
 
    return QSqlTableModel::updateRowInTable(row, rec);
 }
@@ -754,7 +686,7 @@ bool QSqlRelationalTableModel::insertRowIntoTable(const QSqlRecord &values)
    Q_D(QSqlRelationalTableModel);
 
    QSqlRecord rec = values;
-   d->translateFieldNames(0, rec);
+   d->translateFieldNames(rec);
 
    return QSqlTableModel::insertRowIntoTable(rec);
 }
@@ -771,11 +703,9 @@ QString QSqlRelationalTableModel::orderByClause() const
       return QSqlTableModel::orderByClause();
    }
 
-   QString s = QLatin1String("ORDER BY ");
-   s.append(d->relationField(QLatin1String("relTblAl_") + QString::number(d->sortColumn),
-                             rel.displayColumn()));
-   s += d->sortOrder == Qt::AscendingOrder ? QLatin1String(" ASC") : QLatin1String(" DESC");
-   return s;
+   QString f = d->fullyQualifiedFieldName(Sql::relTablePrefix(d->sortColumn), rel.displayColumn());
+   f = d->sortOrder == Qt::AscendingOrder ? Sql::asc(f) : Sql::desc(f);
+   return Sql::orderBy(f);
 }
 
 /*!
@@ -798,4 +728,4 @@ bool QSqlRelationalTableModel::removeColumns(int column, int count, const QModel
    return QSqlTableModel::removeColumns(column, count, parent);
 }
 
-QT_END_NAMESPACE
+

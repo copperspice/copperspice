@@ -311,6 +311,17 @@ bool QSqlQuery::isNull(int field) const
    return true;
 }
 
+
+bool QSqlQuery::isNull(const QString &name) const
+{
+   int index = d->sqlResult->record().indexOf(name);
+   if (index > -1) {
+      return isNull(index);
+   }
+   qWarning("QSqlQuery::isNull: unknown field name '%s'", qPrintable(name));
+   return true;
+}
+
 bool QSqlQuery::exec(const QString &query)
 {
    if (d->ref.load() != 1) {
@@ -339,19 +350,31 @@ bool QSqlQuery::exec(const QString &query)
       return false;
    }
 
-#ifdef QT_DEBUG_SQL
-   qDebug("\n QSqlQuery: %s", query.toUtf8().constData());
-#endif
+
 
    return d->sqlResult->reset(query);
 }
 
 QVariant QSqlQuery::value(int index) const
 {
-   if (isActive() && isValid() && (index > QSql::BeforeFirstRow)) {
+   if (isActive() && isValid() && (index > -1)) {
       return d->sqlResult->data(index);
    }
    qWarning("QSqlQuery::value: not positioned on a valid record");
+
+   return QVariant();
+}
+
+QVariant QSqlQuery::value(const QString &name) const
+{
+   int index = d->sqlResult->record().indexOf(name);
+
+   if (index > -1) {
+      return value(index);
+   }
+
+   qWarning("QSqlQuery::value: unknown field name '%s'", qPrintable(name));
+
    return QVariant();
 }
 
@@ -443,19 +466,22 @@ bool QSqlQuery::seek(int index, bool relative)
          return false;
       }
       actualIdx = index;
+
    } else {
       switch (at()) { // relative seek
+
          case QSql::BeforeFirstRow:
             if (index > 0) {
-               actualIdx = index;
+               actualIdx = index - 1;
             } else {
                return false;
             }
             break;
+
          case QSql::AfterLastRow:
             if (index < 0) {
                d->sqlResult->fetchLast();
-               actualIdx = at() + index;
+               actualIdx = at() + index  + 1;
             } else {
                return false;
             }
@@ -943,6 +969,7 @@ bool QSqlQuery::exec()
 */
 bool QSqlQuery::execBatch(BatchExecutionMode mode)
 {
+   d->sqlResult->resetBindCount();
    return d->sqlResult->execBatch(mode == ValuesAsColumns);
 }
 
@@ -967,8 +994,8 @@ bool QSqlQuery::execBatch(BatchExecutionMode mode)
   \sa addBindValue(), prepare(), exec(), boundValue() boundValues()
 */
 void QSqlQuery::bindValue(const QString &placeholder, const QVariant &val,
-                          QSql::ParamType paramType
-                         )
+   QSql::ParamType paramType
+)
 {
    d->sqlResult->bindValue(placeholder, val, paramType);
 }

@@ -26,7 +26,7 @@
 #include <qstring.h>
 #include <qsql.h>
 
-class QDebug;
+
 class QSqlError;
 class QSqlDriver;
 class QSqlIndex;
@@ -46,7 +46,7 @@ template <class T>
 class QSqlDriverCreator : public QSqlDriverCreatorBase
 {
  public:
-   QSqlDriver *createObject() const {
+   QSqlDriver *createObject() const override {
       return new T;
    }
 };
@@ -121,4 +121,4 @@ class Q_SQL_EXPORT QSqlDatabase
 
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlDatabase &);
 
-#endif // QSQLDATABASE_H
+#endif

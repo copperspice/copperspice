@@ -23,12 +23,10 @@
 #ifndef QSQLCACHEDRESULT_P_H
 #define QSQLCACHEDRESULT_P_H
 
+#include <qcontainerfwd.h>
 #include <QtSql/qsqlresult.h>
 
-QT_BEGIN_NAMESPACE
-
 class QVariant;
-template <typename T> class QVector;
 
 class QSqlCachedResultPrivate;
 
@@ -60,12 +58,12 @@ class Q_SQL_EXPORT QSqlCachedResult: public QSqlResult
    ValueCache &cache();
 
    void virtual_hook(int id, void *data) override;
+   void detachFromResultSet();
+   void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy);
 
  private:
    bool cacheNext();
    QSqlCachedResultPrivate *d;
 };
-
-QT_END_NAMESPACE
 
 #endif // QSQLCACHEDRESULT_P_H

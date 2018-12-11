@@ -36,7 +36,7 @@ class QSqlNullResult : public QSqlResult
  public:
    inline explicit QSqlNullResult(const QSqlDriver *d): QSqlResult(d) {
       QSqlResult::setLastError(QSqlError(QLatin1String("Driver not loaded"),
-                                         QLatin1String("Driver not loaded"), QSqlError::ConnectionError));
+            QLatin1String("Driver not loaded"), QSqlError::ConnectionError));
    }
 
  protected:
@@ -82,8 +82,8 @@ class QSqlNullResult : public QSqlResult
    inline bool exec() override {
       return false;
    }
- 
-  inline bool prepare(const QString &) override {
+
+   inline bool prepare(const QString &) override {
       return false;
    }
 
@@ -100,7 +100,7 @@ class QSqlNullDriver : public QSqlDriver
  public:
    inline QSqlNullDriver(): QSqlDriver() {
       QSqlDriver::setLastError(QSqlError(QLatin1String("Driver not loaded"),
-                  QLatin1String("Driver not loaded"), QSqlError::ConnectionError));
+            QLatin1String("Driver not loaded"), QSqlError::ConnectionError));
    }
 
    inline bool hasFeature(DriverFeature) const override {

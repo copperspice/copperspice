@@ -27,22 +27,20 @@
 #include <qvector.h>
 #include <qsql.h>
 #include <qstring.h>
-
-QT_BEGIN_NAMESPACE
-
 class QSqlRecord;
 class QVariant;
 class QSqlDriver;
 class QSqlError;
 class QSqlResultPrivate;
 
-template <typename T> class QVector;
 
 class Q_SQL_EXPORT QSqlResult
 {
+   Q_DECLARE_PRIVATE(QSqlResult)
+
    friend class QSqlQuery;
    friend class QSqlTableModelPrivate;
-   friend class QSqlResultPrivate;
+
 
  public:
    virtual ~QSqlResult();
@@ -55,6 +53,8 @@ class Q_SQL_EXPORT QSqlResult
    };
 
    explicit QSqlResult(const QSqlDriver *db);
+   QSqlResult(QSqlResultPrivate &dd, const QSqlDriver *db);
+
    int at() const;
    QString lastQuery() const;
    QSqlError lastError() const;
@@ -76,7 +76,7 @@ class Q_SQL_EXPORT QSqlResult
    virtual bool savePrepare(const QString &sqlquery);
    virtual void bindValue(int pos, const QVariant &val, QSql::ParamType type);
    virtual void bindValue(const QString &placeholder, const QVariant &val,
-                          QSql::ParamType type);
+      QSql::ParamType type);
    void addBindValue(const QVariant &val, QSql::ParamType type);
    QVariant boundValue(const QString &placeholder) const;
    QVariant boundValue(int pos) const;
@@ -104,21 +104,21 @@ class Q_SQL_EXPORT QSqlResult
    virtual QSqlRecord record() const;
    virtual QVariant lastInsertId() const;
 
-   enum VirtualHookOperation { BatchOperation, DetachFromResultSet, SetNumericalPrecision, NextResult };
-   virtual void virtual_hook(int id, void *data);
-   bool execBatch(bool arrayBind = false);
-   void detachFromResultSet();
-   void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy);
-   QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
-   bool nextResult();
+   enum VirtualHookOperation {  };
 
- private:
-   QSqlResultPrivate *d;
+   virtual void virtual_hook(int id, void *data);
+   virtual bool execBatch(bool arrayBind = false);
+   virtual void detachFromResultSet();
+   virtual void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy);
+
+   QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
+
+   virtual bool nextResult();
    void resetBindCount(); // HACK
 
+   QSqlResultPrivate *d_ptr;
+ private:
    Q_DISABLE_COPY(QSqlResult)
 };
-
-QT_END_NAMESPACE
 
 #endif // QSQLRESULT_H

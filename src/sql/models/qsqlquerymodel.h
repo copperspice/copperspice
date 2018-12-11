@@ -26,7 +26,6 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <QtSql/qsqldatabase.h>
 
-QT_BEGIN_NAMESPACE
 
 class QSqlQueryModelPrivate;
 class QSqlError;
@@ -66,13 +65,26 @@ class Q_SQL_EXPORT QSqlQueryModel: public QAbstractTableModel
    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const override;
 
  protected:
+   void beginInsertRows(const QModelIndex &parent, int first, int last);
+   void endInsertRows();
+
+   void beginRemoveRows(const QModelIndex &parent, int first, int last);
+   void endRemoveRows();
+
+   void beginInsertColumns(const QModelIndex &parent, int first, int last);
+   void endInsertColumns();
+
+   void beginRemoveColumns(const QModelIndex &parent, int first, int last);
+   void endRemoveColumns();
+
+   void beginResetModel();
+   void endResetModel();
    virtual void queryChange();
 
-   QModelIndex indexInQuery(const QModelIndex &item) const;
+   virtual QModelIndex indexInQuery(const QModelIndex &item) const;
    void setLastError(const QSqlError &error);
    QSqlQueryModel(QSqlQueryModelPrivate &dd, QObject *parent = nullptr);
 };
 
-QT_END_NAMESPACE
 
 #endif // QSQLQUERYMODEL_H

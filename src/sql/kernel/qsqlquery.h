@@ -23,12 +23,12 @@
 #ifndef QSQLQUERY_H
 #define QSQLQUERY_H
 
-#include <QtSql/qsql.h>
-#include <QtSql/qsqldatabase.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qcontainerfwd.h>
+#include <qsql.h>
+#include <qsqldatabase.h>
+#include <qstring.h>
+#include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QVariant;
 class QSqlDriver;
@@ -41,8 +41,8 @@ class Q_SQL_EXPORT QSqlQuery
 {
 
  public:
-   QSqlQuery(QSqlResult *r);
-   QSqlQuery(const QString &query = QString(), QSqlDatabase db = QSqlDatabase());
+   explicit QSqlQuery(QSqlResult *r);
+   explicit QSqlQuery(const QString &query = QString(), QSqlDatabase db = QSqlDatabase());
    explicit QSqlQuery(QSqlDatabase db);
    QSqlQuery(const QSqlQuery &other);
    QSqlQuery &operator=(const QSqlQuery &other);
@@ -51,6 +51,7 @@ class Q_SQL_EXPORT QSqlQuery
    bool isValid() const;
    bool isActive() const;
    bool isNull(int field) const;
+   bool isNull(const QString &name) const;
    int at() const;
    QString lastQuery() const;
    int numRowsAffected() const;
@@ -65,6 +66,7 @@ class Q_SQL_EXPORT QSqlQuery
    void setForwardOnly(bool forward);
    bool exec(const QString &query);
    QVariant value(int i) const;
+   QVariant value(const QString &name) const;
 
    void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy);
    QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
@@ -83,7 +85,7 @@ class Q_SQL_EXPORT QSqlQuery
    bool execBatch(BatchExecutionMode mode = ValuesAsRows);
    bool prepare(const QString &query);
    void bindValue(const QString &placeholder, const QVariant &val,
-                  QSql::ParamType type = QSql::In);
+      QSql::ParamType type = QSql::In);
    void bindValue(int pos, const QVariant &val, QSql::ParamType type = QSql::In);
    void addBindValue(const QVariant &val, QSql::ParamType type = QSql::In);
    QVariant boundValue(const QString &placeholder) const;
@@ -98,6 +100,6 @@ class Q_SQL_EXPORT QSqlQuery
    QSqlQueryPrivate *d;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QSQLQUERY_H

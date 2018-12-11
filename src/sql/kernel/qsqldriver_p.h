@@ -20,5 +20,30 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
+#include "qsqldriver.h"
+#include "qsqlerror.h"
 
+class Q_SQL_EXPORT QSqlDriverPrivate
+{
+   Q_DECLARE_PUBLIC(QSqlDriver)
+
+ public:
+   QSqlDriverPrivate()
+      : isOpen(false),
+        isOpenError(false),
+        precisionPolicy(QSql::LowPrecisionDouble),
+        dbmsType(QSqlDriver::UnknownDbms)
+   { }
+
+   virtual ~QSqlDriverPrivate();
+
+   uint isOpen;
+   uint isOpenError;
+   QSqlError error;
+   QSql::NumericalPrecisionPolicy precisionPolicy;
+   QSqlDriver::DbmsType dbmsType;
+
+ protected:
+   QSqlDriver *q_ptr;
+
+};

@@ -37,7 +37,7 @@ class Q_SQL_EXPORT QSqlField
    enum RequiredStatus { Unknown = -1, Optional = 0, Required = 1 };
 
    QSqlField(const QString &fieldName = QString(),
-             QVariant::Type type = QVariant::Invalid);
+      QVariant::Type type = QVariant::Invalid);
 
    QSqlField(const QSqlField &other);
    QSqlField &operator=(const QSqlField &other);

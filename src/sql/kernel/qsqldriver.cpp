@@ -26,8 +26,7 @@
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlindex.h>
-
-QT_BEGIN_NAMESPACE
+#include <qsqldriver_p.h>
 
 static QString prepareIdentifier(const QString &identifier, QSqlDriver::IdentifierType type, const QSqlDriver *driver)
 {
@@ -40,113 +39,23 @@ static QString prepareIdentifier(const QString &identifier, QSqlDriver::Identifi
    return ret;
 }
 
-class QSqlDriverPrivate
-{
-
- public:
-   QSqlDriverPrivate();
-   virtual ~QSqlDriverPrivate();
-
- public:
-   // @CHECK: this member is never used. It was named q, which expanded to q_func().
-   QSqlDriver *q_func();
-   uint isOpen : 1;
-   uint isOpenError : 1;
-   QSqlError error;
-   QSql::NumericalPrecisionPolicy precisionPolicy;
-};
-
-inline QSqlDriverPrivate::QSqlDriverPrivate()
-   : isOpen(false), isOpenError(false), precisionPolicy(QSql::LowPrecisionDouble)
-{
-}
-
 QSqlDriverPrivate::~QSqlDriverPrivate()
 {
 }
-
-/*!
-    \class QSqlDriver
-    \brief The QSqlDriver class is an abstract base class for accessing
-    specific SQL databases.
-
-    \ingroup database
-    \inmodule QtSql
-
-    This class should not be used directly. Use QSqlDatabase instead.
-
-    If you want to create your own SQL drivers, you can subclass this
-    class and reimplement its pure virtual functions and those
-    virtual functions that you need. See \l{How to Write Your Own
-    Database Driver} for more information.
-
-    \sa QSqlDatabase, QSqlResult
-*/
-
-/*!
-    Constructs a new driver with the given \a parent.
-*/
 
 QSqlDriver::QSqlDriver(QObject *parent)
    : QObject(parent), d_ptr(new QSqlDriverPrivate)
 {
 }
+QSqlDriver::QSqlDriver(QSqlDriverPrivate &dd, QObject *parent)
+   : QObject(parent), d_ptr(&dd)
+{
+}
 
-/*!
-    Destroys the object and frees any allocated resources.
-*/
 
 QSqlDriver::~QSqlDriver()
 {
 }
-
-/*!
-    \since 4.4
-
-    \fn QSqlDriver::notification(const QString &name)
-
-    This signal is emitted when the database posts an event notification
-    that the driver subscribes to. \a name identifies the event notification.
-
-    \sa subscribeToNotification()
-*/
-
-/*!
-    \fn bool QSqlDriver::open(const QString &db, const QString &user, const QString& password,
-                              const QString &host, int port, const QString &options)
-
-    Derived classes must reimplement this pure virtual function to
-    open a database connection on database \a db, using user name \a
-    user, password \a password, host \a host, port \a port and
-    connection options \a options.
-
-    The function must return true on success and false on failure.
-
-    \sa setOpen()
-*/
-
-/*!
-    \fn bool QSqlDriver::close()
-
-    Derived classes must reimplement this pure virtual function in
-    order to close the database connection. Return true on success,
-    false on failure.
-
-    \sa open(), setOpen()
-*/
-
-/*!
-    \fn QSqlResult *QSqlDriver::createResult() const
-
-    Creates an empty SQL result on the database. Derived classes must
-    reimplement this function and return a QSqlResult object
-    appropriate for their database to the caller.
-*/
-
-/*!
-    Returns true if the database connection is open; otherwise returns
-    false.
-*/
 
 bool QSqlDriver::isOpen() const
 {
@@ -367,14 +276,21 @@ QString QSqlDriver::escapeIdentifier(const QString &identifier, IdentifierType) 
 
 bool QSqlDriver::isIdentifierEscaped(const QString &identifier, IdentifierType type) const
 {
-   bool result = this->isIdentifierEscapedImplementation(identifier, type);
-   return result;
+   return identifier.size() > 2
+      && identifier.startsWith(QLatin1Char('"')) //left delimited
+      && identifier.endsWith(QLatin1Char('"')); //right delimited
 }
 
 QString QSqlDriver::stripDelimiters(const QString &identifier, IdentifierType type) const
 {
-   QString result = this->stripDelimitersImplementation(identifier, type);
-   return result;
+   QString ret;
+   if (isIdentifierEscaped(identifier, type)) {
+      ret = identifier.mid(1);
+      ret.chop(1);
+   } else {
+      ret = identifier;
+   }
+   return ret;
 }
 
 QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, const QSqlRecord &rec, bool preparedStatement) const
@@ -396,35 +312,27 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
          s.prepend("SELECT ").append(" FROM ").append(tableName);
          break;
 
-      case WhereStatement:
-         if (preparedStatement) {
-            for (int i = 0; i < rec.count(); ++i) {
-               s.append(prepareIdentifier(rec.fieldName(i), FieldName, this));
-               if (rec.isNull(i)) {
-                  s.append(QLatin1String(" IS NULL"));
-               } else {
-                  s.append(QLatin1String(" = ?"));
-               }
-               s.append(QLatin1String(" AND "));
-            }
+      case WhereStatement: {
+         const QString tableNamePrefix = tableName.isEmpty()
+            ? QString()
+            : prepareIdentifier(tableName, QSqlDriver::TableName, this) + QLatin1Char('.');
 
-         } else {
-            for (i = 0; i < rec.count(); ++i) {
-               s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this));
-               QString val = formatValue(rec.field(i));
-               if (val == QLatin1String("NULL")) {
-                  s.append(QLatin1String(" IS NULL"));
-               } else {
-                  s.append(QLatin1String(" = ")).append(val);
-               }
-               s.append(QLatin1String(" AND "));
+         for (int i = 0; i < rec.count(); ++i) {
+            s.append(i ? QString(" AND ") : QString("WHERE "));
+            s.append(tableNamePrefix);
+            s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this));
+
+            if (rec.isNull(i)) {
+               s.append(QLatin1String(" IS NULL"));
+            } else if (preparedStatement) {
+               s.append(QLatin1String(" = ?"));
+            } else {
+               s.append(QLatin1String(" = ")).append(formatValue(rec.field(i)));
             }
-         }
-         if (!s.isEmpty()) {
-            s.prepend(QLatin1String("WHERE "));
-            s.chop(5); // remove tailing AND
          }
          break;
+      }
+
       case UpdateStatement:
          s.append(QLatin1String("UPDATE ")).append(tableName).append(
             QLatin1String(" SET "));
@@ -500,7 +408,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
          case QVariant::Date:
             if (field.value().toDate().isValid())
                r = QLatin1Char('\'') + field.value().toDate().toString(Qt::ISODate)
-                   + QLatin1Char('\'');
+                  + QLatin1Char('\'');
             else {
                r = nullTxt;
             }
@@ -508,7 +416,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
          case QVariant::Time:
             if (field.value().toTime().isValid())
                r =  QLatin1Char('\'') + field.value().toTime().toString(Qt::ISODate)
-                    + QLatin1Char('\'');
+                  + QLatin1Char('\'');
             else {
                r = nullTxt;
             }
@@ -516,7 +424,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
          case QVariant::DateTime:
             if (field.value().toDateTime().isValid())
                r = QLatin1Char('\'') +
-                   field.value().toDateTime().toString(Qt::ISODate) + QLatin1Char('\'');
+                  field.value().toDateTime().toString(Qt::ISODate) + QLatin1Char('\'');
             else {
                r = nullTxt;
             }
@@ -567,104 +475,42 @@ QVariant QSqlDriver::handle() const
    return QVariant();
 }
 
+
 bool QSqlDriver::subscribeToNotification(const QString &name)
 {
-   bool result = this->subscribeToNotificationImplementation(name);
-   return result;
+
+   return false;
 }
 
 bool QSqlDriver::unsubscribeFromNotification(const QString &name)
 {
-   bool result = this->unsubscribeFromNotificationImplementation(name);
-   return result;
+
+   return false;
 }
+
+
 
 QStringList QSqlDriver::subscribedToNotifications() const
-{
-   QStringList result = this->subscribedToNotificationsImplementation();
-   return result;
-}
-
-bool QSqlDriver::subscribeToNotificationImplementation(const QString &name)
-{
-   Q_UNUSED(name);
-   return false;
-}
-
-bool QSqlDriver::unsubscribeFromNotificationImplementation(const QString &name)
-{
-   Q_UNUSED(name);
-   return false;
-}
-
-QStringList QSqlDriver::subscribedToNotificationsImplementation() const
 {
    return QStringList();
 }
 
-bool QSqlDriver::isIdentifierEscapedImplementation(const QString &identifier, IdentifierType type) const
-{
-   Q_UNUSED(type);
-   return identifier.size() > 2
-          && identifier.startsWith(QLatin1Char('"')) //left delimited
-          && identifier.endsWith(QLatin1Char('"')); //right delimited
-}
-
-/*!
-    \since 4.6
-
-    This slot returns \a identifier with the leading and trailing delimiters removed,
-    \a identifier can either be a tablename or field name, dependent on \a type.
-    If \a identifier does not have leading and trailing delimiter characters, \a
-    identifier is returned without modification.
-
-    Because of binary compatibility constraints, the stripDelimiters() function
-    (introduced in Qt 4.5) is not virtual.  Instead, stripDelimiters() will
-    dynamically detect and call \e this slot.  It generally unnecessary
-    to reimplement this slot.
-
-    \sa stripDelimiters()
- */
-QString QSqlDriver::stripDelimitersImplementation(const QString &identifier, IdentifierType type) const
-{
-   QString ret;
-   if (this->isIdentifierEscaped(identifier, type)) {
-      ret = identifier.mid(1);
-      ret.chop(1);
-   } else {
-      ret = identifier;
-   }
-   return ret;
-}
-
-/*!
-    \since 4.6
-
-    Sets the default numerical precision policy used by queries created
-    by this driver to \a precisionPolicy.
-
-    Note: Setting the default precision policy to \a precisionPolicy
-    doesn't affect any currently active queries.
-
-    \sa QSql::NumericalPrecisionPolicy, numericalPrecisionPolicy(),
-    QSqlQuery::setNumericalPrecisionPolicy(), QSqlQuery::numericalPrecisionPolicy()
-*/
 void QSqlDriver::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy)
 {
    d_func()->precisionPolicy = precisionPolicy;
 }
 
-/*!
-    \since 4.6
-
-    Returns the current default precision policy for the database connection.
-
-    \sa QSql::NumericalPrecisionPolicy, setNumericalPrecisionPolicy(),
-    QSqlQuery::numericalPrecisionPolicy(), QSqlQuery::setNumericalPrecisionPolicy()
-*/
 QSql::NumericalPrecisionPolicy QSqlDriver::numericalPrecisionPolicy() const
 {
    return d_func()->precisionPolicy;
 }
 
-QT_END_NAMESPACE
+QSqlDriver::DbmsType QSqlDriver::dbmsType() const
+{
+   return d_func()->dbmsType;
+}
+bool QSqlDriver::cancelQuery()
+{
+   return false;
+}
+

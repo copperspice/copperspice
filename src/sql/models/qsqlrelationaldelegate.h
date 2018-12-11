@@ -57,16 +57,6 @@ class QSqlRelationalDelegate: public QItemDelegate
       return combo;
    }
 
-   void setEditorData(QWidget *editor, const QModelIndex &index) const {
-      const QSqlRelationalTableModel *sqlModel = qobject_cast<const QSqlRelationalTableModel *>(index.model());
-      QComboBox *combo = qobject_cast<QComboBox *>(editor);
-      if (!sqlModel || !combo) {
-         QItemDelegate::setEditorData(editor, index);
-         return;
-      }
-      combo->setCurrentIndex(combo->findText(sqlModel->data(index).toString()));
-   }
-
    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
       if (!index.isValid()) {
          return;
@@ -84,15 +74,15 @@ class QSqlRelationalDelegate: public QItemDelegate
       int childColIndex = childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn());
       int childEditIndex = childModel->fieldIndex(sqlModel->relation(index.column()).indexColumn());
       sqlModel->setData(index,
-                        childModel->data(childModel->index(currentItem, childColIndex), Qt::DisplayRole),
-                        Qt::DisplayRole);
+         childModel->data(childModel->index(currentItem, childColIndex), Qt::DisplayRole),
+         Qt::DisplayRole);
       sqlModel->setData(index,
-                        childModel->data(childModel->index(currentItem, childEditIndex), Qt::EditRole),
-                        Qt::EditRole);
+         childModel->data(childModel->index(currentItem, childEditIndex), Qt::EditRole),
+         Qt::EditRole);
    }
 
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QSQLRELATIONALDELEGATE_H

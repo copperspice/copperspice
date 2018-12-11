@@ -26,7 +26,6 @@
 #include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
-
 QSqlIndex::QSqlIndex(const QString &cursorname, const QString &name)
    : cursor(cursorname), nm(name)
 {
@@ -135,7 +134,7 @@ QString QSqlIndex::createField(int i, const QString &prefix, bool verbose) const
    f += field(i).name();
    if (verbose)
       f += QLatin1Char(' ') + QString((isDescending(i)
-                                       ? QLatin1String("DESC") : QLatin1String("ASC")));
+               ? QLatin1String("DESC") : QLatin1String("ASC")));
    return f;
 }
 

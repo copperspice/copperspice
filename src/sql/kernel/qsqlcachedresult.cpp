@@ -26,7 +26,7 @@
 #include <qdatetime.h>
 #include <qvector.h>
 
-QT_BEGIN_NAMESPACE
+
 
 static const uint initial_cache_size = 128;
 
@@ -81,10 +81,12 @@ int QSqlCachedResultPrivate::nextIndex()
    if (forwardOnly) {
       return 0;
    }
+
    int newIdx = rowCacheEnd;
    if (newIdx + colCount > cache.size()) {
       cache.resize(qMin(cache.size() * 2, cache.size() + 10000));
    }
+
    rowCacheEnd += colCount;
 
    return newIdx;
@@ -95,6 +97,7 @@ bool QSqlCachedResultPrivate::canSeek(int i) const
    if (forwardOnly || i < 0) {
       return false;
    }
+
    return rowCacheEnd >= (i + 1) * colCount;
 }
 
@@ -103,6 +106,7 @@ void QSqlCachedResultPrivate::revertLast()
    if (forwardOnly) {
       return;
    }
+
    rowCacheEnd -= colCount;
 }
 
@@ -112,8 +116,6 @@ inline int QSqlCachedResultPrivate::cacheCount() const
    Q_ASSERT(colCount);
    return rowCacheEnd / colCount;
 }
-
-//////////////
 
 QSqlCachedResult::QSqlCachedResult(const QSqlDriver *db): QSqlResult (db)
 {
@@ -289,15 +291,16 @@ QSqlCachedResult::ValueCache &QSqlCachedResult::cache()
 
 void QSqlCachedResult::virtual_hook(int id, void *data)
 {
-   switch (id) {
-      case QSqlResult::DetachFromResultSet:
-      case QSqlResult::SetNumericalPrecision:
-         cleanup();
-         break;
-      default:
-         QSqlResult::virtual_hook(id, data);
-   }
+   QSqlResult::virtual_hook(id, data);
 }
 
+void QSqlCachedResult::detachFromResultSet()
+{
+   cleanup();
+}
 
-QT_END_NAMESPACE
+void QSqlCachedResult::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy)
+{
+   QSqlResult::setNumericalPrecisionPolicy(policy);
+   cleanup();
+}

@@ -47,17 +47,30 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
 
  public:
    enum DriverFeature { Transactions, QuerySize, BLOB, Unicode, PreparedQueries,
-                        NamedPlaceholders, PositionalPlaceholders, LastInsertId,
-                        BatchOperations, SimpleLocking, LowPrecisionNumbers,
-                        EventNotifications, FinishQuery, MultipleResultSets
-                      };
+      NamedPlaceholders, PositionalPlaceholders, LastInsertId,
+      BatchOperations, SimpleLocking, LowPrecisionNumbers,
+      EventNotifications, FinishQuery, MultipleResultSets, CancelQuery
+   };
 
    enum StatementType { WhereStatement, SelectStatement, UpdateStatement,
-                        InsertStatement, DeleteStatement
-                      };
+      InsertStatement, DeleteStatement
+   };
 
    enum IdentifierType { FieldName, TableName };
 
+   enum NotificationSource { UnknownSource, SelfSource, OtherSource };
+
+   enum DbmsType {
+      UnknownDbms,
+      MSSqlServer,
+      MySqlServer,
+      PostgreSQL,
+      Oracle,
+      Sybase,
+      SQLite,
+      Interbase,
+      DB2
+   };
    explicit QSqlDriver(QObject *parent = nullptr);
    ~QSqlDriver();
    virtual bool isOpen() const;
@@ -74,7 +87,7 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
 
    virtual QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
    virtual QString sqlStatement(StatementType type, const QString &tableName,
-                                const QSqlRecord &rec, bool preparedStatement) const;
+      const QSqlRecord &rec, bool preparedStatement) const;
 
    QSqlError lastError() const;
 
@@ -84,34 +97,35 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
    virtual QSqlResult *createResult() const = 0;
 
    virtual bool open(const QString &db,
-                     const QString &user = QString(),
-                     const QString &password = QString(),
-                     const QString &host = QString(),
-                     int port = -1,
-                     const QString &connOpts = QString()) = 0;
-   bool subscribeToNotification(const QString &name);	    // ### Qt5/make virtual
-   bool unsubscribeFromNotification(const QString &name);  // ### Qt5/make virtual
-   QStringList subscribedToNotifications() const;          // ### Qt5/make virtual
+      const QString &user = QString(),
+      const QString &password = QString(),
+      const QString &host = QString(),
+      int port = -1,
+      const QString &connOpts = QString()) = 0;
 
-   bool isIdentifierEscaped(const QString &identifier, IdentifierType type) const; // ### Qt5/make virtual
-   QString stripDelimiters(const QString &identifier, IdentifierType type) const;  // ### Qt5/make virtual
+   virtual bool subscribeToNotification(const QString &name);
+   virtual bool unsubscribeFromNotification(const QString &name);
+   virtual QStringList subscribedToNotifications() const;
+
+   virtual bool isIdentifierEscaped(const QString &identifier, IdentifierType type) const;
+   virtual QString stripDelimiters(const QString &identifier, IdentifierType type) const;
 
    void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy);
    QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
 
-   SQL_CS_SIGNAL_1(Public, void notification(const QString &name))
-   SQL_CS_SIGNAL_2(notification, name)
+   DbmsType dbmsType() const;
+
+   SQL_CS_SLOT_1(Public, virtual bool cancelQuery())
+   SQL_CS_SLOT_2(cancelQuery)
+   SQL_CS_SIGNAL_1(Public, void notification(const QString &name, QSqlDriver::NotificationSource source, const QVariant &payload))
+   SQL_CS_SIGNAL_2(notification, name, source, payload)
 
  protected:
+   QSqlDriver(QSqlDriverPrivate &dd, QObject *parent = nullptr);
+
    virtual void setOpen(bool o);
    virtual void setOpenError(bool e);
    virtual void setLastError(const QSqlError &e);
-
-   virtual bool subscribeToNotificationImplementation(const QString &name);
-   virtual bool unsubscribeFromNotificationImplementation(const QString &name);
-   virtual QStringList subscribedToNotificationsImplementation() const;
-   virtual bool isIdentifierEscapedImplementation(const QString &identifier, IdentifierType type) const;
-   virtual QString stripDelimitersImplementation(const QString &identifier, IdentifierType type) const;
 
    QScopedPointer<QSqlDriverPrivate> d_ptr;
 
@@ -119,9 +133,7 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
    Q_DISABLE_COPY(QSqlDriver)
 
    friend class QSqlDatabase;
-
+   friend class QSqlResultPrivate;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSQLDRIVER_H
+#endif

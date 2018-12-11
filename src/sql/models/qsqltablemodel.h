@@ -27,9 +27,10 @@
 #include <qsqlquerymodel.h>
 #include <QSqlRecord>
 
-QT_BEGIN_NAMESPACE
 
 class QSqlTableModelPrivate;
+class QSqlRecord;
+class QSqlField;
 class QSqlIndex;
 
 class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
@@ -43,18 +44,19 @@ class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
    explicit QSqlTableModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
    virtual ~QSqlTableModel();
 
-   virtual bool select();
-
    virtual void setTable(const QString &tableName);
    QString tableName() const;
 
    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+   QSqlRecord record() const;
+   QSqlRecord record(int row) const;
    QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const override;
    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+   bool isDirty() const;
    bool isDirty(const QModelIndex &index) const;
    void clear() override;
 
@@ -82,13 +84,20 @@ class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
 
    virtual void revertRow(int row);
 
+   SQL_CS_SLOT_1(Public, virtual bool select())
+   SQL_CS_SLOT_2(select)
+
+   SQL_CS_SLOT_1(Public, virtual bool selectRow(int row))
+   SQL_CS_SLOT_2(selectRow)
    SQL_CS_SLOT_1(Public, bool submit() override)
    SQL_CS_SLOT_2(submit)
+
    SQL_CS_SLOT_1(Public, void revert() override)
    SQL_CS_SLOT_2(revert)
 
    SQL_CS_SLOT_1(Public, bool submitAll())
    SQL_CS_SLOT_2(submitAll)
+
    SQL_CS_SLOT_1(Public, void revertAll())
    SQL_CS_SLOT_2(revertAll)
 
@@ -115,9 +124,9 @@ class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
 
    void setPrimaryKey(const QSqlIndex &key);
    void setQuery(const QSqlQuery &query);
-   QModelIndex indexInQuery(const QModelIndex &item) const;
+   QModelIndex indexInQuery(const QModelIndex &item) const override;
+   QSqlRecord primaryValues(int row) const;
 };
 
-QT_END_NAMESPACE
 
 #endif // QSQLTABLEMODEL_H

@@ -20,106 +20,40 @@
 *
 ***********************************************************************/
 
+#include <qsqlresult.h>
 #include <qvariant.h>
 #include <qhash.h>
 #include <qregularexpression.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlrecord.h>
-#include <qsqlresult.h>
+
 #include <qvector.h>
 #include <qsqldriver.h>
 #include <qpointer.h>
+
+#include "qsqlresult_p.h"
+#include "qsqldriver_p.h"
 #include <qdebug.h>
-
-QT_BEGIN_NAMESPACE
-
-struct QHolder {
-   QHolder(const QString &hldr = QString(), int index = -1): holderName(hldr), holderPos(index) {}
-   bool operator==(const QHolder &h) const {
-      return h.holderPos == holderPos && h.holderName == holderName;
-   }
-   bool operator!=(const QHolder &h) const {
-      return h.holderPos != holderPos || h.holderName != holderName;
-   }
-   QString holderName;
-   int holderPos;
-};
-
-class QSqlResultPrivate
-{
- public:
-   QSqlResultPrivate(QSqlResult *d)
-      : q(d), idx(QSql::BeforeFirstRow), active(false),
-        isSel(false), forwardOnly(false), precisionPolicy(QSql::LowPrecisionDouble), bindCount(0),
-        binds(QSqlResult::PositionalBinding) {
-   }
-
-   void clearValues() {
-      values.clear();
-      bindCount = 0;
-   }
-
-   void resetBindCount() {
-      bindCount = 0;
-   }
-
-   void clearIndex() {
-      indexes.clear();
-      holders.clear();
-      types.clear();
-   }
-
-   void clear() {
-      clearValues();
-      clearIndex();;
-   }
-
-   QString positionalToNamedBinding();
-   QString namedToPositionalBinding();
-   QString holderAt(int index) const;
-
- public:
-   QSqlResult *q;
-   QPointer<QSqlDriver> sqldriver;
-   int idx;
-   QString sql;
-   bool active;
-   bool isSel;
-   QSqlError error;
-   bool forwardOnly;
-   QSql::NumericalPrecisionPolicy precisionPolicy;
-
-   int bindCount;
-   QSqlResult::BindingSyntax binds;
-
-   QString executedQuery;
-   QHash<int, QSql::ParamType> types;
-   QVector<QVariant> values;
-   typedef QHash<QString, int> IndexMap;
-   IndexMap indexes;
-
-   typedef QVector<QHolder> QHolderVector;
-   QHolderVector holders;
-};
 
 QString QSqlResultPrivate::holderAt(int index) const
 {
-   return indexes.key(index);
+   return holders.size() > index ? holders.at(index).holderName : fieldSerial(index);
 }
 
 // return a unique id for bound names
-static QString qFieldSerial(int i)
+QString QSqlResultPrivate::fieldSerial(int i) const
 {
-   ushort arr[] = { ':', 'f', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-   ushort *ptr = &arr[1];
+   QString retval;
 
-   while (i > 0) {
-      *(++ptr) = 'a' + i % 16;
-      i >>= 4;
-   }
+   do {
+      retval.prepend('a' + (i % 26));
+      i = i / 26;
+   } while (i != 0);
 
-   return QString(reinterpret_cast<const QChar *>(arr), int(ptr - arr) + 1);
+   retval.prepend(":");
+
+   return retval;
 }
 
 static bool qIsAlnum(QChar ch)
@@ -129,135 +63,140 @@ static bool qIsAlnum(QChar ch)
    return u - 'a' < 26 || u - 'A' < 26 || u - '0' < 10 || u == '_';
 }
 
-QString QSqlResultPrivate::positionalToNamedBinding()
+QString QSqlResultPrivate::positionalToNamedBinding(const QString &query) const
 {
-   int n = sql.size();
+   int n = query.size();
 
    QString result;
-
-   bool inQuote = false;
-   int count    = 0;
+   QChar closingQuote;
+   int count = 0;
+   bool ignoreBraces = (sqldriver->d_func()->dbmsType == QSqlDriver::PostgreSQL);
 
    for (int i = 0; i < n; ++i) {
-      QChar ch = sql.at(i);
-      if (ch == QLatin1Char('?') && !inQuote) {
-         result += qFieldSerial(count++);
-      } else {
-         if (ch == QLatin1Char('\'')) {
-            inQuote = !inQuote;
+      QChar ch = query.at(i);
+      if (!closingQuote.isNull()) {
+         if (ch == closingQuote) {
+            if (closingQuote == QLatin1Char(']')
+               && i + 1 < n && query.at(i + 1) == closingQuote) {
+               // consume the extra character. don't close.
+               ++i;
+               result += ch;
+            } else {
+               closingQuote = QChar();
+            }
          }
          result += ch;
+      } else {
+         if (ch == QLatin1Char('?')) {
+            result += fieldSerial(count++);
+         } else {
+            if (ch == QLatin1Char('\'') || ch == QLatin1Char('"') || ch == QLatin1Char('`')) {
+               closingQuote = ch;
+            } else if (!ignoreBraces && ch == QLatin1Char('[')) {
+               closingQuote = QLatin1Char(']');
+            }
+            result += ch;
+         }
       }
    }
    result.squeeze();
    return result;
 }
 
-QString QSqlResultPrivate::namedToPositionalBinding()
+QString QSqlResultPrivate::namedToPositionalBinding(const QString &query)
 {
-   int n = sql.size();
+   int n = query.size();
 
    QString result;
 
-   bool inQuote = false;
-   int count    = 0;
-   int i        = 0;
+   QChar closingQuote;
+   int count = 0;
+   int i = 0;
+   bool ignoreBraces = (sqldriver->d_func()->dbmsType == QSqlDriver::PostgreSQL);
 
    while (i < n) {
-      QChar ch = sql.at(i);
-      if (ch == QLatin1Char(':') && !inQuote
-            && (i == 0 || sql.at(i - 1) != QLatin1Char(':'))
-            && (i + 1 < n && qIsAlnum(sql.at(i + 1)))) {
-         int pos = i + 2;
-         while (pos < n && qIsAlnum(sql.at(pos))) {
-            ++pos;
-         }
-         indexes[sql.mid(i, pos - i)] = count++;
-         result += QLatin1Char('?');
-         i = pos;
-      } else {
-         if (ch == QLatin1Char('\'')) {
-            inQuote = !inQuote;
+      QChar ch = query.at(i);
+      if (!closingQuote.isNull()) {
+         if (ch == closingQuote) {
+            if (closingQuote == QLatin1Char(']')
+               && i + 1 < n && query.at(i + 1) == closingQuote) {
+               // consume the extra character. don't close.
+               ++i;
+               result += ch;
+            } else {
+               closingQuote = QChar();
+            }
          }
          result += ch;
          ++i;
+      } else {
+         if (ch == QLatin1Char(':')
+            && (i == 0 || query.at(i - 1) != QLatin1Char(':'))
+            && (i + 1 < n && qIsAlnum(query.at(i + 1)))) {
+            int pos = i + 2;
+            while (pos < n && qIsAlnum(query.at(pos))) {
+               ++pos;
+            }
+            QString holder(query.mid(i, pos - i));
+            indexes[holder].append(count++);
+            holders.append(QHolder(holder, i));
+            result += QLatin1Char('?');
+            i = pos;
+         } else {
+            if (ch == QLatin1Char('\'') || ch == QLatin1Char('"') || ch == QLatin1Char('`')) {
+               closingQuote = ch;
+            } else if (!ignoreBraces && ch == QLatin1Char('[')) {
+               closingQuote = QLatin1Char(']');
+            }
+            result += ch;
+            ++i;
+         }
       }
    }
    result.squeeze();
+   values.resize(holders.size());
    return result;
 }
 
-/*!
-    \class QSqlResult
-    \brief The QSqlResult class provides an abstract interface for
-    accessing data from specific SQL databases.
-
-    \ingroup database
-    \inmodule QtSql
-
-    Normally, you would use QSqlQuery instead of QSqlResult, since
-    QSqlQuery provides a generic wrapper for database-specific
-    implementations of QSqlResult.
-
-    If you are implementing your own SQL driver (by subclassing
-    QSqlDriver), you will need to provide your own QSqlResult
-    subclass that implements all the pure virtual functions and other
-    virtual functions that you need.
-
-    \sa QSqlDriver
-*/
-
-/*!
-    \enum QSqlResult::BindingSyntax
-
-    This enum type specifies the different syntaxes for specifying
-    placeholders in prepared queries.
-
-    \value PositionalBinding Use the ODBC-style positional syntax, with "?" as placeholders.
-    \value NamedBinding Use the Oracle-style syntax with named placeholders (e.g., ":id")
-    \omitvalue BindByPosition
-    \omitvalue BindByName
-
-    \sa bindingSyntax()
-*/
-
-/*!
-    \enum QSqlResult::VirtualHookOperation
-    \internal
-*/
-
-/*!
-    Creates a QSqlResult using database driver \a db. The object is
-    initialized to an inactive state.
-
-    \sa isActive(), driver()
-*/
 
 QSqlResult::QSqlResult(const QSqlDriver *db)
 {
-   d = new QSqlResultPrivate(this);
+   d_ptr = new QSqlResultPrivate;
+   Q_D(QSqlResult);
+   d->q_ptr = this;
    d->sqldriver = const_cast<QSqlDriver *>(db);
-   if (db) {
-      setNumericalPrecisionPolicy(db->numericalPrecisionPolicy());
+   if (d->sqldriver) {
+      setNumericalPrecisionPolicy(d->sqldriver->numericalPrecisionPolicy());
+   }
+}
+QSqlResult::QSqlResult(QSqlResultPrivate &dd, const QSqlDriver *db)
+{
+   d_ptr = &dd;
+   Q_D(QSqlResult);
+   d->q_ptr = this;
+   d->sqldriver = const_cast<QSqlDriver *>(db);
+   if (d->sqldriver) {
+      setNumericalPrecisionPolicy(d->sqldriver->numericalPrecisionPolicy());
    }
 }
 
-/*!
-    Destroys the object and frees any allocated resources.
-*/
+
 
 QSqlResult::~QSqlResult()
 {
+   Q_D(QSqlResult);
    delete d;
 }
 
 void QSqlResult::setQuery(const QString &query)
 {
+   Q_D(QSqlResult);
    d->sql = query;
 }
 
 QString QSqlResult::lastQuery() const
 {
+   Q_D(const QSqlResult);
    return d->sql;
 }
 
@@ -270,6 +209,7 @@ QString QSqlResult::lastQuery() const
 */
 int QSqlResult::at() const
 {
+   Q_D(const QSqlResult);
    return d->idx;
 }
 
@@ -284,23 +224,14 @@ int QSqlResult::at() const
 
 bool QSqlResult::isValid() const
 {
+   Q_D(const QSqlResult);
    return d->idx != QSql::BeforeFirstRow && d->idx != QSql::AfterLastRow;
 }
 
-/*!
-    \fn bool QSqlResult::isNull(int index)
-
-    Returns true if the field at position \a index in the current row
-    is null; otherwise returns false.
-*/
-
-/*!
-    Returns true if the result has records to be retrieved; otherwise
-    returns false.
-*/
 
 bool QSqlResult::isActive() const
 {
+   Q_D(const QSqlResult);
    return d->active;
 }
 
@@ -313,21 +244,15 @@ bool QSqlResult::isActive() const
 
 void QSqlResult::setAt(int index)
 {
+   Q_D(QSqlResult);
    d->idx = index;
 }
 
 
-/*!
-    This function is provided for derived classes to indicate whether
-    or not the current statement is a SQL \c SELECT statement. The \a
-    select parameter should be true if the statement is a \c SELECT
-    statement; otherwise it should be false.
-
-    \sa isSelect()
-*/
 
 void QSqlResult::setSelect(bool select)
 {
+   Q_D(QSqlResult);
    d->isSel = select;
 }
 
@@ -340,6 +265,7 @@ void QSqlResult::setSelect(bool select)
 
 bool QSqlResult::isSelect() const
 {
+   Q_D(const QSqlResult);
    return d->isSel;
 }
 
@@ -350,6 +276,7 @@ bool QSqlResult::isSelect() const
 
 const QSqlDriver *QSqlResult::driver() const
 {
+   Q_D(const QSqlResult);
    return d->sqldriver;
 }
 
@@ -363,6 +290,8 @@ const QSqlDriver *QSqlResult::driver() const
 
 void QSqlResult::setActive(bool active)
 {
+   Q_D(QSqlResult);
+
    if (active && d->executedQuery.isEmpty()) {
       d->executedQuery = d->sql;
    }
@@ -370,87 +299,41 @@ void QSqlResult::setActive(bool active)
    d->active = active;
 }
 
-/*!
-    This function is provided for derived classes to set the last
-    error to \a error.
-
-    \sa lastError()
-*/
 
 void QSqlResult::setLastError(const QSqlError &error)
 {
+   Q_D(QSqlResult);
    d->error = error;
 }
 
-
-/*!
-    Returns the last error associated with the result.
-*/
-
 QSqlError QSqlResult::lastError() const
 {
+   Q_D(const QSqlResult);
    return d->error;
 }
 
-/*!
-    \fn int QSqlResult::size()
-
-    Returns the size of the \c SELECT result, or -1 if it cannot be
-    determined or if the query is not a \c SELECT statement.
-
-    \sa numRowsAffected()
-*/
 
 bool QSqlResult::fetchNext()
 {
    return fetch(at() + 1);
 }
 
-/*!
-    Positions the result to the previous record (row) in the result.
-
-    This function is only called if the result is in an active state.
-    The default implementation calls fetch() with the previous index.
-    Derived classes can reimplement this function and position the
-    result to the next record in some other way, and call setAt()
-    with an appropriate value. Return true to indicate success, or
-    false to signify failure.
-*/
 
 bool QSqlResult::fetchPrevious()
 {
    return fetch(at() - 1);
 }
 
-/*!
-    Returns true if you can only scroll forward through the result
-    set; otherwise returns false.
-
-    \sa setForwardOnly()
-*/
 bool QSqlResult::isForwardOnly() const
 {
+   Q_D(const QSqlResult);
    return d->forwardOnly;
 }
 
-/*!
-    Sets forward only mode to \a forward. If \a forward is true, only
-    fetchNext() is allowed for navigating the results. Forward only
-    mode needs much less memory since results do not have to be
-    cached. By default, this feature is disabled.
 
-    Setting forward only to false is a suggestion to the database engine,
-    which has the final say on whether a result set is forward only or
-    scrollable. isForwardOnly() will always return the correct status of
-    the result set.
-
-    \note Calling setForwardOnly after execution of the query will result
-    in unexpected results at best, and crashes at worst.
-
-    \sa isForwardOnly(), fetchNext(), QSqlQuery::setForwardOnly()
-*/
 void QSqlResult::setForwardOnly(bool forward)
 {
+   Q_D(QSqlResult);
    d->forwardOnly = forward;
 }
 
@@ -463,70 +346,46 @@ void QSqlResult::setForwardOnly(bool forward)
 */
 bool QSqlResult::savePrepare(const QString &query)
 {
+   Q_D(QSqlResult);
+
    if (!driver()) {
       return false;
    }
+
    d->clear();
    d->sql = query;
+
    if (!driver()->hasFeature(QSqlDriver::PreparedQueries)) {
       return prepare(query);
    }
 
+   // parse the query to memorize parameter location
+   d->executedQuery = d->namedToPositionalBinding(query);
+
    if (driver()->hasFeature(QSqlDriver::NamedPlaceholders)) {
-      // parse the query to memorize parameter location
-      d->namedToPositionalBinding();
-      d->executedQuery = d->positionalToNamedBinding();
-   } else {
-      d->executedQuery = d->namedToPositionalBinding();
+      d->executedQuery = d->positionalToNamedBinding(query);
    }
+
    return prepare(d->executedQuery);
 }
 
-/*!
-    Prepares the given \a query for execution; the query will normally
-    use placeholders so that it can be executed repeatedly. Returns
-    true if the query is prepared successfully; otherwise returns false.
 
-    \sa exec()
-*/
 bool QSqlResult::prepare(const QString &query)
 {
-   int n = query.size();
 
-   bool inQuote = false;
-   int i = 0;
-
-   while (i < n) {
-      QChar ch = query.at(i);
-      if (ch == QLatin1Char(':') && !inQuote
-            && (i == 0 || query.at(i - 1) != QLatin1Char(':'))
-            && (i + 1 < n && qIsAlnum(query.at(i + 1)))) {
-         int pos = i + 2;
-         while (pos < n && qIsAlnum(query.at(pos))) {
-            ++pos;
-         }
-
-         d->holders.append(QHolder(query.mid(i, pos - i), i));
-         i = pos;
-      } else {
-         if (ch == QLatin1Char('\'')) {
-            inQuote = !inQuote;
-         }
-         ++i;
-      }
-   }
+   Q_D(QSqlResult);
    d->sql = query;
+   if (d->holders.isEmpty()) {
+      // parse the query to memorize parameter location
+      d->namedToPositionalBinding(query);
+   }
    return true; // fake prepares should always succeed
 }
 
-/*!
-    Executes the query, returning true if successful; otherwise returns
-    false.
 
-    \sa prepare()
-*/
 bool QSqlResult::exec()
 {
+   Q_D(QSqlResult);
    bool ret;
    // fake preparation - just replace the placeholders..
    QString query = lastQuery();
@@ -536,11 +395,11 @@ bool QSqlResult::exec()
       QString holder;
       for (i = d->holders.count() - 1; i >= 0; --i) {
          holder = d->holders.at(i).holderName;
-         val = d->values.value(d->indexes.value(holder));
+         val = d->values.value(d->indexes.value(holder).value(0, -1));
          QSqlField f(QLatin1String(""), val.type());
          f.setValue(val);
          query = query.replace(d->holders.at(i).holderPos,
-                               holder.length(), driver()->formatValue(f));
+               holder.length(), driver()->formatValue(f));
       }
    } else {
       QString val;
@@ -574,16 +433,18 @@ bool QSqlResult::exec()
    return ret;
 }
 
-/*!
-    Binds the value \a val of parameter type \a paramType to position \a index
-    in the current record (row).
 
-    \sa addBindValue()
-*/
 void QSqlResult::bindValue(int index, const QVariant &val, QSql::ParamType paramType)
 {
+   Q_D(QSqlResult);
+
    d->binds = PositionalBinding;
-   d->indexes[qFieldSerial(index)] = index;
+   QList<int> &indexes = d->indexes[d->fieldSerial(index)];
+
+   if (!indexes.contains(index)) {
+      indexes.append(index);
+   }
+
    if (d->values.count() <= index) {
       d->values.resize(index + 1);
    }
@@ -593,132 +454,86 @@ void QSqlResult::bindValue(int index, const QVariant &val, QSql::ParamType param
    }
 }
 
-/*!
-    \overload
 
-    Binds the value \a val of parameter type \a paramType to the \a
-    placeholder name in the current record (row).
-
-   Values cannot be bound to multiple locations in the query, eg:
-   \code
-   INSERT INTO testtable (id, name, samename) VALUES (:id, :name, :name)
-   \endcode
-   Binding to name will bind to the first :name, but not the second.
-
-    \note Binding an undefined placeholder will result in undefined behavior.
-
-    \sa QSqlQuery::bindValue()
-*/
-void QSqlResult::bindValue(const QString &placeholder, const QVariant &val,
-                           QSql::ParamType paramType)
+void QSqlResult::bindValue(const QString &placeholder, const QVariant &val, QSql::ParamType paramType)
 {
+   Q_D(QSqlResult);
    d->binds = NamedBinding;
 
    // if the index has already been set when doing emulated named
    // bindings - don't reset it
 
-   int idx = d->indexes.value(placeholder, -1);
-   if (idx >= 0) {
+   QList<int> indexes = d->indexes.value(placeholder);
+   for (int idx : indexes) {
       if (d->values.count() <= idx) {
          d->values.resize(idx + 1);
       }
-      d->values[idx] = val;
-   } else {
-      d->values.append(val);
-      idx = d->values.count() - 1;
-      d->indexes[placeholder] = idx;
-   }
 
-   if (paramType != QSql::In || !d->types.isEmpty()) {
-      d->types[idx] = paramType;
+      d->values[idx] = val;
+
+
+
+      if (paramType != QSql::In || !d->types.isEmpty()) {
+         d->types[idx] = paramType;
+      }
    }
 }
 
-/*!
-    Binds the value \a val of parameter type \a paramType to the next
-    available position in the current record (row).
 
-    \sa bindValue()
-*/
 void QSqlResult::addBindValue(const QVariant &val, QSql::ParamType paramType)
 {
+   Q_D(QSqlResult);
    d->binds = PositionalBinding;
    bindValue(d->bindCount, val, paramType);
    ++d->bindCount;
 }
 
-/*!
-    Returns the value bound at position \a index in the current record
-    (row).
 
-    \sa bindValue(), boundValues()
-*/
 QVariant QSqlResult::boundValue(int index) const
 {
+   Q_D(const QSqlResult);
    return d->values.value(index);
 }
 
-/*!
-    \overload
 
-    Returns the value bound by the given \a placeholder name in the
-    current record (row).
-
-    \sa bindValueType()
-*/
 QVariant QSqlResult::boundValue(const QString &placeholder) const
 {
-   int idx = d->indexes.value(placeholder, -1);
-   return d->values.value(idx);
+   Q_D(const QSqlResult);
+   QList<int> indexes = d->indexes.value(placeholder);
+   return d->values.value(indexes.value(0, -1));
 }
 
-/*!
-    Returns the parameter type for the value bound at position \a index.
 
-    \sa boundValue()
-*/
 QSql::ParamType QSqlResult::bindValueType(int index) const
 {
+   Q_D(const QSqlResult);
    return d->types.value(index, QSql::In);
 }
 
-/*!
-    \overload
 
-    Returns the parameter type for the value bound with the given \a
-    placeholder name.
-*/
 QSql::ParamType QSqlResult::bindValueType(const QString &placeholder) const
 {
-   return d->types.value(d->indexes.value(placeholder, -1), QSql::In);
+   Q_D(const QSqlResult);
+   return d->types.value(d->indexes.value(placeholder).value(0, -1), QSql::In);
 }
 
-/*!
-    Returns the number of bound values in the result.
 
-    \sa boundValues()
-*/
 int QSqlResult::boundValueCount() const
 {
+   Q_D(const QSqlResult);
    return d->values.count();
 }
 
-/*!
-    Returns a vector of the result's bound values for the current
-    record (row).
-
-    \sa boundValueCount()
-*/
 QVector<QVariant> &QSqlResult::boundValues() const
 {
-   return d->values;
+   Q_D(const QSqlResult);
+   return const_cast<QSqlResultPrivate *>(d)->values;
 }
 
-/*!
-    Returns the binding syntax used by prepared queries.
-*/
+
 QSqlResult::BindingSyntax QSqlResult::bindingSyntax() const
 {
+   Q_D(const QSqlResult);
    return d->binds;
 }
 
@@ -728,6 +543,7 @@ QSqlResult::BindingSyntax QSqlResult::bindingSyntax() const
 */
 void QSqlResult::clear()
 {
+   Q_D(QSqlResult);
    d->clear();
 }
 
@@ -741,36 +557,32 @@ void QSqlResult::clear()
 */
 QString QSqlResult::executedQuery() const
 {
+   Q_D(const QSqlResult);
    return d->executedQuery;
 }
 
 void QSqlResult::resetBindCount()
 {
+   Q_D(QSqlResult);
    d->resetBindCount();
 }
 
-/*!
-    Returns the name of the bound value at position \a index in the
-    current record (row).
 
-    \sa boundValue()
-*/
 QString QSqlResult::boundValueName(int index) const
 {
+   Q_D(const QSqlResult);
    return d->holderAt(index);
 }
 
-/*!
-    Returns true if at least one of the query's bound values is a \c
-    QSql::Out or a QSql::InOut; otherwise returns false.
 
-    \sa bindValueType()
-*/
 bool QSqlResult::hasOutValues() const
 {
+   Q_D(const QSqlResult);
+
    if (d->types.isEmpty()) {
       return false;
    }
+
    QHash<int, QSql::ParamType>::const_iterator it;
    for (it = d->types.constBegin(); it != d->types.constEnd(); ++it) {
       if (it.value() != QSql::In) {
@@ -780,33 +592,12 @@ bool QSqlResult::hasOutValues() const
    return false;
 }
 
-/*!
-    Returns the current record if the query is active; otherwise
-    returns an empty QSqlRecord.
 
-    The default implementation always returns an empty QSqlRecord.
-
-    \sa isActive()
-*/
 QSqlRecord QSqlResult::record() const
 {
    return QSqlRecord();
 }
 
-/*!
-    Returns the object ID of the most recent inserted row if the
-    database supports it.
-    An invalid QVariant will be returned if the query did not
-    insert any value or if the database does not report the id back.
-    If more than one row was touched by the insert, the behavior is
-    undefined.
-
-    Note that for Oracle databases the row's ROWID will be returned,
-    while for MySQL databases the row's auto-increment field will
-    be returned.
-
-    \sa QSqlDriver::hasFeature()
-*/
 QVariant QSqlResult::lastInsertId() const
 {
    return QVariant();
@@ -818,122 +609,56 @@ void QSqlResult::virtual_hook(int, void *)
 {
 }
 
-/*! \internal
-    \since 4.2
-
-    Executes a prepared query in batch mode if the driver supports it,
-    otherwise emulates a batch execution using bindValue() and exec().
-    QSqlDriver::hasFeature() can be used to find out whether a driver
-    supports batch execution.
-
-    Batch execution can be faster for large amounts of data since it
-    reduces network roundtrips.
-
-    For batch executions, bound values have to be provided as lists
-    of variants (QVariantList).
-
-    Each list must contain values of the same type. All lists must
-    contain equal amount of values (rows).
-
-    NULL values are passed in as typed QVariants, for example
-    \c {QVariant(QVariant::Int)} for an integer NULL value.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_sql_kernel_qsqlresult.cpp 0
-
-    Here, we insert two rows into a SQL table, with each row containing three values.
-
-    \sa exec(), QSqlDriver::hasFeature()
-*/
 bool QSqlResult::execBatch(bool arrayBind)
 {
-   if (driver()->hasFeature(QSqlDriver::BatchOperations)) {
-      virtual_hook(BatchOperation, &arrayBind);
-      d->resetBindCount();
-      return d->error.type() == QSqlError::NoError;
-   } else {
-      QVector<QVariant> values = d->values;
-      if (values.count() == 0) {
+   Q_D(QSqlResult);
+
+   QVector<QVariant> values = d->values;
+   if (values.count() == 0) {
+      return false;
+   }
+
+   for (int i = 0; i < values.at(0).toList().count(); ++i) {
+      for (int j = 0; j < values.count(); ++j) {
+         bindValue(j, values.at(j).toList().at(i), QSql::In);
+      }
+
+      if (!exec()) {
          return false;
       }
-      for (int i = 0; i < values.at(0).toList().count(); ++i) {
-         for (int j = 0; j < values.count(); ++j) {
-            bindValue(j, values.at(j).toList().at(i), QSql::In);
-         }
-         if (!exec()) {
-            return false;
-         }
-      }
-      return true;
    }
-   return false;
+
+   return true;
 }
 
-/*! \internal
- */
 void QSqlResult::detachFromResultSet()
 {
-   if (driver()->hasFeature(QSqlDriver::FinishQuery)
-         || driver()->hasFeature(QSqlDriver::SimpleLocking)) {
-      virtual_hook(DetachFromResultSet, 0);
-   }
 }
 
-/*! \internal
- */
+
 void QSqlResult::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy)
 {
+   Q_D(QSqlResult);
    d->precisionPolicy = policy;
-   virtual_hook(SetNumericalPrecision, &policy);
+
 }
 
-/*! \internal
- */
+
 QSql::NumericalPrecisionPolicy QSqlResult::numericalPrecisionPolicy() const
 {
+   Q_D(const QSqlResult);
    return d->precisionPolicy;
 }
 
-/*! \internal
-*/
+
 bool QSqlResult::nextResult()
 {
-   if (driver()->hasFeature(QSqlDriver::MultipleResultSets)) {
-      bool result = false;
-      virtual_hook(NextResult, &result);
-      return result;
-   }
    return false;
 }
 
-/*!
-    Returns the low-level database handle for this result set
-    wrapped in a QVariant or an invalid QVariant if there is no handle.
 
-    \warning Use this with uttermost care and only if you know what you're doing.
-
-    \warning The handle returned here can become a stale pointer if the result
-    is modified (for example, if you clear it).
-
-    \warning The handle can be NULL if the result was not executed yet.
-
-    The handle returned here is database-dependent, you should query the type
-    name of the variant before accessing it.
-
-    This example retrieves the handle for a sqlite result:
-
-    \snippet doc/src/snippets/code/src_sql_kernel_qsqlresult.cpp 1
-
-    This snippet returns the handle for PostgreSQL or MySQL:
-
-    \snippet doc/src/snippets/code/src_sql_kernel_qsqlresult.cpp 2
-
-    \sa QSqlDriver::handle()
-*/
 QVariant QSqlResult::handle() const
 {
    return QVariant();
 }
 
-QT_END_NAMESPACE

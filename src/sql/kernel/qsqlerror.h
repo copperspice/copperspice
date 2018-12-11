@@ -24,8 +24,10 @@
 #define QSQLERROR_H
 
 #include <qstring.h>
+#include <qsql.h>
 
-class QDebug;
+
+class QSqlErrorPrivate;
 
 class Q_SQL_EXPORT QSqlError
 {
@@ -38,32 +40,33 @@ class Q_SQL_EXPORT QSqlError
       TransactionError,
       UnknownError
    };
+
    QSqlError( const QString &driverText = QString(),
-              const QString &databaseText = QString(),
-              ErrorType type = NoError,
-              int number = -1);
+      const QString &databaseText = QString(),
+      ErrorType type = NoError,
+      const QString &errorCode = QString());
+
    QSqlError(const QSqlError &other);
    QSqlError &operator=(const QSqlError &other);
-   bool operator==(const QSqlError &other);
-   bool operator!=(const QSqlError &other);
+   bool operator==(const QSqlError &other) const;
+   bool operator!=(const QSqlError &other) const;
    ~QSqlError();
 
    QString driverText() const;
-   void setDriverText(const QString &driverText);
+
    QString databaseText() const;
-   void setDatabaseText(const QString &databaseText);
+
    ErrorType type() const;
-   void setType(ErrorType type);
-   int number() const;
-   void setNumber(int number);
+
+
+   QString nativeErrorCode() const;
    QString text() const;
    bool isValid() const;
 
  private:
-   QString driverError;
-   QString databaseError;
-   ErrorType errorType;
-   int errorNumber;
+   QSqlErrorPrivate *d;
+
+
 };
 
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlError &);

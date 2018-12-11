@@ -29,7 +29,7 @@ QT_BEGIN_NAMESPACE
 class QSqlFieldPrivate
 {
  public:
-   QSqlFieldPrivate(const QString &name, QVariant::Type type) 
+   QSqlFieldPrivate(const QString &name, QVariant::Type type)
       : ref(1), nm(name), ro(false), type(type), req(QSqlField::Unknown),
         len(-1), prec(-1), tp(-1), gen(true), autoval(false) {
    }
@@ -50,14 +50,14 @@ class QSqlFieldPrivate
 
    bool operator==(const QSqlFieldPrivate &other) const {
       return (nm == other.nm
-              && ro == other.ro
-              && type == other.type
-              && req == other.req
-              && len == other.len
-              && prec == other.prec
-              && def == other.def
-              && gen == other.gen
-              && autoval == other.autoval);
+            && ro == other.ro
+            && type == other.type
+            && req == other.req
+            && len == other.len
+            && prec == other.prec
+            && def == other.def
+            && gen == other.gen
+            && autoval == other.autoval);
    }
 
    QAtomicInt ref;
@@ -178,7 +178,7 @@ QSqlField &QSqlField::operator=(const QSqlField &other)
 bool QSqlField::operator==(const QSqlField &other) const
 {
    return ((d == other.d || *d == *other.d)
-           && val == other.val);
+         && val == other.val);
 }
 
 /*!
@@ -501,7 +501,7 @@ QDebug operator<<(QDebug dbg, const QSqlField &f)
 
    if (f.requiredStatus() != QSqlField::Unknown)
       dbg.nospace() << ", required: "
-                    << (f.requiredStatus() == QSqlField::Required ? "yes" : "no");
+         << (f.requiredStatus() == QSqlField::Required ? "yes" : "no");
 
    dbg.nospace() << ", generated: " << (f.isGenerated() ? "yes" : "no");
 
