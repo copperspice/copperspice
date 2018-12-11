@@ -31,105 +31,105 @@ class QTimeZonePrivate;
 
 class Q_CORE_EXPORT QTimeZone
 {
-public:
-    enum TimeType {
-        StandardTime = 0,
-        DaylightTime = 1,
-        GenericTime  = 2
-    };
+ public:
+   enum TimeType {
+      StandardTime = 0,
+      DaylightTime = 1,
+      GenericTime  = 2
+   };
 
-    enum NameType {
-        DefaultName = 0,
-        LongName    = 1,
-        ShortName   = 2,
-        OffsetName  = 3
-    };
+   enum NameType {
+      DefaultName = 0,
+      LongName    = 1,
+      ShortName   = 2,
+      OffsetName  = 3
+   };
 
-    struct OffsetData {
-        QString abbreviation;
-        QDateTime atUtc;
-        int offsetFromUtc;
-        int standardTimeOffset;
-        int daylightTimeOffset;
-    };
-    typedef QVector<OffsetData> OffsetDataList;
+   struct OffsetData {
+      QString abbreviation;
+      QDateTime atUtc;
+      int offsetFromUtc;
+      int standardTimeOffset;
+      int daylightTimeOffset;
+   };
+   typedef QVector<OffsetData> OffsetDataList;
 
-    QTimeZone();
-    explicit QTimeZone(const QByteArray &ianaId);
-    explicit QTimeZone(int offsetSeconds);
+   QTimeZone();
+   explicit QTimeZone(const QByteArray &ianaId);
+   explicit QTimeZone(int offsetSeconds);
 
-    QTimeZone(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-              const QString &abbreviation, QLocale::Country country = QLocale::AnyCountry, const QString &comment = QString());
+   QTimeZone(const QByteArray &zoneId, int offsetSeconds, const QString &name,
+      const QString &abbreviation, QLocale::Country country = QLocale::AnyCountry, const QString &comment = QString());
 
-    QTimeZone(const QTimeZone &other);
-    ~QTimeZone();
+   QTimeZone(const QTimeZone &other);
+   ~QTimeZone();
 
-    QTimeZone &operator=(const QTimeZone &other);
-    QTimeZone &operator=(QTimeZone &&other) {
-      swap(other); return *this;
+   QTimeZone &operator=(const QTimeZone &other);
+   QTimeZone &operator=(QTimeZone &&other) {
+      swap(other);
+      return *this;
    }
 
-    void swap(QTimeZone &other)
-    {
+   void swap(QTimeZone &other) {
       d.swap(other.d);
-    }
+   }
 
-    bool operator==(const QTimeZone &other) const;
-    bool operator!=(const QTimeZone &other) const;
+   bool operator==(const QTimeZone &other) const;
+   bool operator!=(const QTimeZone &other) const;
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QByteArray id() const;
-    QLocale::Country country() const;
-    QString comment() const;
+   QByteArray id() const;
+   QLocale::Country country() const;
+   QString comment() const;
 
-    QString displayName(const QDateTime &atDateTime, QTimeZone::NameType nameType = QTimeZone::DefaultName,
-                        const QLocale &locale = QLocale()) const;
+   QString displayName(const QDateTime &atDateTime, QTimeZone::NameType nameType = QTimeZone::DefaultName,
+      const QLocale &locale = QLocale()) const;
 
-    QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType = QTimeZone::DefaultName,
-                        const QLocale &locale = QLocale()) const;
+   QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType = QTimeZone::DefaultName,
+      const QLocale &locale = QLocale()) const;
 
-    QString abbreviation(const QDateTime &atDateTime) const;
+   QString abbreviation(const QDateTime &atDateTime) const;
 
-    int offsetFromUtc(const QDateTime &atDateTime) const;
-    int standardTimeOffset(const QDateTime &atDateTime) const;
-    int daylightTimeOffset(const QDateTime &atDateTime) const;
+   int offsetFromUtc(const QDateTime &atDateTime) const;
+   int standardTimeOffset(const QDateTime &atDateTime) const;
+   int daylightTimeOffset(const QDateTime &atDateTime) const;
 
-    bool hasDaylightTime() const;
-    bool isDaylightTime(const QDateTime &atDateTime) const;
+   bool hasDaylightTime() const;
+   bool isDaylightTime(const QDateTime &atDateTime) const;
 
-    OffsetData offsetData(const QDateTime &forDateTime) const;
+   OffsetData offsetData(const QDateTime &forDateTime) const;
 
-    bool hasTransitions() const;
-    OffsetData nextTransition(const QDateTime &afterDateTime) const;
-    OffsetData previousTransition(const QDateTime &beforeDateTime) const;
-    OffsetDataList transitions(const QDateTime &fromDateTime, const QDateTime &toDateTime) const;
+   bool hasTransitions() const;
+   OffsetData nextTransition(const QDateTime &afterDateTime) const;
+   OffsetData previousTransition(const QDateTime &beforeDateTime) const;
+   OffsetDataList transitions(const QDateTime &fromDateTime, const QDateTime &toDateTime) const;
 
-    static QByteArray systemTimeZoneId();
-    static QTimeZone systemTimeZone();
-    static QTimeZone utc();
+   static QByteArray systemTimeZoneId();
+   static QTimeZone systemTimeZone();
+   static QTimeZone utc();
 
-    static bool isTimeZoneIdAvailable(const QByteArray &ianaId);
+   static bool isTimeZoneIdAvailable(const QByteArray &ianaId);
 
-    static QList<QByteArray> availableTimeZoneIds();
-    static QList<QByteArray> availableTimeZoneIds(QLocale::Country country);
-    static QList<QByteArray> availableTimeZoneIds(int offsetSeconds);
+   static QList<QByteArray> availableTimeZoneIds();
+   static QList<QByteArray> availableTimeZoneIds(QLocale::Country country);
+   static QList<QByteArray> availableTimeZoneIds(int offsetSeconds);
 
-    static QByteArray ianaIdToWindowsId(const QByteArray &ianaId);
-    static QByteArray windowsIdToDefaultIanaId(const QByteArray &windowsId);
-    static QByteArray windowsIdToDefaultIanaId(const QByteArray &windowsId, QLocale::Country country);
-    static QList<QByteArray> windowsIdToIanaIds(const QByteArray &windowsId);
-    static QList<QByteArray> windowsIdToIanaIds(const QByteArray &windowsId, QLocale::Country country);
+   static QByteArray ianaIdToWindowsId(const QByteArray &ianaId);
+   static QByteArray windowsIdToDefaultIanaId(const QByteArray &windowsId);
+   static QByteArray windowsIdToDefaultIanaId(const QByteArray &windowsId, QLocale::Country country);
+   static QList<QByteArray> windowsIdToIanaIds(const QByteArray &windowsId);
+   static QList<QByteArray> windowsIdToIanaIds(const QByteArray &windowsId, QLocale::Country country);
 
-private:
-    QTimeZone(QTimeZonePrivate &dd);
+ private:
+   QTimeZone(QTimeZonePrivate &dd);
 
-    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz);
-    friend class QTimeZonePrivate;
-    friend class QDateTime;
-    friend class QDateTimePrivate;
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz);
+   friend class QTimeZonePrivate;
+   friend class QDateTime;
+   friend class QDateTimePrivate;
 
-    QSharedDataPointer<QTimeZonePrivate> d;
+   QSharedDataPointer<QTimeZonePrivate> d;
 };
 
 Q_DECLARE_TYPEINFO(QTimeZone::OffsetData, Q_MOVABLE_TYPE);

@@ -287,9 +287,9 @@ class Q_CORE_EXPORT QDateTime
    QTime time() const;
    Qt::TimeSpec timeSpec() const;
    int offsetFromUtc() const;
-  QTimeZone timeZone() const;
-  QString timeZoneAbbreviation() const;
-  bool isDaylightTime() const;
+   QTimeZone timeZone() const;
+   QString timeZoneAbbreviation() const;
+   bool isDaylightTime() const;
 
    qint64 toMSecsSinceEpoch() const;
    quint64 toTime_t() const;
@@ -363,12 +363,12 @@ class Q_CORE_EXPORT QDateTime
    static qint64 currentMSecsSinceEpoch();
 
 #if defined(Q_OS_MAC)
-    static QDateTime fromCFDate(CFDateRef date);
-    CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED;
+   static QDateTime fromCFDate(CFDateRef date);
+   CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED;
 
 #  if defined(__OBJC__)
-    static QDateTime fromNSDate(const NSDate *date);
-    NSDate *toNSDate() const Q_DECL_NS_RETURNS_AUTORELEASED;
+   static QDateTime fromNSDate(const NSDate *date);
+   NSDate *toNSDate() const Q_DECL_NS_RETURNS_AUTORELEASED;
 #  endif
 
 #endif
@@ -380,7 +380,7 @@ class Q_CORE_EXPORT QDateTime
 
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
-    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
+   friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
 };
 
 Q_DECLARE_TYPEINFO(QDateTime, Q_MOVABLE_TYPE);

@@ -31,46 +31,46 @@
 class QDateTimePrivate : public QSharedData
 {
  public:
-    enum Spec {
-        LocalUnknown  = -1,
-        LocalStandard = 0,
-        LocalDST      = 1,
-        UTC           = 2,
-        OffsetFromUTC = 3,
-        TimeZone      = 4
-    };
+   enum Spec {
+      LocalUnknown  = -1,
+      LocalStandard = 0,
+      LocalDST      = 1,
+      UTC           = 2,
+      OffsetFromUTC = 3,
+      TimeZone      = 4
+   };
 
-    // Daylight Time Status
-    enum DaylightStatus {
-        NoDaylightTime = -2,
-        UnknownDaylightTime = -1,
-        StandardTime = 0,
-        DaylightTime = 1
-    };
+   // Daylight Time Status
+   enum DaylightStatus {
+      NoDaylightTime = -2,
+      UnknownDaylightTime = -1,
+      StandardTime = 0,
+      DaylightTime = 1
+   };
 
-    // Status of date/time
-    enum StatusFlag {
-        NullDate            = 0x01,
-        NullTime            = 0x02,
-        ValidDate           = 0x04, // just the date field
-        ValidTime           = 0x08, // just the time field
-        ValidDateTime       = 0x10, // the whole object (including timezone)
-        SetToStandardTime   = 0x40,
-        SetToDaylightTime   = 0x80
-    };
-    using StatusFlags = QFlags<StatusFlag>;
+   // Status of date/time
+   enum StatusFlag {
+      NullDate            = 0x01,
+      NullTime            = 0x02,
+      ValidDate           = 0x04, // just the date field
+      ValidTime           = 0x08, // just the time field
+      ValidDateTime       = 0x10, // the whole object (including timezone)
+      SetToStandardTime   = 0x40,
+      SetToDaylightTime   = 0x80
+   };
+   using StatusFlags = QFlags<StatusFlag>;
 
 
 
-    QDateTimePrivate() : m_msecs(0),
-                         m_spec(Qt::LocalTime),
-                         m_offsetFromUtc(0),
-                         m_status(NullDate | NullTime)
-    {}
+   QDateTimePrivate() : m_msecs(0),
+      m_spec(Qt::LocalTime),
+      m_offsetFromUtc(0),
+      m_status(NullDate | NullTime)
+   {}
 
    QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec, int offsetSeconds);
 
-   QDateTimePrivate(const QDate &toDate, const QTime &toTime, const QTimeZone & timeZone);
+   QDateTimePrivate(const QDate &toDate, const QTime &toTime, const QTimeZone &timeZone);
 
 
    qint64 m_msecs;
@@ -91,45 +91,51 @@ class QDateTimePrivate : public QSharedData
 
    void checkValidDateTime();
 
-    void refreshDateTime();
+   void refreshDateTime();
 
-    // Get/set date and time status
-    bool isNullDate() const {
+   // Get/set date and time status
+   bool isNullDate() const {
       return m_status & NullDate;
-    }
+   }
 
-    bool isNullTime() const {
+   bool isNullTime() const {
       return m_status & NullTime;
-    }
+   }
 
-    bool isValidDate() const {
+   bool isValidDate() const {
       return m_status & ValidDate;
-    }
+   }
 
-    bool isValidTime() const {
+   bool isValidTime() const {
       return m_status & ValidTime;
-    }
+   }
 
 
-    bool isValidDateTime() const {
+   bool isValidDateTime() const {
       return m_status & ValidDateTime;
-    }
+   }
 
-    void setValidDateTime() {
+   void setValidDateTime() {
       m_status |= ValidDateTime;
-    }
+   }
 
-    void clearValidDateTime() {
+   void clearValidDateTime() {
       m_status &= ~ValidDateTime;
-    }
+   }
 
-   inline void clearSetToDaylightStatus() { m_status &= ~(SetToStandardTime | SetToDaylightTime); }
+   inline void clearSetToDaylightStatus() {
+      m_status &= ~(SetToStandardTime | SetToDaylightTime);
+   }
 
    static qint64 zoneMSecsToEpochMSecs(qint64 msecs, const QTimeZone &zone,
-                                        QDate *localDate = 0, QTime *localTime = 0);
+      QDate *localDate = 0, QTime *localTime = 0);
 
-   static inline qint64 minJd() { return QDate::minJd(); }
-   static inline qint64 maxJd() { return QDate::maxJd(); }
+   static inline qint64 minJd() {
+      return QDate::minJd();
+   }
+   static inline qint64 maxJd() {
+      return QDate::maxJd();
+   }
 };
 
 
