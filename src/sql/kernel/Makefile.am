@@ -34,7 +34,9 @@ SQL_KERNEL_INCLUDES = \
 
 SQL_KERNEL_PRIVATE_INCLUDES = \
 	qsqlnulldriver_p.h \
-	qsqlcachedresult_p.h
+	qsqlcachedresult_p.h \
+	qsqldriver_p.h \
+	qsqlresult_p.h
 
 SQL_INCLUDES += $(SQL_KERNEL_INCLUDES)
 SQL_PRIVATE_INCLUDES += $(SQL_KERNEL_PRIVATE_INCLUDES)

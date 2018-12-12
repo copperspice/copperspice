@@ -19,6 +19,8 @@ set(SQL_PRIVATE_INCLUDES
     ${SQL_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsqlnulldriver_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsqlcachedresult_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsqldriver_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsqlresult_p.h
 )
 
 set(SQL_INCLUDES
