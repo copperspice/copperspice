@@ -24,15 +24,15 @@
 #include <qstringlist.h>
 #include "../../../../src/sql/drivers/sqlite/qsql_sqlite.h"
 
-QT_BEGIN_NAMESPACE
 
 class QSQLiteDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QSQLiteDriverPlugin)
 public:
     QSQLiteDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver *create(const QString &) override;
+
 };
 
 QSQLiteDriverPlugin::QSQLiteDriverPlugin()
@@ -49,14 +49,3 @@ QSqlDriver* QSQLiteDriverPlugin::create(const QString &name)
     return 0;
 }
 
-QStringList QSQLiteDriverPlugin::keys() const
-{
-    QStringList l;
-    l.append("QSQLITE");
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QSQLiteDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqlite, QSQLiteDriverPlugin)
-
-QT_END_NAMESPACE

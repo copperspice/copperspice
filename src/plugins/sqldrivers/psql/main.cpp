@@ -24,15 +24,13 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/psql/qsql_psql.h"
 
-QT_BEGIN_NAMESPACE
-
 class QPSQLDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QPSQLDriverPlugin)
 public:
     QPSQLDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver* create(const QString &) override;
 };
 
 QPSQLDriverPlugin::QPSQLDriverPlugin()
@@ -49,14 +47,3 @@ QSqlDriver* QPSQLDriverPlugin::create(const QString &name)
     return 0;
 }
 
-QStringList QPSQLDriverPlugin::keys() const
-{
-    QStringList l;    
-    l.append("QPSQL");
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QPSQLDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqlpsql, QPSQLDriverPlugin)
-
-QT_END_NAMESPACE

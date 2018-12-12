@@ -24,15 +24,17 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/db2/qsql_db2.h"
 
-QT_BEGIN_NAMESPACE
+
 
 class QDB2DriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QDB2DriverPlugin)
+
 public:
     QDB2DriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver* create(const QString &) override;
+
 };
 
 QDB2DriverPlugin::QDB2DriverPlugin()
@@ -49,14 +51,3 @@ QSqlDriver* QDB2DriverPlugin::create(const QString &name)
     return 0;
 }
 
-QStringList QDB2DriverPlugin::keys() const
-{
-    QStringList l;
-    l.append("QDB2");
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QDB2DriverPlugin)
-Q_EXPORT_PLUGIN2(qsqldb2, QDB2DriverPlugin)
-
-QT_END_NAMESPACE

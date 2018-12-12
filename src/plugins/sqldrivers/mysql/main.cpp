@@ -24,15 +24,15 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/mysql/qsql_mysql.h"
 
-QT_BEGIN_NAMESPACE
 
 class QMYSQLDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QMYSQLDriverPlugin)
+
 public:
     QMYSQLDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver* create(const QString &) override;
 };
 
 QMYSQLDriverPlugin::QMYSQLDriverPlugin()
@@ -49,14 +49,3 @@ QSqlDriver* QMYSQLDriverPlugin::create(const QString &name)
     return 0;
 }
 
-QStringList QMYSQLDriverPlugin::keys() const
-{
-    QStringList l; 
-    l.append("QMYSQL");
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QMYSQLDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqlmysql, QMYSQLDriverPlugin)
-
-QT_END_NAMESPACE

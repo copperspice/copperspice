@@ -24,15 +24,16 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/odbc/qsql_odbc.h"
 
-QT_BEGIN_NAMESPACE
 
 class QODBCDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QODBCDriverPlugin)
+
 public:
     QODBCDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver *create(const QString &) override;
+
 };
 
 QODBCDriverPlugin::QODBCDriverPlugin()
@@ -48,15 +49,3 @@ QSqlDriver* QODBCDriverPlugin::create(const QString &name)
     }
     return 0;
 }
-
-QStringList QODBCDriverPlugin::keys() const
-{
-    QStringList l;
-    l.append("QODBC");
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QODBCDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqlodbc, QODBCDriverPlugin)
-
-QT_END_NAMESPACE

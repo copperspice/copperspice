@@ -24,15 +24,14 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/ibase/qsql_ibase.h"
 
-QT_BEGIN_NAMESPACE
-
 class QIBaseDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QIBaseDriverPlugin)
 public:
     QIBaseDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver* create(const QString &) override;
+
 };
 
 QIBaseDriverPlugin::QIBaseDriverPlugin()
@@ -49,14 +48,3 @@ QSqlDriver* QIBaseDriverPlugin::create(const QString &name)
     return 0;
 }
 
-QStringList QIBaseDriverPlugin::keys() const
-{
-    QStringList l;
-    l.append("QIBASE");   
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QIBaseDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqlibase, QIBaseDriverPlugin)
-
-QT_END_NAMESPACE

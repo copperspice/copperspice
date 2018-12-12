@@ -30,16 +30,17 @@
 #endif
 #include "../../../sql/drivers/tds/qsql_tds.h"
 
-QT_BEGIN_NAMESPACE
+
 
 
 class QTDSDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QTDSDriverPlugin)
 public:
     QTDSDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+    QSqlDriver* create(const QString &) override;
+
 };
 
 QTDSDriverPlugin::QTDSDriverPlugin()
@@ -56,14 +57,3 @@ QSqlDriver* QTDSDriverPlugin::create(const QString &name)
     return 0;
 }
 
-QStringList QTDSDriverPlugin::keys() const
-{
-    QStringList l;
-    l.append("QTDS");
-    return l;
-}
-
-Q_EXPORT_STATIC_PLUGIN(QTDSDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqltds, QTDSDriverPlugin)
-
-QT_END_NAMESPACE
