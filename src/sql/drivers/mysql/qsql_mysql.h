@@ -23,11 +23,11 @@
 #ifndef QSQL_MYSQL_H
 #define QSQL_MYSQL_H
 
-#include <QtSql/qsqldriver.h>
-#include <QtSql/qsqlresult.h>
+#include <qsqldriver.h>
+#include <qsqlresult.h>
 
 #if defined (Q_OS_WIN32)
-#include <QtCore/qt_windows.h>
+#include <qt_windows.h>
 #endif
 
 #include <mysql.h>
@@ -37,8 +37,6 @@
 #else
 #define Q_EXPORT_SQLDRIVER_MYSQL Q_SQL_EXPORT
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QMYSQLDriverPrivate;
 class QMYSQLResultPrivate;
@@ -54,71 +52,66 @@ class QMYSQLResult : public QSqlResult
    explicit QMYSQLResult(const QMYSQLDriver *db);
    ~QMYSQLResult();
 
-   QVariant handle() const;
+   QVariant handle() const override;
+
  protected:
    void cleanup();
-   bool fetch(int i);
-   bool fetchNext();
-   bool fetchLast();
-   bool fetchFirst();
-   QVariant data(int field);
-   bool isNull(int field);
-   bool reset (const QString &query);
-   int size();
-   int numRowsAffected();
-   QVariant lastInsertId() const;
-   QSqlRecord record() const;
-   void virtual_hook(int id, void *data);
-   bool nextResult();
+   bool fetch(int i) override;
+   bool fetchNext() override;
+   bool fetchLast() override;
+   bool fetchFirst() override;
+   QVariant data(int field) override;
+   bool isNull(int field) override;
+   bool reset (const QString &query) override;
+   int size() override;
+   int numRowsAffected() override;
+   QVariant lastInsertId() const override;
+   QSqlRecord record() const override;
+   void virtual_hook(int id, void *data) override;
+   bool nextResult() override;
 
-#if MYSQL_VERSION_ID >= 40108
-   bool prepare(const QString &stmt);
-   bool exec();
-#endif
+   bool prepare(const QString &stmt) override;
+   bool exec() override;
+
  private:
    QMYSQLResultPrivate *d;
 };
 
 class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 {
-   CS_OBJECT(QMYSQLDriver)
-   friend class QMYSQLResult;
+   SQL_CS_OBJECT(QMYSQLDriver)
 
+   friend class QMYSQLResult;
+   Q_DECLARE_PRIVATE(QMYSQLDriver)
  public:
    explicit QMYSQLDriver(QObject *parent = nullptr);
    explicit QMYSQLDriver(MYSQL *con, QObject *parent = nullptr);
    ~QMYSQLDriver();
 
-   bool hasFeature(DriverFeature f) const;
-   bool open(const QString &db,
-             const QString &user,
-             const QString &password,
-             const QString &host,
-             int port,
-             const QString &connOpts);
-   void close();
+   bool hasFeature(DriverFeature f) const override;
+   bool open(const QString &db, const QString &user, const QString &password,
+      const QString &host, int port, const QString &connOpts) override;
+
+   void close() override;
 
    QSqlResult *createResult() const;
    QStringList tables(QSql::TableType) const;
    QSqlIndex primaryIndex(const QString &tablename) const;
    QSqlRecord record(const QString &tablename) const;
-   QString formatValue(const QSqlField &field,
-                       bool trimStrings) const;
-   QVariant handle() const;
-   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
 
- protected :
-   bool isIdentifierEscapedImplementation(const QString &identifier, IdentifierType type) const;
+   QString formatValue(const QSqlField &field, bool trimStrings) const override;
+   QVariant handle() const override;
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const override;
 
-   bool beginTransaction();
-   bool commitTransaction();
-   bool rollbackTransaction();
+   bool isIdentifierEscaped(const QString &identifier, IdentifierType type) const override;
+ protected:
+   bool beginTransaction() override;
+   bool commitTransaction() override;
+   bool rollbackTransaction() override;
 
  private:
    void init();
-   QMYSQLDriverPrivate *d;
 };
 
-QT_END_NAMESPACE
 
-#endif // QSQL_MYSQL_H
+#endif

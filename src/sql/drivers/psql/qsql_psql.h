@@ -35,8 +35,6 @@
 typedef struct pg_conn PGconn;
 typedef struct pg_result PGresult;
 
-QT_BEGIN_NAMESPACE
-
 class QPSQLResultPrivate;
 class QPSQLDriverPrivate;
 class QPSQLDriver;
@@ -44,10 +42,10 @@ class QSqlRecordInfo;
 
 class QPSQLResult : public QSqlResult
 {
-   friend class QPSQLResultPrivate;
+   Q_DECLARE_PRIVATE(QPSQLResult)
 
  public:
-   QPSQLResult(const QPSQLDriver *db, const QPSQLDriverPrivate *p);
+   QPSQLResult(const QPSQLDriver *db);
    ~QPSQLResult();
 
    QVariant handle() const;
@@ -55,26 +53,27 @@ class QPSQLResult : public QSqlResult
 
  protected:
    void cleanup();
-   bool fetch(int i);
-   bool fetchFirst();
-   bool fetchLast();
-   QVariant data(int i);
-   bool isNull(int field);
-   bool reset (const QString &query);
-   int size();
-   int numRowsAffected();
-   QSqlRecord record() const;
-   QVariant lastInsertId() const;
-   bool prepare(const QString &query);
-   bool exec();
+   bool fetch(int i) override;
+   bool fetchFirst() override;
+   bool fetchLast() override;
+   QVariant data(int i) override;
+   bool isNull(int field) override;
+   bool reset (const QString &query) override;
+   int size() override;
+   int numRowsAffected() override;
+   QSqlRecord record() const override;
+   QVariant lastInsertId() const override;
+   bool prepare(const QString &query) override;
+   bool exec() override;
 
- private:
-   QPSQLResultPrivate *d;
+
 };
 
 class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
 {
-   CS_OBJECT(QPSQLDriver)
+   SQL_CS_OBJECT(QPSQLDriver)
+
+   Q_DECLARE_PRIVATE(QPSQLDriver)
 
  public:
    enum Protocol {
@@ -96,9 +95,9 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    explicit QPSQLDriver(PGconn *conn, QObject *parent = nullptr);
    ~QPSQLDriver();
 
-   bool hasFeature(DriverFeature f) const;
-   bool open(const QString &db, const QString &user, const QString &password, const QString &host,
-             int port, const QString &connOpts);
+   bool hasFeature(DriverFeature f) const override;
+   bool open(const QString &db, const QString &user, const QString &password,
+      const QString &host, int port, const QString &connOpts) override;
 
    bool isOpen() const;
    void close();
@@ -108,28 +107,27 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    QSqlRecord record(const QString &tablename) const;
 
    Protocol protocol() const;
-   QVariant handle() const;
+   QVariant handle() const override;
 
    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
    QString formatValue(const QSqlField &field, bool trimStrings) const;
+
+   bool subscribeToNotification(const QString &name) override;
+   bool unsubscribeFromNotification(const QString &name) override;
+   QStringList subscribedToNotifications() const override;
 
  protected:
    bool beginTransaction();
    bool commitTransaction();
    bool rollbackTransaction();
 
-   bool subscribeToNotificationImplementation(const QString &name);
-   bool unsubscribeFromNotificationImplementation(const QString &name);
-   QStringList subscribedToNotificationsImplementation() const;
+   QPSQLDriverPrivate *d_ptr;
 
- private :
+ private:
    SQL_CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
    SQL_CS_SLOT_2(_q_handleNotification)
 
-   void init();
-   QPSQLDriverPrivate *d;
+   friend class QPSQLResultPrivate;
 };
-
-QT_END_NAMESPACE
 
 #endif // QSQL_PSQL_H

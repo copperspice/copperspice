@@ -70,7 +70,7 @@ class Q_EXPORT_SQLDRIVER_OCI QOCIResult : public QSqlCachedResult
 
 class Q_EXPORT_SQLDRIVER_OCI QOCIDriver : public QSqlDriver
 {
-   CS_OBJECT(QOCIDriver)
+   SQL_CS_OBJECT(QOCIDriver)
 
    friend struct QOCIResultPrivate;
    friend class QOCIPrivate;

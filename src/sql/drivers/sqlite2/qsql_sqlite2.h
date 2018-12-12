@@ -65,7 +65,7 @@ class QSQLite2Result : public QSqlCachedResult
 
 class QSQLite2Driver : public QSqlDriver
 {
-   CS_OBJECT(QSQLite2Driver)
+   SQL_CS_OBJECT(QSQLite2Driver)
    friend class QSQLite2Result;
 
  public:

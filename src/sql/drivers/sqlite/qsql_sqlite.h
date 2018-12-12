@@ -23,9 +23,8 @@
 #ifndef QSQL_SQLITE_H
 #define QSQL_SQLITE_H
 
-#include <QtSql/qsqldriver.h>
-#include <QtSql/qsqlresult.h>
-#include <qsqlcachedresult_p.h>
+#include <qsqldriver.h>
+#include <qsqlresult.h>
 
 struct sqlite3;
 
@@ -35,41 +34,14 @@ struct sqlite3;
 #define Q_EXPORT_SQLDRIVER_SQLITE Q_SQL_EXPORT
 #endif
 
-QT_BEGIN_NAMESPACE
 
 class QSQLiteDriverPrivate;
-class QSQLiteResultPrivate;
 class QSQLiteDriver;
-
-class QSQLiteResult : public QSqlCachedResult
-{
-   friend class QSQLiteDriver;
-   friend class QSQLiteResultPrivate;
-
- public:
-   explicit QSQLiteResult(const QSQLiteDriver *db);
-   ~QSQLiteResult();
-   QVariant handle() const override;
-
- protected:
-   bool gotoNext(QSqlCachedResult::ValueCache &row, int idx) override;
-   bool reset(const QString &query) override;
-   bool prepare(const QString &query) override;
-   bool exec() override;
-   int size() override;
-   int numRowsAffected() override;
-   QVariant lastInsertId() const override;
-   QSqlRecord record() const override;
-   void virtual_hook(int id, void *data) override;
-
- private:
-   QSQLiteResultPrivate *d;
-};
 
 class Q_EXPORT_SQLDRIVER_SQLITE QSQLiteDriver : public QSqlDriver
 {
-   CS_OBJECT(QSQLiteDriver)
-   friend class QSQLiteResult;
+   SQL_CS_OBJECT(QSQLiteDriver)
+   Q_DECLARE_PRIVATE(QSQLiteDriver)
 
  public:
    explicit QSQLiteDriver(QObject *parent = nullptr);
@@ -93,10 +65,10 @@ class Q_EXPORT_SQLDRIVER_SQLITE QSQLiteDriver : public QSqlDriver
    QVariant handle() const override;
    QString escapeIdentifier(const QString &identifier, IdentifierType) const override;
 
- private:
-   QSQLiteDriverPrivate *d;
+private:
+   friend class QSQLiteResult;
+
 };
 
-QT_END_NAMESPACE
 
 #endif // QSQL_SQLITE_H
