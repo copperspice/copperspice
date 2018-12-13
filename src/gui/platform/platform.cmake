@@ -6,35 +6,95 @@ set(GUI_PUBLIC_INCLUDES
 	QPlatform_Cursor
 	QPlatform_Drag
 	QPlatform_FontDatabase
+	QPlatform_GraphicsBuffer
 	QPlatform_Integration
+	QPlatform_InputContext
+	QPlatform_Menu
 	QPlatform_NativeInterface
 	QPlatform_OpenGLContext
 	QPlatform_Pixmap
 	QPlatform_Screen
+	QPlatform_Services
+	QPlatform_Surface
+	QPlatform_SystemTrayIcon
 	QPlatform_Theme
 	QPlatform_Window
-	QPlatform_WindowFormat
 )
 
 set(GUI_INCLUDES
-    ${GUI_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_fontdatabase.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.h
+   ${GUI_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_accessibility.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_backingstore.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_clipboard.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_cursor.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_dialoghelper.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_drag.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_fontdatabase.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_graphicsbuffer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_graphicsbufferhelper.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontext.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationplugin.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_menu.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_offscreensurface.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_openglcontext.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printdevice.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printersupport.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printplugin.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_services.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_sessionmanager.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_sharedgraphicscache.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_surface.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_systemtrayicon.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_theme.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_window.h
 )
 
 set(GUI_PRIVATE_INCLUDES
-    ${GUI_PRIVATE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen_p.h
+   ${GUI_PRIVATE_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationfactory_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_theme_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_themefactory_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_window_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcbfunctions/qxcbintegrationfunctions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcbfunctions/qxcbscreenfunctions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcbfunctions/qxcbwindowfunctions.h
 )
 
 set(GUI_SOURCES
-    ${GUI_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_fontdatabase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.cpp
+   ${GUI_SOURCES}
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_accessibility.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_backingstore.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_clipboard.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_cursor.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_dialoghelper.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_drag.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_fontdatabase.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_graphicsbuffer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_graphicsbufferhelper.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontext.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationfactory.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationplugin.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_menu.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_offscreensurface.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_openglcontext.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printdevice.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printersupport.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printplugin.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_services.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_sessionmanager.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_sharedgraphicscache.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_surface.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_systemtrayicon.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_theme.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_window.cpp
 )

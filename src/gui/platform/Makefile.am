@@ -34,11 +34,15 @@ GUI_PLATFORM_INCLUDES = \
 	qplatform_graphicsbufferhelper.h \
 	qplatform_inputcontext.h \
 	qplatform_integration.h \
+	qplatform_integrationplugin.h \
 	qplatform_menu.h \
 	qplatform_nativeinterface.h \
 	qplatform_offscreensurface.h \
 	qplatform_openglcontext.h \
 	qplatform_pixmap.h \
+	qplatform_printdevice.h \
+	qplatform_printersupport.h \
+	qplatform_printplugin.h \
 	qplatform_screen.h \
 	qplatform_services.h \
 	qplatform_sessionmanager.h \
@@ -50,10 +54,18 @@ GUI_PLATFORM_INCLUDES = \
 
 GUI_PLATFORM_PRIVATE_INCLUDES = \
 	qplatform_inputcontext_p.h \
-   qplatform_screen_p.h \
-   qplatform_theme_p.h \
+	qplatform_integrationfactory_p.h \
+	qplatform_screen_p.h \
+	qplatform_theme_p.h \
 	qplatform_themefactory_p.h \
-   qplatform_window_p.h
+	qplatform_window_p.h
+
+
+# GUI_PLATFORM_PRIVATE_INCLUDES +=   BROOM
+
+#	platformheaders/xcbfunctions/qxcbintegrationfunctions.h
+#	platformheaders/xcbfunctions/qxcbscreenfunctions.h
+#	platformheaders/xcbfunctions/qxcbwindowfunctions.h
 
 GUI_INCLUDES += $(GUI_PLATFORM_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_PLATFORM_PRIVATE_INCLUDES)
@@ -73,11 +85,16 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/platform/qplatform_graphicsbufferhelper.cpp \
 	src/gui/platform/qplatform_inputcontext.cpp \
 	src/gui/platform/qplatform_integration.cpp \
+	src/gui/platform/qplatform_integrationfactory.cpp \
+	src/gui/platform/qplatform_integrationplugin.cpp \
 	src/gui/platform/qplatform_menu.cpp \
 	src/gui/platform/qplatform_nativeinterface.cpp \
 	src/gui/platform/qplatform_offscreensurface.cpp \
 	src/gui/platform/qplatform_openglcontext.cpp \
 	src/gui/platform/qplatform_pixmap.cpp \
+	src/gui/platform/qplatform_printdevice.cpp \
+	src/gui/platform/qplatform_printersupport.cpp \
+	src/gui/platform/qplatform_printplugin.cpp \
 	src/gui/platform/qplatform_screen.cpp \
 	src/gui/platform/qplatform_services.cpp \
 	src/gui/platform/qplatform_sessionmanager.cpp \
