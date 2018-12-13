@@ -37,37 +37,41 @@ class Q_GUI_EXPORT QPlatformOpenGLContext
    Q_DECLARE_PRIVATE(QPlatformOpenGLContext)
 
  public:
-    using FP_Void = void(*)();
+   using FP_Void = void(*)();
 
-    QPlatformOpenGLContext();
-    virtual ~QPlatformOpenGLContext();
+   QPlatformOpenGLContext();
+   virtual ~QPlatformOpenGLContext();
 
-    virtual void initialize();
-    virtual QSurfaceFormat format() const = 0;
+   virtual void initialize();
+   virtual QSurfaceFormat format() const = 0;
 
-    virtual void swapBuffers(QPlatformSurface *surface) = 0;
+   virtual void swapBuffers(QPlatformSurface *surface) = 0;
 
-    virtual GLuint defaultFramebufferObject(QPlatformSurface *surface) const;
-    virtual bool makeCurrent(QPlatformSurface *surface) = 0;
-    virtual void doneCurrent() = 0;
+   virtual GLuint defaultFramebufferObject(QPlatformSurface *surface) const;
+   virtual bool makeCurrent(QPlatformSurface *surface) = 0;
+   virtual void doneCurrent() = 0;
 
-    virtual bool isSharing() const { return false; }
-    virtual bool isValid() const { return true; }
+   virtual bool isSharing() const {
+      return false;
+   }
+   virtual bool isValid() const {
+      return true;
+   }
 
-    virtual FP_Void getProcAddress(const QByteArray &procName) = 0;
+   virtual FP_Void getProcAddress(const QByteArray &procName) = 0;
 
-    QOpenGLContext *context() const;
-    static bool parseOpenGLVersion(const QByteArray &versionString, int &major, int &minor);
+   QOpenGLContext *context() const;
+   static bool parseOpenGLVersion(const QByteArray &versionString, int &major, int &minor);
 
  protected:
    QScopedPointer<QPlatformOpenGLContextPrivate> d_ptr;
 
  private:
-    friend class QOpenGLContext;
+   friend class QOpenGLContext;
 
-    void setContext(QOpenGLContext *context);
+   void setContext(QOpenGLContext *context);
 
-    Q_DISABLE_COPY(QPlatformOpenGLContext)
+   Q_DISABLE_COPY(QPlatformOpenGLContext)
 };
 
 #endif  // no-opengl

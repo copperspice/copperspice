@@ -32,62 +32,63 @@
 
 QPlatformPixmap *QPlatformPixmap::create(int w, int h, PixelType type)
 {
-    QPlatformPixmap *data = QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(static_cast<QPlatformPixmap::PixelType>(type));
-    data->resize(w, h);
-    return data;
+   QPlatformPixmap *data = QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(static_cast<QPlatformPixmap::PixelType>
+         (type));
+   data->resize(w, h);
+   return data;
 }
 
 QPlatformPixmap::QPlatformPixmap(PixelType pixelType, int objectId)
-    : w(0),
-      h(0),
-      d(0),
-      is_null(true),
-      ref(0),
-      detach_no(0),
-      type(pixelType),
-      id(objectId),
-      ser_no(0),
-      is_cached(false)
+   : w(0),
+     h(0),
+     d(0),
+     is_null(true),
+     ref(0),
+     detach_no(0),
+     type(pixelType),
+     id(objectId),
+     ser_no(0),
+     is_cached(false)
 {
 }
 
 QPlatformPixmap::~QPlatformPixmap()
 {
-    // Sometimes the pixmap cleanup hooks will be called from derrived classes, which will
-    // then set is_cached to false. For example, on X11 Qt GUI needs to delete the GLXPixmap
-    // or EGL Pixmap Surface for a given pixmap _before_ the native X11 pixmap is deleted,
-    // otherwise some drivers will leak the GL surface. In this case, QX11PlatformPixmap will
-    // call the cleanup hooks itself before deleting the native pixmap and set is_cached to false.
-    if (is_cached) {
-        QImagePixmapCleanupHooks::executePlatformPixmapDestructionHooks(this);
-        is_cached = false;
-    }
+   // Sometimes the pixmap cleanup hooks will be called from derrived classes, which will
+   // then set is_cached to false. For example, on X11 Qt GUI needs to delete the GLXPixmap
+   // or EGL Pixmap Surface for a given pixmap _before_ the native X11 pixmap is deleted,
+   // otherwise some drivers will leak the GL surface. In this case, QX11PlatformPixmap will
+   // call the cleanup hooks itself before deleting the native pixmap and set is_cached to false.
+   if (is_cached) {
+      QImagePixmapCleanupHooks::executePlatformPixmapDestructionHooks(this);
+      is_cached = false;
+   }
 }
 
 QPlatformPixmap *QPlatformPixmap::createCompatiblePlatformPixmap() const
 {
-    QPlatformPixmap *d = QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(pixelType());
-    return d;
+   QPlatformPixmap *d = QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(pixelType());
+   return d;
 }
 
 static QImage makeBitmapCompliantIfNeeded(QPlatformPixmap *d, const QImage &image, Qt::ImageConversionFlags flags)
 {
-    if (d->pixelType() == QPlatformPixmap::BitmapType) {
-        QImage img = image.convertToFormat(QImage::Format_MonoLSB, flags);
+   if (d->pixelType() == QPlatformPixmap::BitmapType) {
+      QImage img = image.convertToFormat(QImage::Format_MonoLSB, flags);
 
-        // make sure image.color(0) == Qt::color0 (white)
-        // and image.color(1) == Qt::color1 (black)
-        const QRgb c0 = QColor(Qt::black).rgb();
-        const QRgb c1 = QColor(Qt::white).rgb();
-        if (img.color(0) == c0 && img.color(1) == c1) {
-            img.invertPixels();
-            img.setColor(0, c1);
-            img.setColor(1, c0);
-        }
-        return img;
-    }
+      // make sure image.color(0) == Qt::color0 (white)
+      // and image.color(1) == Qt::color1 (black)
+      const QRgb c0 = QColor(Qt::black).rgb();
+      const QRgb c1 = QColor(Qt::white).rgb();
+      if (img.color(0) == c0 && img.color(1) == c1) {
+         img.invertPixels();
+         img.setColor(0, c1);
+         img.setColor(1, c0);
+      }
+      return img;
+   }
 
-    return image;
+   return image;
 }
 
 void QPlatformPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags)
@@ -97,66 +98,69 @@ void QPlatformPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConver
 }
 
 bool QPlatformPixmap::fromFile(const QString &fileName, const char *format,
-                           Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
-    QImage image = QImageReader(fileName, format).read();
-    if (image.isNull())
-        return false;
-    fromImage(makeBitmapCompliantIfNeeded(this, image, flags), flags);
+   QImage image = QImageReader(fileName, format).read();
+   if (image.isNull()) {
+      return false;
+   }
+   fromImage(makeBitmapCompliantIfNeeded(this, image, flags), flags);
 
-    return !isNull();
+   return !isNull();
 }
 
 bool QPlatformPixmap::fromData(const uchar *buf, uint len, const char *format, Qt::ImageConversionFlags flags)
 {
-    QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(buf), len);
-    QBuffer b(&a);
-    b.open(QIODevice::ReadOnly);
-    QImage image = QImageReader(&b, format).read();
+   QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(buf), len);
+   QBuffer b(&a);
+   b.open(QIODevice::ReadOnly);
+   QImage image = QImageReader(&b, format).read();
 
-    if (image.isNull())
-        return false;
-    fromImage(makeBitmapCompliantIfNeeded(this, image, flags), flags);
+   if (image.isNull()) {
+      return false;
+   }
+   fromImage(makeBitmapCompliantIfNeeded(this, image, flags), flags);
 
-    return !isNull();
+   return !isNull();
 }
 
 void QPlatformPixmap::copy(const QPlatformPixmap *data, const QRect &rect)
 {
-    fromImage(data->toImage(rect), Qt::NoOpaqueDetection);
+   fromImage(data->toImage(rect), Qt::NoOpaqueDetection);
 }
 
 bool QPlatformPixmap::scroll(int dx, int dy, const QRect &rect)
 {
-    return false;
+   return false;
 }
 
 QPixmap QPlatformPixmap::transformed(const QTransform &matrix, Qt::TransformationMode mode) const
 {
-    return QPixmap::fromImage(toImage().transformed(matrix, mode));
+   return QPixmap::fromImage(toImage().transformed(matrix, mode));
 }
 
 void QPlatformPixmap::setSerialNumber(int serNo)
 {
-    ser_no = serNo;
+   ser_no = serNo;
 }
 
 void QPlatformPixmap::setDetachNumber(int detNo)
 {
-    detach_no = detNo;
+   detach_no = detNo;
 }
 
 QImage QPlatformPixmap::toImage(const QRect &rect) const
 {
-    if (rect.contains(QRect(0, 0, w, h)))
-        return toImage();
-    else
-        return toImage().copy(rect);
+   if (rect.contains(QRect(0, 0, w, h))) {
+      return toImage();
+   } else {
+      return toImage().copy(rect);
+   }
 }
 
-QImage* QPlatformPixmap::buffer()
+QImage *QPlatformPixmap::buffer()
 {
-    return 0;
+   return 0;
 }
 
 

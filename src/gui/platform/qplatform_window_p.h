@@ -27,8 +27,8 @@
 
 class QPlatformWindowPrivate
 {
-public:
-    QRect rect;
+ public:
+   QRect rect;
 };
 
 

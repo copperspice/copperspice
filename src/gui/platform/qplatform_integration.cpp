@@ -44,7 +44,7 @@ QPlatformFontDatabase *QPlatformIntegration::fontDatabase() const
    static QPlatformFontDatabase *db = nullptr;
 
    if (! db) {
-     db = new QPlatformFontDatabase;
+      db = new QPlatformFontDatabase;
    }
 
    return db;
@@ -54,11 +54,11 @@ QPlatformFontDatabase *QPlatformIntegration::fontDatabase() const
 
 QPlatformClipboard *QPlatformIntegration::clipboard() const
 {
-    static QPlatformClipboard *clipboard = nullptr;
-    if (!clipboard) {
-        clipboard = new QPlatformClipboard;
-    }
-    return clipboard;
+   static QPlatformClipboard *clipboard = nullptr;
+   if (!clipboard) {
+      clipboard = new QPlatformClipboard;
+   }
+   return clipboard;
 }
 
 #endif
@@ -68,50 +68,50 @@ QPlatformClipboard *QPlatformIntegration::clipboard() const
 
 QPlatformDrag *QPlatformIntegration::drag() const
 {
-    static QSimpleDrag *drag = 0;
-    if (!drag) {
-        drag = new QSimpleDrag;
-    }
-    return drag;
+   static QSimpleDrag *drag = 0;
+   if (!drag) {
+      drag = new QSimpleDrag;
+   }
+   return drag;
 }
 
 #endif
 
-QPlatformNativeInterface * QPlatformIntegration::nativeInterface() const
+QPlatformNativeInterface *QPlatformIntegration::nativeInterface() const
 {
-    return 0;
+   return 0;
 }
 
 QPlatformServices *QPlatformIntegration::services() const
 {
-    return 0;
+   return 0;
 }
 bool QPlatformIntegration::hasCapability(Capability cap) const
 {
-    return cap == NonFullScreenWindows || cap == NativeWidgets || cap == WindowManagement;
+   return cap == NonFullScreenWindows || cap == NativeWidgets || cap == WindowManagement;
 }
 QPlatformPixmap *QPlatformIntegration::createPlatformPixmap(QPlatformPixmap::PixelType type) const
 {
-    return new QRasterPlatformPixmap(type);
+   return new QRasterPlatformPixmap(type);
 }
 #ifndef QT_NO_OPENGL
 
 QPlatformOpenGLContext *QPlatformIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
-    qWarning("This plugin does not support createPlatformOpenGLContext");
-    return 0;
+   qWarning("This plugin does not support createPlatformOpenGLContext");
+   return 0;
 }
 #endif
 QPlatformSharedGraphicsCache *QPlatformIntegration::createPlatformSharedGraphicsCache(const char *cacheId) const
 {
-    qWarning("This plugin does not support createPlatformSharedGraphicsBuffer for cacheId: %s",
-             cacheId);
-    return 0;
+   qWarning("This plugin does not support createPlatformSharedGraphicsBuffer for cacheId: %s",
+      cacheId);
+   return 0;
 }
 QPaintEngine *QPlatformIntegration::createImagePaintEngine(QPaintDevice *paintDevice) const
 {
-    Q_UNUSED(paintDevice)
-    return 0;
+   Q_UNUSED(paintDevice)
+   return 0;
 }
 void QPlatformIntegration::initialize()
 {
@@ -121,124 +121,129 @@ void QPlatformIntegration::destroy()
 }
 QPlatformInputContext *QPlatformIntegration::inputContext() const
 {
-    return 0;
+   return 0;
 }
 #ifndef QT_NO_ACCESSIBILITY
 QPlatformAccessibility *QPlatformIntegration::accessibility() const
 {
-    return 0;
+   return 0;
 }
 #endif
 
 QVariant QPlatformIntegration::styleHint(StyleHint hint) const
 {
-    switch (hint) {
-    case CursorFlashTime:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::CursorFlashTime);
-    case KeyboardInputInterval:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::KeyboardInputInterval);
-    case KeyboardAutoRepeatRate:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::KeyboardAutoRepeatRate);
-    case MouseDoubleClickInterval:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::MouseDoubleClickInterval);
-    case StartDragDistance:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::StartDragDistance);
-    case StartDragTime:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::StartDragTime);
-    case ShowIsFullScreen:
-        return false;
-    case ShowIsMaximized:
-        return false;
-    case PasswordMaskDelay:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::PasswordMaskDelay);
-    case PasswordMaskCharacter:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::PasswordMaskCharacter);
-    case FontSmoothingGamma:
-        return qreal(1.7);
-    case StartDragVelocity:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::StartDragVelocity);
-    case UseRtlExtensions:
-        return QVariant(false);
-    case SetFocusOnTouchRelease:
-        return QVariant(false);
-    case MousePressAndHoldInterval:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::MousePressAndHoldInterval);
-    case TabFocusBehavior:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::TabFocusBehavior);
-    case ReplayMousePressOutsidePopup:
-        return true;
-    case ItemViewActivateItemOnSingleClick:
-        return QPlatformTheme::defaultThemeHint(QPlatformTheme::ItemViewActivateItemOnSingleClick);
-    }
+   switch (hint) {
+      case CursorFlashTime:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::CursorFlashTime);
+      case KeyboardInputInterval:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::KeyboardInputInterval);
+      case KeyboardAutoRepeatRate:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::KeyboardAutoRepeatRate);
+      case MouseDoubleClickInterval:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::MouseDoubleClickInterval);
+      case StartDragDistance:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::StartDragDistance);
+      case StartDragTime:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::StartDragTime);
+      case ShowIsFullScreen:
+         return false;
+      case ShowIsMaximized:
+         return false;
+      case PasswordMaskDelay:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::PasswordMaskDelay);
+      case PasswordMaskCharacter:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::PasswordMaskCharacter);
+      case FontSmoothingGamma:
+         return qreal(1.7);
+      case StartDragVelocity:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::StartDragVelocity);
+      case UseRtlExtensions:
+         return QVariant(false);
+      case SetFocusOnTouchRelease:
+         return QVariant(false);
+      case MousePressAndHoldInterval:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::MousePressAndHoldInterval);
+      case TabFocusBehavior:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::TabFocusBehavior);
+      case ReplayMousePressOutsidePopup:
+         return true;
+      case ItemViewActivateItemOnSingleClick:
+         return QPlatformTheme::defaultThemeHint(QPlatformTheme::ItemViewActivateItemOnSingleClick);
+   }
 
-    return 0;
+   return 0;
 }
 Qt::WindowState QPlatformIntegration::defaultWindowState(Qt::WindowFlags flags) const
 {
-    if (flags & Qt::Popup & ~Qt::Window)
-        return Qt::WindowNoState;
-    if (styleHint(QPlatformIntegration::ShowIsFullScreen).toBool())
-        return Qt::WindowFullScreen;
-    else if (styleHint(QPlatformIntegration::ShowIsMaximized).toBool())
-        return Qt::WindowMaximized;
-    return Qt::WindowNoState;
+   if (flags & Qt::Popup & ~Qt::Window) {
+      return Qt::WindowNoState;
+   }
+   if (styleHint(QPlatformIntegration::ShowIsFullScreen).toBool()) {
+      return Qt::WindowFullScreen;
+   } else if (styleHint(QPlatformIntegration::ShowIsMaximized).toBool()) {
+      return Qt::WindowMaximized;
+   }
+   return Qt::WindowNoState;
 }
 Qt::KeyboardModifiers QPlatformIntegration::queryKeyboardModifiers() const
 {
-    return QGuiApplication::keyboardModifiers();
+   return QGuiApplication::keyboardModifiers();
 }
 QList<int> QPlatformIntegration::possibleKeys(const QKeyEvent *) const
 {
-    return QList<int>();
+   return QList<int>();
 }
 void QPlatformIntegration::screenAdded(QPlatformScreen *ps, bool isPrimary)
 {
-    QScreen *screen = new QScreen(ps);
-    if (isPrimary) {
-        QGuiApplicationPrivate::screen_list.prepend(screen);
-    } else {
-        QGuiApplicationPrivate::screen_list.append(screen);
-    }
-    emit qGuiApp->screenAdded(screen);
-    if (isPrimary)
-        emit qGuiApp->primaryScreenChanged(screen);
+   QScreen *screen = new QScreen(ps);
+   if (isPrimary) {
+      QGuiApplicationPrivate::screen_list.prepend(screen);
+   } else {
+      QGuiApplicationPrivate::screen_list.append(screen);
+   }
+   emit qGuiApp->screenAdded(screen);
+   if (isPrimary) {
+      emit qGuiApp->primaryScreenChanged(screen);
+   }
 }
 void QPlatformIntegration::removeScreen(QScreen *screen)
 {
-    const bool wasPrimary = (!QGuiApplicationPrivate::screen_list.isEmpty() && QGuiApplicationPrivate::screen_list[0] == screen);
-    QGuiApplicationPrivate::screen_list.removeOne(screen);
-    if (wasPrimary && qGuiApp && !QGuiApplicationPrivate::screen_list.isEmpty())
-        emit qGuiApp->primaryScreenChanged(QGuiApplicationPrivate::screen_list[0]);
+   const bool wasPrimary = (!QGuiApplicationPrivate::screen_list.isEmpty() && QGuiApplicationPrivate::screen_list[0] == screen);
+   QGuiApplicationPrivate::screen_list.removeOne(screen);
+   if (wasPrimary && qGuiApp && !QGuiApplicationPrivate::screen_list.isEmpty()) {
+      emit qGuiApp->primaryScreenChanged(QGuiApplicationPrivate::screen_list[0]);
+   }
 }
 void QPlatformIntegration::destroyScreen(QPlatformScreen *screen)
 {
-    QScreen *qScreen = screen->screen();
-    removeScreen(qScreen);
-    delete qScreen;
-    delete screen;
+   QScreen *qScreen = screen->screen();
+   removeScreen(qScreen);
+   delete qScreen;
+   delete screen;
 }
 void QPlatformIntegration::setPrimaryScreen(QPlatformScreen *newPrimary)
 {
-    QScreen* newPrimaryScreen = newPrimary->screen();
-    int idx = QGuiApplicationPrivate::screen_list.indexOf(newPrimaryScreen);
-    Q_ASSERT(idx >= 0);
+   QScreen *newPrimaryScreen = newPrimary->screen();
+   int idx = QGuiApplicationPrivate::screen_list.indexOf(newPrimaryScreen);
+   Q_ASSERT(idx >= 0);
 
-    if (idx == 0)
-        return;
-    QGuiApplicationPrivate::screen_list.swap(0, idx);
-    emit qGuiApp->primaryScreenChanged(newPrimaryScreen);
+   if (idx == 0) {
+      return;
+   }
+   QGuiApplicationPrivate::screen_list.swap(0, idx);
+   emit qGuiApp->primaryScreenChanged(newPrimaryScreen);
 }
 QStringList QPlatformIntegration::themeNames() const
 {
-    return QStringList();
+   return QStringList();
 }
 class QPlatformTheme *QPlatformIntegration::createPlatformTheme(const QString &name) const
 {
-    return new QPlatformTheme;
+   return new QPlatformTheme;
 }
 QPlatformOffscreenSurface *QPlatformIntegration::createPlatformOffscreenSurface(QOffscreenSurface *surface) const
 {
-    return 0;
+   return 0;
 }
 
 #ifndef QT_NO_SESSIONMANAGER
@@ -248,7 +253,7 @@ QPlatformOffscreenSurface *QPlatformIntegration::createPlatformOffscreenSurface(
 
 QPlatformSessionManager *QPlatformIntegration::createPlatformSessionManager(const QString &id, const QString &key) const
 {
-    return new QPlatformSessionManager(id, key);
+   return new QPlatformSessionManager(id, key);
 }
 
 
@@ -263,8 +268,8 @@ void QPlatformIntegration::sync()
 
 QOpenGLContext::OpenGLModuleType QPlatformIntegration::openGLModuleType()
 {
-    qWarning("This plugin does not support dynamic OpenGL loading");
-    return QOpenGLContext::LibGL;
+   qWarning("This plugin does not support dynamic OpenGL loading");
+   return QOpenGLContext::LibGL;
 }
 
 #endif

@@ -38,28 +38,30 @@
 #endif
 
 bool QPlatformGraphicsBufferHelper::lockAndBindToTexture(QPlatformGraphicsBuffer *graphicsBuffer,
-                                                         bool *swizzle, bool *premultiplied,
-                                                         const QRect &rect)
+   bool *swizzle, bool *premultiplied,
+   const QRect &rect)
 {
-    if (graphicsBuffer->lock(QPlatformGraphicsBuffer::TextureAccess)) {
-        if (!graphicsBuffer->bindToTexture(rect)) {
-            qWarning("Failed to bind %sgraphicsbuffer to texture", "");
-            return false;
-        }
-        if (swizzle)
-            *swizzle = false;
-        if (premultiplied)
-            *premultiplied = false;
-    } else if (graphicsBuffer->lock(QPlatformGraphicsBuffer::SWReadAccess)) {
-        if (!bindSWToTexture(graphicsBuffer, swizzle, premultiplied, rect)) {
-            qWarning("Failed to bind %sgraphicsbuffer to texture", "SW ");
-            return false;
-        }
-    } else {
-        qWarning("Failed to lock");
-        return false;
-    }
-    return true;
+   if (graphicsBuffer->lock(QPlatformGraphicsBuffer::TextureAccess)) {
+      if (!graphicsBuffer->bindToTexture(rect)) {
+         qWarning("Failed to bind %sgraphicsbuffer to texture", "");
+         return false;
+      }
+      if (swizzle) {
+         *swizzle = false;
+      }
+      if (premultiplied) {
+         *premultiplied = false;
+      }
+   } else if (graphicsBuffer->lock(QPlatformGraphicsBuffer::SWReadAccess)) {
+      if (!bindSWToTexture(graphicsBuffer, swizzle, premultiplied, rect)) {
+         qWarning("Failed to bind %sgraphicsbuffer to texture", "SW ");
+         return false;
+      }
+   } else {
+      qWarning("Failed to lock");
+      return false;
+   }
+   return true;
 }
 
 /*!
@@ -85,122 +87,127 @@ bool QPlatformGraphicsBufferHelper::lockAndBindToTexture(QPlatformGraphicsBuffer
     Returns true on success, otherwise false.
 */
 bool QPlatformGraphicsBufferHelper::bindSWToTexture(const QPlatformGraphicsBuffer *graphicsBuffer,
-                                                    bool *swizzleRandB, bool *premultipliedB,
-                                                    const QRect &subRect)
+   bool *swizzleRandB, bool *premultipliedB,
+   const QRect &subRect)
 {
 #ifndef QT_NO_OPENGL
-    QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    if (!ctx)
-        return false;
+   QOpenGLContext *ctx = QOpenGLContext::currentContext();
+   if (!ctx) {
+      return false;
+   }
 
-    if (!(graphicsBuffer->isLocked() & QPlatformGraphicsBuffer::SWReadAccess))
-        return false;
+   if (!(graphicsBuffer->isLocked() & QPlatformGraphicsBuffer::SWReadAccess)) {
+      return false;
+   }
 
-    QSize size = graphicsBuffer->size();
+   QSize size = graphicsBuffer->size();
 
-    Q_ASSERT(subRect.isEmpty() || QRect(QPoint(0,0), size).contains(subRect));
+   Q_ASSERT(subRect.isEmpty() || QRect(QPoint(0, 0), size).contains(subRect));
 
-    GLenum internalFormat = GL_RGBA;
-    GLuint pixelType = GL_UNSIGNED_BYTE;
+   GLenum internalFormat = GL_RGBA;
+   GLuint pixelType = GL_UNSIGNED_BYTE;
 
-    bool needsConversion = false;
-    bool swizzle = false;
-    bool premultiplied = false;
-    QImage::Format imageformat = QImage::toImageFormat(graphicsBuffer->format());
-    QImage image(graphicsBuffer->data(), size.width(), size.height(), graphicsBuffer->bytesPerLine(), imageformat);
-    if (graphicsBuffer->bytesPerLine() != (size.width() * 4)) {
-        needsConversion = true;
-    } else {
-        switch (imageformat) {
-        case QImage::Format_ARGB32_Premultiplied:
+   bool needsConversion = false;
+   bool swizzle = false;
+   bool premultiplied = false;
+   QImage::Format imageformat = QImage::toImageFormat(graphicsBuffer->format());
+   QImage image(graphicsBuffer->data(), size.width(), size.height(), graphicsBuffer->bytesPerLine(), imageformat);
+   if (graphicsBuffer->bytesPerLine() != (size.width() * 4)) {
+      needsConversion = true;
+   } else {
+      switch (imageformat) {
+         case QImage::Format_ARGB32_Premultiplied:
             premultiplied = true;
-            // no break
-        case QImage::Format_RGB32:
-        case QImage::Format_ARGB32:
+         // no break
+         case QImage::Format_RGB32:
+         case QImage::Format_ARGB32:
             swizzle = true;
             break;
-        case QImage::Format_RGBA8888_Premultiplied:
+         case QImage::Format_RGBA8888_Premultiplied:
             premultiplied = true;
-            // no break
-        case QImage::Format_RGBX8888:
-        case QImage::Format_RGBA8888:
+         // no break
+         case QImage::Format_RGBX8888:
+         case QImage::Format_RGBA8888:
             break;
-        case QImage::Format_BGR30:
-        case QImage::Format_A2BGR30_Premultiplied:
+         case QImage::Format_BGR30:
+         case QImage::Format_A2BGR30_Premultiplied:
             if (!ctx->isOpenGLES() || ctx->format().majorVersion() >= 3) {
-                pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
-                internalFormat = GL_RGB10_A2;
-                premultiplied = true;
+               pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
+               internalFormat = GL_RGB10_A2;
+               premultiplied = true;
             } else {
-                needsConversion = true;
+               needsConversion = true;
             }
             break;
-        case QImage::Format_RGB30:
-        case QImage::Format_A2RGB30_Premultiplied:
+         case QImage::Format_RGB30:
+         case QImage::Format_A2RGB30_Premultiplied:
             if (!ctx->isOpenGLES() || ctx->format().majorVersion() >= 3) {
-                pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
-                internalFormat = GL_RGB10_A2;
-                premultiplied = true;
-                swizzle = true;
+               pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
+               internalFormat = GL_RGB10_A2;
+               premultiplied = true;
+               swizzle = true;
             } else {
-                needsConversion = true;
+               needsConversion = true;
             }
             break;
-        default:
+         default:
             needsConversion = true;
             break;
-        }
-    }
-    if (needsConversion)
-        image = image.convertToFormat(QImage::Format_RGBA8888);
+      }
+   }
+   if (needsConversion) {
+      image = image.convertToFormat(QImage::Format_RGBA8888);
+   }
 
-    QOpenGLFunctions *funcs = ctx->functions();
+   QOpenGLFunctions *funcs = ctx->functions();
 
-    QRect rect = subRect;
-    if (rect.isNull() || rect == QRect(QPoint(0,0),size)) {
-        funcs->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, size.width(), size.height(), 0, GL_RGBA, pixelType, image.constBits());
-    } else {
+   QRect rect = subRect;
+   if (rect.isNull() || rect == QRect(QPoint(0, 0), size)) {
+      funcs->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, size.width(), size.height(), 0, GL_RGBA, pixelType, image.constBits());
+   } else {
 #ifndef QT_OPENGL_ES_2
-        if (!ctx->isOpenGLES()) {
-            funcs->glPixelStorei(GL_UNPACK_ROW_LENGTH, image.width());
-            funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, rect.x(), rect.y(), rect.width(), rect.height(), GL_RGBA, pixelType,
-                                   image.constScanLine(rect.y()) + rect.x() * 4);
-            funcs->glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-        } else
+      if (!ctx->isOpenGLES()) {
+         funcs->glPixelStorei(GL_UNPACK_ROW_LENGTH, image.width());
+         funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, rect.x(), rect.y(), rect.width(), rect.height(), GL_RGBA, pixelType,
+            image.constScanLine(rect.y()) + rect.x() * 4);
+         funcs->glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+      } else
 #endif
-        {
-            // if the rect is wide enough it's cheaper to just
-            // extend it instead of doing an image copy
-            if (rect.width() >= size.width() / 2) {
-                rect.setX(0);
-                rect.setWidth(size.width());
-            }
+      {
+         // if the rect is wide enough it's cheaper to just
+         // extend it instead of doing an image copy
+         if (rect.width() >= size.width() / 2) {
+            rect.setX(0);
+            rect.setWidth(size.width());
+         }
 
-            // if the sub-rect is full-width we can pass the image data directly to
-            // OpenGL instead of copying, since there's no gap between scanlines
+         // if the sub-rect is full-width we can pass the image data directly to
+         // OpenGL instead of copying, since there's no gap between scanlines
 
-            if (rect.width() == size.width()) {
-                funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, 0, rect.y(), rect.width(), rect.height(), GL_RGBA, pixelType,
-                                       image.constScanLine(rect.y()));
-            } else {
-                funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, rect.x(), rect.y(), rect.width(), rect.height(), GL_RGBA, pixelType,
-                                       image.copy(rect).constBits());
-            }
-        }
-    }
-    if (swizzleRandB)
-        *swizzleRandB = swizzle;
-    if (premultipliedB)
-        *premultipliedB = premultiplied;
+         if (rect.width() == size.width()) {
+            funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, 0, rect.y(), rect.width(), rect.height(), GL_RGBA, pixelType,
+               image.constScanLine(rect.y()));
+         } else {
+            funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, rect.x(), rect.y(), rect.width(), rect.height(), GL_RGBA, pixelType,
+               image.copy(rect).constBits());
+         }
+      }
+   }
+   if (swizzleRandB) {
+      *swizzleRandB = swizzle;
+   }
+   if (premultipliedB) {
+      *premultipliedB = premultiplied;
+   }
 
-    return true;
+   return true;
 
 #else
-    Q_UNUSED(graphicsBuffer)
-    Q_UNUSED(swizzleRandB)
-    Q_UNUSED(premultipliedB)
-    Q_UNUSED(subRect)
-    return false;
+   Q_UNUSED(graphicsBuffer)
+   Q_UNUSED(swizzleRandB)
+   Q_UNUSED(premultipliedB)
+   Q_UNUSED(subRect)
+   return false;
 
 #endif // QT_NO_OPENGL
 }

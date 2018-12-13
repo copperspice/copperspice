@@ -27,35 +27,27 @@
 #include <qkeymapper_p.h>
 #include <qplatform_inputcontext_p.h>
 
-/*!
-    \internal
- */
+bool QPlatformInputContextPrivate::s_inputMethodAccepted = false;
+
 QPlatformInputContext::QPlatformInputContext()
-    : QObject(*(new QPlatformInputContextPrivate))
+   : d_ptr(new QPlatformInputContextPrivate)
 {
+   d_ptr->q_ptr = this;
 }
 
-/*!
-    \internal
- */
 QPlatformInputContext::~QPlatformInputContext()
 {
 }
 
-
 bool QPlatformInputContext::isValid() const
 {
-    return false;
+   return false;
 }
-
 
 bool QPlatformInputContext::hasCapability(Capability capability) const
 {
-    Q_UNUSED(capability)
-    return true;
+   return true;
 }
-
-
 void QPlatformInputContext::reset()
 {
 }
@@ -69,43 +61,39 @@ void QPlatformInputContext::update(Qt::InputMethodQueries)
 {
 }
 
-
 void QPlatformInputContext::invokeAction(QInputMethod::Action action, int cursorPosition)
 {
-    Q_UNUSED(cursorPosition)
-    // Default behavior for simple ephemeral input contexts. Some
-    // complex input contexts should not be reset here.
-    if (action == QInputMethod::Click)
-        reset();
+   // Default behavior for simple ephemeral input contexts. Some
+   // complex input contexts should not be reset here.
+   if (action == QInputMethod::Click) {
+      reset();
+   }
 }
 
 bool QPlatformInputContext::filterEvent(const QEvent *event)
 {
-    Q_UNUSED(event)
-    return false;
+   return false;
 }
-
 
 QRectF QPlatformInputContext::keyboardRect() const
 {
-    return QRectF();
+   return QRectF();
 }
 
 void QPlatformInputContext::emitKeyboardRectChanged()
 {
-    emit QGuiApplication::inputMethod()->keyboardRectangleChanged();
+   emit QGuiApplication::inputMethod()->keyboardRectangleChanged();
 }
 
 
 bool QPlatformInputContext::isAnimating() const
 {
-    return false;
+   return false;
 }
-
 
 void QPlatformInputContext::emitAnimatingChanged()
 {
-    emit QGuiApplication::inputMethod()->animatingChanged();
+   emit QGuiApplication::inputMethod()->animatingChanged();
 }
 
 void QPlatformInputContext::showInputPanel()
@@ -117,65 +105,47 @@ void QPlatformInputContext::hideInputPanel()
 {
 }
 
-/*!
-    Returns input panel visibility status. Default implementation returns \c false.
- */
 bool QPlatformInputContext::isInputPanelVisible() const
 {
-    return false;
+   return false;
 }
 
-/*!
-    Active QPlatformInputContext is responsible for providing visible property to QInputMethod.
-    In addition of providing the value in isInputPanelVisible function, it also needs to call this emit
-    function whenever the property changes.
- */
 void QPlatformInputContext::emitInputPanelVisibleChanged()
 {
-    emit QGuiApplication::inputMethod()->visibleChanged();
+   emit QGuiApplication::inputMethod()->visibleChanged();
 }
 
 QLocale QPlatformInputContext::locale() const
 {
-    return qt_keymapper_private()->keyboardInputLocale;
+   return qt_keymapper_private()->keyboardInputLocale;
 }
 
 void QPlatformInputContext::emitLocaleChanged()
 {
-    emit QGuiApplication::inputMethod()->localeChanged();
+   emit QGuiApplication::inputMethod()->localeChanged();
 }
 
 Qt::LayoutDirection QPlatformInputContext::inputDirection() const
 {
-    return qt_keymapper_private()->keyboardInputDirection;
+   return qt_keymapper_private()->keyboardInputDirection;
 }
 
 void QPlatformInputContext::emitInputDirectionChanged(Qt::LayoutDirection newDirection)
 {
-    emit QGuiApplication::inputMethod()->inputDirectionChanged(newDirection);
+   emit QGuiApplication::inputMethod()->inputDirectionChanged(newDirection);
 }
 
-/*!
-    This virtual method gets called to notify updated focus to \a object.
-    \warning Input methods must not call this function directly.
- */
 void QPlatformInputContext::setFocusObject(QObject *object)
 {
-    Q_UNUSED(object)
 }
 
-/*!
-    Returns \c true if current focus object supports input method events.
- */
 bool QPlatformInputContext::inputMethodAccepted() const
 {
-    return QPlatformInputContextPrivate::s_inputMethodAccepted;
+   return QPlatformInputContextPrivate::s_inputMethodAccepted;
 }
-
-bool QPlatformInputContextPrivate::s_inputMethodAccepted = false;
 
 void QPlatformInputContextPrivate::setInputMethodAccepted(bool accepted)
 {
-    QPlatformInputContextPrivate::s_inputMethodAccepted = accepted;
+   QPlatformInputContextPrivate::s_inputMethodAccepted = accepted;
 }
 

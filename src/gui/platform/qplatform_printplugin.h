@@ -20,31 +20,27 @@
 *
 ***********************************************************************/
 
-#include <qplatform_services.h>
+#ifndef QPLATFORMPRINTPLUGIN_H
+#define QPLATFORMPRINTPLUGIN_H
 
-#include <qurl.h>
-#include <qstring.h>
-#include <qdebug.h>
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
-QPlatformServices::QPlatformServices()
-{ }
+class QPlatformPrinterSupport;
 
-bool QPlatformServices::openUrl(const QUrl &url)
+#define QPlatformPrinterSupportFactoryInterface_iid "com.copperspice.QPlatformPrinterSupportFactoryInterface"
+
+class Q_GUI_EXPORT QPlatformPrinterSupportPlugin : public QObject
 {
-   qWarning("This plugin does not support QPlatformServices::openUrl() for '%s'.",
-      qPrintable(url.toString()));
-   return false;
-}
+    GUI_CS_OBJECT(QPlatformPrinterSupportPlugin)
 
-bool QPlatformServices::openDocument(const QUrl &url)
-{
-   qWarning("This plugin does not support QPlatformServices::openDocument() for '%s'.",
-      qPrintable(url.toString()));
-   return false;
-}
+public:
+    explicit QPlatformPrinterSupportPlugin(QObject *parent = nullptr);
+    ~QPlatformPrinterSupportPlugin();
 
-QByteArray QPlatformServices::desktopEnvironment() const
-{
-   return QByteArray("UNKNOWN");
-}
+    virtual QPlatformPrinterSupport *create(const QString &key) = 0;
 
+    static QPlatformPrinterSupport *get();
+};
+
+#endif

@@ -32,22 +32,20 @@
 
 QList<QPlatformCursor *> QPlatformCursorPrivate::getInstances()
 {
-    QList<QPlatformCursor *> result;
+   QList<QPlatformCursor *> result;
 
-    for (const QScreen *screen : QGuiApplicationPrivate::screen_list) {
-        if (QPlatformCursor *cursor = screen->handle()->cursor()) {
-            result.push_back(cursor);
-        }
+   for (const QScreen *screen : QGuiApplicationPrivate::screen_list) {
+      if (QPlatformCursor *cursor = screen->handle()->cursor()) {
+         result.push_back(cursor);
+      }
    }
 
    return result;
 }
 
-
 QPlatformCursor::QPlatformCursor()
    : d_ptr(new QPlatformCursorPrivate)
 {
-   d_ptr->q_ptr = this;
 }
 
 QPoint QPlatformCursor::pos() const
@@ -58,15 +56,14 @@ QPoint QPlatformCursor::pos() const
 
 void QPlatformCursor::setPos(const QPoint &pos)
 {
-    static bool firstCall = true;
+   static bool firstCall = true;
 
-    if (firstCall) {
-        firstCall = false;
-        qWarning("This plugin does not support QCursor::setPos()"
-                 "; emulating movement within the application.");
-    }
+   if (firstCall) {
+      firstCall = false;
+      qWarning("This plugin does not support QCursor::setPos() emulating movement within the application.");
+   }
 
-    QWindowSystemInterface::handleMouseEvent(0, pos, pos, Qt::NoButton);
+   QWindowSystemInterface::handleMouseEvent(0, pos, pos, Qt::NoButton);
 }
 
 // End of display and pointer event handling code
@@ -554,7 +551,7 @@ void QPlatformCursorImage::set(const QImage &image, int hx, int hy)
 
 
 void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
-                               int width, int height, int hx, int hy)
+   int width, int height, int hx, int hy)
 {
    hot.setX(hx);
    hot.setY(hy);

@@ -30,19 +30,19 @@ class QPalette;
 
 class Q_GUI_EXPORT QPlatformThemePrivate
 {
-public:
-    QPlatformThemePrivate();
+ public:
+   QPlatformThemePrivate();
 
-    virtual ~QPlatformThemePrivate();
+   virtual ~QPlatformThemePrivate();
 
-    void initializeSystemPalette();
+   void initializeSystemPalette();
 
-    static const QKeyBinding keyBindings[];
-    static const uint numberOfKeyBindings;
+   static const QKeyBinding keyBindings[];
+   static const uint numberOfKeyBindings;
 
-    static unsigned currentKeyPlatforms();
+   static unsigned currentKeyPlatforms();
 
-    QPalette *systemPalette;
+   QPalette *systemPalette;
 };
 
 #endif

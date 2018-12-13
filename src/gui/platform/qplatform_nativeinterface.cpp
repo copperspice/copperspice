@@ -24,76 +24,76 @@
 
 void *QPlatformNativeInterface::nativeResourceForIntegration(const QByteArray &resource)
 {
-    return 0;
+   return 0;
 }
 
 void *QPlatformNativeInterface::nativeResourceForScreen(const QByteArray &resource, QScreen *screen)
 {
-    return 0;
+   return 0;
 }
 
 
 void *QPlatformNativeInterface::nativeResourceForWindow(const QByteArray &resource, QWindow *window)
 {
-    return 0;
+   return 0;
 }
 
 void *QPlatformNativeInterface::nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context)
 {
-    return 0;
+   return 0;
 }
 
 
-void * QPlatformNativeInterface::nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *backingStore)
+void *QPlatformNativeInterface::nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *backingStore)
 {
-    return 0;
+   return 0;
 }
 
 QPlatformNativeInterface::FP_Integration QPlatformNativeInterface::nativeResourceFunctionForIntegration(const QByteArray &resource)
 {
-    return 0;
+   return 0;
 }
 
 QPlatformNativeInterface::FP_Context QPlatformNativeInterface::nativeResourceFunctionForContext(const QByteArray &resource)
 {
-    return 0;
+   return 0;
 }
 
 QPlatformNativeInterface::FP_Screen QPlatformNativeInterface::nativeResourceFunctionForScreen(const QByteArray &resource)
 {
-    return 0;
+   return 0;
 }
 
 QPlatformNativeInterface::FP_Window QPlatformNativeInterface::nativeResourceFunctionForWindow(const QByteArray &resource)
 {
-    return 0;
+   return 0;
 }
 
 
 QPlatformNativeInterface::FP_BackingStore QPlatformNativeInterface::nativeResourceFunctionForBackingStore(const QByteArray &resource)
 {
-    return 0;
+   return 0;
 }
 
 QPlatformNativeInterface::FP_Void QPlatformNativeInterface::platformFunction(const QByteArray &function) const
 {
-    return nullptr;
+   return nullptr;
 }
 
 
 QVariantMap QPlatformNativeInterface::windowProperties(QPlatformWindow *window) const
 {
-    return QVariantMap();
+   return QVariantMap();
 }
 
 QVariant QPlatformNativeInterface::windowProperty(QPlatformWindow *window, const QString &name) const
 {
-    return QVariant();
+   return QVariant();
 }
 
 QVariant QPlatformNativeInterface::windowProperty(QPlatformWindow *window, const QString &name, const QVariant &defaultValue) const
 {
-    return QVariant();
+   return QVariant();
 }
 
 void QPlatformNativeInterface::setWindowProperty(QPlatformWindow *window, const QString &name, const QVariant &value)

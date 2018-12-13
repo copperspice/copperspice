@@ -26,9 +26,9 @@
 #ifndef QT_NO_SESSIONMANAGER
 
 QPlatformSessionManager::QPlatformSessionManager(const QString &id, const QString &key)
-    : m_sessionId(id),
-      m_sessionKey(key),
-      m_restartHint(QSessionManager::RestartIfRunning)
+   : m_sessionId(id),
+     m_sessionKey(key),
+     m_restartHint(QSessionManager::RestartIfRunning)
 {
 }
 
@@ -38,22 +38,22 @@ QPlatformSessionManager::~QPlatformSessionManager()
 
 QString QPlatformSessionManager::sessionId() const
 {
-    return m_sessionId;
+   return m_sessionId;
 }
 
 QString QPlatformSessionManager::sessionKey() const
 {
-    return m_sessionKey;
+   return m_sessionKey;
 }
 
 bool QPlatformSessionManager::allowsInteraction()
 {
-    return false;
+   return false;
 }
 
 bool QPlatformSessionManager::allowsErrorInteraction()
 {
-    return false;
+   return false;
 }
 
 void QPlatformSessionManager::release()
@@ -66,49 +66,49 @@ void QPlatformSessionManager::cancel()
 
 void QPlatformSessionManager::setRestartHint(QSessionManager::RestartHint restartHint)
 {
-    m_restartHint = restartHint;
+   m_restartHint = restartHint;
 }
 
 QSessionManager::RestartHint QPlatformSessionManager::restartHint() const
 {
-    return m_restartHint;
+   return m_restartHint;
 }
 
 void QPlatformSessionManager::setRestartCommand(const QStringList &command)
 {
-    m_restartCommand = command;
+   m_restartCommand = command;
 }
 
 QStringList QPlatformSessionManager::restartCommand() const
 {
-    return m_restartCommand;
+   return m_restartCommand;
 }
 
 void QPlatformSessionManager::setDiscardCommand(const QStringList &command)
 {
-    m_discardCommand = command;
+   m_discardCommand = command;
 }
 
 QStringList QPlatformSessionManager::discardCommand() const
 {
-    return m_discardCommand;
+   return m_discardCommand;
 }
 
 void QPlatformSessionManager::setManagerProperty(const QString &name, const QString &value)
 {
-    Q_UNUSED(name)
-    Q_UNUSED(value)
+   Q_UNUSED(name)
+   Q_UNUSED(value)
 }
 
 void QPlatformSessionManager::setManagerProperty(const QString &name, const QStringList &value)
 {
-    Q_UNUSED(name)
-    Q_UNUSED(value)
+   Q_UNUSED(name)
+   Q_UNUSED(value)
 }
 
 bool QPlatformSessionManager::isPhase2() const
 {
-    return false;
+   return false;
 }
 
 void QPlatformSessionManager::requestPhase2()
@@ -117,12 +117,12 @@ void QPlatformSessionManager::requestPhase2()
 
 void QPlatformSessionManager::appCommitData()
 {
-    qGuiApp->d_func()->commitData();
+   qGuiApp->d_func()->commitData();
 }
 
 void QPlatformSessionManager::appSaveState()
 {
-    qGuiApp->d_func()->saveState();
+   qGuiApp->d_func()->saveState();
 }
 
 #endif

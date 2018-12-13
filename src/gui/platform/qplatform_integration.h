@@ -54,82 +54,82 @@ class QOffscreenSurface;
 
 class Q_GUI_EXPORT QPlatformIntegration
 {
-public:
-    enum Capability {
-        ThreadedPixmaps = 1,
-        OpenGL,
-        ThreadedOpenGL,
-        SharedGraphicsCache,
-        BufferQueueingOpenGL,
-        WindowMasks,
-        MultipleWindows,
-        ApplicationState,
-        ForeignWindows,
-        NonFullScreenWindows,
-        NativeWidgets,
-        WindowManagement,
-        SyncState,
-        RasterGLSurface,
-        AllGLFunctionsQueryable,
-        ApplicationIcon,
-        SwitchableWidgetComposition
-    };
+ public:
+   enum Capability {
+      ThreadedPixmaps = 1,
+      OpenGL,
+      ThreadedOpenGL,
+      SharedGraphicsCache,
+      BufferQueueingOpenGL,
+      WindowMasks,
+      MultipleWindows,
+      ApplicationState,
+      ForeignWindows,
+      NonFullScreenWindows,
+      NativeWidgets,
+      WindowManagement,
+      SyncState,
+      RasterGLSurface,
+      AllGLFunctionsQueryable,
+      ApplicationIcon,
+      SwitchableWidgetComposition
+   };
 
-    virtual ~QPlatformIntegration() { }
-    virtual bool hasCapability(Capability cap) const;
-    virtual QPlatformPixmap *createPlatformPixmap(QPlatformPixmap::PixelType type) const;
-    virtual QPlatformWindow *createPlatformWindow(QWindow *window) const = 0;
-    virtual QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const = 0;
+   virtual ~QPlatformIntegration() { }
+   virtual bool hasCapability(Capability cap) const;
+   virtual QPlatformPixmap *createPlatformPixmap(QPlatformPixmap::PixelType type) const;
+   virtual QPlatformWindow *createPlatformWindow(QWindow *window) const = 0;
+   virtual QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const = 0;
 
 #ifndef QT_NO_OPENGL
-    virtual QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const;
+   virtual QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const;
 #endif
 
-    virtual QPlatformSharedGraphicsCache *createPlatformSharedGraphicsCache(const char *cacheId) const;
-    virtual QPaintEngine *createImagePaintEngine(QPaintDevice *paintDevice) const;
-    virtual QAbstractEventDispatcher *createEventDispatcher() const = 0;
-    virtual void initialize();
-    virtual void destroy();
+   virtual QPlatformSharedGraphicsCache *createPlatformSharedGraphicsCache(const char *cacheId) const;
+   virtual QPaintEngine *createImagePaintEngine(QPaintDevice *paintDevice) const;
+   virtual QAbstractEventDispatcher *createEventDispatcher() const = 0;
+   virtual void initialize();
+   virtual void destroy();
 
-    //Deeper window system integrations
-    virtual QPlatformFontDatabase *fontDatabase() const;
+   //Deeper window system integrations
+   virtual QPlatformFontDatabase *fontDatabase() const;
 
 #ifndef QT_NO_CLIPBOARD
-    virtual QPlatformClipboard *clipboard() const;
+   virtual QPlatformClipboard *clipboard() const;
 #endif
 
 #ifndef QT_NO_DRAGANDDROP
-    virtual QPlatformDrag *drag() const;
+   virtual QPlatformDrag *drag() const;
 #endif
 
-    virtual QPlatformInputContext *inputContext() const;
+   virtual QPlatformInputContext *inputContext() const;
 
 #ifndef QT_NO_ACCESSIBILITY
-    virtual QPlatformAccessibility *accessibility() const;
+   virtual QPlatformAccessibility *accessibility() const;
 #endif
 
-    virtual QPlatformNativeInterface *nativeInterface() const;
-    virtual QPlatformServices *services() const;
-    enum StyleHint {
-        CursorFlashTime,
-        KeyboardInputInterval,
-        MouseDoubleClickInterval,
-        StartDragDistance,
-        StartDragTime,
-        KeyboardAutoRepeatRate,
-        ShowIsFullScreen,
-        PasswordMaskDelay,
-        FontSmoothingGamma,
-        StartDragVelocity,
-        UseRtlExtensions,
-        PasswordMaskCharacter,
-        SetFocusOnTouchRelease,
-        ShowIsMaximized,
-        MousePressAndHoldInterval,
-        TabFocusBehavior,
-        ReplayMousePressOutsidePopup,
-        ItemViewActivateItemOnSingleClick
-    };
+   virtual QPlatformNativeInterface *nativeInterface() const;
+   virtual QPlatformServices *services() const;
+   enum StyleHint {
+      CursorFlashTime,
+      KeyboardInputInterval,
+      MouseDoubleClickInterval,
+      StartDragDistance,
+      StartDragTime,
+      KeyboardAutoRepeatRate,
+      ShowIsFullScreen,
+      PasswordMaskDelay,
+      FontSmoothingGamma,
+      StartDragVelocity,
+      UseRtlExtensions,
+      PasswordMaskCharacter,
+      SetFocusOnTouchRelease,
+      ShowIsMaximized,
+      MousePressAndHoldInterval,
+      TabFocusBehavior,
+      ReplayMousePressOutsidePopup,
+      ItemViewActivateItemOnSingleClick
+   };
 
 
    virtual QVariant styleHint(StyleHint hint) const;
@@ -141,28 +141,28 @@ public:
    virtual QList<int> possibleKeys(const QKeyEvent *) const;
 
 
-    virtual QStringList themeNames() const;
-    virtual QPlatformTheme *createPlatformTheme(const QString &name) const;
+   virtual QStringList themeNames() const;
+   virtual QPlatformTheme *createPlatformTheme(const QString &name) const;
 
-    virtual QPlatformOffscreenSurface *createPlatformOffscreenSurface(QOffscreenSurface *surface) const;
+   virtual QPlatformOffscreenSurface *createPlatformOffscreenSurface(QOffscreenSurface *surface) const;
 #ifndef QT_NO_SESSIONMANAGER
-    virtual QPlatformSessionManager *createPlatformSessionManager(const QString &id, const QString &key) const;
+   virtual QPlatformSessionManager *createPlatformSessionManager(const QString &id, const QString &key) const;
 #endif
 
-    virtual void sync();
+   virtual void sync();
 
 #ifndef QT_NO_OPENGL
-    virtual QOpenGLContext::OpenGLModuleType openGLModuleType();
+   virtual QOpenGLContext::OpenGLModuleType openGLModuleType();
 #endif
 
-    virtual void setApplicationIcon(const QIcon &icon) const;
+   virtual void setApplicationIcon(const QIcon &icon) const;
 
-    void removeScreen(QScreen *screen);
+   void removeScreen(QScreen *screen);
 
-protected:
-    void screenAdded(QPlatformScreen *screen, bool isPrimary = false);
-    void destroyScreen(QPlatformScreen *screen);
-    void setPrimaryScreen(QPlatformScreen *newPrimary);
+ protected:
+   void screenAdded(QPlatformScreen *screen, bool isPrimary = false);
+   void destroyScreen(QPlatformScreen *screen);
+   void setPrimaryScreen(QPlatformScreen *newPrimary);
 };
 
 #endif

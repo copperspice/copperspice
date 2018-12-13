@@ -27,11 +27,11 @@
 
 QPlatformMenuItem *QPlatformMenu::createMenuItem() const
 {
-    return QGuiApplicationPrivate::platformTheme()->createPlatformMenuItem();
+   return QGuiApplicationPrivate::platformTheme()->createPlatformMenuItem();
 }
 
 QPlatformMenu *QPlatformMenu::createSubMenu() const
 {
-    return QGuiApplicationPrivate::platformTheme()->createPlatformMenu();
+   return QGuiApplicationPrivate::platformTheme()->createPlatformMenu();
 }
 

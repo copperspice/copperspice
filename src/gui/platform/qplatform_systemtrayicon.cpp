@@ -24,33 +24,17 @@
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-
-/*!
-    \internal
- */
 QPlatformSystemTrayIcon::QPlatformSystemTrayIcon()
 {
 }
 
-/*!
-    \internal
- */
 QPlatformSystemTrayIcon::~QPlatformSystemTrayIcon()
 {
 }
 
-
-
-
-
-/
-
 QPlatformMenu *QPlatformSystemTrayIcon::createMenu() const
 {
-    return nullptr;
+   return nullptr;
 }
-
-
-
 
 #endif

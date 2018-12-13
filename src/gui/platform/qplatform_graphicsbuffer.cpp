@@ -28,8 +28,8 @@
 #include <QDebug>
 
 QPlatformGraphicsBuffer::QPlatformGraphicsBuffer(const QSize &size, const QPixelFormat &format)
-    : m_size(size)
-    , m_format(format)
+   : m_size(size)
+   , m_format(format)
 {
 }
 
@@ -41,26 +41,28 @@ QPlatformGraphicsBuffer::~QPlatformGraphicsBuffer()
 
 bool QPlatformGraphicsBuffer::bindToTexture(const QRect &rect) const
 {
-    return false;
+   return false;
 }
 
 bool QPlatformGraphicsBuffer::lock(AccessTypes access, const QRect &rect)
 {
-    bool locked = doLock(access, rect);
-    if (locked)
-        m_lock_access |= access;
+   bool locked = doLock(access, rect);
+   if (locked) {
+      m_lock_access |= access;
+   }
 
-    return locked;
+   return locked;
 }
 
 void QPlatformGraphicsBuffer::unlock()
 {
-    if (m_lock_access == None)
-        return;
-    AccessTypes previous = m_lock_access;
-    doUnlock();
-    m_lock_access = None;
-    emit unlocked(previous);
+   if (m_lock_access == None) {
+      return;
+   }
+   AccessTypes previous = m_lock_access;
+   doUnlock();
+   m_lock_access = None;
+   emit unlocked(previous);
 }
 
 const uchar *QPlatformGraphicsBuffer::data() const
@@ -70,22 +72,22 @@ const uchar *QPlatformGraphicsBuffer::data() const
 
 uchar *QPlatformGraphicsBuffer::data()
 {
-    return nullptr;
+   return nullptr;
 }
 
 int QPlatformGraphicsBuffer::byteCount() const
 {
-    Q_ASSERT(isLocked() & SWReadAccess);
-    return size().height() * bytesPerLine();
+   Q_ASSERT(isLocked() & SWReadAccess);
+   return size().height() * bytesPerLine();
 }
 
 int QPlatformGraphicsBuffer::bytesPerLine() const
 {
-    return 0;
+   return 0;
 }
 
 QPlatformGraphicsBuffer::Origin QPlatformGraphicsBuffer::origin() const
 {
-    return OriginTopLeft;
+   return OriginTopLeft;
 }
 

@@ -28,7 +28,7 @@ class QScreen;
 class QPlatformScreenPrivate
 {
  public:
-    QPointer<QScreen> screen;
+   QPointer<QScreen> screen;
 };
 
 #endif

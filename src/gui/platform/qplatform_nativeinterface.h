@@ -35,38 +35,38 @@ class QWindow;
 
 class Q_GUI_EXPORT QPlatformNativeInterface : public QObject
 {
-    GUI_CS_OBJECT(QPlatformNativeInterface)
+   GUI_CS_OBJECT(QPlatformNativeInterface)
 
-public:
-    virtual void *nativeResourceForIntegration(const QByteArray &resource);
-    virtual void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context);
-    virtual void *nativeResourceForScreen(const QByteArray &resource, QScreen *screen);
-    virtual void *nativeResourceForWindow(const QByteArray &resource, QWindow *window);
-    virtual void *nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *backingStore);
+ public:
+   virtual void *nativeResourceForIntegration(const QByteArray &resource);
+   virtual void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context);
+   virtual void *nativeResourceForScreen(const QByteArray &resource, QScreen *screen);
+   virtual void *nativeResourceForWindow(const QByteArray &resource, QWindow *window);
+   virtual void *nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *backingStore);
 
-    using FP_Integration  = void *(*)();
-    using FP_Context      = void *(*)(QOpenGLContext *);
-    using FP_Screen       = void *(*)(QScreen *);
-    using FP_Window       = void *(*)(QWindow *);
-    using FP_BackingStore = void *(*)(QBackingStore *);
+   using FP_Integration  = void *(*)();
+   using FP_Context      = void *(*)(QOpenGLContext *);
+   using FP_Screen       = void *(*)(QScreen *);
+   using FP_Window       = void *(*)(QWindow *);
+   using FP_BackingStore = void *(*)(QBackingStore *);
 
-    using FP_Void         = void(*)();
+   using FP_Void         = void(*)();
 
-    virtual FP_Integration nativeResourceFunctionForIntegration(const QByteArray &resource);
-    virtual FP_Context nativeResourceFunctionForContext(const QByteArray &resource);
-    virtual FP_Screen nativeResourceFunctionForScreen(const QByteArray &resource);
-    virtual FP_Window nativeResourceFunctionForWindow(const QByteArray &resource);
-    virtual FP_BackingStore nativeResourceFunctionForBackingStore(const QByteArray &resource);
+   virtual FP_Integration nativeResourceFunctionForIntegration(const QByteArray &resource);
+   virtual FP_Context nativeResourceFunctionForContext(const QByteArray &resource);
+   virtual FP_Screen nativeResourceFunctionForScreen(const QByteArray &resource);
+   virtual FP_Window nativeResourceFunctionForWindow(const QByteArray &resource);
+   virtual FP_BackingStore nativeResourceFunctionForBackingStore(const QByteArray &resource);
 
-    virtual FP_Void platformFunction(const QByteArray &function) const;
+   virtual FP_Void platformFunction(const QByteArray &function) const;
 
-    virtual QVariantMap windowProperties(QPlatformWindow *window) const;
-    virtual QVariant windowProperty(QPlatformWindow *window, const QString &name) const;
-    virtual QVariant windowProperty(QPlatformWindow *window, const QString &name, const QVariant &defaultValue) const;
-    virtual void setWindowProperty(QPlatformWindow *window, const QString &name, const QVariant &value);
+   virtual QVariantMap windowProperties(QPlatformWindow *window) const;
+   virtual QVariant windowProperty(QPlatformWindow *window, const QString &name) const;
+   virtual QVariant windowProperty(QPlatformWindow *window, const QString &name, const QVariant &defaultValue) const;
+   virtual void setWindowProperty(QPlatformWindow *window, const QString &name, const QVariant &value);
 
-    GUI_CS_SIGNAL_1(Public, void windowPropertyChanged(QPlatformWindow *window, const QString &propertyName))
-    GUI_CS_SIGNAL_2(windowPropertyChanged, window, propertyName)
+   GUI_CS_SIGNAL_1(Public, void windowPropertyChanged(QPlatformWindow *window, const QString &propertyName))
+   GUI_CS_SIGNAL_2(windowPropertyChanged, window, propertyName)
 };
 
 #endif

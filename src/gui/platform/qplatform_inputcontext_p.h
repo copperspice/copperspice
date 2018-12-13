@@ -25,7 +25,9 @@
 
 class QPlatformInputContextPrivate
 {
-public:
+   Q_DECLARE_PUBLIC(QPlatformInputContext)
+
+ public:
    QPlatformInputContextPrivate() {}
    ~QPlatformInputContextPrivate() {}
 
@@ -33,6 +35,10 @@ public:
    static bool inputMethodAccepted();
 
    static bool s_inputMethodAccepted;
+
+ protected:
+   QPlatformInputContext *q_ptr;
+
 };
 
 #endif

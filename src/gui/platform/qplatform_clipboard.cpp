@@ -88,14 +88,14 @@ bool QPlatformClipboard::supportsMode(QClipboard::Mode mode) const
 
 bool QPlatformClipboard::ownsMode(QClipboard::Mode mode) const
 {
-    Q_UNUSED(mode);
-    return false;
+   Q_UNUSED(mode);
+   return false;
 }
 void QPlatformClipboard::emitChanged(QClipboard::Mode mode)
 {
-    if (!QGuiApplicationPrivate::is_app_closing)  {
-        //  prevent emission when closing down.
-        QGuiApplication::clipboard()->emitChanged(mode);
+   if (!QGuiApplicationPrivate::is_app_closing)  {
+      //  prevent emission when closing down.
+      QGuiApplication::clipboard()->emitChanged(mode);
    }
 }
 

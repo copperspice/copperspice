@@ -61,8 +61,8 @@ class Q_GUI_EXPORT QPlatformCursorImage
 
 class QPlatformCursorPrivate
 {
-public:
-    static QList<QPlatformCursor *> getInstances();
+ public:
+   static QList<QPlatformCursor *> getInstances();
 
 };
 
@@ -76,7 +76,7 @@ class Q_GUI_EXPORT QPlatformCursor : public QObject
    virtual void pointerEvent(const QMouseEvent &event) {
    }
 
-   virtual void changeCursor(QCursor * windowCursor, QWindow * window) = 0;
+   virtual void changeCursor(QCursor *windowCursor, QWindow *window) = 0;
    virtual QPoint pos() const;
    virtual void setPos(const QPoint &pos);
 

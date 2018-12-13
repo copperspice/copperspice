@@ -31,20 +31,22 @@
 
 class Q_GUI_EXPORT QPlatformAccessibility
 {
-public:
-    QPlatformAccessibility();
+ public:
+   QPlatformAccessibility();
 
-    virtual ~QPlatformAccessibility();
-    virtual void notifyAccessibilityUpdate(QAccessibleEvent *event);
-    virtual void setRootObject(QObject *o);
-    virtual void initialize();
-    virtual void cleanup();
+   virtual ~QPlatformAccessibility();
+   virtual void notifyAccessibilityUpdate(QAccessibleEvent *event);
+   virtual void setRootObject(QObject *o);
+   virtual void initialize();
+   virtual void cleanup();
 
-    inline bool isActive() const { return m_active; }
-    void setActive(bool active);
+   inline bool isActive() const {
+      return m_active;
+   }
+   void setActive(bool active);
 
-private:
-    bool m_active;
+ private:
+   bool m_active;
 };
 
 #endif // QT_NO_ACCESSIBILITY

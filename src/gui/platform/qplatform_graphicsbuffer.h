@@ -33,53 +33,58 @@ class Q_GUI_EXPORT QPlatformGraphicsBuffer : public QObject
 {
    GUI_CS_OBJECT(QPlatformGraphicsBuffer)
 
-public:
-    enum AccessType
-    {
-        None                = 0x00,
-        SWReadAccess        = 0x01,
-        SWWriteAccess       = 0x02,
-        TextureAccess       = 0x04,
-        HWCompositor        = 0x08
-    };
-    using AccessTypes = QFlags<AccessType>;
+ public:
+   enum AccessType {
+      None                = 0x00,
+      SWReadAccess        = 0x01,
+      SWWriteAccess       = 0x02,
+      TextureAccess       = 0x04,
+      HWCompositor        = 0x08
+   };
+   using AccessTypes = QFlags<AccessType>;
 
-    enum Origin {
-        OriginBottomLeft,
-        OriginTopLeft
-    };
+   enum Origin {
+      OriginBottomLeft,
+      OriginTopLeft
+   };
 
-    virtual ~QPlatformGraphicsBuffer();
+   virtual ~QPlatformGraphicsBuffer();
 
-    AccessTypes isLocked() const { return m_lock_access; }
-    bool lock(AccessTypes access, const QRect &rect = QRect());
-    void unlock();
+   AccessTypes isLocked() const {
+      return m_lock_access;
+   }
+   bool lock(AccessTypes access, const QRect &rect = QRect());
+   void unlock();
 
-    virtual bool bindToTexture(const QRect &rect = QRect()) const;
+   virtual bool bindToTexture(const QRect &rect = QRect()) const;
 
-    virtual const uchar *data() const;
-    virtual uchar *data();
-    virtual int bytesPerLine() const;
-    int byteCount() const;
+   virtual const uchar *data() const;
+   virtual uchar *data();
+   virtual int bytesPerLine() const;
+   int byteCount() const;
 
-    virtual Origin origin() const;
+   virtual Origin origin() const;
 
-    QSize size() const { return m_size; }
-    QPixelFormat format() const { return m_format; }
+   QSize size() const {
+      return m_size;
+   }
+   QPixelFormat format() const {
+      return m_format;
+   }
 
-    GUI_CS_SIGNAL_1(Public, void unlocked(AccessTypes previousAccessTypes))
-    GUI_CS_SIGNAL_2(unlocked,previousAccessTypes)
+   GUI_CS_SIGNAL_1(Public, void unlocked(AccessTypes previousAccessTypes))
+   GUI_CS_SIGNAL_2(unlocked, previousAccessTypes)
 
-protected:
-    QPlatformGraphicsBuffer(const QSize &size, const QPixelFormat &format);
+ protected:
+   QPlatformGraphicsBuffer(const QSize &size, const QPixelFormat &format);
 
-    virtual bool doLock(AccessTypes access, const QRect &rect = QRect()) = 0;
-    virtual void doUnlock() = 0;
+   virtual bool doLock(AccessTypes access, const QRect &rect = QRect()) = 0;
+   virtual void doUnlock() = 0;
 
-private:
-    QSize m_size;
-    QPixelFormat m_format;
-    AccessTypes m_lock_access;
+ private:
+   QSize m_size;
+   QPixelFormat m_format;
+   AccessTypes m_lock_access;
 };
 
 #endif

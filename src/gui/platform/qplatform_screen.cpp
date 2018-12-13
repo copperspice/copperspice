@@ -34,21 +34,21 @@
 #include <qhighdpiscaling_p.h>
 
 QPlatformScreen::QPlatformScreen()
-    : d_ptr(new QPlatformScreenPrivate)
+   : d_ptr(new QPlatformScreenPrivate)
 {
-    Q_D(QPlatformScreen);
-    d->screen = 0;
+   Q_D(QPlatformScreen);
+   d->screen = 0;
 }
 
 QPlatformScreen::~QPlatformScreen()
 {
-    Q_D(QPlatformScreen);
+   Q_D(QPlatformScreen);
 
-    if (d->screen) {
-        qWarning("Manually deleting a QPlatformScreen. Call QPlatformIntegration::destroyScreen instead.");
-        QGuiApplicationPrivate::platformIntegration()->removeScreen(d->screen);
-        delete d->screen;
-    }
+   if (d->screen) {
+      qWarning("Manually deleting a QPlatformScreen. Call QPlatformIntegration::destroyScreen instead.");
+      QGuiApplicationPrivate::platformIntegration()->removeScreen(d->screen);
+      delete d->screen;
+   }
 }
 
 QPixmap QPlatformScreen::grabWindow(WId window, int x, int y, int width, int height) const
@@ -56,62 +56,64 @@ QPixmap QPlatformScreen::grabWindow(WId window, int x, int y, int width, int hei
    return QPixmap();
 }
 
-QWindow *QPlatformScreen::topLevelAt(const QPoint & pos) const
+QWindow *QPlatformScreen::topLevelAt(const QPoint &pos) const
 {
-    QWindowList list = QGuiApplication::topLevelWindows();
+   QWindowList list = QGuiApplication::topLevelWindows();
 
-    for (int i = list.size()-1; i >= 0; --i) {
-        QWindow *w = list[i];
+   for (int i = list.size() - 1; i >= 0; --i) {
+      QWindow *w = list[i];
 
-        if (w->isVisible() && QHighDpi::toNativePixels(w->geometry(), w).contains(pos))
-            return w;
-    }
+      if (w->isVisible() && QHighDpi::toNativePixels(w->geometry(), w).contains(pos)) {
+         return w;
+      }
+   }
 
-    return 0;
+   return 0;
 }
 
 const QPlatformScreen *QPlatformScreen::screenForPosition(const QPoint &point) const
 {
-    if (! geometry().contains(point)) {
-        for (const QPlatformScreen* screen : virtualSiblings()) {
-            if (screen->geometry().contains(point))
-                return screen;
-        }
-    }
-    return this;
+   if (! geometry().contains(point)) {
+      for (const QPlatformScreen *screen : virtualSiblings()) {
+         if (screen->geometry().contains(point)) {
+            return screen;
+         }
+      }
+   }
+   return this;
 }
 
 QList<QPlatformScreen *> QPlatformScreen::virtualSiblings() const
 {
-    QList<QPlatformScreen *> list;
-    list << const_cast<QPlatformScreen *>(this);
-    return list;
+   QList<QPlatformScreen *> list;
+   list << const_cast<QPlatformScreen *>(this);
+   return list;
 }
 
 QScreen *QPlatformScreen::screen() const
 {
-    Q_D(const QPlatformScreen);
-    return d->screen;
+   Q_D(const QPlatformScreen);
+   return d->screen;
 }
 
 QSizeF QPlatformScreen::physicalSize() const
 {
-    static const int dpi = 100;
-    return QSizeF(geometry().size()) / dpi * qreal(25.4);
+   static const int dpi = 100;
+   return QSizeF(geometry().size()) / dpi * qreal(25.4);
 }
 
 QDpi QPlatformScreen::logicalDpi() const
 {
-    QSizeF ps = physicalSize();
-    QSize s = geometry().size();
+   QSizeF ps = physicalSize();
+   QSize s = geometry().size();
 
-    return QDpi(25.4 * s.width() / ps.width(),
-                25.4 * s.height() / ps.height());
+   return QDpi(25.4 * s.width() / ps.width(),
+         25.4 * s.height() / ps.height());
 }
 
 qreal QPlatformScreen::devicePixelRatio() const
 {
-    return 1.0;
+   return 1.0;
 }
 
 qreal QPlatformScreen::pixelDensity()  const
@@ -121,159 +123,167 @@ qreal QPlatformScreen::pixelDensity()  const
 
 qreal QPlatformScreen::refreshRate() const
 {
-    return 60;
+   return 60;
 }
 
 Qt::ScreenOrientation QPlatformScreen::nativeOrientation() const
 {
-    return Qt::PrimaryOrientation;
+   return Qt::PrimaryOrientation;
 }
 
 Qt::ScreenOrientation QPlatformScreen::orientation() const
 {
-    return Qt::PrimaryOrientation;
+   return Qt::PrimaryOrientation;
 }
 
 void QPlatformScreen::setOrientationUpdateMask(Qt::ScreenOrientations mask)
 {
 }
 
-QPlatformScreen * QPlatformScreen::platformScreenForWindow(const QWindow *window)
+QPlatformScreen *QPlatformScreen::platformScreenForWindow(const QWindow *window)
 {
-    // QTBUG 32681: It can happen during the transition between screens
-    // when one screen is disconnected that the window doesn't have a screen.
+   // QTBUG 32681: It can happen during the transition between screens
+   // when one screen is disconnected that the window doesn't have a screen.
 
-    if (! window->screen())
-        return 0;
+   if (! window->screen()) {
+      return 0;
+   }
 
-    return window->screen()->handle();
+   return window->screen()->handle();
 }
 
 QPlatformCursor *QPlatformScreen::cursor() const
 {
-    return 0;
+   return 0;
 }
 
 void QPlatformScreen::resizeMaximizedWindows()
 {
-    QList<QWindow *> windows = QGuiApplication::allWindows();
+   QList<QWindow *> windows = QGuiApplication::allWindows();
 
-    // 'screen()' still has the old geometry info while 'this' has the new geometry info
-    const QRect oldGeometry = screen()->geometry();
-    const QRect oldAvailableGeometry = screen()->availableGeometry();
-    const QRect newGeometry = deviceIndependentGeometry();
-    const QRect newAvailableGeometry = QHighDpi::fromNative(availableGeometry(), QHighDpiScaling::factor(this), newGeometry.topLeft());
+   // 'screen()' still has the old geometry info while 'this' has the new geometry info
+   const QRect oldGeometry = screen()->geometry();
+   const QRect oldAvailableGeometry = screen()->availableGeometry();
+   const QRect newGeometry = deviceIndependentGeometry();
+   const QRect newAvailableGeometry = QHighDpi::fromNative(availableGeometry(), QHighDpiScaling::factor(this), newGeometry.topLeft());
 
-    // make sure maximized and fullscreen windows are updated
-    for (int i = 0; i < windows.size(); ++i) {
-        QWindow *w = windows.at(i);
+   // make sure maximized and fullscreen windows are updated
+   for (int i = 0; i < windows.size(); ++i) {
+      QWindow *w = windows.at(i);
 
-        // Skip non-platform windows, e.g., offscreen windows.
-        if (!w->handle())
-            continue;
+      // Skip non-platform windows, e.g., offscreen windows.
+      if (!w->handle()) {
+         continue;
+      }
 
-        if (platformScreenForWindow(w) != this)
-            continue;
+      if (platformScreenForWindow(w) != this) {
+         continue;
+      }
 
-        if (w->windowState() & Qt::WindowMaximized || w->geometry() == oldAvailableGeometry)
-            w->setGeometry(newAvailableGeometry);
-        else if (w->windowState() & Qt::WindowFullScreen || w->geometry() == oldGeometry)
-            w->setGeometry(newGeometry);
-    }
+      if (w->windowState() & Qt::WindowMaximized || w->geometry() == oldAvailableGeometry) {
+         w->setGeometry(newAvailableGeometry);
+      } else if (w->windowState() & Qt::WindowFullScreen || w->geometry() == oldGeometry) {
+         w->setGeometry(newGeometry);
+      }
+   }
 }
 
 // i must be power of two
 static int log2(uint i)
 {
-    if (i == 0)
-        return -1;
+   if (i == 0) {
+      return -1;
+   }
 
-    int result = 0;
-    while (!(i & 1)) {
-        ++result;
-        i >>= 1;
-    }
-    return result;
+   int result = 0;
+   while (!(i & 1)) {
+      ++result;
+      i >>= 1;
+   }
+   return result;
 }
 
 int QPlatformScreen::angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b)
 {
-    if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
-        qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "angle");
-        return 0;
-    }
+   if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
+      qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "angle");
+      return 0;
+   }
 
-    if (a == b)
-        return 0;
+   if (a == b) {
+      return 0;
+   }
 
-    int ia = log2(uint(a));
-    int ib = log2(uint(b));
+   int ia = log2(uint(a));
+   int ib = log2(uint(b));
 
-    int delta = ia - ib;
+   int delta = ia - ib;
 
-    if (delta < 0)
-        delta = delta + 4;
+   if (delta < 0) {
+      delta = delta + 4;
+   }
 
-    int angles[] = { 0, 90, 180, 270 };
-    return angles[delta];
+   int angles[] = { 0, 90, 180, 270 };
+   return angles[delta];
 }
 
 QTransform QPlatformScreen::transformBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &target)
 {
-    if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
-        qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "transform");
-        return QTransform();
-    }
+   if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
+      qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "transform");
+      return QTransform();
+   }
 
-    if (a == b)
-        return QTransform();
+   if (a == b) {
+      return QTransform();
+   }
 
-    int angle = angleBetween(a, b);
+   int angle = angleBetween(a, b);
 
-    QTransform result;
-    switch (angle) {
-    case 90:
-        result.translate(target.width(), 0);
-        break;
-    case 180:
-        result.translate(target.width(), target.height());
-        break;
-    case 270:
-        result.translate(0, target.height());
-        break;
-    default:
-        Q_ASSERT(false);
-    }
-    result.rotate(angle);
+   QTransform result;
+   switch (angle) {
+      case 90:
+         result.translate(target.width(), 0);
+         break;
+      case 180:
+         result.translate(target.width(), target.height());
+         break;
+      case 270:
+         result.translate(0, target.height());
+         break;
+      default:
+         Q_ASSERT(false);
+   }
+   result.rotate(angle);
 
-    return result;
+   return result;
 }
 
 QRect QPlatformScreen::mapBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &rect)
 {
-    if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
-        qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "map");
-        return rect;
-    }
+   if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
+      qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "map");
+      return rect;
+   }
 
-    if (a == b)
-        return rect;
+   if (a == b) {
+      return rect;
+   }
 
-    if ((a == Qt::PortraitOrientation || a == Qt::InvertedPortraitOrientation)
-        != (b == Qt::PortraitOrientation || b == Qt::InvertedPortraitOrientation))
-    {
-        return QRect(rect.y(), rect.x(), rect.height(), rect.width());
-    }
+   if ((a == Qt::PortraitOrientation || a == Qt::InvertedPortraitOrientation)
+      != (b == Qt::PortraitOrientation || b == Qt::InvertedPortraitOrientation)) {
+      return QRect(rect.y(), rect.x(), rect.height(), rect.width());
+   }
 
-    return rect;
+   return rect;
 }
 
 QRect QPlatformScreen::deviceIndependentGeometry() const
 {
-    qreal scaleFactor = QHighDpiScaling::factor(this);
-    QRect nativeGeometry = geometry();
+   qreal scaleFactor = QHighDpiScaling::factor(this);
+   QRect nativeGeometry = geometry();
 
-    return QRect(nativeGeometry.topLeft(), QHighDpi::fromNative(nativeGeometry.size(), scaleFactor));
+   return QRect(nativeGeometry.topLeft(), QHighDpi::fromNative(nativeGeometry.size(), scaleFactor));
 }
 
 QPlatformScreen::SubpixelAntialiasingType QPlatformScreen::subpixelAntialiasingTypeHint() const
@@ -283,20 +293,25 @@ QPlatformScreen::SubpixelAntialiasingType QPlatformScreen::subpixelAntialiasingT
    if (type == -1) {
       QByteArray env = qgetenv("QT_SUBPIXEL_AA_TYPE");
 
-     if (env == "RGB")
-        type = QPlatformScreen::Subpixel_RGB;
+      if (env == "RGB") {
+         type = QPlatformScreen::Subpixel_RGB;
+      }
 
-     else if (env == "BGR")
+      else if (env == "BGR") {
          type = QPlatformScreen::Subpixel_BGR;
+      }
 
-     else if (env == "VRGB")
+      else if (env == "VRGB") {
          type = QPlatformScreen::Subpixel_VRGB;
+      }
 
-     else if (env == "VBGR")
+      else if (env == "VBGR") {
          type = QPlatformScreen::Subpixel_VBGR;
+      }
 
-     else
+      else {
          type = QPlatformScreen::Subpixel_None;
+      }
 
    }
 
@@ -305,7 +320,7 @@ QPlatformScreen::SubpixelAntialiasingType QPlatformScreen::subpixelAntialiasingT
 
 QPlatformScreen::PowerState QPlatformScreen::powerState() const
 {
-    return PowerStateOn;
+   return PowerStateOn;
 }
 
 void QPlatformScreen::setPowerState(PowerState state)

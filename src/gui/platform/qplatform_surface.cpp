@@ -29,7 +29,7 @@ QPlatformSurface::~QPlatformSurface()
 
 QSurface *QPlatformSurface::surface() const
 {
-    return m_surface;
+   return m_surface;
 }
 
 QPlatformSurface::QPlatformSurface(QSurface *surface) : m_surface(surface)

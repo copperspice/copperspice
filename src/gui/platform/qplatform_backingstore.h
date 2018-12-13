@@ -43,34 +43,36 @@ class QPlatformGraphicsBuffer;
 #ifndef QT_NO_OPENGL
 class Q_GUI_EXPORT QPlatformTextureList : public QObject
 {
-    GUI_CS_OBJECT(QPlatformTextureList)
-    Q_DECLARE_PRIVATE(QPlatformTextureList)
+   GUI_CS_OBJECT(QPlatformTextureList)
+   Q_DECLARE_PRIVATE(QPlatformTextureList)
 
-public:
-    enum Flag {
-        StacksOnTop = 0x01
-    };
-    using Flags = QFlags<Flag>;
+ public:
+   enum Flag {
+      StacksOnTop = 0x01
+   };
+   using Flags = QFlags<Flag>;
 
-    explicit QPlatformTextureList(QObject *parent = 0);
-    ~QPlatformTextureList();
+   explicit QPlatformTextureList(QObject *parent = 0);
+   ~QPlatformTextureList();
 
-    int count() const;
-    bool isEmpty() const { return count() == 0; }
-    GLuint textureId(int index) const;
-    QRect geometry(int index) const;
-    QRect clipRect(int index) const;
-    void *source(int index);
-    Flags flags(int index) const;
-    void lock(bool on);
-    bool isLocked() const;
+   int count() const;
+   bool isEmpty() const {
+      return count() == 0;
+   }
+   GLuint textureId(int index) const;
+   QRect geometry(int index) const;
+   QRect clipRect(int index) const;
+   void *source(int index);
+   Flags flags(int index) const;
+   void lock(bool on);
+   bool isLocked() const;
 
-    void appendTexture(void *source, GLuint textureId, const QRect &geometry,
-                       const QRect &clipRect = QRect(), Flags flags = 0);
-    void clear();
+   void appendTexture(void *source, GLuint textureId, const QRect &geometry,
+      const QRect &clipRect = QRect(), Flags flags = 0);
+   void clear();
 
-    GUI_CS_SIGNAL_1(Public, void locked(bool un_named_arg1))
-    GUI_CS_SIGNAL_2(locked,un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void locked(bool un_named_arg1))
+   GUI_CS_SIGNAL_2(locked, un_named_arg1)
 
  protected:
    QScopedPointer<QPlatformTextureListPrivate> d_ptr;
@@ -81,45 +83,45 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QPlatformTextureList::Flags)
 
 class Q_GUI_EXPORT QPlatformBackingStore
 {
-public:
-    explicit QPlatformBackingStore(QWindow *window);
-    virtual ~QPlatformBackingStore();
+ public:
+   explicit QPlatformBackingStore(QWindow *window);
+   virtual ~QPlatformBackingStore();
 
-    QWindow *window() const;
+   QWindow *window() const;
 
-    virtual QPaintDevice *paintDevice() = 0;
+   virtual QPaintDevice *paintDevice() = 0;
 
-    // 'window' can be a child window, in which case 'region' is in child window coordinates and
-    // offset is the (child) window's offset in relation to the window surface.
-    virtual void flush(QWindow *window, const QRegion &region, const QPoint &offset) = 0;
+   // 'window' can be a child window, in which case 'region' is in child window coordinates and
+   // offset is the (child) window's offset in relation to the window surface.
+   virtual void flush(QWindow *window, const QRegion &region, const QPoint &offset) = 0;
 
 #ifndef QT_NO_OPENGL
-    virtual void composeAndFlush(QWindow *window, const QRegion &region, const QPoint &offset,
-                                 QPlatformTextureList *textures, QOpenGLContext *context,
-                                 bool translucentBackground);
+   virtual void composeAndFlush(QWindow *window, const QRegion &region, const QPoint &offset,
+      QPlatformTextureList *textures, QOpenGLContext *context,
+      bool translucentBackground);
 
-    virtual QImage toImage() const;
-    enum TextureFlag {
-        TextureSwizzle = 0x01,
-        TextureFlip = 0x02,
-        TexturePremultiplied = 0x04,
-    };
-    using TextureFlags = QFlags<TextureFlag>;
+   virtual QImage toImage() const;
+   enum TextureFlag {
+      TextureSwizzle = 0x01,
+      TextureFlip = 0x02,
+      TexturePremultiplied = 0x04,
+   };
+   using TextureFlags = QFlags<TextureFlag>;
 
-    virtual GLuint toTexture(const QRegion &dirtyRegion, QSize *textureSize, TextureFlags *flags) const;
+   virtual GLuint toTexture(const QRegion &dirtyRegion, QSize *textureSize, TextureFlags *flags) const;
 #endif
 
-    virtual QPlatformGraphicsBuffer *graphicsBuffer() const;
+   virtual QPlatformGraphicsBuffer *graphicsBuffer() const;
 
-    virtual void resize(const QSize &size, const QRegion &staticContents) = 0;
+   virtual void resize(const QSize &size, const QRegion &staticContents) = 0;
 
-    virtual bool scroll(const QRegion &area, int dx, int dy);
+   virtual bool scroll(const QRegion &area, int dx, int dy);
 
-    virtual void beginPaint(const QRegion &);
-    virtual void endPaint();
+   virtual void beginPaint(const QRegion &);
+   virtual void endPaint();
 
-private:
-    QPlatformBackingStorePrivate *d_ptr;
+ private:
+   QPlatformBackingStorePrivate *d_ptr;
 };
 
 #ifndef QT_NO_OPENGL

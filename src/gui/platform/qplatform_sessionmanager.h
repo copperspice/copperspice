@@ -31,46 +31,46 @@
 
 class Q_GUI_EXPORT QPlatformSessionManager
 {
-public:
-    explicit QPlatformSessionManager(const QString &id, const QString &key);
-    virtual ~QPlatformSessionManager();
+ public:
+   explicit QPlatformSessionManager(const QString &id, const QString &key);
+   virtual ~QPlatformSessionManager();
 
-    virtual QString sessionId() const;
-    virtual QString sessionKey() const;
+   virtual QString sessionId() const;
+   virtual QString sessionKey() const;
 
-    virtual bool allowsInteraction();
-    virtual bool allowsErrorInteraction();
-    virtual void release();
+   virtual bool allowsInteraction();
+   virtual bool allowsErrorInteraction();
+   virtual void release();
 
-    virtual void cancel();
+   virtual void cancel();
 
-    virtual void setRestartHint(QSessionManager::RestartHint restartHint);
-    virtual QSessionManager::RestartHint restartHint() const;
+   virtual void setRestartHint(QSessionManager::RestartHint restartHint);
+   virtual QSessionManager::RestartHint restartHint() const;
 
-    virtual void setRestartCommand(const QStringList &command);
-    virtual QStringList restartCommand() const;
-    virtual void setDiscardCommand(const QStringList &command);
-    virtual QStringList discardCommand() const;
+   virtual void setRestartCommand(const QStringList &command);
+   virtual QStringList restartCommand() const;
+   virtual void setDiscardCommand(const QStringList &command);
+   virtual QStringList discardCommand() const;
 
-    virtual void setManagerProperty(const QString &name, const QString &value);
-    virtual void setManagerProperty(const QString &name, const QStringList &value);
+   virtual void setManagerProperty(const QString &name, const QString &value);
+   virtual void setManagerProperty(const QString &name, const QStringList &value);
 
-    virtual bool isPhase2() const;
-    virtual void requestPhase2();
+   virtual bool isPhase2() const;
+   virtual void requestPhase2();
 
-    void appCommitData();
-    void appSaveState();
+   void appCommitData();
+   void appSaveState();
 
-protected:
-    QString m_sessionId;
-    QString m_sessionKey;
+ protected:
+   QString m_sessionId;
+   QString m_sessionKey;
 
-private:
-    QStringList m_restartCommand;
-    QStringList m_discardCommand;
-    QSessionManager::RestartHint m_restartHint;
+ private:
+   QStringList m_restartCommand;
+   QStringList m_discardCommand;
+   QSessionManager::RestartHint m_restartHint;
 
-    Q_DISABLE_COPY(QPlatformSessionManager)
+   Q_DISABLE_COPY(QPlatformSessionManager)
 };
 
 #endif // QT_NO_SESSIONMANAGER

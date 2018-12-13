@@ -37,52 +37,52 @@ class QPlatformDragPrivate;
 
 class Q_GUI_EXPORT QPlatformDropQtResponse
 {
-public:
-    QPlatformDropQtResponse(bool accepted, Qt::DropAction acceptedAction);
-    bool isAccepted() const;
-    Qt::DropAction acceptedAction() const;
+ public:
+   QPlatformDropQtResponse(bool accepted, Qt::DropAction acceptedAction);
+   bool isAccepted() const;
+   Qt::DropAction acceptedAction() const;
 
-private:
-    bool m_accepted;
-    Qt::DropAction m_accepted_action;
+ private:
+   bool m_accepted;
+   Qt::DropAction m_accepted_action;
 
 };
 
 class Q_GUI_EXPORT QPlatformDragQtResponse : public QPlatformDropQtResponse
 {
-public:
-    QPlatformDragQtResponse(bool accepted, Qt::DropAction acceptedAction, QRect answerRect);
+ public:
+   QPlatformDragQtResponse(bool accepted, Qt::DropAction acceptedAction, QRect answerRect);
 
-    QRect answerRect() const;
+   QRect answerRect() const;
 
-private:
-    QRect m_answer_rect;
+ private:
+   QRect m_answer_rect;
 };
 
 class Q_GUI_EXPORT QPlatformDrag
 {
-    Q_DECLARE_PRIVATE(QPlatformDrag)
+   Q_DECLARE_PRIVATE(QPlatformDrag)
 
-public:
-    QPlatformDrag();
-    virtual ~QPlatformDrag();
+ public:
+   QPlatformDrag();
+   virtual ~QPlatformDrag();
 
-    QDrag *currentDrag() const;
-    virtual QMimeData *platformDropData() = 0;
+   QDrag *currentDrag() const;
+   virtual QMimeData *platformDropData() = 0;
 
-    virtual Qt::DropAction drag(QDrag *m_drag) = 0;
-    void updateAction(Qt::DropAction action);
+   virtual Qt::DropAction drag(QDrag *m_drag) = 0;
+   void updateAction(Qt::DropAction action);
 
-    virtual Qt::DropAction defaultAction(Qt::DropActions possibleActions, Qt::KeyboardModifiers modifiers) const;
+   virtual Qt::DropAction defaultAction(Qt::DropActions possibleActions, Qt::KeyboardModifiers modifiers) const;
 
-    static QPixmap defaultPixmap();
+   static QPixmap defaultPixmap();
 
-    virtual bool ownsDragObject() const;
+   virtual bool ownsDragObject() const;
 
-private:
-    QPlatformDragPrivate *d_ptr;
+ private:
+   QPlatformDragPrivate *d_ptr;
 
-    Q_DISABLE_COPY(QPlatformDrag)
+   Q_DISABLE_COPY(QPlatformDrag)
 };
 
 #endif // QT_NO_DRAGANDDROP

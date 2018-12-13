@@ -26,11 +26,11 @@
 #include <qplatform_graphicsbuffer.h>
 
 namespace QPlatformGraphicsBufferHelper {
-    bool lockAndBindToTexture(QPlatformGraphicsBuffer *graphicsBuffer, bool *swizzleRandB, bool *premultipliedB,
-                  const QRect &rect = QRect());
+bool lockAndBindToTexture(QPlatformGraphicsBuffer *graphicsBuffer, bool *swizzleRandB, bool *premultipliedB,
+   const QRect &rect = QRect());
 
-    bool bindSWToTexture(const QPlatformGraphicsBuffer *graphicsBuffer, bool *swizzleRandB = nullptr,
-                  bool *premultipliedB = nullptr, const QRect &rect = QRect());
+bool bindSWToTexture(const QPlatformGraphicsBuffer *graphicsBuffer, bool *swizzleRandB = nullptr,
+   bool *premultipliedB = nullptr, const QRect &rect = QRect());
 }
 
 #endif

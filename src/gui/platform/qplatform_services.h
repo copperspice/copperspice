@@ -29,14 +29,14 @@ class QUrl;
 
 class Q_GUI_EXPORT QPlatformServices
 {
-public:
-    QPlatformServices();
-    virtual ~QPlatformServices() { }
+ public:
+   QPlatformServices();
+   virtual ~QPlatformServices() { }
 
-    virtual bool openUrl(const QUrl &url);
-    virtual bool openDocument(const QUrl &url);
+   virtual bool openUrl(const QUrl &url);
+   virtual bool openDocument(const QUrl &url);
 
-    virtual QByteArray desktopEnvironment() const;
+   virtual QByteArray desktopEnvironment() const;
 };
 
 #endif

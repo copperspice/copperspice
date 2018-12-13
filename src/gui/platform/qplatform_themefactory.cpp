@@ -29,28 +29,30 @@
 #include <qdebug.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QPlatformThemeFactoryInterface_iid, QLatin1String("/platformthemes"), Qt::CaseInsensitive))
+   (QPlatformThemeFactoryInterface_iid, QLatin1String("/platformthemes"), Qt::CaseInsensitive))
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader,
-    (QPlatformThemeFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
+   (QPlatformThemeFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
 
 
-QPlatformTheme *QPlatformThemeFactory::create(const QString& key, const QString &platformPluginPath)
+QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString &platformPluginPath)
 {
-    QStringList paramList = key.split(QLatin1Char(':'));
-    const QString platform = paramList.takeFirst().toLower();
+   QStringList paramList = key.split(QLatin1Char(':'));
+   const QString platform = paramList.takeFirst().toLower();
 
-    // Try loading the plugin from platformPluginPath first:
-    if (!platformPluginPath.isEmpty()) {
-        QCoreApplication::addLibraryPath(platformPluginPath);
-        if (QPlatformTheme *ret = qLoadPlugin1<QPlatformTheme, QPlatformThemePlugin>(directLoader(), platform, paramList))
-            return ret;
-    }
+   // Try loading the plugin from platformPluginPath first:
+   if (!platformPluginPath.isEmpty()) {
+      QCoreApplication::addLibraryPath(platformPluginPath);
+      if (QPlatformTheme *ret = qLoadPlugin1<QPlatformTheme, QPlatformThemePlugin>(directLoader(), platform, paramList)) {
+         return ret;
+      }
+   }
 
-    if (QPlatformTheme *ret = qLoadPlugin1<QPlatformTheme, QPlatformThemePlugin>(loader(), platform, paramList))
-           return ret;
+   if (QPlatformTheme *ret = qLoadPlugin1<QPlatformTheme, QPlatformThemePlugin>(loader(), platform, paramList)) {
+      return ret;
+   }
 
-    return 0;
+   return 0;
 }
 
 /*!
@@ -61,23 +63,25 @@ QPlatformTheme *QPlatformThemeFactory::create(const QString& key, const QString 
 */
 QStringList QPlatformThemeFactory::keys(const QString &platformPluginPath)
 {
-    QStringList list;
+   QStringList list;
 
-    if (!platformPluginPath.isEmpty()) {
-        QCoreApplication::addLibraryPath(platformPluginPath);
-        list += directLoader()->keyMap().values();
-        if (!list.isEmpty()) {
-            const QString postFix = QStringLiteral(" (from ")
-                    + QDir::toNativeSeparators(platformPluginPath)
-                    + QLatin1Char(')');
-            const QStringList::iterator end = list.end();
-            for (QStringList::iterator it = list.begin(); it != end; ++it)
-                (*it).append(postFix);
-        }
-    }
+   if (! platformPluginPath.isEmpty()) {
+      QCoreApplication::addLibraryPath(platformPluginPath);
+      list += directLoader()->keyMap().values();
 
-    list += loader()->keyMap().values();
-    return list;
+      if (! list.isEmpty()) {
+         const QString postFix = " (from " + QDir::toNativeSeparators(platformPluginPath) + ')';
+
+         const QStringList::iterator end = list.end();
+
+         for (auto it = list.begin(); it != end; ++it) {
+            (*it).append(postFix);
+         }
+      }
+   }
+
+   list += loader()->keyMap().values();
+   return list;
 
 }
 

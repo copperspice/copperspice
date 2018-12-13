@@ -29,9 +29,9 @@ class QPlatformTheme;
 
 class QPlatformThemeFactory
 {
-public:
-    static QStringList keys(const QString &platformPluginPath = QString());
-    static QPlatformTheme *create(const QString &key, const QString &platformPluginPath = QString());
+ public:
+   static QStringList keys(const QString &platformPluginPath = QString());
+   static QPlatformTheme *create(const QString &key, const QString &platformPluginPath = QString());
 };
 
 #endif

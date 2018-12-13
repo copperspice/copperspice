@@ -45,245 +45,243 @@ class QFileInfo;
 
 class Q_GUI_EXPORT QPlatformTheme
 {
-    Q_DECLARE_PRIVATE(QPlatformTheme)
+   Q_DECLARE_PRIVATE(QPlatformTheme)
 
-public:
-    enum ThemeHint {
-        CursorFlashTime,
-        KeyboardInputInterval,
-        MouseDoubleClickInterval,
-        StartDragDistance,
-        StartDragTime,
-        KeyboardAutoRepeatRate,
-        PasswordMaskDelay,
-        StartDragVelocity,
-        TextCursorWidth,
-        DropShadow,
-        MaximumScrollBarDragDistance,
-        ToolButtonStyle,
-        ToolBarIconSize,
-        ItemViewActivateItemOnSingleClick,
-        SystemIconThemeName,
-        SystemIconFallbackThemeName,
-        IconThemeSearchPaths,
-        StyleNames,
-        WindowAutoPlacement,
-        DialogButtonBoxLayout,
-        DialogButtonBoxButtonsHaveIcons,
-        UseFullScreenForPopupMenu,
-        KeyboardScheme,
-        UiEffects,
-        SpellCheckUnderlineStyle,
-        TabFocusBehavior,
-        IconPixmapSizes,
-        PasswordMaskCharacter,
-        DialogSnapToDefaultButton,
-        ContextMenuOnMouseRelease,
-        MousePressAndHoldInterval,
-        MouseDoubleClickDistance,
-        WheelScrollLines
-    };
+ public:
+   enum ThemeHint {
+      CursorFlashTime,
+      KeyboardInputInterval,
+      MouseDoubleClickInterval,
+      StartDragDistance,
+      StartDragTime,
+      KeyboardAutoRepeatRate,
+      PasswordMaskDelay,
+      StartDragVelocity,
+      TextCursorWidth,
+      DropShadow,
+      MaximumScrollBarDragDistance,
+      ToolButtonStyle,
+      ToolBarIconSize,
+      ItemViewActivateItemOnSingleClick,
+      SystemIconThemeName,
+      SystemIconFallbackThemeName,
+      IconThemeSearchPaths,
+      StyleNames,
+      WindowAutoPlacement,
+      DialogButtonBoxLayout,
+      DialogButtonBoxButtonsHaveIcons,
+      UseFullScreenForPopupMenu,
+      KeyboardScheme,
+      UiEffects,
+      SpellCheckUnderlineStyle,
+      TabFocusBehavior,
+      IconPixmapSizes,
+      PasswordMaskCharacter,
+      DialogSnapToDefaultButton,
+      ContextMenuOnMouseRelease,
+      MousePressAndHoldInterval,
+      MouseDoubleClickDistance,
+      WheelScrollLines
+   };
 
-    enum DialogType {
-        FileDialog,
-        ColorDialog,
-        FontDialog,
-        MessageDialog
-    };
+   enum DialogType {
+      FileDialog,
+      ColorDialog,
+      FontDialog,
+      MessageDialog
+   };
 
-    enum Palette {
-        SystemPalette,
-        ToolTipPalette,
-        ToolButtonPalette,
-        ButtonPalette,
-        CheckBoxPalette,
-        RadioButtonPalette,
-        HeaderPalette,
-        ComboBoxPalette,
-        ItemViewPalette,
-        MessageBoxLabelPelette,
-        MessageBoxLabelPalette = MessageBoxLabelPelette,
-        TabBarPalette,
-        LabelPalette,
-        GroupBoxPalette,
-        MenuPalette,
-        MenuBarPalette,
-        TextEditPalette,
-        TextLineEditPalette,
-        NPalettes
-    };
+   enum Palette {
+      SystemPalette,
+      ToolTipPalette,
+      ToolButtonPalette,
+      ButtonPalette,
+      CheckBoxPalette,
+      RadioButtonPalette,
+      HeaderPalette,
+      ComboBoxPalette,
+      ItemViewPalette,
+      MessageBoxLabelPelette,
+      MessageBoxLabelPalette = MessageBoxLabelPelette,
+      TabBarPalette,
+      LabelPalette,
+      GroupBoxPalette,
+      MenuPalette,
+      MenuBarPalette,
+      TextEditPalette,
+      TextLineEditPalette,
+      NPalettes
+   };
 
-    enum Font {
-        SystemFont,
-        MenuFont,
-        MenuBarFont,
-        MenuItemFont,
-        MessageBoxFont,
-        LabelFont,
-        TipLabelFont,
-        StatusBarFont,
-        TitleBarFont,
-        MdiSubWindowTitleFont,
-        DockWidgetTitleFont,
-        PushButtonFont,
-        CheckBoxFont,
-        RadioButtonFont,
-        ToolButtonFont,
-        ItemViewFont,
-        ListViewFont,
-        HeaderViewFont,
-        ListBoxFont,
-        ComboMenuItemFont,
-        ComboLineEditFont,
-        SmallFont,
-        MiniFont,
-        FixedFont,
-        GroupBoxTitleFont,
-        TabButtonFont,
-        NFonts
-    };
+   enum Font {
+      SystemFont,
+      MenuFont,
+      MenuBarFont,
+      MenuItemFont,
+      MessageBoxFont,
+      LabelFont,
+      TipLabelFont,
+      StatusBarFont,
+      TitleBarFont,
+      MdiSubWindowTitleFont,
+      DockWidgetTitleFont,
+      PushButtonFont,
+      CheckBoxFont,
+      RadioButtonFont,
+      ToolButtonFont,
+      ItemViewFont,
+      ListViewFont,
+      HeaderViewFont,
+      ListBoxFont,
+      ComboMenuItemFont,
+      ComboLineEditFont,
+      SmallFont,
+      MiniFont,
+      FixedFont,
+      GroupBoxTitleFont,
+      TabButtonFont,
+      NFonts
+   };
 
-    enum StandardPixmap {  // Keep in sync with QStyle::StandardPixmap
-        TitleBarMenuButton,
-        TitleBarMinButton,
-        TitleBarMaxButton,
-        TitleBarCloseButton,
-        TitleBarNormalButton,
-        TitleBarShadeButton,
-        TitleBarUnshadeButton,
-        TitleBarContextHelpButton,
-        DockWidgetCloseButton,
-        MessageBoxInformation,
-        MessageBoxWarning,
-        MessageBoxCritical,
-        MessageBoxQuestion,
-        DesktopIcon,
-        TrashIcon,
-        ComputerIcon,
-        DriveFDIcon,
-        DriveHDIcon,
-        DriveCDIcon,
-        DriveDVDIcon,
-        DriveNetIcon,
-        DirOpenIcon,
-        DirClosedIcon,
-        DirLinkIcon,
-        DirLinkOpenIcon,
-        FileIcon,
-        FileLinkIcon,
-        ToolBarHorizontalExtensionButton,
-        ToolBarVerticalExtensionButton,
-        FileDialogStart,
-        FileDialogEnd,
-        FileDialogToParent,
-        FileDialogNewFolder,
-        FileDialogDetailedView,
-        FileDialogInfoView,
-        FileDialogContentsView,
-        FileDialogListView,
-        FileDialogBack,
-        DirIcon,
-        DialogOkButton,
-        DialogCancelButton,
-        DialogHelpButton,
-        DialogOpenButton,
-        DialogSaveButton,
-        DialogCloseButton,
-        DialogApplyButton,
-        DialogResetButton,
-        DialogDiscardButton,
-        DialogYesButton,
-        DialogNoButton,
-        ArrowUp,
-        ArrowDown,
-        ArrowLeft,
-        ArrowRight,
-        ArrowBack,
-        ArrowForward,
-        DirHomeIcon,
-        CommandLink,
-        VistaShield,
-        BrowserReload,
-        BrowserStop,
-        MediaPlay,
-        MediaStop,
-        MediaPause,
-        MediaSkipForward,
-        MediaSkipBackward,
-        MediaSeekForward,
-        MediaSeekBackward,
-        MediaVolume,
-        MediaVolumeMuted,
-        // do not add any values below/greater than this
-        CustomBase = 0xf0000000
-    };
+   enum StandardPixmap {  // Keep in sync with QStyle::StandardPixmap
+      TitleBarMenuButton,
+      TitleBarMinButton,
+      TitleBarMaxButton,
+      TitleBarCloseButton,
+      TitleBarNormalButton,
+      TitleBarShadeButton,
+      TitleBarUnshadeButton,
+      TitleBarContextHelpButton,
+      DockWidgetCloseButton,
+      MessageBoxInformation,
+      MessageBoxWarning,
+      MessageBoxCritical,
+      MessageBoxQuestion,
+      DesktopIcon,
+      TrashIcon,
+      ComputerIcon,
+      DriveFDIcon,
+      DriveHDIcon,
+      DriveCDIcon,
+      DriveDVDIcon,
+      DriveNetIcon,
+      DirOpenIcon,
+      DirClosedIcon,
+      DirLinkIcon,
+      DirLinkOpenIcon,
+      FileIcon,
+      FileLinkIcon,
+      ToolBarHorizontalExtensionButton,
+      ToolBarVerticalExtensionButton,
+      FileDialogStart,
+      FileDialogEnd,
+      FileDialogToParent,
+      FileDialogNewFolder,
+      FileDialogDetailedView,
+      FileDialogInfoView,
+      FileDialogContentsView,
+      FileDialogListView,
+      FileDialogBack,
+      DirIcon,
+      DialogOkButton,
+      DialogCancelButton,
+      DialogHelpButton,
+      DialogOpenButton,
+      DialogSaveButton,
+      DialogCloseButton,
+      DialogApplyButton,
+      DialogResetButton,
+      DialogDiscardButton,
+      DialogYesButton,
+      DialogNoButton,
+      ArrowUp,
+      ArrowDown,
+      ArrowLeft,
+      ArrowRight,
+      ArrowBack,
+      ArrowForward,
+      DirHomeIcon,
+      CommandLink,
+      VistaShield,
+      BrowserReload,
+      BrowserStop,
+      MediaPlay,
+      MediaStop,
+      MediaPause,
+      MediaSkipForward,
+      MediaSkipBackward,
+      MediaSeekForward,
+      MediaSeekBackward,
+      MediaVolume,
+      MediaVolumeMuted,
+      // do not add any values below/greater than this
+      CustomBase = 0xf0000000
+   };
 
-    enum KeyboardSchemes
-    {
-        WindowsKeyboardScheme,
-        MacKeyboardScheme,
-        X11KeyboardScheme,
-        KdeKeyboardScheme,
-        GnomeKeyboardScheme,
-        CdeKeyboardScheme
-    };
+   enum KeyboardSchemes {
+      WindowsKeyboardScheme,
+      MacKeyboardScheme,
+      X11KeyboardScheme,
+      KdeKeyboardScheme,
+      GnomeKeyboardScheme,
+      CdeKeyboardScheme
+   };
 
-    enum UiEffect
-    {
-        GeneralUiEffect = 0x1,
-        AnimateMenuUiEffect = 0x2,
-        FadeMenuUiEffect = 0x4,
-        AnimateComboUiEffect = 0x8,
-        AnimateTooltipUiEffect = 0x10,
-        FadeTooltipUiEffect = 0x20,
-        AnimateToolBoxUiEffect = 0x40
-    };
+   enum UiEffect {
+      GeneralUiEffect = 0x1,
+      AnimateMenuUiEffect = 0x2,
+      FadeMenuUiEffect = 0x4,
+      AnimateComboUiEffect = 0x8,
+      AnimateTooltipUiEffect = 0x10,
+      FadeTooltipUiEffect = 0x20,
+      AnimateToolBoxUiEffect = 0x40
+   };
 
-    enum IconOption {
-        DontUseCustomDirectoryIcons = 0x01
-    };
-    Q_DECLARE_FLAGS(IconOptions, IconOption)
+   enum IconOption {
+      DontUseCustomDirectoryIcons = 0x01
+   };
+   using IconOptions = QFlags<IconOption>;
 
-    explicit QPlatformTheme();
-    virtual ~QPlatformTheme();
+   explicit QPlatformTheme();
+   virtual ~QPlatformTheme();
 
-    virtual QPlatformMenuItem* createPlatformMenuItem() const;
-    virtual QPlatformMenu* createPlatformMenu() const;
-    virtual QPlatformMenuBar* createPlatformMenuBar() const;
-    virtual void showPlatformMenuBar() {}
+   virtual QPlatformMenuItem *createPlatformMenuItem() const;
+   virtual QPlatformMenu *createPlatformMenu() const;
+   virtual QPlatformMenuBar *createPlatformMenuBar() const;
+   virtual void showPlatformMenuBar() {}
 
-    virtual bool usePlatformNativeDialog(DialogType type) const;
-    virtual QPlatformDialogHelper *createPlatformDialogHelper(DialogType type) const;
+   virtual bool usePlatformNativeDialog(DialogType type) const;
+   virtual QPlatformDialogHelper *createPlatformDialogHelper(DialogType type) const;
 
 #ifndef QT_NO_SYSTEMTRAYICON
-    virtual QPlatformSystemTrayIcon *createPlatformSystemTrayIcon() const;
+   virtual QPlatformSystemTrayIcon *createPlatformSystemTrayIcon() const;
 #endif
 
-    virtual const QPalette *palette(Palette type = SystemPalette) const;
+   virtual const QPalette *palette(Palette type = SystemPalette) const;
 
-    virtual const QFont *font(Font type = SystemFont) const;
+   virtual const QFont *font(Font type = SystemFont) const;
 
-    virtual QVariant themeHint(ThemeHint hint) const;
+   virtual QVariant themeHint(ThemeHint hint) const;
 
-    virtual QPixmap standardPixmap(StandardPixmap sp, const QSizeF &size) const;
-    virtual QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
-                                   QPlatformTheme::IconOptions iconOptions = 0) const;
+   virtual QPixmap standardPixmap(StandardPixmap sp, const QSizeF &size) const;
+   virtual QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
+      QPlatformTheme::IconOptions iconOptions = 0) const;
 
-    virtual QIconEngine *createIconEngine(const QString &iconName) const;
+   virtual QIconEngine *createIconEngine(const QString &iconName) const;
 
-    virtual QList<QKeySequence> keyBindings(QKeySequence::StandardKey key) const;
+   virtual QList<QKeySequence> keyBindings(QKeySequence::StandardKey key) const;
 
-    virtual QString standardButtonText(int button) const;
+   virtual QString standardButtonText(int button) const;
 
-    static QVariant defaultThemeHint(ThemeHint hint);
-    static QString defaultStandardButtonText(int button);
+   static QVariant defaultThemeHint(ThemeHint hint);
+   static QString defaultStandardButtonText(int button);
 
-protected:
-    explicit QPlatformTheme(QPlatformThemePrivate *priv);
-    QScopedPointer<QPlatformThemePrivate> d_ptr;
+ protected:
+   explicit QPlatformTheme(QPlatformThemePrivate *priv);
+   QScopedPointer<QPlatformThemePrivate> d_ptr;
 
-private:
-    Q_DISABLE_COPY(QPlatformTheme)
+ private:
+   Q_DISABLE_COPY(QPlatformTheme)
 };
 
 #endif
