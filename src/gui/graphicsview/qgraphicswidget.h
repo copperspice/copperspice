@@ -23,12 +23,12 @@
 #ifndef QGRAPHICSWIDGET_H
 #define QGRAPHICSWIDGET_H
 
-#include <QtGui/qfont.h>
-#include <QtGui/qgraphicslayoutitem.h>
-#include <QtGui/qgraphicsitem.h>
-#include <QtGui/qpalette.h>
+#include <qfont.h>
+#include <qgraphicslayoutitem.h>
+#include <qgraphicsitem.h>
+#include <qpalette.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QFont;
 class QFontMetrics;
@@ -95,7 +95,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    GUI_CS_PROPERTY_NOTIFY(layout, layoutChanged)
 
  public:
-   QGraphicsWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = 0);
+   QGraphicsWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = Qt::WindowFlags());
    ~QGraphicsWidget();
 
    QGraphicsLayout *layout() const;
@@ -183,7 +183,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
 #ifndef QT_NO_ACTION
    //actions
    void addAction(QAction *action);
-   void addActions(QList<QAction *> actions);
+   void addActions(const QList<QAction *> &actions);
    void insertAction(QAction *before, QAction *action);
    void insertActions(QAction *before, QList<QAction *> actions);
    void removeAction(QAction *action);
@@ -215,7 +215,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    GUI_CS_SLOT_2(close)
 
  protected:
-   QGraphicsWidget(QGraphicsWidgetPrivate &, QGraphicsItem *parent, Qt::WindowFlags wFlags = 0);
+   QGraphicsWidget(QGraphicsWidgetPrivate &, QGraphicsItem *parent, Qt::WindowFlags wFlags = Qt::WindowFlags());
 
    virtual void initStyleOption(QStyleOption *option) const;
 
@@ -266,9 +266,6 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    Q_DISABLE_COPY(QGraphicsWidget)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsWidget)
 
-   GUI_CS_SLOT_1(Private, void _q_relayout())
-   GUI_CS_SLOT_2(_q_relayout)
-
    friend class QGraphicsScene;
    friend class QGraphicsScenePrivate;
    friend class QGraphicsView;
@@ -284,39 +281,37 @@ inline void QGraphicsWidget::setGeometry(qreal ax, qreal ay, qreal aw, qreal ah)
    setGeometry(QRectF(ax, ay, aw, ah));
 }
 
-void QGraphicsWidget::cs_resize(const QSizeF &size)
+inline void QGraphicsWidget::cs_resize(const QSizeF &size)
 {
    resize(size);
 }
 
-void QGraphicsWidget::cs_setGeometry(const QRectF &size)
+inline void QGraphicsWidget::cs_setGeometry(const QRectF &size)
 {
    setGeometry(size);
 }
 
-void QGraphicsWidget::cs_setMinimumSize(const QSizeF &size)
+inline void QGraphicsWidget::cs_setMinimumSize(const QSizeF &size)
 {
    setMinimumSize(size);
 }
 
-void QGraphicsWidget::cs_setPreferredSize(const QSizeF &size)
+inline void QGraphicsWidget::cs_setPreferredSize(const QSizeF &size)
 {
    setPreferredSize(size);
 }
 
-void QGraphicsWidget::cs_setMaximumSize(const QSizeF &size)
+inline void QGraphicsWidget::cs_setMaximumSize(const QSizeF &size)
 {
    setMaximumSize(size);
 }
 
-void QGraphicsWidget::cs_setSizePolicy(const QSizePolicy &policy)
+inline void QGraphicsWidget::cs_setSizePolicy(const QSizePolicy &policy)
 {
    setSizePolicy(policy);
 }
 
 #endif
-
-QT_END_NAMESPACE
 
 #endif
 

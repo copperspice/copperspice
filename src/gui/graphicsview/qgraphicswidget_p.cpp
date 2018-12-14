@@ -36,11 +36,7 @@
 #include <QtGui/QStyleOptionTitleBar>
 #include <QtGui/QGraphicsSceneMouseEvent>
 
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
-# include <QMacStyle>
-#endif
 
-QT_BEGIN_NAMESPACE
 
 void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags wFlags)
 {
@@ -54,9 +50,8 @@ void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags wFl
    adjustWindowFlags(&wFlags);
    windowFlags = wFlags;
 
-   if (parentItem) {
-      setParentItemHelper(parentItem, 0, 0);
-   }
+
+   q->setParentItem(parentItem);
 
    q->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, QSizePolicy::DefaultType));
    q->setGraphicsItem(q);
@@ -74,11 +69,7 @@ qreal QGraphicsWidgetPrivate::titleBarHeight(const QStyleOptionTitleBar &options
 {
    Q_Q(const QGraphicsWidget);
    int height = q->style()->pixelMetric(QStyle::PM_TitleBarHeight, &options);
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
-   if (qobject_cast<QMacStyle *>(q->style())) {
-      height -= 4;
-   }
-#endif
+
    return (qreal)height;
 }
 
@@ -225,17 +216,6 @@ void QGraphicsWidgetPrivate::resolveLayoutDirection()
    }
 }
 
-/* private slot */
-void QGraphicsWidgetPrivate::_q_relayout()
-{
-   --refCountInvokeRelayout;
-   if (refCountInvokeRelayout == 0) {
-      Q_Q(QGraphicsWidget);
-      bool wasResized = q->testAttribute(Qt::WA_Resized);
-      q->resize(q->size()); // this will restrict the size
-      q->setAttribute(Qt::WA_Resized, wasResized);
-   }
-}
 
 QPalette QGraphicsWidgetPrivate::naturalWidgetPalette() const
 {
@@ -334,21 +314,21 @@ void QGraphicsWidgetPrivate::initStyleOptionTitleBar(QStyleOptionTitleBar *optio
       option->state &= ~QStyle::State_Active;
       option->titleBarState = Qt::WindowNoState;
    }
-   QFont windowTitleFont = QApplication::font("QWorkspaceTitleBar");
+   QFont windowTitleFont = QApplication::font("QMdiSubWindowTitleBar");
    QRect textRect = q->style()->subControlRect(QStyle::CC_TitleBar, option, QStyle::SC_TitleBarLabel, 0);
    option->text = QFontMetrics(windowTitleFont).elidedText(
-                     windowData->windowTitle, Qt::ElideRight, textRect.width());
+         windowData->windowTitle, Qt::ElideRight, textRect.width());
 }
 
 void QGraphicsWidgetPrivate::adjustWindowFlags(Qt::WindowFlags *flags)
 {
    bool customize =  (*flags & (Qt::CustomizeWindowHint
-                                | Qt::FramelessWindowHint
-                                | Qt::WindowTitleHint
-                                | Qt::WindowSystemMenuHint
-                                | Qt::WindowMinimizeButtonHint
-                                | Qt::WindowMaximizeButtonHint
-                                | Qt::WindowContextHelpButtonHint));
+            | Qt::FramelessWindowHint
+            | Qt::WindowTitleHint
+            | Qt::WindowSystemMenuHint
+            | Qt::WindowMinimizeButtonHint
+            | Qt::WindowMaximizeButtonHint
+            | Qt::WindowContextHelpButtonHint));
 
    uint type = (*flags & Qt::WindowType_Mask);
    if (customize)
@@ -359,7 +339,7 @@ void QGraphicsWidgetPrivate::adjustWindowFlags(Qt::WindowFlags *flags)
       *flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint;
    } else if (type == Qt::Window || type == Qt::SubWindow)
       *flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint
-                | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint;
+         | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint;
 }
 
 void QGraphicsWidgetPrivate::windowFrameMouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -382,8 +362,8 @@ void QGraphicsWidgetPrivate::windowFrameMouseReleaseEvent(QGraphicsSceneMouseEve
          }
          bar.subControls = QStyle::SC_TitleBarCloseButton;
          if (q->style()->subControlRect(QStyle::CC_TitleBar, &bar,
-                                        QStyle::SC_TitleBarCloseButton,
-                                        event->widget()).contains(pos.toPoint())) {
+               QStyle::SC_TitleBarCloseButton,
+               event->widget()).contains(pos.toPoint())) {
             q->close();
          }
       }
@@ -406,7 +386,7 @@ void QGraphicsWidgetPrivate::windowFrameMousePressEvent(QGraphicsSceneMouseEvent
    windowData->grabbedSection = q->windowFrameSectionAt(event->pos());
    ensureWindowData();
    if (windowData->grabbedSection == Qt::TitleBarArea
-         && windowData->hoveredSubControl == QStyle::SC_TitleBarCloseButton) {
+      && windowData->hoveredSubControl == QStyle::SC_TitleBarCloseButton) {
       windowData->buttonSunken = true;
       q->update();
    }
@@ -423,15 +403,15 @@ void QGraphicsWidgetPrivate::windowFrameMousePressEvent(QGraphicsSceneMouseEvent
   as minimum width and maximum width.
  */
 static qreal minimumHeightForWidth(qreal width, qreal minh, qreal maxh,
-                                   const QGraphicsWidget *widget,
-                                   bool heightForWidth = true)
+   const QGraphicsWidget *widget,
+   bool heightForWidth = true)
 {
    qreal minimumHeightForWidth = -1;
    const bool hasHFW = QGraphicsLayoutItemPrivate::get(widget)->hasHeightForWidth();
    if (hasHFW == heightForWidth) {
       minimumHeightForWidth = hasHFW
-                              ? widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(width, -1)).height()
-                              : widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(-1, width)).width();    //"width" is here height!
+         ? widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(width, -1)).height()
+         : widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(-1, width)).width();    //"width" is here height!
    } else {
       // widthForHeight
       const qreal constraint = width;
@@ -441,8 +421,8 @@ static qreal minimumHeightForWidth(qreal width, qreal minh, qreal maxh,
          // layout->effectiveSizeHint(Qt::MiniumumSize), which again will call
          // sizeHint three times because of how the cache works
          qreal hfw = hasHFW
-                     ? widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(middle, -1)).height()
-                     : widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(-1, middle)).width();
+            ? widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(middle, -1)).height()
+            : widget->effectiveSizeHint(Qt::MinimumSize, QSizeF(-1, middle)).width();
          if (hfw > constraint) {
             minh = middle;
          } else if (hfw <= constraint) {
@@ -455,13 +435,13 @@ static qreal minimumHeightForWidth(qreal width, qreal minh, qreal maxh,
 }
 
 static qreal minimumWidthForHeight(qreal height, qreal minw, qreal maxw,
-                                   const QGraphicsWidget *widget)
+   const QGraphicsWidget *widget)
 {
    return minimumHeightForWidth(height, minw, maxw, widget, false);
 }
 
 static QSizeF closestAcceptableSize(const QSizeF &proposed,
-                                    const QGraphicsWidget *widget)
+   const QGraphicsWidget *widget)
 {
    const QSizeF current = widget->size();
 
@@ -508,9 +488,9 @@ static QSizeF closestAcceptableSize(const QSizeF &proposed,
 }
 
 static void _q_boundGeometryToSizeConstraints(const QRectF &startGeometry,
-      QRectF *rect, Qt::WindowFrameSection section,
-      const QSizeF &min, const QSizeF &max,
-      const QGraphicsWidget *widget)
+   QRectF *rect, Qt::WindowFrameSection section,
+   const QSizeF &min, const QSizeF &max,
+   const QGraphicsWidget *widget)
 {
    const QRectF proposedRect = *rect;
    qreal width = qBound(min.width(), proposedRect.width(), max.width());
@@ -551,15 +531,15 @@ static void _q_boundGeometryToSizeConstraints(const QRectF &startGeometry,
    switch (section) {
       case Qt::LeftSection:
          rect->setRect(startGeometry.right() - qRound(width), startGeometry.top(),
-                       qRound(width), startGeometry.height());
+            qRound(width), startGeometry.height());
          break;
       case Qt::TopLeftSection:
          rect->setRect(startGeometry.right() - qRound(width), startGeometry.bottom() - qRound(height),
-                       qRound(width), qRound(height));
+            qRound(width), qRound(height));
          break;
       case Qt::TopSection:
          rect->setRect(startGeometry.left(), startGeometry.bottom() - qRound(height),
-                       startGeometry.width(), qRound(height));
+            startGeometry.width(), qRound(height));
          break;
       case Qt::TopRightSection:
          rect->setTop(rect->bottom() - qRound(height));
@@ -577,7 +557,7 @@ static void _q_boundGeometryToSizeConstraints(const QRectF &startGeometry,
          break;
       case Qt::BottomLeftSection:
          rect->setRect(startGeometry.right() - qRound(width), startGeometry.top(),
-                       qRound(width), qRound(height));
+            qRound(width), qRound(height));
          break;
       default:
          break;
@@ -601,45 +581,45 @@ void QGraphicsWidgetPrivate::windowFrameMouseMoveEvent(QGraphicsSceneMouseEvent 
    switch (windowData->grabbedSection) {
       case Qt::LeftSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft()
-                              + QPointF(parentXDelta.dx(), parentXDelta.dy()),
-                              windowData->startGeometry.size() - QSizeF(delta.dx(), delta.dy()));
+               + QPointF(parentXDelta.dx(), parentXDelta.dy()),
+               windowData->startGeometry.size() - QSizeF(delta.dx(), delta.dy()));
          break;
       case Qt::TopLeftSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft()
-                              + QPointF(parentDelta.dx(), parentDelta.dy()),
-                              windowData->startGeometry.size() - QSizeF(delta.dx(), delta.dy()));
+               + QPointF(parentDelta.dx(), parentDelta.dy()),
+               windowData->startGeometry.size() - QSizeF(delta.dx(), delta.dy()));
          break;
       case Qt::TopSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft()
-                              + QPointF(parentYDelta.dx(), parentYDelta.dy()),
-                              windowData->startGeometry.size() - QSizeF(0, delta.dy()));
+               + QPointF(parentYDelta.dx(), parentYDelta.dy()),
+               windowData->startGeometry.size() - QSizeF(0, delta.dy()));
          break;
       case Qt::TopRightSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft()
-                              + QPointF(parentYDelta.dx(), parentYDelta.dy()),
-                              windowData->startGeometry.size() - QSizeF(-delta.dx(), delta.dy()));
+               + QPointF(parentYDelta.dx(), parentYDelta.dy()),
+               windowData->startGeometry.size() - QSizeF(-delta.dx(), delta.dy()));
          break;
       case Qt::RightSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft(),
-                              windowData->startGeometry.size() + QSizeF(delta.dx(), 0));
+               windowData->startGeometry.size() + QSizeF(delta.dx(), 0));
          break;
       case Qt::BottomRightSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft(),
-                              windowData->startGeometry.size() + QSizeF(delta.dx(), delta.dy()));
+               windowData->startGeometry.size() + QSizeF(delta.dx(), delta.dy()));
          break;
       case Qt::BottomSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft(),
-                              windowData->startGeometry.size() + QSizeF(0, delta.dy()));
+               windowData->startGeometry.size() + QSizeF(0, delta.dy()));
          break;
       case Qt::BottomLeftSection:
          newGeometry = QRectF(windowData->startGeometry.topLeft()
-                              + QPointF(parentXDelta.dx(), parentXDelta.dy()),
-                              windowData->startGeometry.size() - QSizeF(delta.dx(), -delta.dy()));
+               + QPointF(parentXDelta.dx(), parentXDelta.dy()),
+               windowData->startGeometry.size() - QSizeF(delta.dx(), -delta.dy()));
          break;
       case Qt::TitleBarArea:
          newGeometry = QRectF(windowData->startGeometry.topLeft()
-                              + QPointF(parentDelta.dx(), parentDelta.dy()),
-                              windowData->startGeometry.size());
+               + QPointF(parentDelta.dx(), parentDelta.dy()),
+               windowData->startGeometry.size());
          break;
       case Qt::NoSection:
          break;
@@ -647,10 +627,10 @@ void QGraphicsWidgetPrivate::windowFrameMouseMoveEvent(QGraphicsSceneMouseEvent 
 
    if (windowData->grabbedSection != Qt::NoSection) {
       _q_boundGeometryToSizeConstraints(windowData->startGeometry, &newGeometry,
-                                        windowData->grabbedSection,
-                                        q->effectiveSizeHint(Qt::MinimumSize),
-                                        q->effectiveSizeHint(Qt::MaximumSize),
-                                        q);
+         windowData->grabbedSection,
+         q->effectiveSizeHint(Qt::MinimumSize),
+         q->effectiveSizeHint(Qt::MaximumSize),
+         q);
       q->setGeometry(newGeometry);
    }
 }
@@ -708,14 +688,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverMoveEvent(QGraphicsSceneHoverEvent 
          break;
       case Qt::TitleBarArea:
          windowData->buttonRect = q->style()->subControlRect(
-                                     QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarCloseButton, 0);
-#ifdef Q_OS_MAC
-         // On mac we should hover if we are in the 'area' of the buttons
-         windowData->buttonRect |= q->style()->subControlRect(
-                                      QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarMinButton, 0);
-         windowData->buttonRect |= q->style()->subControlRect(
-                                      QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarMaxButton, 0);
-#endif
+               QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarCloseButton, 0);
          if (windowData->buttonRect.contains(pos.toPoint())) {
             windowData->buttonMouseOver = true;
          }
@@ -760,7 +733,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
 
       bool needsUpdate = false;
       if (windowData->hoveredSubControl == QStyle::SC_TitleBarCloseButton
-            || windowData->buttonMouseOver) {
+         || windowData->buttonMouseOver) {
          needsUpdate = true;
       }
 
@@ -783,77 +756,61 @@ bool QGraphicsWidgetPrivate::hasDecoration() const
  * is called after a reparent has taken place to fix up the focus chain(s)
  */
 void QGraphicsWidgetPrivate::fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene,
-      QGraphicsScene *newScene)
+   QGraphicsScene *newScene)
 {
    Q_Q(QGraphicsWidget);
 
    Q_ASSERT(focusNext && focusPrev);
 
-   QGraphicsWidget *n = q;     //last one in 'new' list
-   QGraphicsWidget *o = 0;     //last one in 'old' list
-
-   QGraphicsWidget *w = focusNext;
-
-   QGraphicsWidget *firstOld = 0;
-   bool wasPreviousNew = true;
-
-   while (w != q) {
-      bool isCurrentNew = q->isAncestorOf(w);
-      if (isCurrentNew) {
-         if (!wasPreviousNew) {
-            n->d_func()->focusNext = w;
-            w->d_func()->focusPrev = n;
-         }
-         n = w;
-      } else { /*if (!isCurrentNew)*/
-         if (wasPreviousNew) {
-            if (o) {
-               o->d_func()->focusNext = w;
-               w->d_func()->focusPrev = o;
-            } else {
-               firstOld = w;
-            }
-         }
-         o = w;
+   if (q_ptr->isPanel()) {
+      // panels are never a part of their parent's or ancestors' focus
+      // chains. so reparenting a panel is easy; there's nothing to do.
+      return;
+   }
+   // we're not a panel, so find the first widget in the focus chain
+   // (this), and the last (this, or the last widget that is still
+   // a descendent of this). also find the widgets that currently /
+   // before reparenting point to this widgets' focus chain.
+   QGraphicsWidget *focusFirst = q;
+   QGraphicsWidget *focusBefore = focusPrev;
+   QGraphicsWidget *focusLast = focusFirst;
+   QGraphicsWidget *focusAfter = focusNext;
+   do {
+      if (!q->isAncestorOf(focusAfter)) {
+         break;
       }
-      w = w->d_func()->focusNext;
-      wasPreviousNew = isCurrentNew;
+      focusLast = focusAfter;
+   } while ((focusAfter = focusAfter->d_func()->focusNext));
+
+   if (!parent && oldScene && oldScene != newScene && oldScene->d_func()->tabFocusFirst == q) {
+      // detach from old scene's top level focus chain.
+      oldScene->d_func()->tabFocusFirst = (focusAfter != q) ? focusAfter : 0;
    }
 
-   // repair the 'old' chain
-   if (firstOld) {
-      o->d_func()->focusNext = firstOld;
-      firstOld->d_func()->focusPrev = o;
-   }
-
-   // update tabFocusFirst for oldScene if the item is going to be removed from oldScene
+   // detach from current focus chain; skip this widget subtree.
+   focusBefore->d_func()->focusNext = focusAfter;
+   focusAfter->d_func()->focusPrev = focusBefore;
    if (newParent) {
-      newScene = newParent->scene();
-   }
+      // attach to new parent's focus chain as the last element
+      // in its chain.
+      QGraphicsWidget *newFocusFirst = newParent;
+      QGraphicsWidget *newFocusLast = newFocusFirst;
+      QGraphicsWidget *newFocusAfter = newFocusFirst->d_func()->focusNext;
+      do {
+         if (!newParent->isAncestorOf(newFocusAfter)) {
+            break;
+         }
+         newFocusLast = newFocusAfter;
+      } while ((newFocusAfter = newFocusAfter->d_func()->focusNext));
 
-   if (oldScene && newScene != oldScene) {
-      oldScene->d_func()->tabFocusFirst = (firstOld && firstOld->scene() == oldScene) ? firstOld : 0;
-   }
-
-   QGraphicsItem *topLevelItem = newParent ? newParent->topLevelItem() : 0;
-   QGraphicsWidget *topLevel = 0;
-   if (topLevelItem && topLevelItem->isWidget()) {
-      topLevel = static_cast<QGraphicsWidget *>(topLevelItem);
-   }
-
-   if (topLevel && newParent) {
-      QGraphicsWidget *last = topLevel->d_func()->focusPrev;
-      // link last with new chain
-      last->d_func()->focusNext = q;
-      focusPrev = last;
-
-      // link last in chain with
-      topLevel->d_func()->focusPrev = n;
-      n->d_func()->focusNext = topLevel;
+      newFocusLast->d_func()->focusNext = q;
+      focusLast->d_func()->focusNext = newFocusAfter;
+      newFocusAfter->d_func()->focusPrev = focusLast;
+      focusPrev = newFocusLast;
    } else {
-      // q is the start of the focus chain
-      n->d_func()->focusNext = q;
-      focusPrev = n;
+      // no new parent, so just link up our own prev->last widgets.
+      focusPrev = focusLast;
+      focusLast->d_func()->focusNext = q;
    }
 
 }
@@ -931,6 +888,5 @@ void QGraphicsWidgetPrivate::setGeometryFromSetPos()
    inSetPos = 0 ;
 }
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_GRAPHICSVIEW

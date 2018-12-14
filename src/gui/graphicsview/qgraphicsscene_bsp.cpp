@@ -27,8 +27,6 @@
 #include <QtCore/qstring.h>
 #include <qgraphicsitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QGraphicsSceneInsertItemBspTreeVisitor : public QGraphicsSceneBspTreeVisitor
 {
  public:
@@ -157,9 +155,9 @@ QString QGraphicsSceneBspTree::debug(int index) const
       QRectF rect = rectForIndex(index);
       if (!leaves[node->leafIndex].isEmpty()) {
          tmp += QString::fromLatin1("[%1, %2, %3, %4] contains %5 items\n")
-                .formatArg(rect.left()).formatArg(rect.top())
-                .formatArg(rect.width()).formatArg(rect.height())
-                .formatArg(leaves[node->leafIndex].size());
+            .formatArg(rect.left()).formatArg(rect.top())
+            .formatArg(rect.width()).formatArg(rect.height())
+            .formatArg(leaves[node->leafIndex].size());
       }
    } else {
       if (node->type == Node::Horizontal) {
@@ -282,6 +280,6 @@ QRectF QGraphicsSceneBspTree::rectForIndex(int index) const
    return rect;
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_GRAPHICSVIEW

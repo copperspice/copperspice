@@ -33,7 +33,7 @@
 #include <QtCore/qrect.h>
 #include <QtCore/qlist.h>
 
-QT_BEGIN_NAMESPACE
+
 
 static const int QGRAPHICSSCENE_INDEXTIMER_TIMEOUT = 2000;
 
@@ -180,7 +180,7 @@ static inline bool QRectF_intersects(const QRectF &s, const QRectF &r)
    return !(t1 >= b2 || t2 >= b1);
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_GRAPHICSVIEW
 

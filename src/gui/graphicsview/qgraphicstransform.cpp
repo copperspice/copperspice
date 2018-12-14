@@ -28,7 +28,10 @@
 #include <QtCore/qnumeric.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
-QT_BEGIN_NAMESPACE
+
+QGraphicsTransformPrivate::~QGraphicsTransformPrivate()
+{
+}
 void QGraphicsTransformPrivate::setItem(QGraphicsItem *i)
 {
    if (item == i) {
@@ -73,9 +76,7 @@ QGraphicsTransform::QGraphicsTransform(QGraphicsTransformPrivate &dd, QObject *p
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the graphics transform.
-*/
+
 QGraphicsTransform::~QGraphicsTransform()
 {
    Q_D(QGraphicsTransform);
@@ -83,26 +84,7 @@ QGraphicsTransform::~QGraphicsTransform()
 }
 
 
-/*!
-    \fn void QGraphicsTransform::applyTo(QMatrix4x4 *matrix) const
 
-    This pure virtual method has to be reimplemented in derived classes.
-
-    It applies this transformation to \a matrix.
-
-    \sa QGraphicsItem::transform(), QMatrix4x4::toTransform()
-*/
-
-/*!
-    Notifies that this transform operation has changed its parameters in such a
-    way that applyTo() will return a different result than before.
-
-    When implementing you own custom graphics transform, you must call this
-    function every time you change a parameter, to let QGraphicsItem know that
-    its transformation needs to be updated.
-
-    \sa applyTo()
-*/
 void QGraphicsTransform::update()
 {
    Q_D(QGraphicsTransform);
@@ -111,27 +93,6 @@ void QGraphicsTransform::update()
    }
 }
 
-/*!
-  \class QGraphicsScale
-  \brief The QGraphicsScale class provides a scale transformation.
-  \since 4.6
-
-  QGraphicsScene provides certain parameters to help control how the scale
-  should be applied.
-
-  The origin is the point that the item is scaled from (i.e., it stays fixed
-  relative to the parent as the rest of the item grows). By default the
-  origin is QPointF(0, 0).
-
-  The parameters xScale, yScale, and zScale describe the scale factors to
-  apply in horizontal, vertical, and depth directions. They can take on any
-  value, including 0 (to collapse the item to a point) or negative value.
-  A negative xScale value will mirror the item horizontally. A negative yScale
-  value will flip the item vertically. A negative zScale will flip the
-  item end for end.
-
-  \sa QGraphicsTransform, QGraphicsItem::setScale(), QTransform::scale()
-*/
 
 class QGraphicsScalePrivate : public QGraphicsTransformPrivate
 {
@@ -144,30 +105,16 @@ class QGraphicsScalePrivate : public QGraphicsTransformPrivate
    qreal zScale;
 };
 
-/*!
-    Constructs an empty QGraphicsScale object with the given \a parent.
-*/
+
 QGraphicsScale::QGraphicsScale(QObject *parent)
    : QGraphicsTransform(*new QGraphicsScalePrivate, parent)
 {
 }
 
-/*!
-    Destroys the graphics scale.
-*/
 QGraphicsScale::~QGraphicsScale()
 {
 }
 
-/*!
-    \property QGraphicsScale::origin
-    \brief the origin of the scale in 3D space.
-
-    All scaling will be done relative to this point (i.e., this point
-    will stay fixed, relative to the parent, when the item is scaled).
-
-    \sa xScale, yScale, zScale
-*/
 QVector3D QGraphicsScale::origin() const
 {
    Q_D(const QGraphicsScale);
@@ -279,78 +226,8 @@ void QGraphicsScale::applyTo(QMatrix4x4 *matrix) const
    matrix->translate(-d->origin);
 }
 
-/*!
-    \fn QGraphicsScale::originChanged()
 
-    QGraphicsScale emits this signal when its origin changes.
 
-    \sa QGraphicsScale::origin
-*/
-
-/*!
-    \fn QGraphicsScale::xScaleChanged()
-    \since 4.7
-
-    This signal is emitted whenever the \l xScale property changes.
-*/
-
-/*!
-    \fn QGraphicsScale::yScaleChanged()
-    \since 4.7
-
-    This signal is emitted whenever the \l yScale property changes.
-*/
-
-/*!
-    \fn QGraphicsScale::zScaleChanged()
-    \since 4.7
-
-    This signal is emitted whenever the \l zScale property changes.
-*/
-
-/*!
-    \fn QGraphicsScale::scaleChanged()
-
-    This signal is emitted whenever the xScale, yScale, or zScale
-    of the object changes.
-
-    \sa QGraphicsScale::xScale, QGraphicsScale::yScale
-    \sa QGraphicsScale::zScale
-*/
-
-/*!
-    \class QGraphicsRotation
-    \brief The QGraphicsRotation class provides a rotation transformation around
-    a given axis.
-    \since 4.6
-
-    You can provide the desired axis by assigning a QVector3D to the axis property
-    or by passing a member if Qt::Axis to the setAxis convenience function.
-    By default the axis is (0, 0, 1) i.e., rotation around the Z axis.
-
-    The angle property, which is provided by QGraphicsRotation, now
-    describes the number of degrees to rotate around this axis.
-
-    QGraphicsRotation provides certain parameters to help control how the
-    rotation should be applied.
-
-    The origin is the point that the item is rotated around (i.e., it stays
-    fixed relative to the parent as the rest of the item is rotated). By
-    default the origin is QPointF(0, 0).
-
-    The angle property provides the number of degrees to rotate the item
-    clockwise around the origin. This value also be negative, indicating a
-    counter-clockwise rotation. For animation purposes it may also be useful to
-    provide rotation angles exceeding (-360, 360) degrees, for instance to
-    animate how an item rotates several times.
-
-    Note: the final rotation is the combined effect of a rotation in
-    3D space followed by a projection back to 2D.  If several rotations
-    are performed in succession, they will not behave as expected unless
-    they were all around the Z axis.
-
-    \sa QGraphicsTransform, QGraphicsItem::setRotation(), QTransform::rotate()
-*/
 
 class QGraphicsRotationPrivate : public QGraphicsTransformPrivate
 {
@@ -362,9 +239,7 @@ class QGraphicsRotationPrivate : public QGraphicsTransformPrivate
    QVector3D axis;
 };
 
-/*!
-    Constructs a new QGraphicsRotation with the given \a parent.
-*/
+
 QGraphicsRotation::QGraphicsRotation(QObject *parent)
    : QGraphicsTransform(*new QGraphicsRotationPrivate, parent)
 {
@@ -431,34 +306,6 @@ void QGraphicsRotation::setAngle(qreal angle)
    emit angleChanged();
 }
 
-/*!
-    \fn QGraphicsRotation::originChanged()
-
-    This signal is emitted whenever the origin has changed.
-
-    \sa QGraphicsRotation::origin
-*/
-
-/*!
-    \fn void QGraphicsRotation::angleChanged()
-
-    This signal is emitted whenever the angle has changed.
-
-    \sa QGraphicsRotation::angle
-*/
-
-/*!
-    \property QGraphicsRotation::axis
-    \brief a rotation axis, specified by a vector in 3D space.
-
-    This can be any axis in 3D space. By default the axis is (0, 0, 1),
-    which is aligned with the Z axis. If you provide another axis,
-    QGraphicsRotation will provide a transformation that rotates
-    around this axis. For example, if you would like to rotate an item
-    around its X axis, you could pass (1, 0, 0) as the axis.
-
-    \sa QTransform, QGraphicsRotation::angle
-*/
 QVector3D QGraphicsRotation::axis() const
 {
    Q_D(const QGraphicsRotation);
@@ -525,13 +372,5 @@ void QGraphicsRotation::applyTo(QMatrix4x4 *matrix) const
    matrix->translate(-d->origin);
 }
 
-/*!
-    \fn void QGraphicsRotation::axisChanged()
 
-    This signal is emitted whenever the axis of the object changes.
-
-    \sa QGraphicsRotation::axis
-*/
-
-QT_END_NAMESPACE
 #endif //QT_NO_GRAPHICSVIEW

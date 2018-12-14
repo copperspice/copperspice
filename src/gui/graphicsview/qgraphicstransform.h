@@ -31,7 +31,6 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-QT_BEGIN_NAMESPACE
 
 class QGraphicsItem;
 class QGraphicsTransformPrivate;
@@ -165,7 +164,6 @@ void QGraphicsRotation::cs_setAxis(const QVector3D &axis)
    setAxis(axis);
 }
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_GRAPHICSVIEW
 

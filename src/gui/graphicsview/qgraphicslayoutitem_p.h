@@ -24,7 +24,7 @@
 #define QGRAPHICSLAYOUTITEM_P_H
 
 #include <QtCore/QSizeF>
-#include <QtGui/QSizePolicy>
+#include <QSizePolicy>
 
 QT_BEGIN_NAMESPACE
 
@@ -72,7 +72,6 @@ class QGraphicsLayoutItemPrivate
    QGraphicsItem *graphicsItem;
 };
 
-QT_END_NAMESPACE
 
 #endif //QGRAPHICSLAYOUTITEM_P_H
 

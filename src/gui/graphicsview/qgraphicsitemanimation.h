@@ -28,7 +28,7 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-QT_BEGIN_NAMESPACE
+
 
 class QGraphicsItem;
 class QMatrix;
@@ -51,34 +51,35 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
    void setTimeLine(QTimeLine *timeLine);
 
    QPointF posAt(qreal step) const;
-   QList<QPair<qreal, QPointF> > posList() const;
+   QList<QPair<qreal, QPointF>> posList() const;
    void setPosAt(qreal step, const QPointF &pos);
 
    QMatrix matrixAt(qreal step) const;
 
    qreal rotationAt(qreal step) const;
-   QList<QPair<qreal, qreal> > rotationList() const;
+   QList<QPair<qreal, qreal>> rotationList() const;
    void setRotationAt(qreal step, qreal angle);
 
    qreal xTranslationAt(qreal step) const;
    qreal yTranslationAt(qreal step) const;
-   QList<QPair<qreal, QPointF> > translationList() const;
+   QList<QPair<qreal, QPointF>> translationList() const;
    void setTranslationAt(qreal step, qreal dx, qreal dy);
 
    qreal verticalScaleAt(qreal step) const;
    qreal horizontalScaleAt(qreal step) const;
-   QList<QPair<qreal, QPointF> > scaleList() const;
+   QList<QPair<qreal, QPointF>> scaleList() const;
    void setScaleAt(qreal step, qreal sx, qreal sy);
 
    qreal verticalShearAt(qreal step) const;
    qreal horizontalShearAt(qreal step) const;
-   QList<QPair<qreal, QPointF> > shearList() const;
+   QList<QPair<qreal, QPointF>> shearList() const;
    void setShearAt(qreal step, qreal sh, qreal sv);
 
    void clear();
 
    GUI_CS_SLOT_1(Public, void setStep(qreal x))
    GUI_CS_SLOT_2(setStep)
+
    GUI_CS_SLOT_1(Public, void reset())
    GUI_CS_SLOT_2(reset)
 
@@ -91,7 +92,7 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
    QGraphicsItemAnimationPrivate *d;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_GRAPHICSVIEW
 #endif

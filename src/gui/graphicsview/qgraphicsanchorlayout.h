@@ -23,11 +23,11 @@
 #ifndef QGRAPHICSANCHORLAYOUT_H
 #define QGRAPHICSANCHORLAYOUT_H
 
-#include <QtGui/qgraphicsitem.h>
-#include <QtGui/qgraphicslayout.h>
+#include <qgraphicsitem.h>
+#include <qgraphicslayout.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -71,20 +71,20 @@ class Q_GUI_EXPORT QGraphicsAnchor : public QObject
 class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
 {
  public:
-   QGraphicsAnchorLayout(QGraphicsLayoutItem *parent = 0);
+   QGraphicsAnchorLayout(QGraphicsLayoutItem *parent = nullptr);
    virtual ~QGraphicsAnchorLayout();
 
    QGraphicsAnchor *addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
-                  QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
+      QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
 
    QGraphicsAnchor *anchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
-                  QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
+      QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
 
    void addCornerAnchors(QGraphicsLayoutItem *firstItem, Qt::Corner firstCorner,
-                  QGraphicsLayoutItem *secondItem, Qt::Corner secondCorner);
+      QGraphicsLayoutItem *secondItem, Qt::Corner secondCorner);
 
    void addAnchors(QGraphicsLayoutItem *firstItem, QGraphicsLayoutItem *secondItem,
-                  Qt::Orientations orientations = Qt::Horizontal | Qt::Vertical);
+      Qt::Orientations orientations = Qt::Horizontal | Qt::Vertical);
 
    void setHorizontalSpacing(qreal spacing);
    void setVerticalSpacing(qreal spacing);
@@ -111,6 +111,6 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
 
 #endif
 
-QT_END_NAMESPACE
+
 
 #endif

@@ -24,7 +24,6 @@
 #define QGRAPHICSTRANSFORM_P_H
 
 #ifndef QT_NO_GRAPHICSVIEW
-QT_BEGIN_NAMESPACE
 
 class QGraphicsItem;
 
@@ -34,8 +33,10 @@ class QGraphicsTransformPrivate
  public:
    Q_DECLARE_PUBLIC(QGraphicsTransform)
 
-   QGraphicsTransformPrivate() : item(0) {}
-   virtual ~QGraphicsTransformPrivate() {}
+   QGraphicsTransformPrivate() : item(0)
+   {}
+
+   virtual ~QGraphicsTransformPrivate();
 
    QGraphicsItem *item;
 
@@ -47,7 +48,6 @@ class QGraphicsTransformPrivate
 
 };
 
-QT_END_NAMESPACE
 #endif //QT_NO_GRAPHCISVIEW
 
 #endif // QGRAPHICSTRANSFORM_P_H

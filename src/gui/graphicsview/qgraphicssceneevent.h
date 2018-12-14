@@ -29,9 +29,6 @@
 #include <QtCore/qrect.h>
 #include <QtGui/qpolygon.h>
 #include <QtCore/qset.h>
-#include <QtCore/qhash.h>
-
-QT_BEGIN_NAMESPACE
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -53,7 +50,7 @@ class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
 {
 
  public:
-   QGraphicsSceneEvent(Type type);
+   explicit QGraphicsSceneEvent(Type type);
    ~QGraphicsSceneEvent();
 
    QWidget *widget() const;
@@ -73,7 +70,7 @@ class Q_GUI_EXPORT QGraphicsSceneMouseEvent : public QGraphicsSceneEvent
 {
 
  public:
-   QGraphicsSceneMouseEvent(Type type = None);
+   explicit QGraphicsSceneMouseEvent(Type type = None);
    ~QGraphicsSceneMouseEvent();
 
    QPointF pos() const;
@@ -112,6 +109,10 @@ class Q_GUI_EXPORT QGraphicsSceneMouseEvent : public QGraphicsSceneEvent
    Qt::KeyboardModifiers modifiers() const;
    void setModifiers(Qt::KeyboardModifiers modifiers);
 
+   Qt::MouseEventSource source() const;
+   void setSource(Qt::MouseEventSource source);
+   Qt::MouseEventFlags flags() const;
+   void setFlags(Qt::MouseEventFlags);
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneMouseEvent)
    Q_DISABLE_COPY(QGraphicsSceneMouseEvent)
@@ -121,7 +122,7 @@ class Q_GUI_EXPORT QGraphicsSceneWheelEvent : public QGraphicsSceneEvent
 {
 
  public:
-   QGraphicsSceneWheelEvent(Type type = None);
+   explicit QGraphicsSceneWheelEvent(Type type = None);
    ~QGraphicsSceneWheelEvent();
 
    QPointF pos() const;
@@ -157,7 +158,7 @@ class Q_GUI_EXPORT QGraphicsSceneContextMenuEvent : public QGraphicsSceneEvent
  public:
    enum Reason { Mouse, Keyboard, Other };
 
-   QGraphicsSceneContextMenuEvent(Type type = None);
+   explicit QGraphicsSceneContextMenuEvent(Type type = None);
    ~QGraphicsSceneContextMenuEvent();
 
    QPointF pos() const;
@@ -184,7 +185,7 @@ class Q_GUI_EXPORT QGraphicsSceneHoverEvent : public QGraphicsSceneEvent
 {
 
  public:
-   QGraphicsSceneHoverEvent(Type type = None);
+   explicit QGraphicsSceneHoverEvent(Type type = None);
    ~QGraphicsSceneHoverEvent();
 
    QPointF pos() const;
@@ -217,7 +218,7 @@ class Q_GUI_EXPORT QGraphicsSceneHelpEvent : public QGraphicsSceneEvent
 {
 
  public:
-   QGraphicsSceneHelpEvent(Type type = None);
+   explicit QGraphicsSceneHelpEvent(Type type = None);
    ~QGraphicsSceneHelpEvent();
 
    QPointF scenePos() const;
@@ -235,7 +236,7 @@ class Q_GUI_EXPORT QGraphicsSceneDragDropEvent : public QGraphicsSceneEvent
 {
 
  public:
-   QGraphicsSceneDragDropEvent(Type type = None);
+   explicit QGraphicsSceneDragDropEvent(Type type = None);
    ~QGraphicsSceneDragDropEvent();
 
    QPointF pos() const;
@@ -308,7 +309,5 @@ class Q_GUI_EXPORT QGraphicsSceneMoveEvent : public QGraphicsSceneEvent
 };
 
 #endif // QT_NO_GRAPHICSVIEW
-
-QT_END_NAMESPACE
 
 #endif

@@ -29,7 +29,6 @@
 #include <QtCore/QDebug>
 #include <float.h>
 
-QT_BEGIN_NAMESPACE
 
 template <typename Vertex, typename EdgeData>
 class Graph
@@ -164,8 +163,8 @@ class Graph
       return setOfVertices;
    }
 
-   QList<QPair<Vertex *, Vertex *> > connections() const {
-      QList<QPair<Vertex *, Vertex *> > conns;
+   QList<QPair<Vertex *, Vertex *>> connections() const {
+      QList<QPair<Vertex *, Vertex *>> conns;
       for (const_iterator it = constBegin(); it != constEnd(); ++it) {
          Vertex *from = it.from();
          Vertex *to = it.to();
@@ -192,14 +191,14 @@ class Graph
             bool forward = data->from == v;
             if (forward) {
                edges += QString::fromLatin1("\"%1\"->\"%2\" [label=\"[%3,%4,%5,%6,%7]\" color=\"#000000\"] \n")
-                        .formatArg(v->toString())
-                        .formatArg(v1->toString())
-                        .formatArg(data->minSize)
-                        .formatArg(data->minPrefSize)
-                        .formatArg(data->prefSize)
-                        .formatArg(data->maxPrefSize)
-                        .formatArg(data->maxSize)
-                        ;
+                  .formatArg(v->toString())
+                  .formatArg(v1->toString())
+                  .formatArg(data->minSize)
+                  .formatArg(data->minPrefSize)
+                  .formatArg(data->prefSize)
+                  .formatArg(data->maxPrefSize)
+                  .formatArg(data->maxSize)
+                  ;
             }
          }
          strVertices += QString::fromLatin1("\"%1\" [label=\"%2\"]\n").formatArg(v->toString()).formatArg(v->toString());
@@ -234,6 +233,6 @@ class Graph
    QHash<Vertex *, QHash<Vertex *, EdgeData *> *> m_graph;
 };
 
-QT_END_NAMESPACE
+
 
 #endif

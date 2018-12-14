@@ -33,8 +33,6 @@
 
 #include <QDebug>
 
-QT_BEGIN_NAMESPACE
-
 /*
     COMBINE_SIZE() is identical to combineSize(), except that it
     doesn't evaluate 'size' unless necessary.
@@ -120,85 +118,18 @@ void QGraphicsLayoutItemPrivate::init()
    sizeHintWithConstraintCacheDirty = true;
 }
 
-/*!
-    \internal
 
-    effectiveSizeHint has a quirky behavior, one of the quirkinesses is when the hfw function is
-    combined with user-specified min/max sizes. The input to hfw function (e.g width) must be within
-    the min/max width constraint, and the output must be within the min/max height. This sets up a
-    loose dependency between minimum width and maximum height (or minimum height, depending on the
-    type of hfw function). Note that its only the concrete subclass that implements that hfw
-    function that knows if this dependency means that the height will increase or decrease when the
-    width is increased.
-
-    The application should try to ensure that the user-defined sizes are within the range so that
-    they don't conflict with the hfw function.
-
-    Suppose, for instance that the hfw function is:
-
-        height = 2000/width
-
-    and the item has these user-defined sizes:
-
-        min  ( 5,  5)
-        pref(100, 10)
-        max (500,100)
-
-    what is the return value if one calls item->effectiveSizeHint(Qt::MinimumSize, QSizeF(10, -1)); ?
-    The sizeHint() function would return QSizeF(10, 200), but it would be bounded down to 100 due
-    to the max value, so it would return (10, 100). This is not what the item expects, since it
-    really wants that its hfw is respected. If this is a label with wrapped text, this would most
-    likely lead to that some text is clipped. This is certainly not what the app developer wants.
-    Now, it would be better if the user changed those constraints to match the hfw function:
-
-        min ( 20,  5)
-        pref(100, 10)
-        max (500,100)
-
-    here, it says that the width cannot be smaller than 20. This is because if it becomes smaller
-    than 20 the result of the hfw function would violate the max height (100).
-
-    However, there is a similar problem if the width passed to the hfw function reaches *max* width:
-
-    the sizeHint() function would now return QSizeF(500, 4), but 4 is smaller than the minimum
-    height (5), so effectiveSizeHint() would return (500, 5), which would leave too much space.
-    In this case, setting the max width to 400 fixes the problem:
-
-        min ( 20,  5)
-        pref(100, 10)
-        max (400,100)
-
-
-    The implementor of a hfw widget must be aware of this when sizeHint() is reimplemented, so that
-    the default min and max sizes works sensible. (unfortunately the implementor does not have the
-    control over user-set values).
-
-*/
 QSizeF *QGraphicsLayoutItemPrivate::effectiveSizeHints(const QSizeF &constraint) const
 {
    Q_Q(const QGraphicsLayoutItem);
    QSizeF *sizeHintCache;
    const bool hasConstraint = constraint.width() >= 0 || constraint.height() >= 0;
-   QSizeF adjustedConstraint = constraint;
+
    if (hasConstraint) {
       if (!sizeHintWithConstraintCacheDirty && constraint == cachedConstraint) {
          return cachedSizeHintsWithConstraints;
       }
 
-      const QSizeF *hintsWithoutConstraint = effectiveSizeHints(QSizeF(-1, -1));
-
-      if (adjustedConstraint.width() >= 0)
-         adjustedConstraint.setWidth( qBound( hintsWithoutConstraint[Qt::MinimumSize].width(),
-                                              adjustedConstraint.width(),
-                                              hintsWithoutConstraint[Qt::MaximumSize].width()));
-      if (adjustedConstraint.height() >= 0)
-         adjustedConstraint.setHeight( qBound( hintsWithoutConstraint[Qt::MinimumSize].height(),
-                                               adjustedConstraint.height(),
-                                               hintsWithoutConstraint[Qt::MaximumSize].height()));
-
-      if (!sizeHintWithConstraintCacheDirty && adjustedConstraint == cachedConstraint) {
-         return cachedSizeHintsWithConstraints;
-      }
       sizeHintCache = cachedSizeHintsWithConstraints;
    } else {
       if (!sizeHintCacheDirty) {
@@ -208,7 +139,7 @@ QSizeF *QGraphicsLayoutItemPrivate::effectiveSizeHints(const QSizeF &constraint)
    }
 
    for (int i = 0; i < Qt::NSizeHints; ++i) {
-      sizeHintCache[i] = adjustedConstraint;
+      sizeHintCache[i] = constraint;
       if (userSizeHints) {
          combineSize(sizeHintCache[i], userSizeHints[i]);
       }
@@ -244,7 +175,7 @@ QSizeF *QGraphicsLayoutItemPrivate::effectiveSizeHints(const QSizeF &constraint)
    // COMBINE_SIZE(descentS, q->sizeHint(Qt::MinimumDescent, constraint));
 
    if (hasConstraint) {
-      cachedConstraint = adjustedConstraint;
+      cachedConstraint = constraint;
       sizeHintWithConstraintCacheDirty = false;
    } else {
       sizeHintCacheDirty = false;
@@ -326,8 +257,8 @@ void QGraphicsLayoutItemPrivate::setSizeComponent(
    Q_Q(QGraphicsLayoutItem);
    ensureUserSizeHints();
    qreal &userValue = (component == Width)
-                      ? userSizeHints[which].rwidth()
-                      : userSizeHints[which].rheight();
+      ? userSizeHints[which].rwidth()
+      : userSizeHints[which].rheight();
    if (value == userValue) {
       return;
    }
@@ -378,81 +309,6 @@ bool QGraphicsLayoutItemPrivate::hasWidthForHeight() const
    return q->sizePolicy().hasWidthForHeight();
 }
 
-/*!
-    \class QGraphicsLayoutItem
-    \brief The QGraphicsLayoutItem class can be inherited to allow your custom
-    items to be managed by layouts.
-    \since 4.4
-    \ingroup graphicsview-api
-
-    QGraphicsLayoutItem is an abstract class that defines a set of virtual
-    functions describing sizes, size policies, and size hints for any object
-    arranged by QGraphicsLayout. The API contains functions relevant
-    for both the item itself and for the user of the item as most of
-    QGraphicsLayoutItem's functions are also part of the subclass' public API.
-
-    In most cases, existing layout-aware classes such as QGraphicsWidget and
-    QGraphicsLayout already provide the functionality you require. However,
-    subclassing these classes will enable you to create both graphical
-    elements that work well with layouts (QGraphicsWidget) or custom layouts
-    (QGraphicsLayout).
-
-    \section1 Subclassing QGraphicsLayoutItem
-
-    If you create a subclass of QGraphicsLayoutItem and reimplement its
-    virtual functions, you will enable the layout to resize and position your
-    item along with other QGraphicsLayoutItems including QGraphicsWidget
-    and QGraphicsLayout.
-
-    You can start by reimplementing important functions: the protected
-    sizeHint() function, as well as the public setGeometry()
-    function. If you want your items to be aware of immediate geometry
-    changes, you can also reimplement updateGeometry().
-
-    The geometry, size hint, and size policy affect the item's size and
-    position. Calling setGeometry() will always resize and reposition the item
-    immediately. Normally, this function is called by QGraphicsLayout after
-    the layout has been activated, but it can also be called by the item's user
-    at any time.
-
-    The sizeHint() function returns the item' minimum, preferred and maximum
-    size hints. You can override these properties by calling setMinimumSize(),
-    setPreferredSize() or setMaximumSize(). You can also use functions such as
-    setMinimumWidth() or setMaximumHeight() to set only the width or height
-    component if desired.
-
-    The effectiveSizeHint() function, on the other hand, returns a size hint
-    for any given Qt::SizeHint, and guarantees that the returned size is bound
-    to the minimum and maximum sizes and size hints. You can set the item's
-    vertical and horizontal size policy by calling setSizePolicy(). The
-    sizePolicy property is used by the layout system to describe how this item
-    prefers to grow or shrink.
-
-    \section1 Nesting QGraphicsLayoutItems
-
-    QGraphicsLayoutItems can be nested within other QGraphicsLayoutItems,
-    similar to layouts that can contain sublayouts. This is done either by
-    passing a QGraphicsLayoutItem pointer to QGraphicsLayoutItem's
-    protected constructor, or by calling setParentLayoutItem(). The
-    parentLayoutItem() function returns a pointer to the item's layoutItem
-    parent. If the item's parent is 0 or if the parent does not inherit
-    from QGraphicsItem, the parentLayoutItem() function then returns 0.
-    isLayout() returns true if the QGraphicsLayoutItem subclass is itself a
-    layout, or false otherwise.
-
-    Qt uses QGraphicsLayoutItem to provide layout functionality in the
-    \l{Graphics View Framework}, but in the future its use may spread
-    throughout Qt itself.
-
-    \sa QGraphicsWidget, QGraphicsLayout, QGraphicsLinearLayout,
-    QGraphicsGridLayout
-*/
-
-/*!
-    Constructs the QGraphicsLayoutItem object. \a parent becomes the object's
-    parent. If \a isLayout is true the item is a layout, otherwise
-    \a isLayout is false.
-*/
 QGraphicsLayoutItem::QGraphicsLayoutItem(QGraphicsLayoutItem *parent, bool isLayout)
    : d_ptr(new QGraphicsLayoutItemPrivate(parent, isLayout))
 {
@@ -473,9 +329,7 @@ QGraphicsLayoutItem::QGraphicsLayoutItem(QGraphicsLayoutItemPrivate &dd)
    d->q_ptr = this;
 }
 
-/*!
-    Destroys the QGraphicsLayoutItem object.
-*/
+
 QGraphicsLayoutItem::~QGraphicsLayoutItem()
 {
    QGraphicsLayoutItem *parentLI = parentLayoutItem();
@@ -491,31 +345,7 @@ QGraphicsLayoutItem::~QGraphicsLayoutItem()
    }
 }
 
-/*!
-    \fn virtual QSizeF QGraphicsLayoutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const = 0;
 
-    This pure virtual function returns the size hint for \a which of the
-    QGraphicsLayoutItem, using the width or height of \a constraint to
-    constrain the output.
-
-    Reimplement this function in a subclass of QGraphicsLayoutItem to
-    provide the necessary size hints for your items.
-
-    \sa effectiveSizeHint()
-*/
-
-/*!
-    Sets the size policy to \a policy. The size policy describes how the item
-    should grow horizontally and vertically when arranged in a layout.
-
-    QGraphicsLayoutItem's default size policy is (QSizePolicy::Fixed,
-    QSizePolicy::Fixed, QSizePolicy::DefaultType), but it is common for
-    subclasses to change the default. For example, QGraphicsWidget defaults
-    to (QSizePolicy::Preferred, QSizePolicy::Preferred,
-    QSizePolicy::DefaultType).
-
-    \sa sizePolicy(), QWidget::sizePolicy()
-*/
 void QGraphicsLayoutItem::setSizePolicy(const QSizePolicy &policy)
 {
    Q_D(QGraphicsLayoutItem);
@@ -535,8 +365,8 @@ void QGraphicsLayoutItem::setSizePolicy(const QSizePolicy &policy)
     \sa sizePolicy(), QWidget::sizePolicy()
 */
 void QGraphicsLayoutItem::setSizePolicy(QSizePolicy::Policy hPolicy,
-                                        QSizePolicy::Policy vPolicy,
-                                        QSizePolicy::ControlType controlType)
+   QSizePolicy::Policy vPolicy,
+   QSizePolicy::ControlType controlType)
 {
    setSizePolicy(QSizePolicy(hPolicy, vPolicy, controlType));
 }
@@ -714,87 +544,15 @@ void QGraphicsLayoutItem::setMaximumHeight(qreal height)
    d_ptr->setSizeComponent(Qt::MaximumSize, d_ptr->Height, height);
 }
 
-/*!
-    \fn qreal QGraphicsLayoutItem::minimumWidth() const
 
-    Returns the minimum width.
-
-    \sa setMinimumWidth(), setMinimumSize(), minimumSize()
-*/
-
-/*!
-    \fn qreal QGraphicsLayoutItem::minimumHeight() const
-
-    Returns the minimum height.
-
-    \sa setMinimumHeight(), setMinimumSize(), minimumSize()
-*/
-
-/*!
-    \fn qreal QGraphicsLayoutItem::preferredWidth() const
-
-    Returns the preferred width.
-
-    \sa setPreferredWidth(), setPreferredSize(), preferredSize()
-*/
-
-/*!
-    \fn qreal QGraphicsLayoutItem::preferredHeight() const
-
-    Returns the preferred height.
-
-    \sa setPreferredHeight(), setPreferredSize(), preferredSize()
-*/
-
-/*!
-    \fn qreal QGraphicsLayoutItem::maximumWidth() const
-
-    Returns the maximum width.
-
-    \sa setMaximumWidth(), setMaximumSize(), maximumSize()
-*/
-
-/*!
-    \fn qreal QGraphicsLayoutItem::maximumHeight() const
-
-    Returns the maximum height.
-
-    \sa setMaximumHeight(), setMaximumSize(), maximumSize()
-*/
-
-/*!
-    \fn virtual void QGraphicsLayoutItem::setGeometry(const QRectF &rect)
-
-    This virtual function sets the geometry of the QGraphicsLayoutItem to
-    \a rect, which is in parent coordinates (e.g., the top-left corner of \a rect
-    is equivalent to the item's position in parent coordinates).
-
-    You must reimplement this function in a subclass of QGraphicsLayoutItem to
-    receive geometry updates. The layout will call this function when it does a
-    rearrangement.
-
-    If \a rect is outside of the bounds of minimumSize and maximumSize, it
-    will be adjusted to its closest size so that it is within the legal
-    bounds.
-
-    \sa geometry()
-*/
 void QGraphicsLayoutItem::setGeometry(const QRectF &rect)
 {
    Q_D(QGraphicsLayoutItem);
    QSizeF effectiveSize = rect.size().expandedTo(effectiveSizeHint(Qt::MinimumSize))
-                          .boundedTo(effectiveSizeHint(Qt::MaximumSize));
+      .boundedTo(effectiveSizeHint(Qt::MaximumSize));
    d->geom = QRectF(rect.topLeft(), effectiveSize);
 }
 
-/*!
-    \fn QRectF QGraphicsLayoutItem::geometry() const
-
-    Returns the item's geometry (e.g., position and size) as a
-    QRectF. This function is equivalent to QRectF(pos(), size()).
-
-    \sa setGeometry()
-*/
 QRectF QGraphicsLayoutItem::geometry() const
 {
    Q_D(const QGraphicsLayoutItem);
@@ -825,17 +583,6 @@ void QGraphicsLayoutItem::getContentsMargins(qreal *left, qreal *top, qreal *rig
    }
 }
 
-/*!
-    Returns the contents rect in local coordinates.
-
-    The contents rect defines the subrectangle used by an associated layout
-    when arranging subitems. This function is a convenience function that
-    adjusts the item's geometry() by its contents margins. Note that
-    getContentsMargins() is a virtual function that you can reimplement to
-    return the item's contents margins.
-
-    \sa getContentsMargins(), geometry()
-*/
 QRectF QGraphicsLayoutItem::contentsRect() const
 {
    qreal left, top, right, bottom;
@@ -843,34 +590,6 @@ QRectF QGraphicsLayoutItem::contentsRect() const
    return QRectF(QPointF(), geometry().size()).adjusted(+left, +top, -right, -bottom);
 }
 
-/*!
-    Returns the effective size hint for this QGraphicsLayoutItem.
-
-    \a which is the size hint in question.
-    \a constraint is an optional argument that defines a special constrain
-    when calculating the effective size hint. By default, \a constraint is
-    QSizeF(-1, -1), which means there is no constraint to the size hint.
-
-    If you want to specify the widget's size hint for a given width or height,
-    you can provide the fixed dimension in \a constraint. This is useful for
-    widgets that can grow only either vertically or horizontally, and need to
-    set either their width or their height to a special value.
-
-    For example, a text paragraph item fit into a column width of 200 may
-    grow vertically. You can pass QSizeF(200, -1) as a constraint to get a
-    suitable minimum, preferred and maximum height).
-
-    You can adjust the effective size hint by reimplementing sizeHint()
-    in a QGraphicsLayoutItem subclass, or by calling one of the following
-    functions: setMinimumSize(), setPreferredSize, or setMaximumSize()
-    (or a combination of both).
-
-    This function caches each of the size hints and guarantees that
-    sizeHint() will be called only once for each value of \a which - unless
-    \a constraint is not specified and updateGeometry() has been called.
-
-    \sa sizeHint()
-*/
 QSizeF QGraphicsLayoutItem::effectiveSizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    Q_D(const QGraphicsLayoutItem);
@@ -883,14 +602,7 @@ QSizeF QGraphicsLayoutItem::effectiveSizeHint(Qt::SizeHint which, const QSizeF &
    return d_ptr->effectiveSizeHints(constraint)[which];
 }
 
-/*!
-    This virtual function discards any cached size hint information. You
-    should always call this function if you change the return value of the
-    sizeHint() function. Subclasses must always call the base implementation
-    when reimplementing this function.
 
-    \sa effectiveSizeHint()
-*/
 void QGraphicsLayoutItem::updateGeometry()
 {
    Q_D(QGraphicsLayoutItem);
@@ -911,11 +623,7 @@ QGraphicsLayoutItem *QGraphicsLayoutItem::parentLayoutItem() const
    return d_func()->parent;
 }
 
-/*!
-    Sets the parent of this QGraphicsLayoutItem to \a parent.
 
-    \sa parentLayoutItem()
-*/
 void QGraphicsLayoutItem::setParentLayoutItem(QGraphicsLayoutItem *parent)
 {
    d_func()->parent = parent;
@@ -933,30 +641,7 @@ bool QGraphicsLayoutItem::isLayout() const
    return d_func()->isLayout;
 }
 
-/*!
-    \since 4.6
 
-    Returns whether a layout should delete this item in its destructor.
-    If its true, then the layout will delete it. If its false, then it is
-    assumed that another object has the ownership of it, and the layout won't
-    delete this item.
-
-    If the item inherits both QGraphicsItem and QGraphicsLayoutItem (such
-    as QGraphicsWidget does) the item is really part of two ownership
-    hierarchies. This property informs what the layout should do with its
-    child items when it is destructed. In the case of QGraphicsWidget, it
-    is preferred that when the layout is deleted it won't delete its children
-    (since they are also part of the graphics item hierarchy).
-
-    By default this value is initialized to false in QGraphicsLayoutItem,
-    but it is overridden by QGraphicsLayout to return true. This is because
-    QGraphicsLayout is not normally part of the QGraphicsItem hierarchy, so the
-    parent layout should delete it.
-    Subclasses might override this default behaviour by calling
-    setOwnedByLayout(true).
-
-    \sa setOwnedByLayout()
-*/
 bool QGraphicsLayoutItem::ownedByLayout() const
 {
    return d_func()->ownedByLayout;
@@ -1000,6 +685,5 @@ void QGraphicsLayoutItem::setGraphicsItem(QGraphicsItem *item)
    d_func()->graphicsItem = item;
 }
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_GRAPHICSVIEW

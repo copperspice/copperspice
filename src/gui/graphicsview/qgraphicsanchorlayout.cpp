@@ -23,10 +23,9 @@
 #include <qgraphicsanchorlayout_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
-QT_BEGIN_NAMESPACE
 
 QGraphicsAnchor::QGraphicsAnchor(QGraphicsAnchorLayout *parentLayout)
-   : QObject(0), d_ptr(new QGraphicsAnchorPrivate)
+   : QObject(nullptr), d_ptr(new QGraphicsAnchorPrivate)
 {
    d_ptr->q_ptr = this;
    Q_D(QGraphicsAnchor);
@@ -74,7 +73,7 @@ void QGraphicsAnchor::unsetSpacing()
     QGraphicsLayout's constructor.
   */
 QGraphicsAnchorLayout::QGraphicsAnchorLayout(QGraphicsLayoutItem *parent)
-   : QGraphicsLayout(*new QGraphicsAnchorLayoutPrivate, parent)
+   : QGraphicsLayout(*new QGraphicsAnchorLayoutPrivate(), parent)
 {
    Q_D(QGraphicsAnchorLayout);
    d->createLayoutEdges();
@@ -107,31 +106,8 @@ QGraphicsAnchorLayout::~QGraphicsAnchorLayout()
    Q_ASSERT(d->m_vertexList.isEmpty());
 }
 
-/*!
-    Creates an anchor between the edge \a firstEdge of item \a firstItem and the edge \a secondEdge
-    of item \a secondItem. The spacing of the anchor is picked up from the style. Anchors
-    between a layout edge and an item edge will have a size of 0.
-    If there is already an anchor between the edges, the the new anchor will replace the old one.
-
-    \a firstItem and \a secondItem are automatically added to the layout if they are not part
-    of the layout. This means that count() can increase by up to 2.
-
-    The spacing an anchor will get depends on the type of anchor. For instance, anchors from the
-    Right edge of one item to the Left edge of another (or vice versa) will use the default
-    horizontal spacing. The same behaviour applies to Bottom to Top anchors, (but they will use
-    the default vertical spacing). For all other anchor combinations, the spacing will be 0.
-    All anchoring functions will follow this rule.
-
-    The spacing can also be set manually by using QGraphicsAnchor::setSpacing() method.
-
-    Calling this function where \a firstItem or \a secondItem are ancestors of the layout have
-    undefined behaviour.
-
-    \sa addAnchors(), addCornerAnchors()
- */
-QGraphicsAnchor *
-QGraphicsAnchorLayout::addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
-                                 QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
+QGraphicsAnchor *QGraphicsAnchorLayout::addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
+   QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
 {
    Q_D(QGraphicsAnchorLayout);
    QGraphicsAnchor *a = d->addAnchor(firstItem, firstEdge, secondItem, secondEdge);
@@ -143,9 +119,8 @@ QGraphicsAnchorLayout::addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint
     Returns the anchor between the anchor points defined by \a firstItem and \a firstEdge and
     \a secondItem and \a secondEdge. If there is no such anchor, the function will return 0.
 */
-QGraphicsAnchor *
-QGraphicsAnchorLayout::anchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
-                              QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
+QGraphicsAnchor *QGraphicsAnchorLayout::anchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
+   QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
 {
    Q_D(QGraphicsAnchorLayout);
    return d->getAnchor(firstItem, firstEdge, secondItem, secondEdge);
@@ -174,9 +149,9 @@ QGraphicsAnchorLayout::anchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint fi
     \sa addAnchor(), addAnchors()
 */
 void QGraphicsAnchorLayout::addCornerAnchors(QGraphicsLayoutItem *firstItem,
-      Qt::Corner firstCorner,
-      QGraphicsLayoutItem *secondItem,
-      Qt::Corner secondCorner)
+   Qt::Corner firstCorner,
+   QGraphicsLayoutItem *secondItem,
+   Qt::Corner secondCorner)
 {
    Q_D(QGraphicsAnchorLayout);
 
@@ -210,8 +185,8 @@ void QGraphicsAnchorLayout::addCornerAnchors(QGraphicsLayoutItem *firstItem,
     \sa addAnchor(), addCornerAnchors()
 */
 void QGraphicsAnchorLayout::addAnchors(QGraphicsLayoutItem *firstItem,
-                                       QGraphicsLayoutItem *secondItem,
-                                       Qt::Orientations orientations)
+   QGraphicsLayoutItem *secondItem,
+   Qt::Orientations orientations)
 {
    bool ok = true;
    if (orientations & Qt::Horizontal) {
@@ -393,5 +368,4 @@ QSizeF QGraphicsAnchorLayout::sizeHint(Qt::SizeHint which, const QSizeF &constra
    return engineSizeHint + QSizeF(left + right, top + bottom);
 }
 
-QT_END_NAMESPACE
 #endif //QT_NO_GRAPHICSVIEW

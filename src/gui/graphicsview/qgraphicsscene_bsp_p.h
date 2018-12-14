@@ -23,7 +23,7 @@
 #ifndef QGRAPHICSSCENE_BSP_P_H
 #define QGRAPHICSSCENE_BSP_P_H
 
-#include <QtCore/qlist.h>
+#include <qlist.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -31,7 +31,6 @@
 #include <QtCore/qset.h>
 #include <QtCore/qvector.h>
 
-QT_BEGIN_NAMESPACE
 
 class QGraphicsItem;
 class QGraphicsSceneBspTreeVisitor;
@@ -80,7 +79,7 @@ class QGraphicsSceneBspTree
    QRectF rectForIndex(int index) const;
 
    QVector<Node> nodes;
-   QVector<QList<QGraphicsItem *> > leaves;
+   QVector<QList<QGraphicsItem *>> leaves;
    int leafCnt;
    QRectF rect;
 
@@ -95,9 +94,6 @@ class QGraphicsSceneBspTreeVisitor
    virtual ~QGraphicsSceneBspTreeVisitor() { }
    virtual void visit(QList<QGraphicsItem *> *items) = 0;
 };
-
-QT_END_NAMESPACE
-
 #endif // QT_NO_GRAPHICSVIEW
 
 #endif // QGRAPHICSSCENEBSPTREE_P_H

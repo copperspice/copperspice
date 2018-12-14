@@ -34,10 +34,10 @@
 #include <QtCore/qstring.h>
 #include <qgraphicsview.h>
 #include <qgraphicsitem.h>
-#include <QtGui/qgesture.h>
+#include <qgesture.h>
 #include <qevent_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QGraphicsSceneEventPrivate
 {
@@ -110,8 +110,8 @@ class QGraphicsSceneMouseEventPrivate : public QGraphicsSceneEventPrivate
  public:
    inline QGraphicsSceneMouseEventPrivate()
       : button(Qt::NoButton),
-        buttons(0), modifiers(0) {
-   }
+        buttons(0), modifiers(0), source(Qt::MouseEventNotSynthesized), flags(0)
+   { }
 
    QPointF pos;
    QPointF scenePos;
@@ -125,6 +125,8 @@ class QGraphicsSceneMouseEventPrivate : public QGraphicsSceneEventPrivate
    Qt::MouseButton button;
    Qt::MouseButtons buttons;
    Qt::KeyboardModifiers modifiers;
+   Qt::MouseEventSource source;
+   Qt::MouseEventFlags flags;
 };
 
 /*!
@@ -387,9 +389,28 @@ Qt::KeyboardModifiers QGraphicsSceneMouseEvent::modifiers() const
    return d->modifiers;
 }
 
-/*!
-    \internal
-*/
+
+Qt::MouseEventSource QGraphicsSceneMouseEvent::source() const
+{
+   Q_D(const QGraphicsSceneMouseEvent);
+   return d->source;
+}
+void QGraphicsSceneMouseEvent::setSource(Qt::MouseEventSource source)
+{
+   Q_D(QGraphicsSceneMouseEvent);
+   d->source = source;
+}
+Qt::MouseEventFlags QGraphicsSceneMouseEvent::flags() const
+{
+   Q_D(const QGraphicsSceneMouseEvent);
+   return d->flags;
+}
+void QGraphicsSceneMouseEvent::setFlags(Qt::MouseEventFlags flags)
+{
+   Q_D(QGraphicsSceneMouseEvent);
+   d->flags = flags;
+}
+
 void QGraphicsSceneMouseEvent::setModifiers(Qt::KeyboardModifiers modifiers)
 {
    Q_D(QGraphicsSceneMouseEvent);
@@ -399,6 +420,7 @@ void QGraphicsSceneMouseEvent::setModifiers(Qt::KeyboardModifiers modifiers)
 class QGraphicsSceneWheelEventPrivate : public QGraphicsSceneEventPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsSceneWheelEvent)
+
  public:
    inline QGraphicsSceneWheelEventPrivate()
       : buttons(0), modifiers(0), delta(0), orientation(Qt::Horizontal) {
@@ -1439,7 +1461,5 @@ void QGraphicsSceneMoveEvent::setNewPos(const QPointF &pos)
    Q_D(QGraphicsSceneMoveEvent);
    d->newPos = pos;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_GRAPHICSVIEW

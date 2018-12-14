@@ -26,7 +26,7 @@
 #include <QtGui/qgraphicsitem.h>
 #include <QtGui/qgraphicslayout.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -35,7 +35,7 @@ class QGraphicsLinearLayoutPrivate;
 class Q_GUI_EXPORT QGraphicsLinearLayout : public QGraphicsLayout
 {
  public:
-   QGraphicsLinearLayout(QGraphicsLayoutItem *parent = 0);
+   QGraphicsLinearLayout(QGraphicsLayoutItem *parent = nullptr);
    QGraphicsLinearLayout(Qt::Orientation orientation, QGraphicsLayoutItem *parent = 0);
    virtual ~QGraphicsLinearLayout();
 
@@ -83,7 +83,7 @@ class Q_GUI_EXPORT QGraphicsLinearLayout : public QGraphicsLayout
 
 #endif
 
-QT_END_NAMESPACE
+
 
 #endif
 

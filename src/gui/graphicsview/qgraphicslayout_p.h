@@ -23,7 +23,7 @@
 #ifndef QGRAPHICSLAYOUT_P_H
 #define QGRAPHICSLAYOUT_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -32,8 +32,6 @@
 #include <QtGui/qstyle.h>
 #include <QtGui/qwidget.h>
 #include <QtGui/qstyleoption.h>
-
-QT_BEGIN_NAMESPACE
 
 class QGraphicsLayoutItem;
 class QGraphicsWidget;
@@ -83,11 +81,11 @@ class QLayoutStyleInfo
       return m_widget;
    }
 
-   inline bool operator==(const QLayoutStyleInfo &other) {
+   inline bool operator==(const QLayoutStyleInfo &other) const {
       return m_style == other.m_style && m_widget == other.m_widget;
    }
 
-   inline bool operator!=(const QLayoutStyleInfo &other) {
+   inline bool operator!=(const QLayoutStyleInfo &other) const {
       return !(*this == other);
    }
 
@@ -101,8 +99,7 @@ class QLayoutStyleInfo
       return m_defaultSpacing[o - 1];
    }
 
-   inline qreal perItemSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation) const
-   {
+   inline qreal perItemSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation) const {
       Q_ASSERT(style());
       return style()->layoutSpacing(control1, control2, orientation, &m_styleOption, widget());
    }
@@ -134,8 +131,6 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
    bool activated;
 };
 
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_GRAPHICSVIEW
 

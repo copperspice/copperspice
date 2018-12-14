@@ -36,7 +36,7 @@ class QGraphicsWidget;
 class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 {
  public:
-   QGraphicsLayout(QGraphicsLayoutItem *parent = 0);
+   QGraphicsLayout(QGraphicsLayoutItem *parent = nullptr);
    ~QGraphicsLayout();
 
    void setContentsMargins(qreal left, qreal top, qreal right, qreal bottom);
@@ -70,7 +70,6 @@ CS_DECLARE_INTERFACE(QGraphicsLayout, "com.copperspice.QGraphicsLayout")
 
 #endif
 
-QT_END_NAMESPACE
 
 #endif
 

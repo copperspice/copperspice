@@ -27,8 +27,6 @@
 
 #include <stdlib.h>
 
-QT_BEGIN_NAMESPACE
-
 /*!
   \internal
   \class QSimplex
@@ -108,11 +106,9 @@ void QSimplex::clearDataStructures()
   This method sets the new constraints, normalizes them, creates the simplex matrix
   and runs the first simplex phase.
 */
-bool QSimplex::setConstraints(const QList<QSimplexConstraint *> newConstraints)
+bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
 {
-   ////////////////////////////
-   // Reset to initial state //
-   ////////////////////////////
+   // Reset to initial state
    clearDataStructures();
 
    if (newConstraints.isEmpty()) {
@@ -131,7 +127,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> newConstraints)
 
    // Remove constraints of type Var == K and replace them for their value.
    if (!simplifyConstraints(&constraints)) {
-      qWarning() << "QSimplex: No feasible solution!";
+      qWarning("QSimplex: No feasible solution");
       clearDataStructures();
       return false;
    }
@@ -146,7 +142,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> newConstraints)
    QSet<QSimplexVariable *> variablesSet;
    for (int i = 0; i < constraints.size(); ++i)
       variablesSet += \
-                      QSet<QSimplexVariable *>::fromList(constraints[i]->variables.keys());
+         QSet<QSimplexVariable *>::fromList(constraints[i]->variables.keys());
    variables = variablesSet.toList();
 
    // Set Variables reverse mapping
@@ -251,8 +247,8 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> newConstraints)
 
       QHash<QSimplexVariable *, qreal>::const_iterator iter;
       for (iter = c->variables.constBegin();
-            iter != c->variables.constEnd();
-            ++iter) {
+         iter != c->variables.constEnd();
+         ++iter) {
          setValueAt(i, iter.key()->index, iter.value());
       }
 
@@ -275,7 +271,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> newConstraints)
    // Otherwise, we clean up our structures and report there is
    // no feasible solution.
    if ((valueAt(0, columns - 1) != 0.0) && (qAbs(valueAt(0, columns - 1)) > 0.00001)) {
-      qWarning() << "QSimplex: No feasible solution!";
+      qWarning("QSimplex: No feasible solution");
       clearDataStructures();
       return false;
    }
@@ -474,7 +470,7 @@ bool QSimplex::iterate()
    // Find Pivot row for column
    int pivotRow = pivotRowForColumn(pivotColumn);
    if (pivotRow == -1) {
-      qWarning() << "QSimplex: Unbounded problem!";
+      qWarning("QSimplex: Unbounded problem");
       return false;
    }
 
@@ -514,7 +510,7 @@ bool QSimplex::iterate()
   minimization case by inverting the original objective and then
   maximizing it.
 */
-qreal QSimplex::solver(solverFactor factor)
+qreal QSimplex::solver(SolverFactor factor)
 {
    // Remove old objective
    clearRow(0);
@@ -523,8 +519,8 @@ qreal QSimplex::solver(solverFactor factor)
    qreal resultOffset = 0;
    QHash<QSimplexVariable *, qreal>::const_iterator iter;
    for (iter = objective->variables.constBegin();
-         iter != objective->variables.constEnd();
-         ++iter) {
+      iter != objective->variables.constEnd();
+      ++iter) {
 
       // Check if the variable was removed in the simplification process.
       // If so, we save its offset to the objective function and skip adding
@@ -672,4 +668,4 @@ void QSimplexConstraint::invert()
    }
 }
 
-QT_END_NAMESPACE
+

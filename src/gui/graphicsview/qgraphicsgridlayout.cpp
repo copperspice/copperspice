@@ -30,44 +30,41 @@
 #include <qgraphicslayoutitem.h>
 #include <qgraphicsgridlayout.h>
 #include <qgraphicswidget.h>
-#include <qgridlayoutengine_p.h>
-#include <QtCore/qdebug.h>
+#include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
+#include <qgraphicsgridlayoutengine_p.h>
+#include <qgraphicslayoutstyleinfo_p.h>
+
+#include <qdebug.h>
 
 class QGraphicsGridLayoutPrivate : public QGraphicsLayoutPrivate
 {
  public:
    QGraphicsGridLayoutPrivate() { }
-   QLayoutStyleInfo styleInfo() const;
+   QGraphicsLayoutStyleInfo *styleInfo() const;
 
-   QGridLayoutEngine engine;
-#ifdef QT_DEBUG
+   mutable QScopedPointer<QGraphicsLayoutStyleInfo> m_styleInfo;
+   QGraphicsGridLayoutEngine engine;
+#ifdef QGRIDLAYOUTENGINE_DEBUG
    void dump(int indent) const;
 #endif
 };
 
-Q_GLOBAL_STATIC(QWidget, globalStyleInfoWidget);
-
-QLayoutStyleInfo QGraphicsGridLayoutPrivate::styleInfo() const
+QGraphicsLayoutStyleInfo *QGraphicsGridLayoutPrivate::styleInfo() const
 {
-   QGraphicsItem *item = parentItem();
-   QStyle *style = (item && item->isWidget()) ? static_cast<QGraphicsWidget *>(item)->style() : QApplication::style();
-   return QLayoutStyleInfo(style, globalStyleInfoWidget());
+   if (!m_styleInfo) {
+      m_styleInfo.reset(new QGraphicsLayoutStyleInfo(this));
+   }
+   return m_styleInfo.data();
 }
 
-/*!
-    Constructs a QGraphicsGridLayout instance.  \a parent is passed to
-    QGraphicsLayout's constructor.
-*/
+
 QGraphicsGridLayout::QGraphicsGridLayout(QGraphicsLayoutItem *parent)
    : QGraphicsLayout(*new QGraphicsGridLayoutPrivate(), parent)
 {
 }
 
-/*!
-    Destroys the QGraphicsGridLayout object.
-*/
+
 QGraphicsGridLayout::~QGraphicsGridLayout()
 {
    for (int i = count() - 1; i >= 0; --i) {
@@ -90,17 +87,17 @@ QGraphicsGridLayout::~QGraphicsGridLayout()
     \a rowSpan and \a columnSpan and an optional \a alignment.
 */
 void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column,
-                                  int rowSpan, int columnSpan, Qt::Alignment alignment)
+   int rowSpan, int columnSpan, Qt::Alignment alignment)
 {
    Q_D(QGraphicsGridLayout);
    if (row < 0 || column < 0) {
       qWarning("QGraphicsGridLayout::addItem: invalid row/column: %d",
-               row < 0 ? row : column);
+         row < 0 ? row : column);
       return;
    }
    if (columnSpan < 1 || rowSpan < 1) {
       qWarning("QGraphicsGridLayout::addItem: invalid row span/column span: %d",
-               rowSpan < 1 ? rowSpan : columnSpan);
+         rowSpan < 1 ? rowSpan : columnSpan);
       return;
    }
    if (!item) {
@@ -114,20 +111,12 @@ void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column
 
    d->addChildLayoutItem(item);
 
-   new QGridLayoutItem(&d->engine, item, row, column, rowSpan, columnSpan, alignment);
+   QGraphicsGridLayoutEngineItem *gridEngineItem = new QGraphicsGridLayoutEngineItem(item, row, column, rowSpan, columnSpan, alignment);
+   d->engine.insertItem(gridEngineItem, -1);
    invalidate();
 }
 
-/*!
-    \fn QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column, Qt::Alignment alignment = 0)
 
-    Adds \a item to the grid on \a row and \a column. You can specify
-    an optional \a alignment for \a item.
-*/
-
-/*!
-    Sets the default horizontal spacing for the grid layout to \a spacing.
-*/
 void QGraphicsGridLayout::setHorizontalSpacing(qreal spacing)
 {
    Q_D(QGraphicsGridLayout);
@@ -135,13 +124,11 @@ void QGraphicsGridLayout::setHorizontalSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-    Returns the default horizontal spacing for the grid layout.
-*/
+
 qreal QGraphicsGridLayout::horizontalSpacing() const
 {
    Q_D(const QGraphicsGridLayout);
-   return d->engine.spacing(d->styleInfo(), Qt::Horizontal);
+   return d->engine.spacing(Qt::Horizontal, d->styleInfo());
 }
 
 /*!
@@ -160,7 +147,7 @@ void QGraphicsGridLayout::setVerticalSpacing(qreal spacing)
 qreal QGraphicsGridLayout::verticalSpacing() const
 {
    Q_D(const QGraphicsGridLayout);
-   return d->engine.spacing(d->styleInfo(), Qt::Vertical);
+   return d->engine.spacing(Qt::Vertical, d->styleInfo());
 }
 
 /*!
@@ -477,8 +464,8 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
       qWarning("QGraphicsGridLayout::itemAt: invalid row, column %d, %d", row, column);
       return 0;
    }
-   if (QGridLayoutItem *item = d->engine.itemAt(row, column)) {
-      return item->layoutItem();
+   if (QGraphicsGridLayoutEngineItem *engineItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(row, column))) {
+      return engineItem->layoutItem();
    }
    return 0;
 }
@@ -504,18 +491,12 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
       return 0;
    }
    QGraphicsLayoutItem *item = 0;
-   if (QGridLayoutItem *gridItem = d->engine.itemAt(index)) {
-      item = gridItem->layoutItem();
+   if (QGraphicsGridLayoutEngineItem *engineItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(index))) {
+      item = engineItem->layoutItem();
    }
    return item;
 }
 
-/*!
-    Removes the layout item at \a index without destroying it. Ownership of
-    the item is transferred to the caller.
-
-    \sa addItem()
-*/
 void QGraphicsGridLayout::removeAt(int index)
 {
    Q_D(QGraphicsGridLayout);
@@ -523,10 +504,12 @@ void QGraphicsGridLayout::removeAt(int index)
       qWarning("QGraphicsGridLayout::removeAt: invalid index %d", index);
       return;
    }
-   if (QGridLayoutItem *gridItem = d->engine.itemAt(index)) {
+
+   if (QGraphicsGridLayoutEngineItem *gridItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(index))) {
       if (QGraphicsLayoutItem *layoutItem = gridItem->layoutItem()) {
          layoutItem->setParentLayoutItem(0);
       }
+
       d->engine.removeItem(gridItem);
 
       // recalculate rowInfo.count if we remove an item that is on the right/bottommost row
@@ -545,14 +528,7 @@ void QGraphicsGridLayout::removeAt(int index)
    }
 }
 
-/*!
-    \since 4.8
 
-    Removes the layout item \a item without destroying it.
-    Ownership of the item is transferred to the caller.
-
-    \sa addItem()
-*/
 void QGraphicsGridLayout::removeItem(QGraphicsLayoutItem *item)
 {
    Q_D(QGraphicsGridLayout);
@@ -566,10 +542,13 @@ void QGraphicsGridLayout::invalidate()
 {
    Q_D(QGraphicsGridLayout);
    d->engine.invalidate();
+   if (d->m_styleInfo) {
+      d->m_styleInfo->invalidate();
+   }
    QGraphicsLayout::invalidate();
 }
 
-#ifdef QT_DEBUG
+#ifdef QGRIDLAYOUTENGINE_DEBUG
 void QGraphicsGridLayoutPrivate::dump(int indent) const
 {
    if (qt_graphicsLayoutDebug()) {
@@ -593,9 +572,11 @@ void QGraphicsGridLayout::setGeometry(const QRectF &rect)
    if (visualDir == Qt::RightToLeft) {
       qSwap(left, right);
    }
+
    effectiveRect.adjust(+left, +top, -right, -bottom);
-   d->engine.setGeometries(d->styleInfo(), effectiveRect);
-#ifdef QT_DEBUG
+   d->engine.setGeometries(effectiveRect, d->styleInfo());
+
+#ifdef QGRIDLAYOUTENGINE_DEBUG
    if (qt_graphicsLayoutDebug()) {
       static int counter = 0;
       qDebug("==== BEGIN DUMP OF QGraphicsGridLayout (%d)====", counter++);
@@ -614,9 +595,9 @@ QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF &constrain
    qreal left, top, right, bottom;
    getContentsMargins(&left, &top, &right, &bottom);
    const QSizeF extraMargins(left + right, top + bottom);
-   return d->engine.sizeHint(d->styleInfo(), which , constraint - extraMargins) + extraMargins;
+   return d->engine.sizeHint(which, constraint - extraMargins, d->styleInfo()) + extraMargins;
 }
 
-QT_END_NAMESPACE
 
-#endif //QT_NO_GRAPHICSVIEW
+
+#endif

@@ -50,113 +50,7 @@
 #include <QtGui/qstyleoption.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
 
-/*!
-    \class QGraphicsWidget
-    \brief The QGraphicsWidget class is the base class for all widget
-    items in a QGraphicsScene.
-    \since 4.4
-    \ingroup graphicsview-api
-
-    QGraphicsWidget is an extended base item that provides extra functionality
-    over QGraphicsItem. It is similar to QWidget in many ways:
-
-    \list
-        \o Provides a \l palette, a \l font and a \l style().
-        \o Has a defined geometry().
-        \o Supports layouts with setLayout() and layout().
-        \o Supports shortcuts and actions with grabShortcut() and insertAction()
-    \endlist
-
-    Unlike QGraphicsItem, QGraphicsWidget is not an abstract class; you can
-    create instances of a QGraphicsWidget without having to subclass it.
-    This approach is useful for widgets that only serve the purpose of
-    organizing child widgets into a layout.
-
-    QGraphicsWidget can be used as a base item for your own custom item if
-    you require advanced input focus handling, e.g., tab focus and activation, or
-    layouts.
-
-    Since QGraphicsWidget resembles QWidget and has similar API, it is
-    easier to port a widget from QWidget to QGraphicsWidget, instead of
-    QGraphicsItem.
-
-    \note QWidget-based widgets can be directly embedded into a
-    QGraphicsScene using QGraphicsProxyWidget.
-
-    Noticeable differences between QGraphicsWidget and QWidget are:
-
-    \table
-    \header \o QGraphicsWidget
-                \o QWidget
-    \row      \o Coordinates and geometry are defined with qreals (doubles or
-                    floats, depending on the platform).
-                \o QWidget uses integer geometry (QPoint, QRect).
-    \row      \o The widget is already visible by default; you do not have to
-                    call show() to display the widget.
-                \o QWidget is hidden by default until you call show().
-    \row      \o A subset of widget attributes are supported.
-                \o All widget attributes are supported.
-    \row      \o A top-level item's style defaults to QGraphicsScene::style
-                \o A top-level widget's style defaults to QApplication::style
-    \row      \o Graphics View provides a custom drag and drop framework, different
-                    from QWidget.
-                \o Standard drag and drop framework.
-    \row      \o Widget items do not support modality.
-                \o Full modality support.
-    \endtable
-
-    QGraphicsWidget supports a subset of Qt's widget attributes,
-    (Qt::WidgetAttribute), as shown in the table below. Any attributes not
-    listed in this table are unsupported, or otherwise unused.
-
-    \table
-    \header \o Widget Attribute                         \o Usage
-    \row    \o Qt::WA_SetLayoutDirection
-                    \o Set by setLayoutDirection(), cleared by
-                        unsetLayoutDirection(). You can test this attribute to
-                        check if the widget has been explicitly assigned a
-                        \l{QGraphicsWidget::layoutDirection()}
-                        {layoutDirection}. If the attribute is not set, the
-                        \l{QGraphicsWidget::layoutDirection()}
-                        {layoutDirection()} is inherited.
-    \row    \o Qt::WA_RightToLeft
-                    \o Toggled by setLayoutDirection(). Inherited from the
-                        parent/scene. If set, the widget's layout will order
-                        horizontally arranged widgets from right to left.
-    \row    \o Qt::WA_SetStyle
-                    \o Set and cleared by setStyle(). If this attribute is
-                        set, the widget has been explicitly assigned a style.
-                        If it is unset, the widget will use the scene's or the
-                        application's style.
-    \row    \o Qt::WA_Resized
-                    \o Set by setGeometry() and resize().
-    \row    \o Qt::WA_SetPalette
-                    \o Set by setPalette().
-    \row    \o Qt::WA_SetFont
-                    \o Set by setFont().
-    \row    \o Qt::WA_WindowPropagation
-                    \o Enables propagation to window widgets.
-    \endtable
-
-    Although QGraphicsWidget inherits from both QObject and QGraphicsItem,
-    you should use the functions provided by QGraphicsItem, \e not QObject, to
-    manage the relationships between parent and child items. These functions
-    control the stacking order of items as well as their ownership.
-
-    \note The QObject::parent() should always return 0 for QGraphicsWidgets,
-    but this policy is not strictly defined.
-
-    \sa QGraphicsProxyWidget, QGraphicsItem, {Widgets and Layouts}
-*/
-
-/*!
-    Constructs a QGraphicsWidget instance. The optional \a parent argument is
-    passed to QGraphicsItem's constructor. The optional \a wFlags argument
-    specifies the widget's window flags (e.g., whether the widget should be a
-    window, a tool, a popup, etc).
-*/
 QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
    : QGraphicsObject(*new QGraphicsWidgetPrivate, nullptr), QGraphicsLayoutItem(0, false)
 {
@@ -203,7 +97,7 @@ class QGraphicsWidgetStyles
    }
 
  private:
-   QMap<const QGraphicsWidget *, QStyle *> styles;
+   QHash<const QGraphicsWidget *, QStyle *> styles;
    mutable QMutex mutex;
 };
 Q_GLOBAL_STATIC(QGraphicsWidgetStyles, widgetStyles)
@@ -241,7 +135,7 @@ QGraphicsWidget::~QGraphicsWidget()
    //we check if we have a layout previously
    if (d->layout) {
       QGraphicsLayout *temp = d->layout;
-      for (QGraphicsItem * item : childItems()) {
+      for (QGraphicsItem *item : childItems()) {
          // In case of a custom layout which doesn't remove and delete items, we ensure that
          // the parent layout item does not point to the deleted layout. This code is here to
          // avoid regression from 4.4 to 4.5, because according to 4.5 docs it is not really needed.
@@ -258,31 +152,9 @@ QGraphicsWidget::~QGraphicsWidget()
 
    // Remove this graphics widget from widgetStyles
    widgetStyles()->setStyleForWidget(this, 0);
+   setParentItem(nullptr);
 }
 
-/*!
-    \property QGraphicsWidget::size
-    \brief the size of the widget
-
-    Calling resize() resizes the widget to a \a size bounded by minimumSize()
-    and maximumSize(). This property only affects the widget's width and
-    height (e.g., its right and bottom edges); the widget's position and
-    top-left corner remains unaffected.
-
-    Resizing a widget triggers the widget to immediately receive a
-    \l{QEvent::GraphicsSceneResize}{GraphicsSceneResize} event with the
-    widget's old and new size.  If the widget has a layout assigned when this
-    event arrives, the layout will be activated and it will automatically
-    update any child widgets's geometry.
-
-    This property does not affect any layout of the parent widget. If the
-    widget itself is managed by a parent layout; e.g., it has a parent widget
-    with a layout assigned, that layout will not activate.
-
-    By default, this property contains a size with zero width and height.
-
-    \sa setGeometry(), QGraphicsSceneResizeEvent, QGraphicsLayout
-*/
 QSizeF QGraphicsWidget::size() const
 {
    return QGraphicsLayoutItem::geometry().size();
@@ -293,50 +165,19 @@ void QGraphicsWidget::resize(const QSizeF &size)
    setGeometry(QRectF(pos(), size));
 }
 
-/*!
-    \fn void QGraphicsWidget::resize(qreal w, qreal h)
 
-    This convenience function is equivalent to calling resize(QSizeF(w, h)).
-
-    \sa setGeometry(), setTransform()
-*/
-
-/*!
-    \property QGraphicsWidget::sizePolicy
-    \brief the size policy for the widget
-    \sa sizePolicy(), setSizePolicy(), QWidget::sizePolicy()
-*/
-
-/*!
-  \fn QGraphicsWidget::geometryChanged()
-
-  This signal gets emitted whenever the geometry is changed in setGeometry().
-*/
-
-/*!
-    \property QGraphicsWidget::geometry
-    \brief the geometry of the widget
-
-    Sets the item's geometry to \a rect. The item's position and size are
-    modified as a result of calling this function. The item is first moved,
-    then resized.
-
-    A side effect of calling this function is that the widget will receive
-    a move event and a resize event. Also, if the widget has a layout
-    assigned, the layout will activate.
-
-    \sa geometry(), resize()
-*/
 void QGraphicsWidget::setGeometry(const QRectF &rect)
 {
    QGraphicsWidgetPrivate *wd = QGraphicsWidget::d_func();
    QGraphicsLayoutItemPrivate *d = QGraphicsLayoutItem::d_ptr.data();
-   QRectF newGeom = rect;
+   QRectF newGeom;
    QPointF oldPos = d->geom.topLeft();
+
    if (!wd->inSetPos) {
       setAttribute(Qt::WA_Resized);
+      newGeom = rect;
       newGeom.setSize(rect.size().expandedTo(effectiveSizeHint(Qt::MinimumSize))
-                      .boundedTo(effectiveSizeHint(Qt::MaximumSize)));
+         .boundedTo(effectiveSizeHint(Qt::MaximumSize)));
 
       if (newGeom == d->geom) {
          goto relayoutChildrenAndReturn;
@@ -378,19 +219,32 @@ void QGraphicsWidget::setGeometry(const QRectF &rect)
       }
       QSizeF oldSize = size();
       QGraphicsLayoutItem::setGeometry(newGeom);
+
       // Send resize event
       bool resized = newGeom.size() != oldSize;
+
       if (resized) {
          QGraphicsSceneResizeEvent re;
          re.setOldSize(oldSize);
          re.setNewSize(newGeom.size());
+
          if (oldSize.width() != newGeom.size().width()) {
             emit widthChanged();
          }
+
          if (oldSize.height() != newGeom.size().height()) {
             emit heightChanged();
          }
-         QApplication::sendEvent(this, &re);
+
+         QGraphicsLayout *lay = wd->layout;
+         if (QGraphicsLayout::instantInvalidatePropagation()) {
+            if (!lay || lay->isActivated()) {
+               QApplication::sendEvent(this, &re);
+            }
+         } else {
+            QApplication::sendEvent(this, &re);
+         }
+
       }
    }
 
@@ -406,61 +260,8 @@ relayoutChildrenAndReturn:
    }
 }
 
-/*!
-    \fn QRectF QGraphicsWidget::rect() const
 
-    Returns the item's local rect as a QRectF. This function is equivalent
-    to QRectF(QPointF(), size()).
 
-    \sa setGeometry(), resize()
-*/
-
-/*!
-    \fn void QGraphicsWidget::setGeometry(qreal x, qreal y, qreal w, qreal h)
-
-    This convenience function is equivalent to calling setGeometry(QRectF(
-    \a x, \a y, \a w, \a h)).
-
-    \sa geometry(), resize()
-*/
-
-/*!
-    \property QGraphicsWidget::minimumSize
-    \brief the minimum size of the widget
-
-    \sa setMinimumSize(), minimumSize(), preferredSize, maximumSize
-*/
-
-/*!
-    \property QGraphicsWidget::preferredSize
-    \brief the preferred size of the widget
-
-    \sa setPreferredSize(), preferredSize(), minimumSize, maximumSize
-*/
-
-/*!
-    \property QGraphicsWidget::maximumSize
-    \brief the maximum size of the widget
-
-    \sa setMaximumSize(), maximumSize(), minimumSize, preferredSize
-*/
-
-/*!
-    Sets the widget's contents margins to \a left, \a top, \a right and \a
-    bottom.
-
-    Contents margins are used by the assigned layout to define the placement
-    of subwidgets and layouts. Margins are particularly useful for widgets
-    that constrain subwidgets to only a section of its own geometry. For
-    example, a group box with a layout will place subwidgets inside its frame,
-    but below the title.
-
-    Changing a widget's contents margins will always trigger an update(), and
-    any assigned layout will be activated automatically. The widget will then
-    receive a \l{QEvent::ContentsRectChange}{ContentsRectChange} event.
-
-    \sa getContentsMargins(), setGeometry()
-*/
 void QGraphicsWidget::setContentsMargins(qreal left, qreal top, qreal right, qreal bottom)
 {
    Q_D(QGraphicsWidget);
@@ -470,9 +271,9 @@ void QGraphicsWidget::setContentsMargins(qreal left, qreal top, qreal right, qre
    }
    d->ensureMargins();
    if (left == d->margins[d->Left]
-         && top == d->margins[d->Top]
-         && right == d->margins[d->Right]
-         && bottom == d->margins[d->Bottom]) {
+      && top == d->margins[d->Top]
+      && right == d->margins[d->Right]
+      && bottom == d->margins[d->Bottom]) {
       return;
    }
 
@@ -590,7 +391,7 @@ void QGraphicsWidget::unsetWindowFrameMargins()
 {
    Q_D(QGraphicsWidget);
    if ((d->windowFlags & Qt::Window) && (d->windowFlags & Qt::WindowType_Mask) != Qt::Popup &&
-         (d->windowFlags & Qt::WindowType_Mask) != Qt::ToolTip && !(d->windowFlags & Qt::FramelessWindowHint)) {
+      (d->windowFlags & Qt::WindowType_Mask) != Qt::ToolTip && !(d->windowFlags & Qt::FramelessWindowHint)) {
       QStyleOptionTitleBar bar;
       d->initStyleOptionTitleBar(&bar);
       QStyle *style = this->style();
@@ -613,9 +414,9 @@ QRectF QGraphicsWidget::windowFrameGeometry() const
 {
    Q_D(const QGraphicsWidget);
    return d->windowFrameMargins
-          ? geometry().adjusted(-d->windowFrameMargins[d->Left], -d->windowFrameMargins[d->Top],
-                                d->windowFrameMargins[d->Right], d->windowFrameMargins[d->Bottom])
-          : geometry();
+      ? geometry().adjusted(-d->windowFrameMargins[d->Left], -d->windowFrameMargins[d->Top],
+         d->windowFrameMargins[d->Right], d->windowFrameMargins[d->Bottom])
+      : geometry();
 }
 
 /*!
@@ -627,53 +428,11 @@ QRectF QGraphicsWidget::windowFrameRect() const
 {
    Q_D(const QGraphicsWidget);
    return d->windowFrameMargins
-          ? rect().adjusted(-d->windowFrameMargins[d->Left], -d->windowFrameMargins[d->Top],
-                            d->windowFrameMargins[d->Right], d->windowFrameMargins[d->Bottom])
-          : rect();
+      ? rect().adjusted(-d->windowFrameMargins[d->Left], -d->windowFrameMargins[d->Top],
+         d->windowFrameMargins[d->Right], d->windowFrameMargins[d->Bottom])
+      : rect();
 }
 
-/*!
-    Populates a style option object for this widget based on its current
-    state, and stores the output in \a option. The default implementation
-    populates \a option with the following properties.
-
-    \table
-      \header
-        \o Style Option Property
-        \o Value
-      \row
-        \o state & QStyle::State_Enabled
-        \o Corresponds to QGraphicsItem::isEnabled().
-      \row
-        \o state & QStyle::State_HasFocus
-        \o Corresponds to QGraphicsItem::hasFocus().
-      \row
-        \o state & QStyle::State_MouseOver
-        \o Corresponds to QGraphicsItem::isUnderMouse().
-      \row
-        \o direction
-        \o Corresponds to QGraphicsWidget::layoutDirection().
-      \row
-        \o rect
-        \o Corresponds to QGraphicsWidget::rect().toRect().
-      \row
-        \o palette
-        \o Corresponds to QGraphicsWidget::palette().
-      \row
-        \o fontMetrics
-        \o Corresponds to QFontMetrics(QGraphicsWidget::font()).
-    \endtable
-
-    Subclasses of QGraphicsWidget should call the base implementation, and
-    then test the type of \a option using qstyleoption_cast<>() or test
-    QStyleOption::Type before storing widget-specific options.
-
-    For example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicswidget.cpp 0
-
-    \sa QStyleOption::initFrom()
-*/
 void QGraphicsWidget::initStyleOption(QStyleOption *option) const
 {
    Q_ASSERT(option);
@@ -698,8 +457,8 @@ void QGraphicsWidget::initStyleOption(QStyleOption *option) const
    if (isWindow()) {
       option->state |= QStyle::State_Window;
    }
+
    /*
-     ###
    #ifdef Q_OS_MAC
    extern bool qt_mac_can_clickThrough(const QGraphicsWidget *w); //qwidget_mac.cpp
    if (!(option->state & QStyle::State_Active) && !qt_mac_can_clickThrough(widget))
@@ -716,11 +475,13 @@ void QGraphicsWidget::initStyleOption(QStyleOption *option) const
        ;
    }
    #endif
+
    #ifdef QT_KEYPAD_NAVIGATION
    if (widget->hasEditFocus())
        state |= QStyle::State_HasEditFocus;
    #endif
    */
+
    option->direction = layoutDirection();
    option->rect = rect().toRect(); // ### truncation!
    option->palette = palette();
@@ -732,6 +493,7 @@ void QGraphicsWidget::initStyleOption(QStyleOption *option) const
       option->palette.setCurrentColorGroup(QPalette::Inactive);
    }
    option->fontMetrics = QFontMetrics(font());
+   option->styleObject = const_cast<QGraphicsWidget *>(this);
 }
 
 /*!
@@ -745,7 +507,7 @@ QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) c
       QSizeF marginSize(0, 0);
       if (d->margins) {
          marginSize = QSizeF(d->margins[d->Left] + d->margins[d->Right],
-                             d->margins[d->Top] + d->margins[d->Bottom]);
+               d->margins[d->Top] + d->margins[d->Bottom]);
       }
       sh = d->layout->effectiveSizeHint(which, constraint - marginSize);
       sh += marginSize;
@@ -768,64 +530,14 @@ QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) c
    return sh;
 }
 
-/*!
-    \property QGraphicsWidget::layout
-    \brief The layout of the widget
 
-    Any existing layout manager is deleted before the new layout is assigned. If
-     \a layout is 0, the widget is left without a layout. Existing subwidgets'
-    geometries will remain unaffected.
-
-    QGraphicsWidget takes ownership of \a layout.
-
-    All widgets that are currently managed by \a layout or all of its
-    sublayouts, are automatically reparented to this item. The layout is then
-    invalidated, and the child widget geometries are adjusted according to
-    this item's geometry() and contentsMargins(). Children who are not
-    explicitly managed by \a layout remain unaffected by the layout after
-    it has been assigned to this widget.
-
-    If no layout is currently managing this widget, layout() will return 0.
-
-*/
-
-/*!
-    \fn void QGraphicsWidget::layoutChanged()
-    This signal gets emitted whenever the layout of the item changes
-    \internal
-*/
-
-/*!
-    Returns this widget's layout, or 0 if no layout is currently managing this
-    widget.
-
-    \sa setLayout()
-*/
 QGraphicsLayout *QGraphicsWidget::layout() const
 {
    Q_D(const QGraphicsWidget);
    return d->layout;
 }
 
-/*!
-    \fn void QGraphicsWidget::setLayout(QGraphicsLayout *layout)
 
-    Sets the layout for this widget to \a layout. Any existing layout manager
-    is deleted before the new layout is assigned. If \a layout is 0, the
-    widget is left without a layout. Existing subwidgets' geometries will
-    remain unaffected.
-
-    All widgets that are currently managed by \a layout or all of its
-    sublayouts, are automatically reparented to this item. The layout is then
-    invalidated, and the child widget geometries are adjusted according to
-    this item's geometry() and contentsMargins(). Children who are not
-    explicitly managed by \a layout remain unaffected by the layout after
-    it has been assigned to this widget.
-
-    QGraphicsWidget takes ownership of \a layout.
-
-    \sa layout(), QGraphicsLinearLayout::addItem(), QGraphicsLayout::invalidate()
-*/
 void QGraphicsWidget::setLayout(QGraphicsLayout *l)
 {
    Q_D(QGraphicsWidget);
@@ -842,7 +554,7 @@ void QGraphicsWidget::setLayout(QGraphicsLayout *l)
 
    if (oldParent && oldParent != this) {
       qWarning("QGraphicsWidget::setLayout: Attempting to set a layout on %s"
-               " \"%s\", when the layout already has a parent", csPrintable(metaObject()->className()), csPrintable(objectName()));
+         " \"%s\", when the layout already has a parent", csPrintable(metaObject()->className()), csPrintable(objectName()));
       return;
    }
 
@@ -870,32 +582,7 @@ void QGraphicsWidget::adjustSize()
    }
 }
 
-/*!
-    \property QGraphicsWidget::layoutDirection
-    \brief the layout direction for this widget.
 
-    This property modifies this widget's and all of its descendants'
-    Qt::WA_RightToLeft attribute. It also sets this widget's
-    Qt::WA_SetLayoutDirection attribute.
-
-    The widget's layout direction determines the order in which the layout
-    manager horizontally arranges subwidgets of this widget. The default
-    value depends on the language and locale of the application, and is
-    typically in the same direction as words are read and written. With
-    Qt::LeftToRight, the layout starts placing subwidgets from the left
-    side of this widget towards the right. Qt::RightToLeft does the opposite -
-    the layout will place widgets starting from the right edge moving towards
-    the left.
-
-    Subwidgets inherit their layout direction from the parent. Top-level
-    widget items inherit their layout direction from
-    QGraphicsScene::layoutDirection. If you change a widget's layout direction
-    by calling setLayoutDirection(), the widget will send itself a
-    \l{QEvent::LayoutDirectionChange}{LayoutDirectionChange} event, and then
-    propagate the new layout direction to all its descendants.
-
-    \sa QWidget::layoutDirection, QApplication::layoutDirection
-*/
 Qt::LayoutDirection QGraphicsWidget::layoutDirection() const
 {
    return testAttribute(Qt::WA_RightToLeft) ? Qt::RightToLeft : Qt::LeftToRight;
@@ -913,14 +600,7 @@ void QGraphicsWidget::unsetLayoutDirection()
    d->resolveLayoutDirection();
 }
 
-/*!
-    Returns a pointer to the widget's style. If this widget does not have any
-    explicitly assigned style, the scene's style is returned instead. In turn,
-    if the scene does not have any assigned style, this function returns
-    QApplication::style().
 
-    \sa setStyle()
-*/
 QStyle *QGraphicsWidget::style() const
 {
    if (QStyle *style = widgetStyles()->styleForWidget(this)) {
@@ -930,19 +610,6 @@ QStyle *QGraphicsWidget::style() const
    return scene() ? scene()->style() : QApplication::style();
 }
 
-/*!
-    Sets the widget's style to \a style. QGraphicsWidget does \e not take
-    ownership of \a style.
-
-    If no style is assigned, or \a style is 0, the widget will use
-    QGraphicsScene::style() (if this has been set). Otherwise the widget will
-    use QApplication::style().
-
-    This function sets the Qt::WA_SetStyle attribute if \a style is not 0;
-    otherwise it clears the attribute.
-
-    \sa style()
-*/
 void QGraphicsWidget::setStyle(QStyle *style)
 {
    setAttribute(Qt::WA_SetStyle, style != 0);
@@ -953,28 +620,6 @@ void QGraphicsWidget::setStyle(QStyle *style)
    QApplication::sendEvent(this, &event);
 }
 
-/*!
-    \property QGraphicsWidget::font
-    \brief the widgets' font
-
-    This property provides the widget's font.
-
-    QFont consists of font properties that have been explicitly defined and
-    properties implicitly inherited from the widget's parent. Hence, font()
-    can return a different font compared to the one set with setFont().
-    This scheme allows you to define single entries in a font without
-    affecting the font's inherited entries.
-
-    When a widget's font changes, it resolves its entries against its
-    parent widget. If the widget does not have a parent widget, it resolves
-    its entries against the scene. The widget then sends itself a
-    \l{QEvent::FontChange}{FontChange} event and notifies all its
-    descendants so that they can resolve their fonts as well.
-
-    By default, this property contains the application's default font.
-
-    \sa QApplication::font(), QGraphicsScene::font, QFont::resolve()
-*/
 QFont QGraphicsWidget::font() const
 {
    Q_D(const QGraphicsWidget);
@@ -992,31 +637,6 @@ void QGraphicsWidget::setFont(const QFont &font)
    d->setFont_helper(resolvedFont);
 }
 
-/*!
-    \property QGraphicsWidget::palette
-    \brief the widget's palette
-
-    This property provides the widget's palette. The palette provides colors
-    and brushes for color groups (e.g., QPalette::Button) and states (e.g.,
-    QPalette::Inactive), loosely defining the general look of the widget and
-    its children.
-
-    QPalette consists of color groups that have been explicitly defined, and
-    groups that are implicitly inherited from the widget's parent. Because of
-    this, palette() can return a different palette than what has been set with
-    setPalette(). This scheme allows you to define single entries in a palette
-    without affecting the palette's inherited entries.
-
-    When a widget's palette changes, it resolves its entries against its
-    parent widget, or if it doesn't have a parent widget, it resolves against
-    the scene. It then sends itself a \l{QEvent::PaletteChange}{PaletteChange}
-    event, and notifies all its descendants so they can resolve their palettes
-    as well.
-
-    By default, this property contains the application's default palette.
-
-    \sa QApplication::palette(), QGraphicsScene::palette, QPalette::resolve()
-*/
 QPalette QGraphicsWidget::palette() const
 {
    Q_D(const QGraphicsWidget);
@@ -1082,25 +702,30 @@ void QGraphicsWidget::updateGeometry()
       } else {
          parentItem->updateGeometry();
       }
+
    } else {
+
       if (parentItem) {
          // This is for custom layouting
-         QGraphicsWidget *parentWid = parentWidget();    //###
+         QGraphicsWidget *parentWid = parentWidget();
+
          if (parentWid->isVisible()) {
             QApplication::postEvent(parentWid, new QEvent(QEvent::LayoutRequest));
          }
+
       } else {
          /**
           * If this is the topmost widget, post a LayoutRequest event to the widget.
           * When the event is received, it will start flowing all the way down to the leaf
           * widgets in one go. This will make a relayout flicker-free.
           */
+
          if (QGraphicsLayout::instantInvalidatePropagation()) {
-            Q_D(QGraphicsWidget);
-            ++d->refCountInvokeRelayout;
-            QMetaObject::invokeMethod(this, "_q_relayout", Qt::QueuedConnection);
+
+            QApplication::postEvent(static_cast<QGraphicsWidget *>(this), new QEvent(QEvent::LayoutRequest));
          }
       }
+
       if (!QGraphicsLayout::instantInvalidatePropagation()) {
          bool wasResized = testAttribute(Qt::WA_Resized);
          resize(size()); // this will restrict the size
@@ -1109,29 +734,11 @@ void QGraphicsWidget::updateGeometry()
    }
 }
 
-/*!
-    \reimp
 
-    QGraphicsWidget uses the base implementation of this function to catch and
-    deliver events related to state changes in the item. Because of this, it is
-    very important that subclasses call the base implementation.
-
-    \a change specifies the type of change, and \a value is the new value.
-
-    For example, QGraphicsWidget uses ItemVisibleChange to deliver
-    \l{QEvent::Show} {Show} and \l{QEvent::Hide}{Hide} events,
-    ItemPositionHasChanged to deliver \l{QEvent::Move}{Move} events,
-    and ItemParentChange both to deliver \l{QEvent::ParentChange}
-    {ParentChange} events, and for managing the focus chain.
-
-    QGraphicsWidget enables the ItemSendsGeometryChanges flag by default in
-    order to track position changes.
-
-    \sa QGraphicsItem::itemChange()
-*/
 QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &value)
 {
    Q_D(QGraphicsWidget);
+
    switch (change) {
       case ItemEnabledHasChanged: {
          // Send EnabledChange after the enabled state has changed.
@@ -1152,8 +759,8 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
          }
          // layout size hint only changes if an item changes from/to explicitly hidden state
          if (value.toBool() || d->explicitlyHidden) {
-             updateGeometry();
-	 }
+            updateGeometry();
+         }
          break;
       case ItemVisibleHasChanged:
          if (!value.toBool()) {
@@ -1190,16 +797,6 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
          // Deliver ToolTipChange.
          QEvent event(QEvent::ToolTipChange);
          QApplication::sendEvent(this, &event);
-         break;
-      }
-
-      case ItemChildAddedChange: {
-         QGraphicsItem *child = value.value<QGraphicsItem *>();
-
-         if (child->isWidget()) {
-            static_cast<QGraphicsWidget *>(child)->d_func()->resolveLayoutDirection();
-         }
-
          break;
       }
 
@@ -1253,19 +850,6 @@ bool QGraphicsWidget::sceneEvent(QEvent *event)
    return QGraphicsItem::sceneEvent(event);
 }
 
-/*!
-    This event handler, for \a event, receives events for the window frame if
-    this widget is a window. Its base implementation provides support for
-    default window frame interaction such as moving, resizing, etc.
-
-    You can reimplement this handler in a subclass of QGraphicsWidget to
-    provide your own custom window frame interaction support.
-
-    Returns true if \a event has been recognized and processed; otherwise,
-    returns false.
-
-    \sa event()
-*/
 bool QGraphicsWidget::windowFrameEvent(QEvent *event)
 {
    Q_D(QGraphicsWidget);
@@ -1295,24 +879,6 @@ bool QGraphicsWidget::windowFrameEvent(QEvent *event)
    return event->isAccepted();
 }
 
-/*!
-    \since 4.4
-
-    Returns the window frame section at position \a pos, or
-    Qt::NoSection if there is no window frame section at this
-    position.
-
-    This function is used in QGraphicsWidget's base implementation for window
-    frame interaction.
-
-    You can reimplement this function if you want to customize how a window
-    can be interactively moved or resized.  For instance, if you only want to
-    allow a window to be resized by the bottom right corner, you can
-    reimplement this function to return Qt::NoSection for all sections except
-    Qt::BottomRightSection.
-
-    \sa windowFrameEvent(), paintWindowFrame(), windowFrameGeometry()
-*/
 Qt::WindowFrameSection QGraphicsWidget::windowFrameSectionAt(const QPointF &pos) const
 {
    Q_D(const QGraphicsWidget);
@@ -1332,13 +898,13 @@ Qt::WindowFrameSection QGraphicsWidget::windowFrameSectionAt(const QPointF &pos)
    const qreal cornerMargin = 20;
    //### Not sure of this one, it should be the same value for all edges.
    const qreal windowFrameWidth = d->windowFrameMargins
-                                  ? d->windowFrameMargins[d->Left] : 0;
+      ? d->windowFrameMargins[d->Left] : 0;
 
    Qt::WindowFrameSection s = Qt::NoSection;
    if (x <= left + cornerMargin) {
       if (y <= top + windowFrameWidth || (x <= left + windowFrameWidth && y <= top + cornerMargin)) {
          s = Qt::TopLeftSection;
-      } else if (y >= bottom - windowFrameWidth || (x <= left + windowFrameWidth && y >= bottom - windowFrameWidth)) {
+      } else if (y >= bottom - windowFrameWidth || (x <= left + windowFrameWidth && y >= bottom - cornerMargin)) {
          s = Qt::BottomLeftSection;
       } else if (x <= left + windowFrameWidth) {
          s = Qt::LeftSection;
@@ -1346,7 +912,7 @@ Qt::WindowFrameSection QGraphicsWidget::windowFrameSectionAt(const QPointF &pos)
    } else if (x >= right - cornerMargin) {
       if (y <= top + windowFrameWidth || (x >= right - windowFrameWidth && y <= top + cornerMargin)) {
          s = Qt::TopRightSection;
-      } else if (y >= bottom - windowFrameWidth || (x >= right - windowFrameWidth && y >= bottom - windowFrameWidth)) {
+      } else if (y >= bottom - windowFrameWidth || (x >= right - windowFrameWidth && y >= bottom - cornerMargin)) {
          s = Qt::BottomRightSection;
       } else if (x >= right - windowFrameWidth) {
          s = Qt::RightSection;
@@ -1359,7 +925,7 @@ Qt::WindowFrameSection QGraphicsWidget::windowFrameSectionAt(const QPointF &pos)
    if (s == Qt::NoSection) {
       QRectF r1 = r;
       r1.setHeight(d->windowFrameMargins
-                   ? d->windowFrameMargins[d->Top] : 0);
+         ? d->windowFrameMargins[d->Top] : 0);
       if (r1.contains(pos)) {
          s = Qt::TitleBarArea;
       }
@@ -1367,42 +933,6 @@ Qt::WindowFrameSection QGraphicsWidget::windowFrameSectionAt(const QPointF &pos)
    return s;
 }
 
-/*!
-    \reimp
-
-    Handles the \a event.  QGraphicsWidget handles the following
-    events:
-
-    \table   \o Event                 \o Usage
-    \row     \o Polish
-                    \o Delivered to the widget some time after it has been
-                        shown.
-    \row     \o GraphicsSceneMove
-                    \o Delivered to the widget after its local position has
-                        changed.
-    \row     \o GraphicsSceneResize
-                    \o Delivered to the widget after its size has changed.
-    \row     \o Show
-                    \o Delivered to the widget before it has been shown.
-    \row     \o Hide
-                    \o Delivered to the widget after it has been hidden.
-    \row     \o PaletteChange
-                    \o Delivered to the widget after its palette has changed.
-    \row     \o FontChange
-                    \o Delivered to the widget after its font has changed.
-    \row     \o EnabledChange
-                    \o Delivered to the widget after its enabled state has
-                        changed.
-    \row     \o StyleChange
-                    \o Delivered to the widget after its style has changed.
-    \row     \o LayoutDirectionChange
-                    \o Delivered to the widget after its layout direction has
-                        changed.
-    \row     \o ContentsRectChange
-                    \o Delivered to the widget after its contents margins/
-                        contents rect has changed.
-    \endtable
-*/
 bool QGraphicsWidget::event(QEvent *event)
 {
    Q_D(QGraphicsWidget);
@@ -1436,6 +966,12 @@ bool QGraphicsWidget::event(QEvent *event)
       case QEvent::WindowDeactivate:
          update();
          break;
+      case QEvent::StyleAnimationUpdate:
+         if (isVisible()) {
+            event->accept();
+            update();
+         }
+         break;
       // Taken from QWidget::event
       case QEvent::ActivationChange:
       case QEvent::EnabledChange:
@@ -1466,6 +1002,8 @@ bool QGraphicsWidget::event(QEvent *event)
          if (d->hasDecoration() && windowFrameEvent(event)) {
             return true;
          }
+         break;
+
       case QEvent::GraphicsSceneMouseMove:
       case QEvent::GraphicsSceneMouseRelease:
       case QEvent::GraphicsSceneMouseDoubleClick:
@@ -1481,7 +1019,7 @@ bool QGraphicsWidget::event(QEvent *event)
             windowFrameEvent(event);
             // Filter out hover events if they were sent to us only because of the
             // decoration (special case in QGraphicsScenePrivate::dispatchHoverEvent).
-            if (!acceptsHoverEvents()) {
+            if (!acceptHoverEvents()) {
                return true;
             }
          }
@@ -1707,7 +1245,7 @@ void QGraphicsWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 */
 void QGraphicsWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-   Q_UNUSED(event);
+   QGraphicsObject::hoverLeaveEvent(event);
 }
 
 /*!
@@ -1943,7 +1481,7 @@ int QGraphicsWidget::grabShortcut(const QKeySequence &sequence, Qt::ShortcutCont
       return 0;
    }
    // ### setAttribute(Qt::WA_GrabbedShortcut);
-   return qApp->d_func()->shortcutMap.addShortcut(this, sequence, context);
+   return qApp->d_func()->shortcutMap.addShortcut(this, sequence, context, qWidgetShortcutContextMatcher);
 }
 
 /*!
@@ -2037,25 +1575,13 @@ void QGraphicsWidget::addAction(QAction *action)
 
     \sa removeAction(), QMenu, addAction(), QWidget::addActions()
 */
-void QGraphicsWidget::addActions(QList<QAction *> actions)
+void QGraphicsWidget::addActions(const QList<QAction *> &actions)
 {
    for (int i = 0; i < actions.count(); ++i) {
       insertAction(0, actions.at(i));
    }
 }
 
-/*!
-    \since 4.5
-
-    Inserts the action \a action to this widget's list of actions,
-    before the action \a before. It appends the action if \a before is 0 or
-    \a before is not a valid action for this widget.
-
-    A QGraphicsWidget should only have one of each action.
-
-    \sa removeAction(), addAction(), QMenu, actions(),
-    QWidget::insertActions()
-*/
 void QGraphicsWidget::insertAction(QAction *before, QAction *action)
 {
    if (!action) {
@@ -2174,13 +1700,13 @@ void QGraphicsWidget::setTabOrder(QGraphicsWidget *first, QGraphicsWidget *secon
    }
    if ((first && second) && first->scene() != second->scene()) {
       qWarning("QGraphicsWidget::setTabOrder: scenes %p and %p are different",
-               first->scene(), second->scene());
+         first->scene(), second->scene());
       return;
    }
    QGraphicsScene *scene = first ? first->scene() : second->scene();
    if (!scene && (!first || !second)) {
       qWarning("QGraphicsWidget::setTabOrder: assigning tab order from/to the"
-               " scene requires the item to be in a scene.");
+         " scene requires the item to be in a scene.");
       return;
    }
 
@@ -2282,10 +1808,10 @@ void QGraphicsWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     \sa QGraphicsItem::paint()
 */
 void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                                       QWidget *widget)
+   QWidget *widget)
 {
    const bool fillBackground = !testAttribute(Qt::WA_OpaquePaintEvent)
-                               && !testAttribute(Qt::WA_NoSystemBackground);
+      && !testAttribute(Qt::WA_NoSystemBackground);
    QGraphicsProxyWidget *proxy = qobject_cast<QGraphicsProxyWidget *>(this);
    const bool embeddedWidgetFillsOwnBackground = proxy && proxy->widget();
 
@@ -2352,7 +1878,7 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
          painter->fillRect(windowFrameRect, palette().window());
       }
    }
-   painter->setRenderHint(QPainter::NonCosmeticDefaultPen);
+
 
    // Draw title
    int height = (int)d->titleBarHeight(bar);
@@ -2362,16 +1888,18 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
    }
 
    painter->save();
-   painter->setFont(QApplication::font("QWorkspaceTitleBar"));
+   painter->setFont(QApplication::font("QMdiSubWindowTitleBar"));
    style()->drawComplexControl(QStyle::CC_TitleBar, &bar, painter, widget);
    painter->restore();
    if (setMask) {
       painter->restore();
    }
+
    // Draw window frame
    QStyleOptionFrame frameOptions;
    frameOptions.QStyleOption::operator=(*option);
    initStyleOption(&frameOptions);
+
    if (!hasBorder) {
       painter->setClipRect(windowFrameRect.adjusted(0, +height, 0, 0), Qt::IntersectClip);
    }
@@ -2417,17 +1945,7 @@ QPainterPath QGraphicsWidget::shape() const
    return path;
 }
 
-/*!
-    Call this function to close the widget.
 
-    Returns true if the widget was closed; otherwise returns false.
-    This slot will first send a QCloseEvent to the widget, which may or may
-    not accept the event. If the event was ignored, nothing happens. If the
-    event was accepted, it will hide() the widget.
-
-    If the widget has the Qt::WA_DeleteOnClose attribute set it will be
-    deleted.
-*/
 bool QGraphicsWidget::close()
 {
    QCloseEvent closeEvent;
@@ -2445,12 +1963,6 @@ bool QGraphicsWidget::close()
    return true;
 }
 
-void QGraphicsWidget::_q_relayout()
-{
-   Q_D(QGraphicsWidget);
-   d->_q_relayout();
-}
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_GRAPHICSVIEW

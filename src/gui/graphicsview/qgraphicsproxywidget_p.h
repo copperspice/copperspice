@@ -28,7 +28,7 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-QT_BEGIN_NAMESPACE
+
 
 class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 {
@@ -93,7 +93,7 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
    quint32 proxyIsGivingFocus : 1;
 };
 
-QT_END_NAMESPACE
+
 
 #endif
 

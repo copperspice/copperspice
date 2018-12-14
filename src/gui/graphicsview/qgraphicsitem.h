@@ -23,19 +23,17 @@
 #ifndef QGRAPHICSITEM_H
 #define QGRAPHICSITEM_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtGui/qpainterpath.h>
-#include <QtGui/qpixmap.h>
+#include <qglobal.h>
+#include <qdeclarativelistproperty_p.h>
+#include <qobject.h>
+#include <qpainterpath.h>
+#include <qpixmap.h>
+#include <qscopedpointer.h>
 #include <qtextcursor.h>
-#include <qdeclarativelistproperty.h>
+#include <qvariant.h>
+#include <qrect.h>
 
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QBrush;
 class QCursor;
@@ -63,6 +61,7 @@ class QRectF;
 class QTextDocument;
 
 class QStyleOptionGraphicsItem;
+
 class QGraphicsItemPrivate;
 class QAbstractGraphicsShapeItemPrivate;
 class QGraphicsPathItemPrivate;
@@ -97,8 +96,9 @@ class Q_GUI_EXPORT QGraphicsItem
       ItemIsFocusScope = 0x8000, // internal
       ItemSendsScenePositionChanges = 0x10000,
       ItemStopsClickFocusPropagation = 0x20000,
-      ItemStopsFocusHandling = 0x40000
-                               // NB! Don't forget to increase the d_ptr->flags bit field by 1 when adding a new flag.
+      ItemStopsFocusHandling = 0x40000,
+      ItemContainsChildrenInShape = 0x80000
+         // NB! Don't forget to increase the d_ptr->flags bit field by 1 when adding a new flag.
    };
    using GraphicsItemFlags = QFlags<GraphicsItemFlag>;
 
@@ -151,7 +151,7 @@ class Q_GUI_EXPORT QGraphicsItem
       SceneModal
    };
 
-   QGraphicsItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsItem(QGraphicsItem *parent = nullptr);
    virtual ~QGraphicsItem();
 
    QGraphicsScene *scene() const;
@@ -164,7 +164,7 @@ class Q_GUI_EXPORT QGraphicsItem
    QGraphicsWidget *window() const;
    QGraphicsItem *panel() const;
    void setParentItem(QGraphicsItem *parent);
-   QList<QGraphicsItem *> children() const; // ### obsolete
+
    QList<QGraphicsItem *> childItems() const;
    bool isWidget() const;
    bool isWindow() const;
@@ -185,7 +185,7 @@ class Q_GUI_EXPORT QGraphicsItem
 
    PanelModality panelModality() const;
    void setPanelModality(PanelModality panelModality);
-   bool isBlockedByModalPanel(QGraphicsItem **blockingPanel = 0) const;
+   bool isBlockedByModalPanel(QGraphicsItem **blockingPanel = nullptr) const;
 
 #ifndef QT_NO_TOOLTIP
    QString toolTip() const;
@@ -206,6 +206,7 @@ class Q_GUI_EXPORT QGraphicsItem
    inline void hide() {
       setVisible(false);
    }
+
    inline void show() {
       setVisible(true);
    }
@@ -232,8 +233,6 @@ class Q_GUI_EXPORT QGraphicsItem
    Qt::MouseButtons acceptedMouseButtons() const;
    void setAcceptedMouseButtons(Qt::MouseButtons buttons);
 
-   bool acceptsHoverEvents() const; // ### obsolete
-   void setAcceptsHoverEvents(bool enabled); // ### obsolete
    bool acceptHoverEvents() const;
    void setAcceptHoverEvents(bool enabled);
    bool acceptTouchEvents() const;
@@ -298,14 +297,11 @@ class Q_GUI_EXPORT QGraphicsItem
    QTransform transform() const;
    QTransform sceneTransform() const;
    QTransform deviceTransform(const QTransform &viewportTransform) const;
-   QTransform itemTransform(const QGraphicsItem *other, bool *ok = 0) const;
+   QTransform itemTransform(const QGraphicsItem *other, bool *ok = nullptr) const;
    void setTransform(const QTransform &matrix, bool combine = false);
    void resetTransform();
 
-   void rotate(qreal angle);           // ### obsolete
-   void scale(qreal sx, qreal sy);     // ### obsolete
-   void shear(qreal sh, qreal sv);     // ### obsolete
-   void translate(qreal dx, qreal dy); // ### obsolete
+
 
    void setRotation(qreal angle);
    qreal rotation() const;
@@ -350,8 +346,8 @@ class Q_GUI_EXPORT QGraphicsItem
    virtual bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    virtual bool collidesWithPath(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QList<QGraphicsItem *> collidingItems(Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-   bool isObscured() const;
-   bool isObscured(const QRectF &rect) const; // ### Qt5/merge with isObscured(), add QRectF arg to isObscuredBy()
+
+   bool isObscured(const QRectF &rect) const;
    inline bool isObscured(qreal x, qreal y, qreal w, qreal h) const;
    virtual bool isObscuredBy(const QGraphicsItem *item) const;
    virtual QPainterPath opaqueArea() const;
@@ -361,7 +357,7 @@ class Q_GUI_EXPORT QGraphicsItem
    void setBoundingRegionGranularity(qreal granularity);
 
    // Drawing
-   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) = 0;
+   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) = 0;
    void update(const QRectF &rect = QRectF());
    inline void update(qreal x, qreal y, qreal width, qreal height);
    void scroll(qreal dx, qreal dy, const QRectF &rect = QRectF());
@@ -469,7 +465,8 @@ class Q_GUI_EXPORT QGraphicsItem
    virtual bool supportsExtension(Extension extension) const;
    virtual void setExtension(Extension extension, const QVariant &variant);
    virtual QVariant extension(const QVariant &variant) const;
- 
+
+
    QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent);
    QScopedPointer<QGraphicsItemPrivate> d_ptr;
 
@@ -680,7 +677,8 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
    CS_INTERFACES(QGraphicsItem)
 
  public:
-   QGraphicsObject(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsObject(QGraphicsItem *parent = nullptr);
+   ~QGraphicsObject();
    using QObject::children;
 
 #ifndef QT_NO_GESTURES
@@ -690,26 +688,37 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
 
    GUI_CS_SIGNAL_1(Public, void parentChanged())
    GUI_CS_SIGNAL_2(parentChanged)
+
    GUI_CS_SIGNAL_1(Public, void opacityChanged())
    GUI_CS_SIGNAL_2(opacityChanged)
+
    GUI_CS_SIGNAL_1(Public, void visibleChanged())
    GUI_CS_SIGNAL_2(visibleChanged)
+
    GUI_CS_SIGNAL_1(Public, void enabledChanged())
    GUI_CS_SIGNAL_2(enabledChanged)
+
    GUI_CS_SIGNAL_1(Public, void xChanged())
    GUI_CS_SIGNAL_2(xChanged)
+
    GUI_CS_SIGNAL_1(Public, void yChanged())
    GUI_CS_SIGNAL_2(yChanged)
+
    GUI_CS_SIGNAL_1(Public, void zChanged())
    GUI_CS_SIGNAL_2(zChanged)
+
    GUI_CS_SIGNAL_1(Public, void rotationChanged())
    GUI_CS_SIGNAL_2(rotationChanged)
+
    GUI_CS_SIGNAL_1(Public, void scaleChanged())
    GUI_CS_SIGNAL_2(scaleChanged)
+
    GUI_CS_SIGNAL_1(Public, void childrenChanged())
    GUI_CS_SIGNAL_2(childrenChanged)
+
    GUI_CS_SIGNAL_1(Public, void widthChanged())
    GUI_CS_SIGNAL_2(widthChanged)
+
    GUI_CS_SIGNAL_1(Public, void heightChanged())
    GUI_CS_SIGNAL_2(heightChanged)
 
@@ -719,6 +728,7 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
 
    QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent);
 
+   bool event(QEvent *ev) override;
  private:
    friend class QGraphicsItem;
    friend class QGraphicsItemPrivate;
@@ -749,7 +759,7 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
 class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
 {
  public:
-   QAbstractGraphicsShapeItem(QGraphicsItem *parent = nullptr);
+   explicit QAbstractGraphicsShapeItem(QGraphicsItem *parent = nullptr);
    ~QAbstractGraphicsShapeItem();
 
    QPen pen() const;
@@ -772,8 +782,8 @@ class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
 class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
 {
  public:
-   QGraphicsPathItem(QGraphicsItem *parent = nullptr);
-   QGraphicsPathItem(const QPainterPath &path, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsPathItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsPathItem(const QPainterPath &path, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsPathItem();
 
@@ -805,9 +815,9 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
 class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
 {
  public:
-   QGraphicsRectItem(QGraphicsItem *parent = nullptr);
-   QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
-   QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsRectItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsRectItem();
 
@@ -845,9 +855,9 @@ inline void QGraphicsRectItem::setRect(qreal ax, qreal ay, qreal w, qreal h)
 class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
 {
  public:
-   QGraphicsEllipseItem(QGraphicsItem *parent = nullptr);
-   QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
-   QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsEllipseItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsEllipseItem();
 
@@ -890,9 +900,9 @@ inline void QGraphicsEllipseItem::setRect(qreal ax, qreal ay, qreal w, qreal h)
 
 class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
 {
- public:  
-   QGraphicsPolygonItem(QGraphicsItem *parent = nullptr);
-   QGraphicsPolygonItem(const QPolygonF &polygon, QGraphicsItem *parent = nullptr);
+ public:
+   explicit QGraphicsPolygonItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsPolygonItem(const QPolygonF &polygon, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsPolygonItem();
 
@@ -927,9 +937,9 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
 class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
 {
  public:
-   QGraphicsLineItem(QGraphicsItem *parent = nullptr);
-   QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent = nullptr);
-   QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsLineItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsLineItem();
 
@@ -973,8 +983,8 @@ class Q_GUI_EXPORT QGraphicsPixmapItem : public QGraphicsItem
       HeuristicMaskShape
    };
 
-   QGraphicsPixmapItem(QGraphicsItem *parent = nullptr);
-   QGraphicsPixmapItem(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsPixmapItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsPixmapItem(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsPixmapItem();
 
@@ -1025,12 +1035,13 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
    // following 4 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(openExternalLinks, openExternalLinks)
    GUI_CS_PROPERTY_WRITE(openExternalLinks, setOpenExternalLinks)
+
    GUI_CS_PROPERTY_READ(textCursor, textCursor)
    GUI_CS_PROPERTY_WRITE(textCursor, setTextCursor)
 
  public:
-   QGraphicsTextItem(QGraphicsItem *parent = nullptr);
-   QGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsTextItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsTextItem();
 
@@ -1080,6 +1091,7 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
 
    GUI_CS_SIGNAL_1(Public, void linkActivated(const QString &un_named_arg1))
    GUI_CS_SIGNAL_2(linkActivated, un_named_arg1)
+
    GUI_CS_SIGNAL_1(Public, void linkHovered(const QString &un_named_arg1))
    GUI_CS_SIGNAL_2(linkHovered, un_named_arg1)
 
@@ -1110,12 +1122,8 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DECLARE_PRIVATE(QGraphicsTextItem)
    Q_DISABLE_COPY(QGraphicsTextItem)
 
-   // notes as of 1/06/2014
-   // QGraphicsTextItem->dd   points to QGraphicsTextItemPrivate
-   // QGraphicsItem->d_ptr    points to QGraphicsItemPrivate
 
    QGraphicsTextItemPrivate *dd;
 
@@ -1127,14 +1135,16 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
 
    GUI_CS_SLOT_1(Private, void _q_ensureVisible(const QRectF &un_named_arg1))
    GUI_CS_SLOT_2(_q_ensureVisible)
+
+   friend class QGraphicsTextItemPrivate;
 };
 
 class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
 {
 
  public:
-   QGraphicsSimpleTextItem(QGraphicsItem *parent = nullptr);
-   QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent = nullptr);
+   explicit QGraphicsSimpleTextItem(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsSimpleTextItem();
 
@@ -1169,7 +1179,7 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
 class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
 {
  public:
-   QGraphicsItemGroup(QGraphicsItem *parent = nullptr);
+   explicit QGraphicsItemGroup(QGraphicsItem *parent = nullptr);
    ~QGraphicsItemGroup();
 
    void addToGroup(QGraphicsItem *item);
@@ -1189,16 +1199,22 @@ class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
    Q_DECLARE_PRIVATE(QGraphicsItemGroup)
 };
 
-template <class T> inline T qgraphicsitem_cast(QGraphicsItem *item)
+template <class T>
+inline T qgraphicsitem_cast(QGraphicsItem *item)
 {
-   return int(static_cast<T>(0)->Type) == int(QGraphicsItem::Type)
-          || (item && int(static_cast<T>(0)->Type) == item->type()) ? static_cast<T>(item) : 0;
+   using Item = typename std::remove_cv<typename std::remove_pointer<T>::type>::type;
+
+   return int(Item::Type) == int(QGraphicsItem::Type)
+      || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : 0;
 }
 
-template <class T> inline T qgraphicsitem_cast(const QGraphicsItem *item)
+template <class T>
+inline T qgraphicsitem_cast(const QGraphicsItem *item)
 {
-   return int(static_cast<T>(0)->Type) == int(QGraphicsItem::Type)
-          || (item && int(static_cast<T>(0)->Type) == item->type()) ? static_cast<T>(item) : 0;
+   using Item = typename std::remove_cv<typename std::remove_pointer<T>::type>::type;
+
+   return int(Item::Type) == int(QGraphicsItem::Type)
+      || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : 0;
 }
 
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem *item);
@@ -1207,15 +1223,9 @@ Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange c
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlag flag);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags);
 
-QT_END_NAMESPACE
-
 Q_DECLARE_METATYPE(QGraphicsItem *)
-Q_DECLARE_METATYPE(QGraphicsScene *)
-
-QT_BEGIN_NAMESPACE
 
 #endif // QT_NO_GRAPHICSVIEW
 
-QT_END_NAMESPACE
 
-#endif // QGRAPHICSITEM_H
+#endif

@@ -23,8 +23,8 @@
 #ifndef QSIMPLEX_P_H
 #define QSIMPLEX_P_H
 
-#include <QtCore/qhash.h>
-#include <QtCore/qpair.h>
+#include <qhash.h>
+#include <qpair.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -117,22 +117,24 @@ struct QSimplexConstraint {
 
 class QSimplex
 {
+   Q_DISABLE_COPY(QSimplex)
+
  public:
    QSimplex();
-   virtual ~QSimplex();
+   ~QSimplex();
 
    qreal solveMin();
    qreal solveMax();
 
-   bool setConstraints(const QList<QSimplexConstraint *> constraints);
+   bool setConstraints(const QList<QSimplexConstraint *> &constraints);
    void setObjective(QSimplexConstraint *objective);
 
    void dumpMatrix();
 
  private:
    // Matrix handling
-   qreal valueAt(int row, int column);
-   void setValueAt(int row, int column, qreal value);
+   inline qreal valueAt(int row, int column);
+   inline void setValueAt(int row, int column, qreal value);
    void clearRow(int rowIndex);
    void clearColumns(int first, int last);
    void combineRows(int toIndex, int fromIndex, qreal factor);
@@ -147,8 +149,10 @@ class QSimplex
    // Helpers
    void clearDataStructures();
    void solveMaxHelper();
-   enum solverFactor { Minimum = -1, Maximum = 1 };
-   qreal solver(solverFactor factor);
+
+   enum SolverFactor { Minimum = -1, Maximum = 1 };
+   qreal solver(SolverFactor factor);
+
    void collectResults();
 
    QList<QSimplexConstraint *> constraints;
@@ -172,6 +176,5 @@ inline void QSimplex::setValueAt(int rowIndex, int columnIndex, qreal value)
    matrix[rowIndex * columns + columnIndex] = value;
 }
 
-QT_END_NAMESPACE
 
 #endif // QSIMPLEX_P_H

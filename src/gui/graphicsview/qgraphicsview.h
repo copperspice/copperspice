@@ -25,10 +25,10 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtGui/qpainter.h>
-#include <QtGui/qscrollarea.h>
-#include <QtGui/qgraphicsscene.h>
+#include <qscrollarea.h>
+#include <qgraphicsscene.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -51,8 +51,10 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 
    GUI_CS_PROPERTY_READ(backgroundBrush, backgroundBrush)
    GUI_CS_PROPERTY_WRITE(backgroundBrush, setBackgroundBrush)
+
    GUI_CS_PROPERTY_READ(foregroundBrush, foregroundBrush)
    GUI_CS_PROPERTY_WRITE(foregroundBrush, setForegroundBrush)
+
    GUI_CS_PROPERTY_READ(interactive, isInteractive)
    GUI_CS_PROPERTY_WRITE(interactive, setInteractive)
 
@@ -64,14 +66,19 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 
    GUI_CS_PROPERTY_READ(renderHints, renderHints)
    GUI_CS_PROPERTY_WRITE(renderHints, setRenderHints)
+
    GUI_CS_PROPERTY_READ(dragMode, dragMode)
    GUI_CS_PROPERTY_WRITE(dragMode, setDragMode)
+
    GUI_CS_PROPERTY_READ(cacheMode, cacheMode)
    GUI_CS_PROPERTY_WRITE(cacheMode, setCacheMode)
+
    GUI_CS_PROPERTY_READ(transformationAnchor, transformationAnchor)
    GUI_CS_PROPERTY_WRITE(transformationAnchor, setTransformationAnchor)
+
    GUI_CS_PROPERTY_READ(resizeAnchor, resizeAnchor)
    GUI_CS_PROPERTY_WRITE(resizeAnchor, setResizeAnchor)
+
    GUI_CS_PROPERTY_READ(viewportUpdateMode, viewportUpdateMode)
    GUI_CS_PROPERTY_WRITE(viewportUpdateMode, setViewportUpdateMode)
 
@@ -150,6 +157,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 #ifndef QT_NO_RUBBERBAND
    Qt::ItemSelectionMode rubberBandSelectionMode() const;
    void setRubberBandSelectionMode(Qt::ItemSelectionMode mode);
+   QRect rubberBandRect() const;
 #endif
 
    CacheMode cacheMode() const;
@@ -196,14 +204,14 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    void fitInView(const QGraphicsItem *item, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
 
    void render(QPainter *painter, const QRectF &target = QRectF(), const QRect &source = QRect(),
-               Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
+      Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
 
    QList<QGraphicsItem *> items() const;
    QList<QGraphicsItem *> items(const QPoint &pos) const;
    inline QList<QGraphicsItem *> items(int x, int y) const;
    QList<QGraphicsItem *> items(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    inline QList<QGraphicsItem *> items(int x, int y, int w, int h,
-                                       Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+      Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QList<QGraphicsItem *> items(const QPolygon &polygon, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QGraphicsItem *itemAt(const QPoint &pos) const;
@@ -235,11 +243,16 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    GUI_CS_SLOT_2(updateScene)
 
    GUI_CS_SLOT_1(Public, void invalidateScene(const QRectF &rect = QRectF(),
-                 QGraphicsScene::SceneLayers layers = QGraphicsScene::AllLayers))
+         QGraphicsScene::SceneLayers layers = QGraphicsScene::AllLayers))
    GUI_CS_SLOT_2(invalidateScene)
 
    GUI_CS_SLOT_1(Public, void updateSceneRect(const QRectF &rect))
    GUI_CS_SLOT_2(updateSceneRect)
+
+#ifndef QT_NO_RUBBERBAND
+   GUI_CS_SIGNAL_1(Public, void rubberBandChanged(QRect viewportRect, QPointF fromScenePoint, QPointF toScenePoint))
+   GUI_CS_SIGNAL_2(rubberBandChanged, viewportRect, fromScenePoint, toScenePoint)
+#endif
 
  protected :
    GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *widget))
@@ -302,68 +315,67 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsView::CacheMode)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsView::OptimizationFlags)
 
-void QGraphicsView::cs_setSceneRect(const QRectF &rect)
+inline void QGraphicsView::cs_setSceneRect(const QRectF &rect)
 {
    setSceneRect(rect);
 }
 
-void QGraphicsView::setSceneRect(qreal ax, qreal ay, qreal aw, qreal ah)
+inline void QGraphicsView::setSceneRect(qreal ax, qreal ay, qreal aw, qreal ah)
 {
    setSceneRect(QRectF(ax, ay, aw, ah));
 }
 
-void QGraphicsView::centerOn(qreal ax, qreal ay)
+inline void QGraphicsView::centerOn(qreal ax, qreal ay)
 {
    centerOn(QPointF(ax, ay));
 }
 
-void QGraphicsView::ensureVisible(qreal ax, qreal ay, qreal aw, qreal ah, int xmargin, int ymargin)
+inline void QGraphicsView::ensureVisible(qreal ax, qreal ay, qreal aw, qreal ah, int xmargin, int ymargin)
 {
    ensureVisible(QRectF(ax, ay, aw, ah), xmargin, ymargin);
 }
 
-void QGraphicsView::fitInView(qreal ax, qreal ay, qreal w, qreal h, Qt::AspectRatioMode mode)
+inline void QGraphicsView::fitInView(qreal ax, qreal ay, qreal w, qreal h, Qt::AspectRatioMode mode)
 {
    fitInView(QRectF(ax, ay, w, h), mode);
 }
 
-QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay) const
+inline QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay) const
 {
    return items(QPoint(ax, ay));
 }
 
-QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay, int w, int h, Qt::ItemSelectionMode mode) const
+inline QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay, int w, int h, Qt::ItemSelectionMode mode) const
 {
    return items(QRect(ax, ay, w, h), mode);
 }
 
-QGraphicsItem *QGraphicsView::itemAt(int ax, int ay) const
+inline QGraphicsItem *QGraphicsView::itemAt(int ax, int ay) const
 {
    return itemAt(QPoint(ax, ay));
 }
 
-QPointF QGraphicsView::mapToScene(int ax, int ay) const
+inline QPointF QGraphicsView::mapToScene(int ax, int ay) const
 {
    return mapToScene(QPoint(ax, ay));
 }
 
-QPolygonF QGraphicsView::mapToScene(int ax, int ay, int w, int h) const
+inline QPolygonF QGraphicsView::mapToScene(int ax, int ay, int w, int h) const
 {
    return mapToScene(QRect(ax, ay, w, h));
 }
 
-QPoint QGraphicsView::mapFromScene(qreal ax, qreal ay) const
+inline QPoint QGraphicsView::mapFromScene(qreal ax, qreal ay) const
 {
    return mapFromScene(QPointF(ax, ay));
 }
 
-QPolygon QGraphicsView::mapFromScene(qreal ax, qreal ay, qreal w, qreal h) const
+inline QPolygon QGraphicsView::mapFromScene(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapFromScene(QRectF(ax, ay, w, h));
 }
 
 #endif // QT_NO_GRAPHICSVIEW
 
-QT_END_NAMESPACE
 
-#endif // QGRAPHICSVIEW_H
+#endif

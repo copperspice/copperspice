@@ -20,8 +20,7 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
@@ -31,7 +30,6 @@
 #include <qmath.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
 
 static inline int intmaxlog(int n)
 {
@@ -116,7 +114,9 @@ void QGraphicsSceneBspTreeIndexPrivate::_q_updateIndex()
             untransformableItems << item;
             continue;
          }
-         if (item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren) {
+
+         if (item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
+            || item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren) {
             continue;
          }
 
@@ -291,7 +291,7 @@ void QGraphicsSceneBspTreeIndexPrivate::addItem(QGraphicsItem *item, bool recurs
 }
 
 void QGraphicsSceneBspTreeIndexPrivate::removeItem(QGraphicsItem *item, bool recursive,
-      bool moveToUnindexedItems)
+   bool moveToUnindexedItems)
 {
    if (!item) {
       return;
@@ -311,9 +311,12 @@ void QGraphicsSceneBspTreeIndexPrivate::removeItem(QGraphicsItem *item, bool rec
          // Avoid virtual function calls from the destructor.
          purgePending = true;
          removedItems << item;
-      } else if (!(item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren)) {
+
+      } else if (!(item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
+            || item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren)) {
          bsp.removeItem(item, item->d_ptr->sceneEffectiveBoundingRect());
       }
+
    } else {
       unindexedItems.removeOne(item);
    }
@@ -336,7 +339,7 @@ void QGraphicsSceneBspTreeIndexPrivate::removeItem(QGraphicsItem *item, bool rec
 }
 
 QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QRectF &rect, Qt::SortOrder order,
-      bool onlyTopLevelItems)
+   bool onlyTopLevelItems)
 {
    Q_Q(QGraphicsSceneBspTreeIndex);
    if (onlyTopLevelItems && rect.isNull()) {
@@ -374,7 +377,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QR
     \internal
 */
 void QGraphicsSceneBspTreeIndexPrivate::sortItems(QList<QGraphicsItem *> *itemList, Qt::SortOrder order,
-      bool sortCacheEnabled, bool onlyTopLevelItems)
+   bool sortCacheEnabled, bool onlyTopLevelItems)
 {
    if (order == Qt::SortOrder(-1)) {
       return;
@@ -477,7 +480,8 @@ void QGraphicsSceneBspTreeIndex::prepareBoundingRectChange(const QGraphicsItem *
    }
 
    if (item->d_ptr->index == -1 || item->d_ptr->itemIsUntransformable()
-         || (item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren)) {
+      || (item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
+         || item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren)) {
       return; // Item is not in BSP tree; nothing to do.
    }
 
@@ -530,46 +534,18 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::items(Qt::SortOrder order) co
    } else {
       // Rebuild the list of items to avoid holes. ### We could also just
       // compress the item lists at this point.
-      for (QGraphicsItem * item : d->indexedItems + d->unindexedItems) {
+      for (QGraphicsItem *item : d->indexedItems + d->unindexedItems) {
          if (item) {
             itemList << item;
          }
       }
    }
-   if (order != -1) {
-      //We sort descending order
-      d->sortItems(&itemList, order, d->sortCacheEnabled);
-   }
+
+   d->sortItems(&itemList, order, d->sortCacheEnabled);
+
    return itemList;
 }
 
-/*!
-    \property QGraphicsSceneBspTreeIndex::bspTreeDepth
-    \brief the depth of the BSP index tree
-    \since 4.6
-
-    This value determines the depth of BSP tree. The depth
-    directly affects performance and memory usage; the latter
-    growing exponentially with the depth of the tree. With an optimal tree
-    depth, the index can instantly determine the locality of items, even
-    for scenes with thousands or millions of items. This also greatly improves
-    rendering performance.
-
-    By default, the value is 0, in which case Qt will guess a reasonable
-    default depth based on the size, location and number of items in the
-    scene. If these parameters change frequently, however, you may experience
-    slowdowns as the index retunes the depth internally. You can avoid
-    potential slowdowns by fixating the tree depth through setting this
-    property.
-
-    The depth of the tree and the size of the scene rectangle decide the
-    granularity of the scene's partitioning. The size of each scene segment is
-    determined by the following algorithm:
-
-    The BSP tree has an optimal size when each segment contains between 0 and
-    10 items.
-
-*/
 int QGraphicsSceneBspTreeIndex::bspTreeDepth() const
 {
    Q_D(const QGraphicsSceneBspTreeIndex);
@@ -606,7 +582,7 @@ void QGraphicsSceneBspTreeIndex::updateSceneRect(const QRectF &rect)
     update the BSP tree if necessary.
 */
 void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::GraphicsItemChange change,
-      const void *const value)
+   const void *const value)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
    switch (change) {
@@ -615,8 +591,10 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
          QGraphicsItem::GraphicsItemFlags newFlags = *static_cast<const QGraphicsItem::GraphicsItemFlags *>(value);
          bool ignoredTransform = item->d_ptr->flags & QGraphicsItem::ItemIgnoresTransformations;
          bool willIgnoreTransform = newFlags & QGraphicsItem::ItemIgnoresTransformations;
-         bool clipsChildren = item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape;
-         bool willClipChildren = newFlags & QGraphicsItem::ItemClipsChildrenToShape;
+         bool clipsChildren = item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
+            || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape;
+         bool willClipChildren = newFlags & QGraphicsItem::ItemClipsChildrenToShape
+            || newFlags & QGraphicsItem::ItemContainsChildrenInShape;
          if ((ignoredTransform != willIgnoreTransform) || (clipsChildren != willClipChildren)) {
             QGraphicsItem *thatItem = const_cast<QGraphicsItem *>(item);
             // Remove item and its descendants from the index and append
@@ -636,11 +614,14 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
          const QGraphicsItem *newParent = static_cast<const QGraphicsItem *>(value);
          bool ignoredTransform = item->d_ptr->itemIsUntransformable();
          bool willIgnoreTransform = (item->d_ptr->flags & QGraphicsItem::ItemIgnoresTransformations)
-                                    || (newParent && newParent->d_ptr->itemIsUntransformable());
-         bool ancestorClippedChildren = item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren;
+            || (newParent && newParent->d_ptr->itemIsUntransformable());
+         bool ancestorClippedChildren = item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
+            || item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren;
          bool ancestorWillClipChildren = newParent
-                                         && ((newParent->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape)
-                                             || (newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren));
+            && ((newParent->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
+                  || newParent->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape)
+               || (newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
+                  || newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren));
          if ((ignoredTransform != willIgnoreTransform) || (ancestorClippedChildren != ancestorWillClipChildren)) {
             QGraphicsItem *thatItem = const_cast<QGraphicsItem *>(item);
             // Remove item and its descendants from the index and append
@@ -665,21 +646,18 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
 bool QGraphicsSceneBspTreeIndex::event(QEvent *event)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
-   switch (event->type()) {
-      case QEvent::Timer:
-         if (d->indexTimerId && static_cast<QTimerEvent *>(event)->timerId() == d->indexTimerId) {
-            if (d->restartIndexTimer) {
-               d->restartIndexTimer = false;
-            } else {
-               // this call will kill the timer
-               d->_q_updateIndex();
-            }
+
+   if (event->type() == QEvent::Timer) {
+      if (d->indexTimerId && static_cast<QTimerEvent *>(event)->timerId() == d->indexTimerId) {
+         if (d->restartIndexTimer) {
+            d->restartIndexTimer = false;
+         } else {
+            // this call will kill the timer
+            d->_q_updateIndex();
          }
-      // Fallthrough intended - support timers in subclasses.
-      default:
-         return QObject::event(event);
+      }
    }
-   return true;
+   return QObject::event(event);
 }
 
 void QGraphicsSceneBspTreeIndex::_q_updateSortCache()
@@ -694,7 +672,5 @@ void QGraphicsSceneBspTreeIndex::_q_updateIndex()
    d->_q_updateIndex();
 }
 
-QT_END_NAMESPACE
-
-#endif  // QT_NO_GRAPHICSVIEW
+#endif
 

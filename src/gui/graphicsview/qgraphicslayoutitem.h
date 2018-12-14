@@ -38,12 +38,12 @@ class Q_GUI_EXPORT QGraphicsLayoutItem
 {
 
  public:
-   QGraphicsLayoutItem(QGraphicsLayoutItem *parent = 0, bool isLayout = false);
+   QGraphicsLayoutItem(QGraphicsLayoutItem *parent = nullptr, bool isLayout = false);
    virtual ~QGraphicsLayoutItem();
 
    void setSizePolicy(const QSizePolicy &policy);
    void setSizePolicy(QSizePolicy::Policy hPolicy, QSizePolicy::Policy vPolicy,
-                      QSizePolicy::ControlType controlType = QSizePolicy::DefaultType);
+      QSizePolicy::ControlType controlType = QSizePolicy::DefaultType);
 
    QSizePolicy sizePolicy() const;
 
@@ -152,6 +152,5 @@ inline qreal QGraphicsLayoutItem::maximumHeight() const
 
 #endif
 
-QT_END_NAMESPACE
 
 #endif

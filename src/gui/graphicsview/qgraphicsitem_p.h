@@ -23,23 +23,25 @@
 #ifndef QGRAPHICSITEM_P_H
 #define QGRAPHICSITEM_P_H
 
-#include <algorithm>
+
 
 #include <qgraphicsitem.h>
+#include <qgraphicseffect.h>
 #include <qset.h>
 #include <qpixmapcache.h>
-#include <qgraphicsview_p.h>
+#include <qpoint.h>
 #include <qgraphicstransform.h>
+
+#include <qgraphicsview_p.h>
 #include <qgraphicstransform_p.h>
 #include <qgraphicseffect_p.h>
-#include <qgraphicseffect.h>
-#include <QtCore/qpoint.h>
-#include <qdeclarativelistproperty.h>
+
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-QT_BEGIN_NAMESPACE
 
+
+class QGraphicsItemPrivate;
 class QGraphicsItemCache
 {
  public:
@@ -57,7 +59,7 @@ class QGraphicsItemCache
       QPoint cacheIndent;
       QPixmapCache::Key key;
    };
-   QMap<QPaintDevice *, DeviceData> deviceData;
+   QHash<QPaintDevice *, DeviceData> deviceData;
 
    // List of logical exposed rects
    QVector<QRectF> exposed;
@@ -85,7 +87,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       AncestorHandlesChildEvents = 0x1,
       AncestorClipsChildren = 0x2,
       AncestorIgnoresTransformations = 0x4,
-      AncestorFiltersChildEvents = 0x8
+      AncestorFiltersChildEvents = 0x8,
+      AncestorContainsChildren = 0x10
    };
 
    inline QGraphicsItemPrivate()
@@ -126,7 +129,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
         needSortChildren(0),
         allChildrenDirty(0),
         fullUpdatePending(0),
-        dirtyChildrenBoundingRect(1),
+
         flags(0),
         paintedViewBoundingRectsNeedRepaint(0),
         dirtySceneTransform(1),
@@ -152,6 +155,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
         mayHaveChildWithGraphicsEffect(0),
         isDeclarativeItem(0),
         sendParentChangeNotification(0),
+        dirtyChildrenBoundingRect(1),
         globalStackingOrder(-1),
         q_ptr(0) {
    }
@@ -168,7 +172,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    void updateChildWithGraphicsEffectFlagRecursively();
    void updateAncestorFlag(QGraphicsItem::GraphicsItemFlag childFlag,
-                           AncestorFlag flag = NoFlag, bool enabled = false, bool root = true);
+      AncestorFlag flag = NoFlag, bool enabled = false, bool root = true);
 
    void updateAncestorFlags();
    void setIsMemberOfGroup(bool enabled);
@@ -177,7 +181,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    inline bool itemIsUntransformable() const {
       return (flags & QGraphicsItem::ItemIgnoresTransformations)
-             || (ancestorFlags & AncestorIgnoresTransformations);
+         || (ancestorFlags & AncestorIgnoresTransformations);
    }
 
    void combineTransformToParent(QTransform *x, const QTransform *viewTransform = 0) const;
@@ -190,7 +194,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void setTransformHelper(const QTransform &transform);
    void prependGraphicsTransform(QGraphicsTransform *t);
    void appendGraphicsTransform(QGraphicsTransform *t);
-   void setVisibleHelper(bool newVisible, bool explicitly, bool update = true);
+   void setVisibleHelper(bool newVisible, bool explicitly, bool update = true, bool hiddenByPanel = false);
    void setEnabledHelper(bool newEnabled, bool explicitly, bool update = true);
 
    bool discardUpdateRequest(bool ignoreVisibleBit = false, bool ignoreDirtyBit = false, bool ignoreOpacity = false) const;
@@ -210,13 +214,13 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void addChild(QGraphicsItem *child);
    void removeChild(QGraphicsItem *child);
 
-   QDeclarativeListProperty<QGraphicsObject> childrenList() const;
+   QDeclarativeListProperty<QGraphicsObject> childrenList();
    void setParentItemHelper(QGraphicsItem *parent, const QVariant *newParentVariant, const QVariant *thisPointerVariant);
 
    void childrenBoundingRectHelper(QTransform *x, QRectF *rect, QGraphicsItem *topMostEffectItem);
 
    void initStyleOption(QStyleOptionGraphicsItem *option, const QTransform &worldTransform,
-                        const QRegion &exposedRegion, bool allItems = false) const;
+      const QRegion &exposedRegion, bool allItems = false) const;
 
    QRectF effectiveBoundingRect(QGraphicsItem *topMostEffectItem = 0) const;
    QRectF sceneEffectiveBoundingRect() const;
@@ -231,7 +235,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    virtual void resolvePalette(uint inheritedMask) {
       for (int i = 0; i < children.size(); ++i) {
-         children.at(i)->d_ptr->resolveFont(inheritedMask);
+         children.at(i)->d_ptr->resolvePalette(inheritedMask);
       }
    }
 
@@ -273,6 +277,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    struct ExtraStruct {
+      ExtraStruct() {}
+
       ExtraStruct(Extra type, QVariant value)
          : type(type), value(value) {
       }
@@ -285,7 +291,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       }
    };
 
-   QList<ExtraStruct> extras;
+   QVector<ExtraStruct> extras;
 
    QGraphicsItemCache *maybeExtraItemCache() const;
    QGraphicsItemCache *extraItemCache() const;
@@ -320,7 +326,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
          // parent propagates to me, then combine my local opacity with my parent's
          // effective opacity into my effective opacity.
          if ((myFlags & QGraphicsItem::ItemIgnoresParentOpacity)
-               || (parentFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
+            || (parentFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
             break;
          }
 
@@ -360,7 +366,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    inline qreal combineOpacityFromParent(qreal parentOpacity) const {
       if (parent && !(flags & QGraphicsItem::ItemIgnoresParentOpacity)
-            && !(parent->d_ptr->flags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
+         && !(parent->d_ptr->flags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
          return parentOpacity * opacity;
       }
       return opacity;
@@ -390,10 +396,10 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return !visible || (childrenCombineOpacity() && isFullyTransparent());
    }
 
-   void markParentDirty(bool updateBoundingRect = false);
+   inline void markParentDirty(bool updateBoundingRect = false);
 
    void setFocusHelper(Qt::FocusReason focusReason, bool climb, bool focusFromHide);
-   void clearFocusHelper(bool giveFocusToParent);
+   void clearFocusHelper(bool giveFocusToParent, bool hiddenByParentPanel);
    void setSubFocus(QGraphicsItem *rootItem = 0, QGraphicsItem *stopItem = 0);
    void clearSubFocus(QGraphicsItem *rootItem = 0, QGraphicsItem *stopItem = 0);
    void resetFocusProxy();
@@ -421,11 +427,11 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    virtual void setHeight(qreal);
    virtual void resetHeight();
 
-   mutable QScopedPointer<QGraphicsItemCache> m_graphicsItemCache;
+   // broom - may not be used    mutable QScopedPointer<QGraphicsItemCache> m_graphicsItemCache;
 
    QRectF childrenBoundingRect;
    QRectF needsRepaint;
-   QMap<QWidget *, QRect> paintedViewBoundingRects;
+   QHash<QWidget *, QRect> paintedViewBoundingRects;
    QPointF pos;
    qreal z;
    qreal opacity;
@@ -465,7 +471,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    quint32 handlesChildEvents : 1;
    quint32 itemDiscovered : 1;
    quint32 hasCursor : 1;
-   quint32 ancestorFlags : 4;
+   quint32 ancestorFlags : 5;
    quint32 cacheMode : 2;
    quint32 hasBoundingRegionGranularity : 1;
    quint32 isWidget : 1;
@@ -476,10 +482,9 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    quint32 needSortChildren : 1;
    quint32 allChildrenDirty : 1;
    quint32 fullUpdatePending : 1;
-   quint32 dirtyChildrenBoundingRect : 1;
 
    // Packed 32 bits
-   quint32 flags : 19;
+   quint32 flags : 20;
    quint32 paintedViewBoundingRectsNeedRepaint : 1;
    quint32 dirtySceneTransform : 1;
    quint32 geometryChanged : 1;
@@ -506,7 +511,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    quint32 mayHaveChildWithGraphicsEffect : 1;
    quint32 isDeclarativeItem : 1;
    quint32 sendParentChangeNotification : 1;
-   quint32 padding : 21;
+   quint32 dirtyChildrenBoundingRect : 1;
+   quint32 padding : 19;
 
    // Optional stacking order
    int globalStackingOrder;
@@ -560,9 +566,9 @@ struct QGraphicsItemPrivate::TransformData {
 
 struct QGraphicsItemPaintInfo {
    inline QGraphicsItemPaintInfo(const QTransform *const xform1, const QTransform *const xform2,
-                                 const QTransform *const xform3,
-                                 QRegion *r, QWidget *w, QStyleOptionGraphicsItem *opt,
-                                 QPainter *p, qreal o, bool b1, bool b2)
+      const QTransform *const xform3,
+      QRegion *r, QWidget *w, QStyleOptionGraphicsItem *opt,
+      QPainter *p, qreal o, bool b1, bool b2)
       : viewTransform(xform1), transformPtr(xform2), effectTransform(xform3), exposedRegion(r), widget(w),
         option(opt), painter(p), opacity(o), wasDirtySceneTransform(b1), drawItem(b2) {
    }
@@ -592,7 +598,7 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
       item->prepareGeometryChange();
    }
 
-   const QGraphicsItem *graphicsItem() const  override{
+   const QGraphicsItem *graphicsItem() const  override {
       return item;
    }
 
@@ -612,8 +618,8 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
 
    bool isPixmap() const override {
       return item->type() == QGraphicsPixmapItem::Type
-             && !(item->flags() & QGraphicsItem::ItemIsSelectable)
-             && item->d_ptr->children.size() == 0;
+         && !(item->flags() & QGraphicsItem::ItemIsSelectable)
+         && item->d_ptr->children.size() == 0;
       //|| (item->d_ptr->isObject && qobject_cast<QDeclarativeImage *>(q_func()));
    }
 
@@ -636,7 +642,7 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
    QPixmap pixmap(Qt::CoordinateSystem system, QPoint *offset, QGraphicsEffect::PixmapPadMode mode) const override;
 
    QRect paddedEffectRect(Qt::CoordinateSystem system, QGraphicsEffect::PixmapPadMode mode, const QRectF &sourceRect,
-                          bool *unpadded = 0) const;
+      bool *unpadded = 0) const;
 
    QGraphicsItem *item;
    QGraphicsItemPaintInfo *info;
@@ -756,7 +762,41 @@ inline bool QGraphicsItemPrivate::insertionOrder(QGraphicsItem *a, QGraphicsItem
    return a->d_ptr->siblingIndex < b->d_ptr->siblingIndex;
 }
 
-QT_END_NAMESPACE
+inline void QGraphicsItemPrivate::markParentDirty(bool updateBoundingRect)
+{
+   QGraphicsItemPrivate *parentp = this;
+#ifndef QT_NO_GRAPHICSEFFECT
+   if (updateBoundingRect && parentp->graphicsEffect && !parentp->inSetPosHelper) {
+      parentp->notifyInvalidated = 1;
+      static_cast<QGraphicsItemEffectSourcePrivate *>(parentp->graphicsEffect->d_func()
+         ->source->d_func())->invalidateCache();
+   }
+#endif
+   while (parentp->parent) {
+      parentp = parentp->parent->d_ptr.data();
+      parentp->dirtyChildren = 1;
+
+      if (updateBoundingRect) {
+         parentp->dirtyChildrenBoundingRect = 1;
+         // ### Only do this if the parent's effect applies to the entire subtree.
+         parentp->notifyBoundingRectChanged = 1;
+      }
+#ifndef QT_NO_GRAPHICSEFFECT
+      if (parentp->graphicsEffect) {
+         if (updateBoundingRect) {
+            static_cast<QGraphicsItemEffectSourcePrivate *>(parentp->graphicsEffect->d_func()
+               ->source->d_func())->invalidateCache();
+            parentp->notifyInvalidated = 1;
+         }
+         if (parentp->scene && parentp->graphicsEffect->isEnabled()) {
+            parentp->dirty = 1;
+            parentp->fullUpdatePending = 1;
+         }
+      }
+#endif
+   }
+}
+
 
 #endif // QT_NO_GRAPHICSVIEW
 

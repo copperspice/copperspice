@@ -27,12 +27,11 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include <QtCore/qrect.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qgraphicsitem.h>
+#include <qrect.h>
+#include <qlist.h>
+#include <qgraphicsitem.h>
 #include <qgraphicssceneindex_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
 {
@@ -48,14 +47,14 @@ class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
    }
 
    QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const override {
-      Q_UNUSED(rect);
-      Q_UNUSED(order);
+
       return m_items;
    }
 
  protected :
    void clear() override {
       m_items.clear();
+      m_numSortedElements = 0;
    }
 
    void addItem(QGraphicsItem *item) override {
@@ -63,15 +62,26 @@ class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
    }
 
    void removeItem(QGraphicsItem *item) override {
-      m_items.removeOne(item);
+      // Sort m_items if needed
+      if (m_numSortedElements < m_items.size()) {
+         std::sort(m_items.begin() + m_numSortedElements, m_items.end() );
+         std::inplace_merge(m_items.begin(), m_items.begin() + m_numSortedElements, m_items.end());
+         m_numSortedElements = m_items.size();
+      }
+
+      QList<QGraphicsItem *>::iterator element = std::lower_bound(m_items.begin(), m_items.end(), item);
+      if (element != m_items.end() && *element == item) {
+         m_items.erase(element);
+         --m_numSortedElements;
+      }
    }
 
  private:
    QList<QGraphicsItem *> m_items;
+   int m_numSortedElements;
 };
 
 #endif // QT_NO_GRAPHICSVIEW
 
-QT_END_NAMESPACE
 
 #endif // QGRAPHICSSCENELINEARINDEX_H

@@ -30,11 +30,10 @@
 #include <QtGui/qevent.h>
 #include <QtCore/qcoreapplication.h>
 #include <qgraphicssceneevent.h>
-#include <QtGui/qstyleoption.h>
+#include <qstyleoption.h>
 #include <qabstractscrollarea_p.h>
 #include <qapplication_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
 {
@@ -42,6 +41,7 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
 
  public:
    QGraphicsViewPrivate();
+   ~QGraphicsViewPrivate();
 
    void recalculateContentSize();
    void centerView(QGraphicsView::ViewportAnchor anchor);
@@ -80,6 +80,7 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
    QPoint mousePressViewPoint;
    QPoint mousePressScreenPoint;
    QPointF lastMouseMoveScenePoint;
+   QPointF lastRubberbandScenePoint;
    QPoint lastMouseMoveScreenPoint;
    QPoint dirtyScrollOffset;
    Qt::MouseButton mousePressButton;
@@ -109,8 +110,10 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
 #ifndef QT_NO_RUBBERBAND
    QRect rubberBandRect;
    QRegion rubberBandRegion(const QWidget *widget, const QRect &rect) const;
+   void updateRubberBand(const QMouseEvent *event);
    bool rubberBanding;
    Qt::ItemSelectionMode rubberBandSelectionMode;
+   Qt::ItemSelectionOperation rubberBandSelectionOperation;
 #endif
 
    int handScrollMotions;
@@ -151,19 +154,7 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
 
    inline void dispatchPendingUpdateRequests() {
 
-#ifdef Q_OS_MAC
-      // QWidget::update() works slightly different on the Mac without the raster engine;
-      // it is not part of our backing store so it needs special threatment.
 
-      if (QApplicationPrivate::graphics_system_name != QLatin1String("raster")) {
-         // At this point either HIViewSetNeedsDisplay (Carbon) or setNeedsDisplay: YES (Cocoa)
-         // is called, which means there is a pending update request. We want to dispatch it
-         // now because otherwise graphics view updates would require two round-trips in the
-         // event loop before the item is painted.
-         extern void qt_mac_dispatchPendingUpdateRequests(QWidget *);
-         qt_mac_dispatchPendingUpdateRequests(viewport->window());
-      } else
-#endif
       {
          if (qt_widget_private(viewport)->paintOnScreen()) {
             QCoreApplication::sendPostedEvents(viewport, QEvent::UpdateRequest);
@@ -191,7 +182,7 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
    QRegion exposedRegion;
 
    QList<QGraphicsItem *> findItems(const QRegion &exposedRegion, bool *allItems,
-                                    const QTransform &viewTransform) const;
+      const QTransform &viewTransform) const;
 
    QPointF mapToScene(const QPointF &point) const;
    QRectF mapToScene(const QRectF &rect) const;
@@ -199,7 +190,6 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
    void updateInputMethodSensitivity();
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_GRAPHICSVIEW
 

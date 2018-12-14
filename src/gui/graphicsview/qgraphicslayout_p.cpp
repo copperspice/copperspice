@@ -29,13 +29,7 @@
 #include <qgraphicswidget.h>
 #include <qapplication.h>
 
-QT_BEGIN_NAMESPACE
 
-/*!
-    \internal
-
-    \a mw is the new parent. all items in the layout will be a child of \a mw.
- */
 void QGraphicsLayoutPrivate::reparentChildItems(QGraphicsItem *newParent)
 {
    Q_Q(QGraphicsLayout);
@@ -64,7 +58,7 @@ void QGraphicsLayoutPrivate::reparentChildItems(QGraphicsItem *newParent)
             QGraphicsWidget *w = static_cast<QGraphicsWidget *>(layoutChild);
 
             qWarning("QGraphicsLayout::addChildLayout: widget %s \"%s\" in wrong parent; moved to correct parent",
-                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+               csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
          if (childParent != newParent) {
@@ -170,7 +164,7 @@ void QGraphicsLayoutPrivate::addChildLayoutItem(QGraphicsLayoutItem *layoutItem)
          if (oldParent && item->isWidget()) {
             QGraphicsWidget *w = static_cast<QGraphicsWidget *>(item);
             qWarning("QGraphicsLayout::addChildLayoutItem: %s \"%s\" in wrong parent; moved to correct parent",
-                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+               csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
 
@@ -203,6 +197,6 @@ void QGraphicsLayoutPrivate::activateRecursive(QGraphicsLayoutItem *item)
 }
 
 
-QT_END_NAMESPACE
+
 
 #endif //QT_NO_GRAPHICSVIEW

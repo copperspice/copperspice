@@ -33,7 +33,6 @@
 #include <QtGui/qpen.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
@@ -101,8 +100,14 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    GUI_CS_PROPERTY_READ(font, font)
    GUI_CS_PROPERTY_WRITE(font, setFont)
 
+   GUI_CS_PROPERTY_READ(sortCacheEnabled, isSortCacheEnabled)
+   GUI_CS_PROPERTY_WRITE(sortCacheEnabled, setSortCacheEnabled)
+
    GUI_CS_PROPERTY_READ(stickyFocus, stickyFocus)
    GUI_CS_PROPERTY_WRITE(stickyFocus, setStickyFocus)
+
+   GUI_CS_PROPERTY_READ(minimumRenderSize, minimumRenderSize)
+   GUI_CS_PROPERTY_WRITE(minimumRenderSize, setMinimumRenderSize)
 
  public:
    enum ItemIndexMethod {
@@ -141,7 +146,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    inline void cs_setSceneRect(const QRectF &rect);
 
    void render(QPainter *painter, const QRectF &target = QRectF(), const QRectF &source = QRectF(),
-               Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
+      Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
 
    ItemIndexMethod itemIndexMethod() const;
    void setItemIndexMethod(ItemIndexMethod method);
@@ -154,53 +159,25 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    QRectF itemsBoundingRect() const;
 
-   QList<QGraphicsItem *> items() const;
+   QList<QGraphicsItem *> items(Qt::SortOrder order = Qt::DescendingOrder) const;
 
-   // ### Qt5/unify
-   QList<QGraphicsItem *> items(Qt::SortOrder order) const;
-
-   QList<QGraphicsItem *> items(const QPointF &pos, Qt::ItemSelectionMode mode,
-                                Qt::SortOrder order, const QTransform &deviceTransform = QTransform()) const;
-   QList<QGraphicsItem *> items(const QRectF &rect, Qt::ItemSelectionMode mode,
-                                Qt::SortOrder order, const QTransform &deviceTransform = QTransform()) const;
-   QList<QGraphicsItem *> items(const QPolygonF &polygon, Qt::ItemSelectionMode mode,
-                                Qt::SortOrder order, const QTransform &deviceTransform = QTransform()) const;
-   QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode,
-                                Qt::SortOrder order, const QTransform &deviceTransform = QTransform()) const;
-
-   // ### obsolete
-   QList<QGraphicsItem *> items(const QPointF &pos) const;
-
-   // ### obsolete
-   QList<QGraphicsItem *> items(const QRectF &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-
-   // ### obsolete
-   QList<QGraphicsItem *> items(const QPolygonF &polygon, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-
-   // ### obsolete
-   QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-
+   QList<QGraphicsItem *> items(const QPointF &pos, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape,
+      Qt::SortOrder order = Qt::DescendingOrder, const QTransform &deviceTransform = QTransform()) const;
+   QList<QGraphicsItem *> items(const QRectF &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape,
+      Qt::SortOrder order = Qt::DescendingOrder, const QTransform &deviceTransform = QTransform()) const;
+   QList<QGraphicsItem *> items(const QPolygonF &polygon, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape,
+      Qt::SortOrder order = Qt::DescendingOrder, const QTransform &deviceTransform = QTransform()) const;
+   QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape,
+      Qt::SortOrder order = Qt::DescendingOrder, const QTransform &deviceTransform = QTransform()) const;
    QList<QGraphicsItem *> collidingItems(const QGraphicsItem *item, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-
-   // ### obsolete
-   QGraphicsItem *itemAt(const QPointF &pos) const;
 
    QGraphicsItem *itemAt(const QPointF &pos, const QTransform &deviceTransform) const;
 
-   // ### obsolete
-   inline QList<QGraphicsItem *> items(qreal x, qreal y, qreal w, qreal h,
-                                       Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const {
-      return items(QRectF(x, y, w, h), mode);
-   }
+
 
    inline QList<QGraphicsItem *> items(qreal x, qreal y, qreal w, qreal h, Qt::ItemSelectionMode mode, Qt::SortOrder order,
-                                       const QTransform &deviceTransform = QTransform()) const {
+      const QTransform &deviceTransform = QTransform()) const {
       return items(QRectF(x, y, w, h), mode, order, deviceTransform);
-   }
-
-   // ### obsolete
-   inline QGraphicsItem *itemAt(qreal x, qreal y) const {
-      return itemAt(QPointF(x, y));
    }
 
    inline QGraphicsItem *itemAt(qreal x, qreal y, const QTransform &deviceTransform) const {
@@ -209,10 +186,13 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    QList<QGraphicsItem *> selectedItems() const;
    QPainterPath selectionArea() const;
-   void setSelectionArea(const QPainterPath &path); // ### obsolete
+
    void setSelectionArea(const QPainterPath &path, const QTransform &deviceTransform);
-   void setSelectionArea(const QPainterPath &path, Qt::ItemSelectionMode mode); // ### obsolete
-   void setSelectionArea(const QPainterPath &path, Qt::ItemSelectionMode mode, const QTransform &deviceTransform);
+   void setSelectionArea(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape,
+      const QTransform &deviceTransform = QTransform());
+   void setSelectionArea(const QPainterPath &path, Qt::ItemSelectionOperation selectionOperation,
+      Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, const QTransform &deviceTransform = QTransform());
+   // ### merge the last 2 functions and add a default: Qt::ItemSelectionOperation selectionOperation = Qt::ReplaceSelection
 
    QGraphicsItemGroup *createItemGroup(const QList<QGraphicsItem *> &items);
    void destroyItemGroup(QGraphicsItemGroup *group);
@@ -226,7 +206,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    QGraphicsRectItem *addRect(const QRectF &rect, const QPen &pen = QPen(), const QBrush &brush = QBrush());
    QGraphicsTextItem *addText(const QString &text, const QFont &font = QFont());
    QGraphicsSimpleTextItem *addSimpleText(const QString &text, const QFont &font = QFont());
-   QGraphicsProxyWidget *addWidget(QWidget *widget, Qt::WindowFlags wFlags = 0);
+   QGraphicsProxyWidget *addWidget(QWidget *widget, Qt::WindowFlags wFlags = Qt::WindowFlags());
 
    inline QGraphicsEllipseItem *addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(), const QBrush &brush = QBrush()) {
       return addEllipse(QRectF(x, y, w, h), pen, brush);
@@ -237,7 +217,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    }
 
    inline QGraphicsRectItem *addRect(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(),
-                                     const QBrush &brush = QBrush()) {
+      const QBrush &brush = QBrush()) {
       return addRect(QRectF(x, y, w, h), pen, brush);
    }
 
@@ -288,6 +268,9 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    bool sendEvent(QGraphicsItem *item, QEvent *event);
 
+   qreal minimumRenderSize() const;
+   void setMinimumRenderSize(qreal minSize);
+
    GUI_CS_SLOT_1(Public, void update(const QRectF &rect = QRectF()))
    GUI_CS_SLOT_OVERLOAD(update, (const QRectF &))
 
@@ -311,6 +294,9 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
+
+   GUI_CS_SIGNAL_1(Public, void focusItemChanged(QGraphicsItem *newFocus, QGraphicsItem *oldFocus, Qt::FocusReason reason))
+   GUI_CS_SIGNAL_2(focusItemChanged, newFocus, oldFocus, reason)
 
  protected:
    bool event(QEvent *event) override;
@@ -336,7 +322,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    virtual void drawBackground(QPainter *painter, const QRectF &rect);
    virtual void drawForeground(QPainter *painter, const QRectF &rect);
    virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[],
-                          const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
+      const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
 
    QScopedPointer<QGraphicsScenePrivate> d_ptr;
 
@@ -376,7 +362,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 #ifndef QT_NO_GESTURES
    friend class QGesture;
 #endif
-  
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsScene::SceneLayers)
@@ -388,6 +374,6 @@ void QGraphicsScene::cs_setSceneRect(const QRectF &rect)
 
 #endif // QT_NO_GRAPHICSVIEW
 
-QT_END_NAMESPACE
+Q_DECLARE_METATYPE(QGraphicsScene *)
 
 #endif
