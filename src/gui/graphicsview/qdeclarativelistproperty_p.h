@@ -20,10 +20,12 @@
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVELISTPROPERTY_H
-#define QDECLARATIVELISTPROPERTY_H
+#ifndef QDECLARATIVELISTPROPERTY_P_H
+#define QDECLARATIVELISTPROPERTY_P_H
 
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
+
+class QObject;
 
 template<typename T>
 class QDeclarativeListProperty
@@ -37,23 +39,23 @@ class QDeclarativeListProperty
    QDeclarativeListProperty()
       : object(0), data(0), append(0), count(0), at(0), clear(0), dummy1(0), dummy2(0) {}
 
-   QDeclarativeListProperty(const QObject *o, QList<T *> &list)
+   QDeclarativeListProperty(QObject *o, QList<T *> &list)
       : object(o), data(&list), append(qlist_append), count(qlist_count), at(qlist_at),
         clear(qlist_clear), dummy1(0), dummy2(0) {}
 
-   QDeclarativeListProperty(const QObject *o, void *d, AppendFunction a, CountFunction c = 0, AtFunction t = 0, ClearFunction r = 0)
+   QDeclarativeListProperty(QObject *o, void *d, AppendFunction a, CountFunction c = 0, AtFunction t = 0, ClearFunction r = 0)
       : object(o), data(d), append(a), count(c), at(t), clear(r), dummy1(0), dummy2(0) {}
 
    bool operator==(const QDeclarativeListProperty &o) const {
       return object == o.object &&
-             data   == o.data &&
-             append == o.append &&
-             count  == o.count &&
-             at     == o.at &&
-             clear  == o.clear;
+         data   == o.data &&
+         append == o.append &&
+         count  == o.count &&
+         at     == o.at &&
+         clear  == o.clear;
    }
 
-   const QObject *object;
+   QObject *object;
    void *data;
 
    AppendFunction append;
@@ -84,6 +86,5 @@ class QDeclarativeListProperty
    }
 };
 
-QT_END_NAMESPACE
 
 #endif
