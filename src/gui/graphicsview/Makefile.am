@@ -34,8 +34,8 @@ GUI_PUBLIC_INCLUDES += \
 	QGraphicsTextItem \
 	QGraphicsTransform \
 	QGraphicsView \
-	QGraphicsWidget \
-	QDeclarativeListProperty
+	QGraphicsWidget
+
 
 GUI_GRAPHICSVIEW_INCLUDES = \
 	qgraphicsanchor.h \
@@ -71,14 +71,17 @@ GUI_GRAPHICSVIEW_INCLUDES = \
 	qgraphicstextitem.h \
 	qgraphicstransform.h \
 	qgraphicsview.h \
-	qgraphicswidget.h  \
-	qdeclarativelistproperty.h
+	qgraphicswidget.h
+
 
 GUI_GRAPHICSVIEW_PRIVATE_INCLUDES = \
 	qgraph_p.h \
+	qdeclarativelistproperty_p.h \
 	qgraphicsanchorlayout_p.h \
+	qgraphicsgridlayoutengine_p.h \
 	qgraphicsitem_p.h \
 	qgraphicslayout_p.h \
+	qgraphicslayoutstyleinfo_p.h \
 	qgraphicslayoutitem_p.h \
 	qgraphicsproxywidget_p.h \
 	qgraphicsscene_bsp_p.h \
@@ -102,10 +105,12 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/graphicsview/qgraphicsanchorlayout.cpp \
 	src/gui/graphicsview/qgraphicsanchorlayout_p.cpp \
 	src/gui/graphicsview/qgraphicsgridlayout.cpp \
+	src/gui/graphicsview/qgraphicsgridlayoutengine.cpp \
 	src/gui/graphicsview/qgraphicsitem.cpp \
 	src/gui/graphicsview/qgraphicsitemanimation.cpp \
 	src/gui/graphicsview/qgraphicslayout.cpp \
 	src/gui/graphicsview/qgraphicslayout_p.cpp \
+	src/gui/graphicsview/qgraphicslayoutstyleinfo.cpp \
 	src/gui/graphicsview/qgraphicslayoutitem.cpp \
 	src/gui/graphicsview/qgraphicslinearlayout.cpp \
 	src/gui/graphicsview/qgraphicsproxywidget.cpp \
