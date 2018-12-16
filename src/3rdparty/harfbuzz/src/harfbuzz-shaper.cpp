@@ -638,7 +638,15 @@ HB_Bool HB_BasicShape(HB_ShaperItem *shaper_item)
 }
 
 const HB_ScriptEngine HB_ScriptEngines[] = {
+
+    // Unknown - new
+    { HB_BasicShape, 0},
+    // Inherited - new
+    { HB_BasicShape, 0},
     // Common
+    { HB_BasicShape, 0},
+
+    // Latin - new
     { HB_BasicShape, 0},
     // Greek
     { HB_GreekShape, 0},
@@ -686,15 +694,290 @@ const HB_ScriptEngine HB_ScriptEngines[] = {
     { HB_BasicShape, 0 },
     // Hangul
     { HB_HangulShape, 0 },
+
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+
     // Ogham
     { HB_BasicShape, 0 },
     // Runic
     { HB_BasicShape, 0 },
     // Khmer
     { HB_KhmerShape, HB_KhmerAttributes },
-    // N'Ko
-    { HB_ArabicShape, 0}
+
+    // NEW - 1
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 5
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 10
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 14
+    { HB_BasicShape, 0},
+
+
+    // Unicode 4.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 8
+    { HB_BasicShape, 0},
+
+
+    // Unicode 4.1
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 7
+    { HB_BasicShape, 0},
+
+
+    // Unicode 5.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // N'Ko - 5
+    { HB_ArabicShape, 0},
+
+
+    // Unicode 5.1
+    // NEW - 1
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 5
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 11
+    { HB_BasicShape, 0},
+
+
+    // Unicode 5.2
+    // NEW - 1
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 5
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 10
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 15
+    { HB_BasicShape, 0},
+
+
+    // Unicode 6.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 3
+    { HB_BasicShape, 0},
+
+
+    // Unicode 6.1
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 7
+    { HB_BasicShape, 0},
+
+
+    // Unicode 7.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 10
+    { HB_BasicShape, 0},
+     // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 20
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 23
+    { HB_BasicShape, 0},
+
+    // Unicode 8.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 6
+    { HB_BasicShape, 0},
+
+    // Unicode 9.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 6
+    { HB_BasicShape, 0},
+
+
+    // Unicode 10.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 4
+    { HB_BasicShape, 0},
+
+
+    // Unicode 11.0
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW
+    { HB_BasicShape, 0},
+    // NEW - 7
+    { HB_BasicShape, 0}
 };
+
+
+static_assert( (sizeof(HB_ScriptEngines)/sizeof(HB_ScriptEngine)) == HB_ScriptCount);
+
 
 void HB_GetCharAttributes(const HB_UChar16 *string, hb_uint32 stringLength,
                           const HB_ScriptItem *items, hb_uint32 numItems,

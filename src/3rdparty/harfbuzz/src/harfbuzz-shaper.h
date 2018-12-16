@@ -190,7 +190,7 @@ typedef enum {
         HB_Script_Siddham,
         HB_Script_Khudawadi,
         HB_Script_Tirhuta,
-        HB_Script_WarangCiti,
+	HB_Script_WarangCiti,
 
         // Unicode 8.0 additions
         HB_Script_Ahom,
@@ -198,9 +198,31 @@ typedef enum {
         HB_Script_Hatran,
         HB_Script_Multani,
         HB_Script_OldHungarian,
-        HB_Script_SignWriting,
+	HB_Script_SignWriting,
 
-        HB_ScriptCount = HB_Script_SignWriting
+	// Unicode 9.0 additions
+	HB_Script_Adlam,
+	HB_Script_Bhaiksuki,
+	HB_Script_Marchen,
+	HB_Script_Newa,
+	HB_Script_Osage,
+	HB_Script_Tangut,
+
+	// Unicode 10.0 additions
+	HB_Script_MasaramGondi,
+	HB_Script_Nushu,
+	HB_Script_Soyombo,
+	HB_Script_ZanabazarSquare,
+
+	// Unicode 11.0 additions
+	HB_Script_HanafiRohingya,
+	HB_Script_OldSogdian,
+	HB_Script_Dogra,
+	HB_Script_GunjalaGondi,
+	HB_Script_Makasar,
+	HB_Script_Medefaidrin,
+
+	HB_ScriptCount
 } HB_Script;
 
 typedef struct
