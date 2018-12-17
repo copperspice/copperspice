@@ -29,7 +29,6 @@
 #include <QtCore/QSize>
 #include <QtCore/QStringList>
 
-QT_BEGIN_NAMESPACE
 
 //detects the deletion of the source model
 void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()
@@ -72,20 +71,30 @@ QAbstractProxyModel::~QAbstractProxyModel()
 void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
    Q_D(QAbstractProxyModel);
-   if (d->model) {
-      disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
-   }
 
-   if (sourceModel) {
-      d->model = sourceModel;
-      connect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
-   } else {
-      d->model = QAbstractItemModelPrivate::staticEmptyModel();
+   if (sourceModel != d->model) {
+      if (d->model) {
+         disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+      }
+
+      if (sourceModel) {
+         d->model = sourceModel;
+         connect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+      } else {
+         d->model = QAbstractItemModelPrivate::staticEmptyModel();
+      }
+
+      d->roleNames = d->model->roleNames();
+      emit sourceModelChanged();
    }
-   d->roleNames = d->model->roleNames();
 }
 
 /*!
+void QAbstractProxyModel::resetInternalData()
+{
+    Q_D(QAbstractProxyModel);
+    d->roleNames = d->model->roleNames();
+}
     Returns the model that contains the data that is available through the proxy model.
 */
 QAbstractItemModel *QAbstractProxyModel::sourceModel() const
@@ -299,46 +308,85 @@ QSize QAbstractProxyModel::span(const QModelIndex &index) const
    return d->model->span(mapToSource(index));
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
+
 bool QAbstractProxyModel::hasChildren(const QModelIndex &parent) const
 {
    Q_D(const QAbstractProxyModel);
    return d->model->hasChildren(mapToSource(parent));
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
+QModelIndex QAbstractProxyModel::sibling(int row, int column, const QModelIndex &idx) const
+{
+   return index(row, column, idx.parent());
+}
+
 QMimeData *QAbstractProxyModel::mimeData(const QModelIndexList &indexes) const
 {
    Q_D(const QAbstractProxyModel);
    QModelIndexList list;
-  
-   for (const QModelIndex & index : indexes) {
+
+   for (const QModelIndex &index : indexes) {
       list << mapToSource(index);
    }
 
    return d->model->mimeData(list);
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
+void QAbstractProxyModelPrivate::mapDropCoordinatesToSource(int row, int column, const QModelIndex &parent,
+   int *sourceRow, int *sourceColumn, QModelIndex *sourceParent) const
+{
+   Q_Q(const QAbstractProxyModel);
+   *sourceRow = -1;
+   *sourceColumn = -1;
+   if (row == -1 && column == -1) {
+      *sourceParent = q->mapToSource(parent);
+   } else if (row == q->rowCount(parent)) {
+      *sourceParent = q->mapToSource(parent);
+      *sourceRow = model->rowCount(*sourceParent);
+   } else {
+      QModelIndex proxyIndex = q->index(row, column, parent);
+      QModelIndex sourceIndex = q->mapToSource(proxyIndex);
+      *sourceRow = sourceIndex.row();
+      *sourceColumn = sourceIndex.column();
+      *sourceParent = sourceIndex.parent();
+   }
+}
+
+bool QAbstractProxyModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
+   int row, int column, const QModelIndex &parent) const
+{
+   Q_D(const QAbstractProxyModel);
+   int sourceDestinationRow;
+   int sourceDestinationColumn;
+   QModelIndex sourceParent;
+   d->mapDropCoordinatesToSource(row, column, parent, &sourceDestinationRow, &sourceDestinationColumn, &sourceParent);
+   return d->model->canDropMimeData(data, action, sourceDestinationRow, sourceDestinationColumn, sourceParent);
+}
+
+bool QAbstractProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+   int row, int column, const QModelIndex &parent)
+{
+   Q_D(QAbstractProxyModel);
+   int sourceDestinationRow;
+   int sourceDestinationColumn;
+   QModelIndex sourceParent;
+   d->mapDropCoordinatesToSource(row, column, parent, &sourceDestinationRow, &sourceDestinationColumn, &sourceParent);
+   return d->model->dropMimeData(data, action, sourceDestinationRow, sourceDestinationColumn, sourceParent);
+}
+
 QStringList QAbstractProxyModel::mimeTypes() const
 {
    Q_D(const QAbstractProxyModel);
    return d->model->mimeTypes();
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
+
+Qt::DropActions QAbstractProxyModel::supportedDragActions() const
+{
+   Q_D(const QAbstractProxyModel);
+   return d->model->supportedDragActions();
+}
+
 Qt::DropActions QAbstractProxyModel::supportedDropActions() const
 {
    Q_D(const QAbstractProxyModel);
@@ -350,8 +398,5 @@ void QAbstractProxyModel::_q_sourceModelDestroyed()
    Q_D(QAbstractProxyModel);
    d->_q_sourceModelDestroyed();
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PROXYMODEL

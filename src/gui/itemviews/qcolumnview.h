@@ -39,9 +39,6 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
    GUI_CS_PROPERTY_WRITE(resizeGripsVisible, setResizeGripsVisible)
 
  public:
-   GUI_CS_SIGNAL_1(Public, void updatePreviewWidget(const QModelIndex &index))
-   GUI_CS_SIGNAL_2(updatePreviewWidget, index)
-
    explicit QColumnView(QWidget *parent = nullptr);
    ~QColumnView();
 
@@ -64,6 +61,9 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 
    void setColumnWidths(const QList<int> &list);
    QList<int> columnWidths() const;
+
+   GUI_CS_SIGNAL_1(Public, void updatePreviewWidget(const QModelIndex &index))
+   GUI_CS_SIGNAL_2(updatePreviewWidget, index)
 
  protected:
    QColumnView(QColumnViewPrivate &dd, QWidget *parent = nullptr);
@@ -100,7 +100,6 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 
 #endif // QT_NO_COLUMNVIEW
 
-QT_END_NAMESPACE
 
 #endif // QCOLUMNVIEW_H
 

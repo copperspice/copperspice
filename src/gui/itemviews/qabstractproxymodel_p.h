@@ -27,8 +27,6 @@
 
 #ifndef QT_NO_PROXYMODEL
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractProxyModelPrivate : public QAbstractItemModelPrivate
 {
    Q_DECLARE_PUBLIC(QAbstractProxyModel)
@@ -37,9 +35,10 @@ class QAbstractProxyModelPrivate : public QAbstractItemModelPrivate
    QAbstractProxyModelPrivate() : QAbstractItemModelPrivate(), model(0) {}
    QAbstractItemModel *model;
    virtual void _q_sourceModelDestroyed();
-};
 
-QT_END_NAMESPACE
+   void mapDropCoordinatesToSource(int row, int column, const QModelIndex &parent,
+      int *source_row, int *source_column, QModelIndex *source_parent) const;
+};
 
 #endif // QT_NO_PROXYMODEL
 

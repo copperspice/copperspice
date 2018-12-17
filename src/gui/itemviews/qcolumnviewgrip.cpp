@@ -29,7 +29,7 @@
 #include <qevent.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QColumnViewGrip::QColumnViewGrip(QWidget *parent)
    :  QWidget(*new QColumnViewGripPrivate, parent, 0)
@@ -156,6 +156,6 @@ QColumnViewGripPrivate::QColumnViewGripPrivate()
 {
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_QCOLUMNVIEW

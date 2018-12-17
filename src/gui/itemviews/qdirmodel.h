@@ -27,7 +27,7 @@
 #include <QtCore/qdir.h>
 #include <QtGui/qfileiconprovider.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_DIRMODEL
 
@@ -52,7 +52,7 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
    };
 
    QDirModel(const QStringList &nameFilters, QDir::Filters filters,
-             QDir::SortFlags sort, QObject *parent = nullptr);
+      QDir::SortFlags sort, QObject *parent = nullptr);
    explicit QDirModel(QObject *parent = nullptr);
    ~QDirModel();
 
@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
    QStringList mimeTypes() const override;
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent) override;
+      int row, int column, const QModelIndex &parent) override;
    Qt::DropActions supportedDropActions() const override;
 
    // QDirModel specific API
@@ -132,6 +132,5 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
 
 #endif // QT_NO_DIRMODEL
 
-QT_END_NAMESPACE
 
 #endif // QDIRMODEL_H

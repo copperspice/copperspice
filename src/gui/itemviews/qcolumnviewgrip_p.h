@@ -27,8 +27,6 @@
 
 #ifndef QT_NO_QCOLUMNVIEW
 
-QT_BEGIN_NAMESPACE
-
 class QColumnViewGripPrivate;
 
 class QColumnViewGrip : public QWidget
@@ -67,7 +65,7 @@ class QColumnViewGripPrivate : public QWidgetPrivate
    int originalXLocation;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_QCOLUMNVIEW
 

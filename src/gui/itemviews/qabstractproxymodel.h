@@ -23,9 +23,7 @@
 #ifndef QABSTRACTPROXYMODEL_H
 #define QABSTRACTPROXYMODEL_H
 
-#include <QtCore/qabstractitemmodel.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractitemmodel.h>
 
 #ifndef QT_NO_PROXYMODEL
 
@@ -36,8 +34,12 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 {
    GUI_CS_OBJECT(QAbstractProxyModel)
 
+   GUI_CS_PROPERTY_READ(sourceModel, sourceModel)
+   GUI_CS_PROPERTY_WRITE(sourceModel, setSourceModel)
+   GUI_CS_PROPERTY_NOTIFY(sourceModel, sourceModelChanged)
+
  public:
-   QAbstractProxyModel(QObject *parent = nullptr);
+   explicit QAbstractProxyModel(QObject *parent = nullptr);
    ~QAbstractProxyModel();
 
    virtual void setSourceModel(QAbstractItemModel *sourceModel);
@@ -67,13 +69,27 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
    QSize span(const QModelIndex &index) const override;
    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
+   QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
 
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+   bool canDropMimeData(const QMimeData *data, Qt::DropAction action,
+      int row, int column, const QModelIndex &parent) const override;
+
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+      int row, int column, const QModelIndex &parent) override;
+
    QStringList mimeTypes() const override;
+   Qt::DropActions supportedDragActions() const override;
    Qt::DropActions supportedDropActions() const override;
+
+   GUI_CS_SIGNAL_1(Public, void sourceModelChanged())
+   GUI_CS_SIGNAL_2(sourceModelChanged)
 
  protected:
    QAbstractProxyModel(QAbstractProxyModelPrivate &, QObject *parent);
+
+   GUI_CS_SLOT_1(Protected, void resetInternalData())
+   GUI_CS_SLOT_2(resetInternalData)
 
  private:
    Q_DECLARE_PRIVATE(QAbstractProxyModel)
@@ -85,6 +101,6 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 
 #endif // QT_NO_PROXYMODEL
 
-QT_END_NAMESPACE
+
 
 #endif // QABSTRACTPROXYMODEL_H

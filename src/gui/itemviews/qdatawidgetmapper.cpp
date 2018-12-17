@@ -30,7 +30,6 @@
 #include <qwidget.h>
 #include <qabstractitemmodel_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class QDataWidgetMapperPrivate
 {
@@ -54,8 +53,8 @@ class QDataWidgetMapperPrivate
 
    inline int itemCount() {
       return orientation == Qt::Horizontal
-             ? model->rowCount(rootIndex)
-             : model->columnCount(rootIndex);
+         ? model->rowCount(rootIndex)
+         : model->columnCount(rootIndex);
    }
 
    inline int currentIdx() const {
@@ -64,17 +63,19 @@ class QDataWidgetMapperPrivate
 
    inline QModelIndex indexAt(int itemPos) {
       return orientation == Qt::Horizontal
-             ? model->index(currentIdx(), itemPos, rootIndex)
-             : model->index(itemPos, currentIdx(), rootIndex);
+         ? model->index(currentIdx(), itemPos, rootIndex)
+         : model->index(itemPos, currentIdx(), rootIndex);
    }
 
    inline void flipEventFilters(QAbstractItemDelegate *oldDelegate, QAbstractItemDelegate *newDelegate) {
-      for (int i = 0; i < widgetMap.count(); ++i) {
-         QWidget *w = widgetMap.at(i).widget;
 
-         if (!w) {
+      for (auto item : widgetMap) {
+         QWidget *w = item.widget;
+
+         if (! w) {
             continue;
          }
+
          w->removeEventFilter(oldDelegate);
          w->installEventFilter(newDelegate);
       }
@@ -83,7 +84,7 @@ class QDataWidgetMapperPrivate
    void populate();
 
    // private slots
-   void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+   void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &);
    void _q_commitData(QWidget *);
    void _q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint);
    void _q_modelDestroyed();
@@ -115,11 +116,12 @@ class QDataWidgetMapperPrivate
 
 int QDataWidgetMapperPrivate::findWidget(QWidget *w) const
 {
-   for (int i = 0; i < widgetMap.count(); ++i) {
-      if (widgetMap.at(i).widget == w) {
-         return i;
+   for (auto iter = widgetMap.cbegin(), end = widgetMap.cend(); iter != end; ++iter) {
+      if (iter->widget == w) {
+         return int(std::distance(widgetMap.cbegin(), iter));
       }
    }
+
    return -1;
 }
 
@@ -160,28 +162,27 @@ void QDataWidgetMapperPrivate::populate(WidgetMapper &m)
 
 void QDataWidgetMapperPrivate::populate()
 {
-   for (int i = 0; i < widgetMap.count(); ++i) {
-      populate(widgetMap[i]);
+   for (auto &item : widgetMap) {
+      populate(item);
    }
 }
 
 static bool qContainsIndex(const QModelIndex &idx, const QModelIndex &topLeft,
-                           const QModelIndex &bottomRight)
+   const QModelIndex &bottomRight)
 {
    return idx.row() >= topLeft.row() && idx.row() <= bottomRight.row()
-          && idx.column() >= topLeft.column() && idx.column() <= bottomRight.column();
+      && idx.column() >= topLeft.column() && idx.column() <= bottomRight.column();
 }
 
-void QDataWidgetMapperPrivate::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void QDataWidgetMapperPrivate::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &)
 {
    if (topLeft.parent() != rootIndex) {
       return;   // not in our hierarchy
    }
 
-   for (int i = 0; i < widgetMap.count(); ++i) {
-      WidgetMapper &m = widgetMap[i];
-      if (qContainsIndex(m.currentIndex, topLeft, bottomRight)) {
-         populate(m);
+   for (auto &item : widgetMap) {
+      if (qContainsIndex(item.currentIndex, topLeft, bottomRight)) {
+         populate(item);
       }
    }
 }
@@ -200,18 +201,6 @@ void QDataWidgetMapperPrivate::_q_commitData(QWidget *w)
    commit(widgetMap.at(idx));
 }
 
-class QFocusHelper: public QWidget
-{
- public:
-   bool focusNextPrevChild(bool next) override{
-      return QWidget::focusNextPrevChild(next);
-   }
-
-   static inline void focusNextPrevChild(QWidget *w, bool next) {
-      static_cast<QFocusHelper *>(w)->focusNextPrevChild(next);
-   }
-};
-
 void QDataWidgetMapperPrivate::_q_closeEditor(QWidget *w, QAbstractItemDelegate::EndEditHint hint)
 {
    int idx = findWidget(w);
@@ -225,11 +214,13 @@ void QDataWidgetMapperPrivate::_q_closeEditor(QWidget *w, QAbstractItemDelegate:
          break;
       }
       case QAbstractItemDelegate::EditNextItem:
-         QFocusHelper::focusNextPrevChild(w, true);
+         w->focusNextChild();
          break;
+
       case QAbstractItemDelegate::EditPreviousItem:
-         QFocusHelper::focusNextPrevChild(w, false);
+         w->focusPreviousChild();
          break;
+
       case QAbstractItemDelegate::SubmitModelCache:
       case QAbstractItemDelegate::NoHint:
          // nothing
@@ -265,8 +256,8 @@ void QDataWidgetMapper::setModel(QAbstractItemModel *model)
    }
 
    if (d->model) {
-      disconnect(d->model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                 this, SLOT(_q_dataChanged(const QModelIndex &, const QModelIndex &)));
+      disconnect(d->model, SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)),
+         this, SLOT(_q_dataChanged(QModelIndex, QModelIndex, QVector<int>)));
 
       disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
    }
@@ -276,38 +267,21 @@ void QDataWidgetMapper::setModel(QAbstractItemModel *model)
 
    d->model = model;
 
-   connect(model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-           this, SLOT(_q_dataChanged(const QModelIndex &, const QModelIndex &)));
+   connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)),
+      this, SLOT(_q_dataChanged(QModelIndex, QModelIndex, QVector<int>)));
 
    connect(model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
 }
 
-/*!
-    Returns the current model.
-
-    \sa setModel()
- */
 QAbstractItemModel *QDataWidgetMapper::model() const
 {
    Q_D(const QDataWidgetMapper);
    return d->model == QAbstractItemModelPrivate::staticEmptyModel()
-          ? static_cast<QAbstractItemModel *>(0)
-          : d->model;
+      ? static_cast<QAbstractItemModel *>(0)
+      : d->model;
 }
 
-/*!
-    Sets the item delegate to \a delegate. The delegate will be used to write
-    data from the model into the widget and from the widget to the model,
-    using QAbstractItemDelegate::setEditorData() and QAbstractItemDelegate::setModelData().
 
-    The delegate also decides when to apply data and when to change the editor,
-    using QAbstractItemDelegate::commitData() and QAbstractItemDelegate::closeEditor().
-
-    \warning You should not share the same instance of a delegate between widget mappers
-    or views. Doing so can cause incorrect or unintuitive editing behavior since each
-    view connected to a given delegate may receive the \l{QAbstractItemDelegate::}{closeEditor()}
-    signal, and attempt to access, modify or close an editor that has already been closed.
- */
 void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
 {
    Q_D(QDataWidgetMapper);
@@ -315,7 +289,7 @@ void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
    if (oldDelegate) {
       disconnect(oldDelegate, SIGNAL(commitData(QWidget *)), this, SLOT(_q_commitData(QWidget *)));
       disconnect(oldDelegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)),
-                 this, SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+         this, SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
    }
 
    d->delegate = delegate;
@@ -323,7 +297,7 @@ void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
    if (delegate) {
       connect(delegate, SIGNAL(commitData(QWidget *)), this, SLOT(_q_commitData(QWidget *)));
       connect(delegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)), this,
-              SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+         SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
    }
 
    d->flipEventFilters(oldDelegate, delegate);
@@ -338,24 +312,13 @@ QAbstractItemDelegate *QDataWidgetMapper::itemDelegate() const
    return d->delegate;
 }
 
-/*!
-    Sets the root item to \a index. This can be used to display
-    a branch of a tree. Pass an invalid model index to display
-    the top-most branch.
-
-    \sa rootIndex()
- */
 void QDataWidgetMapper::setRootIndex(const QModelIndex &index)
 {
    Q_D(QDataWidgetMapper);
    d->rootIndex = index;
 }
 
-/*!
-    Returns the current root index.
 
-    \sa setRootIndex()
-*/
 QModelIndex QDataWidgetMapper::rootIndex() const
 {
    Q_D(const QDataWidgetMapper);
@@ -455,21 +418,15 @@ QWidget *QDataWidgetMapper::mappedWidgetAt(int section) const
 {
    Q_D(const QDataWidgetMapper);
 
-   for (int i = 0; i < d->widgetMap.count(); ++i) {
-      if (d->widgetMap.at(i).section == section) {
-         return d->widgetMap.at(i).widget;
+   for (auto &item : d->widgetMap) {
+      if (item.section == section) {
+         return item.widget;
       }
    }
 
    return 0;
 }
 
-/*!
-    Repopulates all widgets with the current data of the model.
-    All unsubmitted changes will be lost.
-
-    \sa submit(), setSubmitPolicy()
- */
 void QDataWidgetMapper::revert()
 {
    Q_D(QDataWidgetMapper);
@@ -477,27 +434,13 @@ void QDataWidgetMapper::revert()
    d->populate();
 }
 
-/*!
-    Submits all changes from the mapped widgets to the model.
 
-    For every mapped section, the item delegate reads the current
-    value from the widget and sets it in the model. Finally, the
-    model's \l {QAbstractItemModel::}{submit()} method is invoked.
-
-    Returns true if all the values were submitted, otherwise false.
-
-    Note: For database models, QSqlQueryModel::lastError() can be
-    used to retrieve the last error.
-
-    \sa revert(), setSubmitPolicy()
- */
 bool QDataWidgetMapper::submit()
 {
    Q_D(QDataWidgetMapper);
 
-   for (int i = 0; i < d->widgetMap.count(); ++i) {
-      const QDataWidgetMapperPrivate::WidgetMapper &m = d->widgetMap.at(i);
-      if (!d->commit(m)) {
+   for (auto &item : d->widgetMap) {
+      if (! d->commit(item)) {
          return false;
       }
    }
@@ -585,8 +528,8 @@ void QDataWidgetMapper::setCurrentIndex(int index)
       return;
    }
    d->currentTopLeft = d->orientation == Qt::Horizontal
-                       ? d->model->index(index, 0, d->rootIndex)
-                       : d->model->index(0, index, d->rootIndex);
+      ? d->model->index(index, 0, d->rootIndex)
+      : d->model->index(0, index, d->rootIndex);
    d->populate();
 
    emit currentIndexChanged(index);
@@ -622,8 +565,8 @@ void QDataWidgetMapper::setCurrentModelIndex(const QModelIndex &index)
    Q_D(QDataWidgetMapper);
 
    if (!index.isValid()
-         || index.model() != d->model
-         || index.parent() != d->rootIndex) {
+      || index.model() != d->model
+      || index.parent() != d->rootIndex) {
       return;
    }
 
@@ -639,48 +582,17 @@ void QDataWidgetMapper::clearMapping()
 {
    Q_D(QDataWidgetMapper);
 
-   while (!d->widgetMap.isEmpty()) {
-      QWidget *w = d->widgetMap.takeLast().widget;
-      if (w) {
-         w->removeEventFilter(d->delegate);
+   QList<QDataWidgetMapperPrivate::WidgetMapper> copy;
+   d->widgetMap.swap(copy);
+
+   for (auto &item : copy) {
+
+      if (item.widget) {
+         item.widget->removeEventFilter(d->delegate);
       }
    }
 }
 
-/*!
-    \property QDataWidgetMapper::orientation
-    \brief the orientation of the model
-
-    If the orientation is Qt::Horizontal (the default), a widget is
-    mapped to a column of a data model. The widget will be populated
-    with the model's data from its mapped column and the row that
-    currentIndex() points at.
-
-    Use Qt::Horizontal for tabular data that looks like this:
-
-    \table
-    \row \o 1 \o Qt Norway       \o Oslo
-    \row \o 2 \o Qt Australia    \o Brisbane
-    \row \o 3 \o Qt USA          \o Silicon Valley
-    \row \o 4 \o Qt China        \o Beijing
-    \row \o 5 \o Qt Germany      \o Berlin
-    \endtable
-
-    If the orientation is set to Qt::Vertical, a widget is mapped to
-    a row. Calling setCurrentIndex() will change the current column.
-    The widget will be populates with the model's data from its
-    mapped row and the column that currentIndex() points at.
-
-    Use Qt::Vertical for tabular data that looks like this:
-
-    \table
-    \row \o 1 \o 2 \o 3 \o 4 \o 5
-    \row \o Qt Norway \o Qt Australia \o Qt USA \o Qt China \o Qt Germany
-    \row \o Oslo \o Brisbane \o Silicon Valley \o Beijing \i Berlin
-    \endtable
-
-    Changing the orientation clears all existing mappings.
-*/
 void QDataWidgetMapper::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QDataWidgetMapper);
@@ -723,10 +635,10 @@ QDataWidgetMapper::SubmitPolicy QDataWidgetMapper::submitPolicy() const
    return d->submitPolicy;
 }
 
-void QDataWidgetMapper::_q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
+void QDataWidgetMapper::_q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2, const QVector<int> &roles)
 {
    Q_D(QDataWidgetMapper);
-   d->_q_dataChanged(un_named_arg1, un_named_arg2);
+   d->_q_dataChanged(un_named_arg1, un_named_arg2, roles);
 }
 
 void QDataWidgetMapper::_q_commitData(QWidget *un_named_arg1)
@@ -747,6 +659,6 @@ void QDataWidgetMapper::_q_modelDestroyed()
    d->_q_modelDestroyed();
 }
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_DATAWIDGETMAPPER
+
+#endif

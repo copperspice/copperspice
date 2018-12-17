@@ -27,7 +27,7 @@
 #include <qfile.h>
 #include <qfilesystemmodel.h>
 #include <qurl.h>
-#include <qmime.h>
+#include <qmimedata.h>
 #include <qpair.h>
 #include <qvector.h>
 #include <qobject.h>
@@ -38,14 +38,7 @@
 #include <qabstractitemmodel_p.h>
 #include <qdebug.h>
 
-/*!
-    \enum QDirModel::Roles
-    \value FileIconRole
-    \value FilePathRole
-    \value FileNameRole
-*/
 
-QT_BEGIN_NAMESPACE
 
 class QDirModelPrivate : public QAbstractItemModelPrivate
 {
@@ -54,9 +47,7 @@ class QDirModelPrivate : public QAbstractItemModelPrivate
  public:
    struct QDirNode {
       QDirNode() : parent(0), populated(false), stat(false) {}
-      ~QDirNode() {
-         children.clear();
-      }
+
       QDirNode *parent;
       QFileInfo info;
       QIcon icon; // cache the icon
@@ -71,8 +62,8 @@ class QDirModelPrivate : public QAbstractItemModelPrivate
         lazyChildCount(false),
         allowAppendChild(true),
         iconProvider(&defaultProvider),
-        shouldStat(true) { // ### This is set to false by QFileDialog
-   }
+        shouldStat(true)
+   { }
 
    void init();
    QDirNode *node(int row, QDirNode *parent) const;
@@ -166,50 +157,10 @@ void QDirModelPrivate::invalidate()
    }
 }
 
-/*!
-    \class QDirModel
-    \obsolete
-    \brief The QDirModel class provides a data model for the local filesystem.
 
-    \ingroup model-view
 
-    The usage of QDirModel is not recommended anymore. The
-    QFileSystemModel class is a more performant alternative.
-
-    This class provides access to the local filesystem, providing functions
-    for renaming and removing files and directories, and for creating new
-    directories. In the simplest case, it can be used with a suitable display
-    widget as part of a browser or filer.
-
-    QDirModel keeps a cache with file information. The cache needs to be
-    updated with refresh().
-
-    QDirModel can be accessed using the standard interface provided by
-    QAbstractItemModel, but it also provides some convenience functions
-    that are specific to a directory model. The fileInfo() and isDir()
-    functions provide information about the underlying files and directories
-    related to items in the model.
-
-    Directories can be created and removed using mkdir(), rmdir(), and the
-    model will be automatically updated to take the changes into account.
-
-    \note QDirModel requires an instance of a GUI application.
-
-    \sa nameFilters(), setFilter(), filter(), QListView, QTreeView, QFileSystemModel,
-    {Dir View Example}, {Model Classes}
-*/
-
-/*!
-    Constructs a new directory model with the given \a parent.
-    Only those files matching the \a nameFilters and the
-    \a filters are included in the model. The sort order is given by the
-    \a sort flags.
-*/
-
-QDirModel::QDirModel(const QStringList &nameFilters,
-                     QDir::Filters filters,
-                     QDir::SortFlags sort,
-                     QObject *parent)
+QDirModel::QDirModel(const QStringList &nameFilters, QDir::Filters filters,
+   QDir::SortFlags sort, QObject *parent)
    : QAbstractItemModel(*new QDirModelPrivate, parent)
 {
    Q_D(QDirModel);
@@ -221,10 +172,6 @@ QDirModel::QDirModel(const QStringList &nameFilters,
    d->root.info = QFileInfo();
    d->clear(&d->root);
 }
-
-/*!
-  Constructs a directory model with the given \a parent.
-*/
 
 QDirModel::QDirModel(QObject *parent)
    : QAbstractItemModel(*new QDirModelPrivate, parent)
@@ -265,6 +212,7 @@ QModelIndex QDirModel::index(int row, int column, const QModelIndex &parent) con
    if (column < 0 || column >= columnCount(parent) || row < 0 || parent.column() > 0) {
       return QModelIndex();
    }
+
    // make sure the list of children is up to date
    QDirModelPrivate::QDirNode *p = (d->indexValid(parent) ? d->node(parent) : &d->root);
    Q_ASSERT(p);
@@ -405,7 +353,7 @@ bool QDirModel::setData(const QModelIndex &index, const QVariant &value, int rol
 {
    Q_D(QDirModel);
    if (!d->indexValid(index) || index.column() != 0
-         || (flags(index) & Qt::ItemIsEditable) == 0 || role != Qt::EditRole) {
+      || (flags(index) & Qt::ItemIsEditable) == 0 || role != Qt::EditRole) {
       return false;
    }
 
@@ -544,24 +492,12 @@ void QDirModel::sort(int column, Qt::SortOrder order)
    setSorting(sort);
 }
 
-/*!
-    Returns a list of MIME types that can be used to describe a list of items
-    in the model.
-*/
 
 QStringList QDirModel::mimeTypes() const
 {
    return QStringList(QLatin1String("text/uri-list"));
 }
 
-/*!
-    Returns an object that contains a serialized description of the specified
-    \a indexes. The format used to describe the items corresponding to the
-    indexes is obtained from the mimeTypes() function.
-
-    If the list of indexes is empty, 0 is returned rather than a serialized
-    empty list.
-*/
 
 QMimeData *QDirModel::mimeData(const QModelIndexList &indexes) const
 {
@@ -585,7 +521,7 @@ QMimeData *QDirModel::mimeData(const QModelIndexList &indexes) const
 */
 
 bool QDirModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                             int /* row */, int /* column */, const QModelIndex &parent)
+   int /* row */, int /* column */, const QModelIndex &parent)
 {
    Q_D(QDirModel);
    if (!d->indexValid(parent) || isReadOnly()) {
@@ -616,7 +552,7 @@ bool QDirModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
          for (; it != urls.constEnd(); ++it) {
             QString path = (*it).toLocalFile();
             if (QFile::copy(path, to + QFileInfo(path).fileName())
-                  && QFile::remove(path)) {
+               && QFile::remove(path)) {
                QModelIndex idx = index(QFileInfo(path).path());
                if (idx.isValid()) {
                   refresh(idx);
@@ -875,16 +811,15 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    }
 
    QString absolutePath = QDir(path).absolutePath();
-#if defined(Q_OS_WIN)
-   absolutePath = absolutePath.toLower();
-#endif
 
 #if defined(Q_OS_WIN)
+   absolutePath = absolutePath.toLower();
+
    // On Windows, "filename......." and "filename" are equivalent
    if (absolutePath.endsWith(QLatin1Char('.'))) {
       int i;
       for (i = absolutePath.count() - 1; i >= 0; --i) {
-         if (absolutePath.at(i) != QLatin1Char('.')) {
+         if (absolutePath.at(i) != '.') {
             break;
          }
       }
@@ -896,9 +831,9 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    if ((pathElements.isEmpty() || !QFileInfo(path).exists())
 
 #if !defined(Q_OS_WIN)
-         && path != QLatin1String("/")
+      && path != "/"
 #endif
-      ) {
+   ) {
       return QModelIndex();
    }
 
@@ -1115,11 +1050,6 @@ bool QDirModel::remove(const QModelIndex &index)
    return true;
 }
 
-/*!
-  Returns the path of the item stored in the model under the
-  \a index given.
-
-*/
 
 QString QDirModel::filePath(const QModelIndex &index) const
 {
@@ -1205,21 +1135,17 @@ QFileInfo QDirModel::fileInfo(const QModelIndex &index) const
 
 void QDirModelPrivate::init()
 {
-   Q_Q(QDirModel);
-
    filters = QDir::AllEntries | QDir::NoDotAndDotDot;
    sort    = QDir::Name;
-   nameFilters << QLatin1String("*");
+   nameFilters << "*";
 
    root.parent = 0;
    root.info = QFileInfo();
    clear(&root);
 
-   QHash<int, QByteArray> roles = q->roleNames();
-   roles.insert(QDirModel::FileIconRole, "fileIcon"); // == Qt::decoration
-   roles.insert(QDirModel::FilePathRole, "filePath");
-   roles.insert(QDirModel::FileNameRole, "fileName");
-   q->setRoleNames(roles);
+   roleNames.insertMulti(QDirModel::FileIconRole, "fileIcon");
+   roleNames.insert(QDirModel::FilePathRole,      "filePath");
+   roleNames.insert(QDirModel::FileNameRole,      "fileName");
 }
 
 QDirModelPrivate::QDirNode *QDirModelPrivate::node(int row, QDirNode *parent) const
@@ -1294,7 +1220,7 @@ void QDirModelPrivate::savePersistentIndexes()
    Q_Q(QDirModel);
    savedPersistent.clear();
 
-   for (QPersistentModelIndexData * data : persistent.m_indexes) {
+   for (QPersistentModelIndexData *data : persistent.m_indexes) {
       SavedPersistent saved;
 
       QModelIndex index = data->index;
@@ -1356,8 +1282,7 @@ QString QDirModelPrivate::name(const QModelIndex &index) const
       if (name.startsWith(QLatin1Char('/'))) { // UNC host
          return info.fileName();
       }
-#endif
-#if defined(Q_OS_WIN)
+
       if (name.endsWith(QLatin1Char('/'))) {
          name.chop(1);
       }
@@ -1470,7 +1395,5 @@ void QDirModel::_q_refresh()
    Q_D(QDirModel);
    d->_q_refresh();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_DIRMODEL

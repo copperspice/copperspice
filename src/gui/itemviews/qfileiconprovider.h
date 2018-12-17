@@ -27,16 +27,17 @@
 #include <QtCore/qscopedpointer.h>
 #include <QtGui/qicon.h>
 
-QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_FILEICONPROVIDER
-
 class QFileIconProviderPrivate;
 
 class Q_GUI_EXPORT QFileIconProvider
 {
 
  public:
+   enum Option {
+      DontUseCustomDirectoryIcons = 0x00000001
+   };
+   using Options = QFlags<Option>;
+
    QFileIconProvider();
    virtual ~QFileIconProvider();
    enum IconType { Computer, Desktop, Trashcan, Network, Drive, Folder, File };
@@ -44,16 +45,15 @@ class Q_GUI_EXPORT QFileIconProvider
    virtual QIcon icon(const QFileInfo &info) const;
    virtual QString type(const QFileInfo &info) const;
 
+   void setOptions(Options options);
+   Options options() const;
  private:
    Q_DECLARE_PRIVATE(QFileIconProvider)
    QScopedPointer<QFileIconProviderPrivate> d_ptr;
    Q_DISABLE_COPY(QFileIconProvider)
-   friend class QFileDialog;
+
 };
 
-#endif // QT_NO_FILEICONPROVIDER
-
-QT_END_NAMESPACE
-
-#endif // QFILEICONPROVIDER_H
+Q_DECLARE_OPERATORS_FOR_FLAGS(QFileIconProvider::Options)
+#endif
 

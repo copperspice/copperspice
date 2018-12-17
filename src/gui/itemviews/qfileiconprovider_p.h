@@ -27,8 +27,6 @@
 #include <QtGui/qicon.h>
 #include <QtGui/qstyle.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFileInfo;
 class QFileIconProvider;
 
@@ -37,21 +35,16 @@ class QFileIconProviderPrivate
    Q_DECLARE_PUBLIC(QFileIconProvider)
 
  public:
-   QFileIconProviderPrivate();
-   void setUseCustomDirectoryIcons(bool enable);
-   QIcon getIcon(QStyle::StandardPixmap name) const;
+   QFileIconProviderPrivate(QFileIconProvider *q);
 
-#ifdef Q_OS_WIN
-   QIcon getWinIcon(const QFileInfo &fi) const;
-#elif defined(Q_OS_MAC)
-   QIcon getMacIcon(const QFileInfo &fi) const;
-#endif
+   QIcon getIcon(QStyle::StandardPixmap name) const;
+   QIcon getIcon(const QFileInfo &fi) const;
 
    QFileIconProvider *q_ptr;
    const QString homePath;
+   QFileIconProvider::Options options;
 
  private:
-   bool useCustomDirectoryIcons;
    mutable QIcon file;
    mutable QIcon fileLink;
    mutable QIcon directory;
@@ -68,6 +61,6 @@ class QFileIconProviderPrivate
    mutable QIcon home;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QFILEICONPROVIDER_P_H

@@ -23,62 +23,133 @@
 #include <qfileiconprovider.h>
 #include <qfileiconprovider_p.h>
 
-#ifndef QT_NO_FILEICONPROVIDER
-#include <qfileinfo.h>
-#include <qapplication.h>
 #include <qdir.h>
 #include <qpixmapcache.h>
+#include <qfunctions_p.h>
+#include <qguiapplication_p.h>
+#include <qicon_p.h>
+#include <qplatform_integration.h>
+#include <qplatform_services.h>
+#include <qplatform_theme.h>
 
 #if defined(Q_OS_WIN)
-#  define _WIN32_IE 0x0500
 #  include <qt_windows.h>
 #  include <commctrl.h>
 #  include <objbase.h>
-
-#elif defined(Q_OS_MAC)
-#  include <qt_cocoa_helpers_mac_p.h>
+#endif
+#if defined(Q_OS_UNIX) && ! defined(QT_NO_STYLE_GTK)
+#  include <qgtkstyle_p_p.h>
 #endif
 
-#include <qfunctions_p.h>
-#include <qguiplatformplugin_p.h>
+Q_DECLARE_METATYPE(QList<int>)
 
-#if defined(Q_WS_X11) && ! defined(QT_NO_STYLE_GTK)
-#  include <qgtkstyle_p.h>
-#  include <qt_x11_p.h>
-#endif
+static bool isCacheable(const QFileInfo &fi);
 
-#ifndef SHGFI_ADDOVERLAYS
-#  define SHGFI_ADDOVERLAYS 0x000000020
-#  define SHGFI_OVERLAYINDEX 0x000000040
-#endif
-
-QT_BEGIN_NAMESPACE
-
-/*!
-  \class QFileIconProvider
-
-  \brief The QFileIconProvider class provides file icons for the QDirModel and the QFileSystemModel classes.
-*/
-
-/*!
-  \enum QFileIconProvider::IconType
-  \value Computer
-  \value Desktop
-  \value Trashcan
-  \value Network
-  \value Drive
-  \value Folder
-  \value File
-*/
-
-QFileIconProviderPrivate::QFileIconProviderPrivate() :
-   homePath(QDir::home().absolutePath()), useCustomDirectoryIcons(true)
+class QFileIconEngine : public QPixmapIconEngine
 {
-}
+ public:
+   QFileIconEngine(const QFileInfo &info, QFileIconProvider::Options opts)
+      : QPixmapIconEngine(), m_fileInfo(info), m_fipOpts(opts)
+   { }
 
-void QFileIconProviderPrivate::setUseCustomDirectoryIcons(bool enable)
+   QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override {
+
+      QPixmap pixmap;
+
+      if (!size.isValid()) {
+         return pixmap;
+      }
+
+      const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
+      if (!theme) {
+         return pixmap;
+      }
+
+      const QString &keyBase = QLatin1String("qt_.") + m_fileInfo.suffix().toUpper();
+
+      bool cacheable = isCacheable(m_fileInfo);
+      if (cacheable) {
+         QPixmapCache::find(keyBase + QString::number(size.width()), pixmap);
+         if (!pixmap.isNull()) {
+            return pixmap;
+         }
+      }
+
+      QPlatformTheme::IconOptions iconOptions;
+      if (m_fipOpts & QFileIconProvider::DontUseCustomDirectoryIcons) {
+         iconOptions |= QPlatformTheme::DontUseCustomDirectoryIcons;
+      }
+
+      pixmap = theme->fileIconPixmap(m_fileInfo, size, iconOptions);
+      if (!pixmap.isNull()) {
+         if (cacheable) {
+            QPixmapCache::insert(keyBase + QString::number(size.width()), pixmap);
+         }
+      }
+
+      return pixmap;
+   }
+
+   QList<QSize> availableSizes(QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::Off) const override {
+
+      static QList<QSize> sizes;
+      static QPlatformTheme *theme = 0;
+
+      if (!theme) {
+         theme = QGuiApplicationPrivate::platformTheme();
+         if (!theme) {
+            return sizes;
+         }
+
+         QList<int> themeSizes = theme->themeHint(QPlatformTheme::IconPixmapSizes).value<QList<int>>();
+         if (themeSizes.isEmpty()) {
+            return sizes;
+         }
+
+         for (int size : themeSizes) {
+            sizes << QSize(size, size);
+         }
+      }
+      return sizes;
+   }
+
+   QSize actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state) override {
+      const QList<QSize> &sizes = availableSizes(mode, state);
+      const int numberSizes = sizes.length();
+      if (numberSizes == 0) {
+         return QSize();
+      }
+
+      // Find the smallest available size whose area is still larger than the input
+      // size. Otherwise, use the largest area available size. (We don't assume the
+      // platform theme sizes are sorted, hence the extra logic.)
+      const int sizeArea = size.width() * size.height();
+      QSize actualSize = sizes.first();
+      int actualArea = actualSize.width() * actualSize.height();
+      for (int i = 1; i < numberSizes; ++i) {
+         const QSize &s = sizes.at(i);
+         const int a = s.width() * s.height();
+         if ((sizeArea <= a && a < actualArea) || (actualArea < sizeArea && actualArea < a)) {
+            actualSize = s;
+            actualArea = a;
+         }
+      }
+
+      if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height())) {
+         actualSize.scale(size, Qt::KeepAspectRatio);
+      }
+
+      return actualSize;
+   }
+
+ private:
+   QFileInfo m_fileInfo;
+   QFileIconProvider::Options m_fipOpts;
+};
+
+QFileIconProviderPrivate::QFileIconProviderPrivate(QFileIconProvider *q)
+   : q_ptr(q), homePath(QDir::home().absolutePath())
 {
-   useCustomDirectoryIcons = enable;
 }
 
 QIcon QFileIconProviderPrivate::getIcon(QStyle::StandardPixmap name) const
@@ -150,27 +221,27 @@ QIcon QFileIconProviderPrivate::getIcon(QStyle::StandardPixmap name) const
    return QIcon();
 }
 
-/*!
-  Constructs a file icon provider.
-*/
+
 
 QFileIconProvider::QFileIconProvider()
-   : d_ptr(new QFileIconProviderPrivate)
+   : d_ptr(new QFileIconProviderPrivate(this))
 {
 }
-
-/*!
-  Destroys the file icon provider.
-
-*/
 
 QFileIconProvider::~QFileIconProvider()
 {
 }
+void QFileIconProvider::setOptions(QFileIconProvider::Options options)
+{
+   Q_D(QFileIconProvider);
+   d->options = options;
+}
 
-/*!
-  Returns an icon set for the given \a type.
-*/
+QFileIconProvider::Options QFileIconProvider::options() const
+{
+   Q_D(const QFileIconProvider);
+   return d->options;
+}
 
 QIcon QFileIconProvider::icon(IconType type) const
 {
@@ -196,229 +267,49 @@ QIcon QFileIconProvider::icon(IconType type) const
    return QIcon();
 }
 
-#ifdef Q_OS_WIN
-
 static bool isCacheable(const QFileInfo &fi)
 {
    if (!fi.isFile()) {
       return false;
    }
 
+#ifdef Q_OS_WIN
    // On windows it's faster to just look at the file extensions. QTBUG-13182
    const QString fileExtension = fi.suffix();
    return fileExtension.compare(QLatin1String("exe"), Qt::CaseInsensitive) &&
-          fileExtension.compare(QLatin1String("lnk"), Qt::CaseInsensitive) &&
-          fileExtension.compare(QLatin1String("ico"), Qt::CaseInsensitive);
-}
+      fileExtension.compare(QLatin1String("lnk"), Qt::CaseInsensitive) &&
+      fileExtension.compare(QLatin1String("ico"), Qt::CaseInsensitive);
 
-QIcon QFileIconProviderPrivate::getWinIcon(const QFileInfo &fileInfo) const
-{
-   QIcon retIcon;
-   static int defaultFolderIIcon = -1;
+#else
+   return !fi.isExecutable() && !fi.isSymLink();
 
-   QString key;
-   QPixmap pixmap;
-   // If it's a file, non-{exe,lnk,ico} then we might have it cached already
-   if (isCacheable(fileInfo)) {
-      const QString fileExtension = QLatin1Char('.') + fileInfo.suffix().toUpper();
-      key = QLatin1String("qt_") + fileExtension;
-      QPixmapCache::find(key, pixmap);
-      if (!pixmap.isNull()) {
-         retIcon.addPixmap(pixmap);
-         if (QPixmapCache::find(key + QLatin1Char('l'), pixmap)) {
-            retIcon.addPixmap(pixmap);
-         }
-         return retIcon;
-      }
-   }
-
-   const bool cacheableDirIcon = fileInfo.isDir() && !fileInfo.isRoot();
-   if (!useCustomDirectoryIcons && defaultFolderIIcon >= 0 && cacheableDirIcon) {
-      // We already have the default folder icon, just return it
-      key = QString::fromLatin1("qt_dir_%1").formatArg(defaultFolderIIcon);
-      QPixmapCache::find(key, pixmap);
-      if (!pixmap.isNull()) {
-         retIcon.addPixmap(pixmap);
-         if (QPixmapCache::find(key + QLatin1Char('l'), pixmap)) {
-            retIcon.addPixmap(pixmap);
-         }
-         return retIcon;
-      }
-   }
-
-   /* We don't use the variable, but by storing it statically, we
-    * ensure CoInitialize is only called once. */
-   static HRESULT comInit = CoInitialize(NULL);
-   Q_UNUSED(comInit);
-
-   SHFILEINFO info;
-   unsigned long val = 0;
-
-   //Get the small icon
-
-   unsigned int flags =
-      SHGFI_ICON | SHGFI_SYSICONINDEX | SHGFI_ADDOVERLAYS | SHGFI_OVERLAYINDEX;
-
-   if (cacheableDirIcon && !useCustomDirectoryIcons) {
-      flags |= SHGFI_USEFILEATTRIBUTES;
-      val = SHGetFileInfo(L"dummy", FILE_ATTRIBUTE_DIRECTORY, &info, sizeof(SHFILEINFO), flags | SHGFI_SMALLICON);
-
-   } else {
-      std::wstring tmp(QDir::toNativeSeparators(fileInfo.filePath()).toStdWString());
-      val = SHGetFileInfo(&tmp[0], 0, &info, sizeof(SHFILEINFO), flags | SHGFI_SMALLICON);
-   }
-
-   // Even if GetFileInfo returns a valid result, hIcon can be empty in some cases
-   if (val && info.hIcon) {
-      if (fileInfo.isDir() && !fileInfo.isRoot()) {
-         if (!useCustomDirectoryIcons && defaultFolderIIcon < 0) {
-            defaultFolderIIcon = info.iIcon;
-         }
-         //using the unique icon index provided by windows save us from duplicate keys
-         key = QString::fromLatin1("qt_dir_%1").formatArg(info.iIcon);
-         QPixmapCache::find(key, pixmap);
-
-         if (! pixmap.isNull()) {
-            retIcon.addPixmap(pixmap);
-
-            if (QPixmapCache::find(key + QLatin1Char('l'), pixmap)) {
-               retIcon.addPixmap(pixmap);
-            }
-            DestroyIcon(info.hIcon);
-            return retIcon;
-         }
-      }
-      if (pixmap.isNull()) {
-         pixmap = QPixmap::fromWinHICON(info.hIcon);
-
-         if (! pixmap.isNull()) {
-            retIcon.addPixmap(pixmap);
-            if (!key.isEmpty()) {
-               QPixmapCache::insert(key, pixmap);
-            }
-
-         } else {
-            qWarning("QFileIconProviderPrivate::getWinIcon() no small icon found");
-         }
-      }
-      DestroyIcon(info.hIcon);
-   }
-
-   // get the big icon
-   std::wstring tmp(QDir::toNativeSeparators(fileInfo.filePath()).toStdWString());
-   val = SHGetFileInfo(&tmp[0], 0, &info,
-                  sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_LARGEICON | SHGFI_SYSICONINDEX | SHGFI_ADDOVERLAYS | SHGFI_OVERLAYINDEX);
-
-   if (val && info.hIcon) {
-      if (fileInfo.isDir() && !fileInfo.isRoot()) {
-         //using the unique icon index provided by windows save us from duplicate keys
-         key = QString("qt_dir_%1").formatArg(info.iIcon);
-      }
-      pixmap = QPixmap::fromWinHICON(info.hIcon);
-
-      if (! pixmap.isNull()) {
-         retIcon.addPixmap(pixmap);
-
-         if (! key.isEmpty()) {
-            QPixmapCache::insert(key + QLatin1Char('l'), pixmap);
-         }
-
-      } else {
-         qWarning("QFileIconProviderPrivate::getWinIcon() no large icon found");
-      }
-
-      DestroyIcon(info.hIcon);
-   }
-   return retIcon;
-}
-
-#elif defined(Q_OS_MAC)
-QIcon QFileIconProviderPrivate::getMacIcon(const QFileInfo &fi) const
-{
-   QIcon retIcon;
-   QString fileExtension = fi.suffix().toUpper();
-   fileExtension.prepend(QLatin1String("."));
-
-   const QString keyBase = QLatin1String("qt_") + fileExtension;
-
-   QPixmap pixmap;
-   if (fi.isFile() && !fi.isExecutable() && !fi.isSymLink()) {
-      QPixmapCache::find(keyBase + QLatin1String("16"), pixmap);
-   }
-
-   if (!pixmap.isNull()) {
-      retIcon.addPixmap(pixmap);
-
-      if (QPixmapCache::find(keyBase + QLatin1String("32"), pixmap)) {
-         retIcon.addPixmap(pixmap);
-
-         if (QPixmapCache::find(keyBase + QLatin1String("64"), pixmap)) {
-            retIcon.addPixmap(pixmap);
-
-            if (QPixmapCache::find(keyBase + QLatin1String("128"), pixmap)) {
-               retIcon.addPixmap(pixmap);
-               return retIcon;
-            }
-         }
-      }
-   }
-
-
-   FSRef macRef;
-   OSStatus status = FSPathMakeRef(reinterpret_cast<const UInt8 *>(fi.canonicalFilePath().toUtf8().constData()), &macRef, 0);
-
-   if (status != noErr) {
-      return retIcon;
-   }
-   FSCatalogInfo info;
-   HFSUniStr255 macName;
-   status = FSGetCatalogInfo(&macRef, kIconServicesCatalogInfoMask, &info, &macName, 0, 0);
-   if (status != noErr) {
-      return retIcon;
-   }
-   IconRef iconRef;
-   SInt16 iconLabel;
-   status = GetIconRefFromFileInfo(&macRef, macName.length, macName.unicode,
-                                   kIconServicesCatalogInfoMask, &info, kIconServicesNormalUsageFlag,
-                                   &iconRef, &iconLabel);
-   if (status != noErr) {
-      return retIcon;
-   }
-
-   qt_mac_constructQIconFromIconRef(iconRef, 0, &retIcon);
-   ReleaseIconRef(iconRef);
-
-   if (fi.isFile() && !fi.isExecutable() && !fi.isSymLink()) {
-      pixmap = retIcon.pixmap(16);
-      QPixmapCache::insert(keyBase + QLatin1String("16"), pixmap);
-      pixmap = retIcon.pixmap(32);
-      QPixmapCache::insert(keyBase + QLatin1String("32"), pixmap);
-      pixmap = retIcon.pixmap(64);
-      QPixmapCache::insert(keyBase + QLatin1String("64"), pixmap);
-      pixmap = retIcon.pixmap(128);
-      QPixmapCache::insert(keyBase + QLatin1String("128"), pixmap);
-   }
-
-   return retIcon;
-}
 #endif
 
+}
 
-/*!
-  Returns an icon for the file described by \a info.
-*/
+QIcon QFileIconProviderPrivate::getIcon(const QFileInfo &fi) const
+{
+   const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
+   if (!theme) {
+      return QIcon();
+   }
+
+   QList<int> sizes = theme->themeHint(QPlatformTheme::IconPixmapSizes).value<QList<int>>();
+   if (sizes.isEmpty()) {
+      return QIcon();
+   }
+
+   return QIcon(new QFileIconEngine(fi, options));
+}
 
 QIcon QFileIconProvider::icon(const QFileInfo &info) const
 {
    Q_D(const QFileIconProvider);
 
-   QIcon platformIcon = qt_guiPlatformPlugin()->fileSystemIcon(info);
-   if (!platformIcon.isNull()) {
-      return platformIcon;
-   }
 
-#if defined(Q_WS_X11) && !defined(QT_NO_STYLE_GTK)
-   if (X11->desktopEnvironment == DE_GNOME) {
+#if defined(Q_OS_UNIX) && !defined(QT_NO_STYLE_GTK)
+   const QByteArray desktopEnvironment = QGuiApplicationPrivate::platformIntegration()->services()->desktopEnvironment();
+   if (desktopEnvironment != QByteArrayLiteral("KDE")) {
       QIcon gtkIcon = QGtkStylePrivate::getFilesystemIcon(info);
       if (!gtkIcon.isNull()) {
          return gtkIcon;
@@ -426,20 +317,14 @@ QIcon QFileIconProvider::icon(const QFileInfo &info) const
    }
 #endif
 
-#ifdef Q_OS_MAC
-   QIcon retIcon = d->getMacIcon(info);
-   if (! retIcon.isNull()) {
+   QIcon retIcon = d->getIcon(info);
+   if (!retIcon.isNull()) {
       return retIcon;
    }
 
-#elif defined Q_OS_WIN
-   QIcon icon = d->getWinIcon(info);
-   if (! icon.isNull()) {
-      return icon;
-   }
-#endif
 
    if (info.isRoot())
+
 #if defined (Q_OS_WIN)
    {
       std::wstring tmp(info.absoluteFilePath().toStdWString());
@@ -503,7 +388,8 @@ QString QFileIconProvider::type(const QFileInfo &info) const
    }
    if (info.isFile()) {
       if (!info.suffix().isEmpty()) {
-         return info.suffix() + QLatin1Char(' ') + QApplication::translate("QFileDialog", "File");
+         //: %1 is a file name suffix, for example txt
+         return QApplication::translate("QFileDialog", "%1 File").formatArg(info.suffix());
       }
       return QApplication::translate("QFileDialog", "File");
    }
@@ -520,11 +406,13 @@ QString QFileIconProvider::type(const QFileInfo &info) const
    // Nautilus  - "folder"
 
    if (info.isSymLink())
+
 #ifdef Q_OS_MAC
-      return QApplication::translate("QFileDialog", "Alias", "Mac OS X Finder");
+      return QApplication::translate("QFileDialog", "Alias", "OS X Finder");
 #else
       return QApplication::translate("QFileDialog", "Shortcut", "All other platforms");
 #endif
+
    // OS X      - "Alias"
    // Windows   - "Shortcut"
    // Konqueror - "Folder" or "TXT File" i.e. what it is pointing to
@@ -533,6 +421,5 @@ QString QFileIconProvider::type(const QFileInfo &info) const
    return QApplication::translate("QFileDialog", "Unknown");
 }
 
-QT_END_NAMESPACE
 
-#endif
+

@@ -28,8 +28,6 @@
 #include <QtGui/qitemselectionmodel.h>
 #include <QtGui/qabstractitemdelegate.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ITEMVIEWS
 
 class QMenu;
@@ -46,26 +44,34 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_ENUM(ScrollHint)
    GUI_CS_ENUM(ScrollMode)
    GUI_CS_ENUM(DragDropMode)
+
    GUI_CS_FLAG(EditTrigger, EditTriggers)
 
    GUI_CS_PROPERTY_READ(autoScroll, hasAutoScroll)
    GUI_CS_PROPERTY_WRITE(autoScroll, setAutoScroll)
+
    GUI_CS_PROPERTY_READ(autoScrollMargin, autoScrollMargin)
    GUI_CS_PROPERTY_WRITE(autoScrollMargin, setAutoScrollMargin)
+
    GUI_CS_PROPERTY_READ(editTriggers, editTriggers)
    GUI_CS_PROPERTY_WRITE(editTriggers, setEditTriggers)
+
    GUI_CS_PROPERTY_READ(tabKeyNavigation, tabKeyNavigation)
    GUI_CS_PROPERTY_WRITE(tabKeyNavigation, setTabKeyNavigation)
 
 #ifndef QT_NO_DRAGANDDROP
    GUI_CS_PROPERTY_READ(showDropIndicator, showDropIndicator)
    GUI_CS_PROPERTY_WRITE(showDropIndicator, setDropIndicatorShown)
+
    GUI_CS_PROPERTY_READ(dragEnabled, dragEnabled)
    GUI_CS_PROPERTY_WRITE(dragEnabled, setDragEnabled)
+
    GUI_CS_PROPERTY_READ(dragDropOverwriteMode, dragDropOverwriteMode)
    GUI_CS_PROPERTY_WRITE(dragDropOverwriteMode, setDragDropOverwriteMode)
+
    GUI_CS_PROPERTY_READ(dragDropMode, dragDropMode)
    GUI_CS_PROPERTY_WRITE(dragDropMode, setDragDropMode)
+
    GUI_CS_PROPERTY_READ(defaultDropAction, defaultDropAction)
    GUI_CS_PROPERTY_WRITE(defaultDropAction, setDefaultDropAction)
 #endif
@@ -74,14 +80,20 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_PROPERTY_WRITE(alternatingRowColors, setAlternatingRowColors)
    GUI_CS_PROPERTY_READ(selectionMode, selectionMode)
    GUI_CS_PROPERTY_WRITE(selectionMode, setSelectionMode)
+
    GUI_CS_PROPERTY_READ(selectionBehavior, selectionBehavior)
    GUI_CS_PROPERTY_WRITE(selectionBehavior, setSelectionBehavior)
+
    GUI_CS_PROPERTY_READ(iconSize, iconSize)
    GUI_CS_PROPERTY_WRITE(iconSize, setIconSize)
+   GUI_CS_PROPERTY_NOTIFY(iconSize, iconSizeChanged)
+
    GUI_CS_PROPERTY_READ(textElideMode, textElideMode)
    GUI_CS_PROPERTY_WRITE(textElideMode, setTextElideMode)
+
    GUI_CS_PROPERTY_READ(verticalScrollMode, verticalScrollMode)
    GUI_CS_PROPERTY_WRITE(verticalScrollMode, setVerticalScrollMode)
+
    GUI_CS_PROPERTY_READ(horizontalScrollMode, horizontalScrollMode)
    GUI_CS_PROPERTY_WRITE(horizontalScrollMode, setHorizontalScrollMode)
 
@@ -272,8 +284,12 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SIGNAL_1(Public, void viewportEntered())
    GUI_CS_SIGNAL_2(viewportEntered)
 
- protected :
-   GUI_CS_SLOT_1(Protected, virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))
+   GUI_CS_SIGNAL_1(Public, void iconSizeChanged(const QSize &size))
+   GUI_CS_SIGNAL_2(iconSizeChanged, size)
+
+ protected:
+   GUI_CS_SLOT_1(Protected, virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+         const QVector<int> &roles = QVector<int>()))
    GUI_CS_SLOT_2(dataChanged)
 
    GUI_CS_SLOT_1(Protected, virtual void rowsInserted(const QModelIndex &parent, int start, int end))
@@ -283,7 +299,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_2(rowsAboutToBeRemoved)
 
    GUI_CS_SLOT_1(Protected, virtual void selectionChanged(const QItemSelection &selected,
-                 const QItemSelection &deselected))
+         const QItemSelection &deselected))
    GUI_CS_SLOT_2(selectionChanged)
 
    GUI_CS_SLOT_1(Protected, virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous))
@@ -327,9 +343,9 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    int verticalStepsPerItem() const;
 
    enum CursorAction { MoveUp, MoveDown, MoveLeft, MoveRight,
-                       MoveHome, MoveEnd, MovePageUp, MovePageDown,
-                       MoveNext, MovePrevious
-                     };
+      MoveHome, MoveEnd, MovePageUp, MovePageDown,
+      MoveNext, MovePrevious
+   };
 
    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) = 0;
 
@@ -403,12 +419,13 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    DropIndicatorPosition dropIndicatorPosition() const;
 #endif
 
+   QSize viewportSizeHint() const override;
  private:
    Q_DECLARE_PRIVATE(QAbstractItemView)
    Q_DISABLE_COPY(QAbstractItemView)
 
    GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+         int un_named_arg3))
    GUI_CS_SLOT_2(_q_columnsAboutToBeRemoved)
 
    GUI_CS_SLOT_1(Private, void _q_columnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
@@ -432,8 +449,12 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_1(Private, void _q_headerDataChanged())
    GUI_CS_SLOT_2(_q_headerDataChanged)
 
+#ifndef QT_NO_GESTURES
+   GUI_CS_SLOT_1(Private, void _q_scrollerStateChanged())
+   GUI_CS_SLOT_2(_q_scrollerStateChanged)
+#endif
+
    friend class QTreeViewPrivate; // needed to compile with MSVC
-   friend class QAccessibleItemRow;
    friend class QListModeViewBase;
    friend class QListViewPrivate; // needed to compile for Symbian emulator
 };
@@ -442,6 +463,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemView::EditTriggers)
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
 
 #endif // QABSTRACTITEMVIEW_H

@@ -38,16 +38,25 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 
    GUI_CS_PROPERTY_READ(showSortIndicator, isSortIndicatorShown)
    GUI_CS_PROPERTY_WRITE(showSortIndicator, setSortIndicatorShown)
+
    GUI_CS_PROPERTY_READ(highlightSections, highlightSections)
    GUI_CS_PROPERTY_WRITE(highlightSections, setHighlightSections)
+
    GUI_CS_PROPERTY_READ(stretchLastSection, stretchLastSection)
    GUI_CS_PROPERTY_WRITE(stretchLastSection, setStretchLastSection)
+
    GUI_CS_PROPERTY_READ(cascadingSectionResizes, cascadingSectionResizes)
    GUI_CS_PROPERTY_WRITE(cascadingSectionResizes, setCascadingSectionResizes)
+
    GUI_CS_PROPERTY_READ(defaultSectionSize, defaultSectionSize)
    GUI_CS_PROPERTY_WRITE(defaultSectionSize, setDefaultSectionSize)
+
    GUI_CS_PROPERTY_READ(minimumSectionSize, minimumSectionSize)
    GUI_CS_PROPERTY_WRITE(minimumSectionSize, setMinimumSectionSize)
+
+   GUI_CS_PROPERTY_READ(maximumSectionSize, maximumSectionSize)
+   GUI_CS_PROPERTY_WRITE(maximumSectionSize, setMaximumSectionSize)
+
    GUI_CS_PROPERTY_READ(defaultAlignment, defaultAlignment)
    GUI_CS_PROPERTY_WRITE(defaultAlignment, setDefaultAlignment)
 
@@ -72,6 +81,8 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    int offset() const;
    int length() const;
    QSize sizeHint() const override;
+   void setVisible(bool v) override;
+
    int sectionSizeHint(int logicalIndex) const;
 
    int visualIndexAt(int position) const;
@@ -100,18 +111,21 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    int visualIndex(int logicalIndex) const;
    int logicalIndex(int visualIndex) const;
 
-   void setMovable(bool movable);
-   bool isMovable() const;
+   void setSectionsMovable(bool movable);
+   bool sectionsMovable() const;
 
-   void setClickable(bool clickable);
-   bool isClickable() const;
+   void setSectionsClickable(bool clickable);
+   bool sectionsClickable() const;
 
    void setHighlightSections(bool highlight);
    bool highlightSections() const;
 
-   void setResizeMode(ResizeMode mode);
-   void setResizeMode(int logicalIndex, ResizeMode mode);
-   ResizeMode resizeMode(int logicalIndex) const;
+   ResizeMode sectionResizeMode(int logicalIndex) const;
+   void setSectionResizeMode(ResizeMode mode);
+   void setSectionResizeMode(int logicalIndex, ResizeMode mode);
+   void setResizeContentsPrecision(int precision);
+   int  resizeContentsPrecision() const;
+
    int stretchSectionCount() const;
 
    void setSortIndicatorShown(bool show);
@@ -129,9 +143,12 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 
    int defaultSectionSize() const;
    void setDefaultSectionSize(int size);
+   void resetDefaultSectionSize();
 
    int minimumSectionSize() const;
    void setMinimumSectionSize(int size);
+   int maximumSectionSize() const;
+   void setMaximumSectionSize(int size);
 
    Qt::Alignment defaultAlignment() const;
    void setDefaultAlignment(Qt::Alignment alignment);
@@ -140,42 +157,55 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    bool sectionsMoved() const;
    bool sectionsHidden() const;
 
-#ifndef QT_NO_DATASTREAM
+
    QByteArray saveState() const;
    bool restoreState(const QByteArray &state);
-#endif
 
    void reset() override;
 
    GUI_CS_SLOT_1(Public, void setOffset(int offset))
    GUI_CS_SLOT_2(setOffset)
+
    GUI_CS_SLOT_1(Public, void setOffsetToSectionPosition(int visualIndex))
    GUI_CS_SLOT_2(setOffsetToSectionPosition)
+
    GUI_CS_SLOT_1(Public, void setOffsetToLastSection())
    GUI_CS_SLOT_2(setOffsetToLastSection)
+
    GUI_CS_SLOT_1(Public, void headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast))
    GUI_CS_SLOT_2(headerDataChanged)
 
    GUI_CS_SIGNAL_1(Public, void sectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex))
    GUI_CS_SIGNAL_2(sectionMoved, logicalIndex, oldVisualIndex, newVisualIndex)
+
    GUI_CS_SIGNAL_1(Public, void sectionResized(int logicalIndex, int oldSize, int newSize))
    GUI_CS_SIGNAL_2(sectionResized, logicalIndex, oldSize, newSize)
+
    GUI_CS_SIGNAL_1(Public, void sectionPressed(int logicalIndex))
    GUI_CS_SIGNAL_2(sectionPressed, logicalIndex)
+
    GUI_CS_SIGNAL_1(Public, void sectionClicked(int logicalIndex))
    GUI_CS_SIGNAL_2(sectionClicked, logicalIndex)
+
    GUI_CS_SIGNAL_1(Public, void sectionEntered(int logicalIndex))
    GUI_CS_SIGNAL_2(sectionEntered, logicalIndex)
+
    GUI_CS_SIGNAL_1(Public, void sectionDoubleClicked(int logicalIndex))
    GUI_CS_SIGNAL_2(sectionDoubleClicked, logicalIndex)
+
    GUI_CS_SIGNAL_1(Public, void sectionCountChanged(int oldCount, int newCount))
    GUI_CS_SIGNAL_2(sectionCountChanged, oldCount, newCount)
+
    GUI_CS_SIGNAL_1(Public, void sectionHandleDoubleClicked(int logicalIndex))
    GUI_CS_SIGNAL_2(sectionHandleDoubleClicked, logicalIndex)
-   GUI_CS_SIGNAL_1(Public, void sectionAutoResize(int logicalIndex, QHeaderView::ResizeMode mode))
-   GUI_CS_SIGNAL_2(sectionAutoResize, logicalIndex, mode)
+
+   // broom - may be gone
+   //   GUI_CS_SIGNAL_1(Public, void sectionAutoResize(int logicalIndex, QHeaderView::ResizeMode mode))
+   //   GUI_CS_SIGNAL_2(sectionAutoResize, logicalIndex, mode)
+
    GUI_CS_SIGNAL_1(Public, void geometriesChanged())
    GUI_CS_SIGNAL_2(geometriesChanged)
+
    GUI_CS_SIGNAL_1(Public, void sortIndicatorChanged(int logicalIndex, Qt::SortOrder order))
    GUI_CS_SIGNAL_2(sortIndicatorChanged, logicalIndex, order)
 
@@ -215,7 +245,7 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    void updateGeometries() override;
    void scrollContentsBy(int dx, int dy) override;
 
-   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) override;
+   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) override;
    void rowsInserted(const QModelIndex &parent, int start, int end) override;
 
    QRect visualRect(const QModelIndex &index) const override;
@@ -229,6 +259,8 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
    void initStyleOption(QStyleOptionHeader *option) const;
 
+   friend class QTableView;
+   friend class QTreeView;
  private:
    Q_DECLARE_PRIVATE(QHeaderView)
    Q_DISABLE_COPY(QHeaderView)
@@ -262,6 +294,6 @@ inline void QHeaderView::showSection(int alogicalIndex)
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
+
 
 #endif // QHEADERVIEW_H

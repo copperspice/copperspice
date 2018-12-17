@@ -70,22 +70,30 @@ class QColumnViewPreviewColumn : public QAbstractItemView
       QAbstractScrollArea::resizeEvent(event);
    }
 
+   void scrollContentsBy(int dx, int dy) override {
+      if (!previewWidget) {
+         return;
+      }
+      scrollDirtyRegion(dx, dy);
+      viewport()->scroll(dx, dy);
+      QAbstractItemView::scrollContentsBy(dx, dy);
+   }
    QRect visualRect(const QModelIndex &) const override {
       return QRect();
    }
 
-   void scrollTo(const QModelIndex &, ScrollHint)  override{
+   void scrollTo(const QModelIndex &, ScrollHint)  override {
    }
 
-   QModelIndex indexAt(const QPoint &) const override{
+   QModelIndex indexAt(const QPoint &) const override {
       return QModelIndex();
    }
 
-   QModelIndex moveCursor(CursorAction, Qt::KeyboardModifiers) override{
+   QModelIndex moveCursor(CursorAction, Qt::KeyboardModifiers) override {
       return QModelIndex();
    }
 
-   int horizontalOffset () const override{
+   int horizontalOffset () const override {
       return 0;
    }
    int verticalOffset () const override {
@@ -154,6 +162,5 @@ class QColumnViewDelegate : public QItemDelegate
 #endif // QT_NO_QCOLUMNVIEW
 
 
-QT_END_NAMESPACE
 #endif //QCOLUMNVIEW_P_H
 

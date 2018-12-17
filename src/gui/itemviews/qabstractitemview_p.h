@@ -32,17 +32,17 @@
 #include <QtCore/qpair.h>
 #include <QtGui/qregion.h>
 #include <QtCore/qdebug.h>
-#include <QtGui/qpainter.h>
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qelapsedtimer.h>
+#include <qvector.h>
+#include <qbasictimer.h>
+#include <qelapsedtimer.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
 struct QEditorInfo {
-   QEditorInfo(QWidget *e, bool s): widget(QWeakPointer<QWidget>(e)), isStatic(s) {}
+   QEditorInfo(QWidget *e, bool s): widget(QPointer<QWidget>(e)), isStatic(s) {}
    QEditorInfo(): isStatic(false) {}
 
-   QWeakPointer<QWidget> widget;
+   QPointer<QWidget> widget;
    bool isStatic;
 };
 
@@ -51,30 +51,30 @@ typedef QHash<QWidget *, QPersistentModelIndex> QEditorIndexHash;
 typedef QHash<QPersistentModelIndex, QEditorInfo> QIndexEditorHash;
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
-typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
+typedef QVector<QItemViewPaintPair> QItemViewPaintPairs;
 
 class QEmptyModel : public QAbstractItemModel
 {
  public:
    explicit QEmptyModel(QObject *parent = nullptr) : QAbstractItemModel(parent) {}
 
-   QModelIndex index(int, int, const QModelIndex &) const override{
+   QModelIndex index(int, int, const QModelIndex &) const override {
       return QModelIndex();
    }
 
-   QModelIndex parent(const QModelIndex &) const override{
+   QModelIndex parent(const QModelIndex &) const override {
       return QModelIndex();
    }
 
-   int rowCount(const QModelIndex &) const override{
+   int rowCount(const QModelIndex &) const override {
       return 0;
    }
 
-   int columnCount(const QModelIndex &) const override{
+   int columnCount(const QModelIndex &) const override {
       return 0;
    }
 
-   bool hasChildren(const QModelIndex &) const override{
+   bool hasChildren(const QModelIndex &) const override {
       return false;
    }
 
@@ -100,10 +100,16 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    virtual void _q_columnsInserted(const QModelIndex &parent, int start, int end);
    virtual void _q_modelDestroyed();
    virtual void _q_layoutChanged();
+   virtual void _q_rowsMoved(const QModelIndex &source, int sourceStart, int sourceEnd, const QModelIndex &destination,
+      int destinationStart);
+   virtual void _q_columnsMoved(const QModelIndex &source, int sourceStart, int sourceEnd, const QModelIndex &destination,
+      int destinationStart);
 
    void _q_headerDataChanged() {
       doDelayedItemsLayout();
    }
+
+   void _q_scrollerStateChanged();
 
    void fetchMore();
 
@@ -113,12 +119,14 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    void doDelayedItemsLayout(int delay = 0);
    void interruptDelayedItemsLayout() const;
 
+   void updateGeometry();
    void startAutoScroll() {
       // ### it would be nice to make this into a style hint one day
       int scrollInterval = (verticalScrollMode == QAbstractItemView::ScrollPerItem) ? 150 : 50;
       autoScrollTimer.start(scrollInterval, q_func());
       autoScrollCount = 0;
    }
+
    void stopAutoScroll() {
       autoScrollTimer.stop();
       autoScrollCount = 0;
@@ -136,11 +144,11 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    void updateEditorData(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
    QItemSelectionModel::SelectionFlags multiSelectionCommand(const QModelIndex &index,
-         const QEvent *event) const;
+      const QEvent *event) const;
    QItemSelectionModel::SelectionFlags extendedSelectionCommand(const QModelIndex &index,
-         const QEvent *event) const;
+      const QEvent *event) const;
    QItemSelectionModel::SelectionFlags contiguousSelectionCommand(const QModelIndex &index,
-         const QEvent *event) const;
+      const QEvent *event) const;
    virtual void selectAll(QItemSelectionModel::SelectionFlags command);
 
    void setHoverIndex(const QPersistentModelIndex &index);
@@ -163,26 +171,38 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    }
 
 #ifndef QT_NO_DRAGANDDROP
-   virtual QAbstractItemView::DropIndicatorPosition position(const QPoint &pos, const QRect &rect,
-         const QModelIndex &idx) const;
+   virtual QAbstractItemView::DropIndicatorPosition position(const QPoint &pos, const QRect &rect, const QModelIndex &idx) const;
+   inline bool canDrop(QDropEvent *event) {
+      QModelIndex index;
+      int col = -1;
+      int row = -1;
+      const QMimeData *mime = event->mimeData();
 
-   inline bool canDecode(QDropEvent *e) const {
-      QStringList modelTypes = model->mimeTypes();
-      const QMimeData *mime = e->mimeData();
-      for (int i = 0; i < modelTypes.count(); ++i)
-         if (mime->hasFormat(modelTypes.at(i))
-               && (e->dropAction() & model->supportedDropActions())) {
-            return true;
-         }
+      // Drag enter event shall always be accepted, if mime type and action match.
+      // Whether the data can actually be dropped will be checked in drag move.
+      if (event->type() == QEvent::DragEnter) {
+         const QStringList modelTypes = model->mimeTypes();
+         for (int i = 0; i < modelTypes.count(); ++i)
+            if (mime->hasFormat(modelTypes.at(i))
+               && (event->dropAction() & model->supportedDropActions())) {
+               return true;
+            }
+      }
+
+      if (dropOn(event, &row, &col, &index)) {
+         return model->canDropMimeData(mime,
+               dragDropMode == QAbstractItemView::InternalMove ? Qt::MoveAction : event->dropAction(),
+               row, col, index);
+      }
       return false;
    }
 
    inline void paintDropIndicator(QPainter *painter) {
       if (showDropIndicator && state == QAbstractItemView::DraggingState
 #ifndef QT_NO_CURSOR
-            && viewport->cursor().shape() != Qt::ForbiddenCursor
+         && viewport->cursor().shape() != Qt::ForbiddenCursor
 #endif
-         ) {
+      ) {
          QStyleOption opt;
          opt.init(q_func());
          opt.rect = dropIndicatorRect;
@@ -191,17 +211,23 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    }
 
 #endif
+
    virtual QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
    // reimplemented in subclasses
-   virtual void adjustViewOptionsForIndex(QStyleOptionViewItemV4 *, const QModelIndex &) const {}
+   virtual void adjustViewOptionsForIndex(QStyleOptionViewItem *, const QModelIndex &) const {}
 
-   inline void releaseEditor(QWidget *editor) const {
+   inline void releaseEditor(QWidget *editor, const QModelIndex &index = QModelIndex()) const {
       if (editor) {
          QObject::disconnect(editor, SIGNAL(destroyed(QObject *)),
-                             q_func(), SLOT(editorDestroyed(QObject *)));
+            q_func(), SLOT(editorDestroyed(QObject *)));
          editor->removeEventFilter(itemDelegate);
          editor->hide();
-         editor->deleteLater();
+         QAbstractItemDelegate *delegate = delegateForIndex(index);
+         if (delegate) {
+            delegate->destroyEditor(editor, index);
+         } else {
+            editor->deleteLater();
+         }
       }
    }
 
@@ -244,13 +270,11 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    inline QPoint offset() const {
       const Q_Q(QAbstractItemView);
       return QPoint(q->isRightToLeft() ? -q->horizontalOffset()
-                    : q->horizontalOffset(), q->verticalOffset());
+            : q->horizontalOffset(), q->verticalOffset());
    }
 
    const QEditorInfo &editorForIndex(const QModelIndex &index) const;
-   inline bool hasEditor(const QModelIndex &index) const {
-      return indexEditorHash.find(index) != indexEditorHash.constEnd();
-   }
+   bool hasEditor(const QModelIndex &index) const;
 
    QModelIndex indexForEditor(QWidget *editor) const;
    void addEditor(const QModelIndex &index, QWidget *editor, bool isStatic);
@@ -261,7 +285,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    }
 
    inline QAbstractItemDelegate *delegateForIndex(const QModelIndex &index) const {
-      QMap<int, QPointer<QAbstractItemDelegate> >::const_iterator it;
+      QMap<int, QPointer<QAbstractItemDelegate>>::const_iterator it;
 
       it = rowDelegates.find(index.row());
       if (it != rowDelegates.end()) {
@@ -314,7 +338,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
       }
 
       for (int maps = 0; maps < 2; ++maps) {
-         const QMap<int, QPointer<QAbstractItemDelegate> > *delegates = maps ? &columnDelegates : &rowDelegates;
+         const QMap<int, QPointer<QAbstractItemDelegate>> *delegates = maps ? &columnDelegates : &rowDelegates;
 
          for (auto it = delegates->begin(); it != delegates->end(); ++it) {
             if (it.value() == delegate) {
@@ -339,7 +363,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
    QModelIndexList selectedDraggableIndexes() const;
 
-   QStyleOptionViewItemV4 viewOptionsV4() const;
+   QStyleOptionViewItem viewOptions() const;
 
    void doDelayedReset() {
       //we delay the reset of the timer because some views (QTableView)
@@ -352,8 +376,8 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
    QAbstractItemModel *model;
    QPointer<QAbstractItemDelegate> itemDelegate;
-   QMap<int, QPointer<QAbstractItemDelegate> > rowDelegates;
-   QMap<int, QPointer<QAbstractItemDelegate> > columnDelegates;
+   QMap<int, QPointer<QAbstractItemDelegate>> rowDelegates;
+   QMap<int, QPointer<QAbstractItemDelegate>> columnDelegates;
    QPointer<QItemSelectionModel> selectionModel;
    QItemSelectionModel::SelectionFlag ctrlDragSelectionFlag;
    bool noSelectionOnMousePress;
@@ -368,6 +392,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
    QPersistentModelIndex enteredIndex;
    QPersistentModelIndex pressedIndex;
+   QPersistentModelIndex currentSelectionStartIndex;
    Qt::KeyboardModifiers pressedModifiers;
    QPoint pressedPosition;
    bool pressedAlreadySelected;
@@ -422,6 +447,11 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    QAbstractItemView::ScrollMode verticalScrollMode;
    QAbstractItemView::ScrollMode horizontalScrollMode;
 
+#ifndef QT_NO_GESTURES
+   // the selection before the last mouse down. In case we have to restore it for scrolling
+   QItemSelection oldSelection;
+   QModelIndex oldCurrent;
+#endif
    bool currentIndexSet;
 
    bool wrapItemText;
@@ -433,6 +463,20 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    mutable QBasicTimer fetchMoreTimer;
 };
 
+template <typename T>
+inline int qBinarySearch(const QVector<T> &vec, const T &item, int start, int end)
+{
+   int i = (start + end + 1) >> 1;
+   while (end - start > 0) {
+      if (vec.at(i) > item) {
+         end = i - 1;
+      } else {
+         start = i;
+      }
+      i = (start + end + 1) >> 1;
+   }
+   return i;
+}
 #endif // QT_NO_ITEMVIEWS
 
 #endif // QABSTRACTITEMVIEW_P_H
