@@ -35,10 +35,12 @@ class QModelIndex;
 class QAbstractItemModel;
 class QAbstractItemView;
 class QHelpEvent;
+class QAbstractItemDelegatePrivate;
 
 class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
 {
    GUI_CS_OBJECT(QAbstractItemDelegate)
+   Q_DECLARE_PRIVATE(QAbstractItemDelegate)
 
  public:
 
@@ -61,6 +63,7 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
    // editing
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+   virtual void destroyEditor(QWidget *editor, const QModelIndex &index) const;
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
 
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
@@ -69,13 +72,15 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
 
    // for non-widget editors
    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option,
-                            const QModelIndex &index);
+      const QModelIndex &index);
 
    static QString elidedText(const QFontMetrics &fontMetrics, int width, Qt::TextElideMode mode, const QString &text);
 
    //
    virtual bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option,
-                          const QModelIndex &index);
+      const QModelIndex &index);
+
+   virtual QVector<int> paintingRoles() const;
 
    GUI_CS_SIGNAL_1(Public, void commitData(QWidget *editor))
    GUI_CS_SIGNAL_2(commitData, editor)
@@ -86,13 +91,20 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
    GUI_CS_SIGNAL_1(Public, void sizeHintChanged(const QModelIndex &un_named_arg1))
    GUI_CS_SIGNAL_2(sizeHintChanged, un_named_arg1)
 
+ protected:
+   QAbstractItemDelegate(QAbstractItemDelegatePrivate &, QObject *parent = nullptr);
+
+   QScopedPointer<QAbstractItemDelegatePrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QAbstractItemDelegate)
 
+
+   GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget *))
+   GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)
 };
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
 
 #endif // QABSTRACTITEMDELEGATE_H

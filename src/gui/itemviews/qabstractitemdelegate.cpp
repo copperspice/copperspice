@@ -23,6 +23,7 @@
 #include <qabstractitemdelegate.h>
 
 #ifndef QT_NO_ITEMVIEWS
+
 #include <qabstractitemmodel.h>
 #include <qabstractitemview.h>
 #include <qfontmetrics.h>
@@ -31,34 +32,49 @@
 #include <qevent.h>
 #include <qstring.h>
 #include <qdebug.h>
+#include <qlineedit.h>
+#include <qtextedit.h>
+#include <qplaintextedit.h>
+#include <qapplication.h>
 #include <qtextengine_p.h>
+#include <qabstractitemdelegate_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qplatform_integration.h>
+#include <qplatform_drag.h>
+#include <qguiapplication_p.h>
+#include <qdnd_p.h>
 
 
-/*!
-    Creates a new abstract item delegate with the given \a parent.
-*/
 QAbstractItemDelegate::QAbstractItemDelegate(QObject *parent)
-   : QObject(parent)
+   : QObject(parent), d_ptr(new QAbstractItemDelegatePrivate)
 {
+   d_ptr->q_ptr = this;
 }
 
+QAbstractItemDelegate::QAbstractItemDelegate(QAbstractItemDelegatePrivate &dd, QObject *parent)
+   : QObject(parent), d_ptr(&dd)
+{
+   d_ptr->q_ptr = this;
+}
 
-/*!
-    Destroys the abstract item delegate.
-*/
 QAbstractItemDelegate::~QAbstractItemDelegate()
 {
 
 }
 
 QWidget *QAbstractItemDelegate::createEditor(QWidget *,
-      const QStyleOptionViewItem &, const QModelIndex &) const
+   const QStyleOptionViewItem &, const QModelIndex &) const
 {
    return 0;
 }
 
+
+
+void QAbstractItemDelegate::destroyEditor(QWidget *editor, const QModelIndex &index) const
+{
+
+   editor->deleteLater();
+}
 
 void QAbstractItemDelegate::setEditorData(QWidget *, const QModelIndex &) const
 {
@@ -75,108 +91,63 @@ void QAbstractItemDelegate::setEditorData(QWidget *, const QModelIndex &) const
     \sa setEditorData()
 */
 void QAbstractItemDelegate::setModelData(QWidget *,
-      QAbstractItemModel *,
-      const QModelIndex &) const
+   QAbstractItemModel *, const QModelIndex &) const
 {
-   // do nothing
+   // does nothing
 }
 
-/*!
-    Updates the geometry of the \a editor for the item with the given
-    \a index, according to the rectangle specified in the \a option.
-    If the item has an internal layout, the editor will be laid out
-    accordingly. Note that the index contains information about the
-    model being used.
 
-    The base implementation does nothing. If you want custom editing
-    you must reimplement this function.
-*/
 void QAbstractItemDelegate::updateEditorGeometry(QWidget *,
-      const QStyleOptionViewItem &,
-      const QModelIndex &) const
+   const QStyleOptionViewItem &,
+   const QModelIndex &) const
 {
-   // do nothing
+   // does nothing
 }
 
-/*!
-    When editing of an item starts, this function is called with the
-    \a event that triggered the editing, the \a model, the \a index of
-    the item, and the \a option used for rendering the item.
 
-    Mouse events are sent to editorEvent() even if they don't start
-    editing of the item. This can, for instance, be useful if you wish
-    to open a context menu when the right mouse button is pressed on
-    an item.
-
-    The base implementation returns false (indicating that it has not
-    handled the event).
-*/
 bool QAbstractItemDelegate::editorEvent(QEvent *,
-                                        QAbstractItemModel *,
-                                        const QStyleOptionViewItem &,
-                                        const QModelIndex &)
+   QAbstractItemModel *,
+   const QStyleOptionViewItem &,
+   const QModelIndex &)
 {
-   // do nothing
    return false;
 }
 
-/*!
-    \obsolete
 
-    Use QFontMetrics::elidedText() instead.
-
-    \oldcode
-        QFontMetrics fm = ...
-        QString str = QAbstractItemDelegate::elidedText(fm, width, mode, text);
-    \newcode
-        QFontMetrics fm = ...
-        QString str = fm.elidedText(text, mode, width);
-    \endcode
-*/
 
 QString QAbstractItemDelegate::elidedText(const QFontMetrics &fontMetrics, int width,
-      Qt::TextElideMode mode, const QString &text)
+   Qt::TextElideMode mode, const QString &text)
 {
    return fontMetrics.elidedText(text, mode, width);
 }
 
-/*!
-    \since 4.3
-    Whenever a help event occurs, this function is called with the \a event
-    \a view \a option and the \a index that corresponds to the item where the
-    event occurs.
 
-    Returns true if the delegate can handle the event; otherwise returns false.
-    A return value of true indicates that the data obtained using the index had
-    the required role.
 
-    For QEvent::ToolTip and QEvent::WhatsThis events that were handled successfully,
-    the relevant popup may be shown depending on the user's system configuration.
-
-    \sa QHelpEvent
-*/
-// ### Qt5: Make this a virtual non-slot function
 bool QAbstractItemDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view,
-                  const QStyleOptionViewItem &option, const QModelIndex &index)
+   const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-   Q_UNUSED(option);
+   Q_D(QAbstractItemDelegate);
 
    if (!event || !view) {
       return false;
    }
 
    switch (event->type()) {
+
 #ifndef QT_NO_TOOLTIP
       case QEvent::ToolTip: {
          QHelpEvent *he = static_cast<QHelpEvent *>(event);
-         QVariant tooltip = index.data(Qt::ToolTipRole);
-         if (tooltip.canConvert<QString>()) {
-            QToolTip::showText(he->globalPos(), tooltip.toString(), view);
+         const int precision = inherits("QItemDelegate") ? 10 : 6; // keep in sync with DBL_DIG in qitemdelegate.cpp
+         const QString tooltip = d->textForRole(Qt::ToolTipRole, index.data(Qt::ToolTipRole), option.locale, precision);
+
+         if (!tooltip.isEmpty()) {
+            QToolTip::showText(he->globalPos(), tooltip, view);
             return true;
          }
          break;
       }
 #endif
+
 #ifndef QT_NO_WHATSTHIS
       case QEvent::QueryWhatsThis: {
          if (index.data(Qt::WhatsThisRole).isValid()) {
@@ -184,22 +155,206 @@ bool QAbstractItemDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view
          }
          break;
       }
+
       case QEvent::WhatsThis: {
          QHelpEvent *he = static_cast<QHelpEvent *>(event);
-         QVariant whatsthis = index.data(Qt::WhatsThisRole);
-         if (whatsthis.canConvert<QString>()) {
-            QWhatsThis::showText(he->globalPos(), whatsthis.toString(), view);
+         const int precision = inherits("QItemDelegate") ? 10 : 6; // keep in sync with DBL_DIG in qitemdelegate.cpp
+         const QString whatsthis = d->textForRole(Qt::WhatsThisRole, index.data(Qt::WhatsThisRole), option.locale, precision);
+
+         if (!whatsthis.isEmpty()) {
+            QWhatsThis::showText(he->globalPos(), whatsthis, view);
             return true;
          }
-         break ;
+         break;
       }
 #endif
+
       default:
          break;
+   }
+
+   return false;
+}
+
+QVector<int> QAbstractItemDelegate::paintingRoles() const
+{
+   return QVector<int>();
+}
+
+QAbstractItemDelegatePrivate::QAbstractItemDelegatePrivate()
+{
+}
+
+static bool editorHandlesKeyEvent(QWidget *editor, const QKeyEvent *event)
+{
+#ifndef QT_NO_TEXTEDIT
+   if (qobject_cast<QTextEdit *>(editor) || qobject_cast<QPlainTextEdit *>(editor)) {
+      switch (event->key()) {
+         case Qt::Key_Tab:
+         case Qt::Key_Backtab:
+         case Qt::Key_Enter:
+         case Qt::Key_Return:
+            return true;
+         default:
+            break;
+      }
+   }
+#endif // QT_NO_TEXTEDIT
+
+   return false;
+}
+
+bool QAbstractItemDelegatePrivate::editorEventFilter(QObject *object, QEvent *event)
+{
+   Q_Q(QAbstractItemDelegate);
+
+   QWidget *editor = qobject_cast<QWidget *>(object);
+   if (!editor) {
+      return false;
+   }
+   if (event->type() == QEvent::KeyPress) {
+      QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+      if (editorHandlesKeyEvent(editor, keyEvent)) {
+         return false;
+      }
+
+      if (keyEvent->matches(QKeySequence::Cancel)) {
+         // don't commit data
+         emit q->closeEditor(editor, QAbstractItemDelegate::RevertModelCache);
+         return true;
+      }
+
+      switch (keyEvent->key()) {
+         case Qt::Key_Tab:
+            if (tryFixup(editor)) {
+               emit q->commitData(editor);
+               emit q->closeEditor(editor, QAbstractItemDelegate::EditNextItem);
+            }
+            return true;
+         case Qt::Key_Backtab:
+            if (tryFixup(editor)) {
+               emit q->commitData(editor);
+               emit q->closeEditor(editor, QAbstractItemDelegate::EditPreviousItem);
+            }
+            return true;
+         case Qt::Key_Enter:
+         case Qt::Key_Return:
+            // We want the editor to be able to process the key press
+            // before committing the data (e.g. so it can do
+            // validation/fixup of the input).
+            if (!tryFixup(editor)) {
+               return true;
+            }
+
+            QMetaObject::invokeMethod(q, "_q_commitDataAndCloseEditor",
+               Qt::QueuedConnection, Q_ARG(QWidget *, editor));
+            return false;
+         default:
+            return false;
+      }
+   } else if (event->type() == QEvent::FocusOut || (event->type() == QEvent::Hide && editor->isWindow())) {
+      //the Hide event will take care of he editors that are in fact complete dialogs
+      if (!editor->isActiveWindow() || (QApplication::focusWidget() != editor)) {
+         QWidget *w = QApplication::focusWidget();
+         while (w) { // don't worry about focus changes internally in the editor
+            if (w == editor) {
+               return false;
+            }
+            w = w->parentWidget();
+         }
+#ifndef QT_NO_DRAGANDDROP
+         // The window may lose focus during an drag operation.
+         // i.e when dragging involves the taskbar on Windows.
+         QPlatformDrag *platformDrag = QGuiApplicationPrivate::instance()->platformIntegration()->drag();
+         if (platformDrag && platformDrag->currentDrag()) {
+            return false;
+         }
+#endif
+         if (tryFixup(editor)) {
+            emit q->commitData(editor);
+         }
+
+         emit q->closeEditor(editor, QAbstractItemDelegate::NoHint);
+      }
+   } else if (event->type() == QEvent::ShortcutOverride) {
+      if (static_cast<QKeyEvent *>(event)->matches(QKeySequence::Cancel)) {
+         event->accept();
+         return true;
+      }
    }
    return false;
 }
 
-QT_END_NAMESPACE
+bool QAbstractItemDelegatePrivate::tryFixup(QWidget *editor)
+{
+#ifndef QT_NO_LINEEDIT
+   if (QLineEdit *e = qobject_cast<QLineEdit *>(editor)) {
+      if (!e->hasAcceptableInput()) {
+         if (const QValidator *validator = e->validator()) {
+            QString text = e->text();
+            validator->fixup(text);
+            e->setText(text);
+         }
+         return e->hasAcceptableInput();
+      }
+   }
+#endif // QT_NO_LINEEDIT
+
+   return true;
+}
+QString QAbstractItemDelegatePrivate::textForRole(Qt::ItemDataRole role, const QVariant &value, const QLocale &locale,
+   int precision) const
+{
+   const QLocale::FormatType formatType = (role == Qt::DisplayRole) ? QLocale::ShortFormat : QLocale::LongFormat;
+   QString text;
+   switch (value.userType()) {
+      case QMetaType::Float:
+         text = locale.toString(value.toFloat());
+         break;
+      case QVariant::Double:
+         text = locale.toString(value.toDouble(), 'g', precision);
+         break;
+      case QVariant::Int:
+      case QVariant::LongLong:
+         text = locale.toString(value.toLongLong());
+         break;
+      case QVariant::UInt:
+      case QVariant::ULongLong:
+         text = locale.toString(value.toULongLong());
+         break;
+      case QVariant::Date:
+         text = locale.toString(value.toDate(), formatType);
+         break;
+      case QVariant::Time:
+         text = locale.toString(value.toTime(), formatType);
+         break;
+      case QVariant::DateTime: {
+         const QDateTime dateTime = value.toDateTime();
+         text = locale.toString(dateTime.date(), formatType)
+            + QLatin1Char(' ')
+            + locale.toString(dateTime.time(), formatType);
+         break;
+      }
+      default:
+         text = value.toString();
+         if (role == Qt::DisplayRole) {
+            text.replace('\n', QChar(QChar::LineSeparator));
+         }
+         break;
+   }
+   return text;
+}
+void QAbstractItemDelegatePrivate::_q_commitDataAndCloseEditor(QWidget *editor)
+{
+   Q_Q(QAbstractItemDelegate);
+   emit q->commitData(editor);
+   emit q->closeEditor(editor, QAbstractItemDelegate::SubmitModelCache);
+}
+
+void QAbstractItemDelegate::_q_commitDataAndCloseEditor(QWidget *editor)
+{
+   Q_D(QAbstractItemDelegate);
+   d->_q_commitDataAndCloseEditor(editor);
+}
 
 #endif // QT_NO_ITEMVIEWS
