@@ -20,7 +20,6 @@ GUI_PUBLIC_INCLUDES += \
 	QListView \
 	QListWidget \
 	QListWidgetItem \
-	QProxyModel \
 	QSortFilterProxyModel \
 	QStandardItem \
 	QStandardItemEditorCreator \
@@ -56,7 +55,6 @@ GUI_ITEMVIEWS_INCLUDES = \
 	qlistview.h \
 	qlistwidget.h \
 	qlistwidgetitem.h \
-	qproxymodel.h \
 	qsortfilterproxymodel.h \
 	qstandarditem.h \
 	qstandarditemeditorcreator.h \
@@ -73,6 +71,7 @@ GUI_ITEMVIEWS_INCLUDES = \
 	qtreewidgetitemiterator.h
 
 GUI_ITEMVIEWS_PRIVATE_INCLUDES = \
+	qabstractitemdelegate_p.h \
 	qabstractitemview_p.h \
 	qabstractproxymodel_p.h \
 	qbsptree_p.h \
@@ -84,7 +83,6 @@ GUI_ITEMVIEWS_PRIVATE_INCLUDES = \
 	qheaderview_p.h \
 	qlistview_p.h \
 	qlistwidget_p.h \
-	qproxymodel_p.h \
 	qstandarditemmodel_p.h \
 	qtableview_p.h \
 	qtablewidget_p.h \
@@ -116,7 +114,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/itemviews/qitemselectionmodel.cpp \
 	src/gui/itemviews/qlistview.cpp \
 	src/gui/itemviews/qlistwidget.cpp \
-	src/gui/itemviews/qproxymodel.cpp \
 	src/gui/itemviews/qsortfilterproxymodel.cpp \
 	src/gui/itemviews/qstandarditemmodel.cpp \
 	src/gui/itemviews/qstringlistmodel.cpp \

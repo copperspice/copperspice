@@ -19,7 +19,6 @@ set(GUI_PUBLIC_INCLUDES
     QListView
     QListWidget
     QListWidgetItem
-    QProxyModel
     QSortFilterProxyModel
     QStandardItem
     QStandardItemEditorCreator
@@ -41,7 +40,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qabstractitemdelegate.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qabstractitemview.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qabstractproxymodel.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qcolumnview.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qcolumnview.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qdatawidgetmapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qdirmodel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qfileiconprovider.h
@@ -57,7 +56,6 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistview.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistwidgetitem.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qproxymodel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qsortfilterproxymodel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstandarditem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstandarditemeditorcreator.h
@@ -76,6 +74,7 @@ set(GUI_INCLUDES
 
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qabstractitemdelegate_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qabstractitemview_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qabstractproxymodel_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qbsptree_p.h
@@ -87,7 +86,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qheaderview_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistview_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistwidget_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qproxymodel_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstandarditemmodel_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qtableview_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qtablewidget_p.h
@@ -115,7 +113,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qitemselectionmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qlistwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qproxymodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qsortfilterproxymodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstandarditemmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstringlistmodel.cpp
