@@ -27,15 +27,38 @@
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
-#include <qwidgetitemdata_p.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qpair.h>
 #include <QtCore/qstack.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qvector.h>
 
-QT_BEGIN_NAMESPACE
 
+
+class QStandardItemData
+{
+ public:
+   inline QStandardItemData() : role(-1) {}
+   inline QStandardItemData(int r, const QVariant &v) : role(r), value(v) {}
+   int role;
+   QVariant value;
+   inline bool operator==(const QStandardItemData &other) const {
+      return role == other.role && value == other.value;
+   }
+};
+inline QDataStream &operator>>(QDataStream &in, QStandardItemData &data)
+{
+   in >> data.role;
+   in >> data.value;
+   return in;
+}
+
+inline QDataStream &operator<<(QDataStream &out, const QStandardItemData &data)
+{
+   out << data.role;
+   out << data.value;
+   return out;
+}
 class QStandardItemPrivate
 {
    Q_DECLARE_PUBLIC(QStandardItem)
@@ -53,7 +76,7 @@ class QStandardItemPrivate
 
    inline int childIndex(int row, int column) const {
       if ((row < 0) || (column < 0)
-            || (row >= rowCount()) || (column >= columnCount())) {
+         || (row >= rowCount()) || (column >= columnCount())) {
          return -1;
       }
       return (row * columnCount()) + column;
@@ -68,7 +91,7 @@ class QStandardItemPrivate
    }
    QPair<int, int> position() const;
    void setChild(int row, int column, QStandardItem *item,
-                 bool emitChanged = false);
+      bool emitChanged = false);
    inline int rowCount() const {
       return rows;
    }
@@ -98,7 +121,7 @@ class QStandardItemPrivate
 
    QStandardItemModel *model;
    QStandardItem *parent;
-   QVector<QWidgetItemData> values;
+   QVector<QStandardItemData> values;
    QVector<QStandardItem *> children;
    int rows;
    int columns;
@@ -149,7 +172,7 @@ class QStandardItemModelPrivate : public QAbstractItemModelPrivate
    void columnsRemoved(QStandardItem *parent, int column, int count);
 
    void _q_emitItemChanged(const QModelIndex &topLeft,
-                           const QModelIndex &bottomRight);
+      const QModelIndex &bottomRight);
 
    void decodeDataRecursive(QDataStream &stream, QStandardItem *item);
 
@@ -160,7 +183,7 @@ class QStandardItemModelPrivate : public QAbstractItemModelPrivate
    int sortRole;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_STANDARDITEMMODEL
 

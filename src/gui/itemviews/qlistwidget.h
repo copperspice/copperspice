@@ -23,19 +23,19 @@
 #ifndef QLISTWIDGET_H
 #define QLISTWIDGET_H
 
-#include <QtGui/qlistview.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qvector.h>
-#include <QtGui/qitemselectionmodel.h>
-#include <QtGui/qevent.h>
-
-QT_BEGIN_NAMESPACE
+#include <qlistview.h>
+#include <qvariant.h>
+#include <qvector.h>
+#include <qitemselectionmodel.h>
 
 #ifndef QT_NO_LISTWIDGET
 
+class QEvent;
 class QListWidget;
 class QListModel;
 class QWidgetItemData;
+
+class QListWidgetPrivate;
 class QListWidgetItemPrivate;
 
 class Q_GUI_EXPORT QListWidgetItem
@@ -45,8 +45,8 @@ class Q_GUI_EXPORT QListWidgetItem
 
  public:
    enum ItemType { Type = 0, UserType = 1000 };
-   explicit QListWidgetItem(QListWidget *view = 0, int type = Type);
-   explicit QListWidgetItem(const QString &text, QListWidget *view = 0, int type = Type);
+   explicit QListWidgetItem(QListWidget *view = nullptr, int type = Type);
+   explicit QListWidgetItem(const QString &text, QListWidget *view = nullptr, int type = Type);
    explicit QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = 0, int type = Type);
    QListWidgetItem(const QListWidgetItem &other);
    virtual ~QListWidgetItem();
@@ -156,10 +156,10 @@ class Q_GUI_EXPORT QListWidgetItem
 
    virtual bool operator<(const QListWidgetItem &other) const;
 
-#ifndef QT_NO_DATASTREAM
+
    virtual void read(QDataStream &in);
    virtual void write(QDataStream &out) const;
-#endif
+
    QListWidgetItem &operator=(const QListWidgetItem &other);
 
    inline int type() const {
@@ -208,12 +208,11 @@ inline void QListWidgetItem::setFont(const QFont &afont)
    setData(Qt::FontRole, afont);
 }
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QListWidgetItem &item);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QListWidgetItem &item);
-#endif
 
-class QListWidgetPrivate;
+
 
 class Q_GUI_EXPORT QListWidget : public QListView
 {
@@ -289,26 +288,34 @@ class Q_GUI_EXPORT QListWidget : public QListView
 
    GUI_CS_SLOT_1(Public, void scrollToItem(const QListWidgetItem *item, QAbstractItemView::ScrollHint hint = EnsureVisible))
    GUI_CS_SLOT_2(scrollToItem)
+
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
 
    GUI_CS_SIGNAL_1(Public, void itemPressed(QListWidgetItem *item))
    GUI_CS_SIGNAL_2(itemPressed, item)
+
    GUI_CS_SIGNAL_1(Public, void itemClicked(QListWidgetItem *item))
    GUI_CS_SIGNAL_2(itemClicked, item)
+
    GUI_CS_SIGNAL_1(Public, void itemDoubleClicked(QListWidgetItem *item))
    GUI_CS_SIGNAL_2(itemDoubleClicked, item)
+
    GUI_CS_SIGNAL_1(Public, void itemActivated(QListWidgetItem *item))
    GUI_CS_SIGNAL_2(itemActivated, item)
+
    GUI_CS_SIGNAL_1(Public, void itemEntered(QListWidgetItem *item))
    GUI_CS_SIGNAL_2(itemEntered, item)
+
    GUI_CS_SIGNAL_1(Public, void itemChanged(QListWidgetItem *item))
    GUI_CS_SIGNAL_2(itemChanged, item)
 
    GUI_CS_SIGNAL_1(Public, void currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous))
    GUI_CS_SIGNAL_2(currentItemChanged, current, previous)
+
    GUI_CS_SIGNAL_1(Public, void currentTextChanged(const QString &currentText))
    GUI_CS_SIGNAL_2(currentTextChanged, currentText)
+
    GUI_CS_SIGNAL_1(Public, void currentRowChanged(int currentRow))
    GUI_CS_SIGNAL_2(currentRowChanged, currentRow)
 
@@ -318,7 +325,8 @@ class Q_GUI_EXPORT QListWidget : public QListView
  protected:
    bool event(QEvent *e) override;
    virtual QStringList mimeTypes() const;
-   virtual QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+   virtual QMimeData *mimeData(const QList<QListWidgetItem *> &items) const;
+
 #ifndef QT_NO_DRAGANDDROP
    virtual bool dropMimeData(int index, const QMimeData *data, Qt::DropAction action);
    virtual Qt::DropActions supportedDropActions() const;
@@ -371,7 +379,7 @@ void QListWidget::cs_setCurrentRow(int row)
 
 void QListWidget::removeItemWidget(QListWidgetItem *aItem)
 {
-   setItemWidget(aItem, 0);
+   setItemWidget(aItem, nullptr);
 }
 
 void QListWidget::addItem(QListWidgetItem *aitem)
@@ -410,7 +418,5 @@ bool QListWidgetItem::isHidden() const
 
 
 #endif // QT_NO_LISTWIDGET
-
-QT_END_NAMESPACE
 
 #endif // QLISTWIDGET_H

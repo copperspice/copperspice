@@ -32,8 +32,6 @@
 
 #ifndef QT_NO_LISTWIDGET
 
-QT_BEGIN_NAMESPACE
-
 class QListModelLessThan
 {
  public:
@@ -83,11 +81,11 @@ class QListModel : public QAbstractListModel
 
    void sort(int column, Qt::SortOrder order) override;
    void ensureSorted(int column, Qt::SortOrder order, int start, int end);
-   static bool itemLessThan(const QPair<QListWidgetItem *, int> &left,const QPair<QListWidgetItem *, int> &right);
+   static bool itemLessThan(const QPair<QListWidgetItem *, int> &left, const QPair<QListWidgetItem *, int> &right);
    static bool itemGreaterThan(const QPair<QListWidgetItem *, int> &left, const QPair<QListWidgetItem *, int> &right);
 
    static QList<QListWidgetItem *>::iterator sortedInsertionIterator(const QList<QListWidgetItem *>::iterator &begin,
-      const QList<QListWidgetItem *>::iterator &end,Qt::SortOrder order, QListWidgetItem *item);
+      const QList<QListWidgetItem *>::iterator &end, Qt::SortOrder order, QListWidgetItem *item);
 
    void itemChanged(QListWidgetItem *item);
 
@@ -97,7 +95,7 @@ class QListModel : public QAbstractListModel
 
 #ifndef QT_NO_DRAGANDDROP
    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent) override;
+      int row, int column, const QModelIndex &parent) override;
    Qt::DropActions supportedDropActions() const override;
 #endif
 
@@ -108,6 +106,8 @@ class QListModel : public QAbstractListModel
 
    // A cache must be mutable if get-functions should have const modifiers
    mutable QModelIndexList cachedIndexes;
+
+   friend class QListWidget;
 };
 
 
@@ -146,7 +146,6 @@ class QListWidgetItemPrivate
    int theid;
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_LISTWIDGET
 

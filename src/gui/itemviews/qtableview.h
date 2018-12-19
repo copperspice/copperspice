@@ -38,12 +38,16 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
 
    GUI_CS_PROPERTY_READ(showGrid, showGrid)
    GUI_CS_PROPERTY_WRITE(showGrid, setShowGrid)
+
    GUI_CS_PROPERTY_READ(gridStyle, gridStyle)
    GUI_CS_PROPERTY_WRITE(gridStyle, setGridStyle)
+
    GUI_CS_PROPERTY_READ(sortingEnabled, isSortingEnabled)
    GUI_CS_PROPERTY_WRITE(sortingEnabled, setSortingEnabled)
+
    GUI_CS_PROPERTY_READ(wordWrap, wordWrap)
    GUI_CS_PROPERTY_WRITE(wordWrap, setWordWrap)
+
    GUI_CS_PROPERTY_READ(cornerButtonEnabled, isCornerButtonEnabled)
    GUI_CS_PROPERTY_WRITE(cornerButtonEnabled, setCornerButtonEnabled)
 
@@ -172,6 +176,7 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
 
    void updateGeometries() override;
 
+   QSize viewportSizeHint() const override;
    int sizeHintForRow(int row) const override;
    int sizeHintForColumn(int column) const override;
 
@@ -197,24 +202,23 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
    GUI_CS_SLOT_2(_q_selectColumn)
 
    GUI_CS_SLOT_1(Private, void _q_updateSpanInsertedRows(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+         int un_named_arg3))
    GUI_CS_SLOT_2(_q_updateSpanInsertedRows)
 
    GUI_CS_SLOT_1(Private, void _q_updateSpanInsertedColumns(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+         int un_named_arg3))
    GUI_CS_SLOT_2(_q_updateSpanInsertedColumns)
 
    GUI_CS_SLOT_1(Private, void _q_updateSpanRemovedRows(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+         int un_named_arg3))
    GUI_CS_SLOT_2(_q_updateSpanRemovedRows)
 
    GUI_CS_SLOT_1(Private, void _q_updateSpanRemovedColumns(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+         int un_named_arg3))
    GUI_CS_SLOT_2(_q_updateSpanRemovedColumns)
 };
 
 #endif // QT_NO_TABLEVIEW
 
-QT_END_NAMESPACE
 
 #endif // QTABLEVIEW_H

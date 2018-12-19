@@ -28,7 +28,7 @@
 #ifndef QT_NO_TREEWIDGET
 #include <qtreewidgetitemiterator.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QTreeModel;
 class QTreeWidgetItem;
@@ -72,7 +72,7 @@ class QTreeWidgetItemIteratorPrivate
    QTreeWidgetItemIterator *q_ptr;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_TREEWIDGET
 

@@ -27,27 +27,22 @@
 #include <QtGui/qbrush.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qicon.h>
-
-#ifndef QT_NO_DATASTREAM
-#include <QtCore/qdatastream.h>
-#endif
-
-QT_BEGIN_NAMESPACE
+#include <qdatastream.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
+
+#include <qcontainerfwd.h>
 
 class QStandardItemModel;
 class QStandardItemPrivate;
 class QStandardItemModelPrivate;
-
-template <class T> class QList;
 
 class Q_GUI_EXPORT QStandardItem
 {
 
  public:
    QStandardItem();
-   QStandardItem(const QString &text);
+   explicit QStandardItem(const QString &text);
    QStandardItem(const QIcon &icon, const QString &text);
    explicit QStandardItem(int rows, int columns = 1);
    virtual ~QStandardItem();
@@ -149,10 +144,14 @@ class Q_GUI_EXPORT QStandardItem
    }
    void setCheckable(bool checkable);
 
-   inline bool isTristate() const {
-      return (flags() & Qt::ItemIsTristate) != 0;
+   inline bool isAutoTristate() const {
+      return (flags() & Qt::ItemIsAutoTristate) != 0;
    }
-   void setTristate(bool tristate);
+   void setAutoTristate(bool tristate);
+   inline bool isUserTristate() const {
+      return (flags() & Qt::ItemIsUserTristate) != 0;
+   }
+   void setUserTristate(bool tristate);
 
 #ifndef QT_NO_DRAGANDDROP
    inline bool isDragEnabled() const {
@@ -343,6 +342,7 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    QStandardItemModel(int rows, int columns, QObject *parent = nullptr);
    ~QStandardItemModel();
 
+   void setItemRoleNames(const QMultiHash<int, QString> &roleNames);
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
    QModelIndex parent(const QModelIndex &child) const override;
 
@@ -354,10 +354,10 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
    QVariant headerData(int section, Qt::Orientation orientation,
-                  int role = Qt::DisplayRole) const override;
+      int role = Qt::DisplayRole) const override;
 
    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
-                  int role = Qt::EditRole) override;
+      int role = Qt::EditRole) override;
 
    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
@@ -466,13 +466,13 @@ inline bool QStandardItemModel::insertColumn(int acolumn, const QModelIndex &apa
    return QAbstractItemModel::insertColumn(acolumn, aparent);
 }
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QStandardItem &item);
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QStandardItem &item);
-#endif
+
 
 #endif // QT_NO_STANDARDITEMMODEL
 
-QT_END_NAMESPACE
+
 
 #endif //QSTANDARDITEMMODEL_H

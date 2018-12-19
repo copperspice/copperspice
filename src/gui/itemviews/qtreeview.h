@@ -38,6 +38,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 
    GUI_CS_PROPERTY_READ(autoExpandDelay, autoExpandDelay)
    GUI_CS_PROPERTY_WRITE(autoExpandDelay, setAutoExpandDelay)
+
    GUI_CS_PROPERTY_READ(indentation, indentation)
    GUI_CS_PROPERTY_WRITE(indentation, setIndentation)
    GUI_CS_PROPERTY_READ(rootIsDecorated, rootIsDecorated)
@@ -56,6 +57,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    GUI_CS_PROPERTY_WRITE(wordWrap, setWordWrap)
    GUI_CS_PROPERTY_READ(headerHidden, isHeaderHidden)
    GUI_CS_PROPERTY_WRITE(headerHidden, setHeaderHidden)
+
    GUI_CS_PROPERTY_READ(expandsOnDoubleClick, expandsOnDoubleClick)
    GUI_CS_PROPERTY_WRITE(expandsOnDoubleClick, setExpandsOnDoubleClick)
 
@@ -75,6 +77,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 
    int indentation() const;
    void setIndentation(int i);
+   void resetIndentation();
 
    bool rootIsDecorated() const;
    void setRootIsDecorated(bool show);
@@ -120,6 +123,8 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    void setWordWrap(bool on);
    bool wordWrap() const;
 
+   void setTreePosition(int logicalIndex);
+   int treePosition() const;
    void keyboardSearch(const QString &search) override;
 
    QRect visualRect(const QModelIndex &index) const override;
@@ -133,7 +138,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 
    void sortByColumn(int column, Qt::SortOrder order);
 
-   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) override;
+   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) override;
    void selectAll() override;
 
    GUI_CS_SIGNAL_1(Public, void expanded(const QModelIndex &index))
@@ -172,12 +177,16 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
  protected :
    GUI_CS_SLOT_1(Protected, void columnResized(int column, int oldSize, int newSize))
    GUI_CS_SLOT_2(columnResized)
+
    GUI_CS_SLOT_1(Protected, void columnCountChanged(int oldCount, int newCount))
    GUI_CS_SLOT_2(columnCountChanged)
+
    GUI_CS_SLOT_1(Protected, void columnMoved())
    GUI_CS_SLOT_2(columnMoved)
+
    GUI_CS_SLOT_1(Protected, void reexpand())
    GUI_CS_SLOT_2(reexpand)
+
    GUI_CS_SLOT_1(Protected, void rowsRemoved(const QModelIndex &parent, int first, int last))
    GUI_CS_SLOT_2(rowsRemoved)
 
@@ -215,6 +224,8 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 
    void updateGeometries() override;
 
+   QSize viewportSizeHint() const override;
+
    int sizeHintForColumn(int column) const override;
    int indexRowSizeHint(const QModelIndex &index) const;
    int rowHeight(const QModelIndex &index) const;
@@ -226,10 +237,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
  private:
-   friend class QAccessibleItemView;
-   friend class QAccessibleTable2;
-   friend class QAccessibleTree;
-   friend class QAccessibleTable2Cell;
+
    int visualIndex(const QModelIndex &index) const;
 
    Q_DECLARE_PRIVATE(QTreeView)
@@ -246,10 +254,12 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    GUI_CS_SLOT_1(Private, void _q_sortIndicatorChanged(int column, Qt::SortOrder order))
    GUI_CS_SLOT_2(_q_sortIndicatorChanged)
 
+   friend class QAccessibleTable;
+   friend class QAccessibleTree;
+   friend class QAccessibleTableCell;
 };
 
 #endif // QT_NO_TREEVIEW
 
-QT_END_NAMESPACE
 
-#endif // QTREEVIEW_H
+#endif

@@ -47,11 +47,14 @@ class Q_GUI_EXPORT QTreeWidgetItem
 
  public:
    enum ItemType { Type = 0, UserType = 1000 };
+
    explicit QTreeWidgetItem(int type = Type);
-   QTreeWidgetItem(const QStringList &strings, int type = Type);
+   explicit QTreeWidgetItem(const QStringList &strings, int type = Type);
    explicit QTreeWidgetItem(QTreeWidget *view, int type = Type);
+
    QTreeWidgetItem(QTreeWidget *view, const QStringList &strings, int type = Type);
    QTreeWidgetItem(QTreeWidget *view, QTreeWidgetItem *after, int type = Type);
+
    explicit QTreeWidgetItem(QTreeWidgetItem *parent, int type = Type);
    QTreeWidgetItem(QTreeWidgetItem *parent, const QStringList &strings, int type = Type);
    QTreeWidgetItem(QTreeWidgetItem *parent, QTreeWidgetItem *after, int type = Type);
@@ -187,7 +190,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
 
    inline QTreeWidgetItem *child(int index) const {
       if (index < 0 || index >= children.size()) {
-         return 0;
+         return nullptr;
       }
       executePendingSort();
       return children.at(index);
@@ -196,6 +199,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    inline int childCount() const {
       return children.count();
    }
+
    inline int columnCount() const {
       return values.count();
    }
@@ -228,7 +232,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
 
    int rtti;
    // One item has a vector of column entries. Each column has a vector of (role, value) pairs.
-   QVector< QVector<QWidgetItemData> > values;
+   QVector< QVector<QWidgetItemData>> values;
    QTreeWidget *view;
    QTreeWidgetItemPrivate *d;
    QTreeWidgetItem *par;
@@ -278,10 +282,10 @@ inline int QTreeWidgetItem::indexOfChild(QTreeWidgetItem *achild) const
    return children.indexOf(achild);
 }
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QTreeWidgetItem &item);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QTreeWidgetItem &item);
-#endif
+
 
 class QTreeWidgetPrivate;
 
@@ -291,6 +295,7 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
 
    GUI_CS_PROPERTY_READ(columnCount, columnCount)
    GUI_CS_PROPERTY_WRITE(columnCount, setColumnCount)
+
    GUI_CS_PROPERTY_READ(topLevelItemCount, topLevelItemCount)
 
    friend class QTreeModel;
@@ -309,7 +314,6 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
    void insertTopLevelItem(int index, QTreeWidgetItem *item);
    void addTopLevelItem(QTreeWidgetItem *item);
    QTreeWidgetItem *takeTopLevelItem(int index);
-   int indexOfTopLevelItem(QTreeWidgetItem *item); // ### Qt5/remove me
    int indexOfTopLevelItem(QTreeWidgetItem *item) const;
 
    void insertTopLevelItems(int index, const QList<QTreeWidgetItem *> &items);
@@ -332,8 +336,6 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
 
    int sortColumn() const;
    void sortItems(int column, Qt::SortOrder order);
-   void setSortingEnabled(bool enable);
-   bool isSortingEnabled() const;
 
    void editItem(QTreeWidgetItem *item, int column = 0);
    void openPersistentEditor(QTreeWidgetItem *item, int column = 0);
@@ -347,7 +349,7 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
    void setItemSelected(const QTreeWidgetItem *item, bool select);
    QList<QTreeWidgetItem *> selectedItems() const;
    QList<QTreeWidgetItem *> findItems(const QString &text, Qt::MatchFlags flags,
-                                      int column = 0) const;
+      int column = 0) const;
 
    bool isItemHidden(const QTreeWidgetItem *item) const;
    void setItemHidden(const QTreeWidgetItem *item, bool hide);
@@ -365,42 +367,55 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
 
  public :
    GUI_CS_SLOT_1(Public, void scrollToItem(const QTreeWidgetItem *item,
-                                           QAbstractItemView::ScrollHint hint = EnsureVisible))
+         QAbstractItemView::ScrollHint hint = EnsureVisible))
    GUI_CS_SLOT_2(scrollToItem)
+
    GUI_CS_SLOT_1(Public, void expandItem(const QTreeWidgetItem *item))
    GUI_CS_SLOT_2(expandItem)
+
    GUI_CS_SLOT_1(Public, void collapseItem(const QTreeWidgetItem *item))
    GUI_CS_SLOT_2(collapseItem)
+
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
 
    GUI_CS_SIGNAL_1(Public, void itemPressed(QTreeWidgetItem *item, int column))
    GUI_CS_SIGNAL_2(itemPressed, item, column)
+
    GUI_CS_SIGNAL_1(Public, void itemClicked(QTreeWidgetItem *item, int column))
    GUI_CS_SIGNAL_2(itemClicked, item, column)
+
    GUI_CS_SIGNAL_1(Public, void itemDoubleClicked(QTreeWidgetItem *item, int column))
    GUI_CS_SIGNAL_2(itemDoubleClicked, item, column)
+
    GUI_CS_SIGNAL_1(Public, void itemActivated(QTreeWidgetItem *item, int column))
    GUI_CS_SIGNAL_2(itemActivated, item, column)
+
    GUI_CS_SIGNAL_1(Public, void itemEntered(QTreeWidgetItem *item, int column))
    GUI_CS_SIGNAL_2(itemEntered, item, column)
+
    GUI_CS_SIGNAL_1(Public, void itemChanged(QTreeWidgetItem *item, int column))
    GUI_CS_SIGNAL_2(itemChanged, item, column)
+
    GUI_CS_SIGNAL_1(Public, void itemExpanded(QTreeWidgetItem *item))
    GUI_CS_SIGNAL_2(itemExpanded, item)
+
    GUI_CS_SIGNAL_1(Public, void itemCollapsed(QTreeWidgetItem *item))
    GUI_CS_SIGNAL_2(itemCollapsed, item)
+
    GUI_CS_SIGNAL_1(Public, void currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous))
    GUI_CS_SIGNAL_2(currentItemChanged, current, previous)
+
    GUI_CS_SIGNAL_1(Public, void itemSelectionChanged())
    GUI_CS_SIGNAL_2(itemSelectionChanged)
 
  protected:
    bool event(QEvent *e) override;
    virtual QStringList mimeTypes() const;
-   virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
+   virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> &items) const;
    virtual bool dropMimeData(QTreeWidgetItem *parent, int index,
-                             const QMimeData *data, Qt::DropAction action);
+      const QMimeData *data, Qt::DropAction action);
+
    virtual Qt::DropActions supportedDropActions() const;
    QList<QTreeWidgetItem *> items(const QMimeData *data) const;
 
@@ -454,7 +469,7 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
 
 inline void QTreeWidget::removeItemWidget(QTreeWidgetItem *item, int column)
 {
-   setItemWidget(item, column, 0);
+   setItemWidget(item, column, nullptr);
 }
 
 inline QTreeWidgetItem *QTreeWidget::itemAt(int ax, int ay) const
@@ -526,7 +541,5 @@ inline bool QTreeWidgetItem::isDisabled() const
 }
 
 #endif // QT_NO_TREEWIDGET
-
-QT_END_NAMESPACE
 
 #endif // QTREEWIDGET_H

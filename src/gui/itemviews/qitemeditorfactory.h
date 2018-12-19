@@ -28,7 +28,7 @@
 #include <QtCore/qhash.h>
 #include <QtCore/qvariant.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -37,7 +37,7 @@ class QWidget;
 class Q_GUI_EXPORT QItemEditorCreatorBase
 {
  public:
-   virtual ~QItemEditorCreatorBase() {}
+   virtual ~QItemEditorCreatorBase();
 
    virtual QWidget *createWidget(QWidget *parent) const = 0;
    virtual QString valuePropertyName() const = 0;
@@ -47,7 +47,7 @@ template <class T>
 class QItemEditorCreator : public QItemEditorCreatorBase
 {
  public:
-   inline QItemEditorCreator(const QString &valuePropertyName);
+   inline explicit QItemEditorCreator(const QString &valuePropertyName);
 
    inline QWidget *createWidget(QWidget *parent) const override {
       return new T(parent);
@@ -82,8 +82,7 @@ class QStandardItemEditorCreator: public QItemEditorCreatorBase
 };
 
 
-template <class T>
-QItemEditorCreator<T>::QItemEditorCreator(const QString &avaluePropertyName)
+template <class T> QItemEditorCreator<T>::QItemEditorCreator(const QString &avaluePropertyName)
    : propertyName(avaluePropertyName) {}
 
 class Q_GUI_EXPORT QItemEditorFactory
@@ -106,6 +105,6 @@ class Q_GUI_EXPORT QItemEditorFactory
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
+
 
 #endif // QITEMEDITORFACTORY_H

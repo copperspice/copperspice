@@ -27,9 +27,7 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qvector.h>
 
-//#include <QtGui/qitemselectionmodel.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_TABLEWIDGET
 
@@ -77,7 +75,7 @@ class Q_GUI_EXPORT QTableWidgetItem
 
  public:
    enum ItemType { Type = 0, UserType = 1000 };
-   QTableWidgetItem(int type = Type);
+   explicit QTableWidgetItem(int type = Type);
    explicit QTableWidgetItem(const QString &text, int type = Type);
    explicit QTableWidgetItem(const QIcon &icon, const QString &text, int type = Type);
    QTableWidgetItem(const QTableWidgetItem &other);
@@ -240,10 +238,10 @@ inline void QTableWidgetItem::setFont(const QFont &afont)
    setData(Qt::FontRole, afont);
 }
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QTableWidgetItem &item);
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QTableWidgetItem &item);
-#endif
+
 
 class QTableWidgetPrivate;
 
@@ -253,6 +251,7 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
 
    GUI_CS_PROPERTY_READ(rowCount, rowCount)
    GUI_CS_PROPERTY_WRITE(rowCount, setRowCount)
+
    GUI_CS_PROPERTY_READ(columnCount, columnCount)
    GUI_CS_PROPERTY_WRITE(columnCount, setColumnCount)
 
@@ -311,7 +310,7 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    void setRangeSelected(const QTableWidgetSelectionRange &range, bool select);
 
    QList<QTableWidgetSelectionRange> selectedRanges() const;
-   QList<QTableWidgetItem *> selectedItems();
+   QList<QTableWidgetItem *> selectedItems() const;
    QList<QTableWidgetItem *> findItems(const QString &text, Qt::MatchFlags flags) const;
 
    int visualRow(int logicalRow) const;
@@ -326,16 +325,22 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
 
    GUI_CS_SLOT_1(Public, void scrollToItem(const QTableWidgetItem *item, QAbstractItemView::ScrollHint hint = EnsureVisible))
    GUI_CS_SLOT_2(scrollToItem)
+
    GUI_CS_SLOT_1(Public, void insertRow(int row))
    GUI_CS_SLOT_2(insertRow)
+
    GUI_CS_SLOT_1(Public, void insertColumn(int column))
    GUI_CS_SLOT_2(insertColumn)
+
    GUI_CS_SLOT_1(Public, void removeRow(int row))
    GUI_CS_SLOT_2(removeRow)
+
    GUI_CS_SLOT_1(Public, void removeColumn(int column))
    GUI_CS_SLOT_2(removeColumn)
+
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
+
    GUI_CS_SLOT_1(Public, void clearContents())
    GUI_CS_SLOT_2(clearContents)
 
@@ -348,13 +353,16 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
 
    GUI_CS_SIGNAL_1(Public, void itemActivated(QTableWidgetItem *item))
    GUI_CS_SIGNAL_2(itemActivated, item)
+
    GUI_CS_SIGNAL_1(Public, void itemEntered(QTableWidgetItem *item))
    GUI_CS_SIGNAL_2(itemEntered, item)
+
    GUI_CS_SIGNAL_1(Public, void itemChanged(QTableWidgetItem *item))
    GUI_CS_SIGNAL_2(itemChanged, item)
 
    GUI_CS_SIGNAL_1(Public, void currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous))
    GUI_CS_SIGNAL_2(currentItemChanged, current, previous)
+
    GUI_CS_SIGNAL_1(Public, void itemSelectionChanged())
    GUI_CS_SIGNAL_2(itemSelectionChanged)
 
@@ -378,7 +386,8 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
  protected:
    bool event(QEvent *e) override;
    virtual QStringList mimeTypes() const;
-   virtual QMimeData *mimeData(const QList<QTableWidgetItem *> items) const;
+   virtual QMimeData *mimeData(const QList<QTableWidgetItem *> &items) const;
+
    virtual bool dropMimeData(int row, int column, const QMimeData *data, Qt::DropAction action);
    virtual Qt::DropActions supportedDropActions() const;
    QList<QTableWidgetItem *> items(const QMimeData *data) const;
@@ -423,7 +432,7 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
 
 inline void QTableWidget::removeCellWidget(int arow, int acolumn)
 {
-   setCellWidget(arow, acolumn, 0);
+   setCellWidget(arow, acolumn, nullptr);
 }
 
 inline QTableWidgetItem *QTableWidget::itemAt(int ax, int ay) const
@@ -455,6 +464,6 @@ inline bool QTableWidgetItem::isSelected() const
 
 #endif // QT_NO_TABLEWIDGET
 
-QT_END_NAMESPACE
+
 
 #endif // QTABLEWIDGET_H

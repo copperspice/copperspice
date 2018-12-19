@@ -25,7 +25,7 @@
 
 #include <qdatastream.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QWidgetItemData
 {
@@ -41,7 +41,7 @@ class QWidgetItemData
    }
 };
 
-#ifndef QT_NO_DATASTREAM
+
 
 inline QDataStream &operator>>(QDataStream &in, QWidgetItemData &data)
 {
@@ -57,8 +57,6 @@ inline QDataStream &operator<<(QDataStream &out, const QWidgetItemData &data)
    return out;
 }
 
-#endif // QT_NO_DATASTREAM
 
-QT_END_NAMESPACE
 
-#endif // QWIDGETITEMDATA_P_H
+#endif

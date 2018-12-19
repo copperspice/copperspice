@@ -199,10 +199,6 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    GUI_CS_SIGNAL_1(Public, void sectionHandleDoubleClicked(int logicalIndex))
    GUI_CS_SIGNAL_2(sectionHandleDoubleClicked, logicalIndex)
 
-   // broom - may be gone
-   //   GUI_CS_SIGNAL_1(Public, void sectionAutoResize(int logicalIndex, QHeaderView::ResizeMode mode))
-   //   GUI_CS_SIGNAL_2(sectionAutoResize, logicalIndex, mode)
-
    GUI_CS_SIGNAL_1(Public, void geometriesChanged())
    GUI_CS_SIGNAL_2(geometriesChanged)
 

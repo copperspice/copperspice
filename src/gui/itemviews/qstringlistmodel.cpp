@@ -24,13 +24,16 @@
     A simple model that uses a QStringList as its data source.
 */
 
-#include <algorithm>
+
 
 #include <qstringlistmodel.h>
+#include <qvector.h>
+
+#include <algorithm>
 
 #ifndef QT_NO_STRINGLISTMODEL
 
-QT_BEGIN_NAMESPACE
+
 
 QStringListModel::QStringListModel(QObject *parent)
    : QAbstractListModel(parent)
@@ -50,6 +53,16 @@ int QStringListModel::rowCount(const QModelIndex &parent) const
 
    return lst.count();
 }
+
+QModelIndex QStringListModel::sibling(int row, int column, const QModelIndex &idx) const
+{
+   if (!idx.isValid() || column != 0 || row >= lst.count()) {
+      return QModelIndex();
+   }
+
+   return createIndex(row, 0);
+}
+
 
 /*!
     Returns data for the specified \a role, from the item with the
@@ -84,10 +97,10 @@ QVariant QStringListModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags QStringListModel::flags(const QModelIndex &index) const
 {
    if (!index.isValid()) {
-      return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
+      return QAbstractListModel::flags(index) | Qt::ItemIsDropEnabled;
    }
 
-   return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+   return QAbstractListModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
 /*!
@@ -102,9 +115,13 @@ Qt::ItemFlags QStringListModel::flags(const QModelIndex &index) const
 bool QStringListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
    if (index.row() >= 0 && index.row() < lst.size()
-         && (role == Qt::EditRole || role == Qt::DisplayRole)) {
+      && (role == Qt::EditRole || role == Qt::DisplayRole)) {
       lst.replace(index.row(), value.toString());
-      emit dataChanged(index, index);
+      QVector<int> roles;
+      roles.reserve(2);
+      roles.append(Qt::DisplayRole);
+      roles.append(Qt::EditRole);
+      emit dataChanged(index, index, roles);
       return true;
    }
    return false;
@@ -181,10 +198,12 @@ static bool decendingLessThan(const QPair<QString, int> &s1, const QPair<QString
 */
 void QStringListModel::sort(int, Qt::SortOrder order)
 {
-   emit layoutAboutToBeChanged();
+   emit layoutAboutToBeChanged(QList<QPersistentModelIndex>(), VerticalSortHint);
 
-   QList<QPair<QString, int> > list;
-   for (int i = 0; i < lst.count(); ++i) {
+   QList<QPair<QString, int>> list;
+   const int lstCount = lst.count();
+
+   for (int i = 0; i < lstCount; ++i) {
       list.append(QPair<QString, int>(lst.at(i), i));
    }
 
@@ -203,12 +222,14 @@ void QStringListModel::sort(int, Qt::SortOrder order)
 
    QModelIndexList oldList = persistentIndexList();
    QModelIndexList newList;
-   for (int i = 0; i < oldList.count(); ++i) {
+   const int numOldIndexes = oldList.count();
+
+   for (int i = 0; i < numOldIndexes; ++i) {
       newList.append(index(forwarding.at(oldList.at(i).row()), 0));
    }
    changePersistentIndexList(oldList, newList);
 
-   emit layoutChanged();
+   emit layoutChanged(QList<QPersistentModelIndex>(), VerticalSortHint);
 }
 
 /*!
@@ -227,9 +248,9 @@ QStringList QStringListModel::stringList() const
 */
 void QStringListModel::setStringList(const QStringList &strings)
 {
-   emit beginResetModel();
+   beginResetModel();
    lst = strings;
-   emit endResetModel();
+   endResetModel();
 }
 
 /*!
@@ -240,6 +261,6 @@ Qt::DropActions QStringListModel::supportedDropActions() const
    return QAbstractItemModel::supportedDropActions() | Qt::MoveAction;
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_STRINGLISTMODEL

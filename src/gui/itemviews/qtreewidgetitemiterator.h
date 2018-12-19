@@ -23,10 +23,10 @@
 #ifndef QTREEWIDGETITEMITERATOR_H
 #define QTREEWIDGETITEMITERATOR_H
 
-#include <cstddef>
-
 #include <qglobal.h>
 #include <qscopedpointer.h>
+
+#include <cstddef>
 
 #ifndef QT_NO_TREEWIDGET
 
@@ -37,6 +37,9 @@ class QTreeWidgetItemIteratorPrivate;
 
 class Q_GUI_EXPORT QTreeWidgetItemIterator
 {
+
+   Q_DECLARE_PRIVATE(QTreeWidgetItemIterator)
+
  public:
    enum IteratorFlag {
       All           = 0x00000000,
@@ -89,8 +92,6 @@ class Q_GUI_EXPORT QTreeWidgetItemIterator
    IteratorFlags flags;
 
    friend class QTreeModel;
-   Q_DECLARE_PRIVATE(QTreeWidgetItemIterator)
-
 };
 
 inline const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator++(int)

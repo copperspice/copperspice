@@ -29,8 +29,6 @@
 #include <QtCore/qvariant.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ITEMVIEWS
 
 class QStyledItemDelegatePrivate;
@@ -63,17 +61,14 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
    virtual QString displayText(const QVariant &value, const QLocale &locale) const;
 
  protected:
-   virtual void initStyleOption(QStyleOptionViewItem *option,const QModelIndex &index) const;
+   virtual void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const;
 
    bool eventFilter(QObject *object, QEvent *event) override;
-   bool editorEvent(QEvent *event, QAbstractItemModel *model,const QStyleOptionViewItem &option, const QModelIndex &index) override;
+   bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
  private:
    Q_DECLARE_PRIVATE(QStyledItemDelegate)
    Q_DISABLE_COPY(QStyledItemDelegate)
-
-   GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget *un_named_arg1))
-   GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)
 
  protected:
    QScopedPointer<QStyledItemDelegatePrivate> d_ptr;
@@ -82,6 +77,6 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
+
 
 #endif // QSTYLEDITEMDELEGATE_H

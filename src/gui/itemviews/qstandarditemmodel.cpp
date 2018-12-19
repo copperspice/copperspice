@@ -20,8 +20,6 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qstandarditemmodel.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
@@ -38,7 +36,7 @@
 #include <qstandarditemmodel_p.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
 class QStandardItemModelLessThan
 {
@@ -58,7 +56,7 @@ class QStandardItemModelGreaterThan
    }
 
    inline bool operator()(const QPair<QStandardItem *, int> &l,
-                          const QPair<QStandardItem *, int> &r) const {
+      const QPair<QStandardItem *, int> &r) const {
       return *(r.first) < *(l.first);
    }
 };
@@ -102,12 +100,12 @@ QPair<int, int> QStandardItemPrivate::position() const
   \internal
 */
 void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
-                                    bool emitChanged)
+   bool emitChanged)
 {
    Q_Q(QStandardItem);
    if (item == q) {
       qWarning("QStandardItem::setChild: Can't make an item a child of itself %p",
-               item);
+         item);
       return;
    }
    if ((row < 0) || (column < 0)) {
@@ -119,29 +117,41 @@ void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
    if (columns <= column) {
       q->setColumnCount(column + 1);
    }
+
    int index = childIndex(row, column);
    Q_ASSERT(index != -1);
+
    QStandardItem *oldItem = children.at(index);
    if (item == oldItem) {
       return;
+   }
+
+   if (model && emitChanged) {
+      emit model->layoutAboutToBeChanged();
    }
    if (item) {
       if (item->d_func()->parent == 0) {
          item->d_func()->setParentAndModel(q, model);
       } else {
          qWarning("QStandardItem::setChild: Ignoring duplicate insertion of item %p",
-                  item);
+            item);
          return;
       }
    }
    if (oldItem) {
       oldItem->d_func()->setModel(0);
    }
+
    delete oldItem;
    children.replace(index, item);
+   if (model && emitChanged) {
+      emit model->layoutChanged();
+   }
+
    if (emitChanged && model) {
       model->d_func()->itemChanged(item);
    }
+
 }
 
 
@@ -178,7 +188,7 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
    Q_Q(QStandardItem);
 
    // build the vector of new values
-   QVector<QWidgetItemData> newValues;
+   QVector<QStandardItemData> newValues;
    QMap<int, QVariant>::const_iterator it;
 
    for (it = roles.begin(); it != roles.end(); ++it) {
@@ -188,7 +198,7 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
          int role = it.key();
          role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
 
-         QWidgetItemData wid(role, it.value());
+         QStandardItemData wid(role, it.value());
          newValues.append(wid);
       }
    }
@@ -208,7 +218,8 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
 const QMap<int, QVariant> QStandardItemPrivate::itemData() const
 {
    QMap<int, QVariant> result;
-   QVector<QWidgetItemData>::const_iterator it;
+   QVector<QStandardItemData>::const_iterator it;
+
    for (it = values.begin(); it != values.end(); ++it) {
       result.insert((*it).role, (*it).value);
    }
@@ -225,7 +236,7 @@ void QStandardItemPrivate::sortChildren(int column, Qt::SortOrder order)
       return;
    }
 
-   QVector<QPair<QStandardItem *, int> > sortable;
+   QVector<QPair<QStandardItem *, int>> sortable;
    QVector<int> unsortable;
 
    sortable.reserve(rowCount());
@@ -341,15 +352,15 @@ QStandardItemModelPrivate::~QStandardItemModelPrivate()
 void QStandardItemModelPrivate::init()
 {
    Q_Q(QStandardItemModel);
-   QObject::connect(q, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                    q, SLOT(_q_emitItemChanged(const QModelIndex &, const QModelIndex &)));
+   QObject::connect(q, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
+      q, SLOT(_q_emitItemChanged(QModelIndex, QModelIndex)));
 }
 
 /*!
     \internal
 */
 void QStandardItemModelPrivate::_q_emitItemChanged(const QModelIndex &topLeft,
-      const QModelIndex &bottomRight)
+   const QModelIndex &bottomRight)
 {
    Q_Q(QStandardItemModel);
    QModelIndex parent = topLeft.parent();
@@ -431,7 +442,7 @@ bool QStandardItemPrivate::insertRows(int row, int count, const QList<QStandardI
                item->d_func()->setParentAndModel(q, model);
             } else {
                qWarning("QStandardItem::insertRows: Ignoring duplicate insertion of item %p",
-                        item);
+                  item);
                item = 0;
             }
          }
@@ -477,7 +488,7 @@ bool QStandardItemPrivate::insertColumns(int column, int count, const QList<QSta
                item->d_func()->setParentAndModel(q, model);
             } else {
                qWarning("QStandardItem::insertColumns: Ignoring duplicate insertion of item %p",
-                        item);
+                  item);
                item = 0;
             }
          }
@@ -521,7 +532,7 @@ void QStandardItemModelPrivate::itemChanged(QStandardItem *item)
   \internal
 */
 void QStandardItemModelPrivate::rowsAboutToBeInserted(QStandardItem *parent,
-      int start, int end)
+   int start, int end)
 {
    Q_Q(QStandardItemModel);
    QModelIndex index = q->indexFromItem(parent);
@@ -532,7 +543,7 @@ void QStandardItemModelPrivate::rowsAboutToBeInserted(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::columnsAboutToBeInserted(QStandardItem *parent,
-      int start, int end)
+   int start, int end)
 {
    Q_Q(QStandardItemModel);
    QModelIndex index = q->indexFromItem(parent);
@@ -543,7 +554,7 @@ void QStandardItemModelPrivate::columnsAboutToBeInserted(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::rowsAboutToBeRemoved(QStandardItem *parent,
-      int start, int end)
+   int start, int end)
 {
    Q_Q(QStandardItemModel);
    QModelIndex index = q->indexFromItem(parent);
@@ -554,7 +565,7 @@ void QStandardItemModelPrivate::rowsAboutToBeRemoved(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::columnsAboutToBeRemoved(QStandardItem *parent,
-      int start, int end)
+   int start, int end)
 {
    Q_Q(QStandardItemModel);
    QModelIndex index = q->indexFromItem(parent);
@@ -565,7 +576,7 @@ void QStandardItemModelPrivate::columnsAboutToBeRemoved(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::rowsInserted(QStandardItem *parent,
-      int row, int count)
+   int row, int count)
 {
    Q_Q(QStandardItemModel);
    if (parent == root.data()) {
@@ -578,7 +589,7 @@ void QStandardItemModelPrivate::rowsInserted(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::columnsInserted(QStandardItem *parent,
-      int column, int count)
+   int column, int count)
 {
    Q_Q(QStandardItemModel);
    if (parent == root.data()) {
@@ -591,7 +602,7 @@ void QStandardItemModelPrivate::columnsInserted(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::rowsRemoved(QStandardItem *parent,
-      int row, int count)
+   int row, int count)
 {
    Q_Q(QStandardItemModel);
    if (parent == root.data()) {
@@ -611,7 +622,7 @@ void QStandardItemModelPrivate::rowsRemoved(QStandardItem *parent,
   \internal
 */
 void QStandardItemModelPrivate::columnsRemoved(QStandardItem *parent,
-      int column, int count)
+   int column, int count)
 {
    Q_Q(QStandardItemModel);
    if (parent == root.data()) {
@@ -627,90 +638,6 @@ void QStandardItemModelPrivate::columnsRemoved(QStandardItem *parent,
    q->endRemoveColumns();
 }
 
-/*!
-    \class QStandardItem
-    \brief The QStandardItem class provides an item for use with the
-    QStandardItemModel class.
-    \since 4.2
-    \ingroup model-view
-
-    Items usually contain text, icons, or checkboxes.
-
-    Each item can have its own background brush which is set with the
-    setBackground() function. The current background brush can be found with
-    background().  The text label for each item can be rendered with its own
-    font and brush. These are specified with the setFont() and setForeground()
-    functions, and read with font() and foreground().
-
-    By default, items are enabled, editable, selectable, checkable, and can be
-    used both as the source of a drag and drop operation and as a drop target.
-    Each item's flags can be changed by calling setFlags(). Checkable items
-    can be checked and unchecked with the setCheckState() function. The
-    corresponding checkState() function indicates whether the item is
-    currently checked.
-
-    You can store application-specific data in an item by calling setData().
-
-    Each item can have a two-dimensional table of child items. This makes it
-    possible to build hierarchies of items. The typical hierarchy is the tree,
-    in which case the child table is a table with a single column (a list).
-
-    The dimensions of the child table can be set with setRowCount() and
-    setColumnCount(). Items can be positioned in the child table with
-    setChild(). Get a pointer to a child item with child(). New rows and
-    columns of children can also be inserted with insertRow() and
-    insertColumn(), or appended with appendRow() and appendColumn(). When
-    using the append and insert functions, the dimensions of the child table
-    will grow as needed.
-
-    An existing row of children can be removed with removeRow() or takeRow();
-    correspondingly, a column can be removed with removeColumn() or
-    takeColumn().
-
-    An item's children can be sorted by calling sortChildren().
-
-    \section1 Subclassing
-
-    When subclassing QStandardItem to provide custom items, it is possible to
-    define new types for them so that they can be distinguished from the base
-    class. The type() function should be reimplemented to return a new type
-    value equal to or greater than \l UserType.
-
-    Reimplement data() and setData() if you want to perform custom handling of
-    data queries and/or control how an item's data is represented.
-
-    Reimplement clone() if you want QStandardItemModel to be able to create
-    instances of your custom item class on demand (see
-    QStandardItemModel::setItemPrototype()).
-
-    Reimplement read() and write() if you want to control how items are
-    represented in their serialized form.
-
-    Reimplement \l{operator<()} if you want to control the semantics of item
-    comparison. \l{operator<()} determines the sorted order when sorting items
-    with sortChildren() or with QStandardItemModel::sort().
-
-    \sa QStandardItemModel, {Item View Convenience Classes}, {Model/View Programming}
-*/
-
-/*!
-    \enum QStandardItem::ItemType
-
-    This enum describes the types that are used to describe standard items.
-
-    \value Type     The default type for standard items.
-    \value UserType The minimum value for custom types. Values below UserType are
-                    reserved by Qt.
-
-    You can define new user types in QStandardItem subclasses to ensure that
-    custom items are treated specially; for example, when items are sorted.
-
-    \sa type()
-*/
-
-/*!
-    Constructs an item.
-*/
 QStandardItem::QStandardItem()
    : d_ptr(new QStandardItemPrivate)
 {
@@ -829,7 +756,8 @@ void QStandardItem::setData(const QVariant &value, int role)
 {
    Q_D(QStandardItem);
    role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
-   QVector<QWidgetItemData>::iterator it;
+   QVector<QStandardItemData>::iterator it;
+
    for (it = d->values.begin(); it != d->values.end(); ++it) {
       if ((*it).role == role) {
          if (value.isValid()) {
@@ -846,7 +774,8 @@ void QStandardItem::setData(const QVariant &value, int role)
          return;
       }
    }
-   d->values.append(QWidgetItemData(role, value));
+
+   d->values.append(QStandardItemData(role, value));
    if (d->model) {
       d->model->d_func()->itemChanged(this);
    }
@@ -863,7 +792,8 @@ QVariant QStandardItem::data(int role) const
 {
    Q_D(const QStandardItem);
    role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
-   QVector<QWidgetItemData>::const_iterator it;
+   QVector<QStandardItemData>::const_iterator it;
+
    for (it = d->values.begin(); it != d->values.end(); ++it) {
       if ((*it).role == role) {
          return (*it).value;
@@ -920,306 +850,24 @@ Qt::ItemFlags QStandardItem::flags() const
    QVariant v = data(Qt::UserRole - 1);
    if (!v.isValid())
       return (Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable
-              | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+            | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
    return Qt::ItemFlags(v.toInt());
 }
 
-/*!
-    \fn QString QStandardItem::text() const
 
-    Returns the item's text. This is the text that's presented to the user
-    in a view.
 
-    \sa setText()
-*/
-
-/*!
-    \fn void QStandardItem::setText(const QString &text)
-
-    Sets the item's text to the \a text specified.
-
-    \sa text(), setFont(), setForeground()
-*/
-
-/*!
-    \fn QIcon QStandardItem::icon() const
-
-    Returns the item's icon.
-
-    \sa setIcon(), {QAbstractItemView::iconSize}{iconSize}
-*/
-
-/*!
-    \fn void QStandardItem::setIcon(const QIcon &icon)
-
-    Sets the item's icon to the \a icon specified.
-*/
-
-/*!
-    \fn QString QStandardItem::statusTip() const
-
-    Returns the item's status tip.
-
-    \sa setStatusTip(), toolTip(), whatsThis()
-*/
-
-/*!
-    \fn void QStandardItem::setStatusTip(const QString &statusTip)
-
-    Sets the item's status tip to the string specified by \a statusTip.
-
-    \sa statusTip(), setToolTip(), setWhatsThis()
-*/
-
-/*!
-    \fn QString QStandardItem::toolTip() const
-
-    Returns the item's tooltip.
-
-    \sa setToolTip(), statusTip(), whatsThis()
-*/
-
-/*!
-    \fn void QStandardItem::setToolTip(const QString &toolTip)
-
-    Sets the item's tooltip to the string specified by \a toolTip.
-
-    \sa toolTip(), setStatusTip(), setWhatsThis()
-*/
-
-/*!
-    \fn QString QStandardItem::whatsThis() const
-
-    Returns the item's "What's This?" help.
-
-    \sa setWhatsThis(), toolTip(), statusTip()
-*/
-
-/*!
-    \fn void QStandardItem::setWhatsThis(const QString &whatsThis)
-
-    Sets the item's "What's This?" help to the string specified by \a whatsThis.
-
-    \sa whatsThis(), setStatusTip(), setToolTip()
-*/
-
-/*!
-    \fn QFont QStandardItem::font() const
-
-    Returns the font used to render the item's text.
-
-    \sa setFont()
-*/
-
-/*!
-    \fn void QStandardItem::setFont(const QFont &font)
-
-    Sets the font used to display the item's text to the given \a font.
-
-    \sa font() setText() setForeground()
-*/
-
-/*!
-    \fn QBrush QStandardItem::background() const
-
-    Returns the brush used to render the item's background.
-
-    \sa  foreground() setBackground()
-*/
-
-/*!
-    \fn void QStandardItem::setBackground(const QBrush &brush)
-
-    Sets the item's background brush to the specified \a brush.
-
-    \sa background() setForeground()
-*/
-
-/*!
-    \fn QBrush QStandardItem::foreground() const
-
-    Returns the brush used to render the item's foreground (e.g. text).
-
-    \sa setForeground() background()
-*/
-
-/*!
-    \fn void QStandardItem::setForeground(const QBrush &brush)
-
-    Sets the brush used to display the item's foreground (e.g. text) to the
-    given \a brush.
-
-    \sa foreground() setBackground() setFont()
-*/
-
-/*!
-    \fn int QStandardItem::textAlignment() const
-
-    Returns the text alignment for the item's text.
-*/
-
-/*!
-    \fn void QStandardItem::setTextAlignment(Qt::Alignment alignment)
-
-    Sets the text alignment for the item's text to the \a alignment
-    specified.
-
-    \sa textAlignment()
-*/
-
-/*!
-    \fn QSize QStandardItem::sizeHint() const
-
-    Returns the size hint set for the item, or an invalid QSize if no
-    size hint has been set.
-
-    If no size hint has been set, the item delegate will compute the
-    size hint based on the item data.
-
-    \sa setSizeHint()
-*/
-
-/*!
-    \fn void QStandardItem::setSizeHint(const QSize &size)
-
-    Sets the size hint for the item to be \a size.
-    If no size hint is set, the item delegate will compute the
-    size hint based on the item data.
-
-    \sa sizeHint()
-*/
-
-/*!
-    \fn Qt::CheckState QStandardItem::checkState() const
-
-    Returns the checked state of the item.
-
-    \sa setCheckState(), isCheckable()
-*/
-
-/*!
-    \fn void QStandardItem::setCheckState(Qt::CheckState state)
-
-    Sets the check state of the item to be \a state.
-
-    \sa checkState(), setCheckable()
-*/
-
-/*!
-    \fn QString QStandardItem::accessibleText() const
-
-    Returns the item's accessible text.
-
-    The accessible text is used by assistive technologies (i.e. for users who
-    cannot use conventional means of interaction).
-
-    \sa setAccessibleText(), accessibleDescription()
-*/
-
-/*!
-    \fn void QStandardItem::setAccessibleText(const QString &accessibleText)
-
-    Sets the item's accessible text to the string specified by \a accessibleText.
-
-    The accessible text is used by assistive technologies (i.e. for users who
-    cannot use conventional means of interaction).
-
-    \sa accessibleText(), setAccessibleDescription()
-*/
-
-/*!
-    \fn QString QStandardItem::accessibleDescription() const
-
-    Returns the item's accessible description.
-
-    The accessible description is used by assistive technologies (i.e. for
-    users who cannot use conventional means of interaction).
-
-    \sa setAccessibleDescription(), accessibleText()
-*/
-
-/*!
-    \fn void QStandardItem::setAccessibleDescription(const QString &accessibleDescription)
-
-    Sets the item's accessible description to the string specified by \a
-    accessibleDescription.
-
-    The accessible description is used by assistive technologies (i.e. for
-    users who cannot use conventional means of interaction).
-
-    \sa accessibleDescription(), setAccessibleText()
-*/
-
-/*!
-  Sets whether the item is enabled. If \a enabled is true, the item is enabled,
-  meaning that the user can interact with the item; if \a enabled is false, the
-  user cannot interact with the item.
-
-  This flag takes precedence over the other item flags; e.g. if an item is not
-  enabled, it cannot be selected by the user, even if the Qt::ItemIsSelectable
-  flag has been set.
-
-  \sa isEnabled(), Qt::ItemIsEnabled, setFlags()
-*/
 void QStandardItem::setEnabled(bool enabled)
 {
    Q_D(QStandardItem);
    d->changeFlags(enabled, Qt::ItemIsEnabled);
 }
 
-/*!
-  \fn bool QStandardItem::isEnabled() const
-
-  Returns whether the item is enabled.
-
-  When an item is enabled, the user can interact with it. The possible
-  types of interaction are specified by the other item flags, such as
-  isEditable() and isSelectable().
-
-  The default value is true.
-
-  \sa setEnabled(), flags()
-*/
-
-/*!
-  Sets whether the item is editable. If \a editable is true, the item can be
-  edited by the user; otherwise, the user cannot edit the item.
-
-  How the user can edit items in a view is determined by the view's edit
-  triggers; see QAbstractItemView::editTriggers.
-
-  \sa isEditable(), setFlags()
-*/
 void QStandardItem::setEditable(bool editable)
 {
    Q_D(QStandardItem);
    d->changeFlags(editable, Qt::ItemIsEditable);
 }
 
-/*!
-  \fn bool QStandardItem::isEditable() const
-
-  Returns whether the item can be edited by the user.
-
-  When an item is editable (and enabled), the user can edit the item by
-  invoking one of the view's edit triggers; see
-  QAbstractItemView::editTriggers.
-
-  The default value is true.
-
-  \sa setEditable(), flags()
-*/
-
-/*!
-  Sets whether the item is selectable. If \a selectable is true, the item
-  can be selected by the user; otherwise, the user cannot select the item.
-
-  You can control the selection behavior and mode by manipulating their
-  view properties; see QAbstractItemView::selectionMode and
-  QAbstractItemView::selectionBehavior.
-
-  \sa isSelectable(), setFlags()
-*/
 void QStandardItem::setSelectable(bool selectable)
 {
    Q_D(QStandardItem);
@@ -1265,6 +913,11 @@ void QStandardItem::setCheckable(bool checkable)
 
   The default value is false.
 
+void QStandardItem::setAutoTristate(bool tristate)
+{
+    Q_D(QStandardItem);
+    d->changeFlags(tristate, Qt::ItemIsAutoTristate);
+}
   \sa setCheckable(), checkState(), isTristate()
 */
 
@@ -1276,64 +929,24 @@ void QStandardItem::setCheckable(bool checkable)
 
   \sa isTristate(), setCheckable(), setCheckState()
 */
-void QStandardItem::setTristate(bool tristate)
+void QStandardItem::setUserTristate(bool tristate)
 {
    Q_D(QStandardItem);
-   d->changeFlags(tristate, Qt::ItemIsTristate);
+   d->changeFlags(tristate, Qt::ItemIsUserTristate);
 }
 
-/*!
-  \fn bool QStandardItem::isTristate() const
 
-  Returns whether the item is tristate; that is, if it's checkable with three
-  separate states.
-
-  The default value is false.
-
-  \sa setTristate(), isCheckable(), checkState()
-*/
 
 #ifndef QT_NO_DRAGANDDROP
 
-/*!
-  Sets whether the item is drag enabled. If \a dragEnabled is true, the item
-  can be dragged by the user; otherwise, the user cannot drag the item.
 
-  Note that you also need to ensure that item dragging is enabled in the view;
-  see QAbstractItemView::dragEnabled.
-
-  \sa isDragEnabled(), setDropEnabled(), setFlags()
-*/
 void QStandardItem::setDragEnabled(bool dragEnabled)
 {
    Q_D(QStandardItem);
    d->changeFlags(dragEnabled, Qt::ItemIsDragEnabled);
 }
 
-/*!
-  \fn bool QStandardItem::isDragEnabled() const
 
-  Returns whether the item is drag enabled. An item that is drag enabled can
-  be dragged by the user.
-
-  The default value is true.
-
-  Note that item dragging must be enabled in the view for dragging to work;
-  see QAbstractItemView::dragEnabled.
-
-  \sa setDragEnabled(), isDropEnabled(), flags()
-*/
-
-/*!
-  Sets whether the item is drop enabled. If \a dropEnabled is true, the item
-  can be used as a drop target; otherwise, it cannot.
-
-  Note that you also need to ensure that drops are enabled in the view; see
-  QWidget::acceptDrops(); and that the model supports the desired drop actions;
-  see QAbstractItemModel::supportedDropActions().
-
-  \sa isDropEnabled(), setDragEnabled(), setFlags()
-*/
 void QStandardItem::setDropEnabled(bool dropEnabled)
 {
    Q_D(QStandardItem);
@@ -1551,77 +1164,6 @@ void QStandardItem::insertColumns(int column, int count)
    d->insertColumns(column, count, QList<QStandardItem *>());
 }
 
-/*!
-    \fn void QStandardItem::appendRow(const QList<QStandardItem*> &items)
-
-    Appends a row containing \a items. If necessary, the column count is
-    increased to the size of \a items.
-
-    \sa insertRow()
-*/
-
-/*!
-    \fn void QStandardItem::appendRows(const QList<QStandardItem*> &items)
-
-    Appends rows containing \a items.  The column count will not change.
-
-    \sa insertRow()
-*/
-
-/*!
-    \fn void QStandardItem::appendColumn(const QList<QStandardItem*> &items)
-
-    Appends a column containing \a items. If necessary, the row count is
-    increased to the size of \a items.
-
-    \sa insertColumn()
-*/
-
-/*!
-    \fn bool QStandardItemModel::insertRow(int row, const QModelIndex &parent)
-
-    Inserts a single row before the given \a row in the child items of the
-    \a parent specified. Returns true if the row is inserted; otherwise
-    returns false.
-
-    \sa insertRows(), insertColumn(), removeRow()
-*/
-
-/*!
-    \fn bool QStandardItemModel::insertColumn(int column, const QModelIndex &parent)
-
-    Inserts a single column before the given \a column in the child items of
-    the \a parent specified. Returns true if the column is inserted; otherwise
-    returns false.
-
-    \sa insertColumns(), insertRow(), removeColumn()
-*/
-
-/*!
-    \fn QStandardItem::insertRow(int row, QStandardItem *item)
-    \overload
-
-    Inserts a row at \a row containing \a item.
-
-    When building a list or a tree that has only one column, this function
-    provides a convenient way to insert a single new item.
-*/
-
-/*!
-    \fn QStandardItem::appendRow(QStandardItem *item)
-    \overload
-
-    Appends a row containing \a item.
-
-    When building a list or a tree that has only one column, this function
-    provides a convenient way to append a single new item.
-*/
-
-/*!
-    Removes the given \a row. The items that were in the row are deleted.
-
-    \sa takeRow(), removeRows(), removeColumn()
-*/
 void QStandardItem::removeRow(int row)
 {
    removeRows(row, 1);
@@ -1858,10 +1400,18 @@ bool QStandardItem::operator<(const QStandardItem &other) const
 {
    const int role = model() ? model()->sortRole() : Qt::DisplayRole;
    const QVariant l = data(role), r = other.data(role);
+
    // this code is copied from QSortFilterProxyModel::lessThan()
+   if (l.userType() == QVariant::Invalid) {
+      return false;
+   }
+
+   if (r.userType() == QVariant::Invalid) {
+      return true;
+   }
+
    switch (l.userType()) {
-      case QVariant::Invalid:
-         return (r.type() == QVariant::Invalid);
+         ;
       case QVariant::Int:
          return l.toInt() < r.toInt();
       case QVariant::UInt:
@@ -1903,12 +1453,16 @@ void QStandardItem::sortChildren(int column, Qt::SortOrder order)
    if ((column < 0) || (rowCount() == 0)) {
       return;
    }
+
+   QList<QPersistentModelIndex> parents;
+
    if (d->model) {
-      emit d->model->layoutAboutToBeChanged();
+      parents << index();
+      emit d->model->layoutAboutToBeChanged(parents, QAbstractItemModel::VerticalSortHint);
    }
    d->sortChildren(column, order);
    if (d->model) {
-      emit d->model->layoutChanged();
+      emit d->model->layoutChanged(parents, QAbstractItemModel::VerticalSortHint);
    }
 }
 
@@ -1926,27 +1480,13 @@ QStandardItem *QStandardItem::clone() const
    return new QStandardItem(*this);
 }
 
-/*!
-    Returns the type of this item. The type is used to distinguish custom
-    items from the base class. When subclassing QStandardItem, you should
-    reimplement this function and return a new value greater than or equal
-    to \l UserType.
-
-    \sa QStandardItem::Type
-*/
 int QStandardItem::type() const
 {
    return Type;
 }
 
-#ifndef QT_NO_DATASTREAM
 
-/*!
-    Reads the item from stream \a in. Only the data and flags of the item are
-    read, not the child items.
 
-    \sa write()
-*/
 void QStandardItem::read(QDataStream &in)
 {
    Q_D(QStandardItem);
@@ -1969,39 +1509,20 @@ void QStandardItem::write(QDataStream &out) const
    out << flags();
 }
 
-/*!
-    \relates QStandardItem
-    \since 4.2
-
-    Reads a QStandardItem from stream \a in into \a item.
-
-    This operator uses QStandardItem::read().
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &in, QStandardItem &item)
 {
    item.read(in);
    return in;
 }
 
-/*!
-    \relates QStandardItem
-    \since 4.2
 
-    Writes the QStandardItem \a item to stream \a out.
-
-    This operator uses QStandardItem::write().
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &out, const QStandardItem &item)
 {
    item.write(out);
    return out;
 }
 
-#endif // QT_NO_DATASTREAM
+
 
 /*!
     \class QStandardItemModel
@@ -2134,22 +1655,23 @@ QStandardItemModel::~QStandardItemModel()
 {
 }
 
-/*!
-    Removes all items (including header items) from the model and sets the
-    number of rows and columns to zero.
+void QStandardItemModel::setItemRoleNames(const QMultiHash<int, QString> &roleNames)
+{
+   Q_D(QStandardItemModel);
+   d->roleNames = roleNames;
+}
 
-    \sa removeColumns(), removeRows()
-*/
 void QStandardItemModel::clear()
 {
    Q_D(QStandardItemModel);
+   beginResetModel();
    d->root.reset(new QStandardItem);
    d->root->d_func()->setModel(this);
    qDeleteAll(d->columnHeaderItems);
    d->columnHeaderItems.clear();
    qDeleteAll(d->rowHeaderItems);
    d->rowHeaderItems.clear();
-   reset();
+   endResetModel();
 }
 
 /*!
@@ -2325,7 +1847,7 @@ void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item
          item->d_func()->setModel(this);
       } else {
          qWarning("QStandardItem::setHorizontalHeaderItem: Ignoring duplicate insertion of item %p",
-                  item);
+            item);
          return;
       }
    }
@@ -2386,7 +1908,7 @@ void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
          item->d_func()->setModel(this);
       } else {
          qWarning("QStandardItem::setVerticalHeaderItem: Ignoring duplicate insertion of item %p",
-                  item);
+            item);
          return;
       }
    }
@@ -2511,11 +2033,12 @@ const QStandardItem *QStandardItemModel::itemPrototype() const
     flags, in the given \a column.
 */
 QList<QStandardItem *> QStandardItemModel::findItems(const QString &text,
-      Qt::MatchFlags flags, int column) const
+   Qt::MatchFlags flags, int column) const
 {
    QModelIndexList indexes = match(index(0, column, QModelIndex()),
-                                   Qt::DisplayRole, text, -1, flags);
+         Qt::DisplayRole, text, -1, flags);
    QList<QStandardItem *> items;
+
    for (int i = 0; i < indexes.size(); ++i) {
       items.append(itemFromIndex(indexes.at(i)));
    }
@@ -2742,10 +2265,10 @@ Qt::ItemFlags QStandardItemModel::flags(const QModelIndex &index) const
       return item->flags();
    }
    return Qt::ItemIsSelectable
-          | Qt::ItemIsEnabled
-          | Qt::ItemIsEditable
-          | Qt::ItemIsDragEnabled
-          | Qt::ItemIsDropEnabled;
+      | Qt::ItemIsEnabled
+      | Qt::ItemIsEditable
+      | Qt::ItemIsDragEnabled
+      | Qt::ItemIsDropEnabled;
 }
 
 /*!
@@ -2758,15 +2281,12 @@ bool QStandardItemModel::hasChildren(const QModelIndex &parent) const
    return item ? item->hasChildren() : false;
 }
 
-/*!
-  \reimp
-*/
 QVariant QStandardItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QStandardItemModel);
    if ((section < 0)
-         || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-         || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
+      || ((orientation == Qt::Horizontal) && (section >= columnCount()))
+      || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
       return QVariant();
    }
    QStandardItem *headerItem = 0;
@@ -2776,7 +2296,7 @@ QVariant QStandardItemModel::headerData(int section, Qt::Orientation orientation
       headerItem = d->rowHeaderItems.at(section);
    }
    return headerItem ? headerItem->data(role)
-          : QAbstractItemModel::headerData(section, orientation, role);
+      : QAbstractItemModel::headerData(section, orientation, role);
 }
 
 /*!
@@ -2797,10 +2317,10 @@ QModelIndex QStandardItemModel::index(int row, int column, const QModelIndex &pa
    Q_D(const QStandardItemModel);
    QStandardItem *parentItem = d->itemFromIndex(parent);
    if ((parentItem == 0)
-         || (row < 0)
-         || (column < 0)
-         || (row >= parentItem->rowCount())
-         || (column >= parentItem->columnCount())) {
+      || (row < 0)
+      || (column < 0)
+      || (row >= parentItem->rowCount())
+      || (column >= parentItem->columnCount())) {
       return QModelIndex();
    }
    return createIndex(row, column, parentItem);
@@ -2916,8 +2436,8 @@ bool QStandardItemModel::setHeaderData(int section, Qt::Orientation orientation,
 {
    Q_D(QStandardItemModel);
    if ((section < 0)
-         || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-         || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
+      || ((orientation == Qt::Horizontal) && (section >= columnCount()))
+      || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
       return false;
    }
    QStandardItem *headerItem = 0;
@@ -3000,10 +2520,15 @@ QMimeData *QStandardItemModel::mimeData(const QModelIndexList &indexes) const
    QStack<QStandardItem *> stack;
    itemsSet.reserve(indexes.count());
    stack.reserve(indexes.count());
+
    for (int i = 0; i < indexes.count(); ++i) {
-      QStandardItem *item = itemFromIndex(indexes.at(i));
-      itemsSet << item;
-      stack.push(item);
+      if (QStandardItem *item = itemFromIndex(indexes.at(i))) {
+         itemsSet << item;
+         stack.push(item);
+      } else {
+         qWarning() << "QStandardItemModel::mimeData: No item associated with invalid index";
+         return 0;
+      }
    }
 
    //remove duplicates childrens
@@ -3031,23 +2556,20 @@ QMimeData *QStandardItemModel::mimeData(const QModelIndexList &indexes) const
    }
 
    stack.reserve(itemsSet.count());
-   for (QStandardItem * item : itemsSet) {
+   for (QStandardItem *item : itemsSet) {
       stack.push(item);
    }
 
    //stream everything recursively
    while (!stack.isEmpty()) {
       QStandardItem *item = stack.pop();
-      if (itemsSet.contains(item)) { //if the item is selection 'top-level', strem its position
+      if (itemsSet.contains(item)) {
+         //if the item is selection 'top-level', strem its position
          stream << item->row() << item->column();
       }
-      if (item) {
-         stream << *item << item->columnCount() << item->d_ptr->children.count();
-         stack += item->d_ptr->children;
-      } else {
-         QStandardItem dummy;
-         stream << dummy << 0 << 0;
-      }
+
+      stream << *item << item->columnCount() << item->d_ptr->children.count();
+      stack += item->d_ptr->children;
    }
 
    data->setData(format, encoded);
@@ -3081,7 +2603,7 @@ void QStandardItemModelPrivate::decodeDataRecursive(QDataStream &stream, QStanda
   \reimp
 */
 bool QStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                      int row, int column, const QModelIndex &parent)
+   int row, int column, const QModelIndex &parent)
 {
    Q_D(QStandardItemModel);
    // check if the action is supported
@@ -3210,6 +2732,6 @@ void QStandardItemModel::_q_emitItemChanged(const QModelIndex &topLeft, const QM
    d->_q_emitItemChanged(topLeft, bottomRight);
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_STANDARDITEMMODEL

@@ -29,7 +29,7 @@
 
 #ifndef QT_NO_LINEEDIT
 
-QT_BEGIN_NAMESPACE
+
 
 class QExpandingLineEdit : public QLineEdit
 {
@@ -47,7 +47,7 @@ class QExpandingLineEdit : public QLineEdit
 
  protected:
    void changeEvent(QEvent *e) override;
- 
+
  private:
    void updateMinimumWidth();
 
@@ -55,8 +55,6 @@ class QExpandingLineEdit : public QLineEdit
    bool widgetOwnsGeometry;
 };
 
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_LINEEDIT
 

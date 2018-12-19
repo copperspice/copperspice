@@ -26,18 +26,16 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
+#include <qapplication.h>
 #include <qcombobox.h>
 #include <qdatetimeedit.h>
+#include <qdebug.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
+
 #include <limits.h>
 #include <float.h>
-#include <qapplication.h>
-#include <qdebug.h>
-
-QT_BEGIN_NAMESPACE
-
 
 #ifndef QT_NO_COMBOBOX
 
@@ -57,82 +55,52 @@ class QBooleanComboBox : public QComboBox
 
 #endif // QT_NO_COMBOBOX
 
-/*!
-    \class QItemEditorFactory
-    \brief The QItemEditorFactory class provides widgets for editing item data
-    in views and delegates.
-    \since 4.2
-    \ingroup model-view
+#ifndef QT_NO_SPINBOX
 
-    When editing data in an item view, editors are created and
-    displayed by a delegate. QItemDelegate, which is the delegate by
-    default installed on Qt's item views, uses a QItemEditorFactory to
-    create editors for it. A default unique instance provided by
-    QItemEditorFactory is used by all item delegates.  If you set a
-    new default factory with setDefaultFactory(), the new factory will
-    be used by existing and new delegates.
+class QUIntSpinBox : public QSpinBox
+{
+   GUI_CS_OBJECT(QUIntSpinBox)
 
-    A factory keeps a collection of QItemEditorCreatorBase
-    instances, which are specialized editors that produce editors
-    for one particular QVariant data type (All Qt models store
-    their data in \l{QVariant}s).
+   GUI_CS_PROPERTY_READ(value, uintValue)
+   GUI_CS_PROPERTY_WRITE(value, setUIntValue)
+   GUI_CS_PROPERTY_NOTIFY(value, uintValueChanged)
+   GUI_CS_PROPERTY_USER(value, true)
 
-    \section1 Standard Editing Widgets
+ public:
+   explicit QUIntSpinBox(QWidget *parent = nullptr)
+      : QSpinBox(parent) {
+      connect(this, SIGNAL(valueChanged(int)), this, SLOT(uintValueChanged()));
+   }
 
-    The standard factory implementation provides editors for a variety of data
-    types. These are created whenever a delegate needs to provide an editor for
-    data supplied by a model. The following table shows the relationship between
-    types and the standard editors provided.
+   uint uintValue() const {
+      return value();
+   }
 
-    \table
-    \header \o Type \o Editor Widget
-    \row    \o bool \o QComboBox
-    \row    \o double \o QDoubleSpinBox
-    \row    \o int \o{1,2} QSpinBox
-    \row    \o unsigned int
-    \row    \o QDate \o QDateEdit
-    \row    \o QDateTime \o QDateTimeEdit
-    \row    \o QPixmap \o QLabel
-    \row    \o QString \o QLineEdit
-    \row    \o QTime \o QTimeEdit
-    \endtable
+   void setUIntValue(uint data) {
+      return setValue(data);
+   }
 
-    Additional editors can be registered with the registerEditor() function.
-
-    \sa QItemDelegate, {Model/View Programming}, {Color Editor Factory Example}
-*/
-
-/*!
-    \fn QItemEditorFactory::QItemEditorFactory()
-
-    Constructs a new item editor factory.
-*/
-
-/*!
-    Creates an editor widget with the given \a parent for the specified \a type of data,
-    and returns it as a QWidget.
-
-    \sa registerEditor()
-*/
+ public:
+   CS_SIGNAL_1(Public, void uintValueChanged())
+   CS_SIGNAL_2(uintValueChanged)
+};
+#endif // QT_NO_SPINBOX
 QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const
 {
    QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
 
-   if (!creator) {
+   if (! creator) {
       const QItemEditorFactory *dfactory = defaultFactory();
       return dfactory == this ? 0 : dfactory->createEditor(type, parent);
    }
    return creator->createWidget(parent);
 }
 
-/*!
-    Returns the property name used to access data for the given \a type of data.
-*/
 QString QItemEditorFactory::valuePropertyName(QVariant::Type type) const
 {
    QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
 
-   if (!creator) {
+   if (! creator) {
       const QItemEditorFactory *dfactory = defaultFactory();
       return dfactory == this ? QString() : dfactory->valuePropertyName(type);
    }
@@ -196,13 +164,16 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
          return cb;
       }
 #endif
+
 #ifndef QT_NO_SPINBOX
       case QVariant::UInt: {
-         QSpinBox *sb = new QSpinBox(parent);
+         QSpinBox *sb = new QUIntSpinBox(parent);
          sb->setFrame(false);
+         sb->setMinimum(0);
          sb->setMaximum(INT_MAX);
          return sb;
       }
+
       case QVariant::Int: {
          QSpinBox *sb = new QSpinBox(parent);
          sb->setFrame(false);
@@ -211,6 +182,7 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
          return sb;
       }
 #endif
+
 #ifndef QT_NO_DATETIMEEDIT
       case QVariant::Date: {
          QDateTimeEdit *ed = new QDateEdit(parent);
@@ -321,12 +293,15 @@ void QItemEditorFactory::setDefaultFactory(QItemEditorFactory *factory)
    q_default_factory = factory;
 }
 
+QItemEditorCreatorBase::~QItemEditorCreatorBase()
+{
+}
 #ifndef QT_NO_LINEEDIT
 
 QExpandingLineEdit::QExpandingLineEdit(QWidget *parent)
    : QLineEdit(parent), originalWidth(-1), widgetOwnsGeometry(false)
 {
-   connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(resizeToContents()));
+   connect(this, SIGNAL(textChanged(QString)), this, SLOT(resizeToContents()));
    updateMinimumWidth();
 }
 
@@ -353,11 +328,11 @@ void QExpandingLineEdit::updateMinimumWidth()
    getContentsMargins(&left, 0, &right, 0);
    width += left + right;
 
-   QStyleOptionFrameV2 opt;
+   QStyleOptionFrame opt;
    initStyleOption(&opt);
 
-   int minWidth = style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(width, 0)
-                  .expandedTo(QApplication::globalStrut()), this).width();
+   int minWidth = style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(width, 0).
+         expandedTo(QApplication::globalStrut()), this).width();
 
    setMinimumWidth(minWidth);
 }
@@ -411,6 +386,6 @@ bool QBooleanComboBox::value() const
 
 #endif // QT_NO_COMBOBOX
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_ITEMVIEWS

@@ -32,7 +32,7 @@
 
 #ifndef QT_NO_LISTVIEW
 
-QT_BEGIN_NAMESPACE
+
 
 class QListView;
 class QListViewPrivate;
@@ -58,36 +58,45 @@ class QListViewItem
    inline bool operator==(const QListViewItem &other) const {
       return (x == other.x && y == other.y && w == other.w && h == other.h && indexHint == other.indexHint);
    }
+
    inline bool operator!=(const QListViewItem &other) const {
       return !(*this == other);
    }
+
    inline bool isValid() const {
       return rect().isValid() && (indexHint > -1);
    }
+
    inline void invalidate() {
       x = -1;
       y = -1;
       w = 0;
       h = 0;
    }
+
    inline void resize(const QSize &size) {
-      w = qMin(size.width(), SHRT_MAX);
+      w = qMin(size.width(),  SHRT_MAX);
       h = qMin(size.height(), SHRT_MAX);
    }
+
    inline void move(const QPoint &position) {
       x = position.x();
       y = position.y();
    }
+
    inline int width() const {
       return w;
    }
+
    inline int height() const {
       return h;
    }
+
  private:
    inline QRect rect() const {
       return QRect(x, y, w, h);
    }
+
    int x, y;
    short w, h;
    mutable int indexHint;
@@ -121,17 +130,21 @@ class QCommonListViewBase
    virtual void dataChanged(const QModelIndex &, const QModelIndex &) = 0;
 
    virtual int horizontalScrollToValue(int index, QListView::ScrollHint hint,
-                                       bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const;
+      bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const;
    virtual int verticalScrollToValue(int index, QListView::ScrollHint hint,
-                                     bool above, bool below, const QRect &area, const QRect &rect) const;
+      bool above, bool below, const QRect &area, const QRect &rect) const;
    virtual void scrollContentsBy(int dx, int dy, bool scrollElasticBand);
+
    virtual QRect mapToViewport(const QRect &rect) const {
       return rect;
    }
+
    virtual int horizontalOffset() const;
+
    virtual int verticalOffset() const {
       return verticalScrollBar()->value();
    }
+
    virtual void updateHorizontalScrollBar(const QSize &step);
    virtual void updateVerticalScrollBar(const QSize &step);
    virtual void appendHiddenRow(int row);
@@ -174,13 +187,13 @@ class QCommonListViewBase
    inline QModelIndex modelIndex(int row) const;
    inline int rowCount() const;
 
-   inline QStyleOptionViewItemV4 viewOptions() const;
+   inline QStyleOptionViewItem viewOptions() const;
    inline QWidget *viewport() const;
    inline QRect clipRect() const;
 
    inline QSize cachedItemSize() const;
    inline QRect viewItemRect(const QListViewItem &item) const;
-   inline QSize itemSize(const QStyleOptionViewItemV2 &opt, const QModelIndex &idx) const;
+   inline QSize itemSize(const QStyleOptionViewItem &opt, const QModelIndex &idx) const;
    inline QAbstractItemDelegate *delegate(const QModelIndex &idx) const;
 
    inline bool isHidden(int row) const;
@@ -198,7 +211,7 @@ class QCommonListViewBase
 class QListModeViewBase : public QCommonListViewBase
 {
  public:
-   QListModeViewBase(QListView *q, QListViewPrivate *d) : QCommonListViewBase(q, d) {}
+   QListModeViewBase(QListView *q, QListViewPrivate *d);
 
    QVector<int> flowPositions;
    QVector<int> segmentPositions;
@@ -210,7 +223,7 @@ class QListModeViewBase : public QCommonListViewBase
    int batchSavedPosition;
 
    //reimplementations
-   int itemIndex(const QListViewItem &item) const override{
+   int itemIndex(const QListViewItem &item) const override {
       return item.indexHint;
    }
 
@@ -218,7 +231,7 @@ class QListModeViewBase : public QCommonListViewBase
    bool doBatchedItemLayout(const QListViewLayoutInfo &info, int max) override;
    void clear() override;
 
-   void setRowCount(int rowCount) override{
+   void setRowCount(int rowCount) override {
       flowPositions.resize(rowCount);
    }
 
@@ -226,10 +239,10 @@ class QListModeViewBase : public QCommonListViewBase
    void dataChanged(const QModelIndex &, const QModelIndex &) override;
 
    int horizontalScrollToValue(int index, QListView::ScrollHint hint,
-                  bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const override;
+      bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const override;
 
    int verticalScrollToValue(int index, QListView::ScrollHint hint,
-                  bool above, bool below, const QRect &area, const QRect &rect) const override;
+      bool above, bool below, const QRect &area, const QRect &rect) const override;
 
    void scrollContentsBy(int dx, int dy, bool scrollElasticBand) override;
    QRect mapToViewport(const QRect &rect) const override;
@@ -251,7 +264,7 @@ class QListModeViewBase : public QCommonListViewBase
    void doStaticLayout(const QListViewLayoutInfo &info);
 
    int perItemScrollToValue(int index, int value, int height, QAbstractItemView::ScrollHint hint,
-                  Qt::Orientation orientation, bool wrap, int extent) const;
+      Qt::Orientation orientation, bool wrap, int extent) const;
 
    int perItemScrollingPageSteps(int length, int bounds, bool wrap) const;
 };
@@ -296,7 +309,7 @@ class QIconModeViewBase : public QCommonListViewBase
    void initBspTree(const QSize &contents);
    QPoint initDynamicLayout(const QListViewLayoutInfo &info);
    void doDynamicLayout(const QListViewLayoutInfo &info);
-   static void addLeaf(QVector<int> &leaf, const QRect &area,uint visited, QBspTree::Data data);
+   static void addLeaf(QVector<int> &leaf, const QRect &area, uint visited, QBspTree::Data data);
    QRect itemsRect(const QVector<QModelIndex> &indexes) const;
    QRect draggedItemsRect() const;
    QPoint snapToGrid(const QPoint &pos) const;
@@ -324,6 +337,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
       if (doLayout) {
          executePostedLayout();
       }
+
       QRect a = (q_func()->isRightToLeft() ? flipX(area.normalized()) : area.normalized());
       return commonListView->intersectingSet(a);
    }
@@ -350,6 +364,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
    inline QRect flipX(const QRect &r) const {
       return QRect(flipX(r.x()) - r.width(), r.y(), r.width(), r.height());
    }
+
    inline QRect viewItemRect(const QListViewItem &item) const {
       if (q_func()->isRightToLeft()) {
          return flipX(item.rect());
@@ -384,6 +399,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
       if (viewMode == QListView::ListMode && !showElasticBand) {
          return index.isValid();
       }
+
       return true;
    }
 
@@ -395,7 +411,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
 
 #ifndef QT_NO_DRAGANDDROP
    virtual QAbstractItemView::DropIndicatorPosition position(const QPoint &pos, const QRect &rect,
-                  const QModelIndex &idx) const override;
+      const QModelIndex &idx) const override;
 
    bool dropOn(QDropEvent *event, int *row, int *col, QModelIndex *index) override;
 #endif
@@ -428,10 +444,12 @@ class QListViewPrivate: public QAbstractItemViewPrivate
    inline QModelIndex modelIndex(int row) const {
       return model->index(row, column, root);
    }
+
    inline bool isHidden(int row) const {
       QModelIndex idx = model->index(row, 0, root);
       return isPersistent(idx) && hiddenRows.contains(idx);
    }
+
    inline bool isHiddenOrDisabled(int row) const {
       return isHidden(row) || !isIndexEnabled(modelIndex(row));
    }
@@ -564,9 +582,9 @@ inline int QCommonListViewBase::rowCount() const
    return dd->model->rowCount(dd->root);
 }
 
-inline QStyleOptionViewItemV4 QCommonListViewBase::viewOptions() const
+inline QStyleOptionViewItem QCommonListViewBase::viewOptions() const
 {
-   return dd->viewOptionsV4();
+   return dd->viewOptions();
 }
 
 inline QWidget *QCommonListViewBase::viewport() const
@@ -589,7 +607,7 @@ inline QRect QCommonListViewBase::viewItemRect(const QListViewItem &item) const
    return dd->viewItemRect(item);
 }
 
-inline QSize QCommonListViewBase::itemSize(const QStyleOptionViewItemV2 &opt, const QModelIndex &idx) const
+inline QSize QCommonListViewBase::itemSize(const QStyleOptionViewItem &opt, const QModelIndex &idx) const
 {
    return dd->itemSize(opt, idx);
 }
@@ -612,8 +630,6 @@ inline bool QCommonListViewBase::isRightToLeft() const
 {
    return qq->isRightToLeft();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_LISTVIEW
 

@@ -45,52 +45,39 @@
 #include <qitemeditorfactory_p.h>
 #include <qmetaobject.h>
 #include <qtextlayout.h>
-#include <qdnd_p.h>
+
+#include <qabstractitemdelegate_p.h>
 #include <qtextengine_p.h>
 #include <qlayoutengine_p.h>
+
 #include <qdebug.h>
 #include <qlocale.h>
 #include <qdialog.h>
 #include <qtableview.h>
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
-class QStyledItemDelegatePrivate
+class QStyledItemDelegatePrivate : public QAbstractItemDelegatePrivate
 {
    Q_DECLARE_PUBLIC(QStyledItemDelegate)
 
  public:
-   QStyledItemDelegatePrivate() : factory(0) { }
-   virtual ~QStyledItemDelegatePrivate() {}
+   QStyledItemDelegatePrivate() : factory(0)
+   { }
 
    static const QWidget *widget(const QStyleOptionViewItem &option) {
-      if (const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3 *>(&option)) {
-         return v3->widget;
-      }
-      return 0;
+      return option.widget;
    }
 
    const QItemEditorFactory *editorFactory() const {
       return factory ? factory : QItemEditorFactory::defaultFactory();
    }
 
-   void _q_commitDataAndCloseEditor(QWidget *editor) {
-      Q_Q(QStyledItemDelegate);
-      emit q->commitData(editor);
-      emit q->closeEditor(editor, QAbstractItemDelegate::SubmitModelCache);
-   }
    QItemEditorFactory *factory;
-
- protected:
-   QStyledItemDelegate *q_ptr;
-
 };
 
 QStyledItemDelegate::QStyledItemDelegate(QObject *parent)
-   : QAbstractItemDelegate(parent), d_ptr(new QStyledItemDelegatePrivate)
+   : QAbstractItemDelegate(*new QStyledItemDelegatePrivate(), parent)
 {
-   d_ptr->q_ptr = this;
 }
 
 QStyledItemDelegate::~QStyledItemDelegate()
@@ -99,49 +86,7 @@ QStyledItemDelegate::~QStyledItemDelegate()
 
 QString QStyledItemDelegate::displayText(const QVariant &value, const QLocale &locale) const
 {
-   QString text;
-
-   switch (value.userType()) {
-      case QMetaType::Float:
-      case QVariant::Double:
-         text = locale.toString(value.toReal());
-         break;
-
-      case QVariant::Int:
-      case QVariant::LongLong:
-         text = locale.toString(value.toLongLong());
-         break;
-
-      case QVariant::UInt:
-      case QVariant::ULongLong:
-         text = locale.toString(value.toULongLong());
-         break;
-
-      case QVariant::Date:
-         text = locale.toString(value.toDate(), QLocale::ShortFormat);
-         break;
-
-      case QVariant::Time:
-         text = locale.toString(value.toTime(), QLocale::ShortFormat);
-         break;
-
-      case QVariant::DateTime:
-         text = locale.toString(value.toDateTime().date(), QLocale::ShortFormat);
-         text += QLatin1Char(' ');
-         text += locale.toString(value.toDateTime().time(), QLocale::ShortFormat);
-         break;
-
-      default:
-         // convert new lines into line separators
-         text = value.toString();
-
-         const QChar ch = QChar::LineSeparator;
-         text.replace('\n', ch);
-
-         break;
-   }
-
-   return text;
+   return d_func()->textForRole(Qt::DisplayRole, value, locale);
 }
 
 void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
@@ -163,81 +108,86 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
       option->palette.setBrush(QPalette::Text, qvariant_cast<QBrush>(value));
    }
 
-   if (QStyleOptionViewItemV4 *v4 = qstyleoption_cast<QStyleOptionViewItemV4 *>(option)) {
-      v4->index = index;
-      QVariant value = index.data(Qt::CheckStateRole);
-
-      if (value.isValid() && ! value.isNull()) {
-         v4->features |= QStyleOptionViewItemV2::HasCheckIndicator;
-         v4->checkState = static_cast<Qt::CheckState>(value.toInt());
-      }
-
-      value = index.data(Qt::DecorationRole);
-
-      if (value.isValid() && ! value.isNull()) {
-         v4->features |= QStyleOptionViewItemV2::HasDecoration;
-
-         switch (value.type()) {
-            case QVariant::Icon: {
-               v4->icon = qvariant_cast<QIcon>(value);
-               QIcon::Mode mode;
-
-               if (!(option->state & QStyle::State_Enabled)) {
-                  mode = QIcon::Disabled;
-
-               } else if (option->state & QStyle::State_Selected) {
-                  mode = QIcon::Selected;
-
-               } else {
-                  mode = QIcon::Normal;
-               }
-
-               QIcon::State state = option->state & QStyle::State_Open ? QIcon::On : QIcon::Off;
-               v4->decorationSize = v4->icon.actualSize(option->decorationSize, mode, state);
-               break;
-            }
-
-            case QVariant::Color: {
-               QPixmap pixmap(option->decorationSize);
-               pixmap.fill(qvariant_cast<QColor>(value));
-               v4->icon = QIcon(pixmap);
-               break;
-            }
-
-            case QVariant::Image: {
-               QImage image = qvariant_cast<QImage>(value);
-               v4->icon = QIcon(QPixmap::fromImage(image));
-               v4->decorationSize = image.size();
-               break;
-            }
-
-            case QVariant::Pixmap: {
-               QPixmap pixmap = qvariant_cast<QPixmap>(value);
-               v4->icon = QIcon(pixmap);
-               v4->decorationSize = pixmap.size();
-               break;
-            }
-            default:
-               break;
-         }
-      }
-
-      value = index.data(Qt::DisplayRole);
-
-      if (value.isValid() && ! value.isNull()) {
-         v4->features |= QStyleOptionViewItemV2::HasDisplay;
-         v4->text = displayText(value, v4->locale);
-      }
-
-      v4->backgroundBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
+   option->index = index;
+   value = index.data(Qt::CheckStateRole);
+   if (value.isValid() && !value.isNull()) {
+      option->features |= QStyleOptionViewItem::HasCheckIndicator;
+      option->checkState = static_cast<Qt::CheckState>(value.toInt());
    }
+
+   value = index.data(Qt::DecorationRole);
+
+   if (value.isValid() && ! value.isNull()) {
+      option->features |= QStyleOptionViewItem::HasDecoration;
+
+      switch (value.type()) {
+         case QVariant::Icon: {
+            option->icon = qvariant_cast<QIcon>(value);
+            QIcon::Mode mode;
+
+            if (!(option->state & QStyle::State_Enabled)) {
+               mode = QIcon::Disabled;
+
+            } else if (option->state & QStyle::State_Selected) {
+               mode = QIcon::Selected;
+
+            } else {
+               mode = QIcon::Normal;
+            }
+
+            QIcon::State state = option->state & QStyle::State_Open ? QIcon::On : QIcon::Off;
+            QSize actualSize = option->icon.actualSize(option->decorationSize, mode, state);
+
+            // For highdpi icons actualSize might be larger than decorationSize, which we don't want. Clamp it to decorationSize.
+            option->decorationSize = QSize(qMin(option->decorationSize.width(), actualSize.width()),
+                  qMin(option->decorationSize.height(), actualSize.height()));
+            break;
+         }
+
+         case QVariant::Color: {
+            QPixmap pixmap(option->decorationSize);
+            pixmap.fill(qvariant_cast<QColor>(value));
+            option->icon = QIcon(pixmap);
+            break;
+         }
+
+         case QVariant::Image: {
+            QImage image = qvariant_cast<QImage>(value);
+            option->icon = QIcon(QPixmap::fromImage(image));
+            option->decorationSize = image.size() / image.devicePixelRatio();
+            break;
+         }
+
+         case QVariant::Pixmap: {
+            QPixmap pixmap = qvariant_cast<QPixmap>(value);
+            option->icon = QIcon(pixmap);
+            option->decorationSize = pixmap.size() / pixmap.devicePixelRatio();
+            break;
+         }
+         default:
+            break;
+      }
+   }
+
+   value = index.data(Qt::DisplayRole);
+
+   if (value.isValid() && ! value.isNull()) {
+      option->features |= QStyleOptionViewItem::HasDisplay;
+      option->text = displayText(value, option->locale);
+   }
+
+   option->backgroundBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
+
+   // disable style animations for checkboxes etc. within itemviews (QTBUG-30146)
+   option->styleObject = 0;
 }
 
-void QStyledItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void QStyledItemDelegate::paint(QPainter *painter,
+   const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
    Q_ASSERT(index.isValid());
 
-   QStyleOptionViewItemV4 opt = option;
+   QStyleOptionViewItem opt = option;
    initStyleOption(&opt, index);
 
    const QWidget *widget = QStyledItemDelegatePrivate::widget(option);
@@ -253,7 +203,7 @@ QSize QStyledItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QM
       return qvariant_cast<QSize>(value);
    }
 
-   QStyleOptionViewItemV4 opt = option;
+   QStyleOptionViewItem opt = option;
    initStyleOption(&opt, index);
 
    const QWidget *widget = QStyledItemDelegatePrivate::widget(option);
@@ -270,13 +220,13 @@ QSize QStyledItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QM
     \sa QAbstractItemDelegate::createEditor()
 */
 QWidget *QStyledItemDelegate::createEditor(QWidget *parent,
-      const QStyleOptionViewItem &,
-      const QModelIndex &index) const
+   const QStyleOptionViewItem &, const QModelIndex &index) const
 {
    Q_D(const QStyledItemDelegate);
    if (!index.isValid()) {
       return 0;
    }
+
    QVariant::Type t = static_cast<QVariant::Type>(index.data(Qt::EditRole).userType());
    return d->editorFactory()->createEditor(t, parent);
 }
@@ -297,35 +247,16 @@ void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
    Q_UNUSED(index);
 #else
 
-   Q_D(const QStyledItemDelegate);
+
    QVariant v = index.data(Qt::EditRole);
 
    QString n = editor->metaObject()->userProperty().name();
-
-   // ### Qt5: remove
-   // A work-around for missing "USER true" in qdatetimeedit.h for
-   // QTimeEdit's time property and QDateEdit's date property.
-   // It only triggers if the default user property "dateTime" is
-   // reported for QTimeEdit and QDateEdit.
-
-   if (n == "dateTime") {
-      if (editor->inherits("QTimeEdit")) {
-         n = "time";
-
-      } else if (editor->inherits("QDateEdit")) {
-         n = "date";
-      }
-   }
-
-   // ### Qt5: give QComboBox a USER property
-   if (n.isEmpty() && editor->inherits("QComboBox")) {
-      n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(v.userType()));
-   }
 
    if (!n.isEmpty()) {
       if (! v.isValid()) {
          v = QVariant(editor->property(n).userType(), (const void *)0);
       }
+
       editor->setProperty(n, v);
    }
 #endif
@@ -333,11 +264,8 @@ void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 
 void QStyledItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-#ifdef QT_NO_PROPERTIES
-   Q_UNUSED(model);
-   Q_UNUSED(editor);
-   Q_UNUSED(index);
-#else
+#ifndef QT_NO_PROPERTIES
+
 
    Q_D(const QStyledItemDelegate);
    Q_ASSERT(model);
@@ -347,9 +275,11 @@ void QStyledItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
 
    if (n.isEmpty()) {
       n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(model->data(index, Qt::EditRole).userType()));
+   }
 
-   } else {
+   if (! n.isEmpty()) {
       model->setData(index, editor->property(n), Qt::EditRole);
+
    }
 #endif
 }
@@ -363,7 +293,7 @@ void QStyledItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpti
    Q_ASSERT(index.isValid());
    const QWidget *widget = QStyledItemDelegatePrivate::widget(option);
 
-   QStyleOptionViewItemV4 opt = option;
+   QStyleOptionViewItem opt = option;
    initStyleOption(&opt, index);
 
    // let the editor take up all available space
@@ -417,93 +347,15 @@ void QStyledItemDelegate::setItemEditorFactory(QItemEditorFactory *factory)
 
 bool QStyledItemDelegate::eventFilter(QObject *object, QEvent *event)
 {
-   QWidget *editor = qobject_cast<QWidget *>(object);
-   if (!editor) {
-      return false;
-   }
-
-   if (event->type() == QEvent::KeyPress) {
-      switch (static_cast<QKeyEvent *>(event)->key()) {
-         case Qt::Key_Tab:
-            emit commitData(editor);
-            emit closeEditor(editor, QAbstractItemDelegate::EditNextItem);
-            return true;
-
-         case Qt::Key_Backtab:
-            emit commitData(editor);
-            emit closeEditor(editor, QAbstractItemDelegate::EditPreviousItem);
-            return true;
-
-         case Qt::Key_Enter:
-         case Qt::Key_Return:
-#ifndef QT_NO_TEXTEDIT
-            if (qobject_cast<QTextEdit *>(editor) || qobject_cast<QPlainTextEdit *>(editor)) {
-               return false;   // don't filter enter key events for QTextEdit
-            }
-            // We want the editor to be able to process the key press
-            // before committing the data (e.g. so it can do
-            // validation/fixup of the input).
-#endif
-
-#ifndef QT_NO_LINEEDIT
-            if (QLineEdit *e = qobject_cast<QLineEdit *>(editor))
-               if (!e->hasAcceptableInput()) {
-                  return false;
-               }
-#endif
-            QMetaObject::invokeMethod(this, "_q_commitDataAndCloseEditor", Qt::QueuedConnection, Q_ARG(QWidget *, editor));
-            return false;
-
-         case Qt::Key_Escape:
-            // don't commit data
-            emit closeEditor(editor, QAbstractItemDelegate::RevertModelCache);
-            break;
-         default:
-            return false;
-      }
-
-      if (editor->parentWidget()) {
-         editor->parentWidget()->setFocus();
-      }
-      return true;
-
-   } else if (event->type() == QEvent::FocusOut || (event->type() == QEvent::Hide && editor->isWindow())) {
-      //the Hide event will take care of he editors that are in fact complete dialogs
-      if (!editor->isActiveWindow() || (QApplication::focusWidget() != editor)) {
-         QWidget *w = QApplication::focusWidget();
-         while (w) { // don't worry about focus changes internally in the editor
-            if (w == editor) {
-               return false;
-            }
-            w = w->parentWidget();
-         }
-#ifndef QT_NO_DRAGANDDROP
-         // The window may lose focus during an drag operation.
-         // i.e when dragging involves the taskbar on Windows.
-         if (QDragManager::self() && QDragManager::self()->object != 0) {
-            return false;
-         }
-#endif
-
-         emit commitData(editor);
-         emit closeEditor(editor, NoHint);
-      }
-   } else if (event->type() == QEvent::ShortcutOverride) {
-      if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_Escape) {
-         event->accept();
-         return true;
-      }
-   }
-   return false;
+   Q_D(QStyledItemDelegate);
+   return d->editorEventFilter(object, event);
 }
 
 /*!
   \reimp
 */
 bool QStyledItemDelegate::editorEvent(QEvent *event,
-                                      QAbstractItemModel *model,
-                                      const QStyleOptionViewItem &option,
-                                      const QModelIndex &index)
+   QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
    Q_ASSERT(event);
    Q_ASSERT(model);
@@ -511,7 +363,7 @@ bool QStyledItemDelegate::editorEvent(QEvent *event,
    // make sure that the item is checkable
    Qt::ItemFlags flags = model->flags(index);
    if (!(flags & Qt::ItemIsUserCheckable) || !(option.state & QStyle::State_Enabled)
-         || !(flags & Qt::ItemIsEnabled)) {
+      || !(flags & Qt::ItemIsEnabled)) {
       return false;
    }
 
@@ -526,41 +378,39 @@ bool QStyledItemDelegate::editorEvent(QEvent *event,
 
    // make sure that we have the right event type
    if ((event->type() == QEvent::MouseButtonRelease)
-         || (event->type() == QEvent::MouseButtonDblClick)
-         || (event->type() == QEvent::MouseButtonPress)) {
-      QStyleOptionViewItemV4 viewOpt(option);
+      || (event->type() == QEvent::MouseButtonDblClick)
+      || (event->type() == QEvent::MouseButtonPress)) {
+
+      QStyleOptionViewItem viewOpt(option);
       initStyleOption(&viewOpt, index);
       QRect checkRect = style->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &viewOpt, widget);
       QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
       if (me->button() != Qt::LeftButton || !checkRect.contains(me->pos())) {
          return false;
       }
 
       if ((event->type() == QEvent::MouseButtonPress)
-            || (event->type() == QEvent::MouseButtonDblClick)) {
+         || (event->type() == QEvent::MouseButtonDblClick)) {
          return true;
       }
 
    } else if (event->type() == QEvent::KeyPress) {
       if (static_cast<QKeyEvent *>(event)->key() != Qt::Key_Space
-            && static_cast<QKeyEvent *>(event)->key() != Qt::Key_Select) {
+         && static_cast<QKeyEvent *>(event)->key() != Qt::Key_Select) {
          return false;
       }
    } else {
       return false;
    }
 
-   Qt::CheckState state = (static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked
-                           ? Qt::Unchecked : Qt::Checked);
+   Qt::CheckState state = static_cast<Qt::CheckState>(value.toInt());
+   if (flags & Qt::ItemIsUserTristate) {
+      state = ((Qt::CheckState)((state + 1) % 3));
+   } else {
+      state = (state == Qt::Checked) ? Qt::Unchecked : Qt::Checked;
+   }
    return model->setData(index, state, Qt::CheckStateRole);
 }
-
-void QStyledItemDelegate::_q_commitDataAndCloseEditor(QWidget *un_named_arg1)
-{
-   Q_D(QStyledItemDelegate);
-   d->_q_commitDataAndCloseEditor(un_named_arg1);
-}
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ITEMVIEWS

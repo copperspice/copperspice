@@ -26,7 +26,6 @@
 #include <QtCore/qstringlist.h>
 #include <QtGui/qabstractitemview.h>
 
-QT_BEGIN_NAMESPACE
 
 
 #ifndef QT_NO_STRINGLISTMODEL
@@ -37,9 +36,10 @@ class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
 
  public:
    explicit QStringListModel(QObject *parent = nullptr);
-   QStringListModel(const QStringList &strings, QObject *parent = nullptr);
+   explicit QStringListModel(const QStringList &strings, QObject *parent = nullptr);
 
    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+   QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
 
    QVariant data(const QModelIndex &index, int role) const override;
    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
@@ -63,6 +63,5 @@ class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
 
 #endif // QT_NO_STRINGLISTMODEL
 
-QT_END_NAMESPACE
 
 #endif // QSTRINGLISTMODEL_H

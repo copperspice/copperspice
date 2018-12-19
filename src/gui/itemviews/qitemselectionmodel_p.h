@@ -23,7 +23,7 @@
 #ifndef QITEMSELECTIONMODEL_P_H
 #define QITEMSELECTIONMODEL_P_H
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -38,7 +38,7 @@ class QItemSelectionModelPrivate
 
    virtual ~QItemSelectionModelPrivate() {}
 
-   QItemSelection expandSelection(const QItemSelection &selection,QItemSelectionModel::SelectionFlags command) const;
+   QItemSelection expandSelection(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command) const;
 
    void initModel(QAbstractItemModel *model);
 
@@ -46,8 +46,10 @@ class QItemSelectionModelPrivate
    void _q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
    void _q_rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
    void _q_columnsAboutToBeInserted(const QModelIndex &parent, int start, int end);
-   void _q_layoutAboutToBeChanged();
-   void _q_layoutChanged();
+   void _q_layoutAboutToBeChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(),
+      QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
+   void _q_layoutChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(),
+      QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
 
    inline void remove(QList<QItemSelectionRange> &r) {
       QList<QItemSelectionRange>::const_iterator it = r.constBegin();
@@ -68,8 +70,11 @@ class QItemSelectionModelPrivate
    QItemSelection currentSelection;
    QPersistentModelIndex currentIndex;
    QItemSelectionModel::SelectionFlags currentCommand;
-   QList<QPersistentModelIndex> savedPersistentIndexes;
-   QList<QPersistentModelIndex> savedPersistentCurrentIndexes;
+   QVector<QPersistentModelIndex> savedPersistentIndexes;
+   QVector<QPersistentModelIndex> savedPersistentCurrentIndexes;
+   QVector<QPair<QPersistentModelIndex, uint>> savedPersistentRowLengths;
+   QVector<QPair<QPersistentModelIndex, uint>> savedPersistentCurrentRowLengths;
+
    // optimization when all indexes are selected
    bool tableSelected;
    QPersistentModelIndex tableParent;
@@ -82,6 +87,5 @@ class QItemSelectionModelPrivate
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
 
 #endif // QITEMSELECTIONMODEL_P_H

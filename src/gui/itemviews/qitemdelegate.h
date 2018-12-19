@@ -23,13 +23,12 @@
 #ifndef QITEMDELEGATE_H
 #define QITEMDELEGATE_H
 
-#include <QtGui/qabstractitemdelegate.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qpixmap.h>
-#include <QtCore/qvariant.h>
+#include <qabstractitemdelegate.h>
+#include <qstring.h>
+#include <qpixmap.h>
+#include <qvariant.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -69,41 +68,36 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
  protected:
    virtual void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect, const QString &text) const;
 
-   virtual void drawDecoration(QPainter *painter, const QStyleOptionViewItem &option,const QRect &rect, const QPixmap &pixmap) const;
+   virtual void drawDecoration(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect, const QPixmap &pixmap) const;
 
    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect) const;
    virtual void drawCheck(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect, Qt::CheckState state) const;
 
    void drawBackground(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
    void doLayout(const QStyleOptionViewItem &option, QRect *checkRect, QRect *iconRect, QRect *textRect, bool hint) const;
 
    QRect rect(const QStyleOptionViewItem &option, const QModelIndex &index, int role) const;
 
    bool eventFilter(QObject *object, QEvent *event) override;
-   bool editorEvent(QEvent *event, QAbstractItemModel *model,const QStyleOptionViewItem &option, const QModelIndex &index) override;
+   bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
    QStyleOptionViewItem setOptions(const QModelIndex &index, const QStyleOptionViewItem &option) const;
 
    QPixmap decoration(const QStyleOptionViewItem &option, const QVariant &variant) const;
    QPixmap *selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const;
 
-   QRect check(const QStyleOptionViewItem &option, const QRect &bounding, const QVariant &variant) const;
+   QRect doCheck(const QStyleOptionViewItem &option, const QRect &bounding, const QVariant &variant) const;
    QRect textRectangle(QPainter *painter, const QRect &rect, const QFont &font, const QString &text) const;
-
- private:
-   Q_DECLARE_PRIVATE(QItemDelegate)
-   Q_DISABLE_COPY(QItemDelegate)
-
-   GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget *un_named_arg1))
-   GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)
 
  protected:
    QScopedPointer<QItemDelegatePrivate> d_ptr;
 
+ private:
+   Q_DECLARE_PRIVATE(QItemDelegate)
+   Q_DISABLE_COPY(QItemDelegate)
 };
 
 #endif // QT_NO_ITEMVIEWS
 
-QT_END_NAMESPACE
-
-#endif // QITEMDELEGATE_H
+#endif

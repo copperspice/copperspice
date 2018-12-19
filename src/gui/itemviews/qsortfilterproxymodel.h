@@ -29,8 +29,6 @@
 
 #include <qregularexpression.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSortFilterProxyModelPrivate;
 class QSortFilterProxyModelLessThan;
 class QSortFilterProxyModelGreaterThan;
@@ -128,6 +126,8 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
    QModelIndex parent(const QModelIndex &child) const override;
 
+   QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
+
    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
@@ -139,7 +139,7 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
 
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,int row, int column, const QModelIndex &parent) override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
@@ -152,7 +152,7 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
 
    QModelIndex buddy(const QModelIndex &index) const override;
    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits = 1,
-                  Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
+      Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
 
    QSize span(const QModelIndex &index) const override;
    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
@@ -173,7 +173,7 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    Q_DISABLE_COPY(QSortFilterProxyModel)
 
    GUI_CS_SLOT_1(Private, void _q_sourceDataChanged(const QModelIndex &source_top_left,
-                 const QModelIndex &source_bottom_right))
+         const QModelIndex &source_bottom_right, const QVector<int> &roles))
    GUI_CS_SLOT_2(_q_sourceDataChanged)
 
    GUI_CS_SLOT_1(Private, void _q_sourceHeaderDataChanged(Qt::Orientation orientation, int start, int end))
@@ -185,10 +185,12 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    GUI_CS_SLOT_1(Private, void _q_sourceReset())
    GUI_CS_SLOT_2(_q_sourceReset)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceLayoutAboutToBeChanged())
+   GUI_CS_SLOT_1(Private, void _q_sourceLayoutAboutToBeChanged(const QList<QPersistentModelIndex> &sourceParents,
+         QAbstractItemModel::LayoutChangeHint hint))
    GUI_CS_SLOT_2(_q_sourceLayoutAboutToBeChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceLayoutChanged())
+   GUI_CS_SLOT_1(Private, void _q_sourceLayoutChanged(const QList<QPersistentModelIndex> &sourceParents,
+         QAbstractItemModel::LayoutChangeHint hint))
    GUI_CS_SLOT_2(_q_sourceLayoutChanged)
 
    GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
@@ -203,6 +205,12 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &source_parent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceRowsRemoved)
 
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_2(_q_sourceRowsAboutToBeMoved)
+
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_2(_q_sourceRowsMoved)
+
    GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeInserted)
 
@@ -215,9 +223,14 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &source_parent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsRemoved)
 
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeMoved)
+
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_2(_q_sourceColumnsMoved)
+
    GUI_CS_SLOT_1(Private, void _q_clearMapping())
    GUI_CS_SLOT_2(_q_clearMapping)
-
 };
 
 void QSortFilterProxyModel::cs_setFilterRegExp(const QRegularExpression &regExp)
@@ -225,7 +238,6 @@ void QSortFilterProxyModel::cs_setFilterRegExp(const QRegularExpression &regExp)
    setFilterRegExp(regExp);
 }
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_SORTFILTERPROXYMODEL
 

@@ -20,8 +20,6 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qtablewidget.h>
 
 #ifndef QT_NO_TABLEWIDGET
@@ -29,7 +27,7 @@
 #include <qpainter.h>
 #include <qtablewidget_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
 QTableModel::QTableModel(int rows, int columns, QTableWidget *parent)
    : QAbstractTableModel(parent),
@@ -171,13 +169,14 @@ void QTableModel::setItem(int row, int column, QTableWidgetItem *item)
    tableItems[i] = item;
 
    if (view && view->isSortingEnabled()
-         && view->horizontalHeader()->sortIndicatorSection() == column) {
+      && view->horizontalHeader()->sortIndicatorSection() == column) {
       // sorted insertion
       Qt::SortOrder order = view->horizontalHeader()->sortIndicatorOrder();
       QVector<QTableWidgetItem *> colItems = columnItems(column);
       if (row < colItems.count()) {
          colItems.remove(row);
       }
+
       int sortedRow;
       if (item == 0) {
          // move to after all non-0 (sortable) items
@@ -187,6 +186,7 @@ void QTableModel::setItem(int row, int column, QTableWidgetItem *item)
          it = sortedInsertionIterator(colItems.begin(), colItems.end(), order, item);
          sortedRow = qMax((int)(it - colItems.begin()), 0);
       }
+
       if (sortedRow != row) {
          emit layoutAboutToBeChanged();
          // move the items @ row to sortedRow
@@ -208,12 +208,13 @@ void QTableModel::setItem(int row, int column, QTableWidgetItem *item)
          QModelIndexList newPersistentIndexes = oldPersistentIndexes;
          updateRowIndexes(newPersistentIndexes, row, sortedRow);
          changePersistentIndexList(oldPersistentIndexes,
-                                   newPersistentIndexes);
+            newPersistentIndexes);
 
          emit layoutChanged();
          return;
       }
    }
+
    QModelIndex idx = QAbstractTableModel::index(row, column);
    emit dataChanged(idx, idx);
 }
@@ -234,7 +235,7 @@ QTableWidgetItem *QTableModel::takeItem(int row, int column)
 
 QTableWidgetItem *QTableModel::item(int row, int column) const
 {
-   return tableItems.value(tableIndex(row, column));
+   return item(index(row, column));
 }
 
 QTableWidgetItem *QTableModel::item(const QModelIndex &index) const
@@ -458,7 +459,7 @@ QMap<int, QVariant> QTableModel::itemData(const QModelIndex &index) const
    if (itm) {
       for (int i = 0; i < itm->values.count(); ++i) {
          roles.insert(itm->values.at(i).role,
-                      itm->values.at(i).value);
+            itm->values.at(i).value);
       }
    }
    return roles;
@@ -476,6 +477,7 @@ bool QTableModel::setItemData(const QModelIndex &index, const QMap<int, QVariant
    if (itm) {
       itm->view = 0; // prohibits item from calling itemChanged()
       bool changed = false;
+
       for (QMap<int, QVariant>::const_iterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
          if (itm->data(it.key()) != it.value()) {
             itm->setData(it.key(), it.value());
@@ -510,16 +512,16 @@ Qt::ItemFlags QTableModel::flags(const QModelIndex &index) const
       return itm->flags();
    }
    return (Qt::ItemIsEditable
-           | Qt::ItemIsSelectable
-           | Qt::ItemIsUserCheckable
-           | Qt::ItemIsEnabled
-           | Qt::ItemIsDragEnabled
-           | Qt::ItemIsDropEnabled);
+         | Qt::ItemIsSelectable
+         | Qt::ItemIsUserCheckable
+         | Qt::ItemIsEnabled
+         | Qt::ItemIsDragEnabled
+         | Qt::ItemIsDropEnabled);
 }
 
 void QTableModel::sort(int column, Qt::SortOrder order)
 {
-   QVector<QPair<QTableWidgetItem *, int> > sortable;
+   QVector<QPair<QTableWidgetItem *, int>> sortable;
    QVector<int> unsortable;
 
    sortable.reserve(rowCount());
@@ -540,14 +542,18 @@ void QTableModel::sort(int column, Qt::SortOrder order)
    QModelIndexList from;
    QModelIndexList to;
 
-   for (int i = 0; i < rowCount(); ++i) {
+   const int numRows    = rowCount();
+   const int numColumns = columnCount();
+   for (int i = 0; i < numRows; ++i) {
+
       int r = (i < sortable.count()
-               ? sortable.at(i).second
-               : unsortable.at(i - sortable.count()));
-      for (int c = 0; c < columnCount(); ++c) {
+            ? sortable.at(i).second
+            : unsortable.at(i - sortable.count()));
+
+      for (int c = 0; c < numColumns; ++c) {
          sorted_table[tableIndex(i, c)] = item(r, c);
-         from.append(createIndex(r, c, 0));
-         to.append(createIndex(i, c, 0));
+         from.append(createIndex(r, c));
+         to.append(createIndex(i, c));
       }
    }
 
@@ -567,11 +573,12 @@ void QTableModel::sort(int column, Qt::SortOrder order)
   and the given sort \a order.
 */
 void QTableModel::ensureSorted(int column, Qt::SortOrder order,
-                               int start, int end)
+   int start, int end)
 {
    int count = end - start + 1;
-   QVector < QPair<QTableWidgetItem *, int> > sorting;
+   QVector < QPair<QTableWidgetItem *, int>> sorting;
    sorting.reserve(count);
+
    for (int row = start; row <= end; ++row) {
       QTableWidgetItem *itm = item(row, column);
       if (itm == 0) {
@@ -585,8 +592,9 @@ void QTableModel::ensureSorted(int column, Qt::SortOrder order,
    LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
    std::stable_sort(sorting.begin(), sorting.end(), compare);
 
-   QModelIndexList oldPersistentIndexes = persistentIndexList();
-   QModelIndexList newPersistentIndexes = oldPersistentIndexes;
+   QModelIndexList oldPersistentIndexes;
+   QModelIndexList newPersistentIndexes;
+
    QVector<QTableWidgetItem *> newTable = tableItems;
    QVector<QTableWidgetItem *> newVertical = verticalHeaderItems;
    QVector<QTableWidgetItem *> colItems = columnItems(column);
@@ -599,28 +607,42 @@ void QTableModel::ensureSorted(int column, Qt::SortOrder order,
       colItems.remove(oldRow);
       vit = sortedInsertionIterator(vit, colItems.end(), order, item);
       int newRow = qMax((int)(vit - colItems.begin()), 0);
+
       if ((newRow < oldRow) && !(*item < *colItems.at(oldRow - 1)) && !(*colItems.at(oldRow - 1) < *item)) {
          newRow = oldRow;
       }
+
       vit = colItems.insert(vit, item);
       if (newRow != oldRow) {
-         changed = true;
+
+         if (!changed) {
+            emit layoutAboutToBeChanged();
+            oldPersistentIndexes = persistentIndexList();
+            newPersistentIndexes = oldPersistentIndexes;
+            changed = true;
+         }
+
          // move the items @ oldRow to newRow
          int cc = columnCount();
          QVector<QTableWidgetItem *> rowItems(cc);
+
          for (int j = 0; j < cc; ++j) {
             rowItems[j] = newTable.at(tableIndex(oldRow, j));
          }
+
          newTable.remove(tableIndex(oldRow, 0), cc);
          newTable.insert(tableIndex(newRow, 0), cc, 0);
          for (int j = 0; j < cc; ++j) {
             newTable[tableIndex(newRow, j)] = rowItems.at(j);
          }
+
          QTableWidgetItem *header = newVertical.at(oldRow);
          newVertical.remove(oldRow);
          newVertical.insert(newRow, header);
+
          // update persistent indexes
          updateRowIndexes(newPersistentIndexes, oldRow, newRow);
+
          // the index of the remaining rows may have changed
          for (int j = i + 1; j < sorting.count(); ++j) {
             int otherRow = sorting.at(j).second;
@@ -634,11 +656,10 @@ void QTableModel::ensureSorted(int column, Qt::SortOrder order,
    }
 
    if (changed) {
-      emit layoutAboutToBeChanged();
       tableItems = newTable;
       verticalHeaderItems = newVertical;
-      changePersistentIndexList(oldPersistentIndexes,
-                                newPersistentIndexes);
+
+      changePersistentIndexList(oldPersistentIndexes, newPersistentIndexes);
       emit layoutChanged();
    }
 }
@@ -673,7 +694,7 @@ QVector<QTableWidgetItem *> QTableModel::columnItems(int column) const
   \a movedTo.
 */
 void QTableModel::updateRowIndexes(QModelIndexList &indexes,
-                                   int movedFromRow, int movedToRow)
+   int movedFromRow, int movedToRow)
 {
    QModelIndexList::iterator it;
    for (it = indexes.begin(); it != indexes.end(); ++it) {
@@ -711,13 +732,13 @@ QVector<QTableWidgetItem *>::iterator QTableModel::sortedInsertionIterator(
 }
 
 bool QTableModel::itemLessThan(const QPair<QTableWidgetItem *, int> &left,
-                               const QPair<QTableWidgetItem *, int> &right)
+   const QPair<QTableWidgetItem *, int> &right)
 {
    return *(left.first) < *(right.first);
 }
 
 bool QTableModel::itemGreaterThan(const QPair<QTableWidgetItem *, int> &left,
-                                  const QPair<QTableWidgetItem *, int> &right)
+   const QPair<QTableWidgetItem *, int> &right)
 {
    return (*(right.first) < * (left .first));
 }
@@ -747,11 +768,11 @@ QVariant QTableModel::headerData(int section, Qt::Orientation orientation, int r
 }
 
 bool QTableModel::setHeaderData(int section, Qt::Orientation orientation,
-                                const QVariant &value, int role)
+   const QVariant &value, int role)
 {
    if (section < 0 ||
-         (orientation == Qt::Horizontal && horizontalHeaderItems.size() <= section) ||
-         (orientation == Qt::Vertical && verticalHeaderItems.size() <= section)) {
+      (orientation == Qt::Horizontal && horizontalHeaderItems.size() <= section) ||
+      (orientation == Qt::Vertical && verticalHeaderItems.size() <= section)) {
       return false;
    }
 
@@ -771,8 +792,8 @@ bool QTableModel::setHeaderData(int section, Qt::Orientation orientation,
 bool QTableModel::isValid(const QModelIndex &index) const
 {
    return (index.isValid()
-           && index.row() < verticalHeaderItems.count()
-           && index.column() < horizontalHeaderItems.count());
+         && index.row() < verticalHeaderItems.count()
+         && index.column() < horizontalHeaderItems.count());
 }
 
 void QTableModel::clear()
@@ -796,6 +817,7 @@ void QTableModel::clear()
 
 void QTableModel::clearContents()
 {
+   beginResetModel();
    for (int i = 0; i < tableItems.count(); ++i) {
       if (tableItems.at(i)) {
          tableItems.at(i)->view = 0;
@@ -803,7 +825,7 @@ void QTableModel::clearContents()
          tableItems[i] = 0;
       }
    }
-   reset();
+   endResetModel();
 }
 
 void QTableModel::itemChanged(QTableWidgetItem *item)
@@ -811,6 +833,7 @@ void QTableModel::itemChanged(QTableWidgetItem *item)
    if (!item) {
       return;
    }
+
    if (item->flags() & ItemIsHeaderItem) {
       int row = verticalHeaderItems.indexOf(item);
       if (row >= 0) {
@@ -821,6 +844,7 @@ void QTableModel::itemChanged(QTableWidgetItem *item)
             emit headerDataChanged(Qt::Horizontal, column, column);
          }
       }
+
    } else {
       QModelIndex idx = index(item);
       if (idx.isValid()) {
@@ -875,7 +899,7 @@ QMimeData *QTableModel::mimeData(const QModelIndexList &indexes) const
 }
 
 bool QTableModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                               int row , int column, const QModelIndex &index)
+   int row, int column, const QModelIndex &index)
 {
    if (index.isValid()) {
       row = index.row();
@@ -895,29 +919,6 @@ Qt::DropActions QTableModel::supportedDropActions() const
    return (view ? view->supportedDropActions() : Qt::DropActions(Qt::IgnoreAction));
 }
 
-/*!
-    \class QTableWidgetSelectionRange
-
-    \brief The QTableWidgetSelectionRange class provides a way to interact with
-    selection in a model without using model indexes and a selection model.
-
-    \ingroup model-view
-
-    The QTableWidgetSelectionRange class stores the top left and bottom
-    right rows and columns of a selection range in a table. The
-    selections in the table may consist of several selection ranges.
-
-    \note If the item within the selection range is marked as not selectable,
-    e.g., \c{itemFlags() & Qt::ItemIsSelectable == 0} then it will not appear
-    in the selection range.
-
-    \sa QTableWidget
-*/
-
-/*!
-    Constructs an table selection range, i.e. a range
-    whose rowCount() and columnCount() are 0.
-*/
 QTableWidgetSelectionRange::QTableWidgetSelectionRange()
    : top(-1), left(-1), bottom(-2), right(-2)
 {
@@ -950,195 +951,6 @@ QTableWidgetSelectionRange::~QTableWidgetSelectionRange()
 {
 }
 
-/*!
-    \fn int QTableWidgetSelectionRange::topRow() const
-
-    Returns the top row of the range.
-
-    \sa bottomRow(), leftColumn(), rowCount()
-*/
-
-/*!
-    \fn int QTableWidgetSelectionRange::bottomRow() const
-
-    Returns the bottom row of the range.
-
-    \sa topRow(), rightColumn(), rowCount()
-*/
-
-/*!
-    \fn int QTableWidgetSelectionRange::leftColumn() const
-
-    Returns the left column of the range.
-
-    \sa rightColumn(), topRow(), columnCount()
-*/
-
-/*!
-    \fn int QTableWidgetSelectionRange::rightColumn() const
-
-    Returns the right column of the range.
-
-    \sa leftColumn(), bottomRow(), columnCount()
-*/
-
-/*!
-    \since 4.1
-    \fn int QTableWidgetSelectionRange::rowCount() const
-
-    Returns the number of rows in the range.
-
-    This is equivalent to bottomRow() - topRow() + 1.
-
-    \sa columnCount(), topRow(), bottomRow()
-*/
-
-/*!
-    \since 4.1
-    \fn int QTableWidgetSelectionRange::columnCount() const
-
-    Returns the number of columns in the range.
-
-    This is equivalent to rightColumn() - leftColumn() + 1.
-
-    \sa rowCount(), leftColumn(), rightColumn()
-*/
-
-/*!
-    \class QTableWidgetItem
-    \brief The QTableWidgetItem class provides an item for use with the
-    QTableWidget class.
-
-    \ingroup model-view
-
-    Table items are used to hold pieces of information for table widgets.
-    Items usually contain text, icons, or checkboxes
-
-    The QTableWidgetItem class is a convenience class that replaces the
-    \c QTableItem class in Qt 3. It provides an item for use with
-    the QTableWidget class.
-
-    Top-level items are constructed without a parent then inserted at the
-    position specified by a pair of row and column numbers:
-
-    \snippet doc/src/snippets/qtablewidget-using/mainwindow.cpp 3
-
-    Each item can have its own background brush which is set with
-    the setBackground() function. The current background brush can be
-    found with background().
-    The text label for each item can be rendered with its own font and brush.
-    These are specified with the setFont() and setForeground() functions,
-    and read with font() and foreground().
-
-    By default, items are enabled, editable, selectable, checkable, and can be
-    used both as the source of a drag and drop operation and as a drop target.
-    Each item's flags can be changed by calling setFlags() with the appropriate
-    value (see \l{Qt::ItemFlags}). Checkable items can be checked and unchecked
-    with the setCheckState() function. The corresponding checkState() function
-    indicates whether the item is currently checked.
-
-    \section1 Subclassing
-
-    When subclassing QTableWidgetItem to provide custom items, it is possible to
-    define new types for them so that they can be distinguished from standard
-    items. The constructors for subclasses that require this feature need to
-    call the base class constructor with a new type value equal to or greater
-    than \l UserType.
-
-    \sa QTableWidget, {Model/View Programming}, QListWidgetItem, QTreeWidgetItem
-*/
-
-/*!
-  \fn int QTableWidgetItem::row() const
-  \since 4.2
-
-  Returns the row of the item in the table.
-  If the item is not in a table, this function will return -1.
-
-  \sa column()
-*/
-
-/*!
-  \fn int QTableWidgetItem::column() const
-  \since 4.2
-
-  Returns the column of the item in the table.
-  If the item is not in a table, this function will return -1.
-
-  \sa row()
-*/
-
-/*!
-  \fn void QTableWidgetItem::setSelected(bool select)
-  \since 4.2
-
-  Sets the selected state of the item to \a select.
-
-  \sa isSelected()
-*/
-
-/*!
-  \fn bool QTableWidgetItem::isSelected() const
-  \since 4.2
-
-  Returns true if the item is selected, otherwise returns false.
-
-  \sa setSelected()
-*/
-
-/*!
-  \fn QSize QTableWidgetItem::sizeHint() const
-  \since 4.1
-
-  Returns the size hint set for the table item.
-*/
-
-/*!
-  \fn void QTableWidgetItem::setSizeHint(const QSize &size)
-  \since 4.1
-
-  Sets the size hint for the table item to be \a size.
-  If no size hint is set, the item delegate will compute the
-  size hint based on the item data.
-*/
-
-/*!
-    \fn Qt::CheckState QTableWidgetItem::checkState() const
-
-    Returns the checked state of the table item.
-
-    \sa flags()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setCheckState(Qt::CheckState state)
-
-    Sets the check state of the table item to be \a state.
-*/
-
-/*!
-    \fn QTableWidget *QTableWidgetItem::tableWidget() const
-
-    Returns the table widget that contains the item.
-*/
-
-/*!
-    \fn Qt::ItemFlags QTableWidgetItem::flags() const
-
-    Returns the flags used to describe the item. These determine whether
-    the item can be checked, edited, and selected.
-
-    \sa setFlags()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setFlags(Qt::ItemFlags flags)
-
-    Sets the flags for the item to the given \a flags. These determine whether
-    the item can be selected or modified.
-
-    \sa flags()
-*/
 void QTableWidgetItem::setFlags(Qt::ItemFlags aflags)
 {
    itemFlags = aflags;
@@ -1148,215 +960,26 @@ void QTableWidgetItem::setFlags(Qt::ItemFlags aflags)
 }
 
 
-/*!
-    \fn QString QTableWidgetItem::text() const
-
-    Returns the item's text.
-
-    \sa setText()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setText(const QString &text)
-
-    Sets the item's text to the \a text specified.
-
-    \sa text() setFont() setForeground()
-*/
-
-/*!
-    \fn QIcon QTableWidgetItem::icon() const
-
-    Returns the item's icon.
-
-    \sa setIcon(), {QAbstractItemView::iconSize}{iconSize}
-*/
-
-/*!
-    \fn void QTableWidgetItem::setIcon(const QIcon &icon)
-
-    Sets the item's icon to the \a icon specified.
-
-    \sa icon(), setText(), {QAbstractItemView::iconSize}{iconSize}
-*/
-
-/*!
-    \fn QString QTableWidgetItem::statusTip() const
-
-    Returns the item's status tip.
-
-    \sa setStatusTip()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setStatusTip(const QString &statusTip)
-
-    Sets the status tip for the table item to the text specified by
-    \a statusTip. QTableWidget mouse tracking needs to be enabled for this
-    feature to work.
-
-    \sa statusTip() setToolTip() setWhatsThis()
-*/
-
-/*!
-    \fn QString QTableWidgetItem::toolTip() const
-
-    Returns the item's tooltip.
-
-    \sa setToolTip()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setToolTip(const QString &toolTip)
-
-    Sets the item's tooltip to the string specified by \a toolTip.
-
-    \sa toolTip() setStatusTip() setWhatsThis()
-*/
-
-/*!
-    \fn QString QTableWidgetItem::whatsThis() const
-
-    Returns the item's "What's This?" help.
-
-    \sa setWhatsThis()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setWhatsThis(const QString &whatsThis)
-
-    Sets the item's "What's This?" help to the string specified by \a whatsThis.
-
-    \sa whatsThis() setStatusTip() setToolTip()
-*/
-
-/*!
-    \fn QFont QTableWidgetItem::font() const
-
-    Returns the font used to render the item's text.
-
-    \sa setFont()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setFont(const QFont &font)
-
-    Sets the font used to display the item's text to the given \a font.
-
-    \sa font() setText() setForeground()
-*/
-
-/*!
-    \fn QColor QTableWidgetItem::backgroundColor() const
-    \obsolete
-
-    This function is deprecated. Use background() instead.
-*/
-
-/*!
-    \fn void QTableWidgetItem::setBackgroundColor(const QColor &color)
-    \obsolete
-
-    This function is deprecated. Use setBackground() instead.
-*/
-
-/*!
-    \fn QBrush QTableWidgetItem::background() const
-    \since 4.2
-
-    Returns the brush used to render the item's background.
-
-    \sa foreground()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setBackground(const QBrush &brush)
-    \since 4.2
-
-    Sets the item's background brush to the specified \a brush.
-
-    \sa setForeground()
-*/
-
-/*!
-    \fn QColor QTableWidgetItem::textColor() const
-    \obsolete
-
-    This function is deprecated. Use foreground() instead.
-*/
-
-/*!
-    \fn void QTableWidgetItem::setTextColor(const QColor &color)
-    \obsolete
-
-    This function is deprecated. Use setForeground() instead.
-*/
-
-/*!
-    \fn QBrush QTableWidgetItem::foreground() const
-    \since 4.2
-
-    Returns the brush used to render the item's foreground (e.g. text).
-
-    \sa background()
-*/
-
-/*!
-    \fn void QTableWidgetItem::setForeground(const QBrush &brush)
-    \since 4.2
-
-    Sets the item's foreground brush to the specified \a brush.
-
-    \sa setBackground()
-*/
-
-/*!
-    \fn int QTableWidgetItem::textAlignment() const
-
-    Returns the text alignment for the item's text.
-
-    \sa Qt::Alignment
-*/
-
-/*!
-    \fn void QTableWidgetItem::setTextAlignment(int alignment)
-
-    Sets the text alignment for the item's text to the \a alignment
-    specified.
-
-    \sa Qt::Alignment
-*/
-
-/*!
-    Constructs a table item of the specified \a type that does not belong
-    to any table.
-
-    \sa type()
-*/
 QTableWidgetItem::QTableWidgetItem(int type)
    :  rtti(type), view(0), d(new QTableWidgetItemPrivate(this)),
       itemFlags(Qt::ItemIsEditable
-                | Qt::ItemIsSelectable
-                | Qt::ItemIsUserCheckable
-                | Qt::ItemIsEnabled
-                | Qt::ItemIsDragEnabled
-                | Qt::ItemIsDropEnabled)
+         | Qt::ItemIsSelectable
+         | Qt::ItemIsUserCheckable
+         | Qt::ItemIsEnabled
+         | Qt::ItemIsDragEnabled
+         | Qt::ItemIsDropEnabled)
 {
 }
 
-/*!
-    Constructs a table item with the given \a text.
 
-    \sa type()
-*/
 QTableWidgetItem::QTableWidgetItem(const QString &text, int type)
    :  rtti(type), view(0), d(new QTableWidgetItemPrivate(this)),
       itemFlags(Qt::ItemIsEditable
-                | Qt::ItemIsSelectable
-                | Qt::ItemIsUserCheckable
-                | Qt::ItemIsEnabled
-                | Qt::ItemIsDragEnabled
-                | Qt::ItemIsDropEnabled)
+         | Qt::ItemIsSelectable
+         | Qt::ItemIsUserCheckable
+         | Qt::ItemIsEnabled
+         | Qt::ItemIsDragEnabled
+         | Qt::ItemIsDropEnabled)
 {
    setData(Qt::DisplayRole, text);
 }
@@ -1369,11 +992,11 @@ QTableWidgetItem::QTableWidgetItem(const QString &text, int type)
 QTableWidgetItem::QTableWidgetItem(const QIcon &icon, const QString &text, int type)
    :  rtti(type), view(0), d(new QTableWidgetItemPrivate(this)),
       itemFlags(Qt::ItemIsEditable
-                | Qt::ItemIsSelectable
-                | Qt::ItemIsUserCheckable
-                | Qt::ItemIsEnabled
-                | Qt::ItemIsDragEnabled
-                | Qt::ItemIsDropEnabled)
+         | Qt::ItemIsSelectable
+         | Qt::ItemIsUserCheckable
+         | Qt::ItemIsEnabled
+         | Qt::ItemIsDragEnabled
+         | Qt::ItemIsDropEnabled)
 {
    setData(Qt::DecorationRole, icon);
    setData(Qt::DisplayRole, text);
@@ -1450,70 +1073,30 @@ bool QTableWidgetItem::operator<(const QTableWidgetItem &other) const
    return QAbstractItemModelPrivate::variantLessThan(v1, v2);
 }
 
-#ifndef QT_NO_DATASTREAM
 
-/*!
-    Reads the item from stream \a in.
 
-    \sa write()
-*/
 void QTableWidgetItem::read(QDataStream &in)
 {
    in >> values;
 }
 
-/*!
-    Writes the item to stream \a out.
-
-    \sa read()
-*/
 void QTableWidgetItem::write(QDataStream &out) const
 {
    out << values;
 }
 
-/*!
-    \relates QTableWidgetItem
-
-    Reads a table widget item from stream \a in into \a item.
-
-    This operator uses QTableWidgetItem::read().
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &in, QTableWidgetItem &item)
 {
    item.read(in);
    return in;
 }
 
-/*!
-    \relates QTableWidgetItem
-
-    Writes the table widget item \a item to stream \a out.
-
-    This operator uses QTableWidgetItem::write().
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &out, const QTableWidgetItem &item)
 {
    item.write(out);
    return out;
 }
 
-#endif // QT_NO_DATASTREAM
-
-/*!
-    \since 4.1
-
-    Constructs a copy of \a other. Note that type() and tableWidget()
-    are not copied.
-
-    This function is useful when reimplementing clone().
-
-    \sa data(), flags()
-*/
 QTableWidgetItem::QTableWidgetItem(const QTableWidgetItem &other)
    : rtti(Type), values(other.values), view(0),
      d(new QTableWidgetItemPrivate(this)),
@@ -1521,14 +1104,6 @@ QTableWidgetItem::QTableWidgetItem(const QTableWidgetItem &other)
 {
 }
 
-/*!
-    Assigns \a other's data and flags to this item. Note that type()
-    and tableWidget() are not copied.
-
-    This function is useful when reimplementing clone().
-
-    \sa data(), flags()
-*/
 QTableWidgetItem &QTableWidgetItem::operator=(const QTableWidgetItem &other)
 {
    values = other.values;
@@ -1536,110 +1111,35 @@ QTableWidgetItem &QTableWidgetItem::operator=(const QTableWidgetItem &other)
    return *this;
 }
 
-/*!
-    \class QTableWidget
-    \brief The QTableWidget class provides an item-based table view with a default model.
-
-    \ingroup model-view
-
-
-    Table widgets provide standard table display facilities for applications.
-    The items in a QTableWidget are provided by QTableWidgetItem.
-
-    If you want a table that uses your own data model you should
-    use QTableView rather than this class.
-
-    Table widgets can be constructed with the required numbers of rows and
-    columns:
-
-    \snippet doc/src/snippets/qtablewidget-using/mainwindow.cpp 0
-
-    Alternatively, tables can be constructed without a given size and resized
-    later:
-
-    \snippet doc/src/snippets/qtablewidget-resizing/mainwindow.cpp 0
-    \snippet doc/src/snippets/qtablewidget-resizing/mainwindow.cpp 1
-
-    Items are created ouside the table (with no parent widget) and inserted
-    into the table with setItem():
-
-    \snippet doc/src/snippets/qtablewidget-resizing/mainwindow.cpp 2
-
-    If you want to enable sorting in your table widget, do so after you
-    have populated it with items, otherwise sorting may interfere with
-    the insertion order (see setItem() for details).
-
-    Tables can be given both horizontal and vertical headers. The simplest way
-    to create the headers is to supply a list of strings to the
-    setHorizontalHeaderLabels() and setVerticalHeaderLabels() functions. These
-    will provide simple textual headers for the table's columns and rows.
-    More sophisticated headers can be created from existing table items
-    that are usually constructed outside the table. For example, we can
-    construct a table item with an icon and aligned text, and use it as the
-    header for a particular column:
-
-    \snippet doc/src/snippets/qtablewidget-using/mainwindow.cpp 2
-
-    The number of rows in the table can be found with rowCount(), and the
-    number of columns with columnCount(). The table can be cleared with the
-    clear() function.
-
-    \table 100%
-    \row \o \inlineimage windowsxp-tableview.png Screenshot of a Windows XP style table widget
-         \o \inlineimage macintosh-tableview.png Screenshot of a Macintosh style table widget
-         \o \inlineimage plastique-tableview.png Screenshot of a Plastique style table widget
-    \row \o A \l{Windows XP Style Widget Gallery}{Windows XP style} table widget.
-         \o A \l{Macintosh Style Widget Gallery}{Macintosh style} table widget.
-         \o A \l{Plastique Style Widget Gallery}{Plastique style} table widget.
-    \endtable
-
-    \sa QTableWidgetItem, QTableView, {Model/View Programming}
-*/
-
-/*!
-    \property QTableWidget::rowCount
-    \brief the number of rows in the table
-
-    By default, for a table constructed without row and column counts,
-    this property contains a value of 0.
-*/
-
-/*!
-    \property QTableWidget::columnCount
-    \brief the number of columns in the table
-
-    By default, for a table constructed without row and column counts,
-    this property contains a value of 0.
-*/
 
 void QTableWidgetPrivate::setup()
 {
    Q_Q(QTableWidget);
 
    // view signals
-   QObject::connect(q, SIGNAL(pressed(const QModelIndex &)), q, SLOT(_q_emitItemPressed(const QModelIndex &)));
-   QObject::connect(q, SIGNAL(clicked(const QModelIndex &)), q, SLOT(_q_emitItemClicked(const QModelIndex &)));
+   QObject::connect(q, SIGNAL(pressed(QModelIndex)),       q, SLOT(_q_emitItemPressed(QModelIndex)));
+   QObject::connect(q, SIGNAL(clicked(QModelIndex)),       q, SLOT(_q_emitItemClicked(QModelIndex)));
 
-   QObject::connect(q, SIGNAL(doubleClicked(const QModelIndex &)), q, SLOT(_q_emitItemDoubleClicked(const QModelIndex &)));
-   QObject::connect(q, SIGNAL(activated(const QModelIndex &)),     q, SLOT(_q_emitItemActivated(const QModelIndex &)));
-   QObject::connect(q, SIGNAL(entered(const QModelIndex &)),       q, SLOT(_q_emitItemEntered(const QModelIndex &)));
+   QObject::connect(q, SIGNAL(doubleClicked(QModelIndex)), q, SLOT(_q_emitItemDoubleClicked(QModelIndex)));
+   QObject::connect(q, SIGNAL(activated(QModelIndex)),     q, SLOT(_q_emitItemActivated(QModelIndex)));
+   QObject::connect(q, SIGNAL(entered(QModelIndex)),       q, SLOT(_q_emitItemEntered(QModelIndex)));
 
    // model signals
-   QObject::connect(model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                    q, SLOT(_q_emitItemChanged(const QModelIndex &)));
+   QObject::connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
+      q, SLOT(_q_emitItemChanged(QModelIndex)));
 
    // selection signals
-   QObject::connect(q->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
-                    q, SLOT(_q_emitCurrentItemChanged(const QModelIndex &, const QModelIndex &)));
+   QObject::connect(q->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+      q, SLOT(_q_emitCurrentItemChanged(QModelIndex, QModelIndex)));
 
-   QObject::connect(q->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-                    q, SLOT(itemSelectionChanged()));
+   QObject::connect(q->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+      q, SLOT(itemSelectionChanged()));
 
    // sorting
-   QObject::connect(model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                    q, SLOT(_q_dataChanged(const QModelIndex &, const QModelIndex &)));
+   QObject::connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
+      q, SLOT(_q_dataChanged(QModelIndex, QModelIndex)));
 
-   QObject::connect(model, SIGNAL(columnsRemoved(const QModelIndex &, int, int)), q, SLOT(_q_sort()));
+   QObject::connect(model, SIGNAL(columnsRemoved(QModelIndex, int, int)), q, SLOT(_q_sort()));
 }
 
 void QTableWidgetPrivate::_q_emitItemPressed(const QModelIndex &index)
@@ -1699,11 +1199,12 @@ void QTableWidgetPrivate::_q_emitItemChanged(const QModelIndex &index)
 }
 
 void QTableWidgetPrivate::_q_emitCurrentItemChanged(const QModelIndex &current,
-      const QModelIndex &previous)
+   const QModelIndex &previous)
 {
    Q_Q(QTableWidget);
-   QTableWidgetItem *currentItem = tableModel()->item(current);
+   QTableWidgetItem *currentItem  = tableModel()->item(current);
    QTableWidgetItem *previousItem = tableModel()->item(previous);
+
    if (currentItem || previousItem) {
       emit q->currentItemChanged(currentItem, previousItem);
    }
@@ -1720,7 +1221,7 @@ void QTableWidgetPrivate::_q_sort()
 }
 
 void QTableWidgetPrivate::_q_dataChanged(const QModelIndex &topLeft,
-      const QModelIndex &bottomRight)
+   const QModelIndex &bottomRight)
 {
    if (sortingEnabled && topLeft.isValid() && bottomRight.isValid()) {
       int column = horizontalHeader->sortIndicatorSection();
@@ -1731,169 +1232,6 @@ void QTableWidgetPrivate::_q_dataChanged(const QModelIndex &topLeft,
    }
 }
 
-/*!
-    \fn void QTableWidget::itemPressed(QTableWidgetItem *item)
-
-    This signal is emitted whenever an item in the table is pressed.
-    The \a item specified is the item that was pressed.
-*/
-
-/*!
-    \fn void QTableWidget::itemClicked(QTableWidgetItem *item)
-
-    This signal is emitted whenever an item in the table is clicked.
-    The \a item specified is the item that was clicked.
-*/
-
-/*!
-    \fn void QTableWidget::itemDoubleClicked(QTableWidgetItem *item)
-
-    This signal is emitted whenever an item in the table is double
-    clicked. The \a item specified is the item that was double clicked.
-*/
-
-/*!
-    \fn void QTableWidget::itemActivated(QTableWidgetItem *item)
-
-    This signal is emitted when the specified \a item has been activated
-*/
-
-/*!
-    \fn void QTableWidget::itemEntered(QTableWidgetItem *item)
-
-    This signal is emitted when the mouse cursor enters an item. The
-    \a item is the item entered.
-
-    This signal is only emitted when mouseTracking is turned on, or when a
-    mouse button is pressed while moving into an item.
-*/
-
-/*!
-    \fn void QTableWidget::itemChanged(QTableWidgetItem *item)
-
-    This signal is emitted whenever the data of \a item has changed.
-*/
-
-/*!
-    \fn void QTableWidget::currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous)
-
-    This signal is emitted whenever the current item changes. The \a
-    previous item is the item that previously had the focus, \a
-    current is the new current item.
-*/
-
-/*!
-    \fn void QTableWidget::itemSelectionChanged()
-
-    This signal is emitted whenever the selection changes.
-
-    \sa selectedItems() QTableWidgetItem::isSelected()
-*/
-
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::cellPressed(int row, int column)
-
-  This signal is emitted whenever a cell in the table is pressed.
-  The \a row and \a column specified is the cell that was pressed.
-*/
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::cellClicked(int row, int column)
-
-  This signal is emitted whenever a cell in the table is clicked.
-  The \a row and \a column specified is the cell that was clicked.
-*/
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::cellDoubleClicked(int row, int column)
-
-  This signal is emitted whenever a cell in the table is double
-  clicked. The \a row and \a column specified is the cell that was
-  double clicked.
-*/
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::cellActivated(int row, int column)
-
-  This signal is emitted when the cell specified  by \a row and \a column
-  has been activated
-*/
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::cellEntered(int row, int column)
-
-  This signal is emitted when the mouse cursor enters a cell. The
-  cell is specified by \a row and \a column.
-
-  This signal is only emitted when mouseTracking is turned on, or when a
-  mouse button is pressed while moving into an item.
-*/
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::cellChanged(int row, int column)
-
-  This signal is emitted whenever the data of the item in the cell
-  specified by \a row and \a column has changed.
-*/
-
-/*!
-  \since 4.1
-  \fn void QTableWidget::currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn)
-
-  This signal is emitted whenever the current cell changes. The cell
-  specified by \a previousRow and \a previousColumn is the cell that
-  previously had the focus, the cell specified by \a currentRow and \a
-  currentColumn is the new current cell.
-*/
-
-/*!
-  \since 4.3
-  \fn void QTableWidget::removeCellWidget(int row, int column)
-
-  Removes the widget set on the cell indicated by \a row and \a column.
-*/
-
-/*!
-    \fn QTableWidgetItem *QTableWidget::itemAt(int ax, int ay) const
-
-    Returns the item at the position equivalent to QPoint(\a{ax}, \a{ay}) in
-    the table widget's coordinate system, or returns 0 if the specified point
-    is not covered by an item in the table widget.
-
-    \sa item()
-*/
-
-/*!
-    \enum QTableWidgetItem::ItemType
-
-    This enum describes the types that are used to describe table widget items.
-
-    \value Type     The default type for table widget items.
-    \value UserType The minimum value for custom types. Values below UserType are
-                    reserved by Qt.
-
-    You can define new user types in QTableWidgetItem subclasses to ensure that
-    custom items are treated specially.
-
-    \sa type()
-*/
-
-/*!
-    \fn int QTableWidgetItem::type() const
-
-    Returns the type passed to the QTableWidgetItem constructor.
-*/
-
-/*!
-    Creates a new table view with the given \a parent.
-*/
 QTableWidget::QTableWidget(QWidget *parent)
    : QTableView(*new QTableWidgetPrivate, parent)
 {
@@ -1997,24 +1335,6 @@ QTableWidgetItem *QTableWidget::item(int row, int column) const
    return d->tableModel()->item(row, column);
 }
 
-/*!
-    Sets the item for the given \a row and \a column to \a item.
-
-    The table takes ownership of the item.
-
-    Note that if sorting is enabled (see
-    \l{QTableView::sortingEnabled} {sortingEnabled}) and \a column is
-    the current sort column, the \a row will be moved to the sorted
-    position determined by \a item.
-
-    If you want to set several items of a particular row (say, by
-    calling setItem() in a loop), you may want to turn off sorting
-    before doing so, and turn it back on afterwards; this will allow
-    you to use the same \a row argument for all items in the same row
-    (i.e. setItem() will not move the row).
-
-    \sa item() takeItem()
-*/
 void QTableWidget::setItem(int row, int column, QTableWidgetItem *item)
 {
    Q_D(QTableWidget);
@@ -2037,6 +1357,7 @@ QTableWidgetItem *QTableWidget::takeItem(int row, int column)
 {
    Q_D(QTableWidget);
    QTableWidgetItem *item = d->tableModel()->takeItem(row, column);
+
    if (item) {
       item->view = 0;
    }
@@ -2066,10 +1387,7 @@ void QTableWidget::setVerticalHeaderItem(int row, QTableWidgetItem *item)
    }
 }
 
-/*!
-  \since 4.1
-    Removes the vertical header item at \a row from the header without deleting it.
-*/
+
 QTableWidgetItem *QTableWidget::takeVerticalHeaderItem(int row)
 {
    Q_D(QTableWidget);
@@ -2185,57 +1503,24 @@ QTableWidgetItem *QTableWidget::currentItem() const
    return d->tableModel()->item(currentIndex());
 }
 
-/*!
-    Sets the current item to \a item.
 
-    Unless the selection mode is \l{QAbstractItemView::}{NoSelection},
-    the item is also be selected.
-
-    \sa currentItem(), setCurrentCell()
-*/
 void QTableWidget::setCurrentItem(QTableWidgetItem *item)
 {
    Q_D(QTableWidget);
    setCurrentIndex(d->tableModel()->index(item));
 }
 
-/*!
-  \since 4.4
-
-  Sets the current item to be \a item, using the given \a command.
-
-  \sa currentItem(), setCurrentCell()
-*/
 void QTableWidget::setCurrentItem(QTableWidgetItem *item, QItemSelectionModel::SelectionFlags command)
 {
    Q_D(QTableWidget);
    d->selectionModel->setCurrentIndex(d->tableModel()->index(item), command);
 }
 
-/*!
-    \since 4.1
-
-    Sets the current cell to be the cell at position (\a row, \a
-    column).
-
-    Depending on the current \l{QAbstractItemView::SelectionMode}{selection mode},
-    the cell may also be selected.
-
-    \sa setCurrentItem(), currentRow(), currentColumn()
-*/
 void QTableWidget::setCurrentCell(int row, int column)
 {
    setCurrentIndex(model()->index(row, column, QModelIndex()));
 }
 
-/*!
-  \since 4.4
-
-  Sets the current cell to be the cell at position (\a row, \a
-  column), using the given \a command.
-
-  \sa setCurrentItem(), currentRow(), currentColumn()
-*/
 void QTableWidget::setCurrentCell(int row, int column, QItemSelectionModel::SelectionFlags command)
 {
    Q_D(QTableWidget);
@@ -2326,20 +1611,7 @@ QWidget *QTableWidget::cellWidget(int row, int column) const
    return QAbstractItemView::indexWidget(index);
 }
 
-/*!
-    \since 4.1
 
-    Sets the given \a widget to be displayed in the cell in the given \a row
-    and \a column, passing the ownership of the widget to the table.
-
-    If cell widget A is replaced with cell widget B, cell widget A will be
-    deleted. For example, in the code snippet below, the QLineEdit object will
-    be deleted.
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qtablewidget.cpp 0
-
-    \sa cellWidget()
-*/
 void QTableWidget::setCellWidget(int row, int column, QWidget *widget)
 {
    QModelIndex index = model()->index(row, column, QModelIndex());
@@ -2381,7 +1653,7 @@ void QTableWidget::setItemSelected(const QTableWidgetItem *item, bool select)
 void QTableWidget::setRangeSelected(const QTableWidgetSelectionRange &range, bool select)
 {
    if (!model()->hasIndex(range.topRow(), range.leftColumn(), rootIndex()) ||
-         !model()->hasIndex(range.bottomRow(), range.rightColumn(), rootIndex())) {
+      !model()->hasIndex(range.bottomRow(), range.rightColumn(), rootIndex())) {
       return;
    }
 
@@ -2389,7 +1661,7 @@ void QTableWidget::setRangeSelected(const QTableWidgetSelectionRange &range, boo
    QModelIndex bottomRight = model()->index(range.bottomRow(), range.rightColumn(), rootIndex());
 
    selectionModel()->select(QItemSelection(topLeft, bottomRight),
-                            select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+      select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 }
 
 /*!
@@ -2402,11 +1674,13 @@ QList<QTableWidgetSelectionRange> QTableWidget::selectedRanges() const
 {
    const QList<QItemSelectionRange> ranges = selectionModel()->selection();
    QList<QTableWidgetSelectionRange> result;
-   for (int i = 0; i < ranges.count(); ++i)
+   for (int i = 0; i < ranges.count(); ++i) {
       result.append(QTableWidgetSelectionRange(ranges.at(i).top(),
-                    ranges.at(i).left(),
-                    ranges.at(i).bottom(),
-                    ranges.at(i).right()));
+            ranges.at(i).left(),
+            ranges.at(i).bottom(),
+            ranges.at(i).right()));
+   }
+
    return result;
 }
 
@@ -2420,11 +1694,13 @@ QList<QTableWidgetSelectionRange> QTableWidget::selectedRanges() const
   \sa selectedIndexes()
 */
 
-QList<QTableWidgetItem *> QTableWidget::selectedItems()
+QList<QTableWidgetItem *> QTableWidget::selectedItems() const
 {
-   Q_D(QTableWidget);
+   Q_D(const QTableWidget);
+
    QModelIndexList indexes = selectionModel()->selectedIndexes();
    QList<QTableWidgetItem *> items;
+
    for (int i = 0; i < indexes.count(); ++i) {
       QModelIndex index = indexes.at(i);
       if (isIndexHidden(index)) {
@@ -2448,7 +1724,7 @@ QList<QTableWidgetItem *> QTableWidget::findItems(const QString &text, Qt::Match
    QModelIndexList indexes;
    for (int column = 0; column < columnCount(); ++column)
       indexes += d->model->match(model()->index(0, column, QModelIndex()),
-                                 Qt::DisplayRole, text, -1, flags);
+            Qt::DisplayRole, text, -1, flags);
    QList<QTableWidgetItem *> items;
    for (int i = 0; i < indexes.size(); ++i) {
       items.append(d->tableModel()->item(indexes.at(i)));
@@ -2498,6 +1774,7 @@ QRect QTableWidget::visualItemRect(const QTableWidgetItem *item) const
    if (!item) {
       return QRect();
    }
+
    QModelIndex index = d->tableModel()->index(const_cast<QTableWidgetItem *>(item));
    Q_ASSERT(index.isValid());
    return visualRect(index);
@@ -2515,6 +1792,7 @@ void QTableWidget::scrollToItem(const QTableWidgetItem *item, QAbstractItemView:
    if (!item) {
       return;
    }
+
    QModelIndex index = d->tableModel()->index(const_cast<QTableWidgetItem *>(item));
    Q_ASSERT(index.isValid());
    QTableView::scrollTo(index, hint);
@@ -2531,19 +1809,7 @@ const QTableWidgetItem *QTableWidget::itemPrototype() const
    return d->tableModel()->itemPrototype();
 }
 
-/*!
-    Sets the item prototype for the table to the specified \a item.
 
-    The table widget will use the item prototype clone function when it needs
-    to create a new table item.  For example when the user is editing
-    in an empty cell.  This is useful when you have a QTableWidgetItem
-    subclass and want to make sure that QTableWidget creates instances of
-    your subclass.
-
-    The table takes ownership of the prototype.
-
-    \sa itemPrototype()
-*/
 void QTableWidget::setItemPrototype(const QTableWidgetItem *item)
 {
    Q_D(QTableWidget);
@@ -2599,13 +1865,7 @@ void QTableWidget::clear()
    d->tableModel()->clear();
 }
 
-/*!
-    \since 4.2
 
-    Removes all items not in the headers from the view.
-    This will also remove all selections.
-    The table dimensions stay the same.
-*/
 void QTableWidget::clearContents()
 {
    Q_D(QTableWidget);
@@ -2624,27 +1884,30 @@ QStringList QTableWidget::mimeTypes() const
    return d_func()->tableModel()->QAbstractTableModel::mimeTypes();
 }
 
-/*!
-    Returns an object that contains a serialized description of the specified
-    \a items. The format used to describe the items is obtained from the
-    mimeTypes() function.
+QMimeData *QTableWidget::mimeData(const QList<QTableWidgetItem *> &items) const
 
-    If the list of items is empty, 0 is returned rather than a serialized
-    empty list.
-*/
-QMimeData *QTableWidget::mimeData(const QList<QTableWidgetItem *>) const
 {
-   return d_func()->tableModel()->internalMimeData();
+   Q_D(const QTableWidget);
+
+   QModelIndexList &cachedIndexes = d->tableModel()->cachedIndexes;
+
+   // if non empty, it's called from the model's own mimeData
+   if (cachedIndexes.isEmpty()) {
+
+      for (QTableWidgetItem *item : items) {
+         cachedIndexes << indexFromItem(item);
+      }
+
+      QMimeData *result = d->tableModel()->internalMimeData();
+
+      cachedIndexes.clear();
+      return result;
+   }
+
+   return d->tableModel()->internalMimeData();
 }
 
-/*!
-    Handles the \a data supplied by a drag and drop operation that ended with
-    the given \a action in the given \a row and \a column.
-    Returns true if the data and action can be handled by the model;
-    otherwise returns false.
 
-    \sa supportedDropActions()
-*/
 bool QTableWidget::dropMimeData(int row, int column, const QMimeData *data, Qt::DropAction action)
 {
    QModelIndex idx;
@@ -2656,7 +1919,7 @@ bool QTableWidget::dropMimeData(int row, int column, const QMimeData *data, Qt::
       column = -1;
    }
 #endif
-   return d_func()->tableModel()->QAbstractTableModel::dropMimeData(data, action , row, column, idx);
+   return d_func()->tableModel()->QAbstractTableModel::dropMimeData(data, action, row, column, idx);
 }
 
 /*!
@@ -2724,7 +1987,7 @@ void QTableWidget::dropEvent(QDropEvent *event)
 {
    Q_D(QTableWidget);
    if (event->source() == this && (event->dropAction() == Qt::MoveAction ||
-                                   dragDropMode() == QAbstractItemView::InternalMove)) {
+         dragDropMode() == QAbstractItemView::InternalMove)) {
       QModelIndex topIndex;
       int col = -1;
       int row = -1;
@@ -2813,6 +2076,6 @@ void QTableWidget::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex 
    d->_q_dataChanged(topLeft, bottomRight);
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_TABLEWIDGET

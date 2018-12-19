@@ -43,28 +43,40 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
 
    GUI_CS_PROPERTY_READ(movement, movement)
    GUI_CS_PROPERTY_WRITE(movement, setMovement)
+
    GUI_CS_PROPERTY_READ(flow, flow)
    GUI_CS_PROPERTY_WRITE(flow, setFlow)
+
    GUI_CS_PROPERTY_READ(isWrapping, isWrapping)
    GUI_CS_PROPERTY_WRITE(isWrapping, setWrapping)
+
    GUI_CS_PROPERTY_READ(resizeMode, resizeMode)
    GUI_CS_PROPERTY_WRITE(resizeMode, setResizeMode)
+
    GUI_CS_PROPERTY_READ(layoutMode, layoutMode)
    GUI_CS_PROPERTY_WRITE(layoutMode, setLayoutMode)
+
    GUI_CS_PROPERTY_READ(spacing, spacing)
    GUI_CS_PROPERTY_WRITE(spacing, setSpacing)
+
    GUI_CS_PROPERTY_READ(gridSize, gridSize)
    GUI_CS_PROPERTY_WRITE(gridSize, setGridSize)
+
    GUI_CS_PROPERTY_READ(viewMode, viewMode)
    GUI_CS_PROPERTY_WRITE(viewMode, setViewMode)
+
    GUI_CS_PROPERTY_READ(modelColumn, modelColumn)
    GUI_CS_PROPERTY_WRITE(modelColumn, setModelColumn)
+
    GUI_CS_PROPERTY_READ(uniformItemSizes, uniformItemSizes)
    GUI_CS_PROPERTY_WRITE(uniformItemSizes, setUniformItemSizes)
+
    GUI_CS_PROPERTY_READ(batchSize, batchSize)
    GUI_CS_PROPERTY_WRITE(batchSize, setBatchSize)
+
    GUI_CS_PROPERTY_READ(wordWrap, wordWrap)
    GUI_CS_PROPERTY_WRITE(wordWrap, setWordWrap)
+
    GUI_CS_PROPERTY_READ(selectionRectVisible, isSelectionRectVisible)
    GUI_CS_PROPERTY_WRITE(selectionRectVisible, setSelectionRectVisible)
 
@@ -143,12 +155,15 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void resizeContents(int width, int height);
    QSize contentsSize() const;
 
-   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) override;
+   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) override;
    void rowsInserted(const QModelIndex &parent, int start, int end) override;
    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
 
    void mouseMoveEvent(QMouseEvent *e) override;
    void mouseReleaseEvent(QMouseEvent *e) override;
+#ifndef QT_NO_WHEELEVENT
+   void wheelEvent(QWheelEvent *e) override;
+#endif
 
    void timerEvent(QTimerEvent *e) override;
    void resizeEvent(QResizeEvent *e) override;
@@ -157,10 +172,8 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void dragMoveEvent(QDragMoveEvent *e) override;
    void dragLeaveEvent(QDragLeaveEvent *e) override;
    void dropEvent(QDropEvent *e) override;
-   void startDrag(Qt::DropActions supportedActions) override;
 
-   void internalDrop(QDropEvent *e);
-   void internalDrag(Qt::DropActions supportedActions);
+   void startDrag(Qt::DropActions supportedActions) override;
 #endif
 
    QStyleOptionViewItem viewOptions() const override;
@@ -183,8 +196,8 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
+   QSize viewportSizeHint() const override;
  private:
-   friend class QAccessibleItemView;
    int visualIndex(const QModelIndex &index) const;
 
    Q_DECLARE_PRIVATE(QListView)
@@ -192,7 +205,5 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
 };
 
 #endif // QT_NO_LISTVIEW
-
-QT_END_NAMESPACE
 
 #endif // QLISTVIEW_H

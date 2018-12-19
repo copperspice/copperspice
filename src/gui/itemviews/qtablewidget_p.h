@@ -40,6 +40,7 @@ typedef bool(*LessThan)(const QPair<QTableWidgetItem *, int> &, const QPair<QTab
 class QTableWidgetMimeData : public QMimeData
 {
    GUI_CS_OBJECT(QTableWidgetMimeData)
+
  public:
    QList<QTableWidgetItem *> items;
 };
@@ -141,7 +142,7 @@ class QTableModel : public QAbstractTableModel
    // dnd
    QStringList mimeTypes() const override;
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,int row, int column, const QModelIndex &parent) override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
    Qt::DropActions supportedDropActions() const override;
 
    QMimeData *internalMimeData()  const;
@@ -154,6 +155,8 @@ class QTableModel : public QAbstractTableModel
 
    // A cache must be mutable if get-functions should have const modifiers
    mutable QModelIndexList cachedIndexes;
+
+   friend class QTableWidget;
 };
 
 class QTableWidgetPrivate : public QTableViewPrivate
@@ -162,6 +165,7 @@ class QTableWidgetPrivate : public QTableViewPrivate
 
  public:
    QTableWidgetPrivate() : QTableViewPrivate() {}
+
    inline QTableModel *tableModel() const {
       return qobject_cast<QTableModel *>(model);
    }
@@ -193,7 +197,7 @@ class QTableWidgetItemPrivate
    int id;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_TABLEWIDGET
 

@@ -50,6 +50,7 @@ class QSpanCollection
       Span(int row, int column, int rowCount, int columnCount)
          : m_top(row), m_left(column), m_bottom(row + rowCount - 1), m_right(column + columnCount - 1),
            will_be_deleted(false) { }
+
       inline int top() const {
          return m_top;
       }
@@ -143,18 +144,22 @@ class QTableViewPrivate : public QAbstractItemViewPrivate
    }
 
    inline int accessibleTable2Index(const QModelIndex &index) const {
-      return (index.row() + (horizontalHeader ? 1 : 0)) * (index.model()->columnCount() + (verticalHeader ? 1 : 0))
-             + index.column() + (verticalHeader ? 1 : 0) + 1;
+      const int vHeader = verticalHeader ? 1 : 0;
+
+      return (index.row() + (horizontalHeader ? 1 : 0)) * (index.model()->columnCount() + vHeader)
+         + index.column() + vHeader;
    }
 
    int sectionSpanEndLogical(const QHeaderView *header, int logical, int span) const;
    int sectionSpanSize(const QHeaderView *header, int logical, int span) const;
    bool spanContainsSection(const QHeaderView *header, int logical, int spanLogical, int span) const;
 
-   void drawAndClipSpans(const QRegion &area, QPainter *painter, const QStyleOptionViewItemV4 &option, QBitArray *drawn,
-                         int firstVisualRow, int lastVisualRow, int firstVisualColumn, int lastVisualColumn);
+   void drawAndClipSpans(const QRegion &area, QPainter *painter, const QStyleOptionViewItem &option, QBitArray *drawn,
+      int firstVisualRow, int lastVisualRow, int firstVisualColumn, int lastVisualColumn);
 
-   void drawCell(QPainter *painter, const QStyleOptionViewItemV4 &option, const QModelIndex &index);
+   void drawCell(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+   int widthHintForIndex(const QModelIndex &index, int hint, const QStyleOptionViewItem &option) const;
+   int heightHintForIndex(const QModelIndex &index, int hint, QStyleOptionViewItem &option) const;
 
    bool showGrid;
    Qt::PenStyle gridStyle;
@@ -242,7 +247,6 @@ class QTableViewPrivate : public QAbstractItemViewPrivate
    void _q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end);
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_TABLEVIEW
 

@@ -29,7 +29,6 @@
 
 #ifndef QT_NO_TREEVIEW
 
-QT_BEGIN_NAMESPACE
 
 struct QTreeViewItem {
    QTreeViewItem() : parentItem(-1), expanded(false), spanning(false), hasChildren(false),
@@ -59,15 +58,21 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
         uniformRowHeights(false), rootDecoration(true),
         itemsExpandable(true), sortingEnabled(false),
         expandsOnDoubleClick(true),
-        allColumnsShowFocus(false), current(0), spanning(false),
+        allColumnsShowFocus(false), customIndent(false), current(0), spanning(false),
         animationsEnabled(false), columnResizeTimerID(0),
-        autoExpandDelay(-1), hoverBranch(-1), geometryRecursionBlock(false), hasRemovedItems(false) {}
+        autoExpandDelay(-1), hoverBranch(-1), geometryRecursionBlock(false), hasRemovedItems(false),
+        treePosition(0) {}
 
    ~QTreeViewPrivate() {}
    void initialize();
 
+   int logicalIndexForTree() const;
+   inline bool isTreePosition(int logicalIndex) const {
+      return logicalIndex == logicalIndexForTree();
+   }
+
    QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const override;
-   void adjustViewOptionsForIndex(QStyleOptionViewItemV4 *option, const QModelIndex &current) const override;
+   void adjustViewOptionsForIndex(QStyleOptionViewItem *option, const QModelIndex &current) const override;
 
 #ifndef QT_NO_ANIMATION
    struct AnimatedOperation : public QVariantAnimation {
@@ -138,6 +143,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
 #endif
 
    int firstVisibleItem(int *offset = 0) const;
+   int lastVisibleItem(int firstVisual = -1, int offset = -1) const;
    int columnAt(int x) const;
    bool hasVisibleChildren( const QModelIndex &parent) const;
 
@@ -149,20 +155,21 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    QRect itemDecorationRect(const QModelIndex &index) const;
 
 
-   QList<QPair<int, int> > columnRanges(const QModelIndex &topIndex, const QModelIndex &bottomIndex) const;
+   QList<QPair<int, int>> columnRanges(const QModelIndex &topIndex, const QModelIndex &bottomIndex) const;
    void select(const QModelIndex &start, const QModelIndex &stop, QItemSelectionModel::SelectionFlags command);
 
    QPair<int, int> startAndEndColumns(const QRect &rect) const;
 
    void updateChildCount(const int parentItem, const int delta);
 
-   void paintAlternatingRowColors(QPainter *painter, QStyleOptionViewItemV4 *option, int y, int bottom) const;
+   void paintAlternatingRowColors(QPainter *painter, QStyleOptionViewItem *option, int y, int bottom) const;
 
    // logicalIndices: vector of currently visibly logical indices
    // itemPositions: vector of view item positions (beginning/middle/end/onlyone)
-   void calcLogicalIndices(QVector<int> *logicalIndices, QVector<QStyleOptionViewItemV4::ViewItemPosition> *itemPositions,
-                           int left, int right) const;
+   void calcLogicalIndices(QVector<int> *logicalIndices, QVector<QStyleOptionViewItem::ViewItemPosition> *itemPositions,
+      int left, int right) const;
 
+   int widthHintForIndex(const QModelIndex &index, int hint, const QStyleOptionViewItem &option, int i) const;
    QHeaderView *header;
    int indent;
 
@@ -175,6 +182,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    bool sortingEnabled;
    bool expandsOnDoubleClick;
    bool allColumnsShowFocus;
+   bool customIndent;
 
    // used for drawing
    mutable QPair<int, int> leftAndRight;
@@ -195,15 +203,16 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
 
    inline bool isIndexExpanded(const QModelIndex &idx) const {
       //We first check if the idx is a QPersistentModelIndex, because creating QPersistentModelIndex is slow
-      return isPersistent(idx) && expandedIndexes.contains(idx);
+      return !(idx.flags() & Qt::ItemNeverHasChildren) && isPersistent(idx) && expandedIndexes.contains(idx);
    }
 
    // used when hiding and showing items
    QSet<QPersistentModelIndex> hiddenIndexes;
 
    inline bool isRowHidden(const QModelIndex &idx) const {
-      if (hiddenIndexes.isEmpty())
-          return false;
+      if (hiddenIndexes.isEmpty()) {
+         return false;
+      }
       //We first check if the idx is a QPersistentModelIndex, because creating QPersistentModelIndex is slow
       return isPersistent(idx) && hiddenIndexes.contains(idx);
    }
@@ -234,6 +243,8 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
       return (viewIndex(index) + (header ? 1 : 0)) * model->columnCount() + index.column() + 1;
    }
 
+   int accessibleTree2Index(const QModelIndex &index) const;
+   void updateIndentationFromStyle();
    // used for spanning rows
    QVector<QPersistentModelIndex> spanningIndexes;
 
@@ -253,9 +264,10 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
 
    // If we should clean the set
    bool hasRemovedItems;
+   int treePosition;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_TREEVIEW
 

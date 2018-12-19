@@ -23,13 +23,15 @@
 #ifndef QTREEWIDGET_P_H
 #define QTREEWIDGET_P_H
 
-#include <QtCore/qabstractitemmodel.h>
-#include <qabstractitemmodel_p.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qbasictimer.h>
-#include <QtGui/qtreewidget.h>
+#include <qabstractitemmodel.h>
+
+#include <qpair.h>
+#include <qbasictimer.h>
+#include <qtreewidget.h>
 #include <qtreeview_p.h>
-#include <QtGui/qheaderview.h>
+#include <qheaderview.h>
+
+#include <qabstractitemmodel_p.h>
 
 #ifndef QT_NO_TREEWIDGET
 
@@ -75,13 +77,13 @@ class QTreeModel : public QAbstractItemModel
    QMap<int, QVariant> itemData(const QModelIndex &index) const override;
 
    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,int role) override;
+   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
    void sort(int column, Qt::SortOrder order) override;
    void ensureSorted(int column, Qt::SortOrder order, int start, int end, const QModelIndex &parent);
-   static bool itemLessThan(const QPair<QTreeWidgetItem *, int> &left,const QPair<QTreeWidgetItem *, int> &right);
+   static bool itemLessThan(const QPair<QTreeWidgetItem *, int> &left, const QPair<QTreeWidgetItem *, int> &right);
 
    static bool itemGreaterThan(const QPair<QTreeWidgetItem *, int> &left, const QPair<QTreeWidgetItem *, int> &right);
 
@@ -98,7 +100,7 @@ class QTreeModel : public QAbstractItemModel
    // dnd
    QStringList mimeTypes() const override;
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,int row, int column, const QModelIndex &parent) override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
    Qt::DropActions supportedDropActions() const override;
 
    QMimeData *internalMimeData() const;
@@ -113,6 +115,7 @@ class QTreeModel : public QAbstractItemModel
       SkipSorting(const QTreeModel *m) : model(m), previous(model->skipPendingSort) {
          model->skipPendingSort = true;
       }
+
       ~SkipSorting() {
          model->skipPendingSort = previous;
       }
@@ -146,7 +149,7 @@ class QTreeModel : public QAbstractItemModel
 
 };
 
-#include <qabstractitemmodel_p.h>
+
 
 class QTreeModelPrivate : public QAbstractItemModelPrivate
 {

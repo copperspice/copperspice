@@ -27,8 +27,6 @@
 
 #ifndef QT_NO_TREEWIDGET
 
-QT_BEGIN_NAMESPACE
-
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &it)
    :  d_ptr(new QTreeWidgetItemIteratorPrivate(*(it.d_ptr))),
       current(it.current), flags(it.flags)
@@ -74,8 +72,8 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidgetItem *item, IteratorFlags flags)
    : d_ptr(new QTreeWidgetItemIteratorPrivate(
-              this, qobject_cast<QTreeModel *>(item->view->model()))),
-   current(item), flags(flags)
+           this, qobject_cast<QTreeModel *>(item->view->model()))),
+     current(item), flags(flags)
 {
    Q_D(QTreeWidgetItemIterator);
    Q_ASSERT(item);
@@ -276,13 +274,13 @@ QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::next(const QTreeWidgetItem *cur
       // walk the sibling
       QTreeWidgetItem *parent = current->parent();
       next = parent ? parent->child(m_currentIndex + 1)
-             : m_model->rootItem->child(m_currentIndex + 1);
+         : m_model->rootItem->child(m_currentIndex + 1);
       while (!next && parent) {
          // if we had no sibling walk up the parent and try the sibling of that
          parent = parent->parent();
          m_currentIndex = m_parentIndex.pop();
          next = parent ? parent->child(m_currentIndex + 1)
-                : m_model->rootItem->child(m_currentIndex + 1);
+            : m_model->rootItem->child(m_currentIndex + 1);
       }
       if (next) {
          ++(m_currentIndex);
@@ -301,7 +299,7 @@ QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::previous(const QTreeWidgetItem 
    // walk the previous sibling
    QTreeWidgetItem *parent = current->parent();
    prev = parent ? parent->child(m_currentIndex - 1)
-          : m_model->rootItem->child(m_currentIndex - 1);
+      : m_model->rootItem->child(m_currentIndex - 1);
    if (prev) {
       // Yes, we had a previous sibling but we need go down to the last leafnode.
       --m_currentIndex;
@@ -362,7 +360,7 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
       QTreeWidgetItem *par = itemToBeRemoved->parent();   // We know they both have the same parent.
       QTreeWidget *tw = itemToBeRemoved->treeWidget();    // ..and widget
       int indexOfItemToBeRemoved = par ? par->indexOfChild(const_cast<QTreeWidgetItem *>(itemToBeRemoved))
-                                   : tw->indexOfTopLevelItem(const_cast<QTreeWidgetItem *>(itemToBeRemoved));
+         : tw->indexOfTopLevelItem(const_cast<QTreeWidgetItem *>(itemToBeRemoved));
       int indexOfNextItem = par ? par->indexOfChild(nextItem) : tw->indexOfTopLevelItem(nextItem);
 
       if (indexOfItemToBeRemoved <= indexOfNextItem) {
@@ -373,75 +371,7 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
    }
 }
 
-/*!
-  \fn const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator++(int)
-
-  The postfix ++ operator (it++) advances the iterator to the next matching item
-  and returns an iterator to the previously current item.
-*/
-
-/*!
-  \fn QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator+=(int n)
-
-  Makes the iterator go forward by \a n matching items. (If n is negative, the
-  iterator goes backward.)
-
-  If the current item is beyond the last item, the current item pointer is
-  set to 0. Returns the resulting iterator.
-*/
-
-/*!
-  \fn const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator--(int)
-
-  The postfix -- operator (it--) makes the preceding matching item current and returns an iterator to the previously current item.
-*/
-
-/*!
-  \fn QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator-=(int n)
-
-  Makes the iterator go backward by \a n matching items. (If n is negative, the
-  iterator goes forward.)
-
-  If the current item is ahead of the last item, the current item pointer is
-  set to 0. Returns the resulting iterator.
-*/
-
-/*!
-  \fn QTreeWidgetItem *QTreeWidgetItemIterator::operator*() const
-
-  Dereference operator. Returns a pointer to the current item.
-*/
 
 
-/*!
-    \enum QTreeWidgetItemIterator::iteratorFlag
 
-    These flags can be passed to a QTreeWidgetItemIterator constructor
-    (OR-ed together if more than one is used), so that the iterator
-    will only iterate over items that match the given flags.
-
-    \value All
-    \value Hidden
-    \value NotHidden
-    \value Selected
-    \value Unselected
-    \value Selectable
-    \value NotSelectable
-    \value DragEnabled
-    \value DragDisabled
-    \value DropEnabled
-    \value DropDisabled
-    \value HasChildren
-    \value NoChildren
-    \value Checked
-    \value NotChecked
-    \value Enabled
-    \value Disabled
-    \value Editable
-    \value NotEditable
-    \value UserFlag
-*/
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_TREEWIDGET
+#endif
