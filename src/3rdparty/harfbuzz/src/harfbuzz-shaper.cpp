@@ -976,7 +976,7 @@ const HB_ScriptEngine HB_ScriptEngines[] = {
 };
 
 
-static_assert( (sizeof(HB_ScriptEngines)/sizeof(HB_ScriptEngine)) == HB_ScriptCount);
+static_assert((sizeof(HB_ScriptEngines)/sizeof(HB_ScriptEngine)) == HB_ScriptCount, "HB_ScriptEngines array out of sync with HB_ScriptCount enum");
 
 
 void HB_GetCharAttributes(const HB_UChar16 *string, hb_uint32 stringLength,
