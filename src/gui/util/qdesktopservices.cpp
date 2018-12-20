@@ -25,26 +25,16 @@
 #ifndef QT_NO_DESKTOPSERVICES
 
 #include <qdebug.h>
-
-#if defined(Q_WS_QWS) || defined(Q_WS_QPA)
-#include <qdesktopservices_qws.cpp>
-
-#elif defined(Q_WS_X11)
-#include <qdesktopservices_x11.cpp>
-
-#elif defined(Q_OS_WIN)
-#include <qdesktopservices_win.cpp>
-
-#elif defined(Q_OS_MAC)
-#include <qdesktopservices_mac.cpp>
-
-#endif
-
+#include <qstandardpaths.h>
 #include <qhash.h>
 #include <qobject.h>
 #include <qcoreapplication.h>
+#include <qguiapplication_p.h>
 #include <qurl.h>
 #include <qmutex.h>
+#include <qplatform_services.h>
+#include <qplatform_integration.h>
+#include <qdir.h>
 
 class QOpenUrlHandlerRegistry : public QObject
 {
@@ -99,14 +89,22 @@ bool QDesktopServices::openUrl(const QUrl &url)
       }
    }
 
-   bool result;
-   if (url.scheme() == QLatin1String("file")) {
-      result = openDocument(url);
-   } else {
-      result = launchWebBrowser(url);
+   if (!url.isValid()) {
+      return false;
    }
 
-   return result;
+   QPlatformIntegration *platformIntegration = QGuiApplicationPrivate::platformIntegration();
+   if (!platformIntegration) {
+      return false;
+   }
+
+   QPlatformServices *platformServices = platformIntegration->services();
+   if (!platformServices) {
+      qWarning("The platform plugin does not support services.");
+      return false;
+   }
+   return url.scheme() == QLatin1String("file") ?
+      platformServices->openDocument(url) : platformServices->openUrl(url);
 }
 
 void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, const char *method)
@@ -114,15 +112,15 @@ void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, c
    QOpenUrlHandlerRegistry *registry = handlerRegistry();
    QMutexLocker locker(&registry->mutex);
    if (!receiver) {
-      registry->handlers.remove(scheme);
+      registry->handlers.remove(scheme.toLower());
       return;
    }
    QOpenUrlHandlerRegistry::Handler h;
    h.receiver = receiver;
    h.name = method;
-   registry->handlers.insert(scheme, h);
+   registry->handlers.insert(scheme.toLower(), h);
    QObject::connect(receiver, SIGNAL(destroyed(QObject *)),
-                    registry, SLOT(handlerDestroyed(QObject *)));
+      registry, SLOT(handlerDestroyed(QObject *)));
 }
 
 void QDesktopServices::unsetUrlHandler(const QString &scheme)
@@ -131,4 +129,37 @@ void QDesktopServices::unsetUrlHandler(const QString &scheme)
 }
 
 
+extern Q_CORE_EXPORT QString qt_applicationName_noFallback();
+
+QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation type)
+{
+   if (type == QStandardPaths::AppLocalDataLocation) {
+      // Preserve Qt 4 compatibility:
+      // * QCoreApplication::applicationName() must default to empty
+      // * Unix data location is under the "data/" subdirectory
+
+      const QString compatAppName = qt_applicationName_noFallback();
+      const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+      QString result = baseDir;
+      if (!QCoreApplication::organizationName().isEmpty()) {
+         result += QLatin1Char('/') + QCoreApplication::organizationName();
+      }
+
+      if (!compatAppName.isEmpty()) {
+         result += QLatin1Char('/') + compatAppName;
+      }
+
+      return result;
+
+#elif defined(Q_OS_UNIX)
+      return baseDir + QLatin1String("/data/")
+         + QCoreApplication::organizationName() + QLatin1Char('/')
+         + compatAppName;
+#endif
+   }
+
+   return QStandardPaths::writableLocation(type);
+}
 #endif // QT_NO_DESKTOPSERVICES

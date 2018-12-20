@@ -32,8 +32,6 @@
 #include <QtGui/qpainter.h>
 #include <qabstractproxymodel_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QCompletionModel;
 class QCompletionModelPrivate;
 
@@ -53,6 +51,7 @@ class QCompleterPrivate
    QCompletionModel *proxy;
    QAbstractItemView *popup;
    QCompleter::CompletionMode mode;
+   Qt::MatchFlags filterMode;
 
    QString prefix;
    Qt::CaseSensitivity cs;
@@ -68,7 +67,7 @@ class QCompleterPrivate
 
    void showPopup(const QRect &);
 
-   void _q_complete(const QModelIndex &, bool = false);
+   void _q_complete(QModelIndex, bool = false);
    void _q_completionSelected(const QItemSelection &);
    void _q_autoResizePopup();
    void _q_fileSystemModelDirectoryLoaded(const QString &path);
@@ -85,7 +84,7 @@ class QIndexMapper
  public:
    QIndexMapper() : v(false), f(0), t(-1) { }
    QIndexMapper(int f, int t) : v(false), f(f), t(t) { }
-   QIndexMapper(QVector<int> vec) : v(true), vector(vec), f(-1), t(-1) { }
+   QIndexMapper(const QVector<int> &vec) : v(true), vector(vec), f(-1), t(-1) { }
 
    inline int count() const {
       return v ? vector.count() : t - f + 1;
@@ -131,10 +130,13 @@ class QIndexMapper
 };
 
 struct QMatchData {
-   QMatchData() : exactMatchIndex(-1) { }
+   QMatchData() : exactMatchIndex(-1), partial(false)
+   { }
+
    QMatchData(const QIndexMapper &indices, int em, bool p) :
       indices(indices), exactMatchIndex(em), partial(p) { }
    QIndexMapper indices;
+
    inline bool isValid() const {
       return indices.isValid();
    }
@@ -180,7 +182,7 @@ class QSortedModelEngine : public QCompletionEngine
 {
  public:
    QSortedModelEngine(QCompleterPrivate *c) : QCompletionEngine(c) { }
-   QMatchData filter(const QString &, const QModelIndex &, int)  override;
+   QMatchData filter(const QString &, const QModelIndex &, int) override;
    QIndexMapper indexHint(QString, const QModelIndex &, Qt::SortOrder);
    Qt::SortOrder sortOrder(const QModelIndex &) const;
 };
@@ -190,8 +192,8 @@ class QUnsortedModelEngine : public QCompletionEngine
  public:
    QUnsortedModelEngine(QCompleterPrivate *c) : QCompletionEngine(c) { }
 
-   void filterOnDemand(int)  override;
-   QMatchData filter(const QString &, const QModelIndex &, int)  override;
+   void filterOnDemand(int) override;
+   QMatchData filter(const QString &, const QModelIndex &, int) override;
 
  private:
    int buildIndices(const QString &str, const QModelIndex &parent, int n, const QIndexMapper &iv, QMatchData *m);
@@ -221,6 +223,7 @@ class QCompleterItemDelegate : public QItemDelegate
 class QCompletionModel : public QAbstractProxyModel
 {
    GUI_CS_OBJECT(QCompletionModel)
+   Q_DECLARE_PRIVATE(QCompletionModel)
 
  public:
    QCompletionModel(QCompleterPrivate *c, QObject *parent);
@@ -234,7 +237,6 @@ class QCompletionModel : public QAbstractProxyModel
    }
    bool setCurrentRow(int row);
    QModelIndex currentIndex(bool) const;
-   void resetModel();
 
    QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const override;
    int rowCount(const QModelIndex &index = QModelIndex()) const override;
@@ -255,7 +257,6 @@ class QCompletionModel : public QAbstractProxyModel
    QScopedPointer<QCompletionEngine> engine;
    bool showAll;
 
-   Q_DECLARE_PRIVATE(QCompletionModel)
 
    GUI_CS_SIGNAL_1(Public, void rowsAdded())
    GUI_CS_SIGNAL_2(rowsAdded)
@@ -274,8 +275,6 @@ class QCompletionModelPrivate : public QAbstractProxyModelPrivate
 {
    Q_DECLARE_PUBLIC(QCompletionModel)
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_COMPLETER
 

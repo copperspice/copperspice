@@ -27,7 +27,7 @@
 #include <QtCore/qstring.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 class QAction;
 class QUndoCommandPrivate;
@@ -40,8 +40,8 @@ class Q_GUI_EXPORT QUndoCommand
    QUndoCommandPrivate *d;
 
  public:
-   explicit QUndoCommand(QUndoCommand *parent = 0);
-   explicit QUndoCommand(const QString &text, QUndoCommand *parent = 0);
+   explicit QUndoCommand(QUndoCommand *parent = nullptr);
+   explicit QUndoCommand(const QString &text, QUndoCommand *parent = nullptr);
    virtual ~QUndoCommand();
 
    virtual void undo();
@@ -111,12 +111,16 @@ class Q_GUI_EXPORT QUndoStack : public QObject
 
    GUI_CS_SLOT_1(Public, void setClean())
    GUI_CS_SLOT_2(setClean)
+
    GUI_CS_SLOT_1(Public, void setIndex(int idx))
    GUI_CS_SLOT_2(setIndex)
+
    GUI_CS_SLOT_1(Public, void undo())
    GUI_CS_SLOT_2(undo)
+
    GUI_CS_SLOT_1(Public, void redo())
    GUI_CS_SLOT_2(redo)
+
    GUI_CS_SLOT_1(Public, void setActive(bool active = true))
    GUI_CS_SLOT_2(setActive)
 
@@ -139,11 +143,8 @@ class Q_GUI_EXPORT QUndoStack : public QObject
  private:
    Q_DISABLE_COPY(QUndoStack)
    friend class QUndoGroup;
-
 };
 
 #endif // QT_NO_UNDOSTACK
-
-QT_END_NAMESPACE
 
 #endif // QUNDOSTACK_H

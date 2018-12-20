@@ -31,8 +31,6 @@
 #include <qitemselection.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_COMPLETER
 
 class QAbstractItemView;
@@ -91,6 +89,8 @@ class Q_GUI_EXPORT QCompleter : public QObject
 
    void setCompletionMode(CompletionMode mode);
    CompletionMode completionMode() const;
+   void setFilterMode(Qt::MatchFlags filterMode);
+   Qt::MatchFlags filterMode() const;
 
    QAbstractItemView *popup() const;
    void setPopup(QAbstractItemView *popup);
@@ -123,6 +123,9 @@ class Q_GUI_EXPORT QCompleter : public QObject
 
    QString completionPrefix() const;
 
+   virtual QString pathFromIndex(const QModelIndex &index) const;
+   virtual QStringList splitPath(const QString &path) const;
+
    GUI_CS_SLOT_1(Public, void setCompletionPrefix(const QString &prefix))
    GUI_CS_SLOT_2(setCompletionPrefix)
 
@@ -131,9 +134,6 @@ class Q_GUI_EXPORT QCompleter : public QObject
 
    GUI_CS_SLOT_1(Public, void setWrapAround(bool wrap))
    GUI_CS_SLOT_2(setWrapAround)
-
-   virtual QString pathFromIndex(const QModelIndex &index) const;
-   virtual QStringList splitPath(const QString &path) const;
 
    GUI_CS_SIGNAL_1(Public, void activated(const QString &text))
    GUI_CS_SIGNAL_OVERLOAD(activated, (const QString &), text)
@@ -172,6 +172,5 @@ class Q_GUI_EXPORT QCompleter : public QObject
 
 #endif // QT_NO_COMPLETER
 
-QT_END_NAMESPACE
 
 #endif // QCOMPLETER_H

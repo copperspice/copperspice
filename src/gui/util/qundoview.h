@@ -28,7 +28,6 @@
 
 #ifndef QT_NO_UNDOVIEW
 
-QT_BEGIN_NAMESPACE
 
 class QUndoViewPrivate;
 class QUndoStack;
@@ -78,7 +77,7 @@ class Q_GUI_EXPORT QUndoView : public QListView
    Q_DISABLE_COPY(QUndoView)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_UNDOVIEW
 #endif // QUNDOVIEW_H

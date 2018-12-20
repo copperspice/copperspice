@@ -26,7 +26,6 @@
 
 #ifndef QT_NO_UNDOGROUP
 
-QT_BEGIN_NAMESPACE
 
 class QUndoGroupPrivate
 {
@@ -41,7 +40,6 @@ class QUndoGroupPrivate
 
  protected:
    QUndoGroup *q_ptr;
-
 };
 
 QUndoGroup::QUndoGroup(QObject *parent)
@@ -57,8 +55,10 @@ QUndoGroup::~QUndoGroup()
 {
    // Ensure all QUndoStacks no longer refer to this group.
    Q_D(QUndoGroup);
+
    QList<QUndoStack *>::iterator it = d->stack_list.begin();
    QList<QUndoStack *>::iterator end = d->stack_list.end();
+
    while (it != end) {
       (*it)->d_func()->group = 0;
       ++it;
@@ -143,12 +143,12 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
    }
 
    if (d->active != 0) {
-      disconnect(d->active, SIGNAL(canUndoChanged(bool)),             this, SLOT(canUndoChanged(bool)));
-      disconnect(d->active, SIGNAL(undoTextChanged(const QString &)), this, SLOT(undoTextChanged(const QString &)));
-      disconnect(d->active, SIGNAL(canRedoChanged(bool)),             this, SLOT(canRedoChanged(bool)));
-      disconnect(d->active, SIGNAL(redoTextChanged(const QString &)), this, SLOT(redoTextChanged(const QString &)));
-      disconnect(d->active, SIGNAL(indexChanged(int)),                this, SLOT(indexChanged(int)));
-      disconnect(d->active, SIGNAL(cleanChanged(bool)),               this, SLOT(cleanChanged(bool)));
+      disconnect(d->active, SIGNAL(canUndoChanged(bool)),     this, SLOT(canUndoChanged(bool)));
+      disconnect(d->active, SIGNAL(undoTextChanged(QString)), this, SLOT(undoTextChanged(QString)));
+      disconnect(d->active, SIGNAL(canRedoChanged(bool)),     this, SLOT(canRedoChanged(bool)));
+      disconnect(d->active, SIGNAL(redoTextChanged(QString)), this, SLOT(redoTextChanged(QString)));
+      disconnect(d->active, SIGNAL(indexChanged(int)),        this, SLOT(indexChanged(int)));
+      disconnect(d->active, SIGNAL(cleanChanged(bool)),       this, SLOT(cleanChanged(bool)));
    }
 
    d->active = stack;
@@ -162,12 +162,12 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
       emit indexChanged(0);
 
    } else {
-      connect(d->active, SIGNAL(canUndoChanged(bool)),              this, SLOT(canUndoChanged(bool)));
-      connect(d->active, SIGNAL(undoTextChanged(const QString &)),  this, SLOT(undoTextChanged(const QString &)));
-      connect(d->active, SIGNAL(canRedoChanged(bool)),              this, SLOT(canRedoChanged(bool)));
-      connect(d->active, SIGNAL(redoTextChanged(const QString &)),  this, SLOT(redoTextChanged(const QString &)));
-      connect(d->active, SIGNAL(indexChanged(int)),                 this, SLOT(indexChanged(int)));
-      connect(d->active, SIGNAL(cleanChanged(bool)),                this, SLOT(cleanChanged(bool)));
+      connect(d->active, SIGNAL(canUndoChanged(bool)),      this, SLOT(canUndoChanged(bool)));
+      connect(d->active, SIGNAL(undoTextChanged(QString)),  this, SLOT(undoTextChanged(QString)));
+      connect(d->active, SIGNAL(canRedoChanged(bool)),      this, SLOT(canRedoChanged(bool)));
+      connect(d->active, SIGNAL(redoTextChanged(QString)),  this, SLOT(redoTextChanged(QString)));
+      connect(d->active, SIGNAL(indexChanged(int)),         this, SLOT(indexChanged(int)));
+      connect(d->active, SIGNAL(cleanChanged(bool)),        this, SLOT(cleanChanged(bool)));
 
       emit canUndoChanged(d->active->canUndo());
       emit undoTextChanged(d->active->undoText());
@@ -333,7 +333,7 @@ QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) co
    result->setPrefixedText(undoText());
 
    connect(this, SIGNAL(canUndoChanged(bool)), result, SLOT(setEnabled(bool)));
-   connect(this, SIGNAL(undoTextChanged(const QString &)), result, SLOT(setPrefixedText(const QString &)));
+   connect(this, SIGNAL(undoTextChanged(QString)), result, SLOT(setPrefixedText(QString)));
    connect(result, SIGNAL(triggered()), this, SLOT(undo()));
 
    return result;
@@ -364,8 +364,8 @@ QAction *QUndoGroup::createRedoAction(QObject *parent, const QString &prefix) co
    result->setEnabled(canRedo());
    result->setPrefixedText(redoText());
 
-   connect(this, SIGNAL(canRedoChanged(bool)),             result, SLOT(setEnabled(bool)));
-   connect(this, SIGNAL(redoTextChanged(const QString &)), result, SLOT(setPrefixedText(const QString &)));
+   connect(this, SIGNAL(canRedoChanged(bool)),     result, SLOT(setEnabled(bool)));
+   connect(this, SIGNAL(redoTextChanged(QString)), result, SLOT(setPrefixedText(QString)));
    connect(result, SIGNAL(triggered()), this, SLOT(redo()));
 
    return result;
@@ -373,76 +373,5 @@ QAction *QUndoGroup::createRedoAction(QObject *parent, const QString &prefix) co
 
 #endif // QT_NO_ACTION
 
-/*! \fn void QUndoGroup::activeStackChanged(QUndoStack *stack)
-
-    This signal is emitted whenever the active stack of the group changes. This can happen
-    when setActiveStack() or QUndoStack::setActive() is called, or when the active stack
-    is removed form the group. \a stack is the new active stack. If no stack is active,
-    \a stack is 0.
-
-    \sa setActiveStack() QUndoStack::setActive()
-*/
-
-/*! \fn void QUndoGroup::indexChanged(int idx)
-
-    This signal is emitted whenever the active stack emits QUndoStack::indexChanged()
-    or the active stack changes.
-
-    \a idx is the new current index, or 0 if the active stack is 0.
-
-    \sa QUndoStack::indexChanged() setActiveStack()
-*/
-
-/*! \fn void QUndoGroup::cleanChanged(bool clean)
-
-    This signal is emitted whenever the active stack emits QUndoStack::cleanChanged()
-    or the active stack changes.
-
-    \a clean is the new state, or true if the active stack is 0.
-
-    \sa QUndoStack::cleanChanged() setActiveStack()
-*/
-
-/*! \fn void QUndoGroup::canUndoChanged(bool canUndo)
-
-    This signal is emitted whenever the active stack emits QUndoStack::canUndoChanged()
-    or the active stack changes.
-
-    \a canUndo is the new state, or false if the active stack is 0.
-
-    \sa QUndoStack::canUndoChanged() setActiveStack()
-*/
-
-/*! \fn void QUndoGroup::canRedoChanged(bool canRedo)
-
-    This signal is emitted whenever the active stack emits QUndoStack::canRedoChanged()
-    or the active stack changes.
-
-    \a canRedo is the new state, or false if the active stack is 0.
-
-    \sa QUndoStack::canRedoChanged() setActiveStack()
-*/
-
-/*! \fn void QUndoGroup::undoTextChanged(const QString &undoText)
-
-    This signal is emitted whenever the active stack emits QUndoStack::undoTextChanged()
-    or the active stack changes.
-
-    \a undoText is the new state, or an empty string if the active stack is 0.
-
-    \sa QUndoStack::undoTextChanged() setActiveStack()
-*/
-
-/*! \fn void QUndoGroup::redoTextChanged(const QString &redoText)
-
-    This signal is emitted whenever the active stack emits QUndoStack::redoTextChanged()
-    or the active stack changes.
-
-    \a redoText is the new state, or an empty string if the active stack is 0.
-
-    \sa QUndoStack::redoTextChanged() setActiveStack()
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_UNDOGROUP

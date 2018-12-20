@@ -31,7 +31,7 @@
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
+
 
 class QFlickGesturePrivate;
 class QGraphicsItem;
@@ -77,7 +77,7 @@ class QFlickGestureRecognizer : public QGestureRecognizer
    Qt::MouseButton button; // NoButton == Touch
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_GESTURES
 

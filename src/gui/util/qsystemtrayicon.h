@@ -23,14 +23,13 @@
 #ifndef QSYSTEMTRAYICON_H
 #define QSYSTEMTRAYICON_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include <QtGui/qicon.h>
+#include <qicon.h>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qplatform_systemtrayicon.h>
 
 class QSystemTrayIconPrivate;
 class QMenu;
@@ -55,6 +54,8 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    GUI_CS_PROPERTY_DESIGNABLE(visible, false)
 
  public:
+   enum MessageIcon { NoIcon, Information, Warning, Critical };
+
    QSystemTrayIcon(QObject *parent = nullptr);
    QSystemTrayIcon(const QIcon &icon, QObject *parent = nullptr);
    ~QSystemTrayIcon();
@@ -81,10 +82,6 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    static bool isSystemTrayAvailable();
    static bool supportsMessages();
 
-   enum MessageIcon { NoIcon, Information, Warning, Critical };
-   void showMessage(const QString &title, const QString &msg,
-                    MessageIcon icon = Information, int msecs = 10000);
-
    QRect geometry() const;
    bool isVisible() const;
 
@@ -96,6 +93,11 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
 
    GUI_CS_SLOT_1(Public, void hide())
    GUI_CS_SLOT_2(hide)
+
+   GUI_CS_SLOT_1(Public, void showMessage(const QString &title, const QString &msg,
+         QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information, int msecs = 10000))
+   GUI_CS_SLOT_2(showMessage)
+
 
    GUI_CS_SIGNAL_1(Public, void activated(QSystemTrayIcon::ActivationReason reason))
    GUI_CS_SIGNAL_2(activated, reason)
@@ -111,14 +113,12 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
  private:
    Q_DISABLE_COPY(QSystemTrayIcon)
    Q_DECLARE_PRIVATE(QSystemTrayIcon)
+   GUI_CS_SLOT_1(Private, void _q_emitActivated(QPlatformSystemTrayIcon::ActivationReason))
+   GUI_CS_SLOT_2(_q_emitActivated)
 
    friend class QSystemTrayIconSys;
    friend class QBalloonTip;
-   friend void qtsystray_sendActivated(QSystemTrayIcon *, int);
-
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SYSTEMTRAYICON
 #endif // QSYSTEMTRAYICON_H

@@ -31,8 +31,6 @@
 #include <QtGui/qicon.h>
 #include <qlistview_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QUndoModel : public QAbstractItemModel
 {
    GUI_CS_OBJECT(QUndoModel)
@@ -82,8 +80,8 @@ QUndoModel::QUndoModel(QObject *parent)
    m_stack = 0;
    m_sel_model = new QItemSelectionModel(this, this);
 
-   connect(m_sel_model, SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
-           this, SLOT(setStackCurrentIndex(const QModelIndex &)));
+   connect(m_sel_model, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+      this, SLOT(setStackCurrentIndex(QModelIndex)));
 
    m_emty_label = tr("<empty>");
 }
@@ -131,7 +129,8 @@ void QUndoModel::stackDestroyed(QObject *obj)
 
 void QUndoModel::stackChanged()
 {
-   reset();
+   beginResetModel();
+   endResetModel();
    m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);
 }
 
@@ -456,6 +455,6 @@ QIcon QUndoView::cleanIcon() const
    return d->model->cleanIcon();
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_UNDOVIEW

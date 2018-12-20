@@ -132,7 +132,7 @@ void QSystemTrayIcon::setVisible(bool visible)
 {
    Q_D(QSystemTrayIcon);
 
-  if (visible == d->visible) {
+   if (visible == d->visible) {
       return;
    }
 
@@ -160,116 +160,43 @@ bool QSystemTrayIcon::isVisible() const
 */
 bool QSystemTrayIcon::event(QEvent *e)
 {
-#if defined(Q_WS_X11)
-   if (e->type() == QEvent::ToolTip) {
-      Q_D(QSystemTrayIcon);
-      return d->sys->deliverToolTipEvent(e);
-   }
-#endif
    return QObject::event(e);
 }
 
-/*!
-    \enum QSystemTrayIcon::ActivationReason
-
-     This enum describes the reason the system tray was activated.
-
-     \value Unknown     Unknown reason
-     \value Context     The context menu for the system tray entry was requested
-     \value DoubleClick The system tray entry was double clicked
-     \value Trigger     The system tray entry was clicked
-     \value MiddleClick The system tray entry was clicked with the middle mouse button
-
-     \sa activated()
-*/
-
-/*!
-    \fn void QSystemTrayIcon::activated(QSystemTrayIcon::ActivationReason reason)
-
-    This signal is emitted when the user activates the system tray icon. \a reason
-    specifies the reason for activation. QSystemTrayIcon::ActivationReason enumerates
-    the various reasons.
-
-    \sa QSystemTrayIcon::ActivationReason
-*/
-
-/*!
-    \fn void QSystemTrayIcon::messageClicked()
-
-    This signal is emitted when the message displayed using showMessage()
-    was clicked by the user.
-
-    Currently this signal is not sent on Mac OS X.
-
-    \note We follow Microsoft Windows XP/Vista behavior, so the
-    signal is also emitted when the user clicks on a tray icon with
-    a balloon message displayed.
-
-    \sa activated()
-*/
 
 
-/*!
-    Returns true if the system tray is available; otherwise returns false.
-
-    If the system tray is currently unavailable but becomes available later,
-    QSystemTrayIcon will automatically add an entry in the system tray if it
-    is \l visible.
-*/
 
 bool QSystemTrayIcon::isSystemTrayAvailable()
 {
    return QSystemTrayIconPrivate::isSystemTrayAvailable_sys();
 }
 
-/*!
-    Returns true if the system tray supports balloon messages; otherwise returns false.
 
-    \sa showMessage()
-*/
 bool QSystemTrayIcon::supportsMessages()
 {
    return QSystemTrayIconPrivate::supportsMessages_sys();
 }
 
-/*!
-    \fn void QSystemTrayIcon::showMessage(const QString &title, const QString &message, MessageIcon icon, int millisecondsTimeoutHint)
-    \since 4.3
-
-    Shows a balloon message for the entry with the given \a title, \a message and
-    \a icon for the time specified in \a millisecondsTimeoutHint. \a title and \a message
-    must be plain text strings.
-
-    Message can be clicked by the user; the messageClicked() signal will emitted when
-    this occurs.
-
-    Note that display of messages are dependent on the system configuration and user
-    preferences, and that messages may not appear at all. Hence, it should not be
-    relied upon as the sole means for providing critical information.
-
-    On Windows, the \a millisecondsTimeoutHint is usually ignored by the system
-    when the application has focus.
-
-    On Mac OS X, the Growl notification system must be installed for this function to
-    display messages.
-
-    \sa show() supportsMessages()
-  */
 void QSystemTrayIcon::showMessage(const QString &title, const QString &msg,
-                                  QSystemTrayIcon::MessageIcon icon, int msecs)
+   QSystemTrayIcon::MessageIcon icon, int msecs)
 {
    Q_D(QSystemTrayIcon);
+
    if (d->visible) {
       d->showMessage_sys(title, msg, icon, msecs);
    }
 }
 
-//////////////////////////////////////////////////////////////////////
+void QSystemTrayIconPrivate::_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason reason)
+{
+   Q_Q(QSystemTrayIcon);
+   emit q->activated(static_cast<QSystemTrayIcon::ActivationReason>(reason));
+}
+
 static QBalloonTip *theSolitaryBalloonTip = 0;
 
 void QBalloonTip::showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &title,
-                              const QString &message, QSystemTrayIcon *trayIcon,
-                              const QPoint &pos, int timeout, bool showArrow)
+   const QString &message, QSystemTrayIcon *trayIcon, const QPoint &pos, int timeout, bool showArrow)
 {
    hideBalloon();
    if (message.isEmpty() && title.isEmpty()) {
@@ -293,14 +220,25 @@ void QBalloonTip::hideBalloon()
    theSolitaryBalloonTip = 0;
 }
 
+void QBalloonTip::updateBalloonPosition(const QPoint &pos)
+{
+   if (!theSolitaryBalloonTip) {
+      return;
+   }
+   theSolitaryBalloonTip->hide();
+   theSolitaryBalloonTip->balloon(pos, 0, theSolitaryBalloonTip->showArrow);
+}
 bool QBalloonTip::isBalloonVisible()
 {
    return theSolitaryBalloonTip;
 }
 
 QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
-                         const QString &message, QSystemTrayIcon *ti)
-   : QWidget(0, Qt::ToolTip), trayIcon(ti), timerId(-1)
+   const QString &message, QSystemTrayIcon *ti)
+   : QWidget(0, Qt::ToolTip),
+     trayIcon(ti),
+     timerId(-1),
+     showArrow(true)
 {
    setAttribute(Qt::WA_DeleteOnClose);
    QObject::connect(ti, SIGNAL(destroyed()), this, SLOT(close()));
@@ -411,6 +349,7 @@ void QBalloonTip::resizeEvent(QResizeEvent *ev)
 
 void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
 {
+   this->showArrow = showArrow;
    QRect scr = QApplication::desktop()->screenGeometry(pos);
    QSize sh = sizeHint();
    const int border = 1;
@@ -435,16 +374,6 @@ void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
    }
 
    QPainterPath path;
-#if defined(QT_NO_XSHAPE) && defined(Q_WS_X11)
-   // XShape is required for setting the mask, so we just
-   // draw an ugly square when its not available
-   path.moveTo(0, 0);
-   path.lineTo(sz.width() - 1, 0);
-   path.lineTo(sz.width() - 1, sz.height() - 1);
-   path.lineTo(0, sz.height() - 1);
-   path.lineTo(0, 0);
-   move(qMax(pos.x() - sz.width(), scr.left()), pos.y());
-#else
    path.moveTo(ml + rc, mt);
    if (arrowAtTop && arrowAtLeft) {
       if (showArrow) {
@@ -472,7 +401,7 @@ void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
          path.lineTo(mr - ao - aw, mb);
       }
       move(qMin(pos.x() - sh.width() + ao, scr.right() - sh.width() - 2),
-           pos.y() - sh.height());
+         pos.y() - sh.height());
    } else if (!arrowAtTop && arrowAtLeft) {
       if (showArrow) {
          path.lineTo(ao + aw, mb);
@@ -494,7 +423,6 @@ void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
    painter1.setBrush(QBrush(Qt::color1));
    painter1.drawPath(path);
    setMask(bitmap);
-#endif
 
    // Draw the border
    pixmap = QPixmap(sz);
@@ -529,19 +457,99 @@ void QBalloonTip::timerEvent(QTimerEvent *e)
    QWidget::timerEvent(e);
 }
 
-void qtsystray_sendActivated(QSystemTrayIcon *i, int r)
+void QSystemTrayIconPrivate::install_sys_qpa()
 {
-   emit i->activated((QSystemTrayIcon::ActivationReason)r);
+   qpa_sys->init();
+   QObject::connect(qpa_sys, SIGNAL(activated(QPlatformSystemTrayIcon::ActivationReason)),
+      q_func(), SLOT(_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason)));
+   QObject::connect(qpa_sys, &QPlatformSystemTrayIcon::messageClicked,
+      q_func(), &QSystemTrayIcon::messageClicked);
+   updateMenu_sys();
+   updateIcon_sys();
+   updateToolTip_sys();
 }
 
-void QSystemTrayIcon::show()
+void QSystemTrayIconPrivate::remove_sys_qpa()
 {
-   setVisible(true);
+   QObject::disconnect(qpa_sys, SIGNAL(activated(QPlatformSystemTrayIcon::ActivationReason)),
+      q_func(), SLOT(_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason)));
+   QObject::disconnect(qpa_sys, &QPlatformSystemTrayIcon::messageClicked,
+      q_func(), &QSystemTrayIcon::messageClicked);
+   qpa_sys->cleanup();
 }
 
-void QSystemTrayIcon::hide()
+QRect QSystemTrayIconPrivate::geometry_sys_qpa() const
 {
-   setVisible(false);
+   return qpa_sys->geometry();
+}
+
+void QSystemTrayIconPrivate::updateIcon_sys_qpa()
+{
+   qpa_sys->updateIcon(icon);
+}
+
+void QSystemTrayIconPrivate::updateMenu_sys_qpa()
+{
+   if (menu) {
+      addPlatformMenu(menu);
+      qpa_sys->updateMenu(menu->platformMenu());
+   }
+}
+
+void QSystemTrayIconPrivate::updateToolTip_sys_qpa()
+{
+   qpa_sys->updateToolTip(toolTip);
+}
+void QSystemTrayIconPrivate::showMessage_sys_qpa(const QString &title,
+   const QString &message,
+   QSystemTrayIcon::MessageIcon icon,
+   int msecs)
+{
+   QIcon notificationIcon;
+   switch (icon) {
+      case QSystemTrayIcon::Information:
+         notificationIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation);
+         break;
+      case QSystemTrayIcon::Warning:
+         notificationIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning);
+         break;
+      case QSystemTrayIcon::Critical:
+         notificationIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxCritical);
+         break;
+      default:
+         break;
+   }
+   qpa_sys->showMessage(title, message, notificationIcon,
+      static_cast<QPlatformSystemTrayIcon::MessageIcon>(icon), msecs);
+}
+void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
+{
+   if (menu->platformMenu()) {
+      return;   // The platform menu already exists.
+   }
+
+   // The recursion depth is the same as menu depth, so should not
+   // be higher than 3 levels.
+   QListIterator<QAction *> it(menu->actions());
+   while (it.hasNext()) {
+      QAction *action = it.next();
+      if (action->menu()) {
+         addPlatformMenu(action->menu());
+      }
+   }
+
+   // This menu should be processed *after* its children, otherwise
+   // setMenu() is not called on respective QPlatformMenuItems.
+   QPlatformMenu *platformMenu = qpa_sys->createMenu();
+   if (platformMenu) {
+      menu->setPlatformMenu(platformMenu);
+   }
+}
+
+void QSystemTrayIcon::_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason data)
+{
+   Q_D(QSystemTrayIcon);
+   d->_q_emitActivated(data);
 }
 
 #endif // QT_NO_SYSTEMTRAYICON

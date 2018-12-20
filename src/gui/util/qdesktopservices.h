@@ -24,8 +24,7 @@
 #define QDESKTOPSERVICES_H
 
 #include <QtCore/qstring.h>
-
-QT_BEGIN_NAMESPACE
+#include <QtCore/qstandardpaths.h>
 
 #ifndef QT_NO_DESKTOPSERVICES
 
@@ -40,27 +39,11 @@ class Q_GUI_EXPORT QDesktopServices
    static void setUrlHandler(const QString &scheme, QObject *receiver, const char *method);
    static void unsetUrlHandler(const QString &scheme);
 
-   enum StandardLocation {
-      DesktopLocation,
-      DocumentsLocation,
-      FontsLocation,
-      ApplicationsLocation,
-      MusicLocation,
-      MoviesLocation,
-      PicturesLocation,
-      TempLocation,
-      HomeLocation,
-      DataLocation,
-      CacheLocation
-   };
-
-   static QString storageLocation(StandardLocation type);
-   static QString displayName(StandardLocation type);
+ private:
+   static QString storageLocationImpl(QStandardPaths::StandardLocation type);
 };
 
 #endif // QT_NO_DESKTOPSERVICES
-
-QT_END_NAMESPACE
 
 #endif // QDESKTOPSERVICES_H
 

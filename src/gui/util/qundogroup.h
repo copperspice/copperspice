@@ -27,7 +27,7 @@
 #include <QtCore/qstring.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 class QUndoGroupPrivate;
 class QUndoStack;
@@ -62,8 +62,10 @@ class Q_GUI_EXPORT QUndoGroup : public QObject
 
    GUI_CS_SLOT_1(Public, void undo())
    GUI_CS_SLOT_2(undo)
+
    GUI_CS_SLOT_1(Public, void redo())
    GUI_CS_SLOT_2(redo)
+
    GUI_CS_SLOT_1(Public, void setActiveStack(QUndoStack *stack))
    GUI_CS_SLOT_2(setActiveStack)
 
@@ -82,15 +84,15 @@ class Q_GUI_EXPORT QUndoGroup : public QObject
    GUI_CS_SIGNAL_1(Public, void redoTextChanged(const QString &redoText))
    GUI_CS_SIGNAL_2(redoTextChanged, redoText)
 
- private:
-   Q_DISABLE_COPY(QUndoGroup)
-
  protected:
    QScopedPointer<QUndoGroupPrivate> d_ptr;
+
+ private:
+   Q_DISABLE_COPY(QUndoGroup)
 };
 
 #endif // QT_NO_UNDOGROUP
 
-QT_END_NAMESPACE
+
 
 #endif // QUNDOGROUP_H
