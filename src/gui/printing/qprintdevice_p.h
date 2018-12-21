@@ -102,7 +102,7 @@ public:
     QList<QPrint::ColorMode> supportedColorModes() const;
 
 #ifndef QT_NO_MIMETYPE
-/* emerald
+/* emerald - mimedatabase
     QList<QMimeType> supportedMimeTypes() const;
 */
 #endif

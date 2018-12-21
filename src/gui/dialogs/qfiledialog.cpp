@@ -46,63 +46,6 @@ QUrl *cs_internal_lastVisitedDir() {
 
 static const qint32 QFileDialogMagic = 0xbe;
 
-
-/* broom - may not be used
-
-typedef QString (*_qt_filedialog_existing_directory_hook)(QWidget *parent, const QString &caption, const QString &dir,
-      QFileDialog::Options options);
-
-
-using _qt_filedialog_existing_directory_hook =
-   QString (*)(QWidget *parent, const QString &caption, const QString &dir,QFileDialog::Options options);
-
-
-Q_GUI_EXPORT _qt_filedialog_existing_directory_hook qt_filedialog_existing_directory_hook = 0;
-
-_foo foo = 0
-
-
-typedef QUrl (*_qt_filedialog_existing_directory_url_hook)(QWidget *parent, const QString &caption, const QUrl &dir,
-      QFileDialog::Options options, const QStringList &supportedSchemes);
-Q_GUI_EXPORT _qt_filedialog_existing_directory_url_hook qt_filedialog_existing_directory_url_hook = 0;
-
-typedef QString (*_qt_filedialog_open_filename_hook)(QWidget *parent, const QString &caption, const QString &dir,
-      const QString &filter, QString *selectedFilter, QFileDialog::Options options);
-Q_GUI_EXPORT _qt_filedialog_open_filename_hook qt_filedialog_open_filename_hook = 0;
-
-typedef QUrl (*_qt_filedialog_open_file_url_hook)(QWidget *parent, const QString &caption, const QUrl &dir,
-      const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes);
-Q_GUI_EXPORT _qt_filedialog_open_file_url_hook qt_filedialog_open_file_url_hook = 0;
-
-typedef QStringList (*_qt_filedialog_open_filenames_hook)(QWidget *parent, const QString &caption, const QString &dir,
-      const QString &filter, QString *selectedFilter, QFileDialog::Options options);
-Q_GUI_EXPORT _qt_filedialog_open_filenames_hook qt_filedialog_open_filenames_hook = 0;
-
-typedef QList<QUrl> (*_qt_filedialog_open_file_urls_hook)(QWidget *parent, const QString &caption, const QUrl &dir,
-      const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes);
-Q_GUI_EXPORT _qt_filedialog_open_file_urls_hook qt_filedialog_open_file_urls_hook = 0;
-
-typedef QString (*_qt_filedialog_save_filename_hook)(QWidget *parent, const QString &caption, const QString &dir,
-      const QString &filter, QString *selectedFilter, QFileDialog::Options options);
-Q_GUI_EXPORT _qt_filedialog_save_filename_hook qt_filedialog_save_filename_hook = 0;
-
-typedef QUrl (*_qt_filedialog_save_file_url_hook)(QWidget *parent, const QString &caption, const QUrl &dir,
-      const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes);
-Q_GUI_EXPORT _qt_filedialog_save_file_url_hook qt_filedialog_save_file_url_hook = 0;
-
-static const qint32 QFileDialogMagic = 0xbe;
-static const QString qt_file_dialog_filter_reg_exp = "^(.*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$";
-
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
-bool Q_GUI_EXPORT qt_use_native_dialogs = true; // for the benefit of testing tools, until we have a proper API
-#endif
-
-#ifdef Q_OS_WIN
-#include <qwindowsstyle.h>
-#endif
-
-*/
-
 QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags f)
    : QDialog(*new QFileDialogPrivate, parent, f)
 {

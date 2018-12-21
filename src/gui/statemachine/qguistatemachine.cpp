@@ -26,9 +26,7 @@
 
 #include <qstatemachine_p.h>
 #include <QtGui/qevent.h>
-#include <QtGui/qgraphicssceneevent.h>
-
-QT_BEGIN_NAMESPACE
+#include <qgraphicssceneevent.h>
 
 Q_CORE_EXPORT const QStateMachinePrivate::Handler *qcoreStateMachineHandler();
 
@@ -55,7 +53,6 @@ static QEvent *cloneEvent(QEvent *e)
 
       case QEvent::Leave:
          return new QEvent(*e);
-         break;
 
       case QEvent::Paint:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
@@ -141,9 +138,6 @@ static QEvent *cloneEvent(QEvent *e)
 
       case QEvent::Drop:
          return new QDropEvent(*static_cast<QDragMoveEvent *>(e));
-
-      case QEvent::DragResponse:
-         return new QDragResponseEvent(*static_cast<QDragResponseEvent *>(e));
 #endif
 
       case QEvent::ChildAdded:
@@ -182,12 +176,6 @@ static QEvent *cloneEvent(QEvent *e)
 #endif
       case QEvent::InputMethod:
          return new QInputMethodEvent(*static_cast<QInputMethodEvent *>(e));
-      case QEvent::AccessibilityPrepare:
-         return new QEvent(*e);
-#ifndef QT_NO_TABLETEVENT
-      case QEvent::TabletMove:
-         return new QTabletEvent(*static_cast<QTabletEvent *>(e));
-#endif //QT_NO_TABLETEVENT
       case QEvent::LocaleChange:
          return new QEvent(*e);
       case QEvent::LanguageChange:
@@ -197,8 +185,8 @@ static QEvent *cloneEvent(QEvent *e)
       case QEvent::Style:
          return new QEvent(*e);
 #ifndef QT_NO_TABLETEVENT
+    case QEvent::TabletMove:
       case QEvent::TabletPress:
-         return new QTabletEvent(*static_cast<QTabletEvent *>(e));
       case QEvent::TabletRelease:
          return new QTabletEvent(*static_cast<QTabletEvent *>(e));
 #endif //QT_NO_TABLETEVENT
@@ -287,13 +275,6 @@ static QEvent *cloneEvent(QEvent *e)
       case QEvent::HoverMove:
          return new QHoverEvent(*static_cast<QHoverEvent *>(e));
 
-      case QEvent::AccessibilityHelp:
-         Q_ASSERT_X(false, "cloneEvent()", "not implemented");
-         break;
-      case QEvent::AccessibilityDescription:
-         Q_ASSERT_X(false, "cloneEvent()", "not implemented");
-         break;
-
 #ifdef QT_KEYPAD_NAVIGATION
       case QEvent::EnterEditFocus:
          return new QEvent(*e);
@@ -328,6 +309,8 @@ static QEvent *cloneEvent(QEvent *e)
          me2->setButtons(me->buttons());
          me2->setButton(me->button());
          me2->setModifiers(me->modifiers());
+        me2->setSource(me->source());
+        me2->setFlags(me->flags());
          return me2;
       }
 
@@ -458,10 +441,6 @@ static QEvent *cloneEvent(QEvent *e)
          break;
 #endif
 
-      case QEvent::RequestSoftwareInputPanel:
-      case QEvent::CloseSoftwareInputPanel:
-         return new QEvent(*e);
-
       case QEvent::User:
       case QEvent::MaxUser:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
@@ -492,6 +471,5 @@ int qUnregisterGuiStateMachine()
 }
 Q_DESTRUCTOR_FUNCTION(qUnregisterGuiStateMachine)
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE

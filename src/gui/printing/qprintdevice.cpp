@@ -227,7 +227,7 @@ QList<QPrint::ColorMode> QPrintDevice::supportedColorModes() const
 }
 
 #ifndef QT_NO_MIMETYPE
-/* emerald
+/* emerald - mimedatabase
 QList<QMimeType> QPrintDevice::supportedMimeTypes() const
 {
     return isValid() ? d->supportedMimeTypes() : QList<QMimeType>();
@@ -273,7 +273,7 @@ void QPrintDevice::format(QDebug debug) const
 
 #ifndef QT_NO_MIMETYPE
 
-/* emerald  mimetype
+/* emerald - mimedatabase
 
         const QList<QMimeType> mimeTypes = supportedMimeTypes();
 

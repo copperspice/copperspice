@@ -427,8 +427,6 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    virtual void setHeight(qreal);
    virtual void resetHeight();
 
-   // broom - may not be used    mutable QScopedPointer<QGraphicsItemCache> m_graphicsItemCache;
-
    QRectF childrenBoundingRect;
    QRectF needsRepaint;
    QHash<QWidget *, QRect> paintedViewBoundingRects;

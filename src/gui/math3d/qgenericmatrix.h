@@ -27,8 +27,6 @@
 #include <QtCore/qdebug.h>
 #include <QtCore/qdatastream.h>
 
-QT_BEGIN_NAMESPACE
-
 template <int N, int M, typename T>
 class QGenericMatrix
 {
@@ -365,8 +363,6 @@ QDebug operator<<(QDebug dbg, const QGenericMatrix<N, M, T> &m)
    return dbg.space();
 }
 
-#ifndef QT_NO_DATASTREAM
-
 template <int N, int M, typename T>
 QDataStream &operator<<(QDataStream &stream, const QGenericMatrix<N, M, T> &matrix)
 {
@@ -389,10 +385,6 @@ QDataStream &operator>>(QDataStream &stream, QGenericMatrix<N, M, T> &matrix)
    }
    return stream;
 }
-
-#endif
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QMatrix2x2)
 Q_DECLARE_METATYPE(QMatrix2x3)
