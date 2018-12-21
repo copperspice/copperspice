@@ -21,6 +21,7 @@ set(GUI_PUBLIC_INCLUDES
     QFrame
     QGroupBox
     QIntValidator
+	 QKeySequenceEdit
     QLCDNumber
     QLabel
     QLineEdit
@@ -34,11 +35,9 @@ set(GUI_PUBLIC_INCLUDES
     QMenuItem
     QPlainTextDocumentLayout
     QPlainTextEdit
-    QPrintPreviewWidget
     QProgressBar
     QPushButton
     QRadioButton
-    QRegExpValidator
     QRubberBand
     QScrollArea
     QScrollBar
@@ -59,7 +58,6 @@ set(GUI_PUBLIC_INCLUDES
     QToolBox
     QToolButton
     QValidator
-    QWorkspace
 )
 
 set(GUI_INCLUDES
@@ -85,6 +83,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qframe.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qgroupbox.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qintvalidator.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qkeysequenceedit.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlabel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlcdnumber.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit.h
@@ -100,11 +99,9 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenuitem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qplaintextdocumentlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qplaintextedit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qprintpreviewwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qprogressbar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qpushbutton.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qradiobutton.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qregexpvalidator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qrubberband.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollarea.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollbar.h
@@ -125,17 +122,15 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbox.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbutton.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qvalidator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qworkspace.h
 )
 
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractbutton_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractscrollarea_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractplatformmenubar_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractslider_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractspinbox_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcalendartextnavigator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qbuttongroup_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcocoamenu_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcocoatoolbardelegate_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcombobox_p.h
@@ -144,6 +139,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdockwidget_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qeffects_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qframe_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qkeysequenceedit_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlabel_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlinecontrol_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit_p.h
@@ -154,7 +150,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdisubwindow_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenu_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenubar_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenubar_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qplaintextedit_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qpushbutton_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollarea_p.h
@@ -188,6 +183,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qfontcombobox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qframe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qgroupbox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qkeysequenceedit.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlabel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlcdnumber.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit_p.cpp
@@ -226,21 +222,11 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qwidgetresizehandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qfocusframe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollarea.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qworkspace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qwidgetanimator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbararealayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qplaintextedit.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qprintpreviewwidget.cpp
 )
 
-if(X11_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenubar_x11.cpp
-    )
-endif()
-
-# FIXME: check for COCOA instead?
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}

@@ -22,6 +22,7 @@ GUI_PUBLIC_INCLUDES += \
 	QFrame \
 	QGroupBox \
 	QIntValidator \
+	QKeySequenceEdit \
 	QLCDNumber \
 	QLabel \
 	QLineEdit \
@@ -35,11 +36,9 @@ GUI_PUBLIC_INCLUDES += \
 	QMenuItem \
 	QPlainTextDocumentLayout \
 	QPlainTextEdit \
-	QPrintPreviewWidget \
 	QProgressBar \
 	QPushButton \
 	QRadioButton \
-	QRegExpValidator \
 	QRubberBand \
 	QScrollArea \
 	QScrollBar \
@@ -59,8 +58,7 @@ GUI_PUBLIC_INCLUDES += \
 	QToolBar \
 	QToolBox \
 	QToolButton \
-	QValidator \
-	QWorkspace
+	QValidator
 
 GUI_WIDGETS_INCLUDES = \
 	qabstractbutton.h \
@@ -84,6 +82,7 @@ GUI_WIDGETS_INCLUDES = \
 	qframe.h \
 	qgroupbox.h \
 	qintvalidator.h \
+	qkeysequenceedit.h \
 	qlabel.h \
 	qlcdnumber.h \
 	qlineedit.h \
@@ -99,11 +98,9 @@ GUI_WIDGETS_INCLUDES = \
 	qmenuitem.h \
 	qplaintextdocumentlayout.h \
 	qplaintextedit.h \
-	qprintpreviewwidget.h \
 	qprogressbar.h \
 	qpushbutton.h \
 	qradiobutton.h \
-	qregexpvalidator.h \
 	qrubberband.h \
 	qscrollarea.h \
 	qscrollbar.h \
@@ -123,16 +120,14 @@ GUI_WIDGETS_INCLUDES = \
 	qtoolbar.h \
 	qtoolbox.h \
 	qtoolbutton.h \
-	qvalidator.h \
-	qworkspace.h
+	qvalidator.h
 
 GUI_WIDGETS_PRIVATE_INCLUDES = \
 	qabstractbutton_p.h \
 	qabstractscrollarea_p.h \
-	qabstractplatformmenubar_p.h \
 	qabstractslider_p.h \
 	qabstractspinbox_p.h \
-	qcalendartextnavigator_p.h \
+	qbuttongroup_p.h \
 	qcocoamenu_mac_p.h \
 	qcocoatoolbardelegate_mac_p.h \
 	qcombobox_p.h \
@@ -144,6 +139,7 @@ GUI_WIDGETS_PRIVATE_INCLUDES = \
 	qlabel_p.h \
 	qlinecontrol_p.h \
 	qlineedit_p.h \
+	qkeysequenceedit_p.h \
 	qmaccocoaviewcontainer_mac.h \
 	qmacnativewidget_mac.h \
 	qmainwindowlayout_p.h \
@@ -151,7 +147,6 @@ GUI_WIDGETS_PRIVATE_INCLUDES = \
 	qmdisubwindow_p.h \
 	qmenu_p.h \
 	qmenubar_p.h \
-	qmenubar_x11_p.h \
 	qplaintextedit_p.h \
 	qpushbutton_p.h \
 	qscrollarea_p.h \
@@ -190,6 +185,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qfontcombobox.cpp \
 	src/gui/widgets/qframe.cpp \
 	src/gui/widgets/qgroupbox.cpp \
+	src/gui/widgets/qkeysequenceedit.cpp \
 	src/gui/widgets/qlabel.cpp \
 	src/gui/widgets/qlcdnumber.cpp \
 	src/gui/widgets/qlineedit_p.cpp \
@@ -228,12 +224,9 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qwidgetresizehandler.cpp \
 	src/gui/widgets/qfocusframe.cpp \
 	src/gui/widgets/qscrollarea.cpp \
-	src/gui/widgets/qworkspace.cpp \
 	src/gui/widgets/qwidgetanimator.cpp \
 	src/gui/widgets/qtoolbararealayout.cpp \
-	src/gui/widgets/qplaintextedit.cpp \
-	src/gui/widgets/qprintpreviewwidget.cpp
-
+	src/gui/widgets/qplaintextedit.cpp
 
 if COCOA
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
@@ -243,12 +236,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qmacnativewidget_mac.mm \
 	src/gui/widgets/qmainwindowlayout_mac.mm \
 	src/gui/widgets/qmenu_mac.mm
-endif
-
-
-if X11
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/widgets/qmenubar_x11.cpp
 endif
 
 
