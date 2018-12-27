@@ -25,7 +25,7 @@
 
 #include <qabstractbutton_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QDialog;
 class QPushButton;
@@ -44,13 +44,10 @@ class QPushButtonPrivate : public QAbstractButtonPrivate
    inline void init() {
       resetLayoutItemMargins();
    }
+
    static QPushButtonPrivate *get(QPushButton *b) {
       return b->d_func();
    }
-
-#ifdef Q_OS_MAC
-   bool hitButton(const QPoint &pos);
-#endif
 
 #ifndef QT_NO_MENU
    QPoint adjustedMenuPosition();
@@ -68,6 +65,5 @@ class QPushButtonPrivate : public QAbstractButtonPrivate
    mutable uint lastAutoDefault : 1;
 };
 
-QT_END_NAMESPACE
 
 #endif

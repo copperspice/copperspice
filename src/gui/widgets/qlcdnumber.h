@@ -23,16 +23,14 @@
 #ifndef QLCDNUMBER_H
 #define QLCDNUMBER_H
 
-#include <QtGui/qframe.h>
-#include <QtCore/qbitarray.h>
-
-QT_BEGIN_NAMESPACE
+#include <qframe.h>
 
 #ifndef QT_NO_LCDNUMBER
 
 class QLCDNumberPrivate;
 
-class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
+// LCD number widget
+class Q_GUI_EXPORT QLCDNumber : public QFrame
 {
    GUI_CS_OBJECT(QLCDNumber)
 
@@ -41,9 +39,6 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
 
    GUI_CS_PROPERTY_READ(smallDecimalPoint, smallDecimalPoint)
    GUI_CS_PROPERTY_WRITE(smallDecimalPoint, setSmallDecimalPoint)
-
-   GUI_CS_PROPERTY_READ(numDigits, numDigits)
-   GUI_CS_PROPERTY_WRITE(numDigits, setNumDigits)
 
    GUI_CS_PROPERTY_READ(digitCount, digitCount)
    GUI_CS_PROPERTY_WRITE(digitCount, setDigitCount)
@@ -70,12 +65,6 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
    enum SegmentStyle { Outline, Filled, Flat  };
 
    bool smallDecimalPoint() const;
-
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED int numDigits() const;
-   QT_DEPRECATED void setNumDigits(int nDigits);
-#endif
-
    int digitCount() const;
    void setDigitCount(int nDigits);
 
@@ -146,7 +135,5 @@ void QLCDNumber::cs_displayI(int num)
 }
 
 #endif // QT_NO_LCDNUMBER
-
-QT_END_NAMESPACE
 
 #endif // QLCDNUMBER_H

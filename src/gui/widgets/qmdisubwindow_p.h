@@ -35,7 +35,7 @@
 #include <QDebug>
 #include <qwidget_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QVBoxLayout;
 class QMouseEvent;
@@ -142,10 +142,8 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
       QRegion region;
       bool hover;
       OperationInfo(uint changeFlags, Qt::CursorShape cursorShape, bool hover = true)
-         : changeFlags(changeFlags),
-           cursorShape(cursorShape),
-           hover(hover) {
-      }
+         : changeFlags(changeFlags), cursorShape(cursorShape), hover(hover)
+      { }
    };
 
    typedef QMap<Operation, OperationInfo> OperationInfoMap;
@@ -258,12 +256,16 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    QPalette desktopPalette() const;
    void updateActions();
    void setFocusWidget();
-   void restoreFocus();
-   void setWindowFlags(Qt::WindowFlags windowFlags);
+
+   bool restoreFocus();
+   void storeFocusWidget();
+
+   void setWindowFlags(Qt::WindowFlags windowFlags) override;
    void setVisible(WindowStateAction, bool visible = true);
 
 #ifndef QT_NO_ACTION
    void setEnabled(WindowStateAction, bool enable = true);
+
 #ifndef QT_NO_MENU
    void addToSystemMenu(WindowStateAction, const QString &text, const QString &slot);
 #endif
@@ -284,7 +286,7 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
       Q_Q(const QMdiSubWindow);
 
       if (! q->parent() || q->windowFlags() & Qt::FramelessWindowHint
-            || (q->isMaximized() && ! drawTitleBarWhenMaximized())) {
+         || (q->isMaximized() && ! drawTitleBarWhenMaximized())) {
          return 0;
       }
 
@@ -337,7 +339,5 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
 };
 
 #endif // QT_NO_MDIAREA
-
-QT_END_NAMESPACE
 
 #endif // QMDISUBWINDOW_P_H

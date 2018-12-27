@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 #include <qstatusbar.h>
+
 #ifndef QT_NO_STATUSBAR
 
 #include <qlist.h>
@@ -41,7 +42,6 @@
 #include <qlayoutengine_p.h>
 #include <qwidget_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class QStatusBarPrivate : public QWidgetPrivate
 {
@@ -71,9 +71,6 @@ class QStatusBarPrivate : public QWidgetPrivate
 
    int savedStrut;
 
-#ifdef Q_OS_MAC
-   QPoint dragStart;
-#endif
 
    int indexToLastNonPermanentWidget() const {
       int i = items.size() - 1;
@@ -91,10 +88,12 @@ class QStatusBarPrivate : public QWidgetPrivate
       if (!showSizeGrip) {
          return;
       }
+
       showSizeGrip = false;
       if (!resizer || resizer->isVisible()) {
          return;
       }
+
       resizer->setAttribute(Qt::WA_WState_ExplicitShowHide, false);
       QMetaObject::invokeMethod(resizer, "_q_showIfNotHidden", Qt::DirectConnection);
       resizer->setAttribute(Qt::WA_WState_ExplicitShowHide, false);
@@ -143,76 +142,6 @@ QRect QStatusBarPrivate::messageRect() const
 }
 
 
-/*!
-    \class QStatusBar
-    \brief The QStatusBar class provides a horizontal bar suitable for
-    presenting status information.
-
-    \ingroup mainwindow-classes
-    \ingroup helpsystem
-
-
-    Each status indicator falls into one of three categories:
-
-    \list
-    \o \e Temporary - briefly occupies most of the status bar. Used
-        to explain tool tip texts or menu entries, for example.
-    \o \e Normal - occupies part of the status bar and may be hidden
-        by temporary messages. Used to display the page and line
-        number in a word processor, for example.
-    \o \e Permanent - is never hidden. Used for important mode
-        indications, for example, some applications put a Caps Lock
-        indicator in the status bar.
-    \endlist
-
-    QStatusBar lets you display all three types of indicators.
-
-    Typically, a request for the status bar functionality occurs in
-    relation to a QMainWindow object. QMainWindow provides a main
-    application window, with a menu bar, tool bars, dock widgets \e
-    and a status bar around a large central widget. The status bar can
-    be retrieved using the QMainWindow::statusBar() function, and
-    replaced using the QMainWindow::setStatusBar() function.
-
-    Use the showMessage() slot to display a \e temporary message:
-
-    \snippet examples/mainwindows/dockwidgets/mainwindow.cpp 8
-
-    To remove a temporary message, use the clearMessage() slot, or set
-    a time limit when calling showMessage(). For example:
-
-    \snippet examples/mainwindows/dockwidgets/mainwindow.cpp 3
-
-    Use the currentMessage() function to retrieve the temporary
-    message currently shown. The QStatusBar class also provide the
-    messageChanged() signal which is emitted whenever the temporary
-    status message changes.
-
-    \target permanent message
-    \e Normal and \e Permanent messages are displayed by creating a
-    small widget (QLabel, QProgressBar or even QToolButton) and then
-    adding it to the status bar using the addWidget() or the
-    addPermanentWidget() function. Use the removeWidget() function to
-    remove such messages from the status bar.
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qstatusbar.cpp 0
-
-    By default QStatusBar provides a QSizeGrip in the lower-right
-    corner. You can disable it using the setSizeGripEnabled()
-    function. Use the isSizeGripEnabled() function to determine the
-    current status of the size grip.
-
-    \image plastique-statusbar.png A status bar shown in the Plastique widget style
-
-    \sa QMainWindow, QStatusTipEvent, {fowler}{GUI Design Handbook:
-    Status Bar}, {Application Example}
-*/
-
-/*!
-    Constructs a status bar with a size grip and the given \a parent.
-
-    \sa setSizeGripEnabled()
-*/
 QStatusBar::QStatusBar(QWidget *parent)
    : QWidget(*new QStatusBarPrivate, parent, 0)
 {
@@ -228,32 +157,16 @@ QStatusBar::QStatusBar(QWidget *parent)
 #endif
 }
 
-/*!
-    Destroys this status bar and frees any allocated resources and
-    child widgets.
-*/
 QStatusBar::~QStatusBar()
 {
    Q_D(QStatusBar);
+
    while (!d->items.isEmpty()) {
       delete d->items.takeFirst();
    }
 }
 
 
-/*!
-    Adds the given \a widget to this status bar, reparenting the
-    widget if it isn't already a child of this QStatusBar object. The
-    \a stretch parameter is used to compute a suitable size for the
-    given \a widget as the status bar grows and shrinks. The default
-    stretch factor is 0, i.e giving the widget a minimum of space.
-
-    The widget is located to the far left of the first permanent
-    widget (see addPermanentWidget()) and may be obscured by temporary
-    messages.
-
-    \sa insertWidget(), removeWidget(), addPermanentWidget()
-*/
 
 void QStatusBar::addWidget(QWidget *widget, int stretch)
 {
@@ -263,25 +176,7 @@ void QStatusBar::addWidget(QWidget *widget, int stretch)
    insertWidget(d_func()->indexToLastNonPermanentWidget() + 1, widget, stretch);
 }
 
-/*!
-    \since 4.2
 
-    Inserts the given \a widget at the given \a index to this status bar,
-    reparenting the widget if it isn't already a child of this
-    QStatusBar object. If \a index is out of range, the widget is appended
-    (in which case it is the actual index of the widget that is returned).
-
-    The \a stretch parameter is used to compute a suitable size for
-    the given \a widget as the status bar grows and shrinks. The
-    default stretch factor is 0, i.e giving the widget a minimum of
-    space.
-
-    The widget is located to the far left of the first permanent
-    widget (see addPermanentWidget()) and may be obscured by temporary
-    messages.
-
-    \sa addWidget(), removeWidget(), addPermanentWidget()
-*/
 int QStatusBar::insertWidget(int index, QWidget *widget, int stretch)
 {
    if (!widget) {
@@ -333,24 +228,6 @@ void QStatusBar::addPermanentWidget(QWidget *widget, int stretch)
 }
 
 
-/*!
-    \since 4.2
-
-    Inserts the given \a widget at the given \a index permanently to this status bar,
-    reparenting the widget if it isn't already a child of this
-    QStatusBar object. If \a index is out of range, the widget is appended
-    (in which case it is the actual index of the widget that is returned).
-
-    The \a stretch parameter is used to compute a
-    suitable size for the given \a widget as the status bar grows and
-    shrinks. The default stretch factor is 0, i.e giving the widget a
-    minimum of space.
-
-    Permanently means that the widget may not be obscured by temporary
-    messages. It is is located at the far right of the status bar.
-
-    \sa addPermanentWidget(), removeWidget(), addWidget()
-*/
 int QStatusBar::insertPermanentWidget(int index, QWidget *widget, int stretch)
 {
    if (!widget) {
@@ -394,6 +271,7 @@ void QStatusBar::removeWidget(QWidget *widget)
    Q_D(QStatusBar);
    bool found = false;
    QStatusBarPrivate::SBItem *item;
+
    for (int i = 0; i < d->items.size(); ++i) {
       item = d->items.at(i);
       if (!item) {
@@ -418,14 +296,7 @@ void QStatusBar::removeWidget(QWidget *widget)
 #endif
 }
 
-/*!
-    \property QStatusBar::sizeGripEnabled
 
-    \brief whether the QSizeGrip in the bottom-right corner of the
-    status bar is enabled
-
-    The size grip is enabled by default.
-*/
 
 bool QStatusBar::isSizeGripEnabled() const
 {
@@ -440,9 +311,10 @@ bool QStatusBar::isSizeGripEnabled() const
 void QStatusBar::setSizeGripEnabled(bool enabled)
 {
 #ifdef QT_NO_SIZEGRIP
-   Q_UNUSED(enabled);
+   // nothing
 #else
    Q_D(QStatusBar);
+
    if (!enabled != !d->resizer) {
       if (enabled) {
          d->resizer = new QSizeGrip(this);
@@ -534,25 +406,10 @@ void QStatusBar::reformat()
    update();
 }
 
-/*!
 
-  Hides the normal status indications and displays the given \a
-  message for the specified number of milli-seconds (\a{timeout}). If
-  \a{timeout} is 0 (default), the \a {message} remains displayed until
-  the clearMessage() slot is called or until the showMessage() slot is
-  called again to change the message.
-
-  Note that showMessage() is called to show temporary explanations of
-  tool tip texts, so passing a \a{timeout} of 0 is not sufficient to
-  display a \l{permanent message}{permanent message}.
-
-    \sa messageChanged(), currentMessage(), clearMessage()
-*/
 void QStatusBar::showMessage(const QString &message, int timeout)
 {
    Q_D(QStatusBar);
-
-   d->tempItem = message;
 
    if (timeout > 0) {
       if (!d->timer) {
@@ -565,14 +422,14 @@ void QStatusBar::showMessage(const QString &message, int timeout)
       d->timer = 0;
    }
 
+   if (d->tempItem == message) {
+      return;
+   }
+   d->tempItem = message;
+
    hideOrShow();
 }
 
-/*!
-    Removes any temporary message being shown.
-
-    \sa currentMessage(), showMessage(), removeWidget()
-*/
 
 void QStatusBar::clearMessage()
 {
@@ -591,46 +448,13 @@ void QStatusBar::clearMessage()
    hideOrShow();
 }
 
-/*!
-    Returns the temporary message currently shown,
-    or an empty string if there is no such message.
 
-    \sa showMessage()
-*/
 QString QStatusBar::currentMessage() const
 {
    Q_D(const QStatusBar);
    return d->tempItem;
 }
 
-/*!
-    \fn void QStatusBar::message(const QString &message, int timeout)
-
-    Use the showMessage() function instead.
-*/
-
-/*!
-    \fn void QStatusBar::clear()
-
-    Use the clearMessage() function instead.
-*/
-
-/*!
-    \fn QStatusBar::messageChanged(const QString &message)
-
-    This signal is emitted whenever the temporary status message
-    changes. The new temporary message is passed in the \a message
-    parameter which is a null-string when the message has been
-    removed.
-
-    \sa showMessage(), clearMessage()
-*/
-
-/*!
-    Ensures that the right widgets are visible.
-
-    Used by the showMessage() and clearMessage() functions.
-*/
 void QStatusBar::hideOrShow()
 {
    Q_D(QStatusBar);
@@ -654,7 +478,8 @@ void QStatusBar::hideOrShow()
 
 #ifndef QT_NO_ACCESSIBILITY
    if (QAccessible::isActive()) {
-      QAccessible::updateAccessibility(this, 0, QAccessible::NameChanged);
+      QAccessibleEvent event(this, QAccessible::NameChanged);
+      QAccessible::updateAccessibility(&event);
    }
 #endif
 
@@ -674,13 +499,7 @@ void QStatusBar::showEvent(QShowEvent *)
 #endif
 }
 
-/*!
-    \reimp
-    \fn void QStatusBar::paintEvent(QPaintEvent *event)
 
-    Shows the temporary message, if appropriate, in response to the
-    paint \a event.
-*/
 void QStatusBar::paintEvent(QPaintEvent *event)
 {
    Q_D(QStatusBar);
@@ -727,7 +546,7 @@ bool QStatusBar::event(QEvent *e)
    Q_D(QStatusBar);
 
    if (e->type() == QEvent::LayoutRequest
-      ) {
+   ) {
       // Calculate new strut height and call reformat() if it has changed
       int maxH = fontMetrics().height();
 
@@ -772,50 +591,7 @@ bool QStatusBar::event(QEvent *e)
 
    // On Mac OS X.5 it is possible to drag the window by clicking
    // on the tool bar on most applications.
-#ifndef Q_OS_MAC
+
    return QWidget::event(e);
-#else
-   if (QSysInfo::MacintoshVersion <= QSysInfo::MV_10_4) {
-      return QWidget::event(e);
-   }
-
-   // Enable drag-click only if the status bar is the status bar for a
-   // QMainWindow with a unifed toolbar.
-   if (parent() == 0 || qobject_cast<QMainWindow *>(parent()) == 0 ||
-         qobject_cast<QMainWindow *>(parent())->unifiedTitleAndToolBarOnMac() == false ) {
-      return QWidget::event(e);
-   }
-
-   // Check for mouse events.
-   QMouseEvent *mouseEvent;
-   if (e->type() == QEvent::MouseButtonPress ||
-         e->type() == QEvent::MouseMove ||
-         e->type() == QEvent::MouseButtonRelease) {
-      mouseEvent = static_cast <QMouseEvent *>(e);
-   } else {
-      return QWidget::event(e);
-   }
-
-   // The following is a standard mouse drag handler.
-   if (e->type() == QEvent::MouseButtonPress && (mouseEvent->button() == Qt::LeftButton)) {
-      d->dragStart = mouseEvent->pos();
-   } else if (e->type() == QEvent::MouseMove) {
-      if (d->dragStart == QPoint()) {
-         return QWidget::event(e);
-      }
-      QPoint pos = mouseEvent->pos();
-      QPoint delta = (pos - d->dragStart);
-      window()->move(window()->pos() + delta);
-   } else if (e->type() == QEvent::MouseButtonRelease && (mouseEvent->button() == Qt::LeftButton)) {
-      d->dragStart = QPoint();
-   } else {
-      return QWidget::event(e);
-   }
-
-   return true;
-#endif
 }
-
-QT_END_NAMESPACE
-
 #endif

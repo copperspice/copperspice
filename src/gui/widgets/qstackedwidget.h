@@ -23,9 +23,9 @@
 #ifndef QSTACKEDWIDGET_H
 #define QSTACKEDWIDGET_H
 
-#include <QtGui/qframe.h>
+#include <qframe.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_STACKEDWIDGET
 
@@ -38,6 +38,7 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
    GUI_CS_PROPERTY_NOTIFY(currentIndex, currentChanged)
+
    GUI_CS_PROPERTY_READ(count, count)
 
  public:
@@ -57,11 +58,13 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
 
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
+
    GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *w))
    GUI_CS_SLOT_2(setCurrentWidget)
 
    GUI_CS_SIGNAL_1(Public, void currentChanged(int un_named_arg1))
    GUI_CS_SIGNAL_2(currentChanged, un_named_arg1)
+
    GUI_CS_SIGNAL_1(Public, void widgetRemoved(int index))
    GUI_CS_SIGNAL_2(widgetRemoved, index)
 
@@ -75,6 +78,5 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
 
 #endif // QT_NO_STACKEDWIDGET
 
-QT_END_NAMESPACE
 
 #endif // QSTACKEDWIDGET_H

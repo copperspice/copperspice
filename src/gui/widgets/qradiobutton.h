@@ -23,7 +23,7 @@
 #ifndef QRADIOBUTTON_H
 #define QRADIOBUTTON_H
 
-#include <QtGui/qabstractbutton.h>
+#include <qabstractbutton.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,6 +37,7 @@ class Q_GUI_EXPORT QRadioButton : public QAbstractButton
  public:
    explicit QRadioButton(QWidget *parent = nullptr);
    explicit QRadioButton(const QString &text, QWidget *parent = nullptr);
+   ~QRadioButton();
 
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
@@ -51,8 +52,8 @@ class Q_GUI_EXPORT QRadioButton : public QAbstractButton
  private:
    Q_DECLARE_PRIVATE(QRadioButton)
    Q_DISABLE_COPY(QRadioButton)
+   friend class QAccessibleButton;
 };
 
-QT_END_NAMESPACE
 
 #endif // QRADIOBUTTON_H

@@ -28,7 +28,6 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qmargins.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_LINEEDIT
 
@@ -39,11 +38,14 @@ class QCompleter;
 class QStyleOptionFrame;
 class QAbstractSpinBox;
 class QDateTimeEdit;
+class QIcon;
+class QToolButton;
 
 class Q_GUI_EXPORT QLineEdit : public QWidget
 {
    GUI_CS_OBJECT(QLineEdit)
 
+   GUI_CS_ENUM(ActionPosition)
    GUI_CS_ENUM(EchoMode)
 
    GUI_CS_PROPERTY_READ(inputMask, inputMask)
@@ -95,7 +97,17 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_PROPERTY_READ(cursorMoveStyle, cursorMoveStyle)
    GUI_CS_PROPERTY_WRITE(cursorMoveStyle, setCursorMoveStyle)
 
+   GUI_CS_PROPERTY_READ(clearButtonEnabled, isClearButtonEnabled)
+   GUI_CS_PROPERTY_WRITE(clearButtonEnabled, setClearButtonEnabled)
+
  public:
+   enum ActionPosition {
+      LeadingPosition,
+      TrailingPosition
+   };
+
+   enum EchoMode { Normal, NoEcho, Password, PasswordEchoOnEdit };
+
    explicit QLineEdit(QWidget *parent = nullptr);
    explicit QLineEdit(const QString &, QWidget *parent = nullptr);
    ~QLineEdit();
@@ -113,7 +125,9 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    void setFrame(bool);
    bool hasFrame() const;
 
-   enum EchoMode { Normal, NoEcho, Password, PasswordEchoOnEdit };
+   void setClearButtonEnabled(bool enable);
+   bool isClearButtonEnabled() const;
+
    EchoMode echoMode() const;
    void setEchoMode(EchoMode);
 
@@ -175,6 +189,18 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    void getTextMargins(int *left, int *top, int *right, int *bottom) const;
    QMargins textMargins() const;
 
+   using QWidget::addAction;
+   void addAction(QAction *action, ActionPosition position);
+   QAction *addAction(const QIcon &icon, ActionPosition position);
+
+   void deselect();
+   void insert(const QString &);
+
+#ifndef QT_NO_CONTEXTMENU
+   QMenu *createStandardContextMenu();
+#endif
+
+
    GUI_CS_SLOT_1(Public, void setText(const QString &un_named_arg1))
    GUI_CS_SLOT_2(setText)
 
@@ -199,13 +225,6 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
 
    GUI_CS_SLOT_1(Public, void paste())
    GUI_CS_SLOT_2(paste)
-#endif
-
-   void deselect();
-   void insert(const QString &);
-
-#ifndef QT_NO_CONTEXTMENU
-   QMenu *createStandardContextMenu();
 #endif
 
    GUI_CS_SIGNAL_1(Public, void textChanged(const QString &un_named_arg1))
@@ -255,6 +274,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    void inputMethodEvent(QInputMethodEvent *) override;
    void initStyleOption(QStyleOptionFrame *option) const;
 
+ protected:
    QRect cursorRect() const;
 
  private:
@@ -294,10 +314,13 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SLOT_1(Private, void _q_updateNeeded(const QRect &un_named_arg1))
    GUI_CS_SLOT_2(_q_updateNeeded)
 
+   GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_2(_q_textChanged)
+
+   GUI_CS_SLOT_1(Private, void _q_clearButtonClicked())
+   GUI_CS_SLOT_2(_q_clearButtonClicked)
 };
 
 #endif // QT_NO_LINEEDIT
-
-QT_END_NAMESPACE
 
 #endif // QLINEEDIT_H

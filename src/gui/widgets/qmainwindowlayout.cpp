@@ -24,64 +24,54 @@
 #include <qdockarealayout_p.h>
 
 #ifndef QT_NO_MAINWINDOW
-#include <qdockwidget.h>
-#include <qdockwidget_p.h>
-#include <qtoolbar_p.h>
-#include <qmainwindow.h>
-#include <qmainwindowlayout_p.h>
-#include <qtoolbar.h>
-#include <qtoolbarlayout_p.h>
-#include <qwidgetanimator_p.h>
-#include <qrubberband.h>
-#include <qdockwidget_p.h>
-#include <qtabbar_p.h>
 
+#include <qdockwidget.h>
+#include <qmainwindow.h>
+#include <qtoolbar.h>
+#include <qrubberband.h>
 #include <qapplication.h>
 #include <qstatusbar.h>
 #include <qstring.h>
 #include <qstyle.h>
+#include <qstylepainter.h>
 #include <qvarlengtharray.h>
 #include <qstack.h>
 #include <qmap.h>
 #include <qtimer.h>
 #include <qdebug.h>
+#include <qtextstream.h>
+
+
+
 #include <qapplication_p.h>
 #include <qlayoutengine_p.h>
+#include <qwidgetresizehandler_p.h>
+#include <qtoolbarlayout_p.h>
+#include <qwidgetanimator_p.h>
+#include <qdockwidget_p.h>
+#include <qtoolbar_p.h>
+#include <qtabbar_p.h>
 
-#ifdef Q_OS_MAC
-#   include <qcore_mac_p.h>
-#   include <qt_cocoa_helpers_mac_p.h>
-#endif
-
-#ifdef QT_NO_DOCKWIDGET
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
-#endif
 
-#ifdef Q_DEBUG_MAINWINDOW_LAYOUT
-#   include <QTextStream>
-#endif
 
-QT_BEGIN_NAMESPACE
-
-#if defined(Q_DEBUG_MAINWINDOW_LAYOUT) && !defined(QT_NO_DOCKWIDGET)
-
-static QTextStream qout(stderr, QIODevice::WriteOnly);
+#if ! defined(QT_NO_DOCKWIDGET) && ! defined(QT_NO_DEBUG_STREAM)
 
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QString indent);
 
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutItem &item, QString indent)
 {
    qout << indent << "QDockAreaLayoutItem: "
-        << "pos: " << item.pos << " size:" << item.size
-        << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
-        << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize) << '\n';
+      << "pos: " << item.pos << " size:" << item.size
+      << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
+      << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize) << '\n';
 
    indent += QLatin1String("  ");
 
    if (item.widgetItem != 0) {
       qout << indent << "widget: "
-           << item.widgetItem->widget()->metaObject()->className()
-           << ' ' << item.widgetItem->widget()->windowTitle() << '\n';
+         << item.widgetItem->widget()->metaObject()->className()
+         << " \"" << item.widgetItem->widget()->windowTitle() << "\"\n";
 
    } else if (item.subinfo != 0) {
       qout << indent << "subinfo:\n";
@@ -91,28 +81,29 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutItem &item, QStri
       QRect r = item.placeHolderItem->topLevelRect;
 
       qout << indent << "placeHolder: "
-           << "pos: " << item.pos << " size:" << item.size
-           << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
-           << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize)
-           << " objectName:" << item.placeHolderItem->objectName
-           << " hidden:" << item.placeHolderItem->hidden
-           << " window:" << item.placeHolderItem->window
-           << " rect:" << r.x() << ',' << r.y() << ' '
-           << r.width() << 'x' << r.height() << '\n';
+         << "pos: " << item.pos << " size:" << item.size
+         << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
+         << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize)
+         << " objectName:" << item.placeHolderItem->objectName
+         << " hidden:" << item.placeHolderItem->hidden
+         << " window:" << item.placeHolderItem->window
+         << " rect:" << r.x() << ',' << r.y() << ' '
+         << r.width() << 'x' << r.height() << '\n';
    }
-   qout.flush();
 }
 
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QString indent)
 {
+   const QSize minSize = layout.minimumSize();
    qout << indent << "QDockAreaLayoutInfo: "
-        << layout.rect.left() << ','
-        << layout.rect.top() << ' '
-        << layout.rect.width() << 'x'
-        << layout.rect.height()
-        << " orient:" << layout.o
-        << " tabbed:" << layout.tabbed
-        << " tbshape:" << layout.tabBarShape << '\n';
+      << layout.rect.left() << ','
+      << layout.rect.top() << ' '
+      << layout.rect.width() << 'x'
+      << layout.rect.height()
+      << " min size: " << minSize.width() << ',' << minSize.height()
+      << " orient:" << layout.o
+      << " tabbed:" << layout.tabbed
+      << " tbshape:" << layout.tabBarShape << '\n';
 
    indent += QLatin1String("  ");
 
@@ -120,41 +111,272 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QSt
       qout << indent << "Item: " << i << '\n';
       dumpLayout(qout, layout.item_list.at(i), indent + QLatin1String("  "));
    }
-   qout.flush();
-};
 
-static void dumpLayout(QTextStream &qout, const QDockAreaLayout &layout, QString indent)
-{
-   qout << indent << "QDockAreaLayout: "
-        << layout.rect.left() << ','
-        << layout.rect.top() << ' '
-        << layout.rect.width() << 'x'
-        << layout.rect.height() << '\n';
-
-   qout << indent << "TopDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::TopDock], indent + QLatin1String("  "));
-   qout << indent << "LeftDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::LeftDock], indent + QLatin1String("  "));
-   qout << indent << "RightDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::RightDock], indent + QLatin1String("  "));
-   qout << indent << "BottomDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::BottomDock], indent + QLatin1String("  "));
-
-   qout.flush();
-};
-
-void qt_dumpLayout(QTextStream &qout, QMainWindow *window)
-{
-   QMainWindowLayout *layout = qt_mainwindow_layout(window);
-   dumpLayout(qout, layout->layoutState.dockAreaLayout, QString());
 }
 
-#endif // Q_DEBUG_MAINWINDOW_LAYOUT && !QT_NO_DOCKWIDGET
+static void dumpLayout(QTextStream &qout, const QDockAreaLayout &layout)
+{
+   qout << "QDockAreaLayout: "
+      << layout.rect.left() << ','
+      << layout.rect.top() << ' '
+      << layout.rect.width() << 'x'
+      << layout.rect.height() << '\n';
 
-/******************************************************************************
-** QMainWindowLayoutState
-*/
+   qout << "TopDockArea:\n";
+   dumpLayout(qout, layout.docks[QInternal::TopDock], QLatin1String("  "));
+   qout << "LeftDockArea:\n";
+   dumpLayout(qout, layout.docks[QInternal::LeftDock], QLatin1String("  "));
+   qout << "RightDockArea:\n";
+   dumpLayout(qout, layout.docks[QInternal::RightDock], QLatin1String("  "));
+   qout << "BottomDockArea:\n";
+   dumpLayout(qout, layout.docks[QInternal::BottomDock], QLatin1String("  "));
+}
 
+QDebug operator<<(QDebug debug, const QDockAreaLayout &layout)
+{
+   QString s;
+   QTextStream str(&s);
+   dumpLayout(str, layout);
+   debug << s;
+   return debug;
+}
+
+QDebug operator<<(QDebug debug, const QMainWindowLayout *layout)
+{
+   debug << layout->layoutState.dockAreaLayout;
+   return debug;
+}
+#endif // !defined(QT_NO_DOCKWIDGET)
+#ifndef QT_NO_DOCKWIDGET
+class QDockWidgetGroupLayout : public QLayout
+{
+   QDockAreaLayoutInfo info;
+   QWidgetResizeHandler *resizer;
+ public:
+   QDockWidgetGroupLayout(QWidget *parent) : QLayout(parent) {
+      setSizeConstraint(QLayout::SetMinAndMaxSize);
+      resizer = new QWidgetResizeHandler(parent);
+      resizer->setMovingEnabled(false);
+   }
+   ~QDockWidgetGroupLayout() {
+      info.deleteAllLayoutItems();
+   }
+
+   void addItem(QLayoutItem *) override {
+      // error, may want to throw?
+   }
+
+   int count() const override {
+      return 0;
+   }
+   QLayoutItem *itemAt(int index) const override {
+      int x = 0;
+      return info.itemAt(&x, index);
+   }
+   QLayoutItem *takeAt(int index) override {
+      int x = 0;
+      return info.takeAt(&x, index);
+   }
+   QSize sizeHint() const override {
+      int fw = frameWidth();
+      return info.sizeHint() + QSize(fw, fw);
+   }
+   QSize minimumSize() const override {
+      int fw = frameWidth();
+      return info.minimumSize() + QSize(fw, fw);
+   }
+   QSize maximumSize() const override {
+      int fw = frameWidth();
+      return info.maximumSize() + QSize(fw, fw);
+   }
+   void setGeometry(const QRect &r) override {
+      static_cast<QDockWidgetGroupWindow *>(parent())->destroyOrHideIfEmpty();
+      QDockAreaLayoutInfo *li = layoutInfo();
+      if (li->isEmpty()) {
+         return;
+      }
+      int fw = frameWidth();
+      li->reparentWidgets(parentWidget());
+      li->rect = r.adjusted(fw, fw, -fw, -fw);
+      li->fitItems();
+      li->apply(false);
+      resizer->setActive(QWidgetResizeHandler::Resize, !nativeWindowDeco());
+   }
+
+   QDockAreaLayoutInfo *layoutInfo() {
+      return &info;
+   }
+
+   bool nativeWindowDeco() const {
+      return QDockWidgetLayout::wmSupportsNativeWindowDeco();
+   }
+
+   int frameWidth() const {
+      return nativeWindowDeco() ? 0 :
+         parentWidget()->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, parentWidget());
+   }
+};
+
+bool QDockWidgetGroupWindow::event(QEvent *e)
+{
+   switch (e->type()) {
+      case QEvent::Close:
+         // Forward the close to the QDockWidget just as if its close button was pressed
+         if (QDockWidget *dw = topDockWidget()) {
+            e->ignore();
+            dw->close();
+            adjustFlags();
+         }
+         return true;
+
+      case QEvent::Move:
+         // Let QDockWidgetPrivate::moseEvent handle the dragging
+         if (QDockWidget *dw = topDockWidget()) {
+            static_cast<QDockWidgetPrivate *>(QWidgetPrivate::get(dw))->moveEvent(static_cast<QMoveEvent *>(e));
+         }
+         return true;
+
+      case QEvent::NonClientAreaMouseMove:
+      case QEvent::NonClientAreaMouseButtonPress:
+      case QEvent::NonClientAreaMouseButtonRelease:
+      case QEvent::NonClientAreaMouseButtonDblClick:
+         // Let the QDockWidgetPrivate of the currently visible dock widget handle the drag and drop
+         if (QDockWidget *dw = topDockWidget()) {
+            static_cast<QDockWidgetPrivate *>(QWidgetPrivate::get(dw))->nonClientAreaMouseEvent(static_cast<QMouseEvent *>(e));
+         }
+         return true;
+
+      case QEvent::ChildAdded:
+         if (qobject_cast<QDockWidget *>(static_cast<QChildEvent *>(e)->child())) {
+            adjustFlags();
+         }
+         break;
+
+      case QEvent::LayoutRequest:
+         // We might need to show the widget again
+         destroyOrHideIfEmpty();
+         break;
+      default:
+         break;
+   }
+   return QWidget::event(e);
+}
+
+void QDockWidgetGroupWindow::paintEvent(QPaintEvent *)
+{
+   QDockWidgetGroupLayout *lay = static_cast<QDockWidgetGroupLayout *>(layout());
+   bool nativeDeco = lay->nativeWindowDeco();
+
+   if (!nativeDeco) {
+      QStyleOptionFrame framOpt;
+      framOpt.init(this);
+      QStylePainter p(this);
+      p.drawPrimitive(QStyle::PE_FrameDockWidget, framOpt);
+   }
+}
+
+QDockAreaLayoutInfo *QDockWidgetGroupWindow::layoutInfo() const
+{
+   return static_cast<QDockWidgetGroupLayout *>(layout())->layoutInfo();
+}
+
+QDockWidget *QDockWidgetGroupWindow::topDockWidget() const
+{
+   QDockAreaLayoutInfo *info = layoutInfo();
+   QDockWidget *dw = 0;
+   if (info->tabBar && info->tabBar->currentIndex() >= 0) {
+      int i = info->tabIndexToListIndex(info->tabBar->currentIndex());
+      if (i >= 0) {
+         const QDockAreaLayoutItem &item = info->item_list.at(i);
+         if (item.widgetItem) {
+            dw = qobject_cast<QDockWidget *>(item.widgetItem->widget());
+         }
+      }
+   }
+   if (!dw) {
+      for (int i = 0; !dw && i < info->item_list.count(); ++i) {
+         const QDockAreaLayoutItem &item = info->item_list.at(i);
+         if (item.skip()) {
+            continue;
+         }
+         if (!item.widgetItem) {
+            continue;
+         }
+         dw = qobject_cast<QDockWidget *>(item.widgetItem->widget());
+      }
+   }
+   return dw;
+}
+
+void QDockWidgetGroupWindow::destroyOrHideIfEmpty()
+{
+   if (!layoutInfo()->isEmpty()) {
+      show(); // It might have been hidden,
+      return;
+   }
+   // There might still be placeholders
+   if (!layoutInfo()->item_list.isEmpty()) {
+      hide();
+      return;
+   }
+
+   // Make sure to reparent the possibly floating or hidden QDockWidgets to the parent
+   foreach (QDockWidget *dw, findChildren<QDockWidget *>(QString(), Qt::FindDirectChildrenOnly)) {
+      bool wasFloating = dw->isFloating();
+      bool wasHidden = dw->isHidden();
+      dw->setParent(parentWidget());
+      if (wasFloating) {
+         dw->setFloating(true);
+      } else {
+         // maybe it was hidden, we still have to put it back in the main layout.
+         QMainWindowLayout *ml =
+            qt_mainwindow_layout(static_cast<QMainWindow *>(parentWidget()));
+         Qt::DockWidgetArea area = ml->dockWidgetArea(this);
+         if (area == Qt::NoDockWidgetArea) {
+            area = Qt::LeftDockWidgetArea;
+         }
+         static_cast<QMainWindow *>(parentWidget())->addDockWidget(area, dw);
+      }
+      if (!wasHidden) {
+         dw->show();
+      }
+   }
+   foreach (QTabBar *tb, findChildren<QTabBar *>(QString(), Qt::FindDirectChildrenOnly)) {
+      tb->setParent(parentWidget());
+   }
+   deleteLater();
+}
+
+
+void QDockWidgetGroupWindow::adjustFlags()
+{
+   QDockWidget *top = topDockWidget();
+   if (!top) {
+      return;
+   }
+   const bool nativeDeco = static_cast<QDockWidgetGroupLayout *>(layout())->nativeWindowDeco();
+   Qt::WindowFlags oldFlags = windowFlags();
+   Qt::WindowFlags flags = oldFlags;
+   if (nativeDeco) {
+      flags |= Qt::CustomizeWindowHint | Qt::WindowTitleHint;
+      if (top->features() & QDockWidget::DockWidgetClosable) {
+         flags |= Qt::WindowCloseButtonHint;
+      } else {
+         flags &= ~Qt::WindowCloseButtonHint;
+      }
+      flags &= ~Qt::FramelessWindowHint;
+   } else {
+      flags |= Qt::FramelessWindowHint;
+   }
+   if (oldFlags != flags) {
+      setWindowFlags(flags);
+      show(); // setWindowFlags hides the window
+   }
+
+   setWindowTitle(top->windowTitle());
+   setWindowIcon(top->windowIcon());
+}
+#endif
 // we deal with all the #ifndefferry here so QMainWindowLayout code is clean
 
 QMainWindowLayoutState::QMainWindowLayoutState(QMainWindow *win)
@@ -330,8 +552,9 @@ QList<int> QMainWindowLayoutState::indexOf(QWidget *widget) const
 
 #ifndef QT_NO_DOCKWIDGET
    // is it a dock widget?
-   if (QDockWidget *dockWidget = qobject_cast<QDockWidget *>(widget)) {
-      result = dockAreaLayout.indexOf(dockWidget);
+
+   if (qobject_cast<QDockWidget *>(widget) || qobject_cast<QDockWidgetGroupWindow *>(widget)) {
+      result = dockAreaLayout.indexOf(widget);
 
       if (!result.isEmpty()) {
          result.prepend(1);
@@ -421,8 +644,9 @@ QList<int> QMainWindowLayoutState::gapIndex(QWidget *widget, const QPoint &pos) 
 
 #ifndef QT_NO_DOCKWIDGET
    // is it a dock widget?
-   if (qobject_cast<QDockWidget *>(widget) != 0) {
+   if (qobject_cast<QDockWidget *>(widget) != 0 || qobject_cast<QDockWidgetGroupWindow *>(widget)) {
       result = dockAreaLayout.gapIndex(pos);
+
       if (!result.isEmpty()) {
          result.prepend(1);
       }
@@ -450,7 +674,7 @@ bool QMainWindowLayoutState::insertGap(const QList<int> &path, QLayoutItem *item
 
 #ifndef QT_NO_DOCKWIDGET
    if (i == 1) {
-      Q_ASSERT(qobject_cast<QDockWidget *>(item->widget()) != 0);
+      Q_ASSERT(qobject_cast<QDockWidget *>(item->widget()) || qobject_cast<QDockWidgetGroupWindow *>(item->widget()));
       return dockAreaLayout.insertGap(path.mid(1), item);
    }
 #endif //QT_NO_DOCKWIDGET
@@ -615,7 +839,22 @@ void QMainWindowLayoutState::saveState(QDataStream &stream) const
 {
 #ifndef QT_NO_DOCKWIDGET
    dockAreaLayout.saveState(stream);
+
+#ifndef QT_NO_TABBAR
+   QList<QDockWidgetGroupWindow *> floatingTabs =
+      mainWindow->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly);
+
+   for (QDockWidgetGroupWindow *floating : floatingTabs) {
+      if (floating->layoutInfo()->isEmpty()) {
+         continue;
+      }
+      stream << uchar(QDockAreaLayout::FloatingDockWidgetTabMarker) << floating->geometry();
+      floating->layoutInfo()->saveState(stream);
+   }
 #endif
+
+#endif
+
 #ifndef QT_NO_TOOLBAR
    toolBarAreaLayout.saveState(stream);
 #endif
@@ -637,11 +876,9 @@ static QList<T> findChildrenHelper(const QObject *o)
 }
 
 //pre4.3 tests the format that was used before 4.3
-bool QMainWindowLayoutState::checkFormat(QDataStream &stream, bool pre43)
+bool QMainWindowLayoutState::checkFormat(QDataStream &stream)
 {
-#ifdef QT_NO_TOOLBAR
-   Q_UNUSED(pre43);
-#endif
+
    while (!stream.atEnd()) {
       uchar marker;
       stream >> marker;
@@ -650,35 +887,56 @@ bool QMainWindowLayoutState::checkFormat(QDataStream &stream, bool pre43)
          case QToolBarAreaLayout::ToolBarStateMarker:
          case QToolBarAreaLayout::ToolBarStateMarkerEx: {
             QList<QToolBar *> toolBars = findChildrenHelper<QToolBar *>(mainWindow);
-            if (!toolBarAreaLayout.restoreState(stream, toolBars, marker,
-                                                pre43 /*testing 4.3 format*/, true /*testing*/)) {
+            if (!toolBarAreaLayout.restoreState(stream, toolBars, marker, true)) {
                return false;
             }
          }
          break;
+
 #endif // QT_NO_TOOLBAR
 
 #ifndef QT_NO_DOCKWIDGET
          case QDockAreaLayout::DockWidgetStateMarker: {
             QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
+
+            for (QDockWidgetGroupWindow *floating : findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
+               dockWidgets += findChildrenHelper<QDockWidget *>(floating);
+            }
+
             if (!dockAreaLayout.restoreState(stream, dockWidgets, true /*testing*/)) {
                return false;
             }
          }
          break;
-#endif
+#ifndef QT_NO_TABBAR
+         case QDockAreaLayout::FloatingDockWidgetTabMarker: {
+            QRect geom;
+            stream >> geom;
+            QDockAreaLayoutInfo info;
+            QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
+            foreach (QDockWidgetGroupWindow *floating, findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
+               dockWidgets += findChildrenHelper<QDockWidget *>(floating);
+            }
+            if (!info.restoreState(stream, dockWidgets, true /* testing*/)) {
+               return false;
+            }
+         }
+         break;
+#endif // QT_NO_TABBAR
+#endif // QT_NO_DOCKWIDGET
+
          default:
             //there was an error during the parsing
             return false;
-      }// switch
-   } //while
+      }
+   }
 
-   //everything went fine: it must be a pre-4.3 saved state
+
    return true;
 }
 
 bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
-      const QMainWindowLayoutState &oldState)
+   const QMainWindowLayoutState &oldState)
 {
    //make a copy of the data so that we can read it more than once
    QByteArray copy;
@@ -691,13 +949,9 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
    }
 
    QDataStream ds(copy);
-   const bool oldFormat = !checkFormat(ds, false);
-   if (oldFormat) {
-      //we should try with the old format
-      QDataStream ds2(copy);
-      if (!checkFormat(ds2, true)) {
-         return false; //format unknown
-      }
+
+   if (! checkFormat(ds)) {
+      return false; //format unknown
    }
 
    QDataStream stream(copy);
@@ -709,6 +963,10 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
 #ifndef QT_NO_DOCKWIDGET
          case QDockAreaLayout::DockWidgetStateMarker: {
             QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
+            for (QDockWidgetGroupWindow *floating : findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
+               dockWidgets += findChildrenHelper<QDockWidget *>(floating);
+            }
+
             if (!dockAreaLayout.restoreState(stream, dockWidgets)) {
                return false;
             }
@@ -730,13 +988,34 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
             }
          }
          break;
+#ifndef QT_NO_TABBAR
+         case QDockAreaLayout::FloatingDockWidgetTabMarker: {
+            QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
+            foreach (QDockWidgetGroupWindow *floating, findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
+               dockWidgets += findChildrenHelper<QDockWidget *>(floating);
+            }
+            QDockWidgetGroupWindow *floatingTab = qt_mainwindow_layout(mainWindow)->createTabbedDockWindow();
+            *floatingTab->layoutInfo() = QDockAreaLayoutInfo(&dockAreaLayout.sep, QInternal::LeftDock,
+                  Qt::Horizontal, QTabBar::RoundedSouth, mainWindow);
+            QRect geometry;
+            stream >> geometry;
+            if (!floatingTab->layoutInfo()->restoreState(stream, dockWidgets, false)) {
+               return false;
+            }
+            geometry = QDockAreaLayout::constrainedRect(geometry, floatingTab);
+            floatingTab->move(geometry.topLeft());
+            floatingTab->resize(geometry.size());
+            floatingTab->show();
+         }
+         break;
+#endif // QT_NO_TABBAR
 #endif // QT_NO_DOCKWIDGET
 
 #ifndef QT_NO_TOOLBAR
          case QToolBarAreaLayout::ToolBarStateMarker:
          case QToolBarAreaLayout::ToolBarStateMarkerEx: {
             QList<QToolBar *> toolBars = findChildrenHelper<QToolBar *>(mainWindow);
-            if (!toolBarAreaLayout.restoreState(stream, toolBars, marker, oldFormat)) {
+            if (! toolBarAreaLayout.restoreState(stream, toolBars, marker)) {
                return false;
             }
 
@@ -762,10 +1041,6 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
 
    return true;
 }
-
-/******************************************************************************
-** QMainWindowLayoutState - toolbars
-*/
 
 #ifndef QT_NO_TOOLBAR
 
@@ -866,20 +1141,16 @@ void QMainWindowLayout::moveToolBar(QToolBar *toolbar, int pos)
 void QMainWindowLayout::removeToolBar(QToolBar *toolbar)
 {
    if (toolbar) {
-      QObject::disconnect(parentWidget(), SIGNAL(iconSizeChanged(const QSize &)),
-                          toolbar, SLOT(_q_updateIconSize(const QSize &)));
+      QObject::disconnect(parentWidget(), SIGNAL(iconSizeChanged(QSize)),
+         toolbar, SLOT(_q_updateIconSize(QSize)));
 
       QObject::disconnect(parentWidget(), SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)),
-                          toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+         toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
 
-#ifdef Q_OS_MAC
-      if (usesHIToolBar(toolbar)) {
-         removeFromMacToolbar(toolbar);
-      } else
-#endif
-      {
-         removeWidget(toolbar);
-      }
+
+
+      removeWidget(toolbar);
+
    }
 }
 
@@ -890,12 +1161,7 @@ void QMainWindowLayout::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar, bool
 {
    validateToolBarArea(area);
 
-#ifdef Q_OS_MAC
-   if ((area == Qt::TopToolBarArea)
-         && layoutState.mainWindow->unifiedTitleAndToolBarOnMac()) {
-      insertIntoMacToolbar(0, toolbar);
-   } else
-#endif
+
    {
       //let's add the toolbar to the layout
       addChildWidget(toolbar);
@@ -911,37 +1177,32 @@ void QMainWindowLayout::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar, bool
    }
 }
 
-/*!
-    Adds \a toolbar before \a before
-*/
+
 void QMainWindowLayout::insertToolBar(QToolBar *before, QToolBar *toolbar)
 {
-#ifdef Q_OS_MAC
-   if (usesHIToolBar(before)) {
-      insertIntoMacToolbar(before, toolbar);
-   } else
-#endif
-   {
-      addChildWidget(toolbar);
-      QLayoutItem *item = layoutState.toolBarAreaLayout.insertToolBar(before, toolbar);
-      if (savedState.isValid() && item) {
-         // copy the toolbar also in the saved state
-         savedState.toolBarAreaLayout.insertItem(before, item);
-      }
-      if (!currentGapPos.isEmpty() && currentGapPos.first() == 0) {
-         currentGapPos = layoutState.toolBarAreaLayout.currentGapIndex();
-         if (!currentGapPos.isEmpty()) {
-            currentGapPos.prepend(0);
-            currentGapRect = layoutState.itemRect(currentGapPos);
-         }
-      }
-      invalidate();
+
+
+   addChildWidget(toolbar);
+   QLayoutItem *item = layoutState.toolBarAreaLayout.insertToolBar(before, toolbar);
+   if (savedState.isValid() && item) {
+      // copy the toolbar also in the saved state
+      savedState.toolBarAreaLayout.insertItem(before, item);
    }
+   if (!currentGapPos.isEmpty() && currentGapPos.first() == 0) {
+      currentGapPos = layoutState.toolBarAreaLayout.currentGapIndex();
+      if (!currentGapPos.isEmpty()) {
+         currentGapPos.prepend(0);
+         currentGapRect = layoutState.itemRect(currentGapPos);
+      }
+   }
+   invalidate();
+
 }
 
 Qt::ToolBarArea QMainWindowLayout::toolBarArea(QToolBar *toolbar) const
 {
    QInternal::DockPosition pos = layoutState.toolBarAreaLayout.findToolBar(toolbar);
+
    switch (pos) {
       case QInternal::LeftDock:
          return Qt::LeftToolBarArea;
@@ -954,13 +1215,6 @@ Qt::ToolBarArea QMainWindowLayout::toolBarArea(QToolBar *toolbar) const
       default:
          break;
    }
-#ifdef Q_OS_MAC
-   if (pos == QInternal::DockCount) {
-      if (qtoolbarsInUnifiedToolbarList.contains(toolbar)) {
-         return Qt::TopToolBarArea;
-      }
-   }
-#endif
    return Qt::NoToolBarArea;
 }
 
@@ -978,65 +1232,6 @@ void QMainWindowLayout::getStyleOptionInfo(QStyleOptionToolBar *option, QToolBar
 void QMainWindowLayout::toggleToolBarsVisible()
 {
    bool updateNonUnifiedParts = true;
-#ifdef Q_OS_MAC
-   if (layoutState.mainWindow->unifiedTitleAndToolBarOnMac()) {
-      // If we hit this case, someone has pressed the "toolbar button" which will
-      // toggle the unified toolbar visibility, because that's what the user wants.
-      // We might be in a situation where someone has hidden all the toolbars
-      // beforehand (maybe in construction), but now they've hit this button and
-      // and are expecting the items to show. What do we do?
-      // 1) Check the visibility of all the toolbars, if one is visible, do nothing, this
-      //    preserves what people would expect (these toolbars were visible when I clicked last time).
-      // 2) If NONE are visible, then show them all. Again, this preserves the user expectation
-      //    of, "I want to see the toolbars." The user may get more toolbars than expected, but this
-      //    is better seeing nothing.
-      // Don't worry about any of this if we are going invisible. This does mean we may get
-      // into issues when switching into and out of fullscreen mode, but this is probably minor.
-      // If we ever need to do hiding, that would have to be taken care of after the unified toolbar
-      // has finished hiding.
-      // People can of course handle the QEvent::ToolBarChange event themselves and do
-      // WHATEVER they want if they don't like what we are doing (though the unified toolbar
-      // will fire regardless).
-
-      // Check if we REALLY need to update the geometry below. If we only have items in the
-      // unified toolbar, all the docks will be empty, so there's very little point
-      // in doing the geometry as Apple will do it (we also avoid flicker in Cocoa as well).
-      // FWIW, layoutState.toolBarAreaLayout.visible and the state of the unified toolbar
-      // visibility can get out of sync. I really don't think it's a big issue. It is kept
-      // to a minimum because we only change the visibility if we absolutely must.
-      // update the "non unified parts."
-      updateNonUnifiedParts = !layoutState.toolBarAreaLayout.isEmpty();
-
-      // We get this function before the unified toolbar does its thing.
-      // So, the value will be opposite of what we expect.
-      bool goingVisible = !macWindowToolbarIsVisible(qt_mac_window_for(layoutState.mainWindow));
-      if (goingVisible) {
-         const int ToolBarCount = qtoolbarsInUnifiedToolbarList.size();
-         bool needAllVisible = true;
-         for (int i = 0; i < ToolBarCount; ++i) {
-            if (!qtoolbarsInUnifiedToolbarList.at(i)->isHidden()) {
-               needAllVisible = false;
-               break;
-            }
-         }
-         if (needAllVisible) {
-            // Disable the visibilty check because the toggle has already happened
-
-            bool oldValue = blockVisiblityCheck;
-            blockVisiblityCheck = true;
-
-            for (int i = 0; i < ToolBarCount; ++i) {
-               qtoolbarsInUnifiedToolbarList.at(i)->setVisible(true);
-            }
-
-            blockVisiblityCheck = oldValue;
-         }
-      }
-      if (!updateNonUnifiedParts) {
-         layoutState.toolBarAreaLayout.visible = goingVisible;
-      }
-   }
-#endif
    if (updateNonUnifiedParts) {
       layoutState.toolBarAreaLayout.visible = !layoutState.toolBarAreaLayout.visible;
       if (!layoutState.mainWindow->isMaximized()) {
@@ -1053,24 +1248,8 @@ void QMainWindowLayout::toggleToolBarsVisible()
 
 #endif // QT_NO_TOOLBAR
 
-/******************************************************************************
-** QMainWindowLayoutState - dock areas
-*/
 
 #ifndef QT_NO_DOCKWIDGET
-
-static inline void validateDockWidgetArea(Qt::DockWidgetArea &area)
-{
-   switch (area) {
-      case Qt::LeftDockWidgetArea:
-      case Qt::RightDockWidgetArea:
-      case Qt::TopDockWidgetArea:
-      case Qt::BottomDockWidgetArea:
-         break;
-      default:
-         area = Qt::LeftDockWidgetArea;
-   }
-}
 
 static QInternal::DockPosition toDockPos(Qt::DockWidgetArea area)
 {
@@ -1131,8 +1310,8 @@ Qt::DockWidgetArea QMainWindowLayout::corner(Qt::Corner corner) const
 }
 
 void QMainWindowLayout::addDockWidget(Qt::DockWidgetArea area,
-                                      QDockWidget *dockwidget,
-                                      Qt::Orientation orientation)
+   QDockWidget *dockwidget,
+   Qt::Orientation orientation)
 {
    addChildWidget(dockwidget);
 
@@ -1181,11 +1360,11 @@ void QMainWindowLayout::setDocumentMode(bool enabled)
    _documentMode = enabled;
 
    // Update the document mode for all tab bars
-   for (QTabBar * bar: usedTabBars) {
+   for (QTabBar *bar : usedTabBars) {
       bar->setDocumentMode(_documentMode);
    }
 
-   for (QTabBar * bar : unusedTabBars) {
+   for (QTabBar *bar : unusedTabBars) {
       bar->setDocumentMode(_documentMode);
    }
 }
@@ -1304,8 +1483,8 @@ void QMainWindowLayout::updateTabBarShapes()
 #endif // QT_NO_TABBAR
 
 void QMainWindowLayout::splitDockWidget(QDockWidget *after,
-                                        QDockWidget *dockwidget,
-                                        Qt::Orientation orientation)
+   QDockWidget *dockwidget,
+   Qt::Orientation orientation)
 {
    addChildWidget(dockwidget);
    layoutState.dockAreaLayout.splitDockWidget(after, dockwidget, orientation);
@@ -1313,12 +1492,14 @@ void QMainWindowLayout::splitDockWidget(QDockWidget *after,
    invalidate();
 }
 
-Qt::DockWidgetArea QMainWindowLayout::dockWidgetArea(QDockWidget *widget) const
+Qt::DockWidgetArea QMainWindowLayout::dockWidgetArea(QWidget *widget) const
 {
    QList<int> pathToWidget = layoutState.dockAreaLayout.indexOf(widget);
+
    if (pathToWidget.isEmpty()) {
       return Qt::NoDockWidgetArea;
    }
+
    return toDockWidgetArea(pathToWidget.first());
 }
 
@@ -1331,19 +1512,89 @@ void QMainWindowLayout::keepSize(QDockWidget *w)
 
 class QMainWindowTabBar : public QTabBar
 {
+   QMainWindow *mainWindow;
+   QDockWidget *draggingDock;   // Currently dragging (detached) dock widget
+
  public:
-   QMainWindowTabBar(QWidget *parent);
+   QMainWindowTabBar(QMainWindow *parent);
 
  protected:
    bool event(QEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+
 };
 
-QMainWindowTabBar::QMainWindowTabBar(QWidget *parent)
-   : QTabBar(parent)
+QMainWindowTabBar::QMainWindowTabBar(QMainWindow *parent)
+   : QTabBar(parent), mainWindow(parent), draggingDock(0)
 {
    setExpanding(false);
 }
 
+void QMainWindowTabBar::mouseMoveEvent(QMouseEvent *e)
+{
+   // The QTabBar handles the moving (reordering) of tabs.
+   // When QTabBarPrivate::dragInProgress is true, and that the mouse is outside of a region
+   // around the QTabBar, we will consider the user wants to drag that QDockWidget away from this
+   // tab area.
+
+   QTabBarPrivate *d = static_cast<QTabBarPrivate *>(d_ptr.data());
+   if (!draggingDock && (mainWindow->dockOptions() & QMainWindow::GroupedDragging)) {
+      int offset = QApplication::startDragDistance() + 1;
+      offset *= 3;
+      QRect r = rect().adjusted(-offset, -offset, offset, offset);
+      if (d->dragInProgress && !r.contains(e->pos()) && d->validIndex(d->pressedIndex)) {
+         QMainWindowLayout *mlayout = qt_mainwindow_layout(mainWindow);
+         QDockAreaLayoutInfo *info = mlayout->dockInfo(this);
+         Q_ASSERT(info);
+         int idx = info->tabIndexToListIndex(d->pressedIndex);
+         const QDockAreaLayoutItem &item = info->item_list.at(idx);
+         if (item.widgetItem
+            && (draggingDock = qobject_cast<QDockWidget *>(item.widgetItem->widget()))) {
+            // We should drag this QDockWidget away by unpluging it.
+            // First cancel the QTabBar's internal move
+            d->moveTabFinished(d->pressedIndex);
+            d->pressedIndex = -1;
+            if (d->movingTab) {
+               d->movingTab->setVisible(false);
+            }
+            d->dragStartPosition = QPoint();
+
+            // Then starts the drag using QDockWidgetPrivate's API
+            QDockWidgetPrivate *dockPriv = static_cast<QDockWidgetPrivate *>(QWidgetPrivate::get(draggingDock));
+            QDockWidgetLayout *dwlayout  = static_cast<QDockWidgetLayout *>(draggingDock->layout());
+            dockPriv->initDrag(dwlayout->titleArea().center(), true);
+            dockPriv->startDrag(false);
+
+            if (dockPriv->state) {
+               dockPriv->state->ctrlDrag = e->modifiers() & Qt::ControlModifier;
+            }
+         }
+      }
+   }
+
+   if (draggingDock) {
+      QDockWidgetPrivate *dockPriv = static_cast<QDockWidgetPrivate *>(QWidgetPrivate::get(draggingDock));
+      if (dockPriv->state && dockPriv->state->dragging) {
+         QPoint pos = e->globalPos() - dockPriv->state->pressPos;
+         draggingDock->move(pos);
+         // move will call QMainWindowLayout::hover
+      }
+   }
+   QTabBar::mouseMoveEvent(e);
+}
+
+void QMainWindowTabBar::mouseReleaseEvent(QMouseEvent *e)
+{
+   if (draggingDock && e->button() == Qt::LeftButton) {
+      QDockWidgetPrivate *dockPriv = static_cast<QDockWidgetPrivate *>(QWidgetPrivate::get(draggingDock));
+      if (dockPriv->state && dockPriv->state->dragging) {
+         dockPriv->endDrag();
+      }
+      draggingDock = 0;
+   }
+   QTabBar::mouseReleaseEvent(e);
+}
 bool QMainWindowTabBar::event(QEvent *e)
 {
    // show the tooltip if tab is too small to fit label
@@ -1355,9 +1606,10 @@ bool QMainWindowTabBar::event(QEvent *e)
    QSize size = this->size();
    QSize hint = sizeHint();
    if (shape() == QTabBar::RoundedWest || shape() == QTabBar::RoundedEast) {
-      size.transpose();
-      hint.transpose();
+      size = size.transposed();
+      hint = hint.transposed();
    }
+
    if (size.width() < hint.width()) {
       return QTabBar::event(e);
    }
@@ -1371,11 +1623,14 @@ QTabBar *QMainWindowLayout::getTabBar()
    if (!unusedTabBars.isEmpty()) {
       result = unusedTabBars.takeLast();
    } else {
-      result = new QMainWindowTabBar(parentWidget());
+      result = new QMainWindowTabBar(static_cast<QMainWindow *>(parentWidget()));
       result->setDrawBase(true);
       result->setElideMode(Qt::ElideRight);
       result->setDocumentMode(_documentMode);
+      result->setMovable(true);
+
       connect(result, SIGNAL(currentChanged(int)), this, SLOT(tabChanged()));
+      connect(result, &QTabBar::tabMoved, this, &QMainWindowLayout::tabMoved);
    }
 
    usedTabBars.insert(result);
@@ -1398,13 +1653,30 @@ QWidget *QMainWindowLayout::getSeparatorWidget()
    return result;
 }
 
+QDockAreaLayoutInfo *QMainWindowLayout::dockInfo(QWidget *widget)
+{
+   QDockAreaLayoutInfo *info = layoutState.dockAreaLayout.info(widget);
+   if (info) {
+      return info;
+   }
+   foreach (QDockWidgetGroupWindow *dwgw,
+      parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+      info = dwgw->layoutInfo()->info(widget);
+      if (info) {
+         return info;
+      }
+   }
+   return 0;
+}
 void QMainWindowLayout::tabChanged()
 {
    QTabBar *tb = qobject_cast<QTabBar *>(sender());
    if (tb == 0) {
       return;
    }
-   QDockAreaLayoutInfo *info = layoutState.dockAreaLayout.info(tb);
+
+   QDockAreaLayoutInfo *info = dockInfo(tb);
+
    if (info == 0) {
       return;
    }
@@ -1413,6 +1685,16 @@ void QMainWindowLayout::tabChanged()
    if (QWidget *w = centralWidget()) {
       w->raise();
    }
+}
+
+void QMainWindowLayout::tabMoved(int from, int to)
+{
+   QTabBar *tb = qobject_cast<QTabBar *>(sender());
+   Q_ASSERT(tb);
+   QDockAreaLayoutInfo *info = dockInfo(tb);
+   Q_ASSERT(info);
+
+   info->moveTab(from, to);
 }
 #endif // QT_NO_TABBAR
 
@@ -1423,6 +1705,8 @@ bool QMainWindowLayout::startSeparatorMove(const QPoint &pos)
    if (movingSeparator.isEmpty()) {
       return false;
    }
+
+   layoutState.dockAreaLayout.fallbackToSizeHints = false;
 
    savedState = layoutState;
    movingSeparatorPos = movingSeparatorOrigin = pos;
@@ -1452,24 +1736,22 @@ bool QMainWindowLayout::endSeparatorMove(const QPoint &)
 
 void QMainWindowLayout::raise(QDockWidget *widget)
 {
-   QDockAreaLayoutInfo *info = layoutState.dockAreaLayout.info(widget);
+   QDockAreaLayoutInfo *info = dockInfo(widget);
    if (info == 0) {
       return;
    }
+
+
 #ifndef QT_NO_TABBAR
    if (!info->tabbed) {
       return;
    }
+
    info->setCurrentTab(widget);
 #endif
 }
-
 #endif // QT_NO_DOCKWIDGET
 
-
-/******************************************************************************
-** QMainWindowLayoutState - layout interface
-*/
 
 int QMainWindowLayout::count() const
 {
@@ -1545,9 +1827,9 @@ void QMainWindowLayout::setGeometry(const QRect &_r)
    QLayout::setGeometry(r);
 
    if (statusbar) {
-      QRect sbr(QPoint(0, 0),
-                QSize(r.width(), statusbar->heightForWidth(r.width()))
-                .expandedTo(statusbar->minimumSize()));
+      QRect sbr(QPoint(r.left(), 0),
+         QSize(r.width(), statusbar->heightForWidth(r.width()))
+         .expandedTo(statusbar->minimumSize()));
       sbr.moveBottom(r.bottom());
       QRect vr = QStyle::visualRect(parentWidget()->layoutDirection(), _r, sbr);
       statusbar->setGeometry(vr);
@@ -1561,7 +1843,7 @@ void QMainWindowLayout::setGeometry(const QRect &_r)
 
 void QMainWindowLayout::addItem(QLayoutItem *)
 {
-   qWarning("QMainWindowLayout::addItem: Please use the public QMainWindow API instead");
+   qWarning("QMainWindowLayout::addItem: Please use the public QMainWindow API");
 }
 
 QSize QMainWindowLayout::sizeHint() const
@@ -1570,7 +1852,7 @@ QSize QMainWindowLayout::sizeHint() const
       szHint = layoutState.sizeHint();
       const QSize sbHint = statusbar ? statusbar->sizeHint() : QSize(0, 0);
       szHint = QSize(qMax(sbHint.width(), szHint.width()),
-                     sbHint.height() + szHint.height());
+            sbHint.height() + szHint.height());
    }
    return szHint;
 }
@@ -1581,16 +1863,7 @@ QSize QMainWindowLayout::minimumSize() const
       minSize = layoutState.minimumSize();
       const QSize sbMin = statusbar ? statusbar->minimumSize() : QSize(0, 0);
       minSize = QSize(qMax(sbMin.width(), minSize.width()),
-                      sbMin.height() + minSize.height());
-#ifdef Q_OS_MAC
-      const QSize storedSize = minSize;
-      int minWidth = 0;
-
-      for (QToolBar * toolbar : qtoolbarsInUnifiedToolbarList) {
-         minWidth += toolbar->sizeHint().width() + 20;
-      }
-      minSize = QSize(qMax(minWidth, storedSize.width()), storedSize.height());
-#endif
+            sbMin.height() + minSize.height());
    }
    return minSize;
 }
@@ -1601,9 +1874,26 @@ void QMainWindowLayout::invalidate()
    minSize = szHint = QSize();
 }
 
-/******************************************************************************
-** QMainWindowLayout - remaining stuff
-*/
+#ifndef QT_NO_DOCKWIDGET
+void QMainWindowLayout::setCurrentHoveredFloat(QWidget *w)
+{
+   if (currentHoveredFloat != w) {
+      if (currentHoveredFloat) {
+         disconnect(currentHoveredFloat.data(), &QObject::destroyed,
+            this, &QMainWindowLayout::updateGapIndicator);
+      }
+
+      currentHoveredFloat = w;
+
+      if (w) {
+         connect(w, &QObject::destroyed,
+            this, &QMainWindowLayout::updateGapIndicator, Qt::UniqueConnection);
+      }
+
+      updateGapIndicator();
+   }
+}
+#endif
 
 static void fixToolBarOrientation(QLayoutItem *item, int dockPos)
 {
@@ -1618,13 +1908,13 @@ static void fixToolBarOrientation(QLayoutItem *item, int dockPos)
    QInternal::DockPosition pos
       = static_cast<QInternal::DockPosition>(dockPos);
    Qt::Orientation o = pos == QInternal::TopDock || pos == QInternal::BottomDock
-                       ? Qt::Horizontal : Qt::Vertical;
+      ? Qt::Horizontal : Qt::Vertical;
    if (o != toolBar->orientation()) {
       toolBar->setOrientation(o);
    }
 
    QSize hint = toolBar->sizeHint().boundedTo(toolBar->maximumSize())
-                .expandedTo(toolBar->minimumSize());
+      .expandedTo(toolBar->minimumSize());
 
    if (toolBar->size() != hint) {
       QRect newGeo(oldGeo.topLeft(), hint);
@@ -1649,6 +1939,9 @@ void QMainWindowLayout::revert(QLayoutItem *widgetItem)
    QWidget *widget = widgetItem->widget();
    layoutState = savedState;
    currentGapPos = layoutState.indexOf(widget);
+   if (currentGapPos.isEmpty()) {
+      return;
+   }
    fixToolBarOrientation(widgetItem, currentGapPos.at(1));
    layoutState.unplug(currentGapPos);
    layoutState.fitLayout();
@@ -1659,7 +1952,58 @@ void QMainWindowLayout::revert(QLayoutItem *widgetItem)
 
 bool QMainWindowLayout::plug(QLayoutItem *widgetItem)
 {
-   if (! parentWidget()->isVisible() || parentWidget()->isMinimized() || currentGapPos.isEmpty()) {
+#ifndef QT_NO_DOCKWIDGET
+   if (currentHoveredFloat) {
+      QWidget *widget = widgetItem->widget();
+      QList<int> previousPath = layoutState.indexOf(widget);
+      if (!previousPath.isEmpty()) {
+         layoutState.remove(previousPath);
+      }
+      // Let's remove the widget from any possible group window
+      foreach (QDockWidgetGroupWindow *dwgw,
+         parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+         QList<int> path = dwgw->layoutInfo()->indexOf(widget);
+         if (!path.isEmpty()) {
+            dwgw->layoutInfo()->remove(path);
+         }
+      }
+      currentGapRect = QRect();
+
+      if (QDockWidget *dropTo = qobject_cast<QDockWidget *>(currentHoveredFloat)) {
+         //dropping to a normal widget, we mutate it in a QDockWidgetGroupWindow with two tabs
+         QDockWidgetGroupWindow *floatingTabs = createTabbedDockWindow();
+         floatingTabs->setGeometry(dropTo->geometry());
+         QDockAreaLayoutInfo *info = floatingTabs->layoutInfo();
+         *info = QDockAreaLayoutInfo(&layoutState.dockAreaLayout.sep, QInternal::LeftDock,
+               Qt::Horizontal, QTabBar::RoundedSouth,
+               static_cast<QMainWindow *>(parentWidget()));
+         info->tabbed = true;
+         QLayout *parentLayout = currentHoveredFloat->parentWidget()->layout();
+         info->item_list.append(parentLayout->takeAt(parentLayout->indexOf(currentHoveredFloat)));
+
+         dropTo->setParent(floatingTabs);
+         dropTo->show();
+         dropTo->d_func()->plug(QRect());
+         setCurrentHoveredFloat(floatingTabs);
+      }
+
+      QDockWidgetGroupWindow *dwgw = qobject_cast<QDockWidgetGroupWindow *>(currentHoveredFloat);
+      Q_ASSERT(dwgw);
+      Q_ASSERT(dwgw->layoutInfo()->tabbed); // because floating group should always be tabbed
+      previousPath = dwgw->layoutInfo()->indexOf(widget);
+      if (!previousPath.isEmpty()) {
+         dwgw->layoutInfo()->remove(previousPath);
+      }
+      dwgw->layoutInfo()->tab(0, widgetItem);
+      QRect globalRect = dwgw->layoutInfo()->tabContentRect();
+      globalRect.moveTopLeft(dwgw->mapToGlobal(globalRect.topLeft()));
+      pluggingWidget = widget;
+      widgetAnimator.animate(widget, globalRect, dockOptions & QMainWindow::AnimatedDocks);
+      return true;
+   }
+#endif
+
+   if (!parentWidget()->isVisible() || parentWidget()->isMinimized() || currentGapPos.isEmpty()) {
       return false;
    }
 
@@ -1667,14 +2011,24 @@ bool QMainWindowLayout::plug(QLayoutItem *widgetItem)
 
    QWidget *widget = widgetItem->widget();
 
+#ifndef QT_NO_DOCKWIDGET
+   // Let's remove the widget from any possible group window
+   foreach (QDockWidgetGroupWindow *dwgw,
+      parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+      QList<int> path = dwgw->layoutInfo()->indexOf(widget);
+      if (!path.isEmpty()) {
+         dwgw->layoutInfo()->remove(path);
+      }
+   }
+#endif
    QList<int> previousPath = layoutState.indexOf(widget);
 
    const QLayoutItem *it = layoutState.plug(currentGapPos);
    if (!it) {
       return false;
    }
+
    Q_ASSERT(it == widgetItem);
-   Q_UNUSED(it);
 
    if (!previousPath.isEmpty()) {
       layoutState.remove(previousPath);
@@ -1720,7 +2074,54 @@ void QMainWindowLayout::animationFinished(QWidget *widget)
    if (widget == pluggingWidget) {
 
 #ifndef QT_NO_DOCKWIDGET
+      if (QDockWidgetGroupWindow *dwgw = qobject_cast<QDockWidgetGroupWindow *>(widget)) {
+         // When the animated widget was a QDockWidgetGroupWindow, it means each of the
+         // embedded QDockWidget needs to be plugged back into the QMainWindow layout.
+         savedState.clear();
+         QDockAreaLayoutInfo *info = dwgw->layoutInfo();
+         QDockAreaLayoutInfo *parentInfo;
+         QList<int> path;
+
+         if (QDockWidgetGroupWindow *dropTo = qobject_cast<QDockWidgetGroupWindow *>(currentHoveredFloat)) {
+            parentInfo = dropTo->layoutInfo();
+            Q_ASSERT(parentInfo->tabbed);
+            path = parentInfo->indexOf(widget);
+            Q_ASSERT(path.size() == 1);
+         } else {
+            path = layoutState.dockAreaLayout.indexOf(widget);
+            Q_ASSERT(path.size() >= 2);
+            parentInfo = layoutState.dockAreaLayout.info(path);
+            Q_ASSERT(parentInfo);
+         }
+
+         if (parentInfo->tabbed) {
+            // merge the two tab widgets
+            int idx = path.last();
+            Q_ASSERT(parentInfo->item_list[idx].widgetItem->widget() == dwgw);
+            delete parentInfo->item_list[idx].widgetItem;
+            parentInfo->item_list.removeAt(idx);
+            std::copy(info->item_list.cbegin(), info->item_list.cend(),
+               std::inserter(parentInfo->item_list, parentInfo->item_list.begin() + idx));
+            quintptr currentId = info->currentTabId();
+            *info = QDockAreaLayoutInfo();
+            parentInfo->reparentWidgets(currentHoveredFloat ? currentHoveredFloat.data() : parentWidget());
+            parentInfo->updateTabBar();
+            parentInfo->setCurrentTabId(currentId);
+         } else {
+            QDockAreaLayoutItem &item = layoutState.dockAreaLayout.item(path);
+            Q_ASSERT(item.widgetItem->widget() == dwgw);
+            delete item.widgetItem;
+            item.widgetItem = 0;
+            item.subinfo = new QDockAreaLayoutInfo(std::move(*info));
+            *info = QDockAreaLayoutInfo();
+            item.subinfo->reparentWidgets(parentWidget());
+            item.subinfo->setTabBarShape(parentInfo->tabBarShape);
+         }
+         dwgw->destroyOrHideIfEmpty();
+      }
       if (QDockWidget *dw = qobject_cast<QDockWidget *>(widget)) {
+         dw->setParent(currentHoveredFloat ? currentHoveredFloat.data() : parentWidget());
+         dw->show();
          dw->d_func()->plug(currentGapRect);
       }
 #endif
@@ -1733,6 +2134,8 @@ void QMainWindowLayout::animationFinished(QWidget *widget)
       savedState.clear();
       currentGapPos.clear();
       pluggingWidget = 0;
+      setCurrentHoveredFloat(nullptr);
+
       //applying the state will make sure that the currentGap is updated correctly
       //and all the geometries (especially the one from the central widget) is correct
       layoutState.apply(false);
@@ -1742,7 +2145,8 @@ void QMainWindowLayout::animationFinished(QWidget *widget)
       if (qobject_cast<QDockWidget *>(widget) != 0) {
          // info() might return null if the widget is destroyed while
          // animating but before the animationFinished signal is received.
-         if (QDockAreaLayoutInfo *info = layoutState.dockAreaLayout.info(widget)) {
+
+         if (QDockAreaLayoutInfo *info = dockInfo(widget)) {
             info->setCurrentTab(widget);
          }
       }
@@ -1756,7 +2160,7 @@ void QMainWindowLayout::animationFinished(QWidget *widget)
       parentWidget()->update(layoutState.dockAreaLayout.separatorRegion());
 
 #ifndef QT_NO_TABBAR
-      for (QTabBar * tab_bar : usedTabBars) {
+      for (QTabBar *tab_bar : usedTabBars) {
          tab_bar->show();
       }
 #endif
@@ -1802,19 +2206,13 @@ QMainWindowLayout::QMainWindowLayout(QMainWindow *mainwindow, QLayout *parentLay
 #endif // QT_NO_DOCKWIDGET
    , widgetAnimator(this)
    , pluggingWidget(0)
-#ifndef QT_NO_RUBBERBAND
-   , gapIndicator(new QRubberBand(QRubberBand::Rectangle, mainwindow))
-#endif
-#ifdef Q_OS_MAC
-   , activateUnifiedToolbarAfterFullScreen(false)
-   , blockVisiblityCheck(false)
-#endif
 {
    if (parentLayout) {
       setParent(parentLayout);
    }
 
 #ifndef QT_NO_DOCKWIDGET
+
 #ifndef QT_NO_TABBAR
    sep = mainwindow->style()->pixelMetric(QStyle::PM_DockWidgetSeparatorExtent, 0, mainwindow);
 #endif
@@ -1824,13 +2222,8 @@ QMainWindowLayout::QMainWindowLayout(QMainWindow *mainwindow, QLayout *parentLay
       tabPositions[i] = QTabWidget::South;
    }
 #endif
-#endif // QT_NO_DOCKWIDGET
 
-#ifndef QT_NO_RUBBERBAND
-   // For accessibility to identify this special widget.
-   gapIndicator->setObjectName(QLatin1String("qt_rubberband"));
-   gapIndicator->hide();
-#endif
+#endif // QT_NO_DOCKWIDGET
    pluggingWidget = 0;
 
    setObjectName(mainwindow->objectName() + QLatin1String("_layout"));
@@ -1840,10 +2233,6 @@ QMainWindowLayout::~QMainWindowLayout()
 {
    layoutState.deleteAllLayoutItems();
    layoutState.deleteCentralWidgetItem();
-
-#ifdef Q_OS_MAC
-   cleanUpMacToolbarItems();
-#endif
 
    delete statusbar;
 }
@@ -1908,8 +2297,26 @@ void QMainWindowLayout::setCentralWidget(QWidget *widget)
    invalidate();
 }
 
-QLayoutItem *QMainWindowLayout::unplug(QWidget *widget)
+QLayoutItem *QMainWindowLayout::unplug(QWidget *widget, bool group)
 {
+#if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_TABBAR)
+   if (!widget->isWindow() && qobject_cast<const QDockWidgetGroupWindow *>(widget->parentWidget())) {
+      if (group) {
+         // We are just dragging a floating window as it, not need to do anything, we just have to
+         // look up the corresponding QWidgetItem* if it exists
+         QList<int> tabbedWindowPath = layoutState.indexOf(widget->parentWidget());
+         return tabbedWindowPath.isEmpty() ? 0 : layoutState.item(tabbedWindowPath);
+      } else {
+         // We are unplugging a dock widget from a floating window.
+         if (QDockWidget *dw = qobject_cast<QDockWidget *>(widget)) {
+            dw->d_func()->unplug(widget->geometry());
+            int index = widget->parentWidget()->layout()->indexOf(widget);
+            return widget->parentWidget()->layout()->itemAt(index);
+         }
+      }
+   }
+#endif
+
    QList<int> path = layoutState.indexOf(widget);
    if (path.isEmpty()) {
       return 0;
@@ -1925,9 +2332,37 @@ QLayoutItem *QMainWindowLayout::unplug(QWidget *widget)
 
 #ifndef QT_NO_DOCKWIDGET
    if (QDockWidget *dw = qobject_cast<QDockWidget *>(widget)) {
-      dw->d_func()->unplug(r);
+      Q_ASSERT(path.first() == 1);
+      bool actualGroup = false;
+#ifndef QT_NO_TABBAR
+      if (group && (dockOptions & QMainWindow::GroupedDragging) && path.size() > 3) {
+         QDockAreaLayoutItem &parentItem = layoutState.dockAreaLayout.item(path.mid(1, path.size() - 2));
+         if (parentItem.subinfo && parentItem.subinfo->tabbed) {
+            // The QDockWidget is part of a group of tab and we need to unplug them all.
+            actualGroup = true;
+            path.removeLast();
+
+            QDockWidgetGroupWindow *floatingTabs = createTabbedDockWindow();
+            QDockAreaLayoutInfo *info = floatingTabs->layoutInfo();
+            *info = std::move(*parentItem.subinfo);
+            delete parentItem.subinfo;
+            parentItem.subinfo = 0;
+            floatingTabs->setGeometry(info->rect.translated(parentWidget()->pos()));
+            floatingTabs->show();
+            floatingTabs->raise();
+            item = new QDockWidgetGroupWindowItem(floatingTabs);
+            parentItem.widgetItem = item;
+            savedState = layoutState;
+         }
+      }
+#endif // QT_NO_TABBAR
+
+      if (!actualGroup) {
+         dw->d_func()->unplug(r);
+      }
    }
 #endif
+
 #ifndef QT_NO_TOOLBAR
    if (QToolBar *tb = qobject_cast<QToolBar *>(widget)) {
       tb->d_func()->unplug(r);
@@ -1935,7 +2370,7 @@ QLayoutItem *QMainWindowLayout::unplug(QWidget *widget)
 #endif
 
 
-   layoutState.unplug(path , &savedState);
+   layoutState.unplug(path, &savedState);
    savedState.fitLayout();
    currentGapPos = path;
    currentGapRect = r;
@@ -1949,22 +2384,81 @@ QLayoutItem *QMainWindowLayout::unplug(QWidget *widget)
 void QMainWindowLayout::updateGapIndicator()
 {
 #ifndef QT_NO_RUBBERBAND
-   gapIndicator->setVisible(!widgetAnimator.animating() && !currentGapPos.isEmpty());
-   gapIndicator->setGeometry(currentGapRect);
+   if ((!widgetAnimator.animating() && !currentGapPos.isEmpty()) || currentHoveredFloat) {
+      QWidget *expectedParent = currentHoveredFloat ? currentHoveredFloat.data() : parentWidget();
+      if (!gapIndicator) {
+         gapIndicator = new QRubberBand(QRubberBand::Rectangle, expectedParent);
+         gapIndicator->setObjectName(QLatin1String("qt_rubberband"));
+      } else if (gapIndicator->parent() != expectedParent) {
+         gapIndicator->setParent(expectedParent);
+      }
+      gapIndicator->setGeometry(currentHoveredFloat ? currentHoveredFloat->rect() : currentGapRect);
+      gapIndicator->show();
+      gapIndicator->raise();
+   } else if (gapIndicator) {
+      gapIndicator->hide();
+   }
 #endif
 }
 
-QList<int> QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mousePos)
+void QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mousePos)
 {
    if (!parentWidget()->isVisible() || parentWidget()->isMinimized()
-         || pluggingWidget != 0 || widgetItem == 0) {
-      return QList<int>();
+      || pluggingWidget != 0 || widgetItem == 0) {
+      return;
    }
 
    QWidget *widget = widgetItem->widget();
+
+#ifndef QT_NO_DOCKWIDGET
+   if ((dockOptions & QMainWindow::GroupedDragging) && (qobject_cast<QDockWidget *>(widget)
+         || qobject_cast<QDockWidgetGroupWindow *>(widget))) {
+
+      // Check if we are over another floating dock widget
+      QVarLengthArray<QWidget *, 10> candidates;
+      foreach (QObject *c, parentWidget()->children()) {
+         QWidget *w = qobject_cast<QWidget *>(c);
+         if (!w) {
+            continue;
+         }
+         if (!qobject_cast<QDockWidget *>(w) && !qobject_cast<QDockWidgetGroupWindow *>(w)) {
+            continue;
+         }
+         if (w != widget && w->isTopLevel() && w->isVisible() && !w->isMinimized()) {
+            candidates << w;
+         }
+         if (QDockWidgetGroupWindow *group = qobject_cast<QDockWidgetGroupWindow *>(w)) {
+            // Sometimes, there are floating QDockWidget that have a QDockWidgetGroupWindow as a parent.
+            foreach (QObject *c, group->children()) {
+               if (QDockWidget *dw = qobject_cast<QDockWidget *>(c)) {
+                  if (dw != widget && dw->isFloating() && dw->isVisible() && !dw->isMinimized()) {
+                     candidates << dw;
+                  }
+               }
+            }
+         }
+      }
+      foreach (QWidget *w, candidates) {
+         QWindow *handle1 = widget->windowHandle();
+         QWindow *handle2 = w->windowHandle();
+         if (handle1 && handle2 && handle1->screen() != handle2->screen()) {
+            continue;
+         }
+         if (!w->geometry().contains(mousePos)) {
+            continue;
+         }
+
+         setCurrentHoveredFloat(w);
+         restore(true);
+         return;
+      }
+   }
+   setCurrentHoveredFloat(nullptr);
+#endif //QT_NO_DOCKWIDGET
+
    QPoint pos = parentWidget()->mapFromGlobal(mousePos);
 
-   if (!savedState.isValid()) {
+   if (! savedState.isValid()) {
       savedState = layoutState;
    }
 
@@ -1977,27 +2471,32 @@ QList<int> QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mouse
       if (QDockWidget *dw = qobject_cast<QDockWidget *>(widget)) {
          allowed = dw->isAreaAllowed(toDockWidgetArea(path.at(1)));
       }
+
+      if (qobject_cast<QDockWidgetGroupWindow *>(widget)) {
+         allowed = true;
+      }
 #endif
+
 #ifndef QT_NO_TOOLBAR
       if (QToolBar *tb = qobject_cast<QToolBar *>(widget)) {
          allowed = tb->isAreaAllowed(toToolBarArea(path.at(1)));
       }
 #endif
 
-      if (!allowed) {
+      if (! allowed) {
          path.clear();
       }
    }
 
    if (path == currentGapPos) {
-      return currentGapPos;   // the gap is already there
+      return;     // the gap is already there
    }
 
    currentGapPos = path;
    if (path.isEmpty()) {
       fixToolBarOrientation(widgetItem, 2); // 2 = top dock, ie. horizontal
       restore(true);
-      return QList<int>();
+      return;
    }
 
    fixToolBarOrientation(widgetItem, currentGapPos.at(1));
@@ -2006,7 +2505,7 @@ QList<int> QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mouse
 
    if (!newState.insertGap(path, widgetItem)) {
       restore(true); // not enough space
-      return QList<int>();
+      return ;
    }
 
    QSize min = newState.minimumSize();
@@ -2014,7 +2513,7 @@ QList<int> QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mouse
 
    if (min.width() > size.width() || min.height() > size.height()) {
       restore(true);
-      return QList<int>();
+      return;
    }
 
    newState.fitLayout();
@@ -2028,8 +2527,13 @@ QList<int> QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mouse
    applyState(layoutState);
 
    updateGapIndicator();
+}
 
-   return path;
+QDockWidgetGroupWindow *QMainWindowLayout::createTabbedDockWindow()
+{
+   QDockWidgetGroupWindow *f = new QDockWidgetGroupWindow(parentWidget(), Qt::Tool);
+   new QDockWidgetGroupLayout(f);
+   return f;
 }
 
 void QMainWindowLayout::applyState(QMainWindowLayoutState &newState, bool animate)
@@ -2037,10 +2541,14 @@ void QMainWindowLayout::applyState(QMainWindowLayoutState &newState, bool animat
 #ifndef QT_NO_DOCKWIDGET
 #ifndef QT_NO_TABBAR
    QSet<QTabBar *> used = newState.dockAreaLayout.usedTabBars();
+
+   for (QDockWidgetGroupWindow *dwgw : parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+      used += dwgw->layoutInfo()->usedTabBars();
+   }
    QSet<QTabBar *> retired = usedTabBars - used;
    usedTabBars = used;
 
-   for (QTabBar * tab_bar : retired) {
+   for (QTabBar *tab_bar : retired) {
       tab_bar->hide();
 
       while (tab_bar->count() > 0) {
@@ -2054,11 +2562,14 @@ void QMainWindowLayout::applyState(QMainWindowLayoutState &newState, bool animat
       QSet<QWidget *> retiredSeps = usedSeparatorWidgets - usedSeps;
       usedSeparatorWidgets = usedSeps;
 
-      for (QWidget * sepWidget : retiredSeps) {
+      for (QWidget *sepWidget : retiredSeps) {
          unusedSeparatorWidgets.append(sepWidget);
       }
    }
 
+   for (int i = 0; i < QInternal::DockCount; ++i) {
+      newState.dockAreaLayout.docks[i].reparentWidgets(parentWidget());
+   }
 
 #endif // QT_NO_TABBAR
 #endif // QT_NO_DOCKWIDGET
@@ -2097,7 +2608,7 @@ bool QMainWindowLayout::restoreState(QDataStream &stream)
    if (parentWidget()->isVisible()) {
 
 #ifndef QT_NO_TABBAR
-      for (QTabBar * tab_bar : usedTabBars) {
+      for (QTabBar *tab_bar : usedTabBars) {
          tab_bar->show();
       }
 #endif
@@ -2115,14 +2626,8 @@ bool QMainWindowLayout::restoreState(QDataStream &stream)
 // HIToolbar.
 bool QMainWindowLayout::usesHIToolBar(QToolBar *toolbar) const
 {
-#ifndef Q_OS_MAC
-   Q_UNUSED(toolbar);
+
    return false;
-#else
-   return qtoolbarsInUnifiedToolbarList.contains(toolbar)
-          || ((toolBarArea(toolbar) == Qt::TopToolBarArea)
-              && layoutState.mainWindow->unifiedTitleAndToolBarOnMac());
-#endif
 }
 
 void QMainWindowLayout::timerEvent(QTimerEvent *e)
@@ -2143,14 +2648,12 @@ void QMainWindowLayout::timerEvent(QTimerEvent *e)
 
       layoutState = savedState;
       layoutState.dockAreaLayout.separatorMove(movingSeparator, movingSeparatorOrigin,
-            movingSeparatorPos);
+         movingSeparatorPos);
       movingSeparatorPos = movingSeparatorOrigin;
    }
 #endif
    QLayout::timerEvent(e);
 }
 
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_MAINWINDOW

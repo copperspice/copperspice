@@ -33,8 +33,6 @@
 #include <qdebug.h>
 #include <qlayoutengine_p.h>
 
-QT_BEGIN_NAMESPACE
-
 QScrollArea::QScrollArea(QWidget *parent)
    : QAbstractScrollArea(*new QScrollAreaPrivate, parent)
 {
@@ -72,18 +70,20 @@ void QScrollAreaPrivate::updateWidgetPosition()
    Q_Q(QScrollArea);
    Qt::LayoutDirection dir = q->layoutDirection();
    QRect scrolled = QStyle::visualRect(dir, viewport->rect(), QRect(QPoint(-hbar->value(), -vbar->value()),
-                                       widget->size()));
+            widget->size()));
    QRect aligned = QStyle::alignedRect(dir, alignment, widget->size(), viewport->rect());
    widget->move(widget->width() < viewport->width() ? aligned.x() : scrolled.x(),
-                widget->height() < viewport->height() ? aligned.y() : scrolled.y());
+      widget->height() < viewport->height() ? aligned.y() : scrolled.y());
 }
 
 void QScrollAreaPrivate::updateScrollBars()
 {
    Q_Q(QScrollArea);
+
    if (!widget) {
       return;
    }
+
    QSize p = viewport->size();
    QSize m = q->maximumViewportSize();
 
@@ -99,7 +99,7 @@ void QScrollAreaPrivate::updateScrollBars()
    }
 
    if ((resizable && m.expandedTo(min) == m && m.boundedTo(max) == m)
-         || (!resizable && m.expandedTo(widget->size()) == m)) {
+      || (!resizable && m.expandedTo(widget->size()) == m)) {
       p = m;   // no scroll bars needed
    }
 
@@ -128,29 +128,6 @@ QWidget *QScrollArea::widget() const
    return d->widget;
 }
 
-/*!
-    \fn void QScrollArea::setWidget(QWidget *widget)
-
-    Sets the scroll area's \a widget.
-
-    The \a widget becomes a child of the scroll area, and will be
-    destroyed when the scroll area is deleted or when a new widget is
-    set.
-
-    The widget's \l{QWidget::setAutoFillBackground()}{autoFillBackground}
-    property will be set to \c{true}.
-
-    If the scroll area is visible when the \a widget is
-    added, you must \l{QWidget::}{show()} it explicitly.
-
-    Note that You must add the layout of \a widget before you call
-    this function; if you add it later, the \a widget will not be
-    visible - regardless of when you \l{QWidget::}{show()} the scroll
-    area. In this case, you can also not \l{QWidget::}{show()} the \a
-    widget later.
-
-    \sa widget()
-*/
 void QScrollArea::setWidget(QWidget *widget)
 {
    Q_D(QScrollArea);
@@ -177,12 +154,7 @@ void QScrollArea::setWidget(QWidget *widget)
 
 }
 
-/*!
-    Removes the scroll area's widget, and passes ownership of the
-    widget to the caller.
 
-    \sa widget()
- */
 QWidget *QScrollArea::takeWidget()
 {
    Q_D(QScrollArea);
@@ -203,6 +175,7 @@ bool QScrollArea::event(QEvent *e)
    if (e->type() == QEvent::StyleChange || e->type() == QEvent::LayoutRequest) {
       d->updateScrollBars();
    }
+
 #ifdef QT_KEYPAD_NAVIGATION
    else if (QApplication::keypadNavigationEnabled()) {
       if (e->type() == QEvent::Show) {
@@ -212,28 +185,27 @@ bool QScrollArea::event(QEvent *e)
       }
    }
 #endif
+
    return QAbstractScrollArea::event(e);
 }
 
-
-/*!
-    \reimp
- */
 bool QScrollArea::eventFilter(QObject *o, QEvent *e)
 {
    Q_D(QScrollArea);
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (d->widget && o != d->widget && e->type() == QEvent::FocusIn
-         && QApplication::keypadNavigationEnabled()) {
+      && QApplication::keypadNavigationEnabled()) {
       if (o->isWidgetType()) {
          ensureWidgetVisible(static_cast<QWidget *>(o));
       }
    }
 #endif
+
    if (o == d->widget && e->type() == QEvent::Resize) {
       d->updateScrollBars();
    }
-
+   return QAbstractScrollArea::eventFilter(o, e);
    return false;
 }
 
@@ -260,20 +232,6 @@ void QScrollArea::scrollContentsBy(int, int)
 }
 
 
-/*!
-    \property QScrollArea::widgetResizable
-    \brief whether the scroll area should resize the view widget
-
-    If this property is set to false (the default), the scroll area
-    honors the size of its widget. Regardless of this property, you
-    can programmatically resize the widget using widget()->resize(),
-    and the scroll area will automatically adjust itself to the new
-    size.
-
-    If this property is set to true, the scroll area will
-    automatically resize the widget in order to avoid scroll bars
-    where they can be avoided, or to take advantage of extra space.
-*/
 bool QScrollArea::widgetResizable() const
 {
    Q_D(const QScrollArea);
@@ -297,6 +255,7 @@ QSize QScrollArea::sizeHint() const
    int f = 2 * d->frameWidth;
    QSize sz(f, f);
    int h = fontMetrics().height();
+
    if (d->widget) {
       if (!d->widgetSize.isValid()) {
          d->widgetSize = d->resizable ? d->widget->sizeHint() : d->widget->size();
@@ -305,20 +264,28 @@ QSize QScrollArea::sizeHint() const
    } else {
       sz += QSize(12 * h, 8 * h);
    }
+
    if (d->vbarpolicy == Qt::ScrollBarAlwaysOn) {
       sz.setWidth(sz.width() + d->vbar->sizeHint().width());
    }
+
    if (d->hbarpolicy == Qt::ScrollBarAlwaysOn) {
       sz.setHeight(sz.height() + d->hbar->sizeHint().height());
    }
+
    return sz.boundedTo(QSize(36 * h, 24 * h));
 }
 
+QSize QScrollArea::viewportSizeHint() const
+{
+   Q_D(const QScrollArea);
+   if (d->widget) {
+      return d->resizable ? d->widget->sizeHint() : d->widget->size();
+   }
+   const int h = fontMetrics().height();
+   return QSize(6 * h, 4 * h);
+}
 
-
-/*!
-    \reimp
- */
 bool QScrollArea::focusNextPrevChild(bool next)
 {
    if (QWidget::focusNextPrevChild(next)) {
@@ -355,17 +322,6 @@ void QScrollArea::ensureVisible(int x, int y, int xmargin, int ymargin)
    }
 }
 
-/*!
-    \since 4.2
-
-    Scrolls the contents of the scroll area so that the \a childWidget
-    of QScrollArea::widget() is visible inside the viewport with
-    margins specified in pixels by \a xmargin and \a ymargin. If the
-    specified point cannot be reached, the contents are scrolled to
-    the nearest valid position. The default value for both margins is
-    50 pixels.
-
-*/
 void QScrollArea::ensureWidgetVisible(QWidget *childWidget, int xmargin, int ymargin)
 {
    Q_D(QScrollArea);
@@ -374,12 +330,12 @@ void QScrollArea::ensureWidgetVisible(QWidget *childWidget, int xmargin, int yma
       return;
    }
 
-   const QRect microFocus = childWidget->inputMethodQuery(Qt::ImMicroFocus).toRect();
-   const QRect defaultMicroFocus =
-      childWidget->QWidget::inputMethodQuery(Qt::ImMicroFocus).toRect();
+   const QRect microFocus = childWidget->inputMethodQuery(Qt::ImCursorRectangle).toRect();
+   const QRect defaultMicroFocus = childWidget->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
+
    QRect focusRect = (microFocus != defaultMicroFocus)
-                     ? QRect(childWidget->mapTo(d->widget, microFocus.topLeft()), microFocus.size())
-                     : QRect(childWidget->mapTo(d->widget, QPoint(0, 0)), childWidget->size());
+      ? QRect(childWidget->mapTo(d->widget, microFocus.topLeft()), microFocus.size())
+      : QRect(childWidget->mapTo(d->widget, QPoint(0, 0)), childWidget->size());
    const QRect visibleRect(-d->widget->pos(), d->viewport->size());
 
    if (visibleRect.contains(focusRect)) {
@@ -406,18 +362,11 @@ void QScrollArea::ensureWidgetVisible(QWidget *childWidget, int xmargin, int yma
 }
 
 
-/*!
-    \property QScrollArea::alignment
-    \brief the alignment of the scroll area's widget
-    \since 4.2
-
-    By default, the widget stays rooted to the top-left corner of the
-    scroll area.
-*/
 
 void QScrollArea::setAlignment(Qt::Alignment alignment)
 {
    Q_D(QScrollArea);
+
    d->alignment = alignment;
    if (d->widget) {
       d->updateWidgetPosition();
@@ -430,6 +379,5 @@ Qt::Alignment QScrollArea::alignment() const
    return d->alignment;
 }
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_SCROLLAREA

@@ -24,19 +24,19 @@
 #define QPLAINTEXTEDIT_P_H
 
 #include <qabstractscrollarea_p.h>
-#include <QtGui/qtextdocumentfragment.h>
-#include <QtGui/qscrollbar.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qtextformat.h>
-#include <QtGui/qmenu.h>
-#include <QtGui/qabstracttextdocumentlayout.h>
+#include <qtextdocumentfragment.h>
+#include <qscrollbar.h>
+#include <qtextcursor.h>
+#include <qtextformat.h>
+#include <qmenu.h>
+#include <qabstracttextdocumentlayout.h>
 #include <QtCore/qbasictimer.h>
 #include <qtextcontrol_p.h>
 #include <qplaintextedit.h>
 
 #ifndef QT_NO_TEXTEDIT
 
-QT_BEGIN_NAMESPACE
+
 
 class QMimeData;
 class QPlainTextEdit;
@@ -54,6 +54,7 @@ class QPlainTextEditControl : public QTextControl
    void insertFromMimeData(const QMimeData *source) override;
    int hitTest(const QPointF &point, Qt::HitTestAccuracy = Qt::FuzzyHit) const override;
    QRectF blockBoundingRect(const QTextBlock &block) const override;
+   QString anchorAt(const QPointF &pos) const override;
 
    QRectF cursorRect(const QTextCursor &cursor) const {
       QRectF r = QTextControl::cursorRect(cursor);
@@ -155,9 +156,8 @@ class QPlainTextEditPrivate : public QAbstractScrollAreaPrivate
    void _q_modificationChanged(bool);
 
    int originalOffsetY;
+   QString placeholderText;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTEDIT
 

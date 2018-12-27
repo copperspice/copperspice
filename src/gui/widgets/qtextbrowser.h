@@ -26,8 +26,6 @@
 #include <QtGui/qtextedit.h>
 #include <QtCore/qurl.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TEXTBROWSER
 
 class QTextBrowserPrivate;
@@ -42,12 +40,14 @@ class Q_GUI_EXPORT QTextBrowser : public QTextEdit
    // overloaded properties
    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
+
    GUI_CS_PROPERTY_DESIGNABLE(readOnly, false)
    GUI_CS_PROPERTY_SCRIPTABLE(readOnly, false)
 
    // overloaded properties
    GUI_CS_PROPERTY_READ(undoRedoEnabled, isUndoRedoEnabled)
    GUI_CS_PROPERTY_WRITE(undoRedoEnabled, setUndoRedoEnabled)
+
    GUI_CS_PROPERTY_DESIGNABLE(undoRedoEnabled, false)
    GUI_CS_PROPERTY_SCRIPTABLE(undoRedoEnabled, false)
 
@@ -143,6 +143,5 @@ class Q_GUI_EXPORT QTextBrowser : public QTextEdit
 
 #endif // QT_NO_TEXTBROWSER
 
-QT_END_NAMESPACE
 
 #endif // QTEXTBROWSER_H

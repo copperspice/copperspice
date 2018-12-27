@@ -23,10 +23,10 @@
 #ifndef QSPLITTER_H
 #define QSPLITTER_H
 
-#include <QtGui/qframe.h>
-#include <QtGui/qsizepolicy.h>
+#include <qframe.h>
+#include <qsizepolicy.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SPLITTER
 
@@ -123,6 +123,7 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
 
  public:
    QSplitterHandle(Qt::Orientation o, QSplitter *parent);
+   ~QSplitterHandle();
    void setOrientation(Qt::Orientation o);
    Qt::Orientation orientation() const;
    bool opaqueResize() const;
@@ -148,6 +149,5 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
 
 #endif // QT_NO_SPLITTER
 
-QT_END_NAMESPACE
 
 #endif // QSPLITTER_H

@@ -23,10 +23,10 @@
 #ifndef QSPLASHSCREEN_H
 #define QSPLASHSCREEN_H
 
-#include <QtGui/qpixmap.h>
-#include <QtGui/qwidget.h>
+#include <qpixmap.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SPLASHSCREEN
 class QSplashScreenPrivate;
@@ -44,9 +44,10 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
    const QPixmap pixmap() const;
    void finish(QWidget *w);
    void repaint();
+   QString message() const;
 
    GUI_CS_SLOT_1(Public, void showMessage(const QString &message, int alignment = Qt::AlignLeft,
-                                          const QColor &color = Qt::black))
+         const QColor &color = Qt::black))
    GUI_CS_SLOT_2(showMessage)
 
    GUI_CS_SLOT_1(Public, void clearMessage())
@@ -67,6 +68,5 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
 
 #endif // QT_NO_SPLASHSCREEN
 
-QT_END_NAMESPACE
 
 #endif // QSPLASHSCREEN_H

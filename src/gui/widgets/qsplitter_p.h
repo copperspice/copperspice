@@ -26,7 +26,7 @@
 #include <qframe_p.h>
 #include <qrubberband.h>
 
-QT_BEGIN_NAMESPACE
+
 
 static const uint Default = 2;
 
@@ -49,7 +49,7 @@ class QSplitterLayoutStruct
    int getWidgetSize(Qt::Orientation orient);
    int getHandleSize(Qt::Orientation orient);
 
-   inline int pick(const QSize &size, Qt::Orientation orient) {
+   int pick(const QSize &size, Qt::Orientation orient) {
       return (orient == Qt::Horizontal) ? size.width() : size.height();
    }
 };
@@ -60,7 +60,8 @@ class QSplitterPrivate : public QFramePrivate
 
  public:
    QSplitterPrivate() : rubberBand(0), opaque(true), firstShow(true),
-      childrenCollapsible(true), compatMode(false), handleWidth(0), blockChildAdd(false) {}
+      childrenCollapsible(true), compatMode(false), handleWidth(-1), blockChildAdd(false), opaqueResizeSet(false) {}
+   ~QSplitterPrivate();
 
    QPointer<QRubberBand> rubberBand;
    mutable QList<QSplitterLayoutStruct *> list;
@@ -71,6 +72,7 @@ class QSplitterPrivate : public QFramePrivate
    bool compatMode : 8;
    int handleWidth;
    bool blockChildAdd;
+   bool opaqueResizeSet;
 
    inline int pick(const QPoint &pos) const {
       return orient == Qt::Horizontal ? pos.x() : pos.y();
@@ -97,7 +99,7 @@ class QSplitterPrivate : public QFramePrivate
    int adjustPos(int, int, int *, int *, int *, int *) const;
    bool collapsible(QSplitterLayoutStruct *) const;
 
-   inline bool collapsible(int index) const {
+   bool collapsible(int index) const {
       return (index < 0 || index >= list.size()) ? true : collapsible(list.at(index));
    }
 
@@ -131,7 +133,5 @@ class QSplitterHandlePrivate : public QWidgetPrivate
    bool hover   : 1;
    bool pressed : 1;
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -20,8 +20,6 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qmdiarea_p.h>
 
 #ifndef QT_NO_MDIAREA
@@ -29,24 +27,21 @@
 #include <QApplication>
 #include <QStyle>
 
-#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
-#include <QMacStyle>
-#endif
-
 #include <QChildEvent>
 #include <QResizeEvent>
 #include <QScrollBar>
 #include <QtAlgorithms>
-#include <QMutableListIterator>
+#include <QMutableVectorIterator>
 #include <QPainter>
 #include <QFontMetrics>
 #include <QStyleOption>
 #include <QDesktopWidget>
 #include <QDebug>
 #include <qmath.h>
+
 #include <qlayoutengine_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
 using namespace QMdi;
 
@@ -102,16 +97,16 @@ static void setIndex(int *index, int candidate, int min, int max, bool isIncreas
 }
 
 static inline bool useScrollBar(const QRect &childrenRect, const QSize &maxViewportSize,
-                                Qt::Orientation orientation)
+   Qt::Orientation orientation)
 {
    if (orientation == Qt::Horizontal)
       return  childrenRect.width() > maxViewportSize.width()
-              || childrenRect.left() < 0
-              || childrenRect.right() >= maxViewportSize.width();
+         || childrenRect.left() < 0
+         || childrenRect.right() >= maxViewportSize.width();
    else
       return childrenRect.height() > maxViewportSize.height()
-             || childrenRect.top() < 0
-             || childrenRect.bottom() >= maxViewportSize.height();
+         || childrenRect.top() < 0
+         || childrenRect.bottom() >= maxViewportSize.height();
 }
 
 // Returns the closest mdi area containing the widget (if any).
@@ -138,15 +133,19 @@ static inline QTabBar::Shape tabBarShapeFrom(QTabWidget::TabShape shape, QTabWid
    if (position == QTabWidget::North) {
       return rounded ? QTabBar::RoundedNorth : QTabBar::TriangularNorth;
    }
+
    if (position == QTabWidget::South) {
       return rounded ? QTabBar::RoundedSouth : QTabBar::TriangularSouth;
    }
+
    if (position == QTabWidget::East) {
       return rounded ? QTabBar::RoundedEast : QTabBar::TriangularEast;
    }
+
    if (position == QTabWidget::West) {
       return rounded ? QTabBar::RoundedWest : QTabBar::TriangularWest;
    }
+
    return QTabBar::RoundedNorth;
 }
 #endif // QT_NO_TABWIDGET
@@ -238,15 +237,9 @@ void SimpleCascader::rearrange(QList<QWidget *> &widgets, const QRect &domain) c
    options.initFrom(widgets.at(0));
    int titleBarHeight = widgets.at(0)->style()->pixelMetric(QStyle::PM_TitleBarHeight, &options, widgets.at(0));
 
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
-   // ### Remove this after the mac style has been fixed
-   if (qobject_cast<QMacStyle *>(widgets.at(0)->style())) {
-      titleBarHeight -= 4;
-   }
-#endif
-
-   const QFontMetrics fontMetrics = QFontMetrics(QApplication::font("QWorkspaceTitleBar"));
-   const int dy = qMax(titleBarHeight - (titleBarHeight - fontMetrics.height()) / 2, 1);
+   const QFontMetrics fontMetrics = QFontMetrics(QApplication::font("QMdiSubWindowTitleBar"));
+   const int dy = qMax(titleBarHeight - (titleBarHeight - fontMetrics.height()) / 2, 1)
+      + widgets.at(0)->style()->pixelMetric(QStyle::PM_FocusFrameVMargin, 0, widgets.at(0));
 
    const int n = widgets.size();
    const int nrows = qMax((domain.height() - (topOffset + bottomOffset)) / dy, 1);
@@ -309,10 +302,10 @@ void IconTiler::rearrange(QList<QWidget *> &widgets, const QRect &domain) const
     \internal
     Calculates the accumulated overlap (intersection area) between 'source' and 'rects'.
 */
-int MinOverlapPlacer::accumulatedOverlap(const QRect &source, const QList<QRect> &rects)
+int MinOverlapPlacer::accumulatedOverlap(const QRect &source, const QVector<QRect> &rects)
 {
    int accOverlap = 0;
-   for (const QRect & rect : rects) {
+   for (const QRect &rect : rects) {
       QRect intersection = source.intersected(rect);
       accOverlap += intersection.width() * intersection.height();
    }
@@ -325,11 +318,12 @@ int MinOverlapPlacer::accumulatedOverlap(const QRect &source, const QList<QRect>
     Finds among 'source' the rectangle with the minimum accumulated overlap with the
     rectangles in 'rects'.
 */
-QRect MinOverlapPlacer::findMinOverlapRect(const QList<QRect> &source, const QList<QRect> &rects)
+QRect MinOverlapPlacer::findMinOverlapRect(const QVector<QRect> &source, const QVector<QRect> &rects)
 {
    int minAccOverlap = -1;
    QRect minAccOverlapRect;
-   for (const QRect & srcRect : source) {
+
+   for (const QRect &srcRect : source) {
       const int accOverlap = accumulatedOverlap(srcRect, rects);
 
       if (accOverlap < minAccOverlap || minAccOverlap == -1) {
@@ -344,34 +338,40 @@ QRect MinOverlapPlacer::findMinOverlapRect(const QList<QRect> &source, const QLi
     \internal
     Gets candidates for the final placement.
 */
-void MinOverlapPlacer::getCandidatePlacements(const QSize &size, const QList<QRect> &rects,
-      const QRect &domain, QList<QRect> &candidates)
+QVector<QRect> MinOverlapPlacer::getCandidatePlacements(const QSize &size, const QVector<QRect> &rects, const QRect &domain)
 {
-   QSet<int> xset;
-   QSet<int> yset;
-   xset << domain.left() << domain.right() - size.width() + 1;
-   yset << domain.top();
+   QVector<QRect> result;
+
+   QVector<int> xlist;
+   xlist.reserve(2 + rects.size());
+   xlist << domain.left() << domain.right() - size.width() + 1;
+
+   QVector<int> ylist;
+   ylist.reserve(2 + rects.size());
+   ylist << domain.top();
 
    if (domain.bottom() - size.height() + 1 >= 0) {
-      yset << domain.bottom() - size.height() + 1;
+      ylist << domain.bottom() - size.height() + 1;
    }
 
-   for (const QRect & rect : rects) {
-      xset << rect.right() + 1;
-      yset << rect.bottom() + 1;
+   for (const QRect &rect : rects) {
+      xlist << rect.right() + 1;
+      ylist << rect.bottom() + 1;
    }
 
-   QList<int> xlist = xset.values();
    std::sort(xlist.begin(), xlist.end());
+   xlist.erase(std::unique(xlist.begin(), xlist.end()), xlist.end());
 
-   QList<int> ylist = yset.values();
    std::sort(ylist.begin(), ylist.end());
+   ylist.erase(std::unique(ylist.begin(), ylist.end()), ylist.end());
 
-   for (int y : ylist) {
+   result.reserve(ylist.size() * xlist.size());
+   for (int y : ylist)
       for (int x : xlist) {
-         candidates << QRect(QPoint(x, y), size);
+         result << QRect(QPoint(x, y), size);
       }
-   }
+
+   return result;
 }
 
 /*!
@@ -379,10 +379,12 @@ void MinOverlapPlacer::getCandidatePlacements(const QSize &size, const QList<QRe
     Finds all rectangles in 'source' not completely inside 'domain'. The result is stored
     in 'result' and also removed from 'source'.
 */
-void MinOverlapPlacer::findNonInsiders(const QRect &domain, QList<QRect> &source,
-                                       QList<QRect> &result)
+QVector<QRect> MinOverlapPlacer::findNonInsiders(const QRect &domain, QVector<QRect> &source)
 {
-   QMutableListIterator<QRect> it(source);
+   QVector<QRect> result;
+   result.reserve(source.size());
+   QMutableVectorIterator<QRect> it(source);
+
    while (it.hasNext()) {
       const QRect srcRect = it.next();
       if (!domain.contains(srcRect)) {
@@ -390,6 +392,7 @@ void MinOverlapPlacer::findNonInsiders(const QRect &domain, QList<QRect> &source
          it.remove();
       }
    }
+   return result;
 }
 
 /*!
@@ -397,9 +400,10 @@ void MinOverlapPlacer::findNonInsiders(const QRect &domain, QList<QRect> &source
     Finds all rectangles in 'source' that overlaps 'domain' by the maximum overlap area
     between 'domain' and any rectangle in 'source'. The result is stored in 'result'.
 */
-void MinOverlapPlacer::findMaxOverlappers(const QRect &domain, const QList<QRect> &source,
-      QList<QRect> &result)
+QVector<QRect> MinOverlapPlacer::findMaxOverlappers(const QRect &domain, const QVector<QRect> &source)
 {
+   QVector<QRect> result;
+   result.reserve(source.size());
    int maxOverlap = -1;
    for (const QRect &srcRect : source) {
       QRect intersection = domain.intersected(srcRect);
@@ -413,6 +417,7 @@ void MinOverlapPlacer::findMaxOverlappers(const QRect &domain, const QList<QRect
          result << srcRect;
       }
    }
+   return result;
 }
 
 /*!
@@ -421,18 +426,16 @@ void MinOverlapPlacer::findMaxOverlappers(const QRect &domain, const QList<QRect
     placement that overlaps the rectangles in 'rects' as little as possible while at the
     same time being as much as possible inside 'domain'.
 */
-QPoint MinOverlapPlacer::findBestPlacement(const QRect &domain, const QList<QRect> &rects,
-      QList<QRect> &source)
+QPoint MinOverlapPlacer::findBestPlacement(const QRect &domain, const QVector<QRect> &rects,
+   QVector<QRect> &source)
 {
-   QList<QRect> nonInsiders;
-   findNonInsiders(domain, source, nonInsiders);
+   const QVector<QRect> nonInsiders = findNonInsiders(domain, source);
 
    if (!source.empty()) {
       return findMinOverlapRect(source, rects).topLeft();
    }
 
-   QList<QRect> maxOverlappers;
-   findMaxOverlappers(domain, nonInsiders, maxOverlappers);
+   QVector<QRect> maxOverlappers = findMaxOverlappers(domain, nonInsiders);
    return findMinOverlapRect(maxOverlappers, rects).topLeft();
 }
 
@@ -443,21 +446,20 @@ QPoint MinOverlapPlacer::findBestPlacement(const QRect &domain, const QList<QRec
     overlaps 'rects' as little as possible and 'domain' as much as possible.
     Returns the position of the resulting rectangle.
 */
-QPoint MinOverlapPlacer::place(const QSize &size, const QList<QRect> &rects,
-                               const QRect &domain) const
+QPoint MinOverlapPlacer::place(const QSize &size, const QVector<QRect> &rects,
+   const QRect &domain) const
 {
    if (size.isEmpty() || !domain.isValid()) {
       return QPoint();
    }
 
-   for (const QRect & rect : rects) {
+   for (const QRect &rect : rects) {
       if (!rect.isValid()) {
          return QPoint();
       }
    }
 
-   QList<QRect> candidates;
-   getCandidatePlacements(size, rects, domain, candidates);
+   QVector<QRect> candidates = getCandidatePlacements(size, rects, domain);
    return findBestPlacement(domain, rects, candidates);
 }
 
@@ -478,9 +480,6 @@ class QMdiAreaTabBar : public QTabBar
    QMdiSubWindow *subWindowFromIndex(int index) const;
 };
 
-/*!
-    \internal
-*/
 void QMdiAreaTabBar::mousePressEvent(QMouseEvent *event)
 {
    if (event->button() != Qt::MiddleButton) {
@@ -624,7 +623,7 @@ void QMdiAreaPrivate::_q_deactivateAllWindows(QMdiSubWindow *aboutToActivate)
    }
    Q_ASSERT(aboutToBecomeActive);
 
-   for (QMdiSubWindow * child : childWindows) {
+   for (QMdiSubWindow *child : childWindows) {
       if (!sanityCheck(child, "QMdiArea::deactivateAllWindows") || aboutToBecomeActive == child) {
          continue;
       }
@@ -653,7 +652,7 @@ void QMdiAreaPrivate::_q_deactivateAllWindows(QMdiSubWindow *aboutToActivate)
     \internal
 */
 void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState,
-      Qt::WindowStates newState)
+   Qt::WindowStates newState)
 {
    if (ignoreWindowStateChange) {
       return;
@@ -701,7 +700,7 @@ void QMdiAreaPrivate::_q_currentTabChanged(int index)
 
    // If the previous active sub-window was hidden, disable the tab.
    if (indexToLastActiveTab >= 0 && indexToLastActiveTab < tabBar->count()
-         && indexToLastActiveTab < childWindows.count()) {
+      && indexToLastActiveTab < childWindows.count()) {
       QMdiSubWindow *lastActive = childWindows.at(indexToLastActiveTab);
       if (lastActive && lastActive->isHidden()) {
          tabBar->setTabEnabled(indexToLastActiveTab, false);
@@ -793,7 +792,7 @@ void QMdiAreaPrivate::appendChild(QMdiSubWindow *child)
 
    QObject::connect(child, SIGNAL(aboutToActivate()), q, SLOT(_q_deactivateAllWindows()));
    QObject::connect(child, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)),
-                    q, SLOT(_q_processWindowStateChanged(Qt::WindowStates, Qt::WindowStates)));
+      q, SLOT(_q_processWindowStateChanged(Qt::WindowStates, Qt::WindowStates)));
 }
 
 /*!
@@ -814,17 +813,19 @@ void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
       return;
    }
 
-   QList<QRect> rects;
+   QVector<QRect> rects;
+   rects.reserve(childWindows.size());
+
    QRect parentRect = q->rect();
-   for (QMdiSubWindow * window : childWindows) {
+   for (QMdiSubWindow *window : childWindows) {
       if (!sanityCheck(window, "QMdiArea::place") || window == child || !window->isVisibleTo(q)
-            || !window->testAttribute(Qt::WA_Moved)) {
+         || !window->testAttribute(Qt::WA_Moved)) {
          continue;
       }
       QRect occupiedGeometry;
       if (window->isMaximized()) {
          occupiedGeometry = QRect(window->d_func()->oldGeometry.topLeft(),
-                                  window->d_func()->restoreSize);
+               window->d_func()->restoreSize);
       } else {
          occupiedGeometry = window->geometry();
       }
@@ -860,7 +861,8 @@ void QMdiAreaPrivate::rearrange(Rearranger *rearranger)
    const bool reverseList = rearranger->type() == Rearranger::RegularTiler;
    const QList<QMdiSubWindow *> subWindows = subWindowList(activationOrder, reverseList);
    QSize minSubWindowSize;
-   for (QMdiSubWindow * child : subWindows) {
+
+   for (QMdiSubWindow *child : subWindows) {
       if (!sanityCheck(child, "QMdiArea::rearrange") || !child->isVisible()) {
          continue;
       }
@@ -876,7 +878,7 @@ void QMdiAreaPrivate::rearrange(Rearranger *rearranger)
             child->showNormal();
          }
          minSubWindowSize = minSubWindowSize.expandedTo(child->minimumSize())
-                            .expandedTo(child->d_func()->internalMinimumSize);
+            .expandedTo(child->d_func()->internalMinimumSize);
          widgets.append(child);
       }
    }
@@ -1042,7 +1044,7 @@ void QMdiAreaPrivate::resetActiveWindow(QMdiSubWindow *deactivatedWindow)
       }
       active = 0;
       if ((aboutToBecomeActive || isActivated || lastWindowAboutToBeDestroyed())
-            && !isExplicitlyDeactivated(deactivatedWindow) && !q->window()->isMinimized()) {
+         && !isExplicitlyDeactivated(deactivatedWindow) && !q->window()->isMinimized()) {
          return;
       }
       emit q->subWindowActivated(0);
@@ -1191,16 +1193,17 @@ void QMdiAreaPrivate::internalRaise(QMdiSubWindow *mdiChild) const
       return;
    }
 
-   QMdiSubWindow *stackUnderChild = 0;
+   QMdiSubWindow *stackUnderChild = nullptr;
+
    if (! windowStaysOnTop(mdiChild)) {
-      for (QObject * object : viewport->children()) {
+      for (QObject *object : viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
 
          if (! child || ! childWindows.contains(child)) {
             continue;
          }
 
-         if (!child->isHidden() && windowStaysOnTop(child)) {
+         if (! child->isHidden() && windowStaysOnTop(child)) {
             if (stackUnderChild) {
                child->stackUnder(stackUnderChild);
             } else {
@@ -1228,7 +1231,7 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
    // Calculate minimum size.
    const int columns = qMax(qCeil(qSqrt(qreal(subWindowCount))), 1);
    const int rows = qMax((subWindowCount % columns) ? (subWindowCount / columns + 1)
-                         : (subWindowCount / columns), 1);
+         : (subWindowCount / columns), 1);
    const int minWidth = minSubWindowSize.width() * columns;
    const int minHeight = minSubWindowSize.height() * rows;
 
@@ -1321,7 +1324,7 @@ bool QMdiAreaPrivate::lastWindowAboutToBeDestroyed() const
 */
 void QMdiAreaPrivate::setChildActivationEnabled(bool enable, bool onlyNextActivationEvent) const
 {
-   for (QMdiSubWindow * subWindow : childWindows) {
+   for (QMdiSubWindow *subWindow : childWindows) {
       if (!subWindow || !subWindow->isVisible()) {
          continue;
       }
@@ -1344,10 +1347,10 @@ void QMdiAreaPrivate::scrollBarPolicyChanged(Qt::Orientation orientation, Qt::Sc
    }
 
    const QMdiSubWindow::SubWindowOption option = orientation == Qt::Horizontal ?
-         QMdiSubWindow::AllowOutsideAreaHorizontally : QMdiSubWindow::AllowOutsideAreaVertically;
+      QMdiSubWindow::AllowOutsideAreaHorizontally : QMdiSubWindow::AllowOutsideAreaVertically;
 
    const bool enable = policy != Qt::ScrollBarAlwaysOff;
-   for (QMdiSubWindow * child : childWindows) {
+   for (QMdiSubWindow *child : childWindows) {
       if (!sanityCheck(child, "QMdiArea::scrollBarPolicyChanged")) {
          continue;
       }
@@ -1356,8 +1359,7 @@ void QMdiAreaPrivate::scrollBarPolicyChanged(Qt::Orientation orientation, Qt::Sc
    updateScrollBars();
 }
 
-QList<QMdiSubWindow *>
-QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
+QList<QMdiSubWindow *> QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
 {
    QList<QMdiSubWindow *> list;
    if (childWindows.isEmpty()) {
@@ -1365,7 +1367,7 @@ QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
    }
 
    if (order == QMdiArea::CreationOrder) {
-      for (QMdiSubWindow * child : childWindows) {
+      for (QMdiSubWindow *child : childWindows) {
          if (!child) {
             continue;
          }
@@ -1377,7 +1379,7 @@ QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
       }
 
    } else if (order == QMdiArea::StackingOrder) {
-      for (QObject * object : viewport->children()) {
+      for (QObject *object : viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
          if (!child || !childWindows.contains(child)) {
             continue;
@@ -1424,7 +1426,7 @@ void QMdiAreaPrivate::disconnectSubWindow(QObject *subWindow)
     \internal
 */
 QMdiSubWindow *QMdiAreaPrivate::nextVisibleSubWindow(int increaseFactor, QMdiArea::WindowOrder order,
-      int removedIndex, int fromIndex) const
+   int removedIndex, int fromIndex) const
 {
    if (childWindows.isEmpty()) {
       return 0;
@@ -1488,6 +1490,7 @@ void QMdiAreaPrivate::highlightNextSubWindow(int increaseFactor)
    }
 
    Q_Q(QMdiArea);
+
    // There's no highlighted sub-window atm, use current.
    if (indexToHighlighted < 0) {
       QMdiSubWindow *current = q->currentSubWindow();
@@ -1507,7 +1510,7 @@ void QMdiAreaPrivate::highlightNextSubWindow(int increaseFactor)
 
 #ifndef QT_NO_RUBBERBAND
    if (!rubberBand) {
-      rubberBand = new QRubberBand(QRubberBand::Rectangle, viewport);
+      rubberBand = new QRubberBand(QRubberBand::Rectangle, q);
       // For accessibility to identify this special widget.
       rubberBand->setObjectName(QLatin1String("qt_rubberband"));
       rubberBand->setWindowFlags(rubberBand->windowFlags() | Qt::WindowStaysOnTopHint);
@@ -1525,6 +1528,21 @@ void QMdiAreaPrivate::highlightNextSubWindow(int increaseFactor)
    Q_ASSERT(indexToHighlighted >= 0);
 }
 
+void QMdiAreaPrivate::showRubberBandFor(QMdiSubWindow *subWindow)
+{
+   if (!subWindow || !rubberBand) {
+      return;
+   }
+
+   if (viewMode == QMdiArea::TabbedView) {
+      rubberBand->setGeometry(tabBar->tabRect(childWindows.indexOf(subWindow)));
+   } else {
+      rubberBand->setGeometry(subWindow->geometry());
+   }
+
+   rubberBand->raise();
+   rubberBand->show();
+}
 /*!
     \internal
     \since 4.4
@@ -1552,7 +1570,7 @@ void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
 
       isSubWindowsTiled = false;
 
-      for (QMdiSubWindow * subWindow : childWindows) {
+      for (QMdiSubWindow *subWindow : childWindows) {
          tabBar->addTab(subWindow->windowIcon(), tabTextFor(subWindow));
       }
 
@@ -1589,7 +1607,7 @@ void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
 #ifndef QT_NO_TABBAR
       delete tabBar;
       tabBar = 0;
-#endif // QT_NO_TABBAR
+#endif
 
       viewMode = mode;
       q->setViewportMargins(0, 0, 0, 0);
@@ -1741,7 +1759,7 @@ QSize QMdiArea::sizeHint() const
    QSize desktopSize = QApplication::desktop()->size();
    QSize size(desktopSize.width() * 2 / scaleFactor, desktopSize.height() * 2 / scaleFactor);
 
-   for (QMdiSubWindow * child : d_func()->childWindows) {
+   for (QMdiSubWindow *child : d_func()->childWindows) {
       if (! sanityCheck(child, "QMdiArea::sizeHint")) {
          continue;
       }
@@ -1757,10 +1775,10 @@ QSize QMdiArea::minimumSizeHint() const
 {
    Q_D(const QMdiArea);
    QSize size(style()->pixelMetric(QStyle::PM_MdiSubWindowMinimizedWidth, 0, this),
-              style()->pixelMetric(QStyle::PM_TitleBarHeight, 0, this));
+      style()->pixelMetric(QStyle::PM_TitleBarHeight, 0, this));
    size = size.expandedTo(QAbstractScrollArea::minimumSizeHint());
    if (!d->scrollBarsEnabled()) {
-      for (QMdiSubWindow * child : d->childWindows) {
+      for (QMdiSubWindow *child : d->childWindows) {
          if (!sanityCheck(child, "QMdiArea::sizeHint")) {
             continue;
          }
@@ -1802,18 +1820,7 @@ QMdiSubWindow *QMdiArea::currentSubWindow() const
    return current;
 }
 
-/*!
-    Returns a pointer to the current active subwindow. If no
-    window is currently active, 0 is returned.
 
-    Subwindows are treated as top-level windows with respect to
-    window state, i.e., if a widget outside the MDI area is the active
-    window, no subwindow will be active. Note that if a widget in the
-    window in which the MDI area lives gains focus, the window will be
-    activated.
-
-    \sa setActiveSubWindow(), Qt::WindowState
-*/
 QMdiSubWindow *QMdiArea::activeSubWindow() const
 {
    Q_D(const QMdiArea);
@@ -1860,17 +1867,6 @@ void QMdiArea::closeActiveSubWindow()
    }
 }
 
-/*!
-    Returns a list of all subwindows in the MDI area. If \a order is
-    CreationOrder (the default), the windows are sorted in the order
-    in which they were inserted into the workspace. If \a order is
-    StackingOrder, the windows are listed in their stacking order,
-    with the topmost window as the last item in the list. If \a order
-    is ActivationHistoryOrder, the windows are listed according to
-    their recent activation history.
-
-    \sa WindowOrder
-*/
 QList<QMdiSubWindow *> QMdiArea::subWindowList(WindowOrder order) const
 {
    Q_D(const QMdiArea);
@@ -1890,12 +1886,13 @@ QList<QMdiSubWindow *> QMdiArea::subWindowList(WindowOrder order) const
 void QMdiArea::closeAllSubWindows()
 {
    Q_D(QMdiArea);
+
    if (d->childWindows.isEmpty()) {
       return;
    }
 
    d->isSubWindowsTiled = false;
-   for (QMdiSubWindow * child : d->childWindows) {
+   for (QMdiSubWindow *child : d->childWindows) {
       if (!sanityCheck(child, "QMdiArea::closeAllSubWindows")) {
          continue;
       }
@@ -1905,13 +1902,7 @@ void QMdiArea::closeAllSubWindows()
    d->updateScrollBars();
 }
 
-/*!
-    Gives the keyboard focus to another window in the list of child
-    windows.  The window activated will be the next one determined
-    by the current \l{QMdiArea::WindowOrder} {activation order}.
 
-    \sa activatePreviousSubWindow(), QMdiArea::WindowOrder
-*/
 void QMdiArea::activateNextSubWindow()
 {
    Q_D(QMdiArea);
@@ -1925,13 +1916,7 @@ void QMdiArea::activateNextSubWindow()
    }
 }
 
-/*!
-    Gives the keyboard focus to another window in the list of child
-    windows.  The window activated will be the previous one determined
-    by the current \l{QMdiArea::WindowOrder} {activation order}.
 
-    \sa activateNextSubWindow(), QMdiArea::WindowOrder
-*/
 void QMdiArea::activatePreviousSubWindow()
 {
    Q_D(QMdiArea);
@@ -1945,29 +1930,7 @@ void QMdiArea::activatePreviousSubWindow()
    }
 }
 
-/*!
-    Adds \a widget as a new subwindow to the MDI area.  If \a
-    windowFlags are non-zero, they will override the flags set on the
-    widget.
 
-    The \a widget can be either a QMdiSubWindow or another QWidget
-    (in which case the MDI area will create a subwindow and set the \a
-    widget as the internal widget).
-
-    \note Once the subwindow has been added, its parent will be the
-    \e{viewport widget} of the QMdiArea.
-
-    \snippet doc/src/snippets/mdiareasnippets.cpp 1
-
-    When you create your own subwindow, you must set the
-    Qt::WA_DeleteOnClose widget attribute if you want the window to be
-    deleted when closed in the MDI area. If not, the window will be
-    hidden and the MDI area will not activate the next subwindow.
-
-    Returns the QMdiSubWindow that is added to the MDI area.
-
-    \sa removeSubWindow()
-*/
 QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFlags)
 {
    if (!widget) {
@@ -2004,16 +1967,7 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFla
    return child;
 }
 
-/*!
-    Removes \a widget from the MDI area. The \a widget must be
-    either a QMdiSubWindow or a widget that is the internal widget of
-    a subwindow. Note \a widget is never actually deleted by QMdiArea.
-    If a QMdiSubWindow is passed in its parent is set to 0 and it is
-    removed, but if an internal widget is passed in the child widget
-    is set to 0 but the QMdiSubWindow is not removed.
 
-    \sa addSubWindow()
-*/
 void QMdiArea::removeSubWindow(QWidget *widget)
 {
    if (!widget) {
@@ -2041,7 +1995,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
    }
 
    bool found = false;
-   for (QMdiSubWindow * child : d->childWindows) {
+   for (QMdiSubWindow *child : d->childWindows) {
       if (!sanityCheck(child, "QMdiArea::removeSubWindow")) {
          continue;
       }
@@ -2058,14 +2012,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
    }
 }
 
-/*!
-    \property QMdiArea::background
-    \brief the background brush for the workspace
 
-    This property sets the background brush for the workspace area
-    itself. By default, it is a gray color, but can be any brush
-    (e.g., colors, gradients or pixmaps).
-*/
 QBrush QMdiArea::background() const
 {
    return d_func()->background;
@@ -2078,22 +2025,12 @@ void QMdiArea::setBackground(const QBrush &brush)
    if (d->background != brush) {
       d->background = brush;
       d->viewport->setAttribute(Qt::WA_OpaquePaintEvent, brush.isOpaque());
-      update();
+      d->viewport->update();
    }
 }
 
 
-/*!
-    \property QMdiArea::activationOrder
-    \brief the ordering criteria for subwindow lists
-    \since 4.4
 
-    This property specifies the ordering criteria for the list of
-    subwindows returned by subWindowList(). By default, it is the window
-    creation order.
-
-    \sa subWindowList()
-*/
 QMdiArea::WindowOrder QMdiArea::activationOrder() const
 {
    Q_D(const QMdiArea);
@@ -2124,25 +2061,13 @@ void QMdiArea::setOption(AreaOption option, bool on)
    }
 }
 
-/*!
-    Returns true if \a option is enabled; otherwise returns false.
 
-    \sa AreaOption, setOption()
-*/
 bool QMdiArea::testOption(AreaOption option) const
 {
    return d_func()->options & option;
 }
 
-/*!
-    \property QMdiArea::viewMode
-    \brief the way sub-windows are displayed in the QMdiArea.
-    \since 4.4
 
-    By default, the SubWindowView is used to display sub-windows.
-
-    \sa ViewMode, setTabShape(), setTabPosition()
-*/
 QMdiArea::ViewMode QMdiArea::viewMode() const
 {
    Q_D(const QMdiArea);
@@ -2156,15 +2081,7 @@ void QMdiArea::setViewMode(ViewMode mode)
 }
 
 #ifndef QT_NO_TABBAR
-/*!
-    \property QMdiArea::documentMode
-    \brief whether the tab bar is set to document mode in tabbed view mode.
-    \since 4.5
 
-    Document mode is disabled by default.
-
-    \sa QTabBar::documentMode, setViewMode()
-*/
 bool QMdiArea::documentMode() const
 {
    Q_D(const QMdiArea);
@@ -2182,15 +2099,7 @@ void QMdiArea::setDocumentMode(bool enabled)
    d->refreshTabBar();
 }
 
-/*!
-    \property QMdiArea::tabsClosable
-    \brief whether the tab bar should place close buttons on each tab in tabbed view mode.
-    \since 4.8
 
-    Tabs are not closable by default.
-
-    \sa QTabBar::tabsClosable, setViewMode()
-*/
 bool QMdiArea::tabsClosable() const
 {
    Q_D(const QMdiArea);
@@ -2254,16 +2163,7 @@ void QMdiArea::setTabShape(QTabWidget::TabShape shape)
    d->refreshTabBar();
 }
 
-/*!
-    \property QMdiArea::tabPosition
-    \brief the position of the tabs in tabbed view mode.
-    \since 4.4
 
-    Possible values for this property are described by the
-    QTabWidget::TabPosition enum.
-
-    \sa QTabWidget::TabPosition, setViewMode()
-*/
 QTabWidget::TabPosition QMdiArea::tabPosition() const
 {
    Q_D(const QMdiArea);
@@ -2327,9 +2227,9 @@ void QMdiArea::resizeEvent(QResizeEvent *resizeEvent)
 
    // Resize maximized views.
    bool hasMaximizedSubWindow = false;
-   for (QMdiSubWindow * child : d->childWindows) {
+   for (QMdiSubWindow *child : d->childWindows) {
       if (sanityCheck(child, "QMdiArea::resizeEvent") && child->isMaximized()
-            && child->size() != resizeEvent->size()) {
+         && child->size() != resizeEvent->size()) {
          child->resize(resizeEvent->size());
          if (!hasMaximizedSubWindow) {
             hasMaximizedSubWindow = true;
@@ -2382,7 +2282,7 @@ void QMdiArea::showEvent(QShowEvent *showEvent)
    Q_D(QMdiArea);
    if (!d->pendingRearrangements.isEmpty()) {
       bool skipPlacement = false;
-      for (Rearranger * rearranger : d->pendingRearrangements) {
+      for (Rearranger *rearranger : d->pendingRearrangements) {
          // If this is the case, we don't have to lay out pending child windows
          // since the rearranger will find a placement for them.
          if (rearranger->type() != Rearranger::IconTiler && !skipPlacement) {
@@ -2398,7 +2298,7 @@ void QMdiArea::showEvent(QShowEvent *showEvent)
    }
 
    if (!d->pendingPlacements.isEmpty()) {
-      for (QMdiSubWindow * window : d->pendingPlacements) {
+      for (QMdiSubWindow *window : d->pendingPlacements) {
          if (!window) {
             continue;
          }
@@ -2407,7 +2307,7 @@ void QMdiArea::showEvent(QShowEvent *showEvent)
             window->resize(newSize.expandedTo(qSmartMinSize(window)));
          }
          if (!window->testAttribute(Qt::WA_Moved) && !window->isMinimized()
-               && !window->isMaximized()) {
+            && !window->isMaximized()) {
             d->place(d->placer, window);
          }
       }
@@ -2527,13 +2427,7 @@ bool QMdiArea::event(QEvent *event)
 
    switch (event->type()) {
 
-#ifdef Q_OS_WIN
-      // QWidgetPrivate::hide_helper activates another sub-window when closing a
-      // modal dialog on Windows (see activateWindow() inside the the ifdef).
-      case QEvent::WindowUnblocked:
-         d->activateCurrentWindow();
-         break;
-#endif
+
 
       case QEvent::WindowActivate: {
          d->isActivated = true;
@@ -2560,7 +2454,7 @@ bool QMdiArea::event(QEvent *event)
          }
          break;
       case QEvent::WindowIconChange:
-         for (QMdiSubWindow * window : d->childWindows) {
+         for (QMdiSubWindow *window : d->childWindows) {
             if (sanityCheck(window, "QMdiArea::WindowIconChange")) {
                QApplication::sendEvent(window, event);
             }
@@ -2598,12 +2492,9 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
       QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
       // Ingore key events without a Ctrl modifier (except for press/release on the modifier itself).
 
-#ifdef Q_OS_MAC
-      if (!(keyEvent->modifiers() & Qt::MetaModifier) && keyEvent->key() != Qt::Key_Meta)
-#else
-      if (!(keyEvent->modifiers() & Qt::ControlModifier) && keyEvent->key() != Qt::Key_Control)
-#endif
+      if (!(keyEvent->modifiers() & Qt::ControlModifier) && keyEvent->key() != Qt::Key_Control) {
          return QAbstractScrollArea::eventFilter(object, event);
+      }
 
       // Find closest mdi area (in case we have a nested workspace).
       QMdiArea *area = mdiAreaParent(static_cast<QWidget *>(object));
@@ -2619,11 +2510,9 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
       //    direction (activatePreviousSubWindow())
 
       switch (keyEvent->key()) {
-#ifdef Q_OS_MAC
-         case Qt::Key_Meta:
-#else
+
          case Qt::Key_Control:
-#endif
+
             if (keyPress) {
                area->d_func()->startTabToPreviousTimer();
             } else {
@@ -2636,6 +2525,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
                area->d_func()->highlightNextSubWindow(keyEvent->key() == Qt::Key_Tab ? 1 : -1);
             }
             return true;
+
 #ifndef QT_NO_RUBBERBAND
          case Qt::Key_Escape:
             area->d_func()->hideRubberBand();
@@ -2652,7 +2542,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
    if (! subWindow) {
       // QApplication events:
       if (event->type() == QEvent::ApplicationActivate && !d->active
-            && isVisible() && !window()->isMinimized()) {
+         && isVisible() && !window()->isMinimized()) {
          d->activateCurrentWindow();
 
       } else if (event->type() == QEvent::ApplicationDeactivate && d->active) {
@@ -2753,7 +2643,7 @@ void QMdiArea::setupViewport(QWidget *viewport)
       viewport->setAttribute(Qt::WA_OpaquePaintEvent, d->background.isOpaque());
    }
 
-   for (QMdiSubWindow * child : d->childWindows) {
+   for (QMdiSubWindow *child : d->childWindows) {
       if (! sanityCheck(child, "QMdiArea::setupViewport")) {
          continue;
       }
@@ -2761,7 +2651,6 @@ void QMdiArea::setupViewport(QWidget *viewport)
       child->setParent(viewport, child->windowFlags());
    }
 }
-
 
 void QMdiArea::_q_deactivateAllWindows()
 {
@@ -2792,7 +2681,5 @@ void QMdiArea::_q_moveTab(int un_named_arg1, int un_named_arg2)
    Q_D(QMdiArea);
    d->_q_moveTab(un_named_arg1, un_named_arg2);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_MDIAREA

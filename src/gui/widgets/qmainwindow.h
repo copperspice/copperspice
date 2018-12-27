@@ -26,8 +26,6 @@
 #include <QtGui/qwidget.h>
 #include <QtGui/qtabwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_MAINWINDOW
 
 class QDockWidget;
@@ -46,6 +44,7 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
    GUI_CS_PROPERTY_READ(iconSize, iconSize)
    GUI_CS_PROPERTY_WRITE(iconSize, setIconSize)
+
    GUI_CS_PROPERTY_READ(toolButtonStyle, toolButtonStyle)
    GUI_CS_PROPERTY_WRITE(toolButtonStyle, setToolButtonStyle)
 
@@ -81,7 +80,8 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
       AllowNestedDocks = 0x02,
       AllowTabbedDocks = 0x04,
       ForceTabbedDocks = 0x08,  // implies AllowTabbedDocks, !AllowNestedDocks
-      VerticalTabs = 0x10       // implies AllowTabbedDocks
+      VerticalTabs = 0x10,      // implies AllowTabbedDocks
+      GroupedDragging = 0x20    // implies AllowTabbedDocks
    };
    using DockOptions = QFlags<DockOption>;
 
@@ -102,6 +102,7 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    QWidget *centralWidget() const;
    void setCentralWidget(QWidget *widget);
 
+   QWidget *takeCentralWidget();
 #ifndef QT_NO_DOCKWIDGET
    bool isAnimated() const;
    bool isDockNestingEnabled() const;
@@ -120,8 +121,12 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
    Qt::DockWidgetArea dockWidgetArea(QDockWidget *dockwidget) const;
 
+   void resizeDocks(const QList<QDockWidget *> &docks,
+      const QList<int> &sizes, Qt::Orientation orientation);
+
    GUI_CS_SLOT_1(Public, void setAnimated(bool enabled))
    GUI_CS_SLOT_2(setAnimated)
+
    GUI_CS_SLOT_1(Public, void setDockNestingEnabled(bool enabled))
    GUI_CS_SLOT_2(setDockNestingEnabled)
 #endif
@@ -137,7 +142,6 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    QTabWidget::TabPosition tabPosition(Qt::DockWidgetArea area) const;
    void setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosition tabPosition);
 #endif
-
 #ifndef QT_NO_MENU
    virtual QMenu *createPopupMenu();
 #endif
@@ -166,11 +170,14 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    void removeToolBar(QToolBar *toolbar);
    void removeToolBarBreak(QToolBar *before);
 
-   void setUnifiedTitleAndToolBarOnMac(bool set);
    bool unifiedTitleAndToolBarOnMac() const;
 
    Qt::ToolBarArea toolBarArea(QToolBar *toolbar) const;
    bool toolBarBreak(QToolBar *toolbar) const;
+
+   GUI_CS_SLOT_1(Public, void setUnifiedTitleAndToolBarOnMac(bool set))
+   GUI_CS_SLOT_2(setUnifiedTitleAndToolBarOnMac)
+
 #endif
 
    QByteArray saveState(int version = 0) const;
@@ -197,6 +204,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QMainWindow::DockOptions)
 
 #endif // QT_NO_MAINWINDOW
 
-QT_END_NAMESPACE
 
 #endif // QDYNAMICMAINWINDOW_H

@@ -23,9 +23,9 @@
 #ifndef QMDISUBWINDOW_H
 #define QMDISUBWINDOW_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_MDIAREA
 
@@ -44,6 +44,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
 
    GUI_CS_PROPERTY_READ(keyboardSingleStep, keyboardSingleStep)
    GUI_CS_PROPERTY_WRITE(keyboardSingleStep, setKeyboardSingleStep)
+
    GUI_CS_PROPERTY_READ(keyboardPageStep, keyboardPageStep)
    GUI_CS_PROPERTY_WRITE(keyboardPageStep, setKeyboardPageStep)
 
@@ -56,7 +57,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    };
    using SubWindowOptions = QFlags<SubWindowOption>;
 
-   QMdiSubWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+   QMdiSubWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
    ~QMdiSubWindow();
 
    QSize sizeHint() const override;
@@ -95,6 +96,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    GUI_CS_SLOT_1(Public, void showSystemMenu())
    GUI_CS_SLOT_2(showSystemMenu)
 #endif
+
    GUI_CS_SLOT_1(Public, void showShaded())
    GUI_CS_SLOT_2(showShaded)
 
@@ -148,7 +150,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMdiSubWindow::SubWindowOptions)
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_MDIAREA
 

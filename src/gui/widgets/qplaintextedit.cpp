@@ -21,22 +21,7 @@
 ***********************************************************************/
 
 #include <qplaintextedit_p.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qevent.h>
-#include <qdebug.h>
-#include <qmime.h>
-#include <qdrag.h>
-#include <qclipboard.h>
-#include <qmenu.h>
-#include <qstyle.h>
-#include <qtimer.h>
-#include <qtextdocumentlayout_p.h>
-#include <qabstracttextdocumentlayout_p.h>
-#include <qtextdocument.h>
-#include <qtextdocument_p.h>
-#include <qtextlist.h>
-#include <qtextcontrol_p.h>
+
 #include <qaccessible.h>
 #include <qtextformat.h>
 #include <qdatetime.h>
@@ -44,11 +29,23 @@
 #include <limits.h>
 #include <qtexttable.h>
 #include <qvariant.h>
-#include <qinputcontext.h>
+#include <qfont.h>
+#include <qpainter.h>
+#include <qevent.h>
+#include <qdebug.h>
+#include <qdrag.h>
+#include <qclipboard.h>
+#include <qmenu.h>
+#include <qstyle.h>
+#include <qtimer.h>
+
+#include <qtextdocumentlayout_p.h>
+#include <qabstracttextdocumentlayout_p.h>
+#include <qtextdocument.h>
+#include <qtextdocument_p.h>
+#include <qtextlist.h>
 
 #ifndef QT_NO_TEXTEDIT
-
-QT_BEGIN_NAMESPACE
 
 static inline bool shouldEnableInputMethod(QPlainTextEdit *plaintextedit)
 {
@@ -58,6 +55,7 @@ static inline bool shouldEnableInputMethod(QPlainTextEdit *plaintextedit)
 class QPlainTextDocumentLayoutPrivate : public QAbstractTextDocumentLayoutPrivate
 {
    Q_DECLARE_PUBLIC(QPlainTextDocumentLayout)
+
  public:
    QPlainTextDocumentLayoutPrivate() {
       mainViewPrivate = 0;
@@ -87,53 +85,19 @@ class QPlainTextDocumentLayoutPrivate : public QAbstractTextDocumentLayoutPrivat
 };
 
 
-
-/*! \class QPlainTextDocumentLayout
-    \since 4.4
-    \brief The QPlainTextDocumentLayout class implements a plain text layout for QTextDocument
-
-    \ingroup richtext-processing
-
-   A QPlainTextDocumentLayout is required for text documents that can
-   be display or edited in a QPlainTextEdit. See
-   QTextDocument::setDocumentLayout().
-
-   QPlainTextDocumentLayout uses the QAbstractTextDocumentLayout API
-   that QTextDocument requires, but redefines it partially in order to
-   support plain text better. For instances, it does not operate on
-   vertical pixels, but on paragraphs (called blocks) instead. The
-   height of a document is identical to the number of paragraphs it
-   contains. The layout also doesn't support tables or nested frames,
-   or any sort of advanced text layout that goes beyond a list of
-   paragraphs with syntax highlighting.
-
-*/
-
-
-
-/*!
-  Constructs a plain text document layout for the text \a document.
- */
 QPlainTextDocumentLayout::QPlainTextDocumentLayout(QTextDocument *document)
    : QAbstractTextDocumentLayout(* new QPlainTextDocumentLayoutPrivate, document)
 {
 }
-/*!
-  Destructs a plain text document layout.
- */
-QPlainTextDocumentLayout::~QPlainTextDocumentLayout() {}
 
+QPlainTextDocumentLayout::~QPlainTextDocumentLayout()
+{
+}
 
-/*!
-  \reimp
- */
 void QPlainTextDocumentLayout::draw(QPainter *, const PaintContext &)
 {
 }
 
-/*!
-  \reimp
- */
 int QPlainTextDocumentLayout::hitTest(const QPointF &, Qt::HitTestAccuracy ) const
 {
    //     this function is used from
@@ -152,18 +116,12 @@ int QPlainTextDocumentLayout::pageCount() const
    return 1;
 }
 
-/*!
-  \reimp
- */
 QSizeF QPlainTextDocumentLayout::documentSize() const
 {
    Q_D(const QPlainTextDocumentLayout);
    return QSizeF(d->maximumWidth, document()->lineCount());
 }
 
-/*!
-  \reimp
- */
 QRectF QPlainTextDocumentLayout::frameBoundingRect(QTextFrame *) const
 {
    Q_D(const QPlainTextDocumentLayout);
@@ -178,10 +136,12 @@ QRectF QPlainTextDocumentLayout::blockBoundingRect(const QTextBlock &block) cons
    if (!block.isValid()) {
       return QRectF();
    }
+
    QTextLayout *tl = block.layout();
    if (!tl->lineCount()) {
       const_cast<QPlainTextDocumentLayout *>(this)->layoutBlock(block);
    }
+
    QRectF br;
    if (block.isVisible()) {
       br = QRectF(QPointF(0, 0), tl->boundingRect().bottomRight());
@@ -194,6 +154,7 @@ QRectF QPlainTextDocumentLayout::blockBoundingRect(const QTextBlock &block) cons
          br.adjust(0, 0, 0, margin);
       }
    }
+
    return br;
 
 }
@@ -213,10 +174,6 @@ void QPlainTextDocumentLayout::ensureBlockLayout(const QTextBlock &block) const
 }
 
 
-/*! \property QPlainTextDocumentLayout::cursorWidth
-
-    This property specifies the width of the cursor in pixels. The default value is 1.
-*/
 void QPlainTextDocumentLayout::setCursorWidth(int width)
 {
    Q_D(QPlainTextDocumentLayout);
@@ -235,11 +192,6 @@ QPlainTextDocumentLayoutPrivate *QPlainTextDocumentLayout::priv() const
    return const_cast<QPlainTextDocumentLayoutPrivate *>(d);
 }
 
-
-/*!
-
-   Requests a complete update on all views.
- */
 void QPlainTextDocumentLayout::requestUpdate()
 {
    emit update(QRectF(0., -document()->documentMargin(), 1000000000., 1000000000.));
@@ -271,22 +223,20 @@ void QPlainTextDocumentLayoutPrivate::relayout()
    emit q->update();
 }
 
-
-/*! \reimp
- */
-void QPlainTextDocumentLayout::documentChanged(int from, int /*charsRemoved*/, int charsAdded)
+void QPlainTextDocumentLayout::documentChanged(int from, int charsRemoved, int charsAdded)
 {
    Q_D(QPlainTextDocumentLayout);
    QTextDocument *doc = document();
    int newBlockCount = doc->blockCount();
+   int charsChanged = charsRemoved + charsAdded;
 
    QTextBlock changeStartBlock = doc->findBlock(from);
-   QTextBlock changeEndBlock = doc->findBlock(qMax(0, from + charsAdded - 1));
+   QTextBlock changeEndBlock = doc->findBlock(qMax(0, from + charsChanged - 1));
 
    if (changeStartBlock == changeEndBlock && newBlockCount == d->blockCount) {
       QTextBlock block = changeStartBlock;
-      int blockLineCount = block.layout()->lineCount();
-      if (block.isValid() && blockLineCount) {
+
+      if (block.isValid() && block.length()) {
          QRectF oldBr = blockBoundingRect(block);
          layoutBlock(block);
          QRectF newBr = blockBoundingRect(block);
@@ -347,7 +297,6 @@ void QPlainTextDocumentLayout::documentChanged(int from, int /*charsRemoved*/, i
    }
 }
 
-
 void QPlainTextDocumentLayout::layoutBlock(const QTextBlock &block)
 {
    Q_D(QPlainTextDocumentLayout);
@@ -376,6 +325,7 @@ void QPlainTextDocumentLayout::layoutBlock(const QTextBlock &block)
       if (!line.isValid()) {
          break;
       }
+
       line.setLeadingIncluded(true);
       line.setLineWidth(availableWidth);
       line.setPosition(QPointF(margin, height));
@@ -442,10 +392,15 @@ QPlainTextEditControl::QPlainTextEditControl(QPlainTextEdit *parent)
 void QPlainTextEditPrivate::_q_cursorPositionChanged()
 {
    pageUpDownLastCursorYIsValid = false;
-#ifndef QT_NO_ACCESSIBILITY
+
    Q_Q(QPlainTextEdit);
-   QAccessible::updateAccessibility(q, 0, QAccessible::TextCaretMoved);
+
+#ifndef QT_NO_ACCESSIBILITY
+   QAccessibleTextCursorEvent ev(q, q->textCursor().position());
+   QAccessible::updateAccessibility(&ev);
 #endif
+
+   emit q->cursorPositionChanged();
 }
 
 void QPlainTextEditPrivate::_q_verticalScrollbarActionTriggered(int action)
@@ -465,6 +420,7 @@ QMimeData *QPlainTextEditControl::createMimeDataFromSelection() const
    }
    return ed->createMimeDataFromSelection();
 }
+
 bool QPlainTextEditControl::canInsertFromMimeData(const QMimeData *source) const
 {
    QPlainTextEdit *ed = qobject_cast<QPlainTextEdit *>(parent());
@@ -473,6 +429,7 @@ bool QPlainTextEditControl::canInsertFromMimeData(const QMimeData *source) const
    }
    return ed->canInsertFromMimeData(source);
 }
+
 void QPlainTextEditControl::insertFromMimeData(const QMimeData *source)
 {
    QPlainTextEdit *ed = qobject_cast<QPlainTextEdit *>(parent());
@@ -513,18 +470,16 @@ qreal QPlainTextEditPrivate::verticalOffset() const
    return verticalOffset(control->topBlock, topLine) + topLineFracture;
 }
 
-
 QTextBlock QPlainTextEditControl::firstVisibleBlock() const
 {
    return document()->findBlockByNumber(topBlock);
 }
 
-
-
 int QPlainTextEditControl::hitTest(const QPointF &point, Qt::HitTestAccuracy ) const
 {
    int currentBlockNumber = topBlock;
    QTextBlock currentBlock = document()->findBlockByNumber(currentBlockNumber);
+
    if (!currentBlock.isValid()) {
       return -1;
    }
@@ -547,13 +502,14 @@ int QPlainTextEditControl::hitTest(const QPointF &point, Qt::HitTestAccuracy ) c
       r = documentLayout->blockBoundingRect(currentBlock);
    }
 
-
    if (!currentBlock.isValid()) {
       return -1;
    }
+
    QTextLayout *layout = currentBlock.layout();
    int off = 0;
    QPointF pos = point - offset;
+
    for (int i = 0; i < layout->lineCount(); ++i) {
       QTextLine line = layout->lineAt(i);
       const QRectF lr = line.naturalTextRect();
@@ -563,7 +519,7 @@ int QPlainTextEditControl::hitTest(const QPointF &point, Qt::HitTestAccuracy ) c
          off = qMax(off, line.textStart() + line.textLength());
       } else {
          off = line.xToCursor(pos.x(), overwriteMode() ?
-                              QTextLine::CursorOnCharacter : QTextLine::CursorBetweenCharacters);
+               QTextLine::CursorOnCharacter : QTextLine::CursorBetweenCharacters);
          break;
       }
    }
@@ -576,9 +532,11 @@ QRectF QPlainTextEditControl::blockBoundingRect(const QTextBlock &block) const
    int currentBlockNumber = topBlock;
    int blockNumber = block.blockNumber();
    QTextBlock currentBlock = document()->findBlockByNumber(currentBlockNumber);
+
    if (!currentBlock.isValid()) {
       return QRectF();
    }
+
    Q_ASSERT(currentBlock.blockNumber() == currentBlockNumber);
    QTextDocument *doc = document();
    QPlainTextDocumentLayout *documentLayout = qobject_cast<QPlainTextDocumentLayout *>(doc->documentLayout());
@@ -627,6 +585,10 @@ QRectF QPlainTextEditControl::blockBoundingRect(const QTextBlock &block) const
    return r;
 }
 
+QString QPlainTextEditControl::anchorAt(const QPointF &pos) const
+{
+   return textEdit->anchorAt(pos.toPoint());
+}
 
 void QPlainTextEditPrivate::setTopLine(int visualTopLine, int dx)
 {
@@ -658,7 +620,7 @@ void QPlainTextEditPrivate::setTopBlock(int blockNumber, int lineNumber, int dx)
    vbar->setValue(newTopLine);
    vbar->blockSignals(vbarSignalsBlocked);
 
-   if (!dx && blockNumber == control->topBlock && lineNumber == topLine) {
+   if (! dx && blockNumber == control->topBlock && lineNumber == topLine) {
       return;
    }
 
@@ -666,7 +628,7 @@ void QPlainTextEditPrivate::setTopBlock(int blockNumber, int lineNumber, int dx)
       int dy = 0;
       if (doc->findBlockByNumber(control->topBlock).isValid()) {
          qreal realdy = -q->blockBoundingGeometry(block).y()
-                        + verticalOffset() - verticalOffset(blockNumber, lineNumber);
+            + verticalOffset() - verticalOffset(blockNumber, lineNumber);
          dy = (int)realdy;
          topLineFracture = realdy - dy;
       }
@@ -684,32 +646,32 @@ void QPlainTextEditPrivate::setTopBlock(int blockNumber, int lineNumber, int dx)
          topLineFracture = 0;
       }
       emit q->updateRequest(viewport->rect(), dy);
+
    } else {
       control->topBlock = blockNumber;
       topLine = lineNumber;
       topLineFracture = 0;
    }
-
 }
-
-
 
 void QPlainTextEditPrivate::ensureVisible(int position, bool center, bool forceCenter)
 {
    Q_Q(QPlainTextEdit);
    QRectF visible = QRectF(viewport->rect()).translated(-q->contentOffset());
    QTextBlock block = control->document()->findBlock(position);
+
    if (!block.isValid()) {
       return;
    }
+
    QRectF br = control->blockBoundingRect(block);
    if (!br.isValid()) {
       return;
    }
-   QRectF lr = br;
+
    QTextLine line = block.layout()->lineForTextPosition(position - block.position());
    Q_ASSERT(line.isValid());
-   lr = line.naturalTextRect().translated(br.topLeft());
+   QRectF lr = line.naturalTextRect().translated(br.topLeft());
 
    if (lr.bottom() >= visible.bottom() || (center && lr.top() < visible.top()) || forceCenter) {
 
@@ -748,9 +710,7 @@ void QPlainTextEditPrivate::ensureVisible(int position, bool center, bool forceC
    } else if (lr.top() < visible.top()) {
       setTopBlock(block.blockNumber(), line.lineNumber());
    }
-
 }
-
 
 void QPlainTextEditPrivate::updateViewport()
 {
@@ -788,11 +748,11 @@ void QPlainTextEditPrivate::init(const QString &txt)
 
    QObject::connect(vbar, SIGNAL(actionTriggered(int)), q, SLOT(_q_verticalScrollbarActionTriggered(int)));
 
-   QObject::connect(control, SIGNAL(microFocusChanged()),                  q, SLOT(updateMicroFocus()));
-   QObject::connect(control, SIGNAL(documentSizeChanged(const QSizeF &)),  q, SLOT(_q_adjustScrollbars()));
-   QObject::connect(control, SIGNAL(blockCountChanged(int)),               q, SLOT(blockCountChanged(int)));
-   QObject::connect(control, SIGNAL(updateRequest(const QRectF &)),        q, SLOT(_q_repaintContents(const QRectF &)));
-   QObject::connect(control, SIGNAL(modificationChanged(bool)),            q, SLOT(modificationChanged(bool)));
+   QObject::connect(control, SIGNAL(microFocusChanged()),          q, SLOT(updateMicroFocus()));
+   QObject::connect(control, SIGNAL(documentSizeChanged(QSizeF)),  q, SLOT(_q_adjustScrollbars()));
+   QObject::connect(control, SIGNAL(blockCountChanged(int)),       q, SLOT(blockCountChanged(int)));
+   QObject::connect(control, SIGNAL(updateRequest(QRectF)),        q, SLOT(_q_repaintContents(QRectF)));
+   QObject::connect(control, SIGNAL(modificationChanged(bool)),    q, SLOT(modificationChanged(bool)));
 
    QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(textChanged()));
    QObject::connect(control, SIGNAL(undoAvailable(bool)),     q, SLOT(undoAvailable(bool)));
@@ -800,9 +760,8 @@ void QPlainTextEditPrivate::init(const QString &txt)
    QObject::connect(control, SIGNAL(copyAvailable(bool)),     q, SLOT(copyAvailable(bool)));
    QObject::connect(control, SIGNAL(selectionChanged()),      q, SLOT(selectionChanged()));
    QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(_q_cursorPositionChanged()));
-   QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(cursorPositionChanged()));
 
-   QObject::connect(control, SIGNAL(textChanged()), q, SLOT(updateMicroFocus()));
+   QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(updateMicroFocus()));
 
    // set a null page size initially to avoid any relayouting until the textedit
    // is shown. relayoutDocument() will take care of setting the page size to the
@@ -810,7 +769,6 @@ void QPlainTextEditPrivate::init(const QString &txt)
    doc->setTextWidth(-1);
    doc->documentLayout()->setPaintDevice(viewport);
    doc->setDefaultFont(q->font());
-
 
    if (!txt.isEmpty()) {
       control->setPlainText(txt);
@@ -821,19 +779,16 @@ void QPlainTextEditPrivate::init(const QString &txt)
 
    viewport->setBackgroundRole(QPalette::Base);
    q->setAcceptDrops(true);
-   q->setFocusPolicy(Qt::WheelFocus);
+   q->setFocusPolicy(Qt::StrongFocus);
    q->setAttribute(Qt::WA_KeyCompression);
    q->setAttribute(Qt::WA_InputMethodEnabled);
+   q->setInputMethodHints(Qt::ImhMultiLine);
 
 #ifndef QT_NO_CURSOR
    viewport->setCursor(Qt::IBeamCursor);
 #endif
 
    originalOffsetY = 0;
-
-#ifdef Q_OS_WIN
-   setSingleFingerPanEnabled(true);
-#endif
 }
 
 void QPlainTextEditPrivate::_q_repaintContents(const QRectF &contentsRect)
@@ -871,7 +826,6 @@ void QPlainTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCurso
    }
 
    qreal lastY = pageUpDownLastCursorY;
-
 
    if (op == QTextCursor::Down) {
       QRectF visible = QRectF(viewport->rect()).translated(-q->contentOffset());
@@ -1024,7 +978,8 @@ void QPlainTextEditPrivate::_q_adjustScrollbars()
 
    } else {
       vmax = qMax(0, doc->lineCount() - 1);
-      vSliderLength = viewport->height() / q->fontMetrics().lineSpacing();
+      int lineSpacing = q->fontMetrics().lineSpacing();
+      vSliderLength = lineSpacing != 0 ? viewport->height() / lineSpacing : 0;
    }
 
 
@@ -1033,10 +988,12 @@ void QPlainTextEditPrivate::_q_adjustScrollbars()
    vbar->setRange(0, qMax(0, vmax));
    vbar->setPageStep(vSliderLength);
    int visualTopLine = vmax;
+
    QTextBlock firstVisibleBlock = q->firstVisibleBlock();
    if (firstVisibleBlock.isValid()) {
       visualTopLine = firstVisibleBlock.firstLineNumber() + topLine;
    }
+
    bool vbarSignalsBlocked = vbar->blockSignals(true);
    vbar->setValue(visualTopLine);
    vbar->blockSignals(vbarSignalsBlocked);
@@ -1046,217 +1003,12 @@ void QPlainTextEditPrivate::_q_adjustScrollbars()
    documentLayout->priv()->blockDocumentSizeChanged = documentSizeChangedBlocked;
    setTopLine(vbar->value());
 }
-
 #endif
-
 
 void QPlainTextEditPrivate::ensureViewportLayouted()
 {
 }
 
-/*!
-    \class QPlainTextEdit
-    \since 4.4
-    \brief The QPlainTextEdit class provides a widget that is used to edit and display
-    plain text.
-
-    \ingroup richtext-processing
-
-
-    \tableofcontents
-
-    \section1 Introduction and Concepts
-
-    QPlainTextEdit is an advanced viewer/editor supporting plain
-    text. It is optimized to handle large documents and to respond
-    quickly to user input.
-
-    QPlainText uses very much the same technology and concepts as
-    QTextEdit, but is optimized for plain text handling.
-
-    QPlainTextEdit works on paragraphs and characters. A paragraph is
-    a formatted string which is word-wrapped to fit into the width of
-    the widget. By default when reading plain text, one newline
-    signifies a paragraph. A document consists of zero or more
-    paragraphs. Paragraphs are separated by hard line breaks. Each
-    character within a paragraph has its own attributes, for example,
-    font and color.
-
-    The shape of the mouse cursor on a QPlainTextEdit is
-    Qt::IBeamCursor by default.  It can be changed through the
-    viewport()'s cursor property.
-
-    \section1 Using QPlainTextEdit as a Display Widget
-
-    The text is set or replaced using setPlainText() which deletes the
-    existing text and replaces it with the text passed to setPlainText().
-
-    Text can be inserted using the QTextCursor class or using the
-    convenience functions insertPlainText(), appendPlainText() or
-    paste().
-
-    By default, the text edit wraps words at whitespace to fit within
-    the text edit widget. The setLineWrapMode() function is used to
-    specify the kind of line wrap you want, \l WidgetWidth or \l
-    NoWrap if you don't want any wrapping.  If you use word wrap to
-    the widget's width \l WidgetWidth, you can specify whether to
-    break on whitespace or anywhere with setWordWrapMode().
-
-    The find() function can be used to find and select a given string
-    within the text.
-
-    If you want to limit the total number of paragraphs in a
-    QPlainTextEdit, as it is for example useful in a log viewer, then
-    you can use the maximumBlockCount property. The combination of
-    setMaximumBlockCount() and appendPlainText() turns QPlainTextEdit
-    into an efficient viewer for log text. The scrolling can be
-    reduced with the centerOnScroll() property, making the log viewer
-    even faster. Text can be formatted in a limited way, either using
-    a syntax highlighter (see below), or by appending html-formatted
-    text with appendHtml(). While QPlainTextEdit does not support
-    complex rich text rendering with tables and floats, it does
-    support limited paragraph-based formatting that you may need in a
-    log viewer.
-
-    \section2 Read-only Key Bindings
-
-    When QPlainTextEdit is used read-only the key bindings are limited to
-    navigation, and text may only be selected with the mouse:
-    \table
-    \header \i Keypresses \i Action
-    \row \i Qt::UpArrow        \i Moves one line up.
-    \row \i Qt::DownArrow        \i Moves one line down.
-    \row \i Qt::LeftArrow        \i Moves one character to the left.
-    \row \i Qt::RightArrow        \i Moves one character to the right.
-    \row \i PageUp        \i Moves one (viewport) page up.
-    \row \i PageDown        \i Moves one (viewport) page down.
-    \row \i Home        \i Moves to the beginning of the text.
-    \row \i End                \i Moves to the end of the text.
-    \row \i Alt+Wheel
-         \i Scrolls the page horizontally (the Wheel is the mouse wheel).
-    \row \i Ctrl+Wheel        \i Zooms the text.
-    \row \i Ctrl+A            \i Selects all text.
-    \endtable
-
-
-    \section1 Using QPlainTextEdit as an Editor
-
-    All the information about using QPlainTextEdit as a display widget also
-    applies here.
-
-    Selection of text is handled by the QTextCursor class, which provides
-    functionality for creating selections, retrieving the text contents or
-    deleting selections. You can retrieve the object that corresponds with
-    the user-visible cursor using the textCursor() method. If you want to set
-    a selection in QPlainTextEdit just create one on a QTextCursor object and
-    then make that cursor the visible cursor using setCursor(). The selection
-    can be copied to the clipboard with copy(), or cut to the clipboard with
-    cut(). The entire text can be selected using selectAll().
-
-    QPlainTextEdit holds a QTextDocument object which can be retrieved using the
-    document() method. You can also set your own document object using setDocument().
-    QTextDocument emits a textChanged() signal if the text changes and it also
-    provides a isModified() function which will return true if the text has been
-    modified since it was either loaded or since the last call to setModified
-    with false as argument. In addition it provides methods for undo and redo.
-
-    \section2 Syntax Highlighting
-
-    Just like QTextEdit, QPlainTextEdit works together with
-    QSyntaxHighlighter.
-
-    \section2 Editing Key Bindings
-
-    The list of key bindings which are implemented for editing:
-    \table
-    \header \i Keypresses \i Action
-    \row \i Backspace \i Deletes the character to the left of the cursor.
-    \row \i Delete \i Deletes the character to the right of the cursor.
-    \row \i Ctrl+C \i Copy the selected text to the clipboard.
-    \row \i Ctrl+Insert \i Copy the selected text to the clipboard.
-    \row \i Ctrl+K \i Deletes to the end of the line.
-    \row \i Ctrl+V \i Pastes the clipboard text into text edit.
-    \row \i Shift+Insert \i Pastes the clipboard text into text edit.
-    \row \i Ctrl+X \i Deletes the selected text and copies it to the clipboard.
-    \row \i Shift+Delete \i Deletes the selected text and copies it to the clipboard.
-    \row \i Ctrl+Z \i Undoes the last operation.
-    \row \i Ctrl+Y \i Redoes the last operation.
-    \row \i LeftArrow \i Moves the cursor one character to the left.
-    \row \i Ctrl+LeftArrow \i Moves the cursor one word to the left.
-    \row \i RightArrow \i Moves the cursor one character to the right.
-    \row \i Ctrl+RightArrow \i Moves the cursor one word to the right.
-    \row \i UpArrow \i Moves the cursor one line up.
-    \row \i Ctrl+UpArrow \i Moves the cursor one word up.
-    \row \i DownArrow \i Moves the cursor one line down.
-    \row \i Ctrl+Down Arrow \i Moves the cursor one word down.
-    \row \i PageUp \i Moves the cursor one page up.
-    \row \i PageDown \i Moves the cursor one page down.
-    \row \i Home \i Moves the cursor to the beginning of the line.
-    \row \i Ctrl+Home \i Moves the cursor to the beginning of the text.
-    \row \i End \i Moves the cursor to the end of the line.
-    \row \i Ctrl+End \i Moves the cursor to the end of the text.
-    \row \i Alt+Wheel \i Scrolls the page horizontally (the Wheel is the mouse wheel).
-    \row \i Ctrl+Wheel \i Zooms the text.
-    \endtable
-
-    To select (mark) text hold down the Shift key whilst pressing one
-    of the movement keystrokes, for example, \e{Shift+Right Arrow}
-    will select the character to the right, and \e{Shift+Ctrl+Right
-    Arrow} will select the word to the right, etc.
-
-   \section1 Differences to QTextEdit
-
-   QPlainTextEdit is a thin class, implemented by using most of the
-   technology that is behind QTextEdit and QTextDocument. Its
-   performance benefits over QTextEdit stem mostly from using a
-   different and simplified text layout called
-   QPlainTextDocumentLayout on the text document (see
-   QTextDocument::setDocumentLayout()). The plain text document layout
-   does not support tables nor embedded frames, and \e{replaces a
-   pixel-exact height calculation with a line-by-line respectively
-   paragraph-by-paragraph scrolling approach}. This makes it possible
-   to handle significantly larger documents, and still resize the
-   editor with line wrap enabled in real time. It also makes for a
-   fast log viewer (see setMaximumBlockCount()).
-
-
-    \sa QTextDocument, QTextCursor, {Application Example},
-        {Code Editor Example}, {Syntax Highlighter Example},
-        {Rich Text Processing}
-
-*/
-
-/*!
-    \property QPlainTextEdit::plainText
-
-    This property gets and sets the plain text editor's contents. The previous
-    contents are removed and undo/redo history is reset when this property is set.
-
-    By default, for an editor with no contents, this property contains an empty string.
-*/
-
-/*!
-    \property QPlainTextEdit::undoRedoEnabled
-    \brief whether undo and redo are enabled
-
-    Users are only able to undo or redo actions if this property is
-    true, and if there is an action that can be undone (or redone).
-
-    By default, this property is true.
-*/
-
-/*!
-    \enum QPlainTextEdit::LineWrapMode
-
-    \value NoWrap
-    \value WidgetWidth
-*/
-
-
-/*!
-    Constructs an empty QPlainTextEdit with parent \a
-    parent.
-*/
 QPlainTextEdit::QPlainTextEdit(QWidget *parent)
    : QAbstractScrollArea(*new QPlainTextEditPrivate, parent)
 {
@@ -1264,9 +1016,6 @@ QPlainTextEdit::QPlainTextEdit(QWidget *parent)
    d->init();
 }
 
-/*!
-    \internal
-*/
 QPlainTextEdit::QPlainTextEdit(QPlainTextEditPrivate &dd, QWidget *parent)
    : QAbstractScrollArea(dd, parent)
 {
@@ -1274,10 +1023,7 @@ QPlainTextEdit::QPlainTextEdit(QPlainTextEditPrivate &dd, QWidget *parent)
    d->init();
 }
 
-/*!
-    Constructs a QPlainTextEdit with parent \a parent. The text edit will display
-    the plain text \a text.
-*/
+
 QPlainTextEdit::QPlainTextEdit(const QString &text, QWidget *parent)
    : QAbstractScrollArea(*new QPlainTextEditPrivate, parent)
 {
@@ -1286,9 +1032,7 @@ QPlainTextEdit::QPlainTextEdit(const QString &text, QWidget *parent)
 }
 
 
-/*!
-    Destructor.
-*/
+
 QPlainTextEdit::~QPlainTextEdit()
 {
    Q_D(QPlainTextEdit);
@@ -1299,18 +1043,7 @@ QPlainTextEdit::~QPlainTextEdit()
    }
 }
 
-/*!
-    Makes \a document the new document of the text editor.
 
-    The parent QObject of the provided document remains the owner
-    of the object. If the current document is a child of the text
-    editor, then it is deleted.
-
-    The document must have a document layout that inherits
-    QPlainTextDocumentLayout (see QTextDocument::setDocumentLayout()).
-
-    \sa document()
-*/
 void QPlainTextEdit::setDocument(QTextDocument *document)
 {
    Q_D(QPlainTextEdit);
@@ -1327,21 +1060,18 @@ void QPlainTextEdit::setDocument(QTextDocument *document)
          return;
       }
    }
+
    d->control->setDocument(document);
    if (!documentLayout->priv()->mainViewPrivate) {
       documentLayout->priv()->mainViewPrivate = d;
    }
+
    d->documentLayoutPtr = documentLayout;
    d->updateDefaultTextOption();
    d->relayoutDocument();
    d->_q_adjustScrollbars();
 }
 
-/*!
-    Returns a pointer to the underlying document.
-
-    \sa setDocument()
-*/
 QTextDocument *QPlainTextEdit::document() const
 {
    Q_D(const QPlainTextEdit);
@@ -1349,37 +1079,45 @@ QTextDocument *QPlainTextEdit::document() const
 }
 
 /*!
+void QPlainTextEdit::setPlaceholderText(const QString &placeholderText)
+{
+    Q_D(QPlainTextEdit);
+    if (d->placeholderText != placeholderText) {
+        d->placeholderText = placeholderText;
+        if (d->control->document()->isEmpty())
+            d->viewport->update();
+    }
+}
+QString QPlainTextEdit::placeholderText() const
+{
+    Q_D(const QPlainTextEdit);
+    return d->placeholderText;
+}
     Sets the visible \a cursor.
 */
 void QPlainTextEdit::setTextCursor(const QTextCursor &cursor)
+{
+   doSetTextCursor(cursor);
+}
+void QPlainTextEdit::doSetTextCursor(const QTextCursor &cursor)
 {
    Q_D(QPlainTextEdit);
    d->control->setTextCursor(cursor);
 }
 
-/*!
-    Returns a copy of the QTextCursor that represents the currently visible cursor.
-    Note that changes on the returned cursor do not affect QPlainTextEdit's cursor; use
-    setTextCursor() to update the visible cursor.
- */
 QTextCursor QPlainTextEdit::textCursor() const
 {
    Q_D(const QPlainTextEdit);
    return d->control->textCursor();
 }
 
-/*!
-    Returns the reference of the anchor at position \a pos, or an
-    empty string if no anchor exists at that point.
 
-    \since 4.7
- */
 QString QPlainTextEdit::anchorAt(const QPoint &pos) const
 {
    Q_D(const QPlainTextEdit);
    int cursorPos = d->control->hitTest(pos + QPointF(d->horizontalOffset(),
-                                       d->verticalOffset()),
-                                       Qt::ExactHit);
+            d->verticalOffset()), Qt::ExactHit);
+
    if (cursorPos < 0) {
       return QString();
    }
@@ -1390,14 +1128,6 @@ QString QPlainTextEdit::anchorAt(const QPoint &pos) const
    return fmt.anchorHref();
 }
 
-/*!
-    Undoes the last operation.
-
-    If there is no operation to undo, i.e. there is no undo step in
-    the undo/redo history, nothing happens.
-
-    \sa redo()
-*/
 void QPlainTextEdit::undo()
 {
    Q_D(QPlainTextEdit);
@@ -1410,26 +1140,10 @@ void QPlainTextEdit::redo()
    d->control->redo();
 }
 
-/*!
-    \fn void QPlainTextEdit::redo()
 
-    Redoes the last operation.
-
-    If there is no operation to redo, i.e. there is no redo step in
-    the undo/redo history, nothing happens.
-
-    \sa undo()
-*/
 
 #ifndef QT_NO_CLIPBOARD
-/*!
-    Copies the selected text to the clipboard and deletes it from
-    the text edit.
 
-    If there is no selected text nothing happens.
-
-    \sa copy() paste()
-*/
 
 void QPlainTextEdit::cut()
 {
@@ -1437,31 +1151,12 @@ void QPlainTextEdit::cut()
    d->control->cut();
 }
 
-/*!
-    Copies any selected text to the clipboard.
-
-    \sa copyAvailable()
-*/
 
 void QPlainTextEdit::copy()
 {
    Q_D(QPlainTextEdit);
    d->control->copy();
 }
-
-/*!
-    Pastes the text from the clipboard into the text edit at the
-    current cursor position.
-
-    If there is no text in the clipboard nothing happens.
-
-    To change the behavior of this function, i.e. to modify what
-    QPlainTextEdit can paste and how it is being pasted, reimplement the
-    virtual canInsertFromMimeData() and insertFromMimeData()
-    functions.
-
-    \sa cut() copy()
-*/
 
 void QPlainTextEdit::paste()
 {
@@ -1470,13 +1165,7 @@ void QPlainTextEdit::paste()
 }
 #endif
 
-/*!
-    Deletes all the text in the text edit.
 
-    Note that the undo/redo history is cleared by this function.
-
-    \sa cut() setPlainText()
-*/
 void QPlainTextEdit::clear()
 {
    Q_D(QPlainTextEdit);
@@ -1486,11 +1175,6 @@ void QPlainTextEdit::clear()
 }
 
 
-/*!
-    Selects all text.
-
-    \sa copy() cut() textCursor()
- */
 void QPlainTextEdit::selectAll()
 {
    Q_D(QPlainTextEdit);
@@ -1505,7 +1189,7 @@ bool QPlainTextEdit::event(QEvent *e)
 
 #ifndef QT_NO_CONTEXTMENU
    if (e->type() == QEvent::ContextMenu
-         && static_cast<QContextMenuEvent *>(e)->reason() == QContextMenuEvent::Keyboard) {
+      && static_cast<QContextMenuEvent *>(e)->reason() == QContextMenuEvent::Keyboard) {
       ensureCursorVisible();
       const QPoint cursorPos = cursorRect().center();
       QContextMenuEvent ce(QContextMenuEvent::Keyboard, cursorPos, d->viewport->mapToGlobal(cursorPos));
@@ -1516,7 +1200,7 @@ bool QPlainTextEdit::event(QEvent *e)
    }
 #endif // QT_NO_CONTEXTMENU
    if (e->type() == QEvent::ShortcutOverride
-         || e->type() == QEvent::ToolTip) {
+      || e->type() == QEvent::ToolTip) {
       d->sendControlEvent(e);
    }
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1533,14 +1217,17 @@ bool QPlainTextEdit::event(QEvent *e)
       if (g) {
          QScrollBar *hBar = horizontalScrollBar();
          QScrollBar *vBar = verticalScrollBar();
+
          if (g->state() == Qt::GestureStarted) {
             d->originalOffsetY = vBar->value();
          }
+
          QPointF offset = g->offset();
          if (!offset.isNull()) {
             if (QApplication::isRightToLeft()) {
                offset.rx() *= -1;
             }
+
             // QPlainTextEdit scrolls by lines only in vertical direction
             QFontMetrics fm(document()->defaultFont());
             int lineHeight = fm.height();
@@ -1562,22 +1249,29 @@ bool QPlainTextEdit::event(QEvent *e)
 void QPlainTextEdit::timerEvent(QTimerEvent *e)
 {
    Q_D(QPlainTextEdit);
+
    if (e->timerId() == d->autoScrollTimer.timerId()) {
       QRect visible = d->viewport->rect();
       QPoint pos;
+
       if (d->inDrag) {
          pos = d->autoScrollDragPos;
          visible.adjust(qMin(visible.width() / 3, 20), qMin(visible.height() / 3, 20),
-                        -qMin(visible.width() / 3, 20), -qMin(visible.height() / 3, 20));
+            -qMin(visible.width() / 3, 20), -qMin(visible.height() / 3, 20));
+
       } else {
          const QPoint globalPos = QCursor::pos();
          pos = d->viewport->mapFromGlobal(globalPos);
-         QMouseEvent ev(QEvent::MouseMove, pos, globalPos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+         QMouseEvent ev(QEvent::MouseMove, pos, d->viewport->mapTo(d->viewport->topLevelWidget(), pos), globalPos,
+            Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
          mouseMoveEvent(&ev);
       }
+
       int deltaY = qMax(pos.y() - visible.top(), visible.bottom() - pos.y()) - visible.height();
       int deltaX = qMax(pos.x() - visible.left(), visible.right() - pos.x()) - visible.width();
       int delta = qMax(deltaX, deltaY);
+
       if (delta >= 0) {
          if (delta < 7) {
             delta = 7;
@@ -1587,12 +1281,12 @@ void QPlainTextEdit::timerEvent(QTimerEvent *e)
 
          if (deltaY > 0)
             d->vbar->triggerAction(pos.y() < visible.center().y() ?
-                                   QAbstractSlider::SliderSingleStepSub
-                                   : QAbstractSlider::SliderSingleStepAdd);
+               QAbstractSlider::SliderSingleStepSub
+               : QAbstractSlider::SliderSingleStepAdd);
          if (deltaX > 0)
             d->hbar->triggerAction(pos.x() < visible.center().x() ?
-                                   QAbstractSlider::SliderSingleStepSub
-                                   : QAbstractSlider::SliderSingleStepAdd);
+               QAbstractSlider::SliderSingleStepSub
+               : QAbstractSlider::SliderSingleStepAdd);
       }
    }
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1603,16 +1297,6 @@ void QPlainTextEdit::timerEvent(QTimerEvent *e)
 #endif
 }
 
-/*!
-    Changes the text of the text edit to the string \a text.
-    Any previous text is removed.
-
-    \a text is interpreted as plain text.
-
-    Note that the undo/redo history is cleared by this function.
-
-    \sa toText()
-*/
 
 void QPlainTextEdit::setPlainText(const QString &text)
 {
@@ -1620,16 +1304,7 @@ void QPlainTextEdit::setPlainText(const QString &text)
    d->control->setPlainText(text);
 }
 
-/*!
-    \fn QString QPlainTextEdit::toPlainText() const
 
-    Returns the text of the text edit as plain text.
-
-    \sa QPlainTextEdit::setPlainText()
- */
-
-/*! \reimp
-*/
 void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1656,7 +1331,7 @@ void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
       case Qt::Key_Back:
       case Qt::Key_No:
          if (!QApplication::keypadNavigationEnabled()
-               || (QApplication::keypadNavigationEnabled() && !hasEditFocus())) {
+            || (QApplication::keypadNavigationEnabled() && !hasEditFocus())) {
             e->ignore();
             return;
          }
@@ -1714,6 +1389,7 @@ void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
                d->vbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
             }
             break;
+
          default:
             d->sendControlEvent(e);
             if (!e->isAccepted() && e->modifiers() == Qt::NoModifier) {
@@ -1734,6 +1410,7 @@ void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
 #endif // QT_NO_SHORTCUT
 
    d->sendControlEvent(e);
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (!e->isAccepted()) {
       switch (e->key()) {
@@ -1749,7 +1426,7 @@ void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
          case Qt::Key_Left:
          case Qt::Key_Right:
             if (QApplication::keypadNavigationEnabled()
-                  && QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional) {
+               && QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional) {
                // Same as for Key_Up and Key_Down.
                e->ignore();
                return;
@@ -1786,7 +1463,7 @@ void QPlainTextEdit::keyReleaseEvent(QKeyEvent *e)
    Q_D(QPlainTextEdit);
    if (QApplication::keypadNavigationEnabled()) {
       if (!e->isAutoRepeat() && e->key() == Qt::Key_Back
-            && d->deleteAllTimer.isActive()) {
+         && d->deleteAllTimer.isActive()) {
          d->deleteAllTimer.stop();
          QTextCursor cursor = d->control->textCursor();
          QTextBlockFormat blockFmt = cursor.blockFormat();
@@ -1803,22 +1480,14 @@ void QPlainTextEdit::keyReleaseEvent(QKeyEvent *e)
          setTextCursor(cursor);
       }
    }
+
 #else
-   Q_UNUSED(e);
+   QWidget::keyReleaseEvent(e);
 #endif
 }
 
-/*!
-    Loads the resource specified by the given \a type and \a name.
-
-    This function is an extension of QTextDocument::loadResource().
-
-    \sa QTextDocument::loadResource()
-*/
 QVariant QPlainTextEdit::loadResource(int type, const QUrl &name)
 {
-   Q_UNUSED(type);
-   Q_UNUSED(name);
    return QVariant();
 }
 
@@ -1843,8 +1512,8 @@ void QPlainTextEditPrivate::relayoutDocument()
    int width = viewport->width();
 
    if (documentLayout->priv()->mainViewPrivate == 0
-         || documentLayout->priv()->mainViewPrivate == this
-         || width > documentLayout->textWidth()) {
+      || documentLayout->priv()->mainViewPrivate == this
+      || width > documentLayout->textWidth()) {
       documentLayout->priv()->mainViewPrivate = this;
       documentLayout->setTextWidth(width);
    }
@@ -1867,10 +1536,6 @@ static void fillBackground(QPainter *p, const QRectF &rect, QBrush brush, QRectF
    p->restore();
 }
 
-
-
-/*! \reimp
-*/
 void QPlainTextEdit::paintEvent(QPaintEvent *e)
 {
    QPainter painter(viewport());
@@ -1890,11 +1555,9 @@ void QPlainTextEdit::paintEvent(QPaintEvent *e)
    painter.setBrushOrigin(offset);
 
    // keep right margin clean from full-width selection
-   int maxX = offset.x() + qMax((qreal)viewportRect.width(), maximumWidth)
-              - document()->documentMargin();
+   int maxX = offset.x() + qMax((qreal)viewportRect.width(), maximumWidth) - document()->documentMargin();
    er.setRight(qMin(er.right(), maxX));
    painter.setClipRect(er);
-
 
    QAbstractTextDocumentLayout::PaintContext context = getPaintContext();
 
@@ -1920,40 +1583,42 @@ void QPlainTextEdit::paintEvent(QPaintEvent *e)
             fillBackground(&painter, contentsRect, bg);
          }
 
-
          QVector<QTextLayout::FormatRange> selections;
          int blpos = block.position();
          int bllen = block.length();
+
          for (int i = 0; i < context.selections.size(); ++i) {
             const QAbstractTextDocumentLayout::Selection &range = context.selections.at(i);
             const int selStart = range.cursor.selectionStart() - blpos;
             const int selEnd = range.cursor.selectionEnd() - blpos;
             if (selStart < bllen && selEnd > 0
-                  && selEnd > selStart) {
+               && selEnd > selStart) {
                QTextLayout::FormatRange o;
                o.start = selStart;
                o.length = selEnd - selStart;
                o.format = range.format;
                selections.append(o);
             } else if (!range.cursor.hasSelection() && range.format.hasProperty(QTextFormat::FullWidthSelection)
-                       && block.contains(range.cursor.position())) {
+               && block.contains(range.cursor.position())) {
                // for full width selections we don't require an actual selection, just
                // a position to specify the line. that's more convenience in usage.
                QTextLayout::FormatRange o;
                QTextLine l = layout->lineForTextPosition(range.cursor.position() - blpos);
                o.start = l.textStart();
                o.length = l.textLength();
+
                if (o.start + o.length == bllen - 1) {
                   ++o.length;   // include newline
                }
+
                o.format = range.format;
                selections.append(o);
             }
          }
 
          bool drawCursor = ((editable || (textInteractionFlags() & Qt::TextSelectableByKeyboard))
-                            && context.cursorPosition >= blpos
-                            && context.cursorPosition < blpos + bllen);
+               && context.cursorPosition >= blpos
+               && context.cursorPosition < blpos + bllen);
 
          bool drawCursorAsBlock = drawCursor && overwriteMode() ;
 
@@ -1971,10 +1636,20 @@ void QPlainTextEdit::paintEvent(QPaintEvent *e)
          }
 
 
-         layout->draw(&painter, offset, selections, er);
+         if (!placeholderText().isEmpty() && document()->isEmpty()) {
+            Q_D(QPlainTextEdit);
+            QColor col = d->control->palette().text().color();
+            col.setAlpha(128);
+            painter.setPen(col);
+            const int margin = int(document()->documentMargin());
+            painter.drawText(r.adjusted(margin, 0, 0, 0), Qt::AlignTop | Qt::TextWordWrap, placeholderText());
+         } else {
+            layout->draw(&painter, offset, selections, er);
+         }
+
          if ((drawCursor && !drawCursorAsBlock)
-               || (editable && context.cursorPosition < -1
-                   && !layout->preeditAreaText().isEmpty())) {
+            || (editable && context.cursorPosition < -1
+               && !layout->preeditAreaText().isEmpty())) {
             int cpos = context.cursorPosition;
             if (cpos < -1) {
                cpos = layout->preeditAreaPosition() - (cpos + 2);
@@ -1993,7 +1668,7 @@ void QPlainTextEdit::paintEvent(QPaintEvent *e)
    }
 
    if (backgroundVisible() && !block.isValid() && offset.y() <= er.bottom()
-         && (centerOnScroll() || verticalScrollBar()->maximum() == verticalScrollBar()->minimum())) {
+      && (centerOnScroll() || verticalScrollBar()->maximum() == verticalScrollBar()->minimum())) {
       painter.fillRect(QRect(QPoint((int)er.left(), (int)offset.y()), er.bottomRight()), palette().background());
    }
 }
@@ -2023,6 +1698,7 @@ void QPlainTextEditPrivate::updateDefaultTextOption()
 void QPlainTextEdit::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (QApplication::keypadNavigationEnabled() && !hasEditFocus()) {
       setEditFocus(true);
@@ -2042,11 +1718,15 @@ void QPlainTextEdit::mouseMoveEvent(QMouseEvent *e)
    if (!(e->buttons() & Qt::LeftButton)) {
       return;
    }
-   QRect visible = d->viewport->rect();
-   if (visible.contains(pos)) {
-      d->autoScrollTimer.stop();
-   } else if (!d->autoScrollTimer.isActive()) {
-      d->autoScrollTimer.start(100, this);
+
+   if (e->source() == Qt::MouseEventNotSynthesized) {
+      const QRect visible = d->viewport->rect();
+
+      if (visible.contains(pos)) {
+         d->autoScrollTimer.stop();
+      } else if (!d->autoScrollTimer.isActive()) {
+         d->autoScrollTimer.start(100, this);
+      }
    }
 }
 
@@ -2056,7 +1736,8 @@ void QPlainTextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
    d->sendControlEvent(e);
-   if (d->autoScrollTimer.isActive()) {
+
+   if (e->source() == Qt::MouseEventNotSynthesized && d->autoScrollTimer.isActive()) {
       d->autoScrollTimer.stop();
       d->ensureCursorVisible();
    }
@@ -2080,28 +1761,13 @@ void QPlainTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
 bool QPlainTextEdit::focusNextPrevChild(bool next)
 {
    Q_D(const QPlainTextEdit);
-   if (!d->tabChangesFocus && d->control->textInteractionFlags() & Qt::TextEditable) {
+   if (! d->tabChangesFocus && d->control->textInteractionFlags() & Qt::TextEditable) {
       return false;
    }
    return QAbstractScrollArea::focusNextPrevChild(next);
 }
 
 #ifndef QT_NO_CONTEXTMENU
-/*!
-  \fn void QPlainTextEdit::contextMenuEvent(QContextMenuEvent *event)
-
-  Shows the standard context menu created with createStandardContextMenu().
-
-  If you do not want the text edit to have a context menu, you can set
-  its \l contextMenuPolicy to Qt::NoContextMenu. If you want to
-  customize the context menu, reimplement this function. If you want
-  to extend the standard context menu, reimplement this function, call
-  createStandardContextMenu() and extend the menu returned.
-
-  Information about the event is passed in the \a event object.
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qplaintextedit.cpp 0
-*/
 void QPlainTextEdit::contextMenuEvent(QContextMenuEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -2110,8 +1776,7 @@ void QPlainTextEdit::contextMenuEvent(QContextMenuEvent *e)
 #endif // QT_NO_CONTEXTMENU
 
 #ifndef QT_NO_DRAGANDDROP
-/*! \reimp
-*/
+
 void QPlainTextEdit::dragEnterEvent(QDragEnterEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -2119,8 +1784,6 @@ void QPlainTextEdit::dragEnterEvent(QDragEnterEvent *e)
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::dragLeaveEvent(QDragLeaveEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -2160,8 +1823,8 @@ void QPlainTextEdit::inputMethodEvent(QInputMethodEvent *e)
    Q_D(QPlainTextEdit);
 #ifdef QT_KEYPAD_NAVIGATION
    if (d->control->textInteractionFlags() & Qt::TextEditable
-         && QApplication::keypadNavigationEnabled()
-         && !hasEditFocus()) {
+      && QApplication::keypadNavigationEnabled()
+      && !hasEditFocus()) {
       setEditFocus(true);
       selectAll();    // so text is replaced rather than appended to
    }
@@ -2182,23 +1845,36 @@ void QPlainTextEdit::scrollContentsBy(int dx, int /*dy*/)
 */
 QVariant QPlainTextEdit::inputMethodQuery(Qt::InputMethodQuery property) const
 {
+   return inputMethodQuery(property, QVariant());
+}
+
+QVariant QPlainTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
+{
    Q_D(const QPlainTextEdit);
-   QVariant v = d->control->inputMethodQuery(property);
-   const QPoint offset(-d->horizontalOffset(), -0);
-   if (v.type() == QVariant::RectF) {
-      v = v.toRectF().toRect().translated(offset);
-   } else if (v.type() == QVariant::PointF) {
-      v = v.toPointF().toPoint() + offset;
-   } else if (v.type() == QVariant::Rect) {
-      v = v.toRect().translated(offset);
-   } else if (v.type() == QVariant::Point) {
-      v = v.toPoint() + offset;
+
+   if (query == Qt::ImHints) {
+      return QWidget::inputMethodQuery(query);
    }
+
+   const QVariant v = d->control->inputMethodQuery(query, argument);
+   const QPointF offset = contentOffset();
+
+   switch (v.type()) {
+      case QVariant::RectF:
+         return v.toRectF().translated(offset);
+      case QVariant::PointF:
+         return v.toPointF() + offset;
+      case QVariant::Rect:
+         return v.toRect().translated(offset.toPoint());
+      case QVariant::Point:
+         return v.toPoint() + offset.toPoint();
+      default:
+         break;
+   }
+
    return v;
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::focusInEvent(QFocusEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -2209,8 +1885,6 @@ void QPlainTextEdit::focusInEvent(QFocusEvent *e)
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::focusOutEvent(QFocusEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -2235,18 +1909,23 @@ void QPlainTextEdit::changeEvent(QEvent *e)
 {
    Q_D(QPlainTextEdit);
    QAbstractScrollArea::changeEvent(e);
+
    if (e->type() == QEvent::ApplicationFontChange
-         || e->type() == QEvent::FontChange) {
+      || e->type() == QEvent::FontChange) {
       d->control->document()->setDefaultFont(font());
+
    }  else if (e->type() == QEvent::ActivationChange) {
       if (!isActiveWindow()) {
          d->autoScrollTimer.stop();
       }
+
    } else if (e->type() == QEvent::EnabledChange) {
       e->setAccepted(isEnabled());
       d->sendControlEvent(e);
+
    } else if (e->type() == QEvent::PaletteChange) {
       d->control->setPalette(palette());
+
    } else if (e->type() == QEvent::LayoutDirectionChange) {
       d->sendControlEvent(e);
    }
@@ -2257,22 +1936,53 @@ void QPlainTextEdit::changeEvent(QEvent *e)
 #ifndef QT_NO_WHEELEVENT
 void QPlainTextEdit::wheelEvent(QWheelEvent *e)
 {
+   Q_D(QPlainTextEdit);
+
+   if (!(d->control->textInteractionFlags() & Qt::TextEditable)) {
+      if (e->modifiers() & Qt::ControlModifier) {
+         float delta = e->angleDelta().y() / 120.f;
+         zoomInF(delta);
+         return;
+      }
+   }
    QAbstractScrollArea::wheelEvent(e);
    updateMicroFocus();
 }
 #endif
 
+void QPlainTextEdit::zoomIn(int range)
+{
+   zoomInF(range);
+}
+void QPlainTextEdit::zoomOut(int range)
+{
+   zoomInF(-range);
+}
+void QPlainTextEdit::zoomInF(float range)
+{
+   if (range == 0.f) {
+      return;
+   }
+   QFont f = font();
+   const float newSize = f.pointSizeF() + range;
+   if (newSize <= 0) {
+      return;
+   }
+   f.setPointSizeF(newSize);
+   setFont(f);
+}
 #ifndef QT_NO_CONTEXTMENU
-/*!  This function creates the standard context menu which is shown
-  when the user clicks on the line edit with the right mouse
-  button. It is called from the default contextMenuEvent() handler.
-  The popup menu's ownership is transferred to the caller.
-*/
+
 
 QMenu *QPlainTextEdit::createStandardContextMenu()
 {
    Q_D(QPlainTextEdit);
    return d->control->createStandardContextMenu(QPointF(), this);
+}
+QMenu *QPlainTextEdit::createStandardContextMenu(const QPoint &position)
+{
+   Q_D(QPlainTextEdit);
+   return d->control->createStandardContextMenu(position, this);
 }
 #endif // QT_NO_CONTEXTMENU
 
@@ -2314,19 +2024,6 @@ QRect QPlainTextEdit::cursorRect() const
 }
 
 
-/*!
-   \property QPlainTextEdit::overwriteMode
-   \brief whether text entered by the user will overwrite existing text
-
-   As with many text editors, the plain text editor widget can be configured
-   to insert or overwrite existing text with new text entered by the user.
-
-   If this property is true, existing text is overwritten, character-for-character
-   by new text; otherwise, text is inserted at the cursor position, displacing
-   existing text.
-
-   By default, this property is false (new text does not overwrite existing text).
-*/
 
 bool QPlainTextEdit::overwriteMode() const
 {
@@ -2381,16 +2078,6 @@ void QPlainTextEdit::setCursorWidth(int width)
    d->control->setCursorWidth(width);
 }
 
-
-
-/*!
-    This function allows temporarily marking certain regions in the document
-    with a given color, specified as \a selections. This can be useful for
-    example in a programming editor to mark a whole line of text with a given
-    background color to indicate the existence of a breakpoint.
-
-    \sa QTextEdit::ExtraSelection, extraSelections()
-*/
 void QPlainTextEdit::setExtraSelections(const QList<QTextEdit::ExtraSelection> &selections)
 {
    Q_D(QPlainTextEdit);
@@ -2408,28 +2095,13 @@ QList<QTextEdit::ExtraSelection> QPlainTextEdit::extraSelections() const
    return d->control->extraSelections();
 }
 
-/*!
-    This function returns a new MIME data object to represent the contents
-    of the text edit's current selection. It is called when the selection needs
-    to be encapsulated into a new QMimeData object; for example, when a drag
-    and drop operation is started, or when data is copied to the clipboard.
 
-    If you reimplement this function, note that the ownership of the returned
-    QMimeData object is passed to the caller. The selection can be retrieved
-    by using the textCursor() function.
-*/
 QMimeData *QPlainTextEdit::createMimeDataFromSelection() const
 {
    Q_D(const QPlainTextEdit);
    return d->control->QTextControl::createMimeDataFromSelection();
 }
 
-/*!
-    This function returns true if the contents of the MIME data object, specified
-    by \a source, can be decoded and inserted into the document. It is called
-    for example when during a drag operation the mouse enters this widget and it
-    is necessary to determine whether it is possible to accept the drag.
- */
 bool QPlainTextEdit::canInsertFromMimeData(const QMimeData *source) const
 {
    Q_D(const QPlainTextEdit);
@@ -2449,16 +2121,6 @@ void QPlainTextEdit::insertFromMimeData(const QMimeData *source)
    d->control->QTextControl::insertFromMimeData(source);
 }
 
-/*!
-    \property QPlainTextEdit::readOnly
-    \brief whether the text edit is read-only
-
-    In a read-only text edit the user can only navigate through the
-    text and select text; modifying the text is not possible.
-
-    This property's default is false.
-*/
-
 bool QPlainTextEdit::isReadOnly() const
 {
    Q_D(const QPlainTextEdit);
@@ -2476,19 +2138,9 @@ void QPlainTextEdit::setReadOnly(bool ro)
    }
    setAttribute(Qt::WA_InputMethodEnabled, shouldEnableInputMethod(this));
    d->control->setTextInteractionFlags(flags);
+   QEvent event(QEvent::ReadOnlyChange);
+   QApplication::sendEvent(this, &event);
 }
-
-/*!
-    \property QPlainTextEdit::textInteractionFlags
-
-    Specifies how the label should interact with user input if it displays text.
-
-    If the flags contain either Qt::LinksAccessibleByKeyboard or Qt::TextSelectableByKeyboard
-    then the focus policy is also automatically set to Qt::ClickFocus.
-
-    The default value depends on whether the QPlainTextEdit is read-only
-    or editable.
-*/
 
 void QPlainTextEdit::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
@@ -2502,51 +2154,25 @@ Qt::TextInteractionFlags QPlainTextEdit::textInteractionFlags() const
    return d->control->textInteractionFlags();
 }
 
-/*!
-    Merges the properties specified in \a modifier into the current character
-    format by calling QTextCursor::mergeCharFormat on the editor's cursor.
-    If the editor has a selection then the properties of \a modifier are
-    directly applied to the selection.
-
-    \sa QTextCursor::mergeCharFormat()
- */
 void QPlainTextEdit::mergeCurrentCharFormat(const QTextCharFormat &modifier)
 {
    Q_D(QPlainTextEdit);
    d->control->mergeCurrentCharFormat(modifier);
 }
 
-/*!
-    Sets the char format that is be used when inserting new text to \a
-    format by calling QTextCursor::setCharFormat() on the editor's
-    cursor.  If the editor has a selection then the char format is
-    directly applied to the selection.
- */
 void QPlainTextEdit::setCurrentCharFormat(const QTextCharFormat &format)
 {
    Q_D(QPlainTextEdit);
    d->control->setCurrentCharFormat(format);
 }
 
-/*!
-    Returns the char format that is used when inserting new text.
- */
+
 QTextCharFormat QPlainTextEdit::currentCharFormat() const
 {
    Q_D(const QPlainTextEdit);
    return d->control->currentCharFormat();
 }
 
-
-
-/*!
-    Convenience slot that inserts \a text at the current
-    cursor position.
-
-    It is equivalent to
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qplaintextedit.cpp 1
- */
 void QPlainTextEdit::insertPlainText(const QString &text)
 {
    Q_D(QPlainTextEdit);
@@ -2554,15 +2180,6 @@ void QPlainTextEdit::insertPlainText(const QString &text)
 }
 
 
-/*!
-    Moves the cursor by performing the given \a operation.
-
-    If \a mode is QTextCursor::KeepAnchor, the cursor selects the text it moves over.
-    This is the same effect that the user achieves when they hold down the Shift key
-    and move the cursor with the cursor keys.
-
-    \sa QTextCursor::movePosition()
-*/
 void QPlainTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
 {
    Q_D(QPlainTextEdit);
@@ -2579,28 +2196,14 @@ bool QPlainTextEdit::canPaste() const
 }
 
 #ifndef QT_NO_PRINTER
-/*!
-    Convenience function to print the text edit's document to the given \a printer. This
-    is equivalent to calling the print method on the document directly except that this
-    function also supports QPrinter::Selection as print range.
 
-    \sa QTextDocument::print()
-*/
-void QPlainTextEdit::print(QPrinter *printer) const
+void QPlainTextEdit::print(QPagedPaintDevice *printer) const
 {
    Q_D(const QPlainTextEdit);
    d->control->print(printer);
 }
 #endif // QT _NO_PRINTER
 
-/*! \property QPlainTextEdit::tabChangesFocus
-  \brief whether \gui Tab changes focus or is accepted as input
-
-  In some occasions text edits should not allow the user to input
-  tabulators or change indentation using the \gui Tab key, as this breaks
-  the focus chain. The default is false.
-
-*/
 
 bool QPlainTextEdit::tabChangesFocus() const
 {
@@ -2614,22 +2217,6 @@ void QPlainTextEdit::setTabChangesFocus(bool b)
    d->tabChangesFocus = b;
 }
 
-/*!
-    \property QPlainTextEdit::documentTitle
-    \brief the title of the document parsed from the text.
-
-    By default, this property contains an empty string.
-*/
-
-/*!
-    \property QPlainTextEdit::lineWrapMode
-    \brief the line wrap mode
-
-    The default mode is WidgetWidth which causes words to be
-    wrapped at the right edge of the text edit. Wrapping occurs at
-    whitespace, keeping whole words intact. If you want wrapping to
-    occur within words use setWordWrapMode().
-*/
 
 QPlainTextEdit::LineWrapMode QPlainTextEdit::lineWrapMode() const
 {
@@ -2640,24 +2227,17 @@ QPlainTextEdit::LineWrapMode QPlainTextEdit::lineWrapMode() const
 void QPlainTextEdit::setLineWrapMode(LineWrapMode wrap)
 {
    Q_D(QPlainTextEdit);
+
    if (d->lineWrap == wrap) {
       return;
    }
+
    d->lineWrap = wrap;
    d->updateDefaultTextOption();
    d->relayoutDocument();
    d->_q_adjustScrollbars();
    ensureCursorVisible();
 }
-
-/*!
-    \property QPlainTextEdit::wordWrapMode
-    \brief the mode QPlainTextEdit will use when wrapping text by words
-
-    By default, this property is set to QTextOption::WrapAtWordBoundaryOrAnywhere.
-
-    \sa QTextOption::WrapMode
-*/
 
 QTextOption::WrapMode QPlainTextEdit::wordWrapMode() const
 {
@@ -2671,23 +2251,11 @@ void QPlainTextEdit::setWordWrapMode(QTextOption::WrapMode mode)
    if (mode == d->wordWrap) {
       return;
    }
+
    d->wordWrap = mode;
    d->updateDefaultTextOption();
 }
 
-/*!
-    \property QPlainTextEdit::backgroundVisible
-    \brief whether the palette background is visible outside the document area
-
-    If set to true, the plain text edit paints the palette background
-    on the viewport area not covered by the text document. Otherwise,
-    if set to false, it won't. The feature makes it possible for
-    the user to visually distinguish between the area of the document,
-    painted with the base color of the palette, and the empty
-    area not covered by any document.
-
-    The default is false.
-*/
 
 bool QPlainTextEdit::backgroundVisible() const
 {
@@ -2701,26 +2269,11 @@ void QPlainTextEdit::setBackgroundVisible(bool visible)
    if (visible == d->backgroundVisible) {
       return;
    }
+
    d->backgroundVisible = visible;
    d->updateViewport();
 }
 
-/*!
-    \property QPlainTextEdit::centerOnScroll
-    \brief whether the cursor should be centered on screen
-
-    If set to true, the plain text edit scrolls the document
-    vertically to make the cursor visible at the center of the
-    viewport. This also allows the text edit to scroll below the end
-    of the document. Otherwise, if set to false, the plain text edit
-    scrolls the smallest amount possible to ensure the cursor is
-    visible.  The same algorithm is applied to any new line appended
-    through appendPlainText().
-
-    The default is false.
-
-    \sa centerCursor(), ensureCursorVisible()
-*/
 
 bool QPlainTextEdit::centerOnScroll() const
 {
@@ -2737,87 +2290,17 @@ void QPlainTextEdit::setCenterOnScroll(bool enabled)
    d->centerOnScroll = enabled;
 }
 
-
-
-/*!
-    Finds the next occurrence of the string, \a exp, using the given
-    \a options. Returns true if \a exp was found and changes the
-    cursor to select the match; otherwise returns false.
-*/
 bool QPlainTextEdit::find(const QString &exp, QTextDocument::FindFlags options)
 {
    Q_D(QPlainTextEdit);
    return d->control->find(exp, options);
 }
 
-/*!
-    \fn void QPlainTextEdit::copyAvailable(bool yes)
-
-    This signal is emitted when text is selected or de-selected in the
-    text edit.
-
-    When text is selected this signal will be emitted with \a yes set
-    to true. If no text has been selected or if the selected text is
-    de-selected this signal is emitted with \a yes set to false.
-
-    If \a yes is true then copy() can be used to copy the selection to
-    the clipboard. If \a yes is false then copy() does nothing.
-
-    \sa selectionChanged()
-*/
-
-
-/*!
-    \fn void QPlainTextEdit::selectionChanged()
-
-    This signal is emitted whenever the selection changes.
-
-    \sa copyAvailable()
-*/
-
-/*!
-    \fn void QPlainTextEdit::cursorPositionChanged()
-
-    This signal is emitted whenever the position of the
-    cursor changed.
-*/
-
-
-
-/*!
-    \fn void QPlainTextEdit::updateRequest(const QRect &rect, int dy)
-
-    This signal is emitted when the text document needs an update of
-    the specified \a rect. If the text is scrolled, \a rect will cover
-    the entire viewport area. If the text is scrolled vertically, \a
-    dy carries the amount of pixels the viewport was scrolled.
-
-    The purpose of the signal is to support extra widgets in plain
-    text edit subclasses that e.g. show line numbers, breakpoints, or
-    other extra information.
-*/
-
-/*!  \fn void QPlainTextEdit::blockCountChanged(int newBlockCount);
-
-    This signal is emitted whenever the block count changes. The new
-    block count is passed in \a newBlockCount.
-*/
-
-/*!  \fn void QPlainTextEdit::modificationChanged(bool changed);
-
-    This signal is emitted whenever the content of the document
-    changes in a way that affects the modification state. If \a
-    changed is true, the document has been modified; otherwise it is
-    false.
-
-    For example, calling setModified(false) on a document and then
-    inserting text causes the signal to get emitted. If you undo that
-    operation, causing the document to return to its original
-    unmodified state, the signal will get emitted again.
-*/
-
-
-
+bool QPlainTextEdit::find(const QRegularExpression &exp, QTextDocument::FindFlags options)
+{
+   Q_D(QPlainTextEdit);
+   return d->control->find(exp, options);
+}
 
 void QPlainTextEditPrivate::append(const QString &text, Qt::TextFormat format)
 {
@@ -2833,8 +2316,8 @@ void QPlainTextEditPrivate::append(const QString &text, Qt::TextFormat format)
    }
 
    const bool atBottom =  q->isVisible()
-                          && (control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset()
-                              <= viewport->rect().bottom());
+      && (control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset()
+         <= viewport->rect().bottom());
 
    if (!q->isVisible()) {
       showCursorOnInitialShow = true;
@@ -2876,20 +2359,13 @@ void QPlainTextEditPrivate::append(const QString &text, Qt::TextFormat format)
 
    if (atBottom) {
       const bool needScroll =  !centerOnScroll
-                               || control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset()
-                               > viewport->rect().bottom();
+         || control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset()
+         > viewport->rect().bottom();
       if (needScroll) {
          vbar->setValue(vbar->maximum());
       }
    }
 }
-
-
-/*!
-    Appends a new paragraph with \a text to the end of the text edit.
-
-    \sa appendHtml()
-*/
 
 void QPlainTextEdit::appendPlainText(const QString &text)
 {
@@ -2925,12 +2401,6 @@ void QPlainTextEditPrivate::ensureCursorVisible(bool center)
    }
 }
 
-/*!
-    Ensures that the cursor is visible by scrolling the text edit if
-    necessary.
-
-    \sa centerCursor(), centerOnScroll
-*/
 void QPlainTextEdit::ensureCursorVisible()
 {
    Q_D(QPlainTextEdit);
@@ -2938,10 +2408,6 @@ void QPlainTextEdit::ensureCursorVisible()
 }
 
 
-/*!  Scrolls the document in order to center the cursor vertically.
-
-\sa ensureCursorVisible(), centerOnScroll
- */
 void QPlainTextEdit::centerCursor()
 {
    Q_D(QPlainTextEdit);
@@ -2959,19 +2425,6 @@ QTextBlock QPlainTextEdit::firstVisibleBlock() const
    return d->control->firstVisibleBlock();
 }
 
-/*!  Returns the content's origin in viewport coordinates.
-
-     The origin of the content of a plain text edit is always the top
-     left corner of the first visible text block. The content offset
-     is different from (0,0) when the text has been scrolled
-     horizontally, or when the first visible block has been scrolled
-     partially off the screen, i.e. the visible text does not start
-     with the first line of the first visible block, or when the first
-     visible block is the very first block and the editor displays a
-     margin.
-
-     \sa firstVisibleBlock(), horizontalScrollBar(), verticalScrollBar()
- */
 QPointF QPlainTextEdit::contentOffset() const
 {
    Q_D(const QPlainTextEdit);
@@ -2979,23 +2432,13 @@ QPointF QPlainTextEdit::contentOffset() const
 }
 
 
-/*!  Returns the bounding rectangle of the text \a block in content
-  coordinates. Translate the rectangle with the contentOffset() to get
-  visual coordinates on the viewport.
-
-  \sa firstVisibleBlock(), blockBoundingRect()
- */
 QRectF QPlainTextEdit::blockBoundingGeometry(const QTextBlock &block) const
 {
    Q_D(const QPlainTextEdit);
    return d->control->blockBoundingRect(block);
 }
 
-/*!
-  Returns the bounding rectangle of the text \a block in the block's own coordinates.
 
-  \sa blockBoundingGeometry()
- */
 QRectF QPlainTextEdit::blockBoundingRect(const QTextBlock &block) const
 {
    QPlainTextDocumentLayout *documentLayout = qobject_cast<QPlainTextDocumentLayout *>(document()->documentLayout());
@@ -3046,8 +2489,5 @@ void QPlainTextEdit::_q_cursorPositionChanged()
    Q_D(QPlainTextEdit);
    d->_q_cursorPositionChanged();
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTEDIT

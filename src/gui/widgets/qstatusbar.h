@@ -23,9 +23,7 @@
 #ifndef QSTATUSBAR_H
 #define QSTATUSBAR_H
 
-#include <QtGui/qwidget.h>
-
-QT_BEGIN_NAMESPACE
+#include <qwidget.h>
 
 #ifndef QT_NO_STATUSBAR
 
@@ -55,6 +53,7 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
 
    GUI_CS_SLOT_1(Public, void showMessage(const QString &text, int timeout = 0))
    GUI_CS_SLOT_2(showMessage)
+
    GUI_CS_SLOT_1(Public, void clearMessage())
    GUI_CS_SLOT_2(clearMessage)
 
@@ -77,7 +76,5 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
 };
 
 #endif // QT_NO_STATUSBAR
-
-QT_END_NAMESPACE
 
 #endif // QSTATUSBAR_H

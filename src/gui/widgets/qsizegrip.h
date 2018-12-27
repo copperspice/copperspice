@@ -23,9 +23,8 @@
 #ifndef QSIZEGRIP_H
 #define QSIZEGRIP_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SIZEGRIP
 class QSizeGripPrivate;
@@ -50,11 +49,10 @@ class Q_GUI_EXPORT QSizeGrip : public QWidget
    void showEvent(QShowEvent *showEvent) override;
    void hideEvent(QHideEvent *hideEvent) override;
    bool eventFilter(QObject *, QEvent *) override;
+
    bool event(QEvent *) override;
 
-#ifdef Q_OS_WIN
-   bool winEvent(MSG *m, long *result) override;
-#endif
+
 
  private:
    Q_DECLARE_PRIVATE(QSizeGrip)
@@ -65,6 +63,6 @@ class Q_GUI_EXPORT QSizeGrip : public QWidget
 };
 #endif // QT_NO_SIZEGRIP
 
-QT_END_NAMESPACE
 
-#endif // QSIZEGRIP_H
+
+#endif

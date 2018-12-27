@@ -27,38 +27,47 @@
 
 #ifndef QT_NO_LINEEDIT
 
-#include <qwidget_p.h>
-#include <qtextengine_p.h>
+
+
 
 #include <qlineedit.h>
 #include <qtextlayout.h>
 #include <qstyleoption.h>
 #include <qpointer.h>
 #include <qclipboard.h>
+#include <qinputmethod.h>
 #include <qpoint.h>
 #include <qcompleter.h>
-#include <qaccessible.h>
+#include <qthread.h>
 #include <qplatformdefs.h>
 
-QT_BEGIN_NAMESPACE
+#include <qinputcontrol_p.h>
+#include <qtextengine_p.h>
+#include <qwidget_p.h>
 
-class Q_GUI_EXPORT QLineControl : public QObject
+
+
+#ifdef DrawText
+#  undef DrawText
+#endif
+
+class Q_GUI_EXPORT QLineControl : public QInputControl
 {
    GUI_CS_OBJECT(QLineControl)
 
  public:
    QLineControl(const QString &txt = QString())
-      : m_cursor(0), m_preeditCursor(0), m_cursorWidth(0), m_layoutDirection(Qt::LayoutDirectionAuto),
+      : QInputControl(LineEdit),
+        m_cursor(0), m_preeditCursor(0), m_cursorWidth(0), m_layoutDirection(Qt::LayoutDirectionAuto),
         m_hideCursor(false), m_separator(0), m_readOnly(0),
         m_dragEnabled(0), m_echoMode(0), m_textDirty(0), m_selDirty(0),
         m_validInput(1), m_blinkStatus(0), m_blinkPeriod(0), m_blinkTimer(0), m_deleteAllTimer(0),
         m_ascent(0), m_maxLength(32767), m_lastCursorPos(-1),
         m_tripleClickTimer(0), m_maskData(0), m_modifiedState(0), m_undoState(0),
-        m_selstart(0), m_selend(0), m_passwordEchoEditing(false)
-#ifdef QT_GUI_PASSWORD_ECHO_DELAY
-        , m_passwordEchoTimer(0)
-#endif
-   {
+        m_selstart(0), m_selend(0), m_passwordEchoEditing(false),
+        m_passwordEchoTimer(0), m_passwordMaskDelay(-1),
+
+        m_keyboardScheme(0), m_accessibleObject(0) {
       init(txt);
    }
 
@@ -66,6 +75,16 @@ class Q_GUI_EXPORT QLineControl : public QObject
       delete [] m_maskData;
    }
 
+   void setAccessibleObject(QObject *object) {
+      Q_ASSERT(object);
+      m_accessibleObject = object;
+   }
+   QObject *accessibleObject() {
+      if (m_accessibleObject) {
+         return m_accessibleObject;
+      }
+      return parent();
+   }
    int nextMaskBlank(int pos) {
       int c = findInMask(pos, true, false);
       m_separator |= (c != pos);
@@ -80,14 +99,17 @@ class Q_GUI_EXPORT QLineControl : public QObject
 
    bool isUndoAvailable() const;
    bool isRedoAvailable() const;
+
    void clearUndo() {
       m_history.clear();
-      m_modifiedState = m_undoState = 0;
+      m_modifiedState = 0;
+      m_undoState     = 0;
    }
 
    bool isModified() const {
       return m_modifiedState != m_undoState;
    }
+
    void setModified(bool modified) {
       m_modifiedState = modified ? -1 : m_undoState;
    }
@@ -95,6 +117,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    bool allSelected() const {
       return !m_text.isEmpty() && m_selstart == 0 && m_selend == (int)m_text.length();
    }
+
    bool hasSelectedText() const {
       return !m_text.isEmpty() && m_selend > m_selstart;
    }
@@ -102,21 +125,25 @@ class Q_GUI_EXPORT QLineControl : public QObject
    int width() const {
       return qRound(m_textLayout.lineAt(0).width()) + 1;
    }
+
    int height() const {
       return qRound(m_textLayout.lineAt(0).height()) + 1;
    }
+
    int ascent() const {
       return m_ascent;
    }
+
    qreal naturalTextWidth() const {
       return m_textLayout.lineAt(0).naturalTextWidth();
    }
 
    void setSelection(int start, int length);
 
-   inline QString selectedText() const {
+   QString selectedText() const {
       return hasSelectedText() ? m_text.mid(m_selstart, m_selend - m_selstart) : QString();
    }
+
    QString textBeforeSelection() const {
       return hasSelectedText() ? m_text.left(m_selstart) : QString();
    }
@@ -127,9 +154,11 @@ class Q_GUI_EXPORT QLineControl : public QObject
    int selectionStart() const {
       return hasSelectedText() ? m_selstart : -1;
    }
+
    int selectionEnd() const {
       return hasSelectedText() ? m_selend : -1;
    }
+
    bool inSelection(int x) const {
       if (m_selstart >= m_selend) {
          return false;
@@ -147,6 +176,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    int start() const {
       return 0;
    }
+
    int end() const {
       return m_text.length();
    }
@@ -173,6 +203,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    Qt::CursorMoveStyle cursorMoveStyle() const {
       return m_textLayout.cursorMoveStyle();
    }
+
    void setCursorMoveStyle(Qt::CursorMoveStyle style) {
       m_textLayout.setCursorMoveStyle(style);
    }
@@ -183,11 +214,11 @@ class Q_GUI_EXPORT QLineControl : public QObject
       if (steps > 0) {
          while (steps--)
             c = cursorMoveStyle() == Qt::VisualMoveStyle ? m_textLayout.rightCursorPosition(c)
-                : m_textLayout.nextCursorPosition(c);
+               : m_textLayout.nextCursorPosition(c);
       } else if (steps < 0) {
          while (steps++)
             c = cursorMoveStyle() == Qt::VisualMoveStyle ? m_textLayout.leftCursorPosition(c)
-                : m_textLayout.previousCursorPosition(c);
+               : m_textLayout.previousCursorPosition(c);
       }
       moveCursor(c, mark);
    }
@@ -195,6 +226,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    void cursorWordForward(bool mark) {
       moveCursor(m_textLayout.nextCursorPosition(m_cursor, QTextLayout::SkipWords), mark);
    }
+
    void cursorWordBackward(bool mark) {
       moveCursor(m_textLayout.previousCursorPosition(m_cursor, QTextLayout::SkipWords), mark);
    }
@@ -202,6 +234,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    void home(bool mark) {
       moveCursor(0, mark);
    }
+
    void end(bool mark) {
       moveCursor(text().length(), mark);
    }
@@ -225,9 +258,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
       return m_readOnly;
    }
 
-   void setReadOnly(bool enable) {
-      m_readOnly = enable;
-   }
+   void setReadOnly(bool enable);
 
    QString text() const {
       QString res = m_maskData ? stripString(m_text) : m_text;
@@ -235,8 +266,15 @@ class Q_GUI_EXPORT QLineControl : public QObject
    }
 
    void setText(const QString &txt) {
+#ifndef QT_NO_IM
+      if (composeMode()) {
+         QGuiApplication::inputMethod()->reset();
+      }
+#endif
       internalSetText(txt, -1, false);
    }
+
+   void commitPreedit();
 
    QString displayText() const {
       return m_textLayout.text();
@@ -248,17 +286,20 @@ class Q_GUI_EXPORT QLineControl : public QObject
       internalDeselect();
       finishChange();
    }
+
    void selectAll() {
-      m_selstart = m_selend = m_cursor = 0;
+      m_selstart = 0;
+      m_selend   = 0;
+      m_cursor   = 0;
+
       moveCursor(m_text.length(), true);
    }
 
    void insert(const QString &);
    void clear();
-   void undo() {
-      internalUndo();
-      finishChange(-1, true);
-   }
+
+   void undo();
+
    void redo() {
       internalRedo();
       finishChange();
@@ -278,6 +319,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    int maxLength() const {
       return m_maxLength;
    }
+
    void setMaxLength(int maxLength) {
       if (m_maskData) {
          return;
@@ -305,12 +347,14 @@ class Q_GUI_EXPORT QLineControl : public QObject
    void setCompleter(const QCompleter *c) {
       m_completer = const_cast<QCompleter *>(c);
    }
+
    void complete(int key);
 #endif
 
    int cursorPosition() const {
       return m_cursor;
    }
+
    void setCursorPosition(int pos) {
       if (pos <= m_text.length()) {
          moveCursor(qMax(0, pos));
@@ -320,11 +364,22 @@ class Q_GUI_EXPORT QLineControl : public QObject
    bool hasAcceptableInput() const {
       return hasAcceptableInput(m_text);
    }
+
    bool fixup();
 
    QString inputMask() const {
-      return m_maskData ? m_inputMask + QLatin1Char(';') + m_blank : QString();
+      QString mask;
+
+      if (m_maskData) {
+         mask = m_inputMask;
+         if (m_blank != QLatin1Char(' ')) {
+            mask += QLatin1Char(';');
+            mask += m_blank;
+         }
+      }
+      return mask;
    }
+
    void setInputMask(const QString &mask) {
       parseInputMask(mask);
       if (m_maskData) {
@@ -337,6 +392,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    bool composeMode() const {
       return !m_textLayout.preeditAreaText().isEmpty();
    }
+
    void setPreeditArea(int cursor, const QString &text) {
       m_textLayout.setPreeditArea(cursor, text);
    }
@@ -349,11 +405,11 @@ class Q_GUI_EXPORT QLineControl : public QObject
    void updatePasswordEchoEditing(bool editing);
 
    bool passwordEchoEditing() const {
-#ifdef QT_GUI_PASSWORD_ECHO_DELAY
+
       if (m_passwordEchoTimer != 0) {
          return true;
       }
-#endif
+
       return m_passwordEchoEditing ;
    }
 
@@ -366,10 +422,17 @@ class Q_GUI_EXPORT QLineControl : public QObject
       updateDisplayText();
    }
 
+   int passwordMaskDelay() const {
+      return m_passwordMaskDelay;
+   }
+   void setPasswordMaskDelay(int delay) {
+      m_passwordMaskDelay = delay;
+   }
+
    Qt::LayoutDirection layoutDirection() const {
       if (m_layoutDirection == Qt::LayoutDirectionAuto) {
          if (m_text.isEmpty()) {
-            return QApplication::keyboardInputDirection();
+            return QGuiApplication::inputMethod()->inputDirection();
          }
 
          if (QTextEngine::isRightToLeft(m_text)) {
@@ -395,14 +458,19 @@ class Q_GUI_EXPORT QLineControl : public QObject
    }
 
    void processInputMethodEvent(QInputMethodEvent *event);
-   void processMouseEvent(QMouseEvent *ev);
+
    void processKeyEvent(QKeyEvent *ev);
 
    int cursorBlinkPeriod() const {
       return m_blinkPeriod;
    }
+
    void setCursorBlinkPeriod(int msec);
    void resetCursorBlinkTimer();
+
+   bool cursorBlinkStatus() const {
+      return m_blinkStatus;
+   }
 
    QString cancelText() const {
       return m_cancelText;
@@ -426,29 +494,47 @@ class Q_GUI_EXPORT QLineControl : public QObject
    };
    void draw(QPainter *, const QPoint &, const QRect &, int flags = DrawAll);
 
-   bool processEvent(QEvent *ev);
+#ifndef QT_NO_SHORTCUT
+   void processShortcutOverrideEvent(QKeyEvent *ke);
+#endif
+
+   QTextLayout *textLayout() const {
+
+      return &m_textLayout;
+   }
+
+
+
+
+
 
    GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int un_named_arg1, int un_named_arg2))
    GUI_CS_SIGNAL_2(cursorPositionChanged, un_named_arg1, un_named_arg2)
+
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
 
    GUI_CS_SIGNAL_1(Public, void displayTextChanged(const QString &un_named_arg1))
    GUI_CS_SIGNAL_2(displayTextChanged, un_named_arg1)
+
    GUI_CS_SIGNAL_1(Public, void textChanged(const QString &un_named_arg1))
    GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+
    GUI_CS_SIGNAL_1(Public, void textEdited(const QString &un_named_arg1))
    GUI_CS_SIGNAL_2(textEdited, un_named_arg1)
 
    GUI_CS_SIGNAL_1(Public, void resetInputContext())
    GUI_CS_SIGNAL_2(resetInputContext)
+
    GUI_CS_SIGNAL_1(Public, void updateMicroFocus())
    GUI_CS_SIGNAL_2(updateMicroFocus)
 
    GUI_CS_SIGNAL_1(Public, void accepted())
    GUI_CS_SIGNAL_2(accepted)
+
    GUI_CS_SIGNAL_1(Public, void editingFinished())
    GUI_CS_SIGNAL_2(editingFinished)
+
    GUI_CS_SIGNAL_1(Public, void updateNeeded(const QRect &un_named_arg1))
    GUI_CS_SIGNAL_2(updateNeeded, un_named_arg1)
 
@@ -504,6 +590,11 @@ class Q_GUI_EXPORT QLineControl : public QObject
    int m_tripleClickTimer;
    QString m_cancelText;
 
+   int m_keyboardScheme;
+
+   // accessibility events are sent for this object
+   QObject *m_accessibleObject;
+
    void emitCursorPositionChanged();
 
    bool finishChange(int validateFromState = -1, bool update = false, bool edited = true);
@@ -529,7 +620,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    // undo/redo handling
    enum CommandType { Separator, Insert, Remove, Delete, RemoveSelection, DeleteSelection, SetSelection };
    struct Command {
-      inline Command() {}
+
       inline Command(CommandType t, int p, QChar c, int ss, int se) : type(t), uc(c), pos(p), selStart(ss), selEnd(se) {}
       uint type : 4;
       QChar uc;
@@ -558,23 +649,23 @@ class Q_GUI_EXPORT QLineControl : public QObject
    int findInMask(int pos, bool forward, bool findSeparator, QChar searchChar = QChar()) const;
 
    // complex text layout
-   QTextLayout m_textLayout;
+   mutable QTextLayout m_textLayout;
 
    bool m_passwordEchoEditing;
    QChar m_passwordCharacter;
 
-#ifdef QT_GUI_PASSWORD_ECHO_DELAY
    int m_passwordEchoTimer;
-#endif
+   int m_passwordMaskDelay;
 
    void cancelPasswordEchoTimer() {
-#ifdef QT_GUI_PASSWORD_ECHO_DELAY
+
       if (m_passwordEchoTimer != 0) {
          killTimer(m_passwordEchoTimer);
          m_passwordEchoTimer = 0;
       }
-#endif
    }
+
+   int redoTextLayout() const;
 
    GUI_CS_SLOT_1(Private, void _q_clipboardChanged())
    GUI_CS_SLOT_2(_q_clipboardChanged)
@@ -582,9 +673,9 @@ class Q_GUI_EXPORT QLineControl : public QObject
    GUI_CS_SLOT_1(Private, void _q_deleteSelected())
    GUI_CS_SLOT_2(_q_deleteSelected)
 
-};
 
-QT_END_NAMESPACE
+
+};
 
 #endif // QT_NO_LINEEDIT
 

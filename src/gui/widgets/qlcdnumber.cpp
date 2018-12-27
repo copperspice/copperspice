@@ -293,25 +293,8 @@ void QLCDNumberPrivate::init()
    q->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 
-/*!
-    Destroys the LCD number.
-*/
-
 QLCDNumber::~QLCDNumber()
 {
-}
-
-
-/*!
-    \deprecated
-    \property QLCDNumber::numDigits
-    \brief the current number of digits displayed
-    \sa digitCount
-*/
-
-void QLCDNumber::setNumDigits(int numDigits)
-{
-   setDigitCount(numDigits);
 }
 
 void QLCDNumber::setDigitCount(int numDigits)
@@ -348,12 +331,14 @@ void QLCDNumber::setDigitCount(int numDigits)
          buf.fill(QLatin1Char(' '), dif);
          d->digitStr.insert(0, buf);
          d->points.resize(numDigits);
+
          for (i = numDigits - 1; i >= dif; i--) {
             d->points.setBit(i, d->points.testBit(i - dif));
          }
          for (i = 0; i < dif; i++) {
             d->points.clearBit(i);
          }
+
       } else {                                        // shrink
          dif = d->ndigits - numDigits;
          d->digitStr = d->digitStr.right(numDigits);
@@ -363,6 +348,7 @@ void QLCDNumber::setDigitCount(int numDigits)
             d->points.setBit(i, tmpPoints.testBit(i + dif));
          }
       }
+
       d->ndigits = numDigits;
       if (doDisplay) {
          display(value());
@@ -371,29 +357,11 @@ void QLCDNumber::setDigitCount(int numDigits)
    }
 }
 
-int QLCDNumber::numDigits() const
-{
-   Q_D(const QLCDNumber);
-   return d->ndigits;
-}
-
-/*!
-  Returns the current number of digits.
- */
 int QLCDNumber::digitCount() const
 {
    Q_D(const QLCDNumber);
    return d->ndigits;
 }
-
-/*!
-    \overload
-
-    Returns true if \a num is too big to be displayed in its entirety;
-    otherwise returns false.
-
-    \sa display(), digitCount(), smallDecimalPoint()
-*/
 
 bool QLCDNumber::checkOverflow(int num) const
 {
@@ -419,19 +387,6 @@ bool QLCDNumber::checkOverflow(double num) const
    return of;
 }
 
-
-/*!
-    \property QLCDNumber::mode
-    \brief the current display mode (number base)
-
-    Corresponds to the current display mode, which is one of \c Bin,
-    \c Oct, \c Dec (the default) and \c Hex. \c Dec mode can display
-    floating point values, the other modes display the integer
-    equivalent.
-
-    \sa smallDecimalPoint(), setHexMode(), setDecMode(), setOctMode(), setBinMode()
-*/
-
 QLCDNumber::Mode QLCDNumber::mode() const
 {
    Q_D(const QLCDNumber);
@@ -444,20 +399,6 @@ void QLCDNumber::setMode(Mode m)
    d->base = m;
    display(d->val);
 }
-
-
-/*!
-    \property QLCDNumber::value
-    \brief the displayed value
-
-    This property corresponds to the current value displayed by the
-    LCDNumber.
-
-    If the displayed value is not a number, the property has a value
-    of 0.
-
-    By default, this property contains a value of 0.
-*/
 
 double QLCDNumber::value() const
 {
@@ -520,20 +461,6 @@ void QLCDNumber::display(int num)
       d->internalSetString(s);
    }
 }
-
-
-/*!
-    Displays the number represented by the string \a s.
-
-    This version of the function disregards mode() and
-    smallDecimalPoint().
-
-    These digits and other symbols can be shown: 0/O, 1, 2, 3, 4, 5/S,
-    6, 7, 8, 9/g, minus, decimal point, A, B, C, D, E, F, h, H, L, o,
-    P, r, u, U, Y, colon, degree sign (which is specified as single
-    quote in the string) and space. QLCDNumber substitutes spaces for
-    illegal characters.
-*/
 
 void QLCDNumber::display(const QString &s)
 {
@@ -693,7 +620,7 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
          for (i = index; i >= 0; i--) {
             buffer[ndigits - 1 - index + i] = buffer[i];
             newPoints.setBit(ndigits - 1 - index + i,
-                             newPoints.testBit(i));
+               newPoints.testBit(i));
          }
          for (i = 0; i < ndigits - index - 1; i++) {
             buffer[i] = QLatin1Char(' ');
@@ -718,7 +645,7 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
 */
 
 void QLCDNumberPrivate::drawString(const QString &s, QPainter &p,
-                                   QBitArray *newPoints, bool newString)
+   QBitArray *newPoints, bool newString)
 {
    Q_Q(QLCDNumber);
    QPoint  pos;
@@ -763,7 +690,7 @@ void QLCDNumberPrivate::drawString(const QString &s, QPainter &p,
 */
 
 void QLCDNumberPrivate::drawDigit(const QPoint &pos, QPainter &p, int segLen,
-                                  char newCh, char oldCh)
+   char newCh, char oldCh)
 {
    // Draws and/or erases segments to change display of a single digit
    // from oldCh to newCh
@@ -821,7 +748,7 @@ static void addPoint(QPolygon &a, const QPoint &p)
 */
 
 void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter &p,
-                                    int segLen, bool erase)
+   int segLen, bool erase)
 {
    Q_Q(QLCDNumber);
    QPoint ppt;
@@ -860,7 +787,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 1 :
-            pt += QPoint(0 , 1);
+            pt += QPoint(0, 1);
             ppt = pt;
             LIGHT;
             LINETO(width, width);
@@ -871,7 +798,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 2 :
-            pt += QPoint(segLen - 1 , 1);
+            pt += QPoint(segLen - 1, 1);
             ppt = pt;
             DARK;
             LINETO(0, segLen - 2);
@@ -881,7 +808,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 3 :
-            pt += QPoint(0 , segLen);
+            pt += QPoint(0, segLen);
             ppt = pt;
             LIGHT;
             LINETO(width, -width / 2);
@@ -898,7 +825,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 4 :
-            pt += QPoint(0 , segLen + 1);
+            pt += QPoint(0, segLen + 1);
             ppt = pt;
             LIGHT;
             LINETO(width, width / 2);
@@ -909,7 +836,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 5 :
-            pt += QPoint(segLen - 1 , segLen + 1);
+            pt += QPoint(segLen - 1, segLen + 1);
             ppt = pt;
             DARK;
             LINETO(0, segLen - 2);
@@ -919,7 +846,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 6 :
-            pt += QPoint(0 , segLen * 2);
+            pt += QPoint(0, segLen * 2);
             ppt = pt;
             LIGHT;
             LINETO(width, -width);
@@ -929,11 +856,13 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 7 :
-            if (smallPoint) { // if smallpoint place'.' between other digits
-               pt += QPoint(segLen + width / 2 , segLen * 2);
+            if (smallPoint) {
+               // if smallpoint place'.' between other digits
+               pt += QPoint(segLen + width / 2, segLen * 2);
             } else {
-               pt += QPoint(segLen / 2 , segLen * 2);
+               pt += QPoint(segLen / 2, segLen * 2);
             }
+
             ppt = pt;
             DARK;
             LINETO(width, 0);
@@ -943,7 +872,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 8 :
-            pt += QPoint(segLen / 2 - width / 2 + 1 , segLen / 2 + width);
+            pt += QPoint(segLen / 2 - width / 2 + 1, segLen / 2 + width);
             ppt = pt;
             DARK;
             LINETO(width, 0);
@@ -953,7 +882,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 9 :
-            pt += QPoint(segLen / 2 - width / 2 + 1 , 3 * segLen / 2 + width);
+            pt += QPoint(segLen / 2 - width / 2 + 1, 3 * segLen / 2 + width);
             ppt = pt;
             DARK;
             LINETO(width, 0);
@@ -1006,7 +935,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 2 :
-            pt += QPoint(segLen - 1 , 1);
+            pt += QPoint(segLen - 1, 1);
             ppt = pt;
             DARK;
             LINETO(0, segLen - 2);
@@ -1016,7 +945,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 3 :
-            pt += QPoint(0 , segLen);
+            pt += QPoint(0, segLen);
             ppt = pt;
             LIGHT;
             LINETO(width, -width / 2);
@@ -1033,7 +962,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 4 :
-            pt += QPoint(0 , segLen + 1);
+            pt += QPoint(0, segLen + 1);
             ppt = pt;
             LIGHT;
             LINETO(width, width / 2);
@@ -1044,7 +973,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 5 :
-            pt += QPoint(segLen - 1 , segLen + 1);
+            pt += QPoint(segLen - 1, segLen + 1);
             ppt = pt;
             DARK;
             LINETO(0, segLen - 2);
@@ -1054,7 +983,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 6 :
-            pt += QPoint(0 , segLen * 2);
+            pt += QPoint(0, segLen * 2);
             ppt = pt;
             LIGHT;
             LINETO(width, -width);
@@ -1065,9 +994,9 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             break;
          case 7 :
             if (smallPoint) { // if smallpoint place'.' between other digits
-               pt += QPoint(segLen + width / 2 , segLen * 2);
+               pt += QPoint(segLen + width / 2, segLen * 2);
             } else {
-               pt += QPoint(segLen / 2 , segLen * 2);
+               pt += QPoint(segLen / 2, segLen * 2);
             }
             ppt = pt;
             DARK;
@@ -1078,7 +1007,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 8 :
-            pt += QPoint(segLen / 2 - width / 2 + 1 , segLen / 2 + width);
+            pt += QPoint(segLen / 2 - width / 2 + 1, segLen / 2 + width);
             ppt = pt;
             DARK;
             LINETO(width, 0);
@@ -1088,7 +1017,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          case 9 :
-            pt += QPoint(segLen / 2 - width / 2 + 1 , 3 * segLen / 2 + width);
+            pt += QPoint(segLen / 2 - width / 2 + 1, 3 * segLen / 2 + width);
             ppt = pt;
             DARK;
             LINETO(width, 0);
@@ -1160,23 +1089,5 @@ bool QLCDNumber::event(QEvent *e)
 {
    return QFrame::event(e);
 }
-
-/*!
-    \fn void QLCDNumber::setMargin(int margin)
-    Sets the width of the margin around the contents of the widget to \a margin.
-
-    Use QWidget::setContentsMargins() instead.
-    \sa margin(), QWidget::setContentsMargins()
-*/
-
-/*!
-    \fn int QLCDNumber::margin() const
-    Returns the width of the margin around the contents of the widget.
-
-    Use QWidget::getContentsMargins() instead.
-    \sa setMargin(), QWidget::getContentsMargins()
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_LCDNUMBER

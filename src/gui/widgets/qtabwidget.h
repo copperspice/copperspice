@@ -26,8 +26,6 @@
 #include <QtGui/qwidget.h>
 #include <QtGui/qicon.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TABWIDGET
 
 class QTabBar;
@@ -53,16 +51,27 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    GUI_CS_PROPERTY_WRITE(iconSize, setIconSize)
    GUI_CS_PROPERTY_READ(elideMode, elideMode)
    GUI_CS_PROPERTY_WRITE(elideMode, setElideMode)
+
    GUI_CS_PROPERTY_READ(usesScrollButtons, usesScrollButtons)
    GUI_CS_PROPERTY_WRITE(usesScrollButtons, setUsesScrollButtons)
+
    GUI_CS_PROPERTY_READ(documentMode, documentMode)
    GUI_CS_PROPERTY_WRITE(documentMode, setDocumentMode)
+
    GUI_CS_PROPERTY_READ(tabsClosable, tabsClosable)
    GUI_CS_PROPERTY_WRITE(tabsClosable, setTabsClosable)
+
    GUI_CS_PROPERTY_READ(movable, isMovable)
    GUI_CS_PROPERTY_WRITE(movable, setMovable)
 
+   GUI_CS_PROPERTY_READ(tabBarAutoHide, tabBarAutoHide)
+   GUI_CS_PROPERTY_WRITE(abBarAutoHide, setTabBarAutoHide)
+
  public:
+   enum TabPosition { North, South, West, East };
+
+   enum TabShape { Rounded, Triangular };
+
    explicit QTabWidget(QWidget *parent = nullptr);
    ~QTabWidget();
 
@@ -99,8 +108,6 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    int indexOf(QWidget *widget) const;
    int count() const;
 
-   enum TabPosition { North, South, West, East };
-
    TabPosition tabPosition() const;
    void setTabPosition(TabPosition);
 
@@ -110,13 +117,13 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    bool isMovable() const;
    void setMovable(bool movable);
 
-   enum TabShape { Rounded, Triangular };
    TabShape tabShape() const;
    void setTabShape(TabShape s);
 
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
    int heightForWidth(int width) const override;
+   bool hasHeightForWidth() const override;
 
    void setCornerWidget(QWidget *w, Qt::Corner corner = Qt::TopRightCorner);
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
@@ -133,17 +140,28 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    bool documentMode() const;
    void setDocumentMode(bool set);
 
+   bool tabBarAutoHide() const;
+   void setTabBarAutoHide(bool enabled);
    void clear();
 
+   QTabBar *tabBar() const;
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
+
    GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *widget))
    GUI_CS_SLOT_2(setCurrentWidget)
 
    GUI_CS_SIGNAL_1(Public, void currentChanged(int index))
    GUI_CS_SIGNAL_2(currentChanged, index)
+
    GUI_CS_SIGNAL_1(Public, void tabCloseRequested(int index))
    GUI_CS_SIGNAL_2(tabCloseRequested, index)
+
+   GUI_CS_SIGNAL_1(Public, void tabBarClicked(int index))
+   GUI_CS_SIGNAL_2(tabBarClicked, index)
+
+   GUI_CS_SIGNAL_1(Public, void tabBarDoubleClicked(int index))
+   GUI_CS_SIGNAL_2(tabBarDoubleClicked, index)
 
  protected:
    virtual void tabInserted(int index);
@@ -154,7 +172,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    void keyPressEvent(QKeyEvent *) override;
    void paintEvent(QPaintEvent *) override;
    void setTabBar(QTabBar *);
-   QTabBar *tabBar() const;
+
    void changeEvent(QEvent *) override;
    bool event(QEvent *) override;
    void initStyleOption(QStyleOptionTabWidgetFrame *option) const;
@@ -177,6 +195,6 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
 
 #endif // QT_NO_TABWIDGET
 
-QT_END_NAMESPACE
+
 
 #endif // QTABWIDGET_H

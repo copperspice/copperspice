@@ -39,8 +39,6 @@
 #include <qtextobject.h>
 #include <qdesktopservices.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTextBrowserPrivate : public QTextEditPrivate
 {
    Q_DECLARE_PUBLIC(QTextBrowser)
@@ -50,7 +48,7 @@ class QTextBrowserPrivate : public QTextEditPrivate
       : textOrSourceChanged(false), forceLoadOnSourceChange(false), openExternalLinks(false),
         openLinks(true)
 #ifdef QT_KEYPAD_NAVIGATION
-        , lastKeypadScrollValue(-1)
+      , lastKeypadScrollValue(-1)
 #endif
    {}
 
@@ -58,7 +56,9 @@ class QTextBrowserPrivate : public QTextEditPrivate
 
    struct HistoryEntry {
       inline HistoryEntry()
-         : hpos(0), vpos(0), focusIndicatorPosition(-1), focusIndicatorAnchor(-1) {}
+         : hpos(0), vpos(0), focusIndicatorPosition(-1), focusIndicatorAnchor(-1)
+      { }
+
       QUrl url;
       QString title;
       int hpos;
@@ -67,19 +67,22 @@ class QTextBrowserPrivate : public QTextEditPrivate
    };
 
    HistoryEntry history(int i) const {
-      if (i <= 0)
+
+      if (i <= 0) {
+
          if (-i < stack.count()) {
             return stack[stack.count() + i - 1];
          } else {
             return HistoryEntry();
          }
-      else if (i <= forwardStack.count()) {
+
+      } else if (i <= forwardStack.count()) {
          return forwardStack[forwardStack.count() - i];
+
       } else {
          return HistoryEntry();
       }
    }
-
 
    HistoryEntry createHistoryEntry() const;
    void restoreHistoryEntry(const HistoryEntry entry);
@@ -134,16 +137,27 @@ QString QTextBrowserPrivate::findFile(const QUrl &name) const
 {
    QString fileName;
 
-   if (name.scheme() == QLatin1String("qrc")) {
-      fileName = QLatin1String(":/") + name.path();
+   if (name.scheme() == "qrc") {
+      fileName = ":/" + name.path();
+
+   } else if (name.scheme().isEmpty()) {
+      fileName = name.path();
+
    } else {
-      fileName = name.toLocalFile();
+
+#if defined(Q_OS_ANDROID)
+      if (name.scheme() == QLatin1String("assets")) {
+         fileName = QLatin1String("assets:") + name.path();
+      } else
+#endif
+
+         fileName = name.toLocalFile();
    }
 
    if (QFileInfo(fileName).isAbsolute()) {
       return fileName;
    }
-   
+
    for (QString path : searchPaths) {
 
       if (! path.endsWith(QLatin1Char('/'))) {
@@ -170,8 +184,8 @@ QUrl QTextBrowserPrivate::resolveUrl(const QUrl &url) const
    // correctly to "foo.html#someanchor"
    if (!(currentURL.isRelative()
          || (currentURL.scheme() == QLatin1String("file")
-             && !QFileInfo(currentURL.toLocalFile()).isAbsolute()))
-         || (url.hasFragment() && url.path().isEmpty())) {
+            && !QFileInfo(currentURL.toLocalFile()).isAbsolute()))
+      || (url.hasFragment() && url.path().isEmpty())) {
       return currentURL.resolved(url);
    }
 
@@ -207,16 +221,16 @@ void QTextBrowserPrivate::_q_activateAnchor(const QString &href)
    textOrSourceChanged = false;
 
 #ifndef QT_NO_DESKTOPSERVICES
-   if ((openExternalLinks
-         && url.scheme() != QLatin1String("file")
-         && url.scheme() != QLatin1String("qrc")
-         && !url.isRelative())
-         || (url.isRelative() && !currentURL.isRelative()
-             && currentURL.scheme() != QLatin1String("file")
-             && currentURL.scheme() != QLatin1String("qrc"))) {
+
+   bool isFileScheme = url.scheme() == "file" || url.scheme() == "qrc";
+
+   if ((openExternalLinks && ! isFileScheme && ! url.isRelative())
+      || (url.isRelative() && ! currentURL.isRelative() && ! isFileScheme)) {
+
       QDesktopServices::openUrl(url);
       return;
    }
+
 #endif
 
    emit q->anchorClicked(url);
@@ -255,6 +269,7 @@ void QTextBrowserPrivate::_q_highlightLink(const QString &anchor)
 void QTextBrowserPrivate::setSource(const QUrl &url)
 {
    Q_Q(QTextBrowser);
+
 #ifndef QT_NO_CURSOR
    if (q->isVisible()) {
       QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -272,7 +287,7 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
    newUrlWithoutFragment.setFragment(QString());
 
    if (url.isValid()
-         && (newUrlWithoutFragment != currentUrlWithoutFragment || forceLoadOnSourceChange)) {
+      && (newUrlWithoutFragment != currentUrlWithoutFragment || forceLoadOnSourceChange)) {
       QVariant data = q->loadResource(QTextDocument::HtmlResource, resolveUrl(url));
       if (data.type() == QVariant::String) {
          txt = data.toString();
@@ -290,12 +305,13 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
       }
 
       if (q->isVisible()) {
-         QString firstTag = txt.left(txt.indexOf(QLatin1Char('>')) + 1);
-         if (firstTag.startsWith(QLatin1String("<qt")) && firstTag.contains(QLatin1String("type")) &&
-               firstTag.contains(QLatin1String("detail"))) {
+         QString firstTag = txt.left(txt.indexOf('>') + 1);
+
+         if (firstTag.startsWith("<qt") && firstTag.contains("type") && firstTag.contains("detail")) {
 #ifndef QT_NO_CURSOR
             QApplication::restoreOverrideCursor();
 #endif
+
 #ifndef QT_NO_WHATSTHIS
             QWhatsThis::showText(QCursor::pos(), txt, q);
 #endif
@@ -408,7 +424,7 @@ void QTextBrowserPrivate::keypadMove(bool next)
       // than the screen, and just scroll through it in that case
       QRectF prevRect = control->selectionRect(prevFocus);
       if ((next && prevRect.bottom() > (yOffset + height)) ||
-            (!next && prevRect.top() < yOffset)) {
+         (!next && prevRect.top() < yOffset)) {
          anchorToFocus = prevFocus;
          focusedPos = scrollYOffset;
          focusIt = true;
@@ -462,7 +478,7 @@ void QTextBrowserPrivate::keypadMove(bool next)
       // Obviously if a link is entirely visible, we still
       // focus it.
       if (bothViewRects.contains(desiredRect)
-            || bothViewRects.adjusted(0, visibleLinkAmount, 0, -visibleLinkAmount).intersects(desiredRect)) {
+         || bothViewRects.adjusted(0, visibleLinkAmount, 0, -visibleLinkAmount).intersects(desiredRect)) {
          focusIt = true;
 
          // We aim to put the new link in the middle of the screen,
@@ -549,7 +565,7 @@ QTextBrowserPrivate::HistoryEntry QTextBrowserPrivate::createHistoryEntry() cons
 
    const QTextCursor cursor = control->textCursor();
    if (control->cursorIsFocusIndicator()
-         && cursor.hasSelection()) {
+      && cursor.hasSelection()) {
 
       entry.focusIndicatorPosition = cursor.position();
       entry.focusIndicatorAnchor = cursor.anchor();
@@ -581,73 +597,6 @@ void QTextBrowserPrivate::restoreHistoryEntry(const HistoryEntry entry)
 #endif
 }
 
-/*!
-    \class QTextBrowser
-    \brief The QTextBrowser class provides a rich text browser with hypertext navigation.
-
-    \ingroup richtext-processing
-
-    This class extends QTextEdit (in read-only mode), adding some navigation
-    functionality so that users can follow links in hypertext documents.
-
-    If you want to provide your users with an editable rich text editor,
-    use QTextEdit. If you want a text browser without hypertext navigation
-    use QTextEdit, and use QTextEdit::setReadOnly() to disable
-    editing. If you just need to display a small piece of rich text
-    use QLabel.
-
-    \section1 Document Source and Contents
-
-    The contents of QTextEdit are set with setHtml() or setPlainText(),
-    but QTextBrowser also implements the setSource() function, making it
-    possible to use a named document as the source text. The name is looked
-    up in a list of search paths and in the directory of the current document
-    factory.
-
-    If a document name ends with
-    an anchor (for example, "\c #anchor"), the text browser automatically
-    scrolls to that position (using scrollToAnchor()). When the user clicks
-    on a hyperlink, the browser will call setSource() itself with the link's
-    \c href value as argument. You can track the current source by connecting
-    to the sourceChanged() signal.
-
-    \section1 Navigation
-
-    QTextBrowser provides backward() and forward() slots which you can
-    use to implement Back and Forward buttons. The home() slot sets
-    the text to the very first document displayed. The anchorClicked()
-    signal is emitted when the user clicks an anchor. To override the
-    default navigation behavior of the browser, call the setSource()
-    function to supply new document text in a slot connected to this
-    signal.
-
-    If you want to load documents stored in the Qt resource system use
-    \c{qrc} as the scheme in the URL to load. For example, for the document
-    resource path \c{:/docs/index.html} use \c{qrc:/docs/index.html} as
-    the URL with setSource(). To access local files, use \c{file} as the
-    scheme in the URL.
-
-    \sa QTextEdit, QTextDocument
-*/
-
-/*!
-    \property QTextBrowser::modified
-    \brief whether the contents of the text browser have been modified
-*/
-
-/*!
-    \property QTextBrowser::readOnly
-    \brief whether the text browser is read-only
-
-    By default, this property is true.
-*/
-
-/*!
-    \property QTextBrowser::undoRedoEnabled
-    \brief whether the text browser supports undo/redo operations
-
-    By default, this property is false.
-*/
 
 void QTextBrowserPrivate::init()
 {
@@ -661,9 +610,9 @@ void QTextBrowserPrivate::init()
    q->setUndoRedoEnabled(false);
    viewport->setMouseTracking(true);
 
-   QObject::connect(q->document(), SIGNAL(contentsChanged()),       q, SLOT(_q_documentModified()));
-   QObject::connect(control, SIGNAL(linkActivated(const QString &)), q, SLOT(_q_activateAnchor(const QString &)));
-   QObject::connect(control, SIGNAL(linkHovered(const QString &)),  q, SLOT(_q_highlightLink(const QString &)));
+   QObject::connect(q->document(), SIGNAL(contentsChanged()), q, SLOT(_q_documentModified()));
+   QObject::connect(control, SIGNAL(linkActivated(QString)),  q, SLOT(_q_activateAnchor(QString)));
+   QObject::connect(control, SIGNAL(linkHovered(QString)),    q, SLOT(_q_highlightLink(QString)));
 }
 
 /*!
@@ -683,27 +632,6 @@ QTextBrowser::~QTextBrowser()
 {
 }
 
-/*!
-    \property QTextBrowser::source
-    \brief the name of the displayed document.
-
-    This is a an invalid url if no document is displayed or if the
-    source is unknown.
-
-    When setting this property QTextBrowser tries to find a document
-    with the specified name in the paths of the searchPaths property
-    and directory of the current source, unless the value is an absolute
-    file path. It also checks for optional anchors and scrolls the document
-    accordingly
-
-    If the first tag in the document is \c{<qt type=detail>}, the
-    document is displayed as a popup rather than as new document in
-    the browser window itself. Otherwise, the document is displayed
-    normally in the text browser with the text set to the contents of
-    the named document with setHtml().
-
-    By default, this property contains an empty URL.
-*/
 QUrl QTextBrowser::source() const
 {
    Q_D(const QTextBrowser);
@@ -788,77 +716,7 @@ void QTextBrowser::setSource(const QUrl &url)
    emit historyChanged();
 }
 
-/*!
-    \fn void QTextBrowser::backwardAvailable(bool available)
 
-    This signal is emitted when the availability of backward()
-    changes. \a available is false when the user is at home();
-    otherwise it is true.
-*/
-
-/*!
-    \fn void QTextBrowser::forwardAvailable(bool available)
-
-    This signal is emitted when the availability of forward() changes.
-    \a available is true after the user navigates backward() and false
-    when the user navigates or goes forward().
-*/
-
-/*!
-    \fn void QTextBrowser::historyChanged()
-    \since 4.4
-
-    This signal is emitted when the history changes.
-
-    \sa historyTitle(), historyUrl()
-*/
-
-/*!
-    \fn void QTextBrowser::sourceChanged(const QUrl &src)
-
-    This signal is emitted when the source has changed, \a src
-    being the new source.
-
-    Source changes happen both programmatically when calling
-    setSource(), forward(), backword() or home() or when the user
-    clicks on links or presses the equivalent key sequences.
-*/
-
-/*!  \fn void QTextBrowser::highlighted(const QUrl &link)
-
-    This signal is emitted when the user has selected but not
-    activated an anchor in the document. The URL referred to by the
-    anchor is passed in \a link.
-*/
-
-/*!  \fn void QTextBrowser::highlighted(const QString &link)
-     \overload
-
-     Convenience signal that allows connecting to a slot
-     that takes just a QString, like for example QStatusBar's
-     message().
-*/
-
-
-/*!
-    \fn void QTextBrowser::anchorClicked(const QUrl &link)
-
-    This signal is emitted when the user clicks an anchor. The
-    URL referred to by the anchor is passed in \a link.
-
-    Note that the browser will automatically handle navigation to the
-    location specified by \a link unless the openLinks property
-    is set to false or you call setSource() in a slot connected.
-    This mechanism is used to override the default navigation features of the browser.
-*/
-
-/*!
-    Changes the document displayed to the previous document in the
-    list of documents built by navigating links. Does nothing if there
-    is no previous document.
-
-    \sa forward(), backwardAvailable()
-*/
 void QTextBrowser::backward()
 {
    Q_D(QTextBrowser);
@@ -1062,30 +920,6 @@ void QTextBrowser::paintEvent(QPaintEvent *e)
    d->paint(&p, e);
 }
 
-/*!
-    This function is called when the document is loaded and for
-    each image in the document. The \a type indicates the type of resource
-    to be loaded. An invalid QVariant is returned if the resource cannot be
-    loaded.
-
-    The default implementation ignores \a type and tries to locate
-    the resources by interpreting \a name as a file name. If it is
-    not an absolute path it tries to find the file in the paths of
-    the \l searchPaths property and in the same directory as the
-    current source. On success, the result is a QVariant that stores
-    a QByteArray with the contents of the file.
-
-    If you reimplement this function, you can return other QVariant
-    types. The table below shows which variant types are supported
-    depending on the resource type:
-
-    \table
-    \header \i ResourceType  \i QVariant::Type
-    \row    \i QTextDocument::HtmlResource  \i QString or QByteArray
-    \row    \i QTextDocument::ImageResource \i QImage, QPixmap or QByteArray
-    \row    \i QTextDocument::StyleSheetResource \i QString or QByteArray
-    \endtable
-*/
 QVariant QTextBrowser::loadResource(int /*type*/, const QUrl &name)
 {
    Q_D(QTextBrowser);
@@ -1103,42 +937,20 @@ QVariant QTextBrowser::loadResource(int /*type*/, const QUrl &name)
    return data;
 }
 
-/*!
-    \since 4.2
 
-    Returns true if the text browser can go backward in the document history
-    using backward().
-
-    \sa backwardAvailable(), backward()
-*/
 bool QTextBrowser::isBackwardAvailable() const
 {
    Q_D(const QTextBrowser);
    return d->stack.count() > 1;
 }
 
-/*!
-    \since 4.2
-
-    Returns true if the text browser can go forward in the document history
-    using forward().
-
-    \sa forwardAvailable(), forward()
-*/
 bool QTextBrowser::isForwardAvailable() const
 {
    Q_D(const QTextBrowser);
    return !d->forwardStack.isEmpty();
 }
 
-/*!
-    \since 4.2
 
-    Clears the history of visited documents and disables the forward and
-    backward navigation.
-
-    \sa backward(), forward()
-*/
 void QTextBrowser::clearHistory()
 {
    Q_D(QTextBrowser);
@@ -1154,38 +966,14 @@ void QTextBrowser::clearHistory()
    emit historyChanged();
 }
 
-/*!
-   Returns the url of the HistoryItem.
 
-    \table
-    \header \i Input            \i Return
-    \row \i \a{i} < 0  \i \l backward() history
-    \row \i\a{i} == 0 \i current, see QTextBrowser::source()
-    \row \i \a{i} > 0  \i \l forward() history
-    \endtable
-
-    \since 4.4
-*/
 QUrl QTextBrowser::historyUrl(int i) const
 {
    Q_D(const QTextBrowser);
    return d->history(i).url;
 }
 
-/*!
-    Returns the documentTitle() of the HistoryItem.
 
-    \table
-    \header \i Input            \i Return
-    \row \i \a{i} < 0  \i \l backward() history
-    \row \i \a{i} == 0 \i current, see QTextBrowser::source()
-    \row \i \a{i} > 0  \i \l forward() history
-    \endtable
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qtextbrowser.cpp 0
-
-    \since 4.4
-*/
 QString QTextBrowser::historyTitle(int i) const
 {
    Q_D(const QTextBrowser);
@@ -1193,11 +981,7 @@ QString QTextBrowser::historyTitle(int i) const
 }
 
 
-/*!
-    Returns the number of locations forward in the history.
 
-    \since 4.4
-*/
 int QTextBrowser::forwardHistoryCount() const
 {
    Q_D(const QTextBrowser);
@@ -1215,17 +999,6 @@ int QTextBrowser::backwardHistoryCount() const
    return d->stack.count() - 1;
 }
 
-/*!
-    \property QTextBrowser::openExternalLinks
-    \since 4.2
-
-    Specifies whether QTextBrowser should automatically open links to external
-    sources using QDesktopServices::openUrl() instead of emitting the
-    anchorClicked signal. Links are considered external if their scheme is
-    neither file or qrc.
-
-    The default value is false.
-*/
 bool QTextBrowser::openExternalLinks() const
 {
    Q_D(const QTextBrowser);
@@ -1237,18 +1010,6 @@ void QTextBrowser::setOpenExternalLinks(bool open)
    Q_D(QTextBrowser);
    d->openExternalLinks = open;
 }
-
-/*!
-   \property QTextBrowser::openLinks
-   \since 4.3
-
-   This property specifies whether QTextBrowser should automatically open links the user tries to
-   activate by mouse or keyboard.
-
-   Regardless of the value of this property the anchorClicked signal is always emitted.
-
-   The default value is true.
-*/
 
 bool QTextBrowser::openLinks() const
 {
@@ -1285,7 +1046,5 @@ void QTextBrowser::_q_highlightLink(const QString &un_named_arg1)
    Q_D(QTextBrowser);
    d->_q_highlightLink(un_named_arg1);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTBROWSER

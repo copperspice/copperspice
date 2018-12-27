@@ -36,22 +36,33 @@
 
 #include <qstyleoption.h>
 
-QT_BEGIN_NAMESPACE
 
+
+class QMovableTabWidget : public QWidget
+{
+ public:
+   explicit QMovableTabWidget(QWidget *parent = nullptr);
+   void setPixmap(const QPixmap &pixmap);
+
+ protected:
+   void paintEvent(QPaintEvent *e) override;
+
+ private:
+   QPixmap m_pixmap;
+};
 class QTabBarPrivate  : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QTabBar)
 
  public:
    QTabBarPrivate()
-                  : currentIndex(-1), pressedIndex(-1), shape(QTabBar::RoundedNorth), layoutDirty(false),
-                  drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false),
-                  expanding(true), closeButtonOnTabs(false), selectionBehaviorOnRemove(QTabBar::SelectRightTab),
-                  paintWithOffsets(true), movable(false), dragInProgress(false), documentMode(false), movingTab(0)
+      : currentIndex(-1), pressedIndex(-1), shape(QTabBar::RoundedNorth), layoutDirty(false),
+        drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false), expanding(true),
+        closeButtonOnTabs(false),
+        selectionBehaviorOnRemove(QTabBar::SelectRightTab), paintWithOffsets(true), movable(false),
+        dragInProgress(false), documentMode(false), autoHide(false), changeCurrentOnDrag(false),
+        switchTabCurrentIndex(-1), switchTabTimerId(0), movingTab(0)
 
-#ifdef Q_OS_MAC
-        , previousPressedIndex(-1)
-#endif
    {}
 
    int currentIndex;
@@ -63,12 +74,16 @@ class QTabBarPrivate  : public QWidgetPrivate
 
    struct Tab : public QEnableSharedFromThis<Tab> {
       Tab(const QIcon &ico, const QString &txt)
-          : enabled(true) , shortcutId(0), text(txt), icon(ico), leftWidget(0), rightWidget(0), lastTab(-1), dragOffset(0)
+         : enabled(true), shortcutId(0), text(txt), icon(ico), leftWidget(0), rightWidget(0), lastTab(-1), dragOffset(0)
 
 #ifndef QT_NO_ANIMATION
-           , animation(0)
+         , animation(0)
 #endif
       {}
+
+      bool operator==(const Tab &other) const {
+         return &other == this;
+      }
 
       bool enabled;
       int shortcutId;
@@ -105,15 +120,8 @@ class QTabBarPrivate  : public QWidgetPrivate
             setEasingCurve(QEasingCurve::InOutQuad);
          }
 
-         void updateCurrentValue(const QVariant &current) override {
-            priv->moveTab(priv->tabList.indexOf(tab), current.toInt());
-         }
-
-         void updateState(State, State newState) override {
-            if (newState == Stopped) {
-               priv->moveTabFinished(priv->tabList.indexOf(tab));
-            }
-         }
+         void updateCurrentValue(const QVariant &current) override;
+         void updateState(State, State newState) override;
 
        private:
          // these are needed for the callbacks
@@ -123,10 +131,15 @@ class QTabBarPrivate  : public QWidgetPrivate
       } *animation;
 
       void startAnimation(QTabBarPrivate *priv, int duration) {
+
+         if (! priv->isAnimated()) {
+            priv->moveTabFinished(priv->tabList.indexOf(sharedFromThis()));
+            return;
+         }
+
          if (! animation) {
             animation = new TabBarAnimation(sharedFromThis(), priv);
          }
-
          animation->setStartValue(dragOffset);
          animation->setEndValue(0);
          animation->setDuration(duration);
@@ -134,7 +147,6 @@ class QTabBarPrivate  : public QWidgetPrivate
       }
 #else
       void startAnimation(QTabBarPrivate *priv, int duration) {
-         Q_UNUSED(duration);
          priv->moveTabFinished(priv->tabList.indexOf(sharedFromThis()));
       }
 
@@ -143,6 +155,7 @@ class QTabBarPrivate  : public QWidgetPrivate
    }; //struct Tab
 
    QList<QSharedPointer<Tab>> tabList;
+   mutable QHash<QString, QSize> textSizes;
 
    int calculateNewPosition(int from, int to, int index) const;
    void slide(int from, int to);
@@ -153,6 +166,11 @@ class QTabBarPrivate  : public QWidgetPrivate
    QSharedPointer<const Tab> at(int index) const;
 
    int indexAtPos(const QPoint &p) const;
+
+   inline bool isAnimated() const {
+      Q_Q(const QTabBar);
+      return q->style()->styleHint(QStyle::SH_Widget_Animate, 0, q);
+   }
 
    bool validIndex(int index) const {
       return index >= 0 && index < tabList.count();
@@ -174,7 +192,10 @@ class QTabBarPrivate  : public QWidgetPrivate
    void layoutWidgets(int start = 0);
    void layoutTab(int index);
    void updateMacBorderMetrics();
+   bool isTabInMacUnifiedToolbarArea() const;
    void setupMovableTab();
+   void autoHideTabs();
+   void initBasicStyleOption(QStyleOptionTab *option, int tabIndex) const;
 
    void makeVisible(int index);
    QSize iconSize;
@@ -192,15 +213,17 @@ class QTabBarPrivate  : public QWidgetPrivate
    bool movable;
    bool dragInProgress;
    bool documentMode;
+   bool autoHide;
+   bool changeCurrentOnDrag;
 
-   QWidget *movingTab;
+   int switchTabCurrentIndex;
+   int switchTabTimerId;
 
-#ifdef Q_OS_MAC
-   int previousPressedIndex;
-#endif
+   QMovableTabWidget *movingTab;
+
 
    // shared by tabwidget and qtabbar
-   static void initStyleBaseOption(QStyleOptionTabBarBaseV2 *optTabBase, QTabBar *tabbar, QSize size) {
+   static void initStyleBaseOption(QStyleOptionTabBarBase *optTabBase, QTabBar *tabbar, QSize size) {
       QStyleOptionTab tabOverlap;
       tabOverlap.shape = tabbar->shape();
 
@@ -240,6 +263,7 @@ class QTabBarPrivate  : public QWidgetPrivate
       }
    }
 
+   void killSwitchTabTimer();
 };
 
 class CloseButton : public QAbstractButton
@@ -260,7 +284,7 @@ class CloseButton : public QAbstractButton
    void paintEvent(QPaintEvent *event) override;
 };
 
-QT_END_NAMESPACE
+
 
 #endif
 

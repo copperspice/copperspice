@@ -23,9 +23,9 @@
 #ifndef QSCROLLAREA_H
 #define QSCROLLAREA_H
 
-#include <QtGui/qabstractscrollarea.h>
+#include <qabstractscrollarea.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SCROLLAREA
 
@@ -37,6 +37,7 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
 
    GUI_CS_PROPERTY_READ(widgetResizable, widgetResizable)
    GUI_CS_PROPERTY_WRITE(widgetResizable, setWidgetResizable)
+
    GUI_CS_PROPERTY_READ(alignment, alignment)
    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
 
@@ -67,6 +68,7 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
    void resizeEvent(QResizeEvent *) override;
    void scrollContentsBy(int dx, int dy) override;
 
+   QSize viewportSizeHint() const override;
  private:
    Q_DECLARE_PRIVATE(QScrollArea)
    Q_DISABLE_COPY(QScrollArea)
@@ -74,6 +76,5 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
 
 #endif // QT_NO_SCROLLAREA
 
-QT_END_NAMESPACE
 
 #endif // QSCROLLAREA_H

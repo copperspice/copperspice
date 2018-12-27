@@ -23,9 +23,8 @@
 #ifndef QSLIDER_H
 #define QSLIDER_H
 
-#include <QtGui/qabstractslider.h>
+#include <qabstractslider.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SLIDER
 
@@ -40,6 +39,7 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
 
    GUI_CS_PROPERTY_READ(tickPosition, tickPosition)
    GUI_CS_PROPERTY_WRITE(tickPosition, setTickPosition)
+
    GUI_CS_PROPERTY_READ(tickInterval, tickInterval)
    GUI_CS_PROPERTY_WRITE(tickInterval, setTickInterval)
 
@@ -85,6 +85,5 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
 
 #endif // QT_NO_SLIDER
 
-QT_END_NAMESPACE
 
 #endif // QSLIDER_H

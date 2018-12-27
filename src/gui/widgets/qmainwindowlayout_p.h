@@ -37,27 +37,50 @@
 #include <qdockarealayout_p.h>
 #include <qtoolbararealayout_p.h>
 
-//#define Q_DEBUG_MAINWINDOW_LAYOUT
-
-#if defined(Q_DEBUG_MAINWINDOW_LAYOUT) && !defined(QT_NO_DOCKWIDGET)
-QT_BEGIN_NAMESPACE
-class QTextStream;
-Q_GUI_EXPORT void qt_dumpLayout(QTextStream &qout, QMainWindow *window);
-QT_END_NAMESPACE
-#endif
-
-#ifdef Q_OS_MAC
-
-using CFTypeRef    = const void *;
-using CFStringRef  = const struct __CFString *;
-
-#include <qunifiedtoolbarsurface_mac_p.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
 class QToolBar;
 class QRubberBand;
+
+#ifndef QT_NO_DOCKWIDGET
+class QDockWidgetGroupWindow : public QWidget
+{
+   GUI_CS_OBJECT(QDockWidgetGroupWindow)
+
+ public:
+   explicit QDockWidgetGroupWindow(QWidget *parent = 0, Qt::WindowFlags f = 0)
+      : QWidget(parent, f)
+   {}
+
+   QDockAreaLayoutInfo *layoutInfo() const;
+   QDockWidget *topDockWidget() const;
+   void destroyOrHideIfEmpty();
+   void adjustFlags();
+
+ protected:
+   bool event(QEvent *) override;
+   void paintEvent(QPaintEvent *) override;
+};
+// This item will be used in the layout for the gap item. We cannot use QWidgetItem directly
+// because QWidgetItem functions return an empty size for widgets that are are floating.
+class QDockWidgetGroupWindowItem : public QWidgetItem
+{
+ public:
+   explicit QDockWidgetGroupWindowItem(QDockWidgetGroupWindow *parent) : QWidgetItem(parent) {}
+   QSize minimumSize() const override {
+      return lay()->minimumSize();
+   }
+   QSize maximumSize() const override {
+      return lay()->maximumSize();
+   }
+   QSize sizeHint() const override {
+      return lay()->sizeHint();
+   }
+
+ private:
+   QLayout *lay() const {
+      return const_cast<QDockWidgetGroupWindowItem *>(this)->widget()->layout();
+   }
+};
+#endif
 
 /* This data structure represents the state of all the tool-bars and dock-widgets. It's value based
    so it can be easilly copied into a temporary variable. All operations are performed without moving
@@ -115,7 +138,7 @@ class QMainWindowLayoutState
    QLayoutItem *unplug(const QList<int> &path, QMainWindowLayoutState *savedState = 0);
 
    void saveState(QDataStream &stream) const;
-   bool checkFormat(QDataStream &stream, bool pre43);
+   bool checkFormat(QDataStream &stream);
    bool restoreState(QDataStream &stream, const QMainWindowLayoutState &oldState);
 };
 
@@ -170,11 +193,13 @@ class QMainWindowLayout : public QLayout
    Qt::DockWidgetArea corner(Qt::Corner corner) const;
    void addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget, Qt::Orientation orientation);
    void splitDockWidget(QDockWidget *after, QDockWidget *dockwidget, Qt::Orientation orientation);
+
    void tabifyDockWidget(QDockWidget *first, QDockWidget *second);
-   Qt::DockWidgetArea dockWidgetArea(QDockWidget *dockwidget) const;
+   Qt::DockWidgetArea dockWidgetArea(QWidget *widget) const;
    void raise(QDockWidget *widget);
    void setVerticalTabsEnabled(bool enabled);
    bool restoreDockWidget(QDockWidget *dockwidget);
+   QDockAreaLayoutInfo *dockInfo(QWidget *w);
 
 #ifndef QT_NO_TABBAR
    bool _documentMode;
@@ -199,6 +224,7 @@ class QMainWindowLayout : public QLayout
    void setTabShape(QTabWidget::TabShape tabShape);
    QTabWidget::TabPosition tabPosition(Qt::DockWidgetArea area) const;
    void setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosition tabPosition);
+   QDockWidgetGroupWindow *createTabbedDockWindow();
 #endif
 
 #endif // QT_NO_TABBAR
@@ -243,26 +269,35 @@ class QMainWindowLayout : public QLayout
    QWidget *pluggingWidget;
 
 #ifndef QT_NO_RUBBERBAND
-   QRubberBand *gapIndicator;
+   QPointer<QRubberBand> gapIndicator;
+#endif
+#ifndef QT_NO_DOCKWIDGET
+   QPointer<QWidget> currentHoveredFloat; // set when dragging over a floating dock widget
+   void setCurrentHoveredFloat(QWidget *w);
 #endif
 
-   QList<int> hover(QLayoutItem *widgetItem, const QPoint &mousePos);
+   void hover(QLayoutItem *widgetItem, const QPoint &mousePos);
    bool plug(QLayoutItem *widgetItem);
-   QLayoutItem *unplug(QWidget *widget);
+   QLayoutItem *unplug(QWidget *widget, bool group = false);
    void revert(QLayoutItem *widgetItem);
-   void updateGapIndicator();
+
    void paintDropIndicator(QPainter *p, QWidget *widget, const QRegion &clip);
    void applyState(QMainWindowLayoutState &newState, bool animate = true);
    void restore(bool keepSavedState = false);
    void updateHIToolBarStatus();
    void animationFinished(QWidget *widget);
 
- private :
+ private:
+   GUI_CS_SLOT_1(Private, void updateGapIndicator())
+   GUI_CS_SLOT_2(updateGapIndicator)
 
 #ifndef QT_NO_DOCKWIDGET
 #ifndef QT_NO_TABBAR
    GUI_CS_SLOT_1(Private, void tabChanged())
    GUI_CS_SLOT_2(tabChanged)
+
+   GUI_CS_SLOT_1(Private, void tabMoved(int from, int to))
+   GUI_CS_SLOT_2(tabMoved)
 #endif
 #endif
 
@@ -270,36 +305,9 @@ class QMainWindowLayout : public QLayout
    void updateTabBarShapes();
 #endif
 
-#ifdef Q_OS_MAC
- public:
-   struct ToolBarSaveState {
-      ToolBarSaveState() : movable(false) { }
-      ToolBarSaveState(bool newMovable, const QSize &newMax)
-         : movable(newMovable), maximumSize(newMax) { }
-      bool movable;
-      QSize maximumSize;
-   };
-
-   QList<QToolBar *> qtoolbarsInUnifiedToolbarList;
-   QList<void *> toolbarItemsCopy;
-   QHash<void *, QToolBar *> unifiedToolbarHash;
-   QHash<QToolBar *, ToolBarSaveState> toolbarSaveState;
-   QHash<QString, QToolBar *> cocoaItemIDToToolbarHash;
-   void insertIntoMacToolbar(QToolBar *before, QToolBar *after);
-   void removeFromMacToolbar(QToolBar *toolbar);
-   void cleanUpMacToolbarItems();
-   void fixSizeInUnifiedToolbar(QToolBar *tb) const;
-   bool activateUnifiedToolbarAfterFullScreen;
-   void syncUnifiedToolbarVisibility();
-   bool blockVisiblityCheck;
-
-
-   QUnifiedToolbarSurface *unifiedSurface;
-   void updateUnifiedToolbarOffset();
-#endif
-
 };
-QT_END_NAMESPACE
+QDebug operator<<(QDebug debug, const QDockAreaLayout &layout);
+QDebug operator<<(QDebug debug, const QMainWindowLayout *layout);
 
 #endif // QT_NO_MAINWINDOW
 

@@ -39,119 +39,157 @@
 #include <qaccessible.h>
 #endif
 
+#ifdef Q_OS_OSX
+#include <qplatform_nativeinterface.h>
+#endif
+
 #include <qdebug.h>
 #include <qtabbar_p.h>
 
 #ifndef QT_NO_TABBAR
 
-#ifdef Q_OS_MAC
-#include <cs_carbon_wrapper_p.h>
-#include <qt_mac_p.h>
-#include <qt_cocoa_helpers_mac_p.h>
-#endif
 
-QT_BEGIN_NAMESPACE
+QMovableTabWidget::QMovableTabWidget(QWidget *parent)
+   : QWidget(parent)
+{
+}
+void QMovableTabWidget::setPixmap(const QPixmap &pixmap)
+{
+   m_pixmap = pixmap;
+   update();
+}
+void QMovableTabWidget::paintEvent(QPaintEvent *e)
+{
+   QPainter p(this);
+   p.drawPixmap(0, 0, m_pixmap);
+}
 
 inline static bool verticalTabs(QTabBar::Shape shape)
 {
    return shape == QTabBar::RoundedWest
-          || shape == QTabBar::RoundedEast
-          || shape == QTabBar::TriangularWest
-          || shape == QTabBar::TriangularEast;
+      || shape == QTabBar::RoundedEast
+      || shape == QTabBar::TriangularWest
+      || shape == QTabBar::TriangularEast;
 }
 
 void QTabBarPrivate::updateMacBorderMetrics()
 {
-#if (defined Q_OS_MAC)
+#ifdef Q_OS_MAC
 
    Q_Q(QTabBar);
+   // Extend the unified title and toolbar area to cover the tab bar iff
+   // 1) the tab bar is in document mode
+   // 2) the tab bar is directly below an "unified" area.
+   // The extending itself is done in the Cocoa platform plugin and Mac style,
+   // this function registers geometry and visibility state for the tab bar.
 
-   // wrapper for carbon
-   cs_updateMacBorderMetrics(q);
-
-   // In Cocoa we need to keep track of the drawRect method.
-   // If documentMode is enabled we need to change it, unless a toolbar is present.
-
-   // All the information is kept in the window, which is why we retrieve the private widget
-   // for it instead of the private widget for this widget.
-
-   QWidgetPrivate *privateWidget = qt_widget_private(q->window());
-
-   if (privateWidget) {
-      privateWidget->changeMethods = documentMode;
+   // Calculate geometry
+   int upper, lower;
+   if (documentMode) {
+      QPoint windowPos = q->mapTo(q->window(), QPoint(0, 0));
+      upper = windowPos.y();
+      int tabStripHeight = q->tabSizeHint(0).height();
+      int pixelTweak = -3;
+      lower = upper + tabStripHeight + pixelTweak;
+   } else {
+      upper = 0;
+      lower = 0;
    }
 
-   // in Cocoa there is no simple way to remove the baseline, ask the top level to do the magic
-   privateWidget->syncUnifiedMode();
+   QPlatformNativeInterface *nativeInterface = QGuiApplication::platformNativeInterface();
+   quintptr identifier = reinterpret_cast<quintptr>(q);
 
+   // Set geometry
+   QPlatformNativeInterface::NativeResourceForIntegrationFunction function =
+      nativeInterface->nativeResourceFunctionForIntegration("registerContentBorderArea");
+   if (!function) {
+      return;   // Not Cocoa platform plugin.
+   }
+   typedef void (*RegisterContentBorderAreaFunction)(QWindow * window, quintptr identifier, int upper, int lower);
+   (reinterpret_cast<RegisterContentBorderAreaFunction>(function))(q->window()->windowHandle(), identifier, upper, lower);
+
+   // Set visibility state
+   function = nativeInterface->nativeResourceFunctionForIntegration("setContentBorderAreaEnabled");
+   if (!function) {
+      return;
+   }
+
+   typedef void (*SetContentBorderAreaEnabledFunction)(QWindow * window, quintptr identifier, bool enable);
+   (reinterpret_cast<SetContentBorderAreaEnabledFunction>(function))(q->window()->windowHandle(), identifier, q->isVisible());
 #endif
 }
 
-void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
+void QTabBarPrivate::initBasicStyleOption(QStyleOptionTab *option, int tabIndex) const
 {
-   Q_D(const QTabBar);
+   Q_Q(const QTabBar);
 
-   int totalTabs = d->tabList.size();
+   const int totalTabs = tabList.size();
 
    if (! option || (tabIndex < 0 || tabIndex >= totalTabs)) {
       return;
    }
 
-   const QTabBarPrivate::Tab &tab = *(d->tabList.at(tabIndex));
+   const QTabBarPrivate::Tab &tab = *(tabList.at(tabIndex));
 
-   option->initFrom(this);
+   option->initFrom(q);
    option->state &= ~(QStyle::State_HasFocus | QStyle::State_MouseOver);
-   option->rect = tabRect(tabIndex);
+   option->rect = q->tabRect(tabIndex);
 
-   bool isCurrent = tabIndex == d->currentIndex;
+   const bool isCurrent = tabIndex == currentIndex;
    option->row = 0;
 
-   if (tabIndex == d->pressedIndex) {
+   if (tabIndex == pressedIndex) {
       option->state |= QStyle::State_Sunken;
    }
+
    if (isCurrent) {
       option->state |= QStyle::State_Selected;
    }
-   if (isCurrent && hasFocus()) {
+
+   if (isCurrent && q->hasFocus()) {
       option->state |= QStyle::State_HasFocus;
    }
-   if (!tab.enabled) {
+
+   if (! tab.enabled) {
       option->state &= ~QStyle::State_Enabled;
    }
-   if (isActiveWindow()) {
+
+   if (q->isActiveWindow()) {
       option->state |= QStyle::State_Active;
    }
-   if (! d->dragInProgress && option->rect == d->hoverRect) {
+
+   if (! dragInProgress && option->rect == hoverRect) {
       option->state |= QStyle::State_MouseOver;
    }
-   option->shape = d->shape;
+
+   option->shape = shape;
    option->text = tab.text;
 
    if (tab.textColor.isValid()) {
-      option->palette.setColor(foregroundRole(), tab.textColor);
+      option->palette.setColor(q->foregroundRole(), tab.textColor);
+
+   } else if (q->style()->inherits("QMacStyle") && isCurrent && ! documentMode
+      && q->isActiveWindow()) {
+      option->palette.setColor(QPalette::WindowText, Qt::white);
    }
 
    option->icon = tab.icon;
-   if (QStyleOptionTabV2 *optionV2 = qstyleoption_cast<QStyleOptionTabV2 *>(option)) {
-      optionV2->iconSize = iconSize();   // Will get the default value then.
-   }
+   option->iconSize = q->iconSize();   // Will get the default value then.
 
-   if (QStyleOptionTabV3 *optionV3 = qstyleoption_cast<QStyleOptionTabV3 *>(option)) {
-      optionV3->leftButtonSize = tab.leftWidget ? tab.leftWidget->size() : QSize();
-      optionV3->rightButtonSize = tab.rightWidget ? tab.rightWidget->size() : QSize();
-      optionV3->documentMode = d->documentMode;
-   }
+   option->leftButtonSize  = tab.leftWidget ? tab.leftWidget->size() : QSize();
+   option->rightButtonSize = tab.rightWidget ? tab.rightWidget->size() : QSize();
+   option->documentMode    = documentMode;
 
-   if (tabIndex > 0 && tabIndex - 1 == d->currentIndex) {
+   if (tabIndex > 0 && tabIndex - 1 == currentIndex) {
       option->selectedPosition = QStyleOptionTab::PreviousIsSelected;
-   } else if (tabIndex + 1 < totalTabs && tabIndex + 1 == d->currentIndex) {
+   } else if (tabIndex + 1 < totalTabs && tabIndex + 1 == currentIndex) {
       option->selectedPosition = QStyleOptionTab::NextIsSelected;
    } else {
       option->selectedPosition = QStyleOptionTab::NotAdjacent;
    }
 
-   bool paintBeginning = (tabIndex == 0) || (d->dragInProgress && tabIndex == d->pressedIndex + 1);
-   bool paintEnd = (tabIndex == totalTabs - 1) || (d->dragInProgress && tabIndex == d->pressedIndex - 1);
+   const bool paintBeginning = (tabIndex == 0) || (dragInProgress && tabIndex == pressedIndex + 1);
+   const bool paintEnd = (tabIndex == totalTabs - 1) || (dragInProgress && tabIndex == pressedIndex - 1);
 
    if (paintBeginning) {
       if (paintEnd) {
@@ -167,19 +205,28 @@ void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
    }
 
 #ifndef QT_NO_TABWIDGET
-   if (const QTabWidget *tw = qobject_cast<const QTabWidget *>(parentWidget())) {
+   if (const QTabWidget *tw = qobject_cast<const QTabWidget *>(q->parentWidget())) {
+      option->features |= QStyleOptionTab::HasFrame;
+
       if (tw->cornerWidget(Qt::TopLeftCorner) || tw->cornerWidget(Qt::BottomLeftCorner)) {
          option->cornerWidgets |= QStyleOptionTab::LeftCornerWidget;
       }
+
       if (tw->cornerWidget(Qt::TopRightCorner) || tw->cornerWidget(Qt::BottomRightCorner)) {
          option->cornerWidgets |= QStyleOptionTab::RightCornerWidget;
       }
    }
 #endif
 
+}
+
+void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
+{
+   Q_D(const QTabBar);
+   d->initBasicStyleOption(option, tabIndex);
    QRect textRect = style()->subElementRect(QStyle::SE_TabBarTabText, option, this);
    option->text = fontMetrics().elidedText(option->text, d->elideMode, textRect.width(),
-                                           Qt::TextShowMnemonic);
+         Qt::TextShowMnemonic);
 }
 
 
@@ -187,7 +234,7 @@ int QTabBarPrivate::extraWidth() const
 {
    Q_Q(const QTabBar);
    return 2 * qMax(q->style()->pixelMetric(QStyle::PM_TabBarScrollButtonWidth, 0, q),
-                   QApplication::globalStrut().width());
+         QApplication::globalStrut().width());
 }
 
 void QTabBarPrivate::init()
@@ -210,6 +257,11 @@ void QTabBarPrivate::init()
    } else
 #endif
       q->setFocusPolicy(Qt::TabFocus);
+#ifndef QT_NO_ACCESSIBILITY
+   leftB->setAccessibleName(QTabBar::tr("Scroll Left"));
+   rightB->setAccessibleName(QTabBar::tr("Scroll Right"));
+#endif
+
    q->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
    elideMode = Qt::TextElideMode(q->style()->styleHint(QStyle::SH_TabBar_ElideMode, 0, q));
    useScrollButtons = !q->style()->styleHint(QStyle::SH_TabBar_PreferNoArrows, 0, q);
@@ -276,7 +328,7 @@ void QTabBarPrivate::layoutTabs()
    // depending on tabAlignment.
    tabChain[tabChainIndex].init();
    tabChain[tabChainIndex].expansive = (tabAlignment != Qt::AlignLeft)
-                                       && (tabAlignment != Qt::AlignJustify);
+      && (tabAlignment != Qt::AlignJustify);
 
    tabChain[tabChainIndex].empty = true;
    ++tabChainIndex;
@@ -360,7 +412,7 @@ void QTabBarPrivate::layoutTabs()
    // Mirror our front item
    tabChain[tabChainIndex].init();
    tabChain[tabChainIndex].expansive = (tabAlignment != Qt::AlignRight)
-                                       && (tabAlignment != Qt::AlignJustify);
+      && (tabAlignment != Qt::AlignJustify);
    tabChain[tabChainIndex].empty = true;
 
    // Do the calculation
@@ -390,7 +442,7 @@ void QTabBarPrivate::layoutTabs()
 
             leftB->setGeometry(arrows.left(), arrows.top(), extra / 2, arrows.height());
             rightB->setGeometry(arrows.right() - extra / 2 + buttonOverlap, arrows.top(),
-                                extra / 2, arrows.height());
+               extra / 2, arrows.height());
 
             leftB->setArrowType(Qt::LeftArrow);
             rightB->setArrowType(Qt::RightArrow);
@@ -398,7 +450,7 @@ void QTabBarPrivate::layoutTabs()
 
             rightB->setGeometry(arrows.left(), arrows.top(), extra / 2, arrows.height());
             leftB->setGeometry(arrows.right() - extra / 2 + buttonOverlap, arrows.top(),
-                               extra / 2, arrows.height());
+               extra / 2, arrows.height());
 
             rightB->setArrowType(Qt::LeftArrow);
             leftB->setArrowType(Qt::RightArrow);
@@ -409,7 +461,7 @@ void QTabBarPrivate::layoutTabs()
          leftB->setGeometry(arrows.left(), arrows.top(), arrows.width(), extra / 2);
          leftB->setArrowType(Qt::UpArrow);
          rightB->setGeometry(arrows.left(), arrows.bottom() - extra / 2 + 1,
-                             arrows.width(), extra / 2);
+            arrows.width(), extra / 2);
          rightB->setArrowType(Qt::DownArrow);
       }
 
@@ -463,6 +515,17 @@ void QTabBarPrivate::makeVisible(int index)
    }
 }
 
+void QTabBarPrivate::killSwitchTabTimer()
+{
+   Q_Q(QTabBar);
+
+   if (switchTabTimerId) {
+      q->killTimer(switchTabTimerId);
+      switchTabTimerId = 0;
+   }
+
+   switchTabCurrentIndex = -1;
+}
 void QTabBarPrivate::layoutTab(int index)
 {
    Q_Q(QTabBar);
@@ -475,20 +538,24 @@ void QTabBarPrivate::layoutTab(int index)
       return;
    }
 
-   QStyleOptionTabV3 opt;
+   QStyleOptionTab opt;
    q->initStyleOption(&opt, index);
 
    if (tab.leftWidget) {
       QRect rect = q->style()->subElementRect(QStyle::SE_TabBarTabLeftButton, &opt, q);
       QPoint p   = rect.topLeft();
 
+      // broom - review if tabs have an issue
+
       if ((index == pressedIndex) || paintWithOffsets) {
          if (vertical) {
             p.setY(p.y() + tab.dragOffset);
+
          } else {
             p.setX(p.x() + tab.dragOffset);
          }
       }
+
       tab.leftWidget->move(p);
    }
 
@@ -516,6 +583,13 @@ void QTabBarPrivate::layoutWidgets(int start)
    }
 }
 
+void QTabBarPrivate::autoHideTabs()
+{
+   Q_Q(QTabBar);
+   if (autoHide) {
+      q->setVisible(q->count() > 1);
+   }
+}
 void QTabBarPrivate::_q_closeTab()
 {
    Q_Q(QTabBar);
@@ -524,7 +598,7 @@ void QTabBarPrivate::_q_closeTab()
    int tabToClose  = -1;
 
    QTabBar::ButtonPosition closeSide = (QTabBar::ButtonPosition)q->style()->styleHint(
-                                          QStyle::SH_TabBar_CloseButtonPosition, 0, q);
+         QStyle::SH_TabBar_CloseButtonPosition, 0, q);
 
    for (int i = 0; i < tabList.count(); ++i) {
       if (closeSide == QTabBar::LeftSide) {
@@ -738,7 +812,7 @@ int QTabBar::insertTab(int index, const QIcon &icon, const QString &text)
    }
 
    if (d->closeButtonOnTabs) {
-      QStyleOptionTabV3 opt;
+      QStyleOptionTab opt;
       initStyleOption(&opt, index);
       ButtonPosition closeSide = (ButtonPosition)style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, 0, this);
 
@@ -754,6 +828,8 @@ int QTabBar::insertTab(int index, const QIcon &icon, const QString &text)
    }
 
    tabInserted(index);
+   d->autoHideTabs();
+
    return index;
 }
 
@@ -768,6 +844,9 @@ void QTabBar::removeTab(int index)
    Q_D(QTabBar);
 
    if (d->validIndex(index)) {
+      if (d->dragInProgress) {
+         d->moveTabFinished(d->pressedIndex);
+      }
 
 #ifndef QT_NO_SHORTCUT
       releaseShortcut(d->tabList.at(index)->shortcutId);
@@ -810,6 +889,7 @@ void QTabBar::removeTab(int index)
                   if (newIndex > index) {
                      newIndex--;
                   }
+
                   if (d->validIndex(newIndex)) {
                      break;
                   }
@@ -849,6 +929,7 @@ void QTabBar::removeTab(int index)
       }
 
       d->refresh();
+      d->autoHideTabs();
       tabRemoved(index);
    }
 }
@@ -908,6 +989,7 @@ void QTabBar::setTabText(int index, const QString &text)
    Q_D(QTabBar);
 
    if (QSharedPointer<QTabBarPrivate::Tab> tab = d->at(index)) {
+      d->textSizes.remove(tab->text);
       tab->text = text;
 
 #ifndef QT_NO_SHORTCUT
@@ -1112,10 +1194,14 @@ void QTabBar::setCurrentIndex(int index)
 
 #ifndef QT_NO_ACCESSIBILITY
       if (QAccessible::isActive()) {
-         QAccessible::updateAccessibility(this, oldIndex + 1, QAccessible::Selection);
-
-         QAccessible::updateAccessibility(this, index + 1, QAccessible::Focus);
-         QAccessible::updateAccessibility(this, index + 1, QAccessible::Selection);
+         if (hasFocus()) {
+            QAccessibleEvent focusEvent(this, QAccessible::Focus);
+            focusEvent.setChild(index);
+            QAccessible::updateAccessibility(&focusEvent);
+         }
+         QAccessibleEvent selectionEvent(this, QAccessible::Selection);
+         selectionEvent.setChild(index);
+         QAccessible::updateAccessibility(&selectionEvent);
       }
 #endif
       emit currentChanged(index);
@@ -1238,8 +1324,8 @@ QSize QTabBar::tabSizeHint(int index) const
    Q_D(const QTabBar);
 
    if (QSharedPointer<const QTabBarPrivate::Tab> tab = d->at(index)) {
-      QStyleOptionTabV3 opt;
-      initStyleOption(&opt, index);
+      QStyleOptionTab opt;
+      d->initBasicStyleOption(&opt, index);
       opt.text = d->tabList.at(index)->text;
 
       QSize iconSize = tab->icon.isNull() ? QSize(0, 0) : opt.iconSize;
@@ -1267,14 +1353,22 @@ QSize QTabBar::tabSizeHint(int index) const
          padding += 4;
       }
 
+      QHash<QString, QSize>::iterator it = d->textSizes.find(tab->text);
+
+      if (it == d->textSizes.end()) {
+         it = d->textSizes.insert(tab->text, fm.size(Qt::TextShowMnemonic, tab->text));
+      }
+
+      const int textWidth = it.value().width();
+
       QSize csz;
       if (verticalTabs(d->shape)) {
          csz = QSize( qMax(maxWidgetWidth, qMax(fm.height(), iconSize.height())) + vframe,
-                      fm.size(Qt::TextShowMnemonic, tab->text).width() + iconSize.width() + hframe + widgetHeight + padding);
+               textWidth + iconSize.width() + hframe + widgetHeight + padding);
+
       } else {
-         csz = QSize(fm.size(Qt::TextShowMnemonic, tab->text).width() + iconSize.width() + hframe
-                     + widgetWidth + padding,
-                     qMax(maxWidgetHeight, qMax(fm.height(), iconSize.height())) + vframe);
+         csz = QSize(textWidth + iconSize.width() + hframe + widgetWidth + padding,
+               qMax(maxWidgetHeight, qMax(fm.height(), iconSize.height())) + vframe);
       }
 
       QSize retSize = style()->sizeFromContents(QStyle::CT_TabBarTab, &opt, csz, this);
@@ -1413,8 +1507,43 @@ bool QTabBar::event(QEvent *event)
       }
 #endif
 
-   }
 
+   } else if (event->type() == QEvent::MouseButtonDblClick) { // ### fixme Qt 6: move to mouseDoubleClickEvent(), here for BC reasons.
+      const QPoint pos = static_cast<const QMouseEvent *>(event)->pos();
+      const bool isEventInCornerButtons = (!d->leftB->isHidden() && d->leftB->geometry().contains(pos))
+         || (!d->rightB->isHidden() && d->rightB->geometry().contains(pos));
+      if (!isEventInCornerButtons) {
+         emit tabBarDoubleClicked(tabAt(pos));
+      }
+   } else if (event->type() == QEvent::Move) {
+      d->updateMacBorderMetrics();
+      return QWidget::event(event);
+
+#ifndef QT_NO_DRAGANDDROP
+   } else if (event->type() == QEvent::DragEnter) {
+      if (d->changeCurrentOnDrag) {
+         event->accept();
+      }
+
+   } else if (event->type() == QEvent::DragMove) {
+      if (d->changeCurrentOnDrag) {
+         const int tabIndex = tabAt(static_cast<QDragMoveEvent *>(event)->pos());
+         if (isTabEnabled(tabIndex) && d->switchTabCurrentIndex != tabIndex) {
+            d->switchTabCurrentIndex = tabIndex;
+            if (d->switchTabTimerId) {
+               killTimer(d->switchTabTimerId);
+            }
+            d->switchTabTimerId = startTimer(style()->styleHint(QStyle::SH_TabBar_ChangeCurrentDelay));
+         }
+         event->ignore();
+      }
+
+   } else if (event->type() == QEvent::DragLeave || event->type() == QEvent::Drop) {
+      d->killSwitchTabTimer();
+      event->ignore();
+
+#endif
+   }
    return QWidget::event(event);
 }
 
@@ -1437,7 +1566,7 @@ void QTabBar::paintEvent(QPaintEvent *)
 {
    Q_D(QTabBar);
 
-   QStyleOptionTabBarBaseV2 optTabBase;
+   QStyleOptionTabBarBase optTabBase;
    QTabBarPrivate::initStyleBaseOption(&optTabBase, this, size());
 
    QStylePainter p(this);
@@ -1464,7 +1593,7 @@ void QTabBar::paintEvent(QPaintEvent *)
    }
 
    for (int i = 0; i < d->tabList.count(); ++i) {
-      QStyleOptionTabV3 tab;
+      QStyleOptionTab tab;
       initStyleOption(&tab, i);
 
       if (d->paintWithOffsets && d->tabList[i]->dragOffset != 0) {
@@ -1482,14 +1611,14 @@ void QTabBar::paintEvent(QPaintEvent *)
       // If this tab is partially obscured, make a note of it so that we can pass the information
       // along when we draw the tear.
       if (((!vertical && (!rtl && tab.rect.left() < 0)) || (rtl && tab.rect.right() > width()))
-            || (vertical && tab.rect.top() < 0)) {
+         || (vertical && tab.rect.top() < 0)) {
          cut = i;
          cutTab = tab;
       }
 
       // Don't bother drawing a tab if the entire tab is outside of the visible tab bar.
       if ((!vertical && (tab.rect.right() < 0 || tab.rect.left() > width()))
-            || (vertical && (tab.rect.bottom() < 0 || tab.rect.top() > height()))) {
+         || (vertical && (tab.rect.bottom() < 0 || tab.rect.top() > height()))) {
          continue;
       }
 
@@ -1503,7 +1632,7 @@ void QTabBar::paintEvent(QPaintEvent *)
 
    // Draw the selected tab last to get it "on top"
    if (selected >= 0) {
-      QStyleOptionTabV3 tab;
+      QStyleOptionTab tab;
       initStyleOption(&tab, selected);
 
       if (d->paintWithOffsets && d->tabList[selected]->dragOffset != 0) {
@@ -1625,6 +1754,7 @@ void QTabBar::moveTab(int from, int to)
    }
 
    // update external variables
+   int previousIndex = d->currentIndex;
    d->currentIndex = d->calculateNewPosition(from, to, d->currentIndex);
 
    // If we are in the middle of a drag update the dragStartPosition
@@ -1648,6 +1778,9 @@ void QTabBar::moveTab(int from, int to)
    update();
 
    emit tabMoved(from, to);
+   if (previousIndex != d->currentIndex) {
+      emit currentChanged(d->currentIndex);
+   }
    emit tabLayoutChange();
 }
 
@@ -1691,6 +1824,13 @@ void QTabBar::mousePressEvent(QMouseEvent *event)
 {
    Q_D(QTabBar);
 
+   const QPoint pos = event->pos();
+   const bool isEventInCornerButtons = (!d->leftB->isHidden() && d->leftB->geometry().contains(pos))
+      || (!d->rightB->isHidden() && d->rightB->geometry().contains(pos));
+   if (!isEventInCornerButtons) {
+      const int index = d->indexAtPos(pos);
+      emit tabBarClicked(index);
+   }
    if (event->button() != Qt::LeftButton) {
       event->ignore();
       return;
@@ -1703,12 +1843,9 @@ void QTabBar::mousePressEvent(QMouseEvent *event)
 
    d->pressedIndex = d->indexAtPos(event->pos());
 
-#ifdef Q_OS_MAC
-   d->previousPressedIndex = d->pressedIndex;
-#endif
 
    if (d->validIndex(d->pressedIndex)) {
-      QStyleOptionTabBarBaseV2 optTabBase;
+      QStyleOptionTabBarBase optTabBase;
       optTabBase.init(this);
       optTabBase.documentMode = d->documentMode;
 
@@ -1744,10 +1881,8 @@ void QTabBar::mouseMoveEvent(QMouseEvent *event)
          }
       }
 
-      int offset = (event->pos() - d->dragStartPosition).manhattanLength();
-
-      if (event->buttons() == Qt::LeftButton && offset > QApplication::startDragDistance()
-            && d->validIndex(d->pressedIndex)) {
+      if (event->buttons() == Qt::LeftButton && d->dragInProgress
+         && d->validIndex(d->pressedIndex)) {
 
          bool vertical = verticalTabs(d->shape);
          int dragDistance;
@@ -1784,8 +1919,8 @@ void QTabBar::mouseMoveEvent(QMouseEvent *event)
                offset *= -1;
             }
             for (int i = d->pressedIndex;
-                  offset > 0 ? i < overIndex : i > overIndex;
-                  i += offset) {
+               offset > 0 ? i < overIndex : i > overIndex;
+               i += offset) {
                QRect overIndexRect = tabRect(overIndex);
                int needsToBeOver = (vertical ? overIndexRect.height() : overIndexRect.width()) / 2;
                if (dragDistance > needsToBeOver) {
@@ -1798,24 +1933,15 @@ void QTabBar::mouseMoveEvent(QMouseEvent *event)
 
          update();
       }
-#ifdef Q_OS_MAC
-   } else if (!d->documentMode && event->buttons() == Qt::LeftButton && d->previousPressedIndex != -1) {
-      int newPressedIndex = d->indexAtPos(event->pos());
-      if (d->pressedIndex == -1 && d->previousPressedIndex == newPressedIndex) {
-         d->pressedIndex = d->previousPressedIndex;
-         update(tabRect(d->pressedIndex));
-      } else if (d->pressedIndex != newPressedIndex) {
-         d->pressedIndex = -1;
-         update(tabRect(d->previousPressedIndex));
-      }
-#endif
+
    }
 
    if (event->buttons() != Qt::LeftButton) {
       event->ignore();
       return;
    }
-   QStyleOptionTabBarBaseV2 optTabBase;
+
+   QStyleOptionTabBarBase optTabBase;
    optTabBase.init(this);
    optTabBase.documentMode = d->documentMode;
 }
@@ -1825,29 +1951,28 @@ void QTabBarPrivate::setupMovableTab()
    Q_Q(QTabBar);
 
    if (! movingTab) {
-      movingTab = new QWidget(q);
+      movingTab = new QMovableTabWidget(q);
    }
 
-   int taboverlap = q->style()->pixelMetric(QStyle::PM_TabBarTabOverlap, 0 , q);
+   int taboverlap = q->style()->pixelMetric(QStyle::PM_TabBarTabOverlap, 0, q);
    QRect grabRect = q->tabRect(pressedIndex);
    grabRect.adjust(-taboverlap, 0, taboverlap, 0);
 
-   QPixmap grabImage(grabRect.size());
+   QPixmap grabImage(grabRect.size() * q->devicePixelRatioF());
+   grabImage.setDevicePixelRatio(q->devicePixelRatioF());
    grabImage.fill(Qt::transparent);
    QStylePainter p(&grabImage, q);
    p.initFrom(q);
 
-   QStyleOptionTabV3 tab;
+   QStyleOptionTab tab;
    q->initStyleOption(&tab, pressedIndex);
    tab.rect.moveTopLeft(QPoint(taboverlap, 0));
    p.drawControl(QStyle::CE_TabBarTab, tab);
    p.end();
 
-   QPalette pal;
-   pal.setBrush(QPalette::All, QPalette::Window, grabImage);
-   movingTab->setPalette(pal);
+   movingTab->setPixmap(grabImage);
    movingTab->setGeometry(grabRect);
-   movingTab->setAutoFillBackground(true);
+
    movingTab->raise();
 
    // Re-arrange widget order to avoid overlaps
@@ -1924,18 +2049,16 @@ void QTabBar::mouseReleaseEvent(QMouseEvent *event)
       return;
    }
 
-#ifdef Q_OS_MAC
-   d->previousPressedIndex = -1;
-#endif
 
    if (d->movable && d->dragInProgress && d->validIndex(d->pressedIndex)) {
       int length = d->tabList[d->pressedIndex]->dragOffset;
 
       int width = verticalTabs(d->shape)
-                  ? tabRect(d->pressedIndex).height()
-                  : tabRect(d->pressedIndex).width();
+         ? tabRect(d->pressedIndex).height()
+         : tabRect(d->pressedIndex).width();
 
       int duration = qMin(ANIMATION_DURATION, (qAbs(length) * ANIMATION_DURATION) / width);
+
       d->tabList[d->pressedIndex]->startAnimation(d, duration);
       d->dragInProgress = false;
       d->movingTab->setVisible(false);
@@ -1945,7 +2068,7 @@ void QTabBar::mouseReleaseEvent(QMouseEvent *event)
    int i = d->indexAtPos(event->pos()) == d->pressedIndex ? d->pressedIndex : -1;
    d->pressedIndex = -1;
 
-   QStyleOptionTabBarBaseV2 optTabBase;
+   QStyleOptionTabBarBase optTabBase;
    optTabBase.initFrom(this);
    optTabBase.documentMode = d->documentMode;
 
@@ -1974,11 +2097,13 @@ void QTabBar::keyPressEvent(QKeyEvent *event)
 #ifndef QT_NO_WHEELEVENT
 void QTabBar::wheelEvent(QWheelEvent *event)
 {
+#ifndef Q_OS_MAC
    Q_D(QTabBar);
 
    int offset = event->delta() > 0 ? -1 : 1;
    d->setCurrentNextEnabledIndex(offset);
    QWidget::wheelEvent(event);
+#endif
 }
 #endif //QT_NO_WHEELEVENT
 
@@ -1999,23 +2124,35 @@ void QTabBarPrivate::setCurrentNextEnabledIndex(int offset)
 void QTabBar::changeEvent(QEvent *event)
 {
    Q_D(QTabBar);
-
-   if (event->type() == QEvent::StyleChange) {
-      if (! d->elideModeSetByUser) {
-         d->elideMode = Qt::TextElideMode(style()->styleHint(QStyle::SH_TabBar_ElideMode, 0, this));
-      }
-
-      if (!d->useScrollButtonsSetByUser) {
-         d->useScrollButtons = !style()->styleHint(QStyle::SH_TabBar_PreferNoArrows, 0, this);
-      }
-
-      d->refresh();
-
-   } else if (event->type() == QEvent::FontChange) {
-      d->refresh();
+   switch (event->type()) {
+      case QEvent::StyleChange:
+         if (!d->elideModeSetByUser) {
+            d->elideMode = Qt::TextElideMode(style()->styleHint(QStyle::SH_TabBar_ElideMode, 0, this));
+         }
+         if (!d->useScrollButtonsSetByUser) {
+            d->useScrollButtons = !style()->styleHint(QStyle::SH_TabBar_PreferNoArrows, 0, this);
+         }
+      // fallthrough
+      case QEvent::FontChange:
+         d->textSizes.clear();
+         d->refresh();
+         break;
+      default:
+         break;
    }
 
    QWidget::changeEvent(event);
+}
+void QTabBar::timerEvent(QTimerEvent *event)
+{
+   Q_D(QTabBar);
+   if (event->timerId() == d->switchTabTimerId) {
+      killTimer(d->switchTabTimerId);
+      d->switchTabTimerId = 0;
+      setCurrentIndex(d->switchTabCurrentIndex);
+      d->switchTabCurrentIndex = -1;
+   }
+   QWidget::timerEvent(event);
 }
 
 Qt::TextElideMode QTabBar::elideMode() const
@@ -2029,6 +2166,7 @@ void QTabBar::setElideMode(Qt::TextElideMode mode)
    Q_D(QTabBar);
    d->elideMode = mode;
    d->elideModeSetByUser = true;
+   d->textSizes.clear();
    d->refresh();
 }
 
@@ -2152,6 +2290,41 @@ void QTabBar::setDocumentMode(bool enabled)
    d->updateMacBorderMetrics();
 }
 
+
+bool QTabBar::autoHide() const
+{
+   Q_D(const QTabBar);
+   return d->autoHide;
+}
+
+void QTabBar::setAutoHide(bool hide)
+{
+   Q_D(QTabBar);
+   if (d->autoHide == hide) {
+      return;
+   }
+
+   d->autoHide = hide;
+   if (hide) {
+      d->autoHideTabs();
+   } else {
+      setVisible(true);
+   }
+}
+
+bool QTabBar::changeCurrentOnDrag() const
+{
+   Q_D(const QTabBar);
+   return d->changeCurrentOnDrag;
+}
+void QTabBar::setChangeCurrentOnDrag(bool change)
+{
+   Q_D(QTabBar);
+   d->changeCurrentOnDrag = change;
+   if (!change) {
+      d->killSwitchTabTimer();
+   }
+}
 void QTabBar::setTabButton(int index, ButtonPosition position, QWidget *widget)
 {
    Q_D(QTabBar);
@@ -2264,7 +2437,7 @@ void CloseButton::paintEvent(QPaintEvent *)
       int index = tb->currentIndex();
 
       QTabBar::ButtonPosition position =
-                  (QTabBar::ButtonPosition)style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, 0, tb);
+         (QTabBar::ButtonPosition)style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, 0, tb);
 
       if (tb->tabButton(index, position) == this) {
          opt.state |= QStyle::State_Selected;
@@ -2274,7 +2447,19 @@ void CloseButton::paintEvent(QPaintEvent *)
    style()->drawPrimitive(QStyle::PE_IndicatorTabClose, &opt, &p, this);
 }
 
-QT_END_NAMESPACE
+#ifndef QT_NO_ANIMATION
+void QTabBarPrivate::Tab::TabBarAnimation::updateCurrentValue(const QVariant &current)
+{
+   priv->moveTab(priv->tabList.indexOf(tab), current.toInt());
+}
+
+void QTabBarPrivate::Tab::TabBarAnimation::updateState(QAbstractAnimation::State, QAbstractAnimation::State newState)
+{
+   if (newState == Stopped) {
+      priv->moveTabFinished(priv->tabList.indexOf(tab));
+   }
+}
+#endif
 
 
 #endif // QT_NO_TABBAR

@@ -29,13 +29,14 @@
 #ifndef QT_NO_MDIAREA
 
 #include <QList>
+#include <QVector>
 #include <QRect>
 #include <QPoint>
-#include <QtGui/qapplication.h>
+#include <qapplication.h>
 #include <qmdisubwindow_p.h>
 #include <qabstractscrollarea_p.h>
 
-QT_BEGIN_NAMESPACE
+class QMdiAreaTabBar;
 
 namespace QMdi {
 
@@ -98,27 +99,26 @@ class Placer
  public:
    // Places the rectangle defined by 'size' relative to 'rects' and 'domain'.
    // Returns the position of the resulting rectangle.
-   virtual QPoint place(const QSize &size, const QList<QRect> &rects, const QRect &domain) const = 0;
+   virtual QPoint place(const QSize &size, const QVector<QRect> &rects, const QRect &domain) const = 0;
    virtual ~Placer() {}
 };
 
 class MinOverlapPlacer : public Placer
 {
-   QPoint place(const QSize &size, const QList<QRect> &rects, const QRect &domain) const override;
-   static int accumulatedOverlap(const QRect &source, const QList<QRect> &rects);
-   static QRect findMinOverlapRect(const QList<QRect> &source, const QList<QRect> &rects);
+   QPoint place(const QSize &size, const QVector<QRect> &rects, const QRect &domain) const override;
+   static int accumulatedOverlap(const QRect &source, const QVector<QRect> &rects);
+   static QRect findMinOverlapRect(const QVector<QRect> &source, const QVector<QRect> &rects);
 
-   static void getCandidatePlacements(const QSize &size, const QList<QRect> &rects, const QRect &domain,
-                  QList<QRect> &candidates);
+   static QVector<QRect> getCandidatePlacements(const QSize &size, const QVector<QRect> &rects, const QRect &domain);
 
-   static QPoint findBestPlacement(const QRect &domain, const QList<QRect> &rects, QList<QRect> &source);
+   static QPoint findBestPlacement(const QRect &domain, const QVector<QRect> &rects, QVector<QRect> &source);
 
-   static void findNonInsiders(const QRect &domain, QList<QRect> &source, QList<QRect> &result);
-   static void findMaxOverlappers(const QRect &domain, const QList<QRect> &source, QList<QRect> &result);
+   static QVector<QRect> findNonInsiders(const QRect &domain, QVector<QRect> &source);
+   static QVector<QRect> findMaxOverlappers(const QRect &domain, const QVector<QRect> &source);
 };
 } // namespace QMdi
 
-class QMdiAreaTabBar;
+
 class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
 {
    Q_DECLARE_PUBLIC(QMdiArea)
@@ -138,8 +138,8 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
 
    QMdiAreaTabBar *tabBar;
    QList<QMdi::Rearranger *> pendingRearrangements;
-   QList< QPointer<QMdiSubWindow> > pendingPlacements;
-   QList< QPointer<QMdiSubWindow> > childWindows;
+   QVector< QPointer<QMdiSubWindow>> pendingPlacements;
+   QVector< QPointer<QMdiSubWindow>> childWindows;
    QList<int> indicesToActivatedChildren;
    QPointer<QMdiSubWindow> active;
    QPointer<QMdiSubWindow> aboutToBecomeActive;
@@ -249,14 +249,7 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
    }
 
 #ifndef QT_NO_RUBBERBAND
-   inline void showRubberBandFor(QMdiSubWindow *subWindow) {
-      if (!subWindow || !rubberBand) {
-         return;
-      }
-      rubberBand->setGeometry(subWindow->geometry());
-      rubberBand->raise();
-      rubberBand->show();
-   }
+   void showRubberBandFor(QMdiSubWindow *subWindow);
 
    inline void hideRubberBand() {
       if (rubberBand && rubberBand->isVisible()) {
@@ -268,7 +261,5 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
 };
 
 #endif // QT_NO_MDIAREA
-
-QT_END_NAMESPACE
 
 #endif // QMDIAREA_P_H

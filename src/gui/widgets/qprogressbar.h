@@ -23,9 +23,7 @@
 #ifndef QPROGRESSBAR_H
 #define QPROGRESSBAR_H
 
-#include <QtGui/qframe.h>
-
-QT_BEGIN_NAMESPACE
+#include <qframe.h>
 
 #ifndef QT_NO_PROGRESSBAR
 
@@ -72,6 +70,7 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    enum Direction { TopToBottom, BottomToTop };
 
    explicit QProgressBar(QWidget *parent = nullptr);
+   ~QProgressBar();
 
    int minimum() const;
    int maximum() const;
@@ -97,6 +96,7 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    QProgressBar::Direction textDirection() const;
 
    void setFormat(const QString &format);
+   void resetFormat();
    QString format() const;
 
    GUI_CS_SLOT_1(Public, void reset())
@@ -132,6 +132,5 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
 
 #endif // QT_NO_PROGRESSBAR
 
-QT_END_NAMESPACE
 
 #endif // QPROGRESSBAR_H

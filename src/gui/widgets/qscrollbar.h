@@ -23,10 +23,9 @@
 #ifndef QSCROLLBAR_H
 #define QSCROLLBAR_H
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qabstractslider.h>
+#include <qwidget.h>
+#include <qabstractslider.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SCROLLBAR
 
@@ -46,6 +45,10 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    bool event(QEvent *event) override;
 
  protected:
+#ifndef QT_NO_WHEELEVENT
+   void wheelEvent(QWheelEvent *) override;
+#endif
+
    void paintEvent(QPaintEvent *) override;
    void mousePressEvent(QMouseEvent *) override;
    void mouseReleaseEvent(QMouseEvent *) override;
@@ -60,6 +63,7 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    void initStyleOption(QStyleOptionSlider *option) const;
 
  private:
+   friend class QAbstractScrollAreaPrivate;
    friend Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar *scrollBar);
 
    Q_DISABLE_COPY(QScrollBar)
@@ -67,7 +71,5 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
 };
 
 #endif // QT_NO_SCROLLBAR
-
-QT_END_NAMESPACE
 
 #endif // QSCROLLBAR_H

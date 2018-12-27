@@ -23,23 +23,23 @@
 #ifndef QPLAINTEXTEDIT_H
 #define QPLAINTEXTEDIT_H
 
-#include <QtGui/qtextedit.h>
-#include <QtGui/qabstractscrollarea.h>
-#include <QtGui/qtextdocument.h>
-#include <QtGui/qtextoption.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qtextformat.h>
-#include <QtGui/qabstracttextdocumentlayout.h>
+#include <qtextedit.h>
+#include <qabstractscrollarea.h>
+#include <qtextdocument.h>
+#include <qtextoption.h>
+#include <qtextcursor.h>
+#include <qtextformat.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qregularexpression.h>
 
 #ifndef QT_NO_TEXTEDIT
-
-QT_BEGIN_NAMESPACE
 
 class QStyleSheet;
 class QTextDocument;
 class QMenu;
 class QPlainTextEditPrivate;
 class QMimeData;
+class QPagedPaintDevice;
 class QPlainTextDocumentLayoutPrivate;
 
 class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
@@ -51,38 +51,53 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
    GUI_CS_PROPERTY_READ(tabChangesFocus, tabChangesFocus)
    GUI_CS_PROPERTY_WRITE(tabChangesFocus, setTabChangesFocus)
+
    GUI_CS_PROPERTY_READ(documentTitle, documentTitle)
    GUI_CS_PROPERTY_WRITE(documentTitle, setDocumentTitle)
+
    GUI_CS_PROPERTY_READ(undoRedoEnabled, isUndoRedoEnabled)
    GUI_CS_PROPERTY_WRITE(undoRedoEnabled, setUndoRedoEnabled)
+
    GUI_CS_PROPERTY_READ(lineWrapMode, lineWrapMode)
    GUI_CS_PROPERTY_WRITE(lineWrapMode, setLineWrapMode)
 
-   // following 2 were qdoc_property 1/5/2014
+   // following were qdoc_property
    GUI_CS_PROPERTY_READ(wordWrapMode, wordWrapMode)
    GUI_CS_PROPERTY_WRITE(wordWrapMode, setWordWrapMode)
 
    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
+
    GUI_CS_PROPERTY_READ(plainText, toPlainText)
    GUI_CS_PROPERTY_WRITE(plainText, setPlainText)
    GUI_CS_PROPERTY_NOTIFY(plainText, textChanged)
    GUI_CS_PROPERTY_USER(plainText, true)
+
    GUI_CS_PROPERTY_READ(overwriteMode, overwriteMode)
    GUI_CS_PROPERTY_WRITE(overwriteMode, setOverwriteMode)
+
    GUI_CS_PROPERTY_READ(tabStopWidth, tabStopWidth)
    GUI_CS_PROPERTY_WRITE(tabStopWidth, setTabStopWidth)
+
    GUI_CS_PROPERTY_READ(cursorWidth, cursorWidth)
    GUI_CS_PROPERTY_WRITE(cursorWidth, setCursorWidth)
+
    GUI_CS_PROPERTY_READ(textInteractionFlags, textInteractionFlags)
    GUI_CS_PROPERTY_WRITE(textInteractionFlags, setTextInteractionFlags)
+
    GUI_CS_PROPERTY_READ(blockCount, blockCount)
+
    GUI_CS_PROPERTY_READ(maximumBlockCount, maximumBlockCount)
    GUI_CS_PROPERTY_WRITE(maximumBlockCount, setMaximumBlockCount)
+
    GUI_CS_PROPERTY_READ(backgroundVisible, backgroundVisible)
    GUI_CS_PROPERTY_WRITE(backgroundVisible, setBackgroundVisible)
+
    GUI_CS_PROPERTY_READ(centerOnScroll, centerOnScroll)
    GUI_CS_PROPERTY_WRITE(centerOnScroll, setCenterOnScroll)
+
+   GUI_CS_PROPERTY_READ(placeholderText, placeholderText )
+   GUI_CS_PROPERTY_WRITE(placeholderText, setPlaceholderText)
 
  public:
    enum LineWrapMode {
@@ -96,6 +111,8 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
    void setDocument(QTextDocument *document);
    QTextDocument *document() const;
+   void setPlaceholderText(const QString &placeholderText);
+   QString placeholderText() const;
 
    void setTextCursor(const QTextCursor &cursor);
    QTextCursor textCursor() const;
@@ -134,9 +151,13 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    void setCenterOnScroll(bool enabled);
    bool centerOnScroll() const;
 
-   bool find(const QString &exp, QTextDocument::FindFlags options = 0);
+   bool find(const QString &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags());
 
-   inline QString toPlainText() const;
+   bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags());
+
+   QString toPlainText() const {
+      return document()->toPlainText();
+   }
 
    void ensureCursorVisible();
 
@@ -144,6 +165,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
 #ifndef QT_NO_CONTEXTMENU
    QMenu *createStandardContextMenu();
+   QMenu *createStandardContextMenu(const QPoint &position);
 #endif
 
    QTextCursor cursorForPosition(const QPoint &pos) const;
@@ -167,11 +189,11 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    void moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
    bool canPaste() const;
+   void print(QPagedPaintDevice *printer) const;
    int blockCount() const;
 
-#ifndef QT_NO_PRINTER
-   void print(QPrinter *printer) const;
-#endif
+   QVariant inputMethodQuery(Qt::InputMethodQuery property) const override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
 
    GUI_CS_SLOT_1(Public, void setPlainText(const QString &text))
    GUI_CS_SLOT_2(setPlainText)
@@ -179,19 +201,23 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 #ifndef QT_NO_CLIPBOARD
    GUI_CS_SLOT_1(Public, void cut())
    GUI_CS_SLOT_2(cut)
+
    GUI_CS_SLOT_1(Public, void copy())
    GUI_CS_SLOT_2(copy)
+
    GUI_CS_SLOT_1(Public, void paste())
    GUI_CS_SLOT_2(paste)
 #endif
 
    GUI_CS_SLOT_1(Public, void undo())
    GUI_CS_SLOT_2(undo)
+
    GUI_CS_SLOT_1(Public, void redo())
    GUI_CS_SLOT_2(redo)
 
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
+
    GUI_CS_SLOT_1(Public, void selectAll())
    GUI_CS_SLOT_2(selectAll)
 
@@ -200,29 +226,45 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
    GUI_CS_SLOT_1(Public, void appendPlainText(const QString &text))
    GUI_CS_SLOT_2(appendPlainText)
+
    GUI_CS_SLOT_1(Public, void appendHtml(const QString &html))
    GUI_CS_SLOT_2(appendHtml)
 
    GUI_CS_SLOT_1(Public, void centerCursor())
    GUI_CS_SLOT_2(centerCursor)
 
+   GUI_CS_SLOT_1(Public, void zoomIn(int range = 1))
+   GUI_CS_SLOT_2(zoomIn)
+
+   GUI_CS_SLOT_1(Public, void zoomOut(int range = 1))
+   GUI_CS_SLOT_2(zoomOut)
+
+
+
    GUI_CS_SIGNAL_1(Public, void textChanged())
    GUI_CS_SIGNAL_2(textChanged)
+
    GUI_CS_SIGNAL_1(Public, void undoAvailable(bool b))
    GUI_CS_SIGNAL_2(undoAvailable, b)
+
    GUI_CS_SIGNAL_1(Public, void redoAvailable(bool b))
    GUI_CS_SIGNAL_2(redoAvailable, b)
+
    GUI_CS_SIGNAL_1(Public, void copyAvailable(bool b))
    GUI_CS_SIGNAL_2(copyAvailable, b)
+
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
+
    GUI_CS_SIGNAL_1(Public, void cursorPositionChanged())
    GUI_CS_SIGNAL_2(cursorPositionChanged)
 
    GUI_CS_SIGNAL_1(Public, void updateRequest(const QRect &rect, int dy))
    GUI_CS_SIGNAL_2(updateRequest, rect, dy)
+
    GUI_CS_SIGNAL_1(Public, void blockCountChanged(int newBlockCount))
    GUI_CS_SIGNAL_2(blockCountChanged, newBlockCount)
+
    GUI_CS_SIGNAL_1(Public, void modificationChanged(bool un_named_arg1))
    GUI_CS_SIGNAL_2(modificationChanged, un_named_arg1)
 
@@ -264,11 +306,11 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    void insertFromMimeData(const QMimeData *source);
 
    void inputMethodEvent(QInputMethodEvent *) override;
-   QVariant inputMethodQuery(Qt::InputMethodQuery property) const override;
 
    QPlainTextEdit(QPlainTextEditPrivate &dd, QWidget *parent);
 
    void scrollContentsBy(int dx, int dy) override;
+   virtual void doSetTextCursor(const QTextCursor &cursor);
 
    QTextBlock firstVisibleBlock() const;
    QPointF contentOffset() const;
@@ -276,6 +318,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    QRectF blockBoundingGeometry(const QTextBlock &block) const;
    QAbstractTextDocumentLayout::PaintContext getPaintContext() const;
 
+   void zoomInF(float range);
  private:
    Q_DISABLE_COPY(QPlainTextEdit)
 
@@ -366,14 +409,6 @@ int QPlainTextEdit::maximumBlockCount() const
 {
    return document()->maximumBlockCount();
 }
-
-QString QPlainTextEdit::toPlainText() const
-{
-   return document()->toPlainText();
-}
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTEDIT
 

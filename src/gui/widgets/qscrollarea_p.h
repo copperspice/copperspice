@@ -26,9 +26,9 @@
 #ifndef QT_NO_SCROLLAREA
 
 #include <qabstractscrollarea_p.h>
-#include <QtGui/qscrollbar.h>
+#include <qscrollbar.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QScrollAreaPrivate: public QAbstractScrollAreaPrivate
 {
@@ -46,6 +46,6 @@ class QScrollAreaPrivate: public QAbstractScrollAreaPrivate
 
 #endif
 
-QT_END_NAMESPACE
+
 
 #endif

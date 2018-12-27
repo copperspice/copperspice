@@ -23,9 +23,8 @@
 #ifndef QPUSHBUTTON_H
 #define QPUSHBUTTON_H
 
-#include <QtGui/qabstractbutton.h>
+#include <qabstractbutton.h>
 
-QT_BEGIN_NAMESPACE
 
 class QPushButtonPrivate;
 class QMenu;
@@ -70,9 +69,6 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
  protected:
    bool event(QEvent *e) override;
 
-#ifdef Q_OS_MAC
-   bool hitButton(const QPoint &pos) const override;
-#endif
 
    void paintEvent(QPaintEvent *) override;
    void keyPressEvent(QKeyEvent *) override;
@@ -92,6 +88,5 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
 
 };
 
-QT_END_NAMESPACE
 
 #endif // QPUSHBUTTON_H

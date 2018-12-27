@@ -23,9 +23,9 @@
 #ifndef QSPINBOX_H
 #define QSPINBOX_H
 
-#include <QtGui/qabstractspinbox.h>
+#include <qabstractspinbox.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SPINBOX
 
@@ -58,8 +58,12 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    GUI_CS_PROPERTY_NOTIFY(value, cs_valueChanged)
    GUI_CS_PROPERTY_USER(value, true)
 
+   GUI_CS_PROPERTY_READ(displayIntegerBase, displayIntegerBase)
+   GUI_CS_PROPERTY_WRITE(displayIntegerBase, setDisplayIntegerBase)
+
  public:
    explicit QSpinBox(QWidget *parent = nullptr);
+   ~QSpinBox();
 
    int value() const;
 
@@ -81,6 +85,9 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    void setMaximum(int max);
 
    void setRange(int min, int max);
+
+   int displayIntegerBase() const;
+   void setDisplayIntegerBase(int base);
 
    GUI_CS_SLOT_1(Public, void setValue(int val))
    GUI_CS_SLOT_2(setValue)
@@ -134,11 +141,11 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
    GUI_CS_PROPERTY_READ(value, value)
    GUI_CS_PROPERTY_WRITE(value, setValue)
    GUI_CS_PROPERTY_NOTIFY(value, cs_valueChanged)
-
    GUI_CS_PROPERTY_USER(value, true)
 
  public:
    explicit QDoubleSpinBox(QWidget *parent = nullptr);
+   ~QDoubleSpinBox();
 
    double value() const;
 
@@ -189,6 +196,5 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
 
 #endif // QT_NO_SPINBOX
 
-QT_END_NAMESPACE
 
 #endif // QSPINBOX_H

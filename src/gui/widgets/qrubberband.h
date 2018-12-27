@@ -23,9 +23,9 @@
 #ifndef QRUBBERBAND_H
 #define QRUBBERBAND_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_RUBBERBAND
 
@@ -38,7 +38,7 @@ class Q_GUI_EXPORT QRubberBand : public QWidget
 
  public:
    enum Shape { Line, Rectangle };
-   explicit QRubberBand(Shape, QWidget * = 0);
+   explicit QRubberBand(Shape, QWidget * = nullptr);
    ~QRubberBand();
 
    Shape shape() const;
@@ -85,6 +85,6 @@ void QRubberBand::move(int ax, int ay)
 
 #endif // QT_NO_RUBBERBAND
 
-QT_END_NAMESPACE
+
 
 #endif // QRUBBERBAND_H

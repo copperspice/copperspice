@@ -26,8 +26,6 @@
 #include <QtGui/qabstractscrollarea.h>
 #include <QtGui/qtabwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_MDIAREA
 
 class QMdiSubWindow;
@@ -41,8 +39,10 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
 
    GUI_CS_PROPERTY_READ(background, background)
    GUI_CS_PROPERTY_WRITE(background, setBackground)
+
    GUI_CS_PROPERTY_READ(activationOrder, activationOrder)
    GUI_CS_PROPERTY_WRITE(activationOrder, setActivationOrder)
+
    GUI_CS_PROPERTY_READ(viewMode, viewMode)
    GUI_CS_PROPERTY_WRITE(viewMode, setViewMode)
 
@@ -91,7 +91,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    QMdiSubWindow *activeSubWindow() const;
    QList<QMdiSubWindow *> subWindowList(WindowOrder order = CreationOrder) const;
 
-   QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = 0);
+   QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
    void removeSubWindow(QWidget *widget);
 
    QBrush background() const;
@@ -130,20 +130,26 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
 
    GUI_CS_SLOT_1(Public, void setActiveSubWindow(QMdiSubWindow *window))
    GUI_CS_SLOT_2(setActiveSubWindow)
+
    GUI_CS_SLOT_1(Public, void tileSubWindows())
    GUI_CS_SLOT_2(tileSubWindows)
+
    GUI_CS_SLOT_1(Public, void cascadeSubWindows())
    GUI_CS_SLOT_2(cascadeSubWindows)
+
    GUI_CS_SLOT_1(Public, void closeActiveSubWindow())
    GUI_CS_SLOT_2(closeActiveSubWindow)
+
    GUI_CS_SLOT_1(Public, void closeAllSubWindows())
    GUI_CS_SLOT_2(closeAllSubWindows)
+
    GUI_CS_SLOT_1(Public, void activateNextSubWindow())
    GUI_CS_SLOT_2(activateNextSubWindow)
+
    GUI_CS_SLOT_1(Public, void activatePreviousSubWindow())
    GUI_CS_SLOT_2(activatePreviousSubWindow)
 
- protected :
+ protected:
    GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *viewport))
    GUI_CS_SLOT_2(setupViewport)
 
@@ -165,7 +171,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    GUI_CS_SLOT_2(_q_deactivateAllWindows)
 
    GUI_CS_SLOT_1(Private, void _q_processWindowStateChanged(Qt::WindowStates un_named_arg1,
-                 Qt::WindowStates un_named_arg2))
+         Qt::WindowStates un_named_arg2))
    GUI_CS_SLOT_2(_q_processWindowStateChanged)
 
    GUI_CS_SLOT_1(Private, void _q_currentTabChanged(int un_named_arg1))
@@ -180,7 +186,6 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMdiArea::AreaOptions)
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_MDIAREA
 #endif // QMDIAREA_H

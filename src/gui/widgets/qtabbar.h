@@ -25,7 +25,7 @@
 
 #include <QtGui/qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_TABBAR
 
@@ -45,32 +45,47 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
    GUI_CS_PROPERTY_NOTIFY(currentIndex, currentChanged)
    GUI_CS_PROPERTY_READ(count, count)
+
    GUI_CS_PROPERTY_READ(drawBase, drawBase)
    GUI_CS_PROPERTY_WRITE(drawBase, setDrawBase)
+
    GUI_CS_PROPERTY_READ(iconSize, iconSize)
    GUI_CS_PROPERTY_WRITE(iconSize, setIconSize)
+
    GUI_CS_PROPERTY_READ(elideMode, elideMode)
    GUI_CS_PROPERTY_WRITE(elideMode, setElideMode)
+
    GUI_CS_PROPERTY_READ(usesScrollButtons, usesScrollButtons)
    GUI_CS_PROPERTY_WRITE(usesScrollButtons, setUsesScrollButtons)
+
    GUI_CS_PROPERTY_READ(tabsClosable, tabsClosable)
    GUI_CS_PROPERTY_WRITE(tabsClosable, setTabsClosable)
+
    GUI_CS_PROPERTY_READ(selectionBehaviorOnRemove, selectionBehaviorOnRemove)
    GUI_CS_PROPERTY_WRITE(selectionBehaviorOnRemove, setSelectionBehaviorOnRemove)
+
    GUI_CS_PROPERTY_READ(expanding, expanding)
    GUI_CS_PROPERTY_WRITE(expanding, setExpanding)
+
    GUI_CS_PROPERTY_READ(movable, isMovable)
    GUI_CS_PROPERTY_WRITE(movable, setMovable)
+
    GUI_CS_PROPERTY_READ(documentMode, documentMode)
    GUI_CS_PROPERTY_WRITE(documentMode, setDocumentMode)
+
+   GUI_CS_PROPERTY_READ(autoHide, autoHide)
+   GUI_CS_PROPERTY_WRITE(autoHide, setAutoHide)
+
+   GUI_CS_PROPERTY_READ(changeCurrentOnDrag, changeCurrentOnDrag)
+   GUI_CS_PROPERTY_WRITE(changeCurrentOnDrag, setChangeCurrentOnDrag)
 
  public:
    explicit QTabBar(QWidget *parent = nullptr);
    ~QTabBar();
 
    enum Shape { RoundedNorth, RoundedSouth, RoundedWest, RoundedEast,
-                TriangularNorth, TriangularSouth, TriangularWest, TriangularEast
-              };
+      TriangularNorth, TriangularSouth, TriangularWest, TriangularEast
+   };
 
    enum ButtonPosition {
       LeftSide,
@@ -159,15 +174,28 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    bool documentMode() const;
    void setDocumentMode(bool set);
 
+   bool autoHide() const;
+   void setAutoHide(bool hide);
+   bool changeCurrentOnDrag() const;
+   void setChangeCurrentOnDrag(bool change);
+
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
 
    GUI_CS_SIGNAL_1(Public, void currentChanged(int index))
    GUI_CS_SIGNAL_2(currentChanged, index)
+
    GUI_CS_SIGNAL_1(Public, void tabCloseRequested(int index))
    GUI_CS_SIGNAL_2(tabCloseRequested, index)
+
    GUI_CS_SIGNAL_1(Public, void tabMoved(int from, int to))
    GUI_CS_SIGNAL_2(tabMoved, from, to)
+
+   GUI_CS_SIGNAL_1(Public, void tabBarClicked(int index))
+   GUI_CS_SIGNAL_2(tabBarClicked, index)
+
+   GUI_CS_SIGNAL_1(Public, void tabBarDoubleClicked(int index))
+   GUI_CS_SIGNAL_2(tabBarDoubleClicked, index)
 
  protected:
    virtual QSize tabSizeHint(int index) const;
@@ -191,9 +219,12 @@ class Q_GUI_EXPORT QTabBar: public QWidget
 
    void keyPressEvent(QKeyEvent *) override;
    void changeEvent(QEvent *) override;
+   void timerEvent(QTimerEvent *event) override;
    void initStyleOption(QStyleOptionTab *option, int tabIndex) const;
 
+#ifndef QT_NO_ACCESSIBILITY
    friend class QAccessibleTabBar;
+#endif
 
  private:
    Q_DISABLE_COPY(QTabBar)
@@ -208,6 +239,5 @@ class Q_GUI_EXPORT QTabBar: public QWidget
 
 #endif // QT_NO_TABBAR
 
-QT_END_NAMESPACE
 
 #endif // QTABBAR_H

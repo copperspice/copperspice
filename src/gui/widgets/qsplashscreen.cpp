@@ -30,10 +30,16 @@
 #include <qpixmap.h>
 #include <qtextdocument.h>
 #include <qtextcursor.h>
-#include <QtCore/qdebug.h>
-#include <qwidget_p.h>
+#include <qwindow.h>
+#include <qdebug.h>
+#include <qelapsedtimer.h>
 
-QT_BEGIN_NAMESPACE
+#include <qwidget_p.h>
+#ifdef Q_OS_WIN
+#  include <qt_windows.h>
+#else
+#  include <time.h>
+#endif
 
 class QSplashScreenPrivate : public QWidgetPrivate
 {
@@ -47,73 +53,12 @@ class QSplashScreenPrivate : public QWidgetPrivate
    inline QSplashScreenPrivate();
 };
 
-/*!
-   \class QSplashScreen
-   \brief The QSplashScreen widget provides a splash screen that can
-   be shown during application startup.
-
-   A splash screen is a widget that is usually displayed when an
-   application is being started. Splash screens are often used for
-   applications that have long start up times (e.g. database or
-   networking applications that take time to establish connections) to
-   provide the user with feedback that the application is loading.
-
-   The splash screen appears in the center of the screen. It may be
-   useful to add the Qt::WindowStaysOnTopHint to the splash widget's
-   window flags if you want to keep it above all the other windows on
-   the desktop.
-
-   Some X11 window managers do not support the "stays on top" flag. A
-   solution is to set up a timer that periodically calls raise() on
-   the splash screen to simulate the "stays on top" effect.
-
-   The most common usage is to show a splash screen before the main
-   widget is displayed on the screen. This is illustrated in the
-   following code snippet in which a splash screen is displayed and
-   some initialization tasks are performed before the application's
-   main window is shown:
-
-   \snippet doc/src/snippets/qsplashscreen/main.cpp 0
-   \dots
-   \snippet doc/src/snippets/qsplashscreen/main.cpp 1
-
-   The user can hide the splash screen by clicking on it with the
-   mouse. Since the splash screen is typically displayed before the
-   event loop has started running, it is necessary to periodically
-   call QApplication::processEvents() to receive the mouse clicks.
-
-   It is sometimes useful to update the splash screen with messages,
-   for example, announcing connections established or modules loaded
-   as the application starts up:
-
-   \snippet doc/src/snippets/code/src_gui_widgets_qsplashscreen.cpp 0
-
-   QSplashScreen supports this with the showMessage() function. If you
-   wish to do your own drawing you can get a pointer to the pixmap
-   used in the splash screen with pixmap().  Alternatively, you can
-   subclass QSplashScreen and reimplement drawContents().
-*/
-
-/*!
-    Construct a splash screen that will display the \a pixmap.
-
-    There should be no need to set the widget flags, \a f, except
-    perhaps Qt::WindowStaysOnTopHint.
-*/
 QSplashScreen::QSplashScreen(const QPixmap &pixmap, Qt::WindowFlags f)
    : QWidget(*(new QSplashScreenPrivate()), 0, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
    setPixmap(pixmap);  // Does an implicit repaint
 }
 
-/*!
-    \overload
-
-    This function allows you to specify a parent for your splashscreen. The
-    typical use for this constructor is if you have a multiple screens and
-    prefer to have the splash screen on a different screen than your primary
-    one. In that case pass the proper desktop() as the \a parent.
-*/
 QSplashScreen::QSplashScreen(QWidget *parent, const QPixmap &pixmap, Qt::WindowFlags f)
    : QWidget(*new QSplashScreenPrivate, parent, Qt::SplashScreen | f)
 {
@@ -121,9 +66,7 @@ QSplashScreen::QSplashScreen(QWidget *parent, const QPixmap &pixmap, Qt::WindowF
    setPixmap(d_func()->pixmap);  // Does an implicit repaint
 }
 
-/*!
-  Destructor.
-*/
+
 QSplashScreen::~QSplashScreen()
 {
 }
@@ -174,7 +117,7 @@ void QSplashScreen::repaint()
     \sa Qt::Alignment, clearMessage()
 */
 void QSplashScreen::showMessage(const QString &message, int alignment,
-                                const QColor &color)
+   const QColor &color)
 {
    Q_D(QSplashScreen);
    d->currStatus = message;
@@ -184,11 +127,13 @@ void QSplashScreen::showMessage(const QString &message, int alignment,
    repaint();
 }
 
-/*!
-    Removes the message being displayed on the splash screen
 
-    \sa showMessage()
- */
+QString QSplashScreen::message() const
+{
+   Q_D(const QSplashScreen);
+   return d->currStatus;
+}
+
 void QSplashScreen::clearMessage()
 {
    d_func()->currStatus.clear();
@@ -196,25 +141,43 @@ void QSplashScreen::clearMessage()
    repaint();
 }
 
-/*!
-    Makes the splash screen wait until the widget \a mainWin is displayed
-    before calling close() on itself.
-*/
+inline static bool waitForWindowExposed(QWindow *window, int timeout = 1000)
+{
+   enum { TimeOutMs = 10 };
+   QElapsedTimer timer;
+   timer.start();
+
+   while (!window->isExposed()) {
+      const int remaining = timeout - int(timer.elapsed());
+      if (remaining <= 0) {
+         break;
+      }
+      QCoreApplication::processEvents(QEventLoop::AllEvents, remaining);
+      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+#if defined(Q_OS_WINRT)
+      WaitForSingleObjectEx(GetCurrentThread(), TimeOutMs, false);
+#elif defined(Q_OS_WIN)
+      Sleep(uint(TimeOutMs));
+#else
+      struct timespec ts = { TimeOutMs / 1000, (TimeOutMs % 1000) * 1000 * 1000 };
+      nanosleep(&ts, NULL);
+#endif
+   }
+   return window->isExposed();
+}
+
 void QSplashScreen::finish(QWidget *mainWin)
 {
    if (mainWin) {
-#if defined(Q_WS_X11)
-      extern void qt_x11_wait_for_window_manager(QWidget * mainWin, bool);
-      qt_x11_wait_for_window_manager(mainWin, false);
-#endif
+      if (!mainWin->windowHandle()) {
+         mainWin->createWinId();
+      }
+      waitForWindowExposed(mainWin->windowHandle());
    }
    close();
 }
 
-/*!
-    Sets the pixmap that will be used as the splash screen's image to
-    \a pixmap.
-*/
+
 void QSplashScreen::setPixmap(const QPixmap &pixmap)
 {
    Q_D(QSplashScreen);
@@ -222,36 +185,25 @@ void QSplashScreen::setPixmap(const QPixmap &pixmap)
    d->pixmap = pixmap;
    setAttribute(Qt::WA_TranslucentBackground, pixmap.hasAlpha());
 
-   QRect r(QPoint(), d->pixmap.size());
+   QRect r(QPoint(), d->pixmap.size()  / d->pixmap.devicePixelRatio());
    resize(r.size());
    move(QApplication::desktop()->screenGeometry().center() - r.center());
+
    if (isVisible()) {
       repaint();
    }
 }
 
-/*!
-    Returns the pixmap that is used in the splash screen. The image
-    does not have any of the text drawn by showMessage() calls.
-*/
 const QPixmap QSplashScreen::pixmap() const
 {
    return d_func()->pixmap;
 }
 
-/*!
-    \internal
-*/
+
 inline QSplashScreenPrivate::QSplashScreenPrivate() : currAlign(Qt::AlignLeft)
 {
 }
 
-/*!
-    Draw the contents of the splash screen using painter \a painter.
-    The default implementation draws the message passed by showMessage().
-    Reimplement this function if you want to do your own drawing on
-    the splash screen.
-*/
 void QSplashScreen::drawContents(QPainter *painter)
 {
    Q_D(QSplashScreen);
@@ -279,22 +231,6 @@ void QSplashScreen::drawContents(QPainter *painter)
    }
 }
 
-/*!
-    \fn void QSplashScreen::message(const QString &message, int alignment,
-                                    const QColor &color)
-    \compat
-
-    Use showMessage() instead.
-*/
-
-/*!
-    \fn void QSplashScreen::clear()
-    \compat
-
-    Use clearMessage() instead.
-*/
-
-/*! \reimp */
 bool QSplashScreen::event(QEvent *e)
 {
    if (e->type() == QEvent::Paint) {
@@ -307,7 +243,4 @@ bool QSplashScreen::event(QEvent *e)
    }
    return QWidget::event(e);
 }
-
-QT_END_NAMESPACE
-
 #endif //QT_NO_SPLASHSCREEN

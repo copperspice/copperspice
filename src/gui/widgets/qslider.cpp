@@ -36,8 +36,6 @@
 #include <qabstractslider_p.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSliderPrivate : public QAbstractSliderPrivate
 {
    Q_DECLARE_PUBLIC(QSlider)
@@ -66,10 +64,12 @@ void QSliderPrivate::init()
    tickPosition = QSlider::NoTicks;
    hoverControl = QStyle::SC_None;
    q->setFocusPolicy(Qt::FocusPolicy(q->style()->styleHint(QStyle::SH_Button_FocusPolicy)));
+
    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Fixed, QSizePolicy::Slider);
    if (orientation == Qt::Vertical) {
       sp.transpose();
    }
+
    q->setSizePolicy(sp);
    q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
    resetLayoutItemMargins();
@@ -102,7 +102,7 @@ int QSliderPrivate::pixelPosToRangeValue(int pos) const
       sliderMax = gr.bottom() - sliderLength + 1;
    }
    return QStyle::sliderValueFromPosition(minimum, maximum, pos - sliderMin,
-                                          sliderMax - sliderMin, opt.upsideDown);
+         sliderMax - sliderMin, opt.upsideDown);
 }
 
 inline int QSliderPrivate::pick(const QPoint &pt) const
@@ -132,14 +132,17 @@ void QSlider::initStyleOption(QStyleOptionSlider *option) const
    option->minimum = d->minimum;
    option->tickPosition = (QSlider::TickPosition)d->tickPosition;
    option->tickInterval = d->tickInterval;
+
    option->upsideDown = (d->orientation == Qt::Horizontal) ?
-                        (d->invertedAppearance != (option->direction == Qt::RightToLeft))
-                        : (!d->invertedAppearance);
+      (d->invertedAppearance != (option->direction == Qt::RightToLeft))
+      : (!d->invertedAppearance);
+
    option->direction = Qt::LeftToRight; // we use the upsideDown option instead
    option->sliderPosition = d->position;
    option->sliderValue = d->value;
    option->singleStep = d->singleStep;
    option->pageStep = d->pageStep;
+
    if (d->orientation == Qt::Horizontal) {
       option->state |= QStyle::State_Horizontal;
    }
@@ -151,6 +154,7 @@ bool QSliderPrivate::updateHoverControl(const QPoint &pos)
    QRect lastHoverRect = hoverRect;
    QStyle::SubControl lastHoverControl = hoverControl;
    bool doesHover = q->testAttribute(Qt::WA_Hover);
+
    if (lastHoverControl != newHoverControl(pos) && doesHover) {
       q->update(lastHoverRect);
       q->update(hoverRect);
@@ -162,6 +166,7 @@ bool QSliderPrivate::updateHoverControl(const QPoint &pos)
 QStyle::SubControl QSliderPrivate::newHoverControl(const QPoint &pos)
 {
    Q_Q(QSlider);
+
    QStyleOptionSlider opt;
    q->initStyleOption(&opt);
    opt.subControls = QStyle::SC_All;
@@ -186,100 +191,6 @@ QStyle::SubControl QSliderPrivate::newHoverControl(const QPoint &pos)
    return hoverControl;
 }
 
-/*!
-    \class QSlider
-    \brief The QSlider widget provides a vertical or horizontal slider.
-
-    \ingroup basicwidgets
-
-
-    The slider is the classic widget for controlling a bounded value.
-    It lets the user move a slider handle along a horizontal or vertical
-    groove and translates the handle's position into an integer value
-    within the legal range.
-
-    QSlider has very few of its own functions; most of the functionality is in
-    QAbstractSlider. The most useful functions are setValue() to set
-    the slider directly to some value; triggerAction() to simulate
-    the effects of clicking (useful for shortcut keys);
-    setSingleStep(), setPageStep() to set the steps; and setMinimum()
-    and setMaximum() to define the range of the scroll bar.
-
-    QSlider provides methods for controlling tickmarks.  You can use
-    setTickPosition() to indicate where you want the tickmarks to be,
-    setTickInterval() to indicate how many of them you want. the
-    currently set tick position and interval can be queried using the
-    tickPosition() and tickInterval() functions, respectively.
-
-    QSlider inherits a comprehensive set of signals:
-    \table
-    \header \o Signal \o Description
-    \row \o \l valueChanged()
-    \o Emitted when the slider's value has changed. The tracking()
-       determines whether this signal is emitted during user
-       interaction.
-    \row \o \l sliderPressed()
-    \o Emitted when the user starts to drag the slider.
-    \row \o \l sliderMoved()
-    \o Emitted when the user drags the slider.
-    \row \o \l sliderReleased()
-    \o Emitted when the user releases the slider.
-    \endtable
-
-    QSlider only provides integer ranges. Note that although
-    QSlider handles very large numbers, it becomes difficult for users
-    to use a slider accurately for very large ranges.
-
-    A slider accepts focus on Tab and provides both a mouse wheel and a
-    keyboard interface. The keyboard interface is the following:
-
-    \list
-        \o Left/Right move a horizontal slider by one single step.
-        \o Up/Down move a vertical slider by one single step.
-        \o PageUp moves up one page.
-        \o PageDown moves down one page.
-        \o Home moves to the start (mininum).
-        \o End moves to the end (maximum).
-    \endlist
-
-    \table 100%
-    \row \o \inlineimage macintosh-slider.png Screenshot of a Macintosh slider
-         \o A slider shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-    \row \o \inlineimage windows-slider.png Screenshot of a Windows XP slider
-         \o A slider shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-    \row \o \inlineimage plastique-slider.png Screenshot of a Plastique slider
-         \o A slider shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-    \endtable
-
-    \sa QScrollBar, QSpinBox, QDial, {fowler}{GUI Design Handbook: Slider}, {Sliders Example}
-*/
-
-
-/*!
-    \enum QSlider::TickPosition
-
-    This enum specifies where the tick marks are to be drawn relative
-    to the slider's groove and the handle the user moves.
-
-    \value NoTicks Do not draw any tick marks.
-    \value TicksBothSides Draw tick marks on both sides of the groove.
-    \value TicksAbove Draw tick marks above the (horizontal) slider
-    \value TicksBelow Draw tick marks below the (horizontal) slider
-    \value TicksLeft Draw tick marks to the left of the (vertical) slider
-    \value TicksRight Draw tick marks to the right of the (vertical) slider
-
-    \omitvalue NoMarks
-    \omitvalue Above
-    \omitvalue Left
-    \omitvalue Below
-    \omitvalue Right
-    \omitvalue Both
-*/
-
-
-/*!
-    Constructs a vertical slider with the given \a parent.
-*/
 QSlider::QSlider(QWidget *parent)
    : QAbstractSlider(*new QSliderPrivate, parent)
 {
@@ -287,11 +198,6 @@ QSlider::QSlider(QWidget *parent)
    d_func()->init();
 }
 
-/*!
-    Constructs a slider with the given \a parent. The \a orientation
-    parameter determines whether the slider is horizontal or vertical;
-    the valid values are Qt::Vertical and Qt::Horizontal.
-*/
 
 QSlider::QSlider(Qt::Orientation orientation, QWidget *parent)
    : QAbstractSlider(*new QSliderPrivate, parent)
@@ -300,16 +206,12 @@ QSlider::QSlider(Qt::Orientation orientation, QWidget *parent)
    d_func()->init();
 }
 
-/*!
-    Destroys this slider.
-*/
+
 QSlider::~QSlider()
 {
 }
 
-/*!
-    \reimp
-*/
+
 void QSlider::paintEvent(QPaintEvent *)
 {
    Q_D(QSlider);
@@ -321,6 +223,7 @@ void QSlider::paintEvent(QPaintEvent *)
    if (d->tickPosition != NoTicks) {
       opt.subControls |= QStyle::SC_SliderTickmarks;
    }
+
    if (d->pressedControl) {
       opt.activeSubControls = d->pressedControl;
       opt.state |= QStyle::State_Sunken;
@@ -363,10 +266,12 @@ bool QSlider::event(QEvent *event)
 void QSlider::mousePressEvent(QMouseEvent *ev)
 {
    Q_D(QSlider);
+
    if (d->maximum == d->minimum || (ev->buttons() ^ ev->button())) {
       ev->ignore();
       return;
    }
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (QApplication::keypadNavigationEnabled()) {
       setEditFocus(true);
@@ -389,7 +294,7 @@ void QSlider::mousePressEvent(QMouseEvent *ev)
       QStyleOptionSlider opt;
       initStyleOption(&opt);
       d->pressedControl = style()->hitTestComplexControl(QStyle::CC_Slider,
-                          &opt, ev->pos(), this);
+            &opt, ev->pos(), this);
       SliderAction action = SliderNoAction;
       if (d->pressedControl == QStyle::SC_SliderGroove) {
          const QRect sliderRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
@@ -453,9 +358,11 @@ void QSlider::mouseReleaseEvent(QMouseEvent *ev)
    QStyle::SubControl oldPressed = QStyle::SubControl(d->pressedControl);
    d->pressedControl = QStyle::SC_None;
    setRepeatAction(SliderNoAction);
+
    if (oldPressed == QStyle::SC_SliderHandle) {
       setSliderDown(false);
    }
+
    QStyleOptionSlider opt;
    initStyleOption(&opt);
    opt.subControls = oldPressed;
@@ -473,12 +380,14 @@ QSize QSlider::sizeHint() const
    QStyleOptionSlider opt;
    initStyleOption(&opt);
    int thick = style()->pixelMetric(QStyle::PM_SliderThickness, &opt, this);
+
    if (d->tickPosition & TicksAbove) {
       thick += TickSpace;
    }
    if (d->tickPosition & TicksBelow) {
       thick += TickSpace;
    }
+
    int w = thick, h = SliderLength;
    if (d->orientation == Qt::Horizontal) {
       w = SliderLength;
@@ -539,4 +448,4 @@ Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider)
 
 #endif
 
-QT_END_NAMESPACE
+

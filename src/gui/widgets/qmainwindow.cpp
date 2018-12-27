@@ -21,7 +21,6 @@
 ***********************************************************************/
 
 //#define QT_EXPERIMENTAL_CLIENT_DECORATIONS
-
 #include <qmainwindow.h>
 #include <qmainwindowlayout_p.h>
 
@@ -39,17 +38,9 @@
 #include <qwidget_p.h>
 #include <qtoolbar_p.h>
 #include <qwidgetanimator_p.h>
-
-#ifdef Q_OS_MAC
-#include <qt_mac_p.h>
-#include <qt_cocoa_helpers_mac_p.h>
-QT_BEGIN_NAMESPACE
-
-extern OSWindowRef qt_mac_window_for(const QWidget *); // qwidget_mac.cpp
-QT_END_NAMESPACE
+#ifdef Q_OS_OSX
+#include <qplatform_nativeinterface.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QMainWindowPrivate : public QWidgetPrivate
 {
@@ -58,11 +49,13 @@ class QMainWindowPrivate : public QWidgetPrivate
  public:
    inline QMainWindowPrivate()
       : layout(0), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
-#ifdef Q_OS_MAC
-      , useHIToolBar(false)
+#ifdef Q_OS_OSX
+      , useUnifiedToolBar(false)
 #endif
+
+
 #if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
-      , hasOldCursor(false) , cursorAdjusted(false)
+      , hasOldCursor(false), cursorAdjusted(false)
 #endif
    { }
 
@@ -70,9 +63,8 @@ class QMainWindowPrivate : public QWidgetPrivate
    QSize iconSize;
    bool explicitIconSize;
    Qt::ToolButtonStyle toolButtonStyle;
-
-#ifdef Q_OS_MAC
-   bool useHIToolBar;
+#ifdef Q_OS_OSX
+   bool useUnifiedToolBar;
 #endif
 
    void init();
@@ -83,6 +75,7 @@ class QMainWindowPrivate : public QWidgetPrivate
    QCursor separatorCursor(const QList<int> &path) const;
    void adjustCursor(const QPoint &pos);
    QCursor oldCursor;
+   QCursor adjustedCursor;
    uint hasOldCursor : 1;
    uint cursorAdjusted : 1;
 #endif
@@ -230,12 +223,6 @@ void QMainWindow::setIconSize(const QSize &iconSize)
    d->explicitIconSize = iconSize.isValid();
 }
 
-/*! \property QMainWindow::toolButtonStyle
-    \brief style of toolbar buttons in this mainwindow.
-
-    The default is Qt::ToolButtonIconOnly.
-*/
-
 Qt::ToolButtonStyle QMainWindow::toolButtonStyle() const
 {
    return d_func()->toolButtonStyle;
@@ -252,21 +239,7 @@ void QMainWindow::setToolButtonStyle(Qt::ToolButtonStyle toolButtonStyle)
 }
 
 #ifndef QT_NO_MENUBAR
-/*!
-    Returns the menu bar for the main window. This function creates
-    and returns an empty menu bar if the menu bar does not exist.
 
-    If you want all windows in a Mac application to share one menu
-    bar, don't use this function to create it, because the menu bar
-    created here will have this QMainWindow as its parent.  Instead,
-    you must create a menu bar that does not have a parent, which you
-    can then share among all the Mac windows. Create a parent-less
-    menu bar this way:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qmenubar.cpp 1
-
-    \sa setMenuBar()
-*/
 QMenuBar *QMainWindow::menuBar() const
 {
    QMenuBar *menuBar = qobject_cast<QMenuBar *>(layout()->menuBar());
@@ -278,14 +251,7 @@ QMenuBar *QMainWindow::menuBar() const
    return menuBar;
 }
 
-/*!
-    Sets the menu bar for the main window to \a menuBar.
 
-    Note: QMainWindow takes ownership of the \a menuBar pointer and
-    deletes it at the appropriate time.
-
-    \sa menuBar()
-*/
 void QMainWindow::setMenuBar(QMenuBar *menuBar)
 {
    QLayout *topLayout = layout();
@@ -323,14 +289,7 @@ QWidget *QMainWindow::menuWidget() const
    return menuBar;
 }
 
-/*!
-    \since 4.2
 
-    Sets the menu bar for the main window to \a menuBar.
-
-    QMainWindow takes ownership of the \a menuBar pointer and
-    deletes it at the appropriate time.
-*/
 void QMainWindow::setMenuWidget(QWidget *menuBar)
 {
    Q_D(QMainWindow);
@@ -343,12 +302,6 @@ void QMainWindow::setMenuWidget(QWidget *menuBar)
 #endif // QT_NO_MENUBAR
 
 #ifndef QT_NO_STATUSBAR
-/*!
-    Returns the status bar for the main window. This function creates
-    and returns an empty status bar if the status bar does not exist.
-
-    \sa setStatusBar()
-*/
 QStatusBar *QMainWindow::statusBar() const
 {
    QStatusBar *statusbar = d_func()->layout->statusBar();
@@ -361,15 +314,6 @@ QStatusBar *QMainWindow::statusBar() const
    return statusbar;
 }
 
-/*!
-    Sets the status bar for the main window to \a statusbar.
-
-    Setting the status bar to 0 will remove it from the main window.
-    Note that QMainWindow takes ownership of the \a statusbar pointer
-    and deletes it at the appropriate time.
-
-    \sa statusBar()
-*/
 void QMainWindow::setStatusBar(QStatusBar *statusbar)
 {
    Q_D(QMainWindow);
@@ -410,6 +354,17 @@ void QMainWindow::setCentralWidget(QWidget *widget)
    d->layout->setCentralWidget(widget);
 }
 
+QWidget *QMainWindow::takeCentralWidget()
+{
+   Q_D(QMainWindow);
+   QWidget *oldcentralwidget = d->layout->centralWidget();
+   if (oldcentralwidget) {
+      oldcentralwidget->setParent(0);
+      d->layout->setCentralWidget(0);
+   }
+   return oldcentralwidget;
+}
+
 #ifndef QT_NO_DOCKWIDGET
 /*!
     Sets the given dock widget \a area to occupy the specified \a
@@ -434,6 +389,7 @@ void QMainWindow::setCorner(Qt::Corner corner, Qt::DockWidgetArea area)
          valid = (area == Qt::BottomDockWidgetArea || area == Qt::RightDockWidgetArea);
          break;
    }
+
    if (!valid) {
       qWarning("QMainWindow::setCorner(): 'area' is not valid for 'corner'");
    } else {
@@ -500,14 +456,7 @@ void QMainWindow::removeToolBarBreak(QToolBar *before)
    d->layout->removeToolBarBreak(before);
 }
 
-/*!
-    Adds the \a toolbar into the specified \a area in this main
-    window. The \a toolbar is placed at the end of the current tool
-    bar block (i.e. line). If the main window already manages \a toolbar
-    then it will only move the toolbar to \a area.
 
-    \sa insertToolBar() addToolBarBreak() insertToolBarBreak()
-*/
 void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 {
    if (!checkToolBarArea(area, "QMainWindow::addToolBar")) {
@@ -516,9 +465,9 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 
    Q_D(QMainWindow);
 
-   disconnect(this, SIGNAL(iconSizeChanged(const QSize &)), toolbar, SLOT(_q_updateIconSize(const QSize &)));
+   disconnect(this, SIGNAL(iconSizeChanged(QSize)), toolbar, SLOT(_q_updateIconSize(QSize)));
    disconnect(this, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)), toolbar,
-              SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+      SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
 
    if (toolbar->d_func()->state && toolbar->d_func()->state->dragging) {
       //removing a toolbar which is dragging will cause crash
@@ -540,10 +489,10 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 
    toolbar->d_func()->_q_updateIconSize(d->iconSize);
    toolbar->d_func()->_q_updateToolButtonStyle(d->toolButtonStyle);
-   connect(this, SIGNAL(iconSizeChanged(const QSize &)), toolbar, SLOT(_q_updateIconSize(const QSize &)));
+   connect(this, SIGNAL(iconSizeChanged(QSize)), toolbar, SLOT(_q_updateIconSize(QSize)));
 
    connect(this, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)),
-           toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+      toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
 
    d->layout->addToolBar(area, toolbar);
 }
@@ -588,10 +537,10 @@ void QMainWindow::insertToolBar(QToolBar *before, QToolBar *toolbar)
 
    toolbar->d_func()->_q_updateIconSize(d->iconSize);
    toolbar->d_func()->_q_updateToolButtonStyle(d->toolButtonStyle);
-   connect(this, SIGNAL(iconSizeChanged(const QSize &)), toolbar, SLOT(_q_updateIconSize(const QSize &)));
+   connect(this, SIGNAL(iconSizeChanged(QSize)), toolbar, SLOT(_q_updateIconSize(QSize)));
 
    connect(this, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)),
-           toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+      toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
 
    d->layout->insertToolBar(before, toolbar);
 }
@@ -620,13 +569,7 @@ Qt::ToolBarArea QMainWindow::toolBarArea(QToolBar *toolbar) const
    return d_func()->layout->toolBarArea(toolbar);
 }
 
-/*!
 
-    Returns whether there is a toolbar
-    break before the \a toolbar.
-
-    \sa  addToolBarBreak(), insertToolBarBreak()
-*/
 bool QMainWindow::toolBarBreak(QToolBar *toolbar) const
 {
    return d_func()->layout->toolBarBreak(toolbar);
@@ -636,25 +579,6 @@ bool QMainWindow::toolBarBreak(QToolBar *toolbar) const
 
 #ifndef QT_NO_DOCKWIDGET
 
-/*! \property QMainWindow::animated
-    \brief whether manipulating dock widgets and tool bars is animated
-    \since 4.2
-
-    When a dock widget or tool bar is dragged over the
-    main window, the main window adjusts its contents
-    to indicate where the dock widget or tool bar will
-    be docked if it is dropped. Setting this property
-    causes QMainWindow to move its contents in a smooth
-    animation. Clearing this property causes the contents
-    to snap into their new positions.
-
-    By default, this property is set. It may be cleared if
-    the main window contains widgets which are slow at resizing
-    or repainting themselves.
-
-    Setting this property is identical to setting the AnimatedDocks
-    option using setDockOptions().
-*/
 
 bool QMainWindow::isAnimated() const
 {
@@ -676,26 +600,6 @@ void QMainWindow::setAnimated(bool enabled)
    d->layout->setDockOptions(opts);
 }
 
-/*! \property QMainWindow::dockNestingEnabled
-    \brief whether docks can be nested
-    \since 4.2
-
-    If this property is false, dock areas can only contain a single row
-    (horizontal or vertical) of dock widgets. If this property is true,
-    the area occupied by a dock widget can be split in either direction to contain
-    more dock widgets.
-
-    Dock nesting is only necessary in applications that contain a lot of
-    dock widgets. It gives the user greater freedom in organizing their
-    main window. However, dock nesting leads to more complex
-    (and less intuitive) behavior when a dock widget is dragged over the
-    main window, since there are more ways in which a dropped dock widget
-    may be placed in the dock area.
-
-    Setting this property is identical to setting the AllowNestedDocks option
-    using setDockOptions().
-*/
-
 bool QMainWindow::isDockNestingEnabled() const
 {
    Q_D(const QMainWindow);
@@ -707,6 +611,7 @@ void QMainWindow::setDockNestingEnabled(bool enabled)
    Q_D(QMainWindow);
 
    DockOptions opts = d->layout->dockOptions;
+
    if (enabled) {
       opts |= AllowNestedDocks;
    } else {
@@ -715,6 +620,7 @@ void QMainWindow::setDockNestingEnabled(bool enabled)
 
    d->layout->setDockOptions(opts);
 }
+
 
 static bool checkDockWidgetArea(Qt::DockWidgetArea area, const char *where)
 {
@@ -732,15 +638,7 @@ static bool checkDockWidgetArea(Qt::DockWidgetArea area, const char *where)
 }
 
 #ifndef QT_NO_TABBAR
-/*!
-    \property QMainWindow::documentMode
-    \brief whether the tab bar for tabbed dockwidgets is set to document mode.
-    \since 4.5
 
-    The default is false.
-
-    \sa QTabBar::documentMode
-*/
 bool QMainWindow::documentMode() const
 {
    return d_func()->layout->documentMode();
@@ -772,16 +670,7 @@ void QMainWindow::setTabShape(QTabWidget::TabShape tabShape)
    d_func()->layout->setTabShape(tabShape);
 }
 
-/*!
-    \since 4.5
 
-    Returns the tab position for \a area.
-
-    \note The \l VerticalTabs dock option overrides the tab positions returned
-    by this function.
-
-    \sa setTabPosition(), tabShape()
-*/
 QTabWidget::TabPosition QMainWindow::tabPosition(Qt::DockWidgetArea area) const
 {
    if (!checkDockWidgetArea(area, "QMainWindow::tabPosition")) {
@@ -790,17 +679,7 @@ QTabWidget::TabPosition QMainWindow::tabPosition(Qt::DockWidgetArea area) const
    return d_func()->layout->tabPosition(area);
 }
 
-/*!
-    \since 4.5
 
-    Sets the tab position for the given dock widget \a areas to the specified
-    \a tabPosition. By default, all dock areas show their tabs at the bottom.
-
-    \note The \l VerticalTabs dock option overrides the tab positions set by
-    this method.
-
-    \sa tabPosition(), setTabShape()
-*/
 void QMainWindow::setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosition tabPosition)
 {
    d_func()->layout->setTabPosition(areas, tabPosition);
@@ -828,20 +707,6 @@ void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget
    d_func()->layout->removeWidget(dockwidget); // in case it was already in here
    addDockWidget(area, dockwidget, orientation);
 
-#ifdef Q_OS_MAC     //drawer support
-   QMacCocoaAutoReleasePool pool;
-   extern bool qt_mac_is_macdrawer(const QWidget *); //qwidget_mac.cpp
-   if (qt_mac_is_macdrawer(dockwidget)) {
-      extern bool qt_mac_set_drawer_preferred_edge(QWidget *, Qt::DockWidgetArea); //qwidget_mac.cpp
-      window()->createWinId();
-      dockwidget->window()->createWinId();
-      qt_mac_set_drawer_preferred_edge(dockwidget, area);
-      if (dockwidget->isVisible()) {
-         dockwidget->hide();
-         dockwidget->show();
-      }
-   }
-#endif
 }
 
 /*!
@@ -862,7 +727,7 @@ bool QMainWindow::restoreDockWidget(QDockWidget *dockwidget)
     specified by the \a orientation.
 */
 void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget,
-                                Qt::Orientation orientation)
+   Qt::Orientation orientation)
 {
    if (!checkDockWidgetArea(area, "QMainWindow::addDockWidget")) {
       return;
@@ -894,7 +759,7 @@ void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget
     \sa tabifyDockWidget(), addDockWidget(), removeDockWidget()
 */
 void QMainWindow::splitDockWidget(QDockWidget *after, QDockWidget *dockwidget,
-                                  Qt::Orientation orientation)
+   Qt::Orientation orientation)
 {
    d_func()->layout->splitDockWidget(after, dockwidget, orientation);
 }
@@ -968,6 +833,13 @@ void QMainWindow::removeDockWidget(QDockWidget *dockwidget)
 Qt::DockWidgetArea QMainWindow::dockWidgetArea(QDockWidget *dockwidget) const
 {
    return d_func()->layout->dockWidgetArea(dockwidget);
+}
+
+void QMainWindow::resizeDocks(const QList<QDockWidget *> &docks,
+   const QList<int> &sizes, Qt::Orientation orientation)
+{
+   d_func()->layout->layoutState.dockAreaLayout.resizeDocks(docks, sizes, orientation);
+   d_func()->layout->invalidate();
 }
 
 #endif // QT_NO_DOCKWIDGET
@@ -1055,7 +927,7 @@ QCursor QMainWindowPrivate::separatorCursor(const QList<int> &path) const
    // no, it's a splitter inside a dock area, separating two dock widgets
 
    return info->o == Qt::Horizontal
-          ? Qt::SplitHCursor : Qt::SplitVCursor;
+      ? Qt::SplitHCursor : Qt::SplitVCursor;
 }
 
 void QMainWindowPrivate::adjustCursor(const QPoint &pos)
@@ -1078,7 +950,9 @@ void QMainWindowPrivate::adjustCursor(const QPoint &pos)
             q->unsetCursor();
          }
       }
-   } else {
+
+   } else if (layout->movingSeparator.isEmpty()) {
+      // Don't change cursor when moving separator
       QList<int> pathToSeparator
          = layout->layoutState.dockAreaLayout.findSeparator(pos);
 
@@ -1104,9 +978,8 @@ void QMainWindowPrivate::adjustCursor(const QPoint &pos)
                oldCursor = q->cursor();
                hasOldCursor = q->testAttribute(Qt::WA_SetCursor);
             }
-            QCursor cursor = separatorCursor(hoverSeparator);
-            cursorAdjusted = false; //to not reset the oldCursor in event(CursorChange)
-            q->setCursor(cursor);
+            adjustedCursor = separatorCursor(hoverSeparator);
+            q->setCursor(adjustedCursor);
             cursorAdjusted = true;
          }
       }
@@ -1214,33 +1087,17 @@ bool QMainWindow::event(QEvent *event)
          }
          break;
 
-#ifdef Q_OS_MAC
-      case QEvent::Show:
-         d->layout->blockVisiblityCheck = false;
-         if (unifiedTitleAndToolBarOnMac()) {
-            d->layout->syncUnifiedToolbarVisibility();
-         }
-         break;
-      case QEvent::WindowStateChange: {
-         if (isHidden()) {
-            // We are coming out of a minimize, leave things as is.
-            d->layout->blockVisiblityCheck = true;
-         }
-
-         // We need to update the HIToolbar status when we go out of or into fullscreen.
-         QWindowStateChangeEvent *wce = static_cast<QWindowStateChangeEvent *>(event);
-         if ((windowState() & Qt::WindowFullScreen) || (wce->oldState() & Qt::WindowFullScreen)) {
-            d->layout->updateHIToolBarStatus();
-         }
-      }
-
-      break;
-#endif
 #if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
       case QEvent::CursorChange:
-         if (d->cursorAdjusted) {
+         // CursorChange events are triggered as mouse moves to new widgets even
+         // if the cursor doesn't actually change, so do not change oldCursor if
+         // the "changed" cursor has same shape as adjusted cursor.
+         if (d->cursorAdjusted && d->adjustedCursor.shape() != cursor().shape()) {
             d->oldCursor = cursor();
             d->hasOldCursor = testAttribute(Qt::WA_SetCursor);
+
+            // Ensure our adjusted cursor stays visible
+            setCursor(d->adjustedCursor);
          }
          break;
 #endif
@@ -1255,44 +1112,34 @@ bool QMainWindow::event(QEvent *event)
 
 void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
    Q_D(QMainWindow);
-   if (!isWindow() || d->useHIToolBar == set || QSysInfo::MacintoshVersion < QSysInfo::MV_10_3) {
-      return;
-   }
+   if (isWindow()) {
+      d->useUnifiedToolBar = set;
+      createWinId();
 
-   d->useHIToolBar = set;
-   createWinId(); // We need the hiview for down below.
-
-
-   // Activate the unified toolbar with the raster engine.
-   if (windowSurface() && set) {
-      d->layout->unifiedSurface = new QUnifiedToolbarSurface(this);
-   }
-
-   d->layout->updateHIToolBarStatus();
-
-   // Deactivate the unified toolbar with the raster engine.
-   if (windowSurface() && !set) {
-      if (d->layout->unifiedSurface) {
-         delete d->layout->unifiedSurface;
-         d->layout->unifiedSurface = 0;
+      QPlatformNativeInterface *nativeInterface = QGuiApplication::platformNativeInterface();
+      QPlatformNativeInterface::NativeResourceForIntegrationFunction function =
+         nativeInterface->nativeResourceFunctionForIntegration("setContentBorderEnabled");
+      if (!function) {
+         return;   // Not Cocoa platform plugin.
       }
+
+      typedef void (*SetContentBorderEnabledFunction)(QWindow * window, bool enable);
+      (reinterpret_cast<SetContentBorderEnabledFunction>(function))(window()->windowHandle(), set);
+      update();
    }
-
-   // Enabling the unified toolbar clears the opaque size grip setting, update it.
-   d->macUpdateOpaqueSizeGrip();
-#else
-   Q_UNUSED(set)
-
 #endif
+
+
 }
 
 bool QMainWindow::unifiedTitleAndToolBarOnMac() const
 {
-#ifdef Q_OS_MAC
-   return d_func()->useHIToolBar && !testAttribute(Qt::WA_MacBrushedMetal) && !(windowFlags() & Qt::FramelessWindowHint);
+#ifdef Q_OS_OSX
+   return d_func()->useUnifiedToolBar;
 #endif
+
    return false;
 }
 
@@ -1337,7 +1184,7 @@ void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
             return;
          }
          if (dw->widget()
-               && dw->widget()->geometry().contains(child->mapFrom(this, event->pos()))) {
+            && dw->widget()->geometry().contains(child->mapFrom(this, event->pos()))) {
             // ignore the event if the mouse is over the QDockWidget contents
             return;
          }
@@ -1399,10 +1246,23 @@ QMenu *QMainWindow::createPopupMenu()
       menu = new QMenu(this);
       for (int i = 0; i < dockwidgets.size(); ++i) {
          QDockWidget *dockWidget = dockwidgets.at(i);
-         if (dockWidget->parentWidget() == this
-               && !d->layout->layoutState.dockAreaLayout.indexOf(dockWidget).isEmpty()) {
-            menu->addAction(dockwidgets.at(i)->toggleViewAction());
+         // filter to find out if we own this QDockWidget
+         if (dockWidget->parentWidget() == this) {
+            if (d->layout->layoutState.dockAreaLayout.indexOf(dockWidget).isEmpty()) {
+               continue;
+            }
+         } else if (QDockWidgetGroupWindow *dwgw =
+               qobject_cast<QDockWidgetGroupWindow *>(dockWidget->parentWidget())) {
+            if (dwgw->parentWidget() != this) {
+               continue;
+            }
+            if (dwgw->layoutInfo()->indexOf(dockWidget).isEmpty()) {
+               continue;
+            }
+         } else {
+            continue;
          }
+         menu->addAction(dockwidgets.at(i)->toggleViewAction());
       }
       menu->addSeparator();
    }
@@ -1415,20 +1275,19 @@ QMenu *QMainWindow::createPopupMenu()
       }
       for (int i = 0; i < toolbars.size(); ++i) {
          QToolBar *toolBar = toolbars.at(i);
+
          if (toolBar->parentWidget() == this
-               && (!d->layout->layoutState.toolBarAreaLayout.indexOf(toolBar).isEmpty()
-                   || (unifiedTitleAndToolBarOnMac()
-                       && toolBarArea(toolBar) == Qt::TopToolBarArea))) {
+            && (!d->layout->layoutState.toolBarAreaLayout.indexOf(toolBar).isEmpty())) {
             menu->addAction(toolbars.at(i)->toggleViewAction());
          }
       }
    }
 #endif
-   Q_UNUSED(d);
+
    return menu;
 }
 #endif // QT_NO_MENU
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_MAINWINDOW
