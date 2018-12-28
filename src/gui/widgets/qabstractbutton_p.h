@@ -23,10 +23,10 @@
 #ifndef QABSTRACTBUTTON_P_H
 #define QABSTRACTBUTTON_P_H
 
-#include <QtCore/qbasictimer.h>
+#include <qbasictimer.h>
 #include <qwidget_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QAbstractButtonPrivate : public QWidgetPrivate
 {
@@ -77,8 +77,9 @@ class QAbstractButtonPrivate : public QWidgetPrivate
    void emitPressed();
    void emitReleased();
    void emitClicked();
+   void emitToggled(bool checked);
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QABSTRACTBUTTON_P_H

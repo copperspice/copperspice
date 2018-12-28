@@ -23,12 +23,12 @@
 #ifndef QABSTRACTSLIDER_P_H
 #define QABSTRACTSLIDER_P_H
 
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qelapsedtimer.h>
+#include <qbasictimer.h>
+#include <qelapsedtimer.h>
 #include <qwidget_p.h>
 #include <qstyle.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QAbstractSliderPrivate : public QWidgetPrivate
 {
@@ -82,14 +82,15 @@ class QAbstractSliderPrivate : public QWidgetPrivate
    inline int effectiveSingleStep() const {
       return singleStep
 #ifdef QT_KEYPAD_NAVIGATION
-             * repeatMultiplier
+         * repeatMultiplier
 #endif
-             ;
+         ;
    }
 
    virtual int bound(int val) const {
       return qMax(minimum, qMin(maximum, val));
    }
+
    inline int overflowSafeAdd(int add) const {
       int newValue = value + add;
       if (add > 0 && newValue < value) {
@@ -113,6 +114,6 @@ class QAbstractSliderPrivate : public QWidgetPrivate
    bool scrollByDelta(Qt::Orientation orientation, Qt::KeyboardModifiers modifiers, int delta);
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QABSTRACTSLIDER_P_H

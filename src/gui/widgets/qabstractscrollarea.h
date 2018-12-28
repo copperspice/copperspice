@@ -23,9 +23,9 @@
 #ifndef QABSTRACTSCROLLAREA_H
 #define QABSTRACTSCROLLAREA_H
 
-#include <QtGui/qframe.h>
+#include <qframe.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SCROLLAREA
 
@@ -37,14 +37,22 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
 {
    GUI_CS_OBJECT(QAbstractScrollArea)
 
+   GUI_CS_ENUM(SizeAdjustPolicy)
+
    GUI_CS_PROPERTY_READ(verticalScrollBarPolicy, verticalScrollBarPolicy)
    GUI_CS_PROPERTY_WRITE(verticalScrollBarPolicy, setVerticalScrollBarPolicy)
+
    GUI_CS_PROPERTY_READ(horizontalScrollBarPolicy, horizontalScrollBarPolicy)
    GUI_CS_PROPERTY_WRITE(horizontalScrollBarPolicy, setHorizontalScrollBarPolicy)
 
  public:
    explicit QAbstractScrollArea(QWidget *parent = nullptr);
    ~QAbstractScrollArea();
+   enum SizeAdjustPolicy {
+      AdjustIgnored,
+      AdjustToContentsOnFirstShow,
+      AdjustToContents
+   };
 
    Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
    void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy);
@@ -69,14 +77,16 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    QSize minimumSizeHint() const override;
    QSize sizeHint() const override;
 
+   virtual void setupViewport(QWidget *viewport);
+   SizeAdjustPolicy sizeAdjustPolicy() const;
+   void setSizeAdjustPolicy(SizeAdjustPolicy policy);
  protected :
-   GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *viewport))
-   GUI_CS_SLOT_2(setupViewport)
-
    QAbstractScrollArea(QAbstractScrollAreaPrivate &dd, QWidget *parent = nullptr);
    void setViewportMargins(int left, int top, int right, int bottom);
    void setViewportMargins(const QMargins &margins);
+   QMargins viewportMargins() const;
 
+   bool eventFilter(QObject *, QEvent *) override;
    bool event(QEvent *) override;
    virtual bool viewportEvent(QEvent *);
 
@@ -106,6 +116,7 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
 
    virtual void scrollContentsBy(int dx, int dy);
 
+   virtual QSize viewportSizeHint() const;
  private:
    Q_DECLARE_PRIVATE(QAbstractScrollArea)
    Q_DISABLE_COPY(QAbstractScrollArea)
@@ -125,6 +136,5 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
 
 #endif // QT_NO_SCROLLAREA
 
-QT_END_NAMESPACE
 
-#endif // QABSTRACTSCROLLAREA_H
+#endif

@@ -23,15 +23,15 @@
 #ifndef QABSTRACTSPINBOX_P_H
 #define QABSTRACTSPINBOX_P_H
 
-#include <QtGui/qabstractspinbox.h>
+#include <qabstractspinbox.h>
 
 #ifndef QT_NO_SPINBOX
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qstyleoption.h>
-#include <QtGui/qvalidator.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qvariant.h>
+#include <qlineedit.h>
+#include <qstyleoption.h>
+#include <qvalidator.h>
+#include <qdatetime.h>
+#include <qvariant.h>
 #include <qwidget_p.h>
 #include <qdatetime_p.h>
 
@@ -121,6 +121,8 @@ class QAbstractSpinBoxPrivate : public QWidgetPrivate
    QRect hoverRect;
    QAbstractSpinBox::ButtonSymbols buttonSymbols;
    QSpinBoxValidator *validator;
+   uint showGroupSeparator : 1;
+   int wheelDeltaRemainder;
 };
 
 class QSpinBoxValidator : public QValidator
@@ -135,8 +137,7 @@ class QSpinBoxValidator : public QValidator
    QAbstractSpinBoxPrivate *dptr;
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_SPINBOX
 
-#endif // QABSTRACTSPINBOX_P_H
+#endif

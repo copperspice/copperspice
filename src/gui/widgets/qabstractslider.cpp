@@ -32,167 +32,6 @@
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QAbstractSlider
-    \brief The QAbstractSlider class provides an integer value within a range.
-
-    \ingroup abstractwidgets
-
-    The class is designed as a common super class for widgets like
-    QScrollBar, QSlider and QDial.
-
-    Here are the main properties of the class:
-
-    \list 1
-
-    \i \l value: The bounded integer that QAbstractSlider maintains.
-
-    \i \l minimum: The lowest possible value.
-
-    \i \l maximum: The highest possible value.
-
-    \i \l singleStep: The smaller of two natural steps that an
-    abstract sliders provides and typically corresponds to the user
-    pressing an arrow key.
-
-    \i \l pageStep: The larger of two natural steps that an abstract
-    slider provides and typically corresponds to the user pressing
-    PageUp or PageDown.
-
-    \i \l tracking: Whether slider tracking is enabled.
-
-    \i \l sliderPosition: The current position of the slider. If \l
-    tracking is enabled (the default), this is identical to \l value.
-
-    \endlist
-
-    Unity (1) may be viewed as a third step size. setValue() lets you
-    set the current value to any integer in the allowed range, not
-    just minimum() + \e n * singleStep() for integer values of \e n.
-    Some widgets may allow the user to set any value at all; others
-    may just provide multiples of singleStep() or pageStep().
-
-    QAbstractSlider emits a comprehensive set of signals:
-
-    \table
-    \header \i Signal \i Emitted when
-    \row \i \l valueChanged()
-         \i the value has changed. The \l tracking
-            determines whether this signal is emitted during user
-            interaction.
-    \row \i \l sliderPressed()
-         \i the user starts to drag the slider.
-    \row \i \l sliderMoved()
-         \i the user drags the slider.
-    \row \i \l sliderReleased()
-         \i the user releases the slider.
-    \row \i \l actionTriggered()
-         \i a slider action was triggerd.
-    \row \i \l rangeChanged()
-         \i a the range has changed.
-    \endtable
-
-    QAbstractSlider provides a virtual sliderChange() function that is
-    well suited for updating the on-screen representation of
-    sliders. By calling triggerAction(), subclasses trigger slider
-    actions. Two helper functions QStyle::sliderPositionFromValue() and
-    QStyle::sliderValueFromPosition() help subclasses and styles to map
-    screen coordinates to logical range values.
-
-    \sa QAbstractSpinBox, QSlider, QDial, QScrollBar, {Sliders Example}
-*/
-
-/*!
-    \enum QAbstractSlider::SliderAction
-
-    \value SliderNoAction
-    \value SliderSingleStepAdd
-    \value SliderSingleStepSub
-    \value SliderPageStepAdd
-    \value SliderPageStepSub
-    \value SliderToMinimum
-    \value SliderToMaximum
-    \value SliderMove
-
-*/
-
-/*!
-    \fn void QAbstractSlider::valueChanged(int value)
-
-    This signal is emitted when the slider value has changed, with the
-    new slider \a value as argument.
-*/
-
-/*!
-    \fn void QAbstractSlider::sliderPressed()
-
-    This signal is emitted when the user presses the slider with the
-    mouse, or programmatically when setSliderDown(true) is called.
-
-    \sa sliderReleased(), sliderMoved(), isSliderDown()
-*/
-
-/*!
-    \fn void QAbstractSlider::sliderMoved(int value)
-
-    This signal is emitted when sliderDown is true and the slider moves. This
-    usually happens when the user is dragging the slider. The \a value
-    is the new slider position.
-
-    This signal is emitted even when tracking is turned off.
-
-    \sa setTracking(), valueChanged(), isSliderDown(),
-    sliderPressed(), sliderReleased()
-*/
-
-/*!
-    \fn void QAbstractSlider::sliderReleased()
-
-    This signal is emitted when the user releases the slider with the
-    mouse, or programmatically when setSliderDown(false) is called.
-
-    \sa sliderPressed() sliderMoved() sliderDown
-*/
-
-/*!
-    \fn void QAbstractSlider::rangeChanged(int min, int max)
-
-    This signal is emitted when the slider range has changed, with \a
-    min being the new minimum, and \a max being the new maximum.
-
-    \sa minimum, maximum
-*/
-
-/*!
-    \fn void QAbstractSlider::actionTriggered(int action)
-
-    This signal is emitted when the slider action \a action is
-    triggered. Actions are \l SliderSingleStepAdd, \l
-    SliderSingleStepSub, \l SliderPageStepAdd, \l SliderPageStepSub,
-    \l SliderToMinimum, \l SliderToMaximum, and \l SliderMove.
-
-    When the signal is emitted, the \l sliderPosition has been
-    adjusted according to the action, but the \l value has not yet
-    been propagated (meaning the valueChanged() signal was not yet
-    emitted), and the visual display has not been updated. In slots
-    connected to this signal you can thus safely adjust any action by
-    calling setSliderPosition() yourself, based on both the action and
-    the slider's value.
-
-    \sa triggerAction()
-*/
-
-/*!
-    \enum QAbstractSlider::SliderChange
-
-    \value SliderRangeChange
-    \value SliderOrientationChange
-    \value SliderStepsChange
-    \value SliderValueChange
-*/
-
 QAbstractSliderPrivate::QAbstractSliderPrivate()
    : minimum(0), maximum(99), pageStep(10), value(0), position(0), pressValue(-1),
      singleStep(1), offset_accumulated(0), tracking(true),
@@ -200,8 +39,8 @@ QAbstractSliderPrivate::QAbstractSliderPrivate()
      invertedAppearance(false), invertedControls(false),
      orientation(Qt::Horizontal), repeatAction(QAbstractSlider::SliderNoAction)
 #ifdef QT_KEYPAD_NAVIGATION
-     , isAutoRepeating(false)
-     , repeatMultiplier(1)
+   , isAutoRepeating(false)
+   , repeatMultiplier(1)
 {
    firstRepeat.invalidate();
 #else
@@ -303,17 +142,6 @@ Qt::Orientation QAbstractSlider::orientation() const
    return d->orientation;
 }
 
-
-/*!
-    \property QAbstractSlider::minimum
-    \brief the sliders's minimum value
-
-    When setting this property, the \l maximum is adjusted if
-    necessary to ensure that the range remains valid. Also the
-    slider's current value is adjusted to be within the new range.
-
-*/
-
 void QAbstractSlider::setMinimum(int min)
 {
    Q_D(QAbstractSlider);
@@ -326,18 +154,6 @@ int QAbstractSlider::minimum() const
    return d->minimum;
 }
 
-
-/*!
-    \property QAbstractSlider::maximum
-    \brief the slider's maximum value
-
-    When setting this property, the \l minimum is adjusted if
-    necessary to ensure that the range remains valid.  Also the
-    slider's current value is adjusted to be within the new range.
-
-
-*/
-
 void QAbstractSlider::setMaximum(int max)
 {
    Q_D(QAbstractSlider);
@@ -349,22 +165,6 @@ int QAbstractSlider::maximum() const
    Q_D(const QAbstractSlider);
    return d->maximum;
 }
-
-
-
-/*!
-    \property QAbstractSlider::singleStep
-    \brief the single step.
-
-    The smaller of two natural steps that an
-    abstract sliders provides and typically corresponds to the user
-    pressing an arrow key.
-
-    If the property is modified during an auto repeating key event, behavior
-    is undefined.
-
-    \sa pageStep
-*/
 
 void QAbstractSlider::setSingleStep(int step)
 {
@@ -381,15 +181,6 @@ int QAbstractSlider::singleStep() const
 }
 
 
-/*!
-    \property QAbstractSlider::pageStep
-    \brief the page step.
-
-    The larger of two natural steps that an abstract slider provides
-    and typically corresponds to the user pressing PageUp or PageDown.
-
-    \sa singleStep
-*/
 
 void QAbstractSlider::setPageStep(int step)
 {
@@ -404,18 +195,6 @@ int QAbstractSlider::pageStep() const
    Q_D(const QAbstractSlider);
    return d->pageStep;
 }
-
-/*!
-    \property QAbstractSlider::tracking
-    \brief whether slider tracking is enabled
-
-    If tracking is enabled (the default), the slider emits the
-    valueChanged() signal while the slider is being dragged. If
-    tracking is disabled, the slider emits the valueChanged() signal
-    only when the user releases the slider.
-
-    \sa sliderDown
-*/
 void QAbstractSlider::setTracking(bool enable)
 {
    Q_D(QAbstractSlider);
@@ -428,18 +207,6 @@ bool QAbstractSlider::hasTracking() const
    return d->tracking;
 }
 
-
-/*!
-    \property QAbstractSlider::sliderDown
-    \brief whether the slider is pressed down.
-
-    The property is set by subclasses in order to let the abstract
-    slider know whether or not \l tracking has any effect.
-
-    Changing the slider down property emits the sliderPressed() and
-    sliderReleased() signals.
-
-*/
 void QAbstractSlider::setSliderDown(bool down)
 {
    Q_D(QAbstractSlider);
@@ -499,17 +266,6 @@ int QAbstractSlider::sliderPosition() const
 }
 
 
-/*!
-    \property QAbstractSlider::value
-    \brief the slider's current value
-
-    The slider forces the value to be within the legal range: \l
-    minimum <= \c value <= \l maximum.
-
-    Changing the value also changes the \l sliderPosition.
-*/
-
-
 int QAbstractSlider::value() const
 {
    Q_D(const QAbstractSlider);
@@ -523,6 +279,7 @@ void QAbstractSlider::setValue(int value)
    if (d->value == value && d->position == value) {
       return;
    }
+
    d->value = value;
    if (d->position != value) {
       d->position = value;
@@ -530,26 +287,16 @@ void QAbstractSlider::setValue(int value)
          emit sliderMoved((d->position = value));
       }
    }
+
 #ifndef QT_NO_ACCESSIBILITY
-   QAccessible::updateAccessibility(this, 0, QAccessible::ValueChanged);
+   QAccessibleValueChangeEvent event(this, d->value);
+   QAccessible::updateAccessibility(&event);
 #endif
+
    sliderChange(SliderValueChange);
    emit valueChanged(value);
 }
 
-/*!
-    \property QAbstractSlider::invertedAppearance
-    \brief whether or not a slider shows its values inverted.
-
-    If this property is false (the default), the minimum and maximum will
-    be shown in its classic position for the inherited widget. If the
-    value is true, the minimum and maximum appear at their opposite location.
-
-    Note: This property makes most sense for sliders and dials. For
-    scroll bars, the visual effect of the scroll bar subcontrols depends on
-    whether or not the styles understand inverted appearance; most styles
-    ignore this property for scroll bars.
-*/
 
 bool QAbstractSlider::invertedAppearance() const
 {
@@ -564,17 +311,6 @@ void QAbstractSlider::setInvertedAppearance(bool invert)
    update();
 }
 
-
-/*!
-    \property QAbstractSlider::invertedControls
-    \brief whether or not the slider inverts its wheel and key events.
-
-    If this property is false, scrolling the mouse wheel "up" and using keys
-    like page up will increase the slider's value towards its maximum. Otherwise
-    pressing page up will move value towards the slider's minimum.
-*/
-
-
 bool QAbstractSlider::invertedControls() const
 {
    Q_D(const QAbstractSlider);
@@ -587,13 +323,7 @@ void QAbstractSlider::setInvertedControls(bool invert)
    d->invertedControls = invert;
 }
 
-/*!  Triggers a slider \a action.  Possible actions are \l
-  SliderSingleStepAdd, \l SliderSingleStepSub, \l SliderPageStepAdd,
-  \l SliderPageStepSub, \l SliderToMinimum, \l SliderToMaximum, and \l
-  SliderMove.
 
-  \sa actionTriggered()
- */
 void QAbstractSlider::triggerAction(SliderAction action)
 {
    Q_D(QAbstractSlider);
@@ -684,20 +414,11 @@ void QAbstractSlider::sliderChange(SliderChange)
    update();
 }
 
-/*!
-    \internal
-
-    Truncate qreal to int without flipping on overflow.
-*/
-static inline int clampScrollStep(qreal x)
-{
-   return int(qBound(qreal(INT_MIN), x, qreal(INT_MAX)));
-}
-
 bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::KeyboardModifiers modifiers, int delta)
 {
    Q_Q(QAbstractSlider);
    int stepsToScroll = 0;
+
    // in Qt scrolling to the right gives negative values.
    if (orientation == Qt::Horizontal) {
       delta = -delta;
@@ -706,7 +427,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
 
    if ((modifiers & Qt::ControlModifier) || (modifiers & Qt::ShiftModifier)) {
       // Scroll one page regardless of delta:
-      stepsToScroll = qBound(-pageStep, clampScrollStep(offset * pageStep), pageStep);
+      stepsToScroll = qBound(-pageStep, int(offset * pageStep), pageStep);
       offset_accumulated = 0;
    } else {
       // Calculate how many lines to scroll. Depending on what delta is (and
@@ -723,17 +444,23 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
       }
 
       offset_accumulated += stepsToScrollF;
-#ifndef Q_OS_MAC
+
+
       // Don't scroll more than one page in any case:
-      stepsToScroll = qBound(-pageStep, clampScrollStep(offset_accumulated), pageStep);
-#else
-      // Native UI-elements on Mac can scroll hundreds of lines at a time as
-      // a result of acceleration. So keep the same behaviour in Qt, and
-      // don't restrict stepsToScroll to certain maximum (pageStep):
-      stepsToScroll = clampScrollStep(offset_accumulated);
-#endif
-      offset_accumulated -= clampScrollStep(offset_accumulated);
+      stepsToScroll = qBound(-pageStep, int(offset_accumulated), pageStep);
+
+      offset_accumulated -= int(offset_accumulated);
       if (stepsToScroll == 0) {
+         // We moved less than a line, but might still have accumulated partial scroll,
+         // unless we already are at one of the ends.
+         const float effective_offset = invertedControls ? -offset_accumulated : offset_accumulated;
+         if (effective_offset > 0.f && value < maximum) {
+            return true;
+         }
+         if (effective_offset < 0.f && value > minimum) {
+            return true;
+         }
+         offset_accumulated = 0;
          return false;
       }
    }
@@ -743,7 +470,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
    }
 
    int prevValue = value;
-   position = overflowSafeAdd(stepsToScroll); // value will be updated by triggerAction()
+   position = bound(overflowSafeAdd(stepsToScroll)); // value will be updated by triggerAction()
    q->triggerAction(QAbstractSlider::SliderMove);
 
    if (prevValue == value) {
@@ -833,10 +560,10 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
          // value if there is no left/right navigation possible and if this slider is not
          // inside a tab widget.
          if (QApplication::keypadNavigationEnabled()
-               && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-                   || d->orientation == Qt::Vertical
-                   || !hasEditFocus()
-                   && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
+            && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               || d->orientation == Qt::Vertical
+               || !hasEditFocus()
+               && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
             ev->ignore();
             return;
          }
@@ -854,10 +581,10 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 #ifdef QT_KEYPAD_NAVIGATION
          // Same logic as in Qt::Key_Left
          if (QApplication::keypadNavigationEnabled()
-               && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-                   || d->orientation == Qt::Vertical
-                   || !hasEditFocus()
-                   && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
+            && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               || d->orientation == Qt::Vertical
+               || !hasEditFocus()
+               && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
             ev->ignore();
             return;
          }
@@ -876,9 +603,9 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
          // In QApplication::KeypadNavigationDirectional, we want to change the slider
          // value if there is no up/down navigation possible.
          if (QApplication::keypadNavigationEnabled()
-               && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-                   || d->orientation == Qt::Horizontal
-                   || !hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
+            && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               || d->orientation == Qt::Horizontal
+               || !hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
             ev->ignore();
             break;
          }
@@ -889,9 +616,9 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 #ifdef QT_KEYPAD_NAVIGATION
          // Same logic as in Qt::Key_Up
          if (QApplication::keypadNavigationEnabled()
-               && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-                   || d->orientation == Qt::Horizontal
-                   || !hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
+            && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               || d->orientation == Qt::Horizontal
+               || !hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
             ev->ignore();
             break;
          }
@@ -956,60 +683,3 @@ bool QAbstractSlider::event(QEvent *e)
    return QWidget::event(e);
 }
 
-/*! \fn int QAbstractSlider::minValue() const
-
-    Use minimum() instead.
-*/
-
-/*! \fn int QAbstractSlider::maxValue() const
-
-    Use maximum() instead.
-*/
-
-/*! \fn int QAbstractSlider::lineStep() const
-
-    Use singleStep() instead.
-*/
-
-/*! \fn void QAbstractSlider::setMinValue(int v)
-
-    Use setMinimum() instead.
-*/
-
-/*! \fn void QAbstractSlider::setMaxValue(int v)
-
-    Use setMaximum() instead.
-*/
-
-/*! \fn void QAbstractSlider::setLineStep(int v)
-
-    Use setSingleStep() instead.
-*/
-
-/*! \fn void QAbstractSlider::addPage()
-
-    Use triggerAction(QAbstractSlider::SliderPageStepAdd) instead.
-*/
-
-/*! \fn void QAbstractSlider::subtractPage()
-
-    Use triggerAction(QAbstractSlider::SliderPageStepSub) instead.
-*/
-
-/*! \fn void QAbstractSlider::addLine()
-
-    Use triggerAction(QAbstractSlider::SliderSingleStepAdd) instead.
-*/
-
-/*! \fn void QAbstractSlider::subtractLine()
-
-    Use triggerAction(QAbstractSlider::SliderSingleStepSub) instead.
-*/
-
-/*! \fn void QAbstractSlider::setSteps(int single, int page)
-
-    Use setSingleStep(\a single) followed by setPageStep(\a page)
-    instead.
-*/
-
-QT_END_NAMESPACE

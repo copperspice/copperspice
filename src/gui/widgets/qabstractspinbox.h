@@ -23,10 +23,10 @@
 #ifndef QABSTRACTSPINBOX_H
 #define QABSTRACTSPINBOX_H
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qvalidator.h>
+#include <qwidget.h>
+#include <qvalidator.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SPINBOX
 
@@ -76,7 +76,10 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    explicit QAbstractSpinBox(QWidget *parent = nullptr);
    ~QAbstractSpinBox();
 
-   enum StepEnabledFlag { StepNone = 0x00, StepUpEnabled = 0x01, StepDownEnabled = 0x02 };
+   enum StepEnabledFlag { StepNone = 0x00,
+      StepUpEnabled = 0x01,
+      StepDownEnabled = 0x02
+   };
    using StepEnabled = QFlags<StepEnabledFlag>;
 
    enum ButtonSymbols  { UpDownArrows, PlusMinus, NoButtons };
@@ -112,6 +115,8 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    void setAccelerated(bool on);
    bool isAccelerated() const;
 
+   void setGroupSeparatorShown(bool shown);
+   bool isGroupSeparatorShown() const;
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
    void interpretText();
@@ -126,10 +131,13 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 
    GUI_CS_SLOT_1(Public, void stepUp())
    GUI_CS_SLOT_2(stepUp)
+
    GUI_CS_SLOT_1(Public, void stepDown())
    GUI_CS_SLOT_2(stepDown)
+
    GUI_CS_SLOT_1(Public, void selectAll())
    GUI_CS_SLOT_2(selectAll)
+
    GUI_CS_SLOT_1(Public, virtual void clear())
    GUI_CS_SLOT_2(clear)
 
@@ -176,11 +184,12 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    GUI_CS_SLOT_1(Private, void _q_editorCursorPositionChanged(int un_named_arg1, int un_named_arg2))
    GUI_CS_SLOT_2(_q_editorCursorPositionChanged)
 
+   friend class QAccessibleAbstractSpinBox;
+
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSpinBox::StepEnabled)
 
 #endif // QT_NO_SPINBOX
 
-QT_END_NAMESPACE
 
-#endif // QABSTRACTSPINBOX_H
+#endif

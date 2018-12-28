@@ -23,11 +23,11 @@
 #ifndef QABSTRACTBUTTON_H
 #define QABSTRACTBUTTON_H
 
-#include <QtGui/qicon.h>
-#include <QtGui/qkeysequence.h>
-#include <QtGui/qwidget.h>
+#include <qicon.h>
+#include <qkeysequence.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QButtonGroup;
 class QAbstractButtonPrivate;
@@ -50,6 +50,7 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
 
    GUI_CS_PROPERTY_READ(checkable, isCheckable)
    GUI_CS_PROPERTY_WRITE(checkable, setCheckable)
+
    GUI_CS_PROPERTY_READ(checked, isChecked)
    GUI_CS_PROPERTY_WRITE(checked, setChecked)
    GUI_CS_PROPERTY_DESIGNABLE_NONSTATIC(checked, isCheckable())
@@ -58,12 +59,16 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
 
    GUI_CS_PROPERTY_READ(autoRepeat, autoRepeat)
    GUI_CS_PROPERTY_WRITE(autoRepeat, setAutoRepeat)
+
    GUI_CS_PROPERTY_READ(autoExclusive, autoExclusive)
    GUI_CS_PROPERTY_WRITE(autoExclusive, setAutoExclusive)
+
    GUI_CS_PROPERTY_READ(autoRepeatDelay, autoRepeatDelay)
    GUI_CS_PROPERTY_WRITE(autoRepeatDelay, setAutoRepeatDelay)
+
    GUI_CS_PROPERTY_READ(autoRepeatInterval, autoRepeatInterval)
    GUI_CS_PROPERTY_WRITE(autoRepeatInterval, setAutoRepeatInterval)
+
    GUI_CS_PROPERTY_READ(down, isDown)
    GUI_CS_PROPERTY_WRITE(down, setDown)
    GUI_CS_PROPERTY_DESIGNABLE(down, false)
@@ -108,7 +113,7 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
 #ifndef QT_NO_BUTTONGROUP
    QButtonGroup *group() const;
 #endif
- 
+
    GUI_CS_SLOT_1(Public, void setIconSize(const QSize &size))
    GUI_CS_SLOT_2(setIconSize)
    GUI_CS_SLOT_1(Public, void animateClick(int msec = 100))
@@ -154,6 +159,6 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
    friend class QButtonGroup;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QABSTRACTBUTTON_H

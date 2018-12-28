@@ -26,7 +26,7 @@
 #include <qframe_p.h>
 #include <qabstractscrollarea.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SCROLLAREA
 
@@ -40,6 +40,7 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 
  public:
    QAbstractScrollAreaPrivate();
+   ~QAbstractScrollAreaPrivate();
 
    void replaceScrollBar(QScrollBar *scrollBar, Qt::Orientation orientation);
 
@@ -47,23 +48,28 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    QScrollBar *hbar, *vbar;
    Qt::ScrollBarPolicy vbarpolicy, hbarpolicy;
 
+   bool shownOnce;
+   bool inResize;
+   mutable QSize sizeHint;
+   QAbstractScrollArea::SizeAdjustPolicy sizeAdjustPolicy;
    QWidget *viewport;
    QWidget *cornerWidget;
    QRect cornerPaintingRect;
 
-#ifdef Q_OS_MAC
-   QRect reverseCornerPaintingRect;
-#endif
+
    int left, top, right, bottom; // viewport margin
 
    int xoffset, yoffset;
+   QPoint overshoot;
 
    void init();
    void layoutChildren();
 
-   // ### Fix for 4.4, talk to Bjoern E or Girish.
    virtual void scrollBarPolicyChanged(Qt::Orientation, Qt::ScrollBarPolicy) {}
+   bool canStartScrollingAt( const QPoint &startPos );
 
+   void flashScrollBars();
+   void setScrollBarTransient(QScrollBar *scrollBar, bool transient);
    void _q_hslide(int);
    void _q_vslide(int);
    void _q_showOrHideScrollBars();
@@ -73,12 +79,10 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    inline bool viewportEvent(QEvent *event) {
       return q_func()->viewportEvent(event);
    }
+
    QScopedPointer<QObject> viewportFilter;
 
-#ifdef Q_OS_WIN
-   bool singleFingerPanEnabled;
-   void setSingleFingerPanEnabled(bool on = true);
-#endif
+
 };
 
 class QAbstractScrollAreaFilter : public QObject
@@ -119,6 +123,6 @@ class QAbstractScrollAreaScrollBarContainer : public QWidget
 
 #endif // QT_NO_SCROLLAREA
 
-QT_END_NAMESPACE
 
-#endif // QABSTRACTSCROLLAREA_P_H
+
+#endif

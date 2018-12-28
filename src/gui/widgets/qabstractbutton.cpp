@@ -20,28 +20,29 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qabstractbutton.h>
+#include <qabstractbutton_p.h>
+
 #include <qabstractitemview.h>
 #include <qbuttongroup.h>
-#include <qabstractbutton_p.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qstyle.h>
 #include <qaction.h>
 
+#include <qbuttongroup_p.h>
+
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
 #define AUTO_REPEAT_DELAY  300
 #define AUTO_REPEAT_INTERVAL 100
 
-Q_GUI_EXPORT extern bool qt_tab_all_widgets;
+Q_GUI_EXPORT extern bool qt_tab_all_widgets();
 
 QAbstractButtonPrivate::QAbstractButtonPrivate(QSizePolicy::ControlType type)
    :
@@ -53,158 +54,11 @@ QAbstractButtonPrivate::QAbstractButtonPrivate(QSizePolicy::ControlType type)
 #ifndef QT_NO_BUTTONGROUP
    group(0),
 #endif
+
    autoRepeatDelay(AUTO_REPEAT_DELAY),
    autoRepeatInterval(AUTO_REPEAT_INTERVAL),
    controlType(type)
 {}
-
-#ifndef QT_NO_BUTTONGROUP
-
-class QButtonGroupPrivate
-{
-   Q_DECLARE_PUBLIC(QButtonGroup)
-
- public:
-   QButtonGroupPrivate(): exclusive(true) {}
-   virtual ~QButtonGroupPrivate() {}
-
-   QList<QAbstractButton *> buttonList;
-   QPointer<QAbstractButton> checkedButton;
-   void detectCheckedButton();
-   void notifyChecked(QAbstractButton *button);
-   bool exclusive;
-
-   QMap<QAbstractButton *, int> mapping;
-
- protected:
-   QButtonGroup *q_ptr;
-
-};
-
-QButtonGroup::QButtonGroup(QObject *parent)
-   : QObject(parent), d_ptr(new QButtonGroupPrivate)
-{
-   d_ptr->q_ptr = this;
-}
-
-QButtonGroup::~QButtonGroup()
-{
-   Q_D(QButtonGroup);
-   for (int i = 0; i < d->buttonList.count(); ++i) {
-      d->buttonList.at(i)->d_func()->group = 0;
-   }
-}
-
-
-bool QButtonGroup::exclusive() const
-{
-   Q_D(const QButtonGroup);
-   return d->exclusive;
-}
-
-void QButtonGroup::setExclusive(bool exclusive)
-{
-   Q_D(QButtonGroup);
-   d->exclusive = exclusive;
-}
-
-void QButtonGroup::addButton(QAbstractButton *button, int id)
-{
-   Q_D(QButtonGroup);
-
-   if (QButtonGroup *previous = button->d_func()->group) {
-      previous->removeButton(button);
-   }
-
-   button->d_func()->group = this;
-   d->buttonList.append(button);
-
-   if (id == -1) {
-      QList<int> ids = d->mapping.values();
-      if (ids.isEmpty()) {
-         d->mapping[button] = -2;
-      } else {
-         std::sort(ids.begin(), ids.end());
-         d->mapping[button] = ids.first() - 1;
-      }
-
-   } else {
-      d->mapping[button] = id;
-   }
-
-   if (d->exclusive && button->isChecked()) {
-      button->d_func()->notifyChecked();
-   }
-}
-
-void QButtonGroup::removeButton(QAbstractButton *button)
-{
-   Q_D(QButtonGroup);
-   if (d->checkedButton == button) {
-      d->detectCheckedButton();
-   }
-   if (button->d_func()->group == this) {
-      button->d_func()->group = 0;
-      d->buttonList.removeAll(button);
-      d->mapping.remove(button);
-   }
-}
-
-QList<QAbstractButton *> QButtonGroup::buttons() const
-{
-   Q_D(const QButtonGroup);
-   return d->buttonList;
-}
-
-QAbstractButton *QButtonGroup::checkedButton() const
-{
-   Q_D(const QButtonGroup);
-   return d->checkedButton;
-}
-
-QAbstractButton *QButtonGroup::button(int id) const
-{
-   Q_D(const QButtonGroup);
-   return d->mapping.key(id);
-}
-
-void QButtonGroup::setId(QAbstractButton *button, int id)
-{
-   Q_D(QButtonGroup);
-   if (button && id != -1) {
-      d->mapping[button] = id;
-   }
-}
-
-int QButtonGroup::id(QAbstractButton *button) const
-{
-   Q_D(const QButtonGroup);
-   return d->mapping.value(button, -1);
-}
-
-int QButtonGroup::checkedId() const
-{
-   Q_D(const QButtonGroup);
-   return d->mapping.value(d->checkedButton, -1);
-}
-
-// detect a checked button other than the current one
-void QButtonGroupPrivate::detectCheckedButton()
-{
-   QAbstractButton *previous = checkedButton;
-   checkedButton = 0;
-   if (exclusive) {
-      return;
-   }
-   for (int i = 0; i < buttonList.count(); i++) {
-      if (buttonList.at(i) != previous && buttonList.at(i)->isChecked()) {
-         checkedButton = buttonList.at(i);
-         return;
-      }
-   }
-}
-
-#endif // QT_NO_BUTTONGROUP
 
 QList<QAbstractButton *>QAbstractButtonPrivate::queryButtonList() const
 {
@@ -221,15 +75,18 @@ QList<QAbstractButton *>QAbstractButtonPrivate::queryButtonList() const
    if (autoExclusive) {
       for (int i = candidates.count() - 1; i >= 0; --i) {
          QAbstractButton *candidate = candidates.at(i);
+
          if (!candidate->autoExclusive()
+
 #ifndef QT_NO_BUTTONGROUP
-               || candidate->group()
+            || candidate->group()
 #endif
-            ) {
+         ) {
             candidates.removeAt(i);
          }
       }
    }
+
    return candidates;
 }
 
@@ -243,7 +100,8 @@ QAbstractButton *QAbstractButtonPrivate::queryCheckedButton() const
 
    Q_Q(const QAbstractButton);
    QList<QAbstractButton *> buttonList = queryButtonList();
-   if (!autoExclusive || buttonList.count() == 1) { // no group
+   if (!autoExclusive || buttonList.count() == 1) {
+      // no group
       return 0;
    }
 
@@ -278,27 +136,33 @@ void QAbstractButtonPrivate::notifyChecked()
 void QAbstractButtonPrivate::moveFocus(int key)
 {
    QList<QAbstractButton *> buttonList = queryButtonList();;
+
 #ifndef QT_NO_BUTTONGROUP
    bool exclusive = group ? group->d_func()->exclusive : autoExclusive;
 #else
    bool exclusive = autoExclusive;
 #endif
+
    QWidget *f = QApplication::focusWidget();
    QAbstractButton *fb = qobject_cast<QAbstractButton *>(f);
+
    if (!fb || !buttonList.contains(fb)) {
       return;
    }
 
    QAbstractButton *candidate = 0;
    int bestScore = -1;
+
    QRect target = f->rect().translated(f->mapToGlobal(QPoint(0, 0)));
-   QPoint goal = target.center();
-   uint focus_flag = qt_tab_all_widgets ? Qt::TabFocus : Qt::StrongFocus;
+   QPoint goal  = target.center();
+
+   uint focus_flag = qt_tab_all_widgets() ? Qt::TabFocus : Qt::StrongFocus;
 
    for (int i = 0; i < buttonList.count(); ++i) {
       QAbstractButton *button = buttonList.at(i);
+
       if (button != f && button->window() == f->window() && button->isEnabled() && !button->isHidden() &&
-            (autoExclusive || (button->focusPolicy() & focus_flag) == focus_flag)) {
+         (autoExclusive || (button->focusPolicy() & focus_flag) == focus_flag)) {
          QRect buttonRect = button->rect().translated(button->mapToGlobal(QPoint(0, 0)));
          QPoint p = buttonRect.center();
 
@@ -306,14 +170,17 @@ void QAbstractButtonPrivate::moveFocus(int key)
          //In that case, the distance in the direction will be used as significant score,
          //take also in account orthogonal distance in case two widget are in the same distance.
          int score;
+
          if ((buttonRect.x() < target.right() && target.x() < buttonRect.right())
-               && (key == Qt::Key_Up || key == Qt::Key_Down)) {
+            && (key == Qt::Key_Up || key == Qt::Key_Down)) {
             //one item's is at the vertical of the other
             score = (qAbs(p.y() - goal.y()) << 16) + qAbs(p.x() - goal.x());
+
          } else if ((buttonRect.y() < target.bottom() && target.y() < buttonRect.bottom())
-                    && (key == Qt::Key_Left || key == Qt::Key_Right) ) {
+            && (key == Qt::Key_Left || key == Qt::Key_Right) ) {
             //one item's is at the horizontal of the other
             score = (qAbs(p.x() - goal.x()) << 16) + qAbs(p.y() - goal.y());
+
          } else {
             score = (1 << 30) + (p.y() - goal.y()) * (p.y() - goal.y()) + (p.x() - goal.x()) * (p.x() - goal.x());
          }
@@ -353,11 +220,11 @@ void QAbstractButtonPrivate::moveFocus(int key)
 
    if (exclusive
 #ifdef QT_KEYPAD_NAVIGATION
-         && !QApplication::keypadNavigationEnabled()
+      && !QApplication::keypadNavigationEnabled()
 #endif
-         && candidate
-         && fb->d_func()->checked
-         && candidate->d_func()->checkable) {
+      && candidate
+      && fb->d_func()->checked
+      && candidate->d_func()->checkable) {
       candidate->click();
    }
 
@@ -387,8 +254,8 @@ void QAbstractButtonPrivate::fixFocusPolicy()
          continue;
       }
       b->setFocusPolicy((Qt::FocusPolicy) ((b == q || !q->isCheckable())
-                                           ? (b->focusPolicy() | Qt::TabFocus)
-                                           :  (b->focusPolicy() & ~Qt::TabFocus)));
+            ? (b->focusPolicy() | Qt::TabFocus)
+            :  (b->focusPolicy() & ~Qt::TabFocus)));
    }
 }
 
@@ -410,10 +277,8 @@ void QAbstractButtonPrivate::refresh()
    if (blockRefresh) {
       return;
    }
+
    q->update();
-#ifndef QT_NO_ACCESSIBILITY
-   QAccessible::updateAccessibility(q, 0, QAccessible::StateChanged);
-#endif
 }
 
 void QAbstractButtonPrivate::click()
@@ -487,6 +352,7 @@ void QAbstractButtonPrivate::emitReleased()
    Q_Q(QAbstractButton);
    QPointer<QAbstractButton> guard(q);
    emit q->released();
+
 #ifndef QT_NO_BUTTONGROUP
    if (guard && group) {
       emit group->buttonReleased(group->id(q));
@@ -496,10 +362,24 @@ void QAbstractButtonPrivate::emitReleased()
    }
 #endif
 }
+void QAbstractButtonPrivate::emitToggled(bool checked)
+{
+   Q_Q(QAbstractButton);
+   QPointer<QAbstractButton> guard(q);
 
-/*!
-    Constructs an abstract button with a \a parent.
-*/
+   emit q->toggled(checked);
+
+#ifndef QT_NO_BUTTONGROUP
+   if (guard && group) {
+      emit group->buttonToggled(group->id(q), checked);
+
+      if (guard && group) {
+         emit group->buttonToggled(q, checked);
+      }
+   }
+#endif
+}
+
 QAbstractButton::QAbstractButton(QWidget *parent)
    : QWidget(*new QAbstractButtonPrivate, parent, 0)
 {
@@ -530,23 +410,6 @@ QAbstractButton::QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent)
    d->init();
 }
 
-/*!
-\property QAbstractButton::text
-\brief the text shown on the button
-
-If the button has no text, the text() function will return a an empty
-string.
-
-If the text contains an ampersand character ('&'), a shortcut is
-automatically created for it. The character that follows the '&' will
-be used as the shortcut key. Any previous shortcut will be
-overwritten, or cleared if no shortcut is defined by the text. See the
-\l {QShortcut#mnemonic}{QShortcut} documentation for details (to
-display an actual ampersand, use '&&').
-
-There is no default text.
-*/
-
 void QAbstractButton::setText(const QString &text)
 {
    Q_D(QAbstractButton);
@@ -562,7 +425,8 @@ void QAbstractButton::setText(const QString &text)
    update();
    updateGeometry();
 #ifndef QT_NO_ACCESSIBILITY
-   QAccessible::updateAccessibility(this, 0, QAccessible::NameChanged);
+   QAccessibleEvent event(this, QAccessible::NameChanged);
+   QAccessible::updateAccessibility(&event);
 #endif
 }
 
@@ -688,9 +552,16 @@ void QAbstractButton::setChecked(bool checked)
    if (guard && checked) {
       d->notifyChecked();
    }
+
    if (guard) {
-      emit toggled(checked);
+      d->emitToggled(checked);
    }
+#ifndef QT_NO_ACCESSIBILITY
+   QAccessible::State s;
+   s.checked = true;
+   QAccessibleStateChangeEvent event(this, s);
+   QAccessible::updateAccessibility(&event);
+#endif
 }
 
 bool QAbstractButton::isChecked() const
@@ -762,17 +633,6 @@ bool QAbstractButton::autoRepeat() const
    Q_D(const QAbstractButton);
    return d->autoRepeat;
 }
-
-/*!
-    \property QAbstractButton::autoRepeatDelay
-    \brief the initial delay of auto-repetition
-    \since 4.2
-
-    If \l autoRepeat is enabled, then autoRepeatDelay defines the initial
-    delay in milliseconds before auto-repetition kicks in.
-
-    \sa autoRepeat, autoRepeatInterval
-*/
 
 void QAbstractButton::setAutoRepeatDelay(int autoRepeatDelay)
 {
@@ -1111,51 +971,64 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
          }
          break;
       case Qt::Key_Up:
-      case Qt::Key_Left:
          next = false;
       // fall through
+
+      case Qt::Key_Left:
       case Qt::Key_Right:
-      case Qt::Key_Down:
+      case Qt::Key_Down: {
+
 #ifdef QT_KEYPAD_NAVIGATION
          if ((QApplication::keypadNavigationEnabled()
                && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right))
-               || (!QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
-                   || (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down))) {
+            || (!QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
+               || (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down))) {
             e->ignore();
             return;
          }
 #endif
-         QWidget *pw;
+         QWidget *pw = parentWidget();
          if (d->autoExclusive
+
 #ifndef QT_NO_BUTTONGROUP
-               || d->group
+            || d->group
 #endif
+
 #ifndef QT_NO_ITEMVIEWS
-               || ((pw = parentWidget()) && qobject_cast<QAbstractItemView *>(pw->parentWidget()))
+            || (pw && qobject_cast<QAbstractItemView *>(pw->parentWidget()))
 #endif
-            ) {
+         ) {
             // ### Using qobject_cast to check if the parent is a viewport of
             // QAbstractItemView is a crude hack, and should be revisited and
             // cleaned up when fixing task 194373. It's here to ensure that we
             // keep compatibility outside QAbstractItemView.
             d->moveFocus(e->key());
-            if (hasFocus()) { // nothing happend, propagate
+
+            if (hasFocus()) {
+               // nothing happend, propagate
                e->ignore();
             }
+
          } else {
+            QWidget *w = pw ? pw : this;
+            bool reverse = (w->layoutDirection() == Qt::RightToLeft);
+            if ((e->key() == Qt::Key_Left && !reverse)
+               || (e->key() == Qt::Key_Right && reverse)) {
+               next = false;
+            }
             focusNextPrevChild(next);
          }
+
          break;
-      case Qt::Key_Escape:
-         if (d->down) {
+      }
+      default:
+         if (e->matches(QKeySequence::Cancel) && d->down) {
             setDown(false);
             repaint(); //flush paint event before invoking potentially expensive operation
             QApplication::flush();
             d->emitReleased();
-            break;
+            return;
          }
-      // fall through
-      default:
          e->ignore();
    }
 }
@@ -1222,8 +1095,9 @@ void QAbstractButton::focusInEvent(QFocusEvent *e)
 void QAbstractButton::focusOutEvent(QFocusEvent *e)
 {
    Q_D(QAbstractButton);
-   if (e->reason() != Qt::PopupFocusReason) {
+   if (e->reason() != Qt::PopupFocusReason && d->down) {
       d->down = false;
+      d->emitReleased();
    }
    QWidget::focusOutEvent(e);
 }
@@ -1234,8 +1108,9 @@ void QAbstractButton::changeEvent(QEvent *e)
    Q_D(QAbstractButton);
    switch (e->type()) {
       case QEvent::EnabledChange:
-         if (!isEnabled()) {
-            setDown(false);
+         if (!isEnabled() && d->down) {
+            d->down = false;
+            d->emitReleased();
          }
          break;
       default:
@@ -1244,78 +1119,6 @@ void QAbstractButton::changeEvent(QEvent *e)
    }
    QWidget::changeEvent(e);
 }
-
-/*!
-    \fn void QAbstractButton::paintEvent(QPaintEvent *e)
-    \reimp
-*/
-
-/*!
-    \fn void QAbstractButton::pressed()
-
-    This signal is emitted when the button is pressed down.
-
-    \sa released(), clicked()
-*/
-
-/*!
-    \fn void QAbstractButton::released()
-
-    This signal is emitted when the button is released.
-
-    \sa pressed(), clicked(), toggled()
-*/
-
-/*!
-\fn void QAbstractButton::clicked(bool checked)
-
-This signal is emitted when the button is activated (i.e. pressed down
-then released while the mouse cursor is inside the button), when the
-shortcut key is typed, or when click() or animateClick() is called.
-Notably, this signal is \e not emitted if you call setDown(),
-setChecked() or toggle().
-
-If the button is checkable, \a checked is true if the button is
-checked, or false if the button is unchecked.
-
-\sa pressed(), released(), toggled()
-*/
-
-/*!
-\fn void QAbstractButton::toggled(bool checked)
-
-This signal is emitted whenever a checkable button changes its state.
-\a checked is true if the button is checked, or false if the button is
-unchecked.
-
-This may be the result of a user action, click() slot activation,
-or because setChecked() was called.
-
-The states of buttons in exclusive button groups are updated before this
-signal is emitted. This means that slots can act on either the "off"
-signal or the "on" signal emitted by the buttons in the group whose
-states have changed.
-
-For example, a slot that reacts to signals emitted by newly checked
-buttons but which ignores signals from buttons that have been unchecked
-can be implemented using the following pattern:
-
-\snippet doc/src/snippets/code/src_gui_widgets_qabstractbutton.cpp 2
-
-Button groups can be created using the QButtonGroup class, and
-updates to the button states monitored with the
-\l{QButtonGroup::buttonClicked()} signal.
-
-\sa checked, clicked()
-*/
-
-/*!
-    \property QAbstractButton::iconSize
-    \brief the icon size used for this button.
-
-    The default size is defined by the GUI style. This is a maximum
-    size for the icons. Smaller icons will not be scaled up.
-*/
 
 QSize QAbstractButton::iconSize() const
 {
@@ -1342,4 +1145,3 @@ void QAbstractButton::setIconSize(const QSize &size)
    }
 }
 
-QT_END_NAMESPACE

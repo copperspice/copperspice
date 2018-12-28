@@ -23,9 +23,8 @@
 #ifndef QABSTRACTSLIDER_H
 #define QABSTRACTSLIDER_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
 
 class QAbstractSliderPrivate;
 
@@ -72,7 +71,7 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    void setMaximum(int);
    int maximum() const;
 
-   void setRange(int min, int max);
+
 
    void setSingleStep(int);
    int singleStep() const;
@@ -112,16 +111,23 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
    GUI_CS_SLOT_1(Public, void setValue(int un_named_arg1))
    GUI_CS_SLOT_2(setValue)
+
    GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
    GUI_CS_SLOT_2(setOrientation)
+
+   GUI_CS_SLOT_1(Public, void setRange(int min, int max))
+   GUI_CS_SLOT_2(setRange)
+
 
    GUI_CS_SIGNAL_1(Public, void valueChanged(int value))
    GUI_CS_SIGNAL_2(valueChanged, value)
 
    GUI_CS_SIGNAL_1(Public, void sliderPressed())
    GUI_CS_SIGNAL_2(sliderPressed)
+
    GUI_CS_SIGNAL_1(Public, void sliderMoved(int position))
    GUI_CS_SIGNAL_2(sliderMoved, position)
+
    GUI_CS_SIGNAL_1(Public, void sliderReleased())
    GUI_CS_SIGNAL_2(sliderReleased)
 
@@ -161,6 +167,5 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    Q_DECLARE_PRIVATE(QAbstractSlider)
 };
 
-QT_END_NAMESPACE
 
-#endif // QABSTRACTSLIDER_H
+#endif
