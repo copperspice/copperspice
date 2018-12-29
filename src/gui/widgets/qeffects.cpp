@@ -28,20 +28,12 @@
 #include <qevent.h>
 #include <qimage.h>
 #include <qpainter.h>
+#include <qscreen.h>
 #include <qpixmap.h>
 #include <qpointer.h>
 #include <qtimer.h>
 #include <qelapsedtimer.h>
 #include <qdebug.h>
-
-QT_BEGIN_NAMESPACE
-
-/*
-  Internal class QAlphaWidget.
-
-  The QAlphaWidget is shown while the animation lasts
-  and displays the pixmap resulting from the alpha blending.
-*/
 
 class QAlphaWidget: public QWidget, private QEffects
 {
@@ -147,10 +139,10 @@ void QAlphaWidget::run(int time)
    move(widget->geometry().x(), widget->geometry().y());
    resize(widget->size().width(), widget->size().height());
 
-   frontImage = QPixmap::grabWidget(widget).toImage();
-   backImage = QPixmap::grabWindow(QApplication::desktop()->winId(),
-                                   widget->geometry().x(), widget->geometry().y(),
-                                   widget->geometry().width(), widget->geometry().height()).toImage();
+   frontImage = widget->grab().toImage();
+   backImage = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(),
+         widget->geometry().x(), widget->geometry().y(),
+         widget->geometry().width(), widget->geometry().height()).toImage();
 
    if (!backImage.isNull() && checkTime.elapsed() < duration / 2) {
       mixedImage = backImage.copy();
@@ -192,7 +184,7 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
          break;
       case QEvent::KeyPress: {
          QKeyEvent *ke = (QKeyEvent *)e;
-         if (ke->key() == Qt::Key_Escape) {
+         if (ke->matches(QKeySequence::Cancel)) {
             showWidget = false;
          } else {
             duration = 0;
@@ -309,8 +301,8 @@ void QAlphaWidget::alphaBlend()
                quint32 fp = front[sx];
 
                mixed[sx] =  qRgb((qRed(bp) * ia + qRed(fp) * a) >> 8,
-                                 (qGreen(bp) * ia + qGreen(fp) * a) >> 8,
-                                 (qBlue(bp) * ia + qBlue(fp) * a) >> 8);
+                     (qGreen(bp) * ia + qGreen(fp) * a) >> 8,
+                     (qBlue(bp) * ia + qBlue(fp) * a) >> 8);
             }
             mixed_data += bpl;
             back_data += bpl;
@@ -400,7 +392,7 @@ QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient)
       currentHeight = 0;
    }
 
-   pm = QPixmap::grabWidget(widget);
+   pm = widget->grab();
 }
 
 /*
@@ -470,8 +462,6 @@ void QRollEffect::run(int time)
    show();
    setEnabled(false);
 
-   qApp->installEventFilter(this);
-
    showWidget = true;
    done = false;
    anim.start(1);
@@ -493,20 +483,20 @@ void QRollEffect::scroll()
 
       if (currentWidth != totalWidth) {
          currentWidth = totalWidth * (elapsed / duration)
-                        + (2 * totalWidth * (elapsed % duration) + duration)
-                        / (2 * duration);
+            + (2 * totalWidth * (elapsed % duration) + duration)
+            / (2 * duration);
          // equiv. to int((totalWidth*elapsed) / duration + 0.5)
          done = (currentWidth >= totalWidth);
       }
       if (currentHeight != totalHeight) {
          currentHeight = totalHeight * (elapsed / duration)
-                         + (2 * totalHeight * (elapsed % duration) + duration)
-                         / (2 * duration);
+            + (2 * totalHeight * (elapsed % duration) + duration)
+            / (2 * duration);
          // equiv. to int((totalHeight*elapsed) / duration + 0.5)
          done = (currentHeight >= totalHeight);
       }
       done = (currentHeight >= totalHeight) &&
-             (currentWidth >= totalWidth);
+         (currentWidth >= totalWidth);
 
       int w = totalWidth;
       int h = totalHeight;
@@ -537,7 +527,7 @@ void QRollEffect::scroll()
    }
    if (done || !widget) {
       anim.stop();
-      qApp->removeEventFilter(this);
+
       if (widget) {
          if (!showWidget) {
 #ifdef Q_OS_WIN
@@ -606,11 +596,5 @@ void qFadeEffect(QWidget *w, int time)
 
    q_blend->run(time);
 }
-
-QT_END_NAMESPACE
-
-/*
-  Delete this after timeout
-*/
 
 #endif //QT_NO_EFFECTS

@@ -30,10 +30,10 @@
 #include <qapplication.h>
 #include <qframe_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QFramePrivate::QFramePrivate()
-   : frect(QRect(0, 0, 0, 0)),
+   : frect(0, 0, 0, 0),
      frameStyle(QFrame::NoFrame | QFrame::Plain),
      lineWidth(1),
      midLineWidth(0),
@@ -43,6 +43,9 @@ QFramePrivate::QFramePrivate()
 {
 }
 
+QFramePrivate::~QFramePrivate()
+{
+}
 inline void QFramePrivate::init()
 {
    setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
@@ -62,6 +65,41 @@ QFrame::QFrame(QFramePrivate &dd, QWidget *parent, Qt::WindowFlags f)
    d->init();
 }
 
+void QFrame::initStyleOption(QStyleOptionFrame *option) const
+{
+   if (!option) {
+      return;
+   }
+
+   Q_D(const QFrame);
+   option->initFrom(this);
+
+   int frameShape  = d->frameStyle & QFrame::Shape_Mask;
+   int frameShadow = d->frameStyle & QFrame::Shadow_Mask;
+   option->frameShape = Shape(int(option->frameShape) | frameShape);
+   option->rect = frameRect();
+   switch (frameShape) {
+      case QFrame::Box:
+      case QFrame::HLine:
+      case QFrame::VLine:
+      case QFrame::StyledPanel:
+      case QFrame::Panel:
+         option->lineWidth = d->lineWidth;
+         option->midLineWidth = d->midLineWidth;
+         break;
+      default:
+         // most frame styles do not handle customized line and midline widths
+         // (see updateFrameWidth()).
+         option->lineWidth = d->frameWidth;
+         break;
+   }
+
+   if (frameShadow == Sunken) {
+      option->state |= QStyle::State_Sunken;
+   } else if (frameShadow == Raised) {
+      option->state |= QStyle::State_Raised;
+   }
+}
 QFrame::~QFrame()
 {
 }
@@ -103,23 +141,6 @@ void QFrame::setFrameShadow(QFrame::Shadow s)
    setFrameStyle((d->frameStyle & Shape_Mask) | s);
 }
 
-/*!
-    Sets the frame style to \a style.
-
-    The \a style is the bitwise OR between a frame shape and a frame
-    shadow style. See the picture of the frames in the main class
-    documentation.
-
-    The frame shapes are given in \l{QFrame::Shape} and the shadow
-    styles in \l{QFrame::Shadow}.
-
-    If a mid-line width greater than 0 is specified, an additional
-    line is drawn for \l Raised or \l Sunken \l Box, \l HLine, and \l
-    VLine frames. The mid-color of the current color group is used for
-    drawing middle lines.
-
-    \sa frameStyle()
-*/
 
 void QFrame::setFrameStyle(int style)
 {
@@ -185,9 +206,11 @@ int QFrame::lineWidth() const
 void QFrame::setMidLineWidth(int w)
 {
    Q_D(QFrame);
+
    if (short(w) == d->midLineWidth) {
       return;
    }
+
    d->midLineWidth = short(w);
    d->updateFrameWidth();
 }
@@ -205,11 +228,9 @@ int QFrame::midLineWidth() const
 void QFramePrivate::updateStyledFrameWidths()
 {
    Q_Q(const QFrame);
-   QStyleOptionFrameV3 opt;
-   opt.initFrom(q);
-   opt.lineWidth = lineWidth;
-   opt.midLineWidth = midLineWidth;
-   opt.frameShape = QFrame::Shape(frameStyle & QFrame::Shape_Mask);
+
+   QStyleOptionFrame opt;
+   q->initStyleOption(&opt);
 
    QRect cr = q->style()->subElementRect(QStyle::SE_ShapedFrameContents, &opt, q);
    leftFrameWidth = cr.left() - opt.rect.left();
@@ -217,7 +238,7 @@ void QFramePrivate::updateStyledFrameWidths()
    rightFrameWidth = opt.rect.right() - cr.right(),
    bottomFrameWidth = opt.rect.bottom() - cr.bottom();
    frameWidth = qMax(qMax(leftFrameWidth, rightFrameWidth),
-                     qMax(topFrameWidth, bottomFrameWidth));
+         qMax(topFrameWidth, bottomFrameWidth));
 }
 
 /*!
@@ -234,17 +255,7 @@ void QFramePrivate::updateFrameWidth()
    setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
 }
 
-/*!
-    \property QFrame::frameWidth
-    \brief the width of the frame that is drawn.
 
-    Note that the frame width depends on the \l{QFrame::setFrameStyle()}{frame style},
-    not only the line width and the mid-line width. For example, the style specified
-    by \l NoFrame always has a frame width of 0, whereas the style \l Panel has a
-    frame width equivalent to the line width.
-
-    \sa lineWidth(), midLineWidth(), frameStyle()
-*/
 int QFrame::frameWidth() const
 {
    Q_D(const QFrame);
@@ -252,19 +263,6 @@ int QFrame::frameWidth() const
 }
 
 
-/*!
-    \property QFrame::frameRect
-    \brief the frame's rectangle
-
-    The frame's rectangle is the rectangle the frame is drawn in. By
-    default, this is the entire widget. Setting the rectangle does
-    does \e not cause a widget update. The frame rectangle is
-    automatically adjusted when the widget changes size.
-
-    If you set the rectangle to a null rectangle (for example,
-    QRect(0, 0, 0, 0)), then the resulting frame rectangle is
-    equivalent to the \link QWidget::rect() widget rectangle\endlink.
-*/
 
 QRect QFrame::frameRect() const
 {
@@ -314,36 +312,8 @@ void QFrame::paintEvent(QPaintEvent *)
 */
 void QFrame::drawFrame(QPainter *p)
 {
-   Q_D(QFrame);
-   QStyleOptionFrameV3 opt;
-   opt.init(this);
-   int frameShape  = d->frameStyle & QFrame::Shape_Mask;
-   int frameShadow = d->frameStyle & QFrame::Shadow_Mask;
-   opt.frameShape = Shape(int(opt.frameShape) | frameShape);
-   opt.rect = frameRect();
-
-   switch (frameShape) {
-      case QFrame::Box:
-      case QFrame::HLine:
-      case QFrame::VLine:
-      case QFrame::StyledPanel:
-      case QFrame::Panel:
-         opt.lineWidth = d->lineWidth;
-         opt.midLineWidth = d->midLineWidth;
-         break;
-      default:
-         // most frame styles do not handle customized line and midline widths
-         // (see updateFrameWidth()).
-         opt.lineWidth = d->frameWidth;
-         break;
-   }
-
-   if (frameShadow == Sunken) {
-      opt.state |= QStyle::State_Sunken;
-   } else if (frameShadow == Raised) {
-      opt.state |= QStyle::State_Raised;
-   }
-
+   QStyleOptionFrame opt;
+   initStyleOption(&opt);
    style()->drawControl(QStyle::CE_ShapedFrame, &opt, p, this);
 }
 
@@ -356,9 +326,9 @@ void QFrame::changeEvent(QEvent *ev)
 
    if (ev->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-         || ev->type() == QEvent::MacSizeChange
+      || ev->type() == QEvent::MacSizeChange
 #endif
-      ) {
+   ) {
       d->updateFrameWidth();
    }
    QWidget::changeEvent(ev);

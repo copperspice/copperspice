@@ -25,8 +25,6 @@
 
 #include <QtGui/qframe.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_GROUPBOX
 
 class QGroupBoxPrivate;
@@ -38,16 +36,20 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
 
    GUI_CS_PROPERTY_READ(title, title)
    GUI_CS_PROPERTY_WRITE(title, setTitle)
+
    GUI_CS_PROPERTY_READ(alignment, alignment)
    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+
    GUI_CS_PROPERTY_READ(flat, isFlat)
    GUI_CS_PROPERTY_WRITE(flat, setFlat)
 
    GUI_CS_PROPERTY_READ(checkable, isCheckable)
    GUI_CS_PROPERTY_WRITE(checkable, setCheckable)
+
    GUI_CS_PROPERTY_READ(checked, isChecked)
    GUI_CS_PROPERTY_WRITE(checked, setChecked)
    GUI_CS_PROPERTY_DESIGNABLE_NONSTATIC(checked, isCheckable())
+
    GUI_CS_PROPERTY_NOTIFY(checked, toggled)
    GUI_CS_PROPERTY_USER(checked, true)
 
@@ -100,6 +102,5 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
 
 #endif // QT_NO_GROUPBOX
 
-QT_END_NAMESPACE
 
 #endif // QGROUPBOX_H

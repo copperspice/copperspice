@@ -23,9 +23,7 @@
 #ifndef QDIAL_H
 #define QDIAL_H
 
-#include <QtGui/qabstractslider.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractslider.h>
 
 #ifndef QT_NO_DIAL
 
@@ -38,9 +36,12 @@ class Q_GUI_EXPORT QDial: public QAbstractSlider
 
    GUI_CS_PROPERTY_READ(wrapping, wrapping)
    GUI_CS_PROPERTY_WRITE(wrapping, setWrapping)
+
    GUI_CS_PROPERTY_READ(notchSize, notchSize)
+
    GUI_CS_PROPERTY_READ(notchTarget, notchTarget)
    GUI_CS_PROPERTY_WRITE(notchTarget, setNotchTarget)
+
    GUI_CS_PROPERTY_READ(notchesVisible, notchesVisible)
    GUI_CS_PROPERTY_WRITE(notchesVisible, setNotchesVisible)
 
@@ -61,6 +62,7 @@ class Q_GUI_EXPORT QDial: public QAbstractSlider
 
    GUI_CS_SLOT_1(Public, void setNotchesVisible(bool visible))
    GUI_CS_SLOT_2(setNotchesVisible)
+
    GUI_CS_SLOT_1(Public, void setWrapping(bool on))
    GUI_CS_SLOT_2(setWrapping)
 
@@ -83,6 +85,5 @@ class Q_GUI_EXPORT QDial: public QAbstractSlider
 
 #endif  // QT_NO_DIAL
 
-QT_END_NAMESPACE
 
 #endif // QDIAL_H

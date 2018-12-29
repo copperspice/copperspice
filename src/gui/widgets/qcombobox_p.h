@@ -35,7 +35,7 @@
 #include <QtGui/qpainter.h>
 #include <QtGui/qstyle.h>
 #include <QtGui/qstyleoption.h>
-#include <QtCore/qhash.h>
+
 #include <QtCore/qpair.h>
 #include <QtCore/qtimer.h>
 #include <qwidget_p.h>
@@ -46,9 +46,8 @@
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
 class QAction;
+class QPlatformMenu;
 class QStandardItemModel;
 
 class QComboBoxListView : public QListView
@@ -155,7 +154,7 @@ class QComboBoxPrivateScroller : public QWidget
       const int mouseY = e->pos().y();
       const bool horizontallyInside = pos().x() < mouseX && mouseX < rect().right() + 1;
       const bool verticallyOutside = (sliderAction == QAbstractSlider::SliderSingleStepAdd) ?
-                                     rect().bottom() + 1 < mouseY : mouseY < pos().y();
+         rect().bottom() + 1 < mouseY : mouseY < pos().y();
 
       fast = horizontallyInside && verticallyOutside;
    }
@@ -193,6 +192,10 @@ class QComboBoxPrivateContainer : public QFrame
    QAbstractItemView *itemView() const;
    void setItemView(QAbstractItemView *itemView);
    int spacing() const;
+   int topMargin() const;
+   int bottomMargin() const {
+      return topMargin();
+   }
    void updateTopBottomMargin();
 
    QTimer blockMouseReleaseTimer;
@@ -201,13 +204,16 @@ class QComboBoxPrivateContainer : public QFrame
 
    GUI_CS_SLOT_1(Public, void scrollItemView(int action))
    GUI_CS_SLOT_2(scrollItemView)
+
    GUI_CS_SLOT_1(Public, void updateScrollers())
    GUI_CS_SLOT_2(updateScrollers)
+
    GUI_CS_SLOT_1(Public, void viewDestroyed())
    GUI_CS_SLOT_2(viewDestroyed)
 
    GUI_CS_SIGNAL_1(Public, void itemSelected(const QModelIndex &un_named_arg1))
    GUI_CS_SIGNAL_2(itemSelected, un_named_arg1)
+
    GUI_CS_SIGNAL_1(Public, void resetButton())
    GUI_CS_SIGNAL_2(resetButton)
 
@@ -228,6 +234,10 @@ class QComboBoxPrivateContainer : public QFrame
    QAbstractItemView *view;
    QComboBoxPrivateScroller *top;
    QComboBoxPrivateScroller *bottom;
+   bool maybeIgnoreMouseButtonRelease;
+   QElapsedTimer popupTimer;
+   friend class QComboBox;
+   friend class QComboBoxPrivate;
 };
 
 class QComboMenuDelegate : public QAbstractItemDelegate
@@ -284,10 +294,9 @@ class QComboBoxDelegate : public QItemDelegate
       if (isSeparator(index)) {
          QRect rect = option.rect;
 
-         if (const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3 *>(&option))
-            if (const QAbstractItemView *view = qobject_cast<const QAbstractItemView *>(v3->widget)) {
-               rect.setWidth(view->viewport()->width());
-            }
+         if (const QAbstractItemView *view = qobject_cast<const QAbstractItemView *>(option.widget)) {
+            rect.setWidth(view->viewport()->width());
+         }
 
          QStyleOption opt;
          opt.rect = rect;
@@ -317,7 +326,8 @@ class QComboBoxPrivate : public QWidgetPrivate
 
  public:
    QComboBoxPrivate();
-   ~QComboBoxPrivate() {}
+   ~QComboBoxPrivate();
+
    void init();
    QComboBoxPrivateContainer *viewContainer();
    void updateLineEditGeometry();
@@ -333,8 +343,8 @@ class QComboBoxPrivate : public QWidgetPrivate
    void _q_modelDestroyed();
    void _q_modelReset();
 
-#ifdef QT_KEYPAD_NAVIGATION
-   void _q_completerActivated();
+#ifndef QT_NO_COMPLETER
+   void _q_completerActivated(const QModelIndex &index);
 #endif
 
    void _q_resetButton();
@@ -358,6 +368,12 @@ class QComboBoxPrivate : public QWidgetPrivate
    void keyboardSearchString(const QString &text);
    void modelChanged();
    void updateViewContainerPaletteAndOpacity();
+   void updateFocusPolicy();
+   void showPopupFromMouseEvent(QMouseEvent *e);
+#ifdef Q_OS_MAC
+   void cleanupNativePopup();
+   bool showNativePopup();
+#endif
 
    QAbstractItemModel *model;
    QLineEdit *lineEdit;
@@ -385,6 +401,10 @@ class QComboBoxPrivate : public QWidgetPrivate
    Qt::CaseSensitivity autoCompletionCaseSensitivity;
    int indexBeforeChange;
 
+#ifdef Q_OS_MAC
+   QPlatformMenu *m_platformMenu;
+#endif
+
 #ifndef QT_NO_COMPLETER
    QPointer<QCompleter> completer;
 #endif
@@ -394,8 +414,6 @@ class QComboBoxPrivate : public QWidgetPrivate
    }
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_COMBOBOX
 
-#endif // QCOMBOBOX_P_H
+#endif

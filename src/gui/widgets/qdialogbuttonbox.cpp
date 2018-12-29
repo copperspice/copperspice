@@ -20,143 +20,21 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qhash.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qlayout.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qapplication.h>
+#include "qdialogbuttonbox.h"
+
+#include <qaction.h>
+#include <qhash.h>
+#include <qpushbutton.h>
+#include <qstyle.h>
+#include <qlayout.h>
+#include <qdialog.h>
+#include <qapplication.h>
+#include <qplatform_dialoghelper.h>
+#include <qplatform_theme.h>
+
 #include <qwidget_p.h>
-#include <QtGui/qaction.h>
-#include <qdialogbuttonbox.h>
+#include <qguiapplication_p.h>
 
-enum Roles {
-   AcceptRole      = QDialogButtonBox::AcceptRole,
-   RejectRole      = QDialogButtonBox::RejectRole,
-   DestructiveRole = QDialogButtonBox::DestructiveRole,
-   ActionRole      = QDialogButtonBox::ActionRole,
-   HelpRole        = QDialogButtonBox::HelpRole,
-   YesRole         = QDialogButtonBox::YesRole,
-   NoRole          = QDialogButtonBox::NoRole,
-   ApplyRole       = QDialogButtonBox::ApplyRole,
-   ResetRole       = QDialogButtonBox::ResetRole,
-
-   AlternateRole   = 0x10000000,
-   Stretch         = 0x20000000,
-   EOL             = 0x40000000,
-   Reverse         = 0x80000000
-};
-
-static constexpr Roles operator|(Roles lhs, Roles rhs)
-{
-   return Roles(static_cast<uint64_t>(lhs) | static_cast<uint64_t>(rhs));
-}
-
-static QDialogButtonBox::ButtonRole roleFor(QDialogButtonBox::StandardButton button)
-{
-   switch (button) {
-      case QDialogButtonBox::Ok:
-      case QDialogButtonBox::Save:
-      case QDialogButtonBox::Open:
-      case QDialogButtonBox::SaveAll:
-      case QDialogButtonBox::Retry:
-      case QDialogButtonBox::Ignore:
-         return QDialogButtonBox::AcceptRole;
-
-      case QDialogButtonBox::Cancel:
-      case QDialogButtonBox::Close:
-      case QDialogButtonBox::Abort:
-         return QDialogButtonBox::RejectRole;
-
-      case QDialogButtonBox::Discard:
-         return QDialogButtonBox::DestructiveRole;
-
-      case QDialogButtonBox::Help:
-         return QDialogButtonBox::HelpRole;
-
-      case QDialogButtonBox::Apply:
-         return QDialogButtonBox::ApplyRole;
-
-      case QDialogButtonBox::Yes:
-      case QDialogButtonBox::YesToAll:
-         return QDialogButtonBox::YesRole;
-
-      case QDialogButtonBox::No:
-      case QDialogButtonBox::NoToAll:
-         return QDialogButtonBox::NoRole;
-
-      case QDialogButtonBox::RestoreDefaults:
-      case QDialogButtonBox::Reset:
-         return QDialogButtonBox::ResetRole;
-
-      case QDialogButtonBox::NoButton:    // NoButton means zero buttons, not "No" button
-         ;
-   }
-
-   return QDialogButtonBox::InvalidRole;
-}
-
-static const Roles layouts[2][5][14] = {
-   // Qt::Horizontal
-   {
-      // WinLayout
-      {
-         ResetRole, Stretch, YesRole, AcceptRole, AlternateRole, DestructiveRole, NoRole, ActionRole, RejectRole, ApplyRole,
-         HelpRole, EOL, EOL, EOL
-      },
-
-      // MacLayout
-      {
-         HelpRole, ResetRole, ApplyRole, ActionRole, Stretch, DestructiveRole | Reverse,
-         AlternateRole | Reverse, RejectRole | Reverse, AcceptRole | Reverse, NoRole | Reverse, YesRole | Reverse, EOL, EOL
-      },
-
-      // KdeLayout
-      {
-         HelpRole, ResetRole, Stretch, YesRole, NoRole, ActionRole, AcceptRole, AlternateRole,
-         ApplyRole, DestructiveRole, RejectRole, EOL
-      },
-
-      // GnomeLayout
-      {
-         HelpRole, ResetRole, Stretch, ActionRole, ApplyRole | Reverse, DestructiveRole | Reverse,
-         AlternateRole | Reverse, RejectRole | Reverse, AcceptRole | Reverse, NoRole | Reverse, YesRole | Reverse, EOL
-      },
-
-      // Mac modeless
-      { ResetRole, ApplyRole, ActionRole, Stretch, HelpRole, EOL, EOL, EOL, EOL, EOL, EOL, EOL, EOL, EOL }
-   },
-
-   // Qt::Vertical
-   {
-      // WinLayout
-      {
-         ActionRole, YesRole, AcceptRole, AlternateRole, DestructiveRole, NoRole, RejectRole, ApplyRole, ResetRole,
-         HelpRole, Stretch, EOL, EOL, EOL
-      },
-
-      // MacLayout
-      {
-         YesRole, NoRole, AcceptRole, RejectRole, AlternateRole, DestructiveRole, Stretch, ActionRole, ApplyRole,
-         ResetRole, HelpRole, EOL, EOL
-      },
-
-      // KdeLayout
-      {
-         AcceptRole, AlternateRole, ApplyRole, ActionRole, YesRole, NoRole, Stretch, ResetRole,
-         DestructiveRole, RejectRole, HelpRole, EOL
-      },
-
-      // GnomeLayout
-      {
-         YesRole, NoRole, AcceptRole, RejectRole, AlternateRole, DestructiveRole, ApplyRole, ActionRole, Stretch,
-         ResetRole, HelpRole, EOL, EOL, EOL
-      },
-
-      // Mac modeless
-      { ActionRole, ApplyRole, ResetRole, Stretch, HelpRole, EOL, EOL, EOL, EOL, EOL, EOL, EOL, EOL, EOL }
-   }
-};
 
 class QDialogButtonBoxPrivate : public QWidgetPrivate
 {
@@ -185,7 +63,6 @@ class QDialogButtonBoxPrivate : public QWidgetPrivate
    void _q_handleButtonClicked();
    void addButtonsToLayout(const QList<QAbstractButton *> &buttonList, bool reverse);
    void retranslateStrings();
-   const char *standardButtonText(QDialogButtonBox::StandardButton sbutton) const;
 };
 
 QDialogButtonBoxPrivate::QDialogButtonBoxPrivate(Qt::Orientation orient)
@@ -198,8 +75,8 @@ void QDialogButtonBoxPrivate::initLayout()
    Q_Q(QDialogButtonBox);
    layoutPolicy = QDialogButtonBox::ButtonLayout(q->style()->styleHint(QStyle::SH_DialogButtonLayout, 0, q));
    bool createNewLayout = buttonLayout == 0
-                          || (orientation == Qt::Horizontal && qobject_cast<QVBoxLayout *>(buttonLayout) != 0)
-                          || (orientation == Qt::Vertical && qobject_cast<QHBoxLayout *>(buttonLayout) != 0);
+      || (orientation == Qt::Horizontal && qobject_cast<QVBoxLayout *>(buttonLayout) != 0)
+      || (orientation == Qt::Vertical && qobject_cast<QHBoxLayout *>(buttonLayout) != 0);
    if (createNewLayout) {
       delete buttonLayout;
       if (orientation == Qt::Horizontal) {
@@ -222,9 +99,6 @@ void QDialogButtonBoxPrivate::initLayout()
       q->setSizePolicy(sp);
       q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
    }
-
-   // ### move to a real init() function
-   q->setFocusPolicy(Qt::TabFocus);
 }
 
 void QDialogButtonBoxPrivate::resetLayout()
@@ -235,7 +109,7 @@ void QDialogButtonBoxPrivate::resetLayout()
 }
 
 void QDialogButtonBoxPrivate::addButtonsToLayout(const QList<QAbstractButton *> &buttonList,
-      bool reverse)
+   bool reverse)
 {
    int start = reverse ? buttonList.count() - 1 : 0;
    int end = reverse ? -1 : buttonList.count();
@@ -264,7 +138,10 @@ void QDialogButtonBoxPrivate::layoutButtons()
    int tmpPolicy = layoutPolicy;
 
    static const int M = 5;
-   static const int ModalRoles[M] = { AcceptRole, RejectRole, DestructiveRole, YesRole, NoRole };
+   static const int ModalRoles[M] = { QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::RejectRole,
+         QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole
+      };
+
    if (tmpPolicy == QDialogButtonBox::MacLayout) {
       bool hasModalButton = false;
       for (int i = 0; i < M; ++i) {
@@ -273,40 +150,42 @@ void QDialogButtonBoxPrivate::layoutButtons()
             break;
          }
       }
-      if (!hasModalButton) {
+      if (! hasModalButton) {
          tmpPolicy = 4;   // Mac modeless
       }
    }
-
-   const Roles *currentLayout = layouts[orientation == Qt::Vertical][tmpPolicy];
+   const int *currentLayout = QPlatformDialogHelper::buttonLayout(
+         orientation, static_cast<QPlatformDialogHelper::ButtonLayout>(tmpPolicy));
 
    if (center) {
       buttonLayout->addStretch();
    }
 
-   QList<QAbstractButton *> acceptRoleList = buttonLists[AcceptRole];
+   const QList<QAbstractButton *> &acceptRoleList = buttonLists[QPlatformDialogHelper::AcceptRole];
 
-   while (*currentLayout != EOL) {
-      int role = (*currentLayout & ~Reverse);
-      bool reverse = (*currentLayout & Reverse);
+   while (*currentLayout != QPlatformDialogHelper::EOL) {
+      int role = (*currentLayout & ~QPlatformDialogHelper::Reverse);
+      bool reverse = (*currentLayout & QPlatformDialogHelper::Reverse);
 
       switch (role) {
-         case Stretch:
+         case QPlatformDialogHelper::Stretch:
             if (!center) {
                buttonLayout->addStretch();
             }
+
             break;
-         case AcceptRole: {
+         case QPlatformDialogHelper::AcceptRole: {
             if (acceptRoleList.isEmpty()) {
                break;
             }
+
             // Only the first one
             QAbstractButton *button = acceptRoleList.first();
             buttonLayout->addWidget(button);
             button->show();
          }
          break;
-         case AlternateRole: {
+         case QPlatformDialogHelper::AlternateRole: {
             if (acceptRoleList.size() < 2) {
                break;
             }
@@ -315,7 +194,7 @@ void QDialogButtonBoxPrivate::layoutButtons()
             addButtonsToLayout(list, reverse);
          }
          break;
-         case DestructiveRole: {
+         case QPlatformDialogHelper::DestructiveRole: {
             const QList<QAbstractButton *> &list = buttonLists[role];
 
             /*
@@ -327,7 +206,7 @@ void QDialogButtonBoxPrivate::layoutButtons()
                 and not 0)).
             */
             if (tmpPolicy == QDialogButtonBox::MacLayout
-                  && !list.isEmpty() && buttonLayout->count() > 1) {
+               && !list.isEmpty() && buttonLayout->count() > 1) {
                buttonLayout->addSpacing(MacGap);
             }
 
@@ -342,13 +221,14 @@ void QDialogButtonBoxPrivate::layoutButtons()
             }
          }
          break;
-         case RejectRole:
-         case ActionRole:
-         case HelpRole:
-         case YesRole:
-         case NoRole:
-         case ApplyRole:
-         case ResetRole:
+
+         case QPlatformDialogHelper::RejectRole:
+         case QPlatformDialogHelper::ActionRole:
+         case QPlatformDialogHelper::HelpRole:
+         case QPlatformDialogHelper::YesRole:
+         case QPlatformDialogHelper::NoRole:
+         case QPlatformDialogHelper::ApplyRole:
+         case QPlatformDialogHelper::ResetRole:
             addButtonsToLayout(buttonLists[role], reverse);
       }
       ++currentLayout;
@@ -374,10 +254,10 @@ void QDialogButtonBoxPrivate::layoutButtons()
 }
 
 QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardButton sbutton,
-      bool doLayout)
+   bool doLayout)
 {
    Q_Q(QDialogButtonBox);
-   const char *buttonText = 0;
+
    int icon = 0;
 
    switch (sbutton) {
@@ -426,36 +306,33 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
          return 0;
          ;
    }
-   buttonText = standardButtonText(sbutton);
 
-   QPushButton *button = new QPushButton(QDialogButtonBox::tr(buttonText), q);
+   QPushButton *button = new QPushButton(QGuiApplicationPrivate::platformTheme()->standardButtonText(sbutton), q);
    QStyle *style = q->style();
+
    if (style->styleHint(QStyle::SH_DialogButtonBox_ButtonsHaveIcons, 0, q) && icon != 0) {
       button->setIcon(style->standardIcon(QStyle::StandardPixmap(icon), 0, q));
    }
    if (style != QApplication::style()) { // Propagate style
       button->setStyle(style);
    }
+
    standardButtonHash.insert(button, sbutton);
-   if (roleFor(sbutton) != QDialogButtonBox::InvalidRole) {
-      addButton(button, roleFor(sbutton), doLayout);
+   QPlatformDialogHelper::ButtonRole role = QPlatformDialogHelper::buttonRole(static_cast<QPlatformDialogHelper::StandardButton>
+         (sbutton));
+
+   if (role != QPlatformDialogHelper::InvalidRole) {
+      addButton(button, static_cast<QDialogButtonBox::ButtonRole>(role), doLayout);
    } else {
       qWarning("QDialogButtonBox::createButton: Invalid ButtonRole, button not added");
    }
 
-#ifdef Q_OS_MAC
-   // Since mnemonics is off by default on Mac, we add a Cmd-D
-   // shortcut here to e.g. make the "Don't Save" button work nativly:
-   if (sbutton == QDialogButtonBox::Discard) {
-      button->setShortcut(QKeySequence(QLatin1String("Ctrl+D")));
-   }
-#endif
 
    return button;
 }
 
 void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBox::ButtonRole role,
-                                        bool doLayout)
+   bool doLayout)
 {
    Q_Q(QDialogButtonBox);
    QObject::connect(button, SIGNAL(clicked()), q, SLOT(_q_handleButtonClicked()));
@@ -479,259 +356,55 @@ void QDialogButtonBoxPrivate::createStandardButtons(QDialogButtonBox::StandardBu
    layoutButtons();
 }
 
-const char *QDialogButtonBoxPrivate::standardButtonText(QDialogButtonBox::StandardButton sbutton) const
-{
-   const char *buttonText = 0;
-   bool gnomeLayout = (layoutPolicy == QDialogButtonBox::GnomeLayout);
-   switch (sbutton) {
-      case QDialogButtonBox::Ok:
-         buttonText = gnomeLayout ? QT_TRANSLATE_NOOP("QDialogButtonBox", "&OK") : QT_TRANSLATE_NOOP("QDialogButtonBox", "OK");
-         break;
-      case QDialogButtonBox::Save:
-         buttonText = gnomeLayout ? QT_TRANSLATE_NOOP("QDialogButtonBox", "&Save") : QT_TRANSLATE_NOOP("QDialogButtonBox",
-                      "Save");
-         break;
-      case QDialogButtonBox::Open:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Open");
-         break;
-      case QDialogButtonBox::Cancel:
-         buttonText = gnomeLayout ? QT_TRANSLATE_NOOP("QDialogButtonBox", "&Cancel") : QT_TRANSLATE_NOOP("QDialogButtonBox",
-                      "Cancel");
-         break;
-      case QDialogButtonBox::Close:
-         buttonText = gnomeLayout ? QT_TRANSLATE_NOOP("QDialogButtonBox", "&Close") : QT_TRANSLATE_NOOP("QDialogButtonBox",
-                      "Close");
-         break;
-      case QDialogButtonBox::Apply:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Apply");
-         break;
-      case QDialogButtonBox::Reset:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Reset");
-         break;
-      case QDialogButtonBox::Help:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Help");
-         break;
-      case QDialogButtonBox::Discard:
-         if (layoutPolicy == QDialogButtonBox::MacLayout) {
-            buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Don't Save");
-         } else if (layoutPolicy == QDialogButtonBox::GnomeLayout) {
-            buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Close without Saving");
-         } else {
-            buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Discard");
-         }
-         break;
-      case QDialogButtonBox::Yes:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "&Yes");
-         break;
-      case QDialogButtonBox::YesToAll:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Yes to &All");
-         break;
-      case QDialogButtonBox::No:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "&No");
-         break;
-      case QDialogButtonBox::NoToAll:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "N&o to All");
-         break;
-      case QDialogButtonBox::SaveAll:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Save All");
-         break;
-      case QDialogButtonBox::Abort:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Abort");
-         break;
-      case QDialogButtonBox::Retry:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Retry");
-         break;
-      case QDialogButtonBox::Ignore:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Ignore");
-         break;
-      case QDialogButtonBox::RestoreDefaults:
-         buttonText = QT_TRANSLATE_NOOP("QDialogButtonBox", "Restore Defaults");
-         break;
-      case QDialogButtonBox::NoButton:
-         ;
-   } // switch
-   return buttonText;
-}
-
 void QDialogButtonBoxPrivate::retranslateStrings()
 {
-   const char *buttonText = 0;
-   QHash<QPushButton *, QDialogButtonBox::StandardButton>::iterator it =  standardButtonHash.begin();
+   QHash<QPushButton *, QDialogButtonBox::StandardButton>::iterator it = standardButtonHash.begin();
 
    while (it != standardButtonHash.end()) {
-      buttonText = standardButtonText(it.value());
-      if (buttonText) {
-         QPushButton *button = it.key();
-         button->setText(QDialogButtonBox::tr(buttonText));
+
+      const QString text = QGuiApplicationPrivate::platformTheme()->standardButtonText(it.value());
+      if (! text.isEmpty()) {
+         it.key()->setText(text);
       }
+
       ++it;
    }
 }
 
-/*!
-    Constructs an empty, horizontal button box with the given \a parent.
 
-    \sa orientation, addButton()
-*/
 QDialogButtonBox::QDialogButtonBox(QWidget *parent)
    : QWidget(*new QDialogButtonBoxPrivate(Qt::Horizontal), parent, 0)
 {
    d_func()->initLayout();
 }
 
-/*!
-    Constructs an empty button box with the given \a orientation and \a parent.
 
-    \sa orientation, addButton()
-*/
 QDialogButtonBox::QDialogButtonBox(Qt::Orientation orientation, QWidget *parent)
    : QWidget(*new QDialogButtonBoxPrivate(orientation), parent, 0)
 {
    d_func()->initLayout();
 }
 
-/*!
-    Constructs a button box with the given \a orientation and \a parent, containing
-    the standard buttons specified by \a buttons.
+QDialogButtonBox::QDialogButtonBox(StandardButtons buttons, QWidget *parent)
+   : QWidget(*new QDialogButtonBoxPrivate(Qt::Horizontal), parent, 0)
+{
+   d_func()->initLayout();
+   d_func()->createStandardButtons(buttons);
+}
 
-    \sa orientation, addButton()
-*/
 QDialogButtonBox::QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation,
-                                   QWidget *parent)
+   QWidget *parent)
    : QWidget(*new QDialogButtonBoxPrivate(orientation), parent, 0)
 {
    d_func()->initLayout();
    d_func()->createStandardButtons(buttons);
 }
 
-/*!
-    Destroys the button box.
-*/
+
 QDialogButtonBox::~QDialogButtonBox()
 {
 }
 
-/*!
-    \enum QDialogButtonBox::ButtonRole
-    \enum QMessageBox::ButtonRole
-
-    This enum describes the roles that can be used to describe buttons in
-    the button box. Combinations of these roles are as flags used to
-    describe different aspects of their behavior.
-
-    \value InvalidRole The button is invalid.
-    \value AcceptRole Clicking the button causes the dialog to be accepted
-           (e.g. OK).
-    \value RejectRole Clicking the button causes the dialog to be rejected
-           (e.g. Cancel).
-    \value DestructiveRole Clicking the button causes a destructive change
-           (e.g. for Discarding Changes) and closes the dialog.
-    \value ActionRole Clicking the button causes changes to the elements within
-           the dialog.
-    \value HelpRole The button can be clicked to request help.
-    \value YesRole The button is a "Yes"-like button.
-    \value NoRole The button is a "No"-like button.
-    \value ApplyRole The button applies current changes.
-    \value ResetRole The button resets the dialog's fields to default values.
-
-    \omitvalue NRoles
-
-    \sa StandardButton
-*/
-
-/*!
-    \enum QDialogButtonBox::StandardButton
-
-    These enums describe flags for standard buttons. Each button has a
-    defined \l ButtonRole.
-
-    \value Ok An "OK" button defined with the \l AcceptRole.
-    \value Open A "Open" button defined with the \l AcceptRole.
-    \value Save A "Save" button defined with the \l AcceptRole.
-    \value Cancel A "Cancel" button defined with the \l RejectRole.
-    \value Close A "Close" button defined with the \l RejectRole.
-    \value Discard A "Discard" or "Don't Save" button, depending on the platform,
-                    defined with the \l DestructiveRole.
-    \value Apply An "Apply" button defined with the \l ApplyRole.
-    \value Reset A "Reset" button defined with the \l ResetRole.
-    \value RestoreDefaults A "Restore Defaults" button defined with the \l ResetRole.
-    \value Help A "Help" button defined with the \l HelpRole.
-    \value SaveAll A "Save All" button defined with the \l AcceptRole.
-    \value Yes A "Yes" button defined with the \l YesRole.
-    \value YesToAll A "Yes to All" button defined with the \l YesRole.
-    \value No A "No" button defined with the \l NoRole.
-    \value NoToAll A "No to All" button defined with the \l NoRole.
-    \value Abort An "Abort" button defined with the \l RejectRole.
-    \value Retry A "Retry" button defined with the \l AcceptRole.
-    \value Ignore An "Ignore" button defined with the \l AcceptRole.
-
-    \value NoButton An invalid button.
-
-    \omitvalue FirstButton
-    \omitvalue LastButton
-
-    \sa ButtonRole, standardButtons
-*/
-
-/*!
-    \enum QDialogButtonBox::ButtonLayout
-
-    This enum describes the layout policy to be used when arranging the buttons
-    contained in the button box.
-
-    \value WinLayout Use a policy appropriate for applications on Windows.
-    \value MacLayout Use a policy appropriate for applications on Mac OS X.
-    \value KdeLayout Use a policy appropriate for applications on KDE.
-    \value GnomeLayout Use a policy appropriate for applications on GNOME.
-
-    The button layout is specified by the \l{style()}{current style}. However,
-    on the X11 platform, it may be influenced by the desktop environment.
-*/
-
-/*!
-    \fn void QDialogButtonBox::clicked(QAbstractButton *button)
-
-    This signal is emitted when a button inside the button box is clicked. The
-    specific button that was pressed is specified by \a button.
-
-    \sa accepted(), rejected(), helpRequested()
-*/
-
-/*!
-    \fn void QDialogButtonBox::accepted()
-
-    This signal is emitted when a button inside the button box is clicked, as long
-    as it was defined with the \l AcceptRole or \l YesRole.
-
-    \sa rejected(), clicked() helpRequested()
-*/
-
-/*!
-    \fn void QDialogButtonBox::rejected()
-
-    This signal is emitted when a button inside the button box is clicked, as long
-    as it was defined with the \l RejectRole or \l NoRole.
-
-    \sa accepted() helpRequested() clicked()
-*/
-
-/*!
-    \fn void QDialogButtonBox::helpRequested()
-
-    This signal is emitted when a button inside the button box is clicked, as long
-    as it was defined with the \l HelpRole.
-
-    \sa accepted() rejected() clicked()
-*/
-
-/*!
-    \property QDialogButtonBox::orientation
-    \brief the orientation of the button box
-
-    By default, the orientation is horizontal (i.e. the buttons are laid out
-    side by side). The possible orientations are Qt::Horizontal and
-    Qt::Vertical.
-*/
 Qt::Orientation QDialogButtonBox::orientation() const
 {
    return d_func()->orientation;
@@ -748,11 +421,7 @@ void QDialogButtonBox::setOrientation(Qt::Orientation orientation)
    d->resetLayout();
 }
 
-/*!
-    Clears the button box, deleting all buttons within it.
 
-    \sa removeButton(), addButton()
-*/
 void QDialogButtonBox::clear()
 {
    Q_D(QDialogButtonBox);
@@ -770,11 +439,7 @@ void QDialogButtonBox::clear()
    }
 }
 
-/*!
-    Returns a list of all the buttons that have been added to the button box.
 
-    \sa buttonRole(), addButton(), removeButton()
-*/
 QList<QAbstractButton *> QDialogButtonBox::buttons() const
 {
    Q_D(const QDialogButtonBox);
@@ -808,11 +473,7 @@ QDialogButtonBox::ButtonRole QDialogButtonBox::buttonRole(QAbstractButton *butto
    return InvalidRole;
 }
 
-/*!
-    Removes \a button from the button box without deleting it and sets its parent to zero.
 
-    \sa clear(), buttons(), addButton()
-*/
 void QDialogButtonBox::removeButton(QAbstractButton *button)
 {
    Q_D(QDialogButtonBox);
@@ -844,17 +505,7 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
    }
 }
 
-/*!
-    Adds the given \a button to the button box with the specified \a role.
-    If the role is invalid, the button is not added.
 
-    If the button has already been added, it is removed and added again with the
-    new role.
-
-    \note The button box takes ownership of the button.
-
-    \sa removeButton(), clear()
-*/
 void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
 {
    Q_D(QDialogButtonBox);
@@ -867,13 +518,7 @@ void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
    d->addButton(button, role);
 }
 
-/*!
-    Creates a push button with the given \a text, adds it to the button box for the
-    specified \a role, and returns the corresponding push button. If \a role is
-    invalid, no button is created, and zero is returned.
 
-    \sa removeButton(), clear()
-*/
 QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
 {
    Q_D(QDialogButtonBox);
@@ -886,27 +531,13 @@ QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
    return button;
 }
 
-/*!
-    Adds a standard \a button to the button box if it is valid to do so, and returns
-    a push button. If \a button is invalid, it is not added to the button box, and
-    zero is returned.
 
-    \sa removeButton(), clear()
-*/
 QPushButton *QDialogButtonBox::addButton(StandardButton button)
 {
    Q_D(QDialogButtonBox);
    return d->createButton(button);
 }
 
-/*!
-    \property QDialogButtonBox::standardButtons
-    \brief collection of standard buttons in the button box
-
-    This property controls which standard buttons are used by the button box.
-
-    \sa addButton()
-*/
 void QDialogButtonBox::setStandardButtons(StandardButtons buttons)
 {
    Q_D(QDialogButtonBox);
@@ -930,24 +561,14 @@ QDialogButtonBox::StandardButtons QDialogButtonBox::standardButtons() const
    return standardButtons;
 }
 
-/*!
-    Returns the QPushButton corresponding to the standard button \a which,
-    or 0 if the standard button doesn't exist in this button box.
 
-    \sa standardButton(), standardButtons(), buttons()
-*/
 QPushButton *QDialogButtonBox::button(StandardButton which) const
 {
    Q_D(const QDialogButtonBox);
    return d->standardButtonHash.key(which);
 }
 
-/*!
-    Returns the standard button enum value corresponding to the given \a button,
-    or NoButton if the given \a button isn't a standard button.
 
-    \sa button(), buttons(), standardButtons()
-*/
 QDialogButtonBox::StandardButton QDialogButtonBox::standardButton(QAbstractButton *button) const
 {
    Q_D(const QDialogButtonBox);
@@ -958,18 +579,23 @@ void QDialogButtonBoxPrivate::_q_handleButtonClicked()
 {
    Q_Q(QDialogButtonBox);
    if (QAbstractButton *button = qobject_cast<QAbstractButton *>(q->sender())) {
+      const QDialogButtonBox::ButtonRole buttonRole = q->buttonRole(button);
+      QPointer<QDialogButtonBox> guard(q);
       emit q->clicked(button);
 
-      switch (q->buttonRole(button)) {
-         case AcceptRole:
-         case YesRole:
+      if (!guard) {
+         return;
+      }
+      switch (buttonRole) {
+         case QPlatformDialogHelper::AcceptRole:
+         case QPlatformDialogHelper::YesRole:
             emit q->accepted();
             break;
-         case RejectRole:
-         case NoRole:
+         case QPlatformDialogHelper::RejectRole:
+         case QPlatformDialogHelper::NoRole:
             emit q->rejected();
             break;
-         case HelpRole:
+         case QPlatformDialogHelper::HelpRole:
             emit q->helpRequested();
             break;
          default:
@@ -983,26 +609,15 @@ void QDialogButtonBoxPrivate::_q_handleButtonDestroyed()
    Q_Q(QDialogButtonBox);
 
    if (QObject *object = q->sender()) {
-      bool temp = internalRemove;
+      bool tmp = internalRemove;
 
       internalRemove = true;
       q->removeButton(static_cast<QAbstractButton *>(object));
 
-      internalRemove = temp;
+      internalRemove = tmp;
    }
 }
 
-/*!
-    \property QDialogButtonBox::centerButtons
-    \brief whether the buttons in the button box are centered
-
-    By default, this property is false. This behavior is appopriate
-    for most types of dialogs. A notable exception is message boxes
-    on most platforms (e.g. Windows), where the button box is
-    centered horizontally.
-
-    \sa QMessageBox
-*/
 void QDialogButtonBox::setCenterButtons(bool center)
 {
    Q_D(QDialogButtonBox);
@@ -1067,7 +682,7 @@ bool QDialogButtonBox::event(QEvent *event)
          }
       }
 
-      for (QPushButton * pb : (dialog ? dialog : this)->findChildren<QPushButton *>()) {
+      for (QPushButton *pb : (dialog ? dialog : this)->findChildren<QPushButton *>()) {
          if (pb->isDefault() && pb != firstAcceptButton) {
             hasDefault = true;
             break;

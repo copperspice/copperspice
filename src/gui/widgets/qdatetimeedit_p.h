@@ -31,12 +31,11 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qdatetimeedit.h>
 #include <qabstractspinbox_p.h>
-#include <qdatetime_p.h>
 #include <qdebug.h>
 
-#ifndef QT_NO_DATETIMEEDIT
+#include <qdatetimeparser_p.h>
 
-QT_BEGIN_NAMESPACE
+#ifndef QT_NO_DATETIMEEDIT
 
 class QCalendarPopup;
 
@@ -46,6 +45,7 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
 
  public:
    QDateTimeEditPrivate();
+   ~QDateTimeEditPrivate();
 
    void init(const QVariant &var);
    void readLocaleSettings();
@@ -57,16 +57,40 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    void interpret(EmitPolicy ep) override;
    void clearCache() const override;
 
+   QStyle::SubControl newHoverControl(const QPoint &pos) override;
+   void updateEditFieldGeometry() override;
+   QVariant getZeroVariant() const override;
+   void setRange(const QVariant &min, const QVariant &max) override;
+   void updateEdit() override;
+
    QDateTime validateAndInterpret(QString &input, int &, QValidator::State &state, bool fixup = false) const;
    void clearSection(int index);
 
    QString displayText() const override {
-      return edit->text();   // this is from QDateTimeParser
+      return edit->text();
+   }
+
+   QDateTime getMinimum() const override {
+      return minimum.toDateTime();
+   }
+
+   QDateTime getMaximum() const override {
+      return maximum.toDateTime();
+   }
+
+   QLocale locale() const override {
+      return q_func()->locale();
+   }
+
+   QString getAmPmText(AmPm ap, Case cs) const override;
+
+   int cursorPosition() const override {
+      return edit ? edit->cursorPosition() : -1;
    }
 
    int absoluteIndex(QDateTimeEdit::Section s, int index) const;
    int absoluteIndex(const SectionNode &s) const;
-   void updateEdit() override;
+
    QDateTime stepBy(int index, int steps, bool test = false) const;
    int sectionAt(int pos) const;
    int closestSection(int index, bool forward) const;
@@ -76,31 +100,11 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    void updateCache(const QVariant &val, const QString &str) const;
 
    void updateTimeSpec();
-   QDateTime getMinimum() const override {
-      return minimum.toDateTime();
-   }
 
-   QDateTime getMaximum() const override {
-      return maximum.toDateTime();
-   }
- 
-   QLocale locale() const override {
-      return q_func()->locale();
-   }
 
    QString valueToText(const QVariant &var) const {
       return textFromValue(var);
    }
-  
-   QString getAmPmText(AmPm ap, Case cs) const override;
-   int cursorPosition() const override {
-      return edit ? edit->cursorPosition() : -1;
-   }
-
-   QStyle::SubControl newHoverControl(const QPoint &pos) override;
-   void updateEditFieldGeometry() override;
-   QVariant getZeroVariant() const override;
-   void setRange(const QVariant &min, const QVariant &max) override;
 
    void _q_resetButton();
    void updateArrow(QStyle::StateFlag state);
@@ -135,13 +139,15 @@ class QCalendarPopup : public QWidget
    GUI_CS_OBJECT(QCalendarPopup)
 
  public:
-   QCalendarPopup(QWidget *parent = nullptr, QCalendarWidget *cw = 0);
+   explicit  QCalendarPopup(QWidget *parent = nullptr, QCalendarWidget *cw = nullptr);
+
    QDate selectedDate() {
       return verifyCalendarInstance()->selectedDate();
    }
 
    void setDate(const QDate &date);
    void setDateRange(const QDate &min, const QDate &max);
+
    void setFirstDayOfWeek(Qt::DayOfWeek dow) {
       verifyCalendarInstance()->setFirstDayOfWeek(dow);
    }
@@ -151,13 +157,16 @@ class QCalendarPopup : public QWidget
    }
 
    void setCalendarWidget(QCalendarWidget *cw);
- 
+
    GUI_CS_SIGNAL_1(Public, void activated(const QDate &date))
    GUI_CS_SIGNAL_2(activated, date)
+
    GUI_CS_SIGNAL_1(Public, void newDateSelected(const QDate &newDate))
    GUI_CS_SIGNAL_2(newDateSelected, newDate)
+
    GUI_CS_SIGNAL_1(Public, void hidingCalendar(const QDate &oldDate))
    GUI_CS_SIGNAL_2(hidingCalendar, oldDate)
+
    GUI_CS_SIGNAL_1(Public, void resetButton())
    GUI_CS_SIGNAL_2(resetButton)
 
@@ -170,17 +179,18 @@ class QCalendarPopup : public QWidget
  private :
    GUI_CS_SLOT_1(Private, void dateSelected(const QDate &date))
    GUI_CS_SLOT_2(dateSelected)
+
    GUI_CS_SLOT_1(Private, void dateSelectionChanged())
    GUI_CS_SLOT_2(dateSelectionChanged)
- 
+
    QCalendarWidget *verifyCalendarInstance();
 
-   QWeakPointer<QCalendarWidget> calendar;
+   QPointer<QCalendarWidget> calendar;
    QDate oldDate;
    bool dateChanged;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_DATETIMEEDIT
 

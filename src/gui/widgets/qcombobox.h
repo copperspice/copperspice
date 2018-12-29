@@ -50,7 +50,10 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_PROPERTY_READ(count, count)
 
    GUI_CS_PROPERTY_READ(currentText, currentText)
+   GUI_CS_PROPERTY_WRITE(currentText, setCurrentText)
+   GUI_CS_PROPERTY_NOTIFY(currentText, currentTextChanged)
    GUI_CS_PROPERTY_USER(currentText, true)
+
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
    GUI_CS_PROPERTY_NOTIFY(currentIndex, cs_currentIndexChanged)
@@ -115,11 +118,11 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    bool hasFrame() const;
 
    inline int findText(const QString &text,
-                       Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const {
+      Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const {
       return findData(text, Qt::DisplayRole, flags);
    }
    int findData(const QVariant &data, int role = Qt::UserRole,
-                Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const;
+      Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const;
 
    enum InsertPolicy {
       NoInsert,
@@ -178,6 +181,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    int currentIndex() const;
 
    QString currentText() const;
+   QVariant currentData(int role = Qt::UserRole) const;
 
    QString itemText(int index) const;
    QIcon itemIcon(int index) const;
@@ -193,7 +197,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    inline void insertItem(int index, const QString &text, const QVariant &userData = QVariant());
 
    void insertItem(int index, const QIcon &icon, const QString &text,
-                   const QVariant &userData = QVariant());
+      const QVariant &userData = QVariant());
 
    void insertItems(int index, const QStringList &texts);
    void insertSeparator(int index);
@@ -214,15 +218,22 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    virtual void hidePopup();
 
    bool event(QEvent *event) override;
- 
+   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
+
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
+
    GUI_CS_SLOT_1(Public, void clearEditText())
    GUI_CS_SLOT_2(clearEditText)
+
    GUI_CS_SLOT_1(Public, void setEditText(const QString &text))
    GUI_CS_SLOT_2(setEditText)
+
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
+
+   GUI_CS_SLOT_1(Public, void setCurrentText(const QString &text))
+   GUI_CS_SLOT_2(setCurrentText)
 
    GUI_CS_SIGNAL_1(Public, void editTextChanged(const QString &un_named_arg1))
    GUI_CS_SIGNAL_2(editTextChanged, un_named_arg1)
@@ -248,6 +259,9 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SIGNAL_1(Public, void cs_currentIndexChanged(int index))
    GUI_CS_SIGNAL_2(cs_currentIndexChanged, index)
 
+   GUI_CS_SIGNAL_1(Public, void currentTextChanged(const QString &str))
+   GUI_CS_SIGNAL_2(currentTextChanged, str)
+
  protected:
    void focusInEvent(QFocusEvent *e) override;
    void focusOutEvent(QFocusEvent *e) override;
@@ -267,9 +281,8 @@ class Q_GUI_EXPORT QComboBox : public QWidget
 
    void contextMenuEvent(QContextMenuEvent *e) override;
    void inputMethodEvent(QInputMethodEvent *) override;
-   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
    void initStyleOption(QStyleOptionComboBox *option) const;
- 
+
    QComboBox(QComboBoxPrivate &, QWidget *);
 
  private:
@@ -312,8 +325,8 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SLOT_1(Private, void _q_modelReset())
    GUI_CS_SLOT_2(_q_modelReset)
 
-#ifdef QT_KEYPAD_NAVIGATION
-   GUI_CS_SLOT_1(Private, void _q_completerActivated())
+#ifndef QT_NO_COMPLETER
+   GUI_CS_SLOT_1(Private, void _q_completerActivated(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_completerActivated)
 #endif
 

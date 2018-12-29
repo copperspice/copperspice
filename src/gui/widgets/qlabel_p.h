@@ -35,36 +35,21 @@
 #include <qpicture.h>
 #include <qmenu.h>
 
-QT_BEGIN_NAMESPACE
 
 class QLabelPrivate : public QFramePrivate
 {
    Q_DECLARE_PUBLIC(QLabel)
 
  public:
-   QLabelPrivate() {}
+   QLabelPrivate();
+   ~QLabelPrivate();
 
    void init();
    void clearContents();
    void updateLabel();
    QSize sizeForWidth(int w) const;
 
-   mutable QSize sh;
-   mutable QSize msh;
-   mutable bool valid_hints;
-   mutable QSizePolicy sizePolicy;
-   int margin;
-   QString text;
-   QPixmap  *pixmap;
-   QPixmap *scaledpixmap;
-   QImage *cachedimage;
-
-#ifndef QT_NO_PICTURE
-   QPicture *picture;
-#endif
-
 #ifndef QT_NO_MOVIE
-   QPointer<QMovie> movie;
    void _q_movieUpdated(const QRect &);
    void _q_movieResized(const QSize &);
 #endif
@@ -73,27 +58,9 @@ class QLabelPrivate : public QFramePrivate
    void updateShortcut();
 #endif
 
-#ifndef QT_NO_SHORTCUT
-   QPointer<QWidget> buddy;
-   int shortcutId;
-#endif
-
-   ushort align;
-   short indent;
-   uint scaledcontents : 1;
-   mutable uint textLayoutDirty : 1;
-   mutable uint textDirty : 1;
-   mutable uint isRichText : 1;
-   mutable uint isTextLabel : 1;
-   mutable uint hasShortcut : 1;
-   Qt::TextFormat textformat;
-   mutable QTextControl *control;
-   mutable QTextCursor shortcutCursor;
-   Qt::TextInteractionFlags textInteractionFlags;
-
    inline bool needTextControl() const {
       return isTextLabel && (isRichText
-                 || (!isRichText && (textInteractionFlags & (Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard))));
+            || (!isRichText && (textInteractionFlags & (Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard))));
    }
 
    void ensureTextPopulated() const;
@@ -112,17 +79,56 @@ class QLabelPrivate : public QFramePrivate
    QMenu *createStandardContextMenu(const QPoint &pos);
 #endif
 
-   bool openExternalLinks;
+#ifndef QT_NO_PICTURE
+   QPicture *picture;
+#endif
+
+#ifndef QT_NO_MOVIE
+   QPointer<QMovie> movie;
+#endif
+#ifndef QT_NO_CURSOR
+   QCursor cursor;
+#endif
+#ifndef QT_NO_SHORTCUT
+   QPointer<QWidget> buddy;
+   int shortcutId;
+#endif
+
+   Qt::TextFormat textformat;
+   Qt::TextInteractionFlags textInteractionFlags;
+   mutable QSizePolicy sizePolicy;
+   int margin;
+
+   ushort align;
+   short indent;
+   mutable uint valid_hints : 1;
+   uint scaledcontents : 1;
+   mutable uint textLayoutDirty : 1;
+   mutable uint textDirty : 1;
+   mutable uint isRichText : 1;
+   mutable uint isTextLabel : 1;
+   mutable uint hasShortcut : 1;
+
+   mutable QTextControl *control;
+   mutable QTextCursor shortcutCursor;
+
+   mutable QSize sh;
+   mutable QSize msh;
+   QString text;
+   QPixmap  *pixmap;
+   QPixmap *scaledpixmap;
+   QImage *cachedimage;
 
 #ifndef QT_NO_CURSOR
    uint validCursor : 1;
    uint onAnchor : 1;
-   QCursor cursor;
 #endif
+
+   uint openExternalLinks : 1;
 
    friend class QMessageBoxPrivate;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QLABEL_P_H

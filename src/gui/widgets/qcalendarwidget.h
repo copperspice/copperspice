@@ -23,10 +23,10 @@
 #ifndef QCALENDARWIDGET_H
 #define QCALENDARWIDGET_H
 
-#include <QtGui/qwidget.h>
-#include <QtCore/qdatetime.h>
+#include <qwidget.h>
+#include <qdatetime.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_CALENDARWIDGET
 
@@ -45,28 +45,34 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
 
    GUI_CS_PROPERTY_READ(selectedDate, selectedDate)
    GUI_CS_PROPERTY_WRITE(selectedDate, setSelectedDate)
+
    GUI_CS_PROPERTY_READ(minimumDate, minimumDate)
    GUI_CS_PROPERTY_WRITE(minimumDate, setMinimumDate)
+
    GUI_CS_PROPERTY_READ(maximumDate, maximumDate)
    GUI_CS_PROPERTY_WRITE(maximumDate, setMaximumDate)
+
    GUI_CS_PROPERTY_READ(firstDayOfWeek, firstDayOfWeek)
    GUI_CS_PROPERTY_WRITE(firstDayOfWeek, setFirstDayOfWeek)
+
    GUI_CS_PROPERTY_READ(gridVisible, isGridVisible)
    GUI_CS_PROPERTY_WRITE(gridVisible, setGridVisible)
+
    GUI_CS_PROPERTY_READ(selectionMode, selectionMode)
    GUI_CS_PROPERTY_WRITE(selectionMode, setSelectionMode)
+
    GUI_CS_PROPERTY_READ(horizontalHeaderFormat, horizontalHeaderFormat)
    GUI_CS_PROPERTY_WRITE(horizontalHeaderFormat, setHorizontalHeaderFormat)
+
    GUI_CS_PROPERTY_READ(verticalHeaderFormat, verticalHeaderFormat)
    GUI_CS_PROPERTY_WRITE(verticalHeaderFormat, setVerticalHeaderFormat)
-   GUI_CS_PROPERTY_READ(headerVisible, isHeaderVisible)
-   GUI_CS_PROPERTY_WRITE(headerVisible, setHeaderVisible)
-   GUI_CS_PROPERTY_STORED(headerVisible, false)
-   GUI_CS_PROPERTY_DESIGNABLE(headerVisible, false)// obsolete
+
    GUI_CS_PROPERTY_READ(navigationBarVisible, isNavigationBarVisible)
    GUI_CS_PROPERTY_WRITE(navigationBarVisible, setNavigationBarVisible)
+
    GUI_CS_PROPERTY_READ(dateEditEnabled, isDateEditEnabled)
    GUI_CS_PROPERTY_WRITE(dateEditEnabled, setDateEditEnabled)
+
    GUI_CS_PROPERTY_READ(dateEditAcceptDelay, dateEditAcceptDelay)
    GUI_CS_PROPERTY_WRITE(dateEditAcceptDelay, setDateEditAcceptDelay)
 
@@ -108,11 +114,7 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
    Qt::DayOfWeek firstDayOfWeek() const;
    void setFirstDayOfWeek(Qt::DayOfWeek dayOfWeek);
 
-   // ### Qt5/eliminate these two
-   bool isHeaderVisible() const;
-   void setHeaderVisible(bool show);
-
-   inline bool isNavigationBarVisible() const;
+   bool isNavigationBarVisible() const;
 
    bool isGridVisible() const;
 
@@ -143,33 +145,46 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
 
    GUI_CS_SLOT_1(Public, void setSelectedDate(const QDate &date))
    GUI_CS_SLOT_2(setSelectedDate)
+
    GUI_CS_SLOT_1(Public, void setDateRange(const QDate &min, const QDate &max))
    GUI_CS_SLOT_2(setDateRange)
+
    GUI_CS_SLOT_1(Public, void setCurrentPage(int year, int month))
    GUI_CS_SLOT_2(setCurrentPage)
+
    GUI_CS_SLOT_1(Public, void setGridVisible(bool show))
    GUI_CS_SLOT_2(setGridVisible)
+
    GUI_CS_SLOT_1(Public, void setNavigationBarVisible(bool visible))
    GUI_CS_SLOT_2(setNavigationBarVisible)
+
    GUI_CS_SLOT_1(Public, void showNextMonth())
    GUI_CS_SLOT_2(showNextMonth)
+
    GUI_CS_SLOT_1(Public, void showPreviousMonth())
    GUI_CS_SLOT_2(showPreviousMonth)
+
    GUI_CS_SLOT_1(Public, void showNextYear())
    GUI_CS_SLOT_2(showNextYear)
+
    GUI_CS_SLOT_1(Public, void showPreviousYear())
    GUI_CS_SLOT_2(showPreviousYear)
+
    GUI_CS_SLOT_1(Public, void showSelectedDate())
    GUI_CS_SLOT_2(showSelectedDate)
+
    GUI_CS_SLOT_1(Public, void showToday())
    GUI_CS_SLOT_2(showToday)
 
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
+
    GUI_CS_SIGNAL_1(Public, void clicked(const QDate &date))
    GUI_CS_SIGNAL_2(clicked, date)
+
    GUI_CS_SIGNAL_1(Public, void activated(const QDate &date))
    GUI_CS_SIGNAL_2(activated, date)
+
    GUI_CS_SIGNAL_1(Public, void currentPageChanged(int year, int month))
    GUI_CS_SIGNAL_2(currentPageChanged, year, month)
 
@@ -216,14 +231,9 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
    GUI_CS_SLOT_2(_q_monthChanged)
 };
 
-bool QCalendarWidget::isNavigationBarVisible() const
-{
-   return isHeaderVisible();
-}
-
 #endif // QT_NO_CALENDARWIDGET
 
-QT_END_NAMESPACE
 
-#endif // QCALENDARWIDGET_H
+
+#endif
 

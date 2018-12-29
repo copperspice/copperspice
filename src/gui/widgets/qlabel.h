@@ -23,10 +23,9 @@
 #ifndef QLABEL_H
 #define QLABEL_H
 
-#include <QtGui/qframe.h>
+#include <qframe.h>
 #include <qpicture.h>
 
-QT_BEGIN_NAMESPACE
 
 class QLabelPrivate;
 
@@ -36,30 +35,40 @@ class Q_GUI_EXPORT QLabel : public QFrame
 
    GUI_CS_PROPERTY_READ(text, text)
    GUI_CS_PROPERTY_WRITE(text, setText)
+
    GUI_CS_PROPERTY_READ(textFormat, textFormat)
    GUI_CS_PROPERTY_WRITE(textFormat, setTextFormat)
+
    GUI_CS_PROPERTY_READ(pixmap, pixmap)
    GUI_CS_PROPERTY_WRITE(pixmap, setPixmap)
+
    GUI_CS_PROPERTY_READ(scaledContents, hasScaledContents)
    GUI_CS_PROPERTY_WRITE(scaledContents, setScaledContents)
+
    GUI_CS_PROPERTY_READ(alignment, alignment)
    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+
    GUI_CS_PROPERTY_READ(wordWrap, wordWrap)
    GUI_CS_PROPERTY_WRITE(wordWrap, setWordWrap)
+
    GUI_CS_PROPERTY_READ(margin, margin)
    GUI_CS_PROPERTY_WRITE(margin, setMargin)
+
    GUI_CS_PROPERTY_READ(indent, indent)
    GUI_CS_PROPERTY_WRITE(indent, setIndent)
+
    GUI_CS_PROPERTY_READ(openExternalLinks, openExternalLinks)
    GUI_CS_PROPERTY_WRITE(openExternalLinks, setOpenExternalLinks)
+
    GUI_CS_PROPERTY_READ(textInteractionFlags, textInteractionFlags)
    GUI_CS_PROPERTY_WRITE(textInteractionFlags, setTextInteractionFlags)
+
    GUI_CS_PROPERTY_READ(hasSelectedText, hasSelectedText)
    GUI_CS_PROPERTY_READ(selectedText, selectedText)
 
  public:
-   explicit QLabel(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
-   explicit QLabel(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+   explicit QLabel(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   explicit QLabel(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
    ~QLabel();
 
    QString text() const;
@@ -113,6 +122,7 @@ class Q_GUI_EXPORT QLabel : public QFrame
 
    GUI_CS_SLOT_1(Public, void setText(const QString &un_named_arg1))
    GUI_CS_SLOT_2(setText)
+
    GUI_CS_SLOT_1(Public, void setPixmap(const QPixmap &un_named_arg1))
    GUI_CS_SLOT_2(setPixmap)
 
@@ -137,6 +147,7 @@ class Q_GUI_EXPORT QLabel : public QFrame
 
    GUI_CS_SIGNAL_1(Public, void linkActivated(const QString &link))
    GUI_CS_SIGNAL_2(linkActivated, link)
+
    GUI_CS_SIGNAL_1(Public, void linkHovered(const QString &link))
    GUI_CS_SIGNAL_2(linkHovered, link)
 
@@ -173,6 +184,5 @@ class Q_GUI_EXPORT QLabel : public QFrame
    friend class QBalloonTip;
 };
 
-QT_END_NAMESPACE
 
-#endif // QLABEL_H
+#endif

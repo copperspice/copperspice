@@ -27,8 +27,6 @@
 #include <QtCore/qvariant.h>
 #include <QtGui/qabstractspinbox.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_DATETIMEEDIT
 
 class QDateTimeEditPrivate;
@@ -105,6 +103,8 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    explicit QDateTimeEdit(const QDate &d, QWidget *parent = nullptr);
    explicit QDateTimeEdit(const QTime &t, QWidget *parent = nullptr);
 
+   ~QDateTimeEdit();
+
    QDateTime dateTime() const;
    QDate date() const;
    QTime time() const;
@@ -174,8 +174,10 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 
    GUI_CS_SIGNAL_1(Public, void dateTimeChanged(const QDateTime &date))
    GUI_CS_SIGNAL_2(dateTimeChanged, date)
+
    GUI_CS_SIGNAL_1(Public, void timeChanged(const QTime &date))
    GUI_CS_SIGNAL_2(timeChanged, date)
+
    GUI_CS_SIGNAL_1(Public, void dateChanged(const QDate &date))
    GUI_CS_SIGNAL_2(dateChanged, date)
 
@@ -220,24 +222,36 @@ class Q_GUI_EXPORT QTimeEdit : public QDateTimeEdit
 {
    GUI_CS_OBJECT(QTimeEdit)
 
+   // broom - fix this code
+   // Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY userTimeChanged USER true)
+
  public:
-   QTimeEdit(QWidget *parent = nullptr);
-   QTimeEdit(const QTime &time, QWidget *parent = nullptr);
+   explicit QTimeEdit(QWidget *parent = nullptr);
+   explicit QTimeEdit(const QTime &time, QWidget *parent = nullptr);
+   ~QTimeEdit();
+   GUI_CS_SIGNAL_1(Public, void userTimeChanged(const QTime &time))
+   GUI_CS_SIGNAL_2(userTimeChanged, time)
 };
 
 class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
 {
    GUI_CS_OBJECT(QDateEdit)
 
+   // broom - fix this code
+   // Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY userDateChanged USER true)
+
  public:
-   QDateEdit(QWidget *parent = nullptr);
-   QDateEdit(const QDate &date, QWidget *parent = nullptr);
+   explicit QDateEdit(QWidget *parent = nullptr);
+   explicit QDateEdit(const QDate &date, QWidget *parent = nullptr);
+   ~QDateEdit();
+   GUI_CS_SIGNAL_1(Public, void userDateChanged(const QDate &date))
+   GUI_CS_SIGNAL_2(userDateChanged, date)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDateTimeEdit::Sections)
 
 #endif // QT_NO_DATETIMEEDIT
 
-QT_END_NAMESPACE
+
 
 #endif // QDATETIMEEDIT_H

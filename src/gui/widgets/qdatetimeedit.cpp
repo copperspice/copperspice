@@ -20,7 +20,6 @@
 *
 ***********************************************************************/
 
-#include <math.h>
 #include <qdatetimeedit_p.h>
 #include <qabstractspinbox.h>
 #include <qapplication.h>
@@ -47,96 +46,6 @@
 #  define QDTEDEBUGN if (false) qDebug
 #endif
 
-QT_BEGIN_NAMESPACE
-
-// --- QDateTimeEdit ---
-
-/*!
-  \class QDateTimeEdit
-  \brief The QDateTimeEdit class provides a widget for editing dates and times.
-
-  \ingroup basicwidgets
-
-
-  QDateTimeEdit allows the user to edit dates by using the keyboard or
-  the arrow keys to increase and decrease date and time values. The
-  arrow keys can be used to move from section to section within the
-  QDateTimeEdit box. Dates and times appear in accordance with the
-  format set; see setDisplayFormat().
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 0
-
-  Here we've created a new QDateTimeEdit object initialized with
-  today's date, and restricted the valid date range to today plus or
-  minus 365 days. We've set the order to month, day, year.
-
-  The minimum value for QDateTimeEdit is 14 September 1752,
-  and 2 January 4713BC for QDate. You can change this by calling
-  setMinimumDate(), setMaximumDate(),  setMinimumTime(),
-  and setMaximumTime().
-
-  \section1 Using a Pop-up Calendar Widget
-
-  QDateTimeEdit can be configured to allow a QCalendarWidget to be used
-  to select dates. This is enabled by setting the calendarPopup property.
-  Additionally, you can supply a custom calendar widget for use as the
-  calendar pop-up by calling the setCalendarWidget() function. The existing
-  calendar widget can be retrieved with calendarWidget().
-
-  \table 100%
-  \row \o \inlineimage windowsxp-datetimeedit.png Screenshot of a Windows XP style date time editing widget
-       \o A date time editing widget shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-  \row \o \inlineimage macintosh-datetimeedit.png Screenshot of a Macintosh style date time editing widget
-       \o A date time editing widget shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-  \row \o \inlineimage plastique-datetimeedit.png Screenshot of a Plastique style date time editing widget
-       \o A date time editing widget shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-  \endtable
-
-  \sa QDateEdit, QTimeEdit, QDate, QTime
-*/
-
-/*!
-  \enum QDateTimeEdit::Section
-
-  \value NoSection
-  \value AmPmSection
-  \value MSecSection
-  \value SecondSection
-  \value MinuteSection
-  \value HourSection
-  \value DaySection
-  \value MonthSection
-  \value YearSection
-  \omitvalue DateSections_Mask
-  \omitvalue TimeSections_Mask
-*/
-
-/*!
-  \fn void QDateTimeEdit::dateTimeChanged(const QDateTime &datetime)
-
-  This signal is emitted whenever the date or time is changed. The
-  new date and time is passed in \a datetime.
-*/
-
-/*!
-  \fn void QDateTimeEdit::timeChanged(const QTime &time)
-
-  This signal is emitted whenever the time is changed. The new time
-  is passed in \a time.
-*/
-
-/*!
-  \fn void QDateTimeEdit::dateChanged(const QDate &date)
-
-  This signal is emitted whenever the date is changed. The new date
-  is passed in \a date.
-*/
-
-
-/*!
-  Constructs an empty date time editor with a \a parent.
-*/
-
 QDateTimeEdit::QDateTimeEdit(QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
 {
@@ -154,15 +63,9 @@ QDateTimeEdit::QDateTimeEdit(const QDateTime &datetime, QWidget *parent)
 {
    Q_D(QDateTimeEdit);
    d->init(datetime.isValid() ? datetime : QDateTime(QDATETIMEEDIT_DATE_INITIAL,
-           QDATETIMEEDIT_TIME_MIN));
+         QDATETIMEEDIT_TIME_MIN));
 }
 
-/*!
-  \fn QDateTimeEdit::QDateTimeEdit(const QDate &date, QWidget *parent)
-
-  Constructs an empty date time editor with a \a parent.
-  The value is set to \a date.
-*/
 
 QDateTimeEdit::QDateTimeEdit(const QDate &date, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
@@ -171,13 +74,6 @@ QDateTimeEdit::QDateTimeEdit(const QDate &date, QWidget *parent)
    d->init(date.isValid() ? date : QDATETIMEEDIT_DATE_INITIAL);
 }
 
-/*!
-  \fn QDateTimeEdit::QDateTimeEdit(const QTime &time, QWidget *parent)
-
-  Constructs an empty date time editor with a \a parent.
-  The value is set to \a time.
-*/
-
 QDateTimeEdit::QDateTimeEdit(const QTime &time, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
 {
@@ -185,9 +81,6 @@ QDateTimeEdit::QDateTimeEdit(const QTime &time, QWidget *parent)
    d->init(time.isValid() ? time : QDATETIMEEDIT_TIME_MIN);
 }
 
-/*!
-  \internal
-*/
 
 QDateTimeEdit::QDateTimeEdit(const QVariant &var, QVariant::Type parserType, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
@@ -197,18 +90,10 @@ QDateTimeEdit::QDateTimeEdit(const QVariant &var, QVariant::Type parserType, QWi
    d->init(var);
 }
 
-/*!
-  \property QDateTimeEdit::dateTime
-  \brief the QDateTime that is set in the QDateTimeEdit
 
-  When setting this property the timespec of the QDateTimeEdit remains the same
-  and the timespec of the new QDateTime is ignored.
-
-  By default, this property contains a date that refers to January 1,
-  2000 and a time of 00:00:00 and 0 milliseconds.
-
-  \sa date, time
-*/
+QDateTimeEdit::~QDateTimeEdit()
+{
+}
 
 QDateTime QDateTimeEdit::dateTime() const
 {
@@ -228,18 +113,7 @@ void QDateTimeEdit::setDateTime(const QDateTime &datetime)
    }
 }
 
-/*!
-  \property QDateTimeEdit::date
-  \brief the QDate that is set in the widget
 
-  By default, this property contains a date that refers to January 1, 2000.
-
-  \sa time, dateTime
-*/
-
-/*!
-    Returns the date of the date time edit.
-*/
 QDate QDateTimeEdit::date() const
 {
    Q_D(const QDateTimeEdit);
@@ -260,18 +134,7 @@ void QDateTimeEdit::setDate(const QDate &date)
    }
 }
 
-/*!
-  \property QDateTimeEdit::time
-  \brief the QTime that is set in the widget
 
-  By default, this property contains a time of 00:00:00 and 0 milliseconds.
-
-  \sa date, dateTime
-*/
-
-/*!
-    Returns the time of the date time edit.
-*/
 QTime QDateTimeEdit::time() const
 {
    Q_D(const QDateTimeEdit);
@@ -286,29 +149,6 @@ void QDateTimeEdit::setTime(const QTime &time)
       d->setValue(QDateTime(d->value.toDate(), time, d->spec), EmitIfChanged);
    }
 }
-
-
-/*!
-  \property QDateTimeEdit::minimumDateTime
-  \since 4.4
-
-  \brief the minimum datetime of the date time edit
-
-  When setting this property the \l maximumDateTime() is adjusted if
-  necessary to ensure that the range remains valid. If the datetime is
-  not a valid QDateTime object, this function does nothing.
-
-  The default minimumDateTime can be restored with
-  clearMinimumDateTime()
-
-  By default, this property contains a date that refers to September 14,
-  1752 and a time of 00:00:00 and 0 milliseconds.
-
-  \sa maximumDateTime(), minimumTime(), maximumTime(), minimumDate(),
-  maximumDate(), setDateTimeRange(), setDateRange(), setTimeRange(),
-  clearMaximumDateTime(), clearMinimumDate(),
-  clearMaximumDate(), clearMinimumTime(), clearMaximumTime()
-*/
 
 QDateTime QDateTimeEdit::minimumDateTime() const
 {
@@ -331,27 +171,7 @@ void QDateTimeEdit::setMinimumDateTime(const QDateTime &dt)
    }
 }
 
-/*!
-  \property QDateTimeEdit::maximumDateTime
-  \since 4.4
 
-  \brief the maximum datetime of the date time edit
-
-  When setting this property the \l minimumDateTime() is adjusted if
-  necessary to ensure that the range remains valid. If the datetime is
-  not a valid QDateTime object, this function does nothing.
-
-  The default maximumDateTime can be restored with
-  clearMaximumDateTime().
-
-  By default, this property contains a date that refers to 31 December,
-  7999 and a time of 23:59:59 and 999 milliseconds.
-
-  \sa minimumDateTime(), minimumTime(), maximumTime(), minimumDate(),
-  maximumDate(), setDateTimeRange(), setDateRange(), setTimeRange(),
-  clearMinimumDateTime(), clearMinimumDate(),
-  clearMaximumDate(), clearMinimumTime(), clearMaximumTime()
-*/
 
 QDateTime QDateTimeEdit::maximumDateTime() const
 {
@@ -375,24 +195,6 @@ void QDateTimeEdit::setMaximumDateTime(const QDateTime &dt)
 }
 
 
-/*!
-  Convenience function to set minimum and maximum date time with one
-  function call.
-  \since 4.4
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 1
-
-  is analogous to:
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 2
-
-  If either \a min or \a max are not valid, this function does
-  nothing.
-
-  \sa setMinimumDate(), maximumDate(), setMaximumDate(),
-  clearMinimumDate(), setMinimumTime(), maximumTime(),
-  setMaximumTime(), clearMinimumTime(), QDateTime::isValid()
-*/
 
 void QDateTimeEdit::setDateTimeRange(const QDateTime &min, const QDateTime &max)
 {
@@ -404,22 +206,6 @@ void QDateTimeEdit::setDateTimeRange(const QDateTime &min, const QDateTime &max)
    }
    d->setRange(minimum, maximum);
 }
-
-/*!
-  \property QDateTimeEdit::minimumDate
-
-  \brief the minimum date of the date time edit
-
-  When setting this property the \l maximumDate is adjusted if
-  necessary, to ensure that the range remains valid. If the date is
-  not a valid QDate object, this function does nothing.
-
-  By default, this property contains a date that refers to September 14, 1752.
-  The minimum date must be at least the first day in year 100, otherwise
-  setMinimumDate() has no effect.
-
-  \sa minimumTime(), maximumTime(), setDateRange()
-*/
 
 QDate QDateTimeEdit::minimumDate() const
 {
@@ -440,20 +226,6 @@ void QDateTimeEdit::clearMinimumDate()
    setMinimumDate(QDATETIMEEDIT_COMPAT_DATE_MIN);
 }
 
-/*!
-  \property QDateTimeEdit::maximumDate
-
-  \brief the maximum date of the date time edit
-
-  When setting this property the \l minimumDate is adjusted if
-  necessary to ensure that the range remains valid. If the date is
-  not a valid QDate object, this function does nothing.
-
-  By default, this property contains a date that refers to December 31, 7999.
-
-  \sa minimumDate, minimumTime, maximumTime, setDateRange()
-*/
-
 QDate QDateTimeEdit::maximumDate() const
 {
    Q_D(const QDateTimeEdit);
@@ -472,20 +244,6 @@ void QDateTimeEdit::clearMaximumDate()
 {
    setMaximumDate(QDATETIMEEDIT_DATE_MAX);
 }
-
-/*!
-  \property QDateTimeEdit::minimumTime
-
-  \brief the minimum time of the date time edit
-
-  When setting this property the \l maximumTime is adjusted if
-  necessary, to ensure that the range remains valid. If the time is
-  not a valid QTime object, this function does nothing.
-
-  By default, this property contains a time of 00:00:00 and 0 milliseconds.
-
-  \sa maximumTime, minimumDate, maximumDate, setTimeRange()
-*/
 
 QTime QDateTimeEdit::minimumTime() const
 {
@@ -507,19 +265,7 @@ void QDateTimeEdit::clearMinimumTime()
    setMinimumTime(QDATETIMEEDIT_TIME_MIN);
 }
 
-/*!
-  \property QDateTimeEdit::maximumTime
 
-  \brief the maximum time of the date time edit
-
-  When setting this property, the \l minimumTime is adjusted if
-  necessary to ensure that the range remains valid. If the time is
-  not a valid QTime object, this function does nothing.
-
-  By default, this property contains a time of 23:59:59 and 999 milliseconds.
-
-  \sa minimumTime, minimumDate, maximumDate, setTimeRange()
-*/
 QTime QDateTimeEdit::maximumTime() const
 {
    Q_D(const QDateTimeEdit);
@@ -540,57 +286,22 @@ void QDateTimeEdit::clearMaximumTime()
    setMaximumTime(QDATETIMEEDIT_TIME_MAX);
 }
 
-/*!
-  Convenience function to set minimum and maximum date with one
-  function call.
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 3
-
-  is analogous to:
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 4
-
-  If either \a min or \a max are not valid, this function does
-  nothing.
-
-  \sa setMinimumDate(), maximumDate(), setMaximumDate(),
-  clearMinimumDate(), setMinimumTime(), maximumTime(),
-  setMaximumTime(), clearMinimumTime(), QDate::isValid()
-*/
-
 void QDateTimeEdit::setDateRange(const QDate &min, const QDate &max)
 {
    Q_D(QDateTimeEdit);
    if (min.isValid() && max.isValid()) {
       setDateTimeRange(QDateTime(min, d->minimum.toTime(), d->spec),
-                       QDateTime(max, d->maximum.toTime(), d->spec));
+         QDateTime(max, d->maximum.toTime(), d->spec));
    }
 }
 
-/*!
-  Convenience function to set minimum and maximum time with one
-  function call.
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 5
-
-  is analogous to:
-
-  \snippet doc/src/snippets/code/src_gui_widgets_qdatetimeedit.cpp 6
-
-  If either \a min or \a max are not valid, this function does
-  nothing.
-
-  \sa setMinimumDate(), maximumDate(), setMaximumDate(),
-  clearMinimumDate(), setMinimumTime(), maximumTime(),
-  setMaximumTime(), clearMinimumTime(), QTime::isValid()
-*/
 
 void QDateTimeEdit::setTimeRange(const QTime &min, const QTime &max)
 {
    Q_D(QDateTimeEdit);
    if (min.isValid() && max.isValid()) {
       setDateTimeRange(QDateTime(d->minimum.toDate(), min, d->spec),
-                       QDateTime(d->maximum.toDate(), max, d->spec));
+         QDateTime(d->maximum.toDate(), max, d->spec));
    }
 }
 
@@ -683,22 +394,6 @@ int QDateTimeEdit::sectionCount() const
    Q_D(const QDateTimeEdit);
    return d->sectionNodes.size();
 }
-
-
-/*!
-  \since 4.3
-
-  \property QDateTimeEdit::currentSectionIndex
-
-  \brief the current section index of the spinbox
-
-  If the format is 'yyyy/MM/dd', the displayText is '2001/05/21' and
-  the cursorPosition is 5 currentSectionIndex returns 1. If the
-  cursorPosition is 3 currentSectionIndex is 0 etc.
-
-  \a setCurrentSection()
-  \sa currentSection()
-*/
 
 int QDateTimeEdit::currentSectionIndex() const
 {
@@ -860,12 +555,14 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
    Q_D(QDateTimeEdit);
    if (d->parseFormat(format)) {
       d->unreversedFormat.clear();
+
       if (isRightToLeft()) {
          d->unreversedFormat = format;
          d->displayFormat.clear();
+
          for (int i = d->sectionNodes.size() - 1; i >= 0; --i) {
             d->displayFormat += d->separators.at(i + 1);
-            d->displayFormat += d->sectionFormat(i);
+            d->displayFormat += d->sectionNode(i).format();
          }
          d->displayFormat += d->separators.at(0);
          d->separators = reverse(d->separators);
@@ -922,6 +619,7 @@ void QDateTimeEdit::setCalendarPopup(bool enable)
    }
    setAttribute(Qt::WA_MacShowFocusRect, !enable);
    d->calendarPopup = enable;
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (!enable) {
       d->focusOnButton = false;
@@ -967,9 +665,9 @@ QSize QDateTimeEdit::sizeHint() const
       int w = 0;
       QString s;
 
-      s = d->textFromValue(d->minimum) + QLatin1String("   ");
+      s = d->textFromValue(d->minimum) + "   ";
       w = qMax(w, fm.width(s));
-      s = d->textFromValue(d->maximum) + QLatin1String("   ");
+      s = d->textFromValue(d->maximum) + "   ";
       w = qMax(w, fm.width(s));
 
       if (d->specialValueText.size()) {
@@ -984,25 +682,14 @@ QSize QDateTimeEdit::sizeHint() const
       if (d->calendarPopupEnabled()) {
          QStyleOptionComboBox opt;
          d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, hint, this);
-      } else {
-#else
-      {
+      } else
 #endif
-         QSize extra(35, 6);
+      {
          QStyleOptionSpinBox opt;
          initStyleOption(&opt);
-         opt.rect.setSize(hint + extra);
-         extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &opt,
-         QStyle::SC_SpinBoxEditField, this).size();
-         // get closer to final result by repeating the calculation
-         opt.rect.setSize(hint + extra);
-         extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &opt,
-         QStyle::SC_SpinBoxEditField, this).size();
-         hint += extra;
 
-         opt.rect = rect();
          d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_SpinBox, &opt, hint, this)
-         .expandedTo(QApplication::globalStrut());
+            .expandedTo(QApplication::globalStrut());
       }
 
       d->cachedMinimumSizeHint = d->cachedSizeHint;
@@ -1106,7 +793,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
       default:
 #ifdef QT_KEYPAD_NAVIGATION
          if (QApplication::keypadNavigationEnabled() && !hasEditFocus()
-               && !event->text().isEmpty() && event->text().at(0).isLetterOrNumber()) {
+            && !event->text().isEmpty() && event->text().at(0).isLetterOrNumber()) {
             setEditFocus(true);
 
             //hide cursor
@@ -1118,7 +805,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
 #endif
          if (!d->isSeparatorKey(event)) {
             inserted = select = !event->text().isEmpty() && event->text().at(0).isPrint()
-                                && !(event->modifiers() & ~(Qt::ShiftModifier | Qt::KeypadModifier));
+                  && !(event->modifiers() & ~(Qt::ShiftModifier | Qt::KeypadModifier));
             break;
          }
       case Qt::Key_Left:
@@ -1133,16 +820,6 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                select = false;
                break;
             }
-#ifdef Q_OS_MAC
-            else
-#ifdef QT_KEYPAD_NAVIGATION
-               if (!QApplication::keypadNavigationEnabled())
-#endif
-               {
-                  select = (event->modifiers() & Qt::ShiftModifier);
-                  break;
-               }
-#endif
          }
       // else fall through
       case Qt::Key_Backtab:
@@ -1153,7 +830,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
             return;
          }
          const bool forward = event->key() != Qt::Key_Left && event->key() != Qt::Key_Backtab
-                              && (event->key() != Qt::Key_Tab || !(event->modifiers() & Qt::ShiftModifier));
+            && (event->key() != Qt::Key_Tab || !(event->modifiers() & Qt::ShiftModifier));
 #ifdef QT_KEYPAD_NAVIGATION
          int newSection = d->nextPrevSection(d->currentSectionIndex, forward);
          if (QApplication::keypadNavigationEnabled()) {
@@ -1187,12 +864,12 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
          QString str = d->displayText();
          int pos = d->edit->cursorPosition();
          if (validate(str, pos) == QValidator::Acceptable
-               && (d->sectionNodes.at(oldCurrent).count != 1
-                   || d->sectionMaxSize(oldCurrent) == d->sectionSize(oldCurrent)
-                   || d->skipToNextSection(oldCurrent, d->value.toDateTime(), d->sectionText(oldCurrent)))) {
+            && (d->sectionNodes.at(oldCurrent).count != 1
+               || d->sectionMaxSize(oldCurrent) == d->sectionSize(oldCurrent)
+               || d->skipToNextSection(oldCurrent, d->value.toDateTime(), d->sectionText(oldCurrent)))) {
             QDTEDEBUG << "Setting currentsection to"
-                      << d->closestSection(d->edit->cursorPosition(), true) << event->key()
-                      << oldCurrent << str;
+               << d->closestSection(d->edit->cursorPosition(), true) << event->key()
+               << oldCurrent << str;
             const int tmp = d->closestSection(d->edit->cursorPosition(), true);
             if (tmp >= 0) {
                d->currentSectionIndex = tmp;
@@ -1517,102 +1194,26 @@ void QDateTimeEdit::mousePressEvent(QMouseEvent *event)
    }
 }
 
-/*!
-  \class QTimeEdit
-  \brief The QTimeEdit class provides a widget for editing times based on
-  the QDateTimeEdit widget.
-
-  \ingroup basicwidgets
-
-
-  Many of the properties and functions provided by QTimeEdit are implemented in
-  QDateTimeEdit. The following properties are most relevant to users of this
-  class:
-
-  \list
-  \o \l{QDateTimeEdit::time}{time} holds the date displayed by the widget.
-  \o \l{QDateTimeEdit::minimumTime}{minimumTime} defines the minimum (earliest) time
-     that can be set by the user.
-  \o \l{QDateTimeEdit::maximumTime}{maximumTime} defines the maximum (latest) time
-     that can be set by the user.
-  \o \l{QDateTimeEdit::displayFormat}{displayFormat} contains a string that is used
-     to format the time displayed in the widget.
-  \endlist
-
-  \table 100%
-  \row \o \inlineimage windowsxp-timeedit.png Screenshot of a Windows XP style time editing widget
-       \o A time editing widget shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-  \row \o \inlineimage macintosh-timeedit.png Screenshot of a Macintosh style time editing widget
-       \o A time editing widget shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-  \row \o \inlineimage plastique-timeedit.png Screenshot of a Plastique style time editing widget
-       \o A time editing widget shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-  \endtable
-
-  \sa QDateEdit, QDateTimeEdit
-*/
-
-/*!
-  Constructs an empty time editor with a \a parent.
-*/
-
-
 QTimeEdit::QTimeEdit(QWidget *parent)
    : QDateTimeEdit(QDATETIMEEDIT_TIME_MIN, QVariant::Time, parent)
 {
+   connect(this, SIGNAL(timeChanged(QTime)), this, SLOT(userTimeChanged(QTime)));
 }
 
-/*!
-  Constructs an empty time editor with a \a parent. The time is set
-  to \a time.
-*/
 
 QTimeEdit::QTimeEdit(const QTime &time, QWidget *parent)
    : QDateTimeEdit(time, QVariant::Time, parent)
 {
 }
 
-
-/*!
-  \class QDateEdit
-  \brief The QDateEdit class provides a widget for editing dates based on
-  the QDateTimeEdit widget.
-
-  \ingroup basicwidgets
-
-
-  Many of the properties and functions provided by QDateEdit are implemented in
-  QDateTimeEdit. The following properties are most relevant to users of this
-  class:
-
-  \list
-  \o \l{QDateTimeEdit::date}{date} holds the date displayed by the widget.
-  \o \l{QDateTimeEdit::minimumDate}{minimumDate} defines the minimum (earliest)
-     date that can be set by the user.
-  \o \l{QDateTimeEdit::maximumDate}{maximumDate} defines the maximum (latest) date
-     that can be set by the user.
-  \o \l{QDateTimeEdit::displayFormat}{displayFormat} contains a string that is used
-     to format the date displayed in the widget.
-  \endlist
-
-  \table 100%
-  \row \o \inlineimage windowsxp-dateedit.png Screenshot of a Windows XP style date editing widget
-       \o A date editing widget shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-  \row \o \inlineimage macintosh-dateedit.png Screenshot of a Macintosh style date editing widget
-       \o A date editing widget shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-  \row \o \inlineimage plastique-dateedit.png Screenshot of a Plastique style date editing widget
-       \o A date editing widget shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-  \endtable
-
-  \sa QTimeEdit, QDateTimeEdit
-*/
-
-/*!
-  Constructs an empty date editor with a \a parent.
-*/
+QTimeEdit::~QTimeEdit()
+{
+}
 
 QDateEdit::QDateEdit(QWidget *parent)
    : QDateTimeEdit(QDATETIMEEDIT_DATE_INITIAL, QVariant::Date, parent)
 {
+   connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(userDateChanged(QDate)));
 }
 
 /*!
@@ -1622,6 +1223,9 @@ QDateEdit::QDateEdit(QWidget *parent)
 
 QDateEdit::QDateEdit(const QDate &date, QWidget *parent)
    : QDateTimeEdit(date, QVariant::Date, parent)
+{
+}
+QDateEdit::~QDateEdit()
 {
 }
 
@@ -1646,13 +1250,9 @@ QDateTimeEditPrivate::QDateTimeEditPrivate()
    cachedDay = -1;
    currentSectionIndex = FirstSectionIndex;
 
-   first.type = FirstSection;
-   last.type = LastSection;
-   none.type = NoSection;
    first.pos = 0;
-   last.pos = -1;
-   none.pos = -1;
-   sections = 0;
+   sections  = 0;
+
    calendarPopup = false;
    minimum = QDATETIMEEDIT_COMPAT_DATETIME_MIN;
    maximum = QDATETIMEEDIT_DATETIME_MAX;
@@ -1665,6 +1265,9 @@ QDateTimeEditPrivate::QDateTimeEditPrivate()
 #endif
 }
 
+QDateTimeEditPrivate::~QDateTimeEditPrivate()
+{
+}
 void QDateTimeEditPrivate::updateTimeSpec()
 {
    minimum = minimum.toDateTime().toTimeSpec(spec);
@@ -1687,6 +1290,7 @@ void QDateTimeEditPrivate::updateEdit()
    if (newText == displayText()) {
       return;
    }
+
    int selsize = edit->selectedText().size();
    const bool sb = edit->blockSignals(true);
 
@@ -1694,9 +1298,9 @@ void QDateTimeEditPrivate::updateEdit()
 
    if (!specialValue()
 #ifdef QT_KEYPAD_NAVIGATION
-         && !(QApplication::keypadNavigationEnabled() && !edit->hasEditFocus())
+      && !(QApplication::keypadNavigationEnabled() && !edit->hasEditFocus())
 #endif
-      ) {
+   ) {
       int cursor = sectionPos(currentSectionIndex);
       QDTEDEBUG << "cursor is " << cursor << currentSectionIndex;
       cursor = qBound(0, cursor, displayText().size());
@@ -1710,6 +1314,7 @@ void QDateTimeEditPrivate::updateEdit()
 
       }
    }
+
    edit->blockSignals(sb);
 }
 
@@ -1724,9 +1329,9 @@ void QDateTimeEditPrivate::setSelected(int sectionIndex, bool forward)
 {
    if (specialValue()
 #ifdef QT_KEYPAD_NAVIGATION
-         || (QApplication::keypadNavigationEnabled() && !edit->hasEditFocus())
+      || (QApplication::keypadNavigationEnabled() && !edit->hasEditFocus())
 #endif
-      ) {
+   ) {
       edit->selectAll();
    } else {
       const SectionNode &node = sectionNode(sectionIndex);
@@ -1847,13 +1452,17 @@ void QDateTimeEditPrivate::clearSection(int index)
 {
    const QLatin1Char space(' ');
    int cursorPos = edit->cursorPosition();
+
    bool blocked = edit->blockSignals(true);
+
    QString t = edit->text();
    const int pos = sectionPos(index);
+
    if (pos == -1) {
       qWarning("QDateTimeEdit: Internal error (%s:%d)", __FILE__, __LINE__);
       return;
    }
+
    const int size = sectionSize(index);
    t.replace(pos, size, QString().fill(space, size));
    edit->setText(t);
@@ -1889,7 +1498,7 @@ void QDateTimeEditPrivate::updateCache(const QVariant &val, const QString &str) 
 */
 
 QDateTime QDateTimeEditPrivate::validateAndInterpret(QString &input, int &position,
-      QValidator::State &state, bool fixup) const
+   QValidator::State &state, bool fixup) const
 {
    if (input.isEmpty()) {
       if (sectionNodes.size() == 1 || !specialValueText.isEmpty()) {
@@ -2037,7 +1646,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
          // doesn't mean that we hit the floor in the other
          if (steps > 0) {
             setDigit(v, sectionIndex, min);
-            if (!(sn.type & (DaySection | DayOfWeekSection)) && sections & DateSectionMask) {
+            if (!(sn.type & DaySectionMask) && sections & DateSectionMask) {
                const int daysInMonth = v.date().daysInMonth();
                if (v.date().day() < oldDay && v.date().day() < daysInMonth) {
                   const int adds = qMin(oldDay, daysInMonth);
@@ -2053,7 +1662,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
             }
          } else {
             setDigit(v, sectionIndex, max);
-            if (!(sn.type & (DaySection | DayOfWeekSection)) && sections & DateSectionMask) {
+            if (!(sn.type & DaySectionMask) && sections & DateSectionMask) {
                const int daysInMonth = v.date().daysInMonth();
                if (v.date().day() < oldDay && v.date().day() < daysInMonth) {
                   const int adds = qMin(oldDay, daysInMonth);
@@ -2072,7 +1681,8 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
          setDigit(v, sectionIndex, (steps > 0 ? localmax : localmin));
       }
    }
-   if (!test && oldDay != v.date().day() && !(sn.type & (DaySection | DayOfWeekSection))) {
+
+   if (!test && oldDay != v.date().day() && !(sn.type & DaySectionMask)) {
       // this should not happen when called from stepEnabled
       cachedDay = qMax(oldDay, cachedDay);
    }
@@ -2085,8 +1695,8 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
          bool maxcmp = (t <= maximumDateTime);
          if (!mincmp || !maxcmp) {
             setDigit(t, sectionIndex, getDigit(steps < 0
-                                               ? maximumDateTime
-                                               : minimumDateTime, sectionIndex));
+                  ? maximumDateTime
+                  : minimumDateTime, sectionIndex));
             mincmp = (t >= minimumDateTime);
             maxcmp = (t <= maximumDateTime);
          }
@@ -2104,8 +1714,8 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
          bool maxcmp = (t <= maximumDateTime);
          if (!mincmp || !maxcmp) {
             setDigit(t, sectionIndex, getDigit(steps > 0 ?
-                                               minimumDateTime :
-                                               maximumDateTime, sectionIndex));
+                  minimumDateTime :
+                  maximumDateTime, sectionIndex));
             mincmp = (t >= minimumDateTime);
             maxcmp = (t <= maximumDateTime);
          }
@@ -2214,14 +1824,12 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
       }
    }
 
-   QDTEDEBUG << "currentSectionIndex is set to" << sectionName(sectionType(s))
-             << oldpos << newpos
-             << "was" << sectionName(sectionType(currentSectionIndex));
+
 
    currentSectionIndex = s;
 
    Q_ASSERT_X(currentSectionIndex < sectionNodes.size(), "QDateTimeEditPrivate::_q_editorCursorPositionChanged()",
-             csPrintable(QString("Internal error (%1 %2)").formatArg(currentSectionIndex).formatArg(sectionNodes.size())) );
+      csPrintable(QString("Internal error (%1 %2)").formatArg(currentSectionIndex).formatArg(sectionNodes.size())) );
 
    ignoreCursorPositionChanged = false;
 }
@@ -2244,23 +1852,31 @@ QDateTimeEdit::Section QDateTimeEditPrivate::convertToPublic(QDateTimeParser::Se
    switch (s & ~Internal) {
       case AmPmSection:
          return QDateTimeEdit::AmPmSection;
+
       case MSecSection:
          return QDateTimeEdit::MSecSection;
+
       case SecondSection:
          return QDateTimeEdit::SecondSection;
+
       case MinuteSection:
          return QDateTimeEdit::MinuteSection;
-      case DayOfWeekSection:
-      case DaySection:
+
+      case DayOfWeekSectionShort:
+      case DayOfWeekSectionLong:
          return QDateTimeEdit::DaySection;
+
       case MonthSection:
          return QDateTimeEdit::MonthSection;
       case YearSection2Digits:
+
       case YearSection:
          return QDateTimeEdit::YearSection;
+
       case Hour12Section:
       case Hour24Section:
          return QDateTimeEdit::HourSection;
+
       case FirstSection:
       case NoSection:
       case LastSection:
@@ -2281,19 +1897,24 @@ QDateTimeEdit::Sections QDateTimeEditPrivate::convertSections(QDateTimeParser::S
    if (s & QDateTimeParser::MinuteSection) {
       ret |= QDateTimeEdit::MinuteSection;
    }
-   if (s & (QDateTimeParser::Hour24Section | QDateTimeParser::Hour12Section)) {
+
+   if (s & (QDateTimeParser::HourSectionMask)) {
       ret |= QDateTimeEdit::HourSection;
    }
+
    if (s & QDateTimeParser::AmPmSection) {
       ret |= QDateTimeEdit::AmPmSection;
    }
-   if (s & (QDateTimeParser::DaySection | QDateTimeParser::DayOfWeekSection)) {
+
+   if (s & (QDateTimeParser::DaySectionMask)) {
       ret |= QDateTimeEdit::DaySection;
    }
+
    if (s & QDateTimeParser::MonthSection) {
       ret |= QDateTimeEdit::MonthSection;
    }
-   if (s & (QDateTimeParser::YearSection | QDateTimeParser::YearSection2Digits)) {
+
+   if (s & (QDateTimeParser::YearSectionMask)) {
       ret |= QDateTimeEdit::YearSection;
    }
 
@@ -2334,9 +1955,9 @@ void QDateTimeEdit::paintEvent(QPaintEvent *event)
 QString QDateTimeEditPrivate::getAmPmText(AmPm ap, Case cs) const
 {
    if (ap == AmText) {
-      return (cs == UpperCase ? QDateTimeEdit::tr("AM") : QDateTimeEdit::tr("am"));
+      return (cs == UpperCase ? QDateTimeParser::tr("AM") : QDateTimeParser::tr("am"));
    } else {
-      return (cs == UpperCase ? QDateTimeEdit::tr("PM") : QDateTimeEdit::tr("pm"));
+      return (cs == UpperCase ? QDateTimeParser::tr("PM") : QDateTimeParser::tr("pm"));
    }
 }
 
@@ -2361,11 +1982,15 @@ void QDateTimeEditPrivate::interpret(EmitPolicy ep)
    QString tmp = displayText();
    int pos = edit->cursorPosition();
    const QValidator::State state = q->validate(tmp, pos);
+
    if (state != QValidator::Acceptable
-         && correctionMode == QAbstractSpinBox::CorrectToPreviousValue
-         && (state == QValidator::Invalid || !(fieldInfo(currentSectionIndex) & AllowPartial))) {
+      && correctionMode == QAbstractSpinBox::CorrectToPreviousValue
+      && (state == QValidator::Invalid
+         || currentSectionIndex < 0
+         || !(fieldInfo(currentSectionIndex) & AllowPartial))) {
       setValue(value, ep);
       updateTimeSpec();
+
    } else {
       QAbstractSpinBoxPrivate::interpret(ep);
    }
@@ -2394,7 +2019,7 @@ void QDateTimeEdit::initStyleOption(QStyleOptionSpinBox *option) const
    QAbstractSpinBox::initStyleOption(option);
    if (d->calendarPopupEnabled()) {
       option->subControls = QStyle::SC_ComboBoxFrame | QStyle::SC_ComboBoxEditField
-                            | QStyle::SC_ComboBoxArrow;
+         | QStyle::SC_ComboBoxArrow;
       if (d->arrowState == QStyle::State_Sunken) {
          option->state |= QStyle::State_Sunken;
       } else {
@@ -2409,22 +2034,31 @@ void QDateTimeEditPrivate::init(const QVariant &var)
    switch (var.type()) {
       case QVariant::Date:
          value = QDateTime(var.toDate(), QDATETIMEEDIT_TIME_MIN);
+         updateTimeSpec();
+
          q->setDisplayFormat(defaultDateFormat);
-         if (sectionNodes.isEmpty()) { // ### safeguard for broken locale
+         if (sectionNodes.isEmpty()) {
+            // ### safeguard for broken locale
             q->setDisplayFormat(QLatin1String("dd/MM/yyyy"));
          }
          break;
       case QVariant::DateTime:
          value = var;
+         updateTimeSpec();
+
          q->setDisplayFormat(defaultDateTimeFormat);
-         if (sectionNodes.isEmpty()) { // ### safeguard for broken locale
+         if (sectionNodes.isEmpty()) {
+            // ### safeguard for broken locale
             q->setDisplayFormat(QLatin1String("dd/MM/yyyy hh:mm:ss"));
          }
          break;
       case QVariant::Time:
          value = QDateTime(QDATETIMEEDIT_DATE_INITIAL, var.toTime());
+         updateTimeSpec();
+
          q->setDisplayFormat(defaultTimeFormat);
-         if (sectionNodes.isEmpty()) { // ### safeguard for broken locale
+         if (sectionNodes.isEmpty()) {
+            // ### safeguard for broken locale
             q->setDisplayFormat(QLatin1String("hh:mm:ss"));
          }
          break;
@@ -2437,7 +2071,7 @@ void QDateTimeEditPrivate::init(const QVariant &var)
       q->setCalendarPopup(true);
    }
 #endif
-   updateTimeSpec();
+
    q->setInputMethodHints(Qt::ImhPreferNumbers);
    setLayoutItemMargins(QStyle::SE_DateTimeEditLayoutItem);
 }
@@ -2499,7 +2133,7 @@ void QDateTimeEditPrivate::updateEditFieldGeometry()
    optCombo.editable = true;
    optCombo.subControls = QStyle::SC_ComboBoxEditField;
    edit->setGeometry(q->style()->subControlRect(QStyle::CC_ComboBox, &optCombo,
-                     QStyle::SC_ComboBoxEditField, q));
+         QStyle::SC_ComboBoxEditField, q));
 }
 
 QVariant QDateTimeEditPrivate::getZeroVariant() const
@@ -2533,14 +2167,17 @@ bool QDateTimeEditPrivate::isSeparatorKey(const QKeyEvent *ke) const
 void QDateTimeEditPrivate::initCalendarPopup(QCalendarWidget *cw)
 {
    Q_Q(QDateTimeEdit);
-   if (!monthCalendar) {
+
+   if (! monthCalendar) {
       monthCalendar = new QCalendarPopup(q, cw);
       monthCalendar->setObjectName(QLatin1String("qt_datetimedit_calendar"));
-      QObject::connect(monthCalendar, SIGNAL(newDateSelected(const QDate &)), q, SLOT(setDate(const QDate &)));
-      QObject::connect(monthCalendar, SIGNAL(hidingCalendar(const QDate &)), q, SLOT(setDate(const QDate &)));
-      QObject::connect(monthCalendar, SIGNAL(activated(const QDate &)), q, SLOT(setDate(const QDate &)));
-      QObject::connect(monthCalendar, SIGNAL(activated(const QDate &)), monthCalendar, SLOT(close()));
-      QObject::connect(monthCalendar, SIGNAL(resetButton()), q, SLOT(_q_resetButton()));
+
+      QObject::connect(monthCalendar, SIGNAL(newDateSelected(QDate)), q, SLOT(setDate(QDate)));
+      QObject::connect(monthCalendar, SIGNAL(hidingCalendar(QDate)),  q, SLOT(setDate(QDate)));
+      QObject::connect(monthCalendar, SIGNAL(activated(QDate)),       q, SLOT(setDate(QDate)));
+      QObject::connect(monthCalendar, SIGNAL(activated(QDate)),       monthCalendar, SLOT(close()));
+      QObject::connect(monthCalendar, SIGNAL(resetButton()),          q, SLOT(_q_resetButton()));
+
    } else if (cw) {
       monthCalendar->setCalendarWidget(cw);
    }
@@ -2550,13 +2187,16 @@ void QDateTimeEditPrivate::initCalendarPopup(QCalendarWidget *cw)
 void QDateTimeEditPrivate::positionCalendarPopup()
 {
    Q_Q(QDateTimeEdit);
+
    QPoint pos = (q->layoutDirection() == Qt::RightToLeft) ? q->rect().bottomRight() : q->rect().bottomLeft();
    QPoint pos2 = (q->layoutDirection() == Qt::RightToLeft) ? q->rect().topRight() : q->rect().topLeft();
    pos = q->mapToGlobal(pos);
    pos2 = q->mapToGlobal(pos2);
+
    QSize size = monthCalendar->sizeHint();
    QRect screen = QApplication::desktop()->availableGeometry(pos);
    //handle popup falling "off screen"
+
    if (q->layoutDirection() == Qt::RightToLeft) {
       pos.setX(pos.x() - size.width());
       pos2.setX(pos2.x() - size.width());
@@ -2565,6 +2205,7 @@ void QDateTimeEditPrivate::positionCalendarPopup()
       } else if (pos.x() + size.width() > screen.right()) {
          pos.setX(qMax(pos.x() - size.width(), screen.right() - size.width()));
       }
+
    } else {
       if (pos.x() + size.width() > screen.right()) {
          pos.setX(screen.right() - size.width());
@@ -2641,16 +2282,15 @@ void QCalendarPopup::setCalendarWidget(QCalendarWidget *cw)
       widgetLayout->setSpacing(0);
    }
    delete calendar.data();
-   calendar = QWeakPointer<QCalendarWidget>(cw);
+   calendar = QPointer<QCalendarWidget>(cw);
    widgetLayout->addWidget(cw);
 
-   connect(cw, SIGNAL(activated(const QDate &)), this, SLOT(dateSelected(const QDate &)));
-   connect(cw, SIGNAL(clicked(const QDate &)), this, SLOT(dateSelected(const QDate &)));
+   connect(cw, SIGNAL(activated(QDate)),   this, SLOT(dateSelected(QDate)));
+   connect(cw, SIGNAL(clicked(QDate)),     this, SLOT(dateSelected(QDate)));
    connect(cw, SIGNAL(selectionChanged()), this, SLOT(dateSelectionChanged()));
 
    cw->setFocus();
 }
-
 
 void QCalendarPopup::setDate(const QDate &date)
 {
@@ -2672,7 +2312,7 @@ void QCalendarPopup::mousePressEvent(QMouseEvent *event)
       QStyleOptionComboBox opt;
       opt.init(dateTime);
       QRect arrowRect = dateTime->style()->subControlRect(QStyle::CC_ComboBox, &opt,
-                        QStyle::SC_ComboBoxArrow, dateTime);
+            QStyle::SC_ComboBoxArrow, dateTime);
       arrowRect.moveTo(dateTime->mapToGlobal(arrowRect .topLeft()));
       if (arrowRect.contains(event->globalPos()) || rect().contains(event->pos())) {
          setAttribute(Qt::WA_NoMouseReplay);
@@ -2690,10 +2330,12 @@ bool QCalendarPopup::event(QEvent *event)
 {
    if (event->type() == QEvent::KeyPress) {
       QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-      if (keyEvent->key() == Qt::Key_Escape) {
+
+      if (keyEvent->matches(QKeySequence::Cancel)) {
          dateChanged = false;
       }
    }
+
    return QWidget::event(event);
 }
 
@@ -2702,6 +2344,7 @@ void QCalendarPopup::dateSelectionChanged()
    dateChanged = true;
    emit newDateSelected(verifyCalendarInstance()->selectedDate());
 }
+
 void QCalendarPopup::dateSelected(const QDate &date)
 {
    dateChanged = true;
@@ -2724,7 +2367,5 @@ void  QDateTimeEdit::_q_resetButton()
 }
 
 
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_DATETIMEEDIT

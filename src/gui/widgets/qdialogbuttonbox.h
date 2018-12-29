@@ -97,8 +97,9 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 
    QDialogButtonBox(QWidget *parent = nullptr);
    QDialogButtonBox(Qt::Orientation orientation, QWidget *parent = nullptr);
+   explicit QDialogButtonBox(StandardButtons buttons, QWidget *parent = nullptr);
    QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation = Qt::Horizontal,
-                    QWidget *parent = nullptr);
+      QWidget *parent = nullptr);
    ~QDialogButtonBox();
 
    void setOrientation(Qt::Orientation orientation);
@@ -147,6 +148,6 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDialogButtonBox::StandardButtons)
 
-QT_END_NAMESPACE
+
 
 #endif // QDIALOGBUTTONBOX_H

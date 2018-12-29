@@ -26,14 +26,13 @@
 #include <qwidget_p.h>
 #include <qframe.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFramePrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QFrame)
 
  public:
    QFramePrivate();
+   ~QFramePrivate();
 
    void        updateFrameWidth();
    void        updateStyledFrameWidths();
@@ -49,7 +48,5 @@ class QFramePrivate : public QWidgetPrivate
    inline void init();
 
 };
-
-QT_END_NAMESPACE
 
 #endif // QFRAME_P_H

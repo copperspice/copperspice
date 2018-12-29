@@ -30,8 +30,6 @@
 #include <qmath.h>
 #include <qpushbutton_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QCommandLinkButtonPrivate : public QPushButtonPrivate
 {
    Q_DECLARE_PUBLIC(QCommandLinkButton)
@@ -126,7 +124,7 @@ QRect QCommandLinkButtonPrivate::titleRect() const
    if (description.isEmpty()) {
       QFontMetrics fm(titleFont());
       r.setTop(r.top() + qMax(0, (q->icon().actualSize(q->iconSize()).height()
-                                  - fm.height()) / 2));
+               - fm.height()) / 2));
    }
 
    return r;
@@ -136,7 +134,7 @@ QRect QCommandLinkButtonPrivate::descriptionRect() const
 {
    Q_Q(const QCommandLinkButton);
    return q->rect().adjusted(textOffset(), descriptionOffset(),
-                             -rightMargin(), -bottomMargin());
+         -rightMargin(), -bottomMargin());
 }
 
 int QCommandLinkButtonPrivate::textOffset() const
@@ -157,7 +155,7 @@ bool QCommandLinkButtonPrivate::usingVistaStyle() const
    //### This is a hack to detect if we are indeed running Vista style themed and not in classic
    // When we add api to query for this, we should change this implementation to use it.
    return q->style()->inherits("QWindowsVistaStyle")
-          && !q->style()->pixelMetric(QStyle::PM_ButtonShiftHorizontal);
+      && !q->style()->pixelMetric(QStyle::PM_ButtonShiftHorizontal);
 }
 
 void QCommandLinkButtonPrivate::init()
@@ -209,7 +207,7 @@ QSize QCommandLinkButton::minimumSizeHint() const
    Q_D(const QCommandLinkButton);
    QSize size = sizeHint();
    int minimumHeight = qMax(d->descriptionOffset() + d->bottomMargin(),
-                            icon().actualSize(iconSize()).height() + d->topMargin());
+         icon().actualSize(iconSize()).height() + d->topMargin());
    size.setHeight(minimumHeight);
    return size;
 }
@@ -250,6 +248,9 @@ QCommandLinkButton::QCommandLinkButton(const QString &text, const QString &descr
    d->init();
 }
 
+QCommandLinkButton::~QCommandLinkButton()
+{
+}
 /*! \reimp */
 bool QCommandLinkButton::event(QEvent *e)
 {
@@ -272,7 +273,7 @@ QSize QCommandLinkButton::sizeHint() const
 
    size.setWidth(qMax(size.width(), buttonWidth));
    size.setHeight(qMax(d->description.isEmpty() ? 41 : 60,
-                       heightWithoutDescription + d->descriptionHeight(buttonWidth)));
+         heightWithoutDescription + d->descriptionHeight(buttonWidth)));
    return size;
 }
 
@@ -283,8 +284,8 @@ int QCommandLinkButton::heightForWidth(int width) const
    int heightWithoutDescription = d->descriptionOffset() + d->bottomMargin();
    // find the width available for the description area
    return qMax(heightWithoutDescription + d->descriptionHeight(width),
-               icon().actualSize(iconSize()).height() + d->topMargin() +
-               d->bottomMargin());
+         icon().actualSize(iconSize()).height() + d->topMargin() +
+         d->bottomMargin());
 }
 
 /*! \reimp */
@@ -310,8 +311,8 @@ void QCommandLinkButton::paintEvent(QPaintEvent *)
    p.drawControl(QStyle::CE_PushButton, option);
    if (!icon().isNull())
       p.drawPixmap(d->leftMargin() + hOffset, d->topMargin() + vOffset,
-                   icon().pixmap(pixmapSize, isEnabled() ? QIcon::Normal : QIcon::Disabled,
-                                 isChecked() ? QIcon::On : QIcon::Off));
+         icon().pixmap(pixmapSize, isEnabled() ? QIcon::Normal : QIcon::Disabled,
+            isChecked() ? QIcon::On : QIcon::Off));
 
    //Draw title
    QColor textColor = palette().buttonText().color();
@@ -332,13 +333,13 @@ void QCommandLinkButton::paintEvent(QPaintEvent *)
 
    p.setFont(d->titleFont());
    p.drawItemText(d->titleRect().translated(hOffset, vOffset),
-                  textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
+      textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
 
    //Draw description
    textflags |= Qt::TextWordWrap | Qt::ElideRight;
    p.setFont(d->descriptionFont());
    p.drawItemText(d->descriptionRect().translated(hOffset, vOffset), textflags,
-                  option.palette, isEnabled(), description(), QPalette::ButtonText);
+      option.palette, isEnabled(), description(), QPalette::ButtonText);
    p.restore();
 }
 
@@ -355,6 +356,4 @@ QString QCommandLinkButton::description() const
    Q_D(const QCommandLinkButton);
    return d->description;
 }
-
-QT_END_NAMESPACE
 

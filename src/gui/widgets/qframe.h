@@ -25,9 +25,10 @@
 
 #include <QtGui/qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QFramePrivate;
+class QStyleOptionFrame;
 
 class Q_GUI_EXPORT QFrame : public QWidget
 {
@@ -38,13 +39,18 @@ class Q_GUI_EXPORT QFrame : public QWidget
 
    GUI_CS_PROPERTY_READ(frameShape, frameShape)
    GUI_CS_PROPERTY_WRITE(frameShape, setFrameShape)
+
    GUI_CS_PROPERTY_READ(frameShadow, frameShadow)
    GUI_CS_PROPERTY_WRITE(frameShadow, setFrameShadow)
+
    GUI_CS_PROPERTY_READ(lineWidth, lineWidth)
    GUI_CS_PROPERTY_WRITE(lineWidth, setLineWidth)
+
    GUI_CS_PROPERTY_READ(midLineWidth, midLineWidth)
    GUI_CS_PROPERTY_WRITE(midLineWidth, setMidLineWidth)
+
    GUI_CS_PROPERTY_READ(frameWidth, frameWidth)
+
    GUI_CS_PROPERTY_READ(frameRect, frameRect)
    GUI_CS_PROPERTY_WRITE(frameRect, setFrameRect)
    GUI_CS_PROPERTY_DESIGNABLE(frameRect, false)
@@ -100,13 +106,14 @@ class Q_GUI_EXPORT QFrame : public QWidget
    void changeEvent(QEvent *) override;
    void drawFrame(QPainter *);
 
-   QFrame(QFramePrivate &dd, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+   QFrame(QFramePrivate &dd, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   void initStyleOption(QStyleOptionFrame *option) const;
 
  private:
    Q_DISABLE_COPY(QFrame)
    Q_DECLARE_PRIVATE(QFrame)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QFRAME_H
