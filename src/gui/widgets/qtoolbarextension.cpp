@@ -28,7 +28,7 @@
 
 #ifndef QT_NO_TOOLBUTTON
 
-QT_BEGIN_NAMESPACE
+
 
 QToolBarExtension::QToolBarExtension(QWidget *parent)
    : QToolButton(parent)
@@ -68,6 +68,6 @@ QSize QToolBarExtension::sizeHint() const
    return QSize(ext, ext);
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_TOOLBUTTON

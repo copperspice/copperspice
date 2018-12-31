@@ -23,9 +23,7 @@
 #ifndef QToolBarSeparator_P_H
 #define QToolBarSeparator_P_H
 
-#include <QtGui/qwidget.h>
-
-QT_BEGIN_NAMESPACE
+#include <qwidget.h>
 
 #ifndef QT_NO_TOOLBAR
 
@@ -53,6 +51,6 @@ class QToolBarSeparator : public QWidget
 
 #endif // QT_NO_TOOLBAR
 
-QT_END_NAMESPACE
+
 
 #endif // QDYNAMICTOOLBARSEPARATOR_P_H

@@ -35,7 +35,6 @@
 #include <qtextcontrol_p.h>
 #include <qtextedit.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_TEXTEDIT
 
@@ -76,6 +75,7 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
    }
 
    void _q_currentCharFormatChanged(const QTextCharFormat &format);
+   void _q_cursorPositionChanged();
 
    void updateDefaultTextOption();
 
@@ -104,6 +104,7 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
 
    QString anchorToScrollToWhenVisible;
 
+   QString placeholderText;
 #ifdef QT_KEYPAD_NAVIGATION
    QBasicTimer deleteAllTimer;
 #endif
@@ -112,6 +113,5 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
 
 #endif // QT_NO_TEXTEDIT
 
-QT_END_NAMESPACE
 
 #endif // QTEXTEDIT_P_H

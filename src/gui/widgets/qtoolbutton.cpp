@@ -43,8 +43,6 @@
 #include <qaction_p.h>
 #include <qmenu_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QToolButtonPrivate : public QAbstractButtonPrivate
 {
    Q_DECLARE_PUBLIC(QToolButton)
@@ -54,6 +52,7 @@ class QToolButtonPrivate : public QAbstractButtonPrivate
 
 #ifndef QT_NO_MENU
    void _q_buttonPressed();
+   void _q_buttonReleased();
    void popupTimerDone();
    void _q_updateButtonDown();
    void _q_menuTriggered(QAction *);
@@ -87,87 +86,11 @@ class QToolButtonPrivate : public QAbstractButtonPrivate
 bool QToolButtonPrivate::hasMenu() const
 {
    return ((defaultAction && defaultAction->menu())
-           || (menuAction && menuAction->menu())
-           || actions.size() > (defaultAction ? 1 : 0));
+         || (menuAction && menuAction->menu())
+         || actions.size() > (defaultAction ? 1 : 0));
 }
 #endif
 
-/*!
-    \class QToolButton
-    \brief The QToolButton class provides a quick-access button to
-    commands or options, usually used inside a QToolBar.
-
-    \ingroup basicwidgets
-
-
-    A tool button is a special button that provides quick-access to
-    specific commands or options. As opposed to a normal command
-    button, a tool button usually doesn't show a text label, but shows
-    an icon instead.
-
-    Tool buttons are normally created when new QAction instances are
-    created with QToolBar::addAction() or existing actions are added
-    to a toolbar with QToolBar::addAction(). It is also possible to
-    construct tool buttons in the same way as any other widget, and
-    arrange them alongside other widgets in layouts.
-
-    One classic use of a tool button is to select tools; for example,
-    the "pen" tool in a drawing program. This would be implemented
-    by using a QToolButton as a toggle button (see setToggleButton()).
-
-    QToolButton supports auto-raising. In auto-raise mode, the button
-    draws a 3D frame only when the mouse points at it. The feature is
-    automatically turned on when a button is used inside a QToolBar.
-    Change it with setAutoRaise().
-
-    A tool button's icon is set as QIcon. This makes it possible to
-    specify different pixmaps for the disabled and active state. The
-    disabled pixmap is used when the button's functionality is not
-    available. The active pixmap is displayed when the button is
-    auto-raised because the mouse pointer is hovering over it.
-
-    The button's look and dimension is adjustable with
-    setToolButtonStyle() and setIconSize(). When used inside a
-    QToolBar in a QMainWindow, the button automatically adjusts to
-    QMainWindow's settings (see QMainWindow::setToolButtonStyle() and
-    QMainWindow::setIconSize()). Instead of an icon, a tool button can
-    also display an arrow symbol, specified with
-    \l{QToolButton::arrowType} {arrowType}.
-
-    A tool button can offer additional choices in a popup menu. The
-    popup menu can be set using setMenu(). Use setPopupMode() to
-    configure the different modes available for tool buttons with a
-    menu set. The default mode is DelayedPopupMode which is sometimes
-    used with the "Back" button in a web browser.  After pressing and
-    holding the button down for a while, a menu pops up showing a list
-    of possible pages to jump to. The default delay is 600 ms; you can
-    adjust it with setPopupDelay().
-
-    \table 100%
-    \row \o \inlineimage assistant-toolbar.png Qt Assistant's toolbar with tool buttons
-    \row \o Qt Assistant's toolbar contains tool buttons that are associated
-         with actions used in other parts of the main window.
-    \endtable
-
-    \sa QPushButton, QToolBar, QMainWindow, QAction,
-        {fowler}{GUI Design Handbook: Push Button}
-*/
-
-/*!
-    \fn void QToolButton::triggered(QAction *action)
-
-    This signal is emitted when the given \a action is triggered.
-
-    The action may also be associated with other parts of the user interface,
-    such as menu items and keyboard shortcuts. Sharing actions in this
-    way helps make the user interface more consistent and is often less work
-    to implement.
-*/
-
-/*!
-    Constructs an empty tool button with parent \a
-    parent.
-*/
 QToolButton::QToolButton(QWidget *parent)
    : QAbstractButton(*new QToolButtonPrivate, parent)
 {
@@ -182,7 +105,6 @@ void QToolButtonPrivate::init()
 {
    Q_Q(QToolButton);
 
-   delay = q->style()->styleHint(QStyle::SH_ToolButton_PopupDelay, 0, q);
    defaultAction = 0;
 
 #ifndef QT_NO_TOOLBAR
@@ -191,6 +113,7 @@ void QToolButtonPrivate::init()
    } else
 #endif
       autoRaise = false;
+
    arrowType = Qt::NoArrow;
    menuButtonDown = false;
    popupMode = QToolButton::DelayedPopup;
@@ -201,23 +124,18 @@ void QToolButtonPrivate::init()
 
    q->setFocusPolicy(Qt::TabFocus);
    q->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed,
-                                QSizePolicy::ToolButton));
+         QSizePolicy::ToolButton));
 
 #ifndef QT_NO_MENU
    QObject::connect(q, SIGNAL(pressed()), q, SLOT(_q_buttonPressed()));
+   QObject::connect(q, SIGNAL(released()), q, SLOT(_q_buttonReleased()));
 #endif
 
    setLayoutItemMargins(QStyle::SE_ToolButtonLayoutItem);
-
+   delay = q->style()->styleHint(QStyle::SH_ToolButton_PopupDelay, 0, q);
 }
 
-/*!
-    Initialize \a option with the values from this QToolButton. This method
-    is useful for subclasses when they need a QStyleOptionToolButton, but don't want
-    to fill in all the information themselves.
 
-    \sa QStyleOption::initFrom()
-*/
 void QToolButton::initStyleOption(QStyleOptionToolButton *option) const
 {
    if (!option) {
@@ -340,11 +258,6 @@ QSize QToolButton::sizeHint() const
       QSize icon = opt.iconSize;
       w = icon.width();
       h = icon.height();
-#ifdef Q_OS_MAC
-      extern CGFloat qt_mac_get_scalefactor();
-      w /= qt_mac_get_scalefactor();
-      h /= qt_mac_get_scalefactor();
-#endif
    }
 
    if (opt.toolButtonStyle != Qt::ToolButtonIconOnly) {
@@ -372,7 +285,7 @@ QSize QToolButton::sizeHint() const
    }
 
    d->sizeHint = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(w, h), this).
-                 expandedTo(QApplication::globalStrut());
+      expandedTo(QApplication::globalStrut());
    return d->sizeHint;
 }
 
@@ -384,41 +297,6 @@ QSize QToolButton::minimumSizeHint() const
    return sizeHint();
 }
 
-/*!
-    \enum QToolButton::TextPosition
-    \compat
-
-    This enum describes the position of the tool button's text label in
-    relation to the tool button's icon.
-
-    \value BesideIcon The text appears beside the icon.
-    \value BelowIcon The text appears below the icon.
-    \omitvalue Right
-    \omitvalue Under
-*/
-
-/*!
-    \property QToolButton::toolButtonStyle
-    \brief whether the tool button displays an icon only, text only,
-    or text beside/below the icon.
-
-    The default is Qt::ToolButtonIconOnly.
-
-    To have the style of toolbuttons follow the system settings (as available
-    in GNOME and KDE desktop environments), set this property to Qt::ToolButtonFollowStyle.
-
-    QToolButton automatically connects this slot to the relevant
-    signal in the QMainWindow in which is resides.
-*/
-
-/*!
-    \property QToolButton::arrowType
-    \brief whether the button displays an arrow instead of a normal icon
-
-    This displays an arrow as the icon for the QToolButton.
-
-    By default, this property is set to Qt::NoArrow.
-*/
 
 Qt::ToolButtonStyle QToolButton::toolButtonStyle() const
 {
@@ -463,11 +341,7 @@ void QToolButton::setArrowType(Qt::ArrowType type)
    }
 }
 
-/*!
-    \fn void QToolButton::paintEvent(QPaintEvent *event)
 
-    Paints the button in response to the paint \a event.
-*/
 void QToolButton::paintEvent(QPaintEvent *)
 {
    QStylePainter p(this);
@@ -606,9 +480,9 @@ void QToolButton::changeEvent(QEvent *e)
       }
    } else if (e->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-              || e->type() == QEvent::MacSizeChange
+      || e->type() == QEvent::MacSizeChange
 #endif
-             ) {
+   ) {
       d->delay = style()->styleHint(QStyle::SH_ToolButton_PopupDelay, 0, this);
       d->setLayoutItemMargins(QStyle::SE_ToolButtonLayoutItem);
    }
@@ -627,7 +501,7 @@ void QToolButton::mousePressEvent(QMouseEvent *e)
    initStyleOption(&opt);
    if (e->button() == Qt::LeftButton && (d->popupMode == MenuButtonPopup)) {
       QRect popupr = style()->subControlRect(QStyle::CC_ToolButton, &opt,
-                                             QStyle::SC_ToolButtonMenu, this);
+            QStyle::SC_ToolButtonMenu, this);
       if (popupr.isValid() && popupr.contains(e->pos())) {
          d->buttonPressed = QToolButtonPrivate::MenuButtonPressed;
          showMenu();
@@ -675,6 +549,9 @@ void QToolButton::setMenu(QMenu *menu)
 {
    Q_D(QToolButton);
 
+   if (d->menuAction == (menu ? menu->menuAction() : 0)) {
+      return;
+   }
    if (d->menuAction) {
       removeAction(d->menuAction);
    }
@@ -685,14 +562,12 @@ void QToolButton::setMenu(QMenu *menu)
    } else {
       d->menuAction = 0;
    }
+   d->sizeHint = QSize();
+   updateGeometry();
    update();
 }
 
-/*!
-    Returns the associated menu, or 0 if no menu has been defined.
 
-    \sa setMenu()
-*/
 QMenu *QToolButton::menu() const
 {
    Q_D(const QToolButton);
@@ -728,16 +603,25 @@ void QToolButton::showMenu()
 void QToolButtonPrivate::_q_buttonPressed()
 {
    Q_Q(QToolButton);
+
    if (!hasMenu()) {
       return;   // no menu to show
    }
+
    if (popupMode == QToolButton::MenuButtonPopup) {
       return;
-   } else if (delay > 0 && !popupTimer.isActive() && popupMode == QToolButton::DelayedPopup) {
+
+   } else if (delay > 0 && popupMode == QToolButton::DelayedPopup) {
       popupTimer.start(delay, q);
+
    } else if (delay == 0 || popupMode == QToolButton::InstantPopup) {
       q->showMenu();
    }
+}
+
+void QToolButtonPrivate::_q_buttonReleased()
+{
+   popupTimer.stop();
 }
 
 void QToolButtonPrivate::popupTimerDone()
@@ -776,21 +660,10 @@ void QToolButtonPrivate::popupTimerDone()
 #endif
 
    QPoint p;
-   QRect screen = QApplication::desktop()->availableGeometry(q);
+   const QRect rect = q->rect(); // Find screen via point in case of QGraphicsProxyWidget.
 
-   //
-   QSize sh;
-
-   if ( ((QToolButton *)(QMenu *)actualMenu)->receivers("aboutToShow()") ) {
-      sh = QSize();
-
-   }  else {
-      sh = actualMenu->sizeHint();
-
-   }
-
-   //
-   QRect rect = q->rect();
+   QRect screen = QApplication::desktop()->availableGeometry(q->mapToGlobal(rect.center()));
+   QSize sh = ((QToolButton *)(QMenu *)actualMenu)->receivers(SLOT(aboutToShow())) ? QSize() : actualMenu->sizeHint();
 
    if (horizontal) {
       if (q->isRightToLeft()) {
@@ -825,10 +698,12 @@ void QToolButtonPrivate::popupTimerDone()
    }
    p.rx() = qMax(screen.left(), qMin(p.x(), screen.right() - sh.width()));
    p.ry() += 1;
+
    QPointer<QToolButton> that = q;
    actualMenu->setNoReplayFor(q);
 
-   if (!mustDeleteActualMenu) { //only if action are not in this widget
+   if (! mustDeleteActualMenu) {
+      // only if action are not in this widget
       QObject::connect(actualMenu, SIGNAL(triggered(QAction *)), q, SLOT(_q_menuTriggered(QAction *)));
    }
 
@@ -838,16 +713,15 @@ void QToolButtonPrivate::popupTimerDone()
    actionsCopy = q->actions(); //(the list of action may be modified in slots)
    actualMenu->exec(p);
 
+   if (!that) {
+      return;
+   }
    QObject::disconnect(actualMenu, SIGNAL(aboutToHide()), q, SLOT(_q_updateButtonDown()));
 
    if (mustDeleteActualMenu) {
       delete actualMenu;
    } else {
       QObject::disconnect(actualMenu, SIGNAL(triggered(QAction *)), q, SLOT(_q_menuTriggered(QAction *)));
-   }
-
-   if (!that) {
-      return;
    }
 
    actionsCopy.clear();
@@ -878,35 +752,7 @@ void QToolButtonPrivate::_q_menuTriggered(QAction *action)
 #endif // QT_NO_MENU
 
 #ifndef QT_NO_MENU
-/*! \enum QToolButton::ToolButtonPopupMode
 
-    Describes how a menu should be popped up for tool buttons that has
-    a menu set or contains a list of actions.
-
-    \value DelayedPopup After pressing and holding the tool button
-    down for a certain amount of time (the timeout is style dependant,
-    see QStyle::SH_ToolButton_PopupDelay), the menu is displayed.  A
-    typical application example is the "back" button in some web
-    browsers's tool bars. If the user clicks it, the browser simply
-    browses back to the previous page.  If the user presses and holds
-    the button down for a while, the tool button shows a menu
-    containing the current history list
-
-    \value MenuButtonPopup In this mode the tool button displays a
-    special arrow to indicate that a menu is present. The menu is
-    displayed when the arrow part of the button is pressed.
-
-    \value InstantPopup The menu is displayed, without delay, when
-    the tool button is pressed. In this mode, the button's own action
-    is not triggered.
-*/
-
-/*!
-    \property QToolButton::popupMode
-    \brief describes the way that popup menus are used with tool buttons
-
-    By default, this property is set to \l DelayedPopup.
-*/
 
 void QToolButton::setPopupMode(ToolButtonPopupMode mode)
 {
@@ -960,42 +806,51 @@ void QToolButton::setDefaultAction(QAction *action)
    if (!action) {
       return;
    }
+
    if (!actions().contains(action)) {
       addAction(action);
    }
-   setText(action->iconText());
+
+   QString buttonText = action->iconText();
+
+   // If iconText() is generated from text(), we need to escape any '&'s so they
+   // don't turn into shortcuts
+   if (QActionPrivate::get(action)->iconText.isEmpty()) {
+      buttonText.replace(QLatin1String("&"), QLatin1String("&&"));
+   }
+
+   setText(buttonText);
    setIcon(action->icon());
+
 #ifndef QT_NO_TOOLTIP
    setToolTip(action->toolTip());
 #endif
+
 #ifndef QT_NO_STATUSTIP
    setStatusTip(action->statusTip());
 #endif
+
 #ifndef QT_NO_WHATSTHIS
    setWhatsThis(action->whatsThis());
 #endif
+
 #ifndef QT_NO_MENU
    if (action->menu() && !hadMenu) {
-      // new 'default' popup mode defined introduced by tool bar. We
-      // should have changed QToolButton's default instead. Do that
-      // in 4.2.
+      // 'default' popup mode defined introduced by tool bar.
+      // should have changed QToolButton's default instead.
       setPopupMode(QToolButton::MenuButtonPopup);
    }
 #endif
+
    setCheckable(action->isCheckable());
    setChecked(action->isChecked());
    setEnabled(action->isEnabled());
+
    if (action->d_func()->fontSet) {
       setFont(action->font());
    }
 }
 
-
-/*!
-  Returns the default action.
-
-  \sa setDefaultAction()
- */
 QAction *QToolButton::defaultAction() const
 {
    Q_D(const QToolButton);
@@ -1034,20 +889,17 @@ bool QToolButton::event(QEvent *event)
    return QAbstractButton::event(event);
 }
 
-/*! \internal
- */
-QToolButton::QToolButton(QToolButtonPrivate &dd, QWidget *parent)
-   : QAbstractButton(dd, parent)
-{
-   Q_D(QToolButton);
-   d->init();
-}
-
 #ifndef QT_NO_MENU
 void QToolButton::_q_buttonPressed()
 {
    Q_D(QToolButton);
    d->_q_buttonPressed();
+}
+
+void QToolButton::_q_buttonReleased()
+{
+   Q_D(QToolButton);
+   d->_q_buttonReleased();
 }
 
 void QToolButton::_q_updateButtonDown()
@@ -1068,7 +920,5 @@ void QToolButton::_q_actionTriggered()
    Q_D(QToolButton);
    d->_q_actionTriggered();
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -23,9 +23,9 @@
 #ifndef QToolBarExtension_P_H
 #define QToolBarExtension_P_H
 
-#include <QtGui/qtoolbutton.h>
+#include <qtoolbutton.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_TOOLBUTTON
 
@@ -46,6 +46,6 @@ class QToolBarExtension : public QToolButton
 
 #endif // QT_NO_TOOLBUTTON
 
-QT_END_NAMESPACE
+
 
 #endif // QDYNAMICTOOLBAREXTENSION_P_H

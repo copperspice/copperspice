@@ -31,8 +31,6 @@
 
 #ifndef QT_NO_DOCKWIDGET
 
-QT_BEGIN_NAMESPACE
-
 class QLayoutItem;
 class QWidget;
 class QLayoutItem;
@@ -98,7 +96,7 @@ class QDockAreaLayoutInfo
  public:
    QDockAreaLayoutInfo();
    QDockAreaLayoutInfo(const int *_sep, QInternal::DockPosition _dockPos, Qt::Orientation _o,
-                       int tbhape, QMainWindow *window);
+      int tbhape, QMainWindow *window);
 
    QSize minimumSize() const;
    QSize maximumSize() const;
@@ -180,12 +178,15 @@ class QDockAreaLayoutInfo
    QTabBar *tabBar;
    int tabBarShape;
 
+   void reparentWidgets(QWidget *p);
    bool updateTabBar() const;
    void setTabBarShape(int shape);
    QSize tabBarMinimumSize() const;
    QSize tabBarSizeHint() const;
 
    QSet<QTabBar *> usedTabBars() const;
+   int tabIndexToListIndex(int) const;
+   void moveTab(int from, int to);
 #endif
 };
 
@@ -193,6 +194,8 @@ class QDockAreaLayout
 {
  public:
    enum { EmptyDropAreaSize = 80 }; // when a dock area is empty, how "wide" is it?
+
+   enum { DockWidgetStateMarker = 0xfd, FloatingDockWidgetTabMarker = 0xf9 };
 
    Qt::DockWidgetArea corners[4]; // use a Qt::Corner for indexing
    QRect rect;
@@ -211,7 +214,8 @@ class QDockAreaLayout
 
    bool isValid() const;
 
-   enum { DockWidgetStateMarker = 0xfd };
+   static QRect constrainedRect(QRect rect, QWidget *widget);
+
    void saveState(QDataStream &stream) const;
    bool restoreState(QDataStream &stream, const QList<QDockWidget *> &widgets, bool testing = false);
 
@@ -232,6 +236,7 @@ class QDockAreaLayout
    QLayoutItem *plug(const QList<int> &path);
    QLayoutItem *unplug(const QList<int> &path);
    void remove(const QList<int> &path);
+   void removePlaceHolder(const QString &name);
 
    void fitLayout();
 
@@ -243,13 +248,14 @@ class QDockAreaLayout
    void addDockWidget(QInternal::DockPosition pos, QDockWidget *dockWidget, Qt::Orientation orientation);
    bool restoreDockWidget(QDockWidget *dockWidget);
    void splitDockWidget(QDockWidget *after, QDockWidget *dockWidget,
-                        Qt::Orientation orientation);
+      Qt::Orientation orientation);
    void tabifyDockWidget(QDockWidget *first, QDockWidget *second);
+   void resizeDocks(const QList<QDockWidget *> &docks, const QList<int> &sizes, Qt::Orientation o);
 
    void apply(bool animate);
 
    void paintSeparators(QPainter *p, QWidget *widget, const QRegion &clip,
-                        const QPoint &mouse) const;
+      const QPoint &mouse) const;
    QRegion separatorRegion() const;
    int separatorMove(const QList<int> &separator, const QPoint &origin, const QPoint &dest);
 
@@ -275,8 +281,6 @@ class QDockAreaLayout
 
    void styleChangedEvent();
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_QDOCKWIDGET
 

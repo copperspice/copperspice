@@ -27,8 +27,6 @@
 #include <QSize>
 #include <QRect>
 
-QT_BEGIN_NAMESPACE
-
 static inline int pick(Qt::Orientation o, const QPoint &pos)
 {
    return o == Qt::Horizontal ? pos.x() : pos.y();
@@ -225,11 +223,9 @@ class QToolBarAreaLayout
    QLayoutItem *unplug(const QList<int> &path, QToolBarAreaLayout *other);
 
    void saveState(QDataStream &stream) const;
-   bool restoreState(QDataStream &stream, const QList<QToolBar *> &toolBars, uchar tmarker, bool pre43,
-                     bool testing = false);
+   bool restoreState(QDataStream &stream, const QList<QToolBar *> &toolBars, uchar tmarker, bool testing = false);
    bool isEmpty() const;
 };
 
-QT_END_NAMESPACE
 #endif // QT_NO_TOOLBAR
 #endif // QTOOLBARAREALAYOUT_P_H

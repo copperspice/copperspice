@@ -27,13 +27,11 @@
 
 #include <qlocale_p.h>
 #include <limits.h>
-#include <math.h>
-
+#include <cmath>
 
 #ifndef LLONG_MAX
 #   define LLONG_MAX Q_INT64_C(0x7fffffffffffffff)
 #endif
-
 
 class QValidatorPrivate
 {
@@ -109,7 +107,7 @@ static int numDigits(qint64 n)
       return 1;
    }
 
-   return (int)log10(double(n)) + 1;
+   return (int)std::log10(double(n)) + 1;
 }
 
 static qint64 pow10(int exp)
@@ -128,7 +126,7 @@ QValidator::State QIntValidator::validate(QString &input, int &) const
    QByteArray buff;
 
    if (! locale().d->m_data->validateChars(input, QLocaleData::IntegerMode, &buff, -1,
-                   locale().numberOptions() & QLocale::RejectGroupSeparator)) {
+         locale().numberOptions() & QLocale::RejectGroupSeparator)) {
       return Invalid;
    }
 
@@ -177,7 +175,7 @@ void QIntValidator::fixup(QString &input) const
    QByteArray buff;
 
    if (! locale().d->m_data->validateChars(input, QLocaleData::IntegerMode, &buff, -1,
-                   locale().numberOptions() & QLocale::RejectGroupSeparator)) {
+         locale().numberOptions() & QLocale::RejectGroupSeparator)) {
       return;
    }
 
@@ -231,8 +229,8 @@ class QDoubleValidatorPrivate : public QValidatorPrivate
  public:
    QDoubleValidatorPrivate()
       : QValidatorPrivate()
-      , notation(QDoubleValidator::ScientificNotation) {
-   }
+      , notation(QDoubleValidator::ScientificNotation)
+   { }
 
    QDoubleValidator::Notation notation;
 
@@ -240,7 +238,7 @@ class QDoubleValidatorPrivate : public QValidatorPrivate
 };
 
 QDoubleValidator::QDoubleValidator(QObject *parent)
-   : QValidator(*new QDoubleValidatorPrivate , parent)
+   : QValidator(*new QDoubleValidatorPrivate, parent)
 {
    b   = -HUGE_VAL;
    t   = HUGE_VAL;
@@ -248,7 +246,7 @@ QDoubleValidator::QDoubleValidator(QObject *parent)
 }
 
 QDoubleValidator::QDoubleValidator(double bottom, double top, int decimals, QObject *parent)
-   : QValidator(*new QDoubleValidatorPrivate , parent)
+   : QValidator(*new QDoubleValidatorPrivate, parent)
 {
    b   = bottom;
    t   = top;
@@ -279,15 +277,15 @@ QValidator::State QDoubleValidator::validate(QString &input, int &) const
 }
 
 QValidator::State QDoubleValidatorPrivate::validateWithLocale(QString &input, QLocaleData::NumberMode numMode,
-                  const QLocale &locale) const
+   const QLocale &locale) const
 {
    Q_Q(const QDoubleValidator);
 
    QByteArray buff;
 
    if (! locale.d->m_data->validateChars(input, numMode, &buff, q->dec,
-                   locale.numberOptions() & QLocale::RejectGroupSeparator)) {
-     return QValidator::Invalid;
+         locale.numberOptions() & QLocale::RejectGroupSeparator)) {
+      return QValidator::Invalid;
    }
 
    if (buff.isEmpty()) {
@@ -353,6 +351,7 @@ void QDoubleValidator::setRange(double minimum, double maximum, int decimals)
       rangeChanged = true;
       emit decimalsChanged(dec);
    }
+
    if (rangeChanged) {
       emit changed();
    }
@@ -435,7 +434,7 @@ const QRegularExpression &QRegularExpressionValidator::regularExpression() const
 void QRegularExpressionValidator::setRegularExpression(const QRegularExpression &regExp)
 {
    if (m_regexp.pattern() != regExp.pattern() ||
-                  (regExp.patternOptions() | QPatternOption::ExactMatchOption) != m_regexp.patternOptions()  ) {
+      (regExp.patternOptions() | QPatternOption::ExactMatchOption) != m_regexp.patternOptions()  ) {
 
       m_regexp = regExp;
 

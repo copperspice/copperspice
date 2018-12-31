@@ -23,9 +23,9 @@
 #ifndef QFOCUSFRAME_H
 #define QFOCUSFRAME_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QFocusFramePrivate;
 class QStyleOption;
@@ -53,6 +53,6 @@ class Q_GUI_EXPORT QFocusFrame : public QWidget
    Q_DISABLE_COPY(QFocusFrame)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QFOCUSFRAME_H

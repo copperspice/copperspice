@@ -25,12 +25,10 @@
 
 #include <QtGui/qstyleoption.h>
 #include <qwidget_p.h>
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qdockwidget.h>
+#include <qboxlayout.h>
+#include <qdockwidget.h>
 
 #ifndef QT_NO_DOCKWIDGET
-
-QT_BEGIN_NAMESPACE
 
 class QGridLayout;
 class QWidgetResizeHandler;
@@ -55,10 +53,9 @@ class QDockWidgetPrivate : public QWidgetPrivate
  public:
    inline QDockWidgetPrivate()
       : QWidgetPrivate(), state(0),
-        features(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable 
-                 | QDockWidget::DockWidgetFloatable),
-        allowedAreas(Qt::AllDockWidgetAreas) {
-   }
+        features(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable),
+        allowedAreas(Qt::AllDockWidgetAreas),  resizer(0)
+   { }
 
    void init();
    void _q_toggleView(bool);
@@ -69,8 +66,6 @@ class QDockWidgetPrivate : public QWidgetPrivate
 
    QDockWidget::DockWidgetFeatures features;
    Qt::DockWidgetAreas allowedAreas;
-
-   QWidgetResizeHandler *resizer;
 
 #ifndef QT_NO_ACTION
    QAction *toggleViewAction;
@@ -87,14 +82,17 @@ class QDockWidgetPrivate : public QWidgetPrivate
    void setWindowState(bool floating, bool unplug = false, const QRect &rect = QRect());
    void nonClientAreaMouseEvent(QMouseEvent *event);
    void initDrag(const QPoint &pos, bool nca);
-   void startDrag();
+   void startDrag(bool group = true);
    void endDrag(bool abort = false);
    void moveEvent(QMoveEvent *event);
 
    void unplug(const QRect &rect);
    void plug(const QRect &rect);
+   void setResizerActive(bool active);
 
    bool isAnimating() const;
+ private:
+   QWidgetResizeHandler *resizer;
 };
 
 class Q_GUI_EXPORT QDockWidgetLayout : public QLayout
@@ -130,6 +128,9 @@ class Q_GUI_EXPORT QDockWidgetLayout : public QLayout
    int minimumTitleWidth() const;
    int titleHeight() const;
    void updateMaxSize();
+
+   static bool wmSupportsNativeWindowDeco();
+
    bool nativeWindowDeco() const;
    bool nativeWindowDeco(bool floating) const;
 
@@ -175,8 +176,6 @@ inline QDockWidgetLayout *QDockWidgetItem::dockWidgetLayout() const
    }
    return 0;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_DOCKWIDGET
 

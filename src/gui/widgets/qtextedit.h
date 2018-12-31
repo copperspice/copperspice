@@ -31,13 +31,12 @@
 
 #ifndef QT_NO_TEXTEDIT
 
-QT_BEGIN_NAMESPACE
-
 class QStyleSheet;
 class QTextDocument;
 class QMenu;
 class QTextEditPrivate;
 class QMimeData;
+class QPagedPaintDevice;
 
 class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 {
@@ -98,6 +97,11 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    GUI_CS_PROPERTY_READ(textInteractionFlags, textInteractionFlags)
    GUI_CS_PROPERTY_WRITE(textInteractionFlags, setTextInteractionFlags)
 
+   // BROOM - fix this ( new properties )
+   // Q_PROPERTY(QTextDocument *document READ document WRITE setDocument DESIGNABLE false)
+   // Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
+
+
  public:
    enum LineWrapMode {
       NoWrap,
@@ -120,6 +124,8 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 
    void setDocument(QTextDocument *document);
    QTextDocument *document() const;
+   void setPlaceholderText(const QString &placeholderText);
+   QString placeholderText() const;
 
    void setTextCursor(const QTextCursor &cursor);
    QTextCursor textCursor() const;
@@ -166,12 +172,13 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    QTextOption::WrapMode wordWrapMode() const;
    void setWordWrapMode(QTextOption::WrapMode policy);
 
-   bool find(const QString &exp, QTextDocument::FindFlags options = 0);
+   bool find(const QString &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags());
+   bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags());
 
-   inline QString toPlainText() const;
+   QString toPlainText() const;
 
 #ifndef QT_NO_TEXTHTMLPARSER
-   inline QString toHtml() const;
+   QString toHtml() const;
 #endif
 
    void ensureCursorVisible();
@@ -211,26 +218,35 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    void moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
    bool canPaste() const;
 
-#ifndef QT_NO_PRINTER
-   void print(QPrinter *printer) const;
-#endif
+   void print(QPagedPaintDevice *printer) const;
+
+   QVariant inputMethodQuery(Qt::InputMethodQuery property) const override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
 
    GUI_CS_SLOT_1(Public, void setFontPointSize(qreal s))
    GUI_CS_SLOT_2(setFontPointSize)
+
    GUI_CS_SLOT_1(Public, void setFontFamily(const QString &fontFamily))
    GUI_CS_SLOT_2(setFontFamily)
+
    GUI_CS_SLOT_1(Public, void setFontWeight(int w))
    GUI_CS_SLOT_2(setFontWeight)
+
    GUI_CS_SLOT_1(Public, void setFontUnderline(bool b))
    GUI_CS_SLOT_2(setFontUnderline)
+
    GUI_CS_SLOT_1(Public, void setFontItalic(bool b))
    GUI_CS_SLOT_2(setFontItalic)
+
    GUI_CS_SLOT_1(Public, void setTextColor(const QColor &c))
    GUI_CS_SLOT_2(setTextColor)
+
    GUI_CS_SLOT_1(Public, void setTextBackgroundColor(const QColor &c))
    GUI_CS_SLOT_2(setTextBackgroundColor)
+
    GUI_CS_SLOT_1(Public, void setCurrentFont(const QFont &f))
    GUI_CS_SLOT_2(setCurrentFont)
+
    GUI_CS_SLOT_1(Public, void setAlignment(Qt::Alignment a))
    GUI_CS_SLOT_2(setAlignment)
 
@@ -251,19 +267,23 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 #ifndef QT_NO_CLIPBOARD
    GUI_CS_SLOT_1(Public, void cut())
    GUI_CS_SLOT_2(cut)
+
    GUI_CS_SLOT_1(Public, void copy())
    GUI_CS_SLOT_2(copy)
+
    GUI_CS_SLOT_1(Public, void paste())
    GUI_CS_SLOT_2(paste)
 #endif
 
    GUI_CS_SLOT_1(Public, void undo())
    GUI_CS_SLOT_2(undo)
+
    GUI_CS_SLOT_1(Public, void redo())
    GUI_CS_SLOT_2(redo)
 
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
+
    GUI_CS_SLOT_1(Public, void selectAll())
    GUI_CS_SLOT_2(selectAll)
 
@@ -278,6 +298,7 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 
    GUI_CS_SLOT_1(Public, void zoomIn(int range = 1))
    GUI_CS_SLOT_2(zoomIn)
+
    GUI_CS_SLOT_1(Public, void zoomOut(int range = 1))
    GUI_CS_SLOT_2(zoomOut)
 
@@ -334,12 +355,12 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    virtual void insertFromMimeData(const QMimeData *source);
 
    void inputMethodEvent(QInputMethodEvent *) override;
-   QVariant inputMethodQuery(Qt::InputMethodQuery property) const override;
-
    QTextEdit(QTextEditPrivate &dd, QWidget *parent);
 
    virtual void scrollContentsBy(int dx, int dy) override;
+   virtual void doSetTextCursor(const QTextCursor &cursor);
 
+   void zoomInF(float range);
  private:
    Q_DISABLE_COPY(QTextEdit)
 
@@ -354,6 +375,9 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 
    GUI_CS_SLOT_1(Private, void _q_ensureVisible(const QRectF &un_named_arg1))
    GUI_CS_SLOT_2(_q_ensureVisible)
+
+   GUI_CS_SLOT_1(Private, void _q_cursorPositionChanged())
+   GUI_CS_SLOT_2(_q_cursorPositionChanged)
 
    friend class QTextEditControl;
    friend class QTextDocument;
@@ -381,20 +405,6 @@ void QTextEdit::setUndoRedoEnabled(bool enable)
 {
    document()->setUndoRedoEnabled(enable);
 }
-
-QString QTextEdit::toPlainText() const
-{
-   return document()->toPlainText();
-}
-
-#ifndef QT_NO_TEXTHTMLPARSER
-QString QTextEdit::toHtml() const
-{
-   return document()->toHtml();
-}
-#endif
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTEDIT
 

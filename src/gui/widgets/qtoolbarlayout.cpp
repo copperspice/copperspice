@@ -20,6 +20,7 @@
 *
 ***********************************************************************/
 
+#include <qapplication.h>
 #include <qaction.h>
 #include <qwidgetaction.h>
 #include <qtoolbar.h>
@@ -29,6 +30,10 @@
 #include <qdebug.h>
 #include <qmath.h>
 
+#ifdef Q_OS_OSX
+#include <qpa/qplatformnativeinterface.h>
+#endif
+
 #include <qmainwindowlayout_p.h>
 #include <qtoolbarextension_p.h>
 #include <qtoolbarlayout_p.h>
@@ -36,14 +41,10 @@
 
 #ifndef QT_NO_TOOLBAR
 
-QT_BEGIN_NAMESPACE
 
 // qmainwindow.cpp
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 
-/******************************************************************************
-** QToolBarItem
-*/
 
 QToolBarItem::QToolBarItem(QWidget *widget)
    : QWidgetItem(widget), action(0), customWidget(false)
@@ -54,10 +55,6 @@ bool QToolBarItem::isEmpty() const
 {
    return action == 0 || !action->isVisible();
 }
-
-/******************************************************************************
-** QToolBarLayout
-*/
 
 QToolBarLayout::QToolBarLayout(QWidget *parent)
    : QLayout(parent), expanded(false), animating(false), dirty(true),
@@ -99,7 +96,7 @@ void QToolBarLayout::updateMarginAndSpacing()
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
    setMargin(style->pixelMetric(QStyle::PM_ToolBarItemMargin, &opt, tb)
-             + style->pixelMetric(QStyle::PM_ToolBarFrameWidth, &opt, tb));
+      + style->pixelMetric(QStyle::PM_ToolBarFrameWidth, &opt, tb));
    setSpacing(style->pixelMetric(QStyle::PM_ToolBarItemSpacing, &opt, tb));
 }
 
@@ -115,14 +112,14 @@ void QToolBarLayout::setUsePopupMenu(bool set)
    }
    if (!set) {
       QObject::connect(extension, SIGNAL(clicked(bool)),
-                       this, SLOT(setExpanded(bool)), Qt::UniqueConnection);
+         this, SLOT(setExpanded(bool)), Qt::UniqueConnection);
       extension->setPopupMode(QToolButton::DelayedPopup);
       extension->setMenu(0);
       delete popupMenu;
       popupMenu = 0;
    } else {
       QObject::disconnect(extension, SIGNAL(clicked(bool)),
-                          this, SLOT(setExpanded(bool)));
+         this, SLOT(setExpanded(bool)));
       extension->setPopupMode(QToolButton::InstantPopup);
       if (!popupMenu) {
          popupMenu = new QMenu(extension);
@@ -141,7 +138,7 @@ void QToolBarLayout::checkUsePopupMenu()
 
 void QToolBarLayout::addItem(QLayoutItem *)
 {
-   qWarning() << "QToolBarLayout::addItem(): please use addAction() instead";
+   qWarning("QToolBarLayout::addItem(), use addAction() instead");
    return;
 }
 
@@ -257,7 +254,7 @@ void QToolBarLayout::updateGeomArray() const
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
    const int handleExtent = movable()
-                            ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+      ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
    const int margin = this->margin();
    const int spacing = this->spacing();
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
@@ -293,7 +290,8 @@ void QToolBarLayout::updateGeomArray() const
       }
 
       if (!empty) {
-         if (count == 0) { // the minimum size only displays one widget
+         if (count == 0) {
+            // the minimum size only displays one widget
             rpick(o, that->minSize) += pick(o, min);
          }
          int s = perp(o, minSize);
@@ -330,26 +328,46 @@ void QToolBarLayout::updateGeomArray() const
    rpick(o, that->hint) += handleExtent;
    that->hint += QSize(2 * margin, 2 * margin);
    that->dirty = false;
-#ifdef Q_OS_MAC
-   if (QMainWindow *mw = qobject_cast<QMainWindow *>(parentWidget()->parentWidget())) {
-      if (mw->unifiedTitleAndToolBarOnMac()
-            && mw->toolBarArea(static_cast<QToolBar *>(parentWidget())) == Qt::TopToolBarArea) {
-         if (expandFlag) {
-            tb->setMaximumSize(0xFFFFFF, 0xFFFFFF);
-         } else {
-            tb->setMaximumSize(hint);
-         }
-      }
-   }
-#endif
-
-   that->dirty = false;
 }
 
 static bool defaultWidgetAction(QToolBarItem *item)
 {
    QWidgetAction *a = qobject_cast<QWidgetAction *>(item->action);
    return a != 0 && a->defaultWidget() == item->widget();
+}
+
+void QToolBarLayout::updateMacBorderMetrics()
+{
+#ifdef Q_OS_OSX
+   QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
+   if (!tb) {
+      return;
+   }
+
+   QRect rect = geometry();
+
+   QMainWindow *mainWindow = qobject_cast<QMainWindow *>(tb->parentWidget());
+   if (!mainWindow || !mainWindow->isWindow() || !mainWindow->unifiedTitleAndToolBarOnMac()) {
+      return;
+   }
+
+   QPlatformNativeInterface *nativeInterface = QApplication::platformNativeInterface();
+   QPlatformNativeInterface::NativeResourceForIntegrationFunction function =
+      nativeInterface->nativeResourceFunctionForIntegration("registerContentBorderArea");
+   if (!function) {
+      return;   // Not Cocoa platform plugin.
+   }
+
+   QPoint upper = tb->mapToParent(rect.topLeft());
+   QPoint lower = tb->mapToParent(rect.bottomLeft() + QPoint(0, 1));
+
+   typedef void (*RegisterContentBorderAreaFunction)(QWindow * window, void *identifier, int upper, int lower);
+   if (mainWindow->toolBarArea(tb) == Qt::TopToolBarArea) {
+      (reinterpret_cast<RegisterContentBorderAreaFunction>(function))(tb->window()->windowHandle(), tb, upper.y(), lower.y());
+   } else {
+      (reinterpret_cast<RegisterContentBorderAreaFunction>(function))(tb->window()->windowHandle(), tb, 0, 0);
+   }
+#endif
 }
 
 void QToolBarLayout::setGeometry(const QRect &rect)
@@ -367,6 +385,7 @@ void QToolBarLayout::setGeometry(const QRect &rect)
 
    QLayout::setGeometry(rect);
 
+   updateMacBorderMetrics();
    bool ranOutOfSpace = false;
    if (!animating) {
       ranOutOfSpace = layoutActions(rect.size());
@@ -400,21 +419,12 @@ void QToolBarLayout::setGeometry(const QRect &rect)
       if (extension->isHidden()) {
          extension->show();
       }
+
    } else {
       if (!extension->isHidden()) {
          extension->hide();
       }
    }
-
-#ifdef Q_OS_MAC
-   if (QMainWindow *win = qobject_cast<QMainWindow *>(tb->parentWidget())) {
-      Qt::ToolBarArea area = win->toolBarArea(tb);
-      if (win->unifiedTitleAndToolBarOnMac() && area == Qt::TopToolBarArea) {
-         qt_mainwindow_layout(win)->fixSizeInUnifiedToolbar(tb);
-      }
-   }
-#endif
-
 }
 
 bool QToolBarLayout::layoutActions(const QSize &size)
@@ -436,7 +446,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
    const int handleExtent = movable()
-                            ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+      ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
    const int margin = this->margin();
    const int spacing = this->spacing();
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
@@ -508,8 +518,8 @@ bool QToolBarLayout::layoutActions(const QSize &size)
       }
 
       qGeomCalc(a, start, i - start + (expansiveRow ? 0 : 1), 0,
-                space - (ranOutOfSpace ? (extensionExtent + spacing) : 0),
-                spacing);
+         space - (ranOutOfSpace ? (extensionExtent + spacing) : 0),
+         spacing);
 
       for (int j = start; j < i; ++j) {
          QToolBarItem *item = items.at(j);
@@ -597,7 +607,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
    const int handleExtent = movable()
-                            ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+      ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
    const int margin = this->margin();
    const int spacing = this->spacing();
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
@@ -738,7 +748,7 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
    } else if (action->isSeparator()) {
       QToolBarSeparator *sep = new QToolBarSeparator(tb);
       connect(tb, SIGNAL(orientationChanged(Qt::Orientation)),
-              sep, SLOT(setOrientation(Qt::Orientation)));
+         sep, SLOT(setOrientation(Qt::Orientation)));
       widget = sep;
    }
 
@@ -749,9 +759,9 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
       button->setIconSize(tb->iconSize());
       button->setToolButtonStyle(tb->toolButtonStyle());
 
-      QObject::connect(tb, SIGNAL(iconSizeChanged(const QSize &)), button, SLOT(setIconSize(const QSize &)));
+      QObject::connect(tb, SIGNAL(iconSizeChanged(QSize)), button, SLOT(setIconSize(QSize)));
       QObject::connect(tb, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)), button,
-                       SLOT(setToolButtonStyle(Qt::ToolButtonStyle)));
+         SLOT(setToolButtonStyle(Qt::ToolButtonStyle)));
 
       button->setDefaultAction(action);
       QObject::connect(button, SIGNAL(triggered(QAction *)), tb, SLOT(actionTriggered(QAction *)));
@@ -770,6 +780,5 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
    return result;
 }
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_TOOLBAR

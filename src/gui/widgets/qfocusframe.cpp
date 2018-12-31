@@ -28,7 +28,6 @@
 #include <qdebug.h>
 #include <qwidget_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class QFocusFramePrivate : public QWidgetPrivate
 {
@@ -40,7 +39,7 @@ class QFocusFramePrivate : public QWidgetPrivate
 
  public:
    QFocusFramePrivate(QObject *q) {
-      widget = 0;
+      widget      = 0;
       frameParent = 0;
       CSInternalEvents::set_m_sendChildEvents(q, false);
       showFrameAboveWidget = false;
@@ -83,7 +82,7 @@ void QFocusFramePrivate::updateSize()
       pos = widget->parentWidget()->mapTo(q->parentWidget(), pos);
    }
    QRect geom(pos.x() - hmargin, pos.y() - vmargin,
-              widget->width() + (hmargin * 2), widget->height() + (vmargin * 2));
+      widget->width() + (hmargin * 2), widget->height() + (vmargin * 2));
    if (q->geometry() == geom) {
       return;
    }
@@ -113,39 +112,6 @@ void QFocusFrame::initStyleOption(QStyleOption *option) const
    option->initFrom(this);
 }
 
-/*!
-    \class QFocusFrame
-    \brief The QFocusFrame widget provides a focus frame which can be
-    outside of a widget's normal paintable area.
-
-    \ingroup basicwidgets
-
-
-    Normally an application will not need to create its own
-    QFocusFrame as QStyle will handle this detail for
-    you. A style writer can optionally use a QFocusFrame to have a
-    focus area outside of the widget's paintable geometry. In this way
-    space need not be reserved for the widget to have focus but only
-    set on a QWidget with QFocusFrame::setWidget. It is, however,
-    legal to create your own QFocusFrame on a custom widget and set
-    its geometry manually via QWidget::setGeometry however you will
-    not get auto-placement when the focused widget changes size or
-    placement.
-*/
-
-/*!
-    Constructs a QFocusFrame.
-
-    The focus frame will not monitor \a parent for updates but rather
-    can be placed manually or by using QFocusFrame::setWidget. A
-    QFocusFrame sets Qt::WA_NoChildEventsForParent attribute; as a
-    result the parent will not receive a QEvent::ChildInserted event,
-    this will make it possible to manually set the geometry of the
-    QFocusFrame inside of a QSplitter or other child event monitoring
-    widget.
-
-    \sa QFocusFrame::setWidget()
-*/
 
 QFocusFrame::QFocusFrame(QWidget *parent)
    : QWidget(*new QFocusFramePrivate(this), parent, 0)
@@ -173,8 +139,7 @@ QFocusFrame::~QFocusFrame()
   \sa QFocusFrame::widget()
 */
 
-void
-QFocusFrame::setWidget(QWidget *widget)
+void QFocusFrame::setWidget(QWidget *widget)
 {
    Q_D(QFocusFrame);
 
@@ -241,8 +206,7 @@ QFocusFrame::setWidget(QWidget *widget)
    \sa QFocusFrame::setWidget()
 */
 
-QWidget *
-QFocusFrame::widget() const
+QWidget *QFocusFrame::widget() const
 {
    Q_D(const QFocusFrame);
    return d->widget;
@@ -250,10 +214,12 @@ QFocusFrame::widget() const
 
 
 /*! \reimp */
-void
-QFocusFrame::paintEvent(QPaintEvent *)
+void QFocusFrame::paintEvent(QPaintEvent *)
 {
    Q_D(QFocusFrame);
+   if (!d->widget) {
+      return;
+   }
    QStylePainter p(this);
    QStyleOption option;
    initStyleOption(&option);
@@ -267,8 +233,7 @@ QFocusFrame::paintEvent(QPaintEvent *)
 
 
 /*! \reimp */
-bool
-QFocusFrame::eventFilter(QObject *o, QEvent *e)
+bool QFocusFrame::eventFilter(QObject *o, QEvent *e)
 {
    Q_D(QFocusFrame);
    if (o == d->widget) {
@@ -333,4 +298,3 @@ bool QFocusFrame::event(QEvent *e)
    return QWidget::event(e);
 }
 
-QT_END_NAMESPACE

@@ -20,13 +20,12 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qpropertyanimation.h>
-#include <QtGui/qwidget.h>
+#include <qpropertyanimation.h>
+#include <qwidget.h>
+#include <qstyle.h>
 #include <qmainwindowlayout_p.h>
 
 #include <qwidgetanimator_p.h>
-
-QT_BEGIN_NAMESPACE
 
 QWidgetAnimator::QWidgetAnimator(QMainWindowLayout *layout) : m_mainWindowLayout(layout)
 {
@@ -52,8 +51,6 @@ void QWidgetAnimator::abort(QWidget *w)
    m_mainWindowLayout->animationFinished(w);
 #endif
 
-#else
-   Q_UNUSED(w); //there is no animation to abort
 
 #endif //QT_NO_ANIMATION
 }
@@ -66,7 +63,7 @@ void QWidgetAnimator::animationFinished()
 }
 #endif
 
-void QWidgetAnimator::animate(QWidget *widget, const QRect & end_geometry, bool animate)
+void QWidgetAnimator::animate(QWidget *widget, const QRect &end_geometry, bool animate)
 {
    QRect r = widget->geometry();
    if (r.right() < 0 || r.bottom() < 0) {
@@ -76,40 +73,41 @@ void QWidgetAnimator::animate(QWidget *widget, const QRect & end_geometry, bool 
    animate = animate && ! r.isNull() && ! end_geometry.isNull();
 
    // might make the wigdet go away by sending it to negative space
-   QRect final_geometry = end_geometry; 
+   QRect final_geometry = end_geometry;
 
-   if (! (end_geometry.isValid() || widget->isWindow())  ) {
+   if (! (end_geometry.isValid() || widget->isWindow()) ) {
       final_geometry = QRect(QPoint(-500 - widget->width(), -500 - widget->height()), widget->size());
    }
 
 #ifndef QT_NO_ANIMATION
 
-   AnimationMap::const_iterator it = m_animation_map.constFind(widget);
+   if (widget->style()->styleHint(QStyle::SH_Widget_Animate, 0, widget)) {
+      AnimationMap::const_iterator it = m_animation_map.constFind(widget);
 
-   if (it != m_animation_map.constEnd() && (*it)->endValue().toRect() == final_geometry) {
-      return;
-   }
+      if (it != m_animation_map.constEnd() && (*it)->endValue().toRect() == final_geometry) {
+         return;
+      }
 
-   QPropertyAnimation *anim = new QPropertyAnimation(widget, "geometry", widget);
-   anim->setDuration(animate ? 200 : 0);
-   anim->setEasingCurve(QEasingCurve::InOutQuad);
-   anim->setEndValue(final_geometry);
-   m_animation_map[widget] = anim;
+      QPropertyAnimation *anim = new QPropertyAnimation(widget, "geometry", widget);
+      anim->setDuration(animate ? 200 : 0);
+      anim->setEasingCurve(QEasingCurve::InOutQuad);
+      anim->setEndValue(final_geometry);
+      m_animation_map[widget] = anim;
 
-   connect(anim, SIGNAL(finished()), this, SLOT(animationFinished()));
+      connect(anim, SIGNAL(finished()), this, SLOT(animationFinished()));
 
-   anim->start(QPropertyAnimation::DeleteWhenStopped);
+      anim->start(QPropertyAnimation::DeleteWhenStopped);
 
-#else
-   //we do it in one shot
-   widget->setGeometry(final_geometry);
+   } else
+#endif
+   {
+      //we do it in one shot
+      widget->setGeometry(final_geometry);
 
 #ifndef QT_NO_MAINWINDOW
-   m_mainWindowLayout->animationFinished(widget);
+      m_mainWindowLayout->animationFinished(widget);
 #endif
-
-#endif
-
+   }
 }
 
 bool QWidgetAnimator::animating() const
@@ -117,4 +115,4 @@ bool QWidgetAnimator::animating() const
    return ! m_animation_map.isEmpty();
 }
 
-QT_END_NAMESPACE
+

@@ -37,14 +37,13 @@
 #include <qtoolbutton.h>
 #include <qwidgetaction.h>
 #include <qtimer.h>
+
 #include <qwidgetaction_p.h>
-
-#ifdef Q_OS_MAC
-#include <qt_mac_p.h>
-#include <qt_cocoa_helpers_mac_p.h>
-#endif
-
 #include <qmainwindowlayout_p.h>
+
+#ifdef Q_OS_OSX
+#include <qplatform_nativeinterface.h>
+#endif
 
 #include <qtoolbar_p.h>
 #include <qtoolbarseparator_p.h>
@@ -53,23 +52,8 @@
 
 #define POPUP_TIMER_INTERVAL 500
 
-QT_BEGIN_NAMESPACE
-
-#ifdef Q_OS_MAC
-static void qt_mac_updateToolBarButtonHint(QWidget *parentWidget)
-{
-   if (!(parentWidget->windowFlags() & Qt::CustomizeWindowHint)) {
-      parentWidget->setWindowFlags(parentWidget->windowFlags() | Qt::MacWindowToolBarButtonHint);
-   }
-}
-#endif
-
 // qmainwindow.cpp
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
-
-/******************************************************************************
-** QToolBarPrivate
-*/
 
 void QToolBarPrivate::init()
 {
@@ -78,6 +62,7 @@ void QToolBarPrivate::init()
    q->setBackgroundRole(QPalette::Button);
    q->setAttribute(Qt::WA_Hover);
    q->setAttribute(Qt::WA_X11NetWmWindowTypeToolBar);
+   q->setProperty("_q_platform_MacUseNSWindow", QVariant(true));
 
    QStyle *style = q->style();
    int e = style->pixelMetric(QStyle::PM_ToolBarIconSize, 0, q);
@@ -85,17 +70,6 @@ void QToolBarPrivate::init()
 
    layout = new QToolBarLayout(q);
    layout->updateMarginAndSpacing();
-
-#ifdef Q_OS_MAC
-   if (q->parentWidget() && q->parentWidget()->isWindow()) {
-      // Make sure that the window has the "toolbar" button.
-      QWidget *parentWidget = q->parentWidget();
-      qt_mac_updateToolBarButtonHint(parentWidget);
-      reinterpret_cast<QToolBar *>(parentWidget)->d_func()->createWinId(); // Please let me create your winId...
-      extern OSWindowRef qt_mac_window_for(const QWidget *); // qwidget_mac.cpp
-      macWindowToolbarShow(q->parentWidget(), true);
-   }
-#endif
 
    toggleViewAction = new QAction(q);
    toggleViewAction->setCheckable(true);
@@ -143,9 +117,6 @@ void QToolBarPrivate::updateWindowFlags(bool floating, bool unplug)
 
    if (unplug) {
       flags |= Qt::X11BypassWindowManagerHint;
-#ifdef Q_OS_MAC
-      flags |= Qt::WindowStaysOnTopHint;
-#endif
    }
 
    q->setWindowFlags(flags);
@@ -192,7 +163,8 @@ void QToolBarPrivate::initDrag(const QPoint &pos)
    QMainWindowLayout *layout = qt_mainwindow_layout(win);
    Q_ASSERT(layout != 0);
 
-   if (layout->pluggingWidget != 0) { // the main window is animating a docking operation
+   if (layout->pluggingWidget != 0) {
+      // the main window is animating a docking operation
       return;
    }
 
@@ -247,10 +219,9 @@ void QToolBarPrivate::endDrag()
          if (q->isFloatable()) {
             layout->restore();
 
-#if defined(Q_WS_X11) || defined(Q_OS_MAC)
             setWindowState(true); // gets rid of the X11BypassWindowManager window flag
             // and activates the resizer
-#endif
+
             q->activateWindow();
          } else {
             layout->revert(state->widgetItem);
@@ -270,15 +241,15 @@ bool QToolBarPrivate::mousePressEvent(QMouseEvent *event)
    q->initStyleOption(&opt);
 
    if (q->style()->subElementRect(QStyle::SE_ToolBarHandle, &opt, q).contains(event->pos()) == false) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
       // When using the unified toolbar on Mac OS X the user can can click and
       // drag between toolbar contents to move the window. Make this work by
       // implementing the standard mouse-dragging code and then call
       // window->move() in mouseMoveEvent below.
       if (QMainWindow *mainWindow = qobject_cast<QMainWindow *>(q->parent())) {
          if (mainWindow->toolBarArea(q) == Qt::TopToolBarArea
-               && mainWindow->unifiedTitleAndToolBarOnMac()
-               && q->childAt(event->pos()) == 0) {
+            && mainWindow->unifiedTitleAndToolBarOnMac()
+            && q->childAt(event->pos()) == 0) {
             macWindowDragging = true;
             macWindowDragPressPosition = event->pos();
             return true;
@@ -306,7 +277,7 @@ bool QToolBarPrivate::mouseReleaseEvent(QMouseEvent *)
       endDrag();
       return true;
    } else {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
       if (!macWindowDragging) {
          return false;
       }
@@ -324,7 +295,7 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
 
    if (!state) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
       if (!macWindowDragging) {
          return false;
       }
@@ -346,19 +317,16 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
    Q_ASSERT(layout != 0);
 
    if (layout->pluggingWidget == 0
-         && (event->pos() - state->pressPos).manhattanLength() > QApplication::startDragDistance()) {
+      && (event->pos() - state->pressPos).manhattanLength() > QApplication::startDragDistance()) {
       const bool wasDragging = state->dragging;
       const bool moving = !q->isWindow() && (orientation == Qt::Vertical ?
-                                             event->x() >= 0 && event->x() < q->width() :
-                                             event->y() >= 0 && event->y() < q->height());
+            event->x() >= 0 && event->x() < q->width() :
+            event->y() >= 0 && event->y() < q->height());
 
       startDrag(moving);
       if (!moving && !wasDragging) {
-#ifdef Q_OS_WIN
-         grabMouseWhileInWindow();
-#else
+
          q->grabMouse();
-#endif
       }
    }
 
@@ -427,19 +395,6 @@ QToolBar::QToolBar(const QString &title, QWidget *parent)
 
 QToolBar::~QToolBar()
 {
-   // Remove the toolbar button if there is nothing left.
-   QMainWindow *mainwindow = qobject_cast<QMainWindow *>(parentWidget());
-
-   if (mainwindow) {
-#ifdef Q_OS_MAC
-      QMainWindowLayout *mainwin_layout = qt_mainwindow_layout(mainwindow);
-
-      if (mainwin_layout && mainwin_layout->layoutState.toolBarAreaLayout.isEmpty()
-            && mainwindow->testAttribute(Qt::WA_WState_Created)) {
-         macWindowToolbarShow(mainwindow, false);
-      }
-#endif
-   }
 }
 
 void QToolBar::setMovable(bool movable)
@@ -492,15 +447,6 @@ void QToolBar::setAllowedAreas(Qt::ToolBarAreas areas)
 Qt::ToolBarAreas QToolBar::allowedAreas() const
 {
    Q_D(const QToolBar);
-
-#ifdef Q_OS_MAC
-   if (QMainWindow *window = qobject_cast<QMainWindow *>(parentWidget())) {
-      if (window->unifiedTitleAndToolBarOnMac()) { // Don't allow drags to the top (for now).
-         return (d->allowedAreas & ~Qt::TopToolBarArea);
-      }
-   }
-#endif
-
    return d->allowedAreas;
 }
 
@@ -621,7 +567,7 @@ QAction *QToolBar::addAction(const QString &text, const QObject *receiver, const
 }
 
 QAction *QToolBar::addAction(const QIcon &icon, const QString &text,
-                  const QObject *receiver, const QString &member)
+   const QObject *receiver, const QString &member)
 {
    QAction *action = new QAction(icon, text, this);
    QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
@@ -695,7 +641,7 @@ void QToolBar::actionEvent(QActionEvent *event)
    switch (event->type()) {
       case QEvent::ActionAdded: {
          Q_ASSERT_X(widgetAction == 0 || d->layout->indexOf(widgetAction) == -1,
-                    "QToolBar", "Widgets can not be inserted multiple times");
+            "QToolBar", "Widgets can not be inserted multiple times");
 
          // reparent the action to this toolbar if it has been created
          // using the addAction(text) etc. convenience functions, to
@@ -817,12 +763,18 @@ static bool waitForPopup(QToolBar *tb, QWidget *popup)
    return false;
 }
 
-#if defined(Q_OS_MAC)
-static bool toolbarInUnifiedToolBar(QToolBar *toolbar)
+#ifdef Q_OS_OSX
+static void enableMacToolBar(QToolBar *toolbar, bool enable)
 {
-   const QMainWindow *mainWindow = qobject_cast<const QMainWindow *>(toolbar->parentWidget());
-   return mainWindow && mainWindow->unifiedTitleAndToolBarOnMac()
-          && mainWindow->toolBarArea(toolbar) == Qt::TopToolBarArea;
+   QPlatformNativeInterface *nativeInterface = QApplication::platformNativeInterface();
+   QPlatformNativeInterface::NativeResourceForIntegrationFunction function =
+      nativeInterface->nativeResourceFunctionForIntegration("setContentBorderAreaEnabled");
+   if (!function) {
+      return;   // Not Cocoa platform plugin.
+   }
+
+   typedef void (*SetContentBorderAreaEnabledFunction)(QWindow * window, void *identifier, bool enabled);
+   (reinterpret_cast<SetContentBorderAreaEnabledFunction>(function))(toolbar->window()->windowHandle(), toolbar, enable);
 }
 #endif
 
@@ -852,28 +804,14 @@ bool QToolBar::event(QEvent *event)
 
       case QEvent::Show:
          d->toggleViewAction->setChecked(event->type() == QEvent::Show);
-         emit visibilityChanged(event->type() == QEvent::Show);
-
-#if defined(Q_OS_MAC)
-         if (toolbarInUnifiedToolBar(this)) {
-            // I can static_cast because I did the qobject_cast in the if above, therefore
-            // we must have a QMainWindowLayout here.
-            QMainWindowLayout *mwLayout = qt_mainwindow_layout(qobject_cast<QMainWindow *>(parentWidget()));
-            mwLayout->fixSizeInUnifiedToolbar(this);
-            mwLayout->syncUnifiedToolbarVisibility();
-         }
+#ifdef Q_OS_OSX
+         enableMacToolBar(this, event->type() == QEvent::Show);
 #endif
-
+         emit visibilityChanged(event->type() == QEvent::Show);
          break;
 
       case QEvent::ParentChange:
          d->layout->checkUsePopupMenu();
-
-#if defined(Q_OS_MAC)
-         if (parentWidget() && parentWidget()->isWindow()) {
-            qt_mac_updateToolBarButtonHint(parentWidget());
-         }
-#endif
          break;
 
       case QEvent::MouseButtonPress: {
@@ -882,6 +820,7 @@ bool QToolBar::event(QEvent *event)
          }
          break;
       }
+
       case QEvent::MouseButtonRelease:
          if (d->mouseReleaseEvent(static_cast<QMouseEvent *>(event))) {
             return true;
@@ -898,6 +837,7 @@ bool QToolBar::event(QEvent *event)
          QHoverEvent *e = static_cast<QHoverEvent *>(event);
          QStyleOptionToolBar opt;
          initStyleOption(&opt);
+
          if (style()->subElementRect(QStyle::SE_ToolBarHandle, &opt, this).contains(e->pos())) {
             setCursor(Qt::SizeAllCursor);
          } else {
@@ -906,12 +846,13 @@ bool QToolBar::event(QEvent *event)
 #endif
          break;
       }
+
       case QEvent::MouseMove:
          if (d->mouseMoveEvent(static_cast<QMouseEvent *>(event))) {
             return true;
          }
-         break;
 
+         break;
       case QEvent::Leave:
          if (d->state != 0 && d->state->dragging) {
 
@@ -919,7 +860,7 @@ bool QToolBar::event(QEvent *event)
             // This is a workaround for loosing the mouse on Vista.
             QPoint pos = QCursor::pos();
             QMouseEvent fake(QEvent::MouseMove, mapFromGlobal(pos), pos, Qt::NoButton,
-                             QApplication::mouseButtons(), QApplication::keyboardModifiers());
+               QApplication::mouseButtons(), QApplication::keyboardModifiers());
             d->mouseMoveEvent(&fake);
 #endif
 
@@ -991,8 +932,8 @@ void QToolBar::initStyleOption(QStyleOptionToolBar *option) const
 
    option->lineWidth = style()->pixelMetric(QStyle::PM_ToolBarFrameWidth, 0, this);
    option->features = d->layout->movable()
-                      ? QStyleOptionToolBar::Movable
-                      : QStyleOptionToolBar::None;
+      ? QStyleOptionToolBar::Movable
+      : QStyleOptionToolBar::None;
 
    // if the tool bar is not in a QMainWindow, this will make the painting right
    option->toolBarArea = Qt::NoToolBarArea;
@@ -1000,13 +941,13 @@ void QToolBar::initStyleOption(QStyleOptionToolBar *option) const
    // Add more styleoptions if the toolbar has been added to a mainwindow.
    QMainWindow *mainWindow = qobject_cast<QMainWindow *>(parentWidget());
 
-   if (!mainWindow) {
+   if (! mainWindow) {
       return;
    }
 
    QMainWindowLayout *layout = qt_mainwindow_layout(mainWindow);
    Q_ASSERT_X(layout != 0, "QToolBar::initStyleOption()",
-              "QMainWindow->layout() != QMainWindowLayout");
+      "QMainWindow->layout() != QMainWindowLayout");
 
    layout->getStyleOptionInfo(option, const_cast<QToolBar *>(this));
 }
@@ -1033,7 +974,5 @@ bool QToolBar::cs_isMainWindow() const
 {
    return (qobject_cast<QMainWindow *>(parentWidget()) != 0);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TOOLBAR

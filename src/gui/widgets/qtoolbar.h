@@ -23,14 +23,12 @@
 #ifndef QTOOLBAR_H
 #define QTOOLBAR_H
 
-#include <QtGui/qwidget.h>
-
-QT_BEGIN_NAMESPACE
+#include <qaction.h>
+#include <qwidget.h>
 
 #ifndef QT_NO_TOOLBAR
 
 class QToolBarPrivate;
-class QAction;
 class QIcon;
 class QMainWindow;
 class QStyleOptionToolBar;
@@ -61,6 +59,7 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    GUI_CS_PROPERTY_READ(toolButtonStyle, toolButtonStyle)
    GUI_CS_PROPERTY_WRITE(toolButtonStyle, setToolButtonStyle)
    GUI_CS_PROPERTY_NOTIFY(toolButtonStyle, toolButtonStyleChanged)
+
    GUI_CS_PROPERTY_READ(floating, isFloating)
    GUI_CS_PROPERTY_READ(floatable, isFloatable)
    GUI_CS_PROPERTY_WRITE(floatable, setFloatable)
@@ -91,6 +90,41 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    QAction *addAction(const QIcon &icon, const QString &text);
    QAction *addAction(const QString &text, const QObject *receiver, const QString &member);
    QAction *addAction(const QIcon &icon, const QString &text, const QObject *receiver, const QString &member);
+   // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
+   template<class Obj, typename Func1>
+   typename std::enable_if < ! std::is_same<const char *, Func1>::value &&
+   std::is_base_of<QObject, Obj>::value, QAction * >::type addAction(const QString &text, const Obj *object, Func1 slot) {
+      QAction *result = addAction(text);
+      connect(result, &QAction::triggered, object, slot);
+      return result;
+   }
+
+   // addAction(QString): Connect to a functor or function pointer (without context)
+   template <typename Func1>
+   QAction *addAction(const QString &text, Func1 slot) {
+      QAction *result = addAction(text);
+      connect(result, &QAction::triggered, slot);
+      return result;
+   }
+
+   // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
+   template<class Obj, typename Func1>
+   typename std::enable_if < ! std::is_same<const char *, Func1>::value &&
+   std::is_base_of<QObject, Obj>::value, QAction * >::type addAction(const QIcon &actionIcon, const QString &text, const Obj *object,
+      Func1 slot) {
+
+      QAction *result = addAction(actionIcon, text);
+      connect(result, &QAction::triggered, object, slot);
+      return result;
+   }
+
+   // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
+   template <typename Func1>
+   inline QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot) {
+      QAction *result = addAction(actionIcon, text);
+      connect(result, &QAction::triggered, slot);
+      return result;
+   }
 
    QAction *addSeparator();
    QAction *insertSeparator(QAction *before);
@@ -115,23 +149,31 @@ class Q_GUI_EXPORT QToolBar : public QWidget
 
    GUI_CS_SLOT_1(Public, void setIconSize(const QSize &iconSize))
    GUI_CS_SLOT_2(setIconSize)
+
    GUI_CS_SLOT_1(Public, void setToolButtonStyle(Qt::ToolButtonStyle toolButtonStyle))
    GUI_CS_SLOT_2(setToolButtonStyle)
 
    GUI_CS_SIGNAL_1(Public, void actionTriggered(QAction *action))
    GUI_CS_SIGNAL_2(actionTriggered, action)
+
    GUI_CS_SIGNAL_1(Public, void movableChanged(bool movable))
    GUI_CS_SIGNAL_2(movableChanged, movable)
+
    GUI_CS_SIGNAL_1(Public, void allowedAreasChanged(Qt::ToolBarAreas allowedAreas))
    GUI_CS_SIGNAL_2(allowedAreasChanged, allowedAreas)
+
    GUI_CS_SIGNAL_1(Public, void orientationChanged(Qt::Orientation orientation))
    GUI_CS_SIGNAL_2(orientationChanged, orientation)
+
    GUI_CS_SIGNAL_1(Public, void iconSizeChanged(const QSize &iconSize))
    GUI_CS_SIGNAL_2(iconSizeChanged, iconSize)
+
    GUI_CS_SIGNAL_1(Public, void toolButtonStyleChanged(Qt::ToolButtonStyle toolButtonStyle))
    GUI_CS_SIGNAL_2(toolButtonStyleChanged, toolButtonStyle)
+
    GUI_CS_SIGNAL_1(Public, void topLevelChanged(bool topLevel))
    GUI_CS_SIGNAL_2(topLevelChanged, topLevel)
+
    GUI_CS_SIGNAL_1(Public, void visibilityChanged(bool visible))
    GUI_CS_SIGNAL_2(visibilityChanged, visible)
 
@@ -170,6 +212,5 @@ QAction *QToolBar::actionAt(int ax, int ay) const
 
 #endif // QT_NO_TOOLBAR
 
-QT_END_NAMESPACE
 
 #endif // QDYNAMICTOOLBAR_H

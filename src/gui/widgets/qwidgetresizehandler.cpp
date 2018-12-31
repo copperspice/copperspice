@@ -87,12 +87,12 @@ bool QWidgetResizeHandler::isActive(Action ac) const
 bool QWidgetResizeHandler::eventFilter(QObject *o, QEvent *ee)
 {
    if (!isActive()
-         || (ee->type() != QEvent::MouseButtonPress
-             && ee->type() != QEvent::MouseButtonRelease
-             && ee->type() != QEvent::MouseMove
-             && ee->type() != QEvent::KeyPress
-             && ee->type() != QEvent::ShortcutOverride)
-      ) {
+      || (ee->type() != QEvent::MouseButtonPress
+         && ee->type() != QEvent::MouseButtonRelease
+         && ee->type() != QEvent::MouseMove
+         && ee->type() != QEvent::KeyPress
+         && ee->type() != QEvent::ShortcutOverride)
+   ) {
       return false;
    }
 
@@ -247,7 +247,7 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
 
 
    QPoint globalPos = (!widget->isWindow() && widget->parentWidget()) ?
-                      widget->parentWidget()->mapFromGlobal(e->globalPos()) : e->globalPos();
+      widget->parentWidget()->mapFromGlobal(e->globalPos()) : e->globalPos();
    if (!widget->isWindow() && !widget->parentWidget()->rect().contains(globalPos)) {
       if (globalPos.x() < 0) {
          globalPos.rx() = 0;
@@ -288,11 +288,11 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
       maxsize += QSize(2 * fw, 2 * fw + extrahei);
    }
    QSize mpsize(widget->geometry().right() - pp.x() + 1,
-                widget->geometry().bottom() - pp.y() + 1);
+      widget->geometry().bottom() - pp.y() + 1);
    mpsize = mpsize.expandedTo(widget->minimumSize()).expandedTo(QSize(mw, mh))
-            .boundedTo(maxsize);
+      .boundedTo(maxsize);
    QPoint mp(widget->geometry().right() - mpsize.width() + 1,
-             widget->geometry().bottom() - mpsize.height() + 1);
+      widget->geometry().bottom() - mpsize.height() + 1);
 
    QRect geom = widget->geometry();
 
@@ -329,20 +329,18 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
    }
 
    geom = QRect(geom.topLeft(),
-                geom.size().expandedTo(widget->minimumSize())
-                .expandedTo(QSize(mw, mh))
-                .boundedTo(maxsize));
+         geom.size().expandedTo(widget->minimumSize())
+         .expandedTo(QSize(mw, mh))
+         .boundedTo(maxsize));
 
    if (geom != widget->geometry() &&
-         (widget->isWindow() || widget->parentWidget()->rect().intersects(geom))) {
+      (widget->isWindow() || widget->parentWidget()->rect().intersects(geom))) {
       if (mode == Center) {
          widget->move(geom.topLeft());
       } else {
          widget->setGeometry(geom);
       }
    }
-
-   QApplication::syncX();
 }
 
 void QWidgetResizeHandler::setMouseCursor(MousePosition m)

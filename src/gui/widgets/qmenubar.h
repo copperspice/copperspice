@@ -23,15 +23,16 @@
 #ifndef QMENUBAR_H
 #define QMENUBAR_H
 
-#include <QtGui/qmenu.h>
+#include <qmenu.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_MENUBAR
 
 class QMenuBarPrivate;
 class QStyleOptionMenuItem;
 class QWindowsStyle;
+class QPlatformMenuBar;
 
 class Q_GUI_EXPORT QMenuBar : public QWidget
 {
@@ -79,19 +80,20 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    void setCornerWidget(QWidget *w, Qt::Corner corner = Qt::TopRightCorner);
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
 
-#ifdef Q_OS_MAC
-   OSMenuRef macMenu();
-   static bool macUpdateMenuBar();
+
+#ifdef Q_OS_OSX
+   NSMenu *toNSMenu();
 #endif
 
    bool isNativeMenuBar() const;
    void setNativeMenuBar(bool nativeMenuBar);
-
-   GUI_CS_SLOT_1(Public, virtual void setVisible(bool visible) override)
+   QPlatformMenuBar *platformMenuBar();
+   GUI_CS_SLOT_1(Public, void setVisible(bool visible) override)
    GUI_CS_SLOT_2(setVisible)
 
    GUI_CS_SIGNAL_1(Public, void triggered(QAction *action))
    GUI_CS_SIGNAL_2(triggered, action)
+
    GUI_CS_SIGNAL_1(Public, void hovered(QAction *action))
    GUI_CS_SIGNAL_2(hovered, action)
 
@@ -131,17 +133,8 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    friend class QMenu;
    friend class QMenuPrivate;
    friend class QWindowsStyle;
-
-#ifdef Q_OS_MAC
-   friend class QApplicationPrivate;
-   friend class QWidgetPrivate;
-   friend bool qt_mac_activate_action(MenuRef, uint, QAction::ActionEvent, bool);
-#endif
-
 };
 
 #endif // QT_NO_MENUBAR
-
-QT_END_NAMESPACE
 
 #endif // QMENUBAR_H

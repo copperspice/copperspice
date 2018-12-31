@@ -26,7 +26,6 @@
 #include <QtGui/qframe.h>
 #include <QtGui/qicon.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_TOOLBOX
 
@@ -39,10 +38,11 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
    GUI_CS_PROPERTY_NOTIFY(currentIndex, currentChanged)
+
    GUI_CS_PROPERTY_READ(count, count)
 
  public:
-   explicit QToolBox(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+   explicit QToolBox(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
    ~QToolBox();
 
    int addItem(QWidget *widget, const QString &text);
@@ -74,6 +74,7 @@ class Q_GUI_EXPORT QToolBox : public QFrame
 
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
+
    GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *widget))
    GUI_CS_SLOT_2(setCurrentWidget)
 
@@ -117,6 +118,5 @@ inline int QToolBox::insertItem(int index, QWidget *item, const QString &text)
 
 #endif // QT_NO_TOOLBOX
 
-QT_END_NAMESPACE
 
 #endif // QTOOLBOX_H

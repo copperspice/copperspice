@@ -25,7 +25,6 @@
 
 #include <QtGui/qwidget.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_DOCKWIDGET
 
@@ -42,19 +41,22 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
 
    GUI_CS_PROPERTY_READ(floating, isFloating)
    GUI_CS_PROPERTY_WRITE(floating, setFloating)
+
    GUI_CS_PROPERTY_READ(features, features)
    GUI_CS_PROPERTY_WRITE(features, setFeatures)
    GUI_CS_PROPERTY_NOTIFY(features, featuresChanged)
+
    GUI_CS_PROPERTY_READ(allowedAreas, allowedAreas)
    GUI_CS_PROPERTY_WRITE(allowedAreas, setAllowedAreas)
    GUI_CS_PROPERTY_NOTIFY(allowedAreas, allowedAreasChanged)
+
    GUI_CS_PROPERTY_READ(windowTitle, windowTitle)
    GUI_CS_PROPERTY_WRITE(windowTitle, setWindowTitle)
    GUI_CS_PROPERTY_DESIGNABLE(windowTitle, true)
 
  public:
-   explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
-   explicit QDockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+   explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   explicit QDockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
    ~QDockWidget();
 
    QWidget *widget() const;
@@ -78,7 +80,9 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
    DockWidgetFeatures features() const;
 
    void setFloating(bool floating);
-   inline bool isFloating() const;
+   bool isFloating() const {
+      return isWindow();
+   }
 
    void setAllowedAreas(Qt::DockWidgetAreas areas);
    Qt::DockWidgetAreas allowedAreas() const;
@@ -86,7 +90,7 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
    void setTitleBarWidget(QWidget *widget);
    QWidget *titleBarWidget() const;
 
-   inline bool isAreaAllowed(Qt::DockWidgetArea area) const {
+   bool isAreaAllowed(Qt::DockWidgetArea area) const {
       return (allowedAreas() & area) == area;
    }
 
@@ -96,12 +100,16 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
 
    GUI_CS_SIGNAL_1(Public, void featuresChanged(QDockWidget::DockWidgetFeatures features))
    GUI_CS_SIGNAL_2(featuresChanged, features)
+
    GUI_CS_SIGNAL_1(Public, void topLevelChanged(bool topLevel))
    GUI_CS_SIGNAL_2(topLevelChanged, topLevel)
+
    GUI_CS_SIGNAL_1(Public, void allowedAreasChanged(Qt::DockWidgetAreas allowedAreas))
    GUI_CS_SIGNAL_2(allowedAreasChanged, allowedAreas)
+
    GUI_CS_SIGNAL_1(Public, void visibilityChanged(bool visible))
    GUI_CS_SIGNAL_2(visibilityChanged, visible)
+
    GUI_CS_SIGNAL_1(Public, void dockLocationChanged(Qt::DockWidgetArea area))
    GUI_CS_SIGNAL_2(dockLocationChanged, area)
 
@@ -131,13 +139,6 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDockWidget::DockWidgetFeatures)
 
-bool QDockWidget::isFloating() const
-{
-   return isWindow();
-}
-
 #endif // QT_NO_DOCKWIDGET
-
-QT_END_NAMESPACE
 
 #endif // QDYNAMICDOCKWIDGET_H

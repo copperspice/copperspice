@@ -37,8 +37,6 @@
 
 #include <qframe_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QToolBoxButton : public QAbstractButton
 {
    GUI_CS_OBJECT(QToolBoxButton)
@@ -88,6 +86,7 @@ class QToolBoxPrivate : public QFramePrivate
       inline void setIcon(const QIcon &is) {
          button->setIcon(is);
       }
+
 #ifndef QT_NO_TOOLTIP
       inline void setToolTip(const QString &tip) {
          button->setToolTip(tip);
@@ -115,7 +114,7 @@ class QToolBoxPrivate : public QFramePrivate
    void _q_buttonClicked();
    void _q_widgetDestroyed(QObject *);
 
-   Page *page(QWidget *widget) const;
+   const Page *page(const QObject *widget) const;
    const Page *page(int index) const;
    Page *page(int index);
 
@@ -127,16 +126,17 @@ class QToolBoxPrivate : public QFramePrivate
    Page *currentPage;
 };
 
-QToolBoxPrivate::Page *QToolBoxPrivate::page(QWidget *widget) const
+const QToolBoxPrivate::Page *QToolBoxPrivate::page(const QObject *widget) const
 {
-   if (!widget) {
+   if (! widget) {
       return 0;
    }
 
    for (PageList::const_iterator i = pageList.constBegin(); i != pageList.constEnd(); ++i)
       if ((*i).widget == widget) {
-         return (Page *) & (*i);
+         return (const Page *) & (*i);
       }
+
    return 0;
 }
 
@@ -160,7 +160,8 @@ void QToolBoxPrivate::updateTabs()
 {
    QToolBoxButton *lastButton = currentPage ? currentPage->button : 0;
    bool after = false;
-   int index = 0;
+   int index  = 0;
+
    for (index = 0; index < pageList.count(); ++index) {
       const Page &page = pageList.at(index);
       QToolBoxButton *tB = page.button;
@@ -209,97 +210,54 @@ void QToolBoxButton::initStyleOption(QStyleOptionToolBox *option) const
    if (!option) {
       return;
    }
+
    option->initFrom(this);
+
    if (selected) {
       option->state |= QStyle::State_Selected;
    }
+
    if (isDown()) {
       option->state |= QStyle::State_Sunken;
    }
    option->text = text();
    option->icon = icon();
 
-   if (QStyleOptionToolBoxV2 *optionV2 = qstyleoption_cast<QStyleOptionToolBoxV2 *>(option)) {
-      QToolBox *toolBox = static_cast<QToolBox *>(parentWidget()); // I know I'm in a tool box.
-      int widgetCount = toolBox->count();
-      int currIndex = toolBox->currentIndex();
-      if (widgetCount == 1) {
-         optionV2->position = QStyleOptionToolBoxV2::OnlyOneTab;
-      } else if (indexInPage == 0) {
-         optionV2->position = QStyleOptionToolBoxV2::Beginning;
-      } else if (indexInPage == widgetCount - 1) {
-         optionV2->position = QStyleOptionToolBoxV2::End;
-      } else {
-         optionV2->position = QStyleOptionToolBoxV2::Middle;
-      }
-      if (currIndex == indexInPage - 1) {
-         optionV2->selectedPosition = QStyleOptionToolBoxV2::PreviousIsSelected;
-      } else if (currIndex == indexInPage + 1) {
-         optionV2->selectedPosition = QStyleOptionToolBoxV2::NextIsSelected;
-      } else {
-         optionV2->selectedPosition = QStyleOptionToolBoxV2::NotAdjacent;
-      }
+   QToolBox *toolBox = static_cast<QToolBox *>(parentWidget()); // I know I'm in a tool box.
+   const int widgetCount = toolBox->count();
+   const int currIndex = toolBox->currentIndex();
+
+   if (widgetCount == 1) {
+      option->position = QStyleOptionToolBox::OnlyOneTab;
+   } else if (indexInPage == 0) {
+      option->position = QStyleOptionToolBox::Beginning;
+   } else if (indexInPage == widgetCount - 1) {
+      option->position = QStyleOptionToolBox::End;
+   } else {
+      option->position = QStyleOptionToolBox::Middle;
    }
+
+   if (currIndex == indexInPage - 1) {
+      option->selectedPosition = QStyleOptionToolBox::PreviousIsSelected;
+
+   } else if (currIndex == indexInPage + 1) {
+      option->selectedPosition = QStyleOptionToolBox::NextIsSelected;
+   } else {
+      option->selectedPosition = QStyleOptionToolBox::NotAdjacent;
+   }
+
 }
 
 void QToolBoxButton::paintEvent(QPaintEvent *)
 {
    QPainter paint(this);
-   QString text = QAbstractButton::text();
    QPainter *p = &paint;
-   QStyleOptionToolBoxV2 opt;
+
+   QStyleOptionToolBox opt;
    initStyleOption(&opt);
    style()->drawControl(QStyle::CE_ToolBoxTab, &opt, p, parentWidget());
 }
 
-/*!
-    \class QToolBox
-
-    \brief The QToolBox class provides a column of tabbed widget items.
-
-
-    \ingroup basicwidgets
-
-    A toolbox is a widget that displays a column of tabs one above the
-    other, with the current item displayed below the current tab.
-    Every tab has an index position within the column of tabs. A tab's
-    item is a QWidget.
-
-    Each item has an itemText(), an optional itemIcon(), an optional
-    itemToolTip(), and a widget(). The item's attributes can be
-    changed with setItemText(), setItemIcon(), and
-    setItemToolTip(). Each item can be enabled or disabled
-    individually with setItemEnabled().
-
-    Items are added using addItem(), or inserted at particular
-    positions using insertItem(). The total number of items is given
-    by count(). Items can be deleted with delete, or removed from the
-    toolbox with removeItem(). Combining removeItem() and insertItem()
-    allows you to move items to different positions.
-
-    The index of the current item widget is returned by currentIndex(),
-    and set with setCurrentIndex(). The index of a particular item can
-    be found using indexOf(), and the item at a given index is returned
-    by item().
-
-    The currentChanged() signal is emitted when the current item is
-    changed.
-
-    \sa QTabWidget
-*/
-
-/*!
-    \fn void QToolBox::currentChanged(int index)
-
-    This signal is emitted when the current item is changed. The new
-    current item's index is passed in \a index, or -1 if there is no
-    current item.
-*/
-
-
-/*!
-    Constructs a new toolbox with the given \a parent and the flags, \a f.
-*/
 QToolBox::QToolBox(QWidget *parent, Qt::WindowFlags f)
    :  QFrame(*new QToolBoxPrivate, parent, f)
 {
@@ -309,48 +267,16 @@ QToolBox::QToolBox(QWidget *parent, Qt::WindowFlags f)
    setBackgroundRole(QPalette::Button);
 }
 
-/*!
-    Destroys the toolbox.
-*/
 
 QToolBox::~QToolBox()
 {
 }
 
-/*!
-    \fn int QToolBox::addItem(QWidget *w, const QString &text)
-    \overload
 
-    Adds the widget \a w in a new tab at bottom of the toolbox. The
-    new tab's text is set to \a text. Returns the new tab's index.
-*/
-
-/*!
-    \fn int QToolBox::addItem(QWidget *widget, const QIcon &iconSet,const QString &text)
-    Adds the \a widget in a new tab at bottom of the toolbox. The
-    new tab's text is set to \a text, and the \a iconSet is
-    displayed to the left of the \a text.  Returns the new tab's index.
-*/
-
-/*!
-    \fn int QToolBox::insertItem(int index, QWidget *widget, const QString &text)
-    \overload
-
-    Inserts the \a widget at position \a index, or at the bottom
-    of the toolbox if \a index is out of range. The new item's text is
-    set to \a text. Returns the new item's index.
-*/
-
-/*!
-    Inserts the \a widget at position \a index, or at the bottom
-    of the toolbox if \a index is out of range. The new item's text
-    is set to \a text, and the \a icon is displayed to the left of
-    the \a text. Returns the new item's index.
-*/
 
 int QToolBox::insertItem(int index, QWidget *widget, const QIcon &icon, const QString &text)
 {
-   if (!widget) {
+   if (! widget) {
       return -1;
    }
 
@@ -463,11 +389,10 @@ void QToolBoxPrivate::relayout()
 void QToolBoxPrivate::_q_widgetDestroyed(QObject *object)
 {
    Q_Q(QToolBox);
-   // no verification - vtbl corrupted already
-   QWidget *p = (QWidget *)object;
 
-   QToolBoxPrivate::Page *c = page(p);
-   if (!p || !c) {
+   const QToolBoxPrivate::Page *const c = page(object);
+
+   if (!c) {
       return;
    }
 
@@ -488,11 +413,6 @@ void QToolBoxPrivate::_q_widgetDestroyed(QObject *object)
    }
 }
 
-/*!
-    Removes the item at position \a index from the toolbox. Note that
-    the widget is \e not deleted.
-*/
-
 void QToolBox::removeItem(int index)
 {
    Q_D(QToolBox);
@@ -505,28 +425,12 @@ void QToolBox::removeItem(int index)
    }
 }
 
-
-/*!
-    \property QToolBox::currentIndex
-    \brief the index of the current item
-
-    By default, for an empty toolbox, this property has a value of -1.
-
-    \sa indexOf(), widget()
-*/
-
-
 int QToolBox::currentIndex() const
 {
    Q_D(const QToolBox);
    return d->currentPage ? indexOf(d->currentPage->widget) : -1;
 }
 
-/*!
-    Returns a pointer to the current widget, or 0 if there is no such item.
-
-    \sa currentIndex(), setCurrentWidget()
-*/
 
 QWidget *QToolBox::currentWidget() const
 {
@@ -534,11 +438,6 @@ QWidget *QToolBox::currentWidget() const
    return d->currentPage ? d->currentPage->widget : 0;
 }
 
-/*!
-  Makes\a widget the current widget. The \a widget must be an item in this tool box.
-
-  \sa addItem(), setCurrentIndex(), currentWidget()
- */
 void QToolBox::setCurrentWidget(QWidget *widget)
 {
    int i = indexOf(widget);
@@ -571,7 +470,7 @@ QWidget *QToolBox::widget(int index) const
 int QToolBox::indexOf(QWidget *widget) const
 {
    Q_D(const QToolBox);
-   QToolBoxPrivate::Page *c = (widget ? d->page(widget) : 0);
+   const QToolBoxPrivate::Page *c = (widget ? d->page(widget) : 0);
    return c ? d->pageList.indexOf(*c) : -1;
 }
 
@@ -610,19 +509,6 @@ void QToolBox::setItemEnabled(int index, bool enabled)
       setCurrentIndex(index);
    }
 }
-
-
-/*!
-    Sets the text of the item at position \a index to \a text.
-
-    If the provided text contains an ampersand character ('&'), a
-    mnemonic is automatically created for it. The character that
-    follows the '&' will be used as the shortcut key. Any previous
-    mnemonic will be overwritten, or cleared if no mnemonic is defined
-    by the text. See the \l {QShortcut#mnemonic}{QShortcut}
-    documentation for details (to display an actual ampersand, use
-    '&&').
-*/
 
 void QToolBox::setItemText(int index, const QString &text)
 {
@@ -734,7 +620,6 @@ void QToolBox::changeEvent(QEvent *ev)
  */
 void QToolBox::itemInserted(int index)
 {
-   Q_UNUSED(index)
 }
 
 /*!
@@ -745,74 +630,8 @@ void QToolBox::itemInserted(int index)
  */
 void QToolBox::itemRemoved(int index)
 {
-   Q_UNUSED(index)
 }
 
-/*!
-    \fn void QToolBox::setItemLabel(int index, const QString &text)
-
-    Use setItemText() instead.
-*/
-
-/*!
-    \fn QString QToolBox::itemLabel(int index) const
-
-    Use itemText() instead.
-*/
-
-/*!
-    \fn QWidget *QToolBox::currentItem() const
-
-    Use widget(currentIndex()) instead.
-*/
-
-/*!
-    \fn void QToolBox::setCurrentItem(QWidget *widget)
-
-    Use setCurrentIndex(indexOf(widget)) instead.
-*/
-
-/*!
-    \fn void QToolBox::setItemIconSet(int index, const QIcon &icon)
-
-    Use setItemIcon() instead.
-*/
-
-/*!
-    \fn QIcon QToolBox::itemIconSet(int index) const
-
-    Use itemIcon() instead.
-*/
-
-/*!
-    \fn int QToolBox::removeItem(QWidget *widget)
-
-    Use toolbox->removeItem(toolbox->indexOf(widget)) instead.
-*/
-
-/*!
-    \fn QWidget *QToolBox::item(int index) const
-
-    Use widget() instead.
-*/
-
-/*!
-    \fn void QToolBox::setMargin(int margin)
-    Sets the width of the margin around the contents of the widget to \a margin.
-
-    Use QWidget::setContentsMargins() instead.
-    \sa margin(), QWidget::setContentsMargins()
-*/
-
-/*!
-    \fn int QToolBox::margin() const
-    Returns the width of the margin around the contents of the widget.
-
-    Use QWidget::getContentsMargins() instead.
-    \sa setMargin(), QWidget::getContentsMargins()
-*/
-
-/*! \reimp */
 bool QToolBox::event(QEvent *e)
 {
    return QFrame::event(e);
@@ -829,7 +648,5 @@ void QToolBox::_q_widgetDestroyed(QObject *un_named_arg1)
    Q_D(QToolBox);
    d->_q_widgetDestroyed(un_named_arg1);
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_TOOLBOX

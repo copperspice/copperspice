@@ -28,7 +28,6 @@
 
 #ifndef QT_NO_RESIZEHANDLER
 
-QT_BEGIN_NAMESPACE
 
 class QMouseEvent;
 class QKeyEvent;
@@ -44,7 +43,7 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
       Any      = Move | Resize
    };
 
-   explicit QWidgetResizeHandler(QWidget *parent, QWidget *cw = 0);
+   explicit QWidgetResizeHandler(QWidget *parent, QWidget *cw = nullptr);
 
    inline void setActive(bool b) {
       setActive(Any, b);
@@ -78,7 +77,7 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
 
    void doResize();
    void doMove();
- 
+
    GUI_CS_SIGNAL_1(Public, void activate())
    GUI_CS_SIGNAL_2(activate)
 
@@ -114,16 +113,15 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
 
    void setMouseCursor(MousePosition m);
 
-   inline bool isMove() const {
+   bool isMove() const {
       return moveResizeMode && mode == Center;
    }
 
-   inline bool isResize() const {
+   bool isResize() const {
       return moveResizeMode && !isMove();
    }
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_RESIZEHANDLER
 

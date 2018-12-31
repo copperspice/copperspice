@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_FONTCOMBOBOX
 
-QT_BEGIN_NAMESPACE
-
 class QFontComboBoxPrivate;
 
 class Q_GUI_EXPORT QFontComboBox : public QComboBox
@@ -92,7 +90,7 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFontComboBox::FontFilters)
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_FONTCOMBOBOX
 #endif

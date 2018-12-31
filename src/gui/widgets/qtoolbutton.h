@@ -23,9 +23,7 @@
 #ifndef QTOOLBUTTON_H
 #define QTOOLBUTTON_H
 
-#include <QtGui/qabstractbutton.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractbutton.h>
 
 #ifndef QT_NO_TOOLBUTTON
 
@@ -126,6 +124,9 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    GUI_CS_SLOT_1(Private, void _q_buttonPressed())
    GUI_CS_SLOT_2(_q_buttonPressed)
 
+   GUI_CS_SLOT_1(Private, void _q_buttonReleased())
+   GUI_CS_SLOT_2(_q_buttonReleased)
+
    GUI_CS_SLOT_1(Private, void _q_updateButtonDown())
    GUI_CS_SLOT_2(_q_updateButtonDown)
 
@@ -139,7 +140,5 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
 };
 
 #endif // QT_NO_TOOLBUTTON
-
-QT_END_NAMESPACE
 
 #endif // QTOOLBUTTON_H

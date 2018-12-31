@@ -32,13 +32,7 @@
 #include <qtoolbarlayout_p.h>
 #include <qtoolbar_p.h>
 
-/******************************************************************************
-** QToolBarAreaLayoutItem
-*/
-
 #ifndef QT_NO_TOOLBAR
-
-QT_BEGIN_NAMESPACE
 
 // qmainwindow.cpp
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *mainWindow);
@@ -72,7 +66,7 @@ QSize QToolBarAreaLayoutItem::realSizeHint() const
       s.setHeight(0);
    }
    s = s.boundedTo(wid->maximumSize())
-       .expandedTo(wid->minimumSize());
+      .expandedTo(wid->minimumSize());
    return s;
 }
 
@@ -83,10 +77,6 @@ bool QToolBarAreaLayoutItem::skip() const
    }
    return widgetItem == 0 || widgetItem->isEmpty();
 }
-
-/******************************************************************************
-** QToolBarAreaLayoutLine
-*/
 
 QToolBarAreaLayoutLine::QToolBarAreaLayoutLine(Qt::Orientation orientation)
    : o(orientation)
@@ -190,10 +180,6 @@ bool QToolBarAreaLayoutLine::skip() const
    }
    return true;
 }
-
-/******************************************************************************
-** QToolBarAreaLayoutInfo
-*/
 
 QToolBarAreaLayoutInfo::QToolBarAreaLayoutInfo(QInternal::DockPosition pos)
    : dockPos(pos), dirty(false)
@@ -489,9 +475,13 @@ void QToolBarAreaLayoutInfo::moveToolBar(QToolBar *toolbar, int pos)
 
 QList<int> QToolBarAreaLayoutInfo::gapIndex(const QPoint &pos, int *minDistance) const
 {
-   int p = pick(o, pos);
+
 
    if (rect.contains(pos)) {
+      // <pos> is in QToolBarAreaLayout coordinates.
+      // <item.pos> is in local dockarea coordinates (see ~20 lines below)
+      // Since we're comparing p with item.pos, we put them in the same coordinate system.
+      const int p = pick(o, pos - rect.topLeft());
       for (int j = 0; j < lines.count(); ++j) {
          const QToolBarAreaLayoutLine &line = lines.at(j);
          if (line.skip()) {
@@ -614,27 +604,31 @@ int QToolBarAreaLayoutInfo::distance(const QPoint &pos) const
          if (pos.y() < rect.bottom()) {
             return pos.x() - rect.right();
          }
+         break;
+
       case QInternal::RightDock:
          if (pos.y() < rect.bottom()) {
             return rect.left() - pos.x();
          }
+         break;
+
       case QInternal::TopDock:
          if (pos.x() < rect.right()) {
             return pos.y() - rect.bottom();
          }
+         break;
+
       case QInternal::BottomDock:
          if (pos.x() < rect.right()) {
             return rect.top() - pos.y();
          }
-      default:
+         break;
+
+      case QInternal::DockCount:
          break;
    }
    return -1;
 }
-
-/******************************************************************************
-** QToolBarAreaLayout
-*/
 
 QToolBarAreaLayout::QToolBarAreaLayout(const QMainWindow *win) : mainWindow(win), visible(true)
 {
@@ -656,20 +650,19 @@ QRect QToolBarAreaLayout::fitLayout()
    QSize bottom_hint = docks[QInternal::BottomDock].sizeHint();
 
    QRect center = rect.adjusted(left_hint.width(), top_hint.height(),
-                                -right_hint.width(), -bottom_hint.height());
+         -right_hint.width(), -bottom_hint.height());
 
    docks[QInternal::TopDock].rect = QRect(rect.left(), rect.top(),
-                                          rect.width(), top_hint.height());
+         rect.width(), top_hint.height());
    docks[QInternal::LeftDock].rect = QRect(rect.left(), center.top(),
-                                           left_hint.width(), center.height());
+         left_hint.width(), center.height());
    docks[QInternal::RightDock].rect = QRect(center.right() + 1, center.top(),
-                                      right_hint.width(), center.height());
+         right_hint.width(), center.height());
    docks[QInternal::BottomDock].rect = QRect(rect.left(), center.bottom() + 1,
-                                       rect.width(), bottom_hint.height());
+         rect.width(), bottom_hint.height());
 
-   if (!mainWindow->unifiedTitleAndToolBarOnMac()) {
-      docks[QInternal::TopDock].fitLayout();
-   }
+   docks[QInternal::TopDock].fitLayout();
+
    docks[QInternal::LeftDock].fitLayout();
    docks[QInternal::RightDock].fitLayout();
    docks[QInternal::BottomDock].fitLayout();
@@ -737,7 +730,7 @@ QRect QToolBarAreaLayout::rectHint(const QRect &r) const
    QSize bottom_hint = docks[QInternal::BottomDock].sizeHint();
 
    result.adjust(-left_hint.width()*coef, -top_hint.height()*coef,
-                 right_hint.width()*coef, bottom_hint.height()*coef);
+      right_hint.width()*coef, bottom_hint.height()*coef);
 
    return result;
 }
@@ -1172,7 +1165,7 @@ QRect QToolBarAreaLayout::itemRect(const QList<int> &path) const
    QRect r = docks[i].itemRect(path.mid(1));
    if (docks[i].o == Qt::Horizontal)
       r = QStyle::visualRect(mainWindow->layoutDirection(),
-                             docks[i].rect, r);
+            docks[i].rect, r);
    return r;
 }
 
@@ -1180,7 +1173,7 @@ QLayoutItem *QToolBarAreaLayout::plug(const QList<int> &path)
 {
    QToolBarAreaLayoutItem *item = this->item(path);
    if (!item) {
-      qWarning() << Q_FUNC_INFO << "No item at" << path;
+      qWarning() << "No item at" << path;
       return 0;
    }
    Q_ASSERT(item->gap);
@@ -1318,7 +1311,7 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
 
             if (objectName.isEmpty()) {
                qWarning("QMainWindow::saveState(): 'objectName' not set for QToolBar %p '%s'",
-                        widget, csPrintable(widget->windowTitle()) );
+                  widget, csPrintable(widget->windowTitle()) );
             }
 
             stream << objectName;
@@ -1344,31 +1337,23 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
    }
 }
 
-static inline int getInt(QDataStream &stream, Qt::Orientation o, bool pre43)
+static inline int getInt(QDataStream &stream)
 {
-   if (pre43) {
-      QPoint p;
-      stream >> p;
-      return pick(o, p);
-   } else {
-      int x;
-      stream >> x;
-      return x;
-   }
+   int x;
+   stream >> x;
+   return x;
 }
 
 
-bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar *> &_toolBars, uchar tmarker,
-                                      bool pre43, bool testing)
+bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar*> &_toolBars, uchar tmarker, bool testing)
 {
    QList<QToolBar *> toolBars = _toolBars;
    int lines;
    stream >> lines;
-   if (!testing) {
-      testing = mainWindow->unifiedTitleAndToolBarOnMac();
-   }
 
-   for (int j = 0; j < lines; ++j) {
+
+   for (int j = 0; j < lines; ++j)
+   {
       int pos;
       stream >> pos;
       if (pos < 0 || pos >= QInternal::DockCount) {
@@ -1378,7 +1363,7 @@ bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar 
       stream >> cnt;
 
       QToolBarAreaLayoutInfo &dock = docks[pos];
-      const bool applyingLayout = !testing && !(pos == QInternal::TopDock && mainWindow->unifiedTitleAndToolBarOnMac());
+      const bool applyingLayout = !testing;
       QToolBarAreaLayoutLine line(dock.o);
 
       for (int k = 0; k < cnt; ++k) {
@@ -1388,23 +1373,16 @@ bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar 
          stream >> objectName;
          uchar shown;
          stream >> shown;
-         item.pos = getInt(stream, dock.o, pre43);
-         item.size = getInt(stream, dock.o, pre43);
+         item.pos = getInt(stream);
+         item.size = getInt(stream);
 
-         /*
-            4.3.0 added floating toolbars, but failed to add the ability to restore them.
-            We need to store there geometry (four ints). We cannot change the format in a
-            patch release (4.3.1) by adding ToolBarStateMarkerEx2 to signal extra data. So
-            for now we'll pack it in the two legacy ints we no longer used in Qt4.3.0.
-            In 4.4, we should add ToolBarStateMarkerEx2 and fix this properly.
-         */
 
          QRect rect;
          bool floating = false;
          uint geom0, geom1;
-         geom0 = getInt(stream, dock.o, pre43);
+         geom0 = getInt(stream);
          if (tmarker == ToolBarStateMarkerEx) {
-            geom1 = getInt(stream, dock.o, pre43);
+            geom1 = getInt(stream);
             rect = unpackRect(geom0, geom1, &floating);
          }
 
@@ -1448,7 +1426,5 @@ bool QToolBarAreaLayout::isEmpty() const
    }
    return true;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TOOLBAR

@@ -32,6 +32,8 @@
 #ifndef QT_NO_VALIDATOR
 
 class QValidatorPrivate;
+class QDoubleValidatorPrivate;
+class QRegularExpressionValidatorPrivate;
 
 class Q_GUI_EXPORT QValidator : public QObject
 {
@@ -73,6 +75,7 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
    GUI_CS_PROPERTY_READ(bottom, bottom)
    GUI_CS_PROPERTY_WRITE(bottom, setBottom)
    GUI_CS_PROPERTY_NOTIFY(bottom, bottomChanged)
+
    GUI_CS_PROPERTY_READ(top, top)
    GUI_CS_PROPERTY_WRITE(top, setTop)
    GUI_CS_PROPERTY_NOTIFY(top, topChanged)
@@ -114,10 +117,6 @@ int QIntValidator::top() const
    return t;
 }
 
-// **
-class QDoubleValidatorPrivate;
-class QRegularExpressionValidatorPrivate;
-
 class Q_GUI_EXPORT QDoubleValidator : public QValidator
 {
    GUI_CS_OBJECT(QDoubleValidator)
@@ -125,9 +124,11 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
    GUI_CS_PROPERTY_READ(bottom, bottom)
    GUI_CS_PROPERTY_WRITE(bottom, setBottom)
    GUI_CS_PROPERTY_NOTIFY(bottom, bottomChanged)
+
    GUI_CS_PROPERTY_READ(top, top)
    GUI_CS_PROPERTY_WRITE(top, setTop)
    GUI_CS_PROPERTY_NOTIFY(top, topChanged)
+
    GUI_CS_PROPERTY_READ(decimals, decimals)
    GUI_CS_PROPERTY_WRITE(decimals, setDecimals)
    GUI_CS_PROPERTY_NOTIFY(decimals, decimalsChanged)
@@ -225,4 +226,4 @@ int QDoubleValidator::decimals() const
 
 #endif // QT_NO_VALIDATOR
 
-#endif // QVALIDATOR_H
+#endif

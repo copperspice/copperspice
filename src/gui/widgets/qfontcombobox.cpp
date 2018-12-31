@@ -31,55 +31,143 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qcombobox_p.h>
+#include <QDesktopWidget>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
+static QFontDatabase::WritingSystem writingSystemFromScript(QLocale::Script script)
+{
+   switch (script) {
+      case QLocale::ArabicScript:
+         return QFontDatabase::Arabic;
+      case QLocale::CyrillicScript:
+         return QFontDatabase::Cyrillic;
+      case QLocale::GurmukhiScript:
+         return QFontDatabase::Gurmukhi;
+      case QLocale::SimplifiedHanScript:
+         return QFontDatabase::SimplifiedChinese;
+      case QLocale::TraditionalHanScript:
+         return QFontDatabase::TraditionalChinese;
+      case QLocale::LatinScript:
+         return QFontDatabase::Latin;
+      case QLocale::ArmenianScript:
+         return QFontDatabase::Armenian;
+      case QLocale::BengaliScript:
+         return QFontDatabase::Bengali;
+      case QLocale::DevanagariScript:
+         return QFontDatabase::Devanagari;
+      case QLocale::GeorgianScript:
+         return QFontDatabase::Georgian;
+      case QLocale::GreekScript:
+         return QFontDatabase::Greek;
+      case QLocale::GujaratiScript:
+         return QFontDatabase::Gujarati;
+      case QLocale::HebrewScript:
+         return QFontDatabase::Hebrew;
+      case QLocale::JapaneseScript:
+         return QFontDatabase::Japanese;
+      case QLocale::KhmerScript:
+         return QFontDatabase::Khmer;
+      case QLocale::KannadaScript:
+         return QFontDatabase::Kannada;
+      case QLocale::KoreanScript:
+         return QFontDatabase::Korean;
+      case QLocale::LaoScript:
+         return QFontDatabase::Lao;
+      case QLocale::MalayalamScript:
+         return QFontDatabase::Malayalam;
+      case QLocale::MyanmarScript:
+         return QFontDatabase::Myanmar;
+      case QLocale::TamilScript:
+         return QFontDatabase::Tamil;
+      case QLocale::TeluguScript:
+         return QFontDatabase::Telugu;
+      case QLocale::ThaanaScript:
+         return QFontDatabase::Thaana;
+      case QLocale::ThaiScript:
+         return QFontDatabase::Thai;
+      case QLocale::TibetanScript:
+         return QFontDatabase::Tibetan;
+      case QLocale::SinhalaScript:
+         return QFontDatabase::Sinhala;
+      case QLocale::SyriacScript:
+         return QFontDatabase::Syriac;
+      case QLocale::OriyaScript:
+         return QFontDatabase::Oriya;
+      case QLocale::OghamScript:
+         return QFontDatabase::Ogham;
 
+      case QLocale::RunicScript:
+         return QFontDatabase::Runic;
+
+      case QLocale::NkoScript:
+         return QFontDatabase::Nko;
+
+      default:
+         return QFontDatabase::Any;
+   }
+}
+
+static QFontDatabase::WritingSystem writingSystemFromLocale()
+{
+   QStringList uiLanguages = QLocale::system().uiLanguages();
+   QLocale::Script script;
+   if (!uiLanguages.isEmpty()) {
+      script = QLocale(uiLanguages.at(0)).script();
+   } else {
+      script = QLocale::system().script();
+   }
+
+   return writingSystemFromScript(script);
+}
 static QFontDatabase::WritingSystem writingSystemForFont(const QFont &font, bool *hasLatin)
 {
-   *hasLatin = true;
-
    QList<QFontDatabase::WritingSystem> writingSystems = QFontDatabase().writingSystems(font.family());
    //     qDebug() << font.family() << writingSystems;
 
    // this just confuses the algorithm below. Vietnamese is Latin with lots of special chars
-   writingSystems.removeAll(QFontDatabase::Vietnamese);
-
-   QFontDatabase::WritingSystem system = QFontDatabase::Any;
-
-   if (!writingSystems.contains(QFontDatabase::Latin)) {
-      *hasLatin = false;
-      // we need to show something
-      if (writingSystems.count()) {
-         system = writingSystems.last();
-      }
-   } else {
-      writingSystems.removeAll(QFontDatabase::Latin);
-   }
+   writingSystems.removeOne(QFontDatabase::Vietnamese);
+   *hasLatin = writingSystems.removeOne(QFontDatabase::Latin);
 
    if (writingSystems.isEmpty()) {
+      return QFontDatabase::Any;
+   }
+
+   QFontDatabase::WritingSystem system = writingSystemFromLocale();
+
+   if (writingSystems.contains(system)) {
       return system;
    }
 
-   if (writingSystems.count() == 1 && writingSystems.at(0) > QFontDatabase::Cyrillic) {
-      system = writingSystems.at(0);
+   if (system == QFontDatabase::TraditionalChinese
+      && writingSystems.contains(QFontDatabase::SimplifiedChinese)) {
+      return QFontDatabase::SimplifiedChinese;
+   }
+
+   if (system == QFontDatabase::SimplifiedChinese
+      && writingSystems.contains(QFontDatabase::TraditionalChinese)) {
+      return QFontDatabase::TraditionalChinese;
+   }
+
+   system = writingSystems.last();
+
+   if (!*hasLatin) {
+      // we need to show something
       return system;
    }
 
-   if (writingSystems.count() <= 2
-         && writingSystems.last() > QFontDatabase::Armenian
-         && writingSystems.last() < QFontDatabase::Vietnamese) {
-      system = writingSystems.last();
+   if (writingSystems.count() == 1 && system > QFontDatabase::Cyrillic) {
       return system;
    }
 
-   if (writingSystems.count() <= 5
-         && writingSystems.last() >= QFontDatabase::SimplifiedChinese
-         && writingSystems.last() <= QFontDatabase::Korean) {
-      system = writingSystems.last();
+   if (writingSystems.count() <= 2 && system > QFontDatabase::Armenian && system < QFontDatabase::Vietnamese) {
+      return system;
    }
 
-   return system;
+   if (writingSystems.count() <= 5 && system >= QFontDatabase::SimplifiedChinese && system <= QFontDatabase::Korean) {
+      return system;
+   }
+
+   return QFontDatabase::Any;
 }
 
 class QFontFamilyDelegate : public QAbstractItemDelegate
@@ -107,8 +195,8 @@ QFontFamilyDelegate::QFontFamilyDelegate(QObject *parent)
 }
 
 void QFontFamilyDelegate::paint(QPainter *painter,
-                                const QStyleOptionViewItem &option,
-                                const QModelIndex &index) const
+   const QStyleOptionViewItem &option,
+   const QModelIndex &index) const
 {
    QString text = index.data(Qt::DisplayRole).toString();
    QFont font(option.font);
@@ -184,7 +272,7 @@ void QFontFamilyDelegate::paint(QPainter *painter,
 }
 
 QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                    const QModelIndex &index) const
+   const QModelIndex &index) const
 {
    QString text = index.data(Qt::DisplayRole).toString();
    QFont font(option.font);
@@ -233,6 +321,10 @@ void QFontComboBoxPrivate::_q_updateModel()
    QFontInfo fi(currentFont);
 
    for (int i = 0; i < list.size(); ++i) {
+      if (fdb.isPrivateFamily(list.at(i))) {
+         continue;
+      }
+
       if ((filters & scalableMask) && (filters & scalableMask) != scalableMask) {
          if (bool(filters & QFontComboBox::ScalableFonts) != fdb.isSmoothlyScalable(list.at(i))) {
             continue;
@@ -268,7 +360,6 @@ void QFontComboBoxPrivate::_q_updateModel()
    }
 }
 
-
 void QFontComboBoxPrivate::_q_currentChanged(const QString &text)
 {
    Q_Q(QFontComboBox);
@@ -278,49 +369,7 @@ void QFontComboBoxPrivate::_q_currentChanged(const QString &text)
    }
 }
 
-/*!
-    \class QFontComboBox
-    \brief The QFontComboBox widget is a combobox that lets the user
-    select a font family.
 
-    \since 4.2
-    \ingroup basicwidgets
-
-    The combobox is populated with an alphabetized list of font
-    family names, such as Arial, Helvetica, and Times New Roman.
-    Family names are displayed using the actual font when possible.
-    For fonts such as Symbol, where the name is not representable in
-    the font itself, a sample of the font is displayed next to the
-    family name.
-
-    QFontComboBox is often used in toolbars, in conjunction with a
-    QComboBox for controlling the font size and two \l{QToolButton}s
-    for bold and italic.
-
-    When the user selects a new font, the currentFontChanged() signal
-    is emitted in addition to currentIndexChanged().
-
-    Call setWritingSystem() to tell QFontComboBox to show only fonts
-    that support a given writing system, and setFontFilters() to
-    filter out certain types of fonts as e.g. non scalable fonts or
-    monospaced fonts.
-
-    \image windowsxp-fontcombobox.png Screenshot of QFontComboBox on Windows XP
-
-    \sa QComboBox, QFont, QFontInfo, QFontMetrics, QFontDatabase, {Character Map Example}
-*/
-
-/*!
-    \fn void QFontComboBox::setWritingSystem(QFontDatabase::WritingSystem script)
-*/
-
-/*!
-    \fn void QFontComboBox::setCurrentFont(const QFont &font);
-*/
-
-/*!
-    Constructs a font combobox with the given \a parent.
-*/
 QFontComboBox::QFontComboBox(QWidget *parent)
    : QComboBox(*new QFontComboBoxPrivate, parent)
 {
@@ -337,14 +386,11 @@ QFontComboBox::QFontComboBox(QWidget *parent)
    }
    setWritingSystem(QFontDatabase::Any);
 
-   connect(this, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(_q_currentChanged(const QString &)));
+   connect(this, SIGNAL(currentIndexChanged(QString)), this, SLOT(_q_currentChanged(QString)));
    connect(qApp, SIGNAL(fontDatabaseChanged()), this, SLOT(_q_updateModel()));
 }
 
 
-/*!
-    Destroys the combobox.
-*/
 QFontComboBox::~QFontComboBox()
 {
 }
@@ -378,27 +424,6 @@ QFontDatabase::WritingSystem QFontComboBox::writingSystem() const
    return QFontDatabase::Any;
 }
 
-
-/*!
-  \enum QFontComboBox::FontFilter
-
-  This enum can be used to only show certain types of fonts in the font combo box.
-
-  \value AllFonts Show all fonts
-  \value ScalableFonts Show scalable fonts
-  \value NonScalableFonts Show non scalable fonts
-  \value MonospacedFonts Show monospaced fonts
-  \value ProportionalFonts Show proportional fonts
-*/
-
-/*!
-    \property QFontComboBox::fontFilters
-    \brief the filter for the combobox
-
-    By default, all fonts are listed.
-
-    \sa writingSystem
-*/
 void QFontComboBox::setFontFilters(FontFilters filters)
 {
    Q_D(QFontComboBox);
@@ -436,24 +461,13 @@ void QFontComboBox::setCurrentFont(const QFont &font)
    }
 }
 
-/*!
-    \fn QFontComboBox::currentFontChanged(const QFont &font)
-
-    This signal is emitted whenever the current font changes, with
-    the new \a font.
-
-    \sa currentFont
-*/
-
-/*!
-    \reimp
-*/
 bool QFontComboBox::event(QEvent *e)
 {
    if (e->type() == QEvent::Resize) {
       QListView *lview = qobject_cast<QListView *>(view());
       if (lview) {
-         lview->window()->setFixedWidth(width() * 5 / 3);
+         lview->window()->setFixedWidth(qMin(width() * 5 / 3,
+               QApplication::desktop()->availableGeometry(lview).width()));
       }
    }
    return QComboBox::event(e);
@@ -481,8 +495,5 @@ void QFontComboBox::_q_updateModel()
    Q_D(QFontComboBox);
    d->_q_updateModel();
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FONTCOMBOBOX

@@ -23,12 +23,9 @@
 #ifndef QMENUBAR_P_H
 #define QMENUBAR_P_H
 
-#include <QtGui/qstyleoption.h>
-#include <qmenu_p.h> // Mac needs what in this file!
-
-#ifdef Q_WS_X11
-#include <qabstractplatformmenubar_p.h>
-#endif
+#include <qstyleoption.h>
+#include <qmenu_p.h>          // Mac needs what in this file
+#include <qplatform_menu.h>
 
 #ifndef QT_NO_MENUBAR
 class QToolBar;
@@ -40,30 +37,20 @@ class QMenuBarPrivate : public QWidgetPrivate
 
  public:
    QMenuBarPrivate() : itemsDirty(0), currentAction(0), mouseDown(0),
-      closePopupMode(0), defaultPopDown(1), popupState(0), keyboardState(0), altPressed(0)
-#ifndef Q_WS_X11
-      , nativeMenuBar(-1)
-#endif
-      , doChildEffects(false)
+      closePopupMode(0), defaultPopDown(1), popupState(0), keyboardState(0), altPressed(0),
+      doChildEffects(false), platformMenuBar(0)
 
-#ifdef Q_OS_MAC
-      , mac_menubar(0)
-#endif
 
-#ifdef Q_WS_X11
-      , platformMenuBar(0)
-#endif
+
+
    { }
 
    ~QMenuBarPrivate() {
-#ifdef Q_WS_X11
-      delete platformMenuBar;
-#endif
 
-#ifdef Q_OS_MAC
-      delete mac_menubar;
-#endif
+      delete platformMenuBar;
    }
+
+
 
    void init();
    QAction *getNextAction(const int start, const int increment) const;
@@ -94,10 +81,6 @@ class QMenuBarPrivate : public QWidgetPrivate
    uint keyboardState : 1, altPressed : 1;
    QPointer<QWidget> keyboardFocusWidget;
 
-#ifndef Q_WS_X11
-   int nativeMenuBar : 3;  // Only has values -1, 0, and 1
-#endif
-
    //firing of events
    void activateAction(QAction *, QAction::ActionEvent);
 
@@ -118,59 +101,20 @@ class QMenuBarPrivate : public QWidgetPrivate
 
    // reparenting
    void handleReparent();
-   QWidget *oldParent;
-   QWidget *oldWindow;
+   QVector<QPointer<QWidget>> oldParents;
 
    QList<QAction *> hiddenActions;
+
    //default action
    QPointer<QAction> defaultAction;
 
    QBasicTimer autoReleaseTimer;
 
-#ifdef Q_WS_X11
-   QAbstractPlatformMenuBar *platformMenuBar;
-#endif
+   QPlatformMenuBar *platformMenuBar;
+   inline int indexOf(QAction *act) const {
+      return q_func()->actions().indexOf(act);
+   }
 
-#ifdef Q_OS_MAC
-   //mac menubar binding
-   struct QMacMenuBarPrivate {
-      QList<QMacMenuAction *> actionItems;
-      OSMenuRef menu, apple_menu;
-      QMacMenuBarPrivate();
-      ~QMacMenuBarPrivate();
-
-      void addAction(QAction *, QAction * = 0);
-      void addAction(QMacMenuAction *, QMacMenuAction * = 0);
-      void syncAction(QMacMenuAction *);
-      inline void syncAction(QAction *a) {
-         syncAction(findAction(a));
-      }
-      void removeAction(QMacMenuAction *);
-      inline void removeAction(QAction *a) {
-         removeAction(findAction(a));
-      }
-      inline QMacMenuAction *findAction(QAction *a) {
-         for (int i = 0; i < actionItems.size(); i++) {
-            QMacMenuAction *act = actionItems[i];
-            if (a == act->action) {
-               return act;
-            }
-         }
-         return 0;
-      }
-   } *mac_menubar;
-   static bool macUpdateMenuBarImmediatly();
-   bool macWidgetHasNativeMenubar(QWidget *widget);
-   void macCreateMenuBar(QWidget *);
-   void macDestroyMenuBar();
-   OSMenuRef macMenu();
-#endif
-
-#ifdef Q_WS_X11
-   void updateCornerWidgetToolBar();
-   QToolBar *cornerWidgetToolBar;
-   QWidget *cornerWidgetContainer;
-#endif
 
 };
 

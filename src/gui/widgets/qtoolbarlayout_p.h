@@ -23,11 +23,9 @@
 #ifndef QTOOLBARLAYOUT_P_H
 #define QTOOLBARLAYOUT_P_H
 
-#include <QtGui/qlayout.h>
+#include <qlayout.h>
 #include <qlayoutengine_p.h>
 #include <QVector>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_TOOLBAR
 
@@ -84,6 +82,7 @@ class QToolBarLayout : public QLayout
    void updateMarginAndSpacing();
    bool hasExpandFlag() const;
 
+   void updateMacBorderMetrics();
    GUI_CS_SLOT_1(Public, void setExpanded(bool b))
    GUI_CS_SLOT_2(setExpanded)
 
@@ -102,6 +101,5 @@ class QToolBarLayout : public QLayout
 
 #endif // QT_NO_TOOLBAR
 
-QT_END_NAMESPACE
 
 #endif // QTOOLBARLAYOUT_P_H

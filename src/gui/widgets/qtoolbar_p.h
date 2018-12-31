@@ -24,11 +24,10 @@
 #define QTOOLBAR_P_H
 
 #include <qtoolbar.h>
-#include <QtGui/qaction.h>
+#include <qaction.h>
 #include <qwidget_p.h>
-#include <QtCore/qbasictimer.h>
+#include <qbasictimer.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_TOOLBAR
 
@@ -46,7 +45,7 @@ class QToolBarPrivate : public QWidgetPrivate
         toolButtonStyle(Qt::ToolButtonIconOnly),
         layout(0), state(0)
 #ifdef Q_OS_MAC
-        , macWindowDragging(false)
+      , macWindowDragging(false)
 #endif
    { }
 
@@ -100,6 +99,6 @@ class QToolBarPrivate : public QWidgetPrivate
 
 #endif // QT_NO_TOOLBAR
 
-QT_END_NAMESPACE
+
 
 #endif // QDYNAMICTOOLBAR_P_H
