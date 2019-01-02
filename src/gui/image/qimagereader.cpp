@@ -159,7 +159,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
 
 #ifndef QT_NO_IMAGEFORMAT_PPM
 
-   // BROOM - must fix here
+   // emerald - support additional image formats
 
    // testFormat == "pbm"
    // testFormat == "pbmraw"

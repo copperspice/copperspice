@@ -27,7 +27,7 @@
 #if defined(__ARM_NEON__)
 
 
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32_neon(quint32 *dst, const uchar *src, int len)
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32_neon(quint32 *dst, const uchar *src, int len)
 {
    if (!len) {
       return;

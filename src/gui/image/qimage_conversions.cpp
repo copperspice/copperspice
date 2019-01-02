@@ -90,7 +90,7 @@ void qGamma_correct_back_to_linear_cs(QImage *image)
  *****************************************************************************/
 
 // The drawhelper conversions from/to RGB32 are passthroughs which is not always correct for general image conversion.
-static const uint *QT_FASTCALL convertRGB32FromARGB32PM(uint *buffer, const uint *src, int count,
+static const uint *convertRGB32FromARGB32PM(uint *buffer, const uint *src, int count,
    const QPixelLayout *, const QRgb *)
 {
    for (int i = 0; i < count; ++i) {
@@ -99,7 +99,7 @@ static const uint *QT_FASTCALL convertRGB32FromARGB32PM(uint *buffer, const uint
    return buffer;
 }
 
-static const uint *QT_FASTCALL convertRGB32ToARGB32PM(uint *buffer, const uint *src, int count,
+static const uint *convertRGB32ToARGB32PM(uint *buffer, const uint *src, int count,
    const QPixelLayout *, const QRgb *)
 {
    for (int i = 0; i < count; ++i) {
@@ -109,7 +109,7 @@ static const uint *QT_FASTCALL convertRGB32ToARGB32PM(uint *buffer, const uint *
 }
 
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
-extern const uint *QT_FASTCALL convertRGB32FromARGB32PM_sse4(uint *buffer, const uint *src, int count, const QPixelLayout *,
+extern const uint *convertRGB32FromARGB32PM_sse4(uint *buffer, const uint *src, int count, const QPixelLayout *,
    const QRgb *);
 #endif
 
@@ -269,7 +269,7 @@ static void convert_ARGB_to_ARGB_PM(QImageData *dest, const QImageData *src, Qt:
    }
 }
 
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32(quint32 *dest_data, const uchar *src_data, int len)
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32(quint32 *dest_data, const uchar *src_data, int len)
 {
    int pixel = 0;
    // prolog: align input to 32bit
@@ -304,7 +304,7 @@ Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32(quint32 *dest_data, con
    }
 }
 
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgbx8888(quint32 *dest_data, const uchar *src_data, int len)
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgbx8888(quint32 *dest_data, const uchar *src_data, int len)
 {
    int pixel = 0;
    // prolog: align input to 32bit
@@ -346,7 +346,7 @@ Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgbx8888(quint32 *dest_data, 
    }
 }
 
-typedef void (QT_FASTCALL *Rgb888ToRgbConverter)(quint32 *dst, const uchar *src, int len);
+typedef void (*Rgb888ToRgbConverter)(quint32 *dst, const uchar *src, int len);
 
 template <bool rgbx>
 static void convert_RGB888_to_RGB(QImageData *dest, const QImageData *src, Qt::ImageConversionFlags)
@@ -3029,7 +3029,8 @@ static int qInitImageConversions()
 
    return 1;
 }
-//  BROOM -  change to a CLASS
+
+//  BROOM -  static issue, redesign
 
 
 // Ensure initialization if these structures

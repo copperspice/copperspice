@@ -43,37 +43,6 @@ class QImageDataMisc;
 struct QImageData;
 
 
-/* BROOM - should be removed
-#ifdef QT_DEPRECATED
-
-class QImageTextKeyLang {
- public:
-   QImageTextKeyLang(const char *k, const char *l) : key(k), lang(l) { }
-   QImageTextKeyLang() { }
-
-   QByteArray key;
-   QByteArray lang;
-
-   bool operator< (const QImageTextKeyLang &other) const {
-      return key < other.key || (key == other.key && lang < other.lang);
-   }
-
-   bool operator== (const QImageTextKeyLang &other) const {
-      return key == other.key && lang == other.lang;
-   }
-
-   inline bool operator!= (const QImageTextKeyLang &other) const {
-      return !operator==(other);
-   }
-
- private:
-    friend class QImage;
-    QImageTextKeyLang(bool dummy) {}
-};
-
-#endif
-
-*/
 
 typedef void (*QImageCleanupFunction)(void *);
 
@@ -323,19 +292,6 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    static QPixelFormat toPixelFormat(QImage::Format format);
    static QImage::Format toImageFormat(QPixelFormat format);
 
-   /* BROOM - should be removed
-   #ifdef QT_DEPRECATED
-      QT_DEPRECATED QString text(const char *key, const char *lang = 0) const;
-      QT_DEPRECATED QList<QImageTextKeyLang> textList() const;
-      QT_DEPRECATED QStringList textLanguages() const;
-      QT_DEPRECATED QString text(const QImageTextKeyLang &) const;
-      QT_DEPRECATED void setText(const char *key, const char *lang, const QString &);
-      QT_DEPRECATED inline int numColors() const;
-      QT_DEPRECATED inline void setNumColors(int);
-      QT_DEPRECATED inline int numBytes() const;
-   #endif
-   */
-
  protected:
    typedef QImageData *DataPtr;
 
@@ -353,12 +309,14 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QImage smoothScaled(int w, int h) const;
 
  private:
-   friend class QWSOnScreenSurface;
    QImageData *d;
 
+   friend class QBackingStore;
+   friend class QBlittablePlatformPixmap;
    friend class QImagePixmapCleanupHooks;
    friend class QRasterPlatformPixmap;
-   friend class QBlittablePlatformPixmap;
+   friend class QSpanData;
+
    friend class QPixmapCacheEntry;
 };
 
@@ -392,98 +350,6 @@ inline void QImage::setPixelColor(const QPoint &pt, const QColor &c)
    setPixelColor(pt.x(), pt.y(), c);
 }
 
-
-/* BROOM - should be removed
-#ifdef QT_DEPRECATED
-
-inline QString QImage::text(const char* key, const char* lang) const
-{
-    if (!d)
-        return QString();
-    QString k = QString::fromLatin1(key);
-    if (lang && *lang)
-        k += QLatin1Char('/') + QString::fromLatin1(lang);
-    return text(k);
-}
-
-inline QList<QImageTextKeyLang> QImage::textList() const
-{
-    QList<QImageTextKeyLang> imageTextKeys;
-    if (!d)
-        return imageTextKeys;
-    QStringList keys = textKeys();
-    for (int i = 0; i < keys.size(); ++i) {
-        int index = keys.at(i).indexOf(QLatin1Char('/'));
-        if (index > 0) {
-            QImageTextKeyLang tkl(true);
-            tkl.key = keys.at(i).left(index).toLatin1();
-            tkl.lang = keys.at(i).mid(index+1).toLatin1();
-            imageTextKeys += tkl;
-        }
-    }
-
-    return imageTextKeys;
-}
-
-inline QStringList QImage::textLanguages() const
-{
-    if (!d)
-        return QStringList();
-    QStringList keys = textKeys();
-    QStringList languages;
-    for (int i = 0; i < keys.size(); ++i) {
-        int index = keys.at(i).indexOf(QLatin1Char('/'));
-        if (index > 0)
-            languages += keys.at(i).mid(index+1);
-    }
-
-    return languages;
-}
-
-inline QString QImage::text(const QImageTextKeyLang&kl) const
-{
-    if (!d)
-        return QString();
-    QString k = QString::fromLatin1(kl.key.constData());
-    if (!kl.lang.isEmpty())
-        k += QLatin1Char('/') + QString::fromLatin1(kl.lang.constData());
-    return text(k);
-}
-
-inline void QImage::setText(const char* key, const char* lang, const QString &s)
-{
-    if (!d)
-        return;
-    detach();
-
-    // In case detach() ran out of memory
-    if (!d)
-        return;
-
-    QString k = QString::fromLatin1(key);
-    if (lang && *lang)
-        k += QLatin1Char('/') + QString::fromLatin1(lang);
-    setText(k, s);
-}
-
-
-
-inline int QImage::numColors() const
-{
-   return colorCount();
-}
-
-inline void QImage::setNumColors(int n)
-{
-   setColorCount(n);
-}
-
-inline int QImage::numBytes() const
-{
-   return byteCount();
-}
-#endif
-*/
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QImage &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QImage &);

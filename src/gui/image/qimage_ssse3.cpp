@@ -29,7 +29,7 @@
 // Convert a scanline of RGB888 (src) to RGB32 (dst)
 // src must be at least len * 3 bytes
 // dst must be at least len * 4 bytes
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, const uchar *src, int len)
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, const uchar *src, int len)
 {
    quint32 *const end = dst + len;
 

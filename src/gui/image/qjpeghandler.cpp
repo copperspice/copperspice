@@ -55,9 +55,9 @@ extern "C" {
 #endif
 }
 
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32(quint32 *dst, const uchar *src, int len);
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32(quint32 *dst, const uchar *src, int len);
 
-typedef void (QT_FASTCALL *Rgb888ToRgb32Converter)(quint32 *dst, const uchar *src, int len);
+typedef void (*Rgb888ToRgb32Converter)(quint32 *dst, const uchar *src, int len);
 
 struct my_error_mgr : public jpeg_error_mgr {
    jmp_buf setjmp_buffer;
@@ -994,8 +994,8 @@ bool QJpegHandlerPrivate::read(QImage *image)
 
 }
 
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32_neon(quint32 *dst, const uchar *src, int len);
-Q_GUI_EXPORT void QT_FASTCALL qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, const uchar *src, int len);
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32_neon(quint32 *dst, const uchar *src, int len);
+Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, const uchar *src, int len);
 extern "C" void qt_convert_rgb888_to_rgb32_mips_dspr2_asm(quint32 *dst, const uchar *src, int len);
 QJpegHandler::QJpegHandler()
    : d(new QJpegHandlerPrivate(this))
