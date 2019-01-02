@@ -24,6 +24,7 @@
 #define QTOOLS_P_H
 
 #include <qglobal.h>
+#include <limits>
 
 namespace QtMiscUtils {
 
@@ -38,6 +39,9 @@ constexpr inline char toHexLower(uint value)
 }
 
 }
+
+// typically need an extra bit for qNextPowerOfTwo when determining the next allocation size.
+constexpr int MaxAllocSize = (1 << (std::numeric_limits<int>::digits - 1)) - 1;
 
 // implemented in qbytearray.cpp
 int Q_CORE_EXPORT qAllocMore(int alloc, int extra);

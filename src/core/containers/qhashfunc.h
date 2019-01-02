@@ -74,6 +74,11 @@ inline uint qHash(int key, uint seed = 0)
    return uint(key) ^ seed;
 }
 
+inline uint qHash(double key, uint seed = 0)
+{
+   return uint(key) ^ seed;
+}
+
 inline uint qHash(ulong key, uint seed = 0)
 {
    if (sizeof(ulong) > sizeof(uint)) {

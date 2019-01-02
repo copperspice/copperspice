@@ -21,15 +21,13 @@
 ***********************************************************************/
 
 // do not move include, if qthread.h is included directly forward declarations are not sufficient 12/30/2013
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
 #ifndef QTHREAD_H
 #define QTHREAD_H
 
 #include <QScopedPointer>
 #include <limits.h>
-
-QT_BEGIN_NAMESPACE
 
 class QThreadData;
 class QThreadPrivate;
@@ -108,10 +106,9 @@ class Q_CORE_EXPORT QThread : public QObject
    static void initialize();
    static void cleanup();
 
+   friend class QCoreApplicationPrivate;
    friend class QCoreApplication;
    friend class QThreadData;
 };
-
-QT_END_NAMESPACE
 
 #endif // QTHREAD_H
