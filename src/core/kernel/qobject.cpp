@@ -730,8 +730,17 @@ bool QObject::isWidgetType() const
 {
    return cs_isWidgetType();
 }
-
 bool QObject::cs_isWidgetType() const
+{
+   return false;
+}
+
+bool QObject::isWindowType() const
+{
+   return cs_isWindowType();
+}
+
+bool QObject::cs_isWindowType() const
 {
    return false;
 }

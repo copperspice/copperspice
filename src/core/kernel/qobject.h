@@ -141,6 +141,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    bool inherits(const QString &classname) const;
    bool isWidgetType() const;
+   bool isWindowType() const;
+
    void killTimer(int id);
 
    void moveToThread(QThread *targetThread);
@@ -204,6 +206,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
  protected:
    virtual bool cs_isWidgetType() const;
+   virtual bool cs_isWindowType() const;
+
    void cs_forceRemoveChild();
 
    virtual void childEvent(QChildEvent *event);

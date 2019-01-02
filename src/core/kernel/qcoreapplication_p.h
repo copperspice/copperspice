@@ -41,6 +41,8 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    QCoreApplicationPrivate(int &aargc,  char **aargv, uint flags);
    virtual ~QCoreApplicationPrivate();
 
+   void init();
+   static void initLocale();
    bool sendThroughApplicationEventFilters(QObject *, QEvent *);
    bool sendThroughObjectEventFilters(QObject *, QEvent *);
    bool notify_helper(QObject *, QEvent *);
@@ -67,6 +69,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    }
 
    void maybeQuit();
+   void checkReceiverThread(QObject *receiver);
 
    static QThread *theMainThread;
    static QThread *mainThread();
@@ -74,9 +77,6 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    static bool checkInstance(const char *method);
    static void sendPostedEvents(QObject *receiver, int event_type, QThreadData *data);
 
-#if !defined (QT_NO_DEBUG) || defined (QT_MAC_FRAMEWORK_BUILD)
-   void checkReceiverThread(QObject *receiver);
-#endif
 
    int &argc;
    char **argv;
@@ -104,6 +104,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    static bool is_app_running;
    static bool is_app_closing;
 
+   static bool setuidAllowed;
    static uint attribs;
 
    static inline bool testAttribute(uint flag) {

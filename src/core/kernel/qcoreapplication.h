@@ -58,6 +58,11 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    CORE_CS_PROPERTY_READ(organizationDomain, cs_organizationDomain)
    CORE_CS_PROPERTY_WRITE(organizationDomain, cs_setOrganizationDomain)
 
+
+// BROOM - add me    Q_PROPERTY(bool quitLockEnabled READ isQuitLockEnabled WRITE setQuitLockEnabled)
+
+
+
    Q_DECLARE_PRIVATE(QCoreApplication)
 
  public:
@@ -97,6 +102,9 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static QString applicationVersion();
    inline void cs_setApplicationVersion(const QString &version);
    inline QString cs_applicationVersion() const;
+
+   static void setSetuidAllowed(bool allow);
+   static bool isSetuidAllowed();
 
    static QCoreApplication *instance() {
       return self;
@@ -156,6 +164,9 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    void cs_internal_maybeQuit();
 
+   static bool isQuitLockEnabled();
+   static void setQuitLockEnabled(bool enabled);
+
    CORE_CS_SLOT_1(Public, static void quit())
    CORE_CS_SLOT_2(quit)
 
@@ -182,16 +193,20 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    Q_DISABLE_COPY(QCoreApplication)
 
-   friend class QEventDispatcherUNIXPrivate;
+
    friend class QApplication;
    friend class QApplicationPrivate;
-   friend class QETWidget;
-   friend class QShortcutMap;
+   friend class QClassFactory;
+   friend class QCocoaEventDispatcherPrivate;
+   friend class QEventDispatcherUNIXPrivate;
    friend class QWidget;
+   friend class QWidgetWindow;
    friend class QWidgetPrivate;
+
+
    friend bool qt_sendSpontaneousEvent(QObject *, QEvent *);
    friend Q_CORE_EXPORT QString qAppName();
-   friend class QClassFactory;
+
 };
 
 void QCoreApplication::cs_setApplicationName(const QString &application)

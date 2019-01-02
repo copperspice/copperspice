@@ -32,42 +32,45 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qhash.h>
+#include <qmutex.h>
 #include <qprocess_p.h>
 #include <qtextcodec.h>
+
 #include <qthread.h>
 #include <qthreadpool.h>
 #include <qthreadstorage.h>
 #include <qthread_p.h>
+
 #include <qelapsedtimer.h>
 #include <qlibraryinfo.h>
 #include <qvarlengtharray.h>
 #include <qfactoryloader_p.h>
 #include <qfunctions_p.h>
 #include <qlocale_p.h>
-#include <qmutexpool_p.h>
+
 
 #if defined(Q_OS_UNIX)
 #    if !defined(QT_NO_GLIB)
 #    include <qeventdispatcher_glib_p.h>
 #    endif
-#    include <qeventdispatcher_unix_p.h>
+
+#include <qeventdispatcher_unix_p.h>
+#include <locale.h>
+#include <unistd.h>
+#include <sys/types.h>
 #endif
 
 #ifdef Q_OS_WIN
 #include <qeventdispatcher_win_p.h>
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
 #include <qcore_mac_p.h>
+#include <qeventdispatcher_cf_p.h>
+#include <qeventdispatcher_unix_p.h>
 #endif
 
 #include <stdlib.h>
-
-#ifdef Q_OS_UNIX
-#include <locale.h>
-#endif
-
-QT_BEGIN_NAMESPACE
 
 class QMutexUnlocker
 {
@@ -98,6 +101,7 @@ extern QString qAppFileName();
 #endif
 
 
+bool QCoreApplicationPrivate::setuidAllowed = false;
 #if ! defined(Q_OS_WIN)
 
 #ifdef Q_OS_MAC
@@ -115,18 +119,15 @@ QString QCoreApplicationPrivate::macMenuBarName()
 
 QString QCoreApplicationPrivate::appName() const
 {
-   QMutexLocker locker(QMutexPool::globalInstanceGet(&applicationName));
-
-   if (applicationName.isEmpty()) {
+   QString applicationName;
 
 #ifdef Q_OS_MAC
-      applicationName = macMenuBarName();
+   applicationName = macMenuBarName();
 #endif
 
-      if (applicationName.isEmpty() && argv[0]) {
-         char *p = strrchr(argv[0], '/');
-         applicationName = QString::fromUtf8(p ? p + 1 : argv[0]);
-      }
+   if (applicationName.isEmpty() && argv[0]) {
+      char *p = strrchr(argv[0], '/');
+      applicationName = QString::fromUtf8(p ? p + 1 : argv[0]);
    }
 
    return applicationName;
@@ -136,6 +137,7 @@ QString QCoreApplicationPrivate::appName() const
 bool QCoreApplicationPrivate::checkInstance(const char *function)
 {
    bool b = (QCoreApplication::self != 0);
+
    if (!b) {
       qWarning("QApplication::%s: Please instantiate the QApplication object first", function);
    }
@@ -150,15 +152,20 @@ void QCoreApplicationPrivate::processCommandLineArguments()
 
    for (int i = 1; i < argc; ++i) {
 
-      if (argv[i] && *argv[i] != '-') {
+      if (! argv[i]) {
+          continue;
+      }
+
+      if (*argv[i] != '-') {
          argv[j++] = argv[i];
          continue;
       }
 
-      QByteArray arg = argv[i];
+      QString arg = QString::fromUtf8(argv[i]);
 
       if (arg.startsWith("-qmljsdebugger=")) {
-         *qmljs_debug_arguments() = QString::fromUtf8(arg.right(arg.length() - 15));
+
+         *qmljs_debug_arguments() = arg.right(arg.length() - 15);
 
       } else if (arg == "-qmljsdebugger" && i < argc - 1) {
          ++i;
@@ -220,7 +227,7 @@ void qAddPostRoutine(QtCleanUpFunction p)
 void qRemovePostRoutine(QtCleanUpFunction p)
 {
    QVFuncList *list = postRList();
-   if (!list) {
+   if (! list) {
       return;
    }
    list->removeAll(p);
@@ -312,8 +319,12 @@ struct QCoreApplicationData {
       }
 
    }
-   QString orgName, orgDomain, application;
+   QString orgName;
+   QString orgDomain;
+   QString application;
    QString applicationVersion;
+
+   bool applicationNameSet;      // true if setApplicationName was called
 
    QStringList *app_libpaths;
 };
@@ -461,12 +472,23 @@ QString qAppName()
    return QCoreApplication::instance()->d_func()->appName();
 }
 
+void QCoreApplicationPrivate::initLocale()
+{
+    if (qt_locale_initialized) {
+      return;
+    }
+
+    qt_locale_initialized = true;
+
+#ifdef Q_OS_UNIX
+    setlocale(LC_ALL, "");
+#endif
+}
 // internal
 QCoreApplication::QCoreApplication(QCoreApplicationPrivate &p)
    : QObject(0), d_ptr(&p)
 {
    d_ptr->q_ptr = this;
-   init();
 
    // note: it is the subclasses' job to call
    // QCoreApplicationPrivate::eventDispatcher->startingUp();
@@ -483,61 +505,63 @@ QCoreApplication::QCoreApplication(int &argc, char **argv, int _internal)
    : QObject(0), d_ptr(new QCoreApplicationPrivate(argc, argv, _internal) )
 {
    d_ptr->q_ptr = this;
-   init();
+   d_ptr->init();
    QCoreApplicationPrivate::eventDispatcher->startingUp();
 }
 
-// ### move to QCoreApplicationPrivate
-void QCoreApplication::init()
+void QCoreApplicationPrivate::init()
 {
-   Q_D(QCoreApplication);
+   Q_Q(QCoreApplication);
 
-#ifdef Q_OS_UNIX
-   setlocale(LC_ALL, "");                // use correct char set mapping
-   qt_locale_initialized = true;
+   initLocale();
+
+   Q_ASSERT_X(! QCoreApplication::self, "QCoreApplication", "There should be only one application object");
+   QCoreApplication::self = q;
+
+   // Store app name (so it's still available after QCoreApplication is destroyed)
+   if (! coreappdata()->applicationNameSet) {
+      coreappdata()->application = appName();
+   }
+   // emerald - may want to adjust the library path
+#if ! defined(QT_NO_SETTINGS)
+   if (! coreappdata()->app_libpaths) {
+      // make sure that library paths is initialized
+      q->libraryPaths();
+
+   } else {
+      appendApplicationPathToLibraryPaths();
+   }
 #endif
 
-   Q_ASSERT_X(!self, "QCoreApplication", "there should be only one application object");
-   QCoreApplication::self = this;
 
    // threads
    QThread::initialize();
-   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(q);
 
    // use the event dispatcher created by the app programmer (if any)
-   if (! QCoreApplicationPrivate::eventDispatcher) {
-      QCoreApplicationPrivate::eventDispatcher = threadData->eventDispatcher;
+   if (! eventDispatcher) {
+      eventDispatcher = threadData->eventDispatcher;
    }
 
    // otherwise we create one
-   if (!QCoreApplicationPrivate::eventDispatcher) {
-      d->createEventDispatcher();
+   if (! eventDispatcher) {
+      createEventDispatcher();
    }
-   Q_ASSERT(QCoreApplicationPrivate::eventDispatcher != 0);
+   Q_ASSERT(eventDispatcher != 0);
 
-   if (!QCoreApplicationPrivate::eventDispatcher->parent()) {
-      QCoreApplicationPrivate::eventDispatcher->moveToThread(threadData->thread);
+   if (! eventDispatcher->parent()) {
+      eventDispatcher->moveToThread(threadData->thread);
+      eventDispatcher->setParent(q);
    }
 
-   threadData->eventDispatcher = QCoreApplicationPrivate::eventDispatcher;
+   threadData->eventDispatcher = eventDispatcher;
+   eventDispatcherReady();
 
-#if ! defined(QT_NO_SETTINGS)
-   if (!coreappdata()->app_libpaths) {
-      // make sure that library paths is initialized
-      libraryPaths();
-   } else {
-      d->appendApplicationPathToLibraryPaths();
-   }
-#endif
-
-#ifdef QT_EVAL
-   extern void qt_core_eval_init(uint);
-   qt_core_eval_init(d->application_type);
-#endif
-
-   d->processCommandLineArguments();
+   processCommandLineArguments();
    qt_call_pre_routines();
    qt_startup_hook();
+
+   is_app_running = true; // No longer starting up.
 }
 
 QCoreApplication::~QCoreApplication()
@@ -562,18 +586,30 @@ QCoreApplication::~QCoreApplication()
       globalThreadPool->waitForDone();
    }
 
+   // threads
    QThread::cleanup();
-
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-   threadData->eventDispatcher = 0;
+   threadData->eventDispatcher = nullptr;
+
    if (QCoreApplicationPrivate::eventDispatcher) {
       QCoreApplicationPrivate::eventDispatcher->closingDown();
    }
+
    QCoreApplicationPrivate::eventDispatcher = 0;
 
    delete coreappdata()->app_libpaths;
    coreappdata()->app_libpaths = 0;
+}
+
+void QCoreApplication::setSetuidAllowed(bool allow)
+{
+    QCoreApplicationPrivate::setuidAllowed = allow;
+}
+
+bool QCoreApplication::isSetuidAllowed()
+{
+    return QCoreApplicationPrivate::setuidAllowed;
 }
 
 void QCoreApplication::setAttribute(Qt::ApplicationAttribute attribute, bool on)
@@ -583,41 +619,25 @@ void QCoreApplication::setAttribute(Qt::ApplicationAttribute attribute, bool on)
    } else {
       QCoreApplicationPrivate::attribs &= ~(1 << attribute);
    }
-
-#ifdef Q_OS_MAC
-   // Turn on the no native menubar here, since we used to
-   // do this implicitly. We DO NOT flip it off if someone sets
-   // it to false.
-   // Ideally, we'd have magic that would be something along the lines of
-   // "follow MacPluginApplication" unless explicitly set.
-   // Considering this attribute isn't only at the beginning
-   // it's unlikely it will ever be a problem, but I want
-   // to have the behavior documented here.
-
-   if (attribute == Qt::AA_MacPluginApplication && on && ! testAttribute(Qt::AA_DontUseNativeMenuBar)) {
-      setAttribute(Qt::AA_DontUseNativeMenuBar, true);
-   }
-#endif
 }
 
-/*!
-  Returns true if attribute \a attribute is set;
-  otherwise returns false.
-
-  \sa setAttribute()
- */
 bool QCoreApplication::testAttribute(Qt::ApplicationAttribute attribute)
 {
    return QCoreApplicationPrivate::testAttribute(attribute);
 }
 
 
-/*!
-  \internal
+bool QCoreApplication::isQuitLockEnabled()
+{
+    return quitLockRefEnabled;
+}
 
-  This function is here to make it possible for Qt extensions to
-  hook into event notification without subclassing QApplication
-*/
+static bool doNotify(QObject *, QEvent *);
+
+void QCoreApplication::setQuitLockEnabled(bool enabled)
+{
+    quitLockRefEnabled = enabled;
+}
 bool QCoreApplication::notifyInternal(QObject *receiver, QEvent *event)
 {
    // enforces the rule that events can only be sent to objects in
