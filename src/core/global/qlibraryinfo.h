@@ -24,11 +24,9 @@
 #define QLIBRARYINFO_H
 
 #include <qstring8.h>
-#include <qdate.h>
-#include <qsettings.h>
+#include <qdatetime.h>
 
-#ifndef QT_NO_SETTINGS
-
+class QStringList;
 class Q_CORE_EXPORT QLibraryInfo
 {
  public:
@@ -36,9 +34,8 @@ class Q_CORE_EXPORT QLibraryInfo
    static QString licensedProducts();
 
 #ifndef QT_NO_DATESTRING
-   static QDate buildDate();
+    static QDate buildDate();
 #endif
-
    enum LibraryLocation {
       PluginsPath,
       ImportsPath,
@@ -46,17 +43,14 @@ class Q_CORE_EXPORT QLibraryInfo
       TranslationsPath,
       SettingsPath,
    };
+
    static QString location(LibraryLocation);
 
+   static QStringList platformPluginArguments(const QString &platformName);
  private:
    QLibraryInfo();
 
-   static QSettings *configuration();
-   static QSettings *findConfiguration();
-   static QSettings *qt_library_settings();
 };
-
-#endif /* QT_NO_SETTINGS */
 
 Q_CORE_EXPORT void cs_print_build_info();
 

@@ -21,10 +21,13 @@
 ***********************************************************************/
 
 #include <qdir.h>
+#include <qstringlist.h>
 #include <qfile.h>
+#include <qsettings.h>
 #include <qlibraryinfo.h>
 #include <qscopedpointer.h>
 #include <qcoreapplication.h>
+
 #include <qregularexpression.h>
 #include <cs_build_info.h>
 
@@ -34,16 +37,73 @@
 
 #ifndef QT_NO_SETTINGS
 
-QLibraryInfo::QLibraryInfo()
+static const char platformsSection[] = "Platforms";
+
+struct QLibrarySettings
 {
+    QLibrarySettings();
+    void load();
+
+    QScopedPointer<QSettings> settings;
+    bool reloadOnQAppAvailable;
+
+};
+Q_GLOBAL_STATIC(QLibrarySettings, qt_library_settings)
+
+class QLibraryInfoPrivate
+{
+public:
+    static QSettings *findConfiguration();
+    static QSettings *configuration()
+    {
+        QLibrarySettings *ls = qt_library_settings();
+
+        if (ls) {
+            if (ls->reloadOnQAppAvailable && QCoreApplication::instance() != nullptr) {
+                ls->load();
+            }
+
+            return ls->settings.data();
+
+        } else {
+            return nullptr;
+        }
+    }
+};
+
+QLibrarySettings::QLibrarySettings()
+{
+   load();
 }
 
-QSettings *QLibraryInfo::configuration()
+void QLibrarySettings::load()
 {
-   return qt_library_settings();
+    settings.reset(QLibraryInfoPrivate::findConfiguration());
+    reloadOnQAppAvailable = (settings.data() == 0 && QCoreApplication::instance() == 0);
+
+    bool haveDevicePaths;
+    bool haveEffectivePaths;
+    bool havePaths;
+
+    if (settings) {
+
+        QStringList children = settings->childGroups();
+        haveDevicePaths = children.contains("DevicePaths");
+
+        // EffectiveSourcePaths is for the build only
+        bool haveEffectiveSourcePaths = false;
+        haveEffectivePaths = haveEffectiveSourcePaths || children.contains("EffectivePaths");
+
+        // an existing but empty file claimed to contain the Paths section
+        havePaths = (! haveDevicePaths && ! haveEffectivePaths
+                     && ! children.contains(platformsSection)) || children.contains("Paths");
+        if (! havePaths) {
+            settings.reset(0);
+        }
+    }
 }
 
-QSettings *QLibraryInfo::findConfiguration()
+QSettings *QLibraryInfoPrivate::findConfiguration()
 {
    QString qtconfig(":/cs/etc/cs.conf");
 
@@ -53,7 +113,8 @@ QSettings *QLibraryInfo::findConfiguration()
       CFBundleRef bundleRef = CFBundleGetMainBundle();
 
       if (bundleRef) {
-         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString("cs.conf"), 0, 0);
+         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef,
+               QCFString("cs.conf"), 0, 0);
 
          if (urlRef) {
             QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
@@ -76,12 +137,21 @@ QSettings *QLibraryInfo::findConfiguration()
    return 0;     // no luck
 }
 
-#ifndef QT_NO_DATESTRING
+#endif // QT_NO_SETTINGS
+
+QLibraryInfo::QLibraryInfo()
+{
+}
+
 QDate QLibraryInfo::buildDate()
 {
+#ifndef QT_NO_DATESTRING
    return QDate::fromString(QString::fromLatin1(BUILD_DATE), Qt::ISODate);
-}
+#else
+   return QDate::fromSecsSinceEpoch(0);
 #endif
+}
+
 
 QString QLibraryInfo::licensee()
 {
@@ -97,7 +167,11 @@ QString QLibraryInfo::location(LibraryLocation loc)
 {
    QString retval;
 
-   QSettings *config = QLibraryInfo::configuration();
+   QSettings *config = nullptr;
+
+#if ! defined(QT_NO_SETTINGS)
+   config = QLibraryInfoPrivate::configuration();
+#endif
 
    if (config) {
 
@@ -117,6 +191,7 @@ QString QLibraryInfo::location(LibraryLocation loc)
             break;
 
          case Qml2ImportsPath:
+            key = "Qml2Imports";
             defaultValue = "qml";
             break;
 
@@ -127,6 +202,7 @@ QString QLibraryInfo::location(LibraryLocation loc)
 
          case SettingsPath:
             key = "Settings";
+            defaultValue = ".";
             break;
 
          default:
@@ -174,7 +250,7 @@ QString QLibraryInfo::location(LibraryLocation loc)
             break;
 
          case SettingsPath:
-            // key = "Settings";
+            retval = "settings";
             break;
 
          default:
@@ -185,13 +261,21 @@ QString QLibraryInfo::location(LibraryLocation loc)
    return retval;
 }
 
-QSettings *QLibraryInfo::qt_library_settings()
+QStringList QLibraryInfo::platformPluginArguments(const QString &platformName)
 {
-   static QScopedPointer<QSettings> settings(QLibraryInfo::findConfiguration());
-   return settings.data();
-}
 
-#endif // QT_NO_SETTINGS
+#if ! defined(QT_NO_SETTINGS)
+    QScopedPointer<const QSettings> settings(QLibraryInfoPrivate::findConfiguration());
+
+    if (! settings.isNull()) {
+        QString key = QString(platformsSection) + "/" + platformName + "Arguments";
+
+        return settings->value(key).toStringList();
+    }
+#endif
+
+    return QStringList();
+}
 
 Q_CORE_EXPORT void cs_print_build_info()
 {

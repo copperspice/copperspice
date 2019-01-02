@@ -1219,8 +1219,7 @@ class Q_CORE_EXPORT Qt
    enum ClipOperation {
       NoClip,
       ReplaceClip,
-      IntersectClip,
-      UniteClip
+      IntersectClip
    };
 
    // Shape = 0x1, BoundingRect = 0x2
@@ -1711,16 +1710,20 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::Orientations)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::KeyboardModifiers)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::WindowFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::Alignment)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::Edges)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::ImageConversionFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::DockWidgetAreas)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::ToolBarAreas)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::WindowStates)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::ScreenOrientations)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::DropActions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::ItemFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MatchFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::TextInteractionFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::InputMethodQueries)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::InputMethodHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::TouchPointStates)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MouseEventFlags)
 
 #ifndef QT_NO_GESTURES
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::GestureFlags)
