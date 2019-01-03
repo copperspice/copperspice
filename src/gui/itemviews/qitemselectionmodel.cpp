@@ -1527,11 +1527,6 @@ const QItemSelection QItemSelectionModel::selection() const
    return selected;
 }
 
-QAbstractItemModel *QItemSelectionModel::model()
-{
-   return d_func()->model;
-}
-
 const QAbstractItemModel *QItemSelectionModel::model() const
 {
    return d_func()->model;

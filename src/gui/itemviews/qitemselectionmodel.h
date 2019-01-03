@@ -163,22 +163,25 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
 
    GUI_CS_FLAG(SelectionFlag, SelectionFlags)
 
+   GUI_CS_PROPERTY_READ(model, model)
+   GUI_CS_PROPERTY_WRITE(model, setModel)
+   GUI_CS_PROPERTY_NOTIFY(model, modelChanged)
 
-   GUI_CS_PROPERTY_READ(*model, model)
-   GUI_CS_PROPERTY_WRITE(*model, setModel)
-   GUI_CS_PROPERTY_NOTIFY(*model, modelChanged)
    GUI_CS_PROPERTY_READ(hasSelection, hasSelection)
    GUI_CS_PROPERTY_NOTIFY(hasSelection, selectionChanged)
    GUI_CS_PROPERTY_STORED(hasSelection, false)
    GUI_CS_PROPERTY_DESIGNABLE(hasSelection, false)
+
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_NOTIFY(currentIndex, currentChanged)
    GUI_CS_PROPERTY_STORED(currentIndex, false)
+
    GUI_CS_PROPERTY_DESIGNABLE(currentIndex, false)
    GUI_CS_PROPERTY_READ(selection, selection)
    GUI_CS_PROPERTY_NOTIFY(selection, selectionChanged)
    GUI_CS_PROPERTY_STORED(selection, false)
    GUI_CS_PROPERTY_DESIGNABLE(selection, false)
+
    GUI_CS_PROPERTY_READ(selectedIndexes, selectedIndexes)
    GUI_CS_PROPERTY_NOTIFY(selectedIndexes, selectionChanged)
    GUI_CS_PROPERTY_STORED(selectedIndexes, false)
@@ -222,8 +225,6 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
    const QItemSelection selection() const;
 
    const QAbstractItemModel *model() const;
-   QAbstractItemModel *model();
-
    void setModel(QAbstractItemModel *model);
 
    GUI_CS_SLOT_1(Public, void setCurrentIndex(const QModelIndex &index, QItemSelectionModel::SelectionFlags command))

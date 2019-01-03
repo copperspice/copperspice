@@ -25,13 +25,13 @@
 
 #include <qabstractscrollarea_p.h>
 #include <qabstractitemmodel_p.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qmime.h>
-#include <QtGui/qpainter.h>
-#include <QtCore/qpair.h>
-#include <QtGui/qregion.h>
-#include <QtCore/qdebug.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qmimedata.h>
+#include <qpainter.h>
+#include <qpair.h>
+#include <qregion.h>
+#include <qdebug.h>
 #include <qvector.h>
 #include <qbasictimer.h>
 #include <qelapsedtimer.h>
