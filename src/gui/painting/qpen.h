@@ -26,17 +26,16 @@
 #include <QtGui/qcolor.h>
 #include <QtGui/qbrush.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QVariant;
 class QPenPrivate;
 class QBrush;
 class QPen;
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
-#endif
+
 
 class Q_GUI_EXPORT QPen
 {
@@ -45,19 +44,25 @@ class Q_GUI_EXPORT QPen
    QPen(Qt::PenStyle);
    QPen(const QColor &color);
    QPen(const QBrush &brush, qreal width, Qt::PenStyle s = Qt::SolidLine,
-        Qt::PenCapStyle c = Qt::SquareCap, Qt::PenJoinStyle j = Qt::BevelJoin);
+      Qt::PenCapStyle c = Qt::SquareCap, Qt::PenJoinStyle j = Qt::BevelJoin);
+
+
    QPen(const QPen &pen);
+
+   QPen(QPen &&other) : d(other.d) {
+      other.d = nullptr;
+   }
 
    ~QPen();
 
    QPen &operator=(const QPen &pen);
 
-   inline QPen &operator=(QPen && other) {
+   QPen &operator=(QPen &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QPen &other) {
+   void swap(QPen &other) {
       qSwap(d, other.d);
    }
 
@@ -97,7 +102,8 @@ class Q_GUI_EXPORT QPen
    void setCosmetic(bool cosmetic);
 
    bool operator==(const QPen &p) const;
-   inline bool operator!=(const QPen &p) const {
+
+   bool operator!=(const QPen &p) const {
       return !(operator==(p));
    }
    operator QVariant() const;
@@ -105,6 +111,7 @@ class Q_GUI_EXPORT QPen
    bool isDetached();
 
    typedef QPenPrivate *DataPtr;
+
    inline DataPtr &data_ptr() {
       return d;
    }
@@ -115,14 +122,9 @@ class Q_GUI_EXPORT QPen
 
    void detach();
    class QPenPrivate *d;
-
 };
 
-Q_DECLARE_TYPEINFO(QPen, Q_MOVABLE_TYPE);
-Q_DECLARE_SHARED(QPen)
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPen &);
 
-QT_END_NAMESPACE
-
-#endif // QPEN_H
+#endif

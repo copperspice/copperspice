@@ -20,17 +20,20 @@
 *
 ***********************************************************************/
 
+#include <qmatrix.h>
 #include <qdatastream.h>
 #include <qdebug.h>
-#include <qmatrix.h>
+#include <qhashfunc.h>
+#include <qmath.h>
 #include <qregion.h>
 #include <qpainterpath.h>
 #include <qvariant.h>
-#include <qmath.h>
+
+#include <qpainterpath_p.h>
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
+
 
 // some defines to inline some code
 #define MAPDOUBLE(x, y, nx, ny) \
@@ -339,7 +342,7 @@ QPoint QMatrix::map(const QPoint &p) const
    qreal fx = p.x();
    qreal fy = p.y();
    return QPoint(qRound(_m11 * fx + _m21 * fy + _dx),
-                 qRound(_m12 * fx + _m22 * fy + _dy));
+         qRound(_m12 * fx + _m22 * fy + _dy));
 }
 
 /*!
@@ -503,7 +506,8 @@ extern QPainterPath qt_regionToPath(const QRegion &region);
 QRegion QMatrix::map(const QRegion &r) const
 {
    if (_m11 == 1.0 && _m22 == 1.0 && _m12 == 0.0 && _m21 == 0.0) { // translate or identity
-      if (_dx == 0.0 && _dy == 0.0) { // Identity
+      if (_dx == 0.0 && _dy == 0.0) {
+         // Identity
          return r;
       }
       QRegion copy(r);
@@ -515,22 +519,6 @@ QRegion QMatrix::map(const QRegion &r) const
    return p.toFillPolygon().toPolygon();
 }
 
-/*!
-    \fn QPainterPath operator *(const QPainterPath &path, const QMatrix &matrix)
-    \relates QMatrix
-
-    This is the same as \a{matrix}.map(\a{path}).
-
-    \sa QMatrix::map()
-*/
-
-/*!
-    \overload
-
-    Creates and returns a QPainterPath object that is a copy of the
-    given \a path, mapped into the coordinate system defined by this
-    matrix.
-*/
 QPainterPath QMatrix::map(const QPainterPath &path) const
 {
    if (path.isEmpty()) {
@@ -566,36 +554,6 @@ QPainterPath QMatrix::map(const QPainterPath &path) const
    return copy;
 }
 
-/*!
-    \fn QRegion QMatrix::mapToRegion(const QRect &rectangle) const
-
-    Returns the transformed rectangle \a rectangle as a QRegion
-    object. A rectangle which has been rotated or sheared may result
-    in a non-rectangular region being returned.
-
-    Use the mapToPolygon() or map() function instead.
-*/
-
-/*!
-    \fn QPolygon QMatrix::mapToPolygon(const QRect &rectangle) const
-
-    Creates and returns a QPolygon representation of the given \a
-    rectangle, mapped into the coordinate system defined by this
-    matrix.
-
-    The rectangle's coordinates are transformed using the following
-    formulas:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qmatrix.cpp 3
-
-    Polygons and rectangles behave slightly differently when
-    transformed (due to integer rounding), so
-    \c{matrix.map(QPolygon(rectangle))} is not always the same as
-    \c{matrix.mapToPolygon(rectangle)}.
-
-    \sa mapRect(), {QMatrix#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
 QPolygon QMatrix::mapToPolygon(const QRect &rect) const
 {
    QPolygon a(4);
@@ -631,9 +589,9 @@ QPolygon QMatrix::mapToPolygon(const QRect &rect) const
    // all coordinates are correctly, tranform to a pointarray
    // (rounding to the next integer)
    a.setPoints(4, qRound(x[0]), qRound(y[0]),
-               qRound(x[1]), qRound(y[1]),
-               qRound(x[2]), qRound(y[2]),
-               qRound(x[3]), qRound(y[3]));
+      qRound(x[1]), qRound(y[1]),
+      qRound(x[2]), qRound(y[2]),
+      qRound(x[3]), qRound(y[3]));
    return a;
 }
 
@@ -715,20 +673,6 @@ QMatrix &QMatrix::shear(qreal sh, qreal sv)
 
 const qreal deg2rad = qreal(0.017453292519943295769);        // pi/180
 
-/*!
-    \fn QMatrix &QMatrix::rotate(qreal degrees)
-
-    Rotates the coordinate system the given \a degrees
-    counterclockwise.
-
-    Note that if you apply a QMatrix to a point defined in widget
-    coordinates, the direction of the rotation will be clockwise
-    because the y-axis points downwards.
-
-    Returns a reference to the matrix.
-
-    \sa setMatrix()
-*/
 
 QMatrix &QMatrix::rotate(qreal a)
 {
@@ -749,110 +693,69 @@ QMatrix &QMatrix::rotate(qreal a)
    qreal tm12 = cosa * _m12 + sina * _m22;
    qreal tm21 = -sina * _m11 + cosa * _m21;
    qreal tm22 = -sina * _m12 + cosa * _m22;
+
    _m11 = tm11;
    _m12 = tm12;
    _m21 = tm21;
    _m22 = tm22;
+
    return *this;
 }
 
-/*!
-    \fn bool QMatrix::isInvertible() const
-
-    Returns true if the matrix is invertible, otherwise returns false.
-
-    \sa inverted()
-*/
-
-/*!
-    \obsolete
-    \fn qreal QMatrix::det() const
-
-    Returns the matrix's determinant.
-
-    \sa determinant()
-*/
-
-/*!
-    \since 4.6
-    \fn qreal QMatrix::determinant() const
-
-    Returns the matrix's determinant.
-*/
-
-/*!
-    \fn QMatrix QMatrix::invert(bool *invertible) const
-
-    Returns an inverted copy of this matrix.
-
-    Use the inverted() function instead.
-*/
-
-/*!
-    Returns an inverted copy of this matrix.
-
-    If the matrix is singular (not invertible), the returned matrix is
-    the identity matrix. If \a invertible is valid (i.e. not 0), its
-    value is set to true if the matrix is invertible, otherwise it is
-    set to false.
-
-    \sa isInvertible()
-*/
 
 QMatrix QMatrix::inverted(bool *invertible) const
 {
    qreal dtr = determinant();
    if (dtr == 0.0) {
       if (invertible) {
-         *invertible = false;   // singular matrix
+         *invertible = false;          // singular matrix
       }
       return QMatrix(true);
-   } else {                                      // invertible matrix
+   } else {                            // invertible matrix
       if (invertible) {
          *invertible = true;
       }
       qreal dinv = 1.0 / dtr;
       return QMatrix((_m22 * dinv),        (-_m12 * dinv),
-                     (-_m21 * dinv), (_m11 * dinv),
-                     ((_m21 * _dy - _m22 * _dx) * dinv),
-                     ((_m12 * _dx - _m11 * _dy) * dinv),
-                     true);
+            (-_m21 * dinv), (_m11 * dinv),
+            ((_m21 * _dy - _m22 * _dx) * dinv),
+            ((_m12 * _dx - _m11 * _dy) * dinv),
+            true);
    }
 }
 
 
-/*!
-    \fn bool QMatrix::operator==(const QMatrix &matrix) const
-
-    Returns true if this matrix is equal to the given \a matrix,
-    otherwise returns false.
-*/
-
 bool QMatrix::operator==(const QMatrix &m) const
 {
    return _m11 == m._m11 &&
-          _m12 == m._m12 &&
-          _m21 == m._m21 &&
-          _m22 == m._m22 &&
-          _dx == m._dx &&
-          _dy == m._dy;
+      _m12 == m._m12 &&
+      _m21 == m._m21 &&
+      _m22 == m._m22 &&
+      _dx == m._dx &&
+      _dy == m._dy;
 }
 
-/*!
-    \fn bool QMatrix::operator!=(const QMatrix &matrix) const
+uint qHash(const QMatrix &key, uint seed)
+{
+   seed = qHash(key.m11(), seed);
+   seed = qHash(key.m12(), seed);
+   seed = qHash(key.m21(), seed);
+   seed = qHash(key.m22(), seed);
+   seed = qHash(key.dx(),  seed);
+   seed = qHash(key.dy(),  seed);
 
-    Returns true if this matrix is not equal to the given \a matrix,
-    otherwise returns false.
-*/
+   return seed;
+}
+
 
 bool QMatrix::operator!=(const QMatrix &m) const
 {
    return _m11 != m._m11 ||
-          _m12 != m._m12 ||
-          _m21 != m._m21 ||
-          _m22 != m._m22 ||
-          _dx != m._dx ||
-          _dy != m._dy;
+      _m12 != m._m12 ||
+      _m21 != m._m21 ||
+      _m22 != m._m22 ||
+      _dx != m._dx ||
+      _dy != m._dy;
 }
 
 /*!
@@ -879,6 +782,7 @@ QMatrix &QMatrix::operator *=(const QMatrix &m)
    _m22 = tm22;
    _dx = tdx;
    _dy = tdy;
+
    return *this;
 }
 
@@ -937,11 +841,11 @@ Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m)
 QDataStream &operator<<(QDataStream &s, const QMatrix &m)
 {
    s << double(m.m11())
-     << double(m.m12())
-     << double(m.m21())
-     << double(m.m22())
-     << double(m.dx())
-     << double(m.dy());
+      << double(m.m12())
+      << double(m.m21())
+      << double(m.m22())
+      << double(m.dx())
+      << double(m.dy());
 
    return s;
 }
@@ -963,16 +867,16 @@ QDataStream &operator>>(QDataStream &s, QMatrix &m)
 
 QDebug operator<<(QDebug dbg, const QMatrix &m)
 {
+   QDebugStateSaver saver(dbg);
    dbg.nospace() << "QMatrix("
-                 << "11=" << m.m11()
-                 << " 12=" << m.m12()
-                 << " 21=" << m.m21()
-                 << " 22=" << m.m22()
-                 << " dx=" << m.dx()
-                 << " dy=" << m.dy()
-                 << ')';
-   return dbg.space();
+      << "11=" << m.m11()
+      << " 12=" << m.m12()
+      << " 21=" << m.m21()
+      << " 22=" << m.m22()
+      << " dx=" << m.dx()
+      << " dy=" << m.dy()
+      << ')';
+   return dbg;
 }
 
 
-QT_END_NAMESPACE

@@ -31,52 +31,57 @@
 #include <QtGui/qpainter.h>
 #include <QtGui/qpainterpath.h>
 #include <QtGui/qpaintengine.h>
-#include <QtCore/qhash.h>
+
 #include <qpen_p.h>
 
-QT_BEGIN_NAMESPACE
-
+class QRawFont;
 class QPaintEngine;
 class QEmulationPaintEngine;
 class QPaintEngineEx;
-struct QFixedPoint;
 
+struct QFixedPoint;
 struct QTLWExtra;
 
 struct DataPtrContainer {
    void *ptr;
 };
 
-inline void *data_ptr(const QTransform &t)
+inline const void *data_ptr(const QTransform &t)
 {
    return (DataPtrContainer *) &t;
 }
+
 inline bool qtransform_fast_equals(const QTransform &a, const QTransform &b)
 {
    return data_ptr(a) == data_ptr(b);
 }
 
-// QPen inline functions...
+// QPen inline functions
 inline QPen::DataPtr &data_ptr(const QPen &p)
 {
    return const_cast<QPen &>(p).data_ptr();
 }
+
 inline bool qpen_fast_equals(const QPen &a, const QPen &b)
 {
    return data_ptr(a) == data_ptr(b);
 }
+
 inline QBrush qpen_brush(const QPen &p)
 {
    return data_ptr(p)->brush;
 }
+
 inline qreal qpen_widthf(const QPen &p)
 {
    return data_ptr(p)->width;
 }
+
 inline Qt::PenStyle qpen_style(const QPen &p)
 {
    return data_ptr(p)->style;
 }
+
 inline Qt::PenCapStyle qpen_capStyle(const QPen &p)
 {
    return data_ptr(p)->capStyle;
@@ -91,18 +96,22 @@ inline QBrush::DataPtr &data_ptr(const QBrush &p)
 {
    return const_cast<QBrush &>(p).data_ptr();
 }
+
 inline bool qbrush_fast_equals(const QBrush &a, const QBrush &b)
 {
    return data_ptr(a) == data_ptr(b);
 }
+
 inline Qt::BrushStyle qbrush_style(const QBrush &b)
 {
    return data_ptr(b)->style;
 }
+
 inline const QColor &qbrush_color(const QBrush &b)
 {
    return data_ptr(b)->color;
 }
+
 inline bool qbrush_has_transform(const QBrush &b)
 {
    return data_ptr(b)->transform.type() > QTransform::TxNone;
@@ -155,6 +164,7 @@ class Q_GUI_EXPORT QPainterState : public QPaintEngineState
    QPainterState();
    QPainterState(const QPainterState *s);
    virtual ~QPainterState();
+
    void init(QPainter *p);
 
    QPointF brushOrigin;
@@ -162,21 +172,21 @@ class Q_GUI_EXPORT QPainterState : public QPaintEngineState
    QFont deviceFont;
    QPen pen;
    QBrush brush;
-   QBrush bgBrush;             // background brush
+   QBrush bgBrush;                       // background brush
    QRegion clipRegion;
    QPainterPath clipPath;
    Qt::ClipOperation clipOperation;
    QPainter::RenderHints renderHints;
-   QList<QPainterClipInfo> clipInfo; // ### Make me smaller and faster to copy around...
-   QTransform worldMatrix;       // World transformation matrix, not window and viewport
-   QTransform matrix;            // Complete transformation matrix,
+   QList<QPainterClipInfo> clipInfo;     // ### Make me smaller and faster to copy around...
+   QTransform worldMatrix;               // World transformation matrix, not window and viewport
+   QTransform matrix;                    // Complete transformation matrix,
    QTransform redirectionMatrix;
-   int wx, wy, ww, wh;         // window rectangle
-   int vx, vy, vw, vh;         // viewport rectangle
+   int wx, wy, ww, wh;                   // window rectangle
+   int vx, vy, vw, vh;                   // viewport rectangle
    qreal opacity;
 
-   uint WxF: 1;                // World transformation
-   uint VxF: 1;                // View transformation
+   uint WxF: 1;                          // World transformation
+   uint VxF: 1;                          // View transformation
    uint clipEnabled: 1;
 
    Qt::BGMode bgMode;
@@ -194,10 +204,11 @@ struct QPainterDummyState {
    QTransform transform;
 };
 
-class QRawFont;
+
 class QPainterPrivate
 {
    Q_DECLARE_PUBLIC(QPainter)
+
  public:
    QPainterPrivate(QPainter *painter)
       : q_ptr(painter), d_ptrs(0), state(0), dummyState(0), txinv(0), inDestructor(false), d_ptrs_size(0),
@@ -222,9 +233,9 @@ class QPainterPrivate
    uint refcount;
 
    enum DrawOperation { StrokeDraw        = 0x1,
-                        FillDraw          = 0x2,
-                        StrokeAndFillDraw = 0x3
-                      };
+      FillDraw          = 0x2,
+      StrokeAndFillDraw = 0x3
+   };
 
    QPainterDummyState *fakeState() const {
       if (!dummyState) {
@@ -240,19 +251,13 @@ class QPainterPrivate
    void draw_helper(const QPainterPath &path, DrawOperation operation = StrokeAndFillDraw);
    void drawStretchedGradient(const QPainterPath &path, DrawOperation operation);
    void drawOpaqueBackground(const QPainterPath &path, DrawOperation operation);
+   void drawTextItem(const QPointF &p, const QTextItem &_ti, QTextEngine *textEngine);
 
-#if !defined(QT_NO_RAWFONT)
    void drawGlyphs(const quint32 *glyphArray, QFixedPoint *positionArray, int glyphCount,
-                   const QRawFont &font, bool overline = false, bool underline = false, bool strikeOut = false);
-#endif
+      QFontEngine *fontEngine, bool overline = false, bool underline = false, bool strikeOut = false);
 
    void updateMatrix();
    void updateInvMatrix();
-
-   int rectSubtraction() const {
-      return state->pen.style() != Qt::NoPen && state->pen.width() == 0 ? 1 : 0;
-   }
-
    void checkEmulation();
 
    static QPainterPrivate *get(QPainter *painter) {
@@ -260,6 +265,9 @@ class QPainterPrivate
    }
 
    QTransform viewTransform() const;
+   qreal effectiveDevicePixelRatio() const;
+   QTransform hidpiScaleTransform() const;
+
    static bool attachPainterPrivate(QPainter *q, QPaintDevice *pdev);
    void detachPainterPrivate(QPainter *q);
 
@@ -272,11 +280,13 @@ class QPainterPrivate
    QBrush colorBrush;          // for fill with solid color
 };
 
-Q_GUI_EXPORT void qt_draw_helper(QPainterPrivate *p, const QPainterPath &path,
-                                 QPainterPrivate::DrawOperation operation);
+Q_GUI_EXPORT void qt_draw_helper(QPainterPrivate *p, const QPainterPath &path, QPainterPrivate::DrawOperation operation);
 
 QString qt_generate_brush_key(const QBrush &brush);
 
-QT_END_NAMESPACE
+inline bool qt_pen_is_cosmetic(const QPen &pen, QPainter::RenderHints hints)
+{
+   return pen.isCosmetic() || (const_cast<QPen &>(pen).data_ptr()->defaultWidth);
+}
 
-#endif // QPAINTER_P_H
+#endif

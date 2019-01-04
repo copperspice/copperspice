@@ -26,17 +26,15 @@
 #include <math.h>
 #include <qmath.h>
 
-QT_BEGIN_NAMESPACE
-
 static constexpr const qreal Q_PI   = qreal(M_PI);
 static constexpr const qreal Q_2PI  = qreal(M_PI * 2);
 static constexpr const qreal Q_PI2  = qreal(M_PI / 2);
+
+static const qreal Q_MM_PER_INCH = 25.4;
 
 inline int qIntSqrtInt(int v)
 {
    return static_cast<int>(qSqrt(static_cast<qreal>(v)));
 }
-
-QT_END_NAMESPACE
 
 #endif

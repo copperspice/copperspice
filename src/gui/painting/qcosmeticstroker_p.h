@@ -125,7 +125,6 @@ class QCosmeticStroker
    Point lastPixel;
    bool lastAxisAligned;
 
-   // broom - may not be used
    bool clipLine(qreal &x1, qreal &y1, qreal &x2, qreal &y2);
 
  private:
@@ -137,7 +136,5 @@ class QCosmeticStroker
    void calculateLastPoint(qreal rx1, qreal ry1, qreal rx2, qreal ry2);
 
 };
-
-
 
 #endif

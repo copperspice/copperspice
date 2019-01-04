@@ -27,10 +27,12 @@
 #include <qdrawingprimitive_sse2_p.h>
 #include <qpaintengine_raster_p.h>
 
+#ifndef QDRAWHELPER_AVX
+// in AVX mode, we'll use the SSSE3 code
 void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
-                                    const uchar *srcPixels, int sbpl,
-                                    int w, int h,
-                                    int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    const quint32 *src = (const quint32 *) srcPixels;
    quint32 *dst = (quint32 *) destPixels;
@@ -62,17 +64,18 @@ void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
       }
    }
 }
+#endif
 
 // qblendfunctions.cpp
 void qt_blend_rgb32_on_rgb32(uchar *destPixels, int dbpl,
-                             const uchar *srcPixels, int sbpl,
-                             int w, int h,
-                             int const_alpha);
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha);
 
 void qt_blend_rgb32_on_rgb32_sse2(uchar *destPixels, int dbpl,
-                                  const uchar *srcPixels, int sbpl,
-                                  int w, int h,
-                                  int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    const quint32 *src = (const quint32 *) srcPixels;
    quint32 *dst = (quint32 *) destPixels;
@@ -254,9 +257,12 @@ void qt_memfill32(quint32 *dest, quint32 value, int count)
    const int rest = count & 0x3;
    if (rest) {
       switch (rest) {
-        case 3: dest[count - 3] = value;
-        case 2: dest[count - 2] = value;
-        case 1: dest[count - 1] = value;
+         case 3:
+            dest[count - 3] = value;
+         case 2:
+            dest[count - 2] = value;
+         case 1:
+            dest[count - 1] = value;
       }
    }
 
@@ -266,21 +272,21 @@ void qt_memfill32(quint32 *dest, quint32 value, int count)
 
    const __m128i value128 = _mm_set_epi32(value, value, value, value);
    while (dst128 + 3 < end128) {
-        _mm_stream_si128(dst128 + 0, value128);
-        _mm_stream_si128(dst128 + 1, value128);
-        _mm_stream_si128(dst128 + 2, value128);
-        _mm_stream_si128(dst128 + 3, value128);
-        dst128 += 4;
-    }
+      _mm_stream_si128(dst128 + 0, value128);
+      _mm_stream_si128(dst128 + 1, value128);
+      _mm_stream_si128(dst128 + 2, value128);
+      _mm_stream_si128(dst128 + 3, value128);
+      dst128 += 4;
+   }
 
-    switch (count128 & 0x3) {
-       case 3:
+   switch (count128 & 0x3) {
+      case 3:
          _mm_stream_si128(dst128++, value128);
-       case 2:
+      case 2:
          _mm_stream_si128(dst128++, value128);
-       case 1:
-          _mm_stream_si128(dst128++, value128);
-    }
+      case 1:
+         _mm_stream_si128(dst128++, value128);
+   }
 }
 
 void QT_FASTCALL comp_func_solid_SourceOver_sse2(uint *destPixels, int length, uint color, uint const_alpha)
@@ -346,23 +352,23 @@ void qt_memfill16(quint16 *dest, quint16 value, int count)
 }
 
 void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y,
-                          quint32 color,
-                          const uchar *src, int width, int height, int stride)
+   quint32 color,
+   const uchar *src, int width, int height, int stride)
 {
    quint32 *dest = reinterpret_cast<quint32 *>(rasterBuffer->scanLine(y)) + x;
    const int destStride = rasterBuffer->bytesPerLine() / sizeof(quint32);
 
    const __m128i c128 = _mm_set1_epi32(color);
    const __m128i maskmask1 = _mm_set_epi32(0x10101010, 0x20202020,
-                                           0x40404040, 0x80808080);
+         0x40404040, 0x80808080);
    const __m128i maskadd1 = _mm_set_epi32(0x70707070, 0x60606060,
-                                          0x40404040, 0x00000000);
+         0x40404040, 0x00000000);
 
    if (width > 4) {
       const __m128i maskmask2 = _mm_set_epi32(0x01010101, 0x02020202,
-                                              0x04040404, 0x08080808);
+            0x04040404, 0x08080808);
       const __m128i maskadd2 = _mm_set_epi32(0x7f7f7f7f, 0x7e7e7e7e,
-                                             0x7c7c7c7c, 0x78787878);
+            0x7c7c7c7c, 0x78787878);
       while (height--) {
          for (int x = 0; x < width; x += 8) {
             const quint8 s = src[x >> 3];
@@ -398,22 +404,22 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y,
 }
 
 void qt_bitmapblit32_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-                          const QRgba64 &color,
-                          const uchar *src, int width, int height, int stride)
+   const QRgba64 &color,
+   const uchar *src, int width, int height, int stride)
 {
-    qt_bitmapblit32_sse2_base(rasterBuffer, x, y, color.toArgb32(), src, width, height, stride);
+   qt_bitmapblit32_sse2_base(rasterBuffer, x, y, color.toArgb32(), src, width, height, stride);
 }
 
 void qt_bitmapblit8888_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-                            const QRgba64 &color,
-                            const uchar *src, int width, int height, int stride)
+   const QRgba64 &color,
+   const uchar *src, int width, int height, int stride)
 {
-    qt_bitmapblit32_sse2_base(rasterBuffer, x, y, ARGB2RGBA(color.toArgb32()), src, width, height, stride);
+   qt_bitmapblit32_sse2_base(rasterBuffer, x, y, ARGB2RGBA(color.toArgb32()), src, width, height, stride);
 }
 
 void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-                          const QRgba64 &color,
-                          const uchar *src, int width, int height, int stride)
+   const QRgba64 &color,
+   const uchar *src, int width, int height, int stride)
 {
    const quint16 c = qConvertRgb32To16(color.toArgb32());
    quint16 *dest = reinterpret_cast<quint16 *>(rasterBuffer->scanLine(y)) + x;
@@ -422,9 +428,9 @@ void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y,
    const __m128i c128 = _mm_set1_epi16(c);
 
    const __m128i maskmask = _mm_set_epi16(0x0101, 0x0202, 0x0404, 0x0808,
-                                          0x1010, 0x2020, 0x4040, 0x8080);
+         0x1010, 0x2020, 0x4040, 0x8080);
    const __m128i maskadd = _mm_set_epi16(0x7f7f, 0x7e7e, 0x7c7c, 0x7878,
-                                         0x7070, 0x6060, 0x4040, 0x0000);
+         0x7070, 0x6060, 0x4040, 0x0000);
 
    while (height--) {
       for (int x = 0; x < width; x += 8) {
@@ -448,160 +454,211 @@ class QSimdSse2
    typedef __m128i Int32x4;
    typedef __m128 Float32x4;
 
-    union Vect_buffer_i { Int32x4 v; int i[4]; };
-    union Vect_buffer_f { Float32x4 v; float f[4]; };
+   union Vect_buffer_i {
+      Int32x4 v;
+      int i[4];
+   };
+   union Vect_buffer_f {
+      Float32x4 v;
+      float f[4];
+   };
 
-    static inline Float32x4 v_dup(float x) { return _mm_set1_ps(x); }
-    static inline Float32x4 v_dup(double x) { return _mm_set1_ps(x); }
-    static inline Int32x4 v_dup(int x) { return _mm_set1_epi32(x); }
-    static inline Int32x4 v_dup(uint x) { return _mm_set1_epi32(x); }
+   static inline Float32x4 v_dup(float x) {
+      return _mm_set1_ps(x);
+   }
+   static inline Float32x4 v_dup(double x) {
+      return _mm_set1_ps(x);
+   }
+   static inline Int32x4 v_dup(int x) {
+      return _mm_set1_epi32(x);
+   }
+   static inline Int32x4 v_dup(uint x) {
+      return _mm_set1_epi32(x);
+   }
 
-    static inline Float32x4 v_add(Float32x4 a, Float32x4 b) { return _mm_add_ps(a, b); }
-    static inline Int32x4 v_add(Int32x4 a, Int32x4 b) { return _mm_add_epi32(a, b); }
+   static inline Float32x4 v_add(Float32x4 a, Float32x4 b) {
+      return _mm_add_ps(a, b);
+   }
+   static inline Int32x4 v_add(Int32x4 a, Int32x4 b) {
+      return _mm_add_epi32(a, b);
+   }
 
-    static inline Float32x4 v_max(Float32x4 a, Float32x4 b) { return _mm_max_ps(a, b); }
-    static inline Float32x4 v_min(Float32x4 a, Float32x4 b) { return _mm_min_ps(a, b); }
-    static inline Int32x4 v_min_16(Int32x4 a, Int32x4 b) { return _mm_min_epi16(a, b); }
+   static inline Float32x4 v_max(Float32x4 a, Float32x4 b) {
+      return _mm_max_ps(a, b);
+   }
+   static inline Float32x4 v_min(Float32x4 a, Float32x4 b) {
+      return _mm_min_ps(a, b);
+   }
+   static inline Int32x4 v_min_16(Int32x4 a, Int32x4 b) {
+      return _mm_min_epi16(a, b);
+   }
 
-    static inline Int32x4 v_and(Int32x4 a, Int32x4 b) { return _mm_and_si128(a, b); }
+   static inline Int32x4 v_and(Int32x4 a, Int32x4 b) {
+      return _mm_and_si128(a, b);
+   }
 
-    static inline Float32x4 v_sub(Float32x4 a, Float32x4 b) { return _mm_sub_ps(a, b); }
-    static inline Int32x4 v_sub(Int32x4 a, Int32x4 b) { return _mm_sub_epi32(a, b); }
+   static inline Float32x4 v_sub(Float32x4 a, Float32x4 b) {
+      return _mm_sub_ps(a, b);
+   }
+   static inline Int32x4 v_sub(Int32x4 a, Int32x4 b) {
+      return _mm_sub_epi32(a, b);
+   }
 
-    static inline Float32x4 v_mul(Float32x4 a, Float32x4 b) { return _mm_mul_ps(a, b); }
+   static inline Float32x4 v_mul(Float32x4 a, Float32x4 b) {
+      return _mm_mul_ps(a, b);
+   }
 
-    static inline Float32x4 v_sqrt(Float32x4 x) { return _mm_sqrt_ps(x); }
+   static inline Float32x4 v_sqrt(Float32x4 x) {
+      return _mm_sqrt_ps(x);
+   }
 
-    static inline Int32x4 v_toInt(Float32x4 x) { return _mm_cvttps_epi32(x); }
+   static inline Int32x4 v_toInt(Float32x4 x) {
+      return _mm_cvttps_epi32(x);
+   }
 
-    static inline Int32x4 v_greaterOrEqual(Float32x4 a, Float32x4 b) { return _mm_castps_si128(_mm_cmpgt_ps(a, b)); }
+   static inline Int32x4 v_greaterOrEqual(Float32x4 a, Float32x4 b) {
+      return _mm_castps_si128(_mm_cmpgt_ps(a, b));
+   }
 };
 
-const uint * QT_FASTCALL qt_fetch_radial_gradient_sse2(uint *buffer, const Operator *op, const QSpanData *data,
-                                                       int y, int x, int length)
+const uint *QT_FASTCALL qt_fetch_radial_gradient_sse2(uint *buffer, const Operator *op, const QSpanData *data,
+   int y, int x, int length)
 {
-    return qt_fetch_radial_gradient_template<QRadialFetchSimd<QSimdSse2>,uint>(buffer, op, data, y, x, length);
-   }
+   return qt_fetch_radial_gradient_template<QRadialFetchSimd<QSimdSse2>, uint>(buffer, op, data, y, x, length);
+}
 
 void qt_scale_image_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
-                                          const uchar *srcPixels, int sbpl, int srch,
-                                          const QRectF &targetRect,
-                                          const QRectF &sourceRect,
-                                          const QRect &clip,
-                                          int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
-    if (const_alpha != 256) {
-        extern void qt_scale_image_argb32_on_argb32(uchar *destPixels, int dbpl,
-                                               const uchar *srcPixels, int sbpl, int srch,
-                                               const QRectF &targetRect,
-                                               const QRectF &sourceRect,
-                                               const QRect &clip,
-                                               int const_alpha);
-        return qt_scale_image_argb32_on_argb32(destPixels, dbpl, srcPixels, sbpl, srch, targetRect, sourceRect, clip, const_alpha);
+   if (const_alpha != 256) {
+      extern void qt_scale_image_argb32_on_argb32(uchar * destPixels, int dbpl,
+         const uchar * srcPixels, int sbpl, int srch,
+         const QRectF & targetRect,
+         const QRectF & sourceRect,
+         const QRect & clip,
+         int const_alpha);
+      return qt_scale_image_argb32_on_argb32(destPixels, dbpl, srcPixels, sbpl, srch, targetRect, sourceRect, clip, const_alpha);
    }
 
-    qreal sx = targetRect.width() / (qreal) sourceRect.width();
-    qreal sy = targetRect.height() / (qreal) sourceRect.height();
+   qreal sx = targetRect.width() / (qreal) sourceRect.width();
+   qreal sy = targetRect.height() / (qreal) sourceRect.height();
 
-    int ix = 0x00010000 / sx;
-    int iy = 0x00010000 / sy;
+   int ix = 0x00010000 / sx;
+   int iy = 0x00010000 / sy;
 
-    int cx1 = clip.x();
-    int cx2 = clip.x() + clip.width();
-    int cy1 = clip.top();
-    int cy2 = clip.y() + clip.height();
+   int cx1 = clip.x();
+   int cx2 = clip.x() + clip.width();
+   int cy1 = clip.top();
+   int cy2 = clip.y() + clip.height();
 
-    int tx1 = qRound(targetRect.left());
-    int tx2 = qRound(targetRect.right());
-    int ty1 = qRound(targetRect.top());
-    int ty2 = qRound(targetRect.bottom());
+   int tx1 = qRound(targetRect.left());
+   int tx2 = qRound(targetRect.right());
+   int ty1 = qRound(targetRect.top());
+   int ty2 = qRound(targetRect.bottom());
 
-    if (tx2 < tx1)
-        qSwap(tx2, tx1);
-    if (ty2 < ty1)
-        qSwap(ty2, ty1);
-
-    if (tx1 < cx1)
-        tx1 = cx1;
-    if (tx2 >= cx2)
-        tx2 = cx2;
-
-    if (tx1 >= tx2)
-        return;
-
-    if (ty1 < cy1)
-        ty1 = cy1;
-    if (ty2 >= cy2)
-       ty2 = cy2;
-    if (ty1 >= ty2)
-        return;
-
-    int h = ty2 - ty1;
-    int w = tx2 - tx1;
-
-    quint32 basex;
-    quint32 srcy;
-
-    if (sx < 0) {
-        int dstx = qFloor((tx1 + qreal(0.5) - targetRect.right()) * ix) + 1;
-        basex = quint32(sourceRect.right() * 65536) + dstx;
-    } else {
-        int dstx = qCeil((tx1 + qreal(0.5) - targetRect.left()) * ix) - 1;
-        basex = quint32(sourceRect.left() * 65536) + dstx;
+   if (tx2 < tx1) {
+      qSwap(tx2, tx1);
    }
-    if (sy < 0) {
-        int dsty = qFloor((ty1 + qreal(0.5) - targetRect.bottom()) * iy) + 1;
-        srcy = quint32(sourceRect.bottom() * 65536) + dsty;
-    } else {
-        int dsty = qCeil((ty1 + qreal(0.5) - targetRect.top()) * iy) - 1;
-        srcy = quint32(sourceRect.top() * 65536) + dsty;
+   if (ty2 < ty1) {
+      qSwap(ty2, ty1);
    }
 
-    quint32 *dst = ((quint32 *) (destPixels + ty1 * dbpl)) + tx1;
-
-    const __m128i nullVector = _mm_set1_epi32(0);
-    const __m128i half = _mm_set1_epi16(0x80);
-    const __m128i one = _mm_set1_epi16(0xff);
-    const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
-    const __m128i alphaMask = _mm_set1_epi32(0xff000000);
-    const __m128i ixVector = _mm_set1_epi32(4*ix);
-
-    int yend = (srcy + iy * (h - 1)) >> 16;
-    if (yend < 0 || yend >= srch)
-        --h;
-    int xend = (basex + ix * (w - 1)) >> 16;
-    if (xend < 0 || xend >= (int)(sbpl/sizeof(quint32)))
-        --w;
-
-    while (h--) {
-        const uint *src = (const quint32 *) (srcPixels + (srcy >> 16) * sbpl);
-        int srcx = basex;
-        int x = 0;
-
-        ALIGNMENT_PROLOGUE_16BYTES(dst, x, w) {
-            uint s = src[srcx >> 16];
-            dst[x] = s + BYTE_MUL(dst[x], qAlpha(~s));
-            srcx += ix;
+   if (tx1 < cx1) {
+      tx1 = cx1;
+   }
+   if (tx2 >= cx2) {
+      tx2 = cx2;
    }
 
-        __m128i srcxVector = _mm_set_epi32(srcx, srcx + ix, srcx + ix + ix, srcx + ix + ix + ix);
-
-        for (; x<w - 3; x += 4) {
-            union Vect_buffer { __m128i vect; quint32 i[4]; };
-            Vect_buffer addr;
-            addr.vect = _mm_srli_epi32(srcxVector, 16);
-            srcxVector = _mm_add_epi32(srcxVector, ixVector);
-
-            const __m128i srcVector = _mm_set_epi32(src[addr.i[0]], src[addr.i[1]], src[addr.i[2]], src[addr.i[3]]);
-            BLEND_SOURCE_OVER_ARGB32_SSE2_helper(dst, srcVector, nullVector, half, one, colorMask, alphaMask);
+   if (tx1 >= tx2) {
+      return;
    }
 
-        for (; x<w; x++) {
-            uint s = src[(basex + x*ix) >> 16];
-            dst[x] = s + BYTE_MUL(dst[x], qAlpha(~s));
+   if (ty1 < cy1) {
+      ty1 = cy1;
    }
-        dst = (quint32 *)(((uchar *) dst) + dbpl);
-        srcy += iy;
+   if (ty2 >= cy2) {
+      ty2 = cy2;
+   }
+   if (ty1 >= ty2) {
+      return;
+   }
+
+   int h = ty2 - ty1;
+   int w = tx2 - tx1;
+
+   quint32 basex;
+   quint32 srcy;
+
+   if (sx < 0) {
+      int dstx = qFloor((tx1 + qreal(0.5) - targetRect.right()) * ix) + 1;
+      basex = quint32(sourceRect.right() * 65536) + dstx;
+   } else {
+      int dstx = qCeil((tx1 + qreal(0.5) - targetRect.left()) * ix) - 1;
+      basex = quint32(sourceRect.left() * 65536) + dstx;
+   }
+   if (sy < 0) {
+      int dsty = qFloor((ty1 + qreal(0.5) - targetRect.bottom()) * iy) + 1;
+      srcy = quint32(sourceRect.bottom() * 65536) + dsty;
+   } else {
+      int dsty = qCeil((ty1 + qreal(0.5) - targetRect.top()) * iy) - 1;
+      srcy = quint32(sourceRect.top() * 65536) + dsty;
+   }
+
+   quint32 *dst = ((quint32 *) (destPixels + ty1 * dbpl)) + tx1;
+
+   const __m128i nullVector = _mm_set1_epi32(0);
+   const __m128i half = _mm_set1_epi16(0x80);
+   const __m128i one = _mm_set1_epi16(0xff);
+   const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
+   const __m128i alphaMask = _mm_set1_epi32(0xff000000);
+   const __m128i ixVector = _mm_set1_epi32(4 * ix);
+
+   int yend = (srcy + iy * (h - 1)) >> 16;
+   if (yend < 0 || yend >= srch) {
+      --h;
+   }
+   int xend = (basex + ix * (w - 1)) >> 16;
+   if (xend < 0 || xend >= (int)(sbpl / sizeof(quint32))) {
+      --w;
+   }
+
+   while (h--) {
+      const uint *src = (const quint32 *) (srcPixels + (srcy >> 16) * sbpl);
+      int srcx = basex;
+      int x = 0;
+
+      ALIGNMENT_PROLOGUE_16BYTES(dst, x, w) {
+         uint s = src[srcx >> 16];
+         dst[x] = s + BYTE_MUL(dst[x], qAlpha(~s));
+         srcx += ix;
+      }
+
+      __m128i srcxVector = _mm_set_epi32(srcx, srcx + ix, srcx + ix + ix, srcx + ix + ix + ix);
+
+      for (; x < w - 3; x += 4) {
+         union Vect_buffer {
+            __m128i vect;
+            quint32 i[4];
+         };
+         Vect_buffer addr;
+         addr.vect = _mm_srli_epi32(srcxVector, 16);
+         srcxVector = _mm_add_epi32(srcxVector, ixVector);
+
+         const __m128i srcVector = _mm_set_epi32(src[addr.i[0]], src[addr.i[1]], src[addr.i[2]], src[addr.i[3]]);
+         BLEND_SOURCE_OVER_ARGB32_SSE2_helper(dst, srcVector, nullVector, half, one, colorMask, alphaMask);
+      }
+
+      for (; x < w; x++) {
+         uint s = src[(basex + x * ix) >> 16];
+         dst[x] = s + BYTE_MUL(dst[x], qAlpha(~s));
+      }
+      dst = (quint32 *)(((uchar *) dst) + dbpl);
+      srcy += iy;
    }
 }
 

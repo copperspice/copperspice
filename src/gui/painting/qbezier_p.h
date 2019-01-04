@@ -31,7 +31,8 @@
 #include <QtCore/qpair.h>
 #include <QtGui/qtransform.h>
 
-QT_BEGIN_NAMESPACE
+#include <qdatabuffer_p.h>
+
 
 class QPolygonF;
 
@@ -50,6 +51,7 @@ class Q_GUI_EXPORT QBezier
 
    QPolygonF toPolygon(qreal bezier_flattening_threshold = 0.5) const;
    void addToPolygon(QPolygonF *p, qreal bezier_flattening_threshold = 0.5) const;
+   void addToPolygon(QDataBuffer<QPointF> &polygon, qreal bezier_flattening_threshold) const;
 
    QRectF bounds() const;
    qreal length(qreal error = 0.01) const;
@@ -85,7 +87,7 @@ class Q_GUI_EXPORT QBezier
    inline void split(QBezier *firstHalf, QBezier *secondHalf) const;
 
    int shifted(QBezier *curveSegments, int maxSegmets,
-               qreal offset, float threshold) const;
+      qreal offset, float threshold) const;
 
    QBezier bezierOnInterval(qreal t0, qreal t1) const;
    QBezier getSubRange(qreal t0, qreal t1) const;
@@ -103,7 +105,7 @@ inline QLineF QBezier::midTangent() const
    QPointF mid = midPoint();
    QLineF dir(QLineF(x1, y1, x2, y2).pointAt(0.5), QLineF(x3, y3, x4, y4).pointAt(0.5));
    return QLineF(mid.x() - dir.dx(), mid.y() - dir.dy(),
-                 mid.x() + dir.dx(), mid.y() + dir.dy());
+         mid.x() + dir.dx(), mid.y() + dir.dy());
 }
 
 inline QLineF QBezier::startTangent() const
@@ -188,7 +190,7 @@ inline QPointF QBezier::derivedAt(qreal t) const
    qreal c = 2 * t - 3 * d;
 
    return 3 * QPointF(a * x1 + b * x2 + c * x3 + d * x4,
-                      a * y1 + b * y2 + c * y3 + d * y4);
+         a * y1 + b * y2 + c * y3 + d * y4);
 }
 
 inline QPointF QBezier::secondDerivedAt(qreal t) const
@@ -199,7 +201,7 @@ inline QPointF QBezier::secondDerivedAt(qreal t) const
    qreal d = 2 * t;
 
    return 3 * QPointF(a * x1 + b * x2 + c * x3 + d * x4,
-                      a * y1 + b * y2 + c * y3 + d * y4);
+         a * y1 + b * y2 + c * y3 + d * y4);
 }
 
 inline void QBezier::split(QBezier *firstHalf, QBezier *secondHalf) const
@@ -250,6 +252,6 @@ inline void QBezier::parameterSplitLeft(qreal t, QBezier *left)
    left->y4 = y1 = left->y3 + t * (y2 - left->y3);
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QBEZIER_P_H

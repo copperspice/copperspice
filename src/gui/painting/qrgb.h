@@ -23,9 +23,7 @@
 #ifndef QRGB_H
 #define QRGB_H
 
-#include <QtCore/qglobal.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
 
 typedef unsigned int QRgb;                     // RGB triplet
 
@@ -78,34 +76,36 @@ inline constexpr bool qIsGray(QRgb rgb)
 
 inline constexpr QRgb qPremultiply(QRgb x)
 {
-    const uint a = qAlpha(x);
-    uint t = (x & 0xff00ff) * a;
-    t = (t + ((t >> 8) & 0xff00ff) + 0x800080) >> 8;
-    t &= 0xff00ff;
+   const uint a = qAlpha(x);
+   uint t = (x & 0xff00ff) * a;
+   t = (t + ((t >> 8) & 0xff00ff) + 0x800080) >> 8;
+   t &= 0xff00ff;
 
-    x = ((x >> 8) & 0xff) * a;
-    x = (x + ((x >> 8) & 0xff) + 0x80);
-    x &= 0xff00;
-    return x | t | (a << 24);
+   x = ((x >> 8) & 0xff) * a;
+   x = (x + ((x >> 8) & 0xff) + 0x80);
+   x &= 0xff00;
+   return x | t | (a << 24);
 }
 
 Q_GUI_EXPORT extern const uint qt_inv_premul_factor[];
 
 inline QRgb qUnpremultiply(QRgb p)
 {
-    const uint alpha = qAlpha(p);
-    // Alpha 255 and 0 are the two most common values, which makes them beneficial to short-cut.
-    if (alpha == 255)
-        return p;
+   const uint alpha = qAlpha(p);
+   // Alpha 255 and 0 are the two most common values, which makes them beneficial to short-cut.
+   if (alpha == 255) {
+      return p;
+   }
 
-    if (alpha == 0)
-        return 0;
+   if (alpha == 0) {
+      return 0;
+   }
 
-    // (p*(0x00ff00ff/alpha)) >> 16 == (p*255)/alpha for all p and alpha <= 256.
-    const uint invAlpha = qt_inv_premul_factor[alpha];
+   // (p*(0x00ff00ff/alpha)) >> 16 == (p*255)/alpha for all p and alpha <= 256.
+   const uint invAlpha = qt_inv_premul_factor[alpha];
 
-    // We add 0x8000 to get even rounding. The rounding also ensures that qPremultiply(qUnpremultiply(p)) == p for all p.
-    return qRgba((qRed(p)*invAlpha + 0x8000)>>16, (qGreen(p)*invAlpha + 0x8000)>>16, (qBlue(p)*invAlpha + 0x8000)>>16, alpha);
+   // We add 0x8000 to get even rounding. The rounding also ensures that qPremultiply(qUnpremultiply(p)) == p for all p.
+   return qRgba((qRed(p) * invAlpha + 0x8000) >> 16, (qGreen(p) * invAlpha + 0x8000) >> 16, (qBlue(p) * invAlpha + 0x8000) >> 16, alpha);
 }
 
 

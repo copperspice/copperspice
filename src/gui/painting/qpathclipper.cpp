@@ -20,13 +20,14 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qpathclipper_p.h>
 #include <qbezier_p.h>
 #include <qdatabuffer_p.h>
+#include <qdebug.h>
 #include <qnumeric_p.h>
 #include <qmath.h>
+
+#include <algorithm>
 
 /**
   The algorithm is as follows:
@@ -44,9 +45,6 @@
  9. Convert the resulting winged edge structure to a painter path.
  */
 
-#include <qdebug.h>
-
-QT_BEGIN_NAMESPACE
 
 static inline bool fuzzyIsNull(qreal d)
 {
@@ -60,7 +58,7 @@ static inline bool fuzzyIsNull(qreal d)
 static inline bool comparePoints(const QPointF &a, const QPointF &b)
 {
    return fuzzyIsNull(a.x() - b.x())
-          && fuzzyIsNull(a.y() - b.y());
+      && fuzzyIsNull(a.y() - b.y());
 }
 
 //#define QDEBUG_CLIPPER
@@ -154,14 +152,14 @@ bool QIntersectionFinder::linesIntersect(const QLineF &a, const QLineF &b) const
    const qreal invPar = 1 / par;
 
    const qreal tp = (qDelta.y() * (q1.x() - p1.x()) -
-                     qDelta.x() * (q1.y() - p1.y())) * invPar;
+         qDelta.x() * (q1.y() - p1.y())) * invPar;
 
    if (tp < 0 || tp > 1) {
       return false;
    }
 
    const qreal tq = (pDelta.y() * (q1.x() - p1.x()) -
-                     pDelta.x() * (q1.y() - p1.y())) * invPar;
+         pDelta.x() * (q1.y() - p1.y())) * invPar;
 
    return tq >= 0 && tq <= 1;
 }
@@ -219,6 +217,7 @@ bool QIntersectionFinder::hasIntersections(const QPathSegments &a, const QPathSe
 }
 
 namespace {
+
 struct TreeNode {
    qreal splitLeft;
    qreal splitRight;
@@ -250,17 +249,13 @@ class SegmentTree
 {
  public:
    SegmentTree(QPathSegments &segments);
-
-   QRectF boundingRect() const;
-
    void produceIntersections(int segment);
 
  private:
    TreeNode buildTree(int first, int last, int depth, const RectF &bounds);
 
    void produceIntersectionsLeaf(const TreeNode &node, int segment);
-   void produceIntersections(const TreeNode &node, int segment, const RectF &segmentBounds, const RectF &nodeBounds,
-                             int axis);
+   void produceIntersections(const TreeNode &node, int segment, const RectF &segmentBounds, const RectF &nodeBounds, int axis);
    void intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<QIntersection> &intersections);
 
    QPathSegments &m_segments;
@@ -306,12 +301,6 @@ SegmentTree::SegmentTree(QPathSegments &segments)
 
    TreeNode root = buildTree(0, m_index.size(), 0, m_bounds);
    m_tree[0] = root;
-}
-
-QRectF SegmentTree::boundingRect() const
-{
-   return QRectF(QPointF(m_bounds.x1, m_bounds.y1),
-                 QPointF(m_bounds.x2, m_bounds.y2));
 }
 
 static inline qreal coordinate(const QPointF &pos, int axis)
@@ -486,9 +475,9 @@ void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<Q
 
 
    const qreal tp = (qDelta.y() * (q1.x() - p1.x()) -
-                     qDelta.x() * (q1.y() - p1.y())) / par;
+         qDelta.x() * (q1.y() - p1.y())) / par;
    const qreal tq = (pDelta.y() * (q1.x() - p1.x()) -
-                     pDelta.x() * (q1.y() - p1.y())) / par;
+         pDelta.x() * (q1.y() - p1.y())) / par;
 
    if (tp < 0 || tp > 1 || tq < 0 || tq > 1) {
       return;
@@ -565,10 +554,10 @@ void SegmentTree::produceIntersectionsLeaf(const TreeNode &node, int segment)
 
       for (int k = 0; k < m_intersections.size(); ++k) {
          QPathSegments::Intersection i_isect, j_isect;
-         i_isect.vertex = j_isect.vertex = m_segments.addPoint(m_intersections.at(k).pos);
-
          i_isect.t = m_intersections.at(k).alphaA;
          j_isect.t = m_intersections.at(k).alphaB;
+
+         i_isect.vertex = j_isect.vertex = m_segments.addPoint(m_intersections.at(k).pos);
 
          i_isect.next = 0;
          j_isect.next = 0;
@@ -580,7 +569,7 @@ void SegmentTree::produceIntersectionsLeaf(const TreeNode &node, int segment)
 }
 
 void SegmentTree::produceIntersections(const TreeNode &node, int segment, const RectF &segmentBounds,
-                                       const RectF &nodeBounds, int axis)
+   const RectF &nodeBounds, int axis)
 {
    if (node.leaf) {
       produceIntersectionsLeaf(node, segment);
@@ -602,7 +591,7 @@ void SegmentTree::produceIntersections(const TreeNode &node, int segment, const 
    }
 }
 
-}
+} // namespace
 
 void QIntersectionFinder::produceIntersections(QPathSegments &segments)
 {
@@ -728,8 +717,7 @@ class QKdPointFinder
 {
  public:
    QKdPointFinder(int point, const QPathSegments &segments, QKdPointTree &tree)
-      : m_point(point)
-      , m_result(-1)
+      : m_result(-1)
       , m_segments(&segments)
       , m_tree(&tree) {
       pointComponents[0] = segments.pointAt(point).x();
@@ -774,7 +762,6 @@ class QKdPointFinder
    }
 
  private:
-   int m_point;
    qreal pointComponents[2];
    int m_result;
    const QPathSegments *m_segments;
@@ -984,7 +971,7 @@ void QPathSegments::addPath(const QPainterPath &path)
             break;
          case QPainterPath::CurveToElement: {
             QBezier bezier = QBezier::fromPoints(m_points.at(last), path.elementAt(i), path.elementAt(i + 1),
-                                                 path.elementAt(i + 2));
+                  path.elementAt(i + 2));
             if (isLine(bezier)) {
                m_segments << Segment(m_pathId, last, current);
             } else {
@@ -1072,16 +1059,6 @@ qreal QWingedEdge::delta(int vertex, int a, int b) const
    }
 }
 
-static inline QPointF midPoint(const QWingedEdge &list, int ei)
-{
-   const QPathEdge *ep = list.edge(ei);
-   Q_ASSERT(ep);
-
-   const QPointF a = *list.vertex(ep->first);
-   const QPointF b = *list.vertex(ep->second);
-   return a + 0.5 * (b - a);
-}
-
 QWingedEdge::TraversalStatus QWingedEdge::findInsertStatus(int vi, int ei) const
 {
    const QPathVertex *vp = vertex(vi);
@@ -1098,12 +1075,6 @@ QWingedEdge::TraversalStatus QWingedEdge::findInsertStatus(int vi, int ei) const
    status.traversal = QPathEdge::RightTraversal;
    status.edge = vp->edge;
 
-#ifdef QDEBUG_CLIPPER
-   const QPathEdge *ep = edge(ei);
-   qDebug() << "Finding insert status for edge" << ei << "at vertex" << QPointF(*vp) << ", angles: " << ep->angle <<
-            ep->invAngle;
-#endif
-
    do {
       status = next(status);
       status.flip();
@@ -1111,10 +1082,6 @@ QWingedEdge::TraversalStatus QWingedEdge::findInsertStatus(int vi, int ei) const
       Q_ASSERT(edge(status.edge)->vertex(status.direction) == vi);
       qreal d2 = delta(vi, ei, status.edge);
 
-#ifdef QDEBUG_CLIPPER
-      const QPathEdge *op = edge(status.edge);
-      qDebug() << "Delta to edge" << status.edge << d2 << ", angles: " << op->angle << op->invAngle;
-#endif
 
       if (d2 < d) {
          position = status.edge;
@@ -1129,11 +1096,6 @@ QWingedEdge::TraversalStatus QWingedEdge::findInsertStatus(int vi, int ei) const
    if (edge(status.edge)->vertex(status.direction) != vi) {
       status.flip();
    }
-
-#ifdef QDEBUG_CLIPPER
-   qDebug() << "Inserting edge" << ei << "to" << (status.traversal == QPathEdge::LeftTraversal ? "left" : "right") <<
-            "of edge" << status.edge;
-#endif
 
    Q_ASSERT(edge(status.edge)->vertex(status.direction) == vi);
 
@@ -1201,7 +1163,7 @@ static int commonEdge(const QWingedEdge &list, int a, int b)
       const QPathEdge *ep = list.edge(status.edge);
 
       if ((ep->first == a && ep->second == b)
-            || (ep->first == b && ep->second == a)) {
+         || (ep->first == b && ep->second == a)) {
          return status.edge;
       }
 
@@ -1436,7 +1398,7 @@ bool QPathClipper::intersect()
    QRectF r1 = subjectPath.controlPointRect();
    QRectF r2 = clipPath.controlPointRect();
    if (qMax(r1.x(), r2.x()) > qMin(r1.x() + r1.width(), r2.x() + r2.width()) ||
-         qMax(r1.y(), r2.y()) > qMin(r1.y() + r1.height(), r2.y() + r2.height())) {
+      qMax(r1.y(), r2.y()) > qMin(r1.y() + r1.height(), r2.y() + r2.height())) {
       // no way we could intersect
       return false;
    }
@@ -1492,7 +1454,7 @@ bool QPathClipper::contains()
    QRectF r1 = subjectPath.controlPointRect();
    QRectF r2 = clipPath.controlPointRect();
    if (qMax(r1.x(), r2.x()) > qMin(r1.x() + r1.width(), r2.x() + r2.width()) ||
-         qMax(r1.y(), r2.y()) > qMin(r1.y() + r1.height(), r2.y() + r2.height())) {
+      qMax(r1.y(), r2.y()) > qMin(r1.y() + r1.height(), r2.y() + r2.height())) {
       // no intersection -> not contained
       return false;
    }
@@ -1525,7 +1487,7 @@ bool QPathClipper::contains()
 }
 
 QPathClipper::QPathClipper(const QPainterPath &subject,
-                           const QPainterPath &clip)
+   const QPainterPath &clip)
    : subjectPath(subject)
    , clipPath(clip)
 {
@@ -1592,10 +1554,10 @@ bool QPathClipper::pathToRect(const QPainterPath &path, QRectF *rect)
    }
 
    const bool mightBeRect = path.elementAt(0).isMoveTo()
-                            && path.elementAt(1).isLineTo()
-                            && path.elementAt(2).isLineTo()
-                            && path.elementAt(3).isLineTo()
-                            && path.elementAt(4).isLineTo();
+      && path.elementAt(1).isLineTo()
+      && path.elementAt(2).isLineTo()
+      && path.elementAt(3).isLineTo()
+      && path.elementAt(4).isLineTo();
 
    if (!mightBeRect) {
       return false;
@@ -1629,7 +1591,6 @@ bool QPathClipper::pathToRect(const QPainterPath &path, QRectF *rect)
 
    return true;
 }
-
 
 QPainterPath QPathClipper::clip(Operation operation)
 {
@@ -1684,6 +1645,7 @@ QPainterPath QPathClipper::clip(Operation operation)
          }
       } else if (subjectBounds.contains(clipBounds)) {
          if (subjectIsRect) {
+
             switch (op) {
                case BoolSub:
                   if (clipPath.fillRule() == Qt::OddEvenFill) {
@@ -1695,11 +1657,13 @@ QPainterPath QPathClipper::clip(Operation operation)
                      result.addRect(subjectBounds);
                      return result;
                   }
-                  break;
+
                case BoolAnd:
                   return clipPath;
+
                case BoolOr:
                   return subjectPath;
+
                default:
                   break;
             }
@@ -1942,7 +1906,7 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
 
 #ifdef QDEBUG_CLIPPER
       printf("y %f, x %f, inA: %d, inB: %d, inD: %d, inside: %d, flag: %x, bezier: %p, edge: %d\n", y, crossings.at(i).x, inA,
-             inB, inD, inside, edge->flag, edge->bezier, ei);
+         inB, inD, inside, edge->flag, edge->bezier, ei);
 #endif
 
       if (add) {
@@ -1988,12 +1952,13 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
 
 namespace {
 
-QList<QPainterPath> toSubpaths(const QPainterPath &path)
+QVector<QPainterPath> toSubpaths(const QPainterPath &path)
 {
-
-   QList<QPainterPath> subpaths;
-   if (path.isEmpty()) {
-      return subpaths;
+   QVector<QPainterPath> subpaths;
+   {
+      if (path.isEmpty()) {
+         return subpaths;
+      }
    }
 
    QPainterPath current;
@@ -2200,7 +2165,7 @@ QPainterPath clip(const QPainterPath &path, qreal t)
 
 QPainterPath intersectPath(const QPainterPath &path, const QRectF &rect)
 {
-   QList<QPainterPath> subpaths = toSubpaths(path);
+   QVector<QPainterPath> subpaths = toSubpaths(path);
 
    QPainterPath result;
    result.setFillRule(path.fillRule());
@@ -2239,4 +2204,3 @@ QPainterPath QPathClipper::intersect(const QPainterPath &path, const QRectF &rec
    return intersectPath(path, rect);
 }
 
-QT_END_NAMESPACE

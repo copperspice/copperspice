@@ -23,19 +23,16 @@
 #ifndef QRasterDefs_P_H
 #define QRasterDefs_P_H
 
-QT_FT_BEGIN_HEADER
 
-typedef signed int  QT_FT_Pos;
-
-typedef struct  QT_FT_Vector_ {
-   QT_FT_Pos  x;
-   QT_FT_Pos  y;
+typedef struct QT_FT_Vector_ {
+   int  x;
+   int  y;
 
 } QT_FT_Vector;
 
 typedef struct  QT_FT_BBox_ {
-   QT_FT_Pos  xMin, yMin;
-   QT_FT_Pos  xMax, yMax;
+   int  xMin, yMin;
+   int  xMax, yMax;
 
 } QT_FT_BBox;
 
@@ -133,15 +130,15 @@ typedef int
 
 
 typedef int
-(*QT_FT_Outline_ConicToFunc)( QT_FT_Vector  *control, QT_FT_Vector  *to, void       *user );
+(*QT_FT_Outline_ConicToFunc)( QT_FT_Vector *control, QT_FT_Vector *to, void *user );
 
 #define  QT_FT_Outline_ConicTo_Func  QT_FT_Outline_ConicToFunc
 
 typedef int
 (*QT_FT_Outline_CubicToFunc)( QT_FT_Vector  *control1,
-                              QT_FT_Vector  *control2,
-                              QT_FT_Vector  *to,
-                              void       *user );
+   QT_FT_Vector  *control2,
+   QT_FT_Vector  *to,
+   void *user );
 
 #define  QT_FT_Outline_CubicTo_Func  QT_FT_Outline_CubicToFunc
 
@@ -152,8 +149,8 @@ typedef struct  QT_FT_Outline_Funcs_ {
    QT_FT_Outline_ConicToFunc  conic_to;
    QT_FT_Outline_CubicToFunc  cubic_to;
 
-   int                     shift;
-   QT_FT_Pos                  delta;
+   int  shift;
+   int  delta;
 
 } QT_FT_Outline_Funcs;
 
@@ -198,8 +195,8 @@ typedef void (*QT_FT_SpanFunc)(int count, const QT_FT_Span *spans, void *worker)
 
 #define QT_FT_Raster_Span_Func   QT_FT_SpanFunc
 
-typedef int (*QT_FT_Raster_BitTest_Func)(int y, int x, void  *user );
-typedef void (*QT_FT_Raster_BitSet_Func)(int y, int x, void  *user );
+typedef int (*QT_FT_Raster_BitTest_Func)(int y, int x, void *user );
+typedef void (*QT_FT_Raster_BitSet_Func)(int y, int x, void *user );
 
 
 #define QT_FT_RASTER_FLAG_DEFAULT  0x0
@@ -264,7 +261,5 @@ typedef struct  QT_FT_Raster_Funcs_ {
    QT_FT_Raster_DoneFunc      raster_done;
 
 } QT_FT_Raster_Funcs;
-
-QT_FT_END_HEADER
 
 #endif

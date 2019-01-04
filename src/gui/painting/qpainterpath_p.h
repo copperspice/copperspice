@@ -32,7 +32,27 @@
 #include <qvectorpath_p.h>
 #include <qstroker_p.h>
 
-QT_BEGIN_NAMESPACE
+class QPainterPathPrivate
+{
+ public:
+   friend class QPainterPath;
+   friend class QPainterPathData;
+   friend class QPainterPathStroker;
+   friend class QPainterPathStrokerPrivate;
+   friend class QMatrix;
+   friend class QTransform;
+   friend class QVectorPath;
+   friend struct QPainterPathPrivateDeleter;
+
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
+
+   QPainterPathPrivate() : ref(1) {}
+
+ private:
+   QAtomicInt ref;
+   QVector<QPainterPath::Element> elements;
+};
 
 class QPainterPathStrokerPrivate
 {
@@ -52,7 +72,8 @@ class QVectorPathConverter
  public:
    QVectorPathConverter(const QVector<QPainterPath::Element> &path, uint fillRule, bool convex)
       : pathData(path, fillRule, convex),
-        path(pathData.points.data(), path.size(), pathData.elements.data(), pathData.flags) {}
+        path(pathData.points.data(), path.size(),
+           pathData.elements.data(), pathData.flags) {}
 
    const QVectorPath &vectorPath() {
       return path;
@@ -117,7 +138,7 @@ class QPainterPathData : public QPainterPathPrivate
       dirtyBounds(false),
       dirtyControlBounds(false),
       pathConverter(0) {
-      ref = 1;
+
       require_moveTo = false;
       convex = false;
    }
@@ -130,7 +151,6 @@ class QPainterPathData : public QPainterPathPrivate
       dirtyControlBounds(other.dirtyControlBounds),
       convex(other.convex),
       pathConverter(0) {
-      ref = 1;
       require_moveTo = false;
       elements = other.elements;
    }
@@ -163,7 +183,6 @@ class QPainterPathData : public QPainterPathPrivate
 
    QVectorPathConverter *pathConverter;
 };
-
 
 inline const QPainterPath QVectorPath::convertToPainterPath() const
 {
@@ -200,11 +219,12 @@ inline const QPainterPath QVectorPath::convertToPainterPath() const
    } else {
       data->fillRule = Qt::WindingFill;
    }
+
    return path;
 }
 
 void Q_GUI_EXPORT qt_find_ellipse_coords(const QRectF &r, qreal angle, qreal length,
-      QPointF *startPoint, QPointF *endPoint);
+   QPointF *startPoint, QPointF *endPoint);
 
 inline bool QPainterPathData::isClosed() const
 {
@@ -241,8 +261,5 @@ inline void QPainterPathData::maybeMoveTo()
 }
 
 #define KAPPA qreal(0.5522847498)
-
-
-QT_END_NAMESPACE
 
 #endif // QPAINTERPATH_P_H

@@ -20,23 +20,22 @@
 *
 ***********************************************************************/
 
-#include "qblittable_p.h"
+#include <qblittable_p.h>
 
 #ifndef QT_NO_BLITTABLE
-QT_BEGIN_NAMESPACE
+
 
 class QBlittablePrivate
 {
  public:
    QBlittablePrivate(const QSize &size, QBlittable::Capabilities caps)
-      : caps(caps), m_size(size), locked(false), cachedImg(0) {
-   }
+      : caps(caps), m_size(size), locked(false), cachedImg(0)
+   { }
    QBlittable::Capabilities caps;
    QSize m_size;
    bool locked;
    QImage *cachedImg;
 };
-
 
 QBlittable::QBlittable(const QSize &size, Capabilities caps)
    : d_ptr(new QBlittablePrivate(size, caps))
@@ -47,7 +46,6 @@ QBlittable::~QBlittable()
 {
    delete d_ptr;
 }
-
 
 QBlittable::Capabilities QBlittable::capabilities() const
 {
@@ -87,6 +85,5 @@ void QBlittable::unlock()
    }
 }
 
-QT_END_NAMESPACE
-#endif //QT_NO_BLITTABLE
+#endif
 

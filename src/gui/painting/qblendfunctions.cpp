@@ -37,14 +37,17 @@ struct SourceAndConstAlpha {
    SourceAndConstAlpha(int a) : m_alpha256(a) {
       m_alpha255 = (m_alpha256 * 255) >> 8;
    };
+
    inline uchar alpha(uchar src) const {
       return (src * m_alpha256) >> 8;
    }
+
    inline quint16 bytemul(quint16 x) const {
       uint t = (((x & 0x07e0) * m_alpha255) >> 8) & 0x07e0;
       t |= (((x & 0xf81f) * (m_alpha255 >> 2)) >> 6) & 0xf81f;
       return t;
    }
+
    int m_alpha255;
    int m_alpha256;
 };
@@ -118,63 +121,63 @@ struct Blend_ARGB32_on_RGB16_SourceAndConstAlpha {
 };
 
 void qt_scale_image_rgb16_on_rgb16(uchar *destPixels, int dbpl,
-                                   const uchar *srcPixels, int sbpl, int srch,
-                                   const QRectF &targetRect,
-                                   const QRectF &sourceRect,
-                                   const QRect &clip,
-                                   int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    printf("qt_scale_rgb16_on_rgb16: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-          destPixels, dbpl, srcPixels, sbpl,
-          targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-          sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-          const_alpha);
+      destPixels, dbpl, srcPixels, sbpl,
+      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
+      const_alpha);
 #endif
    if (const_alpha == 256) {
       Blend_RGB16_on_RGB16_NoAlpha noAlpha;
       qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, srch,
-                                    targetRect, sourceRect, clip, noAlpha);
+         targetRect, sourceRect, clip, noAlpha);
    } else {
       Blend_RGB16_on_RGB16_ConstAlpha constAlpha(const_alpha);
       qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, srch,
-                                    targetRect, sourceRect, clip, constAlpha);
+         targetRect, sourceRect, clip, constAlpha);
    }
 }
 
 void qt_scale_image_argb32_on_rgb16(uchar *destPixels, int dbpl,
-                                    const uchar *srcPixels, int sbpl, int srch,
-                                    const QRectF &targetRect,
-                                    const QRectF &sourceRect,
-                                    const QRect &clip,
-                                    int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    printf("qt_scale_argb32_on_rgb16: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-          destPixels, dbpl, srcPixels, sbpl,
-          targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-          sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-          const_alpha);
+      destPixels, dbpl, srcPixels, sbpl,
+      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
+      const_alpha);
 #endif
    if (const_alpha == 256) {
       Blend_ARGB32_on_RGB16_SourceAlpha noAlpha;
       qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, srch,
-                                    targetRect, sourceRect, clip, noAlpha);
+         targetRect, sourceRect, clip, noAlpha);
    } else {
       Blend_ARGB32_on_RGB16_SourceAndConstAlpha constAlpha(const_alpha);
       qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, srch,
-                                    targetRect, sourceRect, clip, constAlpha);
+         targetRect, sourceRect, clip, constAlpha);
    }
 }
 
 void qt_blend_rgb16_on_rgb16(uchar *dst, int dbpl,
-                             const uchar *src, int sbpl,
-                             int w, int h,
-                             int const_alpha)
+   const uchar *src, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    printf("qt_blend_rgb16_on_rgb16: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
-          dst, dbpl, src, sbpl, w, h, const_alpha);
+      dst, dbpl, src, sbpl, w, h, const_alpha);
 #endif
 
    if (const_alpha == 256) {
@@ -209,9 +212,9 @@ void qt_blend_rgb16_on_rgb16(uchar *dst, int dbpl,
 }
 
 void qt_blend_argb32_on_rgb16_const_alpha(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl,
-      int w, int h,
-      int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    quint16 *dst = (quint16 *) destPixels;
    const quint32 *src = (const quint32 *) srcPixels;
@@ -232,9 +235,9 @@ void qt_blend_argb32_on_rgb16_const_alpha(uchar *destPixels, int dbpl,
 }
 
 static void qt_blend_argb32_on_rgb16(uchar *destPixels, int dbpl,
-                                     const uchar *srcPixels, int sbpl,
-                                     int w, int h,
-                                     int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    if (const_alpha != 256) {
       qt_blend_argb32_on_rgb16_const_alpha(destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
@@ -242,7 +245,7 @@ static void qt_blend_argb32_on_rgb16(uchar *destPixels, int dbpl,
    }
 
    quint16 *dst = (quint16 *) destPixels;
-    const quint32 *src = (const quint32 *) srcPixels;
+   const quint32 *src = (const quint32 *) srcPixels;
 
    for (int y = 0; y < h; ++y) {
       for (int x = 0; x < w; ++x) {
@@ -274,8 +277,8 @@ static void qt_blend_argb32_on_rgb16(uchar *destPixels, int dbpl,
             quint32 rb = sb + ((siab + (siab >> 8) + (0x80 >> 3)) >> 8);
 
             dst[x] = (rr & 0xf800)
-                     | (rg & 0x07e0)
-                     | (rb);
+               | (rg & 0x07e0)
+               | (rb);
          }
       }
       dst = (quint16 *) (((uchar *) dst) + dbpl);
@@ -285,13 +288,13 @@ static void qt_blend_argb32_on_rgb16(uchar *destPixels, int dbpl,
 
 
 static void qt_blend_rgb32_on_rgb16(uchar *destPixels, int dbpl,
-                                    const uchar *srcPixels, int sbpl,
-                                    int w, int h,
-                                    int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    printf("qt_blend_rgb32_on_rgb16: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
-          destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
+      destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
 #endif
 
    if (const_alpha != 256) {
@@ -328,13 +331,13 @@ static void qt_blend_rgb32_on_rgb16(uchar *destPixels, int dbpl,
  ************************************************************************/
 
 static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl,
-                                      const uchar *srcPixels, int sbpl,
-                                      int w, int h,
-                                      int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    fprintf(stdout, "qt_blend_argb32_on_argb32: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
-           destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
+      destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
    fflush(stdout);
 #endif
 
@@ -368,13 +371,13 @@ static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl,
 
 
 void qt_blend_rgb32_on_rgb32(uchar *destPixels, int dbpl,
-                             const uchar *srcPixels, int sbpl,
-                             int w, int h,
-                             int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    fprintf(stdout, "qt_blend_rgb32_on_rgb32: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
-           destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
+      destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
    fflush(stdout);
 #endif
 
@@ -446,137 +449,137 @@ struct Blend_ARGB32_on_ARGB32_SourceAndConstAlpha {
 };
 
 void qt_scale_image_rgb32_on_rgb32(uchar *destPixels, int dbpl,
-                                   const uchar *srcPixels, int sbpl, int srch,
-                                   const QRectF &targetRect,
-                                   const QRectF &sourceRect,
-                                   const QRect &clip,
-                                   int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    printf("qt_scale_rgb32_on_rgb32: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-          destPixels, dbpl, srcPixels, sbpl,
-          targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-          sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-          const_alpha);
+      destPixels, dbpl, srcPixels, sbpl,
+      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
+      const_alpha);
 #endif
    if (const_alpha == 256) {
       Blend_RGB32_on_RGB32_NoAlpha noAlpha;
       qt_scale_image_32bit(destPixels, dbpl, srcPixels, sbpl, srch,
-                           targetRect, sourceRect, clip, noAlpha);
+         targetRect, sourceRect, clip, noAlpha);
    } else {
       Blend_RGB32_on_RGB32_ConstAlpha constAlpha(const_alpha);
       qt_scale_image_32bit(destPixels, dbpl, srcPixels, sbpl, srch,
-                           targetRect, sourceRect, clip, constAlpha);
+         targetRect, sourceRect, clip, constAlpha);
    }
 }
 
 void qt_scale_image_argb32_on_argb32(uchar *destPixels, int dbpl,
-                                     const uchar *srcPixels, int sbpl, int srch,
-                                     const QRectF &targetRect,
-                                     const QRectF &sourceRect,
-                                     const QRect &clip,
-                                     int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
 #ifdef QT_DEBUG_DRAW
    printf("qt_scale_argb32_on_argb32: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-          destPixels, dbpl, srcPixels, sbpl,
-          targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-          sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-          const_alpha);
+      destPixels, dbpl, srcPixels, sbpl,
+      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
+      const_alpha);
 #endif
    if (const_alpha == 256) {
       Blend_ARGB32_on_ARGB32_SourceAlpha sourceAlpha;
       qt_scale_image_32bit(destPixels, dbpl, srcPixels, sbpl, srch,
-                           targetRect, sourceRect, clip, sourceAlpha);
+         targetRect, sourceRect, clip, sourceAlpha);
    } else {
       Blend_ARGB32_on_ARGB32_SourceAndConstAlpha constAlpha(const_alpha);
       qt_scale_image_32bit(destPixels, dbpl, srcPixels, sbpl, srch,
-                           targetRect, sourceRect, clip, constAlpha);
+         targetRect, sourceRect, clip, constAlpha);
    }
 }
 
 void qt_transform_image_rgb16_on_rgb16(uchar *destPixels, int dbpl,
-                                       const uchar *srcPixels, int sbpl,
-                                       const QRectF &targetRect,
-                                       const QRectF &sourceRect,
-                                       const QRect &clip,
-                                       const QTransform &targetRectTransform,
-                                       int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha)
 {
    if (const_alpha == 256) {
       Blend_RGB16_on_RGB16_NoAlpha noAlpha;
       qt_transform_image(reinterpret_cast<quint16 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint16 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, noAlpha);
+         reinterpret_cast<const quint16 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, noAlpha);
    } else {
       Blend_RGB16_on_RGB16_ConstAlpha constAlpha(const_alpha);
       qt_transform_image(reinterpret_cast<quint16 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint16 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
+         reinterpret_cast<const quint16 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
    }
 }
 
 void qt_transform_image_argb32_on_rgb16(uchar *destPixels, int dbpl,
-                                        const uchar *srcPixels, int sbpl,
-                                        const QRectF &targetRect,
-                                        const QRectF &sourceRect,
-                                        const QRect &clip,
-                                        const QTransform &targetRectTransform,
-                                        int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha)
 {
    if (const_alpha == 256) {
       Blend_ARGB32_on_RGB16_SourceAlpha noAlpha;
       qt_transform_image(reinterpret_cast<quint16 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, noAlpha);
+         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, noAlpha);
    } else {
       Blend_ARGB32_on_RGB16_SourceAndConstAlpha constAlpha(const_alpha);
       qt_transform_image(reinterpret_cast<quint16 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
+         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
    }
 }
 
 
 void qt_transform_image_rgb32_on_rgb32(uchar *destPixels, int dbpl,
-                                       const uchar *srcPixels, int sbpl,
-                                       const QRectF &targetRect,
-                                       const QRectF &sourceRect,
-                                       const QRect &clip,
-                                       const QTransform &targetRectTransform,
-                                       int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha)
 {
    if (const_alpha == 256) {
       Blend_RGB32_on_RGB32_NoAlpha noAlpha;
       qt_transform_image(reinterpret_cast<quint32 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, noAlpha);
+         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, noAlpha);
    } else {
       Blend_RGB32_on_RGB32_ConstAlpha constAlpha(const_alpha);
       qt_transform_image(reinterpret_cast<quint32 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
+         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
    }
 }
 
 void qt_transform_image_argb32_on_argb32(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl,
-      const QRectF &targetRect,
-      const QRectF &sourceRect,
-      const QRect &clip,
-      const QTransform &targetRectTransform,
-      int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha)
 {
    if (const_alpha == 256) {
       Blend_ARGB32_on_ARGB32_SourceAlpha sourceAlpha;
       qt_transform_image(reinterpret_cast<quint32 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, sourceAlpha);
+         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, sourceAlpha);
    } else {
       Blend_ARGB32_on_ARGB32_SourceAndConstAlpha constAlpha(const_alpha);
       qt_transform_image(reinterpret_cast<quint32 *>(destPixels), dbpl,
-                         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
-                         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
+         reinterpret_cast<const quint32 *>(srcPixels), sbpl,
+         targetRect, sourceRect, clip, targetRectTransform, constAlpha);
    }
 }
 
@@ -585,44 +588,45 @@ SrcOverBlendFunc qBlendFunctions[QImage::NImageFormats][QImage::NImageFormats];
 SrcOverTransformFunc qTransformFunctions[QImage::NImageFormats][QImage::NImageFormats];
 void qInitBlendFunctions()
 {
-    qScaleFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
-    qScaleFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
-    qScaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
+   qScaleFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
+   qScaleFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   qScaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
 
-    qScaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
-    qScaleFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_rgb16;
-    qScaleFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_scale_image_rgb16_on_rgb16;
+   qScaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   qScaleFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_rgb16;
+   qScaleFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_scale_image_rgb16_on_rgb16;
 
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-    qScaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
-    qScaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
-    qScaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
-    qScaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   qScaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
+   qScaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   qScaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
+   qScaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
 #endif
-    qBlendFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
-    qBlendFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
-    qBlendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
-    qBlendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
-    qBlendFunctions[QImage::Format_RGB16][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb16;
-    qBlendFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_rgb16;
-    qBlendFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_blend_rgb16_on_rgb16;
+   qBlendFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
+   qBlendFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
+   qBlendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
+   qBlendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
+   qBlendFunctions[QImage::Format_RGB16][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb16;
+   qBlendFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_rgb16;
+   qBlendFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_blend_rgb16_on_rgb16;
 
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-    qBlendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
-    qBlendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
-    qBlendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
-    qBlendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
+   qBlendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
+   qBlendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
+   qBlendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
+   qBlendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
 #endif
-    qTransformFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
-    qTransformFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
-    qTransformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
-    qTransformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
-    qTransformFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_rgb16;
-    qTransformFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_transform_image_rgb16_on_rgb16;
+   qTransformFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
+   qTransformFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   qTransformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
+   qTransformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   qTransformFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_rgb16;
+   qTransformFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_transform_image_rgb16_on_rgb16;
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-    qTransformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
-    qTransformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
-    qTransformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
-    qTransformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   qTransformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
+   qTransformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   qTransformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
+   qTransformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] =
+      qt_transform_image_argb32_on_argb32;
 #endif
 }

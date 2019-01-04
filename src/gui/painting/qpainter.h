@@ -30,7 +30,7 @@
 #include <QtGui/qpixmap.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qtextoption.h>
-#include <QtGui/qdrawutil.h>
+
 #include <QtGui/qpolygon.h>
 #include <QtGui/qpen.h>
 #include <QtGui/qbrush.h>
@@ -39,7 +39,6 @@
 #include <QtGui/qfontinfo.h>
 #include <QtGui/qfontmetrics.h>
 
-QT_BEGIN_NAMESPACE
 
 class QBrush;
 class QFontInfo;
@@ -50,6 +49,7 @@ class QPainterPrivate;
 class QPen;
 class QPolygon;
 class QTextItem;
+class QTextEngine;
 class QMatrix;
 class QTransform;
 class QStaticText;
@@ -59,6 +59,7 @@ class QPainterPrivateDeleter;
 class Q_GUI_EXPORT QPainter
 {
    GUI_CS_GADGET(QPainter)
+
    Q_DECLARE_PRIVATE(QPainter)
 
    GUI_CS_FLAG(RenderHint, RenderHints)
@@ -88,8 +89,8 @@ class Q_GUI_EXPORT QPainter
       qreal rotation;
       qreal opacity;
       static PixmapFragment Q_GUI_EXPORT create(const QPointF &pos, const QRectF &sourceRect,
-            qreal scaleX = 1, qreal scaleY = 1,
-            qreal rotation = 0, qreal opacity = 1);
+         qreal scaleX = 1, qreal scaleY = 1,
+         qreal rotation = 0, qreal opacity = 1);
    };
 
    enum PixmapFragmentHint {
@@ -108,7 +109,7 @@ class Q_GUI_EXPORT QPainter
    bool end();
    bool isActive() const;
 
-   void initFrom(const QWidget *widget);
+   void initFrom(const QPaintDevice *device);
 
    enum CompositionMode {
       CompositionMode_SourceOver,
@@ -147,7 +148,12 @@ class Q_GUI_EXPORT QPainter
       RasterOp_NotSourceXorDestination,
       RasterOp_NotSource,
       RasterOp_NotSourceAndDestination,
-      RasterOp_SourceAndNotDestination
+      RasterOp_SourceAndNotDestination,
+      RasterOp_NotSourceOrDestination,
+      RasterOp_SourceOrNotDestination,
+      RasterOp_ClearDestination,
+      RasterOp_SetDestination,
+      RasterOp_NotDestination
    };
    void setCompositionMode(CompositionMode mode);
    CompositionMode compositionMode() const;
@@ -320,13 +326,13 @@ class Q_GUI_EXPORT QPainter
    inline void drawChord(const QRect &, int a, int alen);
 
    void drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius,
-                        Qt::SizeMode mode = Qt::AbsoluteSize);
+      Qt::SizeMode mode = Qt::AbsoluteSize);
 
    inline void drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius,
-                               Qt::SizeMode mode = Qt::AbsoluteSize);
+      Qt::SizeMode mode = Qt::AbsoluteSize);
 
    inline void drawRoundedRect(const QRect &rect, qreal xRadius, qreal yRadius,
-                               Qt::SizeMode mode = Qt::AbsoluteSize);
+      Qt::SizeMode mode = Qt::AbsoluteSize);
 
    void drawRoundRect(const QRectF &r, int xround = 25, int yround = 25);
    inline void drawRoundRect(int x, int y, int w, int h, int = 25, int = 25);
@@ -355,35 +361,31 @@ class Q_GUI_EXPORT QPainter
    inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pm);
 
    void drawPixmapFragments(const PixmapFragment *fragments, int fragmentCount,
-                            const QPixmap &pixmap, PixmapFragmentHints hints = 0);
-   void drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
-                            const QPixmap &pixmap, PixmapFragmentHints hints = 0);
+      const QPixmap &pixmap, PixmapFragmentHints hints = PixmapFragmentHints());
 
    void drawImage(const QRectF &targetRect, const QImage &image, const QRectF &sourceRect,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor);
+      Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    inline void drawImage(const QRect &targetRect, const QImage &image, const QRect &sourceRect,
-                         Qt::ImageConversionFlags flags = Qt::AutoColor);
+      Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    inline void drawImage(const QPointF &p, const QImage &image, const QRectF &sr,
-                         Qt::ImageConversionFlags flags = Qt::AutoColor);
+      Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    inline void drawImage(const QPoint &p, const QImage &image, const QRect &sr,
-                         Qt::ImageConversionFlags flags = Qt::AutoColor);
+      Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    inline void drawImage(const QRectF &r, const QImage &image);
    inline void drawImage(const QRect &r, const QImage &image);
    void drawImage(const QPointF &p, const QImage &image);
    inline void drawImage(const QPoint &p, const QImage &image);
    inline void drawImage(int x, int y, const QImage &image, int sx = 0, int sy = 0,
-                         int sw = -1, int sh = -1, Qt::ImageConversionFlags flags = Qt::AutoColor);
+      int sw = -1, int sh = -1, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    void setLayoutDirection(Qt::LayoutDirection direction);
    Qt::LayoutDirection layoutDirection() const;
 
-#if !defined(QT_NO_RAWFONT)
    void drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun);
-#endif
 
    void drawStaticText(const QPointF &topLeftPosition, const QStaticText &staticText);
    inline void drawStaticText(const QPoint &topLeftPosition, const QStaticText &staticText);
@@ -395,9 +397,9 @@ class Q_GUI_EXPORT QPainter
 
    void drawText(const QPointF &p, const QString &str, int tf, int justificationPadding);
 
-   void drawText(const QRectF &r, int flags, const QString &text, QRectF *br = 0);
-   void drawText(const QRect &r, int flags, const QString &text, QRect *br = 0);
-   inline void drawText(int x, int y, int w, int h, int flags, const QString &text, QRect *br = 0);
+   void drawText(const QRectF &r, int flags, const QString &text, QRectF *br = nullptr);
+   void drawText(const QRect &r, int flags, const QString &text, QRect *br = nullptr);
+   inline void drawText(int x, int y, int w, int h, int flags, const QString &text, QRect *br = nullptr);
 
    void drawText(const QRectF &r, const QString &text, const QTextOption &o = QTextOption());
 
@@ -434,6 +436,7 @@ class Q_GUI_EXPORT QPainter
    void setRenderHint(RenderHint hint, bool on = true);
    void setRenderHints(RenderHints hints, bool on = true);
    RenderHints renderHints() const;
+
    inline bool testRenderHint(RenderHint hint) const {
       return renderHints() & hint;
    }
@@ -441,8 +444,9 @@ class Q_GUI_EXPORT QPainter
    QPaintEngine *paintEngine() const;
 
    static void setRedirected(const QPaintDevice *device, QPaintDevice *replacement,
-                             const QPoint &offset = QPoint());
-   static QPaintDevice *redirected(const QPaintDevice *device, QPoint *offset = 0);
+      const QPoint &offset = QPoint());
+
+   static QPaintDevice *redirected(const QPaintDevice *device, QPoint *offset = nullptr);
    static void restoreRedirected(const QPaintDevice *device);
 
    void beginNativePainting();
@@ -453,31 +457,28 @@ class Q_GUI_EXPORT QPainter
 
    QScopedPointer<QPainterPrivate> d_ptr;
 
+   friend class QWidget;
    friend class QFontEngine;
    friend class QFontEngineBox;
    friend class QFontEngineFT;
    friend class QFontEngineMac;
    friend class QFontEngineWin;
-   friend class QFontEngineXLFD;
-   friend class QWSManager;
+
    friend class QPaintEngine;
    friend class QPaintEngineExPrivate;
    friend class QOpenGLPaintEngine;
-   friend class QVGPaintEngine;
-   friend class QX11PaintEngine;
-   friend class QX11PaintEnginePrivate;
+
    friend class QWin32PaintEngine;
    friend class QWin32PaintEnginePrivate;
    friend class QRasterPaintEngine;
    friend class QAlphaPaintEngine;
    friend class QPreviewPaintEngine;
+   friend class QTextEngine;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPainter::RenderHints)
 
-//
-// functions
-//
+
 inline void QPainter::drawLine(const QLineF &l)
 {
    drawLines(&l, 1);
@@ -618,13 +619,13 @@ inline void QPainter::drawRoundRect(const QRect &rect, int xRnd, int yRnd)
 }
 
 inline void QPainter::drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius,
-                                      Qt::SizeMode mode)
+   Qt::SizeMode mode)
 {
    drawRoundedRect(QRectF(x, y, w, h), xRadius, yRadius, mode);
 }
 
 inline void QPainter::drawRoundedRect(const QRect &rect, qreal xRadius, qreal yRadius,
-                                      Qt::SizeMode mode)
+   Qt::SizeMode mode)
 {
    drawRoundedRect(QRectF(rect), xRadius, yRadius, mode);
 }
@@ -776,13 +777,13 @@ inline void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap &pm)
 }
 
 inline void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap &pm,
-                                 int sx, int sy, int sw, int sh)
+   int sx, int sy, int sw, int sh)
 {
    drawPixmap(QRectF(x, y, w, h), pm, QRectF(sx, sy, sw, sh));
 }
 
 inline void QPainter::drawPixmap(int x, int y, const QPixmap &pm,
-                                 int sx, int sy, int sw, int sh)
+   int sx, int sy, int sw, int sh)
 {
    drawPixmap(QRectF(x, y, -1, -1), pm, QRectF(sx, sy, sw, sh));
 }
@@ -803,19 +804,19 @@ inline void QPainter::drawTextItem(int x, int y, const QTextItem &ti)
 }
 
 inline void QPainter::drawImage(const QRect &targetRect, const QImage &image, const QRect &sourceRect,
-                                Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    drawImage(QRectF(targetRect), image, QRectF(sourceRect), flags);
 }
 
 inline void QPainter::drawImage(const QPointF &p, const QImage &image, const QRectF &sr,
-                                Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    drawImage(QRectF(p.x(), p.y(), -1, -1), image, sr, flags);
 }
 
 inline void QPainter::drawImage(const QPoint &p, const QImage &image, const QRect &sr,
-                                Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    drawImage(QRect(p.x(), p.y(), -1, -1), image, sr, flags);
 }
@@ -836,7 +837,7 @@ inline void QPainter::drawImage(const QPoint &p, const QImage &image)
 }
 
 inline void QPainter::drawImage(int x, int y, const QImage &image, int sx, int sy, int sw, int sh,
-                                Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    if (sx == 0 && sy == 0 && sw == -1 && sh == -1 && flags == Qt::AutoColor) {
       drawImage(QPointF(x, y), image);
@@ -912,6 +913,6 @@ inline void QPainter::drawPicture(const QPoint &pt, const QPicture &p)
 }
 #endif
 
-QT_END_NAMESPACE
 
-#endif // QPAINTER_H
+
+#endif

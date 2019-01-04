@@ -44,8 +44,8 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
  public:
    QTextureGlyphCache(QFontEngine::GlyphFormat format, const QTransform &matrix)
       : QFontEngineGlyphCache(format, matrix), m_current_fontengine(0),
-        m_w(0), m_h(0), m_cx(0), m_cy(0), m_currentRowHeight(0), m_subPixelPositionCount(0) {
-   }
+        m_w(0), m_h(0), m_cx(0), m_cy(0), m_currentRowHeight(0)
+   { }
 
    virtual ~QTextureGlyphCache();
 
@@ -75,6 +75,11 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
    };
 
    bool populate(QFontEngine *fontEngine, int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions);
+
+   bool hasPendingGlyphs() const {
+      return !m_pendingGlyphs.isEmpty();
+   };
+
    void fillInPendingGlyphs();
 
    virtual void createTextureData(int width, int height) = 0;
@@ -103,6 +108,7 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
    }
 
    QHash<GlyphAndSubPixelPosition, Coord> coords;
+
    virtual int maxTextureWidth() const {
       return QT_DEFAULT_TEXTURE_GLYPH_CACHE_WIDTH;
    }
@@ -112,8 +118,6 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
    }
 
    QImage textureMapForGlyph(glyph_t g, QFixed subPixelPosition) const;
-
-   QFixed subPixelPositionForX(QFixed x) const;
 
  protected:
    int calculateSubPixelPositionCount(glyph_t) const;
@@ -126,7 +130,6 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
    int m_cx; // current x
    int m_cy; // current y
    int m_currentRowHeight; // Height of last row
-   int m_subPixelPositionCount; // Number of positions within a single pixel for this cache
 };
 
 inline uint qHash(const QTextureGlyphCache::GlyphAndSubPixelPosition &g)

@@ -43,34 +43,34 @@ struct BeginPaintInfo {
 #ifndef QT_NO_OPENGL
 class QPlatformTextureListWatcher : public QObject
 {
-    GUI_CS_OBJECT(QPlatformTextureListWatcher)
+   GUI_CS_OBJECT(QPlatformTextureListWatcher)
 
-public:
-    QPlatformTextureListWatcher(QWidgetBackingStore *backingStore);
-    void watch(QPlatformTextureList *textureList);
-    bool isLocked() const;
+ public:
+   QPlatformTextureListWatcher(QWidgetBackingStore *backingStore);
+   void watch(QPlatformTextureList *textureList);
+   bool isLocked() const;
 
-private:
-    GUI_CS_SLOT_1(Private, void onLockStatusChanged(bool locked))
-    GUI_CS_SLOT_2(onLockStatusChanged)
+ private:
+   GUI_CS_SLOT_1(Private, void onLockStatusChanged(bool locked))
+   GUI_CS_SLOT_2(onLockStatusChanged)
 
-    QHash<QPlatformTextureList *, bool> m_locked;
-    QWidgetBackingStore *m_backingStore;
+   QHash<QPlatformTextureList *, bool> m_locked;
+   QWidgetBackingStore *m_backingStore;
 };
 #endif
 
 class QWidgetBackingStore
 {
  public:
-    enum UpdateTime {
-        UpdateNow,
-        UpdateLater
-    };
+   enum UpdateTime {
+      UpdateNow,
+      UpdateLater
+   };
 
-    enum BufferState{
-        BufferValid,
-        BufferInvalid
-    };
+   enum BufferState {
+      BufferValid,
+      BufferInvalid
+   };
 
    QWidgetBackingStore(QWidget *t);
    ~QWidgetBackingStore();
@@ -84,7 +84,9 @@ class QWidgetBackingStore
       return tlwOffset;
    }
 
-   QBackingStore *backingStore() const { return store; }
+   QBackingStore *backingStore() const {
+      return store;
+   }
 
 
    inline bool isDirty() const {
@@ -93,10 +95,10 @@ class QWidgetBackingStore
 
    // ### Qt Merge into a template function (after MSVC isn't supported anymore).
    void markDirty(const QRegion &rgn, QWidget *widget, UpdateTime updateTime = UpdateLater,
-                   BufferState bufferState = BufferValid);
+      BufferState bufferState = BufferValid);
 
    void markDirty(const QRect &rect, QWidget *widget, UpdateTime updateTime = UpdateLater,
-                   BufferState bufferState = BufferValid);
+      BufferState bufferState = BufferValid);
 
  private:
    QWidget *tlw;
@@ -119,23 +121,23 @@ class QWidgetBackingStore
    QElapsedTimer perfTime;
    int perfFrames;
 
-    void sendUpdateRequest(QWidget *widget, UpdateTime updateTime);
+   void sendUpdateRequest(QWidget *widget, UpdateTime updateTime);
 
-    static bool flushPaint(QWidget *widget, const QRegion &rgn);
-    static void unflushPaint(QWidget *widget, const QRegion &rgn);
-    static void qt_flush(QWidget *widget, const QRegion &region, QBackingStore *backingStore,
-                         QWidget *tlw, const QPoint &tlwOffset,
-                         QPlatformTextureList *widgetTextures,
-                         QWidgetBackingStore *widgetBackingStore);
+   static bool flushPaint(QWidget *widget, const QRegion &rgn);
+   static void unflushPaint(QWidget *widget, const QRegion &rgn);
+   static void qt_flush(QWidget *widget, const QRegion &region, QBackingStore *backingStore,
+      QWidget *tlw, const QPoint &tlwOffset,
+      QPlatformTextureList *widgetTextures,
+      QWidgetBackingStore *widgetBackingStore);
 
    void doSync();
    bool bltRect(const QRect &rect, int dx, int dy, QWidget *widget);
    void releaseBuffer();
 
-    void beginPaint(QRegion &toClean, QWidget *widget, QBackingStore *backingStore,
-                   BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates = true);
+   void beginPaint(QRegion &toClean, QWidget *widget, QBackingStore *backingStore,
+      BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates = true);
 
-    void endPaint(const QRegion &cleaned, QBackingStore *backingStore, BeginPaintInfo *beginPaintInfo);
+   void endPaint(const QRegion &cleaned, QBackingStore *backingStore, BeginPaintInfo *beginPaintInfo);
 
    QRegion dirtyRegion(QWidget *widget = 0) const;
    QRegion staticContents(QWidget *widget = 0, const QRect &withinClipRect = QRect()) const;
@@ -163,17 +165,16 @@ class QWidgetBackingStore
             widgetPrivate->inDirtyList = true;
          }
       }
-    }
+   }
 
-    inline void addDirtyRenderToTextureWidget(QWidget *widget)
-    {
-        if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
-            QWidgetPrivate *widgetPrivate = widget->d_func();
-            Q_ASSERT(widgetPrivate->renderToTexture);
-            dirtyRenderToTextureWidgets.append(widget);
-            widgetPrivate->inDirtyList = true;
-        }
-    }
+   inline void addDirtyRenderToTextureWidget(QWidget *widget) {
+      if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
+         QWidgetPrivate *widgetPrivate = widget->d_func();
+         Q_ASSERT(widgetPrivate->renderToTexture);
+         dirtyRenderToTextureWidgets.append(widget);
+         widgetPrivate->inDirtyList = true;
+      }
+   }
 
    inline void dirtyWidgetsRemoveAll(QWidget *widget) {
       int i = 0;
@@ -278,9 +279,9 @@ class QWidgetBackingStore
 
    inline bool hasStaticContents() const {
 #if defined(Q_OS_WIN)
-        return !staticWidgets.isEmpty();
+      return !staticWidgets.isEmpty();
 #else
-        return !staticWidgets.isEmpty() && false;
+      return !staticWidgets.isEmpty() && false;
 #endif
    }
 

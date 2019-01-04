@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
 
-QT_BEGIN_NAMESPACE
-
 class QPreviewPaintEnginePrivate;
 
 class QPreviewPaintEngine : public QPaintEngine, public QPrintEngine
@@ -70,8 +68,6 @@ class QPreviewPaintEngine : public QPaintEngine, public QPrintEngine
 
    QPrinter::PrinterState printerState() const override;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTPREVIEWWIDGET
 

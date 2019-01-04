@@ -24,12 +24,12 @@
 #include <qpainter_p.h>
 #include <qpaintengine_p.h>
 #include <qpicture_p.h>
-#include <QtGui/qprintengine.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpicture.h>
+#include <qprintengine.h>
+#include <qpainter.h>
+#include <qpicture.h>
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
-QT_BEGIN_NAMESPACE
+
 
 class QPreviewPaintEnginePrivate : public QPaintEnginePrivate
 {
@@ -74,6 +74,7 @@ bool QPreviewPaintEngine::begin(QPaintDevice *)
    page->d_func()->in_memory_only = true;
    d->painter = new QPainter(page);
    d->engine = d->painter->paintEngine();
+   *d->painter->d_func()->state = *painter()->d_func()->state;
    d->pages.append(page);
    d->state = QPrinter::Active;
    return true;
@@ -197,7 +198,5 @@ QPrinter::PrinterState QPreviewPaintEngine::printerState() const
    Q_D(const QPreviewPaintEngine);
    return d->state;
 }
-
-QT_END_NAMESPACE
 
 #endif

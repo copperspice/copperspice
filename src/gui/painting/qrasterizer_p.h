@@ -28,17 +28,12 @@
 #include <qdrawhelper_p.h>
 #include <qrasterdefs_p.h>
 
-QT_BEGIN_NAMESPACE
-
 struct QSpanData;
+
 class QRasterBuffer;
 class QRasterizerPrivate;
+class QRasterizer
 
-#ifdef Q_WS_QWS
-   class Q_GUI_EXPORT QRasterizer
-#else
-   class QRasterizer
-#endif   
 {
  public:
    QRasterizer();
@@ -46,6 +41,7 @@ class QRasterizerPrivate;
 
    void setAntialiased(bool antialiased);
    void setClipRect(const QRect &clipRect);
+   void setLegacyRoundingEnabled(bool legacyRoundingEnabled);
 
    void initialize(ProcessSpans blend, void *data);
 
@@ -59,6 +55,5 @@ class QRasterizerPrivate;
    QRasterizerPrivate *d;
 };
 
-QT_END_NAMESPACE
 
 #endif

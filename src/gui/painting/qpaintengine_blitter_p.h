@@ -37,7 +37,7 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    Q_DECLARE_PRIVATE(QBlitterPaintEngine)
 
  public:
-    QBlitterPaintEngine(QBlittablePlatformPixmap *p);
+   QBlitterPaintEngine(QBlittablePlatformPixmap *p);
 
    QPaintEngine::Type type() const  override {
       return Blitter;
@@ -74,7 +74,7 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
 
    void drawImage(const QPointF &p, const QImage &img);
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor) override;
+      Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
    void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &sr) override;
    void drawTextItem(const QPointF &p, const QTextItem &textItem) override;

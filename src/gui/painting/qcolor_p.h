@@ -26,6 +26,7 @@
 #include <qglobal.h>
 #include <qrgb.h>
 
+
 uint qt_get_rgb_val(const char *name);
 
 bool qt_get_named_rgb(const char *, QRgb *);

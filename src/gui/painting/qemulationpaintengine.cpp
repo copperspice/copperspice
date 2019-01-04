@@ -25,7 +25,6 @@
 #include <qtextengine_p.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
 
 QEmulationPaintEngine::QEmulationPaintEngine(QPaintEngineEx *engine)
    : real_engine(engine)
@@ -49,7 +48,6 @@ bool QEmulationPaintEngine::end()
    return true;
 }
 
-
 QPainterState *QEmulationPaintEngine::createState(QPainterState *orig) const
 {
    return real_engine->createState(orig);
@@ -61,7 +59,8 @@ void QEmulationPaintEngine::fill(const QVectorPath &path, const QBrush &brush)
 
    if (s->bgMode == Qt::OpaqueMode) {
       Qt::BrushStyle style = brush.style();
-      if (style >= Qt::Dense1Pattern && style <= Qt::DiagCrossPattern) {
+
+      if ((style >= Qt::Dense1Pattern && style <= Qt::DiagCrossPattern) || (style == Qt::TexturePattern ))  {
          real_engine->fill(path, s->bgBrush);
       }
    }
@@ -152,7 +151,7 @@ void QEmulationPaintEngine::drawTextItem(const QPointF &p, const QTextItem &text
 {
    if (state()->bgMode == Qt::OpaqueMode) {
       const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
-      QRectF rect(p.x(), p.y() - ti.ascent.toReal(), ti.width.toReal(), (ti.ascent + ti.descent + 1).toReal());
+      QRectF rect(p.x(), p.y() - ti.ascent.toReal(), ti.width.toReal(), (ti.ascent + ti.descent).toReal());
       fillBGRect(rect);
    }
 
@@ -197,57 +196,13 @@ void QEmulationPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixm
    if (state()->bgMode == Qt::OpaqueMode && pixmap.isQBitmap()) {
       fillBGRect(r);
    }
+
    real_engine->drawTiledPixmap(r, pixmap, s);
 }
 
-void QEmulationPaintEngine::drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                                      Qt::ImageConversionFlags flags)
+void QEmulationPaintEngine::drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags)
 {
    real_engine->drawImage(r, pm, sr, flags);
-}
-
-void QEmulationPaintEngine::drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount,
-      const QPixmap &pixmap,
-      QPainter::PixmapFragmentHints hints)
-{
-   if (state()->bgMode == Qt::OpaqueMode && pixmap.isQBitmap()) {
-      qreal oldOpacity = real_engine->state()->opacity;
-      QTransform oldTransform = real_engine->state()->matrix;
-
-      for (int i = 0; i < fragmentCount; ++i) {
-         QTransform transform = oldTransform;
-         transform.translate(fragments[i].x, fragments[i].y);
-         transform.rotate(fragments[i].rotation);
-         real_engine->state()->opacity = oldOpacity * fragments[i].opacity;
-         real_engine->state()->matrix = transform;
-         real_engine->opacityChanged();
-         real_engine->transformChanged();
-
-         qreal w = fragments[i].scaleX * fragments[i].width;
-         qreal h = fragments[i].scaleY * fragments[i].height;
-         fillBGRect(QRectF(-0.5 * w, -0.5 * h, w, h));
-      }
-
-      real_engine->state()->opacity = oldOpacity;
-      real_engine->state()->matrix = oldTransform;
-      real_engine->opacityChanged();
-      real_engine->transformChanged();
-   }
-
-   real_engine->drawPixmapFragments(fragments, fragmentCount, pixmap, hints);
-}
-
-void QEmulationPaintEngine::drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
-      const QPixmap &pixmap,
-      QPainter::PixmapFragmentHints hints)
-{
-   if (state()->bgMode == Qt::OpaqueMode && pixmap.isQBitmap()) {
-      for (int i = 0; i < fragmentCount; ++i) {
-         fillBGRect(targetRects[i]);
-      }
-   }
-
-   real_engine->drawPixmapFragments(targetRects, sourceRects, fragmentCount, pixmap, hints);
 }
 
 void QEmulationPaintEngine::clipEnabledChanged()
@@ -309,10 +264,11 @@ void QEmulationPaintEngine::endNativePainting()
 void QEmulationPaintEngine::fillBGRect(const QRectF &r)
 {
    qreal pts[] = { r.x(), r.y(), r.x() + r.width(), r.y(),
-                   r.x() + r.width(), r.y() + r.height(), r.x(), r.y() + r.height()
-                 };
+         r.x() + r.width(), r.y() + r.height(), r.x(), r.y() + r.height()
+      };
+
    QVectorPath vp(pts, 4, 0, QVectorPath::RectangleHint);
    real_engine->fill(vp, state()->bgBrush);
 }
 
-QT_END_NAMESPACE
+

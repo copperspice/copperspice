@@ -32,8 +32,6 @@
 
 #include <stdarg.h>
 
-QT_BEGIN_NAMESPACE
-
 //same as qt_painterpath_isect_line in qpainterpath.cpp
 static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QPointF &pos, int *winding)
 {
@@ -68,103 +66,15 @@ static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QP
    }
 }
 
-/*!
-    \class QPolygon
-    \brief The QPolygon class provides a vector of points using
-    integer precision.
 
-    \reentrant
-
-    \ingroup painting
-    \ingroup shared
-
-    A QPolygon object is a QVector<QPoint>.  The easiest way to add
-    points to a QPolygon is to use QVector's streaming operator, as
-    illustrated below:
-
-    \snippet doc/src/snippets/polygon/polygon.cpp 0
-
-    In addition to the functions provided by QVector, QPolygon
-    provides some point-specific functions.
-
-    Each point in a polygon can be retrieved by passing its index to
-    the point() function. To populate the polygon, QPolygon provides
-    the setPoint() function to set the point at a given index, the
-    setPoints() function to set all the points in the polygon
-    (resizing it to the given number of points), and the putPoints()
-    function which copies a number of given points into the polygon
-    from a specified index (resizing the polygon if necessary).
-
-    QPolygon provides the boundingRect() and translate() functions for
-    geometry functions. Use the QMatrix::map() function for more
-    general transformations of QPolygons.
-
-    The QPolygon class is \l {Implicit Data Sharing}{implicitly
-    shared}.
-
-    \sa QVector, QPolygonF, QLine
-*/
-
-
-/*****************************************************************************
-  QPolygon member functions
- *****************************************************************************/
-
-/*!
-    \fn QPolygon::QPolygon()
-
-    Constructs a polygon with no points.
-
-    \sa QVector::isEmpty()
-*/
-
-/*!
-    \fn QPolygon::QPolygon(int size)
-
-    Constructs a polygon of the given \a size. Creates an empty
-    polygon if \a size == 0.
-
-    \sa QVector::isEmpty()
-*/
-
-/*!
-    \fn QPolygon::QPolygon(const QPolygon &polygon)
-
-    Constructs a copy of the given \a polygon.
-
-    \sa setPoints()
-*/
-
-/*!
-    \fn QPolygon::QPolygon(const QVector<QPoint> &points)
-
-    Constructs a polygon containing the specified \a points.
-
-    \sa setPoints()
-*/
-
-/*!
-    \fn QPolygon::QPolygon(const QRect &rectangle, bool closed)
-
-    Constructs a polygon from the given \a rectangle.  If \a closed is
-    false, the polygon just contains the four points of the rectangle
-    ordered clockwise, otherwise the polygon's fifth point is set to
-    \a {rectangle}.topLeft().
-
-    Note that the bottom-right corner of the rectangle is located at
-    (rectangle.x() + rectangle.width(), rectangle.y() +
-    rectangle.height()).
-
-    \sa setPoints()
-*/
 
 QPolygon::QPolygon(const QRect &r, bool closed)
 {
    reserve(closed ? 5 : 4);
    *this << QPoint(r.x(), r.y())
-         << QPoint(r.x() + r.width(), r.y())
-         << QPoint(r.x() + r.width(), r.y() + r.height())
-         << QPoint(r.x(), r.y() + r.height());
+      << QPoint(r.x() + r.width(), r.y())
+      << QPoint(r.x() + r.width(), r.y() + r.height())
+      << QPoint(r.x(), r.y() + r.height());
    if (closed) {
       *this << QPoint(r.left(), r.top());
    }
@@ -212,21 +122,7 @@ void QPolygon::translate(int dx, int dy)
    }
 }
 
-/*!
-    \fn void QPolygon::translate(const QPoint &offset)
-    \overload
 
-    Translates all points in the polygon by the given \a offset.
-
-    \sa translated()
-*/
-
-/*!
-    Returns a copy of the polygon that is translated by (\a{dx}, \a{dy}).
-
-    \since 4.6
-    \sa translate()
-*/
 QPolygon QPolygon::translated(int dx, int dy) const
 {
    QPolygon copy(*this);
@@ -234,22 +130,6 @@ QPolygon QPolygon::translated(int dx, int dy) const
    return copy;
 }
 
-/*!
-    \fn void QPolygon::translated(const QPoint &offset) const
-    \overload
-    \since 4.6
-
-    Returns a copy of the polygon that is translated by the given \a offset.
-
-    \sa translate()
-*/
-
-/*!
-    Extracts the coordinates of the point at the given \a index to
-    *\a{x} and *\a{y} (if they are valid pointers).
-
-    \sa setPoint()
-*/
 
 void QPolygon::point(int index, int *x, int *y) const
 {
@@ -262,40 +142,6 @@ void QPolygon::point(int index, int *x, int *y) const
    }
 }
 
-/*!
-    \fn QPoint QPolygon::point(int index) const
-    \overload
-
-    Returns the point at the given \a index.
-*/
-
-/*!
-    \fn void QPolygon::setPoint(int index, const QPoint &point)
-    \overload
-
-    Sets the point at the given \a index to the given \a point.
-*/
-
-/*!
-    \fn void QPolygon::setPoint(int index, int x, int y)
-
-    Sets the point at the given \a index to the point specified by
-    (\a{x}, \a{y}).
-
-    \sa point(), putPoints(), setPoints(),
-*/
-
-/*!
-    Resizes the polygon to \a nPoints and populates it with the given
-    \a points.
-
-    The example code creates a polygon with two points (10, 20) and
-    (30, 40):
-
-    \snippet doc/src/snippets/polygon/polygon.cpp 2
-
-    \sa setPoint() putPoints()
-*/
 
 void QPolygon::setPoints(int nPoints, const int *points)
 {
@@ -307,19 +153,7 @@ void QPolygon::setPoints(int nPoints, const int *points)
    }
 }
 
-/*!
-    \overload
 
-    Resizes the polygon to \a nPoints and populates it with the points
-    specified by the variable argument list.  The points are given as a
-    sequence of integers, starting with \a firstx then \a firsty, and
-    so on.
-
-    The example code creates a polygon with two points (10, 20) and
-    (30, 40):
-
-    \snippet doc/src/snippets/polygon/polygon.cpp 3
-*/
 
 void QPolygon::setPoints(int nPoints, int firstx, int firsty, ...)
 {
@@ -359,26 +193,6 @@ void QPolygon::putPoints(int index, int nPoints, const int *points)
    }
 }
 
-/*!
-    Copies \a nPoints points from the variable argument list into this
-    polygon from the given \a index.
-
-    The points are given as a sequence of integers, starting with \a
-    firstx then \a firsty, and so on. The polygon is resized if
-    \c{index+nPoints} exceeds its current size.
-
-    The example code creates a polygon with three points (4,5), (6,7)
-    and (8,9), by expanding the polygon from 1 to 3 points:
-
-    \snippet doc/src/snippets/polygon/polygon.cpp 4
-
-    The following code has the same result, but here the putPoints()
-    function overwrites rather than extends:
-
-    \snippet doc/src/snippets/polygon/polygon.cpp 5
-
-    \sa setPoints()
-*/
 
 void QPolygon::putPoints(int index, int nPoints, int firstx, int firsty, ...)
 {
@@ -463,12 +277,15 @@ QRect QPolygon::boundingRect() const
 
 QDebug operator<<(QDebug dbg, const QPolygon &a)
 {
+   QDebugStateSaver saver(dbg);
    dbg.nospace() << "QPolygon(";
+
    for (int i = 0; i < a.count(); ++i) {
       dbg.nospace() << a.at(i);
    }
+
    dbg.nospace() << ')';
-   return dbg.space();
+   return dbg;
 }
 
 QPolygonF::QPolygonF(const QRectF &r)
@@ -505,21 +322,7 @@ void QPolygonF::translate(const QPointF &offset)
    }
 }
 
-/*!
-    \fn void QPolygonF::translate(qreal dx, qreal dy)
-    \overload
 
-    Translates all points in the polygon by (\a{dx}, \a{dy}).
-
-    \sa translated()
-*/
-
-/*!
-    Returns a copy of the polygon that is translated by the given \a offset.
-
-    \since 4.6
-    \sa translate()
-*/
 QPolygonF QPolygonF::translated(const QPointF &offset) const
 {
    QPolygonF copy(*this);
@@ -527,43 +330,19 @@ QPolygonF QPolygonF::translated(const QPointF &offset) const
    return copy;
 }
 
-/*!
-    \fn void QPolygonF::translated(qreal dx, qreal dy) const
-    \overload
-    \since 4.6
-
-    Returns a copy of the polygon that is translated by (\a{dx}, \a{dy}).
-
-    \sa translate()
-*/
-
-/*!
-    \fn bool QPolygonF::isClosed() const
-
-    Returns true if the polygon is closed; otherwise returns false.
-
-    A polygon is said to be closed if its start point and end point are equal.
-
-    \sa QVector::first(), QVector::last()
-*/
-
-/*!
-    Returns the bounding rectangle of the polygon, or QRectF(0,0,0,0)
-    if the polygon is empty.
-
-    \sa QVector::isEmpty()
-*/
 
 QRectF QPolygonF::boundingRect() const
 {
    if (isEmpty()) {
       return QRectF(0, 0, 0, 0);
    }
+
    const QPointF *pd = constData();
    qreal minx, maxx, miny, maxy;
    minx = maxx = pd->x();
    miny = maxy = pd->y();
    ++pd;
+
    for (int i = 1; i < size(); ++i) {
       if (pd->x() < minx) {
          minx = pd->x();
@@ -597,80 +376,23 @@ QPolygon QPolygonF::toPolygon() const
    return a;
 }
 
-/*!
-    \fn void QPolygon::swap(QPolygon &other)
-    \since 4.8
-
-    Swaps polygon \a other with this polygon. This operation is very
-    fast and never fails.
-*/
-
-/*!
-    \fn void QPolygonF::swap(QPolygonF &other)
-    \since 4.8
-
-    Swaps polygon \a other with this polygon. This operation is very
-    fast and never fails.
-*/
-
-/*!
-   Returns the polygon as a QVariant
-*/
 QPolygon::operator QVariant() const
 {
    return QVariant(QVariant::Polygon, this);
 }
 
-/*****************************************************************************
-  QPolygon stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QPolygon &polygon)
-    \since 4.4
-    \relates QPolygon
-
-    Writes the given \a polygon to the given \a stream, and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &s, const QPolygon &a)
 {
    const QVector<QPoint> &v = a;
    return s << v;
 }
 
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QPolygon &polygon)
-    \since 4.4
-    \relates QPolygon
 
-    Reads a polygon from the given \a stream into the given \a
-    polygon, and returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &s, QPolygon &a)
 {
    QVector<QPoint> &v = a;
    return s >> v;
 }
-#endif // QT_NO_DATASTREAM
-
-/*****************************************************************************
-  QPolygonF stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QPolygonF &polygon)
-    \relates QPolygonF
-
-    Writes the given \a polygon to the given \a stream, and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &s, const QPolygonF &a)
 {
@@ -683,16 +405,6 @@ QDataStream &operator<<(QDataStream &s, const QPolygonF &a)
    }
    return s;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QPolygonF &polygon)
-    \relates QPolygonF
-
-    Reads a polygon from the given \a stream into the given \a
-    polygon, and returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &s, QPolygonF &a)
 {
@@ -708,16 +420,18 @@ QDataStream &operator>>(QDataStream &s, QPolygonF &a)
    }
    return s;
 }
-#endif //QT_NO_DATASTREAM
 
 QDebug operator<<(QDebug dbg, const QPolygonF &a)
 {
+   QDebugStateSaver saver(dbg);
    dbg.nospace() << "QPolygonF(";
+
    for (int i = 0; i < a.count(); ++i) {
       dbg.nospace() << a.at(i);
    }
    dbg.nospace() << ')';
-   return dbg.space();
+
+   return dbg;
 }
 
 bool QPolygonF::containsPoint(const QPointF &pt, Qt::FillRule fillRule) const
@@ -742,8 +456,8 @@ bool QPolygonF::containsPoint(const QPointF &pt, Qt::FillRule fillRule) const
    }
 
    return (fillRule == Qt::WindingFill
-           ? (winding_number != 0)
-           : ((winding_number % 2) != 0));
+         ? (winding_number != 0)
+         : ((winding_number % 2) != 0));
 }
 
 /*!
@@ -775,8 +489,8 @@ bool QPolygon::containsPoint(const QPoint &pt, Qt::FillRule fillRule) const
    }
 
    return (fillRule == Qt::WindingFill
-           ? (winding_number != 0)
-           : ((winding_number % 2) != 0));
+         ? (winding_number != 0)
+         : ((winding_number % 2) != 0));
 }
 
 /*!
@@ -794,109 +508,72 @@ QPolygon QPolygon::united(const QPolygon &r) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
+
    QPainterPath clip;
    clip.addPolygon(r);
 
    return subject.united(clip).toFillPolygon().toPolygon();
 }
 
-/*!
-    \since 4.3
 
-    Returns a polygon which is the intersection of this polygon and \a r.
 
-    Set operations on polygons will treat the polygons as
-    areas. Non-closed polygons will be treated as implicitly closed.
-*/
 
 QPolygon QPolygon::intersected(const QPolygon &r) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
+
    QPainterPath clip;
    clip.addPolygon(r);
 
    return subject.intersected(clip).toFillPolygon().toPolygon();
 }
 
-/*!
-    \since 4.3
-
-    Returns a polygon which is \a r subtracted from this polygon.
-
-    Set operations on polygons will treat the polygons as
-    areas. Non-closed polygons will be treated as implicitly closed.
-
-*/
-
 QPolygon QPolygon::subtracted(const QPolygon &r) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
+
    QPainterPath clip;
    clip.addPolygon(r);
 
    return subject.subtracted(clip).toFillPolygon().toPolygon();
 }
 
-/*!
-    \since 4.3
-
-    Returns a polygon which is the union of this polygon and \a r.
-
-    Set operations on polygons will treat the polygons as
-    areas. Non-closed polygons will be treated as implicitly closed.
-
-    \sa intersected(), subtracted()
-*/
-
 QPolygonF QPolygonF::united(const QPolygonF &r) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
+
    QPainterPath clip;
    clip.addPolygon(r);
 
    return subject.united(clip).toFillPolygon();
 }
 
-/*!
-    \since 4.3
-
-    Returns a polygon which is the intersection of this polygon and \a r.
-
-    Set operations on polygons will treat the polygons as
-    areas. Non-closed polygons will be treated as implicitly closed.
-
-*/
-
 QPolygonF QPolygonF::intersected(const QPolygonF &r) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
+
    QPainterPath clip;
    clip.addPolygon(r);
 
    return subject.intersected(clip).toFillPolygon();
 }
 
-/*!
-    \since 4.3
-
-    Returns a polygon which is \a r subtracted from this polygon.
-
-    Set operations on polygons will treat the polygons as
-    areas. Non-closed polygons will be treated as implicitly closed.
-
-*/
-
 QPolygonF QPolygonF::subtracted(const QPolygonF &r) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
+
    QPainterPath clip;
    clip.addPolygon(r);
    return subject.subtracted(clip).toFillPolygon();
 }
 
-QT_END_NAMESPACE
+QPolygonF::operator QVariant() const
+{
+   return QVariant(QMetaType::QPolygonF, this);
+}
+

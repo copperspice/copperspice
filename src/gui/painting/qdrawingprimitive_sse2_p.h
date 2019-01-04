@@ -210,68 +210,66 @@
 
 #endif
 
-//  BROOM - pending info from Ansel
-
-#if 0
+// emerald - review sse4
 
 #if QT_COMPILER_SUPPORTS_HERE(SSE4_1)
 QT_FUNCTION_TARGET(SSE4_1)
 
 inline QRgb qUnpremultiply_sse4(QRgb p)
 {
-    const uint alpha = qAlpha(p);
-    if (alpha == 255 || alpha == 0)
-        return p;
-    const uint invAlpha = qt_inv_premul_factor[alpha];
-    const __m128i via = _mm_set1_epi32(invAlpha);
-    const __m128i vr = _mm_set1_epi32(0x8000);
-    __m128i vl = _mm_cvtepu8_epi32(_mm_cvtsi32_si128(p));
-    vl = _mm_mullo_epi32(vl, via);
-    vl = _mm_add_epi32(vl, vr);
-    vl = _mm_srai_epi32(vl, 16);
-    vl = _mm_insert_epi32(vl, alpha, 3);
-    vl = _mm_packus_epi32(vl, vl);
-    vl = _mm_packus_epi16(vl, vl);
-    return _mm_cvtsi128_si32(vl);
+   const uint alpha = qAlpha(p);
+   if (alpha == 255 || alpha == 0) {
+      return p;
+   }
+   const uint invAlpha = qt_inv_premul_factor[alpha];
+   const __m128i via = _mm_set1_epi32(invAlpha);
+   const __m128i vr = _mm_set1_epi32(0x8000);
+   __m128i vl = _mm_cvtepu8_epi32(_mm_cvtsi32_si128(p));
+   vl = _mm_mullo_epi32(vl, via);
+   vl = _mm_add_epi32(vl, vr);
+   vl = _mm_srai_epi32(vl, 16);
+   vl = _mm_insert_epi32(vl, alpha, 3);
+   vl = _mm_packus_epi32(vl, vl);
+   vl = _mm_packus_epi16(vl, vl);
+   return _mm_cvtsi128_si32(vl);
 }
-template<enum QtPixelOrder PixelOrder>
-QT_FUNCTION_TARGET(SSE4_1)
+template<enum QtPixelOrder PixelOrder> QT_FUNCTION_TARGET(SSE4_1)
 inline uint qConvertArgb32ToA2rgb30_sse4(QRgb p)
 {
-    const uint alpha = qAlpha(p);
-    if (alpha == 255)
-        return qConvertRgb32ToRgb30<PixelOrder>(p);
-    if (alpha == 0)
-        return 0;
-    Q_CONSTEXPR  uint mult = 255 / (255 >> 6);
-    const uint invAlpha = qt_inv_premul_factor[alpha];
-    const uint newalpha = (alpha >> 6);
-    const __m128i via = _mm_set1_epi32(invAlpha);
-    const __m128i vna = _mm_set1_epi32(mult * newalpha);
-    const __m128i vr1 = _mm_set1_epi32(0x1000);
-    const __m128i vr2 = _mm_set1_epi32(0x80);
-    __m128i vl = _mm_cvtepu8_epi32(_mm_cvtsi32_si128(p));
-    vl = _mm_mullo_epi32(vl, via);
-    vl = _mm_add_epi32(vl, vr1);
-    vl = _mm_srli_epi32(vl, 14);
-    vl = _mm_mullo_epi32(vl, vna);
-    vl = _mm_add_epi32(vl, _mm_srli_epi32(vl, 8));
-    vl = _mm_add_epi32(vl, vr2);
-    vl = _mm_srli_epi32(vl, 8);
-    vl = _mm_packus_epi32(vl, vl);
-    uint rgb30 = (newalpha << 30);
-    rgb30 |= ((uint)_mm_extract_epi16(vl, 1)) << 10;
-    if (PixelOrder == PixelOrderRGB) {
-        rgb30 |= ((uint)_mm_extract_epi16(vl, 2)) << 20;
-        rgb30 |= ((uint)_mm_extract_epi16(vl, 0));
-    } else {
-        rgb30 |= ((uint)_mm_extract_epi16(vl, 0)) << 20;
-        rgb30 |= ((uint)_mm_extract_epi16(vl, 2));
-    }
-    return rgb30;
+   const uint alpha = qAlpha(p);
+   if (alpha == 255) {
+      return qConvertRgb32ToRgb30<PixelOrder>(p);
+   }
+   if (alpha == 0) {
+      return 0;
+   }
+   Q_CONSTEXPR  uint mult = 255 / (255 >> 6);
+   const uint invAlpha = qt_inv_premul_factor[alpha];
+   const uint newalpha = (alpha >> 6);
+   const __m128i via = _mm_set1_epi32(invAlpha);
+   const __m128i vna = _mm_set1_epi32(mult * newalpha);
+   const __m128i vr1 = _mm_set1_epi32(0x1000);
+   const __m128i vr2 = _mm_set1_epi32(0x80);
+   __m128i vl = _mm_cvtepu8_epi32(_mm_cvtsi32_si128(p));
+   vl = _mm_mullo_epi32(vl, via);
+   vl = _mm_add_epi32(vl, vr1);
+   vl = _mm_srli_epi32(vl, 14);
+   vl = _mm_mullo_epi32(vl, vna);
+   vl = _mm_add_epi32(vl, _mm_srli_epi32(vl, 8));
+   vl = _mm_add_epi32(vl, vr2);
+   vl = _mm_srli_epi32(vl, 8);
+   vl = _mm_packus_epi32(vl, vl);
+   uint rgb30 = (newalpha << 30);
+   rgb30 |= ((uint)_mm_extract_epi16(vl, 1)) << 10;
+   if (PixelOrder == PixelOrderRGB) {
+      rgb30 |= ((uint)_mm_extract_epi16(vl, 2)) << 20;
+      rgb30 |= ((uint)_mm_extract_epi16(vl, 0));
+   } else {
+      rgb30 |= ((uint)_mm_extract_epi16(vl, 0)) << 20;
+      rgb30 |= ((uint)_mm_extract_epi16(vl, 2));
+   }
+   return rgb30;
 }
 #endif
-
-#endif  //  TEMP 0  (  ansel is working very hard )
 
 #endif

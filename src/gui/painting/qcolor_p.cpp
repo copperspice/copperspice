@@ -20,13 +20,13 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qglobal.h>
 #include <qrgb.h>
 #include <qstringlist.h>
 
-QT_BEGIN_NAMESPACE
+#include <qtools_p.h>
+
+#include <algorithm>
 
 static inline int h2i(char hex)
 {
@@ -60,7 +60,10 @@ bool qt_get_hex_rgb(const char *name, QRgb *rgb)
    }
    name++;
    int len = qstrlen(name);
+
+   int a = 255;
    int r, g, b;
+
    if (len == 12) {
       r = hex2int(name);
       g = hex2int(name + 4);
@@ -68,6 +71,11 @@ bool qt_get_hex_rgb(const char *name, QRgb *rgb)
    } else if (len == 9) {
       r = hex2int(name);
       g = hex2int(name + 3);
+      b = hex2int(name + 6);
+   } else if (len == 8) {
+      a = hex2int(name);
+      r = hex2int(name + 2);
+      g = hex2int(name + 4);
       b = hex2int(name + 6);
    } else if (len == 6) {
       r = hex2int(name);
@@ -80,12 +88,12 @@ bool qt_get_hex_rgb(const char *name, QRgb *rgb)
    } else {
       r = g = b = -1;
    }
-   if ((uint)r > 255 || (uint)g > 255 || (uint)b > 255) {
+   if ((uint)r > 255 || (uint)g > 255 || (uint)b > 255 || (uint)a > 255) {
       *rgb = 0;
       return false;
    }
 
-   *rgb = qRgb(r, g , b);
+   *rgb = qRgba(r, g, b, a);
 
    return true;
 }
@@ -121,7 +129,7 @@ bool qt_get_hex_rgb(QStringView str, QRgb *rgb)
 #define rgb(r,g,b) (0xff000000 | (r << 16) |  (g << 8) | b)
 
 static const struct RGBData {
-   const char *name;
+   const char name[21];
    uint  value;
 } rgbTbl[] = {
    { "aliceblue", rgb(240, 248, 255) },
@@ -304,6 +312,7 @@ static bool get_named_rgb(const char *name_no_space, QRgb *rgb)
 bool qt_get_named_rgb(const char *name, QRgb *rgb)
 {
    int len = strlen(name);
+
    if (len > 255) {
       return false;
    }
@@ -383,4 +392,3 @@ QStringList qt_get_colornames()
 }
 #endif // QT_NO_COLORNAMES
 
-QT_END_NAMESPACE

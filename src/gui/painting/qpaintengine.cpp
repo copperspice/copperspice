@@ -25,15 +25,17 @@
 #include <qpainter_p.h>
 #include <qpolygon.h>
 #include <qbitmap.h>
-#include <qapplication.h>
+
 #include <qdebug.h>
 #include <qmath.h>
+#include <qguiapplication.h>
+
 #include <qtextengine_p.h>
 #include <qvarlengtharray.h>
 #include <qfontengine_p.h>
 #include <qpaintengineex_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 qreal QTextItem::descent() const
 {
@@ -41,218 +43,41 @@ qreal QTextItem::descent() const
    return ti->descent.toReal();
 }
 
-/*!
-    \fn qreal QTextItem::ascent() const
 
-    Corresponds to the \l{QFontMetrics::ascent()}{ascent} of the piece of text that is drawn.
-*/
 qreal QTextItem::ascent() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return ti->ascent.toReal();
 }
 
-/*!
-    \fn qreal QTextItem::width() const
-
-    Specifies the total width of the text to be drawn.
-*/
 qreal QTextItem::width() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return ti->width.toReal();
 }
 
-/*!
-    \fn QTextItem::RenderFlags QTextItem::renderFlags() const
 
-    Returns the render flags used.
-*/
 QTextItem::RenderFlags QTextItem::renderFlags() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return ti->flags;
 }
 
-/*!
-    \fn QString QTextItem::text() const
 
-    Returns the text that should be drawn.
-*/
 QString QTextItem::text() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return QString(ti->m_iter, ti->m_end);
 }
 
-/*!
-    \fn QFont QTextItem::font() const
 
-    Returns the font that should be used to draw the text.
-*/
 QFont QTextItem::font() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
-   return ti->f ? *ti->f : QApplication::font();
+   return ti->f ? *ti->f : QGuiApplication::font();
 }
 
 
-/*!
-  \class QPaintEngine
-  \ingroup painting
-
-  \brief The QPaintEngine class provides an abstract definition of how
-  QPainter draws to a given device on a given platform.
-
-  Qt 4.0 provides several premade implementations of QPaintEngine for the
-  different painter backends we support. We provide one paint engine for each
-  window system and painting framework we support. This includes X11 on
-  Unix/Linux and CoreGraphics on Mac OS X. In addition we provide QPaintEngine
-  implementations for OpenGL (accessible through QGLWidget) and PostScript
-  (accessible through QPSPrinter on X11). Additionally there is a raster-based
-  paint engine that is a fallback for when an engine does not support a certain
-  capability.
-
-  If one wants to use QPainter to draw to a different backend,
-  one must subclass QPaintEngine and reimplement all its virtual
-  functions. The QPaintEngine implementation is then made available by
-  subclassing QPaintDevice and reimplementing the virtual function
-  QPaintDevice::paintEngine().
-
-  QPaintEngine is created and owned by the QPaintDevice that created it.
-
-  The big advantage of the QPaintEngine approach opposed to
-  Qt 3's QPainter/QPaintDevice::cmd() approach is that it is now
-  possible to adapt to multiple technologies on each platform and take
-  advantage of each to the fullest.
-
-  \sa QPainter, QPaintDevice::paintEngine(), {Paint System}
-*/
-
-/*!
-  \enum QPaintEngine::PaintEngineFeature
-
-  This enum is used to describe the features or capabilities that the
-  paint engine has. If a feature is not supported by the engine,
-  QPainter will do a best effort to emulate that feature through other
-  means and pass on an alpha blended QImage to the engine with the
-  emulated results. Some features cannot be emulated: AlphaBlend and PorterDuff.
-
-  \value AlphaBlend         The engine can alpha blend primitives.
-  \value Antialiasing       The engine can use antialising to improve the appearance
-                            of rendered primitives.
-  \value BlendModes         The engine supports blending modes.
-  \value BrushStroke        The engine supports drawing strokes that
-                            contain brushes as fills, not just solid
-                            colors (e.g. a dashed gradient line of
-                            width 2).
-  \value ConicalGradientFill The engine supports conical gradient fills.
-  \value ConstantOpacity    The engine supports the feature provided by
-                            QPainter::setOpacity().
-  \value LinearGradientFill The engine supports linear gradient fills.
-  \value MaskedBrush        The engine is capable of rendering brushes that has a
-                            texture with an alpha channel or a mask.
-  \value ObjectBoundingModeGradients The engine has native support for gradients
-                            with coordinate mode QGradient::ObjectBoundingMode.
-                            Otherwise, if QPaintEngine::PatternTransform is
-                            supported, object bounding mode gradients are
-                            converted to gradients with coordinate mode
-                            QGradient::LogicalMode and a brush transform for
-                            the coordinate mapping.
-  \value PainterPaths       The engine has path support.
-  \value PaintOutsidePaintEvent The engine is capable of painting outside of
-                                paint events.
-  \value PatternBrush       The engine is capable of rendering brushes with
-                            the brush patterns specified in Qt::BrushStyle.
-  \value PatternTransform   The engine has support for transforming brush
-                            patterns.
-  \value PerspectiveTransform The engine has support for performing perspective
-                            transformations on primitives.
-  \value PixmapTransform    The engine can transform pixmaps, including
-                            rotation and shearing.
-  \value PorterDuff         The engine supports Porter-Duff operations
-  \value PrimitiveTransform The engine has support for transforming
-                            drawing primitives.
-  \value RadialGradientFill The engine supports radial gradient fills.
-  \value RasterOpModes      The engine supports bitwise raster operations.
-  \value AllFeatures        All of the above features. This enum value is usually
-                            used as a bit mask.
-*/
-
-/*!
-    \enum QPaintEngine::PolygonDrawMode
-
-    \value OddEvenMode The polygon should be drawn using OddEven fill
-    rule.
-
-    \value WindingMode The polygon should be drawn using Winding fill rule.
-
-    \value ConvexMode The polygon is a convex polygon and can be drawn
-    using specialized algorithms where available.
-
-    \value PolylineMode Only the outline of the polygon should be
-    drawn.
-
-*/
-
-/*!
-    \enum QPaintEngine::DirtyFlag
-
-    \value DirtyPen The pen is dirty and needs to be updated.
-
-    \value DirtyBrush The brush is dirty and needs to be updated.
-
-    \value DirtyBrushOrigin The brush origin is dirty and needs to
-    updated.
-
-    \value DirtyFont The font is dirty and needs to be updated.
-
-    \value DirtyBackground The background is dirty and needs to be
-    updated.
-
-    \value DirtyBackgroundMode The background mode is dirty and needs
-    to be updated.
-
-    \value DirtyTransform The transform is dirty and needs to be
-    updated.
-
-    \value DirtyClipRegion The clip region is dirty and needs to be
-    updated.
-
-    \value DirtyClipPath The clip path is dirty and needs to be
-    updated.
-
-    \value DirtyHints The render hints is dirty and needs to be
-    updated.
-
-    \value DirtyCompositionMode The composition mode is dirty and
-    needs to be updated.
-
-    \value DirtyClipEnabled Whether clipping is enabled or not is
-    dirty and needs to be updated.
-
-    \value DirtyOpacity The constant opacity has changed and needs to
-                        be updated as part of the state change in
-                        QPaintEngine::updateState().
-
-    \value AllDirty Convenience enum used internally.
-
-    These types are used by QPainter to trigger lazy updates of the
-    various states in the QPaintEngine using
-    QPaintEngine::updateState().
-
-    A paint engine must update every dirty state.
-*/
-
-/*!
-    \fn void QPaintEngine::syncState()
-
-    \internal
-
-    Updates all dirty states in this engine. This function should ONLY
-    be used when drawing with native handles directly and immediate sync
-    from QPainters state to the native state is required.
-*/
 void QPaintEngine::syncState()
 {
    Q_ASSERT(state);
@@ -264,32 +89,25 @@ void QPaintEngine::syncState()
 }
 
 static QPaintEngine *qt_polygon_recursion = 0;
+
 struct QT_Point {
    int x;
    int y;
 };
 
-/*!
-    \fn void QPaintEngine::drawPolygon(const QPointF *points, int pointCount,
-    PolygonDrawMode mode)
-
-    Reimplement this virtual function to draw the polygon defined
-    by the \a pointCount first points in \a points, using mode \a
-    mode.
-
-    \note At least one of the drawPolygon() functions must be reimplemented.
-*/
 void QPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
    Q_ASSERT_X(qt_polygon_recursion != this, "QPaintEngine::drawPolygon",
-              "At least one drawPolygon function must be implemented");
+      "At least one drawPolygon function must be implemented");
    qt_polygon_recursion = this;
    Q_ASSERT(sizeof(QT_Point) == sizeof(QPoint));
    QVarLengthArray<QT_Point> p(pointCount);
+
    for (int i = 0; i < pointCount; ++i) {
       p[i].x = qRound(points[i].x());
       p[i].y = qRound(points[i].y());
    }
+
    drawPolygon((QPoint *)p.data(), pointCount, mode);
    qt_polygon_recursion = 0;
 }
@@ -298,21 +116,16 @@ struct QT_PointF {
    qreal x;
    qreal y;
 };
-/*!
-    \overload
 
-    Reimplement this virtual function to draw the polygon defined by the
-    \a pointCount first points in \a points, using mode \a mode.
-
-    \note At least one of the drawPolygon() functions must be reimplemented.
-*/
 void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
 {
    Q_ASSERT_X(qt_polygon_recursion != this, "QPaintEngine::drawPolygon",
-              "At least one drawPolygon function must be implemented");
+      "At least one drawPolygon function must be implemented");
    qt_polygon_recursion = this;
+
    Q_ASSERT(sizeof(QT_PointF) == sizeof(QPointF));
    QVarLengthArray<QT_PointF> p(pointCount);
+
    for (int i = 0; i < pointCount; ++i) {
       p[i].x = points[i].x();
       p[i].y = points[i].y();
@@ -321,71 +134,7 @@ void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDraw
    qt_polygon_recursion = 0;
 }
 
-/*!
-    \enum QPaintEngine::Type
 
-    \value X11
-    \value Windows
-    \value MacPrinter
-    \value CoreGraphics Mac OS X's Quartz2D (CoreGraphics)
-    \value QuickDraw Mac OS X's QuickDraw
-    \value QWindowSystem Qt for Embedded Linux
-    \value PostScript
-    \value OpenGL
-    \value Picture QPicture format
-    \value SVG Scalable Vector Graphics XML format
-    \value Raster
-    \value Direct3D Windows only, Direct3D based engine
-    \value Pdf Portable Document Format
-    \value OpenVG
-    \value User First user type ID
-    \value MaxUser Last user type ID
-    \value OpenGL2
-    \value PaintBuffer
-    \value Blitter
-*/
-
-/*!
-    \fn bool QPaintEngine::isActive() const
-
-    Returns true if the paint engine is actively drawing; otherwise
-    returns false.
-
-    \sa setActive()
-*/
-
-/*!
-    \fn void QPaintEngine::setActive(bool state)
-
-    Sets the active state of the paint engine to \a state.
-
-    \sa isActive()
-*/
-
-/*!
-    \fn bool QPaintEngine::begin(QPaintDevice *pdev)
-
-    Reimplement this function to initialise your paint engine when
-    painting is to start on the paint device \a pdev. Return true if
-    the initialization was successful; otherwise return false.
-
-    \sa end() isActive()
-*/
-
-/*!
-    \fn bool QPaintEngine::end()
-
-    Reimplement this function to finish painting on the current paint
-    device. Return true if painting was finished successfully;
-    otherwise return false.
-
-    \sa begin() isActive()
-*/
-
-
-/*!
-    Draws the first \a pointCount points in the buffer \a points
-*/
 void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
 {
    QPainter *p = painter();
@@ -403,7 +152,8 @@ void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
    p->save();
 
    QTransform transform;
-   if (p->pen().isCosmetic()) {
+
+   if (qt_pen_is_cosmetic(p->pen(), p->renderHints())) {
       transform = p->transform();
       p->setTransform(QTransform());
    }
@@ -425,14 +175,6 @@ void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
    p->restore();
 }
 
-
-/*!
-    Draws the first \a pointCount points in the buffer \a points
-
-    The default implementation converts the first \a pointCount QPoints in \a points
-    to QPointFs and calls the floating point version of drawPoints.
-
-*/
 void QPaintEngine::drawPoints(const QPoint *points, int pointCount)
 {
    Q_ASSERT(sizeof(QT_PointF) == sizeof(QPointF));
@@ -450,14 +192,7 @@ void QPaintEngine::drawPoints(const QPoint *points, int pointCount)
    }
 }
 
-/*!
-    \fn void QPaintEngine::drawEllipse(const QRectF &rect)
 
-    Reimplement this function to draw the largest ellipse that can be
-    contained within rectangle \a rect.
-
-    The default implementation calls drawPolygon().
-*/
 void QPaintEngine::drawEllipse(const QRectF &rect)
 {
    QPainterPath path;
@@ -479,14 +214,6 @@ void QPaintEngine::drawEllipse(const QRect &rect)
    drawEllipse(QRectF(rect));
 }
 
-/*!
-    \fn void QPaintEngine::drawPixmap(const QRectF &r, const QPixmap
-    &pm, const QRectF &sr)
-
-    Reimplement this function to draw the part of the \a pm
-    specified by the \a sr rectangle in the given \a r.
-*/
-
 
 void qt_fill_tile(QPixmap *tile, const QPixmap &pixmap)
 {
@@ -505,20 +232,20 @@ void qt_fill_tile(QPixmap *tile, const QPixmap &pixmap)
 }
 
 void qt_draw_tile(QPaintEngine *gc, qreal x, qreal y, qreal w, qreal h,
-                  const QPixmap &pixmap, qreal xOffset, qreal yOffset)
+   const QPixmap &pixmap, qreal xOffset, qreal yOffset)
 {
    qreal yPos, xPos, drawH, drawW, yOff, xOff;
    yPos = y;
    yOff = yOffset;
    while (yPos < y + h) {
-      drawH = pixmap.height() - yOff;    // Cropping first row
-      if (yPos + drawH > y + h) {         // Cropping last row
+      drawH = pixmap.height() - yOff;        // Cropping first row
+      if (yPos + drawH > y + h) {            // Cropping last row
          drawH = y + h - yPos;
       }
       xPos = x;
       xOff = xOffset;
       while (xPos < x + w) {
-         drawW = pixmap.width() - xOff; // Cropping first column
+         drawW = pixmap.width() - xOff;      // Cropping first column
          if (xPos + drawW > x + w) {         // Cropping last column
             drawW = x + w - xPos;
          }
@@ -534,11 +261,6 @@ void qt_draw_tile(QPaintEngine *gc, qreal x, qreal y, qreal w, qreal h,
 }
 
 
-/*!
-    Reimplement this function to draw the \a pixmap in the given \a
-    rect, starting at the given \a p. The pixmap will be
-    drawn repeatedly until the \a rect is filled.
-*/
 void QPaintEngine::drawTiledPixmap(const QRectF &rect, const QPixmap &pixmap, const QPointF &p)
 {
    int sw = pixmap.width();
@@ -568,90 +290,18 @@ void QPaintEngine::drawTiledPixmap(const QRectF &rect, const QPixmap &pixmap, co
    }
 }
 
-/*!
-    \fn void QPaintEngine::drawImage(const QRectF &rectangle, const QImage
-    &image, const QRectF &sr, Qt::ImageConversionFlags flags)
-
-    Reimplement this function to draw the part of the \a image
-    specified by the \a sr rectangle in the given \a rectangle using
-    the given conversion flags \a flags, to convert it to a pixmap.
-*/
-
 void QPaintEngine::drawImage(const QRectF &r, const QImage &image, const QRectF &sr,
-                             Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    QRectF baseSize(0, 0, image.width(), image.height());
    QImage im = image;
    if (baseSize != sr)
       im = im.copy(qFloor(sr.x()), qFloor(sr.y()),
-                   qCeil(sr.width()), qCeil(sr.height()));
+            qCeil(sr.width()), qCeil(sr.height()));
    QPixmap pm = QPixmap::fromImage(im, flags);
    drawPixmap(r, pm, QRectF(QPointF(0, 0), pm.size()));
 }
 
-/*!
-    \fn Type QPaintEngine::type() const
-
-    Reimplement this function to return the paint engine \l{Type}.
-*/
-
-/*!
-    \fn void QPaintEngine::fix_neg_rect(int *x, int *y, int *w, int *h);
-
-    \internal
-*/
-
-/*!
-    \fn bool QPaintEngine::testDirty(DirtyFlags df)
-
-    \internal
-*/
-
-/*!
-    \fn void QPaintEngine::clearDirty(DirtyFlags df)
-
-    \internal
-*/
-
-/*!
-    \fn void QPaintEngine::setDirty(DirtyFlags df)
-
-    \internal
-*/
-
-/*!
-    \fn bool QPaintEngine::hasFeature(PaintEngineFeatures feature) const
-
-    Returns true if the paint engine supports the specified \a
-    feature; otherwise returns false.
-*/
-
-/*!
-    \fn bool QPaintEngine::isExtended() const
-
-    \internal
-
-    Returns true if the paint engine is a QPaintEngineEx derivative.
-*/
-
-/*!
-    \fn void QPaintEngine::updateState(const QPaintEngineState &state)
-
-    Reimplement this function to update the state of a paint engine.
-
-    When implemented, this function is responsible for checking the
-    paint engine's current \a state and update the properties that are
-    changed. Use the QPaintEngineState::state() function to find out
-    which properties that must be updated, then use the corresponding
-    \l {GetFunction}{get function} to retrieve the current values for
-    the given properties.
-
-    \sa QPaintEngineState
-*/
-
-/*!
-    Creates a paint engine with the featureset specified by \a caps.
-*/
 
 QPaintEngine::QPaintEngine(PaintEngineFeatures caps)
    : state(0),
@@ -679,25 +329,16 @@ QPaintEngine::QPaintEngine(QPaintEnginePrivate &dptr, PaintEngineFeatures caps)
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the paint engine.
-*/
+
 QPaintEngine::~QPaintEngine()
 {
 }
 
-/*!
-    Returns the paint engine's painter.
-*/
+
 QPainter *QPaintEngine::painter() const
 {
    return state ? state->painter() : 0;
 }
-
-/*!
-    The default implementation ignores the \a path and does nothing.
-*/
-
 void QPaintEngine::drawPath(const QPainterPath &)
 {
    if (hasFeature(PainterPaths)) {
@@ -705,11 +346,6 @@ void QPaintEngine::drawPath(const QPainterPath &)
    }
 }
 
-/*!
-    This function draws the text item \a textItem at position \a p. The
-    default implementation of this function converts the text to a
-    QPainterPath and paints the resulting path.
-*/
 
 void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 {
@@ -717,9 +353,9 @@ void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 
    QPainterPath path;
 
-#ifndef Q_OS_MAC
+
    path.setFillRule(Qt::WindingFill);
-#endif
+
 
    if (ti.glyphs.numGlyphs) {
       ti.fontEngine->addOutlineToPath(0, 0, ti.glyphs, &path, ti.flags);
@@ -729,11 +365,11 @@ void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
       painter()->save();
 
       painter()->setRenderHint(QPainter::Antialiasing,
-                  bool((painter()->renderHints() & QPainter::TextAntialiasing)
-                  && ! (painter()->font().styleStrategy() & QFont::NoAntialias)));
+         bool((painter()->renderHints() & QPainter::TextAntialiasing)
+            && ! (painter()->font().styleStrategy() & QFont::NoAntialias)));
 
       painter()->translate(p.x(), p.y());
-      painter()->fillPath(path, state->pen().brush());
+      painter()->fillPath(path, painter()->pen().brush());
       painter()->restore();
    }
 }
@@ -759,13 +395,6 @@ void QPaintEngine::drawLines(const QLineF *lines, int lineCount)
    }
 }
 
-/*!
-    \overload
-
-    The default implementation converts the first \a lineCount lines
-    in \a lines to a QLineF and calls the floating point version of
-    this function.
-*/
 void QPaintEngine::drawLines(const QLine *lines, int lineCount)
 {
    struct PointF {
@@ -794,14 +423,6 @@ void QPaintEngine::drawLines(const QLine *lines, int lineCount)
    }
 }
 
-
-/*!
-    \overload
-
-    The default implementation converts the first \a rectCount
-    rectangles in the buffer \a rects to a QRectF and calls the
-    floating point version of this function.
-*/
 void QPaintEngine::drawRects(const QRect *rects, int rectCount)
 {
    struct RectF {
@@ -835,8 +456,8 @@ void QPaintEngine::drawRects(const QRect *rects, int rectCount)
 void QPaintEngine::drawRects(const QRectF *rects, int rectCount)
 {
    if (hasFeature(PainterPaths) &&
-         !state->penNeedsResolving() &&
-         !state->brushNeedsResolving()) {
+      !state->penNeedsResolving() &&
+      !state->brushNeedsResolving()) {
       for (int i = 0; i < rectCount; ++i) {
          QPainterPath path;
          path.addRect(rects[i]);
@@ -849,10 +470,10 @@ void QPaintEngine::drawRects(const QRectF *rects, int rectCount)
       for (int i = 0; i < rectCount; ++i) {
          QRectF rf = rects[i];
          QPointF pts[4] = { QPointF(rf.x(), rf.y()),
-                            QPointF(rf.x() + rf.width(), rf.y()),
-                            QPointF(rf.x() + rf.width(), rf.y() + rf.height()),
-                            QPointF(rf.x(), rf.y() + rf.height())
-                          };
+               QPointF(rf.x() + rf.width(), rf.y()),
+               QPointF(rf.x() + rf.width(), rf.y() + rf.height()),
+               QPointF(rf.x(), rf.y() + rf.height())
+            };
          drawPolygon(pts, 4, ConvexMode);
       }
    }
@@ -876,54 +497,12 @@ QPaintDevice *QPaintEngine::paintDevice() const
    return d_func()->pdev;
 }
 
-#ifdef Q_OS_WIN
-/*!
-    \internal
 
-    Empty default implementation.
-*/
-
-HDC QPaintEngine::getDC() const
-{
-   return 0;
-}
-
-
-/*!
-    \internal
-
-    Empty default implementation.
-*/
-
-void QPaintEngine::releaseDC(HDC) const
-{
-}
-
-#endif
-
-/*!
-    \internal
-
-    Returns the offset from the painters origo to the engines
-    origo. This value is used by QPainter for engines who have
-    internal double buffering.
-
-    This function only makes sense when the engine is active.
-*/
 QPoint QPaintEngine::coordinateOffset() const
 {
    return QPoint();
 }
 
-/*!
-    \internal
-
-    Sets the system clip for this engine. The system clip defines the
-    basis area that the engine has to draw in. All clips that are
-    set will be be an intersection with the system clip.
-
-    Reset the systemclip to no clip by setting an empty region.
-*/
 void QPaintEngine::setSystemClip(const QRegion &region)
 {
    Q_D(QPaintEngine);
@@ -975,6 +554,10 @@ QRect QPaintEngine::systemRect() const
    return d_func()->systemRect;
 }
 
+QPaintEnginePrivate::~QPaintEnginePrivate()
+{
+}
+
 void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &ti)
 {
    if (!ti.glyphs.numGlyphs) {
@@ -987,6 +570,7 @@ void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &
    QVarLengthArray<glyph_t> glyphs;
    QTransform matrix = QTransform::fromTranslate(p.x(), p.y() - size);
    ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+
    if (glyphs.size() == 0) {
       return;
    }
@@ -999,10 +583,11 @@ void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &
    QPen pen = painter->pen();
    pen.setWidthF(ti.fontEngine->lineThickness().toReal());
    painter->setPen(pen);
+
    for (int k = 0; k < positions.size(); k++) {
       painter->drawRect(QRectF(positions[k].toPointF(), s));
    }
    painter->restore();
 }
 
-QT_END_NAMESPACE
+

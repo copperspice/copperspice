@@ -94,13 +94,13 @@ class Q_GUI_EXPORT QPaintEngineEx : public QPaintEngine
    virtual void drawPixmap(const QPointF &pos, const QPixmap &pm);
 
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor) override = 0;
+      Qt::ImageConversionFlags flags = Qt::AutoColor) override = 0;
    virtual void drawImage(const QPointF &pos, const QImage &image);
 
    void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
 
    virtual void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                                     QFlags<QPainter::PixmapFragmentHint> hints);
+      QFlags<QPainter::PixmapFragmentHint> hints);
 
    void updateState(const QPaintEngineState &state) override;
 

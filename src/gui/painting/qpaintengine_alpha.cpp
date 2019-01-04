@@ -26,21 +26,18 @@
 
 #include <qdebug.h>
 #include <qpaintengine_alpha_p.h>
+#include <qpainter_p.h>
 #include <qpicture_p.h>
 #include <qfont_p.h>
-#include <QtGui/qpicture.h>
-
-QT_BEGIN_NAMESPACE
+#include <qpicture.h>
 
 QAlphaPaintEngine::QAlphaPaintEngine(QAlphaPaintEnginePrivate &data, PaintEngineFeatures devcaps)
    : QPaintEngine(data, devcaps)
 {
-
 }
 
 QAlphaPaintEngine::~QAlphaPaintEngine()
 {
-
 }
 
 bool QAlphaPaintEngine::begin(QPaintDevice *pdev)
@@ -97,8 +94,8 @@ void QAlphaPaintEngine::updateState(const QPaintEngineState &state)
       d->m_transform = state.transform();
       d->m_complexTransform = (d->m_transform.type() > QTransform::TxScale);
       d->m_emulateProjectiveTransforms = !(d->m_savedcaps & QPaintEngine::PerspectiveTransform)
-                                         && !(d->m_savedcaps & QPaintEngine::AlphaBlend)
-                                         && (d->m_transform.type() >= QTransform::TxProject);
+         && !(d->m_savedcaps & QPaintEngine::AlphaBlend)
+         && (d->m_transform.type() >= QTransform::TxProject);
    }
    if (flags & QPaintEngine::DirtyPen) {
       d->m_pen = state.pen();
@@ -135,6 +132,13 @@ void QAlphaPaintEngine::updateState(const QPaintEngineState &state)
    d->m_hasalpha = d->m_alphaOpacity || d->m_alphaBrush || d->m_alphaPen;
 
    if (d->m_picengine) {
+      const QPainter *p = painter();
+      d->m_picpainter->setPen(p->pen());
+      d->m_picpainter->setBrush(p->brush());
+      d->m_picpainter->setBrushOrigin(p->brushOrigin());
+      d->m_picpainter->setFont(p->font());
+      d->m_picpainter->setOpacity(p->opacity());
+      d->m_picpainter->setTransform(p->combinedTransform());
       d->m_picengine->updateState(state);
    }
 }
@@ -147,10 +151,13 @@ void QAlphaPaintEngine::drawPath(const QPainterPath &path)
 
    if (d->m_pass == 0) {
       d->m_continueCall = false;
-      if (d->m_hasalpha || d->m_advancedPen || d->m_advancedBrush
-            || d->m_emulateProjectiveTransforms) {
+      if (d->canSeeTroughBackground(d->m_hasalpha, tr) || d->m_advancedPen || d->m_advancedBrush
+         || d->m_emulateProjectiveTransforms) {
          d->addAlphaRect(tr);
       }
+
+      d->addDirtyRect(tr);
+
       if (d->m_picengine) {
          d->m_picengine->drawPath(path);
       }
@@ -174,14 +181,18 @@ void QAlphaPaintEngine::drawPolygon(const QPointF *points, int pointCount, Polyg
 
    if (d->m_pass == 0) {
       d->m_continueCall = false;
-      if (d->m_hasalpha || d->m_advancedPen || d->m_advancedBrush
-            || d->m_emulateProjectiveTransforms) {
+
+      if (d->canSeeTroughBackground(d->m_hasalpha, tr) || d->m_advancedPen || d->m_advancedBrush
+         || d->m_emulateProjectiveTransforms) {
          d->addAlphaRect(tr);
       }
+
+      d->addDirtyRect(tr);
 
       if (d->m_picengine) {
          d->m_picengine->drawPolygon(points, pointCount, mode);
       }
+
    } else {
       d->m_continueCall = !d->fullyContained(tr);
    }
@@ -194,32 +205,14 @@ void QAlphaPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const QRe
    QRectF tr = d->m_transform.mapRect(r);
    if (d->m_pass == 0) {
       d->m_continueCall = false;
-      if (pm.hasAlpha() || d->m_alphaOpacity || d->m_complexTransform || pm.isQBitmap()) {
+      if (d->canSeeTroughBackground(pm.hasAlpha() || d->m_alphaOpacity, tr) || d->m_complexTransform || pm.isQBitmap()) {
          d->addAlphaRect(tr);
       }
+
+      d->addDirtyRect(tr);
 
       if (d->m_picengine) {
          d->m_picengine->drawPixmap(r, pm, sr);
-      }
-
-   } else {
-      d->m_continueCall = !d->fullyContained(tr);
-   }
-}
-
-void QAlphaPaintEngine::drawImage(const QRectF &r, const QImage &image, const QRectF &sr)
-{
-   Q_D(QAlphaPaintEngine);
-
-   QRectF tr = d->m_transform.mapRect(r);
-   if (d->m_pass == 0) {
-      d->m_continueCall = false;
-      if (image.hasAlphaChannel() || d->m_alphaOpacity || d->m_complexTransform) {
-         d->addAlphaRect(tr);
-      }
-
-      if (d->m_picengine) {
-         d->m_picengine->drawImage(r, image, sr);
       }
 
    } else {
@@ -236,12 +229,15 @@ void QAlphaPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
 
    if (d->m_pass == 0) {
       d->m_continueCall = false;
-      if (d->m_alphaPen || d->m_alphaOpacity || d->m_advancedPen) {
+
+      if (d->canSeeTroughBackground(d->m_alphaPen || d->m_alphaOpacity, tr) || d->m_advancedPen) {
          d->addAlphaRect(tr);
       }
+      d->addDirtyRect(tr);
       if (d->m_picengine) {
          d->m_picengine->drawTextItem(p, textItem);
       }
+
    } else {
       d->m_continueCall = !d->fullyContained(tr);
    }
@@ -255,9 +251,12 @@ void QAlphaPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, 
 
    if (d->m_pass == 0) {
       d->m_continueCall = false;
-      if (pixmap.hasAlpha() || d->m_alphaOpacity || d->m_complexTransform || pixmap.isQBitmap()) {
+      if (d->canSeeTroughBackground(pixmap.hasAlpha() || d->m_alphaOpacity, brect) || d->m_complexTransform || pixmap.isQBitmap()) {
          d->addAlphaRect(brect);
       }
+
+      d->addDirtyRect(brect);
+
       if (d->m_picengine) {
          d->m_picengine->drawTiledPixmap(r, pixmap, s);
       }
@@ -312,7 +311,7 @@ void QAlphaPaintEngine::flushAndInit(bool init)
       // make sure the output from QPicture is unscaled
       QTransform mtx;
       mtx.scale(1.0f / (qreal(d->m_pdev->logicalDpiX()) / qreal(qt_defaultDpiX())),
-                1.0f / (qreal(d->m_pdev->logicalDpiY()) / qreal(qt_defaultDpiY())));
+         1.0f / (qreal(d->m_pdev->logicalDpiY()) / qreal(qt_defaultDpiY())));
       painter()->setTransform(mtx);
       painter()->drawPicture(0, 0, *d->m_pic);
 
@@ -351,6 +350,11 @@ void QAlphaPaintEngine::flushAndInit(bool init)
       d->m_picpainter->setOpacity(painter()->opacity());
       d->m_picpainter->setTransform(painter()->combinedTransform());
       d->m_picengine->syncState();
+
+      QPainterState &state = *d->m_picpainter->d_func()->state;
+      QPainter *oldPainter = state.painter;
+      state = *painter()->d_func()->state;
+      state.painter = oldPainter;
    }
 }
 
@@ -371,6 +375,7 @@ QAlphaPaintEnginePrivate::QAlphaPaintEnginePrivate()
        m_pic(0),
        m_picengine(0),
        m_picpainter(0),
+       m_numberOfCachedRects(0),
        m_hasalpha(false),
        m_alphaPen(false),
        m_alphaBrush(false),
@@ -390,12 +395,16 @@ QAlphaPaintEnginePrivate::~QAlphaPaintEnginePrivate()
 
 QRectF QAlphaPaintEnginePrivate::addPenWidth(const QPainterPath &path)
 {
+   Q_Q(QAlphaPaintEngine);
    QPainterPath tmp = path;
 
    if (m_pen.style() == Qt::NoPen) {
       return (path.controlPointRect() * m_transform).boundingRect();
    }
-   if (m_pen.isCosmetic()) {
+
+   bool cosmetic = qt_pen_is_cosmetic(m_pen, q->state->renderHints());
+
+   if (cosmetic) {
       tmp = path * m_transform;
    }
 
@@ -405,29 +414,32 @@ QRectF QAlphaPaintEnginePrivate::addPenWidth(const QPainterPath &path)
    } else {
       stroker.setWidth(m_pen.widthF());
    }
+
    stroker.setJoinStyle(m_pen.joinStyle());
    stroker.setCapStyle(m_pen.capStyle());
    tmp = stroker.createStroke(tmp);
-   if (m_pen.isCosmetic()) {
+
+   if (cosmetic) {
       return tmp.controlPointRect();
    }
 
    return (tmp.controlPointRect() * m_transform).boundingRect();
 }
 
-QRect QAlphaPaintEnginePrivate::toRect(const QRectF &rect) const
-{
-   QRect r;
-   r.setLeft(int(rect.left()));
-   r.setTop(int(rect.top()));
-   r.setRight(int(rect.right() + 1));
-   r.setBottom(int(rect.bottom() + 1));
-   return r;
-}
-
 void QAlphaPaintEnginePrivate::addAlphaRect(const QRectF &rect)
 {
-   m_alphargn |= toRect(rect);
+   m_alphargn |= rect.toAlignedRect();
+}
+bool QAlphaPaintEnginePrivate::canSeeTroughBackground(bool somethingInRectHasAlpha, const QRectF &rect) const
+{
+   if (somethingInRectHasAlpha) {
+      if (m_dirtyRects.count() != m_numberOfCachedRects) {
+         m_cachedDirtyRgn.setRects(m_dirtyRects.constData(), m_dirtyRects.count());
+         m_numberOfCachedRects = m_dirtyRects.count();
+      }
+      return m_cachedDirtyRgn.intersects(rect.toAlignedRect());
+   }
+   return false;
 }
 
 void QAlphaPaintEnginePrivate::drawAlphaImage(const QRectF &rect)
@@ -479,7 +491,7 @@ void QAlphaPaintEnginePrivate::drawAlphaImage(const QRectF &rect)
 
 bool QAlphaPaintEnginePrivate::fullyContained(const QRectF &rect) const
 {
-   QRegion r(toRect(rect));
+   QRegion r(rect.toAlignedRect());
    return (m_cliprgn.intersected(r) == r);
 }
 
@@ -500,8 +512,5 @@ void QAlphaPaintEnginePrivate::resetState(QPainter *p)
    p->setClipping(false);
    p->setOpacity(1.0f);
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTER

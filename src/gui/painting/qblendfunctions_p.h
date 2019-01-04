@@ -30,11 +30,11 @@
 
 template <typename SRC, typename T>
 void qt_scale_image_16bit(uchar *destPixels, int dbpl,
-                          const uchar *srcPixels, int sbpl, int srch,
-                          const QRectF &targetRect,
-                          const QRectF &srcRect,
-                          const QRect &clip,
-                          T blender)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &srcRect,
+   const QRect &clip,
+   T blender)
 {
    qreal sx = targetRect.width() / (qreal) srcRect.width();
    qreal sy = targetRect.height() / (qreal) srcRect.height();
@@ -157,11 +157,11 @@ void qt_scale_image_16bit(uchar *destPixels, int dbpl,
 }
 
 template <typename T> void qt_scale_image_32bit(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl, int srch,
-      const QRectF &targetRect,
-      const QRectF &srcRect,
-      const QRect &clip,
-      T blender)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &srcRect,
+   const QRect &clip,
+   T blender)
 {
    qreal sx = targetRect.width() / (qreal) srcRect.width();
    qreal sy = targetRect.height() / (qreal) srcRect.height();
@@ -220,8 +220,9 @@ template <typename T> void qt_scale_image_32bit(uchar *destPixels, int dbpl,
    int h = ty2 - ty1;
    int w = tx2 - tx1;
 
-   if (!w || !h)
+   if (!w || !h) {
       return;
+   }
 
    quint32 basex;
    quint32 srcy;
@@ -274,14 +275,14 @@ struct QTransformImageVertex {
 
 template <class SrcT, class DestT, class Blender>
 void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
-                                  const SrcT *srcPixels, int sbpl,
-                                  const QTransformImageVertex &topLeft, const QTransformImageVertex &bottomLeft,
-                                  const QTransformImageVertex &topRight, const QTransformImageVertex &bottomRight,
-                                  const QRect &sourceRect,
-                                  const QRect &clip,
-                                  qreal topY, qreal bottomY,
-                                  int dudx, int dvdx, int dudy, int dvdy, int u0, int v0,
-                                  Blender blender)
+   const SrcT *srcPixels, int sbpl,
+   const QTransformImageVertex &topLeft, const QTransformImageVertex &bottomLeft,
+   const QTransformImageVertex &topRight, const QTransformImageVertex &bottomRight,
+   const QRect &sourceRect,
+   const QRect &clip,
+   qreal topY, qreal bottomY,
+   int dudx, int dvdx, int dudy, int dvdy, int u0, int v0,
+   Blender blender)
 {
    int fromY = qMax(qRound(topY), clip.top());
    int toY = qMin(qRound(bottomY), clip.top() + clip.height());
@@ -316,7 +317,7 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
             int uu = u >> 16;
             int vv = v >> 16;
             if (uu >= sourceRect.left() && uu < sourceRect.left() + sourceRect.width()
-                  && vv >= sourceRect.top() && vv < sourceRect.top() + sourceRect.height()) {
+               && vv >= sourceRect.top() && vv < sourceRect.top() + sourceRect.height()) {
                break;
             }
             u += dudx;
@@ -331,7 +332,7 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
             int uu = u >> 16;
             int vv = v >> 16;
             if (uu >= sourceRect.left() && uu < sourceRect.left() + sourceRect.width()
-                  && vv >= sourceRect.top() && vv < sourceRect.top() + sourceRect.height()) {
+               && vv >= sourceRect.top() && vv < sourceRect.top() + sourceRect.height()) {
                break;
             }
             u -= dudx;
@@ -361,35 +362,35 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
          ii = i >> 3;
          while (ii) {
             blender.write(&line[0], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[1], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[2], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[3], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[4], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[5], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[6], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
             blender.write(&line[7], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                          (v >> 16) * sbpl)[u >> 16]);
+                  (v >> 16) * sbpl)[u >> 16]);
             u += dudx;
             v += dvdx;
 
@@ -400,43 +401,43 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
          switch (i & 7) {
             case 7:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
             case 6:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
             case 5:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
             case 4:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
             case 3:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
             case 2:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
             case 1:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
-                             (v >> 16) * sbpl)[u >> 16]);
+                     (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
@@ -463,12 +464,12 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 
 template <class SrcT, class DestT, class Blender>
 void qt_transform_image(DestT *destPixels, int dbpl,
-                        const SrcT *srcPixels, int sbpl,
-                        const QRectF &targetRect,
-                        const QRectF &sourceRect,
-                        const QRect &clip,
-                        const QTransform &targetRectTransform,
-                        Blender blender)
+   const SrcT *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   Blender blender)
 {
    enum Corner {
       TopLeft,
@@ -562,18 +563,18 @@ void qt_transform_image(DestT *destPixels, int dbpl,
    // rasterize trapezoids.
    if (v[1].y < v[3].y) {
       qt_transform_image_rasterize(destPixels, dbpl, srcPixels, sbpl, v[0], v[1], v[0], v[3], sourceRectI, clip, v[0].y,
-                                   v[1].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
+         v[1].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
       qt_transform_image_rasterize(destPixels, dbpl, srcPixels, sbpl, v[1], v[2], v[0], v[3], sourceRectI, clip, v[1].y,
-                                   v[3].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
+         v[3].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
       qt_transform_image_rasterize(destPixels, dbpl, srcPixels, sbpl, v[1], v[2], v[3], v[2], sourceRectI, clip, v[3].y,
-                                   v[2].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
+         v[2].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
    } else {
       qt_transform_image_rasterize(destPixels, dbpl, srcPixels, sbpl, v[0], v[1], v[0], v[3], sourceRectI, clip, v[0].y,
-                                   v[3].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
+         v[3].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
       qt_transform_image_rasterize(destPixels, dbpl, srcPixels, sbpl, v[0], v[1], v[3], v[2], sourceRectI, clip, v[3].y,
-                                   v[1].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
+         v[1].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
       qt_transform_image_rasterize(destPixels, dbpl, srcPixels, sbpl, v[1], v[2], v[3], v[2], sourceRectI, clip, v[1].y,
-                                   v[2].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
+         v[2].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
    }
 }
 

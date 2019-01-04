@@ -27,7 +27,6 @@
 
 #include <qpaintengine_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class QAlphaPaintEnginePrivate;
 
@@ -47,7 +46,6 @@ class QAlphaPaintEngine : public QPaintEngine
    void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
 
    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
-   void drawImage(const QRectF &r, const QImage &image, const QRectF &sr);
    void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
    void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
 
@@ -78,6 +76,10 @@ class QAlphaPaintEnginePrivate : public QPaintEnginePrivate
    QRegion m_alphargn;
    QRegion m_cliprgn;
 
+   mutable QRegion m_cachedDirtyRgn;
+   mutable int m_numberOfCachedRects;
+   QVector<QRect> m_dirtyRects;
+
    bool m_hasalpha;
    bool m_alphaPen;
    bool m_alphaBrush;
@@ -92,6 +94,11 @@ class QAlphaPaintEnginePrivate : public QPaintEnginePrivate
    QPen m_pen;
 
    void addAlphaRect(const QRectF &rect);
+
+   void addDirtyRect(const QRectF &rect) {
+      m_dirtyRects.append(rect.toAlignedRect());
+   }
+   bool canSeeTroughBackground(bool somethingInRectHasAlpha, const QRectF &rect) const;
    QRectF addPenWidth(const QPainterPath &path);
    void drawAlphaImage(const QRectF &rect);
    QRect toRect(const QRectF &rect) const;
@@ -100,8 +107,6 @@ class QAlphaPaintEnginePrivate : public QPaintEnginePrivate
    void resetState(QPainter *p);
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_PRINTER
 
-#endif // QPAINTENGINE_ALPHA_P_H
+#endif

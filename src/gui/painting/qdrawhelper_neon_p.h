@@ -30,39 +30,39 @@ QT_BEGIN_NAMESPACE
 #ifdef QT_HAVE_NEON
 
 void qt_blend_argb32_on_argb32_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                    int w, int h, int const_alpha);
+   int w, int h, int const_alpha);
 
 void qt_blend_rgb32_on_rgb32_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                  int w, int h, int const_alpha);
+   int w, int h, int const_alpha);
 
 void qt_blend_argb32_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                   int w, int h, int const_alpha);
+   int w, int h, int const_alpha);
 
 void qt_blend_argb32_on_argb32_scanline_neon(uint *dest, const uint *src, int length, uint const_alpha);
 
 void qt_blend_rgb16_on_argb32_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                   int w, int h, int const_alpha);
+   int w, int h, int const_alpha);
 
 void qt_blend_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                  int w, int h, int const_alpha);
+   int w, int h, int const_alpha);
 
-void qt_alphamapblit_quint16_neon(QRasterBuffer *rasterBuffer, int x, int y, quint32 color, const uchar *bitmap, 
-                                  int mapWidth, int mapHeight, int mapStride, const QClipData *clip);
+void qt_alphamapblit_quint16_neon(QRasterBuffer *rasterBuffer, int x, int y, quint32 color, const uchar *bitmap,
+   int mapWidth, int mapHeight, int mapStride, const QClipData *clip);
 
-void qt_scale_image_argb32_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, 
-                                         int sbpl, int sh, const QRectF &targetRect, const QRectF &sourceRect, 
-                                         const QRect &clip, int const_alpha);
+void qt_scale_image_argb32_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels,
+   int sbpl, int sh, const QRectF &targetRect, const QRectF &sourceRect,
+   const QRect &clip, int const_alpha);
 
 void qt_scale_image_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int sh,
-                                        const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip, int const_alpha);
+   const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip, int const_alpha);
 
 void qt_transform_image_argb32_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                             const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip,
-                                             const QTransform &targetRectTransform, int const_alpha);
+   const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip,
+   const QTransform &targetRectTransform, int const_alpha);
 
 void qt_transform_image_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
-                                            const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip,
-                                            const QTransform &targetRectTransform, int const_alpha);
+   const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip,
+   const QTransform &targetRectTransform, int const_alpha);
 
 void qt_memfill32_neon(quint32 *dest, quint32 value, int count);
 void qt_memrotate90_16_neon(const uchar *srcPixels, int w, int h, int sbpl, uchar *destPixels, int dbpl);
@@ -77,6 +77,5 @@ void QT_FASTCALL comp_func_Plus_neon(uint *dst, const uint *src, int length, uin
 
 #endif // QT_HAVE_NEON
 
-QT_END_NAMESPACE
 
 #endif // QDRAWHELPER_NEON_P_H

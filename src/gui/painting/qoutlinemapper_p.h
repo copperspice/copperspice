@@ -27,14 +27,9 @@
 #include <QtGui/qtransform.h>
 #include <QtGui/qpainterpath.h>
 
-#define QT_FT_BEGIN_HEADER
-#define QT_FT_END_HEADER
-
 #include <qrasterdefs_p.h>
 #include <qdatabuffer_p.h>
 #include <qpaintengineex_p.h>
-
-QT_BEGIN_NAMESPACE
 
 // This limitations comes from qgrayraster.c. Any higher and
 // rasterization of shapes will produce incorrect results.
@@ -42,6 +37,7 @@ const int QT_RASTER_COORD_LIMIT = 32767;
 
 //#define QT_DEBUG_CONVERT
 
+Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 /**
  * Used to map between QPainterPath and the QT_FT_Outline structure used by the
  * freetype scanconvertor.
@@ -57,11 +53,9 @@ class QOutlineMapper
    QOutlineMapper() :
       m_element_types(0),
       m_elements(0),
-      m_elements_dev(0),
       m_points(0),
       m_tags(0),
       m_contours(0),
-      m_polygon_dev(0),
       m_in_clip_elements(false) {
    }
 
@@ -78,6 +72,9 @@ class QOutlineMapper
       m_dx = m.dx();
       m_dy = m.dy();
       m_txop = m.type();
+      qreal scale;
+      qt_scaleForTransform(m, &scale);
+      m_curve_threshold = scale == 0 ? qreal(0.25) : (qreal(0.25) / scale);
    }
 
    void beginOutline(Qt::FillRule fillRule) {
@@ -86,14 +83,13 @@ class QOutlineMapper
 #endif
       m_valid = true;
       m_elements.reset();
-      m_elements_dev.reset();
       m_element_types.reset();
       m_points.reset();
       m_tags.reset();
       m_contours.reset();
       m_outline.flags = fillRule == Qt::WindingFill
-                        ? QT_FT_OUTLINE_NONE
-                        : QT_FT_OUTLINE_EVEN_ODD_FILL;
+         ? QT_FT_OUTLINE_NONE
+         : QT_FT_OUTLINE_EVEN_ODD_FILL;
       m_subpath_start = 0;
    }
 
@@ -121,15 +117,7 @@ class QOutlineMapper
       m_element_types << QPainterPath::LineToElement;
    }
 
-   inline void curveTo(const QPointF &cp1, const QPointF &cp2, const QPointF &ep) {
-#ifdef QT_DEBUG_CONVERT
-      printf("QOutlineMapper::curveTo() (%f, %f)\n", ep.x(), ep.y());
-#endif
-      m_elements << cp1 << cp2 << ep;
-      m_element_types << QPainterPath::CurveToElement
-                      << QPainterPath::CurveToDataElement
-                      << QPainterPath::CurveToDataElement;
-   }
+   void curveTo(const QPointF &cp1, const QPointF &cp2, const QPointF &ep);
 
    inline void closeSubpath() {
       int element_count = m_elements.size();
@@ -170,14 +158,12 @@ class QOutlineMapper
 
    QDataBuffer<QPainterPath::ElementType> m_element_types;
    QDataBuffer<QPointF> m_elements;
-   QDataBuffer<QPointF> m_elements_dev;
+
    QDataBuffer<QT_FT_Vector> m_points;
    QDataBuffer<char> m_tags;
    QDataBuffer<int> m_contours;
 
    QRect m_clip_rect;
-   QDataBuffer<QPointF> m_polygon_dev;
-
    QRectF controlPointRect; // only valid after endOutline()
 
    QT_FT_Outline m_outline;
@@ -196,10 +182,10 @@ class QOutlineMapper
    qreal m_dx;
    qreal m_dy;
 
+   qreal m_curve_threshold;
+
    bool m_valid;
    bool m_in_clip_elements;
 };
-
-QT_END_NAMESPACE
 
 #endif // QOUTLINEMAPPER_P_H

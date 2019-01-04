@@ -21,35 +21,22 @@
 ***********************************************************************/
 
 #include <qbezier_p.h>
+
 #include <qdebug.h>
 #include <qline.h>
 #include <qpolygon.h>
 #include <qvector.h>
 #include <qlist.h>
 #include <qmath.h>
-#include <qnumeric_p.h>
-#include <qmath_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qnumeric_p.h>
+
 
 //#define QDEBUG_BEZIER
 
-#ifdef FLOAT_ACCURACY
-#define INV_EPS (1L<<23)
-#else
-/* The value of 1.0 / (1L<<14) is enough for most applications */
-#define INV_EPS (1L<<14)
-#endif
 
-#ifndef M_SQRT2
-#define M_SQRT2	1.41421356237309504880
-#endif
-
-/*!
-  \internal
-*/
 QBezier QBezier::fromPoints(const QPointF &p1, const QPointF &p2,
-                            const QPointF &p3, const QPointF &p4)
+   const QPointF &p3, const QPointF &p4)
 {
    QBezier b;
    b.x1 = p1.x();
@@ -104,79 +91,62 @@ QBezier QBezier::getSubRange(qreal t0, qreal t1) const
    }
 
    // cut at t0
-   if (!qFuzzyIsNull(t0)) {
+   if (! qFuzzyIsNull(t0)) {
       result.parameterSplitLeft(t0 / t1, &temp);
    }
 
    return result;
 }
 
-static inline int quadraticRoots(qreal a, qreal b, qreal c,
-                                 qreal *x1, qreal *x2)
-{
-   if (qFuzzyIsNull(a)) {
-      if (qFuzzyIsNull(b)) {
-         return 0;
-      }
-      *x1 = *x2 = (-c / b);
-      return 1;
-   } else {
-      const qreal det = b * b - 4 * a * c;
-      if (qFuzzyIsNull(det)) {
-         *x1 = *x2 = -b / (2 * a);
-         return 1;
-      }
-      if (det > 0) {
-         if (qFuzzyIsNull(b)) {
-            *x2 = qSqrt(-c / a);
-            *x1 = -(*x2);
-            return 2;
-         }
-         const qreal stableA = b / (2 * a);
-         const qreal stableB = c / (a * stableA * stableA);
-         const qreal stableC = -1 - qSqrt(1 - stableB);
-         *x2 = stableA * stableC;
-         *x1 = (stableA * stableB) / stableC;
-         return 2;
-      } else {
-         return 0;
-      }
-   }
-}
-
-static inline bool findInflections(qreal a, qreal b, qreal c,
-                                   qreal *t1 , qreal *t2, qreal *tCups)
-{
-   qreal r1 = 0, r2 = 0;
-
-   short rootsCount = quadraticRoots(a, b, c, &r1, &r2);
-
-   if (rootsCount >= 1) {
-      if (r1 < r2) {
-         *t1 = r1;
-         *t2 = r2;
-      } else {
-         *t1 = r2;
-         *t2 = r1;
-      }
-      if (!qFuzzyIsNull(a)) {
-         *tCups = qreal(0.5) * (-b / a);
-      } else {
-         *tCups = 2;
-      }
-
-      return true;
-   }
-
-   return false;
-}
-
-
 void QBezier::addToPolygon(QPolygonF *polygon, qreal bezier_flattening_threshold) const
 {
-   QBezier beziers[32];
+   QBezier beziers[10];
+
+   int levels[10];
    beziers[0] = *this;
+   levels[0]  = 9;
+
    QBezier *b = beziers;
+   int *lvl   = levels;
+
+   while (b >= beziers) {
+      // check if we can pop the top bezier curve from the stack
+      qreal y4y1 = b->y4 - b->y1;
+      qreal x4x1 = b->x4 - b->x1;
+      qreal l = qAbs(x4x1) + qAbs(y4y1);
+      qreal d;
+
+      if (l > 1.) {
+         d = qAbs( (x4x1) * (b->y1 - b->y2) - (y4y1) * (b->x1 - b->x2) )
+            + qAbs( (x4x1) * (b->y1 - b->y3) - (y4y1) * (b->x1 - b->x3) );
+      } else {
+         d = qAbs(b->x1 - b->x2) + qAbs(b->y1 - b->y2) +
+            qAbs(b->x1 - b->x3) + qAbs(b->y1 - b->y3);
+         l = 1.;
+      }
+      if (d < bezier_flattening_threshold * l || *lvl == 0) {
+         // good enough, we pop it off and add the endpoint
+         polygon->append(QPointF(b->x4, b->y4));
+         --b;
+         --lvl;
+      } else {
+         // split, second half of the polygon goes lower into the stack
+         b->split(b + 1, b);
+         lvl[1] = --lvl[0];
+         ++b;
+         ++lvl;
+      }
+   }
+}
+
+void QBezier::addToPolygon(QDataBuffer<QPointF> &polygon, qreal bezier_flattening_threshold) const
+{
+   QBezier beziers[10];
+   int levels[10];
+   beziers[0] = *this;
+   levels[0] = 9;
+   QBezier *b = beziers;
+   int *lvl = levels;
 
    while (b >= beziers) {
       // check if we can pop the top bezier curve from the stack
@@ -186,24 +156,26 @@ void QBezier::addToPolygon(QPolygonF *polygon, qreal bezier_flattening_threshold
       qreal d;
       if (l > 1.) {
          d = qAbs( (x4x1) * (b->y1 - b->y2) - (y4y1) * (b->x1 - b->x2) )
-             + qAbs( (x4x1) * (b->y1 - b->y3) - (y4y1) * (b->x1 - b->x3) );
+            + qAbs( (x4x1) * (b->y1 - b->y3) - (y4y1) * (b->x1 - b->x3) );
       } else {
          d = qAbs(b->x1 - b->x2) + qAbs(b->y1 - b->y2) +
-             qAbs(b->x1 - b->x3) + qAbs(b->y1 - b->y3);
+            qAbs(b->x1 - b->x3) + qAbs(b->y1 - b->y3);
          l = 1.;
       }
-      if (d < bezier_flattening_threshold * l || b == beziers + 31) {
+      if (d < bezier_flattening_threshold * l || *lvl == 0) {
          // good enough, we pop it off and add the endpoint
-         polygon->append(QPointF(b->x4, b->y4));
+         polygon.add(QPointF(b->x4, b->y4));
          --b;
+         --lvl;
       } else {
          // split, second half of the polygon goes lower into the stack
          b->split(b + 1, b);
+         lvl[1] = --lvl[0];
          ++b;
+         ++lvl;
       }
    }
 }
-
 QRectF QBezier::bounds() const
 {
    qreal xmin = x1;
@@ -243,7 +215,6 @@ QRectF QBezier::bounds() const
    }
    return QRectF(xmin, ymin, xmax - xmin, ymax - ymin);
 }
-
 
 enum ShiftResult {
    Ok,
@@ -312,11 +283,11 @@ static ShiftResult shift(const QBezier *orig, QBezier *shifted, qreal offset, qr
    QRectF b = orig->bounds();
    if (np == 4 && b.width() < .1 * offset && b.height() < .1 * offset) {
       qreal l = (orig->x1 - orig->x2) * (orig->x1 - orig->x2) +
-                (orig->y1 - orig->y2) * (orig->y1 - orig->y2) *
-                (orig->x3 - orig->x4) * (orig->x3 - orig->x4) +
-                (orig->y3 - orig->y4) * (orig->y3 - orig->y4);
+         (orig->y1 - orig->y2) * (orig->y1 - orig->y2) *
+         (orig->x3 - orig->x4) * (orig->x3 - orig->x4) +
+         (orig->y3 - orig->y4) * (orig->y3 - orig->y4);
       qreal dot = (orig->x1 - orig->x2) * (orig->x3 - orig->x4) +
-                  (orig->y1 - orig->y2) * (orig->y3 - orig->y4);
+         (orig->y1 - orig->y2) * (orig->y3 - orig->y4);
       if (dot < 0 && dot * dot < 0.8 * l)
          // the points are close and reverse dirction. Approximate the whole
          // thing by a semi circle
@@ -339,7 +310,7 @@ static ShiftResult shift(const QBezier *orig, QBezier *shifted, qreal offset, qr
       QPointF normal_sum = prev_normal + next_normal;
 
       qreal r = qreal(1.0) + prev_normal.x() * next_normal.x()
-                + prev_normal.y() * next_normal.y();
+         + prev_normal.y() * next_normal.y();
 
       if (qFuzzyIsNull(r)) {
          points_shifted[i] = points[i] + offset * prev_normal;
@@ -354,7 +325,7 @@ static ShiftResult shift(const QBezier *orig, QBezier *shifted, qreal offset, qr
    points_shifted[np - 1] = points[np - 1] + offset * prev_normal;
 
    *shifted = QBezier::fromPoints(points_shifted[map[0]], points_shifted[map[1]],
-                                  points_shifted[map[2]], points_shifted[map[3]]);
+         points_shifted[map[2]], points_shifted[map[3]]);
 
    return good_offset(orig, shifted, offset, threshold);
 }
@@ -374,12 +345,14 @@ static bool addCircle(const QBezier *b, qreal offset, QBezier *o)
    if (qFuzzyIsNull(dist)) {
       return false;
    }
+
    normals[0] /= dist;
    normals[2] = QPointF(b->y4 - b->y3, b->x3 - b->x4);
    dist = qSqrt(normals[2].x() * normals[2].x() + normals[2].y() * normals[2].y());
    if (qFuzzyIsNull(dist)) {
       return false;
    }
+
    normals[2] /= dist;
 
    normals[1] = QPointF(b->x1 - b->x2 - b->x3 + b->x4, b->y1 - b->y2 - b->y3 + b->y4);
@@ -395,7 +368,8 @@ static bool addCircle(const QBezier *b, qreal offset, QBezier *o)
       if (cos_a < -1.) {
          cos_a = -1;
       }
-      angles[i] = qAcos(cos_a) / Q_PI;
+
+      angles[i] = qAcos(cos_a) * qreal(M_1_PI);
    }
 
    if (angles[0] + angles[1] > 1.) {
@@ -434,13 +408,14 @@ int QBezier::shifted(QBezier *curveSegments, int maxSegments, qreal offset, floa
    Q_ASSERT(curveSegments);
    Q_ASSERT(maxSegments > 0);
 
-   if (x1 == x2 && x1 == x3 && x1 == x4 &&
-         y1 == y2 && y1 == y3 && y1 == y4) {
+   if (qFuzzyCompare(x1, x2) && qFuzzyCompare(x1, x3) && qFuzzyCompare(x1, x4) &&
+      qFuzzyCompare(y1, y2) && qFuzzyCompare(y1, y3) && qFuzzyCompare(y1, y4)) {
       return 0;
    }
 
    --maxSegments;
    QBezier beziers[10];
+
 redo:
    beziers[0] = *this;
    QBezier *b = beziers;
@@ -450,6 +425,7 @@ redo:
       int stack_segments = b - beziers + 1;
       if ((stack_segments == 10) || (o - curveSegments == maxSegments - stack_segments)) {
          threshold *= qreal(1.5);
+
          if (threshold > qreal(2.0)) {
             goto give_up;
          }
@@ -494,40 +470,12 @@ give_up:
 static QDebug operator<<(QDebug dbg, const QBezier &bz)
 {
    dbg << '[' << bz.x1 << ", " << bz.y1 << "], "
-       << '[' << bz.x2 << ", " << bz.y2 << "], "
-       << '[' << bz.x3 << ", " << bz.y3 << "], "
-       << '[' << bz.x4 << ", " << bz.y4 << ']';
+      << '[' << bz.x2 << ", " << bz.y2 << "], "
+      << '[' << bz.x3 << ", " << bz.y3 << "], "
+      << '[' << bz.x4 << ", " << bz.y4 << ']';
    return dbg;
 }
 #endif
-
-static inline void splitBezierAt(const QBezier &bez, qreal t,
-                                 QBezier *left, QBezier *right)
-{
-   left->x1 = bez.x1;
-   left->y1 = bez.y1;
-
-   left->x2 = bez.x1 + t * ( bez.x2 - bez.x1 );
-   left->y2 = bez.y1 + t * ( bez.y2 - bez.y1 );
-
-   left->x3 = bez.x2 + t * ( bez.x3 - bez.x2 ); // temporary holding spot
-   left->y3 = bez.y2 + t * ( bez.y3 - bez.y2 ); // temporary holding spot
-
-   right->x3 = bez.x3 + t * ( bez.x4 - bez.x3 );
-   right->y3 = bez.y3 + t * ( bez.y4 - bez.y3 );
-
-   right->x2 = left->x3 + t * ( right->x3 - left->x3);
-   right->y2 = left->y3 + t * ( right->y3 - left->y3);
-
-   left->x3 = left->x2 + t * ( left->x3 - left->x2 );
-   left->y3 = left->y2 + t * ( left->y3 - left->y2 );
-
-   left->x4 = right->x1 = left->x3 + t * (right->x2 - left->x3);
-   left->y4 = right->y1 = left->y3 + t * (right->y2 - left->y3);
-
-   right->x4 = bez.x4;
-   right->y4 = bez.y4;
-}
 
 qreal QBezier::length(qreal error) const
 {
@@ -710,4 +658,3 @@ QBezier QBezier::bezierOnInterval(qreal t0, qreal t1) const
    return result;
 }
 
-QT_END_NAMESPACE

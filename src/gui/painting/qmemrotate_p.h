@@ -25,8 +25,6 @@
 
 #include <qdrawhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #define QT_ROTATION_CACHEDREAD 1
 #define QT_ROTATION_CACHEDWRITE 2
 #define QT_ROTATION_PACKING 3
@@ -42,46 +40,16 @@ QT_BEGIN_NAMESPACE
 
 #endif
 
-#ifdef Q_WS_QWS
-#define Q_GUI_QWS_EXPORT Q_GUI_EXPORT
-#else
-#define Q_GUI_QWS_EXPORT
-#endif
+#define QT_DECL_MEMROTATE(type)                            \
+    void Q_GUI_EXPORT qt_memrotate90(const type*, int, int, int, type*, int); \
+    void Q_GUI_EXPORT qt_memrotate180(const type*, int, int, int, type*, int); \
+    void Q_GUI_EXPORT qt_memrotate270(const type*, int, int, int, type*, int)
 
-#define QT_DECL_MEMROTATE(srctype, desttype)                            \
-    void Q_GUI_QWS_EXPORT qt_memrotate90(const srctype*, int, int, int, desttype*, int); \
-    void Q_GUI_QWS_EXPORT qt_memrotate180(const srctype*, int, int, int, desttype*, int); \
-    void Q_GUI_QWS_EXPORT qt_memrotate270(const srctype*, int, int, int, desttype*, int)
-
-void Q_GUI_EXPORT qt_memrotate90(const quint32 *, int, int, int, quint32 *, int);
-void Q_GUI_QWS_EXPORT qt_memrotate180(const quint32 *, int, int, int, quint32 *, int);
-void Q_GUI_QWS_EXPORT qt_memrotate270(const quint32 *, int, int, int, quint32 *, int);
-
-QT_DECL_MEMROTATE(quint32, quint16);
-QT_DECL_MEMROTATE(quint16, quint32);
-QT_DECL_MEMROTATE(quint16, quint16);
-QT_DECL_MEMROTATE(quint24, quint24);
-QT_DECL_MEMROTATE(quint32, quint24);
-QT_DECL_MEMROTATE(quint32, quint18);
-QT_DECL_MEMROTATE(quint32, quint8);
-QT_DECL_MEMROTATE(quint16, quint8);
-QT_DECL_MEMROTATE(qrgb444, quint8);
-QT_DECL_MEMROTATE(quint8, quint8);
-
-#ifdef QT_QWS_ROTATE_BGR
-QT_DECL_MEMROTATE(quint16, qbgr565);
-QT_DECL_MEMROTATE(quint32, qbgr565);
-QT_DECL_MEMROTATE(qrgb555, qbgr555);
-QT_DECL_MEMROTATE(quint32, qbgr555);
-#endif
-
-#ifdef QT_QWS_DEPTH_GENERIC
-QT_DECL_MEMROTATE(quint32, qrgb_generic16);
-QT_DECL_MEMROTATE(quint16, qrgb_generic16);
-#endif
+QT_DECL_MEMROTATE(quint32);
+QT_DECL_MEMROTATE(quint16);
+QT_DECL_MEMROTATE(quint24);
+QT_DECL_MEMROTATE(quint8);
 
 #undef QT_DECL_MEMROTATE
 
-QT_END_NAMESPACE
-
-#endif // QMEMROTATE_P_H
+#endif

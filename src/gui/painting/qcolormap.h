@@ -28,7 +28,6 @@
 #include <QtCore/qvector.h>
 #include <QtGui/qwindowdefs.h>
 
-QT_BEGIN_NAMESPACE
 
 class QColor;
 class QColormapPrivate;
@@ -58,15 +57,10 @@ class Q_GUI_EXPORT QColormap
 
    const QVector<QColor> colormap() const;
 
-#ifdef Q_OS_WIN
-   static HPALETTE hPal();
-#endif
 
  private:
    QColormap();
    QColormapPrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif 
+#endif

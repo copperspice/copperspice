@@ -27,14 +27,10 @@
 #include <qdatastream.h>
 #include <qvariant.h>
 #include <qvarlengtharray.h>
-
-#include <qdebug.h>
-
-#if defined(Q_OS_UNIX) || defined(Q_OS_WIN)
 #include <qimage.h>
 #include <qbitmap.h>
-#include <stdlib.h>
-#endif
+
+#include <qdebug_p.h>
 
 QRegion::QRegion(int x, int y, int w, int h, RegionType t)
 {
@@ -45,16 +41,12 @@ QRegion::QRegion(int x, int y, int w, int h, RegionType t)
 
 void QRegion::detach()
 {
-   if (d->ref.load() != 1) {
+   if (d->ref.isShared()) {
       *this = copy();
    }
 
-#if defined(Q_WS_X11)
-   else if (d->xrectangles) {
-      free(d->xrectangles);
-      d->xrectangles = 0;
-   }
-#endif
+
+
 
 }
 
@@ -181,49 +173,66 @@ QDataStream &operator>>(QDataStream &s, QRegion &r)
 
 QDebug operator<<(QDebug s, const QRegion &r)
 {
-   const QVector<QRect> &rects = r.rects();
-
-   s.nospace() << "QRegion(size=" << rects.size() << "), "
-               << "bounds = " << r.boundingRect() << '\n';
-
-   for (int i = 0; i < rects.size(); ++i) {
-      s << "- " << i << rects.at(i) << '\n';
+   QDebugStateSaver saver(s);
+   s.nospace();
+   s << "QRegion(";
+   if (r.isNull()) {
+      s << "null";
+   } else if (r.isEmpty()) {
+      s << "empty";
+   } else {
+      const QVector<QRect> rects = r.rects();
+      const int count = rects.size();
+      if (count > 1) {
+         s << "size=" << count << ", bounds=(";
+      }
+      QtDebugUtils::formatQRect(s, r.boundingRect());
+      if (count > 1) {
+         s << ") - [";
+         for (int i = 0; i < count; ++i) {
+            if (i) {
+               s << ", ";
+            }
+            s << '(';
+            QtDebugUtils::formatQRect(s, rects.at(i));
+            s << ')';
+         }
+         s << ']';
+      }
    }
-
+   s << ')';
    return s;
 }
 
-const QRegion QRegion::operator|(const QRegion &r) const
+QRegion QRegion::operator|(const QRegion &r) const
+{
+   return united(r);
+}
+QRegion QRegion::operator+(const QRegion &r) const
+{
+   return united(r);
+}
+QRegion QRegion::operator+(const QRect &r) const
 {
    return united(r);
 }
 
-const QRegion QRegion::operator+(const QRegion &r) const
-{
-   return united(r);
-}
-
-const QRegion QRegion::operator+(const QRect &r) const
-{
-   return united(r);
-}
-
-const QRegion QRegion::operator&(const QRegion &r) const
+QRegion QRegion::operator&(const QRegion &r) const
 {
    return intersected(r);
 }
 
-const QRegion QRegion::operator&(const QRect &r) const
+QRegion QRegion::operator&(const QRect &r) const
 {
    return intersected(r);
 }
 
-const QRegion QRegion::operator-(const QRegion &r) const
+QRegion QRegion::operator-(const QRegion &r) const
 {
    return subtracted(r);
 }
 
-const QRegion QRegion::operator^(const QRegion &r) const
+QRegion QRegion::operator^(const QRegion &r) const
 {
    return xored(r);
 }
@@ -284,7 +293,7 @@ QRegion QRegion::translated(int dx, int dy) const
 inline bool rect_intersects(const QRect &r1, const QRect &r2)
 {
    return (r1.right() >= r2.left() && r1.left() <= r2.right() &&
-           r1.bottom() >= r2.top() && r1.top() <= r2.bottom());
+         r1.bottom() >= r2.top() && r1.top() <= r2.bottom());
 }
 
 bool QRegion::intersects(const QRegion &region) const
@@ -492,44 +501,24 @@ QPainterPath qt_regionToPath(const QRegion &region)
 
 //#define QT_REGION_DEBUG
 
-/*
- *   clip region
- */
 
 struct QRegionPrivate {
 
+   int numRects;
+   int innerArea;
    QVector<QRect> rects;
    QRect extents;
    QRect innerRect;
 
-   int numRects;
-   int innerArea;
+   QRegionPrivate() : numRects(0), innerArea(-1)
+   {  }
 
-   inline QRegionPrivate() : numRects(0), innerArea(-1) {}
-
-   inline QRegionPrivate(const QRect &r) {
-      numRects  = 1;
-      extents   = r;
-      innerRect = r;
-      innerArea = r.width() * r.height();
-   }
-
-   inline QRegionPrivate(const QRegionPrivate &r) {
-      rects     = r.rects;
-      numRects  = r.numRects;
-      extents   = r.extents;
-      innerRect = r.innerRect;
-      innerArea = r.innerArea;
-   }
-
-   inline QRegionPrivate &operator=(const QRegionPrivate &r) {
-      rects     = r.rects;
-      numRects  = r.numRects;
-      extents   = r.extents;
-      innerRect = r.innerRect;
-      innerArea = r.innerArea;
-      return *this;
-   }
+   QRegionPrivate(const QRect &r)
+      : numRects(1),
+        innerArea(r.width() * r.height()),
+        extents(r),
+        innerRect(r)
+   { }
 
    void intersect(const QRect &r);
 
@@ -545,7 +534,7 @@ struct QRegionPrivate {
       const QRect &r1 = innerRect;
 
       return r2.left() >= r1.left() && r2.right() <= r1.right()
-             && r2.top() >= r1.top() && r2.bottom() <= r1.bottom();
+         && r2.top() >= r1.top() && r2.bottom() <= r1.bottom();
    }
 
    /*
@@ -555,7 +544,7 @@ struct QRegionPrivate {
       const QRect &r2 = extents;
 
       return r2.left() >= r1.left() && r2.right() <= r1.right()
-             && r2.top() >= r1.top() && r2.bottom() <= r1.bottom();
+         && r2.top() >= r1.top() && r2.bottom() <= r1.bottom();
    }
 
    void updateInnerRect(const QRect &rect) {
@@ -592,10 +581,10 @@ struct QRegionPrivate {
    inline bool mergeFromLeft(QRect *left, const QRect *right);
 
    inline bool mergeFromBelow(QRect *top, const QRect *bottom,
-                  const QRect *nextToTop, const QRect *nextToBottom);
+      const QRect *nextToTop, const QRect *nextToBottom);
 
    inline bool mergeFromAbove(QRect *bottom, const QRect *top,
-                  const QRect *nextToBottom, const QRect *nextToTop);
+      const QRect *nextToBottom, const QRect *nextToTop);
 
 #ifdef QT_REGION_DEBUG
    void selfTest() const;
@@ -610,8 +599,8 @@ static inline bool isEmptyHelper(const QRegionPrivate *preg)
 static inline bool canMergeFromRight(const QRect *left, const QRect *right)
 {
    return (right->top() == left->top()
-           && right->bottom() == left->bottom()
-           && right->left() <= (left->right() + 1));
+         && right->bottom() == left->bottom()
+         && right->left() <= (left->right() + 1));
 }
 
 static inline bool canMergeFromLeft(const QRect *right, const QRect *left)
@@ -640,8 +629,8 @@ bool QRegionPrivate::mergeFromLeft(QRect *right, const QRect *left)
 }
 
 static inline bool canMergeFromBelow(const QRect *top, const QRect *bottom,
-                                     const QRect *nextToTop,
-                                     const QRect *nextToBottom)
+   const QRect *nextToTop,
+   const QRect *nextToBottom)
 {
    if (nextToTop && nextToTop->y() == top->y()) {
       return false;
@@ -651,13 +640,13 @@ static inline bool canMergeFromBelow(const QRect *top, const QRect *bottom,
    }
 
    return ((top->bottom() >= (bottom->top() - 1))
-           && top->left() == bottom->left()
-           && top->right() == bottom->right());
+         && top->left() == bottom->left()
+         && top->right() == bottom->right());
 }
 
 bool QRegionPrivate::mergeFromBelow(QRect *top, const QRect *bottom,
-                                    const QRect *nextToTop,
-                                    const QRect *nextToBottom)
+   const QRect *nextToTop,
+   const QRect *nextToBottom)
 {
    if (canMergeFromBelow(top, bottom, nextToTop, nextToBottom)) {
       top->setBottom(bottom->bottom());
@@ -668,7 +657,7 @@ bool QRegionPrivate::mergeFromBelow(QRect *top, const QRect *bottom,
 }
 
 bool QRegionPrivate::mergeFromAbove(QRect *bottom, const QRect *top,
-                  const QRect *nextToBottom, const QRect *nextToTop)
+   const QRect *nextToBottom, const QRect *nextToTop)
 {
    if (canMergeFromBelow(top, bottom, nextToTop, nextToBottom)) {
       bottom->setTop(top->top());
@@ -780,7 +769,7 @@ void QRegionPrivate::append(const QRect *r)
    }
 
    extents.setCoords(qMin(extents.left(), r->left()), qMin(extents.top(), r->top()),
-                     qMax(extents.right(), r->right()), qMax(extents.bottom(), r->bottom()));
+      qMax(extents.right(), r->right()), qMax(extents.bottom(), r->bottom()));
 
 #ifdef QT_REGION_DEBUG
    selfTest();
@@ -855,9 +844,9 @@ void QRegionPrivate::append(const QRegionPrivate *r)
    destRect = &extents;
    srcRect  = &r->extents;
    extents.setCoords(qMin(destRect->left(), srcRect->left()),
-                     qMin(destRect->top(), srcRect->top()),
-                     qMax(destRect->right(), srcRect->right()),
-                     qMax(destRect->bottom(), srcRect->bottom()));
+      qMin(destRect->top(), srcRect->top()),
+      qMax(destRect->right(), srcRect->right()),
+      qMax(destRect->bottom(), srcRect->bottom()));
 
 #ifdef QT_REGION_DEBUG
    selfTest();
@@ -914,7 +903,7 @@ void QRegionPrivate::prepend(const QRegionPrivate *r)
 
       // move existing rectangles
       memmove(rects.data() + numPrepend, rects.constData() + numSkip,
-              numRects * sizeof(QRect));
+         numRects * sizeof(QRect));
 
       // prepend new rectangles
       memcpy(rects.data(), r->rects.constData(), numPrepend * sizeof(QRect));
@@ -930,9 +919,9 @@ void QRegionPrivate::prepend(const QRegionPrivate *r)
 
    // update extents
    extents.setCoords(qMin(extents.left(), r->extents.left()),
-                     qMin(extents.top(), r->extents.top()),
-                     qMax(extents.right(), r->extents.right()),
-                     qMax(extents.bottom(), r->extents.bottom()));
+      qMin(extents.top(), r->extents.top()),
+      qMax(extents.right(), r->extents.right()),
+      qMax(extents.bottom(), r->extents.bottom()));
 
 #ifdef QT_REGION_DEBUG
    selfTest();
@@ -966,9 +955,9 @@ void QRegionPrivate::prepend(const QRect *r)
    }
 
    extents.setCoords(qMin(extents.left(), r->left()),
-                     qMin(extents.top(), r->top()),
-                     qMax(extents.right(), r->right()),
-                     qMax(extents.bottom(), r->bottom()));
+      qMin(extents.top(), r->top()),
+      qMax(extents.right(), r->right()),
+      qMax(extents.bottom(), r->bottom()));
 
 #ifdef QT_REGION_DEBUG
    selfTest();
@@ -985,7 +974,7 @@ bool QRegionPrivate::canAppend(const QRect *r) const
    }
 
    if (r->top() == myLast->top() && r->height() == myLast->height()
-         && r->left() > myLast->right()) {
+      && r->left() > myLast->right()) {
       return true;
    }
 
@@ -1008,8 +997,7 @@ bool QRegionPrivate::canPrepend(const QRect *r) const
       return true;
    }
 
-   if (r->top() == myFirst->top() && r->height() == myFirst->height()
-         && r->right() < myFirst->left()) {
+   if (r->top() == myFirst->top() && r->height() == myFirst->height() && r->right() < myFirst->left()) {
       return true;
    }
 
@@ -1063,32 +1051,20 @@ void QRegionPrivate::selfTest() const
 }
 #endif
 
-#if defined(Q_WS_X11)
-# include <qregion_x11.cpp>
-
-#elif defined(Q_OS_MAC)
-# include <qregion_mac.cpp>
-
-#elif defined(Q_OS_WIN)
-# include <qregion_win.cpp>
-
-#elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
 static QRegionPrivate qrp;
-QRegion::QRegionData QRegion::shared_empty = {1, &qrp};
-
-#endif
+const QRegion::QRegionData QRegion::shared_empty = {Q_REFCOUNT_INITIALIZE_STATIC, &qrp};
 
 typedef void (*OverlapFunc)(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
-                  const QRect *r2, const QRect *r2End, int y1, int y2);
+   const QRect *r2, const QRect *r2End, int y1, int y2);
 
 typedef void (*NonOverlapFunc)(QRegionPrivate &dest, const QRect *r, const QRect *rEnd,
-                  int y1, int y2);
+   int y1, int y2);
 
 static bool EqualRegion(const QRegionPrivate *r1, const QRegionPrivate *r2);
 static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, QRegionPrivate &dest);
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
-                  OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func,
-                  NonOverlapFunc nonOverlap2Func);
+   OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func,
+   NonOverlapFunc nonOverlap2Func);
 
 #define RectangleOut 0
 #define RectangleIn 1
@@ -1197,7 +1173,7 @@ SOFTWARE.
  * the buffers together
  */
 typedef struct _POINTBLOCK {
-   char data[NUMPTSTOBUFFER *sizeof(QPoint)];
+   char data[NUMPTSTOBUFFER * sizeof(QPoint)];
    QPoint *pts;
    struct _POINTBLOCK *next;
 } POINTBLOCK;
@@ -1342,7 +1318,7 @@ static void miSetExtents(QRegionPrivate &dest)
     * smallest y1 and since pBoxEnd is the last rectangle in the region,
     * it must have the largest y2, because of banding. Initialize x1 and
     * x2 from  pBox and pBoxEnd, resp., as good things to initialize them
-    * to...
+    * to.
     */
    pExtents->setLeft(pBox->left());
    pExtents->setTop(pBox->top());
@@ -1363,10 +1339,6 @@ static void miSetExtents(QRegionPrivate &dest)
    Q_ASSERT(pExtents->left() <= pExtents->right());
 }
 
-/* TranslateRegion(pRegion, x, y)
-   translates in place
-   added by raymond
-*/
 
 static void OffsetRegion(QRegionPrivate &region, int x, int y)
 {
@@ -1383,9 +1355,6 @@ static void OffsetRegion(QRegionPrivate &region, int x, int y)
    region.innerRect.translate(x, y);
 }
 
-/*======================================================================
- *          Region Intersection
- *====================================================================*/
 /*-
  *-----------------------------------------------------------------------
  * miIntersectO --
@@ -1400,7 +1369,7 @@ static void OffsetRegion(QRegionPrivate &region, int x, int y)
  *-----------------------------------------------------------------------
  */
 static void miIntersectO(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
-                         const QRect *r2, const QRect *r2End, int y1, int y2)
+   const QRect *r2, const QRect *r2End, int y1, int y2)
 {
    int x1;
    int x2;
@@ -1443,9 +1412,6 @@ static void miIntersectO(QRegionPrivate &dest, const QRect *r1, const QRect *r1E
    }
 }
 
-/*======================================================================
- *          Generic Region Operator
- *====================================================================*/
 
 /*-
  *-----------------------------------------------------------------------
@@ -1568,9 +1534,35 @@ static int miCoalesce(QRegionPrivate &dest, int prevStart, int curStart)
    return curStart;
 }
 
+/*-
+ *-----------------------------------------------------------------------
+ * miRegionOp --
+ *      Apply an operation to two regions. Called by miUnion, miInverse,
+ *      miSubtract, miIntersect...
+ *
+ * Results:
+ *      None.
+ *
+ * Side Effects:
+ *      The new region is overwritten.
+ *
+ * Notes:
+ *      The idea behind this function is to view the two regions as sets.
+ *      Together they cover a rectangle of area that this function divides
+ *      into horizontal bands where points are covered only by one region
+ *      or by both. For the first case, the nonOverlapFunc is called with
+ *      each the band and the band's upper and lower extents. For the
+ *      second, the overlapFunc is called to process the entire band. It
+ *      is responsible for clipping the rectangles in the band, though
+ *      this function provides the boundaries.
+ *      At the end of each band, the new region is coalesced, if possible,
+ *      to reduce the number of rectangles in the region.
+ *
+ *-----------------------------------------------------------------------
+ */
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
-                  OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func,
-                  NonOverlapFunc nonOverlap2Func)
+   OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func,
+   NonOverlapFunc nonOverlap2Func)
 {
    const QRect *r1;         // Pointer into first region
    const QRect *r2;         // Pointer into 2d region
@@ -1588,8 +1580,6 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
    int prevBand;            // Index of start of previous band in dest
    int curBand;             // Index of start of current band in dest
 
-   QVector<QRect> regTmp;
-
    /*
     * Initialization:
     * set r1, r2, r1End and r2End appropriately
@@ -1599,34 +1589,13 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
     */
    if (reg1->numRects == 1) {
       r1 = &reg1->extents;
-
    } else {
-
-      if (&dest == reg1) {
-         regTmp = reg1->rects;
-         r1 = regTmp.constData();
-
-      } else {
-         r1 = reg1->rects.constData();
-      }
+      r1 = reg1->rects.constData();
    }
-
    if (reg2->numRects == 1) {
       r2 = &reg2->extents;
-
    } else {
-
-      if (&dest == reg2) {
-
-         if (&dest != reg1 && reg1->numRects != 1) {
-            regTmp = reg2->rects;
-         }
-
-         r2 = regTmp.constData();
-
-      } else {
-         r2 = reg2->rects.constData();
-      }
+      r2 = reg2->rects.constData();
    }
 
    r1End = r1 + reg1->numRects;
@@ -1634,11 +1603,8 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
 
    dest.vectorize();
 
-   /*
-    * Allocate a reasonable number of rectangles for the new region. The idea
-    * is to allocate enough so the individual call back functions do not need to
-    * reallocate and copy the array.
-    */
+   QVector<QRect> oldRects = dest.rects;
+
 
    dest.numRects = 0;
    dest.rects.resize(qMax(reg1->numRects, reg2->numRects) * 2);
@@ -1812,7 +1778,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
     * twice the number of rectangles in the region (a simple optimization).
     */
 
-    if (qMax(4, dest.numRects) < (dest.rects.size() >> 1)) {
+   if (qMax(4, dest.numRects) < (dest.rects.size() >> 1)) {
       dest.rects.resize(dest.numRects);
    }
 }
@@ -1836,7 +1802,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
  */
 
 static void miUnionNonO(QRegionPrivate &dest, const QRect *r, const QRect *rEnd,
-                        int y1, int y2)
+   int y1, int y2)
 {
    QRect *pNextRect;
    pNextRect = dest.rects.data() + dest.numRects;
@@ -1872,7 +1838,7 @@ static void miUnionNonO(QRegionPrivate &dest, const QRect *r, const QRect *rEnd,
  */
 
 static void miUnionO(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
-                     const QRect *r2, const QRect *r2End, int y1, int y2)
+   const QRect *r2, const QRect *r2End, int y1, int y2)
 {
    QRect *pNextRect;
 
@@ -1939,9 +1905,9 @@ static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, 
    miRegionOp(dest, reg1, reg2, miUnionO, miUnionNonO, miUnionNonO);
 
    dest.extents.setCoords(qMin(reg1->extents.left(), reg2->extents.left()),
-                          qMin(reg1->extents.top(), reg2->extents.top()),
-                          qMax(reg1->extents.right(), reg2->extents.right()),
-                          qMax(reg1->extents.bottom(), reg2->extents.bottom()));
+      qMin(reg1->extents.top(), reg2->extents.top()),
+      qMax(reg1->extents.right(), reg2->extents.right()),
+      qMax(reg1->extents.bottom(), reg2->extents.bottom()));
 }
 
 /*-
@@ -1960,7 +1926,7 @@ static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, 
  */
 
 static void miSubtractNonO1(QRegionPrivate &dest, const QRect *r,
-                            const QRect *rEnd, int y1, int y2)
+   const QRect *rEnd, int y1, int y2)
 {
    QRect *pNextRect;
 
@@ -1994,7 +1960,7 @@ static void miSubtractNonO1(QRegionPrivate &dest, const QRect *r,
  */
 
 static void miSubtractO(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
-                        const QRect *r2, const QRect *r2End, int y1, int y2)
+   const QRect *r2, const QRect *r2End, int y1, int y2)
 {
    QRect *pNextRect;
    int x1;
@@ -2099,7 +2065,7 @@ static void miSubtractO(QRegionPrivate &dest, const QRect *r1, const QRect *r1En
  */
 
 static void SubtractRegion(QRegionPrivate *regM, QRegionPrivate *regS,
-                           QRegionPrivate &dest)
+   QRegionPrivate &dest)
 {
    Q_ASSERT(!isEmptyHelper(regM));
    Q_ASSERT(!isEmptyHelper(regS));
@@ -2629,7 +2595,7 @@ SOFTWARE.
  *
  */
 static void InsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE, int scanline,
-                           ScanLineListBlock **SLLBlock, int *iSLLBlock)
+   ScanLineListBlock **SLLBlock, int *iSLLBlock)
 {
    EdgeTableEntry *start, *prev;
    ScanLineList *pSLL, *pPrevSLL;
@@ -2710,8 +2676,8 @@ static void InsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE, int scanline,
  */
 
 static void CreateETandAET(int count, const QPoint *pts,
-                           EdgeTable *ET, EdgeTableEntry *AET, EdgeTableEntry *pETEs,
-                           ScanLineListBlock *pSLLBlock)
+   EdgeTable *ET, EdgeTableEntry *AET, EdgeTableEntry *pETEs,
+   ScanLineListBlock *pSLLBlock)
 {
    const QPoint *top,
          *bottom,
@@ -2898,9 +2864,11 @@ static int InsertionSort(EdgeTableEntry *AET)
       if (pETEchase != pETEinsert) {
          pETEchaseBackTMP = pETEchase->back;
          pETEinsert->back->next = AET;
+
          if (AET) {
             AET->back = pETEinsert->back;
          }
+
          pETEinsert->next = pETEchase;
          pETEchase->back->next = pETEinsert;
          pETEchase->back = pETEinsert;
@@ -2939,12 +2907,12 @@ struct QRegionSpan {
 Q_DECLARE_TYPEINFO(QRegionSpan, Q_PRIMITIVE_TYPE);
 
 static inline void flushRow(const QRegionSpan *spans, int y, int numSpans, QRegionPrivate *reg, int *lastRow,
-                            int *extendTo, bool *needsExtend)
+   int *extendTo, bool *needsExtend)
 {
    QRect *regRects = reg->rects.data() + *lastRow;
    bool canExtend = reg->rects.size() - *lastRow == numSpans
-                    && !(*needsExtend && *extendTo + 1 != y)
-                    && (*needsExtend || regRects[0].y() + regRects[0].height() == y);
+      && !(*needsExtend && *extendTo + 1 != y)
+      && (*needsExtend || regRects[0].y() + regRects[0].height() == y);
 
    for (int i = 0; i < numSpans && canExtend; ++i) {
       if (regRects[i].x() != spans[i].x1 || regRects[i].right() != spans[i].x2 - 1) {
@@ -3069,9 +3037,9 @@ static void PtsToRegion(int numFullPtBlocks, int iCurPtBlock, POINTBLOCK *FirstP
  *     Can return nullptr in case of errors.
  */
 static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
-//Point     *Pts;                /* the pts                 */
-//int       Count;                 /* number of pts           */
-//int       rule;                        /* winding rule */
+//Point     *Pts;                   /* the pts                 */
+//int       Count;                  /* number of pts           */
+//int       rule;                   /* winding rule            */
 {
    QRegionPrivate *region;
    EdgeTableEntry *pAET;            /* Active Edge Table       */
@@ -3083,7 +3051,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 
    EdgeTableEntry *pPrevAET;        /* ptr to previous AET     */
    EdgeTable ET;                    /* header node for ET      */
-   EdgeTableEntry AET;              /* header node for AET     */
+   EdgeTableEntry *AET;             /* header node for AET     */
    EdgeTableEntry *pETEs;           /* EdgeTableEntries pool   */
 
    ScanLineListBlock SLLBlock;      /* header for scanlinelist */
@@ -3098,10 +3066,10 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    /* special case a rectangle */
    if (((Count == 4) ||
          ((Count == 5) && (Pts[4].x() == Pts[0].x()) && (Pts[4].y() == Pts[0].y())))
-         && (((Pts[0].y() == Pts[1].y()) && (Pts[1].x() == Pts[2].x()) && (Pts[2].y() == Pts[3].y())
-              && (Pts[3].x() == Pts[0].x())) || ((Pts[0].x() == Pts[1].x())
-                    && (Pts[1].y() == Pts[2].y()) && (Pts[2].x() == Pts[3].x())
-                    && (Pts[3].y() == Pts[0].y())))) {
+      && (((Pts[0].y() == Pts[1].y()) && (Pts[1].x() == Pts[2].x()) && (Pts[2].y() == Pts[3].y())
+            && (Pts[3].x() == Pts[0].x())) || ((Pts[0].x() == Pts[1].x())
+            && (Pts[1].y() == Pts[2].y()) && (Pts[2].x() == Pts[3].x())
+            && (Pts[3].y() == Pts[0].y())))) {
 
       int x = qMin(Pts[0].x(), Pts[2].x());
       region->extents.setLeft(x);
@@ -3112,7 +3080,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
       region->extents.setHeight(qMax(Pts[0].y(), Pts[2].y()) - y);
 
       if ((region->extents.left() <= region->extents.right()) &&
-            (region->extents.top() <= region->extents.bottom())) {
+         (region->extents.top() <= region->extents.bottom())) {
          region->numRects  = 1;
          region->innerRect = region->extents;
          region->innerArea = region->innerRect.width() * region->innerRect.height();
@@ -3128,8 +3096,9 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 
    region->vectorize();
 
+   AET = new EdgeTableEntry;
    pts = FirstPtBlock.pts;
-   CreateETandAET(Count, Pts, &ET, &AET, pETEs, &SLLBlock);
+   CreateETandAET(Count, Pts, &ET, AET, pETEs, &SLLBlock);
 
    pSLL = ET.scanlines.next;
    curPtBlock = &FirstPtBlock;
@@ -3142,6 +3111,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
       qWarning("QRegion: creating region from big polygon failed...!");
 #endif
 
+      delete AET;
       delete region;
       return nullptr;
    }
@@ -3159,11 +3129,11 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
              *  get to the next edge.
              */
             if (pSLL && y == pSLL->scanline) {
-               loadAET(&AET, pSLL->edgelist);
+               loadAET(AET, pSLL->edgelist);
                pSLL = pSLL->next;
             }
-            pPrevAET = &AET;
-            pAET = AET.next;
+            pPrevAET = AET;
+            pAET = AET->next;
 
             /*
              *  for each active edge
@@ -3189,26 +3159,26 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
                }
                EVALUATEEDGEEVENODD(pAET, pPrevAET, y)
             }
-            InsertionSort(&AET);
+            InsertionSort(AET);
          }
 
-      } else {
+      } else
+      {
          /*
           *  for each scanline
           */
-         for (y = ET.ymin; y < ET.ymax; ++y)
-         {
+         for (y = ET.ymin; y < ET.ymax; ++y) {
             /*
              *  Add a new edge to the active edge table when we
              *  get to the next edge.
              */
             if (pSLL && y == pSLL->scanline) {
-               loadAET(&AET, pSLL->edgelist);
-               computeWAET(&AET);
+               loadAET(AET, pSLL->edgelist);
+               computeWAET(AET);
                pSLL = pSLL->next;
             }
-            pPrevAET = &AET;
-            pAET = AET.next;
+            pPrevAET = AET;
+            pAET = AET->next;
             pWETE = pAET;
 
             /*
@@ -3246,8 +3216,8 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
              *  recompute the winding active edge table if
              *  we just resorted or have exited an edge.
              */
-            if (InsertionSort(&AET) || fixWAET) {
-               computeWAET(&AET);
+            if (InsertionSort(AET) || fixWAET) {
+               computeWAET(AET);
                fixWAET = false;
             }
          }
@@ -3275,7 +3245,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
       free(curPtBlock);
       curPtBlock = tmpPtBlock;
    }
-
+   delete AET;
    free(pETEs);
 
    return region;
@@ -3284,11 +3254,16 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 
 QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
 {
-   QImage image = bitmap.toImage();
+   const QImage image = bitmap.toImage();
 
    QRegionPrivate *region = new QRegionPrivate;
    QRect xr;
 
+#define AddSpan \
+        { \
+            xr.setCoords(prev1, y, x-1, y); \
+            UnionRectWithRegion(&xr, region, *region); \
+        }
    const uchar zero = 0;
    bool little = image.format() == QImage::Format_MonoLSB;
 
@@ -3296,7 +3271,7 @@ QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
    int y;
 
    for (y = 0; y < image.height(); ++y) {
-      uchar *line = image.scanLine(y);
+      const uchar *line = image.constScanLine(y);
       int w = image.width();
       uchar all = zero;
       int prev1 = -1;
@@ -3316,10 +3291,9 @@ QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
                      // A change
 
                      if (all != zero) {
-                        xr.setCoords(prev1, y, x-1, y);
-                        UnionRectWithRegion(&xr, region, *region);
-
+                        AddSpan
                         all = zero;
+
                      } else {
                         prev1 = x;
                         all = ~zero;
@@ -3339,9 +3313,7 @@ QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
                   } else {
                      // A change
                      if (all != zero) {
-                        xr.setCoords(prev1, y, x-1, y);
-                        UnionRectWithRegion(&xr, region, *region);
-
+                        AddSpan
                         all = zero;
                      } else {
                         prev1 = x;
@@ -3359,35 +3331,27 @@ QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
       }
 
       if (all != zero) {
-         xr.setCoords(prev1, y, x-1, y);
-         UnionRectWithRegion(&xr, region, *region);
+         AddSpan
       }
    }
+#undef AddSpan
 
    return region;
 }
 
 QRegion::QRegion()
-   : d(&shared_empty)
+   : d(const_cast<QRegionData *>(&shared_empty))
 {
-   d->ref.ref();
 }
 
 QRegion::QRegion(const QRect &r, RegionType t)
 {
    if (r.isEmpty()) {
-      d = &shared_empty;
-      d->ref.ref();
+      d = const_cast<QRegionData *>(&shared_empty);
+
    } else {
       d = new QRegionData;
-      d->ref.store(1);
-
-#if defined(Q_WS_X11)
-      d->rgn = 0;
-      d->xrectangles = 0;
-#elif defined(Q_OS_WIN)
-      d->rgn = 0;
-#endif
+      d->ref.initializeOwned();
 
       if (t == Rectangle) {
          d->qt_rgn = new QRegionPrivate(r);
@@ -3405,27 +3369,19 @@ QRegion::QRegion(const QPolygon &a, Qt::FillRule fillRule)
 {
    if (a.count() > 2) {
       QRegionPrivate *qt_rgn = PolygonRegion(a.constData(), a.size(),
-                                             fillRule == Qt::WindingFill ? WindingRule : EvenOddRule);
+            fillRule == Qt::WindingFill ? WindingRule : EvenOddRule);
       if (qt_rgn) {
          d =  new QRegionData;
-         d->ref.store(1);
+         d->ref.initializeOwned();
 
-#if defined(Q_WS_X11)
-         d->rgn = 0;
-         d->xrectangles = 0;
-#elif defined(Q_OS_WIN)
-         d->rgn = 0;
-#endif
 
          d->qt_rgn = qt_rgn;
 
       } else {
-         d = &shared_empty;
-         d->ref.ref();
+         d = const_cast<QRegionData *>(&shared_empty);
       }
    } else {
-      d = &shared_empty;
-      d->ref.ref();
+      d = const_cast<QRegionData *>(&shared_empty);
    }
 }
 
@@ -3438,19 +3394,12 @@ QRegion::QRegion(const QRegion &r)
 QRegion::QRegion(const QBitmap &bm)
 {
    if (bm.isNull()) {
-      d = &shared_empty;
-      d->ref.ref();
+      d = const_cast<QRegionData *>(&shared_empty);
 
    } else {
       d = new QRegionData;
-      d->ref.store(1);
+      d->ref.initializeOwned();
 
-#if defined(Q_WS_X11)
-      d->rgn = 0;
-      d->xrectangles = 0;
-#elif defined(Q_OS_WIN)
-      d->rgn = 0;
-#endif
 
       d->qt_rgn = qt_bitmapToRegion(bm);
    }
@@ -3459,21 +3408,6 @@ QRegion::QRegion(const QBitmap &bm)
 void QRegion::cleanUp(QRegion::QRegionData *x)
 {
    delete x->qt_rgn;
-
-#if defined(Q_WS_X11)
-   if (x->rgn) {
-      XDestroyRegion(x->rgn);
-   }
-   if (x->xrectangles) {
-      free(x->xrectangles);
-   }
-
-#elif defined(Q_OS_WIN)
-   if (x->rgn) {
-      qt_win_dispose_rgn(x->rgn);
-   }
-#endif
-
    delete x;
 }
 
@@ -3504,15 +3438,8 @@ QRegion QRegion::copy() const
 {
    QRegion r;
    QScopedPointer<QRegionData> x(new QRegionData);
+   x->ref.initializeOwned();
 
-   x->ref.store(1);
-
-#if defined(Q_WS_X11)
-   x->rgn = 0;
-   x->xrectangles = 0;
-#elif defined(Q_OS_WIN)
-   x->rgn = 0;
-#endif
 
    if (d->qt_rgn) {
       x->qt_rgn = new QRegionPrivate(*d->qt_rgn);
@@ -3533,6 +3460,10 @@ bool QRegion::isEmpty() const
    return d == &shared_empty || d->qt_rgn->numRects == 0;
 }
 
+bool QRegion::isNull() const
+{
+   return d == &shared_empty || d->qt_rgn->numRects == 0;
+}
 
 bool QRegion::contains(const QPoint &p) const
 {
@@ -3544,7 +3475,6 @@ bool QRegion::contains(const QRect &r) const
    return RectInRegion(d->qt_rgn, r.left(), r.top(), r.width(), r.height()) != RectangleOut;
 }
 
-
 void QRegion::translate(int dx, int dy)
 {
    if ((dx == 0 && dy == 0) || isEmptyHelper(d->qt_rgn)) {
@@ -3555,14 +3485,16 @@ void QRegion::translate(int dx, int dy)
    OffsetRegion(*d->qt_rgn, dx, dy);
 }
 
-QRegion QRegion::unite(const QRegion &r) const
+QRegion QRegion::united(const QRegion &r) const
 {
    if (isEmptyHelper(d->qt_rgn)) {
       return r;
    }
+
    if (isEmptyHelper(r.d->qt_rgn)) {
       return *this;
    }
+
    if (d == r.d) {
       return *this;
    }
@@ -3629,7 +3561,7 @@ QRegion &QRegion::operator+=(const QRegion &r)
    }
 }
 
-QRegion QRegion::unite(const QRect &r) const
+QRegion QRegion::united(const QRect &r) const
 {
    if (isEmptyHelper(d->qt_rgn)) {
       return r;
@@ -3694,10 +3626,10 @@ QRegion &QRegion::operator+=(const QRect &r)
    }
 }
 
-QRegion QRegion::intersect(const QRegion &r) const
+QRegion QRegion::intersected(const QRegion &r) const
 {
    if (isEmptyHelper(d->qt_rgn) || isEmptyHelper(r.d->qt_rgn)
-         || ! EXTENTCHECK(&d->qt_rgn->extents, &r.d->qt_rgn->extents)) {
+      || ! EXTENTCHECK(&d->qt_rgn->extents, &r.d->qt_rgn->extents)) {
       return QRegion();
    }
 
@@ -3744,7 +3676,7 @@ QRegion QRegion::intersect(const QRegion &r) const
    return result;
 }
 
-QRegion QRegion::intersect(const QRect &r) const
+QRegion QRegion::intersected(const QRect &r) const
 {
    if (isEmptyHelper(d->qt_rgn) || r.isEmpty() || ! EXTENTCHECK(&d->qt_rgn->extents, &r)) {
       return QRegion();
@@ -3772,7 +3704,7 @@ QRegion QRegion::intersect(const QRect &r) const
    return result;
 }
 
-QRegion QRegion::subtract(const QRegion &r) const
+QRegion QRegion::subtracted(const QRegion &r) const
 {
    if (isEmptyHelper(d->qt_rgn) || isEmptyHelper(r.d->qt_rgn)) {
       return *this;
@@ -3801,7 +3733,7 @@ QRegion QRegion::subtract(const QRegion &r) const
    return result;
 }
 
-QRegion QRegion::eor(const QRegion &r) const
+QRegion QRegion::xored(const QRegion &r) const
 {
    if (isEmptyHelper(d->qt_rgn)) {
       return r;
@@ -3827,47 +3759,16 @@ QRect QRegion::boundingRect() const
    return d->qt_rgn->extents;
 }
 
-/*! \internal
-    Returns true if \a rect is guaranteed to be fully contained in \a region.
-    A false return value does not guarantee the opposite.
-*/
-#if defined(Q_WS_QWS) || defined(Q_WS_QPA)
-Q_GUI_EXPORT
-#endif
-
 bool qt_region_strictContains(const QRegion &region, const QRect &rect)
 {
    if (isEmptyHelper(region.d->qt_rgn) || !rect.isValid()) {
       return false;
    }
 
-#if 0 // TEST_INNERRECT
-   static bool guard = false;
-   if (guard) {
-      return false;
-   }
-   guard = true;
-   QRegion inner = region.d->qt_rgn->innerRect;
-   Q_ASSERT((inner - region).isEmpty());
-   guard = false;
-
-   int maxArea = 0;
-   for (int i = 0; i < region.d->qt_rgn->numRects; ++i) {
-      const QRect r = region.d->qt_rgn->rects.at(i);
-      if (r.width() * r.height() > maxArea) {
-         maxArea = r.width() * r.height();
-      }
-   }
-
-   if (maxArea > region.d->qt_rgn->innerArea) {
-      qDebug() << "not largest rectangle" << region << region.d->qt_rgn->innerRect;
-   }
-   Q_ASSERT(maxArea <= region.d->qt_rgn->innerArea);
-#endif
 
    const QRect r1 = region.d->qt_rgn->innerRect;
    return (rect.left() >= r1.left() && rect.right() <= r1.right()
-           && rect.top() >= r1.top() && rect.bottom() <= r1.bottom());
+         && rect.top() >= r1.top() && rect.bottom() <= r1.bottom());
 }
 
 QVector<QRect> QRegion::rects() const

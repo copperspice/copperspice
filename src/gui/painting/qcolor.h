@@ -51,6 +51,8 @@ class Q_GUI_EXPORT QColor
    QColor(const char *name);
    QColor(Spec spec);
 
+
+
    QColor &operator=(Qt::GlobalColor color);
 
    bool isValid() const;
@@ -175,17 +177,10 @@ class Q_GUI_EXPORT QColor
    QColor dark(int f = 200) const;
    QColor darker(int f = 200) const;
 
-
    bool operator==(const QColor &c) const;
    bool operator!=(const QColor &c) const;
 
    operator QVariant() const;
-
-#ifdef Q_WS_X11
-   static bool allowX11ColorNames();
-   static void setAllowX11ColorNames(bool enabled);
-#endif
-
    static bool isValidColor(const QString &name);
 
  private:

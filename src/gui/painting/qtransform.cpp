@@ -23,6 +23,7 @@
 #include <qtransform.h>
 #include <qdatastream.h>
 #include <qdebug.h>
+#include <qhashfunc.h>
 #include <qmatrix.h>
 #include <qregion.h>
 #include <qpainterpath.h>
@@ -30,8 +31,7 @@
 #include <qmath.h>
 #include <qnumeric.h>
 #include <qbezier_p.h>
-
-QT_BEGIN_NAMESPACE
+#include <qpainterpath_p.h>
 
 #define Q_NEAR_CLIP (sizeof(qreal) == sizeof(double) ? 0.000001 : 0.0001)
 
@@ -70,172 +70,12 @@ QT_BEGIN_NAMESPACE
         }                                                               \
     } while (0)
 
-/*!
-    \class QTransform
-    \brief The QTransform class specifies 2D transformations of a coordinate system.
-    \since 4.3
-    \ingroup painting
-
-    A transformation specifies how to translate, scale, shear, rotate
-    or project the coordinate system, and is typically used when
-    rendering graphics.
-
-    QTransform differs from QMatrix in that it is a true 3x3 matrix,
-    allowing perspective transformations. QTransform's toAffine()
-    method allows casting QTransform to QMatrix. If a perspective
-    transformation has been specified on the matrix, then the
-    conversion will cause loss of data.
-
-    QTransform is the recommended transformation class in Qt.
-
-    A QTransform object can be built using the setMatrix(), scale(),
-    rotate(), translate() and shear() functions.  Alternatively, it
-    can be built by applying \l {QTransform#Basic Matrix
-    Operations}{basic matrix operations}. The matrix can also be
-    defined when constructed, and it can be reset to the identity
-    matrix (the default) using the reset() function.
-
-    The QTransform class supports mapping of graphic primitives: A given
-    point, line, polygon, region, or painter path can be mapped to the
-    coordinate system defined by \e this matrix using the map()
-    function. In case of a rectangle, its coordinates can be
-    transformed using the mapRect() function. A rectangle can also be
-    transformed into a \e polygon (mapped to the coordinate system
-    defined by \e this matrix), using the mapToPolygon() function.
-
-    QTransform provides the isIdentity() function which returns true if
-    the matrix is the identity matrix, and the isInvertible() function
-    which returns true if the matrix is non-singular (i.e. AB = BA =
-    I). The inverted() function returns an inverted copy of \e this
-    matrix if it is invertible (otherwise it returns the identity
-    matrix), and adjoint() returns the matrix's classical adjoint.
-    In addition, QTransform provides the determinant() function which
-    returns the matrix's determinant.
-
-    Finally, the QTransform class supports matrix multiplication, addition
-    and subtraction, and objects of the class can be streamed as well
-    as compared.
-
-    \tableofcontents
-
-    \section1 Rendering Graphics
-
-    When rendering graphics, the matrix defines the transformations
-    but the actual transformation is performed by the drawing routines
-    in QPainter.
-
-    By default, QPainter operates on the associated device's own
-    coordinate system.  The standard coordinate system of a
-    QPaintDevice has its origin located at the top-left position. The
-    \e x values increase to the right; \e y values increase
-    downward. For a complete description, see the \l {Coordinate
-    System} {coordinate system} documentation.
-
-    QPainter has functions to translate, scale, shear and rotate the
-    coordinate system without using a QTransform. For example:
-
-    \table 100%
-    \row
-    \o \inlineimage qtransform-simpletransformation.png
-    \o
-    \snippet doc/src/snippets/transform/main.cpp 0
-    \endtable
-
-    Although these functions are very convenient, it can be more
-    efficient to build a QTransform and call QPainter::setTransform() if you
-    want to perform more than a single transform operation. For
-    example:
-
-    \table 100%
-    \row
-    \o \inlineimage qtransform-combinedtransformation.png
-    \o
-    \snippet doc/src/snippets/transform/main.cpp 1
-    \endtable
-
-    \section1 Basic Matrix Operations
-
-    \image qtransform-representation.png
-
-    A QTransform object contains a 3 x 3 matrix.  The \c m31 (\c dx) and
-    \c m32 (\c dy) elements specify horizontal and vertical translation.
-    The \c m11 and \c m22 elements specify horizontal and vertical scaling.
-    The \c m21 and \c m12 elements specify horizontal and vertical \e shearing.
-    And finally, the \c m13 and \c m23 elements specify horizontal and vertical
-    projection, with \c m33 as an additional projection factor.
-
-    QTransform transforms a point in the plane to another point using the
-    following formulas:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qtransform.cpp 0
-
-    The point \e (x, y) is the original point, and \e (x', y') is the
-    transformed point. \e (x', y') can be transformed back to \e (x,
-    y) by performing the same operation on the inverted() matrix.
-
-    The various matrix elements can be set when constructing the
-    matrix, or by using the setMatrix() function later on. They can also
-    be manipulated using the translate(), rotate(), scale() and
-    shear() convenience functions. The currently set values can be
-    retrieved using the m11(), m12(), m13(), m21(), m22(), m23(),
-    m31(), m32(), m33(), dx() and dy() functions.
-
-    Translation is the simplest transformation. Setting \c dx and \c
-    dy will move the coordinate system \c dx units along the X axis
-    and \c dy units along the Y axis.  Scaling can be done by setting
-    \c m11 and \c m22. For example, setting \c m11 to 2 and \c m22 to
-    1.5 will double the height and increase the width by 50%.  The
-    identity matrix has \c m11, \c m22, and \c m33 set to 1 (all others are set
-    to 0) mapping a point to itself. Shearing is controlled by \c m12
-    and \c m21. Setting these elements to values different from zero
-    will twist the coordinate system. Rotation is achieved by
-    setting both the shearing factors and the scaling factors. Perspective
-    transformation is achieved by setting both the projection factors and
-    the scaling factors.
-
-    Here's the combined transformations example using basic matrix
-    operations:
-
-    \table 100%
-    \row
-    \o \inlineimage qtransform-combinedtransformation2.png
-    \o
-    \snippet doc/src/snippets/transform/main.cpp 2
-    \endtable
-
-    \sa QPainter, {Coordinate System}, {demos/affine}{Affine
-    Transformations Demo}, {Transformations Example}
-*/
-
-/*!
-    \enum QTransform::TransformationType
-
-    \value TxNone
-    \value TxTranslate
-    \value TxScale
-    \value TxRotate
-    \value TxShear
-    \value TxProject
-*/
-
-/*!
-    \fn QTransform::QTransform(Qt::Initialization)
-    \internal
-*/
-
-/*!
-    Constructs an identity matrix.
-
-    All elements are set to zero except \c m11 and \c m22 (specifying
-    the scale) and \c m13 which are set to 1.
-
-    \sa reset()
-*/
 QTransform::QTransform()
    : affine(true)
    , m_13(0), m_23(0), m_33(1)
    , m_type(TxNone)
    , m_dirty(TxNone)
+   , d(nullptr)
 {
 }
 
@@ -248,12 +88,13 @@ QTransform::QTransform()
     \sa setMatrix()
 */
 QTransform::QTransform(qreal h11, qreal h12, qreal h13,
-                       qreal h21, qreal h22, qreal h23,
-                       qreal h31, qreal h32, qreal h33)
+   qreal h21, qreal h22, qreal h23,
+   qreal h31, qreal h32, qreal h33)
    : affine(h11, h12, h21, h22, h31, h32, true)
    , m_13(h13), m_23(h23), m_33(h33)
    , m_type(TxNone)
    , m_dirty(TxProject)
+   , d(nullptr)
 {
 }
 
@@ -265,11 +106,12 @@ QTransform::QTransform(qreal h11, qreal h12, qreal h13,
     \sa setMatrix()
 */
 QTransform::QTransform(qreal h11, qreal h12, qreal h21,
-                       qreal h22, qreal dx, qreal dy)
+   qreal h22, qreal dx, qreal dy)
    : affine(h11, h12, h21, h22, dx, dy, true)
    , m_13(0), m_23(0), m_33(1)
    , m_type(TxNone)
    , m_dirty(TxShear)
+   , d(nullptr)
 {
 }
 
@@ -283,8 +125,9 @@ QTransform::QTransform(qreal h11, qreal h12, qreal h21,
 QTransform::QTransform(const QMatrix &mtx)
    : affine(mtx._m11, mtx._m12, mtx._m21, mtx._m22, mtx._dx, mtx._dy, true),
      m_13(0), m_23(0), m_33(1)
-     , m_type(TxNone)
-     , m_dirty(TxShear)
+   , m_type(TxNone)
+   , m_dirty(TxShear)
+   , d(nullptr)
 {
 }
 
@@ -307,8 +150,8 @@ QTransform QTransform::adjoint() const
    h33 = affine._m11 * affine._m22 - affine._m12 * affine._m21;
 
    return QTransform(h11, h12, h13,
-                     h21, h22, h23,
-                     h31, h32, h33, true);
+         h21, h22, h23,
+         h31, h32, h33, true);
 }
 
 /*!
@@ -317,8 +160,8 @@ QTransform QTransform::adjoint() const
 QTransform QTransform::transposed() const
 {
    QTransform t(affine._m11, affine._m21, affine._dx,
-                affine._m12, affine._m22, affine._dy,
-                m_13, m_23, m_33, true);
+      affine._m12, affine._m22, affine._dy,
+      m_13, m_23, m_33, true);
    t.m_type = m_type;
    t.m_dirty = m_dirty;
    return t;
@@ -465,6 +308,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
    if (sx == 1 && sy == 1) {
       return *this;
    }
+
 #ifndef QT_NO_DEBUG
    if (qIsNaN(sx) | qIsNaN(sy)) {
       qWarning() << "QTransform::scale with NaN called";
@@ -770,21 +614,31 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
 bool QTransform::operator==(const QTransform &o) const
 {
    return affine._m11 == o.affine._m11 &&
-          affine._m12 == o.affine._m12 &&
-          affine._m21 == o.affine._m21 &&
-          affine._m22 == o.affine._m22 &&
-          affine._dx == o.affine._dx &&
-          affine._dy == o.affine._dy &&
-          m_13 == o.m_13 &&
-          m_23 == o.m_23 &&
-          m_33 == o.m_33;
+      affine._m12 == o.affine._m12 &&
+      affine._m21 == o.affine._m21 &&
+      affine._m22 == o.affine._m22 &&
+      affine._dx == o.affine._dx &&
+      affine._dy == o.affine._dy &&
+      m_13 == o.m_13 &&
+      m_23 == o.m_23 &&
+      m_33 == o.m_33;
 }
 
-/*!
-    \fn bool QTransform::operator!=(const QTransform &matrix) const
-    Returns true if this matrix is not equal to the given \a matrix,
-    otherwise returns false.
-*/
+uint qHash(const QTransform &key, uint seed)
+{
+   seed = qHash(key.m11(), seed);
+   seed = qHash(key.m12(), seed);
+   seed = qHash(key.m21(), seed);
+   seed = qHash(key.m22(), seed);
+   seed = qHash(key.dx(),  seed);
+   seed = qHash(key.dy(),  seed);
+   seed = qHash(key.m13(), seed);
+   seed = qHash(key.m23(), seed);
+   seed = qHash(key.m33(), seed);
+
+   return seed;
+}
+
 bool QTransform::operator!=(const QTransform &o) const
 {
    return !operator==(o);
@@ -972,41 +826,6 @@ QTransform QTransform::operator*(const QTransform &m) const
    return t;
 }
 
-/*!
-    \fn QTransform & QTransform::operator*=(qreal scalar)
-    \overload
-
-    Returns the result of performing an element-wise multiplication of this
-    matrix with the given \a scalar.
-*/
-
-/*!
-    \fn QTransform & QTransform::operator/=(qreal scalar)
-    \overload
-
-    Returns the result of performing an element-wise division of this
-    matrix by the given \a scalar.
-*/
-
-/*!
-    \fn QTransform & QTransform::operator+=(qreal scalar)
-    \overload
-
-    Returns the matrix obtained by adding the given \a scalar to each
-    element of this matrix.
-*/
-
-/*!
-    \fn QTransform & QTransform::operator-=(qreal scalar)
-    \overload
-
-    Returns the matrix obtained by subtracting the given \a scalar from each
-    element of this matrix.
-*/
-
-/*!
-    Assigns the given \a matrix's values to this matrix.
-*/
 QTransform &QTransform::operator=(const QTransform &matrix)
 {
    affine._m11 = matrix.affine._m11;
@@ -1024,14 +843,6 @@ QTransform &QTransform::operator=(const QTransform &matrix)
    return *this;
 }
 
-/*!
-    Resets the matrix to an identity matrix, i.e. all elements are set
-    to zero, except \c m11 and \c m22 (specifying the scale) and \c m33
-    which are set to 1.
-
-    \sa QTransform(), isIdentity(), {QTransform#Basic Matrix
-    Operations}{Basic Matrix Operations}
-*/
 void QTransform::reset()
 {
    affine._m11 = affine._m22 = m_33 = 1.0;
@@ -1040,41 +851,20 @@ void QTransform::reset()
    m_dirty = TxNone;
 }
 
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QTransform &matrix)
-    \since 4.3
-    \relates QTransform
-
-    Writes the given \a matrix to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &s, const QTransform &m)
 {
    s << double(m.m11())
-     << double(m.m12())
-     << double(m.m13())
-     << double(m.m21())
-     << double(m.m22())
-     << double(m.m23())
-     << double(m.m31())
-     << double(m.m32())
-     << double(m.m33());
+      << double(m.m12())
+      << double(m.m13())
+      << double(m.m21())
+      << double(m.m22())
+      << double(m.m23())
+      << double(m.m31())
+      << double(m.m32())
+      << double(m.m33());
    return s;
 }
 
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QTransform &matrix)
-    \since 4.3
-    \relates QTransform
-
-    Reads the given \a matrix from the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &s, QTransform &t)
 {
    double m11, m12, m13,
@@ -1091,16 +881,16 @@ QDataStream &operator>>(QDataStream &s, QTransform &t)
    s >> m32;
    s >> m33;
    t.setMatrix(m11, m12, m13,
-               m21, m22, m23,
-               m31, m32, m33);
+      m21, m22, m23,
+      m31, m32, m33);
    return s;
 }
 
-#endif // QT_NO_DATASTREAM
+
 
 QDebug operator<<(QDebug dbg, const QTransform &m)
 {
-   static const char *typeStr[] = {
+   static const char *const typeStr[] = {
       "TxNone",
       "TxTranslate",
       "TxScale",
@@ -1112,19 +902,20 @@ QDebug operator<<(QDebug dbg, const QTransform &m)
       "TxProject"
    };
 
+   QDebugStateSaver saver(dbg);
    dbg.nospace() << "QTransform(type=" << typeStr[m.type()] << ','
-                 << " 11=" << m.m11()
-                 << " 12=" << m.m12()
-                 << " 13=" << m.m13()
-                 << " 21=" << m.m21()
-                 << " 22=" << m.m22()
-                 << " 23=" << m.m23()
-                 << " 31=" << m.m31()
-                 << " 32=" << m.m32()
-                 << " 33=" << m.m33()
-                 << ')';
+      << " 11=" << m.m11()
+      << " 12=" << m.m12()
+      << " 13=" << m.m13()
+      << " 21=" << m.m21()
+      << " 22=" << m.m22()
+      << " 23=" << m.m23()
+      << " 31=" << m.m31()
+      << " 32=" << m.m32()
+      << " 33=" << m.m33()
+      << ')';
 
-   return dbg.space();
+   return dbg;
 }
 
 
@@ -1222,40 +1013,6 @@ QPointF QTransform::map(const QPointF &p) const
    return QPointF(x, y);
 }
 
-/*!
-    \fn QPoint QTransform::map(const QPoint &point) const
-    \overload
-
-    Creates and returns a QPoint object that is a copy of the given \a
-    point, mapped into the coordinate system defined by this
-    matrix. Note that the transformed coordinates are rounded to the
-    nearest integer.
-*/
-
-/*!
-    \fn QLineF operator*(const QLineF &line, const QTransform &matrix)
-    \relates QTransform
-
-    This is the same as \a{matrix}.map(\a{line}).
-
-    \sa QTransform::map()
-*/
-
-/*!
-    \fn QLine operator*(const QLine &line, const QTransform &matrix)
-    \relates QTransform
-
-    This is the same as \a{matrix}.map(\a{line}).
-
-    \sa QTransform::map()
-*/
-
-/*!
-    \overload
-
-    Creates and returns a QLineF object that is a copy of the given line,
-    \a l, mapped into the coordinate system defined by this matrix.
-*/
 QLine QTransform::map(const QLine &l) const
 {
    qreal fx1 = l.x1();
@@ -1379,40 +1136,18 @@ static QPolygonF mapProjective(const QTransform &transform, const QPolygonF &pol
    path = transform.map(path);
 
    QPolygonF result;
-   for (int i = 0; i < path.elementCount(); ++i) {
+   const int elementCount = path.elementCount();
+   result.reserve(elementCount);
+
+   for (int i = 0; i < elementCount; ++i) {
       result << path.elementAt(i);
    }
+
    return result;
 }
 
 
-/*!
-    \fn QPolygonF operator *(const QPolygonF &polygon, const QTransform &matrix)
-    \since 4.3
-    \relates QTransform
 
-    This is the same as \a{matrix}.map(\a{polygon}).
-
-    \sa QTransform::map()
-*/
-
-/*!
-    \fn QPolygon operator*(const QPolygon &polygon, const QTransform &matrix)
-    \relates QTransform
-
-    This is the same as \a{matrix}.map(\a{polygon}).
-
-    \sa QTransform::map()
-*/
-
-/*!
-    \fn QPolygonF QTransform::map(const QPolygonF &polygon) const
-    \overload
-
-    Creates and returns a QPolygonF object that is a copy of the given
-    \a polygon, mapped into the coordinate system defined by this
-    matrix.
-*/
 QPolygonF QTransform::map(const QPolygonF &a) const
 {
    TransformationType t = inline_type();
@@ -1537,7 +1272,7 @@ static inline QHomogeneousCoordinate mapHomogeneous(const QTransform &transform,
 }
 
 static inline bool lineTo_clipped(QPainterPath &path, const QTransform &transform, const QPointF &a, const QPointF &b,
-                                  bool needsMoveTo, bool needsLineTo = true)
+   bool needsMoveTo, bool needsLineTo = true)
 {
    QHomogeneousCoordinate ha = mapHomogeneous(transform, a);
    QHomogeneousCoordinate hb = mapHomogeneous(transform, b);
@@ -1581,7 +1316,7 @@ static inline bool lineTo_clipped(QPainterPath &path, const QTransform &transfor
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 
 static inline bool cubicTo_clipped(QPainterPath &path, const QTransform &transform, const QPointF &a, const QPointF &b,
-                                   const QPointF &c, const QPointF &d, bool needsMoveTo)
+   const QPointF &c, const QPointF &d, bool needsMoveTo)
 {
    // Convert projective xformed curves to line
    // segments so they can be transformed more accurately
@@ -1627,7 +1362,7 @@ static QPainterPath mapProjective(const QTransform &transform, const QPainterPat
             break;
          case QPainterPath::CurveToElement:
             if (cubicTo_clipped(result, transform, last, path.elementAt(i), path.elementAt(i + 1), path.elementAt(i + 2),
-                                needsMoveTo)) {
+                  needsMoveTo)) {
                needsMoveTo = false;
             }
             i += 2;
@@ -1646,23 +1381,6 @@ static QPainterPath mapProjective(const QTransform &transform, const QPainterPat
    return result;
 }
 
-/*!
-    \fn QPainterPath operator *(const QPainterPath &path, const QTransform &matrix)
-    \since 4.3
-    \relates QTransform
-
-    This is the same as \a{matrix}.map(\a{path}).
-
-    \sa QTransform::map()
-*/
-
-/*!
-    \overload
-
-    Creates and returns a QPainterPath object that is a copy of the
-    given \a path, mapped into the coordinate system defined by this
-    matrix.
-*/
 QPainterPath QTransform::map(const QPainterPath &path) const
 {
    TransformationType t = inline_type();
@@ -1690,26 +1408,6 @@ QPainterPath QTransform::map(const QPainterPath &path) const
    return copy;
 }
 
-/*!
-    \fn QPolygon QTransform::mapToPolygon(const QRect &rectangle) const
-
-    Creates and returns a QPolygon representation of the given \a
-    rectangle, mapped into the coordinate system defined by this
-    matrix.
-
-    The rectangle's coordinates are transformed using the following
-    formulas:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qtransform.cpp 1
-
-    Polygons and rectangles behave slightly differently when
-    transformed (due to integer rounding), so
-    \c{matrix.map(QPolygon(rectangle))} is not always the same as
-    \c{matrix.mapToPolygon(rectangle)}.
-
-    \sa mapRect(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
 QPolygon QTransform::mapToPolygon(const QRect &rect) const
 {
    TransformationType t = inline_type();
@@ -1747,9 +1445,9 @@ QPolygon QTransform::mapToPolygon(const QRect &rect) const
    // all coordinates are correctly, tranform to a pointarray
    // (rounding to the next integer)
    a.setPoints(4, qRound(x[0]), qRound(y[0]),
-               qRound(x[1]), qRound(y[1]),
-               qRound(x[2]), qRound(y[2]),
-               qRound(x[3]), qRound(y[3]));
+      qRound(x[1]), qRound(y[1]),
+      qRound(x[2]), qRound(y[2]),
+      qRound(x[3]), qRound(y[3]));
    return a;
 }
 
@@ -1781,8 +1479,8 @@ bool QTransform::squareToQuad(const QPolygonF &quad, QTransform &trans)
 
    if (!ax && !ay) { //afine transform
       trans.setMatrix(dx1 - dx0, dy1 - dy0,  0,
-                      dx2 - dx1, dy2 - dy1,  0,
-                      dx0,       dy0,  1);
+         dx2 - dx1, dy2 - dy1,  0,
+         dx0,       dy0,  1);
    } else {
       double ax1 = dx1 - dx2;
       double ax2 = dx3 - dx2;
@@ -1811,8 +1509,8 @@ bool QTransform::squareToQuad(const QPolygonF &quad, QTransform &trans)
       f = dy0;
 
       trans.setMatrix(a, d, g,
-                      b, e, h,
-                      c, f, 1.0);
+         b, e, h,
+         c, f, 1.0);
    }
 
    return true;
@@ -1852,8 +1550,8 @@ bool QTransform::quadToSquare(const QPolygonF &quad, QTransform &trans)
     \sa squareToQuad(), quadToSquare()
 */
 bool QTransform::quadToQuad(const QPolygonF &one,
-                            const QPolygonF &two,
-                            QTransform &trans)
+   const QPolygonF &two,
+   QTransform &trans)
 {
    QTransform stq;
    if (!quadToSquare(one, trans)) {
@@ -1879,19 +1577,22 @@ bool QTransform::quadToQuad(const QPolygonF &one,
 */
 
 void QTransform::setMatrix(qreal m11, qreal m12, qreal m13,
-                           qreal m21, qreal m22, qreal m23,
-                           qreal m31, qreal m32, qreal m33)
+   qreal m21, qreal m22, qreal m23,
+   qreal m31, qreal m32, qreal m33)
 {
    affine._m11 = m11;
    affine._m12 = m12;
    m_13 = m13;
+
    affine._m21 = m21;
    affine._m22 = m22;
    m_23 = m23;
+
    affine._dx = m31;
    affine._dy = m32;
    m_33 = m33;
-   m_type = TxNone;
+
+   m_type  = TxNone;
    m_dirty = TxProject;
 }
 
@@ -1955,25 +1656,6 @@ QRect QTransform::mapRect(const QRect &rect) const
    }
 }
 
-/*!
-    \fn QRectF QTransform::mapRect(const QRectF &rectangle) const
-
-    Creates and returns a QRectF object that is a copy of the given \a
-    rectangle, mapped into the coordinate system defined by this
-    matrix.
-
-    The rectangle's coordinates are transformed using the following
-    formulas:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qtransform.cpp 2
-
-    If rotation or shearing has been specified, this function returns
-    the \e bounding rectangle. To retrieve the exact region the given
-    \a rectangle maps to, use the mapToPolygon() function instead.
-
-    \sa mapToPolygon(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
 QRectF QTransform::mapRect(const QRectF &rect) const
 {
    TransformationType t = inline_type();
@@ -1995,6 +1677,7 @@ QRectF QTransform::mapRect(const QRectF &rect) const
          y -= h;
       }
       return QRectF(x, y, w, h);
+
    } else if (t < TxProject || !needsPerspectiveClipping(rect, *this)) {
       qreal x = 0, y = 0;
       MAP(rect.x(), rect.y(), x, y);
@@ -2018,6 +1701,7 @@ QRectF QTransform::mapRect(const QRectF &rect) const
       xmax = qMax(xmax, x);
       ymax = qMax(ymax, y);
       return QRectF(xmin, ymin, xmax - xmin, ymax - ymin);
+
    } else {
       QPainterPath path;
       path.addRect(rect);
@@ -2025,44 +1709,13 @@ QRectF QTransform::mapRect(const QRectF &rect) const
    }
 }
 
-/*!
-    \fn QRect QTransform::mapRect(const QRect &rectangle) const
-    \overload
-
-    Creates and returns a QRect object that is a copy of the given \a
-    rectangle, mapped into the coordinate system defined by this
-    matrix. Note that the transformed coordinates are rounded to the
-    nearest integer.
-*/
-
-/*!
-    Maps the given coordinates \a x and \a y into the coordinate
-    system defined by this matrix. The resulting values are put in *\a
-    tx and *\a ty, respectively.
-
-    The coordinates are transformed using the following formulas:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qtransform.cpp 3
-
-    The point (x, y) is the original point, and (x', y') is the
-    transformed point.
-
-    \sa {QTransform#Basic Matrix Operations}{Basic Matrix Operations}
-*/
 void QTransform::map(qreal x, qreal y, qreal *tx, qreal *ty) const
 {
    TransformationType t = inline_type();
    MAP(x, y, *tx, *ty);
 }
 
-/*!
-    \overload
 
-    Maps the given coordinates \a x and \a y into the coordinate
-    system defined by this matrix. The resulting values are put in *\a
-    tx and *\a ty, respectively. Note that the transformed coordinates
-    are rounded to the nearest integer.
-*/
 void QTransform::map(int x, int y, int *tx, int *ty) const
 {
    TransformationType t = inline_type();
@@ -2072,29 +1725,11 @@ void QTransform::map(int x, int y, int *tx, int *ty) const
    *ty = qRound(fy);
 }
 
-/*!
-  Returns the QTransform as an affine matrix.
-
-  \warning If a perspective transformation has been specified,
-  then the conversion will cause loss of data.
-*/
 const QMatrix &QTransform::toAffine() const
 {
    return affine;
 }
 
-/*!
-  Returns the transformation type of this matrix.
-
-  The transformation type is the highest enumeration value
-  capturing all of the matrix's transformations. For example,
-  if the matrix both scales and shears, the type would be \c TxShear,
-  because \c TxShear has a higher enumeration value than \c TxScale.
-
-  Knowing the transformation type of a matrix is useful for optimization:
-  you can often handle specific types more optimally than handling
-  the generic case.
-  */
 QTransform::TransformationType QTransform::type() const
 {
    if (m_dirty == TxNone || m_dirty < m_type) {
@@ -2147,188 +1782,11 @@ QTransform::operator QVariant() const
 }
 
 
-/*!
-    \fn bool QTransform::isInvertible() const
-
-    Returns true if the matrix is invertible, otherwise returns false.
-
-    \sa inverted()
-*/
-
-/*!
-    \fn qreal QTransform::det() const
-    \obsolete
-
-    Returns the matrix's determinant. Use determinant() instead.
-*/
-
-
-/*!
-    \fn qreal QTransform::m11() const
-
-    Returns the horizontal scaling factor.
-
-    \sa scale(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::m12() const
-
-    Returns the vertical shearing factor.
-
-    \sa shear(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::m21() const
-
-    Returns the horizontal shearing factor.
-
-    \sa shear(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::m22() const
-
-    Returns the vertical scaling factor.
-
-    \sa scale(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::dx() const
-
-    Returns the horizontal translation factor.
-
-    \sa m31(), translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::dy() const
-
-    Returns the vertical translation factor.
-
-    \sa translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-
-/*!
-    \fn qreal QTransform::m13() const
-
-    Returns the horizontal projection factor.
-
-    \sa translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-
-/*!
-    \fn qreal QTransform::m23() const
-
-    Returns the vertical projection factor.
-
-    \sa translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::m31() const
-
-    Returns the horizontal translation factor.
-
-    \sa dx(), translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::m32() const
-
-    Returns the vertical translation factor.
-
-    \sa dy(), translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::m33() const
-
-    Returns the division factor.
-
-    \sa translate(), {QTransform#Basic Matrix Operations}{Basic Matrix
-    Operations}
-*/
-
-/*!
-    \fn qreal QTransform::determinant() const
-
-    Returns the matrix's determinant.
-*/
-
-/*!
-    \fn bool QTransform::isIdentity() const
-
-    Returns true if the matrix is the identity matrix, otherwise
-    returns false.
-
-    \sa reset()
-*/
-
-/*!
-    \fn bool QTransform::isAffine() const
-
-    Returns true if the matrix represent an affine transformation,
-    otherwise returns false.
-*/
-
-/*!
-    \fn bool QTransform::isScaling() const
-
-    Returns true if the matrix represents a scaling
-    transformation, otherwise returns false.
-
-    \sa reset()
-*/
-
-/*!
-    \fn bool QTransform::isRotating() const
-
-    Returns true if the matrix represents some kind of a
-    rotating transformation, otherwise returns false.
-
-    \sa reset()
-*/
-
-/*!
-    \fn bool QTransform::isTranslating() const
-
-    Returns true if the matrix represents a translating
-    transformation, otherwise returns false.
-
-    \sa reset()
-*/
-
-/*!
-    \fn bool qFuzzyCompare(const QTransform& t1, const QTransform& t2)
-
-    \relates QTransform
-    \since 4.6
-
-    Returns true if \a t1 and \a t2 are equal, allowing for a small
-    fuzziness factor for floating-point comparisons; false otherwise.
-*/
-
 
 // returns true if the transform is uniformly scaling
 // (same scale in x and y direction)
 // scale is set to the max of x and y scaling factors
-Q_GUI_EXPORT
-bool qt_scaleForTransform(const QTransform &transform, qreal *scale)
+Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale)
 {
    const QTransform::TransformationType type = transform.type();
    if (type <= QTransform::TxTranslate) {
@@ -2336,23 +1794,41 @@ bool qt_scaleForTransform(const QTransform &transform, qreal *scale)
          *scale = 1;
       }
       return true;
+
    } else if (type == QTransform::TxScale) {
       const qreal xScale = qAbs(transform.m11());
       const qreal yScale = qAbs(transform.m22());
+
       if (scale) {
          *scale = qMax(xScale, yScale);
       }
       return qFuzzyCompare(xScale, yScale);
    }
 
-   const qreal xScale = transform.m11() * transform.m11()
-                        + transform.m21() * transform.m21();
-   const qreal yScale = transform.m12() * transform.m12()
-                        + transform.m22() * transform.m22();
-   if (scale) {
-      *scale = qSqrt(qMax(xScale, yScale));
-   }
-   return type == QTransform::TxRotate && qFuzzyCompare(xScale, yScale);
-}
+   // rotate then scale: compare columns
+   const qreal xScale1 = transform.m11() * transform.m11()
+      + transform.m21() * transform.m21();
+   const qreal yScale1 = transform.m12() * transform.m12()
+      + transform.m22() * transform.m22();
 
-QT_END_NAMESPACE
+   // scale then rotate: compare rows
+   const qreal xScale2 = transform.m11() * transform.m11()
+      + transform.m12() * transform.m12();
+   const qreal yScale2 = transform.m21() * transform.m21()
+      + transform.m22() * transform.m22();
+
+   // decide the order of rotate and scale operations
+   if (qAbs(xScale1 - yScale1) > qAbs(xScale2 - yScale2)) {
+      if (scale) {
+         *scale = qSqrt(qMax(xScale1, yScale1));
+      }
+
+      return type == QTransform::TxRotate && qFuzzyCompare(xScale1, yScale1);
+   } else {
+      if (scale) {
+         *scale = qSqrt(qMax(xScale2, yScale2));
+      }
+
+      return type == QTransform::TxRotate && qFuzzyCompare(xScale2, yScale2);
+   }
+}

@@ -23,20 +23,10 @@
 #include <qcolor.h>
 #include <qcolor_p.h>
 #include <qnamespace.h>
-#include <qcolormap.h>
+
 #include <qdatastream.h>
 #include <qvariant.h>
 #include <qdebug.h>
-
-#ifdef Q_WS_X11
-#  include <qapplication.h>
-#  include <qx11info_x11.h>
-#  include <qt_x11_p.h>
-
-static bool allowX11ColorNames = false;
-
-#endif
-
 
 #include <stdio.h>
 #include <limits.h>
@@ -110,9 +100,9 @@ QColor::QColor(Qt::GlobalColor color)
 #undef QRGBA
 
    setRgb(qRed(global_colors[color]),
-          qGreen(global_colors[color]),
-          qBlue(global_colors[color]),
-          qAlpha(global_colors[color]));
+      qGreen(global_colors[color]),
+      qBlue(global_colors[color]),
+      qAlpha(global_colors[color]));
 }
 
 QColor::QColor(QRgb color)
@@ -127,7 +117,7 @@ QColor::QColor(QRgb color)
 
 QColor::QColor(QRgba64 rgba64)
 {
-    setRgba64(rgba64);
+   setRgba64(rgba64);
 }
 // internal
 QColor::QColor(Spec spec)
@@ -155,11 +145,11 @@ QString QColor::name(NameFormat format) const
 {
    switch (format) {
       case HexRgb:
-        return '#' + QString::number(rgba() | 0x1000000, 16).rightView(6);
+         return '#' + QString::number(rgba() | 0x1000000, 16).rightView(6);
 
-       case HexArgb:
-        // it is called rgba() but it does return AARRGGBB
-        return '#' + QString::number(rgba() | 0x100000000, 16).rightView(8);
+      case HexArgb:
+         // it is called rgba() but it does return AARRGGBB
+         return '#' + QString::number(rgba() | 0x100000000, 16).rightView(8);
    }
 
    return QString();
@@ -206,20 +196,8 @@ bool QColor::setColorFromString(const QString &name)
 #endif
 
    {
-
-#ifdef Q_WS_X11
-      XColor result;
-
-      if (allowX11ColorNames() && QApplication::instance() && QX11Info::display()
-            && XParseColor(QX11Info::display(), QX11Info::appColormap(), name.toLatin1().constData(), &result)) {
-         setRgb(result.red >> 8, result.green >> 8, result.blue >> 8);
-         return true;
-      } else
-#endif
-      {
-         invalidate();
-         return false;
-      }
+      invalidate();
+      return false;
    }
 }
 
@@ -275,9 +253,9 @@ void QColor::getHsv(int *h, int *s, int *v, int *a) const
 void QColor::setHsvF(qreal h, qreal s, qreal v, qreal a)
 {
    if (((h < qreal(0.0) || h > qreal(1.0)) && h != qreal(-1.0))
-         || (s < qreal(0.0) || s > qreal(1.0))
-         || (v < qreal(0.0) || v > qreal(1.0))
-         || (a < qreal(0.0) || a > qreal(1.0))) {
+      || (s < qreal(0.0) || s > qreal(1.0))
+      || (v < qreal(0.0) || v > qreal(1.0))
+      || (a < qreal(0.0) || a > qreal(1.0))) {
       qWarning("QColor::setHsvF: HSV parameters out of range");
       return;
    }
@@ -349,9 +327,9 @@ void QColor::getHsl(int *h, int *s, int *l, int *a) const
 void QColor::setHslF(qreal h, qreal s, qreal l, qreal a)
 {
    if (((h < qreal(0.0) || h > qreal(1.0)) && h != qreal(-1.0))
-         || (s < qreal(0.0) || s > qreal(1.0))
-         || (l < qreal(0.0) || l > qreal(1.0))
-         || (a < qreal(0.0) || a > qreal(1.0))) {
+      || (s < qreal(0.0) || s > qreal(1.0))
+      || (l < qreal(0.0) || l > qreal(1.0))
+      || (a < qreal(0.0) || a > qreal(1.0))) {
       qWarning("QColor::setHsvF: HSV parameters out of range");
       return;
    }
@@ -424,9 +402,9 @@ void QColor::getRgb(int *r, int *g, int *b, int *a) const
 void QColor::setRgbF(qreal r, qreal g, qreal b, qreal a)
 {
    if (r < qreal(0.0) || r > qreal(1.0)
-         || g < qreal(0.0) || g > qreal(1.0)
-         || b < qreal(0.0) || b > qreal(1.0)
-         || a < qreal(0.0) || a > qreal(1.0)) {
+      || g < qreal(0.0) || g > qreal(1.0)
+      || b < qreal(0.0) || b > qreal(1.0)
+      || a < qreal(0.0) || a > qreal(1.0)) {
       qWarning("QColor::setRgbF: RGB parameters out of range");
       invalidate();
       return;
@@ -456,12 +434,6 @@ void QColor::setRgb(int r, int g, int b, int a)
    ct.argb.pad   = 0;
 }
 
-/*!
-    \obsolete
-    \fn void QColor::setRgba(int r, int g, int b, int a)
-
-    Use setRgb() instead.
-*/
 
 QRgb QColor::rgba() const
 {
@@ -483,18 +455,19 @@ void QColor::setRgba(QRgb rgba)
 
 QRgba64 QColor::rgba64() const
 {
-    if (cspec != Invalid && cspec != Rgb)
-        return toRgb().rgba64();
-    return qRgba64(ct.argb.red, ct.argb.green, ct.argb.blue, ct.argb.alpha);
+   if (cspec != Invalid && cspec != Rgb) {
+      return toRgb().rgba64();
+   }
+   return qRgba64(ct.argb.red, ct.argb.green, ct.argb.blue, ct.argb.alpha);
 }
 void QColor::setRgba64(QRgba64 rgba)
 {
-    cspec = Rgb;
-    ct.argb.alpha = rgba.alpha();
-    ct.argb.red   = rgba.red();
-    ct.argb.green = rgba.green();
-    ct.argb.blue  = rgba.blue();
-    ct.argb.pad   = 0;
+   cspec = Rgb;
+   ct.argb.alpha = rgba.alpha();
+   ct.argb.red   = rgba.red();
+   ct.argb.green = rgba.green();
+   ct.argb.blue  = rgba.blue();
+   ct.argb.pad   = 0;
 }
 QRgb QColor::rgb() const
 {
@@ -918,9 +891,9 @@ QColor QColor::toRgb() const
 
             const qreal temp1 = (qreal(2.0) * l) - temp2;
             qreal temp3[3] = { h + (qreal(1.0) / qreal(3.0)),
-                               h,
-                               h - (qreal(1.0) / qreal(3.0))
-                             };
+                  h,
+                  h - (qreal(1.0) / qreal(3.0))
+               };
 
             for (int i = 0; i != 3; ++i) {
                if (temp3[i] < qreal(0.0)) {
@@ -936,7 +909,7 @@ QColor QColor::toRgb() const
                   color.ct.array[i + 1] = qRound(temp2 * USHRT_MAX);
                } else if ((temp3[i] * qreal(3.0)) < qreal(2.0)) {
                   color.ct.array[i + 1] = qRound((temp1 + (temp2 - temp1) * (qreal(2.0) / qreal(3.0) - temp3[i]) * qreal(
-                                                     6.0)) * USHRT_MAX);
+                              6.0)) * USHRT_MAX);
                } else {
                   color.ct.array[i + 1] = qRound(temp1 * USHRT_MAX);
                }
@@ -964,7 +937,6 @@ QColor QColor::toRgb() const
 
    return color;
 }
-
 
 #define Q_MAX_3(a, b, c) ( ( a > b && a > c) ? a : (b > c ? b : c) )
 #define Q_MIN_3(a, b, c) ( ( a < b && a < c) ? a : (b < c ? b : c) )
@@ -1042,6 +1014,7 @@ QColor QColor::toHsl() const
    const qreal delta2 = max + min;
    const qreal lightness = qreal(0.5) * delta2;
    color.ct.ahsl.lightness = qRound(lightness * USHRT_MAX);
+
    if (qFuzzyIsNull(delta)) {
       // achromatic case, hue is undefined
       color.ct.ahsl.hue = USHRT_MAX;
@@ -1144,9 +1117,9 @@ QColor QColor::fromRgba(QRgb rgba)
 QColor QColor::fromRgb(int r, int g, int b, int a)
 {
    if (r < 0 || r > 255
-         || g < 0 || g > 255
-         || b < 0 || b > 255
-         || a < 0 || a > 255) {
+      || g < 0 || g > 255
+      || b < 0 || b > 255
+      || a < 0 || a > 255) {
       qWarning("QColor::fromRgb: RGB parameters out of range");
       return QColor();
    }
@@ -1164,9 +1137,9 @@ QColor QColor::fromRgb(int r, int g, int b, int a)
 QColor QColor::fromRgbF(qreal r, qreal g, qreal b, qreal a)
 {
    if (r < qreal(0.0) || r > qreal(1.0)
-         || g < qreal(0.0) || g > qreal(1.0)
-         || b < qreal(0.0) || b > qreal(1.0)
-         || a < qreal(0.0) || a > qreal(1.0)) {
+      || g < qreal(0.0) || g > qreal(1.0)
+      || b < qreal(0.0) || b > qreal(1.0)
+      || a < qreal(0.0) || a > qreal(1.0)) {
       qWarning("QColor::fromRgbF: RGB parameters out of range");
       return QColor();
    }
@@ -1183,22 +1156,22 @@ QColor QColor::fromRgbF(qreal r, qreal g, qreal b, qreal a)
 
 QColor QColor::fromRgba64(ushort r, ushort g, ushort b, ushort a)
 {
-    QColor color;
-    color.setRgba64(qRgba64(r, g, b, a));
-    return color;
+   QColor color;
+   color.setRgba64(qRgba64(r, g, b, a));
+   return color;
 }
 QColor QColor::fromRgba64(QRgba64 rgba64)
 {
-    QColor color;
-    color.setRgba64(rgba64);
-    return color;
+   QColor color;
+   color.setRgba64(rgba64);
+   return color;
 }
 QColor QColor::fromHsv(int h, int s, int v, int a)
 {
    if (((h < 0 || h >= 360) && h != -1)
-         || s < 0 || s > 255
-         || v < 0 || v > 255
-         || a < 0 || a > 255) {
+      || s < 0 || s > 255
+      || v < 0 || v > 255
+      || a < 0 || a > 255) {
       qWarning("QColor::fromHsv: HSV parameters out of range");
       return QColor();
    }
@@ -1216,9 +1189,9 @@ QColor QColor::fromHsv(int h, int s, int v, int a)
 QColor QColor::fromHsvF(qreal h, qreal s, qreal v, qreal a)
 {
    if (((h < qreal(0.0) || h > qreal(1.0)) && h != qreal(-1.0))
-         || (s < qreal(0.0) || s > qreal(1.0))
-         || (v < qreal(0.0) || v > qreal(1.0))
-         || (a < qreal(0.0) || a > qreal(1.0))) {
+      || (s < qreal(0.0) || s > qreal(1.0))
+      || (v < qreal(0.0) || v > qreal(1.0))
+      || (a < qreal(0.0) || a > qreal(1.0))) {
       qWarning("QColor::fromHsvF: HSV parameters out of range");
       return QColor();
    }
@@ -1236,19 +1209,19 @@ QColor QColor::fromHsvF(qreal h, qreal s, qreal v, qreal a)
 QColor QColor::fromHsl(int h, int s, int l, int a)
 {
    if (((h < 0 || h >= 360) && h != -1)
-         || s < 0 || s > 255
-         || l < 0 || l > 255
-         || a < 0 || a > 255) {
-        qWarning("QColor::fromHsl: HSL parameters out of range");
+      || s < 0 || s > 255
+      || l < 0 || l > 255
+      || a < 0 || a > 255) {
+      qWarning("QColor::fromHsl: HSL parameters out of range");
       return QColor();
    }
 
    QColor color;
    color.cspec = Hsl;
-    color.ct.ahsl.alpha      = a * 0x101;
+   color.ct.ahsl.alpha      = a * 0x101;
    color.ct.ahsl.hue        = h == -1 ? USHRT_MAX : (h % 360) * 100;
-    color.ct.ahsl.saturation = s * 0x101;
-    color.ct.ahsl.lightness  = l * 0x101;
+   color.ct.ahsl.saturation = s * 0x101;
+   color.ct.ahsl.lightness  = l * 0x101;
    color.ct.ahsl.pad        = 0;
    return color;
 }
@@ -1256,23 +1229,24 @@ QColor QColor::fromHsl(int h, int s, int l, int a)
 QColor QColor::fromHslF(qreal h, qreal s, qreal l, qreal a)
 {
    if (((h < qreal(0.0) || h > qreal(1.0)) && h != qreal(-1.0))
-         || (s < qreal(0.0) || s > qreal(1.0))
-         || (l < qreal(0.0) || l > qreal(1.0))
-         || (a < qreal(0.0) || a > qreal(1.0))) {
-        qWarning("QColor::fromHslF: HSL parameters out of range");
+      || (s < qreal(0.0) || s > qreal(1.0))
+      || (l < qreal(0.0) || l > qreal(1.0))
+      || (a < qreal(0.0) || a > qreal(1.0))) {
+      qWarning("QColor::fromHslF: HSL parameters out of range");
       return QColor();
    }
 
    QColor color;
    color.cspec = Hsl;
-    color.ct.ahsl.alpha      = qRound(a * USHRT_MAX);
-    color.ct.ahsl.hue        = (h == qreal(-1.0)) ? USHRT_MAX : qRound(h * 36000);
+   color.ct.ahsl.alpha      = qRound(a * USHRT_MAX);
+   color.ct.ahsl.hue        = (h == qreal(-1.0)) ? USHRT_MAX : qRound(h * 36000);
 
-    if (color.ct.ahsl.hue == 36000)
+   if (color.ct.ahsl.hue == 36000) {
       color.ct.ahsl.hue = 0;
+   }
 
-    color.ct.ahsl.saturation = qRound(s * USHRT_MAX);
-    color.ct.ahsl.lightness  = qRound(l * USHRT_MAX);
+   color.ct.ahsl.saturation = qRound(s * USHRT_MAX);
+   color.ct.ahsl.lightness  = qRound(l * USHRT_MAX);
    color.ct.ahsl.pad        = 0;
    return color;
 }
@@ -1322,89 +1296,84 @@ void QColor::getCmykF(qreal *c, qreal *m, qreal *y, qreal *k, qreal *a)
 void QColor::setCmyk(int c, int m, int y, int k, int a)
 {
    if (c < 0 || c > 255
-         || m < 0 || m > 255
-         || y < 0 || y > 255
-         || k < 0 || k > 255
-         || a < 0 || a > 255) {
+      || m < 0 || m > 255
+      || y < 0 || y > 255
+      || k < 0 || k > 255
+      || a < 0 || a > 255) {
       qWarning("QColor::setCmyk: CMYK parameters out of range");
       return;
    }
 
    cspec = Cmyk;
-    ct.acmyk.alpha   = a * 0x101;
-    ct.acmyk.cyan    = c * 0x101;
-    ct.acmyk.magenta = m * 0x101;
-    ct.acmyk.yellow  = y * 0x101;
-    ct.acmyk.black   = k * 0x101;
+   ct.acmyk.alpha   = a * 0x101;
+   ct.acmyk.cyan    = c * 0x101;
+   ct.acmyk.magenta = m * 0x101;
+   ct.acmyk.yellow  = y * 0x101;
+   ct.acmyk.black   = k * 0x101;
 }
 
 void QColor::setCmykF(qreal c, qreal m, qreal y, qreal k, qreal a)
 {
    if (c < qreal(0.0) || c > qreal(1.0)
-         || m < qreal(0.0) || m > qreal(1.0)
-         || y < qreal(0.0) || y > qreal(1.0)
-         || k < qreal(0.0) || k > qreal(1.0)
-         || a < qreal(0.0) || a > qreal(1.0)) {
+      || m < qreal(0.0) || m > qreal(1.0)
+      || y < qreal(0.0) || y > qreal(1.0)
+      || k < qreal(0.0) || k > qreal(1.0)
+      || a < qreal(0.0) || a > qreal(1.0)) {
       qWarning("QColor::setCmykF: CMYK parameters out of range");
       return;
    }
 
    cspec = Cmyk;
-    ct.acmyk.alpha   = qRound(a * USHRT_MAX);
-    ct.acmyk.cyan    = qRound(c * USHRT_MAX);
-    ct.acmyk.magenta = qRound(m * USHRT_MAX);
-    ct.acmyk.yellow  = qRound(y * USHRT_MAX);
-    ct.acmyk.black   = qRound(k * USHRT_MAX);
+   ct.acmyk.alpha   = qRound(a * USHRT_MAX);
+   ct.acmyk.cyan    = qRound(c * USHRT_MAX);
+   ct.acmyk.magenta = qRound(m * USHRT_MAX);
+   ct.acmyk.yellow  = qRound(y * USHRT_MAX);
+   ct.acmyk.black   = qRound(k * USHRT_MAX);
 }
 
 QColor QColor::fromCmyk(int c, int m, int y, int k, int a)
 {
    if (c < 0 || c > 255
-         || m < 0 || m > 255
-         || y < 0 || y > 255
-         || k < 0 || k > 255
-         || a < 0 || a > 255) {
+      || m < 0 || m > 255
+      || y < 0 || y > 255
+      || k < 0 || k > 255
+      || a < 0 || a > 255) {
       qWarning("QColor::fromCmyk: CMYK parameters out of range");
       return QColor();
    }
 
    QColor color;
    color.cspec = Cmyk;
-    color.ct.acmyk.alpha   = a * 0x101;
-    color.ct.acmyk.cyan    = c * 0x101;
-    color.ct.acmyk.magenta = m * 0x101;
-    color.ct.acmyk.yellow  = y * 0x101;
-    color.ct.acmyk.black   = k * 0x101;
+   color.ct.acmyk.alpha   = a * 0x101;
+   color.ct.acmyk.cyan    = c * 0x101;
+   color.ct.acmyk.magenta = m * 0x101;
+   color.ct.acmyk.yellow  = y * 0x101;
+   color.ct.acmyk.black   = k * 0x101;
    return color;
 }
 
 QColor QColor::fromCmykF(qreal c, qreal m, qreal y, qreal k, qreal a)
 {
    if (c < qreal(0.0) || c > qreal(1.0)
-         || m < qreal(0.0) || m > qreal(1.0)
-         || y < qreal(0.0) || y > qreal(1.0)
-         || k < qreal(0.0) || k > qreal(1.0)
-         || a < qreal(0.0) || a > qreal(1.0)) {
+      || m < qreal(0.0) || m > qreal(1.0)
+      || y < qreal(0.0) || y > qreal(1.0)
+      || k < qreal(0.0) || k > qreal(1.0)
+      || a < qreal(0.0) || a > qreal(1.0)) {
       qWarning("QColor::fromCmykF: CMYK parameters out of range");
       return QColor();
    }
 
    QColor color;
    color.cspec = Cmyk;
-    color.ct.acmyk.alpha   = qRound(a * USHRT_MAX);
-    color.ct.acmyk.cyan    = qRound(c * USHRT_MAX);
-    color.ct.acmyk.magenta = qRound(m * USHRT_MAX);
-    color.ct.acmyk.yellow  = qRound(y * USHRT_MAX);
-    color.ct.acmyk.black   = qRound(k * USHRT_MAX);
+   color.ct.acmyk.alpha   = qRound(a * USHRT_MAX);
+   color.ct.acmyk.cyan    = qRound(c * USHRT_MAX);
+   color.ct.acmyk.magenta = qRound(m * USHRT_MAX);
+   color.ct.acmyk.yellow  = qRound(y * USHRT_MAX);
+   color.ct.acmyk.black   = qRound(k * USHRT_MAX);
    return color;
 }
 
 
-/*!
-    \obsolete
-
-    Use lighter(\a factor) instead.
-*/
 QColor QColor::light(int factor) const
 {
    if (factor <= 0) {                            // invalid lightness factor
@@ -1427,18 +1396,13 @@ QColor QColor::light(int factor) const
       v = USHRT_MAX;
    }
 
-    hsv.ct.ahsv.saturation = s;
-    hsv.ct.ahsv.value = v;
+   hsv.ct.ahsv.saturation = s;
+   hsv.ct.ahsv.value = v;
 
    // convert back to same color spec as original color
    return hsv.convertTo(cspec);
 }
 
-/*!
-    \obsolete
-
-    Use darker(\a factor) instead.
-*/
 QColor QColor::dark(int factor) const
 {
    if (factor <= 0) {                              // invalid darkness factor
@@ -1464,23 +1428,23 @@ bool QColor::operator==(const QColor &color) const
 {
    if (cspec == Hsl && cspec == color.cspec) {
       return (ct.argb.alpha == color.ct.argb.alpha
-              && ((((ct.ahsl.hue % 36000) == (color.ct.ahsl.hue % 36000)))
-                  || (ct.ahsl.hue == color.ct.ahsl.hue))
-              && (qAbs(ct.ahsl.saturation - color.ct.ahsl.saturation) < 50
-                  || ct.ahsl.lightness == 0
-                  || color.ct.ahsl.lightness == 0
-                  || ct.ahsl.lightness == USHRT_MAX
-                  || color.ct.ahsl.lightness == USHRT_MAX)
-              && (qAbs(ct.ahsl.lightness - color.ct.ahsl.lightness)) < 50);
+            && ((((ct.ahsl.hue % 36000) == (color.ct.ahsl.hue % 36000)))
+               || (ct.ahsl.hue == color.ct.ahsl.hue))
+            && (qAbs(ct.ahsl.saturation - color.ct.ahsl.saturation) < 50
+               || ct.ahsl.lightness == 0
+               || color.ct.ahsl.lightness == 0
+               || ct.ahsl.lightness == USHRT_MAX
+               || color.ct.ahsl.lightness == USHRT_MAX)
+            && (qAbs(ct.ahsl.lightness - color.ct.ahsl.lightness)) < 50);
    } else {
       return (cspec == color.cspec
-              && ct.argb.alpha == color.ct.argb.alpha
-              && (((cspec == QColor::Hsv)
-                   && ((ct.ahsv.hue % 36000) == (color.ct.ahsv.hue % 36000)))
-                  || (ct.ahsv.hue == color.ct.ahsv.hue))
-              && ct.argb.green == color.ct.argb.green
-              && ct.argb.blue  == color.ct.argb.blue
-              && ct.argb.pad   == color.ct.argb.pad);
+            && ct.argb.alpha == color.ct.argb.alpha
+            && (((cspec == QColor::Hsv)
+                  && ((ct.ahsv.hue % 36000) == (color.ct.ahsv.hue % 36000)))
+               || (ct.ahsv.hue == color.ct.ahsv.hue))
+            && ct.argb.green == color.ct.argb.green
+            && ct.argb.blue  == color.ct.argb.blue
+            && ct.argb.pad   == color.ct.argb.pad);
    }
 }
 
@@ -1494,18 +1458,6 @@ QColor::operator QVariant() const
    return QVariant(QVariant::Color, this);
 }
 
-#ifdef Q_WS_X11
-
-bool QColor::allowX11ColorNames()
-{
-   return ::allowX11ColorNames;
-}
-
-void QColor::setAllowX11ColorNames(bool enabled)
-{
-   ::allowX11ColorNames = enabled;
-}
-#endif
 
 // internal
 void QColor::invalidate()
@@ -1520,23 +1472,29 @@ void QColor::invalidate()
 
 QDebug operator<<(QDebug dbg, const QColor &c)
 {
+   QDebugStateSaver saver(dbg);
+
    if (!c.isValid()) {
       dbg.nospace() << "QColor(Invalid)";
+
    } else if (c.spec() == QColor::Rgb) {
       dbg.nospace() << "QColor(ARGB " << c.alphaF() << ", " << c.redF() << ", " << c.greenF() << ", " << c.blueF() << ')';
+
    } else if (c.spec() == QColor::Hsv) {
       dbg.nospace() << "QColor(AHSV " << c.alphaF() << ", " << c.hueF() << ", " << c.saturationF() << ", " << c.valueF() <<
-                    ')';
+         ')';
+
    } else if (c.spec() == QColor::Cmyk)
       dbg.nospace() << "QColor(ACMYK " << c.alphaF() << ", " << c.cyanF() << ", " << c.magentaF() << ", " << c.yellowF() <<
-                    ", "
-                    << c.blackF() << ')';
+         ", "
+         << c.blackF() << ')';
+
    else if (c.spec() == QColor::Hsl) {
       dbg.nospace() << "QColor(AHSL " << c.alphaF() << ", " << c.hslHueF() << ", " << c.hslSaturationF() << ", " <<
-                    c.lightnessF() << ')';
+         c.lightnessF() << ')';
    }
 
-   return dbg.space();
+   return dbg;
 }
 
 QDataStream &operator<<(QDataStream &stream, const QColor &color)
@@ -1581,36 +1539,36 @@ QDataStream &operator>>(QDataStream &stream, QColor &color)
 
 // A table of precalculated results of 0x00ff00ff/alpha use by qUnpremultiply:
 const uint qt_inv_premul_factor[256] = {
-    0, 16711935, 8355967, 5570645, 4177983, 3342387, 2785322, 2387419,
-    2088991, 1856881, 1671193, 1519266, 1392661, 1285533, 1193709, 1114129,
-    1044495, 983055, 928440, 879575, 835596, 795806, 759633, 726605,
-    696330, 668477, 642766, 618960, 596854, 576273, 557064, 539094,
-    522247, 506422, 491527, 477483, 464220, 451673, 439787, 428511,
-    417798, 407608, 397903, 388649, 379816, 371376, 363302, 355573,
-    348165, 341059, 334238, 327685, 321383, 315319, 309480, 303853,
-    298427, 293191, 288136, 283253, 278532, 273966, 269547, 265268,
-    261123, 257106, 253211, 249431, 245763, 242201, 238741, 235379,
-    232110, 228930, 225836, 222825, 219893, 217038, 214255, 211543,
-    208899, 206320, 203804, 201348, 198951, 196611, 194324, 192091,
-    189908, 187774, 185688, 183647, 181651, 179698, 177786, 175915,
-    174082, 172287, 170529, 168807, 167119, 165464, 163842, 162251,
-    160691, 159161, 157659, 156186, 154740, 153320, 151926, 150557,
-    149213, 147893, 146595, 145321, 144068, 142837, 141626, 140436,
-    139266, 138115, 136983, 135869, 134773, 133695, 132634, 131590,
-    130561, 129549, 128553, 127572, 126605, 125653, 124715, 123792,
-    122881, 121984, 121100, 120229, 119370, 118524, 117689, 116866,
-    116055, 115254, 114465, 113686, 112918, 112160, 111412, 110675,
-    109946, 109228, 108519, 107818, 107127, 106445, 105771, 105106,
-    104449, 103800, 103160, 102527, 101902, 101284, 100674, 100071,
-    99475, 98887, 98305, 97730, 97162, 96600, 96045, 95496,
-    94954, 94417, 93887, 93362, 92844, 92331, 91823, 91322,
-    90825, 90334, 89849, 89368, 88893, 88422, 87957, 87497,
-    87041, 86590, 86143, 85702, 85264, 84832, 84403, 83979,
-    83559, 83143, 82732, 82324, 81921, 81521, 81125, 80733,
-    80345, 79961, 79580, 79203, 78829, 78459, 78093, 77729,
-    77370, 77013, 76660, 76310, 75963, 75619, 75278, 74941,
-    74606, 74275, 73946, 73620, 73297, 72977, 72660, 72346,
-    72034, 71725, 71418, 71114, 70813, 70514, 70218, 69924,
-    69633, 69344, 69057, 68773, 68491, 68211, 67934, 67659,
-    67386, 67116, 66847, 66581, 66317, 66055, 65795, 65537
+   0, 16711935, 8355967, 5570645, 4177983, 3342387, 2785322, 2387419,
+   2088991, 1856881, 1671193, 1519266, 1392661, 1285533, 1193709, 1114129,
+   1044495, 983055, 928440, 879575, 835596, 795806, 759633, 726605,
+   696330, 668477, 642766, 618960, 596854, 576273, 557064, 539094,
+   522247, 506422, 491527, 477483, 464220, 451673, 439787, 428511,
+   417798, 407608, 397903, 388649, 379816, 371376, 363302, 355573,
+   348165, 341059, 334238, 327685, 321383, 315319, 309480, 303853,
+   298427, 293191, 288136, 283253, 278532, 273966, 269547, 265268,
+   261123, 257106, 253211, 249431, 245763, 242201, 238741, 235379,
+   232110, 228930, 225836, 222825, 219893, 217038, 214255, 211543,
+   208899, 206320, 203804, 201348, 198951, 196611, 194324, 192091,
+   189908, 187774, 185688, 183647, 181651, 179698, 177786, 175915,
+   174082, 172287, 170529, 168807, 167119, 165464, 163842, 162251,
+   160691, 159161, 157659, 156186, 154740, 153320, 151926, 150557,
+   149213, 147893, 146595, 145321, 144068, 142837, 141626, 140436,
+   139266, 138115, 136983, 135869, 134773, 133695, 132634, 131590,
+   130561, 129549, 128553, 127572, 126605, 125653, 124715, 123792,
+   122881, 121984, 121100, 120229, 119370, 118524, 117689, 116866,
+   116055, 115254, 114465, 113686, 112918, 112160, 111412, 110675,
+   109946, 109228, 108519, 107818, 107127, 106445, 105771, 105106,
+   104449, 103800, 103160, 102527, 101902, 101284, 100674, 100071,
+   99475, 98887, 98305, 97730, 97162, 96600, 96045, 95496,
+   94954, 94417, 93887, 93362, 92844, 92331, 91823, 91322,
+   90825, 90334, 89849, 89368, 88893, 88422, 87957, 87497,
+   87041, 86590, 86143, 85702, 85264, 84832, 84403, 83979,
+   83559, 83143, 82732, 82324, 81921, 81521, 81125, 80733,
+   80345, 79961, 79580, 79203, 78829, 78459, 78093, 77729,
+   77370, 77013, 76660, 76310, 75963, 75619, 75278, 74941,
+   74606, 74275, 73946, 73620, 73297, 72977, 72660, 72346,
+   72034, 71725, 71418, 71114, 70813, 70514, 70218, 69924,
+   69633, 69344, 69057, 68773, 68491, 68211, 67934, 67659,
+   67386, 67116, 66847, 66581, 66317, 66055, 65795, 65537
 };

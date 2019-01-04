@@ -20,21 +20,19 @@
 *
 ***********************************************************************/
 
-#include <qdrawhelper_p.h>
+#include <qdrawhelper_neon_p.h>
 #include <qblendfunctions_p.h>
 #include <qmath_p.h>
 
-#ifdef QT_HAVE_NEON
+#ifdef __ARM_NEON__
 
-#include <qdrawhelper_neon_p.h>
 #include <qpaintengine_raster_p.h>
-#include <arm_neon.h>
 
-QT_BEGIN_NAMESPACE
-
-void qt_memfill32_neon(quint32 *dest, quint32 value, int count)
+void qt_memfill32(quint32 *dest, quint32 value, int count)
 {
    const int epilogueSize = count % 16;
+
+#if !defined(Q_PROCESSOR_ARM_64)
    if (count >= 16) {
       quint32 *const neonEnd = dest + count - epilogueSize;
       register uint32x4_t valueVector1 asm ("q0") = vdupq_n_u32(value);
@@ -49,6 +47,22 @@ void qt_memfill32_neon(quint32 *dest, quint32 value, int count)
          );
       }
    }
+#else
+   if (count >= 16) {
+      quint32 *const neonEnd = dest + count - epilogueSize;
+      register uint32x4_t valueVector1 asm ("v0") = vdupq_n_u32(value);
+      register uint32x4_t valueVector2 asm ("v1") = valueVector1;
+      while (dest != neonEnd) {
+         asm volatile (
+            "st2     { v0.4s, v1.4s }, [%[DST]], #32 \n\t"
+            "st2     { v0.4s, v1.4s }, [%[DST]], #32 \n\t"
+            : [DST]"+r" (dest)
+            : [VALUE1]"w"(valueVector1), [VALUE2]"w"(valueVector2)
+            : "memory"
+         );
+      }
+   }
+#endif
 
    switch (epilogueSize) {
       case 15:
@@ -104,7 +118,7 @@ static inline uint16x8_t qvbyte_mul_u16(uint16x8_t x, uint16x8_t alpha, uint16x8
 }
 
 static inline uint16x8_t qvinterpolate_pixel_255(uint16x8_t x, uint16x8_t a, uint16x8_t y, uint16x8_t b,
-      uint16x8_t half)
+   uint16x8_t half)
 {
    // t = x * a + y * b
 
@@ -124,63 +138,58 @@ static inline uint16x8_t qvsource_over_u16(uint16x8_t src16, uint16x8_t dst16, u
    return vaddq_u16(src16, qvbyte_mul_u16(dst16, alpha16, half));
 }
 
-extern "C" void
-pixman_composite_over_8888_0565_asm_neon (int32_t   w,
-      int32_t   h,
-      uint16_t *dst,
-      int32_t   dst_stride,
-      uint32_t *src,
-      int32_t   src_stride);
+#if defined(ENABLE_PIXMAN_DRAWHELPERS)
+extern "C" void pixman_composite_over_8888_0565_asm_neon (int32_t   w,
+   int32_t   h,
+   uint16_t *dst,
+   int32_t   dst_stride,
+   uint32_t *src,
+   int32_t   src_stride);
 
-extern "C" void
-pixman_composite_over_8888_8888_asm_neon (int32_t   w,
-      int32_t   h,
-      uint32_t *dst,
-      int32_t   dst_stride,
-      uint32_t *src,
-      int32_t   src_stride);
+extern "C" void pixman_composite_over_8888_8888_asm_neon (int32_t   w,
+   int32_t   h,
+   uint32_t *dst,
+   int32_t   dst_stride,
+   uint32_t *src,
+   int32_t   src_stride);
 
-extern "C" void
-pixman_composite_src_0565_8888_asm_neon (int32_t   w,
-      int32_t   h,
-      uint32_t *dst,
-      int32_t   dst_stride,
-      uint16_t *src,
-      int32_t   src_stride);
+extern "C" void pixman_composite_src_0565_8888_asm_neon (int32_t   w,
+   int32_t   h,
+   uint32_t *dst,
+   int32_t   dst_stride,
+   uint16_t *src,
+   int32_t   src_stride);
 
-extern "C" void
-pixman_composite_over_n_8_0565_asm_neon (int32_t    w,
-      int32_t    h,
-      uint16_t  *dst,
-      int32_t    dst_stride,
-      uint32_t   src,
-      int32_t    unused,
-      uint8_t   *mask,
-      int32_t    mask_stride);
+extern "C" void pixman_composite_over_n_8_0565_asm_neon (int32_t    w,
+   int32_t    h,
+   uint16_t  *dst,
+   int32_t    dst_stride,
+   uint32_t   src,
+   int32_t    unused,
+   uint8_t   *mask,
+   int32_t    mask_stride);
 
-extern "C" void
-pixman_composite_scanline_over_asm_neon (int32_t         w,
-      const uint32_t *dst,
-      const uint32_t *src);
+extern "C" void pixman_composite_scanline_over_asm_neon (int32_t         w,
+   const uint32_t *dst,
+   const uint32_t *src);
 
-extern "C" void
-pixman_composite_src_0565_0565_asm_neon (int32_t   w,
-      int32_t   h,
-      uint16_t *dst,
-      int32_t   dst_stride,
-      uint16_t *src,
-      int32_t   src_stride);
+extern "C" void pixman_composite_src_0565_0565_asm_neon (int32_t   w,
+   int32_t   h,
+   uint16_t *dst,
+   int32_t   dst_stride,
+   uint16_t *src,
+   int32_t   src_stride);
 
 // qblendfunctions.cpp
 void qt_blend_argb32_on_rgb16_const_alpha(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl,
-      int w, int h,
-      int const_alpha);
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha);
 
 void qt_blend_rgb16_on_argb32_neon(uchar *destPixels, int dbpl,
-                                   const uchar *srcPixels, int sbpl,
-                                   int w, int h,
-                                   int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    dbpl /= 4;
    sbpl /= 2;
@@ -194,8 +203,9 @@ void qt_blend_rgb16_on_argb32_neon(uchar *destPixels, int dbpl,
 
       while (h--) {
          for (int x = 0; x < w; ++x) {
-            dst[x] = INTERPOLATE_PIXEL_255(qt_colorConvert(src[x], dst[x]), a, dst[x], ia);
+            dst[x] = INTERPOLATE_PIXEL_255(qConvertRgb16To32(src[x]), a, dst[x], ia);
          }
+
          dst += dbpl;
          src += sbpl;
       }
@@ -207,9 +217,9 @@ void qt_blend_rgb16_on_argb32_neon(uchar *destPixels, int dbpl,
 
 // qblendfunctions.cpp
 void qt_blend_rgb16_on_rgb16(uchar *dst, int dbpl,
-                             const uchar *src, int sbpl,
-                             int w, int h,
-                             int const_alpha);
+   const uchar *src, int sbpl,
+   int w, int h,
+   int const_alpha);
 
 template <int N>
 static inline void scanLineBlit16(quint16 *dst, quint16 *src, int dstride)
@@ -221,6 +231,7 @@ static inline void scanLineBlit16(quint16 *dst, quint16 *src, int dstride)
    for (int i = 1; i < N / 2; ++i) {
       ((quint32 *)dst)[i] = ((quint32 *)src)[i];
    }
+
    if (N & 1) {
       dst[N - 1] = src[N - 1];
    }
@@ -257,9 +268,9 @@ static inline void blockBlit16(quint16 *dst, quint16 *src, int dstride, int sstr
 }
 
 void qt_blend_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl,
-                                  const uchar *srcPixels, int sbpl,
-                                  int w, int h,
-                                  int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    // testing show that the default memcpy is faster for widths 150 and up
    if (const_alpha != 256 || w >= 150) {
@@ -301,9 +312,9 @@ void qt_blend_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl,
 extern "C" void blend_8_pixels_argb32_on_rgb16_neon(quint16 *dst, const quint32 *src, int const_alpha);
 
 void qt_blend_argb32_on_rgb16_neon(uchar *destPixels, int dbpl,
-                                   const uchar *srcPixels, int sbpl,
-                                   int w, int h,
-                                   int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    quint16 *dst = (quint16 *) destPixels;
    quint32 *src = (quint32 *) srcPixels;
@@ -341,28 +352,78 @@ void qt_blend_argb32_on_rgb16_neon(uchar *destPixels, int dbpl,
 
    pixman_composite_over_8888_0565_asm_neon(w, h, dst, dbpl / 2, src, sbpl / 4);
 }
+#endif
 
 void qt_blend_argb32_on_argb32_scanline_neon(uint *dest, const uint *src, int length, uint const_alpha)
 {
    if (const_alpha == 255) {
+#if defined(ENABLE_PIXMAN_DRAWHELPERS)
       pixman_composite_scanline_over_asm_neon(length, dest, src);
+#else
+      qt_blend_argb32_on_argb32_neon((uchar *)dest, 4 * length, (uchar *)src, 4 * length, length, 1, 256);
+#endif
    } else {
       qt_blend_argb32_on_argb32_neon((uchar *)dest, 4 * length, (uchar *)src, 4 * length, length, 1,
-                                     (const_alpha * 256) / 255);
+         (const_alpha * 256) / 255);
    }
 }
 
 void qt_blend_argb32_on_argb32_neon(uchar *destPixels, int dbpl,
-                                    const uchar *srcPixels, int sbpl,
-                                    int w, int h,
-                                    int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    const uint *src = (const uint *) srcPixels;
    uint *dst = (uint *) destPixels;
    uint16x8_t half = vdupq_n_u16(0x80);
    uint16x8_t full = vdupq_n_u16(0xff);
    if (const_alpha == 256) {
+#if defined(ENABLE_PIXMAN_DRAWHELPERS)
       pixman_composite_over_8888_8888_asm_neon(w, h, (uint32_t *)destPixels, dbpl / 4, (uint32_t *)srcPixels, sbpl / 4);
+#else
+      for (int y = 0; y < h; ++y) {
+         int x = 0;
+         for (; x < w - 3; x += 4) {
+            if (src[x] | src[x + 1] | src[x + 2] | src[x + 3]) {
+               uint32x4_t src32 = vld1q_u32((uint32_t *)&src[x]);
+               uint32x4_t dst32 = vld1q_u32((uint32_t *)&dst[x]);
+
+               const uint8x16_t src8 = vreinterpretq_u8_u32(src32);
+               const uint8x16_t dst8 = vreinterpretq_u8_u32(dst32);
+
+               const uint8x8_t src8_low = vget_low_u8(src8);
+               const uint8x8_t dst8_low = vget_low_u8(dst8);
+
+               const uint8x8_t src8_high = vget_high_u8(src8);
+               const uint8x8_t dst8_high = vget_high_u8(dst8);
+
+               const uint16x8_t src16_low = vmovl_u8(src8_low);
+               const uint16x8_t dst16_low = vmovl_u8(dst8_low);
+
+               const uint16x8_t src16_high = vmovl_u8(src8_high);
+               const uint16x8_t dst16_high = vmovl_u8(dst8_high);
+
+               const uint16x8_t result16_low = qvsource_over_u16(src16_low, dst16_low, half, full);
+               const uint16x8_t result16_high = qvsource_over_u16(src16_high, dst16_high, half, full);
+
+               const uint32x2_t result32_low = vreinterpret_u32_u8(vmovn_u16(result16_low));
+               const uint32x2_t result32_high = vreinterpret_u32_u8(vmovn_u16(result16_high));
+
+               vst1q_u32((uint32_t *)&dst[x], vcombine_u32(result32_low, result32_high));
+            }
+         }
+         for (; x < w; ++x) {
+            uint s = src[x];
+            if (s >= 0xff000000) {
+               dst[x] = s;
+            } else if (s != 0) {
+               dst[x] = s + BYTE_MUL(dst[x], qAlpha(~s));
+            }
+         }
+         dst = (quint32 *)(((uchar *) dst) + dbpl);
+         src = (const quint32 *)(((const uchar *) src) + sbpl);
+      }
+#endif
    } else if (const_alpha != 0) {
       const_alpha = (const_alpha * 255) >> 8;
       uint16x8_t const_alpha16 = vdupq_n_u16(const_alpha);
@@ -415,14 +476,14 @@ void qt_blend_argb32_on_argb32_neon(uchar *destPixels, int dbpl,
 
 // qblendfunctions.cpp
 void qt_blend_rgb32_on_rgb32(uchar *destPixels, int dbpl,
-                             const uchar *srcPixels, int sbpl,
-                             int w, int h,
-                             int const_alpha);
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha);
 
 void qt_blend_rgb32_on_rgb32_neon(uchar *destPixels, int dbpl,
-                                  const uchar *srcPixels, int sbpl,
-                                  int w, int h,
-                                  int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   int w, int h,
+   int const_alpha)
 {
    if (const_alpha != 256) {
       if (const_alpha != 0) {
@@ -455,9 +516,9 @@ void qt_blend_rgb32_on_rgb32_neon(uchar *destPixels, int dbpl,
                const uint16x8_t dst16_high = vmovl_u8(dst8_high);
 
                const uint16x8_t result16_low = qvinterpolate_pixel_255(src16_low, const_alpha16, dst16_low, one_minus_const_alpha16,
-                                               half);
+                     half);
                const uint16x8_t result16_high = qvinterpolate_pixel_255(src16_high, const_alpha16, dst16_high, one_minus_const_alpha16,
-                                                half);
+                     half);
 
                const uint32x2_t result32_low = vreinterpret_u32_u8(vmovn_u16(result16_low));
                const uint32x2_t result32_high = vreinterpret_u32_u8(vmovn_u16(result16_high));
@@ -478,18 +539,19 @@ void qt_blend_rgb32_on_rgb32_neon(uchar *destPixels, int dbpl,
    }
 }
 
-void qt_alphamapblit_quint16_neon(QRasterBuffer *rasterBuffer,
-                                  int x, int y, quint32 color,
-                                  const uchar *bitmap,
-                                  int mapWidth, int mapHeight, int mapStride,
-                                  const QClipData *)
+#if defined(ENABLE_PIXMAN_DRAWHELPERS)
+void qt_alphamapblit_quint16_neon(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64 &color,
+   const uchar *bitmap,
+   int mapWidth, int mapHeight, int mapStride,
+   const QClipData *)
 {
    quint16 *dest = reinterpret_cast<quint16 *>(rasterBuffer->scanLine(y)) + x;
    const int destStride = rasterBuffer->bytesPerLine() / sizeof(quint16);
 
    uchar *mask = const_cast<uchar *>(bitmap);
+   const uint c = color.toArgb32();
 
-   pixman_composite_over_n_8_0565_asm_neon(mapWidth, mapHeight, dest, destStride, color, 0, mask, mapStride);
+   pixman_composite_over_n_8_0565_asm_neon(mapWidth, mapHeight, dest, destStride, c, 0, mask, mapStride);
 }
 
 extern "C" void blend_8_pixels_rgb16_on_rgb16_neon(quint16 *dst, const quint16 *src, int const_alpha);
@@ -536,100 +598,99 @@ struct Blend_on_RGB16_SourceAndConstAlpha_Neon {
 };
 
 template <typename SRC, typename BlendFunc>
-Blend_on_RGB16_SourceAndConstAlpha_Neon<SRC, BlendFunc>
-Blend_on_RGB16_SourceAndConstAlpha_Neon_create(BlendFunc blender, int const_alpha)
+Blend_on_RGB16_SourceAndConstAlpha_Neon<SRC, BlendFunc> Blend_on_RGB16_SourceAndConstAlpha_Neon_create(BlendFunc blender,
+   int const_alpha)
 {
    return Blend_on_RGB16_SourceAndConstAlpha_Neon<SRC, BlendFunc>(blender, const_alpha);
 }
 
 void qt_scale_image_argb32_on_rgb16_neon(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl, int sh,
-      const QRectF &targetRect,
-      const QRectF &sourceRect,
-      const QRect &clip,
-      int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
    if (const_alpha == 0) {
       return;
    }
 
-   qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, sh, targetRect, sourceRect, clip,
-                                 Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint32>(blend_8_pixels_argb32_on_rgb16_neon, const_alpha));
+   qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, srch, targetRect, sourceRect, clip,
+      Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint32>(blend_8_pixels_argb32_on_rgb16_neon, const_alpha));
 }
 
 void qt_scale_image_rgb16_on_rgb16(uchar *destPixels, int dbpl,
-                                   const uchar *srcPixels, int sbpl, int sh,
-                                   const QRectF &targetRect,
-                                   const QRectF &sourceRect,
-                                   const QRect &clip,
-                                   int const_alpha);
+   const uchar *srcPixels, int sbpl, int sh,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha);
 
 void qt_scale_image_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl,
-                                        const uchar *srcPixels, int sbpl, int sh,
-                                        const QRectF &targetRect,
-                                        const QRectF &sourceRect,
-                                        const QRect &clip,
-                                        int const_alpha)
+   const uchar *srcPixels, int sbpl, int srch,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   int const_alpha)
 {
    if (const_alpha == 0) {
       return;
    }
 
    if (const_alpha == 256) {
-      qt_scale_image_rgb16_on_rgb16(destPixels, dbpl, srcPixels, sbpl, sh, targetRect, sourceRect, clip, const_alpha);
+      qt_scale_image_rgb16_on_rgb16(destPixels, dbpl, srcPixels, sbpl, srch, targetRect, sourceRect, clip, const_alpha);
       return;
    }
 
-   qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, sh, targetRect, sourceRect, clip,
-                                 Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint16>(blend_8_pixels_rgb16_on_rgb16_neon, const_alpha));
+   qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, srch, targetRect, sourceRect, clip,
+      Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint16>(blend_8_pixels_rgb16_on_rgb16_neon, const_alpha));
 }
 
 extern void qt_transform_image_rgb16_on_rgb16(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl,
-      const QRectF &targetRect,
-      const QRectF &sourceRect,
-      const QRect &clip,
-      const QTransform &targetRectTransform,
-      int const_alpha);
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha);
 
 void qt_transform_image_rgb16_on_rgb16_neon(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl,
-      const QRectF &targetRect,
-      const QRectF &sourceRect,
-      const QRect &clip,
-      const QTransform &targetRectTransform,
-      int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha)
 {
    if (const_alpha == 0) {
       return;
    }
 
    if (const_alpha == 256) {
-      qt_transform_image_rgb16_on_rgb16(destPixels, dbpl, srcPixels, sbpl, targetRect, sourceRect, clip, targetRectTransform,
-                                        const_alpha);
+      qt_transform_image_rgb16_on_rgb16(destPixels, dbpl, srcPixels, sbpl, targetRect, sourceRect, clip, targetRectTransform, const_alpha);
       return;
    }
 
    qt_transform_image(reinterpret_cast<quint16 *>(destPixels), dbpl,
-                      reinterpret_cast<const quint16 *>(srcPixels), sbpl, targetRect, sourceRect, clip, targetRectTransform,
-                      Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint16>(blend_8_pixels_rgb16_on_rgb16_neon, const_alpha));
+      reinterpret_cast<const quint16 *>(srcPixels), sbpl, targetRect, sourceRect, clip, targetRectTransform,
+      Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint16>(blend_8_pixels_rgb16_on_rgb16_neon, const_alpha));
 }
 
 void qt_transform_image_argb32_on_rgb16_neon(uchar *destPixels, int dbpl,
-      const uchar *srcPixels, int sbpl,
-      const QRectF &targetRect,
-      const QRectF &sourceRect,
-      const QRect &clip,
-      const QTransform &targetRectTransform,
-      int const_alpha)
+   const uchar *srcPixels, int sbpl,
+   const QRectF &targetRect,
+   const QRectF &sourceRect,
+   const QRect &clip,
+   const QTransform &targetRectTransform,
+   int const_alpha)
 {
    if (const_alpha == 0) {
       return;
    }
 
    qt_transform_image(reinterpret_cast<quint16 *>(destPixels), dbpl,
-                      reinterpret_cast<const quint32 *>(srcPixels), sbpl, targetRect, sourceRect, clip, targetRectTransform,
-                      Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint32>(blend_8_pixels_argb32_on_rgb16_neon, const_alpha));
+      reinterpret_cast<const quint32 *>(srcPixels), sbpl, targetRect, sourceRect, clip, targetRectTransform,
+      Blend_on_RGB16_SourceAndConstAlpha_Neon_create<quint32>(blend_8_pixels_argb32_on_rgb16_neon, const_alpha));
 }
 
 static inline void convert_8_pixels_rgb16_to_argb32(quint32 *dst, const quint16 *src)
@@ -639,6 +700,7 @@ static inline void convert_8_pixels_rgb16_to_argb32(quint32 *dst, const quint16 
 
       /* convert 8 r5g6b5 pixel data from {d0, d1} to planar 8-bit format
          and put data into d4 - red, d3 - green, d2 - blue */
+
       "vshrn.u16   d4,  q0,  #8\n\t"
       "vshrn.u16   d3,  q0,  #3\n\t"
       "vsli.u16    q0,  q0,  #5\n\t"
@@ -727,6 +789,7 @@ void QT_FASTCALL qt_destStoreRGB16_neon(QRasterBuffer *rasterBuffer, int x, int 
       }
    }
 }
+#endif
 
 void QT_FASTCALL comp_func_solid_SourceOver_neon(uint *destPixels, int length, uint color, uint const_alpha)
 {
@@ -780,16 +843,13 @@ void QT_FASTCALL comp_func_Plus_neon(uint *dst, const uint *src, int length, uin
       uint *const neonEnd = end - 3;
 
       while (dst < neonEnd) {
-         asm volatile (
-            "vld2.8     { d0, d1 }, [%[SRC]] !\n\t"
-            "vld2.8     { d2, d3 }, [%[DST]]\n\t"
-            "vqadd.u8 q0, q0, q1\n\t"
-            "vst2.8     { d0, d1 }, [%[DST]] !\n\t"
-            : [DST]"+r" (dst), [SRC]"+r" (src)
-            :
-            : "memory", "d0", "d1", "d2", "d3", "q0", "q1"
-         );
-      }
+         uint8x16_t vs = vld1q_u8((const uint8_t *)src);
+         const uint8x16_t vd = vld1q_u8((uint8_t *)dst);
+         vs = vqaddq_u8(vs, vd);
+         vst1q_u8((uint8_t *)dst, vs);
+         src += 4;
+         dst += 4;
+      };
 
       while (dst != end) {
          *dst = comp_func_Plus_one_pixel(*dst, *src);
@@ -829,6 +889,7 @@ void QT_FASTCALL comp_func_Plus_neon(uint *dst, const uint *src, int length, uin
    }
 }
 
+#if defined(ENABLE_PIXMAN_DRAWHELPERS)
 static const int tileSize = 32;
 
 extern "C" void qt_rotate90_16_neon(quint16 *dst, const quint16 *src, int sstride, int dstride, int count);
@@ -904,8 +965,8 @@ void qt_memrotate90_16_neon(const uchar *srcPixels, int w, int h, int sstride, u
 extern "C" void qt_rotate270_16_neon(quint16 *dst, const quint16 *src, int sstride, int dstride, int count);
 
 void qt_memrotate270_16_neon(const uchar *srcPixels, int w, int h,
-                             int sstride,
-                             uchar *destPixels, int dstride)
+   int sstride,
+   uchar *destPixels, int dstride)
 {
    const ushort *src = (const ushort *)srcPixels;
    ushort *dest = (ushort *)destPixels;
@@ -949,7 +1010,7 @@ void qt_memrotate270_16_neon(const uchar *srcPixels, int w, int h,
 
          for (; x < stopx; ++x) {
             quint32 *d = reinterpret_cast<quint32 *>(dest + x * dstride
-                         + h - 1 - starty);
+                  + h - 1 - starty);
             for (int y = starty; y > stopy; y -= pack) {
                quint32 c = src[y * sstride + x];
                for (int i = 1; i < pack; ++i) {
@@ -972,6 +1033,7 @@ void qt_memrotate270_16_neon(const uchar *srcPixels, int w, int h,
       }
    }
 }
+#endif
 
 class QSimdNeon
 {
@@ -983,10 +1045,15 @@ class QSimdNeon
       Int32x4 v;
       int i[4];
    };
+
    union Vect_buffer_f {
       Float32x4 v;
       float f[4];
    };
+
+   static inline Float32x4 v_dup(double x) {
+      return vdupq_n_f32(float(x));
+   }
 
    static inline Float32x4 v_dup(float x) {
       return vdupq_n_f32(x);
@@ -1046,12 +1113,10 @@ class QSimdNeon
 };
 
 const uint *QT_FASTCALL qt_fetch_radial_gradient_neon(uint *buffer, const Operator *op, const QSpanData *data,
-      int y, int x, int length)
+   int y, int x, int length)
 {
-   return qt_fetch_radial_gradient_template<QRadialFetchSimd<QSimdNeon> >(buffer, op, data, y, x, length);
+   return qt_fetch_radial_gradient_template<QRadialFetchSimd<QSimdNeon>, uint>(buffer, op, data, y, x, length);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_HAVE_NEON
 

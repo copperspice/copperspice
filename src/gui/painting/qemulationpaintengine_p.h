@@ -25,8 +25,6 @@
 
 #include <qpaintengineex_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QEmulationPaintEngine : public QPaintEngineEx
 {
  public:
@@ -47,12 +45,6 @@ class QEmulationPaintEngine : public QPaintEngineEx
    void drawStaticTextItem(QStaticTextItem *item) override;
    void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags) override;
-
-   void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                  QPainter::PixmapFragmentHints hints) override;
-
-   void drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
-                  const QPixmap &pixmap, QPainter::PixmapFragmentHints hints) override;
 
    void clipEnabledChanged() override;
    void penChanged() override;
@@ -85,7 +77,5 @@ class QEmulationPaintEngine : public QPaintEngineEx
  private:
    void fillBGRect(const QRectF &r);
 };
-
-QT_END_NAMESPACE
 
 #endif

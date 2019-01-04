@@ -30,13 +30,12 @@
 #include <QtCore/qvector.h>
 #include <QtCore/qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFont;
 class QPainterPathPrivate;
 struct QPainterPathPrivateDeleter;
 class QPainterPathData;
 class QPainterPathStrokerPrivate;
+class QPen;
 class QPolygonF;
 class QRegion;
 class QVectorPath;
@@ -61,9 +60,11 @@ class Q_GUI_EXPORT QPainterPath
       bool isMoveTo() const {
          return type == MoveToElement;
       }
+
       bool isLineTo() const {
          return type == LineToElement;
       }
+
       bool isCurveTo() const {
          return type == CurveToElement;
       }
@@ -74,9 +75,10 @@ class Q_GUI_EXPORT QPainterPath
 
       bool operator==(const Element &e) const {
          return qFuzzyCompare(x, e.x)
-                && qFuzzyCompare(y, e.y) && type == e.type;
+            && qFuzzyCompare(y, e.y) && type == e.type;
       }
-      inline bool operator!=(const Element &e) const {
+
+      bool operator!=(const Element &e) const {
          return !operator==(e);
       }
    };
@@ -86,13 +88,14 @@ class Q_GUI_EXPORT QPainterPath
    QPainterPath(const QPainterPath &other);
    QPainterPath &operator=(const QPainterPath &other);
 
-   inline QPainterPath &operator=(QPainterPath && other) {
+   QPainterPath &operator=(QPainterPath &&other) {
       qSwap(d_ptr, other.d_ptr);
       return *this;
    }
 
    ~QPainterPath();
-   inline void swap(QPainterPath &other) {
+
+   void swap(QPainterPath &other) {
       d_ptr.swap(other.d_ptr);
    }
 
@@ -154,7 +157,7 @@ class Q_GUI_EXPORT QPainterPath
    Qt::FillRule fillRule() const;
    void setFillRule(Qt::FillRule fillRule);
 
-   inline bool isEmpty() const;
+   bool isEmpty() const;
 
    QPainterPath toReversed() const;
    QList<QPolygonF> toSubpathPolygons(const QMatrix &matrix = QMatrix()) const;
@@ -164,9 +167,9 @@ class Q_GUI_EXPORT QPainterPath
    QList<QPolygonF> toFillPolygons(const QTransform &matrix) const;
    QPolygonF toFillPolygon(const QTransform &matrix) const;
 
-   inline int elementCount() const;
-   inline const QPainterPath::Element &elementAt(int i) const;
-   inline void setElementPositionAt(int i, qreal x, qreal y);
+   int elementCount() const;
+   QPainterPath::Element elementAt(int i) const;
+   void setElementPositionAt(int i, qreal x, qreal y);
 
    qreal length() const;
    qreal percentAtLength(qreal t) const;
@@ -198,13 +201,14 @@ class Q_GUI_EXPORT QPainterPath
  private:
    QScopedPointer<QPainterPathPrivate, QPainterPathPrivateDeleter> d_ptr;
 
-   inline void ensureData() {
-      if (!d_ptr) {
+   void ensureData() {
+      if (! d_ptr) {
          ensureData_helper();
       }
    }
+
    void ensureData_helper();
-   inline void detach();
+   void detach();
    void detach_helper();
    void setDirty(bool);
    void computeBoundingRect() const;
@@ -222,40 +226,16 @@ class Q_GUI_EXPORT QPainterPath
    friend class QVectorPath;
    friend Q_GUI_EXPORT const QVectorPath &qtVectorPathForPath(const QPainterPath &);
 
-#ifndef QT_NO_DATASTREAM
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
-#endif
-};
 
-class QPainterPathPrivate
-{
- public:
-   friend class QPainterPath;
-   friend class QPainterPathData;
-   friend class QPainterPathStroker;
-   friend class QPainterPathStrokerPrivate;
-   friend class QMatrix;
-   friend class QTransform;
-   friend class QVectorPath;
-   friend struct QPainterPathPrivateDeleter;
-
-#ifndef QT_NO_DATASTREAM
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
-#endif
-
- private:
-   QAtomicInt ref;
-   QVector<QPainterPath::Element> elements;
 };
 
 Q_DECLARE_TYPEINFO(QPainterPath::Element, Q_PRIMITIVE_TYPE);
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
-#endif
+
 
 class Q_GUI_EXPORT QPainterPathStroker
 {
@@ -263,6 +243,7 @@ class Q_GUI_EXPORT QPainterPathStroker
 
  public:
    QPainterPathStroker();
+   explicit QPainterPathStroker(const QPen &pen);
    ~QPainterPathStroker();
 
    void setWidth(qreal width);
@@ -343,7 +324,7 @@ inline void QPainterPath::addRect(qreal x, qreal y, qreal w, qreal h)
 }
 
 inline void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h,
-      qreal xRadius, qreal yRadius, Qt::SizeMode mode)
+   qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
    addRoundedRect(QRectF(x, y, w, h), xRadius, yRadius, mode);
 }
@@ -353,7 +334,7 @@ inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h, int x
    addRoundRect(QRectF(x, y, w, h), xRnd, yRnd);
 }
 
-inline void QPainterPath::addRoundRect(const QRectF &rect, int roundness) 
+inline void QPainterPath::addRoundRect(const QRectF &rect, int roundness)
 {
    int xRnd = roundness;
    int yRnd = roundness;
@@ -387,45 +368,7 @@ inline QPainterPath QPainterPath::translated(const QPointF &offset) const
    return translated(offset.x(), offset.y());
 }
 
-inline bool QPainterPath::isEmpty() const
-{
-   return !d_ptr || (d_ptr->elements.size() == 1 && d_ptr->elements.first().type == MoveToElement);
-}
-
-inline int QPainterPath::elementCount() const
-{
-   return d_ptr ? d_ptr->elements.size() : 0;
-}
-
-inline const QPainterPath::Element &QPainterPath::elementAt(int i) const
-{
-   Q_ASSERT(d_ptr);
-   Q_ASSERT(i >= 0 && i < elementCount());
-
-   return d_ptr->elements.at(i);
-}
-
-inline void QPainterPath::setElementPositionAt(int i, qreal x, qreal y)
-{
-   Q_ASSERT(d_ptr);
-   Q_ASSERT(i >= 0 && i < elementCount());
-
-   detach();
-   QPainterPath::Element &e = d_ptr->elements[i];
-   e.x = x;
-   e.y = y;
-}
-
-inline void QPainterPath::detach()
-{
-   if (d_ptr->ref.load() != 1) {
-      detach_helper();
-   }
-   setDirty(true);
-}
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPainterPath &);
 
-QT_END_NAMESPACE
-
-#endif // QPAINTERPATH_H
+#endif

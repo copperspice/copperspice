@@ -115,12 +115,8 @@
 #undef  QT_FT_COMPONENT
 #define QT_FT_COMPONENT  trace_smooth
 
-
 #define ErrRaster_MemoryOverflow   -4
 
-#if defined(VXWORKS)
-#  include <vxWorksCommon.h>    /* needed for setjmp.h */
-#endif
 #include <string.h>             /* for qt_ft_memcpy() */
 #include <setjmp.h>
 #include <limits.h>
@@ -138,9 +134,6 @@
 #define ErrRaster_Invalid_Argument  -3
 #define ErrRaster_Memory_Overflow   -4
 #define ErrRaster_OutOfMemory       -6
-
-#define QT_FT_BEGIN_HEADER
-#define QT_FT_END_HEADER
 
 #include <private/qrasterdefs_p.h>
 #include <private/qgrayraster_p.h>
@@ -172,9 +165,9 @@
 #define QT_FT_MEM_ZERO( dest, count )  QT_FT_MEM_SET( dest, 0, count )
 #endif
 
+
   /* define this to dump debugging information */
 #define xxxDEBUG_GRAYS
-
 
 #define RAS_ARG   PWorker  worker
 #define RAS_ARG_  PWorker  worker,
@@ -191,40 +184,30 @@
 #define ONE_PIXEL       ( 1L << PIXEL_BITS )
 #define PIXEL_MASK      ( -1L << PIXEL_BITS )
 #define TRUNC( x )      ( (TCoord)( (x) >> PIXEL_BITS ) )
-#define SUBPIXELS( x )  ( (TPos)(x) << PIXEL_BITS )
+#define SUBPIXELS( x )  ( (TPos)(x) * ( 1 << PIXEL_BITS ) )
 #define FLOOR( x )      ( (x) & -ONE_PIXEL )
 #define CEILING( x )    ( ( (x) + ONE_PIXEL - 1 ) & -ONE_PIXEL )
 #define ROUND( x )      ( ( (x) + ONE_PIXEL / 2 ) & -ONE_PIXEL )
 
 #if PIXEL_BITS >= 6
-#define UPSCALE( x )    ( (x) << ( PIXEL_BITS - 6 ) )
+#define UPSCALE( x )    ( (x) * ( 1 << ( PIXEL_BITS - 6 ) ) )
 #define DOWNSCALE( x )  ( (x) >> ( PIXEL_BITS - 6 ) )
 #else
 #define UPSCALE( x )    ( (x) >> ( 6 - PIXEL_BITS ) )
 #define DOWNSCALE( x )  ( (x) << ( 6 - PIXEL_BITS ) )
 #endif
 
-  /*************************************************************************/
-  /*                                                                       */
-  /*   TYPE DEFINITIONS                                                    */
-  /*                                                                       */
-
-  /* don't change the following types to QT_FT_Int or QT_FT_Pos, since we might */
-  /* need to define them to "float" or "double" when experimenting with   */
-  /* new algorithms                                                       */
-
-  typedef int   TCoord;   /* integer scanline/pixel coordinate */
-  typedef int   TPos;     /* sub-pixel coordinate              */
+typedef int   TCoord;   /* integer scanline/pixel coordinate */
+typedef int   TPos;     /* sub-pixel coordinate              */
 
   /* determine the type used to store cell areas.  This normally takes at */
   /* least PIXEL_BITS*2 + 1 bits.  On 16-bit systems, we need to use      */
   /* `long' instead of `int', otherwise bad things happen                 */
 
 #if PIXEL_BITS <= 7
-
   typedef int  TArea;
 
-#else /* PIXEL_BITS >= 8 */
+#else
 
   /* approximately determine the size of integers using an ANSI-C header */
 #if QT_FT_UINT_MAX == 0xFFFFU
@@ -233,8 +216,7 @@
   typedef int   TArea;
 #endif
 
-#endif /* PIXEL_BITS >= 8 */
-
+#endif
 
   /* maximal number of gray spans in a call to the span callback */
 #define QT_FT_MAX_GRAY_SPANS  256
@@ -469,11 +451,11 @@
 
       ras.area  = 0;
       ras.cover = 0;
-    }
 
-    ras.ex      = ex;
-    ras.ey      = ey;
-    ras.invalid = ( (unsigned)ey >= (unsigned)ras.count_ey ||
+      ras.ex      = ex;
+      ras.ey      = ey;
+   }
+   ras.invalid = ( (unsigned)ey >= (unsigned)ras.count_ey ||
                               ex >= ras.count_ex           );
   }
 
@@ -659,38 +641,70 @@
     }
 
     /* vertical line - avoid calling gray_render_scanline */
-    incr = 1;
 
     if ( dx == 0 )
     {
       TCoord  ex     = TRUNC( ras.x );
       TCoord  two_fx = (TCoord)( ( ras.x - SUBPIXELS( ex ) ) << 1 );
-      TPos    area;
+      TPos    area, max_ey1;
 
 
       first = ONE_PIXEL;
       if ( dy < 0 )
-      {
         first = 0;
-        incr  = -1;
-      }
 
       delta      = (int)( first - fy1 );
       ras.area  += (TArea)two_fx * delta;
       ras.cover += delta;
-      ey1       += incr;
-
-      gray_set_cell( &ras, ex, ey1 );
 
       delta = (int)( first + first - ONE_PIXEL );
       area  = (TArea)two_fx * delta;
-      while ( ey1 != ey2 )
+      max_ey1 = ras.count_ey + ras.min_ey;
+
+      if (dy < 0) {
+        if (ey1 > max_ey1) {
+          ey1 = (max_ey1 > ey2) ? max_ey1 : ey2;
+          gray_set_cell( &ras, ex, ey1 );
+        } else {
+          ey1--;
+          gray_set_cell( &ras, ex, ey1 );
+        }
+
+        while ( ey1 > ey2 && ey1 >= ras.min_ey)
+        {
+          ras.area  += area;
+          ras.cover += delta;
+          ey1--;
+          gray_set_cell( &ras, ex, ey1 );
+        }
+
+        if (ey1 != ey2) {
+          ey1 = ey2;
+          gray_set_cell( &ras, ex, ey1 );
+        }
+
+      } else {
+        if (ey1 < ras.min_ey) {
+          ey1 = (ras.min_ey < ey2) ? ras.min_ey : ey2;
+          gray_set_cell( &ras, ex, ey1 );
+        } else {
+          ey1++;
+          gray_set_cell( &ras, ex, ey1 );
+        }
+
+      while ( ey1 < ey2 && ey1 < max_ey1)
       {
         ras.area  += area;
         ras.cover += delta;
-        ey1       += incr;
+        ey1++;
 
         gray_set_cell( &ras, ex, ey1 );
+      }
+
+      if (ey1 != ey2) {
+          ey1 = ey2;
+          gray_set_cell( &ras, ex, ey1 );
+        }
       }
 
       delta      = (int)( fy2 - ONE_PIXEL + first );
@@ -1071,37 +1085,6 @@
     return 0;
   }
 
-
-  static int
-  gray_line_to( const QT_FT_Vector*  to,
-                PWorker           worker )
-  {
-    gray_render_line( worker, UPSCALE( to->x ), UPSCALE( to->y ) );
-    return 0;
-  }
-
-
-  static int
-  gray_conic_to( const QT_FT_Vector*  control,
-                 const QT_FT_Vector*  to,
-                 PWorker           worker )
-  {
-    gray_render_conic( worker, control, to );
-    return 0;
-  }
-
-
-  static int
-  gray_cubic_to( const QT_FT_Vector*  control1,
-                 const QT_FT_Vector*  control2,
-                 const QT_FT_Vector*  to,
-                 PWorker           worker )
-  {
-    gray_render_cubic( worker, control1, control2, to );
-    return 0;
-  }
-
-
   static void
   gray_render_span( int             count,
                     const QT_FT_Span*  spans,
@@ -1445,9 +1428,7 @@
             vec.x = SCALED( point->x );
             vec.y = SCALED( point->y );
 
-            error = gray_line_to( &vec, user );
-            if ( error )
-              goto Exit;
+            gray_render_line(user, UPSCALE(vec.x), UPSCALE(vec.y));
             continue;
           }
 
@@ -1472,10 +1453,7 @@
 
               if ( tag == QT_FT_CURVE_TAG_ON )
               {
-                error = gray_conic_to( &v_control, &vec,
-                                                  user );
-                if ( error )
-                  goto Exit;
+                gray_render_conic(user, &v_control, &vec);
                 continue;
               }
 
@@ -1485,17 +1463,13 @@
               v_middle.x = ( v_control.x + vec.x ) / 2;
               v_middle.y = ( v_control.y + vec.y ) / 2;
 
-              error = gray_conic_to( &v_control, &v_middle,
-                                                user );
-              if ( error )
-                goto Exit;
+              gray_render_conic(user, &v_control, &v_middle);
 
               v_control = vec;
               goto Do_Conic;
             }
 
-            error = gray_conic_to( &v_control, &v_start,
-                                              user );
+            gray_render_conic(user, &v_control, &v_start);
             goto Close;
           }
 
@@ -1525,27 +1499,22 @@
               vec.x = SCALED( point->x );
               vec.y = SCALED( point->y );
 
-              error = gray_cubic_to( &vec1, &vec2, &vec, user );
-              if ( error )
-                goto Exit;
+              gray_render_cubic(user, &vec1, &vec2, &vec);
               continue;
             }
 
-            error = gray_cubic_to( &vec1, &vec2, &v_start, user );
+            gray_render_cubic(user, &vec1, &vec2, &v_start);
             goto Close;
           }
         }
       }
 
       /* close the contour with a line segment */
-      error = gray_line_to( &v_start, user );
+      gray_render_line(user, UPSCALE(v_start.x), UPSCALE(v_start.y));
 
    Close:
-      if ( error )
-        goto Exit;
-
       first = last + 1;
-    }
+   }
 
     return 0;
 

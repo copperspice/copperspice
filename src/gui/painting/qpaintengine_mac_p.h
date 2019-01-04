@@ -74,7 +74,7 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
 
    void drawTextItem(const QPointF &pos, const QTextItem &item) override;
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor) override;
+      Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
    Type type() const override {
       return QPaintEngine::CoreGraphics;
@@ -100,7 +100,7 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    friend class QMacPrintEnginePrivate;
    friend void qt_mac_display_change_callbk(CGDirectDisplayID, CGDisplayChangeSummaryFlags, void *);
    friend void qt_color_profile_changed(CFNotificationCenterRef center, void *,
-                                        CFStringRef, const void *, CFDictionaryRef);
+      CFStringRef, const void *, CFDictionaryRef);
    QCoreGraphicsPaintEngine(QPaintEnginePrivate &dptr);
 
  private:

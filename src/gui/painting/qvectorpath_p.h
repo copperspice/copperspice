@@ -23,12 +23,12 @@
 #ifndef QVECTORPATH_P_H
 #define QVECTORPATH_P_H
 
-#include <QtGui/qpaintengine.h>
+#include <qpaintengine.h>
 #include <qpaintengine_p.h>
 #include <qstroker_p.h>
 #include <qpainter_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QPaintEngineEx;
 
@@ -72,9 +72,9 @@ class Q_GUI_EXPORT QVectorPath
 
    // ### Falcon: introduca a struct XY for points so lars is not so confused...
    QVectorPath(const qreal *points,
-               int count,
-               const QPainterPath::ElementType *elements = 0,
-               uint hints = ArbitraryShapeHint)
+      int count,
+      const QPainterPath::ElementType *elements = 0,
+      uint hints = ArbitraryShapeHint)
       : m_elements(elements),
         m_points(points),
         m_count(count),
@@ -88,9 +88,11 @@ class Q_GUI_EXPORT QVectorPath
    inline Hint shape() const {
       return (Hint) (m_hints & ShapeMask);
    }
+
    inline bool isConvex() const {
       return (m_hints & NonConvexShapeMask) == 0;
    }
+
    inline bool isCurved() const {
       return m_hints & CurvedShapeMask;
    }
@@ -98,9 +100,11 @@ class Q_GUI_EXPORT QVectorPath
    inline bool isCacheable() const {
       return m_hints & ShouldUseCacheHint;
    }
+
    inline bool hasImplicitClose() const {
       return m_hints & ImplicitClose;
    }
+
    inline bool hasWindingFill() const {
       return m_hints & WindingFill;
    }
@@ -116,9 +120,26 @@ class Q_GUI_EXPORT QVectorPath
    inline const QPainterPath::ElementType *elements() const {
       return m_elements;
    }
+
+   static inline uint polygonFlags(QPaintEngine::PolygonDrawMode mode) {
+      switch (mode) {
+         case QPaintEngine::ConvexMode:
+            return ConvexPolygonHint | ImplicitClose;
+         case QPaintEngine::OddEvenMode:
+            return PolygonHint | OddEvenFill | ImplicitClose;
+         case QPaintEngine::WindingMode:
+            return PolygonHint | WindingFill | ImplicitClose;
+         case QPaintEngine::PolylineMode:
+            return PolygonHint;
+         default:
+            return 0;
+      }
+   }
+
    inline const qreal *points() const {
       return m_points;
    }
+
    inline bool isEmpty() const {
       return m_points == 0;
    }
@@ -126,9 +147,8 @@ class Q_GUI_EXPORT QVectorPath
    inline int elementCount() const {
       return m_count;
    }
-   inline const QPainterPath convertToPainterPath() const;
 
-   static inline uint polygonFlags(QPaintEngine::PolygonDrawMode mode);
+   inline const QPainterPath convertToPainterPath() const;
 
    struct CacheEntry {
       QPaintEngineEx *engine;
@@ -149,6 +169,31 @@ class Q_GUI_EXPORT QVectorPath
       }
       return 0;
    }
+   template <typename T> static inline bool isRect(const T *pts, int elementCount) {
+      return (elementCount == 5 // 5-point polygon, check for closed rect
+            && pts[0] == pts[8] && pts[1] == pts[9] // last point == first point
+            && pts[0] == pts[6] && pts[2] == pts[4] // x values equal
+            && pts[1] == pts[3] && pts[5] == pts[7] // y values equal...
+            && pts[0] < pts[4] && pts[1] < pts[5]
+         ) ||
+         (elementCount == 4 // 4-point polygon, check for unclosed rect
+            && pts[0] == pts[6] && pts[2] == pts[4] // x values equal
+            && pts[1] == pts[3] && pts[5] == pts[7] // y values equal...
+            && pts[0] < pts[4] && pts[1] < pts[5]
+         );
+   }
+
+   inline bool isRect() const {
+      const QPainterPath::ElementType *const types = elements();
+
+      return (shape() == QVectorPath::RectangleHint)
+         || (isRect(points(), elementCount())
+            && (!types || (types[0] == QPainterPath::MoveToElement
+                  && types[1] == QPainterPath::LineToElement
+                  && types[2] == QPainterPath::LineToElement
+                  && types[3] == QPainterPath::LineToElement)));
+   }
+
 
  private:
    Q_DISABLE_COPY(QVectorPath)
@@ -165,6 +210,6 @@ class Q_GUI_EXPORT QVectorPath
 
 Q_GUI_EXPORT const QVectorPath &qtVectorPathForPath(const QPainterPath &path);
 
-QT_END_NAMESPACE
+
 
 #endif

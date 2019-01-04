@@ -24,7 +24,7 @@
 #include <qblittable_p.h>
 #include <qpaintengine_raster_p.h>
 #include <qpainter_p.h>
-#include <qapplication_p.h>
+
 #include <qpixmap_blitter_p.h>
 
 #ifndef QT_NO_BLITTABLE
@@ -90,12 +90,13 @@ class CapabilitiesToStateMask
    }
 
    bool canBlitterDrawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) const {
-      if (pm.handle()->classId() != QPlatformPixmap::BlitterClass) {
+      if (pm.handle()->classId() != QPlatformPixmap::ClassId::BlitterClass) {
          return false;
       }
+
       if (checkStateAgainstMask(capabillitiesState, drawPixmapMask)) {
          if (m_capabilities & (QBlittable::SourceOverPixmapCapability
-                               | QBlittable::SourceOverScaledPixmapCapability)) {
+               | QBlittable::SourceOverScaledPixmapCapability)) {
             if (r.size() != sr.size()) {
                return m_capabilities & QBlittable::SourceOverScaledPixmapCapability;
             } else {
@@ -110,25 +111,28 @@ class CapabilitiesToStateMask
    }
 
    bool canBlitterDrawPixmapOpacity(const QPixmap &pm) const {
-      if (pm.handle()->classId() != QPlatformPixmap::BlitterClass) {
+      if (pm.handle()->classId() != QPlatformPixmap::ClassId::BlitterClass) {
          return false;
       }
 
       return checkStateAgainstMask(capabillitiesState, opacityPixmapMask);
    }
 
-    bool canBlitterDrawCachedGlyphs(const QTransform &transform, QFontEngine::GlyphFormat requestedGlyphFormat, bool complexClip) const
-    {
-        if (transform.type() > QTransform::TxScale)
-            return false;
-        if (!(m_capabilities & QBlittable::DrawScaledCachedGlyphsCapability))
-            return false;
-        if (requestedGlyphFormat == QFontEngine::Format_ARGB && !(m_capabilities & QBlittable::SubPixelGlyphsCapability))
-            return false;
-        if (complexClip && !(m_capabilities & QBlittable::ComplexClipCapability))
-            return false;
-        return true;
-    }
+   bool canBlitterDrawCachedGlyphs(const QTransform &transform, QFontEngine::GlyphFormat requestedGlyphFormat, bool complexClip) const {
+      if (transform.type() > QTransform::TxScale) {
+         return false;
+      }
+      if (!(m_capabilities & QBlittable::DrawScaledCachedGlyphsCapability)) {
+         return false;
+      }
+      if (requestedGlyphFormat == QFontEngine::Format_ARGB && !(m_capabilities & QBlittable::SubPixelGlyphsCapability)) {
+         return false;
+      }
+      if (complexClip && !(m_capabilities & QBlittable::ComplexClipCapability)) {
+         return false;
+      }
+      return true;
+   }
    inline void updateState(uint mask, bool on) {
       updateStateBits(&capabillitiesState, mask, on);
    }
@@ -233,7 +237,8 @@ class CapabilitiesToStateMask
 
 class QBlitterPaintEnginePrivate : public QRasterPaintEnginePrivate
 {
-   Q_DECLARE_PUBLIC(QBlitterPaintEngine);
+   Q_DECLARE_PUBLIC(QBlitterPaintEngine)
+
  public:
    QBlitterPaintEnginePrivate(QBlittablePlatformPixmap *p)
       : QRasterPaintEnginePrivate()
@@ -297,7 +302,7 @@ void QBlitterPaintEnginePrivate::updateBrushState(QPainterState *s)
 
    caps.updateState(STATE_BRUSH_PATTERN, style > Qt::SolidPattern);
    caps.updateState(STATE_BRUSH_ALPHA,
-                    qbrush_color(s->brush).alpha() < 255);
+      qbrush_color(s->brush).alpha() < 255);
 }
 
 void QBlitterPaintEnginePrivate::updateOpacityState(QPainterState *s)
@@ -309,7 +314,7 @@ void QBlitterPaintEnginePrivate::updateOpacityState(QPainterState *s)
 void QBlitterPaintEnginePrivate::updateCompositionModeState(QPainterState *s)
 {
    bool nonTrivial = s->composition_mode != QPainter::CompositionMode_SourceOver
-                     && s->composition_mode != QPainter::CompositionMode_Source;
+      && s->composition_mode != QPainter::CompositionMode_Source;
 
    caps.updateState(STATE_BLENDING_COMPLEX, nonTrivial);
 }
@@ -328,7 +333,7 @@ void QBlitterPaintEnginePrivate::updateTransformState(QPainterState *s)
    // as some blitters could handle axisymmetrical operations, we should improve blitter
    // paint engine to handle them as a capability
    caps.updateState(STATE_XFORM_COMPLEX, (type > QTransform::TxScale) ||
-                    ((type == QTransform::TxScale) && ((s->matrix.m11() < 0.0) || (s->matrix.m22() < 0.0))));
+      ((type == QTransform::TxScale) && ((s->matrix.m11() < 0.0) || (s->matrix.m22() < 0.0))));
    caps.updateState(STATE_XFORM_SCALE, type > QTransform::TxTranslate);
 
    hasXForm = type >= QTransform::TxTranslate;
@@ -346,10 +351,13 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
    Q_Q(QBlitterPaintEngine);
    pmData->unmarkRasterOverlay(rect);
    QRectF targetRect = rect;
+
    if (hasXForm) {
       targetRect = q->state()->matrix.mapRect(rect);
    }
+
    const QClipData *clipData = clip();
+
    if (clipData) {
       if (clipData->hasRectClip) {
          unlock();
@@ -372,16 +380,19 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
             }
          }
       }
+
    } else {
       if (targetRect.x() >= 0 && targetRect.y() >= 0
-            && targetRect.width() <= q->paintDevice()->width()
-            && targetRect.height() <= q->paintDevice()->height()) {
+         && targetRect.width() <= q->paintDevice()->width()
+         && targetRect.height() <= q->paintDevice()->height()) {
          unlock();
+
          if (alpha) {
             pmData->blittable()->alphaFillRect(targetRect, color, q->state()->compositionMode());
          } else {
             pmData->blittable()->fillRect(targetRect, color);
          }
+
       } else {
          QRectF deviceRect(0, 0, q->paintDevice()->width(), q->paintDevice()->height());
          unlock();
@@ -395,13 +406,15 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
 }
 
 void QBlitterPaintEnginePrivate::clipAndDrawPixmap(const QRectF &clip, const QRectF &target, const QPixmap &pm,
-      const QRectF &sr, bool opacity)
+   const QRectF &sr, bool opacity)
 {
    Q_Q(QBlitterPaintEngine);
    QRectF intersectedRect = clip.intersected(target);
+
    if (intersectedRect.isEmpty()) {
       return;
    }
+
    QRectF source = sr;
    if (intersectedRect.size() != target.size()) {
       if (sr.size() == target.size()) {
@@ -422,10 +435,11 @@ void QBlitterPaintEnginePrivate::clipAndDrawPixmap(const QRectF &clip, const QRe
          source.adjust(-deltaLeft, -deltaTop, -deltaRight, -deltaBottom);
       }
    }
+
    pmData->unmarkRasterOverlay(intersectedRect);
    if (opacity) {
       pmData->blittable()->drawPixmapOpacity(intersectedRect, pm, source, q->state()->compositionMode(),
-                                             q->state()->opacity);
+         q->state()->opacity);
    } else {
       pmData->blittable()->drawPixmap(intersectedRect, pm, source);
    }
@@ -500,7 +514,7 @@ bool QBlitterPaintEngine::begin(QPaintDevice *pdev)
    d->pmData->unmergeOverlay();
 #endif
 
-    d->pdev = pdev;
+   d->pdev = pdev;
    return ok;
 }
 
@@ -559,31 +573,35 @@ void QBlitterPaintEngine::fillRect(const QRectF &rect, const QBrush &brush)
    Q_D(QBlitterPaintEngine);
 
    if (qbrush_style(brush) == Qt::SolidPattern
-         && d->caps.canBlitterAlphaFillRect()) {
+      && d->caps.canBlitterAlphaFillRect()) {
       d->fillRect(rect, qbrush_color(brush), true);
    } else if (qbrush_style(brush) == Qt::SolidPattern
-              && qbrush_color(brush).alpha() == 0xff
-              && d->caps.canBlitterFillRect()) {
+      && qbrush_color(brush).alpha() == 0xff
+      && d->caps.canBlitterFillRect()) {
       d->fillRect(rect, qbrush_color(brush), false);
    } else if ((brush.style() == Qt::TexturePattern) &&
-              (brush.transform().type() <= QTransform::TxTranslate) &&
-              ((d->caps.canBlitterDrawPixmapOpacity(brush.texture())) ||
-               (d->caps.canBlitterDrawPixmap(rect, brush.texture(), rect)))) {
+      (brush.transform().type() <= QTransform::TxTranslate) &&
+      ((d->caps.canBlitterDrawPixmapOpacity(brush.texture())) ||
+         (d->caps.canBlitterDrawPixmap(rect, brush.texture(), rect)))) {
       bool rectIsFilled = false;
       QRectF transformedRect = state()->matrix.mapRect(rect);
       qreal x = transformedRect.x();
       qreal y = transformedRect.y();
       QPixmap pm = brush.texture();
       d->unlock();
+
       int srcX = int(rect.x() - state()->brushOrigin.x() - brush.transform().dx()) % pm.width();
+
       if (srcX < 0) {
          srcX = pm.width() + srcX;
       }
+
       const int startX = srcX;
       int srcY = int(rect.y() - state()->brushOrigin.y() - brush.transform().dy()) % pm.height();
       if (srcY < 0) {
          srcY = pm.height() + srcY;
       }
+
       while (!rectIsFilled) {
          qreal blitWidth = (pm.width() ) - srcX;
          qreal blitHeight = (pm.height() ) - srcY;
@@ -758,7 +776,7 @@ void QBlitterPaintEngine::drawImage(const QPointF &pos, const QImage &image)
 }
 
 void QBlitterPaintEngine::drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                                    Qt::ImageConversionFlags flags)
+   Qt::ImageConversionFlags flags)
 {
    Q_D(QBlitterPaintEngine);
    d->lock();
@@ -820,24 +838,25 @@ void QBlitterPaintEngine::drawStaticTextItem(QStaticTextItem *sti)
 
 bool QBlitterPaintEngine::drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine)
 {
-    Q_D(QBlitterPaintEngine);
-    QFontEngine::GlyphFormat glyphFormat = d->glyphCacheFormat;
-    if (fontEngine->glyphFormat != QFontEngine::Format_None)
-        glyphFormat = fontEngine->glyphFormat;
+   Q_D(QBlitterPaintEngine);
+   QFontEngine::GlyphFormat glyphFormat = d->glyphCacheFormat;
+   if (fontEngine->glyphFormat != QFontEngine::Format_None) {
+      glyphFormat = fontEngine->glyphFormat;
+   }
 
-    const QClipData *clipData = d->clip();
-    const bool complexClip = clipData && !clipData->hasRectClip;
+   const QClipData *clipData = d->clip();
+   const bool complexClip = clipData && !clipData->hasRectClip;
 
-    const QPainterState *s = state();
-    if (d->caps.canBlitterDrawCachedGlyphs(s->transform(), glyphFormat, complexClip)) {
-        d->unlock();
-        const bool result = d->pmData->blittable()->drawCachedGlyphs(s, glyphFormat, numGlyphs, glyphs, positions, fontEngine);
-        // Lock again as the raster paint engine might draw decorations now.
-        d->lock();
-        return result;
-    } else {
-        return QRasterPaintEngine::drawCachedGlyphs(numGlyphs, glyphs, positions, fontEngine);
-    }
+   const QPainterState *s = state();
+   if (d->caps.canBlitterDrawCachedGlyphs(s->transform(), glyphFormat, complexClip)) {
+      d->unlock();
+      const bool result = d->pmData->blittable()->drawCachedGlyphs(s, glyphFormat, numGlyphs, glyphs, positions, fontEngine);
+      // Lock again as the raster paint engine might draw decorations now.
+      d->lock();
+      return result;
+   } else {
+      return QRasterPaintEngine::drawCachedGlyphs(numGlyphs, glyphs, positions, fontEngine);
+   }
 }
 #endif //QT_NO_BLITTABLE
 

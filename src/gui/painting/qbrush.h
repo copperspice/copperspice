@@ -33,8 +33,6 @@
 #include <QtGui/qimage.h>
 #include <QtGui/qpixmap.h>
 
-QT_BEGIN_NAMESPACE
-
 struct QBrushData;
 class QPixmap;
 class QGradient;
@@ -61,7 +59,7 @@ class Q_GUI_EXPORT QBrush
    ~QBrush();
    QBrush &operator=(const QBrush &brush);
 
-   inline QBrush &operator=(QBrush && other) {
+   inline QBrush &operator=(QBrush &&other) {
       qSwap(d, other.d);
       return *this;
    }
@@ -100,18 +98,13 @@ class Q_GUI_EXPORT QBrush
       return !(operator==(b));
    }
 
-  inline bool isDetached() const;
+   inline bool isDetached() const;
    typedef QScopedPointer<QBrushData, QBrushDataPointerDeleter> DataPtr;
    inline DataPtr &data_ptr() {
       return d;
    }
 
  private:
-
-#if defined(Q_WS_X11)
-   friend class QX11PaintEngine;
-#endif
-
    friend class QRasterPaintEngine;
    friend class QRasterPaintEnginePrivate;
    friend struct QSpanData;
@@ -120,7 +113,7 @@ class Q_GUI_EXPORT QBrush
    void detach(Qt::BrushStyle newStyle);
    void init(const QColor &color, Qt::BrushStyle bs);
    QScopedPointer<QBrushData, QBrushDataPointerDeleter> d;
-   void cleanUp(QBrushData *x); 
+   void cleanUp(QBrushData *x);
 };
 
 inline void QBrush::setColor(Qt::GlobalColor acolor)
@@ -128,13 +121,9 @@ inline void QBrush::setColor(Qt::GlobalColor acolor)
    setColor(QColor(acolor));
 }
 
-Q_DECLARE_TYPEINFO(QBrush, Q_MOVABLE_TYPE);
-Q_DECLARE_SHARED(QBrush)
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QBrush &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QBrush &);
-#endif
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QBrush &);
 
@@ -227,11 +216,10 @@ class Q_GUI_EXPORT QGradient
    void setInterpolationMode(InterpolationMode mode);
 
    bool operator==(const QGradient &gradient) const;
+
    inline bool operator!=(const QGradient &other) const {
       return !operator==(other);
    }
-
-   bool operator==(const QGradient &gradient); // ### Qt5/remove
 
  private:
    friend class QLinearGradient;
@@ -334,7 +322,5 @@ class Q_GUI_EXPORT QConicalGradient : public QGradient
    qreal angle() const;
    void setAngle(qreal angle);
 };
-
-QT_END_NAMESPACE
 
 #endif // QBRUSH_H

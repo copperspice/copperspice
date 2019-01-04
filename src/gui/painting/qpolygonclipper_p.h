@@ -25,8 +25,6 @@
 
 #include <qdatabuffer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /* based on sutherland-hodgman line-by-line clipping, as described in
    Computer Graphics and Principles */
 template <typename InType, typename OutType, typename CastType> class QPolygonClipper
@@ -259,7 +257,7 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
       if (closePolygon && clipped->size() > 0) {
          // close clipped polygon
          if (clipped->at(0).x != clipped->at(clipped->size() - 1).x ||
-               clipped->at(0).y != clipped->at(clipped->size() - 1).y) {
+            clipped->at(0).y != clipped->at(clipped->size() - 1).y) {
             OutType ot = clipped->at(0);
             clipped->add(ot);
          }
@@ -273,7 +271,5 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
    QDataBuffer<OutType> buffer1;
    QDataBuffer<OutType> buffer2;
 };
-
-QT_END_NAMESPACE
 
 #endif // QPOLYGONCLIPPER_P_H

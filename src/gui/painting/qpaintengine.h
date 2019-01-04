@@ -23,11 +23,9 @@
 #ifndef QPAINTENGINE_H
 #define QPAINTENGINE_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtGui/qpainter.h>
-
-QT_BEGIN_NAMESPACE
+#include <qnamespace.h>
+#include <qscopedpointer.h>
+#include <qpainter.h>
 
 class QFontEngine;
 class QLineF;
@@ -37,9 +35,10 @@ class QPainterPath;
 class QPointF;
 class QPolygonF;
 class QRectF;
-struct QGlyphLayout;
 class QTextItemInt;
 class QPaintEngineState;
+
+struct QGlyphLayout;
 
 class Q_GUI_EXPORT QTextItem
 {
@@ -47,13 +46,14 @@ class Q_GUI_EXPORT QTextItem
  public:
    enum RenderFlag {
       RightToLeft = 0x1,
-      Overline = 0x10,
-      Underline = 0x20,
-      StrikeOut = 0x40,
+      Overline    = 0x10,
+      Underline   = 0x20,
+      StrikeOut   = 0x40,
 
-      Dummy = 0xffffffff
+      Dummy       = 0xffffffff
    };
    using RenderFlags = QFlags<RenderFlag>;
+
    qreal descent() const;
    qreal ascent() const;
    qreal width() const;
@@ -127,12 +127,13 @@ class Q_GUI_EXPORT QPaintEngine
       PolylineMode
    };
 
-   explicit QPaintEngine(PaintEngineFeatures features = 0);
+   explicit QPaintEngine(PaintEngineFeatures features = PaintEngineFeatures());
    virtual ~QPaintEngine();
 
    bool isActive() const {
       return active;
    }
+
    void setActive(bool newState) {
       active = newState;
    }
@@ -163,7 +164,7 @@ class Q_GUI_EXPORT QPaintEngine
    virtual void drawTextItem(const QPointF &p, const QTextItem &textItem);
    virtual void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
    virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                          Qt::ImageConversionFlags flags = Qt::AutoColor);
+      Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    void setPaintDevice(QPaintDevice *device);
    QPaintDevice *paintDevice() const;
@@ -173,11 +174,6 @@ class Q_GUI_EXPORT QPaintEngine
 
    void setSystemRect(const QRect &rect);
    QRect systemRect() const;
-
-#ifdef Q_OS_WIN
-   virtual HDC getDC() const;
-   virtual void releaseDC(HDC hdc) const;
-#endif
 
    virtual QPoint coordinateOffset() const;
 
@@ -197,6 +193,7 @@ class Q_GUI_EXPORT QPaintEngine
       OpenGL2,
       PaintBuffer,
       Blitter,
+      Direct2D,
 
       User = 50,    // first user type id
       MaxUser = 100 // last user type id
@@ -221,7 +218,7 @@ class Q_GUI_EXPORT QPaintEngine
    }
 
  protected:
-   QPaintEngine(QPaintEnginePrivate &data, PaintEngineFeatures devcaps = 0);
+   QPaintEngine(QPaintEnginePrivate &data, PaintEngineFeatures devcaps = PaintEngineFeatures());
 
    QPaintEngineState *state;
    PaintEngineFeatures gccaps;
@@ -236,41 +233,21 @@ class Q_GUI_EXPORT QPaintEngine
    void setAutoDestruct(bool autoDestr) {
       selfDestruct = autoDestr;
    }
+
    bool autoDestruct() const {
       return selfDestruct;
    }
+
    Q_DISABLE_COPY(QPaintEngine)
 
    friend class QPainterReplayer;
    friend class QFontEngineBox;
    friend class QFontEngineMac;
    friend class QFontEngineWin;
-
-#ifndef QT_NO_FREETYPE
-   friend class QFontEngineFT;
-#endif
-
-#ifndef QT_NO_QWS_QPF
-   friend class QFontEngineQPF1;
-#endif
-
-#ifndef QT_NO_QWS_QPF2
-   friend class QFontEngineQPF;
-#endif
-
-   friend class QPSPrintEngine;
    friend class QMacPrintEngine;
    friend class QMacPrintEnginePrivate;
 
-#ifdef Q_WS_QWS
-   friend class QtopiaPrintEngine;
-   friend class QtopiaPrintEnginePrivate;
-   friend class QProxyFontEngine;
-#endif
-
-#ifdef Q_WS_QPA
-   friend class QFontEngineQPA;
-#endif
+   friend class QFontEngineQPF2;
 
    friend class QPainter;
    friend class QPainterPrivate;
@@ -280,9 +257,8 @@ class Q_GUI_EXPORT QPaintEngine
    friend class QWin32PaintEnginePrivate;
    friend class QMacCGContext;
    friend class QPreviewPaintEngine;
-   friend class QX11GLPixmapData;
+   friend class QX11GLPlatformPixmap;
 };
-
 
 class Q_GUI_EXPORT QPaintEngineState
 {
@@ -325,10 +301,6 @@ class Q_GUI_EXPORT QPaintEngineState
    QPaintEngine::DirtyFlags dirtyFlags;
 };
 
-//
-// inline functions
-//
-
 inline void QPaintEngine::fix_neg_rect(int *x, int *y, int *w, int *h)
 {
    if (*w < 0) {
@@ -363,6 +335,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextItem::RenderFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintEngine::PaintEngineFeatures)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintEngine::DirtyFlags)
 
-QT_END_NAMESPACE
 
-#endif // QPAINTENGINE_H
+
+#endif

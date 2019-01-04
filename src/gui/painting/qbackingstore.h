@@ -36,34 +36,34 @@ class QPlatformBackingStore;
 
 class Q_GUI_EXPORT QBackingStore
 {
-public:
-    explicit QBackingStore(QWindow *window);
-    ~QBackingStore();
+ public:
+   explicit QBackingStore(QWindow *window);
+   ~QBackingStore();
 
-    QWindow *window() const;
+   QWindow *window() const;
 
-    QPaintDevice *paintDevice();
+   QPaintDevice *paintDevice();
 
-    // 'window' can be a child window, in which case 'region' is in child window coordinates and
-    // offset is the (child) window's offset in relation to the window surface.
-    void flush(const QRegion &region, QWindow *window = nullptr, const QPoint &offset = QPoint());
+   // 'window' can be a child window, in which case 'region' is in child window coordinates and
+   // offset is the (child) window's offset in relation to the window surface.
+   void flush(const QRegion &region, QWindow *window = nullptr, const QPoint &offset = QPoint());
 
-    void resize(const QSize &size);
-    QSize size() const;
+   void resize(const QSize &size);
+   QSize size() const;
 
-    bool scroll(const QRegion &area, int dx, int dy);
+   bool scroll(const QRegion &area, int dx, int dy);
 
-    void beginPaint(const QRegion &);
-    void endPaint();
+   void beginPaint(const QRegion &);
+   void endPaint();
 
-    void setStaticContents(const QRegion &region);
-    QRegion staticContents() const;
-    bool hasStaticContents() const;
+   void setStaticContents(const QRegion &region);
+   QRegion staticContents() const;
+   bool hasStaticContents() const;
 
-    QPlatformBackingStore *handle() const;
+   QPlatformBackingStore *handle() const;
 
-private:
-    QScopedPointer<QBackingStorePrivate> d_ptr;
+ private:
+   QScopedPointer<QBackingStorePrivate> d_ptr;
 };
 
 #endif

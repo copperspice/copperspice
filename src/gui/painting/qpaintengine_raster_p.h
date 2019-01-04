@@ -168,7 +168,7 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    void drawStaticTextItem(QStaticTextItem *textItem);
 
    virtual bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions,
-                                 QFontEngine *fontEngine);
+      QFontEngine *fontEngine);
 
    enum ClipType {
       RectClip,
@@ -224,7 +224,7 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    QRect toNormalizedFillRect(const QRectF &rect);
 
    inline void ensureBrush(const QBrush &brush) {
-      if (!qbrush_fast_equals(state()->lastBrush, brush) || state()->fillFlags) {
+      if (! qbrush_fast_equals(state()->lastBrush, brush) || state()->fillFlags) {
          updateBrush(brush);
       }
    }
@@ -234,7 +234,7 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    }
 
    inline void ensurePen(const QPen &pen) {
-      if (!qpen_fast_equals(state()->lastPen, pen) || (pen.style() != Qt::NoPen && state()->strokeFlags)) {
+      if (! qpen_fast_equals(state()->lastPen, pen) || (pen.style() != Qt::NoPen && state()->strokeFlags)) {
          updatePen(pen);
       }
    }
@@ -262,7 +262,7 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
    QRasterPaintEnginePrivate();
 
    void rasterizeLine_dashed(QLineF line, qreal width,
-                             int *dashIndex, qreal *dashOffset, bool *inDash);
+      int *dashIndex, qreal *dashOffset, bool *inDash);
 
    void rasterize(QT_FT_Outline *outline, ProcessSpans callback, QSpanData *spanData, QRasterBuffer *rasterBuffer);
    void rasterize(QT_FT_Outline *outline, ProcessSpans callback, void *userData, QRasterBuffer *rasterBuffer);
@@ -271,7 +271,7 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
    void systemStateChanged();
 
    void drawImage(const QPointF &pt, const QImage &img, SrcOverBlendFunc func,
-                  const QRect &clip, int alpha, const QRect &sr = QRect());
+      const QRect &clip, int alpha, const QRect &sr = QRect());
 
    QTransform brushMatrix() const {
       Q_Q(const QRasterPaintEngine);
@@ -493,11 +493,13 @@ inline const QClipData *QRasterPaintEnginePrivate::clip() const
 
    return baseClip.data();
 }
-inline const QClipData *QRasterPaintEngine::clipData() const {
-    Q_D(const QRasterPaintEngine);
-    if (state() && state()->clip && state()->clip->enabled)
-        return state()->clip;
-    return d->baseClip.data();
+inline const QClipData *QRasterPaintEngine::clipData() const
+{
+   Q_D(const QRasterPaintEngine);
+   if (state() && state()->clip && state()->clip->enabled) {
+      return state()->clip;
+   }
+   return d->baseClip.data();
 }
 
 #endif

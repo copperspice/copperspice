@@ -101,7 +101,7 @@ class QPathEdge
       Curve
    };
 
-   QPathEdge(int a = -1, int b = -1);
+   explicit QPathEdge(int a = -1, int b = -1);
 
    mutable int flag;
 
@@ -130,9 +130,9 @@ class QPathSegments
 {
  public:
    struct Intersection {
-      int vertex;
-      qreal t;
 
+      qreal t;
+      int vertex;
       int next;
 
       bool operator<(const Intersection &o) const {
@@ -388,22 +388,6 @@ inline void QPathSegments::addIntersection(int index, const Intersection &inters
    }
 }
 
-inline void QWingedEdge::TraversalStatus::flipDirection()
-{
-   direction = QWingedEdge::flip(direction);
-}
-
-inline void QWingedEdge::TraversalStatus::flipTraversal()
-{
-   traversal = QWingedEdge::flip(traversal);
-}
-
-inline void QWingedEdge::TraversalStatus::flip()
-{
-   flipDirection();
-   flipTraversal();
-}
-
 inline int QWingedEdge::edgeCount() const
 {
    return m_edges.size();
@@ -445,11 +429,21 @@ inline QPathEdge::Traversal QWingedEdge::flip(QPathEdge::Traversal traversal)
    return traversal == QPathEdge::RightTraversal ? QPathEdge::LeftTraversal : QPathEdge::RightTraversal;
 }
 
+inline void QWingedEdge::TraversalStatus::flipTraversal()
+{
+   traversal = QWingedEdge::flip(traversal);
+}
 inline QPathEdge::Direction QWingedEdge::flip(QPathEdge::Direction direction)
 {
    return direction == QPathEdge::Forward ? QPathEdge::Backward : QPathEdge::Forward;
 }
-
-QT_END_NAMESPACE
-
-#endif // QPATHCLIPPER_P_H
+inline void QWingedEdge::TraversalStatus::flipDirection()
+{
+   direction = QWingedEdge::flip(direction);
+}
+inline void QWingedEdge::TraversalStatus::flip()
+{
+   flipDirection();
+   flipTraversal();
+}
+#endif

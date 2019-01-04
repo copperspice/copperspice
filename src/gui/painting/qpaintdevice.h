@@ -26,13 +26,8 @@
 #include <qwindowdefs.h>
 #include <qrect.h>
 
-QT_BEGIN_NAMESPACE
-
-#if defined(Q_WS_QWS)
-class QWSDisplay;
-#endif
-
 class QPaintEngine;
+class QPaintDevicePrivate;
 
 class Q_GUI_EXPORT QPaintDevice                                // device for QPainter
 {
@@ -47,54 +42,56 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
       PdmDpiX,
       PdmDpiY,
       PdmPhysicalDpiX,
-      PdmPhysicalDpiY
+      PdmPhysicalDpiY,
+      PdmDevicePixelRatio,
+      PdmDevicePixelRatioScaled
    };
 
    virtual ~QPaintDevice();
 
-   inline virtual int devType() const;
-   inline bool paintingActive() const;
+   virtual int devType() const;
+   bool paintingActive() const;
    virtual QPaintEngine *paintEngine() const = 0;
-
-#if defined(Q_WS_QWS)
-   static QWSDisplay *qwsDisplay();
-#endif
-
-#ifdef Q_OS_WIN
-   virtual HDC getDC() const;
-   virtual void releaseDC(HDC hdc) const;
-#endif
 
    int width() const {
       return metric(PdmWidth);
    }
+
    int height() const {
       return metric(PdmHeight);
    }
+
    int widthMM() const {
       return metric(PdmWidthMM);
    }
+
    int heightMM() const {
       return metric(PdmHeightMM);
    }
+
    int logicalDpiX() const {
       return metric(PdmDpiX);
    }
+
    int logicalDpiY() const {
       return metric(PdmDpiY);
    }
+
    int physicalDpiX() const {
       return metric(PdmPhysicalDpiX);
    }
+
    int physicalDpiY() const {
       return metric(PdmPhysicalDpiY);
    }
 
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED int numColors() const {
-      return metric(PdmNumColors);
+   int devicePixelRatio() const {
+      return metric(PdmDevicePixelRatio);
    }
-#endif
+
+   qreal devicePixelRatioF()  const {
+      return metric(PdmDevicePixelRatioScaled) / devicePixelRatioFScale();
+   }
 
    int colorCount() const {
       return metric(PdmNumColors);
@@ -104,16 +101,25 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
       return metric(PdmDepth);
    }
 
+   static inline qreal devicePixelRatioFScale() {
+      return 0x10000;
+   }
+
  protected:
    QPaintDevice();
    virtual int metric(PaintDeviceMetric metric) const;
+   virtual void initPainter(QPainter *painter) const;
+   virtual QPaintDevice *redirected(QPoint *offset) const;
+   virtual QPainter *sharedPainter() const;
 
    ushort painters;       // refcount
 
  private:
    Q_DISABLE_COPY(QPaintDevice)
 
+   QPaintDevicePrivate *reserved;
    friend class QPainter;
+   friend class QPainterPrivate;
    friend class QFontEngineMac;
    friend class QX11PaintEngine;
    friend Q_GUI_EXPORT int qt_paint_device_metric(const QPaintDevice *device, PaintDeviceMetric metric);
@@ -129,6 +135,6 @@ inline bool QPaintDevice::paintingActive() const
    return painters != 0;
 }
 
-QT_END_NAMESPACE
 
-#endif // QPAINTDEVICE_H
+
+#endif

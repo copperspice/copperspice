@@ -27,7 +27,7 @@
 #include <qpixmap_blitter_p.h>
 
 #ifndef QT_NO_BLITTABLE
-QT_BEGIN_NAMESPACE
+
 
 class QImage;
 class QBlittablePrivate;
@@ -45,6 +45,9 @@ class Q_GUI_EXPORT QBlittable
       SourceOverScaledPixmapCapability = 0x0008,
       AlphaFillRectCapability          = 0x0010,
       OpacityPixmapCapability          = 0x0020,
+      DrawScaledCachedGlyphsCapability = 0x0040,
+      SubPixelGlyphsCapability         = 0x0080,
+      ComplexClipCapability            = 0x0100,
 
       // Internal ones
       OutlineCapability                = 0x0001000,
@@ -67,7 +70,7 @@ class Q_GUI_EXPORT QBlittable
    }
 
    virtual void drawPixmapOpacity(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect,
-                                  QPainter::CompositionMode cmode, qreal opacity) {
+      QPainter::CompositionMode cmode, qreal opacity) {
       Q_UNUSED(rect);
       Q_UNUSED(pixmap);
       Q_UNUSED(subrect);
@@ -76,18 +79,28 @@ class Q_GUI_EXPORT QBlittable
       qWarning("Please implement drawPixmapOpacity function in your platform or remove OpacityPixmapCapability from it");
    }
 
-   bool isLocked() const;
-
+   virtual bool drawCachedGlyphs(const QPaintEngineState *state, QFontEngine::GlyphFormat glyphFormat, int numGlyphs,
+      const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine) {
+      Q_UNUSED(state);
+      Q_UNUSED(glyphFormat);
+      Q_UNUSED(numGlyphs);
+      Q_UNUSED(glyphs);
+      Q_UNUSED(positions);
+      Q_UNUSED(fontEngine);
+      qWarning("Please implement drawCachedGlyphs function in your platform or remove DrawCachedGlyphsCapability from it");
+      return true;
+   }
    QImage *lock();
    void unlock();
 
+   bool isLocked() const;
  protected:
    virtual QImage *doLock() = 0;
    virtual void doUnlock() = 0;
    QBlittablePrivate *d_ptr;
 };
 
-QT_END_NAMESPACE
+
 
 #endif //QT_NO_BLITTABLE
 #endif //QBLITTABLE_P_H

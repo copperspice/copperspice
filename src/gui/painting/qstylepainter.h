@@ -23,17 +23,17 @@
 #ifndef QSTYLEPAINTER_H
 #define QSTYLEPAINTER_H
 
-#include <QtGui/qpainter.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qwidget.h>
-
-QT_BEGIN_NAMESPACE
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qwidget.h>
 
 class QStylePainter : public QPainter
 {
 
  public:
-   inline QStylePainter() : QPainter(), widget(0), wstyle(0) {}
+   inline QStylePainter() : QPainter(), widget(nullptr), wstyle(nullptr)
+   { }
+
    inline explicit QStylePainter(QWidget *w) {
       begin(w, w);
    }
@@ -57,8 +57,9 @@ class QStylePainter : public QPainter
    inline void drawControl(QStyle::ControlElement ce, const QStyleOption &opt);
    inline void drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &opt);
    inline void drawItemText(const QRect &r, int flags, const QPalette &pal, bool enabled,
-                            const QString &text, QPalette::ColorRole textRole = QPalette::NoRole);
+      const QString &text, QPalette::ColorRole textRole = QPalette::NoRole);
    inline void drawItemPixmap(const QRect &r, int flags, const QPixmap &pixmap);
+
    inline QStyle *style() const {
       return wstyle;
    }
@@ -85,7 +86,7 @@ void QStylePainter::drawComplexControl(QStyle::ComplexControl cc, const QStyleOp
 }
 
 void QStylePainter::drawItemText(const QRect &r, int flags, const QPalette &pal, bool enabled,
-                                 const QString &text, QPalette::ColorRole textRole)
+   const QString &text, QPalette::ColorRole textRole)
 {
    wstyle->drawItemText(this, r, flags, pal, enabled, text, textRole);
 }
@@ -95,6 +96,5 @@ void QStylePainter::drawItemPixmap(const QRect &r, int flags, const QPixmap &pix
    wstyle->drawItemPixmap(this, r, flags, pixmap);
 }
 
-QT_END_NAMESPACE
 
 #endif // QSTYLEPAINTER_H

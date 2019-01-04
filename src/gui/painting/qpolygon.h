@@ -27,8 +27,6 @@
 #include <QtCore/qpoint.h>
 #include <QtCore/qrect.h>
 
-QT_BEGIN_NAMESPACE
-
 class QMatrix;
 class QTransform;
 class QRect;
@@ -39,14 +37,32 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
 {
  public:
    inline QPolygon() {}
-   inline ~QPolygon() {}
-   inline QPolygon(int size);
-   inline QPolygon(const QPolygon &a) : QVector<QPoint>(a) {}
-   inline QPolygon(const QVector<QPoint> &v) : QVector<QPoint>(v) {}
-   QPolygon(const QRect &r, bool closed = false);
+   inline explicit QPolygon(int size);
+
+   QPolygon(const QPolygon &other) : QVector<QPoint>(other)
+   {}
+
+   QPolygon(const QVector<QPoint> &v) : QVector<QPoint>(v)
+   { }
+
+   QPolygon(QVector<QPoint> &&v)  : QVector<QPoint>(std::move(v))
+   { }
+
+   QPolygon(const QRect &rect, bool closed = false);
    QPolygon(int nPoints, const int *points);
-   inline void swap(QPolygon &other) {
-      QVector<QPoint>::swap(other);   // prevent QVector<QPoint><->QPolygon swaps
+
+   inline ~QPolygon() {}
+
+   void swap(QPolygon &other) {
+      QVector<QPoint>::swap(other);
+   }
+
+   QPolygon(QPolygon &&other) : QVector<QPoint>(std::move(other))
+   { }
+
+   QPolygon &operator=(QPolygon &&other)  {
+      swap(other);
+      return *this;
    }
 
    operator QVariant() const;
@@ -60,9 +76,11 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QRect boundingRect() const;
 
    void point(int i, int *x, int *y) const;
+
    inline QPoint point(int i) const;
    inline void setPoint(int index, int x, int y);
    inline void setPoint(int index, const QPoint &p);
+
    void setPoints(int nPoints, const int *points);
    void setPoints(int nPoints, int firstx, int firsty, ...);
    void putPoints(int index, int nPoints, const int *points);
@@ -111,16 +129,44 @@ inline QPolygon QPolygon::translated(const QPoint &offset) const
 class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
 {
  public:
-   inline QPolygonF() {}
-   inline ~QPolygonF() {}
-   inline QPolygonF(int size);
-   inline QPolygonF(const QPolygonF &a) : QVector<QPointF>(a) {}
-   inline QPolygonF(const QVector<QPointF> &v) : QVector<QPointF>(v) {}
+   QPolygonF()
+   { }
+
+   inline explicit QPolygonF(int size);
+
+   QPolygonF(const QPolygonF &other) : QVector<QPointF>(other)
+   { }
+
+   QPolygonF(const QVector<QPointF> &v) : QVector<QPointF>(v)
+   { }
+
+   QPolygonF(QPolygonF &&other) : QVector<QPointF>(std::move(other))
+   { }
+
+   QPolygonF(QVector<QPointF> &&v) : QVector<QPointF>(std::move(v))
+   { }
+
+
    QPolygonF(const QRectF &r);
    QPolygonF(const QPolygon &a);
-   inline void swap(QPolygonF &other) {
-      QVector<QPointF>::swap(other);   // prevent QVector<QPointF><->QPolygonF swaps
+
+   ~QPolygonF() {}
+
+   QPolygonF &operator=(const QPolygonF &other) {
+      QVector<QPointF>::operator=(other);
+      return *this;
    }
+
+   QPolygonF &operator=(QPolygonF &&other) {
+      swap(other);
+      return *this;
+   }
+
+   void swap(QPolygonF &other) {
+      QVector<QPointF>::swap(other);
+   }
+
+   operator QVariant() const;
 
    inline void translate(qreal dx, qreal dy);
    void translate(const QPointF &offset);
@@ -147,10 +193,10 @@ inline QPolygonF::QPolygonF(int asize) : QVector<QPointF>(asize) {}
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygonF &);
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPolygonF &array);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPolygonF &array);
-#endif
+
 
 inline void QPolygonF::translate(qreal dx, qreal dy)
 {
@@ -162,7 +208,7 @@ inline QPolygonF QPolygonF::translated(qreal dx, qreal dy) const
    return translated(QPointF(dx, dy));
 }
 
-QT_END_NAMESPACE
 
 
-#endif // QPOLYGON_H
+
+#endif

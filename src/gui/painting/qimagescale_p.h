@@ -25,13 +25,21 @@
 
 #include <qimage.h>
 
-QT_BEGIN_NAMESPACE
+
 
 /*
   This version accepts only supported formats.
 */
 QImage qSmoothScaleImage(const QImage &img, int w, int h);
 
-QT_END_NAMESPACE
+namespace QImageScale {
+struct QImageScaleInfo {
+   int *xpoints;
+   const unsigned int **ypoints;
+   int *xapoints, *yapoints;
+   int xup_yup;
+};
+}
+
 
 #endif

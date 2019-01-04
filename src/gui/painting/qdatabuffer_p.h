@@ -23,17 +23,19 @@
 #ifndef QDATABUFFER_P_H
 #define QDATABUFFER_P_H
 
-#include <QtCore/qbytearray.h>
+#include <qbytearray.h>
 
-QT_BEGIN_NAMESPACE
+
 
 template <typename Type> class QDataBuffer
 {
+   Q_DISABLE_COPY(QDataBuffer)
+
  public:
    QDataBuffer(int res) {
       capacity = res;
       if (res) {
-         buffer = (Type *) qMalloc(capacity * sizeof(Type));
+         buffer = (Type *) malloc(capacity * sizeof(Type));
       } else {
          buffer = 0;
       }
@@ -42,7 +44,7 @@ template <typename Type> class QDataBuffer
 
    ~QDataBuffer() {
       if (buffer) {
-         qFree(buffer);
+         free(buffer);
       }
    }
 
@@ -65,22 +67,27 @@ template <typename Type> class QDataBuffer
       Q_ASSERT(i >= 0 && i < siz);
       return buffer[i];
    }
+
    inline const Type &at(int i) const {
       Q_ASSERT(i >= 0 && i < siz);
       return buffer[i];
    }
+
    inline Type &last() {
       Q_ASSERT(!isEmpty());
       return buffer[siz - 1];
    }
+
    inline const Type &last() const {
       Q_ASSERT(!isEmpty());
       return buffer[siz - 1];
    }
+
    inline Type &first() {
       Q_ASSERT(!isEmpty());
       return buffer[0];
    }
+
    inline const Type &first() const {
       Q_ASSERT(!isEmpty());
       return buffer[0];
@@ -110,16 +117,17 @@ template <typename Type> class QDataBuffer
          while (capacity < size) {
             capacity *= 2;
          }
-         buffer = (Type *) qRealloc(buffer, capacity * sizeof(Type));
+         buffer = (Type *) realloc(buffer, capacity * sizeof(Type));
       }
    }
 
    inline void shrink(int size) {
       capacity = size;
       if (size) {
-         buffer = (Type *) qRealloc(buffer, capacity * sizeof(Type));
+         buffer = (Type *) realloc(buffer, capacity * sizeof(Type));
+
       } else {
-         qFree(buffer);
+         free(buffer);
          buffer = 0;
       }
    }
@@ -140,7 +148,5 @@ template <typename Type> class QDataBuffer
    int siz;
    Type *buffer;
 };
-
-QT_END_NAMESPACE
 
 #endif // QDATABUFFER_P_H
