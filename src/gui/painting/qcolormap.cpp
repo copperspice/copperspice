@@ -21,20 +21,18 @@
 ***********************************************************************/
 
 #include <qcolormap.h>
+
 #include <qcolor.h>
 #include <qpaintdevice.h>
-#include <qapplication_p.h>
-#include <qgraphicssystem_p.h>
-
-QT_BEGIN_NAMESPACE
+#include <qscreen.h>
+#include <qguiapplication.h>
 
 class QColormapPrivate
 {
-
  public:
    inline QColormapPrivate()
-      : ref(1), mode(QColormap::Direct), depth(0), numcolors(0) {
-   }
+      : ref(1), mode(QColormap::Direct), depth(0), numcolors(0)
+   { }
 
    QAtomicInt ref;
 
@@ -49,10 +47,16 @@ void QColormap::initialize()
 {
    screenMap = new QColormapPrivate;
 
-   QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
-   QList<QPlatformScreen *> screens = pi->screens();
+   if (! QGuiApplication::primaryScreen()) {
+      qWarning("no screens available, assuming 24-bit color");
 
-   screenMap->depth = screens.at(0)->depth();
+      screenMap->depth = 24;
+      screenMap->mode = QColormap::Direct;
+      return;
+   }
+
+   screenMap->depth = QGuiApplication::primaryScreen()->depth();
+
    if (screenMap->depth < 8) {
       screenMap->mode = QColormap::Indexed;
       screenMap->numcolors = 256;
@@ -97,12 +101,10 @@ QColormap::Mode QColormap::mode() const
    return d->mode;
 }
 
-
 int QColormap::depth() const
 {
    return d->depth;
 }
-
 
 int QColormap::size() const
 {
@@ -112,9 +114,11 @@ int QColormap::size() const
 #ifndef QT_QWS_DEPTH16_RGB
 #define QT_QWS_DEPTH16_RGB 565
 #endif
+
 static const int qt_rbits = (QT_QWS_DEPTH16_RGB / 100);
 static const int qt_gbits = (QT_QWS_DEPTH16_RGB / 10 % 10);
 static const int qt_bbits = (QT_QWS_DEPTH16_RGB % 10);
+
 static const int qt_red_shift = qt_bbits + qt_gbits - (8 - qt_rbits);
 static const int qt_green_shift = qt_bbits - (8 - qt_gbits);
 static const int qt_neg_blue_shift = 8 - qt_bbits;
@@ -150,6 +154,7 @@ inline QRgb qt_conv16ToRgb(ushort c)
 uint QColormap::pixel(const QColor &color) const
 {
    QRgb rgb = color.rgba();
+
    if (d->mode == QColormap::Direct) {
       switch (d->depth) {
          case 16:
@@ -165,6 +170,7 @@ uint QColormap::pixel(const QColor &color) const
             const int green_mask = 0x00ff00;
             const int blue_mask  = 0x0000ff;
             const int tg = g << green_shift;
+
 #ifdef QT_QWS_DEPTH_32_BGR
             if (qt_screen->pixelType() == QScreen::BGRPixel) {
                const int tb = b << red_shift;
@@ -176,8 +182,7 @@ uint QColormap::pixel(const QColor &color) const
          }
       }
    }
-   //XXX
-   //return qt_screen->alloc(qRed(rgb), qGreen(rgb), qBlue(rgb));
+
    return 0;
 }
 
@@ -187,21 +192,24 @@ const QColor QColormap::colorAt(uint pixel) const
       if (d->depth == 16) {
          pixel = qt_conv16ToRgb(pixel);
       }
+
       const int red_shift = 16;
       const int green_shift = 8;
       const int red_mask   = 0xff0000;
       const int green_mask = 0x00ff00;
       const int blue_mask  = 0x0000ff;
+
 #ifdef QT_QWS_DEPTH_32_BGR
       if (qt_screen->pixelType() == QScreen::BGRPixel) {
          return QColor((pixel & blue_mask),
-                       (pixel & green_mask) >> green_shift,
-                       (pixel & red_mask) >> red_shift);
+               (pixel & green_mask) >> green_shift,
+               (pixel & red_mask) >> red_shift);
       }
 #endif
+
       return QColor((pixel & red_mask) >> red_shift,
-                    (pixel & green_mask) >> green_shift,
-                    (pixel & blue_mask));
+            (pixel & green_mask) >> green_shift,
+            (pixel & blue_mask));
    }
 
    return QColor();
@@ -218,4 +226,3 @@ QColormap &QColormap::operator=(const QColormap &colormap)
    return *this;
 }
 
-QT_END_NAMESPACE
