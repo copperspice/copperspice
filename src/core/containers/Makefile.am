@@ -30,7 +30,6 @@ CORE_PUBLIC_INCLUDES += \
    QVector \
    QVectorIterator
 
-
 CORE_CONTAINERS_INCLUDES = \
    qcache.h \
    qcontainerfwd.h \
@@ -66,9 +65,12 @@ CORE_CONTAINERS_INCLUDES = \
    qvectoriterator.h
 
 
-CORE_PUBLIC_INCLUDES += $(CORECONTAINERS_PUBLIC_INCLUDES)
+CORE_PUBLIC_INCLUDES += $(CORE_CONTAINERS_PUBLIC_INCLUDES)
 CORE_INCLUDES += $(CORE_CONTAINERS_INCLUDES)
-CORE_PRIVATE_INCLUDES += $(CORE_TCONTAINERS_PRIVATE_INCLUDES)
+CORE_PRIVATE_INCLUDES += $(CORE_CONTAINERS_PRIVATE_INCLUDES)
+
+noinst_HEADERS+=$(patsubst %,src/core/containers/%,$(CORE_CONTAINERS_INCLUDES)) \
+		$(patsubst %,src/core/containers/%,$(CORE_CONTAINERS_PRIVATE_INCLUDES))
 
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/containers/qcontiguouscache.cpp \

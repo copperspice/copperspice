@@ -22,6 +22,9 @@ CORE_PUBLIC_INCLUDES += $(CORE_DATETIME_PUBLIC_INCLUDES)
 CORE_INCLUDES += $(CORE_DATETIME_INCLUDES)
 CORE_PRIVATE_INCLUDES += $(CORE_DATETIME_PRIVATE_INCLUDES)
 
+noinst_HEADERS+=$(patsubst %,src/core/datetime/%,$(CORE_DATETIME_INCLUDES)) \
+		$(patsubst %,src/core/datetime/%,$(CORE_DATETIME_PRIVATE_INCLUDES))
+
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/datetime/qdatetime.cpp \
    src/core/datetime/qdatetimeparser.cpp \

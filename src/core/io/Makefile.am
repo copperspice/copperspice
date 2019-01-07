@@ -193,7 +193,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfsfileengine_unix.cpp \
 	src/core/io/qprocess_unix.cpp \
 	src/core/io/qsettings_mac.cpp \
-	src/core/io/qstandardpaths_mac.cpp \
 	src/core/io/forkfd_qt.cpp \
+	src/core/io/qstandardpaths_mac.mm \
 	src/core/io/qurl_mac.mm
 endif

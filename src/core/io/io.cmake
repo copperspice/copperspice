@@ -194,8 +194,8 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qfsfileengine_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qprocess_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/forkfd_qt.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl_mac.mm
     )
 endif()

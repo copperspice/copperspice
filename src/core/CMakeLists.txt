@@ -96,6 +96,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
       -framework Foundation
       -framework Security
       -framework ApplicationServices
+      -framework AppKit
       -lobjc
    )
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)

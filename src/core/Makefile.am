@@ -32,7 +32,7 @@ endif
 
 if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -framework CoreFoundation -framework Foundation \
-   -framework Security -framework ApplicationServices -lobjc
+   -framework Security -framework ApplicationServices -framework AppKit -lobjc
 lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/forkfd
 endif
 
@@ -88,6 +88,8 @@ EXTRA_DIST+= \
 	src/core/animation/animation.cmake \
 	src/core/codecs/codecs.cmake \
 	src/core/concurrent/concurrent.cmake \
+	src/core/containers/containers.cmake \
+	src/core/datetime/datetime.cmake \
 	src/core/global/global.cmake \
 	src/core/io/io.cmake \
 	src/core/json/json.cmake \
