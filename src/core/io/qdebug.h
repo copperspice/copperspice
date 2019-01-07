@@ -81,7 +81,9 @@ class Q_CORE_EXPORT QDebug
       void unsetFlag(FormatFlag flag) {
       }
 
-      int verbosity() const;
+      int verbosity() const {
+         return 2;
+      }
 
       void setVerbosity(int v) {
       }

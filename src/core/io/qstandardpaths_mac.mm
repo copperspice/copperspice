@@ -22,9 +22,11 @@
 
 #include <qstandardpaths.h>
 #include <qdir.h>
+#include <qurl.h>
 #include <qcore_mac_p.h>
 #include <qcoreapplication.h>
 
+#include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 
 /*
@@ -35,13 +37,11 @@ OSType translateLocation(QStandardPaths::StandardLocation type)
    switch (type) {
       case QStandardPaths::ConfigLocation:
       case QStandardPaths::GenericConfigLocation:
+      case QStandardPaths::AppConfigLocation:
          return kPreferencesFolderType;
 
       case QStandardPaths::DesktopLocation:
          return kDesktopFolderType;
-
-      case QStandardPaths::DownloadLocation: // needs NSSearchPathForDirectoriesInDomains with NSDownloadsDirectory
-      // which needs an objective-C *.mm file...
 
       case QStandardPaths::DocumentsLocation:
          return kDocumentsFolderType;
@@ -65,7 +65,8 @@ OSType translateLocation(QStandardPaths::StandardLocation type)
          return kTemporaryFolderType;
       case QStandardPaths::GenericDataLocation:
       case QStandardPaths::RuntimeLocation:
-      case QStandardPaths::DataLocation:
+      case QStandardPaths::AppDataLocation:
+      case QStandardPaths::AppLocalDataLocation:
          return kApplicationSupportFolderType;
       case QStandardPaths::GenericCacheLocation:
       case QStandardPaths::CacheLocation:
@@ -75,15 +76,14 @@ OSType translateLocation(QStandardPaths::StandardLocation type)
    }
 }
 
-/*
-    Constructs a full unicode path from a FSRef.
-*/
 static QString getFullPath(const FSRef &ref)
 {
    QByteArray ba(2048, 0);
+
    if (FSRefMakePath(&ref, reinterpret_cast<UInt8 *>(ba.data()), ba.size()) == noErr) {
       return QString::fromUtf8(ba.constData()).normalized(QString::NormalizationForm_C);
    }
+
    return QString();
 }
 
@@ -91,7 +91,7 @@ static void appendOrganizationAndApp(QString &path)
 {
    const QString org = QCoreApplication::organizationName();
 
-   if (!org.isEmpty()) {
+   if (! org.isEmpty()) {
       path += '/' + org;
    }
 
@@ -104,6 +104,14 @@ static void appendOrganizationAndApp(QString &path)
 
 static QString macLocation(QStandardPaths::StandardLocation type, short domain)
 {
+    // https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/index.html
+    if (type == QStandardPaths::DownloadLocation) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        if (!url)
+            return QString();
+        return QString::fromNSString([url path]);
+    }
    // http://developer.apple.com/documentation/Carbon/Reference/Folder_Manager/Reference/reference.html
    FSRef ref;
 
@@ -114,8 +122,9 @@ static QString macLocation(QStandardPaths::StandardLocation type, short domain)
 
    QString path = getFullPath(ref);
 
-   if (type == QStandardPaths::DataLocation || type == QStandardPaths::CacheLocation) {
-      appendOrganizationAndApp(path);
+   if (type == QStandardPaths::AppDataLocation || type == QStandardPaths::AppLocalDataLocation ||
+        type == QStandardPaths::CacheLocation || type == QStandardPaths::AppConfigLocation) {
+        appendOrganizationAndApp(path);
    }
 
    return path;
@@ -129,9 +138,10 @@ QString QStandardPaths::writableLocation(StandardLocation type)
 
       switch (type) {
          case GenericDataLocation:
-         case DataLocation:
-            path = qttestDir + QLatin1String("/Application Support");
-            if (type == DataLocation) {
+        case AppDataLocation:
+        case AppLocalDataLocation:
+            path = qttestDir + "/Application Support";
+            if (type != GenericDataLocation) {
                appendOrganizationAndApp(path);
             }
             return path;
@@ -142,9 +152,15 @@ QString QStandardPaths::writableLocation(StandardLocation type)
                appendOrganizationAndApp(path);
             }
             return path;
-         case GenericConfigLocation:
-         case ConfigLocation:
-            return qttestDir + QLatin1String("/Preferences");
+
+        case GenericConfigLocation:
+        case ConfigLocation:
+        case AppConfigLocation:
+            path = qttestDir + QLatin1String("/Preferences");
+            if (type == AppConfigLocation)
+                appendOrganizationAndApp(path);
+            return path;
+
          default:
             break;
       }
@@ -156,7 +172,8 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case TempLocation:
          return QDir::tempPath();
       case GenericDataLocation:
-      case DataLocation:
+     case AppDataLocation:
+     case AppLocalDataLocation:
       case GenericCacheLocation:
       case CacheLocation:
       case RuntimeLocation:
@@ -170,15 +187,16 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
 {
    QStringList dirs;
 
-   if (type == GenericDataLocation || type == DataLocation || type == GenericCacheLocation || type == CacheLocation) {
-      const QString path = macLocation(type, kOnAppropriateDisk);
-      if (!path.isEmpty()) {
-         dirs.append(path);
-      }
-   }
+    if (type == GenericDataLocation || type == AppDataLocation || type == AppLocalDataLocation || type == GenericCacheLocation || type == CacheLocation) {
+        const QString path = macLocation(type, kOnAppropriateDisk);
+        if (!path.isEmpty())
+            dirs.append(path);
+    }
 
-   if (type == DataLocation) {
+    if (type == AppDataLocation || type == AppLocalDataLocation) {
+
       CFBundleRef mainBundle = CFBundleGetMainBundle();
+
       if (mainBundle) {
          CFURLRef bundleUrl = CFBundleCopyBundleURL(mainBundle);
          CFStringRef cfBundlePath = CFURLCopyPath(bundleUrl);
@@ -187,7 +205,8 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
          CFRelease(bundleUrl);
 
          CFURLRef resourcesUrl = CFBundleCopyResourcesDirectoryURL(mainBundle);
-         CFStringRef cfResourcesPath = CFURLCopyPath(bundleUrl);
+         CFStringRef cfResourcesPath = CFURLCopyPath(resourcesUrl);
+
          QString resourcesPath = QCFString::toQString(cfResourcesPath);
          CFRelease(cfResourcesPath);
          CFRelease(resourcesUrl);
@@ -195,13 +214,15 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
          // Handle bundled vs unbundled executables. CFBundleGetMainBundle() returns
          // a valid bundle in both cases. CFBundleCopyResourcesDirectoryURL() returns
          // an absolute path for unbundled executables.
-         if (resourcesPath.startsWith(QLatin1Char('/'))) {
+
+         if (resourcesPath.startsWith('/')) {
             dirs.append(resourcesPath);
          } else {
             dirs.append(bundlePath + resourcesPath);
          }
       }
    }
+
    const QString localDir = writableLocation(type);
    dirs.prepend(localDir);
 
@@ -214,6 +235,15 @@ QString QStandardPaths::displayName(StandardLocation type)
       return QCoreApplication::translate("QStandardPaths", "Home");
    }
 
+   if (QStandardPaths::DownloadLocation == type) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+
+        if (!url)
+            return QString();
+        return QString::fromNSString([fileManager displayNameAtPath: [url absoluteString]]);
+   }
+
    FSRef ref;
    OSErr err = FSFindFolder(kOnAppropriateDisk, translateLocation(type), false, &ref);
    if (err) {
@@ -222,6 +252,7 @@ QString QStandardPaths::displayName(StandardLocation type)
 
    QCFString displayName;
    err = LSCopyDisplayNameForRef(&ref, &displayName);
+
    if (err) {
       return QString();
    }

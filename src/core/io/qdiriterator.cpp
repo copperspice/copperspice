@@ -33,10 +33,8 @@
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qfilesystemengine_p.h>
-#include <qfsfileengine.h>
-#include <qfileinfo_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qfileinfo_p.h>
 
 template <class Iterator>
 class QDirIteratorPrivateIteratorStack : public QStack<Iterator *>
@@ -279,11 +277,6 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
       return false;
    }
 
-   if ((filters & QDir::NoDotAndDotDot) && dotOrDotDot) {
-      // ### Qt5/remove (NoDotAndDotDot == NoDot|NoDotDot)
-      return false;
-   }
-
    // name filter
    // Pass all entries through name filters, except dirs if the AllDirs
 
@@ -354,16 +347,7 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
 
 QDirIterator::QDirIterator(const QDir &dir, IteratorFlags flags)
 {
-   // little trick to get hold of the QDirPrivate while there is no API on QDir to give it to us
-   class MyQDir : public QDir
-   {
-    public:
-      const QDirPrivate *priv() const {
-         return d_ptr.constData();
-      }
-   };
-
-   const QDirPrivate *other = static_cast<const MyQDir *>(&dir)->priv();
+   const QDirPrivate *other = dir.d_ptr.constData();
    d.reset(new QDirIteratorPrivate(other->dirEntry, other->nameFilters, other->filters, flags, ! other->fileEngine.isNull()));
 }
 
@@ -387,16 +371,6 @@ QDirIterator::~QDirIterator()
 {
 }
 
-/*!
-    Advances the iterator to the next entry, and returns the file path of this
-    new entry. If hasNext() returns false, this function does nothing, and
-    returns a null QString.
-
-    You can call fileName() or filePath() to get the current entry file name
-    or path, or fileInfo() to get a QFileInfo for the current entry.
-
-    \sa hasNext(), fileName(), filePath(), fileInfo()
-*/
 QString QDirIterator::next()
 {
    d->advance();
@@ -421,16 +395,6 @@ bool QDirIterator::hasNext() const
 #endif
 }
 
-/*!
-    Returns the file name for the current directory entry, without the path
-    prepended.
-
-    This function is convenient when iterating a single directory. When using
-    the QDirIterator::Subdirectories flag, you can use filePath() to get the
-    full path.
-
-    \sa filePath(), fileInfo()
-*/
 QString QDirIterator::fileName() const
 {
    return d->currentFileInfo.fileName();
@@ -464,4 +428,3 @@ QString QDirIterator::path() const
    return d->dirEntry.filePath();
 }
 
-QT_END_NAMESPACE

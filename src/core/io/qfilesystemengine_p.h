@@ -33,7 +33,14 @@ QT_BEGIN_NAMESPACE
 class QFileSystemEngine
 {
  public:
-   static bool isCaseSensitive();
+   static bool isCaseSensitive()
+    {
+#ifndef Q_OS_WIN
+        return true;
+#else
+        return false;
+#endif
+    }
 
    static QFileSystemEntry getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data);
    static QFileSystemEntry canonicalName(const QFileSystemEntry &entry, QFileSystemMetaData &data);
@@ -61,7 +68,7 @@ class QFileSystemEngine
 #endif
 
 #if defined(Q_OS_WIN)
-   static bool uncListSharesOnServer(const QString &server,QStringList *list); 
+   static bool uncListSharesOnServer(const QString &server,QStringList *list);
    static bool fillMetaData(int fd, QFileSystemMetaData &data,QFileSystemMetaData::MetaDataFlags what);
    static bool fillMetaData(HANDLE fHandle, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what);
    static bool fillPermissions(const QFileSystemEntry &entry, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what);
@@ -83,7 +90,7 @@ class QFileSystemEngine
    static bool renameFile(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error);
    static bool removeFile(const QFileSystemEntry &entry, QSystemError &error);
 
-   static bool setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions, 
+   static bool setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
          QSystemError &error, QFileSystemMetaData *data = 0);
 
    static bool setCurrentPath(const QFileSystemEntry &entry);

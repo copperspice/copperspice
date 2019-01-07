@@ -102,10 +102,9 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
          return true;
       }
 
-#ifndef Q_OS_IOS
       // Find if an application other than Finder claims to know how to handle the package
       QCFType<CFURLRef> application;
-      LSGetApplicationForURL(url, kLSRolesEditor | kLSRolesViewer | kLSRolesViewer, NULL, &application);
+      application = LSCopyDefaultApplicationURLForURL(url, kLSRolesEditor | kLSRolesViewer | kLSRolesViewer, NULL);
 
       if (application) {
          QCFType<CFBundleRef> bundle = CFBundleCreate(kCFAllocatorDefault, application);
@@ -116,8 +115,6 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
             return true;
          }
       }
-#endif
-
    }
 
    // Third step: check if the directory has the package bit set
@@ -126,10 +123,6 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
 #endif  // Q_OS_DARWIN
 
 
-bool QFileSystemEngine::isCaseSensitive()
-{
-   return true;
-}
 
 //static
 QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data)

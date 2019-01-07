@@ -19,36 +19,31 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-
-#include <algorithm>
-
 #include <qplatformdefs.h>
 #include <qdir.h>
-#include <qdir_p.h>
-#include <qabstractfileengine.h>
-
 #include <qdebug.h>
 #include <qdiriterator.h>
-#include <qfsfileengine.h>
 #include <qdatetime.h>
+#include <qresource.h>
 #include <qregularexpression.h>
 #include <qstring.h>
 #include <qvector.h>
 #include <qvarlengtharray.h>
+
+#include <qdir_p.h>
+#include <qabstractfileengine_p.h>
+#include <qcoreglobaldata_p.h>
+#include <qfsfileengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qfilesystemengine_p.h>
 
-#ifdef QT_BUILD_CORE_LIB
-#  include <qresource.h>
-#  include <qcoreglobaldata_p.h>
-#endif
-
+#include <algorithm>
 #include <stdlib.h>
 
+#if defined(Q_OS_WIN)
 static QString driveSpec(const QString &path)
 {
-#if defined(Q_OS_WIN)
    if (path.size() < 2) {
       return QString();
    }
@@ -61,12 +56,9 @@ static QString driveSpec(const QString &path)
       return QString();
    }
    return path.mid(0, 2);
-
-#else
-   Q_UNUSED(path);
-   return QString();
-#endif
 }
+#endif
+
 
 QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, QDir::SortFlags sort_,
                          QDir::Filters filters_)
@@ -94,10 +86,10 @@ QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, Q
 
 QDirPrivate::QDirPrivate(const QDirPrivate &copy)
    : QSharedData(copy)
+   , fileListsInitialized(false)
    , nameFilters(copy.nameFilters)
    , sort(copy.sort)
    , filters(copy.filters)
-   , fileListsInitialized(false)
    , dirEntry(copy.dirEntry)
    , metaData(copy.metaData)
 {
@@ -141,7 +133,7 @@ inline QChar QDirPrivate::getFilterSepChar(const QString &nameFilter)
 // static
 inline QStringList QDirPrivate::splitFilters(const QString &nameFilter, QChar sep)
 {
-   if (sep == 0) {
+   if (sep.isNull()) {
       sep = getFilterSepChar(nameFilter);
    }
 
@@ -215,10 +207,10 @@ class QDirSortItemComparator
    int qt_cmp_si_sort_flags;
  public:
    QDirSortItemComparator(int flags) : qt_cmp_si_sort_flags(flags) {}
-   bool operator()(const QDirSortItem &, const QDirSortItem &);
+   bool operator()(const QDirSortItem &, const QDirSortItem &) const;
 };
 
-bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortItem &n2)
+bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortItem &n2) const
 {
    const QDirSortItem *f1 = &n1;
    const QDirSortItem *f2 = &n2;
@@ -231,16 +223,27 @@ bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortIt
       return !f1->item.isDir();
    }
 
-   int r = 0;
+   qint64 r = 0;
    int sortBy = (qt_cmp_si_sort_flags & QDir::SortByMask) | (qt_cmp_si_sort_flags & QDir::Type);
 
    switch (sortBy) {
-      case QDir::Time:
-         r = f1->item.lastModified().secsTo(f2->item.lastModified());
-         break;
+      case QDir::Time: {
+        QDateTime firstModified = f1->item.lastModified();
+        QDateTime secondModified = f2->item.lastModified();
+
+        // QDateTime by default will do all sorts of conversions on these to
+        // find timezones, which is incredibly expensive. As we aren't
+        // presenting these to the user, we don't care (at all) about the
+        // local timezone, so force them to UTC to avoid that conversion.
+        firstModified.setTimeSpec(Qt::UTC);
+        secondModified.setTimeSpec(Qt::UTC);
+
+        r = firstModified.msecsTo(secondModified);
+        break;
+      }
 
       case QDir::Size:
-         r = int(qBound(-1, f2->item.size() - f1->item.size(), 1));
+         r = f2->item.size() - f1->item.size();
          break;
 
       case QDir::Type: {
@@ -343,6 +346,11 @@ inline void QDirPrivate::initFileEngine()
    fileEngine.reset(QFileSystemEngine::resolveEntryAndCreateLegacyEngine(dirEntry, metaData));
 }
 
+
+QDir::QDir(QDirPrivate &p) : d_ptr(&p)
+{
+}
+
 QDir::QDir(const QString &path) : d_ptr(new QDirPrivate(path))
 {
 }
@@ -366,30 +374,12 @@ void QDir::setPath(const QString &path)
    d_ptr->setPath(path);
 }
 
-/*!
-    Returns the path. This may contain symbolic links, but never
-    contains redundant ".", ".." or multiple separators.
-
-    The returned path can be either absolute or relative (see
-    setPath()).
-
-    \sa setPath(), absolutePath(), exists(), cleanPath(), dirName(),
-    absoluteFilePath(), toNativeSeparators(), makeAbsolute()
-*/
 QString QDir::path() const
 {
    const QDirPrivate *d = d_ptr.constData();
    return d->dirEntry.filePath();
 }
 
-/*!
-    Returns the absolute path (a path that starts with "/" or with a
-    drive specification), which may contain symbolic links, but never
-    contains redundant ".", ".." or multiple separators.
-
-    \sa setPath(), canonicalPath(), exists(), cleanPath(),
-    dirName(), absoluteFilePath()
-*/
 QString QDir::absolutePath() const
 {
    const QDirPrivate *d = d_ptr.constData();
@@ -469,14 +459,6 @@ QString QDir::filePath(const QString &fileName) const
    return ret;
 }
 
-/*!
-    Returns the absolute path name of a file in the directory. Does \e
-    not check if the file actually exists in the directory; but see
-    exists(). Redundant multiple separators or "." and ".."
-    directories in \a fileName are not removed (see cleanPath()).
-
-    \sa relativeFilePath() filePath() canonicalPath()
-*/
 QString QDir::absoluteFilePath(const QString &fileName) const
 {
    const QDirPrivate *d = d_ptr.constData();
@@ -486,16 +468,19 @@ QString QDir::absoluteFilePath(const QString &fileName) const
 
    d->resolveAbsoluteEntry();
 
+   const QString absoluteDirPath = d->absoluteDirEntry.filePath();
+
    if (fileName.isEmpty()) {
-      return d->absoluteDirEntry.filePath();
+      return absoluteDirPath;
    }
 
-   if (!d->absoluteDirEntry.isRoot()) {
-      return d->absoluteDirEntry.filePath() + '/' + fileName;
+   if (!absoluteDirPath.endsWith('/')) {
+      return absoluteDirPath + '/' + fileName;
    }
 
-   return d->absoluteDirEntry.filePath() + fileName;
+   return absoluteDirPath + fileName;
 }
+
 
 QString QDir::relativeFilePath(const QString &fileName) const
 {
@@ -506,6 +491,7 @@ QString QDir::relativeFilePath(const QString &fileName) const
       return file;
    }
 
+#ifdef Q_OS_WIN
    QString dirDrive = driveSpec(dir);
    QString fileDrive = driveSpec(file);
 
@@ -516,13 +502,7 @@ QString QDir::relativeFilePath(const QString &fileName) const
       fileDriveMissing = true;
    }
 
-#ifdef Q_OS_WIN
    if (fileDrive.toLower() != dirDrive.toLower() || (file.startsWith("//") && ! dir.startsWith("//"))) {
-
-#else
-   if (fileDrive != dirDrive) {
-
-#endif
       return file;
    }
 
@@ -530,18 +510,20 @@ QString QDir::relativeFilePath(const QString &fileName) const
    if (! fileDriveMissing) {
       file.remove(0, fileDrive.size());
    }
+#endif
 
    QString result;
-   QStringList dirElts = dir.split('/', QStringParser::SkipEmptyParts);
-   QStringList fileElts = file.split('/', QStringParser::SkipEmptyParts);
+   QList<QStringView> dirElts  = QStringParser::split<QStringView>(dir,  '/', QStringParser::SkipEmptyParts);
+   QList<QStringView> fileElts = QStringParser::split<QStringView>(file, '/', QStringParser::SkipEmptyParts);
 
    int i = 0;
    while (i < dirElts.size() && i < fileElts.size() &&
 
 #if defined(Q_OS_WIN)
-          dirElts.at(i).toLower() == fileElts.at(i).toLower()) {
+      // emerald - dirElts.at(i).compare(fileElts.at(i), Qt::CaseInsensitive) == 0)
+      dirElts.at(i).toLower() == fileElts.at(i).toLower()) {
 #else
-          dirElts.at(i) == fileElts.at(i)) {
+      dirElts.at(i) == fileElts.at(i)) {
 #endif
       ++i;
    }
@@ -556,6 +538,10 @@ QString QDir::relativeFilePath(const QString &fileName) const
       if (j < fileElts.size() - 1) {
          result += '/';
       }
+   }
+
+   if (result.isEmpty()) {
+      result = ".";
    }
 
    return result;
@@ -573,9 +559,7 @@ QString QDir::toNativeSeparators(const QString &pathName)
    return pathName;
 
 #endif
-
 }
-
 
 QString QDir::fromNativeSeparators(const QString &pathName)
 {
@@ -604,9 +588,6 @@ bool QDir::cd(const QString &dirName)
 
    } else {
       if (isRoot()) {
-         if (dirName == "..") {
-            return false;
-         }
          newPath = d->dirEntry.filePath();
 
       } else {
@@ -617,6 +598,19 @@ bool QDir::cd(const QString &dirName)
 
       if (dirName.indexOf('/') >= 0 || dirName == ".." || d->dirEntry.filePath() == ".") {
          newPath = cleanPath(newPath);
+
+#if defined (Q_OS_UNIX)
+            //After cleanPath() if path is "/.." or starts with "/../" it means trying to cd above root.
+            if (newPath.startsWith("/../") || newPath == "/..")
+#else
+            //  cleanPath() already took care of replacing '\' with '/'.
+            //  We can't use startsWith here because the letter of the drive is unknown.
+            //  After cleanPath() if path is "[A-Z]:/.." or starts with "[A-Z]:/../" it means trying to cd above root.
+
+            if (newPath.midView(1, 4) == ":/.." && (newPath.length() == 5 || newPath.at(5) == '/'))
+#endif
+                return false;
+
 
          if (newPath.startsWith("..")) {
             newPath = QFileInfo(newPath).absoluteFilePath();
@@ -660,14 +654,9 @@ void QDir::setNameFilters(const QStringList &nameFilters)
 // obsolete
 void QDir::addResourceSearchPath(const QString &path)
 {
-#ifdef QT_BUILD_CORE_LIB
    QResource::addSearchPath(path);
-#else
-   Q_UNUSED(path)
-#endif
-}
 
-#ifdef QT_BUILD_CORE_LIB
+}
 
 void QDir::setSearchPaths(const QString &prefix, const QStringList &searchPaths)
 {
@@ -692,13 +681,6 @@ void QDir::setSearchPaths(const QString &prefix, const QStringList &searchPaths)
    }
 }
 
-/*!
-    \since 4.3
-
-    Adds \a path to the search path for \a prefix.
-
-    \sa setSearchPaths()
-*/
 void QDir::addSearchPath(const QString &prefix, const QString &path)
 {
    if (path.isEmpty()) {
@@ -709,106 +691,18 @@ void QDir::addSearchPath(const QString &prefix, const QString &path)
    QCoreGlobalData::instance()->dirSearchPaths[prefix] += path;
 }
 
-/*!
-    \since 4.3
-
-    Returns the search paths for \a prefix.
-
-    \sa setSearchPaths(), addSearchPath()
-*/
 QStringList QDir::searchPaths(const QString &prefix)
 {
    QReadLocker lock(&QCoreGlobalData::instance()->dirSearchPathsLock);
    return QCoreGlobalData::instance()->dirSearchPaths.value(prefix);
 }
 
-#endif // QT_BUILD_CORE_LIB
-
-/*!
-    Returns the value set by setFilter()
-*/
 QDir::Filters QDir::filter() const
 {
    const QDirPrivate *d = d_ptr.constData();
    return d->filters;
 }
 
-/*!
-    \enum QDir::Filter
-
-    This enum describes the filtering options available to QDir; e.g.
-    for entryList() and entryInfoList(). The filter value is specified
-    by combining values from the following list using the bitwise OR
-    operator:
-
-    \value Dirs    List directories that match the filters.
-    \value AllDirs  List all directories; i.e. don't apply the filters
-                    to directory names.
-    \value Files   List files.
-    \value Drives  List disk drives (ignored under Unix).
-    \value NoSymLinks  Do not list symbolic links (ignored by operating
-                       systems that don't support symbolic links).
-    \value NoDotAndDotDot Do not list the special entries "." and "..".
-    \value NoDot       Do not list the special entry ".".
-    \value NoDotDot    Do not list the special entry "..".
-    \value AllEntries  List directories, files, drives and symlinks (this does not list
-                broken symlinks unless you specify System).
-    \value Readable    List files for which the application has read
-                       access. The Readable value needs to be combined
-                       with Dirs or Files.
-    \value Writable    List files for which the application has write
-                       access. The Writable value needs to be combined
-                       with Dirs or Files.
-    \value Executable  List files for which the application has
-                       execute access. The Executable value needs to be
-                       combined with Dirs or Files.
-    \value Modified  Only list files that have been modified (ignored
-                     on Unix).
-    \value Hidden  List hidden files (on Unix, files starting with a ".").
-    \value System  List system files (on Unix, FIFOs, sockets and
-                   device files are included; on Windows, \c {.lnk}
-                   files are included)
-    \value CaseSensitive  The filter should be case sensitive.
-
-    \omitvalue DefaultFilter
-    \omitvalue TypeMask
-    \omitvalue All
-    \omitvalue RWEMask
-    \omitvalue AccessMask
-    \omitvalue PermissionMask
-    \omitvalue NoFilter
-
-    Functions that use Filter enum values to filter lists of files
-    and directories will include symbolic links to files and directories
-    unless you set the NoSymLinks value.
-
-    A default constructed QDir will not filter out files based on
-    their permissions, so entryList() and entryInfoList() will return
-    all files that are readable, writable, executable, or any
-    combination of the three.  This makes the default easy to write,
-    and at the same time useful.
-
-    For example, setting the \c Readable, \c Writable, and \c Files
-    flags allows all files to be listed for which the application has read
-    access, write access or both. If the \c Dirs and \c Drives flags are
-    also included in this combination then all drives, directories, all
-    files that the application can read, write, or execute, and symlinks
-    to such files/directories can be listed.
-
-    To retrieve the permissons for a directory, use the
-    entryInfoList() function to get the associated QFileInfo objects
-    and then use the QFileInfo::permissons() to obtain the permissions
-    and ownership for each file.
-*/
-
-/*!
-    Sets the filter used by entryList() and entryInfoList() to \a
-    filters. The filter is used to specify the kind of files that
-    should be returned by entryList() and entryInfoList(). See
-    \l{QDir::Filter}.
-
-    \sa filter(), setNameFilters()
-*/
 void QDir::setFilter(Filters filters)
 {
    QDirPrivate *d = d_ptr.data();
@@ -829,44 +723,7 @@ QDir::SortFlags QDir::sorting() const
    return d->sort;
 }
 
-/*!
-    \enum QDir::SortFlag
 
-    This enum describes the sort options available to QDir, e.g. for
-    entryList() and entryInfoList(). The sort value is specified by
-    OR-ing together values from the following list:
-
-    \value Name  Sort by name.
-    \value Time  Sort by time (modification time).
-    \value Size  Sort by file size.
-    \value Type  Sort by file type (extension).
-    \value Unsorted  Do not sort.
-    \value NoSort Not sorted by default.
-
-    \value DirsFirst  Put the directories first, then the files.
-    \value DirsLast Put the files first, then the directories.
-    \value Reversed  Reverse the sort order.
-    \value IgnoreCase  Sort case-insensitively.
-    \value LocaleAware Sort items appropriately using the current locale settings.
-
-    \omitvalue SortByMask
-    \omitvalue DefaultSort
-
-    You can only specify one of the first four.
-
-    If you specify both DirsFirst and Reversed, directories are
-    still put first, but in reverse order; the files will be listed
-    after the directories, again in reverse order.
-*/
-
-/*!
-    Sets the sort order used by entryList() and entryInfoList().
-
-    The \a sort is specified by OR-ing values from the enum
-    \l{QDir::SortFlag}.
-
-    \sa sorting() SortFlag
-*/
 void QDir::setSorting(SortFlags sort)
 {
    QDirPrivate *d = d_ptr.data();
@@ -935,22 +792,7 @@ QStringList QDir::entryList(const QStringList &nameFilters, Filters filters, Sor
    return ret;
 }
 
-/*!
-    Returns a list of QFileInfo objects for all the files and
-    directories in the directory, ordered according to the name
-    and attribute filters previously set with setNameFilters()
-    and setFilter(), and sorted according to the flags set with
-    setSorting().
 
-    The name filter, file attribute filter, and sorting specification
-    can be overridden using the \a nameFilters, \a filters, and \a sort
-    arguments.
-
-    Returns an empty list if the directory is unreadable, does not
-    exist, or if nothing matches the specification.
-
-    \sa entryList(), setNameFilters(), setSorting(), setFilter(), isReadable(), exists()
-*/
 QFileInfoList QDir::entryInfoList(const QStringList &nameFilters, Filters filters,
                                   SortFlags sort) const
 {
@@ -1003,6 +845,7 @@ bool QDir::mkdir(const QString &dirName) const
    if (d->fileEngine.isNull()) {
       return QFileSystemEngine::createDirectory(QFileSystemEntry(fn), false);
    }
+
    return d->fileEngine->mkdir(fn, false);
 }
 
@@ -1032,19 +875,6 @@ bool QDir::rmdir(const QString &dirName) const
    return d->fileEngine->rmdir(fn, false);
 }
 
-/*!
-    Creates the directory path \a dirPath.
-
-    The function will create all parent directories necessary to
-    create the directory.
-
-    Returns true if successful; otherwise returns false.
-
-    If the path already exists when this function is called, it will return true.
-
-    \sa rmpath()
-*/
-// ### Qt5/behaviour when directory already exists should be made consistent for mkdir and mkpath
 bool QDir::mkpath(const QString &dirPath) const
 {
    const QDirPrivate *d = d_ptr.constData();
@@ -1058,20 +888,10 @@ bool QDir::mkpath(const QString &dirPath) const
    if (d->fileEngine.isNull()) {
       return QFileSystemEngine::createDirectory(QFileSystemEntry(fn), true);
    }
+
    return d->fileEngine->mkdir(fn, true);
 }
 
-/*!
-    Removes the directory path \a dirPath.
-
-    The function will remove all parent directories in \a dirPath,
-    provided that they are empty. This is the opposite of
-    mkpath(dirPath).
-
-    Returns true if successful; otherwise returns false.
-
-    \sa mkpath()
-*/
 bool QDir::rmpath(const QString &dirPath) const
 {
    const QDirPrivate *d = d_ptr.constData();
@@ -1121,14 +941,26 @@ bool QDir::removeRecursively()
 
    while (di.hasNext()) {
       di.next();
-      const QFileInfo &fi = di.fileInfo();
+      const QFileInfo &fi     = di.fileInfo();
+      const QString &filePath = di.filePath();
+
       bool ok;
+
       if (fi.isDir() && !fi.isSymLink()) {
-         ok = QDir(di.filePath()).removeRecursively();   // recursive
+         ok = QDir(filePath).removeRecursively();   // recursive
       } else {
-         ok = QFile::remove(di.filePath());
+         ok = QFile::remove(filePath);
+         if (!ok) { // Read-only files prevent directory deletion on Windows, retry with Write permission.
+            const QFile::Permissions permissions = QFile::permissions(filePath);
+
+            if (!(permissions & QFile::WriteUser)) {
+               ok = QFile::setPermissions(filePath, permissions | QFile::WriteUser)
+                        && QFile::remove(filePath);
+            }
+         }
       }
-      if (!ok) {
+
+      if (! ok) {
          success = false;
       }
    }
@@ -1154,7 +986,7 @@ bool QDir::isReadable() const
    const QDirPrivate *d = d_ptr.constData();
 
    if (d->fileEngine.isNull()) {
-      if (!d->metaData.hasFlags(QFileSystemMetaData::UserReadPermission)) {
+      if (! d->metaData.hasFlags(QFileSystemMetaData::UserReadPermission)) {
          QFileSystemEngine::fillMetaData(d->dirEntry, d->metaData, QFileSystemMetaData::UserReadPermission);
       }
 
@@ -1170,17 +1002,6 @@ bool QDir::isReadable() const
    return info & QAbstractFileEngine::ReadUserPerm;
 }
 
-/*!
-    \overload
-
-    Returns true if the directory exists; otherwise returns false.
-    (If a file with the same name is found this function will return false).
-
-    The overload of this function that accepts an argument is used to test
-    for the presence of files and directories within a directory.
-
-    \sa QFileInfo::exists(), QFile::exists()
-*/
 bool QDir::exists() const
 {
    return d_ptr->exists();
@@ -1206,31 +1027,6 @@ bool QDir::isRoot() const
    return d_ptr->fileEngine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::RootFlag;
 }
 
-/*!
-    \fn bool QDir::isAbsolute() const
-
-    Returns true if the directory's path is absolute; otherwise
-    returns false. See isAbsolutePath().
-
-    \sa isRelative() makeAbsolute() cleanPath()
-*/
-
-/*!
-   \fn bool QDir::isAbsolutePath(const QString &)
-
-    Returns true if \a path is absolute; returns false if it is
-    relative.
-
-    \sa isAbsolute() isRelativePath() makeAbsolute() cleanPath()
-*/
-
-/*!
-    Returns true if the directory path is relative; otherwise returns
-    false. (Under Unix a path is relative if it does not start with a
-    "/").
-
-    \sa makeAbsolute() isAbsolute() isAbsolutePath() cleanPath()
-*/
 bool QDir::isRelative() const
 {
    if (d_ptr->fileEngine.isNull()) {
@@ -1303,54 +1099,46 @@ bool QDir::operator==(const QDir &dir) const
          && d->sort == other->sort
          && d->nameFilters == other->nameFilters) {
 
-      // Fallback to expensive canonical path computation
-      return canonicalPath().compare(dir.canonicalPath(), sensitive) == 0;
-   }
+        // Assume directories are the same if path is the same
+        if (d->dirEntry.filePath() == other->dirEntry.filePath()) {
+            return true;
+        }
+
+        if (exists()) {
+            if (! dir.exists()) {
+                return false; //can't be equal if only one exists
+            }
+
+            // Both exist, fallback to expensive canonical path computation
+            return canonicalPath().compare(dir.canonicalPath(), sensitive) == 0;
+
+        } else {
+            if (dir.exists()) {
+                return false; //can't be equal if only one exists
+            }
+
+            // Neither exists, compare absolute paths rather than canonical (which would be empty strings)
+            d->resolveAbsoluteEntry();
+            other->resolveAbsoluteEntry();
+            return d->absoluteDirEntry.filePath().compare(other->absoluteDirEntry.filePath(), sensitive) == 0;
+        }
+    }
+
    return false;
 }
 
-/*!
-    Makes a copy of the \a dir object and assigns it to this QDir
-    object.
-*/
 QDir &QDir::operator=(const QDir &dir)
 {
    d_ptr = dir.d_ptr;
    return *this;
 }
 
-/*!
-    \overload
-    \obsolete
-
-    Sets the directory path to the given \a path.
-
-    Use setPath() instead.
-*/
 QDir &QDir::operator=(const QString &path)
 {
    d_ptr->setPath(path);
    return *this;
 }
 
-/*!
-    \fn bool QDir::operator!=(const QDir &dir) const
-
-    Returns true if directory \a dir and this directory have different
-    paths or different sort or filter settings; otherwise returns
-    false.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qdir.cpp 11
-*/
-
-/*!
-    Removes the file, \a fileName.
-
-    Returns true if the file is removed successfully; otherwise
-    returns false.
-*/
 bool QDir::remove(const QString &fileName)
 {
    if (fileName.isEmpty()) {
@@ -1360,17 +1148,7 @@ bool QDir::remove(const QString &fileName)
    return QFile::remove(filePath(fileName));
 }
 
-/*!
-    Renames a file or directory from \a oldName to \a newName, and returns
-    true if successful; otherwise returns false.
 
-    On most file systems, rename() fails only if \a oldName does not
-    exist, if \a newName and \a oldName are not on the same
-    partition or if a file with the new name already exists.
-    However, there are also other reasons why rename() can
-    fail. For example, on at least one file system rename() fails if
-    \a newName points to an open file.
-*/
 bool QDir::rename(const QString &oldName, const QString &newName)
 {
    if (oldName.isEmpty() || newName.isEmpty()) {
@@ -1385,16 +1163,6 @@ bool QDir::rename(const QString &oldName, const QString &newName)
    return file.rename(filePath(newName));
 }
 
-/*!
-    Returns true if the file called \a name exists; otherwise returns
-    false.
-
-    Unless \a name contains an absolute file path, the file name is assumed
-    to be relative to the directory itself, so this function is typically used
-    to check for the presence of files within a directory.
-
-    \sa QFileInfo::exists(), QFile::exists()
-*/
 bool QDir::exists(const QString &name) const
 {
    if (name.isEmpty()) {
@@ -1444,11 +1212,6 @@ QString QDir::currentPath()
 QString QDir::homePath()
 {
    return QFileSystemEngine::homePath();
-}
-
-QString QDir::homeDirPath()
-{
-   return homePath();
 }
 
 QString QDir::tempPath()
@@ -1688,6 +1451,10 @@ void QDir::refresh() const
    d->clearFileLists();
 }
 
+QDirPrivate* QDir::d_func()
+{
+    return d_ptr.data();
+}
 QStringList QDir::nameFiltersFromString(const QString &nameFilter)
 {
    return QDirPrivate::splitFilters(nameFilter);
@@ -1695,6 +1462,9 @@ QStringList QDir::nameFiltersFromString(const QString &nameFilter)
 
 QDebug operator<<(QDebug debug, QDir::Filters filters)
 {
+   QDebugStateSaver save(debug);
+   debug.resetFormat();
+
    QStringList flags;
    if (filters == QDir::NoFilter) {
       flags << "NoFilter";
@@ -1747,12 +1517,15 @@ QDebug operator<<(QDebug debug, QDir::Filters filters)
       }
    }
 
-   debug << "QDir::Filters(" << csPrintable(flags.join("|")) << ')';
+   debug.noquote() << "QDir::Filters(" << csPrintable(flags.join("|")) << ')';
    return debug;
 }
 
 static QDebug operator<<(QDebug debug, QDir::SortFlags sorting)
 {
+   QDebugStateSaver save(debug);
+   debug.resetFormat();
+
    if (sorting == QDir::NoSort) {
       debug << "QDir::SortFlags(NoSort)";
 
@@ -1788,23 +1561,29 @@ static QDebug operator<<(QDebug debug, QDir::SortFlags sorting)
       if (sorting & QDir::Type) {
          flags << "Type";
       }
-      debug << "QDir::SortFlags(" << qPrintable(type)
+
+      debug.noquote() << "QDir::SortFlags(" << csPrintable(type)
             << '|'
-            << qPrintable(flags.join("|")) << ')';
+            << csPrintable(flags.join("|")) << ')';
    }
+
    return debug;
 }
 
 QDebug operator<<(QDebug debug, const QDir &dir)
 {
-   debug.maybeSpace() << "QDir(" << dir.path()
-                      << ", nameFilters = {"
-                      << qPrintable(dir.nameFilters().join(","))
-                      << "}, "
-                      << dir.sorting()
-                      << ','
-                      << dir.filter()
-                      << ')';
-   return debug.space();
+   QDebugStateSaver save(debug);
+   debug.resetFormat();
+
+   debug << "QDir(" << dir.path()
+         << ", nameFilters = {"
+         << dir.nameFilters().join(",")
+         << "}, "
+         << dir.sorting()
+         << ','
+         << dir.filter()
+         << ')';
+
+   return debug;
 }
 

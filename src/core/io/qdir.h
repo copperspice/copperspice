@@ -28,44 +28,37 @@
 #include <qstringlist.h>
 #include <qshareddata.h>
 
-// Undefine macro definition found in an X11 header
-#undef Unsorted
-
-QT_BEGIN_NAMESPACE
-
+class QDebug;
+class QDirIterator;
 class QDirPrivate;
 
 class Q_CORE_EXPORT QDir
 {
- protected:
-   QSharedDataPointer<QDirPrivate> d_ptr;
-
  public:
-   enum Filter { Dirs        = 0x001,
-                 Files       = 0x002,
-                 Drives      = 0x004,
-                 NoSymLinks  = 0x008,
-                 AllEntries  = Dirs | Files | Drives,
-                 TypeMask    = 0x00f,
-                 Readable    = 0x010,
-                 Writable    = 0x020,
-                 Executable  = 0x040,
-                 PermissionMask    = 0x070,
-                 Modified    = 0x080,
-                 Hidden      = 0x100,
-                 System      = 0x200,
+   enum Filter { Dirs            = 0x001,
+                 Files           = 0x002,
+                 Drives          = 0x004,
+                 NoSymLinks      = 0x008,
+                 AllEntries      = Dirs | Files | Drives,
+                 TypeMask        = 0x00f,
+                 Readable        = 0x010,
+                 Writable        = 0x020,
+                 Executable      = 0x040,
+                 PermissionMask  = 0x070,
+                 Modified        = 0x080,
+                 Hidden          = 0x100,
+                 System          = 0x200,
 
-                 AccessMask  = 0x3F0,
+                 AccessMask      = 0x3F0,
 
-                 AllDirs       = 0x400,
-                 CaseSensitive = 0x800,
-                 NoDotAndDotDot = 0x1000, // ### Qt5/NoDotAndDotDot = NoDot|NoDotDot
-                 NoDot         = 0x2000,
-                 NoDotDot      = 0x4000,
+                 AllDirs         = 0x400,
+                 CaseSensitive   = 0x800,
+                 NoDot           = 0x2000,
+                 NoDotDot        = 0x4000,
+                 NoDotAndDotDot  = NoDot|NoDotDot,
 
                  NoFilter = -1
                };
-
 
    using Filters = QFlags<Filter>;
 
@@ -91,13 +84,14 @@ class Q_CORE_EXPORT QDir
    QDir(const QString &path = QString());
    QDir(const QString &path, const QString &nameFilter,
         SortFlags sort = SortFlags(Name | IgnoreCase), Filters filter = AllEntries);
+
    ~QDir();
 
-   QDir &operator=(const QDir &);
+   QDir &operator=(const QDir &other);
    QDir &operator=(const QString &path);
 
-   inline QDir &operator=(QDir && other) {
-      qSwap(d_ptr, other.d_ptr);
+   QDir &operator=(QDir &&other) {
+      swap(other);
       return *this;
    }
 
@@ -155,6 +149,10 @@ class Q_CORE_EXPORT QDir
    bool exists() const;
    bool isRoot() const;
 
+   void swap(QDir &other) {
+      qSwap(d_ptr, other.d_ptr);
+   }
+
    static bool isRelativePath(const QString &path);
    inline static bool isAbsolutePath(const QString &path) {
       return !isRelativePath(path);
@@ -176,26 +174,37 @@ class Q_CORE_EXPORT QDir
 
    static QFileInfoList drives();
 
+   static QChar listSeparator() {
+#if defined(Q_OS_WIN)
+        return ';';
+#else
+        return ':';
+#endif
+    }
    static QChar separator();
 
    static bool setCurrent(const QString &path);
    static inline QDir current() {
       return QDir(currentPath());
    }
+
    static QString currentPath();
 
    static inline QDir home() {
       return QDir(homePath());
    }
+
    static QString homePath();
-   static QString homeDirPath();
+
    static inline QDir root() {
       return QDir(rootPath());
    }
+
    static QString rootPath();
    static inline QDir temp() {
       return QDir(tempPath());
    }
+
    static QString tempPath();
 
    static bool match(const QStringList &filters, const QString &fileName);
@@ -204,15 +213,22 @@ class Q_CORE_EXPORT QDir
    static QString cleanPath(const QString &path);
    void refresh() const;
 
+ protected:
+   explicit QDir(QDirPrivate &d);
+   QSharedDataPointer<QDirPrivate> d_ptr;
+
+    friend class QDirIterator;
+    QDirPrivate* d_func();
+    inline const QDirPrivate* d_func() const
+    {
+        return d_ptr.constData();
+    }
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::Filters)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::SortFlags)
 
-class QDebug;
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, QDir::Filters filters);
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QDir &dir);
 
-QT_END_NAMESPACE
-
-#endif // QDIR_H
+#endif

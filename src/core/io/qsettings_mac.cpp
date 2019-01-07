@@ -600,7 +600,7 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
       const QString &organization,
       const QString &application)
 {
-   if (organization == QLatin1String("Qt"))   {
+   if (organization == "CS")   {
         QString organizationDomain = QCoreApplication::organizationDomain();
         QString applicationName = QCoreApplication::applicationName();
 
@@ -635,28 +635,29 @@ static QCFType<CFURLRef> urlFromFileName(const QString &fileName)
 
 bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSettingsMap *map) const
 {
-   QCFType<CFDataRef> resource;
-   SInt32 code;
+   QFile file(fileName);
 
-   if (! CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, urlFromFileName(fileName),
-         &resource, 0, 0, &code)) {
+   if (! file.open(QIODevice::ReadOnly)) {
       return false;
    }
 
-   QCFString errorStr;
-   QCFType<CFPropertyListRef> propertyList =
-      CFPropertyListCreateFromXMLData(kCFAllocatorDefault, resource, kCFPropertyListImmutable,
-                                      &errorStr);
+   QByteArray data = file.readAll();
 
-   if (!propertyList) {
+   QCFType<CFDataRef> resource =
+         CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data.constData()), data.length(), kCFAllocatorNull);
+
+   QCFType<CFPropertyListRef> propertyList =
+         CFPropertyListCreateWithData(kCFAllocatorDefault, resource, kCFPropertyListImmutable, NULL, NULL);
+
+   if (! propertyList) {
       return true;
    }
+
    if (CFGetTypeID(propertyList) != CFDictionaryGetTypeID()) {
       return false;
    }
 
-   CFDictionaryRef cfdict =
-      static_cast<CFDictionaryRef>(static_cast<CFPropertyListRef>(propertyList));
+   CFDictionaryRef cfdict = static_cast<CFDictionaryRef>(static_cast<CFPropertyListRef>(propertyList));
    int size = (int)CFDictionaryGetCount(cfdict);
    QVarLengthArray<CFPropertyListRef> keys(size);
    QVarLengthArray<CFPropertyListRef> values(size);
@@ -666,15 +667,16 @@ bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSett
       QString key = qtKey(static_cast<CFStringRef>(keys[i]));
       map->insert(QSettingsKey(key, Qt::CaseSensitive), qtValue(values[i]));
    }
+
    return true;
 }
 
-bool QConfFileSettingsPrivate::writePlistFile(const QString &fileName,
-      const ParsedSettingsMap &map) const
+bool QConfFileSettingsPrivate::writePlistFile(const QString &fileName, const ParsedSettingsMap &map) const
 {
    QVarLengthArray<QCFType<CFStringRef> > cfkeys(map.size());
    QVarLengthArray<QCFType<CFPropertyListRef> > cfvalues(map.size());
    int i = 0;
+
    ParsedSettingsMap::const_iterator j;
    for (j = map.constBegin(); j != map.constEnd(); ++j) {
       cfkeys[i] = macKey(j.key());
@@ -690,11 +692,18 @@ bool QConfFileSettingsPrivate::writePlistFile(const QString &fileName,
                          &kCFTypeDictionaryKeyCallBacks,
                          &kCFTypeDictionaryValueCallBacks);
 
-    QCFType<CFDataRef> xmlData = CFPropertyListCreateData(
+   QCFType<CFDataRef> xmlData = CFPropertyListCreateData(
                  kCFAllocatorDefault, propertyList, kCFPropertyListXMLFormat_v1_0, 0, 0);
 
-   SInt32 code;
-   return CFURLWriteDataAndPropertiesToResource(urlFromFileName(fileName), xmlData, 0, &code);
-}
+   auto len = CFDataGetLength(xmlData);
+   QByteArray data(reinterpret_cast<const char *>(CFDataGetBytePtr(xmlData)), len);
 
+   QFile file(fileName);
+
+   if (file.open(QIODevice::WriteOnly)) {
+      return file.write(data) == len;
+   } else {
+      return false;
+   }
+}
 
