@@ -84,7 +84,7 @@ static void getGraphemeBreaks(const QString &str, QCharAttributes *attributes)
          state = GB::Break;
 
       } else if (tmpState == GB::NoBr) {
-         state == GB::Break;
+         state = GB::Break;
 
       } else if (tmpState == GB::GB10) {
          state = GB::GB10;

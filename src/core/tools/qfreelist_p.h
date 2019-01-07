@@ -23,11 +23,10 @@
 #ifndef QFREELIST_P_H
 #define QFREELIST_P_H
 
-#include <qglobal.h>
-#include <qassert.h>
+
+
 #include <qatomic.h>
 
-QT_BEGIN_NAMESPACE
 
 template <typename T>
 struct QFreeListElement {
@@ -35,12 +34,13 @@ struct QFreeListElement {
    typedef T &ReferenceType;
 
    T _t;
-   int next;
+   std::atomic<int> next;
 
-   inline ConstReferenceType t() const {
+   ConstReferenceType t() const {
       return _t;
    }
-   inline ReferenceType t() {
+
+   ReferenceType t() {
       return _t;
    }
 };
@@ -50,7 +50,7 @@ struct QFreeListElement<void> {
    typedef void ConstReferenceType;
    typedef void ReferenceType;
 
-   int next;
+   std::atomic<int> next;
 
    inline void t() const { }
    inline void t() { }
@@ -82,12 +82,13 @@ class QFreeList
    static inline int blockfor(int &x) {
       for (int i = 0; i < ConstantsType::BlockCount; ++i) {
          int size = ConstantsType::Sizes[i];
+
          if (x < size) {
             return i;
          }
          x -= size;
       }
-      Q_ASSERT(false);
+
       return -1;
    }
 
@@ -96,23 +97,24 @@ class QFreeList
       // qDebug("QFreeList: allocating %d elements (%ld bytes) with offset %d", size, size * sizeof(ElementType), offset);
       ElementType *v = new ElementType[size];
       for (int i = 0; i < size; ++i) {
-         v[i].next = offset + i + 1;
+         v[i].next.store(offset + i + 1);
       }
       return v;
    }
 
    // take the current serial number from \a o, increment it, and store it in \a n
    static inline int incrementserial(int o, int n) {
-      return (n & ConstantsType::IndexMask) | ((o + ConstantsType::SerialCounter) & ConstantsType::SerialMask);
+      using uint = unsigned int;
+      return int((uint(n) & ConstantsType::IndexMask) | ((uint(o) + ConstantsType::SerialCounter) & ConstantsType::SerialMask));
    }
 
    // the blocks
    QAtomicPointer<ElementType> _v[ConstantsType::BlockCount];
+
    // the next free id
    QAtomicInt _next;
 
-   // QFreeList is not copyable
-   Q_DISABLE_COPY(QFreeList)
+   QFreeList(const QFreeList &) = delete;
 
  public:
    inline QFreeList();
@@ -179,7 +181,7 @@ inline int QFreeList<T, ConstantsType>::next()
          }
       }
 
-      newid = v[at].next | (id & ~ConstantsType::IndexMask);
+      newid = v[at].next.load() | (id & ~ConstantsType::IndexMask);
    } while (!_next.testAndSetRelaxed(id, newid));
    // qDebug("QFreeList::next(): returning %d (_next now %d, serial %d)",
    //        id & ConstantsType::IndexMask,
@@ -198,7 +200,7 @@ inline void QFreeList<T, ConstantsType>::release(int id)
    int x, newid;
    do {
       x = _next.loadAcquire();
-      v[at].next = x & ConstantsType::IndexMask;
+      v[at].next.store(x & ConstantsType::IndexMask);
 
       newid = incrementserial(x, id);
    } while (!_next.testAndSetRelease(x, newid));
@@ -209,6 +211,5 @@ inline void QFreeList<T, ConstantsType>::release(int id)
    //        (newid & ~ConstantsType::IndexMask) >> 24);
 }
 
-QT_END_NAMESPACE
 
 #endif // QFREELIST_P_H

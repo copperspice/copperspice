@@ -31,6 +31,7 @@
 
 class QThreadData;
 class QThreadPrivate;
+class QAbstractEventDispatcher;
 
 class Q_CORE_EXPORT QThread : public QObject
 {
@@ -65,17 +66,12 @@ class Q_CORE_EXPORT QThread : public QObject
    bool isFinished() const;
    bool isRunning() const;
 
+   void requestInterruption();
+   bool isInterruptionRequested() const;
    void setStackSize(uint stackSize);
    uint stackSize() const;
 
    void exit(int retcode = 0);
-
-   CORE_CS_SLOT_1(Public, void start(Priority un_named_arg1 = InheritPriority))
-   CORE_CS_SLOT_2(start)
-   CORE_CS_SLOT_1(Public, void terminate())
-   CORE_CS_SLOT_2(terminate)
-   CORE_CS_SLOT_1(Public, void quit())
-   CORE_CS_SLOT_2(quit)
 
    // default argument causes thread to block indefinately
    bool wait(unsigned long time = ULONG_MAX);
@@ -84,12 +80,26 @@ class Q_CORE_EXPORT QThread : public QObject
    static void msleep(unsigned long msecs);
    static void usleep(unsigned long usecs);
 
+   QAbstractEventDispatcher *eventDispatcher() const;
+   void setEventDispatcher(QAbstractEventDispatcher *eventDispatcher);
+
+    bool event(QEvent *event) override;
+    int loopLevel() const;
+
    CORE_CS_SIGNAL_1(Public, void started())
    CORE_CS_SIGNAL_2(started)
+
    CORE_CS_SIGNAL_1(Public, void finished())
    CORE_CS_SIGNAL_2(finished)
-   CORE_CS_SIGNAL_1(Public, void terminated())
-   CORE_CS_SIGNAL_2(terminated)
+
+   CORE_CS_SLOT_1(Public, void start(Priority un_named_arg1 = InheritPriority))
+   CORE_CS_SLOT_2(start)
+
+   CORE_CS_SLOT_1(Public, void terminate())
+   CORE_CS_SLOT_2(terminate)
+
+   CORE_CS_SLOT_1(Public, void quit())
+   CORE_CS_SLOT_2(quit)
 
  protected:
    virtual void run();
@@ -103,12 +113,9 @@ class Q_CORE_EXPORT QThread : public QObject
  private:
    Q_DECLARE_PRIVATE(QThread)
 
-   static void initialize();
-   static void cleanup();
 
-   friend class QCoreApplicationPrivate;
    friend class QCoreApplication;
    friend class QThreadData;
 };
 
-#endif // QTHREAD_H
+#endif

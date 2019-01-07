@@ -25,19 +25,22 @@
 
 #include <QtCore/qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 template <typename T>
 class QScopedValueRollback
 {
  public:
-   QScopedValueRollback(T &var) :
-      varRef(var) {
-      oldValue = varRef;
-   }
+   explicit QScopedValueRollback(T &var) :
+        varRef(var), oldValue(var)
+   { }
+
+    explicit QScopedValueRollback(T &var, T value) :
+        varRef(var), oldValue(var)
+    {
+        varRef = qMove(value);
+    }
 
    ~QScopedValueRollback() {
-      varRef = oldValue;
+      varRef = std::move(oldValue);
    }
 
    void commit() {
@@ -51,6 +54,4 @@ class QScopedValueRollback
    Q_DISABLE_COPY(QScopedValueRollback)
 };
 
-QT_END_NAMESPACE
-
-#endif // QSCOPEDVALUEROLLBACK_H
+#endif

@@ -101,6 +101,10 @@ static quint64 getTickCount()
    return val | (quint64(highdword) << 32);
 }
 
+quint64 qt_msectime()
+{
+    return ticksToNanoseconds(getTickCount()) / 1000000;
+}
 QElapsedTimer::ClockType QElapsedTimer::clockType()
 {
    resolveLibs();
