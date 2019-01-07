@@ -673,14 +673,17 @@ qreal QTimeLine::valueForTime(int msec) const
 void QTimeLine::start()
 {
    Q_D(QTimeLine);
+
    if (d->timerId) {
       qWarning("QTimeLine::start: already running");
       return;
    }
+
    int curTime = 0;
    if (d->direction == Backward) {
       curTime = d->duration;
    }
+
    d->timerId = startTimer(d->updateInterval);
    d->startTime = curTime;
    d->currentLoopCount = 0;

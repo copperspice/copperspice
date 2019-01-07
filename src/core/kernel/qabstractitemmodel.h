@@ -281,13 +281,8 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
 
    using QObject::parent;
 
-
-
-
-
-
    CORE_CS_SIGNAL_1(Public, void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
-                    const QVector<int> &roles = QVector<int>()) )
+                    const QVector<int> &roles = QVector<int>()))
    CORE_CS_SIGNAL_2(dataChanged, topLeft, bottomRight, roles)
 
    CORE_CS_SIGNAL_1(Public, void headerDataChanged(Qt::Orientation orientation, int first, int last))

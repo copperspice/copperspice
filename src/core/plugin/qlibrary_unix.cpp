@@ -61,11 +61,11 @@ QStringList QLibraryPrivate::suffixes_sys(const QString &fullVersion)
    }
 
 # ifdef Q_OS_MAC
-   if (!fullVersion.isEmpty()) {
-      suffixes << QString::fromLatin1(".%1.bundle").arg(fullVersion);
-      suffixes << QString::fromLatin1(".%1.dylib").arg(fullVersion);
+   if (! fullVersion.isEmpty()) {
+      suffixes << QString(".%1.bundle").formatArg(fullVersion);
+      suffixes << QString(".%1.dylib").formatArg(fullVersion);
    } else {
-      suffixes << QLatin1String(".bundle") << QLatin1String(".dylib");
+      suffixes << ".bundle" << ".dylib";
    }
 #endif
 

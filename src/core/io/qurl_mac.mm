@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <qurl>
+#include <qurl.h>
 
 #ifdef Q_OS_MAC
 #include <Foundation/Foundation.h>

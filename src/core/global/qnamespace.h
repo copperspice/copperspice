@@ -1439,22 +1439,7 @@ class Q_CORE_EXPORT Qt
    };
    using MatchFlags = QFlags<MatchFlag>;
 
-#ifdef Q_OS_DARWIN
    typedef void *HANDLE;
-
-#elif defined(Q_OS_WIN)
-   typedef void *HANDLE;
-
-#elif defined(Q_WS_X11)
-   typedef unsigned long HANDLE;
-
-#elif defined(Q_WS_QPA)
-   typedef void *HANDLE;
-
-#else
-   typedef void *HANDLE;
-
-#endif
 
    enum WindowModality {
       NonModal,

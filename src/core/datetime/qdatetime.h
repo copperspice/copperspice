@@ -73,7 +73,7 @@ class Q_CORE_EXPORT QDate
    int dayOfYear() const;
    int daysInMonth() const;
    int daysInYear() const;
-   int weekNumber(int *yearNum = nullptr) const;
+   int weekNumber(int *yearNumber = nullptr) const;
 
 #ifndef QT_NO_TEXTDATE
    static QString shortMonthName(int month, MonthNameType type = DateFormat);
@@ -355,6 +355,7 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QDateTime fromString(const QString &s, const QString &format);
 #endif
+
    static QDateTime fromTime_t(quint64 secsSince1Jan1970UTC, Qt::TimeSpec spec = Qt::LocalTime, int offsetFromUtc = 0);
    static QDateTime fromTime_t(quint64 secsSince1Jan1970UTC, const QTimeZone &timeZone);
 
@@ -364,11 +365,11 @@ class Q_CORE_EXPORT QDateTime
 
 #if defined(Q_OS_MAC)
    static QDateTime fromCFDate(CFDateRef date);
-   CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED;
+   CFDateRef toCFDate() const;
 
 #  if defined(__OBJC__)
    static QDateTime fromNSDate(const NSDate *date);
-   NSDate *toNSDate() const Q_DECL_NS_RETURNS_AUTORELEASED;
+   NSDate *toNSDate() const;
 #  endif
 
 #endif

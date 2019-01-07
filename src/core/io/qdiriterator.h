@@ -23,9 +23,7 @@
 #ifndef QDIRITERATOR_H
 #define QDIRITERATOR_H
 
-#include <QtCore/qdir.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdir.h>
 
 class QDirIteratorPrivate;
 
@@ -45,7 +43,7 @@ class Q_CORE_EXPORT QDirIterator
    QDirIterator(const QString &path, QDir::Filters filter, IteratorFlags flags = NoIteratorFlags);
    QDirIterator(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter, IteratorFlags flags = NoIteratorFlags);
 
-   virtual ~QDirIterator();
+   ~QDirIterator();
 
    QString next();
    bool hasNext() const;
@@ -63,7 +61,5 @@ class Q_CORE_EXPORT QDirIterator
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDirIterator::IteratorFlags)
-
-QT_END_NAMESPACE
 
 #endif

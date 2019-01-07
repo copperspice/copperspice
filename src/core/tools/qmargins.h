@@ -26,7 +26,6 @@
 #include <qnamespace.h>
 #include <qdebug.h>
 
-
 class QMargins
 {
  public:

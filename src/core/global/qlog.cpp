@@ -143,7 +143,7 @@ void qt_message_output(QtMsgType msgType, QStringView str)
       (*s_handler)(msgType, str);
 
    } else {
-      fprintf(stderr, "%s\n", str);
+      fprintf(stderr, "%s\n", csPrintable(str));
       fflush(stderr);
    }
 

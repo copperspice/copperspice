@@ -145,8 +145,7 @@ void QFactoryLoader::update()
       // to print "duplicate class definitions" warnings. Detect if QFactoryLoader is about to load both,
       // skip one of them (below). Find a better solution
 
-      const bool isLoadingDebugAndReleaseCocoa = plugins.contains(QStringLiteral("libqcocoa_debug.dylib"))
-         && plugins.contains(QStringLiteral("libqcocoa.dylib"));
+      const bool isLoadingDebugAndReleaseCocoa = plugins.contains("libqcocoa_debug.dylib") && plugins.contains("libqcocoa.dylib");
 #endif
 
       for (int j = 0; j < plugins.count(); ++j) {

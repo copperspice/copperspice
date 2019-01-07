@@ -263,8 +263,8 @@ class QLinkedList
       return  m_data.erase(pos);
    }
 
-   iterator insert(iterator before, size_type n, const T &value) {
-      return m_data.insert(before, n, value);
+   iterator insert(iterator before, size_type count, const T &value) {
+      return m_data.insert(before, count, value);
    }
 
    iterator insert(iterator before, const T &value) {
