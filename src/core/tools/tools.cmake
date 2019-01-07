@@ -50,6 +50,7 @@ set(CORE_PUBLIC_INCLUDES
     QTextBoundaryFinder
     QTimeZone
     QVarLengthArray
+    QVersionNumber
     QWeakPointer
     QtAlgorithms
 )
@@ -97,6 +98,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvarlengtharray.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qversionnumber.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qweakpointer.h
 )
 
@@ -142,9 +144,9 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetools.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qversionnumber.cpp
 
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp
-
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
@@ -157,18 +159,6 @@ set(CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-layout.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-map.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
-
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc
@@ -180,6 +170,17 @@ set(CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")

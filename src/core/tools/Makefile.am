@@ -49,6 +49,7 @@ CORE_PUBLIC_INCLUDES += \
    QTextBoundaryFinder \
    QTimeLine \
    QVarLengthArray \
+   QVersionNumber \
    QWeakPointer \
    QtAlgorithms
 
@@ -94,7 +95,8 @@ CORE_TOOLS_INCLUDES = \
    qtextboundaryfinder.h \
    qtimeline.h \
    qvarlengtharray.h \
-   qweakpointer.h
+   qweakpointer.h \
+   qversionnumber.h
 
 CORE_TOOLS_PRIVATE_INCLUDES = \
    qbytedata_p.h \
@@ -140,9 +142,9 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/tools/qtextboundaryfinder.cpp \
    src/core/tools/qtimeline.cpp \
    src/core/tools/qunicodetools.cpp \
+   src/core/tools/qversionnumber.cpp \
    \
    src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp \
-   \
    src/3rdparty/harfbuzz/src/hb-aat-layout.cc \
    src/3rdparty/harfbuzz/src/hb-aat-map.cc \
    src/3rdparty/harfbuzz/src/hb-blob.cc \
