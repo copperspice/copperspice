@@ -31,6 +31,8 @@
 
 namespace QUnicodeTables {
 
+extern bool cs_isTurkishLocale;
+
 struct NormalizationCorrection {
     char32_t ucs4;
     char32_t old_mapping;
