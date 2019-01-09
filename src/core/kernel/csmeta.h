@@ -309,11 +309,11 @@ template <class T, class = void>
 class Q_CORE_EXPORT cs_typeName_internal
 {
    public:
-      static const QString &typeName();
+      static const QString &typeName() {
+         static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
+      }
 };
 
-
-// three macros
 
 // cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
 #define CS_REGISTER_CLASS(dataType) \
@@ -352,14 +352,20 @@ class Q_CORE_EXPORT cs_typeName_internal
          static const QString &typeName(); \
    };
 
-
 #define CS_REGISTER_TYPE(dataType) \
-   template <>  \
    Q_CORE_EXPORT const QString &cs_typeName_internal<dataType,void>::typeName() \
    { \
       static QString retval(#dataType); \
       return retval; \
    }
+
+#define CS_DECLARE_TYPE(dataType) \
+   template <>  \
+   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
+   { \
+      public: \
+         static const QString &typeName(); \
+   };
 
 
 #define CS_REGISTER_TEMPLATE(dataType) \
@@ -497,11 +503,27 @@ const QString &cs_typeName_internal<const T &>::typeName()
    return tmp;
 }
 
+
+// 6   specialization for const  (template classes)
+template<class T>
+class cs_typeName_internal<const T>
+{
+ public:
+   static const QString &typeName();
+   \
+};
+
+template<class T>
+const QString &cs_typeName_internal<const T>::typeName()
+{
+   static QString tmp = "const " + cs_typeName<T>();
+   return tmp;
+}
+
 template<class T1>
 class QDeclarativeListProperty;
 
-
-// declare here, register in csObject_private.cpp
+// declare here, register in csobject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
 CS_DECLARE_CLASS(QChar32)
 CS_DECLARE_CLASS(QColor)
@@ -519,6 +541,7 @@ CS_DECLARE_CLASS(QGraphicsLayout)
 CS_DECLARE_CLASS(QHostAddress)
 CS_DECLARE_CLASS(QIcon)
 CS_DECLARE_CLASS(QImage)
+CS_DECLARE_CLASS(QItemSelection)
 CS_DECLARE_CLASS(QJsonValue)
 CS_DECLARE_CLASS(QJsonObject)
 CS_DECLARE_CLASS(QJsonArray)
@@ -541,6 +564,8 @@ CS_DECLARE_CLASS(QPixmap)
 CS_DECLARE_CLASS(QRect)
 CS_DECLARE_CLASS(QRectF)
 CS_DECLARE_CLASS(QRegion)
+CS_DECLARE_CLASS(QScrollerProperties)
+CS_DECLARE_CLASS(QScreen)
 CS_DECLARE_CLASS(QSize)
 CS_DECLARE_CLASS(QSizeF)
 CS_DECLARE_CLASS(QSizePolicy)
@@ -563,11 +588,30 @@ CS_DECLARE_CLASS(QVariant)
 CS_DECLARE_CLASS(QVector2D)
 CS_DECLARE_CLASS(QVector3D)
 CS_DECLARE_CLASS(QVector4D)
+CS_DECLARE_CLASS(CS_Internal_TimerInfo)
 
 CS_DECLARE_TYPEDEF(QRegularExpression8)
 CS_DECLARE_TYPEDEF(QRegularExpression16)
 CS_DECLARE_TYPEDEF(QStringView8)
 CS_DECLARE_TYPEDEF(QStringView16)
+
+// primitive
+CS_DECLARE_TYPE(bool)
+CS_DECLARE_TYPE(char)
+CS_DECLARE_TYPE(signed char)
+CS_DECLARE_TYPE(unsigned char)
+CS_DECLARE_TYPE(double)
+CS_DECLARE_TYPE(long double)
+CS_DECLARE_TYPE(float)
+CS_DECLARE_TYPE(int)
+CS_DECLARE_TYPE(unsigned int)
+CS_DECLARE_TYPE(long)
+CS_DECLARE_TYPE(unsigned long)
+CS_DECLARE_TYPE(long long)
+CS_DECLARE_TYPE(unsigned long long)
+CS_DECLARE_TYPE(short)
+CS_DECLARE_TYPE(unsigned short)
+CS_DECLARE_TYPE(void)
 
 //
 CS_REGISTER_TEMPLATE(QFlatMap)

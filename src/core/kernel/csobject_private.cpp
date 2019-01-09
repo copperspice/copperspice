@@ -251,13 +251,12 @@ void CSInternalEvents::decr_PostedEvents(QObject *object)
 }
 
 // private slot
-void QObject::internal_reregisterTimers(QList< std::pair<int, int> > timerList)
+void QObject::internal_reregisterTimers(QList<QAbstractEventDispatcher::TimerInfo> timerList)
 {
-   QAbstractEventDispatcher *eventDispatcher = m_threadData.load()->eventDispatcher;
+   QAbstractEventDispatcher *eventDispatcher = m_threadData.load()->eventDispatcher.load();
 
-   for (int k = 0; k < timerList.size(); ++k) {
-      const std::pair<int, int> &pair = timerList.at(k);
-      eventDispatcher->registerTimer(pair.first, pair.second, this);
+   for (auto &item : timerList) {
+      eventDispatcher->registerTimer(item.interval, item.timerType, this);
    }
 }
 
@@ -281,6 +280,7 @@ CS_REGISTER_CLASS(QGraphicsLayout)
 CS_REGISTER_CLASS(QHostAddress)
 CS_REGISTER_CLASS(QIcon)
 CS_REGISTER_CLASS(QImage)
+CS_REGISTER_CLASS(QItemSelection)
 CS_REGISTER_CLASS(QJsonValue)
 CS_REGISTER_CLASS(QJsonObject)
 CS_REGISTER_CLASS(QJsonArray)
@@ -303,6 +303,8 @@ CS_REGISTER_CLASS(QPixmap)
 CS_REGISTER_CLASS(QRect)
 CS_REGISTER_CLASS(QRectF)
 CS_REGISTER_CLASS(QRegion)
+CS_REGISTER_CLASS(QScrollerProperties)
+CS_REGISTER_CLASS(QScreen)
 CS_REGISTER_CLASS(QSize)
 CS_REGISTER_CLASS(QSizeF)
 CS_REGISTER_CLASS(QSizePolicy)
@@ -325,6 +327,7 @@ CS_REGISTER_CLASS(QVariant)
 CS_REGISTER_CLASS(QVector2D)
 CS_REGISTER_CLASS(QVector3D)
 CS_REGISTER_CLASS(QVector4D)
+CS_REGISTER_CLASS(CS_Internal_TimerInfo)
 
 CS_REGISTER_TYPEDEF(QRegularExpression8)
 CS_REGISTER_TYPEDEF(QRegularExpression16)
