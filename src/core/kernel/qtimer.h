@@ -42,15 +42,86 @@ class Q_CORE_EXPORT QTimer : public QObject
    explicit QTimer(QObject *parent = nullptr);
    ~QTimer();
 
-   inline bool isActive() const;
-   inline int timerId() const;
+   bool isActive() const {
+      return id >= 0;
+   }
+
+   int timerId() const {
+      return id;
+   }
 
    void setInterval(int msec);
-   inline int interval() const;
+   int interval() const {
+      return inter;
+   }
 
-   inline void setSingleShot(bool singleShot);
-   static void singleShot(int msec, QObject *receiver, const QString &member);
-   inline bool isSingleShot() const;
+   int remainingTime() const;
+   void setTimerType(Qt::TimerType atype) {
+      this->type = atype;
+   }
+
+   Qt::TimerType timerType() const {
+      return Qt::TimerType(type);
+   }
+
+   void setSingleShot(bool value);
+
+   bool isSingleShot() const {
+      return single;
+   }
+
+   static void singleShot(int msec, const QObject *receiver, const QString &slotMethod);
+   static void singleShot(int msec, Qt::TimerType timerType, const QObject *receiver, const QString &slotMethod);
+
+   // **A  slot in a QObject
+   template <typename Receiver, typename SlotClass, typename SlotReturn>
+   static inline typename std::enable_if<std::is_base_of<SlotClass, Receiver>::value>::type singleShot(int msec, Receiver *receiver,
+      SlotReturn(SlotClass::*slotMethod)()) {
+      singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, receiver, slotMethod);
+   }
+
+   template <typename Receiver, typename SlotClass, typename SlotReturn>
+   static inline typename std::enable_if<std::is_base_of<SlotClass, Receiver>::value>::type singleShot(int msec, Qt::TimerType timerType,
+      Receiver *receiver, SlotReturn(SlotClass::*slotMethod)()) {
+      std::unique_ptr<CSBento< SlotReturn(SlotClass::*)() >> slotBento =
+            std::make_unique<CSBento< SlotReturn(SlotClass::*)() >>(std::move(slotMethod));
+
+      singleShot_internal(msec, timerType, receiver, slotBento);
+   }
+
+   // ** B  slot is a function pointer (without receiver)
+   template <typename T>
+   static inline typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
+   ! std::is_convertible<T, QString>::value &&
+   ! std::is_convertible<T, const char *>::value, void >::type singleShot(int msec, T slotMethod) {
+      singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, nullptr, slotMethod);
+   }
+
+   template <typename T>
+   static inline typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
+   ! std::is_convertible<T, QString>::value &&
+   ! std::is_convertible<T, const char *>::value, void >::type singleShot(int msec, Qt::TimerType timerType, T slotMethod) {
+      singleShot(msec, timerType, nullptr, slotMethod);
+   }
+
+
+   // ** C  slot is a function pointer (with receiver)
+   template <typename T>
+   static inline typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
+   ! std::is_convertible<T, QString>::value &&
+   ! std::is_convertible<T, const char *>::value, void >::type singleShot(int msec, QObject *receiver, T slotMethod) {
+      singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, receiver, slotMethod);
+   }
+
+   template <typename T>
+   static inline typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
+   ! std::is_convertible<T, QString>::value &&
+   ! std::is_convertible<T, const char *>::value, void >::type singleShot(int msec, Qt::TimerType timerType, QObject *receiver,
+      T slotMethod) {
+      std::unique_ptr<CSBento<T>> slotBento = std::make_unique<CSBento<T>>(std::move(slotMethod));
+
+      singleShot_internal(msec, timerType, receiver, slotBento);
+   }
 
    CORE_CS_SLOT_1(Public, void start(int msec))
    CORE_CS_SLOT_OVERLOAD(start, (int))
@@ -76,34 +147,19 @@ class Q_CORE_EXPORT QTimer : public QObject
 
    inline void killTimer(int) {}
 
-   int id, inter, del;
+   static void singleShot_internal(int msec, Qt::TimerType timerType,
+      const QObject *receiver, std::unique_ptr<CSBentoAbstract> slotBento);
+   int id;
+   int inter;
+   int del;
    uint single : 1;
    uint nulltimer : 1;
+   uint type : 2;
 };
 
-bool QTimer::isActive() const
+inline void QTimer::setSingleShot(bool value)
 {
-   return id >= 0;
+   single = value;
 }
-int  QTimer::timerId() const
-{
-   return id;
-}
-
-int  QTimer::interval() const
-{
-   return inter;
-}
-
-void QTimer::setSingleShot(bool singleShot)
-{
-   single = singleShot;
-}
-bool QTimer::isSingleShot() const
-{
-   return single;
-}
-
-QT_END_NAMESPACE
 
 #endif // QTIMER_H

@@ -24,63 +24,19 @@
 #define QEVENTDISPATCHER_UNIX_P_H
 
 #include <QtCore/qabstracteventdispatcher.h>
+
 #include <QtCore/qlist.h>
 #include <qabstracteventdispatcher_p.h>
 #include <qcore_unix_p.h>
 #include <qpodlist_p.h>
-#include <QtCore/qvarlengtharray.h>
+#include <qvarlengtharray.h>
+#include <qtimerinfo_unix_p.h>
 
 #include <sys/time.h>
+
 #if (!defined(Q_OS_HPUX) || defined(__ia64)) && !defined(Q_OS_NACL)
 #  include <sys/select.h>
 #endif
-
-
-QT_BEGIN_NAMESPACE
-
-// internal timer info
-struct QTimerInfo {
-   int id;              // - timer identifier
-   int interval;        // - timer interval in milliseconds
-   timespec timeout;    // - when to sent event
-   QObject *obj;        // - object to receive event
-   QTimerInfo **activateRef; // - ref from activateTimers
-};
-
-class QTimerInfoList : public QList<QTimerInfo *>
-{
-#if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_MAC))
-   timespec previousTime;
-   clock_t previousTicks;
-   int ticksPerSecond;
-   int msPerTick;
-
-   bool timeChanged(timespec *delta);
-#endif
-
-   // state variables used by activateTimers()
-   QTimerInfo *firstTimerInfo;
-
- public:
-   QTimerInfoList();
-
-   timespec currentTime;
-   timespec updateCurrentTime();
-
-   // must call updateCurrentTime() first!
-   void repairTimersIfNeeded();
-
-   bool timerWait(timespec &);
-   void timerInsert(QTimerInfo *);
-   void timerRepair(const timespec &);
-
-   void registerTimer(int timerId, int interval, QObject *object);
-   bool unregisterTimer(int timerId);
-   bool unregisterTimers(QObject *object);
-   QList<std::pair<int, int> > registeredTimers(QObject *object) const;
-
-   int activateTimers();
-};
 
 struct QSockNot {
    QSocketNotifier *obj;
@@ -103,6 +59,10 @@ class QSockNotType
 
 };
 
+#ifdef check
+// defined in Apple's /usr/include/AssertMacros.h header
+#  undef check
+#endif
 class QEventDispatcherUNIXPrivate;
 
 class Q_CORE_EXPORT QEventDispatcherUNIX : public QAbstractEventDispatcher
@@ -120,11 +80,12 @@ class Q_CORE_EXPORT QEventDispatcherUNIX : public QAbstractEventDispatcher
    void registerSocketNotifier(QSocketNotifier *notifier) override;
    void unregisterSocketNotifier(QSocketNotifier *notifier) override;
 
-   void registerTimer(int timerId, int interval, QObject *object) override;
+   void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) override;
    bool unregisterTimer(int timerId) override;
    bool unregisterTimers(QObject *object) override;
    QList<TimerInfo> registeredTimers(QObject *object) const override;
 
+   int remainingTime(int timerId) override;
    void wakeUp() override;
    void interrupt() override;
    void flush() override;
@@ -149,8 +110,12 @@ class Q_CORE_EXPORT QEventDispatcherUNIXPrivate : public QAbstractEventDispatche
    ~QEventDispatcherUNIXPrivate();
 
    int doSelect(QEventLoop::ProcessEventsFlags flags, timespec *timeout);
+   virtual int initThreadWakeUp();
+   virtual int processThreadWakeUp(int nsel);
 
    bool mainThread;
+   // note for eventfd(7) support:
+   // if thread_pipe[1] is -1, then eventfd(7) is in use and is stored in thread_pipe[0]
    int thread_pipe[2];
 
    // highest fd for all socket notifiers
@@ -165,9 +130,9 @@ class Q_CORE_EXPORT QEventDispatcherUNIXPrivate : public QAbstractEventDispatche
    QSockNotType::List sn_pending_list;
 
    QAtomicInt wakeUps;
-   bool interrupt;
+   std::atomic<bool> interrupt;
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QEVENTDISPATCHER_UNIX_P_H

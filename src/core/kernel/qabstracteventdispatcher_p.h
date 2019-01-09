@@ -25,8 +25,6 @@
 
 #include <QtCore/qabstracteventdispatcher.h>
 
-QT_BEGIN_NAMESPACE
-
 Q_CORE_EXPORT uint qGlobalPostedEventsCount();
 
 class Q_CORE_EXPORT QAbstractEventDispatcherPrivate
@@ -34,20 +32,20 @@ class Q_CORE_EXPORT QAbstractEventDispatcherPrivate
    Q_DECLARE_PUBLIC(QAbstractEventDispatcher)
 
  public:
-   inline QAbstractEventDispatcherPrivate() : event_filter(0) { }
-   virtual ~QAbstractEventDispatcherPrivate() {}
+   QAbstractEventDispatcherPrivate()
+   { }
 
-   void init();
-   QAbstractEventDispatcher::EventFilter event_filter;
+   virtual ~QAbstractEventDispatcherPrivate()
+   { }
+
+   QList<QAbstractNativeEventFilter *> eventFilters;
 
    static int allocateTimerId();
    static void releaseTimerId(int id);
 
  protected:
    QAbstractEventDispatcher *q_ptr;
-
 };
 
-QT_END_NAMESPACE
 
 #endif // QABSTRACTEVENTDISPATCHER_P_H

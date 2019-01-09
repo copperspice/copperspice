@@ -23,24 +23,23 @@
 #ifndef QEVENTDISPATCHER_WIN_P_H
 #define QEVENTDISPATCHER_WIN_P_H
 
-#include <QtCore/qabstracteventdispatcher.h>
-#include <QtCore/qt_windows.h>
+#include <qabstracteventdispatcher.h>
+#include <qt_windows.h>
+#include <qhash.h>
 
-QT_BEGIN_NAMESPACE
+#include <qabstracteventdispatcher_p.h>
 
 class QWinEventNotifier;
 class QEventDispatcherWin32Private;
 
 // forward declaration
 LRESULT QT_WIN_CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPARAM lp);
+quint64 qt_msectime();
 
 class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
 {
    CORE_CS_OBJECT(QEventDispatcherWin32)
    Q_DECLARE_PRIVATE(QEventDispatcherWin32)
-
-   void createInternalHwnd();
-   friend class QGuiEventDispatcherWin32;
 
  public:
    explicit QEventDispatcherWin32(QObject *parent = nullptr);
@@ -52,7 +51,7 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    void registerSocketNotifier(QSocketNotifier *notifier) override;
    void unregisterSocketNotifier(QSocketNotifier *notifier) override;
 
-   void registerTimer(int timerId, int interval, QObject *object) override;
+   void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) override;
    bool unregisterTimer(int timerId) override;
    bool unregisterTimers(QObject *object) override;
    QList<TimerInfo> registeredTimers(QObject *object) const override;
@@ -61,6 +60,7 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    void unregisterEventNotifier(QWinEventNotifier *notifier);
    void activateEventNotifiers();
 
+   int remainingTime(int timerId);
    void wakeUp() override;
    void interrupt() override;
    void flush() override;
@@ -70,11 +70,101 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
 
    bool event(QEvent *e) override;
 
+protected:
+    QEventDispatcherWin32(QEventDispatcherWin32Private &dd, QObject *parent = 0);
+    virtual void sendPostedEvents();
+    void doUnregisterSocketNotifier(QSocketNotifier *notifier);
+
+    void createInternalHwnd();
+    void installMessageHook();
+    void uninstallMessageHook();
+
  private:
    friend LRESULT QT_WIN_CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPARAM lp);
    friend LRESULT QT_WIN_CALLBACK qt_GetMessageHook(int, WPARAM, LPARAM);
 };
 
-QT_END_NAMESPACE
+struct QSockNot {
+    QSocketNotifier *obj;
+    int fd;
+};
+typedef QHash<int, QSockNot *> QSNDict;
+
+struct QSockFd {
+    long event;
+    bool selected;
+
+    explicit inline QSockFd(long ev = 0) : event(ev), selected(false) { }
+};
+typedef QHash<int, QSockFd> QSFDict;
+
+struct WinTimerInfo {                           // internal timer info
+    QObject *dispatcher;
+    int timerId;
+    int interval;
+    Qt::TimerType timerType;
+    quint64 timeout;                            // - when to actually fire
+    QObject *obj;                               // - object to receive events
+    bool inTimerEvent;
+    int fastTimerId;
+};
+
+class QZeroTimerEvent : public QTimerEvent
+{
+public:
+    explicit inline QZeroTimerEvent(int timerId)
+        : QTimerEvent(timerId)
+    { t = QEvent::ZeroTimerEvent; }
+};
+
+typedef QList<WinTimerInfo*>  WinTimerVec;      // vector of TimerInfo structs
+typedef QHash<int, WinTimerInfo*> WinTimerDict; // fast dict of timers
+
+class Q_CORE_EXPORT QEventDispatcherWin32Private : public QAbstractEventDispatcherPrivate
+{
+    Q_DECLARE_PUBLIC(QEventDispatcherWin32)
+
+public:
+    QEventDispatcherWin32Private();
+    ~QEventDispatcherWin32Private();
+
+    DWORD threadId;
+
+    bool interrupt;
+    bool closingDown;
+
+    // internal window handle used for socketnotifiers/timers/etc
+    HWND internalHwnd;
+    HHOOK getMessageHook;
+
+    // for controlling when to send posted events
+    QAtomicInt serialNumber;
+    int lastSerialNumber, sendPostedEventsWindowsTimerId;
+    QAtomicInt wakeUps;
+
+    // timers
+    WinTimerVec timerVec;
+    WinTimerDict timerDict;
+    void registerTimer(WinTimerInfo *t);
+    void unregisterTimer(WinTimerInfo *t);
+    void sendTimerEvent(int timerId);
+
+    // socket notifiers
+    QSNDict sn_read;
+    QSNDict sn_write;
+    QSNDict sn_except;
+    QSFDict active_fd;
+
+    bool activateNotifiersPosted;
+    void postActivateSocketNotifiers();
+
+    void doWsaAsyncSelect(int socket, long event);
+
+    QList<QWinEventNotifier *> winEventNotifierList;
+    void activateEventNotifier(QWinEventNotifier * wen);
+
+    QList<MSG> queuedUserInputEvents;
+    QList<MSG> queuedSocketEvents;
+};
 
 #endif // QEVENTDISPATCHER_WIN_P_H

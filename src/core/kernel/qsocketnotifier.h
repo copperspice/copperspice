@@ -23,9 +23,9 @@
 #ifndef QSOCKETNOTIFIER_H
 #define QSOCKETNOTIFIER_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
-QT_BEGIN_NAMESPACE
+class QSocketNotifierPrivate;
 
 class Q_CORE_EXPORT QSocketNotifier : public QObject
 {
@@ -34,19 +34,12 @@ class Q_CORE_EXPORT QSocketNotifier : public QObject
  public:
    enum Type { Read, Write, Exception };
 
-   QSocketNotifier(int socket, Type, QObject *parent = nullptr);
+   QSocketNotifier(qintptr socket, Type, QObject *parent = nullptr);
    ~QSocketNotifier();
 
-   inline int socket() const {
-      return sockfd;
-   }
-   inline Type type() const {
-      return sntype;
-   }
-
-   inline bool isEnabled() const {
-      return snenabled;
-   }
+   qintptr socket() const;
+   Type type() const;
+   bool isEnabled() const;
 
    CORE_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
    CORE_CS_SLOT_2(setEnabled)
@@ -60,11 +53,9 @@ class Q_CORE_EXPORT QSocketNotifier : public QObject
  private:
    Q_DISABLE_COPY(QSocketNotifier)
 
-   int sockfd;
-   Type sntype;
+   qintptr sockfd;
+   QSocketNotifier::Type sntype;
    bool snenabled;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSOCKETNOTIFIER_H
+#endif

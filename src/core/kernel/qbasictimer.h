@@ -24,8 +24,9 @@
 #define QBASICTIMER_H
 
 #include <QtCore/qglobal.h>
+#include <QtCore/qnamespace.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QObject;
 
@@ -34,7 +35,9 @@ class Q_CORE_EXPORT QBasicTimer
    int id;
 
  public:
-   inline QBasicTimer() : id(0) {}
+   inline QBasicTimer() : id(0)
+   {}
+
    inline ~QBasicTimer() {
       if (id) {
          stop();
@@ -50,10 +53,11 @@ class Q_CORE_EXPORT QBasicTimer
    }
 
    void start(int msec, QObject *obj);
+   void start(int msec, Qt::TimerType timerType, QObject *obj);
    void stop();
 };
 Q_DECLARE_TYPEINFO(QBasicTimer, Q_MOVABLE_TYPE);
 
-QT_END_NAMESPACE
+
 
 #endif // QBASICTIMER_H

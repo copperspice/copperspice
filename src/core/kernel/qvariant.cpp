@@ -1860,6 +1860,13 @@ QVariant::QVariant(const QUuid &uuid)
    v_construct<QUuid>(&d, uuid);
 }
 
+QVariant::QVariant(const QModelIndex &modelIndex)
+{
+   d.is_null = false;
+   d.type    = ModelIndex;
+   v_construct<QModelIndex>(&d, modelIndex);
+}
+
 QVariant::QVariant(const QJsonValue &json)
 {
    d.is_null = false;

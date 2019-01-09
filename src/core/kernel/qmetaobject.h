@@ -274,6 +274,8 @@ class QMetaObject_T : public QMetaObject_X
       template<class U>
       void register_method_s2(const QString &name, U method, QMetaMethod::MethodType kind);
 
+      void cs_internal_reg2(const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind);
+
       // slots, invokables
       template<class U>
       void register_method(const QString &name, U method, QMetaMethod::MethodType kind,
@@ -360,11 +362,17 @@ void QMetaObject_T<T>::register_method_rev(U method, int revision)
 }
 
 
-
 // **
 template<class T>
 template<class U>
 void QMetaObject_T<T>::register_method_s2(const QString &name, U method, QMetaMethod::MethodType kind)
+{
+   CSBento<U> *methodBento = new CSBento<U>(method);
+   cs_internal_reg2(name, methodBento, kind);
+}
+
+template<class T>
+void QMetaObject_T<T>::cs_internal_reg2(const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind)
 {
    if (name.isEmpty()) {
       return;
@@ -408,8 +416,7 @@ void QMetaObject_T<T>::register_method_s2(const QString &name, U method, QMetaMe
          data = item.value();
       }
 
-      CSBento<U> *temp = new CSBento<U>(method);
-      data.setBentoBox(temp);
+      data.setBentoBox(methodBento);
 
       // update master map
       map->insert(tokenName, data);
@@ -435,9 +442,7 @@ void QMetaObject_T<T>::register_method_s2(const QString &name, U method, QMetaMe
          QString key = index.key();
          data = index.value();
 
-         //
-         CSBento<U> *temp = new CSBento<U>(method);
-         data.setBentoBox(temp);
+         data.setBentoBox(methodBento);
 
          // update existing obj
          map->insert(key, data);

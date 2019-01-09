@@ -26,11 +26,9 @@
 #include <qabstracteventdispatcher.h>
 #include <qabstracteventdispatcher_p.h>
 
-#include <QtCore/qhash.h>
+#include <qhash.h>
 
 typedef struct _GMainContext GMainContext;
-
-QT_BEGIN_NAMESPACE
 
 class QEventDispatcherGlibPrivate;
 
@@ -50,11 +48,12 @@ class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
    void registerSocketNotifier(QSocketNotifier *socketNotifier) override;
    void unregisterSocketNotifier(QSocketNotifier *socketNotifier) override;
 
-   void registerTimer(int timerId, int interval, QObject *object) override;
+   void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) override;
    bool unregisterTimer(int timerId) override;
    bool unregisterTimers(QObject *object) override;
    QList<TimerInfo> registeredTimers(QObject *object) const override;
 
+   int remainingTime(int timerId);
    void wakeUp() override;
    void interrupt() override;
    void flush() override;
@@ -83,7 +82,5 @@ class Q_CORE_EXPORT QEventDispatcherGlibPrivate : public QAbstractEventDispatche
 
    void runTimersOnceWithNormalPriority();
 };
-
-QT_END_NAMESPACE
 
 #endif // QEVENTDISPATCHER_GLIB_P_H

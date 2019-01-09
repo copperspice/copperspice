@@ -22,19 +22,18 @@
 
 #include <qeventdispatcher_glib_p.h>
 #include <qeventdispatcher_unix_p.h>
-#include <qmutexpool_p.h>
-#include <qthread_p.h>
+
 #include <qcoreapplication.h>
 #include <qsocketnotifier.h>
-
-#include <qalgorithms.h>
 #include <qhash.h>
 #include <qlist.h>
 #include <qpair.h>
 
-#include <glib.h>
 
-QT_BEGIN_NAMESPACE
+#include <qthread_p.h>
+
+
+#include <glib.h>
 
 struct GPollFDWithQSocketNotifier {
    GPollFD pollfd;
@@ -287,16 +286,15 @@ QEventDispatcherGlibPrivate::QEventDispatcherGlibPrivate(GMainContext *context)
 {
 #if GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32
    if (qgetenv("QT_NO_THREADED_GLIB").isEmpty()) {
-      static int dummyValue = 0;
 
-      QMutexLocker locker(QMutexPool::instance()->get(&dummyValue));
+        static QMutex mutex;
+        QMutexLocker locker(&mutex);
 
       if (! g_thread_supported()) {
          g_thread_init(NULL);
       }
    }
 #endif
-
 
    if (mainContext) {
       g_main_context_ref(mainContext);
@@ -317,7 +315,7 @@ QEventDispatcherGlibPrivate::QEventDispatcherGlibPrivate(GMainContext *context)
 
    // setup post event source
    postEventSource = reinterpret_cast<GPostEventSource *>(g_source_new(&postEventSourceFuncs, sizeof(GPostEventSource)));
-   postEventSource->serialNumber = 1;
+   postEventSource->serialNumber.store(1);
    postEventSource->d = this;
    g_source_set_can_recurse(&postEventSource->source, true);
    g_source_attach(&postEventSource->source, mainContext);
@@ -365,7 +363,10 @@ QEventDispatcherGlib::~QEventDispatcherGlib()
    Q_D(QEventDispatcherGlib);
 
    // destroy all timer sources
-   qDeleteAll(d->timerSource->timerList);
+   for (auto item : d->timerSource->timerList)  {
+      delete item;
+    }
+
    d->timerSource->timerList.~QTimerInfoList();
    g_source_destroy(&d->timerSource->source);
    g_source_unref(&d->timerSource->source);
@@ -391,9 +392,11 @@ QEventDispatcherGlib::~QEventDispatcherGlib()
    d->postEventSource = 0;
 
    Q_ASSERT(d->mainContext != 0);
+
 #if GLIB_CHECK_VERSION (2, 22, 0)
    g_main_context_pop_thread_default (d->mainContext);
 #endif
+
    g_main_context_unref(d->mainContext);
    d->mainContext = 0;
 }
@@ -456,7 +459,6 @@ void QEventDispatcherGlib::registerSocketNotifier(QSocketNotifier *notifier)
 
    Q_D(QEventDispatcherGlib);
 
-
    GPollFDWithQSocketNotifier *p = new GPollFDWithQSocketNotifier;
    p->pollfd.fd = sockfd;
    switch (type) {
@@ -480,6 +482,7 @@ void QEventDispatcherGlib::registerSocketNotifier(QSocketNotifier *notifier)
 void QEventDispatcherGlib::unregisterSocketNotifier(QSocketNotifier *notifier)
 {
    Q_ASSERT(notifier);
+
 #ifndef QT_NO_DEBUG
    int sockfd = notifier->socket();
    if (sockfd < 0) {
@@ -508,12 +511,13 @@ void QEventDispatcherGlib::unregisterSocketNotifier(QSocketNotifier *notifier)
    }
 }
 
-void QEventDispatcherGlib::registerTimer(int timerId, int interval, QObject *object)
+void QEventDispatcherGlib::registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object)
 {
 #ifndef QT_NO_DEBUG
    if (timerId < 1 || interval < 0 || !object) {
       qWarning("QEventDispatcherGlib::registerTimer: invalid arguments");
       return;
+
    } else if (object->thread() != thread() || thread() != QThread::currentThread()) {
       qWarning("QObject::startTimer: timers cannot be started from another thread");
       return;
@@ -521,7 +525,7 @@ void QEventDispatcherGlib::registerTimer(int timerId, int interval, QObject *obj
 #endif
 
    Q_D(QEventDispatcherGlib);
-   d->timerSource->timerList.registerTimer(timerId, interval, object);
+   d->timerSource->timerList.registerTimer(timerId, interval, timerType, object);
 }
 
 bool QEventDispatcherGlib::unregisterTimer(int timerId)
@@ -567,6 +571,19 @@ QList<QEventDispatcherGlib::TimerInfo> QEventDispatcherGlib::registeredTimers(QO
    return d->timerSource->timerList.registeredTimers(object);
 }
 
+int QEventDispatcherGlib::remainingTime(int timerId)
+{
+#ifndef QT_NO_DEBUG
+    if (timerId < 1) {
+        qWarning("QEventDispatcherGlib::remainingTimeTime: invalid argument");
+        return -1;
+    }
+#endif
+
+    Q_D(QEventDispatcherGlib);
+    return d->timerSource->timerList.timerRemainingTime(timerId);
+}
+
 void QEventDispatcherGlib::interrupt()
 {
    wakeUp();
@@ -597,4 +614,3 @@ QEventDispatcherGlib::QEventDispatcherGlib(QEventDispatcherGlibPrivate &dd, QObj
 {
 }
 
-QT_END_NAMESPACE

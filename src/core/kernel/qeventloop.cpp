@@ -65,7 +65,7 @@ QEventLoop::~QEventLoop()
 { }
 
 bool QEventLoop::processEvents(ProcessEventsFlags flags)
-{  
+{
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! threadData->eventDispatcher) {
@@ -76,7 +76,7 @@ bool QEventLoop::processEvents(ProcessEventsFlags flags)
       QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
    }
 
-   return threadData->eventDispatcher->processEvents(flags);
+   return threadData->eventDispatcher.load()->processEvents(flags);
 }
 
 /*!
@@ -185,7 +185,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
     \endlist
 */
 void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
-{  
+{
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! threadData->eventDispatcher) {
@@ -235,7 +235,7 @@ void QEventLoop::exit(int returnCode)
 
    d->returnCode = returnCode;
    d->exit = true;
-   threadData->eventDispatcher->interrupt();
+   threadData->eventDispatcher.load()->interrupt();
 }
 
 /*!
@@ -248,7 +248,7 @@ void QEventLoop::exit(int returnCode)
 bool QEventLoop::isRunning() const
 {
    Q_D(const QEventLoop);
-   return !d->exit;
+   return ! d->exit;
 }
 
 /*!
@@ -257,14 +257,14 @@ bool QEventLoop::isRunning() const
     \sa QAbstractEventDispatcher::wakeUp()
 */
 void QEventLoop::wakeUp()
-{  
+{
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! threadData->eventDispatcher) {
       return;
    }
 
-   threadData->eventDispatcher->wakeUp();
+   threadData->eventDispatcher.load()->wakeUp();
 }
 
 /*!
