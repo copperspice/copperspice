@@ -130,10 +130,14 @@ QObject::~QObject()
    QThreadData *threadData = m_threadData.load();
 
    if (m_pendTimer) {
-      // unregister pending timers
+      if (threadData->thread == QThread::currentThread()) {
 
-      if (threadData && threadData->eventDispatcher) {
-         threadData->eventDispatcher->unregisterTimers(this);
+         // unregister pending timers
+         auto tmp = threadData->eventDispatcher.load();
+
+         if (tmp) {
+            tmp->unregisterTimers(this);
+         }
       }
    }
 
@@ -606,12 +610,12 @@ bool QObject::event(QEvent *e)
 
       case QEvent::ThreadChange: {
          QThreadData *threadData = m_threadData;
-         QAbstractEventDispatcher *eventDispatcher = threadData->eventDispatcher;
+         QAbstractEventDispatcher *eventDispatcher = threadData->eventDispatcher.load();
 
          if (eventDispatcher) {
-            QList< std::pair<int, int> > timerList = eventDispatcher->registeredTimers(this);
+            QList<QAbstractEventDispatcher::TimerInfo> timers = eventDispatcher->registeredTimers(this);
 
-            if (! timerList.isEmpty()) {
+            if (! timers.isEmpty()) {
                // set m_inThreadChangeEvent to true tells the dispatcher not to release timer
                // ids back to the pool (since the timer ids are moving to a new thread)
 
@@ -621,7 +625,7 @@ bool QObject::event(QEvent *e)
 
                // using csArgument directly since the datatype contains a comma
                QMetaObject::invokeMethod(this, "internal_reregisterTimers", Qt::QueuedConnection,
-                                         CSArgument<QList< std::pair<int, int> > > (timerList) );
+                                         CSArgument<QList<QAbstractEventDispatcher::TimerInfo>> (timers) );
             }
          }
 
@@ -748,9 +752,10 @@ bool QObject::cs_isWindowType() const
 void QObject::killTimer(int id)
 {
    QThreadData *threadData = m_threadData.load();
+   auto tmp = threadData->eventDispatcher.load();
 
-   if (threadData->eventDispatcher) {
-      threadData->eventDispatcher->unregisterTimer(id);
+   if (tmp) {
+      tmp->unregisterTimer(id);
    }
 }
 
@@ -788,7 +793,8 @@ void QObject::moveToThread(QThread *targetThread)
    } else if (threadData != currentData) {
 
       qWarning("QObject::moveToThread() Current thread (%p) is not the current object's thread (%p).\n"
-               "Can not move to target thread (%p)\n", currentData->thread, threadData->thread, targetData->thread);
+               "Can not move to target thread (%p)\n", currentData->thread.load(),
+               threadData->thread.load(), targetData ? targetData->thread.load() : nullptr);
 
 #ifdef Q_OS_MAC
 
@@ -1171,7 +1177,7 @@ void QObject::setThreadData_helper(QThreadData *currentData, QThreadData *target
 
    if (eventsMoved > 0 && targetData->eventDispatcher) {
       targetData->canWait = false;
-      targetData->eventDispatcher->wakeUp();
+      targetData->eventDispatcher.load()->wakeUp();
    }
 
    // set new thread data
@@ -1191,11 +1197,8 @@ bool QObject::signalsBlocked() const
    return m_blockSig;
 }
 
-int QObject::startTimer(int interval)
+int QObject::startTimer(int interval, Qt::TimerType timerType)
 {
-   // timer flag hasTimer set when startTimer is called.
-   // not reset when killing the timer because more than one timer might be active
-
    if (interval < 0) {
       qWarning("QObject::startTimer() QTimer can not have a negative interval");
       return 0;
@@ -1205,12 +1208,19 @@ int QObject::startTimer(int interval)
    m_pendTimer = true;
 
    QThreadData *threadData = m_threadData.load();
+   auto tmp = threadData->eventDispatcher.load();
 
-   if (! threadData->eventDispatcher) {
+   if (! tmp ) {
       qWarning("QObject::startTimer() QTimer can only be used with threads started with QThread");
       return 0;
    }
-   return threadData->eventDispatcher->registerTimer(interval, this);
+
+   if (thread() != QThread::currentThread()) {
+       qWarning("QObject::startTimer: Timers can not be started from another thread");
+      return 0;
+   }
+
+   return tmp->registerTimer(interval, timerType, this);
 }
 
 QThread *QObject::thread() const

@@ -35,6 +35,7 @@
 #include <qmutex.h>
 #include <qprocess_p.h>
 #include <qtextcodec.h>
+#include <qstandardpaths.h>
 
 #include <qthread.h>
 #include <qthreadpool.h>
@@ -50,26 +51,32 @@
 
 
 #if defined(Q_OS_UNIX)
+#  if defined(Q_OS_MAC)
+#    include <qeventdispatcher_cf_p.h>
+#    include <qeventdispatcher_unix_p.h>
+#  else
 #    if !defined(QT_NO_GLIB)
 #    include <qeventdispatcher_glib_p.h>
 #    endif
 
 #include <qeventdispatcher_unix_p.h>
+#  endif
+#endif
+
+#ifdef Q_OS_WIN
+#include "qeventdispatcher_win_p.h"
+
+#endif
+#ifdef Q_OS_MAC
+#include <qcore_mac_p.h>
+#endif
+#ifdef Q_OS_UNIX
 #include <locale.h>
 #include <unistd.h>
 #include <sys/types.h>
 #endif
 
-#ifdef Q_OS_WIN
-#include <qeventdispatcher_win_p.h>
-#endif
-
-#ifdef Q_OS_OSX
-#include <qcore_mac_p.h>
-#include <qeventdispatcher_cf_p.h>
-#include <qeventdispatcher_unix_p.h>
-#endif
-
+#include <algorithm>
 #include <stdlib.h>
 
 class QMutexUnlocker
@@ -522,6 +529,7 @@ void QCoreApplicationPrivate::init()
    if (! coreappdata()->applicationNameSet) {
       coreappdata()->application = appName();
    }
+
    // emerald - may want to adjust the library path
 #if ! defined(QT_NO_SETTINGS)
    if (! coreappdata()->app_libpaths) {
@@ -535,7 +543,7 @@ void QCoreApplicationPrivate::init()
 
 
    // threads
-   QThread::initialize();
+
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(q);
 
    // use the event dispatcher created by the app programmer (if any)
@@ -587,7 +595,6 @@ QCoreApplication::~QCoreApplication()
    }
 
    // threads
-   QThread::cleanup();
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    threadData->eventDispatcher = nullptr;
@@ -784,8 +791,9 @@ bool QCoreApplication::closingDown()
 void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
    QThreadData *data = QThreadData::current();
+   auto tmp = data->eventDispatcher.load();
 
-   if (!data->eventDispatcher) {
+   if (! tmp) {
       return;
    }
 
@@ -793,13 +801,13 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags)
       QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
    }
 
-   data->eventDispatcher->processEvents(flags);
+   tmp->processEvents(flags);
 }
 
 void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime)
 {
    QThreadData *data = QThreadData::current();
-   if (!data->eventDispatcher) {
+   if (!data->hasEventDispatcher()) {
       return;
    }
 
@@ -810,7 +818,7 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int m
       QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
    }
 
-   while (data->eventDispatcher->processEvents(flags & ~QEventLoop::WaitForMoreEvents)) {
+   while (data->eventDispatcher.load()->processEvents(flags & ~QEventLoop::WaitForMoreEvents)) {
       if (start.elapsed() > maxtime) {
          break;
       }
@@ -943,8 +951,10 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
    data->canWait = false;
    locker.unlock();
 
-   if (data->eventDispatcher) {
-      data->eventDispatcher->wakeUp();
+   auto tmp = data->eventDispatcher.load();
+
+   if (tmp) {
+      tmp->wakeUp();
    }
 }
 
@@ -1104,11 +1114,13 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
          // since we were interrupted, we need another pass to make sure we clean everything up
          data->canWait = false;
 
-         // uglehack: copied from below
+         // ugly hack, copied from below
          --data->postEventList.recursion;
 
-         if (!data->postEventList.recursion && !data->canWait && data->eventDispatcher) {
-            data->eventDispatcher->wakeUp();
+         auto tmp = data->eventDispatcher.load();
+
+         if (! data->postEventList.recursion && ! data->canWait && tmp) {
+            tmp->wakeUp();
          }
          throw;              // rethrow
       }
@@ -1122,8 +1134,11 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
    }
 
    --data->postEventList.recursion;
-   if (!data->postEventList.recursion && !data->canWait && data->eventDispatcher) {
-      data->eventDispatcher->wakeUp();
+   auto tmp = data->eventDispatcher.load();
+
+
+   if (!data->postEventList.recursion && !data->canWait && tmp) {
+      tmp->wakeUp();
    }
 
    // clear the global list, i.e. remove everything that was delivered
@@ -1176,7 +1191,7 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
    for (int i = 0; i < n; ++i) {
       const QPostEvent &pe = data->postEventList.at(i);
 
-      if ((!receiver || pe.receiver == receiver) && (pe.event && (eventType == 0 || pe.event->type() == eventType))) {
+      if ((! receiver || pe.receiver == receiver) && (pe.event && (eventType == 0 || pe.event->type() == eventType))) {
 
          CSInternalEvents::decr_PostedEvents(pe.receiver);
 
@@ -1184,9 +1199,9 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
          events.append(pe.event);
          const_cast<QPostEvent &>(pe).event = 0;
 
-      } else if (!data->postEventList.recursion) {
+      } else if (! data->postEventList.recursion) {
          if (i != j) {
-            data->postEventList.swap(i, j);
+            qSwap(data->postEventList[i], data->postEventList[j]);
          }
          ++j;
       }
@@ -1604,6 +1619,12 @@ void QCoreApplication::setApplicationName(const QString &application)
 QString QCoreApplication::applicationName()
 {
    return coreappdata()->application;
+}
+
+// Exported for QDesktopServices (Qt4 behavior compatibility)
+Q_CORE_EXPORT QString qt_applicationName_noFallback()
+{
+   return coreappdata()->applicationNameSet ? coreappdata()->application : QString();
 }
 
 void QCoreApplication::setApplicationVersion(const QString &version)

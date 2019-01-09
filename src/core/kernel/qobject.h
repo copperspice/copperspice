@@ -37,6 +37,7 @@
 #include <qlist.h>
 #include <qpointer.h>
 #include <qsharedpointer.h>
+#include <qreadwritelock.h>
 #include <qstring8.h>
 #include <qregularexpression.h>
 
@@ -67,6 +68,18 @@ class QChildEvent;
 class QTimerEvent;
 class QThread;
 class QThreadData;
+
+
+struct CS_Internal_TimerInfo
+{
+   int timerId;
+   int interval;
+   Qt::TimerType timerType;
+
+   CS_Internal_TimerInfo(int id, int i, Qt::TimerType t)
+      : timerId(id), interval(i), timerType(t)
+   { }
+};
 
 class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtual CsSignal::SlotBase
 {
@@ -155,7 +168,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    void setParent(QObject *parent);
    bool setProperty(const QString &name, const QVariant &value);
    bool signalsBlocked() const;
-   int startTimer(int interval);
+
+   int startTimer(int interval, Qt::TimerType timerType  = Qt::CoarseTimer);
 
    bool cs_InstanceOf(const QString &iid);
    virtual bool cs_interface_query(const QString &data) const;
@@ -275,7 +289,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    void findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
                   Qt::FindChildOptions options) const;
 
-   CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList< std::pair<int, int> > timerList))
+   CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList<CS_Internal_TimerInfo> timerList))
    CORE_CS_SLOT_2(internal_reregisterTimers)
 
    friend QMetaObject;
@@ -546,9 +560,9 @@ class Q_CORE_EXPORT CSInternalRefCount
    static void set_m_wasDeleted(QObject *object, bool data);
 
    friend class QGraphicsItem;
+   friend class QStackedLayout;
    friend class QtFriendlyLayoutWidget;
    friend struct QtSharedPointer::ExternalRefCountData;
-
 };
 
 class Q_CORE_EXPORT CSInternalSender

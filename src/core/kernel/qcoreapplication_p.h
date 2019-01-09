@@ -47,6 +47,10 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    bool sendThroughObjectEventFilters(QObject *, QEvent *);
    bool notify_helper(QObject *, QEvent *);
 
+   static inline void setEventSpontaneous(QEvent *e, bool spontaneous) {
+      e->spont = spontaneous;
+   }
+
    virtual QString appName() const;
    mutable QString applicationName;
 
