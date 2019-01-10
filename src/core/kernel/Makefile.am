@@ -56,6 +56,7 @@ CORE_KERNEL_INCLUDES = \
 	qabstractitemmodel.h \
 	qabstractlistmodel.h \
 	qabstracttablemodel.h \
+	qabstractnativeeventfilter.h \
 	qargument.h \
 	qbasictimer.h \
 	qchildevent.h \
@@ -115,22 +116,26 @@ CORE_KERNEL_INCLUDES = \
 
 CORE_KERNEL_PRIVATE_INCLUDES = \
 	qabstractitemmodel_p.h \
-	qcorecmdlineargs_p.h \
-	qcore_unix_p.h \
-	qcore_mac_p.h \
-	qtranslator_p.h \
 	qabstracteventdispatcher_p.h \
+	qcfsocketnotifier_p.h \
 	qcoreapplication_p.h \
-	qvariant_p.h \
+	qcorecmdlineargs_p.h \
 	qcoreglobaldata_p.h \
+	qcore_mac_p.h \
+	qcore_unix_p.h \
+	qcrashhandler_p.h \
+	qeventdispatcher_cf_p.h \
+	qeventdispatcher_glib_p.h \
+	qeventdispatcher_unix_p.h \
+	qeventdispatcher_win_p.h \
+	qfunctions_p.h \
 	qsharedmemory_p.h \
 	qsystemsemaphore_p.h \
-	qeventdispatcher_win_p.h \
-	qeventdispatcher_unix_p.h \
-	qfunctions_p.h \
-	qcrashhandler_p.h \
-	qeventdispatcher_glib_p.h \
-	qsystemerror_p.h
+	qsystemerror_p.h \
+	qtimerinfo_unix_p.h \
+	qtranslator_p.h \
+	qvariant_p.h
+
 
 CORE_INCLUDES += $(CORE_KERNEL_INCLUDES)
 CORE_PRIVATE_INCLUDES += $(CORE_KERNEL_PRIVATE_INCLUDES)
@@ -141,6 +146,7 @@ noinst_HEADERS+=$(patsubst %,src/core/kernel/%,$(CORE_KERNEL_INCLUDES)) \
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/kernel/qabstracteventdispatcher.cpp \
 	src/core/kernel/qabstractitemmodel.cpp \
+	src/core/kernel/qabstractnativeeventfilter.cpp \
 	src/core/kernel/qbasictimer.cpp \
 	src/core/kernel/qcoreapplication.cpp \
 	src/core/kernel/qcoreevent.cpp \
@@ -185,27 +191,32 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/kernel/qcrashhandler.cpp \
 	src/core/kernel/qsharedmemory_unix.cpp \
 	src/core/kernel/qsystemsemaphore_unix.cpp \
+	src/core/kernel/qtimerinfo_unix.cpp \
 	src/core/kernel/qeventdispatcher_unix.cpp \
 	src/core/kernel/qeventdispatcher_glib.cpp
 endif
 
 if OSTYPE_BSD
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
-        src/core/kernel/qcore_unix.cpp \
-        src/core/kernel/qcrashhandler.cpp \
-        src/core/kernel/qsharedmemory_unix.cpp \
-        src/core/kernel/qsystemsemaphore_unix.cpp \
+   src/core/kernel/qcore_unix.cpp \
+   src/core/kernel/qcrashhandler.cpp \
+   src/core/kernel/qsharedmemory_unix.cpp \
+	src/core/kernel/qtimerinfo_unix.cpp \
+   src/core/kernel/qsystemsemaphore_unix.cpp \
 	src/core/kernel/qeventdispatcher_unix.cpp \
 	src/core/kernel/qeventdispatcher_glib.cpp
 endif
 
 if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
+	src/core/kernel/qcfsocketnotifier.cpp \
 	src/core/kernel/qcore_mac.cpp \
 	src/core/kernel/qcore_mac_objc.mm \
 	src/core/kernel/qcore_unix.cpp \
 	src/core/kernel/qcoreapplication_mac.cpp \
+	src/core/kernel/qtimerinfo_unix.cpp \
 	src/core/kernel/qeventdispatcher_unix.cpp \
 	src/core/kernel/qsharedmemory_unix.cpp \
-	src/core/kernel/qsystemsemaphore_unix.cpp
+	src/core/kernel/qsystemsemaphore_unix.cpp \
+	src/core/kernel/qeventdispatcher_cf.mm
 endif

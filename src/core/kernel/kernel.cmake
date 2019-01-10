@@ -57,6 +57,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractitemmodel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractlistmodel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstracttablemodel.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractnativeeventfilter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qargument.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qbasictimer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qchildevent.h
@@ -118,27 +119,32 @@ set(CORE_INCLUDES
 set(CORE_PRIVATE_INCLUDES
     ${CORE_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractitemmodel_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcorecmdlineargs_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstracteventdispatcher_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcfsocketnotifier_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreapplication_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcorecmdlineargs_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreglobaldata_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_win_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfunctions_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcrashhandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_cf_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_win_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfunctions_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemerror_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerinfo_unix_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant_p.h
 )
+
 set(CORE_SOURCES
     ${CORE_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstracteventdispatcher.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractitemmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractnativeeventfilter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qbasictimer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreapplication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreevent.cpp
@@ -183,6 +189,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcrashhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerinfo_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib.cpp
@@ -190,12 +197,15 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
         ${CORE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcfsocketnotifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac_objc.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreapplication_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerinfo_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_cf.mm
     )
 endif()
