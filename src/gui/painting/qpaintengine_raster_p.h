@@ -218,8 +218,6 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    void fillRect(const QRectF &rect, QSpanData *data);
    void drawBitmap(const QPointF &pos, const QImage &image, QSpanData *fill);
 
-   // BROOM - out?    bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine);
-
    bool setClipRectInDeviceCoords(const QRect &r, Qt::ClipOperation op);
    QRect toNormalizedFillRect(const QRectF &rect);
 
@@ -466,7 +464,7 @@ class QRasterBuffer
 
    QPainter::CompositionMode compositionMode;
    QImage::Format format;
-   DrawHelper *drawHelper;
+   const DrawHelper *drawHelper;
    QImage colorizeBitmap(const QImage &image, const QColor &color);
 
  private:

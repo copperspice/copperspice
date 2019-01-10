@@ -27,8 +27,6 @@
 #include <QtGui/qpaintengine.h>
 #include <QtGui/qregion.h>
 
-
-
 class QPaintDevice;
 
 class QPaintEnginePrivate
@@ -39,8 +37,8 @@ class QPaintEnginePrivate
    QPaintEnginePrivate() : pdev(0), q_ptr(0), currentClipDevice(0), hasSystemTransform(0),
       hasSystemViewport(0) {}
 
-   virtual ~QPaintEnginePrivate();
-
+   virtual ~QPaintEnginePrivate()
+   { }
 
    QPaintDevice *pdev;
    QPaintEngine *q_ptr;

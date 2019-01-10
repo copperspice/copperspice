@@ -583,50 +583,50 @@ void qt_transform_image_argb32_on_argb32(uchar *destPixels, int dbpl,
    }
 }
 
-SrcOverScaleFunc qScaleFunctions[QImage::NImageFormats][QImage::NImageFormats];
-SrcOverBlendFunc qBlendFunctions[QImage::NImageFormats][QImage::NImageFormats];
-SrcOverTransformFunc qTransformFunctions[QImage::NImageFormats][QImage::NImageFormats];
-void qInitBlendFunctions()
+void QDrawHelperFunctions::initBlendFunctions()
 {
-   qScaleFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
-   qScaleFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
-   qScaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
+   scaleFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
+   scaleFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   scaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_scale_image_rgb32_on_rgb32;
 
-   qScaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
-   qScaleFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_rgb16;
-   qScaleFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_scale_image_rgb16_on_rgb16;
-
-#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-   qScaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
-   qScaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
-   qScaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
-   qScaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
-#endif
-   qBlendFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
-   qBlendFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
-   qBlendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
-   qBlendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
-   qBlendFunctions[QImage::Format_RGB16][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb16;
-   qBlendFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_rgb16;
-   qBlendFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_blend_rgb16_on_rgb16;
+   scaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   scaleFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_rgb16;
+   scaleFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_scale_image_rgb16_on_rgb16;
 
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-   qBlendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
-   qBlendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
-   qBlendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
-   qBlendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
+   scaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
+   scaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   scaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
+   scaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
 #endif
-   qTransformFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
-   qTransformFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
-   qTransformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
-   qTransformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
-   qTransformFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_rgb16;
-   qTransformFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_transform_image_rgb16_on_rgb16;
+
+   blendFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
+   blendFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
+   blendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
+   blendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_argb32;
+   blendFunctions[QImage::Format_RGB16][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb16;
+   blendFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_blend_argb32_on_rgb16;
+   blendFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_blend_rgb16_on_rgb16;
+
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-   qTransformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
-   qTransformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
-   qTransformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
-   qTransformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] =
-      qt_transform_image_argb32_on_argb32;
+   blendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
+   blendFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
+   blendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_blend_rgb32_on_rgb32;
+   blendFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_blend_argb32_on_argb32;
 #endif
+
+   transformFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
+   transformFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   transformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
+   transformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   transformFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_rgb16;
+   transformFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_transform_image_rgb16_on_rgb16;
+
+#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+   transformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
+   transformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   transformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
+   transformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
+#endif
+
 }

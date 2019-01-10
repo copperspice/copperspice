@@ -135,8 +135,8 @@
 #define ErrRaster_Memory_Overflow   -4
 #define ErrRaster_OutOfMemory       -6
 
-#include <private/qrasterdefs_p.h>
-#include <private/qgrayraster_p.h>
+#include <qrasterdefs_p.h>
+#include <qgrayraster_p.h>
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -255,7 +255,7 @@ class QNullBrushData
    }
 };
 
-Q_GLOBAL_STATIC(QNullBrushData, nullBrushInstance_holder)   // broom
+Q_GLOBAL_STATIC(QNullBrushData, nullBrushInstance_holder)
 
 static QBrushData *nullBrushInstance()
 {

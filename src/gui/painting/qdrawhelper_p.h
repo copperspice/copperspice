@@ -34,7 +34,6 @@
 #include <qrasterdefs_p.h>
 #include <qsimd_p.h>
 
-
 struct QSolidData;
 struct QTextureData;
 struct QGradientData;
@@ -109,11 +108,23 @@ struct DrawHelper {
    RectFillFunc fillRect;
 };
 
-extern SrcOverBlendFunc     qBlendFunctions[QImage::NImageFormats][QImage::NImageFormats];
-extern SrcOverScaleFunc     qScaleFunctions[QImage::NImageFormats][QImage::NImageFormats];
-extern SrcOverTransformFunc qTransformFunctions[QImage::NImageFormats][QImage::NImageFormats];
-extern MemRotateFunc        qMemRotateFunctions[QImage::NImageFormats][3];
-extern DrawHelper           qDrawHelper[QImage::NImageFormats];
+class QDrawHelperFunctions
+{
+ public:
+   QDrawHelperFunctions();
+
+   SrcOverBlendFunc     blendFunctions[QImage::NImageFormats][QImage::NImageFormats];
+   SrcOverScaleFunc     scaleFunctions[QImage::NImageFormats][QImage::NImageFormats];
+   SrcOverTransformFunc transformFunctions[QImage::NImageFormats][QImage::NImageFormats];
+   MemRotateFunc        memRotateFunctions[QImage::NImageFormats][3];
+   DrawHelper           drawHelper[QImage::NImageFormats];
+
+   static const QDrawHelperFunctions & instance();
+
+ private:
+   void initBlendFunctions();
+   void initMemRotate();
+};
 
 void qBlendTexture(int count, const QSpan *spans, void *userData);
 

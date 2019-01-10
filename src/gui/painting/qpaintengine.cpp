@@ -35,14 +35,11 @@
 #include <qfontengine_p.h>
 #include <qpaintengineex_p.h>
 
-
-
 qreal QTextItem::descent() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return ti->descent.toReal();
 }
-
 
 qreal QTextItem::ascent() const
 {
@@ -552,10 +549,6 @@ void QPaintEngine::setSystemRect(const QRect &rect)
 QRect QPaintEngine::systemRect() const
 {
    return d_func()->systemRect;
-}
-
-QPaintEnginePrivate::~QPaintEnginePrivate()
-{
 }
 
 void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &ti)
