@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_PHONON_EXPORT_H
 #define PHONON_PHONON_EXPORT_H
@@ -33,17 +31,17 @@
 
 # if defined Q_OS_WIN
 
-#  ifdef MAKE_PHONON_LIB 
+#  ifdef MAKE_PHONON_LIB
 #    define PHONON_EXPORT    Q_DECL_EXPORT
-#  else 
+#  else
 #    define PHONON_EXPORT    Q_DECL_IMPORT
 #  endif
 
-# else 
+# else
 
-#  ifdef MAKE_PHONON_LIB 
+#  ifdef MAKE_PHONON_LIB
 #    define PHONON_EXPORT    Q_DECL_EXPORT
-#  else 
+#  else
 #    define PHONON_EXPORT    Q_DECL_IMPORT
 #  endif
 

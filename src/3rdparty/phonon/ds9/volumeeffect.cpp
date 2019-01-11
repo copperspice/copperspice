@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +17,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  This file is part of the KDE project.
-********************************************************/
 
 #include "volumeeffect.h"
 #include "qbasefilter.h"
@@ -38,7 +35,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
     namespace DS9
-    {    
+    {
 
         static qreal curveValueFadeIn3dB(const qreal fadeStart, const qreal fadeDiff, const qreal completed)
         {
@@ -82,7 +79,7 @@ namespace Phonon
         class VolumeMemInputPin : public QMemInputPin
         {
         public:
-            VolumeMemInputPin(QBaseFilter *parent, const QVector<AM_MEDIA_TYPE> &mt, QPin *output) 
+            VolumeMemInputPin(QBaseFilter *parent, const QVector<AM_MEDIA_TYPE> &mt, QPin *output)
                   : QMemInputPin(parent, mt, true /*transform*/, output)
             {
             }
@@ -159,7 +156,7 @@ namespace Phonon
                     m_volumeEffect->setVolume(m_volumeEffect->m_targetVolume);
                     m_volumeEffect->m_fading = false; //we end the fading effect
                 } else {
-                    volume = m_volumeEffect->m_fadeCurveFn(m_volumeEffect->m_initialVolume, 
+                    volume = m_volumeEffect->m_fadeCurveFn(m_volumeEffect->m_initialVolume,
                         m_volumeEffect->m_targetVolume - m_volumeEffect->m_initialVolume,
                         completed);
                 }
@@ -208,7 +205,7 @@ namespace Phonon
             return S_OK;
         }
 
-        VolumeEffect::VolumeEffect(QObject *parent) : Effect(parent), 
+        VolumeEffect::VolumeEffect(QObject *parent) : Effect(parent),
             m_volume(1), m_fadeCurve(Phonon::VolumeFaderEffect::Fade3Decibel),
             m_fading(false), m_initialVolume(0), m_targetVolume(0), m_fadeDuration(0),
             m_fadeSamplePosition(0)

@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_VOLUMESLIDER_H
 #define PHONON_VOLUMESLIDER_H
@@ -43,30 +41,30 @@ class PHONON_EXPORT VolumeSlider : public QWidget
 {
     PHN_CS_OBJECT(VolumeSlider)
     K_DECLARE_PRIVATE(VolumeSlider)
-   
+
     PHN_CS_PROPERTY_READ(maximumVolume, maximumVolume)
-    PHN_CS_PROPERTY_WRITE(maximumVolume, setMaximumVolume)   
-   
+    PHN_CS_PROPERTY_WRITE(maximumVolume, setMaximumVolume)
+
     PHN_CS_PROPERTY_READ(orientation, orientation)
     PHN_CS_PROPERTY_WRITE(orientation, setOrientation)
 
     PHN_CS_PROPERTY_READ(tracking, hasTracking)
     PHN_CS_PROPERTY_WRITE(tracking, setTracking)
-   
+
     PHN_CS_PROPERTY_READ(pageStep, pageStep)
     PHN_CS_PROPERTY_WRITE(pageStep, setPageStep)
-   
+
     PHN_CS_PROPERTY_READ(singleStep, singleStep)
     PHN_CS_PROPERTY_WRITE(singleStep, setSingleStep)
 
     PHN_CS_PROPERTY_READ(muteVisible, isMuteVisible)
     PHN_CS_PROPERTY_WRITE(muteVisible, setMuteVisible)
-    
+
     PHN_CS_PROPERTY_READ(iconSize, iconSize)
     PHN_CS_PROPERTY_WRITE(iconSize, setIconSize)
 
     public:
-     
+
         explicit VolumeSlider(QWidget *parent = nullptr);
         explicit VolumeSlider(AudioOutput *, QWidget *parent = nullptr);
         ~VolumeSlider();
@@ -84,19 +82,19 @@ class PHONON_EXPORT VolumeSlider : public QWidget
         AudioOutput *audioOutput() const;
 
         PHN_CS_SLOT_1(Public, void setMaximumVolume(qreal un_named_arg1))
-        PHN_CS_SLOT_2(setMaximumVolume) 
-        
+        PHN_CS_SLOT_2(setMaximumVolume)
+
         PHN_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
-        PHN_CS_SLOT_2(setOrientation) 
+        PHN_CS_SLOT_2(setOrientation)
 
         PHN_CS_SLOT_1(Public, void setMuteVisible(bool un_named_arg1))
-        PHN_CS_SLOT_2(setMuteVisible) 
+        PHN_CS_SLOT_2(setMuteVisible)
 
         PHN_CS_SLOT_1(Public, void setIconSize(const QSize & size))
-        PHN_CS_SLOT_2(setIconSize) 
-      
+        PHN_CS_SLOT_2(setIconSize)
+
         PHN_CS_SLOT_1(Public, void setAudioOutput(Phonon::AudioOutput * un_named_arg1))
-        PHN_CS_SLOT_2(setAudioOutput) 
+        PHN_CS_SLOT_2(setAudioOutput)
 
     protected:
         VolumeSliderPrivate *const k_ptr;

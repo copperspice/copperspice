@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +17,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  This file is part of the KDE project.
-********************************************************/
 
 #include "videowidget.h"
 
@@ -52,7 +49,7 @@ namespace Phonon
                 : QWidget(parent), m_node(vw), m_currentRenderer(0)
             {
                 //default background color
-                setPalette(QPalette(Qt::black));                 
+                setPalette(QPalette(Qt::black));
                 setAttribute(Qt::WA_OpaquePaintEvent, true);
                 setAttribute(Qt::WA_NoSystemBackground, true);
                 setAttribute(Qt::WA_PaintOnScreen, true);
@@ -188,7 +185,7 @@ namespace Phonon
             : BackendNode(parent), m_aspectRatio(Phonon::VideoWidget::AspectRatioAuto),
               m_scaleMode(Phonon::VideoWidget::FitInView),
               m_brightness(0.), m_contrast(0.), m_hue(0.), m_saturation(0.), m_noNativeRendererSupported(false)
-              
+
         {
             //initialisation of the widget
             m_widget = new VideoWindow(parent, this);

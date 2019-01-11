@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_MEDIACONTROLLER_H
 #define PHONON_MEDIACONTROLLER_H
@@ -72,8 +70,8 @@ class PHONON_EXPORT MediaController : public QObject
         int currentTitle() const;
 
         bool autoplayTitles() const;
-       
-        AudioChannelDescription currentAudioChannel() const;      
+
+        AudioChannelDescription currentAudioChannel() const;
         SubtitleDescription currentSubtitle() const;
 
         QList<AudioChannelDescription> availableAudioChannels() const;
@@ -81,41 +79,41 @@ class PHONON_EXPORT MediaController : public QObject
 
         void setCurrentAudioChannel(const Phonon::AudioChannelDescription &stream);
         void setCurrentSubtitle(const Phonon::SubtitleDescription &stream);
-  
+
         PHN_CS_SLOT_1(Public, void setCurrentAngle(int angleNumber))
-        PHN_CS_SLOT_2(setCurrentAngle) 
+        PHN_CS_SLOT_2(setCurrentAngle)
 
         PHN_CS_SLOT_1(Public, void setCurrentChapter(int chapterNumber))
-        PHN_CS_SLOT_2(setCurrentChapter) 
-      
+        PHN_CS_SLOT_2(setCurrentChapter)
+
         PHN_CS_SLOT_1(Public, void setCurrentTitle(int titleNumber))
-        PHN_CS_SLOT_2(setCurrentTitle) 
+        PHN_CS_SLOT_2(setCurrentTitle)
 
         PHN_CS_SLOT_1(Public, void setAutoplayTitles(bool un_named_arg1))
-        PHN_CS_SLOT_2(setAutoplayTitles) 
-     
+        PHN_CS_SLOT_2(setAutoplayTitles)
+
         PHN_CS_SLOT_1(Public, void nextTitle())
-        PHN_CS_SLOT_2(nextTitle) 
-      
+        PHN_CS_SLOT_2(nextTitle)
+
         PHN_CS_SLOT_1(Public, void previousTitle())
-        PHN_CS_SLOT_2(previousTitle) 
+        PHN_CS_SLOT_2(previousTitle)
 
         PHN_CS_SIGNAL_1(Public, void availableSubtitlesChanged())
-        PHN_CS_SIGNAL_2(availableSubtitlesChanged) 
+        PHN_CS_SIGNAL_2(availableSubtitlesChanged)
         PHN_CS_SIGNAL_1(Public, void availableAudioChannelsChanged())
-        PHN_CS_SIGNAL_2(availableAudioChannelsChanged) 
+        PHN_CS_SIGNAL_2(availableAudioChannelsChanged)
         PHN_CS_SIGNAL_1(Public, void availableAnglesChanged(int availableAngles))
-        PHN_CS_SIGNAL_2(availableAnglesChanged,availableAngles) 
+        PHN_CS_SIGNAL_2(availableAnglesChanged,availableAngles)
         PHN_CS_SIGNAL_1(Public, void angleChanged(int angleNumber))
-        PHN_CS_SIGNAL_2(angleChanged,angleNumber) 
+        PHN_CS_SIGNAL_2(angleChanged,angleNumber)
         PHN_CS_SIGNAL_1(Public, void availableChaptersChanged(int availableChapters))
-        PHN_CS_SIGNAL_2(availableChaptersChanged,availableChapters) 
+        PHN_CS_SIGNAL_2(availableChaptersChanged,availableChapters)
         PHN_CS_SIGNAL_1(Public, void chapterChanged(int chapterNumber))
-        PHN_CS_SIGNAL_2(chapterChanged,chapterNumber) 
+        PHN_CS_SIGNAL_2(chapterChanged,chapterNumber)
         PHN_CS_SIGNAL_1(Public, void availableTitlesChanged(int availableTitles))
-        PHN_CS_SIGNAL_2(availableTitlesChanged,availableTitles) 
+        PHN_CS_SIGNAL_2(availableTitlesChanged,availableTitles)
         PHN_CS_SIGNAL_1(Public, void titleChanged(int titleNumber))
-        PHN_CS_SIGNAL_2(titleChanged,titleNumber) 
+        PHN_CS_SIGNAL_2(titleChanged,titleNumber)
 
     protected:
         MediaControllerPrivate *const d;

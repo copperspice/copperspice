@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef Phonon_VIDEOPLAYER_H
 #define Phonon_VIDEOPLAYER_H
@@ -47,48 +45,48 @@ class PHONON_EXPORT VideoPlayer : public QWidget
 {
     PHN_CS_OBJECT(VideoPlayer)
 
-    public:      
+    public:
         explicit VideoPlayer(Phonon::Category category, QWidget *parent = nullptr);
-     
-        VideoPlayer(QWidget *parent = nullptr);      
+
+        VideoPlayer(QWidget *parent = nullptr);
         ~VideoPlayer();
-      
-        qint64 totalTime() const;        
+
+        qint64 totalTime() const;
         qint64 currentTime() const;
-        
-        float volume() const;       
-        bool isPlaying() const;       
+
+        float volume() const;
+        bool isPlaying() const;
         bool isPaused() const;
-      
-        MediaObject *mediaObject() const;        
+
+        MediaObject *mediaObject() const;
         AudioOutput *audioOutput() const;
         VideoWidget *videoWidget() const;
 
     public :
-        
+
         PHN_CS_SLOT_1(Public, void load(const Phonon::MediaSource & source))
-        PHN_CS_SLOT_2(load) 
-       
+        PHN_CS_SLOT_2(load)
+
         PHN_CS_SLOT_1(Public, void play(const Phonon::MediaSource & source))
-        PHN_CS_SLOT_OVERLOAD(play,(const Phonon::MediaSource &)) 
-        
+        PHN_CS_SLOT_OVERLOAD(play,(const Phonon::MediaSource &))
+
         PHN_CS_SLOT_1(Public, void play())
-        PHN_CS_SLOT_OVERLOAD(play,()) 
-        
+        PHN_CS_SLOT_OVERLOAD(play,())
+
         PHN_CS_SLOT_1(Public, void pause())
-        PHN_CS_SLOT_2(pause) 
-        
+        PHN_CS_SLOT_2(pause)
+
         PHN_CS_SLOT_1(Public, void stop())
-        PHN_CS_SLOT_2(stop) 
-       
+        PHN_CS_SLOT_2(stop)
+
         PHN_CS_SLOT_1(Public, void seek(qint64 ms))
-        PHN_CS_SLOT_2(seek) 
-       
+        PHN_CS_SLOT_2(seek)
+
         PHN_CS_SLOT_1(Public, void setVolume(float volume))
-        PHN_CS_SLOT_2(setVolume) 
-   
+        PHN_CS_SLOT_2(setVolume)
+
         PHN_CS_SIGNAL_1(Public, void finished())
-        PHN_CS_SIGNAL_2(finished) 
+        PHN_CS_SIGNAL_2(finished)
 
     protected:
         VideoPlayerPrivate *const d;

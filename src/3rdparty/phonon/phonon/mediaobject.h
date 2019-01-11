@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_MEDIAOBJECT_H
 #define PHONON_MEDIAOBJECT_H
@@ -38,17 +36,17 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
     class MediaObjectPrivate;
- 
+
 
     class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
         CS_OBJECT_MULTIPLE(MediaObject, QObject)
         PHONON_OBJECT(MediaObject)
         K_DECLARE_PRIVATE(MediaObject)
-             
+
         PHN_CS_PROPERTY_READ(transitionTime, transitionTime)
         PHN_CS_PROPERTY_WRITE(transitionTime, setTransitionTime)
-      
+
         PHN_CS_PROPERTY_READ(prefinishMark, prefinishMark)
         PHN_CS_PROPERTY_WRITE(prefinishMark, setPrefinishMark)
 
@@ -57,17 +55,17 @@ namespace Phonon
 
         friend class FrontendInterfacePrivate;
 
-        public:          
+        public:
             ~MediaObject();
-          
-            State state() const;           
+
+            State state() const;
             bool hasVideo() const;
             bool isSeekable() const;
 
             qint32 tickInterval() const;
             QStringList metaData(const QString &key) const;
             QStringList metaData(Phonon::MetaData key) const;
-         
+
             QMultiMap<QString, QString> metaData() const;
             QString errorString() const;
             ErrorType errorType() const;
@@ -78,7 +76,7 @@ namespace Phonon
             QList<MediaSource> queue() const;
 
             void setQueue(const QList<MediaSource> &sources);
-            void setQueue(const QList<QUrl> &urls); 
+            void setQueue(const QList<QUrl> &urls);
             void enqueue(const MediaSource &source);
             void enqueue(const QList<MediaSource> &sources);
             void enqueue(const QList<QUrl> &urls);
@@ -95,57 +93,57 @@ namespace Phonon
             void setTransitionTime(qint32 msec);
 
             PHN_CS_SLOT_1(Public, void setTickInterval(qint32 newTickInterval))
-            PHN_CS_SLOT_2(setTickInterval) 
+            PHN_CS_SLOT_2(setTickInterval)
 
             PHN_CS_SLOT_1(Public, void play())
-            PHN_CS_SLOT_2(play) 
+            PHN_CS_SLOT_2(play)
 
             PHN_CS_SLOT_1(Public, void pause())
-            PHN_CS_SLOT_2(pause) 
+            PHN_CS_SLOT_2(pause)
 
             PHN_CS_SLOT_1(Public, void stop())
-            PHN_CS_SLOT_2(stop) 
+            PHN_CS_SLOT_2(stop)
 
             PHN_CS_SLOT_1(Public, void seek(qint64 time))
-            PHN_CS_SLOT_2(seek) 
+            PHN_CS_SLOT_2(seek)
 
             PHN_CS_SLOT_1(Public, void clear())
-            PHN_CS_SLOT_2(clear) 
+            PHN_CS_SLOT_2(clear)
 
             PHN_CS_SIGNAL_1(Public, void stateChanged(Phonon::State newstate,Phonon::State oldstate))
-            PHN_CS_SIGNAL_2(stateChanged,newstate,oldstate) 
+            PHN_CS_SIGNAL_2(stateChanged,newstate,oldstate)
 
             PHN_CS_SIGNAL_1(Public, void tick(qint64 time))
-            PHN_CS_SIGNAL_2(tick,time) 
+            PHN_CS_SIGNAL_2(tick,time)
 
             PHN_CS_SIGNAL_1(Public, void metaDataChanged())
-            PHN_CS_SIGNAL_2(metaDataChanged) 
+            PHN_CS_SIGNAL_2(metaDataChanged)
 
             PHN_CS_SIGNAL_1(Public, void seekableChanged(bool isSeekable))
-            PHN_CS_SIGNAL_2(seekableChanged,isSeekable) 
+            PHN_CS_SIGNAL_2(seekableChanged,isSeekable)
 
 #ifndef QT_NO_PHONON_VIDEO
             PHN_CS_SIGNAL_1(Public, void hasVideoChanged(bool hasVideo))
-            PHN_CS_SIGNAL_2(hasVideoChanged,hasVideo) 
+            PHN_CS_SIGNAL_2(hasVideoChanged,hasVideo)
 #endif
-            
+
             PHN_CS_SIGNAL_1(Public, void bufferStatus(int percentFilled))
-            PHN_CS_SIGNAL_2(bufferStatus,percentFilled) 
+            PHN_CS_SIGNAL_2(bufferStatus,percentFilled)
 
             PHN_CS_SIGNAL_1(Public, void finished())
-            PHN_CS_SIGNAL_2(finished) 
- 
+            PHN_CS_SIGNAL_2(finished)
+
             PHN_CS_SIGNAL_1(Public, void currentSourceChanged(const Phonon::MediaSource & newSource))
-            PHN_CS_SIGNAL_2(currentSourceChanged,newSource) 
+            PHN_CS_SIGNAL_2(currentSourceChanged,newSource)
 
             PHN_CS_SIGNAL_1(Public, void aboutToFinish())
-            PHN_CS_SIGNAL_2(aboutToFinish) 
+            PHN_CS_SIGNAL_2(aboutToFinish)
 
             PHN_CS_SIGNAL_1(Public, void prefinishMarkReached(qint32 msecToEnd))
-            PHN_CS_SIGNAL_2(prefinishMarkReached,msecToEnd) 
+            PHN_CS_SIGNAL_2(prefinishMarkReached,msecToEnd)
 
             PHN_CS_SIGNAL_1(Public, void totalTimeChanged(qint64 newTotalTime))
-            PHN_CS_SIGNAL_2(totalTimeChanged,newTotalTime) 
+            PHN_CS_SIGNAL_2(totalTimeChanged,newTotalTime)
 
         protected:
             //MediaObject(Phonon::MediaObjectPrivate &dd, QObject *parent);
@@ -163,14 +161,14 @@ namespace Phonon
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             PHN_CS_SLOT_1(Private, void _k_stateChanged(Phonon::State un_named_arg1,Phonon::State un_named_arg2))
             PHN_CS_SLOT_2(_k_stateChanged)
-#endif 
+#endif
             PHN_CS_SLOT_1(Private, void _k_aboutToFinish())
             PHN_CS_SLOT_2(_k_aboutToFinish)
 
             PHN_CS_SLOT_1(Private, void _k_currentSourceChanged(const MediaSource & un_named_arg1))
             PHN_CS_SLOT_2(_k_currentSourceChanged)
     };
-   
+
     PHONON_EXPORT MediaObject *createPlayer(Phonon::Category category, const MediaSource &source = MediaSource());
 
 } //namespace Phonon
