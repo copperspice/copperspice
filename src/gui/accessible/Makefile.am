@@ -80,8 +80,3 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
         src/gui/accessible/qaccessiblebridge.cpp
 endif
 
-if COCOA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/accessible/qaccessible_cache_mac.mm
-endif
-

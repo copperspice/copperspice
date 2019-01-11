@@ -25,8 +25,6 @@
 
 #include <qaccessible.h>
 
-
-
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAccessibleObjectPrivate;
@@ -42,7 +40,7 @@ class Q_GUI_EXPORT QAccessibleObject : public QAccessibleInterface
 
    // properties
    QRect rect() const override;
-   void setText(QAccessible::Text t, const QString &text) override;
+   void setText(QAccessible::Text text, const QString &str) override;
    QAccessibleInterface *childAt(int x, int y) const override;
 
  protected:
@@ -73,11 +71,8 @@ class Q_GUI_EXPORT QAccessibleApplication : public QAccessibleObject
    QString text(QAccessible::Text t) const override;
    QAccessible::Role role() const override;
    QAccessible::State state() const override;
-   // actions
-
 };
 
 #endif
-
 
 #endif

@@ -29,16 +29,12 @@
 #include <qpointer.h>
 #include <qmetaobject.h>
 
-
-
-
 class QAccessibleObjectPrivate
 {
  public:
    QPointer<QObject> object;
 
 };
-
 
 QAccessibleObject::QAccessibleObject(QObject *object)
 {
@@ -75,7 +71,7 @@ QRect QAccessibleObject::rect() const
    return QRect();
 }
 
-void QAccessibleObject::setText(QAccessible::Text, const QString &)
+void QAccessibleObject::setText(QAccessible::Text text, const QString &str)
 {
 }
 

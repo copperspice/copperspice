@@ -64,7 +64,7 @@ static QList<QWidget *> childWidgets(const QWidget *widget)
 
 static QString buddyString(const QWidget *widget)
 {
-   if (!widget) {
+   if (! widget) {
       return QString();
    }
 
@@ -481,8 +481,6 @@ QAccessible::State QAccessibleWidget::state() const
    return state;
 }
 
-
-
 QColor QAccessibleWidget::foregroundColor() const
 {
    return widget()->palette().color(widget()->foregroundRole());
@@ -498,8 +496,8 @@ void *QAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
    if (t == QAccessible::ActionInterface) {
       return static_cast<QAccessibleActionInterface *>(this);
    }
+
    return 0;
-
-
 }
+
 #endif //QT_NO_ACCESSIBILITY

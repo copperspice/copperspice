@@ -54,8 +54,6 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-QT_BEGIN_NAMESPACE
-
 QString qt_accStripAmp(const QString &text);
 QString qt_accHotKey(const QString &text);
 
@@ -64,8 +62,10 @@ QList<QWidget *> childWidgets(const QWidget *widget)
    if (widget == 0) {
       return QList<QWidget *>();
    }
+
    QList<QObject *> list = widget->children();
    QList<QWidget *> widgets;
+
    for (int i = 0; i < list.size(); ++i) {
       QWidget *w = qobject_cast<QWidget *>(list.at(i));
       if (!w) {
@@ -1123,6 +1123,7 @@ QAccessibleInterface *QAccessibleMainWindow::childAt(int x, int y) const
    if (!w->isVisible()) {
       return 0;
    }
+
    QPoint gp = w->mapToGlobal(QPoint(0, 0));
    if (!QRect(gp.x(), gp.y(), w->width(), w->height()).contains(x, y)) {
       return 0;
@@ -1145,7 +1146,5 @@ QMainWindow *QAccessibleMainWindow::mainWindow() const
 }
 
 #endif //QT_NO_MAINWINDOW
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACCESSIBILITY

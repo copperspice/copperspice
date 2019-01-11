@@ -68,17 +68,10 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblewidget_views.cpp
 )
 
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblebridge.cpp
-    )
-
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-....    ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblecache_mac.mm
     )
 endif()
 
