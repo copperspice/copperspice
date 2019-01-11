@@ -93,7 +93,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpainter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpainterpath_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpathclipper_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpdf_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpen_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygonclipper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac_p.h
@@ -114,6 +113,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolor_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcompositionfunctions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcosmeticstroker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcssutil.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawutil.cpp
@@ -122,6 +122,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_sse4.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_ssse3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qemulationpaintengine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgammatables.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmatrix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmemrotate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qoutlinemapper.cpp
@@ -133,7 +134,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpainter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpainterpath.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpathclipper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpdf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpen.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrasterizer.cpp
@@ -143,7 +143,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtextureglyphcache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qtransform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_raster.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qimagescale.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgrayraster.c
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_blitter.cpp

@@ -90,7 +90,6 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qpainter_p.h \
 	qpainterpath_p.h \
 	qpathclipper_p.h \
-	qpdf_p.h \
 	qpen_p.h \
 	qpolygonclipper_p.h \
 	qprintengine_mac_p.h \
@@ -115,6 +114,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolor.cpp \
 	src/gui/painting/qcolor_p.cpp \
 	src/gui/painting/qcolormap.cpp \
+	src/gui/painting/qcompositionfunctions.cpp \
 	src/gui/painting/qcosmeticstroker.cpp \
 	src/gui/painting/qcssutil.cpp \
 	src/gui/painting/qdrawutil.cpp \
@@ -123,6 +123,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qdrawhelper_sse4.cpp \
 	src/gui/painting/qdrawhelper_ssse3.cpp \
 	src/gui/painting/qemulationpaintengine.cpp \
+	src/gui/painting/qgammatables.cpp \
 	src/gui/painting/qmatrix.cpp \
 	src/gui/painting/qmemrotate.cpp \
 	src/gui/painting/qoutlinemapper.cpp \
@@ -134,7 +135,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qpainter.cpp \
 	src/gui/painting/qpainterpath.cpp \
 	src/gui/painting/qpathclipper.cpp \
-	src/gui/painting/qpdf.cpp \
 	src/gui/painting/qpen.cpp \
 	src/gui/painting/qpolygon.cpp \
 	src/gui/painting/qrasterizer.cpp \
@@ -144,7 +144,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qtextureglyphcache.cpp \
 	src/gui/painting/qtransform.cpp \
 	src/gui/painting/qpaintengine_raster.cpp \
-	src/gui/painting/qdrawhelper.cpp \
 	src/gui/painting/qimagescale.cpp \
 	src/gui/painting/qgrayraster.c \
 	src/gui/painting/qpaintengine_blitter.cpp \
