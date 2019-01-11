@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -8785,11941 +8786,12015 @@ static const Properties uc_properties[] = {
 
 char32_t uc_caseFold(char32_t value)
 {
-    if (value < 65) {
-       return value + 0;
+   if (value < 65) {
+      return value + 0;
 
-    } else if (value < 73) {
-       return value + 32;
+   } else if (value < 73) {
+      return value + 32;
 
-    } else if (value < 74 && cs_isTurkishLocale) {
+   } else if (value < 74 && cs_isTurkishLocale) {
        // letter I, ignore for all other locales
        return value + 232;
 
     } else if (value < 91) {
-       return value + 32;
+      return value + 32;
 
-    } else if (value < 181) {
-       return value + 0;
+   } else if (value < 181) {
+      return value + 0;
 
-    } else if (value < 182) {
-       return value + 775;
+   } else if (value < 182) {
+      return value + 775;
 
-    } else if (value < 192) {
-       return value + 0;
+   } else if (value < 192) {
+      return value + 0;
 
-    } else if (value < 215) {
-       return value + 32;
+   } else if (value < 215) {
+      return value + 32;
 
-    } else if (value < 216) {
-       return value + 0;
+   } else if (value < 216) {
+      return value + 0;
 
-    } else if (value == 223) {
-       // special char
-       return 0;
+   } else if (value == 223) {
+      // special char
+      return 0;
 
-    } else if (value < 224) {
-       return value + 32;
+   } else if (value < 224) {
+      return value + 32;
 
-    } else if (value < 256) {
-       return value + 0;
+   } else if (value < 256) {
+      return value + 0;
 
-    } else if (value < 257) {
-       return value + 1;
+   } else if (value < 257) {
+      return value + 1;
 
-    } else if (value < 258) {
-       return value + 0;
+   } else if (value < 258) {
+      return value + 0;
 
-    } else if (value < 259) {
-       return value + 1;
+   } else if (value < 259) {
+      return value + 1;
 
-    } else if (value < 260) {
-       return value + 0;
+   } else if (value < 260) {
+      return value + 0;
 
-    } else if (value < 261) {
-       return value + 1;
+   } else if (value < 261) {
+      return value + 1;
 
-    } else if (value < 262) {
-       return value + 0;
+   } else if (value < 262) {
+      return value + 0;
 
-    } else if (value < 263) {
-       return value + 1;
+   } else if (value < 263) {
+      return value + 1;
 
-    } else if (value < 264) {
-       return value + 0;
+   } else if (value < 264) {
+      return value + 0;
 
-    } else if (value < 265) {
-       return value + 1;
+   } else if (value < 265) {
+      return value + 1;
 
-    } else if (value < 266) {
-       return value + 0;
+   } else if (value < 266) {
+      return value + 0;
 
-    } else if (value < 267) {
-       return value + 1;
+   } else if (value < 267) {
+      return value + 1;
 
-    } else if (value < 268) {
-       return value + 0;
+   } else if (value < 268) {
+      return value + 0;
 
-    } else if (value < 269) {
-       return value + 1;
+   } else if (value < 269) {
+      return value + 1;
 
-    } else if (value < 270) {
-       return value + 0;
+   } else if (value < 270) {
+      return value + 0;
 
-    } else if (value < 271) {
-       return value + 1;
+   } else if (value < 271) {
+      return value + 1;
 
-    } else if (value < 272) {
-       return value + 0;
+   } else if (value < 272) {
+      return value + 0;
 
-    } else if (value < 273) {
-       return value + 1;
+   } else if (value < 273) {
+      return value + 1;
 
-    } else if (value < 274) {
-       return value + 0;
+   } else if (value < 274) {
+      return value + 0;
 
-    } else if (value < 275) {
-       return value + 1;
+   } else if (value < 275) {
+      return value + 1;
 
-    } else if (value < 276) {
-       return value + 0;
+   } else if (value < 276) {
+      return value + 0;
 
-    } else if (value < 277) {
-       return value + 1;
+   } else if (value < 277) {
+      return value + 1;
 
-    } else if (value < 278) {
-       return value + 0;
+   } else if (value < 278) {
+      return value + 0;
 
-    } else if (value < 279) {
-       return value + 1;
+   } else if (value < 279) {
+      return value + 1;
 
-    } else if (value < 280) {
-       return value + 0;
+   } else if (value < 280) {
+      return value + 0;
 
-    } else if (value < 281) {
-       return value + 1;
+   } else if (value < 281) {
+      return value + 1;
 
-    } else if (value < 282) {
-       return value + 0;
+   } else if (value < 282) {
+      return value + 0;
 
-    } else if (value < 283) {
-       return value + 1;
+   } else if (value < 283) {
+      return value + 1;
 
-    } else if (value < 284) {
-       return value + 0;
+   } else if (value < 284) {
+      return value + 0;
 
-    } else if (value < 285) {
-       return value + 1;
+   } else if (value < 285) {
+      return value + 1;
 
-    } else if (value < 286) {
-       return value + 0;
+   } else if (value < 286) {
+      return value + 0;
 
-    } else if (value < 287) {
-       return value + 1;
+   } else if (value < 287) {
+      return value + 1;
 
-    } else if (value < 288) {
-       return value + 0;
+   } else if (value < 288) {
+      return value + 0;
 
-    } else if (value < 289) {
-       return value + 1;
+   } else if (value < 289) {
+      return value + 1;
 
-    } else if (value < 290) {
-       return value + 0;
+   } else if (value < 290) {
+      return value + 0;
 
-    } else if (value < 291) {
-       return value + 1;
+   } else if (value < 291) {
+      return value + 1;
 
-    } else if (value < 292) {
-       return value + 0;
+   } else if (value < 292) {
+      return value + 0;
 
-    } else if (value < 293) {
-       return value + 1;
+   } else if (value < 293) {
+      return value + 1;
 
-    } else if (value < 294) {
-       return value + 0;
+   } else if (value < 294) {
+      return value + 0;
 
-    } else if (value < 295) {
-       return value + 1;
+   } else if (value < 295) {
+      return value + 1;
 
-    } else if (value < 296) {
-       return value + 0;
+   } else if (value < 296) {
+      return value + 0;
 
-    } else if (value < 297) {
-       return value + 1;
+   } else if (value < 297) {
+      return value + 1;
 
-    } else if (value < 298) {
-       return value + 0;
+   } else if (value < 298) {
+      return value + 0;
 
-    } else if (value < 299) {
-       return value + 1;
+   } else if (value < 299) {
+      return value + 1;
 
-    } else if (value < 300) {
-       return value + 0;
+   } else if (value < 300) {
+      return value + 0;
 
-    } else if (value < 301) {
-       return value + 1;
+   } else if (value < 301) {
+      return value + 1;
 
-    } else if (value < 302) {
-       return value + 0;
+   } else if (value < 302) {
+      return value + 0;
 
-    } else if (value < 303) {
-       return value + 1;
+   } else if (value < 303) {
+      return value + 1;
 
-    } else if (value == 304) {
-       // special char
-       return 0;
+   } else if (value == 304) {
+      // special char
+      return 0;
 
-    } else if (value < 306) {
-       return value + 0;
+   } else if (value < 306) {
+      return value + 0;
 
-    } else if (value < 307) {
-       return value + 1;
+   } else if (value < 307) {
+      return value + 1;
 
-    } else if (value < 308) {
-       return value + 0;
+   } else if (value < 308) {
+      return value + 0;
 
-    } else if (value < 309) {
-       return value + 1;
+   } else if (value < 309) {
+      return value + 1;
 
-    } else if (value < 310) {
-       return value + 0;
+   } else if (value < 310) {
+      return value + 0;
 
-    } else if (value < 311) {
-       return value + 1;
+   } else if (value < 311) {
+      return value + 1;
 
-    } else if (value < 313) {
-       return value + 0;
+   } else if (value < 313) {
+      return value + 0;
 
-    } else if (value < 314) {
-       return value + 1;
+   } else if (value < 314) {
+      return value + 1;
 
-    } else if (value < 315) {
-       return value + 0;
+   } else if (value < 315) {
+      return value + 0;
 
-    } else if (value < 316) {
-       return value + 1;
+   } else if (value < 316) {
+      return value + 1;
 
-    } else if (value < 317) {
-       return value + 0;
+   } else if (value < 317) {
+      return value + 0;
 
-    } else if (value < 318) {
-       return value + 1;
+   } else if (value < 318) {
+      return value + 1;
 
-    } else if (value < 319) {
-       return value + 0;
+   } else if (value < 319) {
+      return value + 0;
 
-    } else if (value < 320) {
-       return value + 1;
+   } else if (value < 320) {
+      return value + 1;
 
-    } else if (value < 321) {
-       return value + 0;
+   } else if (value < 321) {
+      return value + 0;
 
-    } else if (value < 322) {
-       return value + 1;
+   } else if (value < 322) {
+      return value + 1;
 
-    } else if (value < 323) {
-       return value + 0;
+   } else if (value < 323) {
+      return value + 0;
 
-    } else if (value < 324) {
-       return value + 1;
+   } else if (value < 324) {
+      return value + 1;
 
-    } else if (value < 325) {
-       return value + 0;
+   } else if (value < 325) {
+      return value + 0;
 
-    } else if (value < 326) {
-       return value + 1;
+   } else if (value < 326) {
+      return value + 1;
 
-    } else if (value < 327) {
-       return value + 0;
+   } else if (value < 327) {
+      return value + 0;
 
-    } else if (value < 328) {
-       return value + 1;
+   } else if (value < 328) {
+      return value + 1;
 
-    } else if (value == 329) {
-       // special char
-       return 0;
+   } else if (value == 329) {
+      // special char
+      return 0;
 
-    } else if (value < 330) {
-       return value + 0;
+   } else if (value < 330) {
+      return value + 0;
 
-    } else if (value < 331) {
-       return value + 1;
+   } else if (value < 331) {
+      return value + 1;
 
-    } else if (value < 332) {
-       return value + 0;
+   } else if (value < 332) {
+      return value + 0;
 
-    } else if (value < 333) {
-       return value + 1;
+   } else if (value < 333) {
+      return value + 1;
 
-    } else if (value < 334) {
-       return value + 0;
+   } else if (value < 334) {
+      return value + 0;
 
-    } else if (value < 335) {
-       return value + 1;
+   } else if (value < 335) {
+      return value + 1;
 
-    } else if (value < 336) {
-       return value + 0;
+   } else if (value < 336) {
+      return value + 0;
 
-    } else if (value < 337) {
-       return value + 1;
+   } else if (value < 337) {
+      return value + 1;
 
-    } else if (value < 338) {
-       return value + 0;
+   } else if (value < 338) {
+      return value + 0;
 
-    } else if (value < 339) {
-       return value + 1;
+   } else if (value < 339) {
+      return value + 1;
 
-    } else if (value < 340) {
-       return value + 0;
+   } else if (value < 340) {
+      return value + 0;
 
-    } else if (value < 341) {
-       return value + 1;
+   } else if (value < 341) {
+      return value + 1;
 
-    } else if (value < 342) {
-       return value + 0;
+   } else if (value < 342) {
+      return value + 0;
 
-    } else if (value < 343) {
-       return value + 1;
+   } else if (value < 343) {
+      return value + 1;
 
-    } else if (value < 344) {
-       return value + 0;
+   } else if (value < 344) {
+      return value + 0;
 
-    } else if (value < 345) {
-       return value + 1;
+   } else if (value < 345) {
+      return value + 1;
 
-    } else if (value < 346) {
-       return value + 0;
+   } else if (value < 346) {
+      return value + 0;
 
-    } else if (value < 347) {
-       return value + 1;
+   } else if (value < 347) {
+      return value + 1;
 
-    } else if (value < 348) {
-       return value + 0;
+   }
 
-    } else if (value < 349) {
-       return value + 1;
+   if (value < 348) {
+      return value + 0;
 
-    } else if (value < 350) {
-       return value + 0;
+   } else if (value < 349) {
+      return value + 1;
 
-    } else if (value < 351) {
-       return value + 1;
+   } else if (value < 350) {
+      return value + 0;
 
-    } else if (value < 352) {
-       return value + 0;
+   } else if (value < 351) {
+      return value + 1;
 
-    } else if (value < 353) {
-       return value + 1;
+   } else if (value < 352) {
+      return value + 0;
 
-    } else if (value < 354) {
-       return value + 0;
+   } else if (value < 353) {
+      return value + 1;
 
-    } else if (value < 355) {
-       return value + 1;
+   } else if (value < 354) {
+      return value + 0;
 
-    } else if (value < 356) {
-       return value + 0;
+   } else if (value < 355) {
+      return value + 1;
 
-    } else if (value < 357) {
-       return value + 1;
+   } else if (value < 356) {
+      return value + 0;
 
-    } else if (value < 358) {
-       return value + 0;
+   } else if (value < 357) {
+      return value + 1;
 
-    } else if (value < 359) {
-       return value + 1;
+   } else if (value < 358) {
+      return value + 0;
 
-    } else if (value < 360) {
-       return value + 0;
+   } else if (value < 359) {
+      return value + 1;
 
-    } else if (value < 361) {
-       return value + 1;
+   } else if (value < 360) {
+      return value + 0;
 
-    } else if (value < 362) {
-       return value + 0;
+   } else if (value < 361) {
+      return value + 1;
 
-    } else if (value < 363) {
-       return value + 1;
+   } else if (value < 362) {
+      return value + 0;
 
-    } else if (value < 364) {
-       return value + 0;
+   } else if (value < 363) {
+      return value + 1;
 
-    } else if (value < 365) {
-       return value + 1;
+   } else if (value < 364) {
+      return value + 0;
 
-    } else if (value < 366) {
-       return value + 0;
+   } else if (value < 365) {
+      return value + 1;
 
-    } else if (value < 367) {
-       return value + 1;
+   } else if (value < 366) {
+      return value + 0;
 
-    } else if (value < 368) {
-       return value + 0;
+   } else if (value < 367) {
+      return value + 1;
 
-    } else if (value < 369) {
-       return value + 1;
+   } else if (value < 368) {
+      return value + 0;
 
-    } else if (value < 370) {
-       return value + 0;
+   } else if (value < 369) {
+      return value + 1;
 
-    } else if (value < 371) {
-       return value + 1;
+   } else if (value < 370) {
+      return value + 0;
 
-    } else if (value < 372) {
-       return value + 0;
+   } else if (value < 371) {
+      return value + 1;
 
-    } else if (value < 373) {
-       return value + 1;
+   } else if (value < 372) {
+      return value + 0;
 
-    } else if (value < 374) {
-       return value + 0;
+   } else if (value < 373) {
+      return value + 1;
 
-    } else if (value < 375) {
-       return value + 1;
+   } else if (value < 374) {
+      return value + 0;
 
-    } else if (value < 376) {
-       return value + 0;
+   } else if (value < 375) {
+      return value + 1;
 
-    } else if (value < 377) {
-       return value + -121;
+   } else if (value < 376) {
+      return value + 0;
 
-    } else if (value < 378) {
-       return value + 1;
+   } else if (value < 377) {
+      return value + -121;
 
-    } else if (value < 379) {
-       return value + 0;
+   } else if (value < 378) {
+      return value + 1;
 
-    } else if (value < 380) {
-       return value + 1;
+   } else if (value < 379) {
+      return value + 0;
 
-    } else if (value < 381) {
-       return value + 0;
+   } else if (value < 380) {
+      return value + 1;
 
-    } else if (value < 382) {
-       return value + 1;
+   } else if (value < 381) {
+      return value + 0;
 
-    } else if (value < 383) {
-       return value + 0;
+   } else if (value < 382) {
+      return value + 1;
 
-    } else if (value < 384) {
-       return value + -268;
+   } else if (value < 383) {
+      return value + 0;
 
-    } else if (value < 385) {
-       return value + 0;
+   } else if (value < 384) {
+      return value + -268;
 
-    } else if (value < 386) {
-       return value + 210;
+   } else if (value < 385) {
+      return value + 0;
 
-    } else if (value < 387) {
-       return value + 1;
+   } else if (value < 386) {
+      return value + 210;
 
-    } else if (value < 388) {
-       return value + 0;
+   } else if (value < 387) {
+      return value + 1;
 
-    } else if (value < 389) {
-       return value + 1;
+   } else if (value < 388) {
+      return value + 0;
 
-    } else if (value < 390) {
-       return value + 0;
+   } else if (value < 389) {
+      return value + 1;
 
-    } else if (value < 391) {
-       return value + 206;
+   } else if (value < 390) {
+      return value + 0;
 
-    } else if (value < 392) {
-       return value + 1;
+   } else if (value < 391) {
+      return value + 206;
 
-    } else if (value < 393) {
-       return value + 0;
+   } else if (value < 392) {
+      return value + 1;
 
-    } else if (value < 395) {
-       return value + 205;
+   } else if (value < 393) {
+      return value + 0;
 
-    } else if (value < 396) {
-       return value + 1;
+   } else if (value < 395) {
+      return value + 205;
 
-    } else if (value < 398) {
-       return value + 0;
+   } else if (value < 396) {
+      return value + 1;
 
-    } else if (value < 399) {
-       return value + 79;
+   } else if (value < 398) {
+      return value + 0;
 
-    } else if (value < 400) {
-       return value + 202;
+   } else if (value < 399) {
+      return value + 79;
 
-    } else if (value < 401) {
-       return value + 203;
+   } else if (value < 400) {
+      return value + 202;
 
-    } else if (value < 402) {
-       return value + 1;
+   } else if (value < 401) {
+      return value + 203;
 
-    } else if (value < 403) {
-       return value + 0;
+   } else if (value < 402) {
+      return value + 1;
 
-    } else if (value < 404) {
-       return value + 205;
+   } else if (value < 403) {
+      return value + 0;
 
-    } else if (value < 405) {
-       return value + 207;
+   } else if (value < 404) {
+      return value + 205;
 
-    } else if (value < 406) {
-       return value + 0;
+   } else if (value < 405) {
+      return value + 207;
 
-    } else if (value < 407) {
-       return value + 211;
+   } else if (value < 406) {
+      return value + 0;
 
-    } else if (value < 408) {
-       return value + 209;
+   } else if (value < 407) {
+      return value + 211;
 
-    } else if (value < 409) {
-       return value + 1;
+   } else if (value < 408) {
+      return value + 209;
 
-    } else if (value < 412) {
-       return value + 0;
+   } else if (value < 409) {
+      return value + 1;
 
-    } else if (value < 413) {
-       return value + 211;
+   } else if (value < 412) {
+      return value + 0;
 
-    } else if (value < 414) {
-       return value + 213;
+   } else if (value < 413) {
+      return value + 211;
 
-    } else if (value < 415) {
-       return value + 0;
+   } else if (value < 414) {
+      return value + 213;
 
-    } else if (value < 416) {
-       return value + 214;
+   } else if (value < 415) {
+      return value + 0;
 
-    } else if (value < 417) {
-       return value + 1;
+   } else if (value < 416) {
+      return value + 214;
 
-    } else if (value < 418) {
-       return value + 0;
+   } else if (value < 417) {
+      return value + 1;
 
-    } else if (value < 419) {
-       return value + 1;
+   } else if (value < 418) {
+      return value + 0;
 
-    } else if (value < 420) {
-       return value + 0;
+   } else if (value < 419) {
+      return value + 1;
 
-    } else if (value < 421) {
-       return value + 1;
+   } else if (value < 420) {
+      return value + 0;
 
-    } else if (value < 422) {
-       return value + 0;
+   } else if (value < 421) {
+      return value + 1;
 
-    } else if (value < 423) {
-       return value + 218;
+   } else if (value < 422) {
+      return value + 0;
 
-    } else if (value < 424) {
-       return value + 1;
+   } else if (value < 423) {
+      return value + 218;
 
-    } else if (value < 425) {
-       return value + 0;
+   } else if (value < 424) {
+      return value + 1;
 
-    } else if (value < 426) {
-       return value + 218;
+   } else if (value < 425) {
+      return value + 0;
 
-    } else if (value < 428) {
-       return value + 0;
+   } else if (value < 426) {
+      return value + 218;
 
-    } else if (value < 429) {
-       return value + 1;
+   } else if (value < 428) {
+      return value + 0;
 
-    } else if (value < 430) {
-       return value + 0;
+   } else if (value < 429) {
+      return value + 1;
 
-    } else if (value < 431) {
-       return value + 218;
+   } else if (value < 430) {
+      return value + 0;
 
-    } else if (value < 432) {
-       return value + 1;
+   } else if (value < 431) {
+      return value + 218;
 
-    } else if (value < 433) {
-       return value + 0;
+   } else if (value < 432) {
+      return value + 1;
 
-    } else if (value < 435) {
-       return value + 217;
+   } else if (value < 433) {
+      return value + 0;
 
-    } else if (value < 436) {
-       return value + 1;
+   } else if (value < 435) {
+      return value + 217;
 
-    } else if (value < 437) {
-       return value + 0;
+   } else if (value < 436) {
+      return value + 1;
 
-    } else if (value < 438) {
-       return value + 1;
+   } else if (value < 437) {
+      return value + 0;
 
-    } else if (value < 439) {
-       return value + 0;
+   } else if (value < 438) {
+      return value + 1;
 
-    } else if (value < 440) {
-       return value + 219;
+   } else if (value < 439) {
+      return value + 0;
 
-    } else if (value < 441) {
-       return value + 1;
+   } else if (value < 440) {
+      return value + 219;
 
-    } else if (value < 444) {
-       return value + 0;
+   } else if (value < 441) {
+      return value + 1;
 
-    } else if (value < 445) {
-       return value + 1;
+   } else if (value < 444) {
+      return value + 0;
 
-    } else if (value < 452) {
-       return value + 0;
+   } else if (value < 445) {
+      return value + 1;
 
-    } else if (value < 453) {
-       return value + 2;
+   } else if (value < 452) {
+      return value + 0;
 
-    } else if (value < 454) {
-       return value + 1;
+   } else if (value < 453) {
+      return value + 2;
 
-    } else if (value < 455) {
-       return value + 0;
+   } else if (value < 454) {
+      return value + 1;
 
-    } else if (value < 456) {
-       return value + 2;
+   } else if (value < 455) {
+      return value + 0;
 
-    } else if (value < 457) {
-       return value + 1;
+   } else if (value < 456) {
+      return value + 2;
 
-    } else if (value < 458) {
-       return value + 0;
+   } else if (value < 457) {
+      return value + 1;
 
-    } else if (value < 459) {
-       return value + 2;
+   } else if (value < 458) {
+      return value + 0;
 
-    } else if (value < 460) {
-       return value + 1;
+   } else if (value < 459) {
+      return value + 2;
 
-    } else if (value < 461) {
-       return value + 0;
+   } else if (value < 460) {
+      return value + 1;
 
-    } else if (value < 462) {
-       return value + 1;
+   } else if (value < 461) {
+      return value + 0;
 
-    } else if (value < 463) {
-       return value + 0;
+   }
 
-    } else if (value < 464) {
-       return value + 1;
+   if (value < 462) {
+      return value + 1;
 
-    } else if (value < 465) {
-       return value + 0;
+   } else if (value < 463) {
+      return value + 0;
 
-    } else if (value < 466) {
-       return value + 1;
+   } else if (value < 464) {
+      return value + 1;
 
-    } else if (value < 467) {
-       return value + 0;
+   } else if (value < 465) {
+      return value + 0;
 
-    } else if (value < 468) {
-       return value + 1;
+   } else if (value < 466) {
+      return value + 1;
 
-    } else if (value < 469) {
-       return value + 0;
+   } else if (value < 467) {
+      return value + 0;
 
-    } else if (value < 470) {
-       return value + 1;
+   } else if (value < 468) {
+      return value + 1;
 
-    } else if (value < 471) {
-       return value + 0;
+   } else if (value < 469) {
+      return value + 0;
 
-    } else if (value < 472) {
-       return value + 1;
+   } else if (value < 470) {
+      return value + 1;
 
-    } else if (value < 473) {
-       return value + 0;
+   } else if (value < 471) {
+      return value + 0;
 
-    } else if (value < 474) {
-       return value + 1;
+   } else if (value < 472) {
+      return value + 1;
 
-    } else if (value < 475) {
-       return value + 0;
+   } else if (value < 473) {
+      return value + 0;
 
-    } else if (value < 476) {
-       return value + 1;
+   } else if (value < 474) {
+      return value + 1;
 
-    } else if (value < 478) {
-       return value + 0;
+   } else if (value < 475) {
+      return value + 0;
 
-    } else if (value < 479) {
-       return value + 1;
+   } else if (value < 476) {
+      return value + 1;
 
-    } else if (value < 480) {
-       return value + 0;
+   } else if (value < 478) {
+      return value + 0;
 
-    } else if (value < 481) {
-       return value + 1;
+   } else if (value < 479) {
+      return value + 1;
 
-    } else if (value < 482) {
-       return value + 0;
+   } else if (value < 480) {
+      return value + 0;
 
-    } else if (value < 483) {
-       return value + 1;
+   } else if (value < 481) {
+      return value + 1;
 
-    } else if (value < 484) {
-       return value + 0;
+   } else if (value < 482) {
+      return value + 0;
 
-    } else if (value < 485) {
-       return value + 1;
+   } else if (value < 483) {
+      return value + 1;
 
-    } else if (value < 486) {
-       return value + 0;
+   } else if (value < 484) {
+      return value + 0;
 
-    } else if (value < 487) {
-       return value + 1;
+   } else if (value < 485) {
+      return value + 1;
 
-    } else if (value < 488) {
-       return value + 0;
+   } else if (value < 486) {
+      return value + 0;
 
-    } else if (value < 489) {
-       return value + 1;
+   } else if (value < 487) {
+      return value + 1;
 
-    } else if (value < 490) {
-       return value + 0;
+   } else if (value < 488) {
+      return value + 0;
 
-    } else if (value < 491) {
-       return value + 1;
+   } else if (value < 489) {
+      return value + 1;
 
-    } else if (value < 492) {
-       return value + 0;
+   } else if (value < 490) {
+      return value + 0;
 
-    } else if (value < 493) {
-       return value + 1;
+   } else if (value < 491) {
+      return value + 1;
 
-    } else if (value < 494) {
-       return value + 0;
+   } else if (value < 492) {
+      return value + 0;
 
-    } else if (value < 495) {
-       return value + 1;
+   } else if (value < 493) {
+      return value + 1;
 
-    } else if (value == 496) {
-       // special char
-       return 0;
+   } else if (value < 494) {
+      return value + 0;
 
-    } else if (value < 497) {
-       return value + 0;
+   } else if (value < 495) {
+      return value + 1;
 
-    } else if (value < 498) {
-       return value + 2;
+   } else if (value == 496) {
+      // special char
+      return 0;
 
-    } else if (value < 499) {
-       return value + 1;
+   } else if (value < 497) {
+      return value + 0;
 
-    } else if (value < 500) {
-       return value + 0;
+   } else if (value < 498) {
+      return value + 2;
 
-    } else if (value < 501) {
-       return value + 1;
+   } else if (value < 499) {
+      return value + 1;
 
-    } else if (value < 502) {
-       return value + 0;
+   } else if (value < 500) {
+      return value + 0;
 
-    } else if (value < 503) {
-       return value + -97;
+   } else if (value < 501) {
+      return value + 1;
 
-    } else if (value < 504) {
-       return value + -56;
+   } else if (value < 502) {
+      return value + 0;
 
-    } else if (value < 505) {
-       return value + 1;
+   } else if (value < 503) {
+      return value + -97;
 
-    } else if (value < 506) {
-       return value + 0;
+   } else if (value < 504) {
+      return value + -56;
 
-    } else if (value < 507) {
-       return value + 1;
+   } else if (value < 505) {
+      return value + 1;
 
-    } else if (value < 508) {
-       return value + 0;
+   } else if (value < 506) {
+      return value + 0;
 
-    } else if (value < 509) {
-       return value + 1;
+   } else if (value < 507) {
+      return value + 1;
 
-    } else if (value < 510) {
-       return value + 0;
+   } else if (value < 508) {
+      return value + 0;
 
-    } else if (value < 511) {
-       return value + 1;
+   } else if (value < 509) {
+      return value + 1;
 
-    } else if (value < 512) {
-       return value + 0;
+   } else if (value < 510) {
+      return value + 0;
 
-    } else if (value < 513) {
-       return value + 1;
+   } else if (value < 511) {
+      return value + 1;
 
-    } else if (value < 514) {
-       return value + 0;
+   } else if (value < 512) {
+      return value + 0;
 
-    } else if (value < 515) {
-       return value + 1;
+   } else if (value < 513) {
+      return value + 1;
 
-    } else if (value < 516) {
-       return value + 0;
+   } else if (value < 514) {
+      return value + 0;
 
-    } else if (value < 517) {
-       return value + 1;
+   } else if (value < 515) {
+      return value + 1;
 
-    } else if (value < 518) {
-       return value + 0;
+   } else if (value < 516) {
+      return value + 0;
 
-    } else if (value < 519) {
-       return value + 1;
+   } else if (value < 517) {
+      return value + 1;
 
-    } else if (value < 520) {
-       return value + 0;
+   } else if (value < 518) {
+      return value + 0;
 
-    } else if (value < 521) {
-       return value + 1;
+   } else if (value < 519) {
+      return value + 1;
 
-    } else if (value < 522) {
-       return value + 0;
+   } else if (value < 520) {
+      return value + 0;
 
-    } else if (value < 523) {
-       return value + 1;
+   } else if (value < 521) {
+      return value + 1;
 
-    } else if (value < 524) {
-       return value + 0;
+   } else if (value < 522) {
+      return value + 0;
 
-    } else if (value < 525) {
-       return value + 1;
+   } else if (value < 523) {
+      return value + 1;
 
-    } else if (value < 526) {
-       return value + 0;
+   } else if (value < 524) {
+      return value + 0;
 
-    } else if (value < 527) {
-       return value + 1;
+   } else if (value < 525) {
+      return value + 1;
 
-    } else if (value < 528) {
-       return value + 0;
+   } else if (value < 526) {
+      return value + 0;
 
-    } else if (value < 529) {
-       return value + 1;
+   } else if (value < 527) {
+      return value + 1;
 
-    } else if (value < 530) {
-       return value + 0;
+   } else if (value < 528) {
+      return value + 0;
 
-    } else if (value < 531) {
-       return value + 1;
+   } else if (value < 529) {
+      return value + 1;
 
-    } else if (value < 532) {
-       return value + 0;
+   } else if (value < 530) {
+      return value + 0;
 
-    } else if (value < 533) {
-       return value + 1;
+   } else if (value < 531) {
+      return value + 1;
 
-    } else if (value < 534) {
-       return value + 0;
+   } else if (value < 532) {
+      return value + 0;
 
-    } else if (value < 535) {
-       return value + 1;
+   } else if (value < 533) {
+      return value + 1;
 
-    } else if (value < 536) {
-       return value + 0;
+   } else if (value < 534) {
+      return value + 0;
 
-    } else if (value < 537) {
-       return value + 1;
+   } else if (value < 535) {
+      return value + 1;
 
-    } else if (value < 538) {
-       return value + 0;
+   } else if (value < 536) {
+      return value + 0;
 
-    } else if (value < 539) {
-       return value + 1;
+   } else if (value < 537) {
+      return value + 1;
 
-    } else if (value < 540) {
-       return value + 0;
+   } else if (value < 538) {
+      return value + 0;
 
-    } else if (value < 541) {
-       return value + 1;
+   } else if (value < 539) {
+      return value + 1;
 
-    } else if (value < 542) {
-       return value + 0;
+   } else if (value < 540) {
+      return value + 0;
 
-    } else if (value < 543) {
-       return value + 1;
+   } else if (value < 541) {
+      return value + 1;
 
-    } else if (value < 544) {
-       return value + 0;
+   } else if (value < 542) {
+      return value + 0;
 
-    } else if (value < 545) {
-       return value + -130;
+   } else if (value < 543) {
+      return value + 1;
 
-    } else if (value < 546) {
-       return value + 0;
+   } else if (value < 544) {
+      return value + 0;
 
-    } else if (value < 547) {
-       return value + 1;
+   } else if (value < 545) {
+      return value + -130;
 
-    } else if (value < 548) {
-       return value + 0;
+   } else if (value < 546) {
+      return value + 0;
 
-    } else if (value < 549) {
-       return value + 1;
+   } else if (value < 547) {
+      return value + 1;
 
-    } else if (value < 550) {
-       return value + 0;
+   } else if (value < 548) {
+      return value + 0;
 
-    } else if (value < 551) {
-       return value + 1;
+   } else if (value < 549) {
+      return value + 1;
 
-    } else if (value < 552) {
-       return value + 0;
+   } else if (value < 550) {
+      return value + 0;
 
-    } else if (value < 553) {
-       return value + 1;
+   } else if (value < 551) {
+      return value + 1;
 
-    } else if (value < 554) {
-       return value + 0;
+   } else if (value < 552) {
+      return value + 0;
 
-    } else if (value < 555) {
-       return value + 1;
+   } else if (value < 553) {
+      return value + 1;
 
-    } else if (value < 556) {
-       return value + 0;
+   } else if (value < 554) {
+      return value + 0;
 
-    } else if (value < 557) {
-       return value + 1;
+   } else if (value < 555) {
+      return value + 1;
 
-    } else if (value < 558) {
-       return value + 0;
+   } else if (value < 556) {
+      return value + 0;
 
-    } else if (value < 559) {
-       return value + 1;
+   } else if (value < 557) {
+      return value + 1;
 
-    } else if (value < 560) {
-       return value + 0;
+   } else if (value < 558) {
+      return value + 0;
 
-    } else if (value < 561) {
-       return value + 1;
+   } else if (value < 559) {
+      return value + 1;
 
-    } else if (value < 562) {
-       return value + 0;
+   } else if (value < 560) {
+      return value + 0;
 
-    } else if (value < 563) {
-       return value + 1;
+   } else if (value < 561) {
+      return value + 1;
 
-    } else if (value < 570) {
-       return value + 0;
+   } else if (value < 562) {
+      return value + 0;
 
-    } else if (value < 571) {
-       return value + 10795;
+   }
 
-    } else if (value < 572) {
-       return value + 1;
+   if (value < 563) {
+      return value + 1;
 
-    } else if (value < 573) {
-       return value + 0;
+   } else if (value < 570) {
+      return value + 0;
 
-    } else if (value < 574) {
-       return value + -163;
+   } else if (value < 571) {
+      return value + 10795;
 
-    } else if (value < 575) {
-       return value + 10792;
+   } else if (value < 572) {
+      return value + 1;
 
-    } else if (value < 577) {
-       return value + 0;
+   } else if (value < 573) {
+      return value + 0;
 
-    } else if (value < 578) {
-       return value + 1;
+   } else if (value < 574) {
+      return value + -163;
 
-    } else if (value < 579) {
-       return value + 0;
+   } else if (value < 575) {
+      return value + 10792;
 
-    } else if (value < 580) {
-       return value + -195;
+   } else if (value < 577) {
+      return value + 0;
 
-    } else if (value < 581) {
-       return value + 69;
+   } else if (value < 578) {
+      return value + 1;
 
-    } else if (value < 582) {
-       return value + 71;
+   } else if (value < 579) {
+      return value + 0;
 
-    } else if (value < 583) {
-       return value + 1;
+   } else if (value < 580) {
+      return value + -195;
 
-    } else if (value < 584) {
-       return value + 0;
+   } else if (value < 581) {
+      return value + 69;
 
-    } else if (value < 585) {
-       return value + 1;
+   } else if (value < 582) {
+      return value + 71;
 
-    } else if (value < 586) {
-       return value + 0;
+   } else if (value < 583) {
+      return value + 1;
 
-    } else if (value < 587) {
-       return value + 1;
+   } else if (value < 584) {
+      return value + 0;
 
-    } else if (value < 588) {
-       return value + 0;
+   } else if (value < 585) {
+      return value + 1;
 
-    } else if (value < 589) {
-       return value + 1;
+   } else if (value < 586) {
+      return value + 0;
 
-    } else if (value < 590) {
-       return value + 0;
+   } else if (value < 587) {
+      return value + 1;
 
-    } else if (value < 591) {
-       return value + 1;
+   } else if (value < 588) {
+      return value + 0;
 
-    } else if (value < 837) {
-       return value + 0;
+   } else if (value < 589) {
+      return value + 1;
 
-    } else if (value < 838) {
-       return value + 116;
+   } else if (value < 590) {
+      return value + 0;
 
-    } else if (value < 880) {
-       return value + 0;
+   } else if (value < 591) {
+      return value + 1;
 
-    } else if (value < 881) {
-       return value + 1;
+   } else if (value < 837) {
+      return value + 0;
 
-    } else if (value < 882) {
-       return value + 0;
+   } else if (value < 838) {
+      return value + 116;
 
-    } else if (value < 883) {
-       return value + 1;
+   } else if (value < 880) {
+      return value + 0;
 
-    } else if (value < 886) {
-       return value + 0;
+   } else if (value < 881) {
+      return value + 1;
 
-    } else if (value < 887) {
-       return value + 1;
+   } else if (value < 882) {
+      return value + 0;
 
-    } else if (value < 895) {
-       return value + 0;
+   } else if (value < 883) {
+      return value + 1;
 
-    } else if (value < 896) {
-       return value + 116;
+   } else if (value < 886) {
+      return value + 0;
 
-    } else if (value < 902) {
-       return value + 0;
+   } else if (value < 887) {
+      return value + 1;
 
-    } else if (value < 903) {
-       return value + 38;
+   } else if (value < 895) {
+      return value + 0;
 
-    } else if (value < 904) {
-       return value + 0;
+   } else if (value < 896) {
+      return value + 116;
 
-    } else if (value < 907) {
-       return value + 37;
+   } else if (value < 902) {
+      return value + 0;
 
-    } else if (value < 908) {
-       return value + 0;
+   } else if (value < 903) {
+      return value + 38;
 
-    } else if (value < 909) {
-       return value + 64;
+   } else if (value < 904) {
+      return value + 0;
 
-    } else if (value < 910) {
-       return value + 0;
+   } else if (value < 907) {
+      return value + 37;
 
-    } else if (value == 912) {
-       // special char
-       return 0;
+   } else if (value < 908) {
+      return value + 0;
 
-    } else if (value < 913) {
-       return value + 63;
+   } else if (value < 909) {
+      return value + 64;
 
-    } else if (value < 930) {
-       return value + 32;
+   } else if (value < 910) {
+      return value + 0;
 
-    } else if (value < 931) {
-       return value + 0;
+   } else if (value == 912) {
+      // special char
+      return 0;
 
-    } else if (value < 940) {
-       return value + 32;
+   } else if (value < 913) {
+      return value + 63;
 
-    } else if (value == 944) {
-       // special char
-       return 0;
+   } else if (value < 930) {
+      return value + 32;
 
-    } else if (value < 962) {
-       return value + 0;
+   } else if (value < 931) {
+      return value + 0;
 
-    } else if (value < 963) {
-       return value + 1;
+   } else if (value < 940) {
+      return value + 32;
 
-    } else if (value < 975) {
-       return value + 0;
+   } else if (value == 944) {
+      // special char
+      return 0;
 
-    } else if (value < 976) {
-       return value + 8;
+   } else if (value < 962) {
+      return value + 0;
 
-    } else if (value < 977) {
-       return value + -30;
+   } else if (value < 963) {
+      return value + 1;
 
-    } else if (value < 978) {
-       return value + -25;
+   } else if (value < 975) {
+      return value + 0;
 
-    } else if (value < 981) {
-       return value + 0;
+   } else if (value < 976) {
+      return value + 8;
 
-    } else if (value < 982) {
-       return value + -15;
+   } else if (value < 977) {
+      return value + -30;
 
-    } else if (value < 983) {
-       return value + -22;
+   } else if (value < 978) {
+      return value + -25;
 
-    } else if (value < 984) {
-       return value + 0;
+   } else if (value < 981) {
+      return value + 0;
 
-    } else if (value < 985) {
-       return value + 1;
+   } else if (value < 982) {
+      return value + -15;
 
-    } else if (value < 986) {
-       return value + 0;
+   } else if (value < 983) {
+      return value + -22;
 
-    } else if (value < 987) {
-       return value + 1;
+   } else if (value < 984) {
+      return value + 0;
 
-    } else if (value < 988) {
-       return value + 0;
+   } else if (value < 985) {
+      return value + 1;
 
-    } else if (value < 989) {
-       return value + 1;
+   } else if (value < 986) {
+      return value + 0;
 
-    } else if (value < 990) {
-       return value + 0;
+   } else if (value < 987) {
+      return value + 1;
 
-    } else if (value < 991) {
-       return value + 1;
+   } else if (value < 988) {
+      return value + 0;
 
-    } else if (value < 992) {
-       return value + 0;
+   } else if (value < 989) {
+      return value + 1;
 
-    } else if (value < 993) {
-       return value + 1;
+   } else if (value < 990) {
+      return value + 0;
 
-    } else if (value < 994) {
-       return value + 0;
+   } else if (value < 991) {
+      return value + 1;
 
-    } else if (value < 995) {
-       return value + 1;
+   } else if (value < 992) {
+      return value + 0;
 
-    } else if (value < 996) {
-       return value + 0;
+   } else if (value < 993) {
+      return value + 1;
 
-    } else if (value < 997) {
-       return value + 1;
+   } else if (value < 994) {
+      return value + 0;
 
-    } else if (value < 998) {
-       return value + 0;
+   } else if (value < 995) {
+      return value + 1;
 
-    } else if (value < 999) {
-       return value + 1;
+   } else if (value < 996) {
+      return value + 0;
 
-    } else if (value < 1000) {
-       return value + 0;
+   } else if (value < 997) {
+      return value + 1;
 
-    } else if (value < 1001) {
-       return value + 1;
+   } else if (value < 998) {
+      return value + 0;
 
-    } else if (value < 1002) {
-       return value + 0;
+   } else if (value < 999) {
+      return value + 1;
 
-    } else if (value < 1003) {
-       return value + 1;
+   } else if (value < 1000) {
+      return value + 0;
 
-    } else if (value < 1004) {
-       return value + 0;
+   } else if (value < 1001) {
+      return value + 1;
 
-    } else if (value < 1005) {
-       return value + 1;
+   } else if (value < 1002) {
+      return value + 0;
 
-    } else if (value < 1006) {
-       return value + 0;
+   } else if (value < 1003) {
+      return value + 1;
 
-    } else if (value < 1007) {
-       return value + 1;
+   } else if (value < 1004) {
+      return value + 0;
 
-    } else if (value < 1008) {
-       return value + 0;
+   } else if (value < 1005) {
+      return value + 1;
 
-    } else if (value < 1009) {
-       return value + -54;
+   } else if (value < 1006) {
+      return value + 0;
 
-    } else if (value < 1010) {
-       return value + -48;
+   } else if (value < 1007) {
+      return value + 1;
 
-    } else if (value < 1012) {
-       return value + 0;
+   } else if (value < 1008) {
+      return value + 0;
 
-    } else if (value < 1013) {
-       return value + -60;
+   } else if (value < 1009) {
+      return value + -54;
 
-    } else if (value < 1014) {
-       return value + -64;
+   } else if (value < 1010) {
+      return value + -48;
 
-    } else if (value < 1015) {
-       return value + 0;
+   } else if (value < 1012) {
+      return value + 0;
 
-    } else if (value < 1016) {
-       return value + 1;
+   } else if (value < 1013) {
+      return value + -60;
 
-    } else if (value < 1017) {
-       return value + 0;
+   } else if (value < 1014) {
+      return value + -64;
 
-    } else if (value < 1018) {
-       return value + -7;
+   } else if (value < 1015) {
+      return value + 0;
 
-    } else if (value < 1019) {
-       return value + 1;
+   } else if (value < 1016) {
+      return value + 1;
 
-    } else if (value < 1021) {
-       return value + 0;
+   } else if (value < 1017) {
+      return value + 0;
 
-    } else if (value < 1024) {
-       return value + -130;
+   } else if (value < 1018) {
+      return value + -7;
 
-    } else if (value < 1040) {
-       return value + 80;
+   } else if (value < 1019) {
+      return value + 1;
 
-    } else if (value < 1072) {
-       return value + 32;
+   } else if (value < 1021) {
+      return value + 0;
 
-    } else if (value < 1120) {
-       return value + 0;
+   } else if (value < 1024) {
+      return value + -130;
 
-    } else if (value < 1121) {
-       return value + 1;
+   } else if (value < 1040) {
+      return value + 80;
 
-    } else if (value < 1122) {
-       return value + 0;
+   } else if (value < 1072) {
+      return value + 32;
 
-    } else if (value < 1123) {
-       return value + 1;
+   } else if (value < 1120) {
+      return value + 0;
 
-    } else if (value < 1124) {
-       return value + 0;
+   } else if (value < 1121) {
+      return value + 1;
 
-    } else if (value < 1125) {
-       return value + 1;
+   } else if (value < 1122) {
+      return value + 0;
 
-    } else if (value < 1126) {
-       return value + 0;
+   } else if (value < 1123) {
+      return value + 1;
 
-    } else if (value < 1127) {
-       return value + 1;
+   } else if (value < 1124) {
+      return value + 0;
 
-    } else if (value < 1128) {
-       return value + 0;
+   } else if (value < 1125) {
+      return value + 1;
 
-    } else if (value < 1129) {
-       return value + 1;
+   } else if (value < 1126) {
+      return value + 0;
 
-    } else if (value < 1130) {
-       return value + 0;
+   }
 
-    } else if (value < 1131) {
-       return value + 1;
+   if (value < 1127) {
+      return value + 1;
 
-    } else if (value < 1132) {
-       return value + 0;
+   } else if (value < 1128) {
+      return value + 0;
 
-    } else if (value < 1133) {
-       return value + 1;
+   } else if (value < 1129) {
+      return value + 1;
 
-    } else if (value < 1134) {
-       return value + 0;
+   } else if (value < 1130) {
+      return value + 0;
 
-    } else if (value < 1135) {
-       return value + 1;
+   } else if (value < 1131) {
+      return value + 1;
 
-    } else if (value < 1136) {
-       return value + 0;
+   } else if (value < 1132) {
+      return value + 0;
 
-    } else if (value < 1137) {
-       return value + 1;
+   } else if (value < 1133) {
+      return value + 1;
 
-    } else if (value < 1138) {
-       return value + 0;
+   } else if (value < 1134) {
+      return value + 0;
 
-    } else if (value < 1139) {
-       return value + 1;
+   } else if (value < 1135) {
+      return value + 1;
 
-    } else if (value < 1140) {
-       return value + 0;
+   } else if (value < 1136) {
+      return value + 0;
 
-    } else if (value < 1141) {
-       return value + 1;
+   } else if (value < 1137) {
+      return value + 1;
 
-    } else if (value < 1142) {
-       return value + 0;
+   } else if (value < 1138) {
+      return value + 0;
 
-    } else if (value < 1143) {
-       return value + 1;
+   } else if (value < 1139) {
+      return value + 1;
 
-    } else if (value < 1144) {
-       return value + 0;
+   } else if (value < 1140) {
+      return value + 0;
 
-    } else if (value < 1145) {
-       return value + 1;
+   } else if (value < 1141) {
+      return value + 1;
 
-    } else if (value < 1146) {
-       return value + 0;
+   } else if (value < 1142) {
+      return value + 0;
 
-    } else if (value < 1147) {
-       return value + 1;
+   } else if (value < 1143) {
+      return value + 1;
 
-    } else if (value < 1148) {
-       return value + 0;
+   } else if (value < 1144) {
+      return value + 0;
 
-    } else if (value < 1149) {
-       return value + 1;
+   } else if (value < 1145) {
+      return value + 1;
 
-    } else if (value < 1150) {
-       return value + 0;
+   } else if (value < 1146) {
+      return value + 0;
 
-    } else if (value < 1151) {
-       return value + 1;
+   } else if (value < 1147) {
+      return value + 1;
 
-    } else if (value < 1152) {
-       return value + 0;
+   } else if (value < 1148) {
+      return value + 0;
 
-    } else if (value < 1153) {
-       return value + 1;
+   } else if (value < 1149) {
+      return value + 1;
 
-    } else if (value < 1162) {
-       return value + 0;
+   } else if (value < 1150) {
+      return value + 0;
 
-    } else if (value < 1163) {
-       return value + 1;
+   } else if (value < 1151) {
+      return value + 1;
 
-    } else if (value < 1164) {
-       return value + 0;
+   } else if (value < 1152) {
+      return value + 0;
 
-    } else if (value < 1165) {
-       return value + 1;
+   } else if (value < 1153) {
+      return value + 1;
 
-    } else if (value < 1166) {
-       return value + 0;
+   } else if (value < 1162) {
+      return value + 0;
 
-    } else if (value < 1167) {
-       return value + 1;
+   } else if (value < 1163) {
+      return value + 1;
 
-    } else if (value < 1168) {
-       return value + 0;
+   } else if (value < 1164) {
+      return value + 0;
 
-    } else if (value < 1169) {
-       return value + 1;
+   } else if (value < 1165) {
+      return value + 1;
 
-    } else if (value < 1170) {
-       return value + 0;
+   } else if (value < 1166) {
+      return value + 0;
 
-    } else if (value < 1171) {
-       return value + 1;
+   } else if (value < 1167) {
+      return value + 1;
 
-    } else if (value < 1172) {
-       return value + 0;
+   } else if (value < 1168) {
+      return value + 0;
 
-    } else if (value < 1173) {
-       return value + 1;
+   } else if (value < 1169) {
+      return value + 1;
 
-    } else if (value < 1174) {
-       return value + 0;
+   } else if (value < 1170) {
+      return value + 0;
 
-    } else if (value < 1175) {
-       return value + 1;
+   } else if (value < 1171) {
+      return value + 1;
 
-    } else if (value < 1176) {
-       return value + 0;
+   } else if (value < 1172) {
+      return value + 0;
 
-    } else if (value < 1177) {
-       return value + 1;
+   } else if (value < 1173) {
+      return value + 1;
 
-    } else if (value < 1178) {
-       return value + 0;
+   } else if (value < 1174) {
+      return value + 0;
 
-    } else if (value < 1179) {
-       return value + 1;
+   } else if (value < 1175) {
+      return value + 1;
 
-    } else if (value < 1180) {
-       return value + 0;
+   } else if (value < 1176) {
+      return value + 0;
 
-    } else if (value < 1181) {
-       return value + 1;
+   } else if (value < 1177) {
+      return value + 1;
 
-    } else if (value < 1182) {
-       return value + 0;
+   } else if (value < 1178) {
+      return value + 0;
 
-    } else if (value < 1183) {
-       return value + 1;
+   } else if (value < 1179) {
+      return value + 1;
 
-    } else if (value < 1184) {
-       return value + 0;
+   } else if (value < 1180) {
+      return value + 0;
 
-    } else if (value < 1185) {
-       return value + 1;
+   } else if (value < 1181) {
+      return value + 1;
 
-    } else if (value < 1186) {
-       return value + 0;
+   } else if (value < 1182) {
+      return value + 0;
 
-    } else if (value < 1187) {
-       return value + 1;
+   } else if (value < 1183) {
+      return value + 1;
 
-    } else if (value < 1188) {
-       return value + 0;
+   } else if (value < 1184) {
+      return value + 0;
 
-    } else if (value < 1189) {
-       return value + 1;
+   } else if (value < 1185) {
+      return value + 1;
 
-    } else if (value < 1190) {
-       return value + 0;
+   } else if (value < 1186) {
+      return value + 0;
 
-    } else if (value < 1191) {
-       return value + 1;
+   } else if (value < 1187) {
+      return value + 1;
 
-    } else if (value < 1192) {
-       return value + 0;
+   } else if (value < 1188) {
+      return value + 0;
 
-    } else if (value < 1193) {
-       return value + 1;
+   } else if (value < 1189) {
+      return value + 1;
 
-    } else if (value < 1194) {
-       return value + 0;
+   } else if (value < 1190) {
+      return value + 0;
 
-    } else if (value < 1195) {
-       return value + 1;
+   } else if (value < 1191) {
+      return value + 1;
 
-    } else if (value < 1196) {
-       return value + 0;
+   } else if (value < 1192) {
+      return value + 0;
 
-    } else if (value < 1197) {
-       return value + 1;
+   } else if (value < 1193) {
+      return value + 1;
 
-    } else if (value < 1198) {
-       return value + 0;
+   } else if (value < 1194) {
+      return value + 0;
 
-    } else if (value < 1199) {
-       return value + 1;
+   } else if (value < 1195) {
+      return value + 1;
 
-    } else if (value < 1200) {
-       return value + 0;
+   } else if (value < 1196) {
+      return value + 0;
 
-    } else if (value < 1201) {
-       return value + 1;
+   } else if (value < 1197) {
+      return value + 1;
 
-    } else if (value < 1202) {
-       return value + 0;
+   } else if (value < 1198) {
+      return value + 0;
 
-    } else if (value < 1203) {
-       return value + 1;
+   } else if (value < 1199) {
+      return value + 1;
 
-    } else if (value < 1204) {
-       return value + 0;
+   } else if (value < 1200) {
+      return value + 0;
 
-    } else if (value < 1205) {
-       return value + 1;
+   } else if (value < 1201) {
+      return value + 1;
 
-    } else if (value < 1206) {
-       return value + 0;
+   } else if (value < 1202) {
+      return value + 0;
 
-    } else if (value < 1207) {
-       return value + 1;
+   } else if (value < 1203) {
+      return value + 1;
 
-    } else if (value < 1208) {
-       return value + 0;
+   } else if (value < 1204) {
+      return value + 0;
 
-    } else if (value < 1209) {
-       return value + 1;
+   } else if (value < 1205) {
+      return value + 1;
 
-    } else if (value < 1210) {
-       return value + 0;
+   } else if (value < 1206) {
+      return value + 0;
 
-    } else if (value < 1211) {
-       return value + 1;
+   } else if (value < 1207) {
+      return value + 1;
 
-    } else if (value < 1212) {
-       return value + 0;
+   } else if (value < 1208) {
+      return value + 0;
 
-    } else if (value < 1213) {
-       return value + 1;
+   } else if (value < 1209) {
+      return value + 1;
 
-    } else if (value < 1214) {
-       return value + 0;
+   } else if (value < 1210) {
+      return value + 0;
 
-    } else if (value < 1215) {
-       return value + 1;
+   } else if (value < 1211) {
+      return value + 1;
 
-    } else if (value < 1216) {
-       return value + 0;
+   } else if (value < 1212) {
+      return value + 0;
 
-    } else if (value < 1217) {
-       return value + 15;
+   } else if (value < 1213) {
+      return value + 1;
 
-    } else if (value < 1218) {
-       return value + 1;
+   } else if (value < 1214) {
+      return value + 0;
 
-    } else if (value < 1219) {
-       return value + 0;
+   } else if (value < 1215) {
+      return value + 1;
 
-    } else if (value < 1220) {
-       return value + 1;
+   } else if (value < 1216) {
+      return value + 0;
 
-    } else if (value < 1221) {
-       return value + 0;
+   } else if (value < 1217) {
+      return value + 15;
 
-    } else if (value < 1222) {
-       return value + 1;
+   } else if (value < 1218) {
+      return value + 1;
 
-    } else if (value < 1223) {
-       return value + 0;
+   } else if (value < 1219) {
+      return value + 0;
 
-    } else if (value < 1224) {
-       return value + 1;
+   } else if (value < 1220) {
+      return value + 1;
 
-    } else if (value < 1225) {
-       return value + 0;
+   } else if (value < 1221) {
+      return value + 0;
 
-    } else if (value < 1226) {
-       return value + 1;
+   } else if (value < 1222) {
+      return value + 1;
 
-    } else if (value < 1227) {
-       return value + 0;
+   } else if (value < 1223) {
+      return value + 0;
 
-    } else if (value < 1228) {
-       return value + 1;
+   } else if (value < 1224) {
+      return value + 1;
 
-    } else if (value < 1229) {
-       return value + 0;
+   } else if (value < 1225) {
+      return value + 0;
 
-    } else if (value < 1230) {
-       return value + 1;
+   } else if (value < 1226) {
+      return value + 1;
 
-    } else if (value < 1232) {
-       return value + 0;
+   } else if (value < 1227) {
+      return value + 0;
 
-    } else if (value < 1233) {
-       return value + 1;
+   } else if (value < 1228) {
+      return value + 1;
 
-    } else if (value < 1234) {
-       return value + 0;
+   } else if (value < 1229) {
+      return value + 0;
 
-    } else if (value < 1235) {
-       return value + 1;
+   } else if (value < 1230) {
+      return value + 1;
 
-    } else if (value < 1236) {
-       return value + 0;
+   } else if (value < 1232) {
+      return value + 0;
 
-    } else if (value < 1237) {
-       return value + 1;
+   } else if (value < 1233) {
+      return value + 1;
 
-    } else if (value < 1238) {
-       return value + 0;
+   } else if (value < 1234) {
+      return value + 0;
 
-    } else if (value < 1239) {
-       return value + 1;
+   } else if (value < 1235) {
+      return value + 1;
 
-    } else if (value < 1240) {
-       return value + 0;
+   }
 
-    } else if (value < 1241) {
-       return value + 1;
+   if (value < 1236) {
+      return value + 0;
 
-    } else if (value < 1242) {
-       return value + 0;
+   } else if (value < 1237) {
+      return value + 1;
 
-    } else if (value < 1243) {
-       return value + 1;
+   } else if (value < 1238) {
+      return value + 0;
 
-    } else if (value < 1244) {
-       return value + 0;
+   } else if (value < 1239) {
+      return value + 1;
 
-    } else if (value < 1245) {
-       return value + 1;
+   } else if (value < 1240) {
+      return value + 0;
 
-    } else if (value < 1246) {
-       return value + 0;
+   } else if (value < 1241) {
+      return value + 1;
 
-    } else if (value < 1247) {
-       return value + 1;
+   } else if (value < 1242) {
+      return value + 0;
 
-    } else if (value < 1248) {
-       return value + 0;
+   } else if (value < 1243) {
+      return value + 1;
 
-    } else if (value < 1249) {
-       return value + 1;
+   } else if (value < 1244) {
+      return value + 0;
 
-    } else if (value < 1250) {
-       return value + 0;
+   } else if (value < 1245) {
+      return value + 1;
 
-    } else if (value < 1251) {
-       return value + 1;
+   } else if (value < 1246) {
+      return value + 0;
 
-    } else if (value < 1252) {
-       return value + 0;
+   } else if (value < 1247) {
+      return value + 1;
 
-    } else if (value < 1253) {
-       return value + 1;
+   } else if (value < 1248) {
+      return value + 0;
 
-    } else if (value < 1254) {
-       return value + 0;
+   } else if (value < 1249) {
+      return value + 1;
 
-    } else if (value < 1255) {
-       return value + 1;
+   } else if (value < 1250) {
+      return value + 0;
 
-    } else if (value < 1256) {
-       return value + 0;
+   } else if (value < 1251) {
+      return value + 1;
 
-    } else if (value < 1257) {
-       return value + 1;
+   } else if (value < 1252) {
+      return value + 0;
 
-    } else if (value < 1258) {
-       return value + 0;
+   } else if (value < 1253) {
+      return value + 1;
 
-    } else if (value < 1259) {
-       return value + 1;
+   } else if (value < 1254) {
+      return value + 0;
 
-    } else if (value < 1260) {
-       return value + 0;
+   } else if (value < 1255) {
+      return value + 1;
 
-    } else if (value < 1261) {
-       return value + 1;
+   } else if (value < 1256) {
+      return value + 0;
 
-    } else if (value < 1262) {
-       return value + 0;
+   } else if (value < 1257) {
+      return value + 1;
 
-    } else if (value < 1263) {
-       return value + 1;
+   } else if (value < 1258) {
+      return value + 0;
 
-    } else if (value < 1264) {
-       return value + 0;
+   } else if (value < 1259) {
+      return value + 1;
 
-    } else if (value < 1265) {
-       return value + 1;
+   } else if (value < 1260) {
+      return value + 0;
 
-    } else if (value < 1266) {
-       return value + 0;
+   } else if (value < 1261) {
+      return value + 1;
 
-    } else if (value < 1267) {
-       return value + 1;
+   } else if (value < 1262) {
+      return value + 0;
 
-    } else if (value < 1268) {
-       return value + 0;
+   } else if (value < 1263) {
+      return value + 1;
 
-    } else if (value < 1269) {
-       return value + 1;
+   } else if (value < 1264) {
+      return value + 0;
 
-    } else if (value < 1270) {
-       return value + 0;
+   } else if (value < 1265) {
+      return value + 1;
 
-    } else if (value < 1271) {
-       return value + 1;
+   } else if (value < 1266) {
+      return value + 0;
 
-    } else if (value < 1272) {
-       return value + 0;
+   } else if (value < 1267) {
+      return value + 1;
 
-    } else if (value < 1273) {
-       return value + 1;
+   } else if (value < 1268) {
+      return value + 0;
 
-    } else if (value < 1274) {
-       return value + 0;
+   } else if (value < 1269) {
+      return value + 1;
 
-    } else if (value < 1275) {
-       return value + 1;
+   } else if (value < 1270) {
+      return value + 0;
 
-    } else if (value < 1276) {
-       return value + 0;
+   } else if (value < 1271) {
+      return value + 1;
 
-    } else if (value < 1277) {
-       return value + 1;
+   } else if (value < 1272) {
+      return value + 0;
 
-    } else if (value < 1278) {
-       return value + 0;
+   } else if (value < 1273) {
+      return value + 1;
 
-    } else if (value < 1279) {
-       return value + 1;
+   } else if (value < 1274) {
+      return value + 0;
 
-    } else if (value < 1280) {
-       return value + 0;
+   } else if (value < 1275) {
+      return value + 1;
 
-    } else if (value < 1281) {
-       return value + 1;
+   } else if (value < 1276) {
+      return value + 0;
 
-    } else if (value < 1282) {
-       return value + 0;
+   } else if (value < 1277) {
+      return value + 1;
 
-    } else if (value < 1283) {
-       return value + 1;
+   } else if (value < 1278) {
+      return value + 0;
 
-    } else if (value < 1284) {
-       return value + 0;
+   } else if (value < 1279) {
+      return value + 1;
 
-    } else if (value < 1285) {
-       return value + 1;
+   } else if (value < 1280) {
+      return value + 0;
 
-    } else if (value < 1286) {
-       return value + 0;
+   } else if (value < 1281) {
+      return value + 1;
 
-    } else if (value < 1287) {
-       return value + 1;
+   } else if (value < 1282) {
+      return value + 0;
 
-    } else if (value < 1288) {
-       return value + 0;
+   } else if (value < 1283) {
+      return value + 1;
 
-    } else if (value < 1289) {
-       return value + 1;
+   } else if (value < 1284) {
+      return value + 0;
 
-    } else if (value < 1290) {
-       return value + 0;
+   } else if (value < 1285) {
+      return value + 1;
 
-    } else if (value < 1291) {
-       return value + 1;
+   } else if (value < 1286) {
+      return value + 0;
 
-    } else if (value < 1292) {
-       return value + 0;
+   } else if (value < 1287) {
+      return value + 1;
 
-    } else if (value < 1293) {
-       return value + 1;
+   } else if (value < 1288) {
+      return value + 0;
 
-    } else if (value < 1294) {
-       return value + 0;
+   } else if (value < 1289) {
+      return value + 1;
 
-    } else if (value < 1295) {
-       return value + 1;
+   } else if (value < 1290) {
+      return value + 0;
 
-    } else if (value < 1296) {
-       return value + 0;
+   } else if (value < 1291) {
+      return value + 1;
 
-    } else if (value < 1297) {
-       return value + 1;
+   } else if (value < 1292) {
+      return value + 0;
 
-    } else if (value < 1298) {
-       return value + 0;
+   } else if (value < 1293) {
+      return value + 1;
 
-    } else if (value < 1299) {
-       return value + 1;
+   } else if (value < 1294) {
+      return value + 0;
 
-    } else if (value < 1300) {
-       return value + 0;
+   } else if (value < 1295) {
+      return value + 1;
 
-    } else if (value < 1301) {
-       return value + 1;
+   } else if (value < 1296) {
+      return value + 0;
 
-    } else if (value < 1302) {
-       return value + 0;
+   } else if (value < 1297) {
+      return value + 1;
 
-    } else if (value < 1303) {
-       return value + 1;
+   } else if (value < 1298) {
+      return value + 0;
 
-    } else if (value < 1304) {
-       return value + 0;
+   } else if (value < 1299) {
+      return value + 1;
 
-    } else if (value < 1305) {
-       return value + 1;
+   } else if (value < 1300) {
+      return value + 0;
 
-    } else if (value < 1306) {
-       return value + 0;
+   } else if (value < 1301) {
+      return value + 1;
 
-    } else if (value < 1307) {
-       return value + 1;
+   } else if (value < 1302) {
+      return value + 0;
 
-    } else if (value < 1308) {
-       return value + 0;
+   } else if (value < 1303) {
+      return value + 1;
 
-    } else if (value < 1309) {
-       return value + 1;
+   } else if (value < 1304) {
+      return value + 0;
 
-    } else if (value < 1310) {
-       return value + 0;
+   } else if (value < 1305) {
+      return value + 1;
 
-    } else if (value < 1311) {
-       return value + 1;
+   } else if (value < 1306) {
+      return value + 0;
 
-    } else if (value < 1312) {
-       return value + 0;
+   } else if (value < 1307) {
+      return value + 1;
 
-    } else if (value < 1313) {
-       return value + 1;
+   } else if (value < 1308) {
+      return value + 0;
 
-    } else if (value < 1314) {
-       return value + 0;
+   } else if (value < 1309) {
+      return value + 1;
 
-    } else if (value < 1315) {
-       return value + 1;
+   } else if (value < 1310) {
+      return value + 0;
 
-    } else if (value < 1316) {
-       return value + 0;
+   } else if (value < 1311) {
+      return value + 1;
 
-    } else if (value < 1317) {
-       return value + 1;
+   } else if (value < 1312) {
+      return value + 0;
 
-    } else if (value < 1318) {
-       return value + 0;
+   } else if (value < 1313) {
+      return value + 1;
 
-    } else if (value < 1319) {
-       return value + 1;
+   } else if (value < 1314) {
+      return value + 0;
 
-    } else if (value < 1320) {
-       return value + 0;
+   } else if (value < 1315) {
+      return value + 1;
 
-    } else if (value < 1321) {
-       return value + 1;
+   } else if (value < 1316) {
+      return value + 0;
 
-    } else if (value < 1322) {
-       return value + 0;
+   } else if (value < 1317) {
+      return value + 1;
 
-    } else if (value < 1323) {
-       return value + 1;
+   } else if (value < 1318) {
+      return value + 0;
 
-    } else if (value < 1324) {
-       return value + 0;
+   } else if (value < 1319) {
+      return value + 1;
 
-    } else if (value < 1325) {
-       return value + 1;
+   } else if (value < 1320) {
+      return value + 0;
 
-    } else if (value < 1326) {
-       return value + 0;
+   } else if (value < 1321) {
+      return value + 1;
 
-    } else if (value < 1327) {
-       return value + 1;
+   } else if (value < 1322) {
+      return value + 0;
 
-    } else if (value < 1329) {
-       return value + 0;
+   } else if (value < 1323) {
+      return value + 1;
 
-    } else if (value < 1367) {
-       return value + 48;
+   } else if (value < 1324) {
+      return value + 0;
 
-    } else if (value == 1415) {
-       // special char
-       return 0;
+   } else if (value < 1325) {
+      return value + 1;
 
-    } else if (value < 4256) {
-       return value + 0;
+   } else if (value < 1326) {
+      return value + 0;
 
-    } else if (value < 4294) {
-       return value + 7264;
+   } else if (value < 1327) {
+      return value + 1;
 
-    } else if (value < 4295) {
-       return value + 0;
+   } else if (value < 1329) {
+      return value + 0;
 
-    } else if (value < 4296) {
-       return value + 7264;
+   } else if (value < 1367) {
+      return value + 48;
 
-    } else if (value < 4301) {
-       return value + 0;
+   } else if (value == 1415) {
+      // special char
+      return 0;
 
-    } else if (value < 4302) {
-       return value + 7264;
+   } else if (value < 4256) {
+      return value + 0;
 
-    } else if (value < 5112) {
-       return value + 0;
+   } else if (value < 4294) {
+      return value + 7264;
 
-    } else if (value < 5118) {
-       return value + -8;
+   } else if (value < 4295) {
+      return value + 0;
 
-    } else if (value < 7296) {
-       return value + 0;
+   } else if (value < 4296) {
+      return value + 7264;
 
-    } else if (value < 7297) {
-       return value + -6222;
+   } else if (value < 4301) {
+      return value + 0;
 
-    } else if (value < 7298) {
-       return value + -6221;
+   }
 
-    } else if (value < 7299) {
-       return value + -6212;
+   if (value < 4302) {
+      return value + 7264;
 
-    } else if (value < 7301) {
-       return value + -6210;
+   } else if (value < 5112) {
+      return value + 0;
 
-    } else if (value < 7302) {
-       return value + -6211;
+   } else if (value < 5118) {
+      return value + -8;
 
-    } else if (value < 7303) {
-       return value + -6204;
+   } else if (value < 7296) {
+      return value + 0;
 
-    } else if (value < 7304) {
-       return value + -6180;
+   } else if (value < 7297) {
+      return value + -6222;
 
-    } else if (value < 7305) {
-       return value + 35267;
+   } else if (value < 7298) {
+      return value + -6221;
 
-    } else if (value < 7312) {
-       return value + 0;
+   } else if (value < 7299) {
+      return value + -6212;
 
-    } else if (value < 7355) {
-       return value + -3008;
+   } else if (value < 7301) {
+      return value + -6210;
 
-    } else if (value < 7357) {
-       return value + 0;
+   } else if (value < 7302) {
+      return value + -6211;
 
-    } else if (value < 7360) {
-       return value + -3008;
+   } else if (value < 7303) {
+      return value + -6204;
 
-    } else if (value < 7680) {
-       return value + 0;
+   } else if (value < 7304) {
+      return value + -6180;
 
-    } else if (value < 7681) {
-       return value + 1;
+   } else if (value < 7305) {
+      return value + 35267;
 
-    } else if (value < 7682) {
-       return value + 0;
+   } else if (value < 7312) {
+      return value + 0;
 
-    } else if (value < 7683) {
-       return value + 1;
+   } else if (value < 7355) {
+      return value + -3008;
 
-    } else if (value < 7684) {
-       return value + 0;
+   } else if (value < 7357) {
+      return value + 0;
 
-    } else if (value < 7685) {
-       return value + 1;
+   } else if (value < 7360) {
+      return value + -3008;
 
-    } else if (value < 7686) {
-       return value + 0;
+   } else if (value < 7680) {
+      return value + 0;
 
-    } else if (value < 7687) {
-       return value + 1;
+   } else if (value < 7681) {
+      return value + 1;
 
-    } else if (value < 7688) {
-       return value + 0;
+   } else if (value < 7682) {
+      return value + 0;
 
-    } else if (value < 7689) {
-       return value + 1;
+   } else if (value < 7683) {
+      return value + 1;
 
-    } else if (value < 7690) {
-       return value + 0;
+   } else if (value < 7684) {
+      return value + 0;
 
-    } else if (value < 7691) {
-       return value + 1;
+   } else if (value < 7685) {
+      return value + 1;
 
-    } else if (value < 7692) {
-       return value + 0;
+   } else if (value < 7686) {
+      return value + 0;
 
-    } else if (value < 7693) {
-       return value + 1;
+   } else if (value < 7687) {
+      return value + 1;
 
-    } else if (value < 7694) {
-       return value + 0;
+   } else if (value < 7688) {
+      return value + 0;
 
-    } else if (value < 7695) {
-       return value + 1;
+   } else if (value < 7689) {
+      return value + 1;
 
-    } else if (value < 7696) {
-       return value + 0;
+   } else if (value < 7690) {
+      return value + 0;
 
-    } else if (value < 7697) {
-       return value + 1;
+   } else if (value < 7691) {
+      return value + 1;
 
-    } else if (value < 7698) {
-       return value + 0;
+   } else if (value < 7692) {
+      return value + 0;
 
-    } else if (value < 7699) {
-       return value + 1;
+   } else if (value < 7693) {
+      return value + 1;
 
-    } else if (value < 7700) {
-       return value + 0;
+   } else if (value < 7694) {
+      return value + 0;
 
-    } else if (value < 7701) {
-       return value + 1;
+   } else if (value < 7695) {
+      return value + 1;
 
-    } else if (value < 7702) {
-       return value + 0;
+   } else if (value < 7696) {
+      return value + 0;
 
-    } else if (value < 7703) {
-       return value + 1;
+   } else if (value < 7697) {
+      return value + 1;
 
-    } else if (value < 7704) {
-       return value + 0;
+   } else if (value < 7698) {
+      return value + 0;
 
-    } else if (value < 7705) {
-       return value + 1;
+   } else if (value < 7699) {
+      return value + 1;
 
-    } else if (value < 7706) {
-       return value + 0;
+   } else if (value < 7700) {
+      return value + 0;
 
-    } else if (value < 7707) {
-       return value + 1;
+   } else if (value < 7701) {
+      return value + 1;
 
-    } else if (value < 7708) {
-       return value + 0;
+   } else if (value < 7702) {
+      return value + 0;
 
-    } else if (value < 7709) {
-       return value + 1;
+   } else if (value < 7703) {
+      return value + 1;
 
-    } else if (value < 7710) {
-       return value + 0;
+   } else if (value < 7704) {
+      return value + 0;
 
-    } else if (value < 7711) {
-       return value + 1;
+   } else if (value < 7705) {
+      return value + 1;
 
-    } else if (value < 7712) {
-       return value + 0;
+   } else if (value < 7706) {
+      return value + 0;
 
-    } else if (value < 7713) {
-       return value + 1;
+   } else if (value < 7707) {
+      return value + 1;
 
-    } else if (value < 7714) {
-       return value + 0;
+   } else if (value < 7708) {
+      return value + 0;
 
-    } else if (value < 7715) {
-       return value + 1;
+   } else if (value < 7709) {
+      return value + 1;
 
-    } else if (value < 7716) {
-       return value + 0;
+   } else if (value < 7710) {
+      return value + 0;
 
-    } else if (value < 7717) {
-       return value + 1;
+   } else if (value < 7711) {
+      return value + 1;
 
-    } else if (value < 7718) {
-       return value + 0;
+   } else if (value < 7712) {
+      return value + 0;
 
-    } else if (value < 7719) {
-       return value + 1;
+   } else if (value < 7713) {
+      return value + 1;
 
-    } else if (value < 7720) {
-       return value + 0;
+   } else if (value < 7714) {
+      return value + 0;
 
-    } else if (value < 7721) {
-       return value + 1;
+   } else if (value < 7715) {
+      return value + 1;
 
-    } else if (value < 7722) {
-       return value + 0;
+   } else if (value < 7716) {
+      return value + 0;
 
-    } else if (value < 7723) {
-       return value + 1;
+   } else if (value < 7717) {
+      return value + 1;
 
-    } else if (value < 7724) {
-       return value + 0;
+   } else if (value < 7718) {
+      return value + 0;
 
-    } else if (value < 7725) {
-       return value + 1;
+   } else if (value < 7719) {
+      return value + 1;
 
-    } else if (value < 7726) {
-       return value + 0;
+   } else if (value < 7720) {
+      return value + 0;
 
-    } else if (value < 7727) {
-       return value + 1;
+   } else if (value < 7721) {
+      return value + 1;
 
-    } else if (value < 7728) {
-       return value + 0;
+   } else if (value < 7722) {
+      return value + 0;
 
-    } else if (value < 7729) {
-       return value + 1;
+   } else if (value < 7723) {
+      return value + 1;
 
-    } else if (value < 7730) {
-       return value + 0;
+   } else if (value < 7724) {
+      return value + 0;
 
-    } else if (value < 7731) {
-       return value + 1;
+   } else if (value < 7725) {
+      return value + 1;
 
-    } else if (value < 7732) {
-       return value + 0;
+   } else if (value < 7726) {
+      return value + 0;
 
-    } else if (value < 7733) {
-       return value + 1;
+   } else if (value < 7727) {
+      return value + 1;
 
-    } else if (value < 7734) {
-       return value + 0;
+   } else if (value < 7728) {
+      return value + 0;
 
-    } else if (value < 7735) {
-       return value + 1;
+   } else if (value < 7729) {
+      return value + 1;
 
-    } else if (value < 7736) {
-       return value + 0;
+   } else if (value < 7730) {
+      return value + 0;
 
-    } else if (value < 7737) {
-       return value + 1;
+   } else if (value < 7731) {
+      return value + 1;
 
-    } else if (value < 7738) {
-       return value + 0;
+   } else if (value < 7732) {
+      return value + 0;
 
-    } else if (value < 7739) {
-       return value + 1;
+   } else if (value < 7733) {
+      return value + 1;
 
-    } else if (value < 7740) {
-       return value + 0;
+   } else if (value < 7734) {
+      return value + 0;
 
-    } else if (value < 7741) {
-       return value + 1;
+   } else if (value < 7735) {
+      return value + 1;
 
-    } else if (value < 7742) {
-       return value + 0;
+   } else if (value < 7736) {
+      return value + 0;
 
-    } else if (value < 7743) {
-       return value + 1;
+   } else if (value < 7737) {
+      return value + 1;
 
-    } else if (value < 7744) {
-       return value + 0;
+   } else if (value < 7738) {
+      return value + 0;
 
-    } else if (value < 7745) {
-       return value + 1;
+   } else if (value < 7739) {
+      return value + 1;
 
-    } else if (value < 7746) {
-       return value + 0;
+   } else if (value < 7740) {
+      return value + 0;
 
-    } else if (value < 7747) {
-       return value + 1;
+   } else if (value < 7741) {
+      return value + 1;
 
-    } else if (value < 7748) {
-       return value + 0;
+   } else if (value < 7742) {
+      return value + 0;
 
-    } else if (value < 7749) {
-       return value + 1;
+   } else if (value < 7743) {
+      return value + 1;
 
-    } else if (value < 7750) {
-       return value + 0;
+   } else if (value < 7744) {
+      return value + 0;
 
-    } else if (value < 7751) {
-       return value + 1;
+   } else if (value < 7745) {
+      return value + 1;
 
-    } else if (value < 7752) {
-       return value + 0;
+   } else if (value < 7746) {
+      return value + 0;
 
-    } else if (value < 7753) {
-       return value + 1;
+   } else if (value < 7747) {
+      return value + 1;
 
-    } else if (value < 7754) {
-       return value + 0;
+   } else if (value < 7748) {
+      return value + 0;
 
-    } else if (value < 7755) {
-       return value + 1;
+   } else if (value < 7749) {
+      return value + 1;
 
-    } else if (value < 7756) {
-       return value + 0;
+   } else if (value < 7750) {
+      return value + 0;
 
-    } else if (value < 7757) {
-       return value + 1;
+   } else if (value < 7751) {
+      return value + 1;
 
-    } else if (value < 7758) {
-       return value + 0;
+   } else if (value < 7752) {
+      return value + 0;
 
-    } else if (value < 7759) {
-       return value + 1;
+   } else if (value < 7753) {
+      return value + 1;
 
-    } else if (value < 7760) {
-       return value + 0;
+   } else if (value < 7754) {
+      return value + 0;
 
-    } else if (value < 7761) {
-       return value + 1;
+   } else if (value < 7755) {
+      return value + 1;
 
-    } else if (value < 7762) {
-       return value + 0;
+   } else if (value < 7756) {
+      return value + 0;
 
-    } else if (value < 7763) {
-       return value + 1;
+   } else if (value < 7757) {
+      return value + 1;
 
-    } else if (value < 7764) {
-       return value + 0;
+   } else if (value < 7758) {
+      return value + 0;
 
-    } else if (value < 7765) {
-       return value + 1;
+   } else if (value < 7759) {
+      return value + 1;
 
-    } else if (value < 7766) {
-       return value + 0;
+   } else if (value < 7760) {
+      return value + 0;
 
-    } else if (value < 7767) {
-       return value + 1;
+   } else if (value < 7761) {
+      return value + 1;
 
-    } else if (value < 7768) {
-       return value + 0;
+   } else if (value < 7762) {
+      return value + 0;
 
-    } else if (value < 7769) {
-       return value + 1;
+   } else if (value < 7763) {
+      return value + 1;
 
-    } else if (value < 7770) {
-       return value + 0;
+   }
 
-    } else if (value < 7771) {
-       return value + 1;
+   if (value < 7764) {
+      return value + 0;
 
-    } else if (value < 7772) {
-       return value + 0;
+   } else if (value < 7765) {
+      return value + 1;
 
-    } else if (value < 7773) {
-       return value + 1;
+   } else if (value < 7766) {
+      return value + 0;
 
-    } else if (value < 7774) {
-       return value + 0;
+   } else if (value < 7767) {
+      return value + 1;
 
-    } else if (value < 7775) {
-       return value + 1;
+   } else if (value < 7768) {
+      return value + 0;
 
-    } else if (value < 7776) {
-       return value + 0;
+   } else if (value < 7769) {
+      return value + 1;
 
-    } else if (value < 7777) {
-       return value + 1;
+   } else if (value < 7770) {
+      return value + 0;
 
-    } else if (value < 7778) {
-       return value + 0;
+   } else if (value < 7771) {
+      return value + 1;
 
-    } else if (value < 7779) {
-       return value + 1;
+   } else if (value < 7772) {
+      return value + 0;
 
-    } else if (value < 7780) {
-       return value + 0;
+   } else if (value < 7773) {
+      return value + 1;
 
-    } else if (value < 7781) {
-       return value + 1;
+   } else if (value < 7774) {
+      return value + 0;
 
-    } else if (value < 7782) {
-       return value + 0;
+   } else if (value < 7775) {
+      return value + 1;
 
-    } else if (value < 7783) {
-       return value + 1;
+   } else if (value < 7776) {
+      return value + 0;
 
-    } else if (value < 7784) {
-       return value + 0;
+   } else if (value < 7777) {
+      return value + 1;
 
-    } else if (value < 7785) {
-       return value + 1;
+   } else if (value < 7778) {
+      return value + 0;
 
-    } else if (value < 7786) {
-       return value + 0;
+   } else if (value < 7779) {
+      return value + 1;
 
-    } else if (value < 7787) {
-       return value + 1;
+   } else if (value < 7780) {
+      return value + 0;
 
-    } else if (value < 7788) {
-       return value + 0;
+   } else if (value < 7781) {
+      return value + 1;
 
-    } else if (value < 7789) {
-       return value + 1;
+   } else if (value < 7782) {
+      return value + 0;
 
-    } else if (value < 7790) {
-       return value + 0;
+   } else if (value < 7783) {
+      return value + 1;
 
-    } else if (value < 7791) {
-       return value + 1;
+   } else if (value < 7784) {
+      return value + 0;
 
-    } else if (value < 7792) {
-       return value + 0;
+   } else if (value < 7785) {
+      return value + 1;
 
-    } else if (value < 7793) {
-       return value + 1;
+   } else if (value < 7786) {
+      return value + 0;
 
-    } else if (value < 7794) {
-       return value + 0;
+   } else if (value < 7787) {
+      return value + 1;
 
-    } else if (value < 7795) {
-       return value + 1;
+   } else if (value < 7788) {
+      return value + 0;
 
-    } else if (value < 7796) {
-       return value + 0;
+   } else if (value < 7789) {
+      return value + 1;
 
-    } else if (value < 7797) {
-       return value + 1;
+   } else if (value < 7790) {
+      return value + 0;
 
-    } else if (value < 7798) {
-       return value + 0;
+   } else if (value < 7791) {
+      return value + 1;
 
-    } else if (value < 7799) {
-       return value + 1;
+   } else if (value < 7792) {
+      return value + 0;
 
-    } else if (value < 7800) {
-       return value + 0;
+   } else if (value < 7793) {
+      return value + 1;
 
-    } else if (value < 7801) {
-       return value + 1;
+   } else if (value < 7794) {
+      return value + 0;
 
-    } else if (value < 7802) {
-       return value + 0;
+   } else if (value < 7795) {
+      return value + 1;
 
-    } else if (value < 7803) {
-       return value + 1;
+   } else if (value < 7796) {
+      return value + 0;
 
-    } else if (value < 7804) {
-       return value + 0;
+   } else if (value < 7797) {
+      return value + 1;
 
-    } else if (value < 7805) {
-       return value + 1;
+   } else if (value < 7798) {
+      return value + 0;
 
-    } else if (value < 7806) {
-       return value + 0;
+   } else if (value < 7799) {
+      return value + 1;
 
-    } else if (value < 7807) {
-       return value + 1;
+   } else if (value < 7800) {
+      return value + 0;
 
-    } else if (value < 7808) {
-       return value + 0;
+   } else if (value < 7801) {
+      return value + 1;
 
-    } else if (value < 7809) {
-       return value + 1;
+   } else if (value < 7802) {
+      return value + 0;
 
-    } else if (value < 7810) {
-       return value + 0;
+   } else if (value < 7803) {
+      return value + 1;
 
-    } else if (value < 7811) {
-       return value + 1;
+   } else if (value < 7804) {
+      return value + 0;
 
-    } else if (value < 7812) {
-       return value + 0;
+   } else if (value < 7805) {
+      return value + 1;
 
-    } else if (value < 7813) {
-       return value + 1;
+   } else if (value < 7806) {
+      return value + 0;
 
-    } else if (value < 7814) {
-       return value + 0;
+   } else if (value < 7807) {
+      return value + 1;
 
-    } else if (value < 7815) {
-       return value + 1;
+   } else if (value < 7808) {
+      return value + 0;
 
-    } else if (value < 7816) {
-       return value + 0;
+   } else if (value < 7809) {
+      return value + 1;
 
-    } else if (value < 7817) {
-       return value + 1;
+   } else if (value < 7810) {
+      return value + 0;
 
-    } else if (value < 7818) {
-       return value + 0;
+   } else if (value < 7811) {
+      return value + 1;
 
-    } else if (value < 7819) {
-       return value + 1;
+   } else if (value < 7812) {
+      return value + 0;
 
-    } else if (value < 7820) {
-       return value + 0;
+   } else if (value < 7813) {
+      return value + 1;
 
-    } else if (value < 7821) {
-       return value + 1;
+   } else if (value < 7814) {
+      return value + 0;
 
-    } else if (value < 7822) {
-       return value + 0;
+   } else if (value < 7815) {
+      return value + 1;
 
-    } else if (value < 7823) {
-       return value + 1;
+   } else if (value < 7816) {
+      return value + 0;
 
-    } else if (value < 7824) {
-       return value + 0;
+   } else if (value < 7817) {
+      return value + 1;
 
-    } else if (value < 7825) {
-       return value + 1;
+   } else if (value < 7818) {
+      return value + 0;
 
-    } else if (value < 7826) {
-       return value + 0;
+   } else if (value < 7819) {
+      return value + 1;
 
-    } else if (value < 7827) {
-       return value + 1;
+   } else if (value < 7820) {
+      return value + 0;
 
-    } else if (value < 7828) {
-       return value + 0;
+   } else if (value < 7821) {
+      return value + 1;
 
-    } else if (value < 7829) {
-       return value + 1;
+   } else if (value < 7822) {
+      return value + 0;
 
-    } else if (value == 7830) {
-       // special char
-       return 0;
+   } else if (value < 7823) {
+      return value + 1;
 
-    } else if (value == 7831) {
-       // special char
-       return 0;
+   } else if (value < 7824) {
+      return value + 0;
 
-    } else if (value == 7832) {
-       // special char
-       return 0;
+   } else if (value < 7825) {
+      return value + 1;
 
-    } else if (value == 7833) {
-       // special char
-       return 0;
+   } else if (value < 7826) {
+      return value + 0;
 
-    } else if (value == 7834) {
-       // special char
-       return 0;
+   } else if (value < 7827) {
+      return value + 1;
 
-    } else if (value < 7835) {
-       return value + 0;
+   } else if (value < 7828) {
+      return value + 0;
 
-    } else if (value < 7836) {
-       return value + -58;
+   } else if (value < 7829) {
+      return value + 1;
 
-    } else if (value == 7838) {
-       // special char
-       return 0;
+   } else if (value == 7830) {
+      // special char
+      return 0;
 
-    } else if (value < 7840) {
-       return value + 0;
+   } else if (value == 7831) {
+      // special char
+      return 0;
 
-    } else if (value < 7841) {
-       return value + 1;
+   } else if (value == 7832) {
+      // special char
+      return 0;
 
-    } else if (value < 7842) {
-       return value + 0;
+   } else if (value == 7833) {
+      // special char
+      return 0;
 
-    } else if (value < 7843) {
-       return value + 1;
+   } else if (value == 7834) {
+      // special char
+      return 0;
 
-    } else if (value < 7844) {
-       return value + 0;
+   } else if (value < 7835) {
+      return value + 0;
 
-    } else if (value < 7845) {
-       return value + 1;
+   } else if (value < 7836) {
+      return value + -58;
 
-    } else if (value < 7846) {
-       return value + 0;
+   } else if (value == 7838) {
+      // special char
+      return 0;
 
-    } else if (value < 7847) {
-       return value + 1;
+   } else if (value < 7840) {
+      return value + 0;
 
-    } else if (value < 7848) {
-       return value + 0;
+   } else if (value < 7841) {
+      return value + 1;
 
-    } else if (value < 7849) {
-       return value + 1;
+   } else if (value < 7842) {
+      return value + 0;
 
-    } else if (value < 7850) {
-       return value + 0;
+   } else if (value < 7843) {
+      return value + 1;
 
-    } else if (value < 7851) {
-       return value + 1;
+   } else if (value < 7844) {
+      return value + 0;
 
-    } else if (value < 7852) {
-       return value + 0;
+   } else if (value < 7845) {
+      return value + 1;
 
-    } else if (value < 7853) {
-       return value + 1;
+   } else if (value < 7846) {
+      return value + 0;
 
-    } else if (value < 7854) {
-       return value + 0;
+   } else if (value < 7847) {
+      return value + 1;
 
-    } else if (value < 7855) {
-       return value + 1;
+   } else if (value < 7848) {
+      return value + 0;
 
-    } else if (value < 7856) {
-       return value + 0;
+   } else if (value < 7849) {
+      return value + 1;
 
-    } else if (value < 7857) {
-       return value + 1;
+   } else if (value < 7850) {
+      return value + 0;
 
-    } else if (value < 7858) {
-       return value + 0;
+   } else if (value < 7851) {
+      return value + 1;
 
-    } else if (value < 7859) {
-       return value + 1;
+   } else if (value < 7852) {
+      return value + 0;
 
-    } else if (value < 7860) {
-       return value + 0;
+   } else if (value < 7853) {
+      return value + 1;
 
-    } else if (value < 7861) {
-       return value + 1;
+   } else if (value < 7854) {
+      return value + 0;
 
-    } else if (value < 7862) {
-       return value + 0;
+   } else if (value < 7855) {
+      return value + 1;
 
-    } else if (value < 7863) {
-       return value + 1;
+   } else if (value < 7856) {
+      return value + 0;
 
-    } else if (value < 7864) {
-       return value + 0;
+   } else if (value < 7857) {
+      return value + 1;
 
-    } else if (value < 7865) {
-       return value + 1;
+   } else if (value < 7858) {
+      return value + 0;
 
-    } else if (value < 7866) {
-       return value + 0;
+   } else if (value < 7859) {
+      return value + 1;
 
-    } else if (value < 7867) {
-       return value + 1;
+   } else if (value < 7860) {
+      return value + 0;
 
-    } else if (value < 7868) {
-       return value + 0;
+   } else if (value < 7861) {
+      return value + 1;
 
-    } else if (value < 7869) {
-       return value + 1;
+   } else if (value < 7862) {
+      return value + 0;
 
-    } else if (value < 7870) {
-       return value + 0;
+   } else if (value < 7863) {
+      return value + 1;
 
-    } else if (value < 7871) {
-       return value + 1;
+   } else if (value < 7864) {
+      return value + 0;
 
-    } else if (value < 7872) {
-       return value + 0;
+   } else if (value < 7865) {
+      return value + 1;
 
-    } else if (value < 7873) {
-       return value + 1;
+   }
 
-    } else if (value < 7874) {
-       return value + 0;
+   if (value < 7866) {
+      return value + 0;
 
-    } else if (value < 7875) {
-       return value + 1;
+   } else if (value < 7867) {
+      return value + 1;
 
-    } else if (value < 7876) {
-       return value + 0;
+   } else if (value < 7868) {
+      return value + 0;
 
-    } else if (value < 7877) {
-       return value + 1;
+   } else if (value < 7869) {
+      return value + 1;
 
-    } else if (value < 7878) {
-       return value + 0;
+   } else if (value < 7870) {
+      return value + 0;
 
-    } else if (value < 7879) {
-       return value + 1;
+   } else if (value < 7871) {
+      return value + 1;
 
-    } else if (value < 7880) {
-       return value + 0;
+   } else if (value < 7872) {
+      return value + 0;
 
-    } else if (value < 7881) {
-       return value + 1;
+   } else if (value < 7873) {
+      return value + 1;
 
-    } else if (value < 7882) {
-       return value + 0;
+   } else if (value < 7874) {
+      return value + 0;
 
-    } else if (value < 7883) {
-       return value + 1;
+   } else if (value < 7875) {
+      return value + 1;
 
-    } else if (value < 7884) {
-       return value + 0;
+   } else if (value < 7876) {
+      return value + 0;
 
-    } else if (value < 7885) {
-       return value + 1;
+   } else if (value < 7877) {
+      return value + 1;
 
-    } else if (value < 7886) {
-       return value + 0;
+   } else if (value < 7878) {
+      return value + 0;
 
-    } else if (value < 7887) {
-       return value + 1;
+   } else if (value < 7879) {
+      return value + 1;
 
-    } else if (value < 7888) {
-       return value + 0;
+   } else if (value < 7880) {
+      return value + 0;
 
-    } else if (value < 7889) {
-       return value + 1;
+   } else if (value < 7881) {
+      return value + 1;
 
-    } else if (value < 7890) {
-       return value + 0;
+   } else if (value < 7882) {
+      return value + 0;
 
-    } else if (value < 7891) {
-       return value + 1;
+   } else if (value < 7883) {
+      return value + 1;
 
-    } else if (value < 7892) {
-       return value + 0;
+   } else if (value < 7884) {
+      return value + 0;
 
-    } else if (value < 7893) {
-       return value + 1;
+   } else if (value < 7885) {
+      return value + 1;
 
-    } else if (value < 7894) {
-       return value + 0;
+   } else if (value < 7886) {
+      return value + 0;
 
-    } else if (value < 7895) {
-       return value + 1;
+   } else if (value < 7887) {
+      return value + 1;
 
-    } else if (value < 7896) {
-       return value + 0;
+   } else if (value < 7888) {
+      return value + 0;
 
-    } else if (value < 7897) {
-       return value + 1;
+   } else if (value < 7889) {
+      return value + 1;
 
-    } else if (value < 7898) {
-       return value + 0;
+   } else if (value < 7890) {
+      return value + 0;
 
-    } else if (value < 7899) {
-       return value + 1;
+   } else if (value < 7891) {
+      return value + 1;
 
-    } else if (value < 7900) {
-       return value + 0;
+   } else if (value < 7892) {
+      return value + 0;
 
-    } else if (value < 7901) {
-       return value + 1;
+   } else if (value < 7893) {
+      return value + 1;
 
-    } else if (value < 7902) {
-       return value + 0;
+   } else if (value < 7894) {
+      return value + 0;
 
-    } else if (value < 7903) {
-       return value + 1;
+   } else if (value < 7895) {
+      return value + 1;
 
-    } else if (value < 7904) {
-       return value + 0;
+   } else if (value < 7896) {
+      return value + 0;
 
-    } else if (value < 7905) {
-       return value + 1;
+   } else if (value < 7897) {
+      return value + 1;
 
-    } else if (value < 7906) {
-       return value + 0;
+   } else if (value < 7898) {
+      return value + 0;
 
-    } else if (value < 7907) {
-       return value + 1;
+   } else if (value < 7899) {
+      return value + 1;
 
-    } else if (value < 7908) {
-       return value + 0;
+   } else if (value < 7900) {
+      return value + 0;
 
-    } else if (value < 7909) {
-       return value + 1;
+   } else if (value < 7901) {
+      return value + 1;
 
-    } else if (value < 7910) {
-       return value + 0;
+   } else if (value < 7902) {
+      return value + 0;
 
-    } else if (value < 7911) {
-       return value + 1;
+   } else if (value < 7903) {
+      return value + 1;
 
-    } else if (value < 7912) {
-       return value + 0;
+   } else if (value < 7904) {
+      return value + 0;
 
-    } else if (value < 7913) {
-       return value + 1;
+   } else if (value < 7905) {
+      return value + 1;
 
-    } else if (value < 7914) {
-       return value + 0;
+   } else if (value < 7906) {
+      return value + 0;
 
-    } else if (value < 7915) {
-       return value + 1;
+   } else if (value < 7907) {
+      return value + 1;
 
-    } else if (value < 7916) {
-       return value + 0;
+   } else if (value < 7908) {
+      return value + 0;
 
-    } else if (value < 7917) {
-       return value + 1;
+   } else if (value < 7909) {
+      return value + 1;
 
-    } else if (value < 7918) {
-       return value + 0;
+   } else if (value < 7910) {
+      return value + 0;
 
-    } else if (value < 7919) {
-       return value + 1;
+   } else if (value < 7911) {
+      return value + 1;
 
-    } else if (value < 7920) {
-       return value + 0;
+   } else if (value < 7912) {
+      return value + 0;
 
-    } else if (value < 7921) {
-       return value + 1;
+   } else if (value < 7913) {
+      return value + 1;
 
-    } else if (value < 7922) {
-       return value + 0;
+   } else if (value < 7914) {
+      return value + 0;
 
-    } else if (value < 7923) {
-       return value + 1;
+   } else if (value < 7915) {
+      return value + 1;
 
-    } else if (value < 7924) {
-       return value + 0;
+   } else if (value < 7916) {
+      return value + 0;
 
-    } else if (value < 7925) {
-       return value + 1;
+   } else if (value < 7917) {
+      return value + 1;
 
-    } else if (value < 7926) {
-       return value + 0;
+   } else if (value < 7918) {
+      return value + 0;
 
-    } else if (value < 7927) {
-       return value + 1;
+   } else if (value < 7919) {
+      return value + 1;
 
-    } else if (value < 7928) {
-       return value + 0;
+   } else if (value < 7920) {
+      return value + 0;
 
-    } else if (value < 7929) {
-       return value + 1;
+   } else if (value < 7921) {
+      return value + 1;
 
-    } else if (value < 7930) {
-       return value + 0;
+   } else if (value < 7922) {
+      return value + 0;
 
-    } else if (value < 7931) {
-       return value + 1;
+   } else if (value < 7923) {
+      return value + 1;
 
-    } else if (value < 7932) {
-       return value + 0;
+   } else if (value < 7924) {
+      return value + 0;
 
-    } else if (value < 7933) {
-       return value + 1;
+   } else if (value < 7925) {
+      return value + 1;
 
-    } else if (value < 7934) {
-       return value + 0;
+   } else if (value < 7926) {
+      return value + 0;
 
-    } else if (value < 7935) {
-       return value + 1;
+   } else if (value < 7927) {
+      return value + 1;
 
-    } else if (value < 7944) {
-       return value + 0;
+   } else if (value < 7928) {
+      return value + 0;
 
-    } else if (value < 7952) {
-       return value + -8;
+   } else if (value < 7929) {
+      return value + 1;
 
-    } else if (value < 7960) {
-       return value + 0;
+   } else if (value < 7930) {
+      return value + 0;
 
-    } else if (value < 7966) {
-       return value + -8;
+   } else if (value < 7931) {
+      return value + 1;
 
-    } else if (value < 7976) {
-       return value + 0;
+   } else if (value < 7932) {
+      return value + 0;
 
-    } else if (value < 7984) {
-       return value + -8;
+   } else if (value < 7933) {
+      return value + 1;
 
-    } else if (value < 7992) {
-       return value + 0;
+   } else if (value < 7934) {
+      return value + 0;
 
-    } else if (value < 8000) {
-       return value + -8;
+   } else if (value < 7935) {
+      return value + 1;
 
-    } else if (value < 8008) {
-       return value + 0;
+   } else if (value < 7944) {
+      return value + 0;
 
-    } else if (value < 8014) {
-       return value + -8;
+   } else if (value < 7952) {
+      return value + -8;
 
-    } else if (value == 8016) {
-       // special char
-       return 0;
+   } else if (value < 7960) {
+      return value + 0;
 
-    } else if (value == 8018) {
-       // special char
-       return 0;
+   } else if (value < 7966) {
+      return value + -8;
 
-    } else if (value == 8020) {
-       // special char
-       return 0;
+   } else if (value < 7976) {
+      return value + 0;
 
-    } else if (value == 8022) {
-       // special char
-       return 0;
+   } else if (value < 7984) {
+      return value + -8;
 
-    } else if (value < 8025) {
-       return value + 0;
+   } else if (value < 7992) {
+      return value + 0;
 
-    } else if (value < 8026) {
-       return value + -8;
+   } else if (value < 8000) {
+      return value + -8;
 
-    } else if (value < 8027) {
-       return value + 0;
+   } else if (value < 8008) {
+      return value + 0;
 
-    } else if (value < 8028) {
-       return value + -8;
+   } else if (value < 8014) {
+      return value + -8;
 
-    } else if (value < 8029) {
-       return value + 0;
+   } else if (value == 8016) {
+      // special char
+      return 0;
 
-    } else if (value < 8030) {
-       return value + -8;
+   } else if (value == 8018) {
+      // special char
+      return 0;
 
-    } else if (value < 8031) {
-       return value + 0;
+   } else if (value == 8020) {
+      // special char
+      return 0;
 
-    } else if (value < 8032) {
-       return value + -8;
+   } else if (value == 8022) {
+      // special char
+      return 0;
 
-    } else if (value < 8040) {
-       return value + 0;
+   } else if (value < 8025) {
+      return value + 0;
 
-    } else if (value < 8048) {
-       return value + -8;
+   } else if (value < 8026) {
+      return value + -8;
 
-    } else if (value == 8064) {
-       // special char
-       return 0;
+   } else if (value < 8027) {
+      return value + 0;
 
-    } else if (value == 8065) {
-       // special char
-       return 0;
+   } else if (value < 8028) {
+      return value + -8;
 
-    } else if (value == 8066) {
-       // special char
-       return 0;
+   } else if (value < 8029) {
+      return value + 0;
 
-    } else if (value == 8067) {
-       // special char
-       return 0;
+   } else if (value < 8030) {
+      return value + -8;
 
-    } else if (value == 8068) {
-       // special char
-       return 0;
+   } else if (value < 8031) {
+      return value + 0;
 
-    } else if (value == 8069) {
-       // special char
-       return 0;
+   } else if (value < 8032) {
+      return value + -8;
 
-    } else if (value == 8070) {
-       // special char
-       return 0;
+   } else if (value < 8040) {
+      return value + 0;
 
-    } else if (value == 8071) {
-       // special char
-       return 0;
+   } else if (value < 8048) {
+      return value + -8;
 
-    } else if (value == 8072) {
-       // special char
-       return 0;
+   } else if (value == 8064) {
+      // special char
+      return 0;
 
-    } else if (value == 8073) {
-       // special char
-       return 0;
+   } else if (value == 8065) {
+      // special char
+      return 0;
 
-    } else if (value == 8074) {
-       // special char
-       return 0;
+   } else if (value == 8066) {
+      // special char
+      return 0;
 
-    } else if (value == 8075) {
-       // special char
-       return 0;
+   } else if (value == 8067) {
+      // special char
+      return 0;
 
-    } else if (value == 8076) {
-       // special char
-       return 0;
+   } else if (value == 8068) {
+      // special char
+      return 0;
 
-    } else if (value == 8077) {
-       // special char
-       return 0;
+   } else if (value == 8069) {
+      // special char
+      return 0;
 
-    } else if (value == 8078) {
-       // special char
-       return 0;
+   }
 
-    } else if (value == 8079) {
-       // special char
-       return 0;
+   if (value == 8070) {
+      // special char
+      return 0;
 
-    } else if (value == 8080) {
-       // special char
-       return 0;
+   } else if (value == 8071) {
+      // special char
+      return 0;
 
-    } else if (value == 8081) {
-       // special char
-       return 0;
+   } else if (value == 8072) {
+      // special char
+      return 0;
 
-    } else if (value == 8082) {
-       // special char
-       return 0;
+   } else if (value == 8073) {
+      // special char
+      return 0;
 
-    } else if (value == 8083) {
-       // special char
-       return 0;
+   } else if (value == 8074) {
+      // special char
+      return 0;
 
-    } else if (value == 8084) {
-       // special char
-       return 0;
+   } else if (value == 8075) {
+      // special char
+      return 0;
 
-    } else if (value == 8085) {
-       // special char
-       return 0;
+   } else if (value == 8076) {
+      // special char
+      return 0;
 
-    } else if (value == 8086) {
-       // special char
-       return 0;
+   } else if (value == 8077) {
+      // special char
+      return 0;
 
-    } else if (value == 8087) {
-       // special char
-       return 0;
+   } else if (value == 8078) {
+      // special char
+      return 0;
 
-    } else if (value == 8088) {
-       // special char
-       return 0;
+   } else if (value == 8079) {
+      // special char
+      return 0;
 
-    } else if (value == 8089) {
-       // special char
-       return 0;
+   } else if (value == 8080) {
+      // special char
+      return 0;
 
-    } else if (value == 8090) {
-       // special char
-       return 0;
+   } else if (value == 8081) {
+      // special char
+      return 0;
 
-    } else if (value == 8091) {
-       // special char
-       return 0;
+   } else if (value == 8082) {
+      // special char
+      return 0;
 
-    } else if (value == 8092) {
-       // special char
-       return 0;
+   } else if (value == 8083) {
+      // special char
+      return 0;
 
-    } else if (value == 8093) {
-       // special char
-       return 0;
+   } else if (value == 8084) {
+      // special char
+      return 0;
 
-    } else if (value == 8094) {
-       // special char
-       return 0;
+   } else if (value == 8085) {
+      // special char
+      return 0;
 
-    } else if (value == 8095) {
-       // special char
-       return 0;
+   } else if (value == 8086) {
+      // special char
+      return 0;
 
-    } else if (value == 8096) {
-       // special char
-       return 0;
+   } else if (value == 8087) {
+      // special char
+      return 0;
 
-    } else if (value == 8097) {
-       // special char
-       return 0;
+   } else if (value == 8088) {
+      // special char
+      return 0;
 
-    } else if (value == 8098) {
-       // special char
-       return 0;
+   } else if (value == 8089) {
+      // special char
+      return 0;
 
-    } else if (value == 8099) {
-       // special char
-       return 0;
+   } else if (value == 8090) {
+      // special char
+      return 0;
 
-    } else if (value == 8100) {
-       // special char
-       return 0;
+   } else if (value == 8091) {
+      // special char
+      return 0;
 
-    } else if (value == 8101) {
-       // special char
-       return 0;
+   } else if (value == 8092) {
+      // special char
+      return 0;
 
-    } else if (value == 8102) {
-       // special char
-       return 0;
+   } else if (value == 8093) {
+      // special char
+      return 0;
 
-    } else if (value == 8103) {
-       // special char
-       return 0;
+   } else if (value == 8094) {
+      // special char
+      return 0;
 
-    } else if (value == 8104) {
-       // special char
-       return 0;
+   } else if (value == 8095) {
+      // special char
+      return 0;
 
-    } else if (value == 8105) {
-       // special char
-       return 0;
+   } else if (value == 8096) {
+      // special char
+      return 0;
 
-    } else if (value == 8106) {
-       // special char
-       return 0;
+   } else if (value == 8097) {
+      // special char
+      return 0;
 
-    } else if (value == 8107) {
-       // special char
-       return 0;
+   } else if (value == 8098) {
+      // special char
+      return 0;
 
-    } else if (value == 8108) {
-       // special char
-       return 0;
+   } else if (value == 8099) {
+      // special char
+      return 0;
 
-    } else if (value == 8109) {
-       // special char
-       return 0;
+   } else if (value == 8100) {
+      // special char
+      return 0;
 
-    } else if (value == 8110) {
-       // special char
-       return 0;
+   } else if (value == 8101) {
+      // special char
+      return 0;
 
-    } else if (value == 8111) {
-       // special char
-       return 0;
+   } else if (value == 8102) {
+      // special char
+      return 0;
 
-    } else if (value == 8114) {
-       // special char
-       return 0;
+   } else if (value == 8103) {
+      // special char
+      return 0;
 
-    } else if (value == 8115) {
-       // special char
-       return 0;
+   } else if (value == 8104) {
+      // special char
+      return 0;
 
-    } else if (value == 8116) {
-       // special char
-       return 0;
+   } else if (value == 8105) {
+      // special char
+      return 0;
 
-    } else if (value == 8118) {
-       // special char
-       return 0;
+   } else if (value == 8106) {
+      // special char
+      return 0;
 
-    } else if (value == 8119) {
-       // special char
-       return 0;
+   } else if (value == 8107) {
+      // special char
+      return 0;
 
-    } else if (value < 8120) {
-       return value + 0;
+   } else if (value == 8108) {
+      // special char
+      return 0;
 
-    } else if (value < 8122) {
-       return value + -8;
+   } else if (value == 8109) {
+      // special char
+      return 0;
 
-    } else if (value == 8124) {
-       // special char
-       return 0;
+   } else if (value == 8110) {
+      // special char
+      return 0;
 
-    } else if (value < 8125) {
-       return value + -74;
+   } else if (value == 8111) {
+      // special char
+      return 0;
 
-    } else if (value < 8126) {
-       return value + 0;
+   } else if (value == 8114) {
+      // special char
+      return 0;
 
-    } else if (value < 8127) {
-       return value + -7173;
+   } else if (value == 8115) {
+      // special char
+      return 0;
 
-    } else if (value == 8130) {
-       // special char
-       return 0;
+   } else if (value == 8116) {
+      // special char
+      return 0;
 
-    } else if (value == 8131) {
-       // special char
-       return 0;
+   } else if (value == 8118) {
+      // special char
+      return 0;
 
-    } else if (value == 8132) {
-       // special char
-       return 0;
+   } else if (value == 8119) {
+      // special char
+      return 0;
 
-    } else if (value == 8134) {
-       // special char
-       return 0;
+   } else if (value < 8120) {
+      return value + 0;
 
-    } else if (value == 8135) {
-       // special char
-       return 0;
+   } else if (value < 8122) {
+      return value + -8;
 
-    } else if (value < 8136) {
-       return value + 0;
+   } else if (value == 8124) {
+      // special char
+      return 0;
 
-    } else if (value == 8140) {
-       // special char
-       return 0;
+   } else if (value < 8125) {
+      return value + -74;
 
-    } else if (value < 8141) {
-       return value + -86;
+   } else if (value < 8126) {
+      return value + 0;
 
-    } else if (value == 8146) {
-       // special char
-       return 0;
+   } else if (value < 8127) {
+      return value + -7173;
 
-    } else if (value == 8147) {
-       // special char
-       return 0;
+   } else if (value == 8130) {
+      // special char
+      return 0;
 
-    } else if (value == 8150) {
-       // special char
-       return 0;
+   } else if (value == 8131) {
+      // special char
+      return 0;
 
-    } else if (value == 8151) {
-       // special char
-       return 0;
+   } else if (value == 8132) {
+      // special char
+      return 0;
 
-    } else if (value < 8152) {
-       return value + 0;
+   } else if (value == 8134) {
+      // special char
+      return 0;
 
-    } else if (value < 8154) {
-       return value + -8;
+   } else if (value == 8135) {
+      // special char
+      return 0;
 
-    } else if (value < 8156) {
-       return value + -100;
+   } else if (value < 8136) {
+      return value + 0;
 
-    } else if (value == 8162) {
-       // special char
-       return 0;
+   } else if (value == 8140) {
+      // special char
+      return 0;
 
-    } else if (value == 8163) {
-       // special char
-       return 0;
+   } else if (value < 8141) {
+      return value + -86;
 
-    } else if (value == 8164) {
-       // special char
-       return 0;
+   } else if (value == 8146) {
+      // special char
+      return 0;
 
-    } else if (value == 8166) {
-       // special char
-       return 0;
+   } else if (value == 8147) {
+      // special char
+      return 0;
 
-    } else if (value == 8167) {
-       // special char
-       return 0;
+   } else if (value == 8150) {
+      // special char
+      return 0;
 
-    } else if (value < 8168) {
-       return value + 0;
+   } else if (value == 8151) {
+      // special char
+      return 0;
 
-    } else if (value < 8170) {
-       return value + -8;
+   } else if (value < 8152) {
+      return value + 0;
 
-    } else if (value < 8172) {
-       return value + -112;
+   } else if (value < 8154) {
+      return value + -8;
 
-    } else if (value < 8173) {
-       return value + -7;
+   } else if (value < 8156) {
+      return value + -100;
 
-    } else if (value == 8178) {
-       // special char
-       return 0;
+   } else if (value == 8162) {
+      // special char
+      return 0;
 
-    } else if (value == 8179) {
-       // special char
-       return 0;
+   } else if (value == 8163) {
+      // special char
+      return 0;
 
-    } else if (value == 8180) {
-       // special char
-       return 0;
+   } else if (value == 8164) {
+      // special char
+      return 0;
 
-    } else if (value == 8182) {
-       // special char
-       return 0;
+   } else if (value == 8166) {
+      // special char
+      return 0;
 
-    } else if (value == 8183) {
-       // special char
-       return 0;
+   } else if (value == 8167) {
+      // special char
+      return 0;
 
-    } else if (value < 8184) {
-       return value + 0;
+   } else if (value < 8168) {
+      return value + 0;
 
-    } else if (value < 8186) {
-       return value + -128;
+   } else if (value < 8170) {
+      return value + -8;
 
-    } else if (value == 8188) {
-       // special char
-       return 0;
+   } else if (value < 8172) {
+      return value + -112;
 
-    } else if (value < 8189) {
-       return value + -126;
+   } else if (value < 8173) {
+      return value + -7;
 
-    } else if (value < 8486) {
-       return value + 0;
+   } else if (value == 8178) {
+      // special char
+      return 0;
 
-    } else if (value < 8487) {
-       return value + -7517;
+   } else if (value == 8179) {
+      // special char
+      return 0;
 
-    } else if (value < 8490) {
-       return value + 0;
+   } else if (value == 8180) {
+      // special char
+      return 0;
 
-    } else if (value < 8491) {
-       return value + -8383;
+   } else if (value == 8182) {
+      // special char
+      return 0;
 
-    } else if (value < 8492) {
-       return value + -8262;
+   } else if (value == 8183) {
+      // special char
+      return 0;
 
-    } else if (value < 8498) {
-       return value + 0;
+   } else if (value < 8184) {
+      return value + 0;
 
-    } else if (value < 8499) {
-       return value + 28;
+   } else if (value < 8186) {
+      return value + -128;
 
-    } else if (value < 8544) {
-       return value + 0;
+   } else if (value == 8188) {
+      // special char
+      return 0;
 
-    } else if (value < 8560) {
-       return value + 16;
+   } else if (value < 8189) {
+      return value + -126;
 
-    } else if (value < 8579) {
-       return value + 0;
+   } else if (value < 8486) {
+      return value + 0;
 
-    } else if (value < 8580) {
-       return value + 1;
+   } else if (value < 8487) {
+      return value + -7517;
 
-    } else if (value < 9398) {
-       return value + 0;
+   } else if (value < 8490) {
+      return value + 0;
 
-    } else if (value < 9424) {
-       return value + 26;
+   } else if (value < 8491) {
+      return value + -8383;
 
-    } else if (value < 11264) {
-       return value + 0;
+   } else if (value < 8492) {
+      return value + -8262;
 
-    } else if (value < 11311) {
-       return value + 48;
+   } else if (value < 8498) {
+      return value + 0;
 
-    } else if (value < 11360) {
-       return value + 0;
+   } else if (value < 8499) {
+      return value + 28;
 
-    } else if (value < 11361) {
-       return value + 1;
+   } else if (value < 8544) {
+      return value + 0;
 
-    } else if (value < 11362) {
-       return value + 0;
+   } else if (value < 8560) {
+      return value + 16;
 
-    } else if (value < 11363) {
-       return value + -10743;
+   } else if (value < 8579) {
+      return value + 0;
 
-    } else if (value < 11364) {
-       return value + -3814;
+   } else if (value < 8580) {
+      return value + 1;
 
-    } else if (value < 11365) {
-       return value + -10727;
+   } else if (value < 9398) {
+      return value + 0;
 
-    } else if (value < 11367) {
-       return value + 0;
+   } else if (value < 9424) {
+      return value + 26;
 
-    } else if (value < 11368) {
-       return value + 1;
+   } else if (value < 11264) {
+      return value + 0;
 
-    } else if (value < 11369) {
-       return value + 0;
+   }
 
-    } else if (value < 11370) {
-       return value + 1;
+   if (value < 11311) {
+      return value + 48;
 
-    } else if (value < 11371) {
-       return value + 0;
+   } else if (value < 11360) {
+      return value + 0;
 
-    } else if (value < 11372) {
-       return value + 1;
+   } else if (value < 11361) {
+      return value + 1;
 
-    } else if (value < 11373) {
-       return value + 0;
+   } else if (value < 11362) {
+      return value + 0;
 
-    } else if (value < 11374) {
-       return value + -10780;
+   } else if (value < 11363) {
+      return value + -10743;
 
-    } else if (value < 11375) {
-       return value + -10749;
+   } else if (value < 11364) {
+      return value + -3814;
 
-    } else if (value < 11376) {
-       return value + -10783;
+   } else if (value < 11365) {
+      return value + -10727;
 
-    } else if (value < 11377) {
-       return value + -10782;
+   } else if (value < 11367) {
+      return value + 0;
 
-    } else if (value < 11378) {
-       return value + 0;
+   } else if (value < 11368) {
+      return value + 1;
 
-    } else if (value < 11379) {
-       return value + 1;
+   } else if (value < 11369) {
+      return value + 0;
 
-    } else if (value < 11381) {
-       return value + 0;
+   } else if (value < 11370) {
+      return value + 1;
 
-    } else if (value < 11382) {
-       return value + 1;
+   } else if (value < 11371) {
+      return value + 0;
 
-    } else if (value < 11390) {
-       return value + 0;
+   } else if (value < 11372) {
+      return value + 1;
 
-    } else if (value < 11392) {
-       return value + -10815;
+   } else if (value < 11373) {
+      return value + 0;
 
-    } else if (value < 11393) {
-       return value + 1;
+   } else if (value < 11374) {
+      return value + -10780;
 
-    } else if (value < 11394) {
-       return value + 0;
+   } else if (value < 11375) {
+      return value + -10749;
 
-    } else if (value < 11395) {
-       return value + 1;
+   } else if (value < 11376) {
+      return value + -10783;
 
-    } else if (value < 11396) {
-       return value + 0;
+   } else if (value < 11377) {
+      return value + -10782;
 
-    } else if (value < 11397) {
-       return value + 1;
+   } else if (value < 11378) {
+      return value + 0;
 
-    } else if (value < 11398) {
-       return value + 0;
+   } else if (value < 11379) {
+      return value + 1;
 
-    } else if (value < 11399) {
-       return value + 1;
+   } else if (value < 11381) {
+      return value + 0;
 
-    } else if (value < 11400) {
-       return value + 0;
+   } else if (value < 11382) {
+      return value + 1;
 
-    } else if (value < 11401) {
-       return value + 1;
+   } else if (value < 11390) {
+      return value + 0;
 
-    } else if (value < 11402) {
-       return value + 0;
+   } else if (value < 11392) {
+      return value + -10815;
 
-    } else if (value < 11403) {
-       return value + 1;
+   } else if (value < 11393) {
+      return value + 1;
 
-    } else if (value < 11404) {
-       return value + 0;
+   } else if (value < 11394) {
+      return value + 0;
 
-    } else if (value < 11405) {
-       return value + 1;
+   } else if (value < 11395) {
+      return value + 1;
 
-    } else if (value < 11406) {
-       return value + 0;
+   } else if (value < 11396) {
+      return value + 0;
 
-    } else if (value < 11407) {
-       return value + 1;
+   } else if (value < 11397) {
+      return value + 1;
 
-    } else if (value < 11408) {
-       return value + 0;
+   } else if (value < 11398) {
+      return value + 0;
 
-    } else if (value < 11409) {
-       return value + 1;
+   } else if (value < 11399) {
+      return value + 1;
 
-    } else if (value < 11410) {
-       return value + 0;
+   } else if (value < 11400) {
+      return value + 0;
 
-    } else if (value < 11411) {
-       return value + 1;
+   } else if (value < 11401) {
+      return value + 1;
 
-    } else if (value < 11412) {
-       return value + 0;
+   } else if (value < 11402) {
+      return value + 0;
 
-    } else if (value < 11413) {
-       return value + 1;
+   } else if (value < 11403) {
+      return value + 1;
 
-    } else if (value < 11414) {
-       return value + 0;
+   } else if (value < 11404) {
+      return value + 0;
 
-    } else if (value < 11415) {
-       return value + 1;
+   } else if (value < 11405) {
+      return value + 1;
 
-    } else if (value < 11416) {
-       return value + 0;
+   } else if (value < 11406) {
+      return value + 0;
 
-    } else if (value < 11417) {
-       return value + 1;
+   } else if (value < 11407) {
+      return value + 1;
 
-    } else if (value < 11418) {
-       return value + 0;
+   } else if (value < 11408) {
+      return value + 0;
 
-    } else if (value < 11419) {
-       return value + 1;
+   } else if (value < 11409) {
+      return value + 1;
 
-    } else if (value < 11420) {
-       return value + 0;
+   } else if (value < 11410) {
+      return value + 0;
 
-    } else if (value < 11421) {
-       return value + 1;
+   } else if (value < 11411) {
+      return value + 1;
 
-    } else if (value < 11422) {
-       return value + 0;
+   } else if (value < 11412) {
+      return value + 0;
 
-    } else if (value < 11423) {
-       return value + 1;
+   } else if (value < 11413) {
+      return value + 1;
 
-    } else if (value < 11424) {
-       return value + 0;
+   } else if (value < 11414) {
+      return value + 0;
 
-    } else if (value < 11425) {
-       return value + 1;
+   } else if (value < 11415) {
+      return value + 1;
 
-    } else if (value < 11426) {
-       return value + 0;
+   } else if (value < 11416) {
+      return value + 0;
 
-    } else if (value < 11427) {
-       return value + 1;
+   } else if (value < 11417) {
+      return value + 1;
 
-    } else if (value < 11428) {
-       return value + 0;
+   } else if (value < 11418) {
+      return value + 0;
 
-    } else if (value < 11429) {
-       return value + 1;
+   } else if (value < 11419) {
+      return value + 1;
 
-    } else if (value < 11430) {
-       return value + 0;
+   } else if (value < 11420) {
+      return value + 0;
 
-    } else if (value < 11431) {
-       return value + 1;
+   } else if (value < 11421) {
+      return value + 1;
 
-    } else if (value < 11432) {
-       return value + 0;
+   } else if (value < 11422) {
+      return value + 0;
 
-    } else if (value < 11433) {
-       return value + 1;
+   } else if (value < 11423) {
+      return value + 1;
 
-    } else if (value < 11434) {
-       return value + 0;
+   } else if (value < 11424) {
+      return value + 0;
 
-    } else if (value < 11435) {
-       return value + 1;
+   } else if (value < 11425) {
+      return value + 1;
 
-    } else if (value < 11436) {
-       return value + 0;
+   } else if (value < 11426) {
+      return value + 0;
 
-    } else if (value < 11437) {
-       return value + 1;
+   } else if (value < 11427) {
+      return value + 1;
 
-    } else if (value < 11438) {
-       return value + 0;
+   } else if (value < 11428) {
+      return value + 0;
 
-    } else if (value < 11439) {
-       return value + 1;
+   } else if (value < 11429) {
+      return value + 1;
 
-    } else if (value < 11440) {
-       return value + 0;
+   } else if (value < 11430) {
+      return value + 0;
 
-    } else if (value < 11441) {
-       return value + 1;
+   } else if (value < 11431) {
+      return value + 1;
 
-    } else if (value < 11442) {
-       return value + 0;
+   } else if (value < 11432) {
+      return value + 0;
 
-    } else if (value < 11443) {
-       return value + 1;
+   } else if (value < 11433) {
+      return value + 1;
 
-    } else if (value < 11444) {
-       return value + 0;
+   } else if (value < 11434) {
+      return value + 0;
 
-    } else if (value < 11445) {
-       return value + 1;
+   } else if (value < 11435) {
+      return value + 1;
 
-    } else if (value < 11446) {
-       return value + 0;
+   } else if (value < 11436) {
+      return value + 0;
 
-    } else if (value < 11447) {
-       return value + 1;
+   } else if (value < 11437) {
+      return value + 1;
 
-    } else if (value < 11448) {
-       return value + 0;
+   } else if (value < 11438) {
+      return value + 0;
 
-    } else if (value < 11449) {
-       return value + 1;
+   } else if (value < 11439) {
+      return value + 1;
 
-    } else if (value < 11450) {
-       return value + 0;
+   } else if (value < 11440) {
+      return value + 0;
 
-    } else if (value < 11451) {
-       return value + 1;
+   } else if (value < 11441) {
+      return value + 1;
 
-    } else if (value < 11452) {
-       return value + 0;
+   } else if (value < 11442) {
+      return value + 0;
 
-    } else if (value < 11453) {
-       return value + 1;
+   } else if (value < 11443) {
+      return value + 1;
 
-    } else if (value < 11454) {
-       return value + 0;
+   } else if (value < 11444) {
+      return value + 0;
 
-    } else if (value < 11455) {
-       return value + 1;
+   } else if (value < 11445) {
+      return value + 1;
 
-    } else if (value < 11456) {
-       return value + 0;
+   } else if (value < 11446) {
+      return value + 0;
 
-    } else if (value < 11457) {
-       return value + 1;
+   } else if (value < 11447) {
+      return value + 1;
 
-    } else if (value < 11458) {
-       return value + 0;
+   } else if (value < 11448) {
+      return value + 0;
 
-    } else if (value < 11459) {
-       return value + 1;
+   } else if (value < 11449) {
+      return value + 1;
 
-    } else if (value < 11460) {
-       return value + 0;
+   } else if (value < 11450) {
+      return value + 0;
 
-    } else if (value < 11461) {
-       return value + 1;
+   } else if (value < 11451) {
+      return value + 1;
 
-    } else if (value < 11462) {
-       return value + 0;
+   } else if (value < 11452) {
+      return value + 0;
 
-    } else if (value < 11463) {
-       return value + 1;
+   } else if (value < 11453) {
+      return value + 1;
 
-    } else if (value < 11464) {
-       return value + 0;
+   } else if (value < 11454) {
+      return value + 0;
 
-    } else if (value < 11465) {
-       return value + 1;
+   } else if (value < 11455) {
+      return value + 1;
 
-    } else if (value < 11466) {
-       return value + 0;
+   } else if (value < 11456) {
+      return value + 0;
 
-    } else if (value < 11467) {
-       return value + 1;
+   } else if (value < 11457) {
+      return value + 1;
 
-    } else if (value < 11468) {
-       return value + 0;
+   } else if (value < 11458) {
+      return value + 0;
 
-    } else if (value < 11469) {
-       return value + 1;
+   } else if (value < 11459) {
+      return value + 1;
 
-    } else if (value < 11470) {
-       return value + 0;
+   } else if (value < 11460) {
+      return value + 0;
 
-    } else if (value < 11471) {
-       return value + 1;
+   } else if (value < 11461) {
+      return value + 1;
 
-    } else if (value < 11472) {
-       return value + 0;
+   } else if (value < 11462) {
+      return value + 0;
 
-    } else if (value < 11473) {
-       return value + 1;
+   } else if (value < 11463) {
+      return value + 1;
 
-    } else if (value < 11474) {
-       return value + 0;
+   } else if (value < 11464) {
+      return value + 0;
 
-    } else if (value < 11475) {
-       return value + 1;
+   } else if (value < 11465) {
+      return value + 1;
 
-    } else if (value < 11476) {
-       return value + 0;
+   } else if (value < 11466) {
+      return value + 0;
 
-    } else if (value < 11477) {
-       return value + 1;
+   } else if (value < 11467) {
+      return value + 1;
 
-    } else if (value < 11478) {
-       return value + 0;
+   } else if (value < 11468) {
+      return value + 0;
 
-    } else if (value < 11479) {
-       return value + 1;
+   }
 
-    } else if (value < 11480) {
-       return value + 0;
+   if (value < 11469) {
+      return value + 1;
 
-    } else if (value < 11481) {
-       return value + 1;
+   } else if (value < 11470) {
+      return value + 0;
 
-    } else if (value < 11482) {
-       return value + 0;
+   } else if (value < 11471) {
+      return value + 1;
 
-    } else if (value < 11483) {
-       return value + 1;
+   } else if (value < 11472) {
+      return value + 0;
 
-    } else if (value < 11484) {
-       return value + 0;
+   } else if (value < 11473) {
+      return value + 1;
 
-    } else if (value < 11485) {
-       return value + 1;
+   } else if (value < 11474) {
+      return value + 0;
 
-    } else if (value < 11486) {
-       return value + 0;
+   } else if (value < 11475) {
+      return value + 1;
 
-    } else if (value < 11487) {
-       return value + 1;
+   } else if (value < 11476) {
+      return value + 0;
 
-    } else if (value < 11488) {
-       return value + 0;
+   } else if (value < 11477) {
+      return value + 1;
 
-    } else if (value < 11489) {
-       return value + 1;
+   } else if (value < 11478) {
+      return value + 0;
 
-    } else if (value < 11490) {
-       return value + 0;
+   } else if (value < 11479) {
+      return value + 1;
 
-    } else if (value < 11491) {
-       return value + 1;
+   } else if (value < 11480) {
+      return value + 0;
 
-    } else if (value < 11499) {
-       return value + 0;
+   } else if (value < 11481) {
+      return value + 1;
 
-    } else if (value < 11500) {
-       return value + 1;
+   } else if (value < 11482) {
+      return value + 0;
 
-    } else if (value < 11501) {
-       return value + 0;
+   } else if (value < 11483) {
+      return value + 1;
 
-    } else if (value < 11502) {
-       return value + 1;
+   } else if (value < 11484) {
+      return value + 0;
 
-    } else if (value < 11506) {
-       return value + 0;
+   } else if (value < 11485) {
+      return value + 1;
 
-    } else if (value < 11507) {
-       return value + 1;
+   } else if (value < 11486) {
+      return value + 0;
 
-    } else if (value < 42560) {
-       return value + 0;
+   } else if (value < 11487) {
+      return value + 1;
 
-    } else if (value < 42561) {
-       return value + 1;
+   } else if (value < 11488) {
+      return value + 0;
 
-    } else if (value < 42562) {
-       return value + 0;
+   } else if (value < 11489) {
+      return value + 1;
 
-    } else if (value < 42563) {
-       return value + 1;
+   } else if (value < 11490) {
+      return value + 0;
 
-    } else if (value < 42564) {
-       return value + 0;
+   } else if (value < 11491) {
+      return value + 1;
 
-    } else if (value < 42565) {
-       return value + 1;
+   } else if (value < 11499) {
+      return value + 0;
 
-    } else if (value < 42566) {
-       return value + 0;
+   } else if (value < 11500) {
+      return value + 1;
 
-    } else if (value < 42567) {
-       return value + 1;
+   } else if (value < 11501) {
+      return value + 0;
 
-    } else if (value < 42568) {
-       return value + 0;
+   } else if (value < 11502) {
+      return value + 1;
 
-    } else if (value < 42569) {
-       return value + 1;
+   } else if (value < 11506) {
+      return value + 0;
 
-    } else if (value < 42570) {
-       return value + 0;
+   } else if (value < 11507) {
+      return value + 1;
 
-    } else if (value < 42571) {
-       return value + 1;
+   } else if (value < 42560) {
+      return value + 0;
 
-    } else if (value < 42572) {
-       return value + 0;
+   } else if (value < 42561) {
+      return value + 1;
 
-    } else if (value < 42573) {
-       return value + 1;
+   } else if (value < 42562) {
+      return value + 0;
 
-    } else if (value < 42574) {
-       return value + 0;
+   } else if (value < 42563) {
+      return value + 1;
 
-    } else if (value < 42575) {
-       return value + 1;
+   } else if (value < 42564) {
+      return value + 0;
 
-    } else if (value < 42576) {
-       return value + 0;
+   } else if (value < 42565) {
+      return value + 1;
 
-    } else if (value < 42577) {
-       return value + 1;
+   } else if (value < 42566) {
+      return value + 0;
 
-    } else if (value < 42578) {
-       return value + 0;
+   } else if (value < 42567) {
+      return value + 1;
 
-    } else if (value < 42579) {
-       return value + 1;
+   } else if (value < 42568) {
+      return value + 0;
 
-    } else if (value < 42580) {
-       return value + 0;
+   } else if (value < 42569) {
+      return value + 1;
 
-    } else if (value < 42581) {
-       return value + 1;
+   } else if (value < 42570) {
+      return value + 0;
 
-    } else if (value < 42582) {
-       return value + 0;
+   } else if (value < 42571) {
+      return value + 1;
 
-    } else if (value < 42583) {
-       return value + 1;
+   } else if (value < 42572) {
+      return value + 0;
 
-    } else if (value < 42584) {
-       return value + 0;
+   } else if (value < 42573) {
+      return value + 1;
 
-    } else if (value < 42585) {
-       return value + 1;
+   } else if (value < 42574) {
+      return value + 0;
 
-    } else if (value < 42586) {
-       return value + 0;
+   } else if (value < 42575) {
+      return value + 1;
 
-    } else if (value < 42587) {
-       return value + 1;
+   } else if (value < 42576) {
+      return value + 0;
 
-    } else if (value < 42588) {
-       return value + 0;
+   } else if (value < 42577) {
+      return value + 1;
 
-    } else if (value < 42589) {
-       return value + 1;
+   } else if (value < 42578) {
+      return value + 0;
 
-    } else if (value < 42590) {
-       return value + 0;
+   } else if (value < 42579) {
+      return value + 1;
 
-    } else if (value < 42591) {
-       return value + 1;
+   } else if (value < 42580) {
+      return value + 0;
 
-    } else if (value < 42592) {
-       return value + 0;
+   } else if (value < 42581) {
+      return value + 1;
 
-    } else if (value < 42593) {
-       return value + 1;
+   } else if (value < 42582) {
+      return value + 0;
 
-    } else if (value < 42594) {
-       return value + 0;
+   } else if (value < 42583) {
+      return value + 1;
 
-    } else if (value < 42595) {
-       return value + 1;
+   } else if (value < 42584) {
+      return value + 0;
 
-    } else if (value < 42596) {
-       return value + 0;
+   } else if (value < 42585) {
+      return value + 1;
 
-    } else if (value < 42597) {
-       return value + 1;
+   } else if (value < 42586) {
+      return value + 0;
 
-    } else if (value < 42598) {
-       return value + 0;
+   } else if (value < 42587) {
+      return value + 1;
 
-    } else if (value < 42599) {
-       return value + 1;
+   } else if (value < 42588) {
+      return value + 0;
 
-    } else if (value < 42600) {
-       return value + 0;
+   } else if (value < 42589) {
+      return value + 1;
 
-    } else if (value < 42601) {
-       return value + 1;
+   } else if (value < 42590) {
+      return value + 0;
 
-    } else if (value < 42602) {
-       return value + 0;
+   } else if (value < 42591) {
+      return value + 1;
 
-    } else if (value < 42603) {
-       return value + 1;
+   } else if (value < 42592) {
+      return value + 0;
 
-    } else if (value < 42604) {
-       return value + 0;
+   } else if (value < 42593) {
+      return value + 1;
 
-    } else if (value < 42605) {
-       return value + 1;
+   } else if (value < 42594) {
+      return value + 0;
 
-    } else if (value < 42624) {
-       return value + 0;
+   } else if (value < 42595) {
+      return value + 1;
 
-    } else if (value < 42625) {
-       return value + 1;
+   } else if (value < 42596) {
+      return value + 0;
 
-    } else if (value < 42626) {
-       return value + 0;
+   } else if (value < 42597) {
+      return value + 1;
 
-    } else if (value < 42627) {
-       return value + 1;
+   } else if (value < 42598) {
+      return value + 0;
 
-    } else if (value < 42628) {
-       return value + 0;
+   } else if (value < 42599) {
+      return value + 1;
 
-    } else if (value < 42629) {
-       return value + 1;
+   } else if (value < 42600) {
+      return value + 0;
 
-    } else if (value < 42630) {
-       return value + 0;
+   } else if (value < 42601) {
+      return value + 1;
 
-    } else if (value < 42631) {
-       return value + 1;
+   } else if (value < 42602) {
+      return value + 0;
 
-    } else if (value < 42632) {
-       return value + 0;
+   } else if (value < 42603) {
+      return value + 1;
 
-    } else if (value < 42633) {
-       return value + 1;
+   } else if (value < 42604) {
+      return value + 0;
 
-    } else if (value < 42634) {
-       return value + 0;
+   } else if (value < 42605) {
+      return value + 1;
 
-    } else if (value < 42635) {
-       return value + 1;
+   } else if (value < 42624) {
+      return value + 0;
 
-    } else if (value < 42636) {
-       return value + 0;
+   } else if (value < 42625) {
+      return value + 1;
 
-    } else if (value < 42637) {
-       return value + 1;
+   } else if (value < 42626) {
+      return value + 0;
 
-    } else if (value < 42638) {
-       return value + 0;
+   } else if (value < 42627) {
+      return value + 1;
 
-    } else if (value < 42639) {
-       return value + 1;
+   } else if (value < 42628) {
+      return value + 0;
 
-    } else if (value < 42640) {
-       return value + 0;
+   } else if (value < 42629) {
+      return value + 1;
 
-    } else if (value < 42641) {
-       return value + 1;
+   } else if (value < 42630) {
+      return value + 0;
 
-    } else if (value < 42642) {
-       return value + 0;
+   } else if (value < 42631) {
+      return value + 1;
 
-    } else if (value < 42643) {
-       return value + 1;
+   } else if (value < 42632) {
+      return value + 0;
 
-    } else if (value < 42644) {
-       return value + 0;
+   } else if (value < 42633) {
+      return value + 1;
 
-    } else if (value < 42645) {
-       return value + 1;
+   } else if (value < 42634) {
+      return value + 0;
 
-    } else if (value < 42646) {
-       return value + 0;
+   } else if (value < 42635) {
+      return value + 1;
 
-    } else if (value < 42647) {
-       return value + 1;
+   } else if (value < 42636) {
+      return value + 0;
 
-    } else if (value < 42648) {
-       return value + 0;
+   } else if (value < 42637) {
+      return value + 1;
 
-    } else if (value < 42649) {
-       return value + 1;
+   } else if (value < 42638) {
+      return value + 0;
 
-    } else if (value < 42650) {
-       return value + 0;
+   } else if (value < 42639) {
+      return value + 1;
 
-    } else if (value < 42651) {
-       return value + 1;
+   } else if (value < 42640) {
+      return value + 0;
 
-    } else if (value < 42786) {
-       return value + 0;
+   } else if (value < 42641) {
+      return value + 1;
 
-    } else if (value < 42787) {
-       return value + 1;
+   } else if (value < 42642) {
+      return value + 0;
 
-    } else if (value < 42788) {
-       return value + 0;
+   } else if (value < 42643) {
+      return value + 1;
 
-    } else if (value < 42789) {
-       return value + 1;
+   } else if (value < 42644) {
+      return value + 0;
 
-    } else if (value < 42790) {
-       return value + 0;
+   } else if (value < 42645) {
+      return value + 1;
 
-    } else if (value < 42791) {
-       return value + 1;
+   } else if (value < 42646) {
+      return value + 0;
 
-    } else if (value < 42792) {
-       return value + 0;
+   } else if (value < 42647) {
+      return value + 1;
 
-    } else if (value < 42793) {
-       return value + 1;
+   } else if (value < 42648) {
+      return value + 0;
 
-    } else if (value < 42794) {
-       return value + 0;
+   }
 
-    } else if (value < 42795) {
-       return value + 1;
+   if (value < 42649) {
+      return value + 1;
 
-    } else if (value < 42796) {
-       return value + 0;
+   } else if (value < 42650) {
+      return value + 0;
 
-    } else if (value < 42797) {
-       return value + 1;
+   } else if (value < 42651) {
+      return value + 1;
 
-    } else if (value < 42798) {
-       return value + 0;
+   } else if (value < 42786) {
+      return value + 0;
 
-    } else if (value < 42799) {
-       return value + 1;
+   } else if (value < 42787) {
+      return value + 1;
 
-    } else if (value < 42802) {
-       return value + 0;
+   } else if (value < 42788) {
+      return value + 0;
 
-    } else if (value < 42803) {
-       return value + 1;
+   } else if (value < 42789) {
+      return value + 1;
 
-    } else if (value < 42804) {
-       return value + 0;
+   } else if (value < 42790) {
+      return value + 0;
 
-    } else if (value < 42805) {
-       return value + 1;
+   } else if (value < 42791) {
+      return value + 1;
 
-    } else if (value < 42806) {
-       return value + 0;
+   } else if (value < 42792) {
+      return value + 0;
 
-    } else if (value < 42807) {
-       return value + 1;
+   } else if (value < 42793) {
+      return value + 1;
 
-    } else if (value < 42808) {
-       return value + 0;
+   } else if (value < 42794) {
+      return value + 0;
 
-    } else if (value < 42809) {
-       return value + 1;
+   } else if (value < 42795) {
+      return value + 1;
 
-    } else if (value < 42810) {
-       return value + 0;
+   } else if (value < 42796) {
+      return value + 0;
 
-    } else if (value < 42811) {
-       return value + 1;
+   } else if (value < 42797) {
+      return value + 1;
 
-    } else if (value < 42812) {
-       return value + 0;
+   } else if (value < 42798) {
+      return value + 0;
 
-    } else if (value < 42813) {
-       return value + 1;
+   } else if (value < 42799) {
+      return value + 1;
 
-    } else if (value < 42814) {
-       return value + 0;
+   } else if (value < 42802) {
+      return value + 0;
 
-    } else if (value < 42815) {
-       return value + 1;
+   } else if (value < 42803) {
+      return value + 1;
 
-    } else if (value < 42816) {
-       return value + 0;
+   } else if (value < 42804) {
+      return value + 0;
 
-    } else if (value < 42817) {
-       return value + 1;
+   } else if (value < 42805) {
+      return value + 1;
 
-    } else if (value < 42818) {
-       return value + 0;
+   } else if (value < 42806) {
+      return value + 0;
 
-    } else if (value < 42819) {
-       return value + 1;
+   } else if (value < 42807) {
+      return value + 1;
 
-    } else if (value < 42820) {
-       return value + 0;
+   } else if (value < 42808) {
+      return value + 0;
 
-    } else if (value < 42821) {
-       return value + 1;
+   } else if (value < 42809) {
+      return value + 1;
 
-    } else if (value < 42822) {
-       return value + 0;
+   } else if (value < 42810) {
+      return value + 0;
 
-    } else if (value < 42823) {
-       return value + 1;
+   } else if (value < 42811) {
+      return value + 1;
 
-    } else if (value < 42824) {
-       return value + 0;
+   } else if (value < 42812) {
+      return value + 0;
 
-    } else if (value < 42825) {
-       return value + 1;
+   } else if (value < 42813) {
+      return value + 1;
 
-    } else if (value < 42826) {
-       return value + 0;
+   } else if (value < 42814) {
+      return value + 0;
 
-    } else if (value < 42827) {
-       return value + 1;
+   } else if (value < 42815) {
+      return value + 1;
 
-    } else if (value < 42828) {
-       return value + 0;
+   } else if (value < 42816) {
+      return value + 0;
 
-    } else if (value < 42829) {
-       return value + 1;
+   } else if (value < 42817) {
+      return value + 1;
 
-    } else if (value < 42830) {
-       return value + 0;
+   } else if (value < 42818) {
+      return value + 0;
 
-    } else if (value < 42831) {
-       return value + 1;
+   } else if (value < 42819) {
+      return value + 1;
 
-    } else if (value < 42832) {
-       return value + 0;
+   } else if (value < 42820) {
+      return value + 0;
 
-    } else if (value < 42833) {
-       return value + 1;
+   } else if (value < 42821) {
+      return value + 1;
 
-    } else if (value < 42834) {
-       return value + 0;
+   } else if (value < 42822) {
+      return value + 0;
 
-    } else if (value < 42835) {
-       return value + 1;
+   } else if (value < 42823) {
+      return value + 1;
 
-    } else if (value < 42836) {
-       return value + 0;
+   } else if (value < 42824) {
+      return value + 0;
 
-    } else if (value < 42837) {
-       return value + 1;
+   } else if (value < 42825) {
+      return value + 1;
 
-    } else if (value < 42838) {
-       return value + 0;
+   } else if (value < 42826) {
+      return value + 0;
 
-    } else if (value < 42839) {
-       return value + 1;
+   } else if (value < 42827) {
+      return value + 1;
 
-    } else if (value < 42840) {
-       return value + 0;
+   } else if (value < 42828) {
+      return value + 0;
 
-    } else if (value < 42841) {
-       return value + 1;
+   } else if (value < 42829) {
+      return value + 1;
 
-    } else if (value < 42842) {
-       return value + 0;
+   } else if (value < 42830) {
+      return value + 0;
 
-    } else if (value < 42843) {
-       return value + 1;
+   } else if (value < 42831) {
+      return value + 1;
 
-    } else if (value < 42844) {
-       return value + 0;
+   } else if (value < 42832) {
+      return value + 0;
 
-    } else if (value < 42845) {
-       return value + 1;
+   } else if (value < 42833) {
+      return value + 1;
 
-    } else if (value < 42846) {
-       return value + 0;
+   } else if (value < 42834) {
+      return value + 0;
 
-    } else if (value < 42847) {
-       return value + 1;
+   } else if (value < 42835) {
+      return value + 1;
 
-    } else if (value < 42848) {
-       return value + 0;
+   } else if (value < 42836) {
+      return value + 0;
 
-    } else if (value < 42849) {
-       return value + 1;
+   } else if (value < 42837) {
+      return value + 1;
 
-    } else if (value < 42850) {
-       return value + 0;
+   } else if (value < 42838) {
+      return value + 0;
 
-    } else if (value < 42851) {
-       return value + 1;
+   } else if (value < 42839) {
+      return value + 1;
 
-    } else if (value < 42852) {
-       return value + 0;
+   } else if (value < 42840) {
+      return value + 0;
 
-    } else if (value < 42853) {
-       return value + 1;
+   } else if (value < 42841) {
+      return value + 1;
 
-    } else if (value < 42854) {
-       return value + 0;
+   } else if (value < 42842) {
+      return value + 0;
 
-    } else if (value < 42855) {
-       return value + 1;
+   } else if (value < 42843) {
+      return value + 1;
 
-    } else if (value < 42856) {
-       return value + 0;
+   } else if (value < 42844) {
+      return value + 0;
 
-    } else if (value < 42857) {
-       return value + 1;
+   } else if (value < 42845) {
+      return value + 1;
 
-    } else if (value < 42858) {
-       return value + 0;
+   } else if (value < 42846) {
+      return value + 0;
 
-    } else if (value < 42859) {
-       return value + 1;
+   } else if (value < 42847) {
+      return value + 1;
 
-    } else if (value < 42860) {
-       return value + 0;
+   } else if (value < 42848) {
+      return value + 0;
 
-    } else if (value < 42861) {
-       return value + 1;
+   } else if (value < 42849) {
+      return value + 1;
 
-    } else if (value < 42862) {
-       return value + 0;
+   } else if (value < 42850) {
+      return value + 0;
 
-    } else if (value < 42863) {
-       return value + 1;
+   } else if (value < 42851) {
+      return value + 1;
 
-    } else if (value < 42873) {
-       return value + 0;
+   } else if (value < 42852) {
+      return value + 0;
 
-    } else if (value < 42874) {
-       return value + 1;
+   } else if (value < 42853) {
+      return value + 1;
 
-    } else if (value < 42875) {
-       return value + 0;
+   } else if (value < 42854) {
+      return value + 0;
 
-    } else if (value < 42876) {
-       return value + 1;
+   } else if (value < 42855) {
+      return value + 1;
 
-    } else if (value < 42877) {
-       return value + 0;
+   } else if (value < 42856) {
+      return value + 0;
 
-    } else if (value < 42878) {
-       return value + -35332;
+   } else if (value < 42857) {
+      return value + 1;
 
-    } else if (value < 42879) {
-       return value + 1;
+   } else if (value < 42858) {
+      return value + 0;
 
-    } else if (value < 42880) {
-       return value + 0;
+   } else if (value < 42859) {
+      return value + 1;
 
-    } else if (value < 42881) {
-       return value + 1;
+   } else if (value < 42860) {
+      return value + 0;
 
-    } else if (value < 42882) {
-       return value + 0;
+   } else if (value < 42861) {
+      return value + 1;
 
-    } else if (value < 42883) {
-       return value + 1;
+   } else if (value < 42862) {
+      return value + 0;
 
-    } else if (value < 42884) {
-       return value + 0;
+   } else if (value < 42863) {
+      return value + 1;
 
-    } else if (value < 42885) {
-       return value + 1;
+   } else if (value < 42873) {
+      return value + 0;
 
-    } else if (value < 42886) {
-       return value + 0;
+   } else if (value < 42874) {
+      return value + 1;
 
-    } else if (value < 42887) {
-       return value + 1;
+   } else if (value < 42875) {
+      return value + 0;
 
-    } else if (value < 42891) {
-       return value + 0;
+   } else if (value < 42876) {
+      return value + 1;
 
-    } else if (value < 42892) {
-       return value + 1;
+   } else if (value < 42877) {
+      return value + 0;
 
-    } else if (value < 42893) {
-       return value + 0;
+   } else if (value < 42878) {
+      return value + -35332;
 
-    } else if (value < 42894) {
-       return value + -42280;
+   } else if (value < 42879) {
+      return value + 1;
 
-    } else if (value < 42896) {
-       return value + 0;
+   } else if (value < 42880) {
+      return value + 0;
 
-    } else if (value < 42897) {
-       return value + 1;
+   } else if (value < 42881) {
+      return value + 1;
 
-    } else if (value < 42898) {
-       return value + 0;
+   } else if (value < 42882) {
+      return value + 0;
 
-    } else if (value < 42899) {
-       return value + 1;
+   } else if (value < 42883) {
+      return value + 1;
 
-    } else if (value < 42902) {
-       return value + 0;
+   } else if (value < 42884) {
+      return value + 0;
 
-    } else if (value < 42903) {
-       return value + 1;
+   } else if (value < 42885) {
+      return value + 1;
 
-    } else if (value < 42904) {
-       return value + 0;
+   } else if (value < 42886) {
+      return value + 0;
 
-    } else if (value < 42905) {
-       return value + 1;
+   } else if (value < 42887) {
+      return value + 1;
 
-    } else if (value < 42906) {
-       return value + 0;
+   } else if (value < 42891) {
+      return value + 0;
 
-    } else if (value < 42907) {
-       return value + 1;
+   } else if (value < 42892) {
+      return value + 1;
 
-    } else if (value < 42908) {
-       return value + 0;
+   } else if (value < 42893) {
+      return value + 0;
 
-    } else if (value < 42909) {
-       return value + 1;
+   } else if (value < 42894) {
+      return value + -42280;
 
-    } else if (value < 42910) {
-       return value + 0;
+   } else if (value < 42896) {
+      return value + 0;
 
-    } else if (value < 42911) {
-       return value + 1;
+   } else if (value < 42897) {
+      return value + 1;
 
-    } else if (value < 42912) {
-       return value + 0;
+   }
 
-    } else if (value < 42913) {
-       return value + 1;
+   if (value < 42898) {
+      return value + 0;
 
-    } else if (value < 42914) {
-       return value + 0;
+   } else if (value < 42899) {
+      return value + 1;
 
-    } else if (value < 42915) {
-       return value + 1;
+   } else if (value < 42902) {
+      return value + 0;
 
-    } else if (value < 42916) {
-       return value + 0;
+   } else if (value < 42903) {
+      return value + 1;
 
-    } else if (value < 42917) {
-       return value + 1;
+   } else if (value < 42904) {
+      return value + 0;
 
-    } else if (value < 42918) {
-       return value + 0;
+   } else if (value < 42905) {
+      return value + 1;
 
-    } else if (value < 42919) {
-       return value + 1;
+   } else if (value < 42906) {
+      return value + 0;
 
-    } else if (value < 42920) {
-       return value + 0;
+   } else if (value < 42907) {
+      return value + 1;
 
-    } else if (value < 42921) {
-       return value + 1;
+   } else if (value < 42908) {
+      return value + 0;
 
-    } else if (value < 42922) {
-       return value + 0;
+   } else if (value < 42909) {
+      return value + 1;
 
-    } else if (value < 42923) {
-       return value + -42308;
+   } else if (value < 42910) {
+      return value + 0;
 
-    } else if (value < 42924) {
-       return value + -42319;
+   } else if (value < 42911) {
+      return value + 1;
 
-    } else if (value < 42925) {
-       return value + -42315;
+   } else if (value < 42912) {
+      return value + 0;
 
-    } else if (value < 42926) {
-       return value + -42305;
+   } else if (value < 42913) {
+      return value + 1;
 
-    } else if (value < 42927) {
-       return value + -42308;
+   } else if (value < 42914) {
+      return value + 0;
 
-    } else if (value < 42928) {
-       return value + 0;
+   } else if (value < 42915) {
+      return value + 1;
 
-    } else if (value < 42929) {
-       return value + -42258;
+   } else if (value < 42916) {
+      return value + 0;
 
-    } else if (value < 42930) {
-       return value + -42282;
+   } else if (value < 42917) {
+      return value + 1;
 
-    } else if (value < 42931) {
-       return value + -42261;
+   } else if (value < 42918) {
+      return value + 0;
 
-    } else if (value < 42932) {
-       return value + 928;
+   } else if (value < 42919) {
+      return value + 1;
 
-    } else if (value < 42933) {
-       return value + 1;
+   } else if (value < 42920) {
+      return value + 0;
 
-    } else if (value < 42934) {
-       return value + 0;
+   } else if (value < 42921) {
+      return value + 1;
 
-    } else if (value < 42935) {
-       return value + 1;
+   } else if (value < 42922) {
+      return value + 0;
 
-    } else if (value < 42936) {
-       return value + 0;
+   } else if (value < 42923) {
+      return value + -42308;
 
-    } else if (value < 42937) {
-       return value + 1;
+   } else if (value < 42924) {
+      return value + -42319;
 
-    } else if (value < 43888) {
-       return value + 0;
+   } else if (value < 42925) {
+      return value + -42315;
 
-    } else if (value < 43968) {
-       return value + -38864;
+   } else if (value < 42926) {
+      return value + -42305;
 
-    } else if (value == 64256) {
-       // special char
-       return 0;
+   } else if (value < 42927) {
+      return value + -42308;
 
-    } else if (value == 64257) {
-       // special char
-       return 0;
+   } else if (value < 42928) {
+      return value + 0;
 
-    } else if (value == 64258) {
-       // special char
-       return 0;
+   } else if (value < 42929) {
+      return value + -42258;
 
-    } else if (value == 64259) {
-       // special char
-       return 0;
+   } else if (value < 42930) {
+      return value + -42282;
 
-    } else if (value == 64260) {
-       // special char
-       return 0;
+   } else if (value < 42931) {
+      return value + -42261;
 
-    } else if (value == 64261) {
-       // special char
-       return 0;
+   } else if (value < 42932) {
+      return value + 928;
 
-    } else if (value == 64262) {
-       // special char
-       return 0;
+   } else if (value < 42933) {
+      return value + 1;
 
-    } else if (value == 64275) {
-       // special char
-       return 0;
+   } else if (value < 42934) {
+      return value + 0;
 
-    } else if (value == 64276) {
-       // special char
-       return 0;
+   } else if (value < 42935) {
+      return value + 1;
 
-    } else if (value == 64277) {
-       // special char
-       return 0;
+   } else if (value < 42936) {
+      return value + 0;
 
-    } else if (value == 64278) {
-       // special char
-       return 0;
+   } else if (value < 42937) {
+      return value + 1;
 
-    } else if (value == 64279) {
-       // special char
-       return 0;
+   } else if (value < 43888) {
+      return value + 0;
 
-    } else if (value < 65313) {
-       return value + 0;
+   } else if (value < 43968) {
+      return value + -38864;
 
-    } else if (value < 65339) {
-       return value + 32;
+   } else if (value == 64256) {
+      // special char
+      return 0;
 
-    } else if (value < 66560) {
-       return value + 0;
+   } else if (value == 64257) {
+      // special char
+      return 0;
 
-    } else if (value < 66600) {
-       return value + 40;
+   } else if (value == 64258) {
+      // special char
+      return 0;
 
-    } else if (value < 66736) {
-       return value + 0;
+   } else if (value == 64259) {
+      // special char
+      return 0;
 
-    } else if (value < 66772) {
-       return value + 40;
+   } else if (value == 64260) {
+      // special char
+      return 0;
 
-    } else if (value < 68736) {
-       return value + 0;
+   } else if (value == 64261) {
+      // special char
+      return 0;
 
-    } else if (value < 68787) {
-       return value + 64;
+   } else if (value == 64262) {
+      // special char
+      return 0;
 
-    } else if (value < 71840) {
-       return value + 0;
+   } else if (value == 64275) {
+      // special char
+      return 0;
 
-    } else if (value < 71872) {
-       return value + 32;
+   } else if (value == 64276) {
+      // special char
+      return 0;
 
-    } else if (value < 93760) {
-       return value + 0;
+   } else if (value == 64277) {
+      // special char
+      return 0;
 
-    } else if (value < 93792) {
-       return value + 32;
+   } else if (value == 64278) {
+      // special char
+      return 0;
 
-    } else if (value < 125184) {
-       return value + 0;
+   } else if (value == 64279) {
+      // special char
+      return 0;
 
-    } else if (value < 125218) {
-       return value + 34;
+   } else if (value < 65313) {
+      return value + 0;
 
-    } else {
+   } else if (value < 65339) {
+      return value + 32;
+
+   } else if (value < 66560) {
+      return value + 0;
+
+   } else if (value < 66600) {
+      return value + 40;
+
+   } else if (value < 66736) {
+      return value + 0;
+
+   } else if (value < 66772) {
+      return value + 40;
+
+   } else if (value < 68736) {
+      return value + 0;
+
+   } else if (value < 68787) {
+      return value + 64;
+
+   } else if (value < 71840) {
+      return value + 0;
+
+   } else if (value < 71872) {
+      return value + 32;
+
+   } else if (value < 93760) {
+      return value + 0;
+
+   } else if (value < 93792) {
+      return value + 32;
+
+   } else if (value < 125184) {
+      return value + 0;
+
+   } else if (value < 125218) {
+      return value + 34;
+
+   } else {
       return value;
    }
 }
 
 char32_t uc_lowerCase(char32_t value)
 {
-    if (value < 65) {
-       return value + 0;
+   if (value < 65) {
+      return value + 0;
 
-    } else if (value < 91) {
-       return value + 32;
+   } else if (value < 91) {
+      return value + 32;
 
-    } else if (value < 192) {
-       return value + 0;
+   } else if (value < 192) {
+      return value + 0;
 
-    } else if (value < 215) {
-       return value + 32;
+   } else if (value < 215) {
+      return value + 32;
 
-    } else if (value < 216) {
-       return value + 0;
+   } else if (value < 216) {
+      return value + 0;
 
-    } else if (value < 223) {
-       return value + 32;
+   } else if (value < 223) {
+      return value + 32;
 
-    } else if (value < 256) {
-       return value + 0;
+   } else if (value < 256) {
+      return value + 0;
 
-    } else if (value < 257) {
-       return value + 1;
+   } else if (value < 257) {
+      return value + 1;
 
-    } else if (value < 258) {
-       return value + 0;
+   } else if (value < 258) {
+      return value + 0;
 
-    } else if (value < 259) {
-       return value + 1;
+   } else if (value < 259) {
+      return value + 1;
 
-    } else if (value < 260) {
-       return value + 0;
+   } else if (value < 260) {
+      return value + 0;
 
-    } else if (value < 261) {
-       return value + 1;
+   } else if (value < 261) {
+      return value + 1;
 
-    } else if (value < 262) {
-       return value + 0;
+   } else if (value < 262) {
+      return value + 0;
 
-    } else if (value < 263) {
-       return value + 1;
+   } else if (value < 263) {
+      return value + 1;
 
-    } else if (value < 264) {
-       return value + 0;
+   } else if (value < 264) {
+      return value + 0;
 
-    } else if (value < 265) {
-       return value + 1;
+   } else if (value < 265) {
+      return value + 1;
 
-    } else if (value < 266) {
-       return value + 0;
+   } else if (value < 266) {
+      return value + 0;
 
-    } else if (value < 267) {
-       return value + 1;
+   } else if (value < 267) {
+      return value + 1;
 
-    } else if (value < 268) {
-       return value + 0;
+   } else if (value < 268) {
+      return value + 0;
 
-    } else if (value < 269) {
-       return value + 1;
+   } else if (value < 269) {
+      return value + 1;
 
-    } else if (value < 270) {
-       return value + 0;
+   } else if (value < 270) {
+      return value + 0;
 
-    } else if (value < 271) {
-       return value + 1;
+   } else if (value < 271) {
+      return value + 1;
 
-    } else if (value < 272) {
-       return value + 0;
+   } else if (value < 272) {
+      return value + 0;
 
-    } else if (value < 273) {
-       return value + 1;
+   } else if (value < 273) {
+      return value + 1;
 
-    } else if (value < 274) {
-       return value + 0;
+   } else if (value < 274) {
+      return value + 0;
 
-    } else if (value < 275) {
-       return value + 1;
+   } else if (value < 275) {
+      return value + 1;
 
-    } else if (value < 276) {
-       return value + 0;
+   } else if (value < 276) {
+      return value + 0;
 
-    } else if (value < 277) {
-       return value + 1;
+   } else if (value < 277) {
+      return value + 1;
 
-    } else if (value < 278) {
-       return value + 0;
+   } else if (value < 278) {
+      return value + 0;
 
-    } else if (value < 279) {
-       return value + 1;
+   } else if (value < 279) {
+      return value + 1;
 
-    } else if (value < 280) {
-       return value + 0;
+   } else if (value < 280) {
+      return value + 0;
 
-    } else if (value < 281) {
-       return value + 1;
+   } else if (value < 281) {
+      return value + 1;
 
-    } else if (value < 282) {
-       return value + 0;
+   } else if (value < 282) {
+      return value + 0;
 
-    } else if (value < 283) {
-       return value + 1;
+   } else if (value < 283) {
+      return value + 1;
 
-    } else if (value < 284) {
-       return value + 0;
+   } else if (value < 284) {
+      return value + 0;
 
-    } else if (value < 285) {
-       return value + 1;
+   } else if (value < 285) {
+      return value + 1;
 
-    } else if (value < 286) {
-       return value + 0;
+   } else if (value < 286) {
+      return value + 0;
 
-    } else if (value < 287) {
-       return value + 1;
+   } else if (value < 287) {
+      return value + 1;
 
-    } else if (value < 288) {
-       return value + 0;
+   } else if (value < 288) {
+      return value + 0;
 
-    } else if (value < 289) {
-       return value + 1;
+   } else if (value < 289) {
+      return value + 1;
 
-    } else if (value < 290) {
-       return value + 0;
+   } else if (value < 290) {
+      return value + 0;
 
-    } else if (value < 291) {
-       return value + 1;
+   } else if (value < 291) {
+      return value + 1;
 
-    } else if (value < 292) {
-       return value + 0;
+   } else if (value < 292) {
+      return value + 0;
 
-    } else if (value < 293) {
-       return value + 1;
+   } else if (value < 293) {
+      return value + 1;
 
-    } else if (value < 294) {
-       return value + 0;
+   } else if (value < 294) {
+      return value + 0;
 
-    } else if (value < 295) {
-       return value + 1;
+   } else if (value < 295) {
+      return value + 1;
 
-    } else if (value < 296) {
-       return value + 0;
+   } else if (value < 296) {
+      return value + 0;
 
-    } else if (value < 297) {
-       return value + 1;
+   } else if (value < 297) {
+      return value + 1;
 
-    } else if (value < 298) {
-       return value + 0;
+   } else if (value < 298) {
+      return value + 0;
 
-    } else if (value < 299) {
-       return value + 1;
+   } else if (value < 299) {
+      return value + 1;
 
-    } else if (value < 300) {
-       return value + 0;
+   } else if (value < 300) {
+      return value + 0;
 
-    } else if (value < 301) {
-       return value + 1;
+   } else if (value < 301) {
+      return value + 1;
 
-    } else if (value < 302) {
-       return value + 0;
+   } else if (value < 302) {
+      return value + 0;
 
-    } else if (value < 303) {
-       return value + 1;
+   } else if (value < 303) {
+      return value + 1;
 
-    } else if (value == 304) {
-       // special char
-       return 0;
+   } else if (value == 304) {
+      // special char
+      return 0;
 
-    } else if (value < 306) {
-       return value + 0;
+   } else if (value < 306) {
+      return value + 0;
 
-    } else if (value < 307) {
-       return value + 1;
+   } else if (value < 307) {
+      return value + 1;
 
-    } else if (value < 308) {
-       return value + 0;
+   } else if (value < 308) {
+      return value + 0;
 
-    } else if (value < 309) {
-       return value + 1;
+   } else if (value < 309) {
+      return value + 1;
 
-    } else if (value < 310) {
-       return value + 0;
+   } else if (value < 310) {
+      return value + 0;
 
-    } else if (value < 311) {
-       return value + 1;
+   } else if (value < 311) {
+      return value + 1;
 
-    } else if (value < 313) {
-       return value + 0;
+   } else if (value < 313) {
+      return value + 0;
 
-    } else if (value < 314) {
-       return value + 1;
+   } else if (value < 314) {
+      return value + 1;
 
-    } else if (value < 315) {
-       return value + 0;
+   } else if (value < 315) {
+      return value + 0;
 
-    } else if (value < 316) {
-       return value + 1;
+   } else if (value < 316) {
+      return value + 1;
 
-    } else if (value < 317) {
-       return value + 0;
+   } else if (value < 317) {
+      return value + 0;
 
-    } else if (value < 318) {
-       return value + 1;
+   } else if (value < 318) {
+      return value + 1;
 
-    } else if (value < 319) {
-       return value + 0;
+   } else if (value < 319) {
+      return value + 0;
 
-    } else if (value < 320) {
-       return value + 1;
+   } else if (value < 320) {
+      return value + 1;
 
-    } else if (value < 321) {
-       return value + 0;
+   } else if (value < 321) {
+      return value + 0;
 
-    } else if (value < 322) {
-       return value + 1;
+   } else if (value < 322) {
+      return value + 1;
 
-    } else if (value < 323) {
-       return value + 0;
+   } else if (value < 323) {
+      return value + 0;
 
-    } else if (value < 324) {
-       return value + 1;
+   } else if (value < 324) {
+      return value + 1;
 
-    } else if (value < 325) {
-       return value + 0;
+   } else if (value < 325) {
+      return value + 0;
 
-    } else if (value < 326) {
-       return value + 1;
+   } else if (value < 326) {
+      return value + 1;
 
-    } else if (value < 327) {
-       return value + 0;
+   } else if (value < 327) {
+      return value + 0;
 
-    } else if (value < 328) {
-       return value + 1;
+   } else if (value < 328) {
+      return value + 1;
 
-    } else if (value < 330) {
-       return value + 0;
+   } else if (value < 330) {
+      return value + 0;
 
-    } else if (value < 331) {
-       return value + 1;
+   } else if (value < 331) {
+      return value + 1;
 
-    } else if (value < 332) {
-       return value + 0;
+   } else if (value < 332) {
+      return value + 0;
 
-    } else if (value < 333) {
-       return value + 1;
+   } else if (value < 333) {
+      return value + 1;
 
-    } else if (value < 334) {
-       return value + 0;
+   } else if (value < 334) {
+      return value + 0;
 
-    } else if (value < 335) {
-       return value + 1;
+   } else if (value < 335) {
+      return value + 1;
 
-    } else if (value < 336) {
-       return value + 0;
+   } else if (value < 336) {
+      return value + 0;
 
-    } else if (value < 337) {
-       return value + 1;
+   } else if (value < 337) {
+      return value + 1;
 
-    } else if (value < 338) {
-       return value + 0;
+   } else if (value < 338) {
+      return value + 0;
 
-    } else if (value < 339) {
-       return value + 1;
+   } else if (value < 339) {
+      return value + 1;
 
-    } else if (value < 340) {
-       return value + 0;
+   } else if (value < 340) {
+      return value + 0;
 
-    } else if (value < 341) {
-       return value + 1;
+   } else if (value < 341) {
+      return value + 1;
 
-    } else if (value < 342) {
-       return value + 0;
+   } else if (value < 342) {
+      return value + 0;
 
-    } else if (value < 343) {
-       return value + 1;
+   } else if (value < 343) {
+      return value + 1;
 
-    } else if (value < 344) {
-       return value + 0;
+   } else if (value < 344) {
+      return value + 0;
 
-    } else if (value < 345) {
-       return value + 1;
+   } else if (value < 345) {
+      return value + 1;
 
-    } else if (value < 346) {
-       return value + 0;
+   } else if (value < 346) {
+      return value + 0;
 
-    } else if (value < 347) {
-       return value + 1;
+   } else if (value < 347) {
+      return value + 1;
 
-    } else if (value < 348) {
-       return value + 0;
+   } else if (value < 348) {
+      return value + 0;
 
-    } else if (value < 349) {
-       return value + 1;
+   } else if (value < 349) {
+      return value + 1;
 
-    } else if (value < 350) {
-       return value + 0;
+   } else if (value < 350) {
+      return value + 0;
 
-    } else if (value < 351) {
-       return value + 1;
+   } else if (value < 351) {
+      return value + 1;
 
-    } else if (value < 352) {
-       return value + 0;
+   } else if (value < 352) {
+      return value + 0;
 
-    } else if (value < 353) {
-       return value + 1;
+   } else if (value < 353) {
+      return value + 1;
 
-    } else if (value < 354) {
-       return value + 0;
+   }
 
-    } else if (value < 355) {
-       return value + 1;
+   if (value < 354) {
+      return value + 0;
 
-    } else if (value < 356) {
-       return value + 0;
+   } else if (value < 355) {
+      return value + 1;
 
-    } else if (value < 357) {
-       return value + 1;
+   } else if (value < 356) {
+      return value + 0;
 
-    } else if (value < 358) {
-       return value + 0;
+   } else if (value < 357) {
+      return value + 1;
 
-    } else if (value < 359) {
-       return value + 1;
+   } else if (value < 358) {
+      return value + 0;
 
-    } else if (value < 360) {
-       return value + 0;
+   } else if (value < 359) {
+      return value + 1;
 
-    } else if (value < 361) {
-       return value + 1;
+   } else if (value < 360) {
+      return value + 0;
 
-    } else if (value < 362) {
-       return value + 0;
+   } else if (value < 361) {
+      return value + 1;
 
-    } else if (value < 363) {
-       return value + 1;
+   } else if (value < 362) {
+      return value + 0;
 
-    } else if (value < 364) {
-       return value + 0;
+   } else if (value < 363) {
+      return value + 1;
 
-    } else if (value < 365) {
-       return value + 1;
+   } else if (value < 364) {
+      return value + 0;
 
-    } else if (value < 366) {
-       return value + 0;
+   } else if (value < 365) {
+      return value + 1;
 
-    } else if (value < 367) {
-       return value + 1;
+   } else if (value < 366) {
+      return value + 0;
 
-    } else if (value < 368) {
-       return value + 0;
+   } else if (value < 367) {
+      return value + 1;
 
-    } else if (value < 369) {
-       return value + 1;
+   } else if (value < 368) {
+      return value + 0;
 
-    } else if (value < 370) {
-       return value + 0;
+   } else if (value < 369) {
+      return value + 1;
 
-    } else if (value < 371) {
-       return value + 1;
+   } else if (value < 370) {
+      return value + 0;
 
-    } else if (value < 372) {
-       return value + 0;
+   } else if (value < 371) {
+      return value + 1;
 
-    } else if (value < 373) {
-       return value + 1;
+   } else if (value < 372) {
+      return value + 0;
 
-    } else if (value < 374) {
-       return value + 0;
+   } else if (value < 373) {
+      return value + 1;
 
-    } else if (value < 375) {
-       return value + 1;
+   } else if (value < 374) {
+      return value + 0;
 
-    } else if (value < 376) {
-       return value + 0;
+   } else if (value < 375) {
+      return value + 1;
 
-    } else if (value < 377) {
-       return value + -121;
+   } else if (value < 376) {
+      return value + 0;
 
-    } else if (value < 378) {
-       return value + 1;
+   } else if (value < 377) {
+      return value + -121;
 
-    } else if (value < 379) {
-       return value + 0;
+   } else if (value < 378) {
+      return value + 1;
 
-    } else if (value < 380) {
-       return value + 1;
+   } else if (value < 379) {
+      return value + 0;
 
-    } else if (value < 381) {
-       return value + 0;
+   } else if (value < 380) {
+      return value + 1;
 
-    } else if (value < 382) {
-       return value + 1;
+   } else if (value < 381) {
+      return value + 0;
 
-    } else if (value < 385) {
-       return value + 0;
+   } else if (value < 382) {
+      return value + 1;
 
-    } else if (value < 386) {
-       return value + 210;
+   } else if (value < 385) {
+      return value + 0;
 
-    } else if (value < 387) {
-       return value + 1;
+   } else if (value < 386) {
+      return value + 210;
 
-    } else if (value < 388) {
-       return value + 0;
+   } else if (value < 387) {
+      return value + 1;
 
-    } else if (value < 389) {
-       return value + 1;
+   } else if (value < 388) {
+      return value + 0;
 
-    } else if (value < 390) {
-       return value + 0;
+   } else if (value < 389) {
+      return value + 1;
 
-    } else if (value < 391) {
-       return value + 206;
+   } else if (value < 390) {
+      return value + 0;
 
-    } else if (value < 392) {
-       return value + 1;
+   } else if (value < 391) {
+      return value + 206;
 
-    } else if (value < 393) {
-       return value + 0;
+   } else if (value < 392) {
+      return value + 1;
 
-    } else if (value < 395) {
-       return value + 205;
+   } else if (value < 393) {
+      return value + 0;
 
-    } else if (value < 396) {
-       return value + 1;
+   } else if (value < 395) {
+      return value + 205;
 
-    } else if (value < 398) {
-       return value + 0;
+   } else if (value < 396) {
+      return value + 1;
 
-    } else if (value < 399) {
-       return value + 79;
+   } else if (value < 398) {
+      return value + 0;
 
-    } else if (value < 400) {
-       return value + 202;
+   } else if (value < 399) {
+      return value + 79;
 
-    } else if (value < 401) {
-       return value + 203;
+   } else if (value < 400) {
+      return value + 202;
 
-    } else if (value < 402) {
-       return value + 1;
+   } else if (value < 401) {
+      return value + 203;
 
-    } else if (value < 403) {
-       return value + 0;
+   } else if (value < 402) {
+      return value + 1;
 
-    } else if (value < 404) {
-       return value + 205;
+   } else if (value < 403) {
+      return value + 0;
 
-    } else if (value < 405) {
-       return value + 207;
+   } else if (value < 404) {
+      return value + 205;
 
-    } else if (value < 406) {
-       return value + 0;
+   } else if (value < 405) {
+      return value + 207;
 
-    } else if (value < 407) {
-       return value + 211;
+   } else if (value < 406) {
+      return value + 0;
 
-    } else if (value < 408) {
-       return value + 209;
+   } else if (value < 407) {
+      return value + 211;
 
-    } else if (value < 409) {
-       return value + 1;
+   } else if (value < 408) {
+      return value + 209;
 
-    } else if (value < 412) {
-       return value + 0;
+   } else if (value < 409) {
+      return value + 1;
 
-    } else if (value < 413) {
-       return value + 211;
+   } else if (value < 412) {
+      return value + 0;
 
-    } else if (value < 414) {
-       return value + 213;
+   } else if (value < 413) {
+      return value + 211;
 
-    } else if (value < 415) {
-       return value + 0;
+   } else if (value < 414) {
+      return value + 213;
 
-    } else if (value < 416) {
-       return value + 214;
+   } else if (value < 415) {
+      return value + 0;
 
-    } else if (value < 417) {
-       return value + 1;
+   } else if (value < 416) {
+      return value + 214;
 
-    } else if (value < 418) {
-       return value + 0;
+   } else if (value < 417) {
+      return value + 1;
 
-    } else if (value < 419) {
-       return value + 1;
+   } else if (value < 418) {
+      return value + 0;
 
-    } else if (value < 420) {
-       return value + 0;
+   } else if (value < 419) {
+      return value + 1;
 
-    } else if (value < 421) {
-       return value + 1;
+   } else if (value < 420) {
+      return value + 0;
 
-    } else if (value < 422) {
-       return value + 0;
+   } else if (value < 421) {
+      return value + 1;
 
-    } else if (value < 423) {
-       return value + 218;
+   } else if (value < 422) {
+      return value + 0;
 
-    } else if (value < 424) {
-       return value + 1;
+   } else if (value < 423) {
+      return value + 218;
 
-    } else if (value < 425) {
-       return value + 0;
+   } else if (value < 424) {
+      return value + 1;
 
-    } else if (value < 426) {
-       return value + 218;
+   } else if (value < 425) {
+      return value + 0;
 
-    } else if (value < 428) {
-       return value + 0;
+   } else if (value < 426) {
+      return value + 218;
 
-    } else if (value < 429) {
-       return value + 1;
+   } else if (value < 428) {
+      return value + 0;
 
-    } else if (value < 430) {
-       return value + 0;
+   } else if (value < 429) {
+      return value + 1;
 
-    } else if (value < 431) {
-       return value + 218;
+   } else if (value < 430) {
+      return value + 0;
 
-    } else if (value < 432) {
-       return value + 1;
+   } else if (value < 431) {
+      return value + 218;
 
-    } else if (value < 433) {
-       return value + 0;
+   } else if (value < 432) {
+      return value + 1;
 
-    } else if (value < 435) {
-       return value + 217;
+   } else if (value < 433) {
+      return value + 0;
 
-    } else if (value < 436) {
-       return value + 1;
+   } else if (value < 435) {
+      return value + 217;
 
-    } else if (value < 437) {
-       return value + 0;
+   } else if (value < 436) {
+      return value + 1;
 
-    } else if (value < 438) {
-       return value + 1;
+   } else if (value < 437) {
+      return value + 0;
 
-    } else if (value < 439) {
-       return value + 0;
+   } else if (value < 438) {
+      return value + 1;
 
-    } else if (value < 440) {
-       return value + 219;
+   } else if (value < 439) {
+      return value + 0;
 
-    } else if (value < 441) {
-       return value + 1;
+   } else if (value < 440) {
+      return value + 219;
 
-    } else if (value < 444) {
-       return value + 0;
+   } else if (value < 441) {
+      return value + 1;
 
-    } else if (value < 445) {
-       return value + 1;
+   } else if (value < 444) {
+      return value + 0;
 
-    } else if (value < 452) {
-       return value + 0;
+   } else if (value < 445) {
+      return value + 1;
 
-    } else if (value < 453) {
-       return value + 2;
+   } else if (value < 452) {
+      return value + 0;
 
-    } else if (value < 454) {
-       return value + 1;
+   } else if (value < 453) {
+      return value + 2;
 
-    } else if (value < 455) {
-       return value + 0;
+   } else if (value < 454) {
+      return value + 1;
 
-    } else if (value < 456) {
-       return value + 2;
+   } else if (value < 455) {
+      return value + 0;
 
-    } else if (value < 457) {
-       return value + 1;
+   } else if (value < 456) {
+      return value + 2;
 
-    } else if (value < 458) {
-       return value + 0;
+   } else if (value < 457) {
+      return value + 1;
 
-    } else if (value < 459) {
-       return value + 2;
+   } else if (value < 458) {
+      return value + 0;
 
-    } else if (value < 460) {
-       return value + 1;
+   } else if (value < 459) {
+      return value + 2;
 
-    } else if (value < 461) {
-       return value + 0;
+   } else if (value < 460) {
+      return value + 1;
 
-    } else if (value < 462) {
-       return value + 1;
+   } else if (value < 461) {
+      return value + 0;
 
-    } else if (value < 463) {
-       return value + 0;
+   } else if (value < 462) {
+      return value + 1;
 
-    } else if (value < 464) {
-       return value + 1;
+   } else if (value < 463) {
+      return value + 0;
 
-    } else if (value < 465) {
-       return value + 0;
+   } else if (value < 464) {
+      return value + 1;
 
-    } else if (value < 466) {
-       return value + 1;
+   } else if (value < 465) {
+      return value + 0;
 
-    } else if (value < 467) {
-       return value + 0;
+   } else if (value < 466) {
+      return value + 1;
 
-    } else if (value < 468) {
-       return value + 1;
+   } else if (value < 467) {
+      return value + 0;
 
-    } else if (value < 469) {
-       return value + 0;
+   } else if (value < 468) {
+      return value + 1;
 
-    } else if (value < 470) {
-       return value + 1;
+   } else if (value < 469) {
+      return value + 0;
 
-    } else if (value < 471) {
-       return value + 0;
+   }
 
-    } else if (value < 472) {
-       return value + 1;
+   if (value < 470) {
+      return value + 1;
 
-    } else if (value < 473) {
-       return value + 0;
+   } else if (value < 471) {
+      return value + 0;
 
-    } else if (value < 474) {
-       return value + 1;
+   } else if (value < 472) {
+      return value + 1;
 
-    } else if (value < 475) {
-       return value + 0;
+   } else if (value < 473) {
+      return value + 0;
 
-    } else if (value < 476) {
-       return value + 1;
+   } else if (value < 474) {
+      return value + 1;
 
-    } else if (value < 478) {
-       return value + 0;
+   } else if (value < 475) {
+      return value + 0;
 
-    } else if (value < 479) {
-       return value + 1;
+   } else if (value < 476) {
+      return value + 1;
 
-    } else if (value < 480) {
-       return value + 0;
+   } else if (value < 478) {
+      return value + 0;
 
-    } else if (value < 481) {
-       return value + 1;
+   } else if (value < 479) {
+      return value + 1;
 
-    } else if (value < 482) {
-       return value + 0;
+   } else if (value < 480) {
+      return value + 0;
 
-    } else if (value < 483) {
-       return value + 1;
+   } else if (value < 481) {
+      return value + 1;
 
-    } else if (value < 484) {
-       return value + 0;
+   } else if (value < 482) {
+      return value + 0;
 
-    } else if (value < 485) {
-       return value + 1;
+   } else if (value < 483) {
+      return value + 1;
 
-    } else if (value < 486) {
-       return value + 0;
+   } else if (value < 484) {
+      return value + 0;
 
-    } else if (value < 487) {
-       return value + 1;
+   } else if (value < 485) {
+      return value + 1;
 
-    } else if (value < 488) {
-       return value + 0;
+   } else if (value < 486) {
+      return value + 0;
 
-    } else if (value < 489) {
-       return value + 1;
+   } else if (value < 487) {
+      return value + 1;
 
-    } else if (value < 490) {
-       return value + 0;
+   } else if (value < 488) {
+      return value + 0;
 
-    } else if (value < 491) {
-       return value + 1;
+   } else if (value < 489) {
+      return value + 1;
 
-    } else if (value < 492) {
-       return value + 0;
+   } else if (value < 490) {
+      return value + 0;
 
-    } else if (value < 493) {
-       return value + 1;
+   } else if (value < 491) {
+      return value + 1;
 
-    } else if (value < 494) {
-       return value + 0;
+   } else if (value < 492) {
+      return value + 0;
 
-    } else if (value < 495) {
-       return value + 1;
+   } else if (value < 493) {
+      return value + 1;
 
-    } else if (value < 497) {
-       return value + 0;
+   } else if (value < 494) {
+      return value + 0;
 
-    } else if (value < 498) {
-       return value + 2;
+   } else if (value < 495) {
+      return value + 1;
 
-    } else if (value < 499) {
-       return value + 1;
+   } else if (value < 497) {
+      return value + 0;
 
-    } else if (value < 500) {
-       return value + 0;
+   } else if (value < 498) {
+      return value + 2;
 
-    } else if (value < 501) {
-       return value + 1;
+   } else if (value < 499) {
+      return value + 1;
 
-    } else if (value < 502) {
-       return value + 0;
+   } else if (value < 500) {
+      return value + 0;
 
-    } else if (value < 503) {
-       return value + -97;
+   } else if (value < 501) {
+      return value + 1;
 
-    } else if (value < 504) {
-       return value + -56;
+   } else if (value < 502) {
+      return value + 0;
 
-    } else if (value < 505) {
-       return value + 1;
+   } else if (value < 503) {
+      return value + -97;
 
-    } else if (value < 506) {
-       return value + 0;
+   } else if (value < 504) {
+      return value + -56;
 
-    } else if (value < 507) {
-       return value + 1;
+   } else if (value < 505) {
+      return value + 1;
 
-    } else if (value < 508) {
-       return value + 0;
+   } else if (value < 506) {
+      return value + 0;
 
-    } else if (value < 509) {
-       return value + 1;
+   } else if (value < 507) {
+      return value + 1;
 
-    } else if (value < 510) {
-       return value + 0;
+   } else if (value < 508) {
+      return value + 0;
 
-    } else if (value < 511) {
-       return value + 1;
+   } else if (value < 509) {
+      return value + 1;
 
-    } else if (value < 512) {
-       return value + 0;
+   } else if (value < 510) {
+      return value + 0;
 
-    } else if (value < 513) {
-       return value + 1;
+   } else if (value < 511) {
+      return value + 1;
 
-    } else if (value < 514) {
-       return value + 0;
+   } else if (value < 512) {
+      return value + 0;
 
-    } else if (value < 515) {
-       return value + 1;
+   } else if (value < 513) {
+      return value + 1;
 
-    } else if (value < 516) {
-       return value + 0;
+   } else if (value < 514) {
+      return value + 0;
 
-    } else if (value < 517) {
-       return value + 1;
+   } else if (value < 515) {
+      return value + 1;
 
-    } else if (value < 518) {
-       return value + 0;
+   } else if (value < 516) {
+      return value + 0;
 
-    } else if (value < 519) {
-       return value + 1;
+   } else if (value < 517) {
+      return value + 1;
 
-    } else if (value < 520) {
-       return value + 0;
+   } else if (value < 518) {
+      return value + 0;
 
-    } else if (value < 521) {
-       return value + 1;
+   } else if (value < 519) {
+      return value + 1;
 
-    } else if (value < 522) {
-       return value + 0;
+   } else if (value < 520) {
+      return value + 0;
 
-    } else if (value < 523) {
-       return value + 1;
+   } else if (value < 521) {
+      return value + 1;
 
-    } else if (value < 524) {
-       return value + 0;
+   } else if (value < 522) {
+      return value + 0;
 
-    } else if (value < 525) {
-       return value + 1;
+   } else if (value < 523) {
+      return value + 1;
 
-    } else if (value < 526) {
-       return value + 0;
+   } else if (value < 524) {
+      return value + 0;
 
-    } else if (value < 527) {
-       return value + 1;
+   } else if (value < 525) {
+      return value + 1;
 
-    } else if (value < 528) {
-       return value + 0;
+   } else if (value < 526) {
+      return value + 0;
 
-    } else if (value < 529) {
-       return value + 1;
+   } else if (value < 527) {
+      return value + 1;
 
-    } else if (value < 530) {
-       return value + 0;
+   } else if (value < 528) {
+      return value + 0;
 
-    } else if (value < 531) {
-       return value + 1;
+   } else if (value < 529) {
+      return value + 1;
 
-    } else if (value < 532) {
-       return value + 0;
+   } else if (value < 530) {
+      return value + 0;
 
-    } else if (value < 533) {
-       return value + 1;
+   } else if (value < 531) {
+      return value + 1;
 
-    } else if (value < 534) {
-       return value + 0;
+   } else if (value < 532) {
+      return value + 0;
 
-    } else if (value < 535) {
-       return value + 1;
+   } else if (value < 533) {
+      return value + 1;
 
-    } else if (value < 536) {
-       return value + 0;
+   } else if (value < 534) {
+      return value + 0;
 
-    } else if (value < 537) {
-       return value + 1;
+   } else if (value < 535) {
+      return value + 1;
 
-    } else if (value < 538) {
-       return value + 0;
+   } else if (value < 536) {
+      return value + 0;
 
-    } else if (value < 539) {
-       return value + 1;
+   } else if (value < 537) {
+      return value + 1;
 
-    } else if (value < 540) {
-       return value + 0;
+   } else if (value < 538) {
+      return value + 0;
 
-    } else if (value < 541) {
-       return value + 1;
+   } else if (value < 539) {
+      return value + 1;
 
-    } else if (value < 542) {
-       return value + 0;
+   } else if (value < 540) {
+      return value + 0;
 
-    } else if (value < 543) {
-       return value + 1;
+   } else if (value < 541) {
+      return value + 1;
 
-    } else if (value < 544) {
-       return value + 0;
+   } else if (value < 542) {
+      return value + 0;
 
-    } else if (value < 545) {
-       return value + -130;
+   } else if (value < 543) {
+      return value + 1;
 
-    } else if (value < 546) {
-       return value + 0;
+   } else if (value < 544) {
+      return value + 0;
 
-    } else if (value < 547) {
-       return value + 1;
+   } else if (value < 545) {
+      return value + -130;
 
-    } else if (value < 548) {
-       return value + 0;
+   } else if (value < 546) {
+      return value + 0;
 
-    } else if (value < 549) {
-       return value + 1;
+   } else if (value < 547) {
+      return value + 1;
 
-    } else if (value < 550) {
-       return value + 0;
+   } else if (value < 548) {
+      return value + 0;
 
-    } else if (value < 551) {
-       return value + 1;
+   } else if (value < 549) {
+      return value + 1;
 
-    } else if (value < 552) {
-       return value + 0;
+   } else if (value < 550) {
+      return value + 0;
 
-    } else if (value < 553) {
-       return value + 1;
+   } else if (value < 551) {
+      return value + 1;
 
-    } else if (value < 554) {
-       return value + 0;
+   } else if (value < 552) {
+      return value + 0;
 
-    } else if (value < 555) {
-       return value + 1;
+   } else if (value < 553) {
+      return value + 1;
 
-    } else if (value < 556) {
-       return value + 0;
+   } else if (value < 554) {
+      return value + 0;
 
-    } else if (value < 557) {
-       return value + 1;
+   } else if (value < 555) {
+      return value + 1;
 
-    } else if (value < 558) {
-       return value + 0;
+   } else if (value < 556) {
+      return value + 0;
 
-    } else if (value < 559) {
-       return value + 1;
+   } else if (value < 557) {
+      return value + 1;
 
-    } else if (value < 560) {
-       return value + 0;
+   } else if (value < 558) {
+      return value + 0;
 
-    } else if (value < 561) {
-       return value + 1;
+   } else if (value < 559) {
+      return value + 1;
 
-    } else if (value < 562) {
-       return value + 0;
+   } else if (value < 560) {
+      return value + 0;
 
-    } else if (value < 563) {
-       return value + 1;
+   } else if (value < 561) {
+      return value + 1;
 
-    } else if (value < 570) {
-       return value + 0;
+   } else if (value < 562) {
+      return value + 0;
 
-    } else if (value < 571) {
-       return value + 10795;
+   } else if (value < 563) {
+      return value + 1;
 
-    } else if (value < 572) {
-       return value + 1;
+   } else if (value < 570) {
+      return value + 0;
 
-    } else if (value < 573) {
-       return value + 0;
+   } else if (value < 571) {
+      return value + 10795;
 
-    } else if (value < 574) {
-       return value + -163;
+   } else if (value < 572) {
+      return value + 1;
 
-    } else if (value < 575) {
-       return value + 10792;
+   } else if (value < 573) {
+      return value + 0;
 
-    } else if (value < 577) {
-       return value + 0;
+   } else if (value < 574) {
+      return value + -163;
 
-    } else if (value < 578) {
-       return value + 1;
+   } else if (value < 575) {
+      return value + 10792;
 
-    } else if (value < 579) {
-       return value + 0;
+   } else if (value < 577) {
+      return value + 0;
 
-    } else if (value < 580) {
-       return value + -195;
+   } else if (value < 578) {
+      return value + 1;
 
-    } else if (value < 581) {
-       return value + 69;
+   }
 
-    } else if (value < 582) {
-       return value + 71;
+   if (value < 579) {
+      return value + 0;
 
-    } else if (value < 583) {
-       return value + 1;
+   } else if (value < 580) {
+      return value + -195;
 
-    } else if (value < 584) {
-       return value + 0;
+   } else if (value < 581) {
+      return value + 69;
 
-    } else if (value < 585) {
-       return value + 1;
+   } else if (value < 582) {
+      return value + 71;
 
-    } else if (value < 586) {
-       return value + 0;
+   } else if (value < 583) {
+      return value + 1;
 
-    } else if (value < 587) {
-       return value + 1;
+   } else if (value < 584) {
+      return value + 0;
 
-    } else if (value < 588) {
-       return value + 0;
+   } else if (value < 585) {
+      return value + 1;
 
-    } else if (value < 589) {
-       return value + 1;
+   } else if (value < 586) {
+      return value + 0;
 
-    } else if (value < 590) {
-       return value + 0;
+   } else if (value < 587) {
+      return value + 1;
 
-    } else if (value < 591) {
-       return value + 1;
+   } else if (value < 588) {
+      return value + 0;
 
-    } else if (value < 880) {
-       return value + 0;
+   } else if (value < 589) {
+      return value + 1;
 
-    } else if (value < 881) {
-       return value + 1;
+   } else if (value < 590) {
+      return value + 0;
 
-    } else if (value < 882) {
-       return value + 0;
+   } else if (value < 591) {
+      return value + 1;
 
-    } else if (value < 883) {
-       return value + 1;
+   } else if (value < 880) {
+      return value + 0;
 
-    } else if (value < 886) {
-       return value + 0;
+   } else if (value < 881) {
+      return value + 1;
 
-    } else if (value < 887) {
-       return value + 1;
+   } else if (value < 882) {
+      return value + 0;
 
-    } else if (value < 895) {
-       return value + 0;
+   } else if (value < 883) {
+      return value + 1;
 
-    } else if (value < 896) {
-       return value + 116;
+   } else if (value < 886) {
+      return value + 0;
 
-    } else if (value < 902) {
-       return value + 0;
+   } else if (value < 887) {
+      return value + 1;
 
-    } else if (value < 903) {
-       return value + 38;
+   } else if (value < 895) {
+      return value + 0;
 
-    } else if (value < 904) {
-       return value + 0;
+   } else if (value < 896) {
+      return value + 116;
 
-    } else if (value < 907) {
-       return value + 37;
+   } else if (value < 902) {
+      return value + 0;
 
-    } else if (value < 908) {
-       return value + 0;
+   } else if (value < 903) {
+      return value + 38;
 
-    } else if (value < 909) {
-       return value + 64;
+   } else if (value < 904) {
+      return value + 0;
 
-    } else if (value < 910) {
-       return value + 0;
+   } else if (value < 907) {
+      return value + 37;
 
-    } else if (value < 912) {
-       return value + 63;
+   } else if (value < 908) {
+      return value + 0;
 
-    } else if (value < 913) {
-       return value + 0;
+   } else if (value < 909) {
+      return value + 64;
 
-    } else if (value < 930) {
-       return value + 32;
+   } else if (value < 910) {
+      return value + 0;
 
-    } else if (value < 931) {
-       return value + 0;
+   } else if (value < 912) {
+      return value + 63;
 
-    } else if (value < 940) {
-       return value + 32;
+   } else if (value < 913) {
+      return value + 0;
 
-    } else if (value < 975) {
-       return value + 0;
+   } else if (value < 930) {
+      return value + 32;
 
-    } else if (value < 976) {
-       return value + 8;
+   } else if (value < 931) {
+      return value + 0;
 
-    } else if (value < 984) {
-       return value + 0;
+   } else if (value < 940) {
+      return value + 32;
 
-    } else if (value < 985) {
-       return value + 1;
+   } else if (value < 975) {
+      return value + 0;
 
-    } else if (value < 986) {
-       return value + 0;
+   } else if (value < 976) {
+      return value + 8;
 
-    } else if (value < 987) {
-       return value + 1;
+   } else if (value < 984) {
+      return value + 0;
 
-    } else if (value < 988) {
-       return value + 0;
+   } else if (value < 985) {
+      return value + 1;
 
-    } else if (value < 989) {
-       return value + 1;
+   } else if (value < 986) {
+      return value + 0;
 
-    } else if (value < 990) {
-       return value + 0;
+   } else if (value < 987) {
+      return value + 1;
 
-    } else if (value < 991) {
-       return value + 1;
+   } else if (value < 988) {
+      return value + 0;
 
-    } else if (value < 992) {
-       return value + 0;
+   } else if (value < 989) {
+      return value + 1;
 
-    } else if (value < 993) {
-       return value + 1;
+   } else if (value < 990) {
+      return value + 0;
 
-    } else if (value < 994) {
-       return value + 0;
+   } else if (value < 991) {
+      return value + 1;
 
-    } else if (value < 995) {
-       return value + 1;
+   } else if (value < 992) {
+      return value + 0;
 
-    } else if (value < 996) {
-       return value + 0;
+   } else if (value < 993) {
+      return value + 1;
 
-    } else if (value < 997) {
-       return value + 1;
+   } else if (value < 994) {
+      return value + 0;
 
-    } else if (value < 998) {
-       return value + 0;
+   } else if (value < 995) {
+      return value + 1;
 
-    } else if (value < 999) {
-       return value + 1;
+   } else if (value < 996) {
+      return value + 0;
 
-    } else if (value < 1000) {
-       return value + 0;
+   } else if (value < 997) {
+      return value + 1;
 
-    } else if (value < 1001) {
-       return value + 1;
+   } else if (value < 998) {
+      return value + 0;
 
-    } else if (value < 1002) {
-       return value + 0;
+   } else if (value < 999) {
+      return value + 1;
 
-    } else if (value < 1003) {
-       return value + 1;
+   } else if (value < 1000) {
+      return value + 0;
 
-    } else if (value < 1004) {
-       return value + 0;
+   } else if (value < 1001) {
+      return value + 1;
 
-    } else if (value < 1005) {
-       return value + 1;
+   } else if (value < 1002) {
+      return value + 0;
 
-    } else if (value < 1006) {
-       return value + 0;
+   } else if (value < 1003) {
+      return value + 1;
 
-    } else if (value < 1007) {
-       return value + 1;
+   } else if (value < 1004) {
+      return value + 0;
 
-    } else if (value < 1012) {
-       return value + 0;
+   } else if (value < 1005) {
+      return value + 1;
 
-    } else if (value < 1013) {
-       return value + -60;
+   } else if (value < 1006) {
+      return value + 0;
 
-    } else if (value < 1015) {
-       return value + 0;
+   } else if (value < 1007) {
+      return value + 1;
 
-    } else if (value < 1016) {
-       return value + 1;
+   } else if (value < 1012) {
+      return value + 0;
 
-    } else if (value < 1017) {
-       return value + 0;
+   } else if (value < 1013) {
+      return value + -60;
 
-    } else if (value < 1018) {
-       return value + -7;
+   } else if (value < 1015) {
+      return value + 0;
 
-    } else if (value < 1019) {
-       return value + 1;
+   } else if (value < 1016) {
+      return value + 1;
 
-    } else if (value < 1021) {
-       return value + 0;
+   } else if (value < 1017) {
+      return value + 0;
 
-    } else if (value < 1024) {
-       return value + -130;
+   } else if (value < 1018) {
+      return value + -7;
 
-    } else if (value < 1040) {
-       return value + 80;
+   } else if (value < 1019) {
+      return value + 1;
 
-    } else if (value < 1072) {
-       return value + 32;
+   } else if (value < 1021) {
+      return value + 0;
 
-    } else if (value < 1120) {
-       return value + 0;
+   } else if (value < 1024) {
+      return value + -130;
 
-    } else if (value < 1121) {
-       return value + 1;
+   } else if (value < 1040) {
+      return value + 80;
 
-    } else if (value < 1122) {
-       return value + 0;
+   } else if (value < 1072) {
+      return value + 32;
 
-    } else if (value < 1123) {
-       return value + 1;
+   } else if (value < 1120) {
+      return value + 0;
 
-    } else if (value < 1124) {
-       return value + 0;
+   } else if (value < 1121) {
+      return value + 1;
 
-    } else if (value < 1125) {
-       return value + 1;
+   } else if (value < 1122) {
+      return value + 0;
 
-    } else if (value < 1126) {
-       return value + 0;
+   } else if (value < 1123) {
+      return value + 1;
 
-    } else if (value < 1127) {
-       return value + 1;
+   } else if (value < 1124) {
+      return value + 0;
 
-    } else if (value < 1128) {
-       return value + 0;
+   } else if (value < 1125) {
+      return value + 1;
 
-    } else if (value < 1129) {
-       return value + 1;
+   } else if (value < 1126) {
+      return value + 0;
 
-    } else if (value < 1130) {
-       return value + 0;
+   } else if (value < 1127) {
+      return value + 1;
 
-    } else if (value < 1131) {
-       return value + 1;
+   } else if (value < 1128) {
+      return value + 0;
 
-    } else if (value < 1132) {
-       return value + 0;
+   } else if (value < 1129) {
+      return value + 1;
 
-    } else if (value < 1133) {
-       return value + 1;
+   } else if (value < 1130) {
+      return value + 0;
 
-    } else if (value < 1134) {
-       return value + 0;
+   } else if (value < 1131) {
+      return value + 1;
 
-    } else if (value < 1135) {
-       return value + 1;
+   } else if (value < 1132) {
+      return value + 0;
 
-    } else if (value < 1136) {
-       return value + 0;
+   } else if (value < 1133) {
+      return value + 1;
 
-    } else if (value < 1137) {
-       return value + 1;
+   } else if (value < 1134) {
+      return value + 0;
 
-    } else if (value < 1138) {
-       return value + 0;
+   } else if (value < 1135) {
+      return value + 1;
 
-    } else if (value < 1139) {
-       return value + 1;
+   } else if (value < 1136) {
+      return value + 0;
 
-    } else if (value < 1140) {
-       return value + 0;
+   } else if (value < 1137) {
+      return value + 1;
 
-    } else if (value < 1141) {
-       return value + 1;
+   } else if (value < 1138) {
+      return value + 0;
 
-    } else if (value < 1142) {
-       return value + 0;
+   } else if (value < 1139) {
+      return value + 1;
 
-    } else if (value < 1143) {
-       return value + 1;
+   } else if (value < 1140) {
+      return value + 0;
 
-    } else if (value < 1144) {
-       return value + 0;
+   } else if (value < 1141) {
+      return value + 1;
 
-    } else if (value < 1145) {
-       return value + 1;
+   } else if (value < 1142) {
+      return value + 0;
 
-    } else if (value < 1146) {
-       return value + 0;
+   } else if (value < 1143) {
+      return value + 1;
 
-    } else if (value < 1147) {
-       return value + 1;
+   } else if (value < 1144) {
+      return value + 0;
 
-    } else if (value < 1148) {
-       return value + 0;
+   } else if (value < 1145) {
+      return value + 1;
 
-    } else if (value < 1149) {
-       return value + 1;
+   } else if (value < 1146) {
+      return value + 0;
 
-    } else if (value < 1150) {
-       return value + 0;
+   } else if (value < 1147) {
+      return value + 1;
 
-    } else if (value < 1151) {
-       return value + 1;
+   } else if (value < 1148) {
+      return value + 0;
 
-    } else if (value < 1152) {
-       return value + 0;
+   } else if (value < 1149) {
+      return value + 1;
 
-    } else if (value < 1153) {
-       return value + 1;
+   }
 
-    } else if (value < 1162) {
-       return value + 0;
+   if (value < 1150) {
+      return value + 0;
 
-    } else if (value < 1163) {
-       return value + 1;
+   } else if (value < 1151) {
+      return value + 1;
 
-    } else if (value < 1164) {
-       return value + 0;
+   } else if (value < 1152) {
+      return value + 0;
 
-    } else if (value < 1165) {
-       return value + 1;
+   } else if (value < 1153) {
+      return value + 1;
 
-    } else if (value < 1166) {
-       return value + 0;
+   } else if (value < 1162) {
+      return value + 0;
 
-    } else if (value < 1167) {
-       return value + 1;
+   } else if (value < 1163) {
+      return value + 1;
 
-    } else if (value < 1168) {
-       return value + 0;
+   } else if (value < 1164) {
+      return value + 0;
 
-    } else if (value < 1169) {
-       return value + 1;
+   } else if (value < 1165) {
+      return value + 1;
 
-    } else if (value < 1170) {
-       return value + 0;
+   } else if (value < 1166) {
+      return value + 0;
 
-    } else if (value < 1171) {
-       return value + 1;
+   } else if (value < 1167) {
+      return value + 1;
 
-    } else if (value < 1172) {
-       return value + 0;
+   } else if (value < 1168) {
+      return value + 0;
 
-    } else if (value < 1173) {
-       return value + 1;
+   } else if (value < 1169) {
+      return value + 1;
 
-    } else if (value < 1174) {
-       return value + 0;
+   } else if (value < 1170) {
+      return value + 0;
 
-    } else if (value < 1175) {
-       return value + 1;
+   } else if (value < 1171) {
+      return value + 1;
 
-    } else if (value < 1176) {
-       return value + 0;
+   } else if (value < 1172) {
+      return value + 0;
 
-    } else if (value < 1177) {
-       return value + 1;
+   } else if (value < 1173) {
+      return value + 1;
 
-    } else if (value < 1178) {
-       return value + 0;
+   } else if (value < 1174) {
+      return value + 0;
 
-    } else if (value < 1179) {
-       return value + 1;
+   } else if (value < 1175) {
+      return value + 1;
 
-    } else if (value < 1180) {
-       return value + 0;
+   } else if (value < 1176) {
+      return value + 0;
 
-    } else if (value < 1181) {
-       return value + 1;
+   } else if (value < 1177) {
+      return value + 1;
 
-    } else if (value < 1182) {
-       return value + 0;
+   } else if (value < 1178) {
+      return value + 0;
 
-    } else if (value < 1183) {
-       return value + 1;
+   } else if (value < 1179) {
+      return value + 1;
 
-    } else if (value < 1184) {
-       return value + 0;
+   } else if (value < 1180) {
+      return value + 0;
 
-    } else if (value < 1185) {
-       return value + 1;
+   } else if (value < 1181) {
+      return value + 1;
 
-    } else if (value < 1186) {
-       return value + 0;
+   } else if (value < 1182) {
+      return value + 0;
 
-    } else if (value < 1187) {
-       return value + 1;
+   } else if (value < 1183) {
+      return value + 1;
 
-    } else if (value < 1188) {
-       return value + 0;
+   } else if (value < 1184) {
+      return value + 0;
 
-    } else if (value < 1189) {
-       return value + 1;
+   } else if (value < 1185) {
+      return value + 1;
 
-    } else if (value < 1190) {
-       return value + 0;
+   } else if (value < 1186) {
+      return value + 0;
 
-    } else if (value < 1191) {
-       return value + 1;
+   } else if (value < 1187) {
+      return value + 1;
 
-    } else if (value < 1192) {
-       return value + 0;
+   } else if (value < 1188) {
+      return value + 0;
 
-    } else if (value < 1193) {
-       return value + 1;
+   } else if (value < 1189) {
+      return value + 1;
 
-    } else if (value < 1194) {
-       return value + 0;
+   } else if (value < 1190) {
+      return value + 0;
 
-    } else if (value < 1195) {
-       return value + 1;
+   } else if (value < 1191) {
+      return value + 1;
 
-    } else if (value < 1196) {
-       return value + 0;
+   } else if (value < 1192) {
+      return value + 0;
 
-    } else if (value < 1197) {
-       return value + 1;
+   } else if (value < 1193) {
+      return value + 1;
 
-    } else if (value < 1198) {
-       return value + 0;
+   } else if (value < 1194) {
+      return value + 0;
 
-    } else if (value < 1199) {
-       return value + 1;
+   } else if (value < 1195) {
+      return value + 1;
 
-    } else if (value < 1200) {
-       return value + 0;
+   } else if (value < 1196) {
+      return value + 0;
 
-    } else if (value < 1201) {
-       return value + 1;
+   } else if (value < 1197) {
+      return value + 1;
 
-    } else if (value < 1202) {
-       return value + 0;
+   } else if (value < 1198) {
+      return value + 0;
 
-    } else if (value < 1203) {
-       return value + 1;
+   } else if (value < 1199) {
+      return value + 1;
 
-    } else if (value < 1204) {
-       return value + 0;
+   } else if (value < 1200) {
+      return value + 0;
 
-    } else if (value < 1205) {
-       return value + 1;
+   } else if (value < 1201) {
+      return value + 1;
 
-    } else if (value < 1206) {
-       return value + 0;
+   } else if (value < 1202) {
+      return value + 0;
 
-    } else if (value < 1207) {
-       return value + 1;
+   } else if (value < 1203) {
+      return value + 1;
 
-    } else if (value < 1208) {
-       return value + 0;
+   } else if (value < 1204) {
+      return value + 0;
 
-    } else if (value < 1209) {
-       return value + 1;
+   } else if (value < 1205) {
+      return value + 1;
 
-    } else if (value < 1210) {
-       return value + 0;
+   } else if (value < 1206) {
+      return value + 0;
 
-    } else if (value < 1211) {
-       return value + 1;
+   } else if (value < 1207) {
+      return value + 1;
 
-    } else if (value < 1212) {
-       return value + 0;
+   } else if (value < 1208) {
+      return value + 0;
 
-    } else if (value < 1213) {
-       return value + 1;
+   } else if (value < 1209) {
+      return value + 1;
 
-    } else if (value < 1214) {
-       return value + 0;
+   } else if (value < 1210) {
+      return value + 0;
 
-    } else if (value < 1215) {
-       return value + 1;
+   } else if (value < 1211) {
+      return value + 1;
 
-    } else if (value < 1216) {
-       return value + 0;
+   } else if (value < 1212) {
+      return value + 0;
 
-    } else if (value < 1217) {
-       return value + 15;
+   } else if (value < 1213) {
+      return value + 1;
 
-    } else if (value < 1218) {
-       return value + 1;
+   } else if (value < 1214) {
+      return value + 0;
 
-    } else if (value < 1219) {
-       return value + 0;
+   } else if (value < 1215) {
+      return value + 1;
 
-    } else if (value < 1220) {
-       return value + 1;
+   } else if (value < 1216) {
+      return value + 0;
 
-    } else if (value < 1221) {
-       return value + 0;
+   } else if (value < 1217) {
+      return value + 15;
 
-    } else if (value < 1222) {
-       return value + 1;
+   } else if (value < 1218) {
+      return value + 1;
 
-    } else if (value < 1223) {
-       return value + 0;
+   } else if (value < 1219) {
+      return value + 0;
 
-    } else if (value < 1224) {
-       return value + 1;
+   } else if (value < 1220) {
+      return value + 1;
 
-    } else if (value < 1225) {
-       return value + 0;
+   } else if (value < 1221) {
+      return value + 0;
 
-    } else if (value < 1226) {
-       return value + 1;
+   } else if (value < 1222) {
+      return value + 1;
 
-    } else if (value < 1227) {
-       return value + 0;
+   } else if (value < 1223) {
+      return value + 0;
 
-    } else if (value < 1228) {
-       return value + 1;
+   } else if (value < 1224) {
+      return value + 1;
 
-    } else if (value < 1229) {
-       return value + 0;
+   } else if (value < 1225) {
+      return value + 0;
 
-    } else if (value < 1230) {
-       return value + 1;
+   } else if (value < 1226) {
+      return value + 1;
 
-    } else if (value < 1232) {
-       return value + 0;
+   } else if (value < 1227) {
+      return value + 0;
 
-    } else if (value < 1233) {
-       return value + 1;
+   } else if (value < 1228) {
+      return value + 1;
 
-    } else if (value < 1234) {
-       return value + 0;
+   } else if (value < 1229) {
+      return value + 0;
 
-    } else if (value < 1235) {
-       return value + 1;
+   } else if (value < 1230) {
+      return value + 1;
 
-    } else if (value < 1236) {
-       return value + 0;
+   } else if (value < 1232) {
+      return value + 0;
 
-    } else if (value < 1237) {
-       return value + 1;
+   } else if (value < 1233) {
+      return value + 1;
 
-    } else if (value < 1238) {
-       return value + 0;
+   } else if (value < 1234) {
+      return value + 0;
 
-    } else if (value < 1239) {
-       return value + 1;
+   } else if (value < 1235) {
+      return value + 1;
 
-    } else if (value < 1240) {
-       return value + 0;
+   } else if (value < 1236) {
+      return value + 0;
 
-    } else if (value < 1241) {
-       return value + 1;
+   } else if (value < 1237) {
+      return value + 1;
 
-    } else if (value < 1242) {
-       return value + 0;
+   } else if (value < 1238) {
+      return value + 0;
 
-    } else if (value < 1243) {
-       return value + 1;
+   } else if (value < 1239) {
+      return value + 1;
 
-    } else if (value < 1244) {
-       return value + 0;
+   } else if (value < 1240) {
+      return value + 0;
 
-    } else if (value < 1245) {
-       return value + 1;
+   } else if (value < 1241) {
+      return value + 1;
 
-    } else if (value < 1246) {
-       return value + 0;
+   } else if (value < 1242) {
+      return value + 0;
 
-    } else if (value < 1247) {
-       return value + 1;
+   } else if (value < 1243) {
+      return value + 1;
 
-    } else if (value < 1248) {
-       return value + 0;
+   } else if (value < 1244) {
+      return value + 0;
 
-    } else if (value < 1249) {
-       return value + 1;
+   } else if (value < 1245) {
+      return value + 1;
 
-    } else if (value < 1250) {
-       return value + 0;
+   } else if (value < 1246) {
+      return value + 0;
 
-    } else if (value < 1251) {
-       return value + 1;
+   } else if (value < 1247) {
+      return value + 1;
 
-    } else if (value < 1252) {
-       return value + 0;
+   } else if (value < 1248) {
+      return value + 0;
 
-    } else if (value < 1253) {
-       return value + 1;
+   } else if (value < 1249) {
+      return value + 1;
 
-    } else if (value < 1254) {
-       return value + 0;
+   } else if (value < 1250) {
+      return value + 0;
 
-    } else if (value < 1255) {
-       return value + 1;
+   } else if (value < 1251) {
+      return value + 1;
 
-    } else if (value < 1256) {
-       return value + 0;
+   } else if (value < 1252) {
+      return value + 0;
 
-    } else if (value < 1257) {
-       return value + 1;
+   } else if (value < 1253) {
+      return value + 1;
 
-    } else if (value < 1258) {
-       return value + 0;
+   } else if (value < 1254) {
+      return value + 0;
 
-    } else if (value < 1259) {
-       return value + 1;
+   } else if (value < 1255) {
+      return value + 1;
 
-    } else if (value < 1260) {
-       return value + 0;
+   } else if (value < 1256) {
+      return value + 0;
 
-    } else if (value < 1261) {
-       return value + 1;
+   } else if (value < 1257) {
+      return value + 1;
 
-    } else if (value < 1262) {
-       return value + 0;
+   } else if (value < 1258) {
+      return value + 0;
 
-    } else if (value < 1263) {
-       return value + 1;
+   }
 
-    } else if (value < 1264) {
-       return value + 0;
+   if (value < 1259) {
+      return value + 1;
 
-    } else if (value < 1265) {
-       return value + 1;
+   } else if (value < 1260) {
+      return value + 0;
 
-    } else if (value < 1266) {
-       return value + 0;
+   } else if (value < 1261) {
+      return value + 1;
 
-    } else if (value < 1267) {
-       return value + 1;
+   } else if (value < 1262) {
+      return value + 0;
 
-    } else if (value < 1268) {
-       return value + 0;
+   } else if (value < 1263) {
+      return value + 1;
 
-    } else if (value < 1269) {
-       return value + 1;
+   } else if (value < 1264) {
+      return value + 0;
 
-    } else if (value < 1270) {
-       return value + 0;
+   } else if (value < 1265) {
+      return value + 1;
 
-    } else if (value < 1271) {
-       return value + 1;
+   } else if (value < 1266) {
+      return value + 0;
 
-    } else if (value < 1272) {
-       return value + 0;
+   } else if (value < 1267) {
+      return value + 1;
 
-    } else if (value < 1273) {
-       return value + 1;
+   } else if (value < 1268) {
+      return value + 0;
 
-    } else if (value < 1274) {
-       return value + 0;
+   } else if (value < 1269) {
+      return value + 1;
 
-    } else if (value < 1275) {
-       return value + 1;
+   } else if (value < 1270) {
+      return value + 0;
 
-    } else if (value < 1276) {
-       return value + 0;
+   } else if (value < 1271) {
+      return value + 1;
 
-    } else if (value < 1277) {
-       return value + 1;
+   } else if (value < 1272) {
+      return value + 0;
 
-    } else if (value < 1278) {
-       return value + 0;
+   } else if (value < 1273) {
+      return value + 1;
 
-    } else if (value < 1279) {
-       return value + 1;
+   } else if (value < 1274) {
+      return value + 0;
 
-    } else if (value < 1280) {
-       return value + 0;
+   } else if (value < 1275) {
+      return value + 1;
 
-    } else if (value < 1281) {
-       return value + 1;
+   } else if (value < 1276) {
+      return value + 0;
 
-    } else if (value < 1282) {
-       return value + 0;
+   } else if (value < 1277) {
+      return value + 1;
 
-    } else if (value < 1283) {
-       return value + 1;
+   } else if (value < 1278) {
+      return value + 0;
 
-    } else if (value < 1284) {
-       return value + 0;
+   } else if (value < 1279) {
+      return value + 1;
 
-    } else if (value < 1285) {
-       return value + 1;
+   } else if (value < 1280) {
+      return value + 0;
 
-    } else if (value < 1286) {
-       return value + 0;
+   } else if (value < 1281) {
+      return value + 1;
 
-    } else if (value < 1287) {
-       return value + 1;
+   } else if (value < 1282) {
+      return value + 0;
 
-    } else if (value < 1288) {
-       return value + 0;
+   } else if (value < 1283) {
+      return value + 1;
 
-    } else if (value < 1289) {
-       return value + 1;
+   } else if (value < 1284) {
+      return value + 0;
 
-    } else if (value < 1290) {
-       return value + 0;
+   } else if (value < 1285) {
+      return value + 1;
 
-    } else if (value < 1291) {
-       return value + 1;
+   } else if (value < 1286) {
+      return value + 0;
 
-    } else if (value < 1292) {
-       return value + 0;
+   } else if (value < 1287) {
+      return value + 1;
 
-    } else if (value < 1293) {
-       return value + 1;
+   } else if (value < 1288) {
+      return value + 0;
 
-    } else if (value < 1294) {
-       return value + 0;
+   } else if (value < 1289) {
+      return value + 1;
 
-    } else if (value < 1295) {
-       return value + 1;
+   } else if (value < 1290) {
+      return value + 0;
 
-    } else if (value < 1296) {
-       return value + 0;
+   } else if (value < 1291) {
+      return value + 1;
 
-    } else if (value < 1297) {
-       return value + 1;
+   } else if (value < 1292) {
+      return value + 0;
 
-    } else if (value < 1298) {
-       return value + 0;
+   } else if (value < 1293) {
+      return value + 1;
 
-    } else if (value < 1299) {
-       return value + 1;
+   } else if (value < 1294) {
+      return value + 0;
 
-    } else if (value < 1300) {
-       return value + 0;
+   } else if (value < 1295) {
+      return value + 1;
 
-    } else if (value < 1301) {
-       return value + 1;
+   } else if (value < 1296) {
+      return value + 0;
 
-    } else if (value < 1302) {
-       return value + 0;
+   } else if (value < 1297) {
+      return value + 1;
 
-    } else if (value < 1303) {
-       return value + 1;
+   } else if (value < 1298) {
+      return value + 0;
 
-    } else if (value < 1304) {
-       return value + 0;
+   } else if (value < 1299) {
+      return value + 1;
 
-    } else if (value < 1305) {
-       return value + 1;
+   } else if (value < 1300) {
+      return value + 0;
 
-    } else if (value < 1306) {
-       return value + 0;
+   } else if (value < 1301) {
+      return value + 1;
 
-    } else if (value < 1307) {
-       return value + 1;
+   } else if (value < 1302) {
+      return value + 0;
 
-    } else if (value < 1308) {
-       return value + 0;
+   } else if (value < 1303) {
+      return value + 1;
 
-    } else if (value < 1309) {
-       return value + 1;
+   } else if (value < 1304) {
+      return value + 0;
 
-    } else if (value < 1310) {
-       return value + 0;
+   } else if (value < 1305) {
+      return value + 1;
 
-    } else if (value < 1311) {
-       return value + 1;
+   } else if (value < 1306) {
+      return value + 0;
 
-    } else if (value < 1312) {
-       return value + 0;
+   } else if (value < 1307) {
+      return value + 1;
 
-    } else if (value < 1313) {
-       return value + 1;
+   } else if (value < 1308) {
+      return value + 0;
 
-    } else if (value < 1314) {
-       return value + 0;
+   } else if (value < 1309) {
+      return value + 1;
 
-    } else if (value < 1315) {
-       return value + 1;
+   } else if (value < 1310) {
+      return value + 0;
 
-    } else if (value < 1316) {
-       return value + 0;
+   } else if (value < 1311) {
+      return value + 1;
 
-    } else if (value < 1317) {
-       return value + 1;
+   } else if (value < 1312) {
+      return value + 0;
 
-    } else if (value < 1318) {
-       return value + 0;
+   } else if (value < 1313) {
+      return value + 1;
 
-    } else if (value < 1319) {
-       return value + 1;
+   } else if (value < 1314) {
+      return value + 0;
 
-    } else if (value < 1320) {
-       return value + 0;
+   } else if (value < 1315) {
+      return value + 1;
 
-    } else if (value < 1321) {
-       return value + 1;
+   } else if (value < 1316) {
+      return value + 0;
 
-    } else if (value < 1322) {
-       return value + 0;
+   } else if (value < 1317) {
+      return value + 1;
 
-    } else if (value < 1323) {
-       return value + 1;
+   } else if (value < 1318) {
+      return value + 0;
 
-    } else if (value < 1324) {
-       return value + 0;
+   } else if (value < 1319) {
+      return value + 1;
 
-    } else if (value < 1325) {
-       return value + 1;
+   } else if (value < 1320) {
+      return value + 0;
 
-    } else if (value < 1326) {
-       return value + 0;
+   } else if (value < 1321) {
+      return value + 1;
 
-    } else if (value < 1327) {
-       return value + 1;
+   } else if (value < 1322) {
+      return value + 0;
 
-    } else if (value < 1329) {
-       return value + 0;
+   } else if (value < 1323) {
+      return value + 1;
 
-    } else if (value < 1367) {
-       return value + 48;
+   } else if (value < 1324) {
+      return value + 0;
 
-    } else if (value < 4256) {
-       return value + 0;
+   } else if (value < 1325) {
+      return value + 1;
 
-    } else if (value < 4294) {
-       return value + 7264;
+   } else if (value < 1326) {
+      return value + 0;
 
-    } else if (value < 4295) {
-       return value + 0;
+   } else if (value < 1327) {
+      return value + 1;
 
-    } else if (value < 4296) {
-       return value + 7264;
+   } else if (value < 1329) {
+      return value + 0;
 
-    } else if (value < 4301) {
-       return value + 0;
+   } else if (value < 1367) {
+      return value + 48;
 
-    } else if (value < 4302) {
-       return value + 7264;
+   } else if (value < 4256) {
+      return value + 0;
 
-    } else if (value < 5024) {
-       return value + 0;
+   } else if (value < 4294) {
+      return value + 7264;
 
-    } else if (value < 5104) {
-       return value + 38864;
+   } else if (value < 4295) {
+      return value + 0;
 
-    } else if (value < 5110) {
-       return value + 8;
+   } else if (value < 4296) {
+      return value + 7264;
 
-    } else if (value < 7312) {
-       return value + 0;
+   } else if (value < 4301) {
+      return value + 0;
 
-    } else if (value < 7355) {
-       return value + -3008;
+   } else if (value < 4302) {
+      return value + 7264;
 
-    } else if (value < 7357) {
-       return value + 0;
+   } else if (value < 5024) {
+      return value + 0;
 
-    } else if (value < 7360) {
-       return value + -3008;
+   } else if (value < 5104) {
+      return value + 38864;
 
-    } else if (value < 7680) {
-       return value + 0;
+   } else if (value < 5110) {
+      return value + 8;
 
-    } else if (value < 7681) {
-       return value + 1;
+   } else if (value < 7312) {
+      return value + 0;
 
-    } else if (value < 7682) {
-       return value + 0;
+   } else if (value < 7355) {
+      return value + -3008;
 
-    } else if (value < 7683) {
-       return value + 1;
+   } else if (value < 7357) {
+      return value + 0;
 
-    } else if (value < 7684) {
-       return value + 0;
+   } else if (value < 7360) {
+      return value + -3008;
 
-    } else if (value < 7685) {
-       return value + 1;
+   } else if (value < 7680) {
+      return value + 0;
 
-    } else if (value < 7686) {
-       return value + 0;
+   } else if (value < 7681) {
+      return value + 1;
 
-    } else if (value < 7687) {
-       return value + 1;
+   } else if (value < 7682) {
+      return value + 0;
 
-    } else if (value < 7688) {
-       return value + 0;
+   } else if (value < 7683) {
+      return value + 1;
 
-    } else if (value < 7689) {
-       return value + 1;
+   } else if (value < 7684) {
+      return value + 0;
 
-    } else if (value < 7690) {
-       return value + 0;
+   } else if (value < 7685) {
+      return value + 1;
 
-    } else if (value < 7691) {
-       return value + 1;
+   } else if (value < 7686) {
+      return value + 0;
 
-    } else if (value < 7692) {
-       return value + 0;
+   } else if (value < 7687) {
+      return value + 1;
 
-    } else if (value < 7693) {
-       return value + 1;
+   } else if (value < 7688) {
+      return value + 0;
 
-    } else if (value < 7694) {
-       return value + 0;
+   } else if (value < 7689) {
+      return value + 1;
 
-    } else if (value < 7695) {
-       return value + 1;
+   } else if (value < 7690) {
+      return value + 0;
 
-    } else if (value < 7696) {
-       return value + 0;
+   } else if (value < 7691) {
+      return value + 1;
 
-    } else if (value < 7697) {
-       return value + 1;
+   } else if (value < 7692) {
+      return value + 0;
 
-    } else if (value < 7698) {
-       return value + 0;
+   } else if (value < 7693) {
+      return value + 1;
 
-    } else if (value < 7699) {
-       return value + 1;
+   } else if (value < 7694) {
+      return value + 0;
 
-    } else if (value < 7700) {
-       return value + 0;
+   } else if (value < 7695) {
+      return value + 1;
 
-    } else if (value < 7701) {
-       return value + 1;
+   }
 
-    } else if (value < 7702) {
-       return value + 0;
+   if (value < 7696) {
+      return value + 0;
 
-    } else if (value < 7703) {
-       return value + 1;
+   } else if (value < 7697) {
+      return value + 1;
 
-    } else if (value < 7704) {
-       return value + 0;
+   } else if (value < 7698) {
+      return value + 0;
 
-    } else if (value < 7705) {
-       return value + 1;
+   } else if (value < 7699) {
+      return value + 1;
 
-    } else if (value < 7706) {
-       return value + 0;
+   } else if (value < 7700) {
+      return value + 0;
 
-    } else if (value < 7707) {
-       return value + 1;
+   } else if (value < 7701) {
+      return value + 1;
 
-    } else if (value < 7708) {
-       return value + 0;
+   } else if (value < 7702) {
+      return value + 0;
 
-    } else if (value < 7709) {
-       return value + 1;
+   } else if (value < 7703) {
+      return value + 1;
 
-    } else if (value < 7710) {
-       return value + 0;
+   } else if (value < 7704) {
+      return value + 0;
 
-    } else if (value < 7711) {
-       return value + 1;
+   } else if (value < 7705) {
+      return value + 1;
 
-    } else if (value < 7712) {
-       return value + 0;
+   } else if (value < 7706) {
+      return value + 0;
 
-    } else if (value < 7713) {
-       return value + 1;
+   } else if (value < 7707) {
+      return value + 1;
 
-    } else if (value < 7714) {
-       return value + 0;
+   } else if (value < 7708) {
+      return value + 0;
 
-    } else if (value < 7715) {
-       return value + 1;
+   } else if (value < 7709) {
+      return value + 1;
 
-    } else if (value < 7716) {
-       return value + 0;
+   } else if (value < 7710) {
+      return value + 0;
 
-    } else if (value < 7717) {
-       return value + 1;
+   } else if (value < 7711) {
+      return value + 1;
 
-    } else if (value < 7718) {
-       return value + 0;
+   } else if (value < 7712) {
+      return value + 0;
 
-    } else if (value < 7719) {
-       return value + 1;
+   } else if (value < 7713) {
+      return value + 1;
 
-    } else if (value < 7720) {
-       return value + 0;
+   } else if (value < 7714) {
+      return value + 0;
 
-    } else if (value < 7721) {
-       return value + 1;
+   } else if (value < 7715) {
+      return value + 1;
 
-    } else if (value < 7722) {
-       return value + 0;
+   } else if (value < 7716) {
+      return value + 0;
 
-    } else if (value < 7723) {
-       return value + 1;
+   } else if (value < 7717) {
+      return value + 1;
 
-    } else if (value < 7724) {
-       return value + 0;
+   } else if (value < 7718) {
+      return value + 0;
 
-    } else if (value < 7725) {
-       return value + 1;
+   } else if (value < 7719) {
+      return value + 1;
 
-    } else if (value < 7726) {
-       return value + 0;
+   } else if (value < 7720) {
+      return value + 0;
 
-    } else if (value < 7727) {
-       return value + 1;
+   } else if (value < 7721) {
+      return value + 1;
 
-    } else if (value < 7728) {
-       return value + 0;
+   } else if (value < 7722) {
+      return value + 0;
 
-    } else if (value < 7729) {
-       return value + 1;
+   } else if (value < 7723) {
+      return value + 1;
 
-    } else if (value < 7730) {
-       return value + 0;
+   } else if (value < 7724) {
+      return value + 0;
 
-    } else if (value < 7731) {
-       return value + 1;
+   } else if (value < 7725) {
+      return value + 1;
 
-    } else if (value < 7732) {
-       return value + 0;
+   } else if (value < 7726) {
+      return value + 0;
 
-    } else if (value < 7733) {
-       return value + 1;
+   } else if (value < 7727) {
+      return value + 1;
 
-    } else if (value < 7734) {
-       return value + 0;
+   } else if (value < 7728) {
+      return value + 0;
 
-    } else if (value < 7735) {
-       return value + 1;
+   } else if (value < 7729) {
+      return value + 1;
 
-    } else if (value < 7736) {
-       return value + 0;
+   } else if (value < 7730) {
+      return value + 0;
 
-    } else if (value < 7737) {
-       return value + 1;
+   } else if (value < 7731) {
+      return value + 1;
 
-    } else if (value < 7738) {
-       return value + 0;
+   } else if (value < 7732) {
+      return value + 0;
 
-    } else if (value < 7739) {
-       return value + 1;
+   } else if (value < 7733) {
+      return value + 1;
 
-    } else if (value < 7740) {
-       return value + 0;
+   } else if (value < 7734) {
+      return value + 0;
 
-    } else if (value < 7741) {
-       return value + 1;
+   } else if (value < 7735) {
+      return value + 1;
 
-    } else if (value < 7742) {
-       return value + 0;
+   } else if (value < 7736) {
+      return value + 0;
 
-    } else if (value < 7743) {
-       return value + 1;
+   } else if (value < 7737) {
+      return value + 1;
 
-    } else if (value < 7744) {
-       return value + 0;
+   } else if (value < 7738) {
+      return value + 0;
 
-    } else if (value < 7745) {
-       return value + 1;
+   } else if (value < 7739) {
+      return value + 1;
 
-    } else if (value < 7746) {
-       return value + 0;
+   } else if (value < 7740) {
+      return value + 0;
 
-    } else if (value < 7747) {
-       return value + 1;
+   } else if (value < 7741) {
+      return value + 1;
 
-    } else if (value < 7748) {
-       return value + 0;
+   } else if (value < 7742) {
+      return value + 0;
 
-    } else if (value < 7749) {
-       return value + 1;
+   } else if (value < 7743) {
+      return value + 1;
 
-    } else if (value < 7750) {
-       return value + 0;
+   } else if (value < 7744) {
+      return value + 0;
 
-    } else if (value < 7751) {
-       return value + 1;
+   } else if (value < 7745) {
+      return value + 1;
 
-    } else if (value < 7752) {
-       return value + 0;
+   } else if (value < 7746) {
+      return value + 0;
 
-    } else if (value < 7753) {
-       return value + 1;
+   } else if (value < 7747) {
+      return value + 1;
 
-    } else if (value < 7754) {
-       return value + 0;
+   } else if (value < 7748) {
+      return value + 0;
 
-    } else if (value < 7755) {
-       return value + 1;
+   } else if (value < 7749) {
+      return value + 1;
 
-    } else if (value < 7756) {
-       return value + 0;
+   } else if (value < 7750) {
+      return value + 0;
 
-    } else if (value < 7757) {
-       return value + 1;
+   } else if (value < 7751) {
+      return value + 1;
 
-    } else if (value < 7758) {
-       return value + 0;
+   } else if (value < 7752) {
+      return value + 0;
 
-    } else if (value < 7759) {
-       return value + 1;
+   } else if (value < 7753) {
+      return value + 1;
 
-    } else if (value < 7760) {
-       return value + 0;
+   } else if (value < 7754) {
+      return value + 0;
 
-    } else if (value < 7761) {
-       return value + 1;
+   } else if (value < 7755) {
+      return value + 1;
 
-    } else if (value < 7762) {
-       return value + 0;
+   } else if (value < 7756) {
+      return value + 0;
 
-    } else if (value < 7763) {
-       return value + 1;
+   } else if (value < 7757) {
+      return value + 1;
 
-    } else if (value < 7764) {
-       return value + 0;
+   } else if (value < 7758) {
+      return value + 0;
 
-    } else if (value < 7765) {
-       return value + 1;
+   } else if (value < 7759) {
+      return value + 1;
 
-    } else if (value < 7766) {
-       return value + 0;
+   } else if (value < 7760) {
+      return value + 0;
 
-    } else if (value < 7767) {
-       return value + 1;
+   } else if (value < 7761) {
+      return value + 1;
 
-    } else if (value < 7768) {
-       return value + 0;
+   } else if (value < 7762) {
+      return value + 0;
 
-    } else if (value < 7769) {
-       return value + 1;
+   } else if (value < 7763) {
+      return value + 1;
 
-    } else if (value < 7770) {
-       return value + 0;
+   } else if (value < 7764) {
+      return value + 0;
 
-    } else if (value < 7771) {
-       return value + 1;
+   } else if (value < 7765) {
+      return value + 1;
 
-    } else if (value < 7772) {
-       return value + 0;
+   } else if (value < 7766) {
+      return value + 0;
 
-    } else if (value < 7773) {
-       return value + 1;
+   } else if (value < 7767) {
+      return value + 1;
 
-    } else if (value < 7774) {
-       return value + 0;
+   } else if (value < 7768) {
+      return value + 0;
 
-    } else if (value < 7775) {
-       return value + 1;
+   } else if (value < 7769) {
+      return value + 1;
 
-    } else if (value < 7776) {
-       return value + 0;
+   } else if (value < 7770) {
+      return value + 0;
 
-    } else if (value < 7777) {
-       return value + 1;
+   } else if (value < 7771) {
+      return value + 1;
 
-    } else if (value < 7778) {
-       return value + 0;
+   } else if (value < 7772) {
+      return value + 0;
 
-    } else if (value < 7779) {
-       return value + 1;
+   } else if (value < 7773) {
+      return value + 1;
 
-    } else if (value < 7780) {
-       return value + 0;
+   } else if (value < 7774) {
+      return value + 0;
 
-    } else if (value < 7781) {
-       return value + 1;
+   } else if (value < 7775) {
+      return value + 1;
 
-    } else if (value < 7782) {
-       return value + 0;
+   } else if (value < 7776) {
+      return value + 0;
 
-    } else if (value < 7783) {
-       return value + 1;
+   } else if (value < 7777) {
+      return value + 1;
 
-    } else if (value < 7784) {
-       return value + 0;
+   } else if (value < 7778) {
+      return value + 0;
 
-    } else if (value < 7785) {
-       return value + 1;
+   } else if (value < 7779) {
+      return value + 1;
 
-    } else if (value < 7786) {
-       return value + 0;
+   } else if (value < 7780) {
+      return value + 0;
 
-    } else if (value < 7787) {
-       return value + 1;
+   } else if (value < 7781) {
+      return value + 1;
 
-    } else if (value < 7788) {
-       return value + 0;
+   } else if (value < 7782) {
+      return value + 0;
 
-    } else if (value < 7789) {
-       return value + 1;
+   } else if (value < 7783) {
+      return value + 1;
 
-    } else if (value < 7790) {
-       return value + 0;
+   } else if (value < 7784) {
+      return value + 0;
 
-    } else if (value < 7791) {
-       return value + 1;
+   } else if (value < 7785) {
+      return value + 1;
 
-    } else if (value < 7792) {
-       return value + 0;
+   } else if (value < 7786) {
+      return value + 0;
 
-    } else if (value < 7793) {
-       return value + 1;
+   } else if (value < 7787) {
+      return value + 1;
 
-    } else if (value < 7794) {
-       return value + 0;
+   } else if (value < 7788) {
+      return value + 0;
 
-    } else if (value < 7795) {
-       return value + 1;
+   } else if (value < 7789) {
+      return value + 1;
 
-    } else if (value < 7796) {
-       return value + 0;
+   } else if (value < 7790) {
+      return value + 0;
 
-    } else if (value < 7797) {
-       return value + 1;
+   } else if (value < 7791) {
+      return value + 1;
 
-    } else if (value < 7798) {
-       return value + 0;
+   } else if (value < 7792) {
+      return value + 0;
 
-    } else if (value < 7799) {
-       return value + 1;
+   } else if (value < 7793) {
+      return value + 1;
 
-    } else if (value < 7800) {
-       return value + 0;
+   } else if (value < 7794) {
+      return value + 0;
 
-    } else if (value < 7801) {
-       return value + 1;
+   } else if (value < 7795) {
+      return value + 1;
 
-    } else if (value < 7802) {
-       return value + 0;
+   }
 
-    } else if (value < 7803) {
-       return value + 1;
+   if (value < 7796) {
+      return value + 0;
 
-    } else if (value < 7804) {
-       return value + 0;
+   } else if (value < 7797) {
+      return value + 1;
 
-    } else if (value < 7805) {
-       return value + 1;
+   } else if (value < 7798) {
+      return value + 0;
 
-    } else if (value < 7806) {
-       return value + 0;
+   } else if (value < 7799) {
+      return value + 1;
 
-    } else if (value < 7807) {
-       return value + 1;
+   } else if (value < 7800) {
+      return value + 0;
 
-    } else if (value < 7808) {
-       return value + 0;
+   } else if (value < 7801) {
+      return value + 1;
 
-    } else if (value < 7809) {
-       return value + 1;
+   } else if (value < 7802) {
+      return value + 0;
 
-    } else if (value < 7810) {
-       return value + 0;
+   } else if (value < 7803) {
+      return value + 1;
 
-    } else if (value < 7811) {
-       return value + 1;
+   } else if (value < 7804) {
+      return value + 0;
 
-    } else if (value < 7812) {
-       return value + 0;
+   } else if (value < 7805) {
+      return value + 1;
 
-    } else if (value < 7813) {
-       return value + 1;
+   } else if (value < 7806) {
+      return value + 0;
 
-    } else if (value < 7814) {
-       return value + 0;
+   } else if (value < 7807) {
+      return value + 1;
 
-    } else if (value < 7815) {
-       return value + 1;
+   } else if (value < 7808) {
+      return value + 0;
 
-    } else if (value < 7816) {
-       return value + 0;
+   } else if (value < 7809) {
+      return value + 1;
 
-    } else if (value < 7817) {
-       return value + 1;
+   } else if (value < 7810) {
+      return value + 0;
 
-    } else if (value < 7818) {
-       return value + 0;
+   } else if (value < 7811) {
+      return value + 1;
 
-    } else if (value < 7819) {
-       return value + 1;
+   } else if (value < 7812) {
+      return value + 0;
 
-    } else if (value < 7820) {
-       return value + 0;
+   } else if (value < 7813) {
+      return value + 1;
 
-    } else if (value < 7821) {
-       return value + 1;
+   } else if (value < 7814) {
+      return value + 0;
 
-    } else if (value < 7822) {
-       return value + 0;
+   } else if (value < 7815) {
+      return value + 1;
 
-    } else if (value < 7823) {
-       return value + 1;
+   } else if (value < 7816) {
+      return value + 0;
 
-    } else if (value < 7824) {
-       return value + 0;
+   } else if (value < 7817) {
+      return value + 1;
 
-    } else if (value < 7825) {
-       return value + 1;
+   } else if (value < 7818) {
+      return value + 0;
 
-    } else if (value < 7826) {
-       return value + 0;
+   } else if (value < 7819) {
+      return value + 1;
 
-    } else if (value < 7827) {
-       return value + 1;
+   } else if (value < 7820) {
+      return value + 0;
 
-    } else if (value < 7828) {
-       return value + 0;
+   } else if (value < 7821) {
+      return value + 1;
 
-    } else if (value < 7829) {
-       return value + 1;
+   } else if (value < 7822) {
+      return value + 0;
 
-    } else if (value < 7838) {
-       return value + 0;
+   } else if (value < 7823) {
+      return value + 1;
 
-    } else if (value < 7839) {
-       return value + -7615;
+   } else if (value < 7824) {
+      return value + 0;
 
-    } else if (value < 7840) {
-       return value + 0;
+   } else if (value < 7825) {
+      return value + 1;
 
-    } else if (value < 7841) {
-       return value + 1;
+   } else if (value < 7826) {
+      return value + 0;
 
-    } else if (value < 7842) {
-       return value + 0;
+   } else if (value < 7827) {
+      return value + 1;
 
-    } else if (value < 7843) {
-       return value + 1;
+   } else if (value < 7828) {
+      return value + 0;
 
-    } else if (value < 7844) {
-       return value + 0;
+   } else if (value < 7829) {
+      return value + 1;
 
-    } else if (value < 7845) {
-       return value + 1;
+   } else if (value < 7838) {
+      return value + 0;
 
-    } else if (value < 7846) {
-       return value + 0;
+   } else if (value < 7839) {
+      return value + -7615;
 
-    } else if (value < 7847) {
-       return value + 1;
+   } else if (value < 7840) {
+      return value + 0;
 
-    } else if (value < 7848) {
-       return value + 0;
+   } else if (value < 7841) {
+      return value + 1;
 
-    } else if (value < 7849) {
-       return value + 1;
+   } else if (value < 7842) {
+      return value + 0;
 
-    } else if (value < 7850) {
-       return value + 0;
+   } else if (value < 7843) {
+      return value + 1;
 
-    } else if (value < 7851) {
-       return value + 1;
+   } else if (value < 7844) {
+      return value + 0;
 
-    } else if (value < 7852) {
-       return value + 0;
+   } else if (value < 7845) {
+      return value + 1;
 
-    } else if (value < 7853) {
-       return value + 1;
+   } else if (value < 7846) {
+      return value + 0;
 
-    } else if (value < 7854) {
-       return value + 0;
+   } else if (value < 7847) {
+      return value + 1;
 
-    } else if (value < 7855) {
-       return value + 1;
+   } else if (value < 7848) {
+      return value + 0;
 
-    } else if (value < 7856) {
-       return value + 0;
+   } else if (value < 7849) {
+      return value + 1;
 
-    } else if (value < 7857) {
-       return value + 1;
+   } else if (value < 7850) {
+      return value + 0;
 
-    } else if (value < 7858) {
-       return value + 0;
+   } else if (value < 7851) {
+      return value + 1;
 
-    } else if (value < 7859) {
-       return value + 1;
+   } else if (value < 7852) {
+      return value + 0;
 
-    } else if (value < 7860) {
-       return value + 0;
+   } else if (value < 7853) {
+      return value + 1;
 
-    } else if (value < 7861) {
-       return value + 1;
+   } else if (value < 7854) {
+      return value + 0;
 
-    } else if (value < 7862) {
-       return value + 0;
+   } else if (value < 7855) {
+      return value + 1;
 
-    } else if (value < 7863) {
-       return value + 1;
+   } else if (value < 7856) {
+      return value + 0;
 
-    } else if (value < 7864) {
-       return value + 0;
+   } else if (value < 7857) {
+      return value + 1;
 
-    } else if (value < 7865) {
-       return value + 1;
+   } else if (value < 7858) {
+      return value + 0;
 
-    } else if (value < 7866) {
-       return value + 0;
+   } else if (value < 7859) {
+      return value + 1;
 
-    } else if (value < 7867) {
-       return value + 1;
+   } else if (value < 7860) {
+      return value + 0;
 
-    } else if (value < 7868) {
-       return value + 0;
+   } else if (value < 7861) {
+      return value + 1;
 
-    } else if (value < 7869) {
-       return value + 1;
+   } else if (value < 7862) {
+      return value + 0;
 
-    } else if (value < 7870) {
-       return value + 0;
+   } else if (value < 7863) {
+      return value + 1;
 
-    } else if (value < 7871) {
-       return value + 1;
+   } else if (value < 7864) {
+      return value + 0;
 
-    } else if (value < 7872) {
-       return value + 0;
+   } else if (value < 7865) {
+      return value + 1;
 
-    } else if (value < 7873) {
-       return value + 1;
+   } else if (value < 7866) {
+      return value + 0;
 
-    } else if (value < 7874) {
-       return value + 0;
+   } else if (value < 7867) {
+      return value + 1;
 
-    } else if (value < 7875) {
-       return value + 1;
+   } else if (value < 7868) {
+      return value + 0;
 
-    } else if (value < 7876) {
-       return value + 0;
+   } else if (value < 7869) {
+      return value + 1;
 
-    } else if (value < 7877) {
-       return value + 1;
+   } else if (value < 7870) {
+      return value + 0;
 
-    } else if (value < 7878) {
-       return value + 0;
+   } else if (value < 7871) {
+      return value + 1;
 
-    } else if (value < 7879) {
-       return value + 1;
+   } else if (value < 7872) {
+      return value + 0;
 
-    } else if (value < 7880) {
-       return value + 0;
+   } else if (value < 7873) {
+      return value + 1;
 
-    } else if (value < 7881) {
-       return value + 1;
+   } else if (value < 7874) {
+      return value + 0;
 
-    } else if (value < 7882) {
-       return value + 0;
+   } else if (value < 7875) {
+      return value + 1;
 
-    } else if (value < 7883) {
-       return value + 1;
+   } else if (value < 7876) {
+      return value + 0;
 
-    } else if (value < 7884) {
-       return value + 0;
+   } else if (value < 7877) {
+      return value + 1;
 
-    } else if (value < 7885) {
-       return value + 1;
+   } else if (value < 7878) {
+      return value + 0;
 
-    } else if (value < 7886) {
-       return value + 0;
+   } else if (value < 7879) {
+      return value + 1;
 
-    } else if (value < 7887) {
-       return value + 1;
+   } else if (value < 7880) {
+      return value + 0;
 
-    } else if (value < 7888) {
-       return value + 0;
+   } else if (value < 7881) {
+      return value + 1;
 
-    } else if (value < 7889) {
-       return value + 1;
+   } else if (value < 7882) {
+      return value + 0;
 
-    } else if (value < 7890) {
-       return value + 0;
+   } else if (value < 7883) {
+      return value + 1;
 
-    } else if (value < 7891) {
-       return value + 1;
+   } else if (value < 7884) {
+      return value + 0;
 
-    } else if (value < 7892) {
-       return value + 0;
+   } else if (value < 7885) {
+      return value + 1;
 
-    } else if (value < 7893) {
-       return value + 1;
+   } else if (value < 7886) {
+      return value + 0;
 
-    } else if (value < 7894) {
-       return value + 0;
+   } else if (value < 7887) {
+      return value + 1;
 
-    } else if (value < 7895) {
-       return value + 1;
+   } else if (value < 7888) {
+      return value + 0;
 
-    } else if (value < 7896) {
-       return value + 0;
+   } else if (value < 7889) {
+      return value + 1;
 
-    } else if (value < 7897) {
-       return value + 1;
+   } else if (value < 7890) {
+      return value + 0;
 
-    } else if (value < 7898) {
-       return value + 0;
+   } else if (value < 7891) {
+      return value + 1;
 
-    } else if (value < 7899) {
-       return value + 1;
+   } else if (value < 7892) {
+      return value + 0;
 
-    } else if (value < 7900) {
-       return value + 0;
+   } else if (value < 7893) {
+      return value + 1;
 
-    } else if (value < 7901) {
-       return value + 1;
+   } else if (value < 7894) {
+      return value + 0;
 
-    } else if (value < 7902) {
-       return value + 0;
+   } else if (value < 7895) {
+      return value + 1;
 
-    } else if (value < 7903) {
-       return value + 1;
+   } else if (value < 7896) {
+      return value + 0;
 
-    } else if (value < 7904) {
-       return value + 0;
+   } else if (value < 7897) {
+      return value + 1;
 
-    } else if (value < 7905) {
-       return value + 1;
+   } else if (value < 7898) {
+      return value + 0;
 
-    } else if (value < 7906) {
-       return value + 0;
+   } else if (value < 7899) {
+      return value + 1;
 
-    } else if (value < 7907) {
-       return value + 1;
+   } else if (value < 7900) {
+      return value + 0;
 
-    } else if (value < 7908) {
-       return value + 0;
+   } else if (value < 7901) {
+      return value + 1;
 
-    } else if (value < 7909) {
-       return value + 1;
+   } else if (value < 7902) {
+      return value + 0;
 
-    } else if (value < 7910) {
-       return value + 0;
+   } else if (value < 7903) {
+      return value + 1;
 
-    } else if (value < 7911) {
-       return value + 1;
+   }
 
-    } else if (value < 7912) {
-       return value + 0;
+   if (value < 7904) {
+      return value + 0;
 
-    } else if (value < 7913) {
-       return value + 1;
+   } else if (value < 7905) {
+      return value + 1;
 
-    } else if (value < 7914) {
-       return value + 0;
+   } else if (value < 7906) {
+      return value + 0;
 
-    } else if (value < 7915) {
-       return value + 1;
+   } else if (value < 7907) {
+      return value + 1;
 
-    } else if (value < 7916) {
-       return value + 0;
+   } else if (value < 7908) {
+      return value + 0;
 
-    } else if (value < 7917) {
-       return value + 1;
+   } else if (value < 7909) {
+      return value + 1;
 
-    } else if (value < 7918) {
-       return value + 0;
+   } else if (value < 7910) {
+      return value + 0;
 
-    } else if (value < 7919) {
-       return value + 1;
+   } else if (value < 7911) {
+      return value + 1;
 
-    } else if (value < 7920) {
-       return value + 0;
+   } else if (value < 7912) {
+      return value + 0;
 
-    } else if (value < 7921) {
-       return value + 1;
+   } else if (value < 7913) {
+      return value + 1;
 
-    } else if (value < 7922) {
-       return value + 0;
+   } else if (value < 7914) {
+      return value + 0;
 
-    } else if (value < 7923) {
-       return value + 1;
+   } else if (value < 7915) {
+      return value + 1;
 
-    } else if (value < 7924) {
-       return value + 0;
+   } else if (value < 7916) {
+      return value + 0;
 
-    } else if (value < 7925) {
-       return value + 1;
+   } else if (value < 7917) {
+      return value + 1;
 
-    } else if (value < 7926) {
-       return value + 0;
+   } else if (value < 7918) {
+      return value + 0;
 
-    } else if (value < 7927) {
-       return value + 1;
+   } else if (value < 7919) {
+      return value + 1;
 
-    } else if (value < 7928) {
-       return value + 0;
+   } else if (value < 7920) {
+      return value + 0;
 
-    } else if (value < 7929) {
-       return value + 1;
+   } else if (value < 7921) {
+      return value + 1;
 
-    } else if (value < 7930) {
-       return value + 0;
+   } else if (value < 7922) {
+      return value + 0;
 
-    } else if (value < 7931) {
-       return value + 1;
+   } else if (value < 7923) {
+      return value + 1;
 
-    } else if (value < 7932) {
-       return value + 0;
+   } else if (value < 7924) {
+      return value + 0;
 
-    } else if (value < 7933) {
-       return value + 1;
+   } else if (value < 7925) {
+      return value + 1;
 
-    } else if (value < 7934) {
-       return value + 0;
+   } else if (value < 7926) {
+      return value + 0;
 
-    } else if (value < 7935) {
-       return value + 1;
+   } else if (value < 7927) {
+      return value + 1;
 
-    } else if (value < 7944) {
-       return value + 0;
+   } else if (value < 7928) {
+      return value + 0;
 
-    } else if (value < 7952) {
-       return value + -8;
+   } else if (value < 7929) {
+      return value + 1;
 
-    } else if (value < 7960) {
-       return value + 0;
+   } else if (value < 7930) {
+      return value + 0;
 
-    } else if (value < 7966) {
-       return value + -8;
+   } else if (value < 7931) {
+      return value + 1;
 
-    } else if (value < 7976) {
-       return value + 0;
+   } else if (value < 7932) {
+      return value + 0;
 
-    } else if (value < 7984) {
-       return value + -8;
+   } else if (value < 7933) {
+      return value + 1;
 
-    } else if (value < 7992) {
-       return value + 0;
+   } else if (value < 7934) {
+      return value + 0;
 
-    } else if (value < 8000) {
-       return value + -8;
+   } else if (value < 7935) {
+      return value + 1;
 
-    } else if (value < 8008) {
-       return value + 0;
+   } else if (value < 7944) {
+      return value + 0;
 
-    } else if (value < 8014) {
-       return value + -8;
+   } else if (value < 7952) {
+      return value + -8;
 
-    } else if (value < 8025) {
-       return value + 0;
+   } else if (value < 7960) {
+      return value + 0;
 
-    } else if (value < 8026) {
-       return value + -8;
+   } else if (value < 7966) {
+      return value + -8;
 
-    } else if (value < 8027) {
-       return value + 0;
+   } else if (value < 7976) {
+      return value + 0;
 
-    } else if (value < 8028) {
-       return value + -8;
+   } else if (value < 7984) {
+      return value + -8;
 
-    } else if (value < 8029) {
-       return value + 0;
+   } else if (value < 7992) {
+      return value + 0;
 
-    } else if (value < 8030) {
-       return value + -8;
+   } else if (value < 8000) {
+      return value + -8;
 
-    } else if (value < 8031) {
-       return value + 0;
+   } else if (value < 8008) {
+      return value + 0;
 
-    } else if (value < 8032) {
-       return value + -8;
+   } else if (value < 8014) {
+      return value + -8;
 
-    } else if (value < 8040) {
-       return value + 0;
+   } else if (value < 8025) {
+      return value + 0;
 
-    } else if (value < 8048) {
-       return value + -8;
+   } else if (value < 8026) {
+      return value + -8;
 
-    } else if (value < 8072) {
-       return value + 0;
+   } else if (value < 8027) {
+      return value + 0;
 
-    } else if (value < 8080) {
-       return value + -8;
+   } else if (value < 8028) {
+      return value + -8;
 
-    } else if (value < 8088) {
-       return value + 0;
+   } else if (value < 8029) {
+      return value + 0;
 
-    } else if (value < 8096) {
-       return value + -8;
+   } else if (value < 8030) {
+      return value + -8;
 
-    } else if (value < 8104) {
-       return value + 0;
+   } else if (value < 8031) {
+      return value + 0;
 
-    } else if (value < 8112) {
-       return value + -8;
+   } else if (value < 8032) {
+      return value + -8;
 
-    } else if (value < 8120) {
-       return value + 0;
+   } else if (value < 8040) {
+      return value + 0;
 
-    } else if (value < 8122) {
-       return value + -8;
+   } else if (value < 8048) {
+      return value + -8;
 
-    } else if (value < 8124) {
-       return value + -74;
+   } else if (value < 8072) {
+      return value + 0;
 
-    } else if (value < 8125) {
-       return value + -9;
+   } else if (value < 8080) {
+      return value + -8;
 
-    } else if (value < 8136) {
-       return value + 0;
+   } else if (value < 8088) {
+      return value + 0;
 
-    } else if (value < 8140) {
-       return value + -86;
+   } else if (value < 8096) {
+      return value + -8;
 
-    } else if (value < 8141) {
-       return value + -9;
+   } else if (value < 8104) {
+      return value + 0;
 
-    } else if (value < 8152) {
-       return value + 0;
+   } else if (value < 8112) {
+      return value + -8;
 
-    } else if (value < 8154) {
-       return value + -8;
+   } else if (value < 8120) {
+      return value + 0;
 
-    } else if (value < 8156) {
-       return value + -100;
+   } else if (value < 8122) {
+      return value + -8;
 
-    } else if (value < 8168) {
-       return value + 0;
+   } else if (value < 8124) {
+      return value + -74;
 
-    } else if (value < 8170) {
-       return value + -8;
+   } else if (value < 8125) {
+      return value + -9;
 
-    } else if (value < 8172) {
-       return value + -112;
+   } else if (value < 8136) {
+      return value + 0;
 
-    } else if (value < 8173) {
-       return value + -7;
+   } else if (value < 8140) {
+      return value + -86;
 
-    } else if (value < 8184) {
-       return value + 0;
+   } else if (value < 8141) {
+      return value + -9;
 
-    } else if (value < 8186) {
-       return value + -128;
+   } else if (value < 8152) {
+      return value + 0;
 
-    } else if (value < 8188) {
-       return value + -126;
+   } else if (value < 8154) {
+      return value + -8;
 
-    } else if (value < 8189) {
-       return value + -9;
+   } else if (value < 8156) {
+      return value + -100;
 
-    } else if (value < 8486) {
-       return value + 0;
+   } else if (value < 8168) {
+      return value + 0;
 
-    } else if (value < 8487) {
-       return value + -7517;
+   } else if (value < 8170) {
+      return value + -8;
 
-    } else if (value < 8490) {
-       return value + 0;
+   } else if (value < 8172) {
+      return value + -112;
 
-    } else if (value < 8491) {
-       return value + -8383;
+   } else if (value < 8173) {
+      return value + -7;
 
-    } else if (value < 8492) {
-       return value + -8262;
+   } else if (value < 8184) {
+      return value + 0;
 
-    } else if (value < 8498) {
-       return value + 0;
+   } else if (value < 8186) {
+      return value + -128;
 
-    } else if (value < 8499) {
-       return value + 28;
+   } else if (value < 8188) {
+      return value + -126;
 
-    } else if (value < 8544) {
-       return value + 0;
+   } else if (value < 8189) {
+      return value + -9;
 
-    } else if (value < 8560) {
-       return value + 16;
+   } else if (value < 8486) {
+      return value + 0;
 
-    } else if (value < 8579) {
-       return value + 0;
+   } else if (value < 8487) {
+      return value + -7517;
 
-    } else if (value < 8580) {
-       return value + 1;
+   } else if (value < 8490) {
+      return value + 0;
 
-    } else if (value < 9398) {
-       return value + 0;
+   } else if (value < 8491) {
+      return value + -8383;
 
-    } else if (value < 9424) {
-       return value + 26;
+   } else if (value < 8492) {
+      return value + -8262;
 
-    } else if (value < 11264) {
-       return value + 0;
+   } else if (value < 8498) {
+      return value + 0;
 
-    } else if (value < 11311) {
-       return value + 48;
+   } else if (value < 8499) {
+      return value + 28;
 
-    } else if (value < 11360) {
-       return value + 0;
+   } else if (value < 8544) {
+      return value + 0;
 
-    } else if (value < 11361) {
-       return value + 1;
+   } else if (value < 8560) {
+      return value + 16;
 
-    } else if (value < 11362) {
-       return value + 0;
+   } else if (value < 8579) {
+      return value + 0;
 
-    } else if (value < 11363) {
-       return value + -10743;
+   } else if (value < 8580) {
+      return value + 1;
 
-    } else if (value < 11364) {
-       return value + -3814;
+   } else if (value < 9398) {
+      return value + 0;
 
-    } else if (value < 11365) {
-       return value + -10727;
+   } else if (value < 9424) {
+      return value + 26;
 
-    } else if (value < 11367) {
-       return value + 0;
+   } else if (value < 11264) {
+      return value + 0;
 
-    } else if (value < 11368) {
-       return value + 1;
+   } else if (value < 11311) {
+      return value + 48;
 
-    } else if (value < 11369) {
-       return value + 0;
+   } else if (value < 11360) {
+      return value + 0;
 
-    } else if (value < 11370) {
-       return value + 1;
+   } else if (value < 11361) {
+      return value + 1;
 
-    } else if (value < 11371) {
-       return value + 0;
+   } else if (value < 11362) {
+      return value + 0;
 
-    } else if (value < 11372) {
-       return value + 1;
+   } else if (value < 11363) {
+      return value + -10743;
 
-    } else if (value < 11373) {
-       return value + 0;
+   } else if (value < 11364) {
+      return value + -3814;
 
-    } else if (value < 11374) {
-       return value + -10780;
+   } else if (value < 11365) {
+      return value + -10727;
 
-    } else if (value < 11375) {
-       return value + -10749;
+   } else if (value < 11367) {
+      return value + 0;
 
-    } else if (value < 11376) {
-       return value + -10783;
+   } else if (value < 11368) {
+      return value + 1;
 
-    } else if (value < 11377) {
-       return value + -10782;
+   } else if (value < 11369) {
+      return value + 0;
 
-    } else if (value < 11378) {
-       return value + 0;
+   }
 
-    } else if (value < 11379) {
-       return value + 1;
+   if (value < 11370) {
+      return value + 1;
 
-    } else if (value < 11381) {
-       return value + 0;
+   } else if (value < 11371) {
+      return value + 0;
 
-    } else if (value < 11382) {
-       return value + 1;
+   } else if (value < 11372) {
+      return value + 1;
 
-    } else if (value < 11390) {
-       return value + 0;
+   } else if (value < 11373) {
+      return value + 0;
 
-    } else if (value < 11392) {
-       return value + -10815;
+   } else if (value < 11374) {
+      return value + -10780;
 
-    } else if (value < 11393) {
-       return value + 1;
+   } else if (value < 11375) {
+      return value + -10749;
 
-    } else if (value < 11394) {
-       return value + 0;
+   } else if (value < 11376) {
+      return value + -10783;
 
-    } else if (value < 11395) {
-       return value + 1;
+   } else if (value < 11377) {
+      return value + -10782;
 
-    } else if (value < 11396) {
-       return value + 0;
+   } else if (value < 11378) {
+      return value + 0;
 
-    } else if (value < 11397) {
-       return value + 1;
+   } else if (value < 11379) {
+      return value + 1;
 
-    } else if (value < 11398) {
-       return value + 0;
+   } else if (value < 11381) {
+      return value + 0;
 
-    } else if (value < 11399) {
-       return value + 1;
+   } else if (value < 11382) {
+      return value + 1;
 
-    } else if (value < 11400) {
-       return value + 0;
+   } else if (value < 11390) {
+      return value + 0;
 
-    } else if (value < 11401) {
-       return value + 1;
+   } else if (value < 11392) {
+      return value + -10815;
 
-    } else if (value < 11402) {
-       return value + 0;
+   } else if (value < 11393) {
+      return value + 1;
 
-    } else if (value < 11403) {
-       return value + 1;
+   } else if (value < 11394) {
+      return value + 0;
 
-    } else if (value < 11404) {
-       return value + 0;
+   } else if (value < 11395) {
+      return value + 1;
 
-    } else if (value < 11405) {
-       return value + 1;
+   } else if (value < 11396) {
+      return value + 0;
 
-    } else if (value < 11406) {
-       return value + 0;
+   } else if (value < 11397) {
+      return value + 1;
 
-    } else if (value < 11407) {
-       return value + 1;
+   } else if (value < 11398) {
+      return value + 0;
 
-    } else if (value < 11408) {
-       return value + 0;
+   } else if (value < 11399) {
+      return value + 1;
 
-    } else if (value < 11409) {
-       return value + 1;
+   } else if (value < 11400) {
+      return value + 0;
 
-    } else if (value < 11410) {
-       return value + 0;
+   } else if (value < 11401) {
+      return value + 1;
 
-    } else if (value < 11411) {
-       return value + 1;
+   } else if (value < 11402) {
+      return value + 0;
 
-    } else if (value < 11412) {
-       return value + 0;
+   } else if (value < 11403) {
+      return value + 1;
 
-    } else if (value < 11413) {
-       return value + 1;
+   } else if (value < 11404) {
+      return value + 0;
 
-    } else if (value < 11414) {
-       return value + 0;
+   } else if (value < 11405) {
+      return value + 1;
 
-    } else if (value < 11415) {
-       return value + 1;
+   } else if (value < 11406) {
+      return value + 0;
 
-    } else if (value < 11416) {
-       return value + 0;
+   } else if (value < 11407) {
+      return value + 1;
 
-    } else if (value < 11417) {
-       return value + 1;
+   } else if (value < 11408) {
+      return value + 0;
 
-    } else if (value < 11418) {
-       return value + 0;
+   } else if (value < 11409) {
+      return value + 1;
 
-    } else if (value < 11419) {
-       return value + 1;
+   } else if (value < 11410) {
+      return value + 0;
 
-    } else if (value < 11420) {
-       return value + 0;
+   } else if (value < 11411) {
+      return value + 1;
 
-    } else if (value < 11421) {
-       return value + 1;
+   } else if (value < 11412) {
+      return value + 0;
 
-    } else if (value < 11422) {
-       return value + 0;
+   } else if (value < 11413) {
+      return value + 1;
 
-    } else if (value < 11423) {
-       return value + 1;
+   } else if (value < 11414) {
+      return value + 0;
 
-    } else if (value < 11424) {
-       return value + 0;
+   } else if (value < 11415) {
+      return value + 1;
 
-    } else if (value < 11425) {
-       return value + 1;
+   } else if (value < 11416) {
+      return value + 0;
 
-    } else if (value < 11426) {
-       return value + 0;
+   } else if (value < 11417) {
+      return value + 1;
 
-    } else if (value < 11427) {
-       return value + 1;
+   } else if (value < 11418) {
+      return value + 0;
 
-    } else if (value < 11428) {
-       return value + 0;
+   } else if (value < 11419) {
+      return value + 1;
 
-    } else if (value < 11429) {
-       return value + 1;
+   } else if (value < 11420) {
+      return value + 0;
 
-    } else if (value < 11430) {
-       return value + 0;
+   } else if (value < 11421) {
+      return value + 1;
 
-    } else if (value < 11431) {
-       return value + 1;
+   } else if (value < 11422) {
+      return value + 0;
 
-    } else if (value < 11432) {
-       return value + 0;
+   } else if (value < 11423) {
+      return value + 1;
 
-    } else if (value < 11433) {
-       return value + 1;
+   } else if (value < 11424) {
+      return value + 0;
 
-    } else if (value < 11434) {
-       return value + 0;
+   } else if (value < 11425) {
+      return value + 1;
 
-    } else if (value < 11435) {
-       return value + 1;
+   } else if (value < 11426) {
+      return value + 0;
 
-    } else if (value < 11436) {
-       return value + 0;
+   } else if (value < 11427) {
+      return value + 1;
 
-    } else if (value < 11437) {
-       return value + 1;
+   } else if (value < 11428) {
+      return value + 0;
 
-    } else if (value < 11438) {
-       return value + 0;
+   } else if (value < 11429) {
+      return value + 1;
 
-    } else if (value < 11439) {
-       return value + 1;
+   } else if (value < 11430) {
+      return value + 0;
 
-    } else if (value < 11440) {
-       return value + 0;
+   } else if (value < 11431) {
+      return value + 1;
 
-    } else if (value < 11441) {
-       return value + 1;
+   } else if (value < 11432) {
+      return value + 0;
 
-    } else if (value < 11442) {
-       return value + 0;
+   } else if (value < 11433) {
+      return value + 1;
 
-    } else if (value < 11443) {
-       return value + 1;
+   } else if (value < 11434) {
+      return value + 0;
 
-    } else if (value < 11444) {
-       return value + 0;
+   } else if (value < 11435) {
+      return value + 1;
 
-    } else if (value < 11445) {
-       return value + 1;
+   } else if (value < 11436) {
+      return value + 0;
 
-    } else if (value < 11446) {
-       return value + 0;
+   } else if (value < 11437) {
+      return value + 1;
 
-    } else if (value < 11447) {
-       return value + 1;
+   } else if (value < 11438) {
+      return value + 0;
 
-    } else if (value < 11448) {
-       return value + 0;
+   } else if (value < 11439) {
+      return value + 1;
 
-    } else if (value < 11449) {
-       return value + 1;
+   } else if (value < 11440) {
+      return value + 0;
 
-    } else if (value < 11450) {
-       return value + 0;
+   } else if (value < 11441) {
+      return value + 1;
 
-    } else if (value < 11451) {
-       return value + 1;
+   } else if (value < 11442) {
+      return value + 0;
 
-    } else if (value < 11452) {
-       return value + 0;
+   } else if (value < 11443) {
+      return value + 1;
 
-    } else if (value < 11453) {
-       return value + 1;
+   } else if (value < 11444) {
+      return value + 0;
 
-    } else if (value < 11454) {
-       return value + 0;
+   } else if (value < 11445) {
+      return value + 1;
 
-    } else if (value < 11455) {
-       return value + 1;
+   } else if (value < 11446) {
+      return value + 0;
 
-    } else if (value < 11456) {
-       return value + 0;
+   } else if (value < 11447) {
+      return value + 1;
 
-    } else if (value < 11457) {
-       return value + 1;
+   } else if (value < 11448) {
+      return value + 0;
 
-    } else if (value < 11458) {
-       return value + 0;
+   } else if (value < 11449) {
+      return value + 1;
 
-    } else if (value < 11459) {
-       return value + 1;
+   } else if (value < 11450) {
+      return value + 0;
 
-    } else if (value < 11460) {
-       return value + 0;
+   } else if (value < 11451) {
+      return value + 1;
 
-    } else if (value < 11461) {
-       return value + 1;
+   } else if (value < 11452) {
+      return value + 0;
 
-    } else if (value < 11462) {
-       return value + 0;
+   } else if (value < 11453) {
+      return value + 1;
 
-    } else if (value < 11463) {
-       return value + 1;
+   } else if (value < 11454) {
+      return value + 0;
 
-    } else if (value < 11464) {
-       return value + 0;
+   } else if (value < 11455) {
+      return value + 1;
 
-    } else if (value < 11465) {
-       return value + 1;
+   } else if (value < 11456) {
+      return value + 0;
 
-    } else if (value < 11466) {
-       return value + 0;
+   } else if (value < 11457) {
+      return value + 1;
 
-    } else if (value < 11467) {
-       return value + 1;
+   } else if (value < 11458) {
+      return value + 0;
 
-    } else if (value < 11468) {
-       return value + 0;
+   } else if (value < 11459) {
+      return value + 1;
 
-    } else if (value < 11469) {
-       return value + 1;
+   } else if (value < 11460) {
+      return value + 0;
 
-    } else if (value < 11470) {
-       return value + 0;
+   } else if (value < 11461) {
+      return value + 1;
 
-    } else if (value < 11471) {
-       return value + 1;
+   } else if (value < 11462) {
+      return value + 0;
 
-    } else if (value < 11472) {
-       return value + 0;
+   } else if (value < 11463) {
+      return value + 1;
 
-    } else if (value < 11473) {
-       return value + 1;
+   } else if (value < 11464) {
+      return value + 0;
 
-    } else if (value < 11474) {
-       return value + 0;
+   } else if (value < 11465) {
+      return value + 1;
 
-    } else if (value < 11475) {
-       return value + 1;
+   } else if (value < 11466) {
+      return value + 0;
 
-    } else if (value < 11476) {
-       return value + 0;
+   } else if (value < 11467) {
+      return value + 1;
 
-    } else if (value < 11477) {
-       return value + 1;
+   } else if (value < 11468) {
+      return value + 0;
 
-    } else if (value < 11478) {
-       return value + 0;
+   } else if (value < 11469) {
+      return value + 1;
 
-    } else if (value < 11479) {
-       return value + 1;
+   } else if (value < 11470) {
+      return value + 0;
 
-    } else if (value < 11480) {
-       return value + 0;
+   } else if (value < 11471) {
+      return value + 1;
 
-    } else if (value < 11481) {
-       return value + 1;
+   } else if (value < 11472) {
+      return value + 0;
 
-    } else if (value < 11482) {
-       return value + 0;
+   } else if (value < 11473) {
+      return value + 1;
 
-    } else if (value < 11483) {
-       return value + 1;
+   } else if (value < 11474) {
+      return value + 0;
 
-    } else if (value < 11484) {
-       return value + 0;
+   } else if (value < 11475) {
+      return value + 1;
 
-    } else if (value < 11485) {
-       return value + 1;
+   } else if (value < 11476) {
+      return value + 0;
 
-    } else if (value < 11486) {
-       return value + 0;
+   } else if (value < 11477) {
+      return value + 1;
 
-    } else if (value < 11487) {
-       return value + 1;
+   } else if (value < 11478) {
+      return value + 0;
 
-    } else if (value < 11488) {
-       return value + 0;
+   }
 
-    } else if (value < 11489) {
-       return value + 1;
+   if (value < 11479) {
+      return value + 1;
 
-    } else if (value < 11490) {
-       return value + 0;
+   } else if (value < 11480) {
+      return value + 0;
 
-    } else if (value < 11491) {
-       return value + 1;
+   } else if (value < 11481) {
+      return value + 1;
 
-    } else if (value < 11499) {
-       return value + 0;
+   } else if (value < 11482) {
+      return value + 0;
 
-    } else if (value < 11500) {
-       return value + 1;
+   } else if (value < 11483) {
+      return value + 1;
 
-    } else if (value < 11501) {
-       return value + 0;
+   } else if (value < 11484) {
+      return value + 0;
 
-    } else if (value < 11502) {
-       return value + 1;
+   } else if (value < 11485) {
+      return value + 1;
 
-    } else if (value < 11506) {
-       return value + 0;
+   } else if (value < 11486) {
+      return value + 0;
 
-    } else if (value < 11507) {
-       return value + 1;
+   } else if (value < 11487) {
+      return value + 1;
 
-    } else if (value < 42560) {
-       return value + 0;
+   } else if (value < 11488) {
+      return value + 0;
 
-    } else if (value < 42561) {
-       return value + 1;
+   } else if (value < 11489) {
+      return value + 1;
 
-    } else if (value < 42562) {
-       return value + 0;
+   } else if (value < 11490) {
+      return value + 0;
 
-    } else if (value < 42563) {
-       return value + 1;
+   } else if (value < 11491) {
+      return value + 1;
 
-    } else if (value < 42564) {
-       return value + 0;
+   } else if (value < 11499) {
+      return value + 0;
 
-    } else if (value < 42565) {
-       return value + 1;
+   } else if (value < 11500) {
+      return value + 1;
 
-    } else if (value < 42566) {
-       return value + 0;
+   } else if (value < 11501) {
+      return value + 0;
 
-    } else if (value < 42567) {
-       return value + 1;
+   } else if (value < 11502) {
+      return value + 1;
 
-    } else if (value < 42568) {
-       return value + 0;
+   } else if (value < 11506) {
+      return value + 0;
 
-    } else if (value < 42569) {
-       return value + 1;
+   } else if (value < 11507) {
+      return value + 1;
 
-    } else if (value < 42570) {
-       return value + 0;
+   } else if (value < 42560) {
+      return value + 0;
 
-    } else if (value < 42571) {
-       return value + 1;
+   } else if (value < 42561) {
+      return value + 1;
 
-    } else if (value < 42572) {
-       return value + 0;
+   } else if (value < 42562) {
+      return value + 0;
 
-    } else if (value < 42573) {
-       return value + 1;
+   } else if (value < 42563) {
+      return value + 1;
 
-    } else if (value < 42574) {
-       return value + 0;
+   } else if (value < 42564) {
+      return value + 0;
 
-    } else if (value < 42575) {
-       return value + 1;
+   } else if (value < 42565) {
+      return value + 1;
 
-    } else if (value < 42576) {
-       return value + 0;
+   } else if (value < 42566) {
+      return value + 0;
 
-    } else if (value < 42577) {
-       return value + 1;
+   } else if (value < 42567) {
+      return value + 1;
 
-    } else if (value < 42578) {
-       return value + 0;
+   } else if (value < 42568) {
+      return value + 0;
 
-    } else if (value < 42579) {
-       return value + 1;
+   } else if (value < 42569) {
+      return value + 1;
 
-    } else if (value < 42580) {
-       return value + 0;
+   } else if (value < 42570) {
+      return value + 0;
 
-    } else if (value < 42581) {
-       return value + 1;
+   } else if (value < 42571) {
+      return value + 1;
 
-    } else if (value < 42582) {
-       return value + 0;
+   } else if (value < 42572) {
+      return value + 0;
 
-    } else if (value < 42583) {
-       return value + 1;
+   } else if (value < 42573) {
+      return value + 1;
 
-    } else if (value < 42584) {
-       return value + 0;
+   } else if (value < 42574) {
+      return value + 0;
 
-    } else if (value < 42585) {
-       return value + 1;
+   } else if (value < 42575) {
+      return value + 1;
 
-    } else if (value < 42586) {
-       return value + 0;
+   } else if (value < 42576) {
+      return value + 0;
 
-    } else if (value < 42587) {
-       return value + 1;
+   } else if (value < 42577) {
+      return value + 1;
 
-    } else if (value < 42588) {
-       return value + 0;
+   } else if (value < 42578) {
+      return value + 0;
 
-    } else if (value < 42589) {
-       return value + 1;
+   } else if (value < 42579) {
+      return value + 1;
 
-    } else if (value < 42590) {
-       return value + 0;
+   } else if (value < 42580) {
+      return value + 0;
 
-    } else if (value < 42591) {
-       return value + 1;
+   } else if (value < 42581) {
+      return value + 1;
 
-    } else if (value < 42592) {
-       return value + 0;
+   } else if (value < 42582) {
+      return value + 0;
 
-    } else if (value < 42593) {
-       return value + 1;
+   } else if (value < 42583) {
+      return value + 1;
 
-    } else if (value < 42594) {
-       return value + 0;
+   } else if (value < 42584) {
+      return value + 0;
 
-    } else if (value < 42595) {
-       return value + 1;
+   } else if (value < 42585) {
+      return value + 1;
 
-    } else if (value < 42596) {
-       return value + 0;
+   } else if (value < 42586) {
+      return value + 0;
 
-    } else if (value < 42597) {
-       return value + 1;
+   } else if (value < 42587) {
+      return value + 1;
 
-    } else if (value < 42598) {
-       return value + 0;
+   } else if (value < 42588) {
+      return value + 0;
 
-    } else if (value < 42599) {
-       return value + 1;
+   } else if (value < 42589) {
+      return value + 1;
 
-    } else if (value < 42600) {
-       return value + 0;
+   } else if (value < 42590) {
+      return value + 0;
 
-    } else if (value < 42601) {
-       return value + 1;
+   } else if (value < 42591) {
+      return value + 1;
 
-    } else if (value < 42602) {
-       return value + 0;
+   } else if (value < 42592) {
+      return value + 0;
 
-    } else if (value < 42603) {
-       return value + 1;
+   } else if (value < 42593) {
+      return value + 1;
 
-    } else if (value < 42604) {
-       return value + 0;
+   } else if (value < 42594) {
+      return value + 0;
 
-    } else if (value < 42605) {
-       return value + 1;
+   } else if (value < 42595) {
+      return value + 1;
 
-    } else if (value < 42624) {
-       return value + 0;
+   } else if (value < 42596) {
+      return value + 0;
 
-    } else if (value < 42625) {
-       return value + 1;
+   } else if (value < 42597) {
+      return value + 1;
 
-    } else if (value < 42626) {
-       return value + 0;
+   } else if (value < 42598) {
+      return value + 0;
 
-    } else if (value < 42627) {
-       return value + 1;
+   } else if (value < 42599) {
+      return value + 1;
 
-    } else if (value < 42628) {
-       return value + 0;
+   } else if (value < 42600) {
+      return value + 0;
 
-    } else if (value < 42629) {
-       return value + 1;
+   } else if (value < 42601) {
+      return value + 1;
 
-    } else if (value < 42630) {
-       return value + 0;
+   } else if (value < 42602) {
+      return value + 0;
 
-    } else if (value < 42631) {
-       return value + 1;
+   } else if (value < 42603) {
+      return value + 1;
 
-    } else if (value < 42632) {
-       return value + 0;
+   } else if (value < 42604) {
+      return value + 0;
 
-    } else if (value < 42633) {
-       return value + 1;
+   } else if (value < 42605) {
+      return value + 1;
 
-    } else if (value < 42634) {
-       return value + 0;
+   } else if (value < 42624) {
+      return value + 0;
 
-    } else if (value < 42635) {
-       return value + 1;
+   } else if (value < 42625) {
+      return value + 1;
 
-    } else if (value < 42636) {
-       return value + 0;
+   } else if (value < 42626) {
+      return value + 0;
 
-    } else if (value < 42637) {
-       return value + 1;
+   } else if (value < 42627) {
+      return value + 1;
 
-    } else if (value < 42638) {
-       return value + 0;
+   } else if (value < 42628) {
+      return value + 0;
 
-    } else if (value < 42639) {
-       return value + 1;
+   } else if (value < 42629) {
+      return value + 1;
 
-    } else if (value < 42640) {
-       return value + 0;
+   } else if (value < 42630) {
+      return value + 0;
 
-    } else if (value < 42641) {
-       return value + 1;
+   } else if (value < 42631) {
+      return value + 1;
 
-    } else if (value < 42642) {
-       return value + 0;
+   } else if (value < 42632) {
+      return value + 0;
 
-    } else if (value < 42643) {
-       return value + 1;
+   } else if (value < 42633) {
+      return value + 1;
 
-    } else if (value < 42644) {
-       return value + 0;
+   } else if (value < 42634) {
+      return value + 0;
 
-    } else if (value < 42645) {
-       return value + 1;
+   } else if (value < 42635) {
+      return value + 1;
 
-    } else if (value < 42646) {
-       return value + 0;
+   } else if (value < 42636) {
+      return value + 0;
 
-    } else if (value < 42647) {
-       return value + 1;
+   } else if (value < 42637) {
+      return value + 1;
 
-    } else if (value < 42648) {
-       return value + 0;
+   } else if (value < 42638) {
+      return value + 0;
 
-    } else if (value < 42649) {
-       return value + 1;
+   } else if (value < 42639) {
+      return value + 1;
 
-    } else if (value < 42650) {
-       return value + 0;
+   } else if (value < 42640) {
+      return value + 0;
 
-    } else if (value < 42651) {
-       return value + 1;
+   } else if (value < 42641) {
+      return value + 1;
 
-    } else if (value < 42786) {
-       return value + 0;
+   } else if (value < 42642) {
+      return value + 0;
 
-    } else if (value < 42787) {
-       return value + 1;
+   } else if (value < 42643) {
+      return value + 1;
 
-    } else if (value < 42788) {
-       return value + 0;
+   } else if (value < 42644) {
+      return value + 0;
 
-    } else if (value < 42789) {
-       return value + 1;
+   } else if (value < 42645) {
+      return value + 1;
 
-    } else if (value < 42790) {
-       return value + 0;
+   } else if (value < 42646) {
+      return value + 0;
 
-    } else if (value < 42791) {
-       return value + 1;
+   } else if (value < 42647) {
+      return value + 1;
 
-    } else if (value < 42792) {
-       return value + 0;
+   } else if (value < 42648) {
+      return value + 0;
 
-    } else if (value < 42793) {
-       return value + 1;
+   } else if (value < 42649) {
+      return value + 1;
 
-    } else if (value < 42794) {
-       return value + 0;
+   } else if (value < 42650) {
+      return value + 0;
 
-    } else if (value < 42795) {
-       return value + 1;
+   } else if (value < 42651) {
+      return value + 1;
 
-    } else if (value < 42796) {
-       return value + 0;
+   } else if (value < 42786) {
+      return value + 0;
 
-    } else if (value < 42797) {
-       return value + 1;
+   } else if (value < 42787) {
+      return value + 1;
 
-    } else if (value < 42798) {
-       return value + 0;
+   } else if (value < 42788) {
+      return value + 0;
 
-    } else if (value < 42799) {
-       return value + 1;
+   } else if (value < 42789) {
+      return value + 1;
 
-    } else if (value < 42802) {
-       return value + 0;
+   } else if (value < 42790) {
+      return value + 0;
 
-    } else if (value < 42803) {
-       return value + 1;
+   } else if (value < 42791) {
+      return value + 1;
 
-    } else if (value < 42804) {
-       return value + 0;
+   } else if (value < 42792) {
+      return value + 0;
 
-    } else if (value < 42805) {
-       return value + 1;
+   }
 
-    } else if (value < 42806) {
-       return value + 0;
+   if (value < 42793) {
+      return value + 1;
 
-    } else if (value < 42807) {
-       return value + 1;
+   } else if (value < 42794) {
+      return value + 0;
 
-    } else if (value < 42808) {
-       return value + 0;
+   } else if (value < 42795) {
+      return value + 1;
 
-    } else if (value < 42809) {
-       return value + 1;
+   } else if (value < 42796) {
+      return value + 0;
 
-    } else if (value < 42810) {
-       return value + 0;
+   } else if (value < 42797) {
+      return value + 1;
 
-    } else if (value < 42811) {
-       return value + 1;
+   } else if (value < 42798) {
+      return value + 0;
 
-    } else if (value < 42812) {
-       return value + 0;
+   } else if (value < 42799) {
+      return value + 1;
 
-    } else if (value < 42813) {
-       return value + 1;
+   } else if (value < 42802) {
+      return value + 0;
 
-    } else if (value < 42814) {
-       return value + 0;
+   } else if (value < 42803) {
+      return value + 1;
 
-    } else if (value < 42815) {
-       return value + 1;
+   } else if (value < 42804) {
+      return value + 0;
 
-    } else if (value < 42816) {
-       return value + 0;
+   } else if (value < 42805) {
+      return value + 1;
 
-    } else if (value < 42817) {
-       return value + 1;
+   } else if (value < 42806) {
+      return value + 0;
 
-    } else if (value < 42818) {
-       return value + 0;
+   } else if (value < 42807) {
+      return value + 1;
 
-    } else if (value < 42819) {
-       return value + 1;
+   } else if (value < 42808) {
+      return value + 0;
 
-    } else if (value < 42820) {
-       return value + 0;
+   } else if (value < 42809) {
+      return value + 1;
 
-    } else if (value < 42821) {
-       return value + 1;
+   } else if (value < 42810) {
+      return value + 0;
 
-    } else if (value < 42822) {
-       return value + 0;
+   } else if (value < 42811) {
+      return value + 1;
 
-    } else if (value < 42823) {
-       return value + 1;
+   } else if (value < 42812) {
+      return value + 0;
 
-    } else if (value < 42824) {
-       return value + 0;
+   } else if (value < 42813) {
+      return value + 1;
 
-    } else if (value < 42825) {
-       return value + 1;
+   } else if (value < 42814) {
+      return value + 0;
 
-    } else if (value < 42826) {
-       return value + 0;
+   } else if (value < 42815) {
+      return value + 1;
 
-    } else if (value < 42827) {
-       return value + 1;
+   } else if (value < 42816) {
+      return value + 0;
 
-    } else if (value < 42828) {
-       return value + 0;
+   } else if (value < 42817) {
+      return value + 1;
 
-    } else if (value < 42829) {
-       return value + 1;
+   } else if (value < 42818) {
+      return value + 0;
 
-    } else if (value < 42830) {
-       return value + 0;
+   } else if (value < 42819) {
+      return value + 1;
 
-    } else if (value < 42831) {
-       return value + 1;
+   } else if (value < 42820) {
+      return value + 0;
 
-    } else if (value < 42832) {
-       return value + 0;
+   } else if (value < 42821) {
+      return value + 1;
 
-    } else if (value < 42833) {
-       return value + 1;
+   } else if (value < 42822) {
+      return value + 0;
 
-    } else if (value < 42834) {
-       return value + 0;
+   } else if (value < 42823) {
+      return value + 1;
 
-    } else if (value < 42835) {
-       return value + 1;
+   } else if (value < 42824) {
+      return value + 0;
 
-    } else if (value < 42836) {
-       return value + 0;
+   } else if (value < 42825) {
+      return value + 1;
 
-    } else if (value < 42837) {
-       return value + 1;
+   } else if (value < 42826) {
+      return value + 0;
 
-    } else if (value < 42838) {
-       return value + 0;
+   } else if (value < 42827) {
+      return value + 1;
 
-    } else if (value < 42839) {
-       return value + 1;
+   } else if (value < 42828) {
+      return value + 0;
 
-    } else if (value < 42840) {
-       return value + 0;
+   } else if (value < 42829) {
+      return value + 1;
 
-    } else if (value < 42841) {
-       return value + 1;
+   } else if (value < 42830) {
+      return value + 0;
 
-    } else if (value < 42842) {
-       return value + 0;
+   } else if (value < 42831) {
+      return value + 1;
 
-    } else if (value < 42843) {
-       return value + 1;
+   } else if (value < 42832) {
+      return value + 0;
 
-    } else if (value < 42844) {
-       return value + 0;
+   } else if (value < 42833) {
+      return value + 1;
 
-    } else if (value < 42845) {
-       return value + 1;
+   } else if (value < 42834) {
+      return value + 0;
 
-    } else if (value < 42846) {
-       return value + 0;
+   } else if (value < 42835) {
+      return value + 1;
 
-    } else if (value < 42847) {
-       return value + 1;
+   } else if (value < 42836) {
+      return value + 0;
 
-    } else if (value < 42848) {
-       return value + 0;
+   } else if (value < 42837) {
+      return value + 1;
 
-    } else if (value < 42849) {
-       return value + 1;
+   } else if (value < 42838) {
+      return value + 0;
 
-    } else if (value < 42850) {
-       return value + 0;
+   } else if (value < 42839) {
+      return value + 1;
 
-    } else if (value < 42851) {
-       return value + 1;
+   } else if (value < 42840) {
+      return value + 0;
 
-    } else if (value < 42852) {
-       return value + 0;
+   } else if (value < 42841) {
+      return value + 1;
 
-    } else if (value < 42853) {
-       return value + 1;
+   } else if (value < 42842) {
+      return value + 0;
 
-    } else if (value < 42854) {
-       return value + 0;
+   } else if (value < 42843) {
+      return value + 1;
 
-    } else if (value < 42855) {
-       return value + 1;
+   } else if (value < 42844) {
+      return value + 0;
 
-    } else if (value < 42856) {
-       return value + 0;
+   } else if (value < 42845) {
+      return value + 1;
 
-    } else if (value < 42857) {
-       return value + 1;
+   } else if (value < 42846) {
+      return value + 0;
 
-    } else if (value < 42858) {
-       return value + 0;
+   } else if (value < 42847) {
+      return value + 1;
 
-    } else if (value < 42859) {
-       return value + 1;
+   } else if (value < 42848) {
+      return value + 0;
 
-    } else if (value < 42860) {
-       return value + 0;
+   } else if (value < 42849) {
+      return value + 1;
 
-    } else if (value < 42861) {
-       return value + 1;
+   } else if (value < 42850) {
+      return value + 0;
 
-    } else if (value < 42862) {
-       return value + 0;
+   } else if (value < 42851) {
+      return value + 1;
 
-    } else if (value < 42863) {
-       return value + 1;
+   } else if (value < 42852) {
+      return value + 0;
 
-    } else if (value < 42873) {
-       return value + 0;
+   } else if (value < 42853) {
+      return value + 1;
 
-    } else if (value < 42874) {
-       return value + 1;
+   } else if (value < 42854) {
+      return value + 0;
 
-    } else if (value < 42875) {
-       return value + 0;
+   } else if (value < 42855) {
+      return value + 1;
 
-    } else if (value < 42876) {
-       return value + 1;
+   } else if (value < 42856) {
+      return value + 0;
 
-    } else if (value < 42877) {
-       return value + 0;
+   } else if (value < 42857) {
+      return value + 1;
 
-    } else if (value < 42878) {
-       return value + -35332;
+   } else if (value < 42858) {
+      return value + 0;
 
-    } else if (value < 42879) {
-       return value + 1;
+   } else if (value < 42859) {
+      return value + 1;
 
-    } else if (value < 42880) {
-       return value + 0;
+   } else if (value < 42860) {
+      return value + 0;
 
-    } else if (value < 42881) {
-       return value + 1;
+   } else if (value < 42861) {
+      return value + 1;
 
-    } else if (value < 42882) {
-       return value + 0;
+   } else if (value < 42862) {
+      return value + 0;
 
-    } else if (value < 42883) {
-       return value + 1;
+   } else if (value < 42863) {
+      return value + 1;
 
-    } else if (value < 42884) {
-       return value + 0;
+   } else if (value < 42873) {
+      return value + 0;
 
-    } else if (value < 42885) {
-       return value + 1;
+   } else if (value < 42874) {
+      return value + 1;
 
-    } else if (value < 42886) {
-       return value + 0;
+   } else if (value < 42875) {
+      return value + 0;
 
-    } else if (value < 42887) {
-       return value + 1;
+   } else if (value < 42876) {
+      return value + 1;
 
-    } else if (value < 42891) {
-       return value + 0;
+   } else if (value < 42877) {
+      return value + 0;
 
-    } else if (value < 42892) {
-       return value + 1;
+   } else if (value < 42878) {
+      return value + -35332;
 
-    } else if (value < 42893) {
-       return value + 0;
+   } else if (value < 42879) {
+      return value + 1;
 
-    } else if (value < 42894) {
-       return value + -42280;
+   } else if (value < 42880) {
+      return value + 0;
 
-    } else if (value < 42896) {
-       return value + 0;
+   } else if (value < 42881) {
+      return value + 1;
 
-    } else if (value < 42897) {
-       return value + 1;
+   } else if (value < 42882) {
+      return value + 0;
 
-    } else if (value < 42898) {
-       return value + 0;
+   } else if (value < 42883) {
+      return value + 1;
 
-    } else if (value < 42899) {
-       return value + 1;
+   } else if (value < 42884) {
+      return value + 0;
 
-    } else if (value < 42902) {
-       return value + 0;
+   } else if (value < 42885) {
+      return value + 1;
 
-    } else if (value < 42903) {
-       return value + 1;
+   } else if (value < 42886) {
+      return value + 0;
 
-    } else if (value < 42904) {
-       return value + 0;
+   } else if (value < 42887) {
+      return value + 1;
 
-    } else if (value < 42905) {
-       return value + 1;
+   } else if (value < 42891) {
+      return value + 0;
 
-    } else if (value < 42906) {
-       return value + 0;
+   } else if (value < 42892) {
+      return value + 1;
 
-    } else if (value < 42907) {
-       return value + 1;
+   } else if (value < 42893) {
+      return value + 0;
 
-    } else if (value < 42908) {
-       return value + 0;
+   } else if (value < 42894) {
+      return value + -42280;
 
-    } else if (value < 42909) {
-       return value + 1;
+   } else if (value < 42896) {
+      return value + 0;
 
-    } else if (value < 42910) {
-       return value + 0;
+   } else if (value < 42897) {
+      return value + 1;
 
-    } else if (value < 42911) {
-       return value + 1;
+   } else if (value < 42898) {
+      return value + 0;
 
-    } else if (value < 42912) {
-       return value + 0;
+   } else if (value < 42899) {
+      return value + 1;
 
-    } else if (value < 42913) {
-       return value + 1;
+   } else if (value < 42902) {
+      return value + 0;
 
-    } else if (value < 42914) {
-       return value + 0;
+   } else if (value < 42903) {
+      return value + 1;
 
-    } else if (value < 42915) {
-       return value + 1;
+   } else if (value < 42904) {
+      return value + 0;
 
-    } else if (value < 42916) {
-       return value + 0;
+   } else if (value < 42905) {
+      return value + 1;
 
-    } else if (value < 42917) {
-       return value + 1;
+   } else if (value < 42906) {
+      return value + 0;
 
-    } else if (value < 42918) {
-       return value + 0;
+   } else if (value < 42907) {
+      return value + 1;
 
-    } else if (value < 42919) {
-       return value + 1;
+   } else if (value < 42908) {
+      return value + 0;
 
-    } else if (value < 42920) {
-       return value + 0;
+   } else if (value < 42909) {
+      return value + 1;
 
-    } else if (value < 42921) {
-       return value + 1;
+   }
 
-    } else if (value < 42922) {
-       return value + 0;
+   if (value < 42910) {
+      return value + 0;
 
-    } else if (value < 42923) {
-       return value + -42308;
+   } else if (value < 42911) {
+      return value + 1;
 
-    } else if (value < 42924) {
-       return value + -42319;
+   } else if (value < 42912) {
+      return value + 0;
 
-    } else if (value < 42925) {
-       return value + -42315;
+   } else if (value < 42913) {
+      return value + 1;
 
-    } else if (value < 42926) {
-       return value + -42305;
+   } else if (value < 42914) {
+      return value + 0;
 
-    } else if (value < 42927) {
-       return value + -42308;
+   } else if (value < 42915) {
+      return value + 1;
 
-    } else if (value < 42928) {
-       return value + 0;
+   } else if (value < 42916) {
+      return value + 0;
 
-    } else if (value < 42929) {
-       return value + -42258;
+   } else if (value < 42917) {
+      return value + 1;
 
-    } else if (value < 42930) {
-       return value + -42282;
+   } else if (value < 42918) {
+      return value + 0;
 
-    } else if (value < 42931) {
-       return value + -42261;
+   } else if (value < 42919) {
+      return value + 1;
 
-    } else if (value < 42932) {
-       return value + 928;
+   } else if (value < 42920) {
+      return value + 0;
 
-    } else if (value < 42933) {
-       return value + 1;
+   } else if (value < 42921) {
+      return value + 1;
 
-    } else if (value < 42934) {
-       return value + 0;
+   } else if (value < 42922) {
+      return value + 0;
 
-    } else if (value < 42935) {
-       return value + 1;
+   } else if (value < 42923) {
+      return value + -42308;
 
-    } else if (value < 42936) {
-       return value + 0;
+   } else if (value < 42924) {
+      return value + -42319;
 
-    } else if (value < 42937) {
-       return value + 1;
+   } else if (value < 42925) {
+      return value + -42315;
 
-    } else if (value < 65313) {
-       return value + 0;
+   } else if (value < 42926) {
+      return value + -42305;
 
-    } else if (value < 65339) {
-       return value + 32;
+   } else if (value < 42927) {
+      return value + -42308;
 
-    } else if (value < 66560) {
-       return value + 0;
+   } else if (value < 42928) {
+      return value + 0;
 
-    } else if (value < 66600) {
-       return value + 40;
+   } else if (value < 42929) {
+      return value + -42258;
 
-    } else if (value < 66736) {
-       return value + 0;
+   } else if (value < 42930) {
+      return value + -42282;
 
-    } else if (value < 66772) {
-       return value + 40;
+   } else if (value < 42931) {
+      return value + -42261;
 
-    } else if (value < 68736) {
-       return value + 0;
+   } else if (value < 42932) {
+      return value + 928;
 
-    } else if (value < 68787) {
-       return value + 64;
+   } else if (value < 42933) {
+      return value + 1;
 
-    } else if (value < 71840) {
-       return value + 0;
+   } else if (value < 42934) {
+      return value + 0;
 
-    } else if (value < 71872) {
-       return value + 32;
+   } else if (value < 42935) {
+      return value + 1;
 
-    } else if (value < 93760) {
-       return value + 0;
+   } else if (value < 42936) {
+      return value + 0;
 
-    } else if (value < 93792) {
-       return value + 32;
+   } else if (value < 42937) {
+      return value + 1;
 
-    } else if (value < 125184) {
-       return value + 0;
+   } else if (value < 65313) {
+      return value + 0;
 
-    } else if (value < 125218) {
-       return value + 34;
+   } else if (value < 65339) {
+      return value + 32;
 
-    } else {
+   } else if (value < 66560) {
+      return value + 0;
+
+   } else if (value < 66600) {
+      return value + 40;
+
+   } else if (value < 66736) {
+      return value + 0;
+
+   } else if (value < 66772) {
+      return value + 40;
+
+   } else if (value < 68736) {
+      return value + 0;
+
+   } else if (value < 68787) {
+      return value + 64;
+
+   } else if (value < 71840) {
+      return value + 0;
+
+   } else if (value < 71872) {
+      return value + 32;
+
+   } else if (value < 93760) {
+      return value + 0;
+
+   } else if (value < 93792) {
+      return value + 32;
+
+   } else if (value < 125184) {
+      return value + 0;
+
+   } else if (value < 125218) {
+      return value + 34;
+
+   } else {
       return value;
    }
 }
 
 char32_t uc_titleCase(char32_t value)
 {
-    if (value < 97) {
-       return value + 0;
+   if (value < 97) {
+      return value + 0;
 
-    } else if (value < 123) {
-       return value + -32;
+   } else if (value < 123) {
+      return value + -32;
 
-    } else if (value < 181) {
-       return value + 0;
+   } else if (value < 181) {
+      return value + 0;
 
-    } else if (value < 182) {
-       return value + 743;
+   } else if (value < 182) {
+      return value + 743;
 
-    } else if (value == 223) {
-       // special char
-       return 0;
+   } else if (value == 223) {
+      // special char
+      return 0;
 
-    } else if (value < 224) {
-       return value + 0;
+   } else if (value < 224) {
+      return value + 0;
 
-    } else if (value < 247) {
-       return value + -32;
+   } else if (value < 247) {
+      return value + -32;
 
-    } else if (value < 248) {
-       return value + 0;
+   } else if (value < 248) {
+      return value + 0;
 
-    } else if (value < 255) {
-       return value + -32;
+   } else if (value < 255) {
+      return value + -32;
 
-    } else if (value < 256) {
-       return value + 121;
+   } else if (value < 256) {
+      return value + 121;
 
-    } else if (value < 257) {
-       return value + 0;
+   } else if (value < 257) {
+      return value + 0;
 
-    } else if (value < 258) {
-       return value + -1;
+   } else if (value < 258) {
+      return value + -1;
 
-    } else if (value < 259) {
-       return value + 0;
+   } else if (value < 259) {
+      return value + 0;
 
-    } else if (value < 260) {
-       return value + -1;
+   } else if (value < 260) {
+      return value + -1;
 
-    } else if (value < 261) {
-       return value + 0;
+   } else if (value < 261) {
+      return value + 0;
 
-    } else if (value < 262) {
-       return value + -1;
+   } else if (value < 262) {
+      return value + -1;
 
-    } else if (value < 263) {
-       return value + 0;
+   } else if (value < 263) {
+      return value + 0;
 
-    } else if (value < 264) {
-       return value + -1;
+   } else if (value < 264) {
+      return value + -1;
 
-    } else if (value < 265) {
-       return value + 0;
+   } else if (value < 265) {
+      return value + 0;
 
-    } else if (value < 266) {
-       return value + -1;
+   } else if (value < 266) {
+      return value + -1;
 
-    } else if (value < 267) {
-       return value + 0;
+   } else if (value < 267) {
+      return value + 0;
 
-    } else if (value < 268) {
-       return value + -1;
+   } else if (value < 268) {
+      return value + -1;
 
-    } else if (value < 269) {
-       return value + 0;
+   } else if (value < 269) {
+      return value + 0;
 
-    } else if (value < 270) {
-       return value + -1;
+   } else if (value < 270) {
+      return value + -1;
 
-    } else if (value < 271) {
-       return value + 0;
+   } else if (value < 271) {
+      return value + 0;
 
-    } else if (value < 272) {
-       return value + -1;
+   } else if (value < 272) {
+      return value + -1;
 
-    } else if (value < 273) {
-       return value + 0;
+   } else if (value < 273) {
+      return value + 0;
 
-    } else if (value < 274) {
-       return value + -1;
+   } else if (value < 274) {
+      return value + -1;
 
-    } else if (value < 275) {
-       return value + 0;
+   } else if (value < 275) {
+      return value + 0;
 
-    } else if (value < 276) {
-       return value + -1;
+   } else if (value < 276) {
+      return value + -1;
 
-    } else if (value < 277) {
-       return value + 0;
+   } else if (value < 277) {
+      return value + 0;
 
-    } else if (value < 278) {
-       return value + -1;
+   } else if (value < 278) {
+      return value + -1;
 
-    } else if (value < 279) {
-       return value + 0;
+   } else if (value < 279) {
+      return value + 0;
 
-    } else if (value < 280) {
-       return value + -1;
+   } else if (value < 280) {
+      return value + -1;
 
-    } else if (value < 281) {
-       return value + 0;
+   } else if (value < 281) {
+      return value + 0;
 
-    } else if (value < 282) {
-       return value + -1;
+   } else if (value < 282) {
+      return value + -1;
 
-    } else if (value < 283) {
-       return value + 0;
+   } else if (value < 283) {
+      return value + 0;
 
-    } else if (value < 284) {
-       return value + -1;
+   } else if (value < 284) {
+      return value + -1;
 
-    } else if (value < 285) {
-       return value + 0;
+   } else if (value < 285) {
+      return value + 0;
 
-    } else if (value < 286) {
-       return value + -1;
+   } else if (value < 286) {
+      return value + -1;
 
-    } else if (value < 287) {
-       return value + 0;
+   } else if (value < 287) {
+      return value + 0;
 
-    } else if (value < 288) {
-       return value + -1;
+   } else if (value < 288) {
+      return value + -1;
 
-    } else if (value < 289) {
-       return value + 0;
+   } else if (value < 289) {
+      return value + 0;
 
-    } else if (value < 290) {
-       return value + -1;
+   } else if (value < 290) {
+      return value + -1;
 
-    } else if (value < 291) {
-       return value + 0;
+   } else if (value < 291) {
+      return value + 0;
 
-    } else if (value < 292) {
-       return value + -1;
+   } else if (value < 292) {
+      return value + -1;
 
-    } else if (value < 293) {
-       return value + 0;
+   } else if (value < 293) {
+      return value + 0;
 
-    } else if (value < 294) {
-       return value + -1;
+   } else if (value < 294) {
+      return value + -1;
 
-    } else if (value < 295) {
-       return value + 0;
+   } else if (value < 295) {
+      return value + 0;
 
-    } else if (value < 296) {
-       return value + -1;
+   } else if (value < 296) {
+      return value + -1;
 
-    } else if (value < 297) {
-       return value + 0;
+   } else if (value < 297) {
+      return value + 0;
 
-    } else if (value < 298) {
-       return value + -1;
+   } else if (value < 298) {
+      return value + -1;
 
-    } else if (value < 299) {
-       return value + 0;
+   } else if (value < 299) {
+      return value + 0;
 
-    } else if (value < 300) {
-       return value + -1;
+   } else if (value < 300) {
+      return value + -1;
 
-    } else if (value < 301) {
-       return value + 0;
+   } else if (value < 301) {
+      return value + 0;
 
-    } else if (value < 302) {
-       return value + -1;
+   } else if (value < 302) {
+      return value + -1;
 
-    } else if (value < 303) {
-       return value + 0;
+   } else if (value < 303) {
+      return value + 0;
 
-    } else if (value < 304) {
-       return value + -1;
+   } else if (value < 304) {
+      return value + -1;
 
-    } else if (value < 305) {
-       return value + 0;
+   } else if (value < 305) {
+      return value + 0;
 
-    } else if (value < 306) {
-       return value + -232;
+   } else if (value < 306) {
+      return value + -232;
 
-    } else if (value < 307) {
-       return value + 0;
+   } else if (value < 307) {
+      return value + 0;
 
-    } else if (value < 308) {
-       return value + -1;
+   } else if (value < 308) {
+      return value + -1;
 
-    } else if (value < 309) {
-       return value + 0;
+   } else if (value < 309) {
+      return value + 0;
 
-    } else if (value < 310) {
-       return value + -1;
+   } else if (value < 310) {
+      return value + -1;
 
-    } else if (value < 311) {
-       return value + 0;
+   } else if (value < 311) {
+      return value + 0;
 
-    } else if (value < 312) {
-       return value + -1;
+   } else if (value < 312) {
+      return value + -1;
 
-    } else if (value < 314) {
-       return value + 0;
+   } else if (value < 314) {
+      return value + 0;
 
-    } else if (value < 315) {
-       return value + -1;
+   } else if (value < 315) {
+      return value + -1;
 
-    } else if (value < 316) {
-       return value + 0;
+   } else if (value < 316) {
+      return value + 0;
 
-    } else if (value < 317) {
-       return value + -1;
+   } else if (value < 317) {
+      return value + -1;
 
-    } else if (value < 318) {
-       return value + 0;
+   } else if (value < 318) {
+      return value + 0;
 
-    } else if (value < 319) {
-       return value + -1;
+   } else if (value < 319) {
+      return value + -1;
 
-    } else if (value < 320) {
-       return value + 0;
+   } else if (value < 320) {
+      return value + 0;
 
-    } else if (value < 321) {
-       return value + -1;
+   } else if (value < 321) {
+      return value + -1;
 
-    } else if (value < 322) {
-       return value + 0;
+   } else if (value < 322) {
+      return value + 0;
 
-    } else if (value < 323) {
-       return value + -1;
+   } else if (value < 323) {
+      return value + -1;
 
-    } else if (value < 324) {
-       return value + 0;
+   } else if (value < 324) {
+      return value + 0;
 
-    } else if (value < 325) {
-       return value + -1;
+   } else if (value < 325) {
+      return value + -1;
 
-    } else if (value < 326) {
-       return value + 0;
+   } else if (value < 326) {
+      return value + 0;
 
-    } else if (value < 327) {
-       return value + -1;
+   } else if (value < 327) {
+      return value + -1;
 
-    } else if (value < 328) {
-       return value + 0;
+   } else if (value < 328) {
+      return value + 0;
 
-    } else if (value == 329) {
-       // special char
-       return 0;
+   } else if (value == 329) {
+      // special char
+      return 0;
 
-    } else if (value < 330) {
-       return value + -1;
+   } else if (value < 330) {
+      return value + -1;
 
-    } else if (value < 331) {
-       return value + 0;
+   } else if (value < 331) {
+      return value + 0;
 
-    } else if (value < 332) {
-       return value + -1;
+   } else if (value < 332) {
+      return value + -1;
 
-    } else if (value < 333) {
-       return value + 0;
+   } else if (value < 333) {
+      return value + 0;
 
-    } else if (value < 334) {
-       return value + -1;
+   } else if (value < 334) {
+      return value + -1;
 
-    } else if (value < 335) {
-       return value + 0;
+   } else if (value < 335) {
+      return value + 0;
 
-    } else if (value < 336) {
-       return value + -1;
+   } else if (value < 336) {
+      return value + -1;
 
-    } else if (value < 337) {
-       return value + 0;
+   } else if (value < 337) {
+      return value + 0;
 
-    } else if (value < 338) {
-       return value + -1;
+   } else if (value < 338) {
+      return value + -1;
 
-    } else if (value < 339) {
-       return value + 0;
+   } else if (value < 339) {
+      return value + 0;
 
-    } else if (value < 340) {
-       return value + -1;
+   } else if (value < 340) {
+      return value + -1;
 
-    } else if (value < 341) {
-       return value + 0;
+   } else if (value < 341) {
+      return value + 0;
 
-    } else if (value < 342) {
-       return value + -1;
+   } else if (value < 342) {
+      return value + -1;
 
-    } else if (value < 343) {
-       return value + 0;
+   } else if (value < 343) {
+      return value + 0;
 
-    } else if (value < 344) {
-       return value + -1;
+   } else if (value < 344) {
+      return value + -1;
 
-    } else if (value < 345) {
-       return value + 0;
+   } else if (value < 345) {
+      return value + 0;
 
-    } else if (value < 346) {
-       return value + -1;
+   } else if (value < 346) {
+      return value + -1;
 
-    } else if (value < 347) {
-       return value + 0;
+   } else if (value < 347) {
+      return value + 0;
 
-    } else if (value < 348) {
-       return value + -1;
+   } else if (value < 348) {
+      return value + -1;
 
-    } else if (value < 349) {
-       return value + 0;
+   } else if (value < 349) {
+      return value + 0;
 
-    } else if (value < 350) {
-       return value + -1;
+   }
 
-    } else if (value < 351) {
-       return value + 0;
+   if (value < 350) {
+      return value + -1;
 
-    } else if (value < 352) {
-       return value + -1;
+   } else if (value < 351) {
+      return value + 0;
 
-    } else if (value < 353) {
-       return value + 0;
+   } else if (value < 352) {
+      return value + -1;
 
-    } else if (value < 354) {
-       return value + -1;
+   } else if (value < 353) {
+      return value + 0;
 
-    } else if (value < 355) {
-       return value + 0;
+   } else if (value < 354) {
+      return value + -1;
 
-    } else if (value < 356) {
-       return value + -1;
+   } else if (value < 355) {
+      return value + 0;
 
-    } else if (value < 357) {
-       return value + 0;
+   } else if (value < 356) {
+      return value + -1;
 
-    } else if (value < 358) {
-       return value + -1;
+   } else if (value < 357) {
+      return value + 0;
 
-    } else if (value < 359) {
-       return value + 0;
+   } else if (value < 358) {
+      return value + -1;
 
-    } else if (value < 360) {
-       return value + -1;
+   } else if (value < 359) {
+      return value + 0;
 
-    } else if (value < 361) {
-       return value + 0;
+   } else if (value < 360) {
+      return value + -1;
 
-    } else if (value < 362) {
-       return value + -1;
+   } else if (value < 361) {
+      return value + 0;
 
-    } else if (value < 363) {
-       return value + 0;
+   } else if (value < 362) {
+      return value + -1;
 
-    } else if (value < 364) {
-       return value + -1;
+   } else if (value < 363) {
+      return value + 0;
 
-    } else if (value < 365) {
-       return value + 0;
+   } else if (value < 364) {
+      return value + -1;
 
-    } else if (value < 366) {
-       return value + -1;
+   } else if (value < 365) {
+      return value + 0;
 
-    } else if (value < 367) {
-       return value + 0;
+   } else if (value < 366) {
+      return value + -1;
 
-    } else if (value < 368) {
-       return value + -1;
+   } else if (value < 367) {
+      return value + 0;
 
-    } else if (value < 369) {
-       return value + 0;
+   } else if (value < 368) {
+      return value + -1;
 
-    } else if (value < 370) {
-       return value + -1;
+   } else if (value < 369) {
+      return value + 0;
 
-    } else if (value < 371) {
-       return value + 0;
+   } else if (value < 370) {
+      return value + -1;
 
-    } else if (value < 372) {
-       return value + -1;
+   } else if (value < 371) {
+      return value + 0;
 
-    } else if (value < 373) {
-       return value + 0;
+   } else if (value < 372) {
+      return value + -1;
 
-    } else if (value < 374) {
-       return value + -1;
+   } else if (value < 373) {
+      return value + 0;
 
-    } else if (value < 375) {
-       return value + 0;
+   } else if (value < 374) {
+      return value + -1;
 
-    } else if (value < 376) {
-       return value + -1;
+   } else if (value < 375) {
+      return value + 0;
 
-    } else if (value < 378) {
-       return value + 0;
+   } else if (value < 376) {
+      return value + -1;
 
-    } else if (value < 379) {
-       return value + -1;
+   } else if (value < 378) {
+      return value + 0;
 
-    } else if (value < 380) {
-       return value + 0;
+   } else if (value < 379) {
+      return value + -1;
 
-    } else if (value < 381) {
-       return value + -1;
+   } else if (value < 380) {
+      return value + 0;
 
-    } else if (value < 382) {
-       return value + 0;
+   } else if (value < 381) {
+      return value + -1;
 
-    } else if (value < 383) {
-       return value + -1;
+   } else if (value < 382) {
+      return value + 0;
 
-    } else if (value < 384) {
-       return value + -300;
+   } else if (value < 383) {
+      return value + -1;
 
-    } else if (value < 385) {
-       return value + 195;
+   } else if (value < 384) {
+      return value + -300;
 
-    } else if (value < 387) {
-       return value + 0;
+   } else if (value < 385) {
+      return value + 195;
 
-    } else if (value < 388) {
-       return value + -1;
+   } else if (value < 387) {
+      return value + 0;
 
-    } else if (value < 389) {
-       return value + 0;
+   } else if (value < 388) {
+      return value + -1;
 
-    } else if (value < 390) {
-       return value + -1;
+   } else if (value < 389) {
+      return value + 0;
 
-    } else if (value < 392) {
-       return value + 0;
+   } else if (value < 390) {
+      return value + -1;
 
-    } else if (value < 393) {
-       return value + -1;
+   } else if (value < 392) {
+      return value + 0;
 
-    } else if (value < 396) {
-       return value + 0;
+   } else if (value < 393) {
+      return value + -1;
 
-    } else if (value < 397) {
-       return value + -1;
+   } else if (value < 396) {
+      return value + 0;
 
-    } else if (value < 402) {
-       return value + 0;
+   } else if (value < 397) {
+      return value + -1;
 
-    } else if (value < 403) {
-       return value + -1;
+   } else if (value < 402) {
+      return value + 0;
 
-    } else if (value < 405) {
-       return value + 0;
+   } else if (value < 403) {
+      return value + -1;
 
-    } else if (value < 406) {
-       return value + 97;
+   } else if (value < 405) {
+      return value + 0;
 
-    } else if (value < 409) {
-       return value + 0;
+   } else if (value < 406) {
+      return value + 97;
 
-    } else if (value < 410) {
-       return value + -1;
+   } else if (value < 409) {
+      return value + 0;
 
-    } else if (value < 411) {
-       return value + 163;
+   } else if (value < 410) {
+      return value + -1;
 
-    } else if (value < 414) {
-       return value + 0;
+   } else if (value < 411) {
+      return value + 163;
 
-    } else if (value < 415) {
-       return value + 130;
+   } else if (value < 414) {
+      return value + 0;
 
-    } else if (value < 417) {
-       return value + 0;
+   } else if (value < 415) {
+      return value + 130;
 
-    } else if (value < 418) {
-       return value + -1;
+   } else if (value < 417) {
+      return value + 0;
 
-    } else if (value < 419) {
-       return value + 0;
+   } else if (value < 418) {
+      return value + -1;
 
-    } else if (value < 420) {
-       return value + -1;
+   } else if (value < 419) {
+      return value + 0;
 
-    } else if (value < 421) {
-       return value + 0;
+   } else if (value < 420) {
+      return value + -1;
 
-    } else if (value < 422) {
-       return value + -1;
+   } else if (value < 421) {
+      return value + 0;
 
-    } else if (value < 424) {
-       return value + 0;
+   } else if (value < 422) {
+      return value + -1;
 
-    } else if (value < 425) {
-       return value + -1;
+   } else if (value < 424) {
+      return value + 0;
 
-    } else if (value < 429) {
-       return value + 0;
+   } else if (value < 425) {
+      return value + -1;
 
-    } else if (value < 430) {
-       return value + -1;
+   } else if (value < 429) {
+      return value + 0;
 
-    } else if (value < 432) {
-       return value + 0;
+   } else if (value < 430) {
+      return value + -1;
 
-    } else if (value < 433) {
-       return value + -1;
+   } else if (value < 432) {
+      return value + 0;
 
-    } else if (value < 436) {
-       return value + 0;
+   } else if (value < 433) {
+      return value + -1;
 
-    } else if (value < 437) {
-       return value + -1;
+   } else if (value < 436) {
+      return value + 0;
 
-    } else if (value < 438) {
-       return value + 0;
+   } else if (value < 437) {
+      return value + -1;
 
-    } else if (value < 439) {
-       return value + -1;
+   } else if (value < 438) {
+      return value + 0;
 
-    } else if (value < 441) {
-       return value + 0;
+   } else if (value < 439) {
+      return value + -1;
 
-    } else if (value < 442) {
-       return value + -1;
+   } else if (value < 441) {
+      return value + 0;
 
-    } else if (value < 445) {
-       return value + 0;
+   } else if (value < 442) {
+      return value + -1;
 
-    } else if (value < 446) {
-       return value + -1;
+   } else if (value < 445) {
+      return value + 0;
 
-    } else if (value < 447) {
-       return value + 0;
+   } else if (value < 446) {
+      return value + -1;
 
-    } else if (value < 448) {
-       return value + 56;
+   } else if (value < 447) {
+      return value + 0;
 
-    } else if (value < 452) {
-       return value + 0;
+   } else if (value < 448) {
+      return value + 56;
 
-    } else if (value < 453) {
-       return value + 1;
+   } else if (value < 452) {
+      return value + 0;
 
-    } else if (value < 454) {
-       return value + 0;
+   } else if (value < 453) {
+      return value + 1;
 
-    } else if (value < 455) {
-       return value + -1;
+   } else if (value < 454) {
+      return value + 0;
 
-    } else if (value < 456) {
-       return value + 1;
+   } else if (value < 455) {
+      return value + -1;
 
-    } else if (value < 457) {
-       return value + 0;
+   } else if (value < 456) {
+      return value + 1;
 
-    } else if (value < 458) {
-       return value + -1;
+   } else if (value < 457) {
+      return value + 0;
 
-    } else if (value < 459) {
-       return value + 1;
+   } else if (value < 458) {
+      return value + -1;
 
-    } else if (value < 460) {
-       return value + 0;
+   } else if (value < 459) {
+      return value + 1;
 
-    } else if (value < 461) {
-       return value + -1;
+   } else if (value < 460) {
+      return value + 0;
 
-    } else if (value < 462) {
-       return value + 0;
+   } else if (value < 461) {
+      return value + -1;
 
-    } else if (value < 463) {
-       return value + -1;
+   } else if (value < 462) {
+      return value + 0;
 
-    } else if (value < 464) {
-       return value + 0;
+   } else if (value < 463) {
+      return value + -1;
 
-    } else if (value < 465) {
-       return value + -1;
+   } else if (value < 464) {
+      return value + 0;
 
-    } else if (value < 466) {
-       return value + 0;
+   } else if (value < 465) {
+      return value + -1;
 
-    } else if (value < 467) {
-       return value + -1;
+   } else if (value < 466) {
+      return value + 0;
 
-    } else if (value < 468) {
-       return value + 0;
+   } else if (value < 467) {
+      return value + -1;
 
-    } else if (value < 469) {
-       return value + -1;
+   } else if (value < 468) {
+      return value + 0;
 
-    } else if (value < 470) {
-       return value + 0;
+   } else if (value < 469) {
+      return value + -1;
 
-    } else if (value < 471) {
-       return value + -1;
+   } else if (value < 470) {
+      return value + 0;
 
-    } else if (value < 472) {
-       return value + 0;
+   } else if (value < 471) {
+      return value + -1;
 
-    } else if (value < 473) {
-       return value + -1;
+   } else if (value < 472) {
+      return value + 0;
 
-    } else if (value < 474) {
-       return value + 0;
+   } else if (value < 473) {
+      return value + -1;
 
-    } else if (value < 475) {
-       return value + -1;
+   } else if (value < 474) {
+      return value + 0;
 
-    } else if (value < 476) {
-       return value + 0;
+   } else if (value < 475) {
+      return value + -1;
 
-    } else if (value < 477) {
-       return value + -1;
+   } else if (value < 476) {
+      return value + 0;
 
-    } else if (value < 478) {
-       return value + -79;
+   } else if (value < 477) {
+      return value + -1;
 
-    } else if (value < 479) {
-       return value + 0;
+   }
 
-    } else if (value < 480) {
-       return value + -1;
+   if (value < 478) {
+      return value + -79;
 
-    } else if (value < 481) {
-       return value + 0;
+   } else if (value < 479) {
+      return value + 0;
 
-    } else if (value < 482) {
-       return value + -1;
+   } else if (value < 480) {
+      return value + -1;
 
-    } else if (value < 483) {
-       return value + 0;
+   } else if (value < 481) {
+      return value + 0;
 
-    } else if (value < 484) {
-       return value + -1;
+   } else if (value < 482) {
+      return value + -1;
 
-    } else if (value < 485) {
-       return value + 0;
+   } else if (value < 483) {
+      return value + 0;
 
-    } else if (value < 486) {
-       return value + -1;
+   } else if (value < 484) {
+      return value + -1;
 
-    } else if (value < 487) {
-       return value + 0;
+   } else if (value < 485) {
+      return value + 0;
 
-    } else if (value < 488) {
-       return value + -1;
+   } else if (value < 486) {
+      return value + -1;
 
-    } else if (value < 489) {
-       return value + 0;
+   } else if (value < 487) {
+      return value + 0;
 
-    } else if (value < 490) {
-       return value + -1;
+   } else if (value < 488) {
+      return value + -1;
 
-    } else if (value < 491) {
-       return value + 0;
+   } else if (value < 489) {
+      return value + 0;
 
-    } else if (value < 492) {
-       return value + -1;
+   } else if (value < 490) {
+      return value + -1;
 
-    } else if (value < 493) {
-       return value + 0;
+   } else if (value < 491) {
+      return value + 0;
 
-    } else if (value < 494) {
-       return value + -1;
+   } else if (value < 492) {
+      return value + -1;
 
-    } else if (value < 495) {
-       return value + 0;
+   } else if (value < 493) {
+      return value + 0;
 
-    } else if (value == 496) {
-       // special char
-       return 0;
+   } else if (value < 494) {
+      return value + -1;
 
-    } else if (value < 497) {
-       return value + -1;
+   } else if (value < 495) {
+      return value + 0;
 
-    } else if (value < 498) {
-       return value + 1;
+   } else if (value == 496) {
+      // special char
+      return 0;
 
-    } else if (value < 499) {
-       return value + 0;
+   } else if (value < 497) {
+      return value + -1;
 
-    } else if (value < 500) {
-       return value + -1;
+   } else if (value < 498) {
+      return value + 1;
 
-    } else if (value < 501) {
-       return value + 0;
+   } else if (value < 499) {
+      return value + 0;
 
-    } else if (value < 502) {
-       return value + -1;
+   } else if (value < 500) {
+      return value + -1;
 
-    } else if (value < 505) {
-       return value + 0;
+   } else if (value < 501) {
+      return value + 0;
 
-    } else if (value < 506) {
-       return value + -1;
+   } else if (value < 502) {
+      return value + -1;
 
-    } else if (value < 507) {
-       return value + 0;
+   } else if (value < 505) {
+      return value + 0;
 
-    } else if (value < 508) {
-       return value + -1;
+   } else if (value < 506) {
+      return value + -1;
 
-    } else if (value < 509) {
-       return value + 0;
+   } else if (value < 507) {
+      return value + 0;
 
-    } else if (value < 510) {
-       return value + -1;
+   } else if (value < 508) {
+      return value + -1;
 
-    } else if (value < 511) {
-       return value + 0;
+   } else if (value < 509) {
+      return value + 0;
 
-    } else if (value < 512) {
-       return value + -1;
+   } else if (value < 510) {
+      return value + -1;
 
-    } else if (value < 513) {
-       return value + 0;
+   } else if (value < 511) {
+      return value + 0;
 
-    } else if (value < 514) {
-       return value + -1;
+   } else if (value < 512) {
+      return value + -1;
 
-    } else if (value < 515) {
-       return value + 0;
+   } else if (value < 513) {
+      return value + 0;
 
-    } else if (value < 516) {
-       return value + -1;
+   } else if (value < 514) {
+      return value + -1;
 
-    } else if (value < 517) {
-       return value + 0;
+   } else if (value < 515) {
+      return value + 0;
 
-    } else if (value < 518) {
-       return value + -1;
+   } else if (value < 516) {
+      return value + -1;
 
-    } else if (value < 519) {
-       return value + 0;
+   } else if (value < 517) {
+      return value + 0;
 
-    } else if (value < 520) {
-       return value + -1;
+   } else if (value < 518) {
+      return value + -1;
 
-    } else if (value < 521) {
-       return value + 0;
+   } else if (value < 519) {
+      return value + 0;
 
-    } else if (value < 522) {
-       return value + -1;
+   } else if (value < 520) {
+      return value + -1;
 
-    } else if (value < 523) {
-       return value + 0;
+   } else if (value < 521) {
+      return value + 0;
 
-    } else if (value < 524) {
-       return value + -1;
+   } else if (value < 522) {
+      return value + -1;
 
-    } else if (value < 525) {
-       return value + 0;
+   } else if (value < 523) {
+      return value + 0;
 
-    } else if (value < 526) {
-       return value + -1;
+   } else if (value < 524) {
+      return value + -1;
 
-    } else if (value < 527) {
-       return value + 0;
+   } else if (value < 525) {
+      return value + 0;
 
-    } else if (value < 528) {
-       return value + -1;
+   } else if (value < 526) {
+      return value + -1;
 
-    } else if (value < 529) {
-       return value + 0;
+   } else if (value < 527) {
+      return value + 0;
 
-    } else if (value < 530) {
-       return value + -1;
+   } else if (value < 528) {
+      return value + -1;
 
-    } else if (value < 531) {
-       return value + 0;
+   } else if (value < 529) {
+      return value + 0;
 
-    } else if (value < 532) {
-       return value + -1;
+   } else if (value < 530) {
+      return value + -1;
 
-    } else if (value < 533) {
-       return value + 0;
+   } else if (value < 531) {
+      return value + 0;
 
-    } else if (value < 534) {
-       return value + -1;
+   } else if (value < 532) {
+      return value + -1;
 
-    } else if (value < 535) {
-       return value + 0;
+   } else if (value < 533) {
+      return value + 0;
 
-    } else if (value < 536) {
-       return value + -1;
+   } else if (value < 534) {
+      return value + -1;
 
-    } else if (value < 537) {
-       return value + 0;
+   } else if (value < 535) {
+      return value + 0;
 
-    } else if (value < 538) {
-       return value + -1;
+   } else if (value < 536) {
+      return value + -1;
 
-    } else if (value < 539) {
-       return value + 0;
+   } else if (value < 537) {
+      return value + 0;
 
-    } else if (value < 540) {
-       return value + -1;
+   } else if (value < 538) {
+      return value + -1;
 
-    } else if (value < 541) {
-       return value + 0;
+   } else if (value < 539) {
+      return value + 0;
 
-    } else if (value < 542) {
-       return value + -1;
+   } else if (value < 540) {
+      return value + -1;
 
-    } else if (value < 543) {
-       return value + 0;
+   } else if (value < 541) {
+      return value + 0;
 
-    } else if (value < 544) {
-       return value + -1;
+   } else if (value < 542) {
+      return value + -1;
 
-    } else if (value < 547) {
-       return value + 0;
+   } else if (value < 543) {
+      return value + 0;
 
-    } else if (value < 548) {
-       return value + -1;
+   } else if (value < 544) {
+      return value + -1;
 
-    } else if (value < 549) {
-       return value + 0;
+   } else if (value < 547) {
+      return value + 0;
 
-    } else if (value < 550) {
-       return value + -1;
+   } else if (value < 548) {
+      return value + -1;
 
-    } else if (value < 551) {
-       return value + 0;
+   } else if (value < 549) {
+      return value + 0;
 
-    } else if (value < 552) {
-       return value + -1;
+   } else if (value < 550) {
+      return value + -1;
 
-    } else if (value < 553) {
-       return value + 0;
+   } else if (value < 551) {
+      return value + 0;
 
-    } else if (value < 554) {
-       return value + -1;
+   } else if (value < 552) {
+      return value + -1;
 
-    } else if (value < 555) {
-       return value + 0;
+   } else if (value < 553) {
+      return value + 0;
 
-    } else if (value < 556) {
-       return value + -1;
+   } else if (value < 554) {
+      return value + -1;
 
-    } else if (value < 557) {
-       return value + 0;
+   } else if (value < 555) {
+      return value + 0;
 
-    } else if (value < 558) {
-       return value + -1;
+   } else if (value < 556) {
+      return value + -1;
 
-    } else if (value < 559) {
-       return value + 0;
+   } else if (value < 557) {
+      return value + 0;
 
-    } else if (value < 560) {
-       return value + -1;
+   } else if (value < 558) {
+      return value + -1;
 
-    } else if (value < 561) {
-       return value + 0;
+   } else if (value < 559) {
+      return value + 0;
 
-    } else if (value < 562) {
-       return value + -1;
+   } else if (value < 560) {
+      return value + -1;
 
-    } else if (value < 563) {
-       return value + 0;
+   } else if (value < 561) {
+      return value + 0;
 
-    } else if (value < 564) {
-       return value + -1;
+   } else if (value < 562) {
+      return value + -1;
 
-    } else if (value < 572) {
-       return value + 0;
+   } else if (value < 563) {
+      return value + 0;
 
-    } else if (value < 573) {
-       return value + -1;
+   } else if (value < 564) {
+      return value + -1;
 
-    } else if (value < 575) {
-       return value + 0;
+   } else if (value < 572) {
+      return value + 0;
 
-    } else if (value < 577) {
-       return value + 10815;
+   } else if (value < 573) {
+      return value + -1;
 
-    } else if (value < 578) {
-       return value + 0;
+   } else if (value < 575) {
+      return value + 0;
 
-    } else if (value < 579) {
-       return value + -1;
+   } else if (value < 577) {
+      return value + 10815;
 
-    } else if (value < 583) {
-       return value + 0;
+   } else if (value < 578) {
+      return value + 0;
 
-    } else if (value < 584) {
-       return value + -1;
+   } else if (value < 579) {
+      return value + -1;
 
-    } else if (value < 585) {
-       return value + 0;
+   } else if (value < 583) {
+      return value + 0;
 
-    } else if (value < 586) {
-       return value + -1;
+   } else if (value < 584) {
+      return value + -1;
 
-    } else if (value < 587) {
-       return value + 0;
+   } else if (value < 585) {
+      return value + 0;
 
-    } else if (value < 588) {
-       return value + -1;
+   } else if (value < 586) {
+      return value + -1;
 
-    } else if (value < 589) {
-       return value + 0;
+   } else if (value < 587) {
+      return value + 0;
 
-    } else if (value < 590) {
-       return value + -1;
+   } else if (value < 588) {
+      return value + -1;
 
-    } else if (value < 591) {
-       return value + 0;
+   } else if (value < 589) {
+      return value + 0;
 
-    } else if (value < 592) {
-       return value + -1;
+   } else if (value < 590) {
+      return value + -1;
 
-    } else if (value < 593) {
-       return value + 10783;
+   } else if (value < 591) {
+      return value + 0;
 
-    } else if (value < 594) {
-       return value + 10780;
+   } else if (value < 592) {
+      return value + -1;
 
-    } else if (value < 595) {
-       return value + 10782;
+   } else if (value < 593) {
+      return value + 10783;
 
-    } else if (value < 596) {
-       return value + -210;
+   } else if (value < 594) {
+      return value + 10780;
 
-    } else if (value < 597) {
-       return value + -206;
+   }
 
-    } else if (value < 598) {
-       return value + 0;
+   if (value < 595) {
+      return value + 10782;
 
-    } else if (value < 600) {
-       return value + -205;
+   } else if (value < 596) {
+      return value + -210;
 
-    } else if (value < 601) {
-       return value + 0;
+   } else if (value < 597) {
+      return value + -206;
 
-    } else if (value < 602) {
-       return value + -202;
+   } else if (value < 598) {
+      return value + 0;
 
-    } else if (value < 603) {
-       return value + 0;
+   } else if (value < 600) {
+      return value + -205;
 
-    } else if (value < 604) {
-       return value + -203;
+   } else if (value < 601) {
+      return value + 0;
 
-    } else if (value < 605) {
-       return value + 42319;
+   } else if (value < 602) {
+      return value + -202;
 
-    } else if (value < 608) {
-       return value + 0;
+   } else if (value < 603) {
+      return value + 0;
 
-    } else if (value < 609) {
-       return value + -205;
+   } else if (value < 604) {
+      return value + -203;
 
-    } else if (value < 610) {
-       return value + 42315;
+   } else if (value < 605) {
+      return value + 42319;
 
-    } else if (value < 611) {
-       return value + 0;
+   } else if (value < 608) {
+      return value + 0;
 
-    } else if (value < 612) {
-       return value + -207;
+   } else if (value < 609) {
+      return value + -205;
 
-    } else if (value < 613) {
-       return value + 0;
+   } else if (value < 610) {
+      return value + 42315;
 
-    } else if (value < 614) {
-       return value + 42280;
+   } else if (value < 611) {
+      return value + 0;
 
-    } else if (value < 615) {
-       return value + 42308;
+   } else if (value < 612) {
+      return value + -207;
 
-    } else if (value < 616) {
-       return value + 0;
+   } else if (value < 613) {
+      return value + 0;
 
-    } else if (value < 617) {
-       return value + -209;
+   } else if (value < 614) {
+      return value + 42280;
 
-    } else if (value < 618) {
-       return value + -211;
+   } else if (value < 615) {
+      return value + 42308;
 
-    } else if (value < 619) {
-       return value + 42308;
+   } else if (value < 616) {
+      return value + 0;
 
-    } else if (value < 620) {
-       return value + 10743;
+   } else if (value < 617) {
+      return value + -209;
 
-    } else if (value < 621) {
-       return value + 42305;
+   } else if (value < 618) {
+      return value + -211;
 
-    } else if (value < 623) {
-       return value + 0;
+   } else if (value < 619) {
+      return value + 42308;
 
-    } else if (value < 624) {
-       return value + -211;
+   } else if (value < 620) {
+      return value + 10743;
 
-    } else if (value < 625) {
-       return value + 0;
+   } else if (value < 621) {
+      return value + 42305;
 
-    } else if (value < 626) {
-       return value + 10749;
+   } else if (value < 623) {
+      return value + 0;
 
-    } else if (value < 627) {
-       return value + -213;
+   } else if (value < 624) {
+      return value + -211;
 
-    } else if (value < 629) {
-       return value + 0;
+   } else if (value < 625) {
+      return value + 0;
 
-    } else if (value < 630) {
-       return value + -214;
+   } else if (value < 626) {
+      return value + 10749;
 
-    } else if (value < 637) {
-       return value + 0;
+   } else if (value < 627) {
+      return value + -213;
 
-    } else if (value < 638) {
-       return value + 10727;
+   } else if (value < 629) {
+      return value + 0;
 
-    } else if (value < 640) {
-       return value + 0;
+   } else if (value < 630) {
+      return value + -214;
 
-    } else if (value < 641) {
-       return value + -218;
+   } else if (value < 637) {
+      return value + 0;
 
-    } else if (value < 643) {
-       return value + 0;
+   } else if (value < 638) {
+      return value + 10727;
 
-    } else if (value < 644) {
-       return value + -218;
+   } else if (value < 640) {
+      return value + 0;
 
-    } else if (value < 647) {
-       return value + 0;
+   } else if (value < 641) {
+      return value + -218;
 
-    } else if (value < 648) {
-       return value + 42282;
+   } else if (value < 643) {
+      return value + 0;
 
-    } else if (value < 649) {
-       return value + -218;
+   } else if (value < 644) {
+      return value + -218;
 
-    } else if (value < 650) {
-       return value + -69;
+   } else if (value < 647) {
+      return value + 0;
 
-    } else if (value < 652) {
-       return value + -217;
+   } else if (value < 648) {
+      return value + 42282;
 
-    } else if (value < 653) {
-       return value + -71;
+   } else if (value < 649) {
+      return value + -218;
 
-    } else if (value < 658) {
-       return value + 0;
+   } else if (value < 650) {
+      return value + -69;
 
-    } else if (value < 659) {
-       return value + -219;
+   } else if (value < 652) {
+      return value + -217;
 
-    } else if (value < 669) {
-       return value + 0;
+   } else if (value < 653) {
+      return value + -71;
 
-    } else if (value < 670) {
-       return value + 42261;
+   } else if (value < 658) {
+      return value + 0;
 
-    } else if (value < 671) {
-       return value + 42258;
+   } else if (value < 659) {
+      return value + -219;
 
-    } else if (value < 837) {
-       return value + 0;
+   } else if (value < 669) {
+      return value + 0;
 
-    } else if (value < 838) {
-       return value + 84;
+   } else if (value < 670) {
+      return value + 42261;
 
-    } else if (value < 881) {
-       return value + 0;
+   } else if (value < 671) {
+      return value + 42258;
 
-    } else if (value < 882) {
-       return value + -1;
+   } else if (value < 837) {
+      return value + 0;
 
-    } else if (value < 883) {
-       return value + 0;
+   } else if (value < 838) {
+      return value + 84;
 
-    } else if (value < 884) {
-       return value + -1;
+   } else if (value < 881) {
+      return value + 0;
 
-    } else if (value < 887) {
-       return value + 0;
+   } else if (value < 882) {
+      return value + -1;
 
-    } else if (value < 888) {
-       return value + -1;
+   } else if (value < 883) {
+      return value + 0;
 
-    } else if (value < 891) {
-       return value + 0;
+   } else if (value < 884) {
+      return value + -1;
 
-    } else if (value < 894) {
-       return value + 130;
+   } else if (value < 887) {
+      return value + 0;
 
-    } else if (value == 912) {
-       // special char
-       return 0;
+   } else if (value < 888) {
+      return value + -1;
 
-    } else if (value < 940) {
-       return value + 0;
+   } else if (value < 891) {
+      return value + 0;
 
-    } else if (value < 941) {
-       return value + -38;
+   } else if (value < 894) {
+      return value + 130;
 
-    } else if (value == 944) {
-       // special char
-       return 0;
+   } else if (value == 912) {
+      // special char
+      return 0;
 
-    } else if (value < 945) {
-       return value + -37;
+   } else if (value < 940) {
+      return value + 0;
 
-    } else if (value < 962) {
-       return value + -32;
+   } else if (value < 941) {
+      return value + -38;
 
-    } else if (value < 963) {
-       return value + -31;
+   } else if (value == 944) {
+      // special char
+      return 0;
 
-    } else if (value < 972) {
-       return value + -32;
+   } else if (value < 945) {
+      return value + -37;
 
-    } else if (value < 973) {
-       return value + -64;
+   } else if (value < 962) {
+      return value + -32;
 
-    } else if (value < 975) {
-       return value + -63;
+   } else if (value < 963) {
+      return value + -31;
 
-    } else if (value < 976) {
-       return value + 0;
+   } else if (value < 972) {
+      return value + -32;
 
-    } else if (value < 977) {
-       return value + -62;
+   } else if (value < 973) {
+      return value + -64;
 
-    } else if (value < 978) {
-       return value + -57;
+   } else if (value < 975) {
+      return value + -63;
 
-    } else if (value < 981) {
-       return value + 0;
+   } else if (value < 976) {
+      return value + 0;
 
-    } else if (value < 982) {
-       return value + -47;
+   } else if (value < 977) {
+      return value + -62;
 
-    } else if (value < 983) {
-       return value + -54;
+   } else if (value < 978) {
+      return value + -57;
 
-    } else if (value < 984) {
-       return value + -8;
+   } else if (value < 981) {
+      return value + 0;
 
-    } else if (value < 985) {
-       return value + 0;
+   } else if (value < 982) {
+      return value + -47;
 
-    } else if (value < 986) {
-       return value + -1;
+   } else if (value < 983) {
+      return value + -54;
 
-    } else if (value < 987) {
-       return value + 0;
+   } else if (value < 984) {
+      return value + -8;
 
-    } else if (value < 988) {
-       return value + -1;
+   } else if (value < 985) {
+      return value + 0;
 
-    } else if (value < 989) {
-       return value + 0;
+   } else if (value < 986) {
+      return value + -1;
 
-    } else if (value < 990) {
-       return value + -1;
+   } else if (value < 987) {
+      return value + 0;
 
-    } else if (value < 991) {
-       return value + 0;
+   } else if (value < 988) {
+      return value + -1;
 
-    } else if (value < 992) {
-       return value + -1;
+   } else if (value < 989) {
+      return value + 0;
 
-    } else if (value < 993) {
-       return value + 0;
+   } else if (value < 990) {
+      return value + -1;
 
-    } else if (value < 994) {
-       return value + -1;
+   } else if (value < 991) {
+      return value + 0;
 
-    } else if (value < 995) {
-       return value + 0;
+   } else if (value < 992) {
+      return value + -1;
 
-    } else if (value < 996) {
-       return value + -1;
+   } else if (value < 993) {
+      return value + 0;
 
-    } else if (value < 997) {
-       return value + 0;
+   } else if (value < 994) {
+      return value + -1;
 
-    } else if (value < 998) {
-       return value + -1;
+   } else if (value < 995) {
+      return value + 0;
 
-    } else if (value < 999) {
-       return value + 0;
+   } else if (value < 996) {
+      return value + -1;
 
-    } else if (value < 1000) {
-       return value + -1;
+   } else if (value < 997) {
+      return value + 0;
 
-    } else if (value < 1001) {
-       return value + 0;
+   } else if (value < 998) {
+      return value + -1;
 
-    } else if (value < 1002) {
-       return value + -1;
+   } else if (value < 999) {
+      return value + 0;
 
-    } else if (value < 1003) {
-       return value + 0;
+   } else if (value < 1000) {
+      return value + -1;
 
-    } else if (value < 1004) {
-       return value + -1;
+   } else if (value < 1001) {
+      return value + 0;
 
-    } else if (value < 1005) {
-       return value + 0;
+   } else if (value < 1002) {
+      return value + -1;
 
-    } else if (value < 1006) {
-       return value + -1;
+   } else if (value < 1003) {
+      return value + 0;
 
-    } else if (value < 1007) {
-       return value + 0;
+   } else if (value < 1004) {
+      return value + -1;
 
-    } else if (value < 1008) {
-       return value + -1;
+   } else if (value < 1005) {
+      return value + 0;
 
-    } else if (value < 1009) {
-       return value + -86;
+   } else if (value < 1006) {
+      return value + -1;
 
-    } else if (value < 1010) {
-       return value + -80;
+   } else if (value < 1007) {
+      return value + 0;
 
-    } else if (value < 1011) {
-       return value + 7;
+   } else if (value < 1008) {
+      return value + -1;
 
-    } else if (value < 1012) {
-       return value + -116;
+   } else if (value < 1009) {
+      return value + -86;
 
-    } else if (value < 1013) {
-       return value + 0;
+   } else if (value < 1010) {
+      return value + -80;
 
-    } else if (value < 1014) {
-       return value + -96;
+   } else if (value < 1011) {
+      return value + 7;
 
-    } else if (value < 1016) {
-       return value + 0;
+   }
 
-    } else if (value < 1017) {
-       return value + -1;
+   if (value < 1012) {
+      return value + -116;
 
-    } else if (value < 1019) {
-       return value + 0;
+   } else if (value < 1013) {
+      return value + 0;
 
-    } else if (value < 1020) {
-       return value + -1;
+   } else if (value < 1014) {
+      return value + -96;
 
-    } else if (value < 1072) {
-       return value + 0;
+   } else if (value < 1016) {
+      return value + 0;
 
-    } else if (value < 1104) {
-       return value + -32;
+   } else if (value < 1017) {
+      return value + -1;
 
-    } else if (value < 1120) {
-       return value + -80;
+   } else if (value < 1019) {
+      return value + 0;
 
-    } else if (value < 1121) {
-       return value + 0;
+   } else if (value < 1020) {
+      return value + -1;
 
-    } else if (value < 1122) {
-       return value + -1;
+   } else if (value < 1072) {
+      return value + 0;
 
-    } else if (value < 1123) {
-       return value + 0;
+   } else if (value < 1104) {
+      return value + -32;
 
-    } else if (value < 1124) {
-       return value + -1;
+   } else if (value < 1120) {
+      return value + -80;
 
-    } else if (value < 1125) {
-       return value + 0;
+   } else if (value < 1121) {
+      return value + 0;
 
-    } else if (value < 1126) {
-       return value + -1;
+   } else if (value < 1122) {
+      return value + -1;
 
-    } else if (value < 1127) {
-       return value + 0;
+   } else if (value < 1123) {
+      return value + 0;
 
-    } else if (value < 1128) {
-       return value + -1;
+   } else if (value < 1124) {
+      return value + -1;
 
-    } else if (value < 1129) {
-       return value + 0;
+   } else if (value < 1125) {
+      return value + 0;
 
-    } else if (value < 1130) {
-       return value + -1;
+   } else if (value < 1126) {
+      return value + -1;
 
-    } else if (value < 1131) {
-       return value + 0;
+   } else if (value < 1127) {
+      return value + 0;
 
-    } else if (value < 1132) {
-       return value + -1;
+   } else if (value < 1128) {
+      return value + -1;
 
-    } else if (value < 1133) {
-       return value + 0;
+   } else if (value < 1129) {
+      return value + 0;
 
-    } else if (value < 1134) {
-       return value + -1;
+   } else if (value < 1130) {
+      return value + -1;
 
-    } else if (value < 1135) {
-       return value + 0;
+   } else if (value < 1131) {
+      return value + 0;
 
-    } else if (value < 1136) {
-       return value + -1;
+   } else if (value < 1132) {
+      return value + -1;
 
-    } else if (value < 1137) {
-       return value + 0;
+   } else if (value < 1133) {
+      return value + 0;
 
-    } else if (value < 1138) {
-       return value + -1;
+   } else if (value < 1134) {
+      return value + -1;
 
-    } else if (value < 1139) {
-       return value + 0;
+   } else if (value < 1135) {
+      return value + 0;
 
-    } else if (value < 1140) {
-       return value + -1;
+   } else if (value < 1136) {
+      return value + -1;
 
-    } else if (value < 1141) {
-       return value + 0;
+   } else if (value < 1137) {
+      return value + 0;
 
-    } else if (value < 1142) {
-       return value + -1;
+   } else if (value < 1138) {
+      return value + -1;
 
-    } else if (value < 1143) {
-       return value + 0;
+   } else if (value < 1139) {
+      return value + 0;
 
-    } else if (value < 1144) {
-       return value + -1;
+   } else if (value < 1140) {
+      return value + -1;
 
-    } else if (value < 1145) {
-       return value + 0;
+   } else if (value < 1141) {
+      return value + 0;
 
-    } else if (value < 1146) {
-       return value + -1;
+   } else if (value < 1142) {
+      return value + -1;
 
-    } else if (value < 1147) {
-       return value + 0;
+   } else if (value < 1143) {
+      return value + 0;
 
-    } else if (value < 1148) {
-       return value + -1;
+   } else if (value < 1144) {
+      return value + -1;
 
-    } else if (value < 1149) {
-       return value + 0;
+   } else if (value < 1145) {
+      return value + 0;
 
-    } else if (value < 1150) {
-       return value + -1;
+   } else if (value < 1146) {
+      return value + -1;
 
-    } else if (value < 1151) {
-       return value + 0;
+   } else if (value < 1147) {
+      return value + 0;
 
-    } else if (value < 1152) {
-       return value + -1;
+   } else if (value < 1148) {
+      return value + -1;
 
-    } else if (value < 1153) {
-       return value + 0;
+   } else if (value < 1149) {
+      return value + 0;
 
-    } else if (value < 1154) {
-       return value + -1;
+   } else if (value < 1150) {
+      return value + -1;
 
-    } else if (value < 1163) {
-       return value + 0;
+   } else if (value < 1151) {
+      return value + 0;
 
-    } else if (value < 1164) {
-       return value + -1;
+   } else if (value < 1152) {
+      return value + -1;
 
-    } else if (value < 1165) {
-       return value + 0;
+   } else if (value < 1153) {
+      return value + 0;
 
-    } else if (value < 1166) {
-       return value + -1;
+   } else if (value < 1154) {
+      return value + -1;
 
-    } else if (value < 1167) {
-       return value + 0;
+   } else if (value < 1163) {
+      return value + 0;
 
-    } else if (value < 1168) {
-       return value + -1;
+   } else if (value < 1164) {
+      return value + -1;
 
-    } else if (value < 1169) {
-       return value + 0;
+   } else if (value < 1165) {
+      return value + 0;
 
-    } else if (value < 1170) {
-       return value + -1;
+   } else if (value < 1166) {
+      return value + -1;
 
-    } else if (value < 1171) {
-       return value + 0;
+   } else if (value < 1167) {
+      return value + 0;
 
-    } else if (value < 1172) {
-       return value + -1;
+   } else if (value < 1168) {
+      return value + -1;
 
-    } else if (value < 1173) {
-       return value + 0;
+   } else if (value < 1169) {
+      return value + 0;
 
-    } else if (value < 1174) {
-       return value + -1;
+   } else if (value < 1170) {
+      return value + -1;
 
-    } else if (value < 1175) {
-       return value + 0;
+   } else if (value < 1171) {
+      return value + 0;
 
-    } else if (value < 1176) {
-       return value + -1;
+   } else if (value < 1172) {
+      return value + -1;
 
-    } else if (value < 1177) {
-       return value + 0;
+   } else if (value < 1173) {
+      return value + 0;
 
-    } else if (value < 1178) {
-       return value + -1;
+   } else if (value < 1174) {
+      return value + -1;
 
-    } else if (value < 1179) {
-       return value + 0;
+   } else if (value < 1175) {
+      return value + 0;
 
-    } else if (value < 1180) {
-       return value + -1;
+   } else if (value < 1176) {
+      return value + -1;
 
-    } else if (value < 1181) {
-       return value + 0;
+   } else if (value < 1177) {
+      return value + 0;
 
-    } else if (value < 1182) {
-       return value + -1;
+   } else if (value < 1178) {
+      return value + -1;
 
-    } else if (value < 1183) {
-       return value + 0;
+   } else if (value < 1179) {
+      return value + 0;
 
-    } else if (value < 1184) {
-       return value + -1;
+   } else if (value < 1180) {
+      return value + -1;
 
-    } else if (value < 1185) {
-       return value + 0;
+   } else if (value < 1181) {
+      return value + 0;
 
-    } else if (value < 1186) {
-       return value + -1;
+   } else if (value < 1182) {
+      return value + -1;
 
-    } else if (value < 1187) {
-       return value + 0;
+   } else if (value < 1183) {
+      return value + 0;
 
-    } else if (value < 1188) {
-       return value + -1;
+   } else if (value < 1184) {
+      return value + -1;
 
-    } else if (value < 1189) {
-       return value + 0;
+   } else if (value < 1185) {
+      return value + 0;
 
-    } else if (value < 1190) {
-       return value + -1;
+   } else if (value < 1186) {
+      return value + -1;
 
-    } else if (value < 1191) {
-       return value + 0;
+   } else if (value < 1187) {
+      return value + 0;
 
-    } else if (value < 1192) {
-       return value + -1;
+   } else if (value < 1188) {
+      return value + -1;
 
-    } else if (value < 1193) {
-       return value + 0;
+   } else if (value < 1189) {
+      return value + 0;
 
-    } else if (value < 1194) {
-       return value + -1;
+   } else if (value < 1190) {
+      return value + -1;
 
-    } else if (value < 1195) {
-       return value + 0;
+   } else if (value < 1191) {
+      return value + 0;
 
-    } else if (value < 1196) {
-       return value + -1;
+   } else if (value < 1192) {
+      return value + -1;
 
-    } else if (value < 1197) {
-       return value + 0;
+   } else if (value < 1193) {
+      return value + 0;
 
-    } else if (value < 1198) {
-       return value + -1;
+   } else if (value < 1194) {
+      return value + -1;
 
-    } else if (value < 1199) {
-       return value + 0;
+   } else if (value < 1195) {
+      return value + 0;
 
-    } else if (value < 1200) {
-       return value + -1;
+   } else if (value < 1196) {
+      return value + -1;
 
-    } else if (value < 1201) {
-       return value + 0;
+   } else if (value < 1197) {
+      return value + 0;
 
-    } else if (value < 1202) {
-       return value + -1;
+   } else if (value < 1198) {
+      return value + -1;
 
-    } else if (value < 1203) {
-       return value + 0;
+   } else if (value < 1199) {
+      return value + 0;
 
-    } else if (value < 1204) {
-       return value + -1;
+   } else if (value < 1200) {
+      return value + -1;
 
-    } else if (value < 1205) {
-       return value + 0;
+   } else if (value < 1201) {
+      return value + 0;
 
-    } else if (value < 1206) {
-       return value + -1;
+   } else if (value < 1202) {
+      return value + -1;
 
-    } else if (value < 1207) {
-       return value + 0;
+   } else if (value < 1203) {
+      return value + 0;
 
-    } else if (value < 1208) {
-       return value + -1;
+   } else if (value < 1204) {
+      return value + -1;
 
-    } else if (value < 1209) {
-       return value + 0;
+   } else if (value < 1205) {
+      return value + 0;
 
-    } else if (value < 1210) {
-       return value + -1;
+   } else if (value < 1206) {
+      return value + -1;
 
-    } else if (value < 1211) {
-       return value + 0;
+   } else if (value < 1207) {
+      return value + 0;
 
-    } else if (value < 1212) {
-       return value + -1;
+   } else if (value < 1208) {
+      return value + -1;
 
-    } else if (value < 1213) {
-       return value + 0;
+   } else if (value < 1209) {
+      return value + 0;
 
-    } else if (value < 1214) {
-       return value + -1;
+   } else if (value < 1210) {
+      return value + -1;
 
-    } else if (value < 1215) {
-       return value + 0;
+   } else if (value < 1211) {
+      return value + 0;
 
-    } else if (value < 1216) {
-       return value + -1;
+   } else if (value < 1212) {
+      return value + -1;
 
-    } else if (value < 1218) {
-       return value + 0;
+   } else if (value < 1213) {
+      return value + 0;
 
-    } else if (value < 1219) {
-       return value + -1;
+   } else if (value < 1214) {
+      return value + -1;
 
-    } else if (value < 1220) {
-       return value + 0;
+   } else if (value < 1215) {
+      return value + 0;
 
-    } else if (value < 1221) {
-       return value + -1;
+   } else if (value < 1216) {
+      return value + -1;
 
-    } else if (value < 1222) {
-       return value + 0;
+   } else if (value < 1218) {
+      return value + 0;
 
-    } else if (value < 1223) {
-       return value + -1;
+   } else if (value < 1219) {
+      return value + -1;
 
-    } else if (value < 1224) {
-       return value + 0;
+   }
 
-    } else if (value < 1225) {
-       return value + -1;
+   if (value < 1220) {
+      return value + 0;
 
-    } else if (value < 1226) {
-       return value + 0;
+   } else if (value < 1221) {
+      return value + -1;
 
-    } else if (value < 1227) {
-       return value + -1;
+   } else if (value < 1222) {
+      return value + 0;
 
-    } else if (value < 1228) {
-       return value + 0;
+   } else if (value < 1223) {
+      return value + -1;
 
-    } else if (value < 1229) {
-       return value + -1;
+   } else if (value < 1224) {
+      return value + 0;
 
-    } else if (value < 1230) {
-       return value + 0;
+   } else if (value < 1225) {
+      return value + -1;
 
-    } else if (value < 1231) {
-       return value + -1;
+   } else if (value < 1226) {
+      return value + 0;
 
-    } else if (value < 1232) {
-       return value + -15;
+   } else if (value < 1227) {
+      return value + -1;
 
-    } else if (value < 1233) {
-       return value + 0;
+   } else if (value < 1228) {
+      return value + 0;
 
-    } else if (value < 1234) {
-       return value + -1;
+   } else if (value < 1229) {
+      return value + -1;
 
-    } else if (value < 1235) {
-       return value + 0;
+   } else if (value < 1230) {
+      return value + 0;
 
-    } else if (value < 1236) {
-       return value + -1;
+   } else if (value < 1231) {
+      return value + -1;
 
-    } else if (value < 1237) {
-       return value + 0;
+   } else if (value < 1232) {
+      return value + -15;
 
-    } else if (value < 1238) {
-       return value + -1;
+   } else if (value < 1233) {
+      return value + 0;
 
-    } else if (value < 1239) {
-       return value + 0;
+   } else if (value < 1234) {
+      return value + -1;
 
-    } else if (value < 1240) {
-       return value + -1;
+   } else if (value < 1235) {
+      return value + 0;
 
-    } else if (value < 1241) {
-       return value + 0;
+   } else if (value < 1236) {
+      return value + -1;
 
-    } else if (value < 1242) {
-       return value + -1;
+   } else if (value < 1237) {
+      return value + 0;
 
-    } else if (value < 1243) {
-       return value + 0;
+   } else if (value < 1238) {
+      return value + -1;
 
-    } else if (value < 1244) {
-       return value + -1;
+   } else if (value < 1239) {
+      return value + 0;
 
-    } else if (value < 1245) {
-       return value + 0;
+   } else if (value < 1240) {
+      return value + -1;
 
-    } else if (value < 1246) {
-       return value + -1;
+   } else if (value < 1241) {
+      return value + 0;
 
-    } else if (value < 1247) {
-       return value + 0;
+   } else if (value < 1242) {
+      return value + -1;
 
-    } else if (value < 1248) {
-       return value + -1;
+   } else if (value < 1243) {
+      return value + 0;
 
-    } else if (value < 1249) {
-       return value + 0;
+   } else if (value < 1244) {
+      return value + -1;
 
-    } else if (value < 1250) {
-       return value + -1;
+   } else if (value < 1245) {
+      return value + 0;
 
-    } else if (value < 1251) {
-       return value + 0;
+   } else if (value < 1246) {
+      return value + -1;
 
-    } else if (value < 1252) {
-       return value + -1;
+   } else if (value < 1247) {
+      return value + 0;
 
-    } else if (value < 1253) {
-       return value + 0;
+   } else if (value < 1248) {
+      return value + -1;
 
-    } else if (value < 1254) {
-       return value + -1;
+   } else if (value < 1249) {
+      return value + 0;
 
-    } else if (value < 1255) {
-       return value + 0;
+   } else if (value < 1250) {
+      return value + -1;
 
-    } else if (value < 1256) {
-       return value + -1;
+   } else if (value < 1251) {
+      return value + 0;
 
-    } else if (value < 1257) {
-       return value + 0;
+   } else if (value < 1252) {
+      return value + -1;
 
-    } else if (value < 1258) {
-       return value + -1;
+   } else if (value < 1253) {
+      return value + 0;
 
-    } else if (value < 1259) {
-       return value + 0;
+   } else if (value < 1254) {
+      return value + -1;
 
-    } else if (value < 1260) {
-       return value + -1;
+   } else if (value < 1255) {
+      return value + 0;
 
-    } else if (value < 1261) {
-       return value + 0;
+   } else if (value < 1256) {
+      return value + -1;
 
-    } else if (value < 1262) {
-       return value + -1;
+   } else if (value < 1257) {
+      return value + 0;
 
-    } else if (value < 1263) {
-       return value + 0;
+   } else if (value < 1258) {
+      return value + -1;
 
-    } else if (value < 1264) {
-       return value + -1;
+   } else if (value < 1259) {
+      return value + 0;
 
-    } else if (value < 1265) {
-       return value + 0;
+   } else if (value < 1260) {
+      return value + -1;
 
-    } else if (value < 1266) {
-       return value + -1;
+   } else if (value < 1261) {
+      return value + 0;
 
-    } else if (value < 1267) {
-       return value + 0;
+   } else if (value < 1262) {
+      return value + -1;
 
-    } else if (value < 1268) {
-       return value + -1;
+   } else if (value < 1263) {
+      return value + 0;
 
-    } else if (value < 1269) {
-       return value + 0;
+   } else if (value < 1264) {
+      return value + -1;
 
-    } else if (value < 1270) {
-       return value + -1;
+   } else if (value < 1265) {
+      return value + 0;
 
-    } else if (value < 1271) {
-       return value + 0;
+   } else if (value < 1266) {
+      return value + -1;
 
-    } else if (value < 1272) {
-       return value + -1;
+   } else if (value < 1267) {
+      return value + 0;
 
-    } else if (value < 1273) {
-       return value + 0;
+   } else if (value < 1268) {
+      return value + -1;
 
-    } else if (value < 1274) {
-       return value + -1;
+   } else if (value < 1269) {
+      return value + 0;
 
-    } else if (value < 1275) {
-       return value + 0;
+   } else if (value < 1270) {
+      return value + -1;
 
-    } else if (value < 1276) {
-       return value + -1;
+   } else if (value < 1271) {
+      return value + 0;
 
-    } else if (value < 1277) {
-       return value + 0;
+   } else if (value < 1272) {
+      return value + -1;
 
-    } else if (value < 1278) {
-       return value + -1;
+   } else if (value < 1273) {
+      return value + 0;
 
-    } else if (value < 1279) {
-       return value + 0;
+   } else if (value < 1274) {
+      return value + -1;
 
-    } else if (value < 1280) {
-       return value + -1;
+   } else if (value < 1275) {
+      return value + 0;
 
-    } else if (value < 1281) {
-       return value + 0;
+   } else if (value < 1276) {
+      return value + -1;
 
-    } else if (value < 1282) {
-       return value + -1;
+   } else if (value < 1277) {
+      return value + 0;
 
-    } else if (value < 1283) {
-       return value + 0;
+   } else if (value < 1278) {
+      return value + -1;
 
-    } else if (value < 1284) {
-       return value + -1;
+   } else if (value < 1279) {
+      return value + 0;
 
-    } else if (value < 1285) {
-       return value + 0;
+   } else if (value < 1280) {
+      return value + -1;
 
-    } else if (value < 1286) {
-       return value + -1;
+   } else if (value < 1281) {
+      return value + 0;
 
-    } else if (value < 1287) {
-       return value + 0;
+   } else if (value < 1282) {
+      return value + -1;
 
-    } else if (value < 1288) {
-       return value + -1;
+   } else if (value < 1283) {
+      return value + 0;
 
-    } else if (value < 1289) {
-       return value + 0;
+   } else if (value < 1284) {
+      return value + -1;
 
-    } else if (value < 1290) {
-       return value + -1;
+   } else if (value < 1285) {
+      return value + 0;
 
-    } else if (value < 1291) {
-       return value + 0;
+   } else if (value < 1286) {
+      return value + -1;
 
-    } else if (value < 1292) {
-       return value + -1;
+   } else if (value < 1287) {
+      return value + 0;
 
-    } else if (value < 1293) {
-       return value + 0;
+   } else if (value < 1288) {
+      return value + -1;
 
-    } else if (value < 1294) {
-       return value + -1;
+   } else if (value < 1289) {
+      return value + 0;
 
-    } else if (value < 1295) {
-       return value + 0;
+   } else if (value < 1290) {
+      return value + -1;
 
-    } else if (value < 1296) {
-       return value + -1;
+   } else if (value < 1291) {
+      return value + 0;
 
-    } else if (value < 1297) {
-       return value + 0;
+   } else if (value < 1292) {
+      return value + -1;
 
-    } else if (value < 1298) {
-       return value + -1;
+   } else if (value < 1293) {
+      return value + 0;
 
-    } else if (value < 1299) {
-       return value + 0;
+   } else if (value < 1294) {
+      return value + -1;
 
-    } else if (value < 1300) {
-       return value + -1;
+   } else if (value < 1295) {
+      return value + 0;
 
-    } else if (value < 1301) {
-       return value + 0;
+   } else if (value < 1296) {
+      return value + -1;
 
-    } else if (value < 1302) {
-       return value + -1;
+   } else if (value < 1297) {
+      return value + 0;
 
-    } else if (value < 1303) {
-       return value + 0;
+   } else if (value < 1298) {
+      return value + -1;
 
-    } else if (value < 1304) {
-       return value + -1;
+   } else if (value < 1299) {
+      return value + 0;
 
-    } else if (value < 1305) {
-       return value + 0;
+   } else if (value < 1300) {
+      return value + -1;
 
-    } else if (value < 1306) {
-       return value + -1;
+   } else if (value < 1301) {
+      return value + 0;
 
-    } else if (value < 1307) {
-       return value + 0;
+   } else if (value < 1302) {
+      return value + -1;
 
-    } else if (value < 1308) {
-       return value + -1;
+   } else if (value < 1303) {
+      return value + 0;
 
-    } else if (value < 1309) {
-       return value + 0;
+   } else if (value < 1304) {
+      return value + -1;
 
-    } else if (value < 1310) {
-       return value + -1;
+   } else if (value < 1305) {
+      return value + 0;
 
-    } else if (value < 1311) {
-       return value + 0;
+   } else if (value < 1306) {
+      return value + -1;
 
-    } else if (value < 1312) {
-       return value + -1;
+   } else if (value < 1307) {
+      return value + 0;
 
-    } else if (value < 1313) {
-       return value + 0;
+   } else if (value < 1308) {
+      return value + -1;
 
-    } else if (value < 1314) {
-       return value + -1;
+   } else if (value < 1309) {
+      return value + 0;
 
-    } else if (value < 1315) {
-       return value + 0;
+   } else if (value < 1310) {
+      return value + -1;
 
-    } else if (value < 1316) {
-       return value + -1;
+   } else if (value < 1311) {
+      return value + 0;
 
-    } else if (value < 1317) {
-       return value + 0;
+   } else if (value < 1312) {
+      return value + -1;
 
-    } else if (value < 1318) {
-       return value + -1;
+   } else if (value < 1313) {
+      return value + 0;
 
-    } else if (value < 1319) {
-       return value + 0;
+   } else if (value < 1314) {
+      return value + -1;
 
-    } else if (value < 1320) {
-       return value + -1;
+   } else if (value < 1315) {
+      return value + 0;
 
-    } else if (value < 1321) {
-       return value + 0;
+   } else if (value < 1316) {
+      return value + -1;
 
-    } else if (value < 1322) {
-       return value + -1;
+   } else if (value < 1317) {
+      return value + 0;
 
-    } else if (value < 1323) {
-       return value + 0;
+   } else if (value < 1318) {
+      return value + -1;
 
-    } else if (value < 1324) {
-       return value + -1;
+   } else if (value < 1319) {
+      return value + 0;
 
-    } else if (value < 1325) {
-       return value + 0;
+   }
 
-    } else if (value < 1326) {
-       return value + -1;
+   if (value < 1320) {
+      return value + -1;
 
-    } else if (value < 1327) {
-       return value + 0;
+   } else if (value < 1321) {
+      return value + 0;
 
-    } else if (value < 1328) {
-       return value + -1;
+   } else if (value < 1322) {
+      return value + -1;
 
-    } else if (value < 1377) {
-       return value + 0;
+   } else if (value < 1323) {
+      return value + 0;
 
-    } else if (value == 1415) {
-       // special char
-       return 0;
+   } else if (value < 1324) {
+      return value + -1;
 
-    } else if (value < 1416) {
-       return value + -48;
+   } else if (value < 1325) {
+      return value + 0;
 
-    } else if (value < 5112) {
-       return value + 0;
+   } else if (value < 1326) {
+      return value + -1;
 
-    } else if (value < 5118) {
-       return value + -8;
+   } else if (value < 1327) {
+      return value + 0;
 
-    } else if (value < 7296) {
-       return value + 0;
+   } else if (value < 1328) {
+      return value + -1;
 
-    } else if (value < 7297) {
-       return value + -6254;
+   } else if (value < 1377) {
+      return value + 0;
 
-    } else if (value < 7298) {
-       return value + -6253;
+   } else if (value == 1415) {
+      // special char
+      return 0;
 
-    } else if (value < 7299) {
-       return value + -6244;
+   } else if (value < 1416) {
+      return value + -48;
 
-    } else if (value < 7301) {
-       return value + -6242;
+   } else if (value < 5112) {
+      return value + 0;
 
-    } else if (value < 7302) {
-       return value + -6243;
+   } else if (value < 5118) {
+      return value + -8;
 
-    } else if (value < 7303) {
-       return value + -6236;
+   } else if (value < 7296) {
+      return value + 0;
 
-    } else if (value < 7304) {
-       return value + -6181;
+   } else if (value < 7297) {
+      return value + -6254;
 
-    } else if (value < 7305) {
-       return value + 35266;
+   } else if (value < 7298) {
+      return value + -6253;
 
-    } else if (value < 7545) {
-       return value + 0;
+   } else if (value < 7299) {
+      return value + -6244;
 
-    } else if (value < 7546) {
-       return value + 35332;
+   } else if (value < 7301) {
+      return value + -6242;
 
-    } else if (value < 7549) {
-       return value + 0;
+   } else if (value < 7302) {
+      return value + -6243;
 
-    } else if (value < 7550) {
-       return value + 3814;
+   } else if (value < 7303) {
+      return value + -6236;
 
-    } else if (value < 7681) {
-       return value + 0;
+   } else if (value < 7304) {
+      return value + -6181;
 
-    } else if (value < 7682) {
-       return value + -1;
+   } else if (value < 7305) {
+      return value + 35266;
 
-    } else if (value < 7683) {
-       return value + 0;
+   } else if (value < 7545) {
+      return value + 0;
 
-    } else if (value < 7684) {
-       return value + -1;
+   } else if (value < 7546) {
+      return value + 35332;
 
-    } else if (value < 7685) {
-       return value + 0;
+   } else if (value < 7549) {
+      return value + 0;
 
-    } else if (value < 7686) {
-       return value + -1;
+   } else if (value < 7550) {
+      return value + 3814;
 
-    } else if (value < 7687) {
-       return value + 0;
+   } else if (value < 7681) {
+      return value + 0;
 
-    } else if (value < 7688) {
-       return value + -1;
+   } else if (value < 7682) {
+      return value + -1;
 
-    } else if (value < 7689) {
-       return value + 0;
+   } else if (value < 7683) {
+      return value + 0;
 
-    } else if (value < 7690) {
-       return value + -1;
+   } else if (value < 7684) {
+      return value + -1;
 
-    } else if (value < 7691) {
-       return value + 0;
+   } else if (value < 7685) {
+      return value + 0;
 
-    } else if (value < 7692) {
-       return value + -1;
+   } else if (value < 7686) {
+      return value + -1;
 
-    } else if (value < 7693) {
-       return value + 0;
+   } else if (value < 7687) {
+      return value + 0;
 
-    } else if (value < 7694) {
-       return value + -1;
+   } else if (value < 7688) {
+      return value + -1;
 
-    } else if (value < 7695) {
-       return value + 0;
+   } else if (value < 7689) {
+      return value + 0;
 
-    } else if (value < 7696) {
-       return value + -1;
+   } else if (value < 7690) {
+      return value + -1;
 
-    } else if (value < 7697) {
-       return value + 0;
+   } else if (value < 7691) {
+      return value + 0;
 
-    } else if (value < 7698) {
-       return value + -1;
+   } else if (value < 7692) {
+      return value + -1;
 
-    } else if (value < 7699) {
-       return value + 0;
+   } else if (value < 7693) {
+      return value + 0;
 
-    } else if (value < 7700) {
-       return value + -1;
+   } else if (value < 7694) {
+      return value + -1;
 
-    } else if (value < 7701) {
-       return value + 0;
+   } else if (value < 7695) {
+      return value + 0;
 
-    } else if (value < 7702) {
-       return value + -1;
+   } else if (value < 7696) {
+      return value + -1;
 
-    } else if (value < 7703) {
-       return value + 0;
+   } else if (value < 7697) {
+      return value + 0;
 
-    } else if (value < 7704) {
-       return value + -1;
+   } else if (value < 7698) {
+      return value + -1;
 
-    } else if (value < 7705) {
-       return value + 0;
+   } else if (value < 7699) {
+      return value + 0;
 
-    } else if (value < 7706) {
-       return value + -1;
+   } else if (value < 7700) {
+      return value + -1;
 
-    } else if (value < 7707) {
-       return value + 0;
+   } else if (value < 7701) {
+      return value + 0;
 
-    } else if (value < 7708) {
-       return value + -1;
+   } else if (value < 7702) {
+      return value + -1;
 
-    } else if (value < 7709) {
-       return value + 0;
+   } else if (value < 7703) {
+      return value + 0;
 
-    } else if (value < 7710) {
-       return value + -1;
+   } else if (value < 7704) {
+      return value + -1;
 
-    } else if (value < 7711) {
-       return value + 0;
+   } else if (value < 7705) {
+      return value + 0;
 
-    } else if (value < 7712) {
-       return value + -1;
+   } else if (value < 7706) {
+      return value + -1;
 
-    } else if (value < 7713) {
-       return value + 0;
+   } else if (value < 7707) {
+      return value + 0;
 
-    } else if (value < 7714) {
-       return value + -1;
+   } else if (value < 7708) {
+      return value + -1;
 
-    } else if (value < 7715) {
-       return value + 0;
+   } else if (value < 7709) {
+      return value + 0;
 
-    } else if (value < 7716) {
-       return value + -1;
+   } else if (value < 7710) {
+      return value + -1;
 
-    } else if (value < 7717) {
-       return value + 0;
+   } else if (value < 7711) {
+      return value + 0;
 
-    } else if (value < 7718) {
-       return value + -1;
+   } else if (value < 7712) {
+      return value + -1;
 
-    } else if (value < 7719) {
-       return value + 0;
+   } else if (value < 7713) {
+      return value + 0;
 
-    } else if (value < 7720) {
-       return value + -1;
+   } else if (value < 7714) {
+      return value + -1;
 
-    } else if (value < 7721) {
-       return value + 0;
+   } else if (value < 7715) {
+      return value + 0;
 
-    } else if (value < 7722) {
-       return value + -1;
+   } else if (value < 7716) {
+      return value + -1;
 
-    } else if (value < 7723) {
-       return value + 0;
+   } else if (value < 7717) {
+      return value + 0;
 
-    } else if (value < 7724) {
-       return value + -1;
+   } else if (value < 7718) {
+      return value + -1;
 
-    } else if (value < 7725) {
-       return value + 0;
+   } else if (value < 7719) {
+      return value + 0;
 
-    } else if (value < 7726) {
-       return value + -1;
+   } else if (value < 7720) {
+      return value + -1;
 
-    } else if (value < 7727) {
-       return value + 0;
+   } else if (value < 7721) {
+      return value + 0;
 
-    } else if (value < 7728) {
-       return value + -1;
+   } else if (value < 7722) {
+      return value + -1;
 
-    } else if (value < 7729) {
-       return value + 0;
+   } else if (value < 7723) {
+      return value + 0;
 
-    } else if (value < 7730) {
-       return value + -1;
+   } else if (value < 7724) {
+      return value + -1;
 
-    } else if (value < 7731) {
-       return value + 0;
+   } else if (value < 7725) {
+      return value + 0;
 
-    } else if (value < 7732) {
-       return value + -1;
+   } else if (value < 7726) {
+      return value + -1;
 
-    } else if (value < 7733) {
-       return value + 0;
+   } else if (value < 7727) {
+      return value + 0;
 
-    } else if (value < 7734) {
-       return value + -1;
+   } else if (value < 7728) {
+      return value + -1;
 
-    } else if (value < 7735) {
-       return value + 0;
+   } else if (value < 7729) {
+      return value + 0;
 
-    } else if (value < 7736) {
-       return value + -1;
+   } else if (value < 7730) {
+      return value + -1;
 
-    } else if (value < 7737) {
-       return value + 0;
+   } else if (value < 7731) {
+      return value + 0;
 
-    } else if (value < 7738) {
-       return value + -1;
+   } else if (value < 7732) {
+      return value + -1;
 
-    } else if (value < 7739) {
-       return value + 0;
+   } else if (value < 7733) {
+      return value + 0;
 
-    } else if (value < 7740) {
-       return value + -1;
+   } else if (value < 7734) {
+      return value + -1;
 
-    } else if (value < 7741) {
-       return value + 0;
+   } else if (value < 7735) {
+      return value + 0;
 
-    } else if (value < 7742) {
-       return value + -1;
+   } else if (value < 7736) {
+      return value + -1;
 
-    } else if (value < 7743) {
-       return value + 0;
+   } else if (value < 7737) {
+      return value + 0;
 
-    } else if (value < 7744) {
-       return value + -1;
+   } else if (value < 7738) {
+      return value + -1;
 
-    } else if (value < 7745) {
-       return value + 0;
+   } else if (value < 7739) {
+      return value + 0;
 
-    } else if (value < 7746) {
-       return value + -1;
+   } else if (value < 7740) {
+      return value + -1;
 
-    } else if (value < 7747) {
-       return value + 0;
+   } else if (value < 7741) {
+      return value + 0;
 
-    } else if (value < 7748) {
-       return value + -1;
+   } else if (value < 7742) {
+      return value + -1;
 
-    } else if (value < 7749) {
-       return value + 0;
+   } else if (value < 7743) {
+      return value + 0;
 
-    } else if (value < 7750) {
-       return value + -1;
+   } else if (value < 7744) {
+      return value + -1;
 
-    } else if (value < 7751) {
-       return value + 0;
+   } else if (value < 7745) {
+      return value + 0;
 
-    } else if (value < 7752) {
-       return value + -1;
+   } else if (value < 7746) {
+      return value + -1;
 
-    } else if (value < 7753) {
-       return value + 0;
+   } else if (value < 7747) {
+      return value + 0;
 
-    } else if (value < 7754) {
-       return value + -1;
+   } else if (value < 7748) {
+      return value + -1;
 
-    } else if (value < 7755) {
-       return value + 0;
+   } else if (value < 7749) {
+      return value + 0;
 
-    } else if (value < 7756) {
-       return value + -1;
+   } else if (value < 7750) {
+      return value + -1;
 
-    } else if (value < 7757) {
-       return value + 0;
+   } else if (value < 7751) {
+      return value + 0;
 
-    } else if (value < 7758) {
-       return value + -1;
+   } else if (value < 7752) {
+      return value + -1;
 
-    } else if (value < 7759) {
-       return value + 0;
+   } else if (value < 7753) {
+      return value + 0;
 
-    } else if (value < 7760) {
-       return value + -1;
+   } else if (value < 7754) {
+      return value + -1;
 
-    } else if (value < 7761) {
-       return value + 0;
+   }
 
-    } else if (value < 7762) {
-       return value + -1;
+   if (value < 7755) {
+      return value + 0;
 
-    } else if (value < 7763) {
-       return value + 0;
+   } else if (value < 7756) {
+      return value + -1;
 
-    } else if (value < 7764) {
-       return value + -1;
+   } else if (value < 7757) {
+      return value + 0;
 
-    } else if (value < 7765) {
-       return value + 0;
+   } else if (value < 7758) {
+      return value + -1;
 
-    } else if (value < 7766) {
-       return value + -1;
+   } else if (value < 7759) {
+      return value + 0;
 
-    } else if (value < 7767) {
-       return value + 0;
+   } else if (value < 7760) {
+      return value + -1;
 
-    } else if (value < 7768) {
-       return value + -1;
+   } else if (value < 7761) {
+      return value + 0;
 
-    } else if (value < 7769) {
-       return value + 0;
+   } else if (value < 7762) {
+      return value + -1;
 
-    } else if (value < 7770) {
-       return value + -1;
+   } else if (value < 7763) {
+      return value + 0;
 
-    } else if (value < 7771) {
-       return value + 0;
+   } else if (value < 7764) {
+      return value + -1;
 
-    } else if (value < 7772) {
-       return value + -1;
+   } else if (value < 7765) {
+      return value + 0;
 
-    } else if (value < 7773) {
-       return value + 0;
+   } else if (value < 7766) {
+      return value + -1;
 
-    } else if (value < 7774) {
-       return value + -1;
+   } else if (value < 7767) {
+      return value + 0;
 
-    } else if (value < 7775) {
-       return value + 0;
+   } else if (value < 7768) {
+      return value + -1;
 
-    } else if (value < 7776) {
-       return value + -1;
+   } else if (value < 7769) {
+      return value + 0;
 
-    } else if (value < 7777) {
-       return value + 0;
+   } else if (value < 7770) {
+      return value + -1;
 
-    } else if (value < 7778) {
-       return value + -1;
+   } else if (value < 7771) {
+      return value + 0;
 
-    } else if (value < 7779) {
-       return value + 0;
+   } else if (value < 7772) {
+      return value + -1;
 
-    } else if (value < 7780) {
-       return value + -1;
+   } else if (value < 7773) {
+      return value + 0;
 
-    } else if (value < 7781) {
-       return value + 0;
+   } else if (value < 7774) {
+      return value + -1;
 
-    } else if (value < 7782) {
-       return value + -1;
+   } else if (value < 7775) {
+      return value + 0;
 
-    } else if (value < 7783) {
-       return value + 0;
+   } else if (value < 7776) {
+      return value + -1;
 
-    } else if (value < 7784) {
-       return value + -1;
+   } else if (value < 7777) {
+      return value + 0;
 
-    } else if (value < 7785) {
-       return value + 0;
+   } else if (value < 7778) {
+      return value + -1;
 
-    } else if (value < 7786) {
-       return value + -1;
+   } else if (value < 7779) {
+      return value + 0;
 
-    } else if (value < 7787) {
-       return value + 0;
+   } else if (value < 7780) {
+      return value + -1;
 
-    } else if (value < 7788) {
-       return value + -1;
+   } else if (value < 7781) {
+      return value + 0;
 
-    } else if (value < 7789) {
-       return value + 0;
+   } else if (value < 7782) {
+      return value + -1;
 
-    } else if (value < 7790) {
-       return value + -1;
+   } else if (value < 7783) {
+      return value + 0;
 
-    } else if (value < 7791) {
-       return value + 0;
+   } else if (value < 7784) {
+      return value + -1;
 
-    } else if (value < 7792) {
-       return value + -1;
+   } else if (value < 7785) {
+      return value + 0;
 
-    } else if (value < 7793) {
-       return value + 0;
+   } else if (value < 7786) {
+      return value + -1;
 
-    } else if (value < 7794) {
-       return value + -1;
+   } else if (value < 7787) {
+      return value + 0;
 
-    } else if (value < 7795) {
-       return value + 0;
+   } else if (value < 7788) {
+      return value + -1;
 
-    } else if (value < 7796) {
-       return value + -1;
+   } else if (value < 7789) {
+      return value + 0;
 
-    } else if (value < 7797) {
-       return value + 0;
+   } else if (value < 7790) {
+      return value + -1;
 
-    } else if (value < 7798) {
-       return value + -1;
+   } else if (value < 7791) {
+      return value + 0;
 
-    } else if (value < 7799) {
-       return value + 0;
+   } else if (value < 7792) {
+      return value + -1;
 
-    } else if (value < 7800) {
-       return value + -1;
+   } else if (value < 7793) {
+      return value + 0;
 
-    } else if (value < 7801) {
-       return value + 0;
+   } else if (value < 7794) {
+      return value + -1;
 
-    } else if (value < 7802) {
-       return value + -1;
+   } else if (value < 7795) {
+      return value + 0;
 
-    } else if (value < 7803) {
-       return value + 0;
+   } else if (value < 7796) {
+      return value + -1;
 
-    } else if (value < 7804) {
-       return value + -1;
+   } else if (value < 7797) {
+      return value + 0;
 
-    } else if (value < 7805) {
-       return value + 0;
+   } else if (value < 7798) {
+      return value + -1;
 
-    } else if (value < 7806) {
-       return value + -1;
+   } else if (value < 7799) {
+      return value + 0;
 
-    } else if (value < 7807) {
-       return value + 0;
+   } else if (value < 7800) {
+      return value + -1;
 
-    } else if (value < 7808) {
-       return value + -1;
+   } else if (value < 7801) {
+      return value + 0;
 
-    } else if (value < 7809) {
-       return value + 0;
+   } else if (value < 7802) {
+      return value + -1;
 
-    } else if (value < 7810) {
-       return value + -1;
+   } else if (value < 7803) {
+      return value + 0;
 
-    } else if (value < 7811) {
-       return value + 0;
+   } else if (value < 7804) {
+      return value + -1;
 
-    } else if (value < 7812) {
-       return value + -1;
+   } else if (value < 7805) {
+      return value + 0;
 
-    } else if (value < 7813) {
-       return value + 0;
+   } else if (value < 7806) {
+      return value + -1;
 
-    } else if (value < 7814) {
-       return value + -1;
+   } else if (value < 7807) {
+      return value + 0;
 
-    } else if (value < 7815) {
-       return value + 0;
+   } else if (value < 7808) {
+      return value + -1;
 
-    } else if (value < 7816) {
-       return value + -1;
+   } else if (value < 7809) {
+      return value + 0;
 
-    } else if (value < 7817) {
-       return value + 0;
+   } else if (value < 7810) {
+      return value + -1;
 
-    } else if (value < 7818) {
-       return value + -1;
+   } else if (value < 7811) {
+      return value + 0;
 
-    } else if (value < 7819) {
-       return value + 0;
+   } else if (value < 7812) {
+      return value + -1;
 
-    } else if (value < 7820) {
-       return value + -1;
+   } else if (value < 7813) {
+      return value + 0;
 
-    } else if (value < 7821) {
-       return value + 0;
+   } else if (value < 7814) {
+      return value + -1;
 
-    } else if (value < 7822) {
-       return value + -1;
+   } else if (value < 7815) {
+      return value + 0;
 
-    } else if (value < 7823) {
-       return value + 0;
+   } else if (value < 7816) {
+      return value + -1;
 
-    } else if (value < 7824) {
-       return value + -1;
+   } else if (value < 7817) {
+      return value + 0;
 
-    } else if (value < 7825) {
-       return value + 0;
+   } else if (value < 7818) {
+      return value + -1;
 
-    } else if (value < 7826) {
-       return value + -1;
+   } else if (value < 7819) {
+      return value + 0;
 
-    } else if (value < 7827) {
-       return value + 0;
+   } else if (value < 7820) {
+      return value + -1;
 
-    } else if (value < 7828) {
-       return value + -1;
+   } else if (value < 7821) {
+      return value + 0;
 
-    } else if (value < 7829) {
-       return value + 0;
+   } else if (value < 7822) {
+      return value + -1;
 
-    } else if (value == 7830) {
-       // special char
-       return 0;
+   } else if (value < 7823) {
+      return value + 0;
 
-    } else if (value == 7831) {
-       // special char
-       return 0;
+   } else if (value < 7824) {
+      return value + -1;
 
-    } else if (value == 7832) {
-       // special char
-       return 0;
+   } else if (value < 7825) {
+      return value + 0;
 
-    } else if (value == 7833) {
-       // special char
-       return 0;
+   } else if (value < 7826) {
+      return value + -1;
 
-    } else if (value == 7834) {
-       // special char
-       return 0;
+   } else if (value < 7827) {
+      return value + 0;
 
-    } else if (value < 7835) {
-       return value + -1;
+   } else if (value < 7828) {
+      return value + -1;
 
-    } else if (value < 7836) {
-       return value + -59;
+   } else if (value < 7829) {
+      return value + 0;
 
-    } else if (value < 7841) {
-       return value + 0;
+   } else if (value == 7830) {
+      // special char
+      return 0;
 
-    } else if (value < 7842) {
-       return value + -1;
+   } else if (value == 7831) {
+      // special char
+      return 0;
 
-    } else if (value < 7843) {
-       return value + 0;
+   } else if (value == 7832) {
+      // special char
+      return 0;
 
-    } else if (value < 7844) {
-       return value + -1;
+   } else if (value == 7833) {
+      // special char
+      return 0;
 
-    } else if (value < 7845) {
-       return value + 0;
+   } else if (value == 7834) {
+      // special char
+      return 0;
 
-    } else if (value < 7846) {
-       return value + -1;
+   } else if (value < 7835) {
+      return value + -1;
 
-    } else if (value < 7847) {
-       return value + 0;
+   } else if (value < 7836) {
+      return value + -59;
 
-    } else if (value < 7848) {
-       return value + -1;
+   } else if (value < 7841) {
+      return value + 0;
 
-    } else if (value < 7849) {
-       return value + 0;
+   } else if (value < 7842) {
+      return value + -1;
 
-    } else if (value < 7850) {
-       return value + -1;
+   } else if (value < 7843) {
+      return value + 0;
 
-    } else if (value < 7851) {
-       return value + 0;
+   } else if (value < 7844) {
+      return value + -1;
 
-    } else if (value < 7852) {
-       return value + -1;
+   } else if (value < 7845) {
+      return value + 0;
 
-    } else if (value < 7853) {
-       return value + 0;
+   } else if (value < 7846) {
+      return value + -1;
 
-    } else if (value < 7854) {
-       return value + -1;
+   } else if (value < 7847) {
+      return value + 0;
 
-    } else if (value < 7855) {
-       return value + 0;
+   } else if (value < 7848) {
+      return value + -1;
 
-    } else if (value < 7856) {
-       return value + -1;
+   } else if (value < 7849) {
+      return value + 0;
 
-    } else if (value < 7857) {
-       return value + 0;
+   } else if (value < 7850) {
+      return value + -1;
 
-    } else if (value < 7858) {
-       return value + -1;
+   } else if (value < 7851) {
+      return value + 0;
 
-    } else if (value < 7859) {
-       return value + 0;
+   } else if (value < 7852) {
+      return value + -1;
 
-    } else if (value < 7860) {
-       return value + -1;
+   } else if (value < 7853) {
+      return value + 0;
 
-    } else if (value < 7861) {
-       return value + 0;
+   } else if (value < 7854) {
+      return value + -1;
 
-    } else if (value < 7862) {
-       return value + -1;
+   } else if (value < 7855) {
+      return value + 0;
 
-    } else if (value < 7863) {
-       return value + 0;
+   } else if (value < 7856) {
+      return value + -1;
 
-    } else if (value < 7864) {
-       return value + -1;
+   } else if (value < 7857) {
+      return value + 0;
 
-    } else if (value < 7865) {
-       return value + 0;
+   } else if (value < 7858) {
+      return value + -1;
 
-    } else if (value < 7866) {
-       return value + -1;
+   } else if (value < 7859) {
+      return value + 0;
 
-    } else if (value < 7867) {
-       return value + 0;
+   } else if (value < 7860) {
+      return value + -1;
 
-    } else if (value < 7868) {
-       return value + -1;
+   } else if (value < 7861) {
+      return value + 0;
 
-    } else if (value < 7869) {
-       return value + 0;
+   } else if (value < 7862) {
+      return value + -1;
 
-    } else if (value < 7870) {
-       return value + -1;
+   } else if (value < 7863) {
+      return value + 0;
 
-    } else if (value < 7871) {
-       return value + 0;
+   }
 
-    } else if (value < 7872) {
-       return value + -1;
+   if (value < 7864) {
+      return value + -1;
 
-    } else if (value < 7873) {
-       return value + 0;
+   } else if (value < 7865) {
+      return value + 0;
 
-    } else if (value < 7874) {
-       return value + -1;
+   } else if (value < 7866) {
+      return value + -1;
 
-    } else if (value < 7875) {
-       return value + 0;
+   } else if (value < 7867) {
+      return value + 0;
 
-    } else if (value < 7876) {
-       return value + -1;
+   } else if (value < 7868) {
+      return value + -1;
 
-    } else if (value < 7877) {
-       return value + 0;
+   } else if (value < 7869) {
+      return value + 0;
 
-    } else if (value < 7878) {
-       return value + -1;
+   } else if (value < 7870) {
+      return value + -1;
 
-    } else if (value < 7879) {
-       return value + 0;
+   } else if (value < 7871) {
+      return value + 0;
 
-    } else if (value < 7880) {
-       return value + -1;
+   } else if (value < 7872) {
+      return value + -1;
 
-    } else if (value < 7881) {
-       return value + 0;
+   } else if (value < 7873) {
+      return value + 0;
 
-    } else if (value < 7882) {
-       return value + -1;
+   } else if (value < 7874) {
+      return value + -1;
 
-    } else if (value < 7883) {
-       return value + 0;
+   } else if (value < 7875) {
+      return value + 0;
 
-    } else if (value < 7884) {
-       return value + -1;
+   } else if (value < 7876) {
+      return value + -1;
 
-    } else if (value < 7885) {
-       return value + 0;
+   } else if (value < 7877) {
+      return value + 0;
 
-    } else if (value < 7886) {
-       return value + -1;
+   } else if (value < 7878) {
+      return value + -1;
 
-    } else if (value < 7887) {
-       return value + 0;
+   } else if (value < 7879) {
+      return value + 0;
 
-    } else if (value < 7888) {
-       return value + -1;
+   } else if (value < 7880) {
+      return value + -1;
 
-    } else if (value < 7889) {
-       return value + 0;
+   } else if (value < 7881) {
+      return value + 0;
 
-    } else if (value < 7890) {
-       return value + -1;
+   } else if (value < 7882) {
+      return value + -1;
 
-    } else if (value < 7891) {
-       return value + 0;
+   } else if (value < 7883) {
+      return value + 0;
 
-    } else if (value < 7892) {
-       return value + -1;
+   } else if (value < 7884) {
+      return value + -1;
 
-    } else if (value < 7893) {
-       return value + 0;
+   } else if (value < 7885) {
+      return value + 0;
 
-    } else if (value < 7894) {
-       return value + -1;
+   } else if (value < 7886) {
+      return value + -1;
 
-    } else if (value < 7895) {
-       return value + 0;
+   } else if (value < 7887) {
+      return value + 0;
 
-    } else if (value < 7896) {
-       return value + -1;
+   } else if (value < 7888) {
+      return value + -1;
 
-    } else if (value < 7897) {
-       return value + 0;
+   } else if (value < 7889) {
+      return value + 0;
 
-    } else if (value < 7898) {
-       return value + -1;
+   } else if (value < 7890) {
+      return value + -1;
 
-    } else if (value < 7899) {
-       return value + 0;
+   } else if (value < 7891) {
+      return value + 0;
 
-    } else if (value < 7900) {
-       return value + -1;
+   } else if (value < 7892) {
+      return value + -1;
 
-    } else if (value < 7901) {
-       return value + 0;
+   } else if (value < 7893) {
+      return value + 0;
 
-    } else if (value < 7902) {
-       return value + -1;
+   } else if (value < 7894) {
+      return value + -1;
 
-    } else if (value < 7903) {
-       return value + 0;
+   } else if (value < 7895) {
+      return value + 0;
 
-    } else if (value < 7904) {
-       return value + -1;
+   } else if (value < 7896) {
+      return value + -1;
 
-    } else if (value < 7905) {
-       return value + 0;
+   } else if (value < 7897) {
+      return value + 0;
 
-    } else if (value < 7906) {
-       return value + -1;
+   } else if (value < 7898) {
+      return value + -1;
 
-    } else if (value < 7907) {
-       return value + 0;
+   } else if (value < 7899) {
+      return value + 0;
 
-    } else if (value < 7908) {
-       return value + -1;
+   } else if (value < 7900) {
+      return value + -1;
 
-    } else if (value < 7909) {
-       return value + 0;
+   } else if (value < 7901) {
+      return value + 0;
 
-    } else if (value < 7910) {
-       return value + -1;
+   } else if (value < 7902) {
+      return value + -1;
 
-    } else if (value < 7911) {
-       return value + 0;
+   } else if (value < 7903) {
+      return value + 0;
 
-    } else if (value < 7912) {
-       return value + -1;
+   } else if (value < 7904) {
+      return value + -1;
 
-    } else if (value < 7913) {
-       return value + 0;
+   } else if (value < 7905) {
+      return value + 0;
 
-    } else if (value < 7914) {
-       return value + -1;
+   } else if (value < 7906) {
+      return value + -1;
 
-    } else if (value < 7915) {
-       return value + 0;
+   } else if (value < 7907) {
+      return value + 0;
 
-    } else if (value < 7916) {
-       return value + -1;
+   } else if (value < 7908) {
+      return value + -1;
 
-    } else if (value < 7917) {
-       return value + 0;
+   } else if (value < 7909) {
+      return value + 0;
 
-    } else if (value < 7918) {
-       return value + -1;
+   } else if (value < 7910) {
+      return value + -1;
 
-    } else if (value < 7919) {
-       return value + 0;
+   } else if (value < 7911) {
+      return value + 0;
 
-    } else if (value < 7920) {
-       return value + -1;
+   } else if (value < 7912) {
+      return value + -1;
 
-    } else if (value < 7921) {
-       return value + 0;
+   } else if (value < 7913) {
+      return value + 0;
 
-    } else if (value < 7922) {
-       return value + -1;
+   } else if (value < 7914) {
+      return value + -1;
 
-    } else if (value < 7923) {
-       return value + 0;
+   } else if (value < 7915) {
+      return value + 0;
 
-    } else if (value < 7924) {
-       return value + -1;
+   } else if (value < 7916) {
+      return value + -1;
 
-    } else if (value < 7925) {
-       return value + 0;
+   } else if (value < 7917) {
+      return value + 0;
 
-    } else if (value < 7926) {
-       return value + -1;
+   } else if (value < 7918) {
+      return value + -1;
 
-    } else if (value < 7927) {
-       return value + 0;
+   } else if (value < 7919) {
+      return value + 0;
 
-    } else if (value < 7928) {
-       return value + -1;
+   } else if (value < 7920) {
+      return value + -1;
 
-    } else if (value < 7929) {
-       return value + 0;
+   } else if (value < 7921) {
+      return value + 0;
 
-    } else if (value < 7930) {
-       return value + -1;
+   } else if (value < 7922) {
+      return value + -1;
 
-    } else if (value < 7931) {
-       return value + 0;
+   } else if (value < 7923) {
+      return value + 0;
 
-    } else if (value < 7932) {
-       return value + -1;
+   } else if (value < 7924) {
+      return value + -1;
 
-    } else if (value < 7933) {
-       return value + 0;
+   } else if (value < 7925) {
+      return value + 0;
 
-    } else if (value < 7934) {
-       return value + -1;
+   } else if (value < 7926) {
+      return value + -1;
 
-    } else if (value < 7935) {
-       return value + 0;
+   } else if (value < 7927) {
+      return value + 0;
 
-    } else if (value < 7936) {
-       return value + -1;
+   } else if (value < 7928) {
+      return value + -1;
 
-    } else if (value < 7944) {
-       return value + 8;
+   } else if (value < 7929) {
+      return value + 0;
 
-    } else if (value < 7952) {
-       return value + 0;
+   } else if (value < 7930) {
+      return value + -1;
 
-    } else if (value < 7958) {
-       return value + 8;
+   } else if (value < 7931) {
+      return value + 0;
 
-    } else if (value < 7968) {
-       return value + 0;
+   } else if (value < 7932) {
+      return value + -1;
 
-    } else if (value < 7976) {
-       return value + 8;
+   } else if (value < 7933) {
+      return value + 0;
 
-    } else if (value < 7984) {
-       return value + 0;
+   } else if (value < 7934) {
+      return value + -1;
 
-    } else if (value < 7992) {
-       return value + 8;
+   } else if (value < 7935) {
+      return value + 0;
 
-    } else if (value < 8000) {
-       return value + 0;
+   } else if (value < 7936) {
+      return value + -1;
 
-    } else if (value < 8006) {
-       return value + 8;
+   } else if (value < 7944) {
+      return value + 8;
 
-    } else if (value == 8016) {
-       // special char
-       return 0;
+   } else if (value < 7952) {
+      return value + 0;
 
-    } else if (value < 8017) {
-       return value + 0;
+   } else if (value < 7958) {
+      return value + 8;
 
-    } else if (value == 8018) {
-       // special char
-       return 0;
+   } else if (value < 7968) {
+      return value + 0;
 
-    } else if (value == 8020) {
-       // special char
-       return 0;
+   } else if (value < 7976) {
+      return value + 8;
 
-    } else if (value == 8022) {
-       // special char
-       return 0;
+   } else if (value < 7984) {
+      return value + 0;
 
-    } else if (value < 8024) {
-       return value + 8;
+   } else if (value < 7992) {
+      return value + 8;
 
-    } else if (value < 8032) {
-       return value + 0;
+   } else if (value < 8000) {
+      return value + 0;
 
-    } else if (value < 8040) {
-       return value + 8;
+   } else if (value < 8006) {
+      return value + 8;
 
-    } else if (value < 8048) {
-       return value + 0;
+   } else if (value == 8016) {
+      // special char
+      return 0;
 
-    } else if (value < 8050) {
-       return value + 74;
+   } else if (value < 8017) {
+      return value + 0;
 
-    } else if (value < 8054) {
-       return value + 86;
+   } else if (value == 8018) {
+      // special char
+      return 0;
 
-    } else if (value < 8056) {
-       return value + 100;
+   } else if (value == 8020) {
+      // special char
+      return 0;
 
-    } else if (value < 8058) {
-       return value + 128;
+   } else if (value == 8022) {
+      // special char
+      return 0;
 
-    } else if (value < 8060) {
-       return value + 112;
+   } else if (value < 8024) {
+      return value + 8;
 
-    } else if (value < 8062) {
-       return value + 126;
+   } else if (value < 8032) {
+      return value + 0;
 
-    } else if (value < 8064) {
-       return value + 0;
+   } else if (value < 8040) {
+      return value + 8;
 
-    } else if (value < 8072) {
-       return value + 8;
+   } else if (value < 8048) {
+      return value + 0;
 
-    } else if (value < 8080) {
-       return value + 0;
+   } else if (value < 8050) {
+      return value + 74;
 
-    } else if (value < 8088) {
-       return value + 8;
+   } else if (value < 8054) {
+      return value + 86;
 
-    } else if (value < 8096) {
-       return value + 0;
+   } else if (value < 8056) {
+      return value + 100;
 
-    } else if (value < 8104) {
-       return value + 8;
+   } else if (value < 8058) {
+      return value + 128;
 
-    } else if (value < 8112) {
-       return value + 0;
+   } else if (value < 8060) {
+      return value + 112;
 
-    } else if (value == 8114) {
-       // special char
-       return 0;
+   } else if (value < 8062) {
+      return value + 126;
 
-    } else if (value < 8115) {
-       return value + 8;
+   } else if (value < 8064) {
+      return value + 0;
 
-    } else if (value == 8116) {
-       // special char
-       return 0;
+   } else if (value < 8072) {
+      return value + 8;
 
-    } else if (value < 8117) {
-       return value + 9;
+   } else if (value < 8080) {
+      return value + 0;
 
-    } else if (value == 8118) {
-       // special char
-       return 0;
+   } else if (value < 8088) {
+      return value + 8;
 
-    } else if (value == 8119) {
-       // special char
-       return 0;
+   } else if (value < 8096) {
+      return value + 0;
 
-    } else if (value < 8126) {
-       return value + 0;
+   } else if (value < 8104) {
+      return value + 8;
 
-    } else if (value < 8127) {
-       return value + -7205;
+   } else if (value < 8112) {
+      return value + 0;
 
-    } else if (value == 8130) {
-       // special char
-       return 0;
+   }
 
-    } else if (value < 8131) {
-       return value + 0;
+   if (value == 8114) {
+      // special char
+      return 0;
 
-    } else if (value == 8132) {
-       // special char
-       return 0;
+   } else if (value < 8115) {
+      return value + 8;
 
-    } else if (value < 8133) {
-       return value + 9;
+   } else if (value == 8116) {
+      // special char
+      return 0;
 
-    } else if (value == 8134) {
-       // special char
-       return 0;
+   } else if (value < 8117) {
+      return value + 9;
 
-    } else if (value == 8135) {
-       // special char
-       return 0;
+   } else if (value == 8118) {
+      // special char
+      return 0;
 
-    } else if (value < 8144) {
-       return value + 0;
+   } else if (value == 8119) {
+      // special char
+      return 0;
 
-    } else if (value == 8146) {
-       // special char
-       return 0;
+   } else if (value < 8126) {
+      return value + 0;
 
-    } else if (value == 8147) {
-       // special char
-       return 0;
+   } else if (value < 8127) {
+      return value + -7205;
 
-    } else if (value < 8148) {
-       return value + 8;
+   } else if (value == 8130) {
+      // special char
+      return 0;
 
-    } else if (value == 8150) {
-       // special char
-       return 0;
+   } else if (value < 8131) {
+      return value + 0;
 
-    } else if (value == 8151) {
-       // special char
-       return 0;
+   } else if (value == 8132) {
+      // special char
+      return 0;
 
-    } else if (value < 8160) {
-       return value + 0;
+   } else if (value < 8133) {
+      return value + 9;
 
-    } else if (value == 8162) {
-       // special char
-       return 0;
+   } else if (value == 8134) {
+      // special char
+      return 0;
 
-    } else if (value == 8163) {
-       // special char
-       return 0;
+   } else if (value == 8135) {
+      // special char
+      return 0;
 
-    } else if (value == 8164) {
-       // special char
-       return 0;
+   } else if (value < 8144) {
+      return value + 0;
 
-    } else if (value < 8165) {
-       return value + 8;
+   } else if (value == 8146) {
+      // special char
+      return 0;
 
-    } else if (value == 8166) {
-       // special char
-       return 0;
+   } else if (value == 8147) {
+      // special char
+      return 0;
 
-    } else if (value == 8167) {
-       // special char
-       return 0;
+   } else if (value < 8148) {
+      return value + 8;
 
-    } else if (value < 8168) {
-       return value + 7;
+   } else if (value == 8150) {
+      // special char
+      return 0;
 
-    } else if (value == 8178) {
-       // special char
-       return 0;
+   } else if (value == 8151) {
+      // special char
+      return 0;
 
-    } else if (value < 8179) {
-       return value + 0;
+   } else if (value < 8160) {
+      return value + 0;
 
-    } else if (value == 8180) {
-       // special char
-       return 0;
+   } else if (value == 8162) {
+      // special char
+      return 0;
 
-    } else if (value < 8181) {
-       return value + 9;
+   } else if (value == 8163) {
+      // special char
+      return 0;
 
-    } else if (value == 8182) {
-       // special char
-       return 0;
+   } else if (value == 8164) {
+      // special char
+      return 0;
 
-    } else if (value == 8183) {
-       // special char
-       return 0;
+   } else if (value < 8165) {
+      return value + 8;
 
-    } else if (value < 8526) {
-       return value + 0;
+   } else if (value == 8166) {
+      // special char
+      return 0;
 
-    } else if (value < 8527) {
-       return value + -28;
+   } else if (value == 8167) {
+      // special char
+      return 0;
 
-    } else if (value < 8560) {
-       return value + 0;
+   } else if (value < 8168) {
+      return value + 7;
 
-    } else if (value < 8576) {
-       return value + -16;
+   } else if (value == 8178) {
+      // special char
+      return 0;
 
-    } else if (value < 8580) {
-       return value + 0;
+   } else if (value < 8179) {
+      return value + 0;
 
-    } else if (value < 8581) {
-       return value + -1;
+   } else if (value == 8180) {
+      // special char
+      return 0;
 
-    } else if (value < 9424) {
-       return value + 0;
+   } else if (value < 8181) {
+      return value + 9;
 
-    } else if (value < 9450) {
-       return value + -26;
+   } else if (value == 8182) {
+      // special char
+      return 0;
 
-    } else if (value < 11312) {
-       return value + 0;
+   } else if (value == 8183) {
+      // special char
+      return 0;
 
-    } else if (value < 11359) {
-       return value + -48;
+   } else if (value < 8526) {
+      return value + 0;
 
-    } else if (value < 11361) {
-       return value + 0;
+   } else if (value < 8527) {
+      return value + -28;
 
-    } else if (value < 11362) {
-       return value + -1;
+   } else if (value < 8560) {
+      return value + 0;
 
-    } else if (value < 11365) {
-       return value + 0;
+   } else if (value < 8576) {
+      return value + -16;
 
-    } else if (value < 11366) {
-       return value + -10795;
+   } else if (value < 8580) {
+      return value + 0;
 
-    } else if (value < 11367) {
-       return value + -10792;
+   } else if (value < 8581) {
+      return value + -1;
 
-    } else if (value < 11368) {
-       return value + 0;
+   } else if (value < 9424) {
+      return value + 0;
 
-    } else if (value < 11369) {
-       return value + -1;
+   } else if (value < 9450) {
+      return value + -26;
 
-    } else if (value < 11370) {
-       return value + 0;
+   } else if (value < 11312) {
+      return value + 0;
 
-    } else if (value < 11371) {
-       return value + -1;
+   } else if (value < 11359) {
+      return value + -48;
 
-    } else if (value < 11372) {
-       return value + 0;
+   } else if (value < 11361) {
+      return value + 0;
 
-    } else if (value < 11373) {
-       return value + -1;
+   } else if (value < 11362) {
+      return value + -1;
 
-    } else if (value < 11379) {
-       return value + 0;
+   } else if (value < 11365) {
+      return value + 0;
 
-    } else if (value < 11380) {
-       return value + -1;
+   } else if (value < 11366) {
+      return value + -10795;
 
-    } else if (value < 11382) {
-       return value + 0;
+   } else if (value < 11367) {
+      return value + -10792;
 
-    } else if (value < 11383) {
-       return value + -1;
+   } else if (value < 11368) {
+      return value + 0;
 
-    } else if (value < 11393) {
-       return value + 0;
+   } else if (value < 11369) {
+      return value + -1;
 
-    } else if (value < 11394) {
-       return value + -1;
+   } else if (value < 11370) {
+      return value + 0;
 
-    } else if (value < 11395) {
-       return value + 0;
+   } else if (value < 11371) {
+      return value + -1;
 
-    } else if (value < 11396) {
-       return value + -1;
+   } else if (value < 11372) {
+      return value + 0;
 
-    } else if (value < 11397) {
-       return value + 0;
+   } else if (value < 11373) {
+      return value + -1;
 
-    } else if (value < 11398) {
-       return value + -1;
+   } else if (value < 11379) {
+      return value + 0;
 
-    } else if (value < 11399) {
-       return value + 0;
+   } else if (value < 11380) {
+      return value + -1;
 
-    } else if (value < 11400) {
-       return value + -1;
+   } else if (value < 11382) {
+      return value + 0;
 
-    } else if (value < 11401) {
-       return value + 0;
+   } else if (value < 11383) {
+      return value + -1;
 
-    } else if (value < 11402) {
-       return value + -1;
+   } else if (value < 11393) {
+      return value + 0;
 
-    } else if (value < 11403) {
-       return value + 0;
+   } else if (value < 11394) {
+      return value + -1;
 
-    } else if (value < 11404) {
-       return value + -1;
+   } else if (value < 11395) {
+      return value + 0;
 
-    } else if (value < 11405) {
-       return value + 0;
+   } else if (value < 11396) {
+      return value + -1;
 
-    } else if (value < 11406) {
-       return value + -1;
+   } else if (value < 11397) {
+      return value + 0;
 
-    } else if (value < 11407) {
-       return value + 0;
+   } else if (value < 11398) {
+      return value + -1;
 
-    } else if (value < 11408) {
-       return value + -1;
+   } else if (value < 11399) {
+      return value + 0;
 
-    } else if (value < 11409) {
-       return value + 0;
+   } else if (value < 11400) {
+      return value + -1;
 
-    } else if (value < 11410) {
-       return value + -1;
+   } else if (value < 11401) {
+      return value + 0;
 
-    } else if (value < 11411) {
-       return value + 0;
+   } else if (value < 11402) {
+      return value + -1;
 
-    } else if (value < 11412) {
-       return value + -1;
+   } else if (value < 11403) {
+      return value + 0;
 
-    } else if (value < 11413) {
-       return value + 0;
+   } else if (value < 11404) {
+      return value + -1;
 
-    } else if (value < 11414) {
-       return value + -1;
+   } else if (value < 11405) {
+      return value + 0;
 
-    } else if (value < 11415) {
-       return value + 0;
+   } else if (value < 11406) {
+      return value + -1;
 
-    } else if (value < 11416) {
-       return value + -1;
+   } else if (value < 11407) {
+      return value + 0;
 
-    } else if (value < 11417) {
-       return value + 0;
+   } else if (value < 11408) {
+      return value + -1;
 
-    } else if (value < 11418) {
-       return value + -1;
+   } else if (value < 11409) {
+      return value + 0;
 
-    } else if (value < 11419) {
-       return value + 0;
+   } else if (value < 11410) {
+      return value + -1;
 
-    } else if (value < 11420) {
-       return value + -1;
+   } else if (value < 11411) {
+      return value + 0;
 
-    } else if (value < 11421) {
-       return value + 0;
+   } else if (value < 11412) {
+      return value + -1;
 
-    } else if (value < 11422) {
-       return value + -1;
+   } else if (value < 11413) {
+      return value + 0;
 
-    } else if (value < 11423) {
-       return value + 0;
+   } else if (value < 11414) {
+      return value + -1;
 
-    } else if (value < 11424) {
-       return value + -1;
+   } else if (value < 11415) {
+      return value + 0;
 
-    } else if (value < 11425) {
-       return value + 0;
+   } else if (value < 11416) {
+      return value + -1;
 
-    } else if (value < 11426) {
-       return value + -1;
+   } else if (value < 11417) {
+      return value + 0;
 
-    } else if (value < 11427) {
-       return value + 0;
+   } else if (value < 11418) {
+      return value + -1;
 
-    } else if (value < 11428) {
-       return value + -1;
+   } else if (value < 11419) {
+      return value + 0;
 
-    } else if (value < 11429) {
-       return value + 0;
+   } else if (value < 11420) {
+      return value + -1;
 
-    } else if (value < 11430) {
-       return value + -1;
+   } else if (value < 11421) {
+      return value + 0;
 
-    } else if (value < 11431) {
-       return value + 0;
+   } else if (value < 11422) {
+      return value + -1;
 
-    } else if (value < 11432) {
-       return value + -1;
+   } else if (value < 11423) {
+      return value + 0;
 
-    } else if (value < 11433) {
-       return value + 0;
+   } else if (value < 11424) {
+      return value + -1;
 
-    } else if (value < 11434) {
-       return value + -1;
+   } else if (value < 11425) {
+      return value + 0;
 
-    } else if (value < 11435) {
-       return value + 0;
+   } else if (value < 11426) {
+      return value + -1;
 
-    } else if (value < 11436) {
-       return value + -1;
+   } else if (value < 11427) {
+      return value + 0;
 
-    } else if (value < 11437) {
-       return value + 0;
+   } else if (value < 11428) {
+      return value + -1;
 
-    } else if (value < 11438) {
-       return value + -1;
+   } else if (value < 11429) {
+      return value + 0;
 
-    } else if (value < 11439) {
-       return value + 0;
+   } else if (value < 11430) {
+      return value + -1;
 
-    } else if (value < 11440) {
-       return value + -1;
+   } else if (value < 11431) {
+      return value + 0;
 
-    } else if (value < 11441) {
-       return value + 0;
+   } else if (value < 11432) {
+      return value + -1;
 
-    } else if (value < 11442) {
-       return value + -1;
+   } else if (value < 11433) {
+      return value + 0;
 
-    } else if (value < 11443) {
-       return value + 0;
+   } else if (value < 11434) {
+      return value + -1;
 
-    } else if (value < 11444) {
-       return value + -1;
+   } else if (value < 11435) {
+      return value + 0;
 
-    } else if (value < 11445) {
-       return value + 0;
+   } else if (value < 11436) {
+      return value + -1;
 
-    } else if (value < 11446) {
-       return value + -1;
+   } else if (value < 11437) {
+      return value + 0;
 
-    } else if (value < 11447) {
-       return value + 0;
+   } else if (value < 11438) {
+      return value + -1;
 
-    } else if (value < 11448) {
-       return value + -1;
+   } else if (value < 11439) {
+      return value + 0;
 
-    } else if (value < 11449) {
-       return value + 0;
+   } else if (value < 11440) {
+      return value + -1;
 
-    } else if (value < 11450) {
-       return value + -1;
+   } else if (value < 11441) {
+      return value + 0;
 
-    } else if (value < 11451) {
-       return value + 0;
+   } else if (value < 11442) {
+      return value + -1;
 
-    } else if (value < 11452) {
-       return value + -1;
+   } else if (value < 11443) {
+      return value + 0;
 
-    } else if (value < 11453) {
-       return value + 0;
+   } else if (value < 11444) {
+      return value + -1;
 
-    } else if (value < 11454) {
-       return value + -1;
+   } else if (value < 11445) {
+      return value + 0;
 
-    } else if (value < 11455) {
-       return value + 0;
+   } else if (value < 11446) {
+      return value + -1;
 
-    } else if (value < 11456) {
-       return value + -1;
+   } else if (value < 11447) {
+      return value + 0;
 
-    } else if (value < 11457) {
-       return value + 0;
+   } else if (value < 11448) {
+      return value + -1;
 
-    } else if (value < 11458) {
-       return value + -1;
+   } else if (value < 11449) {
+      return value + 0;
 
-    } else if (value < 11459) {
-       return value + 0;
+   } else if (value < 11450) {
+      return value + -1;
 
-    } else if (value < 11460) {
-       return value + -1;
+   } else if (value < 11451) {
+      return value + 0;
 
-    } else if (value < 11461) {
-       return value + 0;
+   } else if (value < 11452) {
+      return value + -1;
 
-    } else if (value < 11462) {
-       return value + -1;
+   } else if (value < 11453) {
+      return value + 0;
 
-    } else if (value < 11463) {
-       return value + 0;
+   } else if (value < 11454) {
+      return value + -1;
 
-    } else if (value < 11464) {
-       return value + -1;
+   }
 
-    } else if (value < 11465) {
-       return value + 0;
+   if (value < 11455) {
+      return value + 0;
 
-    } else if (value < 11466) {
-       return value + -1;
+   } else if (value < 11456) {
+      return value + -1;
 
-    } else if (value < 11467) {
-       return value + 0;
+   } else if (value < 11457) {
+      return value + 0;
 
-    } else if (value < 11468) {
-       return value + -1;
+   } else if (value < 11458) {
+      return value + -1;
 
-    } else if (value < 11469) {
-       return value + 0;
+   } else if (value < 11459) {
+      return value + 0;
 
-    } else if (value < 11470) {
-       return value + -1;
+   } else if (value < 11460) {
+      return value + -1;
 
-    } else if (value < 11471) {
-       return value + 0;
+   } else if (value < 11461) {
+      return value + 0;
 
-    } else if (value < 11472) {
-       return value + -1;
+   } else if (value < 11462) {
+      return value + -1;
 
-    } else if (value < 11473) {
-       return value + 0;
+   } else if (value < 11463) {
+      return value + 0;
 
-    } else if (value < 11474) {
-       return value + -1;
+   } else if (value < 11464) {
+      return value + -1;
 
-    } else if (value < 11475) {
-       return value + 0;
+   } else if (value < 11465) {
+      return value + 0;
 
-    } else if (value < 11476) {
-       return value + -1;
+   } else if (value < 11466) {
+      return value + -1;
 
-    } else if (value < 11477) {
-       return value + 0;
+   } else if (value < 11467) {
+      return value + 0;
 
-    } else if (value < 11478) {
-       return value + -1;
+   } else if (value < 11468) {
+      return value + -1;
 
-    } else if (value < 11479) {
-       return value + 0;
+   } else if (value < 11469) {
+      return value + 0;
 
-    } else if (value < 11480) {
-       return value + -1;
+   } else if (value < 11470) {
+      return value + -1;
 
-    } else if (value < 11481) {
-       return value + 0;
+   } else if (value < 11471) {
+      return value + 0;
 
-    } else if (value < 11482) {
-       return value + -1;
+   } else if (value < 11472) {
+      return value + -1;
 
-    } else if (value < 11483) {
-       return value + 0;
+   } else if (value < 11473) {
+      return value + 0;
 
-    } else if (value < 11484) {
-       return value + -1;
+   } else if (value < 11474) {
+      return value + -1;
 
-    } else if (value < 11485) {
-       return value + 0;
+   } else if (value < 11475) {
+      return value + 0;
 
-    } else if (value < 11486) {
-       return value + -1;
+   } else if (value < 11476) {
+      return value + -1;
 
-    } else if (value < 11487) {
-       return value + 0;
+   } else if (value < 11477) {
+      return value + 0;
 
-    } else if (value < 11488) {
-       return value + -1;
+   } else if (value < 11478) {
+      return value + -1;
 
-    } else if (value < 11489) {
-       return value + 0;
+   } else if (value < 11479) {
+      return value + 0;
 
-    } else if (value < 11490) {
-       return value + -1;
+   } else if (value < 11480) {
+      return value + -1;
 
-    } else if (value < 11491) {
-       return value + 0;
+   } else if (value < 11481) {
+      return value + 0;
 
-    } else if (value < 11492) {
-       return value + -1;
+   } else if (value < 11482) {
+      return value + -1;
 
-    } else if (value < 11500) {
-       return value + 0;
+   } else if (value < 11483) {
+      return value + 0;
 
-    } else if (value < 11501) {
-       return value + -1;
+   } else if (value < 11484) {
+      return value + -1;
 
-    } else if (value < 11502) {
-       return value + 0;
+   } else if (value < 11485) {
+      return value + 0;
 
-    } else if (value < 11503) {
-       return value + -1;
+   } else if (value < 11486) {
+      return value + -1;
 
-    } else if (value < 11507) {
-       return value + 0;
+   } else if (value < 11487) {
+      return value + 0;
 
-    } else if (value < 11508) {
-       return value + -1;
+   } else if (value < 11488) {
+      return value + -1;
 
-    } else if (value < 11520) {
-       return value + 0;
+   } else if (value < 11489) {
+      return value + 0;
 
-    } else if (value < 11558) {
-       return value + -7264;
+   } else if (value < 11490) {
+      return value + -1;
 
-    } else if (value < 11559) {
-       return value + 0;
+   } else if (value < 11491) {
+      return value + 0;
 
-    } else if (value < 11560) {
-       return value + -7264;
+   } else if (value < 11492) {
+      return value + -1;
 
-    } else if (value < 11565) {
-       return value + 0;
+   } else if (value < 11500) {
+      return value + 0;
 
-    } else if (value < 11566) {
-       return value + -7264;
+   } else if (value < 11501) {
+      return value + -1;
 
-    } else if (value < 42561) {
-       return value + 0;
+   } else if (value < 11502) {
+      return value + 0;
 
-    } else if (value < 42562) {
-       return value + -1;
+   } else if (value < 11503) {
+      return value + -1;
 
-    } else if (value < 42563) {
-       return value + 0;
+   } else if (value < 11507) {
+      return value + 0;
 
-    } else if (value < 42564) {
-       return value + -1;
+   } else if (value < 11508) {
+      return value + -1;
 
-    } else if (value < 42565) {
-       return value + 0;
+   } else if (value < 11520) {
+      return value + 0;
 
-    } else if (value < 42566) {
-       return value + -1;
+   } else if (value < 11558) {
+      return value + -7264;
 
-    } else if (value < 42567) {
-       return value + 0;
+   } else if (value < 11559) {
+      return value + 0;
 
-    } else if (value < 42568) {
-       return value + -1;
+   } else if (value < 11560) {
+      return value + -7264;
 
-    } else if (value < 42569) {
-       return value + 0;
+   } else if (value < 11565) {
+      return value + 0;
 
-    } else if (value < 42570) {
-       return value + -1;
+   } else if (value < 11566) {
+      return value + -7264;
 
-    } else if (value < 42571) {
-       return value + 0;
+   } else if (value < 42561) {
+      return value + 0;
 
-    } else if (value < 42572) {
-       return value + -1;
+   } else if (value < 42562) {
+      return value + -1;
 
-    } else if (value < 42573) {
-       return value + 0;
+   } else if (value < 42563) {
+      return value + 0;
 
-    } else if (value < 42574) {
-       return value + -1;
+   } else if (value < 42564) {
+      return value + -1;
 
-    } else if (value < 42575) {
-       return value + 0;
+   } else if (value < 42565) {
+      return value + 0;
 
-    } else if (value < 42576) {
-       return value + -1;
+   } else if (value < 42566) {
+      return value + -1;
 
-    } else if (value < 42577) {
-       return value + 0;
+   } else if (value < 42567) {
+      return value + 0;
 
-    } else if (value < 42578) {
-       return value + -1;
+   } else if (value < 42568) {
+      return value + -1;
 
-    } else if (value < 42579) {
-       return value + 0;
+   } else if (value < 42569) {
+      return value + 0;
 
-    } else if (value < 42580) {
-       return value + -1;
+   } else if (value < 42570) {
+      return value + -1;
 
-    } else if (value < 42581) {
-       return value + 0;
+   } else if (value < 42571) {
+      return value + 0;
 
-    } else if (value < 42582) {
-       return value + -1;
+   } else if (value < 42572) {
+      return value + -1;
 
-    } else if (value < 42583) {
-       return value + 0;
+   } else if (value < 42573) {
+      return value + 0;
 
-    } else if (value < 42584) {
-       return value + -1;
+   } else if (value < 42574) {
+      return value + -1;
 
-    } else if (value < 42585) {
-       return value + 0;
+   } else if (value < 42575) {
+      return value + 0;
 
-    } else if (value < 42586) {
-       return value + -1;
+   } else if (value < 42576) {
+      return value + -1;
 
-    } else if (value < 42587) {
-       return value + 0;
+   } else if (value < 42577) {
+      return value + 0;
 
-    } else if (value < 42588) {
-       return value + -1;
+   } else if (value < 42578) {
+      return value + -1;
 
-    } else if (value < 42589) {
-       return value + 0;
+   } else if (value < 42579) {
+      return value + 0;
 
-    } else if (value < 42590) {
-       return value + -1;
+   } else if (value < 42580) {
+      return value + -1;
 
-    } else if (value < 42591) {
-       return value + 0;
+   } else if (value < 42581) {
+      return value + 0;
 
-    } else if (value < 42592) {
-       return value + -1;
+   } else if (value < 42582) {
+      return value + -1;
 
-    } else if (value < 42593) {
-       return value + 0;
+   } else if (value < 42583) {
+      return value + 0;
 
-    } else if (value < 42594) {
-       return value + -1;
+   } else if (value < 42584) {
+      return value + -1;
 
-    } else if (value < 42595) {
-       return value + 0;
+   } else if (value < 42585) {
+      return value + 0;
 
-    } else if (value < 42596) {
-       return value + -1;
+   } else if (value < 42586) {
+      return value + -1;
 
-    } else if (value < 42597) {
-       return value + 0;
+   } else if (value < 42587) {
+      return value + 0;
 
-    } else if (value < 42598) {
-       return value + -1;
+   } else if (value < 42588) {
+      return value + -1;
 
-    } else if (value < 42599) {
-       return value + 0;
+   } else if (value < 42589) {
+      return value + 0;
 
-    } else if (value < 42600) {
-       return value + -1;
+   } else if (value < 42590) {
+      return value + -1;
 
-    } else if (value < 42601) {
-       return value + 0;
+   } else if (value < 42591) {
+      return value + 0;
 
-    } else if (value < 42602) {
-       return value + -1;
+   } else if (value < 42592) {
+      return value + -1;
 
-    } else if (value < 42603) {
-       return value + 0;
+   } else if (value < 42593) {
+      return value + 0;
 
-    } else if (value < 42604) {
-       return value + -1;
+   } else if (value < 42594) {
+      return value + -1;
 
-    } else if (value < 42605) {
-       return value + 0;
+   } else if (value < 42595) {
+      return value + 0;
 
-    } else if (value < 42606) {
-       return value + -1;
+   } else if (value < 42596) {
+      return value + -1;
 
-    } else if (value < 42625) {
-       return value + 0;
+   } else if (value < 42597) {
+      return value + 0;
 
-    } else if (value < 42626) {
-       return value + -1;
+   } else if (value < 42598) {
+      return value + -1;
 
-    } else if (value < 42627) {
-       return value + 0;
+   } else if (value < 42599) {
+      return value + 0;
 
-    } else if (value < 42628) {
-       return value + -1;
+   } else if (value < 42600) {
+      return value + -1;
 
-    } else if (value < 42629) {
-       return value + 0;
+   } else if (value < 42601) {
+      return value + 0;
 
-    } else if (value < 42630) {
-       return value + -1;
+   } else if (value < 42602) {
+      return value + -1;
 
-    } else if (value < 42631) {
-       return value + 0;
+   } else if (value < 42603) {
+      return value + 0;
 
-    } else if (value < 42632) {
-       return value + -1;
+   } else if (value < 42604) {
+      return value + -1;
 
-    } else if (value < 42633) {
-       return value + 0;
+   } else if (value < 42605) {
+      return value + 0;
 
-    } else if (value < 42634) {
-       return value + -1;
+   } else if (value < 42606) {
+      return value + -1;
 
-    } else if (value < 42635) {
-       return value + 0;
+   } else if (value < 42625) {
+      return value + 0;
 
-    } else if (value < 42636) {
-       return value + -1;
+   } else if (value < 42626) {
+      return value + -1;
 
-    } else if (value < 42637) {
-       return value + 0;
+   } else if (value < 42627) {
+      return value + 0;
 
-    } else if (value < 42638) {
-       return value + -1;
+   } else if (value < 42628) {
+      return value + -1;
 
-    } else if (value < 42639) {
-       return value + 0;
+   }
 
-    } else if (value < 42640) {
-       return value + -1;
+   if (value < 42629) {
+      return value + 0;
 
-    } else if (value < 42641) {
-       return value + 0;
+   } else if (value < 42630) {
+      return value + -1;
 
-    } else if (value < 42642) {
-       return value + -1;
+   } else if (value < 42631) {
+      return value + 0;
 
-    } else if (value < 42643) {
-       return value + 0;
+   } else if (value < 42632) {
+      return value + -1;
 
-    } else if (value < 42644) {
-       return value + -1;
+   } else if (value < 42633) {
+      return value + 0;
 
-    } else if (value < 42645) {
-       return value + 0;
+   } else if (value < 42634) {
+      return value + -1;
 
-    } else if (value < 42646) {
-       return value + -1;
+   } else if (value < 42635) {
+      return value + 0;
 
-    } else if (value < 42647) {
-       return value + 0;
+   } else if (value < 42636) {
+      return value + -1;
 
-    } else if (value < 42648) {
-       return value + -1;
+   } else if (value < 42637) {
+      return value + 0;
 
-    } else if (value < 42649) {
-       return value + 0;
+   } else if (value < 42638) {
+      return value + -1;
 
-    } else if (value < 42650) {
-       return value + -1;
+   } else if (value < 42639) {
+      return value + 0;
 
-    } else if (value < 42651) {
-       return value + 0;
+   } else if (value < 42640) {
+      return value + -1;
 
-    } else if (value < 42652) {
-       return value + -1;
+   } else if (value < 42641) {
+      return value + 0;
 
-    } else if (value < 42787) {
-       return value + 0;
+   } else if (value < 42642) {
+      return value + -1;
 
-    } else if (value < 42788) {
-       return value + -1;
+   } else if (value < 42643) {
+      return value + 0;
 
-    } else if (value < 42789) {
-       return value + 0;
+   } else if (value < 42644) {
+      return value + -1;
 
-    } else if (value < 42790) {
-       return value + -1;
+   } else if (value < 42645) {
+      return value + 0;
 
-    } else if (value < 42791) {
-       return value + 0;
+   } else if (value < 42646) {
+      return value + -1;
 
-    } else if (value < 42792) {
-       return value + -1;
+   } else if (value < 42647) {
+      return value + 0;
 
-    } else if (value < 42793) {
-       return value + 0;
+   } else if (value < 42648) {
+      return value + -1;
 
-    } else if (value < 42794) {
-       return value + -1;
+   } else if (value < 42649) {
+      return value + 0;
 
-    } else if (value < 42795) {
-       return value + 0;
+   } else if (value < 42650) {
+      return value + -1;
 
-    } else if (value < 42796) {
-       return value + -1;
+   } else if (value < 42651) {
+      return value + 0;
 
-    } else if (value < 42797) {
-       return value + 0;
+   } else if (value < 42652) {
+      return value + -1;
 
-    } else if (value < 42798) {
-       return value + -1;
+   } else if (value < 42787) {
+      return value + 0;
 
-    } else if (value < 42799) {
-       return value + 0;
+   } else if (value < 42788) {
+      return value + -1;
 
-    } else if (value < 42800) {
-       return value + -1;
+   } else if (value < 42789) {
+      return value + 0;
 
-    } else if (value < 42803) {
-       return value + 0;
+   } else if (value < 42790) {
+      return value + -1;
 
-    } else if (value < 42804) {
-       return value + -1;
+   } else if (value < 42791) {
+      return value + 0;
 
-    } else if (value < 42805) {
-       return value + 0;
+   } else if (value < 42792) {
+      return value + -1;
 
-    } else if (value < 42806) {
-       return value + -1;
+   } else if (value < 42793) {
+      return value + 0;
 
-    } else if (value < 42807) {
-       return value + 0;
+   } else if (value < 42794) {
+      return value + -1;
 
-    } else if (value < 42808) {
-       return value + -1;
+   } else if (value < 42795) {
+      return value + 0;
 
-    } else if (value < 42809) {
-       return value + 0;
+   } else if (value < 42796) {
+      return value + -1;
 
-    } else if (value < 42810) {
-       return value + -1;
+   } else if (value < 42797) {
+      return value + 0;
 
-    } else if (value < 42811) {
-       return value + 0;
+   } else if (value < 42798) {
+      return value + -1;
 
-    } else if (value < 42812) {
-       return value + -1;
+   } else if (value < 42799) {
+      return value + 0;
 
-    } else if (value < 42813) {
-       return value + 0;
+   } else if (value < 42800) {
+      return value + -1;
 
-    } else if (value < 42814) {
-       return value + -1;
+   } else if (value < 42803) {
+      return value + 0;
 
-    } else if (value < 42815) {
-       return value + 0;
+   } else if (value < 42804) {
+      return value + -1;
 
-    } else if (value < 42816) {
-       return value + -1;
+   } else if (value < 42805) {
+      return value + 0;
 
-    } else if (value < 42817) {
-       return value + 0;
+   } else if (value < 42806) {
+      return value + -1;
 
-    } else if (value < 42818) {
-       return value + -1;
+   } else if (value < 42807) {
+      return value + 0;
 
-    } else if (value < 42819) {
-       return value + 0;
+   } else if (value < 42808) {
+      return value + -1;
 
-    } else if (value < 42820) {
-       return value + -1;
+   } else if (value < 42809) {
+      return value + 0;
 
-    } else if (value < 42821) {
-       return value + 0;
+   } else if (value < 42810) {
+      return value + -1;
 
-    } else if (value < 42822) {
-       return value + -1;
+   } else if (value < 42811) {
+      return value + 0;
 
-    } else if (value < 42823) {
-       return value + 0;
+   } else if (value < 42812) {
+      return value + -1;
 
-    } else if (value < 42824) {
-       return value + -1;
+   } else if (value < 42813) {
+      return value + 0;
 
-    } else if (value < 42825) {
-       return value + 0;
+   } else if (value < 42814) {
+      return value + -1;
 
-    } else if (value < 42826) {
-       return value + -1;
+   } else if (value < 42815) {
+      return value + 0;
 
-    } else if (value < 42827) {
-       return value + 0;
+   } else if (value < 42816) {
+      return value + -1;
 
-    } else if (value < 42828) {
-       return value + -1;
+   } else if (value < 42817) {
+      return value + 0;
 
-    } else if (value < 42829) {
-       return value + 0;
+   } else if (value < 42818) {
+      return value + -1;
 
-    } else if (value < 42830) {
-       return value + -1;
+   } else if (value < 42819) {
+      return value + 0;
 
-    } else if (value < 42831) {
-       return value + 0;
+   } else if (value < 42820) {
+      return value + -1;
 
-    } else if (value < 42832) {
-       return value + -1;
+   } else if (value < 42821) {
+      return value + 0;
 
-    } else if (value < 42833) {
-       return value + 0;
+   } else if (value < 42822) {
+      return value + -1;
 
-    } else if (value < 42834) {
-       return value + -1;
+   } else if (value < 42823) {
+      return value + 0;
 
-    } else if (value < 42835) {
-       return value + 0;
+   } else if (value < 42824) {
+      return value + -1;
 
-    } else if (value < 42836) {
-       return value + -1;
+   } else if (value < 42825) {
+      return value + 0;
 
-    } else if (value < 42837) {
-       return value + 0;
+   } else if (value < 42826) {
+      return value + -1;
 
-    } else if (value < 42838) {
-       return value + -1;
+   } else if (value < 42827) {
+      return value + 0;
 
-    } else if (value < 42839) {
-       return value + 0;
+   } else if (value < 42828) {
+      return value + -1;
 
-    } else if (value < 42840) {
-       return value + -1;
+   } else if (value < 42829) {
+      return value + 0;
 
-    } else if (value < 42841) {
-       return value + 0;
+   } else if (value < 42830) {
+      return value + -1;
 
-    } else if (value < 42842) {
-       return value + -1;
+   } else if (value < 42831) {
+      return value + 0;
 
-    } else if (value < 42843) {
-       return value + 0;
+   } else if (value < 42832) {
+      return value + -1;
 
-    } else if (value < 42844) {
-       return value + -1;
+   } else if (value < 42833) {
+      return value + 0;
 
-    } else if (value < 42845) {
-       return value + 0;
+   } else if (value < 42834) {
+      return value + -1;
 
-    } else if (value < 42846) {
-       return value + -1;
+   } else if (value < 42835) {
+      return value + 0;
 
-    } else if (value < 42847) {
-       return value + 0;
+   } else if (value < 42836) {
+      return value + -1;
 
-    } else if (value < 42848) {
-       return value + -1;
+   } else if (value < 42837) {
+      return value + 0;
 
-    } else if (value < 42849) {
-       return value + 0;
+   } else if (value < 42838) {
+      return value + -1;
 
-    } else if (value < 42850) {
-       return value + -1;
+   } else if (value < 42839) {
+      return value + 0;
 
-    } else if (value < 42851) {
-       return value + 0;
+   } else if (value < 42840) {
+      return value + -1;
 
-    } else if (value < 42852) {
-       return value + -1;
+   } else if (value < 42841) {
+      return value + 0;
 
-    } else if (value < 42853) {
-       return value + 0;
+   } else if (value < 42842) {
+      return value + -1;
 
-    } else if (value < 42854) {
-       return value + -1;
+   } else if (value < 42843) {
+      return value + 0;
 
-    } else if (value < 42855) {
-       return value + 0;
+   } else if (value < 42844) {
+      return value + -1;
 
-    } else if (value < 42856) {
-       return value + -1;
+   } else if (value < 42845) {
+      return value + 0;
 
-    } else if (value < 42857) {
-       return value + 0;
+   } else if (value < 42846) {
+      return value + -1;
 
-    } else if (value < 42858) {
-       return value + -1;
+   } else if (value < 42847) {
+      return value + 0;
 
-    } else if (value < 42859) {
-       return value + 0;
+   } else if (value < 42848) {
+      return value + -1;
 
-    } else if (value < 42860) {
-       return value + -1;
+   } else if (value < 42849) {
+      return value + 0;
 
-    } else if (value < 42861) {
-       return value + 0;
+   } else if (value < 42850) {
+      return value + -1;
 
-    } else if (value < 42862) {
-       return value + -1;
+   } else if (value < 42851) {
+      return value + 0;
 
-    } else if (value < 42863) {
-       return value + 0;
+   } else if (value < 42852) {
+      return value + -1;
 
-    } else if (value < 42864) {
-       return value + -1;
+   } else if (value < 42853) {
+      return value + 0;
 
-    } else if (value < 42874) {
-       return value + 0;
+   } else if (value < 42854) {
+      return value + -1;
 
-    } else if (value < 42875) {
-       return value + -1;
+   } else if (value < 42855) {
+      return value + 0;
 
-    } else if (value < 42876) {
-       return value + 0;
+   } else if (value < 42856) {
+      return value + -1;
 
-    } else if (value < 42877) {
-       return value + -1;
+   } else if (value < 42857) {
+      return value + 0;
 
-    } else if (value < 42879) {
-       return value + 0;
+   } else if (value < 42858) {
+      return value + -1;
 
-    } else if (value < 42880) {
-       return value + -1;
+   } else if (value < 42859) {
+      return value + 0;
 
-    } else if (value < 42881) {
-       return value + 0;
+   } else if (value < 42860) {
+      return value + -1;
 
-    } else if (value < 42882) {
-       return value + -1;
+   } else if (value < 42861) {
+      return value + 0;
 
-    } else if (value < 42883) {
-       return value + 0;
+   } else if (value < 42862) {
+      return value + -1;
 
-    } else if (value < 42884) {
-       return value + -1;
+   } else if (value < 42863) {
+      return value + 0;
 
-    } else if (value < 42885) {
-       return value + 0;
+   } else if (value < 42864) {
+      return value + -1;
 
-    } else if (value < 42886) {
-       return value + -1;
+   }
 
-    } else if (value < 42887) {
-       return value + 0;
+   if (value < 42874) {
+      return value + 0;
 
-    } else if (value < 42888) {
-       return value + -1;
+   } else if (value < 42875) {
+      return value + -1;
 
-    } else if (value < 42892) {
-       return value + 0;
+   } else if (value < 42876) {
+      return value + 0;
 
-    } else if (value < 42893) {
-       return value + -1;
+   } else if (value < 42877) {
+      return value + -1;
 
-    } else if (value < 42897) {
-       return value + 0;
+   } else if (value < 42879) {
+      return value + 0;
 
-    } else if (value < 42898) {
-       return value + -1;
+   } else if (value < 42880) {
+      return value + -1;
 
-    } else if (value < 42899) {
-       return value + 0;
+   } else if (value < 42881) {
+      return value + 0;
 
-    } else if (value < 42900) {
-       return value + -1;
+   } else if (value < 42882) {
+      return value + -1;
 
-    } else if (value < 42903) {
-       return value + 0;
+   } else if (value < 42883) {
+      return value + 0;
 
-    } else if (value < 42904) {
-       return value + -1;
+   } else if (value < 42884) {
+      return value + -1;
 
-    } else if (value < 42905) {
-       return value + 0;
+   } else if (value < 42885) {
+      return value + 0;
 
-    } else if (value < 42906) {
-       return value + -1;
+   } else if (value < 42886) {
+      return value + -1;
 
-    } else if (value < 42907) {
-       return value + 0;
+   } else if (value < 42887) {
+      return value + 0;
 
-    } else if (value < 42908) {
-       return value + -1;
+   } else if (value < 42888) {
+      return value + -1;
 
-    } else if (value < 42909) {
-       return value + 0;
+   } else if (value < 42892) {
+      return value + 0;
 
-    } else if (value < 42910) {
-       return value + -1;
+   } else if (value < 42893) {
+      return value + -1;
 
-    } else if (value < 42911) {
-       return value + 0;
+   } else if (value < 42897) {
+      return value + 0;
 
-    } else if (value < 42912) {
-       return value + -1;
+   } else if (value < 42898) {
+      return value + -1;
 
-    } else if (value < 42913) {
-       return value + 0;
+   } else if (value < 42899) {
+      return value + 0;
 
-    } else if (value < 42914) {
-       return value + -1;
+   } else if (value < 42900) {
+      return value + -1;
 
-    } else if (value < 42915) {
-       return value + 0;
+   } else if (value < 42903) {
+      return value + 0;
 
-    } else if (value < 42916) {
-       return value + -1;
+   } else if (value < 42904) {
+      return value + -1;
 
-    } else if (value < 42917) {
-       return value + 0;
+   } else if (value < 42905) {
+      return value + 0;
 
-    } else if (value < 42918) {
-       return value + -1;
+   } else if (value < 42906) {
+      return value + -1;
 
-    } else if (value < 42919) {
-       return value + 0;
+   } else if (value < 42907) {
+      return value + 0;
 
-    } else if (value < 42920) {
-       return value + -1;
+   } else if (value < 42908) {
+      return value + -1;
 
-    } else if (value < 42921) {
-       return value + 0;
+   } else if (value < 42909) {
+      return value + 0;
 
-    } else if (value < 42922) {
-       return value + -1;
+   } else if (value < 42910) {
+      return value + -1;
 
-    } else if (value < 42933) {
-       return value + 0;
+   } else if (value < 42911) {
+      return value + 0;
 
-    } else if (value < 42934) {
-       return value + -1;
+   } else if (value < 42912) {
+      return value + -1;
 
-    } else if (value < 42935) {
-       return value + 0;
+   } else if (value < 42913) {
+      return value + 0;
 
-    } else if (value < 42936) {
-       return value + -1;
+   } else if (value < 42914) {
+      return value + -1;
 
-    } else if (value < 42937) {
-       return value + 0;
+   } else if (value < 42915) {
+      return value + 0;
 
-    } else if (value < 42938) {
-       return value + -1;
+   } else if (value < 42916) {
+      return value + -1;
 
-    } else if (value < 43859) {
-       return value + 0;
+   } else if (value < 42917) {
+      return value + 0;
 
-    } else if (value < 43860) {
-       return value + -928;
+   } else if (value < 42918) {
+      return value + -1;
 
-    } else if (value < 43888) {
-       return value + 0;
+   } else if (value < 42919) {
+      return value + 0;
 
-    } else if (value < 43968) {
-       return value + -38864;
+   } else if (value < 42920) {
+      return value + -1;
 
-    } else if (value == 64256) {
-       // special char
-       return 0;
+   } else if (value < 42921) {
+      return value + 0;
 
-    } else if (value == 64257) {
-       // special char
-       return 0;
+   } else if (value < 42922) {
+      return value + -1;
 
-    } else if (value == 64258) {
-       // special char
-       return 0;
+   } else if (value < 42933) {
+      return value + 0;
 
-    } else if (value == 64259) {
-       // special char
-       return 0;
+   } else if (value < 42934) {
+      return value + -1;
 
-    } else if (value == 64260) {
-       // special char
-       return 0;
+   } else if (value < 42935) {
+      return value + 0;
 
-    } else if (value == 64261) {
-       // special char
-       return 0;
+   } else if (value < 42936) {
+      return value + -1;
 
-    } else if (value == 64262) {
-       // special char
-       return 0;
+   } else if (value < 42937) {
+      return value + 0;
 
-    } else if (value == 64275) {
-       // special char
-       return 0;
+   } else if (value < 42938) {
+      return value + -1;
 
-    } else if (value == 64276) {
-       // special char
-       return 0;
+   } else if (value < 43859) {
+      return value + 0;
 
-    } else if (value == 64277) {
-       // special char
-       return 0;
+   } else if (value < 43860) {
+      return value + -928;
 
-    } else if (value == 64278) {
-       // special char
-       return 0;
+   } else if (value < 43888) {
+      return value + 0;
 
-    } else if (value == 64279) {
-       // special char
-       return 0;
+   } else if (value < 43968) {
+      return value + -38864;
 
-    } else if (value < 65345) {
-       return value + 0;
+   } else if (value == 64256) {
+      // special char
+      return 0;
 
-    } else if (value < 65371) {
-       return value + -32;
+   } else if (value == 64257) {
+      // special char
+      return 0;
 
-    } else if (value < 66600) {
-       return value + 0;
+   } else if (value == 64258) {
+      // special char
+      return 0;
 
-    } else if (value < 66640) {
-       return value + -40;
+   } else if (value == 64259) {
+      // special char
+      return 0;
 
-    } else if (value < 66776) {
-       return value + 0;
+   } else if (value == 64260) {
+      // special char
+      return 0;
 
-    } else if (value < 66812) {
-       return value + -40;
+   } else if (value == 64261) {
+      // special char
+      return 0;
 
-    } else if (value < 68800) {
-       return value + 0;
+   } else if (value == 64262) {
+      // special char
+      return 0;
 
-    } else if (value < 68851) {
-       return value + -64;
+   } else if (value == 64275) {
+      // special char
+      return 0;
 
-    } else if (value < 71872) {
-       return value + 0;
+   } else if (value == 64276) {
+      // special char
+      return 0;
 
-    } else if (value < 71904) {
-       return value + -32;
+   } else if (value == 64277) {
+      // special char
+      return 0;
 
-    } else if (value < 93792) {
-       return value + 0;
+   } else if (value == 64278) {
+      // special char
+      return 0;
 
-    } else if (value < 93824) {
-       return value + -32;
+   } else if (value == 64279) {
+      // special char
+      return 0;
 
-    } else if (value < 125218) {
-       return value + 0;
+   } else if (value < 65345) {
+      return value + 0;
 
-    } else if (value < 125252) {
-       return value + -34;
+   } else if (value < 65371) {
+      return value + -32;
 
-    } else {
+   } else if (value < 66600) {
+      return value + 0;
+
+   } else if (value < 66640) {
+      return value + -40;
+
+   } else if (value < 66776) {
+      return value + 0;
+
+   } else if (value < 66812) {
+      return value + -40;
+
+   } else if (value < 68800) {
+      return value + 0;
+
+   } else if (value < 68851) {
+      return value + -64;
+
+   } else if (value < 71872) {
+      return value + 0;
+
+   } else if (value < 71904) {
+      return value + -32;
+
+   } else if (value < 93792) {
+      return value + 0;
+
+   } else if (value < 93824) {
+      return value + -32;
+
+   } else if (value < 125218) {
+      return value + 0;
+
+   } else if (value < 125252) {
+      return value + -34;
+
+   } else {
       return value;
    }
 }
@@ -20727,4182 +20802,4208 @@ char32_t uc_titleCase(char32_t value)
 char32_t uc_upperCase(char32_t value)
 {
     if (value < 97) {
-       return value + 0;
+      return value + 0;
 
-    } else if (value < 123) {
-       return value + -32;
+   } else if (value < 123) {
+      return value + -32;
 
-    } else if (value < 181) {
-       return value + 0;
+   } else if (value < 181) {
+      return value + 0;
 
-    } else if (value < 182) {
-       return value + 743;
+   } else if (value < 182) {
+      return value + 743;
 
-    } else if (value == 223) {
-       // special char
-       return 0;
+   } else if (value == 223) {
+      // special char
+      return 0;
 
-    } else if (value < 224) {
-       return value + 0;
+   } else if (value < 224) {
+      return value + 0;
 
-    } else if (value < 247) {
-       return value + -32;
+   } else if (value < 247) {
+      return value + -32;
 
-    } else if (value < 248) {
-       return value + 0;
+   } else if (value < 248) {
+      return value + 0;
 
-    } else if (value < 255) {
-       return value + -32;
+   } else if (value < 255) {
+      return value + -32;
 
-    } else if (value < 256) {
-       return value + 121;
+   } else if (value < 256) {
+      return value + 121;
 
-    } else if (value < 257) {
-       return value + 0;
+   } else if (value < 257) {
+      return value + 0;
 
-    } else if (value < 258) {
-       return value + -1;
+   } else if (value < 258) {
+      return value + -1;
 
-    } else if (value < 259) {
-       return value + 0;
+   } else if (value < 259) {
+      return value + 0;
 
-    } else if (value < 260) {
-       return value + -1;
+   } else if (value < 260) {
+      return value + -1;
 
-    } else if (value < 261) {
-       return value + 0;
+   } else if (value < 261) {
+      return value + 0;
 
-    } else if (value < 262) {
-       return value + -1;
+   } else if (value < 262) {
+      return value + -1;
 
-    } else if (value < 263) {
-       return value + 0;
+   } else if (value < 263) {
+      return value + 0;
 
-    } else if (value < 264) {
-       return value + -1;
+   } else if (value < 264) {
+      return value + -1;
 
-    } else if (value < 265) {
-       return value + 0;
+   } else if (value < 265) {
+      return value + 0;
 
-    } else if (value < 266) {
-       return value + -1;
+   } else if (value < 266) {
+      return value + -1;
 
-    } else if (value < 267) {
-       return value + 0;
+   } else if (value < 267) {
+      return value + 0;
 
-    } else if (value < 268) {
-       return value + -1;
+   } else if (value < 268) {
+      return value + -1;
 
-    } else if (value < 269) {
-       return value + 0;
+   } else if (value < 269) {
+      return value + 0;
 
-    } else if (value < 270) {
-       return value + -1;
+   } else if (value < 270) {
+      return value + -1;
 
-    } else if (value < 271) {
-       return value + 0;
+   } else if (value < 271) {
+      return value + 0;
 
-    } else if (value < 272) {
-       return value + -1;
+   } else if (value < 272) {
+      return value + -1;
 
-    } else if (value < 273) {
-       return value + 0;
+   } else if (value < 273) {
+      return value + 0;
 
-    } else if (value < 274) {
-       return value + -1;
+   } else if (value < 274) {
+      return value + -1;
 
-    } else if (value < 275) {
-       return value + 0;
+   } else if (value < 275) {
+      return value + 0;
 
-    } else if (value < 276) {
-       return value + -1;
+   } else if (value < 276) {
+      return value + -1;
 
-    } else if (value < 277) {
-       return value + 0;
+   } else if (value < 277) {
+      return value + 0;
 
-    } else if (value < 278) {
-       return value + -1;
+   } else if (value < 278) {
+      return value + -1;
 
-    } else if (value < 279) {
-       return value + 0;
+   } else if (value < 279) {
+      return value + 0;
 
-    } else if (value < 280) {
-       return value + -1;
+   } else if (value < 280) {
+      return value + -1;
 
-    } else if (value < 281) {
-       return value + 0;
+   } else if (value < 281) {
+      return value + 0;
 
-    } else if (value < 282) {
-       return value + -1;
+   } else if (value < 282) {
+      return value + -1;
 
-    } else if (value < 283) {
-       return value + 0;
+   } else if (value < 283) {
+      return value + 0;
 
-    } else if (value < 284) {
-       return value + -1;
+   } else if (value < 284) {
+      return value + -1;
 
-    } else if (value < 285) {
-       return value + 0;
+   } else if (value < 285) {
+      return value + 0;
 
-    } else if (value < 286) {
-       return value + -1;
+   } else if (value < 286) {
+      return value + -1;
 
-    } else if (value < 287) {
-       return value + 0;
+   } else if (value < 287) {
+      return value + 0;
 
-    } else if (value < 288) {
-       return value + -1;
+   } else if (value < 288) {
+      return value + -1;
 
-    } else if (value < 289) {
-       return value + 0;
+   } else if (value < 289) {
+      return value + 0;
 
-    } else if (value < 290) {
-       return value + -1;
+   } else if (value < 290) {
+      return value + -1;
 
-    } else if (value < 291) {
-       return value + 0;
+   } else if (value < 291) {
+      return value + 0;
 
-    } else if (value < 292) {
-       return value + -1;
+   } else if (value < 292) {
+      return value + -1;
 
-    } else if (value < 293) {
-       return value + 0;
+   } else if (value < 293) {
+      return value + 0;
 
-    } else if (value < 294) {
-       return value + -1;
+   } else if (value < 294) {
+      return value + -1;
 
-    } else if (value < 295) {
-       return value + 0;
+   } else if (value < 295) {
+      return value + 0;
 
-    } else if (value < 296) {
-       return value + -1;
+   } else if (value < 296) {
+      return value + -1;
 
-    } else if (value < 297) {
-       return value + 0;
+   } else if (value < 297) {
+      return value + 0;
 
-    } else if (value < 298) {
-       return value + -1;
+   } else if (value < 298) {
+      return value + -1;
 
-    } else if (value < 299) {
-       return value + 0;
+   } else if (value < 299) {
+      return value + 0;
 
-    } else if (value < 300) {
-       return value + -1;
+   } else if (value < 300) {
+      return value + -1;
 
-    } else if (value < 301) {
-       return value + 0;
+   } else if (value < 301) {
+      return value + 0;
 
-    } else if (value < 302) {
-       return value + -1;
+   } else if (value < 302) {
+      return value + -1;
 
-    } else if (value < 303) {
-       return value + 0;
+   } else if (value < 303) {
+      return value + 0;
 
-    } else if (value < 304) {
-       return value + -1;
+   } else if (value < 304) {
+      return value + -1;
 
-    } else if (value < 305) {
-       return value + 0;
+   } else if (value < 305) {
+      return value + 0;
 
-    } else if (value < 306) {
-       return value + -232;
+   } else if (value < 306) {
+      return value + -232;
 
-    } else if (value < 307) {
-       return value + 0;
+   } else if (value < 307) {
+      return value + 0;
 
-    } else if (value < 308) {
-       return value + -1;
+   } else if (value < 308) {
+      return value + -1;
 
-    } else if (value < 309) {
-       return value + 0;
+   } else if (value < 309) {
+      return value + 0;
 
-    } else if (value < 310) {
-       return value + -1;
+   } else if (value < 310) {
+      return value + -1;
 
-    } else if (value < 311) {
-       return value + 0;
+   } else if (value < 311) {
+      return value + 0;
 
-    } else if (value < 312) {
-       return value + -1;
+   } else if (value < 312) {
+      return value + -1;
 
-    } else if (value < 314) {
-       return value + 0;
+   } else if (value < 314) {
+      return value + 0;
 
-    } else if (value < 315) {
-       return value + -1;
+   } else if (value < 315) {
+      return value + -1;
 
-    } else if (value < 316) {
-       return value + 0;
+   } else if (value < 316) {
+      return value + 0;
 
-    } else if (value < 317) {
-       return value + -1;
+   } else if (value < 317) {
+      return value + -1;
 
-    } else if (value < 318) {
-       return value + 0;
+   } else if (value < 318) {
+      return value + 0;
 
-    } else if (value < 319) {
-       return value + -1;
+   } else if (value < 319) {
+      return value + -1;
 
-    } else if (value < 320) {
-       return value + 0;
+   } else if (value < 320) {
+      return value + 0;
 
-    } else if (value < 321) {
-       return value + -1;
+   } else if (value < 321) {
+      return value + -1;
 
-    } else if (value < 322) {
-       return value + 0;
+   } else if (value < 322) {
+      return value + 0;
 
-    } else if (value < 323) {
-       return value + -1;
+   } else if (value < 323) {
+      return value + -1;
 
-    } else if (value < 324) {
-       return value + 0;
+   } else if (value < 324) {
+      return value + 0;
 
-    } else if (value < 325) {
-       return value + -1;
+   } else if (value < 325) {
+      return value + -1;
 
-    } else if (value < 326) {
-       return value + 0;
+   } else if (value < 326) {
+      return value + 0;
 
-    } else if (value < 327) {
-       return value + -1;
+   } else if (value < 327) {
+      return value + -1;
 
-    } else if (value < 328) {
-       return value + 0;
+   } else if (value < 328) {
+      return value + 0;
 
-    } else if (value == 329) {
-       // special char
-       return 0;
+   } else if (value == 329) {
+      // special char
+      return 0;
 
-    } else if (value < 330) {
-       return value + -1;
+   } else if (value < 330) {
+      return value + -1;
 
-    } else if (value < 331) {
-       return value + 0;
+   } else if (value < 331) {
+      return value + 0;
 
-    } else if (value < 332) {
-       return value + -1;
+   } else if (value < 332) {
+      return value + -1;
 
-    } else if (value < 333) {
-       return value + 0;
+   } else if (value < 333) {
+      return value + 0;
 
-    } else if (value < 334) {
-       return value + -1;
+   } else if (value < 334) {
+      return value + -1;
 
-    } else if (value < 335) {
-       return value + 0;
+   } else if (value < 335) {
+      return value + 0;
 
-    } else if (value < 336) {
-       return value + -1;
+   } else if (value < 336) {
+      return value + -1;
 
-    } else if (value < 337) {
-       return value + 0;
+   } else if (value < 337) {
+      return value + 0;
 
-    } else if (value < 338) {
-       return value + -1;
+   } else if (value < 338) {
+      return value + -1;
 
-    } else if (value < 339) {
-       return value + 0;
+   } else if (value < 339) {
+      return value + 0;
 
-    } else if (value < 340) {
-       return value + -1;
+   } else if (value < 340) {
+      return value + -1;
 
-    } else if (value < 341) {
-       return value + 0;
+   } else if (value < 341) {
+      return value + 0;
 
-    } else if (value < 342) {
-       return value + -1;
+   } else if (value < 342) {
+      return value + -1;
 
-    } else if (value < 343) {
-       return value + 0;
+   } else if (value < 343) {
+      return value + 0;
 
-    } else if (value < 344) {
-       return value + -1;
+   } else if (value < 344) {
+      return value + -1;
 
-    } else if (value < 345) {
-       return value + 0;
+   } else if (value < 345) {
+      return value + 0;
 
-    } else if (value < 346) {
-       return value + -1;
+   } else if (value < 346) {
+      return value + -1;
 
-    } else if (value < 347) {
-       return value + 0;
+   } else if (value < 347) {
+      return value + 0;
 
-    } else if (value < 348) {
-       return value + -1;
+   }
 
-    } else if (value < 349) {
-       return value + 0;
+   if (value < 348) {
+      return value + -1;
 
-    } else if (value < 350) {
-       return value + -1;
+   } else if (value < 349) {
+      return value + 0;
 
-    } else if (value < 351) {
-       return value + 0;
+   } else if (value < 350) {
+      return value + -1;
 
-    } else if (value < 352) {
-       return value + -1;
+   } else if (value < 351) {
+      return value + 0;
 
-    } else if (value < 353) {
-       return value + 0;
+   } else if (value < 352) {
+      return value + -1;
 
-    } else if (value < 354) {
-       return value + -1;
+   } else if (value < 353) {
+      return value + 0;
 
-    } else if (value < 355) {
-       return value + 0;
+   } else if (value < 354) {
+      return value + -1;
 
-    } else if (value < 356) {
-       return value + -1;
+   } else if (value < 355) {
+      return value + 0;
 
-    } else if (value < 357) {
-       return value + 0;
+   } else if (value < 356) {
+      return value + -1;
 
-    } else if (value < 358) {
-       return value + -1;
+   } else if (value < 357) {
+      return value + 0;
 
-    } else if (value < 359) {
-       return value + 0;
+   } else if (value < 358) {
+      return value + -1;
 
-    } else if (value < 360) {
-       return value + -1;
+   } else if (value < 359) {
+      return value + 0;
 
-    } else if (value < 361) {
-       return value + 0;
+   } else if (value < 360) {
+      return value + -1;
 
-    } else if (value < 362) {
-       return value + -1;
+   } else if (value < 361) {
+      return value + 0;
 
-    } else if (value < 363) {
-       return value + 0;
+   } else if (value < 362) {
+      return value + -1;
 
-    } else if (value < 364) {
-       return value + -1;
+   } else if (value < 363) {
+      return value + 0;
 
-    } else if (value < 365) {
-       return value + 0;
+   } else if (value < 364) {
+      return value + -1;
 
-    } else if (value < 366) {
-       return value + -1;
+   } else if (value < 365) {
+      return value + 0;
 
-    } else if (value < 367) {
-       return value + 0;
+   } else if (value < 366) {
+      return value + -1;
 
-    } else if (value < 368) {
-       return value + -1;
+   } else if (value < 367) {
+      return value + 0;
 
-    } else if (value < 369) {
-       return value + 0;
+   } else if (value < 368) {
+      return value + -1;
 
-    } else if (value < 370) {
-       return value + -1;
+   } else if (value < 369) {
+      return value + 0;
 
-    } else if (value < 371) {
-       return value + 0;
+   } else if (value < 370) {
+      return value + -1;
 
-    } else if (value < 372) {
-       return value + -1;
+   } else if (value < 371) {
+      return value + 0;
 
-    } else if (value < 373) {
-       return value + 0;
+   } else if (value < 372) {
+      return value + -1;
 
-    } else if (value < 374) {
-       return value + -1;
+   } else if (value < 373) {
+      return value + 0;
 
-    } else if (value < 375) {
-       return value + 0;
+   } else if (value < 374) {
+      return value + -1;
 
-    } else if (value < 376) {
-       return value + -1;
+   } else if (value < 375) {
+      return value + 0;
 
-    } else if (value < 378) {
-       return value + 0;
+   } else if (value < 376) {
+      return value + -1;
 
-    } else if (value < 379) {
-       return value + -1;
+   } else if (value < 378) {
+      return value + 0;
 
-    } else if (value < 380) {
-       return value + 0;
+   } else if (value < 379) {
+      return value + -1;
 
-    } else if (value < 381) {
-       return value + -1;
+   } else if (value < 380) {
+      return value + 0;
 
-    } else if (value < 382) {
-       return value + 0;
+   } else if (value < 381) {
+      return value + -1;
 
-    } else if (value < 383) {
-       return value + -1;
+   } else if (value < 382) {
+      return value + 0;
 
-    } else if (value < 384) {
-       return value + -300;
+   } else if (value < 383) {
+      return value + -1;
 
-    } else if (value < 385) {
-       return value + 195;
+   } else if (value < 384) {
+      return value + -300;
 
-    } else if (value < 387) {
-       return value + 0;
+   } else if (value < 385) {
+      return value + 195;
 
-    } else if (value < 388) {
-       return value + -1;
+   } else if (value < 387) {
+      return value + 0;
 
-    } else if (value < 389) {
-       return value + 0;
+   } else if (value < 388) {
+      return value + -1;
 
-    } else if (value < 390) {
-       return value + -1;
+   } else if (value < 389) {
+      return value + 0;
 
-    } else if (value < 392) {
-       return value + 0;
+   } else if (value < 390) {
+      return value + -1;
 
-    } else if (value < 393) {
-       return value + -1;
+   } else if (value < 392) {
+      return value + 0;
 
-    } else if (value < 396) {
-       return value + 0;
+   } else if (value < 393) {
+      return value + -1;
 
-    } else if (value < 397) {
-       return value + -1;
+   } else if (value < 396) {
+      return value + 0;
 
-    } else if (value < 402) {
-       return value + 0;
+   } else if (value < 397) {
+      return value + -1;
 
-    } else if (value < 403) {
-       return value + -1;
+   } else if (value < 402) {
+      return value + 0;
 
-    } else if (value < 405) {
-       return value + 0;
+   } else if (value < 403) {
+      return value + -1;
 
-    } else if (value < 406) {
-       return value + 97;
+   } else if (value < 405) {
+      return value + 0;
 
-    } else if (value < 409) {
-       return value + 0;
+   } else if (value < 406) {
+      return value + 97;
 
-    } else if (value < 410) {
-       return value + -1;
+   } else if (value < 409) {
+      return value + 0;
 
-    } else if (value < 411) {
-       return value + 163;
+   } else if (value < 410) {
+      return value + -1;
 
-    } else if (value < 414) {
-       return value + 0;
+   } else if (value < 411) {
+      return value + 163;
 
-    } else if (value < 415) {
-       return value + 130;
+   } else if (value < 414) {
+      return value + 0;
 
-    } else if (value < 417) {
-       return value + 0;
+   } else if (value < 415) {
+      return value + 130;
 
-    } else if (value < 418) {
-       return value + -1;
+   } else if (value < 417) {
+      return value + 0;
 
-    } else if (value < 419) {
-       return value + 0;
+   } else if (value < 418) {
+      return value + -1;
 
-    } else if (value < 420) {
-       return value + -1;
+   } else if (value < 419) {
+      return value + 0;
 
-    } else if (value < 421) {
-       return value + 0;
+   } else if (value < 420) {
+      return value + -1;
 
-    } else if (value < 422) {
-       return value + -1;
+   } else if (value < 421) {
+      return value + 0;
 
-    } else if (value < 424) {
-       return value + 0;
+   } else if (value < 422) {
+      return value + -1;
 
-    } else if (value < 425) {
-       return value + -1;
+   } else if (value < 424) {
+      return value + 0;
 
-    } else if (value < 429) {
-       return value + 0;
+   } else if (value < 425) {
+      return value + -1;
 
-    } else if (value < 430) {
-       return value + -1;
+   } else if (value < 429) {
+      return value + 0;
 
-    } else if (value < 432) {
-       return value + 0;
+   } else if (value < 430) {
+      return value + -1;
 
-    } else if (value < 433) {
-       return value + -1;
+   } else if (value < 432) {
+      return value + 0;
 
-    } else if (value < 436) {
-       return value + 0;
+   } else if (value < 433) {
+      return value + -1;
 
-    } else if (value < 437) {
-       return value + -1;
+   } else if (value < 436) {
+      return value + 0;
 
-    } else if (value < 438) {
-       return value + 0;
+   } else if (value < 437) {
+      return value + -1;
 
-    } else if (value < 439) {
-       return value + -1;
+   } else if (value < 438) {
+      return value + 0;
 
-    } else if (value < 441) {
-       return value + 0;
+   } else if (value < 439) {
+      return value + -1;
 
-    } else if (value < 442) {
-       return value + -1;
+   } else if (value < 441) {
+      return value + 0;
 
-    } else if (value < 445) {
-       return value + 0;
+   } else if (value < 442) {
+      return value + -1;
 
-    } else if (value < 446) {
-       return value + -1;
+   } else if (value < 445) {
+      return value + 0;
 
-    } else if (value < 447) {
-       return value + 0;
+   } else if (value < 446) {
+      return value + -1;
 
-    } else if (value < 448) {
-       return value + 56;
+   } else if (value < 447) {
+      return value + 0;
 
-    } else if (value < 453) {
-       return value + 0;
+   } else if (value < 448) {
+      return value + 56;
 
-    } else if (value < 454) {
-       return value + -1;
+   } else if (value < 453) {
+      return value + 0;
 
-    } else if (value < 455) {
-       return value + -2;
+   } else if (value < 454) {
+      return value + -1;
 
-    } else if (value < 456) {
-       return value + 0;
+   } else if (value < 455) {
+      return value + -2;
 
-    } else if (value < 457) {
-       return value + -1;
+   } else if (value < 456) {
+      return value + 0;
 
-    } else if (value < 458) {
-       return value + -2;
+   } else if (value < 457) {
+      return value + -1;
 
-    } else if (value < 459) {
-       return value + 0;
+   } else if (value < 458) {
+      return value + -2;
 
-    } else if (value < 460) {
-       return value + -1;
+   } else if (value < 459) {
+      return value + 0;
 
-    } else if (value < 461) {
-       return value + -2;
+   } else if (value < 460) {
+      return value + -1;
 
-    } else if (value < 462) {
-       return value + 0;
+   } else if (value < 461) {
+      return value + -2;
 
-    } else if (value < 463) {
-       return value + -1;
+   } else if (value < 462) {
+      return value + 0;
 
-    } else if (value < 464) {
-       return value + 0;
+   } else if (value < 463) {
+      return value + -1;
 
-    } else if (value < 465) {
-       return value + -1;
+   } else if (value < 464) {
+      return value + 0;
 
-    } else if (value < 466) {
-       return value + 0;
+   } else if (value < 465) {
+      return value + -1;
 
-    } else if (value < 467) {
-       return value + -1;
+   } else if (value < 466) {
+      return value + 0;
 
-    } else if (value < 468) {
-       return value + 0;
+   } else if (value < 467) {
+      return value + -1;
 
-    } else if (value < 469) {
-       return value + -1;
+   } else if (value < 468) {
+      return value + 0;
 
-    } else if (value < 470) {
-       return value + 0;
+   } else if (value < 469) {
+      return value + -1;
 
-    } else if (value < 471) {
-       return value + -1;
+   } else if (value < 470) {
+      return value + 0;
 
-    } else if (value < 472) {
-       return value + 0;
+   } else if (value < 471) {
+      return value + -1;
 
-    } else if (value < 473) {
-       return value + -1;
+   } else if (value < 472) {
+      return value + 0;
 
-    } else if (value < 474) {
-       return value + 0;
+   } else if (value < 473) {
+      return value + -1;
 
-    } else if (value < 475) {
-       return value + -1;
+   } else if (value < 474) {
+      return value + 0;
 
-    } else if (value < 476) {
-       return value + 0;
+   } else if (value < 475) {
+      return value + -1;
 
-    } else if (value < 477) {
-       return value + -1;
+   } else if (value < 476) {
+      return value + 0;
 
-    } else if (value < 478) {
-       return value + -79;
+   }
 
-    } else if (value < 479) {
-       return value + 0;
+   if (value < 477) {
+      return value + -1;
 
-    } else if (value < 480) {
-       return value + -1;
+   } else if (value < 478) {
+      return value + -79;
 
-    } else if (value < 481) {
-       return value + 0;
+   } else if (value < 479) {
+      return value + 0;
 
-    } else if (value < 482) {
-       return value + -1;
+   } else if (value < 480) {
+      return value + -1;
 
-    } else if (value < 483) {
-       return value + 0;
+   } else if (value < 481) {
+      return value + 0;
 
-    } else if (value < 484) {
-       return value + -1;
+   } else if (value < 482) {
+      return value + -1;
 
-    } else if (value < 485) {
-       return value + 0;
+   } else if (value < 483) {
+      return value + 0;
 
-    } else if (value < 486) {
-       return value + -1;
+   } else if (value < 484) {
+      return value + -1;
 
-    } else if (value < 487) {
-       return value + 0;
+   } else if (value < 485) {
+      return value + 0;
 
-    } else if (value < 488) {
-       return value + -1;
+   } else if (value < 486) {
+      return value + -1;
 
-    } else if (value < 489) {
-       return value + 0;
+   } else if (value < 487) {
+      return value + 0;
 
-    } else if (value < 490) {
-       return value + -1;
+   } else if (value < 488) {
+      return value + -1;
 
-    } else if (value < 491) {
-       return value + 0;
+   } else if (value < 489) {
+      return value + 0;
 
-    } else if (value < 492) {
-       return value + -1;
+   } else if (value < 490) {
+      return value + -1;
 
-    } else if (value < 493) {
-       return value + 0;
+   } else if (value < 491) {
+      return value + 0;
 
-    } else if (value < 494) {
-       return value + -1;
+   } else if (value < 492) {
+      return value + -1;
 
-    } else if (value < 495) {
-       return value + 0;
+   } else if (value < 493) {
+      return value + 0;
 
-    } else if (value == 496) {
-       // special char
-       return 0;
+   } else if (value < 494) {
+      return value + -1;
 
-    } else if (value < 497) {
-       return value + -1;
+   } else if (value < 495) {
+      return value + 0;
 
-    } else if (value < 498) {
-       return value + 0;
+   } else if (value == 496) {
+      // special char
+      return 0;
 
-    } else if (value < 499) {
-       return value + -1;
+   } else if (value < 497) {
+      return value + -1;
 
-    } else if (value < 500) {
-       return value + -2;
+   } else if (value < 498) {
+      return value + 0;
 
-    } else if (value < 501) {
-       return value + 0;
+   } else if (value < 499) {
+      return value + -1;
 
-    } else if (value < 502) {
-       return value + -1;
+   } else if (value < 500) {
+      return value + -2;
 
-    } else if (value < 505) {
-       return value + 0;
+   } else if (value < 501) {
+      return value + 0;
 
-    } else if (value < 506) {
-       return value + -1;
+   } else if (value < 502) {
+      return value + -1;
 
-    } else if (value < 507) {
-       return value + 0;
+   } else if (value < 505) {
+      return value + 0;
 
-    } else if (value < 508) {
-       return value + -1;
+   } else if (value < 506) {
+      return value + -1;
 
-    } else if (value < 509) {
-       return value + 0;
+   } else if (value < 507) {
+      return value + 0;
 
-    } else if (value < 510) {
-       return value + -1;
+   } else if (value < 508) {
+      return value + -1;
 
-    } else if (value < 511) {
-       return value + 0;
+   } else if (value < 509) {
+      return value + 0;
 
-    } else if (value < 512) {
-       return value + -1;
+   } else if (value < 510) {
+      return value + -1;
 
-    } else if (value < 513) {
-       return value + 0;
+   } else if (value < 511) {
+      return value + 0;
 
-    } else if (value < 514) {
-       return value + -1;
+   } else if (value < 512) {
+      return value + -1;
 
-    } else if (value < 515) {
-       return value + 0;
+   } else if (value < 513) {
+      return value + 0;
 
-    } else if (value < 516) {
-       return value + -1;
+   } else if (value < 514) {
+      return value + -1;
 
-    } else if (value < 517) {
-       return value + 0;
+   } else if (value < 515) {
+      return value + 0;
 
-    } else if (value < 518) {
-       return value + -1;
+   } else if (value < 516) {
+      return value + -1;
 
-    } else if (value < 519) {
-       return value + 0;
+   } else if (value < 517) {
+      return value + 0;
 
-    } else if (value < 520) {
-       return value + -1;
+   } else if (value < 518) {
+      return value + -1;
 
-    } else if (value < 521) {
-       return value + 0;
+   } else if (value < 519) {
+      return value + 0;
 
-    } else if (value < 522) {
-       return value + -1;
+   } else if (value < 520) {
+      return value + -1;
 
-    } else if (value < 523) {
-       return value + 0;
+   } else if (value < 521) {
+      return value + 0;
 
-    } else if (value < 524) {
-       return value + -1;
+   } else if (value < 522) {
+      return value + -1;
 
-    } else if (value < 525) {
-       return value + 0;
+   } else if (value < 523) {
+      return value + 0;
 
-    } else if (value < 526) {
-       return value + -1;
+   } else if (value < 524) {
+      return value + -1;
 
-    } else if (value < 527) {
-       return value + 0;
+   } else if (value < 525) {
+      return value + 0;
 
-    } else if (value < 528) {
-       return value + -1;
+   } else if (value < 526) {
+      return value + -1;
 
-    } else if (value < 529) {
-       return value + 0;
+   } else if (value < 527) {
+      return value + 0;
 
-    } else if (value < 530) {
-       return value + -1;
+   } else if (value < 528) {
+      return value + -1;
 
-    } else if (value < 531) {
-       return value + 0;
+   } else if (value < 529) {
+      return value + 0;
 
-    } else if (value < 532) {
-       return value + -1;
+   } else if (value < 530) {
+      return value + -1;
 
-    } else if (value < 533) {
-       return value + 0;
+   } else if (value < 531) {
+      return value + 0;
 
-    } else if (value < 534) {
-       return value + -1;
+   } else if (value < 532) {
+      return value + -1;
 
-    } else if (value < 535) {
-       return value + 0;
+   } else if (value < 533) {
+      return value + 0;
 
-    } else if (value < 536) {
-       return value + -1;
+   } else if (value < 534) {
+      return value + -1;
 
-    } else if (value < 537) {
-       return value + 0;
+   } else if (value < 535) {
+      return value + 0;
 
-    } else if (value < 538) {
-       return value + -1;
+   } else if (value < 536) {
+      return value + -1;
 
-    } else if (value < 539) {
-       return value + 0;
+   } else if (value < 537) {
+      return value + 0;
 
-    } else if (value < 540) {
-       return value + -1;
+   } else if (value < 538) {
+      return value + -1;
 
-    } else if (value < 541) {
-       return value + 0;
+   } else if (value < 539) {
+      return value + 0;
 
-    } else if (value < 542) {
-       return value + -1;
+   } else if (value < 540) {
+      return value + -1;
 
-    } else if (value < 543) {
-       return value + 0;
+   } else if (value < 541) {
+      return value + 0;
 
-    } else if (value < 544) {
-       return value + -1;
+   } else if (value < 542) {
+      return value + -1;
 
-    } else if (value < 547) {
-       return value + 0;
+   } else if (value < 543) {
+      return value + 0;
 
-    } else if (value < 548) {
-       return value + -1;
+   } else if (value < 544) {
+      return value + -1;
 
-    } else if (value < 549) {
-       return value + 0;
+   } else if (value < 547) {
+      return value + 0;
 
-    } else if (value < 550) {
-       return value + -1;
+   } else if (value < 548) {
+      return value + -1;
 
-    } else if (value < 551) {
-       return value + 0;
+   } else if (value < 549) {
+      return value + 0;
 
-    } else if (value < 552) {
-       return value + -1;
+   } else if (value < 550) {
+      return value + -1;
 
-    } else if (value < 553) {
-       return value + 0;
+   } else if (value < 551) {
+      return value + 0;
 
-    } else if (value < 554) {
-       return value + -1;
+   } else if (value < 552) {
+      return value + -1;
 
-    } else if (value < 555) {
-       return value + 0;
+   } else if (value < 553) {
+      return value + 0;
 
-    } else if (value < 556) {
-       return value + -1;
+   } else if (value < 554) {
+      return value + -1;
 
-    } else if (value < 557) {
-       return value + 0;
+   } else if (value < 555) {
+      return value + 0;
 
-    } else if (value < 558) {
-       return value + -1;
+   } else if (value < 556) {
+      return value + -1;
 
-    } else if (value < 559) {
-       return value + 0;
+   } else if (value < 557) {
+      return value + 0;
 
-    } else if (value < 560) {
-       return value + -1;
+   } else if (value < 558) {
+      return value + -1;
 
-    } else if (value < 561) {
-       return value + 0;
+   } else if (value < 559) {
+      return value + 0;
 
-    } else if (value < 562) {
-       return value + -1;
+   } else if (value < 560) {
+      return value + -1;
 
-    } else if (value < 563) {
-       return value + 0;
+   } else if (value < 561) {
+      return value + 0;
 
-    } else if (value < 564) {
-       return value + -1;
+   } else if (value < 562) {
+      return value + -1;
 
-    } else if (value < 572) {
-       return value + 0;
+   } else if (value < 563) {
+      return value + 0;
 
-    } else if (value < 573) {
-       return value + -1;
+   } else if (value < 564) {
+      return value + -1;
 
-    } else if (value < 575) {
-       return value + 0;
+   } else if (value < 572) {
+      return value + 0;
 
-    } else if (value < 577) {
-       return value + 10815;
+   } else if (value < 573) {
+      return value + -1;
 
-    } else if (value < 578) {
-       return value + 0;
+   } else if (value < 575) {
+      return value + 0;
 
-    } else if (value < 579) {
-       return value + -1;
+   } else if (value < 577) {
+      return value + 10815;
 
-    } else if (value < 583) {
-       return value + 0;
+   } else if (value < 578) {
+      return value + 0;
 
-    } else if (value < 584) {
-       return value + -1;
+   } else if (value < 579) {
+      return value + -1;
 
-    } else if (value < 585) {
-       return value + 0;
+   } else if (value < 583) {
+      return value + 0;
 
-    } else if (value < 586) {
-       return value + -1;
+   } else if (value < 584) {
+      return value + -1;
 
-    } else if (value < 587) {
-       return value + 0;
+   } else if (value < 585) {
+      return value + 0;
 
-    } else if (value < 588) {
-       return value + -1;
+   } else if (value < 586) {
+      return value + -1;
 
-    } else if (value < 589) {
-       return value + 0;
+   } else if (value < 587) {
+      return value + 0;
 
-    } else if (value < 590) {
-       return value + -1;
+   } else if (value < 588) {
+      return value + -1;
 
-    } else if (value < 591) {
-       return value + 0;
+   } else if (value < 589) {
+      return value + 0;
 
-    } else if (value < 592) {
-       return value + -1;
+   } else if (value < 590) {
+      return value + -1;
 
-    } else if (value < 593) {
-       return value + 10783;
+   } else if (value < 591) {
+      return value + 0;
 
-    } else if (value < 594) {
-       return value + 10780;
+   } else if (value < 592) {
+      return value + -1;
 
-    } else if (value < 595) {
-       return value + 10782;
+   }
 
-    } else if (value < 596) {
-       return value + -210;
+   if (value < 593) {
+      return value + 10783;
 
-    } else if (value < 597) {
-       return value + -206;
+   } else if (value < 594) {
+      return value + 10780;
 
-    } else if (value < 598) {
-       return value + 0;
+   } else if (value < 595) {
+      return value + 10782;
 
-    } else if (value < 600) {
-       return value + -205;
+   } else if (value < 596) {
+      return value + -210;
 
-    } else if (value < 601) {
-       return value + 0;
+   } else if (value < 597) {
+      return value + -206;
 
-    } else if (value < 602) {
-       return value + -202;
+   } else if (value < 598) {
+      return value + 0;
 
-    } else if (value < 603) {
-       return value + 0;
+   } else if (value < 600) {
+      return value + -205;
 
-    } else if (value < 604) {
-       return value + -203;
+   } else if (value < 601) {
+      return value + 0;
 
-    } else if (value < 605) {
-       return value + 42319;
+   } else if (value < 602) {
+      return value + -202;
 
-    } else if (value < 608) {
-       return value + 0;
+   } else if (value < 603) {
+      return value + 0;
 
-    } else if (value < 609) {
-       return value + -205;
+   } else if (value < 604) {
+      return value + -203;
 
-    } else if (value < 610) {
-       return value + 42315;
+   } else if (value < 605) {
+      return value + 42319;
 
-    } else if (value < 611) {
-       return value + 0;
+   } else if (value < 608) {
+      return value + 0;
 
-    } else if (value < 612) {
-       return value + -207;
+   } else if (value < 609) {
+      return value + -205;
 
-    } else if (value < 613) {
-       return value + 0;
+   } else if (value < 610) {
+      return value + 42315;
 
-    } else if (value < 614) {
-       return value + 42280;
+   } else if (value < 611) {
+      return value + 0;
 
-    } else if (value < 615) {
-       return value + 42308;
+   } else if (value < 612) {
+      return value + -207;
 
-    } else if (value < 616) {
-       return value + 0;
+   } else if (value < 613) {
+      return value + 0;
 
-    } else if (value < 617) {
-       return value + -209;
+   } else if (value < 614) {
+      return value + 42280;
 
-    } else if (value < 618) {
-       return value + -211;
+   } else if (value < 615) {
+      return value + 42308;
 
-    } else if (value < 619) {
-       return value + 42308;
+   } else if (value < 616) {
+      return value + 0;
 
-    } else if (value < 620) {
-       return value + 10743;
+   } else if (value < 617) {
+      return value + -209;
 
-    } else if (value < 621) {
-       return value + 42305;
+   } else if (value < 618) {
+      return value + -211;
 
-    } else if (value < 623) {
-       return value + 0;
+   } else if (value < 619) {
+      return value + 42308;
 
-    } else if (value < 624) {
-       return value + -211;
+   } else if (value < 620) {
+      return value + 10743;
 
-    } else if (value < 625) {
-       return value + 0;
+   } else if (value < 621) {
+      return value + 42305;
 
-    } else if (value < 626) {
-       return value + 10749;
+   } else if (value < 623) {
+      return value + 0;
 
-    } else if (value < 627) {
-       return value + -213;
+   } else if (value < 624) {
+      return value + -211;
 
-    } else if (value < 629) {
-       return value + 0;
+   } else if (value < 625) {
+      return value + 0;
 
-    } else if (value < 630) {
-       return value + -214;
+   } else if (value < 626) {
+      return value + 10749;
 
-    } else if (value < 637) {
-       return value + 0;
+   } else if (value < 627) {
+      return value + -213;
 
-    } else if (value < 638) {
-       return value + 10727;
+   } else if (value < 629) {
+      return value + 0;
 
-    } else if (value < 640) {
-       return value + 0;
+   } else if (value < 630) {
+      return value + -214;
 
-    } else if (value < 641) {
-       return value + -218;
+   } else if (value < 637) {
+      return value + 0;
 
-    } else if (value < 643) {
-       return value + 0;
+   } else if (value < 638) {
+      return value + 10727;
 
-    } else if (value < 644) {
-       return value + -218;
+   } else if (value < 640) {
+      return value + 0;
 
-    } else if (value < 647) {
-       return value + 0;
+   } else if (value < 641) {
+      return value + -218;
 
-    } else if (value < 648) {
-       return value + 42282;
+   } else if (value < 643) {
+      return value + 0;
 
-    } else if (value < 649) {
-       return value + -218;
+   } else if (value < 644) {
+      return value + -218;
 
-    } else if (value < 650) {
-       return value + -69;
+   } else if (value < 647) {
+      return value + 0;
 
-    } else if (value < 652) {
-       return value + -217;
+   } else if (value < 648) {
+      return value + 42282;
 
-    } else if (value < 653) {
-       return value + -71;
+   } else if (value < 649) {
+      return value + -218;
 
-    } else if (value < 658) {
-       return value + 0;
+   } else if (value < 650) {
+      return value + -69;
 
-    } else if (value < 659) {
-       return value + -219;
+   } else if (value < 652) {
+      return value + -217;
 
-    } else if (value < 669) {
-       return value + 0;
+   } else if (value < 653) {
+      return value + -71;
 
-    } else if (value < 670) {
-       return value + 42261;
+   } else if (value < 658) {
+      return value + 0;
 
-    } else if (value < 671) {
-       return value + 42258;
+   } else if (value < 659) {
+      return value + -219;
 
-    } else if (value < 837) {
-       return value + 0;
+   } else if (value < 669) {
+      return value + 0;
 
-    } else if (value < 838) {
-       return value + 84;
+   } else if (value < 670) {
+      return value + 42261;
 
-    } else if (value < 881) {
-       return value + 0;
+   } else if (value < 671) {
+      return value + 42258;
 
-    } else if (value < 882) {
-       return value + -1;
+   } else if (value < 837) {
+      return value + 0;
 
-    } else if (value < 883) {
-       return value + 0;
+   } else if (value < 838) {
+      return value + 84;
 
-    } else if (value < 884) {
-       return value + -1;
+   } else if (value < 881) {
+      return value + 0;
 
-    } else if (value < 887) {
-       return value + 0;
+   } else if (value < 882) {
+      return value + -1;
 
-    } else if (value < 888) {
-       return value + -1;
+   } else if (value < 883) {
+      return value + 0;
 
-    } else if (value < 891) {
-       return value + 0;
+   } else if (value < 884) {
+      return value + -1;
 
-    } else if (value < 894) {
-       return value + 130;
+   } else if (value < 887) {
+      return value + 0;
 
-    } else if (value == 912) {
-       // special char
-       return 0;
+   } else if (value < 888) {
+      return value + -1;
 
-    } else if (value < 940) {
-       return value + 0;
+   } else if (value < 891) {
+      return value + 0;
 
-    } else if (value < 941) {
-       return value + -38;
+   } else if (value < 894) {
+      return value + 130;
 
-    } else if (value == 944) {
-       // special char
-       return 0;
+   } else if (value == 912) {
+      // special char
+      return 0;
 
-    } else if (value < 945) {
-       return value + -37;
+   } else if (value < 940) {
+      return value + 0;
 
-    } else if (value < 962) {
-       return value + -32;
+   } else if (value < 941) {
+      return value + -38;
 
-    } else if (value < 963) {
-       return value + -31;
+   } else if (value == 944) {
+      // special char
+      return 0;
 
-    } else if (value < 972) {
-       return value + -32;
+   } else if (value < 945) {
+      return value + -37;
 
-    } else if (value < 973) {
-       return value + -64;
+   } else if (value < 962) {
+      return value + -32;
 
-    } else if (value < 975) {
-       return value + -63;
+   } else if (value < 963) {
+      return value + -31;
 
-    } else if (value < 976) {
-       return value + 0;
+   } else if (value < 972) {
+      return value + -32;
 
-    } else if (value < 977) {
-       return value + -62;
+   } else if (value < 973) {
+      return value + -64;
 
-    } else if (value < 978) {
-       return value + -57;
+   } else if (value < 975) {
+      return value + -63;
 
-    } else if (value < 981) {
-       return value + 0;
+   } else if (value < 976) {
+      return value + 0;
 
-    } else if (value < 982) {
-       return value + -47;
+   } else if (value < 977) {
+      return value + -62;
 
-    } else if (value < 983) {
-       return value + -54;
+   } else if (value < 978) {
+      return value + -57;
 
-    } else if (value < 984) {
-       return value + -8;
+   } else if (value < 981) {
+      return value + 0;
 
-    } else if (value < 985) {
-       return value + 0;
+   } else if (value < 982) {
+      return value + -47;
 
-    } else if (value < 986) {
-       return value + -1;
+   } else if (value < 983) {
+      return value + -54;
 
-    } else if (value < 987) {
-       return value + 0;
+   } else if (value < 984) {
+      return value + -8;
 
-    } else if (value < 988) {
-       return value + -1;
+   } else if (value < 985) {
+      return value + 0;
 
-    } else if (value < 989) {
-       return value + 0;
+   } else if (value < 986) {
+      return value + -1;
 
-    } else if (value < 990) {
-       return value + -1;
+   } else if (value < 987) {
+      return value + 0;
 
-    } else if (value < 991) {
-       return value + 0;
+   } else if (value < 988) {
+      return value + -1;
 
-    } else if (value < 992) {
-       return value + -1;
+   } else if (value < 989) {
+      return value + 0;
 
-    } else if (value < 993) {
-       return value + 0;
+   } else if (value < 990) {
+      return value + -1;
 
-    } else if (value < 994) {
-       return value + -1;
+   } else if (value < 991) {
+      return value + 0;
 
-    } else if (value < 995) {
-       return value + 0;
+   } else if (value < 992) {
+      return value + -1;
 
-    } else if (value < 996) {
-       return value + -1;
+   } else if (value < 993) {
+      return value + 0;
 
-    } else if (value < 997) {
-       return value + 0;
+   } else if (value < 994) {
+      return value + -1;
 
-    } else if (value < 998) {
-       return value + -1;
+   } else if (value < 995) {
+      return value + 0;
 
-    } else if (value < 999) {
-       return value + 0;
+   } else if (value < 996) {
+      return value + -1;
 
-    } else if (value < 1000) {
-       return value + -1;
+   } else if (value < 997) {
+      return value + 0;
 
-    } else if (value < 1001) {
-       return value + 0;
+   } else if (value < 998) {
+      return value + -1;
 
-    } else if (value < 1002) {
-       return value + -1;
+   } else if (value < 999) {
+      return value + 0;
 
-    } else if (value < 1003) {
-       return value + 0;
+   } else if (value < 1000) {
+      return value + -1;
 
-    } else if (value < 1004) {
-       return value + -1;
+   } else if (value < 1001) {
+      return value + 0;
 
-    } else if (value < 1005) {
-       return value + 0;
+   } else if (value < 1002) {
+      return value + -1;
 
-    } else if (value < 1006) {
-       return value + -1;
+   } else if (value < 1003) {
+      return value + 0;
 
-    } else if (value < 1007) {
-       return value + 0;
+   } else if (value < 1004) {
+      return value + -1;
 
-    } else if (value < 1008) {
-       return value + -1;
+   } else if (value < 1005) {
+      return value + 0;
 
-    } else if (value < 1009) {
-       return value + -86;
+   } else if (value < 1006) {
+      return value + -1;
 
-    } else if (value < 1010) {
-       return value + -80;
+   } else if (value < 1007) {
+      return value + 0;
 
-    } else if (value < 1011) {
-       return value + 7;
+   }
 
-    } else if (value < 1012) {
-       return value + -116;
+   if (value < 1008) {
+      return value + -1;
 
-    } else if (value < 1013) {
-       return value + 0;
+   } else if (value < 1009) {
+      return value + -86;
 
-    } else if (value < 1014) {
-       return value + -96;
+   } else if (value < 1010) {
+      return value + -80;
 
-    } else if (value < 1016) {
-       return value + 0;
+   } else if (value < 1011) {
+      return value + 7;
 
-    } else if (value < 1017) {
-       return value + -1;
+   } else if (value < 1012) {
+      return value + -116;
 
-    } else if (value < 1019) {
-       return value + 0;
+   } else if (value < 1013) {
+      return value + 0;
 
-    } else if (value < 1020) {
-       return value + -1;
+   } else if (value < 1014) {
+      return value + -96;
 
-    } else if (value < 1072) {
-       return value + 0;
+   } else if (value < 1016) {
+      return value + 0;
 
-    } else if (value < 1104) {
-       return value + -32;
+   } else if (value < 1017) {
+      return value + -1;
 
-    } else if (value < 1120) {
-       return value + -80;
+   } else if (value < 1019) {
+      return value + 0;
 
-    } else if (value < 1121) {
-       return value + 0;
+   } else if (value < 1020) {
+      return value + -1;
 
-    } else if (value < 1122) {
-       return value + -1;
+   } else if (value < 1072) {
+      return value + 0;
 
-    } else if (value < 1123) {
-       return value + 0;
+   } else if (value < 1104) {
+      return value + -32;
 
-    } else if (value < 1124) {
-       return value + -1;
+   } else if (value < 1120) {
+      return value + -80;
 
-    } else if (value < 1125) {
-       return value + 0;
+   } else if (value < 1121) {
+      return value + 0;
 
-    } else if (value < 1126) {
-       return value + -1;
+   } else if (value < 1122) {
+      return value + -1;
 
-    } else if (value < 1127) {
-       return value + 0;
+   } else if (value < 1123) {
+      return value + 0;
 
-    } else if (value < 1128) {
-       return value + -1;
+   } else if (value < 1124) {
+      return value + -1;
 
-    } else if (value < 1129) {
-       return value + 0;
+   } else if (value < 1125) {
+      return value + 0;
 
-    } else if (value < 1130) {
-       return value + -1;
+   } else if (value < 1126) {
+      return value + -1;
 
-    } else if (value < 1131) {
-       return value + 0;
+   } else if (value < 1127) {
+      return value + 0;
 
-    } else if (value < 1132) {
-       return value + -1;
+   } else if (value < 1128) {
+      return value + -1;
 
-    } else if (value < 1133) {
-       return value + 0;
+   } else if (value < 1129) {
+      return value + 0;
 
-    } else if (value < 1134) {
-       return value + -1;
+   } else if (value < 1130) {
+      return value + -1;
 
-    } else if (value < 1135) {
-       return value + 0;
+   } else if (value < 1131) {
+      return value + 0;
 
-    } else if (value < 1136) {
-       return value + -1;
+   } else if (value < 1132) {
+      return value + -1;
 
-    } else if (value < 1137) {
-       return value + 0;
+   } else if (value < 1133) {
+      return value + 0;
 
-    } else if (value < 1138) {
-       return value + -1;
+   } else if (value < 1134) {
+      return value + -1;
 
-    } else if (value < 1139) {
-       return value + 0;
+   } else if (value < 1135) {
+      return value + 0;
 
-    } else if (value < 1140) {
-       return value + -1;
+   } else if (value < 1136) {
+      return value + -1;
 
-    } else if (value < 1141) {
-       return value + 0;
+   } else if (value < 1137) {
+      return value + 0;
 
-    } else if (value < 1142) {
-       return value + -1;
+   } else if (value < 1138) {
+      return value + -1;
 
-    } else if (value < 1143) {
-       return value + 0;
+   } else if (value < 1139) {
+      return value + 0;
 
-    } else if (value < 1144) {
-       return value + -1;
+   } else if (value < 1140) {
+      return value + -1;
 
-    } else if (value < 1145) {
-       return value + 0;
+   } else if (value < 1141) {
+      return value + 0;
 
-    } else if (value < 1146) {
-       return value + -1;
+   } else if (value < 1142) {
+      return value + -1;
 
-    } else if (value < 1147) {
-       return value + 0;
+   } else if (value < 1143) {
+      return value + 0;
 
-    } else if (value < 1148) {
-       return value + -1;
+   } else if (value < 1144) {
+      return value + -1;
 
-    } else if (value < 1149) {
-       return value + 0;
+   } else if (value < 1145) {
+      return value + 0;
 
-    } else if (value < 1150) {
-       return value + -1;
+   } else if (value < 1146) {
+      return value + -1;
 
-    } else if (value < 1151) {
-       return value + 0;
+   } else if (value < 1147) {
+      return value + 0;
 
-    } else if (value < 1152) {
-       return value + -1;
+   } else if (value < 1148) {
+      return value + -1;
 
-    } else if (value < 1153) {
-       return value + 0;
+   } else if (value < 1149) {
+      return value + 0;
 
-    } else if (value < 1154) {
-       return value + -1;
+   } else if (value < 1150) {
+      return value + -1;
 
-    } else if (value < 1163) {
-       return value + 0;
+   } else if (value < 1151) {
+      return value + 0;
 
-    } else if (value < 1164) {
-       return value + -1;
+   } else if (value < 1152) {
+      return value + -1;
 
-    } else if (value < 1165) {
-       return value + 0;
+   } else if (value < 1153) {
+      return value + 0;
 
-    } else if (value < 1166) {
-       return value + -1;
+   } else if (value < 1154) {
+      return value + -1;
 
-    } else if (value < 1167) {
-       return value + 0;
+   } else if (value < 1163) {
+      return value + 0;
 
-    } else if (value < 1168) {
-       return value + -1;
+   } else if (value < 1164) {
+      return value + -1;
 
-    } else if (value < 1169) {
-       return value + 0;
+   } else if (value < 1165) {
+      return value + 0;
 
-    } else if (value < 1170) {
-       return value + -1;
+   } else if (value < 1166) {
+      return value + -1;
 
-    } else if (value < 1171) {
-       return value + 0;
+   } else if (value < 1167) {
+      return value + 0;
 
-    } else if (value < 1172) {
-       return value + -1;
+   } else if (value < 1168) {
+      return value + -1;
 
-    } else if (value < 1173) {
-       return value + 0;
+   } else if (value < 1169) {
+      return value + 0;
 
-    } else if (value < 1174) {
-       return value + -1;
+   } else if (value < 1170) {
+      return value + -1;
 
-    } else if (value < 1175) {
-       return value + 0;
+   } else if (value < 1171) {
+      return value + 0;
 
-    } else if (value < 1176) {
-       return value + -1;
+   } else if (value < 1172) {
+      return value + -1;
 
-    } else if (value < 1177) {
-       return value + 0;
+   } else if (value < 1173) {
+      return value + 0;
 
-    } else if (value < 1178) {
-       return value + -1;
+   } else if (value < 1174) {
+      return value + -1;
 
-    } else if (value < 1179) {
-       return value + 0;
+   } else if (value < 1175) {
+      return value + 0;
 
-    } else if (value < 1180) {
-       return value + -1;
+   } else if (value < 1176) {
+      return value + -1;
 
-    } else if (value < 1181) {
-       return value + 0;
+   } else if (value < 1177) {
+      return value + 0;
 
-    } else if (value < 1182) {
-       return value + -1;
+   } else if (value < 1178) {
+      return value + -1;
 
-    } else if (value < 1183) {
-       return value + 0;
+   } else if (value < 1179) {
+      return value + 0;
 
-    } else if (value < 1184) {
-       return value + -1;
+   } else if (value < 1180) {
+      return value + -1;
 
-    } else if (value < 1185) {
-       return value + 0;
+   } else if (value < 1181) {
+      return value + 0;
 
-    } else if (value < 1186) {
-       return value + -1;
+   } else if (value < 1182) {
+      return value + -1;
 
-    } else if (value < 1187) {
-       return value + 0;
+   } else if (value < 1183) {
+      return value + 0;
 
-    } else if (value < 1188) {
-       return value + -1;
+   } else if (value < 1184) {
+      return value + -1;
 
-    } else if (value < 1189) {
-       return value + 0;
+   } else if (value < 1185) {
+      return value + 0;
 
-    } else if (value < 1190) {
-       return value + -1;
+   } else if (value < 1186) {
+      return value + -1;
 
-    } else if (value < 1191) {
-       return value + 0;
+   } else if (value < 1187) {
+      return value + 0;
 
-    } else if (value < 1192) {
-       return value + -1;
+   } else if (value < 1188) {
+      return value + -1;
 
-    } else if (value < 1193) {
-       return value + 0;
+   } else if (value < 1189) {
+      return value + 0;
 
-    } else if (value < 1194) {
-       return value + -1;
+   } else if (value < 1190) {
+      return value + -1;
 
-    } else if (value < 1195) {
-       return value + 0;
+   } else if (value < 1191) {
+      return value + 0;
 
-    } else if (value < 1196) {
-       return value + -1;
+   } else if (value < 1192) {
+      return value + -1;
 
-    } else if (value < 1197) {
-       return value + 0;
+   } else if (value < 1193) {
+      return value + 0;
 
-    } else if (value < 1198) {
-       return value + -1;
+   } else if (value < 1194) {
+      return value + -1;
 
-    } else if (value < 1199) {
-       return value + 0;
+   } else if (value < 1195) {
+      return value + 0;
 
-    } else if (value < 1200) {
-       return value + -1;
+   } else if (value < 1196) {
+      return value + -1;
 
-    } else if (value < 1201) {
-       return value + 0;
+   } else if (value < 1197) {
+      return value + 0;
 
-    } else if (value < 1202) {
-       return value + -1;
+   } else if (value < 1198) {
+      return value + -1;
 
-    } else if (value < 1203) {
-       return value + 0;
+   } else if (value < 1199) {
+      return value + 0;
 
-    } else if (value < 1204) {
-       return value + -1;
+   } else if (value < 1200) {
+      return value + -1;
 
-    } else if (value < 1205) {
-       return value + 0;
+   } else if (value < 1201) {
+      return value + 0;
 
-    } else if (value < 1206) {
-       return value + -1;
+   } else if (value < 1202) {
+      return value + -1;
 
-    } else if (value < 1207) {
-       return value + 0;
+   } else if (value < 1203) {
+      return value + 0;
 
-    } else if (value < 1208) {
-       return value + -1;
+   } else if (value < 1204) {
+      return value + -1;
 
-    } else if (value < 1209) {
-       return value + 0;
+   } else if (value < 1205) {
+      return value + 0;
 
-    } else if (value < 1210) {
-       return value + -1;
+   } else if (value < 1206) {
+      return value + -1;
 
-    } else if (value < 1211) {
-       return value + 0;
+   } else if (value < 1207) {
+      return value + 0;
 
-    } else if (value < 1212) {
-       return value + -1;
+   } else if (value < 1208) {
+      return value + -1;
 
-    } else if (value < 1213) {
-       return value + 0;
+   } else if (value < 1209) {
+      return value + 0;
 
-    } else if (value < 1214) {
-       return value + -1;
+   } else if (value < 1210) {
+      return value + -1;
 
-    } else if (value < 1215) {
-       return value + 0;
+   } else if (value < 1211) {
+      return value + 0;
 
-    } else if (value < 1216) {
-       return value + -1;
+   } else if (value < 1212) {
+      return value + -1;
 
-    } else if (value < 1218) {
-       return value + 0;
+   } else if (value < 1213) {
+      return value + 0;
 
-    } else if (value < 1219) {
-       return value + -1;
+   } else if (value < 1214) {
+      return value + -1;
 
-    } else if (value < 1220) {
-       return value + 0;
+   }
 
-    } else if (value < 1221) {
-       return value + -1;
+   if (value < 1215) {
+      return value + 0;
 
-    } else if (value < 1222) {
-       return value + 0;
+   } else if (value < 1216) {
+      return value + -1;
 
-    } else if (value < 1223) {
-       return value + -1;
+   } else if (value < 1218) {
+      return value + 0;
 
-    } else if (value < 1224) {
-       return value + 0;
+   } else if (value < 1219) {
+      return value + -1;
 
-    } else if (value < 1225) {
-       return value + -1;
+   } else if (value < 1220) {
+      return value + 0;
 
-    } else if (value < 1226) {
-       return value + 0;
+   } else if (value < 1221) {
+      return value + -1;
 
-    } else if (value < 1227) {
-       return value + -1;
+   } else if (value < 1222) {
+      return value + 0;
 
-    } else if (value < 1228) {
-       return value + 0;
+   } else if (value < 1223) {
+      return value + -1;
 
-    } else if (value < 1229) {
-       return value + -1;
+   } else if (value < 1224) {
+      return value + 0;
 
-    } else if (value < 1230) {
-       return value + 0;
+   } else if (value < 1225) {
+      return value + -1;
 
-    } else if (value < 1231) {
-       return value + -1;
+   } else if (value < 1226) {
+      return value + 0;
 
-    } else if (value < 1232) {
-       return value + -15;
+   } else if (value < 1227) {
+      return value + -1;
 
-    } else if (value < 1233) {
-       return value + 0;
+   } else if (value < 1228) {
+      return value + 0;
 
-    } else if (value < 1234) {
-       return value + -1;
+   } else if (value < 1229) {
+      return value + -1;
 
-    } else if (value < 1235) {
-       return value + 0;
+   } else if (value < 1230) {
+      return value + 0;
 
-    } else if (value < 1236) {
-       return value + -1;
+   } else if (value < 1231) {
+      return value + -1;
 
-    } else if (value < 1237) {
-       return value + 0;
+   } else if (value < 1232) {
+      return value + -15;
 
-    } else if (value < 1238) {
-       return value + -1;
+   } else if (value < 1233) {
+      return value + 0;
 
-    } else if (value < 1239) {
-       return value + 0;
+   } else if (value < 1234) {
+      return value + -1;
 
-    } else if (value < 1240) {
-       return value + -1;
+   } else if (value < 1235) {
+      return value + 0;
 
-    } else if (value < 1241) {
-       return value + 0;
+   } else if (value < 1236) {
+      return value + -1;
 
-    } else if (value < 1242) {
-       return value + -1;
+   } else if (value < 1237) {
+      return value + 0;
 
-    } else if (value < 1243) {
-       return value + 0;
+   } else if (value < 1238) {
+      return value + -1;
 
-    } else if (value < 1244) {
-       return value + -1;
+   } else if (value < 1239) {
+      return value + 0;
 
-    } else if (value < 1245) {
-       return value + 0;
+   } else if (value < 1240) {
+      return value + -1;
 
-    } else if (value < 1246) {
-       return value + -1;
+   } else if (value < 1241) {
+      return value + 0;
 
-    } else if (value < 1247) {
-       return value + 0;
+   } else if (value < 1242) {
+      return value + -1;
 
-    } else if (value < 1248) {
-       return value + -1;
+   } else if (value < 1243) {
+      return value + 0;
 
-    } else if (value < 1249) {
-       return value + 0;
+   } else if (value < 1244) {
+      return value + -1;
 
-    } else if (value < 1250) {
-       return value + -1;
+   } else if (value < 1245) {
+      return value + 0;
 
-    } else if (value < 1251) {
-       return value + 0;
+   } else if (value < 1246) {
+      return value + -1;
 
-    } else if (value < 1252) {
-       return value + -1;
+   } else if (value < 1247) {
+      return value + 0;
 
-    } else if (value < 1253) {
-       return value + 0;
+   } else if (value < 1248) {
+      return value + -1;
 
-    } else if (value < 1254) {
-       return value + -1;
+   } else if (value < 1249) {
+      return value + 0;
 
-    } else if (value < 1255) {
-       return value + 0;
+   } else if (value < 1250) {
+      return value + -1;
 
-    } else if (value < 1256) {
-       return value + -1;
+   } else if (value < 1251) {
+      return value + 0;
 
-    } else if (value < 1257) {
-       return value + 0;
+   } else if (value < 1252) {
+      return value + -1;
 
-    } else if (value < 1258) {
-       return value + -1;
+   } else if (value < 1253) {
+      return value + 0;
 
-    } else if (value < 1259) {
-       return value + 0;
+   } else if (value < 1254) {
+      return value + -1;
 
-    } else if (value < 1260) {
-       return value + -1;
+   } else if (value < 1255) {
+      return value + 0;
 
-    } else if (value < 1261) {
-       return value + 0;
+   } else if (value < 1256) {
+      return value + -1;
 
-    } else if (value < 1262) {
-       return value + -1;
+   } else if (value < 1257) {
+      return value + 0;
 
-    } else if (value < 1263) {
-       return value + 0;
+   } else if (value < 1258) {
+      return value + -1;
 
-    } else if (value < 1264) {
-       return value + -1;
+   } else if (value < 1259) {
+      return value + 0;
 
-    } else if (value < 1265) {
-       return value + 0;
+   } else if (value < 1260) {
+      return value + -1;
 
-    } else if (value < 1266) {
-       return value + -1;
+   } else if (value < 1261) {
+      return value + 0;
 
-    } else if (value < 1267) {
-       return value + 0;
+   } else if (value < 1262) {
+      return value + -1;
 
-    } else if (value < 1268) {
-       return value + -1;
+   } else if (value < 1263) {
+      return value + 0;
 
-    } else if (value < 1269) {
-       return value + 0;
+   } else if (value < 1264) {
+      return value + -1;
 
-    } else if (value < 1270) {
-       return value + -1;
+   } else if (value < 1265) {
+      return value + 0;
 
-    } else if (value < 1271) {
-       return value + 0;
+   } else if (value < 1266) {
+      return value + -1;
 
-    } else if (value < 1272) {
-       return value + -1;
+   } else if (value < 1267) {
+      return value + 0;
 
-    } else if (value < 1273) {
-       return value + 0;
+   } else if (value < 1268) {
+      return value + -1;
 
-    } else if (value < 1274) {
-       return value + -1;
+   } else if (value < 1269) {
+      return value + 0;
 
-    } else if (value < 1275) {
-       return value + 0;
+   } else if (value < 1270) {
+      return value + -1;
 
-    } else if (value < 1276) {
-       return value + -1;
+   } else if (value < 1271) {
+      return value + 0;
 
-    } else if (value < 1277) {
-       return value + 0;
+   } else if (value < 1272) {
+      return value + -1;
 
-    } else if (value < 1278) {
-       return value + -1;
+   } else if (value < 1273) {
+      return value + 0;
 
-    } else if (value < 1279) {
-       return value + 0;
+   } else if (value < 1274) {
+      return value + -1;
 
-    } else if (value < 1280) {
-       return value + -1;
+   } else if (value < 1275) {
+      return value + 0;
 
-    } else if (value < 1281) {
-       return value + 0;
+   } else if (value < 1276) {
+      return value + -1;
 
-    } else if (value < 1282) {
-       return value + -1;
+   } else if (value < 1277) {
+      return value + 0;
 
-    } else if (value < 1283) {
-       return value + 0;
+   } else if (value < 1278) {
+      return value + -1;
 
-    } else if (value < 1284) {
-       return value + -1;
+   } else if (value < 1279) {
+      return value + 0;
 
-    } else if (value < 1285) {
-       return value + 0;
+   } else if (value < 1280) {
+      return value + -1;
 
-    } else if (value < 1286) {
-       return value + -1;
+   } else if (value < 1281) {
+      return value + 0;
 
-    } else if (value < 1287) {
-       return value + 0;
+   } else if (value < 1282) {
+      return value + -1;
 
-    } else if (value < 1288) {
-       return value + -1;
+   } else if (value < 1283) {
+      return value + 0;
 
-    } else if (value < 1289) {
-       return value + 0;
+   } else if (value < 1284) {
+      return value + -1;
 
-    } else if (value < 1290) {
-       return value + -1;
+   } else if (value < 1285) {
+      return value + 0;
 
-    } else if (value < 1291) {
-       return value + 0;
+   } else if (value < 1286) {
+      return value + -1;
 
-    } else if (value < 1292) {
-       return value + -1;
+   } else if (value < 1287) {
+      return value + 0;
 
-    } else if (value < 1293) {
-       return value + 0;
+   } else if (value < 1288) {
+      return value + -1;
 
-    } else if (value < 1294) {
-       return value + -1;
+   } else if (value < 1289) {
+      return value + 0;
 
-    } else if (value < 1295) {
-       return value + 0;
+   } else if (value < 1290) {
+      return value + -1;
 
-    } else if (value < 1296) {
-       return value + -1;
+   } else if (value < 1291) {
+      return value + 0;
 
-    } else if (value < 1297) {
-       return value + 0;
+   } else if (value < 1292) {
+      return value + -1;
 
-    } else if (value < 1298) {
-       return value + -1;
+   } else if (value < 1293) {
+      return value + 0;
 
-    } else if (value < 1299) {
-       return value + 0;
+   } else if (value < 1294) {
+      return value + -1;
 
-    } else if (value < 1300) {
-       return value + -1;
+   } else if (value < 1295) {
+      return value + 0;
 
-    } else if (value < 1301) {
-       return value + 0;
+   } else if (value < 1296) {
+      return value + -1;
 
-    } else if (value < 1302) {
-       return value + -1;
+   } else if (value < 1297) {
+      return value + 0;
 
-    } else if (value < 1303) {
-       return value + 0;
+   } else if (value < 1298) {
+      return value + -1;
 
-    } else if (value < 1304) {
-       return value + -1;
+   } else if (value < 1299) {
+      return value + 0;
 
-    } else if (value < 1305) {
-       return value + 0;
+   } else if (value < 1300) {
+      return value + -1;
 
-    } else if (value < 1306) {
-       return value + -1;
+   } else if (value < 1301) {
+      return value + 0;
 
-    } else if (value < 1307) {
-       return value + 0;
+   } else if (value < 1302) {
+      return value + -1;
 
-    } else if (value < 1308) {
-       return value + -1;
+   } else if (value < 1303) {
+      return value + 0;
 
-    } else if (value < 1309) {
-       return value + 0;
+   } else if (value < 1304) {
+      return value + -1;
 
-    } else if (value < 1310) {
-       return value + -1;
+   } else if (value < 1305) {
+      return value + 0;
 
-    } else if (value < 1311) {
-       return value + 0;
+   } else if (value < 1306) {
+      return value + -1;
 
-    } else if (value < 1312) {
-       return value + -1;
+   } else if (value < 1307) {
+      return value + 0;
 
-    } else if (value < 1313) {
-       return value + 0;
+   } else if (value < 1308) {
+      return value + -1;
 
-    } else if (value < 1314) {
-       return value + -1;
+   } else if (value < 1309) {
+      return value + 0;
 
-    } else if (value < 1315) {
-       return value + 0;
+   } else if (value < 1310) {
+      return value + -1;
 
-    } else if (value < 1316) {
-       return value + -1;
+   } else if (value < 1311) {
+      return value + 0;
 
-    } else if (value < 1317) {
-       return value + 0;
+   } else if (value < 1312) {
+      return value + -1;
 
-    } else if (value < 1318) {
-       return value + -1;
+   } else if (value < 1313) {
+      return value + 0;
 
-    } else if (value < 1319) {
-       return value + 0;
+   } else if (value < 1314) {
+      return value + -1;
 
-    } else if (value < 1320) {
-       return value + -1;
+   } else if (value < 1315) {
+      return value + 0;
 
-    } else if (value < 1321) {
-       return value + 0;
+   }
 
-    } else if (value < 1322) {
-       return value + -1;
+   if (value < 1316) {
+      return value + -1;
 
-    } else if (value < 1323) {
-       return value + 0;
+   } else if (value < 1317) {
+      return value + 0;
 
-    } else if (value < 1324) {
-       return value + -1;
+   } else if (value < 1318) {
+      return value + -1;
 
-    } else if (value < 1325) {
-       return value + 0;
+   } else if (value < 1319) {
+      return value + 0;
 
-    } else if (value < 1326) {
-       return value + -1;
+   } else if (value < 1320) {
+      return value + -1;
 
-    } else if (value < 1327) {
-       return value + 0;
+   } else if (value < 1321) {
+      return value + 0;
 
-    } else if (value < 1328) {
-       return value + -1;
+   } else if (value < 1322) {
+      return value + -1;
 
-    } else if (value < 1377) {
-       return value + 0;
+   } else if (value < 1323) {
+      return value + 0;
 
-    } else if (value == 1415) {
-       // special char
-       return 0;
+   } else if (value < 1324) {
+      return value + -1;
 
-    } else if (value < 1416) {
-       return value + -48;
+   } else if (value < 1325) {
+      return value + 0;
 
-    } else if (value < 4304) {
-       return value + 0;
+   } else if (value < 1326) {
+      return value + -1;
 
-    } else if (value < 4347) {
-       return value + 3008;
+   } else if (value < 1327) {
+      return value + 0;
 
-    } else if (value < 4349) {
-       return value + 0;
+   } else if (value < 1328) {
+      return value + -1;
 
-    } else if (value < 4352) {
-       return value + 3008;
+   } else if (value < 1377) {
+      return value + 0;
 
-    } else if (value < 5112) {
-       return value + 0;
+   } else if (value == 1415) {
+      // special char
+      return 0;
 
-    } else if (value < 5118) {
-       return value + -8;
+   } else if (value < 1416) {
+      return value + -48;
 
-    } else if (value < 7296) {
-       return value + 0;
+   } else if (value < 4304) {
+      return value + 0;
 
-    } else if (value < 7297) {
-       return value + -6254;
+   } else if (value < 4347) {
+      return value + 3008;
 
-    } else if (value < 7298) {
-       return value + -6253;
+   } else if (value < 4349) {
+      return value + 0;
 
-    } else if (value < 7299) {
-       return value + -6244;
+   } else if (value < 4352) {
+      return value + 3008;
 
-    } else if (value < 7301) {
-       return value + -6242;
+   } else if (value < 5112) {
+      return value + 0;
 
-    } else if (value < 7302) {
-       return value + -6243;
+   } else if (value < 5118) {
+      return value + -8;
 
-    } else if (value < 7303) {
-       return value + -6236;
+   } else if (value < 7296) {
+      return value + 0;
 
-    } else if (value < 7304) {
-       return value + -6181;
+   } else if (value < 7297) {
+      return value + -6254;
 
-    } else if (value < 7305) {
-       return value + 35266;
+   } else if (value < 7298) {
+      return value + -6253;
 
-    } else if (value < 7545) {
-       return value + 0;
+   } else if (value < 7299) {
+      return value + -6244;
 
-    } else if (value < 7546) {
-       return value + 35332;
+   } else if (value < 7301) {
+      return value + -6242;
 
-    } else if (value < 7549) {
-       return value + 0;
+   } else if (value < 7302) {
+      return value + -6243;
 
-    } else if (value < 7550) {
-       return value + 3814;
+   } else if (value < 7303) {
+      return value + -6236;
 
-    } else if (value < 7681) {
-       return value + 0;
+   } else if (value < 7304) {
+      return value + -6181;
 
-    } else if (value < 7682) {
-       return value + -1;
+   } else if (value < 7305) {
+      return value + 35266;
 
-    } else if (value < 7683) {
-       return value + 0;
+   } else if (value < 7545) {
+      return value + 0;
 
-    } else if (value < 7684) {
-       return value + -1;
+   } else if (value < 7546) {
+      return value + 35332;
 
-    } else if (value < 7685) {
-       return value + 0;
+   } else if (value < 7549) {
+      return value + 0;
 
-    } else if (value < 7686) {
-       return value + -1;
+   } else if (value < 7550) {
+      return value + 3814;
 
-    } else if (value < 7687) {
-       return value + 0;
+   } else if (value < 7681) {
+      return value + 0;
 
-    } else if (value < 7688) {
-       return value + -1;
+   } else if (value < 7682) {
+      return value + -1;
 
-    } else if (value < 7689) {
-       return value + 0;
+   } else if (value < 7683) {
+      return value + 0;
 
-    } else if (value < 7690) {
-       return value + -1;
+   } else if (value < 7684) {
+      return value + -1;
 
-    } else if (value < 7691) {
-       return value + 0;
+   } else if (value < 7685) {
+      return value + 0;
 
-    } else if (value < 7692) {
-       return value + -1;
+   } else if (value < 7686) {
+      return value + -1;
 
-    } else if (value < 7693) {
-       return value + 0;
+   } else if (value < 7687) {
+      return value + 0;
 
-    } else if (value < 7694) {
-       return value + -1;
+   } else if (value < 7688) {
+      return value + -1;
 
-    } else if (value < 7695) {
-       return value + 0;
+   } else if (value < 7689) {
+      return value + 0;
 
-    } else if (value < 7696) {
-       return value + -1;
+   } else if (value < 7690) {
+      return value + -1;
 
-    } else if (value < 7697) {
-       return value + 0;
+   } else if (value < 7691) {
+      return value + 0;
 
-    } else if (value < 7698) {
-       return value + -1;
+   } else if (value < 7692) {
+      return value + -1;
 
-    } else if (value < 7699) {
-       return value + 0;
+   } else if (value < 7693) {
+      return value + 0;
 
-    } else if (value < 7700) {
-       return value + -1;
+   } else if (value < 7694) {
+      return value + -1;
 
-    } else if (value < 7701) {
-       return value + 0;
+   } else if (value < 7695) {
+      return value + 0;
 
-    } else if (value < 7702) {
-       return value + -1;
+   } else if (value < 7696) {
+      return value + -1;
 
-    } else if (value < 7703) {
-       return value + 0;
+   } else if (value < 7697) {
+      return value + 0;
 
-    } else if (value < 7704) {
-       return value + -1;
+   } else if (value < 7698) {
+      return value + -1;
 
-    } else if (value < 7705) {
-       return value + 0;
+   } else if (value < 7699) {
+      return value + 0;
 
-    } else if (value < 7706) {
-       return value + -1;
+   } else if (value < 7700) {
+      return value + -1;
 
-    } else if (value < 7707) {
-       return value + 0;
+   } else if (value < 7701) {
+      return value + 0;
 
-    } else if (value < 7708) {
-       return value + -1;
+   } else if (value < 7702) {
+      return value + -1;
 
-    } else if (value < 7709) {
-       return value + 0;
+   } else if (value < 7703) {
+      return value + 0;
 
-    } else if (value < 7710) {
-       return value + -1;
+   } else if (value < 7704) {
+      return value + -1;
 
-    } else if (value < 7711) {
-       return value + 0;
+   } else if (value < 7705) {
+      return value + 0;
 
-    } else if (value < 7712) {
-       return value + -1;
+   } else if (value < 7706) {
+      return value + -1;
 
-    } else if (value < 7713) {
-       return value + 0;
+   } else if (value < 7707) {
+      return value + 0;
 
-    } else if (value < 7714) {
-       return value + -1;
+   } else if (value < 7708) {
+      return value + -1;
 
-    } else if (value < 7715) {
-       return value + 0;
+   } else if (value < 7709) {
+      return value + 0;
 
-    } else if (value < 7716) {
-       return value + -1;
+   } else if (value < 7710) {
+      return value + -1;
 
-    } else if (value < 7717) {
-       return value + 0;
+   } else if (value < 7711) {
+      return value + 0;
 
-    } else if (value < 7718) {
-       return value + -1;
+   } else if (value < 7712) {
+      return value + -1;
 
-    } else if (value < 7719) {
-       return value + 0;
+   } else if (value < 7713) {
+      return value + 0;
 
-    } else if (value < 7720) {
-       return value + -1;
+   } else if (value < 7714) {
+      return value + -1;
 
-    } else if (value < 7721) {
-       return value + 0;
+   } else if (value < 7715) {
+      return value + 0;
 
-    } else if (value < 7722) {
-       return value + -1;
+   } else if (value < 7716) {
+      return value + -1;
 
-    } else if (value < 7723) {
-       return value + 0;
+   } else if (value < 7717) {
+      return value + 0;
 
-    } else if (value < 7724) {
-       return value + -1;
+   } else if (value < 7718) {
+      return value + -1;
 
-    } else if (value < 7725) {
-       return value + 0;
+   } else if (value < 7719) {
+      return value + 0;
 
-    } else if (value < 7726) {
-       return value + -1;
+   } else if (value < 7720) {
+      return value + -1;
 
-    } else if (value < 7727) {
-       return value + 0;
+   } else if (value < 7721) {
+      return value + 0;
 
-    } else if (value < 7728) {
-       return value + -1;
+   } else if (value < 7722) {
+      return value + -1;
 
-    } else if (value < 7729) {
-       return value + 0;
+   } else if (value < 7723) {
+      return value + 0;
 
-    } else if (value < 7730) {
-       return value + -1;
+   } else if (value < 7724) {
+      return value + -1;
 
-    } else if (value < 7731) {
-       return value + 0;
+   } else if (value < 7725) {
+      return value + 0;
 
-    } else if (value < 7732) {
-       return value + -1;
+   } else if (value < 7726) {
+      return value + -1;
 
-    } else if (value < 7733) {
-       return value + 0;
+   } else if (value < 7727) {
+      return value + 0;
 
-    } else if (value < 7734) {
-       return value + -1;
+   } else if (value < 7728) {
+      return value + -1;
 
-    } else if (value < 7735) {
-       return value + 0;
+   } else if (value < 7729) {
+      return value + 0;
 
-    } else if (value < 7736) {
-       return value + -1;
+   } else if (value < 7730) {
+      return value + -1;
 
-    } else if (value < 7737) {
-       return value + 0;
+   } else if (value < 7731) {
+      return value + 0;
 
-    } else if (value < 7738) {
-       return value + -1;
+   } else if (value < 7732) {
+      return value + -1;
 
-    } else if (value < 7739) {
-       return value + 0;
+   } else if (value < 7733) {
+      return value + 0;
 
-    } else if (value < 7740) {
-       return value + -1;
+   } else if (value < 7734) {
+      return value + -1;
 
-    } else if (value < 7741) {
-       return value + 0;
+   } else if (value < 7735) {
+      return value + 0;
 
-    } else if (value < 7742) {
-       return value + -1;
+   } else if (value < 7736) {
+      return value + -1;
 
-    } else if (value < 7743) {
-       return value + 0;
+   } else if (value < 7737) {
+      return value + 0;
 
-    } else if (value < 7744) {
-       return value + -1;
+   } else if (value < 7738) {
+      return value + -1;
 
-    } else if (value < 7745) {
-       return value + 0;
+   } else if (value < 7739) {
+      return value + 0;
 
-    } else if (value < 7746) {
-       return value + -1;
+   } else if (value < 7740) {
+      return value + -1;
 
-    } else if (value < 7747) {
-       return value + 0;
+   } else if (value < 7741) {
+      return value + 0;
 
-    } else if (value < 7748) {
-       return value + -1;
+   } else if (value < 7742) {
+      return value + -1;
 
-    } else if (value < 7749) {
-       return value + 0;
+   } else if (value < 7743) {
+      return value + 0;
 
-    } else if (value < 7750) {
-       return value + -1;
+   } else if (value < 7744) {
+      return value + -1;
 
-    } else if (value < 7751) {
-       return value + 0;
+   } else if (value < 7745) {
+      return value + 0;
 
-    } else if (value < 7752) {
-       return value + -1;
+   }
 
-    } else if (value < 7753) {
-       return value + 0;
+   if (value < 7746) {
+      return value + -1;
 
-    } else if (value < 7754) {
-       return value + -1;
+   } else if (value < 7747) {
+      return value + 0;
 
-    } else if (value < 7755) {
-       return value + 0;
+   } else if (value < 7748) {
+      return value + -1;
 
-    } else if (value < 7756) {
-       return value + -1;
+   } else if (value < 7749) {
+      return value + 0;
 
-    } else if (value < 7757) {
-       return value + 0;
+   } else if (value < 7750) {
+      return value + -1;
 
-    } else if (value < 7758) {
-       return value + -1;
+   } else if (value < 7751) {
+      return value + 0;
 
-    } else if (value < 7759) {
-       return value + 0;
+   } else if (value < 7752) {
+      return value + -1;
 
-    } else if (value < 7760) {
-       return value + -1;
+   } else if (value < 7753) {
+      return value + 0;
 
-    } else if (value < 7761) {
-       return value + 0;
+   } else if (value < 7754) {
+      return value + -1;
 
-    } else if (value < 7762) {
-       return value + -1;
+   } else if (value < 7755) {
+      return value + 0;
 
-    } else if (value < 7763) {
-       return value + 0;
+   } else if (value < 7756) {
+      return value + -1;
 
-    } else if (value < 7764) {
-       return value + -1;
+   } else if (value < 7757) {
+      return value + 0;
 
-    } else if (value < 7765) {
-       return value + 0;
+   } else if (value < 7758) {
+      return value + -1;
 
-    } else if (value < 7766) {
-       return value + -1;
+   } else if (value < 7759) {
+      return value + 0;
 
-    } else if (value < 7767) {
-       return value + 0;
+   } else if (value < 7760) {
+      return value + -1;
 
-    } else if (value < 7768) {
-       return value + -1;
+   } else if (value < 7761) {
+      return value + 0;
 
-    } else if (value < 7769) {
-       return value + 0;
+   } else if (value < 7762) {
+      return value + -1;
 
-    } else if (value < 7770) {
-       return value + -1;
+   } else if (value < 7763) {
+      return value + 0;
 
-    } else if (value < 7771) {
-       return value + 0;
+   } else if (value < 7764) {
+      return value + -1;
 
-    } else if (value < 7772) {
-       return value + -1;
+   } else if (value < 7765) {
+      return value + 0;
 
-    } else if (value < 7773) {
-       return value + 0;
+   } else if (value < 7766) {
+      return value + -1;
 
-    } else if (value < 7774) {
-       return value + -1;
+   } else if (value < 7767) {
+      return value + 0;
 
-    } else if (value < 7775) {
-       return value + 0;
+   } else if (value < 7768) {
+      return value + -1;
 
-    } else if (value < 7776) {
-       return value + -1;
+   } else if (value < 7769) {
+      return value + 0;
 
-    } else if (value < 7777) {
-       return value + 0;
+   } else if (value < 7770) {
+      return value + -1;
 
-    } else if (value < 7778) {
-       return value + -1;
+   } else if (value < 7771) {
+      return value + 0;
 
-    } else if (value < 7779) {
-       return value + 0;
+   } else if (value < 7772) {
+      return value + -1;
 
-    } else if (value < 7780) {
-       return value + -1;
+   } else if (value < 7773) {
+      return value + 0;
 
-    } else if (value < 7781) {
-       return value + 0;
+   } else if (value < 7774) {
+      return value + -1;
 
-    } else if (value < 7782) {
-       return value + -1;
+   } else if (value < 7775) {
+      return value + 0;
 
-    } else if (value < 7783) {
-       return value + 0;
+   } else if (value < 7776) {
+      return value + -1;
 
-    } else if (value < 7784) {
-       return value + -1;
+   } else if (value < 7777) {
+      return value + 0;
 
-    } else if (value < 7785) {
-       return value + 0;
+   } else if (value < 7778) {
+      return value + -1;
 
-    } else if (value < 7786) {
-       return value + -1;
+   } else if (value < 7779) {
+      return value + 0;
 
-    } else if (value < 7787) {
-       return value + 0;
+   } else if (value < 7780) {
+      return value + -1;
 
-    } else if (value < 7788) {
-       return value + -1;
+   } else if (value < 7781) {
+      return value + 0;
 
-    } else if (value < 7789) {
-       return value + 0;
+   } else if (value < 7782) {
+      return value + -1;
 
-    } else if (value < 7790) {
-       return value + -1;
+   } else if (value < 7783) {
+      return value + 0;
 
-    } else if (value < 7791) {
-       return value + 0;
+   } else if (value < 7784) {
+      return value + -1;
 
-    } else if (value < 7792) {
-       return value + -1;
+   } else if (value < 7785) {
+      return value + 0;
 
-    } else if (value < 7793) {
-       return value + 0;
+   } else if (value < 7786) {
+      return value + -1;
 
-    } else if (value < 7794) {
-       return value + -1;
+   } else if (value < 7787) {
+      return value + 0;
 
-    } else if (value < 7795) {
-       return value + 0;
+   } else if (value < 7788) {
+      return value + -1;
 
-    } else if (value < 7796) {
-       return value + -1;
+   } else if (value < 7789) {
+      return value + 0;
 
-    } else if (value < 7797) {
-       return value + 0;
+   } else if (value < 7790) {
+      return value + -1;
 
-    } else if (value < 7798) {
-       return value + -1;
+   } else if (value < 7791) {
+      return value + 0;
 
-    } else if (value < 7799) {
-       return value + 0;
+   } else if (value < 7792) {
+      return value + -1;
 
-    } else if (value < 7800) {
-       return value + -1;
+   } else if (value < 7793) {
+      return value + 0;
 
-    } else if (value < 7801) {
-       return value + 0;
+   } else if (value < 7794) {
+      return value + -1;
 
-    } else if (value < 7802) {
-       return value + -1;
+   } else if (value < 7795) {
+      return value + 0;
 
-    } else if (value < 7803) {
-       return value + 0;
+   } else if (value < 7796) {
+      return value + -1;
 
-    } else if (value < 7804) {
-       return value + -1;
+   } else if (value < 7797) {
+      return value + 0;
 
-    } else if (value < 7805) {
-       return value + 0;
+   } else if (value < 7798) {
+      return value + -1;
 
-    } else if (value < 7806) {
-       return value + -1;
+   } else if (value < 7799) {
+      return value + 0;
 
-    } else if (value < 7807) {
-       return value + 0;
+   } else if (value < 7800) {
+      return value + -1;
 
-    } else if (value < 7808) {
-       return value + -1;
+   } else if (value < 7801) {
+      return value + 0;
 
-    } else if (value < 7809) {
-       return value + 0;
+   } else if (value < 7802) {
+      return value + -1;
 
-    } else if (value < 7810) {
-       return value + -1;
+   } else if (value < 7803) {
+      return value + 0;
 
-    } else if (value < 7811) {
-       return value + 0;
+   } else if (value < 7804) {
+      return value + -1;
 
-    } else if (value < 7812) {
-       return value + -1;
+   } else if (value < 7805) {
+      return value + 0;
 
-    } else if (value < 7813) {
-       return value + 0;
+   } else if (value < 7806) {
+      return value + -1;
 
-    } else if (value < 7814) {
-       return value + -1;
+   } else if (value < 7807) {
+      return value + 0;
 
-    } else if (value < 7815) {
-       return value + 0;
+   } else if (value < 7808) {
+      return value + -1;
 
-    } else if (value < 7816) {
-       return value + -1;
+   } else if (value < 7809) {
+      return value + 0;
 
-    } else if (value < 7817) {
-       return value + 0;
+   } else if (value < 7810) {
+      return value + -1;
 
-    } else if (value < 7818) {
-       return value + -1;
+   } else if (value < 7811) {
+      return value + 0;
 
-    } else if (value < 7819) {
-       return value + 0;
+   } else if (value < 7812) {
+      return value + -1;
 
-    } else if (value < 7820) {
-       return value + -1;
+   } else if (value < 7813) {
+      return value + 0;
 
-    } else if (value < 7821) {
-       return value + 0;
+   } else if (value < 7814) {
+      return value + -1;
 
-    } else if (value < 7822) {
-       return value + -1;
+   } else if (value < 7815) {
+      return value + 0;
 
-    } else if (value < 7823) {
-       return value + 0;
+   } else if (value < 7816) {
+      return value + -1;
 
-    } else if (value < 7824) {
-       return value + -1;
+   } else if (value < 7817) {
+      return value + 0;
 
-    } else if (value < 7825) {
-       return value + 0;
+   } else if (value < 7818) {
+      return value + -1;
 
-    } else if (value < 7826) {
-       return value + -1;
+   } else if (value < 7819) {
+      return value + 0;
 
-    } else if (value < 7827) {
-       return value + 0;
+   } else if (value < 7820) {
+      return value + -1;
 
-    } else if (value < 7828) {
-       return value + -1;
+   } else if (value < 7821) {
+      return value + 0;
 
-    } else if (value < 7829) {
-       return value + 0;
+   } else if (value < 7822) {
+      return value + -1;
 
-    } else if (value == 7830) {
-       // special char
-       return 0;
+   } else if (value < 7823) {
+      return value + 0;
 
-    } else if (value == 7831) {
-       // special char
-       return 0;
+   } else if (value < 7824) {
+      return value + -1;
 
-    } else if (value == 7832) {
-       // special char
-       return 0;
+   } else if (value < 7825) {
+      return value + 0;
 
-    } else if (value == 7833) {
-       // special char
-       return 0;
+   } else if (value < 7826) {
+      return value + -1;
 
-    } else if (value == 7834) {
-       // special char
-       return 0;
+   } else if (value < 7827) {
+      return value + 0;
 
-    } else if (value < 7835) {
-       return value + -1;
+   } else if (value < 7828) {
+      return value + -1;
 
-    } else if (value < 7836) {
-       return value + -59;
+   } else if (value < 7829) {
+      return value + 0;
 
-    } else if (value < 7841) {
-       return value + 0;
+   } else if (value == 7830) {
+      // special char
+      return 0;
 
-    } else if (value < 7842) {
-       return value + -1;
+   } else if (value == 7831) {
+      // special char
+      return 0;
 
-    } else if (value < 7843) {
-       return value + 0;
+   } else if (value == 7832) {
+      // special char
+      return 0;
 
-    } else if (value < 7844) {
-       return value + -1;
+   } else if (value == 7833) {
+      // special char
+      return 0;
 
-    } else if (value < 7845) {
-       return value + 0;
+   } else if (value == 7834) {
+      // special char
+      return 0;
 
-    } else if (value < 7846) {
-       return value + -1;
+   } else if (value < 7835) {
+      return value + -1;
 
-    } else if (value < 7847) {
-       return value + 0;
+   } else if (value < 7836) {
+      return value + -59;
 
-    } else if (value < 7848) {
-       return value + -1;
+   } else if (value < 7841) {
+      return value + 0;
 
-    } else if (value < 7849) {
-       return value + 0;
+   } else if (value < 7842) {
+      return value + -1;
 
-    } else if (value < 7850) {
-       return value + -1;
+   } else if (value < 7843) {
+      return value + 0;
 
-    } else if (value < 7851) {
-       return value + 0;
+   } else if (value < 7844) {
+      return value + -1;
 
-    } else if (value < 7852) {
-       return value + -1;
+   } else if (value < 7845) {
+      return value + 0;
 
-    } else if (value < 7853) {
-       return value + 0;
+   } else if (value < 7846) {
+      return value + -1;
 
-    } else if (value < 7854) {
-       return value + -1;
+   } else if (value < 7847) {
+      return value + 0;
 
-    } else if (value < 7855) {
-       return value + 0;
+   } else if (value < 7848) {
+      return value + -1;
 
-    } else if (value < 7856) {
-       return value + -1;
+   } else if (value < 7849) {
+      return value + 0;
 
-    } else if (value < 7857) {
-       return value + 0;
+   }
 
-    } else if (value < 7858) {
-       return value + -1;
+   if (value < 7850) {
+      return value + -1;
 
-    } else if (value < 7859) {
-       return value + 0;
+   } else if (value < 7851) {
+      return value + 0;
 
-    } else if (value < 7860) {
-       return value + -1;
+   } else if (value < 7852) {
+      return value + -1;
 
-    } else if (value < 7861) {
-       return value + 0;
+   } else if (value < 7853) {
+      return value + 0;
 
-    } else if (value < 7862) {
-       return value + -1;
+   } else if (value < 7854) {
+      return value + -1;
 
-    } else if (value < 7863) {
-       return value + 0;
+   } else if (value < 7855) {
+      return value + 0;
 
-    } else if (value < 7864) {
-       return value + -1;
+   } else if (value < 7856) {
+      return value + -1;
 
-    } else if (value < 7865) {
-       return value + 0;
+   } else if (value < 7857) {
+      return value + 0;
 
-    } else if (value < 7866) {
-       return value + -1;
+   } else if (value < 7858) {
+      return value + -1;
 
-    } else if (value < 7867) {
-       return value + 0;
+   } else if (value < 7859) {
+      return value + 0;
 
-    } else if (value < 7868) {
-       return value + -1;
+   } else if (value < 7860) {
+      return value + -1;
 
-    } else if (value < 7869) {
-       return value + 0;
+   } else if (value < 7861) {
+      return value + 0;
 
-    } else if (value < 7870) {
-       return value + -1;
+   } else if (value < 7862) {
+      return value + -1;
 
-    } else if (value < 7871) {
-       return value + 0;
+   } else if (value < 7863) {
+      return value + 0;
 
-    } else if (value < 7872) {
-       return value + -1;
+   } else if (value < 7864) {
+      return value + -1;
 
-    } else if (value < 7873) {
-       return value + 0;
+   } else if (value < 7865) {
+      return value + 0;
 
-    } else if (value < 7874) {
-       return value + -1;
+   } else if (value < 7866) {
+      return value + -1;
 
-    } else if (value < 7875) {
-       return value + 0;
+   } else if (value < 7867) {
+      return value + 0;
 
-    } else if (value < 7876) {
-       return value + -1;
+   } else if (value < 7868) {
+      return value + -1;
 
-    } else if (value < 7877) {
-       return value + 0;
+   } else if (value < 7869) {
+      return value + 0;
 
-    } else if (value < 7878) {
-       return value + -1;
+   } else if (value < 7870) {
+      return value + -1;
 
-    } else if (value < 7879) {
-       return value + 0;
+   } else if (value < 7871) {
+      return value + 0;
 
-    } else if (value < 7880) {
-       return value + -1;
+   } else if (value < 7872) {
+      return value + -1;
 
-    } else if (value < 7881) {
-       return value + 0;
+   } else if (value < 7873) {
+      return value + 0;
 
-    } else if (value < 7882) {
-       return value + -1;
+   } else if (value < 7874) {
+      return value + -1;
 
-    } else if (value < 7883) {
-       return value + 0;
+   } else if (value < 7875) {
+      return value + 0;
 
-    } else if (value < 7884) {
-       return value + -1;
+   } else if (value < 7876) {
+      return value + -1;
 
-    } else if (value < 7885) {
-       return value + 0;
+   } else if (value < 7877) {
+      return value + 0;
 
-    } else if (value < 7886) {
-       return value + -1;
+   } else if (value < 7878) {
+      return value + -1;
 
-    } else if (value < 7887) {
-       return value + 0;
+   } else if (value < 7879) {
+      return value + 0;
 
-    } else if (value < 7888) {
-       return value + -1;
+   } else if (value < 7880) {
+      return value + -1;
 
-    } else if (value < 7889) {
-       return value + 0;
+   } else if (value < 7881) {
+      return value + 0;
 
-    } else if (value < 7890) {
-       return value + -1;
+   } else if (value < 7882) {
+      return value + -1;
 
-    } else if (value < 7891) {
-       return value + 0;
+   } else if (value < 7883) {
+      return value + 0;
 
-    } else if (value < 7892) {
-       return value + -1;
+   } else if (value < 7884) {
+      return value + -1;
 
-    } else if (value < 7893) {
-       return value + 0;
+   } else if (value < 7885) {
+      return value + 0;
 
-    } else if (value < 7894) {
-       return value + -1;
+   } else if (value < 7886) {
+      return value + -1;
 
-    } else if (value < 7895) {
-       return value + 0;
+   } else if (value < 7887) {
+      return value + 0;
 
-    } else if (value < 7896) {
-       return value + -1;
+   } else if (value < 7888) {
+      return value + -1;
 
-    } else if (value < 7897) {
-       return value + 0;
+   } else if (value < 7889) {
+      return value + 0;
 
-    } else if (value < 7898) {
-       return value + -1;
+   } else if (value < 7890) {
+      return value + -1;
 
-    } else if (value < 7899) {
-       return value + 0;
+   } else if (value < 7891) {
+      return value + 0;
 
-    } else if (value < 7900) {
-       return value + -1;
+   } else if (value < 7892) {
+      return value + -1;
 
-    } else if (value < 7901) {
-       return value + 0;
+   } else if (value < 7893) {
+      return value + 0;
 
-    } else if (value < 7902) {
-       return value + -1;
+   } else if (value < 7894) {
+      return value + -1;
 
-    } else if (value < 7903) {
-       return value + 0;
+   } else if (value < 7895) {
+      return value + 0;
 
-    } else if (value < 7904) {
-       return value + -1;
+   } else if (value < 7896) {
+      return value + -1;
 
-    } else if (value < 7905) {
-       return value + 0;
+   } else if (value < 7897) {
+      return value + 0;
 
-    } else if (value < 7906) {
-       return value + -1;
+   } else if (value < 7898) {
+      return value + -1;
 
-    } else if (value < 7907) {
-       return value + 0;
+   } else if (value < 7899) {
+      return value + 0;
 
-    } else if (value < 7908) {
-       return value + -1;
+   } else if (value < 7900) {
+      return value + -1;
 
-    } else if (value < 7909) {
-       return value + 0;
+   } else if (value < 7901) {
+      return value + 0;
 
-    } else if (value < 7910) {
-       return value + -1;
+   } else if (value < 7902) {
+      return value + -1;
 
-    } else if (value < 7911) {
-       return value + 0;
+   } else if (value < 7903) {
+      return value + 0;
 
-    } else if (value < 7912) {
-       return value + -1;
+   } else if (value < 7904) {
+      return value + -1;
 
-    } else if (value < 7913) {
-       return value + 0;
+   } else if (value < 7905) {
+      return value + 0;
 
-    } else if (value < 7914) {
-       return value + -1;
+   } else if (value < 7906) {
+      return value + -1;
 
-    } else if (value < 7915) {
-       return value + 0;
+   } else if (value < 7907) {
+      return value + 0;
 
-    } else if (value < 7916) {
-       return value + -1;
+   } else if (value < 7908) {
+      return value + -1;
 
-    } else if (value < 7917) {
-       return value + 0;
+   } else if (value < 7909) {
+      return value + 0;
 
-    } else if (value < 7918) {
-       return value + -1;
+   } else if (value < 7910) {
+      return value + -1;
 
-    } else if (value < 7919) {
-       return value + 0;
+   } else if (value < 7911) {
+      return value + 0;
 
-    } else if (value < 7920) {
-       return value + -1;
+   } else if (value < 7912) {
+      return value + -1;
 
-    } else if (value < 7921) {
-       return value + 0;
+   } else if (value < 7913) {
+      return value + 0;
 
-    } else if (value < 7922) {
-       return value + -1;
+   } else if (value < 7914) {
+      return value + -1;
 
-    } else if (value < 7923) {
-       return value + 0;
+   } else if (value < 7915) {
+      return value + 0;
 
-    } else if (value < 7924) {
-       return value + -1;
+   } else if (value < 7916) {
+      return value + -1;
 
-    } else if (value < 7925) {
-       return value + 0;
+   } else if (value < 7917) {
+      return value + 0;
 
-    } else if (value < 7926) {
-       return value + -1;
+   } else if (value < 7918) {
+      return value + -1;
 
-    } else if (value < 7927) {
-       return value + 0;
+   } else if (value < 7919) {
+      return value + 0;
 
-    } else if (value < 7928) {
-       return value + -1;
+   } else if (value < 7920) {
+      return value + -1;
 
-    } else if (value < 7929) {
-       return value + 0;
+   } else if (value < 7921) {
+      return value + 0;
 
-    } else if (value < 7930) {
-       return value + -1;
+   } else if (value < 7922) {
+      return value + -1;
 
-    } else if (value < 7931) {
-       return value + 0;
+   } else if (value < 7923) {
+      return value + 0;
 
-    } else if (value < 7932) {
-       return value + -1;
+   } else if (value < 7924) {
+      return value + -1;
 
-    } else if (value < 7933) {
-       return value + 0;
+   } else if (value < 7925) {
+      return value + 0;
 
-    } else if (value < 7934) {
-       return value + -1;
+   } else if (value < 7926) {
+      return value + -1;
 
-    } else if (value < 7935) {
-       return value + 0;
+   } else if (value < 7927) {
+      return value + 0;
 
-    } else if (value < 7936) {
-       return value + -1;
+   } else if (value < 7928) {
+      return value + -1;
 
-    } else if (value < 7944) {
-       return value + 8;
+   } else if (value < 7929) {
+      return value + 0;
 
-    } else if (value < 7952) {
-       return value + 0;
+   } else if (value < 7930) {
+      return value + -1;
 
-    } else if (value < 7958) {
-       return value + 8;
+   } else if (value < 7931) {
+      return value + 0;
 
-    } else if (value < 7968) {
-       return value + 0;
+   } else if (value < 7932) {
+      return value + -1;
 
-    } else if (value < 7976) {
-       return value + 8;
+   } else if (value < 7933) {
+      return value + 0;
 
-    } else if (value < 7984) {
-       return value + 0;
+   } else if (value < 7934) {
+      return value + -1;
 
-    } else if (value < 7992) {
-       return value + 8;
+   } else if (value < 7935) {
+      return value + 0;
 
-    } else if (value < 8000) {
-       return value + 0;
+   } else if (value < 7936) {
+      return value + -1;
 
-    } else if (value < 8006) {
-       return value + 8;
+   } else if (value < 7944) {
+      return value + 8;
 
-    } else if (value == 8016) {
-       // special char
-       return 0;
+   } else if (value < 7952) {
+      return value + 0;
 
-    } else if (value < 8017) {
-       return value + 0;
+   } else if (value < 7958) {
+      return value + 8;
 
-    } else if (value == 8018) {
-       // special char
-       return 0;
+   } else if (value < 7968) {
+      return value + 0;
 
-    } else if (value == 8020) {
-       // special char
-       return 0;
+   } else if (value < 7976) {
+      return value + 8;
 
-    } else if (value == 8022) {
-       // special char
-       return 0;
+   } else if (value < 7984) {
+      return value + 0;
 
-    } else if (value < 8024) {
-       return value + 8;
+   } else if (value < 7992) {
+      return value + 8;
 
-    } else if (value < 8032) {
-       return value + 0;
+   } else if (value < 8000) {
+      return value + 0;
 
-    } else if (value < 8040) {
-       return value + 8;
+   } else if (value < 8006) {
+      return value + 8;
 
-    } else if (value < 8048) {
-       return value + 0;
+   } else if (value == 8016) {
+      // special char
+      return 0;
 
-    } else if (value < 8050) {
-       return value + 74;
+   } else if (value < 8017) {
+      return value + 0;
 
-    } else if (value < 8054) {
-       return value + 86;
+   } else if (value == 8018) {
+      // special char
+      return 0;
 
-    } else if (value < 8056) {
-       return value + 100;
+   } else if (value == 8020) {
+      // special char
+      return 0;
 
-    } else if (value < 8058) {
-       return value + 128;
+   }
 
-    } else if (value < 8060) {
-       return value + 112;
+   if (value == 8022) {
+      // special char
+      return 0;
 
-    } else if (value < 8062) {
-       return value + 126;
+   } else if (value < 8024) {
+      return value + 8;
 
-    } else if (value == 8064) {
-       // special char
-       return 0;
+   } else if (value < 8032) {
+      return value + 0;
 
-    } else if (value == 8065) {
-       // special char
-       return 0;
+   } else if (value < 8040) {
+      return value + 8;
 
-    } else if (value == 8066) {
-       // special char
-       return 0;
+   } else if (value < 8048) {
+      return value + 0;
 
-    } else if (value == 8067) {
-       // special char
-       return 0;
+   } else if (value < 8050) {
+      return value + 74;
 
-    } else if (value == 8068) {
-       // special char
-       return 0;
+   } else if (value < 8054) {
+      return value + 86;
 
-    } else if (value == 8069) {
-       // special char
-       return 0;
+   } else if (value < 8056) {
+      return value + 100;
 
-    } else if (value == 8070) {
-       // special char
-       return 0;
+   } else if (value < 8058) {
+      return value + 128;
 
-    } else if (value == 8071) {
-       // special char
-       return 0;
+   } else if (value < 8060) {
+      return value + 112;
 
-    } else if (value == 8072) {
-       // special char
-       return 0;
+   } else if (value < 8062) {
+      return value + 126;
 
-    } else if (value == 8073) {
-       // special char
-       return 0;
+   } else if (value == 8064) {
+      // special char
+      return 0;
 
-    } else if (value == 8074) {
-       // special char
-       return 0;
+   } else if (value == 8065) {
+      // special char
+      return 0;
 
-    } else if (value == 8075) {
-       // special char
-       return 0;
+   } else if (value == 8066) {
+      // special char
+      return 0;
 
-    } else if (value == 8076) {
-       // special char
-       return 0;
+   } else if (value == 8067) {
+      // special char
+      return 0;
 
-    } else if (value == 8077) {
-       // special char
-       return 0;
+   } else if (value == 8068) {
+      // special char
+      return 0;
 
-    } else if (value == 8078) {
-       // special char
-       return 0;
+   } else if (value == 8069) {
+      // special char
+      return 0;
 
-    } else if (value == 8079) {
-       // special char
-       return 0;
+   } else if (value == 8070) {
+      // special char
+      return 0;
 
-    } else if (value == 8080) {
-       // special char
-       return 0;
+   } else if (value == 8071) {
+      // special char
+      return 0;
 
-    } else if (value == 8081) {
-       // special char
-       return 0;
+   } else if (value == 8072) {
+      // special char
+      return 0;
 
-    } else if (value == 8082) {
-       // special char
-       return 0;
+   } else if (value == 8073) {
+      // special char
+      return 0;
 
-    } else if (value == 8083) {
-       // special char
-       return 0;
+   } else if (value == 8074) {
+      // special char
+      return 0;
 
-    } else if (value == 8084) {
-       // special char
-       return 0;
+   } else if (value == 8075) {
+      // special char
+      return 0;
 
-    } else if (value == 8085) {
-       // special char
-       return 0;
+   } else if (value == 8076) {
+      // special char
+      return 0;
 
-    } else if (value == 8086) {
-       // special char
-       return 0;
+   } else if (value == 8077) {
+      // special char
+      return 0;
 
-    } else if (value == 8087) {
-       // special char
-       return 0;
+   } else if (value == 8078) {
+      // special char
+      return 0;
 
-    } else if (value == 8088) {
-       // special char
-       return 0;
+   } else if (value == 8079) {
+      // special char
+      return 0;
 
-    } else if (value == 8089) {
-       // special char
-       return 0;
+   } else if (value == 8080) {
+      // special char
+      return 0;
 
-    } else if (value == 8090) {
-       // special char
-       return 0;
+   } else if (value == 8081) {
+      // special char
+      return 0;
 
-    } else if (value == 8091) {
-       // special char
-       return 0;
+   } else if (value == 8082) {
+      // special char
+      return 0;
 
-    } else if (value == 8092) {
-       // special char
-       return 0;
+   } else if (value == 8083) {
+      // special char
+      return 0;
 
-    } else if (value == 8093) {
-       // special char
-       return 0;
+   } else if (value == 8084) {
+      // special char
+      return 0;
 
-    } else if (value == 8094) {
-       // special char
-       return 0;
+   } else if (value == 8085) {
+      // special char
+      return 0;
 
-    } else if (value == 8095) {
-       // special char
-       return 0;
+   } else if (value == 8086) {
+      // special char
+      return 0;
 
-    } else if (value == 8096) {
-       // special char
-       return 0;
+   } else if (value == 8087) {
+      // special char
+      return 0;
 
-    } else if (value == 8097) {
-       // special char
-       return 0;
+   } else if (value == 8088) {
+      // special char
+      return 0;
 
-    } else if (value == 8098) {
-       // special char
-       return 0;
+   } else if (value == 8089) {
+      // special char
+      return 0;
 
-    } else if (value == 8099) {
-       // special char
-       return 0;
+   } else if (value == 8090) {
+      // special char
+      return 0;
 
-    } else if (value == 8100) {
-       // special char
-       return 0;
+   } else if (value == 8091) {
+      // special char
+      return 0;
 
-    } else if (value == 8101) {
-       // special char
-       return 0;
+   } else if (value == 8092) {
+      // special char
+      return 0;
 
-    } else if (value == 8102) {
-       // special char
-       return 0;
+   } else if (value == 8093) {
+      // special char
+      return 0;
 
-    } else if (value == 8103) {
-       // special char
-       return 0;
+   } else if (value == 8094) {
+      // special char
+      return 0;
 
-    } else if (value == 8104) {
-       // special char
-       return 0;
+   } else if (value == 8095) {
+      // special char
+      return 0;
 
-    } else if (value == 8105) {
-       // special char
-       return 0;
+   } else if (value == 8096) {
+      // special char
+      return 0;
 
-    } else if (value == 8106) {
-       // special char
-       return 0;
+   } else if (value == 8097) {
+      // special char
+      return 0;
 
-    } else if (value == 8107) {
-       // special char
-       return 0;
+   } else if (value == 8098) {
+      // special char
+      return 0;
 
-    } else if (value == 8108) {
-       // special char
-       return 0;
+   } else if (value == 8099) {
+      // special char
+      return 0;
 
-    } else if (value == 8109) {
-       // special char
-       return 0;
+   } else if (value == 8100) {
+      // special char
+      return 0;
 
-    } else if (value == 8110) {
-       // special char
-       return 0;
+   } else if (value == 8101) {
+      // special char
+      return 0;
 
-    } else if (value == 8111) {
-       // special char
-       return 0;
+   } else if (value == 8102) {
+      // special char
+      return 0;
 
-    } else if (value < 8112) {
-       return value + 0;
+   } else if (value == 8103) {
+      // special char
+      return 0;
 
-    } else if (value == 8114) {
-       // special char
-       return 0;
+   } else if (value == 8104) {
+      // special char
+      return 0;
 
-    } else if (value == 8115) {
-       // special char
-       return 0;
+   } else if (value == 8105) {
+      // special char
+      return 0;
 
-    } else if (value == 8116) {
-       // special char
-       return 0;
+   } else if (value == 8106) {
+      // special char
+      return 0;
 
-    } else if (value < 8117) {
-       return value + 8;
+   } else if (value == 8107) {
+      // special char
+      return 0;
 
-    } else if (value == 8118) {
-       // special char
-       return 0;
+   } else if (value == 8108) {
+      // special char
+      return 0;
 
-    } else if (value == 8119) {
-       // special char
-       return 0;
+   } else if (value == 8109) {
+      // special char
+      return 0;
 
-    } else if (value == 8124) {
-       // special char
-       return 0;
+   } else if (value == 8110) {
+      // special char
+      return 0;
 
-    } else if (value < 8126) {
-       return value + 0;
+   } else if (value == 8111) {
+      // special char
+      return 0;
 
-    } else if (value < 8127) {
-       return value + -7205;
+   } else if (value < 8112) {
+      return value + 0;
 
-    } else if (value == 8130) {
-       // special char
-       return 0;
+   } else if (value == 8114) {
+      // special char
+      return 0;
 
-    } else if (value == 8131) {
-       // special char
-       return 0;
+   } else if (value == 8115) {
+      // special char
+      return 0;
 
-    } else if (value == 8132) {
-       // special char
-       return 0;
+   } else if (value == 8116) {
+      // special char
+      return 0;
 
-    } else if (value == 8134) {
-       // special char
-       return 0;
+   } else if (value < 8117) {
+      return value + 8;
 
-    } else if (value == 8135) {
-       // special char
-       return 0;
+   } else if (value == 8118) {
+      // special char
+      return 0;
 
-    } else if (value == 8140) {
-       // special char
-       return 0;
+   } else if (value == 8119) {
+      // special char
+      return 0;
 
-    } else if (value < 8144) {
-       return value + 0;
+   } else if (value == 8124) {
+      // special char
+      return 0;
 
-    } else if (value == 8146) {
-       // special char
-       return 0;
+   } else if (value < 8126) {
+      return value + 0;
 
-    } else if (value == 8147) {
-       // special char
-       return 0;
+   } else if (value < 8127) {
+      return value + -7205;
 
-    } else if (value < 8148) {
-       return value + 8;
+   } else if (value == 8130) {
+      // special char
+      return 0;
 
-    } else if (value == 8150) {
-       // special char
-       return 0;
+   } else if (value == 8131) {
+      // special char
+      return 0;
 
-    } else if (value == 8151) {
-       // special char
-       return 0;
+   } else if (value == 8132) {
+      // special char
+      return 0;
 
-    } else if (value < 8160) {
-       return value + 0;
+   } else if (value == 8134) {
+      // special char
+      return 0;
 
-    } else if (value == 8162) {
-       // special char
-       return 0;
+   } else if (value == 8135) {
+      // special char
+      return 0;
 
-    } else if (value == 8163) {
-       // special char
-       return 0;
+   } else if (value == 8140) {
+      // special char
+      return 0;
 
-    } else if (value == 8164) {
-       // special char
-       return 0;
+   } else if (value < 8144) {
+      return value + 0;
 
-    } else if (value < 8165) {
-       return value + 8;
+   } else if (value == 8146) {
+      // special char
+      return 0;
 
-    } else if (value == 8166) {
-       // special char
-       return 0;
+   } else if (value == 8147) {
+      // special char
+      return 0;
 
-    } else if (value == 8167) {
-       // special char
-       return 0;
+   } else if (value < 8148) {
+      return value + 8;
 
-    } else if (value < 8168) {
-       return value + 7;
+   } else if (value == 8150) {
+      // special char
+      return 0;
 
-    } else if (value == 8178) {
-       // special char
-       return 0;
+   } else if (value == 8151) {
+      // special char
+      return 0;
 
-    } else if (value == 8179) {
-       // special char
-       return 0;
+   } else if (value < 8160) {
+      return value + 0;
 
-    } else if (value == 8180) {
-       // special char
-       return 0;
+   } else if (value == 8162) {
+      // special char
+      return 0;
 
-    } else if (value == 8182) {
-       // special char
-       return 0;
+   } else if (value == 8163) {
+      // special char
+      return 0;
 
-    } else if (value == 8183) {
-       // special char
-       return 0;
+   } else if (value == 8164) {
+      // special char
+      return 0;
 
-    } else if (value == 8188) {
-       // special char
-       return 0;
+   } else if (value < 8165) {
+      return value + 8;
 
-    } else if (value < 8526) {
-       return value + 0;
+   } else if (value == 8166) {
+      // special char
+      return 0;
 
-    } else if (value < 8527) {
-       return value + -28;
+   } else if (value == 8167) {
+      // special char
+      return 0;
 
-    } else if (value < 8560) {
-       return value + 0;
+   } else if (value < 8168) {
+      return value + 7;
 
-    } else if (value < 8576) {
-       return value + -16;
+   } else if (value == 8178) {
+      // special char
+      return 0;
 
-    } else if (value < 8580) {
-       return value + 0;
+   } else if (value == 8179) {
+      // special char
+      return 0;
 
-    } else if (value < 8581) {
-       return value + -1;
+   } else if (value == 8180) {
+      // special char
+      return 0;
 
-    } else if (value < 9424) {
-       return value + 0;
+   } else if (value == 8182) {
+      // special char
+      return 0;
 
-    } else if (value < 9450) {
-       return value + -26;
+   } else if (value == 8183) {
+      // special char
+      return 0;
 
-    } else if (value < 11312) {
-       return value + 0;
+   } else if (value == 8188) {
+      // special char
+      return 0;
 
-    } else if (value < 11359) {
-       return value + -48;
+   } else if (value < 8526) {
+      return value + 0;
 
-    } else if (value < 11361) {
-       return value + 0;
+   } else if (value < 8527) {
+      return value + -28;
 
-    } else if (value < 11362) {
-       return value + -1;
+   } else if (value < 8560) {
+      return value + 0;
 
-    } else if (value < 11365) {
-       return value + 0;
+   } else if (value < 8576) {
+      return value + -16;
 
-    } else if (value < 11366) {
-       return value + -10795;
+   } else if (value < 8580) {
+      return value + 0;
 
-    } else if (value < 11367) {
-       return value + -10792;
+   }
 
-    } else if (value < 11368) {
-       return value + 0;
+   if (value < 8581) {
+      return value + -1;
 
-    } else if (value < 11369) {
-       return value + -1;
+   } else if (value < 9424) {
+      return value + 0;
 
-    } else if (value < 11370) {
-       return value + 0;
+   } else if (value < 9450) {
+      return value + -26;
 
-    } else if (value < 11371) {
-       return value + -1;
+   } else if (value < 11312) {
+      return value + 0;
 
-    } else if (value < 11372) {
-       return value + 0;
+   } else if (value < 11359) {
+      return value + -48;
 
-    } else if (value < 11373) {
-       return value + -1;
+   } else if (value < 11361) {
+      return value + 0;
 
-    } else if (value < 11379) {
-       return value + 0;
+   } else if (value < 11362) {
+      return value + -1;
 
-    } else if (value < 11380) {
-       return value + -1;
+   } else if (value < 11365) {
+      return value + 0;
 
-    } else if (value < 11382) {
-       return value + 0;
+   } else if (value < 11366) {
+      return value + -10795;
 
-    } else if (value < 11383) {
-       return value + -1;
+   } else if (value < 11367) {
+      return value + -10792;
 
-    } else if (value < 11393) {
-       return value + 0;
+   } else if (value < 11368) {
+      return value + 0;
 
-    } else if (value < 11394) {
-       return value + -1;
+   } else if (value < 11369) {
+      return value + -1;
 
-    } else if (value < 11395) {
-       return value + 0;
+   } else if (value < 11370) {
+      return value + 0;
 
-    } else if (value < 11396) {
-       return value + -1;
+   } else if (value < 11371) {
+      return value + -1;
 
-    } else if (value < 11397) {
-       return value + 0;
+   } else if (value < 11372) {
+      return value + 0;
 
-    } else if (value < 11398) {
-       return value + -1;
+   } else if (value < 11373) {
+      return value + -1;
 
-    } else if (value < 11399) {
-       return value + 0;
+   } else if (value < 11379) {
+      return value + 0;
 
-    } else if (value < 11400) {
-       return value + -1;
+   } else if (value < 11380) {
+      return value + -1;
 
-    } else if (value < 11401) {
-       return value + 0;
+   } else if (value < 11382) {
+      return value + 0;
 
-    } else if (value < 11402) {
-       return value + -1;
+   } else if (value < 11383) {
+      return value + -1;
 
-    } else if (value < 11403) {
-       return value + 0;
+   } else if (value < 11393) {
+      return value + 0;
 
-    } else if (value < 11404) {
-       return value + -1;
+   } else if (value < 11394) {
+      return value + -1;
 
-    } else if (value < 11405) {
-       return value + 0;
+   } else if (value < 11395) {
+      return value + 0;
 
-    } else if (value < 11406) {
-       return value + -1;
+   } else if (value < 11396) {
+      return value + -1;
 
-    } else if (value < 11407) {
-       return value + 0;
+   } else if (value < 11397) {
+      return value + 0;
 
-    } else if (value < 11408) {
-       return value + -1;
+   } else if (value < 11398) {
+      return value + -1;
 
-    } else if (value < 11409) {
-       return value + 0;
+   } else if (value < 11399) {
+      return value + 0;
 
-    } else if (value < 11410) {
-       return value + -1;
+   } else if (value < 11400) {
+      return value + -1;
 
-    } else if (value < 11411) {
-       return value + 0;
+   } else if (value < 11401) {
+      return value + 0;
 
-    } else if (value < 11412) {
-       return value + -1;
+   } else if (value < 11402) {
+      return value + -1;
 
-    } else if (value < 11413) {
-       return value + 0;
+   } else if (value < 11403) {
+      return value + 0;
 
-    } else if (value < 11414) {
-       return value + -1;
+   } else if (value < 11404) {
+      return value + -1;
 
-    } else if (value < 11415) {
-       return value + 0;
+   } else if (value < 11405) {
+      return value + 0;
 
-    } else if (value < 11416) {
-       return value + -1;
+   } else if (value < 11406) {
+      return value + -1;
 
-    } else if (value < 11417) {
-       return value + 0;
+   } else if (value < 11407) {
+      return value + 0;
 
-    } else if (value < 11418) {
-       return value + -1;
+   } else if (value < 11408) {
+      return value + -1;
 
-    } else if (value < 11419) {
-       return value + 0;
+   } else if (value < 11409) {
+      return value + 0;
 
-    } else if (value < 11420) {
-       return value + -1;
+   } else if (value < 11410) {
+      return value + -1;
 
-    } else if (value < 11421) {
-       return value + 0;
+   } else if (value < 11411) {
+      return value + 0;
 
-    } else if (value < 11422) {
-       return value + -1;
+   } else if (value < 11412) {
+      return value + -1;
 
-    } else if (value < 11423) {
-       return value + 0;
+   } else if (value < 11413) {
+      return value + 0;
 
-    } else if (value < 11424) {
-       return value + -1;
+   } else if (value < 11414) {
+      return value + -1;
 
-    } else if (value < 11425) {
-       return value + 0;
+   } else if (value < 11415) {
+      return value + 0;
 
-    } else if (value < 11426) {
-       return value + -1;
+   } else if (value < 11416) {
+      return value + -1;
 
-    } else if (value < 11427) {
-       return value + 0;
+   } else if (value < 11417) {
+      return value + 0;
 
-    } else if (value < 11428) {
-       return value + -1;
+   } else if (value < 11418) {
+      return value + -1;
 
-    } else if (value < 11429) {
-       return value + 0;
+   } else if (value < 11419) {
+      return value + 0;
 
-    } else if (value < 11430) {
-       return value + -1;
+   } else if (value < 11420) {
+      return value + -1;
 
-    } else if (value < 11431) {
-       return value + 0;
+   } else if (value < 11421) {
+      return value + 0;
 
-    } else if (value < 11432) {
-       return value + -1;
+   } else if (value < 11422) {
+      return value + -1;
 
-    } else if (value < 11433) {
-       return value + 0;
+   } else if (value < 11423) {
+      return value + 0;
 
-    } else if (value < 11434) {
-       return value + -1;
+   } else if (value < 11424) {
+      return value + -1;
 
-    } else if (value < 11435) {
-       return value + 0;
+   } else if (value < 11425) {
+      return value + 0;
 
-    } else if (value < 11436) {
-       return value + -1;
+   } else if (value < 11426) {
+      return value + -1;
 
-    } else if (value < 11437) {
-       return value + 0;
+   } else if (value < 11427) {
+      return value + 0;
 
-    } else if (value < 11438) {
-       return value + -1;
+   } else if (value < 11428) {
+      return value + -1;
 
-    } else if (value < 11439) {
-       return value + 0;
+   } else if (value < 11429) {
+      return value + 0;
 
-    } else if (value < 11440) {
-       return value + -1;
+   } else if (value < 11430) {
+      return value + -1;
 
-    } else if (value < 11441) {
-       return value + 0;
+   } else if (value < 11431) {
+      return value + 0;
 
-    } else if (value < 11442) {
-       return value + -1;
+   } else if (value < 11432) {
+      return value + -1;
 
-    } else if (value < 11443) {
-       return value + 0;
+   } else if (value < 11433) {
+      return value + 0;
 
-    } else if (value < 11444) {
-       return value + -1;
+   } else if (value < 11434) {
+      return value + -1;
 
-    } else if (value < 11445) {
-       return value + 0;
+   } else if (value < 11435) {
+      return value + 0;
 
-    } else if (value < 11446) {
-       return value + -1;
+   } else if (value < 11436) {
+      return value + -1;
 
-    } else if (value < 11447) {
-       return value + 0;
+   } else if (value < 11437) {
+      return value + 0;
 
-    } else if (value < 11448) {
-       return value + -1;
+   } else if (value < 11438) {
+      return value + -1;
 
-    } else if (value < 11449) {
-       return value + 0;
+   } else if (value < 11439) {
+      return value + 0;
 
-    } else if (value < 11450) {
-       return value + -1;
+   } else if (value < 11440) {
+      return value + -1;
 
-    } else if (value < 11451) {
-       return value + 0;
+   } else if (value < 11441) {
+      return value + 0;
 
-    } else if (value < 11452) {
-       return value + -1;
+   } else if (value < 11442) {
+      return value + -1;
 
-    } else if (value < 11453) {
-       return value + 0;
+   } else if (value < 11443) {
+      return value + 0;
 
-    } else if (value < 11454) {
-       return value + -1;
+   } else if (value < 11444) {
+      return value + -1;
 
-    } else if (value < 11455) {
-       return value + 0;
+   } else if (value < 11445) {
+      return value + 0;
 
-    } else if (value < 11456) {
-       return value + -1;
+   } else if (value < 11446) {
+      return value + -1;
 
-    } else if (value < 11457) {
-       return value + 0;
+   } else if (value < 11447) {
+      return value + 0;
 
-    } else if (value < 11458) {
-       return value + -1;
+   } else if (value < 11448) {
+      return value + -1;
 
-    } else if (value < 11459) {
-       return value + 0;
+   } else if (value < 11449) {
+      return value + 0;
 
-    } else if (value < 11460) {
-       return value + -1;
+   } else if (value < 11450) {
+      return value + -1;
 
-    } else if (value < 11461) {
-       return value + 0;
+   } else if (value < 11451) {
+      return value + 0;
 
-    } else if (value < 11462) {
-       return value + -1;
+   } else if (value < 11452) {
+      return value + -1;
 
-    } else if (value < 11463) {
-       return value + 0;
+   } else if (value < 11453) {
+      return value + 0;
 
-    } else if (value < 11464) {
-       return value + -1;
+   } else if (value < 11454) {
+      return value + -1;
 
-    } else if (value < 11465) {
-       return value + 0;
+   } else if (value < 11455) {
+      return value + 0;
 
-    } else if (value < 11466) {
-       return value + -1;
+   } else if (value < 11456) {
+      return value + -1;
 
-    } else if (value < 11467) {
-       return value + 0;
+   } else if (value < 11457) {
+      return value + 0;
 
-    } else if (value < 11468) {
-       return value + -1;
+   } else if (value < 11458) {
+      return value + -1;
 
-    } else if (value < 11469) {
-       return value + 0;
+   } else if (value < 11459) {
+      return value + 0;
 
-    } else if (value < 11470) {
-       return value + -1;
+   } else if (value < 11460) {
+      return value + -1;
 
-    } else if (value < 11471) {
-       return value + 0;
+   } else if (value < 11461) {
+      return value + 0;
 
-    } else if (value < 11472) {
-       return value + -1;
+   } else if (value < 11462) {
+      return value + -1;
 
-    } else if (value < 11473) {
-       return value + 0;
+   } else if (value < 11463) {
+      return value + 0;
 
-    } else if (value < 11474) {
-       return value + -1;
+   } else if (value < 11464) {
+      return value + -1;
 
-    } else if (value < 11475) {
-       return value + 0;
+   } else if (value < 11465) {
+      return value + 0;
 
-    } else if (value < 11476) {
-       return value + -1;
+   } else if (value < 11466) {
+      return value + -1;
 
-    } else if (value < 11477) {
-       return value + 0;
+   } else if (value < 11467) {
+      return value + 0;
 
-    } else if (value < 11478) {
-       return value + -1;
+   } else if (value < 11468) {
+      return value + -1;
 
-    } else if (value < 11479) {
-       return value + 0;
+   } else if (value < 11469) {
+      return value + 0;
 
-    } else if (value < 11480) {
-       return value + -1;
+   } else if (value < 11470) {
+      return value + -1;
 
-    } else if (value < 11481) {
-       return value + 0;
+   } else if (value < 11471) {
+      return value + 0;
 
-    } else if (value < 11482) {
-       return value + -1;
+   } else if (value < 11472) {
+      return value + -1;
 
-    } else if (value < 11483) {
-       return value + 0;
+   }
 
-    } else if (value < 11484) {
-       return value + -1;
+   if (value < 11473) {
+      return value + 0;
 
-    } else if (value < 11485) {
-       return value + 0;
+   } else if (value < 11474) {
+      return value + -1;
 
-    } else if (value < 11486) {
-       return value + -1;
+   } else if (value < 11475) {
+      return value + 0;
 
-    } else if (value < 11487) {
-       return value + 0;
+   } else if (value < 11476) {
+      return value + -1;
 
-    } else if (value < 11488) {
-       return value + -1;
+   } else if (value < 11477) {
+      return value + 0;
 
-    } else if (value < 11489) {
-       return value + 0;
+   } else if (value < 11478) {
+      return value + -1;
 
-    } else if (value < 11490) {
-       return value + -1;
+   } else if (value < 11479) {
+      return value + 0;
 
-    } else if (value < 11491) {
-       return value + 0;
+   } else if (value < 11480) {
+      return value + -1;
 
-    } else if (value < 11492) {
-       return value + -1;
+   } else if (value < 11481) {
+      return value + 0;
 
-    } else if (value < 11500) {
-       return value + 0;
+   } else if (value < 11482) {
+      return value + -1;
 
-    } else if (value < 11501) {
-       return value + -1;
+   } else if (value < 11483) {
+      return value + 0;
 
-    } else if (value < 11502) {
-       return value + 0;
+   } else if (value < 11484) {
+      return value + -1;
 
-    } else if (value < 11503) {
-       return value + -1;
+   } else if (value < 11485) {
+      return value + 0;
 
-    } else if (value < 11507) {
-       return value + 0;
+   } else if (value < 11486) {
+      return value + -1;
 
-    } else if (value < 11508) {
-       return value + -1;
+   } else if (value < 11487) {
+      return value + 0;
 
-    } else if (value < 11520) {
-       return value + 0;
+   } else if (value < 11488) {
+      return value + -1;
 
-    } else if (value < 11558) {
-       return value + -7264;
+   } else if (value < 11489) {
+      return value + 0;
 
-    } else if (value < 11559) {
-       return value + 0;
+   } else if (value < 11490) {
+      return value + -1;
 
-    } else if (value < 11560) {
-       return value + -7264;
+   } else if (value < 11491) {
+      return value + 0;
 
-    } else if (value < 11565) {
-       return value + 0;
+   } else if (value < 11492) {
+      return value + -1;
 
-    } else if (value < 11566) {
-       return value + -7264;
+   } else if (value < 11500) {
+      return value + 0;
 
-    } else if (value < 42561) {
-       return value + 0;
+   } else if (value < 11501) {
+      return value + -1;
 
-    } else if (value < 42562) {
-       return value + -1;
+   } else if (value < 11502) {
+      return value + 0;
 
-    } else if (value < 42563) {
-       return value + 0;
+   } else if (value < 11503) {
+      return value + -1;
 
-    } else if (value < 42564) {
-       return value + -1;
+   } else if (value < 11507) {
+      return value + 0;
 
-    } else if (value < 42565) {
-       return value + 0;
+   } else if (value < 11508) {
+      return value + -1;
 
-    } else if (value < 42566) {
-       return value + -1;
+   } else if (value < 11520) {
+      return value + 0;
 
-    } else if (value < 42567) {
-       return value + 0;
+   } else if (value < 11558) {
+      return value + -7264;
 
-    } else if (value < 42568) {
-       return value + -1;
+   } else if (value < 11559) {
+      return value + 0;
 
-    } else if (value < 42569) {
-       return value + 0;
+   } else if (value < 11560) {
+      return value + -7264;
 
-    } else if (value < 42570) {
-       return value + -1;
+   } else if (value < 11565) {
+      return value + 0;
 
-    } else if (value < 42571) {
-       return value + 0;
+   } else if (value < 11566) {
+      return value + -7264;
 
-    } else if (value < 42572) {
-       return value + -1;
+   } else if (value < 42561) {
+      return value + 0;
 
-    } else if (value < 42573) {
-       return value + 0;
+   } else if (value < 42562) {
+      return value + -1;
 
-    } else if (value < 42574) {
-       return value + -1;
+   } else if (value < 42563) {
+      return value + 0;
 
-    } else if (value < 42575) {
-       return value + 0;
+   } else if (value < 42564) {
+      return value + -1;
 
-    } else if (value < 42576) {
-       return value + -1;
+   } else if (value < 42565) {
+      return value + 0;
 
-    } else if (value < 42577) {
-       return value + 0;
+   } else if (value < 42566) {
+      return value + -1;
 
-    } else if (value < 42578) {
-       return value + -1;
+   } else if (value < 42567) {
+      return value + 0;
 
-    } else if (value < 42579) {
-       return value + 0;
+   } else if (value < 42568) {
+      return value + -1;
 
-    } else if (value < 42580) {
-       return value + -1;
+   } else if (value < 42569) {
+      return value + 0;
 
-    } else if (value < 42581) {
-       return value + 0;
+   } else if (value < 42570) {
+      return value + -1;
 
-    } else if (value < 42582) {
-       return value + -1;
+   } else if (value < 42571) {
+      return value + 0;
 
-    } else if (value < 42583) {
-       return value + 0;
+   } else if (value < 42572) {
+      return value + -1;
 
-    } else if (value < 42584) {
-       return value + -1;
+   } else if (value < 42573) {
+      return value + 0;
 
-    } else if (value < 42585) {
-       return value + 0;
+   } else if (value < 42574) {
+      return value + -1;
 
-    } else if (value < 42586) {
-       return value + -1;
+   } else if (value < 42575) {
+      return value + 0;
 
-    } else if (value < 42587) {
-       return value + 0;
+   } else if (value < 42576) {
+      return value + -1;
 
-    } else if (value < 42588) {
-       return value + -1;
+   } else if (value < 42577) {
+      return value + 0;
 
-    } else if (value < 42589) {
-       return value + 0;
+   } else if (value < 42578) {
+      return value + -1;
 
-    } else if (value < 42590) {
-       return value + -1;
+   } else if (value < 42579) {
+      return value + 0;
 
-    } else if (value < 42591) {
-       return value + 0;
+   } else if (value < 42580) {
+      return value + -1;
 
-    } else if (value < 42592) {
-       return value + -1;
+   } else if (value < 42581) {
+      return value + 0;
 
-    } else if (value < 42593) {
-       return value + 0;
+   } else if (value < 42582) {
+      return value + -1;
 
-    } else if (value < 42594) {
-       return value + -1;
+   } else if (value < 42583) {
+      return value + 0;
 
-    } else if (value < 42595) {
-       return value + 0;
+   } else if (value < 42584) {
+      return value + -1;
 
-    } else if (value < 42596) {
-       return value + -1;
+   } else if (value < 42585) {
+      return value + 0;
 
-    } else if (value < 42597) {
-       return value + 0;
+   } else if (value < 42586) {
+      return value + -1;
 
-    } else if (value < 42598) {
-       return value + -1;
+   } else if (value < 42587) {
+      return value + 0;
 
-    } else if (value < 42599) {
-       return value + 0;
+   } else if (value < 42588) {
+      return value + -1;
 
-    } else if (value < 42600) {
-       return value + -1;
+   } else if (value < 42589) {
+      return value + 0;
 
-    } else if (value < 42601) {
-       return value + 0;
+   } else if (value < 42590) {
+      return value + -1;
 
-    } else if (value < 42602) {
-       return value + -1;
+   } else if (value < 42591) {
+      return value + 0;
 
-    } else if (value < 42603) {
-       return value + 0;
+   } else if (value < 42592) {
+      return value + -1;
 
-    } else if (value < 42604) {
-       return value + -1;
+   } else if (value < 42593) {
+      return value + 0;
 
-    } else if (value < 42605) {
-       return value + 0;
+   } else if (value < 42594) {
+      return value + -1;
 
-    } else if (value < 42606) {
-       return value + -1;
+   } else if (value < 42595) {
+      return value + 0;
 
-    } else if (value < 42625) {
-       return value + 0;
+   } else if (value < 42596) {
+      return value + -1;
 
-    } else if (value < 42626) {
-       return value + -1;
+   } else if (value < 42597) {
+      return value + 0;
 
-    } else if (value < 42627) {
-       return value + 0;
+   } else if (value < 42598) {
+      return value + -1;
 
-    } else if (value < 42628) {
-       return value + -1;
+   } else if (value < 42599) {
+      return value + 0;
 
-    } else if (value < 42629) {
-       return value + 0;
+   } else if (value < 42600) {
+      return value + -1;
 
-    } else if (value < 42630) {
-       return value + -1;
+   } else if (value < 42601) {
+      return value + 0;
 
-    } else if (value < 42631) {
-       return value + 0;
+   } else if (value < 42602) {
+      return value + -1;
 
-    } else if (value < 42632) {
-       return value + -1;
+   } else if (value < 42603) {
+      return value + 0;
 
-    } else if (value < 42633) {
-       return value + 0;
+   } else if (value < 42604) {
+      return value + -1;
 
-    } else if (value < 42634) {
-       return value + -1;
+   } else if (value < 42605) {
+      return value + 0;
 
-    } else if (value < 42635) {
-       return value + 0;
+   } else if (value < 42606) {
+      return value + -1;
 
-    } else if (value < 42636) {
-       return value + -1;
+   } else if (value < 42625) {
+      return value + 0;
 
-    } else if (value < 42637) {
-       return value + 0;
+   } else if (value < 42626) {
+      return value + -1;
 
-    } else if (value < 42638) {
-       return value + -1;
+   } else if (value < 42627) {
+      return value + 0;
 
-    } else if (value < 42639) {
-       return value + 0;
+   } else if (value < 42628) {
+      return value + -1;
 
-    } else if (value < 42640) {
-       return value + -1;
+   } else if (value < 42629) {
+      return value + 0;
 
-    } else if (value < 42641) {
-       return value + 0;
+   } else if (value < 42630) {
+      return value + -1;
 
-    } else if (value < 42642) {
-       return value + -1;
+   } else if (value < 42631) {
+      return value + 0;
 
-    } else if (value < 42643) {
-       return value + 0;
+   } else if (value < 42632) {
+      return value + -1;
 
-    } else if (value < 42644) {
-       return value + -1;
+   } else if (value < 42633) {
+      return value + 0;
 
-    } else if (value < 42645) {
-       return value + 0;
+   } else if (value < 42634) {
+      return value + -1;
 
-    } else if (value < 42646) {
-       return value + -1;
+   } else if (value < 42635) {
+      return value + 0;
 
-    } else if (value < 42647) {
-       return value + 0;
+   } else if (value < 42636) {
+      return value + -1;
 
-    } else if (value < 42648) {
-       return value + -1;
+   } else if (value < 42637) {
+      return value + 0;
 
-    } else if (value < 42649) {
-       return value + 0;
+   } else if (value < 42638) {
+      return value + -1;
 
-    } else if (value < 42650) {
-       return value + -1;
+   } else if (value < 42639) {
+      return value + 0;
 
-    } else if (value < 42651) {
-       return value + 0;
+   } else if (value < 42640) {
+      return value + -1;
 
-    } else if (value < 42652) {
-       return value + -1;
+   } else if (value < 42641) {
+      return value + 0;
 
-    } else if (value < 42787) {
-       return value + 0;
+   } else if (value < 42642) {
+      return value + -1;
 
-    } else if (value < 42788) {
-       return value + -1;
+   } else if (value < 42643) {
+      return value + 0;
 
-    } else if (value < 42789) {
-       return value + 0;
+   } else if (value < 42644) {
+      return value + -1;
 
-    } else if (value < 42790) {
-       return value + -1;
+   } else if (value < 42645) {
+      return value + 0;
 
-    } else if (value < 42791) {
-       return value + 0;
+   } else if (value < 42646) {
+      return value + -1;
 
-    } else if (value < 42792) {
-       return value + -1;
+   }
 
-    } else if (value < 42793) {
-       return value + 0;
+   if (value < 42647) {
+      return value + 0;
 
-    } else if (value < 42794) {
-       return value + -1;
+   } else if (value < 42648) {
+      return value + -1;
 
-    } else if (value < 42795) {
-       return value + 0;
+   } else if (value < 42649) {
+      return value + 0;
 
-    } else if (value < 42796) {
-       return value + -1;
+   } else if (value < 42650) {
+      return value + -1;
 
-    } else if (value < 42797) {
-       return value + 0;
+   } else if (value < 42651) {
+      return value + 0;
 
-    } else if (value < 42798) {
-       return value + -1;
+   } else if (value < 42652) {
+      return value + -1;
 
-    } else if (value < 42799) {
-       return value + 0;
+   } else if (value < 42787) {
+      return value + 0;
 
-    } else if (value < 42800) {
-       return value + -1;
+   } else if (value < 42788) {
+      return value + -1;
 
-    } else if (value < 42803) {
-       return value + 0;
+   } else if (value < 42789) {
+      return value + 0;
 
-    } else if (value < 42804) {
-       return value + -1;
+   } else if (value < 42790) {
+      return value + -1;
 
-    } else if (value < 42805) {
-       return value + 0;
+   } else if (value < 42791) {
+      return value + 0;
 
-    } else if (value < 42806) {
-       return value + -1;
+   } else if (value < 42792) {
+      return value + -1;
 
-    } else if (value < 42807) {
-       return value + 0;
+   } else if (value < 42793) {
+      return value + 0;
 
-    } else if (value < 42808) {
-       return value + -1;
+   } else if (value < 42794) {
+      return value + -1;
 
-    } else if (value < 42809) {
-       return value + 0;
+   } else if (value < 42795) {
+      return value + 0;
 
-    } else if (value < 42810) {
-       return value + -1;
+   } else if (value < 42796) {
+      return value + -1;
 
-    } else if (value < 42811) {
-       return value + 0;
+   } else if (value < 42797) {
+      return value + 0;
 
-    } else if (value < 42812) {
-       return value + -1;
+   } else if (value < 42798) {
+      return value + -1;
 
-    } else if (value < 42813) {
-       return value + 0;
+   } else if (value < 42799) {
+      return value + 0;
 
-    } else if (value < 42814) {
-       return value + -1;
+   } else if (value < 42800) {
+      return value + -1;
 
-    } else if (value < 42815) {
-       return value + 0;
+   } else if (value < 42803) {
+      return value + 0;
 
-    } else if (value < 42816) {
-       return value + -1;
+   } else if (value < 42804) {
+      return value + -1;
 
-    } else if (value < 42817) {
-       return value + 0;
+   } else if (value < 42805) {
+      return value + 0;
 
-    } else if (value < 42818) {
-       return value + -1;
+   } else if (value < 42806) {
+      return value + -1;
 
-    } else if (value < 42819) {
-       return value + 0;
+   } else if (value < 42807) {
+      return value + 0;
 
-    } else if (value < 42820) {
-       return value + -1;
+   } else if (value < 42808) {
+      return value + -1;
 
-    } else if (value < 42821) {
-       return value + 0;
+   } else if (value < 42809) {
+      return value + 0;
 
-    } else if (value < 42822) {
-       return value + -1;
+   } else if (value < 42810) {
+      return value + -1;
 
-    } else if (value < 42823) {
-       return value + 0;
+   } else if (value < 42811) {
+      return value + 0;
 
-    } else if (value < 42824) {
-       return value + -1;
+   } else if (value < 42812) {
+      return value + -1;
 
-    } else if (value < 42825) {
-       return value + 0;
+   } else if (value < 42813) {
+      return value + 0;
 
-    } else if (value < 42826) {
-       return value + -1;
+   } else if (value < 42814) {
+      return value + -1;
 
-    } else if (value < 42827) {
-       return value + 0;
+   } else if (value < 42815) {
+      return value + 0;
 
-    } else if (value < 42828) {
-       return value + -1;
+   } else if (value < 42816) {
+      return value + -1;
 
-    } else if (value < 42829) {
-       return value + 0;
+   } else if (value < 42817) {
+      return value + 0;
 
-    } else if (value < 42830) {
-       return value + -1;
+   } else if (value < 42818) {
+      return value + -1;
 
-    } else if (value < 42831) {
-       return value + 0;
+   } else if (value < 42819) {
+      return value + 0;
 
-    } else if (value < 42832) {
-       return value + -1;
+   } else if (value < 42820) {
+      return value + -1;
 
-    } else if (value < 42833) {
-       return value + 0;
+   } else if (value < 42821) {
+      return value + 0;
 
-    } else if (value < 42834) {
-       return value + -1;
+   } else if (value < 42822) {
+      return value + -1;
 
-    } else if (value < 42835) {
-       return value + 0;
+   } else if (value < 42823) {
+      return value + 0;
 
-    } else if (value < 42836) {
-       return value + -1;
+   } else if (value < 42824) {
+      return value + -1;
 
-    } else if (value < 42837) {
-       return value + 0;
+   } else if (value < 42825) {
+      return value + 0;
 
-    } else if (value < 42838) {
-       return value + -1;
+   } else if (value < 42826) {
+      return value + -1;
 
-    } else if (value < 42839) {
-       return value + 0;
+   } else if (value < 42827) {
+      return value + 0;
 
-    } else if (value < 42840) {
-       return value + -1;
+   } else if (value < 42828) {
+      return value + -1;
 
-    } else if (value < 42841) {
-       return value + 0;
+   } else if (value < 42829) {
+      return value + 0;
 
-    } else if (value < 42842) {
-       return value + -1;
+   } else if (value < 42830) {
+      return value + -1;
 
-    } else if (value < 42843) {
-       return value + 0;
+   } else if (value < 42831) {
+      return value + 0;
 
-    } else if (value < 42844) {
-       return value + -1;
+   } else if (value < 42832) {
+      return value + -1;
 
-    } else if (value < 42845) {
-       return value + 0;
+   } else if (value < 42833) {
+      return value + 0;
 
-    } else if (value < 42846) {
-       return value + -1;
+   } else if (value < 42834) {
+      return value + -1;
 
-    } else if (value < 42847) {
-       return value + 0;
+   } else if (value < 42835) {
+      return value + 0;
 
-    } else if (value < 42848) {
-       return value + -1;
+   } else if (value < 42836) {
+      return value + -1;
 
-    } else if (value < 42849) {
-       return value + 0;
+   } else if (value < 42837) {
+      return value + 0;
 
-    } else if (value < 42850) {
-       return value + -1;
+   } else if (value < 42838) {
+      return value + -1;
 
-    } else if (value < 42851) {
-       return value + 0;
+   } else if (value < 42839) {
+      return value + 0;
 
-    } else if (value < 42852) {
-       return value + -1;
+   } else if (value < 42840) {
+      return value + -1;
 
-    } else if (value < 42853) {
-       return value + 0;
+   } else if (value < 42841) {
+      return value + 0;
 
-    } else if (value < 42854) {
-       return value + -1;
+   } else if (value < 42842) {
+      return value + -1;
 
-    } else if (value < 42855) {
-       return value + 0;
+   } else if (value < 42843) {
+      return value + 0;
 
-    } else if (value < 42856) {
-       return value + -1;
+   } else if (value < 42844) {
+      return value + -1;
 
-    } else if (value < 42857) {
-       return value + 0;
+   } else if (value < 42845) {
+      return value + 0;
 
-    } else if (value < 42858) {
-       return value + -1;
+   } else if (value < 42846) {
+      return value + -1;
 
-    } else if (value < 42859) {
-       return value + 0;
+   } else if (value < 42847) {
+      return value + 0;
 
-    } else if (value < 42860) {
-       return value + -1;
+   } else if (value < 42848) {
+      return value + -1;
 
-    } else if (value < 42861) {
-       return value + 0;
+   } else if (value < 42849) {
+      return value + 0;
 
-    } else if (value < 42862) {
-       return value + -1;
+   } else if (value < 42850) {
+      return value + -1;
 
-    } else if (value < 42863) {
-       return value + 0;
+   } else if (value < 42851) {
+      return value + 0;
 
-    } else if (value < 42864) {
-       return value + -1;
+   } else if (value < 42852) {
+      return value + -1;
 
-    } else if (value < 42874) {
-       return value + 0;
+   } else if (value < 42853) {
+      return value + 0;
 
-    } else if (value < 42875) {
-       return value + -1;
+   } else if (value < 42854) {
+      return value + -1;
 
-    } else if (value < 42876) {
-       return value + 0;
+   } else if (value < 42855) {
+      return value + 0;
 
-    } else if (value < 42877) {
-       return value + -1;
+   } else if (value < 42856) {
+      return value + -1;
 
-    } else if (value < 42879) {
-       return value + 0;
+   } else if (value < 42857) {
+      return value + 0;
 
-    } else if (value < 42880) {
-       return value + -1;
+   } else if (value < 42858) {
+      return value + -1;
 
-    } else if (value < 42881) {
-       return value + 0;
+   } else if (value < 42859) {
+      return value + 0;
 
-    } else if (value < 42882) {
-       return value + -1;
+   } else if (value < 42860) {
+      return value + -1;
 
-    } else if (value < 42883) {
-       return value + 0;
+   } else if (value < 42861) {
+      return value + 0;
 
-    } else if (value < 42884) {
-       return value + -1;
+   } else if (value < 42862) {
+      return value + -1;
 
-    } else if (value < 42885) {
-       return value + 0;
+   } else if (value < 42863) {
+      return value + 0;
 
-    } else if (value < 42886) {
-       return value + -1;
+   } else if (value < 42864) {
+      return value + -1;
 
-    } else if (value < 42887) {
-       return value + 0;
+   } else if (value < 42874) {
+      return value + 0;
 
-    } else if (value < 42888) {
-       return value + -1;
+   } else if (value < 42875) {
+      return value + -1;
 
-    } else if (value < 42892) {
-       return value + 0;
+   } else if (value < 42876) {
+      return value + 0;
 
-    } else if (value < 42893) {
-       return value + -1;
+   } else if (value < 42877) {
+      return value + -1;
 
-    } else if (value < 42897) {
-       return value + 0;
+   } else if (value < 42879) {
+      return value + 0;
 
-    } else if (value < 42898) {
-       return value + -1;
+   } else if (value < 42880) {
+      return value + -1;
 
-    } else if (value < 42899) {
-       return value + 0;
+   } else if (value < 42881) {
+      return value + 0;
 
-    } else if (value < 42900) {
-       return value + -1;
+   } else if (value < 42882) {
+      return value + -1;
 
-    } else if (value < 42903) {
-       return value + 0;
+   } else if (value < 42883) {
+      return value + 0;
 
-    } else if (value < 42904) {
-       return value + -1;
+   } else if (value < 42884) {
+      return value + -1;
 
-    } else if (value < 42905) {
-       return value + 0;
+   } else if (value < 42885) {
+      return value + 0;
 
-    } else if (value < 42906) {
-       return value + -1;
+   } else if (value < 42886) {
+      return value + -1;
 
-    } else if (value < 42907) {
-       return value + 0;
+   } else if (value < 42887) {
+      return value + 0;
 
-    } else if (value < 42908) {
-       return value + -1;
+   } else if (value < 42888) {
+      return value + -1;
 
-    } else if (value < 42909) {
-       return value + 0;
+   } else if (value < 42892) {
+      return value + 0;
 
-    } else if (value < 42910) {
-       return value + -1;
+   } else if (value < 42893) {
+      return value + -1;
 
-    } else if (value < 42911) {
-       return value + 0;
+   } else if (value < 42897) {
+      return value + 0;
 
-    } else if (value < 42912) {
-       return value + -1;
+   } else if (value < 42898) {
+      return value + -1;
 
-    } else if (value < 42913) {
-       return value + 0;
+   }
 
-    } else if (value < 42914) {
-       return value + -1;
+   if (value < 42899) {
+      return value + 0;
 
-    } else if (value < 42915) {
-       return value + 0;
+   } else if (value < 42900) {
+      return value + -1;
 
-    } else if (value < 42916) {
-       return value + -1;
+   } else if (value < 42903) {
+      return value + 0;
 
-    } else if (value < 42917) {
-       return value + 0;
+   } else if (value < 42904) {
+      return value + -1;
 
-    } else if (value < 42918) {
-       return value + -1;
+   } else if (value < 42905) {
+      return value + 0;
 
-    } else if (value < 42919) {
-       return value + 0;
+   } else if (value < 42906) {
+      return value + -1;
 
-    } else if (value < 42920) {
-       return value + -1;
+   } else if (value < 42907) {
+      return value + 0;
 
-    } else if (value < 42921) {
-       return value + 0;
+   } else if (value < 42908) {
+      return value + -1;
 
-    } else if (value < 42922) {
-       return value + -1;
+   } else if (value < 42909) {
+      return value + 0;
 
-    } else if (value < 42933) {
-       return value + 0;
+   } else if (value < 42910) {
+      return value + -1;
 
-    } else if (value < 42934) {
-       return value + -1;
+   } else if (value < 42911) {
+      return value + 0;
 
-    } else if (value < 42935) {
-       return value + 0;
+   } else if (value < 42912) {
+      return value + -1;
 
-    } else if (value < 42936) {
-       return value + -1;
+   } else if (value < 42913) {
+      return value + 0;
 
-    } else if (value < 42937) {
-       return value + 0;
+   } else if (value < 42914) {
+      return value + -1;
 
-    } else if (value < 42938) {
-       return value + -1;
+   } else if (value < 42915) {
+      return value + 0;
 
-    } else if (value < 43859) {
-       return value + 0;
+   } else if (value < 42916) {
+      return value + -1;
 
-    } else if (value < 43860) {
-       return value + -928;
+   } else if (value < 42917) {
+      return value + 0;
 
-    } else if (value < 43888) {
-       return value + 0;
+   } else if (value < 42918) {
+      return value + -1;
 
-    } else if (value < 43968) {
-       return value + -38864;
+   } else if (value < 42919) {
+      return value + 0;
 
-    } else if (value == 64256) {
-       // special char
-       return 0;
+   } else if (value < 42920) {
+      return value + -1;
 
-    } else if (value == 64257) {
-       // special char
-       return 0;
+   } else if (value < 42921) {
+      return value + 0;
 
-    } else if (value == 64258) {
-       // special char
-       return 0;
+   } else if (value < 42922) {
+      return value + -1;
 
-    } else if (value == 64259) {
-       // special char
-       return 0;
+   } else if (value < 42933) {
+      return value + 0;
 
-    } else if (value == 64260) {
-       // special char
-       return 0;
+   } else if (value < 42934) {
+      return value + -1;
 
-    } else if (value == 64261) {
-       // special char
-       return 0;
+   } else if (value < 42935) {
+      return value + 0;
 
-    } else if (value == 64262) {
-       // special char
-       return 0;
+   } else if (value < 42936) {
+      return value + -1;
 
-    } else if (value == 64275) {
-       // special char
-       return 0;
+   } else if (value < 42937) {
+      return value + 0;
 
-    } else if (value == 64276) {
-       // special char
-       return 0;
+   } else if (value < 42938) {
+      return value + -1;
 
-    } else if (value == 64277) {
-       // special char
-       return 0;
+   } else if (value < 43859) {
+      return value + 0;
 
-    } else if (value == 64278) {
-       // special char
-       return 0;
+   } else if (value < 43860) {
+      return value + -928;
 
-    } else if (value == 64279) {
-       // special char
-       return 0;
+   } else if (value < 43888) {
+      return value + 0;
 
-    } else if (value < 65345) {
-       return value + 0;
+   } else if (value < 43968) {
+      return value + -38864;
 
-    } else if (value < 65371) {
-       return value + -32;
+   } else if (value == 64256) {
+      // special char
+      return 0;
 
-    } else if (value < 66600) {
-       return value + 0;
+   } else if (value == 64257) {
+      // special char
+      return 0;
 
-    } else if (value < 66640) {
-       return value + -40;
+   } else if (value == 64258) {
+      // special char
+      return 0;
 
-    } else if (value < 66776) {
-       return value + 0;
+   } else if (value == 64259) {
+      // special char
+      return 0;
 
-    } else if (value < 66812) {
-       return value + -40;
+   } else if (value == 64260) {
+      // special char
+      return 0;
 
-    } else if (value < 68800) {
-       return value + 0;
+   } else if (value == 64261) {
+      // special char
+      return 0;
 
-    } else if (value < 68851) {
-       return value + -64;
+   } else if (value == 64262) {
+      // special char
+      return 0;
 
-    } else if (value < 71872) {
-       return value + 0;
+   } else if (value == 64275) {
+      // special char
+      return 0;
 
-    } else if (value < 71904) {
-       return value + -32;
+   } else if (value == 64276) {
+      // special char
+      return 0;
 
-    } else if (value < 93792) {
-       return value + 0;
+   } else if (value == 64277) {
+      // special char
+      return 0;
 
-    } else if (value < 93824) {
-       return value + -32;
+   } else if (value == 64278) {
+      // special char
+      return 0;
 
-    } else if (value < 125218) {
-       return value + 0;
+   } else if (value == 64279) {
+      // special char
+      return 0;
 
-    } else if (value < 125252) {
-       return value + -34;
+   } else if (value < 65345) {
+      return value + 0;
 
-    } else {
+   } else if (value < 65371) {
+      return value + -32;
+
+   } else if (value < 66600) {
+      return value + 0;
+
+   } else if (value < 66640) {
+      return value + -40;
+
+   } else if (value < 66776) {
+      return value + 0;
+
+   } else if (value < 66812) {
+      return value + -40;
+
+   } else if (value < 68800) {
+      return value + 0;
+
+   } else if (value < 68851) {
+      return value + -64;
+
+   } else if (value < 71872) {
+      return value + 0;
+
+   } else if (value < 71904) {
+      return value + -32;
+
+   } else if (value < 93792) {
+      return value + 0;
+
+   } else if (value < 93824) {
+      return value + -32;
+
+   } else if (value < 125218) {
+      return value + 0;
+
+   } else if (value < 125252) {
+      return value + -34;
+
+   } else {
       return value;
    }
 }

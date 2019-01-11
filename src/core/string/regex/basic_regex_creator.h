@@ -1,14 +1,19 @@
 /***********************************************************************
 *
-* Copyright (c) 2017-2018 Barbara Geller
-* Copyright (c) 2017-2018 Ansel Sermersheim
-* Copyright (c) 1998-2014 John Maddock
-* All rights reserved.
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 1998-2009 John Maddock
 *
-* This file is part of CsString
+* This file is part of CsString.
 *
 * CsString is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
 *
 ***********************************************************************/
 
