@@ -1,15 +1,27 @@
 #
-# Copyright (C) 2012-2018 Barbara Geller
-# Copyright (C) 2012-2018 Ansel Sermersheim
-# All rights reserved.
+# Copyright (c) 2012-2019 Barbara Geller
+# Copyright (c) 2012-2019 Ansel Sermersheim
 #
+# This file is part of CopperSpice.
+#
+# CopperSpice is free software. You can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# version 2.1 as published by the Free Software Foundation.
+#
+# CopperSpice is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# https://www.gnu.org/licenses/
+#
+
+
 #  Config file for the CopperSpice package, defines the following variables:
 #
 #  COPPERSPICE_INCLUDES               - all include directories
 #  COPPERSPICE_LIBRARIES              - all libraries to link against
 #  COPPERSPICE_<COMPONENT>_INCLUDES   - component linclude directories for e.g. CsCore
 #  COPPERSPICE_<COMPONENT>_LIBRARIES  - component libraries to link against e.g. CsCore
-#
 
 if(COPPERSPICE_FOUND)
    return()
