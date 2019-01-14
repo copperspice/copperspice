@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qvariantanimation.h>
+#include <qvariantanimation.h>
 #include <qvariantanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
@@ -30,6 +30,8 @@
 #include <QtGui/qvector3d.h>
 #include <QtGui/qvector4d.h>
 #include <QtGui/qquaternion.h>
+
+// emerald - may need review
 
 template<>
 inline QColor _q_interpolate(const QColor &f, const QColor &t, qreal progress)
@@ -46,13 +48,14 @@ inline QQuaternion _q_interpolate(const QQuaternion &f, const QQuaternion &t, qr
    return QQuaternion::slerp(f, t, progress);
 }
 
-static int qRegisterGuiGetInterpolator()
+int qRegisterGuiGetInterpolator()
 {
    qRegisterAnimationInterpolator<QColor>(_q_interpolateVariant<QColor>);
    qRegisterAnimationInterpolator<QVector2D>(_q_interpolateVariant<QVector2D>);
    qRegisterAnimationInterpolator<QVector3D>(_q_interpolateVariant<QVector3D>);
    qRegisterAnimationInterpolator<QVector4D>(_q_interpolateVariant<QVector4D>);
    qRegisterAnimationInterpolator<QQuaternion>(_q_interpolateVariant<QQuaternion>);
+
    return 1;
 }
 Q_CONSTRUCTOR_FUNCTION(qRegisterGuiGetInterpolator)
@@ -62,12 +65,16 @@ static int qUnregisterGuiGetInterpolator()
    // casts required by Sun CC 5.5
    qRegisterAnimationInterpolator<QColor>(
       (QVariant (*)(const QColor &, const QColor &, qreal))0);
+
    qRegisterAnimationInterpolator<QVector2D>(
       (QVariant (*)(const QVector2D &, const QVector2D &, qreal))0);
+
    qRegisterAnimationInterpolator<QVector3D>(
       (QVariant (*)(const QVector3D &, const QVector3D &, qreal))0);
+
    qRegisterAnimationInterpolator<QVector4D>(
       (QVariant (*)(const QVector4D &, const QVector4D &, qreal))0);
+
    qRegisterAnimationInterpolator<QQuaternion>(
       (QVariant (*)(const QQuaternion &, const QQuaternion &, qreal))0);
 
@@ -75,6 +82,5 @@ static int qUnregisterGuiGetInterpolator()
 }
 Q_DESTRUCTOR_FUNCTION(qUnregisterGuiGetInterpolator)
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION
