@@ -1743,7 +1743,6 @@ void QGraphicsScene::setBspTreeDepth(int depth)
    bspTree->setBspTreeDepth(depth);
 }
 
-/*!
 bool QGraphicsScene::isSortCacheEnabled() const
 {
     Q_D(const QGraphicsScene);
@@ -1757,12 +1756,7 @@ void QGraphicsScene::setSortCacheEnabled(bool enabled)
         return;
     d->sortCacheEnabled = enabled;
 }
-    Calculates and returns the bounding rect of all items on the scene. This
-    function works by iterating over all items, and because if this, it can
-    be slow for large scenes.
 
-    \sa sceneRect()
-*/
 QRectF QGraphicsScene::itemsBoundingRect() const
 {
    // Does not take untransformable items into account.

@@ -24,7 +24,6 @@
 #define QGRAPHICSITEM_H
 
 #include <qglobal.h>
-#include <qdeclarativelistproperty_p.h>
 #include <qobject.h>
 #include <qpainterpath.h>
 #include <qpixmap.h>
@@ -32,6 +31,9 @@
 #include <qtextcursor.h>
 #include <qvariant.h>
 #include <qrect.h>
+
+// accurate file name
+#include <qdeclarativelistproperty.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
@@ -58,7 +60,6 @@ class QPainter;
 class QPen;
 class QPointF;
 class QRectF;
-class QTextDocument;
 
 class QStyleOptionGraphicsItem;
 
@@ -465,7 +466,6 @@ class Q_GUI_EXPORT QGraphicsItem
    virtual bool supportsExtension(Extension extension) const;
    virtual void setExtension(Extension extension, const QVariant &variant);
    virtual QVariant extension(const QVariant &variant) const;
-
 
    QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent);
    QScopedPointer<QGraphicsItemPrivate> d_ptr;
