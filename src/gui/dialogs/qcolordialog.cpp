@@ -42,7 +42,7 @@
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qvalidator.h>
-#include <qmime.h>
+#include <qmimedata.h>
 #include <qspinbox.h>
 #include <qdialogbuttonbox.h>
 #include <qscreen.h>
@@ -2242,6 +2242,18 @@ void QColorDialog::_q_newStandard(int un_named_arg1, int un_named_arg2)
 {
    Q_D(QColorDialog);
    d->_q_newStandard(un_named_arg1, un_named_arg2);
+}
+
+void QColorDialog::_q_pickScreenColor()
+{
+   Q_D(QColorDialog);
+   d->_q_pickScreenColor();
+}
+
+void QColorDialog::_q_updateColorPicking()
+{
+   Q_D(QColorDialog);
+   d->_q_updateColorPicking();
 }
 
 #if defined(Q_OS_MAC)

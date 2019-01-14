@@ -485,18 +485,6 @@ void QInputDialogPrivate::_q_currentRowChanged(const QModelIndex &newIndex,
    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
-void QInputDialog::_q_textChanged(const QString &un_named_arg1)
-{
-   Q_D(QInputDialog);
-   d->_q_textChanged(un_named_arg1);
-}
-
-void QInputDialog::_q_currentRowChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
-{
-   Q_D(QInputDialog);
-   d->_q_currentRowChanged(un_named_arg1, un_named_arg2);
-}
-
 
 QInputDialog::QInputDialog(QWidget *parent, Qt::WindowFlags flags)
    : QDialog(*new QInputDialogPrivate, parent, flags)
@@ -1139,5 +1127,23 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
 
 
 
+
+void QInputDialog::_q_textChanged(const QString &un_named_arg1)
+{
+   Q_D(QInputDialog);
+   d->_q_textChanged(un_named_arg1);
+}
+
+void QInputDialog::_q_plainTextEditTextChanged()
+{
+   Q_D(QInputDialog);
+   d->_q_plainTextEditTextChanged();
+}
+
+void QInputDialog::_q_currentRowChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
+{
+   Q_D(QInputDialog);
+   d->_q_currentRowChanged(un_named_arg1, un_named_arg2);
+}
 
 #endif

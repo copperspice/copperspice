@@ -417,7 +417,7 @@ static inline bool isCaseSensitiveFileSystem(const QString &path)
 
 #if defined(Q_OS_WIN)
    return false;
-#elif defined(Q_OS_OSX)
+#elif defined(Q_OS_MAC)
    return pathconf(QFile::encodeName(path).constData(), _PC_CASE_SENSITIVE);
 #else
    return true;
@@ -1418,151 +1418,6 @@ void QFileDialog::accept()
    }
 }
 
-void QFileDialog::_q_pathChanged(const QString &un_named_arg1)
-{
-   Q_D(QFileDialog);
-   d->_q_pathChanged(un_named_arg1);
-}
-
-void QFileDialog::_q_navigateBackward()
-{
-   Q_D(QFileDialog);
-   d->_q_navigateBackward();
-}
-
-void QFileDialog::_q_navigateForward()
-{
-   Q_D(QFileDialog);
-   d->_q_navigateForward();
-}
-
-void QFileDialog::_q_navigateToParent()
-{
-   Q_D(QFileDialog);
-   d->_q_navigateToParent();
-}
-
-void QFileDialog::_q_createDirectory()
-{
-   Q_D(QFileDialog);
-   d->_q_createDirectory();
-}
-
-void QFileDialog::_q_showListView()
-{
-   Q_D(QFileDialog);
-   d->_q_showListView();
-}
-
-void QFileDialog::_q_showDetailsView()
-{
-   Q_D(QFileDialog);
-   d->_q_showDetailsView();
-}
-
-void QFileDialog::_q_showContextMenu(const QPoint &un_named_arg1)
-{
-   Q_D(QFileDialog);
-   d->_q_showContextMenu(un_named_arg1);
-}
-
-void QFileDialog::_q_renameCurrent()
-{
-   Q_D(QFileDialog);
-   d->_q_renameCurrent();
-}
-
-void QFileDialog::_q_deleteCurrent()
-{
-   Q_D(QFileDialog);
-   d->_q_deleteCurrent();
-}
-
-void QFileDialog::_q_showHidden()
-{
-   Q_D(QFileDialog);
-   d->_q_showHidden();
-}
-
-void QFileDialog::_q_updateOkButton()
-{
-   Q_D(QFileDialog);
-   d->_q_updateOkButton();
-}
-
-void QFileDialog::_q_currentChanged(const QModelIndex &index)
-{
-   Q_D(QFileDialog);
-   d->_q_currentChanged(index);
-}
-
-void QFileDialog::_q_enterDirectory(const QModelIndex &index)
-{
-   Q_D(QFileDialog);
-   d->_q_enterDirectory(index);
-}
-
-void QFileDialog::_q_goToDirectory(const QString &path)
-{
-   Q_D(QFileDialog);
-   d->_q_goToDirectory(path);
-}
-
-void QFileDialog::_q_useNameFilter(int index)
-{
-   Q_D(QFileDialog);
-   d->_q_useNameFilter(index);
-}
-
-void QFileDialog::_q_selectionChanged()
-{
-   Q_D(QFileDialog);
-   d->_q_selectionChanged();
-}
-
-void QFileDialog::_q_goToUrl(const QUrl &url)
-{
-   Q_D(QFileDialog);
-   d->_q_goToUrl(url);
-}
-
-void QFileDialog::_q_goHome()
-{
-   Q_D(QFileDialog);
-   d->_q_goHome();
-}
-
-void QFileDialog::_q_showHeader(QAction *un_named_arg1)
-{
-   Q_D(QFileDialog);
-   d->_q_showHeader(un_named_arg1);
-}
-
-void QFileDialog::_q_autoCompleteFileName(const QString &text)
-{
-   Q_D(QFileDialog);
-   d->_q_autoCompleteFileName(text);
-}
-
-void QFileDialog::_q_rowsInserted(const QModelIndex &parent)
-{
-   Q_D(QFileDialog);
-   d->_q_rowsInserted(parent);
-}
-
-void QFileDialog::_q_fileRenamed(const QString &path, const QString &oldName, const QString &newName)
-{
-   Q_D(QFileDialog);
-   d->_q_fileRenamed(path, oldName, newName);
-}
-
-#if defined(Q_OS_MAC)
-void QFileDialog::_q_macRunNativeAppModalPanel()
-{
-   Q_D(QFileDialog);
-   d->_q_macRunNativeAppModalPanel();
-}
-#endif
 
 #ifndef QT_NO_PROXYMODEL
 void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
@@ -1988,6 +1843,168 @@ QStringList QFSCompleter::splitPath(const QString &path) const
 }
 
 #endif // QT_NO_COMPLETER
+
+void QFileDialog::_q_pathChanged(const QString &un_named_arg1)
+{
+   Q_D(QFileDialog);
+   d->_q_pathChanged(un_named_arg1);
+}
+
+void QFileDialog::_q_navigateBackward()
+{
+   Q_D(QFileDialog);
+   d->_q_navigateBackward();
+}
+
+void QFileDialog::_q_navigateForward()
+{
+   Q_D(QFileDialog);
+   d->_q_navigateForward();
+}
+
+void QFileDialog::_q_navigateToParent()
+{
+   Q_D(QFileDialog);
+   d->_q_navigateToParent();
+}
+
+void QFileDialog::_q_createDirectory()
+{
+   Q_D(QFileDialog);
+   d->_q_createDirectory();
+}
+
+void QFileDialog::_q_showListView()
+{
+   Q_D(QFileDialog);
+   d->_q_showListView();
+}
+
+void QFileDialog::_q_showDetailsView()
+{
+   Q_D(QFileDialog);
+   d->_q_showDetailsView();
+}
+
+void QFileDialog::_q_showContextMenu(const QPoint &un_named_arg1)
+{
+   Q_D(QFileDialog);
+   d->_q_showContextMenu(un_named_arg1);
+}
+
+void QFileDialog::_q_renameCurrent()
+{
+   Q_D(QFileDialog);
+   d->_q_renameCurrent();
+}
+
+void QFileDialog::_q_deleteCurrent()
+{
+   Q_D(QFileDialog);
+   d->_q_deleteCurrent();
+}
+
+void QFileDialog::_q_showHidden()
+{
+   Q_D(QFileDialog);
+   d->_q_showHidden();
+}
+
+void QFileDialog::_q_updateOkButton()
+{
+   Q_D(QFileDialog);
+   d->_q_updateOkButton();
+}
+
+void QFileDialog::_q_currentChanged(const QModelIndex &index)
+{
+   Q_D(QFileDialog);
+   d->_q_currentChanged(index);
+}
+
+void QFileDialog::_q_enterDirectory(const QModelIndex &index)
+{
+   Q_D(QFileDialog);
+   d->_q_enterDirectory(index);
+}
+
+void QFileDialog::_q_emitUrlSelected(const QUrl &url)
+{
+   Q_D(QFileDialog);
+   d->_q_emitUrlSelected(url);
+}
+
+void QFileDialog::_q_emitUrlsSelected(const QList<QUrl> &url)
+{
+   Q_D(QFileDialog);
+   d->_q_emitUrlsSelected(url);
+}
+
+void QFileDialog::_q_nativeCurrentChanged(const QUrl &url)
+{
+   Q_D(QFileDialog);
+   d->_q_nativeCurrentChanged(url);
+}
+
+void QFileDialog::_q_nativeEnterDirectory(const QUrl &url)
+{
+   Q_D(QFileDialog);
+   d->_q_nativeEnterDirectory(url);
+}
+
+void QFileDialog::_q_goToDirectory(const QString &path)
+{
+   Q_D(QFileDialog);
+   d->_q_goToDirectory(path);
+}
+
+void QFileDialog::_q_useNameFilter(int index)
+{
+   Q_D(QFileDialog);
+   d->_q_useNameFilter(index);
+}
+
+void QFileDialog::_q_selectionChanged()
+{
+   Q_D(QFileDialog);
+   d->_q_selectionChanged();
+}
+
+void QFileDialog::_q_goToUrl(const QUrl &url)
+{
+   Q_D(QFileDialog);
+   d->_q_goToUrl(url);
+}
+
+void QFileDialog::_q_goHome()
+{
+   Q_D(QFileDialog);
+   d->_q_goHome();
+}
+
+void QFileDialog::_q_showHeader(QAction *un_named_arg1)
+{
+   Q_D(QFileDialog);
+   d->_q_showHeader(un_named_arg1);
+}
+
+void QFileDialog::_q_autoCompleteFileName(const QString &text)
+{
+   Q_D(QFileDialog);
+   d->_q_autoCompleteFileName(text);
+}
+
+void QFileDialog::_q_rowsInserted(const QModelIndex &parent)
+{
+   Q_D(QFileDialog);
+   d->_q_rowsInserted(parent);
+}
+
+void QFileDialog::_q_fileRenamed(const QString &path, const QString &oldName, const QString &newName)
+{
+   Q_D(QFileDialog);
+   d->_q_fileRenamed(path, oldName, newName);
+}
 
 #endif // QT_NO_FILEDIALOG
 

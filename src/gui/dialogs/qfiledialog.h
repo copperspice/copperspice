@@ -344,6 +344,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
 
    GUI_CS_SLOT_1(Private, void _q_fileRenamed(const QString &path, const QString &oldName, const QString &newName))
    GUI_CS_SLOT_2(_q_fileRenamed)
+
    friend class QPlatformDialogHelper;
 };
 

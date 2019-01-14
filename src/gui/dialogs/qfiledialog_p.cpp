@@ -276,7 +276,7 @@ bool QFileDialogPrivate::canBeNativeDialog() const
 
 bool QFileDialogPrivate::usingWidgets() const
 {
-   return !nativeDialogInUse && qFileDialogUi;
+   return ! nativeDialogInUse && qFileDialogUi;
 }
 
 void QFileDialogPrivate::_q_goToUrl(const QUrl &url)
@@ -288,6 +288,61 @@ void QFileDialogPrivate::_q_goToUrl(const QUrl &url)
    _q_enterDirectory(idx);
 }
 
+#ifdef Q_OS_UNIX
+QString cs_tildeExpansion(const QString &path, bool *expanded = nullptr)
+{
+   if (expanded != nullptr) {
+      *expanded = false;
+   }
+
+   if (! path.startsWith('~')) {
+      return path;
+   }
+
+   QString retval = path;
+
+   QStringList tokens = retval.split(QDir::separator());
+   if (tokens.first() == "~") {
+      retval.replace(0, 1, QDir::homePath());
+
+   } else {
+      QString userName = tokens.first();
+      userName.remove(0, 1);
+
+#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && ! defined(Q_OS_OPENBSD)
+      passwd pw;
+      passwd *tmpPw;
+      char buf[200];
+
+      const int bufSize = sizeof(buf);
+      int err = getpwnam_r(userName.constData(), &pw, buf, bufSize, &tmpPw);
+
+      if (err || ! tmpPw) {
+         return retval;
+      }
+
+      const QString homePath = QString::fromUtf8(pw.pw_dir);
+
+#else
+      passwd *pw = getpwnam(userName.constData());
+
+      if (! pw) {
+         return ret;
+      }
+      const QString homePath = QString::frommUtf8(pw->pw_dir);
+#endif
+
+      retval.replace(0, tokens.first().length(), homePath);
+   }
+
+   if (expanded != nullptr) {
+      *expanded = true;
+   }
+
+   return retval;
+}
+#endif
+
 QStringList QFileDialogPrivate::typedFiles() const
 {
    Q_Q(const QFileDialog);
@@ -295,14 +350,15 @@ QStringList QFileDialogPrivate::typedFiles() const
    QStringList files;
    QString editText = lineEdit()->text();
 
-   if (!editText.contains(QLatin1Char('"'))) {
+   if (! editText.contains('"')) {
 
 #ifdef Q_OS_UNIX
       const QString prefix = q->directory().absolutePath() + QDir::separator();
+
       if (QFile::exists(prefix + editText)) {
          files << editText;
       } else {
-         files << qt_tildeExpansion(editText);
+         files << cs_tildeExpansion(editText);
       }
 #else
       files << editText;
@@ -311,24 +367,27 @@ QStringList QFileDialogPrivate::typedFiles() const
    } else {
       // " is used to separate files like so: "file1" "file2" "file3" ...
       // ### need escape character for filenames with quotes (")
-      QStringList tokens = editText.split(QLatin1Char('\"'));
+      QStringList tokens = editText.split('\"');
+
       for (int i = 0; i < tokens.size(); ++i) {
          if ((i % 2) == 0) {
             continue;   // Every even token is a separator
          }
+
 #ifdef Q_OS_UNIX
          const QString token = tokens.at(i);
          const QString prefix = q->directory().absolutePath() + QDir::separator();
          if (QFile::exists(prefix + token)) {
             files << token;
          } else {
-            files << qt_tildeExpansion(token);
+            files << cs_tildeExpansion(token);
          }
 #else
          files << toInternal(tokens.at(i));
 #endif
       }
    }
+
    return addDefaultSuffixToFiles(files);
 }
 

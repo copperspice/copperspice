@@ -1400,7 +1400,18 @@ void QMessageBoxPrivate::retranslateStrings()
 #endif
 }
 
-// obsolete
+QMessageBox::QMessageBox(const QString &title, const QString &text, Icon icon,
+                         int button0, int button1, int button2, QWidget *parent,
+                         Qt::WindowFlags f)
+    : QDialog(*new QMessageBoxPrivate, parent,
+              f /*| Qt::MSWindowsFixedSizeDialogHint #### */| Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
+{
+    Q_D(QMessageBox);
+    d->init(title, text);
+    setIcon(icon);
+    d->addOldButtons(button0, button1, button2);
+}
+
 int QMessageBox::information(QWidget *parent, const QString &title, const QString &text,
    int button0, int button1, int button2)
 {
@@ -1537,7 +1548,7 @@ void QMessageBox::setInformativeText(const QString &text)
          label->setWordWrap(true);
 #ifdef Q_OS_MAC
          // apply a smaller font the information label on the mac
-         label->setFont(qt_app_fonts_hash()->value("QTipLabel"));
+         label->setFont(cs_app_fonts_hash()->value("QTipLabel"));
 #endif
          label->setWordWrap(true);
          d->informativeLabel = label;
