@@ -38,6 +38,7 @@ GUI_PUBLIC_INCLUDES += \
 
 
 GUI_GRAPHICSVIEW_INCLUDES = \
+	qdeclarativelistproperty.h \
 	qgraphicsanchor.h \
 	qgraphicsanchorlayout.h \
 	qgraphicsellipseitem.h \
@@ -76,7 +77,6 @@ GUI_GRAPHICSVIEW_INCLUDES = \
 
 GUI_GRAPHICSVIEW_PRIVATE_INCLUDES = \
 	qgraph_p.h \
-	qdeclarativelistproperty_p.h \
 	qgraphicsanchorlayout_p.h \
 	qgraphicsgridlayoutengine_p.h \
 	qgraphicsitem_p.h \

@@ -38,6 +38,7 @@ set(GUI_PUBLIC_INCLUDES
 
 set(GUI_INCLUDES
     ${GUI_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qdeclarativelistproperty.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsanchor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsanchorlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsellipseitem.h
@@ -77,7 +78,6 @@ set(GUI_INCLUDES
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraph_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qdeclarativelistproperty_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsanchorlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsgridlayoutengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsitem_p.h
