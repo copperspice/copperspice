@@ -1909,7 +1909,7 @@ void QAbstractItemView::keyPressEvent(QKeyEvent *event)
 #endif
          break;
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
       case Qt::Key_Enter:
       case Qt::Key_Return:
          // Propagate the enter if you couldn't edit the item and there are no
@@ -1942,7 +1942,7 @@ void QAbstractItemView::keyPressEvent(QKeyEvent *event)
             selectAll();
             break;
          }
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
          if (event->key() == Qt::Key_O && event->modifiers() & Qt::ControlModifier && currentIndex().isValid()) {
             emit activated(currentIndex());
             break;

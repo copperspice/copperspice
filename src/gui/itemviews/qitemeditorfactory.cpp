@@ -80,9 +80,8 @@ class QUIntSpinBox : public QSpinBox
       return setValue(data);
    }
 
- public:
-   CS_SIGNAL_1(Public, void uintValueChanged())
-   CS_SIGNAL_2(uintValueChanged)
+   GUI_CS_SIGNAL_1(Public, void uintValueChanged())
+   GUI_CS_SIGNAL_2(uintValueChanged)
 };
 #endif // QT_NO_SPINBOX
 QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const

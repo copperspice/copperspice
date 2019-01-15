@@ -29,7 +29,7 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_ITEMVIEWS
 

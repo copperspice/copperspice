@@ -23,9 +23,7 @@
 #ifndef QHEADERVIEW_H
 #define QHEADERVIEW_H
 
-#include <QtGui/qabstractitemview.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractitemview.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -81,7 +79,7 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    int offset() const;
    int length() const;
    QSize sizeHint() const override;
-   void setVisible(bool v) override;
+   void setVisible(bool visible) override;
 
    int sectionSizeHint(int logicalIndex) const;
 
@@ -257,6 +255,7 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 
    friend class QTableView;
    friend class QTreeView;
+
  private:
    Q_DECLARE_PRIVATE(QHeaderView)
    Q_DISABLE_COPY(QHeaderView)
@@ -290,6 +289,4 @@ inline void QHeaderView::showSection(int alogicalIndex)
 
 #endif // QT_NO_ITEMVIEWS
 
-
-
-#endif // QHEADERVIEW_H
+#endif

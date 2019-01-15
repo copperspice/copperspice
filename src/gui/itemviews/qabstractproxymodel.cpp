@@ -89,14 +89,13 @@ void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
    }
 }
 
-/*!
+
 void QAbstractProxyModel::resetInternalData()
 {
     Q_D(QAbstractProxyModel);
     d->roleNames = d->model->roleNames();
 }
-    Returns the model that contains the data that is available through the proxy model.
-*/
+
 QAbstractItemModel *QAbstractProxyModel::sourceModel() const
 {
    Q_D(const QAbstractProxyModel);

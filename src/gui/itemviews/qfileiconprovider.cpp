@@ -37,8 +37,9 @@
 #  include <commctrl.h>
 #  include <objbase.h>
 #endif
+
 #if defined(Q_OS_UNIX) && ! defined(QT_NO_STYLE_GTK)
-#  include <qgtkstyle_p_p.h>
+#  include <qgtkstyle_p.h>
 #endif
 
 Q_DECLARE_METATYPE(QList<int>)
