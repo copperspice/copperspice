@@ -544,7 +544,7 @@ QPixmap PixmapEntry::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       }
 
       if (QGuiApplication *guiApp = qobject_cast<QGuiApplication *>(qApp)) {
-         cachedPixmap = guiApp->cs_internal_applyQIconStyleHelper(mode, cachedPixmap);
+         cachedPixmap = guiApp->cs_internal_applyQIconStyle(mode, cachedPixmap);
       }
 
       QPixmapCache::insert(key, cachedPixmap);

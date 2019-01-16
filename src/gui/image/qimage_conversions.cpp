@@ -376,6 +376,7 @@ static void convert_RGB888_to_RGB(QImageData *dest, const QImageData *src, Qt::I
 
 #ifdef __SSE2__
 extern bool convert_ARGB_to_ARGB_PM_inplace_sse2(QImageData *data, Qt::ImageConversionFlags);
+
 #else
 static bool convert_ARGB_to_ARGB_PM_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
@@ -2981,63 +2982,55 @@ InPlace_Image_Converter qimage_inplace_converter_map[QImage::NImageFormats][QIma
    }  // Format_Grayscale8
 };
 
-static int qInitImageConversions()
+QImageConversions::QImageConversions()
 {
 #if defined(__SSE2__) && defined(QT_COMPILER_SUPPORTS_SSSE3)
    if (qCpuHasFeature(SSSE3)) {
       extern void convert_RGB888_to_RGB32_ssse3(QImageData * dest, const QImageData * src, Qt::ImageConversionFlags);
-      qimage_converter_map[QImage::Format_RGB888][QImage::Format_RGB32] = convert_RGB888_to_RGB32_ssse3;
-      qimage_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32] = convert_RGB888_to_RGB32_ssse3;
-      qimage_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32_Premultiplied] = convert_RGB888_to_RGB32_ssse3;
+      image_converter_map[QImage::Format_RGB888][QImage::Format_RGB32] = convert_RGB888_to_RGB32_ssse3;
+      image_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32] = convert_RGB888_to_RGB32_ssse3;
+      image_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32_Premultiplied] = convert_RGB888_to_RGB32_ssse3;
    }
 #endif
 
 #if defined(QT_COMPILER_SUPPORTS_SSE4_1) && !defined(__SSE4_1__)
    if (qCpuHasFeature(SSE4_1)) {
       extern void convert_ARGB_to_ARGB_PM_sse4(QImageData * dest, const QImageData * src, Qt::ImageConversionFlags);
-      qimage_converter_map[QImage::Format_ARGB32][QImage::Format_ARGB32_Premultiplied] = convert_ARGB_to_ARGB_PM_sse4;
-      qimage_converter_map[QImage::Format_RGBA8888][QImage::Format_RGBA8888_Premultiplied] = convert_ARGB_to_ARGB_PM_sse4;
+      image_converter_map[QImage::Format_ARGB32][QImage::Format_ARGB32_Premultiplied] = convert_ARGB_to_ARGB_PM_sse4;
+      image_converter_map[QImage::Format_RGBA8888][QImage::Format_RGBA8888_Premultiplied] = convert_ARGB_to_ARGB_PM_sse4;
    }
 #endif
 
 #if defined(QT_COMPILER_SUPPORTS_AVX2) && !defined(__AVX2__)
    if (qCpuHasFeature(AVX2)) {
       extern void convert_ARGB_to_ARGB_PM_avx2(QImageData * dest, const QImageData * src, Qt::ImageConversionFlags);
-      qimage_converter_map[QImage::Format_ARGB32][QImage::Format_ARGB32_Premultiplied] = convert_ARGB_to_ARGB_PM_avx2;
-      qimage_converter_map[QImage::Format_RGBA8888][QImage::Format_RGBA8888_Premultiplied] = convert_ARGB_to_ARGB_PM_avx2;
+      image_converter_map[QImage::Format_ARGB32][QImage::Format_ARGB32_Premultiplied] = convert_ARGB_to_ARGB_PM_avx2;
+      image_converter_map[QImage::Format_RGBA8888][QImage::Format_RGBA8888_Premultiplied] = convert_ARGB_to_ARGB_PM_avx2;
    }
 #endif
 
 #if defined(__ARM_NEON__)
    extern void convert_RGB888_to_RGB32_neon(QImageData * dest, const QImageData * src, Qt::ImageConversionFlags);
-   qimage_converter_map[QImage::Format_RGB888][QImage::Format_RGB32] = convert_RGB888_to_RGB32_neon;
-   qimage_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32] = convert_RGB888_to_RGB32_neon;
-   qimage_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32_Premultiplied] = convert_RGB888_to_RGB32_neon;
+   image_converter_map[QImage::Format_RGB888][QImage::Format_RGB32] = convert_RGB888_to_RGB32_neon;
+   image_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32] = convert_RGB888_to_RGB32_neon;
+   image_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32_Premultiplied] = convert_RGB888_to_RGB32_neon;
 #endif
 
 #ifdef QT_COMPILER_SUPPORTS_MIPS_DSPR2
    if (qCpuHasFeature(DSPR2)) {
       extern bool convert_ARGB_to_ARGB_PM_inplace_mips_dspr2(QImageData * data, Qt::ImageConversionFlags);
-      qimage_inplace_converter_map[QImage::Format_ARGB32][QImage::Format_ARGB32_Premultiplied] = convert_ARGB_to_ARGB_PM_inplace_mips_dspr2;
+      image_inplace_converter_map[QImage::Format_ARGB32][QImage::Format_ARGB32_Premultiplied] = convert_ARGB_to_ARGB_PM_inplace_mips_dspr2;
 
       extern void convert_RGB888_to_RGB32_mips_dspr2(QImageData * dest, const QImageData * src, Qt::ImageConversionFlags);
-      qimage_converter_map[QImage::Format_RGB888][QImage::Format_RGB32] = convert_RGB888_to_RGB32_mips_dspr2;
-      qimage_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32] = convert_RGB888_to_RGB32_mips_dspr2;
-      qimage_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32_Premultiplied] = convert_RGB888_to_RGB32_mips_dspr2;
+      image_converter_map[QImage::Format_RGB888][QImage::Format_RGB32] = convert_RGB888_to_RGB32_mips_dspr2;
+      image_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32] = convert_RGB888_to_RGB32_mips_dspr2;
+      image_converter_map[QImage::Format_RGB888][QImage::Format_ARGB32_Premultiplied] = convert_RGB888_to_RGB32_mips_dspr2;
    }
 #endif
 
-   return 1;
 }
-
-//  BROOM -  static issue, redesign
-
-
-// Ensure initialization if these structures
-static const int qInitImageConversions_dummyVar = qInitImageConversions();
-
-int Q_GUI_EXPORT qInitImageConversions_dummyFunc()
+const QImageConversions &QImageConversions::instance()
 {
-   return qInitImageConversions_dummyVar;
+   static QImageConversions retval;
+   return retval;
 }
-

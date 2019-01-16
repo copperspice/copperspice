@@ -1092,11 +1092,6 @@ QImage::Format QImage::format() const
    return d ? d->format : Format_Invalid;
 }
 
-
-
-
-
-
 QImage QImage::convertToFormat_helper(Format format, Qt::ImageConversionFlags flags) const
 {
    if (!d || d->format == format) {
@@ -1107,7 +1102,7 @@ QImage QImage::convertToFormat_helper(Format format, Qt::ImageConversionFlags fl
       return QImage();
    }
 
-   Image_Converter converter = qimage_converter_map[d->format][format];
+   Image_Converter converter = QImageConversions::instance().image_converter_map[d->format][format];
 
    if (!converter && format > QImage::Format_Indexed8 && d->format > QImage::Format_Indexed8) {
       converter = convert_generic;
@@ -1244,7 +1239,7 @@ QImage QImage::convertToFormat(Format format, const QVector<QRgb> &colorTable, Q
       return convertWithPalette(*this, format, colorTable);
    }
 
-   const Image_Converter *converterPtr = &qimage_converter_map[d->format][format];
+   const Image_Converter *converterPtr = &(QImageConversions::instance().image_converter_map[d->format][format]);
    Image_Converter converter = *converterPtr;
 
    if (! converter) {
@@ -1261,7 +1256,6 @@ QImage QImage::convertToFormat(Format format, const QVector<QRgb> &colorTable, Q
 
    return image;
 }
-
 
 bool QImage::valid(int x, int y) const
 {
@@ -3430,6 +3424,7 @@ QTransform QImage::trueMatrix(const QTransform &matrix, int w, int h)
    const QRectF rect(0, 0, w, h);
    const QRect mapped = matrix.mapRect(rect).toAlignedRect();
    const QPoint delta = mapped.topLeft();
+
    return matrix * QTransform().translate(-delta.x(), -delta.y());
 }
 
@@ -3444,11 +3439,14 @@ bool QImageData::convertInPlace(QImage::Format newFormat, Qt::ImageConversionFla
       return false;
    }
 
-   InPlace_Image_Converter converter = qimage_inplace_converter_map[format][newFormat];
+   InPlace_Image_Converter converter = QImageConversions::instance().image_inplace_converter_map[format][newFormat];
 
    if (converter) {
       return converter(this, flags);
-   } else if (format > QImage::Format_Indexed8 && newFormat > QImage::Format_Indexed8 && !qimage_converter_map[format][newFormat])
+
+   } else if (format > QImage::Format_Indexed8 && newFormat > QImage::Format_Indexed8 &&
+            ! QImageConversions::instance().image_converter_map[format][newFormat])
+
       // Convert inplace generic, but only if there are no direct converters,
       // any direct ones are probably better even if not inplace.
    {
@@ -3457,16 +3455,6 @@ bool QImageData::convertInPlace(QImage::Format newFormat, Qt::ImageConversionFla
       return false;
    }
 }
-
-/*!
-    \typedef QImage::DataPtr
-    \internal
-*/
-
-/*!
-    \fn DataPtr & QImage::data_ptr()
-    \internal
-*/
 
 QDebug operator<<(QDebug dbg, const QImage &i)
 {

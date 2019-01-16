@@ -77,6 +77,8 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qicon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_sse2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_ssse3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageiohandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagereader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagewriter.cpp

@@ -270,7 +270,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
          QPixmap active = pm;
 
          if (QGuiApplication *guiApp = qobject_cast<QGuiApplication *>(qApp)) {
-            active = guiApp->cs_internal_applyQIconStyleHelper(QIcon::Active, pm);
+            active = guiApp->cs_internal_applyQIconStyle(QIcon::Active, pm);
          }
 
          if (pm.cacheKey() == active.cacheKey()) {
@@ -288,7 +288,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
          QPixmap generated = pm;
 
          if (QGuiApplication *guiApp = qobject_cast<QGuiApplication *>(qApp)) {
-            generated = guiApp->cs_internal_applyQIconStyleHelper(mode, pm);
+            generated = guiApp->cs_internal_applyQIconStyle(mode, pm);
          }
 
          if (!generated.isNull()) {

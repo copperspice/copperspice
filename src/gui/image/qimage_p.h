@@ -33,6 +33,7 @@ class QImageWriter;
 struct Q_GUI_EXPORT QImageData {        // internal image data
    QImageData();
    ~QImageData();
+
    static QImageData *create(const QSize &size, QImage::Format format);
    static QImageData *create(uchar *data, int w, int h,  int bpl, QImage::Format format, bool readOnly,
       QImageCleanupFunction cleanupFunction = 0, void *cleanupInfo = 0);
@@ -80,9 +81,6 @@ struct Q_GUI_EXPORT QImageData {        // internal image data
 
 typedef void (*Image_Converter)(QImageData *dest, const QImageData *src, Qt::ImageConversionFlags);
 typedef bool (*InPlace_Image_Converter)(QImageData *data, Qt::ImageConversionFlags);
-
-extern Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormats];
-extern InPlace_Image_Converter qimage_inplace_converter_map[QImage::NImageFormats][QImage::NImageFormats];
 
 void convert_generic(QImageData *dest, const QImageData *src, Qt::ImageConversionFlags);
 bool convert_generic_inplace(QImageData *data, QImage::Format dst_format, Qt::ImageConversionFlags);
@@ -144,7 +142,6 @@ inline int qt_depthForFormat(QImage::Format format)
    return depth;
 }
 
-
 inline QImage::Format qt_alphaVersion(QImage::Format format)
 {
    switch (format) {
@@ -185,4 +182,16 @@ inline QImage::Format qt_alphaVersionForPainting(QImage::Format format)
 #endif
    return toFormat;
 }
+
+class QImageConversions
+{
+ public:
+   QImageConversions();
+
+   Image_Converter         image_converter_map[QImage::NImageFormats][QImage::NImageFormats];
+   InPlace_Image_Converter image_inplace_converter_map[QImage::NImageFormats][QImage::NImageFormats];
+
+   static const QImageConversions & instance();
+};
+
 #endif

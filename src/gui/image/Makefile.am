@@ -78,6 +78,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qicon.cpp \
 	src/gui/image/qiconloader.cpp \
 	src/gui/image/qimage.cpp \
+	src/gui/image/qimage_sse2.cpp \
+	src/gui/image/qimage_ssse3.cpp \
 	src/gui/image/qimageiohandler.cpp \
 	src/gui/image/qimagereader.cpp \
 	src/gui/image/qimagewriter.cpp \

@@ -316,6 +316,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    friend class QImagePixmapCleanupHooks;
    friend class QRasterPlatformPixmap;
    friend class QSpanData;
+   friend class QFontEngineFT;
 
    friend class QPixmapCacheEntry;
 };
