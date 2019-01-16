@@ -120,5 +120,17 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    friend class QBalloonTip;
 };
 
+
+
+inline void QSystemTrayIcon::show()
+{
+   setVisible(true);
+}
+
+inline void QSystemTrayIcon::hide()
+{
+   setVisible(false);
+}
+
 #endif // QT_NO_SYSTEMTRAYICON
 #endif // QSYSTEMTRAYICON_H

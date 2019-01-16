@@ -19,6 +19,7 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -40,14 +41,14 @@
 #include <qguiapplication_p.h>
 #include <qdebug.h>
 
-#include <qxcbwindowfunctions.h>
-#include <qxcbintegrationfunctions.h>
+#include <platformheaders/qxcbwindowfunctions.h>
+#include <platformheaders/qxcbintegrationfunctions.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
 static inline unsigned long locateSystemTray()
 {
-   return (unsigned long)QGuiApplication::platformNativeInterface()->nativeResourceForScreen(QByteArrayLiteral("traywindow"),
+   return (unsigned long)QGuiApplication::platformNativeInterface()->nativeResourceForScreen(QByteArray("traywindow"),
          QGuiApplication::primaryScreen());
 }
 
@@ -55,7 +56,8 @@ static inline unsigned long locateSystemTray()
 // a backing store if it did not need tooltip handling.
 class QSystemTrayIconSys : public QWidget
 {
-   Q_OBJECT
+   GUI_CS_OBJECT(QSystemTrayIconSys)
+
  public:
    explicit QSystemTrayIconSys(QSystemTrayIcon *q);
 
@@ -69,17 +71,17 @@ class QSystemTrayIconSys : public QWidget
    QRect globalGeometry() const;
 
  protected:
-   virtual void mousePressEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
-   virtual void mouseDoubleClickEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
-   virtual bool event(QEvent *) Q_DECL_OVERRIDE;
-   virtual void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
-   virtual void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
-   virtual void moveEvent(QMoveEvent *) Q_DECL_OVERRIDE;
-
- private slots:
-   void systemTrayWindowChanged(QScreen *screen);
+   virtual void mousePressEvent(QMouseEvent *ev) override;
+   virtual void mouseDoubleClickEvent(QMouseEvent *ev) override;
+   virtual bool event(QEvent *) override;
+   virtual void paintEvent(QPaintEvent *) override;
+   virtual void resizeEvent(QResizeEvent *) override;
+   virtual void moveEvent(QMoveEvent *) override;
 
  private:
+   GUI_CS_SLOT_1(Private, void systemTrayWindowChanged(QScreen * screen))
+   GUI_CS_SLOT_2(systemTrayWindowChanged)
+
    bool addToTray();
 
    QSystemTrayIcon *q;
@@ -87,13 +89,13 @@ class QSystemTrayIconSys : public QWidget
 };
 
 QSystemTrayIconSys::QSystemTrayIconSys(QSystemTrayIcon *qIn)
-   : QWidget(0, Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint)
-   , q(qIn)
+   : QWidget(0, Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint), q(qIn)
 {
-   setObjectName(QStringLiteral("QSystemTrayIconSys"));
+   setObjectName(QString("QSystemTrayIconSys"));
    setToolTip(q->toolTip());
    setAttribute(Qt::WA_AlwaysShowToolTips, true);
    setAttribute(Qt::WA_QuitOnClose, false);
+
    const QSize size(22, 22); // Gnome, standard size
    setGeometry(QRect(QPoint(0, 0), size));
    setMinimumSize(size);
@@ -107,8 +109,10 @@ QSystemTrayIconSys::QSystemTrayIconSys(QSystemTrayIcon *qIn)
    // window to ParentRelative (so that it inherits the background of its X11 parent window), call
    // xcb_clear_region before painting (so that the inherited background is visible) and then grab
    // the just-drawn background from the X11 server.
+
    bool hasAlphaChannel = QXcbIntegrationFunctions::xEmbedSystemTrayVisualHasAlphaChannel();
    setAttribute(Qt::WA_TranslucentBackground, hasAlphaChannel);
+
    if (!hasAlphaChannel) {
       createWinId();
       QXcbWindowFunctions::setParentRelativeBackPixmap(windowHandle());
@@ -131,9 +135,11 @@ bool QSystemTrayIconSys::addToTray()
    }
    createWinId();
    setMouseTracking(true);
+
    if (!QXcbWindowFunctions::requestSystemTrayWindowDock(windowHandle())) {
       return false;
    }
+
    if (!background.isNull()) {
       background = QPixmap();
    }
@@ -160,6 +166,7 @@ QRect QSystemTrayIconSys::globalGeometry() const
 void QSystemTrayIconSys::mousePressEvent(QMouseEvent *ev)
 {
    QPoint globalPos = ev->globalPos();
+
 #ifndef QT_NO_CONTEXTMENU
    if (ev->button() == Qt::RightButton && q->contextMenu()) {
       q->contextMenu()->popup(globalPos);
@@ -173,9 +180,11 @@ void QSystemTrayIconSys::mousePressEvent(QMouseEvent *ev)
 
    if (ev->button() == Qt::LeftButton) {
       emit q->activated(QSystemTrayIcon::Trigger);
+
    } else if (ev->button() == Qt::RightButton) {
       emit q->activated(QSystemTrayIcon::Context);
-   } else if (ev->button() == Qt::MidButton) {
+
+   } else if (ev->button() == Qt::MiddleButton) {
       emit q->activated(QSystemTrayIcon::MiddleClick);
    }
 }
@@ -186,7 +195,6 @@ void QSystemTrayIconSys::mouseDoubleClickEvent(QMouseEvent *ev)
       emit q->activated(QSystemTrayIcon::DoubleClick);
    }
 }
-
 
 bool QSystemTrayIconSys::event(QEvent *e)
 {
@@ -227,6 +235,7 @@ void QSystemTrayIconSys::paintEvent(QPaintEvent *)
    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
    q->icon().paint(&painter, rect);
 }
+
 void QSystemTrayIconSys::moveEvent(QMoveEvent *event)
 {
    QWidget::moveEvent(event);
@@ -273,6 +282,7 @@ QRect QSystemTrayIconPrivate::geometry_sys() const
    if (qpa_sys) {
       return geometry_sys_qpa();
    }
+
    if (!sys) {
       return QRect();
    }
@@ -285,9 +295,11 @@ void QSystemTrayIconPrivate::remove_sys()
       remove_sys_qpa();
       return;
    }
+
    if (!sys) {
       return;
    }
+
    QBalloonTip::hideBalloon();
    sys->hide(); // this should do the trick, but...
    delete sys; // wm may resize system tray only for DestroyEvents
@@ -358,12 +370,13 @@ void QSystemTrayIconPrivate::showMessage_sys(const QString &title, const QString
       showMessage_sys_qpa(title, message, icon, msecs);
       return;
    }
+
    if (!sys) {
       return;
    }
+
    QBalloonTip::showBalloon(icon, title, message, sys->systemTrayIcon(),
-      sys->globalGeometry().center(),
-      msecs);
+      sys->globalGeometry().center(), msecs);
 }
 
 #endif //QT_NO_SYSTEMTRAYICON

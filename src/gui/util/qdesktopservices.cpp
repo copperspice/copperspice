@@ -128,18 +128,17 @@ void QDesktopServices::unsetUrlHandler(const QString &scheme)
    setUrlHandler(scheme, 0, 0);
 }
 
-
 extern Q_CORE_EXPORT QString qt_applicationName_noFallback();
 
 QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation type)
 {
    if (type == QStandardPaths::AppLocalDataLocation) {
-      // Preserve Qt 4 compatibility:
-      // * QCoreApplication::applicationName() must default to empty
-      // * Unix data location is under the "data/" subdirectory
+
+      // QCoreApplication::applicationName() must default to empty
+      // Unix data location is under the "data/" subdirectory
 
       const QString compatAppName = qt_applicationName_noFallback();
-      const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+      const QString baseDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
       QString result = baseDir;

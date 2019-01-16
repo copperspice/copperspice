@@ -23,8 +23,8 @@
 #ifndef QDESKTOPSERVICES_H
 #define QDESKTOPSERVICES_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qstandardpaths.h>
+#include <qstring.h>
+#include <qstandardpaths.h>
 
 #ifndef QT_NO_DESKTOPSERVICES
 
@@ -45,5 +45,5 @@ class Q_GUI_EXPORT QDesktopServices
 
 #endif // QT_NO_DESKTOPSERVICES
 
-#endif // QDESKTOPSERVICES_H
+#endif
 

@@ -261,24 +261,13 @@ typedef QSet<QScroller *> ScrollerSet;
 Q_GLOBAL_STATIC(ScrollerHash, qt_allScrollers)
 Q_GLOBAL_STATIC(ScrollerSet, qt_activeScrollers)
 
-/*!
-    Returns \c true if a QScroller object was already created for \a target; \c false otherwise.
 
-    \sa scroller()
-*/
 bool QScroller::hasScroller(QObject *target)
 {
    return (qt_allScrollers()->value(target));
 }
 
-/*!
-    Returns the scroller for the given \a target.
-    As long as the object exists this function will always return the same QScroller instance.
-    If no QScroller exists for the \a target, one will implicitly be created.
-    At no point more than one QScroller will be active on an object.
 
-    \sa hasScroller(), target()
-*/
 QScroller *QScroller::scroller(QObject *target)
 {
    if (!target) {
@@ -295,10 +284,7 @@ QScroller *QScroller::scroller(QObject *target)
    return s;
 }
 
-/*!
-    \overload
-    This is the const version of scroller().
-*/
+
 const QScroller *QScroller::scroller(const QObject *target)
 {
    return scroller(const_cast<QObject *>(target));

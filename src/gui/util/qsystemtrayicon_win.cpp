@@ -91,6 +91,13 @@ typedef HRESULT (WINAPI *PtrShell_NotifyIconGetRect)(const Q_NOTIFYICONIDENTIFIE
 typedef BOOL (WINAPI *PtrChangeWindowMessageFilter)(UINT message, DWORD dwFlag);
 typedef BOOL (WINAPI *PtrChangeWindowMessageFilterEx)(HWND hWnd, UINT message, DWORD action, void *pChangeFilterStruct);
 
+static void cs_internal_StringToArray(const QString &str, wchar_t *output, int length)
+{
+   std::wstring tmp = str.toStdWString();
+   std::wcsncpy(output, &tmp[0], length);
+   output[length - 1] = 0;
+}
+
 class QSystemTrayIconSys
 {
  public:
@@ -236,7 +243,7 @@ void QSystemTrayIconSys::setIconContents(NOTIFYICONDATA &tnd)
    const QString tip = q->toolTip();
 
    if (! tip.isEmpty()) {
-      qStringToLimitedWCharArray(tip, tnd.szTip, sizeof(tnd.szTip) / sizeof(wchar_t));   // BROOM
+      cs_internal_StringToArray(tip, tnd.szTip, sizeof(tnd.szTip) / sizeof(wchar_t));
    }
 }
 
@@ -248,8 +255,9 @@ bool QSystemTrayIconSys::showMessage(const QString &title, const QString &messag
 {
    NOTIFYICONDATA tnd;
    memset(&tnd, 0, notifyIconSize);
-   qStringToLimitedWCharArray(message, tnd.szInfo, 256);
-   qStringToLimitedWCharArray(title, tnd.szInfoTitle, 64);
+
+   cs_internal_StringToArray(message, tnd.szInfo, 256);
+   cs_internal_StringToArray(title, tnd.szInfoTitle, 64);
 
    tnd.uID = q_uNOTIFYICONID;
    switch (type) {
