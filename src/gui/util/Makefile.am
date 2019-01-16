@@ -42,26 +42,23 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/util/qabstractlayoutstyleinfo.cpp \
 	src/gui/util/qcompleter.cpp \
 	src/gui/util/qdesktopservices.cpp \
+	src/gui/util/qflickgesture.cpp \
 	src/gui/util/qlayoutpolicy.cpp \
 	src/gui/util/qscroller.cpp \
 	src/gui/util/qscrollerproperties.cpp \
 	src/gui/util/qsystemtrayicon.cpp \
-	src/gui/util/qsystemtrayicon_qpa.cpp \
 	src/gui/util/qundogroup.cpp \
 	src/gui/util/qundostack.cpp \
 	src/gui/util/qundoview.cpp
 
 if OSTYPE_WIN
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/util/qsystemtrayicon_win.cpp
-endif
+   lib_libCsGui@BUILD_ABI@_la_SOURCES += src/gui/util/qsystemtrayicon_win.cpp
+else
 
 if X11
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/util/qsystemtrayicon_x11.cpp
+    lib_libCsGui@BUILD_ABI@_la_SOURCES += src/gui/util/qsystemtrayicon_x11.cpp
+else
+    lib_libCsGui@BUILD_ABI@_la_SOURCES += src/gui/util/qsystemtrayicon_qpa.cpp
 endif
 
-if COCOA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/util/qsystemtrayicon_mac.mm
 endif

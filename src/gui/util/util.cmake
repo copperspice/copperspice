@@ -41,31 +41,32 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qabstractlayoutstyleinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qcompleter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qdesktopservices.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qflickgesture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qlayoutpolicy.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qscroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qscrollerproperties.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_qpa.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundogroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundostack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundoview.cpp
 )
 
-if(X11_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_x11.cpp
-    )
-endif()
-
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_win.cpp
-    )
-# FIXME: check for COCOA instead?
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_mac.mm
-    )
+   set(GUI_SOURCES
+       ${GUI_SOURCES}
+       ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_win.cpp
+   )
+
+elseif(X11_FOUND)
+   set(GUI_SOURCES
+       ${GUI_SOURCES}
+       ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_x11.cpp
+   )
+
+else()
+   set(GUI_SOURCES
+       ${GUI_SOURCES}
+       ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_qpa.cpp
+   )
+
 endif()
