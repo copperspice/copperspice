@@ -26,45 +26,42 @@
 #include <qglyphrun.h>
 #include <qrawfont.h>
 #include <qfont.h>
-
 #if !defined(QT_NO_RAWFONT)
-
-QT_BEGIN_NAMESPACE
 
 class QGlyphRunPrivate: public QSharedData
 {
  public:
    QGlyphRunPrivate()
-      : overline(false)
-      , underline(false)
-      , strikeOut(false)
+      : flags(0)
       , glyphIndexData(glyphIndexes.constData())
       , glyphIndexDataSize(0)
       , glyphPositionData(glyphPositions.constData())
-      , glyphPositionDataSize(0) {
-   }
+      , glyphPositionDataSize(0)
+      , textRangeStart(-1)
+      , textRangeEnd(-1)
+   { }
 
    QGlyphRunPrivate(const QGlyphRunPrivate &other)
       : QSharedData(other)
       , glyphIndexes(other.glyphIndexes)
       , glyphPositions(other.glyphPositions)
       , rawFont(other.rawFont)
-      , overline(other.overline)
-      , underline(other.underline)
-      , strikeOut(other.strikeOut)
+      , boundingRect(other.boundingRect)
+      , flags(other.flags)
       , glyphIndexData(other.glyphIndexData)
       , glyphIndexDataSize(other.glyphIndexDataSize)
       , glyphPositionData(other.glyphPositionData)
-      , glyphPositionDataSize(other.glyphPositionDataSize) {
-   }
+      , glyphPositionDataSize(other.glyphPositionDataSize)
+      , textRangeStart(other.textRangeStart)
+      , textRangeEnd(other.textRangeEnd)
+   { }
 
    QVector<quint32> glyphIndexes;
    QVector<QPointF> glyphPositions;
    QRawFont rawFont;
+   QRectF boundingRect;
 
-   uint overline  : 1;
-   uint underline : 1;
-   uint strikeOut : 1;
+   QGlyphRun::GlyphRunFlags flags;
 
    const quint32 *glyphIndexData;
    int glyphIndexDataSize;
@@ -72,13 +69,14 @@ class QGlyphRunPrivate: public QSharedData
    const QPointF *glyphPositionData;
    int glyphPositionDataSize;
 
+   int textRangeStart;
+   int textRangeEnd;
+
    static QGlyphRunPrivate *get(const QGlyphRun &glyphRun) {
       return glyphRun.d.data();
    }
 };
 
-QT_END_NAMESPACE
-
-#endif // QGLYPHS_P_H
-
 #endif // QT_NO_RAWFONT
+
+#endif

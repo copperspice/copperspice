@@ -23,12 +23,8 @@
 #include <qglobal.h>
 
 #if !defined(QT_NO_RAWFONT)
-
 #include <qglyphrun.h>
 #include <qglyphrun_p.h>
-
-QT_BEGIN_NAMESPACE
-
 
 QGlyphRun::QGlyphRun() : d(new QGlyphRunPrivate)
 {
@@ -39,9 +35,6 @@ QGlyphRun::QGlyphRun(const QGlyphRun &other)
    d = other.d;
 }
 
-/*!
-    Destroys the QGlyphRun.
-*/
 QGlyphRun::~QGlyphRun()
 {
    // Required for QExplicitlySharedDataPointer
@@ -57,19 +50,12 @@ void QGlyphRun::detach()
    }
 }
 
-/*!
-    Assigns \a other to this QGlyphRun object.
-*/
 QGlyphRun &QGlyphRun::operator=(const QGlyphRun &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    Compares \a other to this QGlyphRun object. Returns true if the list of glyph indexes,
-    the list of positions and the font are all equal, otherwise returns false.
-*/
 bool QGlyphRun::operator==(const QGlyphRun &other) const
 {
    if (d == other.d) {
@@ -77,7 +63,7 @@ bool QGlyphRun::operator==(const QGlyphRun &other) const
    }
 
    if ((d->glyphIndexDataSize != other.d->glyphIndexDataSize)
-         || (d->glyphPositionDataSize != other.d->glyphPositionDataSize)) {
+      || (d->glyphPositionDataSize != other.d->glyphPositionDataSize)) {
       return false;
    }
 
@@ -95,47 +81,21 @@ bool QGlyphRun::operator==(const QGlyphRun &other) const
          }
       }
    }
-
-   return (d->overline == other.d->overline
-           && d->underline == other.d->underline
-           && d->strikeOut == other.d->strikeOut
-           && d->rawFont == other.d->rawFont);
+   return (d->flags == other.d->flags && d->rawFont == other.d->rawFont);
 }
 
-/*!
-    \fn bool QGlyphRun::operator!=(const QGlyphRun &other) const
 
-    Compares \a other to this QGlyphRun object. Returns true if any of the list of glyph
-    indexes, the list of positions or the font are different, otherwise returns false.
-*/
-
-/*!
-    Returns the font selected for this QGlyphRun object.
-
-    \sa setRawFont()
-*/
 QRawFont QGlyphRun::rawFont() const
 {
    return d->rawFont;
 }
 
-/*!
-    Sets the font specified by \a rawFont to be the font used to look up the
-    glyph indexes.
-
-    \sa rawFont(), setGlyphIndexes()
-*/
 void QGlyphRun::setRawFont(const QRawFont &rawFont)
 {
    detach();
    d->rawFont = rawFont;
 }
 
-/*!
-    Returns the glyph indexes for this QGlyphRun object.
-
-    \sa setGlyphIndexes(), setPositions()
-*/
 QVector<quint32> QGlyphRun::glyphIndexes() const
 {
    if (d->glyphIndexes.constData() == d->glyphIndexData) {
@@ -147,10 +107,7 @@ QVector<quint32> QGlyphRun::glyphIndexes() const
    }
 }
 
-/*!
-    Set the glyph indexes for this QGlyphRun object to \a glyphIndexes. The glyph indexes must
-    be valid for the selected font.
-*/
+
 void QGlyphRun::setGlyphIndexes(const QVector<quint32> &glyphIndexes)
 {
    detach();
@@ -169,7 +126,7 @@ QVector<QPointF> QGlyphRun::positions() const
    } else {
       QVector<QPointF> glyphPositions(d->glyphPositionDataSize);
       memcpy(glyphPositions.data(), d->glyphPositionData,
-             d->glyphPositionDataSize * sizeof(QPointF));
+         d->glyphPositionDataSize * sizeof(QPointF));
       return glyphPositions;
    }
 }
@@ -193,9 +150,7 @@ void QGlyphRun::clear()
 {
    detach();
    d->rawFont = QRawFont();
-   d->strikeOut = false;
-   d->overline = false;
-   d->underline = false;
+   d->flags = 0;
 
    setPositions(QVector<QPointF>());
    setGlyphIndexes(QVector<quint32>());
@@ -210,7 +165,7 @@ void QGlyphRun::clear()
     \sa setGlyphIndexes(), setPositions()
 */
 void QGlyphRun::setRawData(const quint32 *glyphIndexArray, const QPointF *glyphPositionArray,
-                           int size)
+   int size)
 {
    detach();
    d->glyphIndexes.clear();
@@ -228,7 +183,7 @@ void QGlyphRun::setRawData(const quint32 *glyphIndexArray, const QPointF *glyphP
 */
 bool QGlyphRun::overline() const
 {
-   return d->overline;
+   return d->flags & Overline;
 }
 
 /*!
@@ -239,12 +194,8 @@ bool QGlyphRun::overline() const
 */
 void QGlyphRun::setOverline(bool overline)
 {
-   if (d->overline == overline) {
-      return;
-   }
 
-   detach();
-   d->overline = overline;
+   setFlag(Overline, overline);
 }
 
 /*!
@@ -254,7 +205,7 @@ void QGlyphRun::setOverline(bool overline)
 */
 bool QGlyphRun::underline() const
 {
-   return d->underline;
+   return d->flags & Underline;
 }
 
 /*!
@@ -265,12 +216,7 @@ bool QGlyphRun::underline() const
 */
 void QGlyphRun::setUnderline(bool underline)
 {
-   if (d->underline == underline) {
-      return;
-   }
-
-   detach();
-   d->underline = underline;
+   setFlag(Underline, underline);
 }
 
 /*!
@@ -280,7 +226,7 @@ void QGlyphRun::setUnderline(bool underline)
 */
 bool QGlyphRun::strikeOut() const
 {
-   return d->strikeOut;
+   return d->flags & StrikeOut;
 }
 
 /*!
@@ -291,14 +237,82 @@ bool QGlyphRun::strikeOut() const
 */
 void QGlyphRun::setStrikeOut(bool strikeOut)
 {
-   if (d->strikeOut == strikeOut) {
+   setFlag(StrikeOut, strikeOut);
+}
+bool QGlyphRun::isRightToLeft() const
+{
+   return d->flags & RightToLeft;
+}
+void QGlyphRun::setRightToLeft(bool rightToLeft)
+{
+   setFlag(RightToLeft, rightToLeft);
+}
+QGlyphRun::GlyphRunFlags QGlyphRun::flags() const
+{
+   return d->flags;
+}
+void QGlyphRun::setFlag(GlyphRunFlag flag, bool enabled)
+{
+   if (d->flags.testFlag(flag) == enabled) {
       return;
    }
 
    detach();
-   d->strikeOut = strikeOut;
+   if (enabled) {
+      d->flags |= flag;
+   } else {
+      d->flags &= ~flag;
+   }
 }
 
-QT_END_NAMESPACE
+void QGlyphRun::setFlags(GlyphRunFlags flags)
+{
+   if (d->flags == flags) {
+      return;
+   }
+
+   detach();
+   d->flags = flags;
+}
+
+void QGlyphRun::setBoundingRect(const QRectF &boundingRect)
+{
+   detach();
+   d->boundingRect = boundingRect;
+}
+
+
+QRectF QGlyphRun::boundingRect() const
+{
+   if (!d->boundingRect.isEmpty() || !d->rawFont.isValid()) {
+      return d->boundingRect;
+   }
+
+   qreal minX, minY, maxX, maxY;
+   minX = minY = maxX = maxY = 0;
+
+   for (int i = 0, n = qMin(d->glyphIndexDataSize, d->glyphPositionDataSize); i < n; ++i) {
+      QRectF glyphRect = d->rawFont.boundingRect(d->glyphIndexData[i]);
+      glyphRect.translate(d->glyphPositionData[i]);
+
+      if (i == 0) {
+         minX = glyphRect.left();
+         minY = glyphRect.top();
+         maxX = glyphRect.right();
+         maxY = glyphRect.bottom();
+      } else {
+         minX = qMin(glyphRect.left(), minX);
+         minY = qMin(glyphRect.top(), minY);
+         maxX = qMax(glyphRect.right(), maxX);
+         maxY = qMax(glyphRect.bottom(), maxY);
+      }
+   }
+
+   return QRectF(QPointF(minX, minY), QPointF(maxX, maxY));
+}
+bool QGlyphRun::isEmpty() const
+{
+   return d->glyphIndexDataSize == 0;
+}
 
 #endif // QT_NO_RAWFONT

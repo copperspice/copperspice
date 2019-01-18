@@ -24,8 +24,9 @@
 #define QFRAGMENTMAP_P_H
 
 #include <qglobal.h>
-#include <stdlib.h>
 #include <qtools_p.h>
+
+#include <stdlib.h>
 
 template <int N = 1>
 class QFragment
@@ -74,11 +75,11 @@ class QFragmentMapData
       return (fragments + index);
    }
 
-   inline Fragment &F(uint index) {
+   Fragment &F(uint index) {
       return fragments[index] ;
    }
 
-   inline const Fragment &F(uint index) const {
+   const Fragment &F(uint index) const {
       return fragments[index] ;
    }
 
@@ -191,8 +192,7 @@ class QFragmentMapData
 
 };
 
-template <class Fragment>
-QFragmentMapData<Fragment>::QFragmentMapData()
+template <class Fragment> QFragmentMapData<Fragment>::QFragmentMapData()
    : fragments(0)
 {
    init();
@@ -220,8 +220,7 @@ void QFragmentMapData<Fragment>::init()
    F(head->freelist).right = 0;
 }
 
-template <class Fragment>
-QFragmentMapData<Fragment>::~QFragmentMapData()
+template <class Fragment> QFragmentMapData<Fragment>::~QFragmentMapData()
 {
    free(fragments);
 }
@@ -234,6 +233,10 @@ uint QFragmentMapData<Fragment>::createFragment()
    uint freePos = head->freelist;
    if (freePos == head->allocated) {
       // need to create some free space
+      if (freePos >= uint(MaxAllocSize) / fragmentSize) {
+         qBadAlloc();
+      }
+
       uint needed = qAllocMore((freePos + 1) * fragmentSize, 0);
       Q_ASSERT(needed / fragmentSize > head->allocated);
       Fragment *newFragments = (Fragment *)realloc(fragments, needed);
@@ -335,6 +338,7 @@ void QFragmentMapData<Fragment>::rotateLeft(uint x)
    } else {
       F(x).right = 0;
    }
+
    if (!p) {
       Q_ASSERT(head->root == x);
       head->root = y;
@@ -343,6 +347,7 @@ void QFragmentMapData<Fragment>::rotateLeft(uint x)
    } else {
       F(p).right = y;
    }
+
    F(x).parent = y;
    for (uint field = 0; field < Fragment::size_array_max; ++field) {
       F(y).size_left_array[field] += F(x).size_left_array[field] + F(x).size_array[field];
@@ -441,7 +446,6 @@ void QFragmentMapData<Fragment>::rebalance(uint x)
    }
    F(root()).color = Black;
 }
-
 
 template <class Fragment>
 uint QFragmentMapData<Fragment>::erase_single(uint z)
@@ -572,7 +576,7 @@ uint QFragmentMapData<Fragment>::erase_single(uint z)
                w = F(p).right;
             }
             if ((F(w).left == 0 || F(F(w).left).color == Black) &&
-                  (F(w).right == 0 || F(F(w).right).color == Black)) {
+               (F(w).right == 0 || F(F(w).right).color == Black)) {
                F(w).color = Red;
                x = p;
                p = F(x).parent;
@@ -602,7 +606,7 @@ uint QFragmentMapData<Fragment>::erase_single(uint z)
                w = F(p).left;
             }
             if ((F(w).right == 0 || F(F(w).right).color == Black) &&
-                  (F(w).left == 0 || F(F(w).left).color == Black)) {
+               (F(w).left == 0 || F(F(w).left).color == Black)) {
                F(w).color = Red;
                x = p;
                p = F(x).parent;
@@ -714,7 +718,6 @@ uint QFragmentMapData<Fragment>::insert_single(int key, uint length)
 
    return z;
 }
-
 
 template <class Fragment>
 int QFragmentMapData<Fragment>::length(uint field) const
@@ -972,4 +975,4 @@ class QFragmentMap
    QFragmentMap &operator= (const QFragmentMap &m);
 };
 
-#endif // QFRAGMENTMAP_P_H
+#endif

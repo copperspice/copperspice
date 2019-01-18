@@ -23,24 +23,33 @@
 #ifndef QGLYPHRUN_H
 #define QGLYPHRUN_H
 
-#include <QtCore/qsharedpointer.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qpoint.h>
-#include <QtGui/qrawfont.h>
+#include <qsharedpointer.h>
+#include <qvector.h>
+#include <qpoint.h>
+#include <qrawfont.h>
 
 #if !defined(QT_NO_RAWFONT)
-
-QT_BEGIN_NAMESPACE
-
 class QGlyphRunPrivate;
 
 class Q_GUI_EXPORT QGlyphRun
 {
 
  public:
+   enum GlyphRunFlag {
+      Overline        = 0x01,
+      Underline       = 0x02,
+      StrikeOut       = 0x04,
+      RightToLeft     = 0x08,
+      SplitLigature   = 0x10
+   };
+
+   using GlyphRunFlags = QFlags<GlyphRunFlag>;
+
    QGlyphRun();
    QGlyphRun(const QGlyphRun &other);
+
    ~QGlyphRun();
+
 
    QRawFont rawFont() const;
    void setRawFont(const QRawFont &rawFont);
@@ -55,7 +64,16 @@ class Q_GUI_EXPORT QGlyphRun
 
    void clear();
 
+   void swap(QGlyphRun &other) {
+      qSwap(d, other.d);
+   }
+
    QGlyphRun &operator=(const QGlyphRun &other);
+
+   QGlyphRun &operator=(QGlyphRun &&other) {
+      swap(other);
+      return *this;
+   }
 
    bool operator==(const QGlyphRun &other) const;
    inline bool operator!=(const QGlyphRun &other) const {
@@ -71,6 +89,18 @@ class Q_GUI_EXPORT QGlyphRun
    void setStrikeOut(bool strikeOut);
    bool strikeOut() const;
 
+   void setRightToLeft(bool on);
+   bool isRightToLeft() const;
+
+   void setFlag(GlyphRunFlag flag, bool enabled = true);
+   void setFlags(GlyphRunFlags flags);
+   GlyphRunFlags flags() const;
+
+   void setBoundingRect(const QRectF &boundingRect);
+   QRectF boundingRect() const;
+
+   bool isEmpty() const;
+
  private:
    friend class QGlyphRunPrivate;
    friend class QTextLine;
@@ -82,8 +112,6 @@ class Q_GUI_EXPORT QGlyphRun
    QExplicitlySharedDataPointer<QGlyphRunPrivate> d;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_RAWFONT
 
-#endif // QGLYPHS_H
+#endif

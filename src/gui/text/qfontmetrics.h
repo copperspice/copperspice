@@ -25,13 +25,7 @@
 
 #include <QtGui/qfont.h>
 #include <QtCore/qsharedpointer.h>
-#include <QtCore/qrect.h>
-
-QT_BEGIN_NAMESPACE
-
-#ifdef Q_WS_QWS
-class QFontEngine;
-#endif
+#include <qrect.h>
 
 class QTextCodec;
 class QRect;
@@ -40,16 +34,21 @@ class Q_GUI_EXPORT QFontMetrics
 {
 
  public:
-   QFontMetrics(const QFont &);
+   explicit QFontMetrics(const QFont &);
    QFontMetrics(const QFont &, QPaintDevice *pd);
    QFontMetrics(const QFontMetrics &);
+
    ~QFontMetrics();
 
    QFontMetrics &operator=(const QFontMetrics &);
 
-   inline QFontMetrics &operator=(QFontMetrics && other) {
+   inline QFontMetrics &operator=(QFontMetrics &&other) {
       qSwap(d, other.d);
       return *this;
+   }
+
+   void swap(QFontMetrics &other) {
+      qSwap(d, other.d);
    }
 
    int ascent() const;
@@ -65,7 +64,7 @@ class Q_GUI_EXPORT QFontMetrics
    int averageCharWidth() const;
 
    bool inFont(QChar) const;
-   bool inFontUcs4(uint ucs4) const;
+   bool inFontUcs4(char32_t ch) const;
 
    int leftBearing(QChar) const;
    int rightBearing(QChar) const;
@@ -73,15 +72,14 @@ class Q_GUI_EXPORT QFontMetrics
    int width(const QString &, int len, int flags) const;
 
    int width(QChar) const;
-   int charWidth(const QString &str, int pos) const;
 
    QRect boundingRect(QChar) const;
 
    QRect boundingRect(const QString &text) const;
-   QRect boundingRect(const QRect &r, int flags, const QString &text, int tabstops = 0, int *tabarray = 0) const;
+   QRect boundingRect(const QRect &r, int flags, const QString &text, int tabstops = 0, int *tabarray = nullptr) const;
 
-   inline QRect boundingRect(int x, int y, int w, int h, int flags, const QString &text, int tabstops = 0, 
-            int *tabarray = 0) const {
+   inline QRect boundingRect(int x, int y, int w, int h, int flags, const QString &text, int tabstops = 0,
+      int *tabarray = nullptr) const {
       return boundingRect(QRect(x, y, w, h), flags, text, tabstops, tabarray);
    }
 
@@ -96,29 +94,18 @@ class Q_GUI_EXPORT QFontMetrics
    int strikeOutPos() const;
    int lineWidth() const;
 
-   bool operator==(const QFontMetrics &other); // 5.0 - remove me
    bool operator==(const QFontMetrics &other) const;
-
-   inline bool operator !=(const QFontMetrics &other) {
-      return !operator==(other);   // 5.0 - remove me
-   }
 
    inline bool operator !=(const QFontMetrics &other) const {
       return !operator==(other);
    }
 
  private:
-
-#if defined(Q_OS_MAC)
-   friend class QFontPrivate;
-#endif
-
    friend class QFontMetricsF;
    friend class QStackTextEngine;
 
    QExplicitlySharedDataPointer<QFontPrivate> d;
 };
-
 
 class Q_GUI_EXPORT QFontMetricsF
 {
@@ -132,9 +119,13 @@ class Q_GUI_EXPORT QFontMetricsF
    QFontMetricsF &operator=(const QFontMetricsF &);
    QFontMetricsF &operator=(const QFontMetrics &);
 
-   inline QFontMetricsF &operator=(QFontMetricsF && other) {
+   inline QFontMetricsF &operator=(QFontMetricsF &&other) {
       qSwap(d, other.d);
       return *this;
+   }
+
+   void swap(QFontMetricsF &other) {
+      qSwap(d, other.d);
    }
 
    qreal ascent() const;
@@ -150,7 +141,7 @@ class Q_GUI_EXPORT QFontMetricsF
    qreal averageCharWidth() const;
 
    bool inFont(QChar) const;
-   bool inFontUcs4(uint ucs4) const;
+   bool inFontUcs4(char32_t ch) const;
 
    qreal leftBearing(QChar) const;
    qreal rightBearing(QChar) const;
@@ -160,8 +151,8 @@ class Q_GUI_EXPORT QFontMetricsF
 
    QRectF boundingRect(const QString &string) const;
    QRectF boundingRect(QChar) const;
-   QRectF boundingRect(const QRectF &r, int flags, const QString &string, int tabstops = 0, int *tabarray = 0) const;
-   QSizeF size(int flags, const QString &str, int tabstops = 0, int *tabarray = 0) const;
+   QRectF boundingRect(const QRectF &r, int flags, const QString &string, int tabstops = 0, int *tabarray = nullptr) const;
+   QSizeF size(int flags, const QString &str, int tabstops = 0, int *tabarray = nullptr) const;
 
    QRectF tightBoundingRect(const QString &text) const;
 
@@ -172,11 +163,8 @@ class Q_GUI_EXPORT QFontMetricsF
    qreal strikeOutPos() const;
    qreal lineWidth() const;
 
-   bool operator==(const QFontMetricsF &other); // 5.0 - remove me
    bool operator==(const QFontMetricsF &other) const;
-   inline bool operator !=(const QFontMetricsF &other) {
-      return !operator==(other);   // 5.0 - remove me
-   }
+
    inline bool operator !=(const QFontMetricsF &other) const {
       return !operator==(other);
    }
@@ -185,6 +173,5 @@ class Q_GUI_EXPORT QFontMetricsF
    QExplicitlySharedDataPointer<QFontPrivate> d;
 };
 
-QT_END_NAMESPACE
 
 #endif // QFONTMETRICS_H

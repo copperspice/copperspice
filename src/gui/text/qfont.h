@@ -23,18 +23,11 @@
 #ifndef QFONT_H
 #define QFONT_H
 
-#include <QtGui/qwindowdefs.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qsharedpointer.h>
-#include <qobject.h>
+#include <qwindowdefs.h>
+#include <qstring.h>
+#include <qsharedpointer.h>
 
-#if defined(Q_WS_X11) || defined(Q_WS_QWS)
-typedef struct FT_FaceRec_ *FT_Face;
-#endif
-
-QT_BEGIN_NAMESPACE
-
-class QFontPrivate;     /* don't touch */
+class QFontPrivate;
 class QStringList;
 class QVariant;
 
@@ -69,6 +62,7 @@ class Q_GUI_EXPORT QFont
       NoAntialias         = 0x0100,
       OpenGLCompatible    = 0x0200,
       ForceIntegerMetrics = 0x0400,
+      NoSubpixelAntialias = 0x0800,
       NoFontMerging       = 0x8000
    };
 
@@ -80,11 +74,15 @@ class Q_GUI_EXPORT QFont
    };
 
    enum Weight {
-      Light    = 25,
-      Normal   = 50,
-      DemiBold = 63,
-      Bold     = 75,
-      Black    = 87
+      Thin       = 0,    // 100
+      ExtraLight = 12,   // 200
+      Light      = 25,   // 300
+      Normal     = 50,   // 400
+      Medium     = 57,   // 500
+      DemiBold   = 63,   // 600
+      Bold       = 75,   // 700
+      ExtraBold  = 81,   // 800
+      Black      = 87    // 900
    };
 
    enum Style {
@@ -144,6 +142,11 @@ class Q_GUI_EXPORT QFont
    QFont(const QFont &, QPaintDevice *pd);
    QFont(const QFont &);
    ~QFont();
+
+   void swap(QFont &other) {
+      qSwap(d, other.d);
+      qSwap(resolve_mask, other.resolve_mask);
+   }
 
    QString family() const;
    void setFamily(const QString &);
@@ -207,9 +210,6 @@ class Q_GUI_EXPORT QFont
    void setHintingPreference(HintingPreference hintingPreference);
    HintingPreference hintingPreference() const;
 
-   // is raw mode still needed?
-   bool rawMode() const;
-   void setRawMode(bool);
 
    // dupicated from QFontInfo
    bool exactMatch() const;
@@ -219,31 +219,14 @@ class Q_GUI_EXPORT QFont
    bool operator!=(const QFont &) const;
    bool operator<(const QFont &) const;
    operator QVariant() const;
-   bool isCopyOf(const QFont &) const;
+   bool isCopyOf(const QFont &font) const;
 
-   inline QFont &operator=(QFont && other) {
+   inline QFont &operator=(QFont &&other) {
       qSwap(d, other.d);
       qSwap(resolve_mask, other.resolve_mask);
       return *this;
    }
 
-#ifdef Q_OS_WIN
-   HFONT handle() const;
-#else
-   Qt::HANDLE handle() const;
-#endif
-
-#ifdef Q_OS_MAC
-   quint32 macFontID() const;
-#endif
-
-#if defined(Q_WS_X11) || defined(Q_WS_QWS)
-   FT_Face freetypeFace() const;
-#endif
-
-   // needed for X11
-   void setRawName(const QString &);
-   QString rawName() const;
 
    QString key() const;
 
@@ -255,38 +238,30 @@ class Q_GUI_EXPORT QFont
    static QStringList substitutions();
    static void insertSubstitution(const QString &, const QString &);
    static void insertSubstitutions(const QString &, const QStringList &);
-   static void removeSubstitution(const QString &);
+   static void removeSubstitutions(const QString &);
    static void initialize();
    static void cleanup();
 
-#ifndef Q_WS_QWS
    static void cacheStatistics();
-#endif
 
    QString defaultFamily() const;
    QString lastResortFamily() const;
    QString lastResortFont() const;
 
-   QFont resolve(const QFont &) const;
-   inline uint resolve() const {
+   QFont resolve(const QFont &other) const;
+   uint resolve() const {
       return resolve_mask;
    }
-   inline void resolve(uint mask) {
+
+   void resolve(uint mask) {
       resolve_mask = mask;
    }
 
  private:
-   QFont(QFontPrivate *);
+   explicit QFont(QFontPrivate *);
 
    void detach();
 
-#if defined(Q_OS_MAC)
-   void macSetFont(QPaintDevice *);
-
-#elif defined(Q_WS_X11)
-   void x11SetScreen(int screen = -1);
-   int x11Screen() const;
-#endif
 
    friend class QFontPrivate;
    friend class QFontDialogPrivate;
@@ -295,7 +270,7 @@ class Q_GUI_EXPORT QFont
    friend class QFontInfo;
    friend class QPainter;
    friend class QPainterPrivate;
-   friend class QPSPrintEngineFont;
+
    friend class QApplication;
    friend class QWidget;
    friend class QWidgetPrivate;
@@ -304,7 +279,7 @@ class Q_GUI_EXPORT QFont
    friend class QStackTextEngine;
    friend class QTextLine;
    friend struct QScriptLine;
-   friend class QGLContext;
+   friend class QOpenGLContext;
    friend class QWin32PaintEngine;
    friend class QAlphaPaintEngine;
    friend class QPainterPath;
@@ -315,15 +290,14 @@ class Q_GUI_EXPORT QFont
    friend class QCommandLinkButtonPrivate;
    friend class QFontEngine;
 
-#ifndef QT_NO_DATASTREAM
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QFont &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QFont &);
-#endif
 
    QExplicitlySharedDataPointer<QFontPrivate> d;
    uint resolve_mask;
 };
 
+Q_GUI_EXPORT uint qHash(const QFont &font, uint seed = 0);
 inline bool QFont::bold() const
 {
    return weight() > Normal;
@@ -344,13 +318,9 @@ inline void QFont::setItalic(bool b)
    setStyle(b ? StyleItalic : StyleNormal);
 }
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QFont &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QFont &);
-#endif
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QFont &);
 
-QT_END_NAMESPACE
-
-#endif // QFONT_H
+#endif

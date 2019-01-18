@@ -31,12 +31,10 @@
 #include <qmultihash.h>
 #include <qfont.h>
 #include <qpalette.h>
-#include <qicon.h>
+
 #include <qshareddata.h>
 
 #ifndef QT_NO_CSSPARSER
-
-QT_BEGIN_NAMESPACE
 
 namespace QCss {
 
@@ -311,7 +309,7 @@ enum StyleFeature {
    NumKnownStyleFeatures = 4
 };
 
-struct Q_GUI_EXPORT Value {
+struct Value {
    enum Type {
       Unknown,
       Number,
@@ -326,10 +324,12 @@ struct Q_GUI_EXPORT Value {
       TermOperatorSlash,
       TermOperatorComma
    };
+
    inline Value() : type(Unknown) { }
+
    Type type;
    QVariant variant;
-   QString toString() const;
+   Q_GUI_EXPORT QString toString() const;
 };
 
 struct ColorData {
@@ -375,17 +375,20 @@ struct BorderData {
 // 4. QVector<Declaration> - { prop1: value1; prop2: value2; }
 // 5. Declaration - prop1: value1;
 
-struct Declaration {
+struct Q_GUI_EXPORT Declaration {
    struct DeclarationData : public QSharedData {
-      inline DeclarationData() : propertyId(UnknownProperty), important(false) {}
+      inline DeclarationData() : propertyId(UnknownProperty), important(false), inheritable(false) {}
       QString property;
       Property propertyId;
       QVector<Value> values;
       QVariant parsed;
-      bool important;
+      bool important: 1;
+      bool inheritable: 1;
    };
+
    QExplicitlySharedDataPointer<DeclarationData> d;
    inline Declaration() : d(new DeclarationData()) {}
+
    inline bool isEmpty() const {
       return d->property.isEmpty() && d->propertyId == UnknownProperty;
    }
@@ -465,7 +468,7 @@ const quint64 PseudoClass_EditFocus        = Q_UINT64_C(0x0000080000000000);
 const quint64 PseudoClass_Alternate        = Q_UINT64_C(0x0000100000000000);
 // The Any specifier is never generated, but can be used as a wildcard in searches.
 const quint64 PseudoClass_Any              = Q_UINT64_C(0x0000ffffffffffff);
-const int NumPseudos = 46;
+const int NumPseudos = 45;
 
 struct Pseudo {
    Pseudo() : type(0), negated(false) { }
@@ -508,49 +511,11 @@ struct BasicSelector {
    Relation relationToNext;
 };
 
-struct Selector {
+struct Q_GUI_EXPORT Selector {
    QVector<BasicSelector> basicSelectors;
    int specificity() const;
    quint64 pseudoClass(quint64 *negated = 0) const;
    QString pseudoElement() const;
-};
-
-struct StyleRule;
-struct MediaRule;
-struct PageRule;
-struct ImportRule;
-
-struct ValueExtractor {
-   ValueExtractor(const QVector<Declaration> &declarations, const QPalette & = QPalette());
-
-   bool extractFont(QFont *font, int *fontSizeAdjustment);
-   bool extractBackground(QBrush *, QString *, Repeat *, Qt::Alignment *, QCss::Origin *, QCss::Attachment *,
-                          QCss::Origin *);
-   bool extractGeometry(int *w, int *h, int *minw, int *minh, int *maxw, int *maxh);
-   bool extractPosition(int *l, int *t, int *r, int *b, QCss::Origin *, Qt::Alignment *,
-                        QCss::PositionMode *, Qt::Alignment *);
-   bool extractBox(int *margins, int *paddings, int *spacing = 0);
-   bool extractBorder(int *borders, QBrush *colors, BorderStyle *Styles, QSize *radii);
-   bool extractOutline(int *borders, QBrush *colors, BorderStyle *Styles, QSize *radii, int *offsets);
-   bool extractPalette(QBrush *fg, QBrush *sfg, QBrush *sbg, QBrush *abg);
-   int  extractStyleFeatures();
-   bool extractImage(QIcon *icon, Qt::Alignment *a, QSize *size);
-
-   int lengthValue(const Declaration &decl);
-
- private:
-   void extractFont();
-   void borderValue(const Declaration &decl, int *width, QCss::BorderStyle *style, QBrush *color);
-   LengthData lengthValue(const Value &v);
-   void lengthValues(const Declaration &decl, int *m);
-   QSize sizeValue(const Declaration &decl);
-   void sizeValues(const Declaration &decl, QSize *radii);
-
-   QVector<Declaration> declarations;
-   QFont f;
-   int adjustment;
-   int fontExtracted;
-   QPalette pal;
 };
 
 struct StyleRule {
@@ -595,7 +560,7 @@ struct StyleSheet {
    QMultiHash<QString, StyleRule> nameIndex;
    QMultiHash<QString, StyleRule> idIndex;
 
-   void buildIndexes(Qt::CaseSensitivity nameCaseSensitivity = Qt::CaseSensitive);
+   Q_GUI_EXPORT void buildIndexes(Qt::CaseSensitivity nameCaseSensitivity = Qt::CaseSensitive);
 };
 
 class Q_GUI_EXPORT StyleSelector
@@ -629,7 +594,7 @@ class Q_GUI_EXPORT StyleSelector
 
  private:
    void matchRule(NodePtr node, const StyleRule &rules, StyleSheetOrigin origin,
-                  int depth, QMultiMap<uint, StyleRule> *weightedRules);
+      int depth, QMultiMap<uint, StyleRule> *weightedRules);
 
    bool selectorMatches(const Selector &rule, NodePtr node);
    bool basicSelectorMatches(const BasicSelector &rule, NodePtr node);
@@ -683,15 +648,15 @@ enum TokenType {
    OR
 };
 
-struct Q_GUI_EXPORT Symbol {
+struct Symbol {
    inline Symbol() : token(NONE), start(0), len(-1) {}
    TokenType token;
    QString text;
    int start, len;
-   QString lexem() const;
+   Q_GUI_EXPORT QString lexem() const;
 };
 
-class Scanner
+class Q_GUI_EXPORT Scanner
 {
  public:
    static QString preprocess(const QString &input, bool *hasEscapeSequences = 0);
@@ -702,7 +667,7 @@ class Q_GUI_EXPORT Parser
 {
  public:
    Parser();
-   Parser(const QString &css, bool file = false);
+   explicit Parser(const QString &css, bool file = false);
 
    void init(const QString &css, bool file = false);
    bool parse(StyleSheet *styleSheet, Qt::CaseSensitivity nameCaseSensitivity = Qt::CaseSensitive);
@@ -734,78 +699,98 @@ class Q_GUI_EXPORT Parser
    inline bool testRuleset() {
       return testSelector();
    }
+
    inline bool testSelector() {
       return testSimpleSelector();
    }
+
    inline bool parseNextSelector(Selector *sel) {
       if (!testSelector()) {
          return recordError();
       }
       return parseSelector(sel);
    }
+
    bool testSimpleSelector();
    inline bool parseNextSimpleSelector(BasicSelector *basicSel) {
-      if (!testSimpleSelector()) {
+      if (! testSimpleSelector()) {
          return recordError();
       }
       return parseSimpleSelector(basicSel);
    }
+
    inline bool testElementName() {
       return test(IDENT) || test(STAR);
    }
+
    inline bool testClass() {
       return test(DOT);
    }
+
    inline bool testAttrib() {
       return test(LBRACKET);
    }
+
    inline bool testPseudo() {
       return test(COLON);
    }
+
    inline bool testMedium() {
       return test(IDENT);
    }
+
    inline bool parseNextMedium(QStringList *media) {
       if (!testMedium()) {
          return recordError();
       }
       return parseMedium(media);
    }
+
    inline bool testPseudoPage() {
       return test(COLON);
    }
+
    inline bool testImport() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, QLatin1String("import"));
+      return testTokenAndEndsWith(ATKEYWORD_SYM, QString("import"));
    }
+
    inline bool testMedia() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, QLatin1String("media"));
+      return testTokenAndEndsWith(ATKEYWORD_SYM, QString("media"));
    }
+
    inline bool testPage() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, QLatin1String("page"));
+      return testTokenAndEndsWith(ATKEYWORD_SYM, QString("page"));
    }
+
    inline bool testCombinator() {
       return test(PLUS) || test(GREATER) || test(S);
    }
+
    inline bool testProperty() {
       return test(IDENT);
    }
+
    bool testTerm();
    inline bool testExpr() {
       return testTerm();
    }
+
    inline bool parseNextExpr(QVector<Value> *values) {
       if (!testExpr()) {
          return recordError();
       }
       return parseExpr(values);
    }
+
    bool testPrio();
    inline bool testHexColor() {
       return test(HASH);
    }
+
    inline bool testFunction() {
       return test(FUNCTION);
    }
+
    inline bool parseNextFunction(QString *name, QString *args) {
       if (!testFunction()) {
          return recordError();
@@ -824,20 +809,25 @@ class Q_GUI_EXPORT Parser
    inline bool hasNext() const {
       return index < symbols.count();
    }
+
    inline TokenType next() {
       return symbols.at(index++).token;
    }
+
    bool next(TokenType t);
    bool test(TokenType t);
    inline void prev() {
       index--;
    }
+
    inline const Symbol &symbol() const {
       return symbols.at(index - 1);
    }
+
    inline QString lexem() const {
       return symbol().lexem();
    }
+
    QString unquotedLexem() const;
    QString lexemUntil(TokenType t);
    bool until(TokenType target, TokenType target2 = NONE);
@@ -845,7 +835,7 @@ class Q_GUI_EXPORT Parser
       return (index - 1) < symbols.count() ? symbols.at(index - 1).token : NONE;
    }
 
-   bool testTokenAndEndsWith(TokenType t, const QLatin1String &str);
+   bool testTokenAndEndsWith(TokenType t, QStringView str);
 
    inline bool recordError() {
       errorIndex = index;
@@ -859,15 +849,43 @@ class Q_GUI_EXPORT Parser
    QString sourcePath;
 };
 
-} // namespace QCss
+struct Q_GUI_EXPORT ValueExtractor {
+   ValueExtractor(const QVector<Declaration> &declarations, const QPalette & = QPalette());
 
-QT_END_NAMESPACE
+   bool extractFont(QFont *font, int *fontSizeAdjustment);
+   bool extractBackground(QBrush *, QString *, Repeat *, Qt::Alignment *, QCss::Origin *, QCss::Attachment *,
+      QCss::Origin *);
+   bool extractGeometry(int *w, int *h, int *minw, int *minh, int *maxw, int *maxh);
+   bool extractPosition(int *l, int *t, int *r, int *b, QCss::Origin *, Qt::Alignment *,
+      QCss::PositionMode *, Qt::Alignment *);
+   bool extractBox(int *margins, int *paddings, int *spacing = 0);
+   bool extractBorder(int *borders, QBrush *colors, BorderStyle *Styles, QSize *radii);
+   bool extractOutline(int *borders, QBrush *colors, BorderStyle *Styles, QSize *radii, int *offsets);
+   bool extractPalette(QBrush *fg, QBrush *sfg, QBrush *sbg, QBrush *abg);
+   int  extractStyleFeatures();
+   bool extractImage(QIcon *icon, Qt::Alignment *a, QSize *size);
+
+   int lengthValue(const Declaration &decl);
+
+ private:
+   void extractFont();
+   void borderValue(const Declaration &decl, int *width, QCss::BorderStyle *style, QBrush *color);
+   LengthData lengthValue(const Value &v);
+   void lengthValues(const Declaration &decl, int *m);
+   QSize sizeValue(const Declaration &decl);
+   void sizeValues(const Declaration &decl, QSize *radii);
+
+   QVector<Declaration> declarations;
+   QFont f;
+   int adjustment;
+   int fontExtracted;
+   QPalette pal;
+};
+} // namespace QCss
 
 Q_DECLARE_METATYPE( QCss::BackgroundData )
 Q_DECLARE_METATYPE( QCss::LengthData )
 Q_DECLARE_METATYPE( QCss::BorderData )
-
-
 #endif // QT_NO_CSSPARSER
 
 #endif

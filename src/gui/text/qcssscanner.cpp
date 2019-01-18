@@ -145,7 +145,7 @@ int QCssScanner_Generated::lex()
       goto state_24;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_24;
    }
    if (ch.unicode() == 123) {
@@ -214,7 +214,7 @@ state_3:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -236,7 +236,7 @@ state_4:
       goto state_33;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_33;
    }
    goto out;
@@ -266,7 +266,7 @@ state_5:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -295,7 +295,7 @@ state_11:
       goto state_24;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_24;
    }
    goto out;
@@ -339,7 +339,7 @@ state_14:
       goto state_46;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_46;
    }
    goto out;
@@ -365,7 +365,7 @@ state_20:
       goto state_50;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_50;
    }
    goto out;
@@ -407,7 +407,7 @@ state_24:
       goto state_53;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_53;
    }
    goto out;
@@ -483,7 +483,7 @@ state_30:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -538,7 +538,7 @@ state_33:
       goto state_61;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_61;
    }
    goto out;
@@ -586,7 +586,7 @@ state_35:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -651,7 +651,7 @@ state_39:
       goto state_46;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_46;
    }
    goto out;
@@ -668,7 +668,7 @@ state_42:
       goto state_46;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_46;
    }
    goto out;
@@ -701,7 +701,7 @@ state_44:
       goto state_46;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_46;
    }
    goto out;
@@ -740,7 +740,7 @@ state_46:
       goto state_71;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_71;
    }
    goto out;
@@ -759,7 +759,7 @@ state_48:
       goto state_50;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_50;
    }
    goto out;
@@ -798,7 +798,7 @@ state_50:
       goto state_75;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_75;
    }
    goto out;
@@ -822,7 +822,7 @@ state_51:
       goto state_53;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_53;
    }
    goto out;
@@ -850,7 +850,7 @@ state_53:
       goto state_53;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_53;
    }
    goto out;
@@ -898,7 +898,7 @@ state_57:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -931,7 +931,7 @@ state_58:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -964,7 +964,7 @@ state_59:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -1000,7 +1000,7 @@ state_60:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -1024,7 +1024,7 @@ state_61:
       goto state_61;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_61;
    }
    goto out;
@@ -1063,7 +1063,7 @@ state_63:
       goto state_61;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_61;
    }
    goto out;
@@ -1093,7 +1093,7 @@ state_64:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -1126,7 +1126,7 @@ state_65:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -1159,7 +1159,7 @@ state_66:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -1195,7 +1195,7 @@ state_67:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -1222,7 +1222,7 @@ state_69:
       goto state_46;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_46;
    }
    goto out;
@@ -1243,7 +1243,7 @@ state_70:
       goto state_71;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_71;
    }
    goto out;
@@ -1264,7 +1264,7 @@ state_71:
       goto state_71;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_71;
    }
    goto out;
@@ -1310,7 +1310,7 @@ state_74:
       goto state_75;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_75;
    }
    goto out;
@@ -1331,7 +1331,7 @@ state_75:
       goto state_75;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_75;
    }
    goto out;
@@ -1373,7 +1373,7 @@ state_77:
       goto state_53;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_53;
    }
    goto out;
@@ -1403,7 +1403,7 @@ state_78:
       goto state_30;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_30;
    }
    if (ch.unicode() >= 123) {
@@ -1427,7 +1427,7 @@ state_79:
       goto state_61;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_61;
    }
    goto out;
@@ -1457,7 +1457,7 @@ state_80:
       goto state_35;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_35;
    }
    if (ch.unicode() >= 123) {
@@ -1481,7 +1481,7 @@ state_81:
       goto state_71;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_71;
    }
    goto out;
@@ -1502,7 +1502,7 @@ state_83:
       goto state_75;
    }
    if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') || (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
-         ch.unicode() >= 256) {
+      ch.unicode() >= 256) {
       goto state_75;
    }
    goto out;
