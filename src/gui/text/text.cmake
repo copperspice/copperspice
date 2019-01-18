@@ -93,16 +93,12 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qabstracttextdocumentlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase_mac.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_coretext_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_win_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengineglyphcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset_agl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfragmentmap_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol_p.h
@@ -115,7 +111,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextdocumentfragment_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextdocumentlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextengine_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextengine_mac.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextformat_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexthtmlparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextimagehandler_p.h
@@ -124,9 +119,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttable_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipreader_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipwriter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase_x11.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase_win.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontenginedirectwrite_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssscanner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_p.h
 )
@@ -136,9 +128,11 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengineglyphcache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontmetrics.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextcontrol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextengine.cpp
@@ -163,39 +157,15 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextodfwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz.cpp
 )
 
 if(X11_FOUND)
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_ft.cpp
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontenginedirectwrite.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_win.cpp
-    )
-
-# FIXME: check for COCOA instead?
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_coretext.mm
-    )
-endif()
-
-# missing a bunch of files from 3rdparty/freetype, not sure
+# might be missing files from 3rdparty/freetype
 

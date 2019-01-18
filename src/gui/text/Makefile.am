@@ -102,16 +102,12 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qabstracttextdocumentlayout_p.h \
 	qcssparser_p.h \
 	qfont_p.h \
-	qfontdatabase_mac.cpp \
-	qfontengine_coretext_p.h \
-   qfontengine_ft_p.h \
-	qfontengine_mac_p.h \
+	qfontengine_ft_p.h \
 	qfontengine_p.h \
-   qfontengine_qpf2_p.h \
-	qfontengine_win_p.h \
-	qfontengine_x11_p.h \
+	qfontengine_qpf2_p.h \
 	qfontengineglyphcache_p.h \
 	qfontsubset_p.h \
+	qfontsubset_agl_p.h \
 	qfragmentmap_p.h \
 	qglyphrun_p.h \
 	qinputcontrol_p.h \
@@ -124,7 +120,6 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qtextdocumentfragment_p.h \
 	qtextdocumentlayout_p.h \
 	qtextengine_p.h \
-	qtextengine_mac.cpp \
 	qtextformat_p.h \
 	qtexthtmlparser_p.h \
 	qtextimagehandler_p.h \
@@ -133,9 +128,6 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qtexttable_p.h \
 	qzipreader_p.h \
 	qzipwriter_p.h \
-	qfontdatabase_x11.cpp \
-	qfontdatabase_win.cpp \
-	qfontenginedirectwrite_p.h \
 	qcssscanner.cpp \
 	qharfbuzz_p.h
 
@@ -261,6 +253,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont.cpp \
 	src/gui/text/qfontengine.cpp \
    src/gui/text/qfontengine_qpf2.cpp \
+   src/gui/text/qfontengineglyphcache.cpp \
 	src/gui/text/qfontsubset.cpp \
 	src/gui/text/qfontmetrics.cpp \
 	src/gui/text/qfontdatabase.cpp \
@@ -326,27 +319,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-static.cc \
    src/3rdparty/harfbuzz/src/hb-unicode.cc
 
-if OSTYPE_WIN
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/text/qfont_win.cpp \
-	src/gui/text/qfontengine_win.cpp \
-	src/gui/text/qfontenginedirectwrite.cpp \
-	src/gui/text/qrawfont_win.cpp
-endif
 
 if X11
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/text/qfont_x11.cpp \
-	src/gui/text/qfontengine_x11.cpp \
-	src/gui/text/qfontengine_ft.cpp \
-	src/gui/text/qrawfont_ft.cpp
+	src/gui/text/qfontengine_ft.cpp
 endif
-
-if COCOA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/text/qfont_mac.cpp \
-	src/gui/text/qrawfont_mac.cpp \
-	src/gui/text/qfontengine_mac.mm \
-	src/gui/text/qfontengine_coretext.mm
-endif
-
