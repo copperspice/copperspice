@@ -23,9 +23,8 @@
 #ifndef QTEXTDOCUMENTWRITER_H
 #define QTEXTDOCUMENTWRITER_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
-QT_BEGIN_NAMESPACE
 
 class QTextDocumentWriterPrivate;
 class QIODevice;
@@ -39,7 +38,7 @@ class Q_GUI_EXPORT QTextDocumentWriter
  public:
    QTextDocumentWriter();
    QTextDocumentWriter(QIODevice *device, const QByteArray &format);
-   QTextDocumentWriter(const QString &fileName, const QByteArray &format = QByteArray());
+   explicit QTextDocumentWriter(const QString &fileName, const QByteArray &format = QByteArray());
    ~QTextDocumentWriter();
 
    void setFormat (const QByteArray &format);
@@ -65,6 +64,5 @@ class Q_GUI_EXPORT QTextDocumentWriter
    QTextDocumentWriterPrivate *d;
 };
 
-QT_END_NAMESPACE
 
 #endif

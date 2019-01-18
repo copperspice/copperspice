@@ -27,8 +27,6 @@
 #include <QtCore/qchar.h>
 #include <QtCore/qmetatype.h>
 
-QT_BEGIN_NAMESPACE
-
 template <typename T> class QList;
 struct QTextOptionPrivate;
 
@@ -49,8 +47,8 @@ class Q_GUI_EXPORT QTextOption
 
       inline bool operator==(const Tab &other) const {
          return type == other.type
-                && qFuzzyCompare(position, other.position)
-                && delimiter == other.delimiter;
+            && qFuzzyCompare(position, other.position)
+            && delimiter == other.delimiter;
       }
 
       inline bool operator!=(const Tab &other) const {
@@ -70,14 +68,16 @@ class Q_GUI_EXPORT QTextOption
    QTextOption &operator=(const QTextOption &o);
 
    inline void setAlignment(Qt::Alignment alignment);
-   inline Qt::Alignment alignment() const {
+
+   Qt::Alignment alignment() const {
       return Qt::Alignment(align);
    }
 
-   inline void setTextDirection(Qt::LayoutDirection aDirection) {
+   void setTextDirection(Qt::LayoutDirection aDirection) {
       this->direction = aDirection;
    }
-   inline Qt::LayoutDirection textDirection() const {
+
+   Qt::LayoutDirection textDirection() const {
       return Qt::LayoutDirection(direction);
    }
 
@@ -88,10 +88,12 @@ class Q_GUI_EXPORT QTextOption
       WrapAnywhere,
       WrapAtWordBoundaryOrAnywhere
    };
-   inline void setWrapMode(WrapMode wrap) {
+
+   void setWrapMode(WrapMode wrap) {
       wordWrap = wrap;
    }
-   inline WrapMode wrapMode() const {
+
+   WrapMode wrapMode() const {
       return static_cast<WrapMode>(wordWrap);
    }
 
@@ -103,25 +105,28 @@ class Q_GUI_EXPORT QTextOption
       IncludeTrailingSpaces = 0x80000000
    };
    using Flags = QFlags<Flag>;
+
    inline void setFlags(Flags flags);
-   inline Flags flags() const {
+
+   Flags flags() const {
       return Flags(f);
    }
 
-   inline void setTabStop(qreal tabStop);
-   inline qreal tabStop() const {
+   void setTabStop(qreal tabStop);
+   qreal tabStop() const {
       return tab;
    }
 
-   void setTabArray(QList<qreal> tabStops);
+   void setTabArray(const QList<qreal> &tabStops);
    QList<qreal> tabArray() const;
 
-   void setTabs(QList<Tab> tabStops);
+   void setTabs(const QList<Tab> &tabStops);
    QList<Tab> tabs() const;
 
    void setUseDesignMetrics(bool b) {
       design = b;
    }
+
    bool useDesignMetrics() const {
       return design;
    }
@@ -131,7 +136,7 @@ class Q_GUI_EXPORT QTextOption
    uint wordWrap : 4;
    uint design : 1;
    uint direction : 2;
-   uint unused : 18;
+   uint unused : 17;
    uint f;
    qreal tab;
    QTextOptionPrivate *d;
@@ -154,7 +159,6 @@ inline void QTextOption::setTabStop(qreal atabStop)
    tab = atabStop;
 }
 
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE( QTextOption::Tab )
 

@@ -24,7 +24,6 @@
 #include <qapplication.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
 
 struct QTextOptionPrivate {
    QList<QTextOption::Tab> tabStops;
@@ -51,7 +50,7 @@ QTextOption::QTextOption(Qt::Alignment alignment)
      tab(-1),
      d(0)
 {
-   direction = QApplication::layoutDirection();
+   direction = QGuiApplication::layoutDirection();
 }
 
 QTextOption::~QTextOption()
@@ -97,11 +96,12 @@ QTextOption &QTextOption::operator=(const QTextOption &o)
    return *this;
 }
 
-void QTextOption::setTabArray(QList<qreal> tabStops) // Qt5/const ref
+void QTextOption::setTabArray(const QList<qreal> &tabStops)
 {
    if (!d) {
       d = new QTextOptionPrivate;
    }
+
    QList<QTextOption::Tab> tabs;
    QTextOption::Tab tab;
    for (qreal pos : tabStops) {
@@ -111,7 +111,7 @@ void QTextOption::setTabArray(QList<qreal> tabStops) // Qt5/const ref
    d->tabStops = tabs;
 }
 
-void QTextOption::setTabs(QList<QTextOption::Tab> tabStops) // Qt5/const ref
+void QTextOption::setTabs(const QList<QTextOption::Tab> &tabStops)
 {
    if (!d) {
       d = new QTextOptionPrivate;
@@ -121,11 +121,11 @@ void QTextOption::setTabs(QList<QTextOption::Tab> tabStops) // Qt5/const ref
 
 QList<qreal> QTextOption::tabArray() const
 {
-   if (!d) {
-      return QList<qreal>();
-   }
-
    QList<qreal> answer;
+
+   if (! d) {
+      return answer;
+   }
    QList<QTextOption::Tab>::const_iterator iter = d->tabStops.constBegin();
 
    while (iter != d->tabStops.constEnd()) {
@@ -145,4 +145,4 @@ QList<QTextOption::Tab> QTextOption::tabs() const
    return d->tabStops;
 }
 
-QT_END_NAMESPACE
+

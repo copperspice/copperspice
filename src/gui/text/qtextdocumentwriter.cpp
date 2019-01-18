@@ -20,8 +20,6 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qtextdocumentwriter.h>
 
 #include <QtCore/qfile.h>
@@ -36,7 +34,7 @@
 #include <qtextdocumentfragment_p.h>
 #include <qtextodfwriter_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
 class QTextDocumentWriterPrivate
 {
@@ -54,36 +52,6 @@ class QTextDocumentWriterPrivate
    QTextDocumentWriter *q;
 };
 
-/*!
-    \since 4.5
-    \class QTextDocumentWriter
-
-    \brief The QTextDocumentWriter class provides a format-independent interface for writing a QTextDocument to files or other devices.
-
-    \ingroup richtext-processing
-    \ingroup io
-
-    To write a document, construct a QTextDocumentWriter object with either a
-    file name or a device object, and specify the document format to be
-    written. You can construct a writer and set the format using setFormat()
-    later.
-
-    Call write() to write the document to the device. If the document is
-    successfully written, this function returns true. However, if an error
-    occurs when writing the document, it will return false.
-
-    Call supportedDocumentFormats() for a list of formats that
-    QTextDocumentWriter can write.
-
-    Since the capabilities of the supported output formats vary considerably,
-    the writer simply outputs the appropriate subset of objects for each format.
-    This typically includes the formatted text and images contained in a
-    document.
-*/
-
-/*!
-    \internal
-*/
 QTextDocumentWriterPrivate::QTextDocumentWriterPrivate(QTextDocumentWriter *qq)
    : device(0),
      deleteDevice(false),
@@ -295,6 +263,7 @@ bool QTextDocumentWriter::write(const QTextDocumentFragment &fragment)
    if (fragment.d == 0) {
       return false;   // invalid fragment.
    }
+
    QTextDocument *doc = fragment.d->doc;
    if (doc) {
       return write(doc);
@@ -329,20 +298,7 @@ QTextCodec *QTextDocumentWriter::codec() const
 }
 #endif
 
-/*!
-    Returns the list of document formats supported by QTextDocumentWriter.
 
-    By default, Qt can write the following formats:
-
-    \table
-    \header \o Format    \o Description
-    \row    \o plaintext \o Plain text
-    \row    \o HTML      \o HyperText Markup Language
-    \row    \o ODF       \o OpenDocument Format
-    \endtable
-
-    \sa setFormat()
-*/
 QList<QByteArray> QTextDocumentWriter::supportedDocumentFormats()
 {
    QList<QByteArray> answer;
@@ -360,5 +316,3 @@ QList<QByteArray> QTextDocumentWriter::supportedDocumentFormats()
 
    return answer;
 }
-
-QT_END_NAMESPACE

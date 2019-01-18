@@ -34,7 +34,6 @@
 #include <QtCore/qvarlengtharray.h>
 #include <QtCore/qdatastream.h>
 
-QT_BEGIN_NAMESPACE
 
 class QTextDocumentFragmentPrivate;
 
@@ -42,7 +41,7 @@ class QTextCopyHelper
 {
  public:
    QTextCopyHelper(const QTextCursor &_source, const QTextCursor &_destination, bool forceCharFormat = false,
-                   const QTextCharFormat &fmt = QTextCharFormat());
+      const QTextCharFormat &fmt = QTextCharFormat());
 
    void copy();
 
@@ -50,9 +49,11 @@ class QTextCopyHelper
    void appendFragments(int pos, int endPos);
    int appendFragment(int pos, int endPos, int objectIndex = -1);
    int convertFormatIndex(const QTextFormat &oldFormat, int objectIndexToSet = -1);
+
    inline int convertFormatIndex(int oldFormatIndex, int objectIndexToSet = -1) {
       return convertFormatIndex(src->formatCollection()->format(oldFormatIndex), objectIndexToSet);
    }
+
    inline QTextFormat convertFormat(const QTextFormat &fmt) {
       return dst->formatCollection()->format(convertFormatIndex(fmt));
    }
@@ -102,8 +103,8 @@ class QTextHtmlImporter : public QTextHtmlParser
    };
 
    QTextHtmlImporter(QTextDocument *_doc, const QString &html,
-                     ImportMode mode,
-                     const QTextDocument *resourceProvider = 0);
+      ImportMode mode,
+      const QTextDocument *resourceProvider = 0);
 
    void import();
 
@@ -205,7 +206,6 @@ class QTextHtmlImporter : public QTextHtmlParser
    const QTextHtmlParserNode *currentNode;
 };
 
-QT_END_NAMESPACE
 #endif // QT_NO_TEXTHTMLPARSER
 
 #endif // QTEXTDOCUMENTFRAGMENT_P_H

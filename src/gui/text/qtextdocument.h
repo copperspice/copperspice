@@ -28,15 +28,16 @@
 #include <qrect.h>
 #include <qfont.h>
 #include <qtextcursor.h>
+#include <qurl.h>
+#include <qvariant.h>
+#include <qcontainerfwd.h>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
 
 class QTextFormatCollection;
 class QTextListFormat;
 class QRect;
 class QPainter;
-class QPrinter;
+class QPagedPaintDevice;
 class QAbstractTextDocumentLayout;
 class QPoint;
 class QTextObject;
@@ -44,14 +45,20 @@ class QTextFormat;
 class QTextFrame;
 class QTextBlock;
 class QTextCodec;
-class QUrl;
+class QTextDocumentPrivate;
 class QVariant;
 class QRectF;
 class QTextOption;
-class QTextDocumentPrivate;
+class QTextCursor;
 
-template<typename T> class QVector;
+namespace CsText {
+Q_GUI_EXPORT bool mightBeRichText(const QString &);
+Q_GUI_EXPORT QString convertFromPlainText(const QString &plain, Qt::WhiteSpaceMode mode = Qt::WhiteSpacePre);
 
+#ifndef QT_NO_TEXTCODEC
+Q_GUI_EXPORT QTextCodec *codecForHtml(const QByteArray &ba);
+#endif
+}  // namespace
 class Q_GUI_EXPORT QAbstractUndoItem
 {
 
@@ -71,18 +78,25 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 
    GUI_CS_PROPERTY_READ(undoRedoEnabled, isUndoRedoEnabled)
    GUI_CS_PROPERTY_WRITE(undoRedoEnabled, setUndoRedoEnabled)
+
    GUI_CS_PROPERTY_READ(modified, isModified)
    GUI_CS_PROPERTY_WRITE(modified, setModified)
    GUI_CS_PROPERTY_DESIGNABLE(modified, false)
+
    GUI_CS_PROPERTY_READ(pageSize, pageSize)
    GUI_CS_PROPERTY_WRITE(pageSize, setPageSize)
+
    GUI_CS_PROPERTY_READ(defaultFont, defaultFont)
    GUI_CS_PROPERTY_WRITE(defaultFont, setDefaultFont)
+
    GUI_CS_PROPERTY_READ(useDesignMetrics, useDesignMetrics)
    GUI_CS_PROPERTY_WRITE(useDesignMetrics, setUseDesignMetrics)
+
    GUI_CS_PROPERTY_READ(size, size)
+
    GUI_CS_PROPERTY_READ(textWidth, textWidth)
    GUI_CS_PROPERTY_WRITE(textWidth, setTextWidth)
+
    GUI_CS_PROPERTY_READ(blockCount, blockCount)
    GUI_CS_PROPERTY_READ(indentWidth, indentWidth)
    GUI_CS_PROPERTY_WRITE(indentWidth, setIndentWidth)
@@ -94,6 +108,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 
    GUI_CS_PROPERTY_READ(maximumBlockCount, maximumBlockCount)
    GUI_CS_PROPERTY_WRITE(maximumBlockCount, setMaximumBlockCount)
+
    GUI_CS_PROPERTY_READ(documentMargin, documentMargin)
    GUI_CS_PROPERTY_WRITE(documentMargin, setDocumentMargin)
 
@@ -133,7 +148,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    QString metaInformation(MetaInformation info) const;
 
 #ifndef QT_NO_TEXTHTMLPARSER
-   QString toHtml(const QByteArray &encoding = QByteArray()) const;
+   QString toHtml(const QString &encoding = QString()) const;
    void setHtml(const QString &html);
 #endif
 
@@ -149,11 +164,11 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    };
    using FindFlags = QFlags<FindFlag>;
 
-   QTextCursor find(const QString &subString, int from = 0, FindFlags options = 0) const;
-   QTextCursor find(const QString &subString, const QTextCursor &from, FindFlags options = 0) const;
+   QTextCursor find(const QString &subString, int from = 0, FindFlags options = FindFlags()) const;
+   QTextCursor find(const QString &subString, const QTextCursor &from, FindFlags options = FindFlags()) const;
 
-   QTextCursor find(const QRegularExpression &expr, int from = 0, FindFlags options = 0) const;
-   QTextCursor find(const QRegularExpression &expr, const QTextCursor &from, FindFlags options = 0) const;
+   QTextCursor find(const QRegularExpression &expr, int from = 0, FindFlags options = FindFlags()) const;
+   QTextCursor find(const QRegularExpression &expr, const QTextCursor &from, FindFlags options = FindFlags()) const;
 
    QTextFrame *frameAt(int pos) const;
    QTextFrame *rootFrame() const;
@@ -180,9 +195,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 
    bool isModified() const;
 
-#ifndef QT_NO_PRINTER
-   void print(QPrinter *printer) const;
-#endif
+   void print(QPagedPaintDevice *printer) const;
 
    enum ResourceType {
       HtmlResource  = 1,
@@ -243,6 +256,8 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    QTextOption defaultTextOption() const;
    void setDefaultTextOption(const QTextOption &option);
 
+   QUrl baseUrl() const;
+   void setBaseUrl(const QUrl &url);
    Qt::CursorMoveStyle defaultCursorMoveStyle() const;
    void setDefaultCursorMoveStyle(Qt::CursorMoveStyle style);
 
@@ -270,6 +285,9 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_SIGNAL_1(Public, void blockCountChanged(int newBlockCount))
    GUI_CS_SIGNAL_2(blockCountChanged, newBlockCount)
 
+   GUI_CS_SIGNAL_1(Public, void baseUrlChanged(const QUrl &url))
+   GUI_CS_SIGNAL_2(baseUrlChanged, url)
+
    GUI_CS_SIGNAL_1(Public, void documentLayoutChanged())
    GUI_CS_SIGNAL_2(documentLayoutChanged)
 
@@ -285,7 +303,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_SLOT_1(Public, void setModified(bool m = true))
    GUI_CS_SLOT_2(setModified)
 
-   QTextDocumentPrivate *docHandle() const;
+   QTextDocumentPrivate * docHandle() const;
 
  protected:
    virtual QTextObject *createObject(const QTextFormat &f);
@@ -301,8 +319,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 
 };
 
+Q_DECLARE_METATYPE(QTextDocument *)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextDocument::FindFlags)
 
-QT_END_NAMESPACE
-
-#endif // QTEXTDOCUMENT_H
+#endif

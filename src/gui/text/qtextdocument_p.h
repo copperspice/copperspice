@@ -127,13 +127,14 @@ class QTextUndoCommand
    uint block_end : 1;     // the last command in an undo block has this set to 1.
    uint block_padding : 6; // padding since block used to be a quint8
    quint8 operation;
+
    int format;
-   int strPos;
-   int pos;
+   quint32 strPos;
+   quint32 pos;
 
    union {
       int blockFormat;
-      int length;
+      quint32 length;
       QAbstractUndoItem *custom;
       int objectIndex;
    };
@@ -163,11 +164,12 @@ class QTextDocumentPrivate
 
    void insert(int pos, const QString &text, int format);
    void insert(int pos, int strPos, int strLength, int format);
-   int insertBlock(int pos, int blockFormat, int charFormat,
-                   QTextUndoCommand::Operation = QTextUndoCommand::MoveCursor);
 
-   int insertBlock(const QChar &blockSeparator, int pos, int blockFormat, int charFormat,
-                   QTextUndoCommand::Operation op = QTextUndoCommand::MoveCursor);
+   int insertBlock(int pos, int blockFormat, int charFormat,
+      QTextUndoCommand::Operation = QTextUndoCommand::MoveCursor);
+
+   int insertBlock(QChar blockSeparator, int pos, int blockFormat, int charFormat,
+      QTextUndoCommand::Operation op = QTextUndoCommand::MoveCursor);
 
    void move(int from, int to, int length, QTextUndoCommand::Operation = QTextUndoCommand::MoveCursor);
    void remove(int pos, int length, QTextUndoCommand::Operation = QTextUndoCommand::MoveCursor);
@@ -181,7 +183,7 @@ class QTextDocumentPrivate
 
    void setCharFormat(int pos, int length, const QTextCharFormat &newFormat, FormatChangeMode mode = SetFormat);
    void setBlockFormat(const QTextBlock &from, const QTextBlock &to,
-                       const QTextBlockFormat &newFormat, FormatChangeMode mode = SetFormat);
+      const QTextBlockFormat &newFormat, FormatChangeMode mode = SetFormat);
 
    void emitUndoAvailable(bool available);
    void emitRedoAvailable(bool available);
@@ -373,6 +375,7 @@ class QTextDocumentPrivate
    QString url;
    qreal indentWidth;
    qreal documentMargin;
+   QUrl baseUrl;
 
    void mergeCachedResources(const QTextDocumentPrivate *priv);
 
@@ -387,9 +390,9 @@ class QTextDocumentPrivate
    bool unite(uint f);
 
    void insert_string(int pos, int strPos, uint length, int format, QTextUndoCommand::Operation op);
-   int insert_block(int pos, int strPos, int format, int blockformat, QTextUndoCommand::Operation op, int command);
-   int remove_string(int pos, uint length, QTextUndoCommand::Operation op);
-   int remove_block(int pos, int *blockformat, int command, QTextUndoCommand::Operation op);
+   int insert_block(int pos,   int strPos, int format, int blockformat, QTextUndoCommand::Operation op, int command);
+   int remove_string(int pos,  uint length, QTextUndoCommand::Operation op);
+   int remove_block(int pos,   int *blockformat, int command, QTextUndoCommand::Operation op);
 
    void insert_frame(QTextFrame *f);
    void scan_frames(int pos, int charsRemoved, int charsAdded);
@@ -458,7 +461,7 @@ class QTextHtmlExporter
       ExportFragment
    };
 
-   QString toHtml(const QByteArray &encoding, ExportMode mode = ExportEntireDocument);
+   QString toHtml(const QString &encoding, ExportMode mode = ExportEntireDocument);
 
  private:
    enum StyleMode { EmitStyleTag, OmitStyleTag };

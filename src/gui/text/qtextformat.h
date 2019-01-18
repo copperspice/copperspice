@@ -53,19 +53,22 @@ class QTextLength;
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
 class Q_GUI_EXPORT QTextLength
 {
 
  public:
    enum Type { VariableLength = 0, FixedLength, PercentageLength };
 
-   inline QTextLength() : lengthType(VariableLength), fixedValueOrPercentage(0) {}
+   QTextLength() : lengthType(VariableLength), fixedValueOrPercentage(0)
+   {}
 
-   inline explicit QTextLength(Type type, qreal value);
+   explicit QTextLength(Type type, qreal value);
 
-   inline Type type() const {
+   Type type() const {
       return lengthType;
    }
+
    inline qreal value(qreal maximumLength) const {
       switch (lengthType) {
          case FixedLength:
@@ -85,9 +88,10 @@ class Q_GUI_EXPORT QTextLength
    inline bool operator==(const QTextLength &other) const {
       return lengthType == other.lengthType && qFuzzyCompare(fixedValueOrPercentage, other.fixedValueOrPercentage);
    }
+
    inline bool operator!=(const QTextLength &other) const {
       return lengthType != other.lengthType
-             || !qFuzzyCompare(fixedValueOrPercentage, other.fixedValueOrPercentage);
+         || !qFuzzyCompare(fixedValueOrPercentage, other.fixedValueOrPercentage);
    }
    operator QVariant() const;
 
@@ -106,6 +110,7 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
 #endif
 
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
 class Q_GUI_EXPORT QTextFormat
 {
    GUI_CS_GADGET(QTextFormat)
@@ -117,13 +122,13 @@ class Q_GUI_EXPORT QTextFormat
  public:
    enum FormatType {
       InvalidFormat = -1,
-      BlockFormat = 1,
-      CharFormat = 2,
-      ListFormat = 3,
-      TableFormat = 4,
-      FrameFormat = 5,
+      BlockFormat   = 1,
+      CharFormat    = 2,
+      ListFormat    = 3,
+      TableFormat   = 4,
+      FrameFormat   = 5,
 
-      UserFormat = 100
+      UserFormat    = 100
    };
 
    enum Property {
@@ -156,8 +161,10 @@ class Q_GUI_EXPORT QTextFormat
       // character properties
       FirstFontProperty = 0x1FE0,
       FontCapitalization = FirstFontProperty,
+      FontLetterSpacingType = 0x2033,
       FontLetterSpacing = 0x1FE1,
       FontWordSpacing = 0x1FE2,
+      FontStretch = 0x2034,
       FontStyleHint = 0x1FE3,
       FontStyleStrategy = 0x1FE4,
       FontKerning = 0x1FE5,
@@ -254,7 +261,7 @@ class Q_GUI_EXPORT QTextFormat
       PageBreak_Auto = 0,
       PageBreak_AlwaysBefore = 0x001,
       PageBreak_AlwaysAfter  = 0x010
-                               // PageBreak_AlwaysInside = 0x100
+         // PageBreak_AlwaysInside = 0x100
    };
    using PageBreakFlags = QFlags<PageBreakFlag>;
 
@@ -268,8 +275,12 @@ class Q_GUI_EXPORT QTextFormat
 
    void merge(const QTextFormat &other);
 
-   inline bool isValid() const {
+   bool isValid() const {
       return type() != InvalidFormat;
+   }
+
+   bool isEmpty() const {
+      return propertyCount() == 0;
    }
 
    int type() const;
@@ -296,6 +307,11 @@ class Q_GUI_EXPORT QTextFormat
 
    QMap<int, QVariant> properties() const;
    int propertyCount() const;
+
+   void swap(QTextFormat &other) {
+      qSwap(d, other.d);
+      qSwap(format_type, other.format_type);
+   }
 
    inline void setObjectType(int type);
    inline int objectType() const {
@@ -333,24 +349,28 @@ class Q_GUI_EXPORT QTextFormat
    QTextTableCellFormat toTableCellFormat() const;
 
    bool operator==(const QTextFormat &rhs) const;
-   inline bool operator!=(const QTextFormat &rhs) const {
+
+   bool operator!=(const QTextFormat &rhs) const {
       return !operator==(rhs);
    }
    operator QVariant() const;
 
-   inline void setLayoutDirection(Qt::LayoutDirection direction) {
+   void setLayoutDirection(Qt::LayoutDirection direction) {
       setProperty(QTextFormat::LayoutDirection, direction);
    }
-   inline Qt::LayoutDirection layoutDirection() const {
+
+   Qt::LayoutDirection layoutDirection() const {
       return Qt::LayoutDirection(intProperty(QTextFormat::LayoutDirection));
    }
 
    inline void setBackground(const QBrush &brush) {
       setProperty(BackgroundBrush, brush);
    }
+
    inline QBrush background() const {
       return brushProperty(BackgroundBrush);
    }
+
    inline void clearBackground() {
       clearProperty(BackgroundBrush);
    }
@@ -358,9 +378,11 @@ class Q_GUI_EXPORT QTextFormat
    inline void setForeground(const QBrush &brush) {
       setProperty(ForegroundBrush, brush);
    }
+
    inline QBrush foreground() const {
       return brushProperty(ForegroundBrush);
    }
+
    inline void clearForeground() {
       clearProperty(ForegroundBrush);
    }
@@ -405,17 +427,26 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
       SpellCheckUnderline
    };
 
+   enum FontPropertiesInheritanceBehavior {
+      FontPropertiesSpecifiedOnly,
+      FontPropertiesAll
+   };
+
+   void setFont(const QFont &font, FontPropertiesInheritanceBehavior behavior);
+
    QTextCharFormat();
 
    bool isValid() const {
       return isCharFormat();
    }
+
    void setFont(const QFont &font);
    QFont font() const;
 
    inline void setFontFamily(const QString &family) {
       setProperty(FontFamily, family);
    }
+
    inline QString fontFamily() const {
       return stringProperty(FontFamily);
    }
@@ -423,107 +454,135 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setFontPointSize(qreal size) {
       setProperty(FontPointSize, size);
    }
+
    inline qreal fontPointSize() const {
       return doubleProperty(FontPointSize);
    }
 
    inline void setFontWeight(int weight) {
-      if (weight == QFont::Normal) {
-         weight = 0;
-      }
       setProperty(FontWeight, weight);
    }
+
    inline int fontWeight() const {
-      int weight = intProperty(FontWeight);
-      if (weight == 0) {
-         weight = QFont::Normal;
-      }
-      return weight;
+
+      return hasProperty(FontWeight) ? intProperty(FontWeight) : QFont::Normal;
    }
-   inline void setFontItalic(bool italic) {
+   void setFontItalic(bool italic) {
       setProperty(FontItalic, italic);
    }
-   inline bool fontItalic() const {
+
+   bool fontItalic() const {
       return boolProperty(FontItalic);
    }
-   inline void setFontCapitalization(QFont::Capitalization capitalization) {
+
+   void setFontCapitalization(QFont::Capitalization capitalization) {
       setProperty(FontCapitalization, capitalization);
    }
-   inline QFont::Capitalization fontCapitalization() const {
+
+   QFont::Capitalization fontCapitalization() const {
       return static_cast<QFont::Capitalization>(intProperty(FontCapitalization));
    }
-   inline void setFontLetterSpacing(qreal spacing) {
+
+   void setFontLetterSpacingType(QFont::SpacingType letterSpacingType) {
+      setProperty(FontLetterSpacingType, letterSpacingType);
+   }
+
+   QFont::SpacingType fontLetterSpacingType() const {
+      return static_cast<QFont::SpacingType>(intProperty(FontLetterSpacingType));
+   }
+
+   void setFontLetterSpacing(qreal spacing) {
       setProperty(FontLetterSpacing, spacing);
    }
-   inline qreal fontLetterSpacing() const {
+
+   qreal fontLetterSpacing() const {
       return doubleProperty(FontLetterSpacing);
    }
-   inline void setFontWordSpacing(qreal spacing) {
+
+   void setFontWordSpacing(qreal spacing) {
       setProperty(FontWordSpacing, spacing);
    }
-   inline qreal fontWordSpacing() const {
+
+   qreal fontWordSpacing() const {
       return doubleProperty(FontWordSpacing);
    }
 
-   inline void setFontUnderline(bool underline) {
+   void setFontUnderline(bool underline) {
       setProperty(TextUnderlineStyle, underline ? SingleUnderline : NoUnderline);
    }
+
    bool fontUnderline() const;
 
-   inline void setFontOverline(bool overline) {
+   void setFontOverline(bool overline) {
       setProperty(FontOverline, overline);
    }
-   inline bool fontOverline() const {
+
+   bool fontOverline() const {
       return boolProperty(FontOverline);
    }
 
-   inline void setFontStrikeOut(bool strikeOut) {
+   void setFontStrikeOut(bool strikeOut) {
       setProperty(FontStrikeOut, strikeOut);
    }
-   inline bool fontStrikeOut() const {
+
+   bool fontStrikeOut() const {
       return boolProperty(FontStrikeOut);
    }
 
-   inline void setUnderlineColor(const QColor &color) {
+   void setUnderlineColor(const QColor &color) {
       setProperty(TextUnderlineColor, color);
    }
-   inline QColor underlineColor() const {
+
+   QColor underlineColor() const {
       return colorProperty(TextUnderlineColor);
    }
 
-   inline void setFontFixedPitch(bool fixedPitch) {
+   void setFontFixedPitch(bool fixedPitch) {
       setProperty(FontFixedPitch, fixedPitch);
    }
-   inline bool fontFixedPitch() const {
+
+   bool fontFixedPitch() const {
       return boolProperty(FontFixedPitch);
    }
 
-   inline void setFontStyleHint(QFont::StyleHint hint, QFont::StyleStrategy strategy = QFont::PreferDefault) {
+   void setFontStretch(int factor) {
+      setProperty(FontStretch, factor);
+   }
+
+   int fontStretch() const  {
+      return intProperty(FontStretch);
+   }
+
+   void setFontStyleHint(QFont::StyleHint hint, QFont::StyleStrategy strategy = QFont::PreferDefault) {
       setProperty(FontStyleHint, hint);
       setProperty(FontStyleStrategy, strategy);
    }
-   inline void setFontStyleStrategy(QFont::StyleStrategy strategy) {
+
+   void setFontStyleStrategy(QFont::StyleStrategy strategy) {
       setProperty(FontStyleStrategy, strategy);
    }
+
    QFont::StyleHint fontStyleHint() const {
       return static_cast<QFont::StyleHint>(intProperty(FontStyleHint));
    }
+
    QFont::StyleStrategy fontStyleStrategy() const {
       return static_cast<QFont::StyleStrategy>(intProperty(FontStyleStrategy));
    }
 
-   inline void setFontHintingPreference(QFont::HintingPreference hintingPreference) {
+   void setFontHintingPreference(QFont::HintingPreference hintingPreference) {
       setProperty(FontHintingPreference, hintingPreference);
    }
 
-   inline QFont::HintingPreference fontHintingPreference() const {
+   QFont::HintingPreference fontHintingPreference() const {
       return static_cast<QFont::HintingPreference>(intProperty(FontHintingPreference));
    }
 
-   inline void setFontKerning(bool enable) {
+   void setFontKerning(bool enable) {
       setProperty(FontKerning, enable);
    }
-   inline bool fontKerning() const {
+
+   bool fontKerning() const {
       return boolProperty(FontKerning);
    }
 
@@ -570,11 +629,13 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setAnchorName(const QString &name) {
       setAnchorNames(QStringList(name));
    }
+
    QString anchorName() const;
 
    inline void setAnchorNames(const QStringList &names) {
       setProperty(AnchorName, names);
    }
+
    QStringList anchorNames() const;
 
    inline void setTableCellRowSpan(int tableCellRowSpan);
@@ -585,6 +646,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
       }
       return s;
    }
+
    inline void setTableCellColumnSpan(int tableCellColumnSpan);
    inline int tableCellColumnSpan() const {
       int s = intProperty(TableCellColumnSpan);
@@ -687,6 +749,7 @@ class Q_GUI_EXPORT QTextBlockFormat : public QTextFormat
       setProperty(LineHeight, height);
       setProperty(LineHeightType, heightType);
    }
+
    inline qreal lineHeight(qreal scriptLineHeight, qreal scaling) const;
    inline qreal lineHeight() const {
       return doubleProperty(LineHeight);
@@ -868,7 +931,7 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
       FloatLeft,
       FloatRight
       // ######
-      //        Absolute
+      // Absolute
    };
 
    enum BorderStyle {

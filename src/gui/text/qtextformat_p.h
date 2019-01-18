@@ -27,7 +27,6 @@
 #include <qmultihash.h>
 #include <qvector.h>
 
-QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QTextFormatCollection
 {
@@ -38,8 +37,13 @@ class Q_GUI_EXPORT QTextFormatCollection
    QTextFormatCollection(const QTextFormatCollection &rhs);
    QTextFormatCollection &operator=(const QTextFormatCollection &rhs);
 
-   QTextFormat objectFormat(int objectIndex) const;
-   void setObjectFormat(int objectIndex, const QTextFormat &format);
+   QTextFormat objectFormat(int objectIndex) const {
+      return format(objectFormatIndex(objectIndex));
+   }
+
+   void setObjectFormat(int objectIndex, const QTextFormat &format) {
+      setObjectFormatIndex(objectIndex, indexForFormat(format));
+   }
 
    int objectFormatIndex(int objectIndex) const;
    void setObjectFormatIndex(int objectIndex, int formatIndex);
@@ -50,23 +54,28 @@ class Q_GUI_EXPORT QTextFormatCollection
    bool hasFormatCached(const QTextFormat &format) const;
 
    QTextFormat format(int idx) const;
-   inline QTextBlockFormat blockFormat(int index) const {
+
+   QTextBlockFormat blockFormat(int index) const {
       return format(index).toBlockFormat();
    }
-   inline QTextCharFormat charFormat(int index) const {
+
+   QTextCharFormat charFormat(int index) const {
       return format(index).toCharFormat();
    }
-   inline QTextListFormat listFormat(int index) const {
+
+   QTextListFormat listFormat(int index) const {
       return format(index).toListFormat();
    }
-   inline QTextTableFormat tableFormat(int index) const {
+
+   QTextTableFormat tableFormat(int index) const {
       return format(index).toTableFormat();
    }
-   inline QTextImageFormat imageFormat(int index) const {
+
+   QTextImageFormat imageFormat(int index) const {
       return format(index).toImageFormat();
    }
 
-   inline int numFormats() const {
+   int numFormats() const {
       return formats.count();
    }
 
@@ -84,7 +93,5 @@ class Q_GUI_EXPORT QTextFormatCollection
  private:
    QFont defaultFnt;
 };
-
-QT_END_NAMESPACE
 
 #endif // QTEXTFORMAT_P_H

@@ -35,8 +35,6 @@
 
 #ifndef QT_NO_TEXTHTMLPARSER
 
-QT_BEGIN_NAMESPACE
-
 enum QTextHTMLElements {
    Html_unknown = -1,
    Html_qt = 0,
@@ -115,7 +113,7 @@ enum QTextHTMLElements {
 };
 
 struct QTextHtmlElement {
-   const char *name;
+   const char name[11];
    QTextHTMLElements id;
    enum DisplayMode { DisplayBlock, DisplayInline, DisplayTable, DisplayNone } displayMode;
 };
@@ -190,10 +188,10 @@ struct QTextHtmlParserNode {
             return (parentId == Html_dl);
          case Html_tr:
             return (parentId == Html_table
-                    || parentId == Html_thead
-                    || parentId == Html_tbody
-                    || parentId == Html_tfoot
-                   );
+                  || parentId == Html_thead
+                  || parentId == Html_tbody
+                  || parentId == Html_tfoot
+               );
          case Html_th:
          case Html_td:
             return (parentId == Html_tr);
@@ -242,7 +240,6 @@ struct QTextHtmlParserNode {
 };
 Q_DECLARE_TYPEINFO(QTextHtmlParserNode, Q_MOVABLE_TYPE);
 
-
 class QTextHtmlParser
 {
  public:
@@ -265,6 +262,7 @@ class QTextHtmlParser
    inline int last() const {
       return nodes.count() - 1;
    }
+
    int depth(int i) const;
    int topMargin(int i) const;
    int bottomMargin(int i) const;
@@ -341,7 +339,6 @@ class QTextHtmlParser
    const QTextDocument *resourceProvider;
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTHTMLPARSER
 

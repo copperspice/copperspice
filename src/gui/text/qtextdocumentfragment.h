@@ -23,9 +23,9 @@
 #ifndef QTEXTDOCUMENTFRAGMENT_H
 #define QTEXTDOCUMENTFRAGMENT_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QTextStream;
 class QTextDocument;
@@ -41,16 +41,19 @@ class Q_GUI_EXPORT QTextDocumentFragment
    explicit QTextDocumentFragment(const QTextCursor &range);
    QTextDocumentFragment(const QTextDocumentFragment &rhs);
    QTextDocumentFragment &operator=(const QTextDocumentFragment &rhs);
+
    ~QTextDocumentFragment();
 
    bool isEmpty() const;
 
    QString toPlainText() const;
-   static QTextDocumentFragment fromPlainText(const QString &plainText);
 
 #ifndef QT_NO_TEXTHTMLPARSER
    QString toHtml(const QByteArray &encoding = QByteArray()) const;
+#endif
+   static QTextDocumentFragment fromPlainText(const QString &plainText);
 
+#ifndef QT_NO_TEXTHTMLPARSER
    static QTextDocumentFragment fromHtml(const QString &html);
    static QTextDocumentFragment fromHtml(const QString &html, const QTextDocument *resourceProvider);
 #endif
@@ -61,6 +64,4 @@ class Q_GUI_EXPORT QTextDocumentFragment
    friend class QTextDocumentWriter;
 };
 
-QT_END_NAMESPACE
-
-#endif // QTEXTDOCUMENTFRAGMENT_H
+#endif

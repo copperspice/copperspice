@@ -31,10 +31,8 @@
 #include <qdatastream.h>
 #include <qdatetime.h>
 
-QT_BEGIN_NAMESPACE
-
-QTextCopyHelper::QTextCopyHelper(const QTextCursor &_source, const QTextCursor &_destination, bool forceCharFormat,
-                                 const QTextCharFormat &fmt)
+QT_BEGIN_NAMESPACE QTextCopyHelper::QTextCopyHelper(const QTextCursor &_source, const QTextCursor &_destination, bool forceCharFormat,
+   const QTextCharFormat &fmt)
    : formatCollection(*_destination.d->priv->formatCollection()), originalText(_source.d->priv->buffer())
 
 {
@@ -75,7 +73,7 @@ int QTextCopyHelper::appendFragment(int pos, int endPos, int objectIndex)
    const QTextFragmentData *const frag = fragIt.value();
 
    Q_ASSERT(objectIndex == -1
-            || (frag->size_array[0] == 1 && src->formatCollection()->format(frag->format).objectIndex() != -1));
+      || (frag->size_array[0] == 1 && src->formatCollection()->format(frag->format).objectIndex() != -1));
 
    int charFormatIndex;
    if (forceCharFormat) {
@@ -95,16 +93,16 @@ int QTextCopyHelper::appendFragment(int pos, int endPos, int objectIndex)
 
    } else if (pos == 0 && insertPos == 0) {
       dst->setBlockFormat(dst->blocksBegin(), dst->blocksBegin(),
-                          convertFormat(src->blocksBegin().blockFormat()).toBlockFormat());
+         convertFormat(src->blocksBegin().blockFormat()).toBlockFormat());
 
       dst->setCharFormat(-1, 1, convertFormat(src->blocksBegin().charFormat()).toCharFormat());
    }
 
-   QString txtToInsert = originalText.mid(frag->stringPosition + inFragmentOffset, charsToCopy);
+   QStringView txtToInsert = originalText.midView(frag->stringPosition + inFragmentOffset, charsToCopy);
 
    if (txtToInsert.length() == 1 && (txtToInsert.at(0) == QChar::ParagraphSeparator
-             || txtToInsert.at(0) == QTextBeginningOfFrame
-             || txtToInsert.at(0) == QTextEndOfFrame) ) {
+         || txtToInsert.at(0) == QTextBeginningOfFrame
+         || txtToInsert.at(0) == QTextEndOfFrame) ) {
 
       dst->insertBlock(txtToInsert.at(0), insertPos, blockIdx, charFormatIndex);
       ++insertPos;
@@ -248,33 +246,7 @@ void QTextDocumentFragmentPrivate::insert(QTextCursor &_cursor) const
    destPieceTable->endEditBlock();
 }
 
-/*!
-    \class QTextDocumentFragment
-    \reentrant
 
-    \brief The QTextDocumentFragment class represents a piece of formatted text
-    from a QTextDocument.
-
-    \ingroup richtext-processing
-    \ingroup shared
-
-    A QTextDocumentFragment is a fragment of rich text, that can be inserted into
-    a QTextDocument. A document fragment can be created from a
-    QTextDocument, from a QTextCursor's selection, or from another
-    document fragment. Document fragments can also be created by the
-    static functions, fromPlainText() and fromHtml().
-
-    The contents of a document fragment can be obtained as plain text
-    by using the toPlainText() function, or it can be obtained as HTML
-    with toHtml().
-*/
-
-
-/*!
-    Constructs an empty QTextDocumentFragment.
-
-    \sa isEmpty()
-*/
 QTextDocumentFragment::QTextDocumentFragment()
    : d(0)
 {
@@ -413,7 +385,7 @@ static QTextListFormat::Style nextListStyle(QTextListFormat::Style style)
 #ifndef QT_NO_TEXTHTMLPARSER
 
 QTextHtmlImporter::QTextHtmlImporter(QTextDocument *_doc, const QString &_html, ImportMode mode,
-                                     const QTextDocument *resourceProvider)
+   const QTextDocument *resourceProvider)
    : indent(0), compressNextWhitespace(PreserveWhiteSpace), doc(_doc), importMode(mode)
 {
    cursor = QTextCursor(doc);
@@ -479,11 +451,11 @@ void QTextHtmlImporter::import()
          // visually collapse subsequent block tags, but if the element after the closed block tag
          // is for example an inline element (!isBlock) we have to make sure we start a new paragraph by setting
          // hasBlock to false.
-         if (blockTagClosed
-               && !currentNode->isBlock()
-               && currentNode->id != Html_unknown) {
+
+         if (blockTagClosed && !currentNode->isBlock() && currentNode->id != Html_unknown) {
             hasBlock = false;
-         } else if (hasBlock) {
+
+         } else if (blockTagClosed && hasBlock) {
             // when collapsing subsequent block tags we need to clear the block format
             QTextBlockFormat blockFormat = currentNode->blockFormat;
             blockFormat.setIndent(indent);
@@ -520,10 +492,10 @@ void QTextHtmlImporter::import()
 
       // make sure there's a block for 'Blah' after <ul><li>foo</ul>Blah
       if (blockTagClosed
-            && !hasBlock
-            && !currentNode->isBlock()
-            && !currentNode->text.isEmpty() && !currentNode->hasOnlyWhitespace()
-            && currentNode->displayMode == QTextHtmlElement::DisplayInline) {
+         && !hasBlock
+         && !currentNode->isBlock()
+         && !currentNode->text.isEmpty() && !currentNode->hasOnlyWhitespace()
+         && currentNode->displayMode == QTextHtmlElement::DisplayInline) {
 
          QTextBlockFormat block = currentNode->blockFormat;
          block.setIndent(indent);
@@ -567,7 +539,6 @@ bool QTextHtmlImporter::appendNodeText()
 
    QString text = currentNode->text;
    QString textToInsert;
-
    for (QChar ch : text) {
 
       if (ch.isSpace() && ch != QChar::Nbsp && ch != QChar::ParagraphSeparator) {
@@ -981,14 +952,14 @@ QTextHtmlImporter::Table QTextHtmlImporter::scanTable(int tableNodeIdx)
    fmt.setTopMargin(topMargin(tableNodeIdx));
    fmt.setBottomMargin(bottomMargin(tableNodeIdx));
    fmt.setLeftMargin(leftMargin(tableNodeIdx)
-                     + table.lastIndent * 40 // ##### not a good emulation
-                    );
+      + table.lastIndent * 40 // ##### not a good emulation
+   );
    fmt.setRightMargin(rightMargin(tableNodeIdx));
 
    // compatibility
    if (qFuzzyCompare(fmt.leftMargin(), fmt.rightMargin())
-         && qFuzzyCompare(fmt.leftMargin(), fmt.topMargin())
-         && qFuzzyCompare(fmt.leftMargin(), fmt.bottomMargin())) {
+      && qFuzzyCompare(fmt.leftMargin(), fmt.topMargin())
+      && qFuzzyCompare(fmt.leftMargin(), fmt.bottomMargin())) {
       fmt.setProperty(QTextFormat::FrameMargin, fmt.leftMargin());
    }
 
@@ -1095,9 +1066,9 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processBlockNode()
    // list.
    const QTextHtmlParserNode *parentNode = currentNode->parent ? &at(currentNode->parent) : 0;
    if ((currentNode->id == Html_li || currentNode->id == Html_dt || currentNode->id == Html_dd)
-         && parentNode
-         && (parentNode->isListStart() || parentNode->id == Html_dl)
-         && (parentNode->children.last() == currentNodeIdx)) {
+      && parentNode
+      && (parentNode->isListStart() || parentNode->id == Html_dl)
+      && (parentNode->children.last() == currentNodeIdx)) {
       bottomMargin = qMax(bottomMargin, this->bottomMargin(currentNode->parent));
    }
 
@@ -1121,13 +1092,13 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processBlockNode()
    }
 
    if (currentNode->id != Html_li
-         && indent != 0
-         && (lists.isEmpty()
-             || !hasBlock
-             || !lists.last().list
-             || lists.last().list->itemNumber(cursor.block()) == -1
-            )
-      ) {
+      && indent != 0
+      && (lists.isEmpty()
+         || !hasBlock
+         || !lists.last().list
+         || lists.last().list->itemNumber(cursor.block()) == -1
+      )
+   ) {
       block.setIndent(indent);
       modifiedBlockFormat = true;
    }
@@ -1189,7 +1160,7 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processBlockNode()
       }
       if (hasBlock) {
          QTextBlockFormat fmt;
-         fmt.setIndent(0);
+         fmt.setIndent(currentNode->blockFormat.indent());
          cursor.mergeBlockFormat(fmt);
       }
    }
@@ -1226,34 +1197,12 @@ void QTextHtmlImporter::appendBlock(const QTextBlockFormat &format, QTextCharFor
 
 #endif // QT_NO_TEXTHTMLPARSER
 
-/*!
-    \fn QTextDocumentFragment QTextDocumentFragment::fromHtml(const QString &text)
-
-    Returns a QTextDocumentFragment based on the arbitrary piece of
-    HTML in the given \a text. The formatting is preserved as much as
-    possible; for example, "<b>bold</b>" will become a document
-    fragment with the text "bold" with a bold character format.
-*/
-
 #ifndef QT_NO_TEXTHTMLPARSER
 
 QTextDocumentFragment QTextDocumentFragment::fromHtml(const QString &html)
 {
    return fromHtml(html, 0);
 }
-
-/*!
-    \fn QTextDocumentFragment QTextDocumentFragment::fromHtml(const QString &text, const QTextDocument *resourceProvider)
-    \since 4.2
-
-    Returns a QTextDocumentFragment based on the arbitrary piece of
-    HTML in the given \a text. The formatting is preserved as much as
-    possible; for example, "<b>bold</b>" will become a document
-    fragment with the text "bold" with a bold character format.
-
-    If the provided HTML contains references to external resources such as imported style sheets, then
-    they will be loaded through the \a resourceProvider.
-*/
 
 QTextDocumentFragment QTextDocumentFragment::fromHtml(const QString &html, const QTextDocument *resourceProvider)
 {
@@ -1265,5 +1214,5 @@ QTextDocumentFragment QTextDocumentFragment::fromHtml(const QString &html, const
    return res;
 }
 
-QT_END_NAMESPACE
+
 #endif // QT_NO_TEXTHTMLPARSER

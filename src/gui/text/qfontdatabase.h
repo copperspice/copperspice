@@ -23,17 +23,14 @@
 #ifndef QFONTDATABASE_H
 #define QFONTDATABASE_H
 
-#include <QtGui/qwindowdefs.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qfont.h>
-
-QT_BEGIN_NAMESPACE
+#include <qwindowdefs.h>
+#include <qstring.h>
+#include <qfont.h>
+#include <qcontainerfwd.h>
 
 class QStringList;
 class QFontEngine;
 class QFontDatabasePrivate;
-
-template <class T> class QList;
 struct QFontDef;
 
 class Q_GUI_EXPORT QFontDatabase
@@ -41,6 +38,7 @@ class Q_GUI_EXPORT QFontDatabase
    GUI_CS_GADGET(QFontDatabase)
 
    GUI_CS_ENUM(WritingSystem)
+   GUI_CS_ENUM(SystemFont)
 
  public:
    // do not re-order or delete entries from this enum without updating the QPF2 format and makeqpf!!
@@ -87,6 +85,13 @@ class Q_GUI_EXPORT QFontDatabase
       WritingSystemsCount
    };
 
+   enum SystemFont {
+      GeneralFont,
+      FixedFont,
+      TitleFont,
+      SmallestReadableFont
+   };
+
    static QList<int> standardSizes();
 
    QFontDatabase();
@@ -113,6 +118,7 @@ class Q_GUI_EXPORT QFontDatabase
    int weight(const QString &family, const QString &style) const;
 
    bool hasFamily(const QString &family) const;
+   bool isPrivateFamily(const QString &family) const;
 
    static QString writingSystemName(WritingSystem writingSystem);
    static QString writingSystemSample(WritingSystem writingSystem);
@@ -123,33 +129,23 @@ class Q_GUI_EXPORT QFontDatabase
    static bool removeApplicationFont(int id);
    static bool removeAllApplicationFonts();
 
-   static bool supportsThreadedFontRendering();
+   static QFont systemFont(SystemFont type);
 
  private:
+   QFontDatabasePrivate *d;
+
    static void createDatabase();
    static void parseFontName(const QString &name, QString &foundry, QString &family);
    static QString resolveFontFamilyAlias(const QString &family);
-
-#if defined(Q_WS_QWS) || defined(Q_WS_QPA)
-   static QFontEngine *findFont(int script, const QFontPrivate *fp, const QFontDef &request);
-#endif
+   static QFontEngine *findFont(const QFontDef &request, int script);
    static void load(const QFontPrivate *d, int script);
-#ifdef Q_WS_X11
-   static QFontEngine *loadXlfd(int screen, int script, const QFontDef &request, int force_encoding_id = -1);
-#endif
 
    friend struct QFontDef;
    friend class QFontPrivate;
    friend class QFontDialog;
    friend class QFontDialogPrivate;
-   friend class QFontEngineMultiXLFD;
-   friend class QFontEngineMultiQWS;
-   friend class QFontEngineMultiS60;
-   friend class QFontEngineMultiQPA;
+   friend class QFontEngineMulti;
 
-   QFontDatabasePrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QFONTDATABASE_H
+#endif

@@ -27,9 +27,9 @@
 #include <QtGui/qtextoption.h>
 #include <QtGui/qtextobject.h>
 
-QT_BEGIN_NAMESPACE
 
 class QTextListFormat;
+class QTextTableCell;
 class QTextDocumentLayoutPrivate;
 
 class QTextDocumentLayout : public QAbstractTextDocumentLayout
@@ -63,6 +63,8 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
 
    QRectF frameBoundingRect(QTextFrame *frame) const override;
    QRectF blockBoundingRect(const QTextBlock &block) const override;
+   QRectF tableBoundingRect(QTextTable *table) const;
+   QRectF tableCellBoundingRect(QTextTable *table, const QTextTableCell &cell) const;
 
    // ####
    int layoutStatus() const;
@@ -80,7 +82,7 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format) override;
 
    void drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
-                         int posInDocument, const QTextFormat &format) override;
+      int posInDocument, const QTextFormat &format) override;
 
    void timerEvent(QTimerEvent *e) override;
 
@@ -89,6 +91,5 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    void layoutFinished();
 };
 
-QT_END_NAMESPACE
 
 #endif // QTEXTDOCUMENTLAYOUT_P_H

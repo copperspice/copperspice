@@ -23,10 +23,8 @@
 #ifndef QTEXTIMAGEHANDLER_P_H
 #define QTEXTIMAGEHANDLER_P_H
 
-#include <QtCore/qobject.h>
-#include <QtGui/qabstracttextdocumentlayout.h>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qabstracttextdocumentlayout.h>
 
 class QTextImageFormat;
 
@@ -40,11 +38,9 @@ class QTextImageHandler : public QObject, public QTextObjectInterface
 
    QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) override;
    void drawObject(QPainter *p, const QRectF &rect, QTextDocument *doc, int posInDocument,
-                           const QTextFormat &format) override;
+      const QTextFormat &format) override;
 
-   typedef QImage (*ExternalImageLoaderFunction)(const QString &name, const QString &context);
+   QImage image(QTextDocument *doc, const QTextImageFormat &imageFormat);
 };
-
-QT_END_NAMESPACE
 
 #endif
