@@ -27,63 +27,22 @@
 #include <qzipreader_p.h>
 #include <qzipwriter_p.h>
 #include <qdatetime.h>
-#include <qplatformdefs.h>
+
 #include <qendian.h>
 #include <qdebug.h>
 #include <qdir.h>
 
 #include <zlib.h>
 
-#if defined(Q_OS_WIN)
-#  undef S_IFREG
-#  define S_IFREG 0100000
-#  ifndef S_IFDIR
-#    define S_IFDIR 0040000
-#  endif
-#  ifndef S_ISDIR
-#    define S_ISDIR(x) ((x) & S_IFDIR) > 0
-#  endif
-#  ifndef S_ISREG
-#    define S_ISREG(x) ((x) & 0170000) == S_IFREG
-#  endif
-#  define S_IFLNK 020000
-#  define S_ISLNK(x) ((x) & S_IFLNK) > 0
-#  ifndef S_IRUSR
-#    define S_IRUSR 0400
-#  endif
-#  ifndef S_IWUSR
-#    define S_IWUSR 0200
-#  endif
-#  ifndef S_IXUSR
-#    define S_IXUSR 0100
-#  endif
-#  ifndef S_IRGRP
-#    define S_IRGRP 0040
-#  endif
-#  ifndef S_IWGRP
-#    define S_IWGRP 0020
-#  endif
-#  ifndef S_IXGRP
-#    define S_IXGRP 0010
-#  endif
-#  ifndef S_IROTH
-#    define S_IROTH 0004
-#  endif
-#  ifndef S_IWOTH
-#    define S_IWOTH 0002
-#  endif
-#  ifndef S_IXOTH
-#    define S_IXOTH 0001
-#  endif
-#endif
+// Zip standard version for archives handled by this API
+// (actually, the only basic support of this version is implemented but it is enough for now)
+#define ZIP_VERSION 20
 
 #if 0
 #define ZDEBUG qDebug
 #else
 #define ZDEBUG if (0) qDebug
 #endif
-
-QT_BEGIN_NAMESPACE
 
 static inline uint readUInt(const uchar *data)
 {
@@ -149,54 +108,12 @@ static void writeMSDosDate(uchar *dest, const QDateTime &dt)
    }
 }
 
-static quint32 permissionsToMode(QFile::Permissions perms)
-{
-   quint32 mode = 0;
-   if (perms & QFile::ReadOwner) {
-      mode |= S_IRUSR;
-   }
-   if (perms & QFile::WriteOwner) {
-      mode |= S_IWUSR;
-   }
-   if (perms & QFile::ExeOwner) {
-      mode |= S_IXUSR;
-   }
-   if (perms & QFile::ReadUser) {
-      mode |= S_IRUSR;
-   }
-   if (perms & QFile::WriteUser) {
-      mode |= S_IWUSR;
-   }
-   if (perms & QFile::ExeUser) {
-      mode |= S_IXUSR;
-   }
-   if (perms & QFile::ReadGroup) {
-      mode |= S_IRGRP;
-   }
-   if (perms & QFile::WriteGroup) {
-      mode |= S_IWGRP;
-   }
-   if (perms & QFile::ExeGroup) {
-      mode |= S_IXGRP;
-   }
-   if (perms & QFile::ReadOther) {
-      mode |= S_IROTH;
-   }
-   if (perms & QFile::WriteOther) {
-      mode |= S_IWOTH;
-   }
-   if (perms & QFile::ExeOther) {
-      mode |= S_IXOTH;
-   }
-   return mode;
-}
-
 static int inflate(Bytef *dest, ulong *destLen, const Bytef *source, ulong sourceLen)
 {
    z_stream stream;
    int err;
 
-   stream.next_in = (Bytef *)source;
+   stream.next_in = const_cast<Bytef *>(source);
    stream.avail_in = (uInt)sourceLen;
    if ((uLong)stream.avail_in != sourceLen) {
       return Z_BUF_ERROR;
@@ -235,7 +152,7 @@ static int deflate (Bytef *dest, ulong *destLen, const Bytef *source, ulong sour
    z_stream stream;
    int err;
 
-   stream.next_in = (Bytef *)source;
+   stream.next_in = const_cast<Bytef *>(source);
    stream.avail_in = (uInt)sourceLen;
    stream.next_out = dest;
    stream.avail_out = (uInt) * destLen;
@@ -263,46 +180,100 @@ static int deflate (Bytef *dest, ulong *destLen, const Bytef *source, ulong sour
    return err;
 }
 
+namespace WindowsFileAttributes {
+enum {
+   Dir        = 0x10, // FILE_ATTRIBUTE_DIRECTORY
+   File       = 0x80, // FILE_ATTRIBUTE_NORMAL
+   TypeMask   = 0x90,
+
+   ReadOnly   = 0x01, // FILE_ATTRIBUTE_READONLY
+   PermMask   = 0x01
+};
+}
+
+namespace UnixFileAttributes {
+enum {
+   Dir        = 0040000, // __S_IFDIR
+   File       = 0100000, // __S_IFREG
+   SymLink    = 0120000, // __S_IFLNK
+   TypeMask   = 0170000, // __S_IFMT
+
+   ReadUser   = 0400, // __S_IRUSR
+   WriteUser  = 0200, // __S_IWUSR
+   ExeUser    = 0100, // __S_IXUSR
+   ReadGroup  = 0040, // __S_IRGRP
+   WriteGroup = 0020, // __S_IWGRP
+   ExeGroup   = 0010, // __S_IXGRP
+   ReadOther  = 0004, // __S_IROTH
+   WriteOther = 0002, // __S_IWOTH
+   ExeOther   = 0001, // __S_IXOTH
+   PermMask   = 0777
+};
+}
 static QFile::Permissions modeToPermissions(quint32 mode)
 {
    QFile::Permissions ret;
-   if (mode & S_IRUSR) {
-      ret |= QFile::ReadOwner;
+
+   if (mode & UnixFileAttributes::ReadUser) {
+      ret |= QFile::ReadOwner | QFile::ReadUser;
    }
-   if (mode & S_IWUSR) {
-      ret |= QFile::WriteOwner;
+   if (mode & UnixFileAttributes::WriteUser) {
+      ret |= QFile::WriteOwner | QFile::WriteUser;
    }
-   if (mode & S_IXUSR) {
-      ret |= QFile::ExeOwner;
+   if (mode & UnixFileAttributes::ExeUser) {
+      ret |= QFile::ExeOwner | QFile::ExeUser;
    }
-   if (mode & S_IRUSR) {
-      ret |= QFile::ReadUser;
-   }
-   if (mode & S_IWUSR) {
-      ret |= QFile::WriteUser;
-   }
-   if (mode & S_IXUSR) {
-      ret |= QFile::ExeUser;
-   }
-   if (mode & S_IRGRP) {
+   if (mode & UnixFileAttributes::ReadGroup) {
       ret |= QFile::ReadGroup;
    }
-   if (mode & S_IWGRP) {
+   if (mode & UnixFileAttributes::WriteGroup) {
       ret |= QFile::WriteGroup;
    }
-   if (mode & S_IXGRP) {
+   if (mode & UnixFileAttributes::ExeGroup) {
       ret |= QFile::ExeGroup;
    }
-   if (mode & S_IROTH) {
+   if (mode & UnixFileAttributes::ReadOther) {
       ret |= QFile::ReadOther;
    }
-   if (mode & S_IWOTH) {
+   if (mode & UnixFileAttributes::WriteOther) {
       ret |= QFile::WriteOther;
    }
-   if (mode & S_IXOTH) {
+   if (mode & UnixFileAttributes::ExeOther) {
       ret |= QFile::ExeOther;
    }
    return ret;
+}
+static quint32 permissionsToMode(QFile::Permissions perms)
+{
+   quint32 mode = 0;
+   if (perms & (QFile::ReadOwner | QFile::ReadUser)) {
+      mode |= UnixFileAttributes::ReadUser;
+   }
+   if (perms & (QFile::WriteOwner | QFile::WriteUser)) {
+      mode |= UnixFileAttributes::WriteUser;
+   }
+   if (perms & (QFile::ExeOwner | QFile::ExeUser)) {
+      mode |= UnixFileAttributes::WriteUser;
+   }
+   if (perms & QFile::ReadGroup) {
+      mode |= UnixFileAttributes::ReadGroup;
+   }
+   if (perms & QFile::WriteGroup) {
+      mode |= UnixFileAttributes::WriteGroup;
+   }
+   if (perms & QFile::ExeGroup) {
+      mode |= UnixFileAttributes::ExeGroup;
+   }
+   if (perms & QFile::ReadOther) {
+      mode |= UnixFileAttributes::ReadOther;
+   }
+   if (perms & QFile::WriteOther) {
+      mode |= UnixFileAttributes::WriteOther;
+   }
+   if (perms & QFile::ExeOther) {
+      mode |= UnixFileAttributes::ExeOther;
+   }
+   return mode;
 }
 
 static QDateTime readMSDosDate(const uchar *src)
@@ -320,6 +291,67 @@ static QDateTime readMSDosDate(const uchar *src)
    return QDateTime(QDate(tm_year, tm_mon, tm_mday), QTime(tm_hour, tm_min, tm_sec));
 }
 
+// for details, see http://www.pkware.com/documents/casestudies/APPNOTE.TXT
+
+enum HostOS {
+   HostFAT      = 0,
+   HostAMIGA    = 1,
+   HostVMS      = 2,  // VAX/VMS
+   HostUnix     = 3,
+   HostVM_CMS   = 4,
+   HostAtari    = 5,  // what if it's a minix filesystem? [cjh]
+   HostHPFS     = 6,  // filesystem used by OS/2 (and NT 3.x)
+   HostMac      = 7,
+   HostZ_System = 8,
+   HostCPM      = 9,
+   HostTOPS20   = 10, // pkzip 2.50 NTFS
+   HostNTFS     = 11, // filesystem used by Windows NT
+   HostQDOS     = 12, // SMS/QDOS
+   HostAcorn    = 13, // Archimedes Acorn RISC OS
+   HostVFAT     = 14, // filesystem used by Windows 95, NT
+   HostMVS      = 15,
+   HostBeOS     = 16, // hybrid POSIX/database filesystem
+   HostTandem   = 17,
+   HostOS400    = 18,
+   HostOSX      = 19
+};
+
+enum GeneralPurposeFlag {
+   Encrypted = 0x01,
+   AlgTune1 = 0x02,
+   AlgTune2 = 0x04,
+   HasDataDescriptor = 0x08,
+   PatchedData = 0x20,
+   StrongEncrypted = 0x40,
+   Utf8Names = 0x0800,
+   CentralDirectoryEncrypted = 0x2000
+};
+
+enum CompressionMethod {
+   CompressionMethodStored = 0,
+   CompressionMethodShrunk = 1,
+   CompressionMethodReduced1 = 2,
+   CompressionMethodReduced2 = 3,
+   CompressionMethodReduced3 = 4,
+   CompressionMethodReduced4 = 5,
+   CompressionMethodImploded = 6,
+   CompressionMethodReservedTokenizing = 7, // reserved for tokenizing
+   CompressionMethodDeflated = 8,
+   CompressionMethodDeflated64 = 9,
+   CompressionMethodPKImploding = 10,
+
+   CompressionMethodBZip2 = 12,
+
+   CompressionMethodLZMA = 14,
+
+   CompressionMethodTerse = 18,
+   CompressionMethodLz77 = 19,
+
+   CompressionMethodJpeg = 96,
+   CompressionMethodWavPack = 97,
+   CompressionMethodPPMd = 98,
+   CompressionMethodWzAES = 99
+};
 struct LocalFileHeader {
    uchar signature[4]; //  0x04034b50
    uchar version_needed[2];
@@ -377,38 +409,6 @@ struct FileHeader {
    QByteArray file_comment;
 };
 
-QZipReader::FileInfo::FileInfo()
-   : isDir(false), isFile(false), isSymLink(false), crc32(0), size(0)
-{
-}
-
-QZipReader::FileInfo::~FileInfo()
-{
-}
-
-QZipReader::FileInfo::FileInfo(const FileInfo &other)
-{
-   operator=(other);
-}
-
-QZipReader::FileInfo &QZipReader::FileInfo::operator=(const FileInfo &other)
-{
-   filePath = other.filePath;
-   isDir = other.isDir;
-   isFile = other.isFile;
-   isSymLink = other.isSymLink;
-   permissions = other.permissions;
-   crc32 = other.crc32;
-   size = other.size;
-   lastModified = other.lastModified;
-   return *this;
-}
-
-bool QZipReader::FileInfo::isValid() const
-{
-   return isDir || isFile || isSymLink;
-}
-
 class QZipPrivate
 {
  public:
@@ -422,38 +422,94 @@ class QZipPrivate
       }
    }
 
-   void fillFileInfo(int index, QZipReader::FileInfo &fileInfo) const;
+   QZipReader::FileInfo fillFileInfo(int index) const;
 
    QIODevice *device;
    bool ownDevice;
    bool dirtyFileTree;
-   QList<FileHeader> fileHeaders;
+   QVector<FileHeader> fileHeaders;
    QByteArray comment;
    uint start_of_directory;
 };
 
-void QZipPrivate::fillFileInfo(int index, QZipReader::FileInfo &fileInfo) const
+QZipReader::FileInfo QZipPrivate::fillFileInfo(int index) const
 {
+   QZipReader::FileInfo fileInfo;
    FileHeader header = fileHeaders.at(index);
-   fileInfo.filePath = QString::fromLatin1(header.file_name);
+   quint32 mode = readUInt(header.h.external_file_attributes);
+   const HostOS hostOS = HostOS(readUShort(header.h.version_made) >> 8);
+   switch (hostOS) {
+      case HostUnix:
+         mode = (mode >> 16) & 0xffff;
+         switch (mode & UnixFileAttributes::TypeMask) {
+            case UnixFileAttributes::SymLink:
+               fileInfo.isSymLink = true;
+               break;
+            case UnixFileAttributes::Dir:
+               fileInfo.isDir = true;
+               break;
+            case UnixFileAttributes::File:
+            default: // ### just for the case; should we warn?
+               fileInfo.isFile = true;
+               break;
+         }
+         fileInfo.permissions = modeToPermissions(mode);
+         break;
+      case HostFAT:
+      case HostNTFS:
+      case HostHPFS:
+      case HostVFAT:
+         switch (mode & WindowsFileAttributes::TypeMask) {
+            case WindowsFileAttributes::Dir:
+               fileInfo.isDir = true;
+               break;
+            case WindowsFileAttributes::File:
+            default:
+               fileInfo.isFile = true;
+               break;
+         }
+         fileInfo.permissions |= QFile::ReadOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther;
+         if ((mode & WindowsFileAttributes::ReadOnly) == 0) {
+            fileInfo.permissions |= QFile::WriteOwner | QFile::WriteUser | QFile::WriteGroup | QFile::WriteOther;
+         }
+         if (fileInfo.isDir) {
+            fileInfo.permissions |= QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
+         }
+         break;
 
-   const quint32 mode = (qFromLittleEndian<quint32>(&header.h.external_file_attributes[0]) >> 16) & 0xFFFF;
+      default:
+         qWarning("QZip: Zip entry format at %d is not supported.", index);
+         return fileInfo; // we don't support anything else
+   }
 
-   fileInfo.isDir        = S_ISDIR(mode);
-   fileInfo.isFile       = S_ISREG(mode);
-   fileInfo.isSymLink    = S_ISLNK(mode);
-   fileInfo.permissions  = modeToPermissions(mode);
-   fileInfo.crc32        = readUInt(header.h.crc_32);
+   ushort general_purpose_bits = readUShort(header.h.general_purpose_bits);
+
+   // if bit 11 is set, the filename and comment fields must be encoded using UTF-8
+   const bool inUtf8     = (general_purpose_bits & Utf8Names) != 0;
+   fileInfo.filePath     = inUtf8 ? QString::fromUtf8(header.file_name) : QString::fromLatin1(header.file_name);
+   fileInfo.crc          = readUInt(header.h.crc_32);
    fileInfo.size         = readUInt(header.h.uncompressed_size);
    fileInfo.lastModified = readMSDosDate(header.h.last_mod_file);
+
+   // fix the file path, if broken (convert separators, eat leading and trailing ones)
+   fileInfo.filePath = QDir::fromNativeSeparators(fileInfo.filePath);
+
+   while (!fileInfo.filePath.isEmpty() && (fileInfo.filePath.at(0) == QLatin1Char('.') || fileInfo.filePath.at(0) == QLatin1Char('/'))) {
+      fileInfo.filePath = fileInfo.filePath.mid(1);
+   }
+   while (!fileInfo.filePath.isEmpty() && fileInfo.filePath.at(fileInfo.filePath.size() - 1) == QLatin1Char('/')) {
+      fileInfo.filePath.chop(1);
+   }
+
+   return fileInfo;
 }
 
 class QZipReaderPrivate : public QZipPrivate
 {
  public:
    QZipReaderPrivate(QIODevice *device, bool ownDev)
-      : QZipPrivate(device, ownDev), status(QZipReader::NoError) {
-   }
+      : QZipPrivate(device, ownDev), status(QZipReader::NoError)
+   { }
 
    void scanFiles();
 
@@ -525,7 +581,7 @@ void QZipReaderPrivate::scanFiles()
    int num_dir_entries = 0;
    EndOfDirectory eod;
    while (start_of_directory == -1) {
-      int pos = device->size() - sizeof(EndOfDirectory) - i;
+      const int pos = device->size() - int(sizeof(EndOfDirectory)) - i;
       if (pos < 0 || i > 65535) {
          qWarning() << "QZip: EndOfDirectory not found";
          return;
@@ -587,16 +643,16 @@ void QZipReaderPrivate::scanFiles()
    }
 }
 
-void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
-                                 const QByteArray &contents/*, QFile::Permissions permissions, QZip::Method m*/)
+void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const QByteArray &contents)
 {
 #ifndef NDEBUG
-   static const char *entryTypes[] = {
+   static const char *const entryTypes[] = {
       "directory",
       "file     ",
       "symlink  "
    };
-   ZDEBUG() << "adding" << entryTypes[type] << ":" << fileName.toUtf8().data() << (type == 2 ? QByteArray(" -> " +
+
+   ZDEBUG() << "adding" << entryTypes[type] << ":" << fileName.constData() << (type == 2 ? QByteArray(" -> " +
             contents).constData() : "");
 #endif
 
@@ -620,12 +676,12 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
    memset(&header.h, 0, sizeof(CentralFileHeader));
    writeUInt(header.h.signature, 0x02014b50);
 
-   writeUShort(header.h.version_needed, 0x14);
+   writeUShort(header.h.version_needed, ZIP_VERSION);
    writeUInt(header.h.uncompressed_size, contents.length());
    writeMSDosDate(header.h.last_mod_file, QDateTime::currentDateTime());
    QByteArray data = contents;
    if (compression == QZipWriter::AlwaysCompress) {
-      writeUShort(header.h.compression_method, 8);
+      writeUShort(header.h.compression_method, CompressionMethodDeflated);
 
       ulong len = contents.length();
       // shamelessly copied form zlib
@@ -656,38 +712,51 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
    // TODO add a check if data.length() > contents.length().  Then try to store the original and revert the compression method to be uncompressed
    writeUInt(header.h.compressed_size, data.length());
    uint crc_32 = ::crc32(0, 0, 0);
-   crc_32 = ::crc32(crc_32, (const uchar *)contents.constData(), contents.length());
+   crc_32      = ::crc32(crc_32, (const uchar *)contents.constData(), contents.length());
+
    writeUInt(header.h.crc_32, crc_32);
 
-   header.file_name = fileName.toLatin1();
+   // if bit 11 is set, the filename and comment fields must be encoded using UTF-8
+   ushort general_purpose_bits = Utf8Names; // always use utf-8
+   writeUShort(header.h.general_purpose_bits, general_purpose_bits);
+
+   const bool inUtf8 = (general_purpose_bits & Utf8Names) != 0;
+   header.file_name = inUtf8 ? fileName.toUtf8() : fileName.toLatin1();
 
    if (header.file_name.size() > 0xffff) {
-      qWarning("QZip: Filename too long, chopping it to 65535 characters");
+      qWarning("QZip: Filename is too long, chopping it to 65535 bytes");
       header.file_name = header.file_name.left(0xffff);
    }
 
+   if (header.file_comment.size() + header.file_name.size() > 0xffff) {
+      qWarning("QZip: File comment is too long, chopping it to 65535 bytes");
+      header.file_comment.truncate(0xffff - header.file_name.size()); // ### don't break the utf-8 sequence, if any
+   }
    writeUShort(header.h.file_name_length, header.file_name.length());
    //h.extra_field_length[2];
 
-   writeUShort(header.h.version_made, 3 << 8);
+   writeUShort(header.h.version_made, HostUnix << 8);
    //uchar internal_file_attributes[2];
    //uchar external_file_attributes[4];
    quint32 mode = permissionsToMode(permissions);
 
    switch (type) {
-      case File:
-         mode |= S_IFREG;
+      case Symlink:
+         mode |= UnixFileAttributes::SymLink;
          break;
       case Directory:
-         mode |= S_IFDIR;
+         mode |= UnixFileAttributes::Dir;
          break;
-      case Symlink:
-         mode |= S_IFLNK;
+      case File:
+         mode |= UnixFileAttributes::File;
+         break;
+      default:
+         // error, may want to throw
          break;
    }
+
    writeUInt(header.h.external_file_attributes, mode << 16);
    writeUInt(header.h.offset_local_header, start_of_directory);
-
 
    fileHeaders.append(header);
 
@@ -699,81 +768,14 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
    dirtyFileTree = true;
 }
 
-//////////////////////////////  Reader
-
-/*!
-    \class QZipReader::FileInfo
-    \internal
-    Represents one entry in the zip table of contents.
-*/
-
-/*!
-    \variable FileInfo::filePath
-    The full filepath inside the archive.
-*/
-
-/*!
-    \variable FileInfo::isDir
-    A boolean type indicating if the entry is a directory.
-*/
-
-/*!
-    \variable FileInfo::isFile
-    A boolean type, if it is one this entry is a file.
-*/
-
-/*!
-    \variable FileInfo::isSymLink
-    A boolean type, if it is one this entry is symbolic link.
-*/
-
-/*!
-    \variable FileInfo::permissions
-    A list of flags for the permissions of this entry.
-*/
-
-/*!
-    \variable FileInfo::crc32
-    The calculated checksum as a crc32 type.
-*/
-
-/*!
-    \variable FileInfo::size
-    The total size of the unpacked content.
-*/
-
-/*!
-    \variable FileInfo::d
-    \internal
-    private pointer.
-*/
-
-/*!
-    \class QZipReader
-    \internal
-    \since 4.5
-
-    \brief the QZipReader class provides a way to inspect the contents of a zip
-    archive and extract individual files from it.
-
-    QZipReader can be used to read a zip archive either from a file or from any
-    device. An in-memory QBuffer for instance.  The reader can be used to read
-    which files are in the archive using fileInfoList() and entryInfoAt() but
-    also to extract individual files using fileData() or even to extract all
-    files in the archive using extractAll()
-*/
-
-/*!
-    Create a new zip archive that operates on the \a fileName.  The file will be
-    opened with the \a mode.
-*/
 QZipReader::QZipReader(const QString &archive, QIODevice::OpenMode mode)
 {
    QScopedPointer<QFile> f(new QFile(archive));
-   f->open(mode);
    QZipReader::Status status;
-   if (f->error() == QFile::NoError) {
+
+   if (f->open(mode) && f->error() == QFile::NoError) {
       status = NoError;
+
    } else {
       if (f->error() == QFile::ReadError) {
          status = FileReadError;
@@ -791,37 +793,26 @@ QZipReader::QZipReader(const QString &archive, QIODevice::OpenMode mode)
    d->status = status;
 }
 
-/*!
-    Create a new zip archive that operates on the archive found in \a device.
-    You have to open the device previous to calling the constructor and only a
-    device that is readable will be scanned for zip filecontent.
- */
 QZipReader::QZipReader(QIODevice *device)
    : d(new QZipReaderPrivate(device, /*ownDevice=*/false))
 {
    Q_ASSERT(device);
 }
 
-/*!
-    Desctructor
-*/
+
 QZipReader::~QZipReader()
 {
    close();
    delete d;
 }
 
-/*!
-    Returns device used for reading zip archive.
-*/
+
 QIODevice *QZipReader::device() const
 {
    return d->device;
 }
 
-/*!
-    Returns true if the user can read the file; otherwise returns false.
-*/
+
 bool QZipReader::isReadable() const
 {
    return d->device->isReadable();
@@ -842,15 +833,19 @@ bool QZipReader::exists() const
 /*!
     Returns the list of files the archive contains.
 */
-QList<QZipReader::FileInfo> QZipReader::fileInfoList() const
+QVector<QZipReader::FileInfo> QZipReader::fileInfoList() const
 {
    d->scanFiles();
-   QList<QZipReader::FileInfo> files;
-   for (int i = 0; i < d->fileHeaders.size(); ++i) {
-      QZipReader::FileInfo fi;
-      d->fillFileInfo(i, fi);
-      files.append(fi);
+   QVector<FileInfo> files;
+
+   const int numFileHeaders = d->fileHeaders.size();
+   files.reserve(numFileHeaders);
+
+   for (int i = 0; i < numFileHeaders; ++i) {
+      files.append(d->fillFileInfo(i));
    }
+
+
    return files;
 
 }
@@ -864,14 +859,12 @@ int QZipReader::count() const
 QZipReader::FileInfo QZipReader::entryInfoAt(int index) const
 {
    d->scanFiles();
-   QZipReader::FileInfo fi;
 
    if (index >= 0 && index < d->fileHeaders.count()) {
-      d->fillFileInfo(index, fi);
+      return d->fillFileInfo(index);
    }
-   return fi;
+   return QZipReader::FileInfo();
 }
-
 QByteArray QZipReader::fileData(const QString &fileName) const
 {
    d->scanFiles();
@@ -889,6 +882,13 @@ QByteArray QZipReader::fileData(const QString &fileName) const
 
    FileHeader header = d->fileHeaders.at(i);
 
+   ushort version_needed = readUShort(header.h.version_needed);
+   if (version_needed > ZIP_VERSION) {
+      qWarning("QZip: .ZIP specification version %d implementationis needed to extract the data.", version_needed);
+      return QByteArray();
+   }
+
+   ushort general_purpose_bits = readUShort(header.h.general_purpose_bits);
    int compressed_size = readUInt(header.h.compressed_size);
    int uncompressed_size = readUInt(header.h.uncompressed_size);
    int start = readUInt(header.h.offset_local_header);
@@ -903,13 +903,17 @@ QByteArray QZipReader::fileData(const QString &fileName) const
 
    int compression_method = readUShort(lh.compression_method);
 
+   if ((general_purpose_bits & Encrypted) != 0) {
+      qWarning("QZip: Unsupported encryption method is needed to extract the data.");
+      return QByteArray();
+   }
 
    QByteArray compressed = d->device->read(compressed_size);
-   if (compression_method == 0) {
+   if (compression_method == CompressionMethodStored) {
       // no compression
       compressed.truncate(uncompressed_size);
       return compressed;
-   } else if (compression_method == 8) {
+   } else if (compression_method == CompressionMethodDeflated) {
       // Deflate
       //qDebug("compressed=%d", compressed.size());
       compressed.truncate(compressed_size);
@@ -919,7 +923,7 @@ QByteArray QZipReader::fileData(const QString &fileName) const
       do {
          baunzip.resize(len);
          res = inflate((uchar *)baunzip.data(), &len,
-                       (uchar *)compressed.constData(), compressed_size);
+               (const uchar *)compressed.constData(), compressed_size);
 
          switch (res) {
             case Z_OK:
@@ -940,7 +944,8 @@ QByteArray QZipReader::fileData(const QString &fileName) const
       } while (res == Z_BUF_ERROR);
       return baunzip;
    }
-   qWarning() << "QZip: Unknown compression method";
+
+   qWarning("QZip: Unsupported compression method %d is needed to extract the data.", compression_method);
    return QByteArray();
 }
 
@@ -954,8 +959,9 @@ bool QZipReader::extractAll(const QString &destinationDir) const
    QDir baseDir(destinationDir);
 
    // create directories first
-   QList<FileInfo> allFiles = fileInfoList();
-   for (FileInfo fi : allFiles) {
+   const QVector<FileInfo> allFiles = fileInfoList();
+
+   for (const FileInfo &fi : allFiles) {
       const QString absPath = destinationDir + QDir::separator() + fi.filePath;
       if (fi.isDir) {
          if (!baseDir.mkpath(fi.filePath)) {
@@ -968,7 +974,7 @@ bool QZipReader::extractAll(const QString &destinationDir) const
    }
 
    // set up symlinks
-   for (FileInfo fi : allFiles) {
+   for (const FileInfo &fi : allFiles) {
       const QString absPath = destinationDir + QDir::separator() + fi.filePath;
       if (fi.isSymLink) {
          QString destination = QFile::decodeName(fileData(fi.filePath));
@@ -989,7 +995,7 @@ bool QZipReader::extractAll(const QString &destinationDir) const
       }
    }
 
-   for (FileInfo fi : allFiles) {
+   for (const FileInfo &fi : allFiles) {
       const QString absPath = destinationDir + QDir::separator() + fi.filePath;
       if (fi.isFile) {
          QFile f(absPath);
@@ -1005,61 +1011,25 @@ bool QZipReader::extractAll(const QString &destinationDir) const
    return true;
 }
 
-/*!
-    \enum QZipReader::Status
-
-    The following status values are possible:
-
-    \value NoError  No error occurred.
-    \value FileReadError    An error occurred when reading from the file.
-    \value FileOpenError    The file could not be opened.
-    \value FilePermissionsError The file could not be accessed.
-    \value FileError        Another file error occurred.
-*/
-
-/*!
-    Returns a status code indicating the first error that was met by QZipReader,
-    or QZipReader::NoError if no error occurred.
-*/
 QZipReader::Status QZipReader::status() const
 {
    return d->status;
 }
 
-/*!
-    Close the zip file.
-*/
+
 void QZipReader::close()
 {
    d->device->close();
 }
 
-////////////////////////////// Writer
 
-/*!
-    \class QZipWriter
-    \internal
-    \since 4.5
-
-    \brief the QZipWriter class provides a way to create a new zip archive.
-
-    QZipWriter can be used to create a zip archive containing any number of files
-    and directories. The files in the archive will be compressed in a way that is
-    compatible with common zip reader applications.
-*/
-
-
-/*!
-    Create a new zip archive that operates on the \a archive filename.  The file will
-    be opened with the \a mode.
-    \sa isValid()
-*/
 QZipWriter::QZipWriter(const QString &fileName, QIODevice::OpenMode mode)
 {
    QScopedPointer<QFile> f(new QFile(fileName));
-   f->open(mode);
+
    QZipWriter::Status status;
-   if (f->error() == QFile::NoError) {
+
+   if (f->open(mode) && f->error() == QFile::NoError) {
       status = QZipWriter::NoError;
    } else {
       if (f->error() == QFile::WriteError) {
@@ -1123,77 +1093,30 @@ bool QZipWriter::exists() const
    return f->exists();
 }
 
-/*!
-    \enum QZipWriter::Status
 
-    The following status values are possible:
-
-    \value NoError  No error occurred.
-    \value FileWriteError    An error occurred when writing to the device.
-    \value FileOpenError    The file could not be opened.
-    \value FilePermissionsError The file could not be accessed.
-    \value FileError        Another file error occurred.
-*/
-
-/*!
-    Returns a status code indicating the first error that was met by QZipWriter,
-    or QZipWriter::NoError if no error occurred.
-*/
 QZipWriter::Status QZipWriter::status() const
 {
    return d->status;
 }
 
-/*!
-    \enum QZipWriter::CompressionPolicy
 
-    \value AlwaysCompress   A file that is added is compressed.
-    \value NeverCompress    A file that is added will be stored without changes.
-    \value AutoCompress     A file that is added will be compressed only if that will give a smaller file.
-*/
-
-/*!
-     Sets the policy for compressing newly added files to the new \a policy.
-
-    \note the default policy is AlwaysCompress
-
-    \sa compressionPolicy()
-    \sa addFile()
-*/
 void QZipWriter::setCompressionPolicy(CompressionPolicy policy)
 {
    d->compressionPolicy = policy;
 }
 
-/*!
-     Returns the currently set compression policy.
-    \sa setCompressionPolicy()
-    \sa addFile()
-*/
+
 QZipWriter::CompressionPolicy QZipWriter::compressionPolicy() const
 {
    return d->compressionPolicy;
 }
 
-/*!
-    Sets the permissions that will be used for newly added files.
-
-    \note the default permissions are QFile::ReadOwner | QFile::WriteOwner.
-
-    \sa creationPermissions()
-    \sa addFile()
-*/
 void QZipWriter::setCreationPermissions(QFile::Permissions permissions)
 {
    d->permissions = permissions;
 }
 
-/*!
-     Returns the currently set creation permissions.
 
-    \sa setCreationPermissions()
-    \sa addFile()
-*/
 QFile::Permissions QZipWriter::creationPermissions() const
 {
    return d->permissions;
@@ -1302,7 +1225,5 @@ void QZipWriter::close()
    d->device->write(d->comment);
    d->device->close();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTODFWRITER

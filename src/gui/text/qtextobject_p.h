@@ -26,7 +26,7 @@
 #include <QtGui/qtextobject.h>
 #include <QtGui/qtextdocument.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QTextDocumentPrivate;
 class QTextFrameLayoutData;
@@ -72,8 +72,9 @@ class QTextFramePrivate : public QTextObjectPrivate
    QTextFramePrivate(QTextDocument *doc)
       : QTextObjectPrivate(doc), fragment_start(0), fragment_end(0), parentFrame(0), layoutData(0) {
    }
-   virtual void fragmentAdded(const QChar &type, uint fragment);
-   virtual void fragmentRemoved(const QChar &type, uint fragment);
+
+   virtual void fragmentAdded(QChar type, uint fragment);
+   virtual void fragmentRemoved(QChar type, uint fragment);
    void remove_me();
 
    uint fragment_start;
@@ -83,7 +84,5 @@ class QTextFramePrivate : public QTextObjectPrivate
    QList<QTextFrame *> childFrames;
    QTextFrameLayoutData *layoutData;
 };
-
-QT_END_NAMESPACE
 
 #endif // QTEXTOBJECT_P_H

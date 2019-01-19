@@ -28,14 +28,12 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qfile.h>
 
-QT_BEGIN_NAMESPACE
-
 class QZipWriterPrivate;
 
 class Q_GUI_EXPORT QZipWriter
 {
  public:
-   QZipWriter(const QString &fileName, QIODevice::OpenMode mode = (QIODevice::WriteOnly | QIODevice::Truncate) );
+   explicit QZipWriter(const QString &fileName, QIODevice::OpenMode mode = (QIODevice::WriteOnly | QIODevice::Truncate) );
 
    explicit QZipWriter(QIODevice *device);
    ~QZipWriter();
@@ -81,8 +79,6 @@ class Q_GUI_EXPORT QZipWriter
    QZipWriterPrivate *d;
    Q_DISABLE_COPY(QZipWriter)
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTODFWRITER
 #endif // QZIPWRITER_H

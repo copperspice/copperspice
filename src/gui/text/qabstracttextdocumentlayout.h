@@ -31,8 +31,6 @@
 #include <QTextBlock>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractTextDocumentLayoutPrivate;
 class QTextObjectInterface;
 class QTextFrame;
@@ -77,6 +75,7 @@ class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
    QTextDocument *document() const;
 
    void registerHandler(int objectType, QObject *component);
+   void unregisterHandler(int objectType, QObject *component = nullptr);
    QTextObjectInterface *handlerForObject(int objectType) const;
 
    GUI_CS_SIGNAL_1(Public, void update(const QRectF &un_named_arg1 = QRectF(0.0, 0.0, 1000000000.0, 1000000000.0) ))
@@ -99,7 +98,7 @@ class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
    virtual void resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
    virtual void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
    virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int posInDocument,
-                                 const QTextFormat &format);
+      const QTextFormat &format);
 
    int formatIndex(int pos);
    QTextCharFormat format(int pos);
@@ -121,21 +120,19 @@ class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
    GUI_CS_SLOT_2(_q_dynamicPageCountSlot)
 
    GUI_CS_SLOT_1(Private, QSizeF _q_dynamicDocumentSizeSlot())
-   GUI_CS_SLOT_2(_q_dynamicDocumentSizeSlot)  
+   GUI_CS_SLOT_2(_q_dynamicDocumentSizeSlot)
 };
 
 class Q_GUI_EXPORT QTextObjectInterface
 {
  public:
-   virtual ~QTextObjectInterface() {}
+   virtual ~QTextObjectInterface();
+
    virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) = 0;
    virtual void drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc, int posInDocument,
-                           const QTextFormat &format) = 0;
+      const QTextFormat &format) = 0;
 };
 
 CS_DECLARE_INTERFACE(QTextObjectInterface, "com.copperspice.QTextObjectInterface")
-
-QT_END_NAMESPACE
-
 
 #endif // QABSTRACTTEXTDOCUMENTLAYOUT_H

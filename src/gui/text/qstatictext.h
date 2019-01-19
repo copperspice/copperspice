@@ -30,7 +30,7 @@
 #include <QtGui/qfont.h>
 #include <QtGui/qtextoption.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QStaticTextPrivate;
 
@@ -46,7 +46,10 @@ class Q_GUI_EXPORT QStaticText
    QStaticText();
    QStaticText(const QString &text);
    QStaticText(const QStaticText &other);
+
    ~QStaticText();
+
+
 
    void setText(const QString &text);
    QString text() const;
@@ -62,14 +65,24 @@ class Q_GUI_EXPORT QStaticText
 
    QSizeF size() const;
 
+   void swap(QStaticText &other) {
+      qSwap(data, other.data);
+   }
+
    void prepare(const QTransform &matrix = QTransform(), const QFont &font = QFont());
 
    void setPerformanceHint(PerformanceHint performanceHint);
    PerformanceHint performanceHint() const;
 
-   QStaticText &operator=(const QStaticText &);
    bool operator==(const QStaticText &) const;
    bool operator!=(const QStaticText &) const;
+
+   QStaticText &operator=(const QStaticText &);
+
+   QStaticText &operator=(QStaticText &&other) {
+      swap(other);
+      return *this;
+   }
 
  private:
    void detach();
@@ -77,9 +90,5 @@ class Q_GUI_EXPORT QStaticText
    QExplicitlySharedDataPointer<QStaticTextPrivate> data;
    friend class QStaticTextPrivate;
 };
-
-QT_END_NAMESPACE
-
-Q_DECLARE_METATYPE(QStaticText)
 
 #endif // QSTATICTEXT_H

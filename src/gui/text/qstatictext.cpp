@@ -76,7 +76,7 @@ QStaticText &QStaticText::operator=(const QStaticText &other)
 bool QStaticText::operator==(const QStaticText &other) const
 {
    return (data == other.data || (data->text == other.data->text
-               && data->font == other.data->font && data->textWidth == other.data->textWidth));
+            && data->font == other.data->font && data->textWidth == other.data->textWidth));
 }
 
 bool QStaticText::operator!=(const QStaticText &other) const
@@ -144,7 +144,7 @@ QString QStaticText::text() const
 void QStaticText::setPerformanceHint(PerformanceHint performanceHint)
 {
    if ((performanceHint == ModerateCaching && !data->useBackendOptimizations)
-         || (performanceHint == AggressiveCaching && data->useBackendOptimizations)) {
+      || (performanceHint == AggressiveCaching && data->useBackendOptimizations)) {
       return;
    }
    detach();
@@ -298,7 +298,7 @@ class DrawTextItemRecorder: public QPaintEngine
       m_items.append(currentItem);
    }
 
-   void drawPolygon(const QPointF *, int , PolygonDrawMode)  override {
+   void drawPolygon(const QPointF *, int, PolygonDrawMode)  override {
       /* intentionally empty */
    }
 
@@ -312,7 +312,7 @@ class DrawTextItemRecorder: public QPaintEngine
 
    void drawPixmap(const QRectF &, const QPixmap &, const QRectF &)  override {}
 
-   Type type() const  override {
+   virtual Type type() const override {
       return User;
    }
 
@@ -343,8 +343,7 @@ class DrawTextItemDevice: public QPaintDevice
 {
  public:
    DrawTextItemDevice(bool untransformedCoordinates, bool useBackendOptimizations) {
-      m_paintEngine = new DrawTextItemRecorder(untransformedCoordinates,
-            useBackendOptimizations);
+      m_paintEngine = new DrawTextItemRecorder(untransformedCoordinates, useBackendOptimizations);
    }
 
    ~DrawTextItemDevice() {
@@ -373,6 +372,12 @@ class DrawTextItemDevice: public QPaintDevice
             break;
          case PdmDepth:
             val = 24;
+            break;
+         case PdmDevicePixelRatio:
+            val = 1;
+            break;
+         case PdmDevicePixelRatioScaled:
+            val = devicePixelRatioFScale();
             break;
          default:
             val = 0;
@@ -405,13 +410,14 @@ class DrawTextItemDevice: public QPaintDevice
 void QStaticTextPrivate::paintText(const QPointF &topLeftPosition, QPainter *p)
 {
    bool preferRichText = textFormat == Qt::RichText
-                         || (textFormat == Qt::AutoText && Qt::mightBeRichText(text));
+      || (textFormat == Qt::AutoText && Qt::mightBeRichText(text));
 
-   if (!preferRichText) {
+   if (! preferRichText) {
       QTextLayout textLayout;
       textLayout.setText(text);
       textLayout.setFont(font);
       textLayout.setTextOption(textOption);
+      textLayout.setCacheEnabled(true);
 
       qreal leading = QFontMetricsF(font).leading();
       qreal height = -leading;
@@ -441,9 +447,9 @@ void QStaticTextPrivate::paintText(const QPointF &topLeftPosition, QPainter *p)
 #ifndef QT_NO_CSSPARSER
       QColor color = p->pen().color();
       document.setDefaultStyleSheet(QString::fromLatin1("body { color: #%1%2%3 }")
-                                    .formatArg(QString::number(color.red(), 16),   2, QLatin1Char('0'))
-                                    .formatArg(QString::number(color.green(), 16), 2, QLatin1Char('0'))
-                                    .formatArg(QString::number(color.blue(), 16),  2, QLatin1Char('0')));
+         .formatArg(QString::number(color.red(), 16),   2, QLatin1Char('0'))
+         .formatArg(QString::number(color.green(), 16), 2, QLatin1Char('0'))
+         .formatArg(QString::number(color.blue(), 16),  2, QLatin1Char('0')));
 #endif
       document.setDefaultFont(font);
       document.setDocumentMargin(0.0);
@@ -520,13 +526,15 @@ QStaticTextItem::~QStaticTextItem()
       delete m_userData;
    }
 
-   if (! m_fontEngine->ref.deref()) {
-      delete m_fontEngine;
-   }
+   setFontEngine(0);
 }
 
 void QStaticTextItem::setFontEngine(QFontEngine *fe)
 {
+   if (m_fontEngine == fe) {
+      return;
+   }
+
    if (m_fontEngine != 0 && !m_fontEngine->ref.deref()) {
       delete m_fontEngine;
    }

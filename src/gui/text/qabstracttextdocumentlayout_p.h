@@ -23,9 +23,7 @@
 #ifndef QABSTRACTTEXTDOCUMENTLAYOUT_P_H
 #define QABSTRACTTEXTDOCUMENTLAYOUT_P_H
 
-#include <QtCore/qhash.h>
-
-QT_BEGIN_NAMESPACE
+#include <qhash.h>
 
 struct QTextObjectHandler {
    QTextObjectHandler() : iface(0) {}
@@ -43,7 +41,7 @@ class QAbstractTextDocumentLayoutPrivate
    inline QAbstractTextDocumentLayoutPrivate()
       : paintDevice(0) {}
 
-   virtual ~QAbstractTextDocumentLayoutPrivate() {}
+   virtual ~QAbstractTextDocumentLayoutPrivate();
 
    inline void setDocument(QTextDocument *doc) {
       document = doc;
@@ -56,6 +54,7 @@ class QAbstractTextDocumentLayoutPrivate
    inline int _q_dynamicPageCountSlot() const {
       return q_func()->pageCount();
    }
+
    inline QSizeF _q_dynamicDocumentSizeSlot() const {
       return q_func()->documentSize();
    }
@@ -72,7 +71,5 @@ class QAbstractTextDocumentLayoutPrivate
    QAbstractTextDocumentLayout *q_ptr;
 
 };
-
-QT_END_NAMESPACE
 
 #endif // QABSTRACTTEXTDOCUMENTLAYOUT_P_H

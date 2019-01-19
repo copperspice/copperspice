@@ -22,13 +22,19 @@
 
 #include <qabstracttextdocumentlayout.h>
 #include <qtextformat.h>
+
 #include <qtextdocument_p.h>
 #include <qtextengine_p.h>
-
 #include <qabstracttextdocumentlayout_p.h>
 
-QT_BEGIN_NAMESPACE
 
+QAbstractTextDocumentLayoutPrivate::~QAbstractTextDocumentLayoutPrivate()
+{
+}
+QTextObjectInterface::~QTextObjectInterface()
+{
+
+}
 QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QTextDocument *document)
    : QObject(document), d_ptr(new QAbstractTextDocumentLayoutPrivate)
 {
@@ -38,11 +44,8 @@ QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QTextDocument *document
    d->setDocument(document);
 }
 
-/*!
-    \internal
-*/
 QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QAbstractTextDocumentLayoutPrivate &dd,
-      QTextDocument *document)
+   QTextDocument *document)
    : QObject(document), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
@@ -51,14 +54,11 @@ QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QAbstractTextDocumentLa
    d->setDocument(document);
 }
 
-/*!
-    \internal
-*/
 QAbstractTextDocumentLayout::~QAbstractTextDocumentLayout()
 {
 }
 
-void QAbstractTextDocumentLayout::registerHandler(int formatType, QObject *component)
+void QAbstractTextDocumentLayout::registerHandler(int objectType, QObject *component)
 {
    Q_D(QAbstractTextDocumentLayout);
 
@@ -72,12 +72,21 @@ void QAbstractTextDocumentLayout::registerHandler(int formatType, QObject *compo
    QTextObjectHandler h;
    h.iface = iface;
    h.component = component;
-   d->handlers.insert(formatType, h);
+   d->handlers.insert(objectType, h);
 }
 
-/*!
-    Returns a handler for objects of the given \a objectType.
-*/
+void QAbstractTextDocumentLayout::unregisterHandler(int objectType, QObject *component)
+{
+   Q_D(QAbstractTextDocumentLayout);
+
+   HandlerHash::iterator it = d->handlers.find(objectType);
+   if (it != d->handlers.end() && (!component || component == it->component)) {
+      if (component) {
+         disconnect(component, SIGNAL(destroyed(QObject *)), this, SLOT(_q_handlerDestroyed(QObject *)));
+      }
+      d->handlers.erase(it);
+   }
+}
 QTextObjectInterface *QAbstractTextDocumentLayout::handlerForObject(int objectType) const
 {
    Q_D(const QAbstractTextDocumentLayout);
@@ -90,19 +99,9 @@ QTextObjectInterface *QAbstractTextDocumentLayout::handlerForObject(int objectTy
    return handler.iface;
 }
 
-/*!
-    Sets the size of the inline object \a item corresponding to the text
-    \a format.
 
-    \a posInDocument specifies the position of the object within the document.
-
-    The default implementation resizes the \a item to the size returned by
-    the object handler's intrinsicSize() function. This function is called only
-    within Qt. Subclasses can reimplement this function to customize the
-    resizing of inline objects.
-*/
 void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int posInDocument,
-      const QTextFormat &format)
+   const QTextFormat &format)
 {
    Q_D(QAbstractTextDocumentLayout);
 
@@ -131,30 +130,12 @@ void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int
     \sa drawInlineObject()
 */
 void QAbstractTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posInDocument,
-      const QTextFormat &format)
+   const QTextFormat &format)
 {
-   Q_UNUSED(item);
-   Q_UNUSED(posInDocument);
-   Q_UNUSED(format);
 }
 
-/*!
-    \fn void QAbstractTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextFormat &format)
-
-    This function is called to draw the inline object, \a object, with the
-    given \a painter within the rectangle specified by \a rect using the
-    specified text \a format.
-
-    \a posInDocument specifies the position of the object within the document.
-
-    The default implementation calls drawObject() on the object handlers. This
-    function is called only within Qt. Subclasses can reimplement this function
-    to customize the drawing of inline objects.
-
-    \sa draw()
-*/
 void QAbstractTextDocumentLayout::drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
-      int posInDocument, const QTextFormat &format)
+   int posInDocument, const QTextFormat &format)
 {
    Q_UNUSED(item);
    Q_D(QAbstractTextDocumentLayout);
@@ -172,6 +153,7 @@ void QAbstractTextDocumentLayout::drawInlineObject(QPainter *p, const QRectF &re
 void QAbstractTextDocumentLayoutPrivate::_q_handlerDestroyed(QObject *obj)
 {
    HandlerHash::iterator it = handlers.begin();
+
    while (it != handlers.end())
       if ((*it).component == obj) {
          it = handlers.erase(it);
@@ -227,41 +209,36 @@ QString QAbstractTextDocumentLayout::anchorAt(const QPointF &pos) const
       return QString();
    }
 
+   // compensate for preedit in the hit text block
+   QTextBlock block = document()->firstBlock();
+   while (block.isValid()) {
+      QRectF blockBr = blockBoundingRect(block);
+      if (blockBr.contains(pos)) {
+         QTextLayout *layout = block.layout();
+         int relativeCursorPos = cursorPos - block.position();
+         const int preeditLength = layout ? layout->preeditAreaText().length() : 0;
+         if (preeditLength > 0 && relativeCursorPos > layout->preeditAreaPosition()) {
+            cursorPos -= qMin(cursorPos - layout->preeditAreaPosition(), preeditLength);
+         }
+         break;
+      }
+      block = block.next();
+   }
+
    QTextDocumentPrivate *pieceTable = qobject_cast<const QTextDocument *>(parent())->docHandle();
    QTextDocumentPrivate::FragmentIterator it = pieceTable->find(cursorPos);
    QTextCharFormat fmt = pieceTable->formatCollection()->charFormat(it->format);
    return fmt.anchorHref();
 }
 
-/*!
-    \fn QRectF QAbstractTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
 
-    Returns the bounding rectangle of \a frame.
-*/
-
-/*!
-    \fn QRectF QAbstractTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
-
-    Returns the bounding rectangle of \a block.
-*/
-
-/*!
-    Sets the paint device used for rendering the document's layout to the given
-    \a device.
-
-    \sa paintDevice()
-*/
 void QAbstractTextDocumentLayout::setPaintDevice(QPaintDevice *device)
 {
    Q_D(QAbstractTextDocumentLayout);
    d->paintDevice = device;
 }
 
-/*!
-    Returns the paint device used to render the document's layout.
 
-    \sa setPaintDevice()
-*/
 QPaintDevice *QAbstractTextDocumentLayout::paintDevice() const
 {
    Q_D(const QAbstractTextDocumentLayout);
@@ -286,4 +263,3 @@ QSizeF QAbstractTextDocumentLayout::_q_dynamicDocumentSizeSlot()
    return d->_q_dynamicDocumentSizeSlot();
 }
 
-QT_END_NAMESPACE

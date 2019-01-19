@@ -25,50 +25,54 @@
 
 #include <qfontengine_p.h>
 
-#ifndef QT_NO_PRINTER
 
-QT_BEGIN_NAMESPACE
 
 class QFontSubset
 {
  public:
-   QFontSubset(QFontEngine *fe, int obj_id = 0)
+   explicit QFontSubset(QFontEngine *fe, int obj_id = 0)
       : object_id(obj_id), noEmbed(false), fontEngine(fe), downloaded_glyphs(0), standard_font(false) {
       fontEngine->ref.ref();
+#ifndef QT_NO_PDF
       addGlyph(0);
+#endif
    }
+
    ~QFontSubset() {
-      if (!fontEngine->ref.deref() && fontEngine->cache_count == 0) {
+      if (! fontEngine->ref.deref()) {
          delete fontEngine;
       }
    }
 
    QByteArray toTruetype() const;
-   QByteArray toType1() const;
-   QByteArray type1AddedGlyphs() const;
+
+#ifndef QT_NO_PDF
    QByteArray widthArray() const;
    QByteArray createToUnicodeMap() const;
    QVector<int> getReverseMap() const;
-   QByteArray glyphName(unsigned int glyph, const QVector<int> reverseMap) const;
+
+   QByteArray glyphName(unsigned int glyph, const QVector<int> &reverseMap) const;
 
    static QByteArray glyphName(unsigned short unicode, bool symbol);
 
    int addGlyph(int index);
+#endif
+
    const int object_id;
    bool noEmbed;
    QFontEngine *fontEngine;
-   QList<int> glyph_indices;
+   QVector<int> glyph_indices;
    mutable int downloaded_glyphs;
    mutable bool standard_font;
+
    int nGlyphs() const {
       return glyph_indices.size();
    }
+
    mutable QFixed emSquare;
    mutable QVector<QFixed> widths;
 };
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_PRINTER
 
-#endif // QFONTSUBSET_P_H
+#endif
