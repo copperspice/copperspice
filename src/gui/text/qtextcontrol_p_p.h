@@ -104,19 +104,19 @@ class QTextControlPrivate
 
    void keyPressEvent(QKeyEvent *e);
    void mousePressEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
-         Qt::MouseButtons buttons, const QPoint &globalPos);
+      Qt::MouseButtons buttons, const QPoint &globalPos);
 
    void mouseMoveEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
-         Qt::MouseButtons buttons, const QPoint &globalPos);
+      Qt::MouseButtons buttons, const QPoint &globalPos);
 
    void mouseReleaseEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
-         Qt::MouseButtons buttons, const QPoint &globalPos);
+      Qt::MouseButtons buttons, const QPoint &globalPos);
 
    void mouseDoubleClickEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
-         Qt::MouseButtons buttons, const QPoint &globalPos);
+      Qt::MouseButtons buttons, const QPoint &globalPos);
 
    bool sendMouseEventToInputContext(QEvent *e,  QEvent::Type eventType, Qt::MouseButton button, const QPointF &pos,
-         Qt::KeyboardModifiers modifiers, Qt::MouseButtons buttons, const QPoint &globalPos);
+      Qt::KeyboardModifiers modifiers, Qt::MouseButtons buttons, const QPoint &globalPos);
 
    void contextMenuEvent(const QPoint &screenPos, const QPointF &docPos, QWidget *contextWidget);
    void focusEvent(QFocusEvent *e);

@@ -24,39 +24,44 @@
 #include <qevent.h>
 
 QInputControl::QInputControl(Type type, QObject *parent)
-    : QObject(parent), m_type(type)
+   : QObject(parent), m_type(type)
 {
 }
 
 bool QInputControl::isAcceptableInput(const QKeyEvent *event) const
 {
-    const QString text = event->text();
-    if (text.isEmpty())
-        return false;
+   const QString text = event->text();
+   if (text.isEmpty()) {
+      return false;
+   }
 
-    const QChar c = text.at(0);
+   const QChar c = text.at(0);
 
-    // Formatting characters such as ZWNJ, ZWJ, RLM, etc. This needs to go before the
-    // next test, since CTRL+SHIFT is sometimes used to input it on Windows.
-    if (c.category() == QChar::Other_Format)
-        return true;
+   // Formatting characters such as ZWNJ, ZWJ, RLM, etc. This needs to go before the
+   // next test, since CTRL+SHIFT is sometimes used to input it on Windows.
+   if (c.category() == QChar::Other_Format) {
+      return true;
+   }
 
-    // QTBUG-35734: ignore Ctrl/Ctrl+Shift; accept only AltGr (Alt+Ctrl) on German keyboards
-    if (event->modifiers() == Qt::ControlModifier
-            || event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
-        return false;
-    }
+   // QTBUG-35734: ignore Ctrl/Ctrl+Shift; accept only AltGr (Alt+Ctrl) on German keyboards
+   if (event->modifiers() == Qt::ControlModifier
+      || event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+      return false;
+   }
 
-    if (c.isPrint())
-        return true;
+   if (c.isPrint()) {
+      return true;
+   }
 
-    if (c.category() == QChar::Other_PrivateUse)
-        return true;
+   if (c.category() == QChar::Other_PrivateUse) {
+      return true;
+   }
 
-    if (m_type == TextEdit && c == QLatin1Char('\t'))
-        return true;
+   if (m_type == TextEdit && c == QLatin1Char('\t')) {
+      return true;
+   }
 
-    return false;
+   return false;
 }
 
 

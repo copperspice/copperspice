@@ -26,8 +26,6 @@
 #include <QtGui/qfont.h>
 #include <QtCore/qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_GUI_EXPORT QFontInfo
 {
  public:
@@ -37,6 +35,10 @@ class Q_GUI_EXPORT QFontInfo
 
    QFontInfo &operator=(const QFontInfo &);
 
+   void swap(QFontInfo &other) {
+      qSwap(d, other.d);
+   }
+
    QString family() const;
    QString styleName() const;
    int pixelSize() const;
@@ -45,23 +47,23 @@ class Q_GUI_EXPORT QFontInfo
    bool italic() const;
    QFont::Style style() const;
    int weight() const;
-   inline bool bold() const {
+
+   bool bold() const {
       return weight() > QFont::Normal;
    }
+
    bool underline() const;
    bool overline() const;
    bool strikeOut() const;
    bool fixedPitch() const;
    QFont::StyleHint styleHint() const;
-   bool rawMode() const;
+
 
    bool exactMatch() const;
 
  private:
    QExplicitlySharedDataPointer<QFontPrivate> d;
 };
-
-QT_END_NAMESPACE
 
 
 #endif // QFONTINFO_H

@@ -23,48 +23,36 @@
 #ifndef QFONTENGINEGLYPHCACHE_P_H
 #define QFONTENGINEGLYPHCACHE_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
-#include <QtCore/qvarlengtharray.h>
+#include <qglobal.h>
+#include <qatomic.h>
+#include <qvarlengtharray.h>
+
 #include <qfont_p.h>
-
-#ifdef Q_OS_WIN
-#   include <QtCore/qt_windows.h>
-#endif
-
-#ifdef Q_OS_MAC
-#   include <qt_mac_p.h>
-#   include <QtCore/qmap.h>
-#   include <QtCore/qcache.h>
-#   include <qcore_mac_p.h>
-#endif
-
-QT_BEGIN_NAMESPACE
+#include <qfontengine_p.h>
 
 class QFontEngineGlyphCache: public QSharedData
 {
  public:
-   enum Type {
-      Raster_RGBMask,
-      Raster_A8,
-      Raster_Mono,
-      Raster_ARGB
-   };
-
-   QFontEngineGlyphCache(const QTransform &matrix, Type type) : m_transform(matrix), m_type(type) { }
-
-   virtual ~QFontEngineGlyphCache() { }
-
-   Type cacheType() const {
-      return m_type;
+   QFontEngineGlyphCache(QFontEngine::GlyphFormat format, const QTransform &matrix)
+      : m_format(format), m_transform(matrix) {
+      Q_ASSERT(m_format != QFontEngine::Format_None);
    }
 
-   QTransform m_transform;
-   QFontEngineGlyphCache::Type m_type;
-};
-typedef QHash<void *, QList<QFontEngineGlyphCache *> > GlyphPointerHash;
-typedef QHash<int, QList<QFontEngineGlyphCache *> > GlyphIntHash;
+   virtual ~QFontEngineGlyphCache();
 
-QT_END_NAMESPACE
+   QFontEngine::GlyphFormat glyphFormat() const {
+      return m_format;
+   }
+
+   const QTransform &transform() const {
+      return m_transform;
+   }
+
+   QFontEngine::GlyphFormat m_format;
+   QTransform m_transform;
+};
+
+typedef QHash<void *, QList<QFontEngineGlyphCache *>> GlyphPointerHash;
+typedef QHash<int, QList<QFontEngineGlyphCache *>> GlyphIntHash;
 
 #endif

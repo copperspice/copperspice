@@ -31,15 +31,12 @@
 #include <QtGui/qtextobject.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QTextDocument;
 class QSyntaxHighlighterPrivate;
 class QTextCharFormat;
 class QFont;
 class QColor;
 class QTextBlockUserData;
-class QTextEdit;
 
 class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 {
@@ -47,9 +44,8 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
    Q_DECLARE_PRIVATE(QSyntaxHighlighter)
 
  public:
-   QSyntaxHighlighter(QObject *parent);
-   QSyntaxHighlighter(QTextDocument *parent);
-   QSyntaxHighlighter(QTextEdit *parent);
+   explicit QSyntaxHighlighter(QObject *parent);
+   explicit QSyntaxHighlighter(QTextDocument *parent);
    virtual ~QSyntaxHighlighter();
 
    void setDocument(QTextDocument *doc);
@@ -57,6 +53,7 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 
    GUI_CS_SLOT_1(Public, void rehighlight())
    GUI_CS_SLOT_2(rehighlight)
+
    GUI_CS_SLOT_1(Public, void rehighlightBlock(const QTextBlock &block))
    GUI_CS_SLOT_2(rehighlightBlock)
 
@@ -89,8 +86,6 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
    GUI_CS_SLOT_2(_q_delayedRehighlight)
 
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SYNTAXHIGHLIGHTER
 

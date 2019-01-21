@@ -23,10 +23,8 @@
 #ifndef QTEXTLIST_H
 #define QTEXTLIST_H
 
-#include <QtGui/qtextobject.h>
-#include <QtCore/qobject.h>
-
-QT_BEGIN_NAMESPACE
+#include <qtextobject.h>
+#include <qobject.h>
 
 class QTextListPrivate;
 class QTextCursor;
@@ -56,6 +54,7 @@ class Q_GUI_EXPORT QTextList : public QTextBlockGroup
    void add(const QTextBlock &block);
 
    inline void setFormat(const QTextListFormat &format);
+
    QTextListFormat format() const {
       return QTextObject::format().toListFormat();
    }
@@ -70,6 +69,5 @@ inline void QTextList::setFormat(const QTextListFormat &aformat)
    QTextObject::setFormat(aformat);
 }
 
-QT_END_NAMESPACE
 
 #endif // QTEXTLIST_H

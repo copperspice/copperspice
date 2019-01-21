@@ -26,8 +26,6 @@
 #include <qtextobject_p.h>
 #include <qtextdocument_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTextTablePrivate : public QTextFramePrivate
 {
    Q_DECLARE_PUBLIC(QTextTable)
@@ -39,16 +37,17 @@ class QTextTablePrivate : public QTextFramePrivate
    ~QTextTablePrivate();
 
    static QTextTable *createTable(QTextDocumentPrivate *, int pos, int rows, int cols,
-                                  const QTextTableFormat &tableFormat);
+      const QTextTableFormat &tableFormat);
 
-   void fragmentAdded(const QChar &type, uint fragment)  override;
-   void fragmentRemoved(const QChar &type, uint fragment)  override;
+   void fragmentAdded(QChar type, uint fragment)  override;
+   void fragmentRemoved(QChar type, uint fragment)  override;
 
    void update() const;
 
    int findCellIndex(int fragment) const;
 
    QList<int> cells;
+
    // symmetric to cells array and maps to indecs in grid,
    // used for fast-lookup for row/column by fragment
    mutable QVector<int> cellIndices;
@@ -59,6 +58,5 @@ class QTextTablePrivate : public QTextFramePrivate
    bool blockFragmentUpdates;
 };
 
-QT_END_NAMESPACE
 
 #endif // QTEXTTABLE_P_H

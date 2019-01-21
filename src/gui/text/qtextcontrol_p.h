@@ -36,8 +36,6 @@
 #include <qmimedata.h>
 #include <qinputcontrol_p.h>
 
-
-
 class QAbstractScrollArea;
 class QMenu;
 class QStyleSheet;
@@ -48,7 +46,7 @@ class QEvent;
 class QTimerEvent;
 class QPagedPaintDevice;
 
-class Q_GUI_EXPORT QTextControl : public QObject
+class Q_GUI_EXPORT QTextControl : public QInputControl
 {
    GUI_CS_OBJECT(QTextControl)
    Q_DECLARE_PRIVATE(QTextControl)
@@ -100,11 +98,8 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    bool find(const QString &exp, QTextDocument::FindFlags options = 0);
 
-   // broom - fix regex
    bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = 0);
-   inline QString toPlainText() const {
-      return document()->toPlainText();
-   }
+   QString toPlainText() const;
 
 #ifndef QT_NO_TEXTHTMLPARSER
    QString toHtml() const;
@@ -317,8 +312,9 @@ class Q_GUI_EXPORT QTextControl : public QObject
    GUI_CS_SLOT_1(Private, void _q_documentLayoutChanged())
    GUI_CS_SLOT_2(_q_documentLayoutChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_contentsChanged(int, int, int))
-   GUI_CS_SLOT_2(_q_contentsChanged)};
+   GUI_CS_SLOT_1(Private, void _q_contentsChanged(int arg1, int arg2, int arg3))
+   GUI_CS_SLOT_2(_q_contentsChanged)
+};
 
 
 #ifndef QT_NO_CONTEXTMENU

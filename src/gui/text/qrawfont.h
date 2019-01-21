@@ -33,9 +33,6 @@
 #include <QtGui/qfontdatabase.h>
 
 #if !defined(QT_NO_RAWFONT)
-
-QT_BEGIN_NAMESPACE
-
 class QRawFontPrivate;
 
 class Q_GUI_EXPORT QRawFont
@@ -47,15 +44,31 @@ class Q_GUI_EXPORT QRawFont
       SubPixelAntialiasing
    };
 
+   enum LayoutFlag {
+      SeparateAdvances = 0,
+      KernedAdvances = 1,
+      UseDesignMetrics = 2
+   };
+
+   using LayoutFlags = QFlags<LayoutFlag>;
+
    QRawFont();
-   QRawFont(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
-   QRawFont(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
+   QRawFont(const QString &fileName, qreal pixelSize,
+      QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
+   QRawFont(const QByteArray &fontData, qreal pixelSize,
+      QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
    QRawFont(const QRawFont &other);
+
    ~QRawFont();
 
    bool isValid() const;
 
    QRawFont &operator=(const QRawFont &other);
+
+   QRawFont &operator=(QRawFont &&other) {
+      swap(other);
+      return *this;
+   }
 
    bool operator==(const QRawFont &other) const;
    inline bool operator!=(const QRawFont &other) const {
@@ -69,14 +82,19 @@ class Q_GUI_EXPORT QRawFont
    int weight() const;
 
    QVector<quint32> glyphIndexesForString(const QString &text) const;
-   QVector<QPointF> advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes) const;
+
+   inline QVector<QPointF> advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes) const;
+   inline QVector<QPointF> advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes, LayoutFlags layoutFlags) const;
+
    bool glyphIndexesForChars(QStringView str, quint32 *glyphIndexes, int *numGlyphs) const;
    bool advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *advances, int numGlyphs) const;
+   bool advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *advances, int numGlyphs, LayoutFlags layoutFlags) const;
 
    QImage alphaMapForGlyph(quint32 glyphIndex, AntialiasingType antialiasingType = SubPixelAntialiasing,
-                           const QTransform &transform = QTransform()) const;
+      const QTransform &transform = QTransform()) const;
 
    QPainterPath pathForGlyph(quint32 glyphIndex) const;
+   QRectF boundingRect(quint32 glyphIndex) const;
 
    void setPixelSize(qreal pixelSize);
    qreal pixelSize() const;
@@ -89,12 +107,18 @@ class Q_GUI_EXPORT QRawFont
    qreal xHeight() const;
    qreal averageCharWidth() const;
    qreal maxCharWidth() const;
+   qreal lineThickness() const;
+   qreal underlinePosition() const;
 
    qreal unitsPerEm() const;
 
    void loadFromFile(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
    void loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
+
+   void swap(QRawFont &other) {
+      qSwap(d, other.d);
+   }
 
    bool supportsCharacter(quint32 ucs4) const;
    bool supportsCharacter(QChar character) const;
@@ -106,11 +130,28 @@ class Q_GUI_EXPORT QRawFont
 
  private:
    friend class QRawFontPrivate;
+   friend class QTextLayout;
+   friend class QTextEngine;
+
    QExplicitlySharedDataPointer<QRawFontPrivate> d;
 };
 
-QT_END_NAMESPACE
+Q_DECLARE_OPERATORS_FOR_FLAGS(QRawFont::LayoutFlags)
+inline QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes,
+   QRawFont::LayoutFlags layoutFlags) const
+{
+   QVector<QPointF> advances(glyphIndexes.size());
+
+   if (advancesForGlyphIndexes(glyphIndexes.constData(), advances.data(), glyphIndexes.size(), layoutFlags)) {
+      return advances;
+   }
+   return QVector<QPointF>();
+}
+
+inline QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes) const
+{
+   return advancesForGlyphIndexes(glyphIndexes, QRawFont::SeparateAdvances);
+}
 
 #endif // QT_NO_RAWFONT
-
-#endif // QRAWFONT_H
+#endif

@@ -55,8 +55,19 @@ class Q_GUI_EXPORT QTextCursor
    explicit QTextCursor(const QTextBlock &block);
    explicit QTextCursor(QTextCursorPrivate *d);
    QTextCursor(const QTextCursor &cursor);
-   QTextCursor &operator=(const QTextCursor &other);
+
    ~QTextCursor();
+
+   QTextCursor &operator=(const QTextCursor &other);
+
+   QTextCursor &operator=(QTextCursor &&other) {
+      swap(other);
+      return *this;
+   }
+
+   void swap(QTextCursor &other) {
+      qSwap(d, other.d);
+   }
 
    bool isNull() const;
 
@@ -206,11 +217,12 @@ class Q_GUI_EXPORT QTextCursor
 
  private:
    QSharedDataPointer<QTextCursorPrivate> d;
+   friend class QTextCursorPrivate;
+   friend class QTextDocumentPrivate;
    friend class QTextDocumentFragmentPrivate;
    friend class QTextCopyHelper;
    friend class QTextControlPrivate;
 };
 
-QT_END_NAMESPACE
 
 #endif // QTEXTCURSOR_H

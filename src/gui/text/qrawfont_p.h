@@ -25,15 +25,11 @@
 
 #include <qrawfont.h>
 #include <qfontengine_p.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qthreadstorage.h>
-
-#if !defined(QT_NO_RAWFONT)
-
-QT_BEGIN_NAMESPACE
+#include <qthread.h>
+#include <qthreadstorage.h>
 
 namespace {
-   class CustomFontFileLoader;
+class CustomFontFileLoader;
 }
 
 class QRawFontPrivate
@@ -43,19 +39,12 @@ class QRawFontPrivate
       : fontEngine(0)
       , hintingPreference(QFont::PreferDefaultHinting)
       , thread(0)
-#if defined(Q_OS_WIN)
-      , fontHandle(NULL)
-#endif
    {}
 
    QRawFontPrivate(const QRawFontPrivate &other)
       : fontEngine(other.fontEngine)
       , hintingPreference(other.hintingPreference)
-      , thread(other.thread)
-#if defined(Q_OS_WIN)
-      , fontHandle(NULL)
-#endif
-   {
+      , thread(other.thread) {
       if (fontEngine != 0) {
          fontEngine->ref.ref();
       }
@@ -66,14 +55,44 @@ class QRawFontPrivate
       cleanUp();
    }
 
+   inline void cleanUp() {
+      setFontEngine(0);
+      hintingPreference = QFont::PreferDefaultHinting;
+   }
    inline bool isValid() const {
-      Q_ASSERT(thread == 0 || thread == QThread::currentThread());
+      Q_ASSERT(fontEngine == 0 || thread == QThread::currentThread());
       return fontEngine != 0;
    }
 
-   void cleanUp();
-   void platformCleanUp();
-   void platformLoadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
+   inline void setFontEngine(QFontEngine *engine) {
+      Q_ASSERT(fontEngine == 0 || thread == QThread::currentThread());
+
+      if (fontEngine == engine) {
+         return;
+      }
+
+      if (fontEngine != 0) {
+         if (!fontEngine->ref.deref()) {
+            delete fontEngine;
+         }
+
+         thread = 0;
+
+      }
+
+      fontEngine = engine;
+
+      if (fontEngine != 0) {
+         fontEngine->ref.ref();
+
+         thread = QThread::currentThread();
+         Q_ASSERT(thread);
+
+      }
+   }
+   void loadFromData(const QByteArray &fontData,
+      qreal pixelSize,
+      QFont::HintingPreference hintingPreference);
 
    static QRawFontPrivate *get(const QRawFont &font) {
       return font.d.data();
@@ -81,16 +100,12 @@ class QRawFontPrivate
 
    QFontEngine *fontEngine;
    QFont::HintingPreference hintingPreference;
-   QThread *thread;
+
    QAtomicInt ref;
 
-#if defined(Q_OS_WIN)
-   HANDLE fontHandle;
-#endif
+ private:
+   QThread *thread;
+
 };
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_RAWFONT
-
-#endif // QRAWFONTPRIVATE_P_H
+#endif

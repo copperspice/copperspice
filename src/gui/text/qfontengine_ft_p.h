@@ -28,26 +28,26 @@
 #ifndef QT_NO_FREETYPE
 
 #include <ft2build.h>
+
+
 #include FT_FREETYPE_H
 
-#if defined(Q_WS_X11)
-#include <qt_x11_p.h>
+#ifndef Q_OS_WIN
+#include <unistd.h>
 #endif
 
-#include <unistd.h>
-#include <fontconfig/fontconfig.h>
 #include <qmutex.h>
-#include <harfbuzz-shaper.h>
-
-QT_BEGIN_NAMESPACE
 
 class QFontEngineFTRawFont;
+class QFontconfigDatabase;
 
 /*
  * This struct represents one font file on disk (like Arial.ttf) and is shared between all the font engines
  * that show this font file (at different pixel sizes).
  */
-struct QFreetypeFace {
+class QFreetypeFace
+{
+ public:
    void computeSize(const QFontDef &fontDef, int *xsize, int *ysize, bool *outline_drawing);
    QFontEngine::Properties properties() const;
    bool getSfntTable(uint tag, uchar *buffer, uint *length) const;
@@ -65,9 +65,6 @@ struct QFreetypeFace {
    }
 
    FT_Face face;
-   HB_Face hbFace;
-
-   FcCharSet *charset;
 
    int xsize; // 26.6
    int ysize; // 26.6
@@ -80,21 +77,28 @@ struct QFreetypeFace {
 
    int fsType() const;
 
-   HB_Error getPointInOutline(HB_Glyph glyph, int flags, hb_uint32 point, HB_Fixed *xpos, HB_Fixed *ypos,
-                              hb_uint32 *nPoints);
-
+   int getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints);
    static void addGlyphToPath(FT_Face face, FT_GlyphSlot g, const QFixedPoint &point, QPainterPath *path, FT_Fixed x_scale,
-                              FT_Fixed y_scale);
-   static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path, bool = false);
+      FT_Fixed y_scale);
+   static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path);
 
  private:
-   friend class QFontEngineFT;
-   friend class QScopedPointerDeleter<QFreetypeFace>;
+
    QFreetypeFace() : _lock(QMutex::Recursive) {}
    ~QFreetypeFace() {}
+
+   void cleanup();
+
    QAtomicInt ref;
    QMutex _lock;
    QByteArray fontData;
+
+   void *hbFace;
+   qt_destroy_func_ptr hbFace_destroy_func;
+
+   friend class QFontEngineFT;
+   friend class QtFreetypeData;
+   friend struct QScopedPointerDeleter<QFreetypeFace>;
 };
 
 class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
@@ -104,6 +108,7 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
    /* we don't cache glyphs that are too large anyway, so we can make this struct rather small */
    struct Glyph {
       ~Glyph();
+
       short linearAdvance;
       unsigned char width;
       unsigned char height;
@@ -112,21 +117,10 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
       signed char advance;
       signed char format;
       uchar *data;
-      unsigned int uploadedToServer : 1;
    };
 
-   enum SubpixelAntialiasingType {
-      Subpixel_None,
-      Subpixel_RGB,
-      Subpixel_BGR,
-      Subpixel_VRGB,
-      Subpixel_VBGR
-   };
-
-#if defined(Q_WS_X11) && !defined(QT_NO_XRENDER)
-   typedef XGlyphInfo GlyphInfo;
-#else
    struct GlyphInfo {
+      int             linearAdvance;
       unsigned short  width;
       unsigned short  height;
       short           x;
@@ -134,7 +128,6 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
       short           xOff;
       short           yOff;
    };
-#endif
 
    struct GlyphAndSubPixelPosition {
       GlyphAndSubPixelPosition(glyph_t g, QFixed spp) : glyph(g), subPixelPosition(spp) {}
@@ -151,7 +144,7 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
       QGlyphSet();
       ~QGlyphSet();
       FT_Matrix transformationMatrix;
-      unsigned long id; // server sided id, GlyphSet for X11
+
       bool outline_drawing;
 
       void removeGlyphFromCache(glyph_t index, QFixed subPixelPosition);
@@ -162,10 +155,20 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
       }
 
       inline QFontEngineFT::Glyph *getGlyph(glyph_t index, QFixed subPixelPosition = 0) const;
+
       void setGlyph(glyph_t index, QFixed spp, Glyph *glyph);
+
+      inline bool isGlyphMissing(glyph_t index) const {
+         return missing_glyphs.contains(index);
+      }
+
+      inline void setGlyphMissing(glyph_t index) const {
+         missing_glyphs.insert(index);
+      }
 
     private:
       mutable QHash<GlyphAndSubPixelPosition, Glyph *> glyph_data; // maps from glyph index to glyph data
+      mutable QSet<glyph_t> missing_glyphs;
       mutable Glyph *fast_glyph_data[256]; // for fast lookup of glyphs < 256
       mutable int fast_glyph_count;
    };
@@ -188,47 +191,62 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
    QFixed averageCharWidth() const override;
 
    qreal maxCharWidth() const override;
-   qreal minLeftBearing() const override;
-   qreal minRightBearing() const override;
+
    QFixed lineThickness() const override;
    QFixed underlinePosition() const override;
 
-   void doKerning(QGlyphLayout *, QTextEngine::ShaperFlags) const override;
+   glyph_t glyphIndex(char32_t ch) const override;
+   void doKerning(QGlyphLayout *, ShaperFlags) const override;
 
-   bool canRender(QStringView str) override;
+   void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) override;
 
-   const QString &fontEngineName() const override {
-      static QString retval("freetype");
+   const QString &fontEngineName() const {
+      static QString retval = "freetype";
       return retval;
    }
 
-   Type type() const override {
-      return QFontEngine::Freetype;
-   }
+   bool supportsTransformation(const QTransform &transform) const override;
 
-   void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) override;
-   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, QTextItem::RenderFlags flags) override;
-   void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path, QTextItem::RenderFlags flags) override;
+   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
+      QPainterPath *path, QTextItem::RenderFlags flags) override;
 
-   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
+   void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs,
+      QPainterPath *path, QTextItem::RenderFlags flags) override;
+
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QFontEngine::ShaperFlags flags) const override;
 
    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) override;
    glyph_metrics_t boundingBox(glyph_t glyph) override;
    glyph_metrics_t boundingBox(glyph_t glyph, const QTransform &matrix) override;
 
-   void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags flags) const override;
+   void recalcAdvances(QGlyphLayout *glyphs, QFontEngine::ShaperFlags flags) const override;
 
    QImage alphaMapForGlyph(glyph_t g) override {
       return alphaMapForGlyph(g, 0);
    }
 
    QImage alphaMapForGlyph(glyph_t, QFixed) override;
-   QImage alphaRGBMapForGlyph(glyph_t, QFixed subPixelPosition, int margin, const QTransform &t) override;
+
+   QImage alphaMapForGlyph(glyph_t glyph, QFixed subPixelPosition, const QTransform &t) override;
+
+   QImage alphaRGBMapForGlyph(glyph_t, QFixed subPixelPosition, const QTransform &t) override;
 
    glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition, const QTransform &matrix,
-                  QFontEngine::GlyphFormat format) override;
+      QFontEngine::GlyphFormat format) override;
+
+   QImage *lockedAlphaMapForGlyph(glyph_t glyph, QFixed subPixelPosition, GlyphFormat neededFormat, const QTransform &t,
+      QPoint *offset) override;
+
+   bool hasInternalCaching() const override {
+      return cacheEnabled;
+   }
+   void unlockAlphaMapForGlyph() override;
 
    void removeGlyphFromCache(glyph_t glyph) override;
+   int glyphMargin(QFontEngine::GlyphFormat format) override {
+      return 0;
+   }
+
    int glyphCount() const override;
 
    enum Scaling {
@@ -254,87 +272,60 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
    }
 
    Glyph *loadGlyph(uint glyph, QFixed subPixelPosition, GlyphFormat format = Format_None,
-                  bool fetchMetricsOnly = false) const {
-      return loadGlyph(&defaultGlyphSet, glyph, subPixelPosition, format, fetchMetricsOnly);
+      bool fetchMetricsOnly = false) const {
+
+      return loadGlyph(cacheEnabled ? &defaultGlyphSet : 0, glyph, subPixelPosition, format, fetchMetricsOnly);
    }
 
    Glyph *loadGlyph(QGlyphSet *set, uint glyph, QFixed subPixelPosition, GlyphFormat = Format_None,
-                  bool fetchMetricsOnly = false) const;
+      bool fetchMetricsOnly = false) const;
+   Glyph *loadGlyphFor(glyph_t g, QFixed subPixelPosition, GlyphFormat format, const QTransform &t, bool fetchBoundingBox = false);
+   QGlyphSet *loadGlyphSet(const QTransform &matrix);
 
-   QGlyphSet *defaultGlyphs() {
-      return &defaultGlyphSet;
-   }
-
-   GlyphFormat defaultGlyphFormat() const {
-      return defaultFormat;
-   }
-
-   Glyph *cachedGlyph(glyph_t g) const {
-      return defaultGlyphSet.getGlyph(g, 0);
-   }
-
-   QGlyphSet *loadTransformedGlyphSet(const QTransform &matrix);
-   QFixed subPixelPositionForX(QFixed x);
-
-   bool loadGlyphs(QGlyphSet *gs, const glyph_t *glyphs, int num_glyphs, const QFixedPoint *positions,
-                  GlyphFormat format = Format_Render);
-
-#if defined(Q_WS_QWS)
-   virtual void draw(QPaintEngine * /*p*/, qreal /*x*/, qreal /*y*/, const QTextItemInt & /*si*/) {}
-#endif
 
    QFontEngineFT(const QFontDef &fd);
    virtual ~QFontEngineFT();
 
    bool init(FaceId faceId, bool antiaalias, GlyphFormat defaultFormat = Format_None,
-                  const QByteArray &fontData = QByteArray());
+      const QByteArray &fontData = QByteArray());
 
    bool init(FaceId faceId, bool antialias, GlyphFormat format, QFreetypeFace *freetypeFace);
 
-   HB_Error getPointInOutline(HB_Glyph glyph, int flags, hb_uint32 point, HB_Fixed *xpos,
-                  HB_Fixed *ypos, hb_uint32 *nPoints) override;
+   int getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints) override;
 
-   enum HintStyle {
-      HintNone,
-      HintLight,
-      HintMedium,
-      HintFull
-   };
-
-   void setDefaultHintStyle(HintStyle style);
+   void setQtDefaultHintStyle(QFont::HintingPreference hintingPreference);
+   void setDefaultHintStyle(HintStyle style) override;
 
    QFontEngine *cloneWithSize(qreal pixelSize) const override;
+   Qt::HANDLE handle() const override;
+
    bool initFromFontEngine(const QFontEngineFT *fontEngine);
 
    HintStyle defaultHintStyle() const {
       return default_hint_style;
    }
+
  protected:
-
-   void freeGlyphSets();
-
-   virtual bool uploadGlyphToServer(QGlyphSet *set, uint glyphid, Glyph *g, GlyphInfo *info, int glyphDataSize) const;
-   virtual unsigned long allocateServerGlyphSet();
-   virtual void freeServerGlyphSet(unsigned long id);
-
    QFreetypeFace *freetype;
-   int default_load_flags;
-
+   mutable int default_load_flags;
 
    HintStyle default_hint_style;
 
    bool antialias;
    bool transform;
    bool embolden;
+   bool obliquen;
+
    SubpixelAntialiasingType subpixelType;
    int lcdFilterType;
-   bool canUploadGlyphsToServer;
+
    bool embeddedbitmap;
+   bool cacheEnabled;
+   bool forceAutoHint;
 
  private:
-   friend class QFontEngineFTRawFont;
-
    int loadFlags(QGlyphSet *set, GlyphFormat format, int flags, bool &hsubpixel, int &vfactor) const;
+   bool shouldUseDesignMetrics(ShaperFlags flags) const;
 
    GlyphFormat defaultFormat;
    FT_Matrix matrix;
@@ -347,13 +338,17 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
    int xsize;
    int ysize;
 
-   mutable QFixed lbearing;
-   mutable QFixed rbearing;
    QFixed line_thickness;
    QFixed underline_position;
 
    FT_Size_Metrics metrics;
    mutable bool kerning_pairs_loaded;
+
+   friend class QFontEngineFTRawFont;
+   friend class QFontconfigDatabase;
+   friend class QBasicFontDatabase;
+   friend class QCoreTextFontDatabase;
+   friend class QFontEngineMultiFontConfig;
 };
 
 inline uint qHash(const QFontEngineFT::GlyphAndSubPixelPosition &g)
@@ -369,9 +364,8 @@ inline QFontEngineFT::Glyph *QFontEngineFT::QGlyphSet::getGlyph(glyph_t index, Q
    return glyph_data.value(GlyphAndSubPixelPosition(index, subPixelPosition));
 }
 
-
-QT_END_NAMESPACE
+extern FT_Library qt_getFreetype();
 
 #endif // QT_NO_FREETYPE
 
-#endif // QFONTENGINE_FT_P_H
+#endif

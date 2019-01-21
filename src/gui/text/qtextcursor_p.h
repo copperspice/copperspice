@@ -29,7 +29,6 @@
 #include <qtextformat_p.h>
 #include <qtextobject.h>
 
-QT_BEGIN_NAMESPACE
 
 class QTextCursorPrivate : public QSharedData
 {
@@ -45,7 +44,7 @@ class QTextCursorPrivate : public QSharedData
 
    void remove();
    void clearCells(QTextTable *table, int startRow, int startCol, int numRows, int numCols,
-                   QTextUndoCommand::Operation op);
+      QTextUndoCommand::Operation op);
    inline bool setPosition(int newPosition) {
       Q_ASSERT(newPosition >= 0 && newPosition < priv->length());
       bool moved = position != newPosition;
@@ -79,6 +78,9 @@ class QTextCursorPrivate : public QSharedData
    void setCharFormat(const QTextCharFormat &format, QTextDocumentPrivate::FormatChangeMode changeMode);
 
    void aboutToRemoveCell(int from, int to);
+   static QTextCursor fromPosition(QTextDocumentPrivate *d, int pos) {
+      return QTextCursor(d, pos);
+   }
 
    QTextDocumentPrivate *priv;
    qreal x;
@@ -90,7 +92,5 @@ class QTextCursorPrivate : public QSharedData
    uint keepPositionOnInsert : 1;
    uint changed : 1;
 };
-
-QT_END_NAMESPACE
 
 #endif // QTEXTCURSOR_P_H

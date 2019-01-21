@@ -72,16 +72,16 @@ QTextCursorPrivate::~QTextCursorPrivate()
 }
 
 QTextCursorPrivate::AdjustResult QTextCursorPrivate::adjustPosition(int positionOfChange, int charsAddedOrRemoved,
-      QTextUndoCommand::Operation op)
+   QTextUndoCommand::Operation op)
 {
    QTextCursorPrivate::AdjustResult result = QTextCursorPrivate::CursorMoved;
    // not(!) <= , so that inserting text adjusts the cursor correctly
    if (position < positionOfChange
-         || (position == positionOfChange
-             && (op == QTextUndoCommand::KeepCursor
-                 || keepPositionOnInsert)
-            )
-      ) {
+      || (position == positionOfChange
+         && (op == QTextUndoCommand::KeepCursor
+            || keepPositionOnInsert)
+      )
+   ) {
       result = CursorUnchanged;
    } else {
       if (charsAddedOrRemoved < 0 && position < positionOfChange - charsAddedOrRemoved) {
@@ -94,7 +94,7 @@ QTextCursorPrivate::AdjustResult QTextCursorPrivate::adjustPosition(int position
    }
 
    if (anchor >= positionOfChange
-         && (anchor != positionOfChange || op != QTextUndoCommand::KeepCursor)) {
+      && (anchor != positionOfChange || op != QTextUndoCommand::KeepCursor)) {
       if (charsAddedOrRemoved < 0 && anchor < positionOfChange - charsAddedOrRemoved) {
          anchor = positionOfChange;
       } else {
@@ -103,7 +103,7 @@ QTextCursorPrivate::AdjustResult QTextCursorPrivate::adjustPosition(int position
    }
 
    if (adjusted_anchor >= positionOfChange
-         && (adjusted_anchor != positionOfChange || op != QTextUndoCommand::KeepCursor)) {
+      && (adjusted_anchor != positionOfChange || op != QTextUndoCommand::KeepCursor)) {
       if (charsAddedOrRemoved < 0 && adjusted_anchor < positionOfChange - charsAddedOrRemoved) {
          adjusted_anchor = positionOfChange;
       } else {
@@ -116,7 +116,7 @@ QTextCursorPrivate::AdjustResult QTextCursorPrivate::adjustPosition(int position
 
 void QTextCursorPrivate::setX()
 {
-   if (priv->isInEditBlock()) {
+   if (priv->isInEditBlock() || priv->inContentsChange) {
       x = -1; // mark dirty
       return;
    }
@@ -163,13 +163,13 @@ void QTextCursorPrivate::remove()
    } else {
       priv->remove(pos1, pos2 - pos1, op);
       adjusted_anchor = anchor = position;
-      priv->finishEdit();
+
    }
 
 }
 
 void QTextCursorPrivate::clearCells(QTextTable *table, int startRow, int startCol, int numRows, int numCols,
-                                    QTextUndoCommand::Operation op)
+   QTextUndoCommand::Operation op)
 {
    priv->beginEditBlock();
 
@@ -245,11 +245,13 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
          if (i < positionChain.size()) {
             position = positionChain.at(i)->firstPosition() - 1;
          }
+
       } else {
          if (i < positionChain.size()) {
             position = positionChain.at(i)->lastPosition() + 1;
          }
       }
+
       if (position < adjusted_anchor) {
          if (i < anchorChain.size()) {
             adjusted_anchor = anchorChain.at(i)->lastPosition() + 1;
@@ -265,7 +267,7 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
 
    // same frame, either need to adjust to cell boundaries or return
    QTextTable *table = qobject_cast<QTextTable *>(f_position);
-   if (!table) {
+   if (! table) {
       return;
    }
 
@@ -273,28 +275,10 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
    QTextTableCell c_anchor = table->cellAt(adjusted_anchor);
 
    if (c_position != c_anchor) {
-      bool before;
-      int col_position = c_position.column();
-      int col_anchor = c_anchor.column();
-
-      if (col_position == col_anchor) {
-         before = c_position.row() < c_anchor.row();
-      } else {
-         before = col_position < col_anchor;
-      }
-
       // adjust to cell boundaries
-      if (m <= QTextCursor::WordLeft) {
-         position = c_position.firstPosition();
-         if (!before) {
-            --position;
-         }
-      } else {
-         position = c_position.lastPosition();
-         if (before) {
-            ++position;
-         }
-      }
+
+      position = c_position.firstPosition();
+
       if (position < adjusted_anchor) {
          adjusted_anchor = c_anchor.lastPosition();
       } else {
@@ -308,8 +292,7 @@ void QTextCursorPrivate::adjustCursor(QTextCursor::MoveOperation m)
 void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
 {
    Q_ASSERT(from <= to);
-   if (position == anchor
-) {
+   if (position == anchor) {
       return;
    }
 
@@ -317,6 +300,7 @@ void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
    if (!t) {
       return;
    }
+
    QTextTableCell removedCellFrom = t->cellAt(from);
    QTextTableCell removedCellEnd = t->cellAt(to);
    if (! removedCellFrom.isValid() || !removedCellEnd.isValid()) {
@@ -333,8 +317,8 @@ void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
    QTextTableCell cellEnd = t->cellAt(curTo);
 
    if (cellStart.row() >= removedCellFrom.row() && cellEnd.row() <= removedCellEnd.row()
-         && cellStart.column() >= removedCellFrom.column()
-         && cellEnd.column() <= removedCellEnd.column()) {
+      && cellStart.column() >= removedCellFrom.column()
+      && cellEnd.column() <= removedCellEnd.column()) {
 
       // selection is completely removed
       // find a new position, as close as possible to where we were.
@@ -358,16 +342,18 @@ void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
       adjusted_anchor = newPosition;
       x = 0;
    } else if (cellStart.row() >= removedCellFrom.row() && cellStart.row() <= removedCellEnd.row()
-              && cellEnd.row() > removedCellEnd.row()) {
+      && cellEnd.row() > removedCellEnd.row()) {
       int newPosition = t->cellAt(removedCellEnd.row() + 1, cellStart.column()).firstPosition();
       if (position < anchor) {
          position = newPosition;
       } else {
          anchor = adjusted_anchor = newPosition;
       }
+
    } else if (cellStart.column() >= removedCellFrom.column() && cellStart.column() <= removedCellEnd.column()
-              && cellEnd.column() > removedCellEnd.column()) {
+      && cellEnd.column() > removedCellEnd.column()) {
       int newPosition = t->cellAt(cellStart.row(), removedCellEnd.column() + 1).firstPosition();
+
       if (position < anchor) {
          position = newPosition;
       } else {
@@ -378,9 +364,9 @@ void QTextCursorPrivate::aboutToRemoveCell(int from, int to)
 
 bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode)
 {
-   currentCharFormat = -1;
-   bool adjustX = true;
-   QTextBlock blockIt = block();
+   currentCharFormat   = -1;
+   bool adjustX        = true;
+   QTextBlock blockIt  = block();
    bool visualMovement = priv->defaultCursorMoveStyle == Qt::VisualMoveStyle;
 
    if (!blockIt.isValid()) {
@@ -406,15 +392,31 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
    const QTextLayout *layout = blockLayout(blockIt);
    int relativePos = position - blockIt.position();
    QTextLine line;
-   if (!priv->isInEditBlock()) {
+
+   if (! priv->isInEditBlock()) {
       line = layout->lineForTextPosition(relativePos);
    }
 
    Q_ASSERT(priv->frameAt(position) == priv->frameAt(adjusted_anchor));
 
    int newPosition = position;
+   if (mode == QTextCursor::KeepAnchor && complexSelectionTable() != 0) {
 
-   if (x == -1 && !priv->isInEditBlock() && (op == QTextCursor::Up || op == QTextCursor::Down)) {
+      if ((op >= QTextCursor::EndOfLine && op <= QTextCursor::NextWord)
+         || (op >= QTextCursor::Right && op <= QTextCursor::WordRight)) {
+         QTextTable *t = qobject_cast<QTextTable *>(priv->frameAt(position));
+         Q_ASSERT(t); // as we have already made sure we have a complex selection
+
+         QTextTableCell cell_pos = t->cellAt(position);
+
+         if (cell_pos.column() + cell_pos.columnSpan() != t->columns()) {
+            op = QTextCursor::NextCell;
+         }
+      }
+
+   }
+
+   if (x == -1 && ! priv->isInEditBlock() && (op == QTextCursor::Up || op == QTextCursor::Down)) {
       setX();
    }
 
@@ -425,6 +427,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
       case QTextCursor::Start:
          newPosition = 0;
          break;
+
       case QTextCursor::StartOfLine: {
          newPosition = blockIt.position();
          if (line.isValid()) {
@@ -433,10 +436,12 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
 
          break;
       }
+
       case QTextCursor::StartOfBlock: {
          newPosition = blockIt.position();
          break;
       }
+
       case QTextCursor::PreviousBlock: {
          if (blockIt == priv->blocksBegin()) {
             return false;
@@ -446,24 +451,29 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          newPosition = blockIt.position();
          break;
       }
+
       case QTextCursor::PreviousCharacter:
-#ifdef Q_OS_MAC
+
          if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor) {
             newPosition = qMin(position, adjusted_anchor);
-         } else
-#endif
+         } else {
             newPosition = priv->previousCursorPosition(position, QTextLayout::SkipCharacters);
+         }
+
          break;
+
       case QTextCursor::Left:
-#ifdef Q_OS_MAC
-         if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor)
+
+         if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor) {
             newPosition = visualMovement ? qMax(position, adjusted_anchor)
-                          : qMin(position, adjusted_anchor);
-         else
-#endif
+               : qMin(position, adjusted_anchor);
+         } else {
             newPosition = visualMovement ? priv->leftCursorPosition(position)
-                          : priv->previousCursorPosition(position, QTextLayout::SkipCharacters);
+               : priv->previousCursorPosition(position, QTextLayout::SkipCharacters);
+         }
+
          break;
+
       case QTextCursor::StartOfWord: {
          if (relativePos == 0) {
             break;
@@ -471,9 +481,10 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
 
          // skip if already at word start
          QTextEngine *engine = layout->engine();
-         engine->attributes();
+         const QCharAttributes *attributes = engine->attributes();
+
          if ((relativePos == blockIt.length() - 1)
-               && (engine->atSpace(relativePos - 1) || engine->atWordSeparator(relativePos - 1))) {
+            && (attributes[relativePos - 1].whiteSpace || engine->atWordSeparator(relativePos - 1))) {
             return false;
          }
 
@@ -481,20 +492,25 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
             ++position;
          }
 
-         // FALL THROUGH!
+         // FALL THROUGH
       }
+
       case QTextCursor::PreviousWord:
       case QTextCursor::WordLeft:
          newPosition = priv->previousCursorPosition(position, QTextLayout::SkipWords);
          break;
+
       case QTextCursor::Up: {
          int i = line.lineNumber() - 1;
+
          if (i == -1) {
             if (blockIt == priv->blocksBegin()) {
                return false;
             }
+
             int blockPosition = blockIt.position();
             QTextTable *table = qobject_cast<QTextTable *>(priv->frameAt(blockPosition));
+
             if (table) {
                QTextTableCell cell = table->cellAt(blockPosition);
                if (cell.firstPosition() == blockPosition) {
@@ -515,12 +531,14 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
             layout = blockLayout(blockIt);
             i = layout->lineCount() - 1;
          }
+
          if (layout->lineCount()) {
             QTextLine line = layout->lineAt(i);
             newPosition = line.xToCursor(x) + blockIt.position();
          } else {
             newPosition = blockIt.position();
          }
+
          adjustX = false;
          break;
       }
@@ -528,6 +546,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
       case QTextCursor::End:
          newPosition = priv->length() - 1;
          break;
+
       case QTextCursor::EndOfLine: {
          if (!line.isValid() || line.textLength() == 0) {
             if (blockIt.length() >= 1)
@@ -537,10 +556,12 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
             }
             break;
          }
+
          newPosition = blockIt.position() + line.textStart() + line.textLength();
          if (newPosition >= priv->length()) {
             newPosition = priv->length() - 1;
          }
+
          if (line.lineNumber() < layout->lineCount() - 1) {
             const QString text = blockIt.text();
             // ###### this relies on spaces being the cause for linebreaks.
@@ -551,10 +572,12 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          }
          break;
       }
+
       case QTextCursor::EndOfWord: {
          QTextEngine *engine = layout->engine();
-         engine->attributes();
+         const QCharAttributes *attributes = engine->attributes();
          const int len = blockIt.length() - 1;
+
          if (relativePos >= len) {
             return false;
          }
@@ -564,20 +587,21 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
                ++relativePos;
             }
          } else {
-            while (relativePos < len && !engine->atSpace(relativePos) && !engine->atWordSeparator(relativePos)) {
+            while (relativePos < len && !attributes[relativePos].whiteSpace && !engine->atWordSeparator(relativePos)) {
                ++relativePos;
             }
          }
          newPosition = blockIt.position() + relativePos;
          break;
       }
+
       case QTextCursor::EndOfBlock:
-         if (blockIt.length() >= 1)
+         if (blockIt.length() >= 1) {
             // position right before the block separator
-         {
             newPosition = blockIt.position() + blockIt.length() - 1;
          }
          break;
+
       case QTextCursor::NextBlock: {
          blockIt = blockIt.next();
          if (!blockIt.isValid()) {
@@ -587,24 +611,27 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          newPosition = blockIt.position();
          break;
       }
+
       case QTextCursor::NextCharacter:
-#ifdef Q_OS_MAC
+
          if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor) {
             newPosition = qMax(position, adjusted_anchor);
-         } else
-#endif
+         } else {
             newPosition = priv->nextCursorPosition(position, QTextLayout::SkipCharacters);
+         }
          break;
+
       case QTextCursor::Right:
-#ifdef Q_OS_MAC
+
          if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor)
             newPosition = visualMovement ? qMin(position, adjusted_anchor)
-                          : qMax(position, adjusted_anchor);
+               : qMax(position, adjusted_anchor);
          else
-#endif
+
             newPosition = visualMovement ? priv->rightCursorPosition(position)
-                          : priv->nextCursorPosition(position, QTextLayout::SkipCharacters);
+               : priv->nextCursorPosition(position, QTextLayout::SkipCharacters);
          break;
+
       case QTextCursor::NextWord:
       case QTextCursor::WordRight:
          newPosition = priv->nextCursorPosition(position, QTextLayout::SkipWords);
@@ -649,9 +676,10 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          adjustX = false;
          break;
       }
-      case QTextCursor::NextCell: // fall through
-      case QTextCursor::PreviousCell: // fall through
-      case QTextCursor::NextRow: // fall through
+
+      case QTextCursor::NextCell:          // fall through
+      case QTextCursor::PreviousCell:      // fall through
+      case QTextCursor::NextRow:           // fall through
       case QTextCursor::PreviousRow: {
          QTextTable *table = qobject_cast<QTextTable *>(priv->frameAt(position));
          if (!table) {
@@ -673,8 +701,8 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
                cell = table->cellAt(row, column);
                // note we also continue while we have not reached a cell thats not merged with one above us
             } while (cell.isValid()
-                     && ((op == QTextCursor::NextRow && currentRow == cell.row())
-                         || cell.row() < row));
+               && ((op == QTextCursor::NextRow && currentRow == cell.row())
+                  || cell.row() < row));
          } else if (op == QTextCursor::PreviousCell || op == QTextCursor::PreviousRow) {
             do {
                --column;
@@ -685,8 +713,8 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
                cell = table->cellAt(row, column);
                // note we also continue while we have not reached a cell thats not merged with one above us
             } while (cell.isValid()
-                     && ((op == QTextCursor::PreviousRow && currentRow == cell.row())
-                         || cell.row() < row));
+               && ((op == QTextCursor::PreviousRow && currentRow == cell.row())
+                  || cell.row() < row));
          }
          if (cell.isValid()) {
             newPosition = cell.firstPosition();
@@ -697,18 +725,21 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
 
    if (mode == QTextCursor::KeepAnchor) {
       QTextTable *table = qobject_cast<QTextTable *>(priv->frameAt(position));
+
       if (table && ((op >= QTextCursor::PreviousBlock && op <= QTextCursor::WordLeft)
-                    || (op >= QTextCursor::NextBlock && op <= QTextCursor::WordRight))) {
+            || (op >= QTextCursor::NextBlock && op <= QTextCursor::WordRight))) {
+
          int oldColumn = table->cellAt(position).column();
 
          const QTextTableCell otherCell = table->cellAt(newPosition);
+
          if (!otherCell.isValid()) {
             return false;
          }
 
          int newColumn = otherCell.column();
          if ((oldColumn > newColumn && op >= QTextCursor::End)
-               || (oldColumn < newColumn && op <= QTextCursor::WordLeft)) {
+            || (oldColumn < newColumn && op <= QTextCursor::WordLeft)) {
             return false;
          }
       }
@@ -719,6 +750,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
    if (mode == QTextCursor::MoveAnchor) {
       anchor = position;
       adjusted_anchor = position;
+
    } else {
       adjustCursor(op);
    }
@@ -737,16 +769,17 @@ QTextTable *QTextCursorPrivate::complexSelectionTable() const
    }
 
    QTextTable *t = qobject_cast<QTextTable *>(priv->frameAt(position));
+
    if (t) {
       QTextTableCell cell_pos = t->cellAt(position);
       QTextTableCell cell_anchor = t->cellAt(adjusted_anchor);
-
       Q_ASSERT(cell_anchor.isValid());
 
       if (cell_pos == cell_anchor) {
          t = 0;
       }
    }
+
    return t;
 }
 
@@ -762,7 +795,7 @@ void QTextCursorPrivate::selectedTableCells(int *firstRow, int *numRows, int *fi
    }
 
    QTextTable *t = qobject_cast<QTextTable *>(priv->frameAt(position));
-   if (!t) {
+   if (! t) {
       return;
    }
 
@@ -775,15 +808,16 @@ void QTextCursorPrivate::selectedTableCells(int *firstRow, int *numRows, int *fi
       return;
    }
 
-   *firstRow = qMin(cell_pos.row(), cell_anchor.row());
+   *firstRow    = qMin(cell_pos.row(), cell_anchor.row());
    *firstColumn = qMin(cell_pos.column(), cell_anchor.column());
-   *numRows = qMax(cell_pos.row() + cell_pos.rowSpan(), cell_anchor.row() + cell_anchor.rowSpan()) - *firstRow;
-   *numColumns = qMax(cell_pos.column() + cell_pos.columnSpan(),
-                      cell_anchor.column() + cell_anchor.columnSpan()) - *firstColumn;
+   *numRows     = qMax(cell_pos.row() + cell_pos.rowSpan(), cell_anchor.row() + cell_anchor.rowSpan()) - *firstRow;
+
+   *numColumns  = qMax(cell_pos.column() + cell_pos.columnSpan(),
+         cell_anchor.column() + cell_anchor.columnSpan()) - *firstColumn;
 }
 
 static void setBlockCharFormatHelper(QTextDocumentPrivate *priv, int pos1, int pos2,
-                                     const QTextCharFormat &format, QTextDocumentPrivate::FormatChangeMode changeMode)
+   const QTextCharFormat &format, QTextDocumentPrivate::FormatChangeMode changeMode)
 {
    QTextBlock it  = priv->blocksFind(pos1);
    QTextBlock end = priv->blocksFind(pos2);
@@ -798,7 +832,7 @@ static void setBlockCharFormatHelper(QTextDocumentPrivate *priv, int pos1, int p
 }
 
 void QTextCursorPrivate::setBlockCharFormat(const QTextCharFormat &_format,
-      QTextDocumentPrivate::FormatChangeMode changeMode)
+   QTextDocumentPrivate::FormatChangeMode changeMode)
 {
    priv->beginEditBlock();
 
@@ -816,6 +850,7 @@ void QTextCursorPrivate::setBlockCharFormat(const QTextCharFormat &_format,
             QTextTableCell cell = table->cellAt(r, c);
             int rspan = cell.rowSpan();
             int cspan = cell.columnSpan();
+
             if (rspan != 1) {
                int cr = cell.row();
                if (cr != r) {
@@ -849,15 +884,17 @@ void QTextCursorPrivate::setBlockCharFormat(const QTextCharFormat &_format,
 
 
 void QTextCursorPrivate::setBlockFormat(const QTextBlockFormat &format,
-                                        QTextDocumentPrivate::FormatChangeMode changeMode)
+   QTextDocumentPrivate::FormatChangeMode changeMode)
 {
    QTextTable *table = complexSelectionTable();
+
    if (table) {
       priv->beginEditBlock();
       int row_start, col_start, num_rows, num_cols;
       selectedTableCells(&row_start, &num_rows, &col_start, &num_cols);
 
       Q_ASSERT(row_start != -1);
+
       for (int r = row_start; r < row_start + num_rows; ++r) {
          for (int c = col_start; c < col_start + num_cols; ++c) {
             QTextTableCell cell = table->cellAt(r, c);
@@ -895,7 +932,7 @@ void QTextCursorPrivate::setBlockFormat(const QTextBlockFormat &format,
 }
 
 void QTextCursorPrivate::setCharFormat(const QTextCharFormat &_format,
-                                       QTextDocumentPrivate::FormatChangeMode changeMode)
+   QTextDocumentPrivate::FormatChangeMode changeMode)
 {
    Q_ASSERT(position != anchor);
 
@@ -909,6 +946,7 @@ void QTextCursorPrivate::setCharFormat(const QTextCharFormat &_format,
       selectedTableCells(&row_start, &num_rows, &col_start, &num_cols);
 
       Q_ASSERT(row_start != -1);
+
       for (int r = row_start; r < row_start + num_rows; ++r) {
          for (int c = col_start; c < col_start + num_cols; ++c) {
             QTextTableCell cell = table->cellAt(r, c);
@@ -920,6 +958,7 @@ void QTextCursorPrivate::setCharFormat(const QTextCharFormat &_format,
                   continue;
                }
             }
+
             if (cspan != 1) {
                int cc = cell.column();
                if (cc != c) {
@@ -945,7 +984,6 @@ void QTextCursorPrivate::setCharFormat(const QTextCharFormat &_format,
    }
 }
 
-
 QTextLayout *QTextCursorPrivate::blockLayout(QTextBlock &block) const
 {
    QTextLayout *tl = block.layout();
@@ -960,27 +998,17 @@ QTextCursor::QTextCursor()
 {
 }
 
-/*!
-    Constructs a cursor pointing to the beginning of the \a document.
- */
 QTextCursor::QTextCursor(QTextDocument *document)
    : d(new QTextCursorPrivate(document->docHandle()))
 {
 }
 
-/*!
-    Constructs a cursor pointing to the beginning of the \a frame.
-*/
 QTextCursor::QTextCursor(QTextFrame *frame)
    : d(new QTextCursorPrivate(frame->document()->docHandle()))
 {
    d->adjusted_anchor = d->anchor = d->position = frame->firstPosition();
 }
 
-
-/*!
-    Constructs a cursor pointing to the beginning of the \a block.
-*/
 QTextCursor::QTextCursor(const QTextBlock &block)
    : d(new QTextCursorPrivate(block.docHandle()))
 {
@@ -1008,49 +1036,26 @@ QTextCursor::QTextCursor(QTextCursorPrivate *d)
    this->d = d;
 }
 
-/*!
-    Constructs a new cursor that is a copy of \a cursor.
- */
 QTextCursor::QTextCursor(const QTextCursor &cursor)
 {
    d = cursor.d;
 }
 
-/*!
-    Makes a copy of \a cursor and assigns it to this QTextCursor. Note
-    that QTextCursor is an \l{Implicitly Shared Classes}{implicitly
-    shared} class.
-
- */
 QTextCursor &QTextCursor::operator=(const QTextCursor &cursor)
 {
    d = cursor.d;
    return *this;
 }
 
-/*!
-    Destroys the QTextCursor.
- */
 QTextCursor::~QTextCursor()
 {
 }
 
-/*!
-    Returns true if the cursor is null; otherwise returns false. A null
-    cursor is created by the default constructor.
- */
 bool QTextCursor::isNull() const
 {
-   return !d || !d->priv;
+   return ! d || ! d->priv;
 }
 
-/*!
-    Moves the cursor to the absolute position in the document specified by
-    \a pos using a \c MoveMode specified by \a m. The cursor is positioned
-    between characters.
-
-    \sa position() movePosition() anchor()
-*/
 void QTextCursor::setPosition(int pos, MoveMode m)
 {
    if (!d || !d->priv) {
@@ -1066,6 +1071,7 @@ void QTextCursor::setPosition(int pos, MoveMode m)
    if (m == MoveAnchor) {
       d->anchor = pos;
       d->adjusted_anchor = pos;
+
    } else { // keep anchor
       QTextCursor::MoveOperation op;
       if (pos < d->anchor) {
@@ -1138,6 +1144,7 @@ bool QTextCursor::movePosition(MoveOperation op, MoveMode mode, int n)
       case EndOfLine:
          n = 1;
          break;
+
       default:
          break;
    }
@@ -1166,7 +1173,7 @@ bool QTextCursor::movePosition(MoveOperation op, MoveMode mode, int n)
          d->anchor = d->position;
       }
       while (d->movePosition(op, mode)
-             && !d->block().isVisible())
+         && !d->block().isVisible())
          ;
 
    }
@@ -1264,7 +1271,7 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
          }
 
          if (ch == '\n' || ch == '\r' || ch == QChar::ParagraphSeparator || ch == QTextBeginningOfFrame
-                  || ch == QTextEndOfFrame) {
+            || ch == QTextEndOfFrame) {
 
             if (! hasEditBlock) {
                hasEditBlock = true;
@@ -1602,7 +1609,7 @@ QTextCharFormat QTextCursor::charFormat() const
 
       int pos;
       if (d->position == block.position()
-            && block.length() > 1) {
+         && block.length() > 1) {
          pos = d->position;
       } else {
          pos = d->position - 1;
@@ -2073,7 +2080,7 @@ void QTextCursor::insertImage(const QImage &image, const QString &name)
    }
    QString imageName = name;
    if (name.isEmpty()) {
-      imageName = QString::number(image.serialNumber());
+      imageName = QString::number(image.cacheKey());
    }
    d->priv->document()->addResource(QTextDocument::ImageResource, QUrl(imageName), image);
    QTextImageFormat format;
