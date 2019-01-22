@@ -39,7 +39,7 @@
 #include <qaccessible.h>
 #endif
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
 #include <qplatform_nativeinterface.h>
 #endif
 
@@ -545,7 +545,7 @@ void QTabBarPrivate::layoutTab(int index)
       QRect rect = q->style()->subElementRect(QStyle::SE_TabBarTabLeftButton, &opt, q);
       QPoint p   = rect.topLeft();
 
-      // broom - review if tabs have an issue
+      // emerald -review here if tabs are not working
 
       if ((index == pressedIndex) || paintWithOffsets) {
          if (vertical) {

@@ -33,11 +33,12 @@ class QKeySequenceEditPrivate;
 
 class Q_GUI_EXPORT QKeySequenceEdit : public QWidget
 {
-   CS_OBJECT(QKeySequenceEdit)
-   CS_PROPERTY_READ(keySequence, keySequence)
-   CS_PROPERTY_WRITE(keySequence, setKeySequence)
-   CS_PROPERTY_NOTIFY(keySequence, keySequenceChanged)
-   CS_PROPERTY_USER(keySequence, true)
+   GUI_CS_OBJECT(QKeySequenceEdit)
+
+   GUI_CS_PROPERTY_READ(keySequence, keySequence)
+   GUI_CS_PROPERTY_WRITE(keySequence, setKeySequence)
+   GUI_CS_PROPERTY_NOTIFY(keySequence, keySequenceChanged)
+   GUI_CS_PROPERTY_USER(keySequence, true)
 
  public:
    explicit QKeySequenceEdit(QWidget *parent = nullptr);
@@ -46,17 +47,15 @@ class Q_GUI_EXPORT QKeySequenceEdit : public QWidget
 
    QKeySequence keySequence() const;
 
- public :
-   CS_SLOT_1(Public, void setKeySequence(const QKeySequence &keySequence))
-   CS_SLOT_2(setKeySequence)
-   CS_SLOT_1(Public, void clear())
-   CS_SLOT_2(clear)
+   GUI_CS_SLOT_1(Public, void setKeySequence(const QKeySequence &keySequence))
+   GUI_CS_SLOT_2(setKeySequence)
+   GUI_CS_SLOT_1(Public, void clear())
+   GUI_CS_SLOT_2(clear)
 
- public:
-   CS_SIGNAL_1(Public, void editingFinished())
-   CS_SIGNAL_2(editingFinished)
-   CS_SIGNAL_1(Public, void keySequenceChanged(const QKeySequence &keySequence))
-   CS_SIGNAL_2(keySequenceChanged, keySequence)
+   GUI_CS_SIGNAL_1(Public, void editingFinished())
+   GUI_CS_SIGNAL_2(editingFinished)
+   GUI_CS_SIGNAL_1(Public, void keySequenceChanged(const QKeySequence &keySequence))
+   GUI_CS_SIGNAL_2(keySequenceChanged, keySequence)
 
  protected:
    QKeySequenceEdit(QKeySequenceEditPrivate &d, QWidget *parent, Qt::WindowFlags f);

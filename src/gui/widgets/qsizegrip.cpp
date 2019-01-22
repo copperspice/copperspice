@@ -418,14 +418,15 @@ bool QSizeGrip::eventFilter(QObject *o, QEvent *e)
    return QWidget::eventFilter(o, e);
 }
 
-/*!
-    \reimp
-*/
 bool QSizeGrip::event(QEvent *event)
 {
    return QWidget::event(event);
 }
 
-
+void QSizeGrip::_q_showIfNotHidden()
+{
+   Q_D(QSizeGrip);
+   d->_q_showIfNotHidden();
+}
 
 #endif //QT_NO_SIZEGRIP

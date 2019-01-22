@@ -38,7 +38,7 @@
 #include <qwidget_p.h>
 #include <qtoolbar_p.h>
 #include <qwidgetanimator_p.h>
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
 #include <qplatform_nativeinterface.h>
 #endif
 
@@ -49,7 +49,7 @@ class QMainWindowPrivate : public QWidgetPrivate
  public:
    inline QMainWindowPrivate()
       : layout(0), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
       , useUnifiedToolBar(false)
 #endif
 
@@ -63,7 +63,7 @@ class QMainWindowPrivate : public QWidgetPrivate
    QSize iconSize;
    bool explicitIconSize;
    Qt::ToolButtonStyle toolButtonStyle;
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    bool useUnifiedToolBar;
 #endif
 
@@ -1112,7 +1112,7 @@ bool QMainWindow::event(QEvent *event)
 
 void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    Q_D(QMainWindow);
    if (isWindow()) {
       d->useUnifiedToolBar = set;
@@ -1136,7 +1136,7 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 
 bool QMainWindow::unifiedTitleAndToolBarOnMac() const
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    return d_func()->useUnifiedToolBar;
 #endif
 

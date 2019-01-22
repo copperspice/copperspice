@@ -212,7 +212,7 @@ void QAbstractScrollAreaPrivate::init()
    q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    layoutChildren();
 
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MAC
 #  ifndef QT_NO_GESTURES
    viewport->grabGesture(Qt::PanGesture);
 #  endif

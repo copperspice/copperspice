@@ -23,10 +23,10 @@
 #ifndef QABSTRACTBUTTON_P_H
 #define QABSTRACTBUTTON_P_H
 
+#include <qabstractbutton.h>
 #include <qbasictimer.h>
+
 #include <qwidget_p.h>
-
-
 
 class QAbstractButtonPrivate : public QWidgetPrivate
 {
@@ -80,6 +80,4 @@ class QAbstractButtonPrivate : public QWidgetPrivate
    void emitToggled(bool checked);
 };
 
-
-
-#endif // QABSTRACTBUTTON_P_H
+#endif

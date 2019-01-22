@@ -43,13 +43,15 @@ void QButtonGroupPrivate::detectCheckedButton()
 
 
 QButtonGroup::QButtonGroup(QObject *parent)
-   : QObject(*new QButtonGroupPrivate, parent)
+   : QObject(parent), d_ptr(new QButtonGroupPrivate)
 {
+   d_ptr->q_ptr = this;
 }
 
 QButtonGroup::~QButtonGroup()
 {
    Q_D(QButtonGroup);
+
    for (int i = 0; i < d->buttonList.count(); ++i) {
       d->buttonList.at(i)->d_func()->group = 0;
    }
@@ -124,6 +126,7 @@ QAbstractButton *QButtonGroup::button(int id) const
 void QButtonGroup::setId(QAbstractButton *button, int id)
 {
    Q_D(QButtonGroup);
+
    if (button && id != -1) {
       d->mapping[button] = id;
    }

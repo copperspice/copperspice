@@ -32,7 +32,7 @@
 #include <qpainter.h>
 #include <qplatform_theme.h>
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
 #include "qmacnativewidget_mac.h"
 #endif
 
@@ -224,7 +224,6 @@ void QMenuPrivate::syncPlatformMenu()
    platformMenu->syncSeparatorsCollapsible(collapsibleSeparators);
    platformMenu->setEnabled(q->isEnabled());
 }
-
 
 int QMenuPrivate::scrollerHeight() const
 {
@@ -1409,7 +1408,7 @@ void QMenuPrivate::_q_platformMenuAboutToShow()
 {
    Q_Q(QMenu);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    if (platformMenu)
       Q_FOREACH (QAction *action, q->actions())
          if (QWidget *widget = widgetItems.value(action))
@@ -1571,7 +1570,7 @@ QAction *QMenu::addAction(const QIcon &icon, const QString &text)
 }
 
 
-QAction *QMenu::addAction(const QString &text, const QObject *receiver, const char *member, const QKeySequence &shortcut)
+QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QString &member, const QKeySequence &shortcut)
 {
    QAction *action = new QAction(text, this);
 
@@ -1730,13 +1729,6 @@ bool QMenu::isTearOffEnabled() const
    return d_func()->tearoff;
 }
 
-/*!
-  When a menu is torn off a second menu is shown to display the menu
-  contents in a new window. When the menu is in this mode and the menu
-  is visible returns true; otherwise false.
-
-  \sa hideTearOffMenu() isTearOffEnabled()
-*/
 bool QMenu::isTearOffMenuVisible() const
 {
    if (d_func()->tornPopup) {
@@ -3128,7 +3120,7 @@ void QMenu::actionEvent(QActionEvent *e)
       if (QWidgetAction *wa = qobject_cast<QWidgetAction *>(e->action())) {
          if (QWidget *widget = d->widgetItems.value(wa)) {
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
             QWidget *p = widget->parentWidget();
             if (p != this && qobject_cast<QMacNativeWidget *>(p)) {
                // This widget was reparented into a native Mac view
@@ -3296,6 +3288,12 @@ void QMenu::_q_overrideMenuActionDestroyed()
 {
    Q_D(QMenu);
    d->_q_overrideMenuActionDestroyed();
+}
+
+void QMenu::_q_platformMenuAboutToShow()
+{
+   Q_D(QMenu);
+   d->_q_platformMenuAboutToShow();
 }
 
 #endif // QT_NO_MENU

@@ -79,6 +79,7 @@ void QProgressBarPrivate::initDefaultFormat()
       format = QString("%p") + locale.percent();
    }
 }
+
 void QProgressBarPrivate::init()
 {
    Q_Q(QProgressBar);
@@ -150,18 +151,19 @@ bool QProgressBarPrivate::repaintRequired() const
       }
    }
 
-
    // Check if the bar needs to be repainted
    QStyleOptionProgressBar opt;
    q->initStyleOption(&opt);
    int cw = q->style()->pixelMetric(QStyle::PM_ProgressBarChunkWidth, &opt, q);
 
    QRect groove  = q->style()->subElementRect(QStyle::SE_ProgressBarGroove, &opt, q);
+
    // This expression is basically
    // (valueDifference / (maximum - minimum) > cw / groove.width())
    // transformed to avoid integer division.
    int grooveBlock = (q->orientation() == Qt::Horizontal) ? groove.width() : groove.height();
-   return (valueDifference * grooveBlock > cw * (maximum - minimum));
+
+   return (valueDifference * grooveBlock > cw * totalSteps);
 }
 
 
@@ -171,13 +173,10 @@ QProgressBar::QProgressBar(QWidget *parent)
    d_func()->init();
 }
 
-/*!
+
 QProgressBar::~QProgressBar()
 {
 }
-    Reset the progress bar. The progress bar "rewinds" and shows no
-    progress.
-*/
 
 void QProgressBar::reset()
 {
@@ -213,13 +212,7 @@ int QProgressBar::maximum() const
    return d_func()->maximum;
 }
 
-/*!
-    \property QProgressBar::value
-    \brief the progress bar's current value
 
-    Attempting to change the current value to one outside
-    the minimum-maximum range has no effect on the current value.
-*/
 void QProgressBar::setValue(int value)
 {
    Q_D(QProgressBar);

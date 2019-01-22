@@ -274,7 +274,7 @@ class QMenuPrivate : public QWidgetPrivate
    void setPlatformMenu(QPlatformMenu *menu);
    void syncPlatformMenu();
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    void moveWidgetToPlatformItem(QWidget *w, QPlatformMenuItem *item);
 #endif
 
@@ -425,7 +425,7 @@ class QMenuPrivate : public QWidgetPrivate
    void setOverrideMenuAction(QAction *);
    void _q_overrideMenuActionDestroyed();
 
-   //firing of events
+   // firing of events
    void activateAction(QAction *, QAction::ActionEvent, bool self = true);
    void activateCausedStack(const QVector<QPointer<QWidget>> &, QAction *, QAction::ActionEvent, bool);
 

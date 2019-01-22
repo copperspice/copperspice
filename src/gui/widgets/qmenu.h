@@ -28,7 +28,7 @@
 #include <qicon.h>
 #include <qaction.h>
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
 
 #ifdef __OBJC__
 @class NSMenu;
@@ -74,15 +74,15 @@ class Q_GUI_EXPORT QMenu : public QWidget
    QAction *addAction(const QString &text);
    QAction *addAction(const QIcon &icon,   const QString &text);
    QAction *addAction(const QString &text, const QObject *receiver, const QString &member, const QKeySequence &shortcut = 0);
-   QAction *addAction(const QIcon &icon,   const QString &text, const QObject *receiver, QString &member,
+   QAction *addAction(const QIcon &icon,   const QString &text, const QObject *receiver, const QString &member,
       const QKeySequence &shortcut = 0);
 
-
-   // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
+   // connect to a slot or function pointer (with context)
    template<class Obj, typename Func1>
-   typename std::enable_if < ! std::is_convertible<Func1, QString>::value
-   &&std::is_base_of<QObject, Obj>::value, QAction * >::Type addAction(const QString &text, const Obj *object, Func1 slot,
-      const QKeySequence &shortcut = 0) {
+   typename std::enable_if < ! std::is_convertible<Func1, QString>::value &&
+         ! std::is_convertible<Func1, const char *>::value &&
+         std::is_base_of<QObject, Obj>::value, QAction * >::type
+      addAction(const QString &text, const Obj *object, Func1 slot, const QKeySequence &shortcut = 0) {
       QAction *result = addAction(text);
 
 #ifndef QT_NO_SHORTCUT
@@ -92,13 +92,13 @@ class Q_GUI_EXPORT QMenu : public QWidget
       return result;
    }
 
-   // addAction(QString): Connect to a functor or function pointer (without context)
+   // connect to a slot or function pointer (without context)
    template <typename Func1>
-   QAction *addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0) {
+   typename std::enable_if < ! std::is_convertible<Func1, QObject *>::value, QAction * >::type
+      addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0) {
       QAction *result = addAction(text);
 
 #ifndef QT_NO_SHORTCUT
-
       result->setShortcut(shortcut);
 #endif
       connect(result, &QAction::triggered, slot);
@@ -107,13 +107,12 @@ class Q_GUI_EXPORT QMenu : public QWidget
 
    // addAction(QIcon, QString): Connect to a QObject slot / functor or function pointer (with context)
    template<class Obj, typename Func1>
-   typename std::enable_if < ! std::is_same<const char *, Func1>::value
-   &&std::is_base_of<QObject, Obj>::value, QAction * >::Type addAction(const QIcon &actionIcon, const QString &text, const Obj *object,
-      Func1 slot, const QKeySequence &shortcut = 0) {
+   typename std::enable_if < ! std::is_convertible<Func1, QString>::value
+   &&std::is_base_of<QObject, Obj>::value, QAction * >::type addAction(const QIcon &actionIcon, const QString &text,
+      const Obj *object, Func1 slot, const QKeySequence &shortcut = 0) {
       QAction *result = addAction(actionIcon, text);
 
 #ifndef QT_NO_SHORTCUT
-
       result->setShortcut(shortcut);
 #endif
       connect(result, &QAction::triggered, object, slot);
@@ -122,7 +121,7 @@ class Q_GUI_EXPORT QMenu : public QWidget
 
    // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
    template <typename Func1>
-   inline QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot, const QKeySequence &shortcut = 0) {
+   QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot, const QKeySequence &shortcut = 0) {
       QAction *result = addAction(actionIcon, text);
 
 #ifndef QT_NO_SHORTCUT
@@ -132,7 +131,6 @@ class Q_GUI_EXPORT QMenu : public QWidget
       connect(result, &QAction::triggered, slot);
       return result;
    }
-
 
    QAction *addMenu(QMenu *menu);
    QMenu *addMenu(const QString &title);
@@ -186,11 +184,10 @@ class Q_GUI_EXPORT QMenu : public QWidget
    QPlatformMenu *platformMenu();
    void setPlatformMenu(QPlatformMenu *platformMenu);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    NSMenu *toNSMenu();
    void setAsDockMenu();
 #endif
-
 
    bool separatorsCollapsible() const;
    void setSeparatorsCollapsible(bool collapse);

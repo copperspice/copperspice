@@ -637,8 +637,9 @@ void QDockWidget::initStyleOption(QStyleOptionDockWidget *option) const
    // If we are in a floating tab, init from the parent because the attributes and the geometry
    // of the title bar should be taken from the floating window.
    option->initFrom(floatingTab && !isFloating() ? parentWidget() : this);
-   option->rect = dwlayout->titleArea();
+   option->rect  = dwlayout->titleArea();
    option->title = d->fixedWindowTitle;
+
    option->closable  = hasFeature(this, QDockWidget::DockWidgetClosable);
    option->movable   = hasFeature(this, QDockWidget::DockWidgetMovable);
    option->floatable = hasFeature(this, QDockWidget::DockWidgetFloatable);
@@ -1333,17 +1334,16 @@ void QDockWidget::closeEvent(QCloseEvent *event)
 /*! \reimp */
 void QDockWidget::paintEvent(QPaintEvent *event)
 {
-   Q_UNUSED(event)
-
-   QDockWidgetLayout *layout
-      = qobject_cast<QDockWidgetLayout *>(this->layout());
+   QDockWidgetLayout *layout = qobject_cast<QDockWidgetLayout *>(this->layout());
    bool customTitleBar = layout->widgetForRole(QDockWidgetLayout::TitleBar) != 0;
    bool nativeDeco = layout->nativeWindowDeco();
 
    if (!nativeDeco && !customTitleBar) {
       QStylePainter p(this);
+
       // ### Add PixelMetric to change spacers, so style may show border
       // when not floating.
+
       if (isFloating()) {
          QStyleOptionFrame framOpt;
          framOpt.init(this);

@@ -1078,7 +1078,6 @@ QTextDocument *QPlainTextEdit::document() const
    return d->control->document();
 }
 
-/*!
 void QPlainTextEdit::setPlaceholderText(const QString &placeholderText)
 {
     Q_D(QPlainTextEdit);
@@ -1088,13 +1087,13 @@ void QPlainTextEdit::setPlaceholderText(const QString &placeholderText)
             d->viewport->update();
     }
 }
+
 QString QPlainTextEdit::placeholderText() const
 {
     Q_D(const QPlainTextEdit);
     return d->placeholderText;
 }
-    Sets the visible \a cursor.
-*/
+
 void QPlainTextEdit::setTextCursor(const QTextCursor &cursor)
 {
    doSetTextCursor(cursor);

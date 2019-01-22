@@ -2152,6 +2152,7 @@ void QMdiSubWindowPrivate::addToSystemMenu(WindowStateAction action, const QStri
    if (! systemMenu) {
       return;
    }
+
    actions[action] = systemMenu->addAction(text, q_func(), slot);
 }
 #endif

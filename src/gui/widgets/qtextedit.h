@@ -97,10 +97,12 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    GUI_CS_PROPERTY_READ(textInteractionFlags, textInteractionFlags)
    GUI_CS_PROPERTY_WRITE(textInteractionFlags, setTextInteractionFlags)
 
-   // BROOM - fix this ( new properties )
-   // Q_PROPERTY(QTextDocument *document READ document WRITE setDocument DESIGNABLE false)
-   // Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
+   GUI_CS_PROPERTY_READ(document, document)
+   GUI_CS_PROPERTY_WRITE(document, setDocument)
+   GUI_CS_PROPERTY_DESIGNABLE(document, false)
 
+   GUI_CS_PROPERTY_READ(placeholderText, placeholderText)
+   GUI_CS_PROPERTY_WRITE(placeholderText, setPlaceholderText)
 
  public:
    enum LineWrapMode {

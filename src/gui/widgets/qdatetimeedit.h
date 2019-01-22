@@ -222,13 +222,17 @@ class Q_GUI_EXPORT QTimeEdit : public QDateTimeEdit
 {
    GUI_CS_OBJECT(QTimeEdit)
 
-   // broom - fix this code
-   // Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY userTimeChanged USER true)
+
+   GUI_CS_PROPERTY_READ(time, time)
+   GUI_CS_PROPERTY_WRITE(time, setTime)
+   GUI_CS_PROPERTY_NOTIFY(time, userTimeChanged)
+   GUI_CS_PROPERTY_USER(time, true)
 
  public:
    explicit QTimeEdit(QWidget *parent = nullptr);
    explicit QTimeEdit(const QTime &time, QWidget *parent = nullptr);
    ~QTimeEdit();
+
    GUI_CS_SIGNAL_1(Public, void userTimeChanged(const QTime &time))
    GUI_CS_SIGNAL_2(userTimeChanged, time)
 };
@@ -237,8 +241,10 @@ class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
 {
    GUI_CS_OBJECT(QDateEdit)
 
-   // broom - fix this code
-   // Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY userDateChanged USER true)
+   GUI_CS_PROPERTY_READ(data, date)
+   GUI_CS_PROPERTY_WRITE(data, setDate)
+   GUI_CS_PROPERTY_NOTIFY(date, userDateChanged)
+   GUI_CS_PROPERTY_USER(date, true)
 
  public:
    explicit QDateEdit(QWidget *parent = nullptr);

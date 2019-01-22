@@ -1345,15 +1345,14 @@ static inline int getInt(QDataStream &stream)
 }
 
 
-bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar*> &_toolBars, uchar tmarker, bool testing)
+bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar *> &_toolBars, uchar tmarker, bool testing)
 {
    QList<QToolBar *> toolBars = _toolBars;
    int lines;
    stream >> lines;
 
 
-   for (int j = 0; j < lines; ++j)
-   {
+   for (int j = 0; j < lines; ++j) {
       int pos;
       stream >> pos;
       if (pos < 0 || pos >= QInternal::DockCount) {

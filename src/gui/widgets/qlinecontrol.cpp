@@ -188,16 +188,8 @@ void QLineControl::backspace()
       if (m_maskData) {
          m_cursor = prevMaskBlank(m_cursor);
       }
+
       QChar uc = m_text.at(m_cursor);
-      if (m_cursor > 0 && uc.isLowSurrogate()) {
-         // second half of a surrogate, check if we have the first half as well,
-         // if yes delete both at once
-         uc = m_text.at(m_cursor - 1);
-         if (uc.isHighSurrogate()) {
-            internalDelete(true);
-            --m_cursor;
-         }
-      }
       internalDelete(true);
    }
 

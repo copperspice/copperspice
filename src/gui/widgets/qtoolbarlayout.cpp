@@ -30,7 +30,7 @@
 #include <qdebug.h>
 #include <qmath.h>
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
 #include <qpa/qplatformnativeinterface.h>
 #endif
 
@@ -338,7 +338,7 @@ static bool defaultWidgetAction(QToolBarItem *item)
 
 void QToolBarLayout::updateMacBorderMetrics()
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
    if (!tb) {
       return;

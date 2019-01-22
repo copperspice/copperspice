@@ -81,7 +81,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
 
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    NSMenu *toNSMenu();
 #endif
 

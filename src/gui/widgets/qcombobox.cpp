@@ -162,14 +162,14 @@ QStyleOptionMenuItem QComboMenuDelegate::getStyleOption(const QStyleOptionViewIt
    if (mCombo->testAttribute(Qt::WA_SetFont)
       || mCombo->testAttribute(Qt::WA_MacSmallSize)
       || mCombo->testAttribute(Qt::WA_MacMiniSize)
-      || mCombo->font() != qt_app_fonts_hash()->value("QComboBox", QFont())) {
+      || mCombo->font() != cs_app_fonts_hash()->value("QComboBox", QFont())) {
       menuOption.font = mCombo->font();
    } else {
       QVariant fontRoleData = index.data(Qt::FontRole);
       if (fontRoleData.isValid()) {
          menuOption.font = fontRoleData.value<QFont>();
       } else {
-         menuOption.font = qt_app_fonts_hash()->value("QComboMenuItem", mCombo->font());
+         menuOption.font = cs_app_fonts_hash()->value("QComboMenuItem", mCombo->font());
       }
    }
 
@@ -817,7 +817,7 @@ QComboBox::QComboBox(QComboBoxPrivate &dd, QWidget *parent)
 void QComboBoxPrivate::init()
 {
    Q_Q(QComboBox);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    // On OS X, only line edits and list views always get tab focus. It's only
    // when we enable full keyboard access that other controls can get tab focus.
    // When it's not editable, a combobox looks like a button, and it behaves as
@@ -988,7 +988,7 @@ void QComboBoxPrivate::updateViewContainerPaletteAndOpacity()
 
 void QComboBoxPrivate::updateFocusPolicy()
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    Q_Q(QComboBox);
 
    // See comment in QComboBoxPrivate::init()
@@ -2157,7 +2157,7 @@ bool QComboBoxPrivate::showNativePopup()
 
    m_platformMenu->showPopup(tlw, QRect(tlw->mapFromGlobal(q->mapToGlobal(offset)), QSize()), currentItem);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
    // The Cocoa popup will swallow any mouse release event.
    // We need to fake one here to un-press the button.
    QMouseEvent mouseReleased(QEvent::MouseButtonRelease, q->pos(), Qt::LeftButton,
@@ -3172,14 +3172,12 @@ void QComboBox::_q_modelReset()
    d->_q_modelReset();
 }
 
-#ifdef QT_KEYPAD_NAVIGATION
-void QComboBox::_q_completerActivated()
+#ifndef QT_NO_COMPLETER
+void QComboBox::_q_completerActivated(const QModelIndex &index)
 {
    Q_D(QComboBox);
-   d->_q_completerActivated();
+   d->_q_completerActivated(index);
 }
 #endif
-
-
 
 #endif // QT_NO_COMBOBOX
