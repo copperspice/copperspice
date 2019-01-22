@@ -153,6 +153,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qplaintextedit_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qpushbutton_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollarea_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollbar_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qsplitter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtabbar_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtextedit_p.h
@@ -170,6 +171,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractslider.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractspinbox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qbuttongroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcalendarwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcheckbox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcombobox.cpp

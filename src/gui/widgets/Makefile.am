@@ -150,6 +150,7 @@ GUI_WIDGETS_PRIVATE_INCLUDES = \
 	qplaintextedit_p.h \
 	qpushbutton_p.h \
 	qscrollarea_p.h \
+	qscrollbar_p.h \
 	qsplitter_p.h \
 	qtabbar_p.h \
 	qtextedit_p.h \
@@ -172,6 +173,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qabstractbutton.cpp \
 	src/gui/widgets/qabstractslider.cpp \
 	src/gui/widgets/qabstractspinbox.cpp \
+	src/gui/widgets/qbuttongroup.cpp \
 	src/gui/widgets/qcalendarwidget.cpp \
 	src/gui/widgets/qcheckbox.cpp \
 	src/gui/widgets/qcombobox.cpp \
