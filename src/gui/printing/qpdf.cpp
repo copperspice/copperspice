@@ -1209,7 +1209,6 @@ void QPdfEngine::setPen()
     *d->currentPage << QPdf::generateDashes(d->pen);
 }
 
-
 void QPdfEngine::setBrush()
 {
     Q_D(QPdfEngine);
@@ -1244,7 +1243,6 @@ void QPdfEngine::setBrush()
     else
         *d->currentPage << "/GSa gs\n";
 }
-
 
 bool QPdfEngine::newPage()
 {

@@ -54,12 +54,14 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagelayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesize.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpdf.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpdfwriter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintengine_pdf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdevice.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprinterinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintpreviewdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintpreviewwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintengine_pdf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdialog.qrc
 )
 

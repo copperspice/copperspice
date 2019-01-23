@@ -25,7 +25,6 @@
 
 #include <qabstractprintdialog.h>
 
-
 #ifndef QT_NO_PRINTDIALOG
 
 class QPrintDialogPrivate;
@@ -80,7 +79,6 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
    GUI_CS_SLOT_1(Private, void _q_collapseOrExpandDialog())
    GUI_CS_SLOT_2(_q_collapseOrExpandDialog)
-
 
    GUI_CS_SLOT_1(Private, void _q_checkFields())
    GUI_CS_SLOT_2(_q_checkFields)

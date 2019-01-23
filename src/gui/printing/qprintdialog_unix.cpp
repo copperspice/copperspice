@@ -25,6 +25,7 @@
 #ifndef QT_NO_PRINTDIALOG
 
 #include <qabstractprintdialog_p.h>
+#include <qdialogbuttonbox.h>
 #include <qmessagebox.h>
 #include <qprintdialog.h>
 #include <qfiledialog.h>
@@ -36,7 +37,7 @@
 #include <qplatform_printplugin.h>
 #include <qplatform_printersupport.h>
 #include <qprintdevice_p.h>
-#include <qdialogbuttonbox.h>
+#include <qregularexpression.h>
 
 #include <qfscompleter_p.h>
 #include <ui_qprintpropertieswidget.h>
@@ -54,7 +55,6 @@ class QUnixPrintWidgetPrivate;
 
 static void initResources()
 {
-   Q_INIT_RESOURCE(qprintdialog);
 }
 
 class QPrintPropertiesDialog : public QDialog
@@ -88,7 +88,7 @@ class QUnixPrintWidget : public QWidget
    GUI_CS_OBJECT(QUnixPrintWidget)
 
  public:
-   explicit QUnixPrintWidget(QPrinter *printer, QWidget *parent = 0);
+   explicit QUnixPrintWidget(QPrinter *printer, QWidget *parent = nullptr);
    ~QUnixPrintWidget();
    void updatePrinter();
 
@@ -97,14 +97,14 @@ class QUnixPrintWidget : public QWidget
    friend class QUnixPrintWidgetPrivate;
    QUnixPrintWidgetPrivate *d;
 
-   CS_SLOT_1(Private, void _q_printerChanged(int un_named_arg1))
-   CS_SLOT_2(_q_printerChanged)
+   GUI_CS_SLOT_1(Private, void _q_printerChanged(int index))
+   GUI_CS_SLOT_2(_q_printerChanged)
 
-   CS_SLOT_1(Private, void _q_btnBrowseClicked())
-   CS_SLOT_2(_q_btnBrowseClicked)
+   GUI_CS_SLOT_1(Private, void _q_btnBrowseClicked())
+   GUI_CS_SLOT_2(_q_btnBrowseClicked)
 
-   CS_SLOT_1(Private, void _q_btnPropertiesClicked())
-   CS_SLOT_2(_q_btnPropertiesClicked)
+   GUI_CS_SLOT_1(Private, void _q_btnPropertiesClicked())
+   GUI_CS_SLOT_2(_q_btnPropertiesClicked)
 };
 
 class QUnixPrintWidgetPrivate
@@ -177,7 +177,6 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
    QPrinter::OutputFormat printerOutputFormat;
 };
-
 
 QPrintPropertiesDialog::QPrintPropertiesDialog(QAbstractPrintDialog *parent)
    : QDialog(parent)
@@ -736,196 +735,243 @@ void QUnixPrintWidgetPrivate::applyPrinterProperties()
       }
 
       if (! cur.isEmpty() && cur.at(cur.length() - 1) != '/') {
-         cur += QLatin1Char('/');
+         cur += '/';
       }
 
       if (! cur.startsWith(home)) {
          cur = home;
+      }
 
-         if (QGuiApplication::platformName() == QLatin1String("xcb")) {
-            if (printer->docName().isEmpty()) {
-               cur += QLatin1String("print.pdf");
+      if (QGuiApplication::platformName() == "xcb") {
+         if (printer->docName().isEmpty()) {
+            cur += "print.pdf";
+
+         } else {
+            QRegularExpression regExp("^(.*)\\.\\S+$");   // exact match
+            QRegularExpressionMatch match = regExp.match(printer->docName());
+
+            if (match.hasMatch()) {
+               cur += match.captured(1);
+
             } else {
-               QRegExp re(QString::fromLatin1("(.*)\\.\\S+"));
-               if (re.exactMatch(printer->docName())) {
-                  cur += re.cap(1);
-               } else {
-                  cur += printer->docName();
-               }
-               cur += QLatin1String(".pdf");
+               cur += printer->docName();
             }
-         } // xcb
-         widget.filename->setText(cur);
-      } else {
-         widget.filename->setText( printer->outputFileName() );
-      }
-      QString printerName = printer->printerName();
 
-      if (!printerName.isEmpty()) {
-         for (int i = 0; i < widget.printers->count(); ++i) {
-            if (widget.printers->itemText(i) == printerName) {
-               widget.printers->setCurrentIndex(i);
-               break;
-            }
+            cur += ".pdf";
          }
-      }
+      } // xcb
 
-      // PDF and PS printers are not added to the dialog yet, we'll handle those cases in QUnixPrintWidgetPrivate::updateWidget
+      widget.filename->setText(cur);
 
-      if (propertiesDialog) {
-         propertiesDialog->applyPrinterProperties(printer);
+   } else {
+      widget.filename->setText( printer->outputFileName() );
+   }
+   QString printerName = printer->printerName();
+
+   if (! printerName.isEmpty()) {
+      for (int i = 0; i < widget.printers->count(); ++i) {
+         if (widget.printers->itemText(i) == printerName) {
+            widget.printers->setCurrentIndex(i);
+            break;
+         }
       }
    }
 
+   // PDF and PS printers are not added to the dialog yet, we'll handle those cases in QUnixPrintWidgetPrivate::updateWidget
+
+   if (propertiesDialog) {
+      propertiesDialog->applyPrinterProperties(printer);
+   }
+}
+
 #ifndef QT_NO_MESSAGEBOX
-   bool QUnixPrintWidgetPrivate::checkFields() {
-      if (widget.filename->isEnabled()) {
-         QString file = widget.filename->text();
-         QFile f(file);
-         QFileInfo fi(f);
-         bool exists = fi.exists();
-         bool opened = false;
-         if (exists && fi.isDir()) {
-            QMessageBox::warning(q, q->windowTitle(),
-               QPrintDialog::tr("%1 is a directory.\nPlease choose a different file name.").formatArg(file));
-            return false;
-         } else if ((exists && !fi.isWritable()) || !(opened = f.open(QFile::Append))) {
-            QMessageBox::warning(q, q->windowTitle(),
-               QPrintDialog::tr("File %1 is not writable.\nPlease choose a different file name.").formatArg(file));
-            return false;
-         } else if (exists) {
-            int ret = QMessageBox::question(q, q->windowTitle(),
-                  QPrintDialog::tr("%1 already exists.\nDo you want to overwrite it?").formatArg(file),
-                  QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-            if (ret == QMessageBox::No) {
-               return false;
-            }
-         }
+bool QUnixPrintWidgetPrivate::checkFields()
+{
+   if (widget.filename->isEnabled()) {
+      QString file = widget.filename->text();
+      QFile f(file);
+      QFileInfo fi(f);
 
-         if (opened) {
-            f.close();
-            if (!exists) {
-               f.remove();
-            }
+      bool exists = fi.exists();
+      bool opened = false;
+
+      if (exists && fi.isDir()) {
+         QMessageBox::warning(q, q->windowTitle(),
+            QPrintDialog::tr("%1 is a directory.\nPlease choose a different file name.").formatArg(file));
+         return false;
+
+      } else if ((exists && !fi.isWritable()) || !(opened = f.open(QFile::Append))) {
+         QMessageBox::warning(q, q->windowTitle(),
+            QPrintDialog::tr("File %1 is not writable.\nPlease choose a different file name.").formatArg(file));
+         return false;
+
+      } else if (exists) {
+         int ret = QMessageBox::question(q, q->windowTitle(),
+               QPrintDialog::tr("%1 already exists.\nDo you want to overwrite it?").formatArg(file),
+               QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+         if (ret == QMessageBox::No) {
+            return false;
          }
+      }
+
+      if (opened) {
+         f.close();
+
+         if (!exists) {
+            f.remove();
+         }
+      }
+   }
+
 #ifndef QT_NO_CUPS
-         if (propertiesDialogShown) {
-            QCUPSSupport::PagesPerSheet pagesPerSheet = propertiesDialog->widget.pageSetup->m_ui.pagesPerSheetCombo
-               ->currentData().value<QCUPSSupport::PagesPerSheet>();
-            QCUPSSupport::PageSet pageSet = optionsPane->options.pageSetCombo->currentData().value<QCUPSSupport::PageSet>();
-            if (pagesPerSheet != QCUPSSupport::OnePagePerSheet
-               && pageSet != QCUPSSupport::AllPages) {
-               QMessageBox::warning(q, q->windowTitle(),
-                  QPrintDialog::tr("Options 'Pages Per Sheet' and 'Page Set' cannot be used together.\nPlease turn one of those options off."));
-               return false;
-            }
+   if (propertiesDialogShown) {
+      QCUPSSupport::PagesPerSheet pagesPerSheet = propertiesDialog->widget.pageSetup->m_ui.pagesPerSheetCombo
+         ->currentData().value<QCUPSSupport::PagesPerSheet>();
 
-            // Every test passed. Accept the dialog.
-            return true;
-         }
+      QCUPSSupport::PageSet pageSet = optionsPane->options.pageSetCombo->currentData().value<QCUPSSupport::PageSet>();
+      if (pagesPerSheet != QCUPSSupport::OnePagePerSheet && pageSet != QCUPSSupport::AllPages) {
+         QMessageBox::warning(q, q->windowTitle(),
+            QPrintDialog::tr("Options 'Pages Per Sheet' and 'Page Set' cannot be used together.\nPlease turn one of those options off."));
+
+         return false;
+      }
+   }
+#endif
+
+   // Every test passed. Accept the dialog.
+   return true;
+}
 #endif // QT_NO_MESSAGEBOX
 
-         void QUnixPrintWidgetPrivate::setupPrinterProperties() {
-            if (! propertiesDialog) {
-               delete propertiesDialog;
-            }
+void QUnixPrintWidgetPrivate::setupPrinterProperties()
+{
+   if (! propertiesDialog) {
+      delete propertiesDialog;
+   }
 
-            propertiesDialog = new QPrintPropertiesDialog(q);
-            propertiesDialog->setResult(QDialog::Rejected);
+   propertiesDialog = new QPrintPropertiesDialog(q);
+   propertiesDialog->setResult(QDialog::Rejected);
 
-            propertiesDialogShown = false;
+   propertiesDialogShown = false;
 
-            propertiesDialog->applyPrinterProperties(q->printer());
+   propertiesDialog->applyPrinterProperties(q->printer());
 
-            if (q->isOptionEnabled(QPrintDialog::PrintToFile)
-               && (widget.printers->currentIndex() == widget.printers->count() - 1)) {// PDF
-               propertiesDialog->selectPrinter(QPrinter::PdfFormat, QString());
-            } else {
-               propertiesDialog->selectPrinter(QPrinter::NativeFormat, widget.printers->currentText());
-            }
-         }
+   if (q->isOptionEnabled(QPrintDialog::PrintToFile)
+      && (widget.printers->currentIndex() == widget.printers->count() - 1)) {// PDF
+      propertiesDialog->selectPrinter(QPrinter::PdfFormat, QString());
+   } else {
+      propertiesDialog->selectPrinter(QPrinter::NativeFormat, widget.printers->currentText());
+   }
+}
 
-         void QUnixPrintWidgetPrivate::_q_btnPropertiesClicked() {
-            if (!propertiesDialog) {
-               setupPrinterProperties();
-            }
-            propertiesDialog->exec();
-            if (!propertiesDialogShown && propertiesDialog->result() == QDialog::Rejected) {
-               delete propertiesDialog;
-               propertiesDialog = 0;
-               propertiesDialogShown = false;
-            } else {
-               propertiesDialogShown = true;
-            }
-         }
+void QUnixPrintWidgetPrivate::_q_btnPropertiesClicked()
+{
+   if (!propertiesDialog) {
+      setupPrinterProperties();
+   }
+   propertiesDialog->exec();
+   if (!propertiesDialogShown && propertiesDialog->result() == QDialog::Rejected) {
+      delete propertiesDialog;
+      propertiesDialog = 0;
+      propertiesDialogShown = false;
+   } else {
+      propertiesDialogShown = true;
+   }
+}
+
+void QUnixPrintWidgetPrivate::setupPrinter()
+{
+   const int printerCount = widget.printers->count();
+   const int index = widget.printers->currentIndex();
+
+   if (filePrintersAdded && index == printerCount - 1) { // PDF
+      printer->setPrinterName(QString());
+      Q_ASSERT(index != printerCount - 2); // separator
+      printer->setOutputFormat(QPrinter::PdfFormat);
+      QString path = widget.filename->text();
+      if (QDir::isRelativePath(path)) {
+         path = QDir::homePath() + QDir::separator() + path;
+      }
+      printer->setOutputFileName(path);
+   } else {
+      printer->setPrinterName(widget.printers->currentText());
+      printer->setOutputFileName(QString());
+   }
+
+   if (!propertiesDialog) {
+      setupPrinterProperties();
+   }
+   if (propertiesDialog->result() == QDialog::Accepted || !propertiesDialogShown) {
+      propertiesDialog->setupPrinter();
+   }
+}
 
 
-         void QUnixPrintWidgetPrivate::setupPrinter() {
-            const int printerCount = widget.printers->count();
-            const int index = widget.printers->currentIndex();
+/*! \internal
+*/
+QUnixPrintWidget::QUnixPrintWidget(QPrinter *printer, QWidget *parent)
+   : QWidget(parent), d(new QUnixPrintWidgetPrivate(this, printer))
+{
+   d->applyPrinterProperties();
+}
 
-            if (filePrintersAdded && index == printerCount - 1) { // PDF
-               printer->setPrinterName(QString());
-               Q_ASSERT(index != printerCount - 2); // separator
-               printer->setOutputFormat(QPrinter::PdfFormat);
-               QString path = widget.filename->text();
-               if (QDir::isRelativePath(path)) {
-                  path = QDir::homePath() + QDir::separator() + path;
-               }
-               printer->setOutputFileName(path);
-            } else {
-               printer->setPrinterName(widget.printers->currentText());
-               printer->setOutputFileName(QString());
-            }
+/*! \internal
+*/
+QUnixPrintWidget::~QUnixPrintWidget()
+{
+   delete d;
+}
 
-            if (!propertiesDialog) {
-               setupPrinterProperties();
-            }
-            if (propertiesDialog->result() == QDialog::Accepted || !propertiesDialogShown) {
-               propertiesDialog->setupPrinter();
-            }
-         }
+/*! \internal
 
-
-         /*! \internal
-         */
-         QUnixPrintWidget::QUnixPrintWidget(QPrinter * printer, QWidget * parent)
-            : QWidget(parent), d(new QUnixPrintWidgetPrivate(this, printer)) {
-            d->applyPrinterProperties();
-         }
-
-         /*! \internal
-         */
-         QUnixPrintWidget::~QUnixPrintWidget() {
-            delete d;
-         }
-
-         /*! \internal
-
-             Updates the printer with the states held in the QUnixPrintWidget.
-         */
-         void QUnixPrintWidget::updatePrinter() {
-            d->setupPrinter();
-         }
+    Updates the printer with the states held in the QUnixPrintWidget.
+*/
+void QUnixPrintWidget::updatePrinter()
+{
+   d->setupPrinter();
+}
 
 #endif // defined (Q_OS_UNIX)
 
-void QUnixPrintWidget::_q_printerChanged(int un_named_arg1)
+void QUnixPrintWidget::_q_printerChanged(int index)
 {
-	Q_D(QUnixPrintWidget);
-	d->_q_printerChanged();
+   d->_q_printerChanged(index);
 }
 
-void QUnixPrintWidget:_q_btnBrowseClicked()
+void QUnixPrintWidget::_q_btnBrowseClicked()
 {
-	Q_D(QUnixPrintWidget);
-	d->_q_btnBrowseClicked();
+   d->_q_btnBrowseClicked();
 }
 
-void QUnixPrintWidget:_q_btnPropertiesClicked()
+void QUnixPrintWidget::_q_btnPropertiesClicked()
 {
-	Q_D(QUnixPrintWidget);
-	d->_q_btnPropertiesClicked();
+   d->_q_btnPropertiesClicked();
 }
+
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
+
+void QPrintDialog::_q_togglePageSetCombo(bool arg1)
+{
+   Q_D(QPrintDialog);
+   d->_q_togglePageSetCombo(arg1);
+}
+
+void QPrintDialog::_q_collapseOrExpandDialog()
+{
+   Q_D(QPrintDialog);
+   d->_q_collapseOrExpandDialog();
+}
+
+void QPrintDialog::_q_checkFields()
+{
+   Q_D(QPrintDialog);
+   d->_q_checkFields();
+}
+
+#endif
+
+
+
 
 #endif // QT_NO_PRINTDIALOG

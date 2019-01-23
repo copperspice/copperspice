@@ -31,26 +31,23 @@
 #include <qpagelayout.h>
 #include <ui_qpagesetupwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 class QPrinter;
 class QPagePreview;
-
 
 class QPageSetupWidget : public QWidget
 {
    GUI_CS_OBJECT(QPageSetupWidget)
 
  public:
-   QPageSetupWidget(QWidget *parent = nullptr);
-   QPageSetupWidget(QPrinter *printer, QWidget *parent = nullptr);
+   explicit QPageSetupWidget(QWidget *parent = nullptr);
+   explicit QPageSetupWidget(QPrinter *printer, QWidget *parent = nullptr);
    void setPrinter(QPrinter *printer);
-
+   void selectPrinter(QPrinter::OutputFormat outputFormat, const QString &printerName);
    void setupPrinter() const;
 
- private :
+ private:
    GUI_CS_SLOT_1(Private, void pageOrientationChanged())
-   GUI_CS_SLOT_2(_pageOrientationChanged)
+   GUI_CS_SLOT_2(pageOrientationChanged)
 
    GUI_CS_SLOT_1(Private, void pageSizeChanged())
    GUI_CS_SLOT_2(pageSizeChanged)
@@ -88,12 +85,7 @@ class QPageSetupWidget : public QWidget
    QPageLayout m_pageLayout;
    QPageLayout::Unit m_units;
    bool m_blockSignals;
-
-   friend class QUnixPrintWidgetPrivate;  // Needed by checkFields()
-
 };
-
-
 
 #endif // QT_NO_PRINTDIALOG
 #endif
