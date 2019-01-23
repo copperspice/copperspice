@@ -283,7 +283,7 @@ void QPlatformPrintDevice::loadInputSlots() const
 QPrint::InputSlot QPlatformPrintDevice::defaultInputSlot() const
 {
     QPrint::InputSlot input;
-    input.key = QByteArrayLiteral("Auto");
+    input.key = QByteArray("Auto");
     input.name = QPrintDialog::tr("Automatic");
     input.id = QPrint::Auto;
     return input;
@@ -303,7 +303,7 @@ void QPlatformPrintDevice::loadOutputBins() const
 QPrint::OutputBin QPlatformPrintDevice::defaultOutputBin() const
 {
     QPrint::OutputBin output;
-    output.key = QByteArrayLiteral("Auto");
+    output.key = QByteArray("Auto");
     output.name = QPrintDialog::tr("Automatic");
     output.id = QPrint::AutoOutputBin;
     return output;

@@ -835,7 +835,7 @@ QPlatformDialogHelper::ButtonRole QPlatformDialogHelper::buttonRole(QPlatformDia
 const int *QPlatformDialogHelper::buttonLayout(Qt::Orientation orientation, ButtonLayout policy)
 {
    if (policy == UnknownLayout) {
-#if defined (Q_OS_OSX)
+#if defined (Q_OS_MAC)
       policy = MacLayout;
 #elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX)
       policy = KdeLayout;

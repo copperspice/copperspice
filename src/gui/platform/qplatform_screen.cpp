@@ -56,7 +56,7 @@ QPixmap QPlatformScreen::grabWindow(WId window, int x, int y, int width, int hei
    return QPixmap();
 }
 
-QWindow *QPlatformScreen::topLevelAt(const QPoint &pos) const
+QWindow *QPlatformScreen::topLevelWindowAt(const QPoint &pos) const
 {
    QWindowList list = QGuiApplication::topLevelWindows();
 

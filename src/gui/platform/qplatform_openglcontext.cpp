@@ -77,9 +77,11 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
    bool majorOk = false;
    bool minorOk = false;
    QList<QByteArray> parts = versionString.split(' ');
-   if (versionString.startsWith(QByteArrayLiteral("OpenGL ES"))) {
+
+   if (versionString.startsWith(QByteArray("OpenGL ES"))) {
       if (parts.size() >= 3) {
          QList<QByteArray> versionParts = parts.at(2).split('.');
+
          if (versionParts.size() >= 2) {
             major = versionParts.at(0).toInt(&majorOk);
             minor = versionParts.at(1).toInt(&minorOk);

@@ -89,7 +89,7 @@ class Q_GUI_EXPORT QPlatformScreen
    virtual Qt::ScreenOrientation orientation() const;
    virtual void setOrientationUpdateMask(Qt::ScreenOrientations mask);
 
-   virtual QWindow *topLevelAt(const QPoint &point) const;
+   virtual QWindow *topLevelWindowAt(const QPoint &point) const;
    virtual QList<QPlatformScreen *> virtualSiblings() const;
    const QPlatformScreen *screenForPosition(const QPoint &point) const;
 
