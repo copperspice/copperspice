@@ -5,22 +5,32 @@ GUI_PUBLIC_INCLUDES += \
 	QPlatform_BackingStore \
 	QPlatform_Clipboard \
 	QPlatform_Cursor \
+	QPlatform_DialogHelper \
 	QPlatform_Drag \
 	QPlatform_FontDatabase \
 	QPlatform_GraphicsBuffer \
+	QPlatform_GraphicsBufferHelper \
+	QPlatform_HeaderHelper \
 	QPlatform_Integration \
+	QPlatform_IntegrationPlugin \
 	QPlatform_InputContext \
 	QPlatform_Menu \
 	QPlatform_NativeInterface \
+	QPlatform_OffScreenSurface \
 	QPlatform_OpenGLContext \
 	QPlatform_Pixmap \
+	QPlatform_PrintDevice \
+	QPlatform_PrinterSupport \
+	QPlatform_PrintPlugin \
 	QPlatform_Screen \
 	QPlatform_Services \
+	QPlatform_SessionManager \
+	QPlatform_SharedGraphicsCache \
 	QPlatform_Surface \
 	QPlatform_SystemTrayIcon \
 	QPlatform_Theme \
+	QPlatform_ThemePlugin \
 	QPlatform_Window
-
 
 GUI_PLATFORM_INCLUDES = \
 	qplatform_accessibility.h \
@@ -32,6 +42,7 @@ GUI_PLATFORM_INCLUDES = \
 	qplatform_fontdatabase.h \
 	qplatform_graphicsbuffer.h \
 	qplatform_graphicsbufferhelper.h \
+	qplatform_headerhelper.h \
 	qplatform_inputcontext.h \
 	qplatform_integration.h \
 	qplatform_integrationplugin.h \
@@ -50,6 +61,7 @@ GUI_PLATFORM_INCLUDES = \
 	qplatform_surface.h \
 	qplatform_systemtrayicon.h \
 	qplatform_theme.h \
+	qplatform_themeplugin.h \
 	qplatform_window.h
 
 GUI_PLATFORM_PRIVATE_INCLUDES = \
@@ -60,18 +72,23 @@ GUI_PLATFORM_PRIVATE_INCLUDES = \
 	qplatform_themefactory_p.h \
 	qplatform_window_p.h
 
+GUI_PLATFORMHEADERS_INCLUDES = \
+	platformheaders/xcb/qxcbintegrationfunctions.h \
+	platformheaders/xcb/qxcbscreenfunctions.h \
+	platformheaders/xcb/qxcbwindowfunctions.h \
+	platformheaders/windows/qwindowswindowfunctions.h \
+	platformheaders/cocoa/qcocoawindowfunctions.h
 
-# GUI_PLATFORM_PRIVATE_INCLUDES +=   BROOM
+PLATFORMHEADER_DIRS = xcb windows cocoa
 
-#	platformheaders/xcbfunctions/qxcbintegrationfunctions.h
-#	platformheaders/xcbfunctions/qxcbscreenfunctions.h
-#	platformheaders/xcbfunctions/qxcbwindowfunctions.h
+GUI_INCLUDES += $(GUI_PLATFORM_INCLUDES) \
+	$(patsubst %,platformheaders/%,$(notdir $(GUI_PLATFORMHEADERS_INCLUDES)))
 
-GUI_INCLUDES += $(GUI_PLATFORM_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_PLATFORM_PRIVATE_INCLUDES)
 
 noinst_HEADERS+=$(patsubst %,src/gui/platform/%,$(GUI_PLATFORM_INCLUDES)) \
-	$(patsubst %,src/gui/platform/%,$(GUI_PLATFORM_PRIVATE_INCLUDES))
+	$(patsubst %,src/gui/platform/%,$(GUI_PLATFORM_PRIVATE_INCLUDES)) \
+	$(patsubst %,src/gui/platform/%,$(GUI_PLATFORMHEADERS_INCLUDES))
 
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/platform/qplatform_accessibility.cpp \
@@ -102,6 +119,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/platform/qplatform_surface.cpp \
 	src/gui/platform/qplatform_systemtrayicon.cpp \
 	src/gui/platform/qplatform_theme.cpp \
+	src/gui/platform/qplatform_themefactory.cpp \
+	src/gui/platform/qplatform_themeplugin.cpp \
 	src/gui/platform/qplatform_window.cpp
 
 EXTRA_DIST+=
