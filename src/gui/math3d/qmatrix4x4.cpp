@@ -1458,14 +1458,33 @@ void QMatrix4x4::lookAt(const QVector3D &eye, const QVector3D &center, const QVe
 
 #endif
 
-/*!
-    Flips between right-handed and left-handed coordinate systems
-    by multiplying the y and z co-ordinates by -1.  This is normally
-    used to create a left-handed orthographic view without scaling
-    the viewport as ortho() does.
+void QMatrix4x4::viewport(qreal left, qreal  bottom, qreal  width, qreal  height, qreal  nearPlane, qreal farPlane)
+{
+    const float w2 = width / 2.0f;
+    const float h2 = height / 2.0f;
 
-    \sa ortho()
-*/
+    QMatrix4x4 m(1);
+    m.m[0][0] = w2;
+    m.m[1][0] = 0.0f;
+    m.m[2][0] = 0.0f;
+    m.m[3][0] = left + w2;
+    m.m[0][1] = 0.0f;
+    m.m[1][1] = h2;
+    m.m[2][1] = 0.0f;
+    m.m[3][1] = bottom + h2;
+    m.m[0][2] = 0.0f;
+    m.m[1][2] = 0.0f;
+    m.m[2][2] = (farPlane - nearPlane) / 2.0f;
+    m.m[3][2] = (nearPlane + farPlane) / 2.0f;
+    m.m[0][3] = 0.0f;
+    m.m[1][3] = 0.0f;
+    m.m[2][3] = 0.0f;
+    m.m[3][3] = 1.0f;
+    m.flagBits = General;
+
+    *this *= m;
+}
+
 void QMatrix4x4::flipCoordinates()
 {
    if (flagBits == Scale || flagBits == (Scale | Translation)) {
