@@ -22,8 +22,6 @@
 
 #include <qsqldriverplugin.h>
 
-QT_BEGIN_NAMESPACE
-
 QSqlDriverPlugin::QSqlDriverPlugin(QObject *parent)
    : QObject(parent)
 {
@@ -32,5 +30,3 @@ QSqlDriverPlugin::QSqlDriverPlugin(QObject *parent)
 QSqlDriverPlugin::~QSqlDriverPlugin()
 {
 }
-
-QT_END_NAMESPACE

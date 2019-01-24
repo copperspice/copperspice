@@ -120,14 +120,14 @@ class QSqlDatabasePrivate
 {
  public:
    QSqlDatabasePrivate(QSqlDatabase *d, QSqlDriver *dr = 0):
-      q(d),
-      driver(dr),
-      port(-1) {
-      ref = 1;
+      ref(1), q(d), driver(dr), port(-1) {
+
       precisionPolicy = QSql::LowPrecisionDouble;
    }
+
    QSqlDatabasePrivate(const QSqlDatabasePrivate &other);
    ~QSqlDatabasePrivate();
+
    void init(const QString &type);
    void copy(const QSqlDatabasePrivate *other);
    void disable();
@@ -154,9 +154,8 @@ class QSqlDatabasePrivate
    static void cleanConnections();
 };
 
-QSqlDatabasePrivate::QSqlDatabasePrivate(const QSqlDatabasePrivate &other)
+QSqlDatabasePrivate::QSqlDatabasePrivate(const QSqlDatabasePrivate &other) : ref(1)
 {
-   ref = 1;
    q = other.q;
    dbname = other.dbname;
    uname = other.uname;

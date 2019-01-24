@@ -23,30 +23,24 @@
 #ifndef QSQLDRIVERPLUGIN_H
 #define QSQLDRIVERPLUGIN_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
-
-QT_BEGIN_NAMESPACE
+#include <qplugin.h>
+#include <qfactoryinterface.h>
+#include <qsql.h>
 
 class QSqlDriver;
 
-struct Q_SQL_EXPORT QSqlDriverFactoryInterface : public QFactoryInterface {
-   virtual QSqlDriver *create(const QString &name) = 0;
-};
-
 #define QSqlDriverFactoryInterface_iid "com.copperspice.QSqlDriverFactoryInterface"
-CS_DECLARE_INTERFACE(QSqlDriverFactoryInterface, QSqlDriverFactoryInterface_iid)
 
-class Q_SQL_EXPORT QSqlDriverPlugin : public QObject, public QSqlDriverFactoryInterface
+class Q_SQL_EXPORT QSqlDriverPlugin : public QObject
 {
-   SQL_CS_OBJECT_MULTIPLE(QSqlDriverPlugin, QObject)
-   CS_INTERFACES(QSqlDriverFactoryInterface, QFactoryInterface)
+   SQL_CS_OBJECT(QSqlDriverPlugin)
 
  public:
    explicit QSqlDriverPlugin(QObject *parent = nullptr);
    ~QSqlDriverPlugin();
+
+   virtual QSqlDriver *create(const QString &key) = 0;
 };
 
-QT_END_NAMESPACE
 
-#endif // QSQLDRIVERPLUGIN_H
+#endif
