@@ -23,11 +23,10 @@
 #ifndef QWINDOWSVISTASTYLE_P_H
 #define QWINDOWSVISTASTYLE_P_H
 
-#include <qwindowsvistastyle.h>
+#include <qwindows_xpstyle_p.h>
 
 #if ! defined(QT_NO_STYLE_WINDOWSVISTA)
-#include <qwindowsxpstyle_p.h>
-#include <qpaintengine_raster_p.h>
+
 #include <qlibrary.h>
 #include <qpaintengine.h>
 #include <qwidget.h>
@@ -52,14 +51,14 @@
 #include <qmessagebox.h>
 #include <qdialogbuttonbox.h>
 #include <qinputdialog.h>
-#include <qtreeview.h>
-#include <qlistview.h>
 #include <qtableview.h>
-#include <qbasictimer.h>
 #include <qdatetime.h>
 #include <qcommandlinkbutton.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstyleanimation_p.h>
+#include <qpaintengine_raster_p.h>
+
+class QWindowsVistaStylePrivate;
 
 #if !defined(SCHEMA_VERIFY_VSSYM32)
 #define TMT_ANIMATIONDURATION       5006
@@ -107,99 +106,94 @@ QT_BEGIN_NAMESPACE
 #define TDLG_SECONDARYPANEL         8
 #endif
 
-class QWindowsVistaAnimation
+class QWindowsVistaStyle : public QWindowsXPStyle
 {
- public :
-   QWindowsVistaAnimation() : _running(true) { }
-   virtual ~QWindowsVistaAnimation() { }
-   QWidget *widget() const {
-      return _widget;
-   }
-   bool running() const {
-      return _running;
-   }
-   const QTime &startTime() const {
-      return _startTime;
-   }
-   void setRunning(bool val) {
-      _running = val;
-   }
-   void setWidget(QWidget *widget) {
-      _widget = widget;
-   }
-   void setStartTime(const QTime &startTime) {
-      _startTime = startTime;
-   }
-   virtual void paint(QPainter *painter, const QStyleOption *option);
+   GUI_CS_OBJECT(QWindowsVistaStyle)
 
- protected:
-   void drawBlendedImage(QPainter *painter, QRect rect, float value);
-   QTime _startTime;
-   QPointer<QWidget> _widget;
-   QImage _primaryImage;
-   QImage _secondaryImage;
-   QImage _tempImage;
-   bool _running;
+ public:
+   QWindowsVistaStyle();
+   ~QWindowsVistaStyle();
+
+   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
+      const QWidget *widget = 0) const override;
+
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
+      const QWidget *widget) const override;
+
+   void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
+      const QWidget *widget) const override;
+
+   QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size,
+      const QWidget *widget) const override;
+
+   QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const override;
+
+   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
+      const QWidget *widget) const override;
+
+   SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option, const QPoint &pos,
+      const QWidget *widget = 0) const override;
+
+   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
+      const QWidget *widget = nullptr) const;
+
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = 0) const override;
+
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const override;
+
+   int styleHint(StyleHint hint, const QStyleOption *opt = 0, const QWidget *widget = 0,
+      QStyleHintReturn *returnData = 0) const override;
+
+   void polish(QWidget *widget) override;
+   void unpolish(QWidget *widget) override;
+   void polish(QPalette &pal) override;
+   void polish(QApplication *app) override;
+   void unpolish(QApplication *app) override;
+
+   QPalette standardPalette() const override;
+
+
+ private:
+   Q_DISABLE_COPY(QWindowsVistaStyle)
+   Q_DECLARE_PRIVATE(QWindowsVistaStyle)
+
+   friend class QStyleFactory;
 };
 
+class QWindowsVistaAnimation : public QBlendStyleAnimation
+{
+   GUI_CS_OBJECT(QWindowsVistaAnimation)
+
+ public:
+   QWindowsVistaAnimation(Type type, QObject *target)
+      : QBlendStyleAnimation(type, target)
+   { }
+
+   virtual bool isUpdateNeeded() const;
+   void paint(QPainter *painter, const QStyleOption *option);
+};
 
 // Handles state transition animations
 class QWindowsVistaTransition : public QWindowsVistaAnimation
 {
+   GUI_CS_OBJECT(QWindowsVistaTransition)
+
  public :
-   QWindowsVistaTransition() : QWindowsVistaAnimation() {}
-   virtual ~QWindowsVistaTransition() { }
-
-   void setDuration(int duration) {
-      _duration = duration;
-   }
-
-   void setStartImage(const QImage &image) {
-      _primaryImage = image;
-   }
-
-   void setEndImage(const QImage &image) {
-      _secondaryImage = image;
-   }
-
-   virtual void paint(QPainter *painter, const QStyleOption *option) override;
-
-   int duration() const {
-      return _duration;
-   }
-
-   int _duration; //set time in ms to complete a state transition
+   QWindowsVistaTransition(QObject *target)
+      : QWindowsVistaAnimation(Transition, target)
+   {}
 };
-
 
 // Handles pulse animations (default buttons)
 class QWindowsVistaPulse: public QWindowsVistaAnimation
 {
+   GUI_CS_OBJECT(QWindowsVistaPulse)
+
  public :
-   QWindowsVistaPulse() : QWindowsVistaAnimation() {}
-   virtual ~QWindowsVistaPulse() { }
-
-   void setDuration(int duration) {
-      _duration = duration;
-   }
-
-   void setPrimaryImage(const QImage &image) {
-      _primaryImage = image;
-   }
-
-   void setAlternateImage(const QImage &image) {
-      _secondaryImage = image;
-   }
-
-   virtual void paint(QPainter *painter, const QStyleOption *option) override;
-
-   int duration() const {
-      return _duration;
-   }
-
-   int _duration; //time in ms to complete a pulse cycle
+   QWindowsVistaPulse(QObject *target)
+      : QWindowsVistaAnimation(Pulse, target)
+   {}
 };
-
 
 class QWindowsVistaStylePrivate :  public QWindowsXPStylePrivate
 {
@@ -207,24 +201,11 @@ class QWindowsVistaStylePrivate :  public QWindowsXPStylePrivate
 
  public:
    QWindowsVistaStylePrivate();
-   ~QWindowsVistaStylePrivate();
-   static bool resolveSymbols();
-   static inline bool useVista();
-   void startAnimation(QWindowsVistaAnimation *);
-   void stopAnimation(const QWidget *);
-   QWindowsVistaAnimation *widgetAnimation(const QWidget *) const;
-   void timerEvent();
-   bool transitionsEnabled() const;
-   QWidget *treeViewHelper();
 
- private:
-   QList <QWindowsVistaAnimation *> animations;
-   QBasicTimer animationTimer;
-   QWidget *m_treeViewHelper;
+   static int fixedPixelMetric(QStyle::PixelMetric pm);
+   static inline bool useVista();
+   bool transitionsEnabled() const;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_STYLE_WINDOWSVISTA
-
-#endif // QWINDOWSVISTASTYLE_P_H
+#endif
