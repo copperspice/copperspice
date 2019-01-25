@@ -23,93 +23,95 @@
 #ifndef QGTKPAINTER_P_H
 #define QGTKPAINTER_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
-#if !defined(QT_NO_STYLE_GTK)
+#if ! defined(QT_NO_STYLE_GTK)
 
-#include <QtGui/QCleanlooksStyle>
-#include <QtGui/QPainter>
-#include <QtGui/QPalette>
-#include <QtGui/QFont>
-#include <qgtkstyle_p.h>
+#include <qsize.h>
+#include <qrect.h>
+#include <qpoint.h>
+#include <qpixmap.h>
+#include <qpainter.h>
 
-QT_BEGIN_NAMESPACE
+#include <gtk/gtk.h>
 
 class QGtkPainter
 {
 
  public:
-   QGtkPainter(QPainter *painter);
-   GtkStyle *getStyle(GtkWidget *gtkWidget);
-   GtkStateType gtkState(const QStyleOption *option);
+   QGtkPainter();
+   virtual ~QGtkPainter();
+
+   void reset(QPainter *painter = 0);
 
    void setAlphaSupport(bool value) {
       m_alpha = value;
    }
+
    void setClipRect(const QRect &rect) {
       m_cliprect = rect;
    }
+
    void setFlipHorizontal(bool value) {
       m_hflipped = value;
    }
+
    void setFlipVertical(bool value) {
       m_vflipped = value;
    }
+
    void setUsePixmapCache(bool value) {
       m_usePixmapCache = value;
    }
 
-   void paintBoxGap(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
-      GtkPositionType gap_side, gint x, gint width, GtkStyle *style);
+   virtual void paintBoxGap(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
+      GtkPositionType gap_side, gint x, gint width, GtkStyle *style) = 0;
 
-   void paintBox(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
-      GtkStyle *style,const QString &pmKey = QString());
+   virtual void paintBox(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
+      GtkStyle *style, const QString &pmKey = QString()) = 0;
 
-   void paintHline(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkStyle *style,
-      int x1, int x2, int y, const QString &pmKey = QString());
+   virtual void paintHline(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkStyle *style,
+      int x1, int x2, int y, const QString &pmKey = QString()) = 0;
 
-   void paintVline(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkStyle *style,
-      int y1, int y2, int x, const QString &pmKey = QString());
+   virtual void paintVline(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkStyle *style,
+      int y1, int y2, int x, const QString &pmKey = QString()) = 0;
 
-   void paintExpander(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
-      GtkExpanderStyle expander_state, GtkStyle *style, const QString &pmKey = QString());
+   virtual void paintExpander(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
+      GtkExpanderStyle expander_state, GtkStyle *style, const QString &pmKey = QString()) = 0;
 
-   void paintFocus(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkStyle *style,
-      const QString &pmKey = QString());
+   virtual void paintFocus(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkStyle *style,
+      const QString &pmKey = QString()) = 0;
 
-   void paintResizeGrip(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
-      GtkShadowType shadow, GdkWindowEdge edge, GtkStyle *style, const QString &pmKey = QString());
+   virtual void paintResizeGrip(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
+      GtkShadowType shadow, GdkWindowEdge edge, GtkStyle *style, const QString &pmKey = QString()) = 0;
 
-   void paintArrow(GtkWidget *gtkWidget, const QString &part, const QRect &arrowrect, GtkArrowType arrow_type,
-      GtkStateType state, GtkShadowType shadow, gboolean fill, GtkStyle *style, const QString &pmKey = QString());
+   virtual void paintArrow(GtkWidget *gtkWidget, const QString &part, const QRect &arrowrect, GtkArrowType arrow_type,
+      GtkStateType state, GtkShadowType shadow, gboolean fill, GtkStyle *style, const QString &pmKey = QString()) = 0;
 
-   void paintHandle(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
-      GtkOrientation orientation, GtkStyle *style);
+   virtual void paintHandle(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
+      GtkOrientation orientation, GtkStyle *style) = 0;
 
-   void paintSlider(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
-      GtkStyle *style, GtkOrientation orientation, const QString &pmKey = QString());
+   virtual void paintSlider(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
+      GtkStyle *style, GtkOrientation orientation, const QString &pmKey = QString()) = 0;
 
-   void paintShadow(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
-      GtkStyle *style, const QString &pmKey = QString());
+   virtual void paintShadow(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
+      GtkStyle *style, const QString &pmKey = QString()) = 0;
 
-   void paintFlatBox(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
-      GtkStyle *style, const QString & = QString());
+   virtual void paintFlatBox(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state, GtkShadowType shadow,
+      GtkStyle *style, const QString & = QString()) = 0;
 
-   void paintExtention(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
-      GtkShadowType shadow,GtkPositionType gap_pos, GtkStyle *style);
+   virtual void paintExtention(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
+      GtkShadowType shadow, GtkPositionType gap_pos, GtkStyle *style) = 0;
 
-   void paintOption(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state, GtkShadowType shadow, GtkStyle *style,
-      const QString &detail);
+   virtual void paintOption(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state, GtkShadowType shadow, GtkStyle *style,
+      const QString &detail) = 0;
 
-   void paintCheckbox(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state, GtkShadowType shadow, GtkStyle *style,
-      const QString &detail);
+   virtual void paintCheckbox(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state, GtkShadowType shadow, GtkStyle *style,
+      const QString &detail) = 0;
 
-   static QPixmap getIcon(const char *iconName, GtkIconSize size = GTK_ICON_SIZE_BUTTON);
+ protected:
+   static QString uniqueName(const QString &key, GtkStateType state, GtkShadowType shadow, const QSize &size, GtkWidget *widget = 0);
 
- private:
-   QPixmap renderTheme(uchar *bdata, uchar *wdata, const QRect &);
-
-   GtkWidget *m_window;
    QPainter *m_painter;
    bool m_alpha;
    bool m_hflipped;
@@ -118,8 +120,6 @@ class QGtkPainter
    QRect m_cliprect;
 
 };
-
-QT_END_NAMESPACE
 
 #endif //!defined(QT_NO_STYLE_QGTK)
 

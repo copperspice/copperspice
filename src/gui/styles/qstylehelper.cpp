@@ -23,21 +23,19 @@
 #include <qstyleoption.h>
 #include <qpainter.h>
 #include <qpixmapcache.h>
+#include <qmath.h>
+#include <qscrollbar.h>
+#include <qabstractscrollarea.h>
+#include <qwindow.h>
+#include <qcryptographichash.h>
+
 #include <qmath_p.h>
 #include <qstyle_p.h>
-#include <qmath.h>
-
-#if defined(Q_OS_WIN)
-#include <qt_windows.h>
-
-#elif defined(Q_OS_MAC)
-#include <qt_cocoa_helpers_mac_p.h>
-
-#endif
-
 #include <qstylehelper_p.h>
 
-QT_BEGIN_NAMESPACE
+Q_DECLARE_METATYPE(QWindow *);
+
+Q_GUI_EXPORT int qt_defaultDpiX();
 
 namespace QStyleHelper {
 
@@ -45,40 +43,67 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
 {
    const QStyleOptionComplex *complexOption = qstyleoption_cast<const QStyleOptionComplex *>(option);
    QString tmp = key + HexString<uint>(option->state)
-                 + HexString<uint>(option->direction)
-                 + HexString<uint>(complexOption ? uint(complexOption->activeSubControls) : 0u)
-                 + HexString<quint64>(option->palette.cacheKey())
-                 + HexString<uint>(size.width())
-                 + HexString<uint>(size.height());
+      + HexString<uint>(option->direction)
+      + HexString<uint>(complexOption ? uint(complexOption->activeSubControls) : 0u)
+      + HexString<uint>(size.width())
+      + HexString<uint>(size.height());
 
 #ifndef QT_NO_SPINBOX
    if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
       tmp = tmp + HexString<uint>(spinBox->buttonSymbols)
-            + HexString<uint>(spinBox->stepEnabled)
-            + QLatin1Char(spinBox->frame ? '1' : '0'); ;
+         + HexString<uint>(spinBox->stepEnabled)
+         + QLatin1Char(spinBox->frame ? '1' : '0'); ;
    }
 #endif // QT_NO_SPINBOX
+   if (option->palette != QGuiApplication::palette()) {
+      tmp.append(QLatin1Char('P'));
+
+      QByteArray key;
+      key.reserve(5120); // Observed 5040B for a serialized palette on 64bit
+      {
+         QDataStream str(&key, QIODevice::WriteOnly);
+         str << option->palette;
+      }
+      const QByteArray sha1 = QCryptographicHash::hash(key, QCryptographicHash::Sha1).toHex();
+      tmp.append(QString::fromLatin1(sha1));
+
+   }
    return tmp;
 }
 
 qreal dpiScaled(qreal value)
 {
-   static qreal scale = -1;
-   if (scale < 0) {
-      scale = 1.0;
-#if defined(Q_OS_WIN)
-      {
-         HDC hdcScreen = GetDC(0);
-         int dpi = GetDeviceCaps(hdcScreen, LOGPIXELSX);
-         ReleaseDC(0, hdcScreen);
-         scale = dpi / 96.0;
-      }
-#elif defined(Q_OS_MAC)
-      scale = qt_mac_get_scalefactor();
-#endif
-   }
+#ifdef Q_OS_MAC
+   // On mac the DPI is always 72 so we should not scale it
+   return value;
+#else
+   static const qreal scale = qreal(qt_defaultDpiX()) / 96.0;
    return value * scale;
+#endif
 }
+
+#ifndef QT_NO_ACCESSIBILITY
+bool isInstanceOf(QObject *obj, QAccessible::Role role)
+{
+   bool match = false;
+   QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(obj);
+   match = iface && iface->role() == role;
+   return match;
+}
+// Searches for an ancestor of a particular accessible role
+bool hasAncestor(QObject *obj, QAccessible::Role role)
+{
+   bool found = false;
+   QObject *parent = obj ? obj->parent() : 0;
+   while (parent && !found) {
+      if (isInstanceOf(parent, role)) {
+         found = true;
+      }
+      parent = parent->parent();
+   }
+   return found;
+}
+#endif // QT_NO_ACCESSIBILITY
 
 
 #ifndef QT_NO_DIAL
@@ -102,19 +127,23 @@ static QPointF calcRadialPos(const QStyleOptionSlider *dial, qreal offset)
    const int r = qMin(width, height) / 2;
    const int currentSliderPosition = dial->upsideDown ? dial->sliderPosition : (dial->maximum - dial->sliderPosition);
    qreal a = 0;
+
    if (dial->maximum == dial->minimum) {
       a = Q_PI / 2;
-   } else if (dial->dialWrapping)
+   } else if (dial->dialWrapping) {
       a = Q_PI * 3 / 2 - (currentSliderPosition - dial->minimum) * 2 * Q_PI
-          / (dial->maximum - dial->minimum);
-   else
+         / (dial->maximum - dial->minimum);
+   } else {
       a = (Q_PI * 8 - (currentSliderPosition - dial->minimum) * 10 * Q_PI
-           / (dial->maximum - dial->minimum)) / 6;
+            / (dial->maximum - dial->minimum)) / 6;
+   }
+
    qreal xc = width / 2.0;
    qreal yc = height / 2.0;
    qreal len = r - QStyleHelper::calcBigLineSize(r) - 3;
    qreal back = offset * len;
    QPointF pos(QPointF(xc + back * qCos(a), yc - back * qSin(a)));
+
    return pos;
 }
 
@@ -183,16 +212,16 @@ QPolygonF calcLines(const QStyleOptionSlider *dial)
    int smallLineSize = bigLineSize / 2;
    for (int i = 0; i <= notches; ++i) {
       qreal angle = dial->dialWrapping ? Q_PI * 3 / 2 - i * 2 * Q_PI / notches
-                    : (Q_PI * 8 - i * 10 * Q_PI / notches) / 6;
+         : (Q_PI * 8 - i * 10 * Q_PI / notches) / 6;
       qreal s = qSin(angle);
       qreal c = qCos(angle);
       if (i == 0 || (((ns * i) % (dial->pageStep ? dial->pageStep : 1)) == 0)) {
          poly[2 * i] = QPointF(xc + (r - bigLineSize) * c,
-                               yc - (r - bigLineSize) * s);
+               yc - (r - bigLineSize) * s);
          poly[2 * i + 1] = QPointF(xc + r * c, yc - r * s);
       } else {
          poly[2 * i] = QPointF(xc + (r - 1 - smallLineSize) * c,
-                               yc - (r - 1 - smallLineSize) * s);
+               yc - (r - 1 - smallLineSize) * s);
          poly[2 * i + 1] = QPointF(xc + (r - 1) * c, yc - (r - 1) * s);
       }
    }
@@ -231,21 +260,21 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
    const qreal dy = option->rect.y() + d_ + (height - 2 * r) / 2 + 1;
 
    QRectF br = QRectF(dx + 0.5, dy + 0.5,
-                      int(r * 2 - 2 * d_ - 2),
-                      int(r * 2 - 2 * d_ - 2));
+         int(r * 2 - 2 * d_ - 2),
+         int(r * 2 - 2 * d_ - 2));
    buttonColor.setHsv(buttonColor .hue(),
-                      qMin(140, buttonColor .saturation()),
-                      qMax(180, buttonColor.value()));
+      qMin(140, buttonColor .saturation()),
+      qMax(180, buttonColor.value()));
    QColor shadowColor(0, 0, 0, 20);
 
    if (enabled) {
       // Drop shadow
       qreal shadowSize = qMax(1.0, penSize / 2.0);
       QRectF shadowRect = br.adjusted(-2 * shadowSize, -2 * shadowSize,
-                                      2 * shadowSize, 2 * shadowSize);
+            2 * shadowSize, 2 * shadowSize);
       QRadialGradient shadowGradient(shadowRect.center().x(),
-                                     shadowRect.center().y(), shadowRect.width() / 2.0,
-                                     shadowRect.center().x(), shadowRect.center().y());
+         shadowRect.center().y(), shadowRect.width() / 2.0,
+         shadowRect.center().x(), shadowRect.center().y());
       shadowGradient.setColorAt(qreal(0.91), QColor(0, 0, 0, 40));
       shadowGradient.setColorAt(qreal(1.0), Qt::transparent);
       p->setBrush(shadowGradient);
@@ -256,8 +285,8 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
 
       // Main gradient
       QRadialGradient gradient(br.center().x() - br.width() / 3, dy,
-                               br.width() * 1.3, br.center().x(),
-                               br.center().y() - br.height() / 2);
+         br.width() * 1.3, br.center().x(),
+         br.center().y() - br.height() / 2);
       gradient.setColorAt(0, buttonColor.lighter(110));
       gradient.setColorAt(qreal(0.5), buttonColor);
       gradient.setColorAt(qreal(0.501), buttonColor.darker(102));
@@ -276,8 +305,8 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
    if (option->state & QStyle::State_HasFocus) {
       QColor highlight = pal.highlight().color();
       highlight.setHsv(highlight.hue(),
-                       qMin(160, highlight.saturation()),
-                       qMax(230, highlight.value()));
+         qMin(160, highlight.saturation()),
+         qMax(230, highlight.value()));
       highlight.setAlpha(127);
       p->setPen(QPen(highlight, 2.0));
       p->setBrush(Qt::NoBrush);
@@ -292,9 +321,9 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
    const qreal ds = r / qreal(7.0);
    QRectF dialRect(dp.x() - ds, dp.y() - ds, 2 * ds, 2 * ds);
    QRadialGradient dialGradient(dialRect.center().x() + dialRect.width() / 2,
-                                dialRect.center().y() + dialRect.width(),
-                                dialRect.width() * 2,
-                                dialRect.center().x(), dialRect.center().y());
+      dialRect.center().y() + dialRect.width(),
+      dialRect.width() * 2,
+      dialRect.center().x(), dialRect.center().y());
    dialGradient.setColorAt(1, buttonColor.darker(140));
    dialGradient.setColorAt(qreal(0.4), buttonColor.darker(120));
    dialGradient.setColorAt(0, buttonColor.darker(110));
@@ -313,8 +342,8 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
 #endif //QT_NO_DIAL
 
 void drawBorderPixmap(const QPixmap &pixmap, QPainter *painter, const QRect &rect,
-                      int left, int top, int right,
-                      int bottom)
+   int left, int top, int right,
+   int bottom)
 {
    QSize size = pixmap.size();
    //painter->setRenderHint(QPainter::SmoothPixmapTransform);
@@ -322,53 +351,72 @@ void drawBorderPixmap(const QPixmap &pixmap, QPainter *painter, const QRect &rec
    //top
    if (top > 0) {
       painter->drawPixmap(QRect(rect.left() + left, rect.top(), rect.width() - right - left, top), pixmap,
-                          QRect(left, 0, size.width() - right - left, top));
+         QRect(left, 0, size.width() - right - left, top));
 
       //top-left
       if (left > 0)
          painter->drawPixmap(QRect(rect.left(), rect.top(), left, top), pixmap,
-                             QRect(0, 0, left, top));
+            QRect(0, 0, left, top));
 
       //top-right
       if (right > 0)
          painter->drawPixmap(QRect(rect.left() + rect.width() - right, rect.top(), right, top), pixmap,
-                             QRect(size.width() - right, 0, right, top));
+            QRect(size.width() - right, 0, right, top));
    }
 
    //left
    if (left > 0)
       painter->drawPixmap(QRect(rect.left(), rect.top() + top, left, rect.height() - top - bottom), pixmap,
-                          QRect(0, top, left, size.height() - bottom - top));
+         QRect(0, top, left, size.height() - bottom - top));
 
    //center
    painter->drawPixmap(QRect(rect.left() + left, rect.top() + top, rect.width() - right - left,
-                             rect.height() - bottom - top), pixmap,
-                       QRect(left, top, size.width() - right - left,
-                             size.height() - bottom - top));
+         rect.height() - bottom - top), pixmap,
+      QRect(left, top, size.width() - right - left,
+         size.height() - bottom - top));
    //right
    if (right > 0)
       painter->drawPixmap(QRect(rect.left() + rect.width() - right, rect.top() + top, right, rect.height() - top - bottom),
-                          pixmap,
-                          QRect(size.width() - right, top, right, size.height() - bottom - top));
+         pixmap,
+         QRect(size.width() - right, top, right, size.height() - bottom - top));
 
    //bottom
    if (bottom > 0) {
       painter->drawPixmap(QRect(rect.left() + left, rect.top() + rect.height() - bottom,
-                                rect.width() - right - left, bottom), pixmap,
-                          QRect(left, size.height() - bottom,
-                                size.width() - right - left, bottom));
+            rect.width() - right - left, bottom), pixmap,
+         QRect(left, size.height() - bottom,
+            size.width() - right - left, bottom));
       //bottom-left
       if (left > 0)
          painter->drawPixmap(QRect(rect.left(), rect.top() + rect.height() - bottom, left, bottom), pixmap,
-                             QRect(0, size.height() - bottom, left, bottom));
+            QRect(0, size.height() - bottom, left, bottom));
 
       //bottom-right
       if (right > 0)
          painter->drawPixmap(QRect(rect.left() + rect.width() - right, rect.top() + rect.height() - bottom, right, bottom),
-                             pixmap,
-                             QRect(size.width() - right, size.height() - bottom, right, bottom));
+            pixmap,
+            QRect(size.width() - right, size.height() - bottom, right, bottom));
 
    }
 }
+
+QColor backgroundColor(const QPalette &pal, const QWidget *widget)
+{
+   if (qobject_cast<const QScrollBar *>(widget) && widget->parent() &&
+      qobject_cast<const QAbstractScrollArea *>(widget->parent()->parent())) {
+      return widget->parentWidget()->parentWidget()->palette().color(QPalette::Base);
+   }
+   return pal.color(QPalette::Base);
 }
-QT_END_NAMESPACE
+
+QWindow *styleObjectWindow(QObject *so)
+{
+   if (so) {
+      return so->property("_q_styleObjectWindow").value<QWindow *>();
+   }
+
+   return 0;
+}
+
+} // namespace
+

@@ -25,9 +25,8 @@
 
 #include <qcommonstyle.h>
 #include <qstyle_p.h>
+#include <qstyleanimation_p.h>
 #include <qstyleoption.h>
-
-QT_BEGIN_NAMESPACE
 
 class QStringList;
 
@@ -36,47 +35,67 @@ class QCommonStylePrivate : public QStylePrivate
    Q_DECLARE_PUBLIC(QCommonStyle)
 
  public:
-   inline QCommonStylePrivate()
+   inline QCommonStylePrivate() :
 #ifndef QT_NO_ITEMVIEWS
-      : cachedOption(0)
+      cachedOption(0),
 #endif
+      animationFps(30)
    { }
 
-#ifndef QT_NO_ITEMVIEWS
    ~QCommonStylePrivate() {
+#ifndef QT_NO_ANIMATION
+      qDeleteAll(animations);
+#endif
+
+#ifndef QT_NO_ITEMVIEWS
       delete cachedOption;
+#endif
    }
-   void viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const;
-   void viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect, QRect *pixmapRect, QRect *textRect, bool sizehint) const;
-   QSize viewItemSize(const QStyleOptionViewItemV4 *option, int role) const;
+#ifndef QT_NO_ITEMVIEWS
+   void viewItemDrawText(QPainter *p, const QStyleOptionViewItem *option, const QRect &rect) const;
+   void viewItemLayout(const QStyleOptionViewItem *opt,  QRect *checkRect,
+      QRect *pixmapRect, QRect *textRect, bool sizehint) const;
+
+   QSize viewItemSize(const QStyleOptionViewItem *option, int role) const;
 
    mutable QRect decorationRect, displayRect, checkRect;
-   mutable QStyleOptionViewItemV4 *cachedOption;
+   mutable QStyleOptionViewItem *cachedOption;
 
-   bool isViewItemCached(const QStyleOptionViewItemV4 &option) const {
-      return cachedOption && (option.rect == cachedOption->rect
-                              && option.direction == cachedOption->direction
-                              && option.state == cachedOption->state
-                              && option.displayAlignment == cachedOption->displayAlignment
-                              && option.decorationAlignment == cachedOption->decorationAlignment
-                              && option.decorationPosition == cachedOption->decorationPosition
-                              && option.decorationSize == cachedOption->decorationSize
-                              && option.font == cachedOption->font
-                              && option.features == cachedOption->features
-                              && option.widget == cachedOption->widget
-                              && option.index == cachedOption->index
-                              && option.icon.isNull() == cachedOption->icon.isNull()
-                              && option.text == cachedOption->text
-                              && option.viewItemPosition == cachedOption->viewItemPosition);
+   bool isViewItemCached(const QStyleOptionViewItem &option) const {
+      return cachedOption && (option.widget == cachedOption->widget
+            && option.index == cachedOption->index
+            && option.state == cachedOption->state
+            && option.rect == cachedOption->rect
+            && option.text == cachedOption->text
+            && option.direction == cachedOption->direction
+            && option.displayAlignment == cachedOption->displayAlignment
+            && option.decorationAlignment == cachedOption->decorationAlignment
+            && option.decorationPosition == cachedOption->decorationPosition
+            && option.decorationSize == cachedOption->decorationSize
+            && option.features == cachedOption->features
+            && option.icon.isNull() == cachedOption->icon.isNull()
+            && option.font == cachedOption->font
+            && option.viewItemPosition == cachedOption->viewItemPosition);
    }
 #endif
    mutable QIcon tabBarcloseButtonIcon;
 
 #ifndef QT_NO_TABBAR
-   void tabLayout(const QStyleOptionTabV3 *opt, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
+   void tabLayout(const QStyleOptionTab *opt, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
 #endif
-};
+   int animationFps;
 
-QT_END_NAMESPACE
+#ifndef QT_NO_ANIMATION
+   void _q_removeAnimation();
+
+   QList<const QObject *> animationTargets() const;
+   QStyleAnimation *animation(const QObject *target) const;
+   void startAnimation(QStyleAnimation *animation) const;
+   void stopAnimation(const QObject *target) const;
+ private:
+   mutable QHash<const QObject *, QStyleAnimation *> animations;
+#endif
+
+};
 
 #endif //QCOMMONSTYLE_P_H

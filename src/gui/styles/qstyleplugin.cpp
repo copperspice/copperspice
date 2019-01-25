@@ -23,7 +23,6 @@
 #include <qstyleplugin.h>
 #include <qstyle.h>
 
-QT_BEGIN_NAMESPACE
 
 QStylePlugin::QStylePlugin(QObject *parent)
    : QObject(parent)
@@ -34,4 +33,3 @@ QStylePlugin::~QStylePlugin()
 {
 }
 
-QT_END_NAMESPACE

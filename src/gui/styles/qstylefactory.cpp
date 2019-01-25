@@ -25,28 +25,22 @@
 #include <qfactoryloader_p.h>
 #include <qmutex.h>
 #include <qapplication.h>
-#include <qwindowsstyle.h>
-#include <qmotifstyle.h>
-#include <qcdestyle.h>
+#include <qwindows_style_p.h>
 
-#ifndef QT_NO_STYLE_PLASTIQUE
-#include <qplastiquestyle.h>
-#endif
+#ifndef QT_NO_STYLE_FUSION
 
-#ifndef QT_NO_STYLE_CLEANLOOKS
-#include <qcleanlooksstyle.h>
-#endif
+#include <qfusionstyle_p.h>
 
 #ifndef QT_NO_STYLE_GTK
-#include <qgtkstyle.h>
+#include <qgtkstyle_p.h>
 #endif
 
 #ifndef QT_NO_STYLE_WINDOWSXP
-#include <qwindowsxpstyle.h>
+#include <qwindows_xpstyle_p.h>
 #endif
 
 #ifndef QT_NO_STYLE_WINDOWSVISTA
-#include <qwindowsvistastyle.h>
+#include <qwindows_vistastyle_p.h>
 #endif
 
 #if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_MAC)
@@ -59,6 +53,7 @@ QStyle *QStyleFactory::create(const QString &key)
 {
    QStyle *ret = 0;
    QString style = key.toLower();
+
 #ifndef QT_NO_STYLE_WINDOWS
    if (style == QLatin1String("windows")) {
       ret = new QWindowsStyle;
@@ -69,73 +64,59 @@ QStyle *QStyleFactory::create(const QString &key)
          ret = new QWindowsXPStyle;
       } else
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWSVISTA
          if (style == QLatin1String("windowsvista")) {
             ret = new QWindowsVistaStyle;
          } else
 #endif
-#ifndef QT_NO_STYLE_MOTIF
-            if (style == QLatin1String("motif")) {
-               ret = new QMotifStyle;
+
+#ifndef QT_NO_STYLE_FUSION
+            if (style == QLatin1String("fusion")) {
+               ret = new QFusionStyle;
             } else
 #endif
-#ifndef QT_NO_STYLE_CDE
-               if (style == QLatin1String("cde")) {
-                  ret = new QCDEStyle;
+
+#ifndef QT_NO_STYLE_GTK
+               if (style == QLatin1String("gtk") || style == QLatin1String("gtk+")) {
+                  ret = new QGtkStyle;
                } else
 #endif
-#ifndef QT_NO_STYLE_PLASTIQUE
-                  if (style == QLatin1String("plastique")) {
-                     ret = new QPlastiqueStyle;
+
+#ifndef QT_NO_STYLE_MAC
+                  if (style.startsWith(QLatin1String("macintosh"))) {
+                     ret = new QMacStyle;
                   } else
 #endif
-#ifndef QT_NO_STYLE_CLEANLOOKS
-                     if (style == QLatin1String("cleanlooks")) {
-                        ret = new QCleanlooksStyle;
-                     } else
-#endif
-#ifndef QT_NO_STYLE_GTK
-                        if (style == QLatin1String("gtk") || style == QLatin1String("gtk+")) {
-                           ret = new QGtkStyle;
-                        } else
-#endif
-#ifndef QT_NO_STYLE_MAC
-                           if (style.startsWith(QLatin1String("macintosh"))) {
-                              ret = new QMacStyle;
-#  ifdef Q_OS_MAC
-                              if (style == QLatin1String("macintosh")) {
-                                 style += QLatin1String(" (aqua)");
-                              }
-#  endif
-                           } else
-#endif
-                           { } // Keep these here - they make the #ifdefery above work
-#if  ! defined(QT_NO_SETTINGS)
-   if (!ret) {
-      if (QStyleFactoryInterface *factory = qobject_cast<QStyleFactoryInterface *>(loader()->instance(style))) {
-         ret = factory->create(style);
-      }
+
+                  { } // Keep these here
+
+
+   if (! ret) {
+      ret = qLoadPlugin<QStyle, QStylePlugin>(loader(), style);
    }
-#endif
+
    if (ret) {
       ret->setObjectName(style);
    }
+
    return ret;
 }
 
-/*!
-    Returns the list of valid keys, i.e. the keys this factory can
-    create styles for.
 
-    \sa create()
-*/
 QStringList QStyleFactory::keys()
 {
-#if ! defined(QT_NO_SETTINGS)
-   QStringList list = loader()->keys();
-#else
    QStringList list;
+   typedef QMultiMap<int, QString> PluginKeyMap;
+
+   const PluginKeyMap keyMap = loader()->keyMap();
+   const PluginKeyMap::const_iterator cend = keyMap.constEnd();
+
+   for (PluginKeyMap::const_iterator it = keyMap.constBegin(); it != cend; ++it) {
+      list.append(it.value());
+   }
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWS
    if (!list.contains(QLatin1String("Windows"))) {
       list << QLatin1String("Windows");
@@ -143,50 +124,39 @@ QStringList QStyleFactory::keys()
 #endif
 #ifndef QT_NO_STYLE_WINDOWSXP
    if (!list.contains(QLatin1String("WindowsXP")) &&
-         (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
       list << QLatin1String("WindowsXP");
    }
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWSVISTA
    if (!list.contains(QLatin1String("WindowsVista")) &&
-         (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
       list << QLatin1String("WindowsVista");
    }
 #endif
-#ifndef QT_NO_STYLE_MOTIF
-   if (!list.contains(QLatin1String("Motif"))) {
-      list << QLatin1String("Motif");
-   }
-#endif
-#ifndef QT_NO_STYLE_CDE
-   if (!list.contains(QLatin1String("CDE"))) {
-      list << QLatin1String("CDE");
-   }
-#endif
-#ifndef QT_NO_STYLE_PLASTIQUE
-   if (!list.contains(QLatin1String("Plastique"))) {
-      list << QLatin1String("Plastique");
-   }
-#endif
+
+
 #ifndef QT_NO_STYLE_GTK
    if (!list.contains(QLatin1String("GTK+"))) {
       list << QLatin1String("GTK+");
    }
 #endif
-#ifndef QT_NO_STYLE_CLEANLOOKS
-   if (!list.contains(QLatin1String("Cleanlooks"))) {
-      list << QLatin1String("Cleanlooks");
+
+#ifndef QT_NO_STYLE_FUSION
+   if (!list.contains(QLatin1String("Fusion"))) {
+      list << QLatin1String("Fusion");
    }
 #endif
+
 #ifndef QT_NO_STYLE_MAC
    QString mstyle = QLatin1String("Macintosh");
-# ifdef Q_OS_MAC
-   mstyle += QLatin1String(" (aqua)");
-# endif
+
    if (!list.contains(mstyle)) {
       list << mstyle;
    }
 #endif
+
    return list;
 }
 

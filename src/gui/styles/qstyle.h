@@ -32,8 +32,6 @@
 #include <QtGui/qsizepolicy.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QAction;
 class QDebug;
 class QTab;
@@ -54,21 +52,21 @@ class Q_GUI_EXPORT QStyle : public QObject
    QStyle();
    virtual ~QStyle();
 
-   virtual void polish(QWidget *);
-   virtual void unpolish(QWidget *);
+   virtual void polish(QWidget *widget);
+   virtual void unpolish(QWidget *widget);
 
-   virtual void polish(QApplication *);
-   virtual void unpolish(QApplication *);
+   virtual void polish(QApplication *app);
+   virtual void unpolish(QApplication *app);
 
-   virtual void polish(QPalette &);
+   virtual void polish(QPalette &palette);
 
    virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled, const QString &text) const;
    virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const;
 
-   virtual void drawItemText(QPainter *painter, const QRect &rect,int flags, const QPalette &pal, bool enabled,
-                             const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
+   virtual void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
+      const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
 
-   virtual void drawItemPixmap(QPainter *painter, const QRect &rect,int alignment, const QPixmap &pixmap) const;
+   virtual void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const;
 
    virtual QPalette standardPalette() const;
 
@@ -170,7 +168,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_CustomBase = 0xf000000
    };
 
-   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const = 0;
+   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
    enum ControlElement {
       CE_PushButton,
       CE_PushButtonBevel,
@@ -239,7 +237,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       CE_CustomBase = 0xf0000000
    };
 
-   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const = 0;
+   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
 
    enum SubElement {
       SE_PushButtonContents,
@@ -395,12 +393,13 @@ class Q_GUI_EXPORT QStyle : public QObject
    using SubControls = QFlags<SubControl>;
 
    virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
-         const QWidget *widget = 0) const = 0;
+      const QWidget *widget = nullptr) const = 0;
 
    virtual SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-         const QPoint &pt, const QWidget *widget = 0) const = 0;
+      const QPoint &pt, const QWidget *widget = nullptr) const = 0;
 
-   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *widget = 0) const = 0;
+   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
+      const QWidget *widget = nullptr) const = 0;
 
    enum PixelMetric {
       PM_ButtonMargin,
@@ -455,8 +454,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_IndicatorHeight,
       PM_ExclusiveIndicatorWidth,
       PM_ExclusiveIndicatorHeight,
-      PM_CheckListButtonSize,
-      PM_CheckListControllerSize,
 
       PM_DialogButtonsSeparator,
       PM_DialogButtonsButtonWidth,
@@ -521,13 +518,17 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_TabCloseIndicatorHeight,
 
       PM_ScrollView_ScrollBarSpacing,
+      PM_ScrollView_ScrollBarOverlap,
       PM_SubMenuOverlap,
+      PM_TreeViewIndentation,
 
+      PM_HeaderDefaultSectionSizeHorizontal,
+      PM_HeaderDefaultSectionSizeVertical,
       // do not add any values below/greater than this
       PM_CustomBase = 0xf0000000
    };
 
-   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const = 0;
+   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
 
    enum ContentsType {
       CT_PushButton,
@@ -558,7 +559,7 @@ class Q_GUI_EXPORT QStyle : public QObject
    };
 
    virtual QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
-                                  const QSize &contentsSize, const QWidget *w = 0) const = 0;
+      const QSize &contentsSize, const QWidget *w = nullptr) const = 0;
 
    enum RequestSoftwareInputPanel {
       RSIP_OnMouseClickAndAlreadyFocused,
@@ -617,7 +618,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_DrawMenuBarSeparator,
       SH_TitleBar_ModifyNotification,
       SH_Button_FocusPolicy,
-      SH_MenuBar_DismissOnSecondClick,
+
       SH_MessageBox_UseBorderForButtonSpacing,
       SH_TitleBar_AutoRaise,
       SH_ToolButton_PopupDelay,
@@ -665,11 +666,28 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_DockWidget_ButtonsHaveFrame,
       SH_ToolButtonStyle,
       SH_RequestSoftwareInputPanel,
+      SH_ScrollBar_Transient,
+      SH_Menu_SupportsSections,
+      SH_ToolTip_WakeUpDelay,
+      SH_ToolTip_FallAsleepDelay,
+      SH_Widget_Animate,
+      SH_Splitter_OpaqueResize,
+      // Whether we should use a native popup.
+      // Only supported for non-editable combo boxes on Mac OS X so far.
+      SH_ComboBox_UseNativePopup,
+      SH_LineEdit_PasswordMaskDelay,
+      SH_TabBar_ChangeCurrentDelay,
+      SH_Menu_SubMenuUniDirection,
+      SH_Menu_SubMenuUniDirectionFailCount,
+      SH_Menu_SubMenuSloppySelectOtherActions,
+      SH_Menu_SubMenuSloppyCloseTimeout,
+      SH_Menu_SubMenuResetWhenReenteringParent,
+      SH_Menu_SubMenuDontStartSloppyOnLeave,
       SH_CustomBase = 0xf0000000
    };
 
-   virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = 0,
-                         const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const = 0;
+   virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = nullptr,
+      const QWidget *widget = nullptr, QStyleHintReturn *returnData = nullptr) const = 0;
 
    enum StandardPixmap {
       SP_TitleBarMenuButton,
@@ -696,6 +714,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SP_DirOpenIcon,
       SP_DirClosedIcon,
       SP_DirLinkIcon,
+      SP_DirLinkOpenIcon,
       SP_FileIcon,
       SP_FileLinkIcon,
       SP_ToolBarHorizontalExtensionButton,
@@ -741,20 +760,22 @@ class Q_GUI_EXPORT QStyle : public QObject
       SP_MediaSeekBackward,
       SP_MediaVolume,
       SP_MediaVolumeMuted,
+      SP_LineEditClearButton,
       // do not add any values below/greater than this
       SP_CustomBase = 0xf0000000
    };
 
-   virtual QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt = 0,
-         const QWidget *widget = 0) const = 0;
+   virtual QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt = nullptr,
+      const QWidget *widget = nullptr) const = 0;
 
-   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+   virtual QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
+      const QWidget *widget = nullptr) const = 0;
 
    virtual QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-         const QStyleOption *opt) const = 0;
+      const QStyleOption *opt) const = 0;
 
-   static QRect visualRect(Qt::LayoutDirection direction, const QRect &boundingRect,const QRect &logicalRect);
-   static QPoint visualPos(Qt::LayoutDirection direction, const QRect &boundingRect,const QPoint &logicalPos);
+   static QRect visualRect(Qt::LayoutDirection direction, const QRect &boundingRect, const QRect &logicalRect);
+   static QPoint visualPos(Qt::LayoutDirection direction, const QRect &boundingRect, const QPoint &logicalPos);
 
    static int sliderPositionFromValue(int min, int max, int val, int space, bool upsideDown = false);
    static int sliderValueFromPosition(int min, int max, int pos, int space, bool upsideDown = false);
@@ -762,24 +783,18 @@ class Q_GUI_EXPORT QStyle : public QObject
 
    static QRect alignedRect(Qt::LayoutDirection direction, Qt::Alignment alignment, const QSize &size, const QRect &rectangle);
 
-   int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
-         const QStyleOption *option = 0, const QWidget *widget = 0) const;
+   virtual int layoutSpacing(QSizePolicy::ControlType control1,
+      QSizePolicy::ControlType control2, Qt::Orientation orientation,
+      const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
 
-   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,QSizePolicy::ControlTypes controls2,
-         Qt::Orientation orientation, QStyleOption *option = 0, QWidget *widget = 0) const;
+   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,
+      QSizePolicy::ControlTypes controls2, Qt::Orientation orientation,
+      QStyleOption *option = nullptr, QWidget *widget = nullptr) const;
 
    const QStyle *proxy() const;
 
  protected:
    QStyle(QStylePrivate &dd);
-
-   virtual QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0,
-         const QWidget *widget = 0) const;
-
-   virtual int layoutSpacingImplementation(QSizePolicy::ControlType control1,
-                                           QSizePolicy::ControlType control2, Qt::Orientation orientation, const QStyleOption *option = 0,
-                                           const QWidget *widget = 0) const;
-
    QScopedPointer<QStylePrivate> d_ptr;
 
  private:
@@ -799,6 +814,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::SubControls)
 
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QStyle::State state);
 
-QT_END_NAMESPACE
 
-#endif // QSTYLE_H
+
+#endif

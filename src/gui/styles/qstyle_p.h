@@ -23,9 +23,11 @@
 #ifndef QSTYLE_P_H
 #define QSTYLE_P_H
 
-#include <QtGui/qstyle.h>
+#include <qstyle.h>
 
-QT_BEGIN_NAMESPACE
+#include <qguiapplication.h>
+
+
 
 class QStyle;
 
@@ -46,7 +48,23 @@ class QStylePrivate
    QStyle *q_ptr;
 };
 
+inline QImage styleCacheImage(const QSize &size)
+{
+   const qreal pixelRatio = qApp->devicePixelRatio();
+   QImage cacheImage = QImage(size * pixelRatio, QImage::Format_ARGB32_Premultiplied);
+   cacheImage.setDevicePixelRatio(pixelRatio);
 
+   return cacheImage;
+}
+
+inline QPixmap styleCachePixmap(const QSize &size)
+{
+   const qreal pixelRatio = qApp->devicePixelRatio();
+   QPixmap cachePixmap = QPixmap(size * pixelRatio);
+   cachePixmap.setDevicePixelRatio(pixelRatio);
+
+   return cachePixmap;
+}
 #define BEGIN_STYLE_PIXMAPCACHE(a) \
     QRect rect = option->rect; \
     QPixmap internalPixmapCache; \
@@ -54,17 +72,17 @@ class QStylePrivate
     QPainter *p = painter; \
     QString unique = QStyleHelper::uniqueName((a), option, option->rect.size()); \
     int txType = painter->deviceTransform().type() | painter->worldTransform().type(); \
-    bool doPixmapCache = txType <= QTransform::TxTranslate; \
+    bool doPixmapCache = (!option->rect.isEmpty()) \
+            && ((txType <= QTransform::TxTranslate) || (painter->deviceTransform().type() == QTransform::TxScale)); \
     if (doPixmapCache && QPixmapCache::find(unique, internalPixmapCache)) { \
         painter->drawPixmap(option->rect.topLeft(), internalPixmapCache); \
     } else { \
         if (doPixmapCache) { \
             rect.setRect(0, 0, option->rect.width(), option->rect.height()); \
-            imageCache = QImage(option->rect.size(), QImage::Format_ARGB32_Premultiplied); \
+            imageCache = styleCacheImage(option->rect.size()); \
             imageCache.fill(0); \
             p = new QPainter(&imageCache); \
         }
-
 
 #define END_STYLE_PIXMAPCACHE \
         if (doPixmapCache) { \
@@ -76,6 +94,5 @@ class QStylePrivate
         } \
     }
 
-QT_END_NAMESPACE
 
 #endif //QSTYLE_P_H

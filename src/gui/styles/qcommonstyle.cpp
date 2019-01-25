@@ -25,6 +25,7 @@
 
 #include <qfile.h>
 #include <qapplication.h>
+#include <qplatform_theme.h>
 #include <qbitmap.h>
 #include <qcache.h>
 #include <qdockwidget.h>
@@ -44,98 +45,64 @@
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qrubberband.h>
-#include <qcommonstylepixmaps_p.h>
-#include <qmath_p.h>
+#include <qtreeview.h>
 #include <qdebug.h>
 #include <qtextformat.h>
 #include <qwizard.h>
-#include <qtabbar.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qsettings.h>
 #include <qpixmapcache.h>
-#include <qguiplatformplugin_p.h>
+
+
+#include <qcommonstylepixmaps_p.h>
+#include <qguiapplication_p.h>
+#include <qmath_p.h>
+#include <qstylehelper_p.h>
+#include <qstyleanimation_p.h>
+
+#ifndef QT_NO_ITEMVIEWS
+#   include <qtextengine_p.h>
+#endif
 
 #include <limits.h>
 
-#ifndef QT_NO_ITEMVIEWS
-#   include "qtextengine_p.h"
-#endif
-
-#ifdef Q_WS_X11
-#   include <qt_x11_p.h>
-
-#elif defined(Q_OS_MAC)
-#   include <qt_cocoa_helpers_mac_p.h>
-#endif
-
-#include <qstylehelper_p.h>
-
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QCommonStyle
-    \brief The QCommonStyle class encapsulates the common Look and Feel of a GUI.
-
-    \ingroup appearance
-
-    This abstract class implements some of the widget's look and feel
-    that is common to all GUI styles provided and shipped as part of
-    Qt.
-
-    Since QCommonStyle inherits QStyle, all of its functions are fully documented
-    in the QStyle documentation.
-    \omit
-    , although the
-    extra functions that QCommonStyle provides, e.g.
-    drawComplexControl(), drawControl(), drawPrimitive(),
-    hitTestComplexControl(), subControlRect(), sizeFromContents(), and
-    subElementRect() are documented here.
-    \endomit
-
-    \sa QStyle, QMotifStyle, QWindowsStyle
-*/
-
-/*!
-    Constructs a QCommonStyle.
-*/
+static QWindow *qt_getWindow(const QWidget *widget)
+{
+   return widget ? widget->window()->windowHandle() : nullptr;
+}
 QCommonStyle::QCommonStyle()
    : QStyle(*new QCommonStylePrivate)
 { }
 
-/*! \internal
-*/
+
 QCommonStyle::QCommonStyle(QCommonStylePrivate &dd)
    : QStyle(dd)
 { }
 
-/*!
-    Destroys the style.
-*/
+
 QCommonStyle::~QCommonStyle()
 { }
 
 
-/*!
-    \reimp
-*/
+
 void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-                                 const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D(const QCommonStyle);
    switch (pe) {
       case PE_FrameButtonBevel:
       case PE_FrameButtonTool:
          qDrawShadeRect(p, opt->rect, opt->palette,
-                        opt->state & (State_Sunken | State_On), 1, 0);
+            opt->state & (State_Sunken | State_On), 1, 0);
          break;
       case PE_PanelButtonCommand:
       case PE_PanelButtonBevel:
       case PE_PanelButtonTool:
       case PE_IndicatorButtonDropDown:
          qDrawShadePanel(p, opt->rect, opt->palette,
-                         opt->state & (State_Sunken | State_On), 1,
-                         &opt->palette.brush(QPalette::Button));
+            opt->state & (State_Sunken | State_On), 1,
+            &opt->palette.brush(QPalette::Button));
          break;
       case PE_IndicatorViewItemCheck:
          proxy()->drawPrimitive(PE_IndicatorCheckBox, opt, p, widget);
@@ -148,14 +115,15 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             p->drawLine(opt->rect.topLeft(), opt->rect.bottomRight());
          } else {
             qDrawShadePanel(p, opt->rect.x(), opt->rect.y(), opt->rect.width(), opt->rect.height(),
-                            opt->palette, opt->state & (State_Sunken | State_On), 1,
-                            &opt->palette.brush(QPalette::Button));
+               opt->palette, opt->state & (State_Sunken | State_On), 1,
+               &opt->palette.brush(QPalette::Button));
          }
          break;
       case PE_IndicatorRadioButton: {
          QRect ir = opt->rect;
          p->setPen(opt->palette.dark().color());
          p->drawArc(opt->rect, 0, 5760);
+
          if (opt->state & (State_Sunken | State_On)) {
             ir.adjust(2, 2, -2, -2);
             p->setBrush(opt->palette.foreground());
@@ -163,6 +131,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          break;
       }
+
       case PE_FrameFocusRect:
          if (const QStyleOptionFocusRect *fropt = qstyleoption_cast<const QStyleOptionFocusRect *>(opt)) {
             QColor bg = fropt->backgroundColor;
@@ -217,12 +186,13 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          p->drawLines(a);
          break;
       }
+
       case PE_Frame:
       case PE_FrameMenu:
          if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             if (pe == PE_FrameMenu || (frame->state & State_Sunken) || (frame->state & State_Raised)) {
                qDrawShadePanel(p, frame->rect, frame->palette, frame->state & State_Sunken,
-                               frame->lineWidth);
+                  frame->lineWidth);
             } else {
                qDrawPlainRect(p, frame->rect, frame->palette.foreground().color(), frame->lineWidth);
             }
@@ -235,11 +205,11 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             qDrawShadePanel(p, frame->rect, frame->palette, false, frame->lineWidth,
-                            &frame->palette.brush(QPalette::Button));
+               &frame->palette.brush(QPalette::Button));
 
          } else if (const QStyleOptionToolBar *frame = qstyleoption_cast<const QStyleOptionToolBar *>(opt)) {
             qDrawShadePanel(p, frame->rect, frame->palette, false, frame->lineWidth,
-                            &frame->palette.brush(QPalette::Button));
+               &frame->palette.brush(QPalette::Button));
          }
 
          break;
@@ -252,15 +222,16 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 #ifndef QT_NO_PROGRESSBAR
       case PE_IndicatorProgressChunk: {
          bool vertical = false;
-         if (const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
-            vertical = (pb2->orientation == Qt::Vertical);
+         if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
+            vertical = (pb->orientation == Qt::Vertical);
          }
+
          if (!vertical) {
             p->fillRect(opt->rect.x(), opt->rect.y() + 3, opt->rect.width() - 2, opt->rect.height() - 6,
-                        opt->palette.brush(QPalette::Highlight));
+               opt->palette.brush(QPalette::Highlight));
          } else {
             p->fillRect(opt->rect.x() + 2, opt->rect.y(), opt->rect.width() - 6, opt->rect.height() - 2,
-                        opt->palette.brush(QPalette::Highlight));
+               opt->palette.brush(QPalette::Highlight));
          }
       }
       break;
@@ -268,38 +239,48 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 
 
       case PE_IndicatorBranch: {
+         static const int decoration_size = 9;
+
          int mid_h = opt->rect.x() + opt->rect.width() / 2;
          int mid_v = opt->rect.y() + opt->rect.height() / 2;
          int bef_h = mid_h;
          int bef_v = mid_v;
          int aft_h = mid_h;
          int aft_v = mid_v;
-#ifndef QT_NO_IMAGEFORMAT_XPM
-         static const int decoration_size = 9;
-         static QPixmap open(tree_branch_open_xpm);
-         static QPixmap closed(tree_branch_closed_xpm);
+
          if (opt->state & State_Children) {
             int delta = decoration_size / 2;
             bef_h -= delta;
             bef_v -= delta;
             aft_h += delta;
             aft_v += delta;
-            p->drawPixmap(bef_h, bef_v, opt->state & State_Open ? open : closed);
+            p->drawLine(bef_h + 2, bef_v + 4, bef_h + 6, bef_v + 4);
+            if (!(opt->state & State_Open)) {
+               p->drawLine(bef_h + 4, bef_v + 2, bef_h + 4, bef_v + 6);
+            }
+            QPen oldPen = p->pen();
+            p->setPen(opt->palette.dark().color());
+            p->drawRect(bef_h, bef_v, decoration_size - 1, decoration_size - 1);
+            p->setPen(oldPen);
          }
-#endif // QT_NO_IMAGEFORMAT_XPM
+
+         QBrush brush(opt->palette.dark().color(), Qt::Dense4Pattern);
+
          if (opt->state & State_Item) {
             if (opt->direction == Qt::RightToLeft) {
-               p->drawLine(opt->rect.left(), mid_v, bef_h, mid_v);
+               p->fillRect(opt->rect.left(), mid_v, bef_h - opt->rect.left(), 1, brush);
             } else {
-               p->drawLine(aft_h, mid_v, opt->rect.right(), mid_v);
+               p->fillRect(aft_h, mid_v, opt->rect.right() - aft_h + 1, 1, brush);
             }
          }
          if (opt->state & State_Sibling) {
-            p->drawLine(mid_h, aft_v, mid_h, opt->rect.bottom());
+            p->fillRect(mid_h, aft_v, 1, opt->rect.bottom() - aft_v + 1, brush);
          }
+
          if (opt->state & (State_Open | State_Children | State_Item | State_Sibling)) {
-            p->drawLine(mid_h, opt->rect.y(), mid_h, bef_v);
+            p->fillRect(mid_h, opt->rect.y(), 1, bef_v - opt->rect.y(), brush);
          }
+
          break;
       }
 
@@ -310,33 +291,40 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             QPen oldPen = p->pen();
             if (header->sortIndicator & QStyleOptionHeader::SortUp) {
-               QPolygon pa(3);
+
                p->setPen(QPen(opt->palette.light(), 0));
                p->drawLine(opt->rect.x() + opt->rect.width(), opt->rect.y(),
-                           opt->rect.x() + opt->rect.width() / 2, opt->rect.y() + opt->rect.height());
+                  opt->rect.x() + opt->rect.width() / 2, opt->rect.y() + opt->rect.height());
                p->setPen(QPen(opt->palette.dark(), 0));
-               pa.setPoint(0, opt->rect.x() + opt->rect.width() / 2, opt->rect.y() + opt->rect.height());
-               pa.setPoint(1, opt->rect.x(), opt->rect.y());
-               pa.setPoint(2, opt->rect.x() + opt->rect.width(), opt->rect.y());
-               p->drawPolyline(pa);
+               const QPoint points[] = {
+                  QPoint(opt->rect.x() + opt->rect.width() / 2, opt->rect.y() + opt->rect.height()),
+                  QPoint(opt->rect.x(), opt->rect.y()),
+                  QPoint(opt->rect.x() + opt->rect.width(), opt->rect.y()),
+               };
+               p->drawPolyline(points, sizeof points / sizeof * points);
+
             } else if (header->sortIndicator & QStyleOptionHeader::SortDown) {
-               QPolygon pa(3);
+
                p->setPen(QPen(opt->palette.light(), 0));
-               pa.setPoint(0, opt->rect.x(), opt->rect.y() + opt->rect.height());
-               pa.setPoint(1, opt->rect.x() + opt->rect.width(), opt->rect.y() + opt->rect.height());
-               pa.setPoint(2, opt->rect.x() + opt->rect.width() / 2, opt->rect.y());
-               p->drawPolyline(pa);
+               const QPoint points[] = {
+                  QPoint(opt->rect.x(), opt->rect.y() + opt->rect.height()),
+                  QPoint(opt->rect.x() + opt->rect.width(), opt->rect.y() + opt->rect.height()),
+                  QPoint(opt->rect.x() + opt->rect.width() / 2, opt->rect.y()),
+               };
+
+               p->drawPolyline(points, sizeof points / sizeof * points);
                p->setPen(QPen(opt->palette.dark(), 0));
                p->drawLine(opt->rect.x(), opt->rect.y() + opt->rect.height(),
-                           opt->rect.x() + opt->rect.width() / 2, opt->rect.y());
+                  opt->rect.x() + opt->rect.width() / 2, opt->rect.y());
             }
             p->setPen(oldPen);
          }
          break;
+
 #ifndef QT_NO_TABBAR
       case PE_FrameTabBarBase:
          if (const QStyleOptionTabBarBase * tbb
-               = qstyleoption_cast<const QStyleOptionTabBarBase *>(opt)) {
+            = qstyleoption_cast<const QStyleOptionTabBarBase *>(opt)) {
             p->save();
             switch (tbb->shape) {
                case QTabBar::RoundedNorth:
@@ -353,10 +341,10 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
                case QTabBar::TriangularSouth:
                   p->setPen(QPen(tbb->palette.shadow(), 0));
                   p->drawLine(tbb->rect.left(), tbb->rect.bottom(),
-                              tbb->rect.right(), tbb->rect.bottom());
+                     tbb->rect.right(), tbb->rect.bottom());
                   p->setPen(QPen(tbb->palette.dark(), 0));
                   p->drawLine(tbb->rect.left(), tbb->rect.bottom() - 1,
-                              tbb->rect.right() - 1, tbb->rect.bottom() - 1);
+                     tbb->rect.right() - 1, tbb->rect.bottom() - 1);
                   break;
                case QTabBar::RoundedEast:
                case QTabBar::TriangularEast:
@@ -370,28 +358,29 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       case PE_IndicatorTabClose: {
          if (d->tabBarcloseButtonIcon.isNull()) {
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
-                                                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-16.png")),
-                                               QIcon::Normal, QIcon::Off);
+                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-16.png")),
+               QIcon::Normal, QIcon::Off);
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
-                                                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-down-16.png")),
-                                               QIcon::Normal, QIcon::On);
+                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-down-16.png")),
+               QIcon::Normal, QIcon::On);
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
-                                                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-hover-16.png")),
-                                               QIcon::Active, QIcon::Off);
+                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-hover-16.png")),
+               QIcon::Active, QIcon::Off);
          }
 
          int size = proxy()->pixelMetric(QStyle::PM_SmallIconSize);
          QIcon::Mode mode = opt->state & State_Enabled ?
-                            (opt->state & State_Raised ? QIcon::Active : QIcon::Normal)
-                            : QIcon::Disabled;
+            (opt->state & State_Raised ? QIcon::Active : QIcon::Normal)
+            : QIcon::Disabled;
+
          if (!(opt->state & State_Raised)
-               && !(opt->state & State_Sunken)
-               && !(opt->state & QStyle::State_Selected)) {
+            && !(opt->state & State_Sunken)
+            && !(opt->state & QStyle::State_Selected)) {
             mode = QIcon::Disabled;
          }
 
          QIcon::State state = opt->state & State_Sunken ? QIcon::On : QIcon::Off;
-         QPixmap pixmap = d->tabBarcloseButtonIcon.pixmap(size, mode, state);
+         QPixmap pixmap = d->tabBarcloseButtonIcon.pixmap(qt_getWindow(widget), QSize(size, size), mode, state);
          proxy()->drawItemPixmap(p, opt->rect, Qt::AlignCenter, pixmap);
          break;
       }
@@ -403,20 +392,21 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       case PE_FrameLineEdit:
          proxy()->drawPrimitive(PE_Frame, opt, p, widget);
          break;
+
 #ifndef QT_NO_GROUPBOX
       case PE_FrameGroupBox:
          if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
-            const QStyleOptionFrameV2 *frame2 = qstyleoption_cast<const QStyleOptionFrameV2 *>(opt);
-            if (frame2 && (frame2->features & QStyleOptionFrameV2::Flat)) {
+
+            if (frame->features & QStyleOptionFrame::Flat) {
                QRect fr = frame->rect;
                QPoint p1(fr.x(), fr.y() + 1);
                QPoint p2(fr.x() + fr.width(), p1.y());
                qDrawShadeLine(p, p1, p2, frame->palette, true,
-                              frame->lineWidth, frame->midLineWidth);
+                  frame->lineWidth, frame->midLineWidth);
             } else {
                qDrawShadeRect(p, frame->rect.x(), frame->rect.y(), frame->rect.width(),
-                              frame->rect.height(), frame->palette, true,
-                              frame->lineWidth, frame->midLineWidth);
+                  frame->rect.height(), frame->palette, true,
+                  frame->lineWidth, frame->midLineWidth);
             }
          }
          break;
@@ -445,17 +435,17 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             }
             if (opt->rect.height() > 4) {
                qDrawShadePanel(p, x, 2, 3, opt->rect.height() - 4,
-                               opt->palette, false, 1, 0);
+                  opt->palette, false, 1, 0);
                qDrawShadePanel(p, x + 3, 2, 3, opt->rect.height() - 4,
-                               opt->palette, false, 1, 0);
+                  opt->palette, false, 1, 0);
             }
          } else {
             if (opt->rect.width() > 4) {
                int y = opt->rect.height() / 3;
                qDrawShadePanel(p, 2, y, opt->rect.width() - 4, 3,
-                               opt->palette, false, 1, 0);
+                  opt->palette, false, 1, 0);
                qDrawShadePanel(p, 2, y + 3, opt->rect.width() - 4, 3,
-                               opt->palette, false, 1, 0);
+                  opt->palette, false, 1, 0);
             }
          }
          p->restore();
@@ -474,6 +464,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          break;
       }
 #endif // QT_NO_TOOLBAR
+
 #ifndef QT_NO_SPINBOX
       case PE_IndicatorSpinPlus:
       case PE_IndicatorSpinMinus: {
@@ -484,15 +475,16 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          int offset = (opt->state & State_Sunken) ? 1 : 0;
          int step = (br.width() + 4) / 5;
          p->fillRect(br.x() + offset, br.y() + offset + br.height() / 2 - step / 2,
-                     br.width(), step,
-                     opt->palette.buttonText());
+            br.width(), step,
+            opt->palette.buttonText());
          if (pe == PE_IndicatorSpinPlus)
             p->fillRect(br.x() + br.width() / 2 - step / 2 + offset, br.y() + offset,
-                        step, br.height(),
-                        opt->palette.buttonText());
+               step, br.height(),
+               opt->palette.buttonText());
 
          break;
       }
+
       case PE_IndicatorSpinUp:
       case PE_IndicatorSpinDown: {
          QRect r = opt->rect;
@@ -505,6 +497,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          } else if (!(sw & 1)) {
             sw--;
          }
+
          sw -= (sw / 7) * 2;        // Empty border
          int sh = sw / 2 + 2;    // Must have empty row at foot of arrow
 
@@ -515,12 +508,6 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             --sy;
          }
 
-         QPolygon a;
-         if (pe == PE_IndicatorSpinDown) {
-            a.setPoints(3, 0, 1,  sw - 1, 1,  sh - 2, sh - 1);
-         } else {
-            a.setPoints(3, 0, sh - 1,  sw - 1, sh - 1,  sh - 2, 1);
-         }
          int bsx = 0;
          int bsy = 0;
          if (opt->state & State_Sunken) {
@@ -531,10 +518,18 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          p->translate(sx + bsx, sy + bsy);
          p->setPen(opt->palette.buttonText().color());
          p->setBrush(opt->palette.buttonText());
-         p->drawPolygon(a);
+
+         if (pe == PE_IndicatorSpinDown) {
+            const QPoint points[] = { QPoint(0, 1), QPoint(sw - 1, 1), QPoint(sh - 2, sh - 1) };
+            p->drawPolygon(points, sizeof points / sizeof * points);
+         } else {
+            const QPoint points[] = { QPoint(0, sh - 1), QPoint(sw - 1, sh - 1), QPoint(sh - 2, 1) };
+            p->drawPolygon(points, sizeof points / sizeof * points);
+         }
          p->restore();
          break;
       }
+
 #endif // QT_NO_SPINBOX
       case PE_PanelTipLabel: {
          QBrush oldBrush = p->brush();
@@ -546,6 +541,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          p->setBrush(oldBrush);
          break;
       }
+
 #ifndef QT_NO_TABBAR
       case PE_IndicatorTabTear:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
@@ -569,11 +565,12 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          break;
 #endif // QT_NO_TABBAR
+
 #ifndef QT_NO_LINEEDIT
       case PE_PanelLineEdit:
          if (const QStyleOptionFrame *panel = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             p->fillRect(panel->rect.adjusted(panel->lineWidth, panel->lineWidth, -panel->lineWidth, -panel->lineWidth),
-                        panel->palette.brush(QPalette::Base));
+               panel->palette.brush(QPalette::Base));
 
             if (panel->lineWidth > 0) {
                proxy()->drawPrimitive(PE_FrameLineEdit, panel, p, widget);
@@ -581,6 +578,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          break;
 #endif // QT_NO_LINEEDIT
+
 #ifndef QT_NO_COLUMNVIEW
       case PE_IndicatorColumnViewArrow: {
          if (const QStyleOptionViewItem *viewOpt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
@@ -593,6 +591,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             if (height % 2 == 1) {
                --height;
             }
+
             int x2 = x + height - 1;
             if (reverse) {
                x = viewOpt->rect.x() + viewOpt->rect.width() - 1;
@@ -636,6 +635,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          break;
       }
 #endif //QT_NO_COLUMNVIEW
+
       case PE_IndicatorItemViewItemDrop: {
          QRect rect = opt->rect;
          if (opt->rect.height() == 0) {
@@ -645,27 +645,32 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          break;
       }
+
 #ifndef QT_NO_ITEMVIEWS
       case PE_PanelItemViewRow:
-         if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+         if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
+
             QPalette::ColorGroup cg = (widget ? widget->isEnabled() : (vopt->state & QStyle::State_Enabled))
-                                      ? QPalette::Normal : QPalette::Disabled;
+               ? QPalette::Normal : QPalette::Disabled;
+
             if (cg == QPalette::Normal && !(vopt->state & QStyle::State_Active)) {
                cg = QPalette::Inactive;
             }
 
-            if ((vopt->state & QStyle::State_Selected) &&
-                  proxy()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, opt, widget)) {
+            if ((vopt->state & QStyle::State_Selected) &&  proxy()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, opt, widget)) {
                p->fillRect(vopt->rect, vopt->palette.brush(cg, QPalette::Highlight));
-            } else if (vopt->features & QStyleOptionViewItemV2::Alternate) {
+
+            } else if (vopt->features & QStyleOptionViewItem::Alternate) {
                p->fillRect(vopt->rect, vopt->palette.brush(cg, QPalette::AlternateBase));
             }
          }
          break;
+
       case PE_PanelItemViewItem:
-         if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+         if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             QPalette::ColorGroup cg = (widget ? widget->isEnabled() : (vopt->state & QStyle::State_Enabled))
-                                      ? QPalette::Normal : QPalette::Disabled;
+               ? QPalette::Normal : QPalette::Disabled;
+
             if (cg == QPalette::Normal && !(vopt->state & QStyle::State_Active)) {
                cg = QPalette::Inactive;
             }
@@ -688,9 +693,87 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          break;
 #endif //QT_NO_ITEMVIEWS
+
       case PE_PanelScrollAreaCorner: {
          const QBrush brush(opt->palette.brush(QPalette::Window));
          p->fillRect(opt->rect, brush);
+      }
+      break;
+
+      case PE_IndicatorArrowUp:
+      case PE_IndicatorArrowDown:
+      case PE_IndicatorArrowRight:
+      case PE_IndicatorArrowLeft: {
+         if (opt->rect.width() <= 1 || opt->rect.height() <= 1) {
+            break;
+         }
+
+         QRect r = opt->rect;
+         int size = qMin(r.height(), r.width());
+         QPixmap pixmap;
+
+         QString pixmapName = QStyleHelper::uniqueName("$qt_ia-"
+               + metaObject()->className(), opt, QSize(size, size))
+            + HexString<uint>(pe);
+
+         if (!QPixmapCache::find(pixmapName, pixmap)) {
+            int border = size / 5;
+            int sqsize = 2 * (size / 2);
+            QImage image(sqsize, sqsize, QImage::Format_ARGB32_Premultiplied);
+            image.fill(0);
+            QPainter imagePainter(&image);
+
+            QPolygon a;
+            switch (pe) {
+               case PE_IndicatorArrowUp:
+                  a.setPoints(3, border, sqsize / 2,  sqsize / 2, border,  sqsize - border, sqsize / 2);
+                  break;
+               case PE_IndicatorArrowDown:
+                  a.setPoints(3, border, sqsize / 2,  sqsize / 2, sqsize - border,  sqsize - border, sqsize / 2);
+                  break;
+               case PE_IndicatorArrowRight:
+                  a.setPoints(3, sqsize - border, sqsize / 2,  sqsize / 2, border,  sqsize / 2, sqsize - border);
+                  break;
+               case PE_IndicatorArrowLeft:
+                  a.setPoints(3, border, sqsize / 2,  sqsize / 2, border,  sqsize / 2, sqsize - border);
+                  break;
+               default:
+                  break;
+            }
+
+            int bsx = 0;
+            int bsy = 0;
+
+            if (opt->state & State_Sunken) {
+               bsx = proxy()->pixelMetric(PM_ButtonShiftHorizontal, opt, widget);
+               bsy = proxy()->pixelMetric(PM_ButtonShiftVertical, opt, widget);
+            }
+
+            QRect bounds = a.boundingRect();
+            int sx = sqsize / 2 - bounds.center().x() - 1;
+            int sy = sqsize / 2 - bounds.center().y() - 1;
+            imagePainter.translate(sx + bsx, sy + bsy);
+            imagePainter.setPen(opt->palette.buttonText().color());
+            imagePainter.setBrush(opt->palette.buttonText());
+
+            if (!(opt->state & State_Enabled)) {
+               imagePainter.translate(1, 1);
+               imagePainter.setBrush(opt->palette.light().color());
+               imagePainter.setPen(opt->palette.light().color());
+               imagePainter.drawPolygon(a);
+               imagePainter.translate(-1, -1);
+               imagePainter.setBrush(opt->palette.mid().color());
+               imagePainter.setPen(opt->palette.mid().color());
+            }
+
+            imagePainter.drawPolygon(a);
+            imagePainter.end();
+            pixmap = QPixmap::fromImage(image);
+            QPixmapCache::insert(pixmapName, pixmap);
+         }
+         int xOffset = r.x() + (r.width() - size) / 2;
+         int yOffset = r.y() + (r.height() - size) / 2;
+         p->drawPixmap(xOffset, yOffset, pixmap);
       }
       break;
       default:
@@ -700,7 +783,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 
 #ifndef QT_NO_TOOLBUTTON
 static void drawArrow(const QStyle *style, const QStyleOptionToolButton *toolbutton,
-                      const QRect &rect, QPainter *painter, const QWidget *widget = 0)
+   const QRect &rect, QPainter *painter, const QWidget *widget = 0)
 {
    QStyle::PrimitiveElement pe;
    switch (toolbutton->arrowType) {
@@ -719,81 +802,14 @@ static void drawArrow(const QStyle *style, const QStyleOptionToolButton *toolbut
       default:
          return;
    }
-   QStyleOption arrowOpt;
+   QStyleOption arrowOpt = *toolbutton;
    arrowOpt.rect = rect;
-   arrowOpt.palette = toolbutton->palette;
-   arrowOpt.state = toolbutton->state;
+
    style->drawPrimitive(pe, &arrowOpt, painter, widget);
 }
 #endif // QT_NO_TOOLBUTTON
 
 #ifndef QT_NO_ITEMVIEWS
-
-QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItemV4 *option, int role) const
-{
-   const QWidget *widget = option->widget;
-   switch (role) {
-      case Qt::CheckStateRole:
-         if (option->features & QStyleOptionViewItemV2::HasCheckIndicator)
-            return QSize(proxyStyle->pixelMetric(QStyle::PM_IndicatorWidth, option, widget),
-                         proxyStyle->pixelMetric(QStyle::PM_IndicatorHeight, option, widget));
-         break;
-      case Qt::DisplayRole:
-         if (option->features & QStyleOptionViewItemV2::HasDisplay) {
-            QTextOption textOption;
-            textOption.setWrapMode(QTextOption::WordWrap);
-            QTextLayout textLayout;
-            textLayout.setTextOption(textOption);
-            textLayout.setFont(option->font);
-            textLayout.setText(option->text);
-            const bool wrapText = option->features & QStyleOptionViewItemV2::WrapText;
-            const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, option, widget) + 1;
-            QRect bounds = option->rect;
-            switch (option->decorationPosition) {
-               case QStyleOptionViewItem::Left:
-               case QStyleOptionViewItem::Right:
-                  bounds.setWidth(wrapText && bounds.isValid() ? bounds.width() - 2 * textMargin : QFIXED_MAX);
-                  break;
-               case QStyleOptionViewItem::Top:
-               case QStyleOptionViewItem::Bottom:
-                  if (wrapText) {
-                     bounds.setWidth(bounds.isValid() ? bounds.width() - 2 * textMargin : option->decorationSize.width());
-                  } else {
-                     bounds.setWidth(QFIXED_MAX);
-                  }
-                  break;
-               default:
-                  break;
-            }
-
-            qreal height = 0, widthUsed = 0;
-            textLayout.beginLayout();
-            while (true) {
-               QTextLine line = textLayout.createLine();
-               if (!line.isValid()) {
-                  break;
-               }
-               line.setLineWidth(bounds.width());
-               line.setPosition(QPointF(0, height));
-               height += line.height();
-               widthUsed = qMax(widthUsed, line.naturalTextWidth());
-            }
-            textLayout.endLayout();
-            const QSize size(qCeil(widthUsed), qCeil(height));
-            return QSize(size.width() + 2 * textMargin, size.height());
-         }
-         break;
-      case Qt::DecorationRole:
-         if (option->features & QStyleOptionViewItemV2::HasDecoration) {
-            return option->decorationSize;
-         }
-         break;
-      default:
-         break;
-   }
-
-   return QSize(0, 0);
-}
 
 static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 {
@@ -814,22 +830,75 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
    return QSizeF(widthUsed, height);
 }
 
+QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int role) const
+{
+   const QWidget *widget = option->widget;
+   switch (role) {
+      case Qt::CheckStateRole:
+         if (option->features & QStyleOptionViewItem::HasCheckIndicator)
+            return QSize(proxyStyle->pixelMetric(QStyle::PM_IndicatorWidth, option, widget),
+                  proxyStyle->pixelMetric(QStyle::PM_IndicatorHeight, option, widget));
+         break;
 
-void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const
+      case Qt::DisplayRole:
+         if (option->features & QStyleOptionViewItem::HasDisplay) {
+            QTextOption textOption;
+            textOption.setWrapMode(QTextOption::WordWrap);
+            QTextLayout textLayout(option->text, option->font);
+            textLayout.setTextOption(textOption);
+
+            const bool wrapText = option->features & QStyleOptionViewItem::WrapText;
+            const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, option, widget) + 1;
+            QRect bounds = option->rect;
+            switch (option->decorationPosition) {
+               case QStyleOptionViewItem::Left:
+               case QStyleOptionViewItem::Right:
+                  bounds.setWidth(wrapText && bounds.isValid() ? bounds.width() - 2 * textMargin : QFIXED_MAX);
+                  break;
+               case QStyleOptionViewItem::Top:
+               case QStyleOptionViewItem::Bottom:
+                  if (wrapText) {
+                     bounds.setWidth(bounds.isValid() ? bounds.width() - 2 * textMargin : option->decorationSize.width());
+                  } else {
+                     bounds.setWidth(QFIXED_MAX);
+                  }
+                  break;
+               default:
+                  break;
+            }
+
+            const int lineWidth = bounds.width();
+            const QSizeF size = viewItemTextLayout(textLayout, lineWidth);
+            return QSize(qCeil(size.width()) + 2 * textMargin, qCeil(size.height()));
+         }
+         break;
+
+      case Qt::DecorationRole:
+         if (option->features & QStyleOptionViewItem::HasDecoration) {
+            return option->decorationSize;
+         }
+         break;
+      default:
+         break;
+   }
+
+   return QSize(0, 0);
+}
+
+void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewItem *option, const QRect &rect) const
 {
    const QWidget *widget = option->widget;
    const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1;
 
    QRect textRect = rect.adjusted(textMargin, 0, -textMargin, 0); // remove width padding
-   const bool wrapText = option->features & QStyleOptionViewItemV2::WrapText;
+   const bool wrapText = option->features & QStyleOptionViewItem::WrapText;
    QTextOption textOption;
    textOption.setWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::ManualWrap);
    textOption.setTextDirection(option->direction);
    textOption.setAlignment(QStyle::visualAlignment(option->direction, option->displayAlignment));
-   QTextLayout textLayout;
+
+   QTextLayout textLayout(option->text, option->font);
    textLayout.setTextOption(textOption);
-   textLayout.setFont(option->font);
-   textLayout.setText(option->text);
 
    viewItemTextLayout(textLayout, textRect.width());
 
@@ -869,7 +938,7 @@ void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewIt
    }
 
    const QRect layoutRect = QStyle::alignedRect(option->direction, option->displayAlignment,
-                            QSize(int(width), int(height)), textRect);
+         QSize(int(width), int(height)), textRect);
    const QPointF position = layoutRect.topLeft();
    for (int i = 0; i < lineCount; ++i) {
       const QTextLine line = textLayout.lineAt(i);
@@ -894,8 +963,8 @@ void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewIt
 
     Code duplicated in QItemDelegate::doLayout
 */
-void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect,
-      QRect *pixmapRect, QRect *textRect, bool sizehint) const
+void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect *checkRect,
+   QRect *pixmapRect, QRect *textRect, bool sizehint) const
 {
    Q_ASSERT(checkRect && pixmapRect && textRect);
    *pixmapRect = QRect(QPoint(0, 0), viewItemSize(opt, Qt::DecorationRole));
@@ -926,7 +995,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
    if (sizehint) {
       h = qMax(checkRect->height(), qMax(textRect->height(), pm.height()));
       if (opt->decorationPosition == QStyleOptionViewItem::Left
-            || opt->decorationPosition == QStyleOptionViewItem::Right) {
+         || opt->decorationPosition == QStyleOptionViewItem::Right) {
          w = textRect->width() + pm.width();
       } else {
          w = qMax(textRect->width(), pm.width());
@@ -968,6 +1037,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
          }
          break;
       }
+
       case QStyleOptionViewItem::Bottom: {
          if (hasText) {
             textRect->setHeight(textRect->height() + textMargin);   // add space
@@ -983,6 +1053,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
          }
          break;
       }
+
       case QStyleOptionViewItem::Left: {
          if (opt->direction == Qt::LeftToRight) {
             decoration.setRect(x + cw, y, pm.width(), h);
@@ -993,6 +1064,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
          }
          break;
       }
+
       case QStyleOptionViewItem::Right: {
          if (opt->direction == Qt::LeftToRight) {
             display.setRect(x + cw, y, w - pm.width() - cw, h);
@@ -1003,6 +1075,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
          }
          break;
       }
+
       default:
          qWarning("doLayout: decoration position is invalid");
          decoration = *pixmapRect;
@@ -1011,15 +1084,15 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
 
    if (!sizehint) { // we only need to do the internal layout if we are going to paint
       *checkRect = QStyle::alignedRect(opt->direction, Qt::AlignCenter,
-                                       checkRect->size(), check);
+            checkRect->size(), check);
       *pixmapRect = QStyle::alignedRect(opt->direction, opt->decorationAlignment,
-                                        pixmapRect->size(), decoration);
+            pixmapRect->size(), decoration);
       // the text takes up all available space, unless the decoration is not shown as selected
       if (opt->showDecorationSelected) {
          *textRect = display;
       } else
          *textRect = QStyle::alignedRect(opt->direction, opt->displayAlignment,
-                                         textRect->size().boundedTo(display.size()), display);
+               textRect->size().boundedTo(display.size()), display);
    } else {
       *checkRect = check;
       *pixmapRect = decoration;
@@ -1035,16 +1108,17 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRe
 
     Uses the same computation than in QTabBar::tabSizeHint
  */
-void QCommonStylePrivate::tabLayout(const QStyleOptionTabV3 *opt, const QWidget *widget, QRect *textRect,
-                                    QRect *iconRect) const
+void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *widget, QRect *textRect, QRect *iconRect) const
 {
    Q_ASSERT(textRect);
    Q_ASSERT(iconRect);
+
    QRect tr = opt->rect;
+
    bool verticalTabs = opt->shape == QTabBar::RoundedEast
-                       || opt->shape == QTabBar::RoundedWest
-                       || opt->shape == QTabBar::TriangularEast
-                       || opt->shape == QTabBar::TriangularWest;
+      || opt->shape == QTabBar::RoundedWest
+      || opt->shape == QTabBar::TriangularEast
+      || opt->shape == QTabBar::TriangularWest;
    if (verticalTabs) {
       tr.setRect(0, 0, tr.height(), tr.width());   //0, 0 as we will have a translate transform
    }
@@ -1066,12 +1140,12 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTabV3 *opt, const QWidget 
    // left widget
    if (!opt->leftButtonSize.isEmpty()) {
       tr.setLeft(tr.left() + 4 +
-                 (verticalTabs ? opt->leftButtonSize.height() : opt->leftButtonSize.width()));
+         (verticalTabs ? opt->leftButtonSize.height() : opt->leftButtonSize.width()));
    }
    // right widget
    if (!opt->rightButtonSize.isEmpty()) {
       tr.setRight(tr.right() - 4 -
-                  (verticalTabs ? opt->rightButtonSize.height() : opt->rightButtonSize.width()));
+         (verticalTabs ? opt->rightButtonSize.height() : opt->rightButtonSize.width()));
    }
 
    // icon
@@ -1082,11 +1156,14 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTabV3 *opt, const QWidget 
          iconSize = QSize(iconExtent, iconExtent);
       }
       QSize tabIconSize = opt->icon.actualSize(iconSize,
-                          (opt->state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled,
-                          (opt->state & QStyle::State_Selected) ? QIcon::On : QIcon::Off  );
+            (opt->state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled,
+            (opt->state & QStyle::State_Selected) ? QIcon::On : QIcon::Off  );
+
+      // High-dpi icons do not need adjustmet; make sure tabIconSize is not larger than iconSize
+      tabIconSize = QSize(qMin(tabIconSize.width(), iconSize.width()), qMin(tabIconSize.height(), iconSize.height()));
 
       *iconRect = QRect(tr.left(), tr.center().y() - tabIconSize.height() / 2,
-                        tabIconSize.width(), tabIconSize .height());
+            tabIconSize.width(), tabIconSize .height());
       if (!verticalTabs) {
          *iconRect = proxyStyle->visualRect(opt->direction, opt->rect, *iconRect);
       }
@@ -1101,12 +1178,52 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTabV3 *opt, const QWidget 
 }
 #endif //QT_NO_TABBAR
 
+#ifndef QT_NO_ANIMATION
+QList<const QObject *> QCommonStylePrivate::animationTargets() const
+{
+   return animations.keys();
+}
+QStyleAnimation *QCommonStylePrivate::animation(const QObject *target) const
+{
+   return animations.value(target);
+}
+void QCommonStylePrivate::startAnimation(QStyleAnimation *animation) const
+{
+   Q_Q(const QCommonStyle);
+   stopAnimation(animation->target());
+
+   QCommonStyle *obj = const_cast<QCommonStyle *>(q);
+   q->connect(animation, SIGNAL(destroyed()), obj, SLOT(_q_removeAnimation()), Qt::UniqueConnection);
+
+   animations.insert(animation->target(), animation);
+   animation->start();
+}
+
+void QCommonStylePrivate::stopAnimation(const QObject *target) const
+{
+   QStyleAnimation *animation = animations.take(target);
+   if (animation) {
+      animation->stop();
+      delete animation;
+   }
+}
+
+void QCommonStylePrivate::_q_removeAnimation()
+{
+   Q_Q(QCommonStyle);
+   QObject *animation = q->sender();
+
+   if (animation) {
+      animations.remove(animation->parent());
+   }
+}
+#endif
 
 /*!
   \reimp
 */
 void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
-                               QPainter *p, const QWidget *widget) const
+   QPainter *p, const QWidget *widget) const
 {
    Q_D(const QCommonStyle);
    switch (element) {
@@ -1114,9 +1231,11 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
       case CE_PushButton:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             proxy()->drawControl(CE_PushButtonBevel, btn, p, widget);
+
             QStyleOptionButton subopt = *btn;
             subopt.rect = subElementRect(SE_PushButtonContents, btn, widget);
             proxy()->drawControl(CE_PushButtonLabel, &subopt, p, widget);
+
             if (btn->state & State_HasFocus) {
                QStyleOptionFocusRect fropt;
                fropt.QStyleOption::operator=(*btn);
@@ -1136,8 +1255,8 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                br.setCoords(br.left() + dbi, br.top() + dbi, br.right() - dbi, br.bottom() - dbi);
             }
             if (!(btn->features & (QStyleOptionButton::Flat | QStyleOptionButton::CommandLinkButton))
-                  || btn->state & (State_Sunken | State_On)
-                  || (btn->features & QStyleOptionButton::CommandLinkButton && btn->state & State_MouseOver)) {
+               || btn->state & (State_Sunken | State_On)
+               || (btn->features & QStyleOptionButton::CommandLinkButton && btn->state & State_MouseOver)) {
                QStyleOptionButton tmpBtn = *btn;
                tmpBtn.rect = br;
                proxy()->drawPrimitive(PE_PanelButtonCommand, &tmpBtn, p, widget);
@@ -1166,23 +1285,29 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                if (mode == QIcon::Normal && button->state & State_HasFocus) {
                   mode = QIcon::Active;
                }
+
                QIcon::State state = QIcon::Off;
                if (button->state & State_On) {
                   state = QIcon::On;
                }
 
-               QPixmap pixmap = button->icon.pixmap(button->iconSize, mode, state);
-               int labelWidth = pixmap.width();
-               int labelHeight = pixmap.height();
+               QPixmap pixmap = button->icon.pixmap(qt_getWindow(widget), button->iconSize, mode, state);
+
+               int pixmapWidth = pixmap.width() / pixmap.devicePixelRatio();
+               int pixmapHeight = pixmap.height() / pixmap.devicePixelRatio();
+               int labelWidth = pixmapWidth;
+               int labelHeight = pixmapHeight;
+
                int iconSpacing = 4;//### 4 is currently hardcoded in QPushButton::sizeHint()
                int textWidth = button->fontMetrics.boundingRect(opt->rect, tf, button->text).width();
-               if (!button->text.isEmpty()) {
+
+               if (! button->text.isEmpty()) {
                   labelWidth += (textWidth + iconSpacing);
                }
 
                iconRect = QRect(textRect.x() + (textRect.width() - labelWidth) / 2,
-                                textRect.y() + (textRect.height() - labelHeight) / 2,
-                                pixmap.width(), pixmap.height());
+                     textRect.y() + (textRect.height() - labelHeight) / 2,
+                     pixmapWidth, pixmapHeight);
 
                iconRect = visualRect(button->direction, textRect, iconRect);
 
@@ -1196,14 +1321,14 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
 
                if (button->state & (State_On | State_Sunken))
                   iconRect.translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, opt, widget),
-                                     proxy()->pixelMetric(PM_ButtonShiftVertical, opt, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, opt, widget));
                p->drawPixmap(iconRect, pixmap);
             } else {
                tf |= Qt::AlignHCenter;
             }
             if (button->state & (State_On | State_Sunken))
                textRect.translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, opt, widget),
-                                  proxy()->pixelMetric(PM_ButtonShiftVertical, opt, widget));
+                  proxy()->pixelMetric(PM_ButtonShiftVertical, opt, widget));
 
             if (button->features & QStyleOptionButton::HasMenu) {
                int indicatorSize = proxy()->pixelMetric(PM_MenuButtonIndicator, button, widget);
@@ -1214,7 +1339,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                }
             }
             proxy()->drawItemText(p, textRect, tf, button->palette, (button->state & State_Enabled),
-                                  button->text, QPalette::ButtonText);
+               button->text, QPalette::ButtonText);
          }
          break;
       case CE_RadioButton:
@@ -1223,17 +1348,17 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             bool isRadio = (element == CE_RadioButton);
             QStyleOptionButton subopt = *btn;
             subopt.rect = subElementRect(isRadio ? SE_RadioButtonIndicator
-                                         : SE_CheckBoxIndicator, btn, widget);
+                  : SE_CheckBoxIndicator, btn, widget);
             proxy()->drawPrimitive(isRadio ? PE_IndicatorRadioButton : PE_IndicatorCheckBox,
-                                   &subopt, p, widget);
+               &subopt, p, widget);
             subopt.rect = subElementRect(isRadio ? SE_RadioButtonContents
-                                         : SE_CheckBoxContents, btn, widget);
+                  : SE_CheckBoxContents, btn, widget);
             proxy()->drawControl(isRadio ? CE_RadioButtonLabel : CE_CheckBoxLabel, &subopt, p, widget);
             if (btn->state & State_HasFocus) {
                QStyleOptionFocusRect fropt;
                fropt.QStyleOption::operator=(*btn);
                fropt.rect = subElementRect(isRadio ? SE_RadioButtonFocusRect
-                                           : SE_CheckBoxFocusRect, btn, widget);
+                     : SE_CheckBoxFocusRect, btn, widget);
                proxy()->drawPrimitive(PE_FrameFocusRect, &fropt, p, widget);
             }
          }
@@ -1249,8 +1374,9 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             QPixmap pix;
             QRect textRect = btn->rect;
             if (!btn->icon.isNull()) {
-               pix = btn->icon.pixmap(btn->iconSize, btn->state & State_Enabled ? QIcon::Normal : QIcon::Disabled);
+               pix = btn->icon.pixmap(qt_getWindow(widget), btn->iconSize, btn->state & State_Enabled ? QIcon::Normal : QIcon::Disabled);
                proxy()->drawItemPixmap(p, btn->rect, alignment, pix);
+
                if (btn->direction == Qt::RightToLeft) {
                   textRect.setRight(textRect.right() - btn->iconSize.width() - 4);
                } else {
@@ -1259,62 +1385,74 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
             if (!btn->text.isEmpty()) {
                proxy()->drawItemText(p, textRect, alignment | Qt::TextShowMnemonic,
-                                     btn->palette, btn->state & State_Enabled, btn->text, QPalette::WindowText);
+                  btn->palette, btn->state & State_Enabled, btn->text, QPalette::WindowText);
             }
          }
          break;
+
 #ifndef QT_NO_MENU
       case CE_MenuScroller: {
-         p->fillRect(opt->rect, opt->palette.background());
+
          QStyleOption arrowOpt = *opt;
          arrowOpt.state |= State_Enabled;
          proxy()->drawPrimitive(((opt->state & State_DownArrow) ? PE_IndicatorArrowDown : PE_IndicatorArrowUp),
-                                &arrowOpt, p, widget);
+            &arrowOpt, p, widget);
          break;
       }
+
       case CE_MenuTearoff:
          if (opt->state & State_Selected) {
             p->fillRect(opt->rect, opt->palette.brush(QPalette::Highlight));
          } else {
             p->fillRect(opt->rect, opt->palette.brush(QPalette::Button));
          }
+
          p->setPen(QPen(opt->palette.dark().color(), 1, Qt::DashLine));
          p->drawLine(opt->rect.x() + 2, opt->rect.y() + opt->rect.height() / 2 - 1,
-                     opt->rect.x() + opt->rect.width() - 4,
-                     opt->rect.y() + opt->rect.height() / 2 - 1);
+            opt->rect.x() + opt->rect.width() - 4,
+            opt->rect.y() + opt->rect.height() / 2 - 1);
          p->setPen(QPen(opt->palette.light().color(), 1, Qt::DashLine));
          p->drawLine(opt->rect.x() + 2, opt->rect.y() + opt->rect.height() / 2,
-                     opt->rect.x() + opt->rect.width() - 4, opt->rect.y() + opt->rect.height() / 2);
+            opt->rect.x() + opt->rect.width() - 4, opt->rect.y() + opt->rect.height() / 2);
          break;
 #endif // QT_NO_MENU
+
 #ifndef QT_NO_MENUBAR
       case CE_MenuBarItem:
          if (const QStyleOptionMenuItem *mbi = qstyleoption_cast<const QStyleOptionMenuItem *>(opt)) {
             uint alignment = Qt::AlignCenter | Qt::TextShowMnemonic | Qt::TextDontClip
-                             | Qt::TextSingleLine;
+               | Qt::TextSingleLine;
+
             if (!proxy()->styleHint(SH_UnderlineShortcut, mbi, widget)) {
                alignment |= Qt::TextHideMnemonic;
             }
-            QPixmap pix = mbi->icon.pixmap(proxy()->pixelMetric(PM_SmallIconSize),
-                                           (mbi->state & State_Enabled) ? QIcon::Normal : QIcon::Disabled);
+
+            int iconExtent = proxy()->pixelMetric(PM_SmallIconSize);
+            QPixmap pix = mbi->icon.pixmap(qt_getWindow(widget), QSize(iconExtent, iconExtent),
+                  (mbi->state & State_Enabled) ? QIcon::Normal : QIcon::Disabled);
+
             if (!pix.isNull()) {
                proxy()->drawItemPixmap(p, mbi->rect, alignment, pix);
-            } else
+            } else {
                proxy()->drawItemText(p, mbi->rect, alignment, mbi->palette, mbi->state & State_Enabled,
-                                     mbi->text, QPalette::ButtonText);
+                  mbi->text, QPalette::ButtonText);
+            }
+
          }
          break;
+
       case CE_MenuBarEmptyArea:
          if (widget && !widget->testAttribute(Qt::WA_NoSystemBackground)) {
             p->eraseRect(opt->rect);
          }
          break;
 #endif // QT_NO_MENUBAR
+
 #ifndef QT_NO_PROGRESSBAR
       case CE_ProgressBar:
-         if (const QStyleOptionProgressBar * pb
-               = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
-            QStyleOptionProgressBarV2 subopt = *pb;
+         if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
+            QStyleOptionProgressBar subopt = *pb;
+
             subopt.rect = subElementRect(SE_ProgressBarGroove, pb, widget);
             proxy()->drawControl(CE_ProgressBarGroove, &subopt, p, widget);
             subopt.rect = subElementRect(SE_ProgressBarContents, pb, widget);
@@ -1325,34 +1463,34 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
          }
          break;
+
       case CE_ProgressBarGroove:
          if (opt->rect.isValid())
             qDrawShadePanel(p, opt->rect, opt->palette, true, 1,
-                            &opt->palette.brush(QPalette::Window));
+               &opt->palette.brush(QPalette::Window));
          break;
+
       case CE_ProgressBarLabel:
          if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
-            bool vertical = false;
-            if (const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
-               vertical = (pb2->orientation == Qt::Vertical);
-            }
+            const bool vertical = pb->orientation == Qt::Vertical;
+
             if (!vertical) {
                QPalette::ColorRole textRole = QPalette::NoRole;
                if ((pb->textAlignment & Qt::AlignCenter) && pb->textVisible
-                     && ((qint64(pb->progress) - qint64(pb->minimum)) * 2 >= (qint64(pb->maximum) - qint64(pb->minimum)))) {
+                  && ((qint64(pb->progress) - qint64(pb->minimum)) * 2 >= (qint64(pb->maximum) - qint64(pb->minimum)))) {
                   textRole = QPalette::HighlightedText;
                   //Draw text shadow, This will increase readability when the background of same color
                   QRect shadowRect(pb->rect);
                   shadowRect.translate(1, 1);
                   QColor shadowColor = (pb->palette.color(textRole).value() <= 128)
-                                       ? QColor(255, 255, 255, 160) : QColor(0, 0, 0, 160);
+                     ? QColor(255, 255, 255, 160) : QColor(0, 0, 0, 160);
                   QPalette shadowPalette = pb->palette;
                   shadowPalette.setColor(textRole, shadowColor);
                   proxy()->drawItemText(p, shadowRect, Qt::AlignCenter | Qt::TextSingleLine, shadowPalette,
-                                        pb->state & State_Enabled, pb->text, textRole);
+                     pb->state & State_Enabled, pb->text, textRole);
                }
                proxy()->drawItemText(p, pb->rect, Qt::AlignCenter | Qt::TextSingleLine, pb->palette,
-                                     pb->state & State_Enabled, pb->text, textRole);
+                  pb->state & State_Enabled, pb->text, textRole);
             }
          }
          break;
@@ -1360,18 +1498,12 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
 
             QRect rect = pb->rect;
-            bool vertical = false;
-            bool inverted = false;
+            const bool vertical = pb->orientation == Qt::Vertical;
+            const bool inverted = pb->invertedAppearance;
             qint64 minimum = qint64(pb->minimum);
             qint64 maximum = qint64(pb->maximum);
             qint64 progress = qint64(pb->progress);
 
-            // Get extra style options if version 2
-            const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt);
-            if (pb2) {
-               vertical = (pb2->orientation == Qt::Vertical);
-               inverted = pb2->invertedAppearance;
-            }
             QMatrix m;
 
             if (vertical) {
@@ -1384,7 +1516,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             // Correct the highlight color if it is the same as the background
             if (pal2.highlight() == pal2.background())
                pal2.setColor(QPalette::Highlight, pb->palette.color(QPalette::Active,
-                             QPalette::Highlight));
+                     QPalette::Highlight));
             bool reverse = ((!vertical && (pb->direction == Qt::RightToLeft)) || vertical);
             if (inverted) {
                reverse = !reverse;
@@ -1396,9 +1528,11 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                if (x > w) {
                   x = 2 * w - x;
                }
+
                x = reverse ? rect.right() - x : x + rect.x();
                p->setPen(QPen(pal2.highlight().color(), 4));
                p->drawLine(x, rect.y(), x, rect.height());
+
             } else {
                const int unit_width = proxy()->pixelMetric(PM_ProgressBarChunkWidth, pb, widget);
                if (!unit_width) {
@@ -1434,9 +1568,9 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                // display at the end.
                int x = 0;
                int x0 = reverse ? rect.right() - ((unit_width > 1) ? unit_width : 0)
-                        : rect.x();
+                  : rect.x();
 
-               QStyleOptionProgressBarV2 pbBits = *pb;
+               QStyleOptionProgressBar pbBits = *pb;
                pbBits.rect = rect;
                pbBits.palette = pal2;
                int myY = pbBits.rect.y();
@@ -1462,19 +1596,26 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          }
          break;
 #endif // QT_NO_PROGRESSBAR
+
       case CE_HeaderLabel:
          if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             QRect rect = header->rect;
-            if (!header->icon.isNull()) {
-               QPixmap pixmap
-                  = header->icon.pixmap(proxy()->pixelMetric(PM_SmallIconSize),
-                                        (header->state & State_Enabled) ? QIcon::Normal : QIcon::Disabled);
-               int pixw = pixmap.width();
 
-               QRect aligned = alignedRect(header->direction, QFlag(header->iconAlignment), pixmap.size(), rect);
+            if (!header->icon.isNull()) {
+               int iconExtent = proxy()->pixelMetric(PM_SmallIconSize);
+
+               QPixmap pixmap
+                  = header->icon.pixmap(qt_getWindow(widget), QSize(iconExtent, iconExtent),
+                        (header->state & State_Enabled) ? QIcon::Normal : QIcon::Disabled);
+
+               int pixw = pixmap.width() / pixmap.devicePixelRatio();
+
+               QRect aligned = alignedRect(header->direction, QFlag(header->iconAlignment), pixmap.size() / pixmap.devicePixelRatio(), rect);
                QRect inter = aligned.intersected(rect);
-               p->drawPixmap(inter.x(), inter.y(), pixmap, inter.x() - aligned.x(), inter.y() - aligned.y(), inter.width(),
-                             inter.height());
+               p->drawPixmap(inter.x(), inter.y(), pixmap,
+                  inter.x() - aligned.x(), inter.y() - aligned.y(),
+                  aligned.width() * pixmap.devicePixelRatio(),
+                  pixmap.height() * pixmap.devicePixelRatio());
 
                if (header->direction == Qt::LeftToRight) {
                   rect.setLeft(rect.left() + pixw + 2);
@@ -1488,13 +1629,14 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                p->setFont(fnt);
             }
             proxy()->drawItemText(p, rect, header->textAlignment, header->palette,
-                                  (header->state & State_Enabled), header->text, QPalette::ButtonText);
+               (header->state & State_Enabled), header->text, QPalette::ButtonText);
          }
          break;
+
 #ifndef QT_NO_TOOLBUTTON
       case CE_ToolButtonLabel:
          if (const QStyleOptionToolButton * toolbutton
-               = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
+            = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
             QRect rect = toolbutton->rect;
             int shiftX = 0;
             int shiftY = 0;
@@ -1505,7 +1647,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             // Arrow type always overrules and is always shown
             bool hasArrow = toolbutton->features & QStyleOptionToolButton::Arrow;
             if (((!hasArrow && toolbutton->icon.isNull()) && !toolbutton->text.isEmpty())
-                  || toolbutton->toolButtonStyle == Qt::ToolButtonTextOnly) {
+               || toolbutton->toolButtonStyle == Qt::ToolButtonTextOnly) {
                int alignment = Qt::AlignCenter | Qt::TextShowMnemonic;
                if (!proxy()->styleHint(SH_UnderlineShortcut, opt, widget)) {
                   alignment |= Qt::TextHideMnemonic;
@@ -1513,14 +1655,15 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                rect.translate(shiftX, shiftY);
                p->setFont(toolbutton->font);
                proxy()->drawItemText(p, rect, alignment, toolbutton->palette,
-                                     opt->state & State_Enabled, toolbutton->text,
-                                     QPalette::ButtonText);
+                  opt->state & State_Enabled, toolbutton->text,
+                  QPalette::ButtonText);
             } else {
                QPixmap pm;
                QSize pmSize = toolbutton->iconSize;
                if (!toolbutton->icon.isNull()) {
                   QIcon::State state = toolbutton->state & State_On ? QIcon::On : QIcon::Off;
                   QIcon::Mode mode;
+
                   if (!(toolbutton->state & State_Enabled)) {
                      mode = QIcon::Disabled;
                   } else if ((opt->state & State_MouseOver) && (opt->state & State_AutoRaise)) {
@@ -1528,9 +1671,10 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                   } else {
                      mode = QIcon::Normal;
                   }
-                  pm = toolbutton->icon.pixmap(toolbutton->rect.size().boundedTo(toolbutton->iconSize),
-                                               mode, state);
-                  pmSize = pm.size();
+
+                  pm = toolbutton->icon.pixmap(qt_getWindow(widget), toolbutton->rect.size().boundedTo(toolbutton->iconSize),
+                        mode, state);
+                  pmSize = pm.size() / pm.devicePixelRatio();
                }
 
                if (toolbutton->toolButtonStyle != Qt::ToolButtonIconOnly) {
@@ -1544,12 +1688,12 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
 
                   if (toolbutton->toolButtonStyle == Qt::ToolButtonTextUnderIcon) {
                      pr.setHeight(pmSize.height() + 6);
-                     tr.adjust(0, pr.height() - 1, 0, -2);
+                     tr.adjust(0, pr.height() - 1, 0, -1);
                      pr.translate(shiftX, shiftY);
                      if (!hasArrow) {
                         proxy()->drawItemPixmap(p, pr, Qt::AlignCenter, pm);
                      } else {
-                        drawArrow(this, toolbutton, pr, p, widget);
+                        drawArrow(proxy(), toolbutton, pr, p, widget);
                      }
                      alignment |= Qt::AlignCenter;
                   } else {
@@ -1559,18 +1703,18 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                      if (!hasArrow) {
                         proxy()->drawItemPixmap(p, QStyle::visualRect(opt->direction, rect, pr), Qt::AlignCenter, pm);
                      } else {
-                        drawArrow(this, toolbutton, pr, p, widget);
+                        drawArrow(proxy(), toolbutton, pr, p, widget);
                      }
                      alignment |= Qt::AlignLeft | Qt::AlignVCenter;
                   }
                   tr.translate(shiftX, shiftY);
                   proxy()->drawItemText(p, QStyle::visualRect(opt->direction, rect, tr), alignment, toolbutton->palette,
-                                        toolbutton->state & State_Enabled, toolbutton->text,
-                                        QPalette::ButtonText);
+                     toolbutton->state & State_Enabled, toolbutton->text,
+                     QPalette::ButtonText);
                } else {
                   rect.translate(shiftX, shiftY);
                   if (hasArrow) {
-                     drawArrow(this, toolbutton, rect, p, widget);
+                     drawArrow(proxy(), toolbutton, rect, p, widget);
                   } else {
                      proxy()->drawItemPixmap(p, rect, Qt::AlignCenter, pm);
                   }
@@ -1586,46 +1730,56 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             proxy()->drawControl(CE_ToolBoxTabLabel, tb, p, widget);
          }
          break;
+
       case CE_ToolBoxTabShape:
          if (const QStyleOptionToolBox *tb = qstyleoption_cast<const QStyleOptionToolBox *>(opt)) {
+            p->setPen(tb->palette.mid().color().darker(150));
+
             int d = 20 + tb->rect.height() - 3;
-            QPolygon a(7);
+
             if (tb->direction != Qt::RightToLeft) {
-               a.setPoint(0, -1, tb->rect.height() + 1);
-               a.setPoint(1, -1, 1);
-               a.setPoint(2, tb->rect.width() - d, 1);
-               a.setPoint(3, tb->rect.width() - 20, tb->rect.height() - 2);
-               a.setPoint(4, tb->rect.width() - 1, tb->rect.height() - 2);
-               a.setPoint(5, tb->rect.width() - 1, tb->rect.height() + 1);
-               a.setPoint(6, -1, tb->rect.height() + 1);
+               const QPoint points[] = {
+                  QPoint(-1, tb->rect.height() + 1),
+                  QPoint(-1, 1),
+                  QPoint(tb->rect.width() - d, 1),
+                  QPoint(tb->rect.width() - 20, tb->rect.height() - 2),
+                  QPoint(tb->rect.width() - 1, tb->rect.height() - 2),
+                  QPoint(tb->rect.width() - 1, tb->rect.height() + 1),
+                  QPoint(-1, tb->rect.height() + 1),
+               };
+               p->drawPolygon(points, sizeof points / sizeof * points);
             } else {
-               a.setPoint(0, tb->rect.width(), tb->rect.height() + 1);
-               a.setPoint(1, tb->rect.width(), 1);
-               a.setPoint(2, d - 1, 1);
-               a.setPoint(3, 20 - 1, tb->rect.height() - 2);
-               a.setPoint(4, 0, tb->rect.height() - 2);
-               a.setPoint(5, 0, tb->rect.height() + 1);
-               a.setPoint(6, tb->rect.width(), tb->rect.height() + 1);
+               const QPoint points[] = {
+                  QPoint(tb->rect.width(), tb->rect.height() + 1),
+                  QPoint(tb->rect.width(), 1),
+                  QPoint(d - 1, 1),
+                  QPoint(20 - 1, tb->rect.height() - 2),
+                  QPoint(0, tb->rect.height() - 2),
+                  QPoint(0, tb->rect.height() + 1),
+                  QPoint(tb->rect.width(), tb->rect.height() + 1),
+               };
+               p->drawPolygon(points, sizeof points / sizeof * points);
             }
 
-            p->setPen(tb->palette.mid().color().darker(150));
-            p->drawPolygon(a);
+
             p->setPen(tb->palette.light().color());
+
             if (tb->direction != Qt::RightToLeft) {
                p->drawLine(0, 2, tb->rect.width() - d, 2);
                p->drawLine(tb->rect.width() - d - 1, 2, tb->rect.width() - 21, tb->rect.height() - 1);
                p->drawLine(tb->rect.width() - 20, tb->rect.height() - 1,
-                           tb->rect.width(), tb->rect.height() - 1);
+                  tb->rect.width(), tb->rect.height() - 1);
             } else {
                p->drawLine(tb->rect.width() - 1, 2, d - 1, 2);
                p->drawLine(d, 2, 20, tb->rect.height() - 1);
                p->drawLine(19, tb->rect.height() - 1,
-                           -1, tb->rect.height() - 1);
+                  -1, tb->rect.height() - 1);
             }
             p->setBrush(Qt::NoBrush);
          }
          break;
 #endif // QT_NO_TOOLBOX
+
 #ifndef QT_NO_TABBAR
       case CE_TabBarTab:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
@@ -1646,7 +1800,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                switch (tab->shape) {
                   case QTabBar::TriangularNorth:
                      rect.adjust(0, 0, 0, -tabOverlap);
-                     if (!selected) {
+                     if (! selected) {
                         rect.adjust(1, 1, -1, 0);
                      }
                      break;
@@ -1718,6 +1872,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                   p->drawPath(path);
                   break;
                }
+
                case QTabBar::TriangularEast:
                case QTabBar::TriangularWest: {
                   a.setPoint(0, -1, 0);
@@ -1751,12 +1906,14 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             p->restore();
          }
          break;
+
       case CE_ToolBoxTabLabel:
          if (const QStyleOptionToolBox *tb = qstyleoption_cast<const QStyleOptionToolBox *>(opt)) {
             bool enabled = tb->state & State_Enabled;
             bool selected = tb->state & State_Selected;
-            QPixmap pm = tb->icon.pixmap(proxy()->pixelMetric(QStyle::PM_SmallIconSize, tb, widget),
-                                         enabled ? QIcon::Normal : QIcon::Disabled);
+            int iconExtent = proxy()->pixelMetric(QStyle::PM_SmallIconSize, tb, widget);
+            QPixmap pm = tb->icon.pixmap(qt_getWindow(widget), QSize(iconExtent, iconExtent),
+                  enabled ? QIcon::Normal : QIcon::Disabled);
 
             QRect cr = subElementRect(QStyle::SE_ToolBoxTabContents, tb, widget);
             QRect tr, ir;
@@ -1765,8 +1922,8 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                tr = cr;
                tr.adjust(4, 0, -8, 0);
             } else {
-               int iw = pm.width() + 4;
-               ih = pm.height();
+               int iw = pm.width() / pm.devicePixelRatio() + 4;
+               ih = pm.height() / pm.devicePixelRatio();
                ir = QRect(cr.left() + 4, cr.top(), iw + 2, ih);
                tr = QRect(ir.right(), cr.top(), cr.width() - ir.right() - 4, cr.height());
             }
@@ -1800,12 +1957,12 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          break;
       case CE_TabBarTabLabel:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
-            QStyleOptionTabV3 tabV2(*tab);
-            QRect tr = tabV2.rect;
-            bool verticalTabs = tabV2.shape == QTabBar::RoundedEast
-                                || tabV2.shape == QTabBar::RoundedWest
-                                || tabV2.shape == QTabBar::TriangularEast
-                                || tabV2.shape == QTabBar::TriangularWest;
+
+            QRect tr = tab->rect;
+            bool verticalTabs = tab->shape == QTabBar::RoundedEast
+               || tab->shape == QTabBar::RoundedWest
+               || tab->shape == QTabBar::TriangularEast
+               || tab->shape == QTabBar::TriangularWest;
 
             int alignment = Qt::AlignCenter | Qt::TextShowMnemonic;
             if (!proxy()->styleHint(SH_UnderlineShortcut, opt, widget)) {
@@ -1815,7 +1972,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             if (verticalTabs) {
                p->save();
                int newX, newY, newRot;
-               if (tabV2.shape == QTabBar::RoundedEast || tabV2.shape == QTabBar::TriangularEast) {
+               if (tab->shape == QTabBar::RoundedEast || tab->shape == QTabBar::TriangularEast) {
                   newX = tr.width() + tr.x();
                   newY = tr.y();
                   newRot = 90;
@@ -1829,16 +1986,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                p->setTransform(m, true);
             }
             QRect iconRect;
-            d->tabLayout(&tabV2, widget, &tr, &iconRect);
-            tr = proxy()->subElementRect(SE_TabBarTabText, opt,
-                                         widget); //we compute tr twice because the style may override subElementRect
+            d->tabLayout(tab, widget, &tr, &iconRect);
+            tr = proxy()->subElementRect(SE_TabBarTabText, opt, widget); //we compute tr twice because the style may override subElementRect
 
-            if (!tabV2.icon.isNull()) {
-               QPixmap tabIcon = tabV2.icon.pixmap(tabV2.iconSize,
-                                                   (tabV2.state & State_Enabled) ? QIcon::Normal
-                                                   : QIcon::Disabled,
-                                                   (tabV2.state & State_Selected) ? QIcon::On
-                                                   : QIcon::Off);
+            if (!tab->icon.isNull()) {
+               QPixmap tabIcon = tab->icon.pixmap(qt_getWindow(widget), tab->iconSize,
+                     (tab->state & State_Enabled) ? QIcon::Normal : QIcon::Disabled,
+                     (tab->state & State_Selected) ? QIcon::On : QIcon::Off);
                p->drawPixmap(iconRect.x(), iconRect.y(), tabIcon);
             }
 
@@ -1847,22 +2001,22 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                p->restore();
             }
 
-            if (tabV2.state & State_HasFocus) {
+            if (tab->state & State_HasFocus) {
                const int OFFSET = 1 + pixelMetric(PM_DefaultFrameWidth);
 
-               int x1, x2;
-               x1 = tabV2.rect.left();
-               x2 = tabV2.rect.right() - 1;
+               int x1 = tab->rect.left();
+               int x2 = tab->rect.right() - 1;
 
                QStyleOptionFocusRect fropt;
                fropt.QStyleOption::operator=(*tab);
-               fropt.rect.setRect(x1 + 1 + OFFSET, tabV2.rect.y() + OFFSET,
-                                  x2 - x1 - 2 * OFFSET, tabV2.rect.height() - 2 * OFFSET);
+               fropt.rect.setRect(x1 + 1 + OFFSET, tab->rect.y() + OFFSET,
+                  x2 - x1 - 2 * OFFSET, tab->rect.height() - 2 * OFFSET);
                drawPrimitive(PE_FrameFocusRect, &fropt, p, widget);
             }
          }
          break;
 #endif // QT_NO_TABBAR
+
 #ifndef QT_NO_SIZEGRIP
       case CE_SizeGrip: {
          p->save();
@@ -1893,7 +2047,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             sx = x + sw;
             for (int i = 0; i < 4; ++i) {
                p->setPen(QPen(opt->palette.light().color(), 1));
-               p->drawLine(x, sy - 1 , sx + 1, sw);
+               p->drawLine(x, sy - 1, sx + 1, sw);
                p->setPen(QPen(opt->palette.dark().color(), 1));
                p->drawLine(x, sy, sx, sw);
                p->setPen(QPen(opt->palette.dark().color(), 1));
@@ -1940,6 +2094,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          break;
       }
 #endif // QT_NO_SIZEGRIP
+
 #ifndef QT_NO_RUBBERBAND
       case CE_RubberBand: {
          if (const QStyleOptionRubberBand *rbOpt = qstyleoption_cast<const QStyleOptionRubberBand *>(opt)) {
@@ -1982,14 +2137,10 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
 
             if (!dwOpt->title.isEmpty()) {
-               const QStyleOptionDockWidgetV2 *v2
-                  = qstyleoption_cast<const QStyleOptionDockWidgetV2 *>(opt);
-               bool verticalTitleBar = v2 == 0 ? false : v2->verticalTitleBar;
+               const bool verticalTitleBar = dwOpt->verticalTitleBar;
 
                if (verticalTitleBar) {
-                  QSize s = r.size();
-                  s.transpose();
-                  r.setSize(s);
+                  r.setSize(r.size().transposed());
 
                   p->save();
                   p->translate(r.left(), r.top() + r.width());
@@ -1999,9 +2150,9 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
 
                const int indent = p->fontMetrics().descent();
                proxy()->drawItemText(p, r.adjusted(indent + 1, 1, -indent - 1, -1),
-                                     Qt::AlignLeft | Qt::AlignVCenter | Qt::TextShowMnemonic, dwOpt->palette,
-                                     dwOpt->state & State_Enabled, dwOpt->title,
-                                     QPalette::WindowText);
+                  Qt::AlignLeft | Qt::AlignVCenter | Qt::TextShowMnemonic, dwOpt->palette,
+                  dwOpt->state & State_Enabled, dwOpt->title,
+                  QPalette::WindowText);
 
                if (verticalTitleBar) {
                   p->restore();
@@ -2032,8 +2183,8 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          break;
       case CE_HeaderSection:
          qDrawShadePanel(p, opt->rect, opt->palette,
-                         opt->state & State_Sunken, 1,
-                         &opt->palette.brush(QPalette::Button));
+            opt->state & State_Sunken, 1,
+            &opt->palette.brush(QPalette::Button));
          break;
       case CE_HeaderEmptyArea:
          p->fillRect(opt->rect, opt->palette.background());
@@ -2046,13 +2197,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             p->setClipRect(editRect);
             if (!cb->currentIcon.isNull()) {
                QIcon::Mode mode = cb->state & State_Enabled ? QIcon::Normal
-                                  : QIcon::Disabled;
-               QPixmap pixmap = cb->currentIcon.pixmap(cb->iconSize, mode);
+                  : QIcon::Disabled;
+               QPixmap pixmap = cb->currentIcon.pixmap(qt_getWindow(widget), cb->iconSize, mode);
                QRect iconRect(editRect);
                iconRect.setWidth(cb->iconSize.width() + 4);
                iconRect = alignedRect(cb->direction,
-                                      Qt::AlignLeft | Qt::AlignVCenter,
-                                      iconRect.size(), editRect);
+                     Qt::AlignLeft | Qt::AlignVCenter,
+                     iconRect.size(), editRect);
                if (cb->editable) {
                   p->fillRect(iconRect, opt->palette.brush(QPalette::Base));
                }
@@ -2066,8 +2217,8 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
             if (!cb->currentText.isEmpty() && !cb->editable) {
                proxy()->drawItemText(p, editRect.adjusted(1, 0, -1, 0),
-                                     visualAlignment(cb->direction, Qt::AlignLeft | Qt::AlignVCenter),
-                                     cb->palette, cb->state & State_Enabled, cb->currentText);
+                  visualAlignment(cb->direction, Qt::AlignLeft | Qt::AlignVCenter),
+                  cb->palette, cb->state & State_Enabled, cb->currentText);
             }
             p->restore();
          }
@@ -2087,7 +2238,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                break;
             }
             qDrawShadePanel(p, toolBar->rect, toolBar->palette, false, toolBar->lineWidth,
-                            &toolBar->palette.brush(QPalette::Button));
+               &toolBar->palette.brush(QPalette::Button));
          }
          break;
 #endif // QT_NO_TOOLBAR
@@ -2115,20 +2266,20 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
 
 #ifndef QT_NO_ITEMVIEWS
       case CE_ItemViewItem:
-         if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+         if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             p->save();
             p->setClipRect(opt->rect);
 
-            QRect checkRect = subElementRect(SE_ItemViewItemCheckIndicator, vopt, widget);
-            QRect iconRect = subElementRect(SE_ItemViewItemDecoration, vopt, widget);
-            QRect textRect = subElementRect(SE_ItemViewItemText, vopt, widget);
+            QRect checkRect = proxy()->subElementRect(SE_ItemViewItemCheckIndicator, vopt, widget);
+            QRect iconRect  = proxy()->subElementRect(SE_ItemViewItemDecoration, vopt, widget);
+            QRect textRect  = proxy()->subElementRect(SE_ItemViewItemText, vopt, widget);
 
             // draw the background
             proxy()->drawPrimitive(PE_PanelItemViewItem, opt, p, widget);
 
             // draw the check mark
-            if (vopt->features & QStyleOptionViewItemV2::HasCheckIndicator) {
-               QStyleOptionViewItemV4 option(*vopt);
+            if (vopt->features & QStyleOptionViewItem::HasCheckIndicator) {
+               QStyleOptionViewItem option(*vopt);
                option.rect = checkRect;
                option.state = option.state & ~QStyle::State_HasFocus;
 
@@ -2159,7 +2310,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             // draw the text
             if (!vopt->text.isEmpty()) {
                QPalette::ColorGroup cg = vopt->state & QStyle::State_Enabled
-                                         ? QPalette::Normal : QPalette::Disabled;
+                  ? QPalette::Normal : QPalette::Disabled;
                if (cg == QPalette::Normal && !(vopt->state & QStyle::State_Active)) {
                   cg = QPalette::Inactive;
                }
@@ -2185,9 +2336,9 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                o.state |= QStyle::State_KeyboardFocusChange;
                o.state |= QStyle::State_Item;
                QPalette::ColorGroup cg = (vopt->state & QStyle::State_Enabled)
-                                         ? QPalette::Normal : QPalette::Disabled;
+                  ? QPalette::Normal : QPalette::Disabled;
                o.backgroundColor = vopt->palette.color(cg, (vopt->state & QStyle::State_Selected)
-                                                       ? QPalette::Highlight : QPalette::Window);
+                     ? QPalette::Highlight : QPalette::Window);
                proxy()->drawPrimitive(QStyle::PE_FrameFocusRect, &o, p, widget);
             }
 
@@ -2198,7 +2349,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
 #endif // QT_NO_ITEMVIEWS
 #ifndef QT_NO_FRAME
       case CE_ShapedFrame:
-         if (const QStyleOptionFrameV3 *f = qstyleoption_cast<const QStyleOptionFrameV3 *>(opt)) {
+         if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             int frameShape  = f->frameShape;
             int frameShadow = QFrame::Plain;
             if (f->state & QStyle::State_Sunken) {
@@ -2249,12 +2400,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                case QFrame::VLine: {
                   QPoint p1, p2;
                   if (frameShape == QFrame::HLine) {
-                     p1 = QPoint(opt->rect.x(), opt->rect.height() / 2);
+                     p1 = QPoint(opt->rect.x(), opt->rect.y() + opt->rect.height() / 2);
                      p2 = QPoint(opt->rect.x() + opt->rect.width(), p1.y());
                   } else {
-                     p1 = QPoint(opt->rect.x() + opt->rect.width() / 2, 0);
-                     p2 = QPoint(p1.x(), opt->rect.height());
+                     p1 = QPoint(opt->rect.x() + opt->rect.width() / 2, opt->rect.y());
+                     p2 = QPoint(p1.x(), p1.y() + opt->rect.height());
                   }
+
                   if (frameShadow == QFrame::Plain) {
                      QPen oldPen = p->pen();
                      p->setPen(QPen(opt->palette.brush(foregroundRole), lw));
@@ -2278,7 +2430,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
   \reimp
 */
 QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
-                                   const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D(const QCommonStyle);
    QRect r;
@@ -2292,7 +2444,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
             dx2 = dx1 * 2;
             r.setRect(opt->rect.x() + dx1, opt->rect.y() + dx1, opt->rect.width() - dx2,
-                      opt->rect.height() - dx2);
+               opt->rect.height() - dx2);
             r = visualRect(opt->direction, opt->rect, r);
          }
          break;
@@ -2308,14 +2460,14 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                 dfw2 = dfw1 * 2;
 
             r.setRect(btn->rect.x() + dfw1 + dbw1, btn->rect.y() + dfw1 + dbw1,
-                      btn->rect.width() - dfw2 - dbw2, btn->rect.height() - dfw2 - dbw2);
+               btn->rect.width() - dfw2 - dbw2, btn->rect.height() - dfw2 - dbw2);
             r = visualRect(opt->direction, opt->rect, r);
          }
          break;
       case SE_CheckBoxIndicator: {
          int h = proxy()->pixelMetric(PM_IndicatorHeight, opt, widget);
          r.setRect(opt->rect.x(), opt->rect.y() + ((opt->rect.height() - h) / 2),
-                   proxy()->pixelMetric(PM_IndicatorWidth, opt, widget), h);
+            proxy()->pixelMetric(PM_IndicatorWidth, opt, widget), h);
          r = visualRect(opt->direction, opt->rect, r);
       }
       break;
@@ -2323,10 +2475,10 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
       case SE_CheckBoxContents: {
          // Deal with the logical first, then convert it back to screen coords.
          QRect ir = visualRect(opt->direction, opt->rect,
-                               subElementRect(SE_CheckBoxIndicator, opt, widget));
+               subElementRect(SE_CheckBoxIndicator, opt, widget));
          int spacing = proxy()->pixelMetric(PM_CheckBoxLabelSpacing, opt, widget);
          r.setRect(ir.right() + spacing, opt->rect.y(), opt->rect.width() - ir.width() - spacing,
-                   opt->rect.height());
+            opt->rect.height());
          r = visualRect(opt->direction, opt->rect, r);
       }
       break;
@@ -2340,18 +2492,18 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
             // As above, deal with the logical first, then convert it back to screen coords.
             QRect cr = visualRect(btn->direction, btn->rect,
-                                  subElementRect(SE_CheckBoxContents, btn, widget));
+                  subElementRect(SE_CheckBoxContents, btn, widget));
 
             QRect iconRect, textRect;
             if (!btn->text.isEmpty()) {
                textRect = itemTextRect(opt->fontMetrics, cr, Qt::AlignAbsolute | Qt::AlignLeft
-                                       | Qt::AlignVCenter | Qt::TextShowMnemonic,
-                                       btn->state & State_Enabled, btn->text);
+                     | Qt::AlignVCenter | Qt::TextShowMnemonic,
+                     btn->state & State_Enabled, btn->text);
             }
             if (!btn->icon.isNull()) {
                iconRect = itemPixmapRect(cr, Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter
-                                         | Qt::TextShowMnemonic,
-                                         btn->icon.pixmap(btn->iconSize, QIcon::Normal));
+                     | Qt::TextShowMnemonic,
+                     btn->icon.pixmap(btn->iconSize, QIcon::Normal));
                if (!textRect.isEmpty()) {
                   textRect.translate(iconRect.right() + 4, 0);
                }
@@ -2366,17 +2518,17 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
       case SE_RadioButtonIndicator: {
          int h = proxy()->pixelMetric(PM_ExclusiveIndicatorHeight, opt, widget);
          r.setRect(opt->rect.x(), opt->rect.y() + ((opt->rect.height() - h) / 2),
-                   proxy()->pixelMetric(PM_ExclusiveIndicatorWidth, opt, widget), h);
+            proxy()->pixelMetric(PM_ExclusiveIndicatorWidth, opt, widget), h);
          r = visualRect(opt->direction, opt->rect, r);
       }
       break;
 
       case SE_RadioButtonContents: {
          QRect ir = visualRect(opt->direction, opt->rect,
-                               subElementRect(SE_RadioButtonIndicator, opt, widget));
+               subElementRect(SE_RadioButtonIndicator, opt, widget));
          int spacing = proxy()->pixelMetric(PM_RadioButtonLabelSpacing, opt, widget);
          r.setRect(ir.left() + ir.width() + spacing, opt->rect.y(), opt->rect.width() - ir.width() - spacing,
-                   opt->rect.height());
+            opt->rect.height());
          r = visualRect(opt->direction, opt->rect, r);
          break;
       }
@@ -2389,16 +2541,16 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                break;
             }
             QRect cr = visualRect(btn->direction, btn->rect,
-                                  subElementRect(SE_RadioButtonContents, opt, widget));
+                  subElementRect(SE_RadioButtonContents, opt, widget));
 
             QRect iconRect, textRect;
             if (!btn->text.isEmpty()) {
                textRect = itemTextRect(opt->fontMetrics, cr, Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter
-                                       | Qt::TextShowMnemonic, btn->state & State_Enabled, btn->text);
+                     | Qt::TextShowMnemonic, btn->state & State_Enabled, btn->text);
             }
             if (!btn->icon.isNull()) {
                iconRect = itemPixmapRect(cr, Qt::AlignAbsolute | Qt::AlignLeft | Qt::AlignVCenter | Qt::TextShowMnemonic,
-                                         btn->icon.pixmap(btn->iconSize, QIcon::Normal));
+                     btn->icon.pixmap(btn->iconSize, QIcon::Normal));
                if (!textRect.isEmpty()) {
                   textRect.translate(iconRect.right() + 4, 0);
                }
@@ -2424,16 +2576,15 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          }
          break;
 #endif // QT_NO_SLIDER
+
 #ifndef QT_NO_PROGRESSBAR
       case SE_ProgressBarGroove:
       case SE_ProgressBarContents:
       case SE_ProgressBarLabel:
          if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             int textw = 0;
-            bool vertical = false;
-            if (const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
-               vertical = (pb2->orientation == Qt::Vertical);
-            }
+            const bool vertical = pb->orientation == Qt::Vertical;
+
             if (!vertical) {
                if (pb->textVisible) {
                   textw = qMax(pb->fontMetrics.width(pb->text), pb->fontMetrics.width(QLatin1String("100%"))) + 6;
@@ -2443,10 +2594,10 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             if ((pb->textAlignment & Qt::AlignCenter) == 0) {
                if (sr != SE_ProgressBarLabel)
                   r.setCoords(pb->rect.left(), pb->rect.top(),
-                              pb->rect.right() - textw, pb->rect.bottom());
+                     pb->rect.right() - textw, pb->rect.bottom());
                else
                   r.setCoords(pb->rect.right() - textw, pb->rect.top(),
-                              pb->rect.right(), pb->rect.bottom());
+                     pb->rect.right(), pb->rect.bottom());
             } else {
                r = pb->rect;
             }
@@ -2460,7 +2611,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          if (const QStyleOptionComboBox *cb = qstyleoption_cast<const QStyleOptionComboBox *>(opt)) {
             int margin = cb->frame ? 3 : 0;
             r.setRect(opt->rect.left() + margin, opt->rect.top() + margin,
-                      opt->rect.width() - 2 * margin - 16, opt->rect.height() - 2 * margin);
+               opt->rect.width() - 2 * margin - 16, opt->rect.height() - 2 * margin);
             r = visualRect(opt->direction, opt->rect, r);
          }
          break;
@@ -2476,7 +2627,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
       case SE_HeaderLabel: {
          int margin = proxy()->pixelMetric(QStyle::PM_HeaderMargin, opt, widget);
          r.setRect(opt->rect.x() + margin, opt->rect.y() + margin,
-                   opt->rect.width() - margin * 2, opt->rect.height() - margin * 2);
+            opt->rect.width() - margin * 2, opt->rect.height() - margin * 2);
 
          if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             // Subtract width needed for arrow, if there is one
@@ -2501,11 +2652,11 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          if (opt->state & State_Horizontal) {
             int horiz_size = h / 2;
             r.setRect(x + w - margin * 2 - horiz_size, y + 5,
-                      horiz_size, h - margin * 2 - 5);
+               horiz_size, h - margin * 2 - 5);
          } else {
             int vert_size = w / 2;
             r.setRect(x + 5, y + h - margin * 2 - vert_size,
-                      w - margin * 2 - 5, vert_size);
+               w - margin * 2 - 5, vert_size);
          }
          r = visualRect(opt->direction, opt->rect, r);
          break;
@@ -2522,7 +2673,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 #ifndef QT_NO_TABWIDGET
       case SE_TabWidgetTabBar:
          if (const QStyleOptionTabWidgetFrame * twf
-               = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
+            = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
             r.setSize(twf->tabBarSize);
             const uint alingMask = Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter;
             switch (twf->shape) {
@@ -2531,8 +2682,8 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                   // Constrain the size now, otherwise, center could get off the page
                   // This of course repeated for all the other directions
                   r.setWidth(qMin(r.width(), twf->rect.width()
-                                  - twf->leftCornerWidgetSize.width()
-                                  - twf->rightCornerWidgetSize.width()));
+                        - twf->leftCornerWidgetSize.width()
+                        - twf->rightCornerWidgetSize.width()));
                   switch (proxy()->styleHint(SH_TabBar_Alignment, twf, widget) & alingMask) {
                      default:
                      case Qt::AlignLeft:
@@ -2540,12 +2691,12 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                         break;
                      case Qt::AlignHCenter:
                         r.moveTopLeft(QPoint(twf->rect.center().x() - qRound(r.width() / 2.0f)
-                                             + (twf->leftCornerWidgetSize.width() / 2)
-                                             - (twf->rightCornerWidgetSize.width() / 2), 0));
+                              + (twf->leftCornerWidgetSize.width() / 2)
+                              - (twf->rightCornerWidgetSize.width() / 2), 0));
                         break;
                      case Qt::AlignRight:
                         r.moveTopLeft(QPoint(twf->rect.width() - twf->tabBarSize.width()
-                                             - twf->rightCornerWidgetSize.width(), 0));
+                              - twf->rightCornerWidgetSize.width(), 0));
                         break;
                   }
                   r = visualRect(twf->direction, twf->rect, r);
@@ -2553,24 +2704,24 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
                   r.setWidth(qMin(r.width(), twf->rect.width()
-                                  - twf->leftCornerWidgetSize.width()
-                                  - twf->rightCornerWidgetSize.width()));
+                        - twf->leftCornerWidgetSize.width()
+                        - twf->rightCornerWidgetSize.width()));
                   switch (proxy()->styleHint(SH_TabBar_Alignment, twf, widget) & alingMask) {
                      default:
                      case Qt::AlignLeft:
                         r.moveTopLeft(QPoint(twf->leftCornerWidgetSize.width(),
-                                             twf->rect.height() - twf->tabBarSize.height()));
+                              twf->rect.height() - twf->tabBarSize.height()));
                         break;
                      case Qt::AlignHCenter:
                         r.moveTopLeft(QPoint(twf->rect.center().x() - qRound(r.width() / 2.0f)
-                                             + (twf->leftCornerWidgetSize.width() / 2)
-                                             - (twf->rightCornerWidgetSize.width() / 2),
-                                             twf->rect.height() - twf->tabBarSize.height()));
+                              + (twf->leftCornerWidgetSize.width() / 2)
+                              - (twf->rightCornerWidgetSize.width() / 2),
+                              twf->rect.height() - twf->tabBarSize.height()));
                         break;
                      case Qt::AlignRight:
                         r.moveTopLeft(QPoint(twf->rect.width() - twf->tabBarSize.width()
-                                             - twf->rightCornerWidgetSize.width(),
-                                             twf->rect.height() - twf->tabBarSize.height()));
+                              - twf->rightCornerWidgetSize.width(),
+                              twf->rect.height() - twf->tabBarSize.height()));
                         break;
                   }
                   r = visualRect(twf->direction, twf->rect, r);
@@ -2578,30 +2729,30 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                case QTabBar::RoundedEast:
                case QTabBar::TriangularEast:
                   r.setHeight(qMin(r.height(), twf->rect.height()
-                                   - twf->leftCornerWidgetSize.height()
-                                   - twf->rightCornerWidgetSize.height()));
+                        - twf->leftCornerWidgetSize.height()
+                        - twf->rightCornerWidgetSize.height()));
                   switch (proxy()->styleHint(SH_TabBar_Alignment, twf, widget) & alingMask) {
                      default:
                      case Qt::AlignLeft:
                         r.moveTopLeft(QPoint(twf->rect.width() - twf->tabBarSize.width(),
-                                             twf->leftCornerWidgetSize.height()));
+                              twf->leftCornerWidgetSize.height()));
                         break;
                      case Qt::AlignHCenter:
                         r.moveTopLeft(QPoint(twf->rect.width() - twf->tabBarSize.width(),
-                                             twf->rect.center().y() - r.height() / 2));
+                              twf->rect.center().y() - r.height() / 2));
                         break;
                      case Qt::AlignRight:
                         r.moveTopLeft(QPoint(twf->rect.width() - twf->tabBarSize.width(),
-                                             twf->rect.height() - twf->tabBarSize.height()
-                                             - twf->rightCornerWidgetSize.height()));
+                              twf->rect.height() - twf->tabBarSize.height()
+                              - twf->rightCornerWidgetSize.height()));
                         break;
                   }
                   break;
                case QTabBar::RoundedWest:
                case QTabBar::TriangularWest:
                   r.setHeight(qMin(r.height(), twf->rect.height()
-                                   - twf->leftCornerWidgetSize.height()
-                                   - twf->rightCornerWidgetSize.height()));
+                        - twf->leftCornerWidgetSize.height()
+                        - twf->rightCornerWidgetSize.height()));
                   switch (proxy()->styleHint(SH_TabBar_Alignment, twf, widget) & alingMask) {
                      default:
                      case Qt::AlignLeft:
@@ -2612,7 +2763,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                         break;
                      case Qt::AlignRight:
                         r.moveTopLeft(QPoint(0, twf->rect.height() - twf->tabBarSize.height()
-                                             - twf->rightCornerWidgetSize.height()));
+                              - twf->rightCornerWidgetSize.height()));
                         break;
                   }
                   break;
@@ -2632,22 +2783,22 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                case QTabBar::RoundedNorth:
                case QTabBar::TriangularNorth:
                   r = QRect(QPoint(0, qMax(twf->tabBarSize.height() - overlap, 0)),
-                            QSize(twf->rect.width(), qMin(twf->rect.height() - twf->tabBarSize.height() + overlap, twf->rect.height())));
+                        QSize(twf->rect.width(), qMin(twf->rect.height() - twf->tabBarSize.height() + overlap, twf->rect.height())));
                   break;
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
                   r = QRect(QPoint(0, 0), QSize(twf->rect.width(), qMin(twf->rect.height() - twf->tabBarSize.height() + overlap,
-                                                twf->rect.height())));
+                              twf->rect.height())));
                   break;
                case QTabBar::RoundedEast:
                case QTabBar::TriangularEast:
                   r = QRect(QPoint(0, 0), QSize(qMin(twf->rect.width() - twf->tabBarSize.width() + overlap, twf->rect.width()),
-                                                twf->rect.height()));
+                           twf->rect.height()));
                   break;
                case QTabBar::RoundedWest:
                case QTabBar::TriangularWest:
                   r = QRect(QPoint(qMax(twf->tabBarSize.width() - overlap, 0), 0),
-                            QSize(qMin(twf->rect.width() - twf->tabBarSize.width() + overlap, twf->rect.width()), twf->rect.height()));
+                        QSize(qMin(twf->rect.width() - twf->tabBarSize.width() + overlap, twf->rect.width()), twf->rect.height()));
                   break;
             }
             if (sr == SE_TabWidgetTabContents && twf->lineWidth > 0) {
@@ -2655,6 +2806,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
          }
          break;
+
       case SE_TabWidgetLeftCorner:
          if (const QStyleOptionTabWidgetFrame *twf = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
             QRect paneRect = subElementRect(SE_TabWidgetTabPane, twf, widget);
@@ -2662,7 +2814,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                case QTabBar::RoundedNorth:
                case QTabBar::TriangularNorth:
                   r = QRect(QPoint(paneRect.x(), paneRect.y() - twf->leftCornerWidgetSize.height()),
-                            twf->leftCornerWidgetSize);
+                        twf->leftCornerWidgetSize);
                   break;
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
@@ -2681,13 +2833,13 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                case QTabBar::RoundedNorth:
                case QTabBar::TriangularNorth:
                   r = QRect(QPoint(paneRect.width() - twf->rightCornerWidgetSize.width(),
-                                   paneRect.y() - twf->rightCornerWidgetSize.height()),
-                            twf->rightCornerWidgetSize);
+                           paneRect.y() - twf->rightCornerWidgetSize.height()),
+                        twf->rightCornerWidgetSize);
                   break;
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
                   r = QRect(QPoint(paneRect.width() - twf->rightCornerWidgetSize.width(),
-                                   paneRect.height()), twf->rightCornerWidgetSize);
+                           paneRect.height()), twf->rightCornerWidgetSize);
                   break;
                default:
                   break;
@@ -2695,16 +2847,18 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             r = visualRect(twf->direction, twf->rect, r);
          }
          break;
+
       case SE_TabBarTabText:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
-            QStyleOptionTabV3 tabV3(*tab);
+
             QRect dummyIconRect;
-            d->tabLayout(&tabV3, widget, &r, &dummyIconRect);
+            d->tabLayout(tab, widget, &r, &dummyIconRect);
          }
          break;
+
       case SE_TabBarTabLeftButton:
       case SE_TabBarTabRightButton:
-         if (const QStyleOptionTabV3 *tab = qstyleoption_cast<const QStyleOptionTabV3 *>(opt)) {
+         if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
             bool selected = tab->state & State_Selected;
             int verticalShift = proxy()->pixelMetric(QStyle::PM_TabBarTabShiftVertical, tab, widget);
             int horizontalShift = proxy()->pixelMetric(QStyle::PM_TabBarTabShiftHorizontal, tab, widget);
@@ -2712,9 +2866,9 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             hpadding = qMax(hpadding, 4); //workaround KStyle returning 0 because they workaround an old bug in Qt
 
             bool verticalTabs = tab->shape == QTabBar::RoundedEast
-                                || tab->shape == QTabBar::RoundedWest
-                                || tab->shape == QTabBar::TriangularEast
-                                || tab->shape == QTabBar::TriangularWest;
+               || tab->shape == QTabBar::RoundedWest
+               || tab->shape == QTabBar::TriangularEast
+               || tab->shape == QTabBar::TriangularWest;
 
             QRect tr = tab->rect;
             if (tab->shape == QTabBar::RoundedSouth || tab->shape == QTabBar::TriangularSouth) {
@@ -2803,14 +2957,14 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          }
          break;
       case SE_FrameContents:
-         if (const QStyleOptionFrameV2 *f = qstyleoption_cast<const QStyleOptionFrameV2 *>(opt)) {
+         if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             int fw = proxy()->pixelMetric(PM_DefaultFrameWidth, f, widget);
             r = opt->rect.adjusted(fw, fw, -fw, -fw);
             r = visualRect(opt->direction, opt->rect, r);
          }
          break;
       case SE_ShapedFrameContents:
-         if (const QStyleOptionFrameV3 *f = qstyleoption_cast<const QStyleOptionFrameV3 *>(opt)) {
+         if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             int frameShape  = f->frameShape;
             int frameShadow = QFrame::Plain;
             if (f->state & QStyle::State_Sunken) {
@@ -2843,12 +2997,12 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                case QFrame::StyledPanel:
                   //keep the compatibility with Qt 4.4 if there is a proxy style.
                   //be sure to call drawPrimitive(QStyle::SE_FrameContents) on the proxy style
+
                   if (widget) {
                      return widget->style()->subElementRect(QStyle::SE_FrameContents, opt, widget);
                   } else {
                      return subElementRect(QStyle::SE_FrameContents, opt, widget);
                   }
-                  break;
 
                case QFrame::WinPanel:
                   frameWidth = 2;
@@ -2867,6 +3021,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             r = f->rect.adjusted(frameWidth, frameWidth, -frameWidth, -frameWidth);
          }
          break;
+
 #ifndef QT_NO_DOCKWIDGET
       case SE_DockWidgetCloseButton:
       case SE_DockWidgetFloatButton:
@@ -2877,21 +3032,17 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          int margin = proxy()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, opt, widget);
          QRect rect = opt->rect;
 
-         const QStyleOptionDockWidget *dwOpt
-            = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
+         const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
          bool canClose = dwOpt == 0 ? true : dwOpt->closable;
          bool canFloat = dwOpt == 0 ? false : dwOpt->floatable;
-         const QStyleOptionDockWidgetV2 *v2
-            = qstyleoption_cast<const QStyleOptionDockWidgetV2 *>(opt);
-         bool verticalTitleBar = v2 == 0 ? false : v2->verticalTitleBar;
+
+         const bool verticalTitleBar = dwOpt && dwOpt->verticalTitleBar;
 
          // If this is a vertical titlebar, we transpose and work as if it was
          // horizontal, then transpose again.
 
          if (verticalTitleBar) {
-            QSize size = rect.size();
-            size.transpose();
-            rect.setSize(size);
+            rect.setSize(rect.size().transposed());
          }
 
          do {
@@ -2901,15 +3052,15 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
             QRect closeRect;
             if (canClose) {
-               QSize sz = standardIcon(QStyle::SP_TitleBarCloseButton,
-                                       opt, widget).actualSize(QSize(iconSize, iconSize));
+               QSize sz = proxy()->standardIcon(QStyle::SP_TitleBarCloseButton,
+                     opt, widget).actualSize(QSize(iconSize, iconSize));
                sz += QSize(buttonMargin, buttonMargin);
                if (verticalTitleBar) {
-                  sz.transpose();
+                  sz = sz.transposed();
                }
                closeRect = QRect(right - sz.width(),
-                                 rect.center().y() - sz.height() / 2,
-                                 sz.width(), sz.height());
+                     rect.center().y() - sz.height() / 2,
+                     sz.width(), sz.height());
                right = closeRect.left() - 1;
             }
             if (sr == SE_DockWidgetCloseButton) {
@@ -2919,15 +3070,15 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
             QRect floatRect;
             if (canFloat) {
-               QSize sz = standardIcon(QStyle::SP_TitleBarNormalButton,
-                                       opt, widget).actualSize(QSize(iconSize, iconSize));
+               QSize sz = proxy()->standardIcon(QStyle::SP_TitleBarNormalButton,
+                     opt, widget).actualSize(QSize(iconSize, iconSize));
                sz += QSize(buttonMargin, buttonMargin);
                if (verticalTitleBar) {
-                  sz.transpose();
+                  sz = sz.transposed();
                }
                floatRect = QRect(right - sz.width(),
-                                 rect.center().y() - sz.height() / 2,
-                                 sz.width(), sz.height());
+                     rect.center().y() - sz.height() / 2,
+                     sz.width(), sz.height());
                right = floatRect.left() - 1;
             }
             if (sr == SE_DockWidgetFloatButton) {
@@ -2942,13 +3093,15 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                   icon = dw->windowIcon();
                }
                if (!icon.isNull()
-                     && icon.cacheKey() != QApplication::windowIcon().cacheKey()) {
+                  && icon.cacheKey() != QApplication::windowIcon().cacheKey()) {
                   QSize sz = icon.actualSize(QSize(r.height(), r.height()));
+
                   if (verticalTitleBar) {
-                     sz.transpose();
+                     sz = sz.transposed();
                   }
+
                   iconRect = QRect(left, rect.center().y() - sz.height() / 2,
-                                   sz.width(), sz.height());
+                        sz.width(), sz.height());
                   left = iconRect.right() + margin;
                }
             }
@@ -2958,7 +3111,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
 
             QRect textRect = QRect(left, rect.top(),
-                                   right - left, rect.height());
+                  right - left, rect.height());
             if (sr == SE_DockWidgetTitleBarText) {
                r = textRect;
                break;
@@ -2968,8 +3121,8 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
          if (verticalTitleBar) {
             r = QRect(rect.left() + r.top() - rect.top(),
-                      rect.top() + rect.right() - r.right(),
-                      r.height(), r.width());
+                  rect.top() + rect.right() - r.right(),
+                  r.height(), r.width());
          } else {
             r = visualRect(opt->direction, rect, r);
          }
@@ -2978,21 +3131,21 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 #endif
 #ifndef QT_NO_ITEMVIEWS
       case SE_ItemViewItemCheckIndicator:
-         if (!qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+         if (!qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             r = subElementRect(SE_CheckBoxIndicator, opt, widget);
             break;
          }
       case SE_ItemViewItemDecoration:
       case SE_ItemViewItemText:
       case SE_ItemViewItemFocusRect:
-         if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+         if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             if (!d->isViewItemCached(*vopt)) {
                d->viewItemLayout(vopt, &d->checkRect, &d->decorationRect, &d->displayRect, false);
                if (d->cachedOption) {
                   delete d->cachedOption;
                   d->cachedOption = 0;
                }
-               d->cachedOption = new QStyleOptionViewItemV4(*vopt);
+               d->cachedOption = new QStyleOptionViewItem(*vopt);
             }
             if (sr == SE_ViewItemCheckIndicator) {
                r = d->checkRect;
@@ -3004,6 +3157,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          }
          break;
 #endif //QT_NO_ITEMVIEWS
+
 #ifndef QT_NO_TOOLBAR
       case SE_ToolBarHandle:
          if (const QStyleOptionToolBar *tbopt = qstyleoption_cast<const QStyleOptionToolBar *>(opt)) {
@@ -3023,6 +3177,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          }
          break;
 #endif //QT_NO_TOOLBAR
+
       default:
          break;
    }
@@ -3031,7 +3186,24 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
 #ifndef QT_NO_DIAL
 
-static QPolygonF calcArrow(const QStyleOptionSlider *dial, qreal &a)
+// in lieu of std::array, minimal API
+template <int N>
+struct StaticPolygonF {
+   QPointF data[N];
+
+   constexpr int size() const {
+      return N;
+   }
+
+   constexpr  const QPointF *cbegin() const {
+      return data;
+   }
+
+   constexpr  const QPointF &operator[](int idx) const {
+      return data[idx];
+   }
+};
+static StaticPolygonF<3> calcArrow(const QStyleOptionSlider *dial, qreal &a)
 {
    int width = dial->rect.width();
    int height = dial->rect.height();
@@ -3040,12 +3212,13 @@ static QPolygonF calcArrow(const QStyleOptionSlider *dial, qreal &a)
 
    if (dial->maximum == dial->minimum) {
       a = Q_PI / 2;
-   } else if (dial->dialWrapping)
+   } else if (dial->dialWrapping) {
       a = Q_PI * 3 / 2 - (currentSliderPosition - dial->minimum) * 2 * Q_PI
-          / (dial->maximum - dial->minimum);
-   else
+         / (dial->maximum - dial->minimum);
+   } else {
       a = (Q_PI * 8 - (currentSliderPosition - dial->minimum) * 10 * Q_PI
-           / (dial->maximum - dial->minimum)) / 6;
+            / (dial->maximum - dial->minimum)) / 6;
+   }
 
    int xc = width / 2;
    int yc = height / 2;
@@ -3054,15 +3227,18 @@ static QPolygonF calcArrow(const QStyleOptionSlider *dial, qreal &a)
    if (len < 5) {
       len = 5;
    }
+
    int back = len / 2;
 
-   QPolygonF arrow(3);
-   arrow[0] = QPointF(0.5 + xc + len * qCos(a),
-                      0.5 + yc - len * qSin(a));
-   arrow[1] = QPointF(0.5 + xc + back * qCos(a + Q_PI * 5 / 6),
-                      0.5 + yc - back * qSin(a + Q_PI * 5 / 6));
-   arrow[2] = QPointF(0.5 + xc + back * qCos(a - Q_PI * 5 / 6),
-                      0.5 + yc - back * qSin(a - Q_PI * 5 / 6));
+   StaticPolygonF<3> arrow = {{
+         QPointF(0.5 + xc + len * qCos(a),
+            0.5 + yc - len * qSin(a)),
+         QPointF(0.5 + xc + back * qCos(a + Q_PI * 5 / 6),
+            0.5 + yc - back * qSin(a + Q_PI * 5 / 6)),
+         QPointF(0.5 + xc + back * qCos(a - Q_PI * 5 / 6),
+            0.5 + yc - back * qSin(a - Q_PI * 5 / 6)),
+      }
+   };
    return arrow;
 }
 
@@ -3072,7 +3248,7 @@ static QPolygonF calcArrow(const QStyleOptionSlider *dial, qreal &a)
   \reimp
 */
 void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-                                      QPainter *p, const QWidget *widget) const
+   QPainter *p, const QWidget *widget) const
 {
    switch (cc) {
 #ifndef QT_NO_SLIDER
@@ -3088,9 +3264,9 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                if (interval <= 0) {
                   interval = slider->singleStep;
                   if (QStyle::sliderPositionFromValue(slider->minimum, slider->maximum, interval,
-                                                      available)
-                        - QStyle::sliderPositionFromValue(slider->minimum, slider->maximum,
-                                                          0, available) < 3) {
+                        available)
+                     - QStyle::sliderPositionFromValue(slider->minimum, slider->maximum,
+                        0, available) < 3) {
                      interval = slider->pageStep;
                   }
                }
@@ -3110,21 +3286,21 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                   }
                   const int v_ = qMin(v, slider->maximum);
                   pos = QStyle::sliderPositionFromValue(slider->minimum, slider->maximum,
-                                                        v_, available) + fudge;
+                        v_, available) + fudge;
                   if (slider->orientation == Qt::Horizontal) {
                      if (ticks & QSlider::TicksAbove) {
                         p->drawLine(pos, 0, pos, tickOffset - 2);
                      }
                      if (ticks & QSlider::TicksBelow)
                         p->drawLine(pos, tickOffset + thickness + 1, pos,
-                                    slider->rect.height() - 1);
+                           slider->rect.height() - 1);
                   } else {
                      if (ticks & QSlider::TicksAbove) {
                         p->drawLine(0, pos, tickOffset - 2, pos);
                      }
                      if (ticks & QSlider::TicksBelow)
                         p->drawLine(tickOffset + thickness + 1, pos,
-                                    slider->rect.width() - 1, pos);
+                           slider->rect.width() - 1, pos);
                   }
                   // in the case where maximum is max int
                   int nextInterval = v + interval;
@@ -3138,6 +3314,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
          }
          break;
 #endif // QT_NO_SLIDER
+
 #ifndef QT_NO_SCROLLBAR
       case CC_ScrollBar:
          if (const QStyleOptionSlider *scrollbar = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
@@ -3224,8 +3401,8 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                      QStyleOptionFocusRect fropt;
                      fropt.QStyleOption::operator=(newScrollbar);
                      fropt.rect.setRect(newScrollbar.rect.x() + 2, newScrollbar.rect.y() + 2,
-                                        newScrollbar.rect.width() - 5,
-                                        newScrollbar.rect.height() - 5);
+                        newScrollbar.rect.width() - 5,
+                        newScrollbar.rect.height() - 5);
                      proxy()->drawPrimitive(PE_FrameFocusRect, &fropt, p, widget);
                   }
                }
@@ -3302,7 +3479,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
 #ifndef QT_NO_TOOLBUTTON
       case CC_ToolButton:
          if (const QStyleOptionToolButton * toolbutton
-               = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
+            = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
             QRect button, menuarea;
             button = proxy()->subControlRect(cc, toolbutton, SC_ToolButton, widget);
             menuarea = proxy()->subControlRect(cc, toolbutton, SC_ToolButtonMenu, widget);
@@ -3322,8 +3499,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                mflags |= State_Sunken;
             }
 
-            QStyleOption tool(0);
-            tool.palette = toolbutton->palette;
+            QStyleOption tool = *toolbutton;
             if (toolbutton->subControls & SC_ToolButton) {
                if (bflags & (State_Sunken | State_On | State_Raised)) {
                   tool.rect = button;
@@ -3338,7 +3514,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                fr.rect.adjust(3, 3, -3, -3);
                if (toolbutton->features & QStyleOptionToolButton::MenuButtonPopup)
                   fr.rect.adjust(0, 0, -proxy()->pixelMetric(QStyle::PM_MenuButtonIndicator,
-                                 toolbutton, widget), 0);
+                        toolbutton, widget), 0);
                proxy()->drawPrimitive(PE_FrameFocusRect, &fr, p, widget);
             }
             QStyleOptionToolButton label = *toolbutton;
@@ -3364,6 +3540,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
          }
          break;
 #endif // QT_NO_TOOLBUTTON
+
       case CC_TitleBar:
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             QRect ir;
@@ -3387,26 +3564,28 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
 
                p->setPen(tb->palette.highlightedText().color());
                p->drawText(ir.x() + 2, ir.y(), ir.width() - 2, ir.height(),
-                           Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, tb->text);
+                  Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, tb->text);
             }
 
             bool down = false;
             QPixmap pm;
 
-            QStyleOption tool(0);
-            tool.palette = tb->palette;
+            QStyleOption tool = *tb;
             if (tb->subControls & SC_TitleBarCloseButton && tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarCloseButton, widget);
                down = tb->activeSubControls & SC_TitleBarCloseButton && (opt->state & State_Sunken);
+
                if ((tb->titleBarFlags & Qt::WindowType_Mask) == Qt::Tool
 #ifndef QT_NO_DOCKWIDGET
-                     || qobject_cast<const QDockWidget *>(widget)
+                  || qobject_cast<const QDockWidget *>(widget)
 #endif
-                  ) {
-                  pm = standardIcon(SP_DockWidgetCloseButton, &tool, widget).pixmap(10, 10);
+               ) {
+                  pm = proxy()->standardIcon(SP_DockWidgetCloseButton, &tool, widget).pixmap(10, 10);
+
                } else {
-                  pm = standardIcon(SP_TitleBarCloseButton, &tool, widget).pixmap(10, 10);
+                  pm = proxy()->standardIcon(SP_TitleBarCloseButton, &tool, widget).pixmap(10, 10);
                }
+
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
@@ -3414,18 +3593,18 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
 
             if (tb->subControls & SC_TitleBarMaxButton
-                  && tb->titleBarFlags & Qt::WindowMaximizeButtonHint
-                  && !(tb->titleBarState & Qt::WindowMaximized)) {
+               && tb->titleBarFlags & Qt::WindowMaximizeButtonHint
+               && !(tb->titleBarState & Qt::WindowMaximized)) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarMaxButton, widget);
 
                down = tb->activeSubControls & SC_TitleBarMaxButton && (opt->state & State_Sunken);
-               pm = standardIcon(SP_TitleBarMaxButton, &tool, widget).pixmap(10, 10);
+               pm = proxy()->standardIcon(SP_TitleBarMaxButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(10, 10));
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
@@ -3433,17 +3612,17 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
 
             if (tb->subControls & SC_TitleBarMinButton
-                  && tb->titleBarFlags & Qt::WindowMinimizeButtonHint
-                  && !(tb->titleBarState & Qt::WindowMinimized)) {
+               && tb->titleBarFlags & Qt::WindowMinimizeButtonHint
+               && !(tb->titleBarState & Qt::WindowMinimized)) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarMinButton, widget);
                down = tb->activeSubControls & SC_TitleBarMinButton && (opt->state & State_Sunken);
-               pm = standardIcon(SP_TitleBarMinButton, &tool, widget).pixmap(10, 10);
+               pm = proxy()->standardIcon(SP_TitleBarMinButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(10, 10));
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
@@ -3451,21 +3630,21 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
 
             bool drawNormalButton = (tb->subControls & SC_TitleBarNormalButton)
-                                    && (((tb->titleBarFlags & Qt::WindowMinimizeButtonHint)
-                                         && (tb->titleBarState & Qt::WindowMinimized))
-                                        || ((tb->titleBarFlags & Qt::WindowMaximizeButtonHint)
-                                            && (tb->titleBarState & Qt::WindowMaximized)));
+               && (((tb->titleBarFlags & Qt::WindowMinimizeButtonHint)
+                     && (tb->titleBarState & Qt::WindowMinimized))
+                  || ((tb->titleBarFlags & Qt::WindowMaximizeButtonHint)
+                     && (tb->titleBarState & Qt::WindowMaximized)));
 
             if (drawNormalButton) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarNormalButton, widget);
                down = tb->activeSubControls & SC_TitleBarNormalButton && (opt->state & State_Sunken);
-               pm = standardIcon(SP_TitleBarNormalButton, &tool, widget).pixmap(10, 10);
+               pm = proxy()->standardIcon(SP_TitleBarNormalButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(10, 10));
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
@@ -3473,58 +3652,58 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
 
             if (tb->subControls & SC_TitleBarShadeButton
-                  && tb->titleBarFlags & Qt::WindowShadeButtonHint
-                  && !(tb->titleBarState & Qt::WindowMinimized)) {
+               && tb->titleBarFlags & Qt::WindowShadeButtonHint
+               && !(tb->titleBarState & Qt::WindowMinimized)) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarShadeButton, widget);
                down = (tb->activeSubControls & SC_TitleBarShadeButton && (opt->state & State_Sunken));
-               pm = standardIcon(SP_TitleBarShadeButton, &tool, widget).pixmap(10, 10);
+               pm = proxy()->standardIcon(SP_TitleBarShadeButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(10, 10));
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
 
             if (tb->subControls & SC_TitleBarUnshadeButton
-                  && tb->titleBarFlags & Qt::WindowShadeButtonHint
-                  && tb->titleBarState & Qt::WindowMinimized) {
+               && tb->titleBarFlags & Qt::WindowShadeButtonHint
+               && tb->titleBarState & Qt::WindowMinimized) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarUnshadeButton, widget);
 
                down = tb->activeSubControls & SC_TitleBarUnshadeButton  && (opt->state & State_Sunken);
-               pm = standardIcon(SP_TitleBarUnshadeButton, &tool, widget).pixmap(10, 10);
+               pm = proxy()->standardIcon(SP_TitleBarUnshadeButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(10, 10));
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
             if (tb->subControls & SC_TitleBarContextHelpButton
-                  && tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
+               && tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                ir = proxy()->subControlRect(CC_TitleBar, tb, SC_TitleBarContextHelpButton, widget);
 
                down = tb->activeSubControls & SC_TitleBarContextHelpButton  && (opt->state & State_Sunken);
-               pm = standardIcon(SP_TitleBarContextHelpButton, &tool, widget).pixmap(10, 10);
+               pm = proxy()->standardIcon(SP_TitleBarContextHelpButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(10, 10));
                tool.rect = ir;
                tool.state = down ? State_Sunken : State_Raised;
                proxy()->drawPrimitive(PE_PanelButtonTool, &tool, p, widget);
                p->save();
                if (down)
                   p->translate(proxy()->pixelMetric(PM_ButtonShiftHorizontal, tb, widget),
-                               proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
+                     proxy()->pixelMetric(PM_ButtonShiftVertical, tb, widget));
                proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                p->restore();
             }
@@ -3534,7 +3713,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                   tb->icon.paint(p, ir);
                } else {
                   int iconSize = proxy()->pixelMetric(PM_SmallIconSize, tb, widget);
-                  pm = standardIcon(SP_TitleBarMenuButton, &tool, widget).pixmap(iconSize, iconSize);
+                  pm = proxy()->standardIcon(SP_TitleBarMenuButton, &tool, widget).pixmap(qt_getWindow(widget), QSize(iconSize, iconSize));
                   tool.rect = ir;
                   p->save();
                   proxy()->drawItemPixmap(p, ir, Qt::AlignCenter, pm);
@@ -3571,7 +3750,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
 
             if (dial->state & State_Enabled) {
                p->setBrush(pal.brush(QPalette::ColorRole(proxy()->styleHint(SH_Dial_BackgroundRole,
-                                     dial, widget))));
+                           dial, widget))));
                p->setPen(Qt::NoPen);
                p->drawEllipse(br);
                p->setBrush(Qt::NoBrush);
@@ -3582,11 +3761,12 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
             p->drawArc(br, 240 * 16, 180 * 16);
 
             qreal a;
-            QPolygonF arrow(calcArrow(dial, a));
+            const StaticPolygonF<3> arrow = calcArrow(dial, a);
 
             p->setPen(Qt::NoPen);
             p->setBrush(pal.button());
-            p->drawPolygon(arrow);
+
+            p->drawPolygon(arrow.cbegin(), arrow.size());
 
             a = QStyleHelper::angle(QPointF(width / 2, height / 2), arrow[0]);
             p->setBrush(Qt::NoBrush);
@@ -3644,7 +3824,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
             QRect textRect = proxy()->subControlRect(CC_GroupBox, opt, SC_GroupBoxLabel, widget);
             QRect checkBoxRect = proxy()->subControlRect(CC_GroupBox, opt, SC_GroupBoxCheckBox, widget);
             if (groupBox->subControls & QStyle::SC_GroupBoxFrame) {
-               QStyleOptionFrameV2 frame;
+               QStyleOptionFrame frame;
                frame.QStyleOption::operator=(*groupBox);
                frame.features = groupBox->features;
                frame.lineWidth = groupBox->lineWidth;
@@ -3680,8 +3860,8 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                }
 
                proxy()->drawItemText(p, textRect,  Qt::TextShowMnemonic | Qt::AlignHCenter | alignment,
-                                     groupBox->palette, groupBox->state & State_Enabled, groupBox->text,
-                                     textColor.isValid() ? QPalette::NoRole : QPalette::WindowText);
+                  groupBox->palette, groupBox->state & State_Enabled, groupBox->text,
+                  textColor.isValid() ? QPalette::NoRole : QPalette::WindowText);
 
                if (groupBox->state & State_HasFocus) {
                   QStyleOptionFocusRect fropt;
@@ -3701,7 +3881,8 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
          }
          break;
 #endif // QT_NO_GROUPBOX
-#ifndef QT_NO_WORKSPACE
+
+#ifndef QT_NO_MDIAREA
       case CC_MdiControls: {
          QStyleOptionButton btnOpt;
          btnOpt.QStyleOption::operator=(*opt);
@@ -3722,7 +3903,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
             }
             btnOpt.rect = proxy()->subControlRect(CC_MdiControls, opt, SC_MdiCloseButton, widget);
             proxy()->drawPrimitive(PE_PanelButtonCommand, &btnOpt, p, widget);
-            QPixmap pm = standardIcon(SP_TitleBarCloseButton).pixmap(16, 16);
+            QPixmap pm = proxy()->standardIcon(SP_TitleBarCloseButton).pixmap(qt_getWindow(widget), QSize(16, 16));
             proxy()->drawItemPixmap(p, btnOpt.rect.translated(bsx, bsy), Qt::AlignCenter, pm);
          }
          if (opt->subControls & QStyle::SC_MdiNormalButton) {
@@ -3739,7 +3920,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
             }
             btnOpt.rect = proxy()->subControlRect(CC_MdiControls, opt, SC_MdiNormalButton, widget);
             proxy()->drawPrimitive(PE_PanelButtonCommand, &btnOpt, p, widget);
-            QPixmap pm = standardIcon(SP_TitleBarNormalButton).pixmap(16, 16);
+            QPixmap pm = proxy()->standardIcon(SP_TitleBarNormalButton).pixmap(qt_getWindow(widget), QSize(16, 16));
             proxy()->drawItemPixmap(p, btnOpt.rect.translated(bsx, bsy), Qt::AlignCenter, pm);
          }
          if (opt->subControls & QStyle::SC_MdiMinButton) {
@@ -3756,7 +3937,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
             }
             btnOpt.rect = proxy()->subControlRect(CC_MdiControls, opt, SC_MdiMinButton, widget);
             proxy()->drawPrimitive(PE_PanelButtonCommand, &btnOpt, p, widget);
-            QPixmap pm = standardIcon(SP_TitleBarMinButton).pixmap(16, 16);
+            QPixmap pm = proxy()->standardIcon(SP_TitleBarMinButton).pixmap(qt_getWindow(widget), QSize(16, 16));
             proxy()->drawItemPixmap(p, btnOpt.rect.translated(bsx, bsy), Qt::AlignCenter, pm);
          }
       }
@@ -3772,7 +3953,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
     \reimp
 */
 QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-      const QPoint &pt, const QWidget *widget) const
+   const QPoint &pt, const QWidget *widget) const
 {
    SubControl sc = SC_None;
    switch (cc) {
@@ -3783,7 +3964,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
             if (r.isValid() && r.contains(pt)) {
                sc = SC_SliderHandle;
             } else {
-               r = proxy()->subControlRect(cc, slider, SC_SliderGroove , widget);
+               r = proxy()->subControlRect(cc, slider, SC_SliderGroove, widget);
                if (r.isValid() && r.contains(pt)) {
                   sc = SC_SliderGroove;
                }
@@ -3791,6 +3972,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
          break;
 #endif // QT_NO_SLIDER
+
 #ifndef QT_NO_SCROLLBAR
       case CC_ScrollBar:
          if (const QStyleOptionSlider *scrollbar = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
@@ -3807,6 +3989,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
          break;
 #endif // QT_NO_SCROLLBAR
+
 #ifndef QT_NO_TOOLBUTTON
       case CC_ToolButton:
          if (const QStyleOptionToolButton *toolbutton = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
@@ -3855,6 +4038,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
             }
          }
          break;
+
 #ifndef QT_NO_COMBOBOX
       case CC_ComboBox:
          if (const QStyleOptionComboBox *cb = qstyleoption_cast<const QStyleOptionComboBox *>(opt)) {
@@ -3871,6 +4055,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
          break;
 #endif // QT_NO_COMBOBOX
+
 #ifndef QT_NO_GROUPBOX
       case CC_GroupBox:
          if (const QStyleOptionGroupBox *groupBox = qstyleoption_cast<const QStyleOptionGroupBox *>(opt)) {
@@ -3910,7 +4095,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
     \reimp
 */
 QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
-                                   SubControl sc, const QWidget *widget) const
+   SubControl sc, const QWidget *widget) const
 {
    QRect ret;
    switch (cc) {
@@ -3926,10 +4111,10 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                   int len = proxy()->pixelMetric(PM_SliderLength, slider, widget);
                   bool horizontal = slider->orientation == Qt::Horizontal;
                   sliderPos = sliderPositionFromValue(slider->minimum, slider->maximum,
-                                                      slider->sliderPosition,
-                                                      (horizontal ? slider->rect.width()
-                                                       : slider->rect.height()) - len,
-                                                      slider->upsideDown);
+                        slider->sliderPosition,
+                        (horizontal ? slider->rect.width()
+                           : slider->rect.height()) - len,
+                        slider->upsideDown);
                   if (horizontal) {
                      ret.setRect(slider->rect.x() + sliderPos, slider->rect.y() + tickOffset, len, thickness);
                   } else {
@@ -3940,10 +4125,10 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                case SC_SliderGroove:
                   if (slider->orientation == Qt::Horizontal)
                      ret.setRect(slider->rect.x(), slider->rect.y() + tickOffset,
-                                 slider->rect.width(), thickness);
+                        slider->rect.width(), thickness);
                   else
                      ret.setRect(slider->rect.x() + tickOffset, slider->rect.y(),
-                                 thickness, slider->rect.height());
+                        thickness, slider->rect.height());
                   break;
                default:
                   break;
@@ -3956,9 +4141,12 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
       case CC_ScrollBar:
          if (const QStyleOptionSlider *scrollbar = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
             const QRect scrollBarRect = scrollbar->rect;
-            int sbextent = proxy()->pixelMetric(PM_ScrollBarExtent, scrollbar, widget);
+            int sbextent = 0;
+            if (!proxy()->styleHint(SH_ScrollBar_Transient, scrollbar, widget)) {
+               sbextent = proxy()->pixelMetric(PM_ScrollBarExtent, scrollbar, widget);
+            }
             int maxlen = ((scrollbar->orientation == Qt::Horizontal) ?
-                          scrollBarRect.width() : scrollBarRect.height()) - (sbextent * 2);
+                  scrollBarRect.width() : scrollBarRect.height()) - (sbextent * 2);
             int sliderlen;
 
             // calculate slider length
@@ -3973,15 +4161,16 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                if (sliderlen > maxlen) {
                   sliderlen = maxlen;
                }
+
             } else {
                sliderlen = maxlen;
             }
 
             int sliderstart = sbextent + sliderPositionFromValue(scrollbar->minimum,
-                              scrollbar->maximum,
-                              scrollbar->sliderPosition,
-                              maxlen - sliderlen,
-                              scrollbar->upsideDown);
+                  scrollbar->maximum,
+                  scrollbar->sliderPosition,
+                  maxlen - sliderlen,
+                  scrollbar->upsideDown);
 
             switch (sc) {
                case SC_ScrollBarSubLine:            // top/left button
@@ -4012,18 +4201,18 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                case SC_ScrollBarAddPage:            // between bottom/right button and slider
                   if (scrollbar->orientation == Qt::Horizontal)
                      ret.setRect(sliderstart + sliderlen, 0,
-                                 maxlen - sliderstart - sliderlen + sbextent, scrollBarRect.height());
+                        maxlen - sliderstart - sliderlen + sbextent, scrollBarRect.height());
                   else
                      ret.setRect(0, sliderstart + sliderlen, scrollBarRect.width(),
-                                 maxlen - sliderstart - sliderlen + sbextent);
+                        maxlen - sliderstart - sliderlen + sbextent);
                   break;
                case SC_ScrollBarGroove:
                   if (scrollbar->orientation == Qt::Horizontal)
                      ret.setRect(sbextent, 0, scrollBarRect.width() - sbextent * 2,
-                                 scrollBarRect.height());
+                        scrollBarRect.height());
                   else
                      ret.setRect(0, sbextent, scrollBarRect.width(),
-                                 scrollBarRect.height() - sbextent * 2);
+                        scrollBarRect.height() - sbextent * 2);
                   break;
                case SC_ScrollBarSlider:
                   if (scrollbar->orientation == Qt::Horizontal) {
@@ -4083,6 +4272,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          }
          break;
 #endif // Qt_NO_SPINBOX
+
 #ifndef QT_NO_TOOLBUTTON
       case CC_ToolButton:
          if (const QStyleOptionToolButton *tb = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
@@ -4092,14 +4282,14 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                case SC_ToolButton:
                   if ((tb->features
                         & (QStyleOptionToolButton::MenuButtonPopup | QStyleOptionToolButton::PopupDelay))
-                        == QStyleOptionToolButton::MenuButtonPopup) {
+                     == QStyleOptionToolButton::MenuButtonPopup) {
                      ret.adjust(0, 0, -mbi, 0);
                   }
                   break;
                case SC_ToolButtonMenu:
                   if ((tb->features
                         & (QStyleOptionToolButton::MenuButtonPopup | QStyleOptionToolButton::PopupDelay))
-                        == QStyleOptionToolButton::MenuButtonPopup) {
+                     == QStyleOptionToolButton::MenuButtonPopup) {
                      ret.adjust(ret.width() - mbi, 0, 0, 0);
                   }
                   break;
@@ -4143,6 +4333,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          }
          break;
 #endif // QT_NO_COMBOBOX
+
       case CC_TitleBar:
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             const int controlMargin = 2;
@@ -4174,10 +4365,12 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                      }
                   }
                   break;
+
                case SC_TitleBarContextHelpButton:
                   if (tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                      offset += delta;
                   }
+
                case SC_TitleBarMinButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
                      offset += delta;
@@ -4217,12 +4410,12 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                      break;
                   }
                   ret.setRect(tb->rect.right() - offset, tb->rect.top() + controlMargin,
-                              controlHeight, controlHeight);
+                     controlHeight, controlHeight);
                   break;
                case SC_TitleBarSysMenu:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                      ret.setRect(tb->rect.left() + controlMargin, tb->rect.top() + controlMargin,
-                                 controlHeight, controlHeight);
+                        controlHeight, controlHeight);
                   }
                   break;
                default:
@@ -4261,7 +4454,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
 
                   int frameWidth = 0;
 
-                  if ((groupBox->features & QStyleOptionFrameV2::Flat) == 0) {
+                  if ((groupBox->features & QStyleOptionFrame::Flat) == 0) {
                      frameWidth = proxy()->pixelMetric(PM_DefaultFrameWidth, groupBox, widget);
                   }
 
@@ -4270,13 +4463,13 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                }
 
                case SC_GroupBoxCheckBox:
-               // FALL THROUGH
+               // fall through
 
                case SC_GroupBoxLabel: {
                   QFontMetrics fontMetrics = groupBox->fontMetrics;
                   int h = fontMetrics.height();
                   int tw = fontMetrics.size(Qt::TextShowMnemonic, groupBox->text + QLatin1Char(' ')).width();
-                  int marg = (groupBox->features & QStyleOptionFrameV2::Flat) ? 0 : 8;
+                  int marg = (groupBox->features & QStyleOptionFrame::Flat) ? 0 : 8;
                   ret = groupBox->rect.adjusted(marg, 0, -marg, 0);
                   ret.setHeight(h);
 
@@ -4287,7 +4480,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
 
                   // Adjusted rect for label + indicatorWidth + indicatorSpace
                   QRect totalRect = alignedRect(groupBox->direction, groupBox->textAlignment,
-                                                QSize(tw + checkBoxSize, h), ret);
+                        QSize(tw + checkBoxSize, h), ret);
 
                   // Adjust totalRect if checkbox is set
                   if (hasCheckBox) {
@@ -4297,13 +4490,13 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                      if (sc == SC_GroupBoxCheckBox) {
                         int indicatorHeight = proxy()->pixelMetric(PM_IndicatorHeight, opt, widget);
                         left = ltr ? totalRect.left() : (totalRect.right() - indicatorWidth);
-                        int top = totalRect.top() + (fontMetrics.height() - indicatorHeight) / 2;
+                        int top = totalRect.top() + qMax(0, fontMetrics.height() - indicatorHeight) / 2;
                         totalRect.setRect(left, top, indicatorWidth, indicatorHeight);
                         // Adjust for label
                      } else {
                         left = ltr ? (totalRect.left() + checkBoxSize - 2) : totalRect.left();
                         totalRect.setRect(left, totalRect.top(),
-                                          totalRect.width() - checkBoxSize, totalRect.height());
+                           totalRect.width() - checkBoxSize, totalRect.height());
                      }
                   }
                   ret = totalRect;
@@ -4316,7 +4509,8 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          break;
       }
 #endif // QT_NO_GROUPBOX
-#ifndef QT_NO_WORKSPACE
+
+#ifndef QT_NO_MDIAREA
       case CC_MdiControls: {
          int numSubControls = 0;
          if (opt->subControls & SC_MdiCloseButton) {
@@ -4334,14 +4528,17 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
 
          int buttonWidth = opt->rect.width() / numSubControls - 1;
          int offset = 0;
+
          switch (sc) {
             case SC_MdiCloseButton:
                // Only one sub control, no offset needed.
                if (numSubControls == 1) {
                   break;
                }
+
                offset += buttonWidth + 2;
-            //FALL THROUGH
+            // fall through
+
             case SC_MdiNormalButton:
                // No offset needed if
                // 1) There's only one sub control
@@ -4366,7 +4563,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          ret = QRect(offset, 0, buttonWidth, opt->rect.height());
          break;
       }
-#endif // QT_NO_WORKSPACE
+#endif // QT_NO_MDIAREA
       default:
          qWarning("QCommonStyle::subControlRect: Case %d not handled", cc);
    }
@@ -4395,10 +4592,6 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          break;
       case PM_DialogButtonsButtonHeight:
          ret = int(QStyleHelper::dpiScaled(30.));
-         break;
-      case PM_CheckListControllerSize:
-      case PM_CheckListButtonSize:
-         ret = int(QStyleHelper::dpiScaled(16.));
          break;
       case PM_TitleBarHeight: {
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
@@ -4464,8 +4657,8 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
       case PM_ScrollBarExtent:
          if (const QStyleOptionSlider *sb = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
             int s = sb->orientation == Qt::Horizontal ?
-                    QApplication::globalStrut().height()
-                    : QApplication::globalStrut().width();
+               QApplication::globalStrut().height()
+               : QApplication::globalStrut().width();
             ret = qMax(16, s);
          } else {
             ret = int(QStyleHelper::dpiScaled(16.));
@@ -4473,7 +4666,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          break;
 #endif
       case PM_MaximumDragDistance:
-         ret = -1;
+         ret = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::MaximumScrollBarDragDistance).toInt();
          break;
 
 #ifndef QT_NO_SLIDER
@@ -4484,7 +4677,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
       case PM_SliderTickmarkOffset:
          if (const QStyleOptionSlider *sl = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
             int space = (sl->orientation == Qt::Horizontal) ? sl->rect.height()
-                        : sl->rect.width();
+               : sl->rect.width();
             int thickness = proxy()->pixelMetric(PM_SliderControlThickness, sl, widget);
             int ticks = sl->tickPosition;
 
@@ -4582,14 +4775,17 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
 
       case PM_TabBarTabVSpace: {
          const QStyleOptionTab *tb = qstyleoption_cast<const QStyleOptionTab *>(opt);
+
          if (tb && (tb->shape == QTabBar::RoundedNorth || tb->shape == QTabBar::RoundedSouth
-                    || tb->shape == QTabBar::RoundedWest || tb->shape == QTabBar::RoundedEast)) {
+               || tb->shape == QTabBar::RoundedWest || tb->shape == QTabBar::RoundedEast)) {
             ret = 8;
          } else if (tb && (tb->shape == QTabBar::TriangularWest || tb->shape == QTabBar::TriangularEast)) {
             ret = 3;
+
          } else {
             ret = 2;
          }
+
          break;
       }
 #endif
@@ -4632,10 +4828,16 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          ret = int(QStyleHelper::dpiScaled(4.));
          break;
       case PM_HeaderMarkSize:
-         ret = int(QStyleHelper::dpiScaled(32.));
+         ret = int(QStyleHelper::dpiScaled(16.));
          break;
       case PM_HeaderGripMargin:
          ret = int(QStyleHelper::dpiScaled(4.));
+         break;
+      case PM_HeaderDefaultSectionSizeHorizontal:
+         ret = int(QStyleHelper::dpiScaled(100.));
+         break;
+      case PM_HeaderDefaultSectionSizeVertical:
+         ret = int(QStyleHelper::dpiScaled(30.));
          break;
       case PM_TabBarScrollButtonWidth:
          ret = int(QStyleHelper::dpiScaled(16.));
@@ -4669,8 +4871,11 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          break;
 
       case PM_ToolBarIconSize:
-         ret = qt_guiPlatformPlugin()->platformHint(QGuiPlatformPlugin::PH_ToolBarIconSize);
-         if (!ret) {
+         ret = 0;
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            ret = theme->themeHint(QPlatformTheme::ToolBarIconSize).toInt();
+         }
+         if (ret <= 0) {
             ret = int(QStyleHelper::dpiScaled(24.));
          }
          break;
@@ -4713,7 +4918,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          }
          break;
       case PM_TextCursorWidth:
-         ret = 1;
+         ret = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TextCursorWidth).toInt();
          break;
       case PM_TabBar_ScrollButtonOverlap:
          ret = 1;
@@ -4725,8 +4930,14 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
       case PM_ScrollView_ScrollBarSpacing:
          ret = 2 * proxy()->pixelMetric(PM_DefaultFrameWidth, opt, widget);
          break;
+      case PM_ScrollView_ScrollBarOverlap:
+         ret = 0;
+         break;
       case PM_SubMenuOverlap:
          ret = -proxy()->pixelMetric(QStyle::PM_MenuPanelWidth, opt, widget);
+         break;
+      case PM_TreeViewIndentation:
+         ret = int(QStyleHelper::dpiScaled(20.));
          break;
       default:
          ret = 0;
@@ -4740,7 +4951,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
     \reimp
 */
 QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
-                                     const QSize &csz, const QWidget *widget) const
+   const QSize &csz, const QWidget *widget) const
 {
    Q_D(const QCommonStyle);
    QSize sz(csz);
@@ -4767,15 +4978,15 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             bool isRadio = (ct == CT_RadioButton);
 
             int w = proxy()->pixelMetric(isRadio ? PM_ExclusiveIndicatorWidth
-                                         : PM_IndicatorWidth, btn, widget);
+                  : PM_IndicatorWidth, btn, widget);
             int h = proxy()->pixelMetric(isRadio ? PM_ExclusiveIndicatorHeight
-                                         : PM_IndicatorHeight, btn, widget);
+                  : PM_IndicatorHeight, btn, widget);
 
             int margins = 0;
             // we add 4 pixels for label margins
             if (!btn->icon.isNull() || !btn->text.isEmpty())
                margins = 4 + proxy()->pixelMetric(isRadio ? PM_RadioButtonLabelSpacing
-                                                  : PM_CheckBoxLabelSpacing, opt, widget);
+                     : PM_CheckBoxLabelSpacing, opt, widget);
             sz += QSize(w + margins, 4);
             sz.setHeight(qMax(sz.height(), h));
          }
@@ -4796,22 +5007,27 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
                   h = qMax(h, mi->icon.actualSize(QSize(iconExtent, iconExtent)).height() + 4);
                }
             }
-            if (mi->text.contains(QLatin1Char('\t'))) {
+            if (mi->text.contains('\t')) {
                w += 12;
             }
+
             if (maxpmw > 0) {
                w += maxpmw + 6;
             }
+
             if (checkable && maxpmw < 20) {
                w += 20 - maxpmw;
             }
+
             if (checkable || maxpmw > 0) {
                w += 2;
             }
+
             w += 12;
             sz = QSize(w, h);
          }
          break;
+
 #endif // QT_NO_MENU
 
 #ifndef QT_NO_TOOLBUTTON
@@ -4841,7 +5057,19 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
             QSize txt = hdr->fontMetrics.size(0, hdr->text);
             sz.setHeight(margin + qMax(iconSize, txt.height()) + margin);
-            sz.setWidth((nullIcon ? 0 : margin) + iconSize + (hdr->text.isEmpty() ? 0 : margin) + txt.width() + margin);
+
+            sz.setWidth((nullIcon ? 0 : margin) + iconSize
+               + (hdr->text.isEmpty() ? 0 : margin) + txt.width() + margin);
+
+            if (hdr->sortIndicator != QStyleOptionHeader::None) {
+               int margin = proxy()->pixelMetric(QStyle::PM_HeaderMargin, hdr, widget);
+
+               if (hdr->orientation == Qt::Horizontal) {
+                  sz.rwidth() += sz.height() + margin;
+               } else {
+                  sz.rheight() += sz.width() + margin;
+               }
+            }
          }
          break;
 
@@ -4853,6 +5081,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             sz += QSize(2 * f->lineWidth, 2 * f->lineWidth);
          }
          break;
+
 #ifndef QT_NO_GROUPBOX
       case CT_GroupBox:
          if (const QGroupBox *grb = static_cast<const QGroupBox *>(widget)) {
@@ -4880,10 +5109,21 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
 #ifndef QT_NO_ITEMVIEWS
       case CT_ItemViewItem:
-         if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+         if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             QRect decorationRect, displayRect, checkRect;
             d->viewItemLayout(vopt, &checkRect, &decorationRect, &displayRect, true);
             sz = (decorationRect | displayRect | checkRect).size();
+         }
+         break;
+#endif
+
+#ifndef QT_NO_SPINBOX
+      case CT_SpinBox:
+         if (const QStyleOptionSpinBox *vopt = qstyleoption_cast<const QStyleOptionSpinBox *>(opt)) {
+            // Add button + frame widths
+            int buttonWidth = 20;
+            int fw = vopt->frame ? proxy()->pixelMetric(PM_SpinBoxFrameWidth, vopt, widget) : 0;
+            sz += QSize(buttonWidth + 2 * fw, 2 * fw);
          }
          break;
 #endif
@@ -4907,7 +5147,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
 /*! \reimp */
 int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *widget,
-                            QStyleHintReturn *hret) const
+   QStyleHintReturn *hret) const
 {
    int ret = 0;
 
@@ -4940,19 +5180,18 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
       case SH_GroupBox_TextLabelColor:
          ret = opt ? int(opt->palette.color(QPalette::Text).rgba()) : 0;
          break;
-
-      case SH_ListViewExpand_SelectMouseType:
-         ret = QEvent::MouseButtonPress;
-         break;
 #endif
 
+      case SH_ListViewExpand_SelectMouseType:
       case SH_TabBar_SelectMouseType:
          ret = QEvent::MouseButtonPress;
          break;
 
       case SH_TabBar_Alignment:
-      case SH_Header_ArrowAlignment:
          ret = Qt::AlignLeft;
+         break;
+      case SH_Header_ArrowAlignment:
+         ret = Qt::AlignRight | Qt::AlignVCenter;
          break;
 
       case SH_TitleBar_AutoRaise:
@@ -4967,6 +5206,24 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
          ret = true;
          break;
 
+      case SH_Menu_SubMenuUniDirection:
+         ret = false;
+         break;
+      case SH_Menu_SubMenuUniDirectionFailCount:
+         ret = 1;
+         break;
+      case SH_Menu_SubMenuSloppySelectOtherActions:
+         ret = true;
+         break;
+      case SH_Menu_SubMenuSloppyCloseTimeout:
+         ret = 1000;
+         break;
+      case SH_Menu_SubMenuResetWhenReenteringParent:
+         ret = false;
+         break;
+      case SH_Menu_SubMenuDontStartSloppyOnLeave:
+         ret = false;
+         break;
       case SH_ProgressDialog_TextLabelAlignment:
          ret = Qt::AlignCenter;
          break;
@@ -4982,21 +5239,17 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
             ret = -1;
          }
          break;
+
       case SH_LineEdit_PasswordCharacter: {
-         const QFontMetrics &fm = opt ? opt->fontMetrics
-                                  : (widget ? widget->fontMetrics() : QFontMetrics(QFont()));
-         ret = 0;
-         if (fm.inFont(QChar(0x25CF))) {
-            ret = 0x25CF;
-         } else if (fm.inFont(QChar(0x2022))) {
-            ret = 0x2022;
-         } else {
-            ret = '*';
-         }
+         const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
+         const QPlatformTheme::ThemeHint hintType = QPlatformTheme::PasswordMaskCharacter;
+         const QVariant hint = theme ? theme->themeHint(hintType) : QPlatformTheme::defaultThemeHint(hintType);
+         ret = hint.toChar().unicode();
          break;
       }
-
-
+      case SH_LineEdit_PasswordMaskDelay:
+         ret = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::PasswordMaskDelay).toInt();
+         break;
       case SH_ToolBox_SelectedPageTitleBold:
          ret = 1;
          break;
@@ -5031,10 +5284,6 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
 
       case SH_Button_FocusPolicy:
          ret = Qt::StrongFocus;
-         break;
-
-      case SH_MenuBar_DismissOnSecondClick:
-         ret = 1;
          break;
 
       case SH_MessageBox_UseBorderForButtonSpacing:
@@ -5092,39 +5341,45 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
          break;
 
       case SH_ItemView_ActivateItemOnSingleClick:
-         ret = qt_guiPlatformPlugin()->platformHint(QGuiPlatformPlugin::PH_ItemView_ActivateItemOnSingleClick);
+         ret = 0;
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            ret = theme->themeHint(QPlatformTheme::ItemViewActivateItemOnSingleClick).toBool() ? 1 : 0;
+         }
          break;
 
       case SH_TitleBar_ModifyNotification:
          ret = true;
          break;
+
       case SH_ScrollBar_RollBetweenButtons:
          ret = false;
          break;
+
       case SH_TabBar_ElideMode:
          ret = Qt::ElideNone;
          break;
+
       case SH_DialogButtonLayout:
          ret = QDialogButtonBox::WinLayout;
-#ifdef Q_WS_X11
-         if (X11->desktopEnvironment == DE_KDE) {
-            ret = QDialogButtonBox::KdeLayout;
-         } else if (X11->desktopEnvironment == DE_GNOME) {
-            ret = QDialogButtonBox::GnomeLayout;
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            ret = theme->themeHint(QPlatformTheme::DialogButtonBoxLayout).toInt();
          }
-#endif
+
          break;
       case SH_ComboBox_PopupFrameStyle:
          ret = QFrame::StyledPanel | QFrame::Plain;
          break;
+
       case SH_MessageBox_TextInteractionFlags:
          ret = Qt::LinksAccessibleByMouse;
          break;
+
       case SH_DialogButtonBox_ButtonsHaveIcons:
-#ifdef Q_WS_X11
-         return true;
-#endif
+
          ret = 0;
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            ret = theme->themeHint(QPlatformTheme::DialogButtonBoxButtonsHaveIcons).toBool() ? 1 : 0;
+         }
          break;
       case SH_SpellCheckUnderlineStyle:
          ret = QTextCharFormat::WaveUnderline;
@@ -5138,11 +5393,13 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
       case SH_FocusFrame_AboveWidget:
          ret = false;
          break;
+
 #ifndef QT_NO_TABWIDGET
       case SH_TabWidget_DefaultTabPosition:
          ret = QTabWidget::North;
          break;
 #endif
+
       case SH_ToolBar_Movable:
          ret = true;
          break;
@@ -5155,11 +5412,13 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
             vret->variant = fmt;
          }
          break;
+
 #ifndef QT_NO_WIZARD
       case SH_WizardStyle:
          ret = QWizard::ClassicStyle;
          break;
 #endif
+
       case SH_FormLayoutWrapPolicy:
          ret = QFormLayout::DontWrapRows;
          break;
@@ -5182,15 +5441,48 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
       case SH_TabBar_CloseButtonPosition:
          ret = QTabBar::RightSide;
          break;
+      case SH_TabBar_ChangeCurrentDelay:
+         ret = 500;
+         break;
 #endif
       case SH_DockWidget_ButtonsHaveFrame:
          ret = true;
          break;
       case SH_ToolButtonStyle:
-         ret = qt_guiPlatformPlugin()->platformHint(QGuiPlatformPlugin::PH_ToolButtonStyle);
+         ret = 0;
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            ret = theme->themeHint(QPlatformTheme::ToolButtonStyle).toInt();
+         }
          break;
       case SH_RequestSoftwareInputPanel:
-         ret = RSIP_OnMouseClickAndAlreadyFocused;
+         ret = RSIP_OnMouseClick;
+         break;
+      case SH_ScrollBar_Transient:
+         ret = false;
+         break;
+      case SH_Menu_SupportsSections:
+         ret = false;
+         break;
+#ifndef QT_NO_TOOLTIP
+      case SH_ToolTip_WakeUpDelay:
+         ret = 700;
+         break;
+      case SH_ToolTip_FallAsleepDelay:
+         ret = 2000;
+         break;
+#endif
+      case SH_Widget_Animate:
+#ifndef QT_NO_TREEVIEW
+         if (qobject_cast<const QTreeView *>(widget)) {
+            ret = false;
+         } else
+#endif
+         {
+            ret = true;
+         }
+         break;
+      case SH_Splitter_OpaqueResize:
+         ret = true;
          break;
       default:
          ret = 0;
@@ -5199,16 +5491,70 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
 
    return ret;
 }
+static QPixmap cachedPixmapFromXPM(const char *const *xpm)
+{
+   QPixmap result;
 
-/*! \reimp */
+   const QString tag = QString("xpm:0x%1").formatArg(reinterpret_cast<quintptr>(xpm), 8, 16, '0');
+
+   if (! QPixmapCache::find(tag, &result)) {
+      result = QPixmap(xpm);
+      QPixmapCache::insert(tag, result);
+   }
+
+   return result;
+}
+static inline QPixmap titleBarMenuCachedPixmapFromXPM()
+{
+   return cachedPixmapFromXPM(qt_menu_xpm);
+}
+
+#ifndef QT_NO_IMAGEFORMAT_PNG
+static inline QString clearText16IconPath()
+{
+
+   return QString(":/copperspice/styles/commonstyle/images/cleartext-16.png");
+}
+#endif // !QT_NO_IMAGEFORMAT_PNG
+
+static QIcon clearTextIcon(bool rtl)
+{
+   const QString directionalThemeName = rtl ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl";
+
+   if (QIcon::hasThemeIcon(directionalThemeName)) {
+      return QIcon::fromTheme(directionalThemeName);
+   }
+
+   const QString themeName = "edit-clear";
+
+   if (QIcon::hasThemeIcon(themeName)) {
+      return QIcon::fromTheme(themeName);
+   }
+
+   QIcon icon;
+#ifndef QT_NO_IMAGEFORMAT_PNG
+   QPixmap clearText16(clearText16IconPath());
+   Q_ASSERT(!clearText16.size().isEmpty());
+   icon.addPixmap(clearText16);
+
+   QPixmap clearText32(":/copperspice/styles/commonstyle/images/cleartext-32.png");
+   Q_ASSERT(!clearText32.size().isEmpty());
+
+   icon.addPixmap(clearText32);
+   clearText32.setDevicePixelRatio(2); // The 32x32 pixmap can also be used for 16x16/devicePixelRatio=2
+   icon.addPixmap(clearText32);
+#endif // !QT_NO_IMAGEFORMAT_PNG
+
+   return icon;
+}
+
 QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *option,
-                                     const QWidget *widget) const
+   const QWidget *widget) const
 {
    const bool rtl = (option && option->direction == Qt::RightToLeft) || (!option && QApplication::isRightToLeft());
-#ifdef QT_NO_IMAGEFORMAT_PNG
-   Q_UNUSED(widget);
-   Q_UNUSED(sp);
-#else
+
+#ifndef QT_NO_IMAGEFORMAT_PNG
+
    QPixmap pixmap;
 
    if (QApplication::desktopSettingsAware() && !QIcon::themeName().isEmpty()) {
@@ -5247,7 +5593,7 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
             break;
          case SP_FileIcon:
             pixmap = QIcon::fromTheme(QLatin1String("text-x-generic"),
-                                      QIcon::fromTheme(QLatin1String("empty"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("empty"))).pixmap(16);
             break;
          case SP_DirClosedIcon:
          case SP_DirIcon:
@@ -5255,51 +5601,51 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
             break;
          case SP_DriveFDIcon:
             pixmap = QIcon::fromTheme(QLatin1String("media-floppy"),
-                                      QIcon::fromTheme(QLatin1String("3floppy_unmount"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("3floppy_unmount"))).pixmap(16);
             break;
          case SP_ComputerIcon:
             pixmap = QIcon::fromTheme(QLatin1String("computer"),
-                                      QIcon::fromTheme(QLatin1String("system"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("system"))).pixmap(16);
             break;
          case SP_DesktopIcon:
             pixmap = QIcon::fromTheme(QLatin1String("user-desktop"),
-                                      QIcon::fromTheme(QLatin1String("desktop"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("desktop"))).pixmap(16);
             break;
          case SP_TrashIcon:
             pixmap = QIcon::fromTheme(QLatin1String("user-trash"),
-                                      QIcon::fromTheme(QLatin1String("trashcan_empty"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("trashcan_empty"))).pixmap(16);
             break;
          case SP_DriveCDIcon:
          case SP_DriveDVDIcon:
             pixmap = QIcon::fromTheme(QLatin1String("media-optical"),
-                                      QIcon::fromTheme(QLatin1String("cdrom_unmount"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("cdrom_unmount"))).pixmap(16);
             break;
          case SP_DriveHDIcon:
             pixmap = QIcon::fromTheme(QLatin1String("drive-harddisk"),
-                                      QIcon::fromTheme(QLatin1String("hdd_unmount"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("hdd_unmount"))).pixmap(16);
             break;
          case SP_FileDialogToParent:
             pixmap = QIcon::fromTheme(QLatin1String("go-up"),
-                                      QIcon::fromTheme(QLatin1String("up"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("up"))).pixmap(16);
             break;
          case SP_FileDialogNewFolder:
             pixmap = QIcon::fromTheme(QLatin1String("folder_new")).pixmap(16);
             break;
          case SP_ArrowUp:
             pixmap = QIcon::fromTheme(QLatin1String("go-up"),
-                                      QIcon::fromTheme(QLatin1String("up"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("up"))).pixmap(16);
             break;
          case SP_ArrowDown:
             pixmap = QIcon::fromTheme(QLatin1String("go-down"),
-                                      QIcon::fromTheme(QLatin1String("down"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("down"))).pixmap(16);
             break;
          case SP_ArrowRight:
             pixmap = QIcon::fromTheme(QLatin1String("go-next"),
-                                      QIcon::fromTheme(QLatin1String("forward"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("forward"))).pixmap(16);
             break;
          case SP_ArrowLeft:
             pixmap = QIcon::fromTheme(QLatin1String("go-previous"),
-                                      QIcon::fromTheme(QLatin1String("back"))).pixmap(16);
+                  QIcon::fromTheme(QLatin1String("back"))).pixmap(16);
             break;
          case SP_FileDialogDetailedView:
             pixmap = QIcon::fromTheme(QLatin1String("view_detailed")).pixmap(16);
@@ -5343,7 +5689,7 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
          case SP_DialogNoButton:
          case SP_DialogCancelButton:
             pixmap = QIcon::fromTheme(QLatin1String("dialog-cancel"),
-                                      QIcon::fromTheme(QLatin1String("process-stop"))).pixmap(24);
+                  QIcon::fromTheme(QLatin1String("process-stop"))).pixmap(24);
             break;
          case SP_DialogSaveButton:
             pixmap = QIcon::fromTheme(QLatin1String("document-save")).pixmap(24);
@@ -5373,6 +5719,9 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
                }
             }
             break;
+         case SP_LineEditClearButton:
+            pixmap = clearTextIcon(rtl).pixmap(16);
+            break;
          default:
             break;
       }
@@ -5382,6 +5731,7 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
       return pixmap;
    }
 #endif //QT_NO_IMAGEFORMAT_PNG
+
    switch (sp) {
 #ifndef QT_NO_IMAGEFORMAT_XPM
       case SP_ToolBarHorizontalExtensionButton:
@@ -5390,14 +5740,15 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
             im = im.convertToFormat(QImage::Format_ARGB32).mirrored(true, false);
             return QPixmap::fromImage(im);
          }
-         return QPixmap(tb_extension_arrow_h_xpm);
+         return cachedPixmapFromXPM(tb_extension_arrow_h_xpm);
       case SP_ToolBarVerticalExtensionButton:
-         return QPixmap(tb_extension_arrow_v_xpm);
+         return cachedPixmapFromXPM(tb_extension_arrow_v_xpm);
       case SP_FileDialogStart:
-         return QPixmap(filedialog_start_xpm);
+         return cachedPixmapFromXPM(filedialog_start_xpm);
       case SP_FileDialogEnd:
-         return QPixmap(filedialog_end_xpm);
+         return cachedPixmapFromXPM(filedialog_end_xpm);
 #endif
+
 #ifndef QT_NO_IMAGEFORMAT_PNG
       case SP_CommandLink:
       case SP_ArrowForward:
@@ -5405,11 +5756,13 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
             return proxy()->standardPixmap(SP_ArrowLeft, option, widget);
          }
          return proxy()->standardPixmap(SP_ArrowRight, option, widget);
+
       case SP_ArrowBack:
          if (rtl) {
             return proxy()->standardPixmap(SP_ArrowRight, option, widget);
          }
          return proxy()->standardPixmap(SP_ArrowLeft, option, widget);
+
       case SP_ArrowLeft:
          return QPixmap(QLatin1String(":/copperspice/styles/commonstyle/images/left-16.png"));
       case SP_ArrowRight:
@@ -5504,21 +5857,106 @@ QPixmap QCommonStyle::standardPixmap(StandardPixmap sp, const QStyleOption *opti
          return QPixmap(QLatin1String(":/copperspice/styles/commonstyle/images/media-volume-16.png"));
       case SP_MediaVolumeMuted:
          return QPixmap(QLatin1String(":/copperspice/styles/commonstyle/images/media-volume-muted-16.png"));
+      case SP_LineEditClearButton:
+         return QPixmap(clearText16IconPath());
 #endif // QT_NO_IMAGEFORMAT_PNG
+
       default:
          break;
    }
+#ifndef QT_NO_IMAGEFORMAT_XPM
+   switch (sp) {
+      case SP_TitleBarMenuButton:
+         return titleBarMenuCachedPixmapFromXPM();
+      case SP_TitleBarShadeButton:
+         return cachedPixmapFromXPM(qt_shade_xpm);
+      case SP_TitleBarUnshadeButton:
+         return cachedPixmapFromXPM(qt_unshade_xpm);
+      case SP_TitleBarNormalButton:
+         return cachedPixmapFromXPM(qt_normalizeup_xpm);
+      case SP_TitleBarMinButton:
+         return cachedPixmapFromXPM(qt_minimize_xpm);
+      case SP_TitleBarMaxButton:
+         return cachedPixmapFromXPM(qt_maximize_xpm);
+      case SP_TitleBarCloseButton:
+         return cachedPixmapFromXPM(qt_close_xpm);
+      case SP_TitleBarContextHelpButton:
+         return cachedPixmapFromXPM(qt_help_xpm);
+      case SP_DockWidgetCloseButton:
+         return cachedPixmapFromXPM(dock_widget_close_xpm);
+      case SP_MessageBoxInformation:
+         return cachedPixmapFromXPM(information_xpm);
+      case SP_MessageBoxWarning:
+         return cachedPixmapFromXPM(warning_xpm);
+      case SP_MessageBoxCritical:
+         return cachedPixmapFromXPM(critical_xpm);
+      case SP_MessageBoxQuestion:
+         return cachedPixmapFromXPM(question_xpm);
+      default:
+         break;
+   }
+#endif //QT_NO_IMAGEFORMAT_XPM
    return QPixmap();
 }
 
-/*!
-    \internal
-*/
-QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option,
-      const QWidget *widget) const
+
+QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *option,
+   const QWidget *widget) const
 {
    QIcon icon;
    const bool rtl = (option && option->direction == Qt::RightToLeft) || (!option && QApplication::isRightToLeft());
+#ifdef Q_OS_WIN
+   switch (standardIcon) {
+      case SP_DriveCDIcon:
+      case SP_DriveDVDIcon:
+      case SP_DriveNetIcon:
+      case SP_DriveHDIcon:
+      case SP_DriveFDIcon:
+      case SP_FileIcon:
+      case SP_FileLinkIcon:
+      case SP_DesktopIcon:
+      case SP_ComputerIcon:
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            QPlatformTheme::StandardPixmap sp = static_cast<QPlatformTheme::StandardPixmap>(standardIcon);
+            for (int size = 16 ; size <= 32 ; size += 16) {
+               QPixmap pixmap = theme->standardPixmap(sp, QSizeF(size, size));
+               icon.addPixmap(pixmap, QIcon::Normal);
+            }
+         }
+         break;
+      case SP_DirIcon:
+      case SP_DirLinkIcon:
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            QPlatformTheme::StandardPixmap spOff = static_cast<QPlatformTheme::StandardPixmap>(standardIcon);
+            QPlatformTheme::StandardPixmap spOn = standardIcon == SP_DirIcon ? QPlatformTheme::DirOpenIcon :
+               QPlatformTheme::DirLinkOpenIcon;
+            for (int size = 16 ; size <= 32 ; size += 16) {
+               QSizeF pixSize(size, size);
+               QPixmap pixmap = theme->standardPixmap(spOff, pixSize);
+               icon.addPixmap(pixmap, QIcon::Normal, QIcon::Off);
+               pixmap = theme->standardPixmap(spOn, pixSize);
+               icon.addPixmap(pixmap, QIcon::Normal, QIcon::On);
+            }
+         }
+         break;
+      case SP_VistaShield:
+         if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+            QPlatformTheme::StandardPixmap sp = static_cast<QPlatformTheme::StandardPixmap>(standardIcon);
+            QPixmap pixmap = theme->standardPixmap(sp, QSizeF(32, 32));
+            icon.addPixmap(pixmap);
+         }
+         break;
+      case SP_LineEditClearButton:
+         icon = clearTextIcon(rtl);
+         break;
+      default:
+         break;
+   }
+   if (!icon.isNull()) {
+      return icon;
+   }
+
+#endif
    if (QApplication::desktopSettingsAware() && !QIcon::themeName().isEmpty()) {
       switch (standardIcon) {
          case SP_DirHomeIcon:
@@ -5571,7 +6009,7 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
             break;
          case SP_ComputerIcon:
             icon = QIcon::fromTheme(QLatin1String("computer"),
-                                    QIcon::fromTheme(QLatin1String("system")));
+                  QIcon::fromTheme(QLatin1String("system")));
             break;
          case SP_DesktopIcon:
             icon = QIcon::fromTheme(QLatin1String("user-desktop"));
@@ -5606,7 +6044,7 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
             break;
          case SP_DialogCancelButton:
             icon = QIcon::fromTheme(QLatin1String("dialog-cancel"),
-                                    QIcon::fromTheme(QLatin1String("process-stop")));
+                  QIcon::fromTheme(QLatin1String("process-stop")));
             break;
          case SP_DialogCloseButton:
             icon = QIcon::fromTheme(QLatin1String("window-close"));
@@ -5650,25 +6088,29 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
          case SP_MediaVolumeMuted:
             icon = QIcon::fromTheme(QLatin1String("audio-volume-muted"));
             break;
+
          case SP_ArrowForward:
             if (rtl) {
-               return standardIconImplementation(SP_ArrowLeft, option, widget);
+               return QCommonStyle::standardIcon(SP_ArrowLeft, option, widget);
             }
-            return standardIconImplementation(SP_ArrowRight, option, widget);
+            return QCommonStyle::standardIcon(SP_ArrowRight, option, widget);
+
          case SP_ArrowBack:
             if (rtl) {
-               return standardIconImplementation(SP_ArrowRight, option, widget);
+               return QCommonStyle::standardIcon(SP_ArrowRight, option, widget);
             }
-            return standardIconImplementation(SP_ArrowLeft, option, widget);
+            return QCommonStyle::standardIcon(SP_ArrowLeft, option, widget);
+
          case SP_FileLinkIcon: {
             QIcon linkIcon = QIcon::fromTheme(QLatin1String("emblem-symbolic-link"));
             if (!linkIcon.isNull()) {
-               QIcon baseIcon = standardIconImplementation(SP_FileIcon, option, widget);
+               QIcon baseIcon = QCommonStyle::standardIcon(SP_FileIcon, option, widget);
                const QList<QSize> sizes = baseIcon.availableSizes(QIcon::Normal, QIcon::Off);
+
                for (int i = 0 ; i < sizes.size() ; ++i) {
                   int size = sizes[i].width();
-                  QPixmap basePixmap = baseIcon.pixmap(size);
-                  QPixmap linkPixmap = linkIcon.pixmap(size / 2);
+                  QPixmap basePixmap = baseIcon.pixmap(qt_getWindow(widget), QSize(size, size));
+                  QPixmap linkPixmap = linkIcon.pixmap(qt_getWindow(widget), QSize(size / 2, size / 2));
                   QPainter painter(&basePixmap);
                   painter.drawPixmap(size / 2, size / 2, linkPixmap);
                   icon.addPixmap(basePixmap);
@@ -5679,12 +6121,12 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
          case SP_DirLinkIcon: {
             QIcon linkIcon = QIcon::fromTheme(QLatin1String("emblem-symbolic-link"));
             if (!linkIcon.isNull()) {
-               QIcon baseIcon = standardIconImplementation(SP_DirIcon, option, widget);
+               QIcon baseIcon = QCommonStyle::standardIcon(SP_DirIcon, option, widget);
                const QList<QSize> sizes = baseIcon.availableSizes(QIcon::Normal, QIcon::Off);
                for (int i = 0 ; i < sizes.size() ; ++i) {
                   int size = sizes[i].width();
-                  QPixmap basePixmap = baseIcon.pixmap(size);
-                  QPixmap linkPixmap = linkIcon.pixmap(size / 2);
+                  QPixmap basePixmap = baseIcon.pixmap(qt_getWindow(widget), QSize(size, size));
+                  QPixmap linkPixmap = linkIcon.pixmap(qt_getWindow(widget), QSize(size / 2, size / 2));
                   QPainter painter(&basePixmap);
                   painter.drawPixmap(size / 2, size / 2, linkPixmap);
                   icon.addPixmap(basePixmap);
@@ -5699,59 +6141,16 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
    if (!icon.isNull()) {
       return icon;
    }
+
 #if defined(Q_OS_MAC)
    if (QApplication::desktopSettingsAware()) {
-      OSType iconType = 0;
+
       switch (standardIcon) {
-         case QStyle::SP_MessageBoxQuestion:
-            iconType = kQuestionMarkIcon;
-            break;
-         case QStyle::SP_MessageBoxInformation:
-            iconType = kAlertNoteIcon;
-            break;
-         case QStyle::SP_MessageBoxWarning:
-            iconType = kAlertCautionIcon;
-            break;
-         case QStyle::SP_MessageBoxCritical:
-            iconType = kAlertStopIcon;
-            break;
-         case SP_DesktopIcon:
-            iconType = kDesktopIcon;
-            break;
-         case SP_TrashIcon:
-            iconType = kTrashIcon;
-            break;
-         case SP_ComputerIcon:
-            iconType = kComputerIcon;
-            break;
-         case SP_DriveFDIcon:
-            iconType = kGenericFloppyIcon;
-            break;
-         case SP_DriveHDIcon:
-            iconType = kGenericHardDiskIcon;
-            break;
-         case SP_DriveCDIcon:
-         case SP_DriveDVDIcon:
-            iconType = kGenericCDROMIcon;
-            break;
-         case SP_DriveNetIcon:
-            iconType = kGenericNetworkIcon;
-            break;
-         case SP_DirOpenIcon:
-            iconType = kOpenFolderIcon;
-            break;
-         case SP_DirClosedIcon:
-         case SP_DirLinkIcon:
-            iconType = kGenericFolderIcon;
-            break;
-         case SP_FileLinkIcon:
-         case SP_FileIcon:
-            iconType = kGenericDocumentIcon;
-            break;
+
          case SP_DirIcon: {
             // A rather special case
-            QIcon closeIcon = QStyle::standardIcon(SP_DirClosedIcon, option, widget);
-            QIcon openIcon = QStyle::standardIcon(SP_DirOpenIcon, option, widget);
+            QIcon closeIcon = QCommonStyle::standardIcon(SP_DirClosedIcon, option, widget);
+            QIcon openIcon = QCommonStyle::standardIcon(SP_DirOpenIcon, option, widget);
             closeIcon.addPixmap(openIcon.pixmap(16, 16), QIcon::Normal, QIcon::On);
             closeIcon.addPixmap(openIcon.pixmap(32, 32), QIcon::Normal, QIcon::On);
             closeIcon.addPixmap(openIcon.pixmap(64, 64), QIcon::Normal, QIcon::On);
@@ -5764,44 +6163,59 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
             if (standardIcon == SP_TitleBarCloseButton) {
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/closedock-16.png"));
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/closedock-down-16.png"), QSize(16, 16),
-                                    QIcon::Normal, QIcon::On);
+                  QIcon::Normal, QIcon::On);
             } else {
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/dockdock-16.png"));
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/dockdock-down-16.png"), QSize(16, 16),
-                                    QIcon::Normal, QIcon::On);
+                  QIcon::Normal, QIcon::On);
             }
             return titleBarIcon;
          }
+
+         case SP_MessageBoxQuestion:
+         case SP_MessageBoxInformation:
+         case SP_MessageBoxWarning:
+         case SP_MessageBoxCritical:
+         case SP_DesktopIcon:
+         case SP_TrashIcon:
+         case SP_ComputerIcon:
+         case SP_DriveFDIcon:
+         case SP_DriveHDIcon:
+         case SP_DriveCDIcon:
+         case SP_DriveDVDIcon:
+         case SP_DriveNetIcon:
+         case SP_DirOpenIcon:
+         case SP_DirClosedIcon:
+         case SP_DirLinkIcon:
+         case SP_FileLinkIcon:
+         case SP_FileIcon:
+            if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+               QPlatformTheme::StandardPixmap sp = static_cast<QPlatformTheme::StandardPixmap>(standardIcon);
+               QIcon retIcon;
+               QList<int> sizes = theme->themeHint(QPlatformTheme::IconPixmapSizes).value<QList<int>>();
+               Q_FOREACH (int size, sizes) {
+                  QPixmap mainIcon;
+                  const QString cacheKey = QLatin1String("qt_mac_constructQIconFromIconRef") + QString::number(standardIcon) + QString::number(size);
+
+                  if (standardIcon >= QStyle::SP_CustomBase) {
+                     mainIcon = theme->standardPixmap(sp, QSizeF(size, size));
+                  } else if (QPixmapCache::find(cacheKey, mainIcon) == false) {
+                     mainIcon = theme->standardPixmap(sp, QSizeF(size, size));
+                     QPixmapCache::insert(cacheKey, mainIcon);
+                  }
+
+                  retIcon.addPixmap(mainIcon);
+               }
+               if (!retIcon.isNull()) {
+                  return retIcon;
+               }
+            }
+
          default:
             break;
       }
-      if (iconType != 0) {
-         QIcon retIcon;
-         IconRef icon;
-         IconRef overlayIcon = 0;
-         if (iconType != kGenericApplicationIcon) {
-            GetIconRef(kOnSystemDisk, kSystemIconsCreator, iconType, &icon);
-         } else {
-            FSRef fsRef;
-            ProcessSerialNumber psn = { 0, kCurrentProcess };
-            GetProcessBundleLocation(&psn, &fsRef);
-            GetIconRefFromFileInfo(&fsRef, 0, 0, 0, 0, kIconServicesNormalUsageFlag, &icon, 0);
-            if (standardIcon == SP_MessageBoxCritical) {
-               overlayIcon = icon;
-               GetIconRef(kOnSystemDisk, kSystemIconsCreator, kAlertCautionIcon, &icon);
-            }
-         }
-         if (icon) {
-            qt_mac_constructQIconFromIconRef(icon, overlayIcon, &retIcon, standardIcon);
-            ReleaseIconRef(icon);
-         }
-         if (overlayIcon) {
-            ReleaseIconRef(overlayIcon);
-         }
-         return retIcon;
-      }
    }
-#endif
+#endif // Q_OS_MAC
 
    switch (standardIcon) {
 
@@ -5812,9 +6226,11 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/newdirectory-128.png"), QSize(128, 128));
          break;
       case SP_FileDialogBack:
-         return standardIconImplementation(SP_ArrowBack, option, widget);
+         return QCommonStyle::standardIcon(SP_ArrowBack, option, widget);
+
       case SP_FileDialogToParent:
-         return standardIconImplementation(SP_ArrowUp, option, widget);
+         return QCommonStyle::standardIcon(SP_ArrowUp, option, widget);
+
       case SP_FileDialogDetailedView:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewdetailed-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewdetailed-32.png"), QSize(32, 32));
@@ -5890,71 +6306,83 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-no-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-no-128.png"), QSize(128, 128));
          break;
+
       case SP_ArrowForward:
          if (rtl) {
-            return standardIconImplementation(SP_ArrowLeft, option, widget);
+            return QCommonStyle::standardIcon(SP_ArrowLeft, option, widget);
          }
-         return standardIconImplementation(SP_ArrowRight, option, widget);
+         return QCommonStyle::standardIcon(SP_ArrowRight, option, widget);
+
       case SP_ArrowBack:
          if (rtl) {
-            return standardIconImplementation(SP_ArrowRight, option, widget);
+            return QCommonStyle::standardIcon(SP_ArrowRight, option, widget);
          }
-         return standardIconImplementation(SP_ArrowLeft, option, widget);
+         return QCommonStyle::standardIcon(SP_ArrowLeft, option, widget);
+
       case SP_ArrowLeft:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/left-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/left-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/left-128.png"), QSize(128, 128));
          break;
+
       case SP_ArrowRight:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/right-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/right-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/right-128.png"), QSize(128, 128));
          break;
       case SP_ArrowUp:
+
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/up-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/up-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/up-128.png"), QSize(128, 128));
          break;
+
       case SP_ArrowDown:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/down-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/down-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/down-128.png"), QSize(128, 128));
          break;
+
       case SP_DirHomeIcon:
       case SP_DirIcon:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/dirclosed-16.png"),
-                      QSize(), QIcon::Normal, QIcon::Off);
+            QSize(), QIcon::Normal, QIcon::Off);
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/diropen-16.png"),
-                      QSize(), QIcon::Normal, QIcon::On);
+            QSize(), QIcon::Normal, QIcon::On);
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/dirclosed-32.png"),
-                      QSize(32, 32), QIcon::Normal, QIcon::Off);
+            QSize(32, 32), QIcon::Normal, QIcon::Off);
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/diropen-32.png"),
-                      QSize(32, 32), QIcon::Normal, QIcon::On);
+            QSize(32, 32), QIcon::Normal, QIcon::On);
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/dirclosed-128.png"),
-                      QSize(128, 128), QIcon::Normal, QIcon::Off);
+            QSize(128, 128), QIcon::Normal, QIcon::Off);
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/diropen-128.png"),
-                      QSize(128, 128), QIcon::Normal, QIcon::On);
+            QSize(128, 128), QIcon::Normal, QIcon::On);
          break;
+
       case SP_DriveCDIcon:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/cdr-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/cdr-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/cdr-128.png"), QSize(128, 128));
          break;
+
       case SP_DriveDVDIcon:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/dvd-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/dvd-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/dvd-128.png"), QSize(128, 128));
          break;
+
       case SP_FileIcon:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/file-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/file-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/file-128.png"), QSize(128, 128));
          break;
+
       case SP_FileLinkIcon:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/filelink-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/filelink-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/filelink-128.png"), QSize(128, 128));
          break;
+
       case SP_TrashIcon:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/trash-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/trash-32.png"), QSize(32, 32));
@@ -5964,45 +6392,64 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/refresh-24.png"), QSize(24, 24));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/refresh-32.png"), QSize(32, 32));
          break;
+
       case SP_BrowserStop:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/stop-24.png"), QSize(24, 24));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/stop-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaPlay:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-play-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-play-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaPause:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-pause-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-pause-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaStop:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-stop-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-stop-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaSeekForward:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-seek-forward-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-seek-forward-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaSeekBackward:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-seek-backward-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-seek-backward-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaSkipForward:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-skip-forward-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-skip-forward-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaSkipBackward:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-skip-backward-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-skip-backward-32.png"), QSize(32, 32));
          break;
+
       case SP_MediaVolume:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-volume-16.png"), QSize(16, 16));
          break;
+
       case SP_MediaVolumeMuted:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/media-volume-muted-16.png"), QSize(16, 16));
          break;
+
+      case SP_TitleBarMenuButton:
+#ifndef QT_NO_IMAGEFORMAT_XPM
+         icon.addPixmap(titleBarMenuCachedPixmapFromXPM());
+#endif
+         icon.addFile(QLatin1String(":/qt-project.org/qmessagebox/images/qtlogo-64.png"));
+         break;
+
 #endif // QT_NO_IMAGEFORMAT_PNG
+
       default:
          icon.addPixmap(proxy()->standardPixmap(standardIcon, option, widget));
          break;
@@ -6018,7 +6465,7 @@ static inline uint qt_intensity(uint r, uint g, uint b)
 
 /*! \reimp */
 QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-      const QStyleOption *opt) const
+   const QStyleOption *opt) const
 {
    switch (iconMode) {
       case QIcon::Disabled: {
@@ -6048,8 +6495,8 @@ QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &p
          // low intensity colors needs light shifting. This is to increase the
          // percieved contrast.
          if ((red - factor > green && red - factor > blue)
-               || (green - factor > red && green - factor > blue)
-               || (blue - factor > red && blue - factor > green)) {
+            || (green - factor > red && green - factor > blue)
+            || (blue - factor > red && blue - factor > green)) {
             intensity = qMin(255, intensity + 91);
          } else if (intensity <= 128) {
             intensity -= 51;
@@ -6087,41 +6534,32 @@ QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &p
    return pixmap;
 }
 
-/*!
-  \reimp
-*/
+int QCommonStyle::layoutSpacing(QSizePolicy::ControlType /* control1 */, QSizePolicy::ControlType /* control2 */,
+   Qt::Orientation /* orientation */, const QStyleOption * /* option */,
+   const QWidget * /* widget */) const
+{
+   return -1;
+}
 void QCommonStyle::polish(QPalette &pal)
 {
    QStyle::polish(pal);
 }
 
-/*!
-    \reimp
- */
 void QCommonStyle::polish(QWidget *widget)
 {
    QStyle::polish(widget);
 }
 
-/*!
-    \reimp
- */
 void QCommonStyle::unpolish(QWidget *widget)
 {
    QStyle::unpolish(widget);
 }
 
-/*!
-  \reimp
-*/
 void QCommonStyle::polish(QApplication *app)
 {
    QStyle::polish(app);
 }
 
-/*!
-    \reimp
- */
 void QCommonStyle::unpolish(QApplication *application)
 {
    Q_D(const QCommonStyle);
@@ -6129,5 +6567,11 @@ void QCommonStyle::unpolish(QApplication *application)
    QStyle::unpolish(application);
 }
 
+#ifndef QT_NO_ANIMATION
+void QCommonStyle::_q_removeAnimation()
+{
+   Q_D(QCommonStyle);
+   d->_q_removeAnimation();
+}
 
-QT_END_NAMESPACE
+#endif

@@ -23,32 +23,22 @@
 #ifndef QSTYLEPLUGIN_H
 #define QSTYLEPLUGIN_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
-
-QT_BEGIN_NAMESPACE
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
 class QStyle;
 
-struct Q_GUI_EXPORT QStyleFactoryInterface : public QFactoryInterface {
-   virtual QStyle *create(const QString &key) = 0;
-};
-
 #define QStyleFactoryInterface_iid "com.copperspice.QStyleFactoryInterface"
 
-CS_DECLARE_INTERFACE(QStyleFactoryInterface, QStyleFactoryInterface_iid)
-
-class Q_GUI_EXPORT QStylePlugin : public QObject, public QStyleFactoryInterface
+class Q_GUI_EXPORT QStylePlugin : public QObject
 {
-   GUI_CS_OBJECT_MULTIPLE(QStylePlugin, QObject)
-   CS_INTERFACES(QStyleFactoryInterface, QFactoryInterface)
+   GUI_CS_OBJECT(QStylePlugin)
 
  public:
    explicit QStylePlugin(QObject *parent = nullptr);
    ~QStylePlugin();
 
+   virtual QStyle *create(const QString &key) = 0;
 };
-
-QT_END_NAMESPACE
 
 #endif

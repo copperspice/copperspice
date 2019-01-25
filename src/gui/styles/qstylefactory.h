@@ -23,9 +23,7 @@
 #ifndef QSTYLEFACTORY_H
 #define QSTYLEFACTORY_H
 
-#include <QtCore/qstringlist.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstringlist.h>
 
 class QStyle;
 
@@ -36,6 +34,4 @@ class Q_GUI_EXPORT QStyleFactory
    static QStyle *create(const QString &);
 };
 
-QT_END_NAMESPACE
-
-#endif // QSTYLEFACTORY_H
+#endif
