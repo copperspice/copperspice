@@ -94,8 +94,8 @@ QT_BEGIN_NAMESPACE
 #define CT2(c1, c2) ((uint(c1) << 16) | uint(c2))
 
 enum QAquaWidgetSize { QAquaSizeLarge = 0, QAquaSizeSmall = 1, QAquaSizeMini = 2,
-                       QAquaSizeUnknown = -1
-                     };
+   QAquaSizeUnknown = -1
+};
 
 #define SIZE(large, small, mini) \
     (controlSize == QAquaSizeLarge ? (large) : controlSize == QAquaSizeSmall ? (small) : (mini))
@@ -138,11 +138,11 @@ class QMacStylePrivate : public QObject
    void startAnimate(Animates, QWidget *);
    static ThemeDrawState getDrawState(QStyle::State flags);
 
-   QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg, 
-         QStyle::ContentsType ct = QStyle::CT_CustomBase, QSize szHint = QSize(-1, -1), QSize *insz = 0) const;
+   QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
+      QStyle::ContentsType ct = QStyle::CT_CustomBase, QSize szHint = QSize(-1, -1), QSize *insz = 0) const;
 
    void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
-         HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe);
+      HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe);
 
    bool doAnimate(Animates);
    inline int animateSpeed(Animates) const {
@@ -157,7 +157,7 @@ class QMacStylePrivate : public QObject
    HIRect pushButtonContentBounds(const QStyleOptionButton *btn, const HIThemeButtonDrawInfo *bdi) const;
 
    void initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
-                  const QWidget *widget, const ThemeDrawState &tds);
+      const QWidget *widget, const ThemeDrawState &tds);
 
    static HIRect comboboxInnerBounds(const HIRect &outerBounds, int buttonKind);
 
@@ -165,19 +165,19 @@ class QMacStylePrivate : public QObject
 
    static void drawCombobox(const HIRect &outerBounds, const HIThemeButtonDrawInfo &bdi, QPainter *p);
    static void drawTableHeader(const HIRect &outerBounds, bool drawTopBorder, bool drawLeftBorder,
-                  const HIThemeButtonDrawInfo &bdi, QPainter *p);
+      const HIThemeButtonDrawInfo &bdi, QPainter *p);
 
    bool contentFitsInPushButton(const QStyleOptionButton *btn, HIThemeButtonDrawInfo *bdi,
-                  ThemeButtonKind buttonKindToCheck) const;
+      ThemeButtonKind buttonKindToCheck) const;
 
    void initHIThemePushButton(const QStyleOptionButton *btn, const QWidget *widget,
-                  const ThemeDrawState tds,HIThemeButtonDrawInfo *bdi) const;
+      const ThemeDrawState tds, HIThemeButtonDrawInfo *bdi) const;
 
    QPixmap generateBackgroundPattern() const;
 
    QPointer<QPushButton> defaultButton; //default push buttons
    int timerID;
-   QList<QPointer<QWidget> > progressBars; //existing progress bars that need animation
+   QList<QPointer<QWidget>> progressBars; //existing progress bars that need animation
 
    struct ButtonState {
       int frame;
@@ -197,7 +197,7 @@ class QMacStylePrivate : public QObject
  private :
    GUI_CS_SLOT_1(Private, void startAnimationTimer())
    GUI_CS_SLOT_2(startAnimationTimer)
-  
+
 };
 
 QT_END_NAMESPACE

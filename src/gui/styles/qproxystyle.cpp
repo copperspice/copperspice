@@ -69,9 +69,24 @@ QProxyStyle::QProxyStyle(QStyle *style)
    Q_D(QProxyStyle);
 
    if (style) {
+      d->baseStyle = style;
+
       style->setProxy(this);
       style->setParent(this); // Take ownership
+
+   }
+}
+
+QProxyStyle::QProxyStyle(const QString &key)
+   : QCommonStyle(*new QProxyStylePrivate())
+{
+   Q_D(QProxyStyle);
+
+   QStyle *style = QStyleFactory::create(key);
+   if (style) {
       d->baseStyle = style;
+      style->setProxy(this);
+      style->setParent(this); // Take ownership
    }
 }
 
@@ -113,7 +128,7 @@ void QProxyStyle::setBaseStyle(QStyle *style)
 /*! \reimp
  */
 void QProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
-                                const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -124,7 +139,7 @@ void QProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOption *op
   \reimp
  */
 void QProxyStyle::drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
-                              const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -134,7 +149,7 @@ void QProxyStyle::drawControl(ControlElement element, const QStyleOption *option
 /*! \reimp
  */
 void QProxyStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
-                                     const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -144,7 +159,7 @@ void QProxyStyle::drawComplexControl(ComplexControl control, const QStyleOptionC
 /*! \reimp
  */
 void QProxyStyle::drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
-                               const QString &text, QPalette::ColorRole textRole) const
+   const QString &text, QPalette::ColorRole textRole) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -163,7 +178,7 @@ void QProxyStyle::drawItemPixmap(QPainter *painter, const QRect &rect, int align
 /*! \reimp
  */
 QSize QProxyStyle::sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size,
-                                    const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -182,7 +197,7 @@ QRect QProxyStyle::subElementRect(SubElement element, const QStyleOption *option
 /*! \reimp
  */
 QRect QProxyStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *option, SubControl sc,
-                                  const QWidget *widget) const
+   const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -192,7 +207,7 @@ QRect QProxyStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *
 /*! \reimp
  */
 QRect QProxyStyle::itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled,
-                                const QString &text) const
+   const QString &text) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -211,7 +226,7 @@ QRect QProxyStyle::itemPixmapRect(const QRect &r, int flags, const QPixmap &pixm
 /*! \reimp
  */
 QStyle::SubControl QProxyStyle::hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option,
-      const QPoint &pos, const QWidget *widget) const
+   const QPoint &pos, const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -221,7 +236,7 @@ QStyle::SubControl QProxyStyle::hitTestComplexControl(ComplexControl control, co
 /*! \reimp
  */
 int QProxyStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
-                           QStyleHintReturn *returnData) const
+   QStyleHintReturn *returnData) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
@@ -318,16 +333,19 @@ bool QProxyStyle::event(QEvent *e)
    return d->baseStyle->event(e);
 }
 
-QIcon QProxyStyle::standardIconImplementation(StandardPixmap standardIcon,
-                  const QStyleOption *option, const QWidget *widget) const
+QIcon QProxyStyle::standardIcon(StandardPixmap standardIcon,
+   const QStyleOption *option, const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
    return d->baseStyle->standardIcon(standardIcon, option, widget);
 }
 
-int QProxyStyle::layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
-                  Qt::Orientation orientation, const QStyleOption *option, const QWidget *widget) const
+int QProxyStyle::layoutSpacing(QSizePolicy::ControlType control1,
+   QSizePolicy::ControlType control2,
+   Qt::Orientation orientation,
+   const QStyleOption *option,
+   const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();

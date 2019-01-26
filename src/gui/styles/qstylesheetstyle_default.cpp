@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-/* This is the default Qt style sheet.
+/* This is the default style sheet.
 
    IMPORTANT: This style sheet is primarily meant for defining feature
    capablities of styles. Do NOT add default styling rules here. When in
@@ -34,8 +34,6 @@
 #include <qstylesheetstyle_p.h>
 
 #ifndef QT_NO_STYLE_STYLESHEET
-
-QT_BEGIN_NAMESPACE
 
 using namespace QCss;
 
@@ -136,12 +134,9 @@ StyleSheet QStyleSheetStyle::getDefaultStyleSheet() const
    Pseudo pseudo;
    AttributeSelector attr;
 
-   // pixmap based style doesn't support any features
+   // pixmap based style does not support any features
    bool styleIsPixmapBased = baseStyle()->inherits("QMacStyle")
-                             || baseStyle()->inherits("QWindowsXPStyle")
-                             || baseStyle()->inherits("QGtkStyle")
-                             || baseStyle()->inherits("QS60Style");
-
+      || baseStyle()->inherits("QWindowsXPStyle") || baseStyle()->inherits("QGtkStyle");
 
    /*QLineEdit {
        -qt-background-role: base;
@@ -321,7 +316,8 @@ StyleSheet QStyleSheetStyle::getDefaultStyleSheet() const
    {
        -qt-background-role: button;
    }*/
-   if (baseStyle()->inherits("QPlastiqueStyle")  || baseStyle()->inherits("QCleanlooksStyle")) {
+
+   if (baseStyle()->inherits("QPlastiqueStyle")  || baseStyle()->inherits("QCleanlooksStyle") || baseStyle()->inherits("QFusionStyle")) {
       SET_ELEMENT_NAME(QLatin1String("QComboBox"));
       ADD_ATTRIBUTE_SELECTOR(QLatin1String("readOnly"), QLatin1String("true"), AttributeSelector::MatchEqual);
       ADD_BASIC_SELECTOR;
@@ -489,4 +485,3 @@ StyleSheet QStyleSheetStyle::getDefaultStyleSheet() const
 
 #endif // #ifndef QT_NO_STYLE_STYLESHEET
 
-QT_END_NAMESPACE

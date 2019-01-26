@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_STYLE_PROXY
 
-QT_BEGIN_NAMESPACE
-
 class QProxyStylePrivate : public QCommonStylePrivate
 {
    Q_DECLARE_PUBLIC(QProxyStyle)
@@ -43,8 +41,6 @@ class QProxyStylePrivate : public QCommonStylePrivate
       QCommonStylePrivate(), baseStyle(0) {}
    mutable QPointer <QStyle> baseStyle;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_STYLE_PROXY
 

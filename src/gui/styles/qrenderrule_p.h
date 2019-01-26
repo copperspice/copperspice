@@ -47,7 +47,7 @@ struct QStyleSheetBorderImageData : public QSharedData {
 
 struct QStyleSheetBackgroundData : public QSharedData {
    QStyleSheetBackgroundData(const QBrush &b, const QPixmap &p, QCss::Repeat r,
-                  Qt::Alignment a, QCss::Origin o, QCss::Attachment t, QCss::Origin c)
+      Qt::Alignment a, QCss::Origin o, QCss::Attachment t, QCss::Origin c)
       : brush(b), pixmap(p), repeat(r), position(a), origin(o), attachment(t), clip(c) { }
 
    bool isTransparent() const {
@@ -91,6 +91,7 @@ struct QStyleSheetBorderData : public QSharedData {
    const QStyleSheetBorderImageData *borderImage() const {
       return bi;
    }
+
    bool hasBorderImage() const {
       return bi != 0;
    }
@@ -104,7 +105,7 @@ struct QStyleSheetBorderData : public QSharedData {
          }
 
          if (styles[i] >= QCss::BorderStyle_Dotted && styles[i] <= QCss::BorderStyle_DotDotDash
-               && styles[i] != QCss::BorderStyle_Solid) {
+            && styles[i] != QCss::BorderStyle_Solid) {
             return false;
          }
 
@@ -176,7 +177,7 @@ struct QStyleSheetGeometryData : public QSharedData {
 
 struct QStyleSheetPositionData : public QSharedData {
    QStyleSheetPositionData(int l, int t, int r, int b, QCss::Origin o, Qt::Alignment p,
-                  QCss::PositionMode m, Qt::Alignment a = 0)
+      QCss::PositionMode m, Qt::Alignment a = 0)
       : left(l), top(t), bottom(b), right(r), origin(o), position(p), mode(m), textAlignment(a) { }
 
    int left, top, bottom, right;
@@ -201,9 +202,7 @@ class QRenderRule
    QRenderRule()
       : features(0), hasFont(false), pal(0), b(0), bg(0), bd(0), ou(0), geo(0), p(0), img(0), clipset(0) { }
 
-   QRenderRule(const QVector<QCss::Declaration> &, const QWidget *);
-
-   ~QRenderRule() { }
+   QRenderRule(const QVector<QCss::Declaration> &, const QObject *);
 
    QRect borderRect(const QRect &r) const;
    QRect outlineRect(const QRect &r) const;
@@ -320,7 +319,7 @@ class QRenderRule
       return geo ? QSize(geo->minWidth, geo->minHeight) : QSize(0, 0);
    }
 
- QSize minimumSize() const {
+   QSize minimumSize() const {
       return boxSize(minimumContentsSize());
    }
 
@@ -372,13 +371,6 @@ class QRenderRule
       return csz;
    }
 
-   int features;
-   QBrush defaultBackground;
-   QFont font;
-   bool hasFont;
-
-   QHash<QString, QVariant> styleHints;
-
    bool hasStyleHint(const QString &sh) const {
       return styleHints.contains(sh);
    }
@@ -388,6 +380,15 @@ class QRenderRule
    }
 
    void fixupBorder(int);
+   void setClip(QPainter *p, const QRect &rect);
+   void unsetClip(QPainter *);
+
+   int features;
+   QBrush defaultBackground;
+   QFont font;
+   bool hasFont;
+
+   QHash<QString, QVariant> styleHints;
 
    QSharedDataPointer<QStyleSheetPaletteData> pal;
    QSharedDataPointer<QStyleSheetBoxData> b;
@@ -398,11 +399,7 @@ class QRenderRule
    QSharedDataPointer<QStyleSheetPositionData> p;
    QSharedDataPointer<QStyleSheetImageData> img;
 
-   // Should not be here
-   void setClip(QPainter *p, const QRect &rect);
-   void unsetClip(QPainter *);
    int clipset;
    QPainterPath clipPath;
 };
-
 #endif

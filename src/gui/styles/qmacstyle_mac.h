@@ -23,7 +23,7 @@
 #ifndef QMACSTYLE_MAC_H
 #define QMACSTYLE_MAC_H
 
-#include <QtGui/qwindowsstyle.h>
+#include <qwindows_style_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -61,23 +61,23 @@ class Q_GUI_EXPORT_STYLE_MAC QMacStyle : public QWindowsStyle
    void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const override;
    QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const override;
 
-   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, 
-                  const QWidget *w = 0) const override;
-   SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, const QPoint &pt, 
-                  const QWidget *w = 0) const override;
+   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
+      const QWidget *w = 0) const override;
+   SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, const QPoint &pt,
+      const QWidget *w = 0) const override;
 
-   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, 
-                  const QWidget *w = 0) const override;
+   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
+      const QWidget *w = 0) const override;
 
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,const QSize &contentsSize, 
-                  const QWidget *w = 0) const override;
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize,
+      const QWidget *w = 0) const override;
 
    int pixelMetric(PixelMetric pm, const QStyleOption *opt = 0, const QWidget *widget = 0) const override;
 
    QPalette standardPalette() const override;
 
-   int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, 
-                  QStyleHintReturn *shret = 0) const override;
+   int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0,
+      QStyleHintReturn *shret = 0) const override;
 
    enum FocusRectPolicy { FocusEnabled, FocusDisabled, FocusDefault };
    static void setFocusRectPolicy(QWidget *w, FocusRectPolicy policy);
@@ -87,20 +87,20 @@ class Q_GUI_EXPORT_STYLE_MAC QMacStyle : public QWindowsStyle
    static void setWidgetSizePolicy(const QWidget *w, WidgetSizePolicy policy);
    static WidgetSizePolicy widgetSizePolicy(const QWidget *w);
 
-    QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *opt, const QWidget *widget = 0) const override;
+   QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *opt, const QWidget *widget = 0) const override;
 
    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const override;
 
    void drawItemText(QPainter *p, const QRect &r, int flags, const QPalette &pal,
-         bool enabled, const QString &text, QPalette::ColorRole textRole  = QPalette::NoRole) const override;
+      bool enabled, const QString &text, QPalette::ColorRole textRole  = QPalette::NoRole) const override;
 
    bool event(QEvent *e) override;
 
  protected:
    QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0, const QWidget *widget = 0) const override;
 
-   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation, 
-         const QStyleOption *option = 0, const QWidget *widget = 0) const override;
+   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
+      const QStyleOption *option = 0, const QWidget *widget = 0) const override;
 
  private:
    Q_DISABLE_COPY(QMacStyle)

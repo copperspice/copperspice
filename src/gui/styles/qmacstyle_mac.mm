@@ -506,7 +506,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
       // If you're using a custom font and it's bigger than the default font,
       // then no constraints for you. If you are smaller, we can try to help you out
 
-      QFont font = qt_app_fonts_hash()->value(widg->metaObject()->className(), QFont());
+      QFont font = cs_app_fonts_hash()->value(widg->metaObject()->className(), QFont());
 
       if (widg->font().pointSize() > font.pointSize()) {
          return ret;
@@ -2029,7 +2029,7 @@ void QMacStyle::polish(QWidget *w)
    if (QTabBar *tb = qobject_cast<QTabBar *>(w)) {
       if (tb->documentMode()) {
          w->setAttribute(Qt::WA_Hover);
-         w->setFont(qt_app_fonts_hash()->value("QSmallFont", QFont()));
+         w->setFont(cs_app_fonts_hash()->value("QSmallFont", QFont()));
          QPalette p = w->palette();
          p.setColor(QPalette::WindowText, QColor(17, 17, 17));
          w->setPalette(p);
@@ -3675,7 +3675,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
                // ### this is really overly difficult, simplify.
                // It basically tries to get the right font for "small" and "mini" icons.
                QFont oldFont = p->font();
-               QFont newFont = qt_app_fonts_hash()->value("QPushButton", QFont());
+               QFont newFont = cs_app_fonts_hash()->value("QPushButton", QFont());
 
                ThemeFontID themeId = kThemePushButtonFont;
 
@@ -3930,7 +3930,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
             // (QComboMenuItem is internal and should never be seen by the
             // outside world, unless they read the source, in which case, it's
             // their own fault).
-            bool nonDefaultFont = p->font() != qt_app_fonts_hash()->value("QComboMenuItem");
+            bool nonDefaultFont = p->font() != cs_app_fonts_hash()->value("QComboMenuItem");
             bool isSelectedAndNeedsShadow = selected && usingLionOrLater && !usingYosemiteOrLater;
             if (isSelectedAndNeedsShadow || verticalTabs || nonDefaultFont || !tab->icon.isNull()
                 || !myTab.leftButtonSize.isEmpty() || !myTab.rightButtonSize.isEmpty()) {
@@ -4070,7 +4070,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
                }
 
                QFont oldFont = p->font();
-               p->setFont(qt_app_fonts_hash()->value("QToolButton", p->font()));
+               p->setFont(cs_app_fonts_hash()->value("QToolButton", p->font()));
                QString text = p->fontMetrics().elidedText(dwOpt->title, Qt::ElideRight,
                               titleRect.width());
                drawItemText(p, titleRect,
@@ -4257,7 +4257,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
                }
                p->save();
                if (t >= 0) {
-                  p->setFont(qt_app_fonts_hash()->value("QMenuItem", p->font()));
+                  p->setFont(cs_app_fonts_hash()->value("QMenuItem", p->font()));
                   int xp = contentRect.right() - tabwidth - macRightBorder
                            - macItemHMargin - macItemFrame + 1;
                   p->drawText(xp, yPos, tabwidth, contentRect.height(), text_flags,
@@ -5933,7 +5933,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
                   if (!checkable) {
                      if (widget && !widget->testAttribute(Qt::WA_SetFont)
                            && QApplication::desktopSettingsAware()) {
-                        fm = QFontMetrics(qt_app_fonts_hash()->value("QSmallFont", QFont()));
+                        fm = QFontMetrics(cs_app_fonts_hash()->value("QSmallFont", QFont()));
                      }
                      yOffset = 5;
                      if (hasNoText) {
@@ -5948,7 +5948,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
                }
                break;
                default:
-                  ret = QWindowsStyle::subControlRect(cc, groupBox, sc, widget);
+                  ret = QCommonStyle::subControlRect(cc, groupBox, sc, widget);
                   break;
             }
          }

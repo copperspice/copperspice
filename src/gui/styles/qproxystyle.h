@@ -23,9 +23,7 @@
 #ifndef QPROXYSTYLE_H
 #define QPROXYSTYLE_H
 
-#include <QtGui/QCommonStyle>
-
-QT_BEGIN_NAMESPACE
+#include <QCommonStyle>
 
 #if !defined(QT_NO_STYLE_PROXY)
 
@@ -36,20 +34,21 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    GUI_CS_OBJECT(QProxyStyle)
 
  public:
-   QProxyStyle(QStyle *baseStyle = 0);
+   QProxyStyle(QStyle *baseStyle = nullptr);
+   QProxyStyle(const QString &key);
    ~QProxyStyle();
 
    QStyle *baseStyle() const;
    void setBaseStyle(QStyle *style);
 
-   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const override; 
+   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const override;
    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const override;
 
-   void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, 
-                  const QWidget *widget = 0) const override;
+   void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
+      const QWidget *widget = nullptr) const override;
 
    void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
-                  const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const override;
+      const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const override;
 
    void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const override;
 
@@ -61,14 +60,18 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
 
    SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option, const QPoint &pos,
-         const QWidget *widget = 0) const override;
+      const QWidget *widget = 0) const override;
 
    int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0,
-         QStyleHintReturn *returnData = 0) const override;
+      QStyleHintReturn *returnData = 0) const override;
 
-   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const override;
-   
-   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = 0) const override;
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = nullptr) const override;
+
+   int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
+      Qt::Orientation orientation, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
+
+   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const override;
    QPalette standardPalette() const override;
 
@@ -82,11 +85,6 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
  protected:
    bool event(QEvent *e) override;
 
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget) const override;
-
-   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
-         const QStyleOption *option = 0, const QWidget *widget = 0) const override;
-
  private:
    Q_DISABLE_COPY(QProxyStyle)
    Q_DECLARE_PRIVATE(QProxyStyle)
@@ -94,6 +92,5 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
 
 #endif // QT_NO_STYLE_PROXY
 
-QT_END_NAMESPACE
 
 #endif // QPROXYSTYLE_H
