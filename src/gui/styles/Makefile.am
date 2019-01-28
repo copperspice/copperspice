@@ -2,7 +2,6 @@ GUI_DIRS += src/gui/styles
 
 GUI_PUBLIC_INCLUDES += \
 	QCommonStyle \
-	QMacStyle \
 	QProxyStyle \
 	QStyle \
 	QStyleFactory \
@@ -39,7 +38,6 @@ GUI_PUBLIC_INCLUDES += \
 GUI_STYLES_INCLUDES = \
 	qcommonstyle.h \
 	qmacstyle_mac.h \
-	qmacstyle.h \
 	qproxystyle.h \
 	qstyle.h \
 	qstylefactory.h \
@@ -84,7 +82,6 @@ GUI_STYLES_PRIVATE_INCLUDES = \
 	qgtkpainter_p.h \
 	qgtk2painter_p.h \
 	qmacstyle_mac_p.h \
-	qmacstylepixmaps_mac_p.h \
 	qproxystyle_p.h \
 	qrenderrule_p.h \
 	qstyle_p.h \
@@ -274,7 +271,7 @@ endif
 
 if OSTYPE_DARWIN
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/styles/qwindows_style.cpp  \
+	src/gui/styles/qwindows_style.cpp \
 	src/gui/styles/qmacstyle_mac.mm
 
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK

@@ -2,7 +2,6 @@ set(GUI_PUBLIC_INCLUDES
     ${GUI_PUBLIC_INCLUDES}
     QCommonStyle
     QFusionStyle
-    QMacStyle
     QProxyStyle
     QStyle
     QStyleFactory
@@ -41,7 +40,6 @@ set(GUI_INCLUDES
     ${GUI_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylefactory.h
@@ -87,7 +85,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkpainter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtk2painter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstylepixmaps_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qrenderrule_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle_p.h
@@ -137,18 +134,23 @@ if(GTK2_FOUND)
     )
     include_directories(${GTK2_INCLUDE_DIRS})
     add_definitions(${GTK2_DEFINITIONS})
+
 else()
     add_definitions(-DQT_NO_STYLE_GTK)
 endif()
 
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+    add_definitions(-DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP)
+
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_style.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_xpstyle.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_vistastyle.cpp
     )
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
@@ -157,6 +159,4 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK)
 
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
-    add_definitions(-DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP)
 endif()
