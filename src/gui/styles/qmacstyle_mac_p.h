@@ -24,14 +24,13 @@
 #define QMACSTYLE_MAC_P_H
 
 #include <cs_carbon_wrapper_p.h>
+#include <cs_mac_p.h>
 
 #include <qmacstyle_mac.h>
+#include <qcommonstyle_p.h>
 #include <qapplication_p.h>
 #include <qcombobox_p.h>
-#include <qmacstylepixmaps_mac_p.h>
-#include <qpaintengine_mac_p.h>
 #include <qpainter_p.h>
-#include <qprintengine_mac_p.h>
 #include <qstylehelper_p.h>
 #include <qapplication.h>
 #include <qbitmap.h>
@@ -74,11 +73,12 @@
 #include <qlibrary.h>
 #include <qdatetimeedit.h>
 #include <qmath.h>
-#include <QtGui/qgraphicsproxywidget.h>
-#include <QtGui/qgraphicsview.h>
-#include <qt_cocoa_helpers_mac_p.h>
+#include <qpair.h>
+#include <qvector.h>
 
-QT_BEGIN_NAMESPACE
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsview.h>
+
 
 /*
     AHIG:
@@ -94,8 +94,21 @@ QT_BEGIN_NAMESPACE
 #define CT2(c1, c2) ((uint(c1) << 16) | uint(c2))
 
 enum QAquaWidgetSize { QAquaSizeLarge = 0, QAquaSizeSmall = 1, QAquaSizeMini = 2,
-   QAquaSizeUnknown = -1
+                       QAquaSizeUnknown = -1 };
+
+enum QCocoaWidgetKind {
+    QCocoaArrowButton,     // Disclosure triangle, like in QTreeView
+    QCocoaCheckBox,
+    QCocoaComboBox,        // Editable QComboBox
+    QCocoaPopupButton,     // Non-editable QComboBox
+    QCocoaPullDownButton,  // QPushButton with menu
+    QCocoaPushButton,
+    QCocoaRadioButton,
+    QCocoaHorizontalSlider,
+    QCocoaVerticalSlider
 };
+typedef QPair<QCocoaWidgetKind, QAquaWidgetSize> QCocoaWidget;
+typedef void (^QCocoaDrawRectBlock)(NSRect, CGContextRef);
 
 #define SIZE(large, small, mini) \
     (controlSize == QAquaSizeLarge ? (large) : controlSize == QAquaSizeSmall ? (small) : (mini))
@@ -109,12 +122,13 @@ enum QAquaWidgetSize { QAquaSizeLarge = 0, QAquaSizeSmall = 1, QAquaSizeMini = 2
 
 bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOptionButton *option);
 
-class QMacStylePrivate : public QObject
+class QMacStylePrivate : public QCommonStylePrivate
 {
-   GUI_CS_OBJECT(QMacStylePrivate)
+   Q_DECLARE_PUBLIC(QMacStyle)
 
  public:
-   QMacStylePrivate(QMacStyle *style);
+   QMacStylePrivate();
+   ~QMacStylePrivate();
 
    // Ideally these wouldn't exist, but since they already exist we need some accessors.
    static const int PushButtonLeftOffset;
@@ -127,24 +141,19 @@ class QMacStylePrivate : public QObject
    static const int BevelButtonH;
    static const int PushButtonContentPadding;
 
+   enum Animates { AquaPushButton,
+                   AquaProgressBar,
+                   AquaListViewItemOpen,
+                   AquaScrollBar };
 
-   // Stuff from QAquaAnimate:
-   bool addWidget(QWidget *);
-   void removeWidget(QWidget *);
-
-   enum Animates { AquaPushButton, AquaProgressBar, AquaListViewItemOpen };
-   bool animatable(Animates, const QWidget *) const;
-   void stopAnimate(Animates, QWidget *);
-   void startAnimate(Animates, QWidget *);
    static ThemeDrawState getDrawState(QStyle::State flags);
 
    QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
       QStyle::ContentsType ct = QStyle::CT_CustomBase, QSize szHint = QSize(-1, -1), QSize *insz = 0) const;
 
    void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
-      HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe);
+      HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe) const;
 
-   bool doAnimate(Animates);
    inline int animateSpeed(Animates) const {
       return 33;
    }
@@ -157,7 +166,7 @@ class QMacStylePrivate : public QObject
    HIRect pushButtonContentBounds(const QStyleOptionButton *btn, const HIThemeButtonDrawInfo *bdi) const;
 
    void initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
-      const QWidget *widget, const ThemeDrawState &tds);
+      const QWidget *widget, const ThemeDrawState &tds) const;
 
    static HIRect comboboxInnerBounds(const HIRect &outerBounds, int buttonKind);
 
@@ -175,31 +184,38 @@ class QMacStylePrivate : public QObject
 
    QPixmap generateBackgroundPattern() const;
 
-   QPointer<QPushButton> defaultButton; //default push buttons
-   int timerID;
-   QList<QPointer<QWidget>> progressBars; //existing progress bars that need animation
+   void setAutoDefaultButton(QObject *button) const;
+
+   NSView *cocoaControl(QCocoaWidget widget) const;
+
+   void drawNSViewInRect(QCocoaWidget widget, NSView *view, const QRect &rect, QPainter *p, bool isQWidget = true, QCocoaDrawRectBlock drawRectBlock = nil) const;
+   void resolveCurrentNSView(QWindow *window);
+
+   void drawFocusRing(QPainter *p, const QRect &targetRect, int hMargin, int vMargin, qreal radius = 0) const;
+
+   mutable QPointer<QObject> pressedButton;
+   mutable QPointer<QObject> defaultButton;
+   mutable QPointer<QObject> autoDefaultButton;
+
+   static  QVector<QPointer<QObject> > scrollBars;
 
    struct ButtonState {
       int frame;
       enum { ButtonDark, ButtonLight } dir;
    } buttonState;
 
-   UInt8 progressFrame;
-   QPointer<QFocusFrame> focusWidget;
+   mutable QPointer<QFocusFrame> focusWidget;
    CFAbsoluteTime defaultButtonStart;
-   QMacStyle *q;
+
    bool mouseDown;
 
- protected:
-   bool eventFilter(QObject *, QEvent *) override;
-   void timerEvent(QTimerEvent *) override;
+   void* receiver;
+   void *nsscroller;
+   void *indicatorBranchButtonCell;
 
- private :
-   GUI_CS_SLOT_1(Private, void startAnimationTimer())
-   GUI_CS_SLOT_2(startAnimationTimer)
-
+   NSView *backingStoreNSView;
+   QHash<QCocoaWidget, NSView *> cocoaControls;
 };
 
-QT_END_NAMESPACE
 
-#endif // QMACSTYLE_MAC_P_H
+#endif

@@ -6192,8 +6192,10 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
             if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
                QPlatformTheme::StandardPixmap sp = static_cast<QPlatformTheme::StandardPixmap>(standardIcon);
                QIcon retIcon;
+
                QList<int> sizes = theme->themeHint(QPlatformTheme::IconPixmapSizes).value<QList<int>>();
-               Q_FOREACH (int size, sizes) {
+
+               for (int size : sizes) {
                   QPixmap mainIcon;
                   const QString cacheKey = QLatin1String("qt_mac_constructQIconFromIconRef") + QString::number(standardIcon) + QString::number(size);
 

@@ -33,8 +33,6 @@
 #include <qstyle_p.h>
 #include <qstylehelper_p.h>
 
-Q_DECLARE_METATYPE(QWindow *);
-
 Q_GUI_EXPORT int qt_defaultDpiX();
 
 namespace QStyleHelper {

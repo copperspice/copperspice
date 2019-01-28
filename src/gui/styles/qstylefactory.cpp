@@ -28,8 +28,8 @@
 #include <qwindows_style_p.h>
 
 #ifndef QT_NO_STYLE_FUSION
-
 #include <qfusionstyle_p.h>
+#endif
 
 #ifndef QT_NO_STYLE_GTK
 #include <qgtkstyle_p.h>
@@ -44,7 +44,7 @@
 #endif
 
 #if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_MAC)
-#  include <qmacstyle_mac.h>
+#include <qmacstyle_mac.h>
 #endif
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
@@ -59,6 +59,7 @@ QStyle *QStyleFactory::create(const QString &key)
       ret = new QWindowsStyle;
    } else
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWSXP
       if (style == QLatin1String("windowsxp")) {
          ret = new QWindowsXPStyle;
@@ -91,9 +92,8 @@ QStyle *QStyleFactory::create(const QString &key)
 
                   { } // Keep these here
 
-
    if (! ret) {
-      ret = qLoadPlugin<QStyle, QStylePlugin>(loader(), style);
+      ret = cs_load_plugin<QStyle, QStylePlugin>(loader(), style);
    }
 
    if (ret) {
@@ -103,54 +103,47 @@ QStyle *QStyleFactory::create(const QString &key)
    return ret;
 }
 
-
 QStringList QStyleFactory::keys()
 {
    QStringList list;
-   typedef QMultiMap<int, QString> PluginKeyMap;
 
-   const PluginKeyMap keyMap = loader()->keyMap();
-   const PluginKeyMap::const_iterator cend = keyMap.constEnd();
-
-   for (PluginKeyMap::const_iterator it = keyMap.constBegin(); it != cend; ++it) {
-      list.append(it.value());
-   }
-#endif
+   auto keySet = loader()->keySet();
+   list.append(keySet.toList());
 
 #ifndef QT_NO_STYLE_WINDOWS
-   if (!list.contains(QLatin1String("Windows"))) {
-      list << QLatin1String("Windows");
+   if (! list.contains("Windows")) {
+      list << "Windows";
    }
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWSXP
-   if (!list.contains(QLatin1String("WindowsXP")) &&
-      (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
-      list << QLatin1String("WindowsXP");
+   if (! list.contains("WindowsXP") &&
+            (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      list << "WindowsXP";
    }
 #endif
 
 #ifndef QT_NO_STYLE_WINDOWSVISTA
-   if (!list.contains(QLatin1String("WindowsVista")) &&
-      (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
-      list << QLatin1String("WindowsVista");
+   if (! list.contains("WindowsVista") &&
+            (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      list << "WindowsVista";
    }
 #endif
 
-
 #ifndef QT_NO_STYLE_GTK
-   if (!list.contains(QLatin1String("GTK+"))) {
-      list << QLatin1String("GTK+");
+   if (! list.contains("GTK+")) {
+      list << "GTK+";
    }
 #endif
 
 #ifndef QT_NO_STYLE_FUSION
-   if (!list.contains(QLatin1String("Fusion"))) {
-      list << QLatin1String("Fusion");
+   if (! list.contains("Fusion")) {
+      list << "Fusion";
    }
 #endif
 
 #ifndef QT_NO_STYLE_MAC
-   QString mstyle = QLatin1String("Macintosh");
+   QString mstyle = "Macintosh";
 
    if (!list.contains(mstyle)) {
       list << mstyle;
