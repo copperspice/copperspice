@@ -645,7 +645,7 @@ static const int scriptForWritingSystem[] = {
    QChar::Script_Runic, // Runic
    QChar::Script_Nko // Nko
 };
-static_assert(sizeof(scriptForWritingSystem) / sizeof(scriptForWritingSystem[0]) == QFontDatabase::WritingSystemsCount);
+static_assert(sizeof(scriptForWritingSystem) / sizeof(scriptForWritingSystem[0]) == QFontDatabase::WritingSystemsCount, "Type mismatch");
 
 Q_GUI_EXPORT int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSystem)
 {
@@ -1481,7 +1481,7 @@ QList<QFontDatabase::WritingSystem> QFontDatabase::writingSystems() const
    loadDb();
 
    quint64 writingSystemsFound = 0;
-   static_assert(WritingSystemsCount < 64);
+   static_assert(WritingSystemsCount < 64, "Count must be less than 64");
 
    for (int i = 0; i < d->count; ++i) {
       QtFontFamily *family = d->families[i];

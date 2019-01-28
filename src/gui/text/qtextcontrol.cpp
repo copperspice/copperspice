@@ -58,7 +58,6 @@
 #include <qabstracttextdocumentlayout_p.h>
 #include <qtextedit_p.h>
 #include <qtextdocument_p.h>
-#include <qpagedpaintdevice_p.h>
 #include <qtextcursor_p.h>
 
 #include <limits.h>
@@ -2723,11 +2722,11 @@ void QTextControl::print(QPagedPaintDevice *printer) const
       return;
    }
 
-   QTextDocument *tempDoc = 0;
+   QTextDocument *tempDoc   = nullptr;
    const QTextDocument *doc = d->doc;
 
-   if (QPagedPaintDevicePrivate::get(printer)->printSelectionOnly) {
-      if (!d->cursor.hasSelection()) {
+   if (printer->printSelectionOnly()) {
+      if (! d->cursor.hasSelection()) {
          return;
       }
 
@@ -2736,6 +2735,7 @@ void QTextControl::print(QPagedPaintDevice *printer) const
       tempDoc->setPageSize(doc->pageSize());
       tempDoc->setDefaultFont(doc->defaultFont());
       tempDoc->setUseDesignMetrics(doc->useDesignMetrics());
+
       QTextCursor(tempDoc).insertFragment(d->cursor.selection());
       doc = tempDoc;
 

@@ -406,7 +406,7 @@ class QFontEngineBox : public QFontEngine
 
    bool canRender(QStringView str) const override;
 
-   const QString &fontEngineName() const {
+   const QString &fontEngineName() const override {
       static QString retval = "box";
       return retval;
    }

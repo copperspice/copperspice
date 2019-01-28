@@ -50,10 +50,8 @@
 #include <qabstracttextdocumentlayout_p.h>
 #include <qtextcursor_p.h>
 #include <qtextdocumentlayout_p.h>
-#include <qpagedpaintdevice_p.h>
 
 #include <limits.h>
-
 
 Q_CORE_EXPORT unsigned int qt_int_sqrt(unsigned int n);
 
@@ -978,21 +976,22 @@ void QTextDocument::print(QPagedPaintDevice *printer) const
    bool documentPaginated = d->pageSize.isValid() && !d->pageSize.isNull()
       && d->pageSize.height() != INT_MAX;
 
-   QPagedPaintDevicePrivate *pd = QPagedPaintDevicePrivate::get(printer);
+   // ### set page size to paginated size
+   QMarginsF m = printer->margins();
 
-   // ### set page size to paginated size?
-   QPagedPaintDevice::Margins m = printer->margins();
-   if (!documentPaginated && m.left == 0. && m.right == 0. && m.top == 0. && m.bottom == 0.) {
-      m.left = m.right = m.top = m.bottom = 2.;
+   if (! documentPaginated && m.left() == 0.0 && m.right() == 0.0 && m.top() == 0.0 && m.bottom() == 0.0) {
+      m.setLeft(2.0);
+      m.setRight(2.0);
+      m.setTop(2.0);
+      m.setBottom(2.0);
+
       printer->setMargins(m);
    }
 
-   // ### use the margins correctly
-
    QPainter p(printer);
 
-   // Check that there is a valid device to print to.
-   if (!p.isActive()) {
+   // Check if there is a valid device to print to
+   if (! p.isActive()) {
       return;
    }
 
@@ -1028,6 +1027,7 @@ void QTextDocument::print(QPagedPaintDevice *printer) const
       // scale to page
       p.scale(printerPageSize.width() / scaledPageSize.width(),
          printerPageSize.height() / scaledPageSize.height());
+
    } else {
       doc = clone(const_cast<QTextDocument *>(this));
       clonedDoc.reset(const_cast<QTextDocument *>(doc));
@@ -1051,27 +1051,26 @@ void QTextDocument::print(QPagedPaintDevice *printer) const
       fmt.setMargin(margin);
       doc->rootFrame()->setFrameFormat(fmt);
 
-
       body = QRectF(0, 0, printer->width(), printer->height());
 
-      pageNumberPos = QPointF(body.width() - margin,
-            body.height() - margin
-            + QFontMetrics(doc->defaultFont(), p.device()).ascent()
-            + 5 * dpiy / 72.0);
+      pageNumberPos = QPointF(body.width() - margin, body.height() - margin
+            + QFontMetrics(doc->defaultFont(), p.device()).ascent() + 5 * dpiy / 72.0);
+
       clonedDoc->setPageSize(body.size());
    }
 
-   int fromPage   = pd->fromPage;
-   int toPage     = pd->toPage;
+   int fromPage   = printer->fromPage();
+   int toPage     = printer->toPage();
    bool ascending = true;
 
    if (fromPage == 0 && toPage == 0) {
       fromPage = 1;
-      toPage = doc->pageCount();
+      toPage   = doc->pageCount();
    }
+
    // paranoia check
    fromPage = qMax(1, fromPage);
-   toPage = qMin(doc->pageCount(), toPage);
+   toPage   = qMin(doc->pageCount(), toPage);
 
    if (toPage < fromPage) {
       // if the user entered a page range outside the actual number

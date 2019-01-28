@@ -153,7 +153,7 @@ struct QGlyphAttributes {
    uchar justification : 4;
    uchar reserved      : 2;
 };
-static_assert(sizeof(QGlyphAttributes) == 1);
+static_assert(sizeof(QGlyphAttributes) == 1, "Type mismatch");
 
 struct QGlyphLayout {
 

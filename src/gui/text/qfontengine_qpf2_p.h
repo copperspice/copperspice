@@ -138,7 +138,7 @@ class Q_GUI_EXPORT QFontEngineQPF2 : public QFontEngine
    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) override;
    glyph_metrics_t boundingBox(glyph_t glyph) override;
 
-   const QString &fontEngineName() const {
+   const QString &fontEngineName() const override {
       static QString retval = "qpf2";
       return retval;
    }

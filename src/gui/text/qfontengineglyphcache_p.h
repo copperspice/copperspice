@@ -30,7 +30,7 @@
 #include <qfont_p.h>
 #include <qfontengine_p.h>
 
-class QFontEngineGlyphCache: public QSharedData
+class Q_GUI_EXPORT QFontEngineGlyphCache: public QSharedData
 {
  public:
    QFontEngineGlyphCache(QFontEngine::GlyphFormat format, const QTransform &matrix)
