@@ -69,6 +69,8 @@ set(GUI_INCLUDES
 set(GUI_PRIVATE_INCLUDES
    ${GUI_PRIVATE_INCLUDES}
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontext_p.h
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextfactory_p.h
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextplugin_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationfactory_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_theme_p.h
@@ -96,6 +98,8 @@ set(GUI_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_graphicsbuffer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_graphicsbufferhelper.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontext.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextfactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextplugin.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationfactory.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationplugin.cpp

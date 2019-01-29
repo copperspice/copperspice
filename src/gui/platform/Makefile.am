@@ -66,6 +66,8 @@ GUI_PLATFORM_INCLUDES = \
 
 GUI_PLATFORM_PRIVATE_INCLUDES = \
 	qplatform_inputcontext_p.h \
+	qplatform_inputcontextfactory_p.h \
+	qplatform_inputcontextplugin_p.h \
 	qplatform_integrationfactory_p.h \
 	qplatform_screen_p.h \
 	qplatform_theme_p.h \
@@ -79,7 +81,7 @@ GUI_PLATFORMHEADERS_INCLUDES = \
 	platformheaders/windows/qwindowswindowfunctions.h \
 	platformheaders/cocoa/qcocoawindowfunctions.h
 
-PLATFORMHEADER_DIRS = xcb windows cocoa
+GUI_PLATFORMHEADERS_DIRS = xcb windows cocoa
 
 GUI_INCLUDES += $(GUI_PLATFORM_INCLUDES) \
 	$(patsubst %,platformheaders/%,$(notdir $(GUI_PLATFORMHEADERS_INCLUDES)))
@@ -101,6 +103,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/platform/qplatform_graphicsbuffer.cpp \
 	src/gui/platform/qplatform_graphicsbufferhelper.cpp \
 	src/gui/platform/qplatform_inputcontext.cpp \
+	src/gui/platform/qplatform_inputcontextfactory.cpp \
+	src/gui/platform/qplatform_inputcontextplugin.cpp \
 	src/gui/platform/qplatform_integration.cpp \
 	src/gui/platform/qplatform_integrationfactory.cpp \
 	src/gui/platform/qplatform_integrationplugin.cpp \
@@ -124,5 +128,4 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/platform/qplatform_window.cpp
 
 EXTRA_DIST+=
-
 
