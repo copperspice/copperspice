@@ -36,9 +36,6 @@
 
 #include <algorithm>
 
-
-Q_DECLARE_METATYPE(QList<int>)
-
 // Table of key bindings, must be sorted on key sequence:
 // The integer value of VK_KEY | Modifier Keys (e.g., VK_META, and etc.)
 // A priority of 1 indicates that this is the primary key binding when multiple are defined.

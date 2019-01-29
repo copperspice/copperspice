@@ -82,27 +82,24 @@ void QPlatformAccessibility::initialize()
       return;
    }
 
-   isInit = true;      // ### not atomic
+   isInit = true;      // not atomic
 
-   typedef QMultiMap<int, QString> PluginKeyMap;
-   typedef PluginKeyMap::const_iterator PluginKeyMapConstIterator;
+   auto keySet = bridgeloader()->keySet();
 
-   const PluginKeyMap keyMap = bridgeloader()->keyMap();
-   QAccessibleBridgePlugin *factory = 0;
-   int i = -1;
-   const PluginKeyMapConstIterator cend = keyMap.constEnd();
+   QAccessibleBridgePlugin *factory = nullptr;
+   QSet<QAccessibleBridgePlugin *> usedSet;
 
-   for (PluginKeyMapConstIterator it = keyMap.constBegin(); it != cend; ++it) {
-      if (it.key() != i) {
-         i = it.key();
-         factory = qobject_cast<QAccessibleBridgePlugin *>(bridgeloader()->instance(i));
-      }
-      if (factory)
-         if (QAccessibleBridge *bridge = factory->create(it.value())) {
+   for (auto item : keySet) {
+      factory = qobject_cast<QAccessibleBridgePlugin *>(bridgeloader()->instance(item));
+
+      if (factory != nullptr && ! usedSet.contains(factory)) {
+         usedSet.insert(factory);
+
+         if (QAccessibleBridge *bridge = factory->create(item)) {
             bridges()->append(bridge);
          }
+      }
    }
-
 }
 
 void QPlatformAccessibility::cleanup()

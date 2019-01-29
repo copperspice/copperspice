@@ -30,28 +30,28 @@
 #include <qdebug.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QPlatformIntegrationFactoryInterface_iid, QLatin1String("/platforms"), Qt::CaseInsensitive))
+                  (QPlatformIntegrationFactoryInterface_iid, "/platforms", Qt::CaseInsensitive))
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader,
-                  (QPlatformIntegrationFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
+                  (QPlatformIntegrationFactoryInterface_iid, "", Qt::CaseInsensitive))
 
 static inline QPlatformIntegration *loadIntegration(QFactoryLoader *loader, const QString &key,
                   const QStringList &parameters, int &argc, char ** argv)
 {
-    const int index = loader->indexOf(key);
-
-    if (index != -1) {
-        if (QPlatformIntegrationPlugin *factory = qobject_cast<QPlatformIntegrationPlugin *>(loader->instance(index)))
-            if (QPlatformIntegration *result = factory->create(key, parameters, argc, argv))
+    if (loader->keySet().contains(key)) {
+        if (QPlatformIntegrationPlugin *factory = qobject_cast<QPlatformIntegrationPlugin *>(loader->instance(key)))
+            if (QPlatformIntegration *result = factory->create(key, parameters, argc, argv)) {
                 return result;
+            }
     }
+
     return 0;
 }
 
 QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platform,
                   const QStringList &paramList, int &argc, char **argv, const QString &platformPluginPath)
 {
-    // Try loading the plugin from platformPluginPath first:
+    // try loading the plugin from platformPluginPath first
 
     if (! platformPluginPath.isEmpty()) {
         QCoreApplication::addLibraryPath(platformPluginPath);
@@ -59,30 +59,34 @@ QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platfor
             return ret;
     }
 
-    if (QPlatformIntegration *ret = loadIntegration(loader(), platform, paramList, argc, argv))
+    if (QPlatformIntegration *ret = loadIntegration(loader(), platform, paramList, argc, argv)) {
         return ret;
+    }
 
-    return 0;
+    return nullptr;
 }
 
 QStringList QPlatformIntegrationFactory::keys(const QString &platformPluginPath)
 {
     QStringList list;
 
-    if (!platformPluginPath.isEmpty()) {
+    if (! platformPluginPath.isEmpty()) {
         QCoreApplication::addLibraryPath(platformPluginPath);
-        list = directLoader()->keyMap().values();
 
-        if (!list.isEmpty()) {
+        auto keySet = directLoader()->keySet();
+        list.append(keySet.toList());
+
+        if (! list.isEmpty()) {
             const QString postFix = QString(" (from ") + QDir::toNativeSeparators(platformPluginPath) + ')';
-            const QStringList::iterator end = list.end();
 
-            for (QStringList::iterator it = list.begin(); it != end; ++it)
-                (*it).append(postFix);
+            for (auto &tmp : list) {
+               tmp.append(postFix);
+            }
         }
     }
 
-    list.append(loader()->keyMap().values());
+    auto keySet = loader()->keySet();
+    list.append(keySet.toList());
 
     return list;
 }

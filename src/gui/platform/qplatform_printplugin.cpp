@@ -29,7 +29,6 @@
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformPrinterSupportFactoryInterface_iid, "/printsupport", Qt::CaseInsensitive))
 
-
 QPlatformPrinterSupportPlugin::QPlatformPrinterSupportPlugin(QObject *parent)
     : QObject(parent)
 {
@@ -39,14 +38,14 @@ QPlatformPrinterSupportPlugin::~QPlatformPrinterSupportPlugin()
 {
 }
 
-static QPlatformPrinterSupport *printerSupport = 0;
-
+static QPlatformPrinterSupport *printerSupport = nullptr;
 
 static void cleanupPrinterSupport()
 {
 #ifndef QT_NO_PRINTER
     delete printerSupport;
 #endif
+
     printerSupport = 0;
 }
 
@@ -60,12 +59,16 @@ static void cleanupPrinterSupport()
 */
 QPlatformPrinterSupport *QPlatformPrinterSupportPlugin::get()
 {
-    if (!printerSupport) {
-        const QMultiMap<int, QString> keyMap = loader()->keyMap();
-        if (!keyMap.isEmpty())
-            printerSupport = qLoadPlugin<QPlatformPrinterSupport, QPlatformPrinterSupportPlugin>(loader(), keyMap.constBegin().value());
-        if (printerSupport)
+    if (! printerSupport) {
+        auto keySet = loader()->keySet();
+
+        if (! keySet.isEmpty()) {
+            printerSupport = cs_load_plugin<QPlatformPrinterSupport, QPlatformPrinterSupportPlugin>(loader(), *(keySet.constBegin()));
+        }
+
+        if (printerSupport) {
             qAddPostRoutine(cleanupPrinterSupport);
+        }
     }
 
     return printerSupport;

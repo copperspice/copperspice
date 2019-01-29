@@ -29,26 +29,27 @@
 #include <qdebug.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-   (QPlatformThemeFactoryInterface_iid, QLatin1String("/platformthemes"), Qt::CaseInsensitive))
+   (QPlatformThemeFactoryInterface_iid, "/platformthemes", Qt::CaseInsensitive))
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader,
-   (QPlatformThemeFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
+   (QPlatformThemeFactoryInterface_iid, "", Qt::CaseInsensitive))
 
 
 QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString &platformPluginPath)
 {
-   QStringList paramList = key.split(QLatin1Char(':'));
+   QStringList paramList = key.split(':');
    const QString platform = paramList.takeFirst().toLower();
 
    // Try loading the plugin from platformPluginPath first:
    if (!platformPluginPath.isEmpty()) {
       QCoreApplication::addLibraryPath(platformPluginPath);
-      if (QPlatformTheme *ret = qLoadPlugin1<QPlatformTheme, QPlatformThemePlugin>(directLoader(), platform, paramList)) {
+
+      if (QPlatformTheme *ret = cs_load_plugin<QPlatformTheme, QPlatformThemePlugin>(directLoader(), platform, paramList)) {
          return ret;
       }
    }
 
-   if (QPlatformTheme *ret = qLoadPlugin1<QPlatformTheme, QPlatformThemePlugin>(loader(), platform, paramList)) {
+   if (QPlatformTheme *ret = cs_load_plugin<QPlatformTheme, QPlatformThemePlugin>(loader(), platform, paramList)) {
       return ret;
    }
 
@@ -67,20 +68,22 @@ QStringList QPlatformThemeFactory::keys(const QString &platformPluginPath)
 
    if (! platformPluginPath.isEmpty()) {
       QCoreApplication::addLibraryPath(platformPluginPath);
-      list += directLoader()->keyMap().values();
+
+      auto keySet = directLoader()->keySet();
+      list.append(keySet.toList());
 
       if (! list.isEmpty()) {
          const QString postFix = " (from " + QDir::toNativeSeparators(platformPluginPath) + ')';
 
-         const QStringList::iterator end = list.end();
-
-         for (auto it = list.begin(); it != end; ++it) {
-            (*it).append(postFix);
+         for (auto &tmp : list) {
+            tmp.append(postFix);
          }
       }
    }
 
-   list += loader()->keyMap().values();
+   auto keySet = loader()->keySet();
+   list.append(keySet.toList());
+
    return list;
 
 }

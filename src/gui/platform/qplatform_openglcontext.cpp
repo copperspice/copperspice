@@ -24,8 +24,6 @@
 
 #include <QOpenGLFunctions>
 
-
-
 class QPlatformOpenGLContextPrivate
 {
  public:
@@ -46,7 +44,6 @@ QPlatformOpenGLContext::~QPlatformOpenGLContext()
 {
 
 }
-
 
 void QPlatformOpenGLContext::initialize()
 {
@@ -93,10 +90,12 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
          } else {
             qWarning("Unrecognized OpenGL ES version");
          }
+
       } else {
          // If < 3 parts to the name, it is an unrecognised OpenGL ES
          qWarning("Unrecognised OpenGL ES version");
       }
+
    } else {
       // Not OpenGL ES, but regular OpenGL, the version numbers are first in the string
       QList<QByteArray> versionParts = parts.at(0).split('.');
@@ -111,6 +110,7 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
    if (!majorOk || !minorOk) {
       qWarning("Unrecognized OpenGL version");
    }
+
    return (majorOk && minorOk);
 }
 

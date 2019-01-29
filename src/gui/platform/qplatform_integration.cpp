@@ -36,9 +36,6 @@
 #include <qplatform_sessionmanager.h>
 #endif
 
-
-
-
 QPlatformFontDatabase *QPlatformIntegration::fontDatabase() const
 {
    static QPlatformFontDatabase *db = nullptr;
@@ -51,21 +48,20 @@ QPlatformFontDatabase *QPlatformIntegration::fontDatabase() const
 }
 
 #ifndef QT_NO_CLIPBOARD
-
 QPlatformClipboard *QPlatformIntegration::clipboard() const
 {
    static QPlatformClipboard *clipboard = nullptr;
+
    if (!clipboard) {
       clipboard = new QPlatformClipboard;
    }
+
    return clipboard;
 }
-
 #endif
 
 
 #ifndef QT_NO_DRAGANDDROP
-
 QPlatformDrag *QPlatformIntegration::drag() const
 {
    static QSimpleDrag *drag = 0;
@@ -74,7 +70,6 @@ QPlatformDrag *QPlatformIntegration::drag() const
    }
    return drag;
 }
-
 #endif
 
 QPlatformNativeInterface *QPlatformIntegration::nativeInterface() const
@@ -86,43 +81,50 @@ QPlatformServices *QPlatformIntegration::services() const
 {
    return 0;
 }
+
 bool QPlatformIntegration::hasCapability(Capability cap) const
 {
    return cap == NonFullScreenWindows || cap == NativeWidgets || cap == WindowManagement;
 }
+
 QPlatformPixmap *QPlatformIntegration::createPlatformPixmap(QPlatformPixmap::PixelType type) const
 {
    return new QRasterPlatformPixmap(type);
 }
-#ifndef QT_NO_OPENGL
 
+#ifndef QT_NO_OPENGL
 QPlatformOpenGLContext *QPlatformIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
    qWarning("This plugin does not support createPlatformOpenGLContext");
    return 0;
 }
 #endif
+
 QPlatformSharedGraphicsCache *QPlatformIntegration::createPlatformSharedGraphicsCache(const char *cacheId) const
 {
    qWarning("This plugin does not support createPlatformSharedGraphicsBuffer for cacheId: %s",
       cacheId);
    return 0;
 }
+
 QPaintEngine *QPlatformIntegration::createImagePaintEngine(QPaintDevice *paintDevice) const
 {
-   Q_UNUSED(paintDevice)
    return 0;
 }
+
 void QPlatformIntegration::initialize()
 {
 }
+
 void QPlatformIntegration::destroy()
 {
 }
+
 QPlatformInputContext *QPlatformIntegration::inputContext() const
 {
    return 0;
 }
+
 #ifndef QT_NO_ACCESSIBILITY
 QPlatformAccessibility *QPlatformIntegration::accessibility() const
 {
@@ -173,47 +175,59 @@ QVariant QPlatformIntegration::styleHint(StyleHint hint) const
 
    return 0;
 }
+
 Qt::WindowState QPlatformIntegration::defaultWindowState(Qt::WindowFlags flags) const
 {
    if (flags & Qt::Popup & ~Qt::Window) {
       return Qt::WindowNoState;
    }
+
    if (styleHint(QPlatformIntegration::ShowIsFullScreen).toBool()) {
       return Qt::WindowFullScreen;
    } else if (styleHint(QPlatformIntegration::ShowIsMaximized).toBool()) {
       return Qt::WindowMaximized;
    }
+
    return Qt::WindowNoState;
 }
+
 Qt::KeyboardModifiers QPlatformIntegration::queryKeyboardModifiers() const
 {
    return QGuiApplication::keyboardModifiers();
 }
+
 QList<int> QPlatformIntegration::possibleKeys(const QKeyEvent *) const
 {
    return QList<int>();
 }
+
 void QPlatformIntegration::screenAdded(QPlatformScreen *ps, bool isPrimary)
 {
    QScreen *screen = new QScreen(ps);
+
    if (isPrimary) {
       QGuiApplicationPrivate::screen_list.prepend(screen);
    } else {
       QGuiApplicationPrivate::screen_list.append(screen);
    }
+
    emit qGuiApp->screenAdded(screen);
+
    if (isPrimary) {
       emit qGuiApp->primaryScreenChanged(screen);
    }
 }
+
 void QPlatformIntegration::removeScreen(QScreen *screen)
 {
    const bool wasPrimary = (!QGuiApplicationPrivate::screen_list.isEmpty() && QGuiApplicationPrivate::screen_list[0] == screen);
    QGuiApplicationPrivate::screen_list.removeOne(screen);
+
    if (wasPrimary && qGuiApp && !QGuiApplicationPrivate::screen_list.isEmpty()) {
       emit qGuiApp->primaryScreenChanged(QGuiApplicationPrivate::screen_list[0]);
    }
 }
+
 void QPlatformIntegration::destroyScreen(QPlatformScreen *screen)
 {
    QScreen *qScreen = screen->screen();
@@ -221,57 +235,54 @@ void QPlatformIntegration::destroyScreen(QPlatformScreen *screen)
    delete qScreen;
    delete screen;
 }
+
 void QPlatformIntegration::setPrimaryScreen(QPlatformScreen *newPrimary)
 {
    QScreen *newPrimaryScreen = newPrimary->screen();
+
    int idx = QGuiApplicationPrivate::screen_list.indexOf(newPrimaryScreen);
    Q_ASSERT(idx >= 0);
 
    if (idx == 0) {
       return;
    }
+
    QGuiApplicationPrivate::screen_list.swap(0, idx);
    emit qGuiApp->primaryScreenChanged(newPrimaryScreen);
 }
+
 QStringList QPlatformIntegration::themeNames() const
 {
    return QStringList();
 }
+
 class QPlatformTheme *QPlatformIntegration::createPlatformTheme(const QString &name) const
 {
    return new QPlatformTheme;
 }
+
 QPlatformOffscreenSurface *QPlatformIntegration::createPlatformOffscreenSurface(QOffscreenSurface *surface) const
 {
    return 0;
 }
 
 #ifndef QT_NO_SESSIONMANAGER
-
-
-
-
 QPlatformSessionManager *QPlatformIntegration::createPlatformSessionManager(const QString &id, const QString &key) const
 {
    return new QPlatformSessionManager(id, key);
 }
-
-
-
 #endif
-
 
 void QPlatformIntegration::sync()
 {
 }
-#ifndef QT_NO_OPENGL
 
+#ifndef QT_NO_OPENGL
 QOpenGLContext::OpenGLModuleType QPlatformIntegration::openGLModuleType()
 {
    qWarning("This plugin does not support dynamic OpenGL loading");
    return QOpenGLContext::LibGL;
 }
-
 #endif
 
 void QPlatformIntegration::setApplicationIcon(const QIcon &icon) const
