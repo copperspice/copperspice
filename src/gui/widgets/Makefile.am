@@ -26,8 +26,6 @@ GUI_PUBLIC_INCLUDES += \
 	QLCDNumber \
 	QLabel \
 	QLineEdit \
-	QMacCocoaViewContainer \
-	QMacNativeWidget \
 	QMainWindow \
 	QMdiArea \
 	QMdiSubWindow \
@@ -86,9 +84,7 @@ GUI_WIDGETS_INCLUDES = \
 	qlabel.h \
 	qlcdnumber.h \
 	qlineedit.h \
-	qmaccocoaviewcontainer.h \
 	qmaccocoaviewcontainer_mac.h \
-	qmacnativewidget.h \
 	qmacnativewidget_mac.h \
 	qmainwindow.h \
 	qmdiarea.h \
@@ -128,8 +124,6 @@ GUI_WIDGETS_PRIVATE_INCLUDES = \
 	qabstractslider_p.h \
 	qabstractspinbox_p.h \
 	qbuttongroup_p.h \
-	qcocoamenu_mac_p.h \
-	qcocoatoolbardelegate_mac_p.h \
 	qcombobox_p.h \
 	qdatetimeedit_p.h \
 	qdockarealayout_p.h \
@@ -140,8 +134,6 @@ GUI_WIDGETS_PRIVATE_INCLUDES = \
 	qlinecontrol_p.h \
 	qlineedit_p.h \
 	qkeysequenceedit_p.h \
-	qmaccocoaviewcontainer_mac.h \
-	qmacnativewidget_mac.h \
 	qmainwindowlayout_p.h \
 	qmdiarea_p.h \
 	qmdisubwindow_p.h \
@@ -232,11 +224,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 
 if COCOA
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/widgets/qcocoamenu_mac.mm \
-	src/gui/widgets/qcocoatoolbardelegate_mac.mm \
 	src/gui/widgets/qmaccocoaviewcontainer_mac.mm \
 	src/gui/widgets/qmacnativewidget_mac.mm \
-	src/gui/widgets/qmainwindowlayout_mac.mm \
 	src/gui/widgets/qmenu_mac.mm
 endif
 

@@ -25,8 +25,6 @@ set(GUI_PUBLIC_INCLUDES
     QLCDNumber
     QLabel
     QLineEdit
-    QMacCocoaViewContainer
-    QMacNativeWidget
     QMainWindow
     QMdiArea
     QMdiSubWindow
@@ -87,9 +85,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlabel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlcdnumber.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmaccocoaviewcontainer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmaccocoaviewcontainer_mac.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmacnativewidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmacnativewidget_mac.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmainwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdiarea.h
@@ -131,8 +127,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractslider_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractspinbox_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qbuttongroup_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcocoamenu_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcocoatoolbardelegate_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcombobox_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdatetimeedit_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdockarealayout_p.h
@@ -143,8 +137,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlabel_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlinecontrol_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmaccocoaviewcontainer_mac.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmacnativewidget_mac.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmainwindowlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdiarea_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdisubwindow_p.h
@@ -232,11 +224,8 @@ set(GUI_SOURCES
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcocoamenu_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcocoatoolbardelegate_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmaccocoaviewcontainer_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmacnativewidget_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmainwindowlayout_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenu_mac.mm
     )
 endif()
