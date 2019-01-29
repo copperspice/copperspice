@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    GUI_CS_PROPERTY_WRITE(movable, setMovable)
 
    GUI_CS_PROPERTY_READ(tabBarAutoHide, tabBarAutoHide)
-   GUI_CS_PROPERTY_WRITE(abBarAutoHide, setTabBarAutoHide)
+   GUI_CS_PROPERTY_WRITE(tabBarAutoHide, setTabBarAutoHide)
 
  public:
    enum TabPosition { North, South, West, East };

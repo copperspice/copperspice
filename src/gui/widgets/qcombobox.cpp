@@ -2105,6 +2105,7 @@ void QComboBoxPrivate::cleanupNativePopup()
    delete m_platformMenu;
    m_platformMenu = 0;
 }
+
 bool QComboBoxPrivate::showNativePopup()
 {
    Q_Q(QComboBox);
@@ -2126,9 +2127,12 @@ bool QComboBoxPrivate::showNativePopup()
    for (int i = 0; i < itemsCount; ++i) {
       QPlatformMenuItem *item = theme->createPlatformMenuItem();
       QModelIndex rowIndex = model->index(i, modelColumn, root);
+
       QVariant textVariant = model->data(rowIndex, Qt::EditRole);
       item->setText(textVariant.toString());
+
       QVariant iconVariant = model->data(rowIndex, Qt::DecorationRole);
+
       if (iconVariant.canConvert<QIcon>()) {
          item->setIcon(iconVariant.value<QIcon>());
       }
@@ -2139,7 +2143,7 @@ bool QComboBoxPrivate::showNativePopup()
       }
 
       IndexSetter setter = { i, q };
-      QObject::connect(item, &QPlatformMenuItem::activated, setter);
+      QObject::connect(item, &QPlatformMenuItem::activated, q, setter);
 
       m_platformMenu->insertMenuItem(item, 0);
       m_platformMenu->syncMenuItem(item);

@@ -1114,14 +1114,17 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 {
 #ifdef Q_OS_MAC
    Q_D(QMainWindow);
+
    if (isWindow()) {
       d->useUnifiedToolBar = set;
       createWinId();
 
       QPlatformNativeInterface *nativeInterface = QGuiApplication::platformNativeInterface();
-      QPlatformNativeInterface::NativeResourceForIntegrationFunction function =
+
+      QPlatformNativeInterface::FP_Integration function =
          nativeInterface->nativeResourceFunctionForIntegration("setContentBorderEnabled");
-      if (!function) {
+
+      if (! function) {
          return;   // Not Cocoa platform plugin.
       }
 

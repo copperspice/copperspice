@@ -20,12 +20,16 @@
 *
 ***********************************************************************/
 
-#ifndef QMacCOCOAVIEWCONTAINER_MAC_H
-#define QMacCOCOAVIEWCONTAINER_MAC_H
+#ifndef QMAC_COCOAVIEWCONTAINERMAC_H
+#define QMAC_COCOAVIEWCONTAINERMAC_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
-QT_BEGIN_NAMESPACE
+#ifdef __OBJC__
+@class NSView;
+#else
+using NSView = struct objc_object;
+#endif
 
 class QMacCocoaViewContainerPrivate;
 
@@ -34,16 +38,15 @@ class Q_GUI_EXPORT QMacCocoaViewContainer : public QWidget
    GUI_CS_OBJECT(QMacCocoaViewContainer)
 
  public:
-   QMacCocoaViewContainer(void *cocoaViewToWrap, QWidget *parent = nullptr);
-   virtual ~QMacCocoaViewContainer();
+    QMacCocoaViewContainer(NSView *cocoaViewToWrap, QWidget *parent = nullptr);
+    virtual ~QMacCocoaViewContainer();
 
-   void setCocoaView(void *cocoaViewToWrap);
-   void *cocoaView() const;
+    void setCocoaView(NSView *view);
+    NSView *cocoaView() const;
 
  private:
    Q_DECLARE_PRIVATE(QMacCocoaViewContainer)
 };
 
-QT_END_NAMESPACE
 
-#endif // QCOCOAVIEWCONTAINER_H
+#endif

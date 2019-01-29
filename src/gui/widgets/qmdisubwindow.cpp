@@ -36,8 +36,8 @@
 #include <QDebug>
 #include <QScopedValueRollback>
 
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
-#include <qmacstyle_mac_p.h>
+#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
+#include <qmacstyle_mac.h>
 #endif
 
 

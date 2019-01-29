@@ -21,30 +21,63 @@
 ***********************************************************************/
 
 #import  <Cocoa/Cocoa.h>
-#import  <qcocoaview_mac_p.h>
 
 #include <qmacnativewidget_mac.h>
-#include <qwidget_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qdebug.h>
+#include <qwindow.h>
+#include <qguiapplication.h>
+#include <qplatform_nativeinterface.h>
 
-class QMacNativeWidgetPrivate : public QWidgetPrivate
+
+
+namespace {
+// TODO use QtMacExtras copy of this function when available.
+
+inline QPlatformNativeInterface::FP_Integration resolvePlatformFunction(const QByteArray &functionName)
 {
-};
+    QPlatformNativeInterface *nativeInterface = QGuiApplication::platformNativeInterface();
 
-extern OSViewRef qt_mac_create_widget(QWidget *widget, QWidgetPrivate *widgetPrivate, OSViewRef parent);
+    QPlatformNativeInterface::FP_Integration function =
+        nativeInterface->nativeResourceFunctionForIntegration(functionName);
 
-QMacNativeWidget::QMacNativeWidget(void *parentView)
-   : QWidget(*new QMacNativeWidgetPrivate, 0, Qt::Window)
+    if (! function)
+         qWarning() << "Unable to resolve function" << functionName
+                    << "from QGuiApplication::platformNativeInterface()->nativeResourceFunctionForIntegration()";
+    return function;
+}
+} //namespsace
+
+
+NSView *getEmbeddableView(QWindow *qtWindow)
 {
-   Q_D(QMacNativeWidget);
-   OSViewRef myView = qt_mac_create_widget(this, d, OSViewRef(parentView));
+    // Make sure the platform window is created
+    qtWindow->create();
 
-   d->topData()->embedded = true;
-   create(WId(myView), false, false);
-   setPalette(QPalette(Qt::transparent));
-   setAttribute(Qt::WA_SetPalette, false);
-   setAttribute(Qt::WA_LayoutUsesWidgetRect);
+    // Inform the window that it's a subwindow of a non-Qt window. This must be
+    // done after create() because we need to have a QPlatformWindow instance.
+    // The corresponding NSWindow will not be shown and can be deleted later.
+    typedef void (*SetEmbeddedInForeignViewFunction)(QPlatformWindow *window, bool embedded);
+    reinterpret_cast<SetEmbeddedInForeignViewFunction>(resolvePlatformFunction("setEmbeddedInForeignView"))(qtWindow->handle(), true);
+
+    // Get the Qt content NSView for the QWindow from the Qt platform plugin
+    QPlatformNativeInterface *platformNativeInterface = QGuiApplication::platformNativeInterface();
+    NSView *qtView = (NSView *)platformNativeInterface->nativeResourceForWindow("nsview", qtWindow);
+
+    return qtView; // qtView is ready for use.
+}
+
+
+
+QMacNativeWidget::QMacNativeWidget(NSView *parentView)
+    : QWidget(0)
+{
+    //d_func()->topData()->embedded = true;
+    setPalette(QPalette(Qt::transparent));
+    setAttribute(Qt::WA_SetPalette, false);
+    setAttribute(Qt::WA_LayoutUsesWidgetRect);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_NoSystemBackground, false);
 }
 
 /*!
@@ -59,14 +92,23 @@ QMacNativeWidget::~QMacNativeWidget()
 */
 QSize QMacNativeWidget::sizeHint() const
 {
-   return QSize(200, 200);
+    // QMacNativeWidget really does not have any other choice
+    // than to fill its designated area.
+
+    if (windowHandle())
+        return windowHandle()->size();
+
+    return QWidget::sizeHint();
 }
-/*!
-    \reimp
-*/
+NSView *QMacNativeWidget::nativeView() const
+{
+    winId();
+    return getEmbeddableView(windowHandle());
+}
+
 bool QMacNativeWidget::event(QEvent *ev)
 {
    return QWidget::event(ev);
 }
 
-QT_END_NAMESPACE
+

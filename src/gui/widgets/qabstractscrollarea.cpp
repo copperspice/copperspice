@@ -303,13 +303,17 @@ void QAbstractScrollAreaPrivate::layoutChildren()
    }
 
    // move the scrollbars away from top/left headers
-   int vHeaderRight = 0;
+   int vHeaderRight  = 0;
    int hHeaderBottom = 0;
+
    if ((vscrollOverlap > 0 && needv) || (hscrollOverlap > 0 && needh)) {
       const QList<QHeaderView *> headers = q->findChildren<QHeaderView *>();
+
       if (headers.count() <= 2) {
-         Q_FOREACH (const QHeaderView *header, headers) {
+         for (const QHeaderView *header : headers) {
+
             const QRect geo = header->geometry();
+
             if (header->orientation() == Qt::Vertical && header->isVisible() &&
                QStyle::visualRect(opt.direction, opt.rect, geo).left() <= opt.rect.width() / 2) {
                vHeaderRight = QStyle::visualRect(opt.direction, opt.rect, geo).right();
@@ -323,11 +327,11 @@ void QAbstractScrollAreaPrivate::layoutChildren()
    if (needh) {
       QRect horizontalScrollBarRect(QPoint(controlsRect.left() + vHeaderRight, cornerPoint.y()), QPoint(cornerPoint.x() - 1,
             controlsRect.bottom()));
-      if (!hasCornerWidget && htransient)
-#ifdef Q_OS_MAC
-         if (QSysInfo::macVersion() >= QSysInfo::MV_10_8)
-#endif
-            horizontalScrollBarRect.adjust(0, 0, cornerOffset.x(), 0);
+      if (! hasCornerWidget && htransient) {
+
+         horizontalScrollBarRect.adjust(0, 0, cornerOffset.x(), 0);
+      }
+
       scrollBarContainers[Qt::Horizontal]->setGeometry(QStyle::visualRect(opt.direction, opt.rect, horizontalScrollBarRect));
       scrollBarContainers[Qt::Horizontal]->raise();
    }
@@ -335,11 +339,13 @@ void QAbstractScrollAreaPrivate::layoutChildren()
    if (needv) {
       QRect verticalScrollBarRect  (QPoint(cornerPoint.x(), controlsRect.top() + hHeaderBottom),  QPoint(controlsRect.right(),
             cornerPoint.y() - 1));
-      if (!hasCornerWidget && vtransient)
-#ifdef Q_OS_MAC
-         if (QSysInfo::macVersion() >= QSysInfo::MV_10_8)
-#endif
-            verticalScrollBarRect.adjust(0, 0, 0, cornerOffset.y());
+
+      if (! hasCornerWidget && vtransient) {
+
+
+         verticalScrollBarRect.adjust(0, 0, 0, cornerOffset.y());
+      }
+
       scrollBarContainers[Qt::Vertical]->setGeometry(QStyle::visualRect(opt.direction, opt.rect, verticalScrollBarRect));
       scrollBarContainers[Qt::Vertical]->raise();
    }
@@ -1194,7 +1200,6 @@ void QAbstractScrollArea::setupViewport(QWidget *viewport)
 {
    Q_UNUSED(viewport);
 }
-
 
 void QAbstractScrollArea::_q_hslide(int un_named_arg1)
 {

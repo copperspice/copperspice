@@ -23,20 +23,26 @@
 #ifndef QMACNATIVEWIDGET_MAC_H
 #define QMACNATIVEWIDGET_MAC_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
-QT_BEGIN_NAMESPACE
+#ifdef __OBJC__
+@class NSView;
+#else
+using NSView = struct objc_object;
+#endif
 
 class QMacNativeWidgetPrivate;
+
 class Q_GUI_EXPORT QMacNativeWidget : public QWidget
 {
    GUI_CS_OBJECT(QMacNativeWidget)
 
  public:
-   QMacNativeWidget(void *parentRef = 0);
+   QMacNativeWidget(NSView *parentView = nullptr);
    ~QMacNativeWidget();
 
    QSize sizeHint() const override;
+   NSView *nativeView() const;
 
  protected:
    bool event(QEvent *ev) override;
@@ -44,7 +50,5 @@ class Q_GUI_EXPORT QMacNativeWidget : public QWidget
  private:
    Q_DECLARE_PRIVATE(QMacNativeWidget)
 };
-
-QT_END_NAMESPACE
 
 #endif // QMACNATIVEWIDGET_H

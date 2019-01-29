@@ -31,7 +31,7 @@
 #include <qmath.h>
 
 #ifdef Q_OS_MAC
-#include <qpa/qplatformnativeinterface.h>
+#include <qplatform_nativeinterface.h>
 #endif
 
 #include <qmainwindowlayout_p.h>
@@ -352,9 +352,10 @@ void QToolBarLayout::updateMacBorderMetrics()
    }
 
    QPlatformNativeInterface *nativeInterface = QApplication::platformNativeInterface();
-   QPlatformNativeInterface::NativeResourceForIntegrationFunction function =
+   QPlatformNativeInterface::FP_Integration function =
       nativeInterface->nativeResourceFunctionForIntegration("registerContentBorderArea");
-   if (!function) {
+
+   if (! function) {
       return;   // Not Cocoa platform plugin.
    }
 

@@ -150,7 +150,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    GUI_CS_SLOT_2(activatePreviousSubWindow)
 
  protected:
-   GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *viewport))
+   GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *viewport) override)
    GUI_CS_SLOT_2(setupViewport)
 
    bool event(QEvent *event) override;
