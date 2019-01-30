@@ -255,7 +255,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 #endif
 
  protected :
-   GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *widget))
+   GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *widget) override)
    GUI_CS_SLOT_2(setupViewport)
 
    QGraphicsView(QGraphicsViewPrivate &, QWidget *parent = nullptr);
