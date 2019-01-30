@@ -15,6 +15,7 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui 
     -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
     -DQT_BUILD_GUI_LIB           \
     -DQT_BUILTIN_GIF_READER      \
+    -DQOPENGL_DEPRECATEDFUNCTION \
     -DMNG_BUILD_SO               \
     -DMNG_NO_INCLUDE_JNG         \
     -DPNG_NO_CONFIG_H
@@ -25,29 +26,32 @@ lib_libCsGui@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsGui@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
 
 if OSTYPE_LINUX
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_XINPUT -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
-    -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DHAVE_POSIX_MEMALIGN -DQT_NO_XINPUT -DQT_NO_STYLE_MAC \
+   -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
+   -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
 
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
 endif
 
 if OSTYPE_BSD
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_XINPUT -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
-    -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DHAVE_POSIX_MEMALIGN -DQT_NO_XINPUT -DQT_NO_STYLE_MAC \
+   -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
+   -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
 
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
 endif
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR -DQT_NO_DIRECTWRITE
-lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid --export-all-symbols
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid -lopengl32  \
+    -lkernel32 -luser32 --export-all-symbols
 endif
 
 if OSTYPE_DARWIN
 nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += src/gui/mac/qrc_macresources.cpp
 lib_libCsGui@BUILD_ABI@_la_OBJCXXFLAGS += $(lib_libCsGui@BUILD_ABI@_la_CXXFLAGS)
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSVISTA
-lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lobjc -framework Carbon
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lobjc -framework Carbon -framework OpenGL
 endif
 
 EXTRA_DIST += src/gui/mac/macresources.qrc \
@@ -115,6 +119,7 @@ $(lib_libCsGui@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_
 	@- rm -rf $@
 	echo "include/QtGui:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+   echo "	\$$(MKDIR_P) \$$@/platformheaders" >> $@ ; \
 	echo "privateinclude/QtGui/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(GUI_PUBLIC_INCLUDES); do \
@@ -123,6 +128,10 @@ $(lib_libCsGui@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_
 	done; \
 	for i in $(GUI_DIRS); do \
 		echo "include/QtGui/%: $$i/% | include/QtGui" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
+	done;\
+	for i in $(GUI_PLATFORMHEADERS_DIRS); do \
+		echo "include/QtGui/platformheaders/%: src/gui/platform/platformheaders/$$i/% | include/QtGui" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(GUI_DIRS); do \
@@ -140,3 +149,5 @@ dist_macnib_DATA += \
 		src/gui/mac/qt_menu.nib/info.nib \
 		src/gui/mac/qt_menu.nib/keyedobjects.nib
 endif
+
+

@@ -1,10 +1,10 @@
 add_definitions(
     -DQT_BUILD_GUI_LIB
     -DQT_BUILTIN_GIF_READER
+    -DQOPENGL_DEPRECATEDFUNCTION
     -DMNG_BUILD_SO
     -DMNG_NO_INCLUDE_JNG
     -DPNG_NO_CONFIG_H
-    -DMNG_BUILD_SO
 )
 set(EXTRA_GUI_LIBS CsCore${BUILD_ABI})
 set(EXTRA_GUI_CXXFLAGS)
@@ -69,6 +69,7 @@ include(widgets/widgets.cmake)
 macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
 macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_INCLUDES}" QtGui)
+macro_generate_misc("${GUI_PLATFORMHEADERS_INCLUDES}" QtGui/platformheaders)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(EXTRA_GUI_LIBS
@@ -89,6 +90,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         rt
     )
     add_definitions(
+        -DHAVE_POSIX_MEMALIGN
         -DQT_NO_XINPUT
         -DQT_NO_STYLE_MAC
         -DQT_NO_STYLE_WINDOWSXP
@@ -153,7 +155,7 @@ endif()
 function_variable_fixup("${EXTRA_GUI_CXXFLAGS}" EXTRA_GUI_CXXFLAGS)
 function_variable_fixup("${EXTRA_GUI_LDFLAGS}" EXTRA_GUI_LDFLAGS)
 
-add_library(CsGui${BUILD_ABI} SHARED ${GUI_SOURCES} ${GUI_INCLUDES})
+add_library(CsGui${BUILD_ABI} SHARED ${GUI_SOURCES} ${GUI_INCLUDES} ${GUI_PLATFORMHEADERS_INCLUDES})
 target_link_libraries(CsGui${BUILD_ABI} ${EXTRA_GUI_LIBS})
 
 target_include_directories(CsGui${BUILD_ABI}
