@@ -27,8 +27,6 @@
 #include <qmenu.h>
 #include <qgraphicswidget_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACTION
 class QShortcutMap;
 
@@ -102,7 +100,4 @@ class QActionPrivate
 };
 
 #endif // QT_NO_ACTION
-
-QT_END_NAMESPACE
-
-#endif // QACTION_P_H
+#endif

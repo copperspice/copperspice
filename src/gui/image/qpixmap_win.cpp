@@ -95,6 +95,7 @@ enum HBitmapFormat {
    HBitmapPremultipliedAlpha,
    HBitmapAlpha
 };
+
 Q_GUI_EXPORT HBITMAP qt_createIconMask(const QBitmap &bitmap)
 {
    QImage bm = bitmap.toImage().convertToFormat(QImage::Format_Mono);

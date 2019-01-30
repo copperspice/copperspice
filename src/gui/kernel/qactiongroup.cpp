@@ -29,7 +29,6 @@
 #include <qevent.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
 
 class QActionGroupPrivate
 {
@@ -59,6 +58,7 @@ void QActionGroupPrivate::_q_actionChanged()
    Q_Q(QActionGroup);
    QAction *action = qobject_cast<QAction *>(q->sender());
    Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionChanged", "internal error");
+
    if (exclusive) {
       if (action->isChecked()) {
          if (action != current) {
@@ -89,66 +89,13 @@ void QActionGroupPrivate::_q_actionHovered()
    emit q->hovered(action);
 }
 
-/*!
-    \class QActionGroup
-    \brief The QActionGroup class groups actions together.
-
-    \ingroup mainwindow-classes
-
-    In some situations it is useful to group QAction objects together.
-    For example, if you have a \gui{Left Align} action, a \gui{Right
-    Align} action, a \gui{Justify} action, and a \gui{Center} action,
-    only one of these actions should be active at any one time. One
-    simple way of achieving this is to group the actions together in
-    an action group.
-
-    Here's a example (from the \l{mainwindows/menus}{Menus} example):
-
-    \snippet examples/mainwindows/menus/mainwindow.cpp 6
-
-    Here we create a new action group. Since the action group is
-    exclusive by default, only one of the actions in the group is
-    checked at any one time.
-
-    \img qactiongroup-align.png Alignment options in a QMenu
-
-    A QActionGroup emits an triggered() signal when one of its
-    actions is chosen. Each action in an action group emits its
-    triggered() signal as usual.
-
-    As stated above, an action group is \l exclusive by default; it
-    ensures that only one checkable action is active at any one time.
-    If you want to group checkable actions without making them
-    exclusive, you can turn of exclusiveness by calling
-    setExclusive(false).
-
-    Actions can be added to an action group using addAction(), but it
-    is usually more convenient to specify a group when creating
-    actions; this ensures that actions are automatically created with
-    a parent. Actions can be visually separated from each other by
-    adding a separator action to the group; create an action and use
-    QAction's \l {QAction::}{setSeparator()} function to make it
-    considered a separator. Action groups are added to widgets with
-    the QWidget::addActions() function.
-
-    \sa QAction
-*/
-
-/*!
-    Constructs an action group for the \a parent object.
-
-    The action group is exclusive by default. Call setExclusive(false)
-    to make the action group non-exclusive.
-*/
 QActionGroup::QActionGroup(QObject *parent)
    : QObject(parent), d_ptr(new QActionGroupPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the action group.
-*/
+
 QActionGroup::~QActionGroup()
 {
 }
@@ -183,6 +130,7 @@ QAction *QActionGroup::addAction(QAction *a)
    if (a->isChecked()) {
       d->current = a;
    }
+
    QActionGroup *oldGroup = a->d_func()->group;
    if (oldGroup != this) {
       if (oldGroup) {
@@ -230,6 +178,7 @@ QAction *QActionGroup::addAction(const QIcon &icon, const QString &text)
 void QActionGroup::removeAction(QAction *action)
 {
    Q_D(QActionGroup);
+
    if (d->actions.removeAll(action)) {
       if (action == d->current) {
          d->current = 0;
@@ -273,23 +222,7 @@ bool QActionGroup::isExclusive() const
    return d->exclusive;
 }
 
-/*!
-    \fn void QActionGroup::setDisabled(bool b)
 
-    This is a convenience function for the \l enabled property, that
-    is useful for signals--slots connections. If \a b is true the
-    action group is disabled; otherwise it is enabled.
-*/
-
-/*!
-    \property QActionGroup::enabled
-    \brief whether the action group is enabled
-
-    Each action in the group will be enabled or disabled unless it
-    has been explicitly disabled.
-
-    \sa QAction::setEnabled()
-*/
 void QActionGroup::setEnabled(bool b)
 {
    Q_D(QActionGroup);
@@ -362,8 +295,5 @@ void QActionGroup::_q_actionHovered()
    Q_D(QActionGroup);
    d->_q_actionHovered();
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACTION

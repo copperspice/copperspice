@@ -25,7 +25,7 @@
 
 #include <qaction_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QWidgetActionPrivate : public QActionPrivate
 {
@@ -43,6 +43,6 @@ class QWidgetActionPrivate : public QActionPrivate
    }
 };
 
-QT_END_NAMESPACE
+
 
 #endif

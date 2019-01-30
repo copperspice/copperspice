@@ -26,10 +26,9 @@
 #include <qstyle.h>
 #include <qsizepolicy.h>
 
-QT_BEGIN_NAMESPACE
-
 class QWidgetItem;
 class QSpacerItem;
+class QLayoutItem;
 
 class Q_GUI_EXPORT QLayoutPrivate
 {
@@ -38,7 +37,7 @@ class Q_GUI_EXPORT QLayoutPrivate
  public:
    typedef QWidgetItem *(*QWidgetItemFactoryMethod)(const QLayout *layout, QWidget *widget);
    typedef QSpacerItem *(*QSpacerItemFactoryMethod)(const QLayout *layout, int w, int h, QSizePolicy::Policy hPolicy,
-         QSizePolicy::Policy);
+      QSizePolicy::Policy);
 
    QLayoutPrivate();
    virtual ~QLayoutPrivate() {}
@@ -46,10 +45,16 @@ class Q_GUI_EXPORT QLayoutPrivate
    void getMargin(int *result, int userMargin, QStyle::PixelMetric pm) const;
    void doResize(const QSize &);
    void reparentChildWidgets(QWidget *mw);
+   bool checkWidget(QWidget *widget) const;
+   bool checkLayout(QLayout *otherLayout) const;
 
    static QWidgetItem *createWidgetItem(const QLayout *layout, QWidget *widget);
+
    static QSpacerItem *createSpacerItem(const QLayout *layout, int w, int h,
-                                        QSizePolicy::Policy hPolicy = QSizePolicy::Minimum, QSizePolicy::Policy vPolicy = QSizePolicy::Minimum);
+      QSizePolicy::Policy hPolicy = QSizePolicy::Minimum, QSizePolicy::Policy vPolicy = QSizePolicy::Minimum);
+   virtual QLayoutItem *replaceAt(int index, QLayoutItem *newitem) {
+      return 0;
+   }
 
    static QWidgetItemFactoryMethod widgetItemFactoryMethod;
    static QSpacerItemFactoryMethod spacerItemFactoryMethod;
@@ -72,6 +77,4 @@ class Q_GUI_EXPORT QLayoutPrivate
 
 };
 
-QT_END_NAMESPACE
-
-#endif // QLAYOUT_P_H
+#endif

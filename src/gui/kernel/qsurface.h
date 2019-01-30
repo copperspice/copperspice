@@ -33,36 +33,36 @@ class QSurfacePrivate;
 
 class Q_GUI_EXPORT QSurface
 {
-public:
-    enum SurfaceClass {
-        Window,
-        Offscreen
-    };
+ public:
+   enum SurfaceClass {
+      Window,
+      Offscreen
+   };
 
-    enum SurfaceType {
-        RasterSurface,
-        OpenGLSurface,
-        RasterGLSurface
-    };
+   enum SurfaceType {
+      RasterSurface,
+      OpenGLSurface,
+      RasterGLSurface
+   };
 
-    virtual ~QSurface();
+   virtual ~QSurface();
 
-    SurfaceClass surfaceClass() const;
+   SurfaceClass surfaceClass() const;
 
-    virtual QSurfaceFormat format() const = 0;
-    virtual QPlatformSurface *surfaceHandle() const = 0;
+   virtual QSurfaceFormat format() const = 0;
+   virtual QPlatformSurface *surfaceHandle() const = 0;
 
-    virtual SurfaceType surfaceType() const = 0;
-    bool supportsOpenGL() const;
+   virtual SurfaceType surfaceType() const = 0;
+   bool supportsOpenGL() const;
 
-    virtual QSize size() const = 0;
+   virtual QSize size() const = 0;
 
-protected:
-    explicit QSurface(SurfaceClass type);
+ protected:
+   explicit QSurface(SurfaceClass type);
 
-    SurfaceClass m_type;
+   SurfaceClass m_type;
 
-    QSurfacePrivate *m_reserved;
+   QSurfacePrivate *m_reserved;
 };
 
 #endif

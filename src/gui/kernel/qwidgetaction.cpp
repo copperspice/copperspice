@@ -26,8 +26,6 @@
 #ifndef QT_NO_ACTION
 #include <qwidgetaction_p.h>
 
-QT_BEGIN_NAMESPACE
-
 QWidgetAction::QWidgetAction(QObject *parent)
    : QAction(*(new QWidgetActionPrivate), parent)
 {
@@ -38,7 +36,7 @@ QWidgetAction::~QWidgetAction()
    Q_D(QWidgetAction);
    for (int i = 0; i < d->createdWidgets.count(); ++i)
       disconnect(d->createdWidgets.at(i), SIGNAL(destroyed(QObject *)),
-                 this, SLOT(_q_widgetDestroyed(QObject *)));
+         this, SLOT(_q_widgetDestroyed(QObject *)));
    QList<QWidget *> widgetsToDelete = d->createdWidgets;
    d->createdWidgets.clear();
    qDeleteAll(widgetsToDelete);
@@ -99,7 +97,7 @@ QWidget *QWidgetAction::requestWidget(QWidget *parent)
    }
 
    connect(w, SIGNAL(destroyed(QObject *)),
-           this, SLOT(_q_widgetDestroyed(QObject *)));
+      this, SLOT(_q_widgetDestroyed(QObject *)));
    d->createdWidgets.append(w);
    return w;
 }
@@ -128,7 +126,7 @@ void QWidgetAction::releaseWidget(QWidget *widget)
    }
 
    disconnect(widget, SIGNAL(destroyed(QObject *)),
-              this, SLOT(_q_widgetDestroyed(QObject *)));
+      this, SLOT(_q_widgetDestroyed(QObject *)));
    d->createdWidgets.removeAll(widget);
    deleteWidget(widget);
 }
@@ -202,7 +200,5 @@ void QWidgetAction::_q_widgetDestroyed(QObject *un_named_arg1)
    Q_D(QWidgetAction);
    d->_q_widgetDestroyed(un_named_arg1);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACTION

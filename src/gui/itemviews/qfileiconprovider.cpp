@@ -42,8 +42,6 @@
 #  include <qgtkstyle_p.h>
 #endif
 
-Q_DECLARE_METATYPE(QList<int>)
-
 static bool isCacheable(const QFileInfo &fi);
 
 class QFileIconEngine : public QPixmapIconEngine

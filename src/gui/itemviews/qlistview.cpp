@@ -3304,8 +3304,7 @@ void QListView::currentChanged(const QModelIndex &current, const QModelIndex &pr
 /*!
   \reimp
 */
-void QListView::selectionChanged(const QItemSelection &selected,
-   const QItemSelection &deselected)
+void QListView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
 #ifndef QT_NO_ACCESSIBILITY
    if (QAccessible::isActive()) {
@@ -3346,6 +3345,7 @@ int QListView::visualIndex(const QModelIndex &index) const
       return visualIndex;
    }
 }
+
 QSize QListView::viewportSizeHint() const
 {
    return QAbstractItemView::viewportSizeHint();

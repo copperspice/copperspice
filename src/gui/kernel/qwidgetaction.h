@@ -23,9 +23,9 @@
 #ifndef QWIDGETACTION_H
 #define QWIDGETACTION_H
 
-#include <QtGui/qaction.h>
+#include <qaction.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_ACTION
 
@@ -56,7 +56,7 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
  private:
    Q_DISABLE_COPY(QWidgetAction)
 
-   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *obj))
    GUI_CS_SLOT_2(_q_widgetDestroyed)
 
    friend class QToolBar;
@@ -64,6 +64,6 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
 
 #endif // QT_NO_ACTION
 
-QT_END_NAMESPACE
+
 
 #endif // QWIDGETACTION_H
