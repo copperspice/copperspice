@@ -44,10 +44,7 @@ GUI_PUBLIC_INCLUDES += \
 	QLayout \
 	QLayoutItem \
 	QLayoutIterator \
-	QMacMime \
-	QMacPasteboardMime \
 	QMenubarUpdatedEvent \
-	QMimeSource \
 	QMouseEvent \
 	QMoveEvent \
 	QOffscreenSurface \
@@ -67,7 +64,6 @@ GUI_PUBLIC_INCLUDES += \
 	QShortcutEvent \
 	QShowEvent \
 	QSizePolicy \
-	QSound \
 	QSpacerItem \
 	QStackedLayout \
 	QStatusTipEvent \
@@ -98,7 +94,6 @@ GUI_PUBLIC_INCLUDES += \
 	QWindow \
 	QWindowStateChangeEvent \
 	QWindowSystemInterface \
-	QWindowsMime \
 	QtGui
 
 GUI_KERNEL_INCLUDES = \
@@ -145,12 +140,7 @@ GUI_KERNEL_INCLUDES = \
 	qlayout.h \
 	qlayoutitem.h \
 	qlayoutiterator.h \
-	qmacdefines_mac.h \
-	qmacmime.h \
-	qmacpasteboardmime.h \
 	qmenubarupdatedevent.h \
-	qmime.h \
-	qmimesource.h \
 	qmouseevent.h \
 	qmoveevent.h \
 	qoffscreensurface.h \
@@ -170,7 +160,6 @@ GUI_KERNEL_INCLUDES = \
 	qshortcutevent.h \
 	qshowevent.h \
 	qsizepolicy.h \
-	qsound.h \
 	qspaceritem.h \
 	qstackedlayout.h \
 	qstatustipevent.h \
@@ -202,7 +191,6 @@ GUI_KERNEL_INCLUDES = \
 	qwindow.h \
 	qwindowdefs.h \
 	qwindowdefs_win.h \
-	qwindowsmime.h \
 	qwindowstatechangeevent.h \
 	qwindowsysteminterface.h \
 	cs_carbon_wrapper.h \
@@ -213,43 +201,20 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qaction_p.h \
 	qapplication_p.h \
 	qguiapplication_p.h \
-	qclipboard_p.h \
-	qcocoaapplication_mac_p.h \
-	qcocoaapplicationdelegate_mac_p.h \
-	qcocoaintrospection_p.h \
-	qcocoamenuloader_mac_p.h \
-	qcocoapanel_mac_p.h \
-	qcocoasharedwindowmethods_mac_p.h \
-	qcocoaview_mac_p.h \
-	qcocoawindow_mac_p.h \
-	qcocoawindowdelegate_mac_p.h \
-	qcocoawindowcustomthemeframe_mac_p.h \
 	qcursor_p.h \
 	qdesktopwidget_p.h \
-	qdesktopwidget_mac_p.h \
 	qdnd_p.h \
 	qevent_p.h \
-	qeventdispatcher_glib_qpa_p.h \
-	qeventdispatcher_mac_p.h \
-	qeventdispatcher_x11_p.h \
 	qgesture_p.h \
 	qgesturemanager_p.h \
-	qguieventdispatcher_glib_p.h \
-	qguiplatformplugin_p.h \
 	qhexstring_p.h \
 	qhighdpiscaling_p.h \
 	qinputdevicemanager_p.h \
 	qinputmethod_p.h \
-	qkde_p.h \
 	qkeymapper_p.h \
 	qkeysequence_p.h \
 	qlayout_p.h \
 	qlayoutengine_p.h \
-	qnsthemeframe_mac_p.h \
-	qnstitledframe_mac_p.h \
-	qnsframeview_mac_p.h \
-	qmacgesturerecognizer_p.h \
-	qmultitouch_mac_p.h \
 	qopenglcontext_p.h \
 	qpaintdevicewindow_p.h \
 	qscreen_p.h \
@@ -257,18 +222,16 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qsimpledrag_p.h \
 	qsessionmanager_p.h \
 	qshortcutmap_p.h \
-	qsound_p.h \
 	qstandardgestures_p.h \
 	qtouchdevice_p.h \
-	qt_cocoa_helpers_mac_p.h \
-	qt_x11_p.h \
-	qt_mac_p.h \
 	qwidget_p.h \
 	qwidgetaction_p.h \
+	qwidgetwindow_p.h \
 	qwindow_p.h \
 	qwindowcontainer_p.h \
 	qwindowsysteminterface_p.h \
-	cs_carbon_wrapper_p.h
+	cs_carbon_wrapper_p.h \
+	cs_mac_p.h
 
 
 GUI_INCLUDES += $(GUI_KERNEL_INCLUDES)
@@ -281,6 +244,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qaction.cpp \
 	src/gui/kernel/qactiongroup.cpp \
 	src/gui/kernel/qapplication.cpp \
+	src/gui/kernel/qapplication_cs.cpp \
 	src/gui/kernel/qboxlayout.cpp \
 	src/gui/kernel/qclipboard.cpp \
 	src/gui/kernel/qcursor.cpp \
@@ -289,6 +253,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qdesktopwidget.cpp \
 	src/gui/kernel/qevent.cpp \
 	src/gui/kernel/qformlayout.cpp \
+	src/gui/kernel/qgenericplugin.cpp \
+	src/gui/kernel/qgenericpluginfactory.cpp \
 	src/gui/kernel/qgesture.cpp \
 	src/gui/kernel/qgesturerecognizer.cpp \
 	src/gui/kernel/qgesturemanager.cpp \
@@ -302,18 +268,19 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qlayout.cpp \
 	src/gui/kernel/qlayoutengine.cpp \
 	src/gui/kernel/qlayoutitem.cpp \
-	src/gui/kernel/qmime.cpp \
 	src/gui/kernel/qoffscreensurface.cpp \
 	src/gui/kernel/qopenglcontext.cpp \
 	src/gui/kernel/qopenglwindow.cpp \
 	src/gui/kernel/qpaintdevicewindow.cpp \
 	src/gui/kernel/qpalette.cpp \
 	src/gui/kernel/qrasterwindow.cpp \
+	src/gui/kernel/qsessionmanager.cpp \
 	src/gui/kernel/qsimpledrag.cpp \
 	src/gui/kernel/qshapedpixmapdndwindow.cpp \
 	src/gui/kernel/qscreen.cpp \
 	src/gui/kernel/qshortcut.cpp \
 	src/gui/kernel/qshortcutmap.cpp \
+	src/gui/kernel/qsizepolicy.cpp \
 	src/gui/kernel/qstackedlayout.cpp \
 	src/gui/kernel/qstandardgestures.cpp \
 	src/gui/kernel/qstylehints.cpp \
@@ -325,71 +292,24 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qwidget.cpp \
 	src/gui/kernel/qwidgetaction.cpp \
 	src/gui/kernel/qwindow.cpp \
+	src/gui/kernel/qwidgetwindow.cpp \
 	src/gui/kernel/qwindowsysteminterface.cpp \
 	src/gui/kernel/qwindowcontainer.cpp \
-	src/gui/kernel/qguiplatformplugin.cpp \
-	src/gui/kernel/qsound.cpp \
 	src/gui/kernel/qpixelformat.cpp
 
 EXTRA_DIST+= \
 	src/3rdparty/wintab/wintab.h \
-	src/3rdparty/wintab/pktdef.h \
-	src/gui/kernel/qguieventdispatcher_glib.cpp \
-	src/gui/kernel/qkeymapper_x11_p.cpp
+	src/3rdparty/wintab/pktdef.h
+
 
 if OSTYPE_WIN
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/kernel/qclipboard_win.cpp \
-	src/gui/kernel/qcursor_win.cpp \
-	src/gui/kernel/qdesktopwidget_win.cpp \
-	src/gui/kernel/qdnd_win.cpp \
-	src/gui/kernel/qmime_win.cpp \
-	src/gui/kernel/qsound_win.cpp \
-	src/gui/kernel/qole_win.cpp \
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_DIRECTDRAW
 endif
 
-if X11
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/kernel/qapplication_x11.cpp \
-	src/gui/kernel/qclipboard_x11.cpp \
-	src/gui/kernel/qcursor_x11.cpp \
-	src/gui/kernel/qdnd_x11.cpp \
-	src/gui/kernel/qdesktopwidget_x11.cpp \
-	src/gui/kernel/qmotifdnd_x11.cpp \
-	src/gui/kernel/qsound_x11.cpp \
-	src/gui/kernel/qwidgetcreate_x11.cpp \
-	src/gui/kernel/qkeymapper_x11.cpp \
-	src/gui/kernel/qkde.cpp \
-	src/gui/kernel/qeventdispatcher_x11.cpp \
-	src/gui/kernel/qguieventdispatcher_glib.cpp
-endif
 
 if COCOA
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/kernel/qclipboard_mac.cpp \
-	src/gui/kernel/qmime_mac.cpp \
-	src/gui/kernel/qt_mac.cpp \
-	src/gui/kernel/qkeymapper_mac.cpp \
-	src/gui/kernel/qcursor_mac.mm \
-	src/gui/kernel/qdnd_mac.mm \
-	src/gui/kernel/qsound_mac.mm \
-	src/gui/kernel/qapplication_mac.mm \
-	src/gui/kernel/qwidget_mac.mm \
-	src/gui/kernel/qcocoapanel_mac.mm \
-	src/gui/kernel/qcocoaview_mac.mm \
-	src/gui/kernel/qcocoawindow_mac.mm \
-	src/gui/kernel/qcocoawindowdelegate_mac.mm \
-	src/gui/kernel/qcocoamenuloader_mac.mm \
-	src/gui/kernel/qcocoaapplication_mac.mm \
-	src/gui/kernel/qcocoaapplicationdelegate_mac.mm \
-	src/gui/kernel/qt_cocoa_helpers_mac.mm \
-	src/gui/kernel/qdesktopwidget_mac.mm \
-	src/gui/kernel/qeventdispatcher_mac.mm \
-	src/gui/kernel/qcocoawindowcustomthemeframe_mac.mm \
-	src/gui/kernel/qmacgesturerecognizer_mac.mm \
-	src/gui/kernel/qmultitouch_mac.mm \
-	src/gui/kernel/qcocoaintrospection_mac.mm \
+	src/gui/kernel/qmacgesturerecognizer.cpp \
 	src/gui/kernel/cs_carbon_wrapper.mm
 
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -framework AppKit

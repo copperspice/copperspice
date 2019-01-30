@@ -43,10 +43,7 @@ set(GUI_PUBLIC_INCLUDES
     QLayout
     QLayoutItem
     QLayoutIterator
-    QMacMime
-    QMacPasteboardMime
     QMenubarUpdatedEvent
-    QMimeSource
     QMouseEvent
     QMoveEvent
     QOffscreenSurface
@@ -66,7 +63,6 @@ set(GUI_PUBLIC_INCLUDES
     QShortcutEvent
     QShowEvent
     QSizePolicy
-    QSound
     QSpacerItem
     QStackedLayout
     QStatusTipEvent
@@ -97,7 +93,6 @@ set(GUI_PUBLIC_INCLUDES
     QWindow
     QWindowStateChangeEvent
     QWindowSystemInterface
-    QWindowsMime
     QtGui
 )
 
@@ -146,12 +141,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutiterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacdefines_mac.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacmime.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacpasteboardmime.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmenubarupdatedevent.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmimesource.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmouseevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmoveevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.h
@@ -171,7 +161,6 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshowevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsizepolicy.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qspaceritem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstackedlayout.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstatustipevent.h
@@ -203,7 +192,6 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowdefs.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowdefs_win.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsmime.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowstatechangeevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper.h
@@ -215,43 +203,20 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qaction_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiapplication_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplication_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplicationdelegate_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaintrospection_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoamenuloader_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoapanel_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoasharedwindowmethods_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaview_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindow_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowdelegate_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowcustomthemeframe_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib_qpa_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturemanager_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguieventdispatcher_glib_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhexstring_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputdevicemanager_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkde_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutengine_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnsthemeframe_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnstitledframe_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnsframeview_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultitouch_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen_p.h
@@ -259,17 +224,16 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsimpledrag_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_cocoa_helpers_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetwindow_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowcontainer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_mac_p.h
 )
 
 set(GUI_SOURCES
@@ -277,6 +241,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qactiongroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_cs.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qboxlayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor.cpp
@@ -285,6 +250,8 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qformlayout.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturemanager.cpp
@@ -298,14 +265,15 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpalette.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qrasterwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsimpledrag.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsizepolicy.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshapedpixmapdndwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcut.cpp
@@ -320,71 +288,20 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthis.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowcontainer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpixelformat.cpp
 )
 
-if(X11_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmotifdnd_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetcreate_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkde.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguieventdispatcher_glib.cpp
-    )
-endif()
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qole_win.cpp
-    )
     add_definitions(-DQT_NO_DIRECTDRAW)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoapanel_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaview_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindow_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowdelegate_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoamenuloader_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplication_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplicationdelegate_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_cocoa_helpers_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowcustomthemeframe_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultitouch_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaintrospection_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper.mm
     )
     set(EXTRA_GUI_LDFLAGS
