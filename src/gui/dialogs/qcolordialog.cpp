@@ -2256,14 +2256,6 @@ void QColorDialog::_q_updateColorPicking()
    d->_q_updateColorPicking();
 }
 
-#if defined(Q_OS_MAC)
-void QColorDialog::_q_macRunNativeAppModalPanel()
-{
-   Q_D(QColorDialog);
-   d->_q_macRunNativeAppModalPanel();
-}
-#endif
-
 #endif // QT_NO_COLORDIALOG
 
 

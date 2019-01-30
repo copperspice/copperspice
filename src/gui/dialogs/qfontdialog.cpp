@@ -46,8 +46,6 @@
 #include <qdialog_p.h>
 #include <qfont_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFontListView : public QListView
 {
    GUI_CS_OBJECT(QFontListView)
@@ -949,15 +947,5 @@ void QFontDialog::_q_updateSample()
    Q_D(QFontDialog);
    d->_q_updateSample();
 }
-
-#if defined(Q_OS_MAC)
-void QFontDialog::_q_macRunNativeAppModalPanel()
-{
-   Q_D(QFontDialog);
-   d->_q_macRunNativeAppModalPanel();
-}
-#endif
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FONTDIALOG

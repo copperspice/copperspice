@@ -1183,14 +1183,14 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
    }
 #endif
 
-
    QMessageBox *msgBox = new QMessageBox(title, text, Information, 0, 0, 0, parent
 
 #ifdef Q_OS_MAC
       , Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
+#else
+      );
 #endif
 
-   );
    msgBox->setAttribute(Qt::WA_DeleteOnClose);
    QIcon icon = msgBox->windowIcon();
    QSize size = icon.actualSize(QSize(64, 64));

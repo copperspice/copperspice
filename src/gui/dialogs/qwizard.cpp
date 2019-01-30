@@ -44,8 +44,7 @@
 #include <qwindow.h>
 
 #if defined(Q_OS_MAC)
-#include <qt_mac_p.h>
-#include <qlibrary.h>
+
 #include <qplatform_nativeinterface.h>
 
 #elif ! defined(QT_NO_STYLE_WINDOWSVISTA)
@@ -168,7 +167,7 @@ static QString changed_signal(int which)
          retval = SLOT(valueChanged(int));
    };
 
-   static_assert(7 == NFallbackDefaultProperties);
+   static_assert(7 == NFallbackDefaultProperties, "Incorrect values");
 
    return retval;
 }
