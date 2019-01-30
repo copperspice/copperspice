@@ -41,8 +41,8 @@ class QAccessibleBridge
    virtual void notifyAccessibilityUpdate(QAccessibleEvent *event) = 0;
 };
 
-
 #define QAccessibleBridgeFactoryInterface_iid "com.copperspice.QAccessibleBridgeFactoryInterface"
+
 class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject
 {
    GUI_CS_OBJECT(QAccessibleBridgePlugin)
@@ -53,7 +53,7 @@ class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject
    virtual QAccessibleBridge *create(const QString &key) = 0;
 };
 
-#endif // QT_NO_ACCESSIBILITY
+#endif
 
 
 

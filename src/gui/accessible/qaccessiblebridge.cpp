@@ -30,7 +30,6 @@ QAccessibleBridgePlugin::QAccessibleBridgePlugin(QObject *parent)
 
 }
 
-
 QAccessibleBridgePlugin::~QAccessibleBridgePlugin()
 {
 
@@ -38,4 +37,4 @@ QAccessibleBridgePlugin::~QAccessibleBridgePlugin()
 
 
 
-#endif // QT_NO_ACCESSIBILITY
+#endif

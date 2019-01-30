@@ -57,6 +57,7 @@ noinst_HEADERS+=$(patsubst %,src/gui/accessible/%,$(GUI_ACCESSIBLE_INCLUDES)) \
 
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/accessible/qaccessible.cpp \
+	src/gui/accessible/qaccessiblebridge.cpp \
 	src/gui/accessible/qaccessiblecache.cpp \
 	src/gui/accessible/qaccessibleobject.cpp \
 	src/gui/accessible/qaccessiblemenu.cpp \
@@ -70,13 +71,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/accessible/qaccessiblewidget_views.cpp
 
 
-if OSTYPE_LINUX
+if OSTYPE_DARWIN
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/accessible/qaccessiblebridge.cpp
+	src/gui/accessible/qaccessiblecache_mac.mm
 endif
-
-if OSTYPE_BSD
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-        src/gui/accessible/qaccessiblebridge.cpp
-endif
-

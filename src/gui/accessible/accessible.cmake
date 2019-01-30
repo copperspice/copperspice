@@ -55,6 +55,7 @@ set(GUI_PRIVATE_INCLUDES
 set(GUI_SOURCES
     ${GUI_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessible.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblebridge.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblecache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblemenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessibleobject.cpp
@@ -68,10 +69,9 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblewidget_views.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblebridge.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblecache_mac.mm
     )
 endif()
-

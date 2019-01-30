@@ -169,12 +169,14 @@ QAccessibleInterface *QAccessible::queryAccessibleInterface(QObject *object)
 
       // Find a QAccessiblePlugin (factory) for the class name. If there's
       // no entry in the cache try to create it using the plugin loader.
+
       if (! qAccessiblePlugins()->contains(cn)) {
          QAccessiblePlugin *factory = 0;                // 0 means "no plugin found". This is cached as well
-         const int index = loader()->indexOf(cn);
 
-         if (index != -1) {
-            factory = qobject_cast<QAccessiblePlugin *>(loader()->instance(index));
+         auto keySet = loader()->keySet();
+
+         if (keySet.contains(cn)) {
+            factory = qobject_cast<QAccessiblePlugin *>(loader()->instance(cn));
          }
 
          qAccessiblePlugins()->insert(cn, factory);
