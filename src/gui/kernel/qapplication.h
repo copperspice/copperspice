@@ -23,69 +23,64 @@
 #ifndef QAPPLICATION_H
 #define QAPPLICATION_H
 
-#if defined(Q_OS_MAC)
-#include <cs_carbon_wrapper.h>
-#endif
-
-#include <QtCore/qcoreapplication.h>
-#include <QtGui/qwindowdefs.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qsize.h>
-#include <QtGui/qcursor.h>
-
-#ifdef Q_WS_QWS
-# include <QtGui/qrgb.h>
-# include <QtGui/qtransportauth_qws.h>
-#endif
-
-#include <QSessionManager>
-#include <QIcon>
-
-QT_BEGIN_NAMESPACE
-
-class QDesktopWidget;
-class QStyle;
-class QEventLoop;
-
-#ifndef QT_NO_IM
-class QInputContext;
-#endif
-
-template <typename T> class QList;
-class QLocale;
-
-#if defined(Q_WS_QWS)
-class QDecoration;
-#elif defined(Q_WS_QPA)
-class QPlatformNativeInterface;
-#endif
+#include <qcoreapplication.h>
+#include <qcursor.h>
+#include <qicon.h>
+#include <qinputmethod.h>
+#include <qlocale.h>
+#include <qpalette.h>
+#include <qpoint.h>
+#include <qsize.h>
+#include <qstring.h>
+#include <qsessionmanager.h>
+#include <qwindowdefs.h>
 
 class QApplication;
 class QApplicationPrivate;
+class QDesktopWidget;
+class QEventLoop;
+class QPlatformNativeInterface;
+class QStyle;
+class QStyleHints;
+class QScreen;
 
 #if defined(qApp)
 #undef qApp
 #endif
 
-#define qApp (static_cast<QApplication *>(QCoreApplication::instance()))
+using QGuiApplication        = QApplication;
+using QGuiApplicationPrivate = QApplicationPrivate;
+
+#define qApp    (static_cast<QApplication *>(QCoreApplication::instance()))
+#define qGuiApp (static_cast<QApplication *>(QCoreApplication::instance()))
 
 class Q_GUI_EXPORT QApplication : public QCoreApplication
 {
    GUI_CS_OBJECT(QApplication)
 
-   GUI_CS_PROPERTY_READ(layoutDirection, cs_layoutDirection)
+   GUI_CS_PROPERTY_READ(applicationDisplayName,  cs_applicationDisplayName)
+   GUI_CS_PROPERTY_WRITE(applicationDisplayName, cs_setApplicationDisplayName)
+
+   GUI_CS_PROPERTY_READ(platformName,   cs_platformName)
+   GUI_CS_PROPERTY_STORED(platformName, false)
+
+   GUI_CS_PROPERTY_READ(primaryScreen,   cs_primaryScreen)
+   GUI_CS_PROPERTY_NOTIFY(primaryScreen, primaryScreenChanged)
+   GUI_CS_PROPERTY_STORED(primaryScreen, false)
+
+   GUI_CS_PROPERTY_READ(layoutDirection,  cs_layoutDirection)
    GUI_CS_PROPERTY_WRITE(layoutDirection, cs_setLayoutDirection)
 
-   GUI_CS_PROPERTY_READ(windowIcon, cs_windowIcon)
+   GUI_CS_PROPERTY_READ(windowIcon,  cs_windowIcon)
    GUI_CS_PROPERTY_WRITE(windowIcon, cs_setWindowIcon)
 
-   GUI_CS_PROPERTY_READ(cursorFlashTime, cs_cursorFlashTime)
+   GUI_CS_PROPERTY_READ(cursorFlashTime,  cs_cursorFlashTime)
    GUI_CS_PROPERTY_WRITE(cursorFlashTime, cs_setCursorFlashTime)
 
-   GUI_CS_PROPERTY_READ(doubleClickInterval, cs_doubleClickInterval)
+   GUI_CS_PROPERTY_READ(doubleClickInterval,  cs_doubleClickInterval)
    GUI_CS_PROPERTY_WRITE(doubleClickInterval, cs_setDoubleClickInterval)
 
-   GUI_CS_PROPERTY_READ(keyboardInputInterval, cs_keyboardInputInterval)
+   GUI_CS_PROPERTY_READ(keyboardInputInterval,  cs_keyboardInputInterval)
    GUI_CS_PROPERTY_WRITE(keyboardInputInterval, cs_setKeyboardInputInterval)
 
 #ifndef QT_NO_WHEELEVENT
@@ -114,20 +109,44 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_PROPERTY_WRITE(autoSipEnabled, setAutoSipEnabled)
 
  public:
-   enum Type { Tty, GuiClient, GuiServer };
+   using FP_Void = void(*)();
 
    QApplication(int &argc, char **argv, int = ApplicationFlags);
-   QApplication(int &argc, char **argv, bool GUIenabled, int = ApplicationFlags);
-   QApplication(int &argc, char **argv, Type, int = ApplicationFlags);
-
-#if defined(Q_WS_X11)
-   QApplication(Display *dpy, Qt::HANDLE visual = 0, Qt::HANDLE cmap = 0, int = ApplicationFlags);
-   QApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE cmap = 0, int = ApplicationFlags);
-#endif
 
    virtual ~QApplication();
 
-   static Type type();
+   static void setApplicationDisplayName(const QString &name);
+   static QString applicationDisplayName();
+
+   // wrapper for static method
+   inline void cs_setApplicationDisplayName(const QString &name);
+
+   // wrapper for static method
+   inline QString cs_applicationDisplayName() const;
+
+   static QWindowList allWindows();
+   static QWindowList topLevelWindows();
+
+   static QWindow *topLevelWindowAt(const QPoint &pos);
+   static QWidget *topLevelWidgetAt(const QPoint &pos);
+
+   static QString platformName();
+
+   // wrapper for static method
+   inline QString cs_platformName() const;
+
+   static QWindow *modalWindow();
+
+   static QWindow *focusWindow();
+   static QObject *focusObject();
+
+   static QScreen *primaryScreen();
+
+   // wrapper for static method
+   inline QScreen *cs_primaryScreen() const;
+
+   static QList<QScreen *> screens();
+   qreal devicePixelRatio() const;
 
    static QStyle *style();
    static void setStyle(QStyle *);
@@ -136,7 +155,6 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    enum ColorSpec { NormalColor = 0, CustomColor = 1, ManyColor = 2 };
    static int colorSpec();
    static void setColorSpec(int);
-   static void setGraphicsSystem(const QString &);
 
 #ifndef QT_NO_CURSOR
    static QCursor *overrideCursor();
@@ -145,18 +163,19 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static void restoreOverrideCursor();
 #endif
 
-   static QPalette palette();
-   static QPalette palette(const QWidget *);
-   static QPalette palette(const QString &className);
-   static void setPalette(const QPalette &, const QString &className = QString());
-
    static QFont font();
    static QFont font(const QWidget *);
    static QFont font(const QString &className);
    static void setFont(const QFont &, const QString &className = QString());
 
+   static QPalette palette();
+   static QPalette palette(const QWidget *);
+   static QPalette palette(const QString &className);
+   static void setPalette(const QPalette &pal, const QString &className = QString());
+
    static QFontMetrics fontMetrics();
 
+   // emerald - may go away
    static void setWindowIcon(const QIcon &icon);
    static QIcon windowIcon();
 
@@ -183,25 +202,17 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static QWidget *activeWindow();
    static void setActiveWindow(QWidget *act);
 
-   static QWidget *widgetAt(const QPoint &p);
+   static QWidget *widgetAt(const QPoint &pos);
+
    static inline QWidget *widgetAt(int x, int y) {
       return widgetAt(QPoint(x, y));
    }
-   static QWidget *topLevelAt(const QPoint &p);
-   static inline QWidget *topLevelAt(int x, int y)  {
-      return topLevelAt(QPoint(x, y));
-   }
-
-   static void syncX();
    static void beep();
    static void alert(QWidget *widget, int duration = 0);
 
    static Qt::KeyboardModifiers keyboardModifiers();
    static Qt::KeyboardModifiers queryKeyboardModifiers();
    static Qt::MouseButtons mouseButtons();
-
-   static void setDesktopSettingsAware(bool);
-   static bool desktopSettingsAware();
 
    static void setCursorFlashTime(int);
    static int cursorFlashTime();
@@ -285,59 +296,34 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
       return layoutDirection() == Qt::LeftToRight;
    }
 
+   static QStyleHints *styleHints();
+   static void setDesktopSettingsAware(bool on);
+   static bool desktopSettingsAware();
+
+   static QInputMethod *inputMethod();
+
+   static QPlatformNativeInterface *platformNativeInterface();
+
+   static FP_Void platformFunction(const QByteArray &function);
+
+   static Qt::ApplicationState applicationState();
+
+   static int exec();
+   bool notify(QObject *, QEvent *) override;
+
    static bool isEffectEnabled(Qt::UIEffect);
    static void setEffectEnabled(Qt::UIEffect, bool enable = true);
-
-#if defined(Q_OS_MAC)
-   virtual bool macEventFilter(EventHandlerCallRef, EventRef);
-#endif
-
-#if defined(Q_WS_X11)
-   virtual bool x11EventFilter(XEvent *);
-   virtual int x11ClientMessage(QWidget *, XEvent *, bool passive_only);
-   int x11ProcessEvent(XEvent *);
-#endif
-
-#if defined(Q_WS_QWS)
-   virtual bool qwsEventFilter(QWSEvent *);
-   int qwsProcessEvent(QWSEvent *);
-   void qwsSetCustomColors(QRgb *colortable, int start, int numColors);
-#ifndef QT_NO_QWS_MANAGER
-   static QDecoration &qwsDecoration();
-   static void qwsSetDecoration(QDecoration *);
-   static QDecoration *qwsSetDecoration(const QString &decoration);
-#endif
-#endif
-
-#if defined(Q_WS_QPA)
-   static QPlatformNativeInterface *platformNativeInterface();
-#endif
-
-
-#if defined(Q_OS_WIN)
-   void winFocus(QWidget *, bool);
-   static void winMouseButtonUp();
-#endif
 
 #ifndef QT_NO_SESSIONMANAGER
    // session management
    bool isSessionRestored() const;
    QString sessionId() const;
    QString sessionKey() const;
-   virtual void commitData(QSessionManager &sm);
-   virtual void saveState(QSessionManager &sm);
+   bool isSavingSession() const;
+
+   static bool isFallbackSessionManagementEnabled();
+   static void setFallbackSessionManagementEnabled(bool);
 #endif
-
-#ifndef QT_NO_IM
-   void setInputContext(QInputContext *);
-   QInputContext *inputContext() const;
-#endif
-
-   static QLocale keyboardInputLocale();
-   static Qt::LayoutDirection keyboardInputDirection();
-
-   static int exec();
-   bool notify(QObject *, QEvent *) override;
 
    static void setQuitOnLastWindowClosed(bool quit);
    static bool quitOnLastWindowClosed();
@@ -348,15 +334,40 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    // wrapper for static method
    inline bool cs_quitOnLastWindowClosed() const;
 
-#ifdef QT_KEYPAD_NAVIGATION
-   static void setNavigationMode(Qt::NavigationMode mode);
-   static Qt::NavigationMode navigationMode();
-#endif
+   static void sync();
+
+   QPixmap cs_internal_applyQIconStyle(QIcon::Mode mode, const QPixmap &basePixmap) const;
+
+   GUI_CS_SIGNAL_1(Public, void screenAdded(QScreen *screen))
+   GUI_CS_SIGNAL_2(screenAdded, screen)
+
+   GUI_CS_SIGNAL_1(Public, void screenRemoved(QScreen *screen))
+   GUI_CS_SIGNAL_2(screenRemoved, screen)
+
+   GUI_CS_SIGNAL_1(Public, void primaryScreenChanged(QScreen *screen))
+   GUI_CS_SIGNAL_2(primaryScreenChanged, screen)
+
+   GUI_CS_SIGNAL_1(Public, void focusObjectChanged(QObject *focusObject))
+   GUI_CS_SIGNAL_2(focusObjectChanged, focusObject)
+
+   GUI_CS_SIGNAL_1(Public, void focusWindowChanged(QWindow *focusWindow))
+   GUI_CS_SIGNAL_2(focusWindowChanged, focusWindow)
+
+   GUI_CS_SIGNAL_1(Public, void applicationStateChanged(Qt::ApplicationState state))
+   GUI_CS_SIGNAL_2(applicationStateChanged, state)
+
+   GUI_CS_SIGNAL_1(Public, void layoutDirectionChanged(Qt::LayoutDirection direction))
+   GUI_CS_SIGNAL_2(layoutDirectionChanged, direction)
+
+   GUI_CS_SIGNAL_1(Public, void paletteChanged(const QPalette &pal))
+   GUI_CS_SIGNAL_2(paletteChanged, pal)
 
    GUI_CS_SIGNAL_1(Public, void lastWindowClosed())
    GUI_CS_SIGNAL_2(lastWindowClosed)
+
    GUI_CS_SIGNAL_1(Public, void focusChanged(QWidget *old, QWidget *now))
    GUI_CS_SIGNAL_2(focusChanged, old, now)
+
    GUI_CS_SIGNAL_1(Public, void fontDatabaseChanged())
    GUI_CS_SIGNAL_2(fontDatabaseChanged)
 
@@ -393,14 +404,10 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_SLOT_2(aboutQt)
 
  protected:
-
-#if defined(Q_WS_QWS)
-   void setArgs(int, char **);
-#endif
-
    bool event(QEvent *) override;
    bool compressEvent(QEvent *, QObject *receiver, QPostEventList *) override;
 
+   QApplication(QApplicationPrivate &p);
  private:
    Q_DISABLE_COPY(QApplication)
    Q_DECLARE_PRIVATE(QApplication)
@@ -411,9 +418,13 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    friend class QGraphicsScenePrivate;
    friend class QWidget;
    friend class QWidgetPrivate;
-   friend class QETWidget;
+   friend class QWidgetWindow;
    friend class QTranslator;
    friend class QWidgetAnimator;
+
+   friend class QAction;
+   friend class QFontDatabasePrivate;
+   friend class QPlatformIntegration;
 
 #ifndef QT_NO_SHORTCUT
    friend class QShortcut;
@@ -421,31 +432,38 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    friend class QTextControl;
 #endif
 
-   friend class QAction;
-   friend class QFontDatabasePrivate;
-
-#if defined(Q_WS_QWS)
-   friend class QInputContext;
-   friend class QWSDirectPainterSurface;
-   friend class QDirectPainter;
-   friend class QDirectPainterPrivate;
-#endif
-
 #ifndef QT_NO_GESTURES
    friend class QGestureManager;
 #endif
 
-#if defined(Q_OS_MAC) || defined(Q_WS_X11)
-   GUI_CS_SLOT_1(Private, void _q_alertTimeOut())
-   GUI_CS_SLOT_2(_q_alertTimeOut)
+#ifndef QT_NO_SESSIONMANAGER
+   friend class QPlatformSessionManager;
 #endif
 
-#if defined(QT_RX71_MULTITOUCH)
-   GUI_CS_SLOT_1(Private, void _q_readRX71MultiTouchEvents())
-   GUI_CS_SLOT_2(_q_readRX71MultiTouchEvents)
-#endif
-
+   GUI_CS_SLOT_1(Private, void _q_updateFocusObject(QObject *object))
+   GUI_CS_SLOT_2(_q_updateFocusObject)
 };
+
+
+void QApplication::cs_setApplicationDisplayName(const QString &name)
+{
+   setApplicationDisplayName(name);
+}
+
+QString QApplication::cs_applicationDisplayName() const
+{
+   return applicationDisplayName();
+}
+
+QString QApplication::cs_platformName() const
+{
+   return platformName();
+}
+
+QScreen *QApplication::cs_primaryScreen() const
+{
+   return primaryScreen();
+}
 
 void QApplication::cs_setWindowIcon(const QIcon &icon)
 {
@@ -549,7 +567,4 @@ Qt::LayoutDirection QApplication::cs_layoutDirection() const
    return layoutDirection();
 }
 
-
-QT_END_NAMESPACE
-
-#endif // QAPPLICATION_H
+#endif
