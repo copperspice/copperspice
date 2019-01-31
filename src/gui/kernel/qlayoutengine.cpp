@@ -20,24 +20,24 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qlayout.h>
 #include <qlayoutengine_p.h>
 #include <qvector.h>
 #include <qwidget.h>
-#include <qlist.h>
+#include <qvarlengtharray.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
+#include <algorithm>
 
 //#define QLAYOUT_EXTRA_DEBUG
 
 typedef qint64 Fixed64;
+
 static inline Fixed64 toFixed(int i)
 {
    return (Fixed64)i * 256;
 }
+
 static inline int fRound(Fixed64 i)
 {
    return (i % 256 < 128) ? i / 256 : 1 + i / 256;
@@ -116,10 +116,11 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
          sumSpacing = spacer * spacerCount;
       }
 
-      QList<int> list;
+      QVector<int> list;
+      list.reserve(count);
 
       for (i = start; i < start + count; i++) {
-         list << chain.at(i).minimumSize;
+         list.append(chain.at(i).minimumSize);
       }
 
       std::sort(list.begin(), list.end());
@@ -237,7 +238,7 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
          QLayoutStruct *data = &chain[i];
 
          if (! data->done && (data->maximumSize <= data->smartSizeHint()
-                   || (!allEmptyNonstretch && data->empty && !data->expansive && data->stretch == 0))) {
+               || (!allEmptyNonstretch && data->empty && !data->expansive && data->stretch == 0))) {
             data->size = data->smartSizeHint();
             data->done = true;
             space_left -= data->size;
@@ -361,20 +362,20 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
 
 #ifdef QLAYOUT_EXTRA_DEBUG
    qDebug() << "qGeomCalc" << "start" << start <<  "count" << count <<  "pos" << pos
-            <<  "space" << space <<  "spacer" << spacer;
+      <<  "space" << space <<  "spacer" << spacer;
    for (i = start; i < start + count; ++i) {
       qDebug() << i << ':' << chain[i].minimumSize << chain[i].smartSizeHint()
-               << chain[i].maximumSize << "stretch" << chain[i].stretch
-               << "empty" << chain[i].empty << "expansive" << chain[i].expansive
-               << "spacing" << chain[i].spacing;
+         << chain[i].maximumSize << "stretch" << chain[i].stretch
+         << "empty" << chain[i].empty << "expansive" << chain[i].expansive
+         << "spacing" << chain[i].spacing;
       qDebug() << "result pos" << chain[i].pos << "size" << chain[i].size;
    }
 #endif
 }
 
 Q_GUI_EXPORT QSize qSmartMinSize(const QSize &sizeHint, const QSize &minSizeHint,
-                                 const QSize &minSize, const QSize &maxSize,
-                                 const QSizePolicy &sizePolicy)
+   const QSize &minSize, const QSize &maxSize,
+   const QSizePolicy &sizePolicy)
 {
    QSize s(0, 0);
 
@@ -407,26 +408,27 @@ Q_GUI_EXPORT QSize qSmartMinSize(const QSize &sizeHint, const QSize &minSizeHint
 
 Q_GUI_EXPORT QSize qSmartMinSize(const QWidgetItem *i)
 {
-   QWidget *w = ((QWidgetItem *)i)->widget();
+   QWidget *w = const_cast<QWidgetItem *>(i)->widget();
    return qSmartMinSize(w->sizeHint(), w->minimumSizeHint(),
-                        w->minimumSize(), w->maximumSize(),
-                        w->sizePolicy());
+         w->minimumSize(), w->maximumSize(),
+         w->sizePolicy());
 }
 
 Q_GUI_EXPORT QSize qSmartMinSize(const QWidget *w)
 {
    return qSmartMinSize(w->sizeHint(), w->minimumSizeHint(),
-                        w->minimumSize(), w->maximumSize(),
-                        w->sizePolicy());
+         w->minimumSize(), w->maximumSize(),
+         w->sizePolicy());
 }
 
 Q_GUI_EXPORT QSize qSmartMaxSize(const QSize &sizeHint,
-                                 const QSize &minSize, const QSize &maxSize,
-                                 const QSizePolicy &sizePolicy, Qt::Alignment align)
+   const QSize &minSize, const QSize &maxSize,
+   const QSizePolicy &sizePolicy, Qt::Alignment align)
 {
    if (align & Qt::AlignHorizontal_Mask && align & Qt::AlignVertical_Mask) {
       return QSize(QLAYOUTSIZE_MAX, QLAYOUTSIZE_MAX);
    }
+
    QSize s = maxSize;
    QSize hint = sizeHint.expandedTo(minSize);
    if (s.width() == QWIDGETSIZE_MAX && !(align & Qt::AlignHorizontal_Mask))
@@ -450,16 +452,16 @@ Q_GUI_EXPORT QSize qSmartMaxSize(const QSize &sizeHint,
 
 Q_GUI_EXPORT QSize qSmartMaxSize(const QWidgetItem *i, Qt::Alignment align)
 {
-   QWidget *w = ((QWidgetItem *)i)->widget();
+   QWidget *w = const_cast<QWidgetItem *>(i)->widget();
 
    return qSmartMaxSize(w->sizeHint().expandedTo(w->minimumSizeHint()), w->minimumSize(), w->maximumSize(),
-                        w->sizePolicy(), align);
+         w->sizePolicy(), align);
 }
 
 Q_GUI_EXPORT QSize qSmartMaxSize(const QWidget *w, Qt::Alignment align)
 {
    return qSmartMaxSize(w->sizeHint().expandedTo(w->minimumSizeHint()), w->minimumSize(), w->maximumSize(),
-                        w->sizePolicy(), align);
+         w->sizePolicy(), align);
 }
 
 Q_GUI_EXPORT int qSmartSpacing(const QLayout *layout, QStyle::PixelMetric pm)
@@ -474,5 +476,3 @@ Q_GUI_EXPORT int qSmartSpacing(const QLayout *layout, QStyle::PixelMetric pm)
       return static_cast<QLayout *>(parent)->spacing();
    }
 }
-
-QT_END_NAMESPACE

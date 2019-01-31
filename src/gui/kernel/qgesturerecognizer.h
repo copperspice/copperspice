@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
-
 class QObject;
 class QEvent;
 class QGesture;
@@ -61,7 +59,7 @@ class Q_GUI_EXPORT QGestureRecognizer
 
    virtual QGesture *create(QObject *target);
    virtual Result recognize(QGesture *state, QObject *watched,
-                            QEvent *event) = 0;
+      QEvent *event) = 0;
    virtual void reset(QGesture *state);
 
    static Qt::GestureType registerRecognizer(QGestureRecognizer *recognizer);
@@ -69,8 +67,6 @@ class Q_GUI_EXPORT QGestureRecognizer
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGestureRecognizer::Result)
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_GESTURES
 

@@ -23,12 +23,11 @@
 #ifndef QCURSOR_H
 #define QCURSOR_H
 
-#include <QtCore/qpoint.h>
-#include <QtGui/qwindowdefs.h>
-
-QT_BEGIN_NAMESPACE
+#include <qpoint.h>
+#include <qwindowdefs.h>
 
 class QVariant;
+class QScreen;
 
 #ifdef QT_NO_CURSOR
 // fake class, used on touchscreen devices
@@ -37,7 +36,12 @@ class Q_GUI_EXPORT QCursor
 {
  public:
    static QPoint pos();
+   static QPoint pos(const QScreen *screen);
+
    static void setPos(int x, int y);
+
+   static void setPos(QScreen *screen, int x, int y);
+
    inline static void setPos(const QPoint &p) {
       setPos(p.x(), p.y());
    }
@@ -55,10 +59,6 @@ class QCursorData;
 class QBitmap;
 class QPixmap;
 
-#if defined(Q_OS_MAC)
-void qt_mac_set_cursor(const QCursor *c);
-#endif
-
 class Q_GUI_EXPORT QCursor
 {
  public:
@@ -67,11 +67,16 @@ class Q_GUI_EXPORT QCursor
    QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX = -1, int hotY = -1);
    QCursor(const QPixmap &pixmap, int hotX = -1, int hotY = -1);
    QCursor(const QCursor &cursor);
+
+   QCursor(QCursor &&other) : d(other.d) {
+      other.d = nullptr;
+   }
+
    ~QCursor();
 
    QCursor &operator=(const QCursor &cursor);
 
-   inline QCursor &operator=(QCursor && other) {
+   inline QCursor &operator=(QCursor &&other) {
       qSwap(d, other.d);
       return *this;
    }
@@ -87,44 +92,29 @@ class Q_GUI_EXPORT QCursor
    QPoint hotSpot() const;
 
    static QPoint pos();
+   static QPoint pos(const QScreen *screen);
    static void setPos(int x, int y);
+
+   static void setPos(QScreen *screen, int x, int y);
+
    inline static void setPos(const QPoint &p) {
       setPos(p.x(), p.y());
    }
 
-#if defined(Q_OS_WIN)
-   HCURSOR handle() const;
-   QCursor(HCURSOR cursor);
-
-#elif defined(Q_WS_X11)
-   Qt::HANDLE handle() const;
-   QCursor(Qt::HANDLE cursor);
-   static int x11Screen();
-
-#elif defined(Q_OS_MAC)
-   Qt::HANDLE handle() const;
-
-#elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
-   int handle() const;
-
-#endif
-
-
+   inline static void setPos(QScreen *screen, const QPoint &p) {
+      setPos(screen, p.x(), p.y());
+   }
  private:
    QCursorData *d;
-#if defined(Q_OS_MAC)
-   friend void *qt_mac_nsCursorForQCursor(const QCursor &c);
-   friend void qt_mac_set_cursor(const QCursor *c);
-   friend void qt_mac_updateCursorWithWidgetUnderMouse(QWidget *widgetUnderMouse);
-#endif
+
 };
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &outS, const QCursor &cursor);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &inS, QCursor &cursor);
-#endif
+
 #endif // QT_NO_CURSOR
 
-QT_END_NAMESPACE
 
-#endif // QCURSOR_H
+
+#endif

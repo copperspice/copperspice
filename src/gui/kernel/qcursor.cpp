@@ -21,15 +21,54 @@
 ***********************************************************************/
 
 #include <qcursor.h>
-
-#ifndef QT_NO_CURSOR
-
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qimage.h>
 #include <qdatastream.h>
 #include <qvariant.h>
+#include <qdebug.h>
+#include <qplatform_cursor.h>
+
 #include <qcursor_p.h>
+#include <qguiapplication_p.h>
+#include <qhighdpiscaling_p.h>
+
+QPoint QCursor::pos(const QScreen *screen)
+{
+   if (screen) {
+      if (const QPlatformCursor *cursor = screen->handle()->cursor()) {
+         const QPlatformScreen *ps = screen->handle();
+         QPoint nativePos = cursor->pos();
+         ps = ps->screenForPosition(nativePos);
+         return QHighDpi::fromNativePixels(nativePos, ps->screen());
+      }
+   }
+   return QGuiApplicationPrivate::lastCursorPosition.toPoint();
+}
+
+QPoint QCursor::pos()
+{
+   return QCursor::pos(QGuiApplication::primaryScreen());
+}
+
+void QCursor::setPos(QScreen *screen, int x, int y)
+{
+   if (screen) {
+      if (QPlatformCursor *cursor = screen->handle()->cursor()) {
+         const QPoint devicePos = QHighDpi::toNativePixels(QPoint(x, y), screen);
+         if (devicePos != cursor->pos()) {
+            cursor->setPos(devicePos);
+         }
+      }
+   }
+}
+
+void QCursor::setPos(int x, int y)
+{
+   QCursor::setPos(QGuiApplication::primaryScreen(), x, y);
+}
+
+#ifndef QT_NO_CURSOR
 
 QDataStream &operator<<(QDataStream &s, const QCursor &c)
 {
@@ -75,7 +114,7 @@ QDataStream &operator>>(QDataStream &s, QCursor &c)
       }
 
    } else {
-      c.setShape((Qt::CursorShape)shape);                // create cursor with shape
+      c.setShape((Qt::CursorShape)shape);          // create cursor with shape
    }
 
    return s;
@@ -87,68 +126,34 @@ QCursor::QCursor(const QPixmap &pixmap, int hotX, int hotY)
    QImage img = pixmap.toImage().convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither | Qt::AvoidDither);
    QBitmap bm = QBitmap::fromImage(img, Qt::ThresholdDither | Qt::AvoidDither);
    QBitmap bmm = pixmap.mask();
+
    if (!bmm.isNull()) {
       QBitmap nullBm;
       bm.setMask(nullBm);
+
    } else if (!pixmap.mask().isNull()) {
       QImage mimg = pixmap.mask().toImage().convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither | Qt::AvoidDither);
       bmm = QBitmap::fromImage(mimg, Qt::ThresholdDither | Qt::AvoidDither);
+
    } else {
       bmm = QBitmap(bm.size());
       bmm.fill(Qt::color1);
    }
 
-   d = QCursorData::setBitmap(bm, bmm, hotX, hotY);
+   d = QCursorData::setBitmap(bm, bmm, hotX, hotY, pixmap.devicePixelRatio());
    d->pixmap = pixmap;
 }
 
 QCursor::QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY)
    : d(0)
 {
-   d = QCursorData::setBitmap(bitmap, mask, hotX, hotY);
+   d = QCursorData::setBitmap(bitmap, mask, hotX, hotY, 1.0);
 }
 
-QCursorData *qt_cursorTable[Qt::LastCursor + 1];
-bool QCursorData::initialized = false;
-
-/*! \internal */
-void QCursorData::cleanup()
-{
-   if (!QCursorData::initialized) {
-      return;
-   }
-
-   for (int shape = 0; shape <= Qt::LastCursor; ++shape) {
-      // In case someone has a static QCursor defined with this shape
-      if (!qt_cursorTable[shape]->ref.deref()) {
-         delete qt_cursorTable[shape];
-      }
-      qt_cursorTable[shape] = 0;
-   }
-   QCursorData::initialized = false;
-}
-
-/*! \internal */
-void QCursorData::initialize()
-{
-   if (QCursorData::initialized) {
-      return;
-   }
-
-   for (int shape = 0; shape <= Qt::LastCursor; ++shape) {
-      qt_cursorTable[shape] = new QCursorData((Qt::CursorShape)shape);
-   }
-
-   QCursorData::initialized = true;
-}
-
-/*!
-    Constructs a cursor with the default arrow shape.
-*/
 QCursor::QCursor()
 {
    if (!QCursorData::initialized) {
-      if (QApplication::startingUp()) {
+      if (QCoreApplication::startingUp()) {
          d = 0;
          return;
       }
@@ -159,29 +164,16 @@ QCursor::QCursor()
    d = c;
 }
 
-/*!
-    Constructs a cursor with the specified \a shape.
-
-    See \l Qt::CursorShape for a list of shapes.
-
-    \sa setShape()
-*/
 QCursor::QCursor(Qt::CursorShape shape)
    : d(0)
 {
    if (!QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    setShape(shape);
 }
 
-
-/*!
-    Returns the cursor shape identifier. The return value is one of
-    the \l Qt::CursorShape enum values (cast to an int).
-
-    \sa setShape()
-*/
 Qt::CursorShape QCursor::shape() const
 {
    if (!QCursorData::initialized) {
@@ -190,19 +182,14 @@ Qt::CursorShape QCursor::shape() const
    return d->cshape;
 }
 
-/*!
-    Sets the cursor to the shape identified by \a shape.
-
-    See \l Qt::CursorShape for the list of cursor shapes.
-
-    \sa shape()
-*/
 void QCursor::setShape(Qt::CursorShape shape)
 {
    if (!QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    QCursorData *c = uint(shape) <= Qt::LastCursor ? qt_cursorTable[shape] : 0;
+
    if (!c) {
       c = qt_cursorTable[0];
    }
@@ -217,10 +204,6 @@ void QCursor::setShape(Qt::CursorShape shape)
    }
 }
 
-/*!
-    Returns the cursor bitmap, or 0 if it is one of the standard
-    cursors.
-*/
 const QBitmap *QCursor::bitmap() const
 {
    if (!QCursorData::initialized) {
@@ -228,11 +211,6 @@ const QBitmap *QCursor::bitmap() const
    }
    return d->bm;
 }
-
-/*!
-    Returns the cursor bitmap mask, or 0 if it is one of the standard
-    cursors.
-*/
 
 const QBitmap *QCursor::mask() const
 {
@@ -255,11 +233,6 @@ QPixmap QCursor::pixmap() const
    return d->pixmap;
 }
 
-/*!
-    Returns the cursor hot spot, or (0, 0) if it is one of the
-    standard cursors.
-*/
-
 QPoint QCursor::hotSpot() const
 {
    if (!QCursorData::initialized) {
@@ -268,22 +241,15 @@ QPoint QCursor::hotSpot() const
    return QPoint(d->hx, d->hy);
 }
 
-/*!
-    Constructs a copy of the cursor \a c.
-*/
-
 QCursor::QCursor(const QCursor &c)
 {
    if (!QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    d = c.d;
    d->ref.ref();
 }
-
-/*!
-    Destroys the cursor.
-*/
 
 QCursor::~QCursor()
 {
@@ -291,12 +257,6 @@ QCursor::~QCursor()
       delete d;
    }
 }
-
-
-/*!
-    Assigns \a c to this cursor and returns a reference to this
-    cursor.
-*/
 
 QCursor &QCursor::operator=(const QCursor &c)
 {
@@ -313,13 +273,83 @@ QCursor &QCursor::operator=(const QCursor &c)
    return *this;
 }
 
-/*!
-   Returns the cursor as a QVariant.
-*/
+
+
 QCursor::operator QVariant() const
 {
    return QVariant(QVariant::Cursor, this);
 }
-QT_END_NAMESPACE
+
+QDebug operator<<(QDebug dbg, const QCursor &c)
+{
+   QDebugStateSaver saver(dbg);
+   dbg.nospace() << "QCursor(Qt::CursorShape(" << c.shape() << "))";
+   return dbg;
+}
+
+QCursorData *qt_cursorTable[Qt::LastCursor + 1];
+bool QCursorData::initialized = false;
+
+QCursorData::QCursorData(Qt::CursorShape s)
+   : ref(1), cshape(s), bm(0), bmm(0), hx(0), hy(0)
+{
+}
+
+QCursorData::~QCursorData()
+{
+   delete bm;
+   delete bmm;
+}
+
+void QCursorData::cleanup()
+{
+   if (!QCursorData::initialized) {
+      return;
+   }
+   for (int shape = 0; shape <= Qt::LastCursor; ++shape) {
+      if (!qt_cursorTable[shape]->ref.deref()) {
+         delete qt_cursorTable[shape];
+      }
+      qt_cursorTable[shape] = 0;
+   }
+   QCursorData::initialized = false;
+}
+
+void QCursorData::initialize()
+{
+   if (QCursorData::initialized) {
+      return;
+   }
+   for (int shape = 0; shape <= Qt::LastCursor; ++shape) {
+      qt_cursorTable[shape] = new QCursorData((Qt::CursorShape)shape);
+   }
+   QCursorData::initialized = true;
+}
+
+QCursorData *QCursorData::setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY, qreal devicePixelRatio)
+{
+   if (!QCursorData::initialized) {
+      QCursorData::initialize();
+   }
+   if (bitmap.depth() != 1 || mask.depth() != 1 || bitmap.size() != mask.size()) {
+      qWarning("QCursor: Cannot create bitmap cursor; invalid bitmap(s)");
+      QCursorData *c = qt_cursorTable[0];
+      c->ref.ref();
+      return c;
+   }
+   QCursorData *d = new QCursorData;
+   d->bm  = new QBitmap(bitmap);
+   d->bmm = new QBitmap(mask);
+   d->cshape = Qt::BitmapCursor;
+   d->hx = hotX >= 0 ? hotX : bitmap.width() / 2 / devicePixelRatio;
+   d->hy = hotY >= 0 ? hotY : bitmap.height() / 2 / devicePixelRatio;
+
+   return d;
+}
+
+void QCursorData::update()
+{
+}
+
 #endif // QT_NO_CURSOR
 

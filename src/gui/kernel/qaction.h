@@ -23,12 +23,13 @@
 #ifndef QACTION_H
 #define QACTION_H
 
-#include <QtGui/qkeysequence.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qwidget.h>
-#include <QtCore/qvariant.h>
-#include <QtGui/qicon.h>
+#include <qkeysequence.h>
+#include <qstring.h>
+#include <qwidget.h>
+#include <qvariant.h>
+#include <qicon.h>
 #include <QScopedPointer>
+
 
 #ifndef QT_NO_ACTION
 
@@ -48,6 +49,7 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_READ(checkable, isCheckable)
    GUI_CS_PROPERTY_WRITE(checkable, setCheckable)
    GUI_CS_PROPERTY_NOTIFY(checkable, changed)
+
    GUI_CS_PROPERTY_READ(checked, isChecked)
    GUI_CS_PROPERTY_WRITE(checked, setChecked)
    GUI_CS_PROPERTY_DESIGNABLE_NONSTATIC(checked, isCheckable())
@@ -89,9 +91,11 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_READ(shortcut, shortcut)
    GUI_CS_PROPERTY_WRITE(shortcut, setShortcut)
    GUI_CS_PROPERTY_NOTIFY(shortcut, changed)
+
    GUI_CS_PROPERTY_READ(shortcutContext, shortcutContext)
    GUI_CS_PROPERTY_WRITE(shortcutContext, setShortcutContext)
    GUI_CS_PROPERTY_NOTIFY(shortcutContext, changed)
+
    GUI_CS_PROPERTY_READ(autoRepeat, autoRepeat)
    GUI_CS_PROPERTY_WRITE(autoRepeat, setAutoRepeat)
    GUI_CS_PROPERTY_NOTIFY(autoRepeat, changed)
@@ -100,6 +104,7 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_READ(visible, isVisible)
    GUI_CS_PROPERTY_WRITE(visible, setVisible)
    GUI_CS_PROPERTY_NOTIFY(visible, changed)
+
    GUI_CS_PROPERTY_READ(menuRole, menuRole)
    GUI_CS_PROPERTY_WRITE(menuRole, setMenuRole)
    GUI_CS_PROPERTY_NOTIFY(menuRole, changed)
@@ -107,18 +112,19 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_READ(iconVisibleInMenu, isIconVisibleInMenu)
    GUI_CS_PROPERTY_WRITE(iconVisibleInMenu, setIconVisibleInMenu)
    GUI_CS_PROPERTY_NOTIFY(iconVisibleInMenu, changed)
+
    GUI_CS_PROPERTY_READ(priority, priority)
    GUI_CS_PROPERTY_WRITE(priority, setPriority)
 
  public:
-   enum MenuRole { NoRole, TextHeuristicRole, ApplicationSpecificRole, AboutCsRole,
-                   AboutRole, PreferencesRole, QuitRole
-                 };
+   enum MenuRole { NoRole = 0, TextHeuristicRole, ApplicationSpecificRole, AboutCsRole,
+      AboutRole, PreferencesRole, QuitRole
+   };
 
-   enum Priority { LowPriority = 0,
-                   NormalPriority = 128,
-                   HighPriority = 256
-                 };
+   enum Priority { LowPriority    = 0,
+      NormalPriority = 128,
+      HighPriority   = 256
+   };
 
    explicit QAction(QObject *parent);
    QAction(const QString &text, QObject *parent);
@@ -189,7 +195,7 @@ class Q_GUI_EXPORT QAction : public QObject
 
    enum ActionEvent { Trigger, Hover };
    void activate(ActionEvent event);
-   bool showStatusText(QWidget *widget = 0);
+   bool showStatusText(QWidget *widget = nullptr);
 
    void setMenuRole(MenuRole menuRole);
    MenuRole menuRole() const;
@@ -253,7 +259,6 @@ class Q_GUI_EXPORT QAction : public QObject
    friend class QMenu;
    friend class QMenuPrivate;
    friend class QMenuBar;
-   friend class QShortcutMap;
    friend class QToolButton;
 
 #ifdef Q_OS_MAC
@@ -262,8 +267,23 @@ class Q_GUI_EXPORT QAction : public QObject
 
 };
 
-#include <QtGui/qactiongroup.h>
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QAction *);
+
+inline void QAction::trigger() {
+   activate(ActionEvent::Trigger);
+}
+
+inline void QAction::hover() {
+   activate(ActionEvent::Hover);
+}
+
+inline void QAction::setDisabled(bool b) {
+   setEnabled(! b);
+}
+
+// recursive, leave here
+#include <qactiongroup.h>
 
 #endif // QT_NO_ACTION
 
-#endif // QACTION_H
+#endif

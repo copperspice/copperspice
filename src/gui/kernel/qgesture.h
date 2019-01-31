@@ -29,12 +29,9 @@
 #include <QtCore/qpoint.h>
 #include <QtCore/qrect.h>
 #include <QtCore/qmetatype.h>
-#include <QScopedPointer>
+#include <qevent.h>
 
 #ifndef QT_NO_GESTURES
-
-Q_DECLARE_METATYPE(Qt::GestureState)
-Q_DECLARE_METATYPE(Qt::GestureType)
 
 QT_BEGIN_NAMESPACE
 
@@ -44,6 +41,7 @@ class QPinchGesturePrivate;
 class QTapAndHoldGesturePrivate;
 class QSwipeGesturePrivate;
 class QTapGesturePrivate;
+class QGestureEventPrivate;
 
 class Q_GUI_EXPORT QGesture : public QObject
 {
@@ -115,7 +113,8 @@ class Q_GUI_EXPORT QPanGesture : public QGesture
    GUI_CS_PROPERTY_WRITE(verticalVelocity, cs_setVerticalVelocity)
 
  public:
-   QPanGesture(QObject *parent = nullptr);
+   explicit QPanGesture(QObject *parent = nullptr);
+   ~QPanGesture();
 
    QPointF lastOffset() const;
    QPointF offset() const;
@@ -130,7 +129,6 @@ class Q_GUI_EXPORT QPanGesture : public QGesture
    friend class QWinNativePanGestureRecognizer;
 
  private:
-
    // wrapper for overloaded method
    qreal cs_horizontalVelocity() const;
 
@@ -154,9 +152,9 @@ class Q_GUI_EXPORT QPinchGesture : public QGesture
 
  public:
    enum ChangeFlag {
-      ScaleFactorChanged = 0x1,
+      ScaleFactorChanged   = 0x1,
       RotationAngleChanged = 0x2,
-      CenterPointChanged = 0x4
+      CenterPointChanged   = 0x4
    };
    using ChangeFlags = QFlags<ChangeFlag>;
 
@@ -186,7 +184,8 @@ class Q_GUI_EXPORT QPinchGesture : public QGesture
    GUI_CS_PROPERTY_READ(centerPoint, centerPoint)
    GUI_CS_PROPERTY_WRITE(centerPoint, setCenterPoint)
 
-   QPinchGesture(QObject *parent = nullptr);
+   explicit QPinchGesture(QObject *parent = nullptr);
+   ~QPinchGesture();
 
    ChangeFlags totalChangeFlags() const;
    void setTotalChangeFlags(ChangeFlags value);
@@ -220,11 +219,6 @@ class Q_GUI_EXPORT QPinchGesture : public QGesture
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPinchGesture::ChangeFlags)
 
-QT_END_NAMESPACE
-
-Q_DECLARE_METATYPE(QPinchGesture::ChangeFlags)
-
-QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QSwipeGesture : public QGesture
 {
@@ -246,7 +240,8 @@ class Q_GUI_EXPORT QSwipeGesture : public QGesture
 
  public:
    enum SwipeDirection { NoDirection, Left, Right, Up, Down };
-   QSwipeGesture(QObject *parent = nullptr);
+   explicit QSwipeGesture(QObject *parent = nullptr);
+   ~QSwipeGesture();
 
    SwipeDirection horizontalDirection() const;
    SwipeDirection verticalDirection() const;
@@ -274,7 +269,8 @@ class Q_GUI_EXPORT QTapGesture : public QGesture
    GUI_CS_PROPERTY_WRITE(position, setPosition)
 
  public:
-   QTapGesture(QObject *parent = nullptr);
+   explicit QTapGesture(QObject *parent = nullptr);
+   ~QTapGesture();
 
    QPointF position() const;
    void setPosition(const QPointF &pos);
@@ -291,7 +287,8 @@ class Q_GUI_EXPORT QTapAndHoldGesture : public QGesture
    GUI_CS_PROPERTY_WRITE(position, setPosition)
 
  public:
-   QTapAndHoldGesture(QObject *parent = nullptr);
+   explicit QTapAndHoldGesture(QObject *parent = nullptr);
+   ~QTapAndHoldGesture();
 
    QPointF position() const;
    void setPosition(const QPointF &pos);
@@ -302,10 +299,53 @@ class Q_GUI_EXPORT QTapAndHoldGesture : public QGesture
    friend class QTapAndHoldGestureRecognizer;
 };
 
-QT_END_NAMESPACE
+class Q_GUI_EXPORT QGestureEvent : public QEvent
+{
+ public:
+   explicit QGestureEvent(const QList<QGesture *> &gestures);
+   ~QGestureEvent();
 
-Q_DECLARE_METATYPE(QGesture::GestureCancelPolicy)
+   QList<QGesture *> gestures() const;
+   QGesture *gesture(Qt::GestureType type) const;
+
+   QList<QGesture *> activeGestures() const;
+   QList<QGesture *> canceledGestures() const;
+
+   using QEvent::setAccepted;
+   using QEvent::isAccepted;
+   using QEvent::accept;
+   using QEvent::ignore;
+
+   void setAccepted(QGesture *, bool);
+   void accept(QGesture *);
+   void ignore(QGesture *);
+   bool isAccepted(QGesture *) const;
+
+   void setAccepted(Qt::GestureType, bool);
+   void accept(Qt::GestureType);
+   void ignore(Qt::GestureType);
+   bool isAccepted(Qt::GestureType) const;
+
+   void setWidget(QWidget *widget);
+   QWidget *widget() const;
+
+#ifndef QT_NO_GRAPHICSVIEW
+   QPointF mapToGraphicsScene(const QPointF &gesturePoint) const;
+#endif
+
+ private:
+   QList<QGesture *> m_gestures;
+   QWidget *m_widget;
+   QMap<Qt::GestureType, bool> m_accepted;
+   QMap<Qt::GestureType, QWidget *> m_targetWidgets;
+
+   friend class QApplication;
+   friend class QGestureManager;
+};
+
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QGesture *);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QGestureEvent *);
 
 #endif // QT_NO_GESTURES
 
-#endif // QGESTURE_H
+#endif

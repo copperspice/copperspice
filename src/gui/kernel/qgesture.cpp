@@ -23,62 +23,12 @@
 #include <qgesture.h>
 #include <qgesture_p.h>
 #include <qstandardgestures_p.h>
+#include <qgraphicsview.h>
+
+#include <qdebug_p.h>
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
-
-/*!
-   \class QGesture
-   \since 4.6
-   \ingroup gestures
-
-   \brief The QGesture class represents a gesture, containing properties that
-   describe the corresponding user input.
-
-   Gesture objects are not constructed directly by developers. They are created by
-   the QGestureRecognizer object that is registered with the application; see
-   QGestureRecognizer::registerRecognizer().
-
-   For an overview of gesture handling in Qt and information on using gestures
-   in your applications, see the \l{Gestures Programming} document.
-
-   \section1 Gesture Properties
-
-   The class has a list of properties that can be queried by the user to get
-   some gesture-specific arguments. For example, the pinch gesture has a scale
-   factor that is exposed as a property.
-
-   Developers of custom gesture recognizers can add additional properties in
-   order to provide additional information about a gesture. This can be done
-   by adding new dynamic properties to a QGesture object, or by subclassing
-   the QGesture class (or one of its subclasses).
-
-   \section1 Lifecycle of a Gesture Object
-
-   A QGesture instance is implicitly created when needed and is owned by Qt.
-   Developers should never destroy them or store them for later use as Qt may
-   destroy particular instances of them and create new ones to replace them.
-
-   The registered gesture recognizer monitors the input events for the target
-   object via its \l{QGestureRecognizer::}{recognize()} function, updating the
-   properties of the gesture object as required.
-
-   The gesture object may be delivered to the target object in a QGestureEvent if
-   the corresponding gesture is active or has just been canceled. Each event that
-   is delivered contains a list of gesture objects, since support for more than
-   one gesture may be enabled for the target object. Due to the way events are
-   handled in Qt, gesture events may be filtered by other objects.
-
-   \sa QGestureEvent, QGestureRecognizer
-*/
-
-/*!
-    Constructs a new gesture object with the given \a parent.
-
-    QGesture objects are created by gesture recognizers in the
-    QGestureRecognizer::create() function.
-*/
 QGesture::QGesture(QObject *parent)
    : QObject(parent), d_ptr(new QGesturePrivate)
 {
@@ -86,49 +36,17 @@ QGesture::QGesture(QObject *parent)
    d_func()->gestureType = Qt::CustomGesture;
 }
 
-/*!
-    \internal
-*/
+
 QGesture::QGesture(QGesturePrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the gesture object.
-*/
+
 QGesture::~QGesture()
 {
 }
-
-/*!
-    \property QGesture::state
-    \brief the current state of the gesture
-*/
-
-/*!
-    \property QGesture::gestureType
-    \brief the type of the gesture
-*/
-
-/*!
-    \property QGesture::hotSpot
-
-    \brief The point that is used to find the receiver for the gesture event.
-
-    The hot-spot is a point in the global coordinate system, use
-    QWidget::mapFromGlobal() or QGestureEvent::mapToGraphicsScene() to get a
-    local hot-spot.
-
-    The hot-spot should be set by the gesture recognizer to allow gesture event
-    delivery to a QGraphicsObject.
-*/
-
-/*!
-    \property QGesture::hasHotSpot
-    \brief whether the gesture has a hot-spot
-*/
 
 Qt::GestureType QGesture::gestureType() const
 {
@@ -162,29 +80,6 @@ void QGesture::unsetHotSpot()
    d_func()->isHotSpotSet = false;
 }
 
-/*!
-    \property QGesture::gestureCancelPolicy
-    \brief the policy for deciding what happens on accepting a gesture
-
-    On accepting one gesture Qt can automatically cancel other gestures
-    that belong to other targets. The policy is normally set to not cancel
-    any other gestures and can be set to cancel all active gestures in the
-    context. For example for all child widgets.
-*/
-
-/*!
-    \enum QGesture::GestureCancelPolicy
-
-    This enum describes how accepting a gesture can cancel other gestures
-    automatically.
-
-    \value CancelNone On accepting this gesture no other gestures will be affected.
-
-    \value CancelAllInContext On accepting this gesture all gestures that are
-    active in the context (respecting the Qt::GestureFlag that were specified
-    when subscribed to the gesture) will be cancelled.
-*/
-
 void QGesture::setGestureCancelPolicy(GestureCancelPolicy policy)
 {
    Q_D(QGesture);
@@ -197,84 +92,17 @@ QGesture::GestureCancelPolicy QGesture::gestureCancelPolicy() const
    return static_cast<GestureCancelPolicy>(d->gestureCancelPolicy);
 }
 
-/*!
-    \class QPanGesture
-    \since 4.6
-    \brief The QPanGesture class describes a panning gesture made by the user.
-    \ingroup gestures
 
-    \image pangesture.png
 
-    For an overview of gesture handling in Qt and information on using gestures
-    in your applications, see the \l{Gestures Programming} document.
-
-    \sa QPinchGesture, QSwipeGesture
-*/
-
-/*!
-    \property QPanGesture::lastOffset
-    \brief the last offset recorded for this gesture
-
-    The last offset contains the change in position of the user's input as
-    reported in the \l offset property when a previous gesture event was
-    delivered for this gesture.
-
-    If no previous event was delivered with information about this gesture
-    (i.e., this gesture object contains information about the first movement
-    in the gesture) then this property contains a zero size.
-*/
-
-/*!
-    \property QPanGesture::offset
-    \brief the total offset from the first input position to the current input
-    position
-
-    The offset measures the total change in position of the user's input
-    covered by the gesture on the input device.
-*/
-
-/*!
-    \property QPanGesture::delta
-    \brief the offset from the previous input position to the current input
-
-    This is essentially the same as the difference between offset() and
-    lastOffset().
-*/
-
-/*!
-    \property QPanGesture::acceleration
-    \brief the acceleration in the motion of the touch point for this gesture
-*/
-
-/*!
-    \property QPanGesture::horizontalVelocity
-    \brief the horizontal component of the motion of the touch point for this
-    gesture
-    \since 4.7.1
-    \internal
-
-    \sa verticalVelocity, acceleration
-*/
-
-/*!
-    \property QPanGesture::verticalVelocity
-    \brief the vertical component of the motion of the touch point for this
-    gesture
-    \since 4.7.1
-    \internal
-
-    \sa horizontalVelocity, acceleration
-*/
-
-/*!
-    \internal
-*/
 QPanGesture::QPanGesture(QObject *parent)
    : QGesture(*new QPanGesturePrivate, parent)
 {
    d_func()->gestureType = Qt::PanGesture;
 }
 
+QPanGesture::~QPanGesture()
+{
+}
 
 QPointF QPanGesture::lastOffset() const
 {
@@ -312,157 +140,14 @@ void QPanGesture::setAcceleration(qreal value)
    d_func()->acceleration = value;
 }
 
-/*!
-    \class QPinchGesture
-    \since 4.6
-    \brief The QPinchGesture class describes a pinch gesture made by the user.
-    \ingroup touch
-    \ingroup gestures
 
-    A pinch gesture is a form of touch user input in which the user typically
-    touches two points on the input device with a thumb and finger, before moving
-    them closer together or further apart to change the scale factor, zoom, or level
-    of detail of the user interface.
-
-    For an overview of gesture handling in Qt and information on using gestures
-    in your applications, see the \l{Gestures Programming} document.
-
-    \image pinchgesture.png
-
-    Instead of repeatedly applying the same pinching gesture, the user may
-    continue to touch the input device in one place, and apply a second touch
-    to a new point, continuing the gesture. When this occurs, gesture events
-    will continue to be delivered to the target object, containing an instance
-    of QPinchGesture in the Qt::GestureUpdated state.
-
-    \sa QPanGesture, QSwipeGesture
-*/
-
-/*!
-    \enum QPinchGesture::ChangeFlag
-
-    This enum describes the changes that can occur to the properties of
-    the gesture object.
-
-    \value ScaleFactorChanged The scale factor held by scaleFactor changed.
-    \value RotationAngleChanged The rotation angle held by rotationAngle changed.
-    \value CenterPointChanged The center point held by centerPoint changed.
-
-    \sa changeFlags, totalChangeFlags
-*/
-
-/*!
-    \property QPinchGesture::totalChangeFlags
-    \brief the property of the gesture that has change
-
-    This property indicates which of the other properties has changed since the
-    gesture has started. You can use this information to determine which aspect
-    of your user interface needs to be updated.
-
-    \sa changeFlags, scaleFactor, rotationAngle, centerPoint
-*/
-
-/*!
-    \property QPinchGesture::changeFlags
-    \brief the property of the gesture that has changed in the current step
-
-    This property indicates which of the other properties has changed since
-    the previous gesture event included information about this gesture. You
-    can use this information to determine which aspect of your user interface
-    needs to be updated.
-
-    \sa totalChangeFlags, scaleFactor, rotationAngle, centerPoint
-*/
-
-/*!
-    \property QPinchGesture::totalScaleFactor
-    \brief the total scale factor
-
-    The total scale factor measures the total change in scale factor from the
-    original value to the current scale factor.
-
-    \sa scaleFactor, lastScaleFactor
-*/
-/*!
-    \property QPinchGesture::lastScaleFactor
-    \brief the last scale factor recorded for this gesture
-
-    The last scale factor contains the scale factor reported in the
-    \l scaleFactor property when a previous gesture event included
-    information about this gesture.
-
-    If no previous event was delivered with information about this gesture
-    (i.e., this gesture object contains information about the first movement
-    in the gesture) then this property contains zero.
-
-    \sa scaleFactor, totalScaleFactor
-*/
-/*!
-    \property QPinchGesture::scaleFactor
-    \brief the current scale factor
-
-    The scale factor measures the scale factor associated with the distance
-    between two of the user's inputs on a touch device.
-
-    \sa totalScaleFactor, lastScaleFactor
-*/
-
-/*!
-    \property QPinchGesture::totalRotationAngle
-    \brief the total angle covered by the gesture
-
-    This total angle measures the complete angle covered by the gesture. Usually, this
-    is equal to the value held by the \l rotationAngle property, except in the case where
-    the user performs multiple rotations by removing and repositioning one of the touch
-    points, as described above. In this case, the total angle will be the sum of the
-    rotation angles for the multiple stages of the gesture.
-
-    \sa rotationAngle, lastRotationAngle
-*/
-/*!
-    \property QPinchGesture::lastRotationAngle
-    \brief the last reported angle covered by the gesture motion
-
-    The last rotation angle is the angle as reported in the \l rotationAngle property
-    when a previous gesture event was delivered for this gesture.
-
-    \sa rotationAngle, totalRotationAngle
-*/
-/*!
-    \property QPinchGesture::rotationAngle
-    \brief the angle covered by the gesture motion
-
-    \sa totalRotationAngle, lastRotationAngle
-*/
-
-/*!
-    \property QPinchGesture::startCenterPoint
-    \brief the starting position of the center point
-
-    \sa centerPoint, lastCenterPoint
-*/
-/*!
-    \property QPinchGesture::lastCenterPoint
-    \brief the last position of the center point recorded for this gesture
-
-    \sa centerPoint, startCenterPoint
-*/
-/*!
-    \property QPinchGesture::centerPoint
-    \brief the current center point
-
-    The center point is the midpoint between the two input points in the gesture.
-
-    \sa startCenterPoint, lastCenterPoint
-*/
-
-/*!
-    \internal
-*/
 QPinchGesture::QPinchGesture(QObject *parent)
    : QGesture(*new QPinchGesturePrivate, parent)
 {
    d_func()->gestureType = Qt::PinchGesture;
+}
+QPinchGesture::~QPinchGesture()
+{
 }
 
 QPinchGesture::ChangeFlags QPinchGesture::totalChangeFlags() const
@@ -577,80 +262,15 @@ void QPinchGesture::setRotationAngle(qreal value)
    d_func()->rotationAngle = value;
 }
 
-/*!
-    \class QSwipeGesture
-    \since 4.6
-    \brief The QSwipeGesture class describes a swipe gesture made by the user.
-    \ingroup gestures
-
-    \image swipegesture.png
-
-    For an overview of gesture handling in Qt and information on using gestures
-    in your applications, see the \l{Gestures Programming} document.
-
-    \sa QPanGesture, QPinchGesture
-*/
-
-/*!
-    \enum QSwipeGesture::SwipeDirection
-
-    This enum describes the possible directions for the gesture's motion
-    along the horizontal and vertical axes.
-
-    \value NoDirection The gesture had no motion associated with it on a particular axis.
-    \value Left     The gesture involved a horizontal motion to the left.
-    \value Right    The gesture involved a horizontal motion to the right.
-    \value Up       The gesture involved an upward vertical motion.
-    \value Down     The gesture involved a downward vertical motion.
-*/
-
-/*!
-    \property QSwipeGesture::horizontalDirection
-    \brief the horizontal direction of the gesture
-
-    If the gesture has a horizontal component, the horizontal direction
-    is either Left or Right; otherwise, it is NoDirection.
-
-    \sa verticalDirection, swipeAngle
-*/
-
-/*!
-    \property QSwipeGesture::verticalDirection
-    \brief the vertical direction of the gesture
-
-    If the gesture has a vertical component, the vertical direction
-    is either Up or Down; otherwise, it is NoDirection.
-
-    \sa horizontalDirection, swipeAngle
-*/
-
-/*!
-    \property QSwipeGesture::swipeAngle
-    \brief the angle of the motion associated with the gesture
-
-    If the gesture has either a horizontal or vertical component, the
-    swipe angle describes the angle between the direction of motion and the
-    x-axis as defined using the standard widget
-    \l{Coordinate System}{coordinate system}.
-
-    \sa horizontalDirection, verticalDirection
-*/
-
-/*!
-    \property QSwipeGesture::velocity
-    \since 4.7.1
-    \internal
-*/
-
-/*!
-    \internal
-*/
 QSwipeGesture::QSwipeGesture(QObject *parent)
    : QGesture(*new QSwipeGesturePrivate, parent)
 {
    d_func()->gestureType = Qt::SwipeGesture;
 }
 
+QSwipeGesture::~QSwipeGesture()
+{
+}
 QSwipeGesture::SwipeDirection QSwipeGesture::horizontalDirection() const
 {
    Q_D(const QSwipeGesture);
@@ -710,6 +330,9 @@ QTapGesture::QTapGesture(QObject *parent)
 {
    d_func()->gestureType = Qt::TapGesture;
 }
+QTapGesture::~QTapGesture()
+{
+}
 
 QPointF QTapGesture::position() const
 {
@@ -720,31 +343,14 @@ void QTapGesture::setPosition(const QPointF &value)
 {
    d_func()->position = value;
 }
-/*!
-    \class QTapAndHoldGesture
-    \since 4.6
-    \brief The QTapAndHoldGesture class describes a tap-and-hold (aka LongTap)
-    gesture made by the user.
-    \ingroup gestures
 
-    For an overview of gesture handling in Qt and information on using gestures
-    in your applications, see the \l{Gestures Programming} document.
-
-    \sa QPanGesture, QPinchGesture
-*/
-
-/*!
-    \property QTapAndHoldGesture::position
-    \brief the position of the tap
-*/
-
-/*!
-    \internal
-*/
 QTapAndHoldGesture::QTapAndHoldGesture(QObject *parent)
    : QGesture(*new QTapAndHoldGesturePrivate, parent)
 {
    d_func()->gestureType = Qt::TapAndHoldGesture;
+}
+QTapAndHoldGesture::~QTapAndHoldGesture()
+{
 }
 
 QPointF QTapAndHoldGesture::position() const
@@ -771,14 +377,6 @@ void QTapAndHoldGesture::setTimeout(int msecs)
    QTapAndHoldGesturePrivate::Timeout = msecs;
 }
 
-/*!
-    Gets the timeout, in milliseconds, before the gesture triggers.
-
-    The recognizer will detect a touch down and and if timeout()
-    later the touch is still down, it will trigger the QTapAndHoldGesture.
-    The default value is 700 milliseconds.
-*/
-
 // static
 int QTapAndHoldGesture::timeout()
 {
@@ -787,6 +385,207 @@ int QTapAndHoldGesture::timeout()
 
 int QTapAndHoldGesturePrivate::Timeout = 700; // in ms
 
+
+QGestureEvent::QGestureEvent(const QList<QGesture *> &gestures)
+    : QEvent(QEvent::Gesture), m_gestures(gestures), m_widget(0)
+
+{
+}
+
+QGestureEvent::~QGestureEvent()
+{
+}
+
+QList<QGesture *> QGestureEvent::gestures() const
+{
+    return m_gestures;
+}
+
+QGesture *QGestureEvent::gesture(Qt::GestureType type) const
+{
+    for (int i = 0; i < m_gestures.size(); ++i)
+        if (m_gestures.at(i)->gestureType() == type)
+            return m_gestures.at(i);
+    return 0;
+}
+QList<QGesture *> QGestureEvent::activeGestures() const
+{
+    QList<QGesture *> gestures;
+
+    for (QGesture *gesture : m_gestures) {
+        if (gesture->state() != Qt::GestureCanceled)
+            gestures.append(gesture);
+    }
+    return gestures;
+}
+
+QList<QGesture *> QGestureEvent::canceledGestures() const
+{
+    QList<QGesture *> gestures;
+    for (QGesture *gesture : m_gestures) {
+        if (gesture->state() == Qt::GestureCanceled)
+            gestures.append(gesture);
+    }
+    return gestures;
+}
+
+void QGestureEvent::setAccepted(QGesture *gesture, bool value)
+{
+    if (gesture)
+        setAccepted(gesture->gestureType(), value);
+}
+
+void QGestureEvent::accept(QGesture *gesture)
+{
+    if (gesture)
+        setAccepted(gesture->gestureType(), true);
+}
+
+void QGestureEvent::ignore(QGesture *gesture)
+{
+    if (gesture)
+        setAccepted(gesture->gestureType(), false);
+}
+
+bool QGestureEvent::isAccepted(QGesture *gesture) const
+{
+    return gesture ? isAccepted(gesture->gestureType()) : false;
+}
+
+void QGestureEvent::setAccepted(Qt::GestureType gestureType, bool value)
+{
+    setAccepted(false);
+    m_accepted[gestureType] = value;
+}
+void QGestureEvent::accept(Qt::GestureType gestureType)
+{
+    setAccepted(gestureType, true);
+}
+
+void QGestureEvent::ignore(Qt::GestureType gestureType)
+{
+    setAccepted(gestureType, false);
+}
+
+bool QGestureEvent::isAccepted(Qt::GestureType gestureType) const
+{
+    return m_accepted.value(gestureType, true);
+}
+
+void QGestureEvent::setWidget(QWidget *widget)
+{
+    m_widget = widget;
+}
+
+QWidget *QGestureEvent::widget() const
+{
+    return m_widget;
+}
+
+#ifndef QT_NO_GRAPHICSVIEW
+QPointF QGestureEvent::mapToGraphicsScene(const QPointF &gesturePoint) const
+{
+    QWidget *w = widget();
+
+    if (w) // we get the viewport as widget, not the graphics view
+        w = w->parentWidget();
+
+    QGraphicsView *view = qobject_cast<QGraphicsView*>(w);
+
+    if (view) {
+        return view->mapToScene(view->mapFromGlobal(gesturePoint.toPoint()));
+    }
+    return QPointF();
+}
+#endif
+
+static void formatGestureHeader(QDebug d, const char *className, const QGesture *gesture)
+{
+     d << className << "(state=";
+     QtDebugUtils::formatQEnum(d, gesture->state());
+
+     if (gesture->hasHotSpot()) {
+         d << ",hotSpot=";
+         QtDebugUtils::formatQPoint(d, gesture->hotSpot());
+     }
+}
+
+
+Q_GUI_EXPORT QDebug operator<<(QDebug d, const QGesture *gesture)
+{
+    QDebugStateSaver saver(d);
+    d.nospace();
+    switch (gesture->gestureType()) {
+    case Qt::TapGesture:
+        formatGestureHeader(d, "QTapGesture", gesture);
+        d << ",position=";
+        QtDebugUtils::formatQPoint(d, static_cast<const QTapGesture*>(gesture)->position());
+        d << ')';
+        break;
+    case Qt::TapAndHoldGesture: {
+        const QTapAndHoldGesture *tap = static_cast<const QTapAndHoldGesture*>(gesture);
+        formatGestureHeader(d, "QTapAndHoldGesture", tap);
+        d << ",position=";
+        QtDebugUtils::formatQPoint(d, tap->position());
+        d << ",timeout=" << tap->timeout() << ')';
+    }
+        break;
+    case Qt::PanGesture: {
+        const QPanGesture *pan = static_cast<const QPanGesture*>(gesture);
+        formatGestureHeader(d, "QPanGesture", pan);
+        d << ",lastOffset=";
+        QtDebugUtils::formatQPoint(d, pan->lastOffset());
+        d << pan->lastOffset();
+        d << ",offset=";
+        QtDebugUtils::formatQPoint(d, pan->offset());
+        d  << ",acceleration=" << pan->acceleration() << ",delta=";
+        QtDebugUtils::formatQPoint(d, pan->delta());
+        d << ')';
+    }
+        break;
+    case Qt::PinchGesture: {
+        const QPinchGesture *pinch = static_cast<const QPinchGesture*>(gesture);
+        formatGestureHeader(d, "QPinchGesture", pinch);
+        d << ",totalChangeFlags=" << pinch->totalChangeFlags()
+          << ",changeFlags=" << pinch->changeFlags() << ",startCenterPoint=";
+        QtDebugUtils::formatQPoint(d, pinch->startCenterPoint());
+        d << ",lastCenterPoint=";
+        QtDebugUtils::formatQPoint(d, pinch->lastCenterPoint());
+        d << ",centerPoint=";
+        QtDebugUtils::formatQPoint(d, pinch->centerPoint());
+        d << ",totalScaleFactor=" << pinch->totalScaleFactor()
+            << ",lastScaleFactor=" << pinch->lastScaleFactor()
+            << ",scaleFactor=" << pinch->scaleFactor()
+            << ",totalRotationAngle=" << pinch->totalRotationAngle()
+            << ",lastRotationAngle=" << pinch->lastRotationAngle()
+            << ",rotationAngle=" << pinch->rotationAngle() << ')';
+    }
+        break;
+    case Qt::SwipeGesture: {
+        const QSwipeGesture *swipe = static_cast<const QSwipeGesture*>(gesture);
+        formatGestureHeader(d, "QSwipeGesture", swipe);
+        d << ",horizontalDirection=";
+        QtDebugUtils::formatQEnum(d, swipe->horizontalDirection());
+        d << ",verticalDirection=";
+        QtDebugUtils::formatQEnum(d, swipe->verticalDirection());
+        d << ",swipeAngle=" << swipe->swipeAngle() << ')';
+    }
+        break;
+    default:
+        formatGestureHeader(d, "Custom gesture", gesture);
+        d << ",type=" << gesture->gestureType() << ')';
+        break;
+    }
+    return d;
+}
+
+Q_GUI_EXPORT QDebug operator<<(QDebug d, const QGestureEvent *gestureEvent)
+{
+    QDebugStateSaver saver(d);
+    d.nospace();
+    d << "QGestureEvent(" << gestureEvent->gestures() << ')';
+    return d;
+}
 
 // wrapper for overloaded method
 qreal QPanGesture::cs_horizontalVelocity() const
@@ -829,8 +628,5 @@ void QSwipeGesture::cs_setVelocity(qreal velocity)
    Q_D(QSwipeGesture);
    d->setVelocity(velocity);
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_GESTURES

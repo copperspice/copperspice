@@ -28,36 +28,39 @@
 #include <qapplication.h>
 #include <qevent.h>
 #include <qlist.h>
-#include <qdebug.h>
+
+#include <qdebug_p.h>
 #include <qshortcutmap_p.h>
 #include <qapplication_p.h>
 #include <qmenu_p.h>
 
 #define QAPP_CHECK(functionName) \
-    if (!qApp) { \
+    if (! qApp) { \
         qWarning("QAction: Initialize QApplication before calling '" functionName "'."); \
         return; \
     }
-
-QT_BEGIN_NAMESPACE
 
 /*
   internal: guesses a descriptive text from a text suited for a menu entry
  */
 static QString qt_strippedText(QString s)
 {
-   s.remove( QString::fromLatin1("...") );
+   s.remove("...");
+
    int i = 0;
    while (i < s.size()) {
       ++i;
-      if (s.at(i - 1) != QLatin1Char('&')) {
+      if (s.at(i - 1) != '&') {
          continue;
       }
-      if (i < s.size() && s.at(i) == QLatin1Char('&')) {
+
+      if (i < s.size() && s.at(i) == '&') {
          ++i;
       }
+
       s.remove(i - 1, 1);
    }
+
    return s.trimmed();
 }
 
@@ -81,16 +84,14 @@ bool QActionPrivate::showStatusText(QWidget *widget, const QString &str)
 {
    Q_Q(QAction);
 
-#ifdef QT_NO_STATUSTIP
-   Q_UNUSED(widget);
-   Q_UNUSED(str);
-#else
+#ifndef QT_NO_STATUSTIP
    if (QObject *object = widget ? widget : q->parent()) {
       QStatusTipEvent tip(str);
       QApplication::sendEvent(object, &tip);
       return true;
    }
 #endif
+
    return false;
 }
 
@@ -103,12 +104,14 @@ void QActionPrivate::sendDataChanged()
       QWidget *w = widgets.at(i);
       QApplication::sendEvent(w, &e);
    }
+
 #ifndef QT_NO_GRAPHICSVIEW
    for (int i = 0; i < graphicsWidgets.size(); ++i) {
       QGraphicsWidget *w = graphicsWidgets.at(i);
       QApplication::sendEvent(w, &e);
    }
 #endif
+
    QApplication::sendEvent(q, &e);
 
    emit q->changed();
@@ -124,7 +127,9 @@ void QActionPrivate::redoGrab(QShortcutMap &map)
    if (shortcut.isEmpty()) {
       return;
    }
-   shortcutId = map.addShortcut(q, shortcut, shortcutContext);
+
+   shortcutId = map.addShortcut(q, shortcut, shortcutContext, qWidgetShortcutContextMatcher);
+
    if (!enabled) {
       map.setShortcutEnabled(false, shortcutId, q);
    }
@@ -136,19 +141,23 @@ void QActionPrivate::redoGrab(QShortcutMap &map)
 void QActionPrivate::redoGrabAlternate(QShortcutMap &map)
 {
    Q_Q(QAction);
+
    for (int i = 0; i < alternateShortcutIds.count(); ++i) {
       if (const int id = alternateShortcutIds.at(i)) {
          map.removeShortcut(id, q);
       }
    }
+
    alternateShortcutIds.clear();
    if (alternateShortcuts.isEmpty()) {
       return;
    }
+
    for (int i = 0; i < alternateShortcuts.count(); ++i) {
       const QKeySequence &alternate = alternateShortcuts.at(i);
-      if (!alternate.isEmpty()) {
-         alternateShortcutIds.append(map.addShortcut(q, alternate, shortcutContext));
+
+      if (! alternate.isEmpty()) {
+         alternateShortcutIds.append(map.addShortcut(q, alternate, shortcutContext, qWidgetShortcutContextMatcher));
       } else {
          alternateShortcutIds.append(0);
       }
@@ -182,10 +191,6 @@ void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 #endif // QT_NO_SHORTCUT
 
 
-/*!
-    Constructs an action with \a parent. If \a parent is an action
-    group the action will be automatically inserted into the group.
-*/
 QAction::QAction(QObject *parent)
    : QObject(parent), d_ptr(new QActionPrivate)
 {
@@ -198,19 +203,7 @@ QAction::QAction(QObject *parent)
    }
 }
 
-/*!
-    Constructs an action with some \a text and \a parent. If \a
-    parent is an action group the action will be automatically
-    inserted into the group.
 
-    The action uses a stripped version of \a text (e.g. "\&Menu
-    Option..." becomes "Menu Option") as descriptive text for
-    tool buttons. You can override this by setting a specific
-    description with setText(). The same text will be used for
-    tooltips unless you specify a different text using
-    setToolTip().
-
-*/
 QAction::QAction(const QString &text, QObject *parent)
    : QObject(parent), d_ptr(new QActionPrivate)
 {
@@ -224,18 +217,7 @@ QAction::QAction(const QString &text, QObject *parent)
    }
 }
 
-/*!
-    Constructs an action with an \a icon and some \a text and \a
-    parent. If \a parent is an action group the action will be
-    automatically inserted into the group.
 
-    The action uses a stripped version of \a text (e.g. "\&Menu
-    Option..." becomes "Menu Option") as descriptive text for
-    tool buttons. You can override this by setting a specific
-    description with setText(). The same text will be used for
-    tooltips unless you specify a different text using
-    setToolTip().
-*/
 QAction::QAction(const QIcon &icon, const QString &text, QObject *parent)
    : QObject(parent), d_ptr(new QActionPrivate)
 {
@@ -277,12 +259,6 @@ QWidget *QAction::parentWidget() const
    return (QWidget *)ret;
 }
 
-/*!
-  \since 4.2
-  Returns a list of widgets this action has been added to.
-
-  \sa QWidget::addAction(), associatedGraphicsWidgets()
-*/
 QList<QWidget *> QAction::associatedWidgets() const
 {
    Q_D(const QAction);
@@ -290,12 +266,7 @@ QList<QWidget *> QAction::associatedWidgets() const
 }
 
 #ifndef QT_NO_GRAPHICSVIEW
-/*!
-  \since 4.5
-  Returns a list of widgets this action has been added to.
 
-  \sa QWidget::addAction(), associatedWidgets()
-*/
 QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
 {
    Q_D(const QAction);
@@ -304,13 +275,7 @@ QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
 #endif
 
 #ifndef QT_NO_SHORTCUT
-/*!
-    \property QAction::shortcut
-    \brief the action's primary shortcut key
 
-    Valid keycodes for this property can be found in \l Qt::Key and
-    \l Qt::Modifier. There is no default shortcut key.
-*/
 void QAction::setShortcut(const QKeySequence &shortcut)
 {
    QAPP_CHECK("setShortcut");
@@ -325,14 +290,6 @@ void QAction::setShortcut(const QKeySequence &shortcut)
    d->sendDataChanged();
 }
 
-/*!
-    \since 4.2
-
-    Sets \a shortcuts as the list of shortcuts that trigger the
-    action. The first element of the list is the primary shortcut.
-
-    \sa shortcut
-*/
 void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
 {
    Q_D(QAction);
@@ -357,41 +314,21 @@ void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
    d->sendDataChanged();
 }
 
-/*!
-    \since 4.2
 
-    Sets a platform dependent list of shortcuts based on the \a key.
-    The result of calling this function will depend on the currently running platform.
-    Note that more than one shortcut can assigned by this action.
-    If only the primary shortcut is required, use setShortcut instead.
-
-    \sa QKeySequence::keyBindings()
-*/
 void QAction::setShortcuts(QKeySequence::StandardKey key)
 {
    QList <QKeySequence> list = QKeySequence::keyBindings(key);
    setShortcuts(list);
 }
 
-/*!
-    Returns the primary shortcut.
 
-    \sa setShortcuts()
-*/
 QKeySequence QAction::shortcut() const
 {
    Q_D(const QAction);
    return d->shortcut;
 }
 
-/*!
-    \since 4.2
 
-    Returns the list of shortcuts, with the primary shortcut as
-    the first element of the list.
-
-    \sa setShortcuts()
-*/
 QList<QKeySequence> QAction::shortcuts() const
 {
    Q_D(const QAction);
@@ -461,18 +398,7 @@ bool QAction::autoRepeat() const
 }
 #endif // QT_NO_SHORTCUT
 
-/*!
-    \property QAction::font
-    \brief the action's font
 
-    The font property is used to render the text set on the
-    QAction. The font will can be considered a hint as it will not be
-    consulted in all cases based upon application and style.
-
-    By default, this property contains the application's default font.
-
-    \sa QAction::setText() QStyle
-*/
 void QAction::setFont(const QFont &font)
 {
    Q_D(QAction);
@@ -510,6 +436,7 @@ QAction::~QAction()
    if (d->group) {
       d->group->removeAction(this);
    }
+
 #ifndef QT_NO_SHORTCUT
    if (d->shortcutId && qApp) {
       qApp->d_func()->shortcutMap.removeShortcut(d->shortcutId, this);
@@ -656,28 +583,6 @@ QString QAction::text() const
 }
 
 
-
-
-
-/*!
-    \property QAction::iconText
-    \brief the action's descriptive icon text
-
-    If QToolBar::toolButtonStyle is set to a value that permits text to
-    be displayed, the text defined held in this property appears as a
-    label in the relevant tool button.
-
-    It also serves as the default text in menus and tooltips if the action
-    has not been defined with setText() or setToolTip(), and will
-    also be used in toolbar buttons if no icon has been defined using setIcon().
-
-    If the icon text is not explicitly set, the action's normal text will be
-    used for the icon text.
-
-    By default, this property contains an empty string.
-
-    \sa setToolTip(), setStatusTip()
-*/
 void QAction::setIconText(const QString &text)
 {
    Q_D(QAction);
@@ -777,37 +682,7 @@ QString QAction::whatsThis() const
    return d->whatsthis;
 }
 
-/*!
-    \enum QAction::Priority
-    \since 4.6
 
-    This enum defines priorities for actions in user interface.
-
-    \value LowPriority The action should not be prioritized in
-    the user interface.
-
-    \value NormalPriority
-
-    \value HighPriority The action should be prioritized in
-    the user interface.
-
-    \sa priority
-*/
-
-
-/*!
-    \property QAction::priority
-    \since 4.6
-
-    \brief the actions's priority in the user interface.
-
-    This property can be set to indicate how the action should be prioritized
-    in the user interface.
-
-    For instance, when toolbars have the Qt::ToolButtonTextBesideIcon
-    mode set, then actions with LowPriority will not show the text
-    labels.
-*/
 void QAction::setPriority(Priority priority)
 {
    Q_D(QAction);
@@ -825,25 +700,7 @@ QAction::Priority QAction::priority() const
    return d->priority;
 }
 
-/*!
-    \property QAction::checkable
-    \brief whether the action is a checkable action
 
-    A checkable action is one which has an on/off state. For example,
-    in a word processor, a Bold toolbar button may be either on or
-    off. An action which is not a toggle action is a command action;
-    a command action is simply executed, e.g. file save.
-    By default, this property is false.
-
-    In some situations, the state of one toggle action should depend
-    on the state of others. For example, "Left Align", "Center" and
-    "Right Align" toggle actions are mutually exclusive. To achieve
-    exclusive toggling, add the relevant toggle actions to a
-    QActionGroup with the QActionGroup::exclusive property set to
-    true.
-
-    \sa QAction::setChecked()
-*/
 void QAction::setCheckable(bool b)
 {
    Q_D(QAction);
@@ -862,12 +719,6 @@ bool QAction::isCheckable() const
    return d->checkable;
 }
 
-/*!
-    \fn void QAction::toggle()
-
-    This is a convenience function for the \l checked property.
-    Connect to it to change the checked state to its opposite state.
-*/
 void QAction::toggle()
 {
    Q_D(QAction);
@@ -904,35 +755,6 @@ bool QAction::isChecked() const
    return d->checked;
 }
 
-/*!
-    \fn void QAction::setDisabled(bool b)
-
-    This is a convenience function for the \l enabled property, that
-    is useful for signals--slots connections. If \a b is true the
-    action is disabled; otherwise it is enabled.
-*/
-
-/*!
-    \property QAction::enabled
-    \brief whether the action is enabled
-
-    Disabled actions cannot be chosen by the user. They do not
-    disappear from menus or toolbars, but they are displayed in a way
-    which indicates that they are unavailable. For example, they might
-    be displayed using only shades of gray.
-
-    \gui{What's This?} help on disabled actions is still available, provided
-    that the QAction::whatsThis property is set.
-
-    An action will be disabled when all widgets to which it is added
-    (with QWidget::addAction()) are disabled or not visible. When an
-    action is disabled, it is not possible to trigger it through its
-    shortcut.
-
-    By default, this property is true (actions are enabled).
-
-    \sa text
-*/
 void QAction::setEnabled(bool b)
 {
    Q_D(QAction);
@@ -996,19 +818,18 @@ bool QAction::isVisible() const
 /*!
   \reimp
 */
-bool
-QAction::event(QEvent *e)
+bool QAction::event(QEvent *e)
 {
 #ifndef QT_NO_SHORTCUT
    if (e->type() == QEvent::Shortcut) {
       QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
 
       Q_ASSERT_X(se->key() == d_func()->shortcut || d_func()->alternateShortcuts.contains(se->key()),
-                 "QAction::event", "Received shortcut event from incorrect shortcut");
+         "QAction::event", "Received shortcut event from incorrect shortcut");
 
       if (se->isAmbiguous()) {
          qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s",
-                  se->key().toString(QKeySequence::NativeText).toLatin1().constData());
+            se->key().toString(QKeySequence::NativeText).toLatin1().constData());
 
       } else {
          activate(Trigger);
@@ -1026,59 +847,34 @@ QAction::event(QEvent *e)
 
   \sa setData()
 */
-QVariant
-QAction::data() const
+QVariant QAction::data() const
 {
    Q_D(const QAction);
    return d->userData;
 }
 
-/*!
-  \fn void QAction::setData(const QVariant &userData)
-
-  Sets the action's internal data to the given \a userData.
-
-  \sa data()
-*/
-void
-QAction::setData(const QVariant &data)
+void QAction::setData(const QVariant &data)
 {
    Q_D(QAction);
    d->userData = data;
    d->sendDataChanged();
 }
 
-
-/*!
-  Updates the relevant status bar for the \a widget specified by sending a
-  QStatusTipEvent to its parent widget. Returns true if an event was sent;
-  otherwise returns false.
-
-  If a null widget is specified, the event is sent to the action's parent.
-
-  \sa statusTip
-*/
-bool
-QAction::showStatusText(QWidget *widget)
+bool QAction::showStatusText(QWidget *widget)
 {
    return d_func()->showStatusText(widget, statusTip());
 }
 
-/*!
-  Sends the relevant signals for ActionEvent \a event.
-
-  Action based widgets use this API to cause the QAction
-  to emit signals as well as emitting their own.
-*/
 void QAction::activate(ActionEvent event)
 {
    Q_D(QAction);
+
    if (event == Trigger) {
-      QWeakPointer<QObject> guard = this;
+      QPointer<QObject> guard = this;
       if (d->checkable) {
          // the checked action of an exclusive group cannot be  unchecked
          if (d->checked && (d->group && d->group->isExclusive()
-                            && d->group->checkedAction() == this)) {
+               && d->group->checkedAction() == this)) {
             if (!guard.isNull()) {
                emit triggered(true);
             }
@@ -1086,6 +882,7 @@ void QAction::activate(ActionEvent event)
          }
          setChecked(!d->checked);
       }
+
       if (!guard.isNull()) {
          emit triggered(d->checked);
       }
@@ -1094,169 +891,6 @@ void QAction::activate(ActionEvent event)
    }
 }
 
-/*!
-    \fn void QAction::triggered(bool checked)
-
-    This signal is emitted when an action is activated by the user;
-    for example, when the user clicks a menu option, toolbar button,
-    or presses an action's shortcut key combination, or when trigger()
-    was called. Notably, it is \e not emitted when setChecked() or
-    toggle() is called.
-
-    If the action is checkable, \a checked is true if the action is
-    checked, or false if the action is unchecked.
-
-    \sa QAction::activate(), QAction::toggled(), checked
-*/
-
-/*!
-    \fn void QAction::toggled(bool checked)
-
-    This signal is emitted whenever a checkable action changes its
-    isChecked() status. This can be the result of a user interaction,
-    or because setChecked() was called.
-
-    \a checked is true if the action is checked, or false if the
-    action is unchecked.
-
-    \sa QAction::activate(), QAction::triggered(), checked
-*/
-
-/*!
-    \fn void QAction::hovered()
-
-    This signal is emitted when an action is highlighted by the user;
-    for example, when the user pauses with the cursor over a menu option,
-    toolbar button, or presses an action's shortcut key combination.
-
-    \sa QAction::activate()
-*/
-
-/*!
-    \fn void QAction::changed()
-
-    This signal is emitted when an action has changed. If you
-    are only interested in actions in a given widget, you can
-    watch for QWidget::actionEvent() sent with an
-    QEvent::ActionChanged.
-
-    \sa QWidget::actionEvent()
-*/
-
-/*!
-    \enum QAction::ActionEvent
-
-    This enum type is used when calling QAction::activate()
-
-    \value Trigger this will cause the QAction::triggered() signal to be emitted.
-
-    \value Hover this will cause the QAction::hovered() signal to be emitted.
-*/
-
-/*!
-    \fn void QAction::setMenuText(const QString &text)
-
-    Use setText() instead.
-*/
-
-/*!
-    \fn QString QAction::menuText() const
-
-    Use text() instead.
-*/
-
-/*!
-    \fn bool QAction::isOn() const
-
-    Use isChecked() instead.
-*/
-
-/*!
-    \fn void QAction::setOn(bool b)
-
-    Use setChecked() instead.
-*/
-
-/*!
-    \fn bool QAction::isToggleAction() const
-
-    Use isCheckable() instead.
-*/
-
-/*!
-    \fn void QAction::setToggleAction(bool b)
-
-    Use setCheckable() instead.
-*/
-
-/*!
-    \fn void QAction::setIconSet(const QIcon &i)
-
-    Use setIcon() instead.
-*/
-
-/*!
-    \fn bool QAction::addTo(QWidget *w)
-
-    Use QWidget::addAction() instead.
-
-    \oldcode
-    action->addTo(widget);
-    \newcode
-    widget->addAction(action);
-    \endcode
-*/
-
-/*!
-    \fn bool QAction::removeFrom(QWidget *w)
-
-    Use QWidget::removeAction() instead.
-
-    \oldcode
-    action->removeFrom(widget);
-    \newcode
-    widget->removeAction(action);
-    \endcode
-*/
-
-/*!
-    \fn void QAction::setAccel(const QKeySequence &shortcut)
-
-    Use setShortcut() instead.
-*/
-
-/*!
-    \fn QIcon QAction::iconSet() const
-
-    Use icon() instead.
-*/
-
-/*!
-    \fn QKeySequence QAction::accel() const
-
-    Use shortcut() instead.
-*/
-
-/*!
-    \fn void QAction::activated(int i);
-
-    Use triggered() instead.
-*/
-
-
-/*!
-    \property QAction::menuRole
-    \brief the action's menu role
-    \since 4.2
-
-    This indicates what role the action serves in the application menu on Mac
-    OS X. By default all action have the TextHeuristicRole, which means that
-    the action is added based on its text (see QMenuBar for more information).
-
-    The menu role can only be changed before the actions are put into the menu
-    bar in Mac OS X (usually just before the first application window is
-    shown).
-*/
 void QAction::setMenuRole(MenuRole menuRole)
 {
    Q_D(QAction);
@@ -1282,8 +916,8 @@ void QAction::setIconVisibleInMenu(bool visible)
       d->iconVisibleInMenu = visible;
       // Only send data changed if we really need to.
       if (oldValue != -1
-            || (oldValue == -1
-                && visible == !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus))) {
+         || (oldValue == -1
+            && visible == !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus))) {
          d->sendDataChanged();
       }
    }
@@ -1298,22 +932,32 @@ bool QAction::isIconVisibleInMenu() const
    return d->iconVisibleInMenu;
 }
 
-void QAction::trigger()
+
+Q_GUI_EXPORT QDebug operator<<(QDebug d, const QAction *action)
 {
-   activate(Trigger);
+   QDebugStateSaver saver(d);
+   d.nospace();
+   d << "QAction(" << static_cast<const void *>(action);
+   if (action) {
+      d << " text=" << action->text();
+      if (!action->toolTip().isEmpty()) {
+         d << " toolTip=" << action->toolTip();
+      }
+      if (action->isCheckable()) {
+         d << " checked=" << action->isChecked();
+      }
+      if (!action->shortcut().isEmpty()) {
+         d << " shortcut=" << action->shortcut();
+      }
+      d << " menuRole=";
+      QtDebugUtils::formatQEnum(d, action->menuRole());
+      d << " visible=" << action->isVisible();
+   } else {
+      d << '0';
+   }
+   d << ')';
+   return d;
 }
 
-void QAction::hover()
-{
-   activate(Hover);
-}
 
-void QAction::setDisabled(bool b)
-{
-   setEnabled(!b);
-}
-
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_ACTION
+#endif

@@ -30,7 +30,6 @@
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
 
 class QGesturePrivate
 {
@@ -61,8 +60,8 @@ class QPanGesturePrivate : public QGesturePrivate
 
  public:
    QPanGesturePrivate()
-      : acceleration(0), xVelocity(0), yVelocity(0) {
-   }
+      : acceleration(0), xVelocity(0), yVelocity(0), pointCount(2)
+   { }
 
    qreal horizontalVelocity() const {
       return xVelocity;
@@ -83,6 +82,7 @@ class QPanGesturePrivate : public QGesturePrivate
    qreal acceleration;
    qreal xVelocity;
    qreal yVelocity;
+   int pointCount;         // ### fixme Add accessor to QPanGesture.
 };
 
 class QPinchGesturePrivate : public QGesturePrivate
@@ -121,12 +121,17 @@ class QSwipeGesturePrivate : public QGesturePrivate
    Q_DECLARE_PUBLIC(QSwipeGesture)
 
  public:
+   enum State {
+      NoGesture,
+      Started,
+      ThreePointsReached
+   };
    QSwipeGesturePrivate()
       : horizontalDirection(QSwipeGesture::NoDirection),
         verticalDirection(QSwipeGesture::NoDirection),
         swipeAngle(0),
-        started(false), velocityValue(0) {
-   }
+        state(NoGesture), velocityValue(0)
+   { }
 
    qreal velocity() const {
       return velocityValue;
@@ -140,7 +145,7 @@ class QSwipeGesturePrivate : public QGesturePrivate
    qreal swipeAngle;
 
    QPoint lastPositions[3];
-   bool started;
+   State state;
    qreal velocityValue;
    QElapsedTimer time;
 };
@@ -170,8 +175,6 @@ class QTapAndHoldGesturePrivate : public QGesturePrivate
    static int Timeout;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_GESTURES
 
-#endif // QGESTURE_P_H
+#endif

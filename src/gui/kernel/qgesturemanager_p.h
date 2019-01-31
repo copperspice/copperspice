@@ -30,7 +30,6 @@
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
 
 class QBasicTimer;
 class QGraphicsObject;
@@ -53,6 +52,7 @@ class QGestureManager : public QObject
 #endif
 
    static QGestureManager *instance(); // declared in qapplication.cpp
+   static bool gesturePending(QObject *o);
 
    void cleanupCachedGestures(QObject *target, Qt::GestureType type);
    void recycle(QGesture *gesture);
@@ -90,15 +90,15 @@ class QGestureManager : public QObject
       }
    };
 
-   QMap<ObjectGesture, QList<QGesture *> > m_objectGestures;
+   QMap<ObjectGesture, QList<QGesture *>> m_objectGestures;
    QHash<QGesture *, QGestureRecognizer *> m_gestureToRecognizer;
    QHash<QGesture *, QObject *> m_gestureOwners;
 
-   QHash<QGesture *, QWidget *> m_gestureTargets;
+   QHash<QGesture *, QPointer<QWidget>> m_gestureTargets;
 
    int m_lastCustomGestureId;
 
-   QHash<QGestureRecognizer *, QSet<QGesture *> > m_obsoleteGestures;
+   QHash<QGestureRecognizer *, QSet<QGesture *>> m_obsoleteGestures;
    QHash<QGesture *, QGestureRecognizer *> m_deletedRecognizers;
    QSet<QGesture *> m_gesturesToDelete;
    void cleanupGesturesForRemovedRecognizer(QGesture *gesture);
@@ -106,13 +106,13 @@ class QGestureManager : public QObject
    QGesture *getState(QObject *widget, QGestureRecognizer *recognizer, Qt::GestureType gesture);
    void deliverEvents(const QSet<QGesture *> &gestures, QSet<QGesture *> *undeliveredGestures);
 
-   void getGestureTargets(const QSet<QGesture *> &gestures, 
-                          QMap<QWidget *, QList<QGesture *> > *conflicts, QMap<QWidget *, QList<QGesture *> > *normal);
+   void getGestureTargets(const QSet<QGesture *> &gestures,
+      QHash<QWidget *, QList<QGesture *>> *conflicts,
+      QHash<QWidget *, QList<QGesture *>> *normal);
 
    void cancelGesturesForChildren(QGesture *originatingGesture);
 };
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_GESTURES
 

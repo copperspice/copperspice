@@ -23,11 +23,11 @@
 #ifndef QLAYOUT_H
 #define QLAYOUT_H
 
-#include <QtCore/qobject.h>
-#include <QtGui/qlayoutitem.h>
-#include <QtGui/qsizepolicy.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qmargins.h>
+#include <qobject.h>
+#include <qlayoutitem.h>
+#include <qsizepolicy.h>
+#include <qrect.h>
+#include <qmargins.h>
 #include <QScopedPointer>
 
 #include <limits.h>
@@ -110,7 +110,9 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    virtual int count() const = 0;
 
    bool isEmpty() const override;
+   QSizePolicy::ControlTypes controlTypes() const override;
 
+   virtual QLayoutItem *replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOptions options = Qt::FindChildrenRecursively);
    int totalHeightForWidth(int w) const;
    QSize totalMinimumSize() const;
    QSize totalMaximumSize() const;
@@ -143,7 +145,8 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    friend class QWidget;
 };
 
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qgridlayout.h>
+//emerald - support old includes
+#include <qboxlayout.h>
+#include <qgridlayout.h>
 
 #endif // QLAYOUT_H

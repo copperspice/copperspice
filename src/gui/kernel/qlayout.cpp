@@ -33,8 +33,6 @@
 #include <qlayout_p.h>
 #include <qformlayout.h>
 
-QT_BEGIN_NAMESPACE
-
 static int menuBarHeightForWidth(QWidget *menubar, int w)
 {
    if (menubar && !menubar->isHidden() && !menubar->isWindow()) {
@@ -42,6 +40,7 @@ static int menuBarHeightForWidth(QWidget *menubar, int w)
       if (result == -1) {
          result = menubar->sizeHint().height();
       }
+
       const int min = qSmartMinSize(menubar).height();
       result = qBound(min, result, menubar->maximumSize().height());
       if (result != -1) {
@@ -62,12 +61,6 @@ QLayout::QLayout(QWidget *parent)
    parent->setLayout(this);
 }
 
-/*!
-    Constructs a new child QLayout.
-
-    This layout has to be inserted into another layout before geometry
-    management will work.
-*/
 QLayout::QLayout()
    : QObject(0), d_ptr(new QLayoutPrivate)
 {
@@ -89,7 +82,7 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
    } else if (w) {
       if (w->layout()) {
          qWarning("QLayout: Attempting to add QLayout \"%s\" to %s \"%s\", which  already has a layout",
-                  csPrintable(QObject::objectName()), csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+            csPrintable(QObject::objectName()), csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 
          setParent(0);
 
@@ -147,52 +140,28 @@ QWidgetItem *QLayoutPrivate::createWidgetItem(const QLayout *layout, QWidget *wi
 }
 
 QSpacerItem *QLayoutPrivate::createSpacerItem(const QLayout *layout, int w, int h, QSizePolicy::Policy hPolicy,
-      QSizePolicy::Policy vPolicy)
+   QSizePolicy::Policy vPolicy)
 {
-   if (spacerItemFactoryMethod)
+   if (spacerItemFactoryMethod) {
       if (QSpacerItem *si = (*spacerItemFactoryMethod)(layout, w, h, hPolicy, vPolicy)) {
          return si;
       }
+   }
+
    return new QSpacerItem(w, h,  hPolicy, vPolicy);
 }
 
-/*!
-    \fn void QLayout::addItem(QLayoutItem *item)
-
-    Implemented in subclasses to add an \a item. How it is added is
-    specific to each subclass.
-
-    This function is not usually called in application code. To add a widget
-    to a layout, use the addWidget() function; to add a child layout, use the
-    addLayout() function provided by the relevant QLayout subclass.
-
-    \bold{Note:} The ownership of \a item is transferred to the layout, and it's
-    the layout's responsibility to delete it.
-
-    \sa addWidget(), QBoxLayout::addLayout(), QGridLayout::addLayout()
-*/
-
-/*!
-    Adds widget \a w to this layout in a manner specific to the
-    layout. This function uses addItem().
-*/
 void QLayout::addWidget(QWidget *w)
 {
    addChildWidget(w);
    addItem(QLayoutPrivate::createWidgetItem(this, w));
 }
 
-
-
-/*!
-    Sets the alignment for widget \a w to \a alignment and returns
-    true if \a w is found in this layout (not including child
-    layouts); otherwise returns false.
-*/
 bool QLayout::setAlignment(QWidget *w, Qt::Alignment alignment)
 {
    int i = 0;
    QLayoutItem *item = itemAt(i);
+
    while (item) {
       if (item->widget() == w) {
          item->setAlignment(alignment);
@@ -205,13 +174,6 @@ bool QLayout::setAlignment(QWidget *w, Qt::Alignment alignment)
    return false;
 }
 
-/*!
-  \overload
-
-  Sets the alignment for the layout \a l to \a alignment and
-  returns true if \a l is found in this layout (not including child
-  layouts); otherwise returns false.
-*/
 bool QLayout::setAlignment(QLayout *l, Qt::Alignment alignment)
 {
    int i = 0;
@@ -228,34 +190,6 @@ bool QLayout::setAlignment(QLayout *l, Qt::Alignment alignment)
    return false;
 }
 
-/*!
-    \fn void QLayout::setAlignment(Qt::Alignment alignment)
-
-    Sets the alignment of this item to \a alignment.
-
-    \sa QLayoutItem::setAlignment()
-*/
-
-/*!
-    \fn bool QLayout::isTopLevel() const
-
-    Returns true if this layout is a top-level layout, i.e. not a
-    child of another layout; otherwise returns false.
-*/
-
-/*!
-    \property QLayout::margin
-    \brief the width of the outside border of the layout
-    \obsolete
-
-    Use setContentsMargins() and getContentsMargins() instead.
-
-    \sa contentsRect(), spacing
-*/
-
-/*!
-    \obsolete
-*/
 int QLayout::margin() const
 {
    int left, top, right, bottom;
@@ -266,23 +200,6 @@ int QLayout::margin() const
       return -1;
    }
 }
-
-/*!
-    \property QLayout::spacing
-    \brief the spacing between widgets inside the layout
-
-    If no value is explicitly set, the layout's spacing is inherited
-    from the parent layout, or from the style settings for the parent
-    widget.
-
-    For QGridLayout and QFormLayout, it is possible to set different horizontal and
-    vertical spacings using \l{QGridLayout::}{setHorizontalSpacing()}
-    and \l{QGridLayout::}{setVerticalSpacing()}. In that case,
-    spacing() returns -1.
-
-    \sa contentsRect(), getContentsMargins(), QStyle::layoutSpacing(),
-        QStyle::pixelMetric()
-*/
 
 int QLayout::spacing() const
 {
@@ -326,27 +243,12 @@ void QLayout::setSpacing(int spacing)
    }
 }
 
-/*!
-    \since 4.3
-
-    Sets the \a left, \a top, \a right, and \a bottom margins to use
-    around the layout.
-
-    By default, QLayout uses the values provided by the style. On
-    most platforms, the margin is 11 pixels in all directions.
-
-    \sa getContentsMargins(), QStyle::pixelMetric(),
-        {QStyle::}{PM_LayoutLeftMargin},
-        {QStyle::}{PM_LayoutTopMargin},
-        {QStyle::}{PM_LayoutRightMargin},
-        {QStyle::}{PM_LayoutBottomMargin}
-*/
 void QLayout::setContentsMargins(int left, int top, int right, int bottom)
 {
    Q_D(QLayout);
 
    if (d->userLeftMargin == left && d->userTopMargin == top &&
-         d->userRightMargin == right && d->userBottomMargin == bottom) {
+      d->userRightMargin == right && d->userBottomMargin == bottom) {
       return;
    }
 
@@ -357,37 +259,13 @@ void QLayout::setContentsMargins(int left, int top, int right, int bottom)
    invalidate();
 }
 
-/*!
-    \since 4.6
 
-    Sets the \a margins to use around the layout.
-
-    By default, QLayout uses the values provided by the style. On
-    most platforms, the margin is 11 pixels in all directions.
-
-    \sa contentsMargins()
-*/
 void QLayout::setContentsMargins(const QMargins &margins)
 {
    setContentsMargins(margins.left(), margins.top(), margins.right(), margins.bottom());
 }
 
-/*!
-    \since 4.3
 
-    Extracts the left, top, right, and bottom margins used around the
-    layout, and assigns them to *\a left, *\a top, *\a right, and *\a
-    bottom (unless they are null pointers).
-
-    By default, QLayout uses the values provided by the style. On
-    most platforms, the margin is 11 pixels in all directions.
-
-    \sa setContentsMargins(), QStyle::pixelMetric(),
-        {QStyle::}{PM_LayoutLeftMargin},
-        {QStyle::}{PM_LayoutTopMargin},
-        {QStyle::}{PM_LayoutRightMargin},
-        {QStyle::}{PM_LayoutBottomMargin}
-*/
 void QLayout::getContentsMargins(int *left, int *top, int *right, int *bottom) const
 {
    Q_D(const QLayout);
@@ -397,16 +275,7 @@ void QLayout::getContentsMargins(int *left, int *top, int *right, int *bottom) c
    d->getMargin(bottom, d->userBottomMargin, QStyle::PM_LayoutBottomMargin);
 }
 
-/*!
-    \since 4.6
 
-    Returns the margins used around the layout.
-
-    By default, QLayout uses the values provided by the style. On
-    most platforms, the margin is 11 pixels in all directions.
-
-    \sa setContentsMargins()
-*/
 QMargins QLayout::contentsMargins() const
 {
    int left, top, right, bottom;
@@ -414,14 +283,7 @@ QMargins QLayout::contentsMargins() const
    return QMargins(left, top, right, bottom);
 }
 
-/*!
-    \since 4.3
 
-    Returns the layout's geometry() rectangle, but taking into account the
-    contents margins.
-
-    \sa setContentsMargins(), getContentsMargins()
-*/
 QRect QLayout::contentsRect() const
 {
    Q_D(const QLayout);
@@ -432,15 +294,6 @@ QRect QLayout::contentsRect() const
    return d->rect.adjusted(+left, +top, -right, -bottom);
 }
 
-/*!
-    Returns the parent widget of this layout, or 0 if this layout is
-    not installed on any widget.
-
-    If the layout is a sub-layout, this function returns the parent
-    widget of the parent layout.
-
-    \sa parent()
-*/
 QWidget *QLayout::parentWidget() const
 {
    Q_D(const QLayout);
@@ -473,6 +326,7 @@ bool QLayout::isEmpty() const
 {
    int i = 0;
    QLayoutItem *item = itemAt(i);
+
    while (item) {
       if (!item->isEmpty()) {
          return false;
@@ -480,7 +334,19 @@ bool QLayout::isEmpty() const
       ++i;
       item = itemAt(i);
    }
+
    return true;
+}
+QSizePolicy::ControlTypes QLayout::controlTypes() const
+{
+   if (count() == 0) {
+      return QSizePolicy::DefaultType;
+   }
+   QSizePolicy::ControlTypes types;
+   for (int i = count() - 1; i >= 0; --i) {
+      types |= itemAt(i)->controlTypes();
+   }
+   return types;
 }
 
 /*!
@@ -511,14 +377,16 @@ void QLayout::invalidate()
    update();
 }
 
-static bool removeWidgetRecursively(QLayoutItem *li, QWidget *w)
+static bool removeWidgetRecursively(QLayoutItem *li, QObject *w)
 {
    QLayout *lay = li->layout();
    if (!lay) {
       return false;
    }
+
    int i = 0;
    QLayoutItem *child;
+
    while ((child = lay->itemAt(i))) {
       if (child->widget() == w) {
          delete lay->takeAt(i);
@@ -543,13 +411,15 @@ void QLayoutPrivate::doResize(const QSize &r)
    QWidget *mw = q->parentWidget();
 
    QRect rect = mw->testAttribute(Qt::WA_LayoutOnEntireRect) ? mw->rect() : mw->contentsRect();
+
+   const int mbTop = rect.top();
    rect.setTop(rect.top() + mbh);
 
    q->setGeometry(rect);
 
 #ifndef QT_NO_MENUBAR
    if (menubar) {
-      menubar->setGeometry(0, 0, r.width(), mbh);
+      menubar->setGeometry(rect.left(), mbTop, r.width(), mbh);
    }
 
 #endif
@@ -575,17 +445,17 @@ void QLayout::widgetEvent(QEvent *e)
          break;
 
       case QEvent::ChildRemoved: {
-         QChildEvent *c = static_cast<QChildEvent *>(e);
+         QChildEvent *c = (QChildEvent *)e;
 
          if (c->child()->isWidgetType()) {
-            QWidget *w = (QWidget *)c->child();
+
 
 #ifndef QT_NO_MENUBAR
-            if (w == d->menubar) {
+            if (c->child() == d->menubar) {
                d->menubar = 0;
             }
 #endif
-            removeWidgetRecursively(this, w);
+            removeWidgetRecursively(this, c->child());
          }
       }
 
@@ -614,12 +484,13 @@ void QLayout::childEvent(QChildEvent *e)
    }
 
    if (e->type() == QEvent::ChildRemoved) {
+      QChildEvent *c = (QChildEvent *)e;
       int i = 0;
       QLayoutItem *item;
 
       while ((item = itemAt(i))) {
 
-         if (item == static_cast<QLayout *>(e->child())) {
+         if (item == static_cast<QLayout *>(c->child())) {
             takeAt(i);
             invalidate();
             break;
@@ -696,6 +567,7 @@ QSize QLayout::totalSizeHint() const
    if (hasHeightForWidth()) {
       s.setHeight(heightForWidth(s.width() + side));
    }
+
 #ifndef QT_NO_MENUBAR
    top += menuBarHeightForWidth(d->menubar, s.width());
 #endif
@@ -725,18 +597,11 @@ QSize QLayout::totalMaximumSize() const
 
    if (d->topLevel)
       s = QSize(qMin(s.width() + side, QLAYOUTSIZE_MAX),
-                qMin(s.height() + top, QLAYOUTSIZE_MAX));
+            qMin(s.height() + top, QLAYOUTSIZE_MAX));
    return s;
 }
 
-/*!
-  \internal
-  Destroys the layout, deleting all child layouts.
-  Geometry management stops when a top-level layout is deleted.
 
-  The layout classes will probably be fatally confused if you delete
-  a sublayout.
-*/
 QLayout::~QLayout()
 {
    Q_D(QLayout);
@@ -745,7 +610,7 @@ QLayout::~QLayout()
      when the parent no longer is a QWidget.
    */
    if (d->topLevel && parent() && parent()->isWidgetType() &&
-         ((QWidget *)parent())->layout() == this) {
+      ((QWidget *)parent())->layout() == this) {
       ((QWidget *)parent())->d_func()->layout = nullptr;
    }
 }
@@ -817,13 +682,14 @@ void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
 #ifdef QT_DEBUG
          if (pw && pw != mw && layoutDebug()) {
             qWarning("QLayout::addChildLayout() Widget %s \"%s\" in wrong parent, moved to correct parent",
-                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+               csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
          bool needShow = mwVisible && !(w->isHidden() && w->testAttribute(Qt::WA_WState_ExplicitShowHide));
          if (pw != mw) {
             w->setParent(mw);
          }
+
          if (needShow) {
             QMetaObject::invokeMethod(w, "_q_showIfNotHidden", Qt::QueuedConnection);   //show later
          }
@@ -832,6 +698,43 @@ void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
          l->d_func()->reparentChildWidgets(mw);
       }
    }
+}
+
+bool QLayoutPrivate::checkWidget(QWidget *widget) const
+{
+   Q_Q(const QLayout);
+
+   if (! widget) {
+      qWarning("QLayout: Can not add a null widget to %s/%s",
+            csPrintable(q->metaObject()->className()), csPrintable(q->objectName()));
+
+      return false;
+   }
+
+   if (widget == q->parentWidget()) {
+      qWarning("QLayout: Can not add parent widget %s/%s to its child layout %s/%s",
+         csPrintable(widget->metaObject()->className()), csPrintable(widget->objectName()),
+         csPrintable(q->metaObject()->className()), csPrintable(q->objectName()));
+
+      return false;
+   }
+   return true;
+}
+bool QLayoutPrivate::checkLayout(QLayout *otherLayout) const
+{
+   Q_Q(const QLayout);
+   if (!otherLayout) {
+      qWarning("QLayout: Can not add a null layout to %s/%s",
+         csPrintable(q->metaObject()->className()), csPrintable(q->objectName()));
+      return false;
+   }
+
+   if (otherLayout == q) {
+      qWarning("QLayout: Cannot add layout %s/%s to itself",
+         csPrintable(q->metaObject()->className()), csPrintable(q->objectName()));
+      return false;
+   }
+   return true;
 }
 
 /*!
@@ -856,7 +759,7 @@ void QLayout::addChildWidget(QWidget *w)
 #ifdef QT_DEBUG
          if (layoutDebug()) {
             qWarning("QLayout::addChildWidget: %s \"%s\" is already in a layout; moved to new layout",
-                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+               csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
       }
@@ -867,7 +770,7 @@ void QLayout::addChildWidget(QWidget *w)
 #ifdef QT_DEBUG
       if (layoutDebug())
          qWarning("QLayout::addChildWidget: %s \"%s\" in wrong parent; moved to correct parent",
-                  csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+            csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 #endif
       pw = 0;
    }
@@ -914,48 +817,18 @@ QWidget *QLayout::menuBar() const
 }
 
 
-/*!
-    Returns the minimum size of this layout. This is the smallest
-    size that the layout can have while still respecting the
-    specifications.
 
-    The returned value doesn't include the space required by
-    QWidget::setContentsMargins() or menuBar().
-
-    The default implementation allows unlimited resizing.
-*/
 QSize QLayout::minimumSize() const
 {
    return QSize(0, 0);
 }
 
-/*!
-    Returns the maximum size of this layout. This is the largest size
-    that the layout can have while still respecting the
-    specifications.
-
-    The returned value doesn't include the space required by
-    QWidget::setContentsMargins() or menuBar().
-
-    The default implementation allows unlimited resizing.
-*/
 QSize QLayout::maximumSize() const
 {
    return QSize(QLAYOUTSIZE_MAX, QLAYOUTSIZE_MAX);
 }
 
-/*!
-    Returns whether this layout can make use of more space than
-    sizeHint(). A value of Qt::Vertical or Qt::Horizontal means that
-    it wants to grow in only one dimension, whereas Qt::Vertical |
-    Qt::Horizontal means that it wants to grow in both dimensions.
 
-    The default implementation returns Qt::Horizontal | Qt::Vertical.
-    Subclasses reimplement it to return a meaningful value based on
-    their child widgets's \l{QSizePolicy}{size policies}.
-
-    \sa sizeHint()
-*/
 Qt::Orientations QLayout::expandingDirections() const
 {
    return Qt::Horizontal | Qt::Vertical;
@@ -1027,7 +900,7 @@ bool QLayout::activate()
    QWidget *mw = static_cast<QWidget *>(parent());
    if (mw == 0) {
       qWarning("QLayout::activate: %s \"%s\" does not have a main widget",
-               csPrintable(QObject::metaObject()->className()), csPrintable(QObject::objectName()));
+         csPrintable(QObject::metaObject()->className()), csPrintable(QObject::objectName()));
       return false;
    }
    activateRecursiveHelper(this);
@@ -1051,9 +924,11 @@ bool QLayout::activate()
          mw->setMinimumSize(totalMinimumSize());
          mw->setMaximumSize(totalMaximumSize());
          break;
+
       case SetDefaultConstraint: {
          bool widthSet = explMin & Qt::Horizontal;
          bool heightSet = explMin & Qt::Vertical;
+
          if (mw->isWindow()) {
             QSize ms = totalMinimumSize();
             if (widthSet) {
@@ -1062,18 +937,9 @@ bool QLayout::activate()
             if (heightSet) {
                ms.setHeight(mw->minimumSize().height());
             }
-            if ((!heightSet || !widthSet) && hasHeightForWidth()) {
-               int h = minimumHeightForWidth(ms.width());
-               if (h > ms.height()) {
-                  if (!heightSet) {
-                     ms.setHeight(0);
-                  }
-                  if (!widthSet) {
-                     ms.setWidth(0);
-                  }
-               }
-            }
+
             mw->setMinimumSize(ms);
+
          } else if (!widthSet || !heightSet) {
             QSize ms = mw->minimumSize();
             if (!widthSet) {
@@ -1101,59 +967,55 @@ bool QLayout::activate()
    return true;
 }
 
-/*!
-    \fn QLayoutItem *QLayout::itemAt(int index) const
 
-    Must be implemented in subclasses to return the layout item at \a
-    index. If there is no such item, the function must return 0.
-    Items are numbered consecutively from 0. If an item is deleted, other items will be renumbered.
+QLayoutItem *QLayout::replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOptions options)
+{
+   Q_D(QLayout);
+   if (!from || !to) {
+      return 0;
+   }
 
-    This function can be used to iterate over a layout. The following
-    code will draw a rectangle for each layout item in the layout structure of the widget.
+   int index = -1;
+   QLayoutItem *item = 0;
+   for (int u = 0; u < count(); ++u) {
+      item = itemAt(u);
+      if (!item) {
+         continue;
+      }
 
-    \snippet doc/src/snippets/code/src_gui_kernel_qlayout.cpp 0
+      if (item->widget() == from) {
+         index = u;
+         break;
+      }
 
-    \sa count(), takeAt()
-*/
+      if (item->layout() && (options & Qt::FindChildrenRecursively)) {
+         QLayoutItem *r = item->layout()->replaceWidget(from, to, options);
+         if (r) {
+            return r;
+         }
+      }
+   }
+   if (index == -1) {
+      return 0;
+   }
 
-/*!
-    \fn QLayoutItem *QLayout::takeAt(int index)
+   addChildWidget(to);
+   QLayoutItem *newitem = new QWidgetItem(to);
+   newitem->setAlignment(item->alignment());
+   QLayoutItem *r = d->replaceAt(index, newitem);
+   if (!r) {
+      delete newitem;
+   }
+   return r;
+}
 
-    Must be implemented in subclasses to remove the layout item at \a
-    index from the layout, and return the item. If there is no such
-    item, the function must do nothing and return 0.  Items are numbered
-    consecutively from 0. If an item is removed, other items will be
-    renumbered.
 
-    The following code fragment shows a safe way to remove all items
-    from a layout:
 
-    \snippet doc/src/snippets/code/src_gui_kernel_qlayout.cpp 1
-
-    \sa itemAt(), count()
-*/
-
-/*!
-    \fn int *QLayout::count() const
-
-    Must be implemented in subclasses to return the number of items
-    in the layout.
-
-    \sa itemAt()
-*/
-
-/*!
-    Searches for widget \a widget in this layout (not including child
-    layouts).
-
-    Returns the index of \a widget, or -1 if \a widget is not found.
-
-    The default implementation iterates over all items using itemAt()
-*/
 int QLayout::indexOf(QWidget *widget) const
 {
    int i = 0;
    QLayoutItem *item = itemAt(i);
+
    while (item) {
       if (item->widget() == widget) {
          return i;
@@ -1164,44 +1026,6 @@ int QLayout::indexOf(QWidget *widget) const
    return -1;
 }
 
-/*!
-    \enum QLayout::SizeConstraint
-
-    The possible values are:
-
-    \value SetDefaultConstraint The main widget's minimum size is set
-                    to minimumSize(), unless the widget already has
-                    a minimum size.
-
-    \value SetFixedSize The main widget's size is set to sizeHint(); it
-                    cannot be resized at all.
-    \value SetMinimumSize  The main widget's minimum size is set to
-                    minimumSize(); it cannot be smaller.
-
-    \value SetMaximumSize  The main widget's maximum size is set to
-                    maximumSize(); it cannot be larger.
-
-    \value SetMinAndMaxSize  The main widget's minimum size is set to
-                    minimumSize() and its maximum size is set to
-                    maximumSize().
-
-    \value SetNoConstraint  The widget is not constrained.
-
-    \omitvalue Auto
-    \omitvalue FreeResize
-    \omitvalue Minimum
-    \omitvalue Fixed
-
-    \sa setSizeConstraint()
-*/
-
-/*!
-    \property QLayout::sizeConstraint
-    \brief the resize mode of the layout
-
-    The default mode is \l {QLayout::SetDefaultConstraint}
-    {SetDefaultConstraint}.
-*/
 void QLayout::setSizeConstraint(SizeConstraint constraint)
 {
    Q_D(QLayout);
@@ -1219,14 +1043,7 @@ QLayout::SizeConstraint QLayout::sizeConstraint() const
    return d->constraint;
 }
 
-/*!
-    Returns the rectangle that should be covered when the geometry of
-    this layout is set to \a r, provided that this layout supports
-    setAlignment().
 
-    The result is derived from sizeHint() and expanding(). It is never
-    larger than \a r.
-*/
 QRect QLayout::alignmentRect(const QRect &r) const
 {
    QSize s = sizeHint();
@@ -1243,11 +1060,11 @@ QRect QLayout::alignmentRect(const QRect &r) const
    that->setAlignment(a);
 
    if ((expandingDirections() & Qt::Horizontal) ||
-         !(a & Qt::AlignHorizontal_Mask)) {
+      !(a & Qt::AlignHorizontal_Mask)) {
       s.setWidth(qMin(r.width(), ms.width()));
    }
    if ((expandingDirections() & Qt::Vertical) ||
-         !(a & Qt::AlignVertical_Mask)) {
+      !(a & Qt::AlignVertical_Mask)) {
       s.setHeight(qMin(r.height(), ms.height()));
    } else if (hasHeightForWidth()) {
       int hfw = heightForWidth(s.width());
@@ -1277,16 +1094,7 @@ QRect QLayout::alignmentRect(const QRect &r) const
    return QRect(x, y, s.width(), s.height());
 }
 
-/*!
-    Removes the widget \a widget from the layout. After this call, it
-    is the caller's responsibility to give the widget a reasonable
-    geometry or to put the widget back into a layout.
 
-    \bold{Note:} The ownership of \a widget remains the same as
-    when it was added.
-
-    \sa removeItem(), QWidget::setGeometry(), addWidget()
-*/
 void QLayout::removeWidget(QWidget *widget)
 {
    int i = 0;
@@ -1397,75 +1205,3 @@ QSize QLayout::closestAcceptableSize(const QWidget *widget, const QSize &size)
    return result;
 }
 
-/*!
-    \fn void QLayout::setResizeMode(SizeConstraint constraint)
-
-    Use setSizeConstraint(\a constraint) instead.
-*/
-
-/*!
-    \fn QLayout::SizeConstraint QLayout::resizeMode() const
-
-    Use sizeConstraint() instead.
-*/
-
-void QSizePolicy::setControlType(ControlType type)
-{
-   /*
-       The control type is a flag type, with values 0x1, 0x2, 0x4, 0x8, 0x10,
-       etc. In memory, we pack it onto the available bits (CTSize) in
-       setControlType(), and unpack it here.
-
-       Example:
-
-           0x00000001 maps to 0x00000000
-           0x00000002 maps to 0x00000200
-           0x00000004 maps to 0x00000400
-           0x00000008 maps to 0x00000600
-           etc.
-   */
-
-   int i = 0;
-   while (true) {
-      if (type & (0x1 << i)) {
-         data = (data & ~CTMask) | (i << CTShift);
-         return;
-      }
-      ++i;
-   }
-}
-
-QSizePolicy::ControlType QSizePolicy::controlType() const
-{
-   return QSizePolicy::ControlType(0x1 << ((data & CTMask) >> CTShift));
-}
-
-#ifndef QT_NO_DATASTREAM
-/*!
-    \relates QSizePolicy
-    \since 4.2
-
-    Writes the size \a policy to the data stream \a stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
-QDataStream &operator<<(QDataStream &stream, const QSizePolicy &policy)
-{
-   return stream << policy.data;
-}
-
-/*!
-    \relates QSizePolicy
-    \since 4.2
-
-    Reads the size \a policy from the data stream \a stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
-QDataStream &operator>>(QDataStream &stream, QSizePolicy &policy)
-{
-   return stream >> policy.data;
-}
-#endif // QT_NO_DATASTREAM
-
-QT_END_NAMESPACE

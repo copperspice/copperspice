@@ -23,11 +23,9 @@
 #ifndef QLAYOUTITEM_H
 #define QLAYOUTITEM_H
 
-#include <QtGui/qsizepolicy.h>
-#include <QtCore/qrect.h>
+#include <qsizepolicy.h>
+#include <qrect.h>
 #include <limits.h>
-
-QT_BEGIN_NAMESPACE
 
 static const int QLAYOUTSIZE_MAX = INT_MAX / 256 / 16;
 
@@ -41,7 +39,7 @@ class Q_GUI_EXPORT QLayoutItem
 {
 
  public:
-   inline explicit QLayoutItem(Qt::Alignment alignment = 0);
+   inline explicit QLayoutItem(Qt::Alignment alignment = Qt::Alignment());
    virtual ~QLayoutItem();
    virtual QSize sizeHint() const = 0;
    virtual QSize minimumSize() const = 0;
@@ -62,8 +60,9 @@ class Q_GUI_EXPORT QLayoutItem
    Qt::Alignment alignment() const {
       return align;
    }
+
    void setAlignment(Qt::Alignment a);
-   QSizePolicy::ControlTypes controlTypes() const;
+   virtual QSizePolicy::ControlTypes controlTypes() const;
 
  protected:
    Qt::Alignment align;
@@ -77,11 +76,13 @@ class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
 
  public:
    QSpacerItem(int w, int h, QSizePolicy::Policy hData = QSizePolicy::Minimum,
-               QSizePolicy::Policy vData = QSizePolicy::Minimum)
+      QSizePolicy::Policy vData = QSizePolicy::Minimum)
       : width(w), height(h), sizeP(hData, vData) { }
 
+   ~QSpacerItem();
+
    void changeSize(int w, int h, QSizePolicy::Policy hData = QSizePolicy::Minimum,
-                   QSizePolicy::Policy vData = QSizePolicy::Minimum);
+      QSizePolicy::Policy vData = QSizePolicy::Minimum);
 
    QSize sizeHint() const override;
    QSize minimumSize() const override;
@@ -91,6 +92,10 @@ class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
    void setGeometry(const QRect &) override;
    QRect geometry() const override;
    QSpacerItem *spacerItem() override;
+
+   QSizePolicy sizePolicy() const {
+      return sizeP;
+   }
 
  private:
    int width;
@@ -108,6 +113,8 @@ class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
       : wid(w) {
    }
 
+   ~QWidgetItem();
+
    QSize sizeHint() const override;
    QSize minimumSize() const override;
    QSize maximumSize() const override;
@@ -119,6 +126,8 @@ class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
 
    bool hasHeightForWidth() const override;
    int heightForWidth(int) const override;
+
+   QSizePolicy::ControlTypes controlTypes() const override;
 
  protected:
    QWidget *wid;
@@ -159,7 +168,5 @@ class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
 
    Q_DISABLE_COPY(QWidgetItemV2)
 };
-
-QT_END_NAMESPACE
 
 #endif // QLAYOUTITEM_H

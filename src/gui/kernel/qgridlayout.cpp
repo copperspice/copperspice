@@ -30,7 +30,6 @@
 #include <qlayoutengine_p.h>
 #include <qlayout_p.h>
 
-QT_BEGIN_NAMESPACE
 
 struct QGridLayoutSizeTriple {
    QSize minS;
@@ -61,15 +60,19 @@ class QGridBox
    QSize sizeHint() const {
       return item_->sizeHint();
    }
+
    QSize minimumSize() const {
       return item_->minimumSize();
    }
+
    QSize maximumSize() const {
       return item_->maximumSize();
    }
+
    Qt::Orientations expandingDirections() const {
       return item_->expandingDirections();
    }
+
    bool isEmpty() const {
       return item_->isEmpty();
    }
@@ -84,15 +87,23 @@ class QGridBox
    void setAlignment(Qt::Alignment a) {
       item_->setAlignment(a);
    }
+
    void setGeometry(const QRect &r) {
       item_->setGeometry(r);
    }
+
    Qt::Alignment alignment() const {
       return item_->alignment();
    }
+
    QLayoutItem *item() {
       return item_;
    }
+
+   void setItem(QLayoutItem *newitem) {
+      item_ = newitem;
+   }
+
    QLayoutItem *takeItem() {
       QLayoutItem *i = item_;
       item_ = 0;
@@ -101,21 +112,23 @@ class QGridBox
 
    int hStretch() {
       return item_->widget() ?
-             item_->widget()->sizePolicy().horizontalStretch() : 0;
+         item_->widget()->sizePolicy().horizontalStretch() : 0;
    }
+
    int vStretch() {
       return item_->widget() ?
-             item_->widget()->sizePolicy().verticalStretch() : 0;
+         item_->widget()->sizePolicy().verticalStretch() : 0;
    }
 
  private:
    friend class QGridLayoutPrivate;
    friend class QGridLayout;
 
-   inline int toRow(int rr) const {
+   int toRow(int rr) const {
       return torow >= 0 ? torow : rr - 1;
    }
-   inline int toCol(int cc) const {
+
+   int toCol(int cc) const {
       return tocol >= 0 ? tocol : cc - 1;
    }
 
@@ -127,6 +140,7 @@ class QGridBox
 class QGridLayoutPrivate : public QLayoutPrivate
 {
    Q_DECLARE_PUBLIC(QGridLayout)
+
  public:
    QGridLayoutPrivate();
 
@@ -185,19 +199,24 @@ class QGridLayoutPrivate : public QLayoutPrivate
       hReversed = c;
       vReversed = r;
    }
+
    inline bool horReversed() const {
       return hReversed;
    }
+
    inline bool verReversed() const {
       return vReversed;
    }
+
    inline void setDirty() {
       needRecalc = true;
       hfw_width = -1;
    }
+
    inline bool isDirty() const {
       return needRecalc;
    }
+
    bool hasHeightForWidth(int hSpacing, int vSpacing);
    int heightForWidth(int width, int hSpacing, int vSpacing);
    int minimumHeightForWidth(int width, int hSpacing, int vSpacing);
@@ -236,9 +255,22 @@ class QGridLayoutPrivate : public QLayoutPrivate
       return 0;
    }
 
-   void getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan) {
+   QLayoutItem *replaceAt(int index, QLayoutItem *newitem) override {
+      if (!newitem) {
+         return 0;
+      }
+      QLayoutItem *item = 0;
+      QGridBox *b = things.value(index);
+      if (b) {
+         item = b->takeItem();
+         b->setItem(newitem);
+      }
+      return item;
+   }
+
+   void getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan) const {
       if (index < things.count()) {
-         QGridBox *b =  things.at(index);
+         const QGridBox *b =  things.at(index);
          int toRow = b->toRow(rr);
          int toCol = b->toCol(cc);
          *row = b->row;
@@ -258,7 +290,7 @@ class QGridLayoutPrivate : public QLayoutPrivate
    void addData(QGridBox *b, const QGridLayoutSizeTriple &sizes, bool r, bool c);
    void setSize(int rows, int cols);
    void setupSpacings(QVector<QLayoutStruct> &chain, QGridBox *grid[], int fixedSpacing,
-                      Qt::Orientation orientation);
+      Qt::Orientation orientation);
    void setupLayoutData(int hSpacing, int vSpacing);
    void setupHfwLayoutData();
    void effectiveMargins(int *left, int *top, int *right, int *bottom) const;
@@ -300,6 +332,7 @@ void QGridLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *
    int t = topMargin;
    int r = rightMargin;
    int b = bottomMargin;
+
 #ifdef Q_OS_MAC
    int leftMost = INT_MAX;
    int topMost = INT_MAX;
@@ -385,6 +418,7 @@ void QGridLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *
    }
 
 #endif
+
    if (left) {
       *left = l;
    }
@@ -436,7 +470,7 @@ void QGridLayoutPrivate::recalcHFW(int w)
      Go through all children, using colData and heightForWidth()
      and put the results in hfwData.
    */
-   if (!hfwData) {
+   if (! hfwData) {
       hfwData = new QVector<QLayoutStruct>(rr);
    }
    setupHfwLayoutData();
@@ -625,7 +659,9 @@ void QGridLayoutPrivate::add(QGridBox *box, int row1, int row2, int col1, int co
       add(box, row1, col1);
       return;
    }
-   expand(row2 + 1, col2 + 1);
+
+   expand(qMax(row1, row2) + 1, qMax(col1, col2) + 1);
+
    box->row = row1;
    box->col = col1;
 
@@ -658,7 +694,7 @@ void QGridLayoutPrivate::addData(QGridBox *box, const QGridLayoutSizeTriple &siz
       data->minimumSize = qMax(sizes.minS.width(), data->minimumSize);
 
       qMaxExpCalc(data->maximumSize, data->expansive, data->empty, sizes.maxS.width(),
-                  box->expandingDirections() & Qt::Horizontal, box->isEmpty());
+         box->expandingDirections() & Qt::Horizontal, box->isEmpty());
    }
    if (r) {
       QLayoutStruct *data = &rowData[box->row];
@@ -669,7 +705,7 @@ void QGridLayoutPrivate::addData(QGridBox *box, const QGridLayoutSizeTriple &siz
       data->minimumSize = qMax(sizes.minS.height(), data->minimumSize);
 
       qMaxExpCalc(data->maximumSize, data->expansive, data->empty, sizes.maxS.height(),
-                  box->expandingDirections() & Qt::Vertical, box->isEmpty());
+         box->expandingDirections() & Qt::Vertical, box->isEmpty());
    }
 }
 
@@ -677,7 +713,8 @@ static void initEmptyMultiBox(QVector<QLayoutStruct> &chain, int start, int end)
 {
    for (int i = start; i <= end; i++) {
       QLayoutStruct *data = &chain[i];
-      if (data->empty && data->maximumSize == 0) { // truly empty box
+      if (data->empty && data->maximumSize == 0) {
+         // truly empty box
          data->maximumSize = QWIDGETSIZE_MAX;
       }
       data->empty = false;
@@ -685,7 +722,7 @@ static void initEmptyMultiBox(QVector<QLayoutStruct> &chain, int start, int end)
 }
 
 static void distributeMultiBox(QVector<QLayoutStruct> &chain, int start, int end, int minSize,
-                               int sizeHint, QVector<int> &stretchArray, int stretch)
+   int sizeHint, QVector<int> &stretchArray, int stretch)
 {
    int i;
    int w = 0;
@@ -756,7 +793,7 @@ static void distributeMultiBox(QVector<QLayoutStruct> &chain, int start, int end
 }
 
 static QGridBox *&gridAt(QGridBox *grid[], int r, int c, int cc,
-                         Qt::Orientation orientation = Qt::Vertical)
+   Qt::Orientation orientation = Qt::Vertical)
 {
    if (orientation == Qt::Horizontal) {
       qSwap(r, c);
@@ -765,8 +802,8 @@ static QGridBox *&gridAt(QGridBox *grid[], int r, int c, int cc,
 }
 
 void QGridLayoutPrivate::setupSpacings(QVector<QLayoutStruct> &chain,
-                                       QGridBox *grid[], int fixedSpacing,
-                                       Qt::Orientation orientation)
+   QGridBox *grid[], int fixedSpacing,
+   Qt::Orientation orientation)
 {
    Q_Q(QGridLayout);
    int numRows = rr;       // or columns if orientation is horizontal
@@ -806,13 +843,13 @@ void QGridLayoutPrivate::setupSpacings(QVector<QLayoutStruct> &chain,
                }
 
                if ((orientation == Qt::Horizontal && hReversed)
-                     || (orientation == Qt::Vertical && vReversed)) {
+                  || (orientation == Qt::Vertical && vReversed)) {
                   qSwap(controlTypes1, controlTypes2);
                }
 
                if (style)
                   spacing = style->combinedLayoutSpacing(controlTypes1, controlTypes2,
-                                                         orientation, 0, q->parentWidget());
+                        orientation, 0, q->parentWidget());
             } else {
                if (orientation == Qt::Vertical) {
                   QGridBox *sibling = vReversed ? previousBox : box;
@@ -920,10 +957,10 @@ void QGridLayoutPrivate::setupLayoutData(int hSpacing, int vSpacing)
 
          if (box->row != box->toRow(rr))
             distributeMultiBox(rowData, box->row, box->toRow(rr), sizes[i].minS.height(),
-                               sizes[i].hint.height(), rStretch, box->vStretch());
+               sizes[i].hint.height(), rStretch, box->vStretch());
          if (box->col != box->toCol(cc))
             distributeMultiBox(colData, box->col, box->toCol(cc), sizes[i].minS.width(),
-                               sizes[i].hint.width(), cStretch, box->hStretch());
+               sizes[i].hint.width(), cStretch, box->hStretch());
       }
    }
 
@@ -996,7 +1033,7 @@ void QGridLayoutPrivate::setupHfwLayoutData()
                   }
                }
                distributeMultiBox(rData, r1, r2, min.height(), hint.height(),
-                                  rStretch, box->vStretch());
+                  rStretch, box->vStretch());
             }
          }
       }
@@ -1035,7 +1072,7 @@ void QGridLayoutPrivate::distribute(QRect r, int hSpacing, int vSpacing)
    int i;
 
    bool reverse = ((r.bottom() > rect.bottom()) || (r.bottom() == rect.bottom()
-                   && ((r.right() > rect.right()) != visualHReversed)));
+            && ((r.right() > rect.right()) != visualHReversed)));
    int n = things.size();
    for (i = 0; i < n; ++i) {
       QGridBox *box = things.at(reverse ? n - i - 1 : i);
@@ -1073,89 +1110,9 @@ QRect QGridLayoutPrivate::cellRect(int row, int col) const
       rDataPtr = &rowData;
    }
    return QRect(colData.at(col).pos, rDataPtr->at(row).pos,
-                colData.at(col).size, rDataPtr->at(row).size);
+         colData.at(col).size, rDataPtr->at(row).size);
 }
 
-/*!
-    \class QGridLayout
-
-    \brief The QGridLayout class lays out widgets in a grid.
-
-    \ingroup geomanagement
-
-
-    QGridLayout takes the space made available to it (by its parent
-    layout or by the parentWidget()), divides it up into rows and
-    columns, and puts each widget it manages into the correct cell.
-
-    Columns and rows behave identically; we will discuss columns, but
-    there are equivalent functions for rows.
-
-    Each column has a minimum width and a stretch factor. The minimum
-    width is the greatest of that set using setColumnMinimumWidth() and the
-    minimum width of each widget in that column. The stretch factor is
-    set using setColumnStretch() and determines how much of the available
-    space the column will get over and above its necessary minimum.
-
-    Normally, each managed widget or layout is put into a cell of its
-    own using addWidget(). It is also possible for a widget to occupy
-    multiple cells using the row and column spanning overloads of
-    addItem() and addWidget(). If you do this, QGridLayout will guess
-    how to distribute the size over the columns/rows (based on the
-    stretch factors).
-
-    To remove a widget from a layout, call removeWidget(). Calling
-    QWidget::hide() on a widget also effectively removes the widget
-    from the layout until QWidget::show() is called.
-
-    This illustration shows a fragment of a dialog with a five-column,
-    three-row grid (the grid is shown overlaid in magenta):
-
-    \image gridlayout.png A grid layout
-
-    Columns 0, 2 and 4 in this dialog fragment are made up of a
-    QLabel, a QLineEdit, and a QListBox. Columns 1 and 3 are
-    placeholders made with setColumnMinimumWidth(). Row 0 consists of three
-    QLabel objects, row 1 of three QLineEdit objects and row 2 of
-    three QListBox objects. We used placeholder columns (1 and 3) to
-    get the right amount of space between the columns.
-
-    Note that the columns and rows are not equally wide or tall. If
-    you want two columns to have the same width, you must set their
-    minimum widths and stretch factors to be the same yourself. You do
-    this using setColumnMinimumWidth() and setColumnStretch().
-
-    If the QGridLayout is not the top-level layout (i.e. does not
-    manage all of the widget's area and children), you must add it to
-    its parent layout when you create it, but before you do anything
-    with it. The normal way to add a layout is by calling
-    addLayout() on the parent layout.
-
-    Once you have added your layout you can start putting widgets and
-    other layouts into the cells of your grid layout using
-    addWidget(), addItem(), and addLayout().
-
-    QGridLayout also includes two margin widths:
-    the \l{getContentsMargins()}{contents margin} and the spacing().
-    The contents margin is the width of the reserved space along each
-    of the QGridLayout's four sides. The spacing() is the width of the
-    automatically allocated spacing between neighboring boxes.
-
-    The default contents margin values are provided by the
-    \l{QStyle::pixelMetric()}{style}. The default value Qt styles specify
-    is 9 for child widgets and 11 for windows. The spacing defaults to the same as
-    the margin width for a top-level layout, or to the same as the
-    parent layout.
-
-    \sa QBoxLayout, QStackedLayout, {Layout Management}, {Basic Layouts Example}
-*/
-
-
-/*!
-    Constructs a new QGridLayout with parent widget, \a parent.  The
-    layout has one row and one column initially, and will expand when
-    new items are inserted.
-*/
 QGridLayout::QGridLayout(QWidget *parent)
    : QLayout(*new QGridLayoutPrivate, 0, parent)
 {
@@ -1163,13 +1120,7 @@ QGridLayout::QGridLayout(QWidget *parent)
    d->expand(1, 1);
 }
 
-/*!
-    Constructs a new grid layout.
 
-    You must insert this grid into another layout. You can insert
-    widgets and layouts into this layout at any time, but laying out
-    will not be performed before this is inserted into another layout.
-*/
 QGridLayout::QGridLayout()
    : QLayout(*new QGridLayoutPrivate, 0, 0)
 {
@@ -1212,17 +1163,6 @@ QGridLayout::~QGridLayout()
    d->deleteAll();
 }
 
-/*!
-    \property QGridLayout::horizontalSpacing
-    \brief the spacing between widgets that are laid out side by side
-    \since 4.3
-
-    If no value is explicitly set, the layout's horizontal spacing is
-    inherited from the parent layout, or from the style settings for
-    the parent widget.
-
-    \sa verticalSpacing, QStyle::pixelMetric(), {QStyle::}{PM_LayoutHorizontalSpacing}
-*/
 void QGridLayout::setHorizontalSpacing(int spacing)
 {
    Q_D(QGridLayout);
@@ -1240,17 +1180,7 @@ int QGridLayout::horizontalSpacing() const
    }
 }
 
-/*!
-    \property QGridLayout::verticalSpacing
-    \brief the spacing between widgets that are laid out on top of each other
-    \since 4.3
 
-    If no value is explicitly set, the layout's vertical spacing is
-    inherited from the parent layout, or from the style settings for
-    the parent widget.
-
-    \sa horizontalSpacing, QStyle::pixelMetric(), {QStyle::}{PM_LayoutHorizontalSpacing}
-*/
 void QGridLayout::setVerticalSpacing(int spacing)
 {
    Q_D(QGridLayout);
@@ -1268,12 +1198,7 @@ int QGridLayout::verticalSpacing() const
    }
 }
 
-/*!
-    This function sets both the vertical and horizontal spacing to
-    \a spacing.
 
-    \sa setVerticalSpacing(), setHorizontalSpacing()
-*/
 void QGridLayout::setSpacing(int spacing)
 {
    Q_D(QGridLayout);
@@ -1353,6 +1278,7 @@ QSize QGridLayout::maximumSize() const
    d->effectiveMargins(&left, &top, &right, &bottom);
    s += QSize(left + right, top + bottom);
    s = s.boundedTo(QSize(QLAYOUTSIZE_MAX, QLAYOUTSIZE_MAX));
+
    if (alignment() & Qt::AlignHorizontal_Mask) {
       s.setWidth(QLAYOUTSIZE_MAX);
    }
@@ -1367,7 +1293,7 @@ QSize QGridLayout::maximumSize() const
 */
 bool QGridLayout::hasHeightForWidth() const
 {
-   return ((QGridLayout *)this)->d_func()->hasHeightForWidth(horizontalSpacing(), verticalSpacing());
+   return const_cast<QGridLayout *>(this)->d_func()->hasHeightForWidth(horizontalSpacing(), verticalSpacing());
 }
 
 /*!
@@ -1409,14 +1335,6 @@ QLayoutItem *QGridLayout::itemAt(int index) const
    return d->itemAt(index);
 }
 
-/*!
-    \since 4.4
-
-    Returns the layout item that occupies cell (\a row, \a column), or 0 if
-    the cell is empty.
-
-    \sa getItemPosition(), indexOf()
-*/
 QLayoutItem *QGridLayout::itemAtPosition(int row, int column) const
 {
    Q_D(const QGridLayout);
@@ -1424,7 +1342,7 @@ QLayoutItem *QGridLayout::itemAtPosition(int row, int column) const
    for (int i = 0; i < n; ++i) {
       QGridBox *box = d->things.at(i);
       if (row >= box->row && row <= box->toRow(d->rr)
-            && column >= box->col && column <= box->toCol(d->cc)) {
+         && column >= box->col && column <= box->toCol(d->cc)) {
          return box->item();
       }
    }
@@ -1440,18 +1358,10 @@ QLayoutItem *QGridLayout::takeAt(int index)
    return d->takeAt(index);
 }
 
-/*!
-  Returns the position information of the item with the given \a index.
 
-  The variables passed as \a row and \a column are updated with the position of the
-  item in the layout, and the \a rowSpan and \a columnSpan variables are updated
-  with the vertical and horizontal spans of the item.
-
-  \sa itemAtPosition(), itemAt()
-*/
-void QGridLayout::getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan)
+void QGridLayout::getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan) const
 {
-   Q_D(QGridLayout);
+   Q_D(const QGridLayout);
    d->getItemPosition(index, row, column, rowSpan, columnSpan);
 }
 
@@ -1514,37 +1424,19 @@ void QGridLayout::addItem(QLayoutItem *item, int row, int column, int rowSpan, i
    invalidate();
 }
 
-/*
-  Returns true if the widget \a w can be added to the layout \a l;
-  otherwise returns false.
-*/
-static bool checkWidget(QLayout *l, QWidget *w)
-{
-   if (!w) {
-      qWarning("QLayout: Can not add null widget to %s/%s", csPrintable(l->metaObject()->className()), csPrintable(l->objectName()));
-      return false;
-   }
-
-   return true;
-}
-
-/*!
-    Adds the given \a widget to the cell grid at \a row, \a column. The
-    top-left position is (0, 0) by default.
-
-    The alignment is specified by \a alignment. The default
-    alignment is 0, which means that the widget fills the entire cell.
-
-*/
 void QGridLayout::addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment)
 {
-   if (!checkWidget(this, widget)) {
+   Q_D(QGridLayout);
+
+   if (! d->checkWidget(widget)) {
       return;
    }
+
    if (row < 0 || column < 0) {
       qWarning("QGridLayout: Cannot add %s/%s to %s/%s at row %d column %d",
-               csPrintable(widget->metaObject()->className()), csPrintable(widget->objectName()),
-               csPrintable(metaObject()->className()), csPrintable(objectName()), row, column);
+         csPrintable(widget->metaObject()->className()), csPrintable(widget->objectName()),
+         csPrintable(metaObject()->className()), csPrintable(objectName()), row, column);
+
       return;
    }
 
@@ -1553,25 +1445,15 @@ void QGridLayout::addWidget(QWidget *widget, int row, int column, Qt::Alignment 
    addItem(b, row, column, 1, 1, alignment);
 }
 
-/*!
-    \overload
-
-    This version adds the given \a widget to the cell grid, spanning
-    multiple rows/columns. The cell will start at \a fromRow, \a
-    fromColumn spanning \a rowSpan rows and \a columnSpan columns. The
-    \a widget will have the given \a alignment.
-
-    If \a rowSpan and/or \a columnSpan is -1, then the widget will
-    extend to the bottom and/or right edge, respectively.
-
-*/
 void QGridLayout::addWidget(QWidget *widget, int fromRow, int fromColumn,
-                            int rowSpan, int columnSpan, Qt::Alignment alignment)
+   int rowSpan, int columnSpan, Qt::Alignment alignment)
 {
    Q_D(QGridLayout);
-   if (!checkWidget(this, widget)) {
+
+   if (!d->checkWidget(widget)) {
       return;
    }
+
    int toRow = (rowSpan < 0) ? -1 : fromRow + rowSpan - 1;
    int toColumn = (columnSpan < 0) ? -1 : fromColumn + columnSpan - 1;
    addChildWidget(widget);
@@ -1581,30 +1463,14 @@ void QGridLayout::addWidget(QWidget *widget, int fromRow, int fromColumn,
    invalidate();
 }
 
-/*!
-    \fn void QGridLayout::addWidget(QWidget *widget)
-
-    \overload
-    \internal
-*/
-
-/*!
-    Places the \a layout at position (\a row, \a column) in the grid. The
-    top-left position is (0, 0).
-
-    The alignment is specified by \a alignment. The default
-    alignment is 0, which means that the widget fills the entire cell.
-
-    A non-zero alignment indicates that the layout should not grow to
-    fill the available space but should be sized according to
-    sizeHint().
-
-
-    \a layout becomes a child of the grid layout.
-*/
 void QGridLayout::addLayout(QLayout *layout, int row, int column, Qt::Alignment alignment)
 {
    Q_D(QGridLayout);
+
+   if (!d->checkLayout(layout)) {
+      return;
+   }
+
    if (!adoptLayout(layout)) {
       return;
    }
@@ -1623,9 +1489,13 @@ void QGridLayout::addLayout(QLayout *layout, int row, int column, Qt::Alignment 
     and/or right edge, respectively.
 */
 void QGridLayout::addLayout(QLayout *layout, int row, int column,
-                            int rowSpan, int columnSpan, Qt::Alignment alignment)
+   int rowSpan, int columnSpan, Qt::Alignment alignment)
 {
    Q_D(QGridLayout);
+   if (!d->checkLayout(layout)) {
+      return;
+   }
+
    if (!adoptLayout(layout)) {
       return;
    }
@@ -1764,13 +1634,10 @@ void QGridLayout::setOriginCorner(Qt::Corner corner)
 {
    Q_D(QGridLayout);
    d->setReversed(corner == Qt::BottomLeftCorner || corner == Qt::BottomRightCorner,
-                  corner == Qt::TopRightCorner || corner == Qt::BottomRightCorner);
+      corner == Qt::TopRightCorner || corner == Qt::BottomRightCorner);
 }
 
-/*!
-    Returns the corner that's used for the grid's origin, i.e. for
-    position (0, 0).
-*/
+
 Qt::Corner QGridLayout::originCorner() const
 {
    Q_D(const QGridLayout);
@@ -1781,9 +1648,7 @@ Qt::Corner QGridLayout::originCorner() const
    }
 }
 
-/*!
-    \reimp
-*/
+
 void QGridLayout::invalidate()
 {
    Q_D(QGridLayout);
@@ -1791,104 +1656,3 @@ void QGridLayout::invalidate()
    QLayout::invalidate();
 }
 
-/*!
-    \fn void QGridLayout::addRowSpacing(int row, int minsize)
-
-    Use addItem(new QSpacerItem(0, minsize), row, 0) instead.
-*/
-
-/*!
-    \fn void QGridLayout::addColSpacing(int col, int minsize)
-
-    Use addItem(new QSpacerItem(minsize, 0), 0, col) instead.
-*/
-
-/*!
-    \fn void QGridLayout::addMultiCellWidget(QWidget *widget, int fromRow, int toRow, int fromCol, int toCol, Qt::Alignment align = 0)
-
-    Use an addWidget() overload that allows you to specify row and
-    column spans instead.
-*/
-
-/*!
-    \fn void QGridLayout::addMultiCell(QLayoutItem *l, int fromRow, int toRow, int fromCol, int toCol, Qt::Alignment align = 0)
-
-    Use an addItem() overload that allows you to specify row and
-    column spans instead.
-*/
-
-/*!
-    \fn void QGridLayout::addMultiCellLayout(QLayout *layout, int fromRow, int toRow, int fromCol, int toCol, Qt::Alignment align = 0)
-
-    Use an addLayout() overload that allows you to specify row and
-    column spans instead.
-*/
-
-/*!
-    \fn int QGridLayout::numRows() const
-
-    Use rowCount() instead.
-*/
-
-/*!
-    \fn int QGridLayout::numCols() const
-
-    Use columnCount() instead.
-*/
-
-/*!
-    \fn void QGridLayout::setColStretch(int col, int stretch)
-
-    Use setColumnStretch() instead.
-*/
-
-/*!
-    \fn int QGridLayout::colStretch(int col) const
-
-    Use columnStretch() instead.
-*/
-
-/*!
-    \fn void QGridLayout::setColSpacing(int col, int minSize)
-
-    Use setColumnMinimumWidth() instead.
-*/
-
-/*!
-    \fn int QGridLayout::colSpacing(int col) const
-
-    Use columnMinimumWidth() instead.
-*/
-
-/*!
-    \fn void QGridLayout::setRowSpacing(int row, int minSize)
-
-    Use setRowMinimumHeight(\a row, \a minSize) instead.
-*/
-
-/*!
-    \fn int QGridLayout::rowSpacing(int row) const
-
-    Use rowMinimumHeight(\a row) instead.
-*/
-
-/*!
-    \fn QRect QGridLayout::cellGeometry(int row, int column) const
-
-    Use cellRect(\a row, \a column) instead.
-*/
-
-/*!
-    \fn void QGridLayout::setOrigin(Qt::Corner corner)
-
-    Use setOriginCorner(\a corner) instead.
-*/
-
-/*!
-    \fn Qt::Corner QGridLayout::origin() const
-
-    Use originCorner() instead.
-*/
-
-
-QT_END_NAMESPACE

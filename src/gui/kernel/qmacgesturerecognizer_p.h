@@ -20,55 +20,53 @@
 *
 ***********************************************************************/
 
-#ifndef QMACGESTURERECOGNIZER_MAC_P_H
-#define QMACGESTURERECOGNIZER_MAC_P_H
+#ifndef QMACGESTURERECOGNIZER_P_H
+#define QMACGESTURERECOGNIZER_P_H
 
-#include <qtimer.h>
-#include <qpoint.h>
-#include <qgesturerecognizer.h>
+
+#include "qtimer.h"
+#include "qpoint.h"
+#include "qgesturerecognizer.h"
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
-
 class QMacSwipeGestureRecognizer : public QGestureRecognizer
 {
- public:
-   QMacSwipeGestureRecognizer();
+public:
+    QMacSwipeGestureRecognizer();
 
-   QGesture *create(QObject *target);
-   QGestureRecognizer::Result recognize(QGesture *gesture, QObject *watched, QEvent *event);
-   void reset(QGesture *gesture);
+    QGesture *create(QObject *target);
+    QGestureRecognizer::Result recognize(QGesture *gesture, QObject *watched, QEvent *event);
+    void reset(QGesture *gesture);
 };
 
 class QMacPinchGestureRecognizer : public QGestureRecognizer
 {
- public:
-   QMacPinchGestureRecognizer();
+public:
+    QMacPinchGestureRecognizer();
 
-   QGesture *create(QObject *target);
-   QGestureRecognizer::Result recognize(QGesture *gesture, QObject *watched, QEvent *event);
-   void reset(QGesture *gesture);
+    QGesture *create(QObject *target);
+    QGestureRecognizer::Result recognize(QGesture *gesture, QObject *watched, QEvent *event);
+    void reset(QGesture *gesture);
 };
-
 
 class QMacPanGestureRecognizer : public QObject, public QGestureRecognizer
 {
- public:
-   QMacPanGestureRecognizer();
+public:
+    QMacPanGestureRecognizer();
 
-   QGesture *create(QObject *target);
-   QGestureRecognizer::Result recognize(QGesture *gesture, QObject *watched, QEvent *event);
-   void reset(QGesture *gesture);
- private:
-   QPointF _startPos;
-   QBasicTimer _panTimer;
-   bool _panCanceled;
+    QGesture *create(QObject *target);
+    QGestureRecognizer::Result recognize(QGesture *gesture, QObject *watched, QEvent *event);
+    void reset(QGesture *gesture);
+
+private:
+    QPointF _startPos;
+    QBasicTimer _panTimer;
+    bool _panCanceled;
 };
 
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_GESTURES
 
-#endif // QMACSWIPEGESTURERECOGNIZER_MAC_P_H
+#endif
