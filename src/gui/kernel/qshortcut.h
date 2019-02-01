@@ -27,7 +27,7 @@
 #include <QtGui/qkeysequence.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SHORTCUT
 
@@ -56,7 +56,7 @@ class Q_GUI_EXPORT QShortcut : public QObject
  public:
    explicit QShortcut(QWidget *parent);
    QShortcut(const QKeySequence &key, QWidget *parent, const QString &member = QString(), const QString &ambiguousMember = QString(),
-                  Qt::ShortcutContext context = Qt::WindowShortcut);
+      Qt::ShortcutContext context = Qt::WindowShortcut);
 
    ~QShortcut();
 
@@ -95,6 +95,5 @@ class Q_GUI_EXPORT QShortcut : public QObject
 
 #endif // QT_NO_SHORTCUT
 
-QT_END_NAMESPACE
 
-#endif // QSHORTCUT_H
+#endif

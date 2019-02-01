@@ -32,44 +32,44 @@ class QScreen;
 
 class Q_GUI_EXPORT QOffscreenSurface : public QObject, public QSurface
 {
-    GUI_CS_OBJECT_MULTIPLE(QOffscreenSurface, QObject)
-    Q_DECLARE_PRIVATE(QOffscreenSurface)
+   GUI_CS_OBJECT_MULTIPLE(QOffscreenSurface, QObject)
+   Q_DECLARE_PRIVATE(QOffscreenSurface)
 
-public:
-    explicit QOffscreenSurface(QScreen *screen = nullptr);
-    virtual ~QOffscreenSurface();
+ public:
+   explicit QOffscreenSurface(QScreen *screen = nullptr);
+   virtual ~QOffscreenSurface();
 
-    SurfaceType surfaceType() const override;
+   SurfaceType surfaceType() const override;
 
-    void create();
-    void destroy();
+   void create();
+   void destroy();
 
-    bool isValid() const;
+   bool isValid() const;
 
-    void setFormat(const QSurfaceFormat &format);
-    QSurfaceFormat format() const override;
-    QSurfaceFormat requestedFormat() const;
+   void setFormat(const QSurfaceFormat &format);
+   QSurfaceFormat format() const override;
+   QSurfaceFormat requestedFormat() const;
 
-    QSize size() const override;
+   QSize size() const override;
 
-    QScreen *screen() const;
-    void setScreen(QScreen *screen);
+   QScreen *screen() const;
+   void setScreen(QScreen *screen);
 
-    QPlatformOffscreenSurface *handle() const;
+   QPlatformOffscreenSurface *handle() const;
 
-    GUI_CS_SIGNAL_1(Public, void screenChanged(QScreen * screen))
-    GUI_CS_SIGNAL_2(screenChanged,screen)
+   GUI_CS_SIGNAL_1(Public, void screenChanged(QScreen *screen))
+   GUI_CS_SIGNAL_2(screenChanged, screen)
 
  protected:
    QScopedPointer<QOffscreenSurfacePrivate> d_ptr;
 
-private:
-    GUI_CS_SLOT_1(Private, void screenDestroyed(QObject * screen))
-    GUI_CS_SLOT_2(screenDestroyed)
+ private:
+   GUI_CS_SLOT_1(Private, void screenDestroyed(QObject *screen))
+   GUI_CS_SLOT_2(screenDestroyed)
 
-    QPlatformSurface *surfaceHandle() const override;
+   QPlatformSurface *surfaceHandle() const override;
 
-    Q_DISABLE_COPY(QOffscreenSurface)
+   Q_DISABLE_COPY(QOffscreenSurface)
 };
 
 #endif

@@ -23,12 +23,14 @@
 #ifndef QWINDOWDEFS_H
 #define QWINDOWDEFS_H
 
+#include <qglobal.h>
 #include <qnamespace.h>
 #include <qcontainerfwd.h>
 #include <qstringfwd.h>
 
 class QPaintDevice;
 class QWidget;
+class QWindow;
 class QDialog;
 class QColor;
 class QPalette;
@@ -50,44 +52,26 @@ class QBitmap;
 class QMovie;
 class QImage;
 class QPicture;
-class QPrinter;
+
 class QTimer;
 class QTime;
 class QClipboard;
 class QByteArray;
 class QApplication;
 
+
 // Window system dependent definitions
-
-#if defined(Q_OS_MAC) && ! defined(Q_WS_QWS)
-#include <qmacdefines_mac.h>
-   typedef long WId;
-#endif
-
 #if defined(Q_OS_WIN)
 #include <qwindowdefs_win.h>
 #endif
 
-#if defined(Q_WS_X11)
-   typedef struct _XDisplay Display;
-   typedef union  _XEvent XEvent;
-   typedef struct _XGC *GC;
-   typedef struct _XRegion *Region;
-   typedef unsigned long  WId;
-#endif
 
-#if defined(Q_WS_QWS)
-   typedef unsigned long  WId;
-   struct QWSEvent;
-#endif
-
-#if defined(Q_WS_QPA)
-   typedef unsigned long  WId;
-#endif
+using WId = quintptr;
 
 using QWidgetMapper = QHash<WId, QWidget *>;
 using QWidgetList   = QList<QWidget *>;
 using QWidgetSet    = QSet<QWidget *>;
+using QWindowList   = QList<QWindow *>;
 
 #if defined(QT_NEEDS_QMAIN)
 #define main qMain

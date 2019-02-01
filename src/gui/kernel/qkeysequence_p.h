@@ -25,7 +25,7 @@
 
 #include <qkeysequence.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_SHORTCUT
 struct QKeyBinding {
@@ -38,28 +38,34 @@ struct QKeyBinding {
 class QKeySequencePrivate
 {
  public:
-   inline QKeySequencePrivate() {
-      ref = 1;
-      key[0] = key[1] = key[2] = key[3] =  0;
+   static constexpr int MaxKeyCount = 4;
+   inline QKeySequencePrivate()  : ref(1) {
+
+      key[0] = 0;
+      key[1] = 0;
+      key[2] = 0;
+      key[3] = 0;
    }
-   inline QKeySequencePrivate(const QKeySequencePrivate &copy) {
-      ref = 1;
+
+   inline QKeySequencePrivate(const QKeySequencePrivate &copy)  : ref(1) {
+
       key[0] = copy.key[0];
       key[1] = copy.key[1];
       key[2] = copy.key[2];
       key[3] = copy.key[3];
    }
+
    QAtomicInt ref;
-   int key[4];
+   int key[MaxKeyCount];
    static QString encodeString(int key, QKeySequence::SequenceFormat format);
+
+   // used in dbusmenu
+   Q_GUI_EXPORT static QString keyName(int key, QKeySequence::SequenceFormat format);
+
    static int decodeString(const QString &keyStr, QKeySequence::SequenceFormat format);
-
-   static const QKeyBinding keyBindings[];
-   static const uint numberOfKeyBindings;
-
 };
 #endif // QT_NO_SHORTCUT
 
-QT_END_NAMESPACE
 
-#endif //QKEYSEQUENCE_P_H
+
+#endif

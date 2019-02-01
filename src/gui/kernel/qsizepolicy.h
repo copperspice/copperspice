@@ -23,28 +23,18 @@
 #ifndef QSIZEPOLICY_H
 #define QSIZEPOLICY_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
+#include <qhashfunc.h>
 
 QT_BEGIN_NAMESPACE
 
 class QVariant;
-
+class QSizePolicy;
+inline uint qHash(QSizePolicy key, uint seed = 0);
 class Q_GUI_EXPORT QSizePolicy
 {
    GUI_CS_GADGET(QSizePolicy)
    GUI_CS_ENUM(Policy)
-
-   enum SizePolicyMasks {
-      HSize = 4,
-      HMask = 0x0f,
-      VMask = HMask << HSize,
-      CTShift = 9,
-      CTSize = 5,
-      CTMask = ((0x1 << CTSize) - 1) << CTShift,
-      WFHShift = CTShift + CTSize,
-      UnusedShift = WFHShift + 1,
-      UnusedSize = 1
-   };
 
  public:
    enum PolicyFlag {
@@ -85,52 +75,48 @@ class Q_GUI_EXPORT QSizePolicy
 
    QSizePolicy() : data(0) { }
 
-   // ### Qt5/merge these two constructors (with type == DefaultType)
-   QSizePolicy(Policy horizontal, Policy vertical)
-      : data(horizontal | (vertical << HSize)) { }
-   QSizePolicy(Policy horizontal, Policy vertical, ControlType type)
-      : data(horizontal | (vertical << HSize)) {
+   QSizePolicy(Policy horizontal, Policy vertical, ControlType type = DefaultType)
+      : data(0) {
+      bits.horPolicy = horizontal;
+      bits.verPolicy = vertical;
       setControlType(type);
    }
 
    Policy horizontalPolicy() const {
-      return static_cast<Policy>(data & HMask);
+      return static_cast<Policy>(bits.horPolicy);
    }
    Policy verticalPolicy() const {
-      return static_cast<Policy>((data & VMask) >> HSize);
+      return static_cast<Policy>(bits.verPolicy);
    }
    ControlType controlType() const;
 
    void setHorizontalPolicy(Policy d) {
-      data = (data & ~HMask) | d;
+      bits.horPolicy = d;
    }
+
    void setVerticalPolicy(Policy d) {
-      data = (data & ~(HMask << HSize)) | (d << HSize);
+      bits.verPolicy = d;
    }
    void setControlType(ControlType type);
 
    Qt::Orientations expandingDirections() const {
-      Qt::Orientations result;
-      if (verticalPolicy() & ExpandFlag) {
-         result |= Qt::Vertical;
-      }
-      if (horizontalPolicy() & ExpandFlag) {
-         result |= Qt::Horizontal;
-      }
-      return result;
+      return ( (verticalPolicy()   & ExpandFlag) ? Qt::Vertical   : Qt::Orientations() )
+         | ( (horizontalPolicy() & ExpandFlag) ? Qt::Horizontal : Qt::Orientations() ) ;
    }
 
    void setHeightForWidth(bool b) {
-      data = b ? (data | (1 << 2 * HSize)) : (data & ~(1 << 2 * HSize));
+      bits.hfw = b;
    }
+
    bool hasHeightForWidth() const {
-      return data & (1 << 2 * HSize);
+      return bits.hfw;
    }
    void setWidthForHeight(bool b) {
-      data = b ? (data | (1 << (WFHShift))) : (data & ~(1 << (WFHShift)));
+      bits.wfh = b;
    }
+
    bool hasWidthForHeight() const {
-      return data & (1 << (WFHShift));
+      return bits.wfh;
    }
 
    bool operator==(const QSizePolicy &s) const {
@@ -139,68 +125,76 @@ class Q_GUI_EXPORT QSizePolicy
    bool operator!=(const QSizePolicy &s) const {
       return data != s.data;
    }
-   operator QVariant() const; // implemented in qabstractlayout.cpp
+
+   operator QVariant() const;
+
+   friend uint qHash(QSizePolicy key, uint seed) {
+      return qHash(key.data, seed);
+   }
+
 
    int horizontalStretch() const {
-      return data >> 24;
+      return static_cast<int>(bits.horStretch);
    }
    int verticalStretch() const {
-      return (data >> 16) & 0xff;
+      return static_cast<int>(bits.verStretch);
    }
-   void setHorizontalStretch(uchar stretchFactor) {
-      data = (data & 0x00ffffff) | (uint(stretchFactor) << 24);
+   void setHorizontalStretch(int stretchFactor) {
+      bits.horStretch = static_cast<quint32>(qBound(0, stretchFactor, 255));
    }
-   void setVerticalStretch(uchar stretchFactor) {
-      data = (data & 0xff00ffff) | (uint(stretchFactor) << 16);
+   void setVerticalStretch(int stretchFactor) {
+      bits.verStretch = static_cast<quint32>(qBound(0, stretchFactor, 255));
    }
-
+   bool retainSizeWhenHidden() const {
+      return bits.retainSizeWhenHidden;
+   }
+   void setRetainSizeWhenHidden(bool retainSize) {
+      bits.retainSizeWhenHidden = retainSize;
+   }
    void transpose();
 
  private:
-
-#ifndef QT_NO_DATASTREAM
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
-#endif
+
    QSizePolicy(int i) : data(i) { }
 
-   quint32 data;
-   /*  Qt5/Use bit flags instead, keep it here for improved readability for now.
-       We can maybe change it for Qt4, but we'd have to be careful, since the behaviour
-       is implementation defined. It usually varies between little- and big-endian compilers, but
-       it might also not vary.
-       quint32 horzPolicy : 4;
-       quint32 vertPolicy : 4;
-       quint32 hfw : 1;
-       quint32 ctype : 5;
-       quint32 wfh : 1;
-       quint32 padding : 1;   // we cannot use the highest bit
-       quint32 verStretch : 8;
-       quint32 horStretch : 8;
-   */
+   struct Bits {
+      quint32 horStretch : 8;
+      quint32 verStretch : 8;
+      quint32 horPolicy : 4;
+      quint32 verPolicy : 4;
+      quint32 ctype : 5;
+      quint32 hfw : 1;
+      quint32 wfh : 1;
+      quint32 retainSizeWhenHidden : 1;
+   };
 
+   union {
+      Bits bits;
+      quint32 data;
+   };
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
 
-#ifndef QT_NO_DATASTREAM
-// implemented in qlayout.cpp
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
-#endif
 
+
+Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QSizePolicy &);
 inline void QSizePolicy::transpose()
 {
    Policy hData = horizontalPolicy();
    Policy vData = verticalPolicy();
-   uchar hStretch = uchar(horizontalStretch());
-   uchar vStretch = uchar(verticalStretch());
+   int hStretch = horizontalStretch();
+   int vStretch = verticalStretch();
    setHorizontalPolicy(vData);
    setVerticalPolicy(hData);
    setHorizontalStretch(vStretch);
    setVerticalStretch(hStretch);
 }
 
-QT_END_NAMESPACE
 
 #endif // QSIZEPOLICY_H

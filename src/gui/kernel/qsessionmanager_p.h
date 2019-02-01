@@ -32,11 +32,11 @@ class QPlatformSessionManager;
 
 class QSessionManagerPrivate
 {
-public:
+ public:
    QSessionManagerPrivate(const QString &id, const QString &key);
-   
+
    virtual ~QSessionManagerPrivate();
-   
+
    QPlatformSessionManager *platformSessionManager;
 };
 

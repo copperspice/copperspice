@@ -2,52 +2,14 @@
 #define QT_GUI_H
 
 #include <qtcore.h>
-#include <qcdestyle.h>
-#include <qcleanlooksstyle.h>
+
 #include <qcommonstyle.h>
-
-#ifndef QT_NO_STYLE_GTK
-#include <qgtkstyle.h>
-#endif
-
-#include <qmotifstyle.h>
-#include <qplastiquestyle.h>
+#include <qfusionestyle.h>
 #include <qproxystyle.h>
 #include <qstyle.h>
 #include <qstylefactory.h>
 #include <qstyleoption.h>
 #include <qstyleplugin.h>
-
-#ifndef QT_NO_STYLE_WINDOWS
-#include <qwindowsstyle.h>
-#endif
-
-#ifndef QT_NO_STYLE_WINDOWSVISTA
-#include <qwindowsvistastyle.h>
-#endif
-
-#ifndef QT_NO_STYLE_WINDOWSXP
-#include <qwindowsxpstyle.h>
-#endif
-
-#include <qbitmap.h>
-#include <qicon.h>
-#include <qiconengine.h>
-#include <qiconengineplugin.h>
-#include <qimage.h>
-#include <qimageiohandler.h>
-#include <qimagereader.h>
-#include <qimagewriter.h>
-#include <qmovie.h>
-#include <qpicture.h>
-#include <qpictureformatplugin.h>
-#include <qpixmap.h>
-#include <qpixmapcache.h>
-
-#ifdef Q_WS_QWS
-#include <qvfbhdr.h>
-#include <qwsembedwidget.h>
-#endif
 
 #include <qabstracttextdocumentlayout.h>
 #include <qfont.h>
@@ -68,33 +30,13 @@
 #include <qtextobject.h>
 #include <qtextoption.h>
 #include <qtexttable.h>
-#include <qabstractpagesetupdialog.h>
-#include <qabstractprintdialog.h>
-#include <qcolordialog.h>
-#include <qdialog.h>
-#include <qerrormessage.h>
-#include <qfiledialog.h>
-#include <qfilesystemmodel.h>
-#include <qfontdialog.h>
-#include <qinputdialog.h>
-#include <qmessagebox.h>
-#include <qpagesetupdialog.h>
-#include <qprintdialog.h>
-#include <qprintpreviewdialog.h>
-#include <qprogressdialog.h>
-#include <qwizard.h>
+
 #include <qgenericmatrix.h>
 #include <qmatrix4x4.h>
 #include <qquaternion.h>
 #include <qvector2d.h>
 #include <qvector3d.h>
 #include <qvector4d.h>
-#include <qaccessible.h>
-#include <qaccessible2.h>
-#include <qaccessiblebridge.h>
-#include <qaccessibleobject.h>
-#include <qaccessibleplugin.h>
-#include <qaccessiblewidget.h>
 #include <qaction.h>
 #include <qactiongroup.h>
 #include <qapplication.h>
@@ -111,7 +53,7 @@
 #include <qkeysequence.h>
 #include <qlayout.h>
 #include <qlayoutitem.h>
-#include <qmime.h>
+#include <qmimedata.h>
 #include <qpalette.h>
 #include <qsessionmanager.h>
 #include <qshortcut.h>
@@ -134,17 +76,11 @@
 #include <qpainterpath.h>
 #include <qpen.h>
 #include <qpolygon.h>
-#include <qprintengine.h>
-#include <qprinter.h>
-#include <qprinterinfo.h>
 #include <qregion.h>
 #include <qrgb.h>
 #include <qstylepainter.h>
 #include <qtransform.h>
-#include <qgraphicseffect.h>
-#include <qinputcontext.h>
-#include <qinputcontextfactory.h>
-#include <qinputcontextplugin.h>
+
 #include <qabstractitemdelegate.h>
 #include <qabstractitemview.h>
 #include <qabstractproxymodel.h>
@@ -169,6 +105,7 @@
 #include <qtreeview.h>
 #include <qtreewidget.h>
 #include <qtreewidgetitemiterator.h>
+
 #include <qgraphicsanchorlayout.h>
 #include <qgraphicsgridlayout.h>
 #include <qgraphicsitem.h>
@@ -182,6 +119,7 @@
 #include <qgraphicstransform.h>
 #include <qgraphicsview.h>
 #include <qgraphicswidget.h>
+
 #include <qkeyeventtransition.h>
 #include <qmouseeventtransition.h>
 #include <qcompleter.h>
@@ -219,6 +157,7 @@
 #include <qprintpreviewwidget.h>
 #include <qprogressbar.h>
 #include <qpushbutton.h>
+#include <qrasterwindow.h>
 #include <qradiobutton.h>
 #include <qrubberband.h>
 #include <qscrollarea.h>
@@ -239,4 +178,115 @@
 #include <qtoolbutton.h>
 #include <qvalidator.h>
 #include <qworkspace.h>
+
+#include <qaccessible.h>
+#include <qaccessibleactioninterface.h>
+#include <qaccessibleapplication.h>
+#include <qaccessiblebridge.h>
+#include <qaccessiblebridgefactoryinterface.h>
+#include <qaccessiblebridgeplugin.h>
+#include <qaccessibleeditabletextinterface.h>
+#include <qaccessibleevent.h>
+#include <qaccessiblefactoryinterface.h>
+#include <qaccessibleimageinterface.h>
+#include <qaccessibleinterface.h>
+#include <qaccessibleobject.h>
+#include <qaccessibleplugin.h>
+#include <qaccessibletableinterface.h>
+#include <qaccessibletextinterface.h>
+#include <qaccessiblevalueinterface.h>
+#include <qaccessiblewidget.h>
+
+#include <qcolordialog.h>
+#include <qdialog.h>
+#include <qerrormessage.h>
+#include <qfiledialog.h>
+#include <qfilesystemmodel.h>
+#include <qfontdialog.h>
+#include <qinputdialog.h>
+#include <qmessagebox.h>
+#include <qprogressdialog.h>
+#include <qwizardpage.h>
+#include <qwizard.h>
+
+#include <qgraphicsblureffect.h>
+#include <qgraphicscolorizeeffect.h>
+#include <qgraphicsdropshadoweffect.h>
+#include <qgraphicsopacityeffect.h>
+#include <qgraphicseffect.h>
+
+#include <qbitmap.h>
+#include <qicon.h>
+#include <qiconengine.h>
+#include <qiconenginefactoryinterface.h>
+#include <qiconengineplugin.h>
+#include <qiconset.h>
+#include <qimage.h>
+#include <qimageiohandler.h>
+#include <qimageiohandlerfactoryinterface.h>
+#include <qimageioplugin.h>
+#include <qimagereader.h>
+#include <qimagetextkeylang.h>
+#include <qimagewriter.h>
+#include <qmovie.h>
+#include <qpicture.h>
+#include <qpictureformatinterface.h>
+#include <qpictureformatplugin.h>
+#include <qpictureio.h>
+#include <qpixmap.h>
+#include <qpixmapcache.h>
+
+#include <qplatform_accessibility.h>
+#include <qplatform_backingstore.h>
+#include <qplatform_clipboard.h>
+#include <qplatform_cursor.h>
+#include <qplatform_dialoghelper.h>
+#include <qplatform_drag.h>
+#include <qplatform_fontdatabase.h>
+#include <qplatform_graphicsbuffer.h>
+#include <qplatform_graphicsbufferhelper.h>
+#include <qplatform_inputcontext.h>
+#include <qplatform_integration.h>
+#include <qplatform_menu.h>
+#include <qplatform_nativeinterface.h>
+#include <qplatform_offscreensurface.h>
+#include <qplatform_openglcontext.h>
+#include <qplatform_pixmap.h>
+#include <qplatform_screen.h>
+#include <qplatform_services.h>
+#include <qplatform_sessionmanager.h>
+#include <qplatform_sharedgraphicscache.h>
+#include <qplatform_surface.h>
+#include <qplatform_systemtrayicon.h>
+#include <qplatform_theme.h>
+#include <qplatform_window.h>
+
+#include <qabstractprintdialog.h>
+#include <qpagelayout.h>
+#include <qpagesize.h>
+#include <qpagesetupdialog.h>
+#include <qpagedpaintdevice.h>
+#include <qprinter.h>
+#include <qprintdialog.h>
+#include <qprintengine.h>
+#include <qprinterinfo.h>
+#include <qprintpreviewdialog.h>
+#include <qunixprintwidget.h>
+
+#ifndef QT_NO_STYLE_GTK
+#include <qgtkstyle_p.h>
+#endif
+
+#ifndef QT_NO_STYLE_WINDOWS
+#include <qwindows_style.h>
+#endif
+
+#ifndef QT_NO_STYLE_WINDOWSVISTA
+#include <qwindowsvista_style.h>
+#endif
+
+#ifndef QT_NO_STYLE_WINDOWSXP
+#include <qwindowsxp_style.h>
+#endif
+
 #endif

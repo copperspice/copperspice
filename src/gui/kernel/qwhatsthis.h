@@ -23,10 +23,10 @@
 #ifndef QWHATSTHIS_H
 #define QWHATSTHIS_H
 
-#include <QtCore/qobject.h>
-#include <QtGui/qcursor.h>
+#include <qobject.h>
+#include <qcursor.h>
 
-QT_BEGIN_NAMESPACE
+
 
 #ifndef QT_NO_WHATSTHIS
 
@@ -34,14 +34,14 @@ class QAction;
 
 class Q_GUI_EXPORT QWhatsThis
 {
-   QWhatsThis();
+   QWhatsThis() = delete;
 
  public:
    static void enterWhatsThisMode();
    static bool inWhatsThisMode();
    static void leaveWhatsThisMode();
 
-   static void showText(const QPoint &pos, const QString &text, QWidget *w = 0);
+   static void showText(const QPoint &pos, const QString &text, QWidget *w = nullptr);
    static void hideText();
 
    static QAction *createAction(QObject *parent = nullptr);
@@ -49,6 +49,5 @@ class Q_GUI_EXPORT QWhatsThis
 
 #endif // QT_NO_WHATSTHIS
 
-QT_END_NAMESPACE
 
 #endif // QWHATSTHIS_H

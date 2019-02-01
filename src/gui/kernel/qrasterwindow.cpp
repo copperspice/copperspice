@@ -29,41 +29,38 @@
 
 class QRasterWindowPrivate : public QPaintDeviceWindowPrivate
 {
-    Q_DECLARE_PUBLIC(QRasterWindow)
+   Q_DECLARE_PUBLIC(QRasterWindow)
 
-public:
-    void beginPaint(const QRegion &region) override
-    {
-        Q_Q(QRasterWindow);
-        if (backingstore->size() != q->size()) {
-            backingstore->resize(q->size());
-            markWindowAsDirty();
-        }
-        backingstore->beginPaint(region);
-    }
+ public:
+   void beginPaint(const QRegion &region) override {
+      Q_Q(QRasterWindow);
+      if (backingstore->size() != q->size()) {
+         backingstore->resize(q->size());
+         markWindowAsDirty();
+      }
+      backingstore->beginPaint(region);
+   }
 
-    void endPaint() override
-    {
-        backingstore->endPaint();
-    }
+   void endPaint() override {
+      backingstore->endPaint();
+   }
 
-    void flush(const QRegion &region) override
-    {
-        Q_Q(QRasterWindow);
-        backingstore->flush(region, q);
-    }
+   void flush(const QRegion &region) override {
+      Q_Q(QRasterWindow);
+      backingstore->flush(region, q);
+   }
 
-    QScopedPointer<QBackingStore> backingstore;
+   QScopedPointer<QBackingStore> backingstore;
 };
 
 /*!
   Constructs a new QRasterWindow with \a parent.
 */
 QRasterWindow::QRasterWindow(QWindow *parent)
-    : QPaintDeviceWindow(* (new QRasterWindowPrivate), parent)
-{   
-    setSurfaceType(QSurface::RasterSurface);
-    d_func()->backingstore.reset(new QBackingStore(this));
+   : QPaintDeviceWindow(* (new QRasterWindowPrivate), parent)
+{
+   setSurfaceType(QSurface::RasterSurface);
+   d_func()->backingstore.reset(new QBackingStore(this));
 }
 
 /*!
@@ -71,15 +68,15 @@ QRasterWindow::QRasterWindow(QWindow *parent)
 */
 int QRasterWindow::metric(PaintDeviceMetric metric) const
 {
-    Q_D(const QRasterWindow);
+   Q_D(const QRasterWindow);
 
-    switch (metric) {
-    case PdmDepth:
-        return d->backingstore->paintDevice()->depth();
-    default:
-        break;
-    }
-    return QPaintDeviceWindow::metric(metric);
+   switch (metric) {
+      case PdmDepth:
+         return d->backingstore->paintDevice()->depth();
+      default:
+         break;
+   }
+   return QPaintDeviceWindow::metric(metric);
 }
 
 /*!
@@ -87,7 +84,7 @@ int QRasterWindow::metric(PaintDeviceMetric metric) const
 */
 QPaintDevice *QRasterWindow::redirected(QPoint *) const
 {
-    Q_D(const QRasterWindow);
-    return d->backingstore->paintDevice();
+   Q_D(const QRasterWindow);
+   return d->backingstore->paintDevice();
 }
 

@@ -36,6 +36,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &out, QKeySequence &ks);
 class QVariant;
 class QKeySequencePrivate;
 
+Q_GUI_EXPORT uint qHash(const QKeySequence &key, uint seed = 0);
 class Q_GUI_EXPORT QKeySequence
 {
    GUI_CS_GADGET(QKeySequence)
@@ -109,7 +110,12 @@ class Q_GUI_EXPORT QKeySequence
       InsertLineSeparator,
       SaveAs,
       Preferences,
-      Quit
+      Quit,
+      FullScreen,
+      Deselect,
+      DeleteCompleteLine,
+      Backspace,
+      Cancel
    };
 
    enum SequenceFormat {
@@ -118,8 +124,7 @@ class Q_GUI_EXPORT QKeySequence
    };
 
    QKeySequence();
-   QKeySequence(const QString &key);
-   QKeySequence(const QString &key, SequenceFormat format);
+   QKeySequence(const QString &key, SequenceFormat format  = NativeText);
    QKeySequence(int k1, int k2 = 0, int k3 = 0, int k4 = 0);
    QKeySequence(const QKeySequence &ks);
    QKeySequence(StandardKey key);
@@ -149,7 +154,7 @@ class Q_GUI_EXPORT QKeySequence
    int operator[](uint i) const;
    QKeySequence &operator=(const QKeySequence &other);
 
-   inline QKeySequence &operator=(QKeySequence && other) {
+   inline QKeySequence &operator=(QKeySequence &&other) {
       qSwap(d, other.d);
       return *this;
    }
@@ -189,6 +194,7 @@ class Q_GUI_EXPORT QKeySequence
 
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QKeySequence &ks);
+   friend Q_GUI_EXPORT uint qHash(const QKeySequence &key, uint seed);
    friend class QShortcutMap;
    friend class QShortcut;
 
@@ -199,8 +205,9 @@ class Q_GUI_EXPORT QKeySequence
    }
 
 };
-Q_DECLARE_TYPEINFO(QKeySequence, Q_MOVABLE_TYPE);
-Q_DECLARE_SHARED(QKeySequence)
+
+
+
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
 
@@ -216,4 +223,4 @@ class Q_GUI_EXPORT QKeySequence
 
 #endif // QT_NO_SHORTCUT
 
-#endif // QKEYSEQUENCE_H
+#endif

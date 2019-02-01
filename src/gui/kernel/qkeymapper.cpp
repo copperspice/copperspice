@@ -21,13 +21,15 @@
 ***********************************************************************/
 
 #include <qapplication.h>
-#include <qkeymapper_p.h>
+
+#include <qplatform_integration.h>
 #include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
+#include <qguiapplication_p.h>
+#include <qkeymapper_p.h>
 
 QKeyMapper::QKeyMapper()
-   : QObject(0), d_ptr(new QKeyMapperPrivate)
+   : QObject(nullptr), d_ptr(new QKeyMapperPrivate)
 {
    d_ptr->q_ptr = this;
 }
@@ -52,25 +54,29 @@ QList<int> QKeyMapper::possibleKeys(QKeyEvent *e)
    return instance()->d_func()->possibleKeys(e);
 }
 
-extern bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event); // in qapplication_*.cpp
+// in qapplication_*.cpp
+extern bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event);
+
 void QKeyMapper::changeKeyboard()
 {
    instance()->d_func()->clearMappings();
 
+   // emerald - support KeyboardLayoutChange
+#if 0
    // inform all toplevel widgets of the change
    QEvent e(QEvent::KeyboardLayoutChange);
    QWidgetList list = QApplication::topLevelWidgets();
+
    for (int i = 0; i < list.size(); ++i) {
       QWidget *w = list.at(i);
       qt_sendSpontaneousEvent(w, &e);
    }
+#endif
+
 }
 
 Q_GLOBAL_STATIC(QKeyMapper, keymapper)
-/*!
-    Returns the pointer to the single instance of QKeyMapper in the application.
-    If none yet exists, the function ensures that one is created.
-*/
+
 QKeyMapper *QKeyMapper::instance()
 {
    return keymapper();
@@ -81,4 +87,31 @@ QKeyMapperPrivate *qt_keymapper_private()
    return QKeyMapper::instance()->d_func();
 }
 
-QT_END_NAMESPACE
+QKeyMapperPrivate::QKeyMapperPrivate()
+{
+   keyboardInputLocale = QLocale::system();
+   keyboardInputDirection = keyboardInputLocale.textDirection();
+}
+
+QKeyMapperPrivate::~QKeyMapperPrivate()
+{
+   // clearMappings();
+}
+
+void QKeyMapperPrivate::clearMappings()
+{
+}
+QList<int> QKeyMapperPrivate::possibleKeys(QKeyEvent *e)
+{
+   QList<int> result = QGuiApplicationPrivate::platformIntegration()->possibleKeys(e);
+   if (!result.isEmpty()) {
+      return result;
+   }
+   if (e->key() && (e->key() != Qt::Key_unknown)) {
+      result << int(e->key() + e->modifiers());
+   } else if (!e->text().isEmpty()) {
+      result << int(e->text().at(0).unicode() + e->modifiers());
+   }
+   return result;
+}
+

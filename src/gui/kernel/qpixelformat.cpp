@@ -20,16 +20,16 @@
 *
 ***********************************************************************/
 
-#include "qpixelformat.h"
+#include <qpixelformat.h>
 
-static_assert(sizeof(QPixelFormat) == sizeof(quint64));
+static_assert(sizeof(QPixelFormat) == sizeof(quint64), "Type mismatch");
 
 namespace QtPrivate {
 
 QPixelFormat QPixelFormat_createYUV(QPixelFormat::YUVLayout yuvLayout, uchar alphaSize,
-                                    QPixelFormat::AlphaUsage alphaUsage, QPixelFormat::AlphaPosition alphaPosition,
-                                    QPixelFormat::AlphaPremultiplied premultiplied, QPixelFormat::TypeInterpretation typeInterpretation,
-                                    QPixelFormat::ByteOrder byteOrder)
+   QPixelFormat::AlphaUsage alphaUsage, QPixelFormat::AlphaPosition alphaPosition,
+   QPixelFormat::AlphaPremultiplied premultiplied, QPixelFormat::TypeInterpretation typeInterpretation,
+   QPixelFormat::ByteOrder byteOrder)
 {
    uchar bits_per_pixel = 0;
 
@@ -76,7 +76,7 @@ QPixelFormat QPixelFormat_createYUV(QPixelFormat::YUVLayout yuvLayout, uchar alp
    }
 
    return QPixelFormat(QPixelFormat::YUV, 0, 0, 0, 0, bits_per_pixel, alphaSize, alphaUsage,
-                       alphaPosition, premultiplied, typeInterpretation, byteOrder, yuvLayout);
+         alphaPosition, premultiplied, typeInterpretation, byteOrder, yuvLayout);
 }
 
 } // namespace

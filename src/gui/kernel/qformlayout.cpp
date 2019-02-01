@@ -30,8 +30,6 @@
 #include <qvector.h>
 #include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace {
 
 // Fixed column matrix, stores items as [i11, i12, i21, i22...],
@@ -52,6 +50,7 @@ class FixedColumnMatrix
    const T &operator()(int r, int c) const {
       return m_storage[r * NumColumns + c];
    }
+
    T &operator()(int r, int c) {
       return m_storage[r * NumColumns + c];
    }
@@ -59,6 +58,7 @@ class FixedColumnMatrix
    int rowCount() const {
       return m_storage.size() / NumColumns;
    }
+
    void addRow(const T &value);
    void insertRow(int r, const T &value);
    void removeRow(int r);
@@ -68,7 +68,7 @@ class FixedColumnMatrix
       return m_storage.count(value);
    }
 
-   // Hmmpf.. Some things are faster that way.
+   // Some things are faster
    const Storage &storage() const {
       return m_storage;
    }
@@ -139,6 +139,7 @@ struct QFormLayoutItem {
    QWidget *widget() const {
       return item->widget();
    }
+
    QLayout *layout() const {
       return item->layout();
    }
@@ -146,18 +147,23 @@ struct QFormLayoutItem {
    bool hasHeightForWidth() const {
       return item->hasHeightForWidth();
    }
+
    int heightForWidth(int width) const {
       return item->heightForWidth(width);
    }
+
    int minimumHeightForWidth(int width) const {
       return item->minimumHeightForWidth(width);
    }
+
    Qt::Orientations expandingDirections() const {
       return item->expandingDirections();
    }
+
    QSizePolicy::ControlTypes controlTypes() const {
       return item->controlTypes();
    }
+
    int vStretch() const {
       return widget() ? widget()->sizePolicy().verticalStretch() : 0;
    }
@@ -165,6 +171,7 @@ struct QFormLayoutItem {
    void setGeometry(const QRect &r) {
       item->setGeometry(r);
    }
+
    QRect geometry() const {
       return item->geometry();
    }
@@ -208,7 +215,7 @@ class QFormLayoutPrivate : public QLayoutPrivate
 
    int insertRow(int row);
    void insertRows(int row, int count);
-   void setItem(int row, QFormLayout::ItemRole role, QLayoutItem *item);
+   bool setItem(int row, QFormLayout::ItemRole role, QLayoutItem *item);
    void setLayout(int row, QFormLayout::ItemRole role, QLayout *layout);
    void setWidget(int row, QFormLayout::ItemRole role, QWidget *widget);
 
@@ -266,6 +273,7 @@ class QFormLayoutPrivate : public QLayoutPrivate
 
    int hSpacing;
    int vSpacing;
+   QLayoutItem *replaceAt(int index, QLayoutItem *) override;
 };
 
 QFormLayoutPrivate::QFormLayoutPrivate()
@@ -282,15 +290,15 @@ static Qt::Alignment fixedAlignment(Qt::Alignment alignment, Qt::LayoutDirection
    if (layoutDirection == Qt::RightToLeft && alignment & Qt::AlignAbsolute) {
       // swap left and right, and eliminate absolute flag
       return Qt::Alignment((alignment & ~(Qt::AlignLeft | Qt::AlignRight | Qt::AlignAbsolute))
-                           | ((alignment & Qt::AlignRight) ? Qt::AlignLeft : 0)
-                           | ((alignment & Qt::AlignLeft) ? Qt::AlignRight : 0));
+            | ((alignment & Qt::AlignRight) ? Qt::AlignLeft : 0)
+            | ((alignment & Qt::AlignLeft) ? Qt::AlignRight : 0));
    } else {
       return alignment & ~Qt::AlignAbsolute;
    }
 }
 
 static int storageIndexFromLayoutItem(const QFormLayoutPrivate::ItemMatrix &m,
-                                      QFormLayoutItem *item)
+   QFormLayoutItem *item)
 {
    if (item) {
       return m.storage().indexOf(item);
@@ -300,16 +308,16 @@ static int storageIndexFromLayoutItem(const QFormLayoutPrivate::ItemMatrix &m,
 }
 
 static void updateFormLayoutItem(QFormLayoutItem *item, int userVSpacing,
-                                 QFormLayout::FieldGrowthPolicy fieldGrowthPolicy,
-                                 bool fullRow)
+   QFormLayout::FieldGrowthPolicy fieldGrowthPolicy,
+   bool fullRow)
 {
    item->minSize = item->item->minimumSize();
    item->sizeHint = item->item->sizeHint();
    item->maxSize = item->item->maximumSize();
 
    if (!fullRow && (fieldGrowthPolicy == QFormLayout::FieldsStayAtSizeHint
-                    || (fieldGrowthPolicy == QFormLayout::ExpandingFieldsGrow
-                        && !(item->item->expandingDirections() & Qt::Horizontal)))) {
+         || (fieldGrowthPolicy == QFormLayout::ExpandingFieldsGrow
+            && !(item->item->expandingDirections() & Qt::Horizontal)))) {
       item->maxSize.setWidth(item->sizeHint.width());
    }
 
@@ -636,8 +644,9 @@ void QFormLayoutPrivate::setupHfwLayoutData()
   -  if item2 is not null, prevItem2 will be null (e.g. steps 1 or 3 above)
   -  if prevItem1 is null, prevItem2 will be null
 */
+
 static inline int spacingHelper(QWidget *parent, QStyle *style, int userVSpacing, bool recalculate,
-                                QFormLayoutItem *item1, QFormLayoutItem *item2, QFormLayoutItem *prevItem1, QFormLayoutItem *prevItem2)
+   QFormLayoutItem *item1, QFormLayoutItem *item2, QFormLayoutItem *prevItem1, QFormLayoutItem *prevItem2)
 {
    int spacing = userVSpacing;
    if (spacing < 0) {
@@ -648,6 +657,7 @@ static inline int spacingHelper(QWidget *parent, QStyle *style, int userVSpacing
          if (item2) {
             spacing = qMax(spacing, item2->vSpace);
          }
+
       } else {
          if (style && prevItem1) {
             QSizePolicy::ControlTypes itemtypes =
@@ -680,7 +690,8 @@ static inline int spacingHelper(QWidget *parent, QStyle *style, int userVSpacing
          }
       }
    }
-   return spacing;
+
+   return qMax(spacing, 0);
 }
 
 static inline void initLayoutStruct(QLayoutStruct &sl, QFormLayoutItem *item)
@@ -771,7 +782,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
       // In separate lines, we make a vLayout for everything that isn't null
       // in side by side, we only separate label/field if we're going to wrap it
       bool splitSideBySide = (rowWrapPolicy == QFormLayout::WrapLongRows)
-                             && ((maxLabelWidth < sh1.width()) || (width < (maxLabelWidth + min2.width())));
+         && ((maxLabelWidth < sh1.width()) || (width < (maxLabelWidth + min2.width())));
 
       if (wrapAllRows || splitSideBySide) {
          if (label) {
@@ -779,7 +790,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
 
             if (vidx > 1) {
                vLayouts[vidx - 1].spacing = spacingHelper(q->parentWidget(), style, userVSpacing, splitSideBySide ||
-                                            prevRowSplit, label, 0, prevItem1, prevItem2);
+                     prevRowSplit, label, 0, prevItem1, prevItem2);
             }
 
             label->vLayoutIndex = vidx;
@@ -800,7 +811,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
 
             if (vidx > 1) {
                vLayouts[vidx - 1].spacing = spacingHelper(q->parentWidget(), style, userVSpacing, splitSideBySide ||
-                                            prevRowSplit, field, 0, prevItem1, prevItem2);
+                     prevRowSplit, field, 0, prevItem1, prevItem2);
             }
 
             field->vLayoutIndex = vidx;
@@ -860,7 +871,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
 
          if (vidx > 1) {
             vLayouts[vidx - 1].spacing = spacingHelper(q->parentWidget(), style, userVSpacing, prevRowSplit, label, field,
-                                         prevItem1, prevItem2);
+                  prevItem1, prevItem2);
          }
 
          if (label) {
@@ -1005,22 +1016,23 @@ void QFormLayoutPrivate::insertRows(int row, int count)
    }
 }
 
-void QFormLayoutPrivate::setItem(int row, QFormLayout::ItemRole role, QLayoutItem *item)
+bool QFormLayoutPrivate::setItem(int row, QFormLayout::ItemRole role, QLayoutItem *item)
 {
    const bool fullRow = role == QFormLayout::SpanningRole;
    const int column =  role == QFormLayout::SpanningRole ? 1 : static_cast<int>(role);
+
    if (uint(row) >= uint(m_matrix.rowCount()) || uint(column) > 1U) {
       qWarning("QFormLayoutPrivate::setItem: Invalid cell (%d, %d)", row, column);
-      return;
+      return false;
    }
 
-   if (!item) {
-      return;
+   if (! item) {
+      return false;
    }
 
    if (m_matrix(row, column)) {
       qWarning("QFormLayoutPrivate::setItem: Cell (%d, %d) already occupied", row, column);
-      return;
+      return false;
    }
 
    QFormLayoutItem *i = new QFormLayoutItem(item);
@@ -1028,6 +1040,8 @@ void QFormLayoutPrivate::setItem(int row, QFormLayout::ItemRole role, QLayoutIte
    m_matrix(row, column) = i;
 
    m_things.append(i);
+
+   return true;
 }
 
 void QFormLayoutPrivate::setLayout(int row, QFormLayout::ItemRole role, QLayout *layout)
@@ -1045,7 +1059,10 @@ void QFormLayoutPrivate::setWidget(int row, QFormLayout::ItemRole role, QWidget 
    if (widget) {
       Q_Q(QFormLayout);
       q->addChildWidget(widget);
-      setItem(row, role, QLayoutPrivate::createWidgetItem(q, widget));
+      QWidgetItem *item = QLayoutPrivate::createWidgetItem(q, widget);
+      if (!setItem(row, role, item)) {
+         delete item;
+      }
    }
 }
 
@@ -1061,171 +1078,41 @@ QStyle *QFormLayoutPrivate::getStyle() const
    }
 }
 
-/*!
-    \class QFormLayout
-    \since 4.4
-    \brief The QFormLayout class manages forms of input widgets and their associated labels.
+QLayoutItem *QFormLayoutPrivate::replaceAt(int index, QLayoutItem *newitem)
+{
+   Q_Q(QFormLayout);
 
-    \ingroup geomanagement
+   if (!newitem) {
+      return 0;
+   }
 
+   const int storageIndex = storageIndexFromLayoutItem(m_matrix, m_things.value(index));
+   if (storageIndex == -1) {
+      // ### Qt6 - fix warning too when this class becomes public
+      qWarning("QFormLayoutPrivate::replaceAt: Invalid index %d", index);
+      return 0;
+   }
 
-    QFormLayout is a convenience layout class that lays out its
-    children in a two-column form. The left column consists of labels
-    and the right column consists of "field" widgets (line editors,
-    spin boxes, etc.).
+   int row, col;
+   QFormLayoutPrivate::ItemMatrix::storageIndexToPosition(storageIndex, &row, &col);
+   Q_ASSERT(m_matrix(row, col));
 
-    Traditionally, such two-column form layouts were achieved using
-    QGridLayout. QFormLayout is a higher-level alternative that
-    provides the following advantages:
+   QFormLayoutItem *item = m_matrix(row, col);
+   Q_ASSERT(item);
 
-    \list
-    \o \bold{Adherence to the different platform's look and feel guidelines.}
+   QLayoutItem *olditem = item->item;
+   item->item = newitem;
 
-        For example, the
-        \l{Mac OS X Aqua} and KDE guidelines specify that the
-        labels should be right-aligned, whereas Windows and GNOME
-        applications normally use left-alignment.
+   q->invalidate();
+   return olditem;
+}
 
-    \o \bold{Support for wrapping long rows.}
-
-       For devices with small displays, QFormLayout can be set to
-       \l{WrapLongRows}{wrap long rows}, or even to
-       \l{WrapAllRows}{wrap all rows}.
-
-    \o \bold{Convenient API for creating label--field pairs.}
-
-       The addRow() overload that takes a QString and a QWidget *
-       creates a QLabel behind the scenes and automatically set up
-       its buddy. We can then write code like this:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qformlayout.cpp 0
-
-       Compare this with the following code, written using QGridLayout:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qformlayout.cpp 1
-    \endlist
-
-    The table below shows the default appearance in different styles.
-
-    \table
-    \header
-        \o QCommonStyle derived styles (except QPlastiqueStyle)
-        \o QMacStyle
-        \o QPlastiqueStyle
-        \o Qt Extended styles
-    \row
-        \o \inlineimage qformlayout-win.png
-        \o \inlineimage qformlayout-mac.png
-        \o \inlineimage qformlayout-kde.png
-        \o \inlineimage qformlayout-qpe.png
-    \row
-        \o Traditional style used for Windows, GNOME, and earlier
-           versions of KDE. Labels are left aligned, and expanding
-           fields grow to fill the available space. (This normally
-           corresponds to what we would get using a two-column
-           QGridLayout.)
-        \o Style based on the
-           \l{Mac OS X Aqua} guidelines. Labels are right-aligned,
-           the fields don't grow beyond their size hint, and the
-           form is horizontally centered.
-        \o Recommended style for
-           \l{KDE applications}. Similar to MacStyle, except that the form
-           is left-aligned and all fields grow to fill the available
-           space.
-        \o Default style for Qt Extended styles. Labels are right-aligned,
-           expanding fields grow to fill the available space, and row
-           wrapping is enabled for long lines.
-    \endtable
-
-    The form styles can be also be overridden individually by calling
-    setLabelAlignment(), setFormAlignment(), setFieldGrowthPolicy(),
-    and setRowWrapPolicy().  For example, to simulate the form layout
-    appearance of QMacStyle on all platforms, but with left-aligned
-    labels, you could write:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qformlayout.cpp 2
-
-    \sa QGridLayout, QBoxLayout, QStackedLayout
-*/
-
-
-/*!
-    \enum QFormLayout::FieldGrowthPolicy
-
-    This enum specifies the different policies that can be used to
-    control the way in which the form's fields grow.
-
-    \value FieldsStayAtSizeHint
-           The fields never grow beyond their
-           \l{QWidgetItem::sizeHint()}{effective size hint}. This is
-           the default for QMacStyle.
-
-    \value ExpandingFieldsGrow
-           Fields with an horizontal \l{QSizePolicy}{size policy} of
-           \l{QSizePolicy::}{Expanding} or
-           \l{QSizePolicy::}{MinimumExpanding} will grow to fill the
-           available space. The other fields will not grow beyond
-           their effective size hint. This is the default policy for
-           Plastique.
-
-    \value AllNonFixedFieldsGrow
-           All fields with a size policy that allows them to grow
-           will grow to fill the available space. This is the default
-           policy for most styles.
-
-    \sa fieldGrowthPolicy
-*/
-
-/*!
-    \enum QFormLayout::RowWrapPolicy
-
-    This enum specifies the different policies that can be used to
-    control the way in which the form's rows wrap.
-
-    \value DontWrapRows
-           Fields are always laid out next to their label.  This is
-           the default policy for all styles except Qt Extended styles
-           and QS60Style.
-
-    \value WrapLongRows
-           Labels are given enough horizontal space to fit the widest label,
-           and the rest of the space is given to the fields. If the minimum
-           size of a field pair is wider than the available space, the field
-           is wrapped to the next line.  This is the default policy for
-           Qt Extended styles and and QS60Style.
-
-    \value WrapAllRows
-           Fields are always laid out below their label.
-
-    \sa rowWrapPolicy
-*/
-
-/*!
-    \enum QFormLayout::ItemRole
-
-    This enum specifies the types of widgets (or other layout items)
-    that may appear in a row.
-
-    \value LabelRole A label widget.
-    \value FieldRole A field widget.
-    \value SpanningRole A widget that spans label and field columns.
-
-    \sa itemAt(), getItemPosition()
-*/
-
-/*!
-    Constructs a new form layout with the given \a parent widget.
-
-    \sa QWidget::setLayout()
-*/
 QFormLayout::QFormLayout(QWidget *parent)
    : QLayout(*new QFormLayoutPrivate, 0, parent)
 {
 }
 
-/*!
-    Destroys the form layout.
-*/
+
 QFormLayout::~QFormLayout()
 {
    Q_D(QFormLayout);
@@ -1240,12 +1127,6 @@ QFormLayout::~QFormLayout()
    d->m_matrix.clear();
 }
 
-/*!
-    Adds a new row to the bottom of this form layout, with the given
-    \a label and \a field.
-
-    \sa insertRow()
-*/
 void QFormLayout::addRow(QWidget *label, QWidget *field)
 {
    insertRow(-1, label, field);
@@ -1314,11 +1195,15 @@ void QFormLayout::addRow(QLayout *layout)
 void QFormLayout::insertRow(int row, QWidget *label, QWidget *field)
 {
    Q_D(QFormLayout);
+   if ((label && !d->checkWidget(label)) || (field && !d->checkWidget(field))) {
+      return;
+   }
 
    row = d->insertRow(row);
    if (label) {
       d->setWidget(row, LabelRole, label);
    }
+
    if (field) {
       d->setWidget(row, FieldRole, field);
    }
@@ -1331,11 +1216,15 @@ void QFormLayout::insertRow(int row, QWidget *label, QWidget *field)
 void QFormLayout::insertRow(int row, QWidget *label, QLayout *field)
 {
    Q_D(QFormLayout);
+   if ((label && !d->checkWidget(label)) || (field && !d->checkLayout(field))) {
+      return;
+   }
 
    row = d->insertRow(row);
    if (label) {
       d->setWidget(row, LabelRole, label);
    }
+
    if (field) {
       d->setLayout(row, FieldRole, field);
    }
@@ -1351,40 +1240,39 @@ void QFormLayout::insertRow(int row, QWidget *label, QLayout *field)
 */
 void QFormLayout::insertRow(int row, const QString &labelText, QWidget *field)
 {
+   Q_D(QFormLayout);
+   if (field && !d->checkWidget(field)) {
+      return;
+   }
    QLabel *label = 0;
+
    if (!labelText.isEmpty()) {
       label = new QLabel(labelText);
+
 #ifndef QT_NO_SHORTCUT
       label->setBuddy(field);
 #endif
+
    }
    insertRow(row, label, field);
 }
 
-/*!
-    \overload
 
-    This overload automatically creates a QLabel behind the scenes
-    with \a labelText as its text.
-*/
 void QFormLayout::insertRow(int row, const QString &labelText, QLayout *field)
 {
+   Q_D(QFormLayout);
+   if (field && !d->checkLayout(field)) {
+      return;
+   }
    insertRow(row, labelText.isEmpty() ? 0 : new QLabel(labelText), field);
 }
 
-/*!
-    \overload
 
-    Inserts the specified \a widget at position \a row in this form
-    layout. The \a widget spans both columns. If \a row is out of
-    bounds, the widget is added at the end.
-*/
 void QFormLayout::insertRow(int row, QWidget *widget)
 {
    Q_D(QFormLayout);
 
-   if (!widget) {
-      qWarning("QFormLayout: Cannot add null field to %s", qPrintable(objectName()));
+   if (!d->checkWidget(widget)) {
       return;
    }
 
@@ -1404,8 +1292,7 @@ void QFormLayout::insertRow(int row, QLayout *layout)
 {
    Q_D(QFormLayout);
 
-   if (!layout) {
-      qWarning("QFormLayout: Cannot add null field to %s", qPrintable(objectName()));
+   if (!d->checkLayout(layout)) {
       return;
    }
 
@@ -1441,6 +1328,7 @@ int QFormLayout::count() const
 QLayoutItem *QFormLayout::itemAt(int index) const
 {
    Q_D(const QFormLayout);
+
    if (QFormLayoutItem *formItem = d->m_things.value(index)) {
       return formItem->item;
    }
@@ -1499,6 +1387,7 @@ Qt::Orientations QFormLayout::expandingDirections() const
    if (e->expandHorizontal) {
       o = Qt::Horizontal;
    }
+
    if (e->expandVertical) {
       o |= Qt::Vertical;
    }
@@ -1734,7 +1623,7 @@ QWidget *QFormLayout::labelForField(QWidget *field) const
    Q_D(const QFormLayout);
 
    int row;
-   ItemRole role;
+   ItemRole role = LabelRole;
 
    getWidgetPosition(field, &row, &role);
 
@@ -1802,20 +1691,6 @@ QFormLayout::FieldGrowthPolicy QFormLayout::fieldGrowthPolicy() const
    }
 }
 
-/*!
-    \property QFormLayout::rowWrapPolicy
-    \brief the way in which the form's rows wrap
-
-    The default value depends on the widget or application style. For
-    Qt Extended styles and QS60Style, the default is WrapLongRows;
-    for the other styles, the default is DontWrapRows.
-
-    If you want to display each label above its associated field
-    (instead of next to it), set this property to WrapAllRows.
-
-    \sa fieldGrowthPolicy
-*/
-
 void QFormLayout::setRowWrapPolicy(RowWrapPolicy policy)
 {
    Q_D(QFormLayout);
@@ -1834,18 +1709,6 @@ QFormLayout::RowWrapPolicy QFormLayout::rowWrapPolicy() const
       return QFormLayout::RowWrapPolicy(d->rowWrapPolicy);
    }
 }
-
-/*!
-    \property QFormLayout::labelAlignment
-    \brief the horizontal alignment of the labels
-
-    The default value depends on the widget or application style. For
-    QCommonStyle derived styles, except for QPlastiqueStyle, the
-    default is Qt::AlignLeft; for the other styles, the default is
-    Qt::AlignRight.
-
-    \sa formAlignment
-*/
 
 void QFormLayout::setLabelAlignment(Qt::Alignment alignment)
 {
@@ -1866,17 +1729,6 @@ Qt::Alignment QFormLayout::labelAlignment() const
    }
 }
 
-/*!
-    \property QFormLayout::formAlignment
-    \brief the alignment of the form layout's contents within the layout's geometry
-
-    The default value depends on the widget or application style. For
-    QMacStyle, the default is Qt::AlignHCenter | Qt::AlignTop; for the
-    other styles, the default is Qt::AlignLeft | Qt::AlignTop.
-
-    \sa labelAlignment, rowWrapPolicy
-*/
-
 void QFormLayout::setFormAlignment(Qt::Alignment alignment)
 {
    Q_D(QFormLayout);
@@ -1896,16 +1748,7 @@ Qt::Alignment QFormLayout::formAlignment() const
    }
 }
 
-/*!
-    \property QFormLayout::horizontalSpacing
-    \brief the spacing between widgets that are laid out side by side
 
-    By default, if no value is explicitly set, the layout's horizontal
-    spacing is inherited from the parent layout, or from the style settings
-    for the parent widget.
-
-    \sa verticalSpacing, QStyle::pixelMetric(), {QStyle::}{PM_LayoutHorizontalSpacing}
-*/
 void QFormLayout::setHorizontalSpacing(int spacing)
 {
    Q_D(QFormLayout);
@@ -1925,16 +1768,6 @@ int QFormLayout::horizontalSpacing() const
    }
 }
 
-/*!
-    \property QFormLayout::verticalSpacing
-    \brief the spacing between widgets that are laid out vertically
-
-    By default, if no value is explicitly set, the layout's vertical spacing is
-    inherited from the parent layout, or from the style settings for the parent
-    widget.
-
-    \sa horizontalSpacing, QStyle::pixelMetric(), {QStyle::}{PM_LayoutHorizontalSpacing}
-*/
 void QFormLayout::setVerticalSpacing(int spacing)
 {
    Q_D(QFormLayout);
@@ -2016,8 +1849,8 @@ void QFormLayoutPrivate::arrangeWidgets(const QVector<QLayoutStruct> &layouts, Q
                 gets some extra pixels at the top.
             */
             height = qMin(height,
-                          qMin(label->sizeHint.height() * 7 / 4,
-                               label->maxSize.height()));
+                  qMin(label->sizeHint.height() * 7 / 4,
+                     label->maxSize.height()));
          }
 
          QSize sz(qMin(label->layoutWidth, label->sizeHint.width()), height);
@@ -2153,5 +1986,3 @@ void QFormLayout::resetLabelAlignment()
    Q_D(QFormLayout);
    d->labelAlignment = 0;
 }
-
-QT_END_NAMESPACE

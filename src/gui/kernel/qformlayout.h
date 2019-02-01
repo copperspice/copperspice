@@ -23,9 +23,7 @@
 #ifndef QFORMLAYOUT_H
 #define QFORMLAYOUT_H
 
-#include <QtGui/QLayout>
-
-QT_BEGIN_NAMESPACE
+#include <QLayout>
 
 class QFormLayoutPrivate;
 
@@ -148,7 +146,5 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
    void resetLabelAlignment();
    void resetFormAlignment();
 };
-
-QT_END_NAMESPACE
 
 #endif

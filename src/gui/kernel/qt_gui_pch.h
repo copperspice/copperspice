@@ -22,6 +22,7 @@
 
 #ifndef Qt_Gui_Pch_H
 #define Qt_Gui_Pch_H
+// use to create a precompiled header
 
 // from core/global/qt_pch.h
 #if defined __cplusplus
@@ -45,15 +46,15 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qcursor.h>
-#include <qdesktopwidget.h>
+
 #include <qevent.h>
 #include <qimage.h>
-#include <qlayout.h>
+
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qstyle.h>
+
 #include <qtimer.h>
-#include <qwidget.h>
+
 
 #include <stdlib.h>
 

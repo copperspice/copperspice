@@ -28,16 +28,19 @@
 
 #ifndef QT_NO_GESTURES
 
-QT_BEGIN_NAMESPACE
+
 
 class QPanGestureRecognizer : public QGestureRecognizer
 {
  public:
-   QPanGestureRecognizer();
+   explicit QPanGestureRecognizer(int pointCount = 2) : m_pointCount(pointCount)
+   {}
 
    QGesture *create(QObject *target) override;
    QGestureRecognizer::Result recognize(QGesture *state, QObject *watched, QEvent *event) override;
    void reset(QGesture *state) override;
+ private:
+   const int m_pointCount;
 };
 
 class QPinchGestureRecognizer : public QGestureRecognizer
@@ -80,8 +83,5 @@ class QTapAndHoldGestureRecognizer : public QGestureRecognizer
    void reset(QGesture *state) override;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_GESTURES
-
 #endif // QSTANDARDGESTURES_P_H

@@ -23,11 +23,10 @@
 #ifndef QPALETTE_H
 #define QPALETTE_H
 
-#include <QtGui/qwindowdefs.h>
-#include <QtGui/qcolor.h>
-#include <QtGui/qbrush.h>
+#include <qwindowdefs.h>
+#include <qcolor.h>
+#include <qbrush.h>
 
-QT_BEGIN_NAMESPACE
 
 class QPalettePrivate;
 class QVariant;
@@ -40,6 +39,20 @@ class Q_GUI_EXPORT QPalette
    GUI_CS_ENUM(ColorRole)
 
  public:
+   // Do not change the order, the serialization format depends on it
+   enum ColorGroup { Active, Disabled, Inactive, NColorGroups, Current, All, Normal = Active };
+
+   enum ColorRole { WindowText, Button, Light, Midlight, Dark, Mid,
+      Text, BrightText, ButtonText, Base, Window, Shadow,
+      Highlight, HighlightedText,
+      Link, LinkVisited, // ### Qt5/remove
+      AlternateBase,
+      NoRole, // ### Qt5/value should be 0 or -1
+      ToolTipBase, ToolTipText,
+      NColorRoles = ToolTipText + 1,
+      Foreground = WindowText, Background = Window // ### Qt5/remove
+   };
+
    QPalette();
 
    QPalette(const QColor &button);
@@ -47,44 +60,49 @@ class Q_GUI_EXPORT QPalette
    QPalette(const QColor &button, const QColor &window);
 
    QPalette(const QBrush &windowText, const QBrush &button, const QBrush &light,
-            const QBrush &dark, const QBrush &mid, const QBrush &text,
-            const QBrush &bright_text, const QBrush &base, const QBrush &window);
+      const QBrush &dark, const QBrush &mid, const QBrush &text,
+      const QBrush &bright_text, const QBrush &base, const QBrush &window);
 
    QPalette(const QColor &windowText, const QColor &window, const QColor &light,
-            const QColor &dark, const QColor &mid, const QColor &text, const QColor &base);
+      const QColor &dark, const QColor &mid, const QColor &text, const QColor &base);
 
    QPalette(const QPalette &palette);
+
+   QPalette(QPalette &&other) : d(other.d) {
+      resolve_mask  = other.resolve_mask;
+      current_group = other.current_group;
+      other.d = nullptr;
+   }
+
    ~QPalette();
 
    QPalette &operator=(const QPalette &palette);
 
-   inline QPalette &operator=(QPalette && other) {
-      resolve_mask = other.resolve_mask;
+
+   inline QPalette &operator=(QPalette &&other) {
+      resolve_mask  = other.resolve_mask;
       current_group = other.current_group;
       qSwap(d, other.d);
+
       return *this;
    }
 
+
+
+
    operator QVariant() const;
 
-   // Do not change the order, the serialization format depends on it
-   enum ColorGroup { Active, Disabled, Inactive, NColorGroups, Current, All, Normal = Active };
+   void swap(QPalette &other) {
+      qSwap(resolve_mask,  other.resolve_mask);
+      qSwap(current_group, other.current_group);
+      qSwap(d, other.d);
+   }
 
-   enum ColorRole { WindowText, Button, Light, Midlight, Dark, Mid,
-                    Text, BrightText, ButtonText, Base, Window, Shadow,
-                    Highlight, HighlightedText,
-                    Link, LinkVisited, // ### Qt5/remove
-                    AlternateBase,
-                    NoRole, // ### Qt5/value should be 0 or -1
-                    ToolTipBase, ToolTipText,
-                    NColorRoles = ToolTipText + 1,
-                    Foreground = WindowText, Background = Window // ### Qt5/remove
-                  };
-
-   inline ColorGroup currentColorGroup() const {
+   ColorGroup currentColorGroup() const {
       return static_cast<ColorGroup>(current_group);
    }
-   inline void setCurrentColorGroup(ColorGroup cg) {
+
+   void setCurrentColorGroup(ColorGroup cg) {
       current_group = cg;
    }
 
@@ -102,9 +120,9 @@ class Q_GUI_EXPORT QPalette
    void setBrush(ColorGroup cg, ColorRole cr, const QBrush &brush);
 
    void setColorGroup(ColorGroup cr, const QBrush &windowText, const QBrush &button,
-                      const QBrush &light, const QBrush &dark, const QBrush &mid,
-                      const QBrush &text, const QBrush &bright_text, const QBrush &base,
-                      const QBrush &window);
+      const QBrush &light, const QBrush &dark, const QBrush &mid,
+      const QBrush &text, const QBrush &bright_text, const QBrush &base,
+      const QBrush &window);
 
    bool isEqual(ColorGroup cr1, ColorGroup cr2) const;
 
@@ -184,41 +202,46 @@ class Q_GUI_EXPORT QPalette
    }
    bool isCopyOf(const QPalette &p) const;
 
-   int serialNumber() const;
+
    qint64 cacheKey() const;
 
    QPalette resolve(const QPalette &) const;
-   inline uint resolve() const {
+
+   uint resolve() const {
       return resolve_mask;
    }
-   inline void resolve(uint mask) {
+
+   void resolve(uint mask) {
       resolve_mask = mask;
    }
 
  private:
    void setColorGroup(ColorGroup cr, const QBrush &windowText, const QBrush &button,
-                      const QBrush &light, const QBrush &dark, const QBrush &mid,
-                      const QBrush &text, const QBrush &bright_text,
-                      const QBrush &base, const QBrush &alternate_base,
-                      const QBrush &window, const QBrush &midlight,
-                      const QBrush &button_text, const QBrush &shadow,
-                      const QBrush &highlight, const QBrush &highlighted_text,
-                      const QBrush &link, const QBrush &link_visited);
+      const QBrush &light, const QBrush &dark, const QBrush &mid,
+      const QBrush &text, const QBrush &bright_text,
+      const QBrush &base, const QBrush &alternate_base,
+      const QBrush &window, const QBrush &midlight,
+      const QBrush &button_text, const QBrush &shadow,
+      const QBrush &highlight, const QBrush &highlighted_text,
+      const QBrush &link, const QBrush &link_visited);
+
    void setColorGroup(ColorGroup cr, const QBrush &windowText, const QBrush &button,
-                      const QBrush &light, const QBrush &dark, const QBrush &mid,
-                      const QBrush &text, const QBrush &bright_text,
-                      const QBrush &base, const QBrush &alternate_base,
-                      const QBrush &window, const QBrush &midlight,
-                      const QBrush &button_text, const QBrush &shadow,
-                      const QBrush &highlight, const QBrush &highlighted_text,
-                      const QBrush &link, const QBrush &link_visited,
-                      const QBrush &toolTipBase, const QBrush &toolTipText);
+      const QBrush &light, const QBrush &dark, const QBrush &mid,
+      const QBrush &text, const QBrush &bright_text,
+      const QBrush &base, const QBrush &alternate_base,
+      const QBrush &window, const QBrush &midlight,
+      const QBrush &button_text, const QBrush &shadow,
+      const QBrush &highlight, const QBrush &highlighted_text,
+      const QBrush &link, const QBrush &link_visited,
+      const QBrush &toolTipBase, const QBrush &toolTipText);
    void init();
    void detach();
 
    QPalettePrivate *d;
-   uint current_group : 4;
-   uint resolve_mask : 28;
+
+   uint current_group;
+   uint resolve_mask;
+
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const QPalette &p);
 };
 
@@ -237,12 +260,11 @@ inline void QPalette::setBrush(ColorRole acr, const QBrush &abrush)
    setBrush(All, acr, abrush);
 }
 
-#ifndef QT_NO_DATASTREAM
+
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &ds, const QPalette &p);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &ds, QPalette &p);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QPalette &);
+
+
+
 #endif
-
-QT_END_NAMESPACE
-
-
-#endif // QPALETTE_H
