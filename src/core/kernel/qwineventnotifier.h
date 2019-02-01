@@ -42,6 +42,9 @@ class Q_CORE_EXPORT QWinEventNotifier : public QObject
 
    bool isEnabled() const;
 
+   CORE_CS_SIGNAL_1(Public, void activated(HANDLE hEvent))
+   CORE_CS_SIGNAL_2(activated, hEvent)
+
    CORE_CS_SLOT_1(Public, void setEnabled(bool enable))
    CORE_CS_SLOT_2(setEnabled)
 
@@ -51,9 +54,6 @@ class Q_CORE_EXPORT QWinEventNotifier : public QObject
  private:
    HANDLE handleToEvent;
    bool enabled;
-
-   CORE_CS_SIGNAL_1(Private, void activated(HANDLE hEvent))
-   CORE_CS_SIGNAL_2(activated, hEvent)
 };
 
 #endif // Q_OS_WIN

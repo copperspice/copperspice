@@ -29,7 +29,7 @@
 
 extern QString qAppFileName();
 
-static inline QString qSystemDirectory()
+static QString qSystemDirectory()
 {
    std::wstring fullPath(MAX_PATH, L'\0');
 

@@ -39,7 +39,7 @@ class QAnimationDriverPrivate;
 class Q_CORE_EXPORT QAbstractAnimation : public QObject
 {
    CORE_CS_OBJECT(QAbstractAnimation)
- 
+
    CORE_CS_PROPERTY_READ(state, state)
    CORE_CS_PROPERTY_NOTIFY(state, stateChanged)
 
@@ -104,8 +104,8 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    CORE_CS_SIGNAL_2(stateChanged, newState, oldState)
    CORE_CS_SIGNAL_1(Public, void currentLoopChanged(int currentLoop))
    CORE_CS_SIGNAL_2(currentLoopChanged, currentLoop)
-   CORE_CS_SIGNAL_1(Public, void directionChanged(QAbstractAnimation::Direction un_named_arg1))
-   CORE_CS_SIGNAL_2(directionChanged, un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void directionChanged(QAbstractAnimation::Direction direction))
+   CORE_CS_SIGNAL_2(directionChanged, direction)
 
    CORE_CS_SLOT_1(Public, void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped))
    CORE_CS_SLOT_2(start)
@@ -113,7 +113,7 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    CORE_CS_SLOT_2(pause)
    CORE_CS_SLOT_1(Public, void resume())
    CORE_CS_SLOT_2(resume)
-   CORE_CS_SLOT_1(Public, void setPaused(bool un_named_arg1))
+   CORE_CS_SLOT_1(Public, void setPaused(bool paused))
    CORE_CS_SLOT_2(setPaused)
    CORE_CS_SLOT_1(Public, void stop())
    CORE_CS_SLOT_2(stop)

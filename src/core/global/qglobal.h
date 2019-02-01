@@ -23,12 +23,10 @@
 #ifndef QGLOBAL_H
 #define QGLOBAL_H
 
-
 #include <stddef.h>
 #include <stdint.h>
 
 #include <cs_build_info.h>
-
 #include <qexport.h>
 #include <qfeatures.h>
 

@@ -30,8 +30,6 @@
 #include <mach-o/loader.h>
 #include <mach-o/fat.h>
 
-QT_BEGIN_NAMESPACE
-
 #if defined(Q_PROCESSOR_X86_64)
 #  define MACHO64
 static const cpu_type_t my_cputype = CPU_TYPE_X86_64;
@@ -65,7 +63,8 @@ static int ns(const QString &reason, const QString &library, QString *errorStrin
 {
    if (errorString)
       *errorString = QLibrary::tr("'%1' is not a valid Mach-O binary (%2)")
-         .arg(library, reason.isEmpty() ? QLibrary::tr("file is corrupt") : reason);
+         .formatArg(library, reason.isEmpty() ? QLibrary::tr("file is corrupt") : reason);
+
    return QMachOParser::NotSuitable;
 }
 
@@ -79,13 +78,14 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
    static const size_t MinFileSize = sizeof(my_mach_header) + sizeof(my_segment_command) + sizeof(my_section);
    static const size_t MinFatHeaderSize = sizeof(fat_header) + 2 * sizeof(fat_arch);
 
-   if (Q_UNLIKELY(fdlen < MinFileSize)) {
+   if (fdlen < MinFileSize) {
       return ns(QLibrary::tr("file too small"), library, errorString);
    }
 
    // find out if this is a fat Mach-O binary first
    const my_mach_header *header = 0;
    const fat_header *fat = reinterpret_cast<const fat_header *>(m_s);
+
    if (fat->magic == qToBigEndian(FAT_MAGIC)) {
       // find our architecture in the binary
       const fat_arch *arch = reinterpret_cast<const fat_arch *>(fat + 1);
@@ -94,7 +94,7 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
       }
 
       int count = qFromBigEndian(fat->nfat_arch);
-      if (Q_UNLIKELY(fdlen < sizeof(*fat) + sizeof(*arch) * count)) {
+      if (fdlen < sizeof(*fat) + sizeof(*arch) * count) {
          return ns(QString(), library, errorString);
       }
 
@@ -127,7 +127,7 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
 
       // check magic
       if (header->magic != my_magic)
-         return ns(QLibrary::tr("invalid magic %1").arg(qFromBigEndian(header->magic), 8, 16, QLatin1Char('0')),
+         return ns(QLibrary::tr("invalid magic %1").formatArg(qFromBigEndian(header->magic), 8, 16, QLatin1Char('0')),
                library, errorString);
    }
 
@@ -145,7 +145,7 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
    }
 
    // check the file type
-   if (Q_UNLIKELY(header->filetype != MH_BUNDLE && header->filetype != MH_DYLIB)) {
+   if (header->filetype != MH_BUNDLE && header->filetype != MH_DYLIB) {
       return ns(QLibrary::tr("not a dynamic library"), library, errorString);
    }
 
@@ -157,7 +157,7 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
       seg = reinterpret_cast<const my_segment_command *>(reinterpret_cast<const char *>(seg) + seg->cmdsize)) {
       // We're sure that the file size includes at least one load command
       // but we have to check anyway if we're past the first
-      if (Q_UNLIKELY(fdlen < minsize + sizeof(load_command))) {
+      if (fdlen < minsize + sizeof(load_command)) {
          return ns(QString(), library, errorString);
       }
 
@@ -165,7 +165,7 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
       // so check it against fdlen anyway
       // (these are unsigned operations, with overflow behavior specified in the standard)
       minsize += seg->cmdsize;
-      if (Q_UNLIKELY(fdlen < minsize) || Q_UNLIKELY(fdlen < seg->cmdsize)) {
+      if (fdlen < minsize || fdlen < seg->cmdsize) {
          return ns(QString(), library, errorString);
       }
 
@@ -202,11 +202,10 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
    //    // No Qt section was found, but at least we know that where the proper architecture's boundaries are
    //    return NoQtSection;
    if (errorString) {
-      *errorString = QLibrary::tr("'%1' is not a Qt plugin").arg(library);
+      *errorString = QLibrary::tr("'%1' is not a Qt plugin").formatArg(library);
    }
+
    return NotSuitable;
 }
-
-QT_END_NAMESPACE
 
 #endif

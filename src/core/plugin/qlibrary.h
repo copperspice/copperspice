@@ -23,11 +23,9 @@
 #ifndef QLIBRARY_H
 #define QLIBRARY_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
-
-
-class QLibraryPrivate;
+class QLibraryHandle;
 
 class Q_CORE_EXPORT QLibrary : public QObject
 {
@@ -62,11 +60,11 @@ class Q_CORE_EXPORT QLibrary : public QObject
    static void *resolve(const QString &fileName, int verNum, const QString &symbol);
    static void *resolve(const QString &fileName, const QString &version, const QString &symbol);
 
+  static bool isLibrary(const QString &fileName);
+
    bool load();
    bool unload();
    bool isLoaded() const;
-
-   static bool isLibrary(const QString &fileName);
 
    void setFileName(const QString &fileName);
    QString fileName() const;
@@ -79,13 +77,12 @@ class Q_CORE_EXPORT QLibrary : public QObject
    LoadHints loadHints() const;
 
  private:
-   QLibraryPrivate *d;
-   bool did_load;
    Q_DISABLE_COPY(QLibrary)
+
+   QLibraryHandle *m_handle;
+   bool m_loaded;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QLibrary::LoadHints)
 
-
-
-#endif //QLIBRARY_H
+#endif
