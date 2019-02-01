@@ -23,11 +23,11 @@
 #ifndef QPLUGINLOADER_H
 #define QPLUGINLOADER_H
 
-#include <QtCore/qlibrary.h>
-#include <QtCore/qplugin.h>
+#include <qlibrary.h>
+#include <qplugin.h>
 
-class QLibraryPrivate;
-class QJsonObject;
+class QLibraryHandle;
+
 
 class Q_CORE_EXPORT QPluginLoader : public QObject
 {
@@ -45,10 +45,9 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
    ~QPluginLoader();
 
    QObject *instance();
-   QJsonObject metaData() const;
 
    static QObjectList staticInstances();
-   static QVector<QStaticPlugin> staticPlugins();
+   static QVector<QMetaObject *> staticPlugins();
 
    bool load();
    bool unload();
@@ -63,9 +62,10 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
    QLibrary::LoadHints loadHints() const;
 
  private:
-   QLibraryPrivate *d;
-   bool did_load;
-   Q_DISABLE_COPY(QPluginLoader)
+    Q_DISABLE_COPY(QPluginLoader)
+
+   QLibraryHandle *mp_handle;
+   bool mp_loaded;
 };
 
 

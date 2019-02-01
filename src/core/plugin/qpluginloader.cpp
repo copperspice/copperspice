@@ -33,87 +33,73 @@
 #include <qlibrary_p.h>
 
 QPluginLoader::QPluginLoader(QObject *parent)
-   : QObject(parent), d(0), did_load(false)
+   : QObject(parent), mp_handle(nullptr), mp_loaded(false)
 {
 }
 
 QPluginLoader::QPluginLoader(const QString &fileName, QObject *parent)
-   : QObject(parent), d(0), did_load(false)
+   : QObject(parent), mp_handle(nullptr), mp_loaded(false)
 {
    setFileName(fileName);
    setLoadHints(QLibrary::PreventUnloadHint);
 }
 
-/*!
-    Destroys the QPluginLoader object.
-
-    Unless unload() was called explicitly, the plugin stays in memory
-    until the application terminates.
-
-    \sa isLoaded(), unload()
-*/
 QPluginLoader::~QPluginLoader()
 {
-   if (d) {
-      d->release();
+   if (mp_handle) {
+      mp_handle->release();
    }
 }
 
 QObject *QPluginLoader::instance()
 {
-   if (!isLoaded() && !load()) {
-      return 0;
+   if (! isLoaded() && ! load()) {
+      return nullptr;
    }
 
-   if (!d->inst && d->instance) {
-      d->inst = d->instance();
+   if (! mp_handle->pluginObj) {
+      mp_handle->pluginObj = mp_handle->m_metaObject->newInstance();
    }
-   return d->inst.data();
 
+   return mp_handle->pluginObj.data();
 }
-QJsonObject QPluginLoader::metaData() const
-{
-   if (!d) {
-      return QJsonObject();
-   }
-   return d->metaData;
-}
-
 
 bool QPluginLoader::load()
 {
-   if (! d || d->fileName.isEmpty()) {
+   if (! mp_handle || mp_handle->fileName.isEmpty()) {
       return false;
    }
 
-   if (did_load) {
-      return d->pHnd && d->instance;
+   if (mp_loaded) {
+      return mp_handle->pHnd && mp_handle->m_metaObject;
    }
 
-   if (! d->isPlugin()) {
+   if (! mp_handle->isPlugin()) {
       return false;
    }
 
+   mp_loaded = true;
 
-   did_load = true;
-   return d->loadPlugin();
+   return mp_handle->loadPlugin();
 }
 
 bool QPluginLoader::unload()
 {
-   if (did_load) {
-      did_load = false;
-      return d->unload();
+   if (mp_loaded) {
+      mp_loaded = false;
+      return mp_handle->unload();
    }
-   if (d) { // Ouch
-      d->errorString = tr("The plugin was not loaded.");
+
+   if (mp_handle) {
+      mp_handle->errorString = tr("Plugin was not loaded.");
    }
+
    return false;
 }
 
 bool QPluginLoader::isLoaded() const
 {
-   return d && d->pHnd && d->instance;
+   return mp_handle && mp_handle->pHnd && mp_handle->m_metaObject;
 }
 
 #if ! defined(QT_STATIC)
@@ -129,10 +115,10 @@ static QString locatePlugin(const QString &fileName)
       }
    }
 
-   QStringList prefixes = QLibraryPrivate::prefixes_sys();
+   QStringList prefixes = QLibraryHandle::prefixes_sys();
    prefixes.prepend(QString());
 
-   QStringList suffixes = QLibraryPrivate::suffixes_sys(QString());
+   QStringList suffixes = QLibraryHandle::suffixes_sys(QString());
    suffixes.prepend(QString());
 
    // Split up "subdir/filename"
@@ -178,23 +164,23 @@ void QPluginLoader::setFileName(const QString &fileName)
 #if ! defined(QT_STATIC)
    QLibrary::LoadHints lh = QLibrary::PreventUnloadHint;
 
-   if (d) {
-      lh = d->loadHints();
-      d->release();
-      d = 0;
-      did_load = false;
+   if (mp_handle) {
+      lh = mp_handle->loadHints();
+      mp_handle->release();
+      mp_handle = 0;
+      mp_loaded = false;
    }
 
    const QString fn = locatePlugin(fileName);
 
-   d = QLibraryPrivate::findOrCreate(fn, QString(), lh);
+   mp_handle = QLibraryHandle::findOrLoad(fn, QString(), lh);
    if (! fn.isEmpty()) {
-      d->updatePluginState();
+      mp_handle->updatePluginState();
    }
 
 #else
    if (qt_debug_component()) {
-      qWarning("Can not load %s into a statically linked CopperSpice library.",
+      qWarning("Unable to load %s into a statically linked CopperSpice library.",
          QFile::encodeName(fileName).constData() );
    }
 
@@ -203,45 +189,51 @@ void QPluginLoader::setFileName(const QString &fileName)
 
 QString QPluginLoader::fileName() const
 {
-   if (d) {
-      return d->fileName;
+   if (mp_handle) {
+      return mp_handle->fileName;
    }
+
    return QString();
 }
 
 QString QPluginLoader::errorString() const
 {
-   return (!d || d->errorString.isEmpty()) ? tr("Unknown error") : d->errorString;
+   return (! mp_handle || mp_handle->errorString.isEmpty()) ? tr("Unknown error") : mp_handle->errorString;
 }
 
-typedef QVector<QStaticPlugin> StaticPluginList;
+typedef QVector<QMetaObject *> StaticPluginList;
 Q_GLOBAL_STATIC(StaticPluginList, staticPluginList)
 
 void QPluginLoader::setLoadHints(QLibrary::LoadHints loadHints)
 {
-   if (!d) {
-      d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
-      d->errorString.clear();
+   if (! mp_handle) {
+      mp_handle = QLibraryHandle::findOrLoad(QString());
+      mp_handle->errorString.clear();
    }
 
-   d->setLoadHints(loadHints);
+   mp_handle->setLoadHints(loadHints);
 }
 
 QLibrary::LoadHints QPluginLoader::loadHints() const
 {
-   return d ? d->loadHints() : QLibrary::LoadHints();
+   return mp_handle ? mp_handle->loadHints() : QLibrary::LoadHints();
 }
 
 
 
+/* emerald - static plugins
 void Q_CORE_EXPORT qRegisterStaticPluginFunction(QStaticPlugin plugin)
 {
    staticPluginList()->append(plugin);
 }
 
+
+*/
 QObjectList QPluginLoader::staticInstances()
 {
    QObjectList instances;
+
+/* emerald
    const StaticPluginList *plugins = staticPluginList();
 
    if (plugins) {
@@ -251,23 +243,19 @@ QObjectList QPluginLoader::staticInstances()
          instances += plugins->at(i).instance();
       }
    }
+*/
 
    return instances;
-
 }
 
-
-QVector<QStaticPlugin> QPluginLoader::staticPlugins()
+QVector<QMetaObject *> QPluginLoader::staticPlugins()
 {
    StaticPluginList *plugins = staticPluginList();
+
    if (plugins) {
       return *plugins;
    }
-   return QVector<QStaticPlugin>();
-}
 
-QJsonObject QStaticPlugin::metaData() const
-{
-   return QLibraryPrivate::fromRawMetaData(rawMetaData()).object();
+   return QVector<QMetaObject *>();
 }
 

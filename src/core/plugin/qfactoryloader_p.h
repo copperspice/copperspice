@@ -25,7 +25,6 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qjsonobject.h>
 #include <qmap.h>
 #include <QScopedPointer>
 
@@ -42,50 +41,44 @@ class Q_CORE_EXPORT QFactoryLoader : public QObject
    explicit QFactoryLoader(const QString &iid, const QString &suffix = QString(), Qt::CaseSensitivity = Qt::CaseSensitive);
    ~QFactoryLoader();
 
-   QList<QJsonObject> metaData() const;
-   QObject *instance(int index) const;
-
 #if defined(Q_OS_UNIX) && ! defined (Q_OS_MAC)
-   QLibraryPrivate *library(const QString &key) const;
+   QLibraryHandle *library(const QString &key) const;
 #endif
 
-   QMultiMap<int, QString> keyMap() const;
-   int indexOf(const QString &needle) const;
+   QObject *instance(QString key) const;
+   QObject *instance(QLibraryHandle * library) const;
+
+   QSet<QString> keySet() const;
+   QSet<QLibraryHandle *> librarySet(QString key) const;
+
    void update();
    static void refreshAll();
 
  protected:
    QScopedPointer<QFactoryLoaderPrivate> d_ptr;
+
+ private:
+   mutable QMultiMap<QString, QLibraryHandle *> m_pluginMap;
 };
 
-template <class PluginInterface, class FactoryInterface>
-PluginInterface *qLoadPlugin(const QFactoryLoader *loader, const QString &key)
+template <class PluginInterface, class FactoryInterface, class ...Ts>
+PluginInterface *cs_load_plugin(const QFactoryLoader *loader, const QString &key, const Ts &... Vs)
 {
-   const int index = loader->indexOf(key);
-   if (index != -1) {
-      QObject *factoryObject = loader->instance(index);
-      if (FactoryInterface *factory = qobject_cast<FactoryInterface *>(factoryObject))
-         if (PluginInterface *result = factory->create(key)) {
-            return result;
-         }
-   }
-   return 0;
-}
+   QObject *factoryObject = loader->instance(key);
 
-template <class PluginInterface, class FactoryInterface, class Parameter1>
-PluginInterface *qLoadPlugin1(const QFactoryLoader *loader,
-   const QString &key,
-   const Parameter1 &parameter1)
-{
-   const int index = loader->indexOf(key);
-   if (index != -1) {
-      QObject *factoryObject = loader->instance(index);
-      if (FactoryInterface *factory = qobject_cast<FactoryInterface *>(factoryObject))
-         if (PluginInterface *result = factory->create(key, parameter1)) {
-            return result;
+   if (factoryObject != nullptr) {
+      FactoryInterface *factory = qobject_cast<FactoryInterface *>(factoryObject);
+
+      if (factory == nullptr) {
+         PluginInterface *retval = factory->create(key, Vs...);
+
+         if (retval != nullptr) {
+            return retval;
          }
+      }
    }
-   return 0;
+
+   return nullptr;
 }
 
 #endif

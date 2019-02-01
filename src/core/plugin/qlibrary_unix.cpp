@@ -50,7 +50,7 @@ static QString qdlerror()
    return err ? QString('(' + QString::fromUtf8(err) + ')') : QString();
 }
 
-QStringList QLibraryPrivate::suffixes_sys(const QString &fullVersion)
+QStringList QLibraryHandle::suffixes_sys(const QString &fullVersion)
 {
    QStringList suffixes;
 
@@ -72,12 +72,12 @@ QStringList QLibraryPrivate::suffixes_sys(const QString &fullVersion)
    return suffixes;
 }
 
-QStringList QLibraryPrivate::prefixes_sys()
+QStringList QLibraryHandle::prefixes_sys()
 {
    return QStringList() << "lib";
 }
 
-bool QLibraryPrivate::load_sys()
+bool QLibraryHandle::load_sys()
 {
    QString attempt;
 
@@ -160,12 +160,15 @@ bool QLibraryPrivate::load_sys()
          if (!suffixes.at(suffix).isEmpty() && name.endsWith(suffixes.at(suffix))) {
             continue;
          }
+
          if (loadHints & QLibrary::LoadArchiveMemberHint) {
             attempt = name;
-            int lparen = attempt.indexOf(QLatin1Char('('));
+            int lparen = attempt.indexOf('(');
+
             if (lparen == -1) {
                lparen = attempt.count();
             }
+
             attempt = path + prefixes.at(prefix) + attempt.insert(lparen, suffixes.at(suffix));
          } else {
             attempt = path + prefixes.at(prefix) + name + suffixes.at(suffix);
@@ -210,12 +213,12 @@ bool QLibraryPrivate::load_sys()
       qualifiedFileName = attempt;
       errorString.clear();
    } else {
-      errorString = QLibrary::tr("Can not load library %1: %2").formatArg(fileName).formatArg(qdlerror());
+      errorString = QLibrary::tr("Unable to load library %1: %2").formatArg(fileName).formatArg(qdlerror());
    }
    return (pHnd != 0);
 }
 
-bool QLibraryPrivate::unload_sys()
+bool QLibraryHandle::unload_sys()
 {
 #if ! defined(QT_NO_DYNAMIC_LIBRARY)
 
@@ -242,11 +245,11 @@ Q_CORE_EXPORT void *qt_mac_resolve_sys(void *handle, const char *symbol)
 }
 #endif
 
-void *QLibraryPrivate::resolve_sys(const QString &symbol)
+void *QLibraryHandle::resolve_sys(const QString &symbol)
 {
 
 #if defined (QT_NO_DYNAMIC_LIBRARY)
-   void *address = 0;
+   void *address = nullptr;
 
 #else
    void *address = dlsym(pHnd, symbol.constData());

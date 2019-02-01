@@ -28,9 +28,6 @@
 #include <qstringlist.h>
 #include <qplugin.h>
 #include <qsharedpointer.h>
-#include "QtCore/qjsonobject.h"
-#include "QtCore/qjsondocument.h"
-#include "QtCore/qendian.h"
 
 #ifdef Q_OS_WIN
 # include <qt_windows.h>
@@ -40,11 +37,34 @@ class QLibraryStore;
 
 bool qt_debug_component();
 
-class QLibraryPrivate
+class QLibraryHandle
 {
    enum {IsAPlugin, IsNotAPlugin, MightBeAPlugin } pluginState;
 
  public:
+    enum UnloadFlag { UnloadSys, NoUnloadSys };
+
+   bool tryload();
+   bool loadPlugin();                              // loads and resolves instance
+   bool unload(UnloadFlag flag = UnloadSys);
+
+   void release();
+   void *resolve(const QString &symbol);
+
+   QLibrary::LoadHints loadHints() const {
+      return QLibrary::LoadHints(loadHintsInt.load());
+   }
+
+   void setLoadHints(QLibrary::LoadHints lh);
+
+   static QLibraryHandle *findOrLoad(const QString &fileName, const QString &version = QString(),
+                  QLibrary::LoadHints loadHints = 0);
+
+   static QStringList suffixes_sys(const QString &fullVersion);
+   static QStringList prefixes_sys();
+
+   void updatePluginState();
+   bool isPlugin();
 
 #ifdef Q_OS_WIN
    HINSTANCE
@@ -54,56 +74,18 @@ class QLibraryPrivate
 
    pHnd;
 
-   enum UnloadFlag { UnloadSys, NoUnloadSys };
-
    QString fileName;
    QString qualifiedFileName;
    QString fullVersion;
 
-   bool load();
-   bool loadPlugin(); // loads and resolves instance
-   bool unload(UnloadFlag flag = UnloadSys);
-   void release();
-   void *resolve(const QString &symbol);
-
-   QLibrary::LoadHints loadHints() const {
-      return QLibrary::LoadHints(loadHintsInt.load());
-   }
-
-   void setLoadHints(QLibrary::LoadHints lh);
-   static QLibraryPrivate *findOrCreate(const QString &fileName,
-      const QString &version = QString(), QLibrary::LoadHints loadHints = 0);
-
-   static QStringList suffixes_sys(const QString &fullVersion);
-   static QStringList prefixes_sys();
-
-   QPointer<QObject> inst;
-   QtPluginInstanceFunction instance;
-
-   QJsonObject metaData;
-
    QString errorString;
+   QMetaObject *m_metaObject;
 
-   void updatePluginState();
-   bool isPlugin();
-
-   static inline QJsonDocument fromRawMetaData(const char *raw) {
-      raw += strlen("QTMETADATA  ");
-
-      // the size of the embedded JSON object can be found 8 bytes into the data (see qjson_p.h),
-      // but does not include the size of the header (8 bytes)
-
-
-      // BROOM - bad mojo !!        QByteArray json(raw, qFromLittleEndian<uint>(*(const uint *)(raw + 8)) + 8);
-      QByteArray json;  // broom - must fix
-
-
-      return QJsonDocument::fromJson(json);
-   }
+   QPointer<QObject> pluginObj;
 
  private:
-   explicit QLibraryPrivate(const QString &canonicalFileName, const QString &version, QLibrary::LoadHints loadHints);
-   ~QLibraryPrivate();
+   explicit QLibraryHandle(const QString &canonicalFileName, const QString &version, QLibrary::LoadHints loadHints);
+   ~QLibraryHandle();
 
    void mergeLoadHints(QLibrary::LoadHints loadHints);
 
@@ -121,7 +103,5 @@ class QLibraryPrivate
 
    friend class QLibraryStore;
 };
-
-
 
 #endif

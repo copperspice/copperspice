@@ -15,7 +15,6 @@ CORE_PLUGIN_INCLUDES = \
 	quuid.h
 
 CORE_PLUGIN_PRIVATE_INCLUDES = \
-	qelfparser_p.h \
 	qfactoryloader_p.h \
 	qlibrary_p.h \
 	qmachparser_p.h \
@@ -29,7 +28,6 @@ noinst_HEADERS+=$(patsubst %,src/core/plugin/%,$(CORE_PLUGIN_INCLUDES)) \
 		src/plugins/codecs/jp/qfontjpcodec.h
 
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
-	src/core/plugin/qelfparser_p.cpp \
 	src/core/plugin/qfactoryloader.cpp \
 	src/core/plugin/qfactoryinterface.cpp \
 	src/core/plugin/qlibrary.cpp \

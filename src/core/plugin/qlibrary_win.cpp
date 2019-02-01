@@ -29,44 +29,30 @@
 
 #include <qfilesystementry_p.h>
 
-
 extern QString qt_error_string(int code);
 
-QStringList QLibraryPrivate::suffixes_sys(const QString &fullVersion)
+QStringList QLibraryHandle::suffixes_sys(const QString &fullVersion)
 {
    return QStringList(".dll");
 }
 
-QStringList QLibraryPrivate::prefixes_sys()
+QStringList QLibraryHandle::prefixes_sys()
 {
    return QStringList();
 }
 
-bool QLibraryPrivate::load_sys()
+bool QLibraryHandle::load_sys()
 {
-   // avoid 'Bad Image' message box
+   // avoid 'Bad Image message box
    UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-   // make the following attempts at locating the library:
-   //
-   // Windows
-   // if (loadHints & QLibrary::ImprovedSearchHeuristics)
-   //   if (absolute)
-   //     fileName
-   //     fileName + ".dll"
-   //   else
-   //     fileName + ".dll"
-   //     fileName
-   // else
-   //   fileName
-   //   fileName + ".dll"
-   //
-   // NB If it's a plugin we do not ever try the ".dll" extension
+   // if it is a plugin do not try the ".dll" extension
 
    QStringList attempts;
    if (pluginState != IsAPlugin) {
       attempts.append(fileName + QLatin1String(".dll"));
    }
+
    QFileSystemEntry fsEntry(fileName);
 
    if (fsEntry.isAbsolute()) {
@@ -81,19 +67,18 @@ bool QLibraryPrivate::load_sys()
    for (const QString &attempt : attempts) {
       pHnd = LoadLibrary(&QDir::toNativeSeparators(attempt).toStdWString()[0]);
 
-      // If we have a handle or the last error is something other than "unable
-      // to find the module", then bail out
       if (pHnd || ::GetLastError() != ERROR_MOD_NOT_FOUND) {
+         // "unable to find the module"
          break;
       }
    }
 
    SetErrorMode(oldmode);
    if (! pHnd) {
-      errorString = QLibrary::tr("Can not load library %1: %2").formatArgs(fileName, qt_error_string());
+      errorString = QLibrary::tr("Unable to load library %1: %2").formatArgs(fileName, qt_error_string());
 
    } else {
-      // Query the actual name of the library that was loaded
+      // Query the actual name of the library which was loaded
       errorString.clear();
 
       std::wstring buffer(MAX_PATH, L'\0');
@@ -114,9 +99,9 @@ bool QLibraryPrivate::load_sys()
    return (pHnd != 0);
 }
 
-bool QLibraryPrivate::unload_sys()
+bool QLibraryHandle::unload_sys()
 {
-   if (!FreeLibrary(pHnd)) {
+   if (! FreeLibrary(pHnd)) {
       errorString = QLibrary::tr("Can not unload library %1: %2").formatArg(fileName).formatArg(qt_error_string());
       return false;
    }
@@ -125,7 +110,7 @@ bool QLibraryPrivate::unload_sys()
    return true;
 }
 
-void *QLibraryPrivate::resolve_sys(const QString &symbol)
+void *QLibraryHandle::resolve_sys(const QString &symbol)
 {
    void *address = (void *)GetProcAddress(pHnd, symbol.constData());
 

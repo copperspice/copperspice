@@ -18,14 +18,12 @@ set(CORE_INCLUDES
 set(CORE_PRIVATE_INCLUDES
     ${CORE_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qfactoryloader_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qelfparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qmachparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qsystemlibrary_p.h
 )
 set(CORE_SOURCES
     ${CORE_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qelfparser_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qfactoryloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qfactoryinterface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary.cpp
