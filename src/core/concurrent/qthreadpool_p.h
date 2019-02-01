@@ -28,8 +28,6 @@
 #include <QtCore/qset.h>
 #include <QtCore/qqueue.h>
 
-QT_BEGIN_NAMESPACE
-
 class QThreadPoolThread;
 
 class QThreadPoolPrivate
@@ -50,15 +48,17 @@ class QThreadPoolPrivate
 
    void startThread(QRunnable *runnable = 0);
    void reset();
-   bool waitForDone(int msecs = -1);
-   bool startFrontRunnable();
-   void stealRunnable(QRunnable *);
+   bool waitForDone(int msecs);
+
+   void clear();
+   bool stealRunnable(QRunnable *runnable);
+   void stealAndRunRunnable(QRunnable *runnable);
 
    mutable QMutex mutex;
    QSet<QThreadPoolThread *> allThreads;
    QQueue<QThreadPoolThread *> waitingThreads;
    QQueue<QThreadPoolThread *> expiredThreads;
-   QList<QPair<QRunnable *, int> > queue;
+   QVector<QPair<QRunnable *, int> > queue;
    QWaitCondition noActiveThreads;
 
    bool isExiting;
@@ -72,6 +72,5 @@ class QThreadPoolPrivate
 
 };
 
-QT_END_NAMESPACE
 
 #endif

@@ -28,7 +28,6 @@
 #include <QtCore/qrunnable.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
 
 class QThreadPoolPrivate;
 
@@ -40,8 +39,10 @@ class Q_CORE_EXPORT QThreadPool : public QObject
 
    CORE_CS_PROPERTY_READ(expiryTimeout, expiryTimeout)
    CORE_CS_PROPERTY_WRITE(expiryTimeout, setExpiryTimeout)
+
    CORE_CS_PROPERTY_READ(maxThreadCount, maxThreadCount)
    CORE_CS_PROPERTY_WRITE(maxThreadCount, setMaxThreadCount)
+
    CORE_CS_PROPERTY_READ(activeThreadCount, activeThreadCount)
 
    friend class QFutureInterfaceBase;
@@ -66,14 +67,14 @@ class Q_CORE_EXPORT QThreadPool : public QObject
    void reserveThread();
    void releaseThread();
 
-   void waitForDone();
-   bool waitForDone(int msecs);
+   bool waitForDone(int msecs = -1);
+
+   void clear();
+   void cancel(QRunnable *runnable);
 
  protected:
    QScopedPointer<QThreadPoolPrivate> d_ptr;
 
 };
-
-QT_END_NAMESPACE
 
 #endif
