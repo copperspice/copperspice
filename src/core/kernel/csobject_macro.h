@@ -27,6 +27,9 @@
 #include <cs_slot.h>
 #include <qglobal.h>
 
+class QMetaObject;
+extern "C" QMetaObject *cs_internal_plugin_metaobject();
+
 #define qPrintable(string)          QString8(string).constData()
 #define csPrintable(string)         QString8(string).constData()
 #define csPrintable8(string)        QString8(string).constData()
@@ -38,6 +41,40 @@
 
 #define CS_TOKENPASTE1(x,y)         x ## y
 #define CS_TOKENPASTE2(x,y)         CS_TOKENPASTE1(x,y)
+
+#define CS_PLUGIN_IID(data)                                                        \
+   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =         \
+            decltype( cs_counter(cs_number<255>{}) )::value;                       \
+   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>      \
+            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>)  \
+      {  \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};       \
+      }  \
+   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
+      {  \
+         QMetaObject_T<cs_class> &meta = const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()); \
+         meta.register_classInfo("plugin_iid", data);  \
+         meta.register_classInfo("plugin_version", CS_VERSION_STR); \
+         \
+         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__); \
+         \
+         QString cname = QString::fromUtf8(cs_className());  \
+         meta.register_method<QObject * (*)()>(   \
+            cname, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__), \
+            QMetaMethod::Constructor, cname + "()", QMetaMethod::Public);   \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} );  \
+      } \
+   static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)() \
+      { \
+         return new cs_class;  \
+      } \
+   friend QMetaObject *::cs_internal_plugin_metaobject() {  \
+      return const_cast<QMetaObject_T<cs_class> *>(&cs_class::staticMetaObject()); \
+   }
+
+#define CS_PLUGIN_KEY(y)            CS_CLASSINFO("plugin_key", y)
+
 
 /**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 
@@ -1038,6 +1075,7 @@ class cs_number<0>
 #define MULTI_CS_OBJECT(className)                                CS_OBJECT(className)
 #define MULTI_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE(className, parentX)
 #define MULTI_CS_GADGET(className)                                CS_GADGET(className)
+#define MULTI_CS_CLASSINFO(name, data)                            CS_CLASSINFO(name, data)
 
 #define MULTI_CS_SLOT_1(access, ...)                              CS_SLOT_1(access, __VA_ARGS__)
 #define MULTI_CS_SLOT_2(slotName)                                 CS_SLOT_2(slotName)
@@ -1047,10 +1085,29 @@ class cs_number<0>
 #define MULTI_CS_SIGNAL_2(signalName, ...)                        CS_SIGNAL_2(signalName, ## __VA_ARGS__)
 #define MULTI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)       CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
+#define MULTI_CS_ENUM(name)                                       CS_ENUM(name)
+
+#define MULTI_CS_PROPERTY_READ(name, method)                      CS_PROPERTY_READ(name, method)
+#define MULTI_CS_PROPERTY_WRITE(name, method)                     CS_PROPERTY_WRITE(name, method)
+#define MULTI_CS_PROPERTY_NOTIFY(name, method)                    CS_PROPERTY_NOTIFY(name, method)
+#define MULTI_CS_PROPERTY_RESET(name, method)                     CS_PROPERTY_RESET(name, method)
+#define MULTI_CS_PROPERTY_REVISION(name, da)                      CS_PROPERTY_REVISION(name, data)
+#define MULTI_CS_PROPERTY_DESIGNABLE(namedata)                    CS_PROPERTY_DESIGNABLE(name, data)
+#define MULTI_CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)        CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_SCRIPTABLE(namedata)                    CS_PROPERTY_SCRIPTABLE(name, data)
+#define MULTI_CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)        CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_STORED(name, data)                      CS_PROPERTY_STORED(name, data)
+#define MULTI_CS_PROPERTY_STORED_NONSTATIC(name, data)            CS_PROPERTY_STORED_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_USER(name, data)                        CS_PROPERTY_USER(name, data)
+#define MULTI_CS_PROPERTY_USER_NONSTATIC(name, data)              CS_PROPERTY_USER_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_CONSTANT(name)                          CS_PROPERTY_CONSTANT(name)
+#define MULTI_CS_PROPERTY_FINAL(name)                             CS_PROPERTY_FINAL(name)
+
 #else
 #define MULTI_CS_OBJECT(className)                                CS_OBJECT_OUTSIDE(className)
 #define MULTI_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define MULTI_CS_GADGET(className)                                CS_GADGET_OUTSIDE(className)
+#define MULTI_CS_CLASSINFO(name, data)
 
 #define MULTI_CS_SLOT_1(access, ...)                              __VA_ARGS__;
 #define MULTI_CS_SLOT_2(slotName)
@@ -1059,6 +1116,24 @@ class cs_number<0>
 #define MULTI_CS_SIGNAL_1(access, ...)                            __VA_ARGS__;
 #define MULTI_CS_SIGNAL_2(signalName, ...)
 #define MULTI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
+
+#define MULTI_CS_ENUM(name)
+
+#define MULTI_CS_PROPERTY_READ(name, method)
+#define MULTI_CS_PROPERTY_WRITE(name, method)
+#define MULTI_CS_PROPERTY_NOTIFY(name, method)
+#define MULTI_CS_PROPERTY_RESET(name, method)
+#define MULTI_CS_PROPERTY_REVISION(name, da)
+#define MULTI_CS_PROPERTY_DESIGNABLE(namedata)
+#define MULTI_CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_SCRIPTABLE(namedata)
+#define MULTI_CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_STORED(name, data)
+#define MULTI_CS_PROPERTY_STORED_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_USER(name, data)
+#define MULTI_CS_PROPERTY_USER_NONSTATIC(name, data)
+#define MULTI_CS_PROPERTY_CONSTANT(name)
+#define MULTI_CS_PROPERTY_FINAL(name)
 
 #endif
 

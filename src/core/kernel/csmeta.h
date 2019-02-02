@@ -418,6 +418,13 @@ const QString &cs_typeName_internal<T, typename std::enable_if< std::is_base_of<
 // 1   standard template functions
 class cs_internalEmpty;
 
+template<class ...Ts>
+typename std::enable_if<sizeof...(Ts) == 0, const QString &>::type cs_typeName()
+{
+   static QString retval("");
+   return retval;
+}
+
 template<class T1 = cs_internalEmpty>
 const QString &cs_typeName()
 {
@@ -629,6 +636,8 @@ CS_REGISTER_TEMPLATE(QDeclarativeListProperty)
 CS_REGISTER_TEMPLATE(qMapCompare)
 CS_REGISTER_TEMPLATE(std::tuple)
 CS_REGISTER_TEMPLATE(std::pair)
+
+Q_DECLARE_METATYPE(QList<int>)
 
 // **
 template<class T>
