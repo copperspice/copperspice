@@ -330,8 +330,7 @@ inline qreal QMarginsF::right() const
 inline qreal QMarginsF::bottom() const
 { return m_bottom; }
 
-
- inline void QMarginsF::setLeft(qreal aleft)
+inline void QMarginsF::setLeft(qreal aleft)
 { m_left = aleft; }
 
  inline void QMarginsF::setTop(qreal atop)

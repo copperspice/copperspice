@@ -34,8 +34,14 @@ class Q_CORE_EXPORT QTimer : public QObject
 
    CORE_CS_PROPERTY_READ(singleShot, isSingleShot)
    CORE_CS_PROPERTY_WRITE(singleShot, setSingleShot)
+
    CORE_CS_PROPERTY_READ(interval, interval)
    CORE_CS_PROPERTY_WRITE(interval, setInterval)
+
+   CORE_CS_PROPERTY_READ(remainingTime, remainingTime)
+   CORE_CS_PROPERTY_READ(timerType, timerType)
+   CORE_CS_PROPERTY_WRITE(timerType, setTimerType)
+
    CORE_CS_PROPERTY_READ(active, isActive)
 
  public:

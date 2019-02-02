@@ -28,6 +28,11 @@
 #include <qnamespace.h>
 #include <qbytearray.h>
 
+#ifdef Expose
+#undef Expose
+#warning "QCoreEvent should be included before any X11 header, issue with enum Expose"
+#endif
+
 class QEventPrivate;
 
 class Q_CORE_EXPORT QEvent           // event base class
@@ -268,7 +273,6 @@ class Q_CORE_EXPORT QEvent           // event base class
       User = 1000,                            // first user event id
       MaxUser = 65535                         // last user event id
    };
-
 
    explicit QEvent(Type type);
    QEvent(const QEvent &other);
