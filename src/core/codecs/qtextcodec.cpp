@@ -42,6 +42,7 @@
 #include <qstringlist.h>
 #include <qstringparser.h>
 #include <qvarlengtharray.h>
+#include <qset.h>
 
 #ifdef Q_OS_UNIX
 #  include <qiconvcodec_p.h>
@@ -131,24 +132,19 @@ static QTextCodec *createForName(QStringView name)
 {
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-   QFactoryLoader *l = loader();
-   QMultiMap<int, QString> keyMap = l->keyMap();
+   QFactoryLoader *obj  = loader();
+   QSet<QString> keySet = obj->keySet();
 
-   for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
-
-      if (nameMatch(name, iter.value())) {
-
-         int id           = iter.key();
-         QString realName = iter.value();
-
-         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(l->instance(id))) {
-            return factory->create(realName);
+   for (auto key : keySet) {
+      if (nameMatch(name, key)) {
+         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
+            return factory->create(key);
          }
       }
    }
 #endif
 
-   return 0;
+   return nullptr;
 }
 
 static QTextCodec *createForMib(int mib)
@@ -157,25 +153,20 @@ static QTextCodec *createForMib(int mib)
 #ifndef QT_NO_TEXTCODECPLUGIN
    QString name = "MIB: " + QString::number(mib);
 
-   QFactoryLoader *l = loader();
-   QMultiMap<int, QString> keyMap = l->keyMap();
+   QFactoryLoader *obj  = loader();
+   QSet<QString> keySet = obj->keySet();
 
-   for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
-
-      if (name == iter.value()) {
-
-         int id           = iter.key();
-         QString realName = iter.value();
-
-         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(l->instance(id))) {
-            return factory->create(realName);
+   for (auto key : keySet) {
+      if (name == key) {
+         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
+            return factory->create(key);
          }
       }
    }
 
 #endif
 
-   return 0;
+   return nullptr;
 }
 
 static QList<QTextCodec *> *all = 0;
@@ -724,18 +715,15 @@ QStringList QTextCodec::availableCodecs()
    locker.unlock();
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-   QFactoryLoader *l = loader();
-   QMultiMap<int, QString> keyMap = l->keyMap();
+   QFactoryLoader *obj  = loader();
+   QSet<QString> keySet = obj->keySet();
 
-   for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
-      QString name = iter.value();
+   for (auto key : keySet) {
 
-      if (! name.startsWith("MIB: ")) {
-
-         if (! codecs.contains(name)) {
-            codecs.append(name);
+      if (! key.startsWith("MIB: ")) {
+         if (! codecs.contains(key)) {
+            codecs.append(key);
          }
-
       }
    }
 #endif
@@ -761,19 +749,17 @@ QList<int> QTextCodec::availableMibs()
    locker.unlock();
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-   QFactoryLoader *l = loader();
-   QMultiMap<int, QString> keyMap = l->keyMap();
+   QFactoryLoader *obj  = loader();
+   QSet<QString> keySet = obj->keySet();
 
-  for (auto iter = keyMap.begin(); iter != keyMap.end(); ++iter) {
-      QString name = iter.value();
+   for (auto key : keySet) {
 
-      if (name.startsWith("MIB: ")) {
-         int id = name.mid(5).toInteger<int>();
+      if (key.startsWith("MIB: ")) {
+         int id = key.mid(5).toInteger<int>();
 
          if (! codecs.contains(id)) {
             codecs.append(id);
          }
-
       }
    }
 #endif
