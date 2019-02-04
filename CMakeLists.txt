@@ -107,37 +107,40 @@ string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 add_definitions(-DQT_SHARED -DBUILD_DATE="${BUILD_DATE}")
 set(TOOLS_SUFFIX)
 
-check_include_file(cups/cups.h HAVE_CUPS_CUPS_H)
-check_include_file(features.h HAVE_FEATURES_H)
-check_include_file(pthread.h HAVE_PTHREAD_H)
-check_include_file(pthread_np.h HAVE_PTHREAD_NP_H)
-check_include_file(unistd.h HAVE_UNISTD_H)
-check_include_file(dirent.h HAVE_DIRENT_H)
-check_include_file(fcntl.h HAVE_FCNTL_H)
-check_include_file(grp.h HAVE_GRP_H)
-check_include_file(pwd.h HAVE_PWD_H)
-check_include_file(signal.h HAVE_SIGNAL_H)
-check_include_file(dlfcn.h HAVE_DLFCN_H)
-check_include_file(sys/types.h HAVE_SYS_TYPES_H)
-check_include_file(sys/ioctl.h HAVE_SYS_IOCTL_H)
-check_include_file(sys/ipc.h HAVE_SYS_IPC_H)
-check_include_file(sys/time.h HAVE_SYS_TIME_H)
-check_include_file(sys/shm.h HAVE_SYS_SHM_H)
-check_include_file(sys/socket.h HAVE_SYS_SOCKET_H)
-check_include_file(sys/stat.h HAVE_SYS_STAT_H)
-check_include_file(sys/wait.h HAVE_SYS_WAIT_H)
-check_include_file(sys/param.h HAVE_SYS_PARAM_H)
-check_include_file(netinet/in.h HAVE_NETINET_IN_H)
-check_include_file(net/if.h HAVE_NET_IF_H)
-check_include_file(inttypes.h HAVE_INTTYPES_H)
-check_include_file(libpq-fe.h HAVE_LIBPQ_FE_H)
-check_include_file(pg_config.h HAVE_PG_CONFIG_H)
-check_include_file(memory.h HAVE_MEMORY_H)
+check_include_file(dlfcn.h       HAVE_DLFCN_H)
+check_include_file(dirent.h      HAVE_DIRENT_H)
+check_include_file(features.h    HAVE_FEATURES_H)
+check_include_file(fcntl.h       HAVE_FCNTL_H)
+check_include_file(grp.h         HAVE_GRP_H)
+check_include_file(inttypes.h    HAVE_INTTYPES_H)
+check_include_file(libpq-fe.h    HAVE_LIBPQ_FE_H)
+check_include_file(memory.h      HAVE_MEMORY_H)
+check_include_file(pg_config.h   HAVE_PG_CONFIG_H)
+check_include_file(pthread.h     HAVE_PTHREAD_H)
+check_include_file(pthread_np.h  HAVE_PTHREAD_NP_H)
+check_include_file(pwd.h         HAVE_PWD_H)
+check_include_file(signal.h      HAVE_SIGNAL_H)
+check_include_file(stdint.h      HAVE_STDINT_H)
+check_include_file(stdlib.h      HAVE_STDLIB_H)
+check_include_file(strings.h     HAVE_STRINGS_H)
+check_include_file(string.h      HAVE_STRING_H)
+check_include_file(unistd.h      HAVE_UNISTD_H)
+
+check_include_file(cups/cups.h   HAVE_CUPS_CUPS_H)
 check_include_file(mysql/mysql.h HAVE_MYSQL_H)
-check_include_file(stdint.h HAVE_STDINT_H)
-check_include_file(stdlib.h HAVE_STDLIB_H)
-check_include_file(strings.h HAVE_STRINGS_H)
-check_include_file(string.h HAVE_STRING_H)
+check_include_file(net/if.h      HAVE_NET_IF_H)
+check_include_file(netinet/in.h  HAVE_NETINET_IN_H)
+check_include_file(sys/eventfd.h HAVE_SYS_EVENTFD_H)
+check_include_file(sys/types.h   HAVE_SYS_TYPES_H)
+check_include_file(sys/ioctl.h   HAVE_SYS_IOCTL_H)
+check_include_file(sys/ipc.h     HAVE_SYS_IPC_H)
+check_include_file(sys/time.h    HAVE_SYS_TIME_H)
+check_include_file(sys/shm.h     HAVE_SYS_SHM_H)
+check_include_file(sys/socket.h  HAVE_SYS_SOCKET_H)
+check_include_file(sys/stat.h    HAVE_SYS_STAT_H)
+check_include_file(sys/wait.h    HAVE_SYS_WAIT_H)
+check_include_file(sys/param.h   HAVE_SYS_PARAM_H)
+
 check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;string.h;float.h" STDC_HEADERS)
 check_type_size(size_t SIZEOF_SIZE_T)
 opj_test_large_files(HAVE_LARGEFILESUPPORT)
@@ -304,11 +307,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         )
     endif()
 
-    if(WITH_MULTIMEDIA)
+    if(WITH_PHONON)
         find_package(GStreamer)
         set_package_properties(GStreamer PROPERTIES
-            PURPOSE "Required for multimedia support"
-            DESCRIPTION "Open source multimedia framework"
+            PURPOSE "Required for phonon support"
+            DESCRIPTION "Open source phonon framework"
             URL "http://gstreamer.freedesktop.org"
             TYPE REQUIRED
         )
@@ -328,18 +331,23 @@ endif()
 if(WIN32)
     add_definitions(-DUNICODE)
 endif()
+
 if(NOT CUPS_FOUND)
     add_definitions(-DQT_NO_CUPS)
 endif()
+
 if(NOT GLIB2_FOUND)
     add_definitions(-DQT_NO_GLIB)
 endif()
+
 if(NOT FREETYPE_FOUND)
     add_definitions(-DQT_NO_FREETYPE)
 endif()
+
 if(NOT ZLIB_FOUND)
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/zlib)
 endif()
+
 if(HAVE_LARGEFILESUPPORT)
     if(_FILE_OFFSET_BITS)
         add_definitions(-D_FILE_OFFSET_BITS=64)
@@ -372,19 +380,24 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 
 # check components dependencies
-# TODO: revisit once _OPTIONAL_COMPONENTS has changed
 if(WITH_MULTIMEDIA AND NOT WITH_GUI)
     message(SEND_ERROR "Multimedia component requires Gui component")
+
 elseif(WITH_PHONON AND NOT (WITH_GUI AND WITH_NETWORK))
     message(SEND_ERROR "Phonon component requires Gui and Network components")
+
 elseif(WITH_OPENGL AND NOT WITH_GUI)
     message(SEND_ERROR "OpenGL component requires Gui component")
+
 elseif(WITH_SVG AND NOT WITH_GUI)
     message(SEND_ERROR "Svg component requires Gui component")
+
 elseif(WITH_XMLPATTERNS AND NOT WITH_NETWORK)
     message(SEND_ERROR "XmlPatterns component requires Network component")
+
 elseif(WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
     message(SEND_ERROR "WebKit component requires Gui, Network and Script components")
+
 endif()
 
 add_subdirectory(src/core)
@@ -396,15 +409,22 @@ foreach(component ${_OPTIONAL_COMPONENTS})
         set(BUILD_COMPONENTS "${BUILD_COMPONENTS} ${component}")
     endif()
 endforeach()
+
 if(WITH_XML)
     add_subdirectory(src/tools/shared)
     add_subdirectory(src/tools/lconvert)
     add_subdirectory(src/tools/lrelease)
     add_subdirectory(src/tools/lupdate)
 endif()
+
 if(WITH_XML AND WITH_GUI)
     add_subdirectory(src/tools/rcc)
     add_subdirectory(src/tools/uic)
+endif()
+
+# platform plugins
+if(WITH_GUI)
+    add_subdirectory(src/plugins/platforms)
 endif()
 
 configure_file(

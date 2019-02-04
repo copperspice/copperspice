@@ -100,16 +100,19 @@ include src/tools/lconvert/Makefile.am
 
 include src/core/Makefile.am
 include src/gui/Makefile.am
-include src/multimedia/Makefile.am
 include src/network/Makefile.am
+include src/multimedia/Makefile.am
 include src/opengl/Makefile.am
 include src/sql/Makefile.am
 include src/svg/Makefile.am
 include src/phonon/Makefile.am
 include src/script/Makefile.am
-#out for now   include src/scripttools/Makefile.am
 include src/xml/Makefile.am
 include src/xmlpatterns/Makefile.am
+
+include src/plugins/platforms/Makefile.am
+
+#out for now   include src/scripttools/Makefile.am
 #out for now   include src/declarative/Makefile.am
 
 # extra files for distribution
