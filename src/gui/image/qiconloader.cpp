@@ -94,7 +94,7 @@ void QIconLoader::ensureInitialized()
          m_systemTheme = fallbackTheme();
       }
 
-      if (qt_iconEngineFactoryLoader()->keyMap().key("svg", -1) != -1) {
+      if (qt_iconEngineFactoryLoader()->keySet().contains("svg")) {
          m_supportsSvg = true;
       }
    }

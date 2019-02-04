@@ -152,7 +152,7 @@ bool QPicture::load(QIODevice *dev, const QString &format)
          return true;
       }
 #endif
-      qWarning("QPicture::load: No such picture format: %s", format);
+      qWarning("QPicture::load: No such picture format: %s", csPrintable(format));
       operator=(QPicture());
       return false;
    }
@@ -1147,18 +1147,15 @@ Q_GLOBAL_STATIC(QPHList, pictureHandlers)
 
 void qt_init_picture_plugins()
 {
-   using PluginKeyMap = QMultiMap<int, QString>;
-
    static QMutex mutex;
    QMutexLocker locker(&mutex);
+
    static QFactoryLoader loader(QPictureFormatInterface_iid, "/pictureformats");
+   auto keySet = loader.keySet();
 
-   const PluginKeyMap keyMap = loader.keyMap();
-   auto cend = keyMap.constEnd();
-
-   for (auto iter = keyMap.constBegin(); iter != cend; ++iter) {
-      if (QPictureFormatPlugin *format = qobject_cast<QPictureFormatPlugin *>(loader.instance(iter.key()))) {
-         format->installIOHandler(iter.value());
+   for (auto item : keySet) {
+      if (QPictureFormatPlugin *format = qobject_cast<QPictureFormatPlugin *>(loader.instance(item))) {
+         format->installIOHandler(item);
       }
    }
 }
