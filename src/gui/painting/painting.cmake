@@ -85,7 +85,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qoutlinemapper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_alpha_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_blitter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_preview_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_raster_p.h
@@ -95,7 +94,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpathclipper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpen_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpolygonclipper_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrasterdefs_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qrasterizer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qstroker_p.h
@@ -155,12 +153,5 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         msimg32
-    )
-
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintengine_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac.mm
     )
 endif()

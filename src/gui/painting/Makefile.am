@@ -82,7 +82,6 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qoutlinemapper_p.h \
 	qpaintengine_alpha_p.h \
 	qpaintengine_blitter_p.h \
-	qpaintengine_mac_p.h \
 	qpaintengine_p.h \
 	qpaintengine_preview_p.h \
 	qpaintengine_raster_p.h \
@@ -92,7 +91,6 @@ GUI_PAINTING_PRIVATE_INCLUDES = \
 	qpathclipper_p.h \
 	qpen_p.h \
 	qpolygonclipper_p.h \
-	qprintengine_mac_p.h \
 	qrasterdefs_p.h \
 	qrasterizer_p.h \
 	qrgba64_p.h \
@@ -156,9 +154,3 @@ if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lmsimg32
 endif
 
-
-if COCOA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/painting/qpaintengine_mac.cpp \
-	src/gui/painting/qprintengine_mac.mm
-endif
