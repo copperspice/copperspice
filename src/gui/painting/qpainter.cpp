@@ -1333,7 +1333,7 @@ bool QPainter::end()
    }
 
    if (d->states.size() > 1) {
-      qWarning("QPainter::end: Painter ended with %d saved states", d->states.size());
+      qWarning("QPainter::end: Painter ended with %zd saved states", d->states.size());
    }
 
    if (d->engine->autoDestruct()) {
@@ -5227,7 +5227,7 @@ start_lengthVariant:
                break;
             }
 
-            if (*iter != '&' && ! hidemnmemonic && !(tf & Qt::TextDontPrint)) {
+            if (*iter != '&' && ! hidemnmemonic && ! (tf & Qt::TextDontPrint)) {
                QTextLayout::FormatRange range;
                range.start  = iter - (text.constBegin() + old_offset);
                range.length = 1;
@@ -5237,19 +5237,29 @@ start_lengthVariant:
 
 #ifdef Q_OS_MAC
          } else if (hidemnmemonic) {
+
             QStringView tmp(iter, text.end());
 
             if (tmp.startsWith("(&") && len > 4 && tmp[2] != '&' && tmp[3] == ')')  {
                int n = 0;
+               QString::const_iterator tmp_iter = iter;
 
-               while ((cout - n) > cout0 && (cout - n - 1)->isSpace()) {
+               while (tmp_iter != text.begin()) {
+                  --tmp_iter;
+
+                  if (! tmp_iter->isSpace()) {
+                     ++tmp_iter;
+                     break;
+                  }
+
                   ++n;
                }
-
 
                iter   += 4;
                length -= n + 4;
                len    -= 4;
+
+               iter = text.erase(tmp_iter, iter + 1);
                continue;
             }
 #endif

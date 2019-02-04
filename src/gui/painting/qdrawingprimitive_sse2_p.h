@@ -23,6 +23,7 @@
 #ifndef QDRAWINGPRIMITIVE_SSE2_P_H
 #define QDRAWINGPRIMITIVE_SSE2_P_H
 
+#include <qglobal.h>
 #include <qsimd_p.h>
 #include <qdrawhelper_p.h>
 
@@ -233,7 +234,8 @@ inline QRgb qUnpremultiply_sse4(QRgb p)
    vl = _mm_packus_epi16(vl, vl);
    return _mm_cvtsi128_si32(vl);
 }
-template<enum QtPixelOrder PixelOrder> QT_FUNCTION_TARGET(SSE4_1)
+template<enum QtPixelOrder PixelOrder>
+QT_FUNCTION_TARGET(SSE4_1)
 inline uint qConvertArgb32ToA2rgb30_sse4(QRgb p)
 {
    const uint alpha = qAlpha(p);
@@ -243,13 +245,15 @@ inline uint qConvertArgb32ToA2rgb30_sse4(QRgb p)
    if (alpha == 0) {
       return 0;
    }
-   Q_CONSTEXPR  uint mult = 255 / (255 >> 6);
+
+   uint mult = 255 / (255 >> 6);
    const uint invAlpha = qt_inv_premul_factor[alpha];
    const uint newalpha = (alpha >> 6);
    const __m128i via = _mm_set1_epi32(invAlpha);
    const __m128i vna = _mm_set1_epi32(mult * newalpha);
    const __m128i vr1 = _mm_set1_epi32(0x1000);
    const __m128i vr2 = _mm_set1_epi32(0x80);
+
    __m128i vl = _mm_cvtepu8_epi32(_mm_cvtsi32_si128(p));
    vl = _mm_mullo_epi32(vl, via);
    vl = _mm_add_epi32(vl, vr1);

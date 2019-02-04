@@ -144,7 +144,7 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    void drawPixmap(const QPointF &p, const QPixmap &pm) override;
    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
 
-   void drawImage(const QPointF &p, const QImage &img);
+   void drawImage(const QPointF &p, const QImage &img) override;
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
    void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &sr) override;
@@ -165,7 +165,7 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
 
    inline const QClipData *clipData() const;
 
-   void drawStaticTextItem(QStaticTextItem *textItem);
+   void drawStaticTextItem(QStaticTextItem *textItem) override;
 
    virtual bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions,
       QFontEngine *fontEngine);
@@ -202,8 +202,8 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
 
    QPoint coordinateOffset() const override;
 
-   bool requiresPretransformedGlyphPositions(QFontEngine *fontEngine, const QTransform &m) const;
-   bool shouldDrawCachedGlyphs(QFontEngine *fontEngine, const QTransform &m) const;
+   bool requiresPretransformedGlyphPositions(QFontEngine *fontEngine, const QTransform &m) const override;
+   bool shouldDrawCachedGlyphs(QFontEngine *fontEngine, const QTransform &m) const override;
 
  protected:
    QRasterPaintEngine(QRasterPaintEnginePrivate &d, QPaintDevice *);

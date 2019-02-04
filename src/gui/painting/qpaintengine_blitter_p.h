@@ -72,7 +72,7 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void fillPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
    void drawEllipse(const QRectF &rect) override;
 
-   void drawImage(const QPointF &p, const QImage &img);
+   void drawImage(const QPointF &p, const QImage &img) override;
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
       Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
@@ -83,10 +83,10 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void stroke(const QVectorPath &path, const QPen &pen) override;
    void drawStaticTextItem(QStaticTextItem *) override;
 
-   bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine);
+   bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine) override;
 };
 
 
-#endif //QT_NO_BLITTABLE
+#endif // QT_NO_BLITTABLE
 #endif // QPAINTENGINE_BLITTER_P_H
 

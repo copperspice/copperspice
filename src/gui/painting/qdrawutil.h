@@ -36,9 +36,7 @@ class QColor;
 class QBrush;
 class QRect;
 
-//
 // Standard shade drawing
-//
 
 Q_GUI_EXPORT void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2,
    const QPalette &pal, bool sunken = true,
@@ -99,8 +97,9 @@ struct QTileRules {
 };
 
 
-// For internal use only.
+// For internal use only
 namespace QDrawBorderPixmap {
+
 enum DrawingHint {
    OpaqueTopLeft = 0x0001,
    OpaqueTop = 0x0002,
@@ -120,15 +119,13 @@ enum DrawingHint {
 using DrawingHints = QFlags<DrawingHint>;
 }
 
-
 Q_GUI_EXPORT void qDrawBorderPixmap(QPainter *painter,
    const QRect &targetRect,
    const QMargins &targetMargins,
    const QPixmap &pixmap,
    const QRect &sourceRect,
    const QMargins &sourceMargins,
-   const QTileRules &rules = QTileRules()
-      , QDrawBorderPixmap::DrawingHints hints = QDrawBorderPixmap::DrawingHints()
+   const QTileRules &rules = QTileRules(), QDrawBorderPixmap::DrawingHints hints = QDrawBorderPixmap::DrawingHints()
 
 );
 
@@ -140,4 +137,4 @@ inline void qDrawBorderPixmap(QPainter *painter,
    qDrawBorderPixmap(painter, target, margins, pixmap, pixmap.rect(), margins);
 }
 
-#endif // QDRAWUTIL_H
+#endif

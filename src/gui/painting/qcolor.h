@@ -189,6 +189,9 @@ class Q_GUI_EXPORT QColor
    bool setColorFromString(const QString &name);
 
    Spec cspec;
+
+#ifndef CS_DOXYPRESS
+
    union {
       struct {
          ushort alpha;
@@ -220,6 +223,7 @@ class Q_GUI_EXPORT QColor
       } ahsl;
       ushort array[5];
    } ct;
+#endif
 
    friend class QColormap;
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
