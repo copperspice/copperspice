@@ -23,10 +23,9 @@
 #ifndef QBOXLAYOUT_H
 #define QBOXLAYOUT_H
 
-#include <QtGui/qlayout.h>
+#include <qlayout.h>
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
 
 class QBoxLayoutPrivate;
 
@@ -37,8 +36,8 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
 
  public:
    enum Direction { LeftToRight, RightToLeft, TopToBottom, BottomToTop,
-                    Down = TopToBottom, Up = BottomToTop
-                  };
+      Down = TopToBottom, Up = BottomToTop
+   };
 
    explicit QBoxLayout(Direction, QWidget *parent = nullptr);
    ~QBoxLayout();
@@ -49,7 +48,7 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
    void addSpacing(int size);
    void addStretch(int stretch = 0);
    void addSpacerItem(QSpacerItem *spacerItem);
-   void addWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = 0);
+   void addWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
    void addLayout(QLayout *layout, int stretch = 0);
    void addStrut(int);
    void addItem(QLayoutItem *) override;
@@ -57,8 +56,9 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
    void insertSpacing(int index, int size);
    void insertStretch(int index, int stretch = 0);
    void insertSpacerItem(int index, QSpacerItem *spacerItem);
-   void insertWidget(int index, QWidget *widget, int stretch = 0, Qt::Alignment alignment = 0);
+   void insertWidget(int index, QWidget *widget, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
    void insertLayout(int index, QLayout *layout, int stretch = 0);
+   void insertItem(int index, QLayoutItem *);
 
    int spacing() const;
    void setSpacing(int spacing);
@@ -82,8 +82,6 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
    QLayoutItem *takeAt(int) override;
    int count() const override;
    void setGeometry(const QRect &) override;
-
-   void insertItem(int index, QLayoutItem *);
 
  private:
    Q_DISABLE_COPY(QBoxLayout)
@@ -114,7 +112,5 @@ class Q_GUI_EXPORT QVBoxLayout : public QBoxLayout
  private:
    Q_DISABLE_COPY(QVBoxLayout)
 };
-
-QT_END_NAMESPACE
 
 #endif // QBOXLAYOUT_H

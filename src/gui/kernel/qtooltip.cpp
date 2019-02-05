@@ -20,14 +20,10 @@
 *
 ***********************************************************************/
 
-#ifdef Q_OS_MAC
-# include <qcore_mac_p.h>
-#endif
-
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 #include <qevent.h>
-#include <qhash.h>
+
 #include <qlabel.h>
 #include <qpointer.h>
 #include <qstyle.h>
@@ -42,69 +38,12 @@
 
 #ifndef QT_NO_TOOLTIP
 
-#ifdef Q_OS_MAC
-#include <qcore_mac_p.h>
-#include <qt_cocoa_helpers_mac_p.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QToolTip
-
-    \brief The QToolTip class provides tool tips (balloon help) for any
-    widget.
-
-    \ingroup helpsystem
-
-
-    The tip is a short piece of text reminding the user of the
-    widget's function. It is drawn immediately below the given
-    position in a distinctive black-on-yellow color combination. The
-    tip can be any \l{QTextEdit}{rich text} formatted string.
-
-    Rich text displayed in a tool tip is implicitly word-wrapped unless
-    specified differently with \c{<p style='white-space:pre'>}.
-
-    The simplest and most common way to set a widget's tool tip is by
-    calling its QWidget::setToolTip() function.
-
-    It is also possible to show different tool tips for different
-    regions of a widget, by using a QHelpEvent of type
-    QEvent::ToolTip. Intercept the help event in your widget's \l
-    {QWidget::}{event()} function and call QToolTip::showText() with
-    the text you want to display. The \l{widgets/tooltips}{Tooltips}
-    example illustrates this technique.
-
-    If you are calling QToolTip::hideText(), or QToolTip::showText()
-    with an empty string, as a result of a \l{QEvent::}{ToolTip}-event you
-    should also call \l{QEvent::}{ignore()} on the event, to signal
-    that you don't want to start any tooltip specific modes.
-
-    Note that, if you want to show tooltips in an item view, the
-    model/view architecture provides functionality to set an item's
-    tool tip; e.g., the QTableWidgetItem::setToolTip() function.
-    However, if you want to provide custom tool tips in an item view,
-    you must intercept the help event in the
-    QAbstractItemView::viewportEvent() function and handle it yourself.
-
-    The default tool tip color and font can be customized with
-    setPalette() and setFont(). When a tooltip is currently on
-    display, isVisible() returns true and text() the currently visible
-    text.
-
-    \note Tool tips use the inactive color group of QPalette, because tool
-    tips are not active windows.
-
-    \sa QWidget::toolTip, QAction::toolTip, {Tool Tips Example}
-*/
-
 class QTipLabel : public QLabel
 {
    GUI_CS_OBJECT(QTipLabel)
 
  public:
-   QTipLabel(const QString &text, QWidget *w);
+   QTipLabel(const QString &text, QWidget *w, int msecDisplayTime);
    ~QTipLabel();
    static QTipLabel *instance;
 
@@ -114,11 +53,11 @@ class QTipLabel : public QLabel
 
    bool fadingOut;
 
-   void reuseTip(const QString &text);
+   void reuseTip(const QString &text, int msecDisplayTime);
    void hideTip();
    void hideTipImmediately();
    void setTipRect(QWidget *w, const QRect &r);
-   void restartExpireTimer();
+   void restartExpireTimer(int msecDisplayTime);
    bool tipChanged(const QPoint &pos, const QString &text, QObject *o);
    void placeTip(const QPoint &pos, QWidget *w);
 
@@ -146,11 +85,12 @@ class QTipLabel : public QLabel
 
 };
 
-QTipLabel *QTipLabel::instance = 0;
+QTipLabel *QTipLabel::instance = nullptr;
 
-QTipLabel::QTipLabel(const QString &text, QWidget *w)
+QTipLabel::QTipLabel(const QString &text, QWidget *w, int msecDisplayTime)
+
 #ifndef QT_NO_STYLE_STYLESHEET
-   : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), widget(0), styleSheetParent(0)
+   : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), styleSheetParent(0), widget(0)
 #else
    : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), widget(0)
 #endif
@@ -169,28 +109,23 @@ QTipLabel::QTipLabel(const QString &text, QWidget *w)
    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / qreal(255.0));
    setMouseTracking(true);
    fadingOut = false;
-   reuseTip(text);
+   reuseTip(text, msecDisplayTime);
 }
-
-void QTipLabel::styleSheetParentDestroyed()
-{
-   setProperty("_q_stylesheet_parent", QVariant());
-   styleSheetParent = 0;
-}
-
-void QTipLabel::restartExpireTimer()
+void QTipLabel::restartExpireTimer(int msecDisplayTime)
 {
    int time = 10000 + 40 * qMax(0, text().length() - 100);
+   if (msecDisplayTime > 0) {
+      time = msecDisplayTime;
+   }
    expireTimer.start(time, this);
    hideTimer.stop();
 }
 
-void QTipLabel::reuseTip(const QString &text)
+void QTipLabel::reuseTip(const QString &text, int msecDisplayTime)
 {
 #ifndef QT_NO_STYLE_STYLESHEET
    if (styleSheetParent) {
-      disconnect(styleSheetParent, SIGNAL(destroyed()),
-                 QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+      disconnect(styleSheetParent, SIGNAL(destroyed()), QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
       styleSheetParent = 0;
    }
 #endif
@@ -199,12 +134,13 @@ void QTipLabel::reuseTip(const QString &text)
    setText(text);
    QFontMetrics fm(font());
    QSize extra(1, 0);
+
    // Make it look good with the default ToolTip font on Mac, which has a small descent.
    if (fm.descent() == 2 && fm.ascent() >= 11) {
       ++extra.rheight();
    }
    resize(sizeHint() + extra);
-   restartExpireTimer();
+   restartExpireTimer(msecDisplayTime);
 }
 
 void QTipLabel::paintEvent(QPaintEvent *ev)
@@ -265,63 +201,43 @@ void QTipLabel::hideTipImmediately()
 
 void QTipLabel::setTipRect(QWidget *w, const QRect &r)
 {
-   if (!rect.isNull() && !w) {
+   if (! r.isNull() && ! w) {
       qWarning("QToolTip::setTipRect: Cannot pass null widget if rect is set");
+
    } else {
       widget = w;
-      rect = r;
+      rect   = r;
    }
 }
 
 void QTipLabel::timerEvent(QTimerEvent *e)
 {
    if (e->timerId() == hideTimer.timerId()
-         || e->timerId() == expireTimer.timerId()) {
+      || e->timerId() == expireTimer.timerId()) {
       hideTimer.stop();
       expireTimer.stop();
-#if defined(Q_OS_MAC) && !defined(QT_NO_EFFECTS)
-      if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip)) {
-         // Fade out tip on mac (makes it invisible).
-         // The tip will not be deleted until a new tip is shown.
 
-         // DRSWAT - Cocoa
-         macWindowFade(qt_mac_window_for(this));
-         QTipLabel::instance->fadingOut = true; // will never be false again.
-      } else {
-         hideTipImmediately();
-      }
-#else
+
       hideTipImmediately();
-#endif
+
    }
 }
 
 bool QTipLabel::eventFilter(QObject *o, QEvent *e)
 {
    switch (e->type()) {
-#ifdef Q_OS_MAC
-      case QEvent::KeyPress:
-      case QEvent::KeyRelease: {
-         int key = static_cast<QKeyEvent *>(e)->key();
-         Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();
-         if (!(mody & Qt::KeyboardModifierMask)
-               && key != Qt::Key_Shift && key != Qt::Key_Control
-               && key != Qt::Key_Alt && key != Qt::Key_Meta) {
-            hideTip();
-         }
-         break;
-      }
-#endif
       case QEvent::Leave:
          hideTip();
          break;
       case QEvent::WindowActivate:
       case QEvent::WindowDeactivate:
+      case QEvent::FocusIn:
+      case QEvent::FocusOut:
+      case QEvent::Close:
       case QEvent::MouseButtonPress:
       case QEvent::MouseButtonRelease:
       case QEvent::MouseButtonDblClick:
-      case QEvent::FocusIn:
-      case QEvent::FocusOut:
+
       case QEvent::Wheel:
          hideTipImmediately();
          break;
@@ -351,44 +267,27 @@ void QTipLabel::placeTip(const QPoint &pos, QWidget *w)
    if (testAttribute(Qt::WA_StyleSheet) || (w && qobject_cast<QStyleSheetStyle *>(w->style()))) {
       //the stylesheet need to know the real parent
       QTipLabel::instance->setProperty("_q_stylesheet_parent", QVariant::fromValue(w));
+
       //we force the style to be the QStyleSheetStyle, and force to clear the cache as well.
       QTipLabel::instance->setStyleSheet(QLatin1String("/* */"));
 
       // Set up for cleaning up this later...
       QTipLabel::instance->styleSheetParent = w;
+
       if (w) {
          connect(w, SIGNAL(destroyed()),
-                 QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+            QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
       }
    }
 #endif
 
 
-#ifdef Q_OS_MAC
-   // When in full screen mode, there is no Dock nor Menu so we can use
-   // the whole screen for displaying the tooltip. However when not in
-   // full screen mode we need to save space for the dock, so we use
-   // availableGeometry instead.
-   extern bool qt_mac_app_fullscreen; //qapplication_mac.mm
-   QRect screen;
-   if (qt_mac_app_fullscreen) {
-      screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
-   } else {
-      screen = QApplication::desktop()->availableGeometry(getTipScreen(pos, w));
-   }
-#else
    QRect screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
 
-#endif
-
    QPoint p = pos;
-   p += QPoint(2,
-#ifdef Q_OS_WIN
-               21
-#else
-               16
-#endif
-              );
+   p += QPoint(2, 16);
+
+
    if (p.x() + this->width() > screen.x() + screen.width()) {
       p.rx() -= 4 + this->width();
    }
@@ -427,26 +326,12 @@ bool QTipLabel::tipChanged(const QPoint &pos, const QString &text, QObject *o)
    }
 }
 
-/*!
-    Shows \a text as a tool tip, with the global position \a pos as
-    the point of interest. The tool tip will be shown with a platform
-    specific offset from this point of interest.
-
-    If you specify a non-empty rect the tip will be hidden as soon
-    as you move your cursor out of this area.
-
-    The \a rect is in the coordinates of the widget you specify with
-    \a w. If the \a rect is not empty you must specify a widget.
-    Otherwise this argument can be 0 but it is used to determine the
-    appropriate screen on multi-head systems.
-
-    If \a text is empty the tool tip is hidden. If the text is the
-    same as the currently shown tooltip, the tip will \e not move.
-    You can force moving by first hiding the tip with an empty text,
-    and then showing the new tip at the new position.
-*/
 
 void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect)
+{
+   showText(pos, text, w, rect, -1);
+}
+void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect, int msecDisplayTime)
 {
    if (QTipLabel::instance && QTipLabel::instance->isVisible()) { // a tip does already exist
       if (text.isEmpty()) { // empty text means hide current tip
@@ -459,8 +344,9 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, cons
          if (w) {
             localPos = w->mapFromGlobal(pos);
          }
+
          if (QTipLabel::instance->tipChanged(localPos, text, w)) {
-            QTipLabel::instance->reuseTip(text);
+            QTipLabel::instance->reuseTip(text, msecDisplayTime);
             QTipLabel::instance->setTipRect(w, rect);
             QTipLabel::instance->placeTip(pos, w);
          }
@@ -468,40 +354,31 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, cons
       }
    }
 
-   if (!text.isEmpty()) { // no tip can be reused, create new tip:
+   if (! text.isEmpty()) { // no tip can be reused, create new tip:
 
-#ifndef Q_OS_WIN
-      new QTipLabel(text, w); // sets QTipLabel::instance to itself
-#else
-      // On windows, we can't use the widget as parent otherwise the window will be
-      // raised when the tooltip will be shown
-      new QTipLabel(text, QApplication::desktop()->screen(QTipLabel::getTipScreen(pos, w)));
-#endif
+      new QTipLabel(text, w, msecDisplayTime); // sets QTipLabel::instance to itself
 
       QTipLabel::instance->setTipRect(w, rect);
       QTipLabel::instance->placeTip(pos, w);
       QTipLabel::instance->setObjectName(QLatin1String("qtooltip_label"));
 
 
-#if !defined(QT_NO_EFFECTS) && !defined(Q_OS_MAC)
+#if ! defined(QT_NO_EFFECTS)
       if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip)) {
          qFadeEffect(QTipLabel::instance);
       } else if (QApplication::isEffectEnabled(Qt::UI_AnimateTooltip)) {
          qScrollEffect(QTipLabel::instance);
       } else {
-         QTipLabel::instance->show();
+         QTipLabel::instance->showNormal();
       }
+
 #else
-      QTipLabel::instance->show();
+      QTipLabel::instance->showNormal();
 #endif
+
    }
 }
 
-/*!
-    \overload
-
-    This is analogous to calling QToolTip::showText(\a pos, \a text, \a w, QRect())
-*/
 
 void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w)
 {
@@ -509,35 +386,12 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w)
 }
 
 
-/*!
-    \fn void QToolTip::hideText()
-    \since 4.2
-
-    Hides the tool tip. This is the same as calling showText() with an
-    empty string.
-
-    \sa showText()
-*/
-
-
-/*!
-  \since 4.4
-
-  Returns true if this tooltip is currently shown.
-
-  \sa showText()
- */
 bool QToolTip::isVisible()
 {
    return (QTipLabel::instance != 0 && QTipLabel::instance->isVisible());
 }
 
-/*!
-  \since 4.4
 
-  Returns the tooltip text, if a tooltip is visible, or an
-  empty string if a tooltip is not visible.
- */
 QString QToolTip::text()
 {
    if (QTipLabel::instance) {
@@ -549,35 +403,18 @@ QString QToolTip::text()
 
 Q_GLOBAL_STATIC(QPalette, tooltip_palette)
 
-/*!
-    Returns the palette used to render tooltips.
-
-    \note Tool tips use the inactive color group of QPalette, because tool
-    tips are not active windows.
-*/
 QPalette QToolTip::palette()
 {
    return *tooltip_palette();
 }
 
-/*!
-    \since 4.2
 
-    Returns the font used to render tooltips.
-*/
 QFont QToolTip::font()
 {
    return QApplication::font("QTipLabel");
 }
 
-/*!
-    \since 4.2
 
-    Sets the \a palette used to render tooltips.
-
-    \note Tool tips use the inactive color group of QPalette, because tool
-    tips are not active windows.
-*/
 void QToolTip::setPalette(const QPalette &palette)
 {
    *tooltip_palette() = palette;
@@ -586,50 +423,17 @@ void QToolTip::setPalette(const QPalette &palette)
    }
 }
 
-/*!
-    \since 4.2
 
-    Sets the \a font used to render tooltips.
-*/
 void QToolTip::setFont(const QFont &font)
 {
    QApplication::setFont(font, "QTipLabel");
 }
 
-
-/*!
-    \fn void QToolTip::add(QWidget *widget, const QString &text)
-
-    Use QWidget::setToolTip() instead.
-
-    \oldcode
-    tip->add(widget, text);
-    \newcode
-    widget->setToolTip(text);
-    \endcode
-*/
-
-/*!
-    \fn void QToolTip::add(QWidget *widget, const QRect &rect, const QString &text)
-
-    Intercept the QEvent::ToolTip events in your widget's
-    QWidget::event() function and call QToolTip::showText() with the
-    text you want to display. The \l{widgets/tooltips}{Tooltips}
-    example illustrates this technique.
-*/
-
-/*!
-    \fn void QToolTip::remove(QWidget *widget)
-
-    Use QWidget::setToolTip() instead.
-
-    \oldcode
-    tip->remove(widget);
-    \newcode
-    widget->setToolTip("");
-    \endcode
-*/
-
-QT_END_NAMESPACE
+#ifndef QT_NO_STYLE_STYLESHEET
+void QTipLabel::styleSheetParentDestroyed() {
+   setProperty("_q_stylesheet_parent", QVariant());
+   styleSheetParent = 0;
+}
+#endif
 
 #endif // QT_NO_TOOLTIP

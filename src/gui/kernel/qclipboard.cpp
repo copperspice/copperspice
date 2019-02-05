@@ -24,30 +24,26 @@
 
 #ifndef QT_NO_CLIPBOARD
 
-#include <qapplication.h>
-#include <qapplication_p.h>
 #include <qpixmap.h>
-#include <qclipboard_p.h>
+#include "qmimedata.h"
 #include <qvariant.h>
 #include <qbuffer.h>
 #include <qimage.h>
 #include <qtextcodec.h>
 
-QT_BEGIN_NAMESPACE
+#include <qguiapplication_p.h>
+#include <qplatform_integration.h>
+#include <qplatform_clipboard.h>
 
-#ifndef Q_WS_X11
 QClipboard::QClipboard(QObject *parent)
-   : QObject(parent), d_ptr(new QClipboardPrivate)
+   : QObject(parent)
 {
-   // nothing
 }
-#endif
 
-#ifndef Q_OS_WIN32
+
 QClipboard::~QClipboard()
 {
 }
-#endif
 
 QString QClipboard::text(QString &subtype, Mode mode) const
 {
@@ -134,6 +130,30 @@ void QClipboard::setPixmap(const QPixmap &pixmap, Mode mode)
    setMimeData(data, mode);
 }
 
+const QMimeData *QClipboard::mimeData(Mode mode) const
+{
+   QPlatformClipboard *clipboard = QGuiApplicationPrivate::platformIntegration()->clipboard();
+   if (!clipboard->supportsMode(mode)) {
+      return 0;
+   }
+   return clipboard->mimeData(mode);
+}
+void QClipboard::setMimeData(QMimeData *src, Mode mode)
+{
+   QPlatformClipboard *clipboard = QGuiApplicationPrivate::platformIntegration()->clipboard();
+   if (!clipboard->supportsMode(mode)) {
+      if (src != 0) {
+         qWarning("Data set on unsupported clipboard mode. QMimeData object will be deleted.");
+         src->deleteLater();
+      }
+   } else {
+      clipboard->setMimeData(src, mode);
+   }
+}
+void QClipboard::clear(Mode mode)
+{
+   setMimeData(0, mode);
+}
 bool QClipboard::supportsSelection() const
 {
    return supportsMode(Selection);
@@ -159,6 +179,16 @@ bool QClipboard::ownsFindBuffer() const
    return ownsMode(FindBuffer);
 }
 
+bool QClipboard::supportsMode(Mode mode) const
+{
+   QPlatformClipboard *clipboard = QGuiApplicationPrivate::platformIntegration()->clipboard();
+   return clipboard->supportsMode(mode);
+}
+bool QClipboard::ownsMode(Mode mode) const
+{
+   QPlatformClipboard *clipboard = QGuiApplicationPrivate::platformIntegration()->clipboard();
+   return clipboard->ownsMode(mode);
+}
 void QClipboard::emitChanged(Mode mode)
 {
    switch (mode) {
@@ -177,68 +207,6 @@ void QClipboard::emitChanged(Mode mode)
    emit changed(mode);
 }
 
-QString QMimeDataWrapper::format(int n) const
-{
-   if (m_formats.isEmpty()) {
-      m_formats = data->formats();
-   }
-
-   if (n < 0 || n >= m_formats.size()) {
-      return QString();
-   }
-
-   return m_formats.at(n);
-}
-
-QByteArray QMimeDataWrapper::encodedData(const QString &format) const
-{
-   if (format != "application/x-qt-image") {
-      return data->data(format);
-
-   } else {
-      QVariant variant = data->imageData();
-      QImage img = qvariant_cast<QImage>(variant);
-      QByteArray ba;
-      QBuffer buffer(&ba);
-
-      buffer.open(QIODevice::WriteOnly);
-      img.save(&buffer, "PNG");
-
-      return ba;
-   }
-}
-
-QVariant QMimeSourceWrapper::retrieveData(const QString &mimetype, QVariant::Type) const
-{
-   return source->encodedData(mimetype);
-}
-
-bool QMimeSourceWrapper::hasFormat(const QString &mimetype) const
-{
-   return source->provides(mimetype);
-}
-
-QStringList QMimeSourceWrapper::formats() const
-{
-   QStringList retval;
-   QString fmt;
-
-   int i = 0;
-
-   while (true) {
-      fmt = source->format(i);
-
-      if (fmt.isEmpty()) {
-         break;
-      }
-
-      retval.append(fmt);
-      ++i;
-   }
-
-   return retval;
-}
 
 #endif // QT_NO_CLIPBOARD
 
-QT_END_NAMESPACE

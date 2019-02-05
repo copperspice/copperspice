@@ -31,21 +31,21 @@
 
 class QTouchDevicePrivate
 {
-public:
-    QTouchDevicePrivate()
-        : type(QTouchDevice::TouchScreen),
-          caps(QTouchDevice::Position),
-          maxTouchPoints(1)
-    { }
+ public:
+   QTouchDevicePrivate()
+      : type(QTouchDevice::TouchScreen),
+        caps(QTouchDevice::Position),
+        maxTouchPoints(1)
+   { }
 
-    QTouchDevice::DeviceType type;
-    QTouchDevice::Capabilities caps;
-    QString name;
-    int maxTouchPoints;
+   QTouchDevice::DeviceType type;
+   QTouchDevice::Capabilities caps;
+   QString name;
+   int maxTouchPoints;
 
-    static void registerDevice(const QTouchDevice *dev);
-    static void unregisterDevice(const QTouchDevice *dev);
-    static bool isRegistered(const QTouchDevice *dev);
+   static void registerDevice(const QTouchDevice *dev);
+   static void unregisterDevice(const QTouchDevice *dev);
+   static bool isRegistered(const QTouchDevice *dev);
 };
 
 

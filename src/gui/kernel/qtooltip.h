@@ -23,7 +23,7 @@
 #ifndef QTOOLTIP_H
 #define QTOOLTIP_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,11 +31,13 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QToolTip
 {
-   QToolTip();
+   QToolTip() = delete;
 
  public:
-   static void showText(const QPoint &pos, const QString &text, QWidget *w = 0);
+   static void showText(const QPoint &pos, const QString &text, QWidget *w = nullptr);
    static void showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect);
+   static void showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect, int msecShowTime);
+
    static inline void hideText() {
       showText(QPoint(), QString());
    }
@@ -51,6 +53,5 @@ class Q_GUI_EXPORT QToolTip
 
 #endif // QT_NO_TOOLTIP
 
-QT_END_NAMESPACE
 
 #endif // QTOOLTIP_H

@@ -23,25 +23,20 @@
 #ifndef QCLIPBOARD_H
 #define QCLIPBOARD_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_CLIPBOARD
 
-class QMimeSource;
 class QMimeData;
 class QImage;
 class QPixmap;
-class QClipboardPrivate;
 
 class Q_GUI_EXPORT QClipboard : public QObject
 {
    GUI_CS_OBJECT(QClipboard)
-   Q_DECLARE_PRIVATE(QClipboard)
 
-   QClipboard(QObject *parent);
+   explicit QClipboard(QObject *parent);
    ~QClipboard();
 
  public:
@@ -70,24 +65,21 @@ class Q_GUI_EXPORT QClipboard : public QObject
 
    GUI_CS_SIGNAL_1(Public, void changed(QClipboard::Mode mode))
    GUI_CS_SIGNAL_2(changed, mode)
+
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
+
    GUI_CS_SIGNAL_1(Public, void findBufferChanged())
    GUI_CS_SIGNAL_2(findBufferChanged)
+
    GUI_CS_SIGNAL_1(Public, void dataChanged())
    GUI_CS_SIGNAL_2(dataChanged)
 
  protected:
-   void connectNotify(const char *);
-   bool event(QEvent *) override;
-
-   QScopedPointer<QClipboardPrivate> d_ptr;
-
    friend class QApplication;
    friend class QApplicationPrivate;
    friend class QBaseApplication;
    friend class QDragManager;
-   friend class QMimeSource;
    friend class QPlatformClipboard;
 
  private:
@@ -97,12 +89,7 @@ class Q_GUI_EXPORT QClipboard : public QObject
    bool ownsMode(Mode mode) const;
    void emitChanged(Mode mode);
 
-   GUI_CS_SLOT_1(Private, void ownerDestroyed())
-   GUI_CS_SLOT_2(ownerDestroyed)
 };
 
 #endif // QT_NO_CLIPBOARD
-
-QT_END_NAMESPACE
-
-#endif // QCLIPBOARD_H
+#endif

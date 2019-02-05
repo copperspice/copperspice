@@ -31,45 +31,45 @@ class QTouchDevicePrivate;
 
 class Q_GUI_EXPORT QTouchDevice
 {
-    GUI_CS_GADGET(QTouchDevice)
+   GUI_CS_GADGET(QTouchDevice)
 
-    GUI_CS_ENUM(DeviceType)
-    GUI_CS_ENUM(CapabilityFlag)
+   GUI_CS_ENUM(DeviceType)
+   GUI_CS_ENUM(CapabilityFlag)
 
-public:
-    enum DeviceType {
-        TouchScreen,
-        TouchPad
-    };
+ public:
+   enum DeviceType {
+      TouchScreen,
+      TouchPad
+   };
 
-    enum CapabilityFlag {
-        Position = 0x0001,
-        Area = 0x0002,
-        Pressure = 0x0004,
-        Velocity = 0x0008,
-        RawPositions = 0x0010,
-        NormalizedPosition = 0x0020,
-        MouseEmulation = 0x0040
-    };
-    using Capabilities = QFlags<CapabilityFlag>;
+   enum CapabilityFlag {
+      Position = 0x0001,
+      Area = 0x0002,
+      Pressure = 0x0004,
+      Velocity = 0x0008,
+      RawPositions = 0x0010,
+      NormalizedPosition = 0x0020,
+      MouseEmulation = 0x0040
+   };
+   using Capabilities = QFlags<CapabilityFlag>;
 
-    QTouchDevice();
-    ~QTouchDevice();
+   QTouchDevice();
+   ~QTouchDevice();
 
-    static QList<const QTouchDevice *> devices();
+   static QList<const QTouchDevice *> devices();
 
-    QString name() const;
-    DeviceType type() const;
-    Capabilities capabilities() const;
-    int maximumTouchPoints() const;
+   QString name() const;
+   DeviceType type() const;
+   Capabilities capabilities() const;
+   int maximumTouchPoints() const;
 
-    void setName(const QString &name);
-    void setType(DeviceType devType);
-    void setCapabilities(Capabilities caps);
-    void setMaximumTouchPoints(int max);
+   void setName(const QString &name);
+   void setType(DeviceType devType);
+   void setCapabilities(Capabilities caps);
+   void setMaximumTouchPoints(int max);
 
-private:
-    QTouchDevicePrivate *d;
+ private:
+   QTouchDevicePrivate *d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTouchDevice::Capabilities)

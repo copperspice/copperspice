@@ -20,15 +20,14 @@
 *
 ***********************************************************************/
 
-#include <qstring.h>
-
 #ifndef QHEXSTRING_P_H
 #define QHEXSTRING_P_H
 
+#include <qstring.h>
+
 // converts an integer or double to an unique string token
 template <typename T>
-struct HexString
-{
+struct HexString {
    HexString(const T t)
       : m_data(t)
    { }
@@ -41,7 +40,8 @@ struct HexString
 };
 
 template <>
-inline QString HexString<double>::toString() const {
+inline QString HexString<double>::toString() const
+{
 
    uchar buffer[sizeof(double)];
    memcpy(buffer, &m_data, sizeof(double));
@@ -56,7 +56,8 @@ inline QString HexString<double>::toString() const {
 }
 
 template <>
-inline QString HexString<float>::toString() const {
+inline QString HexString<float>::toString() const
+{
 
    uchar buffer[sizeof(float)];
    memcpy(buffer, &m_data, sizeof(float));

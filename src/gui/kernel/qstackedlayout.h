@@ -23,9 +23,8 @@
 #ifndef QSTACKEDLAYOUT_H
 #define QSTACKEDLAYOUT_H
 
-#include <QtGui/qlayout.h>
+#include <qlayout.h>
 
-QT_BEGIN_NAMESPACE
 
 class QStackedLayoutPrivate;
 
@@ -39,10 +38,11 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
    GUI_CS_PROPERTY_NOTIFY(currentIndex, currentChanged)
+
    GUI_CS_PROPERTY_READ(stackingMode, stackingMode)
    GUI_CS_PROPERTY_WRITE(stackingMode, setStackingMode)
 
-   // following 1 was qdoc_property 1/5/2014
+   // following is qdoc_property
    GUI_CS_PROPERTY_READ(count, count)
 
  public:
@@ -76,21 +76,23 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    QLayoutItem *itemAt(int) const override;
    QLayoutItem *takeAt(int) override;
    void setGeometry(const QRect &rect) override;
+   bool hasHeightForWidth() const override;
+   int heightForWidth(int width) const override;
 
    GUI_CS_SIGNAL_1(Public, void widgetRemoved(int index))
    GUI_CS_SIGNAL_2(widgetRemoved, index)
+
    GUI_CS_SIGNAL_1(Public, void currentChanged(int index))
    GUI_CS_SIGNAL_2(currentChanged, index)
 
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
+
    GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *w))
    GUI_CS_SLOT_2(setCurrentWidget)
 
  private:
    Q_DISABLE_COPY(QStackedLayout)
 };
-
-QT_END_NAMESPACE
 
 #endif // QSTACKEDLAYOUT_H
