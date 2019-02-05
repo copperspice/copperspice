@@ -26,6 +26,22 @@
 
 #include <Carbon/Carbon.h>
 
+#ifdef __OBJC__
+#include <AppKit/AppKit.h>
+
+typedef NSWindow *OSWindowRef;
+typedef NSView   *OSViewRef;
+typedef NSMenu   *OSMenuRef;
+typedef NSEvent  *OSEventRef;
+
+#else
+typedef void *OSWindowRef;
+typedef void *OSViewRef;
+typedef void *OSMenuRef;
+typedef void *OSEventRef;
+
+#endif
+
 bool documentMode;
 
 CS_FontUIFontType CS_HIThemeGetUIFontType(ThemeFontID themeID)
@@ -279,25 +295,32 @@ OSStatus CS_CopyThemeIdentifier(CFStringRef *theme)
 }
 
 OSStatus CS_HIThemeDrawFrame(const HIRect *hirect, const HIThemeFrameDrawInfo *drawInfo, CGContextRef context,
-                             HIThemeOrientation orientation)
+                  HIThemeOrientation orientation)
 {
    return HIThemeDrawFrame(hirect, drawInfo, context, orientation);
 }
 
 OSStatus CS_HIThemeDrawPopupArrow(const HIRect *hirect, const HIThemePopupArrowDrawInfo *drawInfo, CGContextRef context,
-                                  HIThemeOrientation orientation)
+                  HIThemeOrientation orientation)
 {
    return HIThemeDrawPopupArrow(hirect, drawInfo, context, orientation);
 }
 
+
+OSStatus CS_HIThemeDrawSeparator(const HIRect *hirect, const HIThemeSeparatorDrawInfo *drawInfo, CGContextRef context,
+                  HIThemeOrientation orientation)
+{
+   return HIThemeDrawSeparator(hirect, drawInfo, context, orientation);
+}
+
 OSStatus CS_HIThemeDrawTabPane(const HIRect *hirect, const HIThemeTabPaneDrawInfo *info, CGContextRef context,
-                               HIThemeOrientation orientation)
+                  HIThemeOrientation orientation)
 {
    return HIThemeDrawTabPane(hirect, info, context, orientation);
 }
 
 OSStatus CS_HIThemeDrawTextBox(CFTypeRef text, const HIRect *hirect, HIThemeTextInfo *info, CGContextRef context,
-                               HIThemeOrientation orientation)
+                  HIThemeOrientation orientation)
 {
    return HIThemeDrawTextBox(text, hirect, info, context, orientation);
 }
@@ -436,27 +459,9 @@ void qt_mac_updateContentBorderMetrics(void * /*OSWindowRef */window, const ::HI
 {
    OSWindowRef theWindow = static_cast<OSWindowRef>(window);
 
-   if ([theWindow styleMask] & NSTexturedBackgroundWindowMask) {
+   if ([theWindow styleMask] & NSWindowStyleMaskTexturedBackground) {
       [theWindow setContentBorderThickness: metrics.top forEdge: NSMaxYEdge];
    }
 
    [theWindow setContentBorderThickness: metrics.bottom forEdge: NSMinYEdge];
-}
-
-void cs_updateMacBorderMetrics(QTabBar *q)
-{
-   ::HIContentBorderMetrics metrics;
-
-   // TODO: get metrics to preserve the bottom value
-   // TODO: test tab bar position
-
-   OSWindowRef window = qt_mac_window_for(q);
-
-   // push base line separator down to the client are so we can paint over it
-   metrics.top = (documentMode && q->isVisible()) ? 1 : 0;
-   metrics.bottom = 0;
-   metrics.left = 0;
-   metrics.right = 0;
-
-   qt_mac_updateContentBorderMetrics(window, metrics);
 }
