@@ -423,7 +423,8 @@ void QPrintPreviewDialogPrivate::setupActions()
    // Initial state:
    fitPageAction->setChecked(true);
    singleModeAction->setChecked(true);
-   if (preview->orientation() == QPrinter::Portrait) {
+
+   if (preview->orientation() == QPageLayout::Orientation::Portrait) {
       portraitAction->setChecked(true);
    } else {
       landscapeAction->setChecked(true);
@@ -606,11 +607,13 @@ void QPrintPreviewDialogPrivate::_q_pageSetup()
    Q_Q(QPrintPreviewDialog);
 
    QPageSetupDialog pageSetup(printer, q);
+
    if (pageSetup.exec() == QDialog::Accepted) {
       // update possible orientation changes
-      if (preview->orientation() == QPrinter::Portrait) {
+      if (preview->orientation() == QPageLayout::Orientation::Portrait) {
          portraitAction->setChecked(true);
          preview->setPortraitOrientation();
+
       } else {
          landscapeAction->setChecked(true);
          preview->setLandscapeOrientation();

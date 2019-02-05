@@ -61,7 +61,7 @@ class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
    explicit QAbstractPrintDialog(QPrinter *printer, QWidget *parent = nullptr);
    ~QAbstractPrintDialog();
 
-   virtual int exec() = 0;
+   int exec() override = 0;
 
    // obsolete
    void addEnabledOption(PrintDialogOption option);

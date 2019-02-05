@@ -97,7 +97,8 @@ class QPagePreview : public QWidget
 
       qreal width_factor = scaledSize.width() / pageSize.width();
       qreal height_factor = scaledSize.height() / pageSize.height();
-      QMarginsF margins = m_pageLayout.margins(QPageLayout::Point);
+
+      QMarginsF margins = m_pageLayout.margins(QPageSize::Unit::Point);
       int left = qRound(margins.left() * width_factor);
       int top = qRound(margins.top() * height_factor);
       int right = qRound(margins.right() * width_factor);
@@ -108,6 +109,7 @@ class QPagePreview : public QWidget
 
       QPainter p(this);
       QColor shadow(palette().mid().color());
+
       for (int i = 1; i < 6; ++i) {
          shadow.setAlpha(180 - i * 30);
          QRect offset(pageRect.adjusted(i, i, i, i));
@@ -197,8 +199,8 @@ QPageSetupWidget::QPageSetupWidget(QWidget *parent)
    : QWidget(parent),
      m_pagePreview(0),
      m_printer(0),
-     m_outputFormat(QPrinter::PdfFormat),
-     m_units(QPageLayout::Point),
+     m_outputFormat(QPrinter::OutputFormat::PdfFormat),
+     m_units(QPageSize::Unit::Point),
      m_blockSignals(false)
 {
    m_ui.setupUi(this);
@@ -246,13 +248,13 @@ QPageSetupWidget::QPageSetupWidget(QWidget *parent)
 // Init the Units combo box
 void QPageSetupWidget::initUnits()
 {
-   m_ui.unitCombo->addItem(tr("Millimeters (mm)"), QVariant::fromValue(QPageLayout::Millimeter));
-   m_ui.unitCombo->addItem(tr("Inches (in)"), QVariant::fromValue(QPageLayout::Inch));
-   m_ui.unitCombo->addItem(tr("Points (pt)"), QVariant::fromValue(QPageLayout::Point));
+   m_ui.unitCombo->addItem(tr("Millimeters (mm)"), QVariant::fromValue(QPageSize::Unit::Millimeter));
+   m_ui.unitCombo->addItem(tr("Inches (in)"), QVariant::fromValue(QPageSize::Unit::Inch));
+   m_ui.unitCombo->addItem(tr("Points (pt)"), QVariant::fromValue(QPageSize::Unit::Point));
 
-   m_ui.unitCombo->addItem(tr("Pica (P/)"), QVariant::fromValue(QPageLayout::Pica));
-   m_ui.unitCombo->addItem(tr("Didot (DD)"), QVariant::fromValue(QPageLayout::Didot));
-   m_ui.unitCombo->addItem(tr("Cicero (CC)"), QVariant::fromValue(QPageLayout::Cicero));
+   m_ui.unitCombo->addItem(tr("Pica (P/)"), QVariant::fromValue(QPageSize::Unit::Pica));
+   m_ui.unitCombo->addItem(tr("Didot (DD)"), QVariant::fromValue(QPageSize::Unit::Didot));
+   m_ui.unitCombo->addItem(tr("Cicero (CC)"), QVariant::fromValue(QPageSize::Unit::Cicero));
 
    // Initailly default to locale measurement system, mm if metric, in otherwise
    m_ui.unitCombo->setCurrentIndex(QLocale().measurementSystem() != QLocale::MetricSystem);
@@ -346,12 +348,14 @@ void QPageSetupWidget::setPrinter(QPrinter *printer)
 
    // Initialize the layout to the current QPrinter layout
    m_pageLayout = m_printer->pageLayout();
+
    // Assume if margins are Points then is by default, so set to locale default units
-   if (m_pageLayout.units() == QPageLayout::Point) {
+   if (m_pageLayout.units() == QPageSize::Unit:::Point) {
+
       if (QLocale().measurementSystem() == QLocale::MetricSystem) {
-         m_pageLayout.setUnits(QPageLayout::Millimeter);
+         m_pageLayout.setUnits(QPageSize::Unit::Millimeter);
       } else {
-         m_pageLayout.setUnits(QPageLayout::Inch);
+         m_pageLayout.setUnits(QPageSize::Unit::Inch);
       }
    }
    m_units = m_pageLayout.units();
@@ -377,27 +381,28 @@ void QPageSetupWidget::updateWidget()
 
    QString suffix;
    switch (m_units) {
-      case QPageLayout::Millimeter:
+
+      case QPageSize::Unit::Millimeter:
          //: Unit 'Millimeter'
          suffix = tr("mm");
          break;
-      case QPageLayout::Point:
+      case QPageSize::Unit::Point:
          //: Unit 'Points'
          suffix = tr("pt");
          break;
-      case QPageLayout::Inch:
+      case QPageSize::Unit::Inch:
          //: Unit 'Inch'
          suffix = tr("in");
          break;
-      case QPageLayout::Pica:
+      case QPageSize::Unit::Pica:
          //: Unit 'Pica'
          suffix = tr("P/");
          break;
-      case QPageLayout::Didot:
+      case QPageSize::Unit::Didot:
          //: Unit 'Didot'
          suffix = tr("DD");
          break;
-      case QPageLayout::Cicero:
+      case QPageSize::Unit::Cicero:
          //: Unit 'Cicero'
          suffix = tr("CC");
          break;

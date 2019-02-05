@@ -339,8 +339,9 @@ void QPrintPreviewWidgetPrivate::layoutPages()
 
    int numPagePlaces = numPages;
    int cols = 1; // singleMode and default
+
    if (viewMode == QPrintPreviewWidget::AllPagesView) {
-      if (printer->orientation() == QPrinter::Portrait) {
+      if (printer->orientation() == QPageLayout::Orientation::Portrait) {
          cols = qCeil(qSqrt((float) numPages));
       } else {
          cols = qFloor(qSqrt((float) numPages));
@@ -632,37 +633,21 @@ QPrintPreviewWidget::ZoomMode QPrintPreviewWidget::zoomMode() const
    return d->zoomMode;
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setOrientation(QPrinter::Landscape)}.
-*/
 void QPrintPreviewWidget::setLandscapeOrientation()
 {
-   setOrientation(QPrinter::Landscape);
+   setOrientation(QPageLayout::Orientation::Landscape);
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setOrientation(QPrinter::Portrait)}.
-*/
 void QPrintPreviewWidget::setPortraitOrientation()
 {
-   setOrientation(QPrinter::Portrait);
+   setOrientation(QPageLayout::Orientation::Portrait);
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setViewMode(QPrintPreviewWidget::SinglePageView)}.
-*/
 void QPrintPreviewWidget::setSinglePageViewMode()
 {
    setViewMode(SinglePageView);
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setViewMode(QPrintPreviewWidget::FacingPagesView)}.
-*/
 void QPrintPreviewWidget::setFacingPagesViewMode()
 {
    setViewMode(FacingPagesView);

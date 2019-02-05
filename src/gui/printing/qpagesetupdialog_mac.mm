@@ -57,20 +57,23 @@
 - (void)pageLayoutDidEnd: (NSPageLayout *)pageLayout
               returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-   Q_UNUSED(pageLayout);
    QPageSetupDialog *dialog = static_cast<QPageSetupDialog *>(contextInfo);
-    QPrinter *printer = dialog->printer();
-   if (returnCode == NSOKButton) {
+   QPrinter *printer = dialog->printer();
+
+   if (returnCode == NSModalResponseOK) {
         PMPageFormat format = static_cast<PMPageFormat>([printInfo PMPageFormat]);
         PMRect paperRect;
         PMGetUnadjustedPaperRect(format, &paperRect);
         PMOrientation orientation;
         PMGetOrientation(format, &orientation);
+
         QSizeF paperSize = QSizeF(paperRect.right - paperRect.left, paperRect.bottom - paperRect.top);
         printer->printEngine()->setProperty(QPrintEngine::PPK_CustomPaperSize, paperSize);
-        printer->printEngine()->setProperty(QPrintEngine::PPK_Orientation, orientation == kPMLandscape ? QPrinter::Landscape : QPrinter::Portrait);
+        printer->printEngine()->setProperty(QPrintEngine::PPK_Orientation, orientation == kPMLandscape ?
+                  QPageLayout::Orientation::Landscape : QPageLayout::Orientation::Portrait);
    }
-   dialog->done((returnCode == NSOKButton) ? QDialog::Accepted : QDialog::Rejected);
+
+   dialog->done((returnCode == NSModalResponseOK) ? QDialog::Accepted : QDialog::Rejected);
 }
 @end
 
@@ -161,7 +164,7 @@ void QPageSetupDialog::setVisible(bool visible)
 {
    Q_D(QPageSetupDialog);
 
-    if (d->printer->outputFormat() != QPrinter::NativeFormat)
+    if (d->printer->outputFormat() != QPrinter::NativeFormat) {
       return;
    }
 
@@ -170,16 +173,19 @@ void QPageSetupDialog::setVisible(bool visible)
    if (!visible == !isCurrentlyVisible) {
       return;
    }
-    QDialog::setVisible(visible);
 
-    if (visible) {
+   QDialog::setVisible(visible);
+
+   if (visible) {
         Qt::WindowModality modality = windowModality();
         if (modality == Qt::NonModal) {
             // NSPrintPanels can only be modal, so we must pick a type
             modality = parentWidget() ? Qt::WindowModal : Qt::ApplicationModal;
         }
+
         static_cast <QMacPageSetupDialogPrivate*>(d)->openCocoaPageLayout(modality);
         return;
+
     } else {
         if (static_cast <QMacPageSetupDialogPrivate*>(d)->pageLayout) {
             static_cast <QMacPageSetupDialogPrivate*>(d)->closeCocoaPageLayout();

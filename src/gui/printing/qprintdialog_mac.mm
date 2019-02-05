@@ -48,7 +48,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
    inline QPrintDialog *printDialog() { return q_func(); }
 
- 
+
     NSPrintInfo *printInfo;
     NSPrintPanel *printPanel;
 };
@@ -81,7 +81,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
     QPrintDialog *dialog = static_cast<QPrintDialog *>(contextInfo);
     QPrinter *printer = dialog->printer();
 
-   if (returnCode == NSOKButton) {
+   if (returnCode == NSModalResponseOK) {
         PMPrintSession session = static_cast<PMPrintSession>([printInfo PMPrintSession]);
         PMPrintSettings settings = static_cast<PMPrintSettings>([printInfo PMPrintSettings]);
       UInt32 frompage, topage;
@@ -93,7 +93,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
 
       if (dialog->fromPage() == 1 && dialog->toPage() == INT_MAX) {
-      
+
 
          dialog->setPrintRange(QPrintDialog::AllPages);
          dialog->setFromTo(0, 0);
@@ -113,7 +113,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
       PMSessionGetDestinationType(session, settings, &dest);
       if (dest == kPMDestinationFile) {
       	// QTBUG-38820
-      
+
       } else {
             PMPrinter macPrinter;
             PMSessionGetCurrentPrinter(session, &macPrinter);
@@ -122,7 +122,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
                 printer->setPrinterName(printerId);
         }
     }
-         
+
     // Note this code should be in QCocoaPrintDevice, but that implementation is in the plugin
     PMPageFormat pageFormat = static_cast<PMPageFormat>([printInfo PMPageFormat]);
     PMPaper paper;
@@ -133,12 +133,13 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
     CFStringRef key;
     double width = 0;
     double height = 0;
-    
+
     // If the PPD name is empty then is custom, for some reason PMPaperIsCustom doesn't work here
     PMPaperGetPPDPaperName(paper, &key);
-    
+
     if (PMPaperGetWidth(paper, &width) == noErr && PMPaperGetHeight(paper, &height) == noErr) {
         QString ppdKey = QString::fromCFString(key);
+
         if (ppdKey.isEmpty()) {
             // Is using a custom page size as defined in the Print Dialog custom settings using mm or inches.
             // We can't ask PMPaper what those units actually are, we can only get the point size which may return
@@ -146,26 +147,28 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
             // Testing shows if using metric/mm then is rounded mm, if imperial/inch is rounded to 2 decimal places
             // Even if we pass in our own custom size in mm with decimal places, the dialog will still round it!
             // Suspect internal storage is in rounded mm?
+
             if (QLocale().measurementSystem() == QLocale::MetricSystem) {
-                QSizeF sizef = QSizeF(width, height) / qt_pointMultiplier(QPageLayout::Millimeter);
+                QSizeF sizef = QSizeF(width, height) / qt_pointMultiplier(QPageSize::Unit::Millimeter);
                 // Round to 0 decimal places
-                pageSize = QPageSize(sizef.toSize(), QPageSize::Millimeter);
+                pageSize = QPageSize(sizef.toSize(), QPageSize::Unit::Millimeter);
+
             } else {
-                qreal multiplier = qt_pointMultiplier(QPageLayout::Inch);
+                qreal multiplier = qt_pointMultiplier(QPageSize::Unit::Inch);
                 const int w = qRound(width * 100 / multiplier);
                 const int h = qRound(height * 100 / multiplier);
-                pageSize = QPageSize(QSizeF(w / 100.0, h / 100.0), QPageSize::Inch);
+                pageSize = QPageSize(QSizeF(w / 100.0, h / 100.0), QPageSize::Unit::Inch);
             }
         } else {
             pageSize = QPlatformPrintDevice::createPageSize(ppdKey, QSize(width, height), QString());
         }
     }
-    
+
     if (pageSize.isValid() && !pageSize.isEquivalentTo(printer->pageLayout().pageSize()))
         printer->setPageSize(pageSize);
     printer->setOrientation(orientation == kPMLandscape ? QPrinter::Landscape : QPrinter::Portrait);
 
-   dialog->done((returnCode == NSOKButton) ? QDialog::Accepted : QDialog::Rejected);
+   dialog->done((returnCode == NSModalResponseOK) ? QDialog::Accepted : QDialog::Rejected);
 }
 @end
 
@@ -176,7 +179,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
 {
    Q_Q(QPrintDialog);
- 
+
     // get the NSPrintInfo from the print engine in the platform plugin
     void *voidp = 0;
     (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(),
@@ -193,12 +196,12 @@ void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
     // get print settings from the platform plugin
     PMPrintSettings settings = static_cast<PMPrintSettings>([printInfo PMPrintSettings]);
     PMSetPageRange(settings, q->minPage(), q->maxPage());
-    
+
     if (q->printRange() == QAbstractPrintDialog::PageRange) {
         PMSetFirstPage(settings, q->fromPage(), false);
         PMSetLastPage(settings, q->toPage(), false);
     }
-    
+
     [printInfo updateFromPMPrintSettings];
 
    QPrintDialog::PrintDialogOptions qtOptions = q->options();
@@ -206,7 +209,7 @@ void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
    if (qtOptions & QPrintDialog::PrintPageRange) {
       macOptions |= NSPrintPanelShowsPageRange;
    }
-   
+
    if (qtOptions & QPrintDialog::PrintShowPageSize)
       macOptions |= NSPrintPanelShowsPaperSize | NSPrintPanelShowsPageSetupAccessory
                     | NSPrintPanelShowsOrientation;
@@ -221,7 +224,7 @@ void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
    qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers);
 
     QCocoaPrintPanelDelegate *delegate = [[QCocoaPrintPanelDelegate alloc] initWithNSPrintInfo:printInfo];
-    
+
     if (modality == Qt::ApplicationModal || !q->parentWidget()) {
         if (modality == Qt::NonModal)
             qWarning("QPrintDialog is required to be modal on OS X");
@@ -278,7 +281,7 @@ QPrintDialog::QPrintDialog(QWidget *parent)
    if (!warnIfNotNative(d->printer)) {
       return;
     }
-      
+
     setAttribute(Qt::WA_DontShowOnScreen);
 }
 
@@ -339,13 +342,7 @@ void QPrintDialog::setVisible(bool visible)
 }
 
 // wrappers, duplicated code in _win, _unix, _mac
-void QPrintDialog::_q_chbPrintLastFirstToggled(bool un_named_arg1)
-{
-   Q_D(QPrintDialog);
-   d->_q_chbPrintLastFirstToggled(un_named_arg1);
-}
-
-#if defined (Q_OS_UNIX) && !defined (Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
 void QPrintDialog::_q_collapseOrExpandDialog()
 {
    Q_D(QPrintDialog);

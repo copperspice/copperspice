@@ -88,23 +88,27 @@ int QPageSetupDialog::exec()
 
    psd.Flags = PSD_MARGINS;
    QPageLayout layout = d->printer->pageLayout();
+
    switch (layout.units()) {
-      case QPageLayout::Millimeter:
-      case QPageLayout::Inch:
+      case QPageSize::Unit::Millimeter:
+      case QPageSize::Unit::Inch:
          break;
-      case QPageLayout::Point:
-      case QPageLayout::Pica:
-      case QPageLayout::Didot:
-      case QPageLayout::Cicero:
-         layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ? QPageLayout::Millimeter
-            : QPageLayout::Inch);
+      case QPageSize::Unit::Point:
+      case QPageSize::Unit::Pica:
+      case QPageSize::Unit::Didot:
+      case QPageSize::Unit::Cicero:
+         layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ? QPageSize::Unit::Millimeter : QPageSize::Unit::Inch);
          break;
    }
+
    qreal multiplier = 1.0;
-   if (layout.units() == QPageLayout::Millimeter) {
+   if (layout.units() == QPageSize::Unit::Millimeter) {
       psd.Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
       multiplier = 100.0;
-   } else { // QPageLayout::Inch)
+
+   } else {
+      //QPageSize::Unit::Inch)
+
       psd.Flags |= PSD_INTHOUSANDTHSOFINCHES;
       multiplier = 1000.0;
    }
