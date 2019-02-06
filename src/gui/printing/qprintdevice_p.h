@@ -77,7 +77,7 @@ public:
     QPageSize supportedPageSize(QPageSize::PageSizeId pageSizeId) const;
     QPageSize supportedPageSize(const QString &pageName) const;
     QPageSize supportedPageSize(const QSize &pointSize) const;
-    QPageSize supportedPageSize(const QSizeF &size, QPageSize::Unit units = QPageSize::Point) const;
+    QPageSize supportedPageSize(const QSizeF &size, QPageSize::Unit units = QPageSize::Unit::Point) const;
 
     bool supportsCustomPageSizes() const;
 

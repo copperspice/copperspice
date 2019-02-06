@@ -35,8 +35,6 @@
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
 class QPrintEngine;
 class QPreviewPaintEngine;
 class QPicture;
@@ -69,6 +67,7 @@ class QPrinterPrivate
    QPrinterInfo findValidPrinter(const QPrinterInfo &printer = QPrinterInfo());
    void initEngines(QPrinter::OutputFormat format, const QPrinterInfo &printer);
    void changeEngines(QPrinter::OutputFormat format, const QPrinterInfo &printer);
+
 #ifndef QT_NO_PRINTPREVIEWWIDGET
    QList<const QPicture *> previewPages() const;
    void setPreviewMode(bool);
@@ -78,6 +77,7 @@ class QPrinterPrivate
 
    QPrinter::PrinterMode printerMode;
    QPrinter::OutputFormat outputFormat;
+
    QPrintEngine *printEngine;
    QPaintEngine *paintEngine;
 
@@ -91,19 +91,14 @@ class QPrinterPrivate
    QPrinter *q_ptr;
    QPrinter::PrintRange printRange;
 
-
    uint use_default_engine : 1;
    uint had_default_engines : 1;
-
    uint validPrinter : 1;
    uint hasCustomPageMargins : 1;
-
 
    // Used to remember which properties have been manually set by the user.
    QSet<QPrintEngine::PrintEnginePropertyKey> m_properties;
 };
-
-
 
 #endif // QT_NO_PRINTER
 

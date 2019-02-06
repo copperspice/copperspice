@@ -30,10 +30,6 @@
 
 #ifndef QT_NO_PRINTER
 
-#if defined(B0)
-#undef B0 // Terminal hang-up.  We assume that you do not want that.
-#endif
-
 class QPrinterPrivate;
 class QPaintEngine;
 class QPrintEngine;
@@ -46,28 +42,19 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    Q_DECLARE_PRIVATE(QPrinter)
 
  public:
-   enum PrinterMode { ScreenResolution, PrinterResolution, HighResolution };
+   using Orientation = QPageLayout::Orientation;
+   using Unit = QPageSize::Unit;
 
-   explicit QPrinter(PrinterMode mode = ScreenResolution);
-   explicit QPrinter(const QPrinterInfo &printer, PrinterMode mode = ScreenResolution);
-   ~QPrinter();
+   // Keep in sync with QAbstractPrintDialog::PrintRange
+   enum PrintRange   { AllPages, Selection, PageRange, CurrentPage };
 
-   int devType() const override;
+   enum ColorMode    { GrayScale, Color };
+   enum OutputFormat { NativeFormat, PdfFormat };
+   enum PageOrder    { FirstPageFirst, LastPageFirst };
+   enum PrinterMode  { ScreenResolution, PrinterResolution, HighResolution };
 
-   enum Orientation { Portrait, Landscape };
-
-   using PaperSize = QPagedPaintDevice::PageSize;
-
-
-   enum PageOrder   { FirstPageFirst,
-      LastPageFirst
-   };
-
-   enum ColorMode   { GrayScale,
-      Color
-   };
-
-   enum PaperSource { OnlyOne,
+   enum PaperSource {
+      OnlyOne,
       Lower,
       Middle,
       Manual,
@@ -80,31 +67,17 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
       LargeCapacity,
       Cassette,
       FormSource,
-      MaxPageSource, // Deprecated
+      MaxPageSource,       // Deprecated
       CustomSource,
       LastPaperSource = CustomSource,
-      Upper = OnlyOne  // As defined in Windows
+      Upper = OnlyOne     // As defined in Windows
    };
 
-   enum PrinterState { Idle,
+   enum PrinterState {
+      Idle,
       Active,
       Aborted,
       Error
-   };
-
-   enum OutputFormat { NativeFormat, PdfFormat };
-
-   // Keep in sync with QAbstractPrintDialog::PrintRange
-   enum PrintRange { AllPages, Selection, PageRange, CurrentPage };
-
-   enum Unit {
-      Millimeter,
-      Point,
-      Inch,
-      Pica,
-      Didot,
-      Cicero,
-      DevicePixel
    };
 
    enum DuplexMode {
@@ -113,6 +86,12 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
       DuplexLongSide,
       DuplexShortSide
    };
+
+   explicit QPrinter(PrinterMode mode = ScreenResolution);
+   explicit QPrinter(const QPrinterInfo &printer, PrinterMode mode = ScreenResolution);
+   ~QPrinter();
+
+   int devType() const override;
 
    void setOutputFormat(OutputFormat format);
    OutputFormat outputFormat() const;
@@ -134,22 +113,35 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setCreator(const QString &);
    QString creator() const;
 
-   using QPagedPaintDevice::setPageSize;
-   using QPagedPaintDevice::setPageMargins;
+   void setMargins(const QMarginsF &margins) override;
+   QMarginsF margins(Unit unit) const;
+
+   bool setPageLayout(const QPageLayout &newPageLayout) override;
+   QPageLayout pageLayout() const override;
+
+   bool setPageOrientation(QPageLayout::Orientation orientation) override;
    void setOrientation(Orientation);
    Orientation orientation() const;
 
-   void setPageSize(PageSize) override;
-   PageSize pageSize() const;
+   bool setPageMargins(const QMarginsF &margins, QPageSize::Unit units) override;
+   bool setPageMargins(const QMarginsF &margins) override;
+
+   bool setPageSize(const QPageSize &pageSize) override;
+   void setPageSize(QPageSize::PageSizeId sizeId) override;
+   QPageSize::PageSizeId pageSize() const;
 
    void setPageSizeMM(const QSizeF &size) override;
-   void setPaperSize(PaperSize);
-   PaperSize paperSize() const;
 
+   void setPaperSize(QPageSize::PageSizeId sizeId);
    void setPaperSize(const QSizeF &paperSize, Unit unit);
+   QPageSize::PageSizeId paperSize() const;
    QSizeF paperSize(Unit unit) const;
+
    void setPaperName(const QString &paperName);
    QString paperName() const;
+
+   void setPrintRange(PrintRange range);
+   PrintRange printRange() const;
 
    void setPageOrder(PageOrder);
    PageOrder pageOrder() const;
@@ -193,10 +185,8 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setDoubleSidedPrinting(bool enable);
    bool doubleSidedPrinting() const;
 
-
    void setWinPageSize(int winPageSize);
    int winPageSize() const;
-
 
    QRect paperRect() const;
    QRect pageRect() const;
@@ -214,17 +204,9 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    QPaintEngine *paintEngine() const override;
    QPrintEngine *printEngine() const;
 
-
    void setFromTo(int fromPage, int toPage);
    int fromPage() const;
    int toPage() const;
-
-   void setPrintRange(PrintRange range);
-   PrintRange printRange() const;
-
-   void setMargins(const Margins &m) override;
-   void setPageMargins(qreal left, qreal top, qreal right, qreal bottom, Unit unit);
-   void getPageMargins(qreal *left, qreal *top, qreal *right, qreal *bottom, Unit unit) const;
 
  protected:
    int metric(PaintDeviceMetric) const override;
@@ -243,7 +225,8 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    friend class QPageSetupWidget;
 };
 
-#endif // QT_NO_PRINTER
+Q_DECLARE_METATYPE(QPrinter::Orientation)
 
+#endif // QT_NO_PRINTER
 
 #endif

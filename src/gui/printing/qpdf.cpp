@@ -1327,10 +1327,10 @@ int QPdfEngine::metric(QPaintDevice::PaintDeviceMetric metricType) const
         val = 1200;
         break;
     case QPaintDevice::PdmWidthMM:
-        val = qRound(d->m_pageLayout.paintRect(QPageLayout::Millimeter).width());
+        val = qRound(d->m_pageLayout.paintRect(QPageSize::Unit::Millimeter).width());
         break;
     case QPaintDevice::PdmHeightMM:
-        val = qRound(d->m_pageLayout.paintRect(QPageLayout::Millimeter).height());
+        val = qRound(d->m_pageLayout.paintRect(QPageSize::Unit::Millimeter).height());
         break;
     case QPaintDevice::PdmNumColors:
         val = INT_MAX;

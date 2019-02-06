@@ -31,45 +31,54 @@
 #include <qpagedpaintdevice.h>
 #include <qpagelayout.h>
 
+#include <qpdf_p.h>
+
 class QIODevice;
-class QPdfWriterPrivate;
 
 class Q_GUI_EXPORT QPdfWriter : public QObject, public QPagedPaintDevice
 {
     GUI_CS_OBJECT_MULTIPLE(QPdfWriter, QObject)
 
 public:
-    explicit QPdfWriter(const QString &filename);
-    explicit QPdfWriter(QIODevice *device);
-    ~QPdfWriter();
+   explicit QPdfWriter(const QString &filename);
+   explicit QPdfWriter(QIODevice *device);
+   ~QPdfWriter();
 
-    QString title() const;
-    void setTitle(const QString &title);
+   QString creator() const;
+   void setCreator(const QString &creator);
 
-    QString creator() const;
-    void setCreator(const QString &creator);
+   QString title() const;
+   void setTitle(const QString &title);
 
-    bool newPage();
+   bool newPage() override;
 
-    void setResolution(int resolution);
-    int resolution() const;
+   void setResolution(int resolution);
+   int resolution() const;
 
-    using QPagedPaintDevice::setPageSize;
+   QPageLayout pageLayout() const override;
+   bool setPageLayout(const QPageLayout &newPageLayout) override;
 
-    void setPageSize(PageSize size);
-    void setPageSizeMM(const QSizeF &size);
+   bool setPageOrientation(QPageLayout::Orientation orientation) override;
 
-    void setMargins(const Margins &m);
+   void setMargins(const QMarginsF &margins) override;
+
+   bool setPageMargins(const QMarginsF &margins) override;
+   bool setPageMargins(const QMarginsF &margins, QPageLayout::Unit units) override;
+
+   void setPageSizeMM(const QSizeF &size) override;
+
+   bool setPageSize(const QPageSize &size) override;
+   void setPageSize(QPageSize::PageSizeId sizeId)  override;   // not sure about this method
 
 protected:
-   QPaintEngine *paintEngine() const;
-   int metric(PaintDeviceMetric id) const;
-
-   QScopedPointer<QPdfWriterPrivate> d_ptr;
+   QPaintEngine *paintEngine() const override;
+   int metric(PaintDeviceMetric id) const override;
 
 private:
+    std::unique_ptr<QPdfEngine> m_engine;
+
     Q_DISABLE_COPY(QPdfWriter)
-    Q_DECLARE_PRIVATE(QPdfWriter)
+
 };
 
 #endif // QT_NO_PDF

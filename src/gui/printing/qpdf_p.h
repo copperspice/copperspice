@@ -178,14 +178,14 @@ public:
     Type type() const override;
     // end reimplementations QPaintEngine
 
-    // Printer stuff...
+    // Printer stuff
     bool newPage();
 
     // Page layout stuff
     void setPageLayout(const QPageLayout &pageLayout);
     void setPageSize(const QPageSize &pageSize);
     void setPageOrientation(QPageLayout::Orientation orientation);
-    void setPageMargins(const QMarginsF &margins, QPageLayout::Unit units = QPageLayout::Point);
+    void setPageMargins(const QMarginsF &margins, QPageSize::Unit units = QPageSize::Unit::Point);
 
     QPageLayout pageLayout() const;
 

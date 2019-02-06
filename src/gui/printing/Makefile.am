@@ -34,7 +34,6 @@ GUI_PRINTING_PRIVATE_INCLUDES = \
 	qabstractprintdialog_p.h \
 	qcups_p.h \
 	qpagesetupdialog_p.h \
-	qpagedpaintdevice_p.h \
 	qpagesetupdialog_unix_p.h \
 	qpdf_p.h \
 	qprint_p.h \

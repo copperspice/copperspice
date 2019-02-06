@@ -1247,7 +1247,7 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
                if (!d->devMode) {
                   break;
                }
-               const QPageSize pageSize = QPageSize(value.toSizeF(), QPageSize::Point);
+               const QPageSize pageSize = QPageSize(value.toSizeF(), QPageSize::Unit::Point);
                if (pageSize.isValid()) {
                   d->setPageSize(pageSize);
                   d->doReinit();
@@ -1259,7 +1259,7 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
             case PPK_PageMargins: {
                QList<QVariant> margins(value.toList());
                Q_ASSERT(margins.size() == 4);
-               d->m_pageLayout.setUnits(QPageLayout::Point);
+               d->m_pageLayout.setUnits(QPageSize::Unit::Point);
                d->m_pageLayout.setMargins(QMarginsF(margins.at(0).toReal(), margins.at(1).toReal(),
                      margins.at(2).toReal(), margins.at(3).toReal()));
                d->updateMetrics();
@@ -1467,7 +1467,7 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
 
                case PPK_PageMargins: {
                   QList<QVariant> list;
-                  QMarginsF margins = d->m_pageLayout.margins(QPageLayout::Point);
+                  QMarginsF margins = d->m_pageLayout.margins(QPageSize::Unit::Point);
                   list << margins.left() << margins.top() << margins.right() << margins.bottom();
                   value = list;
                   break;
@@ -1585,7 +1585,7 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
             const QPageSize usePageSize = printerPageSize.isValid() ? printerPageSize : pageSize;
 
             const QMarginsF printable = m_printDevice.printableMargins(usePageSize, m_pageLayout.orientation(), resolution);
-            m_pageLayout.setPageSize(usePageSize, qt_convertMargins(printable, QPageLayout::Point, m_pageLayout.units()));
+            m_pageLayout.setPageSize(usePageSize, qt_convertMargins(printable, QPageSize::Unit::Point, m_pageLayout.units()));
 
             // Setup if Windows custom size, i.e. not a known Windows ID
             if (printerPageSize.isValid()) {
@@ -1623,16 +1623,18 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
             updateMetrics();
          }
 
-            // Update the cached page paint metrics whenever page layout is changed
+         // Update the cached page paint metrics whenever page layout is changed
          void QWin32PrintEnginePrivate::updateMetrics() {
             m_paintRectPixels = m_pageLayout.paintRectPixels(resolution);
-            QSizeF sizeMM = m_pageLayout.paintRect(QPageLayout::Millimeter).size();
+
+            QSizeF sizeMM = m_pageLayout.paintRect(QPageSize::Unit::Millimeter).size();
             m_paintSizeMM = QSize(qRound(sizeMM.width()), qRound(sizeMM.height()));
+
             // Calculate the origin using the physical device pixels, not our paint pixels
             // Origin is defined as User Margins - Device Margins
-            QMarginsF margins = m_pageLayout.margins(QPageLayout::Millimeter) / 25.4;
+            QMarginsF margins = m_pageLayout.margins(QPageSize::Unit::Millimeter) / 25.4;
             origin_x = qRound(margins.left() * dpi_x) - GetDeviceCaps(hdc, PHYSICALOFFSETX);
-            origin_y = qRound(margins.top() * dpi_y) - GetDeviceCaps(hdc, PHYSICALOFFSETY);
+            origin_y = qRound(margins.top() * dpi_y)  - GetDeviceCaps(hdc, PHYSICALOFFSETY);
          }
 
          void QWin32PrintEnginePrivate::debugMetrics() const {
@@ -1661,6 +1663,7 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
                const QVariantMap userData = ti.fontEngine->userData().toMap();
                const QVariant hfontV = userData.value("hFont");
                const QVariant ttfV = userData.value("trueType");
+
                if (ttfV.toBool() && hfontV.canConvert<HFONT>()) {
                   hfont = hfontV.value<HFONT>();
                }

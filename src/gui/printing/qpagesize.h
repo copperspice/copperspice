@@ -28,7 +28,7 @@
 #include <qrectf.h>
 
 #if defined(B0)
-#undef B0 // Terminal hang-up.  We assume that you do not want that.
+#undef B0             // Terminal hang-up, assume you do not want that
 #endif
 
 class QPageSizePrivate;
@@ -39,10 +39,7 @@ class Q_GUI_EXPORT QPageSize
 {
  public:
 
-   // ### Qt6 Re-order and remove duplicates
-   // NOTE: Must keep in sync with QPagedPrintEngine and QPrinter
    enum PageSizeId {
-      // Existing Qt sizes
       A4,
       B5,
       Letter,
@@ -192,14 +189,14 @@ class Q_GUI_EXPORT QPageSize
       Envelope10 = Comm10E
    };
 
-   // NOTE: Must keep in sync with QPageLayout::Unit and QPrinter::Unit
    enum Unit {
       Millimeter,
       Point,
       Inch,
       Pica,
       Didot,
-      Cicero
+      Cicero,
+      DevicePixel
    };
 
    enum SizeMatchPolicy {
@@ -209,12 +206,9 @@ class Q_GUI_EXPORT QPageSize
    };
 
    QPageSize();
-   explicit QPageSize(PageSizeId pageSizeId);
-   explicit QPageSize(const QSize &pointSize, const QString &name = QString(),
-      SizeMatchPolicy matchPolicy = FuzzyMatch);
-
-   explicit QPageSize(const QSizeF &size, Unit units, const QString &name = QString(),
-      SizeMatchPolicy matchPolicy = FuzzyMatch);
+   explicit QPageSize(PageSizeId sizeId);
+   explicit QPageSize(const QSize &size, const QString &name = QString(), SizeMatchPolicy matchPolicy = FuzzyMatch);
+   explicit QPageSize(const QSizeF &size, Unit units, const QString &name = QString(), SizeMatchPolicy matchPolicy = FuzzyMatch);
 
    QPageSize(const QPageSize &other);
 
@@ -225,7 +219,6 @@ class Q_GUI_EXPORT QPageSize
       return *this;
    }
    QPageSize &operator=(const QPageSize &other);
-
 
    void swap(QPageSize &other) {
       qSwap(d, other.d);
@@ -290,7 +283,7 @@ inline bool operator!=(const QPageSize &lhs, const QPageSize &rhs)
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageSize &pageSize);
 
 Q_DECLARE_METATYPE(QPageSize)
-Q_DECLARE_METATYPE(QPageSize::PageSizeId)
 Q_DECLARE_METATYPE(QPageSize::Unit)
+Q_DECLARE_METATYPE(QPageSize::PageSizeId)
 
 #endif

@@ -189,12 +189,12 @@ void QPdfPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          d->duplex = static_cast<QPrint::DuplexMode>(value.toInt());
          break;
       case PPK_CustomPaperSize:
-         d->m_pageLayout.setPageSize(QPageSize(value.toSizeF(), QPageSize::Point));
+         d->m_pageLayout.setPageSize(QPageSize(value.toSizeF(), QPageSize::Unit::Point));
          break;
       case PPK_PageMargins: {
          QList<QVariant> margins(value.toList());
          Q_ASSERT(margins.size() == 4);
-         d->m_pageLayout.setUnits(QPageLayout::Point);
+         d->m_pageLayout.setUnits(QPageSize::Unit::Point);
          d->m_pageLayout.setMargins(QMarginsF(margins.at(0).toReal(), margins.at(1).toReal(),
                margins.at(2).toReal(), margins.at(3).toReal()));
          break;
@@ -315,7 +315,7 @@ QVariant QPdfPrintEngine::property(PrintEnginePropertyKey key) const
          break;
       case PPK_PageMargins: {
          QList<QVariant> list;
-         QMarginsF margins = d->m_pageLayout.margins(QPageLayout::Point);
+         QMarginsF margins = d->m_pageLayout.margins(QPageSize::Unit::Point);
          list << margins.left() << margins.top() << margins.right() << margins.bottom();
          ret = list;
          break;

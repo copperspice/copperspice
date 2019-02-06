@@ -29,8 +29,6 @@
 #include <qsize.h>
 #include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 // Define the Windows DMPAPER sizes for use in the look-up table
 // See http://msdn.microsoft.com/en-us/library/windows/desktop/dd319099.aspx
 
@@ -437,21 +435,21 @@ static QString qt_keyForCustomSize(const QSizeF &size, QPageSize::Unit units)
    QString abbrev;
 
    switch (units) {
-      case QPageSize::Millimeter:
+      case QPageSize::Unit::Millimeter:
          abbrev = "mm";
          break;
-      case QPageSize::Point:
+      case QPageSize::Unit::Point:
          break;
-      case QPageSize::Inch:
+      case QPageSize::Unit::Inch:
          abbrev = "in";
          break;
-      case QPageSize::Pica:
+      case QPageSize::Unit::Pica:
          abbrev = "pc";
          break;
-      case QPageSize::Didot:
+      case QPageSize::Unit::Didot:
          abbrev = "DD";
          break;
-      case QPageSize::Cicero:
+      case QPageSize::Unit::Cicero:
          abbrev = "CC";
          break;
    }
@@ -464,27 +462,27 @@ static QString qt_nameForCustomSize(const QSizeF &size, QPageSize::Unit units)
 {
    QString name;
    switch (units) {
-      case QPageSize::Millimeter:
+      case QPageSize::Unit::Millimeter:
          //: Custom size name in millimeters
          name = QCoreApplication::translate("QPageSize", "Custom (%1mm x %2mm)");
          break;
-      case QPageSize::Point:
+      case QPageSize::Unit::Point:
          //: Custom size name in points
          name = QCoreApplication::translate("QPageSize", "Custom (%1pt x %2pt)");
          break;
-      case QPageSize::Inch:
+      case QPageSize::Unit::Inch:
          //: Custom size name in inches
          name = QCoreApplication::translate("QPageSize", "Custom (%1in x %2in)");
          break;
-      case QPageSize::Pica:
+      case QPageSize::Unit::Pica:
          //: Custom size name in picas
          name = QCoreApplication::translate("QPageSize", "Custom (%1pc x %2pc)");
          break;
-      case QPageSize::Didot:
+      case QPageSize::Unit::Didot:
          //: Custom size name in didots
          name = QCoreApplication::translate("QPageSize", "Custom (%1DD x %2DD)");
          break;
-      case QPageSize::Cicero:
+      case QPageSize::Unit::Cicero:
          //: Custom size name in ciceros
          name = QCoreApplication::translate("QPageSize", "Custom (%1CC x %2CC)");
          break;
@@ -497,17 +495,17 @@ static QString qt_nameForCustomSize(const QSizeF &size, QPageSize::Unit units)
 static qreal qt_pointMultiplier(QPageSize::Unit unit)
 {
    switch (unit) {
-      case QPageSize::Millimeter:
+      case QPageSize::Unit::Millimeter:
          return 2.83464566929;
-      case QPageSize::Point:
+      case QPageSize::Unit::Point:
          return 1.0;
-      case QPageSize::Inch:
+      case QPageSize::Unit::Inch:
          return 72.0;
-      case QPageSize::Pica:
+      case QPageSize::Unit::Pica:
          return 12;
-      case QPageSize::Didot:
+      case QPageSize::Unit::Didot:
          return 1.065826771;
-      case QPageSize::Cicero:
+      case QPageSize::Unit::Cicero:
          return 12.789921252;
    }
    return 1.0;
@@ -542,10 +540,11 @@ static QSizeF qt_convertUnits(const QSizeF &size, QPageSize::Unit fromUnits, QPa
 
    QSizeF newSize = size;
    // First convert to points
-   if (fromUnits != QPageSize::Point) {
+   if (fromUnits != QPageSize::Unit::Point) {
       const qreal multiplier = qt_pointMultiplier(fromUnits);
       newSize = newSize * multiplier;
    }
+
    // Then convert from points to required units
    const qreal multiplier = qt_pointMultiplier(toUnits);
    // Try force to 2 decimal places for consistency
@@ -586,15 +585,18 @@ static QSizeF qt_convertPointsToUnits(const QSize &size, QPageSize::Unit units)
 static QSizeF qt_unitSize(QPageSize::PageSizeId pageSizeId, QPageSize::Unit units)
 {
    switch (units) {
-      case QPageSize::Millimeter:
+      case QPageSize::Unit::Millimeter:
          return QSizeF(qt_pageSizes[pageSizeId].widthMillimeters, qt_pageSizes[pageSizeId].heightMillimeters);
-      case QPageSize::Point:
+
+      case QPageSize::Unit::Point:
          return QSizeF(qt_pageSizes[pageSizeId].widthPoints, qt_pageSizes[pageSizeId].heightPoints);
-      case QPageSize::Inch:
+
+      case QPageSize::Unit::Inch:
          return QSizeF(qt_pageSizes[pageSizeId].widthInches, qt_pageSizes[pageSizeId].heightInches);
-      case QPageSize::Pica:
-      case QPageSize::Didot:
-      case QPageSize::Cicero:
+
+      case QPageSize::Unit::Pica:
+      case QPageSize::Unit::Didot:
+      case QPageSize::Unit::Cicero:
          return qt_convertPointsToUnits(QSize(qt_pageSizes[pageSizeId].widthPoints,
                   qt_pageSizes[pageSizeId].heightPoints), units);
    }
@@ -604,7 +606,7 @@ static QSizeF qt_unitSize(QPageSize::PageSizeId pageSizeId, QPageSize::Unit unit
 // Find matching standard page size for point size
 static QPageSize::PageSizeId qt_idForPointSize(const QSize &size, QPageSize::SizeMatchPolicy matchPolicy, QSize *match)
 {
-   if (!size.isValid()) {
+   if (! size.isValid()) {
       return QPageSize::Custom;
    }
 
@@ -691,8 +693,9 @@ static QPageSize::PageSizeId qt_idForSize(const QSizeF &size, QPageSize::Unit un
             return qt_pageSizes[i].id;
          }
       }
-   } else if (units == QPageSize::Inch) {
-      for (int i = 0; i <= QPageSize::LastPageSize; ++i) {
+
+   } else if (units == QPageSize::Unit::Inch) {
+      for (int i = 0; i <= QPageSize::PageSizeId::LastPageSize; ++i) {
          if (size.width() == qt_pageSizes[i].widthInches && size.height() == qt_pageSizes[i].heightInches) {
             if (match) {
                *match = QSize(qt_pageSizes[i].widthPoints, qt_pageSizes[i].heightPoints);
@@ -700,8 +703,9 @@ static QPageSize::PageSizeId qt_idForSize(const QSizeF &size, QPageSize::Unit un
             return qt_pageSizes[i].id;
          }
       }
-   } else if (units == QPageSize::Point) {
-      for (int i = 0; i <= QPageSize::LastPageSize; ++i) {
+
+   } else if (units == QPageSize::Unit::Point) {
+      for (int i = 0; i <= QPageSize::PageSizeId::LastPageSize; ++i) {
          if (size.width() == qt_pageSizes[i].widthPoints && size.height() == qt_pageSizes[i].heightPoints) {
             if (match) {
                *match = QSize(qt_pageSizes[i].widthPoints, qt_pageSizes[i].heightPoints);
@@ -758,16 +762,14 @@ class QPageSizePrivate : public QSharedData
 QPageSizePrivate::QPageSizePrivate()
    : m_id(QPageSize::Custom),
      m_windowsId(0),
-     m_units(QPageSize::Point)
+     m_units(QPageSize::Unit::Point)
 {
 }
 
 QPageSizePrivate::QPageSizePrivate(QPageSize::PageSizeId pageSizeId)
-   : m_id(QPageSize::Custom),
-     m_windowsId(0),
-     m_units(QPageSize::Point)
+   : m_id(QPageSize::Custom), m_windowsId(0), m_units(QPageSize::Unit::Point)
 {
-   if (pageSizeId >= QPageSize::PageSizeId(0) && pageSizeId <= QPageSize::LastPageSize) {
+   if (pageSizeId >= QPageSize::PageSizeId(0) && pageSizeId <= QPageSize::PageSizeId::LastPageSize) {
       init(pageSizeId, QString());
    }
 }
@@ -775,7 +777,7 @@ QPageSizePrivate::QPageSizePrivate(QPageSize::PageSizeId pageSizeId)
 QPageSizePrivate::QPageSizePrivate(const QSize &pointSize, const QString &name, QPageSize::SizeMatchPolicy matchPolicy)
    : m_id(QPageSize::Custom),
      m_windowsId(0),
-     m_units(QPageSize::Point)
+     m_units(QPageSize::Unit::Point)
 {
    if (pointSize.isValid()) {
       QPageSize::PageSizeId id = qt_idForPointSize(pointSize, matchPolicy, 0);
@@ -787,7 +789,7 @@ QPageSizePrivate::QPageSizePrivate(const QSizeF &size, QPageSize::Unit units,
    const QString &name, QPageSize::SizeMatchPolicy matchPolicy)
    : m_id(QPageSize::Custom),
      m_windowsId(0),
-     m_units(QPageSize::Point)
+     m_units(QPageSize::Unit::Point)
 {
    if (size.isValid()) {
       QPageSize::PageSizeId id = qt_idForSize(size, units, matchPolicy, 0);
@@ -798,7 +800,7 @@ QPageSizePrivate::QPageSizePrivate(const QSizeF &size, QPageSize::Unit units,
 QPageSizePrivate::QPageSizePrivate(const QString &key, const QSize &pointSize, const QString &name)
    : m_id(QPageSize::Custom),
      m_windowsId(0),
-     m_units(QPageSize::Point)
+     m_units(QPageSize::Unit::Point)
 {
    if (!key.isEmpty() && pointSize.isValid()) {
       QPageSize::PageSizeId id = qt_idForPpdKey(key, 0);
@@ -814,7 +816,7 @@ QPageSizePrivate::QPageSizePrivate(const QString &key, const QSize &pointSize, c
 QPageSizePrivate::QPageSizePrivate(int windowsId, const QSize &pointSize, const QString &name)
    : m_id(QPageSize::Custom),
      m_windowsId(0),
-     m_units(QPageSize::Point)
+     m_units(QPageSize::Unit::Point)
 {
    if (windowsId > 0 && pointSize.isValid()) {
       QPageSize::PageSizeId id = qt_idForWindowsID(windowsId, 0);
@@ -848,7 +850,7 @@ void QPageSizePrivate::init(const QSize &size, const QString &name)
 {
    m_id = QPageSize::Custom;
    m_size = size;
-   m_units = QPageSize::Point;
+   m_units = QPageSize::Unit::Point;
    m_key = qt_keyForCustomSize(m_size, m_units);
    m_name = name.isEmpty() ? qt_nameForCustomSize(m_size, m_units) : name;
    m_windowsId = 0;
@@ -897,7 +899,7 @@ QSizeF QPageSizePrivate::size(QPageSize::Unit units) const
    }
 
    // If want points we already have them
-   if (units == QPageSize::Point) {
+   if (units == QPageSize::Unit::Point) {
       return QSizeF(m_pointSize.width(), m_pointSize.height());
    }
 
@@ -1624,7 +1626,6 @@ QSize QPageSize::sizePixels(PageSizeId pageSizeId, int resolution)
    return qt_convertPointsToPixels(sizePoints(pageSizeId), resolution);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QPageSize &pageSize)
 {
    QDebugStateSaver saver(dbg);
@@ -1641,6 +1642,5 @@ QDebug operator<<(QDebug dbg, const QPageSize &pageSize)
    dbg << ')';
    return dbg;
 }
-#endif
 
-QT_END_NAMESPACE
+

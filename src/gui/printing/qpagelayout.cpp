@@ -31,17 +31,17 @@
 Q_GUI_EXPORT qreal qt_pointMultiplier(QPageLayout::Unit unit)
 {
    switch (unit) {
-      case QPageLayout::Millimeter:
+      case QPageSize::Unit::Millimeter:
          return 2.83464566929;
-      case QPageLayout::Point:
+      case QPageSize::Unit::Point:
          return 1.0;
-      case QPageLayout::Inch:
+      case QPageSize::Unit::Inch:
          return 72.0;
-      case QPageLayout::Pica:
+      case QPageSize::Unit::Pica:
          return 12;
-      case QPageLayout::Didot:
+      case QPageSize::Unit::Didot:
          return 1.065826771;
-      case QPageLayout::Cicero:
+      case QPageSize::Unit::Cicero:
          return 12.789921252;
    }
    return 1.0;
@@ -58,14 +58,14 @@ QPointF qt_convertPoint(const QPointF &xy, QPageLayout::Unit fromUnits, QPageLay
    }
 
    // If converting to points then convert and round to 0 decimal places
-   if (toUnits == QPageLayout::Point) {
+   if (toUnits == QPageSize::Unit::Point) {
       const qreal multiplier = qt_pointMultiplier(fromUnits);
       return QPointF(qRound(xy.x() * multiplier),
             qRound(xy.y() * multiplier));
    }
 
    // If converting to other units, need to convert to unrounded points first
-   QPointF pointXy = (fromUnits == QPageLayout::Point) ? xy : xy * qt_pointMultiplier(fromUnits);
+   QPointF pointXy = (fromUnits == QPageSize::Unit::Point) ? xy : xy * qt_pointMultiplier(fromUnits);
 
    // Then convert from points to required units rounded to 2 decimal places
    const qreal multiplier = qt_pointMultiplier(toUnits);
@@ -81,7 +81,7 @@ Q_GUI_EXPORT QMarginsF qt_convertMargins(const QMarginsF &margins, QPageLayout::
    }
 
    // If converting to points then convert and round to 0 decimal places
-   if (toUnits == QPageLayout::Point) {
+   if (toUnits == QPageSize::Unit::Point) {
       const qreal multiplier = qt_pointMultiplier(fromUnits);
       return QMarginsF(qRound(margins.left()   * multiplier),
             qRound(margins.top()    * multiplier),
@@ -90,7 +90,7 @@ Q_GUI_EXPORT QMarginsF qt_convertMargins(const QMarginsF &margins, QPageLayout::
    }
 
    // If converting to other units, need to convert to unrounded points first
-   QMarginsF pointMargins = fromUnits == QPageLayout::Point ? margins : margins * qt_pointMultiplier(fromUnits);
+   QMarginsF pointMargins = fromUnits == QPageSize::Unit::Point ? margins : margins * qt_pointMultiplier(fromUnits);
 
    // Then convert from points to required units rounded to 2 decimal places
    const qreal multiplier = qt_pointMultiplier(toUnits);
@@ -184,8 +184,8 @@ bool QPageLayoutPrivate::isEquivalentTo(const QPageLayoutPrivate &other) const
 {
    return m_pageSize.isEquivalentTo(other.m_pageSize)
       && m_orientation == other.m_orientation
-      && qt_convertMargins(m_margins, m_units, QPageLayout::Point)
-      == qt_convertMargins(other.m_margins, other.m_units, QPageLayout::Point);
+      && qt_convertMargins(m_margins, m_units, QPageSize::Unit::Point)
+      == qt_convertMargins(other.m_margins, other.m_units, QPageSize::Unit::Point);
 }
 
 bool QPageLayoutPrivate::isValid() const
@@ -208,7 +208,7 @@ QMarginsF QPageLayoutPrivate::margins(QPageLayout::Unit units) const
 
 QMargins QPageLayoutPrivate::marginsPoints() const
 {
-   return qt_convertMargins(m_margins, m_units, QPageLayout::Point).toMargins();
+   return qt_convertMargins(m_margins, m_units, QPageSize::Unit::Point).toMargins();
 }
 
 QMargins QPageLayoutPrivate::marginsPixels(int resolution) const
@@ -910,23 +910,24 @@ QDebug operator<<(QDebug dbg, const QPageLayout &layout)
          << (layout.orientation() == QPageLayout::Portrait ? "Portrait" : "Landscape")
          << ", l:" << margins.left() << " r:" << margins.right() << " t:"
          << margins.top() << " b:" << margins.bottom() << ' ';
+
       switch (layout.units()) {
-         case QPageLayout::Millimeter:
+         case QPageSize::Unit::Millimeter:
             dbg << "mm";
             break;
-         case QPageLayout::Point:
+         case QPageSize::Unit::Point:
             dbg << "pt";
             break;
-         case QPageLayout::Inch:
+         case QPageSize::Unit::Inch:
             dbg << "in";
             break;
-         case QPageLayout::Pica:
+         case QPageSize::Unit::Pica:
             dbg << "pc";
             break;
-         case QPageLayout::Didot:
+         case QPageSize::Unit::Didot:
             dbg << "DD";
             break;
-         case QPageLayout::Cicero:
+         case QPageSize::Unit::Cicero:
             dbg << "CC";
             break;
       }
