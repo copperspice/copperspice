@@ -94,6 +94,7 @@ include src/gui/image/Makefile.am
 include src/gui/itemviews/Makefile.am
 include src/gui/kernel/Makefile.am
 include src/gui/math3d/Makefile.am
+include src/gui/opengl/Makefile.am
 include src/gui/painting/Makefile.am
 include src/gui/platform/Makefile.am
 include src/gui/printing/Makefile.am

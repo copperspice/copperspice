@@ -6,7 +6,12 @@ add_definitions(
     -DMNG_NO_INCLUDE_JNG
     -DPNG_NO_CONFIG_H
 )
-set(EXTRA_GUI_LIBS CsCore${BUILD_ABI})
+
+set(EXTRA_GUI_LIBS
+   CsCore${BUILD_ABI}
+   ${OPENGL_LIBRARIES}
+)
+
 set(EXTRA_GUI_CXXFLAGS)
 set(EXTRA_GUI_LDFLAGS)
 
@@ -57,6 +62,7 @@ include(itemviews/itemviews.cmake)
 include(kernel/kernel.cmake)
 include(math3d/math3d.cmake)
 include(painting/painting.cmake)
+include(opengl/opengl.cmake)
 include(painting/painting.cmake)
 include(platform/platform.cmake)
 include(printing/printing.cmake)
@@ -124,6 +130,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         comdlg32
         imm32
         uuid
+        opengl32
+        kernel32
+        user32
     )
     set(EXTRA_GUI_LDFLAGS
         ${EXTRA_GUI_LDFLAGS}
@@ -133,7 +142,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         -DQT_NO_STYLE_MAC
         -DQT_NO_LPR
         -DQT_NO_DIRECTWRITE
-   )
+    )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -148,6 +157,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(EXTRA_GUI_LDFLAGS
         ${EXTRA_GUI_LDFLAGS}
         -framework Carbon
+        -framework OpenGL
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSVISTA)
 endif()
