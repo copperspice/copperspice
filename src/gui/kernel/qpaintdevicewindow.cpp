@@ -27,28 +27,30 @@
 
 void QPaintDeviceWindow::update()
 {
-    update(QRect(QPoint(0,0), size()));
+   update(QRect(QPoint(0, 0), size()));
 }
 
 void QPaintDeviceWindow::update(const QRect &rect)
 {
-    Q_D(QPaintDeviceWindow);
-    d->dirtyRegion += rect;
-    if (isExposed())
-        requestUpdate();
+   Q_D(QPaintDeviceWindow);
+   d->dirtyRegion += rect;
+   if (isExposed()) {
+      requestUpdate();
+   }
 }
 
 void QPaintDeviceWindow::update(const QRegion &region)
 {
-    Q_D(QPaintDeviceWindow);
-    d->dirtyRegion += region;
-    if (isExposed())
-        requestUpdate();
+   Q_D(QPaintDeviceWindow);
+   d->dirtyRegion += region;
+   if (isExposed()) {
+      requestUpdate();
+   }
 }
 
 void QPaintDeviceWindow::paintEvent(QPaintEvent *event)
 {
-    // Do nothing
+   // Do nothing
 }
 
 /*!
@@ -56,97 +58,104 @@ void QPaintDeviceWindow::paintEvent(QPaintEvent *event)
  */
 int QPaintDeviceWindow::metric(PaintDeviceMetric metric) const
 {
-    QScreen *screen = this->screen();
-    if (!screen && QGuiApplication::primaryScreen())
-        screen = QGuiApplication::primaryScreen();
+   QScreen *screen = this->screen();
+   if (!screen && QGuiApplication::primaryScreen()) {
+      screen = QGuiApplication::primaryScreen();
+   }
 
-    switch (metric) {
-    case PdmWidth:
-        return width();
-    case PdmWidthMM:
-        if (screen)
+   switch (metric) {
+      case PdmWidth:
+         return width();
+      case PdmWidthMM:
+         if (screen) {
             return width() * screen->physicalSize().width() / screen->geometry().width();
-        break;
-    case PdmHeight:
-        return height();
-    case PdmHeightMM:
-        if (screen)
+         }
+         break;
+      case PdmHeight:
+         return height();
+      case PdmHeightMM:
+         if (screen) {
             return height() * screen->physicalSize().height() / screen->geometry().height();
-        break;
-    case PdmDpiX:
-        if (screen)
+         }
+         break;
+      case PdmDpiX:
+         if (screen) {
             return qRound(screen->logicalDotsPerInchX());
-        break;
-    case PdmDpiY:
-        if (screen)
+         }
+         break;
+      case PdmDpiY:
+         if (screen) {
             return qRound(screen->logicalDotsPerInchY());
-        break;
-    case PdmPhysicalDpiX:
-        if (screen)
+         }
+         break;
+      case PdmPhysicalDpiX:
+         if (screen) {
             return qRound(screen->physicalDotsPerInchX());
-        break;
-    case PdmPhysicalDpiY:
-        if (screen)
+         }
+         break;
+      case PdmPhysicalDpiY:
+         if (screen) {
             return qRound(screen->physicalDotsPerInchY());
-        break;
-    case PdmDevicePixelRatio:
-        return int(QWindow::devicePixelRatio());
-        break;
-    case PdmDevicePixelRatioScaled:
-        return int(QWindow::devicePixelRatio() * devicePixelRatioFScale());
-        break;
-    default:
-        break;
-    }
+         }
+         break;
+      case PdmDevicePixelRatio:
+         return int(QWindow::devicePixelRatio());
+         break;
+      case PdmDevicePixelRatioScaled:
+         return int(QWindow::devicePixelRatio() * devicePixelRatioFScale());
+         break;
+      default:
+         break;
+   }
 
-    return QPaintDevice::metric(metric);
+   return QPaintDevice::metric(metric);
 }
 
 // internal
 void QPaintDeviceWindow::exposeEvent(QExposeEvent *exposeEvent)
 {
-    Q_D(QPaintDeviceWindow);
+   Q_D(QPaintDeviceWindow);
 
-    if (isExposed()) {
-        d->markWindowAsDirty();
-        // Do not rely on exposeEvent->region() as it has some issues for the
-        // time being, namely that it is sometimes in local coordinates,
-        // sometimes relative to the parent, depending on the platform plugin.
-        // We require local coords here.
-        d->doFlush(QRect(QPoint(0, 0), size()));
+   if (isExposed()) {
+      d->markWindowAsDirty();
+      // Do not rely on exposeEvent->region() as it has some issues for the
+      // time being, namely that it is sometimes in local coordinates,
+      // sometimes relative to the parent, depending on the platform plugin.
+      // We require local coords here.
+      d->doFlush(QRect(QPoint(0, 0), size()));
 
-    } else if (!d->dirtyRegion.isEmpty()) {
-        // Updates while non-exposed were ignored. Schedule an update now.
-        requestUpdate();
-    }
+   } else if (!d->dirtyRegion.isEmpty()) {
+      // Updates while non-exposed were ignored. Schedule an update now.
+      requestUpdate();
+   }
 }
 
 // internal
 bool QPaintDeviceWindow::event(QEvent *event)
 {
-    Q_D(QPaintDeviceWindow);
+   Q_D(QPaintDeviceWindow);
 
-    if (event->type() == QEvent::UpdateRequest) {
-        if (handle()) {
-            // platform window may be gone when the window is closed during app exit
-            d->handleUpdateEvent();
-        }
+   if (event->type() == QEvent::UpdateRequest) {
+      if (handle()) {
+         // platform window may be gone when the window is closed during app exit
+         d->handleUpdateEvent();
+      }
 
-        return true;
-    }
+      return true;
+   }
 
-    return QWindow::event(event);
+   return QWindow::event(event);
 }
 
 // internal
 QPaintDeviceWindow::QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *parent)
-    : QWindow(dd, parent)
+   : QWindow(dd, parent)
 {
 }
 
 // internal
 QPaintEngine *QPaintDeviceWindow::paintEngine() const
 {
-    return 0;
+   return 0;
 }
 

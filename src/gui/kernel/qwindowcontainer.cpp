@@ -31,95 +31,95 @@
 
 class QWindowContainerPrivate : public QWidgetPrivate
 {
-public:
-    Q_DECLARE_PUBLIC(QWindowContainer)
+ public:
+   Q_DECLARE_PUBLIC(QWindowContainer)
 
-    QWindowContainerPrivate()
-        : window(0)
-        , oldFocusWindow(0)
-        , usesNativeWidgets(false)
-    {
-    }
+   QWindowContainerPrivate()
+      : window(0)
+      , oldFocusWindow(0)
+      , usesNativeWidgets(false) {
+   }
 
-    ~QWindowContainerPrivate() { }
+   ~QWindowContainerPrivate() { }
 
-    static QWindowContainerPrivate *get(QWidget *w) {
-        QWindowContainer *wc = qobject_cast<QWindowContainer *>(w);
-        if (wc)
-            return wc->d_func();
-        return 0;
-    }
+   static QWindowContainerPrivate *get(QWidget *w) {
+      QWindowContainer *wc = qobject_cast<QWindowContainer *>(w);
+      if (wc) {
+         return wc->d_func();
+      }
+      return 0;
+   }
 
-    void updateGeometry() {
-        Q_Q(QWindowContainer);
-        if (!q->isWindow() && (q->geometry().bottom() <= 0 || q->geometry().right() <= 0))
-            /* Qt (e.g. QSplitter) sometimes prefer to hide a widget by *not* calling
-               setVisible(false). This is often done by setting its coordinates to a sufficiently
-               negative value so that its clipped outside the parent. Since a QWindow is not clipped
-               to widgets in general, it needs to be dealt with as a special case.
-            */
-            window->setGeometry(q->geometry());
-        else if (usesNativeWidgets)
-            window->setGeometry(q->rect());
-        else
-            window->setGeometry(QRect(q->mapTo(q->window(), QPoint()), q->size()));
-    }
+   void updateGeometry() {
+      Q_Q(QWindowContainer);
+      if (!q->isWindow() && (q->geometry().bottom() <= 0 || q->geometry().right() <= 0))
+         /* Qt (e.g. QSplitter) sometimes prefer to hide a widget by *not* calling
+            setVisible(false). This is often done by setting its coordinates to a sufficiently
+            negative value so that its clipped outside the parent. Since a QWindow is not clipped
+            to widgets in general, it needs to be dealt with as a special case.
+         */
+      {
+         window->setGeometry(q->geometry());
+      } else if (usesNativeWidgets) {
+         window->setGeometry(q->rect());
+      } else {
+         window->setGeometry(QRect(q->mapTo(q->window(), QPoint()), q->size()));
+      }
+   }
 
-    void updateUsesNativeWidgets()
-    {
-        if (usesNativeWidgets || window->parent() == 0)
-            return;
-        Q_Q(QWindowContainer);
-        if (q->internalWinId()) {
-            // Allow use native widgets if the window container is already a native widget
-            usesNativeWidgets = true;
-            return;
-        }
+   void updateUsesNativeWidgets() {
+      if (usesNativeWidgets || window->parent() == 0) {
+         return;
+      }
+      Q_Q(QWindowContainer);
+      if (q->internalWinId()) {
+         // Allow use native widgets if the window container is already a native widget
+         usesNativeWidgets = true;
+         return;
+      }
 
-        QWidget *p = q->parentWidget();
+      QWidget *p = q->parentWidget();
 
-        while (p) {
-            if (
+      while (p) {
+         if (
 
 #ifndef QT_NO_MDIAREA
-                qobject_cast<QMdiSubWindow *>(p) != 0 ||
+            qobject_cast<QMdiSubWindow *>(p) != 0 ||
 #endif
 
-                qobject_cast<QAbstractScrollArea *>(p) != 0) {
-                q->winId();
-                usesNativeWidgets = true;
-                break;
-            }
-            p = p->parentWidget();
-        }
-    }
+            qobject_cast<QAbstractScrollArea *>(p) != 0) {
+            q->winId();
+            usesNativeWidgets = true;
+            break;
+         }
+         p = p->parentWidget();
+      }
+   }
 
-    void markParentChain() {
-        Q_Q(QWindowContainer);
+   void markParentChain() {
+      Q_Q(QWindowContainer);
 
-        QWidget *parentContainer = q;
+      QWidget *parentContainer = q;
 
-        while (parentContainer) {
+      while (parentContainer) {
+         QWidgetPrivate *obj = static_cast<QWidgetPrivate *>(QWidgetPrivate::get(parentContainer));
 
-            // BROOM - fix the private
-            QWidgetPrivate *obj = static_cast<QWidgetPrivate *>(QWidgetPrivate::get(parentContainer));
+         obj->createExtra();
+         obj->extra->hasWindowContainer = true;
 
-            obj->createExtra();
-            obj->extra->hasWindowContainer = true;
+         parentContainer = parentContainer->parentWidget();
+      }
+   }
 
-            parentContainer = parentContainer->parentWidget();
-        }
-    }
+   bool isStillAnOrphan() const {
+      return window->parent() == &fakeParent;
+   }
 
-    bool isStillAnOrphan() const {
-        return window->parent() == &fakeParent;
-    }
+   QPointer<QWindow> window;
+   QWindow *oldFocusWindow;
+   QWindow fakeParent;
 
-    QPointer<QWindow> window;
-    QWindow *oldFocusWindow;
-    QWindow fakeParent;
-
-    uint usesNativeWidgets : 1;
+   uint usesNativeWidgets : 1;
 };
 
 
@@ -183,7 +183,7 @@ public:
 
 QWidget *QWidget::createWindowContainer(QWindow *window, QWidget *parent, Qt::WindowFlags flags)
 {
-    return new QWindowContainer(window, parent, flags);
+   return new QWindowContainer(window, parent, flags);
 }
 
 
@@ -193,32 +193,33 @@ QWidget *QWidget::createWindowContainer(QWindow *window, QWidget *parent, Qt::Wi
  */
 
 QWindowContainer::QWindowContainer(QWindow *embeddedWindow, QWidget *parent, Qt::WindowFlags flags)
-    : QWidget(*new QWindowContainerPrivate, parent, flags)
+   : QWidget(*new QWindowContainerPrivate, parent, flags)
 {
-    Q_D(QWindowContainer);
-    if (!embeddedWindow) {
-        qWarning("QWindowContainer: embedded window cannot be null");
-        return;
-    }
+   Q_D(QWindowContainer);
+   if (!embeddedWindow) {
+      qWarning("QWindowContainer: embedded window cannot be null");
+      return;
+   }
 
-    // The embedded QWindow must use the same logic as QWidget when it comes to the surface type.
-    // Otherwise we may end up with BadMatch failures on X11.
-    if (embeddedWindow->surfaceType() == QSurface::RasterSurface
-        && QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)
-        && !QApplication::testAttribute(Qt::AA_ForceRasterWidgets))
-        embeddedWindow->setSurfaceType(QSurface::RasterGLSurface);
+   // The embedded QWindow must use the same logic as QWidget when it comes to the surface type.
+   // Otherwise we may end up with BadMatch failures on X11.
+   if (embeddedWindow->surfaceType() == QSurface::RasterSurface
+      && QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)
+      && !QApplication::testAttribute(Qt::AA_ForceRasterWidgets)) {
+      embeddedWindow->setSurfaceType(QSurface::RasterGLSurface);
+   }
 
-    d->window = embeddedWindow;
-    d->window->setParent(&d->fakeParent);
-    setAcceptDrops(true);
+   d->window = embeddedWindow;
+   d->window->setParent(&d->fakeParent);
+   setAcceptDrops(true);
 
-    connect(QGuiApplication::instance(), SIGNAL(focusWindowChanged(QWindow*)), this, SLOT(focusWindowChanged(QWindow*)));
+   connect(QGuiApplication::instance(), SIGNAL(focusWindowChanged(QWindow *)), this, SLOT(focusWindowChanged(QWindow *)));
 }
 
 QWindow *QWindowContainer::containedWindow() const
 {
-    Q_D(const QWindowContainer);
-    return d->window;
+   Q_D(const QWindowContainer);
+   return d->window;
 }
 
 /*!
@@ -227,8 +228,8 @@ QWindow *QWindowContainer::containedWindow() const
 
 QWindowContainer::~QWindowContainer()
 {
-    Q_D(QWindowContainer);
-    delete d->window;
+   Q_D(QWindowContainer);
+   delete d->window;
 }
 
 
@@ -239,13 +240,14 @@ QWindowContainer::~QWindowContainer()
 
 void QWindowContainer::focusWindowChanged(QWindow *focusWindow)
 {
-    Q_D(QWindowContainer);
-    d->oldFocusWindow = focusWindow;
-    if (focusWindow == d->window) {
-        QWidget *widget = QApplication::focusWidget();
-        if (widget)
-            widget->clearFocus();
-    }
+   Q_D(QWindowContainer);
+   d->oldFocusWindow = focusWindow;
+   if (focusWindow == d->window) {
+      QWidget *widget = QApplication::focusWidget();
+      if (widget) {
+         widget->clearFocus();
+      }
+   }
 }
 
 /*!
@@ -254,163 +256,161 @@ void QWindowContainer::focusWindowChanged(QWindow *focusWindow)
 
 bool QWindowContainer::event(QEvent *e)
 {
-    Q_D(QWindowContainer);
-    if (!d->window)
-        return QWidget::event(e);
+   Q_D(QWindowContainer);
+   if (!d->window) {
+      return QWidget::event(e);
+   }
 
-    QEvent::Type type = e->type();
-    switch (type) {
-    case QEvent::ChildRemoved: {
-        QChildEvent *ce = static_cast<QChildEvent *>(e);
-        if (ce->child() == d->window)
+   QEvent::Type type = e->type();
+   switch (type) {
+      case QEvent::ChildRemoved: {
+         QChildEvent *ce = static_cast<QChildEvent *>(e);
+         if (ce->child() == d->window) {
             d->window = 0;
-        break;
-    }
-    // The only thing we are interested in is making sure our sizes stay
-    // in sync, so do a catch-all case.
-    case QEvent::Resize:
-        d->updateGeometry();
-        break;
-    case QEvent::Move:
-        d->updateGeometry();
-        break;
-    case QEvent::PolishRequest:
-        d->updateGeometry();
-        break;
-    case QEvent::Show:
-        d->updateUsesNativeWidgets();
-        if (d->isStillAnOrphan()) {
+         }
+         break;
+      }
+      // The only thing we are interested in is making sure our sizes stay
+      // in sync, so do a catch-all case.
+      case QEvent::Resize:
+         d->updateGeometry();
+         break;
+      case QEvent::Move:
+         d->updateGeometry();
+         break;
+      case QEvent::PolishRequest:
+         d->updateGeometry();
+         break;
+      case QEvent::Show:
+         d->updateUsesNativeWidgets();
+         if (d->isStillAnOrphan()) {
             d->window->setParent(d->usesNativeWidgets
-                                 ? windowHandle()
-                                 : window()->windowHandle());
-        }
-        if (d->window->parent()) {
+               ? windowHandle()
+               : window()->windowHandle());
+         }
+         if (d->window->parent()) {
             d->markParentChain();
             d->window->show();
-        }
-        break;
-    case QEvent::Hide:
-        if (d->window->parent())
+         }
+         break;
+      case QEvent::Hide:
+         if (d->window->parent()) {
             d->window->hide();
-        break;
-    case QEvent::FocusIn:
-        if (d->window->parent()) {
+         }
+         break;
+      case QEvent::FocusIn:
+         if (d->window->parent()) {
             if (d->oldFocusWindow != d->window) {
-                d->window->requestActivate();
+               d->window->requestActivate();
             } else {
-                QWidget *next = nextInFocusChain();
-                next->setFocus();
+               QWidget *next = nextInFocusChain();
+               next->setFocus();
             }
-        }
-        break;
+         }
+         break;
 #ifndef QT_NO_DRAGANDDROP
-    case QEvent::Drop:
-    case QEvent::DragMove:
-    case QEvent::DragLeave:
-        QCoreApplication::sendEvent(d->window, e);
-        return e->isAccepted();
-    case QEvent::DragEnter:
-        // Don't reject drag events for the entire widget when one
-        // item rejects the drag enter
-        QCoreApplication::sendEvent(d->window, e);
-        e->accept();
-        return true;
+      case QEvent::Drop:
+      case QEvent::DragMove:
+      case QEvent::DragLeave:
+         QCoreApplication::sendEvent(d->window, e);
+         return e->isAccepted();
+      case QEvent::DragEnter:
+         // Don't reject drag events for the entire widget when one
+         // item rejects the drag enter
+         QCoreApplication::sendEvent(d->window, e);
+         e->accept();
+         return true;
 #endif
-    default:
-        break;
-    }
+      default:
+         break;
+   }
 
-    return QWidget::event(e);
+   return QWidget::event(e);
 }
 
 typedef void (*qwindowcontainer_traverse_callback)(QWidget *parent);
 
 static void qwindowcontainer_traverse(QWidget *parent, qwindowcontainer_traverse_callback callback)
 {
-    const QObjectList &children = parent->children();
+   const QObjectList &children = parent->children();
 
-    for (int i=0; i<children.size(); ++i) {
-        QWidget *w = qobject_cast<QWidget *>(children.at(i));
+   for (int i = 0; i < children.size(); ++i) {
+      QWidget *w = qobject_cast<QWidget *>(children.at(i));
 
-        if (w) {
+      if (w) {
+         QWidgetPrivate *wd = static_cast<QWidgetPrivate *>(QWidgetPrivate::get(w));
 
-            // BROOM - fix the private
-            QWidgetPrivate *wd = static_cast<QWidgetPrivate *>(QWidgetPrivate::get(w));
-
-            if (wd->extra && wd->extra->hasWindowContainer) {
-                callback(w);
-            }
-        }
-    }
+         if (wd->extra && wd->extra->hasWindowContainer) {
+            callback(w);
+         }
+      }
+   }
 }
 
 void QWindowContainer::toplevelAboutToBeDestroyed(QWidget *parent)
 {
-    // BROOM - fix the private
-    if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
-        d->window->setParent(&d->fakeParent);
-    }
+   if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
+      d->window->setParent(&d->fakeParent);
+   }
 
-    qwindowcontainer_traverse(parent, toplevelAboutToBeDestroyed);
+   qwindowcontainer_traverse(parent, toplevelAboutToBeDestroyed);
 }
 
 void QWindowContainer::parentWasChanged(QWidget *parent)
 {
-    // BROOM - fix the private
-    if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
+   if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
 
-        if (d->window->parent()) {
-            d->updateUsesNativeWidgets();
-            d->markParentChain();
+      if (d->window->parent()) {
+         d->updateUsesNativeWidgets();
+         d->markParentChain();
 
-            QWidget *toplevel = d->usesNativeWidgets ? parent : parent->window();
+         QWidget *toplevel = d->usesNativeWidgets ? parent : parent->window();
 
-            if (!toplevel->windowHandle()) {
-                QWidgetPrivate *tld = static_cast<QWidgetPrivate *>(QWidgetPrivate::get(toplevel));
-                tld->createTLExtra();
-                tld->createTLSysExtra();
-                Q_ASSERT(toplevel->windowHandle());
-            }
+         if (!toplevel->windowHandle()) {
+            QWidgetPrivate *tld = static_cast<QWidgetPrivate *>(QWidgetPrivate::get(toplevel));
+            tld->createTLExtra();
+            tld->createTLSysExtra();
+            Q_ASSERT(toplevel->windowHandle());
+         }
 
-            d->window->setParent(toplevel->windowHandle());
-            d->updateGeometry();
-        }
-    }
+         d->window->setParent(toplevel->windowHandle());
+         d->updateGeometry();
+      }
+   }
 
-    qwindowcontainer_traverse(parent, parentWasChanged);
+   qwindowcontainer_traverse(parent, parentWasChanged);
 }
 
 void QWindowContainer::parentWasMoved(QWidget *parent)
 {
-    // BROOM - fix the private
-    if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
-        if (d->window->parent())
-            d->updateGeometry();
-    }
+   if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
+      if (d->window->parent()) {
+         d->updateGeometry();
+      }
+   }
 
-    qwindowcontainer_traverse(parent, parentWasMoved);
+   qwindowcontainer_traverse(parent, parentWasMoved);
 }
 
 void QWindowContainer::parentWasRaised(QWidget *parent)
 {
-    // BROOM - fix the private
-    if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
-        if (d->window->parent())
-            d->window->raise();
-    }
+   if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
+      if (d->window->parent()) {
+         d->window->raise();
+      }
+   }
 
-    qwindowcontainer_traverse(parent, parentWasRaised);
+   qwindowcontainer_traverse(parent, parentWasRaised);
 }
 
 void QWindowContainer::parentWasLowered(QWidget *parent)
 {
-    // BROOM - fix the private
-    if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
-        if (d->window->parent())
-            d->window->lower();
-    }
+   if (QWindowContainerPrivate *d = QWindowContainerPrivate::get(parent)) {
+      if (d->window->parent()) {
+         d->window->lower();
+      }
+   }
 
-    qwindowcontainer_traverse(parent, parentWasLowered);
+   qwindowcontainer_traverse(parent, parentWasLowered);
 }
-
 

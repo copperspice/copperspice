@@ -31,32 +31,32 @@ class QPaintEvent;
 
 class Q_GUI_EXPORT QPaintDeviceWindow : public QWindow, public QPaintDevice
 {
-    GUI_CS_OBJECT(QPaintDeviceWindow)
-    Q_DECLARE_PRIVATE(QPaintDeviceWindow)
+   GUI_CS_OBJECT(QPaintDeviceWindow)
+   Q_DECLARE_PRIVATE(QPaintDeviceWindow)
 
-public:
-    void update(const QRect &rect);
-    void update(const QRegion &region);
+ public:
+   void update(const QRect &rect);
+   void update(const QRegion &region);
 
-    using QWindow::width;
-    using QWindow::height;
-    using QWindow::devicePixelRatio;
+   using QWindow::width;
+   using QWindow::height;
+   using QWindow::devicePixelRatio;
 
-    GUI_CS_SLOT_1(Public, void update())
-    GUI_CS_SLOT_OVERLOAD(update, ())
+   GUI_CS_SLOT_1(Public, void update())
+   GUI_CS_SLOT_OVERLOAD(update, ())
 
-protected:
-    virtual void paintEvent(QPaintEvent *event);
+ protected:
+   virtual void paintEvent(QPaintEvent *event);
 
-    int metric(PaintDeviceMetric metric) const override;
-    void exposeEvent(QExposeEvent *) override;
-    bool event(QEvent *event) override;
+   int metric(PaintDeviceMetric metric) const override;
+   void exposeEvent(QExposeEvent *) override;
+   bool event(QEvent *event) override;
 
-    QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *parent);
+   QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *parent);
 
-private:
-    QPaintEngine *paintEngine() const override;
-    Q_DISABLE_COPY(QPaintDeviceWindow)
+ private:
+   QPaintEngine *paintEngine() const override;
+   Q_DISABLE_COPY(QPaintDeviceWindow)
 };
 
 

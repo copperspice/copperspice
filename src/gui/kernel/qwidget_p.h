@@ -23,63 +23,64 @@
 #ifndef QWIDGET_P_H
 #define QWIDGET_P_H
 
-#include <QtGui/qwidget.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qlocale.h>
-#include <QtCore/qset.h>
-#include <QtGui/qregion.h>
-#include <QtGui/qsizepolicy.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qapplication.h>
+#include <qwidget.h>
+#include <qrect.h>
+#include <qlocale.h>
+#include <qset.h>
+#include <qregion.h>
+
+#include "qinputmethod.h"
+#include "qopengl.h"
+#include "qsurfaceformat.h"
+
+#include <qsizepolicy.h>
+#include <qstyle.h>
+#include <qapplication.h>
+
 #include <qgraphicseffect_p.h>
-#include <QtGui/qgraphicsproxywidget.h>
-#include <QtGui/qgraphicsscene.h>
-#include <QtGui/qgraphicsview.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsscene.h>
+#include <qgraphicsview.h>
 #include <qgesture_p.h>
 
-#ifdef Q_OS_WIN
-#include <QtCore/qt_windows.h>
-#include <qdnd_p.h>
-#endif
 
-#ifdef Q_WS_X11
-#include <QtGui/qx11info_x11.h>
-#endif
 
-#ifdef Q_OS_MAC
-#include <qt_mac_p.h>
-#endif
-
-#if defined(Q_WS_QWS)
-#include <QtGui/qinputcontext.h>
-#include <QtGui/qscreen_qws.h>
-#endif
-
-QT_BEGIN_NAMESPACE
 
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used
 //  - top-level widgets have extra extra data to reduce cost further
-#if defined(Q_WS_QWS)
-class QWSManager;
-#endif
 
-#if defined(Q_OS_MAC)
-class QCoreGraphicsPaintEnginePrivate;
-#endif
-
-#if defined(Q_WS_QPA)
-class QPlatformWindow;
-#endif
 
 class QPaintEngine;
 class QPixmap;
 class QWidgetBackingStore;
 class QGraphicsProxyWidget;
 class QWidgetItemV2;
+class QOpenGLContext;
+class QPlatformTextureList;
 class QStyle;
 class QUnifiedToolbarSurface;
 
+// implemented in qshortcut.cpp
+bool qWidgetShortcutContextMatcher(QObject *object, Qt::ShortcutContext context);
+
+class QUpdateLaterEvent : public QEvent
+{
+ public:
+   explicit QUpdateLaterEvent(const QRegion &paintRegion)
+      : QEvent(UpdateLater), m_region(paintRegion) {
+   }
+
+   ~QUpdateLaterEvent() {
+   }
+
+   inline const QRegion &region() const {
+      return m_region;
+   }
+
+ protected:
+   QRegion m_region;
+};
 class QWidgetBackingStoreTracker
 {
 
@@ -122,10 +123,13 @@ struct QTLWExtra {
 
    // Regular pointers (keep them together to avoid gaps on 64 bits architectures).
    QIcon *icon; // widget icon
-   QPixmap *iconPixmap;
-   QWidgetBackingStoreTracker backingStore;
-   QWindowSurface *windowSurface;
+
+   QWidgetBackingStoreTracker backingStoreTracker;
+   QBackingStore *backingStore;
+
    QPainter *sharedPainter;
+   QWindow *window;
+   QOpenGLContext *shareContext;
 
    // Implicit pointers (shared_null).
    QString caption; // widget caption
@@ -141,63 +145,19 @@ struct QTLWExtra {
    QRect normalGeometry; // used by showMin/maximized/FullScreen
    Qt::WindowFlags savedFlags; // Save widget flags while showing fullscreen
 
+   int initialScreenIndex; // Screen number when passing a QDesktop[Screen]Widget as parent.
+   QVector<QPlatformTextureList *> widgetTextures;
    // *************************** Cross-platform bit fields ****************************
    uint opacity : 8;
-   uint posFromMove : 1;
+   uint posIncludesFrame : 1;
    uint sizeAdjusted : 1;
    uint inTopLevelResize : 1;
    uint inRepaint : 1;
    uint embedded : 1;
 
-   // *************************** Platform specific values (bit fields first) **********
-#if defined(Q_WS_X11)
-   uint spont_unmapped: 1; // window was spontaneously unmapped
-   uint dnd : 1; // DND properties installed
-   uint validWMState : 1; // is WM_STATE valid?
-   uint waitingForMapNotify : 1; // show() has been called, haven't got the MapNotify yet
-   WId parentWinId; // parent window Id (valid after reparenting)
-   WId userTimeWindow; // window id that contains user-time timestamp when WM supports a _NET_WM_USER_TIME_WINDOW atom
-   QPoint fullScreenOffset;
 
-#ifndef QT_NO_XSYNC
-   WId syncUpdateCounter;
-   ulong syncRequestTimestamp;
-   qint32 newCounterValueHi;
-   quint32 newCounterValueLo;
-#endif
 
-#elif defined(Q_OS_WIN)
-   uint hotkeyRegistered: 1;   // Hot key from the STARTUPINFO has been registered.
-   HICON winIconBig;           // internal big Windows icon
-   HICON winIconSmall;         // internal small Windows icon
 
-#elif defined(Q_OS_MAC)
-   uint resizer : 4;
-   uint isSetGeometry : 1;
-   uint isMove : 1;
-   quint32 wattr;
-   quint32 wclass;
-
-   IconRef windowIcon;                            // the current window icon, if set with setWindowIcon_sys.
-   quint32 savedWindowAttributesFromMaximized;    // Saved attributes from when the calling updateMaximizeButton_sys()
-
-   // This value is just to make sure we maximize and restore to the right location,
-   // yet we allow apps to be maximized and manually resized.
-   // The name is misleading, since this is set when maximizing the window. It is a hint to saveGeometry(..) to record
-   // the starting position as 0,0 instead of the normal starting position.
-   bool wasMaximized;
-
-#elif defined(Q_WS_QWS)
-
-#ifndef QT_NO_QWS_MANAGER
-   QWSManager *qwsManager;
-#endif
-
-#elif defined(Q_WS_QPA)
-   QPlatformWindow *platformWindow;
-   QPlatformWindowFormat platformWindowFormat;
-   quint32 screenIndex; // index in qplatformscreenlist
-#endif
 };
 
 struct QWExtra {
@@ -238,25 +198,10 @@ struct QWExtra {
    uint nativeChildrenForced : 1;
    uint inRenderWithPainter : 1;
    uint hasMask : 1;
+   uint hasWindowContainer : 1;
 
-   // *************************** Platform specific values (bit fields first) **********
 
-#if defined(Q_OS_WIN)
-#ifndef QT_NO_DRAGANDDROP
-   QOleDropTarget *dropTarget; // drop target
-   QList<QPointer<QWidget> > oleDropWidgets;
-#endif
 
-#elif defined(Q_WS_X11)
-   uint compress_events : 1;
-   WId xDndProxy; // XDND forwarding to embedded windows
-
-#elif defined(Q_OS_MAC)
-   // Cocoa Mask stuff
-   QImage maskBits;
-   CGImageRef imageMask;
-
-#endif
 };
 
 static inline bool bypassGraphicsProxyWidget(const QWidget *p)
@@ -282,9 +227,9 @@ class Q_GUI_EXPORT QWidgetPrivate
       DrawRecursive = 0x04,
       DrawInvisible = 0x08,
       DontSubtractOpaqueChildren = 0x10,
-      DontSetCompositionMode = 0x20,
-      DontDrawOpaqueChildren = 0x40,
-      DontDrawNativeChildren = 0x80
+      DontDrawOpaqueChildren = 0x20,
+      DontDrawNativeChildren = 0x40,
+      DontSetCompositionMode = 0x80
    };
 
    enum CloseMode {
@@ -303,6 +248,13 @@ class Q_GUI_EXPORT QWidgetPrivate
    explicit QWidgetPrivate();
    virtual ~QWidgetPrivate();
 
+   static QWidgetPrivate *get(QWidget *w) {
+      return w->d_func();
+   }
+   static const QWidgetPrivate *get(const QWidget *w) {
+      return w->d_func();
+   }
+
    QWExtra *extraData() const;
    QTLWExtra *topData() const;
    QTLWExtra *maybeTopData() const;
@@ -313,7 +265,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void init(QWidget *desktopWidget, Qt::WindowFlags f);
    void create_sys(WId window, bool initializeWindow, bool destroyOldWindow);
    void createRecursively();
-   void createWinId(WId id = 0);
+   void createWinId();
 
    void createTLExtra();
    void createExtra();
@@ -335,10 +287,11 @@ class Q_GUI_EXPORT QWidgetPrivate
    void stackUnder_sys(QWidget *);
 
    void setFocus_sys();
+   void updateFocusChild();
 
    void updateFont(const QFont &);
    inline void setFont_helper(const QFont &font) {
-      if (data.fnt == font && data.fnt.resolve() == font.resolve()) {
+      if (data.fnt.resolve() == font.resolve() && data.fnt == font) {
          return;
       }
       updateFont(font);
@@ -361,37 +314,31 @@ class Q_GUI_EXPORT QWidgetPrivate
    bool isAboutToShow() const;
    QRegion prepareToRender(const QRegion &region, QWidget::RenderFlags renderFlags);
    void render_helper(QPainter *painter, const QPoint &targetOffset, const QRegion &sourceRegion,
-                      QWidget::RenderFlags renderFlags);
+      QWidget::RenderFlags renderFlags);
    void render(QPaintDevice *target, const QPoint &targetOffset, const QRegion &sourceRegion,
-               QWidget::RenderFlags renderFlags, bool readyToRender);
+      QWidget::RenderFlags renderFlags);
    void drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QPoint &offset, int flags,
-                   QPainter *sharedPainter = 0, QWidgetBackingStore *backingStore = 0);
-
+      QPainter *sharedPainter = 0, QWidgetBackingStore *backingStore = 0);
+   void sendPaintEvent(const QRegion &toBePainted);
 
    void paintSiblingsRecursive(QPaintDevice *pdev, const QObjectList &children, int index,
-                               const QRegion &rgn, const QPoint &offset, int flags
-#ifdef Q_BACKINGSTORE_SUBSURFACES
-                               , const QWindowSurface *currentSurface
-#endif
-                               , QPainter *sharedPainter, QWidgetBackingStore *backingStore);
+      const QRegion &rgn, const QPoint &offset, int flags,
+      QPainter *sharedPainter, QWidgetBackingStore *backingStore);
 
-
-   QPainter *beginSharedPainter();
-   bool endSharedPainter();
 
 #ifndef QT_NO_GRAPHICSVIEW
    static QGraphicsProxyWidget *nearestGraphicsProxyWidget(const QWidget *origin);
 #endif
 
-   QWindowSurface *createDefaultWindowSurface();
-   QWindowSurface *createDefaultWindowSurface_sys();
    void repaint_sys(const QRegion &rgn);
 
    QRect clipRect() const;
    QRegion clipRegion() const;
+
+   void setSystemClip(QPaintDevice *paintDevice, const QRegion &region);
    void subtractOpaqueChildren(QRegion &rgn, const QRect &clipRect) const;
    void subtractOpaqueSiblings(QRegion &source, bool *hasDirtySiblingsAbove = 0,
-                               bool alsoNonOpaque = false) const;
+      bool alsoNonOpaque = false) const;
    void clipToEffectiveMask(QRegion &region) const;
    void updateIsOpaque();
    void setOpaque(bool opaque);
@@ -408,7 +355,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    bool close_helper(CloseMode mode);
 
    void setWindowIcon_helper();
-   void setWindowIcon_sys(bool forceReset = false);
+   void setWindowIcon_sys();
    void setWindowOpacity_sys(qreal opacity);
    void adjustQuitOnCloseAttribute();
 
@@ -422,6 +369,8 @@ class Q_GUI_EXPORT QWidgetPrivate
    bool isOverlapped(const QRect &) const;
    void syncBackingStore();
    void syncBackingStore(const QRegion &region);
+   // tells the input method about the widgets transform
+   void updateWidgetTransform(QEvent *event);
 
    void reparentFocusWidgets(QWidget *oldtlw);
 
@@ -435,6 +384,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void scroll_sys(int dx, int dy, const QRect &r);
    void deactivateWidgetCleanup();
    void setGeometry_sys(int, int, int, int, bool);
+   void fixPosIncludesFrame();
    void sendPendingMoveAndResizeEvents(bool recursive = false, bool disableUpdates = false);
    void activateChildLayoutsRecursively();
    void show_recursive();
@@ -461,6 +411,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setWindowIconText_sys(const QString &cap);
    void setWindowIconText_helper(const QString &cap);
    void setWindowTitle_sys(const QString &cap);
+   void setWindowFilePath_sys(const QString &filePath);
 
 #ifndef QT_NO_CURSOR
    void setCursor_sys(const QCursor &cursor);
@@ -469,14 +420,16 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    void setWindowTitle_helper(const QString &cap);
    void setWindowFilePath_helper(const QString &filePath);
+   void setWindowModified_helper();
+   virtual void setWindowFlags(Qt::WindowFlags windowFlags);
 
    bool setMinimumSize_helper(int &minw, int &minh);
    bool setMaximumSize_helper(int &maxw, int &maxh);
-   virtual bool hasHeightForWidth() const;
+
    void setConstraints_sys();
    bool pointInsideRectAndMask(const QPoint &) const;
    QWidget *childAt_helper(const QPoint &, bool) const;
-   QWidget *childAtRecursiveHelper(const QPoint &p, bool, bool includeFrame = false) const;
+   QWidget *childAtRecursiveHelper(const QPoint &p, bool) const;
    void updateGeometry_helper(bool forceUpdate);
 
    void getLayoutItemMargins(int *left, int *top, int *right, int *bottom) const;
@@ -487,11 +440,6 @@ class Q_GUI_EXPORT QWidgetPrivate
    // QWidget::destroy() is executed. It's used to signal QWidget
    // sub-classes that their internals are about to be released.
    virtual void aboutToDestroy() {}
-
-#ifndef QT_NO_IM
-   QInputContext *assignedInputContext() const;
-   QInputContext *inputContext() const;
-#endif
 
    inline QWidget *effectiveFocusWidget() {
       QWidget *w = q_func();
@@ -509,8 +457,10 @@ class Q_GUI_EXPORT QWidgetPrivate
    // null, we let QDesktopWidget decide for us.
    static QRect screenGeometry(const QWidget *widget) {
       QRect screen;
+
 #ifndef QT_NO_GRAPHICSVIEW
       QGraphicsProxyWidget *ancestorProxy = widget->d_func()->nearestGraphicsProxyWidget(widget);
+
       //It's embedded if it has an ancestor
       if (ancestorProxy) {
          if (!bypassGraphicsProxyWidget(widget) && ancestorProxy->scene() != 0) {
@@ -583,17 +533,15 @@ class Q_GUI_EXPORT QWidgetPrivate
       Q_Q(QWidget);
       if (button == Qt::LeftButton && qApp->autoSipEnabled()) {
          QStyle::RequestSoftwareInputPanel behavior = QStyle::RequestSoftwareInputPanel(
-                  q->style()->styleHint(QStyle::SH_RequestSoftwareInputPanel));
-         if (!clickCausedFocus || behavior == QStyle::RSIP_OnMouseClick) {
-            QEvent event(QEvent::RequestSoftwareInputPanel);
-            QApplication::sendEvent(q, &event);
+               q->style()->styleHint(QStyle::SH_RequestSoftwareInputPanel));
+
+         if (! clickCausedFocus || behavior == QStyle::RSIP_OnMouseClick) {
+            QGuiApplication::inputMethod()->show();
          }
       }
    }
 
-#ifndef Q_WS_QWS
-   // Almost cross-platform
-   void setWSGeometry(bool dontShow = false, const QRect &oldRect = QRect());
+   void setWSGeometry();
 
    inline QPoint mapToWS(const QPoint &p) const {
       return p - data.wrect.topLeft();
@@ -603,20 +551,56 @@ class Q_GUI_EXPORT QWidgetPrivate
       return p + data.wrect.topLeft();
    }
 
-   inline QRect mapToWS(const QRect &r) const {
-      QRect rr(r);
-      rr.translate(-data.wrect.topLeft());
-      return rr;
+   inline QRect mapToWS(const QRect &r) const  {
+      return r.translated(-data.wrect.topLeft());
    }
 
    inline QRect mapFromWS(const QRect &r) const {
-      QRect rr(r);
-      rr.translate(data.wrect.topLeft());
-      return rr;
+      return r.translated(data.wrect.topLeft());
    }
+
+   QOpenGLContext *shareContext() const;
+   virtual QObject *focusObject() {
+      return 0;
+   }
+
+#ifndef QT_NO_OPENGL
+   virtual GLuint textureId() const {
+      return 0;
+   }
+   virtual QImage grabFramebuffer() {
+      return QImage();
+   }
+   virtual void beginBackingStorePainting() { }
+   virtual void endBackingStorePainting() { }
+   virtual void beginCompose() { }
+   virtual void endCompose() { }
+   void setRenderToTexture() {
+      renderToTexture = true;
+      setTextureChildSeen();
+   }
+   void setTextureChildSeen() {
+      Q_Q(QWidget);
+      if (textureChildSeen) {
+         return;
+      }
+      textureChildSeen = 1;
+
+      if (!q->isWindow()) {
+         QWidget *parent = q->parentWidget();
+         if (parent) {
+            get(parent)->setTextureChildSeen();
+         }
+      }
+   }
+   static void sendComposeStatus(QWidget *w, bool end);
+   virtual void initializeViewportFramebuffer() { }
+   virtual void resizeViewportFramebuffer() { }
+   virtual void resolveSamples() { }
 #endif
 
-   // Variables.
+   static void setWidgetParentHelper(QObject *widgetAsObject, QObject *newParent);
+
    // Regular pointers (keep them together to avoid gaps on 64 bit architectures).
    QWExtra *extra;
    QWidget *focus_next;
@@ -629,14 +613,14 @@ class Q_GUI_EXPORT QWidgetPrivate
    QPaintEngine *extraPaintEngine;
    mutable const QMetaObject *polished;
    QGraphicsEffect *graphicsEffect;
+
    // All widgets are added into the allWidgets set. Once
    // they receive a window id they are also added to the mapper.
    // This should just ensure that all widgets are deleted by QApplication
    static QWidgetMapper *mapper;
    static QWidgetSet *allWidgets;
 
-#if !defined(QT_NO_IM)
-   QPointer<QInputContext> ic;
+#if ! defined(QT_NO_IM)
    Qt::InputMethodHints imHints;
 #endif
 
@@ -650,6 +634,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 
 #ifndef QT_NO_TOOLTIP
    QString toolTip;
+   int toolTipDuration;
 #endif
 
 #ifndef QT_NO_STATUSTIP
@@ -665,7 +650,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    QString accessibleDescription;
 #endif
 
-   // Other variables.
+   // Other variables
    uint inheritedFontResolveMask;
    uint inheritedPaletteResolveMask;
    short leftmargin;
@@ -698,162 +683,63 @@ class Q_GUI_EXPORT QWidgetPrivate
    QPalette::ColorRole bg_role : 8;
    uint dirtyOpaqueChildren : 1;
    uint isOpaque : 1;
+   uint retainSizeWhenHiddenChanged : 1;
    uint inDirtyList : 1;
    uint isScrolled : 1;
    uint isMoved : 1;
-   uint isGLWidget : 1;
    uint usesDoubleBufferedGLContext : 1;
+   uint mustHaveWindowHandle : 1;
+   uint renderToTexture : 1;
+   uint textureChildSeen : 1;
 
 #ifndef QT_NO_IM
    uint inheritsInputMethodHints : 1;
 #endif
-   uint inSetParent : 1;
+
+#ifndef QT_NO_OPENGL
+   uint renderToTextureReallyDirty : 1;
+   uint renderToTextureComposeActive : 1;
+#endif
+
+   uint childrenHiddenByWState : 1;
+   uint childrenShownByExpose : 1;
+
 
    // *************************** Platform specific ************************************
-#if defined(Q_WS_X11)
-   QX11Info xinfo;
-   Qt::HANDLE picture;
-   static QWidget *mouseGrabber;
-   static QWidget *keyboardGrabber;
-
-   void setWindowRole();
-   void sendStartupMessage(const char *message) const;
-   void setNetWmWindowTypes();
-   void x11UpdateIsOpaque();
-   bool isBackgroundInherited() const;
-   void updateX11AcceptFocus();
-   QPoint mapToGlobal(const QPoint &pos) const;
-   QPoint mapFromGlobal(const QPoint &pos) const;
-
-#elif defined(Q_OS_WIN)
-   uint noPaintOnScreen : 1; // see qwidget_win.cpp ::paintEngine()
-
-#ifndef QT_NO_GESTURES
-   uint nativeGesturePanEnabled : 1;
+#if defined(Q_OS_WIN)
+   uint noPaintOnScreen : 1;    // see qwidget.cpp ::paintEngine()
 #endif
 
-   bool shouldShowMaximizeButton();
-   void winUpdateIsOpaque();
-   void reparentChildren();
 
-#ifndef QT_NO_DRAGANDDROP
-   QOleDropTarget *registerOleDnd(QWidget *widget);
-   void unregisterOleDnd(QWidget *widget, QOleDropTarget *target);
-#endif
 
-   void grabMouseWhileInWindow();
-   void registerTouchWindow();
-   void winSetupGestures();
 
-#elif defined(Q_OS_MAC)
-   uint needWindowChange : 1;
 
-   // Each wiget keeps a list of all its child and grandchild OpenGL widgets.
-   // This list is used to update the gl context whenever a parent and a granparent
-   // moves, and also to check for intersections with gl widgets within the window when a widget moves
-   struct GlWidgetInfo {
-      GlWidgetInfo(QWidget *widget) : widget(widget), lastUpdateWidget(0) { }
-      bool operator==(const GlWidgetInfo &other) const {
-         return (widget == other.widget);
-      }
-      QWidget *widget;
-      QWidget *lastUpdateWidget;
-   };
 
-   // dirtyOnWidget contains the areas in the widget that needs to be repained,
-   // in the same way as dirtyOnScreen does for the window. Areas are added in
-   // dirtyWidget_sys and cleared in the paint event. In scroll_sys we then use
-   // this information repaint invalid areas when widgets are scrolled.
-   QRegion dirtyOnWidget;
 
-   QList<GlWidgetInfo> glWidgets;
 
-   //these are here just for code compat (HIViews)
-   Qt::HANDLE qd_hd;
-
+#if defined(Q_OS_MAC)
    void macUpdateSizeAttribute();
-   void macUpdateHideOnSuspend();
-   void macUpdateOpaqueSizeGrip();
-   void macUpdateIgnoreMouseEvents();
-   void macUpdateMetalAttribute();
-   void macUpdateIsOpaque();
-   void macSetNeedsDisplay(QRegion region);
-   void setEnabled_helper_sys(bool enable);
-   bool isRealWindow() const;
-   void adjustWithinMaxAndMinSize(int &w, int &h);
-   void applyMaxAndMinSizeOnWindow();
-   void update_sys(const QRect &rect);
-   void update_sys(const QRegion &rgn);
-   void setGeometry_sys_helper(int, int, int, int, bool);
-   void setWindowModified_sys(bool b);
-   void updateMaximizeButton_sys();
-   void setWindowFilePath_sys(const QString &filePath);
-   void createWindow_sys();
-   void recreateMacWindow();
 
-   void setSubWindowStacking(bool set);
-   void setWindowLevel();
-   void finishCreateWindow_sys_Cocoa(void * /*NSWindow * */ windowRef);
-   void syncCocoaMask();
-   void finishCocoaMaskSetup();
-   void syncUnifiedMode();
 
-   // Did we add the drawRectOriginal method?
-   bool drawRectOriginalAdded;
 
-   // Is the original drawRect method available?
-   bool originalDrawMethod;
 
-   // Do we need to change the methods?
-   bool changeMethods;
 
-   // Unified toolbar variables
-   bool isInUnifiedToolbar;
-   QUnifiedToolbarSurface *unifiedSurface;
-   QPoint toolbar_offset;
-   QWidget *toolbar_ancestor;
-   bool flushRequested;
-   bool touchEventsEnabled;
 
-   void determineWindowClass();
-   void transferChildren();
-   bool qt_mac_dnd_event(uint, DragRef);
-   void toggleDrawers(bool);
 
-   //mac event functions
-   static bool qt_create_root_win();
-   static void qt_clean_root_win();
-   static bool qt_mac_update_sizer(QWidget *, int up = 0);
-   static bool qt_widget_rgn(QWidget *, short, RgnHandle, bool);
-   void registerTouchWindow(bool enable = true);
 
-#elif defined(Q_WS_QWS)
-   void setMaxWindowState_helper();
-   void setFullScreenSize_helper();
-   void moveSurface(QWindowSurface *surface, const QPoint &offset);
-   QRegion localRequestedRegion() const;
-   QRegion localAllocatedRegion() const;
 
-   friend class QWSManager;
-   friend class QWSManagerPrivate;
-   friend class QDecoration;
 
-#ifndef QT_NO_CURSOR
-   void updateCursor() const;
-#endif
 
-   QScreen *getScreen() const;
-
-#elif defined(Q_WS_QPA)
-   void setMaxWindowState_helper();
-   void setFullScreenSize_helper();
-
-#ifndef QT_NO_CURSOR
-   void updateCursor() const;
-#endif
 
 #endif
+
+   void setNetWmWindowTypes(bool skipIfMissing = false);
+
+   bool stealKeyboardGrab(bool grab);
+   bool stealMouseGrab(bool grab);
+
    static QWidgetPrivate *cs_getPrivate(QWidget *object);
+   static QWidget *cs_getPublic(QWidgetPrivate *object);
 
  protected:
    QWidget *q_ptr;
@@ -861,7 +747,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 
 struct QWidgetPaintContext {
    inline QWidgetPaintContext(QPaintDevice *d, const QRegion &r, const QPoint &o, int f,
-                              QPainter *p, QWidgetBackingStore *b)
+      QPainter *p, QWidgetBackingStore *b)
       : pdev(d), rgn(r), offset(o), flags(f), sharedPainter(p), backingStore(b), painter(0) {}
 
    QPaintDevice *pdev;
@@ -878,28 +764,28 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
 {
  public:
    QWidgetEffectSourcePrivate(QWidget *widget)
-      : QGraphicsEffectSourcePrivate(), m_widget(widget), context(0), updateDueToGraphicsEffect(false) {
-   }
+      : QGraphicsEffectSourcePrivate(), m_widget(widget), context(0), updateDueToGraphicsEffect(false)
+   { }
 
-   inline void detach() override {
+   void detach() override {
       m_widget->d_func()->graphicsEffect = 0;
    }
 
-   inline const QGraphicsItem *graphicsItem() const override {
+   const QGraphicsItem *graphicsItem() const override {
       return 0;
    }
 
-   inline const QWidget *widget() const override {
+   const QWidget *widget() const override {
       return m_widget;
    }
 
-   inline void update() override {
+   void update() override {
       updateDueToGraphicsEffect = true;
       m_widget->update();
       updateDueToGraphicsEffect = false;
    }
 
-   inline bool isPixmap() const override {
+   bool isPixmap() const override {
       return false;
    }
 
@@ -913,11 +799,11 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
       }
    }
 
-   inline const QStyleOption *styleOption() const override {
+   const QStyleOption *styleOption() const override {
       return 0;
    }
 
-   inline QRect deviceRect() const override {
+   QRect deviceRect() const override {
       return m_widget->window()->rect();
    }
 
@@ -967,16 +853,14 @@ inline bool QWidgetPrivate::pointInsideRectAndMask(const QPoint &p) const
 {
    Q_Q(const QWidget);
    return q->rect().contains(p) && (!extra || !extra->hasMask || q->testAttribute(Qt::WA_MouseNoMask)
-                                    || extra->mask.contains(p));
+         || extra->mask.contains(p));
 }
 
 inline QWidgetBackingStore *QWidgetPrivate::maybeBackingStore() const
 {
    Q_Q(const QWidget);
    QTLWExtra *x = q->window()->d_func()->maybeTopData();
-   return x ? x->backingStore.data() : 0;
+   return x ? x->backingStoreTracker.data() : 0;
 }
 
-QT_END_NAMESPACE
-
-#endif // QWIDGET_P_H
+#endif
