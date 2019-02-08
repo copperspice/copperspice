@@ -90,8 +90,6 @@
 
 #include <stdlib.h>
 
-
-
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QSqlDriverFactoryInterface_iid, "/sqldrivers"))
 
 QString QSqlDatabase::defaultConnection = "qt_sql_default_connection";
@@ -119,7 +117,7 @@ Q_GLOBAL_STATIC(QConnectionDict, dbDict)
 class QSqlDatabasePrivate
 {
  public:
-   QSqlDatabasePrivate(QSqlDatabase *d, QSqlDriver *dr = 0):
+   QSqlDatabasePrivate(QSqlDatabase *d, QSqlDriver *dr = nullptr):
       ref(1), q(d), driver(dr), port(-1) {
 
       precisionPolicy = QSql::LowPrecisionDouble;
@@ -234,7 +232,7 @@ void QSqlDatabasePrivate::removeDatabase(const QString &name)
 
    QWriteLocker locker(&dict->lock);
 
-   if (!dict->contains(name)) {
+   if (! dict->contains(name)) {
       return;
    }
 
@@ -302,7 +300,6 @@ void QSqlDatabasePrivate::disable()
    }
 }
 
-
 QSqlDatabase QSqlDatabase::addDatabase(const QString &type, const QString &connectionName)
 {
    QSqlDatabase db(type);
@@ -326,22 +323,27 @@ QStringList QSqlDatabase::drivers()
 
 #ifdef QT_SQL_PSQL
    list << "QPSQL";
+   // list << "QPSQL7";
 #endif
 
 #ifdef QT_SQL_MYSQL
    list << "QMYSQL";
+   // list << "QMYSQL3";
 #endif
 
 #ifdef QT_SQL_ODBC
-   list << "QODBC";
+   list << "QODBC"
+   // list << "QODBC3";
 #endif
 
 #ifdef QT_SQL_OCI
-   list << "QOCI";
+   list << "QOCI"
+   // list << "QOCI8";
 #endif
 
 #ifdef QT_SQL_TDS
-   list << "QTDS";
+   list << "QTDS"
+   // list << "QTDS7";
 #endif
 
 #ifdef QT_SQL_DB2
@@ -361,11 +363,10 @@ QStringList QSqlDatabase::drivers()
 #endif
 
    if (QFactoryLoader *fl = loader()) {
+      // what keys are available
+      const QSet<QString> keySet = fl->keySet();
 
-      const QMultiMap<int, QString> keyMap = fl->keyMap();
-      auto cend = keyMap.constEnd();
-
-      for (auto item : keyMap) {
+      for (auto item : keySet) {
          if (! list.contains(item)) {
             list << item;
          }
@@ -373,6 +374,7 @@ QStringList QSqlDatabase::drivers()
    }
 
    DriverDict dict = QSqlDatabasePrivate::driverDict();
+
    for (DriverDict::const_iterator i = dict.constBegin(); i != dict.constEnd(); ++i) {
       if (! list.contains(i.key())) {
          list << i.key();
@@ -504,7 +506,7 @@ void QSqlDatabasePrivate::init(const QString &type)
    }
 
    if (! driver && loader()) {
-      driver = qLoadPlugin<QSqlDriver, QSqlDriverPlugin>(loader(), type);
+      driver = cs_load_plugin<QSqlDriver, QSqlDriverPlugin>(loader(), type);
    }
 
    if (! driver) {
@@ -512,7 +514,7 @@ void QSqlDatabasePrivate::init(const QString &type)
       qWarning("QSqlDatabase: available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
 
       if (QCoreApplication::instance() == 0) {
-         qWarning("QSqlDatabase: an instance of QCoreApplication is required for loading driver plugins");
+         qWarning("QSqlDatabase: an instance of QCoreApplication is required to load an SQL driver plugin");
       }
 
       driver = shared_null()->driver;

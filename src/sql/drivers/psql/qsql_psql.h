@@ -65,30 +65,28 @@ class QPSQLResult : public QSqlResult
    QVariant lastInsertId() const override;
    bool prepare(const QString &query) override;
    bool exec() override;
-
-
 };
 
 class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
 {
-   SQL_CS_OBJECT(QPSQLDriver)
+   CS_OBJECT(QPSQLDriver)
 
    Q_DECLARE_PRIVATE(QPSQLDriver)
 
  public:
    enum Protocol {
       VersionUnknown = -1,
-      Version6 = 6,
-      Version7 = 7,
+      Version6  = 6,
+      Version7  = 7,
       Version71 = 8,
       Version73 = 9,
       Version74 = 10,
-      Version8 = 11,
+      Version8  = 11,
       Version81 = 12,
       Version82 = 13,
       Version83 = 14,
       Version84 = 15,
-      Version9 = 16,
+      Version9  = 16,
    };
 
    explicit QPSQLDriver(QObject *parent = nullptr);
@@ -99,35 +97,35 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    bool open(const QString &db, const QString &user, const QString &password,
       const QString &host, int port, const QString &connOpts) override;
 
-   bool isOpen() const;
-   void close();
-   QSqlResult *createResult() const;
-   QStringList tables(QSql::TableType) const;
-   QSqlIndex primaryIndex(const QString &tablename) const;
-   QSqlRecord record(const QString &tablename) const;
+   bool isOpen() const override;
+   void close() override;
+   QSqlResult *createResult() const override;
+   QStringList tables(QSql::TableType) const override;
+   QSqlIndex primaryIndex(const QString &tablename) const override;
+   QSqlRecord record(const QString &tablename) const override;
 
    Protocol protocol() const;
    QVariant handle() const override;
 
-   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
-   QString formatValue(const QSqlField &field, bool trimStrings) const;
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const override;
+   QString formatValue(const QSqlField &field, bool trimStrings) const override;
 
    bool subscribeToNotification(const QString &name) override;
    bool unsubscribeFromNotification(const QString &name) override;
    QStringList subscribedToNotifications() const override;
 
  protected:
-   bool beginTransaction();
-   bool commitTransaction();
-   bool rollbackTransaction();
+   bool beginTransaction() override;
+   bool commitTransaction() override;
+   bool rollbackTransaction() override;
 
    QPSQLDriverPrivate *d_ptr;
 
  private:
-   SQL_CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
-   SQL_CS_SLOT_2(_q_handleNotification)
+   CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
+   CS_SLOT_2(_q_handleNotification)
 
    friend class QPSQLResultPrivate;
 };
 
-#endif // QSQL_PSQL_H
+#endif

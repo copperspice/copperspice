@@ -20,18 +20,6 @@ SQL_PUBLIC_INCLUDES =
 SQL_PRIVATE_INCLUDES =
 SQL_DIRS =
 
-EXTRA_DIST += \
-	src/sql/CMakeLists.txt \
-	src/sql/drivers/db2/db2.cmake \
-	src/sql/drivers/ibase/ibase.cmake \
-	src/sql/drivers/mysql/mysql.cmake \
-	src/sql/drivers/oci/oci.cmake \
-	src/sql/drivers/odbc/odbc.cmake \
-	src/sql/drivers/psql/psql.cmake \
-	src/sql/drivers/sqlite/sqlite.cmake \
-	src/sql/kernel/kernel.cmake \
-	src/sql/models/models.cmake
-
 include src/sql/drivers/db2/Makefile.am
 include src/sql/drivers/ibase/Makefile.am
 include src/sql/drivers/mysql/Makefile.am
@@ -41,6 +29,18 @@ include src/sql/drivers/psql/Makefile.am
 include src/sql/drivers/sqlite/Makefile.am
 include src/sql/kernel/Makefile.am
 include src/sql/models/Makefile.am
+
+EXTRA_DIST += \
+	src/sql/CMakeLists.txt \
+	src/sql/kernel/kernel.cmake \
+	src/sql/models/models.cmake \
+	src/sql/drivers/db2/db2.cmake \
+	src/sql/drivers/ibase/ibase.cmake \
+	src/sql/drivers/mysql/mysql.cmake \
+	src/sql/drivers/oci/oci.cmake \
+	src/sql/drivers/odbc/odbc.cmake \
+	src/sql/drivers/psql/psql.cmake \
+	src/sql/drivers/sqlite/sqlite.cmake
 
 SQL_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtSql/%,$(SQL_INCLUDES)) \

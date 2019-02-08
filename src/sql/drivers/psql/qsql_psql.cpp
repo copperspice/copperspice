@@ -128,6 +128,7 @@ inline void qPQfreemem(void *buffer)
 class QPSQLDriverPrivate : public QSqlDriverPrivate
 {
    Q_DECLARE_PUBLIC(QPSQLDriver)
+
  public:
    QPSQLDriverPrivate() : QSqlDriverPrivate(),
       connection(0),
@@ -135,7 +136,8 @@ class QPSQLDriverPrivate : public QSqlDriverPrivate
       pro(QPSQLDriver::Version6),
       sn(0),
       pendingNotifyCheck(false),
-      hasBackslashEscape(false) {
+      hasBackslashEscape(false)
+   {
       dbmsType = QSqlDriver::PostgreSQL;
    }
 
@@ -174,7 +176,8 @@ void QPSQLDriverPrivate::appendTables(QStringList &tl, QSqlQuery &t, QChar type)
    t.exec(query);
    while (t.next()) {
       QString schema = t.value(1).toString();
-      if (schema.isEmpty() || schema == QLatin1String("public")) {
+
+      if (schema.isEmpty() || schema == "public") {
          tl.append(t.value(0).toString());
       } else {
          tl.append(t.value(0).toString().prepend(QLatin1Char('.')).prepend(schema));
@@ -217,6 +220,7 @@ class QPSQLResultPrivate : public QSqlResultPrivate
    }
 
    void deallocatePreparedStmt();
+
    const QPSQLDriverPrivate *privDriver() const {
       Q_Q(const QPSQLResult);
       return reinterpret_cast<const QPSQLDriver *>(q->driver())->d_func();
@@ -239,7 +243,7 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const
 
    if (result) {
       errorCode = QString::fromLatin1(PQresultErrorField(result, PG_DIAG_SQLSTATE));
-      msg += QString::fromLatin1("(%1)").formatArg(errorCode);
+      msg += QString("(%1)").formatArg(errorCode);
    }
 
    return QSqlError(QLatin1String("QPSQL: ") + err, msg, type, errorCode);
@@ -254,11 +258,13 @@ bool QPSQLResultPrivate::processResults()
    }
 
    int status = PQresultStatus(result);
+
    if (status == PGRES_TUPLES_OK) {
       q->setSelect(true);
       q->setActive(true);
       currentSize = PQntuples(result);
       return true;
+
    } else if (status == PGRES_COMMAND_OK) {
       q->setSelect(false);
       q->setActive(true);
@@ -275,6 +281,7 @@ bool QPSQLResultPrivate::processResults()
 static QVariant::Type qDecodePSQLType(int t)
 {
    QVariant::Type type = QVariant::Invalid;
+
    switch (t) {
       case QBOOLOID:
          type = QVariant::Bool;
@@ -320,7 +327,7 @@ static QVariant::Type qDecodePSQLType(int t)
 
 void QPSQLResultPrivate::deallocatePreparedStmt()
 {
-   const QString stmt = QLatin1String("DEALLOCATE ") + preparedStmtId;
+   const QString stmt = "DEALLOCATE " + preparedStmtId;
    PGresult *result = privDriver()->exec(stmt);
 
    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
@@ -456,18 +463,22 @@ QVariant QPSQLResult::data(int i)
             return QString::fromLatin1(val);
          }
          return QString::fromLatin1(val).toDouble();
+
       case QVariant::Date:
          if (val[0] == '\0') {
             return QVariant(QDate());
          } else {
+
 #ifndef QT_NO_DATESTRING
             return QVariant(QDate::fromString(QString::fromLatin1(val), Qt::ISODate));
 #else
             return QVariant(QString::fromLatin1(val));
 #endif
          }
+
       case QVariant::Time: {
          const QString str = QString::fromLatin1(val);
+
 #ifndef QT_NO_DATESTRING
          if (str.isEmpty()) {
             return QVariant(QTime());
@@ -479,6 +490,7 @@ QVariant QPSQLResult::data(int i)
 #endif
 
       }
+
       case QVariant::DateTime: {
          QString dtval = QString::fromLatin1(val);
 
@@ -488,7 +500,7 @@ QVariant QPSQLResult::data(int i)
 
          } else {
             QChar sign = dtval[dtval.size() - 3];
-            if (sign == QLatin1Char('-') || sign == QLatin1Char('+')) {
+            if (sign == '-' || sign == '+') {
                dtval += QLatin1String(":00");
             }
             return QVariant(QDateTime::fromString(dtval, Qt::ISODate).toLocalTime());
@@ -522,6 +534,7 @@ bool QPSQLResult::isNull(int field)
 bool QPSQLResult::reset (const QString &query)
 {
    Q_D(QPSQLResult);
+
    cleanup();
    if (!driver()) {
       return false;
@@ -549,12 +562,14 @@ int QPSQLResult::numRowsAffected()
 QVariant QPSQLResult::lastInsertId() const
 {
    Q_D(const QPSQLResult);
+
    if (d->privDriver()->pro >= QPSQLDriver::Version81) {
       QSqlQuery qry(driver()->createResult());
       // Most recent sequence value obtained from nextval
       if (qry.exec(QLatin1String("SELECT lastval();")) && qry.next()) {
          return qry.value(0);
       }
+
    } else if (isActive()) {
       Oid id = PQoidValue(d->result);
       if (id != InvalidOid) {
@@ -568,6 +583,7 @@ QVariant QPSQLResult::lastInsertId() const
 QSqlRecord QPSQLResult::record() const
 {
    Q_D(const QPSQLResult);
+
    QSqlRecord info;
    if (!isActive() || !isSelect()) {
       return info;
@@ -661,8 +677,9 @@ QString qMakePreparedStmtId()
 {
    qMutex()->lock();
    static unsigned int qPreparedStmtCount = 0;
-   QString id = QLatin1String("qpsqlpstmt_") + QString::number(++qPreparedStmtCount, 16);
+   QString id = "qpsqlpstmt_" + QString::number(++qPreparedStmtCount, 16);
    qMutex()->unlock();
+
    return id;
 }
 
@@ -701,10 +718,10 @@ bool QPSQLResult::prepare(const QString &query)
 bool QPSQLResult::exec()
 {
    Q_D(QPSQLResult);
+
    if (!d->preparedQueriesEnabled) {
       return QSqlResult::exec();
    }
-
 
    cleanup();
 
@@ -881,7 +898,9 @@ QPSQLDriver::QPSQLDriver(PGconn *conn, QObject *parent)
    : QSqlDriver(*new QPSQLDriverPrivate, parent)
 {
    Q_D(QPSQLDriver);
+
    d->connection = conn;
+
    if (conn) {
       d->pro = d->getPSQLVersion();
       d->detectBackslashEscape();
@@ -890,14 +909,13 @@ QPSQLDriver::QPSQLDriver(PGconn *conn, QObject *parent)
    }
 }
 
-
 QPSQLDriver::~QPSQLDriver()
 {
    Q_D(QPSQLDriver);
+
    if (d->connection) {
       PQfinish(d->connection);
    }
-
 }
 
 QVariant QPSQLDriver::handle() const
@@ -909,6 +927,7 @@ QVariant QPSQLDriver::handle() const
 bool QPSQLDriver::hasFeature(DriverFeature f) const
 {
    Q_D(const QPSQLDriver);
+
    switch (f) {
       case Transactions:
       case QuerySize:
@@ -945,6 +964,7 @@ static QString qQuote(QString s)
    s.replace(QLatin1Char('\\'), QLatin1String("\\\\"));
    s.replace(QLatin1Char('\''), QLatin1String("\\'"));
    s.append(QLatin1Char('\'')).prepend(QLatin1Char('\''));
+
    return s;
 }
 

@@ -26,7 +26,6 @@
 #include <qstring.h>
 #include <qsql.h>
 
-
 class QSqlError;
 class QSqlDriver;
 class QSqlIndex;
@@ -36,7 +35,6 @@ class QSqlDatabasePrivate;
 
 class Q_SQL_EXPORT QSqlDriverCreatorBase
 {
-
  public:
    virtual ~QSqlDriverCreatorBase() {}
    virtual QSqlDriver *createObject() const = 0;
