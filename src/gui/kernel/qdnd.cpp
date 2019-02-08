@@ -29,258 +29,110 @@
 #include <qtextcodec.h>
 #include <qapplication.h>
 #include <qpoint.h>
-#include <qwidget.h>
+
 #include <qbuffer.h>
 #include <qimage.h>
+#include <qpainter.h>
 #include <qregularexpression.h>
 #include <qdir.h>
 #include <qdnd_p.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
 #include <qdebug.h>
+#include <qplatform_integration.h>
+#include <qplatform_drag.h>
+#include <qguiapplication_p.h>
+
 #include <ctype.h>
-#include <qapplication_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
-
-QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_DRAGANDDROP
-
-//#define QDND_DEBUG
-
-#ifdef QDND_DEBUG
-QString dragActionsToString(Qt::DropActions actions)
-{
-   QString str;
-   if (actions == Qt::IgnoreAction) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += "IgnoreAction";
-   }
-   if (actions & Qt::LinkAction) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += "LinkAction";
-   }
-   if (actions & Qt::CopyAction) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += "CopyAction";
-   }
-   if (actions & Qt::MoveAction) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += "MoveAction";
-   }
-   if ((actions & Qt::TargetMoveAction) == Qt::TargetMoveAction ) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += "TargetMoveAction";
-   }
-   return str;
-}
-
-QString KeyboardModifiersToString(Qt::KeyboardModifiers moderfies)
-{
-   QString str;
-   if (moderfies & Qt::ControlModifier) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += Qt::ControlModifier;
-   }
-   if (moderfies & Qt::AltModifier) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += Qt::AltModifier;
-   }
-   if (moderfies & Qt::ShiftModifier) {
-      if (!str.isEmpty()) {
-         str += " | ";
-      }
-      str += Qt::ShiftModifier;
-   }
-   return str;
-}
-#endif
-
 
 // the universe's only drag manager
-QDragManager *QDragManager::instance = 0;
-
+QDragManager *QDragManager::m_instance = 0;
 
 QDragManager::QDragManager()
-   : QObject(qApp)
+   : QObject(qApp), m_platformDropData(0), m_currentDropTarget(0),
+     m_platformDrag(QGuiApplicationPrivate::platformIntegration()->drag()),
+     m_object(0)
 {
-   Q_ASSERT(!instance);
+   Q_ASSERT(! m_instance);
 
-#ifdef Q_WS_QWS
-   currentActionForOverrideCursor = Qt::IgnoreAction;
-#endif
-   object = 0;
-   beingCancelled = false;
-   restoreCursor = false;
-   willDrop = false;
-   eventLoop = 0;
-   dropData = new QDropData();
-   currentDropTarget = 0;
-#ifdef Q_WS_X11
-   xdndMimeTransferedPixmapIndex = 0;
-#endif
+   if (m_platformDrag) {
+      m_platformDropData = m_platformDrag->platformDropData();
+   }
+
 }
 
 
 QDragManager::~QDragManager()
 {
-#ifndef QT_NO_CURSOR
-   if (restoreCursor) {
-      QApplication::restoreOverrideCursor();
-   }
-#endif
-   instance = 0;
-   delete dropData;
+   m_instance = 0;
+
 }
 
 QDragManager *QDragManager::self()
 {
-   if (!instance && !QApplication::closingDown()) {
-      instance = new QDragManager;
+   if (!m_instance && !QGuiApplication::closingDown()) {
+      m_instance = new QDragManager;
    }
-   return instance;
+   return m_instance;
 }
 
-QPixmap QDragManager::dragCursor(Qt::DropAction action) const
+QObject *QDragManager::source() const
 {
-   QDragPrivate *d = dragPrivate();
-   if (d && d->customCursors.contains(action)) {
-      return d->customCursors[action];
-   } else if (action == Qt::MoveAction) {
-      return QApplicationPrivate::instance()->getPixmapCursor(Qt::DragMoveCursor);
-   } else if (action == Qt::CopyAction) {
-      return QApplicationPrivate::instance()->getPixmapCursor(Qt::DragCopyCursor);
-   } else if (action == Qt::LinkAction) {
-      return QApplicationPrivate::instance()->getPixmapCursor(Qt::DragLinkCursor);
+   if (m_object) {
+      return m_object->source();
    }
-#ifdef Q_OS_WIN
-   else if (action == Qt::IgnoreAction) {
-      return QApplicationPrivate::instance()->getPixmapCursor(Qt::ForbiddenCursor);
-   }
-#endif
-   return QPixmap();
+   return 0;
 }
 
-bool QDragManager::hasCustomDragCursors() const
+void QDragManager::setCurrentTarget(QObject *target, bool dropped)
 {
-   QDragPrivate *d = dragPrivate();
-   return d && !d->customCursors.isEmpty();
-}
-
-Qt::DropAction QDragManager::defaultAction(Qt::DropActions possibleActions,
-      Qt::KeyboardModifiers modifiers) const
-{
-#ifdef QDND_DEBUG
-   qDebug("QDragManager::defaultAction(Qt::DropActions possibleActions)");
-   qDebug("keyboard modifiers : %s", qPrintable(KeyboardModifiersToString(modifiers)));
-#endif
-
-   QDragPrivate *d = dragPrivate();
-   Qt::DropAction defaultAction = d ? d->defaultDropAction : Qt::IgnoreAction;
-
-   if (defaultAction == Qt::IgnoreAction) {
-      //This means that the drag was initiated by QDrag::start and we need to
-      //preserve the old behavior
-#ifdef Q_OS_MAC
-      defaultAction = Qt::MoveAction;
-#else
-      defaultAction = Qt::CopyAction;
-#endif
-   }
-
-#ifdef Q_OS_MAC
-   if (modifiers & Qt::ControlModifier && modifiers & Qt::AltModifier) {
-      defaultAction = Qt::LinkAction;
-   } else if (modifiers & Qt::AltModifier) {
-      defaultAction = Qt::CopyAction;
-   } else if (modifiers & Qt::ControlModifier) {
-      defaultAction = Qt::MoveAction;
-   }
-#else
-   if (modifiers & Qt::ControlModifier && modifiers & Qt::ShiftModifier) {
-      defaultAction = Qt::LinkAction;
-   } else if (modifiers & Qt::ControlModifier) {
-      defaultAction = Qt::CopyAction;
-   } else if (modifiers & Qt::ShiftModifier) {
-      defaultAction = Qt::MoveAction;
-   } else if (modifiers & Qt::AltModifier) {
-      defaultAction = Qt::LinkAction;
-   }
-#endif
-
-   // if the object is set take the list of possibles from it
-   if (object) {
-      possibleActions = object->d_func()->possible_actions;
-   }
-
-#ifdef QDND_DEBUG
-   qDebug("possible actions : %s", qPrintable(dragActionsToString(possibleActions)));
-#endif
-
-   // Check if the action determined is allowed
-   if (!(possibleActions & defaultAction)) {
-      if (possibleActions & Qt::CopyAction) {
-         defaultAction = Qt::CopyAction;
-      } else if (possibleActions & Qt::MoveAction) {
-         defaultAction = Qt::MoveAction;
-      } else if (possibleActions & Qt::LinkAction) {
-         defaultAction = Qt::LinkAction;
-      } else {
-         defaultAction = Qt::IgnoreAction;
-      }
-   }
-
-#ifdef QDND_DEBUG
-   qDebug("default action : %s", qPrintable(dragActionsToString(defaultAction)));
-#endif
-
-   return defaultAction;
-}
-
-void QDragManager::setCurrentTarget(QWidget *target, bool dropped)
-{
-   if (currentDropTarget == target) {
+   if (m_currentDropTarget == target) {
       return;
    }
 
-   currentDropTarget = target;
-   if (!dropped && object) {
-      object->d_func()->target = target;
-      emit object->targetChanged(target);
+   m_currentDropTarget = target;
+   if (!dropped && m_object) {
+      m_object->d_func()->target = target;
+      emit m_object->targetChanged(target);
    }
 
 }
 
-QWidget *QDragManager::currentTarget()
+QObject *QDragManager::currentTarget() const
 {
-   return currentDropTarget;
+   return m_currentDropTarget;
+}
+Qt::DropAction QDragManager::drag(QDrag *o)
+{
+   if (!o || m_object == o) {
+      return Qt::IgnoreAction;
+   }
+
+   if (!m_platformDrag || !o->source()) {
+      o->deleteLater();
+      return Qt::IgnoreAction;
+   }
+
+   if (m_object) {
+      qWarning("QDragManager::drag in possibly invalid state");
+      return Qt::IgnoreAction;
+   }
+
+   m_object = o;
+
+   m_object->d_func()->target = 0;
+
+   QGuiApplicationPrivate::instance()->notifyDragStarted(o);
+   const Qt::DropAction result = m_platformDrag->drag(m_object);
+   m_object = 0;
+   if (!m_platformDrag->ownsDragObject()) {
+      o->deleteLater();
+   }
+   return result;
 }
 
-#endif
-
-QDropData::QDropData()
-   : QInternalMimeData()
-{
-}
-
-QDropData::~QDropData()
-{
-}
 #endif // QT_NO_DRAGANDDROP
 
 #if !(defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
@@ -295,7 +147,7 @@ static QStringList imageReadMimeFormats()
       formats.append(format);
    }
 
-   //put png at the front because it is best
+   // put png at the front because it is best
    int pngIndex = formats.indexOf(QLatin1String("image/png"));
    if (pngIndex != -1 && pngIndex != 0) {
       formats.move(pngIndex, 0);
@@ -379,7 +231,7 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
       }
       // we wanted some image type, but all we got was a byte array. Convert it to an image.
       if (data.type() == QVariant::ByteArray
-            && (type == QVariant::Image || type == QVariant::Pixmap || type == QVariant::Bitmap)) {
+         && (type == QVariant::Image || type == QVariant::Pixmap || type == QVariant::Bitmap)) {
          data = QImage::fromData(data.toByteArray());
       }
 
@@ -389,9 +241,9 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
       if (ba.size() == 8) {
          ushort *colBuf = (ushort *)ba.data();
          c.setRgbF(qreal(colBuf[0]) / qreal(0xFFFF),
-                   qreal(colBuf[1]) / qreal(0xFFFF),
-                   qreal(colBuf[2]) / qreal(0xFFFF),
-                   qreal(colBuf[3]) / qreal(0xFFFF));
+            qreal(colBuf[1]) / qreal(0xFFFF),
+            qreal(colBuf[2]) / qreal(0xFFFF),
+            qreal(colBuf[3]) / qreal(0xFFFF));
          data = c;
       } else {
          qWarning("Qt: Invalid color format");
@@ -491,5 +343,3 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
 }
 
 #endif // QT_NO_DRAGANDDROP && QT_NO_CLIPBOARD
-
-QT_END_NAMESPACE

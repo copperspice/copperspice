@@ -23,15 +23,13 @@
 #ifndef QDRAG_H
 #define QDRAG_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_DRAGANDDROP
+
 class QMimeData;
 class QDragPrivate;
-class QWidget;
 class QPixmap;
 class QPoint;
 class QDragManager;
@@ -42,7 +40,7 @@ class Q_GUI_EXPORT QDrag : public QObject
    Q_DECLARE_PRIVATE(QDrag)
 
  public:
-   explicit QDrag(QWidget *dragSource);
+   explicit QDrag(QObject *dragSource);
    ~QDrag();
 
    void setMimeData(QMimeData *data);
@@ -54,29 +52,28 @@ class Q_GUI_EXPORT QDrag : public QObject
    void setHotSpot(const QPoint &hotspot);
    QPoint hotSpot() const;
 
-   QWidget *source() const;
-   QWidget *target() const;
+   QObject *source() const;
+   QObject *target() const;
 
    Qt::DropAction start(Qt::DropActions supportedActions = Qt::CopyAction);
    Qt::DropAction exec(Qt::DropActions supportedActions = Qt::MoveAction);
    Qt::DropAction exec(Qt::DropActions supportedActions, Qt::DropAction defaultAction);
 
    void setDragCursor(const QPixmap &cursor, Qt::DropAction action);
+   QPixmap dragCursor(Qt::DropAction action) const;
+   Qt::DropActions supportedActions() const;
+   Qt::DropAction defaultAction() const;
 
    GUI_CS_SIGNAL_1(Public, void actionChanged(Qt::DropAction action))
    GUI_CS_SIGNAL_2(actionChanged, action)
-   GUI_CS_SIGNAL_1(Public, void targetChanged(QWidget *newTarget))
+
+   GUI_CS_SIGNAL_1(Public, void targetChanged(QObject *newTarget))
    GUI_CS_SIGNAL_2(targetChanged, newTarget)
 
  protected:
    QScopedPointer<QDragPrivate> d_ptr;
 
  private:
-
-#ifdef Q_OS_MAC
-   friend class QWidgetPrivate;
-#endif
-
    friend class QDragManager;
    Q_DISABLE_COPY(QDrag)
 
@@ -84,6 +81,5 @@ class Q_GUI_EXPORT QDrag : public QObject
 
 #endif // QT_NO_DRAGANDDROP
 
-QT_END_NAMESPACE
 
 #endif // QDRAG_H

@@ -20,17 +20,17 @@
 *
 ***********************************************************************/
 
-#include <qwidget.h>
 #include <qdrag.h>
+
 #include <qpixmap.h>
 #include <qpoint.h>
+
 #include <qdnd_p.h>
+#include "qguiapplication_p.h"
 
 #ifndef QT_NO_DRAGANDDROP
 
-QT_BEGIN_NAMESPACE
-
-QDrag::QDrag(QWidget *dragSource)
+QDrag::QDrag(QObject *dragSource)
    : QObject(dragSource), d_ptr(new QDragPrivate)
 {
    Q_D(QDrag);
@@ -38,28 +38,20 @@ QDrag::QDrag(QWidget *dragSource)
    d->target = 0;
    d->data = 0;
    d->hotspot = QPoint(-10, -10);
-   d->possible_actions = Qt::CopyAction;
+
    d->executed_action = Qt::IgnoreAction;
-   d->defaultDropAction = Qt::IgnoreAction;
+   d->supported_actions = Qt::IgnoreAction;
+   d->default_action = Qt::IgnoreAction;
 }
 
-/*!
-    Destroys the drag object.
-*/
+
 QDrag::~QDrag()
 {
    Q_D(QDrag);
    delete d->data;
-   QDragManager *manager = QDragManager::self();
-   if (manager && manager->object == this) {
-      manager->cancel(false);
-   }
 }
 
-/*!
-    Sets the data to be sent to the given MIME \a data. Ownership of the data is
-    transferred to the QDrag object.
-*/
+
 void QDrag::setMimeData(QMimeData *data)
 {
    Q_D(QDrag);
@@ -129,7 +121,7 @@ QPoint QDrag::hotSpot() const
     Returns the source of the drag object. This is the widget where the drag
     and drop operation originated.
 */
-QWidget *QDrag::source() const
+QObject *QDrag::source() const
 {
    Q_D(const QDrag);
    return d->source;
@@ -139,51 +131,16 @@ QWidget *QDrag::source() const
     Returns the target of the drag and drop operation. This is the widget where
     the drag object was dropped.
 */
-QWidget *QDrag::target() const
+QObject *QDrag::target() const
 {
    Q_D(const QDrag);
    return d->target;
 }
 
-/*!
-    \since 4.3
-
-    Starts the drag and drop operation and returns a value indicating the requested
-    drop action when it is completed. The drop actions that the user can choose
-    from are specified in \a supportedActions. The default proposed action will be selected
-    among the allowed actions in the following order: Move, Copy and Link.
-
-    \bold{Note:} On Linux and Mac OS X, the drag and drop operation
-    can take some time, but this function does not block the event
-    loop. Other events are still delivered to the application while
-    the operation is performed. On Windows, the Qt event loop is
-    blocked while during the operation.
-*/
-
 Qt::DropAction QDrag::exec(Qt::DropActions supportedActions)
 {
    return exec(supportedActions, Qt::IgnoreAction);
 }
-
-/*!
-    \since 4.3
-
-    Starts the drag and drop operation and returns a value indicating the requested
-    drop action when it is completed. The drop actions that the user can choose
-    from are specified in \a supportedActions.
-
-    The \a defaultDropAction determines which action will be proposed when the user performs a
-    drag without using modifier keys.
-
-    \bold{Note:} On Linux and Mac OS X, the drag and drop operation
-    can take some time, but this function does not block the event
-    loop. Other events are still delivered to the application while
-    the operation is performed. On Windows, the Qt event loop is
-    blocked during the operation. However, QDrag::exec() on
-	Windows causes processEvents() to be called frequently to keep the GUI responsive.
-	If any loops or operations are called while a drag operation is active, it will block the drag operation.
-*/
-
 Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defaultDropAction)
 {
    Q_D(QDrag);
@@ -191,43 +148,29 @@ Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defa
       qWarning("QDrag: No mimedata set before starting the drag");
       return d->executed_action;
    }
-   QDragManager *manager = QDragManager::self();
-   d->defaultDropAction = Qt::IgnoreAction;
-   d->possible_actions = supportedActions;
 
-   if (manager) {
-      if (defaultDropAction == Qt::IgnoreAction) {
-         if (supportedActions & Qt::MoveAction) {
-            d->defaultDropAction = Qt::MoveAction;
-         } else if (supportedActions & Qt::CopyAction) {
-            d->defaultDropAction = Qt::CopyAction;
-         } else if (supportedActions & Qt::LinkAction) {
-            d->defaultDropAction = Qt::LinkAction;
-         }
-      } else {
-         d->defaultDropAction = defaultDropAction;
+   Qt::DropAction transformedDefaultDropAction = Qt::IgnoreAction;
+
+   if (defaultDropAction == Qt::IgnoreAction) {
+      if (supportedActions & Qt::MoveAction) {
+         transformedDefaultDropAction = Qt::MoveAction;
+      } else if (supportedActions & Qt::CopyAction) {
+         transformedDefaultDropAction = Qt::CopyAction;
+      } else if (supportedActions & Qt::LinkAction) {
+         transformedDefaultDropAction = Qt::LinkAction;
       }
-      d->executed_action = manager->drag(this);
+   } else {
+      transformedDefaultDropAction = defaultDropAction;
    }
+
+   d->supported_actions = supportedActions;
+   d->default_action = transformedDefaultDropAction;
+   d->executed_action = QDragManager::self()->drag(this);
 
    return d->executed_action;
 }
 
-/*!
-    \obsolete
 
-    \bold{Note:} It is recommended to use exec() instead of this function.
-
-    Starts the drag and drop operation and returns a value indicating the requested
-    drop action when it is completed. The drop actions that the user can choose
-    from are specified in \a request. Qt::CopyAction is always allowed.
-
-    \bold{Note:} Although the drag and drop operation can take some time, this function
-    does not block the event loop. Other events are still delivered to the application
-    while the operation is performed.
-
-    \sa exec()
-*/
 Qt::DropAction QDrag::start(Qt::DropActions request)
 {
    Q_D(QDrag);
@@ -235,54 +178,67 @@ Qt::DropAction QDrag::start(Qt::DropActions request)
       qWarning("QDrag: No mimedata set before starting the drag");
       return d->executed_action;
    }
-   QDragManager *manager = QDragManager::self();
-   d->defaultDropAction = Qt::IgnoreAction;
-   d->possible_actions = request | Qt::CopyAction;
-   if (manager) {
-      d->executed_action = manager->drag(this);
-   }
+
+   d->supported_actions = request | Qt::CopyAction;
+   d->default_action = Qt::IgnoreAction;
+   d->executed_action = QDragManager::self()->drag(this);
+
    return d->executed_action;
 }
 
-/*!
-    Sets the drag \a cursor for the \a action. This allows you
-    to override the default native cursors. To revert to using the
-    native cursor for \a action pass in a null QPixmap as \a cursor.
 
-    The \a action can only be CopyAction, MoveAction or LinkAction.
-    All other values of DropAction are ignored.
-*/
 void QDrag::setDragCursor(const QPixmap &cursor, Qt::DropAction action)
 {
    Q_D(QDrag);
+
    if (action != Qt::CopyAction && action != Qt::MoveAction && action != Qt::LinkAction) {
       return;
    }
+
    if (cursor.isNull()) {
       d->customCursors.remove(action);
    } else {
       d->customCursors[action] = cursor;
    }
 }
+QPixmap QDrag::dragCursor(Qt::DropAction action) const
+{
+   typedef QMap<Qt::DropAction, QPixmap>::const_iterator Iterator;
 
-/*!
-    \fn void QDrag::actionChanged(Qt::DropAction action)
+   Q_D(const QDrag);
+   const Iterator it = d->customCursors.constFind(action);
+   if (it != d->customCursors.constEnd()) {
+      return it.value();
+   }
 
-    This signal is emitted when the \a action associated with the
-    drag changes.
+   Qt::CursorShape shape = Qt::ForbiddenCursor;
+   switch (action) {
+      case Qt::MoveAction:
+         shape = Qt::DragMoveCursor;
+         break;
+      case Qt::CopyAction:
+         shape = Qt::DragCopyCursor;
+         break;
+      case Qt::LinkAction:
+         shape = Qt::DragLinkCursor;
+         break;
+      default:
+         shape = Qt::ForbiddenCursor;
+   }
 
-    \sa targetChanged()
-*/
+   return QGuiApplicationPrivate::instance()->getPixmapCursor(shape);
+}
 
-/*!
-    \fn void QDrag::targetChanged(QWidget *newTarget)
+Qt::DropActions QDrag::supportedActions() const
+{
+   Q_D(const QDrag);
+   return d->supported_actions;
+}
+Qt::DropAction QDrag::defaultAction() const
+{
+   Q_D(const QDrag);
+   return d->default_action;
+}
 
-    This signal is emitted when the target of the drag and drop
-    operation changes, with \a newTarget the new target.
-
-    \sa target(), actionChanged()
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_DRAGANDDROP

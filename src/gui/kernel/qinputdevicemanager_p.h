@@ -26,32 +26,33 @@
 #include <qobject.h>
 #include <qpoint.h>
 
+
 class QInputDeviceManagerPrivate;
 
 class Q_GUI_EXPORT QInputDeviceManager : public QObject
 {
-    GUI_CS_OBJECT(QInputDeviceManager)
-    Q_DECLARE_PRIVATE(QInputDeviceManager)
+   GUI_CS_OBJECT(QInputDeviceManager)
+   Q_DECLARE_PRIVATE(QInputDeviceManager)
 
-public:
-    enum DeviceType {
-        DeviceTypeUnknown,
-        DeviceTypePointer,
-        DeviceTypeKeyboard,
-        DeviceTypeTouch
-    };
+ public:
+   enum DeviceType {
+      DeviceTypeUnknown,
+      DeviceTypePointer,
+      DeviceTypeKeyboard,
+      DeviceTypeTouch
+   };
 
-    QInputDeviceManager(QObject *parent = nullptr);
+   QInputDeviceManager(QObject *parent = nullptr);
 
-    int deviceCount(DeviceType type) const;
+   int deviceCount(DeviceType type) const;
 
-    void setCursorPos(const QPoint &pos);
+   void setCursorPos(const QPoint &pos);
 
-    GUI_CS_SIGNAL_1(Public, void deviceListChanged(DeviceType type))
-    GUI_CS_SIGNAL_2(deviceListChanged,type)
+   GUI_CS_SIGNAL_1(Public, void deviceListChanged(DeviceType type))
+   GUI_CS_SIGNAL_2(deviceListChanged, type)
 
-    GUI_CS_SIGNAL_1(Public, void cursorPositionChangeRequested(const QPoint & pos))
-    GUI_CS_SIGNAL_2(cursorPositionChangeRequested, pos)
+   GUI_CS_SIGNAL_1(Public, void cursorPositionChangeRequested(const QPoint &pos))
+   GUI_CS_SIGNAL_2(cursorPositionChangeRequested, pos)
 
  protected:
    QScopedPointer<QInputDeviceManagerPrivate> d_ptr;
@@ -60,18 +61,22 @@ public:
 
 class Q_GUI_EXPORT QInputDeviceManagerPrivate
 {
-    Q_DECLARE_PUBLIC(QInputDeviceManager)
+   Q_DECLARE_PUBLIC(QInputDeviceManager)
 
-public:
-    static QInputDeviceManagerPrivate *get(QInputDeviceManager *mgr) { return mgr->d_func(); }
+ public:
+   static QInputDeviceManagerPrivate *get(QInputDeviceManager *mgr) {
+      return mgr->d_func();
+   }
 
-    int deviceCount(QInputDeviceManager::DeviceType type) const;
-    void setDeviceCount(QInputDeviceManager::DeviceType type, int count);
+   int deviceCount(QInputDeviceManager::DeviceType type) const;
+   void setDeviceCount(QInputDeviceManager::DeviceType type, int count);
 
-    QMap<QInputDeviceManager::DeviceType, int> m_deviceCount;
+   QMap<QInputDeviceManager::DeviceType, int> m_deviceCount;
 
-protected:
+ protected:
    QInputDeviceManager *q_ptr;
 };
+
+Q_DECLARE_METATYPE(QInputDeviceManager::DeviceType)
 
 #endif

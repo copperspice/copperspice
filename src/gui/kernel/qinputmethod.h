@@ -56,63 +56,63 @@ class Q_GUI_EXPORT QInputMethod : public QObject
    GUI_CS_PROPERTY_READ(inputDirection, inputDirection)
    GUI_CS_PROPERTY_NOTIFY(inputDirection, inputDirectionChanged)
 
-public:
-    QTransform inputItemTransform() const;
-    void setInputItemTransform(const QTransform &transform);
+ public:
+   QTransform inputItemTransform() const;
+   void setInputItemTransform(const QTransform &transform);
 
-    QRectF inputItemRectangle() const;
-    void setInputItemRectangle(const QRectF &rect);
+   QRectF inputItemRectangle() const;
+   void setInputItemRectangle(const QRectF &rect);
 
-    // in window coordinates
-    QRectF cursorRectangle() const; // ### what if we have rotations for the item?
+   // in window coordinates
+   QRectF cursorRectangle() const; // ### what if we have rotations for the item?
 
-    // keyboard geometry in window coords
-    QRectF keyboardRectangle() const;
+   // keyboard geometry in window coords
+   QRectF keyboardRectangle() const;
 
-    enum Action {
-        Click,
-        ContextMenu
-    };
+   enum Action {
+      Click,
+      ContextMenu
+   };
 
-    bool isVisible() const;
-    void setVisible(bool visible);
+   bool isVisible() const;
+   void setVisible(bool visible);
 
-    bool isAnimating() const;
+   bool isAnimating() const;
 
-    QLocale locale() const;
-    Qt::LayoutDirection inputDirection() const;
+   QLocale locale() const;
+   Qt::LayoutDirection inputDirection() const;
 
-    static QVariant queryFocusObject(Qt::InputMethodQuery query, QVariant argument); // ### Qt 6: QVariant by const-ref
+   static QVariant queryFocusObject(Qt::InputMethodQuery query, QVariant argument); // ### Qt 6: QVariant by const-ref
 
-    GUI_CS_SLOT_1(Public, void show())
-    GUI_CS_SLOT_2(show)
-    GUI_CS_SLOT_1(Public, void hide())
-    GUI_CS_SLOT_2(hide)
+   GUI_CS_SLOT_1(Public, void show())
+   GUI_CS_SLOT_2(show)
+   GUI_CS_SLOT_1(Public, void hide())
+   GUI_CS_SLOT_2(hide)
 
-    GUI_CS_SLOT_1(Public, void update(Qt::InputMethodQueries queries))
-    GUI_CS_SLOT_2(update)
-    GUI_CS_SLOT_1(Public, void reset())
-    GUI_CS_SLOT_2(reset)
-    GUI_CS_SLOT_1(Public, void commit())
-    GUI_CS_SLOT_2(commit)
+   GUI_CS_SLOT_1(Public, void update(Qt::InputMethodQueries queries))
+   GUI_CS_SLOT_2(update)
+   GUI_CS_SLOT_1(Public, void reset())
+   GUI_CS_SLOT_2(reset)
+   GUI_CS_SLOT_1(Public, void commit())
+   GUI_CS_SLOT_2(commit)
 
-    GUI_CS_SLOT_1(Public, void invokeAction(Action a,int cursorPosition))
-    GUI_CS_SLOT_2(invokeAction)
+   GUI_CS_SLOT_1(Public, void invokeAction(Action a, int cursorPosition))
+   GUI_CS_SLOT_2(invokeAction)
 
-    GUI_CS_SIGNAL_1(Public, void cursorRectangleChanged())
-    GUI_CS_SIGNAL_2(cursorRectangleChanged)
-    GUI_CS_SIGNAL_1(Public, void keyboardRectangleChanged())
-    GUI_CS_SIGNAL_2(keyboardRectangleChanged)
-    GUI_CS_SIGNAL_1(Public, void visibleChanged())
-    GUI_CS_SIGNAL_2(visibleChanged)
-    GUI_CS_SIGNAL_1(Public, void animatingChanged())
-    GUI_CS_SIGNAL_2(animatingChanged)
-    GUI_CS_SIGNAL_1(Public, void localeChanged())
-    GUI_CS_SIGNAL_2(localeChanged)
-    GUI_CS_SIGNAL_1(Public, void inputDirectionChanged(Qt::LayoutDirection newDirection))
-    GUI_CS_SIGNAL_2(inputDirectionChanged,newDirection)
+   GUI_CS_SIGNAL_1(Public, void cursorRectangleChanged())
+   GUI_CS_SIGNAL_2(cursorRectangleChanged)
+   GUI_CS_SIGNAL_1(Public, void keyboardRectangleChanged())
+   GUI_CS_SIGNAL_2(keyboardRectangleChanged)
+   GUI_CS_SIGNAL_1(Public, void visibleChanged())
+   GUI_CS_SIGNAL_2(visibleChanged)
+   GUI_CS_SIGNAL_1(Public, void animatingChanged())
+   GUI_CS_SIGNAL_2(animatingChanged)
+   GUI_CS_SIGNAL_1(Public, void localeChanged())
+   GUI_CS_SIGNAL_2(localeChanged)
+   GUI_CS_SIGNAL_1(Public, void inputDirectionChanged(Qt::LayoutDirection newDirection))
+   GUI_CS_SIGNAL_2(inputDirectionChanged, newDirection)
 
-private:
+ private:
    QInputMethod();
    ~QInputMethod();
 

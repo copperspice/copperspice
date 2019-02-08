@@ -23,43 +23,49 @@
 #ifndef QDESKTOPWIDGET_P_H
 #define QDESKTOPWIDGET_P_H
 
-#include "QDesktopWidget"
-#include "qwidget_p.h"
+#include <QDesktopWidget>
+#include <qwidget_p.h>
 
-#include <QtCore/qalgorithms.h>
+#include <qalgorithms.h>
 
-QT_BEGIN_NAMESPACE
+class QDesktopScreenWidget : public QWidget
+{
+   GUI_CS_OBJECT(QDesktopScreenWidget)
 
-class QDesktopScreenWidget : public QWidget {
-    Q_OBJECT
-public:
-    explicit QDesktopScreenWidget(QScreen *screen, const QRect &geometry);
+ public:
+   explicit QDesktopScreenWidget(QScreen *screen, const QRect &geometry);
 
-    int screenNumber() const;
-    void setScreenGeometry(const QRect &geometry);
+   int screenNumber() const;
+   void setScreenGeometry(const QRect &geometry);
 
-    QScreen *screen() const { return m_screen.data(); }
-    QRect screenGeometry() const { return m_geometry; }
+   QScreen *screen() const {
+      return m_screen.data();
+   }
+   QRect screenGeometry() const {
+      return m_geometry;
+   }
 
-private:
-    // The widget updates its screen and geometry automatically. We need to save them separately
-    // to detect changes, and trigger the appropriate signals.
-    const QPointer<QScreen> m_screen;
-    QRect m_geometry;
+ private:
+   // The widget updates its screen and geometry automatically. We need to save them separately
+   // to detect changes, and trigger the appropriate signals.
+   const QPointer<QScreen> m_screen;
+   QRect m_geometry;
 };
 
-class QDesktopWidgetPrivate : public QWidgetPrivate {
-    Q_DECLARE_PUBLIC(QDesktopWidget)
+class QDesktopWidgetPrivate : public QWidgetPrivate
+{
+   Q_DECLARE_PUBLIC(QDesktopWidget)
 
-public:
-    ~QDesktopWidgetPrivate() { qDeleteAll(screens); }
-    void _q_updateScreens();
-    void _q_availableGeometryChanged();
-    QDesktopScreenWidget *widgetForScreen(QScreen *qScreen) const;
+ public:
+   ~QDesktopWidgetPrivate() {
+      qDeleteAll(screens);
+   }
 
-    QList<QDesktopScreenWidget *> screens;
+   void _q_updateScreens();
+   void _q_availableGeometryChanged();
+   QDesktopScreenWidget *widgetForScreen(QScreen *qScreen) const;
+
+   QList<QDesktopScreenWidget *> screens;
 };
 
-QT_END_NAMESPACE
-
-#endif // QDESKTOPWIDGET_QPA_P_H
+#endif
