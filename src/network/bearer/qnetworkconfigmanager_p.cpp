@@ -360,29 +360,20 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
          return;
       }
 
-      updating = false;
-
+      updating    = false;
       bool envOK  = false;
-      const int skipGeneric = qgetenv("QT_EXCLUDE_GENERIC_BEARER").toInt(&envOK);
+
+      const int skipGeneric  = qgetenv("QT_EXCLUDE_GENERIC_BEARER").toInt(&envOK);
       QBearerEngine *generic = nullptr;
-      QFactoryLoader *l = loader();
 
-      const QMultiMap<int, QString> keyMap = l->keyMap();
-      QStringList addedEngines;
+      QFactoryLoader *pluginLoader = loader();
 
-      for (auto iter = keyMap.constBegin(); iter != keyMap.constEnd(); ++iter) {
+      auto keySet = pluginLoader->keySet();
 
-         const QString &key = iter.value();
+      for (auto item : keySet) {
+         if (QBearerEngine *engine = cs_load_plugin<QBearerEngine, QBearerEnginePlugin>(pluginLoader, item)) {
 
-         if (addedEngines.contains(key))  {
-            continue;
-         }
-
-         addedEngines.append(key);
-
-         if (QBearerEngine *engine = qLoadPlugin<QBearerEngine, QBearerEnginePlugin>(l, key)) {
-
-            if (key == "generic") {
+            if (item == "generic") {
                generic = engine;
             } else {
                sessionEngines.append(engine);
@@ -405,7 +396,7 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
       }
 
       if (generic) {
-         if (!envOK || skipGeneric <= 0) {
+         if ( !envOK || skipGeneric <= 0) {
             sessionEngines.append(generic);
          } else {
             delete generic;
