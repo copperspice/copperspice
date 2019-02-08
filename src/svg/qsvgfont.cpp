@@ -20,16 +20,12 @@
 *
 ***********************************************************************/
 
-#include "qsvgfont_p.h"
+#include <qsvgfont_p.h>
 
-#ifndef QT_NO_SVG
-
-#include "qpainter.h"
-#include "qpen.h"
-#include "qdebug.h"
-#include "qpicture.h"
-
-QT_BEGIN_NAMESPACE
+#include <qpainter.h>
+#include <qpen.h>
+#include <qdebug.h>
+#include <qpicture.h>
 
 QSvgGlyph::QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX)
    : m_unicode(unicode), m_path(path), m_horizAdvX(horizAdvX)
@@ -37,18 +33,15 @@ QSvgGlyph::QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX)
 
 }
 
-
 QSvgFont::QSvgFont(qreal horizAdvX)
    : m_horizAdvX(horizAdvX)
 {
 }
 
-
 QString QSvgFont::familyName() const
 {
    return m_familyName;
 }
-
 
 void QSvgFont::addGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX )
 {
@@ -100,7 +93,8 @@ void QSvgFont::draw(QPainter *p, const QPointF &point, const QString &str, qreal
       QChar unicode = *itr;
       if (!m_glyphs.contains(*itr)) {
          unicode = 0;
-         if (!m_glyphs.contains(unicode)) {
+
+         if (! m_glyphs.contains(unicode)) {
             continue;
          }
       }
@@ -121,6 +115,3 @@ void QSvgFont::setUnitsPerEm(qreal upem)
    m_unitsPerEm = upem;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG

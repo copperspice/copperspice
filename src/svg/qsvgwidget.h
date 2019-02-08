@@ -23,11 +23,11 @@
 #ifndef QSVGWIDGET_H
 #define QSVGWIDGET_H
 
-#include <QtGui/qwidget.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_SVGWIDGET
 
-QT_BEGIN_NAMESPACE
+#include <qwidget.h>
 
 class QSvgWidgetPrivate;
 class QPaintEvent;
@@ -59,8 +59,6 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
    Q_DISABLE_COPY(QSvgWidget)
    Q_DECLARE_PRIVATE(QSvgWidget)
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SVGWIDGET
 #endif // QSVGWIDGET_H

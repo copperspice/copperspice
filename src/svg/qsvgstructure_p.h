@@ -23,14 +23,10 @@
 #ifndef QSVGSTRUCTURE_P_H
 #define QSVGSTRUCTURE_P_H
 
-#include "qsvgnode_p.h"
+#include <qsvgnode_p.h>
 
-#ifndef QT_NO_SVG
-
-#include "QtCore/qlist.h"
-#include "QtCore/qhash.h"
-
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
+#include <qhash.h>
 
 class QSvgTinyDocument;
 class QSvgNode;
@@ -85,12 +81,12 @@ class QSvgSwitch : public QSvgStructureNode
    Type type() const override;
 
  private:
-   void init(); 
+   void init();
+
+
    QString m_systemLanguage;
    QString m_systemLanguagePrefix;
 };
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_SVG
-#endif // QSVGSTRUCTURE_P_H
+#endif

@@ -23,15 +23,13 @@
 #ifndef QSVGGENERATOR_H
 #define QSVGGENERATOR_H
 
-#include <QtGui/qpaintdevice.h>
+#include <qpaintdevice.h>
 
 #ifndef QT_NO_SVGGENERATOR
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qiodevice.h>
-#include <QtCore/qscopedpointer.h>
-
-QT_BEGIN_NAMESPACE
+#include <qnamespace.h>
+#include <qiodevice.h>
+#include <qscopedpointer.h>
 
 class QSvgGeneratorPrivate;
 
@@ -104,7 +102,6 @@ void QSvgGenerator::cs_setViewBox(const QRectF &viewBox)
    setViewBox(viewBox);
 }
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_SVGGENERATOR
-#endif // QSVGGENERATOR_H
+#endif

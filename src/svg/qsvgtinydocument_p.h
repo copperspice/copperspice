@@ -23,19 +23,15 @@
 #ifndef QSVGTINYDOCUMENT_P_H
 #define QSVGTINYDOCUMENT_P_H
 
-#include "qsvgstructure_p.h"
+#include <qsvgstructure_p.h>
 
-#ifndef QT_NO_SVG
-
-#include "QtCore/qrect.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qxmlstream.h"
-#include "qsvgstyle_p.h"
-#include "qsvgfont_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qrect.h>
+#include <qlist.h>
+#include <qhash.h>
+#include <qdatetime.h>
+#include <qxmlstream.h>
+#include <qsvgstyle_p.h>
+#include <qsvgfont_p.h>
 
 class QPainter;
 class QByteArray;
@@ -66,7 +62,7 @@ class Q_SVG_EXPORT QSvgTinyDocument : public QSvgStructureNode
    QRectF viewBox() const;
    void setViewBox(const QRectF &rect);
 
-   void draw(QPainter *p, QSvgExtraStates &) override;      //from the QSvgNode
+   void draw(QPainter *p, QSvgExtraStates &) override;      // from the QSvgNode
 
    void draw(QPainter *p);
    void draw(QPainter *p, const QRectF &bounds);
@@ -94,7 +90,7 @@ class Q_SVG_EXPORT QSvgTinyDocument : public QSvgStructureNode
 
  private:
    void mapSourceToTarget(QPainter *p, const QRectF &targetRect, const QRectF &sourceRect = QRectF());
- 
+
    QSize  m_size;
    bool   m_widthPercent;
    bool   m_heightPercent;
@@ -166,7 +162,5 @@ inline int QSvgTinyDocument::animationDuration() const
    return m_animationDuration;
 }
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_SVG
-#endif // QSVGTINYDOCUMENT_P_H
+#endif

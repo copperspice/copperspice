@@ -23,12 +23,10 @@
 #ifndef QGRAPHICSSVGITEM_H
 #define QGRAPHICSSVGITEM_H
 
-#include <QtGui/qgraphicsitem.h>
+#include <qglobal.h>
 
-#ifndef QT_NO_GRAPHICSSVGITEM
 
-QT_BEGIN_NAMESPACE
-
+#include <qgraphicsitem.h>
 class QSvgRenderer;
 class QGraphicsSvgItemPrivate;
 
@@ -39,12 +37,13 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
 
    SVG_CS_PROPERTY_READ(elementId, elementId)
    SVG_CS_PROPERTY_WRITE(elementId, setElementId)
+
    SVG_CS_PROPERTY_READ(maximumCacheSize, maximumCacheSize)
    SVG_CS_PROPERTY_WRITE(maximumCacheSize, setMaximumCacheSize)
 
  public:
-   QGraphicsSvgItem(QGraphicsItem *parentItem = 0);
-   QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parentItem = 0);
+   QGraphicsSvgItem(QGraphicsItem *parentItem = nullptr);
+   QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parentItem = nullptr);
 
    void setSharedRenderer(QSvgRenderer *renderer);
    QSvgRenderer *renderer() const;
@@ -59,7 +58,7 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    QSize maximumCacheSize() const;
 
    QRectF boundingRect() const override;
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    enum { Type = 13 };
    int type() const override;
@@ -72,7 +71,5 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    SVG_CS_SLOT_2(_q_repaintItem)
 };
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_GRAPHICSSVGITEM
-#endif // QGRAPHICSSVGITEM_H
+#endif // QT_NO_GRAPHICSVIEW or QT_NO_SVGWIDGETS
+#endif

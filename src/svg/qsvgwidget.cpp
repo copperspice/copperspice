@@ -20,26 +20,24 @@
 *
 ***********************************************************************/
 
-#include "qsvgwidget.h"
+#include <qsvgwidget.h>
 
 #ifndef QT_NO_SVGWIDGET
 
-#include "qsvgrenderer.h"
-#include "qpainter.h"
-#include "qwidget_p.h"
+#include <qsvgrenderer.h>
+#include <qpainter.h>
+#include <qwidget_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QSvgWidgetPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QSvgWidget)
+
  public:
    QSvgRenderer *renderer;
 };
 
-/*!
-    Constructs a new SVG display widget with the given \a parent.
-*/
 QSvgWidget::QSvgWidget(QWidget *parent)
    : QWidget(*new QSvgWidgetPrivate, parent, 0)
 {
@@ -48,10 +46,7 @@ QSvgWidget::QSvgWidget(QWidget *parent)
                     this, SLOT(update()));
 }
 
-/*!
-    Constructs a new SVG display widget with the given \a parent and loads the contents
-    of the specified \a file.
-*/
+
 QSvgWidget::QSvgWidget(const QString &file, QWidget *parent)
    : QWidget(*new QSvgWidgetPrivate, parent, 0)
 {
@@ -60,17 +55,11 @@ QSvgWidget::QSvgWidget(const QString &file, QWidget *parent)
                     this, SLOT(update()));
 }
 
-/*!
-    Destroys the widget.
-*/
 QSvgWidget::~QSvgWidget()
 {
 
 }
 
-/*!
-    Returns the renderer used to display the contents of the widget.
-*/
 QSvgRenderer *QSvgWidget::renderer() const
 {
    Q_D(const QSvgWidget);
@@ -119,7 +108,5 @@ void QSvgWidget::load(const QByteArray &contents)
    Q_D(const QSvgWidget);
    d->renderer->load(contents);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SVGWIDGET

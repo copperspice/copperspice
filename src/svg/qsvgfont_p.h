@@ -23,15 +23,11 @@
 #ifndef QSVGFONT_P_H
 #define QSVGFONT_P_H
 
-#include "qpainterpath.h"
+#include <qpainterpath.h>
 
-#ifndef QT_NO_SVG
-
-#include "qhash.h"
-#include "qstring.h"
-#include "qsvgstyle_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qhash.h>
+#include <qstring.h>
+#include <qsvgstyle_p.h>
 
 class QSvgGlyph
 {
@@ -44,7 +40,6 @@ class QSvgGlyph
    qreal m_horizAdvX;
 };
 
-
 class QSvgFont : public QSvgRefCounted
 {
  public:
@@ -54,10 +49,9 @@ class QSvgFont : public QSvgRefCounted
    QString familyName() const;
 
    void setUnitsPerEm(qreal upem);
-
    void addGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX = -1);
-
    void draw(QPainter *p, const QPointF &point, const QString &str, qreal pixelSize, Qt::Alignment alignment) const;
+
  public:
    QString m_familyName;
    qreal m_unitsPerEm;
@@ -67,7 +61,4 @@ class QSvgFont : public QSvgRefCounted
    QHash<QChar, QSvgGlyph> m_glyphs;
 };
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG
-#endif // QSVGFONT_P_H
+#endif

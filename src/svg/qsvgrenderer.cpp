@@ -24,13 +24,11 @@
 
 #ifndef QT_NO_SVGRENDERER
 
-#include "qsvgtinydocument_p.h"
-
 #include "qbytearray.h"
 #include "qtimer.h"
 #include "qdebug.h"
 
-QT_BEGIN_NAMESPACE
+#include "qsvgtinydocument_p.h"
 
 class QSvgRendererPrivate
 {
@@ -86,12 +84,6 @@ QSvgRenderer::QSvgRenderer(const QByteArray &contents, QObject *parent)
    load(contents);
 }
 
-/*!
-    \since 4.5
-
-    Constructs a new renderer with the given \a parent and loads the SVG data
-    using the stream reader specified by \a contents.
-*/
 QSvgRenderer::QSvgRenderer(QXmlStreamReader *contents, QObject *parent)
    : QObject(parent), d_ptr(new QSvgRendererPrivate)
 {
@@ -99,16 +91,10 @@ QSvgRenderer::QSvgRenderer(QXmlStreamReader *contents, QObject *parent)
    load(contents);
 }
 
-/*!
-    Destroys the renderer.
-*/
 QSvgRenderer::~QSvgRenderer()
 {
 }
 
-/*!
-    Returns true if there is a valid current document; otherwise returns false.
-*/
 bool QSvgRenderer::isValid() const
 {
    Q_D(const QSvgRenderer);
@@ -439,7 +425,5 @@ QMatrix QSvgRenderer::matrixForElement(const QString &id) const
    }
    return mat;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SVGRENDERER

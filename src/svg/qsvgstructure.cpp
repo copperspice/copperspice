@@ -22,17 +22,12 @@
 
 #include "qsvgstructure_p.h"
 
-#ifndef QT_NO_SVG
-
 #include "qsvgnode_p.h"
 #include "qsvgstyle_p.h"
 #include "qsvgtinydocument_p.h"
-
 #include "qpainter.h"
 #include "qlocale.h"
 #include "qdebug.h"
-
-QT_BEGIN_NAMESPACE
 
 QSvgG::QSvgG(QSvgNode *parent)
    : QSvgStructureNode(parent)
@@ -98,7 +93,6 @@ QSvgDefs::QSvgDefs(QSvgNode *parent)
 
 void QSvgDefs::draw(QPainter *, QSvgExtraStates &)
 {
-   //noop
 }
 
 QSvgNode::Type QSvgDefs::type() const
@@ -365,6 +359,3 @@ QSvgNode *QSvgStructureNode::previousSiblingNode(QSvgNode *n) const
    return prev;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG

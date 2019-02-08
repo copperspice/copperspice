@@ -22,15 +22,13 @@
 
 #include "qgraphicssvgitem.h"
 
-#ifndef QT_NO_GRAPHICSSVGITEM
+#include <qpainter.h>
+#include <qstyleoption.h>
+#include <qsvgrenderer.h>
+#include <qdebug.h>
+#include <qgraphicsitem_p.h>
 
-#include "qpainter.h"
-#include "qstyleoption.h"
-#include "qsvgrenderer.h"
-#include "qdebug.h"
-#include "qgraphicsitem_p.h"
 
-QT_BEGIN_NAMESPACE
 
 class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
 {
@@ -74,47 +72,6 @@ class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
    QString elemId;
 };
 
-/*!
-    \class QGraphicsSvgItem
-    \ingroup graphicsview-api
-    \brief The QGraphicsSvgItem class is a QGraphicsItem that can be used to render
-           the contents of SVG files.
-
-    \since 4.2
-
-    QGraphicsSvgItem provides a way of rendering SVG files onto QGraphicsView.
-    QGraphicsSvgItem can be created by passing the SVG file to be rendered to
-    its constructor or by explicit setting a shared QSvgRenderer on it.
-
-    Note that setting QSvgRenderer on a QGraphicsSvgItem doesn't make the item take
-    ownership of the renderer, therefore if using setSharedRenderer() method one has
-    to make sure that the lifetime of the QSvgRenderer object will be at least as long
-    as that of the QGraphicsSvgItem.
-
-    QGraphicsSvgItem provides a way of rendering only parts of the SVG files via
-    the setElementId. If setElementId() method is called, only the SVG element
-    (and its children) with the passed id will be renderer. This provides a convenient
-    way of selectively rendering large SVG files that contain a number of discrete
-    elements. For example the following code renders only jokers from a SVG file
-    containing a whole card deck:
-
-    \snippet doc/src/snippets/code/src_svg_qgraphicssvgitem.cpp 0
-
-    Size of the item can be set via the \l{QRectF::setSize()}
-    {setSize()} method of the \l{QGraphicsSvgItem::boundingRect()}
-    {bounding rectangle} or via direct manipulation of the items
-    transformation matrix.
-
-    By default the SVG rendering is cached using QGraphicsItem::DeviceCoordinateCache
-    mode to speedup the display of items. Caching can be disabled by passing
-    QGraphicsItem::NoCache to the QGraphicsItem::setCacheMode() method.
-
-    \sa QSvgWidget, {QtSvg Module}, QGraphicsItem, QGraphicsView
-*/
-
-/*!
-    Constructs a new SVG item with the given \a parent.
-*/
 QGraphicsSvgItem::QGraphicsSvgItem(QGraphicsItem *parent)
    : QGraphicsObject(*new QGraphicsSvgItemPrivate(), nullptr)
 {
@@ -122,10 +79,6 @@ QGraphicsSvgItem::QGraphicsSvgItem(QGraphicsItem *parent)
    d->init(parent);
 }
 
-/*!
-    Constructs a new item with the given \a parent and loads the contents of the
-    SVG file with the specified \a fileName.
-*/
 QGraphicsSvgItem::QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parent)
    : QGraphicsObject(*new QGraphicsSvgItemPrivate(), nullptr)
 {
@@ -248,28 +201,6 @@ int QGraphicsSvgItem::type() const
    return Type;
 }
 
-/*!
-  \property QGraphicsSvgItem::maximumCacheSize
-  \since 4.6
-
-  This property holds the maximum size of the device coordinate cache
-  for this item.
- */
-
-/*!
-    Sets the maximum device coordinate cache size of the item to \a size.
-    If the item is cached using QGraphicsItem::DeviceCoordinateCache mode,
-    caching is bypassed if the extension of the item in device coordinates
-    is larger than \a size.
-
-    The cache corresponds to the QPixmap which is used to cache the
-    results of the rendering.
-    Use QPixmapCache::setCacheLimit() to set limitations on the whole cache
-    and use setMaximumCacheSize() when setting cache size for individual
-    items.
-
-    \sa QGraphicsItem::cacheMode()
-*/
 void QGraphicsSvgItem::setMaximumCacheSize(const QSize &size)
 {
    QGraphicsItem::d_ptr->setExtra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize, size);
@@ -372,7 +303,5 @@ void QGraphicsSvgItem::_q_repaintItem()
    Q_D(QGraphicsSvgItem);
    d->_q_repaintItem();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_GRAPHICSSVGITEM

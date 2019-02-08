@@ -20,22 +20,17 @@
 *
 ***********************************************************************/
 
-#include "qsvggraphics_p.h"
+#include <qsvggraphics_p.h>
 
-#ifndef QT_NO_SVG
-
-#include "qsvgfont_p.h"
-
-#include "qpainter.h"
-#include "qtextdocument.h"
-#include "qabstracttextdocumentlayout.h"
-#include "qtextcursor.h"
-#include "qdebug.h"
+#include <qsvgfont_p.h>
+#include <qpainter.h>
+#include <qtextdocument.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qtextcursor.h>
+#include <qdebug.h>
 
 #include <math.h>
 #include <limits.h>
-
-QT_BEGIN_NAMESPACE
 
 #define QT_SVG_DRAW_SHAPE(command)                          \
     qreal oldOpacity = p->opacity();                        \
@@ -606,6 +601,3 @@ QRectF QSvgLine::bounds(QPainter *p, QSvgExtraStates &) const
    }
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG

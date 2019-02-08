@@ -25,8 +25,7 @@
 
 #include <qpainter.h>
 
-#ifndef QT_NO_SVG
-
+#include "QtGui/qpainter.h"
 #include "QtGui/qpen.h"
 #include "QtGui/qbrush.h"
 #include "QtGui/qmatrix.h"
@@ -34,9 +33,6 @@
 #include "QtGui/qfont.h"
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
-class QPainter;
 class QSvgNode;
 class QSvgFont;
 class QSvgTinyDocument;
@@ -47,18 +43,21 @@ template <class T> class QSvgRefCounter
    QSvgRefCounter() {
       t = 0;
    }
+
    QSvgRefCounter(T *_t) {
       t = _t;
       if (t) {
          t->ref();
       }
    }
+
    QSvgRefCounter(const QSvgRefCounter &other) {
       t = other.t;
       if (t) {
          t->ref();
       }
    }
+
    QSvgRefCounter &operator =(T *_t) {
       if (_t) {
          _t->ref();
@@ -69,6 +68,7 @@ template <class T> class QSvgRefCounter
       t = _t;
       return *this;
    }
+
    QSvgRefCounter &operator =(const QSvgRefCounter &other) {
       if (other.t) {
          other.t->ref();
@@ -79,6 +79,7 @@ template <class T> class QSvgRefCounter
       t = other.t;
       return *this;
    }
+
    ~QSvgRefCounter() {
       if (t) {
          t->deref();
@@ -102,6 +103,7 @@ class QSvgRefCounted
    QSvgRefCounted() {
       _ref = 0;
    }
+
    virtual ~QSvgRefCounted() {}
    void ref() {
       ++_ref;
@@ -174,7 +176,7 @@ class QSvgQualityStyle : public QSvgStyleProperty
  private:
    // color-render ing v 	v 	'auto' | 'optimizeSpeed' |
    //                                  'optimizeQuality' | 'inherit'
-   int m_colorRendering;
+   // int m_colorRendering;
 
    // shape-rendering v 	v 	'auto' | 'optimizeSpeed' | 'crispEdges' |
    //                                  'geometricPrecision' | 'inherit'
@@ -193,7 +195,6 @@ class QSvgQualityStyle : public QSvgStyleProperty
    //                                      'inherit'
    //QSvgImageRendering m_imageRendering;
 };
-
 
 
 class QSvgOpacityStyle : public QSvgStyleProperty
@@ -649,7 +650,7 @@ class QSvgAnimateTransform : public QSvgStyleProperty
    void resolveMatrix(const QSvgNode *node);
 
  private:
-   qreal m_from, m_to, m_by;
+   qreal m_from;
    qreal m_totalRunningTime;
    TransformType m_type;
    Additive m_additive;
@@ -679,8 +680,6 @@ class QSvgAnimateColor : public QSvgStyleProperty
 
  private:
    qreal m_from;
-   qreal m_to;
-   qreal m_by;
    qreal m_totalRunningTime;
 
    QList<QColor> m_colors;
@@ -691,7 +690,6 @@ class QSvgAnimateColor : public QSvgStyleProperty
    bool m_freeze;
    qreal m_repeatCount;
 };
-
 
 class QSvgCompOpStyle : public QSvgStyleProperty
 {
@@ -778,7 +776,4 @@ class QSvgStyle
 
 // audio-level     v  	x  	'inherit' | <Number.datatype>
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG
-#endif // QSVGSTYLE_P_H
+#endif
