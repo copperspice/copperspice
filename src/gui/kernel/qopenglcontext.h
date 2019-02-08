@@ -58,67 +58,67 @@ class QOpenGLTextureHelper;
 
 class Q_GUI_EXPORT QOpenGLVersionProfile
 {
-public:
-    QOpenGLVersionProfile();
-    explicit QOpenGLVersionProfile(const QSurfaceFormat &format);
-    QOpenGLVersionProfile(const QOpenGLVersionProfile &other);
-    ~QOpenGLVersionProfile();
+ public:
+   QOpenGLVersionProfile();
+   explicit QOpenGLVersionProfile(const QSurfaceFormat &format);
+   QOpenGLVersionProfile(const QOpenGLVersionProfile &other);
+   ~QOpenGLVersionProfile();
 
-    QOpenGLVersionProfile &operator=(const QOpenGLVersionProfile &rhs);
+   QOpenGLVersionProfile &operator=(const QOpenGLVersionProfile &rhs);
 
-    QPair<int, int> version() const;
-    void setVersion(int majorVersion, int minorVersion);
+   QPair<int, int> version() const;
+   void setVersion(int majorVersion, int minorVersion);
 
-    QSurfaceFormat::OpenGLContextProfile profile() const;
-    void setProfile(QSurfaceFormat::OpenGLContextProfile profile);
+   QSurfaceFormat::OpenGLContextProfile profile() const;
+   void setProfile(QSurfaceFormat::OpenGLContextProfile profile);
 
-    bool hasProfiles() const;
-    bool isLegacyVersion() const;
-    bool isValid() const;
+   bool hasProfiles() const;
+   bool isLegacyVersion() const;
+   bool isValid() const;
 
-private:
-    QOpenGLVersionProfilePrivate* d;
+ private:
+   QOpenGLVersionProfilePrivate *d;
 };
 
 inline uint qHash(const QOpenGLVersionProfile &v, uint seed = 0)
 {
-    return qHash(static_cast<int>(v.profile() * 1000)
-               + v.version().first * 100 + v.version().second * 10, seed);
+   return qHash(static_cast<int>(v.profile() * 1000)
+         + v.version().first * 100 + v.version().second * 10, seed);
 }
 
 inline bool operator==(const QOpenGLVersionProfile &lhs, const QOpenGLVersionProfile &rhs)
 {
-    if (lhs.profile() != rhs.profile()) {
-        return false;
-    }
+   if (lhs.profile() != rhs.profile()) {
+      return false;
+   }
 
-    return lhs.version() == rhs.version();
+   return lhs.version() == rhs.version();
 }
 
 inline bool operator!=(const QOpenGLVersionProfile &lhs, const QOpenGLVersionProfile &rhs)
 {
-    return !operator==(lhs, rhs);
+   return !operator==(lhs, rhs);
 }
 
 class Q_GUI_EXPORT QOpenGLContextGroup : public QObject
 {
-    GUI_CS_OBJECT(QOpenGLContextGroup)
-    Q_DECLARE_PRIVATE(QOpenGLContextGroup)
+   GUI_CS_OBJECT(QOpenGLContextGroup)
+   Q_DECLARE_PRIVATE(QOpenGLContextGroup)
 
-public:
-    ~QOpenGLContextGroup();
+ public:
+   ~QOpenGLContextGroup();
 
-    QList<QOpenGLContext *> shares() const;
+   QList<QOpenGLContext *> shares() const;
 
-    static QOpenGLContextGroup *currentContextGroup();
+   static QOpenGLContextGroup *currentContextGroup();
 
-private:
-    QOpenGLContextGroup();
+ private:
+   QOpenGLContextGroup();
 
-    friend class QOpenGLContext;
-    friend class QOpenGLContextGroupResourceBase;
-    friend class QOpenGLSharedResource;
-    friend class QOpenGLMultiGroupSharedResource;
+   friend class QOpenGLContext;
+   friend class QOpenGLContextGroupResourceBase;
+   friend class QOpenGLSharedResource;
+   friend class QOpenGLMultiGroupSharedResource;
 
  protected:
    QScopedPointer<QOpenGLContextGroupPrivate> d_ptr;
@@ -127,114 +127,113 @@ private:
 
 class Q_GUI_EXPORT QOpenGLContext : public QObject
 {
-    GUI_CS_OBJECT(QOpenGLContext)
-    Q_DECLARE_PRIVATE(QOpenGLContext)
+   GUI_CS_OBJECT(QOpenGLContext)
+   Q_DECLARE_PRIVATE(QOpenGLContext)
 
-public:
-    using FP_Void = void(*)();
+ public:
+   using FP_Void = void(*)();
 
-    explicit QOpenGLContext(QObject *parent = nullptr);
-    ~QOpenGLContext();
+   explicit QOpenGLContext(QObject *parent = nullptr);
+   ~QOpenGLContext();
 
-    void setFormat(const QSurfaceFormat &format);
-    void setShareContext(QOpenGLContext *shareContext);
-    void setScreen(QScreen *screen);
-    void setNativeHandle(const QVariant &handle);
+   void setFormat(const QSurfaceFormat &format);
+   void setShareContext(QOpenGLContext *shareContext);
+   void setScreen(QScreen *screen);
+   void setNativeHandle(const QVariant &handle);
 
-    bool create();
-    bool isValid() const;
+   bool create();
+   bool isValid() const;
 
-    QSurfaceFormat format() const;
-    QOpenGLContext *shareContext() const;
-    QOpenGLContextGroup *shareGroup() const;
-    QScreen *screen() const;
-    QVariant nativeHandle() const;
+   QSurfaceFormat format() const;
+   QOpenGLContext *shareContext() const;
+   QOpenGLContextGroup *shareGroup() const;
+   QScreen *screen() const;
+   QVariant nativeHandle() const;
 
-    GLuint defaultFramebufferObject() const;
+   GLuint defaultFramebufferObject() const;
 
-    bool makeCurrent(QSurface *surface);
-    void doneCurrent();
+   bool makeCurrent(QSurface *surface);
+   void doneCurrent();
 
-    void swapBuffers(QSurface *surface);
-    FP_Void getProcAddress(const QByteArray &procName) const;
+   void swapBuffers(QSurface *surface);
+   FP_Void getProcAddress(const QByteArray &procName) const;
 
-    QSurface *surface() const;
+   QSurface *surface() const;
 
-    static QOpenGLContext *currentContext();
-    static bool areSharing(QOpenGLContext *first, QOpenGLContext *second);
+   static QOpenGLContext *currentContext();
+   static bool areSharing(QOpenGLContext *first, QOpenGLContext *second);
 
-    QPlatformOpenGLContext *handle() const;
-    QPlatformOpenGLContext *shareHandle() const;
+   QPlatformOpenGLContext *handle() const;
+   QPlatformOpenGLContext *shareHandle() const;
 
-    QOpenGLFunctions *functions() const;
-    QOpenGLExtraFunctions *extraFunctions() const;
+   QOpenGLFunctions *functions() const;
+   QOpenGLExtraFunctions *extraFunctions() const;
 
-    QAbstractOpenGLFunctions *versionFunctions(const QOpenGLVersionProfile &versionProfile = QOpenGLVersionProfile()) const;
+   QAbstractOpenGLFunctions *versionFunctions(const QOpenGLVersionProfile &versionProfile = QOpenGLVersionProfile()) const;
 
-    template<class TYPE>
-    TYPE *versionFunctions() const
-    {
-        QOpenGLVersionProfile v = TYPE::versionProfile();
-        return static_cast<TYPE*>(versionFunctions(v));
-    }
+   template<class TYPE>
+   TYPE *versionFunctions() const {
+      QOpenGLVersionProfile v = TYPE::versionProfile();
+      return static_cast<TYPE *>(versionFunctions(v));
+   }
 
-    QSet<QByteArray> extensions() const;
-    bool hasExtension(const QByteArray &extension) const;
+   QSet<QByteArray> extensions() const;
+   bool hasExtension(const QByteArray &extension) const;
 
-    static void *openGLModuleHandle();
+   static void *openGLModuleHandle();
 
-    enum OpenGLModuleType {
-        LibGL,
-        LibGLES
-    };
+   enum OpenGLModuleType {
+      LibGL,
+      LibGLES
+   };
 
-    static OpenGLModuleType openGLModuleType();
+   static OpenGLModuleType openGLModuleType();
 
-    bool isOpenGLES() const;
+   bool isOpenGLES() const;
 
-    static bool supportsThreadedOpenGL();
-    static QOpenGLContext *globalShareContext();
+   static bool supportsThreadedOpenGL();
+   static QOpenGLContext *globalShareContext();
 
-    GUI_CS_SIGNAL_1(Public, void aboutToBeDestroyed())
-    GUI_CS_SIGNAL_2(aboutToBeDestroyed)
+   GUI_CS_SIGNAL_1(Public, void aboutToBeDestroyed())
+   GUI_CS_SIGNAL_2(aboutToBeDestroyed)
 
-private:
-    QScopedPointer<QOpenGLContextPrivate> d_ptr;
+ private:
+   QScopedPointer<QOpenGLContextPrivate> d_ptr;
 
-    friend class QGLContext;
-    friend class QGLPixelBuffer;
-    friend class QOpenGLContextResourceBase;
-    friend class QOpenGLPaintDevice;
-    friend class QOpenGLGlyphTexture;
-    friend class QOpenGLTextureGlyphCache;
-    friend class QOpenGLEngineShaderManager;
-    friend class QOpenGLFramebufferObject;
-    friend class QOpenGLFramebufferObjectPrivate;
-    friend class QOpenGL2PaintEngineEx;
-    friend class QOpenGL2PaintEngineExPrivate;
-    friend class QSGDistanceFieldGlyphCache;
-    friend class QWidgetPrivate;
-    friend class QAbstractOpenGLFunctionsPrivate;
-    friend class QOpenGLTexturePrivate;
+   friend class QGLContext;
+   friend class QGLPixelBuffer;
+   friend class QOpenGLContextResourceBase;
+   friend class QOpenGLPaintDevice;
+   friend class QOpenGLGlyphTexture;
+   friend class QOpenGLTextureGlyphCache;
+   friend class QOpenGLEngineShaderManager;
+   friend class QOpenGLFramebufferObject;
+   friend class QOpenGLFramebufferObjectPrivate;
+   friend class QOpenGL2PaintEngineEx;
+   friend class QOpenGL2PaintEngineExPrivate;
+   friend class QSGDistanceFieldGlyphCache;
+   friend class QWidgetPrivate;
+   friend class QAbstractOpenGLFunctionsPrivate;
+   friend class QOpenGLTexturePrivate;
 
-    void *qGLContextHandle() const;
-    void setQGLContextHandle(void *handle,void (*qGLContextDeleteFunction)(void *));
-    void deleteQGLContext();
+   void *qGLContextHandle() const;
+   void setQGLContextHandle(void *handle, void (*qGLContextDeleteFunction)(void *));
+   void deleteQGLContext();
 
-    QOpenGLVersionFunctionsBackend* functionsBackend(const QOpenGLVersionStatus &v) const;
-    void insertFunctionsBackend(const QOpenGLVersionStatus &v,
-                                QOpenGLVersionFunctionsBackend *backend);
-    void removeFunctionsBackend(const QOpenGLVersionStatus &v);
-    void insertExternalFunctions(QAbstractOpenGLFunctions *f);
-    void removeExternalFunctions(QAbstractOpenGLFunctions *f);
+   QOpenGLVersionFunctionsBackend *functionsBackend(const QOpenGLVersionStatus &v) const;
+   void insertFunctionsBackend(const QOpenGLVersionStatus &v,
+      QOpenGLVersionFunctionsBackend *backend);
+   void removeFunctionsBackend(const QOpenGLVersionStatus &v);
+   void insertExternalFunctions(QAbstractOpenGLFunctions *f);
+   void removeExternalFunctions(QAbstractOpenGLFunctions *f);
 
-    QOpenGLTextureHelper* textureFunctions() const;
-    void setTextureFunctions(QOpenGLTextureHelper* textureFuncs);
+   QOpenGLTextureHelper *textureFunctions() const;
+   void setTextureFunctions(QOpenGLTextureHelper *textureFuncs);
 
-    void destroy();
+   void destroy();
 
-    GUI_CS_SLOT_1(Private, void _q_screenDestroyed(QObject * object))
-    GUI_CS_SLOT_2(_q_screenDestroyed)
+   GUI_CS_SLOT_1(Private, void _q_screenDestroyed(QObject *object))
+   GUI_CS_SLOT_2(_q_screenDestroyed)
 };
 
 #endif // QT_NO_OPENGL
