@@ -22,33 +22,13 @@
 
 #include <qscreen.h>
 #include <qscreen_p.h>
-#include <qpixmap.h>
-// emerald    #include <qplatformscreen.h>
 #include <qdebug.h>
+#include <qpixmap.h>
+#include <qplatform_screen.h>
 
 #include <qapplication_p.h>
-#include <qplatformscreen_p.h>
 #include <qhighdpiscaling_p.h>
-
-/*!
-    \class QScreen
-    \since 5.0
-    \brief The QScreen class is used to query screen properties.
-    \inmodule QtGui
-
-    A note on logical vs physical dots per inch: physical DPI is based on the
-    actual physical pixel sizes when available, and is useful for print preview
-    and other cases where it's desirable to know the exact physical dimensions
-    of screen displayed contents.
-
-    Logical dots per inch are used to convert font and user interface elements
-    from point sizes to pixel sizes, and might be different from the physical
-    dots per inch. The logical dots per inch are sometimes user-settable in the
-    desktop environment's settings panel, to let the user globally control UI
-    and font sizes in different applications.
-
-    \inmodule QtGui
-*/
+#include <qplatform_screen_p.h>
 
 QScreen::QScreen(QPlatformScreen *screen)
    : d_ptr(new QScreenPrivate)
@@ -61,91 +41,80 @@ QScreen::QScreen(QPlatformScreen *screen)
 
 void QScreenPrivate::setPlatformScreen(QPlatformScreen *screen)
 {
-    Q_Q(QScreen);
-    platformScreen = screen;
-    platformScreen->d_func()->screen = q;
-    orientation = platformScreen->orientation();
-    geometry = platformScreen->deviceIndependentGeometry();
-    availableGeometry = QHighDpi::fromNative(platformScreen->availableGeometry(), QHighDpiScaling::factor(platformScreen), geometry.topLeft());
-    logicalDpi = platformScreen->logicalDpi();
-    refreshRate = platformScreen->refreshRate();
+   Q_Q(QScreen);
+   platformScreen = screen;
+   platformScreen->d_func()->screen = q;
+   orientation = platformScreen->orientation();
+   geometry = platformScreen->deviceIndependentGeometry();
+   availableGeometry = QHighDpi::fromNative(platformScreen->availableGeometry(), QHighDpiScaling::factor(platformScreen),
+         geometry.topLeft());
+   logicalDpi = platformScreen->logicalDpi();
+   refreshRate = platformScreen->refreshRate();
 
-    // safeguard ourselves against buggy platform behavior...
-    if (refreshRate < 1.0)
-        refreshRate = 60.0;
+   // safeguard ourselves against buggy platform behavior...
+   if (refreshRate < 1.0) {
+      refreshRate = 60.0;
+   }
 
-    updatePrimaryOrientation();
+   updatePrimaryOrientation();
 
-    filteredOrientation = orientation;
-    if (filteredOrientation == Qt::PrimaryOrientation)
-        filteredOrientation = primaryOrientation;
+   filteredOrientation = orientation;
+   if (filteredOrientation == Qt::PrimaryOrientation) {
+      filteredOrientation = primaryOrientation;
+   }
 
-    updateHighDpi();
+   updateHighDpi();
 }
 
 QScreen::~QScreen()
 {
-    if (! qApp)
-        return;
+   if (! qApp) {
+      return;
+   }
 
-    // Allow clients to manage windows that are affected by the screen going
-    // away, before we fall back to moving them to the primary screen.
+   // Allow clients to manage windows that are affected by the screen going
+   // away, before we fall back to moving them to the primary screen.
 
-    // emerald emit qApp->screenRemoved(this);
+   emit qApp->screenRemoved(this);
 
-    if (QApplication::closingDown())
-        return;
+   if (QGuiApplication::closingDown()) {
+      return;
+   }
 
-/* emerald
+   QScreen *primaryScreen = QGuiApplication::primaryScreen();
+   if (this == primaryScreen) {
+      return;
+   }
 
-    QScreen *primaryScreen = QApplication::primaryScreen();
-    if (this == primaryScreen)
-        return;
+   bool movingFromVirtualSibling = primaryScreen && primaryScreen->handle()->virtualSiblings().contains(handle());
 
-    bool movingFromVirtualSibling = primaryScreen && primaryScreen->handle()->virtualSiblings().contains(handle());
+   // Move any leftover windows to the primary screen
+   for (QWindow *window : QGuiApplication::allWindows()) {
+      if (!window->isTopLevel() || window->screen() != this) {
+         continue;
+      }
 
-*/
+      const bool wasVisible = window->isVisible();
+      window->setScreen(primaryScreen);
 
-/* emerald
-
-    // Move any leftover windows to the primary screen
-    for (QWindow *window : QApplication::allWindows()) {
-        if (!window->isTopLevel() || window->screen() != this)
-            continue;
-
-        const bool wasVisible = window->isVisible();
-        window->setScreen(primaryScreen);
-
-        // Re-show window if moved from a virtual sibling screen. Otherwise
-        // leave it up to the application developer to show the window.
-        if (movingFromVirtualSibling)
-            window->setVisible(wasVisible);
-    }
-
-*/
-
+      // Re-show window if moved from a virtual sibling screen. Otherwise
+      // leave it up to the application developer to show the window.
+      if (movingFromVirtualSibling) {
+         window->setVisible(wasVisible);
+      }
+   }
 }
 
-/*!
-  Get the platform screen handle.
-*/
 QPlatformScreen *QScreen::handle() const
 {
-    Q_D(const QScreen);
-    return d->platformScreen;
+   Q_D(const QScreen);
+   return d->platformScreen;
 }
 
-/*!
-  \property QScreen::name
-  \brief a user presentable string representing the screen
-
-  For example, on X11 these correspond to the XRandr screen names,
-  typically "VGA1", "HDMI1", etc.
-*/
 QString QScreen::name() const
 {
-    Q_D(const QScreen);
-    return d->platformScreen->name();
+   Q_D(const QScreen);
+   return d->platformScreen->name();
 }
 
 /*!
@@ -154,8 +123,8 @@ QString QScreen::name() const
 */
 int QScreen::depth() const
 {
-    Q_D(const QScreen);
-    return d->platformScreen->depth();
+   Q_D(const QScreen);
+   return d->platformScreen->depth();
 }
 
 /*!
@@ -164,8 +133,8 @@ int QScreen::depth() const
 */
 QSize QScreen::size() const
 {
-    Q_D(const QScreen);
-    return d->geometry.size();
+   Q_D(const QScreen);
+   return d->geometry.size();
 }
 
 /*!
@@ -180,7 +149,7 @@ QSize QScreen::size() const
 */
 qreal QScreen::physicalDotsPerInchX() const
 {
-    return size().width() / physicalSize().width() * qreal(25.4);
+   return size().width() / physicalSize().width() * qreal(25.4);
 }
 
 /*!
@@ -195,7 +164,7 @@ qreal QScreen::physicalDotsPerInchX() const
 */
 qreal QScreen::physicalDotsPerInchY() const
 {
-    return size().height() / physicalSize().height() * qreal(25.4);
+   return size().height() / physicalSize().height() * qreal(25.4);
 }
 
 /*!
@@ -214,9 +183,9 @@ qreal QScreen::physicalDotsPerInchY() const
 */
 qreal QScreen::physicalDotsPerInch() const
 {
-    QSize sz = size();
-    QSizeF psz = physicalSize();
-    return ((sz.height() / psz.height()) + (sz.width() / psz.width())) * qreal(25.4 * 0.5);
+   QSize sz = size();
+   QSizeF psz = physicalSize();
+   return ((sz.height() / psz.height()) + (sz.width() / psz.width())) * qreal(25.4 * 0.5);
 }
 
 /*!
@@ -229,10 +198,11 @@ qreal QScreen::physicalDotsPerInch() const
 */
 qreal QScreen::logicalDotsPerInchX() const
 {
-    Q_D(const QScreen);
-    if (QHighDpiScaling::isActive())
-        return QHighDpiScaling::logicalDpi().first;
-    return d->logicalDpi.first;
+   Q_D(const QScreen);
+   if (QHighDpiScaling::isActive()) {
+      return QHighDpiScaling::logicalDpi().first;
+   }
+   return d->logicalDpi.first;
 }
 
 /*!
@@ -245,102 +215,51 @@ qreal QScreen::logicalDotsPerInchX() const
 */
 qreal QScreen::logicalDotsPerInchY() const
 {
-    Q_D(const QScreen);
-    if (QHighDpiScaling::isActive())
-        return QHighDpiScaling::logicalDpi().second;
-    return d->logicalDpi.second;
+   Q_D(const QScreen);
+   if (QHighDpiScaling::isActive()) {
+      return QHighDpiScaling::logicalDpi().second;
+   }
+   return d->logicalDpi.second;
 }
 
-/*!
-  \property QScreen::logicalDotsPerInch
-  \brief the number of logical dots or pixels per inch
 
-  This value can be used to convert font point sizes to pixel sizes.
-
-  This is a convenience property that's simply the average of the logicalDotsPerInchX
-  and logicalDotsPerInchY properties.
-
-  \sa logicalDotsPerInchX()
-  \sa logicalDotsPerInchY()
-*/
 qreal QScreen::logicalDotsPerInch() const
 {
-    Q_D(const QScreen);
-    QDpi dpi = QHighDpiScaling::isActive() ? QHighDpiScaling::logicalDpi() : d->logicalDpi;
-    return (dpi.first + dpi.second) * qreal(0.5);
+   Q_D(const QScreen);
+   QDpi dpi = QHighDpiScaling::isActive() ? QHighDpiScaling::logicalDpi() : d->logicalDpi;
+   return (dpi.first + dpi.second) * qreal(0.5);
 }
 
-/*!
-    \property QScreen::devicePixelRatio
-    \brief the screen's ratio between physical pixels and device-independent pixels
-    \since 5.5
-
-    Returns the ratio between physical pixels and device-independent pixels for the screen.
-
-    Common values are 1.0 on normal displays and 2.0 on "retina" displays.
-    Higher values are also possible.
-
-    \sa QWindow::devicePixelRatio(), QGuiApplication::devicePixelRatio()
-*/
 qreal QScreen::devicePixelRatio() const
 {
-    Q_D(const QScreen);
-    return d->platformScreen->devicePixelRatio() * QHighDpiScaling::factor(this);
+   Q_D(const QScreen);
+   return d->platformScreen->devicePixelRatio() * QHighDpiScaling::factor(this);
 }
 
-/*!
-  \property QScreen::physicalSize
-  \brief the screen's physical size (in millimeters)
 
-  The physical size represents the actual physical dimensions of the
-  screen's display.
-
-  Depending on what information the underlying system provides the value
-  might not be entirely accurate.
-*/
 QSizeF QScreen::physicalSize() const
 {
-    Q_D(const QScreen);
-    return d->platformScreen->physicalSize();
+   Q_D(const QScreen);
+   return d->platformScreen->physicalSize();
 }
 
-/*!
-  \property QScreen::availableSize
-  \brief the screen's available size in pixels
-
-  The available size is the size excluding window manager reserved areas
-  such as task bars and system menus.
-*/
 QSize QScreen::availableSize() const
 {
-    Q_D(const QScreen);
-    return d->availableGeometry.size();
+   Q_D(const QScreen);
+   return d->availableGeometry.size();
 }
 
-/*!
-  \property QScreen::geometry
-  \brief the screen's geometry in pixels
-
-  As an example this might return QRect(0, 0, 1280, 1024), or in a
-  virtual desktop setting QRect(1280, 0, 1280, 1024).
-*/
 QRect QScreen::geometry() const
 {
-    Q_D(const QScreen);
-    return d->geometry;
+   Q_D(const QScreen);
+   return d->geometry;
 }
 
-/*!
-  \property QScreen::availableGeometry
-  \brief the screen's available geometry in pixels
 
-  The available geometry is the geometry excluding window manager reserved areas
-  such as task bars and system menus.
-*/
 QRect QScreen::availableGeometry() const
 {
-    Q_D(const QScreen);
-    return d->availableGeometry;
+   Q_D(const QScreen);
+   return d->availableGeometry;
 }
 
 /*!
@@ -353,99 +272,52 @@ QRect QScreen::availableGeometry() const
 QList<QScreen *> QScreen::virtualSiblings() const
 {
 
-    Q_D(const QScreen);
-    QList<QPlatformScreen *> platformScreens = d->platformScreen->virtualSiblings();
-    QList<QScreen *> screens;
+   Q_D(const QScreen);
+   QList<QPlatformScreen *> platformScreens = d->platformScreen->virtualSiblings();
+   QList<QScreen *> screens;
 
-    for (QPlatformScreen *platformScreen : platformScreens)
-        screens << platformScreen->screen();
-    return screens;
+   for (QPlatformScreen *platformScreen : platformScreens) {
+      screens << platformScreen->screen();
+   }
+   return screens;
 }
 
-/*!
-    \property QScreen::virtualSize
-    \brief the pixel size of the virtual desktop to which this screen belongs
-
-  Returns the pixel size of the virtual desktop corresponding to this screen.
-
-  This is the combined size of the virtual siblings' individual geometries.
-
-  \sa virtualSiblings()
-*/
 QSize QScreen::virtualSize() const
 {
-    return virtualGeometry().size();
+   return virtualGeometry().size();
 }
 
-/*!
-    \property QScreen::virtualGeometry
-    \brief the pixel geometry of the virtual desktop to which this screen belongs
-
-  Returns the pixel geometry of the virtual desktop corresponding to this screen.
-
-  This is the union of the virtual siblings' individual geometries.
-
-  \sa virtualSiblings()
-*/
 QRect QScreen::virtualGeometry() const
 {
-    QRect result;
-    for (QScreen *screen : virtualSiblings())
-        result |= screen->geometry();
-    return result;
+   QRect result;
+   for (QScreen *screen : virtualSiblings()) {
+      result |= screen->geometry();
+   }
+   return result;
 }
 
-/*!
-    \property QScreen::availableVirtualSize
-    \brief the available size of the virtual desktop to which this screen belongs
 
-  Returns the available pixel size of the virtual desktop corresponding to this screen.
-
-  This is the combined size of the virtual siblings' individual available geometries.
-
-  \sa availableSize(), virtualSiblings()
-*/
 QSize QScreen::availableVirtualSize() const
 {
-    return availableVirtualGeometry().size();
+   return availableVirtualGeometry().size();
 }
 
-/*!
-    \property QScreen::availableVirtualGeometry
-    \brief the available geometry of the virtual desktop to which this screen belongs
-
-  Returns the available geometry of the virtual desktop corresponding to this screen.
-
-  This is the union of the virtual siblings' individual available geometries.
-
-  \sa availableGeometry(), virtualSiblings()
-*/
 QRect QScreen::availableVirtualGeometry() const
 {
-    QRect result;
-    for (QScreen *screen : virtualSiblings())
-        result |= screen->availableGeometry();
-    return result;
+   QRect result;
+   for (QScreen *screen : virtualSiblings()) {
+      result |= screen->availableGeometry();
+   }
+   return result;
 }
 
-/*!
-    Sets the orientations that the application is interested in receiving
-    updates for in conjunction with this screen.
-
-    For example, to receive orientation() updates and thus have
-    orientationChanged() signals being emitted for LandscapeOrientation and
-    InvertedLandscapeOrientation, call setOrientationUpdateMask() with
-    \a{mask} set to Qt::LandscapeOrientation | Qt::InvertedLandscapeOrientation.
-
-    The default, 0, means no orientationChanged() signals are fired.
-*/
 void QScreen::setOrientationUpdateMask(Qt::ScreenOrientations mask)
 {
-    Q_D(QScreen);
+   Q_D(QScreen);
 
-    d->orientationUpdateMask = mask;
-    d->platformScreen->setOrientationUpdateMask(mask);
-    // emerald    QApplicationPrivate::updateFilteredScreenOrientation(this);
+   d->orientationUpdateMask = mask;
+   d->platformScreen->setOrientationUpdateMask(mask);
+   QGuiApplicationPrivate::updateFilteredScreenOrientation(this);
 }
 
 /*!
@@ -455,8 +327,8 @@ void QScreen::setOrientationUpdateMask(Qt::ScreenOrientations mask)
 */
 Qt::ScreenOrientations QScreen::orientationUpdateMask() const
 {
-    Q_D(const QScreen);
-    return d->orientationUpdateMask;
+   Q_D(const QScreen);
+   return d->orientationUpdateMask;
 }
 
 /*!
@@ -479,73 +351,40 @@ Qt::ScreenOrientations QScreen::orientationUpdateMask() const
 */
 Qt::ScreenOrientation QScreen::orientation() const
 {
-    Q_D(const QScreen);
-    return d->filteredOrientation;
+   Q_D(const QScreen);
+   return d->filteredOrientation;
 }
 
-/*!
-  \property QScreen::refreshRate
-  \brief the approximate vertical refresh rate of the screen in Hz
-*/
+
 qreal QScreen::refreshRate() const
 {
-    Q_D(const QScreen);
-    return d->refreshRate;
+   Q_D(const QScreen);
+   return d->refreshRate;
 }
 
-/*!
-    \property QScreen::primaryOrientation
-    \brief the primary screen orientation
-
-    The primary screen orientation is Qt::LandscapeOrientation
-    if the screen geometry's width is greater than or equal to its
-    height, or Qt::PortraitOrientation otherwise. This property might
-    change when the screen orientation was changed (i.e. when the
-    display is rotated).
-    The behavior is however platform dependent and can often be specified in
-    an application manifest file.
-
-*/
 Qt::ScreenOrientation QScreen::primaryOrientation() const
 {
-    Q_D(const QScreen);
-    return d->primaryOrientation;
+   Q_D(const QScreen);
+   return d->primaryOrientation;
 }
 
-/*!
-    \property QScreen::nativeOrientation
-    \brief the native screen orientation
-    \since 5.2
-
-    The native orientation of the screen is the orientation where the logo
-    sticker of the device appears the right way up, or Qt::PrimaryOrientation
-    if the platform does not support this functionality.
-
-    The native orientation is a property of the hardware, and does not change.
-*/
 Qt::ScreenOrientation QScreen::nativeOrientation() const
 {
-    Q_D(const QScreen);
-    return d->platformScreen->nativeOrientation();
+   Q_D(const QScreen);
+   return d->platformScreen->nativeOrientation();
 }
 
-/*!
-    Convenience function to compute the angle of rotation to get from
-    rotation \a a to rotation \a b.
-
-    The result will be 0, 90, 180, or 270.
-
-    Qt::PrimaryOrientation is interpreted as the screen's primaryOrientation().
-*/
 int QScreen::angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b) const
 {
-    if (a == Qt::PrimaryOrientation)
-        a = primaryOrientation();
+   if (a == Qt::PrimaryOrientation) {
+      a = primaryOrientation();
+   }
 
-    if (b == Qt::PrimaryOrientation)
-        b = primaryOrientation();
+   if (b == Qt::PrimaryOrientation) {
+      b = primaryOrientation();
+   }
 
-    return QPlatformScreen::angleBetween(a, b);
+   return QPlatformScreen::angleBetween(a, b);
 }
 
 /*!
@@ -562,13 +401,15 @@ int QScreen::angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b) cons
 */
 QTransform QScreen::transformBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &target) const
 {
-    if (a == Qt::PrimaryOrientation)
-        a = primaryOrientation();
+   if (a == Qt::PrimaryOrientation) {
+      a = primaryOrientation();
+   }
 
-    if (b == Qt::PrimaryOrientation)
-        b = primaryOrientation();
+   if (b == Qt::PrimaryOrientation) {
+      b = primaryOrientation();
+   }
 
-    return QPlatformScreen::transformBetween(a, b, target);
+   return QPlatformScreen::transformBetween(a, b, target);
 }
 
 /*!
@@ -582,13 +423,15 @@ QTransform QScreen::transformBetween(Qt::ScreenOrientation a, Qt::ScreenOrientat
 */
 QRect QScreen::mapBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &rect) const
 {
-    if (a == Qt::PrimaryOrientation)
-        a = primaryOrientation();
+   if (a == Qt::PrimaryOrientation) {
+      a = primaryOrientation();
+   }
 
-    if (b == Qt::PrimaryOrientation)
-        b = primaryOrientation();
+   if (b == Qt::PrimaryOrientation) {
+      b = primaryOrientation();
+   }
 
-    return QPlatformScreen::mapBetween(a, b, rect);
+   return QPlatformScreen::mapBetween(a, b, rect);
 }
 
 /*!
@@ -599,8 +442,8 @@ QRect QScreen::mapBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, cons
 */
 bool QScreen::isPortrait(Qt::ScreenOrientation o) const
 {
-    return o == Qt::PortraitOrientation || o == Qt::InvertedPortraitOrientation
-        || (o == Qt::PrimaryOrientation && primaryOrientation() == Qt::PortraitOrientation);
+   return o == Qt::PortraitOrientation || o == Qt::InvertedPortraitOrientation
+      || (o == Qt::PrimaryOrientation && primaryOrientation() == Qt::PortraitOrientation);
 }
 
 /*!
@@ -611,8 +454,8 @@ bool QScreen::isPortrait(Qt::ScreenOrientation o) const
 */
 bool QScreen::isLandscape(Qt::ScreenOrientation o) const
 {
-    return o == Qt::LandscapeOrientation || o == Qt::InvertedLandscapeOrientation
-        || (o == Qt::PrimaryOrientation && primaryOrientation() == Qt::LandscapeOrientation);
+   return o == Qt::LandscapeOrientation || o == Qt::InvertedLandscapeOrientation
+      || (o == Qt::PrimaryOrientation && primaryOrientation() == Qt::LandscapeOrientation);
 }
 
 /*!
@@ -635,7 +478,7 @@ bool QScreen::isLandscape(Qt::ScreenOrientation o) const
 
 void QScreenPrivate::updatePrimaryOrientation()
 {
-    primaryOrientation = geometry.width() >= geometry.height() ? Qt::LandscapeOrientation : Qt::PortraitOrientation;
+   primaryOrientation = geometry.width() >= geometry.height() ? Qt::LandscapeOrientation : Qt::PortraitOrientation;
 }
 
 /*!
@@ -676,50 +519,51 @@ void QScreenPrivate::updatePrimaryOrientation()
 
 QPixmap QScreen::grabWindow(WId window, int x, int y, int width, int height)
 {
-    const QPlatformScreen *platformScreen = handle();
-    if (! platformScreen) {
-        qWarning("invoked with handle==0");
-        return QPixmap();
-    }
+   const QPlatformScreen *platformScreen = handle();
+   if (! platformScreen) {
+      qWarning("invoked with handle==0");
+      return QPixmap();
+   }
 
-    const qreal factor = QHighDpiScaling::factor(this);
-    if (qFuzzyCompare(factor, 1))
-        return platformScreen->grabWindow(window, x, y, width, height);
+   const qreal factor = QHighDpiScaling::factor(this);
+   if (qFuzzyCompare(factor, 1)) {
+      return platformScreen->grabWindow(window, x, y, width, height);
+   }
 
-    const QPoint nativePos = QHighDpi::toNative(QPoint(x, y), factor);
-    QSize nativeSize(width, height);
+   const QPoint nativePos = QHighDpi::toNative(QPoint(x, y), factor);
+   QSize nativeSize(width, height);
 
-    if (nativeSize.isValid())
-        nativeSize = QHighDpi::toNative(nativeSize, factor);
+   if (nativeSize.isValid()) {
+      nativeSize = QHighDpi::toNative(nativeSize, factor);
+   }
 
-    QPixmap result = platformScreen->grabWindow(window, nativePos.x(), nativePos.y(),
-                                   nativeSize.width(), nativeSize.height());
+   QPixmap result = platformScreen->grabWindow(window, nativePos.x(), nativePos.y(),
+         nativeSize.width(), nativeSize.height());
 
-    // emerald    result.setDevicePixelRatio(factor);
+   result.setDevicePixelRatio(factor);
 
-    return result;
+   return result;
 }
 
 static inline void formatRect(QDebug &debug, const QRect r)
 {
-    debug << r.width() << 'x' << r.height()
-        << forcesign << r.x() << r.y() << noforcesign;
+   debug << r.width() << 'x' << r.height()
+      << forcesign << r.x() << r.y() << noforcesign;
 }
 
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QScreen *screen)
 {
-    // emerald   const QDebugStateSaver saver(debug);
-    // emerald   debug.nospace();
+   const QDebugStateSaver saver(debug);
+   debug.nospace();
 
-    debug << "QScreen(" << (const void *)screen;
+   debug << "QScreen(" << (const void *)screen;
 
-    if (screen) {
+   if (screen) {
       debug << ", name=" << screen->name();
 
-/* emerald
-      if (screen == QApplication::primaryScreen())
-          debug << ", primary";
-*/
+      if (screen == QGuiApplication::primaryScreen()) {
+         debug << ", primary";
+      }
 
       debug << ", geometry=";
 
@@ -728,18 +572,18 @@ Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QScreen *screen)
 
       formatRect(debug, screen->availableGeometry());
       debug << ", logical DPI=" << screen->logicalDotsPerInchX()
-          << ',' << screen->logicalDotsPerInchY()
-          << ", physical DPI=" << screen->physicalDotsPerInchX()
-          << ',' << screen->physicalDotsPerInchY()
-          << ", devicePixelRatio=" << screen->devicePixelRatio()
-          << ", orientation=" << screen->orientation()
-          << ", physical size=" << screen->physicalSize().width()
-          << 'x' << screen->physicalSize().height() << "mm";
+         << ',' << screen->logicalDotsPerInchY()
+         << ", physical DPI=" << screen->physicalDotsPerInchX()
+         << ',' << screen->physicalDotsPerInchY()
+         << ", devicePixelRatio=" << screen->devicePixelRatio()
+         << ", orientation=" << screen->orientation()
+         << ", physical size=" << screen->physicalSize().width()
+         << 'x' << screen->physicalSize().height() << "mm";
 
-    }
+   }
 
-    debug << ')';
-    return debug;
+   debug << ')';
+   return debug;
 }
 
 

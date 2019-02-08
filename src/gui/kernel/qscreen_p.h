@@ -24,40 +24,39 @@
 #define QSCREEN_P_H
 
 #include <qscreen.h>
-#include <qplatformscreen.h>
+#include <qplatform_screen.h>
 
 #include <qhighdpiscaling_p.h>
 
 class QScreenPrivate
 {
-    Q_DECLARE_PUBLIC(QScreen)
+   Q_DECLARE_PUBLIC(QScreen)
 
-public:
-    QScreenPrivate()
-        : platformScreen(0), orientationUpdateMask(0)
-    {
-    }
-    void setPlatformScreen(QPlatformScreen *screen);
+ public:
+   QScreenPrivate()
+      : platformScreen(0), orientationUpdateMask(0) {
+   }
+   void setPlatformScreen(QPlatformScreen *screen);
 
-    void updateHighDpi()
-    {
-        geometry          = platformScreen->deviceIndependentGeometry();
-        availableGeometry = QHighDpi::fromNative(platformScreen->availableGeometry(), QHighDpiScaling::factor(platformScreen), geometry.topLeft());
-    }
+   void updateHighDpi() {
+      geometry          = platformScreen->deviceIndependentGeometry();
+      availableGeometry = QHighDpi::fromNative(platformScreen->availableGeometry(), QHighDpiScaling::factor(platformScreen),
+            geometry.topLeft());
+   }
 
-    void updatePrimaryOrientation();
+   void updatePrimaryOrientation();
 
-    QPlatformScreen *platformScreen;
+   QPlatformScreen *platformScreen;
 
-    Qt::ScreenOrientations orientationUpdateMask;
-    Qt::ScreenOrientation  orientation;
-    Qt::ScreenOrientation  filteredOrientation;
-    Qt::ScreenOrientation  primaryOrientation;
+   Qt::ScreenOrientations orientationUpdateMask;
+   Qt::ScreenOrientation  orientation;
+   Qt::ScreenOrientation  filteredOrientation;
+   Qt::ScreenOrientation  primaryOrientation;
 
-    QRect geometry;
-    QRect availableGeometry;
-    QDpi logicalDpi;
-    qreal refreshRate;
+   QRect geometry;
+   QRect availableGeometry;
+   QDpi logicalDpi;
+   qreal refreshRate;
 
  protected:
    QScreen *q_ptr;

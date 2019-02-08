@@ -30,154 +30,175 @@
 #include <qsizef.h>
 #include <qtransform.h>
 #include <qnamespace.h>
+#include <qscopedpointer.h>
 
 class QPlatformScreen;
 class QScreenPrivate;
-//emerald    class QWindow;
+class QWindow;
 class QRect;
 class QPixmap;
 class QDebug;
 
 class Q_GUI_EXPORT QScreen : public QObject
 {
-    CS_OBJECT(QScreen)
-    Q_DECLARE_PRIVATE(QScreen)
+   GUI_CS_OBJECT(QScreen)
+   Q_DECLARE_PRIVATE(QScreen)
 
-    CS_PROPERTY_READ(name, name)
-    CS_PROPERTY_CONSTANT(name)
-    CS_PROPERTY_READ(depth, depth)
-    CS_PROPERTY_CONSTANT(depth)
-    CS_PROPERTY_READ(size, size)
-    CS_PROPERTY_NOTIFY(size, geometryChanged)
-    CS_PROPERTY_READ(availableSize, availableSize)
-    CS_PROPERTY_NOTIFY(availableSize, availableGeometryChanged)
-    CS_PROPERTY_READ(virtualSize, virtualSize)
-    CS_PROPERTY_NOTIFY(virtualSize, virtualGeometryChanged)
-    CS_PROPERTY_READ(availableVirtualSize, availableVirtualSize)
-    CS_PROPERTY_NOTIFY(availableVirtualSize, virtualGeometryChanged)
-    CS_PROPERTY_READ(geometry, geometry)
-    CS_PROPERTY_NOTIFY(geometry, geometryChanged)
-    CS_PROPERTY_READ(availableGeometry, availableGeometry)
-    CS_PROPERTY_NOTIFY(availableGeometry, availableGeometryChanged)
-    CS_PROPERTY_READ(virtualGeometry, virtualGeometry)
-    CS_PROPERTY_NOTIFY(virtualGeometry, virtualGeometryChanged)
-    CS_PROPERTY_READ(availableVirtualGeometry, availableVirtualGeometry)
-    CS_PROPERTY_NOTIFY(availableVirtualGeometry, virtualGeometryChanged)
-    CS_PROPERTY_READ(physicalSize, physicalSize)
-    CS_PROPERTY_NOTIFY(physicalSize, physicalSizeChanged)
-    CS_PROPERTY_READ(physicalDotsPerInchX, physicalDotsPerInchX)
-    CS_PROPERTY_NOTIFY(physicalDotsPerInchX, physicalDotsPerInchChanged)
-    CS_PROPERTY_READ(physicalDotsPerInchY, physicalDotsPerInchY)
-    CS_PROPERTY_NOTIFY(physicalDotsPerInchY, physicalDotsPerInchChanged)
-    CS_PROPERTY_READ(physicalDotsPerInch, physicalDotsPerInch)
-    CS_PROPERTY_NOTIFY(physicalDotsPerInch, physicalDotsPerInchChanged)
-    CS_PROPERTY_READ(logicalDotsPerInchX, logicalDotsPerInchX)
-    CS_PROPERTY_NOTIFY(logicalDotsPerInchX, logicalDotsPerInchChanged)
-    CS_PROPERTY_READ(logicalDotsPerInchY, logicalDotsPerInchY)
-    CS_PROPERTY_NOTIFY(logicalDotsPerInchY, logicalDotsPerInchChanged)
-    CS_PROPERTY_READ(logicalDotsPerInch, logicalDotsPerInch)
-    CS_PROPERTY_NOTIFY(logicalDotsPerInch, logicalDotsPerInchChanged)
-    CS_PROPERTY_READ(devicePixelRatio, devicePixelRatio)
-    CS_PROPERTY_NOTIFY(devicePixelRatio, physicalDotsPerInchChanged)
-    CS_PROPERTY_READ(primaryOrientation, primaryOrientation)
-    CS_PROPERTY_NOTIFY(primaryOrientation, primaryOrientationChanged)
-    CS_PROPERTY_READ(orientation, orientation)
-    CS_PROPERTY_NOTIFY(orientation, orientationChanged)
-    CS_PROPERTY_READ(nativeOrientation, nativeOrientation)
-    CS_PROPERTY_READ(refreshRate, refreshRate)
-    CS_PROPERTY_NOTIFY(refreshRate, refreshRateChanged)
+   GUI_CS_PROPERTY_READ(name, name)
+   GUI_CS_PROPERTY_CONSTANT(name)
 
-public:
-    ~QScreen();
-    QPlatformScreen *handle() const;
+   GUI_CS_PROPERTY_READ(depth, depth)
+   GUI_CS_PROPERTY_CONSTANT(depth)
 
-    QString name() const;
+   GUI_CS_PROPERTY_READ(size, size)
+   GUI_CS_PROPERTY_NOTIFY(size, geometryChanged)
 
-    int depth() const;
+   GUI_CS_PROPERTY_READ(availableSize, availableSize)
+   GUI_CS_PROPERTY_NOTIFY(availableSize, availableGeometryChanged)
 
-    QSize size() const;
-    QRect geometry() const;
+   GUI_CS_PROPERTY_READ(virtualSize, virtualSize)
+   GUI_CS_PROPERTY_NOTIFY(virtualSize, virtualGeometryChanged)
 
-    QSizeF physicalSize() const;
+   GUI_CS_PROPERTY_READ(availableVirtualSize, availableVirtualSize)
+   GUI_CS_PROPERTY_NOTIFY(availableVirtualSize, virtualGeometryChanged)
 
-    qreal physicalDotsPerInchX() const;
-    qreal physicalDotsPerInchY() const;
-    qreal physicalDotsPerInch() const;
+   GUI_CS_PROPERTY_READ(geometry, geometry)
+   GUI_CS_PROPERTY_NOTIFY(geometry, geometryChanged)
 
-    qreal logicalDotsPerInchX() const;
-    qreal logicalDotsPerInchY() const;
-    qreal logicalDotsPerInch() const;
+   GUI_CS_PROPERTY_READ(availableGeometry, availableGeometry)
+   GUI_CS_PROPERTY_NOTIFY(availableGeometry, availableGeometryChanged)
 
-    qreal devicePixelRatio() const;
+   GUI_CS_PROPERTY_READ(virtualGeometry, virtualGeometry)
+   GUI_CS_PROPERTY_NOTIFY(virtualGeometry, virtualGeometryChanged)
 
-    QSize availableSize() const;
-    QRect availableGeometry() const;
+   GUI_CS_PROPERTY_READ(availableVirtualGeometry, availableVirtualGeometry)
+   GUI_CS_PROPERTY_NOTIFY(availableVirtualGeometry, virtualGeometryChanged)
 
-    QList<QScreen *> virtualSiblings() const;
+   GUI_CS_PROPERTY_READ(physicalSize, physicalSize)
+   GUI_CS_PROPERTY_NOTIFY(physicalSize, physicalSizeChanged)
 
-    QSize virtualSize() const;
-    QRect virtualGeometry() const;
+   GUI_CS_PROPERTY_READ(physicalDotsPerInchX, physicalDotsPerInchX)
+   GUI_CS_PROPERTY_NOTIFY(physicalDotsPerInchX, physicalDotsPerInchChanged)
 
-    QSize availableVirtualSize() const;
-    QRect availableVirtualGeometry() const;
+   GUI_CS_PROPERTY_READ(physicalDotsPerInchY, physicalDotsPerInchY)
+   GUI_CS_PROPERTY_NOTIFY(physicalDotsPerInchY, physicalDotsPerInchChanged)
 
-    Qt::ScreenOrientation primaryOrientation() const;
-    Qt::ScreenOrientation orientation() const;
-    Qt::ScreenOrientation nativeOrientation() const;
+   GUI_CS_PROPERTY_READ(physicalDotsPerInch, physicalDotsPerInch)
+   GUI_CS_PROPERTY_NOTIFY(physicalDotsPerInch, physicalDotsPerInchChanged)
 
-    Qt::ScreenOrientations orientationUpdateMask() const;
-    void setOrientationUpdateMask(Qt::ScreenOrientations mask);
+   GUI_CS_PROPERTY_READ(logicalDotsPerInchX, logicalDotsPerInchX)
+   GUI_CS_PROPERTY_NOTIFY(logicalDotsPerInchX, logicalDotsPerInchChanged)
 
-    int angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b) const;
-    QTransform transformBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &target) const;
-    QRect mapBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &rect) const;
+   GUI_CS_PROPERTY_READ(logicalDotsPerInchY, logicalDotsPerInchY)
+   GUI_CS_PROPERTY_NOTIFY(logicalDotsPerInchY, logicalDotsPerInchChanged)
 
-    bool isPortrait(Qt::ScreenOrientation orientation) const;
-    bool isLandscape(Qt::ScreenOrientation orientation) const;
+   GUI_CS_PROPERTY_READ(logicalDotsPerInch, logicalDotsPerInch)
+   GUI_CS_PROPERTY_NOTIFY(logicalDotsPerInch, logicalDotsPerInchChanged)
 
-    QPixmap grabWindow(WId window, int x = 0, int y = 0, int w = -1, int h = -1);
+   GUI_CS_PROPERTY_READ(devicePixelRatio, devicePixelRatio)
+   GUI_CS_PROPERTY_NOTIFY(devicePixelRatio, physicalDotsPerInchChanged)
 
-    qreal refreshRate() const;
+   GUI_CS_PROPERTY_READ(primaryOrientation, primaryOrientation)
+   GUI_CS_PROPERTY_NOTIFY(primaryOrientation, primaryOrientationChanged)
 
-    CS_SIGNAL_1(Public, void geometryChanged(const QRect & geometry))
-    CS_SIGNAL_2(geometryChanged,geometry)
+   GUI_CS_PROPERTY_READ(orientation, orientation)
+   GUI_CS_PROPERTY_NOTIFY(orientation, orientationChanged)
 
-    CS_SIGNAL_1(Public, void availableGeometryChanged(const QRect & geometry))
-    CS_SIGNAL_2(availableGeometryChanged,geometry)
+   GUI_CS_PROPERTY_READ(nativeOrientation, nativeOrientation)
 
-    CS_SIGNAL_1(Public, void physicalSizeChanged(const QSizeF & size))
-    CS_SIGNAL_2(physicalSizeChanged,size)
+   GUI_CS_PROPERTY_READ(refreshRate, refreshRate)
+   GUI_CS_PROPERTY_NOTIFY(refreshRate, refreshRateChanged)
 
-    CS_SIGNAL_1(Public, void physicalDotsPerInchChanged(qreal dpi))
-    CS_SIGNAL_2(physicalDotsPerInchChanged,dpi)
+ public:
+   ~QScreen();
+   QPlatformScreen *handle() const;
 
-    CS_SIGNAL_1(Public, void logicalDotsPerInchChanged(qreal dpi))
-    CS_SIGNAL_2(logicalDotsPerInchChanged,dpi)
+   QString name() const;
+   int depth() const;
 
-    CS_SIGNAL_1(Public, void virtualGeometryChanged(const QRect & rect))
-    CS_SIGNAL_2(virtualGeometryChanged,rect)
+   QSize size() const;
+   QRect geometry() const;
 
-    CS_SIGNAL_1(Public, void primaryOrientationChanged(Qt::ScreenOrientation orientation))
-    CS_SIGNAL_2(primaryOrientationChanged,orientation)
+   QSizeF physicalSize() const;
 
-    CS_SIGNAL_1(Public, void orientationChanged(Qt::ScreenOrientation orientation))
-    CS_SIGNAL_2(orientationChanged,orientation)
+   qreal physicalDotsPerInchX() const;
+   qreal physicalDotsPerInchY() const;
+   qreal physicalDotsPerInch() const;
 
-    CS_SIGNAL_1(Public, void refreshRateChanged(qreal refreshRate))
-    CS_SIGNAL_2(refreshRateChanged,refreshRate)
+   qreal logicalDotsPerInchX() const;
+   qreal logicalDotsPerInchY() const;
+   qreal logicalDotsPerInch() const;
 
-protected:
+   qreal devicePixelRatio() const;
+
+   QSize availableSize() const;
+   QRect availableGeometry() const;
+
+   QList<QScreen *> virtualSiblings() const;
+
+   QSize virtualSize() const;
+   QRect virtualGeometry() const;
+
+   QSize availableVirtualSize() const;
+   QRect availableVirtualGeometry() const;
+
+   Qt::ScreenOrientation primaryOrientation() const;
+   Qt::ScreenOrientation orientation() const;
+   Qt::ScreenOrientation nativeOrientation() const;
+
+   Qt::ScreenOrientations orientationUpdateMask() const;
+   void setOrientationUpdateMask(Qt::ScreenOrientations mask);
+
+   int angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b) const;
+   QTransform transformBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &target) const;
+   QRect mapBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &rect) const;
+
+   bool isPortrait(Qt::ScreenOrientation orientation) const;
+   bool isLandscape(Qt::ScreenOrientation orientation) const;
+
+   QPixmap grabWindow(WId window, int x = 0, int y = 0, int w = -1, int h = -1);
+
+   qreal refreshRate() const;
+
+   GUI_CS_SIGNAL_1(Public, void geometryChanged(const QRect &geometry))
+   GUI_CS_SIGNAL_2(geometryChanged, geometry)
+
+   GUI_CS_SIGNAL_1(Public, void availableGeometryChanged(const QRect &geometry))
+   GUI_CS_SIGNAL_2(availableGeometryChanged, geometry)
+
+   GUI_CS_SIGNAL_1(Public, void physicalSizeChanged(const QSizeF &size))
+   GUI_CS_SIGNAL_2(physicalSizeChanged, size)
+
+   GUI_CS_SIGNAL_1(Public, void physicalDotsPerInchChanged(qreal dpi))
+   GUI_CS_SIGNAL_2(physicalDotsPerInchChanged, dpi)
+
+   GUI_CS_SIGNAL_1(Public, void logicalDotsPerInchChanged(qreal dpi))
+   GUI_CS_SIGNAL_2(logicalDotsPerInchChanged, dpi)
+
+   GUI_CS_SIGNAL_1(Public, void virtualGeometryChanged(const QRect &rect))
+   GUI_CS_SIGNAL_2(virtualGeometryChanged, rect)
+
+   GUI_CS_SIGNAL_1(Public, void primaryOrientationChanged(Qt::ScreenOrientation orientation))
+   GUI_CS_SIGNAL_2(primaryOrientationChanged, orientation)
+
+   GUI_CS_SIGNAL_1(Public, void orientationChanged(Qt::ScreenOrientation orientation))
+   GUI_CS_SIGNAL_2(orientationChanged, orientation)
+
+   GUI_CS_SIGNAL_1(Public, void refreshRateChanged(qreal refreshRate))
+   GUI_CS_SIGNAL_2(refreshRateChanged, refreshRate)
+
+ protected:
    QScopedPointer<QScreenPrivate> d_ptr;
 
-private:
-    explicit QScreen(QPlatformScreen *screen);
+ private:
+   explicit QScreen(QPlatformScreen *screen);
 
-    Q_DISABLE_COPY(QScreen)
+   Q_DISABLE_COPY(QScreen)
 
-    friend class QGuiApplicationPrivate;
-    friend class QPlatformIntegration;
-    friend class QPlatformScreen;
-    friend class QHighDpiScaling;
+   friend class QApplicationPrivate;
+   friend class QPlatformIntegration;
+   friend class QPlatformScreen;
+   friend class QHighDpiScaling;
 };
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QScreen *);

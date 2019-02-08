@@ -23,43 +23,11 @@
 #ifndef QEVENT_P_H
 #define QEVENT_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qurl.h>
-#include <QtGui/qevent.h>
+#include <qglobal.h>
+#include <qurl.h>
+#include <qevent.h>
 
-QT_BEGIN_NAMESPACE
 
-// ### Qt5/remove
-class QKeyEventEx : public QKeyEvent
-{
- public:
-   QKeyEventEx(Type type, int key, Qt::KeyboardModifiers modifiers,
-               const QString &text, bool autorep, ushort count,
-               quint32 nativeScanCode, quint32 nativeVirtualKey, quint32 nativeModifiers);
-   QKeyEventEx(const QKeyEventEx &other);
-
-   ~QKeyEventEx();
-
- protected:
-   quint32 nScanCode;
-   quint32 nVirtualKey;
-   quint32 nModifiers;
-   friend class QKeyEvent;
-};
-
-// ### Qt5/remove
-class QMouseEventEx : public QMouseEvent
-{
- public:
-   QMouseEventEx(Type type, const QPointF &pos, const QPoint &globalPos,
-                 Qt::MouseButton button, Qt::MouseButtons buttons,
-                 Qt::KeyboardModifiers modifiers);
-   ~QMouseEventEx();
-
- protected:
-   QPointF posF;
-   friend class QMouseEvent;
-};
 
 class QTouchEventTouchPointPrivate
 {
@@ -88,65 +56,25 @@ class QTouchEventTouchPointPrivate
            startPos, startScenePos, startScreenPos, startNormalizedPos,
            lastPos, lastScenePos, lastScreenPos, lastNormalizedPos;
    qreal pressure;
+
+   QVector2D velocity;
+   QTouchEvent::TouchPoint::InfoFlags flags;
+   QVector<QPointF> rawScreenPositions;
 };
 
-#ifndef QT_NO_GESTURES
-class QNativeGestureEvent : public QEvent
+#ifndef QT_NO_TABLETEVENT
+class QTabletEventPrivate
 {
  public:
-   enum Type {
-      None,
-      GestureBegin,
-      GestureEnd,
-      Pan,
-      Zoom,
-      Rotate,
-      Swipe
-   };
+   inline QTabletEventPrivate(Qt::MouseButton button, Qt::MouseButtons buttons)
+      : b(button),
+        buttonState(buttons)
+   { }
 
-   QNativeGestureEvent()
-      : QEvent(QEvent::NativeGesture), gestureType(None), percentage(0)
-#ifdef Q_OS_WIN
-      , sequenceId(0), argument(0)
+   Qt::MouseButton b;
+   Qt::MouseButtons buttonState;
+};
+#endif // QT_NO_TABLETEVENT
+
+
 #endif
-   {
-   }
-
-   Type gestureType;
-   float percentage;
-   QPoint position;
-   float angle;
-#ifdef Q_OS_WIN
-   ulong sequenceId;
-   quint64 argument;
-#endif
-};
-
-class QGestureEventPrivate
-{
- public:
-   inline QGestureEventPrivate(const QList<QGesture *> &list)
-      : gestures(list), widget(0) {
-   }
-
-   QList<QGesture *> gestures;
-   QWidget *widget;
-   QMap<Qt::GestureType, bool> accepted;
-   QMap<Qt::GestureType, QWidget *> targetWidgets;
-};
-#endif // QT_NO_GESTURES
-
-class QFileOpenEventPrivate
-{
- public:
-   inline QFileOpenEventPrivate(const QUrl &url)
-      : url(url) {
-   }
-   ~QFileOpenEventPrivate();
-
-   QUrl url;
-};
-
-QT_END_NAMESPACE
-
-#endif // QEVENT_P_H
