@@ -1,6 +1,7 @@
 add_definitions(
     -DQT_BUILD_SVG_LIB
 )
+
 set(EXTRA_SVG_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
 set(EXTRA_SVG_CXXFLAGS)
 set(EXTRA_SVG_LDFLAGS)
@@ -97,6 +98,12 @@ macro_generate_package(
     "${EXTRA_SVG_CXXFLAGS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+   add_definitions(
+        -DHAVE_POSIX_MEMALIGN
+   )
+endif()
 
 install(
     TARGETS CsSvg${BUILD_ABI}
