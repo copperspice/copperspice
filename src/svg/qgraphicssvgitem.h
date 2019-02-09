@@ -25,6 +25,7 @@
 
 #include <qglobal.h>
 
+#if ! defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
 
 #include <qgraphicsitem.h>
 class QSvgRenderer;

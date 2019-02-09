@@ -22,8 +22,6 @@
 
 #include "qsvgstyle_p.h"
 
-#ifndef QT_NO_SVG
-
 #include "qsvgfont_p.h"
 #include "qsvggraphics_p.h"
 #include "qsvgnode_p.h"
@@ -36,7 +34,6 @@
 #include "qmath.h"
 #include "qnumeric.h"
 
-QT_BEGIN_NAMESPACE
 
 QSvgExtraStates::QSvgExtraStates()
    : fillOpacity(1.0)
@@ -64,12 +61,11 @@ void QSvgFillStyleProperty::revert(QPainter *, QSvgExtraStates &)
    Q_ASSERT(!"This should not be called!");
 }
 
-
 QSvgQualityStyle::QSvgQualityStyle(int color)
-   : m_colorRendering(color)
 {
 
 }
+
 void QSvgQualityStyle::apply(QPainter *, const QSvgNode *, QSvgExtraStates &)
 {
 
@@ -438,7 +434,6 @@ QBrush QSvgGradientStyle::brush(QPainter *, QSvgExtraStates &)
    return b;
 }
 
-
 void QSvgGradientStyle::setMatrix(const QMatrix &mat)
 {
    m_matrix = mat;
@@ -499,7 +494,6 @@ QSvgStyleProperty::Type QSvgTransformStyle::type() const
 {
    return TRANSFORM;
 }
-
 
 QSvgCompOpStyle::QSvgCompOpStyle(QPainter::CompositionMode mode)
    : m_mode(mode)
@@ -563,9 +557,11 @@ void QSvgStyle::apply(QPainter *p, const QSvgNode *node, QSvgExtraStates &states
       qreal totalTimeElapsed = node->document()->currentElapsed();
       // Find the last animateTransform with additive="replace", since this will override all
       // previous animateTransforms.
+
       QList<QSvgRefCounter<QSvgAnimateTransform> >::const_iterator itr = animateTransforms.constEnd();
       do {
          --itr;
+
          if ((*itr)->animActive(totalTimeElapsed)
                && (*itr)->additiveType() == QSvgAnimateTransform::Replace) {
             // An animateTransform with additive="replace" will replace the transform attribute.
@@ -649,10 +645,16 @@ void QSvgStyle::revert(QPainter *p, QSvgExtraStates &states)
 
 QSvgAnimateTransform::QSvgAnimateTransform(int startMs, int endMs, int byMs )
    : QSvgStyleProperty(),
-     m_from(startMs), m_to(endMs), m_by(byMs),
-     m_type(Empty), m_additive(Replace), m_count(0), m_finished(false), m_transformApplied(false)
+      m_from(startMs),
+      m_totalRunningTime(endMs - startMs),
+      m_type(Empty),
+      m_additive(Replace),
+      m_count(0),
+      m_finished(false),
+      m_freeze(false),
+      m_repeatCount(-1.),
+      m_transformApplied(false)
 {
-   m_totalRunningTime = m_to - m_from;
 }
 
 void QSvgAnimateTransform::setArgs(TransformType type, Additive additive, const QVector<qreal> &args)
@@ -821,14 +823,16 @@ void QSvgAnimateTransform::setRepeatCount(qreal repeatCount)
 
 QSvgAnimateColor::QSvgAnimateColor(int startMs, int endMs, int byMs)
    : QSvgStyleProperty(),
-     m_from(startMs), m_to(endMs), m_by(byMs),
-     m_finished(false)
+      m_from(startMs),
+      m_totalRunningTime(endMs - startMs),
+      m_fill(false),
+      m_finished(false),
+      m_freeze(false),
+      m_repeatCount(-1.)
 {
-   m_totalRunningTime = m_to - m_from;
 }
 
-void QSvgAnimateColor::setArgs(bool fill,
-                               const QList<QColor> &colors)
+void QSvgAnimateColor::setArgs(bool fill, const QList<QColor> &colors)
 {
    m_fill = fill;
    m_colors = colors;
@@ -950,7 +954,8 @@ void QSvgGradientStyle::resolveStops()
 {
    if (!m_link.isEmpty() && m_doc) {
       QSvgStyleProperty *prop = m_doc->styleProperty(m_link);
-      if (prop) {
+
+      if (prop && prop != this) {
          if (prop->type() == QSvgStyleProperty::GRADIENT) {
             QSvgGradientStyle *st =
                static_cast<QSvgGradientStyle *>(prop);
@@ -965,6 +970,4 @@ void QSvgGradientStyle::resolveStops()
    }
 }
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_SVG

@@ -23,14 +23,10 @@
 #ifndef QSVGNODE_P_H
 #define QSVGNODE_P_H
 
-#include "qsvgstyle_p.h"
+#include <qsvgstyle_p.h>
 
-#ifndef QT_NO_SVG
-
-#include "QtCore/qstring.h"
-#include "QtCore/qhash.h"
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qhash.h>
 
 class QPainter;
 class QSvgTinyDocument;
@@ -79,12 +75,14 @@ class QSvgNode
       NoneMode,
       InheritMode
    };
+
  public:
    QSvgNode(QSvgNode *parent = 0);
    virtual ~QSvgNode();
    virtual void draw(QPainter *p, QSvgExtraStates &states) = 0;
 
    QSvgNode *parent() const;
+   bool isDescendantOf(const QSvgNode *parent) const;
 
    void appendStyleProperty(QSvgStyleProperty *prop, const QString &id);
    void applyStyle(QPainter *p, QSvgExtraStates &states) const;
@@ -125,10 +123,12 @@ class QSvgNode
 
    QString xmlClass() const;
    void setXmlClass(const QString &str);
+
  protected:
    mutable QSvgStyle m_style;
 
    static qreal strokeWidth(QPainter *p);
+
  private:
    QSvgNode   *m_parent;
 
@@ -138,7 +138,7 @@ class QSvgNode
    QStringList m_requiredFormats;
    QStringList m_requiredFonts;
 
-   bool        m_visible;
+   bool m_visible;
 
    QString m_id;
    QString m_class;
@@ -169,7 +169,4 @@ inline QString QSvgNode::xmlClass() const
    return m_class;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG
-#endif // QSVGNODE_P_H
+#endif

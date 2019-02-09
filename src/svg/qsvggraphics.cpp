@@ -40,7 +40,7 @@
     p->setOpacity(oldOpacity * states.fillOpacity);         \
     command;                                                \
     p->setPen(oldPen);                                      \
-    if (oldPen.widthF() != 0) {                             \
+    if (oldPen != Qt::NoPen && oldPen.brush() != Qt::NoBrush && oldPen.widthF() != 0) { \
         p->setOpacity(oldOpacity * states.strokeOpacity);   \
         p->setBrush(Qt::NoBrush);                           \
         command;                                            \
@@ -108,6 +108,7 @@ QSvgImage::QSvgImage(QSvgNode *parent, const QImage &image,
    if (m_bounds.width() == 0) {
       m_bounds.setWidth(m_image.width());
    }
+
    if (m_bounds.height() == 0) {
       m_bounds.setHeight(m_image.height());
    }
@@ -120,12 +121,10 @@ void QSvgImage::draw(QPainter *p, QSvgExtraStates &states)
    revertStyle(p, states);
 }
 
-
 QSvgLine::QSvgLine(QSvgNode *parent, const QLineF &line)
    : QSvgNode(parent), m_line(line)
 {
 }
-
 
 void QSvgLine::draw(QPainter *p, QSvgExtraStates &states)
 {
@@ -302,9 +301,9 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
    bool appendSpace = false;
    QVector<QString> paragraphs;
    QStack<QTextCharFormat> formats;
-   QVector<QList<QTextLayout::FormatRange> > formatRanges;
+
+   QVector<QVector<QTextLayout::FormatRange> > formatRanges(1);
    paragraphs.push_back(QString());
-   formatRanges.push_back(QList<QTextLayout::FormatRange>());
 
    for (int i = 0; i < m_tspans.size(); ++i) {
       if (m_tspans[i] == LINEBREAK) {
@@ -323,7 +322,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
             }
             appendSpace = false;
             paragraphs.push_back(QString());
-            formatRanges.push_back(QList<QTextLayout::FormatRange>());
+                formatRanges.resize(formatRanges.size() + 1);
          }
       } else {
          WhitespaceMode mode = m_tspans[i]->whitespaceMode();
@@ -337,7 +336,8 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
          newText.replace(QLatin1Char('\n'), QLatin1Char(' '));
 
          bool prependSpace = !appendSpace && !m_tspans[i]->isTspan() && (mode == Default) && !paragraphs.back().isEmpty() &&
-                             newText.startsWith(QLatin1Char(' '));
+                             newText.startsWith(' ');
+
          if (appendSpace || prependSpace) {
             paragraphs.back().append(QLatin1Char(' '));
          }
@@ -388,7 +388,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
          QTextOption op = tl.textOption();
          op.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
          tl.setTextOption(op);
-         tl.setAdditionalFormats(formatRanges[i]);
+         tl.setFormats(formatRanges[i]);
          tl.beginLayout();
 
          forever {
@@ -462,6 +462,10 @@ QSvgUse::QSvgUse(const QPointF &start, QSvgNode *parent, QSvgNode *node)
 
 void QSvgUse::draw(QPainter *p, QSvgExtraStates &states)
 {
+   if (! m_link || isDescendantOf(m_link)) {
+      return;
+   }
+
    applyStyle(p, states);
 
    if (!m_start.isNull()) {
@@ -550,7 +554,8 @@ QSvgNode::Type QSvgVideo::type() const
 QRectF QSvgUse::bounds(QPainter *p, QSvgExtraStates &states) const
 {
    QRectF bounds;
-   if (m_link) {
+
+   if (m_link && !isDescendantOf(m_link)) {
       p->translate(m_start);
       bounds = m_link->transformedBounds(p, states);
       p->translate(-m_start);

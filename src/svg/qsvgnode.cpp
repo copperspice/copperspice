@@ -23,12 +23,8 @@
 #include "qsvgnode_p.h"
 #include "qsvgtinydocument_p.h"
 
-#ifndef QT_NO_SVG
-
 #include "qdebug.h"
 #include "qstack.h"
-
-QT_BEGIN_NAMESPACE
 
 QSvgNode::QSvgNode(QSvgNode *parent)
    : m_parent(parent),
@@ -42,6 +38,16 @@ QSvgNode::~QSvgNode()
 
 }
 
+bool QSvgNode::isDescendantOf(const QSvgNode *parent) const
+{
+    const QSvgNode *n = this;
+    while (n) {
+        if (n == parent)
+            return true;
+        n = n->m_parent;
+    }
+    return false;
+}
 void QSvgNode::appendStyleProperty(QSvgStyleProperty *prop, const QString &id)
 {
    //qDebug()<<"appending "<<prop->type()<< " ("<< id <<") "<<"to "<<this<<this->type();
@@ -207,7 +213,7 @@ QRectF QSvgNode::transformedBounds() const
    QPainter p(&dummy);
    QSvgExtraStates states;
 
-   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::SvgMiterJoin);
    pen.setMiterLimit(4);
    p.setPen(pen);
 
@@ -340,6 +346,4 @@ qreal QSvgNode::strokeWidth(QPainter *p)
    return pen.widthF();
 }
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_SVG

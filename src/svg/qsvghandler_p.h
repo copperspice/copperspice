@@ -25,15 +25,11 @@
 
 #include <qxmlstream.h>
 
-#ifndef QT_NO_SVG
-
 #include <qhash.h>
 #include <qstack.h>
 #include <qsvgstyle_p.h>
 #include <qcssparser_p.h>
 #include <qsvggraphics_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QSvgNode;
 class QSvgTinyDocument;
@@ -42,10 +38,12 @@ class QColor;
 class QSvgStyleSelector;
 class QXmlStreamReader;
 
+#ifndef QT_NO_CSSPARSER
 struct QSvgCssAttribute {
    QString name;
    QString value;
 };
+#endif
 
 class QSvgHandler
 {
@@ -73,10 +71,11 @@ class QSvgHandler
       return document() != 0 && !xml->hasError();
    }
 
-   inline QString errorString() const {
+   QString errorString() const {
       return xml->errorString();
    }
-   inline int lineNumber() const {
+
+   int lineNumber() const {
       return xml->lineNumber();
    }
 
@@ -88,15 +87,19 @@ class QSvgHandler
    void popColor();
    QColor currentColor() const;
 
+#ifndef QT_NO_CSSPARSER
    void setInStyle(bool b);
    bool inStyle() const;
 
    QSvgStyleSelector *selector() const;
+#endif
 
    void setAnimPeriod(int start, int end);
    int animationDuration() const;
 
+#ifndef QT_NO_CSSPARSER
    void parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *attributes);
+#endif
 
    inline QPen defaultPen() const {
       return m_defaultPen;
@@ -131,14 +134,16 @@ class QSvgHandler
    QStack<QColor> m_colorStack;
    QStack<int>    m_colorTagCount;
 
+#ifndef QT_NO_CSSPARSER
    bool m_inStyle;
-
    QSvgStyleSelector *m_selector;
+   QCss::Parser m_cssParser;
+#endif
 
    int m_animEnd;
 
    QXmlStreamReader *const xml;
-   QCss::Parser m_cssParser;
+
    void parse();
    void resolveGradients(QSvgNode *node);
 
@@ -148,7 +153,5 @@ class QSvgHandler
    const bool m_ownsReader;
 };
 
-QT_END_NAMESPACE
 
-#endif // QT_NO_SVG
-#endif // QSVGHANDLER_P_H
+#endif

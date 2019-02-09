@@ -22,11 +22,8 @@
 
 #include "qsvgtinydocument_p.h"
 
-#ifndef QT_NO_SVG
-
 #include "qsvghandler_p.h"
 #include "qsvgfont_p.h"
-
 #include "qpainter.h"
 #include "qfile.h"
 #include "qbuffer.h"
@@ -39,7 +36,6 @@
 #include <zlib.h>
 #endif
 
-QT_BEGIN_NAMESPACE
 
 QSvgTinyDocument::QSvgTinyDocument()
    : QSvgStructureNode(0)
@@ -224,7 +220,8 @@ void QSvgTinyDocument::draw(QPainter *p, const QRectF &bounds)
    //sets default style on the painter
    //### not the most optimal way
    mapSourceToTarget(p, bounds);
-   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+
+   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::SvgMiterJoin);
    pen.setMiterLimit(4);
    p->setPen(pen);
    p->setBrush(Qt::black);
@@ -232,6 +229,7 @@ void QSvgTinyDocument::draw(QPainter *p, const QRectF &bounds)
    p->setRenderHint(QPainter::SmoothPixmapTransform);
    QList<QSvgNode *>::iterator itr = m_renderers.begin();
    applyStyle(p, m_states);
+
    while (itr != m_renderers.end()) {
       QSvgNode *node = *itr;
       if ((node->isVisible()) && (node->displayMode() != QSvgNode::NoneMode)) {
@@ -239,13 +237,13 @@ void QSvgTinyDocument::draw(QPainter *p, const QRectF &bounds)
       }
       ++itr;
    }
+
    revertStyle(p, m_states);
    p->restore();
 }
 
 
-void QSvgTinyDocument::draw(QPainter *p, const QString &id,
-                            const QRectF &bounds)
+void QSvgTinyDocument::draw(QPainter *p, const QString &id, const QRectF &bounds)
 {
    QSvgNode *node = scopeNode(id);
 
@@ -269,7 +267,7 @@ void QSvgTinyDocument::draw(QPainter *p, const QString &id,
    QTransform originalTransform = p->worldTransform();
 
    //XXX set default style on the painter
-   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::SvgMiterJoin);
    pen.setMiterLimit(4);
    p->setPen(pen);
    p->setBrush(Qt::black);
@@ -278,6 +276,7 @@ void QSvgTinyDocument::draw(QPainter *p, const QString &id,
 
    QStack<QSvgNode *> parentApplyStack;
    QSvgNode *parent = node->parent();
+
    while (parent) {
       parentApplyStack.push(parent);
       parent = parent->parent();
@@ -304,7 +303,6 @@ void QSvgTinyDocument::draw(QPainter *p, const QString &id,
 
    p->restore();
 }
-
 
 QSvgNode::Type QSvgTinyDocument::type() const
 {
@@ -420,9 +418,10 @@ void QSvgTinyDocument::mapSourceToTarget(QPainter *p, const QRectF &targetRect, 
 QRectF QSvgTinyDocument::boundsOnElement(const QString &id) const
 {
    const QSvgNode *node = scopeNode(id);
-   if (!node) {
+   if (! node) {
       node = this;
    }
+
    return node->transformedBounds();
 }
 
@@ -479,6 +478,3 @@ void QSvgTinyDocument::setFramesPerSecond(int num)
    m_fps = num;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVG

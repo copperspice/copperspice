@@ -22,6 +22,8 @@
 
 #include "qgraphicssvgitem.h"
 
+#if !defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
+
 #include <qpainter.h>
 #include <qstyleoption.h>
 #include <qsvgrenderer.h>

@@ -23,17 +23,16 @@
 #ifndef QSVGRENDERER_H
 #define QSVGRENDERER_H
 
-#include <QtGui/qmatrix.h>
+#include <qmatrix.h>
 
 #ifndef QT_NO_SVGRENDERER
 
-#include <QtCore/qobject.h>
-#include <QtCore/qsize.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qxmlstream.h>
+#include <qobject.h>
+#include <qsize.h>
+#include <qrect.h>
+#include <qxmlstream.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
 
 class QSvgRendererPrivate;
 class QPainter;
@@ -115,9 +114,6 @@ void QSvgRenderer::cs_setViewBox(const QRectF &viewbox)
 {
    setViewBox(viewbox);
 }
-
-QT_END_NAMESPACE
-
 
 #endif // QT_NO_SVGRENDERER
 #endif // QSVGRENDERER_H
