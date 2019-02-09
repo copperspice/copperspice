@@ -270,8 +270,10 @@ bool TSReader::read(Translator &translator)
             if (isEndElement()) {
                // </TS> found, finish local loop
                break;
+
             } else if (isWhiteSpace()) {
                // ignore these, just whitespace
+
             } else if (elementStarts(strdefaultcodec)) {
                // <defaultcodec>
                const QString &codec = readElementText();
@@ -279,6 +281,7 @@ bool TSReader::read(Translator &translator)
                   translator.setCodecName(codec.toLatin1());
                }
                // </defaultcodec>
+
             } else if (isStartElement()
                        && name().toString().startsWith(strextrans)) {
                // <extra-...>
@@ -490,7 +493,7 @@ static QString protect(const QString &str)
    return result;
 }
 
-static QString evilBytes(const QString &str, bool isUtf8, int format, const QByteArray &codecName)
+static QString evilBytes(const QString &str, bool isUtf8, int format, const QString &codecName)
 {
    if (isUtf8) {
       return protect(str);
@@ -599,7 +602,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd, in
    }
    t << ">\n";
 
-   QByteArray codecName = translator.codecName();
+   QString codecName = translator.codecName();
    if (codecName != "ISO-8859-1") {
       t << "<defaultcodec>" << codecName << "</defaultcodec>\n";
    }
@@ -625,20 +628,23 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd, in
       }
       context.append(msg);
    }
+
    if (cd.sortContexts()) {
       std::sort(contextOrder.begin(), contextOrder.end());
    }
 
    QHash<QString, int> currentLine;
    QString currentFile;
-   foreach (const QString & context, contextOrder) {
+
+   for (const QString & context : contextOrder) {
       const TranslatorMessage &firstMsg = messageOrder[context].first();
       t << "<context" << ((!fileIsUtf8 && firstMsg.isUtf8()) ? " encoding=\"UTF-8\"" : "") << ">\n";
 
       t << "    <name>"
         << evilBytes(context, firstMsg.isUtf8() || fileIsUtf8, format, codecName)
         << "</name>\n";
-      foreach (const TranslatorMessage & msg, messageOrder[context]) {
+
+      for (const TranslatorMessage & msg : messageOrder[context]) {
          //msg.dump();
 
          bool isUtf8 = msg.isUtf8();

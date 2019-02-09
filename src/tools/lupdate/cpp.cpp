@@ -2514,7 +2514,7 @@ const ParseResults *CppParser::recordResults(bool isHeader)
    if (isHeader) {
       const ParseResults *pr;
 
-      if (!tor && results->includes.count() == 1
+      if (! tor && results->includes.count() == 1
             && results->rootNamespace.children.isEmpty()
             && results->rootNamespace.aliases.isEmpty()
             && results->rootNamespace.usings.isEmpty()) {
@@ -2543,10 +2543,11 @@ const ParseResults *CppParser::recordResults(bool isHeader)
 */
 void fetchtrInlinedCpp(const QString &in, Translator &translator, const QString &context)
 {
-   CppParser parser;
-   parser.setInput(in);
    ConversionData cd;
    QSet<QString> inclusions;
+
+   CppParser parser;
+   parser.setInput(in);
    parser.setTranslator(&translator);
    parser.parse(context, cd, QStringList(), inclusions);
    parser.deleteResults();
@@ -2554,7 +2555,7 @@ void fetchtrInlinedCpp(const QString &in, Translator &translator, const QString 
 
 void loadCPP(Translator &translator, const QStringList &filenames, ConversionData &cd)
 {
-   QByteArray codecName = cd.m_codecForSource.isEmpty() ? translator.codecName() : cd.m_codecForSource;
+   QString codecName = cd.m_codecForSource.isEmpty() ? translator.codecName() : cd.m_codecForSource;
    QTextCodec *codec = QTextCodec::codecForName(codecName);
 
    for (const QString & filename : filenames) {
@@ -2564,11 +2565,12 @@ void loadCPP(Translator &translator, const QStringList &filenames, ConversionDat
 
       QFile file(filename);
       if (!file.open(QIODevice::ReadOnly)) {
-         cd.appendError(LU::tr("Can not open %1: %2").formatArgs(filename, file.errorString()));
+         cd.appendError(LU::tr("Unable to open %1: %2").formatArgs(filename, file.errorString()));
          continue;
       }
 
       CppParser parser;
+
       QTextStream ts(&file);
       ts.setCodec(codec);
       ts.setAutoDetectUnicode(true);
@@ -2581,6 +2583,7 @@ void loadCPP(Translator &translator, const QStringList &filenames, ConversionDat
       Translator *tor = new Translator;
       tor->setCodecName(translator.codecName());
       parser.setTranslator(tor);
+
       QSet<QString> inclusions;
       parser.parse(cd.m_defaultContext, cd, QStringList(), inclusions);
       parser.recordResults(isHeader(filename));

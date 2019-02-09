@@ -157,11 +157,13 @@ class Translator
    Duplicates resolveDuplicates();
    void reportDuplicates(const Duplicates &dupes, const QString &fileName, bool verbose);
 
-   void setCodecName(const QByteArray &name);
+   void setCodecName(const QString &name);
    void setCodec(QTextCodec *codec) {
       m_codec = codec;
    }
-   QByteArray codecName() const;
+
+   QString codecName() const;
+
    QTextCodec *codec() const {
       return m_codec;
    }
@@ -177,13 +179,14 @@ class Translator
    void setLocationsType(LocationsType lt) {
       m_locationsType = lt;
    }
+
    LocationsType locationsType() const {
       return m_locationsType;
    }
 
    static QString makeLanguageCode(QLocale::Language language, QLocale::Country country);
-   static void languageAndCountry(const QString &languageCode,
-                                  QLocale::Language *lang, QLocale::Country *country);
+   static void languageAndCountry(const QString &languageCode, QLocale::Language *lang, QLocale::Country *country);
+
    void setLanguageCode(const QString &languageCode) {
       m_language = languageCode;
    }

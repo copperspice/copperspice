@@ -624,7 +624,7 @@ bool loadJava(Translator &translator, const QString &filename, ConversionData &c
    QFile file(filename);
 
    if (!file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Cannot open %1: %2").formatArgs(filename, file.errorString()));
+      cd.appendError(LU::tr("Can not open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
 
@@ -639,12 +639,14 @@ bool loadJava(Translator &translator, const QString &filename, ConversionData &c
    yyParenLineNo = 1;
 
    QTextStream ts(&file);
-   QByteArray codecName;
-   if (!cd.m_codecForSource.isEmpty()) {
-      codecName = cd.m_codecForSource;
+   QString codecName;
+
+   if (! cd.m_codecForSource.isEmpty()) {
+      codecName = QString::fromLatin1(cd.m_codecForSource);
    } else {
-      codecName = translator.codecName();   // Just because it should be latin1 already
+      codecName = translator.codecName();   // should be latin1 already
    }
+
    ts.setCodec(QTextCodec::codecForName(codecName));
    ts.setAutoDetectUnicode(true);
    yyInStr = ts.readAll();

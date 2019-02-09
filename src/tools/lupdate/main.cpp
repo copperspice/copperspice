@@ -152,7 +152,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 
          if (setCodec && fetchedTor.codec() != tor.codec())
             printErr(LU::tr("lupdate warning: Codec for tr() '%1' disagrees with existing file's codec '%2'. Expect trouble.\n")
-                  .formatArgs(QString::fromLatin1(fetchedTor.codecName()), QString::fromLatin1(tor.codecName())));
+                  .formatArgs(fetchedTor.codecName(), tor.codecName()));
 
          if (!targetLanguage.isEmpty() && targetLanguage != tor.languageCode())
             printErr(LU::tr("lupdate warning: Specified target language '%1' disagrees with"

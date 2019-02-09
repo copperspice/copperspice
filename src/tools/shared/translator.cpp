@@ -40,8 +40,6 @@
 #include <QtCore/QTextStream>
 #include <qtranslator_p.h>
 
-QT_BEGIN_NAMESPACE
-
 Translator::Translator() :
    m_codec(QTextCodec::codecForName("ISO-8859-1")),
    m_locationsType(AbsoluteLocations),
@@ -751,20 +749,23 @@ void Translator::setExtra(const QString &key, const QString &value)
    m_extra[key] = value;
 }
 
-void Translator::setCodecName(const QByteArray &name)
+void Translator::setCodecName(const QString &name)
 {
    QTextCodec *codec = QTextCodec::codecForName(name);
-   if (!codec) {
-      if (!name.isEmpty()) {
-         std::cerr << "No QTextCodec for " << name.constData() << " available. Using Latin1.\n";
+
+   if (! codec) {
+      if (! name.isEmpty()) {
+         std::cerr << "No QTextCodec for " << name.constData() << " available, using ISO-8859-1\n";
       }
+
       m_codec = QTextCodec::codecForName("ISO-8859-1");
+
    } else {
       m_codec = codec;
    }
 }
 
-QByteArray Translator::codecName() const
+QString Translator::codecName() const
 {
    return m_codec->name();
 }
@@ -776,4 +777,3 @@ void Translator::dump() const
    }
 }
 
-QT_END_NAMESPACE

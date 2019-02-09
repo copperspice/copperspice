@@ -31,15 +31,12 @@
 #include <QtCore/QString>
 #include <QtCore/QTextCodec>
 
-QT_BEGIN_NAMESPACE
-
 // magic number for the file
 static const int MagicLength = 16;
 static const uchar magic[MagicLength] = {
    0x3c, 0xb8, 0x64, 0x18, 0xca, 0xef, 0x9c, 0x95,
    0xcd, 0x21, 0x1c, 0xbf, 0x60, 0xa1, 0xbd, 0xdd
 };
-
 
 namespace {
 
@@ -158,7 +155,7 @@ class Releaser
 
    Releaser() : m_codec(0) {}
 
-   void setCodecName(const QByteArray &codecName) {
+   void setCodecName(const QString &codecName) {
       m_codec = QTextCodec::codecForName(codecName);
    }
 
@@ -808,4 +805,3 @@ int initQM()
 
 Q_CONSTRUCTOR_FUNCTION(initQM)
 
-QT_END_NAMESPACE

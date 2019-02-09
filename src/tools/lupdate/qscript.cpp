@@ -2714,7 +2714,6 @@ void QScriptParser::processComment(const QChar *chars, int length)
    }
 }
 
-
 bool loadQScript(Translator &translator, const QString &filename, ConversionData &cd)
 {
    QFile file(filename);
@@ -2725,12 +2724,12 @@ bool loadQScript(Translator &translator, const QString &filename, ConversionData
    }
 
    QTextStream ts(&file);
-   QByteArray codecName;
+   QString codecName;
 
-   if (!cd.m_codecForSource.isEmpty()) {
-      codecName = cd.m_codecForSource;
+   if (! cd.m_codecForSource.isEmpty()) {
+      codecName = QString::fromLatin1(cd.m_codecForSource);
    } else {
-      codecName = translator.codecName();   // Just because it should be latin1 already
+      codecName = translator.codecName();   // should be latin1 already
    }
 
    ts.setCodec(QTextCodec::codecForName(codecName));
@@ -2739,9 +2738,11 @@ bool loadQScript(Translator &translator, const QString &filename, ConversionData
    QString code = ts.readAll();
    QScriptParser parser;
    QScript::Lexer lexer(&parser);
+
    lexer.setCode(code, filename, /*lineNumber=*/1);
    parser.setLexer(&lexer);
    parser.setTranslator(&translator);
+
    if (!parser.parse()) {
       std::cerr << qPrintable(filename) << ':' << parser.errorLineNumber() << ": "
                 << qPrintable(parser.errorMessage()) << std::endl;
