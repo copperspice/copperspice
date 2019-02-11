@@ -27,6 +27,10 @@
 class QIBaseDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QIBaseDriverPlugin)
+
+   CSQ_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_KEY("QIBASE")
+
 public:
     QIBaseDriverPlugin();
 
@@ -45,6 +49,7 @@ QSqlDriver* QIBaseDriverPlugin::create(const QString &name)
         QIBaseDriver* driver = new QIBaseDriver();
         return driver;
     }
+
     return 0;
 }
 

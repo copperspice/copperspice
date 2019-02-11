@@ -29,11 +29,14 @@ class QODBCDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QODBCDriverPlugin)
 
+   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_KEY("QODBC")
+   // CS_PLUGIN_KEY("QODBC3")
+
 public:
     QODBCDriverPlugin();
 
     QSqlDriver *create(const QString &) override;
-
 };
 
 QODBCDriverPlugin::QODBCDriverPlugin()
@@ -43,7 +46,7 @@ QODBCDriverPlugin::QODBCDriverPlugin()
 
 QSqlDriver* QODBCDriverPlugin::create(const QString &name)
 {
-    if (name == "QODBC") {
+    if (name == "QODBC" || name == "QODBC3") {
         QODBCDriver* driver = new QODBCDriver();
         return driver;
     }

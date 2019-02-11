@@ -24,10 +24,15 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/oci/qsql_oci.h"
 
-QT_BEGIN_NAMESPACE
 
 class QOCIDriverPlugin : public QSqlDriverPlugin
 {
+   CS_OBJECT(QOCIDriverPlugin)
+
+   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_KEY("QOCI")
+   // CS_PLUGIN_KEY("QOCI8")
+
 public:
     QOCIDriverPlugin();
 
@@ -42,21 +47,11 @@ QOCIDriverPlugin::QOCIDriverPlugin()
 
 QSqlDriver* QOCIDriverPlugin::create(const QString &name)
 {
-    if (name == "QOCI") {
+    if (name == "QOCI" || name == "QOCI8") {
         QOCIDriver* driver = new QOCIDriver();
         return driver;
     }
     return 0;
 }
 
-QStringList QOCIDriverPlugin::keys() const
-{
-    QStringList l;   
-    l.append("QOCI");
-    return l;
-}
 
-Q_EXPORT_STATIC_PLUGIN(QOCIDriverPlugin)
-Q_EXPORT_PLUGIN2(qsqloci, QOCIDriverPlugin)
-
-QT_END_NAMESPACE

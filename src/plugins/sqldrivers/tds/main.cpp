@@ -23,19 +23,24 @@
 #define Q_UUIDIMPL
 #include <qsqldriverplugin.h>
 #include <qstringlist.h>
+
 #ifdef Q_OS_WIN32    // We assume that MS SQL Server is used. Set Q_USE_SYBASE to force Sybase.
+
 // Conflicting declarations of LPCBYTE in sqlfront.h and winscard.h
 #define _WINSCARD_H_
 #include <windows.h>
 #endif
+
 #include "../../../sql/drivers/tds/qsql_tds.h"
-
-
-
 
 class QTDSDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QTDSDriverPlugin)
+
+   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_KEY("QTDS")
+   // CS_PLUGIN_KEY("QTDS7")
+
 public:
     QTDSDriverPlugin();
 
@@ -50,7 +55,7 @@ QTDSDriverPlugin::QTDSDriverPlugin()
 
 QSqlDriver* QTDSDriverPlugin::create(const QString &name)
 {
-    if (name == "QTDS") {
+    if (name == "QTDS" || name == "QTDS7") {
         QTDSDriver* driver = new QTDSDriver();
         return driver;
     }

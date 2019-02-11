@@ -30,6 +30,9 @@ class QDB2DriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QDB2DriverPlugin)
 
+   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_KEY("QDB2")
+
 public:
     QDB2DriverPlugin();
 

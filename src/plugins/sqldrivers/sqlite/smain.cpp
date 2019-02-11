@@ -28,6 +28,10 @@
 class QSQLiteDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QSQLiteDriverPlugin)
+
+   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_KEY("QSQLITE")
+
 public:
     QSQLiteDriverPlugin();
 
