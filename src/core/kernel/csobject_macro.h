@@ -54,26 +54,30 @@ extern "C" QMetaObject *cs_internal_plugin_metaobject();
       {  \
          QMetaObject_T<cs_class> &meta = const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()); \
          meta.register_classInfo("plugin_iid", data);  \
-         meta.register_classInfo("plugin_version", CS_VERSION_STR); \
+         meta.register_classInfo("plugin_version", QString::number(CS_VERSION)); \
          \
          constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__); \
          \
          QString cname = QString::fromUtf8(cs_className());  \
          meta.register_method<QObject * (*)()>(   \
             cname, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__), \
-            QMetaMethod::Constructor, cname + "()", QMetaMethod::Public);   \
+            QMetaMethod::Constructor, cname + " " + cname + "()", QMetaMethod::Public);   \
          \
          cs_regTrigger(cs_number<cntValue + 1>{} );  \
       } \
    static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)() \
       { \
          return new cs_class;  \
-      } \
-   friend QMetaObject *::cs_internal_plugin_metaobject() {  \
-      return const_cast<QMetaObject_T<cs_class> *>(&cs_class::staticMetaObject()); \
-   }
+      }
 
 #define CS_PLUGIN_KEY(y)            CS_CLASSINFO("plugin_key", y)
+
+
+#define CS_PLUGIN_REGISTER(classname) \
+   QMetaObject * cs_internal_plugin_metaobject() {  \
+      return const_cast<QMetaObject_T<classname> *>(&classname::staticMetaObject()); \
+   }
+
 
 
 /**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
@@ -378,7 +382,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const auto &va_args = #__VA_ARGS__;    \
+         QString va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
          constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
@@ -388,7 +392,7 @@ class cs_number<0>
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method    \
             <QObject * (*)(__VA_ARGS__)>(   \
             #className, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)<__VA_ARGS__>,  \
-            QMetaMethod::Constructor, va_args, accessType); \
+            QMetaMethod::Constructor, QString(#className) + " " + va_args, accessType); \
          \
          cs_regTrigger(cs_number<cntValue + 1>{} );  \
       } \

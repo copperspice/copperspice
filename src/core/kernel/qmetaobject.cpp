@@ -572,6 +572,12 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
             ++index;
             continue;
 
+         } else if (word == "explicit")  {
+            // discard
+
+            ++index;
+            continue;
+
          } else if (word == "inline")  {
             // discard
 
@@ -678,8 +684,15 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
       // convert return type to "char *" data type
       returnType = strdup(csPrintable(typeReturn));
 
+
       // part 3 parse method name
+      if (tokens[index] == "explicit")  {
+         // discard
+         ++index;
+      }
+
       QString signature = tokens[index++];
+
 
       // part 4, parse signature from tokens
       QString typeArg;
@@ -1065,7 +1078,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
 
       return std::make_tuple(sigList, returnType, paramNames);
 
-   }  catch (std::exception &e) {
+   } catch (std::exception &e) {
       // rethrow
       std::string msg = "QObject::getSignature() Exception when processing " + std::string(csPrintable(fullName));
       std::throw_with_nested(std::logic_error(msg));
