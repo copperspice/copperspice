@@ -443,11 +443,17 @@ void QLibraryHandle::updatePluginState()
    }
 
    if (success) {
-      // call the special function to get the meta data object
       QPluginMetadataPtr metaPtr = nullptr;
 
+      // returns a function pointer so we can retrieve the meta data object
       metaPtr = (QPluginMetadataPtr) resolve("cs_internal_plugin_metaobject");
-      success = qt_get_metadata(metaPtr, this);
+
+      if (metaPtr) {
+         success = qt_get_metadata(metaPtr, this);
+      } else {
+         success = false;
+         errorString = QLibrary::tr("Unable to retrieve the meta object for the %1 plugin").formatArg(fileName);
+      }
    }
 
    if (! success) {
@@ -461,6 +467,7 @@ void QLibraryHandle::updatePluginState()
       }
 
       pluginState = IsNotAPlugin;
+
       return;
    }
 

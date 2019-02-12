@@ -23,8 +23,8 @@
 #ifndef QFACTORYINTERFACE_H
 #define QFACTORYINTERFACE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstringlist.h>
+#include <qobject.h>
+#include <qstringlist.h>
 
 struct Q_CORE_EXPORT QFactoryInterface {
    virtual ~QFactoryInterface();

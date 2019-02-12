@@ -80,6 +80,7 @@ QFactoryLoader::QFactoryLoader(const QString &iid, const QString &suffix, Qt::Ca
 
    QMutexLocker locker(qt_factoryloader_mutex());
    update();
+
    qt_factory_loaders()->append(this);
 }
 
@@ -132,8 +133,8 @@ void QFactoryLoader::update()
             library->release();
             continue;
          }
-         iid = library->m_metaObject->classInfo(index).value();
 
+         iid = library->m_metaObject->classInfo(index).value();
          if (iid != d->iid) {
             // no match
             library->release();
@@ -163,7 +164,7 @@ void QFactoryLoader::update()
          //
          int keyUsageCount = 0;
 
-         for (const auto &item : keyList) {;
+         for (const auto &item : keyList) {
             QLibraryHandle *lib_other = d->libraryMap.value(item);
 
             int other_version = 0;
@@ -175,13 +176,13 @@ void QFactoryLoader::update()
 
             int lib_version = version.toInteger<int>();
 
-            if (lib_other != nullptr || (other_version > CS_VERSION && lib_version <= CS_VERSION)) {
+            if (lib_other == nullptr || (other_version > CS_VERSION && lib_version <= CS_VERSION)) {
                d->libraryMap[item] = library;
                ++keyUsageCount;
             }
          }
 
-         if (keyUsageCount  > 0|| keyList.isEmpty()) {
+         if (keyUsageCount  > 0 || keyList.isEmpty()) {
             // once loaded, do not unload
             library->setLoadHints(QLibrary::PreventUnloadHint);
             d->libraryList += library;
@@ -321,11 +322,10 @@ QSet<QString> QFactoryLoader::keySet() const
 
    for (auto lib_handle : d->libraryList) {
       // only works for one key
-
       int index = lib_handle->m_metaObject->indexOfClassInfo("plugin_key");
 
       if (index != -1) {
-         const QString &key = lib_handle->m_metaObject->classInfo(index).value();
+         const QString key = lib_handle->m_metaObject->classInfo(index).value();
 
          m_pluginMap.insert(key, lib_handle);
          retval.insert(key);
