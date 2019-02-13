@@ -28,8 +28,8 @@
 #include <qvariant.h>
 
 QJsonDocument::QJsonDocument()
+   : m_data(std::make_shared<QJsonValue>())
 {
-   m_data = std::make_shared<QJsonValue>();
 }
 
 QJsonDocument::QJsonDocument(const QJsonObject &object)
@@ -140,12 +140,12 @@ QJsonArray QJsonDocument::array() const
 
 void QJsonDocument::setObject(const QJsonObject &object)
 {
-   *m_data = QJsonValue(object);
+   m_data = std::make_shared<QJsonValue>(object);
 }
 
 void QJsonDocument::setArray(const QJsonArray &array)
 {
-   *m_data = QJsonValue(array);
+   m_data = std::make_shared<QJsonValue>(array);
 }
 
 bool QJsonDocument::operator==(const QJsonDocument &other) const
