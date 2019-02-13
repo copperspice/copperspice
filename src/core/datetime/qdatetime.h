@@ -136,8 +136,9 @@ class Q_CORE_EXPORT QDate
    explicit constexpr QDate(qint64 julianDay) : jd(julianDay)
    {}
 
+   // extra parentheses around min, avoids expanding if it is a macro (MSVC issue)
    static constexpr qint64 nullJd() {
-      return std::numeric_limits<qint64>::min();
+      return (std::numeric_limits<qint64>::min)();
    }
 
    static constexpr qint64 minJd() {

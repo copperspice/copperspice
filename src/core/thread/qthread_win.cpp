@@ -280,7 +280,6 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
    theEventDispatcher->startingUp();
 }
 
-
 unsigned int __stdcall QT_ENSURE_STACK_ALIGNED_FOR_SSE QThreadPrivate::start(void *arg)
 {
    QThread *thr = reinterpret_cast<QThread *>(arg);
@@ -305,11 +304,16 @@ unsigned int __stdcall QT_ENSURE_STACK_ALIGNED_FOR_SSE QThreadPrivate::start(voi
    }
 
 #if defined(Q_CC_MSVC)
-    // sets the name of the current thread.
-    QByteArray objectName = thr->objectName().toLocal8Bit();
-    qt_set_thread_name((HANDLE)-1,
-                       objectName.isEmpty() ?
-                       thr->metaObject()->className() : objectName.constData());
+    // sets the name of the current thread
+    QString objectName = thr->objectName();
+
+    if (objectName.isEmpty()) {
+      objectName = thr->metaObject()->className();
+    }
+
+    std::wstring tmp = objectName.toStdWString();
+
+    qt_set_thread_name((HANDLE)-1, tmp.data());
 #endif
 
    emit thr->started();
@@ -317,6 +321,7 @@ unsigned int __stdcall QT_ENSURE_STACK_ALIGNED_FOR_SSE QThreadPrivate::start(voi
    thr->run();
 
    finish(arg);
+
    return 0;
 }
 

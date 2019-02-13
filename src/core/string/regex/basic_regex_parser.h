@@ -22,17 +22,17 @@
 #define CS_BASIC_REGEX_PARSER_H
 
 #include <cassert>
+#include <limits>
 
 namespace cs_regex_ns {
 
 namespace cs_regex_detail_ns {
 
-
 inline intmax_t umax()
 {
-   return std::numeric_limits<intmax_t>::max();
+   // extra parentheses around min, avoids expanding if it is a macro (MSVC issue)
+   return (std::numeric_limits<intmax_t>::max)();
 }
-
 
 template <class charT, class traits>
 class basic_regex_parser : public basic_regex_creator<charT, traits>
