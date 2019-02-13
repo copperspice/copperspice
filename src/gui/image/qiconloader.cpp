@@ -85,7 +85,7 @@ extern QFactoryLoader *qt_iconEngineFactoryLoader(); // qicon.cpp
 
 void QIconLoader::ensureInitialized()
 {
-   if (!m_initialized) {
+   if (! m_initialized) {
       m_initialized = true;
       Q_ASSERT(qApp);
 

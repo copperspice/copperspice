@@ -350,7 +350,7 @@ void QPageSetupWidget::setPrinter(QPrinter *printer)
    m_pageLayout = m_printer->pageLayout();
 
    // Assume if margins are Points then is by default, so set to locale default units
-   if (m_pageLayout.units() == QPageSize::Unit:::Point) {
+   if (m_pageLayout.units() == QPageSize::Unit::Point) {
 
       if (QLocale().measurementSystem() == QLocale::MetricSystem) {
          m_pageLayout.setUnits(QPageSize::Unit::Millimeter);
@@ -383,27 +383,26 @@ void QPageSetupWidget::updateWidget()
    switch (m_units) {
 
       case QPageSize::Unit::Millimeter:
-         //: Unit 'Millimeter'
          suffix = tr("mm");
          break;
+
       case QPageSize::Unit::Point:
-         //: Unit 'Points'
          suffix = tr("pt");
          break;
+
       case QPageSize::Unit::Inch:
-         //: Unit 'Inch'
          suffix = tr("in");
          break;
+
       case QPageSize::Unit::Pica:
-         //: Unit 'Pica'
          suffix = tr("P/");
          break;
+
       case QPageSize::Unit::Didot:
-         //: Unit 'Didot'
          suffix = tr("DD");
          break;
+
       case QPageSize::Unit::Cicero:
-         //: Unit 'Cicero'
          suffix = tr("CC");
          break;
    }
@@ -484,6 +483,7 @@ void QPageSetupWidget::setupPrinter() const
 #endif
 
 }
+
 // Updates size/preview after the combobox has been changed.
 void QPageSetupWidget::pageSizeChanged()
 {
@@ -491,6 +491,7 @@ void QPageSetupWidget::pageSizeChanged()
    if (m_blockSignals) {
       return;
    }
+
    QPageSize::PageSizeId id = m_ui.pageSizeCombo->currentData().value<QPageSize::PageSizeId>();
    if (id != QPageSize::Custom) {
 
@@ -514,6 +515,7 @@ void QPageSetupWidget::pageOrientationChanged()
    if (m_blockSignals) {
       return;
    }
+
    m_pageLayout.setOrientation(m_ui.portrait->isChecked() ? QPageLayout::Portrait : QPageLayout::Landscape);
    m_pagePreview->setPageLayout(m_pageLayout);
    updateWidget();
@@ -550,6 +552,7 @@ void QPageSetupWidget::unitChanged()
    if (m_blockSignals) {
       return;
    }
+
    m_units = m_ui.unitCombo->currentData().value<QPageLayout::Unit>();
    m_pageLayout.setUnits(m_units);
    updateWidget();

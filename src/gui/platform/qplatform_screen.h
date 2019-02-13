@@ -95,8 +95,8 @@ class Q_GUI_EXPORT QPlatformScreen
 
    QScreen *screen() const;
 
-   //jl: should this function be in QPlatformIntegration
-   //jl: maybe screenForWindow is a better name?
+   // should this function be in QPlatformIntegration
+   // maybe screenForWindow is a better name?
 
    static QPlatformScreen *platformScreenForWindow(const QWindow *window);
 

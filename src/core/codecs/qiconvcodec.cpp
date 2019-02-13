@@ -330,12 +330,9 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
    char **inBytesPtr = &inBytes;
 #endif
 
-
    // remove when enabled
    perror("QIconvCodec::convertFromUnicode: using Latin1 for conversion, iconv failed for BOM");
    return str.toLatin1();
-
-
 
    IconvState *temporaryState = 0;
    QThreadStorage<QIconvCodec::IconvState *> *ts = fromUnicodeState();
