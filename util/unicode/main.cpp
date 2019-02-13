@@ -1622,16 +1622,12 @@ static void readDerivedNormalizationProps()
             QString::NormalizationForm form;
             if (propName == "NFD_QC") {
                form = QString::NormalizationForm_D;
-
             } else if (propName == "NFC_QC") {
                form = QString::NormalizationForm_C;
-
             } else if (propName == "NFKD_QC") {
                form = QString::NormalizationForm_KD;
-
             } else { // if (propName == "NFKC_QC")
                form = QString::NormalizationForm_KC;
-
             }
 
             Q_ASSERT(l.size() == 3);
@@ -1964,6 +1960,7 @@ static void readCaseFolding()
 
       l[1] = l[1].trimmed();
 
+
       QList<QByteArray> fold = l[2].trimmed().split(' ');
       QList<char32_t> foldMap;
 
@@ -2003,7 +2000,7 @@ static void readGraphemeBreak()
 
    f.open(QFile::ReadOnly);
 
-   while (! f.atEnd()) {
+   while (!f.atEnd()) {
       QByteArray line = f.readLine();
       line = line.trimmed();
 
@@ -2552,11 +2549,20 @@ static QByteArray create_PropertyTables()
 
       char32_t retval = uc + flags.caseFoldDiff;
 
-      if (flags.caseFoldSpecial) {
+      if (uc == 74) {
+         // very special case for Turkish
+
+         out += "if (value < " + QByteArray::number(uc) + " && cs_isTurkishLocale) {\n";
+         out += "       // letter I, ignore for all other locales\n";
+         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
+         out += "    } else ";
+
+         oldDiff = flags.caseFoldDiff;
+
+      } else if (flags.caseFoldSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
          out += "      // special char\n";
          out += "      return 0;\n\n";
-
          if (count % 100 == 0) {
             out += "   }\n\n";
             out += "   ";
@@ -2567,11 +2573,9 @@ static QByteArray create_PropertyTables()
          }
 
          ++count;
-
       } else if (flags.caseFoldDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
          out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
-
          if (count % 100 == 0) {
             out += "   }\n\n";
             out += "   ";
@@ -2580,7 +2584,6 @@ static QByteArray create_PropertyTables()
             out += "   } else ";
 
          }
-
          oldDiff = flags.caseFoldDiff;
          ++count;
       }
@@ -2614,16 +2617,13 @@ static QByteArray create_PropertyTables()
       } else if (flags.lowerCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
          out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
-
          if (count % 100 == 0) {
             out += "   }\n\n";
             out += "   ";
-
          } else {
             out += "   } else ";
 
          }
-
          oldDiff = flags.lowerCaseDiff;
          ++count;
       }
@@ -2657,7 +2657,6 @@ static QByteArray create_PropertyTables()
       } else if (flags.titleCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
          out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
-
          if (count % 100 == 0) {
             out += "   }\n\n";
             out += "   ";
@@ -2694,7 +2693,6 @@ static QByteArray create_PropertyTables()
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
          out += "      // special char\n";
          out += "      return 0;\n\n";
-
          if (count % 100 == 0) {
             out += "   }\n\n";
             out += "   ";
@@ -2705,11 +2703,9 @@ static QByteArray create_PropertyTables()
          }
 
          ++count;
-
       } else if (flags.upperCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
          out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
-
          if (count % 100 == 0) {
             out += "   }\n\n";
             out += "   ";
@@ -3441,6 +3437,9 @@ int main(int, char **)
 
    f.write("#include \"qunicodetables_p.h\"\n\n");
    f.write("namespace QUnicodeTables {\n\n");
+
+   f.write("bool cs_isTurkishLocale = false;\n\n");
+
    f.write(property_tables);
    f.write("\n");
    f.write(specialCase_tables);
@@ -3467,6 +3466,8 @@ int main(int, char **)
 
    f.write("#define UNICODE_DATA_VERSION " DATA_VERSION_STR "\n\n");
    f.write("namespace QUnicodeTables {\n\n");
+
+   f.write("extern bool cs_isTurkishLocale;\n\n");
 
    f.write(normalizationCorrections.second);
    f.write(property_string);
