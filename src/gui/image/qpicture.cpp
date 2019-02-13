@@ -1150,7 +1150,7 @@ void qt_init_picture_plugins()
    static QMutex mutex;
    QMutexLocker locker(&mutex);
 
-   static QFactoryLoader loader(QPictureFormatInterface_iid, "/pictureformats");
+   static QFactoryLoader loader(QPictureFormatInterface_ID, "/pictureformats");
    auto keySet = loader.keySet();
 
    for (auto item : keySet) {

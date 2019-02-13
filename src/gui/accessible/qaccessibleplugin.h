@@ -31,7 +31,7 @@
 class QStringList;
 class QAccessibleInterface;
 
-#define QAccessibleFactoryInterface_iid "com.copperspice.QAccessibleFactoryInterface"
+#define QAccessibleInterface_ID "com.copperspice.CS.AccessibleInterface"
 
 class QAccessiblePluginPrivate;
 

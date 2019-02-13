@@ -526,8 +526,7 @@ void QPixmapIconEngine::virtual_hook(int id, void *data)
 }
 
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-   (QIconEngineFactoryInterface_iid, QLatin1String("/iconengines"), Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QIconEngineInterface_ID, "/iconengines", Qt::CaseInsensitive))
 
 QFactoryLoader *qt_iconEngineFactoryLoader()
 {

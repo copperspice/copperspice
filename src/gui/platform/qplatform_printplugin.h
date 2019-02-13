@@ -28,7 +28,7 @@
 
 class QPlatformPrinterSupport;
 
-#define QPlatformPrinterSupportFactoryInterface_iid "com.copperspice.QPlatformPrinterSupportFactoryInterface"
+#define QPlatformPrinterSupportInterface_ID "com.copperspice.CS.QPlatformPrinterSupportInterface"
 
 class Q_GUI_EXPORT QPlatformPrinterSupportPlugin : public QObject
 {

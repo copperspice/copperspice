@@ -29,11 +29,9 @@
 #include <qguiapplication.h>
 #include <qdebug.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                  (QPlatformIntegrationFactoryInterface_iid, "/platforms", Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformIntegrationInterface_ID, "/platforms", Qt::CaseInsensitive))
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader,
-                  (QPlatformIntegrationFactoryInterface_iid, "", Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QPlatformIntegrationInterface_ID, "", Qt::CaseInsensitive))
 
 static inline QPlatformIntegration *loadIntegration(QFactoryLoader *loader, const QString &key,
                   const QStringList &parameters, int &argc, char ** argv)

@@ -28,7 +28,7 @@
 
 class QPlatformIntegration;
 
-#define QPlatformIntegrationFactoryInterface_iid "com.copperspice.CS.QPlatformIntegrationFactoryInterface"
+#define QPlatformIntegrationInterface_ID "com.copperspice.CS.QPlatformIntegrationInterface"
 
 class Q_GUI_EXPORT QPlatformIntegrationPlugin : public QObject
 {

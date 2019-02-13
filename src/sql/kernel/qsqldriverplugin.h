@@ -29,7 +29,7 @@
 
 class QSqlDriver;
 
-#define QSqlDriverFactoryInterface_iid "com.copperspice.CS.QSqlDriverFactoryInterface"
+#define QSqlDriverInterface_ID "com.copperspice.CS.QSqlDriverInterface"
 
 class Q_SQL_EXPORT QSqlDriverPlugin : public QObject
 {

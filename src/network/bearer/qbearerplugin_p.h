@@ -34,8 +34,8 @@ struct Q_NETWORK_EXPORT QBearerEngineFactoryInterface : public QFactoryInterface
    virtual QBearerEngine *create(const QString &key) const = 0;
 };
 
-#define QBearerEngineFactoryInterface_iid "com.copperspice.QBearerEngineFactoryInterface"
-CS_DECLARE_INTERFACE(QBearerEngineFactoryInterface, QBearerEngineFactoryInterface_iid)
+#define QBearerEngineInterface_ID "com.copperspice.CS.QBearerEngineFactoryInterface"
+CS_DECLARE_INTERFACE(QBearerEngineFactoryInterface, QBearerEngineInterface_ID)
 
 class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngineFactoryInterface
 {
@@ -45,6 +45,7 @@ class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngin
  public:
    explicit QBearerEnginePlugin(QObject *parent = nullptr);
    virtual ~QBearerEnginePlugin();
+
    QBearerEngine *create(const QString &key) const override = 0;
 };
 

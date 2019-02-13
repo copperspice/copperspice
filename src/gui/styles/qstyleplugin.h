@@ -28,7 +28,7 @@
 
 class QStyle;
 
-#define QStyleFactoryInterface_iid "com.copperspice.QStyleFactoryInterface"
+#define QStyleInterface_ID "com.copperspice.CS.StyleFactoryInterface"
 
 class Q_GUI_EXPORT QStylePlugin : public QObject
 {

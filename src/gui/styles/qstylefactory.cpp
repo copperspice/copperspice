@@ -44,10 +44,10 @@
 #endif
 
 #if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_MAC)
-#include <qmacstyle_mac.h>
+#include <qmacstyle.h>
 #endif
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleInterface_ID, "/styles", Qt::CaseInsensitive))
 
 QStyle *QStyleFactory::create(const QString &key)
 {

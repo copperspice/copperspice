@@ -28,8 +28,6 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qbytearray.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TEXTCODECPLUGIN
 
 class QTextCodec;
@@ -38,14 +36,13 @@ struct Q_CORE_EXPORT QTextCodecFactoryInterface : public QFactoryInterface {
    virtual QTextCodec *create(const QString &key) = 0;
 };
 
-#define QTextCodecFactoryInterface_iid "com.copperspice.Qt.QTextCodecFactoryInterface"
-
-CS_DECLARE_INTERFACE(QTextCodecFactoryInterface, QTextCodecFactoryInterface_iid)
-
+#define QTextCodecInterface_ID "com.copperspice.CS.QTextCodecInterface"
+CS_DECLARE_INTERFACE(QTextCodecFactoryInterface, QTextCodecInterface_ID)
 
 class Q_CORE_EXPORT QTextCodecPlugin : public QObject, public QTextCodecFactoryInterface
 {
    CORE_CS_OBJECT_MULTIPLE(QTextCodecPlugin, QObject)
+
    CS_INTERFACES(QTextCodecFactoryInterface, QFactoryInterface)
 
  public:
@@ -65,7 +62,5 @@ class Q_CORE_EXPORT QTextCodecPlugin : public QObject, public QTextCodecFactoryI
 };
 
 #endif // QT_NO_TEXTCODECPLUGIN
-
-QT_END_NAMESPACE
 
 #endif // QTEXTCODECPLUGIN_H

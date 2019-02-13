@@ -28,12 +28,13 @@
 #include <qfactoryinterface.h>
 #include <qscopedpointer.h>
 
-
 class QImage;
 class QRect;
 class QSize;
 class QVariant;
 class QImageIOHandlerPrivate;
+
+#define QImageIOHandlerInterface_ID "com.copperspice.CS.ImageIOHandlerInterface"
 
 class Q_GUI_EXPORT QImageIOHandler
 {
@@ -78,6 +79,7 @@ class Q_GUI_EXPORT QImageIOHandler
       ImageTransformation,
       TransformedByDefault
    };
+
    enum Transformation {
       TransformationNone = 0,
       TransformationMirror = 1,
@@ -111,10 +113,6 @@ class Q_GUI_EXPORT QImageIOHandler
  private:
    Q_DISABLE_COPY(QImageIOHandler)
 };
-
-
-
-#define QImageIOHandlerFactoryInterface_iid "org.qt-project.Qt.QImageIOHandlerFactoryInterface"
 
 class Q_GUI_EXPORT QImageIOPlugin : public QObject
 {

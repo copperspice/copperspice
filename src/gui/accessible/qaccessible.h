@@ -898,8 +898,9 @@ class Q_GUI_EXPORT QAccessibleTableModelChangeEvent : public QAccessibleEvent
    int m_lastRow;
    int m_lastColumn;
 };
-#define QAccessibleInterface_iid "com.copperspice.QAccessibleInterface"
-CS_DECLARE_INTERFACE(QAccessibleInterface, QAccessibleInterface_iid)
+
+#define QAccessibleInterface_ID "com.copperspice.CS.AccessibleInterface"
+CS_DECLARE_INTERFACE(QAccessibleInterface, QAccessibleInterface_ID)
 
 Q_GUI_EXPORT QString qAccessibleRoleString(QAccessible::Role role);
 Q_GUI_EXPORT QString qAccessibleEventString(QAccessible::Event event);

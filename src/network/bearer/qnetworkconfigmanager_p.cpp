@@ -31,7 +31,7 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QBearerEngineFactoryInterface_iid, QLatin1String("/bearer")))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QBearerEngineInterface_ID, "/bearer"))
 
 QNetworkConfigurationManagerPrivate::QNetworkConfigurationManagerPrivate()
    : QObject(), pollTimer(0), bearerThread(0),  mutex(QMutex::Recursive), forcedPolling(0), firstUpdate(true)
@@ -79,6 +79,7 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::defaultConfiguration(
 
    for (QBearerEngine *engine : sessionEngines) {
       QNetworkConfigurationPrivatePointer ptr = engine->defaultConfiguration();
+
       if (ptr) {
          QNetworkConfiguration config;
          config.d = ptr;

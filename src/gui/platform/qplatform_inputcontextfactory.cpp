@@ -32,8 +32,7 @@
 #include <stdlib.h>
 
 #if ! defined(QT_NO_SETTINGS)
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QPlatformInputContextFactoryInterface_iid, "/platforminputcontexts", Qt::CaseInsensitive))
+   Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformInputContextInterface_ID, "/platforminputcontexts", Qt::CaseInsensitive))
 #endif
 
 QStringList QPlatformInputContextFactory::keys()
@@ -63,8 +62,8 @@ QPlatformInputContext *QPlatformInputContextFactory::create(const QString& key)
         QStringList paramList  = key.split(':');
         const QString platform = paramList.takeFirst().toLower();
 
-        QPlatformInputContext *ic = cs_load_plugin<QPlatformInputContext, QPlatformInputContextPlugin>
-                                                 (loader(), platform, paramList);
+        QPlatformInputContext *ic = cs_load_plugin<QPlatformInputContext, QPlatformInputContextPlugin> (loader(), platform, paramList);
+
         if (ic && ic->isValid()) {
             return ic;
         }

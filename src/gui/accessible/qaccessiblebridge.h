@@ -26,8 +26,6 @@
 #include <QtCore/qplugin.h>
 #include <QtCore/qfactoryinterface.h>
 
-
-
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAccessibleInterface;
@@ -41,7 +39,7 @@ class QAccessibleBridge
    virtual void notifyAccessibilityUpdate(QAccessibleEvent *event) = 0;
 };
 
-#define QAccessibleBridgeFactoryInterface_iid "com.copperspice.QAccessibleBridgeFactoryInterface"
+#define QAccessibleBridgeInterface_ID "com.copperspice.CS.AccessibleBridgeInterface"
 
 class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject
 {
@@ -50,11 +48,10 @@ class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject
  public:
    explicit QAccessibleBridgePlugin(QObject *parent = nullptr);
    ~QAccessibleBridgePlugin();
+
    virtual QAccessibleBridge *create(const QString &key) = 0;
 };
 
 #endif
-
-
 
 #endif

@@ -28,12 +28,8 @@
 #include <qguiapplication.h>
 #include <qdebug.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-   (QPlatformThemeFactoryInterface_iid, "/platformthemes", Qt::CaseInsensitive))
-
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader,
-   (QPlatformThemeFactoryInterface_iid, "", Qt::CaseInsensitive))
-
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformThemeInterface_ID, "/platformthemes", Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QPlatformThemeInterface_ID, "", Qt::CaseInsensitive))
 
 QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString &platformPluginPath)
 {
@@ -41,7 +37,7 @@ QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString 
    const QString platform = paramList.takeFirst().toLower();
 
    // Try loading the plugin from platformPluginPath first:
-   if (!platformPluginPath.isEmpty()) {
+   if (! platformPluginPath.isEmpty()) {
       QCoreApplication::addLibraryPath(platformPluginPath);
 
       if (QPlatformTheme *ret = cs_load_plugin<QPlatformTheme, QPlatformThemePlugin>(directLoader(), platform, paramList)) {

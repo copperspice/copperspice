@@ -27,7 +27,7 @@
 #include "qfactoryloader_p.h"
 #include <qcoreapplication.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformPrinterSupportFactoryInterface_iid, "/printsupport", Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformPrinterSupportInterface_ID, "/printsupport", Qt::CaseInsensitive))
 
 QPlatformPrinterSupportPlugin::QPlatformPrinterSupportPlugin(QObject *parent)
     : QObject(parent)

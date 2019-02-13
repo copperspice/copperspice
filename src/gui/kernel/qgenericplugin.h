@@ -26,7 +26,7 @@
 #include <qplugin.h>
 #include <qfactoryinterface.h>
 
-#define QGenericPluginFactoryInterface_iid "com.copperspice.CS.QGenericPluginFactoryInterface"
+#define QGenericPluginInterface_ID "com.copperspice.CS.GenericPluginInterface"
 
 class Q_GUI_EXPORT QGenericPlugin : public QObject
 {

@@ -45,8 +45,10 @@ QAccessibleInterface::~QAccessibleInterface()
 
 #ifndef QT_NO_ACCESSIBILITY
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QAccessibleFactoryInterface_iid, QLatin1String("/accessible")))
-typedef QHash<QString, QAccessiblePlugin *> QAccessiblePluginsHash;
+using QAccessiblePluginsHash = QHash<QString, QAccessiblePlugin *>;
+
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QAccessibleInterface_ID, "/accessible"))
+
 Q_GLOBAL_STATIC(QAccessiblePluginsHash, qAccessiblePlugins)
 Q_GLOBAL_STATIC(QList<QAccessible::InterfaceFactory>, qAccessibleFactories)
 Q_GLOBAL_STATIC(QList<QAccessible::ActivationObserver *>, qAccessibleActivationObservers)

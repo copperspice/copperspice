@@ -28,7 +28,7 @@
 
 class QPlatformTheme;
 
-#define QPlatformThemeFactoryInterface_iid "com.copperspice.CS.QPA.QPlatformThemeFactoryInterface.5.1"
+#define QPlatformThemeInterface_ID "com.copperspice.CS.QPlatformThemeInterface"
 
 class Q_GUI_EXPORT QPlatformThemePlugin : public QObject
 {

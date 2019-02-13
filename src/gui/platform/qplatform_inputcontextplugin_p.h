@@ -23,12 +23,12 @@
 #ifndef QPLATFORM_INPUTCONTEXTPLUGIN_P_H
 #define QPLATFORM_INPUTCONTEXTPLUGIN_P_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
 class QPlatformInputContext;
 
-#define QPlatformInputContextFactoryInterface_iid "com.copperspice.CS.QPlatformInputContextFactoryInterface"
+#define QPlatformInputContextInterface_ID "com.copperspice.CS.QPlatformInputContextInterface"
 
 class Q_GUI_EXPORT QPlatformInputContextPlugin : public QObject
 {

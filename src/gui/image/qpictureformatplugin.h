@@ -33,7 +33,7 @@ class QPicture;
 class QImage;
 class QStringList;
 
-#define QPictureFormatInterface_iid "com.copperspice.QPictureFormatInterface"
+#define QPictureFormatInterface_ID "com.copperspice.CS.PictureFormatInterface"
 
 class Q_GUI_EXPORT QPictureFormatPlugin : public QObject
 {

@@ -28,7 +28,7 @@
 
 class QIconEngine;
 
-#define QIconEngineFactoryInterface_iid "com.copperspice.QIconEngineFactoryInterface"
+#define QIconEngineInterface_ID "com.copperspice.CS.IconEngineInterface"
 
 class Q_GUI_EXPORT QIconEnginePlugin : public QObject
 {

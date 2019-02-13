@@ -31,9 +31,7 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, bridgeloader,
-   (QAccessibleBridgeFactoryInterface_iid, QLatin1String("/accessiblebridge")))
-
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, bridgeloader, (QAccessibleBridgeInterface_ID, "/accessiblebridge"))
 Q_GLOBAL_STATIC(QVector<QAccessibleBridge *>, bridges)
 
 QPlatformAccessibility::QPlatformAccessibility()

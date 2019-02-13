@@ -73,8 +73,7 @@
 
 Q_DECLARE_METATYPE(QList<QByteArray>)
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-   (QImageIOHandlerFactoryInterface_iid, QLatin1String("/imageformats")))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QImageIOHandlerInterface_ID, "/imageformats"))
 
 struct cs_BuiltInFormatStruct {
    using TestDevice = QImageIOHandler * (*)(QIODevice *);
