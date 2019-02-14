@@ -28,7 +28,7 @@ class QPSQLDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QPSQLDriverPlugin)
 
-   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QPSQL")
    // CS_PLUGIN_KEY("QPSQL7")
 
@@ -37,6 +37,8 @@ public:
 
     QSqlDriver* create(const QString &) override;
 };
+
+CS_PLUGIN_REGISTER(QPSQLDriverPlugin)
 
 QPSQLDriverPlugin::QPSQLDriverPlugin()
     : QSqlDriverPlugin()

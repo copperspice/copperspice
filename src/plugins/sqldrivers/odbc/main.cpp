@@ -24,12 +24,11 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/odbc/qsql_odbc.h"
 
-
 class QODBCDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QODBCDriverPlugin)
 
-   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QODBC")
    // CS_PLUGIN_KEY("QODBC3")
 
@@ -38,6 +37,8 @@ public:
 
     QSqlDriver *create(const QString &) override;
 };
+
+CS_PLUGIN_REGISTER(QODBCDriverPlugin)
 
 QODBCDriverPlugin::QODBCDriverPlugin()
     : QSqlDriverPlugin()

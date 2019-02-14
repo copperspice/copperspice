@@ -28,7 +28,7 @@ class QIBaseDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QIBaseDriverPlugin)
 
-   CSQ_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QIBASE")
 
 public:

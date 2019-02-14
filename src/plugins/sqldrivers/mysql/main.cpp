@@ -24,12 +24,11 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/mysql/qsql_mysql.h"
 
-
 class QMYSQLDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QMYSQLDriverPlugin)
 
-   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QMYSQL")
    // CS_PLUGIN_KEY("QMYSQL3")
 
@@ -39,6 +38,8 @@ public:
     QSqlDriver* create(const QString &) override;
 };
 
+CS_PLUGIN_REGISTER(QMYSQLDriverPlugin)
+
 QMYSQLDriverPlugin::QMYSQLDriverPlugin()
     : QSqlDriverPlugin()
 {
@@ -46,10 +47,11 @@ QMYSQLDriverPlugin::QMYSQLDriverPlugin()
 
 QSqlDriver* QMYSQLDriverPlugin::create(const QString &name)
 {
-    if (name == "QMYSQL" || name == "QMYSQL3") {
-        QMYSQLDriver* driver = new QMYSQLDriver();
-        return driver;
-    }
-    return 0;
+   if (name == "QMYSQL" || name == "QMYSQL3") {
+     QMYSQLDriver* driver = new QMYSQLDriver();
+     return driver;
+   }
+
+   return 0;
 }
 

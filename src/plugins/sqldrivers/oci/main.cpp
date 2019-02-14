@@ -24,12 +24,11 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/oci/qsql_oci.h"
 
-
 class QOCIDriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QOCIDriverPlugin)
 
-   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QOCI")
    // CS_PLUGIN_KEY("QOCI8")
 
@@ -39,6 +38,8 @@ public:
     QSqlDriver* create(const QString &);
     QStringList keys() const;
 };
+
+CS_PLUGIN_REGISTER(QOCIDriverPlugin)
 
 QOCIDriverPlugin::QOCIDriverPlugin()
     : QSqlDriverPlugin()

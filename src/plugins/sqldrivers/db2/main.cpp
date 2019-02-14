@@ -24,21 +24,20 @@
 #include <qstringlist.h>
 #include "../../../sql/drivers/db2/qsql_db2.h"
 
-
-
 class QDB2DriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QDB2DriverPlugin)
 
-   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QDB2")
 
 public:
     QDB2DriverPlugin();
 
     QSqlDriver* create(const QString &) override;
-
 };
+
+CS_PLUGIN_REGISTER(QDB2DriverPlugin)
 
 QDB2DriverPlugin::QDB2DriverPlugin()
     : QSqlDriverPlugin()

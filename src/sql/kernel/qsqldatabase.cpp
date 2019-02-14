@@ -90,21 +90,26 @@
 
 #include <stdlib.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QSqlDriverFactoryInterface_iid, "/sqldrivers"))
+QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QSqlDriverInterface_ID, "/sqldrivers");
+
+   return &retval;
+}
 
 QString QSqlDatabase::defaultConnection = "qt_sql_default_connection";
 
-typedef QHash<QString, QSqlDriverCreatorBase *> DriverDict;
+static bool s_hashCleared = true;
 
 class QConnectionDict: public QHash<QString, QSqlDatabase>
 {
  public:
-   inline bool contains_ts(const QString &key) {
+   bool contains_ts(const QString &key) {
       QReadLocker locker(&lock);
       return contains(key);
    }
 
-   inline QStringList keys_ts() const {
+   QStringList keys_ts() const {
       QReadLocker locker(&lock);
       return keys();
    }
@@ -148,19 +153,20 @@ class QSqlDatabasePrivate
    static void addDatabase(const QSqlDatabase &db, const QString &name);
    static void removeDatabase(const QString &name);
    static void invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn = true);
-   static DriverDict &driverDict();
+   static QHash<QString, QSqlDriverCreatorBase *> &driverDict();
    static void cleanConnections();
 };
 
 QSqlDatabasePrivate::QSqlDatabasePrivate(const QSqlDatabasePrivate &other) : ref(1)
 {
    q = other.q;
-   dbname = other.dbname;
-   uname = other.uname;
-   pword = other.pword;
-   hname = other.hname;
+
+   dbname  = other.dbname;
+   uname   = other.uname;
+   pword   = other.pword;
+   hname   = other.hname;
    drvName = other.drvName;
-   port = other.port;
+   port    = other.port;
    connOptions = other.connOptions;
    driver = other.driver;
    precisionPolicy = other.precisionPolicy;
@@ -189,37 +195,39 @@ void QSqlDatabasePrivate::cleanConnections()
    dict->clear();
 }
 
-static bool qDriverDictInit = false;
 static void cleanDriverDict()
 {
    qDeleteAll(QSqlDatabasePrivate::driverDict());
    QSqlDatabasePrivate::driverDict().clear();
    QSqlDatabasePrivate::cleanConnections();
-   qDriverDictInit = false;
+
+   s_hashCleared = true;
 }
 
-DriverDict &QSqlDatabasePrivate::driverDict()
+QHash<QString, QSqlDriverCreatorBase *> &QSqlDatabasePrivate::driverDict()
 {
-   static DriverDict dict;
+   static QHash<QString, QSqlDriverCreatorBase *> dict;
 
-   if (! qDriverDictInit) {
-      qDriverDictInit = true;
+   if (s_hashCleared ) {
+      s_hashCleared  = false;
       qAddPostRoutine(cleanDriverDict);
    }
+
    return dict;
 }
 
 QSqlDatabasePrivate *QSqlDatabasePrivate::shared_null()
 {
    static QSqlNullDriver dr;
-   static QSqlDatabasePrivate n(NULL, &dr);
+   static QSqlDatabasePrivate n(nullptr, &dr);
+
    return &n;
 }
 
 void QSqlDatabasePrivate::invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn)
 {
    if (db.d->ref.load() != 1 && doWarn) {
-      qWarning("QSqlDatabasePrivate::removeDatabase: connection '%s' is still in use, all queries will cease to work.", csPrintable(name));
+      qWarning("QSqlDatabasePrivate::removeDatabase: Connection '%s' is still in use, all queries about to fail", csPrintable(name));
       db.d->disable();
       db.d->connName.clear();
    }
@@ -249,7 +257,7 @@ void QSqlDatabasePrivate::addDatabase(const QSqlDatabase &db, const QString &nam
    if (dict->contains(name)) {
       invalidateDb(dict->take(name), name);
 
-      qWarning("QSqlDatabasePrivate::addDatabase: duplicate connection name '%s', old connection removed.", csPrintable(name));
+      qWarning("QSqlDatabasePrivate::addDatabase: Duplicate connection name '%s', old connection removed", csPrintable(name));
    }
 
    dict->insert(name, db);
@@ -266,6 +274,7 @@ QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
    dict->lock.lockForRead();
    QSqlDatabase db = dict->value(name);
    dict->lock.unlock();
+
    if (db.isValid() && !db.isOpen() && open) {
       if (!db.open()) {
          qWarning() << "QSqlDatabasePrivate::database: unable to open database:" << db.lastError().text();
@@ -275,10 +284,6 @@ QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
    return db;
 }
 
-
-/*! \internal
-    Copies the connection data from \a other.
-*/
 void QSqlDatabasePrivate::copy(const QSqlDatabasePrivate *other)
 {
    q = other->q;
@@ -362,7 +367,9 @@ QStringList QSqlDatabase::drivers()
    list << "QIBASE";
 #endif
 
-   if (QFactoryLoader *fl = loader()) {
+   QFactoryLoader *fl = loader();
+
+   if (fl != nullptr) {
       // what keys are available
       const QSet<QString> keySet = fl->keySet();
 
@@ -373,11 +380,11 @@ QStringList QSqlDatabase::drivers()
       }
    }
 
-   DriverDict dict = QSqlDatabasePrivate::driverDict();
+   QHash<QString, QSqlDriverCreatorBase *> dict = QSqlDatabasePrivate::driverDict();
 
-   for (DriverDict::const_iterator i = dict.constBegin(); i != dict.constEnd(); ++i) {
+   for (auto i = dict.constBegin(); i != dict.constEnd(); ++i) {
       if (! list.contains(i.key())) {
-         list << i.key();
+         list.append(i.key());
       }
    }
 
@@ -388,6 +395,7 @@ QStringList QSqlDatabase::drivers()
 void QSqlDatabase::registerSqlDriver(const QString &name, QSqlDriverCreatorBase *creator)
 {
    delete QSqlDatabasePrivate::driverDict().take(name);
+
    if (creator) {
       QSqlDatabasePrivate::driverDict().insert(name, creator);
    }
@@ -495,9 +503,9 @@ void QSqlDatabasePrivate::init(const QString &type)
    }
 
    if (! driver) {
-      DriverDict dict = QSqlDatabasePrivate::driverDict();
+      QHash<QString, QSqlDriverCreatorBase *> dict = QSqlDatabasePrivate::driverDict();
 
-      for (DriverDict::const_iterator it = dict.constBegin(); it != dict.constEnd() && ! driver; ++it) {
+      for (auto it = dict.constBegin(); it != dict.constEnd() && ! driver; ++it) {
 
          if (type == it.key()) {
             driver = ((QSqlDriverCreatorBase *)(*it))->createObject();

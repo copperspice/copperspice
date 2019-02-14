@@ -25,20 +25,20 @@
 #include "../../../../src/sql/drivers/sqlite2/qsql_sqlite2.h"
 
 
-
 class QSQLite2DriverPlugin : public QSqlDriverPlugin
 {
    CS_OBJECT(QSQLite2DriverPlugin)
 
-   CS_PLUGIN_IID("com.copperspice.CS.SqlDriver")
+   CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QSQLITE2")
 
 public:
     QSQLite2DriverPlugin();
 
     QSqlDriver* create(const QString &) override;
-
 };
+
+CS_PLUGIN_REGISTER(QSQLite2DriverPlugin)
 
 QSQLite2DriverPlugin::QSQLite2DriverPlugin()
     : QSqlDriverPlugin()
