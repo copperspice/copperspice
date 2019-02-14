@@ -58,10 +58,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    CORE_CS_PROPERTY_READ(organizationDomain, cs_organizationDomain)
    CORE_CS_PROPERTY_WRITE(organizationDomain, cs_setOrganizationDomain)
 
-
-// BROOM - add me    Q_PROPERTY(bool quitLockEnabled READ isQuitLockEnabled WRITE setQuitLockEnabled)
-
-
+   CORE_CS_PROPERTY_READ(quitLockEnabled, cs_isQuitLockEnabled)
+   CORE_CS_PROPERTY_WRITE(quitLockEnabled, cs_setQuitLockEnabled)
 
    Q_DECLARE_PRIVATE(QCoreApplication)
 
@@ -167,6 +165,10 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static bool isQuitLockEnabled();
    static void setQuitLockEnabled(bool enabled);
 
+   // wrapper for static method
+   inline bool cs_isQuitLockEnabled() const;
+   inline void cs_setQuitLockEnabled(bool enabled);
+
    CORE_CS_SLOT_1(Public, static void quit())
    CORE_CS_SLOT_2(quit)
 
@@ -193,7 +195,6 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    Q_DISABLE_COPY(QCoreApplication)
 
-
    friend class QApplication;
    friend class QApplicationPrivate;
    friend class QClassFactory;
@@ -209,6 +210,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
 };
 
+// wrappers for static method
 void QCoreApplication::cs_setApplicationName(const QString &application)
 {
    QCoreApplication::setApplicationName(application);
@@ -249,6 +251,15 @@ QString QCoreApplication::cs_organizationDomain() const
    return QCoreApplication::organizationDomain();
 };
 
+bool QCoreApplication::cs_isQuitLockEnabled() const
+{
+   return QCoreApplication::isQuitLockEnabled();
+};
+
+void QCoreApplication::cs_setQuitLockEnabled(bool enabled)
+{
+   return QCoreApplication::setQuitLockEnabled(enabled);
+};
 
 inline bool QCoreApplication::sendEvent(QObject *receiver, QEvent *event)
 {
@@ -328,8 +339,8 @@ Q_CORE_EXPORT void qRemovePostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT QString qAppName();
 
 #if defined(Q_OS_WIN)
-Q_CORE_EXPORT QString decodeMSG(const MSG &);
-Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
+   Q_CORE_EXPORT QString decodeMSG(const MSG &);
+   Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
 #endif
 
 #endif
