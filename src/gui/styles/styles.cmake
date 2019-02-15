@@ -39,7 +39,7 @@ set(GUI_PUBLIC_INCLUDES
 set(GUI_INCLUDES
     ${GUI_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstyle.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylefactory.h
@@ -84,7 +84,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkglobal_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkpainter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtk2painter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qrenderrule_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle_p.h
@@ -155,7 +155,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_style.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle.mm
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK)
 

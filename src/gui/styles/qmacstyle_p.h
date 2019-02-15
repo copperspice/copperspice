@@ -20,13 +20,13 @@
 *
 ***********************************************************************/
 
-#ifndef QMACSTYLE_MAC_P_H
-#define QMACSTYLE_MAC_P_H
+#ifndef QMACSTYLE_P_H
+#define QMACSTYLE_P_H
 
 #include <cs_carbon_wrapper_p.h>
 #include <cs_mac_p.h>
 
-#include <qmacstyle_mac.h>
+#include <qmacstyle.h>
 #include <qcommonstyle_p.h>
 #include <qapplication_p.h>
 #include <qcombobox_p.h>

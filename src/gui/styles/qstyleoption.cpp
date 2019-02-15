@@ -24,7 +24,7 @@
 #include <qapplication.h>
 
 #ifdef Q_OS_MAC
-# include <qmacstyle_mac.h>
+# include <qmacstyle.h>
 #endif
 
 #include <qdebug.h>

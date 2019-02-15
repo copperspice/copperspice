@@ -22,8 +22,8 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include <qmacstyle_mac.h>
-#include <qmacstyle_mac_p.h>
+#include <qmacstyle.h>
+#include <qmacstyle_p.h>
 
 #define QMAC_QAQUASTYLE_SIZE_CONSTRAIN
 //#define DEBUG_SIZE_CONSTRAINT

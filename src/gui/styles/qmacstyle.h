@@ -20,8 +20,8 @@
 *
 ***********************************************************************/
 
-#ifndef QMACSTYLE_MAC_H
-#define QMACSTYLE_MAC_H
+#ifndef QMACSTYLE_H
+#define QMACSTYLE_H
 
 #include <qcommonstyle.h>
 
