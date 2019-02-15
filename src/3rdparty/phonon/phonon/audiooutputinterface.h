@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_AUDIOOUTPUTINTERFACE_H
 #define PHONON_AUDIOOUTPUTINTERFACE_H
@@ -36,19 +34,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-/* \class AudioOutputInterface audiooutputinterface.h Phonon/AudioOutputInterface
- * \short Interface for AudioOutput objects
- *
- * The implementation can make use of the signals
- * \code
-     void volumeChanged(qreal newVolume);
-     void audioDeviceFailed();
- * \endcode
- * to notify the frontend whenever the volume has changed or when an audioDeviceFailed (e.g. USB
- * unplug or sound server failure).
- *
- * \author Matthias Kretz <kretz@kde.org>
- */
+
 class AudioOutputInterface40
 {
     public:

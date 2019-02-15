@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_FACTORY_P_H
 #define PHONON_FACTORY_P_H
@@ -42,58 +40,46 @@ namespace Phonon
     class MediaNodePrivate;
     class AbstractMediaStream;
 
-/**
- * \internal
- * \brief Factory to access the preferred Backend.
- *
- * This class is used internally to get the backend's implementation.
- * It keeps track of the objects that were created. When a
- * request for a backend change comes, it asks all frontend objects to delete
- * their backend objects and then checks whether they were all deleted. Only
- * then the old backend is unloaded and the new backend is loaded.
- *
- * \author Matthias Kretz <kretz@kde.org>
- */
 namespace Factory
-{    
+{
     class Sender : public QObject
     {
         PHN_CS_OBJECT(Sender)
 
-        public:            
+        public:
             PHN_CS_SIGNAL_1(Public, void backendChanged())
-            PHN_CS_SIGNAL_2(backendChanged) 
+            PHN_CS_SIGNAL_2(backendChanged)
 
             PHN_CS_SIGNAL_1(Public, void availableAudioOutputDevicesChanged())
-            PHN_CS_SIGNAL_2(availableAudioOutputDevicesChanged) 
-           
+            PHN_CS_SIGNAL_2(availableAudioOutputDevicesChanged)
+
             PHN_CS_SIGNAL_1(Public, void availableAudioCaptureDevicesChanged())
-            PHN_CS_SIGNAL_2(availableAudioCaptureDevicesChanged) 
+            PHN_CS_SIGNAL_2(availableAudioCaptureDevicesChanged)
     };
-   
+
     PHONON_EXPORT Sender *sender();
-   
+
     QObject *createMediaObject(QObject *parent = nullptr);
-  
+
 #ifndef QT_NO_PHONON_EFFECT
     QObject *createEffect(int effectId, QObject *parent = nullptr);
-#endif 
-   
+#endif
+
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
     QObject *createVolumeFaderEffect(QObject *parent = nullptr);
-#endif 
+#endif
 
     QObject *createAudioOutput(QObject *parent = nullptr);
-  
+
 #ifndef QT_NO_PHONON_VIDEO
     QObject *createVideoWidget(QObject *parent = nullptr);
-#endif 
+#endif
 
     PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = nullptr);
     PHONON_EXPORT QObject *backend(bool createWhenNull = true);
 
     QString identifier();
-    
+
     PHONON_EXPORT QString backendName();
 
     QString backendComment();

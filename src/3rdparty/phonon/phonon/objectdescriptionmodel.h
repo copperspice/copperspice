@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_OBJECTDESCRIPTIONMODEL_H
 #define PHONON_OBJECTDESCRIPTIONMODEL_H
@@ -46,17 +44,17 @@ namespace Phonon
     class PHONON_EXPORT ObjectDescriptionModelData
     {
         public:
-           
-            int rowCount(const QModelIndex &parent = QModelIndex()) const;
-            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;            
 
-            Qt::ItemFlags flags(const QModelIndex &index) const;           
-            QList<int> tupleIndexOrder() const;          
-           
+            int rowCount(const QModelIndex &parent = QModelIndex()) const;
+            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+            Qt::ItemFlags flags(const QModelIndex &index) const;
+            QList<int> tupleIndexOrder() const;
+
             int tupleIndexAtPositionIndex(int positionIndex) const;
             QMimeData *mimeData(ObjectDescriptionType type, const QModelIndexList &indexes) const;
 
-            void moveUp(const QModelIndex &index);           
+            void moveUp(const QModelIndex &index);
             void moveDown(const QModelIndex &index);
 
             void setModelData(const QList<QExplicitlySharedDataPointer<ObjectDescriptionData> > &data);
@@ -64,7 +62,7 @@ namespace Phonon
             QExplicitlySharedDataPointer<ObjectDescriptionData> modelData(const QModelIndex &index) const;
             Qt::DropActions supportedDropActions() const;
 
-            bool dropMimeData(ObjectDescriptionType type, const QMimeData *data, Qt::DropAction action, 
+            bool dropMimeData(ObjectDescriptionType type, const QMimeData *data, Qt::DropAction action,
                   int row, int column, const QModelIndex &parent);
 
             bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
@@ -100,37 +98,37 @@ class PHONON_TEMPLATE_CLASS_EXPORT ObjectDescriptionModel : public QAbstractList
 {
    PHN_CS_OBJECT(ObjectDescriptionModel)
 
-public:    
-         
-   inline int rowCount(const QModelIndex &parent = QModelIndex()) const { return d->rowCount(parent); } 
+public:
+
+   inline int rowCount(const QModelIndex &parent = QModelIndex()) const { return d->rowCount(parent); }
    inline QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const { return d->data(index, role); }
 
    inline Qt::ItemFlags flags(const QModelIndex &index) const { return d->flags(index); }
    inline QList<int> tupleIndexOrder() const { return d->tupleIndexOrder(); }
-           
-   inline int tupleIndexAtPositionIndex(int positionIndex) const { return d->tupleIndexAtPositionIndex(positionIndex); }          
+
+   inline int tupleIndexAtPositionIndex(int positionIndex) const { return d->tupleIndexAtPositionIndex(positionIndex); }
    inline QMimeData *mimeData(const QModelIndexList &indexes) const { return d->mimeData(type, indexes); }
-           
-   inline void moveUp(const QModelIndex &index) { d->moveUp(index); }           
+
+   inline void moveUp(const QModelIndex &index) { d->moveUp(index); }
    inline void moveDown(const QModelIndex &index) { d->moveDown(index); }
 
-   explicit inline ObjectDescriptionModel(QObject *parent = nullptr) : QAbstractListModel(parent), 
-         d(new ObjectDescriptionModelData(this)) {} 
-      
+   explicit inline ObjectDescriptionModel(QObject *parent = nullptr) : QAbstractListModel(parent),
+         d(new ObjectDescriptionModelData(this)) {}
+
    explicit inline ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent = nullptr) :
          QAbstractListModel(parent), d(new ObjectDescriptionModelData(this)) { setModelData(data); }
-           
-   inline void setModelData(const QList<ObjectDescription<type> > &data) 
-      { 
+
+   inline void setModelData(const QList<ObjectDescription<type> > &data)
+      {
           QList<QExplicitlySharedDataPointer<ObjectDescriptionData> > list;
           for (int i = 0; i < data.count(); ++i) {
               list += data.at(i).d;
           }
           d->setModelData(list);
       }
-           
+
    inline QList<ObjectDescription<type> > modelData() const
-      { 
+      {
                 QList<ObjectDescription<type> > ret;
                 QList<QExplicitlySharedDataPointer<ObjectDescriptionData> > list = d->modelData();
                 for (int i = 0; i < list.count(); ++i) {
@@ -138,25 +136,25 @@ public:
                 }
                 return ret;
       }
-           
-   inline ObjectDescription<type> modelData(const QModelIndex &index) const
-      { return ObjectDescription<type>(d->modelData(index)); } 
 
-   inline Qt::DropActions supportedDropActions() const 
+   inline ObjectDescription<type> modelData(const QModelIndex &index) const
+      { return ObjectDescription<type>(d->modelData(index)); }
+
+   inline Qt::DropActions supportedDropActions() const
       { return d->supportedDropActions(); }
-           
-   inline bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) 
-      { 
+
+   inline bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+      {
          return d->dropMimeData(type, data, action, row, column, parent);
       }
 
-   inline bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) 
-      { 
+   inline bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex())
+      {
          return d->removeRows(row, count, parent);
       }
-            
-   inline QStringList mimeTypes() const 
-      { return d->mimeTypes(type); } 
+
+   inline QStringList mimeTypes() const
+      { return d->mimeTypes(type); }
 
 protected:
    ObjectDescriptionModelData *const d;
@@ -170,7 +168,7 @@ typedef ObjectDescriptionModel<AudioChannelType> AudioChannelDescriptionModel;
 typedef ObjectDescriptionModel<SubtitleType> SubtitleDescriptionModel;
 
 
-/* ** unused Qt 4 code 
+/* ** unused Qt 4 code
     typedef ObjectDescriptionModel<VideoOutputDeviceType> VideoOutputDeviceModel;
     typedef ObjectDescriptionModel<VideoCaptureDeviceType> VideoCaptureDeviceModel;
     typedef ObjectDescriptionModel<AudioCodecType> AudioCodecDescriptionModel;
@@ -185,4 +183,4 @@ typedef ObjectDescriptionModel<SubtitleType> SubtitleDescriptionModel;
 
 QT_END_NAMESPACE
 
-#endif 
+#endif

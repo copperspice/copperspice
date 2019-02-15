@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef PHONON_SEEKSLIDER_H
 #define PHONON_SEEKSLIDER_H
@@ -52,7 +50,7 @@ class PHONON_EXPORT SeekSlider : public QWidget
 
     PHN_CS_PROPERTY_READ(tracking, hasTracking)
     PHN_CS_PROPERTY_WRITE(tracking, setTracking)
-   
+
     PHN_CS_PROPERTY_READ(pageStep, pageStep)
     PHN_CS_PROPERTY_WRITE(pageStep, setPageStep)
 
@@ -61,14 +59,14 @@ class PHONON_EXPORT SeekSlider : public QWidget
 
     PHN_CS_PROPERTY_READ(orientation, orientation)
     PHN_CS_PROPERTY_WRITE(orientation, setOrientation)
-  
+
     PHN_CS_PROPERTY_READ(iconSize, iconSize)
     PHN_CS_PROPERTY_WRITE(iconSize, setIconSize)
 
-    public:       
+    public:
         explicit SeekSlider(QWidget *parent = nullptr);
         explicit SeekSlider(MediaObject *media, QWidget *parent = nullptr);
-       
+
         ~SeekSlider();
 
         bool hasTracking() const;
@@ -81,18 +79,18 @@ class PHONON_EXPORT SeekSlider : public QWidget
         bool isIconVisible() const;
         QSize iconSize() const;
         MediaObject *mediaObject() const;
-    
+
         PHN_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
-        PHN_CS_SLOT_2(setOrientation) 
+        PHN_CS_SLOT_2(setOrientation)
 
         PHN_CS_SLOT_1(Public, void setIconVisible(bool un_named_arg1))
-        PHN_CS_SLOT_2(setIconVisible) 
+        PHN_CS_SLOT_2(setIconVisible)
 
         PHN_CS_SLOT_1(Public, void setIconSize(const QSize & size))
-        PHN_CS_SLOT_2(setIconSize) 
-        
+        PHN_CS_SLOT_2(setIconSize)
+
         PHN_CS_SLOT_1(Public, void setMediaObject(MediaObject * un_named_arg1))
-        PHN_CS_SLOT_2(setMediaObject) 
+        PHN_CS_SLOT_2(setMediaObject)
 
     protected:
         SeekSliderPrivate *const k_ptr;

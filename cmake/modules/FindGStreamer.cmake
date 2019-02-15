@@ -1,10 +1,20 @@
 #
-# Copyright (C) 2012-2018 Barbara Geller
-# Copyright (C) 2012-2018 Ansel Sermersheim
-# All rights reserved.    
+# Copyright (c) 2012-2019 Barbara Geller
+# Copyright (c) 2012-2019 Ansel Sermersheim
+# Copyright (c) 2015 Ivailo Monev, <xakepa10@gmail.com>
 #
-# Copyright (c) 2006, Tim Beaulen <tbscope@gmail.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
+# This file is part of CopperSpice.
+#
+# CopperSpice is free software. You can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# version 2.1 as published by the Free Software Foundation.
+#
+# CopperSpice is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# https://www.gnu.org/licenses/
+#
 
 #  Find GStreamer, will define
 #
@@ -31,7 +41,7 @@ IF (NOT WIN32)
    PKG_CHECK_MODULES(PC_GSTREAMER QUIET gstreamer-0.10)
    #MESSAGE(STATUS "DEBUG: GStreamer include directory = ${GSTREAMER_INCLUDE_DIRS}")
    #MESSAGE(STATUS "DEBUG: GStreamer link directory = ${GSTREAMER_LIBRARY_DIRS}")
-   #MESSAGE(STATUS "DEBUG: GStreamer CFlags = ${GSTREAMER_CFLAGS_OTHER}") 
+   #MESSAGE(STATUS "DEBUG: GStreamer CFlags = ${GSTREAMER_CFLAGS_OTHER}")
    SET(GSTREAMER_DEFINITIONS ${PC_GSTREAMER_CFLAGS_OTHER})
 ENDIF (NOT WIN32)
 
