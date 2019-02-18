@@ -20,30 +20,35 @@
 *
 ***********************************************************************/
 
-#ifndef QSESSIONMANAGER_P_H
-#define QSESSIONMANAGER_P_H
+#ifndef QWGLNATIVECONTEXT_H
+#define QWGLNATIVECONTEXT_H
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QMetaType>
 
-#ifndef QT_NO_SESSIONMANAGER
+#include <wingdi.h>
+#include <GL/gl.h>
 
-class QPlatformSessionManager;
-
-class QSessionManagerPrivate
+class QWGLNativeContext
 {
- public:
-   QSessionManagerPrivate(const QString &id, const QString &key);
-   virtual ~QSessionManagerPrivate();
+public:
+    QWGLNativeContext()
+        : m_context(0),
+          m_window(0)
+    { }
 
-   static QSessionManagerPrivate *get(QSessionManager *object) {
-      // d_ptr is a smart pointer, need to return a raw pointer
-      return object->d_ptr.data();
-   }
+    QWGLNativeContext(HGLRC ctx, HWND wnd)
+        : m_context(ctx),
+          m_window(wnd)
+    { }
 
-   QPlatformSessionManager *platformSessionManager;
+    HGLRC context() const { return m_context; }
+    HWND window() const { return m_window; }
+
+private:
+    HGLRC m_context;
+    HWND m_window;
 };
 
-#endif // QT_NO_SESSIONMANAGER
+Q_DECLARE_METATYPE(QWGLNativeContext)
 
 #endif

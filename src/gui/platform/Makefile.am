@@ -79,6 +79,7 @@ GUI_PLATFORMHEADERS_INCLUDES = \
 	platformheaders/xcb/qxcbscreenfunctions.h \
 	platformheaders/xcb/qxcbwindowfunctions.h \
 	platformheaders/windows/qwindowswindowfunctions.h \
+	platformheaders/windows/qwglnativecontext.h \
 	platformheaders/cocoa/qcocoawindowfunctions.h
 
 GUI_PLATFORMHEADERS_DIRS = xcb windows cocoa
