@@ -114,7 +114,7 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    QString creator() const;
 
    void setMargins(const QMarginsF &margins) override;
-   QMarginsF margins(Unit unit) const;
+   QMarginsF margins(QPageSize::Unit unit) const;
 
    bool setPageLayout(const QPageLayout &newPageLayout) override;
    QPageLayout pageLayout() const override;
