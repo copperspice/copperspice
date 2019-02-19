@@ -20,32 +20,19 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#include "qxcbglintegration.h"
 
-#include "qxcbconnection.h"
-
-class QXcbObject
+QXcbGlIntegration::QXcbGlIntegration()
 {
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+}
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+QXcbGlIntegration::~QXcbGlIntegration()
+{
+}
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+bool QXcbGlIntegration::handleXcbEvent(xcb_generic_event_t *event, uint responseType)
+{
+   return false;
+}
 
- private:
-   QXcbConnection *m_connection;
-};
 
-#endif

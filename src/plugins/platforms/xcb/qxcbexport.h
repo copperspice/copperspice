@@ -20,32 +20,16 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBEXPORT_H
+#define QXCBEXPORT_H
 
-#include "qxcbconnection.h"
+#include <qglobal.h>
 
-class QXcbObject
-{
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
-
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
-};
+#  if defined(QT_BUILD_XCB_PLUGIN)
+#    define Q_XCB_EXPORT Q_DECL_EXPORT
+#  else
+#    define Q_XCB_EXPORT Q_DECL_IMPORT
+#  endif
 
 #endif
+

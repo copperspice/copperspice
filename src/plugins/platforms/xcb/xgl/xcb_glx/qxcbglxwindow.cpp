@@ -20,32 +20,31 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#include "qxcbglxwindow.h"
 
-#include "qxcbconnection.h"
+#include "qxcbscreen.h"
+#include <qglxconvenience_p.h>
 
-class QXcbObject
+QXcbGlxWindow::QXcbGlxWindow(QWindow *window)
+   : QXcbWindow(window)
 {
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+}
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+QXcbGlxWindow::~QXcbGlxWindow()
+{
+}
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+void QXcbGlxWindow::resolveFormat()
+{
+   m_format = window()->requestedFormat(); //qglx_findVisualInfo sets the resovled format
+}
 
- private:
-   QXcbConnection *m_connection;
-};
+void *QXcbGlxWindow::createVisual()
+{
+   QXcbScreen *scr = xcbScreen();
+   if (!scr) {
+      return nullptr;
+   }
+   return qglx_findVisualInfo(DISPLAY_FROM_XCB(scr), scr->screenNumber(), &m_format);
+}
 
-#endif

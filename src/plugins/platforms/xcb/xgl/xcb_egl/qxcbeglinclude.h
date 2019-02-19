@@ -20,32 +20,15 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBINCLUDE_H
+#define QXCBINCLUDE_H
 
-#include "qxcbconnection.h"
+#include <QPalette>
+#include <QTextStream>
+#include <qmath_p.h>
+#include <qcssparser_p.h>
+#include <qtextengine_p.h>
 
-class QXcbObject
-{
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+#include <EGL/egl.h>
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
-};
-
-#endif
+#endif //QXCBINCLUDE_H

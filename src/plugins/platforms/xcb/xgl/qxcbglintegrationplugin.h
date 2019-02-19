@@ -20,32 +20,27 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBGLINTEGRATIONPLUGIN_H
+#define QXCBGLINTEGRATIONPLUGIN_H
 
-#include "qxcbconnection.h"
+#include "qxcbexport.h"
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
-class QXcbObject
+#define QXcbGlIntegrationInterface_ID "com.copperspice.CS.Xcb.QXcbGlIntegrationInterface"
+
+class QXcbGlIntegration;
+
+class Q_XCB_EXPORT QXcbGlIntegrationPlugin : public QObject
 {
+   CS_OBJECT(QXcbGlIntegrationPlugin)
+
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   explicit QXcbGlIntegrationPlugin(QObject *parent = nullptr)
+      : QObject(parent)
+   { }
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
+   virtual QXcbGlIntegration *create() = 0;
 };
 
 #endif

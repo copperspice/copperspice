@@ -20,32 +20,27 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QUNIXEVENTDISPATCHER_P_H
+#define QUNIXEVENTDISPATCHER_P_H
 
-#include "qxcbconnection.h"
+#include <qglobal.h>
+#include <qeventdispatcher_unix_p.h>
 
-class QXcbObject
+class QUnixEventDispatcherPrivate;
+
+class QUnixEventDispatcher : public QEventDispatcherUNIX
 {
+   CS_OBJECT(QUnixEventDispatcher)
+   Q_DECLARE_PRIVATE(QUnixEventDispatcher)
+
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   explicit QUnixEventDispatcher(QObject *parent = nullptr);
+   ~QUnixEventDispatcher();
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+   bool processEvents(QEventLoop::ProcessEventsFlags flags);
+   bool hasPendingEvents();
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
+   void flush();
 };
 
 #endif

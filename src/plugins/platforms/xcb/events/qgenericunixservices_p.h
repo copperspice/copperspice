@@ -20,32 +20,25 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QGENERICUNIXDESKTOPSERVICES_H
+#define QGENERICUNIXDESKTOPSERVICES_H
 
-#include "qxcbconnection.h"
+#include <qplatform_services.h>
+#include <QString>
 
-class QXcbObject
+class QGenericUnixServices : public QPlatformServices
 {
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   QGenericUnixServices() {}
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+   QByteArray desktopEnvironment() const override;
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+   bool openUrl(const QUrl &url) override;
+   bool openDocument(const QUrl &url) override;
 
  private:
-   QXcbConnection *m_connection;
+   QString m_webBrowser;
+   QString m_documentLauncher;
 };
 
-#endif
+#endif // QGENERICUNIXDESKTOPSERVICES_H

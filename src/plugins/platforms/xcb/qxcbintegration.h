@@ -23,42 +23,102 @@
 #ifndef QXCBINTEGRATION_H
 #define QXCBINTEGRATION_H
 
-#include <QtGui/QPlatformIntegration>
-#include <QtGui/QPlatformScreen>
+#include <qplatform_integration.h>
+#include <qplatform_screen.h>
 
-QT_BEGIN_NAMESPACE
+#include "qxcbexport.h"
+
+#include <xcb/xcb.h>
 
 class QXcbConnection;
+class QAbstractEventDispatcher;
+class QXcbNativeInterface;
+class QXcbScreen;
 
-class QXcbIntegration : public QPlatformIntegration
+class Q_XCB_EXPORT QXcbIntegration : public QPlatformIntegration
 {
-public:
-    QXcbIntegration();
-    ~QXcbIntegration();
+ public:
+   QXcbIntegration(const QStringList &parameters, int &argc, char **argv);
+   ~QXcbIntegration();
 
-    bool hasCapability(Capability cap) const;
-    QPixmapData *createPixmapData(QPixmapData::PixelType type) const;
-    QPlatformWindow *createPlatformWindow(QWidget *widget, WId winId) const;
-    QWindowSurface *createWindowSurface(QWidget *widget, WId winId) const;
+   QPlatformWindow *createPlatformWindow(QWindow *window) const override;
+#ifndef QT_NO_OPENGL
+   QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const override;
+#endif
+   QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
 
-    QList<QPlatformScreen *> screens() const;
-    void moveToScreen(QWidget *window, int screen);
-    bool isVirtualDesktop();
-    QPixmap grabWindow(WId window, int x, int y, int width, int height) const;
+   QPlatformOffscreenSurface *createPlatformOffscreenSurface(QOffscreenSurface *surface) const override;
 
-    QPlatformFontDatabase *fontDatabase() const;
+   bool hasCapability(Capability cap) const override;
+   QAbstractEventDispatcher *createEventDispatcher() const override;
+   void initialize() override;
 
-    QPlatformNativeInterface *nativeInterface()const;
+   void moveToScreen(QWindow *window, int screen);
 
-private:
-    bool hasOpenGL() const;
-    QList<QPlatformScreen *> m_screens;
-    QXcbConnection *m_connection;
+   QPlatformFontDatabase *fontDatabase() const override;
 
-    QPlatformFontDatabase *m_fontDatabase;
-    QPlatformNativeInterface *m_nativeInterface;
+   QPlatformNativeInterface *nativeInterface()const override;
+
+#ifndef QT_NO_CLIPBOARD
+   QPlatformClipboard *clipboard() const override;
+#endif
+#ifndef QT_NO_DRAGANDDROP
+   QPlatformDrag *drag() const override;
+#endif
+
+   QPlatformInputContext *inputContext() const override;
+
+#ifndef QT_NO_ACCESSIBILITY
+   QPlatformAccessibility *accessibility() const override;
+#endif
+
+   QPlatformServices *services() const override;
+
+   Qt::KeyboardModifiers queryKeyboardModifiers() const override;
+   QList<int> possibleKeys(const QKeyEvent *e) const override;
+
+   QStringList themeNames() const override;
+   QPlatformTheme *createPlatformTheme(const QString &name) const override;
+   QVariant styleHint(StyleHint hint) const override;
+
+   QXcbConnection *defaultConnection() const {
+      return m_connections.first();
+   }
+
+   QByteArray wmClass() const;
+
+#if ! defined(QT_NO_SESSIONMANAGER) && defined(XCB_USE_SM)
+   QPlatformSessionManager *createPlatformSessionManager(const QString &id, const QString &key) const override;
+#endif
+
+   void sync() override;
+
+   static QXcbIntegration *instance() {
+      return m_instance;
+   }
+
+ private:
+   QList<QXcbConnection *> m_connections;
+
+   QScopedPointer<QPlatformFontDatabase> m_fontDatabase;
+   QScopedPointer<QXcbNativeInterface> m_nativeInterface;
+
+   QScopedPointer<QPlatformInputContext> m_inputContext;
+
+#ifndef QT_NO_ACCESSIBILITY
+   mutable QScopedPointer<QPlatformAccessibility> m_accessibility;
+#endif
+
+   QScopedPointer<QPlatformServices> m_services;
+
+   friend class QXcbConnection; // access QPlatformIntegration::screenAdded()
+
+   mutable QByteArray m_wmClass;
+   const char *m_instanceName;
+   bool m_canGrab;
+   xcb_visualid_t m_defaultVisualId;
+
+   static QXcbIntegration *m_instance;
 };
-
-QT_END_NAMESPACE
 
 #endif

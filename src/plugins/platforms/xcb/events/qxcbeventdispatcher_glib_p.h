@@ -20,32 +20,36 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBEVENTDISPATCHER_GLIB_P_H
+#define QXCBEVENTDISPATCHER_GLIB_P_H
 
-#include "qxcbconnection.h"
+#include <qeventdispatcher_glib_p.h>
 
-class QXcbObject
+using GMainContext = struct _GMainContext;
+
+class QXcbEventDispatcherGlibPrivate;
+struct GUserEventSource;
+
+class QXcbEventDispatcherGlib : public QEventDispatcherGlib
 {
+   CS_OBJECT(QXcbEventDispatcherGlib)
+   Q_DECLARE_PRIVATE(QXcbEventDispatcherGlib)
+
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   explicit QXcbEventDispatcherGlib(QObject *parent = nullptr);
+   ~QXcbEventDispatcherGlib();
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+   bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
+   QEventLoop::ProcessEventsFlags m_flags;
+};
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+class QXcbEventDispatcherGlibPrivate : public QEventDispatcherGlibPrivate
+{
+   Q_DECLARE_PUBLIC(QXcbEventDispatcherGlib)
 
- private:
-   QXcbConnection *m_connection;
+ public:
+   QXcbEventDispatcherGlibPrivate(GMainContext *context = nullptr);
+   GUserEventSource *userEventSource;
 };
 
 #endif

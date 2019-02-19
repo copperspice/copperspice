@@ -20,32 +20,32 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBXSETTINGS_H
+#define QXCBXSETTINGS_H
 
-#include "qxcbconnection.h"
+#include "qxcbscreen.h"
 
-class QXcbObject
+class QXcbXSettingsPrivate;
+
+class QXcbXSettings : public QXcbWindowEventListener
 {
+   Q_DECLARE_PRIVATE(QXcbXSettings)
+
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   QXcbXSettings(QXcbVirtualDesktop *screen);
+   ~QXcbXSettings();
+   bool initialized() const;
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+   QVariant setting(const QByteArray &property) const;
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+   typedef void (*PropertyChangeFunc)(QXcbVirtualDesktop *screen, const QByteArray &name, const QVariant &property, void *handle);
+   void registerCallbackForProperty(const QByteArray &property, PropertyChangeFunc func, void *handle);
+   void removeCallbackForHandle(const QByteArray &property, void *handle);
+   void removeCallbackForHandle(void *handle);
 
+   void handlePropertyNotifyEvent(const xcb_property_notify_event_t *event) override;
  private:
-   QXcbConnection *m_connection;
+   QXcbXSettingsPrivate *d_ptr;
 };
 
-#endif
+#endif // QXCBXSETTINGS_H

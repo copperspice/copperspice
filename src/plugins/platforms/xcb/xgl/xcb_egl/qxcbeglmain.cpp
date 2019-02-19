@@ -20,32 +20,20 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#include "qxcbglintegrationplugin.h"
 
-#include "qxcbconnection.h"
+#include "qxcbeglintegration.h"
 
-class QXcbObject
+class QXcbEglIntegrationPlugin : public QXcbGlIntegrationPlugin
 {
+   CS_OBJECT(QXcbEglIntegrationPlugin)
+
+   CS_PLUGIN_IID(QXcbGlIntegrationInterface_ID)
+
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
-
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
+   QXcbGlIntegration *create() {
+      return new QXcbEglIntegration();
    }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
 };
 
-#endif
+CS_PLUGIN_REGISTER(QXcbEglIntegrationPlugin)

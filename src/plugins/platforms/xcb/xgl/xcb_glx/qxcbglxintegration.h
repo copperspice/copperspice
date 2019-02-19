@@ -20,32 +20,34 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBGLXINTEGRATION_H
+#define QXCBGLXINTEGRATION_H
 
-#include "qxcbconnection.h"
+#include "qxcbglintegration.h"
 
-class QXcbObject
+class QXcbNativeInterfaceHandler;
+
+class QXcbGlxIntegration : public QXcbGlIntegration
 {
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   QXcbGlxIntegration();
+   ~QXcbGlxIntegration();
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+   bool initialize(QXcbConnection *connection) override;
+   bool handleXcbEvent(xcb_generic_event_t *event, uint responseType) override;
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+   QXcbWindow *createWindow(QWindow *window) const override;
+   QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const override;
+   QPlatformOffscreenSurface *createPlatformOffscreenSurface(QOffscreenSurface *surface) const override;
+
+   virtual bool supportsThreadedOpenGL() const override;
+   virtual bool supportsSwitchableWidgetComposition() const override;
 
  private:
    QXcbConnection *m_connection;
+   uint32_t m_glx_first_event;
+
+   QScopedPointer<QXcbNativeInterfaceHandler> m_native_interface_handler;
 };
 
-#endif
+#endif //QXCBGLXINTEGRATION_H

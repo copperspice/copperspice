@@ -20,32 +20,23 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBIMAGE_H
+#define QXCBIMAGE_H
 
-#include "qxcbconnection.h"
+#include "qxcbscreen.h"
+#include <QtCore/QPair>
+#include <QtGui/QImage>
+#include <QtGui/QPixmap>
+#include <xcb/xcb_image.h>
 
-class QXcbObject
-{
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+QImage::Format qt_xcb_imageFormatForVisual(QXcbConnection *connection,
+   uint8_t depth, const xcb_visualtype_t *visual);
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+QPixmap qt_xcb_pixmapFromXPixmap(QXcbConnection *connection, xcb_pixmap_t pixmap,
+   int width, int height, int depth, const xcb_visualtype_t *visual);
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+xcb_pixmap_t qt_xcb_XPixmapFromBitmap(QXcbScreen *screen, const QImage &image);
+xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image, const QPoint &spot);
 
- private:
-   QXcbConnection *m_connection;
-};
 
 #endif

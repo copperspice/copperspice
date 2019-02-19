@@ -20,32 +20,19 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QGENERICUNIXFONTDATABASE_H
+#define QGENERICUNIXFONTDATABASE_H
 
-#include "qxcbconnection.h"
+#include <qglobal.h>
 
-class QXcbObject
-{
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+#ifdef Q_FONTCONFIGDATABASE
+#include <qfontconfigdatabase_p.h>
+typedef QFontconfigDatabase QGenericUnixFontDatabase;
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
+#else
+#include <qbasicfontdatabase_p.h>
+typedef QBasicFontDatabase QGenericUnixFontDatabase;
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
-};
+#endif
 
 #endif

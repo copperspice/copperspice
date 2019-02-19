@@ -20,32 +20,13 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QGENERICUNIXEVENTDISPATCHER_P_H
+#define QGENERICUNIXEVENTDISPATCHER_P_H
 
-#include "qxcbconnection.h"
+#include <qglobal.h>
 
-class QXcbObject
-{
- public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+class QAbstractEventDispatcher;
+QAbstractEventDispatcher *createUnixEventDispatcher();
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
-};
-
-#endif
+#endif // QGENERICUNIXEVENTDISPATCHER_P_H

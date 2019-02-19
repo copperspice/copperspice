@@ -20,32 +20,25 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBGLXNATIVEINTERFACEHANDLER_H
+#define QXCBGLXNATIVEINTERFACEHANDLER_H
 
-#include "qxcbconnection.h"
+#include "qxcbnativeinterfacehandler.h"
 
-class QXcbObject
+class QXcbGlxNativeInterfaceHandler : public QXcbNativeInterfaceHandler
 {
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   enum ResourceType {
+      GLXConfig,
+      GLXContext,
+   };
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+   QXcbGlxNativeInterfaceHandler(QXcbNativeInterface *nativeInterface);
+   QPlatformNativeInterface::NativeResourceForContextFunction nativeResourceFunctionForContext(const QByteArray &resource) const override;
 
  private:
-   QXcbConnection *m_connection;
+   static void *glxContextForContext(QOpenGLContext *context);
+   static void *glxConfigForContext(QOpenGLContext *context);
 };
 
-#endif
+#endif //QXCBGLXNATIVEINTERFACEHANDLER_H

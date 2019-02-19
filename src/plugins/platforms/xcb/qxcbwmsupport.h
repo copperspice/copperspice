@@ -20,32 +20,30 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBWMSUPPORT_H
+#define QXCBWMSUPPORT_H
 
+#include "qxcbobject.h"
 #include "qxcbconnection.h"
+#include <qvector.h>
 
-class QXcbObject
+class QXcbWMSupport : public QXcbObject
 {
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   QXcbWMSupport(QXcbConnection *c);
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
+   bool isSupportedByWM(xcb_atom_t atom) const;
+   const QVector<xcb_window_t> &virtualRoots() const {
+      return net_virtual_roots;
    }
 
  private:
-   QXcbConnection *m_connection;
+   friend class QXcbConnection;
+   void updateNetWMAtoms();
+   void updateVirtualRoots();
+
+   QVector<xcb_atom_t> net_wm_atoms;
+   QVector<xcb_window_t> net_virtual_roots;
 };
 
 #endif

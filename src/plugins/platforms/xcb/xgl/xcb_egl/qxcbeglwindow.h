@@ -20,32 +20,37 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBEGLWINDOW_H
+#define QXCBEGLWINDOW_H
 
-#include "qxcbconnection.h"
+#include "qxcbwindow.h"
+#include "qxcbeglinclude.h"
 
-class QXcbObject
+class QXcbEglIntegration;
+
+class QXcbEglWindow : public QXcbWindow
 {
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   QXcbEglWindow(QWindow *window, QXcbEglIntegration *glIntegration);
+   ~QXcbEglWindow();
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
+   EGLSurface eglSurface() const {
+      return m_surface;
    }
 
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
+   QXcbEglIntegration *glIntegration() const {
+      return m_glIntegration;
    }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
+
+ protected:
+   void create() override;
+   void resolveFormat() override;
+   void *createVisual() override;
 
  private:
-   QXcbConnection *m_connection;
+   QXcbEglIntegration *m_glIntegration;
+   EGLConfig m_config;
+   EGLSurface m_surface;
 };
 
 #endif

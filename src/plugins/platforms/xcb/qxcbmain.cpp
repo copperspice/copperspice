@@ -20,32 +20,27 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#include <qplatform_integrationplugin.h>
+#include "qxcbintegration.h"
 
-#include "qxcbconnection.h"
-
-class QXcbObject
+class QXcbIntegrationPlugin : public QPlatformIntegrationPlugin
 {
+   CS_OBJECT(QXcbIntegrationPlugin)
+
+   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
+   CS_PLUGIN_KEY("xcb")
+
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
-
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
+   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **) override;
 };
 
-#endif
+CS_PLUGIN_REGISTER(QXcbIntegrationPlugin)
+
+QPlatformIntegration *QXcbIntegrationPlugin::create(const QString &system, const QStringList &parameters, int &argc, char **argv)
+{
+   if (!system.compare("xcb", Qt::CaseInsensitive)) {
+      return new QXcbIntegration(parameters, argc, argv);
+   }
+
+   return nullptr;
+}

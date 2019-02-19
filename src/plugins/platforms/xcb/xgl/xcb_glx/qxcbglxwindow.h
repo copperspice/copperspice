@@ -20,32 +20,21 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBOBJECT_H
-#define QXCBOBJECT_H
+#ifndef QXCBGLXWINDOW_H
+#define QXCBGLXWINDOW_H
 
-#include "qxcbconnection.h"
+#include "qxcbglxintegration.h"
+#include "qxcbwindow.h"
 
-class QXcbObject
+class QXcbGlxWindow : public QXcbWindow
 {
  public:
-   QXcbObject(QXcbConnection *connection = 0) : m_connection(connection) {}
+   QXcbGlxWindow(QWindow *window);
+   ~QXcbGlxWindow();
 
-   void setConnection(QXcbConnection *connection) {
-      m_connection = connection;
-   }
-   QXcbConnection *connection() const {
-      return m_connection;
-   }
-
-   xcb_atom_t atom(QXcbAtom::Atom atom) const {
-      return m_connection->atom(atom);
-   }
-   xcb_connection_t *xcb_connection() const {
-      return m_connection->xcb_connection();
-   }
-
- private:
-   QXcbConnection *m_connection;
+ protected:
+   void resolveFormat() override;
+   void *createVisual() override;
 };
 
-#endif
+#endif //QXCBGLXWINDOW_H
