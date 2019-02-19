@@ -20,33 +20,16 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+/***********************************************************************
+* Copyright (c) 2007-2008, Apple, Inc.
+* All rights reserved.
+*
+* Refer to APPLE_LICENSE.TXT (in this directory) for license terms
+***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include <qglobal.h>
+#import <objc/objc-class.h>
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
-{
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
-public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
-};
-
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
-
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
+void qt_cocoa_change_implementation(Class baseClass, SEL originalSel, Class proxyClass, SEL replacementSel = 0, SEL backupSel = 0);
+void qt_cocoa_change_back_implementation(Class baseClass, SEL originalSel, SEL backupSel);
 

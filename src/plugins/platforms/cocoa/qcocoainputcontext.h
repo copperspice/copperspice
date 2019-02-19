@@ -20,33 +20,38 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#ifndef QCOCOAINPUTCONTEXT_H
+#define QCOCOAINPUTCONTEXT_H
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include <qplatform_inputcontext.h>
+#include <QtCore/QLocale>
+#include <QtCore/QPointer>
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+class QCocoaInputContext : public QPlatformInputContext
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
+    CS_OBJECT(QCocoaInputContext)
 
 public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
+    explicit QCocoaInputContext();
+    ~QCocoaInputContext();
+
+    bool isValid() const override { return true; }
+
+    void reset() override;
+
+    QLocale locale() const override { return m_locale; }
+    void updateLocale();
+
+private:
+    CS_SLOT_1(Private, void connectSignals())
+    CS_SLOT_2(connectSignals)
+
+    CS_SLOT_1(Private, void focusObjectChanged(QObject * focusObject))
+    CS_SLOT_2(focusObjectChanged)
+
+    QPointer<QWindow> mWindow;
+    QLocale m_locale;
 };
 
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
 
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
-
+#endif // QCOCOAINPUTCONTEXT_H

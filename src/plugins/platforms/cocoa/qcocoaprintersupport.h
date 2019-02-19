@@ -20,33 +20,31 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#ifndef QCOCOAPRINTERSUPPORT_H
+#define QCOCOAPRINTERSUPPORT_H
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include <qplatform_printersupport.h>
+#ifndef QT_NO_PRINTER
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+#include "qt_mac_p.h"
+
+QT_BEGIN_NAMESPACE
+
+class QCocoaPrinterSupport : public QPlatformPrinterSupport
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
 public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
+    QCocoaPrinterSupport();
+    ~QCocoaPrinterSupport();
+
+    QPrintEngine *createNativePrintEngine(QPrinter::PrinterMode printerMode) override;
+    QPaintEngine *createPaintEngine(QPrintEngine *, QPrinter::PrinterMode printerMode) override;
+
+    QPrintDevice createPrintDevice(const QString &id) override;
+    QStringList availablePrintDeviceIds() const override;
+    QString defaultPrintDeviceId() const override;
 };
 
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
+QT_END_NAMESPACE
 
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
-
+#endif // QT_NO_PRINTER
+#endif // QCOCOAPRINTERSUPPORT_H

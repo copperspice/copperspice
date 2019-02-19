@@ -20,27 +20,15 @@
 *
 ***********************************************************************/
 
-#ifndef QCOCAEVENTLOOPINTEGRATION_H
-#define QCOCAEVENTLOOPINTEGRATION_H
+#ifndef MESSAGES_H
+#define MESSAGES_H
 
-#include <Cocoa/Cocoa.h>
+#include <QString>
+#include <qplatform_menu.h>
 
-#include <QPlatformEventLoopIntegration>
+QString msgAboutCs();
+QString qt_mac_applicationmenu_string(int type);
+QPlatformMenuItem::MenuRole detectMenuRole(const QString &caption);
+QString msgDialogButtonDiscard();
 
-
-class QCocoaEventLoopIntegration : public QPlatformEventLoopIntegration
-{
-public:
-    QCocoaEventLoopIntegration();
-    void startEventLoop();
-    void quitEventLoop();
-    void qtNeedsToProcessEvents();
-
-private:
-    CFRunLoopSourceContext m_sourceContext;
-    CFRunLoopTimerContext m_timerContext;
-    CFRunLoopSourceRef m_source;
-};
-
-#endif // QCOCAEVENTLOOPINTEGRATION_H
-
+#endif

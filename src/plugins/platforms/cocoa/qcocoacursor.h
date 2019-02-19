@@ -20,35 +20,33 @@
 *
 ***********************************************************************/
 
-#ifndef QWINDOWSURFACE_COCOA_H
-#define QWINDOWSURFACE_COCOA_H
+#ifndef QWINDOWSCURSOR_H
+#define QWINDOWSCURSOR_H
 
 #include <Cocoa/Cocoa.h>
 
-#include <qcocoawindow.h>
-#include <qnsview.h>
-#include <qwindowsurface_p.h>
+#include <QtCore>
+#include <qplatform_cursor.h>
 
 QT_BEGIN_NAMESPACE
 
-class QCocoaWindowSurface : public QWindowSurface
+class QCocoaCursor : public QPlatformCursor
 {
-
 public:
-    QCocoaWindowSurface(QWidget *window, WId wid);
-    ~QCocoaWindowSurface();
+    QCocoaCursor();
+    ~QCocoaCursor();
 
-    QPaintDevice *paintDevice();
-    void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
-    void resize (const QSize &size);
-
+    void changeCursor(QCursor *cursor, QWindow *window) override;
+    QPoint pos() const override;
+    void setPos(const QPoint &position) override;
 private:
-
-    QCocoaWindow *m_cocoaWindow;
-    QImage *m_image;
-    QNSView *m_contentView;
+    QHash<Qt::CursorShape, NSCursor *> m_cursors;
+    NSCursor *convertCursor(QCursor *cursor);
+    NSCursor *createCursorData(QCursor * cursor);
+    NSCursor *createCursorFromBitmap(const QBitmap *bitmap, const QBitmap *mask, const QPoint hotspot = QPoint());
+    NSCursor *createCursorFromPixmap(const QPixmap pixmap, const QPoint hotspot = QPoint());
 };
 
 QT_END_NAMESPACE
 
-#endif
+#endif // QWINDOWSCURSOR_H

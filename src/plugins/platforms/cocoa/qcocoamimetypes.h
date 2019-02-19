@@ -20,33 +20,16 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#ifndef QCOCOAMIMETYPES_H
+#define QCOCOAMIMETYPES_H
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include <QtCore/QtCore>
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+class QCocoaMimeTypes
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
 public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
+    static void initializeMimeTypes();
 };
 
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
 
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
-
+#endif

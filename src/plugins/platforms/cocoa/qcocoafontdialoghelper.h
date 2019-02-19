@@ -20,33 +20,29 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#ifndef QCOCOAFONTDIALOGHELPER_H
+#define QCOCOAFONTDIALOGHELPER_H
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include <QObject>
+#include <qplatform_dialoghelper.h>
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+QT_BEGIN_NAMESPACE
+
+class QCocoaFontDialogHelper : public QPlatformFontDialogHelper
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
 public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
+    QCocoaFontDialogHelper();
+    ~QCocoaFontDialogHelper();
+
+    void exec() override;
+
+    bool show(Qt::WindowFlags windowFlags, Qt::WindowModality windowModality, QWindow *parent) override;
+    void hide() override;
+
+    void setCurrentFont(const QFont &) override;
+    QFont currentFont() const override;
 };
 
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
+QT_END_NAMESPACE
 
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
-
+#endif // QCOCOAFONTDIALOGHELPER_H

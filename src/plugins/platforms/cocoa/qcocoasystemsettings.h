@@ -20,19 +20,14 @@
 *
 ***********************************************************************/
 
-#ifndef QCOCOAAUTORELEASEPOOL_H
-#define QCOCOAAUTORELEASEPOOL_H
+#ifndef QCOCOASYSTEMSETTINGS_H
+#define QCOCOASYSTEMSETTINGS_H
 
-#include <Cocoa/Cocoa.h>
+#include <qhash.h>
+#include <qpalette.h>
+#include <qplatform_theme.h>
 
-class QCocoaAutoReleasePool
-{
-public:
-    QCocoaAutoReleasePool();
-    ~QCocoaAutoReleasePool();
+QPalette * qt_mac_createSystemPalette();
+QHash<QPlatformTheme::Palette, QPalette*> qt_mac_createRolePalettes();
 
-private:
-    NSAutoreleasePool *pool;
-};
-
-#endif // QCOCOAAUTORELEASEPOOL_H
+#endif

@@ -20,33 +20,39 @@
 *
 ***********************************************************************/
 
+#ifndef QBACKINGSTORE_COCOA_H
+#define QBACKINGSTORE_COCOA_H
+
 #include <Cocoa/Cocoa.h>
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include "qcocoawindow.h"
+#include "qnsview.h"
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qplatform_backingstore.h>
+
+class QCocoaBackingStore : public QPlatformBackingStore
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
 public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
+    QCocoaBackingStore(QWindow *window);
+    ~QCocoaBackingStore();
+
+    QPaintDevice *paintDevice() override;
+    void flush(QWindow *widget, const QRegion &region, const QPoint &offset) override;
+
+#ifndef QT_NO_OPENGL
+    QImage toImage() const override;
+#else
+    QImage toImage() const; // No QPlatformBackingStore::toImage() for NO_OPENGL builds.
+#endif
+
+    void resize (const QSize &size, const QRegion &) override;
+    bool scroll(const QRegion &area, int dx, int dy) override;
+    void beginPaint(const QRegion &region) override;
+    qreal getBackingStoreDevicePixelRatio();
+
+private:
+    QImage m_qImage;
+    QSize m_requestedSize;
 };
 
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
-
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
-
+#endif

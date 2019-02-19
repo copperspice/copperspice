@@ -20,14 +20,34 @@
 *
 ***********************************************************************/
 
-#include "qcocoaautoreleasepool.h"
+#ifndef QCOCOAACCESIBILITYELEMENT_H
+#define QCOCOAACCESIBILITYELEMENT_H
 
-QCocoaAutoReleasePool::QCocoaAutoReleasePool()
-{
-    pool = [[NSAutoreleasePool alloc] init];
+#include <QtCore/qglobal.h>
+
+#include "qt_mac_p.h"
+
+#ifndef QT_NO_ACCESSIBILITY
+
+#import <Cocoa/Cocoa.h>
+#import <AppKit/NSAccessibility.h>
+
+#import <qaccessible.h>
+
+@class QT_MANGLE_NAMESPACE(QMacAccessibilityElement);
+
+@interface QT_MANGLE_NAMESPACE(QMacAccessibilityElement) : NSObject {
+    NSString *role;
+    QAccessible::Id axid;
 }
 
-QCocoaAutoReleasePool::~QCocoaAutoReleasePool()
-{
-    [pool release];
-}
+- (id)initWithId:(QAccessible::Id)anId;
++ (QT_MANGLE_NAMESPACE(QMacAccessibilityElement) *)elementWithId:(QAccessible::Id)anId;
+
+@end
+
+QT_NAMESPACE_ALIAS_OBJC_CLASS(QMacAccessibilityElement);
+
+#endif // QT_NO_ACCESSIBILITY
+
+#endif // QCOCOAACCESIBILITYELEMENT_H

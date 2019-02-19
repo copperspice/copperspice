@@ -20,33 +20,28 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#include "qcocoaservices.h"
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include "qt_mac_p.h"
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <AppKit/NSWorkspace.h>
+#include <Foundation/NSURL.h>
+
+#include <QtCore/QUrl>
+
+bool QCocoaServices::openUrl(const QUrl &url)
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
-public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
-};
-
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
-
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
+    const QString scheme = url.scheme();
+    if (scheme.isEmpty())
+        return openDocument(url);
+    return [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:QCFString::toNSString(url.toString(QUrl::FullyEncoded))]];
 }
 
+bool QCocoaServices::openDocument(const QUrl &url)
+{
+    if (!url.isValid())
+        return false;
+
+    return [[NSWorkspace sharedWorkspace] openFile:QCFString::toNSString(url.toLocalFile())];
+}
 

@@ -20,33 +20,20 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#ifndef QCOCOADESKTOPSERVICES_H
+#define QCOCOADESKTOPSERVICES_H
 
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
-#include "qcocoaintegration.h"
-#include "qcocoatheme.h"
+#include <qpa/qplatformservices.h>
 
-class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
+QT_BEGIN_NAMESPACE
+
+class QCocoaServices : public QPlatformServices
 {
-   CS_OBJECT(QCocoaIntegrationPlugin)
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("cocoa")
-
 public:
-    QPlatformIntegration *create(const QString&, const QStringList&);
+    bool openUrl(const QUrl &url) override;
+    bool openDocument(const QUrl &url) override;
 };
 
-CS_PLUGIN_REGISTER(QCocoaIntegrationPlugin)
+QT_END_NAMESPACE
 
-QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, const QStringList& paramList)
-{
-    QMacAutoReleasePool pool;
-
-    if (system.compare(QLatin1String("cocoa"), Qt::CaseInsensitive) == 0)
-        return new QCocoaIntegration(paramList);
-
-    return 0;
-}
-
-
+#endif // QCOCOADESKTOPSERVICES_H
