@@ -30,10 +30,13 @@
 #endif
 #include <qgifhandler_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QGifPlugin : public QImageIOPlugin
 {
+   CS_OBJECT(QGifPlugin)
+
+   CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
+   CS_PLUGIN_KEY("gif")
+
 public:
     QGifPlugin();
     ~QGifPlugin();
@@ -42,6 +45,8 @@ public:
     Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
     QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
 };
+
+CS_PLUGIN_REGISTER(QGifPlugin)
 
 QGifPlugin::QGifPlugin()
 {
@@ -53,7 +58,7 @@ QGifPlugin::~QGifPlugin()
 
 QStringList QGifPlugin::keys() const
 {
-    return QStringList() << QLatin1String("gif");
+    return QStringList() << "gif";
 }
 
 QImageIOPlugin::Capabilities QGifPlugin::capabilities(QIODevice *device, const QByteArray &format) const
@@ -71,9 +76,4 @@ QImageIOHandler *QGifPlugin::create(QIODevice *device, const QByteArray &format)
     return handler;
 }
 
-Q_EXPORT_STATIC_PLUGIN(QGifPlugin)
-Q_EXPORT_PLUGIN2(qgif, QGifPlugin)
-
-#endif // QT_NO_IMAGEFORMATPLUGIN
-
-QT_END_NAMESPACE
+#endif

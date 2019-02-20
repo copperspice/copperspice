@@ -28,27 +28,35 @@
 #ifdef QT_NO_IMAGEFORMAT_JPEG
 #undef QT_NO_IMAGEFORMAT_JPEG
 #endif
-#include <qjpeghandler_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qjpeghandler_p.h>
 
 class QJpegPlugin : public QImageIOPlugin
 {
+   CS_OBJECT(QJpegPlugin)
+
+   CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
+   CS_PLUGIN_KEY("jpeg")
+   // CS_PLUGIN_KEY("jpg")
+
 public:
     QStringList keys() const;
     Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
     QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
 };
 
+CS_PLUGIN_REGISTER(QJpegPlugin)
+
 QStringList QJpegPlugin::keys() const
 {
-    return QStringList() << QLatin1String("jpeg") << QLatin1String("jpg");
+    return QStringList() << "jpeg" << "jpg";
 }
 
 QImageIOPlugin::Capabilities QJpegPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     if (format == "jpeg" || format == "jpg")
         return Capabilities(CanRead | CanWrite);
+
     if (!format.isEmpty())
         return 0;
     if (!device->isOpen())
@@ -70,9 +78,4 @@ QImageIOHandler *QJpegPlugin::create(QIODevice *device, const QByteArray &format
     return handler;
 }
 
-Q_EXPORT_STATIC_PLUGIN(QJpegPlugin)
-Q_EXPORT_PLUGIN2(qjpeg, QJpegPlugin)
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_IMAGEFORMATPLUGIN
+#endif

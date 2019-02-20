@@ -23,7 +23,7 @@
 #include <qimageiohandler.h>
 #include <qstringlist.h>
 
-#if !defined(QT_NO_IMAGEFORMATPLUGIN) && !defined(QT_NO_SVGRENDERER)
+#if !defined(QT_NO_IMAGEFORMATPLUGIN) && ! defined(QT_NO_SVGRENDERER)
 
 #include "qsvgiohandler.h"
 
@@ -31,31 +31,40 @@
 #include <qbytearray.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSvgPlugin : public QImageIOPlugin
 {
+   CS_OBJECT(QSvgPlugin)
+
+   CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
+   CS_PLUGIN_KEY("svg")
+   // CS_PLUGIN_KEY("svgz")
+
 public:
     QStringList keys() const;
     Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
     QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
 };
 
+CS_PLUGIN_REGISTER(QSvgPlugin)
+
 QStringList QSvgPlugin::keys() const
 {
-    return QStringList() << QLatin1String("svg") << QLatin1String("svgz");
+    return QStringList() << "svg" << "svgz";
 }
 
 QImageIOPlugin::Capabilities QSvgPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     if (format == "svg" || format == "svgz")
         return Capabilities(CanRead);
-    if (!format.isEmpty())
+
+    if (! format.isEmpty())
         return 0;
 
     Capabilities cap;
+
     if (device->isReadable() && QSvgIOHandler::canRead(device))
         cap |= CanRead;
+
     return cap;
 }
 
@@ -64,12 +73,8 @@ QImageIOHandler *QSvgPlugin::create(QIODevice *device, const QByteArray &format)
     QSvgIOHandler *hand = new QSvgIOHandler();
     hand->setDevice(device);
     hand->setFormat(format);
+
     return hand;
 }
 
-Q_EXPORT_STATIC_PLUGIN(QSvgPlugin)
-Q_EXPORT_PLUGIN2(qsvg, QSvgPlugin)
-
-QT_END_NAMESPACE
-
-#endif // !QT_NO_IMAGEFORMATPLUGIN
+#endif

@@ -28,32 +28,43 @@
 #ifdef QT_NO_IMAGEFORMAT_TIFF
 #undef QT_NO_IMAGEFORMAT_TIFF
 #endif
-#include <qtiffhandler_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qtiffhandler_p.h>
 
 class QTiffPlugin : public QImageIOPlugin
 {
+   CS_OBJECT(QTiffPlugin)
+
+   CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
+   CS_PLUGIN_KEY("tiff")
+   // CS_PLUGIN_KEY("tif")
+
 public:
     Capabilities capabilities(QIODevice * device, const QByteArray & format) const;
     QImageIOHandler * create(QIODevice * device, const QByteArray & format = QByteArray()) const;
     QStringList keys() const;
 };
 
+CS_PLUGIN_REGISTER(QTiffPlugin)
+
 QImageIOPlugin::Capabilities QTiffPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     if (format == "tiff" || format == "tif")
         return Capabilities(CanRead | CanWrite);
+
     if (!format.isEmpty())
         return 0;
+
     if (!device->isOpen())
         return 0;
 
     Capabilities cap;
     if (device->isReadable() && QTiffHandler::canRead(device))
         cap |= CanRead;
+
     if (device->isWritable())
         cap |= CanWrite;
+
     return cap;
 }
 
@@ -62,17 +73,13 @@ QImageIOHandler* QTiffPlugin::create(QIODevice *device, const QByteArray &format
     QImageIOHandler *tiffHandler = new QTiffHandler();
     tiffHandler->setDevice(device);
     tiffHandler->setFormat(format);
+
     return tiffHandler;
 }
 
 QStringList QTiffPlugin::keys() const
 {
-    return QStringList() << QLatin1String("tiff") << QLatin1String("tif");
+    return QStringList() << "tiff" << "tif";
 }
 
-Q_EXPORT_STATIC_PLUGIN(QTiffPlugin)
-Q_EXPORT_PLUGIN2(qtiff, QTiffPlugin)
-
-QT_END_NAMESPACE
-
-#endif /* QT_NO_IMAGEFORMATPLUGIN */
+#endif

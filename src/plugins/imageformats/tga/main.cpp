@@ -31,22 +31,29 @@
 
 #include "qtgahandler.h"
 
-QT_BEGIN_NAMESPACE
-
 class QTgaPlugin : public QImageIOPlugin
 {
+   CS_OBJECT(QTgaPlugin)
+
+   CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
+   CS_PLUGIN_KEY("tga")
+
 public:
     Capabilities capabilities(QIODevice * device, const QByteArray & format) const;
     QImageIOHandler * create(QIODevice * device, const QByteArray & format = QByteArray()) const;
     QStringList keys() const;
 };
 
+CS_PLUGIN_REGISTER(QTgaPlugin)
+
 QImageIOPlugin::Capabilities QTgaPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     if (format == "tga")
         return Capabilities(CanRead);
+
     if (!format.isEmpty())
         return 0;
+
     if (!device->isOpen())
         return 0;
 
@@ -66,11 +73,7 @@ QImageIOHandler* QTgaPlugin::create(QIODevice *device, const QByteArray &format)
 
 QStringList QTgaPlugin::keys() const
 {
-    return QStringList() << QLatin1String("tga");
+    return QStringList() << "tga";
 }
 
-Q_EXPORT_PLUGIN2(qtga, QTgaPlugin)
-
-QT_END_NAMESPACE
-
-#endif /* QT_NO_IMAGEFORMATPLUGIN */
+#endif

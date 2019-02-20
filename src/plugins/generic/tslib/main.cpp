@@ -20,10 +20,8 @@
 *
 ***********************************************************************/
 
-#include <qgenericplugin_qpa.h>
+#include <qgenericplugin.h>
 #include "qtslib.h"
-
-QT_BEGIN_NAMESPACE
 
 class QTsLibPlugin : public QGenericPlugin
 {
@@ -41,19 +39,16 @@ QTsLibPlugin::QTsLibPlugin()
 
 QStringList QTsLibPlugin::keys() const
 {
-    return (QStringList()
-            << QLatin1String("Tslib")
-            << QLatin1String("TslibRaw"));
+    return (QStringList() << "Tslib" << "TslibRaw");
 }
 
-QObject* QTsLibPlugin::create(const QString &key,
-                                                 const QString &specification)
+QObject* QTsLibPlugin::create(const QString &key, const QString &specification)
 {
-    if (!key.compare(QLatin1String("Tslib"), Qt::CaseInsensitive) || !key.compare(QLatin1String("TslibRaw"), Qt::CaseInsensitive))
+    if (! key.compare("Tslib", Qt::CaseInsensitive) || ! key.compare("TslibRaw", Qt::CaseInsensitive))
         return new QTsLibMouseHandler(key, specification);
+
     return 0;
-    }
+}
 
 Q_EXPORT_PLUGIN2(qtslibplugin, QTsLibPlugin)
 
-QT_END_NAMESPACE
