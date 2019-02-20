@@ -35,6 +35,10 @@
 class QJsonData
 {
    public:
+      virtual ~QJsonData()
+      {
+      }
+
       virtual std::unique_ptr<QJsonData> clone() const {
          return std::make_unique<QJsonData>();
       }
