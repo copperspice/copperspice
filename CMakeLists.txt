@@ -424,7 +424,19 @@ endif()
 
 # platform plugins
 if(WITH_GUI)
-    add_subdirectory(src/plugins/platforms)
+   if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+      set(BUILD_PLATFORMS_COCOA_PLUGIN TRUE)
+   endif()
+
+   if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+      set(BUILD_PLATFORMS_WINDOWS_PLUGIN TRUE)
+   endif()
+
+   if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+      set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
+   endif()
+
+   add_subdirectory(src/plugins/platforms)
 endif()
 
 configure_file(
