@@ -2538,9 +2538,10 @@ static QByteArray create_PropertyTables()
 
    // trip 2
    out += "char32_t uc_caseFold(char32_t value)\n";
-   out += "{\n    ";
+   out += "{\n   ";
 
    int oldDiff = 0;
+   int count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2548,18 +2549,43 @@ static QByteArray create_PropertyTables()
 
       char32_t retval = uc + flags.caseFoldDiff;
 
-      if (flags.caseFoldSpecial) {
-         out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+      if (uc == 74) {
+         // very special case for Turkish
 
-      } else if (flags.caseFoldDiff != oldDiff) {
-         out += "if (value < " + QByteArray::number(uc) + ") {\n";
+         out += "if (value < " + QByteArray::number(uc) + " && cs_isTurkishLocale) {\n";
+         out += "       // letter I, ignore for all other locales\n";
          out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
          out += "    } else ";
 
          oldDiff = flags.caseFoldDiff;
+
+      } else if (flags.caseFoldSpecial) {
+         out += "if (value == " + QByteArray::number(uc) + ") {\n";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
+
+         ++count;
+      } else if (flags.caseFoldDiff != oldDiff) {
+         out += "if (value < " + QByteArray::number(uc) + ") {\n";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
+         oldDiff = flags.caseFoldDiff;
+         ++count;
       }
    }
 
@@ -2571,9 +2597,10 @@ static QByteArray create_PropertyTables()
 
    // trip 3
    out += "char32_t uc_lowerCase(char32_t value)\n";
-   out += "{\n    ";
+   out += "{\n   ";
 
    oldDiff = 0;
+   count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2583,16 +2610,22 @@ static QByteArray create_PropertyTables()
 
       if (flags.lowerCaseSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+         out += "   } else ";
 
       } else if (flags.lowerCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+         } else {
+            out += "   } else ";
 
+         }
          oldDiff = flags.lowerCaseDiff;
+         ++count;
       }
    }
 
@@ -2604,9 +2637,10 @@ static QByteArray create_PropertyTables()
 
    // trip 4
    out += "char32_t uc_titleCase(char32_t value)\n";
-   out += "{\n    ";
+   out += "{\n   ";
 
    oldDiff = 0;
+   count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2616,16 +2650,24 @@ static QByteArray create_PropertyTables()
 
       if (flags.titleCaseSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+         out += "   } else ";
 
       } else if (flags.titleCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
 
          oldDiff = flags.titleCaseDiff;
+         ++count;
       }
    }
 
@@ -2639,6 +2681,7 @@ static QByteArray create_PropertyTables()
    out += "{\n    ";
 
    oldDiff = 0;
+   count   = 1;
 
    for (int uc = 0; uc <= QChar::LastValidCodePoint; ++uc) {
       UnicodeData &rowData = UnicodeData::get_codePoint_data(uc);
@@ -2648,16 +2691,32 @@ static QByteArray create_PropertyTables()
 
       if (flags.upperCaseSpecial) {
          out += "if (value == " + QByteArray::number(uc) + ") {\n";
-         out += "       // special char\n";
-         out += "       return 0;\n\n";
-         out += "    } else ";
+         out += "      // special char\n";
+         out += "      return 0;\n\n";
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
 
+         } else {
+            out += "   } else ";
+
+         }
+
+         ++count;
       } else if (flags.upperCaseDiff != oldDiff) {
          out += "if (value < " + QByteArray::number(uc) + ") {\n";
-         out += "       return value + " + QByteArray::number(oldDiff) + ";\n\n";
-         out += "    } else ";
+         out += "      return value + " + QByteArray::number(oldDiff) + ";\n\n";
+         if (count % 100 == 0) {
+            out += "   }\n\n";
+            out += "   ";
+
+         } else {
+            out += "   } else ";
+
+         }
 
          oldDiff = flags.upperCaseDiff;
+         ++count;
       }
    }
 
@@ -3378,6 +3437,9 @@ int main(int, char **)
 
    f.write("#include \"qunicodetables_p.h\"\n\n");
    f.write("namespace QUnicodeTables {\n\n");
+
+   f.write("bool cs_isTurkishLocale = false;\n\n");
+
    f.write(property_tables);
    f.write("\n");
    f.write(specialCase_tables);
@@ -3404,6 +3466,8 @@ int main(int, char **)
 
    f.write("#define UNICODE_DATA_VERSION " DATA_VERSION_STR "\n\n");
    f.write("namespace QUnicodeTables {\n\n");
+
+   f.write("extern bool cs_isTurkishLocale;\n\n");
 
    f.write(normalizationCorrections.second);
    f.write(property_string);

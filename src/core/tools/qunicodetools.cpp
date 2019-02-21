@@ -22,6 +22,8 @@
 
 #include <qunicodetools_p.h>
 #include <qunicodetables_p.h>
+
+#include <qharfbuzz_core_p.h>
 #include <qfile.h>
 
 #include <hb.h>
@@ -660,7 +662,10 @@ static void CS_GetTailoredCharAttributes(const QString &str, QCharAttributes *at
    hb_buffer_t *buffer;
    buffer = hb_buffer_create();
 
-   hb_buffer_cluster_level_t level = HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES;      // level 0
+   // set up HB callbacks, apply to this buffer
+   hb_buffer_set_unicode_funcs(buffer, cs_get_unicode_funcs());
+
+   hb_buffer_cluster_level_t level = HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS;      // level 1
    hb_buffer_set_cluster_level(buffer, level);
 
    hb_buffer_add_utf8(buffer, str.constData(), -1, 0, -1);
@@ -699,9 +704,9 @@ static void CS_GetTailoredCharAttributes(const QString &str, QCharAttributes *at
       cur_cluster = glyph_info[k].cluster;
 
       if (prev_cluster != cur_cluster) {
-         // issue determining clusters - not enabled
+         // etermin cluster -  EMERALD
 
-//       attributes[k].graphemeBoundary = true;
+         attributes[k].graphemeBoundary = true;
       }
 
       prev_cluster = cur_cluster;
