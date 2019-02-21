@@ -93,7 +93,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qabstracttextdocumentlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengineglyphcache_p.h
@@ -159,13 +158,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz.cpp
 )
-
-if(X11_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft.cpp
-    )
-endif()
 
 # might be missing files from 3rdparty/freetype
 

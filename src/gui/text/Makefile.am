@@ -102,7 +102,6 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qabstracttextdocumentlayout_p.h \
 	qcssparser_p.h \
 	qfont_p.h \
-	qfontengine_ft_p.h \
 	qfontengine_p.h \
 	qfontengine_qpf2_p.h \
 	qfontengineglyphcache_p.h \
@@ -319,8 +318,3 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-static.cc \
    src/3rdparty/harfbuzz/src/hb-unicode.cc
 
-
-if X11
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/text/qfontengine_ft.cpp
-endif
