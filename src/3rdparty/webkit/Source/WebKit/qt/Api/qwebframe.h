@@ -29,7 +29,7 @@
 #include <qicon.h>
 #include <QtScript/qscriptengine.h>
 #include <qnetworkaccessmanager.h>
-#include "qwebkitglobal.h"
+#include <qwebkitglobal.h>
 
 class QRect;
 class QPoint;

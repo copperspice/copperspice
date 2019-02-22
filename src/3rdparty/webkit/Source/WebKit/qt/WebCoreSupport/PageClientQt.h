@@ -31,6 +31,8 @@
 #include "qwebframe_p.h"
 #include "qwebpage.h"
 #include "qwebpage_p.h"
+
+#include <QApplication>
 #include <QtCore/qmetaobject.h>
 #include <QtGui/qgraphicsscene.h>
 #include <QtGui/qgraphicsview.h>

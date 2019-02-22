@@ -259,13 +259,14 @@ void BitmapImage::checkForSolidColor()
 }
 
 #if OS(WINDOWS)
+
+Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0);
+
 PassRefPtr<BitmapImage> BitmapImage::create(HBITMAP hBitmap)
 {
-    return BitmapImage::create(new QPixmap(QPixmap::fromWinHBITMAP(hBitmap)));
+   return BitmapImage::create(new QPixmap(qt_pixmapFromWinHBITMAP(hBitmap)));
 }
 #endif
 
 }
 
-
-// vim: ts=4 sw=4 et

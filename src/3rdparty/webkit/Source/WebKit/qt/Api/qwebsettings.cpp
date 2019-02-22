@@ -185,7 +185,7 @@ void QWebSettingsPrivate::apply()
                                  global->attributes.value(QWebSettings::HyperlinkAuditingEnabled));
 
         settings->setHyperlinkAuditingEnabled(value);
- 
+
         value = attributes.value(QWebSettings::JavascriptCanOpenWindows,
                                       global->attributes.value(QWebSettings::JavascriptCanOpenWindows));
         settings->setJavaScriptCanOpenWindowsAutomatically(value);
@@ -453,8 +453,8 @@ QWebSettings* QWebSettings::globalSettings()
     \value TiledBackingStoreEnabled This setting enables the tiled backing store feature
         for a QGraphicsWebView. With the tiled backing store enabled, the web page contents in and around
         the current visible area is speculatively cached to bitmap tiles. The tiles are automatically kept
-        in sync with the web page as it changes. Enabling tiling can significantly speed up painting heavy 
-        operations like scrolling. Enabling the feature increases memory consumption. It does not work well 
+        in sync with the web page as it changes. Enabling tiling can significantly speed up painting heavy
+        operations like scrolling. Enabling the feature increases memory consumption. It does not work well
         with contents using CSS fixed positioning (see also \l{QGraphicsWebView::}{resizesToContents} property).
         \l{QGraphicsWebView::}{tiledBackingStoreFrozen} property allows application to temporarily
         freeze the contents of the backing store. This is disabled by default.
@@ -1051,12 +1051,12 @@ qint64 QWebSettings::offlineWebApplicationCacheQuota()
     \since 4.6
 
     Sets the path for HTML5 local storage to \a path.
-    
+
     For more information on HTML5 local storage see the
     \l{http://www.w3.org/TR/webstorage/#the-localstorage-attribute}{Web Storage standard}.
-    
+
     Support for local storage can enabled by setting the
-    \l{QWebSettings::LocalStorageEnabled}{LocalStorageEnabled} attribute.     
+    \l{QWebSettings::LocalStorageEnabled}{LocalStorageEnabled} attribute.
 
     \sa localStoragePath()
 */
@@ -1070,7 +1070,7 @@ void QWebSettings::setLocalStoragePath(const QString& path)
     \since 4.6
 
     Returns the path for HTML5 local storage.
-    
+
     \sa setLocalStoragePath()
 */
 QString QWebSettings::localStoragePath() const
@@ -1097,11 +1097,15 @@ void QWebSettings::enablePersistentStorage(const QString& path)
 
     if (path.isEmpty()) {
 
-        storagePath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-        if (storagePath.isEmpty())
+        storagePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+        if (storagePath.isEmpty()) {
             storagePath = WebCore::pathByAppendingComponent(QDir::homePath(), QCoreApplication::applicationName());
-    } else
+        }
+
+    } else {
         storagePath = path;
+    }
 
     WebCore::makeAllDirectories(storagePath);
 
@@ -1116,7 +1120,7 @@ void QWebSettings::enablePersistentStorage(const QString& path)
 #if ENABLE(NETSCAPE_PLUGIN_METADATA_CACHE)
     // All applications can share the common QtWebkit cache file(s).
     // Path is not configurable and uses QDesktopServices::CacheLocation by default.
-    QString cachePath = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+    QString cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     WebCore::makeAllDirectories(cachePath);
 
     QFileInfo info(cachePath);

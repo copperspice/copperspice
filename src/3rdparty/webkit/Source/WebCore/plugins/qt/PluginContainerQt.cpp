@@ -28,7 +28,6 @@
 #include "PlatformWheelEvent.h"
 #include "PluginView.h"
 #include <QApplication>
-#include <QX11Info>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -97,7 +96,7 @@ void PluginContainerQt::on_clientIsEmbedded()
     // them to the parent. NOTICE: Native Qt based plugins running in process,
     // will already be in the window mapper, and thus creating a wrapper, stops
     // them from getting events from Qt, as they are redirected to the wrapper.
-    if (!QWidget::find(clientWinId()))
+    if (! QWidget::find(clientWinId()))
         m_clientWrapper = new PluginClientWrapper(this, clientWinId());
 }
 
@@ -126,6 +125,7 @@ bool PluginContainerQt::x11Event(XEvent* event)
         // events to it, but to the parent frame, so let's redirect here.
         redirectWheelEventsToParent(!hasFocus());
         break;
+
     case LeaveNotify:
         // it is always safe to ungrab wheel events when the mouse leaves the
         // plugin window.

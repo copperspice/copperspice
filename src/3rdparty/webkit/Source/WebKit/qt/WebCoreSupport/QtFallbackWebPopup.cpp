@@ -31,7 +31,6 @@
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QInputContext>
 #include <QMouseEvent>
 #include <QStandardItemModel>
 
@@ -55,20 +54,18 @@ void QtFallbackWebPopupCombo::showPopup()
 void QtFallbackWebPopupCombo::hidePopup()
 {
 #ifndef QT_NO_IM
-    QWidget* activeFocus = QApplication::focusWidget();
+    QWidget *activeFocus = QApplication::focusWidget();
+
     if (activeFocus && activeFocus == QComboBox::view()
         && activeFocus->testAttribute(Qt::WA_InputMethodEnabled)) {
-        QInputContext* qic = activeFocus->inputContext();
-        if (qic) {
-            qic->reset();
-            qic->setFocusWidget(0);
-        }
+
+        QGuiApplication::inputMethod()->hide();
     }
-#endif // QT_NO_IM
+#endif
 
     QComboBox::hidePopup();
 
-    if (!m_ownerPopup.m_popupVisible)
+    if (! m_ownerPopup.m_popupVisible)
         return;
 
     m_ownerPopup.m_popupVisible = false;

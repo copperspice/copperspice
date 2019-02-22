@@ -42,10 +42,7 @@
 #include <QtGui/qpixmapcache.h>
 #include <QtGui/qscrollbar.h>
 #include <QtGui/qstyleoption.h>
-#include <QtGui/qinputcontext.h>
-#if defined(Q_WS_X11)
-#include <QX11Info>
-#endif
+
 #include <Settings.h>
 
 using namespace WebCore;
@@ -87,7 +84,7 @@ public:
     PageClientQGraphicsWidget* pageClient() const
     {
         return static_cast<WebCore::PageClientQGraphicsWidget*> (page->d->client.get());
-    } 
+    }
 };
 
 QGraphicsWebViewPrivate::~QGraphicsWebViewPrivate()
@@ -103,7 +100,7 @@ void QGraphicsWebViewPrivate::syncLayers()
 }
 
 void QGraphicsWebViewPrivate::_q_doLoadFinished(bool success)
-{   
+{
     // If the page had no title, still make sure it gets the signal
     if (q->title().isEmpty())
         emit q->urlChanged(q->url());
@@ -292,11 +289,11 @@ void QGraphicsWebView::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
         // FIXME: We should set the backing store viewport earlier than in paint
         backingStore->adjustVisibleRect();
         // QWebFrame::render is a public API, bypass it for tiled rendering so behavior does not need to change.
-        WebCore::GraphicsContext context(painter); 
+        WebCore::GraphicsContext context(painter);
         page()->mainFrame()->d->renderFromTiledBackingStore(&context, option->exposedRect.toAlignedRect());
         painter->setRenderHints(oldHints);
         return;
-    } 
+    }
 #endif
 #if USE(ACCELERATED_COMPOSITING) && !USE(TEXTURE_MAPPER)
     page()->mainFrame()->render(painter, d->overlay() ? QWebFrame::ContentsLayer : QWebFrame::AllLayers, option->exposedRect.toAlignedRect());
@@ -855,7 +852,7 @@ bool QGraphicsWebView::findText(const QString &subString, QWebPage::FindFlags op
 /*
     \property QGraphicsWebView::resizesToContents
     \brief whether the size of the QGraphicsWebView and its viewport changes to match the contents size
-    \since 4.7 
+    \since 4.7
 
     If this property is set, the QGraphicsWebView will automatically change its
     size to match the size of the main frame contents. As a result the top level frame
@@ -884,16 +881,16 @@ bool QGraphicsWebView::resizesToContents() const
 /*
     \property QGraphicsWebView::tiledBackingStoreFrozen
     \brief whether the tiled backing store updates its contents
-    \since 4.7 
+    \since 4.7
 
     If the tiled backing store is enabled using QWebSettings::TiledBackingStoreEnabled attribute, this property
     can be used to disable backing store updates temporarily. This can be useful for example for running
     a smooth animation that changes the scale of the QGraphicsWebView.
- 
+
     When the backing store is unfrozen, its contents will be automatically updated to match the current
     state of the document. If the QGraphicsWebView scale was changed, the backing store is also
     re-rendered using the new scale.
- 
+
     If the tiled backing store is not enabled, this property does nothing.
 
     \sa QWebSettings::TiledBackingStoreEnabled

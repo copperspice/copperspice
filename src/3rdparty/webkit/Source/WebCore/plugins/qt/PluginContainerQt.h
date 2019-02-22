@@ -16,40 +16,42 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
+
 #ifndef PluginContainerQt_h
 #define PluginContainerQt_h
 
-#include <QX11EmbedContainer>
+#include <QWidget>
+
+union _XEvent;
 
 namespace WebCore {
 
     class PluginView;
 
-    class PluginContainerQt : public QX11EmbedContainer
+    class PluginContainerQt : public QObject    // QX11EmbedContainer   BROOM - fix this
     {
         WEB_CS_OBJECT(PluginContainerQt)
 
     public:
-        PluginContainerQt(PluginView*, QWidget* parent);
+        PluginContainerQt(PluginView*, QWidget *parent);
         ~PluginContainerQt();
 
         void redirectWheelEventsToParent(bool enable = true);
 
-    protected:
-        virtual bool x11Event(XEvent*);
-        virtual void focusInEvent(QFocusEvent*);
-        virtual void focusOutEvent(QFocusEvent*);
-
-    public:
         WEB_CS_SLOT_1(Public, void on_clientClosed())
         WEB_CS_SLOT_2(on_clientClosed)
 
         WEB_CS_SLOT_1(Public, void on_clientIsEmbedded())
         WEB_CS_SLOT_2(on_clientIsEmbedded)
 
+    protected:
+        virtual bool x11Event(_XEvent *);
+        virtual void focusInEvent(QFocusEvent*);
+        virtual void focusOutEvent(QFocusEvent*);
+
     private:
-        PluginView* m_pluginView;
-        QWidget* m_clientWrapper;
+        PluginView *m_pluginView;
+        QWidget *m_clientWrapper;
     };
 
     class PluginClientWrapper : public QWidget
@@ -57,10 +59,11 @@ namespace WebCore {
     public:
         PluginClientWrapper(QWidget* parent, WId client);
         ~PluginClientWrapper();
-        bool x11Event(XEvent*);
+
+        bool x11Event(_XEvent *);
 
     private:
-        QWidget* m_parent;
+        QWidget *m_parent;
     };
 }
 

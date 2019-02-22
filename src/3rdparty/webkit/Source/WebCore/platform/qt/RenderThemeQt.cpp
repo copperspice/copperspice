@@ -56,9 +56,11 @@
 #include "QtStyleOptionWebComboBox.h"
 #include "qwebsettings.h"
 #include "RenderBox.h"
+
 #if ENABLE(PROGRESS_TAG)
 #include "RenderProgress.h"
 #endif
+
 #include "RenderSlider.h"
 #include "RenderTheme.h"
 #include "ScrollbarThemeQt.h"
@@ -74,10 +76,12 @@
 #include <QPushButton>
 #include <QStyleFactory>
 #include <QStyleOptionButton>
-#include <QStyleOptionFrameV2>
+#include <QStyleOptionFrame>
+
 #if ENABLE(PROGRESS_TAG)
-#include <QStyleOptionProgressBarV2>
+#include <QStyleOptionProgressBar>
 #endif
+
 #include <QStyleOptionSlider>
 #include <QWidget>
 
@@ -344,7 +348,7 @@ int RenderThemeQt::findFrameLineWidth(QStyle* style) const
         m_lineEdit = new QLineEdit();
 #endif
 
-    QStyleOptionFrameV2 opt;
+    QStyleOptionFrame opt;
     QWidget* widget = 0;
 #ifndef QT_NO_LINEEDIT
     widget = m_lineEdit;
@@ -686,7 +690,7 @@ bool RenderThemeQt::paintTextField(RenderObject* o, const PaintInfo& i, const In
     if (!p.isValid())
         return true;
 
-    QStyleOptionFrameV2 panel;
+    QStyleOptionFrame panel;
     initStyleOption(p.widget, panel);
     panel.rect = r;
     panel.lineWidth = findFrameLineWidth(qStyle());
@@ -696,7 +700,7 @@ bool RenderThemeQt::paintTextField(RenderObject* o, const PaintInfo& i, const In
 #else
     panel.state |= QStyle::State_Sunken;
 #endif
-    panel.features = QStyleOptionFrameV2::None;
+    panel.features = QStyleOptionFrame::None;
 
     // Get the correct theme data for a text field
     ControlPart appearance = initializeCommonQStyleOptions(panel, o);
@@ -844,7 +848,7 @@ double RenderThemeQt::animationDurationForProgressBar(RenderProgress* renderProg
     if (renderProgress->position() >= 0)
         return 0;
 
-    QStyleOptionProgressBarV2 option;
+    QStyleOptionProgressBar option;
     option.rect.setSize(renderProgress->size());
     // FIXME: Until http://bugreports.qt.nokia.com/browse/QTBUG-9171 is fixed,
     // we simulate one square animating across the progress bar.
@@ -865,7 +869,7 @@ bool RenderThemeQt::paintProgressBar(RenderObject* o, const PaintInfo& pi, const
     if (!p.isValid())
        return true;
 
-    QStyleOptionProgressBarV2 option;
+    QStyleOptionProgressBar option;
     initStyleOption(p.widget, option);
     initializeCommonQStyleOptions(option, o);
 

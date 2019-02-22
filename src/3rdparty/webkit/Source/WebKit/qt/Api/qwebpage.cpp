@@ -153,10 +153,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 
-#if defined(Q_WS_X11)
-#include <QX11Info>
-#endif
-
 #if USE(QT_MOBILITY_SYSTEMINFO)
 #include <qsysteminfo.h>
 #endif

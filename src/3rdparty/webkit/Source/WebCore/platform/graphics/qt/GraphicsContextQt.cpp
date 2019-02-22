@@ -65,6 +65,12 @@
 #include <QVector>
 #include <wtf/MathExtras.h>
 
+enum HBitmapFormat {
+   HBitmapNoAlpha,
+   HBitmapPremultipliedAplpha,
+   HBitmapAlpha
+};
+
 namespace WebCore {
 
 static inline QPainter::CompositionMode toQtCompositionMode(CompositeOperator op)
@@ -617,7 +623,7 @@ static inline void drawRepeatPattern(QPainter* p, QPixmap* image, const FloatRec
                    startX = 0;
                    startY = 0;
                } else
-                   return;   
+                   return;
            } else if (repeatX && !repeatY) {
                // repeat-x
                // startY is fixed, but startX change based on the left-top of the rect
@@ -640,7 +646,7 @@ static inline void drawRepeatPattern(QPainter* p, QPixmap* image, const FloatRec
         }
 
         int x = startX;
-        int y = startY; 
+        int y = startY;
         do {
             // repeat Y
             do {
@@ -832,7 +838,7 @@ void GraphicsContext::drawFocusRing(const Path& path, int /* width */, int offse
 
 /**
  * Focus ring handling for form controls is not handled here. Qt style in
- * RenderTheme handles drawing focus on widgets which 
+ * RenderTheme handles drawing focus on widgets which
  * need it. It is still handled here for links.
  */
 void GraphicsContext::drawFocusRing(const Vector<IntRect>& rects, int width, int offset, const Color& color)
@@ -1280,6 +1286,8 @@ void GraphicsContext::setPlatformShouldAntialias(bool enable)
 
 #ifdef Q_OS_WIN
 
+Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0);
+
 HDC GraphicsContext::getWindowsContext(const IntRect& dstRect, bool supportAlphaBlend, bool mayCreateBitmap)
 {
     // painting through native HDC is only supported for plugin, where mayCreateBitmap is always true
@@ -1353,7 +1361,8 @@ void GraphicsContext::releaseWindowsContext(HDC hdc, const IntRect& dstRect, boo
             GetObject(bitmap, sizeof(info), &info);
             ASSERT(info.bmBitsPixel == 32);
 
-            QPixmap pixmap = QPixmap::fromWinHBITMAP(bitmap, supportAlphaBlend ? QPixmap::PremultipliedAlpha : QPixmap::NoAlpha);
+            QPixmap pixmap = qt_pixmapFromWinHBITMAP(bitmap, supportAlphaBlend ? HBitmapPremultipliedAplpha : HBitmapNoAlpha);
+
             m_data->p()->drawPixmap(dstRect, pixmap);
 
             ::DeleteObject(bitmap);

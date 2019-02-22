@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -87,6 +87,8 @@
 #endif
 
 #if PLATFORM(QT)
+#include "QApplication"
+#include "QPlatform_NativeInterface"
 #include "QWebPageClient.h"
 #include <QWidget>
 #endif
@@ -101,9 +103,15 @@ static inline HWND windowHandleForPageClient(PlatformPageClient client)
 #if PLATFORM(QT)
     if (!client)
         return 0;
-    if (QWidget* pluginParent = qobject_cast<QWidget*>(client->pluginParent()))
-        return pluginParent->winId();
+
+    if (QWidget* pluginParent = qobject_cast<QWidget*>(client->pluginParent())) {
+        QWindow *tmpWindow = pluginParent->windowHandle();
+        return (HWND)QApplication::platformNativeInterface()->nativeResourceForWindow("handle", tmpWindow);
+        // return pluginParent->winId();
+    }
+
     return 0;
+
 #elif PLATFORM(WX)
     if (!client)
         return 0;
@@ -367,7 +375,7 @@ PluginView::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     if (message == m_lastMessage &&
-        m_plugin->quirks().contains(PluginQuirkDontCallWndProcForSameMessageRecursively) && 
+        m_plugin->quirks().contains(PluginQuirkDontCallWndProcForSameMessageRecursively) &&
         m_isCallingPluginWndProc)
         return 1;
 
@@ -385,7 +393,7 @@ PluginView::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     // If the plug-in doesn't explicitly support changing the pop-up state, we enable
     // popups for all user gestures.
-    // Note that we need to pop the state in a timer, because the Flash plug-in 
+    // Note that we need to pop the state in a timer, because the Flash plug-in
     // pops up windows in response to a posted message.
     if (m_plugin->pluginFuncs()->version < NPVERS_HAS_POPUPS_ENABLED_STATE &&
         isWindowsMessageUserGesture(message) && !m_popPopupsStateTimer.isActive()) {
@@ -511,7 +519,7 @@ bool PluginView::dispatchNPEvent(NPEvent& npEvent)
     bool result = m_plugin->pluginFuncs()->event(m_instance, &npEvent);
     setCallingPlugin(false);
 
-    if (shouldPop) 
+    if (shouldPop)
         popPopupsEnabledState();
 
     return result;
@@ -641,7 +649,7 @@ void PluginView::handleKeyboardEvent(KeyboardEvent* event)
 {
     NPEvent npEvent;
 
-    npEvent.wParam = event->keyCode();    
+    npEvent.wParam = event->keyCode();
 
     if (event->type() == eventNames().keydownEvent) {
         npEvent.event = WM_KEYDOWN;
@@ -675,7 +683,7 @@ void PluginView::handleMouseEvent(MouseEvent* event)
         npEvent.wParam |= MK_SHIFT;
 
     if (event->type() == eventNames().mousemoveEvent ||
-        event->type() == eventNames().mouseoutEvent || 
+        event->type() == eventNames().mouseoutEvent ||
         event->type() == eventNames().mouseoverEvent) {
         npEvent.event = WM_MOUSEMOVE;
         if (event->buttonDown())
@@ -728,7 +736,7 @@ void PluginView::handleMouseEvent(MouseEvent* event)
     // and since we don't want that we set ignoreNextSetCursor to true here to prevent that.
     ignoreNextSetCursor = true;
     if (Page* page = m_parentFrame->page())
-        page->chrome()->client()->setLastSetCursorToCurrentCursor();    
+        page->chrome()->client()->setLastSetCursorToCurrentCursor();
 #endif
 }
 
@@ -751,7 +759,7 @@ void PluginView::setParent(ScrollView* parent)
         if (!platformPluginWidget())
             return;
 
-        // If the plug-in window or one of its children have the focus, we need to 
+        // If the plug-in window or one of its children have the focus, we need to
         // clear it to prevent the web view window from being focused because that can
         // trigger a layout while the plugin element is being detached.
         HWND focusedWindow = ::GetFocus();
@@ -848,7 +856,7 @@ NPError PluginView::handlePostReadFile(Vector<char>& buffer, uint32_t len, const
         return NPERR_FILE_NOT_FOUND;
 
     HANDLE fileHandle = CreateFileW(filename.charactersWithNullTermination(), FILE_READ_DATA, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
-    
+
     if (fileHandle == INVALID_HANDLE_VALUE)
         return NPERR_FILE_NOT_FOUND;
 

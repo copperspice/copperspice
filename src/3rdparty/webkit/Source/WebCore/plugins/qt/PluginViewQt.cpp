@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -78,13 +78,16 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QWidget>
-#include <QX11Info>
+
+// include after QCoreEvent, enum issue
 #include <X11/X.h>
+
 #ifndef QT_NO_XRENDER
 #define Bool int
 #define Status int
 #include <X11/extensions/Xrender.h>
 #endif
+
 #include <runtime/JSLock.h>
 #include <runtime/JSValue.h>
 
@@ -162,9 +165,8 @@ void PluginView::updatePluginWidget()
             if (m_drawable)
                 XFreePixmap(QX11Info::display(), m_drawable);
 
-            m_drawable = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), m_windowRect.width(), m_windowRect.height(), 
+            m_drawable = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), m_windowRect.width(), m_windowRect.height(),
                                        ((NPSetWindowCallbackStruct*)m_npWindow.ws_info)->depth);
-            QApplication::syncX(); // make sure that the server knows about the Drawable
         }
     }
 
@@ -240,7 +242,7 @@ void PluginView::paintUsingImageSurfaceExtension(QPainter* painter, const IntRec
     } else {
         if (m_isTransparent) {
             // On Maemo5, Flash expects the buffer to contain the contents that are below it.
-            // We don't support transparency for non-raster graphicssystem, so clean the image 
+            // We don't support transparency for non-raster graphicssystem, so clean the image
             // before giving to Flash.
             QPainter imagePainter(&m_image);
             imagePainter.fillRect(exposedRect, Qt::white);
@@ -284,6 +286,7 @@ void PluginView::paintUsingXPixmap(QPainter* painter, const QRect &exposedRect)
     QPixmap qtDrawable = QPixmap::fromX11Pixmap(m_drawable, QPixmap::ExplicitlyShared);
     const int drawableDepth = ((NPSetWindowCallbackStruct*)m_npWindow.ws_info)->depth;
     ASSERT(drawableDepth == qtDrawable.depth());
+
     const bool syncX = m_pluginDisplay && m_pluginDisplay != QX11Info::display();
 
     // When printing, Qt uses a QPicture to capture the output in preview mode. The
@@ -302,12 +305,12 @@ void PluginView::paintUsingXPixmap(QPainter* painter, const QRect &exposedRect)
         QPixmap* backingStorePixmap = static_cast<QPixmap*>(backingStoreDevice);
 
         // We cannot grab contents from the backing store when painting on QGraphicsView items
-        // (because backing store contents are already transformed). What we really mean to do 
+        // (because backing store contents are already transformed). What we really mean to do
         // here is to check if we are painting on QWebView, but let's be a little permissive :)
         QWebPageClient* client = m_parentFrame->view()->hostWindow()->platformPageClient();
         const bool backingStoreHasUntransformedContents = client && qobject_cast<QWidget*>(client->pluginParent());
 
-        if (hasValidBackingStore && backingStorePixmap->depth() == drawableDepth 
+        if (hasValidBackingStore && backingStorePixmap->depth() == drawableDepth
             && backingStoreHasUntransformedContents) {
             GC gc = XDefaultGC(QX11Info::display(), QX11Info::appScreen());
             XCopyArea(QX11Info::display(), backingStorePixmap->handle(), m_drawable, gc,
@@ -317,9 +320,6 @@ void PluginView::paintUsingXPixmap(QPainter* painter, const QRect &exposedRect)
             QPainter painter(&qtDrawable);
             painter.fillRect(exposedRect, Qt::white);
         }
-
-        if (syncX)
-            QApplication::syncX();
     }
 
     XEvent xevent;
@@ -674,7 +674,7 @@ void PluginView::setNPWindowIfNeeded()
         m_npWindow.clipRect.top = 0;
         m_npWindow.clipRect.bottom = 0;
     } else {
-        // Clipping rectangle of the plug-in; the origin is the top left corner of the drawable or window. 
+        // Clipping rectangle of the plug-in; the origin is the top left corner of the drawable or window.
         m_npWindow.clipRect.left = m_npWindow.x + m_clipRect.x();
         m_npWindow.clipRect.top = m_npWindow.y + m_clipRect.y();
         m_npWindow.clipRect.right = m_npWindow.x + m_clipRect.x() + m_clipRect.width();
@@ -937,8 +937,7 @@ bool PluginView::platformStart()
         QWebPageClient* client = m_parentFrame->view()->hostWindow()->platformPageClient();
         if (m_needsXEmbed && client) {
             setPlatformWidget(new PluginContainerQt(this, client->ownerWidget()));
-            // sync our XEmbed container window creation before sending the xid to plugins.
-            QApplication::syncX();
+
         } else {
             notImplemented();
             m_status = PluginStatusCanNotLoadPlugin;
@@ -1030,7 +1029,7 @@ void PluginView::halt()
 void PluginView::restart()
 {
 }
- 
+
 #if USE(ACCELERATED_COMPOSITING)
 PlatformLayer* PluginView::platformLayer() const
 {

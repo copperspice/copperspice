@@ -23,11 +23,10 @@
 #include "PageClientQt.h"
 #include "TextureMapperQt.h"
 #include "texmap/TextureMapperPlatformLayer.h"
+
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#if defined(Q_WS_X11)
-#include <QX11Info>
-#endif
+#include <QDesktopWidget>
 
 #ifdef QT_OPENGL_LIB
 #include "opengl/TextureMapperGL.h"
@@ -36,7 +35,7 @@
 
 namespace WebCore {
 
-#if USE(ACCELERATED_COMPOSITING) && USE(TEXTURE_MAPPER)    
+#if USE(ACCELERATED_COMPOSITING) && USE(TEXTURE_MAPPER)
 class PlatformLayerProxyQt : public QObject, public virtual TextureMapperLayerClient {
 public:
     PlatformLayerProxyQt(QWebFrame* frame, TextureMapperContentLayer* layer, QObject* object)
@@ -226,8 +225,9 @@ QPalette PageClientQWidget::palette() const
 int PageClientQWidget::screenNumber() const
 {
 #if defined(Q_WS_X11)
-    return view->x11Info().screen();
+    return QApplication::desktop()->screenNumber(view);
 #endif
+
     return 0;
 }
 
@@ -412,8 +412,9 @@ int PageClientQGraphicsWidget::screenNumber() const
     if (QGraphicsScene* scene = view->scene()) {
         const QList<QGraphicsView*> views = scene->views();
 
-        if (!views.isEmpty())
-            return views.at(0)->x11Info().screen();
+        if (! views.isEmpty()) {
+           return QApplication::desktop()->screenNumber(views.at(0));
+        }
     }
 #endif
 
