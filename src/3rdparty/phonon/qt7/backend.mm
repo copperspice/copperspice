@@ -25,10 +25,10 @@
 ********************************************************/
 
 #include "backend.h"
-#include <QtCore/QDebug>
-#include <QtCore/QSet>
-#include <QtCore/QVariant>
-#include <QtCore/QtPlugin>
+
+#include <QDebug>
+#include <QSet>
+#include <QVariant>
 
 #include "backendheader.h"
 
@@ -52,6 +52,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
+
 namespace QT7
 {
 
@@ -274,8 +275,10 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
     return ret;
 }
 
-Q_EXPORT_PLUGIN2(phonon_qt7, Backend)
-}}
+
+} // namespace
+
+} // namespace
 
 QT_END_NAMESPACE
 

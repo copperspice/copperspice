@@ -185,22 +185,22 @@ inline QDebug operator<<(QDebug s, const ObjectDescription<T> &o)
     return s << o.name();
 }
 
-typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
+using AudioOutputDevice = ObjectDescription<AudioOutputDeviceType>;
 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
-typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
+using AudioCaptureDevice = ObjectDescription<AudioCaptureDeviceType>;
 #endif
 
 #ifndef QT_NO_PHONON_EFFECT
-typedef ObjectDescription<EffectType> EffectDescription;
+using EffectDescription = ObjectDescription<EffectType>;
 #endif
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
-typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
-typedef ObjectDescription<SubtitleType> SubtitleDescription;
+using AudioChannelDescription = ObjectDescription<AudioChannelType>;
+using SubtitleDescription     = ObjectDescription<SubtitleType>;
 #endif
 
-} //namespace Phonon
+} // namespace Phonon
 
 QT_END_NAMESPACE
 

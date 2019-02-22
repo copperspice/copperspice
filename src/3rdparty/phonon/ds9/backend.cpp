@@ -20,8 +20,6 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include "backend.h"
 #include "backendnode.h"
 
@@ -37,11 +35,9 @@
 #include <QtCore/QSettings>
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
-#include <QtCore/QtPlugin>
+#include <qplugin.h>
 
-QT_BEGIN_NAMESPACE
-
-Q_EXPORT_PLUGIN2(phonon_ds9, Phonon::DS9::Backend);
+#include <algorithm>
 
 namespace Phonon
 {
@@ -374,6 +370,4 @@ namespace Phonon
         }
     }
 }
-
-QT_END_NAMESPACE
 

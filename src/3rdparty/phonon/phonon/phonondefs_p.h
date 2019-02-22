@@ -254,10 +254,4 @@ void PHONON_CLASSNAME::functionname(argtype1 x) \
     } \
 }
 
-#ifndef METATYPE_QLIST_INT_DEFINED
-#define METATYPE_QLIST_INT_DEFINED
-// Want this exactly once, see phonondefs_p.h kcm/outputdevicechoice.cpp
-Q_DECLARE_METATYPE(QList<int>)
 #endif
-
-#endif // PHONONDEFS_P_H

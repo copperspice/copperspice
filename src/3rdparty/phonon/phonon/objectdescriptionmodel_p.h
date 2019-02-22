@@ -24,15 +24,13 @@
 **  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
 ********************************************************/
 
-
 #ifndef PHONON_OBJECTDESCRIPTIONMODEL_P_H
 #define PHONON_OBJECTDESCRIPTIONMODEL_P_H
 
 #include "objectdescriptionmodel.h"
-#include <QtCore/QList>
 #include "objectdescription.h"
 
-QT_BEGIN_NAMESPACE
+#include <QList>
 
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
@@ -44,12 +42,16 @@ class ListModelHelper : public QAbstractListModel
     public:
         using QAbstractListModel::layoutAboutToBeChanged;
         using QAbstractListModel::changePersistentIndexList;
-        using QAbstractListModel::layoutChanged;
-        using QAbstractListModel::reset;
+        using QAbstractListModel::layoutChanged;;
         using QAbstractListModel::beginInsertRows;
         using QAbstractListModel::endInsertRows;
         using QAbstractListModel::beginRemoveRows;
         using QAbstractListModel::endRemoveRows;
+
+     void reset() {
+        beginResetModel();
+        endResetModel();
+     }
 };
 
 class ObjectDescriptionModelDataPrivate
@@ -63,8 +65,6 @@ class ObjectDescriptionModelDataPrivate
 }
 
 #endif //QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
-
-QT_END_NAMESPACE
 
 #endif // PHONON_OBJECTDESCRIPTIONMODEL_P_H
 

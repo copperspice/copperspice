@@ -111,25 +111,31 @@ namespace Phonon
             }
             return QSize(w, h);
         }
-       
+
         void VideoRendererVMR9::repaintCurrentFrame(QWidget *target, const QRect &rect)
         {
-            HDC hDC = target->getDC();
+            HWND hwnd = (HWND)target->winId();
+            HDC hDC   = GetDC(hwnd);
+
             // repaint the video
             ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
 
-            HRESULT hr = windowlessControl ? windowlessControl->RepaintVideo(target->winId(), hDC) : E_POINTER;
+            HRESULT hr = windowlessControl ? windowlessControl->RepaintVideo(hwnd, hDC) : E_POINTER;
+
             if (FAILED(hr) || m_dstY > 0 || m_dstX > 0) {
                 const QColor c = target->palette().color(target->backgroundRole());
                 COLORREF color = RGB(c.red(), c.green(), c.blue());
                 HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
+
                 HBRUSH hBrush = ::CreateSolidBrush(color);
                 ::SelectObject(hDC, hPen);
                 ::SelectObject(hDC, hBrush);
+
                 // repaint the video
                 if (FAILED(hr)) {
                     //black background : we use the Win32 API to avoid the ghost effect of the backing store
                     ::Rectangle(hDC, 0, 0, target->width(), target->height());
+
                 } else {
                     if (m_dstY > 0) {
                         ::Rectangle(hDC, 0, 0, target->width(), m_dstY); //top
@@ -143,8 +149,8 @@ namespace Phonon
                 ::DeleteObject(hPen);
                 ::DeleteObject(hBrush);
             }
-            target->releaseDC(hDC);
 
+            ReleaseDC(hwnd, hDC);
         }
 
         void VideoRendererVMR9::notifyResize(const QSize &size, Phonon::VideoWidget::AspectRatio aspectRatio,

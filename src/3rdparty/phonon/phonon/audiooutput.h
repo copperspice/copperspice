@@ -60,15 +60,15 @@ namespace Phonon
         PHN_CS_PROPERTY_READ(volumeDecibel, volumeDecibel)
         PHN_CS_PROPERTY_WRITE(volumeDecibel, setVolumeDecibel)
 
-        PHN_CS_PROPERTY_READ(outputDevice, outputDevice)
-        PHN_CS_PROPERTY_WRITE(outputDevice, cs_setOutputDevice)
+//      emerald
+//      PHN_CS_PROPERTY_READ(outputDevice, outputDevice)
+//      PHN_CS_PROPERTY_WRITE(outputDevice, cs_setOutputDevice)
 
         PHN_CS_PROPERTY_READ(muted, isMuted)
         PHN_CS_PROPERTY_WRITE(muted, setMuted)
         PHN_CS_PROPERTY_NOTIFY(muted, mutedChanged)
 
         public:
-
             // wrapper for overloaded method
             inline void cs_setOutputDevice(const Phonon::AudioOutputDevice & newAudioOutputDevice);
 

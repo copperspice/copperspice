@@ -33,8 +33,6 @@
 #include "compointer.h"
 #include "backendnode.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     namespace DS9
@@ -47,7 +45,9 @@ namespace Phonon
         class Backend : public QObject, public Phonon::BackendInterface
         {
             DS9_CS_OBJECT(Backend)
-            CS_INTERFACES(Phonon::BackendInterface)
+
+            CS_PLUGIN_IID("com.copperspice.CS.phonon")
+            CS_PLUGIN_KEY("DS9")
 
         public:
             Backend(QObject *parent = nullptr, const QVariantList & = QVariantList());
@@ -64,7 +64,7 @@ namespace Phonon
             bool connectNodes(QObject *, QObject *) override;
             bool disconnectNodes(QObject *, QObject *) override;
 
-            //transaction management
+            // transaction management
             bool startConnectionChange(QSet<QObject *>) override;
             bool endConnectionChange(QSet<QObject *>) override;
 
@@ -89,6 +89,4 @@ namespace Phonon
     }
 }
 
-QT_END_NAMESPACE
-
-#endif // PHONON_BACKEND_H
+#endif

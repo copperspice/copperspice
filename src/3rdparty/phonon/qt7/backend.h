@@ -28,8 +28,6 @@
 #include <QtCore/QStringList>
 #include <phonon/backendinterface.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 namespace QT7
@@ -37,7 +35,9 @@ namespace QT7
     class Backend : public QObject, public BackendInterface
     {
         QT7_CS_OBJECT(Backend)
-        CS_INTERFACES(Phonon::BackendInterface)
+
+        CS_PLUGIN_IID("com.copperspice.CS.phonon")
+        CS_PLUGIN_KEY("QT7")
 
         public:
             Backend();
@@ -53,14 +53,15 @@ namespace QT7
             bool connectNodes(QObject *source, QObject *sink) override;
             bool disconnectNodes(QObject *source, QObject *sink) override;
             bool endConnectionChange(QSet<QObject *> nodes) override;
-        
+
             QT7_CS_SIGNAL_1(Public, void objectDescriptionChanged(ObjectDescriptionType un_named_arg1))
-            QT7_CS_SIGNAL_2(objectDescriptionChanged,un_named_arg1) 
+            QT7_CS_SIGNAL_2(objectDescriptionChanged,un_named_arg1)
 
         private:
             bool quickTime7Available();
     };
+
 }} // namespace Phonon::QT7
 
-QT_END_NAMESPACE
-#endif 
+
+#endif

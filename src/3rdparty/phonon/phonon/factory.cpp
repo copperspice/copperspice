@@ -41,12 +41,6 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
 
-#ifndef QT_NO_DBUS
-#include <QtDBus/QtDBus>
-#endif
-
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -76,13 +70,6 @@ class FactoryPrivate : public Phonon::Factory::Sender
         QList<MediaNodePrivate *> mediaNodePrivateList;
 
     private:
-
-#ifndef QT_NO_DBUS
-        // called via DBUS when the user changes the Phonon Backend.
-        PHN_CS_SLOT_1(Private,void phononBackendChanged())
-        PHN_CS_SLOT_2(phononBackendChanged)
-
-#endif
         // unregisters the backend object
         PHN_CS_SLOT_1(Private,void objectDestroyed(QObject *))
         PHN_CS_SLOT_2(objectDestroyed)
@@ -192,12 +179,6 @@ FactoryPrivate::FactoryPrivate()
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
     // as the whole backend might still be alive.
     qAddPostRoutine(globalFactory.destroy);
-
-#ifndef QT_NO_DBUS
-    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
-        QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
-#endif
-
 }
 
 FactoryPrivate::~FactoryPrivate()
@@ -275,38 +256,6 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
     }
 }
 
-#ifndef QT_NO_DBUS
-void FactoryPrivate::phononBackendChanged()
-{
-    if (m_backendObject) {
-        for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-            mediaNodePrivateList.at(i)->deleteBackendObject();
-        }
-        if (objects.size() > 0) {
-            pDebug() << "WARNING: we were asked to change the backend but the application did\n"
-                "not free all references to objects created by the factory. Therefore we can not\n"
-                "change the backend without crashing. Now we have to wait for a restart to make\n"
-                "backendswitching possible.";
-
-            // in case there were objects deleted give them a chance to recreate them now
-            for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-                mediaNodePrivateList.at(i)->createBackendObject();
-            }
-            return;
-        }
-        delete m_backendObject;
-        m_backendObject = 0;
-    }
-
-    createBackend();
-    for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-        mediaNodePrivateList.at(i)->createBackendObject();
-    }
-
-    emit backendChanged();
-}
-#endif
-
 //X void Factory::freeSoundcardDevices()
 //X {
 //X     if (globalFactory->backend) {
@@ -362,12 +311,6 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     if (m_noPlatformPlugin) {
         return nullptr;
     }
-
-#ifndef QT_NO_DBUS
-    if (! QCoreApplication::instance() || QCoreApplication::applicationName().isEmpty()) {
-        pWarning() << "Phonon needs QCoreApplication::applicationName set in order to export audio output names through the DBUS interface";
-    }
-#endif
 
     Q_ASSERT(QCoreApplication::instance());
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
