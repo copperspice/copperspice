@@ -23,24 +23,42 @@
 #ifndef QABSTRACTVIDEOBUFFER_P_H
 #define QABSTRACTVIDEOBUFFER_P_H
 
-#include <QtCore/qshareddata.h>
-#include <QtMultimedia/qabstractvideobuffer.h>
+#include <qshareddata.h>
+#include <qabstractvideobuffer.h>
 
-QT_BEGIN_NAMESPACE
+#include <qmultimedia.h>
+
 
 class QAbstractVideoBufferPrivate
 {
  public:
    QAbstractVideoBufferPrivate()
-      : handleType(QAbstractVideoBuffer::NoHandle) {
-   }
+        : q_ptr(0)
+    {}
 
-   virtual ~QAbstractVideoBufferPrivate() {
-   }
+   virtual ~QAbstractVideoBufferPrivate()
+   { }
 
-   QAbstractVideoBuffer::HandleType handleType;
+    virtual int map(
+            QAbstractVideoBuffer::MapMode mode,
+            int *numBytes,
+            int bytesPerLine[4],
+            uchar *data[4]);
+
+    QAbstractVideoBuffer *q_ptr;
 };
 
-QT_END_NAMESPACE
+class QAbstractPlanarVideoBufferPrivate : QAbstractVideoBufferPrivate
+{
+public:
+    QAbstractPlanarVideoBufferPrivate()
+    {}
+
+    int map(QAbstractVideoBuffer::MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]);
+
+private:
+    Q_DECLARE_PUBLIC(QAbstractPlanarVideoBuffer)
+};
+
 
 #endif

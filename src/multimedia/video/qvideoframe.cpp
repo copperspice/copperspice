@@ -22,55 +22,71 @@
 
 #include <qvideoframe.h>
 
-#include <qimagevideobuffer_p.h>
-#include <qmemoryvideobuffer_p.h>
 #include <qimage.h>
 #include <qpair.h>
 #include <qsize.h>
 #include <qvariant.h>
 #include <qvector.h>
+#include <qmutex.h>
+#include <QDebug>
 
-QT_BEGIN_NAMESPACE
+#include <qvideoframe_p.h>
+#include <qimagevideobuffer_p.h>
+#include <qmemoryvideobuffer_p.h>
+#include <qvideoframeconversionhelper_p.h>
+
 
 class QVideoFramePrivate : public QSharedData
 {
  public:
    QVideoFramePrivate()
-      : startTime(-1)
-      , endTime(-1)
-      , data(0)
-      , mappedBytes(0)
-      , bytesPerLine(0)
-      , pixelFormat(QVideoFrame::Format_Invalid)
-      , fieldType(QVideoFrame::ProgressiveFrame)
-      , buffer(0) {
+        : startTime(-1)
+        , endTime(-1)
+        , mappedBytes(0)
+        , planeCount(0)
+        , pixelFormat(QVideoFrame::Format_Invalid)
+        , fieldType(QVideoFrame::ProgressiveFrame)
+        , buffer(0)
+        , mappedCount(0)
+    {
+        memset(data, 0, sizeof(data));
+        memset(bytesPerLine, 0, sizeof(bytesPerLine));
    }
 
    QVideoFramePrivate(const QSize &size, QVideoFrame::PixelFormat format)
-      : size(size)
-      , startTime(-1)
-      , endTime(-1)
-      , data(0)
-      , mappedBytes(0)
-      , bytesPerLine(0)
-      , pixelFormat(format)
-      , fieldType(QVideoFrame::ProgressiveFrame)
-      , buffer(0) {
-   }
+        : size(size)
+        , startTime(-1)
+        , endTime(-1)
+        , mappedBytes(0)
+        , planeCount(0)
+        , pixelFormat(format)
+        , fieldType(QVideoFrame::ProgressiveFrame)
+        , buffer(0)
+        , mappedCount(0)
+    {
+        memset(data, 0, sizeof(data));
+        memset(bytesPerLine, 0, sizeof(bytesPerLine));
+    }
 
-   ~QVideoFramePrivate() {
-      delete buffer;
-   }
+    ~QVideoFramePrivate()
+    {
+        if (buffer)
+            buffer->release();
+    }
 
    QSize size;
    qint64 startTime;
    qint64 endTime;
-   uchar *data;
+    uchar *data[4];
+    int bytesPerLine[4];
    int mappedBytes;
-   int bytesPerLine;
+    int planeCount;
    QVideoFrame::PixelFormat pixelFormat;
    QVideoFrame::FieldType fieldType;
    QAbstractVideoBuffer *buffer;
+    int mappedCount;
+    QMutex mapMutex;
+    QVariantMap metadata;
 
  private:
    Q_DISABLE_COPY(QVideoFramePrivate)
@@ -96,156 +112,12 @@ class QVideoFramePrivate : public QSharedData
     copies.
 */
 
-/*!
-    \enum QVideoFrame::PixelFormat
 
-    Enumerates video data types.
-
-    \value Format_Invalid
-    The frame is invalid.
-
-    \value Format_ARGB32
-    The frame is stored using a 32-bit ARGB format (0xAARRGGBB).  This is equivalent to
-    QImage::Format_ARGB32.
-
-    \value Format_ARGB32_Premultiplied
-    The frame stored using a premultiplied 32-bit ARGB format (0xAARRGGBB).  This is equivalent
-    to QImage::Format_ARGB32_Premultiplied.
-
-    \value Format_RGB32
-    The frame stored using a 32-bit RGB format (0xffRRGGBB).  This is equivalent to
-    QImage::Format_RGB32
-
-    \value Format_RGB24
-    The frame is stored using a 24-bit RGB format (8-8-8).  This is equivalent to
-    QImage::Format_RGB888
-
-    \value Format_RGB565
-    The frame is stored using a 16-bit RGB format (5-6-5).  This is equivalent to
-    QImage::Format_RGB16.
-
-    \value Format_RGB555
-    The frame is stored using a 16-bit RGB format (5-5-5).  This is equivalent to
-    QImage::Format_RGB555.
-
-    \value Format_ARGB8565_Premultiplied
-    The frame is stored using a 24-bit premultiplied ARGB format (8-6-6-5).
-
-    \value Format_BGRA32
-    The frame is stored using a 32-bit ARGB format (0xBBGGRRAA).
-
-    \value Format_BGRA32_Premultiplied
-    The frame is stored using a premultiplied 32bit BGRA format.
-
-    \value Format_BGR32
-    The frame is stored using a 32-bit BGR format (0xBBGGRRff).
-
-    \value Format_BGR24
-    The frame is stored using a 24-bit BGR format (0xBBGGRR).
-
-    \value Format_BGR565
-    The frame is stored using a 16-bit BGR format (5-6-5).
-
-    \value Format_BGR555
-    The frame is stored using a 16-bit BGR format (5-5-5).
-
-    \value Format_BGRA5658_Premultiplied
-    The frame is stored using a 24-bit premultiplied BGRA format (5-6-5-8).
-
-    \value Format_AYUV444
-    The frame is stored using a packed 32-bit AYUV format (0xAAYYUUVV).
-
-    \value Format_AYUV444_Premultiplied
-    The frame is stored using a packed premultiplied 32-bit AYUV format (0xAAYYUUVV).
-
-    \value Format_YUV444
-    The frame is stored using a 24-bit packed YUV format (8-8-8).
-
-    \value Format_YUV420P
-    The frame is stored using an 8-bit per component planar YUV format with the U and V planes
-    horizontally and vertically sub-sampled, i.e. the height and width of the U and V planes are
-    half that of the Y plane.
-
-    \value Format_YV12
-    The frame is stored using an 8-bit per component planar YVU format with the V and U planes
-    horizontally and vertically sub-sampled, i.e. the height and width of the V and U planes are
-    half that of the Y plane.
-
-    \value Format_UYVY
-    The frame is stored using an 8-bit per component packed YUV format with the U and V planes
-    horizontally sub-sampled (U-Y-V-Y), i.e. two horizontally adjacent pixels are stored as a 32-bit
-    macropixel which has a Y value for each pixel and common U and V values.
-
-    \value Format_YUYV
-    The frame is stored using an 8-bit per component packed YUV format with the U and V planes
-    horizontally sub-sampled (Y-U-Y-V), i.e. two horizontally adjacent pixels are stored as a 32-bit
-    macropixel which has a Y value for each pixel and common U and V values.
-
-    \value Format_NV12
-    The frame is stored using an 8-bit per component semi-planar YUV format with a Y plane (Y)
-    followed by a horizontally and vertically sub-sampled, packed UV plane (U-V).
-
-    \value Format_NV21
-    The frame is stored using an 8-bit per component semi-planar YUV format with a Y plane (Y)
-    followed by a horizontally and vertically sub-sampled, packed VU plane (V-U).
-
-    \value Format_IMC1
-    The frame is stored using an 8-bit per component planar YUV format with the U and V planes
-    horizontally and vertically sub-sampled.  This is similar to the Format_YUV420P type, except
-    that the bytes per line of the U and V planes are padded out to the same stride as the Y plane.
-
-    \value Format_IMC2
-    The frame is stored using an 8-bit per component planar YUV format with the U and V planes
-    horizontally and vertically sub-sampled.  This is similar to the Format_YUV420P type, except
-    that the lines of the U and V planes are interleaved, i.e. each line of U data is followed by a
-    line of V data creating a single line of the same stride as the Y data.
-
-    \value Format_IMC3
-    The frame is stored using an 8-bit per component planar YVU format with the V and U planes
-    horizontally and vertically sub-sampled.  This is similar to the Format_YV12 type, except that
-    the bytes per line of the V and U planes are padded out to the same stride as the Y plane.
-
-    \value Format_IMC4
-    The frame is stored using an 8-bit per component planar YVU format with the V and U planes
-    horizontally and vertically sub-sampled.  This is similar to the Format_YV12 type, except that
-    the lines of the V and U planes are interleaved, i.e. each line of V data is followed by a line
-    of U data creating a single line of the same stride as the Y data.
-
-    \value Format_Y8
-    The frame is stored using an 8-bit greyscale format.
-
-    \value Format_Y16
-    The frame is stored using a 16-bit linear greyscale format.  Little endian.
-
-    \value Format_User
-    Start value for user defined pixel formats.
-*/
-
-/*!
-    \enum QVideoFrame::FieldType
-
-    Specifies the field an interlaced video frame belongs to.
-
-    \value ProgressiveFrame The frame is not interlaced.
-    \value TopField The frame contains a top field.
-    \value BottomField The frame contains a bottom field.
-    \value InterlacedFrame The frame contains a merged top and bottom field.
-*/
-
-/*!
-    Constructs a null video frame.
-*/
 
 QVideoFrame::QVideoFrame()
    : d(new QVideoFramePrivate)
 {
 }
-
-/*!
-    Constructs a video frame from a \a buffer of the given pixel \a format and \a size in pixels.
-
-    \note This doesn't increment the reference count of the video buffer.
-*/
 
 QVideoFrame::QVideoFrame(
    QAbstractVideoBuffer *buffer, const QSize &size, PixelFormat format)
@@ -302,10 +174,6 @@ QVideoFrame::QVideoFrame(const QVideoFrame &other)
 {
 }
 
-/*!
-    Assigns the contents of \a other to a video frame.
-*/
-
 QVideoFrame &QVideoFrame::operator =(const QVideoFrame &other)
 {
    d = other.d;
@@ -313,9 +181,16 @@ QVideoFrame &QVideoFrame::operator =(const QVideoFrame &other)
    return *this;
 }
 
-/*!
-    Destroys a video frame.
-*/
+bool QVideoFrame::operator==(const QVideoFrame &other) const
+{
+    // Due to explicit sharing we just compare the QSharedData which in turn compares the pointers.
+    return d == other.d;
+}
+
+bool QVideoFrame::operator!=(const QVideoFrame &other) const
+{
+    return d != other.d;
+}
 
 QVideoFrame::~QVideoFrame()
 {
@@ -399,65 +274,21 @@ void QVideoFrame::setFieldType(QVideoFrame::FieldType field)
    d->fieldType = field;
 }
 
-/*!
-    Identifies if a video frame's contents are currently mapped to system memory.
-
-    This is a convenience function which checks that the \l {QAbstractVideoBuffer::MapMode}{MapMode}
-    of the frame is not equal to QAbstractVideoBuffer::NotMapped.
-
-    Returns true if the contents of the video frame are mapped to system memory, and false
-    otherwise.
-
-    \sa mapMode() QAbstractVideoBuffer::MapMode
-*/
-
 bool QVideoFrame::isMapped() const
 {
    return d->buffer != 0 && d->buffer->mapMode() != QAbstractVideoBuffer::NotMapped;
 }
 
-/*!
-    Identifies if the mapped contents of a video frame will be persisted when the frame is unmapped.
-
-    This is a convenience function which checks if the \l {QAbstractVideoBuffer::MapMode}{MapMode}
-    contains the QAbstractVideoBuffer::WriteOnly flag.
-
-    Returns true if the video frame will be updated when unmapped, and false otherwise.
-
-    \note The result of altering the data of a frame that is mapped in read-only mode is undefined.
-    Depending on the buffer implementation the changes may be persisted, or worse alter a shared
-    buffer.
-
-    \sa mapMode(), QAbstractVideoBuffer::MapMode
-*/
 
 bool QVideoFrame::isWritable() const
 {
    return d->buffer != 0 && (d->buffer->mapMode() & QAbstractVideoBuffer::WriteOnly);
 }
 
-/*!
-    Identifies if the mapped contents of a video frame were read from the frame when it was mapped.
-
-    This is a convenience function which checks if the \l {QAbstractVideoBuffer::MapMode}{MapMode}
-    contains the QAbstractVideoBuffer::WriteOnly flag.
-
-    Returns true if the contents of the mapped memory were read from the video frame, and false
-    otherwise.
-
-    \sa mapMode(), QAbstractVideoBuffer::MapMode
-*/
-
 bool QVideoFrame::isReadable() const
 {
    return d->buffer != 0 && (d->buffer->mapMode() & QAbstractVideoBuffer::ReadOnly);
 }
-
-/*!
-    Returns the mode a video frame was mapped to system memory in.
-
-    \sa map(), QAbstractVideoBuffer::MapMode
-*/
 
 QAbstractVideoBuffer::MapMode QVideoFrame::mapMode() const
 {
@@ -486,16 +317,108 @@ QAbstractVideoBuffer::MapMode QVideoFrame::mapMode() const
 
 bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
 {
-   if (d->buffer != 0 && d->data == 0) {
-      Q_ASSERT(d->bytesPerLine == 0);
-      Q_ASSERT(d->mappedBytes == 0);
+    QMutexLocker lock(&d->mapMutex);
 
-      d->data = d->buffer->map(mode, &d->mappedBytes, &d->bytesPerLine);
+    if (!d->buffer)
+        return false;
 
-      return d->data != 0;
-   }
+    if (mode == QAbstractVideoBuffer::NotMapped)
+        return false;
 
-   return false;
+    if (d->mappedCount > 0) {
+        //it's allowed to map the video frame multiple times in read only mode
+        if (d->buffer->mapMode() == QAbstractVideoBuffer::ReadOnly
+                && mode == QAbstractVideoBuffer::ReadOnly) {
+            d->mappedCount++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    Q_ASSERT(d->data[0] == 0);
+    Q_ASSERT(d->bytesPerLine[0] == 0);
+    Q_ASSERT(d->planeCount == 0);
+    Q_ASSERT(d->mappedBytes == 0);
+
+    d->planeCount = d->buffer->mapPlanes(mode, &d->mappedBytes, d->bytesPerLine, d->data);
+    if (d->planeCount == 0)
+        return false;
+
+    if (d->planeCount > 1) {
+        // If the plane count is derive the additional planes for planar formats.
+    } else switch (d->pixelFormat) {
+    case Format_Invalid:
+    case Format_ARGB32:
+    case Format_ARGB32_Premultiplied:
+    case Format_RGB32:
+    case Format_RGB24:
+    case Format_RGB565:
+    case Format_RGB555:
+    case Format_ARGB8565_Premultiplied:
+    case Format_BGRA32:
+    case Format_BGRA32_Premultiplied:
+    case Format_BGR32:
+    case Format_BGR24:
+    case Format_BGR565:
+    case Format_BGR555:
+    case Format_BGRA5658_Premultiplied:
+    case Format_AYUV444:
+    case Format_AYUV444_Premultiplied:
+    case Format_YUV444:
+    case Format_UYVY:
+    case Format_YUYV:
+    case Format_Y8:
+    case Format_Y16:
+    case Format_Jpeg:
+    case Format_CameraRaw:
+    case Format_AdobeDng:
+    case Format_User:
+        // Single plane or opaque format.
+        break;
+    case Format_YUV420P:
+    case Format_YV12: {
+        // The UV stride is usually half the Y stride and is 32-bit aligned.
+        // However it's not always the case, at least on Windows where the
+        // UV planes are sometimes not aligned.
+        // We calculate the stride using the UV byte count to always
+        // have a correct stride.
+        const int height = d->size.height();
+        const int yStride = d->bytesPerLine[0];
+        const int uvStride = (d->mappedBytes - (yStride * height)) / height;
+
+        // Three planes, the second and third vertically and horizontally subsampled.
+        d->planeCount = 3;
+        d->bytesPerLine[2] = d->bytesPerLine[1] = uvStride;
+        d->data[1] = d->data[0] + (yStride * height);
+        d->data[2] = d->data[1] + (uvStride * height / 2);
+        break;
+    }
+    case Format_NV12:
+    case Format_NV21:
+    case Format_IMC2:
+    case Format_IMC4: {
+        // Semi planar, Full resolution Y plane with interleaved subsampled U and V planes.
+        d->planeCount = 2;
+        d->bytesPerLine[1] = d->bytesPerLine[0];
+        d->data[1] = d->data[0] + (d->bytesPerLine[0] * d->size.height());
+        break;
+    }
+    case Format_IMC1:
+    case Format_IMC3: {
+        // Three planes, the second and third vertically and horizontally subsumpled,
+        // but with lines padded to the width of the first plane.
+        d->planeCount = 3;
+        d->bytesPerLine[2] = d->bytesPerLine[1] = d->bytesPerLine[0];
+        d->data[1] = d->data[0] + (d->bytesPerLine[0] * d->size.height());
+        d->data[2] = d->data[1] + (d->bytesPerLine[1] * d->size.height() / 2);
+        break;
+    }
+    default:
+        break;
+    }
+
+    d->mappedCount++;
+    return true;
 }
 
 /*!
@@ -509,13 +432,26 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
 
 void QVideoFrame::unmap()
 {
-   if (d->data != 0) {
-      d->mappedBytes = 0;
-      d->bytesPerLine = 0;
-      d->data = 0;
+    QMutexLocker lock(&d->mapMutex);
 
-      d->buffer->unmap();
-   }
+    if (!d->buffer)
+        return;
+
+    if (d->mappedCount == 0) {
+        qWarning() << "QVideoFrame::unmap() was called more times then QVideoFrame::map()";
+        return;
+    }
+
+    d->mappedCount--;
+
+    if (d->mappedCount == 0) {
+        d->mappedBytes = 0;
+        d->planeCount = 0;
+        memset(d->bytesPerLine, 0, sizeof(d->bytesPerLine));
+        memset(d->data, 0, sizeof(d->data));
+
+        d->buffer->unmap();
+    }
 }
 
 /*!
@@ -531,82 +467,65 @@ void QVideoFrame::unmap()
 
 int QVideoFrame::bytesPerLine() const
 {
-   return d->bytesPerLine;
+    return d->bytesPerLine[0];
+}
+int QVideoFrame::bytesPerLine(int plane) const
+{
+    return plane >= 0 && plane < d->planeCount ? d->bytesPerLine[plane] : 0;
 }
 
-/*!
-    Returns a pointer to the start of the frame data buffer.
-
-    This value is only valid while the frame data is \l {map()}{mapped}.
-
-    \sa map(), mappedBytes(), bytesPerLine()
-*/
 
 uchar *QVideoFrame::bits()
 {
-   return d->data;
+    return d->data[0];
 }
 
-/*!
-    Returns a pointer to the start of the frame data buffer.
+uchar *QVideoFrame::bits(int plane)
+{
+    return plane >= 0 && plane < d->planeCount ? d->data[plane] : 0;
+}
 
-    This value is only valid while the frame data is \l {map()}{mapped}.
-
-    \sa map(), mappedBytes(), bytesPerLine()
-*/
 
 const uchar *QVideoFrame::bits() const
 {
-   return d->data;
+    return d->data[0];
 }
 
-/*!
-    Returns the number of bytes occupied by the mapped frame data.
+const uchar *QVideoFrame::bits(int plane) const
+{
+    return plane >= 0 && plane < d->planeCount ?  d->data[plane] : 0;
+}
 
-    This value is only valid while the frame data is \l {map()}{mapped}.
-
-    \sa map()
-*/
 
 int QVideoFrame::mappedBytes() const
 {
    return d->mappedBytes;
 }
 
-/*!
-    Returns a type specific handle to a video frame's buffer.
-
-    For an OpenGL texture this would be the texture ID.
-
-    \sa QAbstractVideoBuffer::handle()
-*/
+int QVideoFrame::planeCount() const
+{
+    return d->planeCount;
+}
 
 QVariant QVideoFrame::handle() const
 {
    return d->buffer != 0 ? d->buffer->handle() : QVariant();
 }
 
-/*!
-    Returns the presentation time when the frame should be displayed.
-*/
 
 qint64 QVideoFrame::startTime() const
 {
    return d->startTime;
 }
 
-/*!
-    Sets the presentation \a time when the frame should be displayed.
-*/
+
 
 void QVideoFrame::setStartTime(qint64 time)
 {
    d->startTime = time;
 }
 
-/*!
-    Returns the presentation time when a frame should stop being displayed.
-*/
+
 
 qint64 QVideoFrame::endTime() const
 {
@@ -622,45 +541,47 @@ void QVideoFrame::setEndTime(qint64 time)
    d->endTime = time;
 }
 
-/*!
-    Returns an video pixel format equivalent to an image \a format.  If there is no equivalent
-    format QVideoFrame::InvalidType is returned instead.
-*/
+
+QVariantMap QVideoFrame::availableMetaData() const
+{
+    return d->metadata;
+}
+QVariant QVideoFrame::metaData(const QString &key) const
+{
+    return d->metadata.value(key);
+}
+
+void QVideoFrame::setMetaData(const QString &key, const QVariant &value)
+{
+    if (!value.isNull())
+        d->metadata.insert(key, value);
+    else
+        d->metadata.remove(key);
+}
 
 QVideoFrame::PixelFormat QVideoFrame::pixelFormatFromImageFormat(QImage::Format format)
 {
-   switch (format) {
-      case QImage::Format_Invalid:
-      case QImage::Format_Mono:
-      case QImage::Format_MonoLSB:
-      case QImage::Format_Indexed8:
-         return Format_Invalid;
-      case QImage::Format_RGB32:
-         return Format_RGB32;
-      case QImage::Format_ARGB32:
-         return Format_ARGB32;
-      case QImage::Format_ARGB32_Premultiplied:
-         return Format_ARGB32_Premultiplied;
-      case QImage::Format_RGB16:
-         return Format_RGB565;
-      case QImage::Format_ARGB8565_Premultiplied:
-         return Format_ARGB8565_Premultiplied;
-      case QImage::Format_RGB666:
-      case QImage::Format_ARGB6666_Premultiplied:
-         return Format_Invalid;
-      case QImage::Format_RGB555:
-         return Format_RGB555;
-      case QImage::Format_ARGB8555_Premultiplied:
-         return Format_Invalid;
-      case QImage::Format_RGB888:
-         return Format_RGB24;
-      case QImage::Format_RGB444:
-      case QImage::Format_ARGB4444_Premultiplied:
-         return Format_Invalid;
-      case QImage::NImageFormats:
-         return Format_Invalid;
-   }
-   return Format_Invalid;
+    switch (format) {
+    case QImage::Format_RGB32:
+    case QImage::Format_RGBX8888:
+        return Format_RGB32;
+    case QImage::Format_ARGB32:
+    case QImage::Format_RGBA8888:
+        return Format_ARGB32;
+    case QImage::Format_ARGB32_Premultiplied:
+    case QImage::Format_RGBA8888_Premultiplied:
+        return Format_ARGB32_Premultiplied;
+    case QImage::Format_RGB16:
+        return Format_RGB565;
+    case QImage::Format_ARGB8565_Premultiplied:
+        return Format_ARGB8565_Premultiplied;
+    case QImage::Format_RGB555:
+        return Format_RGB555;
+    case QImage::Format_RGB888:
+        return Format_RGB24;
+    default:
+        return Format_Invalid;
+    }
 }
 
 /*!
@@ -710,12 +631,310 @@ QImage::Format QVideoFrame::imageFormatFromPixelFormat(PixelFormat format)
       case Format_IMC4:
       case Format_Y8:
       case Format_Y16:
+    case Format_Jpeg:
+    case Format_CameraRaw:
+    case Format_AdobeDng:
          return QImage::Format_Invalid;
       case Format_User:
+    default:
          return QImage::Format_Invalid;
    }
    return QImage::Format_Invalid;
 }
 
-QT_END_NAMESPACE
+extern void qt_convert_BGRA32_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_BGR24_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_BGR565_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_BGR555_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_AYUV444_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_YUV444_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_YUV420P_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_YV12_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_UYVY_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_YUYV_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_NV12_to_ARGB32(const QVideoFrame&, uchar*);
+extern void qt_convert_NV21_to_ARGB32(const QVideoFrame&, uchar*);
+static VideoFrameConvertFunc qConvertFuncs[QVideoFrame::NPixelFormats] = {
+    /* Format_Invalid */                nullptr, // Not needed
+    /* Format_ARGB32 */                 nullptr, // Not needed
+    /* Format_ARGB32_Premultiplied */   nullptr, // Not needed
+    /* Format_RGB32 */                  nullptr, // Not needed
+    /* Format_RGB24 */                  nullptr, // Not needed
+    /* Format_RGB565 */                 nullptr, // Not needed
+    /* Format_RGB555 */                 nullptr, // Not needed
+    /* Format_ARGB8565_Premultiplied */ nullptr, // Not needed
+    /* Format_BGRA32 */                 qt_convert_BGRA32_to_ARGB32,
+    /* Format_BGRA32_Premultiplied */   qt_convert_BGRA32_to_ARGB32,
+    /* Format_BGR32 */                  qt_convert_BGRA32_to_ARGB32,
+    /* Format_BGR24 */                  qt_convert_BGR24_to_ARGB32,
+    /* Format_BGR565 */                 qt_convert_BGR565_to_ARGB32,
+    /* Format_BGR555 */                 qt_convert_BGR555_to_ARGB32,
+    /* Format_BGRA5658_Premultiplied */ nullptr,
+    /* Format_AYUV444 */                qt_convert_AYUV444_to_ARGB32,
+    /* Format_AYUV444_Premultiplied */  nullptr,
+    /* Format_YUV444 */                 qt_convert_YUV444_to_ARGB32,
+    /* Format_YUV420P */                qt_convert_YUV420P_to_ARGB32,
+    /* Format_YV12 */                   qt_convert_YV12_to_ARGB32,
+    /* Format_UYVY */                   qt_convert_UYVY_to_ARGB32,
+    /* Format_YUYV */                   qt_convert_YUYV_to_ARGB32,
+    /* Format_NV12 */                   qt_convert_NV12_to_ARGB32,
+    /* Format_NV21 */                   qt_convert_NV21_to_ARGB32,
+    /* Format_IMC1 */                   nullptr,
+    /* Format_IMC2 */                   nullptr,
+    /* Format_IMC3 */                   nullptr,
+    /* Format_IMC4 */                   nullptr,
+    /* Format_Y8 */                     nullptr,
+    /* Format_Y16 */                    nullptr,
+    /* Format_Jpeg */                   nullptr, // Not needed
+    /* Format_CameraRaw */              nullptr,
+    /* Format_AdobeDng */               nullptr
+};
+static void qInitConvertFuncsAsm()
+{
+#ifdef QT_COMPILER_SUPPORTS_SSE2
+    extern void qt_convert_BGRA32_to_ARGB32_sse2(const QVideoFrame&, uchar*);
+    if (qCpuHasFeature(SSE2)){
+        qConvertFuncs[QVideoFrame::Format_BGRA32] = qt_convert_BGRA32_to_ARGB32_sse2;
+        qConvertFuncs[QVideoFrame::Format_BGRA32_Premultiplied] = qt_convert_BGRA32_to_ARGB32_sse2;
+        qConvertFuncs[QVideoFrame::Format_BGR32] = qt_convert_BGRA32_to_ARGB32_sse2;
+    }
+#endif
+#ifdef QT_COMPILER_SUPPORTS_SSSE3
+    extern void qt_convert_BGRA32_to_ARGB32_ssse3(const QVideoFrame&, uchar*);
+    if (qCpuHasFeature(SSSE3)){
+        qConvertFuncs[QVideoFrame::Format_BGRA32] = qt_convert_BGRA32_to_ARGB32_ssse3;
+        qConvertFuncs[QVideoFrame::Format_BGRA32_Premultiplied] = qt_convert_BGRA32_to_ARGB32_ssse3;
+        qConvertFuncs[QVideoFrame::Format_BGR32] = qt_convert_BGRA32_to_ARGB32_ssse3;
+    }
+#endif
+#ifdef QT_COMPILER_SUPPORTS_AVX2
+    extern void qt_convert_BGRA32_to_ARGB32_avx2(const QVideoFrame&, uchar*);
+    if (qCpuHasFeature(AVX2)){
+        qConvertFuncs[QVideoFrame::Format_BGRA32] = qt_convert_BGRA32_to_ARGB32_avx2;
+        qConvertFuncs[QVideoFrame::Format_BGRA32_Premultiplied] = qt_convert_BGRA32_to_ARGB32_avx2;
+        qConvertFuncs[QVideoFrame::Format_BGR32] = qt_convert_BGRA32_to_ARGB32_avx2;
+    }
+#endif
+}
+
+QImage qt_imageFromVideoFrame(const QVideoFrame &f)
+{
+    QVideoFrame &frame = const_cast<QVideoFrame&>(f);
+    QImage result;
+
+    if (!frame.isValid() || !frame.map(QAbstractVideoBuffer::ReadOnly))
+        return result;
+
+    // Formats supported by QImage don't need conversion
+    QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
+    if (imageFormat != QImage::Format_Invalid) {
+        result = QImage(frame.bits(), frame.width(), frame.height(), imageFormat).copy();
+    }
+
+    // Load from JPG
+    else if (frame.pixelFormat() == QVideoFrame::Format_Jpeg) {
+        result.loadFromData(frame.bits(), frame.mappedBytes(), "JPG");
+    }
+
+    // Need conversion
+    else {
+        static bool initAsmFuncsDone = false;
+        if (!initAsmFuncsDone) {
+            qInitConvertFuncsAsm();
+            initAsmFuncsDone = true;
+        }
+        VideoFrameConvertFunc convert = qConvertFuncs[frame.pixelFormat()];
+        if (!convert) {
+            qWarning() << Q_FUNC_INFO << ": unsupported pixel format" << frame.pixelFormat();
+        } else {
+            result = QImage(frame.width(), frame.height(), QImage::Format_ARGB32);
+            convert(frame, result.bits());
+        }
+    }
+
+    frame.unmap();
+
+    return result;
+}
+
+QDebug operator<<(QDebug dbg, QVideoFrame::PixelFormat pf)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    switch (pf) {
+        case QVideoFrame::Format_Invalid:
+            return dbg << "Format_Invalid";
+        case QVideoFrame::Format_ARGB32:
+            return dbg << "Format_ARGB32";
+        case QVideoFrame::Format_ARGB32_Premultiplied:
+            return dbg << "Format_ARGB32_Premultiplied";
+        case QVideoFrame::Format_RGB32:
+            return dbg << "Format_RGB32";
+        case QVideoFrame::Format_RGB24:
+            return dbg << "Format_RGB24";
+        case QVideoFrame::Format_RGB565:
+            return dbg << "Format_RGB565";
+        case QVideoFrame::Format_RGB555:
+            return dbg << "Format_RGB555";
+        case QVideoFrame::Format_ARGB8565_Premultiplied:
+            return dbg << "Format_ARGB8565_Premultiplied";
+        case QVideoFrame::Format_BGRA32:
+            return dbg << "Format_BGRA32";
+        case QVideoFrame::Format_BGRA32_Premultiplied:
+            return dbg << "Format_BGRA32_Premultiplied";
+        case QVideoFrame::Format_BGR32:
+            return dbg << "Format_BGR32";
+        case QVideoFrame::Format_BGR24:
+            return dbg << "Format_BGR24";
+        case QVideoFrame::Format_BGR565:
+            return dbg << "Format_BGR565";
+        case QVideoFrame::Format_BGR555:
+            return dbg << "Format_BGR555";
+        case QVideoFrame::Format_BGRA5658_Premultiplied:
+            return dbg << "Format_BGRA5658_Premultiplied";
+        case QVideoFrame::Format_AYUV444:
+            return dbg << "Format_AYUV444";
+        case QVideoFrame::Format_AYUV444_Premultiplied:
+            return dbg << "Format_AYUV444_Premultiplied";
+        case QVideoFrame::Format_YUV444:
+            return dbg << "Format_YUV444";
+        case QVideoFrame::Format_YUV420P:
+            return dbg << "Format_YUV420P";
+        case QVideoFrame::Format_YV12:
+            return dbg << "Format_YV12";
+        case QVideoFrame::Format_UYVY:
+            return dbg << "Format_UYVY";
+        case QVideoFrame::Format_YUYV:
+            return dbg << "Format_YUYV";
+        case QVideoFrame::Format_NV12:
+            return dbg << "Format_NV12";
+        case QVideoFrame::Format_NV21:
+            return dbg << "Format_NV21";
+        case QVideoFrame::Format_IMC1:
+            return dbg << "Format_IMC1";
+        case QVideoFrame::Format_IMC2:
+            return dbg << "Format_IMC2";
+        case QVideoFrame::Format_IMC3:
+            return dbg << "Format_IMC3";
+        case QVideoFrame::Format_IMC4:
+            return dbg << "Format_IMC4";
+        case QVideoFrame::Format_Y8:
+            return dbg << "Format_Y8";
+        case QVideoFrame::Format_Y16:
+            return dbg << "Format_Y16";
+        case QVideoFrame::Format_Jpeg:
+            return dbg << "Format_Jpeg";
+        case QVideoFrame::Format_AdobeDng:
+            return dbg << "Format_AdobeDng";
+        case QVideoFrame::Format_CameraRaw:
+            return dbg << "Format_CameraRaw";
+
+        default:
+            return dbg << QString("UserType(%1)" ).formatArg(int(pf));
+    }
+}
+
+QDebug operator<<(QDebug dbg, QVideoFrame::FieldType f)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    switch (f) {
+        case QVideoFrame::TopField:
+            return dbg << "TopField";
+        case QVideoFrame::BottomField:
+            return dbg << "BottomField";
+        case QVideoFrame::InterlacedFrame:
+            return dbg << "InterlacedFrame";
+        default:
+            return dbg << "ProgressiveFrame";
+    }
+}
+static QString qFormatTimeStamps(qint64 start, qint64 end)
+{
+    // Early out for invalid.
+    if (start < 0)
+        return QLatin1String("[no timestamp]");
+
+    bool onlyOne = (start == end);
+
+    // [hh:]mm:ss.ms
+    const int s_millis = start % 1000000;
+    start /= 1000000;
+    const int s_seconds = start % 60;
+    start /= 60;
+    const int s_minutes = start % 60;
+    start /= 60;
+
+    if (onlyOne) {
+        if (start > 0)
+            return QString("@%1:%2:%3.%4")
+                    .formatArg(start, 1, 10, QLatin1Char('0'))
+                    .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+        else
+            return QString("@%1:%2.%3")
+                    .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+
+    } else if (end == -1) {
+        // Similar to start-start, except it means keep displaying it?
+        if (start > 0)
+            return QString("%1:%2:%3.%4 - forever")
+                    .formatArg(start, 1, 10, QLatin1Char('0'))
+                    .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+        else
+            return QString("%1:%2.%3 - forever")
+                    .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+    } else {
+        const int e_millis = end % 1000000;
+        end /= 1000000;
+        const int e_seconds = end % 60;
+        end /= 60;
+        const int e_minutes = end % 60;
+        end /= 60;
+
+        if (start > 0 || end > 0)
+            return QString("%1:%2:%3.%4 - %5:%6:%7.%8")
+                    .formatArg(start, 1, 10, QLatin1Char('0'))
+                    .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_millis, 2, 10, QLatin1Char('0'))
+                    .formatArg(end, 1, 10, QLatin1Char('0'))
+                    .formatArg(e_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(e_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(e_millis, 2, 10, QLatin1Char('0'));
+        else
+            return QString("%1:%2.%3 - %4:%5.%6")
+                    .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(s_millis, 2, 10, QLatin1Char('0'))
+                    .formatArg(e_minutes, 2, 10, QLatin1Char('0'))
+                    .formatArg(e_seconds, 2, 10, QLatin1Char('0'))
+                    .formatArg(e_millis, 2, 10, QLatin1Char('0'));
+    }
+}
+
+QDebug operator<<(QDebug dbg, const QVideoFrame& f)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+
+    dbg << "QVideoFrame(" << f.size() << ", "
+               << f.pixelFormat() << ", "
+               << f.handleType() << ", "
+               << f.mapMode() << ", "
+               << qFormatTimeStamps(f.startTime(), f.endTime());
+
+    if (f.availableMetaData().count())
+        dbg << ", metaData: " << f.availableMetaData();
+
+    dbg << ')';
+    return dbg;
+}
 

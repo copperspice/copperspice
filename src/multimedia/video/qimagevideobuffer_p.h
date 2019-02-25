@@ -23,9 +23,8 @@
 #ifndef QIMAGEVIDEOBUFFER_P_H
 #define QIMAGEVIDEOBUFFER_P_H
 
-#include <QtMultimedia/qabstractvideobuffer.h>
+#include <qabstractvideobuffer.h>
 
-QT_BEGIN_NAMESPACE
 
 class QImage;
 class QImageVideoBufferPrivate;
@@ -43,6 +42,6 @@ class Q_MULTIMEDIA_EXPORT QImageVideoBuffer : public QAbstractVideoBuffer
    void unmap() override;
 };
 
-QT_END_NAMESPACE
+
 
 #endif

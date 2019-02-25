@@ -24,15 +24,14 @@
 #include <qabstractvideobuffer_p.h>
 #include <qbytearray.h>
 
-QT_BEGIN_NAMESPACE
 
 class QMemoryVideoBufferPrivate : public QAbstractVideoBufferPrivate
 {
  public:
    QMemoryVideoBufferPrivate()
       : bytesPerLine(0)
-      , mapMode(QAbstractVideoBuffer::NotMapped) {
-   }
+      , mapMode(QAbstractVideoBuffer::NotMapped)
+   { }
 
    int bytesPerLine;
    QAbstractVideoBuffer::MapMode mapMode;
@@ -107,4 +106,3 @@ void QMemoryVideoBuffer::unmap()
    d_func()->mapMode = NotMapped;
 }
 
-QT_END_NAMESPACE

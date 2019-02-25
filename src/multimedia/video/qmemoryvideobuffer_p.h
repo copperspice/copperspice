@@ -23,9 +23,9 @@
 #ifndef QMEMORYVIDEOBUFFER_P_H
 #define QMEMORYVIDEOBUFFER_P_H
 
-#include <QtMultimedia/qabstractvideobuffer.h>
+#include <qabstractvideobuffer.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QMemoryVideoBufferPrivate;
 
@@ -41,8 +41,6 @@ class Q_MULTIMEDIA_EXPORT QMemoryVideoBuffer : public QAbstractVideoBuffer
    uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) override;
    void unmap() override;
 };
-
-QT_END_NAMESPACE
 
 
 #endif

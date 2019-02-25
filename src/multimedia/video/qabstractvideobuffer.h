@@ -23,13 +23,13 @@
 #ifndef QABSTRACTVIDEOBUFFER_H
 #define QABSTRACTVIDEOBUFFER_H
 
+#include <qmultimedia.h>
 #include <qmetatype.h>
 #include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 class QVariant;
 class QAbstractVideoBufferPrivate;
+class QAbstractPlanarVideoBufferPrivate;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoBuffer
 {
@@ -53,11 +53,14 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoBuffer
    QAbstractVideoBuffer(HandleType type);
    virtual ~QAbstractVideoBuffer();
 
+   virtual void release();
+
    HandleType handleType() const;
 
    virtual MapMode mapMode() const = 0;
 
    virtual uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) = 0;
+   int mapPlanes(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]);
    virtual void unmap() = 0;
 
    virtual QVariant handle() const;
@@ -66,13 +69,33 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoBuffer
    QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, HandleType type);
 
    QAbstractVideoBufferPrivate *d_ptr;
+   HandleType m_type;
 
  private:
    Q_DECLARE_PRIVATE(QAbstractVideoBuffer)
    Q_DISABLE_COPY(QAbstractVideoBuffer)
 };
 
-QT_END_NAMESPACE
+class Q_MULTIMEDIA_EXPORT QAbstractPlanarVideoBuffer : public QAbstractVideoBuffer
+{
+public:
+    QAbstractPlanarVideoBuffer(HandleType type);
+    virtual ~QAbstractPlanarVideoBuffer();
+
+    uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
+    virtual int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]) = 0;
+
+protected:
+    QAbstractPlanarVideoBuffer(QAbstractPlanarVideoBufferPrivate &dd, HandleType type);
+
+private:
+    Q_DISABLE_COPY(QAbstractPlanarVideoBuffer)
+};
+
+
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAbstractVideoBuffer::HandleType);
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAbstractVideoBuffer::MapMode);
+
 
 Q_DECLARE_METATYPE(QAbstractVideoBuffer::HandleType)
 Q_DECLARE_METATYPE(QAbstractVideoBuffer::MapMode)

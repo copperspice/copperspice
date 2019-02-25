@@ -23,15 +23,13 @@
 #ifndef QVIDEOFRAME_H
 #define QVIDEOFRAME_H
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qshareddata.h>
-#include <QtGui/qimage.h>
-#include <QtMultimedia/qabstractvideobuffer.h>
-
-QT_BEGIN_NAMESPACE
+#include <qmetatype.h>
+#include <qshareddata.h>
+#include <qimage.h>
+#include <qabstractvideobuffer.h>
+#include <qvariant.h>
 
 class QSize;
-class QVariant;
 class QVideoFramePrivate;
 
 class Q_MULTIMEDIA_EXPORT QVideoFrame
@@ -76,7 +74,10 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
       Format_IMC4,
       Format_Y8,
       Format_Y16,
-
+      Format_Jpeg,
+      Format_CameraRaw,
+      Format_AdobeDng,
+      NPixelFormats,
       Format_User = 1000
    };
 
@@ -88,6 +89,9 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
    ~QVideoFrame();
 
    QVideoFrame &operator =(const QVideoFrame &other);
+
+   bool operator==(const QVideoFrame &other) const;
+   bool operator!=(const QVideoFrame &other) const;
 
    bool isValid() const;
 
@@ -112,10 +116,14 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
    void unmap();
 
    int bytesPerLine() const;
+    int bytesPerLine(int plane) const;
 
    uchar *bits();
+    uchar *bits(int plane);
    const uchar *bits() const;
+    const uchar *bits(int plane) const;
    int mappedBytes() const;
+    int planeCount() const;
 
    QVariant handle() const;
 
@@ -125,6 +133,9 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
    qint64 endTime() const;
    void setEndTime(qint64 time);
 
+    QVariantMap availableMetaData() const;
+    QVariant metaData(const QString &key) const;
+    void setMetaData(const QString &key, const QVariant &value);
    static PixelFormat pixelFormatFromImageFormat(QImage::Format format);
    static QImage::Format imageFormatFromPixelFormat(PixelFormat format);
 
@@ -132,8 +143,12 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
    QExplicitlySharedDataPointer<QVideoFramePrivate> d;
 };
 
-QT_END_NAMESPACE
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QVideoFrame&);
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QVideoFrame::FieldType);
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QVideoFrame::PixelFormat);
 
+
+Q_DECLARE_METATYPE(QVideoFrame)
 Q_DECLARE_METATYPE(QVideoFrame::FieldType)
 Q_DECLARE_METATYPE(QVideoFrame::PixelFormat)
 

@@ -23,12 +23,12 @@
 #ifndef QABSTRACTVIDEOSURFACE_H
 #define QABSTRACTVIDEOSURFACE_H
 
-#include <QtCore/qobject.h>
-#include <QtMultimedia/qvideoframe.h>
+#include <qobject.h>
+#include <qvideoframe.h>
 #include <QScopedPointer>
 #include <QVideoSurfaceFormat>
 
-QT_BEGIN_NAMESPACE
+
 
 class QRectF;
 class QAbstractVideoSurfacePrivate;
@@ -36,6 +36,10 @@ class QAbstractVideoSurfacePrivate;
 class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 {
    MULTI_CS_OBJECT(QAbstractVideoSurface)
+
+   // BROOM - fix the property
+   // Q_PROPERTY(QSize nativeResolution READ nativeResolution NOTIFY nativeResolutionChanged)
+
 
  public:
    enum Error {
@@ -56,6 +60,7 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 
    QVideoSurfaceFormat surfaceFormat() const;
 
+    QSize nativeResolution() const;
    virtual bool start(const QVideoSurfaceFormat &format);
    virtual void stop();
 
@@ -67,23 +72,30 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 
    MULTI_CS_SIGNAL_1(Public, void activeChanged(bool active))
    MULTI_CS_SIGNAL_2(activeChanged, active)
+
    MULTI_CS_SIGNAL_1(Public, void surfaceFormatChanged(const QVideoSurfaceFormat &format))
    MULTI_CS_SIGNAL_2(surfaceFormatChanged, format)
+
    MULTI_CS_SIGNAL_1(Public, void supportedFormatsChanged())
    MULTI_CS_SIGNAL_2(supportedFormatsChanged)
 
+   MULTI_CS_SIGNAL_1(Public, void nativeResolutionChanged(const QSize &arg1))
+   MULTI_CS_SIGNAL_2(nativeResolutionChanged, arg1)
+
  protected:
-   QAbstractVideoSurface(QAbstractVideoSurfacePrivate &dd, QObject *parent);
    QScopedPointer<QAbstractVideoSurfacePrivate> d_ptr;
 
    void setError(Error error);
+   void setNativeResolution(const QSize &resolution);
 
  private:
    Q_DECLARE_PRIVATE(QAbstractVideoSurface)
 
 };
 
-QT_END_NAMESPACE
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QAbstractVideoSurface::Error &);
 
+Q_DECLARE_METATYPE(QAbstractVideoSurface*)
+Q_DECLARE_METATYPE(QAbstractVideoSurface::Error)
 
 #endif

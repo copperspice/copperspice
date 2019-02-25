@@ -20,26 +20,15 @@
 *
 ***********************************************************************/
 
-#ifndef QABSTRACTVIDEOSURFACE_P_H
-#define QABSTRACTVIDEOSURFACE_P_H
+#ifndef QVIDEOFRAME_P_H
+#define QVIDEOFRAME_P_H
 
-#include <qabstractvideosurface.h>
-#include <qvideosurfaceformat.h>
-
+#include <qvideoframe.h>
 
 
-class QAbstractVideoSurfacePrivate
-{
 
- public:
-   QAbstractVideoSurfacePrivate()
-      : error(QAbstractVideoSurface::NoError), active(false)
-   { }
+Q_MULTIMEDIA_EXPORT QImage qt_imageFromVideoFrame(const QVideoFrame &frame);
 
-   QVideoSurfaceFormat surfaceFormat;
-   QAbstractVideoSurface::Error error;
-   QSize nativeResolution;
-   bool active;
-};
 
 #endif
+
