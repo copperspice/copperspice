@@ -23,13 +23,11 @@
 #ifndef QAUDIOINPUT_H
 #define QAUDIOINPUT_H
 
-#include <QtCore/qiodevice.h>
-#include <QtCore/qglobal.h>
+#include <qiodevice.h>
+#include <QtMultimedia/qmultimedia.h>
 #include <QtMultimedia/qaudio.h>
 #include <QtMultimedia/qaudioformat.h>
 #include <QtMultimedia/qaudiodeviceinfo.h>
-
-QT_BEGIN_NAMESPACE
 
 class QAbstractAudioInput;
 
@@ -62,6 +60,8 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    void setNotifyInterval(int milliSeconds);
    int notifyInterval() const;
 
+    void setVolume(qreal volume);
+    qreal volume() const;
    qint64 processedUSecs() const;
    qint64 elapsedUSecs() const;
 
@@ -70,21 +70,14 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
 
    MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
    MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+
    MULTI_CS_SIGNAL_1(Public, void notify())
    MULTI_CS_SIGNAL_2(notify)
-   //
-   MULTI_CS_SLOT_1(Public, void emitStateChanged(QAudio::State un_named_arg1) {emit stateChanged(un_named_arg1);})
-   MULTI_CS_SLOT_2(emitStateChanged)
-   MULTI_CS_SLOT_1(Public, void emitNotify() {emit notify();})
-   MULTI_CS_SLOT_2(emitNotify)
-   //
 
  private:
    Q_DISABLE_COPY(QAudioInput)
 
    QAbstractAudioInput *d;
 };
-
-QT_END_NAMESPACE
 
 #endif // QAUDIOINPUT_H

@@ -25,6 +25,7 @@
 
 #include <qglobal.h>
 #include <qlist.h>
+#include <qmultimedia.h>
 #include <qaudiodeviceinfo.h>
 
 class QAbstractAudioInput;

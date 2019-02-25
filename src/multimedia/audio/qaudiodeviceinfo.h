@@ -28,10 +28,10 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qlist.h>
-#include <QtMultimedia/qaudio.h>
-#include <QtMultimedia/qaudioformat.h>
+#include <qmultimedia.h>
+#include <qaudio.h>
+#include <qaudioformat.h>
 
-QT_BEGIN_NAMESPACE
 
 class QAudioDeviceFactory;
 class QAudioDeviceInfoPrivate;
@@ -47,6 +47,8 @@ class Q_MULTIMEDIA_EXPORT QAudioDeviceInfo
 
    QAudioDeviceInfo &operator=(const QAudioDeviceInfo &other);
 
+   bool operator==(const QAudioDeviceInfo &other) const;
+   bool operator!=(const QAudioDeviceInfo &other) const;
    bool isNull() const;
 
    QString deviceName() const;
@@ -56,9 +58,8 @@ class Q_MULTIMEDIA_EXPORT QAudioDeviceInfo
    QAudioFormat nearestFormat(const QAudioFormat &format) const;
 
    QStringList supportedCodecs() const;
-   QList<int> supportedFrequencies() const;
    QList<int> supportedSampleRates() const;
-   QList<int> supportedChannels() const;
+
    QList<int> supportedChannelCounts() const;
    QList<int> supportedSampleSizes() const;
    QList<QAudioFormat::Endian> supportedByteOrders() const;
@@ -77,8 +78,6 @@ class Q_MULTIMEDIA_EXPORT QAudioDeviceInfo
 
    QSharedDataPointer<QAudioDeviceInfoPrivate> d;
 };
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QAudioDeviceInfo)
 

@@ -20,29 +20,29 @@
 *
 ***********************************************************************/
 
-#include <QtMultimedia/qaudio.h>
-#include <QtMultimedia/qaudiodeviceinfo.h>
-#include <QtMultimedia/qaudioengine.h>
-#include <QtMultimedia/qaudiooutput.h>
+#include <qaudio.h>
+#include <qaudiodeviceinfo.h>
+#include <qaudiosystem.h>
+#include <qaudiooutput.h>
 
 #include <qaudiodevicefactory_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QAudioOutput::QAudioOutput(const QAudioFormat &format, QObject *parent):
    QObject(parent)
 {
    d = QAudioDeviceFactory::createDefaultOutputDevice(format);
-   connect(d, SIGNAL(notify()), this, SLOT(emitNotify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(emitStateChanged(QAudio::State)));
+   connect(d, SIGNAL(notify()), this, SLOT(notify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(stateChanged(QAudio::State)));
 }
 
 QAudioOutput::QAudioOutput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent):
    QObject(parent)
 {
    d = QAudioDeviceFactory::createOutputDevice(audioDevice, format);
-   connect(d, SIGNAL(notify()), this, SLOT(emitNotify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(emitStateChanged(QAudio::State)));
+   connect(d, SIGNAL(notify()), this, SLOT(notify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(stateChanged(QAudio::State)));
 }
 
 QAudioOutput::~QAudioOutput()
@@ -81,7 +81,7 @@ void QAudioOutput::start(QIODevice *device)
 
 QIODevice *QAudioOutput::start()
 {
-   return d->start(0);
+   return d->start();
 }
 
 /*!
@@ -255,16 +255,20 @@ QAudio::State QAudioOutput::state() const
    return d->state();
 }
 
-/*!
-    \fn QAudioOutput::stateChanged(QAudio::State state)
-    This signal is emitted when the device \a state has changed.
-    This is the current state of the audio output.
-*/
-
-/*!
-    \fn QAudioOutput::notify()
-    This signal is emitted when x ms of audio data has been processed
-    the interval set by setNotifyInterval(x).
-*/
-
-QT_END_NAMESPACE
+void QAudioOutput::setVolume(qreal volume)
+{
+    qreal v = qBound(qreal(0.0), volume, qreal(1.0));
+    d->setVolume(v);
+}
+qreal QAudioOutput::volume() const
+{
+    return d->volume();
+}
+QString QAudioOutput::category() const
+{
+    return d->category();
+}
+void QAudioOutput::setCategory(const QString &category)
+{
+    d->setCategory(category);
+}

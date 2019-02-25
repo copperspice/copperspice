@@ -21,7 +21,7 @@
 ***********************************************************************/
 
 #include <qaudiodevicefactory_p.h>
-#include <qaudioengine.h>
+#include <qaudiosystem.h>
 #include <qaudiodeviceinfo.h>
 
 #include <qmap.h>
@@ -29,10 +29,16 @@
 class QAudioDeviceInfoPrivate : public QSharedData
 {
  public:
-   QAudioDeviceInfoPrivate(): info(0) {}
+   QAudioDeviceInfoPrivate()
+        : mode(QAudio::AudioOutput), info(nullptr)
+   { }
    QAudioDeviceInfoPrivate(const QString &r, const QString &h, QAudio::Mode m):
       realm(r), handle(h), mode(m) {
-      info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
+      if (! handle.isEmpty()) {
+       info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
+      } else {
+         info = nullptr;
+      }
    }
 
    QAudioDeviceInfoPrivate(const QAudioDeviceInfoPrivate &other):
@@ -58,7 +64,7 @@ class QAudioDeviceInfoPrivate : public QSharedData
    QString  realm;
    QString  handle;
    QAudio::Mode mode;
-   QAbstractAudioDeviceInfo   *info;
+   QAbstractAudioDeviceInfo *info;
 };
 
 /*!
@@ -100,7 +106,22 @@ QAudioDeviceInfo &QAudioDeviceInfo::operator=(const QAudioDeviceInfo &other)
 /*!
     Returns whether this QAudioDeviceInfo object holds a device definition.
 */
+bool QAudioDeviceInfo::operator ==(const QAudioDeviceInfo &other) const
+{
+    if (d == other.d)
+        return true;
+    if (d->realm == other.d->realm
+            && d->mode == other.d->mode
+            && d->handle == other.d->handle
+            && deviceName() == other.deviceName())
+        return true;
+    return false;
+}
 
+bool QAudioDeviceInfo::operator !=(const QAudioDeviceInfo &other) const
+{
+    return !operator==(other);
+}
 bool QAudioDeviceInfo::isNull() const
 {
    return d->info == 0;
@@ -164,203 +185,169 @@ QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
    }
 
    QAudioFormat nearest = settings;
-   nearest.setCodec("audio/pcm");
 
-   if (nearest.sampleType() == QAudioFormat::Unknown) {
-      QAudioFormat preferred = preferredFormat();
-      nearest.setSampleType(preferred.sampleType());
-   }
+    QList<QString> testCodecs = supportedCodecs();
+    QList<int> testChannels = supportedChannelCounts();
+    QList<QAudioFormat::Endian> testByteOrders = supportedByteOrders();
+    QList<QAudioFormat::SampleType> testSampleTypes;
+    QList<QAudioFormat::SampleType> sampleTypesAvailable = supportedSampleTypes();
+    QMap<int,int> testSampleRates;
+    QList<int> sampleRatesAvailable = supportedSampleRates();
+    QMap<int,int> testSampleSizes;
+    QList<int> sampleSizesAvailable = supportedSampleSizes();
 
-   QMap<int, int> testFrequencies;
-   QList<int> frequenciesAvailable = supportedFrequencies();
-   QMap<int, int> testSampleSizes;
-   QList<int> sampleSizesAvailable = supportedSampleSizes();
+    // Get sorted lists for checking
+    if (testCodecs.contains(settings.codec())) {
+        testCodecs.removeAll(settings.codec());
+        testCodecs.insert(0, settings.codec());
+    }
+    testChannels.removeAll(settings.channelCount());
+    testChannels.insert(0, settings.channelCount());
+    testByteOrders.removeAll(settings.byteOrder());
+    testByteOrders.insert(0, settings.byteOrder());
 
-   // Get sorted sampleSizes (equal to and ascending values only)
+    // Get sorted sampleSizes (equal to and ascending values only)
+    if (sampleTypesAvailable.contains(settings.sampleType()))
+        testSampleTypes.append(settings.sampleType());
+    if (sampleTypesAvailable.contains(QAudioFormat::SignedInt))
+        testSampleTypes.append(QAudioFormat::SignedInt);
+    if (sampleTypesAvailable.contains(QAudioFormat::UnSignedInt))
+        testSampleTypes.append(QAudioFormat::UnSignedInt);
+    if (sampleTypesAvailable.contains(QAudioFormat::Float))
+        testSampleTypes.append(QAudioFormat::Float);
    if (sampleSizesAvailable.contains(settings.sampleSize())) {
       testSampleSizes.insert(0, settings.sampleSize());
    }
+
    sampleSizesAvailable.removeAll(settings.sampleSize());
    for (int size : sampleSizesAvailable) {
       int larger  = (size > settings.sampleSize()) ? size : settings.sampleSize();
       int smaller = (size > settings.sampleSize()) ? settings.sampleSize() : size;
-      if (size >= settings.sampleSize()) {
+
+        bool isMultiple = ( 0 == (larger % smaller));
          int diff = larger - smaller;
-         testSampleSizes.insert(diff, size);
-      }
+        testSampleSizes.insert((isMultiple ? diff : diff+100000), size);
    }
 
-   // Get sorted frequencies (equal to and ascending values only)
-   if (frequenciesAvailable.contains(settings.frequency())) {
-      testFrequencies.insert(0, settings.frequency());
+   if (sampleRatesAvailable.contains(settings.sampleRate())) {
+        testSampleRates.insert(0,settings.sampleRate());
    }
 
-   frequenciesAvailable.removeAll(settings.frequency());
-   for (int frequency : frequenciesAvailable) {
-      int larger  = (frequency > settings.frequency()) ? frequency : settings.frequency();
-      int smaller = (frequency > settings.frequency()) ? settings.frequency() : frequency;
-      if (frequency >= settings.frequency()) {
-         int diff = larger - smaller;
-         testFrequencies.insert(diff, frequency);
-      }
+    sampleRatesAvailable.removeAll(settings.sampleRate());
+    for (int sampleRate : sampleRatesAvailable) {
+        int larger  = (sampleRate > settings.sampleRate()) ? sampleRate : settings.sampleRate();
+        int smaller = (sampleRate > settings.sampleRate()) ? settings.sampleRate() : sampleRate;
+        bool isMultiple = ( 0 == (larger % smaller));
+        int diff = larger - smaller;
+        testSampleRates.insert((isMultiple ? diff : diff+100000), sampleRate);
+
    }
 
-   // Try to find nearest
-   // Check ascending frequencies, ascending sampleSizes
-   QMapIterator<int, int> sz(testSampleSizes);
-   while (sz.hasNext()) {
-      sz.next();
-      nearest.setSampleSize(sz.value());
-      QMapIterator<int, int> i(testFrequencies);
-      while (i.hasNext()) {
-         i.next();
-         nearest.setFrequency(i.value());
-         if (isFormatSupported(nearest)) {
-            return nearest;
-         }
-      }
-   }
+    // Try to find nearest
+    for (QString codec : testCodecs) {
+        nearest.setCodec(codec);
+
+        for (QAudioFormat::Endian order : testByteOrders) {
+            nearest.setByteOrder(order);
+
+            for (QAudioFormat::SampleType sample : testSampleTypes) {
+                nearest.setSampleType(sample);
+                QMapIterator<int, int> sz(testSampleSizes);
+
+                while (sz.hasNext()) {
+                    sz.next();
+                    nearest.setSampleSize(sz.value());
+
+                    for (int channel : testChannels) {
+                        nearest.setChannelCount(channel);
+                        QMapIterator<int, int> i(testSampleRates);
+
+                        while (i.hasNext()) {
+                            i.next();
+                            nearest.setSampleRate(i.value());
+                            if (isFormatSupported(nearest))
+                                return nearest;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
    //Fallback
    return preferredFormat();
 }
 
-/*!
-    Returns a list of supported codecs.
 
-    All platform and plugin implementations should provide support for:
-
-    "audio/pcm" - Linear PCM
-
-    For writing plugins to support additional codecs refer to:
-
-    http://www.iana.org/assignments/media-types/audio/
-*/
 
 QStringList QAudioDeviceInfo::supportedCodecs() const
 {
-   return isNull() ? QStringList() : d->info->codecList();
+    return isNull() ? QStringList() : d->info->supportedCodecs();
 }
 
-/*!
-    Returns a list of supported sample rates.
-
-    \since 4.7
-*/
 
 QList<int> QAudioDeviceInfo::supportedSampleRates() const
 {
-   return supportedFrequencies();
+    return isNull() ? QList<int>() : d->info->supportedSampleRates();
 }
 
-/*!
-    \obsolete
 
-    Use supportedSampleRates() instead.
-*/
-
-QList<int> QAudioDeviceInfo::supportedFrequencies() const
-{
-   return isNull() ? QList<int>() : d->info->frequencyList();
-}
-
-/*!
-    Returns a list of supported channel counts.
-
-    \since 4.7
-*/
 
 QList<int> QAudioDeviceInfo::supportedChannelCounts() const
 {
-   return supportedChannels();
+    return isNull() ? QList<int>() : d->info->supportedChannelCounts();
 }
 
-/*!
-    \obsolete
 
-    Use supportedChannelCount() instead.
-*/
-
-QList<int> QAudioDeviceInfo::supportedChannels() const
-{
-   return isNull() ? QList<int>() : d->info->channelsList();
-}
-
-/*!
-    Returns a list of supported sample sizes.
-*/
 
 QList<int> QAudioDeviceInfo::supportedSampleSizes() const
 {
-   return isNull() ? QList<int>() : d->info->sampleSizeList();
+    return isNull() ? QList<int>() : d->info->supportedSampleSizes();
 }
 
-/*!
-    Returns a list of supported byte orders.
-*/
 
 QList<QAudioFormat::Endian> QAudioDeviceInfo::supportedByteOrders() const
 {
-   return isNull() ? QList<QAudioFormat::Endian>() : d->info->byteOrderList();
+    return isNull() ? QList<QAudioFormat::Endian>() : d->info->supportedByteOrders();
 }
-
-/*!
-    Returns a list of supported sample types.
-*/
 
 QList<QAudioFormat::SampleType> QAudioDeviceInfo::supportedSampleTypes() const
 {
-   return isNull() ? QList<QAudioFormat::SampleType>() : d->info->sampleTypeList();
+    return isNull() ? QList<QAudioFormat::SampleType>() : d->info->supportedSampleTypes();
 }
-
-/*!
-    Returns the name of the default input audio device.
-    All platform and audio plugin implementations provide a default audio device to use.
-*/
 
 QAudioDeviceInfo QAudioDeviceInfo::defaultInputDevice()
 {
    return QAudioDeviceFactory::defaultInputDevice();
 }
-
-/*!
-    Returns the name of the default output audio device.
-    All platform and audio plugin implementations provide a default audio device to use.
-*/
-
 QAudioDeviceInfo QAudioDeviceInfo::defaultOutputDevice()
 {
    return QAudioDeviceFactory::defaultOutputDevice();
 }
-
-/*!
-    Returns a list of audio devices that support \a mode.
-*/
 
 QList<QAudioDeviceInfo> QAudioDeviceInfo::availableDevices(QAudio::Mode mode)
 {
    return QAudioDeviceFactory::availableDevices(mode);
 }
 
-// internal
+
 QAudioDeviceInfo::QAudioDeviceInfo(const QString &realm, const QString &handle, QAudio::Mode mode):
    d(new QAudioDeviceInfoPrivate(realm, handle, mode))
 {
 }
 
-// internal
+
 QString QAudioDeviceInfo::realm() const
 {
    return d->realm;
 }
 
-// internal
 QString QAudioDeviceInfo::handle() const
 {
    return d->handle;
 }
 
-// internal
+
 QAudio::Mode QAudioDeviceInfo::mode() const
 {
    return d->mode;

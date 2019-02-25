@@ -20,15 +20,46 @@
 *
 ***********************************************************************/
 
-#include <QtMultimedia/qaudioengineplugin.h>
+#ifndef QSOUND_H
+#define QSOUND_H
 
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
 
-QAudioEnginePlugin::QAudioEnginePlugin(QObject *parent) :
-   QObject(parent)
-{}
+class QSoundEffect;
 
-QAudioEnginePlugin::~QAudioEnginePlugin()
-{}
+class Q_MULTIMEDIA_EXPORT QSound : public QObject
+{
+    MULTI_CS_OBJECT(QSound)
 
-QT_END_NAMESPACE
+public:
+    enum Loop
+    {
+       Infinite = -1
+    };
+
+    explicit QSound(const QString &filename, QObject *parent = nullptr);
+    ~QSound();
+
+    static void play(const QString &filename);
+
+    int loops() const;
+    int loopsRemaining() const;
+    void setLoops(int);
+    QString fileName() const;
+
+    bool isFinished() const;
+
+    MULTI_CS_SLOT_1(Public, void play())
+    MULTI_CS_SLOT_OVERLOAD(play, ())
+
+    MULTI_CS_SLOT_1(Public, void stop())
+    MULTI_CS_SLOT_2(stop)
+
+private:
+    MULTI_CS_SLOT_1(Private, void deleteOnComplete())
+    MULTI_CS_SLOT_2(deleteOnComplete)
+
+    QSoundEffect *m_soundEffect;
+};
+
+#endif

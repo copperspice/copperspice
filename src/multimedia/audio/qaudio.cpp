@@ -20,10 +20,8 @@
 *
 ***********************************************************************/
 
-#include <QtMultimedia/qaudio.h>
-
-
-QT_BEGIN_NAMESPACE
+#include <qaudio.h>
+#include <QDebug>
 
 namespace QAudio {
 
@@ -34,49 +32,108 @@ class RegisterMetaTypes
       qRegisterMetaType<QAudio::Error>();
       qRegisterMetaType<QAudio::State>();
       qRegisterMetaType<QAudio::Mode>();
+      qRegisterMetaType<QAudio::Role>();
    }
 
 } _register;
 
 }
 
-/*!
-    \namespace QAudio
-    \brief The QAudio namespace contains enums used by the audio classes.
-    \inmodule QtMultimedia
-    \ingroup multimedia
-    \since 4.6
-*/
 
-/*!
-    \enum QAudio::Error
+QDebug operator<<(QDebug dbg, QAudio::Error error)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    switch (error) {
+        case QAudio::NoError:
+            dbg << "NoError";
+            break;
+        case QAudio::OpenError:
+            dbg << "OpenError";
+            break;
+        case QAudio::IOError:
+            dbg << "IOError";
+            break;
+        case QAudio::UnderrunError:
+            dbg << "UnderrunError";
+            break;
+        case QAudio::FatalError:
+            dbg << "FatalError";
+            break;
+    }
+    return dbg;
+}
+QDebug operator<<(QDebug dbg, QAudio::State state)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    switch (state) {
+        case QAudio::ActiveState:
+            dbg << "ActiveState";
+            break;
+        case QAudio::SuspendedState:
+            dbg << "SuspendedState";
+            break;
+        case QAudio::StoppedState:
+            dbg << "StoppedState";
+            break;
+        case QAudio::IdleState:
+            dbg << "IdleState";
+            break;
+    }
+    return dbg;
+}
+QDebug operator<<(QDebug dbg, QAudio::Mode mode)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    switch (mode) {
+        case QAudio::AudioInput:
+            dbg << "AudioInput";
+            break;
+        case QAudio::AudioOutput:
+            dbg << "AudioOutput";
+            break;
+    }
+    return dbg;
+}
+QDebug operator<<(QDebug dbg, QAudio::Role role)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.nospace();
+    switch (role) {
+    case QAudio::UnknownRole:
+        dbg << "UnknownRole";
+        break;
+    case QAudio::AccessibilityRole:
+        dbg << "AccessibilityRole";
+        break;
+    case QAudio::AlarmRole:
+        dbg << "AlarmRole";
+        break;
+    case QAudio::GameRole:
+        dbg << "GameRole";
+        break;
+    case QAudio::MusicRole:
+        dbg << "MusicRole";
+        break;
+    case QAudio::NotificationRole:
+        dbg << "NotificationRole";
+        break;
+    case QAudio::RingtoneRole:
+        dbg << "RingtoneRole";
+        break;
+    case QAudio::SonificationRole:
+        dbg << "SonificationRole";
+        break;
+    case QAudio::VideoRole:
+        dbg << "VideoRole";
+        break;
+    case QAudio::VoiceCommunicationRole:
+        dbg << "VoiceCommunicationRole";
+        break;
+    }
+    return dbg;
+}
 
-    \value NoError         No errors have occurred
-    \value OpenError       An error opening the audio device
-    \value IOError         An error occurred during read/write of audio device
-    \value UnderrunError   Audio data is not being fed to the audio device at a fast enough rate
-    \value FatalError      A non-recoverable error has occurred, the audio device is not usable at this time.
-*/
-
-/*!
-    \enum QAudio::State
-
-    \value ActiveState     Audio data is being processed, this state is set after start() is called
-                           and while audio data is available to be processed.
-    \value SuspendedState  The audio device is in a suspended state, this state will only be entered
-                           after suspend() is called.
-    \value StoppedState    The audio device is closed, not processing any audio data
-    \value IdleState       The QIODevice passed in has no data and audio system's buffer is empty, this state
-                           is set after start() is called and while no audio data is available to be processed.
-*/
-
-/*!
-    \enum QAudio::Mode
-
-    \value AudioOutput   audio output device
-    \value AudioInput    audio input device
-*/
-
-
-QT_END_NAMESPACE
 
