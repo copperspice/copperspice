@@ -56,9 +56,9 @@ QScriptObjectDelegate::Type ClassObjectDelegate::type() const
 }
 
 bool ClassObjectDelegate::getOwnPropertySlot(QScriptObject *object,
-      JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertySlot &slot)
+   JSC::ExecState *exec,
+   const JSC::Identifier &propertyName,
+   JSC::PropertySlot &slot)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    QScript::SaveFrameHelper saveFrame(engine, exec);
@@ -74,7 +74,7 @@ bool ClassObjectDelegate::getOwnPropertySlot(QScriptObject *object,
    QScriptStringPrivate::init(scriptName, &scriptName_d);
    uint id = 0;
    QScriptClass::QueryFlags flags = m_scriptClass->queryProperty(
-                                       scriptObject, scriptName, QScriptClass::HandlesReadAccess, &id);
+         scriptObject, scriptName, QScriptClass::HandlesReadAccess, &id);
    if (flags & QScriptClass::HandlesReadAccess) {
       QScriptValue value = m_scriptClass->property(scriptObject, scriptName, id);
       if (!value.isValid()) {
@@ -90,9 +90,9 @@ bool ClassObjectDelegate::getOwnPropertySlot(QScriptObject *object,
 }
 
 bool ClassObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object,
-      JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &descriptor)
+   JSC::ExecState *exec,
+   const JSC::Identifier &propertyName,
+   JSC::PropertyDescriptor &descriptor)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    QScript::SaveFrameHelper saveFrame(engine, exec);
@@ -108,7 +108,7 @@ bool ClassObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object,
    QScriptStringPrivate::init(scriptName, &scriptName_d);
    uint id = 0;
    QScriptClass::QueryFlags qflags = m_scriptClass->queryProperty(
-                                        scriptObject, scriptName, QScriptClass::HandlesReadAccess, &id);
+         scriptObject, scriptName, QScriptClass::HandlesReadAccess, &id);
    if (qflags & QScriptClass::HandlesReadAccess) {
       QScriptValue::PropertyFlags pflags = m_scriptClass->propertyFlags(scriptObject, scriptName, id);
       unsigned attribs = 0;
@@ -143,8 +143,8 @@ bool ClassObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object,
 }
 
 void ClassObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
-                              const JSC::Identifier &propertyName,
-                              JSC::JSValue value, JSC::PutPropertySlot &slot)
+   const JSC::Identifier &propertyName,
+   JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    QScript::SaveFrameHelper saveFrame(engine, exec);
@@ -154,7 +154,7 @@ void ClassObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
    QScriptStringPrivate::init(scriptName, &scriptName_d);
    uint id = 0;
    QScriptClass::QueryFlags flags = m_scriptClass->queryProperty(
-                                       scriptObject, scriptName, QScriptClass::HandlesWriteAccess, &id);
+         scriptObject, scriptName, QScriptClass::HandlesWriteAccess, &id);
    if (flags & QScriptClass::HandlesWriteAccess) {
       m_scriptClass->setProperty(scriptObject, scriptName, id, engine->scriptValueFromJSCValue(value));
       return;
@@ -163,7 +163,7 @@ void ClassObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 }
 
 bool ClassObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *exec,
-      const JSC::Identifier &propertyName)
+   const JSC::Identifier &propertyName)
 {
    // ### avoid duplication of put()
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
@@ -174,7 +174,7 @@ bool ClassObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *
    QScriptStringPrivate::init(scriptName, &scriptName_d);
    uint id = 0;
    QScriptClass::QueryFlags flags = m_scriptClass->queryProperty(
-                                       scriptObject, scriptName, QScriptClass::HandlesWriteAccess, &id);
+         scriptObject, scriptName, QScriptClass::HandlesWriteAccess, &id);
    if (flags & QScriptClass::HandlesWriteAccess) {
       if (m_scriptClass->propertyFlags(scriptObject, scriptName, id) & QScriptValue::Undeletable) {
          return false;
@@ -186,8 +186,8 @@ bool ClassObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *
 }
 
 void ClassObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState *exec,
-      JSC::PropertyNameArray &propertyNames,
-      JSC::EnumerationMode mode)
+   JSC::PropertyNameArray &propertyNames,
+   JSC::EnumerationMode mode)
 {
    // For compatibility with the old back-end, normal JS properties
    // are added first.
@@ -217,7 +217,7 @@ JSC::CallType ClassObjectDelegate::getCallData(QScriptObject *, JSC::CallData &c
 }
 
 JSC::JSValue JSC_HOST_CALL ClassObjectDelegate::call(JSC::ExecState *exec, JSC::JSObject *callee,
-      JSC::JSValue thisValue, const JSC::ArgList &args)
+   JSC::JSValue thisValue, const JSC::ArgList &args)
 {
    if (!callee->inherits(&QScriptObject::info)) {
       return JSC::throwError(exec, JSC::TypeError, "callee is not a ClassObject object");
@@ -251,7 +251,7 @@ JSC::ConstructType ClassObjectDelegate::getConstructData(QScriptObject *, JSC::C
 }
 
 JSC::JSObject *ClassObjectDelegate::construct(JSC::ExecState *exec, JSC::JSObject *callee,
-      const JSC::ArgList &args)
+   const JSC::ArgList &args)
 {
    Q_ASSERT(callee->inherits(&QScriptObject::info));
    QScriptObject *obj = static_cast<QScriptObject *>(callee);
@@ -265,7 +265,7 @@ JSC::JSObject *ClassObjectDelegate::construct(JSC::ExecState *exec, JSC::JSObjec
 
    QScriptValue defaultObject = ctx->thisObject();
    QScriptValue result = qvariant_cast<QScriptValue>(scriptClass->extension(QScriptClass::Callable,
-                         QVariant::fromValue(ctx)));
+            QVariant::fromValue(ctx)));
    if (!result.isObject()) {
       result = defaultObject;
    }
@@ -275,7 +275,7 @@ JSC::JSObject *ClassObjectDelegate::construct(JSC::ExecState *exec, JSC::JSObjec
 }
 
 bool ClassObjectDelegate::hasInstance(QScriptObject *object, JSC::ExecState *exec,
-                                      JSC::JSValue value, JSC::JSValue proto)
+   JSC::JSValue value, JSC::JSValue proto)
 {
    if (!scriptClass()->supportsExtension(QScriptClass::HasInstance)) {
       return QScriptObjectDelegate::hasInstance(object, exec, value, proto);

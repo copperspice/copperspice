@@ -29,87 +29,6 @@
 #include "CodeBlock.h"
 #include "Instruction.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \since 4.4
-  \class QScriptEngineAgent
-
-  \brief The QScriptEngineAgent class provides an interface to report events pertaining to QScriptEngine execution.
-
-  \ingroup script
-
-
-  The QScriptEngineAgent class is the basis of tools that monitor and/or control the execution of a
-  QScriptEngine, such as debuggers and profilers.
-
-  To process script loading and unloading events, reimplement the
-  scriptLoad() and scriptUnload() functions. scriptLoad() is called
-  after the input to QScriptEngine::evaluate() has been parsed, right
-  before the given script is executed. The engine assigns each
-  script an ID, which is available as one of the arguments to
-  scriptLoad(); subsequently, other event handlers can use the ID to
-  identify a particular script. One common usage of scriptLoad() is
-  to retain the script text, filename and base line number (the
-  original input to QScriptEngine::evaluate()), so that other event
-  handlers can e.g. map a line number to the corresponding line of
-  text.
-
-  scriptUnload() is called when the QScriptEngine has no further use
-  for a script; the QScriptEngineAgent may at this point safely
-  discard any resources associated with the script (such as the
-  script text). Note that after scriptUnload() has been called, the
-  QScriptEngine may reuse the relevant script ID for new scripts
-  (i.e. as argument to a subsequent call to scriptLoad()).
-
-  Evaluating the following script will result in scriptUnload()
-  being called immediately after evaluation has completed:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengineagent.cpp 0
-
-  Evaluating the following script will \b{not} result in a call to
-  scriptUnload() when evaluation has completed:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengineagent.cpp 1
-
-  The script isn't unloaded because it defines a function (\c{cube})
-  that remains in the script environment after evaluation has
-  completed. If a subsequent script removed the \c{cube} function
-  (e.g. by setting it to \c{null}), scriptUnload() would be called
-  when the function is garbage collected. In general terms, a script
-  isn't unloaded until the engine has determined that none of its
-  contents is referenced.
-
-  To process script function calls and returns, reimplement the
-  functionEntry() and functionExit() functions. functionEntry() is
-  called when a script function is about to be executed;
-  functionExit() is called when a script function is about to return,
-  either normally or due to an exception.
-
-  To process individual script statements, reimplement
-  positionChange(). positionChange() is called each time the engine is
-  about to execute a new statement of a script, and thus offers the
-  finest level of script monitoring.
-
-  To process exceptions, reimplement exceptionThrow() and
-  exceptionCatch(). exceptionThrow() is called when a script exception
-  is thrown, before it has been handled. exceptionCatch() is called
-  when an exception handler is present, and execution is about to be
-  resumed at the handler code.
-
-  \sa QScriptEngine::setAgent(), QScriptContextInfo
-*/
-
-/*!
-  \enum QScriptEngineAgent::Extension
-
-  This enum specifies the possible extensions to a QScriptEngineAgent.
-
-  \value DebuggerInvocationRequest The agent handles \c{debugger} script statements.
-
-  \sa extension()
-*/
-
 
 void QScriptEngineAgentPrivate::attach()
 {
@@ -158,7 +77,7 @@ void QScriptEngineAgentPrivate::exceptionCatch(const JSC::DebuggerCallFrame &fra
 }
 
 void QScriptEngineAgentPrivate::atStatement(const JSC::DebuggerCallFrame &frame, intptr_t sourceID,
-      int lineno/*, int column*/)
+   int lineno/*, int column*/)
 {
    QScript::UStringSourceProviderWithFeedback *source = engine->loadedScripts.value(sourceID);
    if (!source) {
@@ -190,7 +109,7 @@ void QScriptEngineAgentPrivate::evaluateStop(const JSC::JSValue &returnValue, in
 }
 
 void QScriptEngineAgentPrivate::didReachBreakpoint(const JSC::DebuggerCallFrame &frame,
-      intptr_t sourceID, int lineno/*, int column*/)
+   intptr_t sourceID, int lineno/*, int column*/)
 {
    if (q_ptr->supportsExtension(QScriptEngineAgent::DebuggerInvocationRequest)) {
       QScript::UStringSourceProviderWithFeedback *source = engine->loadedScripts.value(sourceID);
@@ -269,12 +188,8 @@ QScriptEngineAgent::~QScriptEngineAgent()
   \sa scriptUnload()
 */
 void QScriptEngineAgent::scriptLoad(qint64 id, const QString &program,
-                                    const QString &fileName, int baseLineNumber)
+   const QString &fileName, int baseLineNumber)
 {
-   Q_UNUSED(id);
-   Q_UNUSED(program);
-   Q_UNUSED(fileName);
-   Q_UNUSED(baseLineNumber);
 }
 
 /*!
@@ -365,7 +280,7 @@ void QScriptEngineAgent::functionEntry(qint64 scriptId)
   \sa functionEntry(), QScriptEngine::hasUncaughtException()
 */
 void QScriptEngineAgent::functionExit(qint64 scriptId,
-                                      const QScriptValue &returnValue)
+   const QScriptValue &returnValue)
 {
    Q_UNUSED(scriptId);
    Q_UNUSED(returnValue);
@@ -389,11 +304,8 @@ void QScriptEngineAgent::functionExit(qint64 scriptId,
   \sa scriptLoad(), functionEntry()
 */
 void QScriptEngineAgent::positionChange(qint64 scriptId,
-                                        int lineNumber, int columnNumber)
+   int lineNumber, int columnNumber)
 {
-   Q_UNUSED(scriptId);
-   Q_UNUSED(lineNumber);
-   Q_UNUSED(columnNumber);
 }
 
 /*!
@@ -415,8 +327,8 @@ void QScriptEngineAgent::positionChange(qint64 scriptId,
   \sa exceptionCatch()
 */
 void QScriptEngineAgent::exceptionThrow(qint64 scriptId,
-                                        const QScriptValue &exception,
-                                        bool hasHandler)
+   const QScriptValue &exception,
+   bool hasHandler)
 {
    Q_UNUSED(scriptId);
    Q_UNUSED(exception);
@@ -434,7 +346,7 @@ void QScriptEngineAgent::exceptionThrow(qint64 scriptId,
   \sa exceptionThrow()
 */
 void QScriptEngineAgent::exceptionCatch(qint64 scriptId,
-                                        const QScriptValue &exception)
+   const QScriptValue &exception)
 {
    Q_UNUSED(scriptId);
    Q_UNUSED(exception);
@@ -473,7 +385,7 @@ bool QScriptEngineAgent::supportsExtension(Extension extension) const
   \sa supportsExtension()
 */
 QVariant QScriptEngineAgent::extension(Extension extension,
-                                       const QVariant &argument)
+   const QVariant &argument)
 {
    Q_UNUSED(extension);
    Q_UNUSED(argument);
@@ -489,4 +401,4 @@ QScriptEngine *QScriptEngineAgent::engine() const
    return QScriptEnginePrivate::get(d->engine);
 }
 
-QT_END_NAMESPACE
+

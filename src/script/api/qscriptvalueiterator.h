@@ -27,8 +27,6 @@
 #include <QtCore/qscopedpointer.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptString;
 class QScriptValueIteratorPrivate;
 
@@ -66,6 +64,4 @@ class Q_SCRIPT_EXPORT QScriptValueIterator
    Q_DISABLE_COPY(QScriptValueIterator)
 };
 
-QT_END_NAMESPACE
-
-#endif // QSCRIPTVALUEITERATOR_H
+#endif

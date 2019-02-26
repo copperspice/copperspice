@@ -24,34 +24,6 @@
 
 #include "qscriptstring.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \since 4.4
-  \class QScriptClassPropertyIterator
-
-  \brief The QScriptClassPropertyIterator class provides an iterator interface for custom Qt Script objects.
-
-  \ingroup script
-
-  This class is only relevant if you have subclassed QScriptClass and
-  want to provide enumeration of your custom properties (e.g. when
-  objects of your class are used with QScriptValueIterator, or with
-  the for-in statement in scripts).
-
-  The object() function returns the Qt Script object the iterator is
-  traversing.
-
-  toFront(), hasNext() and next() provide forward iteration.
-
-  toBack(), hasPrevious() and previous() provide backward iteration.
-
-  name(), id() and flags() return information about the last property
-  that was jumped over using next() or previous().
-
-  \sa QScriptClass::newIterator(), QScriptValueIterator
-*/
-
 class QScriptClassPropertyIteratorPrivate
 {
    Q_DECLARE_PUBLIC(QScriptClassPropertyIterator)
@@ -81,7 +53,7 @@ QScriptClassPropertyIterator::QScriptClassPropertyIterator(const QScriptValue &o
   \internal
 */
 QScriptClassPropertyIterator::QScriptClassPropertyIterator(const QScriptValue &object,
-      QScriptClassPropertyIteratorPrivate &dd)
+   QScriptClassPropertyIteratorPrivate &dd)
    : d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
@@ -200,4 +172,3 @@ QScriptValue::PropertyFlags QScriptClassPropertyIterator::flags() const
    return object().propertyFlags(name());
 }
 
-QT_END_NAMESPACE

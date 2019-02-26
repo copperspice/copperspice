@@ -41,10 +41,10 @@ class QScriptActivationObject : public JSC::JSVariableObject
    virtual bool getOwnPropertySlot(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::PropertySlot &);
    virtual bool getOwnPropertyDescriptor(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::PropertyDescriptor &);
    virtual void getOwnPropertyNames(JSC::ExecState *, JSC::PropertyNameArray &,
-                                    JSC::EnumerationMode mode = JSC::ExcludeDontEnumProperties);
+      JSC::EnumerationMode mode = JSC::ExcludeDontEnumProperties);
 
    virtual void putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value,
-                                  unsigned attributes);
+      unsigned attributes);
    virtual void put(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::JSValue value, JSC::PutPropertySlot &);
    virtual void put(JSC::ExecState *, unsigned propertyName, JSC::JSValue value);
 

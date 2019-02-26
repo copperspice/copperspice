@@ -26,8 +26,6 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptStringPrivate;
 
 class Q_SCRIPT_EXPORT QScriptString
@@ -44,7 +42,7 @@ class Q_SCRIPT_EXPORT QScriptString
    bool operator==(const QScriptString &other) const;
    bool operator!=(const QScriptString &other) const;
 
-   quint32 toArrayIndex(bool *ok = 0) const;
+   quint32 toArrayIndex(bool *ok = nullptr) const;
 
    QString toString() const;
    operator QString() const;
@@ -57,6 +55,6 @@ class Q_SCRIPT_EXPORT QScriptString
 
 Q_SCRIPT_EXPORT uint qHash(const QScriptString &key);
 
-QT_END_NAMESPACE
+
 
 #endif // QSCRIPTSTRING_H

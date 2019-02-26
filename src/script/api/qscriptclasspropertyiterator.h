@@ -24,11 +24,8 @@
 #define QSCRIPTCLASSPROPERTYITERATOR_H
 
 #include <QtCore/qstring.h>
-
 #include <QtCore/qscopedpointer.h>
 #include <QtScript/qscriptvalue.h>
-
-QT_BEGIN_NAMESPACE
 
 class QScriptClassPropertyIteratorPrivate;
 
@@ -63,6 +60,5 @@ class Q_SCRIPT_EXPORT QScriptClassPropertyIterator
    Q_DISABLE_COPY(QScriptClassPropertyIterator)
 };
 
-QT_END_NAMESPACE
 
 #endif

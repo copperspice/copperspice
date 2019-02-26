@@ -163,10 +163,10 @@ class Q_SCRIPT_EXPORT QScriptEngine
 
 
    QScriptValue newQObject(QObject *object, ValueOwnership ownership = QtOwnership,
-                           const QObjectWrapOptions &options = 0);
+      const QObjectWrapOptions &options = 0);
    QScriptValue newQObject(const QScriptValue &scriptObject, QObject *qtObject,
-                           ValueOwnership ownership = QtOwnership,
-                           const QObjectWrapOptions &options = 0);
+      ValueOwnership ownership = QtOwnership,
+      const QObjectWrapOptions &options = 0);
 
    QScriptValue newQMetaObject(const QMetaObject *metaObject, const QScriptValue &ctor = QScriptValue());
 
@@ -183,6 +183,7 @@ class Q_SCRIPT_EXPORT QScriptEngine
    inline QScriptValue toScriptValue(const T &value) {
       return qScriptValueFromValue(this, value);
    }
+
    template <typename T>
    inline T fromScriptValue(const QScriptValue &value) {
       return qscriptvalue_cast<T>(value);
@@ -220,10 +221,10 @@ class Q_SCRIPT_EXPORT QScriptEngine
    static bool convertV2(const QScriptValue &value, int type, void *ptr);
 
    void registerCustomType(int type, MarshalFunction mf, DemarshalFunction df,
-                           const QScriptValue &prototype);
+      const QScriptValue &prototype);
 
    friend inline void qScriptRegisterMetaType_helper(QScriptEngine *,
-         int, MarshalFunction, DemarshalFunction, const QScriptValue &);
+      int, MarshalFunction, DemarshalFunction, const QScriptValue &);
 
    friend inline QScriptValue qScriptValueFromValue_helper(QScriptEngine *, int, const void *);
 
@@ -262,13 +263,13 @@ template <class T> QScriptValue QScriptEngine::scriptValueFromQMetaObject()
    typedef QScriptValue(*ConstructPtr)(QScriptContext *, QScriptEngine *, T *);
    ConstructPtr cptr = qscriptQMetaObjectConstructor<T>;
    return newQMetaObject(&T::staticMetaObject,
-                         newFunction(reinterpret_cast<FunctionWithArgSignature>(cptr), 0));
+         newFunction(reinterpret_cast<FunctionWithArgSignature>(cptr), 0));
 }
 
 #ifdef QT_DEPRECATED
 template <class T>
 inline QT_DEPRECATED QScriptValue qScriptValueFromQMetaObject(QScriptEngine *engine,
-      T * /* dummy */ = 0 )
+   T * /* dummy */ = 0 )
 {
    return engine->scriptValueFromQMetaObject<T>();
 }
@@ -332,9 +333,9 @@ inline QT_DEPRECATED T qScriptValueToValue(const QScriptValue &value)
 #endif
 
 inline void qScriptRegisterMetaType_helper(QScriptEngine *eng, int type,
-      QScriptEngine::MarshalFunction mf,
-      QScriptEngine::DemarshalFunction df,
-      const QScriptValue &prototype)
+   QScriptEngine::MarshalFunction mf,
+   QScriptEngine::DemarshalFunction df,
+   const QScriptValue &prototype)
 {
    eng->registerCustomType(type, mf, df, prototype);
 }
@@ -345,7 +346,7 @@ int qScriptRegisterMetaType(
    QScriptValue (*toScriptValue)(QScriptEngine *, const T &t),
    void (*fromScriptValue)(const QScriptValue &, T &t),
    const QScriptValue &prototype = QScriptValue()
-                                   , T * /* dummy */ = 0  )
+      , T * /* dummy */ = 0  )
 {
    const int id = qRegisterMetaType<T>(); // make sure it's registered
 
@@ -389,13 +390,13 @@ int qScriptRegisterSequenceMetaType(QScriptEngine *engine, const QScriptValue &p
 
 
 Q_SCRIPT_EXPORT bool qScriptConnect(QObject *sender, const QString &signal,
-                  const QScriptValue &receiver, const QScriptValue &function);
+   const QScriptValue &receiver, const QScriptValue &function);
 
 Q_SCRIPT_EXPORT bool qScriptDisconnect(QObject *sender, const QString &signal,
-                  const QScriptValue &receiver, const QScriptValue &function);
+   const QScriptValue &receiver, const QScriptValue &function);
 
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptEngine::QObjectWrapOptions)
 
 
-#endif // QSCRIPTENGINE_H
+#endif

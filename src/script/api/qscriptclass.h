@@ -29,9 +29,6 @@
 #include <QtCore/qscopedpointer.h>
 #include <QtScript/qscriptvalue.h>
 
-
-QT_BEGIN_NAMESPACE
-
 class QScriptString;
 class QScriptClassPropertyIterator;
 
@@ -56,14 +53,14 @@ class Q_SCRIPT_EXPORT QScriptClass
    QScriptEngine *engine() const;
 
    virtual QueryFlags queryProperty(const QScriptValue &object,
-                                    const QScriptString &name,
-                                    QueryFlags flags, uint *id);
+      const QScriptString &name,
+      QueryFlags flags, uint *id);
 
    virtual QScriptValue property(const QScriptValue &object,
-                                 const QScriptString &name, uint id);
+      const QScriptString &name, uint id);
 
    virtual void setProperty(QScriptValue &object, const QScriptString &name,
-                            uint id, const QScriptValue &value);
+      uint id, const QScriptValue &value);
 
    virtual QScriptValue::PropertyFlags propertyFlags(
       const QScriptValue &object, const QScriptString &name, uint id);
@@ -76,7 +73,7 @@ class Q_SCRIPT_EXPORT QScriptClass
 
    virtual bool supportsExtension(Extension extension) const;
    virtual QVariant extension(Extension extension,
-                              const QVariant &argument = QVariant());
+      const QVariant &argument = QVariant());
 
  protected:
    QScriptClass(QScriptEngine *engine, QScriptClassPrivate &dd);
@@ -88,8 +85,5 @@ class Q_SCRIPT_EXPORT QScriptClass
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptClass::QueryFlags)
-
-QT_END_NAMESPACE
-
 
 #endif

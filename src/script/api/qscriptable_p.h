@@ -23,7 +23,7 @@
 #ifndef QSCRIPTABLE_P_H
 #define QSCRIPTABLE_P_H
 
-QT_BEGIN_NAMESPACE
+
 
 class QScriptable;
 
@@ -45,6 +45,6 @@ class QScriptablePrivate
    QScriptable *q_ptr;
 };
 
-QT_END_NAMESPACE
+
 
 #endif

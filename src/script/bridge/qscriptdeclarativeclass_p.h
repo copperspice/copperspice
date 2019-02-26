@@ -121,7 +121,7 @@ class Q_SCRIPT_EXPORT QScriptDeclarativeClass
    quint32 toArrayIndex(const Identifier &, bool *ok);
 
    virtual QScriptClass::QueryFlags queryProperty(Object *, const Identifier &,
-         QScriptClass::QueryFlags flags);
+      QScriptClass::QueryFlags flags);
 
    virtual Value property(Object *, const Identifier &);
    virtual void setProperty(Object *, const Identifier &name, const QScriptValue &);

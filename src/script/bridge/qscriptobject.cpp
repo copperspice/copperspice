@@ -49,8 +49,8 @@ QScriptObject::~QScriptObject()
 }
 
 bool QScriptObject::getOwnPropertySlot(JSC::ExecState *exec,
-                                       const JSC::Identifier &propertyName,
-                                       JSC::PropertySlot &slot)
+   const JSC::Identifier &propertyName,
+   JSC::PropertySlot &slot)
 {
    if (!d || !d->delegate) {
       return JSC::JSObject::getOwnPropertySlot(exec, propertyName, slot);
@@ -60,8 +60,8 @@ bool QScriptObject::getOwnPropertySlot(JSC::ExecState *exec,
 }
 
 bool QScriptObject::getOwnPropertyDescriptor(JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &descriptor)
+   const JSC::Identifier &propertyName,
+   JSC::PropertyDescriptor &descriptor)
 {
    if (!d || !d->delegate) {
       return JSC::JSObject::getOwnPropertyDescriptor(exec, propertyName, descriptor);
@@ -70,7 +70,7 @@ bool QScriptObject::getOwnPropertyDescriptor(JSC::ExecState *exec,
 }
 
 void QScriptObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-                        JSC::JSValue value, JSC::PutPropertySlot &slot)
+   JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
    if (!d || !d->delegate) {
       JSC::JSObject::put(exec, propertyName, value, slot);
@@ -80,7 +80,7 @@ void QScriptObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyNam
 }
 
 bool QScriptObject::deleteProperty(JSC::ExecState *exec,
-                                   const JSC::Identifier &propertyName)
+   const JSC::Identifier &propertyName)
 {
    if (!d || !d->delegate) {
       return JSC::JSObject::deleteProperty(exec, propertyName);
@@ -89,7 +89,7 @@ bool QScriptObject::deleteProperty(JSC::ExecState *exec,
 }
 
 void QScriptObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::PropertyNameArray &propertyNames,
-                                        JSC::EnumerationMode mode)
+   JSC::EnumerationMode mode)
 {
    if (!d || !d->delegate) {
       JSC::JSObject::getOwnPropertyNames(exec, propertyNames, mode);
@@ -159,7 +159,7 @@ bool QScriptObject::hasInstance(JSC::ExecState *exec, JSC::JSValue value, JSC::J
 }
 
 QScriptObjectPrototype::QScriptObjectPrototype(JSC::ExecState *, WTF::PassRefPtr<JSC::Structure> structure,
-      JSC::Structure * /*prototypeFunctionStructure*/)
+   JSC::Structure * /*prototypeFunctionStructure*/)
    : QScriptObject(structure)
 {
 }
@@ -173,36 +173,36 @@ QScriptObjectDelegate::~QScriptObjectDelegate()
 }
 
 bool QScriptObjectDelegate::getOwnPropertySlot(QScriptObject *object, JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertySlot &slot)
+   const JSC::Identifier &propertyName,
+   JSC::PropertySlot &slot)
 {
    return object->JSC::JSObject::getOwnPropertySlot(exec, propertyName, slot);
 }
 
 bool QScriptObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object, JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &descriptor)
+   const JSC::Identifier &propertyName,
+   JSC::PropertyDescriptor &descriptor)
 {
    return object->JSC::JSObject::getOwnPropertyDescriptor(exec, propertyName, descriptor);
 }
 
 
 void QScriptObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
-                                const JSC::Identifier &propertyName,
-                                JSC::JSValue value, JSC::PutPropertySlot &slot)
+   const JSC::Identifier &propertyName,
+   JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
    object->JSC::JSObject::put(exec, propertyName, value, slot);
 }
 
 bool QScriptObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *exec,
-      const JSC::Identifier &propertyName)
+   const JSC::Identifier &propertyName)
 {
    return object->JSC::JSObject::deleteProperty(exec, propertyName);
 }
 
 void QScriptObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState *exec,
-      JSC::PropertyNameArray &propertyNames,
-      JSC::EnumerationMode mode)
+   JSC::PropertyNameArray &propertyNames,
+   JSC::EnumerationMode mode)
 {
    object->JSC::JSObject::getOwnPropertyNames(exec, propertyNames, mode);
 }
@@ -224,7 +224,7 @@ JSC::ConstructType QScriptObjectDelegate::getConstructData(QScriptObject *object
 }
 
 bool QScriptObjectDelegate::hasInstance(QScriptObject *object, JSC::ExecState *exec,
-                                        JSC::JSValue value, JSC::JSValue proto)
+   JSC::JSValue value, JSC::JSValue proto)
 {
    return object->JSC::JSObject::hasInstance(exec, value, proto);
 }

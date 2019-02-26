@@ -33,8 +33,7 @@
 #include "JSString.h"
 
 namespace JSC {
-QT_USE_NAMESPACE
-ASSERT_CLASS_FITS_IN_CELL(QScript::QVariantPrototype);
+QT_USE_NAMESPACE ASSERT_CLASS_FITS_IN_CELL(QScript::QVariantPrototype);
 }
 
 QT_BEGIN_NAMESPACE
@@ -66,7 +65,7 @@ QScriptObjectDelegate::Type QVariantDelegate::type() const
 }
 
 static JSC::JSValue JSC_HOST_CALL variantProtoFuncValueOf(JSC::ExecState *exec, JSC::JSObject *,
-      JSC::JSValue thisValue, const JSC::ArgList &)
+   JSC::JSValue thisValue, const JSC::ArgList &)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    thisValue = engine->toUsableValue(thisValue);
@@ -106,7 +105,7 @@ static JSC::JSValue JSC_HOST_CALL variantProtoFuncValueOf(JSC::ExecState *exec, 
 }
 
 static JSC::JSValue JSC_HOST_CALL variantProtoFuncToString(JSC::ExecState *exec, JSC::JSObject *callee,
-      JSC::JSValue thisValue, const JSC::ArgList &args)
+   JSC::JSValue thisValue, const JSC::ArgList &args)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    thisValue = engine->toUsableValue(thisValue);
@@ -142,15 +141,15 @@ bool QVariantDelegate::compareToObject(QScriptObject *, JSC::ExecState *exec, JS
 }
 
 QVariantPrototype::QVariantPrototype(JSC::ExecState *exec, WTF::PassRefPtr<JSC::Structure> structure,
-                                     JSC::Structure *prototypeFunctionStructure)
+   JSC::Structure *prototypeFunctionStructure)
    : QScriptObject(structure)
 {
    setDelegate(new QVariantDelegate(QVariant()));
 
    putDirectFunction(exec, new (exec) JSC::NativeFunctionWrapper(exec, prototypeFunctionStructure, 0,
-                     exec->propertyNames().toString, variantProtoFuncToString), JSC::DontEnum);
+         exec->propertyNames().toString, variantProtoFuncToString), JSC::DontEnum);
    putDirectFunction(exec, new (exec) JSC::NativeFunctionWrapper(exec, prototypeFunctionStructure, 0,
-                     exec->propertyNames().valueOf, variantProtoFuncValueOf), JSC::DontEnum);
+         exec->propertyNames().valueOf, variantProtoFuncValueOf), JSC::DontEnum);
 }
 
 

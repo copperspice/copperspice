@@ -26,8 +26,6 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptEngine;
 class QScriptValue;
 class QScriptEngineAgentPrivate;
@@ -43,7 +41,7 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
    virtual ~QScriptEngineAgent();
 
    virtual void scriptLoad(qint64 id, const QString &program,
-                           const QString &fileName, int baseLineNumber);
+      const QString &fileName, int baseLineNumber);
    virtual void scriptUnload(qint64 id);
 
    virtual void contextPush();
@@ -51,20 +49,20 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
 
    virtual void functionEntry(qint64 scriptId);
    virtual void functionExit(qint64 scriptId,
-                             const QScriptValue &returnValue);
+      const QScriptValue &returnValue);
 
    virtual void positionChange(qint64 scriptId,
-                               int lineNumber, int columnNumber);
+      int lineNumber, int columnNumber);
 
    virtual void exceptionThrow(qint64 scriptId,
-                               const QScriptValue &exception,
-                               bool hasHandler);
+      const QScriptValue &exception,
+      bool hasHandler);
    virtual void exceptionCatch(qint64 scriptId,
-                               const QScriptValue &exception);
+      const QScriptValue &exception);
 
    virtual bool supportsExtension(Extension extension) const;
    virtual QVariant extension(Extension extension,
-                              const QVariant &argument = QVariant());
+      const QVariant &argument = QVariant());
 
    QScriptEngine *engine() const;
 
@@ -77,6 +75,5 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
    Q_DISABLE_COPY(QScriptEngineAgent)
 };
 
-QT_END_NAMESPACE
 
 #endif

@@ -26,38 +26,6 @@
 #include "qscriptengine.h"
 #include "qscriptengine_p.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \since 4.4
-  \class QScriptString
-
-  \brief The QScriptString class acts as a handle to "interned" strings in a QScriptEngine.
-
-  \ingroup script
-
-
-  QScriptString can be used to achieve faster (repeated)
-  property getting/setting, and comparison of property names, of
-  script objects.
-
-  To get a QScriptString representation of a string, pass the string
-  to QScriptEngine::toStringHandle(). The typical usage pattern is to
-  register one or more pre-defined strings when setting up your script
-  environment, then subsequently use the relevant QScriptString as
-  argument to e.g. QScriptValue::property().
-
-  Call the toString() function to obtain the string that a
-  QScriptString represents.
-
-  Call the toArrayIndex() function to convert a QScriptString to an
-  array index. This is useful when using QScriptClass to implement
-  array-like objects.
-*/
-
-/*!
-  Constructs an invalid QScriptString.
-*/
 QScriptString::QScriptString()
    : d_ptr(0)
 {
@@ -108,7 +76,7 @@ QScriptString::~QScriptString()
 QScriptString &QScriptString::operator=(const QScriptString &other)
 {
    if (d_func() && d_func()->engine && (d_func()->ref.load() == 1) &&
-         (d_func()->type == QScriptStringPrivate::HeapAllocated)) {
+      (d_func()->type == QScriptStringPrivate::HeapAllocated)) {
       // current d_ptr will be deleted at the assignment below, so unregister it first
       d_func()->engine->unregisterScriptString(d_func());
    }
@@ -215,5 +183,3 @@ uint qHash(const QScriptString &key)
    }
    return qHash(d->identifier.ustring().rep());
 }
-
-QT_END_NAMESPACE

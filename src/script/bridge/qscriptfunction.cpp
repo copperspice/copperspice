@@ -47,7 +47,7 @@ const JSC::ClassInfo FunctionWrapper::info = { "QtNativeFunctionWrapper", &Proto
 const JSC::ClassInfo FunctionWithArgWrapper::info = { "QtNativeFunctionWithArgWrapper", &PrototypeFunction::info, 0, 0 };
 
 FunctionWrapper::FunctionWrapper(JSC::ExecState *exec, int length, const JSC::Identifier &name,
-                                 QScriptEngine::FunctionSignature function)
+   QScriptEngine::FunctionSignature function)
    : JSC::PrototypeFunction(exec, length, name, proxyCall),
      data(new Data())
 {
@@ -67,7 +67,7 @@ JSC::ConstructType FunctionWrapper::getConstructData(JSC::ConstructData &consDat
 }
 
 JSC::JSValue FunctionWrapper::proxyCall(JSC::ExecState *exec, JSC::JSObject *callee,
-                                        JSC::JSValue thisObject, const JSC::ArgList &args)
+   JSC::JSValue thisObject, const JSC::ArgList &args)
 {
    FunctionWrapper *self = static_cast<FunctionWrapper *>(callee);
    QScriptEnginePrivate *eng_p = QScript::scriptEngineFromExec(exec);
@@ -88,7 +88,7 @@ JSC::JSValue FunctionWrapper::proxyCall(JSC::ExecState *exec, JSC::JSObject *cal
 }
 
 JSC::JSObject *FunctionWrapper::proxyConstruct(JSC::ExecState *exec, JSC::JSObject *callee,
-      const JSC::ArgList &args)
+   const JSC::ArgList &args)
 {
    FunctionWrapper *self = static_cast<FunctionWrapper *>(callee);
    QScriptEnginePrivate *eng_p = QScript::scriptEngineFromExec(exec);
@@ -114,7 +114,7 @@ JSC::JSObject *FunctionWrapper::proxyConstruct(JSC::ExecState *exec, JSC::JSObje
 }
 
 FunctionWithArgWrapper::FunctionWithArgWrapper(JSC::ExecState *exec, int length, const JSC::Identifier &name,
-      QScriptEngine::FunctionWithArgSignature function, void *arg)
+   QScriptEngine::FunctionWithArgSignature function, void *arg)
    : JSC::PrototypeFunction(exec, length, name, proxyCall),
      data(new Data())
 {
@@ -134,7 +134,7 @@ JSC::ConstructType FunctionWithArgWrapper::getConstructData(JSC::ConstructData &
 }
 
 JSC::JSValue FunctionWithArgWrapper::proxyCall(JSC::ExecState *exec, JSC::JSObject *callee,
-      JSC::JSValue thisObject, const JSC::ArgList &args)
+   JSC::JSValue thisObject, const JSC::ArgList &args)
 {
    FunctionWithArgWrapper *self = static_cast<FunctionWithArgWrapper *>(callee);
    QScriptEnginePrivate *eng_p = QScript::scriptEngineFromExec(exec);
@@ -152,7 +152,7 @@ JSC::JSValue FunctionWithArgWrapper::proxyCall(JSC::ExecState *exec, JSC::JSObje
 }
 
 JSC::JSObject *FunctionWithArgWrapper::proxyConstruct(JSC::ExecState *exec, JSC::JSObject *callee,
-      const JSC::ArgList &args)
+   const JSC::ArgList &args)
 {
    FunctionWithArgWrapper *self = static_cast<FunctionWithArgWrapper *>(callee);
    QScriptEnginePrivate *eng_p = QScript::scriptEngineFromExec(exec);
@@ -161,7 +161,7 @@ JSC::JSObject *FunctionWithArgWrapper::proxyConstruct(JSC::ExecState *exec, JSC:
    eng_p->pushContext(exec, JSC::JSValue(), args, callee, true);
    QScriptContext *ctx = eng_p->contextForFrame(eng_p->currentFrame);
 
-   QScriptValue result = self->data->function(ctx, QScriptEnginePrivate::get(eng_p) , self->data->arg);
+   QScriptValue result = self->data->function(ctx, QScriptEnginePrivate::get(eng_p), self->data->arg);
    if (!result.isObject()) {
       result = ctx->thisObject();
    }

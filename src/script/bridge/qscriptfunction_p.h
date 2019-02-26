@@ -23,11 +23,10 @@
 #ifndef QSCRIPTFUNCTION_P_H
 #define QSCRIPTFUNCTION_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include "qscriptengine.h"
 #include "PrototypeFunction.h"
 
-QT_BEGIN_NAMESPACE
 
 namespace QScript {
 
@@ -40,12 +39,13 @@ class FunctionWrapper : public JSC::PrototypeFunction // ### subclass InternalFu
    };
 
    FunctionWrapper(JSC::ExecState *, int length, const JSC::Identifier &,
-                   QScriptEngine::FunctionSignature);
+      QScriptEngine::FunctionSignature);
    ~FunctionWrapper();
 
    virtual const JSC::ClassInfo *classInfo() const {
       return &info;
    }
+
    static const JSC::ClassInfo info;
 
    QScriptEngine::FunctionSignature function() const {
@@ -56,9 +56,9 @@ class FunctionWrapper : public JSC::PrototypeFunction // ### subclass InternalFu
    virtual JSC::ConstructType getConstructData(JSC::ConstructData &);
 
    static JSC::JSValue JSC_HOST_CALL proxyCall(JSC::ExecState *, JSC::JSObject *,
-         JSC::JSValue, const JSC::ArgList &);
+      JSC::JSValue, const JSC::ArgList &);
    static JSC::JSObject *proxyConstruct(JSC::ExecState *, JSC::JSObject *,
-                                        const JSC::ArgList &);
+      const JSC::ArgList &);
 
  private:
    Data *data;
@@ -74,7 +74,7 @@ class FunctionWithArgWrapper : public JSC::PrototypeFunction
    };
 
    FunctionWithArgWrapper(JSC::ExecState *, int length, const JSC::Identifier &,
-                          QScriptEngine::FunctionWithArgSignature, void *);
+      QScriptEngine::FunctionWithArgSignature, void *);
    ~FunctionWithArgWrapper();
 
    virtual const JSC::ClassInfo *classInfo() const {
@@ -94,9 +94,9 @@ class FunctionWithArgWrapper : public JSC::PrototypeFunction
    virtual JSC::ConstructType getConstructData(JSC::ConstructData &);
 
    static JSC::JSValue JSC_HOST_CALL proxyCall(JSC::ExecState *, JSC::JSObject *,
-         JSC::JSValue , const JSC::ArgList &);
+      JSC::JSValue, const JSC::ArgList &);
    static JSC::JSObject *proxyConstruct(JSC::ExecState *, JSC::JSObject *,
-                                        const JSC::ArgList &);
+      const JSC::ArgList &);
 
  private:
    Data *data;
@@ -104,6 +104,5 @@ class FunctionWithArgWrapper : public JSC::PrototypeFunction
 
 } // namespace QScript
 
-QT_END_NAMESPACE
 
 #endif

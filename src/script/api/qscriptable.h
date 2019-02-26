@@ -25,8 +25,6 @@
 
 #include <QtCore/qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptEngine;
 class QScriptContext;
 class QScriptValue;
@@ -51,7 +49,5 @@ class Q_SCRIPT_EXPORT QScriptable
    Q_DECLARE_PRIVATE(QScriptable)
 };
 
-
-QT_END_NAMESPACE
 
 #endif // QSCRIPTABLE_H

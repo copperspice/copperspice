@@ -35,48 +35,6 @@
 #include "JSArray.h"
 #include "JSFunction.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \since 4.3
-  \class QScriptValueIterator
-
-  \brief The QScriptValueIterator class provides a Java-style iterator for QScriptValue.
-
-  \ingroup script
-
-
-  The QScriptValueIterator constructor takes a QScriptValue as
-  argument.  After construction, the iterator is located at the very
-  beginning of the sequence of properties. Here's how to iterate over
-  all the properties of a QScriptValue:
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalueiterator.cpp 0
-
-  The next() advances the iterator. The name(), value() and flags()
-  functions return the name, value and flags of the last item that was
-  jumped over.
-
-  If you want to remove properties as you iterate over the
-  QScriptValue, use remove(). If you want to modify the value of a
-  property, use setValue().
-
-  Note that QScriptValueIterator only iterates over the QScriptValue's
-  own properties; i.e. it does not follow the prototype chain. You can
-  use a loop like this to follow the prototype chain:
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalueiterator.cpp 1
-
-  Note that QScriptValueIterator will not automatically skip over
-  properties that have the QScriptValue::SkipInEnumeration flag set;
-  that flag only affects iteration in script code.  If you want, you
-  can skip over such properties with code like the following:
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalueiterator.cpp 2
-
-  \sa QScriptValue::property()
-*/
-
 class QScriptValueIteratorPrivate
 {
  public:
@@ -369,4 +327,3 @@ QScriptValueIterator &QScriptValueIterator::operator=(QScriptValue &object)
    return *this;
 }
 
-QT_END_NAMESPACE

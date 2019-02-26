@@ -29,7 +29,6 @@
 #include "SamplingTool.h"
 #include "Executable.h"
 
-QT_BEGIN_NAMESPACE
 
 /*!
   \since 4.7
@@ -51,12 +50,11 @@ QT_BEGIN_NAMESPACE
 */
 
 QScriptProgramPrivate::QScriptProgramPrivate(const QString &src,
-      const QString &fn,
-      int ln)
+   const QString &fn,
+   int ln)
    : sourceCode(src), fileName(fn), firstLineNumber(ln),
      engine(0), _executable(0), sourceId(-1), isCompiled(false)
 {
-   ref.store(0);
 }
 
 QScriptProgramPrivate::~QScriptProgramPrivate()
@@ -74,7 +72,7 @@ QScriptProgramPrivate *QScriptProgramPrivate::get(const QScriptProgram &q)
 }
 
 JSC::EvalExecutable *QScriptProgramPrivate::executable(JSC::ExecState *exec,
-      QScriptEnginePrivate *eng)
+   QScriptEnginePrivate *eng)
 {
    if (_executable) {
       if (eng == engine) {
@@ -117,8 +115,8 @@ QScriptProgram::QScriptProgram()
   fileName and \a firstLineNumber.
 */
 QScriptProgram::QScriptProgram(const QString &sourceCode,
-                               const QString fileName,
-                               int firstLineNumber)
+   const QString fileName,
+   int firstLineNumber)
    : d_ptr(new QScriptProgramPrivate(sourceCode, fileName, firstLineNumber))
 {
 }
@@ -204,8 +202,8 @@ bool QScriptProgram::operator==(const QScriptProgram &other) const
       return true;
    }
    return (sourceCode() == other.sourceCode())
-          && (fileName() == other.fileName())
-          && (firstLineNumber() == other.firstLineNumber());
+      && (fileName() == other.fileName())
+      && (firstLineNumber() == other.firstLineNumber());
 }
 
 /*!
@@ -217,4 +215,3 @@ bool QScriptProgram::operator!=(const QScriptProgram &other) const
    return !operator==(other);
 }
 
-QT_END_NAMESPACE

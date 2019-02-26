@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 namespace QScript {
 
 DeclarativeObjectDelegate::DeclarativeObjectDelegate(QScriptDeclarativeClass *c,
-      QScriptDeclarativeClass::Object *o)
+   QScriptDeclarativeClass::Object *o)
    : m_class(c), m_object(o)
 {
 }
@@ -60,9 +60,9 @@ QScriptObjectDelegate::Type DeclarativeObjectDelegate::type() const
 }
 
 bool DeclarativeObjectDelegate::getOwnPropertySlot(QScriptObject *object,
-      JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertySlot &slot)
+   JSC::ExecState *exec,
+   const JSC::Identifier &propertyName,
+   JSC::PropertySlot &slot)
 {
    QScriptDeclarativeClass::Identifier identifier = (void *)propertyName.ustring().rep();
 
@@ -82,8 +82,8 @@ bool DeclarativeObjectDelegate::getOwnPropertySlot(QScriptObject *object,
 }
 
 void DeclarativeObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
-                                    const JSC::Identifier &propertyName,
-                                    JSC::JSValue value, JSC::PutPropertySlot &slot)
+   const JSC::Identifier &propertyName,
+   JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    QScript::SaveFrameHelper saveFrame(engine, exec);
@@ -104,14 +104,14 @@ void DeclarativeObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 }
 
 bool DeclarativeObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *exec,
-      const JSC::Identifier &propertyName)
+   const JSC::Identifier &propertyName)
 {
    return QScriptObjectDelegate::deleteProperty(object, exec, propertyName);
 }
 
 void DeclarativeObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState *exec,
-      JSC::PropertyNameArray &propertyNames,
-      JSC::EnumerationMode mode)
+   JSC::PropertyNameArray &propertyNames,
+   JSC::EnumerationMode mode)
 {
    QStringList properties = m_class->propertyNames(m_object);
    for (int ii = 0; ii < properties.count(); ++ii) {
@@ -132,7 +132,7 @@ JSC::CallType DeclarativeObjectDelegate::getCallData(QScriptObject *object, JSC:
 }
 
 JSC::JSValue DeclarativeObjectDelegate::call(JSC::ExecState *exec, JSC::JSObject *callee,
-      JSC::JSValue thisValue, const JSC::ArgList &args)
+   JSC::JSValue thisValue, const JSC::ArgList &args)
 {
    if (!callee->inherits(&QScriptObject::info)) {
       return JSC::throwError(exec, JSC::TypeError, "callee is not a DeclarativeObject object");
@@ -164,7 +164,7 @@ JSC::ConstructType DeclarativeObjectDelegate::getConstructData(QScriptObject *ob
 }
 
 bool DeclarativeObjectDelegate::hasInstance(QScriptObject *object, JSC::ExecState *exec,
-      JSC::JSValue value, JSC::JSValue proto)
+   JSC::JSValue value, JSC::JSValue proto)
 {
    return QScriptObjectDelegate::hasInstance(object, exec, value, proto);
 }

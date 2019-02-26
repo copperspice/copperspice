@@ -43,29 +43,29 @@ class ClassObjectDelegate : public QScriptObjectDelegate
    virtual Type type() const;
 
    virtual bool getOwnPropertySlot(QScriptObject *, JSC::ExecState *,
-                                   const JSC::Identifier &propertyName,
-                                   JSC::PropertySlot &);
+      const JSC::Identifier &propertyName,
+      JSC::PropertySlot &);
    virtual bool getOwnPropertyDescriptor(QScriptObject *, JSC::ExecState *,
-                                         const JSC::Identifier &propertyName,
-                                         JSC::PropertyDescriptor &);
+      const JSC::Identifier &propertyName,
+      JSC::PropertyDescriptor &);
    virtual void put(QScriptObject *, JSC::ExecState *exec,
-                    const JSC::Identifier &propertyName,
-                    JSC::JSValue, JSC::PutPropertySlot &);
+      const JSC::Identifier &propertyName,
+      JSC::JSValue, JSC::PutPropertySlot &);
    virtual bool deleteProperty(QScriptObject *, JSC::ExecState *,
-                               const JSC::Identifier &propertyName);
+      const JSC::Identifier &propertyName);
    virtual void getOwnPropertyNames(QScriptObject *, JSC::ExecState *,
-                                    JSC::PropertyNameArray &,
-                                    JSC::EnumerationMode mode = JSC::ExcludeDontEnumProperties);
+      JSC::PropertyNameArray &,
+      JSC::EnumerationMode mode = JSC::ExcludeDontEnumProperties);
 
    virtual JSC::CallType getCallData(QScriptObject *, JSC::CallData &);
    static JSC::JSValue JSC_HOST_CALL call(JSC::ExecState *, JSC::JSObject *,
-                                          JSC::JSValue, const JSC::ArgList &);
+      JSC::JSValue, const JSC::ArgList &);
    virtual JSC::ConstructType getConstructData(QScriptObject *, JSC::ConstructData &);
    static JSC::JSObject *construct(JSC::ExecState *, JSC::JSObject *,
-                                   const JSC::ArgList &);
+      const JSC::ArgList &);
 
    virtual bool hasInstance(QScriptObject *, JSC::ExecState *,
-                            JSC::JSValue value, JSC::JSValue proto);
+      JSC::JSValue value, JSC::JSValue proto);
 
  private:
    QScriptClass *m_scriptClass;

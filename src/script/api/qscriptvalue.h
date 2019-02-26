@@ -147,19 +147,19 @@ class Q_SCRIPT_EXPORT QScriptValue
    void setScope(const QScriptValue &scope);
 
    QScriptValue property(const QString &name,
-                         const ResolveFlags &mode = ResolvePrototype) const;
+      const ResolveFlags &mode = ResolvePrototype) const;
    void setProperty(const QString &name, const QScriptValue &value,
-                    const PropertyFlags &flags = KeepExistingFlags);
+      const PropertyFlags &flags = KeepExistingFlags);
 
    QScriptValue property(quint32 arrayIndex,
-                         const ResolveFlags &mode = ResolvePrototype) const;
+      const ResolveFlags &mode = ResolvePrototype) const;
    void setProperty(quint32 arrayIndex, const QScriptValue &value,
-                    const PropertyFlags &flags = KeepExistingFlags);
+      const PropertyFlags &flags = KeepExistingFlags);
 
    QScriptValue property(const QScriptString &name,
-                         const ResolveFlags &mode = ResolvePrototype) const;
+      const ResolveFlags &mode = ResolvePrototype) const;
    void setProperty(const QScriptString &name, const QScriptValue &value,
-                    const PropertyFlags &flags = KeepExistingFlags);
+      const PropertyFlags &flags = KeepExistingFlags);
 
    QScriptValue::PropertyFlags propertyFlags(
       const QString &name, const ResolveFlags &mode = ResolvePrototype) const;
@@ -167,9 +167,9 @@ class Q_SCRIPT_EXPORT QScriptValue
       const QScriptString &name, const ResolveFlags &mode = ResolvePrototype) const;
 
    QScriptValue call(const QScriptValue &thisObject = QScriptValue(),
-                     const QScriptValueList &args = QScriptValueList());
+      const QScriptValueList &args = QScriptValueList());
    QScriptValue call(const QScriptValue &thisObject,
-                     const QScriptValue &arguments);
+      const QScriptValue &arguments);
    QScriptValue construct(const QScriptValueList &args = QScriptValueList());
    QScriptValue construct(const QScriptValue &arguments);
 

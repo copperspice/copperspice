@@ -44,7 +44,7 @@ const JSC::ClassInfo QScriptActivationObject::info = { "QScriptActivationObject"
 
 QScriptActivationObject::QScriptActivationObject(JSC::ExecState *callFrame, JSC::JSObject *delegate)
    : JSC::JSVariableObject(callFrame->globalData().activationStructure,
-                           new QScriptActivationObjectData(callFrame->registers(), delegate))
+        new QScriptActivationObjectData(callFrame->registers(), delegate))
 {
 }
 
@@ -54,7 +54,7 @@ QScriptActivationObject::~QScriptActivationObject()
 }
 
 bool QScriptActivationObject::getOwnPropertySlot(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-      JSC::PropertySlot &slot)
+   JSC::PropertySlot &slot)
 {
    if (d_ptr()->delegate != 0) {
       return d_ptr()->delegate->getOwnPropertySlot(exec, propertyName, slot);
@@ -63,7 +63,7 @@ bool QScriptActivationObject::getOwnPropertySlot(JSC::ExecState *exec, const JSC
 }
 
 bool QScriptActivationObject::getOwnPropertyDescriptor(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &descriptor)
+   JSC::PropertyDescriptor &descriptor)
 {
    if (d_ptr()->delegate != 0) {
       return d_ptr()->delegate->getOwnPropertyDescriptor(exec, propertyName, descriptor);
@@ -72,7 +72,7 @@ bool QScriptActivationObject::getOwnPropertyDescriptor(JSC::ExecState *exec, con
 }
 
 void QScriptActivationObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::PropertyNameArray &propertyNames,
-      JSC::EnumerationMode mode)
+   JSC::EnumerationMode mode)
 {
    if (d_ptr()->delegate != 0) {
       d_ptr()->delegate->getOwnPropertyNames(exec, propertyNames, mode);
@@ -82,7 +82,7 @@ void QScriptActivationObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::Pro
 }
 
 void QScriptActivationObject::putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-      JSC::JSValue value, unsigned attributes)
+   JSC::JSValue value, unsigned attributes)
 {
    if (d_ptr()->delegate != 0) {
       d_ptr()->delegate->putWithAttributes(exec, propertyName, value, attributes);
@@ -98,7 +98,7 @@ void QScriptActivationObject::putWithAttributes(JSC::ExecState *exec, const JSC:
 }
 
 void QScriptActivationObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value,
-                                  JSC::PutPropertySlot &slot)
+   JSC::PutPropertySlot &slot)
 {
    if (d_ptr()->delegate != 0) {
       d_ptr()->delegate->put(exec, propertyName, value, slot);
@@ -125,7 +125,7 @@ bool QScriptActivationObject::deleteProperty(JSC::ExecState *exec, const JSC::Id
 }
 
 void QScriptActivationObject::defineGetter(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-      JSC::JSObject *getterFunction)
+   JSC::JSObject *getterFunction)
 {
    if (d_ptr()->delegate != 0) {
       d_ptr()->delegate->defineGetter(exec, propertyName, getterFunction);
@@ -135,7 +135,7 @@ void QScriptActivationObject::defineGetter(JSC::ExecState *exec, const JSC::Iden
 }
 
 void QScriptActivationObject::defineSetter(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-      JSC::JSObject *setterFunction)
+   JSC::JSObject *setterFunction)
 {
    if (d_ptr()->delegate != 0) {
       d_ptr()->delegate->defineSetter(exec, propertyName, setterFunction);

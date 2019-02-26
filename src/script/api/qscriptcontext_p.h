@@ -29,12 +29,10 @@ class ArgList;
 class ExecState;
 }
 
-QT_BEGIN_NAMESPACE
 
 class QScriptEnginePrivate;
 class QScriptContext;
 
-QT_END_NAMESPACE
 
 #include "wtf/Platform.h"
 #include "JSValue.h"

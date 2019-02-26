@@ -27,8 +27,6 @@
 
 #include <QtCore/qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptProgramPrivate;
 
 class Q_SCRIPT_EXPORT QScriptProgram
@@ -36,8 +34,8 @@ class Q_SCRIPT_EXPORT QScriptProgram
  public:
    QScriptProgram();
    QScriptProgram(const QString &sourceCode,
-                  const QString fileName = QString(),
-                  int firstLineNumber = 1);
+      const QString fileName = QString(),
+      int firstLineNumber = 1);
    QScriptProgram(const QScriptProgram &other);
    ~QScriptProgram();
 
@@ -56,7 +54,5 @@ class Q_SCRIPT_EXPORT QScriptProgram
    QExplicitlySharedDataPointer<QScriptProgramPrivate> d_ptr;
    Q_DECLARE_PRIVATE(QScriptProgram)
 };
-
-QT_END_NAMESPACE
 
 #endif // QSCRIPTPROGRAM_H

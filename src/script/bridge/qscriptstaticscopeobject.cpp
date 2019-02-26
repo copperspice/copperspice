@@ -53,7 +53,7 @@ const JSC::ClassInfo QScriptStaticScopeObject::info = { "QScriptStaticScopeObjec
     It's not possible to add new properties to the object after construction.
 */
 QScriptStaticScopeObject::QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure,
-      int propertyCount, const PropertyInfo *props)
+   int propertyCount, const PropertyInfo *props)
    : JSC::JSVariableObject(structure, new Data(/*canGrow=*/false))
 {
    int index = growRegisterArray(propertyCount);
@@ -89,19 +89,19 @@ QScriptStaticScopeObject::~QScriptStaticScopeObject()
 }
 
 bool QScriptStaticScopeObject::getOwnPropertySlot(JSC::ExecState *, const JSC::Identifier &propertyName,
-      JSC::PropertySlot &slot)
+   JSC::PropertySlot &slot)
 {
    return symbolTableGet(propertyName, slot);
 }
 
 bool QScriptStaticScopeObject::getOwnPropertyDescriptor(JSC::ExecState *, const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &descriptor)
+   JSC::PropertyDescriptor &descriptor)
 {
    return symbolTableGet(propertyName, descriptor);
 }
 
 void QScriptStaticScopeObject::putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-      JSC::JSValue value, unsigned attributes)
+   JSC::JSValue value, unsigned attributes)
 {
    if (symbolTablePutWithAttributes(propertyName, value, attributes)) {
       return;
@@ -111,7 +111,7 @@ void QScriptStaticScopeObject::putWithAttributes(JSC::ExecState *exec, const JSC
 }
 
 void QScriptStaticScopeObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value,
-                                   JSC::PutPropertySlot &)
+   JSC::PutPropertySlot &)
 {
    if (symbolTablePut(propertyName, value)) {
       return;
@@ -135,7 +135,7 @@ void QScriptStaticScopeObject::markChildren(JSC::MarkStack &markStack)
 }
 
 void QScriptStaticScopeObject::addSymbolTableProperty(const JSC::Identifier &name, JSC::JSValue value,
-      unsigned attributes)
+   unsigned attributes)
 {
    int index = growRegisterArray(1);
    JSC::SymbolTableEntry newEntry(index, attributes | JSC::DontDelete);

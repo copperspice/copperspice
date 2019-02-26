@@ -25,8 +25,6 @@
 
 #include <QtScript/qscriptvalue.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptContextPrivate;
 
 class Q_SCRIPT_EXPORT QScriptContext
@@ -90,6 +88,5 @@ class Q_SCRIPT_EXPORT QScriptContext
    Q_DISABLE_COPY(QScriptContext)
 };
 
-QT_END_NAMESPACE
 
 #endif

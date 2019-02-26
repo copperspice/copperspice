@@ -23,6 +23,7 @@
 #ifndef QSCRIPTPROGRAM_P_H
 #define QSCRIPTPROGRAM_P_H
 
+#include <QtCore/qshareddata.h>
 #include "RefPtr.h"
 
 namespace JSC {
@@ -30,25 +31,21 @@ class EvalExecutable;
 class ExecState;
 }
 
-QT_BEGIN_NAMESPACE
+
 
 class QScriptEnginePrivate;
 
-class QScriptProgramPrivate
+class QScriptProgramPrivate : public QSharedData
 {
  public:
-   QScriptProgramPrivate(const QString &sourceCode,
-                         const QString &fileName,
-                         int firstLineNumber);
+   QScriptProgramPrivate(const QString &sourceCode, const QString &fileName, int firstLineNumber);
    ~QScriptProgramPrivate();
 
    static QScriptProgramPrivate *get(const QScriptProgram &q);
 
-   JSC::EvalExecutable *executable(JSC::ExecState *exec,
-                                   QScriptEnginePrivate *engine);
+   JSC::EvalExecutable *executable(JSC::ExecState *exec, QScriptEnginePrivate *engine);
    void detachFromEngine();
 
-   QAtomicInt ref;
 
    QString sourceCode;
    QString fileName;
@@ -60,6 +57,5 @@ class QScriptProgramPrivate
    bool isCompiled;
 };
 
-QT_END_NAMESPACE
 
 #endif

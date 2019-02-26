@@ -26,8 +26,6 @@
 #include <qvariant.h>
 #include "qscriptobject_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
 
 class QVariantDelegate : public QScriptObjectDelegate
@@ -51,11 +49,10 @@ class QVariantPrototype : public QScriptObject
 {
  public:
    QVariantPrototype(JSC::ExecState *, WTF::PassRefPtr<JSC::Structure>,
-                     JSC::Structure *prototypeFunctionStructure);
+      JSC::Structure *prototypeFunctionStructure);
 };
 
 } // namespace QScript
 
-QT_END_NAMESPACE
 
 #endif

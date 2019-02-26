@@ -42,7 +42,7 @@ class QScriptStaticScopeObject : public JSC::JSVariableObject
    };
 
    QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure,
-                            int propertyCount, const PropertyInfo *);
+      int propertyCount, const PropertyInfo *);
    QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure);
    virtual ~QScriptStaticScopeObject();
 
@@ -54,7 +54,7 @@ class QScriptStaticScopeObject : public JSC::JSVariableObject
    virtual bool getOwnPropertyDescriptor(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::PropertyDescriptor &);
 
    virtual void putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value,
-                                  unsigned attributes);
+      unsigned attributes);
    virtual void put(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::JSValue value, JSC::PutPropertySlot &);
 
    virtual bool deleteProperty(JSC::ExecState *, const JSC::Identifier &propertyName);
@@ -72,7 +72,7 @@ class QScriptStaticScopeObject : public JSC::JSVariableObject
 
  protected:
    static const unsigned StructureFlags = JSC::OverridesGetOwnPropertySlot | JSC::NeedsThisConversion |
-                                          JSC::OverridesMarkChildren | JSC::OverridesGetPropertyNames | JSC::JSVariableObject::StructureFlags;
+      JSC::OverridesMarkChildren | JSC::OverridesGetPropertyNames | JSC::JSVariableObject::StructureFlags;
 
    struct Data : public JSVariableObjectData {
       Data(bool canGrow_)

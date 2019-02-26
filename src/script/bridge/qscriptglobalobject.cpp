@@ -28,7 +28,6 @@
 
 namespace JSC {
 QT_USE_NAMESPACE
-
 ASSERT_CLASS_FITS_IN_CELL(QScript::GlobalObject);
 ASSERT_CLASS_FITS_IN_CELL(QScript::OriginalGlobalObjectProxy);
 
@@ -56,8 +55,8 @@ void GlobalObject::markChildren(JSC::MarkStack &markStack)
 }
 
 bool GlobalObject::getOwnPropertySlot(JSC::ExecState *exec,
-                                      const JSC::Identifier &propertyName,
-                                      JSC::PropertySlot &slot)
+   const JSC::Identifier &propertyName,
+   JSC::PropertySlot &slot)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    if (propertyName == exec->propertyNames().arguments && engine->currentFrame->argumentCount() > 0) {
@@ -72,8 +71,8 @@ bool GlobalObject::getOwnPropertySlot(JSC::ExecState *exec,
 }
 
 bool GlobalObject::getOwnPropertyDescriptor(JSC::ExecState *exec,
-      const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &descriptor)
+   const JSC::Identifier &propertyName,
+   JSC::PropertyDescriptor &descriptor)
 {
    // Must match the logic of getOwnPropertySlot().
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
@@ -90,7 +89,7 @@ bool GlobalObject::getOwnPropertyDescriptor(JSC::ExecState *exec,
 }
 
 void GlobalObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-                       JSC::JSValue value, JSC::PutPropertySlot &slot)
+   JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
    if (customGlobalObject) {
       customGlobalObject->put(exec, propertyName, value, slot);
@@ -100,7 +99,7 @@ void GlobalObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName
 }
 
 void GlobalObject::putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-                                     JSC::JSValue value, unsigned attributes)
+   JSC::JSValue value, unsigned attributes)
 {
    if (customGlobalObject) {
       customGlobalObject->putWithAttributes(exec, propertyName, value, attributes);
@@ -118,7 +117,7 @@ bool GlobalObject::deleteProperty(JSC::ExecState *exec, const JSC::Identifier &p
 }
 
 void GlobalObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::PropertyNameArray &propertyNames,
-                                       JSC::EnumerationMode mode)
+   JSC::EnumerationMode mode)
 {
    if (customGlobalObject) {
       customGlobalObject->getOwnPropertyNames(exec, propertyNames, mode);
@@ -128,7 +127,7 @@ void GlobalObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::PropertyNameAr
 }
 
 void GlobalObject::defineGetter(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-                                JSC::JSObject *getterFunction, unsigned attributes)
+   JSC::JSObject *getterFunction, unsigned attributes)
 {
    if (customGlobalObject) {
       customGlobalObject->defineGetter(exec, propertyName, getterFunction, attributes);
@@ -138,7 +137,7 @@ void GlobalObject::defineGetter(JSC::ExecState *exec, const JSC::Identifier &pro
 }
 
 void GlobalObject::defineSetter(JSC::ExecState *exec, const JSC::Identifier &propertyName,
-                                JSC::JSObject *setterFunction, unsigned attributes)
+   JSC::JSObject *setterFunction, unsigned attributes)
 {
    if (customGlobalObject) {
       customGlobalObject->defineSetter(exec, propertyName, setterFunction, attributes);

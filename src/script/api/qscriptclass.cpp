@@ -23,94 +23,6 @@
 #include "qscriptclass.h"
 #include "qscriptstring.h"
 
-/*!
-  \since 4.4
-  \class QScriptClass
-
-  \brief The QScriptClass class provides an interface for defining custom behavior of (a class of) Qt Script objects.
-
-  \ingroup script
-  \mainclass
-
-  The QScriptClass class defines an interface for handling various
-  aspects of interaction with the Qt Script objects associated with
-  the class. Such objects are created by calling
-  QScriptEngine::newObject(), passing a pointer to the QScriptClass as
-  argument.
-
-  By subclassing QScriptClass, you can define precisely how access to
-  properties of the objects that use your class is handled. This
-  enables a fully dynamic handling of properties, e.g. it's more
-  powerful than QScriptEngine::newQObject(). For example, you can use
-  QScriptClass to implement array-type objects (i.e. objects that
-  handle the \c{length} property, and properties whose names are valid
-  array indexes, in a special way), or to implement a "live"
-  (runtime-defined) proxy to an underlying object.
-
-  If you just need to handle access to a set of properties that are
-  known at the time an object is created (i.e. "semi-statically"), you
-  might consider using QScriptValue::setProperty() to define
-  getter/setter functions for the relevant properties, rather than
-  subclassing QScriptClass.
-
-  Reimplement queryProperty() to specify which properties are handled
-  in a custom way by your script class (i.e. should be
-  \bold{delegated} to the QScriptClass), and which properties should
-  be handled just like normal Qt Script object properties.
-
-  Reimplement property() and setProperty() to perform the actual
-  access (read or write) to the properties that your class
-  handles. Additionally, you can reimplement propertyFlags() to
-  specify custom flags for your properties.
-
-  Reimplement newIterator() to provide an iterator for objects of your
-  custom class. This is only necessary if objects of your class can
-  have custom properties that you want to be reported when an object
-  is used together with the QScriptValueIterator class, or when an
-  object is used in a for-in enumeration statement in a script.
-
-  When implementing custom classes of objects, you typically use
-  QScriptValue::setData() to store instance-specific data as part of
-  object initialization; the data won't be accessible from scripts
-  directly, but you can access it in e.g. your reimplementations of
-  property() and setProperty() (by calling QScriptValue::data()) to
-  perform custom processing.
-
-  Reimplement prototype() to provide a custom prototype object for
-  your script class.
-
-  Reimplement supportsExtension() and extension() if your custom
-  script class supports one or more of the extensions specified by the
-  Extension enum.
-
-  \sa QScriptClassPropertyIterator, QScriptEngine::newObject(), {Custom Script Class Example}
-*/
-
-/*!
-    \enum QScriptClass::Extension
-
-    This enum specifies the possible extensions to a QScriptClass.
-
-    \value Callable Instances of this class can be called as functions.
-
-    \value HasInstance Instances of this class implement [[HasInstance]].
-
-    \sa extension()
-*/
-
-/*!
-    \enum QScriptClass::QueryFlag
-
-    This enum describes flags that are used to query a QScriptClass
-    regarding how access to a property should be handled.
-
-    \value HandlesReadAccess The QScriptClass handles read access to this property.
-    \value HandlesWriteAccess The QScriptClass handles write access to this property.
-
-    \sa queryProperty()
-*/
-
-QT_BEGIN_NAMESPACE
 
 class QScriptClassPrivate
 {
@@ -251,7 +163,7 @@ QScriptClass::QueryFlags QScriptClass::queryProperty(
   \sa setProperty(), propertyFlags()
 */
 QScriptValue QScriptClass::property(const QScriptValue &object,
-                                    const QScriptString &name, uint id)
+   const QScriptString &name, uint id)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
@@ -293,7 +205,7 @@ QScriptValue::PropertyFlags QScriptClass::propertyFlags(
   \sa property()
 */
 void QScriptClass::setProperty(QScriptValue &object, const QScriptString &name,
-                               uint id, const QScriptValue &value)
+   uint id, const QScriptValue &value)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
@@ -375,4 +287,3 @@ QVariant QScriptClass::extension(Extension extension, const QVariant &argument)
    return QVariant();
 }
 
-QT_END_NAMESPACE

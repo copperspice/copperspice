@@ -33,7 +33,7 @@
 #include <qscriptactivationobject_p.h>
 #include <QtCore/qstringlist.h>
 
-QT_BEGIN_NAMESPACE
+
 
 QScriptDeclarativeClass::Value::Value()
 {
@@ -161,8 +161,8 @@ QScriptDeclarativeClass::PersistentIdentifier::PersistentIdentifier(const Persis
    new (&d) JSC::Identifier((JSC::Identifier &)(other.d));
 }
 
-QScriptDeclarativeClass::PersistentIdentifier &
-QScriptDeclarativeClass::PersistentIdentifier::operator=(const PersistentIdentifier &other)
+QScriptDeclarativeClass::PersistentIdentifier &QScriptDeclarativeClass::PersistentIdentifier::operator=
+(const PersistentIdentifier &other)
 {
    identifier = other.identifier;
    engine = other.engine;
@@ -184,7 +184,7 @@ QScriptDeclarativeClass::QScriptDeclarativeClass(QScriptEngine *engine)
 }
 
 QScriptValue QScriptDeclarativeClass::newObject(QScriptEngine *engine,
-      QScriptDeclarativeClass *scriptClass, Object *object)
+   QScriptDeclarativeClass *scriptClass, Object *object)
 {
    Q_ASSERT(engine);
    Q_ASSERT(scriptClass);
@@ -199,8 +199,8 @@ QScriptValue QScriptDeclarativeClass::newObject(QScriptEngine *engine,
    return p->scriptValueFromJSCValue(result);
 }
 
-QScriptDeclarativeClass::Value
-QScriptDeclarativeClass::newObjectValue(QScriptEngine *engine, QScriptDeclarativeClass *scriptClass, Object *object)
+QScriptDeclarativeClass::Value QScriptDeclarativeClass::newObjectValue(QScriptEngine *engine, QScriptDeclarativeClass *scriptClass,
+   Object *object)
 {
    Q_ASSERT(engine);
    Q_ASSERT(scriptClass);
@@ -282,8 +282,7 @@ QScriptValue QScriptDeclarativeClass::property(const QScriptValue &v, const Iden
    return QScriptValue();
 }
 
-QScriptDeclarativeClass::Value
-QScriptDeclarativeClass::functionValue(const QScriptValue &v, const Identifier &name)
+QScriptDeclarativeClass::Value QScriptDeclarativeClass::functionValue(const QScriptValue &v, const Identifier &name)
 {
    QScriptValuePrivate *d = QScriptValuePrivate::get(v);
 
@@ -309,8 +308,7 @@ QScriptDeclarativeClass::functionValue(const QScriptValue &v, const Identifier &
    return Value();
 }
 
-QScriptDeclarativeClass::Value
-QScriptDeclarativeClass::propertyValue(const QScriptValue &v, const Identifier &name)
+QScriptDeclarativeClass::Value QScriptDeclarativeClass::propertyValue(const QScriptValue &v, const Identifier &name)
 {
    QScriptValuePrivate *d = QScriptValuePrivate::get(v);
 
@@ -368,12 +366,12 @@ QScriptValue QScriptDeclarativeClass::scopeChainValue(QScriptContext *context, i
       if (index == 0) {
 
          JSC::JSObject *object = *it;
-         if (!object) {
+         if (! object) {
             return QScriptValue();
          }
 
          if (object->inherits(&QScript::QScriptActivationObject::info)
-               && (static_cast<QScript::QScriptActivationObject *>(object)->delegate() != 0)) {
+            && (static_cast<QScript::QScriptActivationObject *>(object)->delegate() != 0)) {
             // Return the object that property access is being delegated to
             object = static_cast<QScript::QScriptActivationObject *>(object)->delegate();
          }
@@ -388,24 +386,10 @@ QScriptValue QScriptDeclarativeClass::scopeChainValue(QScriptContext *context, i
    return QScriptValue();
 }
 
-/*!
-  Enters a new execution context and returns the associated
-  QScriptContext object.
 
-  Once you are done with the context, you should call popContext() to
-  restore the old context.
-
-  By default, the `this' object of the new context is the Global Object.
-  The context's \l{QScriptContext::callee()}{callee}() will be invalid.
-
-  Unlike pushContext(), the default scope chain is reset to include
-  only the global object and the QScriptContext's activation object.
-
-  \sa QScriptEngine::popContext()
-*/
 QScriptContext *QScriptDeclarativeClass::pushCleanContext(QScriptEngine *engine)
 {
-   if (!engine) {
+   if (! engine) {
       return 0;
    }
 
@@ -443,7 +427,6 @@ void QScriptDeclarativeClass::setSupportsCall(bool c)
 }
 
 QScriptDeclarativeClass::PersistentIdentifier
-
 QScriptDeclarativeClass::createPersistentIdentifier(const QString &str)
 {
    QScriptEnginePrivate *p = QScriptEnginePrivate::cs_getPrivate(d_ptr->engine);
@@ -459,7 +442,6 @@ QScriptDeclarativeClass::createPersistentIdentifier(const QString &str)
 }
 
 QScriptDeclarativeClass::PersistentIdentifier
-
 QScriptDeclarativeClass::createPersistentIdentifier(const Identifier &id)
 {
    QScriptEnginePrivate *p = QScriptEnginePrivate::cs_getPrivate(d_ptr->engine);
@@ -498,7 +480,7 @@ quint32 QScriptDeclarativeClass::toArrayIndex(const Identifier &identifier, bool
 }
 
 QScriptClass::QueryFlags QScriptDeclarativeClass::queryProperty(Object *object,
-                  const Identifier &name, QScriptClass::QueryFlags flags)
+   const Identifier &name, QScriptClass::QueryFlags flags)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
@@ -590,8 +572,8 @@ QScriptValue QScriptDeclarativeClass::newStaticScopeObject(
       props[i] = QScriptStaticScopeObject::PropertyInfo(id, jsval, attribs);
    }
    QScriptValue result = eng_p->scriptValueFromJSCValue(new (exec)QScriptStaticScopeObject(
-                            eng_p->staticScopeObjectStructure,
-                            propertyCount, props));
+            eng_p->staticScopeObjectStructure,
+            propertyCount, props));
    delete[] props;
    return result;
 }
@@ -605,7 +587,6 @@ QScriptValue QScriptDeclarativeClass::newStaticScopeObject(QScriptEngine *engine
    QScriptEnginePrivate *eng_p = QScriptEnginePrivate::get(engine);
    QScript::APIShim shim(eng_p);
    return eng_p->scriptValueFromJSCValue(new (eng_p->currentFrame)QScriptStaticScopeObject(
-         eng_p->staticScopeObjectStructure));
+            eng_p->staticScopeObjectStructure));
 }
 
-QT_END_NAMESPACE

@@ -30,8 +30,6 @@
 #include "UString.h"
 #include "DebuggerCallFrame.h"
 
-QT_BEGIN_NAMESPACE
-
 class QScriptEnginePrivate;
 class QScriptEngineAgent;
 
@@ -55,12 +53,12 @@ class Q_SCRIPT_EXPORT QScriptEngineAgentPrivate : public JSC::Debugger
 
    //scripts
    virtual void sourceParsed(JSC::ExecState *, const JSC::SourceCode &, int /*errorLine*/,
-                             const JSC::UString & /*errorMsg*/) {}
+      const JSC::UString & /*errorMsg*/) {}
    virtual void scriptUnload(qint64 id) {
       q_ptr->scriptUnload(id);
    }
    virtual void scriptLoad(qint64 id, const JSC::UString &program,
-                           const JSC::UString &fileName, int baseLineNumber) {
+      const JSC::UString &fileName, int baseLineNumber) {
       q_ptr->scriptLoad(id, program, fileName, baseLineNumber);
    }
 
@@ -104,7 +102,5 @@ class Q_SCRIPT_EXPORT QScriptEngineAgentPrivate : public JSC::Debugger
    QScriptEnginePrivate *engine;
    QScriptEngineAgent *q_ptr;
 };
-
-QT_END_NAMESPACE
 
 #endif
