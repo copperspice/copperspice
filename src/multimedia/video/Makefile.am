@@ -4,22 +4,21 @@ MULTIMEDIA_PUBLIC_INCLUDES += \
 	QVideoFrame \
 	QAbstractVideoBuffer \
 	QAbstractVideoSurface \
-	QVideoSurfaceFormat \
-	QtMultimedia
-
+	QVideoSurfaceFormat
 
 MULTIMEDIA_VIDEO_INCLUDES = \
 	qabstractvideobuffer.h \
 	qabstractvideosurface.h \
 	qvideoframe.h \
-	qvideosurfaceformat.h \
-	qtmultimedia.h
+	qvideosurfaceformat.h
 
 MULTIMEDIA_VIDEO_PRIVATE_INCLUDES = \
 	qabstractvideobuffer_p.h \
 	qabstractvideosurface_p.h \
 	qimagevideobuffer_p.h \
-	qmemoryvideobuffer_p.h
+	qmemoryvideobuffer_p.h \
+	qvideoframe_p.h \
+	qvideoframeconversionhelper_p.h
 
 MULTIMEDIA_INCLUDES += $(MULTIMEDIA_VIDEO_INCLUDES)
 MULTIMEDIA_PRIVATE_INCLUDES += $(MULTIMEDIA_VIDEO_PRIVATE_INCLUDES)
@@ -33,4 +32,5 @@ lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/video/qimagevideobuffer.cpp \
 	src/multimedia/video/qmemoryvideobuffer.cpp \
 	src/multimedia/video/qvideoframe.cpp \
-	src/multimedia/video/qvideosurfaceformat.cpp
+	src/multimedia/video/qvideosurfaceformat.cpp \
+	src/multimedia/video/qvideoframeconversionhelper.cpp

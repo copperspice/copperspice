@@ -1,7 +1,7 @@
 add_definitions(
    -DQT_BUILD_MULTIMEDIA_LIB
 )
-set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
+set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI}  CsNetwork${BUILD_ABI})
 set(EXTRA_MULTIMEDIA_CXXFLAGS)
 set(EXTRA_MULTIMEDIA_LDFLAGS)
 
@@ -11,17 +11,24 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
+
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
+
+    ${CMAKE_BINARY_DIR}/include/QtNetwork
+
     ${CMAKE_BINARY_DIR}/include/QtMultimedia
     ${CMAKE_BINARY_DIR}/privateinclude/QtMultimedia
     ${CMAKE_BINARY_DIR}/privateinclude/QtMultimedia/private
+
     ${CMAKE_CURRENT_SOURCE_DIR}/audio
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/video
 )
 
 include(audio/audio.cmake)
+include(kernel/kernel.cmake)
 include(video/video.cmake)
 
 macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)

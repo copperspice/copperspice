@@ -4,12 +4,15 @@ endif
 
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES =
 
-lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui -Iinclude/QtMultimedia \
-   -Iprivateinclude/QtCore/private  -Iprivateinclude/QtMultimedia/private   \
+lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui \
+   -Iinclude/QtNetwork -Iinclude/QtMultimedia \
+   -Iprivateinclude/QtCore/private  -Iprivateinclude/QtMultimedia/private  \
    -DQT_BUILD_MULTIMEDIA_LIB
 
 lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsMultimedia@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la
+
+lib_libCsMultimedia@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la  lib/libCsGui@BUILD_ABI@.la \
+   lib/libCsNetwork@BUILD_ABI@.la
 
 MULTIMEDIA_INCLUDES =
 MULTIMEDIA_PUBLIC_INCLUDES =
@@ -19,9 +22,11 @@ MULTIMEDIA_DIRS =
 EXTRA_DIST += \
 	src/multimedia/CMakeLists.txt \
 	src/multimedia/audio/audio.cmake \
+	src/multimedia/kernel/kernel.cmake \
 	src/multimedia/video/video.cmake
 
 include src/multimedia/audio/Makefile.am
+include src/multimedia/kernel/Makefile.am
 include src/multimedia/video/Makefile.am
 
 MULTIMEDIA_HEADERS_INSTALLED= \
@@ -33,7 +38,9 @@ MULTIMEDIA_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.multimedia-header-deps.mk
 
-$(lib_libCsMultimedia@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(MULTIMEDIA_HEADERS_INSTALLED) include/QtMultimedia privateinclude/QtMultimedia/private
+$(lib_libCsMultimedia@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) \
+   $(NETWORK_HEADERS_INSTALLED) $(MULTIMEDIA_HEADERS_INSTALLED) \
+   include/QtMultimedia privateinclude/QtMultimedia/private
 
 -include .multimedia-header-deps.mk
 

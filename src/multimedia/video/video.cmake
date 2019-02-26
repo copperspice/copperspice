@@ -4,7 +4,6 @@ set(MULTIMEDIA_PUBLIC_INCLUDES
     QAbstractVideoBuffer
     QAbstractVideoSurface
     QVideoSurfaceFormat
-    QtMultimedia
 )
 
 set(MULTIMEDIA_INCLUDES
@@ -13,7 +12,6 @@ set(MULTIMEDIA_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qabstractvideosurface.h
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframe.h
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideosurfaceformat.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/video/qtmultimedia.h
 )
 
 set(MULTIMEDIA_PRIVATE_INCLUDES
@@ -22,6 +20,8 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qabstractvideosurface_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qimagevideobuffer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qmemoryvideobuffer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframe_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframeconversionhelper_p.h
 )
 
 set(MULTIMEDIA_SOURCES
@@ -32,4 +32,5 @@ set(MULTIMEDIA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qmemoryvideobuffer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideosurfaceformat.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframeconversionhelper.cpp
 )
