@@ -28,8 +28,6 @@
 #include <qvectorpath_p.h>
 #include <qgl_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QGLPoint
 {
 
@@ -49,6 +47,7 @@ class QGLPoint
    operator QPointF() {
       return QPointF(x, y);
    }
+
    operator QPointF() const {
       return QPointF(x, y);
    }
@@ -117,13 +116,16 @@ class QGL2PEXVertexArray
    QGLPoint        *data() {
       return vertexArray.data();
    }
+
    int *stops() const {
       return vertexArrayStops.data();
    }
+
    int stopCount() const {
       return vertexArrayStops.size();
    }
-   QGLRect         boundingRect() const;
+
+   QGLRect boundingRect() const;
 
    int vertexCount() const {
       return vertexArray.size();
@@ -143,7 +145,5 @@ class QGL2PEXVertexArray
    void addClosingLine(int index);
    void addCentroid(const QVectorPath &path, int subPathIndex);
 };
-
-QT_END_NAMESPACE
 
 #endif

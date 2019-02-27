@@ -26,7 +26,6 @@
 #include <QtGui/qcolor.h>
 #include <QtCore/qvector.h>
 
-QT_BEGIN_NAMESPACE
 
 class Q_OPENGL_EXPORT QGLColormap
 {
@@ -51,8 +50,9 @@ class Q_OPENGL_EXPORT QGLColormap
 
  protected:
    Qt::HANDLE handle() {
-      return d ? d->cmapHandle : 0;
+      return d ? d->cmapHandle : nullptr;
    }
+
    void setHandle(Qt::HANDLE ahandle) {
       d->cmapHandle = ahandle;
    }
@@ -80,6 +80,4 @@ inline void QGLColormap::detach()
    }
 }
 
-QT_END_NAMESPACE
-
-#endif // QGLCOLORMAP_H
+#endif

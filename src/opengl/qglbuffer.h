@@ -26,8 +26,6 @@
 #include <QtCore/qscopedpointer.h>
 #include <QtOpenGL/qgl.h>
 
-QT_BEGIN_NAMESPACE
-
 class QGLBufferPrivate;
 
 class Q_OPENGL_EXPORT QGLBuffer
@@ -100,7 +98,5 @@ class Q_OPENGL_EXPORT QGLBuffer
 
    Q_DECLARE_PRIVATE(QGLBuffer)
 };
-
-QT_END_NAMESPACE
 
 #endif

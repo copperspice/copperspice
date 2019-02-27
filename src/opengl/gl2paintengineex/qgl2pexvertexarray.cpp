@@ -22,10 +22,7 @@
 
 #include <qgl2pexvertexarray_p.h>
 #include <qbezier_p.h>
-
 #include <qmath.h>
-
-QT_BEGIN_NAMESPACE
 
 void QGL2PEXVertexArray::clear()
 {
@@ -33,7 +30,6 @@ void QGL2PEXVertexArray::clear()
    vertexArrayStops.reset();
    boundingRectDirty = true;
 }
-
 
 QGLRect QGL2PEXVertexArray::boundingRect() const
 {
@@ -60,7 +56,7 @@ void QGL2PEXVertexArray::addCentroid(const QVectorPath &path, int subPathIndex)
    QPointF sum = points[subPathIndex];
    int count = 1;
 
-   for (int i = subPathIndex + 1; i < path.elementCount() && (!elements ||
+   for (int i = subPathIndex + 1; i < path.elementCount() && (! elements ||
          elements[i] != QPainterPath::MoveToElement); ++i) {
       sum += points[i];
       ++count;
@@ -107,16 +103,22 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
                if (!outline) {
                   addClosingLine(lastMoveTo);
                }
-               //                qDebug("element[%d] is a MoveToElement", i);
+
+               //  qDebug("element[%d] is a MoveToElement", i);
+
                vertexArrayStops.add(vertexArray.size());
+
                if (!outline) {
                   if (!path.isConvex()) {
                      addCentroid(path, i);
                   }
+
                   lastMoveTo = vertexArray.size();
                }
+
                lineToArray(points[i].x(), points[i].y()); // Add the moveTo as a new vertex
                break;
+
             case QPainterPath::LineToElement:
                //                qDebug("element[%d] is a LineToElement", i);
                lineToArray(points[i].x(), points[i].y());
@@ -134,6 +136,7 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
                if (threshold < 3) {
                   threshold = 3;
                }
+
                qreal one_over_threshold_minus_1 = qreal(1) / (threshold - 1);
                for (int t = 0; t < threshold; ++t) {
                   QPointF pt = b.pointAt(t * one_over_threshold_minus_1);
@@ -148,9 +151,10 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
       }
    } while (0);
 
-   if (!outline) {
+   if (! outline) {
       addClosingLine(lastMoveTo);
    }
+
    vertexArrayStops.add(vertexArray.size());
 }
 
@@ -170,4 +174,3 @@ void QGL2PEXVertexArray::lineToArray(const GLfloat x, const GLfloat y)
    }
 }
 
-QT_END_NAMESPACE

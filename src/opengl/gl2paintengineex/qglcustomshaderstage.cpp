@@ -25,8 +25,6 @@
 #include "qpaintengineex_opengl2_p.h"
 #include <qpainter_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QGLCustomShaderStagePrivate
 {
  public:
@@ -36,7 +34,6 @@ class QGLCustomShaderStagePrivate
    QPointer<QGLEngineShaderManager> m_manager;
    QString m_source;
 };
-
 
 QGLCustomShaderStage::QGLCustomShaderStage()
    : d_ptr(new QGLCustomShaderStagePrivate)
@@ -50,13 +47,15 @@ QGLCustomShaderStage::~QGLCustomShaderStage()
       d->m_manager->removeCustomStage();
       d->m_manager->sharedShaders->cleanupCustomStage(this);
    }
+
+   delete d_ptr;
 }
 
 void QGLCustomShaderStage::setUniformsDirty()
 {
    Q_D(QGLCustomShaderStage);
    if (d->m_manager) {
-      d->m_manager->setDirty();   // ### Probably a bit overkill!
+      d->m_manager->setDirty();   // ### Probably a bit overkill
    }
 }
 
@@ -117,4 +116,3 @@ void QGLCustomShaderStage::setSource(const QString &s)
    d->m_source = s;
 }
 
-QT_END_NAMESPACE

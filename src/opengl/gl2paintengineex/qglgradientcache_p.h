@@ -23,15 +23,13 @@
 #ifndef QGLGradientCache_P_H
 #define QGLGradientCache_P_H
 
-#include <QMultiHash>
-#include <QObject>
-#include <QtOpenGL>
 #include <qgl_p.h>
+
+#include <qobject.h>
+#include <qmultihash.h>
 #include <qmutex.h>
 
-QT_BEGIN_NAMESPACE
-
-class QGL2GradientCache
+class QGL2GradientCache : public QOpenGLSharedResource
 {
    struct CacheInfo {
       inline CacheInfo(QGradientStops s, qreal op, QGradient::InterpolationMode mode) :
@@ -46,22 +44,24 @@ class QGL2GradientCache
    typedef QMultiHash<quint64, CacheInfo> QGLGradientColorTableHash;
 
  public:
+   QGL2GradientCache(QOpenGLContext *);
+   ~QGL2GradientCache();
+
    static QGL2GradientCache *cacheForContext(const QGLContext *context);
 
-   QGL2GradientCache(const QGLContext *) {}
-   ~QGL2GradientCache() {
-      cleanCache();
-   }
-
    GLuint getBuffer(const QGradient &gradient, qreal opacity);
-   inline int paletteSize() const {
+   int paletteSize() const {
       return 1024;
    }
+
+   void invalidateResource();
+   void freeResource(QOpenGLContext *ctx);
 
  private:
    inline int maxCacheSize() const {
       return 60;
    }
+
    inline void generateGradientColorTable(const QGradient &gradient,
                                           uint *colorTable,
                                           int size, qreal opacity) const;
@@ -72,7 +72,7 @@ class QGL2GradientCache
    QMutex m_mutex;
 };
 
-QT_END_NAMESPACE
+
 
 #endif
 

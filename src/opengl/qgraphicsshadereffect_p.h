@@ -23,9 +23,9 @@
 #ifndef QGRAPHICSSHADEREFFECT_P_H
 #define QGRAPHICSSHADEREFFECT_P_H
 
-#include <QtGui/qgraphicseffect.h>
+#include <qgraphicseffect.h>
 
-QT_BEGIN_NAMESPACE
+#ifndef QT_NO_GRAPHICSEFFECT
 
 class QGLShaderProgram;
 class QGLCustomShaderEffectStage;
@@ -54,6 +54,7 @@ class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
    friend class QGLCustomShaderEffectStage;
 };
 
-QT_END_NAMESPACE
 
-#endif // QGRAPHICSSHADEREFFECT_P_H
+#endif // QT_NO_GRAPHICSEFFECT
+
+#endif

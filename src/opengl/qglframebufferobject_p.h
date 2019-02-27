@@ -24,14 +24,11 @@
 #define QGL_FRAMEBUFFEROBJECT_P_H
 
 #include <qglframebufferobject.h>
+
 #include <qglpaintdevice_p.h>
 #include <qgl_p.h>
+#include <qopenglextensions_p.h>
 
-#ifndef QT_OPENGL_ES
-#define DEFAULT_FORMAT GL_RGBA8
-#else
-#define DEFAULT_FORMAT GL_RGBA
-#endif
 
 class QGLFramebufferObjectFormatPrivate
 {
@@ -41,9 +38,16 @@ class QGLFramebufferObjectFormatPrivate
         samples(0),
         attachment(QGLFramebufferObject::NoAttachment),
         target(GL_TEXTURE_2D),
-        internal_format(DEFAULT_FORMAT),
         mipmap(false) {
+#ifndef QT_OPENGL_ES_2
+      QOpenGLContext *ctx = QOpenGLContext::currentContext();
+      const bool isES = ctx ? ctx->isOpenGLES() : QOpenGLContext::openGLModuleType() != QOpenGLContext::LibGL;
+      internal_format = isES ? GL_RGBA : GL_RGBA8;
+#else
+      internal_format = GL_RGBA;
+#endif
    }
+
    QGLFramebufferObjectFormatPrivate
    (const QGLFramebufferObjectFormatPrivate *other)
       : ref(1),
@@ -55,10 +59,10 @@ class QGLFramebufferObjectFormatPrivate
    }
    bool equals(const QGLFramebufferObjectFormatPrivate *other) {
       return samples == other->samples &&
-             attachment == other->attachment &&
-             target == other->target &&
-             internal_format == other->internal_format &&
-             mipmap == other->mipmap;
+         attachment == other->attachment &&
+         target == other->target &&
+         internal_format == other->internal_format &&
+         mipmap == other->mipmap;
    }
 
    QAtomicInt ref;
@@ -91,32 +95,36 @@ class QGLFBOGLPaintDevice : public QGLPaintDevice
    }
 
    void setFBO(QGLFramebufferObject *f,
-               QGLFramebufferObject::Attachment attachment);
+      QGLFramebufferObject::Attachment attachment);
 
  private:
    QGLFramebufferObject *fbo;
    QGLFormat fboFormat;
-   bool wasBound;
    bool reqAlpha;
 };
 
 class QGLFramebufferObjectPrivate
 {
  public:
-   QGLFramebufferObjectPrivate() : fbo_guard(0), texture(0), depth_buffer(0), stencil_buffer(0)
-      , color_buffer(0), valid(false), engine(0) {}
+   QGLFramebufferObjectPrivate() : fbo_guard(0), texture_guard(0), depth_buffer_guard(0)
+              , stencil_buffer_guard(0), color_buffer_guard(0), valid(false), engine(0)
+   {}
+
    ~QGLFramebufferObjectPrivate() {}
 
    void init(QGLFramebufferObject *q, const QSize &sz,
-             QGLFramebufferObject::Attachment attachment,
-             GLenum internal_format, GLenum texture_target,
-             GLint samples = 0, bool mipmap = false);
+      QGLFramebufferObject::Attachment attachment,
+      GLenum internal_format, GLenum texture_target,
+      GLint samples = 0, bool mipmap = false);
+
    bool checkFramebufferStatus() const;
-   QGLSharedResourceGuard fbo_guard;
-   GLuint texture;
-   GLuint depth_buffer;
-   GLuint stencil_buffer;
-   GLuint color_buffer;
+
+   QGLSharedResourceGuardBase *fbo_guard;
+   QGLSharedResourceGuardBase *texture_guard;
+   QGLSharedResourceGuardBase *depth_buffer_guard;
+   QGLSharedResourceGuardBase *stencil_buffer_guard;
+   QGLSharedResourceGuardBase *color_buffer_guard;
+
    GLenum target;
    QSize size;
    QGLFramebufferObjectFormat format;
@@ -124,10 +132,11 @@ class QGLFramebufferObjectPrivate
    QGLFramebufferObject::Attachment fbo_attachment;
    mutable QPaintEngine *engine;
    QGLFBOGLPaintDevice glDevice;
+   QOpenGLExtensions funcs;
 
-   inline GLuint fbo() const {
-      return fbo_guard.id();
+   GLuint fbo() const {
+      return fbo_guard ? fbo_guard->id() : 0;
    }
 };
 
-#endif // QGLFRAMEBUFFEROBJECT_P_H
+#endif

@@ -30,12 +30,9 @@
 #include <QtGui/qmatrix4x4.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_OPENGL_ES_1)
-
 class QGLShaderProgram;
 class QGLShaderPrivate;
+class QGLShaderProgramPrivate;
 
 class Q_OPENGL_EXPORT QGLShader : public QObject
 {
@@ -67,7 +64,7 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
 
    GLuint shaderId() const;
 
-   static bool hasOpenGLShaders(ShaderType type, const QGLContext *context = 0);
+   static bool hasOpenGLShaders(ShaderType type, const QGLContext *context = nullptr);
 
  private:
    friend class QGLShaderProgram;
@@ -81,17 +78,6 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGLShader::ShaderType)
-
-
-class QGLShaderProgramPrivate;
-
-#ifndef GL_EXT_geometry_shader4
-#  define GL_LINES_ADJACENCY_EXT 0xA
-#  define GL_LINE_STRIP_ADJACENCY_EXT 0xB
-#  define GL_TRIANGLES_ADJACENCY_EXT 0xC
-#  define GL_TRIANGLE_STRIP_ADJACENCY_EXT 0xD
-#endif
-
 
 class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
 {
@@ -187,17 +173,6 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    void setAttributeBuffer
    (const char *name, GLenum type, int offset, int tupleSize, int stride = 0);
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-   void setAttributeArray
-   (int location, QMacCompatGLenum type, const void *values, int tupleSize, int stride = 0);
-   void setAttributeArray
-   (const char *name, QMacCompatGLenum type, const void *values, int tupleSize, int stride = 0);
-   void setAttributeBuffer
-   (int location, QMacCompatGLenum type, int offset, int tupleSize, int stride = 0);
-   void setAttributeBuffer
-   (const char *name, QMacCompatGLenum type, int offset, int tupleSize, int stride = 0);
-#endif
-
    void enableAttributeArray(int location);
    void enableAttributeArray(const char *name);
    void disableAttributeArray(int location);
@@ -206,17 +181,6 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    int uniformLocation(const char *name) const;
    int uniformLocation(const QByteArray &name) const;
    int uniformLocation(const QString &name) const;
-
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-   void setUniformValue(int location, QMacCompatGLint value);
-   void setUniformValue(int location, QMacCompatGLuint value);
-   void setUniformValue(const char *name, QMacCompatGLint value);
-   void setUniformValue(const char *name, QMacCompatGLuint value);
-   void setUniformValueArray(int location, const QMacCompatGLint *values, int count);
-   void setUniformValueArray(int location, const QMacCompatGLuint *values, int count);
-   void setUniformValueArray(const char *name, const QMacCompatGLint *values, int count);
-   void setUniformValueArray(const char *name, const QMacCompatGLuint *values, int count);
-#endif
 
    void setUniformValue(int location, GLfloat value);
    void setUniformValue(int location, GLint value);
@@ -306,7 +270,10 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    void setUniformValueArray(const char *name, const QMatrix4x3 *values, int count);
    void setUniformValueArray(const char *name, const QMatrix4x4 *values, int count);
 
-   static bool hasOpenGLShaderPrograms(const QGLContext *context = 0);
+   static bool hasOpenGLShaderPrograms(const QGLContext *context = nullptr);
+
+ protected:
+   QScopedPointer<QGLShaderProgramPrivate> d_ptr;
 
  private :
    OPENGL_CS_SLOT_1(Private, void shaderDestroyed())
@@ -316,14 +283,6 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    Q_DECLARE_PRIVATE(QGLShaderProgram)
 
    bool init();
-
- protected:
-   QScopedPointer<QGLShaderProgramPrivate> d_ptr;
-
 };
-
-#endif
-
-QT_END_NAMESPACE
 
 #endif

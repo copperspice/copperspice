@@ -20,66 +20,12 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QGLColormap
-    \brief The QGLColormap class is used for installing custom colormaps into
-    a QGLWidget.
 
-    \module OpenGL
-    \ingroup painting-3D
-    \ingroup shared
+#include <qglcolormap.h>
 
-    QGLColormap provides a platform independent way of specifying and
-    installing indexed colormaps for a QGLWidget. QGLColormap is
-    especially useful when using the OpenGL color-index mode.
-
-    Under X11 you must use an X server that supports either a \c
-    PseudoColor or \c DirectColor visual class. If your X server
-    currently only provides a \c GrayScale, \c TrueColor, \c
-    StaticColor or \c StaticGray visual, you will not be able to
-    allocate colorcells for writing. If this is the case, try setting
-    your X server to 8 bit mode. It should then provide you with at
-    least a \c PseudoColor visual. Note that you may experience
-    colormap flashing if your X server is running in 8 bit mode.
-
-    The size() of the colormap is always set to 256
-    colors. Note that under Windows you can also install colormaps
-    in child widgets.
-
-    This class uses \l{implicit sharing} as a memory and speed
-    optimization.
-
-    Example of use:
-    \snippet doc/src/snippets/code/src_opengl_qglcolormap.cpp 0
-
-    \sa QGLWidget::setColormap(), QGLWidget::colormap()
-*/
-
-/*!
-    \fn Qt::HANDLE QGLColormap::handle()
-
-    \internal
-
-    Returns the handle for this color map.
-*/
-
-/*!
-    \fn void QGLColormap::setHandle(Qt::HANDLE handle)
-
-    \internal
-
-    Sets the handle for this color map to \a handle.
-*/
-
-#include "qglcolormap.h"
-
-QT_BEGIN_NAMESPACE
 
 QGLColormap::QGLColormapData QGLColormap::shared_null = { 1, 0, 0 };
 
-/*!
-    Construct a QGLColormap.
-*/
 QGLColormap::QGLColormap()
    : d(&shared_null)
 {
@@ -87,22 +33,15 @@ QGLColormap::QGLColormap()
 }
 
 
-/*!
-    Construct a shallow copy of \a map.
-*/
 QGLColormap::QGLColormap(const QGLColormap &map)
    : d(map.d)
 {
    d->ref.ref();
 }
 
-/*!
-    Dereferences the QGLColormap and deletes it if this was the last
-    reference to it.
-*/
 QGLColormap::~QGLColormap()
 {
-   if (!d->ref.deref()) {
+   if (! d->ref.deref()) {
       cleanup(d);
    }
 }
@@ -176,7 +115,7 @@ void QGLColormap::setEntries(int count, const QRgb *colors, int base)
    }
 
    Q_ASSERT_X(colors && base >= 0 && (base + count) <= d->cells->size(), "QGLColormap::setEntries",
-              "preconditions not met");
+      "preconditions not met");
    for (int i = 0; i < count; ++i) {
       setEntry(base + i, colors[i]);
    }
@@ -265,12 +204,14 @@ int QGLColormap::findNearest(QRgb color) const
    if (idx >= 0) {
       return idx;
    }
+
    int mapSize = size();
    int mindist = 200000;
    int r = qRed(color);
    int g = qGreen(color);
    int b = qBlue(color);
    int rx, gx, bx, dist;
+
    for (int i = 0; i < mapSize; ++i) {
       QRgb ci = d->cells->at(i);
       rx = r - qRed(ci);
@@ -285,4 +226,3 @@ int QGLColormap::findNearest(QRgb color) const
    return idx;
 }
 
-QT_END_NAMESPACE

@@ -23,75 +23,21 @@
 #ifndef QGL_H
 #define QGL_H
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qpaintengine.h>
-#include <QtOpenGL/qglcolormap.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qscopedpointer.h>
-
-#ifdef Q_WS_QPA
-#include <QtGui/QPlatformWindowFormat>
-#endif
-
-#if defined(Q_OS_WIN)
-# include <QtCore/qt_windows.h>
-#endif
-
-#if defined(Q_OS_MAC)
-# include <OpenGL/gl.h>
-
-#elif defined(QT_OPENGL_ES_1)
-# if defined(Q_OS_MAC)
-#  include <OpenGLES/ES1/gl.h>
-# else
-#  include <GLES/gl.h>
-# endif
-
-# ifndef GL_DOUBLE
-#  define GL_DOUBLE GL_FLOAT
-# endif
-
-# ifndef GLdouble
-typedef GLfloat GLdouble;
-# endif
-
-#elif defined(QT_OPENGL_ES_2)
-# if defined(Q_OS_MAC)
-#  include <OpenGLES/ES2/gl.h>
-# else
-#  include <GLES2/gl2.h>
-# endif
-
-# ifndef GL_DOUBLE
-#  define GL_DOUBLE GL_FLOAT
-# endif
-
-# ifndef GLdouble
-typedef GLfloat GLdouble;
-# endif
-
-#else
-# include <GL/gl.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
-class QGLCmap;
-#endif
+#include <qopengl.h>
+#include <qwidget.h>
+#include <qpaintengine.h>
+#include <qglcolormap.h>
+#include <qmap.h>
+#include <qscopedpointer.h>
+#include <QSurfaceFormat>
 
 class QPixmap;
-
-#if defined(Q_WS_X11) && !defined(QT_OPENGL_ES)
-class QGLOverlayWidget;
-#endif
-
 class QGLWidgetPrivate;
 class QGLContextPrivate;
+class QGLFunctions;
+class QGLFormatPrivate;
 
-// Namespace class:
 namespace QGL {
-Q_OPENGL_EXPORT void setPreferredPaintEngine(QPaintEngine::Type engineType);
 
 enum FormatOption {
    DoubleBuffer            = 0x0001,
@@ -118,11 +64,11 @@ enum FormatOption {
    NoDeprecatedFunctions   = DeprecatedFunctions << 16
 };
 using FormatOptions = QFlags<FormatOption>;
-}
+
+} // namespace
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGL::FormatOptions)
 
-class QGLFormatPrivate;
 
 class Q_OPENGL_EXPORT QGLFormat
 {
@@ -228,16 +174,17 @@ class Q_OPENGL_EXPORT QGLFormat
       OpenGL_Version_3_1                = 0x00002000,
       OpenGL_Version_3_2                = 0x00004000,
       OpenGL_Version_3_3                = 0x00008000,
-      OpenGL_Version_4_0                = 0x00010000
+      OpenGL_Version_4_0                = 0x00010000,
+      OpenGL_Version_4_1                = 0x00020000,
+      OpenGL_Version_4_2                = 0x00040000,
+      OpenGL_Version_4_3                = 0x00080000
    };
    using OpenGLVersionFlags = QFlags<OpenGLVersionFlag>;
 
    static OpenGLVersionFlags openGLVersionFlags();
 
-#if defined(Q_WS_QPA)
-   static QGLFormat fromPlatformWindowFormat(const QPlatformWindowFormat &format);
-   static QPlatformWindowFormat toPlatformWindowFormat(const QGLFormat &format);
-#endif
+   static QGLFormat fromSurfaceFormat(const QSurfaceFormat &format);
+   static QSurfaceFormat toSurfaceFormat(const QGLFormat &format);
 
  private:
    QGLFormatPrivate *d;
@@ -261,11 +208,13 @@ class Q_OPENGL_EXPORT QGLContext
    Q_DECLARE_PRIVATE(QGLContext)
 
  public:
+   using FP_Void = void(*)();
+
    QGLContext(const QGLFormat &format, QPaintDevice *device);
    QGLContext(const QGLFormat &format);
    virtual ~QGLContext();
 
-   virtual bool create(const QGLContext *shareContext = 0);
+   virtual bool create(const QGLContext *shareContext = nullptr);
    bool isValid() const;
    bool isSharing() const;
    void reset();
@@ -276,11 +225,13 @@ class Q_OPENGL_EXPORT QGLContext
    QGLFormat requestedFormat() const;
    void setFormat(const QGLFormat &format);
 
-   // ### Qt5/return bools + maybe remove virtuals
+   void moveToThread(QThread *thread);
+
    virtual void makeCurrent();
    virtual void doneCurrent();
 
    virtual void swapBuffers() const;
+   QGLFunctions *functions() const;
 
    enum BindOption {
       NoBindOption                            = 0x0000,
@@ -291,24 +242,25 @@ class Q_OPENGL_EXPORT QGLContext
 
       MemoryManagedBindOption                 = 0x0010, // internal flag
       CanFlipNativePixmapBindOption           = 0x0020, // internal flag
+      TemporarilyCachedBindOption             = 0x0040, // internal flag
 
       DefaultBindOption                       = LinearFilteringBindOption
-            | InvertedYBindOption
-            | MipmapBindOption,
+         | InvertedYBindOption
+         | MipmapBindOption,
       InternalBindOption                      = MemoryManagedBindOption
-            | PremultipliedAlphaBindOption
+         | PremultipliedAlphaBindOption
    };
    using BindOptions = QFlags<BindOption>;
 
    GLuint bindTexture(const QImage &image, GLenum target, GLint format,
-                      BindOptions options);
+      BindOptions options);
    GLuint bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
-                      BindOptions options);
+      BindOptions options);
 
    GLuint bindTexture(const QImage &image, GLenum target = GL_TEXTURE_2D,
-                      GLint format = GL_RGBA);
+      GLint format = GL_RGBA);
    GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D,
-                      GLint format = GL_RGBA);
+      GLint format = GL_RGBA);
    GLuint bindTexture(const QString &fileName);
 
    void deleteTexture(GLuint tx_id);
@@ -316,70 +268,35 @@ class Q_OPENGL_EXPORT QGLContext
    void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
    void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-   GLuint bindTexture(const QImage &image, QMacCompatGLenum = GL_TEXTURE_2D,
-                      QMacCompatGLint format = GL_RGBA);
-
-   GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum = GL_TEXTURE_2D,
-                      QMacCompatGLint format = GL_RGBA);
-
-   GLuint bindTexture(const QImage &image, QMacCompatGLenum, QMacCompatGLint format, BindOptions);
-   GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum, QMacCompatGLint format, BindOptions);
-
-   void deleteTexture(QMacCompatGLuint tx_id);
-
-   void drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget = GL_TEXTURE_2D);
-   void drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget = GL_TEXTURE_2D);
-#endif
-
    static void setTextureCacheLimit(int size);
    static int textureCacheLimit();
 
-   void *getProcAddress(const QString &proc) const;
+   FP_Void getProcAddress(const QString &proc) const;
    QPaintDevice *device() const;
    QColor overlayTransparentColor() const;
 
    static const QGLContext *currentContext();
 
-#ifdef Q_WS_QPA
-   static QGLContext *fromPlatformGLContext(QPlatformGLContext *platformContext);
-#endif
+   static QGLContext *fromOpenGLContext(QOpenGLContext *platformContext);
+   QOpenGLContext *contextHandle() const;
 
  protected:
-   virtual bool chooseContext(const QGLContext *shareContext = 0);
-
-#if defined(Q_OS_WIN)
-   virtual int choosePixelFormat(void *pfd, HDC pdc);
-#endif
-
-#if defined(Q_WS_X11)
-   virtual void *tryVisual(const QGLFormat &f, int bufDepth = 1);
-   virtual void *chooseVisual();
-#endif
-
-#if defined(Q_OS_MAC)
-   virtual void *chooseMacVisual(GDHandle);
-#endif
+   virtual bool chooseContext(const QGLContext *shareContext = nullptr);
 
    bool deviceIsPixmap() const;
    bool windowCreated() const;
    void setWindowCreated(bool on);
    bool initialized() const;
    void setInitialized(bool on);
-   void generateFontDisplayLists(const QFont &fnt, int listBase);  // ### Qt5/remove
 
    uint colorIndex(const QColor &c) const;
    void setValid(bool valid);
    void setDevice(QPaintDevice *pDev);
 
- protected:
    static QGLContext *currentCtx;
 
  private:
-
-#ifdef Q_WS_QPA
-   QGLContext(QPlatformGLContext *platformContext);
-#endif
+   QGLContext(QOpenGLContext *windowContext);
 
    QScopedPointer<QGLContextPrivate> d_ptr;
 
@@ -388,42 +305,26 @@ class Q_OPENGL_EXPORT QGLContext
    friend class QGLWidget;
    friend class QGLWidgetPrivate;
    friend class QGLGlyphCache;
-   friend class QOpenGLPaintEngine;
-   friend class QOpenGLPaintEnginePrivate;
    friend class QGL2PaintEngineEx;
    friend class QGL2PaintEngineExPrivate;
    friend class QGLEngineShaderManager;
-   friend class QGLWindowSurface;
-   friend class QGLPixmapData;
-   friend class QGLPixmapFilterBase;
    friend class QGLTextureGlyphCache;
    friend struct QGLGlyphTexture;
    friend class QGLContextGroup;
-   friend class QGLSharedResourceGuard;
    friend class QGLPixmapBlurFilter;
-   friend class QGLExtensions;
    friend class QGLTexture;
    friend QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags();
 
-#ifdef Q_OS_MAC
- public:
-   void updatePaintDevice();
-
- private:
-   friend class QMacGLWindowChangeEvent;
-   friend QGLContextPrivate *qt_phonon_get_dptr(const QGLContext *);
-#endif
 
    friend class QGLFramebufferObject;
    friend class QGLFramebufferObjectPrivate;
    friend class QGLFBOGLPaintDevice;
    friend class QGLPaintDevice;
    friend class QGLWidgetGLPaintDevice;
-   friend class QX11GLPixmapData;
    friend class QX11GLSharedContexts;
    friend class QGLContextResourceBase;
+   friend class QSGDistanceFieldGlyphCache;
 
- private:
    Q_DISABLE_COPY(QGLContext)
 };
 
@@ -436,13 +337,13 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
 
  public:
    explicit QGLWidget(QWidget *parent = nullptr,
-                      const QGLWidget *shareWidget = 0, Qt::WindowFlags f = 0);
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
    explicit QGLWidget(QGLContext *context, QWidget *parent = nullptr,
-                      const QGLWidget *shareWidget = 0, Qt::WindowFlags f = 0);
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
    explicit QGLWidget(const QGLFormat &format, QWidget *parent = nullptr,
-                      const QGLWidget *shareWidget = 0, Qt::WindowFlags f = 0);
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
    ~QGLWidget();
 
@@ -452,7 +353,6 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    bool isValid() const;
    bool isSharing() const;
 
-   // ### Qt5/return bools
    void makeCurrent();
    void doneCurrent();
 
@@ -462,9 +362,9 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    QGLFormat format() const;
    void setFormat(const QGLFormat &format);
 
-   const QGLContext *context() const;
-   void setContext(QGLContext *context, const QGLContext *shareContext = 0,
-                   bool deleteOldContext = true);
+   QGLContext *context() const;
+   void setContext(QGLContext *context, const QGLContext *shareContext = nullptr,
+      bool deleteOldContext = true);
 
    QPixmap renderPixmap(int w = 0, int h = 0, bool useContext = false);
    QImage grabFrameBuffer(bool withAlpha = false);
@@ -473,8 +373,6 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    const QGLContext *overlayContext() const;
 
    static QImage convertToGLFormat(const QImage &img);
-
-   void setMouseTracking(bool enable);
 
    const QGLColormap &colormap() const;
    void  setColormap(const QGLColormap &map);
@@ -485,14 +383,14 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    QPaintEngine *paintEngine() const override;
 
    GLuint bindTexture(const QImage &image, GLenum target, GLint format,
-                      QGLContext::BindOptions options);
+      QGLContext::BindOptions options);
    GLuint bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
-                      QGLContext::BindOptions options);
+      QGLContext::BindOptions options);
 
    GLuint bindTexture(const QImage &image, GLenum target = GL_TEXTURE_2D,
-                      GLint format = GL_RGBA);
+      GLint format = GL_RGBA);
    GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D,
-                      GLint format = GL_RGBA);
+      GLint format = GL_RGBA);
 
    GLuint bindTexture(const QString &fileName);
 
@@ -501,25 +399,10 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
    void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-   GLuint bindTexture(const QImage &image, QMacCompatGLenum = GL_TEXTURE_2D,
-                      QMacCompatGLint format = GL_RGBA);
-   GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum = GL_TEXTURE_2D,
-                      QMacCompatGLint format = GL_RGBA);
-   GLuint bindTexture(const QImage &image, QMacCompatGLenum, QMacCompatGLint format,
-                      QGLContext::BindOptions);
-   GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum, QMacCompatGLint format,
-                      QGLContext::BindOptions);
-
-   void deleteTexture(QMacCompatGLuint tx_id);
-
-   void drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget = GL_TEXTURE_2D);
-   void drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget = GL_TEXTURE_2D);
-#endif
-
  public :
    OPENGL_CS_SLOT_1(Public, virtual void updateGL())
    OPENGL_CS_SLOT_2(updateGL)
+
    OPENGL_CS_SLOT_1(Public, virtual void updateOverlayGL())
    OPENGL_CS_SLOT_2(updateOverlayGL)
 
@@ -541,14 +424,13 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
 
    virtual void glInit();
    virtual void glDraw();
-   int fontDisplayListBase(const QFont &fnt, int listBase = 2000);  // ### Qt5/remove
-
+   QGLWidget(QGLWidgetPrivate &dd,
+      const QGLFormat &format = QGLFormat(),
+      QWidget *parent = nullptr,
+      const QGLWidget *shareWidget = nullptr,
+      Qt::WindowFlags f = Qt::WindowFlags());
  private:
    Q_DISABLE_COPY(QGLWidget)
-
-#ifdef Q_OS_MAC
-   friend class QMacGLWindowChangeEvent;
-#endif
 
    friend class QGLDrawable;
    friend class QGLPixelBuffer;
@@ -556,7 +438,6 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    friend class QGLContext;
    friend class QGLContextPrivate;
    friend class QGLOverlayWidget;
-   friend class QOpenGLPaintEngine;
    friend class QGLPaintDevice;
    friend class QGLWidgetGLPaintDevice;
 };
@@ -616,6 +497,5 @@ inline bool QGLFormat::sampleBuffers() const
    return testOption(QGL::SampleBuffers);
 }
 
-QT_END_NAMESPACE
 
-#endif // QGL_H
+#endif

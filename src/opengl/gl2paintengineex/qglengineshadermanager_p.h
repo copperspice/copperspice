@@ -198,8 +198,6 @@
 #include <qgl_p.h>
 #include <qglcustomshaderstage_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /*
 struct QGLEngineCachedShaderProg
 {
@@ -337,7 +335,6 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
    void cleanupCustomStage(QGLCustomShaderStage *stage);
 
  private:
-   QGLSharedResourceGuard ctxGuard;
    QGLShaderProgram *blitShaderProg;
    QGLShaderProgram *simpleShaderProg;
    QList<QGLEngineShaderProg *> cachedPrograms;
@@ -345,7 +342,6 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
 
    static QStringList qShaderSnippets;
 };
-
 
 class QGLEngineShaderProg
 {
@@ -374,7 +370,7 @@ class QGLEngineShaderProg
    bool useOpacityAttribute;
    bool usePmvMatrixAttribute;
 
-   bool operator==(const QGLEngineShaderProg &other) {
+   bool operator==(const QGLEngineShaderProg &other) const {
       // do not care about the program
       return ( mainVertexShader      == other.mainVertexShader &&
                positionVertexShader  == other.positionVertexShader &&
@@ -390,6 +386,7 @@ class QGLEngineShaderProg
 class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
 {
    OPENGL_CS_OBJECT(QGLEngineShaderManager)
+
  public:
    QGLEngineShaderManager(QGLContext *context);
    ~QGLEngineShaderManager();
@@ -421,6 +418,7 @@ class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
       BrushTransform,
       BrushTexture,
       Matrix,
+      TranslateZ,
       NumUniforms
    };
 
@@ -478,7 +476,5 @@ class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
 
    QGLEngineShaderProg    *currentShaderProg;
 };
-
-QT_END_NAMESPACE
 
 #endif //QGLENGINE_SHADER_MANAGER_H

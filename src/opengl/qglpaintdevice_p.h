@@ -26,7 +26,6 @@
 #include <qpaintdevice.h>
 #include <qgl.h>
 
-QT_BEGIN_NAMESPACE
 
 class Q_OPENGL_EXPORT QGLPaintDevice : public QPaintDevice
 {
@@ -57,7 +56,6 @@ class Q_OPENGL_EXPORT QGLPaintDevice : public QPaintDevice
    GLuint m_thisFBO;
 };
 
-
 // Wraps a QGLWidget
 class QGLWidget;
 class QGLWidgetGLPaintDevice : public QGLPaintDevice
@@ -80,6 +78,6 @@ class QGLWidgetGLPaintDevice : public QGLPaintDevice
    QGLWidget *glWidget;
 };
 
-QT_END_NAMESPACE
 
-#endif // QGLPAINTDEVICE_P_H
+
+#endif

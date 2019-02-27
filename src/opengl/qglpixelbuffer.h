@@ -23,10 +23,8 @@
 #ifndef QGLPIXELBUFFER_H
 #define QGLPIXELBUFFER_H
 
-#include <QtOpenGL/qgl.h>
-#include <QtGui/qpaintdevice.h>
-
-QT_BEGIN_NAMESPACE
+#include <qgl.h>
+#include <qpaintdevice.h>
 
 class QGLPixelBufferPrivate;
 
@@ -35,14 +33,15 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
    Q_DECLARE_PRIVATE(QGLPixelBuffer)
  public:
    QGLPixelBuffer(const QSize &size, const QGLFormat &format = QGLFormat::defaultFormat(),
-                  QGLWidget *shareWidget = 0);
+      QGLWidget *shareWidget = nullptr);
    QGLPixelBuffer(int width, int height, const QGLFormat &format = QGLFormat::defaultFormat(),
-                  QGLWidget *shareWidget = 0);
+      QGLWidget *shareWidget = nullptr);
    virtual ~QGLPixelBuffer();
 
    bool isValid() const;
    bool makeCurrent();
    bool doneCurrent();
+   QGLContext *context() const;
 
    GLuint generateDynamicTexture() const;
    bool bindToDynamicTexture(GLuint texture);
@@ -57,18 +56,6 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
    void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
    void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-   bool bindToDynamicTexture(QMacCompatGLuint texture);
-   void updateDynamicTexture(QMacCompatGLuint texture_id) const;
-   GLuint bindTexture(const QImage &image, QMacCompatGLenum target = GL_TEXTURE_2D);
-   GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum target = GL_TEXTURE_2D);
-
-   void drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget = GL_TEXTURE_2D);
-   void drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget = GL_TEXTURE_2D);
-
-   void deleteTexture(QMacCompatGLuint texture_id);
-#endif
-
    QSize size() const;
    Qt::HANDLE handle() const;
    QImage toImage() const;
@@ -81,20 +68,18 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
  protected:
    int metric(PaintDeviceMetric metric) const override;
 
-   int devType() const override{
+   int devType() const override {
       return QInternal::Pbuffer;
    }
 
  private:
    Q_DISABLE_COPY(QGLPixelBuffer)
    QScopedPointer<QGLPixelBufferPrivate> d_ptr;
+
    friend class QGLDrawable;
-   friend class QGLWindowSurface;
    friend class QGLPaintDevice;
    friend class QGLPBufferGLPaintDevice;
    friend class QGLContextPrivate;
 };
 
-QT_END_NAMESPACE
-
-#endif // QGLPIXELBUFFER_H
+#endif

@@ -20,41 +20,39 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qglobal.h>
+#include <qopenglextensions_p.h>
 
-#if !defined(QT_OPENGL_ES_1)
-#include <qpaintengineex_opengl2_p.h>
-#endif
-
+#include <qimage.h>
+#include <qglobal.h>
+#include <qopenglframebufferobject.h>
+#include <qglframebufferobject.h>
 #include <qglpixelbuffer.h>
+
+#include <qpaintengineex_opengl2_p.h>
 #include <qglpixelbuffer_p.h>
 #include <qfont_p.h>
-#include <qimage.h>
 
-#ifndef QT_OPENGL_ES_2
-#include <qpaintengine_opengl_p.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_OPENGL_ES_2)
-extern void qgl_cleanup_glyph_cache(QGLContext *);
-#else
-void qgl_cleanup_glyph_cache(QGLContext *) {}
-#endif
-
-extern QImage qt_gl_read_framebuffer(const QSize &, bool, bool);
-
+QImage cs_glRead_frameBuffer(const QSize &, bool, bool);
 
 QGLContext *QGLPBufferGLPaintDevice::context() const
 {
    return pbuf->d_func()->qctx;
 }
 
+void QGLPBufferGLPaintDevice::beginPaint()
+{
+   pbuf->makeCurrent();
+   QGLPaintDevice::beginPaint();
+}
 void QGLPBufferGLPaintDevice::endPaint()
 {
-   glFlush();
+   QOpenGLContext::currentContext()->functions()->glFlush();
    QGLPaintDevice::endPaint();
+}
+
+void QGLPBufferGLPaintDevice::setFbo(GLuint fbo)
+{
+   m_thisFBO = fbo;
 }
 
 void QGLPBufferGLPaintDevice::setPBuffer(QGLPixelBuffer *pb)
@@ -65,56 +63,18 @@ void QGLPBufferGLPaintDevice::setPBuffer(QGLPixelBuffer *pb)
 void QGLPixelBufferPrivate::common_init(const QSize &size, const QGLFormat &format, QGLWidget *shareWidget)
 {
    Q_Q(QGLPixelBuffer);
+
    if (init(size, format, shareWidget)) {
       req_size = size;
       req_format = format;
       req_shareWidget = shareWidget;
       invalid = false;
-      qctx = new QGLContext(format);
-      qctx->d_func()->sharing = (shareWidget != 0);
-      if (shareWidget != 0 && shareWidget->d_func()->glcx) {
-         QGLContextGroup::addShare(qctx, shareWidget->d_func()->glcx);
-         shareWidget->d_func()->glcx->d_func()->sharing = true;
-      }
 
       glDevice.setPBuffer(q);
-      qctx->d_func()->paintDevice = q;
-      qctx->d_func()->valid = true;
-
-#if defined(Q_OS_WIN) && !defined(QT_OPENGL_ES)
-      qctx->d_func()->dc = dc;
-      qctx->d_func()->rc = ctx;
-
-#elif (defined(Q_WS_X11) && defined(QT_NO_EGL))
-      qctx->d_func()->cx = ctx;
-      qctx->d_func()->pbuf = (void *) pbuf;
-      qctx->d_func()->vi = 0;
-
-#elif defined(Q_OS_MAC)
-      qctx->d_func()->cx = ctx;
-      qctx->d_func()->vi = 0;
-
-#elif !defined(QT_NO_EGL)
-      qctx->d_func()->eglContext = ctx;
-      qctx->d_func()->eglSurface = pbuf;
-#endif
 
    }
 }
 
-/*!
-    Constructs an OpenGL pbuffer of the given \a size. If no \a
-    format is specified, the \l{QGLFormat::defaultFormat()}{default
-    format} is used. If the \a shareWidget parameter points to a
-    valid QGLWidget, the pbuffer will share its context with \a
-    shareWidget.
-
-    If you intend to bind this pbuffer as a dynamic texture, the width
-    and height components of \c size must be powers of two (e.g., 512
-    x 128).
-
-    \sa size(), format()
-*/
 QGLPixelBuffer::QGLPixelBuffer(const QSize &size, const QGLFormat &format, QGLWidget *shareWidget)
    : d_ptr(new QGLPixelBufferPrivate(this))
 {
@@ -158,9 +118,9 @@ QGLPixelBuffer::~QGLPixelBuffer()
    if (current != d->qctx) {
       makeCurrent();
    }
-   qgl_cleanup_glyph_cache(d->qctx);
+
    d->cleanup();
-   delete d->qctx;
+
    if (current && current != d->qctx) {
       current->makeCurrent();
    }
@@ -180,7 +140,23 @@ bool QGLPixelBuffer::makeCurrent()
    if (d->invalid) {
       return false;
    }
+
    d->qctx->makeCurrent();
+   if (!d->fbo) {
+      QOpenGLFramebufferObjectFormat format;
+      if (d->req_format.stencil()) {
+         format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+      } else if (d->req_format.depth()) {
+         format.setAttachment(QOpenGLFramebufferObject::Depth);
+      }
+      if (d->req_format.sampleBuffers()) {
+         format.setSamples(d->req_format.samples());
+      }
+      d->fbo = new QOpenGLFramebufferObject(d->req_size, format);
+      d->fbo->bind();
+      d->glDevice.setFbo(d->fbo->handle());
+      QOpenGLContext::currentContext()->functions()->glViewport(0, 0, d->req_size.width(), d->req_size.height());
+   }
    return true;
 }
 
@@ -200,106 +176,59 @@ bool QGLPixelBuffer::doneCurrent()
    return true;
 }
 
-/*!
-    Generates and binds a 2D GL texture that is the same size as the
-    pbuffer, and returns the texture's ID. This can be used in
-    conjunction with bindToDynamicTexture() and
-    updateDynamicTexture().
 
-    \sa size()
-*/
-
-#if (defined(Q_WS_X11) || defined(Q_OS_WIN)) && defined(QT_NO_EGL)
-GLuint QGLPixelBuffer::generateDynamicTexture() const
+QGLContext *QGLPixelBuffer::context() const
 {
    Q_D(const QGLPixelBuffer);
-   GLuint texture;
-   glGenTextures(1, &texture);
-   glBindTexture(GL_TEXTURE_2D, texture);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, d->req_size.width(), d->req_size.height(), 0, GL_RGBA, GL_FLOAT, 0);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   return texture;
+   return d->qctx;
 }
-#endif
 
-/*! \fn bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 
-    Binds the texture specified by \a texture_id to this pbuffer.
-    Returns true on success; otherwise returns false.
 
-    The texture must be of the same size and format as the pbuffer.
 
-    To unbind the texture, call releaseFromDynamicTexture(). While
-    the texture is bound, it is updated automatically when the
-    pbuffer contents change, eliminating the need for additional copy
-    operations.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_opengl_qglpixelbuffer.cpp 0
-
-    \warning This function uses the \c {render_texture} extension,
-    which is currently not supported under X11. An alternative that
-    works on all systems (including X11) is to manually copy the
-    pbuffer contents to a texture using updateDynamicTexture().
-
-    \warning For the bindToDynamicTexture() call to succeed on the
-    Mac OS X, the pbuffer needs a shared context, i.e. the
-    QGLPixelBuffer must be created with a share widget.
-
-    \sa generateDynamicTexture(), releaseFromDynamicTexture()
-*/
-
-/*! \fn void QGLPixelBuffer::releaseFromDynamicTexture()
-
-    Releases the pbuffer from any previously bound texture.
-
-    \sa bindToDynamicTexture()
-*/
-
-/*! \fn bool QGLPixelBuffer::hasOpenGLPbuffers()
-
-    Returns true if the OpenGL \c pbuffer extension is present on
-    this system; otherwise returns false.
-*/
-
-/*!
-    Copies the pbuffer contents into the texture specified with \a
-    texture_id.
-
-    The texture must be of the same size and format as the pbuffer.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_opengl_qglpixelbuffer.cpp 1
-
-    An alternative on Windows and Mac OS X systems that support the
-    \c render_texture extension is to use bindToDynamicTexture() to
-    get dynamic updates of the texture.
-
-    \sa generateDynamicTexture(), bindToDynamicTexture()
-*/
 void QGLPixelBuffer::updateDynamicTexture(GLuint texture_id) const
 {
    Q_D(const QGLPixelBuffer);
-   if (d->invalid) {
+   if (d->invalid || !d->fbo) {
       return;
    }
-   glBindTexture(GL_TEXTURE_2D, texture_id);
-#ifndef QT_OPENGL_ES
-   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, d->req_size.width(), d->req_size.height(), 0);
-#else
-   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, d->req_size.width(), d->req_size.height(), 0);
+
+   const QGLContext *ctx = QGLContext::currentContext();
+   if (!ctx) {
+      return;
+   }
+
+#undef glBindFramebuffer
+
+#ifndef GL_READ_FRAMEBUFFER
+#define GL_READ_FRAMEBUFFER 0x8CA8
 #endif
+
+#ifndef GL_DRAW_FRAMEBUFFER
+#define GL_DRAW_FRAMEBUFFER 0x8CA9
+#endif
+   QOpenGLExtensions extensions(ctx->contextHandle());
+
+   ctx->d_ptr->refreshCurrentFbo();
+
+   if (d->blit_fbo) {
+      QOpenGLFramebufferObject::blitFramebuffer(d->blit_fbo, d->fbo);
+      extensions.glBindFramebuffer(GL_READ_FRAMEBUFFER, d->blit_fbo->handle());
+   }
+
+   extensions.glBindTexture(GL_TEXTURE_2D, texture_id);
+#ifndef QT_OPENGL_ES
+   GLenum format = ctx->contextHandle()->isOpenGLES() ? GL_RGBA : GL_RGBA8;
+   extensions.glCopyTexImage2D(GL_TEXTURE_2D, 0, format, 0, 0, d->req_size.width(), d->req_size.height(), 0);
+#else
+   extensions.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, d->req_size.width(), d->req_size.height(), 0);
+#endif
+
+   if (d->blit_fbo) {
+      extensions.glBindFramebuffer(GL_READ_FRAMEBUFFER, ctx->d_func()->current_fbo);
+   }
 }
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-void QGLPixelBuffer::updateDynamicTexture(QMacCompatGLuint texture_id) const
-{
-   updateDynamicTexture(GLuint(texture_id));
-}
-#endif
 
 /*!
     Returns the size of the pbuffer.
@@ -321,7 +250,11 @@ QImage QGLPixelBuffer::toImage() const
    }
 
    const_cast<QGLPixelBuffer *>(this)->makeCurrent();
-   return qt_gl_read_framebuffer(d->req_size, d->format.alpha(), true);
+   if (d->fbo) {
+      d->fbo->bind();
+   }
+
+   return cs_glRead_frameBuffer(d->req_size, d->format.alpha(), true);
 }
 
 /*!
@@ -345,28 +278,12 @@ bool QGLPixelBuffer::isValid() const
    return !d->invalid;
 }
 
-#if !defined(QT_OPENGL_ES_1)
 Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_buffer_2_engine)
-#endif
-
-#ifndef QT_OPENGL_ES_2
-Q_GLOBAL_STATIC(QGLEngineThreadStorage<QOpenGLPaintEngine>, qt_buffer_engine)
-#endif
 
 /*! \reimp */
 QPaintEngine *QGLPixelBuffer::paintEngine() const
 {
-#if defined(QT_OPENGL_ES_1)
-   return qt_buffer_engine()->engine();
-#elif defined(QT_OPENGL_ES_2)
    return qt_buffer_2_engine()->engine();
-#else
-   if (qt_gl_preferGL2Engine()) {
-      return qt_buffer_2_engine()->engine();
-   } else {
-      return qt_buffer_engine()->engine();
-   }
-#endif
 }
 
 /*! \reimp */
@@ -409,6 +326,10 @@ int QGLPixelBuffer::metric(PaintDeviceMetric metric) const
       case PdmPhysicalDpiY:
          return qRound(dpmy * 0.0254);
 
+      case QPaintDevice::PdmDevicePixelRatio:
+         return 1;
+      case QPaintDevice::PdmDevicePixelRatioScaled:
+         return QPaintDevice::devicePixelRatioFScale();
       default:
          qWarning("QGLPixelBuffer::metric(), Unhandled metric type: %d\n", metric);
          break;
@@ -431,57 +352,25 @@ GLuint QGLPixelBuffer::bindTexture(const QImage &image, GLenum target)
 {
    Q_D(QGLPixelBuffer);
 #ifndef QT_OPENGL_ES
-   return d->qctx->bindTexture(image, target, GLint(GL_RGBA8));
+   GLenum format = QOpenGLContext::currentContext()->isOpenGLES() ? GL_RGBA : GL_RGBA8;
+   return d->qctx->bindTexture(image, target, GLint(format));
 #else
    return d->qctx->bindTexture(image, target, GL_RGBA);
 #endif
 }
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-/*! \internal */
-GLuint QGLPixelBuffer::bindTexture(const QImage &image, QMacCompatGLenum target)
-{
-   Q_D(QGLPixelBuffer);
-   return d->qctx->bindTexture(image, target, QMacCompatGLint(GL_RGBA8));
-}
-#endif
-
-/*! \overload
-
-    Generates and binds a 2D GL texture based on \a pixmap.
-
-    Equivalent to calling QGLContext::bindTexture().
-
-    \sa deleteTexture()
-*/
 GLuint QGLPixelBuffer::bindTexture(const QPixmap &pixmap, GLenum target)
 {
    Q_D(QGLPixelBuffer);
 #ifndef QT_OPENGL_ES
-   return d->qctx->bindTexture(pixmap, target, GLint(GL_RGBA8));
+   GLenum format = QOpenGLContext::currentContext()->isOpenGLES() ? GL_RGBA : GL_RGBA8;
+   return d->qctx->bindTexture(pixmap, target, GLint(format));
 #else
    return d->qctx->bindTexture(pixmap, target, GL_RGBA);
 #endif
 }
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-/*! \internal */
-GLuint QGLPixelBuffer::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target)
-{
-   Q_D(QGLPixelBuffer);
-   return d->qctx->bindTexture(pixmap, target, QMacCompatGLint(GL_RGBA8));
-}
-#endif
 
-/*! \overload
-
-    Reads the DirectDrawSurface (DDS) compressed file \a fileName and
-    generates a 2D GL texture from it.
-
-    Equivalent to calling QGLContext::bindTexture().
-
-    \sa deleteTexture()
-*/
 GLuint QGLPixelBuffer::bindTexture(const QString &fileName)
 {
    Q_D(QGLPixelBuffer);
@@ -499,66 +388,18 @@ void QGLPixelBuffer::deleteTexture(GLuint texture_id)
    d->qctx->deleteTexture(texture_id);
 }
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-/*! \internal */
-void QGLPixelBuffer::deleteTexture(QMacCompatGLuint texture_id)
-{
-   Q_D(QGLPixelBuffer);
-   d->qctx->deleteTexture(texture_id);
-}
-#endif
 
-/*!
-    \since 4.4
-
-    Draws the given texture, \a textureId, to the given target rectangle,
-    \a target, in OpenGL model space. The \a textureTarget should be a 2D
-    texture target.
-
-    Equivalent to the corresponding QGLContext::drawTexture().
-*/
 void QGLPixelBuffer::drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget)
 {
    Q_D(QGLPixelBuffer);
    d->qctx->drawTexture(target, textureId, textureTarget);
 }
 
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-/*! \internal */
-void QGLPixelBuffer::drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
-{
-   Q_D(QGLPixelBuffer);
-   d->qctx->drawTexture(target, textureId, textureTarget);
-}
-#endif
-
-/*!
-    \since 4.4
-
-    Draws the given texture, \a textureId, at the given \a point in OpenGL model
-    space. The textureTarget parameter should be a 2D texture target.
-
-    Equivalent to the corresponding QGLContext::drawTexture().
-*/
 void QGLPixelBuffer::drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget)
 {
    Q_D(QGLPixelBuffer);
    d->qctx->drawTexture(point, textureId, textureTarget);
 }
-
-#ifdef Q_MAC_COMPAT_GL_FUNCTIONS
-/*! \internal */
-void QGLPixelBuffer::drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
-{
-   Q_D(QGLPixelBuffer);
-   d->qctx->drawTexture(point, textureId, textureTarget);
-}
-#endif
-
-/*!
-    Returns the format of the pbuffer. The format may be different
-    from the one that was requested.
-*/
 QGLFormat QGLPixelBuffer::format() const
 {
    Q_D(const QGLPixelBuffer);
@@ -569,4 +410,65 @@ QGLFormat QGLPixelBuffer::format() const
     \internal
 */
 
-QT_END_NAMESPACE
+bool QGLPixelBufferPrivate::init(const QSize &, const QGLFormat &f, QGLWidget *shareWidget)
+{
+   widget = new QGLWidget(f, 0, shareWidget);
+   widget->resize(1, 1);
+   qctx = const_cast<QGLContext *>(widget->context());
+   return widget->isValid();
+}
+bool QGLPixelBufferPrivate::cleanup()
+{
+   delete fbo;
+   fbo = 0;
+   delete blit_fbo;
+   blit_fbo = 0;
+   delete widget;
+   widget = 0;
+   return true;
+}
+bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
+{
+   Q_UNUSED(texture_id);
+   return false;
+}
+void QGLPixelBuffer::releaseFromDynamicTexture()
+{
+}
+GLuint QGLPixelBuffer::generateDynamicTexture() const
+{
+   Q_D(const QGLPixelBuffer);
+   if (!d->fbo) {
+      return 0;
+   }
+   if (d->fbo->format().samples() > 0
+      && QOpenGLExtensions(QOpenGLContext::currentContext())
+      .hasOpenGLExtension(QOpenGLExtensions::FramebufferBlit)) {
+      if (!d->blit_fbo) {
+         const_cast<QOpenGLFramebufferObject *&>(d->blit_fbo) = new QOpenGLFramebufferObject(d->req_size);
+      }
+   } else {
+      return d->fbo->texture();
+   }
+
+   GLuint texture;
+   QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
+
+   funcs->glGenTextures(1, &texture);
+   funcs->glBindTexture(GL_TEXTURE_2D, texture);
+
+   funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+   funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+   funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+   funcs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, d->req_size.width(), d->req_size.height(), 0,
+      GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+   return texture;
+}
+bool QGLPixelBuffer::hasOpenGLPbuffers()
+{
+   return QGLFramebufferObject::hasOpenGLFramebufferObjects();
+}
+

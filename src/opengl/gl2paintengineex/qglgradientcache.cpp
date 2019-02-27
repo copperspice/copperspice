@@ -20,40 +20,58 @@
 *
 ***********************************************************************/
 
-#include "qglgradientcache_p.h"
+#include <qglgradientcache_p.h>
 #include <qdrawhelper_p.h>
 #include <qgl_p.h>
-#include <QtCore/qmutex.h>
-
-QT_BEGIN_NAMESPACE
+#include <qmutex.h>
 
 class QGL2GradientCacheWrapper
 {
  public:
    QGL2GradientCache *cacheForContext(const QGLContext *context) {
       QMutexLocker lock(&m_mutex);
-      return m_resource.value(context);
+      return m_resource.value<QGL2GradientCache>(context->contextHandle());
    }
 
  private:
-   QGLContextGroupResource<QGL2GradientCache> m_resource;
-   QMutex m_mutex;
+    QOpenGLMultiGroupSharedResource m_resource;
+    QMutex m_mutex;
 };
 
 Q_GLOBAL_STATIC(QGL2GradientCacheWrapper, qt_gradient_caches)
 
+QGL2GradientCache::QGL2GradientCache(QOpenGLContext *ctx)
+    : QOpenGLSharedResource(ctx->shareGroup())
+{
+}
+
+QGL2GradientCache::~QGL2GradientCache()
+{
+    cache.clear();
+}
 QGL2GradientCache *QGL2GradientCache::cacheForContext(const QGLContext *context)
 {
    return qt_gradient_caches()->cacheForContext(context);
 }
 
+void QGL2GradientCache::invalidateResource()
+{
+    QMutexLocker lock(&m_mutex);
+    cache.clear();
+}
+
+void QGL2GradientCache::freeResource(QOpenGLContext *)
+{
+    cleanCache();
+}
 void QGL2GradientCache::cleanCache()
 {
+    QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
    QMutexLocker lock(&m_mutex);
    QGLGradientColorTableHash::const_iterator it = cache.constBegin();
    for (; it != cache.constEnd(); ++it) {
       const CacheInfo &cache_info = it.value();
-      glDeleteTextures(1, &cache_info.texId);
+        funcs->glDeleteTextures(1, &cache_info.texId);
    }
    cache.clear();
 }
@@ -89,6 +107,7 @@ GLuint QGL2GradientCache::getBuffer(const QGradient &gradient, qreal opacity)
 
 GLuint QGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity)
 {
+    QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
    if (cache.size() == maxCacheSize()) {
       int elem_to_remove = qrand() % maxCacheSize();
       quint64 key = cache.keys()[elem_to_remove];
@@ -96,7 +115,7 @@ GLuint QGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient &gra
       // need to call glDeleteTextures on each removed cache entry:
       QGLGradientColorTableHash::const_iterator it = cache.constFind(key);
       do {
-         glDeleteTextures(1, &it.value().texId);
+            funcs->glDeleteTextures(1, &it.value().texId);
       } while (++it != cache.constEnd() && it.key() == key);
       cache.remove(key); // may remove more than 1, but OK
    }
@@ -104,9 +123,9 @@ GLuint QGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient &gra
    CacheInfo cache_entry(gradient.stops(), opacity, gradient.interpolationMode());
    uint buffer[1024];
    generateGradientColorTable(gradient, buffer, paletteSize(), opacity);
-   glGenTextures(1, &cache_entry.texId);
-   glBindTexture(GL_TEXTURE_2D, cache_entry.texId);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, paletteSize(), 1,
+    funcs->glGenTextures(1, &cache_entry.texId);
+    funcs->glBindTexture(GL_TEXTURE_2D, cache_entry.texId);
+    funcs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, paletteSize(), 1,
                 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
    return cache.insert(hash_val, cache_entry).value().texId;
 }
@@ -146,7 +165,7 @@ void QGL2GradientCache::generateGradientColorTable(const QGradient &gradient, ui
    uint current_color = ARGB_COMBINE_ALPHA(colors[0], alpha);
    qreal incr = 1.0 / qreal(size);
    qreal fpos = 1.5 * incr;
-   colorTable[pos++] = qtToGlColor(PREMUL(current_color));
+   colorTable[pos++] = qtToGlColor(qPremultiply(current_color));
 
    while (fpos <= s.first().first) {
       colorTable[pos] = colorTable[pos - 1];
@@ -155,14 +174,14 @@ void QGL2GradientCache::generateGradientColorTable(const QGradient &gradient, ui
    }
 
    if (colorInterpolation) {
-      current_color = PREMUL(current_color);
+      current_color = qPremultiply(current_color);
    }
 
    for (int i = 0; i < s.size() - 1; ++i) {
       qreal delta = 1 / (s[i + 1].first - s[i].first);
       uint next_color = ARGB_COMBINE_ALPHA(colors[i + 1], alpha);
       if (colorInterpolation) {
-         next_color = PREMUL(next_color);
+         next_color = qPremultiply(next_color);
       }
 
       while (fpos < s[i + 1].first && pos < size) {
@@ -171,7 +190,7 @@ void QGL2GradientCache::generateGradientColorTable(const QGradient &gradient, ui
          if (colorInterpolation) {
             colorTable[pos] = qtToGlColor(INTERPOLATE_PIXEL_256(current_color, idist, next_color, dist));
          } else {
-            colorTable[pos] = qtToGlColor(PREMUL(INTERPOLATE_PIXEL_256(current_color, idist, next_color, dist)));
+            colorTable[pos] = qtToGlColor(qPremultiply(INTERPOLATE_PIXEL_256(current_color, idist, next_color, dist)));
          }
          ++pos;
          fpos += incr;
@@ -181,7 +200,7 @@ void QGL2GradientCache::generateGradientColorTable(const QGradient &gradient, ui
 
    Q_ASSERT(s.size() > 0);
 
-   uint last_color = qtToGlColor(PREMUL(ARGB_COMBINE_ALPHA(colors[s.size() - 1], alpha)));
+   uint last_color = qtToGlColor(qPremultiply(ARGB_COMBINE_ALPHA(colors[s.size() - 1], alpha)));
    for (; pos < size; ++pos) {
       colorTable[pos] = last_color;
    }
@@ -190,4 +209,3 @@ void QGL2GradientCache::generateGradientColorTable(const QGradient &gradient, ui
    colorTable[size - 1] = last_color;
 }
 
-QT_END_NAMESPACE

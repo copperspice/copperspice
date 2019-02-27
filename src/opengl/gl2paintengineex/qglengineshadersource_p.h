@@ -23,7 +23,7 @@
 #ifndef QGLENGINESHADERSOURCE_P_H
 #define QGLENGINESHADERSOURCE_P_H
 
-#include "qglengineshadermanager_p.h"
+#include <qglengineshadermanager_p.h>
 
 static const QString qglslMainVertexShader = "\n\
     void setPosition(); \n\
@@ -71,10 +71,13 @@ static const QString qglslPositionOnlyVertexShader = "\n\
 
 static const QString qglslComplexGeometryPositionOnlyVertexShader = "\n\
     uniform highp mat3 matrix; \n\
+    uniform highp float translateZ; \n\
     attribute highp vec2 vertexCoordsArray; \n\
     void setPosition(void) \n\
     { \n\
-      gl_Position = vec4(matrix * vec3(vertexCoordsArray, 1), 1);\n\
+      vec3 v = matrix * vec3(vertexCoordsArray, 1.0); \n\
+      vec4 vz = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, translateZ, 1) * vec4(v, 1.0); \n\
+      gl_Position = vec4(vz.xyz, 1.0);\n\
     } \n";
 
 static const QString qglslUntransformedPositionVertexShader = "\n\
@@ -203,7 +206,7 @@ static const QString qglslPositionWithRadialGradientBrushVertexShader = "\n\
     uniform   mediump vec2      halfViewportSize; \n\
     uniform   highp   mat3      brushTransform; \n\
     uniform   highp   vec2      fmp; \n\
-    uniform   highp   vec3      bradius; \n\
+    uniform   mediump vec3      bradius; \n\
     varying   highp   float     b; \n\
     varying   highp   vec2      A; \n\
     void setPosition(void) \n\
@@ -228,7 +231,7 @@ static const QString qglslRadialGradientBrushSrcFragmentShader = "\n\
     uniform   highp   float     sqrfr; \n\
     varying   highp   float     b; \n\
     varying   highp   vec2      A; \n\
-    uniform   highp   vec3      bradius; \n\
+    uniform   mediump vec3      bradius; \n\
     lowp vec4 srcPixel() \n\
     { \n\
         highp float c = sqrfr-dot(A, A); \n\
@@ -268,28 +271,24 @@ static const QString qglslPositionWithTextureBrushVertexShader = "\n\
 
 static const QString qglslAffinePositionWithTextureBrushVertexShader = qglslPositionWithTextureBrushVertexShader;
 
-#if defined(QT_OPENGL_ES_2)
-
 // OpenGL ES does not support GL_REPEAT wrap modes for NPOT textures. So instead,
 // we emulate GL_REPEAT by only taking the fractional part of the texture coords.
 // TODO: Special case POT textures which don't need this emulation
 
-static const QString qglslTextureBrushSrcFragmentShader = "\n\
+static const QString qglslTextureBrushSrcFragmentShader_ES = "\n\
     varying highp   vec2      brushTextureCoords; \n\
     uniform         sampler2D brushTexture; \n\
     lowp vec4 srcPixel() { \n\
         return texture2D(brushTexture, fract(brushTextureCoords)); \n\
     }\n";
-#else
 
-static const QString qglslTextureBrushSrcFragmentShader = "\n\
+static const QString qglslTextureBrushSrcFragmentShader_desktop = "\n\
     varying   highp   vec2      brushTextureCoords; \n\
     uniform           sampler2D brushTexture; \n\
     lowp vec4 srcPixel() \n\
     { \n\
         return texture2D(brushTexture, brushTextureCoords); \n\
     }\n";
-#endif
 
 static const QString qglslTextureBrushSrcWithPatternFragmentShader = "\n\
     varying   highp   vec2      brushTextureCoords; \n\

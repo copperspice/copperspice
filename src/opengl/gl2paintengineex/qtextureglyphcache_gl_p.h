@@ -23,47 +23,52 @@
 #ifndef QTEXTUREGLYPHCACHE_GL_P_H
 #define QTEXTUREGLYPHCACHE_GL_P_H
 
-#include <qtextureglyphcache_p.h>
-#include <qgl_p.h>
 #include <qglshaderprogram.h>
 #include <qglframebufferobject.h>
+#include <qopenglfunctions.h>
+
+#include <qtextureglyphcache_p.h>
+#include <qgl_p.h>
 
 // #define QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
 
-QT_BEGIN_NAMESPACE
 
 class QGL2PaintEngineExPrivate;
 
-struct QGLGlyphTexture {
+struct QGLGlyphTexture : public QOpenGLSharedResource
+{
    QGLGlyphTexture(const QGLContext *ctx)
-      : m_fbo(0)
-      , m_width(0)
-      , m_height(0) {
-      if (ctx && QGLFramebufferObject::hasOpenGLFramebufferObjects() && !ctx->d_ptr->workaround_brokenFBOReadBack) {
-         glGenFramebuffers(1, &m_fbo);
-      }
+        : QOpenGLSharedResource(ctx->contextHandle()->shareGroup())
+        , m_fbo(0), m_width(0), m_height(0) {
+        if (ctx && QGLFramebufferObject::hasOpenGLFramebufferObjects() && ! ctx->d_ptr->workaround_brokenFBOReadBack) {
+            ctx->contextHandle()->functions()->glGenFramebuffers(1, &m_fbo);
+        }
 
 #ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
       qDebug(" -> QGLGlyphTexture() %p for context %p.", this, ctx);
 #endif
    }
 
-   ~QGLGlyphTexture() {
-      const QGLContext *ctx = QGLContext::currentContext();
+    void freeResource(QOpenGLContext *context) override
+    {
+        const QGLContext *ctx = QGLContext::fromOpenGLContext(context);
 #ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
-      qDebug("~QGLGlyphTexture() %p for context %p.", this, ctx);
+        qDebug("~QGLGlyphTexture() %p for context %p.", this, ctx);
+#else
+        Q_UNUSED(ctx);
 #endif
-      // At this point, the context group is made current, so it's safe to
-      // release resources without a makeCurrent() call
-      if (ctx) {
-         if (m_fbo) {
-            glDeleteFramebuffers(1, &m_fbo);
-         }
-         if (m_width || m_height) {
-            glDeleteTextures(1, &m_texture);
-         }
-      }
-   }
+        if (ctx && m_fbo)
+            ctx->contextHandle()->functions()->glDeleteFramebuffers(1, &m_fbo);
+        if (m_width || m_height)
+            ctx->contextHandle()->functions()->glDeleteTextures(1, &m_texture);
+    }
+
+    void invalidateResource() override {
+        m_texture = 0;
+        m_fbo = 0;
+        m_width = 0;
+        m_height = 0;
+    }
 
    GLuint m_texture;
    GLuint m_fbo;
@@ -71,10 +76,10 @@ struct QGLGlyphTexture {
    int m_height;
 };
 
-class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, public QGLContextGroupResourceBase
+class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache
 {
  public:
-   QGLTextureGlyphCache(const QGLContext *context, QFontEngineGlyphCache::Type type, const QTransform &matrix);
+   QGLTextureGlyphCache(QFontEngine::GlyphFormat format, const QTransform &matrix);
    ~QGLTextureGlyphCache();
 
    void createTextureData(int width, int height) override;
@@ -86,19 +91,19 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
 
    GLuint texture() const {
       QGLTextureGlyphCache *that = const_cast<QGLTextureGlyphCache *>(this);
-      QGLGlyphTexture *glyphTexture = that->m_textureResource.value(ctx);
+      QGLGlyphTexture *glyphTexture = that->m_textureResource;
       return glyphTexture ? glyphTexture->m_texture : 0;
    }
 
    int width() const {
       QGLTextureGlyphCache *that = const_cast<QGLTextureGlyphCache *>(this);
-      QGLGlyphTexture *glyphTexture = that->m_textureResource.value(ctx);
+      QGLGlyphTexture *glyphTexture = that->m_textureResource;
       return glyphTexture ? glyphTexture->m_width : 0;
    }
 
    int height() const {
       QGLTextureGlyphCache *that = const_cast<QGLTextureGlyphCache *>(this);
-      QGLGlyphTexture *glyphTexture = that->m_textureResource.value(ctx);
+      QGLGlyphTexture *glyphTexture = that->m_textureResource;
       return glyphTexture ? glyphTexture->m_height : 0;
    }
 
@@ -106,9 +111,8 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
       pex = p;
    }
 
-   void setContext(const QGLContext *context) ;
-   const QGLContext *context() const {
-      return ctx;
+   inline const QOpenGLContextGroup *contextGroup() const {
+      return m_textureResource ? m_textureResource->group() : 0;
    }
 
    int serialNumber() const {
@@ -129,20 +133,9 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
 
    void clear();
 
-   void contextDeleted(const QGLContext *context) override {
-      if (ctx == context) {
-         ctx = 0;
-      }
-   }
-
-   void freeResource(void *) override{
-      ctx = 0;
-   }
-
  private:
-   QGLContextGroupResource<QGLGlyphTexture> m_textureResource;
+   QGLGlyphTexture *m_textureResource;
 
-   const QGLContext *ctx;
    QGL2PaintEngineExPrivate *pex;
    QGLShaderProgram *m_blitProgram;
    FilterMode m_filterMode;
@@ -152,8 +145,6 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
 
    int m_serialNumber;
 };
-
-QT_END_NAMESPACE
 
 #endif
 

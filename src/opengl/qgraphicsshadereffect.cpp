@@ -20,23 +20,24 @@
 *
 ***********************************************************************/
 
-#include "qgraphicsshadereffect_p.h"
+#include <qgraphicsshadereffect_p.h>
 
-#if !defined(QT_OPENGL_ES_1)
-#include "qglshaderprogram.h"
-#include "gl2paintengineex/qglcustomshaderstage_p.h"
+#ifndef QT_NO_GRAPHICSEFFECT
+
+#include <qglshaderprogram.h>
+#include <qglcustomshaderstage_p.h>
+
 #define QGL_HAVE_CUSTOM_SHADERS 1
-#endif
 
-#include <QtGui/qpainter.h>
-#include <QtGui/qgraphicsitem.h>
+#include <qpainter.h>
+#include <qgraphicsitem.h>
 #include <qgraphicseffect_p.h>
 
-QT_BEGIN_NAMESPACE
 
-static const char qglslDefaultImageFragmentShader[] =
-   "lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) \
-    { \
+
+
+static const char qglslDefaultImageFragmentShader[] = "\
+    lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) { \
         return texture2D(imageTexture, textureCoords); \
     }\n";
 
@@ -45,12 +46,12 @@ static const char qglslDefaultImageFragmentShader[] =
 class QGLCustomShaderEffectStage : public QGLCustomShaderStage
 {
  public:
-   QGLCustomShaderEffectStage(QGraphicsShaderEffect *e, const QByteArray &source)
+   QGLCustomShaderEffectStage (QGraphicsShaderEffect *e, const QByteArray &source)
       : QGLCustomShaderStage(), effect(e) {
       setSource(source);
    }
 
-   void setUniforms(QGLShaderProgram *program)  override;
+   void setUniforms(QGLShaderProgram *program) override;
 
    QGraphicsShaderEffect *effect;
 };
@@ -67,7 +68,8 @@ class QGraphicsShaderEffectPrivate : public QGraphicsEffectPrivate
    Q_DECLARE_PUBLIC(QGraphicsShaderEffect)
 
  public:
-   QGraphicsShaderEffectPrivate() : pixelShaderFragment(qglslDefaultImageFragmentShader)
+   QGraphicsShaderEffectPrivate()
+      : pixelShaderFragment(qglslDefaultImageFragmentShader)
 #ifdef QGL_HAVE_CUSTOM_SHADERS
       , customShaderStage(0)
 #endif
@@ -75,24 +77,17 @@ class QGraphicsShaderEffectPrivate : public QGraphicsEffectPrivate
    }
 
    QByteArray pixelShaderFragment;
-
 #ifdef QGL_HAVE_CUSTOM_SHADERS
    QGLCustomShaderEffectStage *customShaderStage;
 #endif
-
 };
 
-/*#
-    Constructs a shader effect and attaches it to \a parent.
-*/
+
 QGraphicsShaderEffect::QGraphicsShaderEffect(QObject *parent)
    : QGraphicsEffect(*new QGraphicsShaderEffectPrivate(), parent)
 {
 }
 
-/*#
-    Destroys this shader effect.
-*/
 QGraphicsShaderEffect::~QGraphicsShaderEffect()
 {
 #ifdef QGL_HAVE_CUSTOM_SHADERS
@@ -115,24 +110,7 @@ QByteArray QGraphicsShaderEffect::pixelShaderFragment() const
    return d->pixelShaderFragment;
 }
 
-/*#
-    Sets the source code for the pixel shader fragment for
-    this shader effect to \a code.
 
-    The \a code must define a GLSL function with the signature
-    \c{lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords)}
-    that returns the source pixel value to use in the paint engine's
-    shader program.  The following is the default pixel shader fragment,
-    which draws a pixmap with no effect applied:
-
-    \code
-    lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) {
-        return texture2D(imageTexture, textureCoords);
-    }
-    \endcode
-
-    \sa pixelShaderFragment(), setUniforms()
-*/
 void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray &code)
 {
    Q_D(QGraphicsShaderEffect);
@@ -185,16 +163,7 @@ void QGraphicsShaderEffect::draw(QPainter *painter)
 #endif
 }
 
-/*#
-    Sets the custom uniform variables on this shader effect to
-    be dirty.  The setUniforms() function will be called the next
-    time the shader program corresponding to this effect is used.
 
-    This function is typically called by subclasses when an
-    effect-specific parameter is changed by the application.
-
-    \sa setUniforms()
-*/
 void QGraphicsShaderEffect::setUniformsDirty()
 {
 #ifdef QGL_HAVE_CUSTOM_SHADERS
@@ -217,7 +186,8 @@ void QGraphicsShaderEffect::setUniformsDirty()
 */
 void QGraphicsShaderEffect::setUniforms(QGLShaderProgram *program)
 {
-   Q_UNUSED(program);
 }
 
-QT_END_NAMESPACE
+
+
+#endif
