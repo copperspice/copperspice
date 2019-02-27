@@ -29,6 +29,7 @@
 #include <qregularexpression.h>
 #include <qset.h>
 #include <qstringfwd.h>
+#include <qstringlist.h>
 
 #include "qscriptvalue_p.h"
 #include "qscriptstring_p.h"
@@ -116,6 +117,8 @@ struct GlobalClientData : public JSC::JSGlobalData::ClientData {
    virtual ~GlobalClientData() {}
    virtual void mark(JSC::MarkStack &markStack);
 
+   virtual void uncaughtException(JSC::ExecState *, unsigned bytecodeOffset, JSC::JSValue);
+
    QScriptEnginePrivate *engine;
 };
 
@@ -132,6 +135,7 @@ class QScriptEnginePrivate
    static QScriptEnginePrivate *get(QScriptEngine *q) {
       return q ? q->d_func() : 0;
    }
+
    static QScriptEngine *get(QScriptEnginePrivate *d) {
       return d ? d->q_func() : 0;
    }
@@ -161,28 +165,28 @@ class QScriptEnginePrivate
    static inline const QMetaObject *toQMetaObject(JSC::ExecState *, JSC::JSValue);
 
    static inline JSC::JSValue property(JSC::ExecState *, JSC::JSValue, const JSC::Identifier &id,
-                                       int resolveMode = QScriptValue::ResolvePrototype);
+      int resolveMode = QScriptValue::ResolvePrototype);
 
    static JSC::JSValue propertyHelper(JSC::ExecState *, JSC::JSValue, const JSC::Identifier &id, int resolveMode);
    static inline JSC::JSValue property(JSC::ExecState *, JSC::JSValue, quint32 index,
-                                       int resolveMode = QScriptValue::ResolvePrototype);
+      int resolveMode = QScriptValue::ResolvePrototype);
 
    static JSC::JSValue propertyHelper(JSC::ExecState *, JSC::JSValue, quint32, int resolveMode);
    static inline JSC::JSValue property(JSC::ExecState *, JSC::JSValue, const JSC::UString &, int resolveMode);
    static inline void setProperty(JSC::ExecState *, JSC::JSValue object, const JSC::UString &name, JSC::JSValue,
-                                  const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
+      const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
 
    static void setProperty(JSC::ExecState *, JSC::JSValue object, const JSC::Identifier &id, JSC::JSValue,
-                           const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
+      const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
 
    static void setProperty(JSC::ExecState *, JSC::JSValue object, quint32 index, JSC::JSValue,
-                           const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
+      const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
 
    static QScriptValue::PropertyFlags propertyFlags(JSC::ExecState *, JSC::JSValue value,
-         const JSC::Identifier &id, const QScriptValue::ResolveFlags &mode);
+      const JSC::Identifier &id, const QScriptValue::ResolveFlags &mode);
 
    static inline QScriptValue::PropertyFlags propertyFlags(JSC::ExecState *, JSC::JSValue value,
-         const JSC::UString &name, const QScriptValue::ResolveFlags &mode);
+      const JSC::UString &name, const QScriptValue::ResolveFlags &mode);
 
    static bool convertValue(JSC::ExecState *, JSC::JSValue value, int type, void *ptr);
    static bool convertNumber(qsreal, int type, void *ptr);
@@ -228,7 +232,7 @@ class QScriptEnginePrivate
    static JSC::Register *thisRegisterForFrame(JSC::ExecState *frame);
 
    JSC::CallFrame *pushContext(JSC::CallFrame *exec, JSC::JSValue thisObject, const JSC::ArgList &args,
-                               JSC::JSObject *callee, bool calledAsConstructor = false, bool clearScopeChain = false);
+      JSC::JSObject *callee, bool calledAsConstructor = false);
    void popContext();
 
    void mark(JSC::MarkStack &markStack);
@@ -250,17 +254,23 @@ class QScriptEnginePrivate
 
    void agentDeleted(QScriptEngineAgent *agent);
 
+   static bool isLikelyStackOverflowError(JSC::ExecState *, JSC::JSValue);
+   void uncaughtException(JSC::ExecState *, unsigned bytecodeOffset, JSC::JSValue);
    static inline void saveException(JSC::ExecState *, JSC::JSValue *);
    static inline void restoreException(JSC::ExecState *, JSC::JSValue);
 
    void setCurrentException(QScriptValue exception) {
       m_currentException = exception;
    }
+
    QScriptValue currentException() const {
       return m_currentException;
    }
+
    void clearCurrentException() {
       m_currentException.d_ptr.reset();
+      uncaughtExceptionBacktrace.clear();
+      uncaughtExceptionLineNumber = -1;
    }
 
    static QScriptSyntaxCheckResult checkSyntax(const QString &program);
@@ -299,8 +309,9 @@ class QScriptEnginePrivate
    JSC::UString translationContextFromUrl(const JSC::UString &);
 
    //
+   void markQObjectData(JSC::MarkStack &);
    JSC::JSValue newQObject(QObject *object, QScriptEngine::ValueOwnership ownership = QScriptEngine::QtOwnership,
-                           const QScriptEngine:: QObjectWrapOptions &options = 0);
+      const QScriptEngine:: QObjectWrapOptions &options = 0);
 
    JSC::JSValue newQMetaObject(const QMetaObject *metaObject, JSC::JSValue ctor);
 
@@ -313,12 +324,12 @@ class QScriptEnginePrivate
    void emitSignalHandlerException();
 
    bool scriptConnect(QObject *sender, const QString &signal, JSC::JSValue receiver, JSC::JSValue function,
-                      Qt::ConnectionType type);
+      Qt::ConnectionType type);
 
    bool scriptDisconnect(QObject *sender, const QString &signal, JSC::JSValue receiver, JSC::JSValue function);
 
    bool scriptConnect(QObject *sender, int index, JSC::JSValue receiver, JSC::JSValue function,
-                      JSC::JSValue senderWrapper, Qt::ConnectionType type);
+      JSC::JSValue senderWrapper, Qt::ConnectionType type);
 
    bool scriptDisconnect(QObject *sender, int index, JSC::JSValue receiver, JSC::JSValue function);
    bool scriptConnect(JSC::JSValue signal, JSC::JSValue receiver, JSC::JSValue function, Qt::ConnectionType type);
@@ -364,6 +375,9 @@ class QScriptEnginePrivate
 
    QHash<intptr_t, QScript::UStringSourceProviderWithFeedback *> loadedScripts;
    QScriptValue m_currentException;
+
+   QStringList uncaughtExceptionBacktrace;
+   int uncaughtExceptionLineNumber;
 
    QSet<JSC::JSObject *> visitedConversionObjects;
 
@@ -436,7 +450,7 @@ class UStringSourceProviderWithFeedback: public JSC::UStringSourceProvider
 
  protected:
    UStringSourceProviderWithFeedback(const JSC::UString &source, const JSC::UString &url,
-                                     int lineNumber, QScriptEnginePrivate *engine)
+      int lineNumber, QScriptEnginePrivate *engine)
       : UStringSourceProvider(source, url),
         m_ptr(engine) {
       if (JSC::Debugger *debugger = this->debugger()) {
@@ -465,7 +479,7 @@ class SaveFrameHelper
 {
  public:
    SaveFrameHelper(QScriptEnginePrivate *eng,
-                   JSC::ExecState *newFrame)
+      JSC::ExecState *newFrame)
       : engine(eng), oldFrame(eng->currentFrame) {
       eng->currentFrame = newFrame;
    }
@@ -560,7 +574,8 @@ inline QScriptValuePrivate *QScriptEnginePrivate::allocateScriptValuePrivate(siz
       --freeScriptValuesCount;
       return p;
    }
-   return reinterpret_cast<QScriptValuePrivate *>(qMalloc(size));
+
+   return reinterpret_cast<QScriptValuePrivate *>(malloc(size));
 }
 
 inline void QScriptEnginePrivate::freeScriptValuePrivate(QScriptValuePrivate *p)
@@ -569,8 +584,9 @@ inline void QScriptEnginePrivate::freeScriptValuePrivate(QScriptValuePrivate *p)
       p->next = freeScriptValues;
       freeScriptValues = p;
       ++freeScriptValuesCount;
+
    } else {
-      qFree(p);
+      free(p);
    }
 }
 
@@ -690,13 +706,13 @@ inline void QScriptValuePrivate::initFrom(const QString &value)
 }
 
 inline JSC::JSValue QScriptEnginePrivate::property(JSC::ExecState *exec, JSC::JSValue value, const JSC::UString &name,
-      int resolveMode)
+   int resolveMode)
 {
    return property(exec, value, JSC::Identifier(exec, name), resolveMode);
 }
 
 inline JSC::JSValue QScriptEnginePrivate::property(JSC::ExecState *exec, JSC::JSValue value, const JSC::Identifier &id,
-      int resolveMode)
+   int resolveMode)
 {
    Q_ASSERT(isObject(value));
    JSC::JSObject *object = JSC::asObject(value);
@@ -708,7 +724,7 @@ inline JSC::JSValue QScriptEnginePrivate::property(JSC::ExecState *exec, JSC::JS
 }
 
 inline JSC::JSValue QScriptEnginePrivate::property(JSC::ExecState *exec, JSC::JSValue value, quint32 index,
-      int resolveMode)
+   int resolveMode)
 {
    Q_ASSERT(isObject(value));
    JSC::JSObject *object = JSC::asObject(value);
@@ -720,19 +736,19 @@ inline JSC::JSValue QScriptEnginePrivate::property(JSC::ExecState *exec, JSC::JS
 }
 
 inline QScriptValue::PropertyFlags QScriptEnginePrivate::propertyFlags(JSC::ExecState *exec, JSC::JSValue value,
-      const JSC::UString &name, const QScriptValue::ResolveFlags &mode)
+   const JSC::UString &name, const QScriptValue::ResolveFlags &mode)
 {
    return propertyFlags(exec, value, JSC::Identifier(exec, name), mode);
 }
 
 inline void QScriptEnginePrivate::setProperty(JSC::ExecState *exec, JSC::JSValue objectValue, const JSC::UString &name,
-      JSC::JSValue value, const QScriptValue::PropertyFlags &flags)
+   JSC::JSValue value, const QScriptValue::PropertyFlags &flags)
 {
    setProperty(exec, objectValue, JSC::Identifier(exec, name), value, flags);
 }
 
 inline JSC::JSValue QScriptValuePrivate::property(const JSC::Identifier &id,
-      const QScriptValue::ResolveFlags &resolveMode) const
+   const QScriptValue::ResolveFlags &resolveMode) const
 {
    return QScriptEnginePrivate::property(engine->currentFrame, jscValue, id, resolveMode);
 }
@@ -743,7 +759,7 @@ inline JSC::JSValue QScriptValuePrivate::property(quint32 index, const QScriptVa
 }
 
 inline JSC::JSValue QScriptValuePrivate::property(const JSC::UString &name,
-      const QScriptValue::ResolveFlags &resolveMode) const
+   const QScriptValue::ResolveFlags &resolveMode) const
 {
    JSC::ExecState *exec = engine->currentFrame;
    return QScriptEnginePrivate::property(exec, jscValue, JSC::Identifier(exec, name), resolveMode);
@@ -756,39 +772,39 @@ inline QScriptValue::PropertyFlags QScriptValuePrivate::propertyFlags(
 }
 
 inline void QScriptValuePrivate::setProperty(const JSC::Identifier &id, const JSC::JSValue &value,
-      const QScriptValue::PropertyFlags &flags)
+   const QScriptValue::PropertyFlags &flags)
 {
    QScriptEnginePrivate::setProperty(engine->currentFrame, jscValue, id, value, flags);
 }
 
 inline void QScriptValuePrivate::setProperty(quint32 index, const JSC::JSValue &value,
-      const QScriptValue::PropertyFlags &flags)
+   const QScriptValue::PropertyFlags &flags)
 {
    QScriptEnginePrivate::setProperty(engine->currentFrame, jscValue, index, value, flags);
 }
 
 inline void QScriptValuePrivate::setProperty(const JSC::UString &name, const JSC::JSValue &value,
-      const QScriptValue::PropertyFlags &flags)
+   const QScriptValue::PropertyFlags &flags)
 {
    JSC::ExecState *exec = engine->currentFrame;
    QScriptEnginePrivate::setProperty(exec, jscValue, JSC::Identifier(exec, name), value, flags);
 }
 
-inline void *QScriptValuePrivate::operator new(size_t size, QScriptEnginePrivate *engine)
+inline void *QScriptValuePrivate::operator new (size_t size, QScriptEnginePrivate *engine)
 {
    if (engine) {
       return engine->allocateScriptValuePrivate(size);
    }
-   return qMalloc(size);
+   return malloc(size);
 }
 
-inline void QScriptValuePrivate::operator delete(void *ptr)
+inline void QScriptValuePrivate::operator delete (void *ptr)
 {
    QScriptValuePrivate *d = reinterpret_cast<QScriptValuePrivate *>(ptr);
    if (d->engine) {
       d->engine->freeScriptValuePrivate(d);
    } else {
-      qFree(d);
+      free(d);
    }
 }
 
@@ -839,7 +855,7 @@ inline void QScriptEnginePrivate::unregisterScriptString(QScriptStringPrivate *v
 inline QScriptContext *QScriptEnginePrivate::contextForFrame(JSC::ExecState *frame)
 {
    if (frame && frame->callerFrame()->hasHostCallFrameFlag() && !frame->callee()
-         && frame->callerFrame()->removeHostCallFrameFlag() == QScript::scriptEngineFromExec(frame)->globalExec()) {
+      && frame->callerFrame()->removeHostCallFrameFlag() == QScript::scriptEngineFromExec(frame)->globalExec()) {
       //skip the "fake" context created in Interpreter::execute.
       frame = frame->callerFrame()->removeHostCallFrameFlag();
    }
@@ -864,7 +880,7 @@ inline bool QScriptEnginePrivate::hasValidCodeBlockRegister(JSC::ExecState *fram
    // callee is a host JSFunction.
    JSC::JSObject *callee = frame->callee();
    return !(callee && callee->inherits(&JSC::JSFunction::info)
-            && JSC::asFunction(callee)->isHostFunction());
+         && JSC::asFunction(callee)->isHostFunction());
 #else
    Q_UNUSED(frame);
    return true;
@@ -928,23 +944,50 @@ inline bool QScriptEnginePrivate::isVariant(JSC::JSValue value)
    if (!isObject(value) || !value.inherits(&QScriptObject::info)) {
       return false;
    }
+
    QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
    QScriptObjectDelegate *delegate = object->delegate();
+
    return (delegate && (delegate->type() == QScriptObjectDelegate::Variant));
+}
+
+static bool isPtr2QObject(int type)
+{
+   //  emerald - adjust after meta system update
+   //  if ((QMetaType::typeFlags(type) & QMetaType::PointerToQObject)) {
+
+   if (type == QMetaType::QObjectStar || type == QMetaType::QWidgetStar) {
+      return true;
+   } else {
+      return false;
+   }
 }
 
 inline bool QScriptEnginePrivate::isQObject(JSC::JSValue value)
 {
-   if (!isObject(value) || !value.inherits(&QScriptObject::info)) {
+   if (! isObject(value) || ! value.inherits(&QScriptObject::info)) {
       return false;
    }
 
    QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
    QScriptObjectDelegate *delegate = object->delegate();
-   return (delegate && (delegate->type() == QScriptObjectDelegate::QtObject ||
-                        (delegate->type() == QScriptObjectDelegate::DeclarativeClassObject &&
-                         static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->scriptClass()->isQObject())));
+   if (delegate) {
+      if (delegate->type() == QScriptObjectDelegate::QtObject
+         || (delegate->type() == QScriptObjectDelegate::DeclarativeClassObject
+            && static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->scriptClass()->isQObject())) {
+         return true;
+      }
 
+      if (delegate->type() == QScriptObjectDelegate::Variant) {
+         QVariant var = variantValue(value);
+         int type     = var.userType();
+
+         if (isPtr2QObject(type)) {
+            return true;
+         }
+      }
+   }
+   return false;
 }
 
 inline bool QScriptEnginePrivate::isQMetaObject(JSC::JSValue value)
@@ -1012,6 +1055,7 @@ inline JSC::UString QScriptEnginePrivate::toString(JSC::ExecState *exec, JSC::JS
    JSC::JSValue savedException;
    saveException(exec, &savedException);
    JSC::UString str = value.toString(exec);
+
    if (exec && exec->hadException() && !str.size()) {
       JSC::JSValue savedException2;
       saveException(exec, &savedException2);
@@ -1029,6 +1073,7 @@ inline QDateTime QScriptEnginePrivate::toDateTime(JSC::ExecState *exec, JSC::JSV
    if (!isDate(value)) {
       return QDateTime();
    }
+
    qsreal t = static_cast<JSC::DateInstance *>(JSC::asObject(value))->internalNumber();
    return QScript::MsToDateTime(exec, t);
 }
@@ -1038,24 +1083,31 @@ inline QObject *QScriptEnginePrivate::toQObject(JSC::ExecState *exec, JSC::JSVal
    if (isObject(value) && value.inherits(&QScriptObject::info)) {
       QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
       QScriptObjectDelegate *delegate = object->delegate();
+
       if (!delegate) {
          return 0;
       }
+
       if (delegate->type() == QScriptObjectDelegate::QtObject) {
          return static_cast<QScript::QObjectDelegate *>(delegate)->value();
       }
+
       if (delegate->type() == QScriptObjectDelegate::DeclarativeClassObject) {
          return static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->scriptClass()->toQObject(declarativeObject(value));
       }
+
       if (delegate->type() == QScriptObjectDelegate::Variant) {
          QVariant var = variantValue(value);
          int type = var.userType();
-         if ((type == QMetaType::QObjectStar) || (type == QMetaType::QWidgetStar)) {
+
+         if (isPtr2QObject(type)) {
             return *reinterpret_cast<QObject *const *>(var.constData());
          }
       }
+
    } else if (isObject(value) && value.inherits(&QScript::QScriptActivationObject::info)) {
       QScript::QScriptActivationObject *proxy = static_cast<QScript::QScriptActivationObject *>(JSC::asObject(value));
+
       return toQObject(exec, proxy->delegate());
    }
 
@@ -1075,7 +1127,9 @@ inline QVariant &QScriptEnginePrivate::variantValue(JSC::JSValue value)
 {
    Q_ASSERT(value.inherits(&QScriptObject::info));
    QScriptObjectDelegate *delegate = static_cast<QScriptObject *>(JSC::asObject(value))->delegate();
+
    Q_ASSERT(delegate && (delegate->type() == QScriptObjectDelegate::Variant));
+
    return static_cast<QScript::QVariantDelegate *>(delegate)->value();
 }
 
@@ -1092,11 +1146,13 @@ inline QScriptDeclarativeClass *QScriptEnginePrivate::declarativeClass(JSC::JSVa
    if (!QScriptEnginePrivate::isObject(v) || !v.inherits(&QScriptObject::info)) {
       return 0;
    }
+
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(v));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
    if (!delegate || (delegate->type() != QScriptObjectDelegate::DeclarativeClassObject)) {
       return 0;
    }
+
    return static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->scriptClass();
 }
 
@@ -1105,14 +1161,14 @@ inline QScriptDeclarativeClass::Object *QScriptEnginePrivate::declarativeObject(
    if (!QScriptEnginePrivate::isObject(v) || !v.inherits(&QScriptObject::info)) {
       return 0;
    }
+
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(v));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
    if (!delegate || (delegate->type() != QScriptObjectDelegate::DeclarativeClassObject)) {
       return 0;
    }
+
    return static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->object();
 }
-
-QT_END_NAMESPACE
 
 #endif

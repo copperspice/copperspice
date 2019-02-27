@@ -29,6 +29,7 @@
 #include "../bridge/qscriptqobject_p.h"
 #include <qdatastream.h>
 #include <qmetaobject.h>
+#include <qshareddata.h>
 #include "CodeBlock.h"
 #include "JSFunction.h"
 
@@ -36,7 +37,7 @@
 #include "MacroAssemblerCodeRef.h"
 #endif
 
-class QScriptContextInfoPrivate
+class QScriptContextInfoPrivate : public QSharedData
 {
    Q_DECLARE_PUBLIC(QScriptContextInfo)
 
@@ -59,8 +60,6 @@ class QScriptContextInfoPrivate
    int functionMetaIndex;
 
    QStringList parameterNames;
-
-   QAtomicInt ref;
    QScriptContextInfo *q_ptr;
 };
 
@@ -69,7 +68,6 @@ class QScriptContextInfoPrivate
 */
 QScriptContextInfoPrivate::QScriptContextInfoPrivate()
 {
-   ref.store(0);
    functionType = QScriptContextInfo::NativeFunction;
    functionMetaIndex = -1;
    functionStartLineNumber = -1;
@@ -85,7 +83,7 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate()
 QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *context)
 {
    Q_ASSERT(context);
-   ref.store(0);
+
    functionType = QScriptContextInfo::NativeFunction;
    functionMetaIndex = -1;
    functionStartLineNumber = -1;
@@ -106,12 +104,17 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
       // An agent might have provided the line number.
       lineNumber = QScript::scriptEngineFromExec(frame)->agentLineNumber;
 
+      if (lineNumber == -1) {
+         lineNumber = QScript::scriptEngineFromExec(frame)->uncaughtExceptionLineNumber;
+      }
    } else {
       // rewind the stack from the top in order to find the frame from the caller where the returnPC is stored
+
       while (rewindContext &&
-             QScriptEnginePrivate::contextForFrame(rewindContext->callerFrame()->removeHostCallFrameFlag()) != context) {
+         QScriptEnginePrivate::contextForFrame(rewindContext->callerFrame()->removeHostCallFrameFlag()) != context) {
          rewindContext = rewindContext->callerFrame()->removeHostCallFrameFlag();
       }
+
       if (rewindContext) {
          frame = rewindContext->callerFrame()->removeHostCallFrameFlag(); //for retreiving the global context's "fake" frame
 
@@ -119,10 +122,11 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
          JSC::CodeBlock *codeBlock = frame->codeBlock();
 
          if (returnPC && codeBlock && QScriptEnginePrivate::hasValidCodeBlockRegister(frame)) {
+
 #if ENABLE(JIT)
             JSC::JITCode code = codeBlock->getJITCode();
             uintptr_t jitOffset = reinterpret_cast<uintptr_t>(JSC::ReturnAddressPtr(returnPC).value()) -
-                                  reinterpret_cast<uintptr_t>(code.addressForCall().executableAddress());
+               reinterpret_cast<uintptr_t>(code.addressForCall().executableAddress());
             // We can only use the JIT code offset if it's smaller than the JIT size;
             // otherwise calling getBytecodeIndex() is meaningless.
             if (jitOffset < code.size()) {
@@ -150,11 +154,13 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
 
    // Get the others information:
    JSC::JSObject *callee = frame->callee();
-   if (callee && callee->inherits(&JSC::InternalFunction::info)) {
+   if (callee && callee->inherits(&JSC::InternalFunction::info))
+   {
       functionName = JSC::asInternalFunction(callee)->name(frame);
    }
 
-   if (callee && callee->inherits(&JSC::JSFunction::info) && !JSC::asFunction(callee)->isHostFunction()) {
+   if (callee && callee->inherits(&JSC::JSFunction::info) && !JSC::asFunction(callee)->isHostFunction())
+   {
       functionType = QScriptContextInfo::ScriptFunction;
       JSC::FunctionExecutable *body = JSC::asFunction(callee)->jsExecutable();
       functionStartLineNumber = body->lineNo();
@@ -165,11 +171,12 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
       }
 
       // ### get the function name from the AST
-   } else if (callee && callee->inherits(&QScript::QtFunction::info)) {
+   } else if (callee && callee->inherits(&QScript::QtFunction::info))
+   {
       functionType = QScriptContextInfo::QtFunction;
 
       // ### the slot can be overloaded -- need to get the particular overload from the context
-      functionMetaIndex = static_cast<QScript::QtFunction *>(callee)->initialIndex();
+      functionMetaIndex = static_cast<QScript::QtFunction *>(callee)->specificIndex(context);
       const QMetaObject *meta = static_cast<QScript::QtFunction *>(callee)->metaObject();
 
       if (meta != 0) {
@@ -181,7 +188,8 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
          }
       }
 
-   } else if (callee && callee->inherits(&QScript::QtPropertyFunction::info)) {
+   } else if (callee && callee->inherits(&QScript::QtPropertyFunction::info))
+   {
       functionType = QScriptContextInfo::QtPropertyFunction;
       functionMetaIndex = static_cast<QScript::QtPropertyFunction *>(callee)->propertyIndex();
    }
@@ -442,15 +450,15 @@ bool QScriptContextInfo::operator==(const QScriptContextInfo &other) const
       return false;
    }
    return ((d->scriptId == od->scriptId)
-           && (d->lineNumber == od->lineNumber)
-           && (d->columnNumber == od->columnNumber)
-           && (d->fileName == od->fileName)
-           && (d->functionName == od->functionName)
-           && (d->functionType == od->functionType)
-           && (d->functionStartLineNumber == od->functionStartLineNumber)
-           && (d->functionEndLineNumber == od->functionEndLineNumber)
-           && (d->functionMetaIndex == od->functionMetaIndex)
-           && (d->parameterNames == od->parameterNames));
+         && (d->lineNumber == od->lineNumber)
+         && (d->columnNumber == od->columnNumber)
+         && (d->fileName == od->fileName)
+         && (d->functionName == od->functionName)
+         && (d->functionType == od->functionType)
+         && (d->functionStartLineNumber == od->functionStartLineNumber)
+         && (d->functionEndLineNumber == od->functionEndLineNumber)
+         && (d->functionMetaIndex == od->functionMetaIndex)
+         && (d->parameterNames == od->parameterNames));
 }
 
 /*!

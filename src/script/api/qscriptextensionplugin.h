@@ -23,10 +23,8 @@
 #ifndef QSCRIPTEXTENSIONPLUGIN_H
 #define QSCRIPTEXTENSIONPLUGIN_H
 
-#include <QtCore/qplugin.h>
-#include <QtScript/qscriptextensioninterface.h>
-
-QT_BEGIN_NAMESPACE
+#include <qplugin.h>
+#include <qscriptextensioninterface.h>
 
 class QScriptValue;
 
@@ -37,11 +35,12 @@ class Q_SCRIPT_EXPORT QScriptExtensionPlugin : public QObject, public QScriptExt
 
  public:
    explicit QScriptExtensionPlugin(QObject *parent = nullptr);
-   ~QScriptExtensionPlugin();  
+   ~QScriptExtensionPlugin();
 
+   virtual QStringList keys() const = 0;
+   virtual void initialize(const QString &key, QScriptEngine *engine) = 0;
    QScriptValue setupPackage(const QString &key, QScriptEngine *engine) const;
 };
 
-QT_END_NAMESPACE
 
 #endif

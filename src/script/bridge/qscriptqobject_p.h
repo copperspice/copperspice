@@ -84,6 +84,10 @@ class QObjectDelegate : public QScriptObjectDelegate
       data->value = value;
    }
 
+   inline bool hasParent() const {
+      return data->value && data->value->parent();
+   }
+
    inline QScriptEngine::ValueOwnership ownership() const {
       return data->ownership;
    }
@@ -131,6 +135,23 @@ struct QObjectWrapperInfo {
    QScriptObject *object;
    QScriptEngine::ValueOwnership ownership;
    QScriptEngine::QObjectWrapOptions options;
+   // Returns true if this wrapper can be garbage-collected when there are no
+   // other references to it in the JS environment (weak reference), otherwise
+   // returns false (should not be collected).
+   bool isCollectableWhenWeaklyReferenced() const {
+      switch (ownership) {
+         case QScriptEngine::ScriptOwnership:
+            return true;
+         case QScriptEngine::AutoOwnership: {
+            QScriptObjectDelegate *delegate = object->delegate();
+            Q_ASSERT(delegate && (delegate->type() == QScriptObjectDelegate::QtObject));
+            return !static_cast<QObjectDelegate *>(delegate)->hasParent();
+         }
+         default:
+            break;
+      }
+      return false;
+   }
 };
 
 class QObjectData // : public QObjectUserData
@@ -201,6 +222,7 @@ class QtFunction: public JSC::InternalFunction
    QObject *qobject() const;
    const QMetaObject *metaObject() const;
    int initialIndex() const;
+   int specificIndex(const QScriptContext *context) const;
    bool maybeOverloaded() const;
    int mostGeneralMethod(QMetaMethod *out = 0) const;
 

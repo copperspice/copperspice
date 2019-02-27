@@ -23,6 +23,7 @@
 #ifndef QSCRIPTVALUE_P_H
 #define QSCRIPTVALUE_P_H
 
+#include <qshareddata.h>
 #include "wtf/Platform.h"
 #include "JSValue.h"
 
@@ -31,13 +32,13 @@
 class QScriptEnginePrivate;
 class QScriptValue;
 
-class QScriptValuePrivate
+class QScriptValuePrivate : public QSharedData
 {
    Q_DISABLE_COPY(QScriptValuePrivate)
 
  public:
-   inline void *operator new(size_t, QScriptEnginePrivate *);
-   inline void operator delete(void *);
+   inline void *operator new (size_t, QScriptEnginePrivate *);
+   inline void operator delete (void *);
 
    enum Type {
       JavaScriptCore,
@@ -64,24 +65,27 @@ class QScriptValuePrivate
    }
 
    static inline QScriptEnginePrivate *getEngine(const QScriptValue &q) {
-      if (!q.d_ptr) {
+      if (! q.d_ptr) {
          return 0;
       }
       return q.d_ptr->engine;
    }
 
    inline JSC::JSValue property(const JSC::Identifier &id,
-                                const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
+      const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
+
    inline JSC::JSValue property(quint32 index,
-                                const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
+      const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
+
    inline JSC::JSValue property(const JSC::UString &,
-                                const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
+      const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
+
    inline void setProperty(const JSC::UString &name, const JSC::JSValue &value,
-                           const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
+      const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
    inline void setProperty(const JSC::Identifier &id, const JSC::JSValue &value,
-                           const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
+      const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
    inline void setProperty(quint32 index, const JSC::JSValue &value,
-                           const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
+      const QScriptValue::PropertyFlags &flags = QScriptValue::KeepExistingFlags);
    inline QScriptValue::PropertyFlags propertyFlags(
       const JSC::Identifier &id, const QScriptValue::ResolveFlags &mode = QScriptValue::ResolvePrototype) const;
 
@@ -104,12 +108,10 @@ class QScriptValuePrivate
    // linked list of engine's script values
    QScriptValuePrivate *prev;
    QScriptValuePrivate *next;
-
-   QAtomicInt ref;
 };
 
 inline QScriptValuePrivate::QScriptValuePrivate(QScriptEnginePrivate *e)
-   : engine(e), prev(0), next(0), ref(0)
+   : engine(e), prev(0), next(0)
 {
 }
 

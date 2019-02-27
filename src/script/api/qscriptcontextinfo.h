@@ -56,11 +56,9 @@ class Q_SCRIPT_EXPORT QScriptContextInfo
 
    qint64 scriptId() const;
    QString fileName() const;
-   int lineNumber() const;
 
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED int columnNumber() const;
-#endif
+   int lineNumber() const;
+   int columnNumber() const;
 
    QString functionName() const;
    FunctionType functionType() const;

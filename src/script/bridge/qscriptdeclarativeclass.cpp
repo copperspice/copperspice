@@ -393,18 +393,7 @@ QScriptContext *QScriptDeclarativeClass::pushCleanContext(QScriptEngine *engine)
       return 0;
    }
 
-   QScriptEnginePrivate *d = QScriptEnginePrivate::get(engine);
-   QScript::APIShim shim(d);
-
-   JSC::CallFrame *newFrame = d->pushContext(d->currentFrame,
-                              d->currentFrame->globalData().dynamicGlobalObject,
-                              JSC::ArgList(), /*callee = */0, false, true);
-
-   if (engine->agent()) {
-      engine->agent()->contextPush();
-   }
-
-   return d->contextForFrame(newFrame);
+   return engine->pushContext();
 }
 
 QScriptDeclarativeClass::~QScriptDeclarativeClass()

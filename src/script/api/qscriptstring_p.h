@@ -23,12 +23,12 @@
 #ifndef QSCRIPTSTRING_P_H
 #define QSCRIPTSTRING_P_H
 
+#include <QtCore/qshareddata.h>
 #include "Identifier.h"
 
-QT_BEGIN_NAMESPACE
-
 class QScriptEnginePrivate;
-class QScriptStringPrivate
+
+class QScriptStringPrivate : public QSharedData
 {
  public:
    enum AllocationType {
@@ -37,7 +37,7 @@ class QScriptStringPrivate
    };
 
    inline QScriptStringPrivate(QScriptEnginePrivate *engine, const JSC::Identifier &id,
-                               AllocationType type);
+      AllocationType type);
    inline ~QScriptStringPrivate();
    static inline void init(QScriptString &q, QScriptStringPrivate *d);
 
@@ -46,8 +46,6 @@ class QScriptStringPrivate
    inline void detachFromEngine();
 
    static inline bool isValid(const QScriptString &q);
-
-   QAtomicInt ref;
    QScriptEnginePrivate *engine;
    JSC::Identifier identifier;
    AllocationType type;
@@ -58,8 +56,8 @@ class QScriptStringPrivate
 };
 
 inline QScriptStringPrivate::QScriptStringPrivate(QScriptEnginePrivate *e, const JSC::Identifier &id,
-      AllocationType tp)
-   : engine(e), identifier(id), type(tp), prev(0), next(0), ref(0)
+   AllocationType tp)
+   : engine(e), identifier(id), type(tp), prev(0), next(0)
 {
 }
 
@@ -87,7 +85,5 @@ inline bool QScriptStringPrivate::isValid(const QScriptString &q)
 {
    return (q.d_ptr && q.d_ptr->engine);
 }
-
-QT_END_NAMESPACE
 
 #endif
