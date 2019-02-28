@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -1244,8 +1245,9 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    msg2->setFont(font);
 
    QLabel *msg3 = new QLabel;
-   msg3->setText(tr("Copyright (C) 2012-2018 Ansel Sermersheim & Barbara Geller\n"
-         "Copyright (C) 2012-2014 Digia Plc and/or its subsidiary(-ies)\n"
+   msg3->setText(tr("Copyright (C) 2012-2019 Ansel Sermersheim & Barbara Geller\n"
+         "\n"
+         "Copyright (C) 2012-2016 Digia Plc and/or its subsidiary(-ies)\n"
          "Copyright (C) 2008-2012 Nokia Corporation and/or its subsidiary(-ies)"));
 
    font = msg3->font();
