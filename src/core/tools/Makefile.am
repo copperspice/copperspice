@@ -101,6 +101,7 @@ CORE_TOOLS_INCLUDES = \
 CORE_TOOLS_PRIVATE_INCLUDES = \
    qbytedata_p.h \
    qfreelist_p.h \
+   qharfbuzz_core_p.h \
    qlocale_data_p.h \
    qlocale_p.h \
    qlocale_tools_p.h \
@@ -125,6 +126,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/tools/qeasingcurve.cpp \
    src/core/tools/qelapsedtimer.cpp \
    src/core/tools/qfreelist.cpp \
+   src/core/tools/qharfbuzz_core.cpp \
    src/core/tools/qline.cpp \
    src/core/tools/qlocale.cpp \
    src/core/tools/qlocale_tools.cpp \

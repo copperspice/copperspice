@@ -106,6 +106,7 @@ set(CORE_PRIVATE_INCLUDES
     ${CORE_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytedata_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qfreelist_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz_core_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_data_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_tools_p.h
@@ -127,6 +128,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qeasingcurve.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qfreelist.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz_core.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_tools.cpp

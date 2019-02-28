@@ -20,41 +20,25 @@
 *
 ***********************************************************************/
 
-#ifndef QHARFBUZZ_P_H
-#define QHARFBUZZ_P_H
+#ifndef QHARFBUZZ_GUI_P_H
+#define QHARFBUZZ_GUI_P_H
 
-#include <qchar.h>
+#include <qharfbuzz_core_p.h>
 
 #include <hb.h>
 #include <hb-font.hh>
+#include <hb-ot.h>
 
 class QFontEngine;
 
-// hb define, causes an issue
+// following define is required due to something in Harfbuzz
 #undef round
 
 using glyph_t = quint32;
 using HB_Bool = hb_bool_t;
-using HB_Font = hb_font_t *;
-using HB_Face = hb_face_t *;
 
 using qt_destroy_func_ptr        = void (*)(void *);
 using qt_get_font_table_func_ptr = bool (*)(void *, uint, uchar *, uint *);
-
-// not used in many places, refactor it and then remove these magic numbers
-enum HB_Error {
-    HB_Err_Ok                       = 0x0000,
-    HB_Err_Not_Covered              = 0xFFFF,
-    HB_Err_Invalid_Argument         = 0x1A66,
-    HB_Err_Invalid_SubTable_Format  = 0x157F,
-    HB_Err_Invalid_SubTable         = 0x1570
-};
-
-// Unicode
-Q_GUI_EXPORT hb_script_t  cs_script_to_hb_script(QChar::Script script);
-//   Q_GUI_EXPORT QChar::Script hb_qt_script_from_script(hb_script_t script);
-
-Q_GUI_EXPORT hb_unicode_funcs_t *cs_get_unicode_funcs();
 
 // Font
 Q_GUI_EXPORT hb_font_funcs_t *cs_get_font_funcs();
@@ -64,7 +48,5 @@ Q_GUI_EXPORT hb_font_t *cs_font_get_for_engine(QFontEngine *fe);
 
 Q_GUI_EXPORT void cs_font_set_use_design_metrics(hb_font_t *font, uint value);
 Q_GUI_EXPORT uint cs_font_get_use_design_metrics(hb_font_t *font);
-
-// broom - may not be used Q_GUI_EXPORT void qHBFreeFace(HB_Face face);
 
 #endif

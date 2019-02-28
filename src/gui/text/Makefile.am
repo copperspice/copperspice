@@ -128,7 +128,7 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qzipreader_p.h \
 	qzipwriter_p.h \
 	qcssscanner.cpp \
-	qharfbuzz_p.h
+	qharfbuzz_gui_p.h
 
 
 GUI_INCLUDES += $(GUI_TEXT_INCLUDES)
@@ -281,7 +281,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qstatictext.cpp \
 	src/gui/text/qrawfont.cpp \
 	src/gui/text/qglyphrun.cpp \
-   src/gui/text/qharfbuzz.cpp \
+   src/gui/text/qharfbuzz_gui.cpp \
    \
    src/3rdparty/harfbuzz/src/hb-aat-layout.cc \
    src/3rdparty/harfbuzz/src/hb-aat-map.cc \

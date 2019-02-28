@@ -119,7 +119,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipreader_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipwriter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssscanner.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_gui_p.h
 )
 
 set(GUI_SOURCES
@@ -131,6 +131,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontmetrics.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_gui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextcontrol.cpp
@@ -156,7 +157,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextodfwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz.cpp
 )
 
 # might be missing files from 3rdparty/freetype
