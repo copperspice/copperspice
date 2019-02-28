@@ -3,7 +3,7 @@ lib_libCsOpenGL@BUILD_ABI@_la_SOURCES =
 
 lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui  -Iinclude/QtOpenGL  \
    -Iprivateinclude/QtCore/private -Iprivateinclude/QtGui/private  -Iprivateinclude/QtOpenGL/private \
-   -I$(top_srcdir)/src/3rdparty/harfbuzz/src -Isrc/opengl   \
+   -I$(top_srcdir)/src/3rdparty/harfbuzz/src -Isrc/opengl  \
    -DQT_NO_EGL   \
 	-DQT_BUILD_OPENGL_LIB
 
@@ -14,7 +14,7 @@ lib_libCsOpenGL@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@
 OPENGL_INCLUDES =
 OPENGL_PUBLIC_INCLUDES =
 OPENGL_PRIVATE_INCLUDES =
-OPENGL_DIRS = src/opengl src/opengl/gl2paintengineex  src/opengl/util
+OPENGL_DIRS = src/opengl src/opengl/gl2paintengineex
 
 EXTRA_DIST += \
 	src/opengl/CMakeLists.txt
@@ -25,18 +25,11 @@ OPENGL_PUBLIC_INCLUDES += \
 	QGLContext \
 	QGLFormat \
 	QGLFramebufferObject \
-	QGLFramebufferObjectFormat \
 	QGLFunctions \
-	QGLFunctionsPrivate \
 	QGLPixelBuffer \
 	QGLShader \
 	QGLShaderProgram \
-	QGLWidget \
-	QMacCompatGLenum \
-	QMacCompatGLint \
-	QMacCompatGLuint \
-	QMacGLCompatTypes \
-	QtOpenGL
+	QGLWidget
 
 OPENGL_INCLUDES += \
 	qgl.h \
@@ -45,32 +38,18 @@ OPENGL_INCLUDES += \
 	qglcontext.h \
 	qglformat.h \
 	qglframebufferobject.h  \
-	qglframebufferobjectformat.h \
 	qglfunctions.h \
-	qglfunctionsprivate.h \
 	qglpixelbuffer.h \
 	qglshader.h \
 	qglshaderprogram.h \
-	qglwidget.h \
-	qmaccompatglenum.h \
-	qmaccompatglint.h \
-	qmaccompatgluint.h \
-	qmacglcompattypes.h \
-	qtopengl.h
+	qglwidget.h
 
 OPENGL_ROOT_PRIVATE_INCLUDES = \
 	qgl_p.h \
-	qglextensions_p.h \
 	qglframebufferobject_p.h  \
 	qglpaintdevice_p.h \
 	qglpixelbuffer_p.h \
-	qglpixmapfilter_p.h  \
-	qgraphicsshadereffect_p.h \
-	qgraphicssystem_gl_p.h \
-	qpaintengine_opengl_p.h \
-	qpixmapdata_gl_p.h \
-	qpixmapdata_x11gl_p.h \
-	qwindowsurface_gl_p.h
+	qgraphicsshadereffect_p.h
 
 OPENGL_GL2_PRIVATE_INCLUDES = \
 	qgl2pexvertexarray_p.h \
@@ -80,12 +59,7 @@ OPENGL_GL2_PRIVATE_INCLUDES = \
 	qglgradientcache_p.h \
 	qglshadercache_p.h \
 	qpaintengineex_opengl2_p.h \
-	qtextureglyphcache_gl_p.h \
-	qtriangulatingstroker_p.h \
-	qtriangulator_p.h
-
-OPENGL_UTIL_PRIVATE_INCLUDES = fragmentprograms_p.h
-
+	qtextureglyphcache_gl_p.h
 
 OPENGL_PRIVATE_INCLUDES += $(OPENGL_ROOT_PRIVATE_INCLUDES)
 
@@ -96,58 +70,35 @@ lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 	src/opengl/gl2paintengineex/qglgradientcache.cpp \
 	src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp \
 	src/opengl/gl2paintengineex/qtextureglyphcache_gl.cpp \
-	src/opengl/gl2paintengineex/qtriangulatingstroker.cpp \
-	src/opengl/gl2paintengineex/qtriangulator.cpp \
 	src/opengl/qgl.cpp \
 	src/opengl/qglbuffer.cpp \
 	src/opengl/qglcolormap.cpp \
-	src/opengl/qglextensions.cpp \
 	src/opengl/qglframebufferobject.cpp \
 	src/opengl/qglfunctions.cpp \
 	src/opengl/qglpaintdevice.cpp \
 	src/opengl/qglpixelbuffer.cpp \
-	src/opengl/qglpixmapfilter.cpp \
 	src/opengl/qglshaderprogram.cpp \
-	src/opengl/qgraphicsshadereffect.cpp \
-	src/opengl/qgraphicssystem_gl.cpp \
-	src/opengl/qpaintengine_opengl.cpp \
-	src/opengl/qpixmapdata_gl.cpp \
-	src/opengl/qwindowsurface_gl.cpp
+	src/opengl/qgraphicsshadereffect.cpp
 
-
-if X11
-lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
-	src/opengl/qgl_x11.cpp \
-	src/opengl/qglpixelbuffer_x11.cpp
-endif
-
-if COCOA
-lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
-	src/opengl/qgl_mac.mm \
-	src/opengl/qglpixelbuffer_mac.mm
-lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -framework AppKit -framework Carbon -framework OpenGL
-endif
 
 if OSTYPE_WIN
 lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK -DQT_NO_STYLE_WINDOWSVISTA -DQT_BUILD_OPENGL_LIB
-lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
-	src/opengl/qgl_win.cpp \
-	src/opengl/qglpixelbuffer_win.cpp
 lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -lopengl32 -lgdi32 -lkernel32 -luser32
 endif
 
-noinst_HEADERS+=$(patsubst %,src/opengl/%,$(OPENGL_INCLUDES)) \
-		$(patsubst %,src/opengl/%,$(OPENGL_ROOT_PRIVATE_INCLUDES)) \
-		$(patsubst %,src/opengl/gl2paintengineex/%,$(OPENGL_GL2_PRIVATE_INCLUDES))  \
-	$(patsubst %,src/opengl/util/%,$(OPENGL_UTIL_PRIVATE_INCLUDES))
+if OSTYPE_DARWIN
+lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -framework AppKit -framework Carbon -framework OpenGL
+endif
 
+noinst_HEADERS+=$(patsubst %,src/opengl/%,$(OPENGL_INCLUDES)) \
+	$(patsubst %,src/opengl/%,$(OPENGL_ROOT_PRIVATE_INCLUDES)) \
+	$(patsubst %,src/opengl/gl2paintengineex/%,$(OPENGL_GL2_PRIVATE_INCLUDES))
 
 OPENGL_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtOpenGL/%,$(OPENGL_INCLUDES)) \
 	$(patsubst %,include/QtOpenGL/%,$(OPENGL_PUBLIC_INCLUDES)) \
 	$(patsubst %,privateinclude/QtOpenGL/private/%,$(OPENGL_ROOT_PRIVATE_INCLUDES)) \
    $(patsubst %,privateinclude/QtOpenGL/private/%,$(OPENGL_GL2_PRIVATE_INCLUDES))  \
-   $(patsubst %,privateinclude/QtOpenGL/private/%,$(OPENGL_UTIL_PRIVATE_INCLUDES)) \
 	include/QtOpenGL privateinclude/QtOpenGL/private
 
 BUILT_SOURCES+=.opengl-header-deps.mk
