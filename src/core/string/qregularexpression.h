@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -131,7 +132,7 @@ class QRegexTraits
 
       template<typename C = QChar32>
       QChar32 translate_nocase(QChar32 c) const {
-         // broom -modify for case insensitive when multiple chars are returned
+         // broom - modify for case insensitive when multiple chars are returned
          return C(c).toCaseFolded()[0];
       }
 
@@ -575,9 +576,10 @@ S QRegularExpression<S>::escape(const S &str)
          result.append('\\');
          result.append('0');
 
-      } else if ( (ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') &&
-                  (ch < '0' || ch > '9') && (ch != '_') )  {
+      } else if (ch == '.'  || ch == '[' || ch == '{' || ch == '}' || ch == '(' || ch == ')' ||
+                 ch == '\\' || ch == '*' || ch == '+' || ch == '?' || ch == '|' || ch == '^' || ch == '$')  {
 
+         // must escaped exactly these chars
          result.append('\\');
          result.append(ch);
 

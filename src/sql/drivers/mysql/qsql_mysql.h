@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -91,11 +92,11 @@ class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 
    bool hasFeature(DriverFeature f) const;
    bool open(const QString &db,
-             const QString &user,
-             const QString &password,
-             const QString &host,
-             int port,
-             const QString &connOpts);
+      const QString &user,
+      const QString &password,
+      const QString &host,
+      int port,
+      const QString &connOpts);
    void close();
 
    QSqlResult *createResult() const;
@@ -103,7 +104,7 @@ class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
    QSqlIndex primaryIndex(const QString &tablename) const;
    QSqlRecord record(const QString &tablename) const;
    QString formatValue(const QSqlField &field,
-                       bool trimStrings) const;
+      bool trimStrings) const;
    QVariant handle() const;
    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
 

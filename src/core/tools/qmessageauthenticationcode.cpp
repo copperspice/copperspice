@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -24,10 +25,10 @@
 #include "qvarlengtharray.h"
 
 /*
-    These #defines replace the typedefs needed by the RFC6234 code. Normally
-    the typedefs would come from from stdint.h, but since this header is not
-    available on all platforms (MSVC 2008, for example), we #define them to the
-    Qt equivalents.
+   These #defines replace the typedefs needed by the RFC6234 code.
+   Normally the typedefs would come from from stdint.h, but since this header is not available on all
+   platforms define them here
+
 */
 
 #ifdef uint64_t

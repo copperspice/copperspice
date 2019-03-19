@@ -4,7 +4,10 @@
  */
 
 #include "gzguts.h"
+
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 /* Local functions */
 local int gz_load OF((gz_statep, unsigned char *, unsigned, unsigned *));

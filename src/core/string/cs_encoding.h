@@ -1,13 +1,18 @@
 /***********************************************************************
 *
-* Copyright (c) 2017-2018 Barbara Geller
-* Copyright (c) 2017-2018 Ansel Sermersheim
-* All rights reserved.
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
 *
-* This file is part of CsString
+* This file is part of CsString.
 *
 * CsString is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
 *
 ***********************************************************************/
 
@@ -25,6 +30,31 @@ class LIB_CS_STRING_EXPORT utf8
 {
    public:
       using storage_unit = uint8_t;
+
+      template <typename Iterator>
+      static Iterator advance(Iterator iter_begin, Iterator iter_end, int count)
+      {
+         auto iter = iter_begin;
+         storage_unit value = 0;
+
+         while (iter != iter_end && count != 0)  {
+
+            value = *iter;
+            if (value < 0x80 || value > 0xBf) {
+               --count;
+            }
+
+            ++iter;
+         }
+
+         if (value >= 0xBF) {
+            while (iter != iter_end && *iter >= 0x80 && *iter <= 0xBF) {
+               ++iter;
+            }
+         }
+
+         return iter;
+      }
 
       template <typename Iterator>
       static int distance(Iterator iter_begin, Iterator iter_end)
@@ -179,6 +209,29 @@ class LIB_CS_STRING_EXPORT utf16
 {
    public:
       using storage_unit = uint16_t;
+
+      template <typename Iterator>
+      static Iterator advance(Iterator iter_begin, Iterator iter_end, int count)
+      {
+         auto iter = iter_begin;
+         storage_unit value = 0;
+
+         while (iter != iter_end && count != 0)  {
+
+            value = *iter;
+            if (value < 0xDC00 || value > 0xDFFF) {
+               --count;
+            }
+
+            ++iter;
+         }
+
+         if (value >= 0xD800 && value <= 0xDBFF) {
+            ++iter;
+         }
+
+         return iter;
+      }
 
       template <typename Iterator>
       static int distance(Iterator iter_begin, Iterator iter_end)

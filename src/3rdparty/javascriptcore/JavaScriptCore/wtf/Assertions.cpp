@@ -34,6 +34,12 @@
 #include <CoreFoundation/CFString.h>
 #endif
 
+#if COMPILER(MSVC)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <crtdbg.h>
+#endif
+
 extern "C" {
 
 WTF_ATTRIBUTE_PRINTF(1, 0)

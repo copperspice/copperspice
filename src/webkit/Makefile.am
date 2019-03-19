@@ -136,7 +136,7 @@ WEBKIT_DIRS = . ../3rdparty/webkit/Source/WebKit/qt/Api
 
 ______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += \
 	-UHAVE_CONFIG_H \
-	-DBUILDING_QT__=1 \
+	-DBUILDING_CS=1 \
 	-DWTF_PLATFORM_QT=1 \
 	-DENABLE_WORKERS=1 \
 	-DENABLE_JAVASCRIPT_DEBUGGER=1 \

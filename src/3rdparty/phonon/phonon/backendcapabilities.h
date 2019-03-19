@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #ifndef Phonon_BACKENDCAPABILITIES_H
 #define Phonon_BACKENDCAPABILITIES_H
@@ -40,31 +38,31 @@ namespace Phonon
 {
 
 namespace BackendCapabilities
-{   
+{
     class Notifier : public QObject
     {
         PHN_CS_OBJECT(Notifier)
 
-        public:           
+        public:
             PHN_CS_SIGNAL_1(Public, void capabilitiesChanged())
-            PHN_CS_SIGNAL_2(capabilitiesChanged) 
-            
+            PHN_CS_SIGNAL_2(capabilitiesChanged)
+
             PHN_CS_SIGNAL_1(Public, void availableAudioOutputDevicesChanged())
-            PHN_CS_SIGNAL_2(availableAudioOutputDevicesChanged) 
-            
+            PHN_CS_SIGNAL_2(availableAudioOutputDevicesChanged)
+
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
             PHN_CS_SIGNAL_1(Public, void availableAudioCaptureDevicesChanged())
-            PHN_CS_SIGNAL_2(availableAudioCaptureDevicesChanged) 
+            PHN_CS_SIGNAL_2(availableAudioCaptureDevicesChanged)
 #endif
 
     };
-  
-    PHONON_EXPORT Notifier *notifier();  
-    PHONON_EXPORT QStringList availableMimeTypes();   
+
+    PHONON_EXPORT Notifier *notifier();
+    PHONON_EXPORT QStringList availableMimeTypes();
     PHONON_EXPORT bool isMimeTypeAvailable(const QString &mimeType);
     PHONON_EXPORT QList<AudioOutputDevice> availableAudioOutputDevices();
 
-   
+
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
     PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
 #endif

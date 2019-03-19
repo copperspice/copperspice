@@ -167,13 +167,16 @@ set_target_properties(CsGui${BUILD_ABI} PROPERTIES
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
-
-    # TODO: put those in resource prefix $(prefix)/mac/qt_menu.nib
-    RESOURCE
-    ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/classes.nib
-    ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/info.nib
-    ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/keyedobjects.nib
 )
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   set_target_properties(CsGui${BUILD_ABI} PROPERTIES
+       RESOURCE
+       ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/classes.nib
+       ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/info.nib
+       ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/keyedobjects.nib
+   )
+endif()
 
 macro_generate_resources("${GUI_SOURCES}")
 macro_generate_package(

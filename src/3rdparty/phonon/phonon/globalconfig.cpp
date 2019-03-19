@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #include "globalconfig.h"
 #include "globalconfig_p.h"
@@ -212,7 +210,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
     sb = QString("(Size %1)").arg(newOrder.size());
     for (int i : newOrder) {
        sb += QString("%1, ").arg(i);
-    }  
+    }
     fprintf(stderr, "=== Reindex Before : %s\n", sb.toUtf8().constData());*/
 
     QList<int> currentList;
@@ -257,7 +255,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
     /*sb = QString("(Size %1)").arg(newList.size());
     for (int i : newList) {
        sb += QString("%1, ").arg(i);
-    }  
+    }
     fprintf(stderr, "=== Reindex After  : %s\n", sb.toUtf8().constData());*/
     return newList;
 }

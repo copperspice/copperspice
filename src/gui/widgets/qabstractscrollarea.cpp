@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -245,8 +246,13 @@ void QAbstractScrollAreaPrivate::replaceScrollBar(QScrollBar *scrollBar, Qt::Ori
    scrollBar->setValue(oldBar->value());
    delete oldBar;
 
-   QObject::connect(scrollBar, SIGNAL(valueChanged(int)),
-                    q, horizontal ? SLOT(_q_hslide(int)) : SLOT(_q_vslide(int)));
+   if (horizontal) {
+      QObject::connect(scrollBar, SIGNAL(valueChanged(int)), q, SLOT(_q_hslide(int)));
+
+   } else {
+      QObject::connect(scrollBar, SIGNAL(valueChanged(int)), q, SLOT(_q_vslide(int)));
+
+   }
 
    QObject::connect(scrollBar, SIGNAL(rangeChanged(int, int)),
                     q, SLOT(_q_showOrHideScrollBars()), Qt::QueuedConnection);
@@ -961,7 +967,7 @@ bool QAbstractScrollArea::event(QEvent *e)
          d->layoutChildren();
 
          // fall through
-      
+
       default:
          return QFrame::event(e);
    }

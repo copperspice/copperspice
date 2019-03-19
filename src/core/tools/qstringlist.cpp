@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -84,8 +85,6 @@ void QStringList::sort()
    std::sort(this->begin(), this->end());
 }
 
-#ifndef QT_NO_REGEXP
-
 QStringList QStringList::filter(const QRegularExpression8 &rx) const
 {
    QStringList res;
@@ -147,8 +146,6 @@ int QStringList::lastIndexOf( const QRegularExpression8 &regExp, int from) const
 
    return -1;
 }
-
-#endif
 
 int QStringList::removeDuplicates()
 {

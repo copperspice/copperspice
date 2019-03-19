@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #include <objectdescriptionmodel.h>
 #include <objectdescriptionmodel_p.h>
@@ -62,11 +60,11 @@ QVariant ObjectDescriptionModelData::data(const QModelIndex &index, int role) co
        case Qt::DisplayRole:
            return d->data.at(index.row())->name();
            break;
-   
+
        case Qt::ToolTipRole:
            return d->data.at(index.row())->description();
            break;
-   
+
        case Qt::DecorationRole:
            {
                QVariant icon = d->data.at(index.row())->property("icon");
@@ -189,7 +187,7 @@ QExplicitlySharedDataPointer<ObjectDescriptionData> ObjectDescriptionModelData::
 }
 
 Qt::DropActions ObjectDescriptionModelData::supportedDropActions() const
-{   
+{
     return Qt::MoveAction;
 }
 
@@ -199,7 +197,7 @@ bool ObjectDescriptionModelData::dropMimeData(ObjectDescriptionType type, const 
     Q_UNUSED(action);
     Q_UNUSED(column);
     Q_UNUSED(parent);
- 
+
     QString format = mimeTypes(type).first();
     if (!data->hasFormat(format)) {
         return false;
@@ -233,7 +231,7 @@ bool ObjectDescriptionModelData::dropMimeData(ObjectDescriptionType type, const 
 
 
 bool ObjectDescriptionModelData::removeRows(int row, int count, const QModelIndex &parent)
-{    
+{
     if (parent.isValid() || row + count > d->data.size()) {
         return false;
     }

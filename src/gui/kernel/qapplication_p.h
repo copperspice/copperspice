@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,23 +17,24 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
 #ifndef QAPPLICATION_P_H
 #define QAPPLICATION_P_H
 
-#include <QtGui/qapplication.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qcursor.h>
-#include <QtGui/qregion.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qtranslator.h>
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qpointer.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qfont.h>
+#include <qcursor.h>
+#include <qregion.h>
+
+#include <qmutex.h>
+#include <qtranslator.h>
+#include <qbasictimer.h>
+#include <qhash.h>
+#include <qpointer.h>
 #include <qcoreapplication_p.h>
 #include <qshortcutmap_p.h>
 #include <qthread_p.h>
@@ -41,7 +43,7 @@
 #include <qstringlist.h>
 
 #ifdef Q_WS_QWS
-#include <QtGui/qscreen_qws.h>
+#include <qscreen_qws.h>
 #include <qgraphicssystem_qws_p.h>
 #endif
 
@@ -51,8 +53,6 @@
 #include <qplatformintegration_qpa.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QClipboard;
 class QGraphicsScene;
 class QGraphicsSystem;
@@ -60,6 +60,7 @@ class QInputContext;
 class QObject;
 class QWidget;
 class QSocketNotifier;
+
 #ifndef QT_NO_GESTURES
 class QGestureManager;
 #endif
@@ -161,10 +162,12 @@ inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY, int outOrig
 
 typedef QList<QTabletDeviceData> QTabletDeviceDataList;
 QTabletDeviceDataList *qt_tablet_devices();
+
 # if defined(Q_OS_MAC)
 typedef QHash<int, QTabletDeviceData> QMacTabletHash;
 QMacTabletHash *qt_mac_tablet_hash();
 # endif
+
 #endif
 
 #if defined(Q_OS_WIN)
@@ -314,14 +317,13 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 #endif
 
    enum KeyPlatform {
-      KB_Win = 1,
-      KB_Mac = 2,
-      KB_X11 = 4,
-      KB_KDE = 8,
+      KB_Win   = 1,
+      KB_Mac   = 2,
+      KB_X11   = 4,
+      KB_KDE   = 8,
       KB_Gnome = 16,
-      KB_CDE = 32,
-      KB_S60 = 64,
-      KB_All = 0xffff
+      KB_CDE   = 32,
+      KB_All   = 0xffff
    };
 
    static uint currentPlatform();
@@ -343,8 +345,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 #endif
 
 #ifndef QT_NO_GRAPHICSVIEW
-   // Maintain a list of all scenes to ensure font and palette propagation to
-   // all scenes.
+   // Maintain a list of all scenes to ensure font and palette propagation to all scenes.
    QList<QGraphicsScene *> scene_list;
 #endif
 
@@ -376,7 +377,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 #endif
 
  private:
-   static QFont *app_font; // private for a reason! Always use QApplication::font() instead!
+   static QFont *app_font; // private for a reason! Always use QApplication::font() instead
 
  public:
    static QFont *sys_font;
@@ -451,8 +452,10 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 
    //    static void reportScreenCount(int count);
    static void reportScreenCount(QWindowSystemInterfacePrivate::ScreenCountEvent *e);
+
    //    static void reportGeometryChange(int screenIndex);
    static void reportGeometryChange(QWindowSystemInterfacePrivate::ScreenGeometryEvent *e);
+
    //    static void reportAvailableGeometryChange(int screenIndex);
    static void reportAvailableGeometryChange(QWindowSystemInterfacePrivate::ScreenAvailableGeometryEvent *e);
    static void reportLocaleChange();
@@ -607,6 +610,4 @@ extern void qt_qpa_set_cursor(QWidget *, bool);
 
 #endif
 
-QT_END_NAMESPACE
-
-#endif // QAPPLICATION_P_H
+#endif

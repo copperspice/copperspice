@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,26 +17,22 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
 #ifndef QKEYSEQUENCE_H
 #define QKEYSEQUENCE_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qstring.h>
+#include <qnamespace.h>
+#include <qstring.h>
 #include <qobject.h>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SHORTCUT
 
-#ifndef QT_NO_DATASTREAM
 class QKeySequence;
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &out, QKeySequence &ks);
-#endif
 
 class QVariant;
 class QKeySequencePrivate;
@@ -129,7 +126,7 @@ class Q_GUI_EXPORT QKeySequence
    QKeySequence(StandardKey key);
    ~QKeySequence();
 
-   uint count() const; // ### Qt5/return 'int'
+   int count() const;
    bool isEmpty() const;
 
    enum SequenceMatch {
@@ -161,17 +158,21 @@ class Q_GUI_EXPORT QKeySequence
    inline void swap(QKeySequence &other) {
       qSwap(d, other.d);
    }
+
    bool operator==(const QKeySequence &other) const;
    inline bool operator!= (const QKeySequence &other) const {
       return !(*this == other);
    }
+
    bool operator< (const QKeySequence &ks) const;
    inline bool operator> (const QKeySequence &other) const {
       return other < *this;
    }
+
    inline bool operator<= (const QKeySequence &other) const {
       return !(other < *this);
    }
+
    inline bool operator>= (const QKeySequence &other) const {
       return !(*this < other);
    }
@@ -215,7 +216,5 @@ class Q_GUI_EXPORT QKeySequence
 };
 
 #endif // QT_NO_SHORTCUT
-
-QT_END_NAMESPACE
 
 #endif // QKEYSEQUENCE_H

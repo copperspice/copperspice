@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -32,7 +33,7 @@
 using QStringListIterator        = QListIterator<QString>;
 using QMutableStringListIterator = QMutableListIterator<QString>;
 
-class Q_CORE_EXPORT QStringList : public QList<QString>
+class QStringList : public QList<QString>
 {
  public:
    QStringList() { }
@@ -51,16 +52,16 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
       : QList<QString>(args) { }
 
    // methods
-   bool contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+   bool Q_CORE_EXPORT contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-   QStringList filter(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+   QStringList Q_CORE_EXPORT filter(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-   QString join(const QString &sep) const;
+   QString Q_CORE_EXPORT join(const QString &sep) const;
 
-   int removeDuplicates();
-   QStringList &replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+   int Q_CORE_EXPORT removeDuplicates();
+   Q_CORE_EXPORT QStringList &replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-   void sort();
+   void Q_CORE_EXPORT sort();
 
    // operators
    QStringList operator+(const QStringList &other) const {
@@ -79,16 +80,14 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
       return *this;
    }
 
-#ifndef QT_NO_REGEXP
-   QStringList filter(const QRegularExpression8 &rx) const;
+   Q_CORE_EXPORT QStringList filter(const QRegularExpression8 &rx) const;
 
-   int indexOf(const QRegularExpression8 &rx, int from = 0) const;
-   int lastIndexOf(const QRegularExpression8 &rx, int from = -1) const;
-   int indexOf(QRegularExpression8 &rx, int from = 0) const;
-   int lastIndexOf(QRegularExpression8 &rx, int from = -1) const;
+   int Q_CORE_EXPORT indexOf(const QRegularExpression8 &rx, int from = 0) const;
+   int Q_CORE_EXPORT lastIndexOf(const QRegularExpression8 &rx, int from = -1) const;
+   int Q_CORE_EXPORT indexOf(QRegularExpression8 &rx, int from = 0) const;
+   int Q_CORE_EXPORT lastIndexOf(QRegularExpression8 &rx, int from = -1) const;
 
-   QStringList &replaceInStrings(const QRegularExpression8 &rx, const QString &after);
-#endif
+   Q_CORE_EXPORT QStringList &replaceInStrings(const QRegularExpression8 &rx, const QString &after);
 
    using QList<QString>::indexOf;
    using QList<QString>::lastIndexOf;
@@ -105,6 +104,5 @@ inline QDataStream &operator<<(QDataStream &out, const QStringList &list)
 {
    return operator<<(out, static_cast<const QList<QString> &>(list));
 }
-
 
 #endif

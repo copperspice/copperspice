@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -260,37 +261,37 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
 #ifdef QT_DEBUG
    {
-      QByteArray override = qgetenv("QT_WINVER_OVERRIDE");
+      QByteArray forceWinVer = qgetenv("QT_WINVER_OVERRIDE");
 
-      if (override.isEmpty()) {
+      if (forceWinVer.isEmpty()) {
          return winver;
       }
 
-      if (override == "NT") {
+      if (forceWinVer == "NT") {
          winver = QSysInfo::WV_NT;
 
-      } else if (override == "2000") {
+      } else if (forceWinVer == "2000") {
          winver = QSysInfo::WV_2000;
 
-      } else if (override == "2003") {
+      } else if (forceWinVer == "2003") {
          winver = QSysInfo::WV_2003;
 
-      } else if (override == "XP") {
+      } else if (forceWinVer == "XP") {
           winver = QSysInfo::WV_XP;
 
-      } else if (override == "VISTA") {
+      } else if (forceWinVer == "VISTA") {
           winver = QSysInfo::WV_VISTA;
 
-      } else if (override == "WINDOWS7") {
+      } else if (forceWinVer == "WINDOWS7") {
           winver = QSysInfo::WV_WINDOWS7;
 
-      } else if (override == "WINDOWS8") {
+      } else if (forceWinVer == "WINDOWS8") {
          winver = QSysInfo::WV_WINDOWS8;
 
-      } else if (override == "WINDOWS8.1") {
+      } else if (forceWinVer == "WINDOWS8.1") {
          winver = QSysInfo::WV_WINDOWS8_1;
 
-      } else if (override == "WINDOWS10") {
+      } else if (forceWinVer == "WINDOWS10") {
          winver = QSysInfo::WV_WINDOWS10;
 
       }
@@ -419,18 +420,21 @@ void *qMemSet(void *dest, int c, size_t n)
    return memset(dest, c, n);
 }
 
-static std::mutex environmentMutex;
+static std::mutex &environmentMutex()
+{
+   static std::mutex retval;
+   return retval;
+}
 
 QByteArray qgetenv(const char *varName)
 {
-   std::lock_guard<std::mutex> lock(environmentMutex);
-
+   std::lock_guard<std::mutex> lock(environmentMutex());
    return QByteArray(::getenv(varName));
 }
 
 bool qputenv(const char *varName, const QByteArray &value)
 {
-   std::lock_guard<std::mutex> lock(environmentMutex);
+   std::lock_guard<std::mutex> lock(environmentMutex());
 
 #if defined(_POSIX_VERSION) && (_POSIX_VERSION - 0) >= 200112L
     return setenv(varName, value.constData(), true) == 0;
@@ -454,7 +458,7 @@ bool qputenv(const char *varName, const QByteArray &value)
 
 bool qunsetenv(const char *varName)
 {
-   std::lock_guard<std::mutex> lock(environmentMutex);
+   std::lock_guard<std::mutex> lock(environmentMutex());
 
 #if defined(_POSIX_VERSION) && (_POSIX_VERSION - 0) >= 200112L
    return unsetenv(varName) == 0;

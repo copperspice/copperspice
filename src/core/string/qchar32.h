@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -38,21 +39,45 @@ inline uint qHash(const QChar32 &key, uint seed = 0);
 class Q_CORE_EXPORT QChar32 : public CsString::CsChar
 {
    public:
+      enum CombiningClass {
+           Combining_BelowLeftAttached    = 200,
+           Combining_BelowAttached        = 202,
+           Combining_BelowRightAttached   = 204,
+           Combining_LeftAttached         = 208,
+           Combining_RightAttached        = 210,
+           Combining_AboveLeftAttached    = 212,
+           Combining_AboveAttached        = 214,
+           Combining_AboveRightAttached   = 216,
+
+           Combining_BelowLeft            = 218,
+           Combining_Below                = 220,
+           Combining_BelowRight           = 222,
+           Combining_Left                 = 224,
+           Combining_Right                = 226,
+           Combining_AboveLeft            = 228,
+           Combining_Above                = 230,
+           Combining_AboveRight           = 232,
+
+           Combining_DoubleBelow          = 233,
+           Combining_DoubleAbove          = 234,
+           Combining_IotaSubscript        = 240
+      };
+
       enum SpecialCharacter {
-        Null                       = 0x0000,
-        Tabulation                 = 0x0009,
-        LineFeed                   = 0x000a,
-        CarriageReturn             = 0x000d,
-        Space                      = 0x0020,
-        Nbsp                       = 0x00a0,
-        SoftHyphen                 = 0x00ad,
-        ReplacementCharacter       = 0xfffd,
-        ObjectReplacementCharacter = 0xfffc,
-        ByteOrderMark              = 0xfeff,
-        ByteOrderSwapped           = 0xfffe,
-        ParagraphSeparator         = 0x2029,
-        LineSeparator              = 0x2028,
-        LastValidCodePoint         = 0x10ffff
+        Null                              = 0x0000,
+        Tabulation                        = 0x0009,
+        LineFeed                          = 0x000a,
+        CarriageReturn                    = 0x000d,
+        Space                             = 0x0020,
+        Nbsp                              = 0x00a0,
+        SoftHyphen                        = 0x00ad,
+        ReplacementCharacter              = 0xfffd,
+        ObjectReplacementCharacter        = 0xfffc,
+        ByteOrderMark                     = 0xfeff,
+        ByteOrderSwapped                  = 0xfffe,
+        ParagraphSeparator                = 0x2029,
+        LineSeparator                     = 0x2028,
+        LastValidCodePoint                = 0x10ffff
       };
 
       enum Category {
@@ -145,7 +170,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_Tagbanwa,
            Script_Coptic,
 
-           // Unicode 4.0 additions
+           // Unicode 4.0
            Script_Limbu,
            Script_TaiLe,
            Script_LinearB,
@@ -155,7 +180,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_Cypriot,
            Script_Braille,
 
-           // Unicode 4.1 additions
+           // Unicode 4.1
            Script_Buginese,
            Script_NewTaiLue,
            Script_Glagolitic,
@@ -164,14 +189,14 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_OldPersian,
            Script_Kharoshthi,
 
-           // Unicode 5.0 additions
+           // Unicode 5.0
            Script_Balinese,
            Script_Cuneiform,
            Script_Phoenician,
            Script_PhagsPa,
            Script_Nko,
 
-           // Unicode 5.1 additions
+           // Unicode 5.1
            Script_Sundanese,
            Script_Lepcha,
            Script_OlChiki,
@@ -184,7 +209,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_Lydian,
            Script_Cham,
 
-           // Unicode 5.2 additions
+           // Unicode 5.2
            Script_TaiTham,
            Script_TaiViet,
            Script_Avestan,
@@ -201,12 +226,12 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_OldTurkic,
            Script_Kaithi,
 
-           // Unicode 6.0 additions
+           // Unicode 6.0
            Script_Batak,
            Script_Brahmi,
            Script_Mandaic,
 
-           // Unicode 6.1 additions
+           // Unicode 6.1
            Script_Chakma,
            Script_MeroiticCursive,
            Script_MeroiticHieroglyphs,
@@ -215,7 +240,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_SoraSompeng,
            Script_Takri,
 
-           // Unicode 7.0 additions
+           // Unicode 7.0
            Script_CaucasianAlbanian,
            Script_BassaVah,
            Script_Duployan,
@@ -240,7 +265,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_Tirhuta,
            Script_WarangCiti,
 
-           // Unicode 8.0 additions
+           // Unicode 8.0
            Script_Ahom,
            Script_AnatolianHieroglyphs,
            Script_Hatran,
@@ -248,12 +273,36 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Script_OldHungarian,
            Script_SignWriting,
 
+           // Unicode 9.0
+           Script_Adlam,
+           Script_Bhaiksuki,
+           Script_Marchen,
+           Script_Newa,
+           Script_Osage,
+           Script_Tangut,
+
+           // Unicode 10.0
+           Script_MasaramGondi,
+           Script_Nushu,
+           Script_Soyombo,
+           Script_ZanabazarSquare,
+
+           // Unicode 11.0
+           Script_HanifiRohingya,
+           Script_OldSogdian,
+           Script_Sogdian,
+           Script_Dogra,
+           Script_GunjalaGondi,
+           Script_Makasar,
+           Script_Medefaidrin,
+
            ScriptCount
       };
 
       enum Direction {
-         DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS,
-         DirON, DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBN
+         DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON,
+         DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBN,
+         DirLRI, DirRLI, DirFSI, DirPDI
       };
 
       enum Decomposition {
@@ -286,35 +335,11 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
          Joining_Transparent
        };
 
-      enum CombiningClass {
-           Combining_BelowLeftAttached       = 200,
-           Combining_BelowAttached           = 202,
-           Combining_BelowRightAttached      = 204,
-           Combining_LeftAttached            = 208,
-           Combining_RightAttached           = 210,
-           Combining_AboveLeftAttached       = 212,
-           Combining_AboveAttached           = 214,
-           Combining_AboveRightAttached      = 216,
-
-           Combining_BelowLeft               = 218,
-           Combining_Below                   = 220,
-           Combining_BelowRight              = 222,
-           Combining_Left                    = 224,
-           Combining_Right                   = 226,
-           Combining_AboveLeft               = 228,
-           Combining_Above                   = 230,
-           Combining_AboveRight              = 232,
-
-           Combining_DoubleBelow             = 233,
-           Combining_DoubleAbove             = 234,
-           Combining_IotaSubscript           = 240
-      };
-
       enum UnicodeVersion {
            Unicode_Unassigned,
            Unicode_1_1,
            Unicode_2_0,
-           Unicode_2_1_2,
+           Unicode_2_1,
            Unicode_3_0,
            Unicode_3_1,
            Unicode_3_2,
@@ -328,7 +353,10 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
            Unicode_6_2,
            Unicode_6_3,
            Unicode_7_0,
-           Unicode_8_0
+           Unicode_8_0,
+           Unicode_9_0,
+           Unicode_10_0,
+           Unicode_11_0
       };
 
       QChar32() = default;

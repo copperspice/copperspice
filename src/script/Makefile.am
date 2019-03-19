@@ -35,25 +35,16 @@ lib_libCsScript@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCo
 	-DWTF_USE_JAVASCRIPTCORE_BINDINGS=1 \
 	-DWTF_CHANGES=1 \
 	-DJS_NO_EXPORT \
-	-DBUILDING_QT__=1 \
+	-DBUILDING_CS=1 \
 	-DWTF_USE_ACCELERATED_COMPOSITING \
 	-DJSC=QTJSC -Djscyyparse=qtjscyyparse -Djscyylex=qtjscyylex \
 	-Djscyyerror=qtjscyyerror \
 	-DWTF=QTWTF \
-	-UHAVE_CONFIG_H \
 	-DUSE_SYSTEM_MALLOC  \
 	-DQT_BUILD_SCRIPT_LIB
 
-#	-DWTF_USE_JAVASCRIPTCORE_BINDINGS=1 -DWTF_CHANGES=1
-#	-DBUILDING_QT__
-#	-DBUILDING_JavaScriptCore -DBUILDING_WTF
-#	-DJSC=QTJSC -Djscyyparse=qtjscyyparse -Djscyylex=qtjscyylex
-#	-Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE=""
-#	-DWTF_USE_JSC -DWTF_PLATFORM_QT=1
-
 lib_libCsScript@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsScript@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
-
 
 if OSTYPE_WIN
 lib_libCsScript@BUILD_ABI@_la_LDFLAGS += -lwinmm

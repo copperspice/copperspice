@@ -47,7 +47,7 @@ static HashReturn Update(hashState *state, const BitSequence *data, DataLength d
     else {
         HashReturn ret = (HashReturn) Absorb((spongeState*)state, data, databitlen - (databitlen % 8));
         if (ret == SUCCESS) {
-            unsigned char lastByte; 
+            unsigned char lastByte;
             // Align the last partial byte to the least significant bits
             lastByte = data[databitlen/8] >> (8 - (databitlen % 8));
             return (HashReturn) Absorb((spongeState*)state, &lastByte, databitlen % 8);
@@ -61,22 +61,3 @@ static HashReturn Final(hashState *state, BitSequence *hashval)
 {
     return (HashReturn) Squeeze(state, hashval, state->fixedOutputLength);
 }
-
-#ifndef QT_BUILDING_QT
-static HashReturn Hash(int hashbitlen, const BitSequence *data, DataLength databitlen, BitSequence *hashval)
-{
-    hashState state;
-    HashReturn result;
-
-    if ((hashbitlen != 224) && (hashbitlen != 256) && (hashbitlen != 384) && (hashbitlen != 512))
-        return BAD_HASHLEN; // Only the four fixed output lengths available through this API
-    result = Init(&state, hashbitlen);
-    if (result != SUCCESS)
-        return result;
-    result = Update(&state, data, databitlen);
-    if (result != SUCCESS)
-        return result;
-    result = Final(&state, hashval);
-    return result;
-}
-#endif

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef WTF_StringExtras_h
@@ -30,28 +30,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#if HAVE(STRINGS_H) 
-#include <strings.h> 
-#endif 
+#if HAVE(STRINGS_H)
+#include <strings.h>
+#endif
 
 #if COMPILER(MSVC)
-// FIXME: why a COMPILER check instead of OS? also, these should be HAVE checks
-
-inline int snprintf(char* buffer, size_t count, const char* format, ...) 
-{
-    int result;
-    va_list args;
-    va_start(args, format);
-    result = _vsnprintf(buffer, count, format, args);
-    va_end(args);
-
-    // In the case where the string entirely filled the buffer, _vsnprintf will not
-    // null-terminate it, but snprintf must.
-    if (count > 0)
-        buffer[count - 1] = '\0';
-
-    return result;
-}
 
 inline double wtf_vsnprintf(char* buffer, size_t count, const char* format, va_list args)
 {
@@ -65,28 +48,9 @@ inline double wtf_vsnprintf(char* buffer, size_t count, const char* format, va_l
     return result;
 }
 
-// Work around a difference in Microsoft's implementation of vsnprintf, where 
+// Work around a difference in Microsoft's implementation of vsnprintf, where
 // vsnprintf does not null terminate the buffer. WebKit can rely on the null termination.
 #define vsnprintf(buffer, count, format, args) wtf_vsnprintf(buffer, count, format, args)
-
-#if OS(WINCE)
-
-inline int strnicmp(const char* string1, const char* string2, size_t count)
-{
-    return _strnicmp(string1, string2, count);
-}
-
-inline int stricmp(const char* string1, const char* string2)
-{
-    return _stricmp(string1, string2);
-}
-
-inline char* strdup(const char* strSource)
-{
-    return _strdup(strSource);
-}
-
-#endif
 
 inline int strncasecmp(const char* s1, const char* s2, size_t len)
 {
@@ -100,7 +64,7 @@ inline int strcasecmp(const char* s1, const char* s2)
 
 #endif
 
-#if !HAVE(STRNSTR)
+#if ! HAVE(STRNSTR)
 
 inline char* strnstr(const char* buffer, const char* target, size_t bufferLength)
 {

@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -31,9 +32,8 @@
 #include <QtGui/qvector4d.h>
 #include <QtGui/qquaternion.h>
 
-QT_BEGIN_NAMESPACE
-
-template<> Q_INLINE_TEMPLATE QColor _q_interpolate(const QColor &f, const QColor &t, qreal progress)
+template<>
+inline QColor _q_interpolate(const QColor &f, const QColor &t, qreal progress)
 {
    return QColor(qBound(0, _q_interpolate(f.red(), t.red(), progress), 255),
                  qBound(0, _q_interpolate(f.green(), t.green(), progress), 255),
@@ -41,7 +41,8 @@ template<> Q_INLINE_TEMPLATE QColor _q_interpolate(const QColor &f, const QColor
                  qBound(0, _q_interpolate(f.alpha(), t.alpha(), progress), 255));
 }
 
-template<> Q_INLINE_TEMPLATE QQuaternion _q_interpolate(const QQuaternion &f, const QQuaternion &t, qreal progress)
+template<>
+inline QQuaternion _q_interpolate(const QQuaternion &f, const QQuaternion &t, qreal progress)
 {
    return QQuaternion::slerp(f, t, progress);
 }

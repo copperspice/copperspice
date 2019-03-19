@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -122,14 +123,23 @@ class QVector
    }
 
    T *data() {
+      if(isEmpty()) {
+	return nullptr;
+      }
       return &m_data[0];
    }
 
    const T *data() const {
+      if(isEmpty()) {
+	 return nullptr;
+      }
       return &m_data[0];
    }
 
    const T *constData() const {
+      if(isEmpty()) {
+	 return nullptr;
+      }
       return &m_data[0];
    }
 
@@ -281,7 +291,17 @@ class QVector
      m_data.pop_back();
    }
 
-   bool removeOne(const T &value);
+   bool removeOne(const T &value) {
+     auto iter = std::find(m_data.begin(), m_data.end(), value);
+
+     if (iter != m_data.end()) {
+       m_data.erase(iter);
+       return true;
+     }
+
+     return false;
+   }
+
    void replace(size_type i, const T &value);
 
    void reserve(size_type size) {

@@ -42,21 +42,25 @@
 #define JS_EXPORT_PRIVATE WTF_IMPORT
 #endif
 
-#define JS_EXPORTDATA JS_EXPORT_PRIVATE
+#define JS_EXPORTDATA  JS_EXPORT_PRIVATE
 #define JS_EXPORTCLASS JS_EXPORT_PRIVATE
 
 #else /* !USE(EXPORT_MACROS) */
 
-#if !PLATFORM(CHROMIUM) && OS(WINDOWS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
+#if ! PLATFORM(CHROMIUM) && OS(WINDOWS) && COMPILER(MSVC)
+
 #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
-#define JS_EXPORTDATA __declspec(dllexport)
+#define JS_EXPORTDATA
+#define JS_EXPORTCLASS   __declspec(dllexport)
 #else
-#define JS_EXPORTDATA __declspec(dllimport)
+#define JS_EXPORTDATA
+#define JS_EXPORTCLASS   __declspec(dllimport)
 #endif
-#define JS_EXPORTCLASS JS_EXPORTDATA
+
 #else
 #define JS_EXPORTDATA
 #define JS_EXPORTCLASS
+
 #endif
 
 #define WTF_EXPORT_PRIVATE
@@ -66,7 +70,7 @@
 
 #if OS(WINDOWS)
 
-// If we don't define these, they get defined in windef.h. 
+// If we don't define these, they get defined in windef.h.
 // We want to use std::min and std::max
 #define max max
 #define min min
@@ -101,7 +105,7 @@
 
 // this breaks compilation of <QFontDatabase>, at least, so turn it off for now
 // Also generates errors on wx on Windows, because these functions
-// are used from wx headers. 
+// are used from wx headers.
 #if !PLATFORM(QT) && !PLATFORM(WX)
 #include <wtf/DisallowCType.h>
 #endif

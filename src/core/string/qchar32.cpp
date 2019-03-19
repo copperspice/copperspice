@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -54,17 +55,17 @@ unsigned char QChar32::combiningClass() const
 }
 
 // buffer has to have a length of 3, required for Hangul decomposition
-static const uint16_t * cs_internal_decomposition(uint value, int *length, int *tag, unsigned short *buffer)
+static const char32_t * cs_internal_decomposition(uint value, int *length, int *tag, char32_t *buffer)
 {
-   if (value >= Hangul_SBase && value < Hangul_SBase + Hangul_SCount) {
+   if (value >= Hangul_Constants::Hangul_SBase && value < Hangul_Constants::Hangul_SBase + Hangul_Constants::Hangul_SCount) {
       // compute Hangul syllable decomposition as per UAX #15
 
-      const uint SIndex = value - Hangul_SBase;
-      buffer[0] = Hangul_LBase + SIndex / Hangul_NCount;                   // L
-      buffer[1] = Hangul_VBase + (SIndex % Hangul_NCount) / Hangul_TCount; // V
-      buffer[2] = Hangul_TBase + SIndex % Hangul_TCount;                   // T
+      const uint SIndex = value - Hangul_Constants::Hangul_SBase;
+      buffer[0] = Hangul_Constants::Hangul_LBase + SIndex / Hangul_Constants::Hangul_NCount;                                     // L
+      buffer[1] = Hangul_Constants::Hangul_VBase + (SIndex % Hangul_Constants::Hangul_NCount) / Hangul_Constants::Hangul_TCount; // V
+      buffer[2] = Hangul_Constants::Hangul_TBase + SIndex % Hangul_Constants::Hangul_TCount;                                     // T
 
-      *length = buffer[2] == Hangul_TBase ? 2 : 3;
+      *length = buffer[2] == Hangul_Constants::Hangul_TBase ? 2 : 3;
       *tag = QChar32::Canonical;
 
       return buffer;
@@ -78,7 +79,7 @@ static const uint16_t * cs_internal_decomposition(uint value, int *length, int *
       return 0;
    }
 
-   const unsigned short *decomposition = QUnicodeTables::uc_decomposition_map + index;
+   const char32_t *decomposition = QUnicodeTables::uc_decomposition_map + index;
    *tag    = (*decomposition) & 0xff;
    *length = (*decomposition) >> 8;
 
@@ -87,14 +88,14 @@ static const uint16_t * cs_internal_decomposition(uint value, int *length, int *
 
 QString8 QChar32::decomposition() const
 {
-   unsigned short buffer[3];
+   char32_t buffer[3];
    int length;
    int tag;
 
    uint32_t value = unicode();
-   const unsigned short *d = cs_internal_decomposition(value, &length, &tag, buffer);
+   const char32_t *d = cs_internal_decomposition(value, &length, &tag, buffer);
 
-   return QString8::fromUtf16(reinterpret_cast<const char16_t *>(d), length);
+   return QString8(d, d + length);
 }
 
 QChar32::Decomposition QChar32::decompositionTag() const
@@ -321,24 +322,18 @@ QString8 QChar32::toTitleCase() const
    }
 
    QString8 retval;
+   char32_t caseValue = QUnicodeTables::TitleCaseTraits::caseValue(value);
 
-   const QUnicodeTables::Properties *prop = QUnicodeTables::properties(value);
-   int32_t caseDiff = QUnicodeTables::TitlecaseTraits::caseDiff(prop);
+   if (caseValue == 0 && value != 0) {
+      // special char
 
-   if (QUnicodeTables::TitlecaseTraits::caseSpecial(prop)) {
-      const ushort *specialCase = QUnicodeTables::specialCaseMap + caseDiff;
-
-      ushort length = *specialCase;
-      ++specialCase;
-
-      for (ushort cnt; cnt < length; ++cnt)  {
-         retval += QChar32(specialCase[cnt]);
-      }
+      const char32_t *data = QUnicodeTables::TitleCaseTraits::caseSpecial(value);
+      retval += data;
 
    } else {
-      retval += QChar32( static_cast<char32_t>(value + caseDiff) );
-
+      retval += QChar32(caseValue);
    }
+
 
    return retval;
 }
@@ -368,7 +363,7 @@ QChar32::UnicodeVersion QChar32::unicodeVersion() const
 
 QChar32::UnicodeVersion QChar32::currentUnicodeVersion()
 {
-   return UNICODE_DATA_VERSION_32;
+   return UNICODE_DATA_VERSION;
 }
 
 QDataStream &operator>>(QDataStream &in, QChar32 &ch)

@@ -1,4 +1,4 @@
-# This file is used to ignore files 
+# This file is used to ignore files
 # -------------------------------------------------
 
 /aclocal.m4
@@ -22,6 +22,35 @@
 /autotools/build-aux/ltmain.sh
 /autotools/build-aux/missing
 
+/util/unicode/aclocal.m4
+/util/unicode/configure
+/util/unicode/configure.cache
+/util/unicode/config.status
+
+/util/unicode/autom4te.cache
+/util/unicode/autotools/aclocal.m4
+/util/unicode/autotools/m4/libtool.m4
+/util/unicode/autotools/m4/ltoptions.m4
+/util/unicode/autotools/m4/ltsugar.m4
+/util/unicode/autotools/m4/ltversion.m4
+/util/unicode/autotools/m4/lt~obsolete.m4
+/util/unicode/autotools/m4/pkg.m4
+/util/unicode/autotools/build-aux/compile
+/util/unicode/autotools/build-aux/config.guess
+/util/unicode/autotools/build-aux/config.sub
+/util/unicode/autotools/build-aux/depcomp
+/util/unicode/autotools/build-aux/install-sh
+/util/unicode/autotools/build-aux/ltmain.sh
+/util/unicode/autotools/build-aux/missing
+
+/util/unicode/do_build
+/util/unicode/config.log
+/util/unicode/libtool
+/util/unicode/error.log
+
+/bin/
+/util/unicode/bin
+
 /include/qt-acconfig.h.in
 
 *.a
@@ -31,6 +60,7 @@
 *.obj
 *.lo
 *.so
+*.Po
 *~
 
 *.flc
@@ -42,4 +72,5 @@ Makefile
 
 qrc_*.cpp
 ui_*.h
-/bin/
+
+/src/3rdparty/harfbuzz/src_1.8.8

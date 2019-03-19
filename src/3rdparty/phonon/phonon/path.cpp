@@ -1,10 +1,12 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +18,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org
-********************************************************/
 
 #include "path.h"
 #include "path_p.h"
@@ -184,7 +182,7 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
 
         if (bcurrentSource) {
             disconnections << QObjectPair(bcurrentSource, bnext);
-        } 
+        }
         connections << QObjectPair(bnewSource, bnext);
     }
 
@@ -200,7 +198,7 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
 
         if (bcurrentSink) {
             disconnections << QObjectPair(bprevious, bcurrentSink);
-        } 
+        }
 
         QObjectPair pair(bprevious, bnewSink);
         if (!connections.contains(pair)) //avoid connecting twice
@@ -283,7 +281,7 @@ bool Path::disconnect()
             d->effects.at(i)->k_ptr->removeDestructionHandler(d.data());
         }
         d->effects.clear();
-#endif 
+#endif
 
         if (d->sinkNode) {
             d->sinkNode->k_ptr->removeInputPath(*this);

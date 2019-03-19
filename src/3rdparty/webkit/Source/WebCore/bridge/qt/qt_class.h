@@ -27,7 +27,7 @@
 #include "qglobal.h"
 
 class QObject;
-struct QMetaObject;
+class QMetaObject;
 
 namespace JSC {
 namespace Bindings {

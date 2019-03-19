@@ -1,3 +1,0 @@
-[qtuser@workstation:~/dev/qt-4.4/examples/dbus/pingpong]$ ./pong &
-[qtuser@workstation:~/dev/qt-4.4/examples/dbus/pingpong]$ ./ping Hello
-Reply was: ping("Hello") got called

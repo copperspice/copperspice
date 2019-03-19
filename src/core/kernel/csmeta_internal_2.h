@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -111,9 +112,9 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
    return std::make_pair( static_cast<T>(temp), retval);
 }
 
-// classes for these 2 methods, located in csmeta.h around line 330
+// classes for these 2 methods, located in csmeta.h around line 405
 template<class E>
-inline const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
+const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<E>();
 
@@ -129,7 +130,7 @@ inline const QString &cs_typeName_internal<E, typename std::enable_if<std::is_en
 }
 
 template<class E>
-inline const QString &cs_typeName_internal< QFlags<E> >::typeName()
+const QString &cs_typeName_internal< QFlags<E> >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
 

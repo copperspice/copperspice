@@ -218,6 +218,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qtextboundaryfinder.cpp \
 	src/core/tools/qtimeline.cpp \
 	src/core/tools/qvector.cpp \
+	src/core/tools/qharfbuzz.cpp \
 	src/3rdparty/harfbuzz/src/harfbuzz-buffer.c \
 	src/3rdparty/harfbuzz/src/harfbuzz-gdef.c \
 	src/3rdparty/harfbuzz/src/harfbuzz-gsub.c \
@@ -225,8 +226,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/harfbuzz/src/harfbuzz-impl.c \
 	src/3rdparty/harfbuzz/src/harfbuzz-open.c \
 	src/3rdparty/harfbuzz/src/harfbuzz-stream.c \
-	src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp \
-	src/core/tools/qharfbuzz.cpp
+	src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp
 
 
 if OSTYPE_WIN

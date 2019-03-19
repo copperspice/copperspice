@@ -1,13 +1,18 @@
 /***********************************************************************
 *
-* Copyright (c) 2017-2018 Barbara Geller
-* Copyright (c) 2017-2018 Ansel Sermersheim
-* All rights reserved.
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
 *
-* This file is part of CsString
+* This file is part of CsString.
 *
 * CsString is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
 *
 ***********************************************************************/
 
@@ -37,7 +42,7 @@ class LIB_CS_STRING_EXPORT CsCharArrow
 };
 
 template <typename E, typename A>
-class LIB_CS_STRING_EXPORT CsStringIterator
+class CsStringIterator
 {
    using v_iter = typename std::vector<typename E::storage_unit, A>::const_iterator;
 
@@ -247,7 +252,7 @@ auto CsStringIterator<E,A>::codePointEnd() const -> v_iter
 
 // reverse iterator defreference needs to return by value
 template <typename T>
-class LIB_CS_STRING_EXPORT CsStringReverseIterator : public std::reverse_iterator<T>
+class CsStringReverseIterator : public std::reverse_iterator<T>
 {
    public:
       CsStringReverseIterator() = default;

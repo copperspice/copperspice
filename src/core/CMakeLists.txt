@@ -86,16 +86,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
       ${CMAKE_THREAD_LIBS_INIT}
    )
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-   set(EXTRA_CORE_LIBS
-      ${EXTRA_CORE_LIBS}
-      ole32
-      ws2_32
-   )
-   set(EXTRA_CORE_LDFLAGS
-      ${EXTRA_CORE_LDFLAGS}
-      -Wl,-luuid
-   )
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    set(EXTRA_CORE_LDFLAGS
       ${EXTRA_CORE_LDFLAGS}
@@ -107,6 +98,18 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    )
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/global/Info.plist.app DESTINATION mac)
+
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+   set(EXTRA_CORE_LIBS
+      ${EXTRA_CORE_LIBS}
+      ole32
+      ws2_32
+   )
+
+   set(EXTRA_CORE_LDFLAGS
+      ${EXTRA_CORE_LDFLAGS}
+      -Wl,-luuid
+   )
 endif()
 
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
@@ -114,6 +117,12 @@ function_variable_fixup("${EXTRA_CORE_LDFLAGS}" EXTRA_CORE_LDFLAGS)
 
 add_library(CsCore${BUILD_ABI} SHARED ${CORE_SOURCES} ${CORE_INCLUDES} ${CORE_REGEX_INCLUDES})
 target_link_libraries(CsCore${BUILD_ABI} ${EXTRA_CORE_LIBS})
+
+if(MSVC)
+   target_compile_options(CsCore${BUILD_ABI}
+      PUBLIC /w /bigobj /DNOMINMAX
+   )
+endif()
 
 target_include_directories(CsCore${BUILD_ABI}
    PUBLIC

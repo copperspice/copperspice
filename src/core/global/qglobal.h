@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -49,37 +50,38 @@
 #define QT_END_NAMESPACE
 
 // ** detect target architecture
-#if defined(__x86_64__)
+#if defined(__x86_64__) || defined(_M_AMD64)
 #define QT_ARCH_X86_64
 
-#elif defined(__i386__)
+#elif defined(__i386__) || defined(_M_IX86)
 #define QT_ARCH_I386
 
 #else
-#error Unable to detect architecture, please update above list
+#error Unable to detect system architecture, contact CopperSpice development
 
 #endif
 
 // ** detect target endianness
-#if defined (__BYTE_ORDER__) && \
-    (__BYTE_ORDER__ - 0 == __ORDER_BIG_ENDIAN__ - 0 || __BYTE_ORDER__ - 0 == __ORDER_LITTLE_ENDIAN__ - 0)
+#if defined (__BYTE_ORDER__) && (__BYTE_ORDER__ - 0 == __ORDER_BIG_ENDIAN__ - 0 || __BYTE_ORDER__ - 0 == __ORDER_LITTLE_ENDIAN__ - 0)
 
 #define Q_BYTE_ORDER       __BYTE_ORDER__
 #define Q_BIG_ENDIAN       __ORDER_BIG_ENDIAN__
 #define Q_LITTLE_ENDIAN    __ORDER_LITTLE_ENDIAN__
 
-#elif defined (__LITTLE_ENDIAN__)
+#elif defined (__LITTLE_ENDIAN__) || defined (QT_ARCH_X86_64) || defined (QT_ARCH_I386)
+
 #define Q_BIG_ENDIAN 1234
 #define Q_LITTLE_ENDIAN 4321
 #define Q_BYTE_ORDER Q_LITTLE_ENDIAN
 
 #elif defined (__BIG_ENDIAN__)
+
 #define Q_BIG_ENDIAN 1234
 #define Q_LITTLE_ENDIAN 4321
 #define Q_BYTE_ORDER Q_BIG_ENDIAN
 
 #else
-#error Unable to detect target endianness
+#error Unable to detect target endianness, contact CopperSpice development
 
 #endif
 
@@ -125,7 +127,7 @@
 #elif defined(__MAKEDEPEND__)
 
 #else
-#  error "CopperSpice has not been ported to this OS"
+#  error "CopperSpice has not been ported to this Operating System"
 
 #endif
 
@@ -211,33 +213,33 @@
 // ******
 #if defined(__clang__)
 
-#  if ( __clang_major__ == 3  &&  __clang_minor__ >= 2 ) || ( __clang_major__  >= 4  )
-#    define Q_CC_CLANG
-#    define Q_CC_GNU
-#    define Q_C_CALLBACKS
+#  if ( __clang_major__  < 3) || ( __clang_major__ == 3 && __clang_minor__ < 4 )
+#    error "CopperSpice requires Clang 3.4 or greater"
+#  endif
 
-#    define Q_ALIGNOF(type)   __alignof__(type)
-#    define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
-#    define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
-#    define Q_PACKED          __attribute__ ((__packed__))
+#  define Q_CC_CLANG
+#  define Q_CC_GNU
+#  define Q_C_CALLBACKS
 
-#    define Q_NO_PACKED_REFERENCE
+#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
-#    ifndef __ARM_EABI__
-#      define QT_NO_ARM_EABI
-#    endif
+#  define Q_ALIGNOF(type)   __alignof__(type)
+#  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
+#  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
+#  define Q_PACKED          __attribute__ ((__packed__))
 
-#  else
-#    error "CopperSpice requires Clang 3.2 or greater"
+#  define Q_NO_PACKED_REFERENCE
 
+#  ifndef __ARM_EABI__
+#     define QT_NO_ARM_EABI
 #  endif
 
 
 #elif defined(__GNUC__)
 //  **
 
-#  if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 8)
-#    error "CopperSpice requires GCC 4.9 or greater"
+#  if (__GNUC__ < 5) || (__GNUC__ == 5 && __GNUC_MINOR__ < 4)
+#    error "CopperSpice requires GCC 5.4 or greater"
 #  endif
 
 #  define Q_CC_GNU
@@ -251,6 +253,8 @@
 #  if defined(__INTEL_COMPILER)
 #    define Q_CC_INTEL
 #  endif
+
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
 
 #  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
@@ -266,6 +270,21 @@
 #  endif
 
 
+#elif defined(_MSC_VER)
+//  **
+
+#  if _MSC_VER < 1914
+#    error "CopperSpice requires Visual Studio 2017 Version 15.8 or greater"
+#  endif
+
+#  define Q_CC_MSVC         (_MSC_VER)
+#  define Q_FUNC_INFO       __FUNCSIG__
+
+#  define Q_ALIGNOF(type)   __alignof(type)
+#  define Q_LIKELY(expr)    (expr)
+#  define Q_UNLIKELY(expr)  (expr)
+
+
 #elif defined(__PGI)
 //  **
 
@@ -274,6 +293,8 @@
 #  if defined(__EDG__)
 #    define Q_CC_EDG
 #  endif
+
+#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
 
 #elif ! defined(Q_OS_HPUX) && (defined(__EDG) || defined(__EDG__))
@@ -302,6 +323,7 @@
 
 #  endif
 
+#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
 #else
 //  **
@@ -316,12 +338,18 @@
 #endif
 
 #ifndef Q_LIKELY
-#  define Q_LIKELY(x) (x)
+#  define Q_LIKELY(x)   (x)
 #endif
 
 #ifndef Q_UNLIKELY
 #  define Q_UNLIKELY(x) (x)
 #endif
+
+#ifndef QT_STRINGIFY1
+#  define QT_STRINGIFY2(x)  #x
+#  define QT_STRINGIFY1(x)  QT_STRINGIFY2(x)
+#endif
+
 
 #ifndef Q_CONSTRUCTOR_FUNCTION
 # define Q_CONSTRUCTOR_FUNCTION0(AFUNC)    static const int AFUNC ## __init_variable__ = AFUNC();
@@ -662,13 +690,8 @@ class Q_CORE_EXPORT QSysInfo
 
 Q_CORE_EXPORT const char *qVersion();
 
-// not needed, used over 40 times
-#ifndef Q_INLINE_TEMPLATE
-#  define Q_INLINE_TEMPLATE inline
-#endif
-
 // avoid "unused parameter" warnings
-#  define Q_UNUSED(x) (void)x;
+#define Q_UNUSED(x) (void)x;
 
 
 // Debugging and error handling
@@ -688,24 +711,6 @@ inline T *q_check_ptr(T *p)
    return p;
 }
 
-#if (defined(Q_CC_GNU) && ! defined(Q_OS_SOLARIS))
-#  define Q_FUNC_INFO            __PRETTY_FUNCTION__
-
-#else
-#   if defined(Q_OS_SOLARIS)
-#      define Q_FUNC_INFO        __FILE__ "(line number unavailable)"
-
-#   else
-#       define QT_STRINGIFY2(x)  #x
-#       define QT_STRINGIFY1(x)  QT_STRINGIFY2(x)
-
-#       define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
-
-#       undef QT_STRINGIFY2
-#       undef QT_STRINGIFY1
-#   endif
-
-#endif
 
 // * *
 template <typename T>

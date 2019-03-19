@@ -5,22 +5,15 @@ add_definitions(
     -DQLALR_NO_QSCRIPTGRAMMAR_DEBUG_INFO
     -DWTF_USE_JAVASCRIPTCORE_BINDINGS=1
     -DWTF_CHANGES=1
-    -DBUILDING_QT__=1
+    -DBUILDING_CS=1
     -DWTF_USE_ACCELERATED_COMPOSITING
     -DJSC=QTJSC
     -Djscyyparse=qtjscyyparse
     -Djscyylex=qtjscyylex
     -Djscyyerror=qtjscyyerror
     -DWTF=QTWTF
-    -UHAVE_CONFIG_H
     -DUSE_SYSTEM_MALLOC
     -DQT_BUILD_SCRIPT_LIB
-#   -DWTF_USE_JAVASCRIPTCORE_BINDINGS=1 -DWTF_CHANGES=1
-#   -DBUILDING_QT__
-#   -DBUILDING_JavaScriptCore -DBUILDING_WTF
-#   -DJSC=QTJSC -Djscyyparse=qtjscyyparse -Djscyylex=qtjscyylex
-#   -Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE=""
-#   -DWTF_USE_JSC -DWTF_PLATFORM_QT=1
 )
 set(EXTRA_SCRIPT_LIBS CsCore${BUILD_ABI})
 set(EXTRA_SCRIPT_CXXFLAGS)

@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -28,8 +29,8 @@
 #include <qvariant.h>
 
 QJsonDocument::QJsonDocument()
+   : m_data(std::make_shared<QJsonValue>())
 {
-   m_data = std::make_shared<QJsonValue>();
 }
 
 QJsonDocument::QJsonDocument(const QJsonObject &object)
@@ -140,12 +141,12 @@ QJsonArray QJsonDocument::array() const
 
 void QJsonDocument::setObject(const QJsonObject &object)
 {
-   *m_data = QJsonValue(object);
+   m_data = std::make_shared<QJsonValue>(object);
 }
 
 void QJsonDocument::setArray(const QJsonArray &array)
 {
-   *m_data = QJsonValue(array);
+   m_data = std::make_shared<QJsonValue>(array);
 }
 
 bool QJsonDocument::operator==(const QJsonDocument &other) const

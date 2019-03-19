@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,7 +17,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 
@@ -90,8 +91,6 @@ QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QS
    : dirEntry(entry), nameFilters(nameFilters.contains("*") ? QStringList() : nameFilters)
    , filters(QDir::NoFilter == filters ? QDir::AllEntries : filters), iteratorFlags(flags)
 {
-
-#ifndef QT_NO_REGEXP
    nameRegExps.reserve(nameFilters.size());
 
    for (int i = 0; i < nameFilters.size(); ++i) {
@@ -104,7 +103,6 @@ QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QS
       QRegularExpression regExp(nameFilters.at(i), options);
       nameRegExps.append(regExp);
    }
-#endif
 
    QFileSystemMetaData metaData;
 
@@ -288,8 +286,6 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // name filter
-
-#ifndef QT_NO_REGEXP
    // Pass all entries through name filters, except dirs if the AllDirs
 
    if (! nameFilters.isEmpty() && ! ((filters & QDir::AllDirs) && fi.isDir())) {
@@ -306,7 +302,6 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
          return false;
       }
    }
-#endif
 
    // skip symlinks
    const bool skipSymlinks  = (filters & QDir::NoSymLinks);

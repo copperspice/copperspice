@@ -1,10 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
 *
 * This file is part of CopperSpice.
 *
@@ -16,13 +17,9 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
-
-/********************************************************
-**  This file is part of the KDE project.
-********************************************************/
 
 #include "videorenderer_soft.h"
 
@@ -272,7 +269,7 @@ namespace Phonon
                 m_hue = hue * M_PI;
                 m_saturation = saturation + 1.;
             }
-            
+
             QImage currentImage() const
             {
                 return m_currentImage;
@@ -400,7 +397,7 @@ namespace Phonon
                   ALLOCATOR_PROPERTIES prop;
                   HRESULT hr = alloc->GetProperties(&prop);
                   if (SUCCEEDED(hr) && prop.cBuffers == 1) {
-                      //we ask to get 2 buffers so that we don't block the flow 
+                      //we ask to get 2 buffers so that we don't block the flow
                       //when we addref the mediasample
                       prop.cBuffers = 2;
                       ALLOCATOR_PROPERTIES dummy;
@@ -533,7 +530,7 @@ namespace Phonon
 
             if (!playing) {
                 //useless to test the return value of WaitForSingleObject: timeout can't happen
-                ::WaitForSingleObject(m_receiveCanWait, INFINITE); 
+                ::WaitForSingleObject(m_receiveCanWait, INFINITE);
                 if (state() != State_Stopped && !m_inputPin->isFlushing()) {
                     ::ResetEvent(m_receiveCanWait);
                 }
@@ -644,7 +641,7 @@ namespace Phonon
 
 
 #ifndef QT_NO_OPENGL
-            if (painter.paintEngine() && 
+            if (painter.paintEngine() &&
                 (painter.paintEngine()->type() == QPaintEngine::OpenGL || painter.paintEngine()->type() == QPaintEngine::OpenGL2)
                 && checkGLPrograms()) {
 
@@ -670,14 +667,14 @@ namespace Phonon
 
                 glEnable(GL_FRAGMENT_PROGRAM_ARB);
 
-                const float v_array[] = { 
-                     static_cast<float>(r.left()), 
-                     static_cast<float>(r.top()), 
-                     static_cast<float>(r.right()+1), 
-                     static_cast<float>(r.top()), 
-                     static_cast<float>(r.right()+1), 
-                     static_cast<float>(r.bottom()+1), 
-                     static_cast<float>(r.left()), 
+                const float v_array[] = {
+                     static_cast<float>(r.left()),
+                     static_cast<float>(r.top()),
+                     static_cast<float>(r.right()+1),
+                     static_cast<float>(r.top()),
+                     static_cast<float>(r.right()+1),
+                     static_cast<float>(r.bottom()+1),
+                     static_cast<float>(r.left()),
                      static_cast<float>(r.bottom()+1) };
 
                 float tx_array[12] = {0., 0., 0., 1.,

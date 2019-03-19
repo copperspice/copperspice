@@ -1,13 +1,18 @@
 /***********************************************************************
 *
-* Copyright (c) 2017-2018 Barbara Geller
-* Copyright (c) 2017-2018 Ansel Sermersheim
-* All rights reserved.
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
 *
-* This file is part of CsString
+* This file is part of CsString.
 *
 * CsString is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
 *
 ***********************************************************************/
 
@@ -158,6 +163,8 @@ class CsBasicString
 
       CsChar operator[](size_type index) const;
 
+      const_iterator advance(const_iterator begin, size_type count) const;
+      iterator advance(iterator begin, size_type count);
 
       // ** methods
       CsBasicString &append(const CsBasicString &str);
@@ -914,6 +921,18 @@ CsChar CsBasicString<E, A>::operator[](size_type index) const
 
 
 // methods
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::advance(const_iterator begin, size_type count) const
+{
+   return const_iterator(E::advance(begin.codePointBegin(), cend().codePointBegin(), count));
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::advance(iterator begin, size_type count)
+{
+   return iterator(E::advance(begin.codePointBegin(), end().codePointBegin(), count));
+}
+
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::append(const CsBasicString &str)
 {
@@ -1889,7 +1908,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const char (&s
    // make this safe
    size_type stringLen = this->size();
 
-   if (str == nullptr || *str == '\0') {
+   if (*str == '\0') {
 
       if (indexStart > stringLen) {
          return -1;
@@ -2595,7 +2614,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
 
    size_type stringLen = this->size();
 
-   if (str == nullptr || *str == '\0') {
+   if (*str == '\0') {
 
       if (indexStart >= stringLen) {
          return -1;
@@ -2904,7 +2923,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(co
 
    size_type stringLen = this->size();
 
-   if (str == nullptr || *str == '\0') {
+   if (*str == '\0') {
 
       if (indexStart > stringLen || indexStart == -1) {
          return stringLen - 1;
@@ -4281,6 +4300,10 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::replace(const_iterat
 template <typename E, typename A>
 void CsBasicString<E, A>::resize(size_type size)
 {
+   if (size < 0) {
+      size = 0;
+   }
+
    size_type stringLen = this->size();
    size_type count     = size - stringLen;
 
@@ -4291,7 +4314,7 @@ void CsBasicString<E, A>::resize(size_type size)
 
    } else if (count < 0) {
       auto end   = this->end();
-      auto begin = end + (size - stringLen);
+      auto begin = end + count;
 
       erase(begin, end);
    }
@@ -4300,6 +4323,10 @@ void CsBasicString<E, A>::resize(size_type size)
 template <typename E, typename A>
 void CsBasicString<E, A>::resize(size_type size, CsChar c)
 {
+   if (size < 0) {
+      size = 0;
+   }
+
    size_type stringLen = this->size();
    size_type count     = size - stringLen;
 

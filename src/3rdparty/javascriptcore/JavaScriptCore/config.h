@@ -25,16 +25,20 @@
 
 #include <wtf/Platform.h>
 
-#if !defined(QT_BUILD_SCRIPT_LIB) && OS(WINDOWS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
+#if ! defined(QT_BUILD_SCRIPT_LIB) && OS(WINDOWS) && COMPILER(MSVC)
+
 #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
-#define JS_EXPORTDATA __declspec(dllexport)
+#define JS_EXPORTDATA
+#define JS_EXPORTCLASS   __declspec(dllexport)
 #else
-#define JS_EXPORTDATA __declspec(dllimport)
+#define JS_EXPORTDATA
+#define JS_EXPORTCLASS   __declspec(dllimport)
 #endif
-#define JS_EXPORTCLASS JS_EXPORTDATA
+
 #else
 #define JS_EXPORTDATA
 #define JS_EXPORTCLASS
+
 #endif
 
 #if OS(WINDOWS)
