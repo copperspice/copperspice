@@ -106,10 +106,12 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       ws2_32
    )
 
-   set(EXTRA_CORE_LDFLAGS
-      ${EXTRA_CORE_LDFLAGS}
-      -Wl,-luuid
-   )
+   if(NOT MSVC)
+      set(EXTRA_CORE_LDFLAGS
+         ${EXTRA_CORE_LDFLAGS}
+         -Wl,-luuid
+      )
+   endif()
 endif()
 
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
