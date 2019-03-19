@@ -104,12 +104,9 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       ${EXTRA_CORE_LIBS}
       ole32
       ws2_32
+      uuid
    )
 
-   set(EXTRA_CORE_LDFLAGS
-      ${EXTRA_CORE_LDFLAGS}
-      -Wl,-luuid
-   )
 endif()
 
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
