@@ -2363,10 +2363,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 
     if(MSVC)
-       set(WEBKIT_SOURCES
-          ${WEBKIT_SOURCES}
-          ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/win/PaintHooks.asm
-       )
+        if ("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8") # targeting 64-bit
+           set(WEBKIT_SOURCES
+              ${WEBKIT_SOURCES}
+              ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/win/PaintHooks.asm
+           )
+        endif()
     endif()
 
     set(EXTRA_WEBKIT_LIBS
