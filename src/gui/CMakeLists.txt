@@ -124,10 +124,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         imm32
         uuid
     )
-    set(EXTRA_GUI_LDFLAGS
+    if (NOT MSVC)
+        set(EXTRA_GUI_LDFLAGS
         ${EXTRA_GUI_LDFLAGS}
-         -Wl,--export-all-symbols
-    )
+        -Wl,--export-all-symbols
+        )
+    endif()
     add_definitions(
         -DQT_NO_STYLE_MAC
         -DQT_NO_LPR
