@@ -519,10 +519,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_SCRIPT_LIBS}
         winmm
     )
-    set(EXTRA_SCRIPT_LDFLAGS
-        ${EXTRA_SCRIPT_LDFLAGS}
-        -Wl,-s
-    )
+    if (NOT MSVC)
+        set(EXTRA_SCRIPT_LDFLAGS
+            ${EXTRA_SCRIPT_LDFLAGS}
+            -Wl,-s
+        )
+    endif()
     set(SCRIPT_INCLUDES
         ${SCRIPT_INCLUDES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdbool.h

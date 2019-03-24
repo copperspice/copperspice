@@ -2369,6 +2369,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
               ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/win/PaintHooks.asm
            )
         endif()
+    else()
+        set(EXTRA_WEBKIT_LDFLAGS
+            ${EXTRA_WEBKIT_LDFLAGS}
+            -Wl,-s
+        )    
     endif()
 
     set(EXTRA_WEBKIT_LIBS
@@ -2377,11 +2382,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         winmm
         shlwapi
         version
-    )
-
-    set(EXTRA_WEBKIT_LDFLAGS
-        ${EXTRA_WEBKIT_LDFLAGS}
-        -Wl,-s
     )
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
