@@ -297,10 +297,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qwindowcontainer.cpp \
 	src/gui/kernel/qpixelformat.cpp
 
-EXTRA_DIST+= \
-	src/3rdparty/wintab/wintab.h \
-	src/3rdparty/wintab/pktdef.h
-
+EXTRA_DIST+=
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_DIRECTDRAW

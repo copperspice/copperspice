@@ -44,7 +44,6 @@ include_directories(
     ${GLIB2_INCLUDES}
     ${GOBJECT2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/wintab
     ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng

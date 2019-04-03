@@ -29,7 +29,6 @@ set(PLATFORMS_WIN_PRIVATE_INCLUDES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsglcontext.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsopenglcontext.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsopengltester.h
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowstabletsupport.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsthreadpoolrunner.h	
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsclipboard.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsdrag.h
@@ -71,7 +70,6 @@ set(PLATFORMS_WIN_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsnativeinterface.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsglcontext.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsopengltester.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowstabletsupport.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsclipboard.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsdrag.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontdatabase_ft.cpp

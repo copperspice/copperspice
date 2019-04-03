@@ -29,7 +29,6 @@ PLATFORMS_WINDOWS_PRIVATE_INCLUDES = \
 	qwindowsglcontext.h \
 	qwindowsopenglcontext.h \
 	qwindowsopengltester.h \
-	qwindowstabletsupport.h \
 	qwindowsthreadpoolrunner.h \
 	qwindowsclipboard.h \
 	qwindowsdrag.h \
@@ -73,7 +72,6 @@ lib_CsGuiWin@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    -Iprivateinclude/QtGui/private/platforms \
    -I$(top_srcdir)/src/3rdparty/freetype/include \
    -I$(top_srcdir)/src/3rdparty/freetype/include/freetype \
-   -I$(top_srcdir)/src/3rdparty/wintab \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src \
    $(AM_CXXFLAGS) \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\" -DIN_TRUE \
@@ -111,7 +109,6 @@ lib_CsGuiWin@BUILD_ABI@_la_SOURCES = \
 	src/plugins/platforms/windows/qwindowsnativeinterface.cpp \
 	src/plugins/platforms/windows/qwindowsglcontext.cpp \
 	src/plugins/platforms/windows/qwindowsopengltester.cpp \
-	src/plugins/platforms/windows/qwindowstabletsupport.cpp \
 	src/plugins/platforms/windows/qwindowsclipboard.cpp \
 	src/plugins/platforms/windows/qwindowsdrag.cpp \
 	src/plugins/platforms/windows/qwindowsfontdatabase_ft.cpp \
