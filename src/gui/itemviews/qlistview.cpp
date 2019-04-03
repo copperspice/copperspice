@@ -3334,17 +3334,19 @@ void QListView::selectionChanged(const QItemSelection &selected, const QItemSele
 int QListView::visualIndex(const QModelIndex &index) const
 {
    Q_D(const QListView);
+
    d->executePostedLayout();
+
    QListViewItem itm = d->indexToListViewItem(index);
-   int visualIndex = d->commonListView->itemIndex(itm);
+   int visualIndex   = d->commonListView->itemIndex(itm);
 
    for (int row = 0; row <= index.row() && visualIndex >= 0; row++) {
       if (d->isHidden(row)) {
          visualIndex--;
       }
-
-      return visualIndex;
    }
+
+   return visualIndex;
 }
 
 QSize QListView::viewportSizeHint() const

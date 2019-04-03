@@ -38,10 +38,9 @@ class Q_SCRIPT_EXPORT QScriptExtensionPlugin : public QObject, public QScriptExt
    explicit QScriptExtensionPlugin(QObject *parent = nullptr);
    ~QScriptExtensionPlugin();
 
-   virtual QStringList keys() const = 0;
-   virtual void initialize(const QString &key, QScriptEngine *engine) = 0;
+   virtual QStringList keys() const override = 0;
+   virtual void initialize(const QString &key, QScriptEngine *engine) override = 0;
    QScriptValue setupPackage(const QString &key, QScriptEngine *engine) const;
 };
-
 
 #endif

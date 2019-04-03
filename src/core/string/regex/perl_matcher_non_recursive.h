@@ -738,6 +738,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_fast()
    const re_repeat *rep = static_cast<const re_repeat *>(pstate);
    bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);
    std::size_t count = static_cast<std::size_t>((std::min)(static_cast<std::size_t>(std::distance(position, last)), greedy ? rep->max : rep->min));
+
    if (rep->min > count) {
       position = last;
       return false;  // not enough text left to match

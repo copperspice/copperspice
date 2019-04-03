@@ -485,7 +485,7 @@ static void qMoveRange(Container &c, typename Container::size_type rangeStart,
    Q_ASSERT(targetPosition < rangeStart || targetPosition >= rangeEnd);
    const bool forwardMove = targetPosition > rangeStart;
 
-   typename Container::size_type first = std::min(rangeStart, targetPosition);
+   typename Container::size_type first = (std::min)(rangeStart, targetPosition);
    typename Container::size_type mid   = forwardMove ? rangeEnd : rangeStart;
    typename Container::size_type last  = forwardMove ? targetPosition + 1 : rangeEnd;
 

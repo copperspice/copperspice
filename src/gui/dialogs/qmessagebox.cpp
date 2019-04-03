@@ -1282,7 +1282,6 @@ void QMessageBox::aboutQt(QWidget *parent, const QString &title)
    QMessageBox::aboutCs(parent, title);
 }
 
-
 static QMessageBox::StandardButton newButton(int button)
 {
    if (button == QMessageBox::NoButton || (button & NewButtonMask)) {

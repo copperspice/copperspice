@@ -1131,10 +1131,11 @@ static int qt_timezone()
    _get_timezone(&offset);
    return offset;
 
-#elif defined(Q_OS_BSD4) && !defined(Q_OS_DARWIN)
+#elif defined(Q_OS_BSD4) && ! defined(Q_OS_DARWIN)
    time_t clock = time(NULL);
    struct tm t;
    localtime_r(&clock, &t);
+
    // QTBUG-36080 Workaround for systems without the POSIX timezone
    // variable. This solution is not very efficient but fixing it is up to
    // the libc implementations.
@@ -1146,6 +1147,7 @@ static int qt_timezone()
    // - It also takes DST into account, so we need to adjust it to always
    //   get the Standard Time offset.
    return -t.tm_gmtoff + (t.tm_isdst ? (long)SECS_PER_HOUR : 0L);
+
 #else
    return timezone;
 
@@ -1276,14 +1278,16 @@ static bool qt_localtime(qint64 msecsSinceEpoch, QDate *localDate, QTime *localT
    tm local;
    bool valid = false;
 
-#if !defined(QT_NO_THREAD) && defined(_POSIX_THREAD_SAFE_FUNCTIONS)
+#if ! defined(QT_NO_THREAD) && defined(_POSIX_THREAD_SAFE_FUNCTIONS)
    // localtime() is required to work as if tzset() was called before it.
    // localtime_r() does not have this requirement, so make an explicit call.
    qt_tzset();
+
    // Use the reentrant version of localtime() where available
    // as is thread-safe and doesn't use a shared static data area
    tm *res = 0;
    res = localtime_r(&secsSinceEpoch, &local);
+
    if (res) {
       valid = true;
    }

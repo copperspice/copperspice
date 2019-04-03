@@ -4,8 +4,8 @@
     <target>Informacje o</target>
 </phrase>
 <phrase>
-    <source>About Qt</source>
-    <target>Informacje o Qt</target>
+    <source>About CS</source>
+    <target>Informacje o CS</target>
 </phrase>
 <phrase>
     <source>Accelerator</source>
@@ -465,12 +465,8 @@
     <target>obsługiwany</target>
 </phrase>
 <phrase>
-    <source>This program is licensed</source>
-    <target>Ten program wydany jest na licencji Qt Commercial. Aby sprawdzić szczegóły licencji, proszę sprawdzić plik LICENSE, który dołączany jest do pakietu Qt.</target>
-</phrase>
-<phrase>
     <source>This version of</source>
-    <target>Ta wersja Qt Assistant jest częścią wydania Qt Open Source, przeznaczonego dla tworzenia i publikowania aplikacji Open Source. Qt jest zaawansowanym zestawem bibliotek wykorzystywanym do pisania aplikacji cross-platformowych.</target>
+    <target></target>
 </phrase>
 <phrase>
     <source>to display</source>
@@ -511,10 +507,6 @@
 <phrase>
     <source>Widget</source>
     <target>Element interfejsu</target>
-</phrase>
-<phrase>
-    <source>You need a commercial</source>
-    <target>Aby móc sprzedawać aplikację utworzone przy pomocy Qt potrzebujesz wersji komercyjnej. Proszę sprawdzić &lt;a href=&quot;http://qt.nokia.com/about&quot;&gt;qt.nokia.com/about&lt;/a&gt; dla poznania sposobu licencjonowania Qt.</target>
 </phrase>
 <phrase>
     <source>Zoom in</source>

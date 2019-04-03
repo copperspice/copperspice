@@ -66,9 +66,11 @@ static inline void copyImageDataCreateAlpha(const uchar *data, QImage *target)
    const int height = target->height();
    const int width = target->width();
    const int bytesPerLine = width * int(sizeof(QRgb));
+
    for (int y = 0; y < height; ++y) {
       QRgb *dest = reinterpret_cast<QRgb *>(target->scanLine(y));
       const QRgb *src = reinterpret_cast<const QRgb *>(data + y * bytesPerLine);
+
       for (int x = 0; x < width; ++x) {
          const uint pixel = src[x];
          if ((pixel & 0xff000000) == 0 && (pixel & 0x00ffffff) != 0) {
@@ -83,6 +85,7 @@ static inline void copyImageData(const uchar *data, QImage *target)
 {
    const int height = target->height();
    const int bytesPerLine = target->bytesPerLine();
+
    for (int y = 0; y < height; ++y) {
       void *dest = static_cast<void *>(target->scanLine(y));
       const void *src = data + y * bytesPerLine;
@@ -103,12 +106,16 @@ Q_GUI_EXPORT HBITMAP qt_createIconMask(const QBitmap &bitmap)
    const int w = bm.width();
    const int h = bm.height();
    const int bpl = ((w + 15) / 16) * 2; // bpl, 16 bit alignment
+
    QScopedArrayPointer<uchar> bits(new uchar[bpl * h]);
    bm.invertPixels();
+
    for (int y = 0; y < h; ++y) {
       memcpy(bits.data() + y * bpl, bm.constScanLine(y), bpl);
    }
+
    HBITMAP hbm = CreateBitmap(w, h, 1, 1, bits.data());
+
    return hbm;
 }
 
@@ -237,11 +244,14 @@ Q_GUI_EXPORT QImage qt_imageFromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h
    if (image.isNull()) {
       return image;
    }
+
    QScopedArrayPointer<uchar> data(getDiBits(hdc, bitmap, w, h, true));
    if (data.isNull()) {
       return QImage();
    }
+
    copyImageDataCreateAlpha(data.data(), &image);
+
    return image;
 }
 
@@ -251,17 +261,22 @@ static QImage qt_imageFromWinIconHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
    if (image.isNull()) {
       return image;
    }
+
    QScopedArrayPointer<uchar> data(getDiBits(hdc, bitmap, w, h, true));
    if (data.isNull()) {
       return QImage();
    }
+
    copyImageData(data.data(), &image);
+
    return image;
 }
+
 static inline bool hasAlpha(const QImage &image)
 {
    const int w = image.width();
    const int h = image.height();
+
    for (int y = 0; y < h; ++y) {
       const QRgb *scanLine = reinterpret_cast<const QRgb *>(image.scanLine(y));
       for (int x = 0; x < w; ++x) {
@@ -315,6 +330,7 @@ Q_GUI_EXPORT QPixmap qt_pixmapFromWinHICON(HICON icon)
          }
       }
    }
+
    //dispose resources created by iconinfo call
    DeleteObject(iconinfo.hbmMask);
    DeleteObject(iconinfo.hbmColor);
@@ -322,7 +338,7 @@ Q_GUI_EXPORT QPixmap qt_pixmapFromWinHICON(HICON icon)
    SelectObject(hdc, oldhdc); //restore state
    DeleteObject(winBitmap);
    DeleteDC(hdc);
+
    return QPixmap::fromImage(image);
 }
-
 

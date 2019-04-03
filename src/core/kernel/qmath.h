@@ -173,11 +173,11 @@ inline qreal qExp(qreal v)
 inline qreal qPow(qreal x, qreal y)
 {
 
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return powf(float(x), float(y));
    } else
-#    endif
+#endif
       return pow(x, y);
 }
 

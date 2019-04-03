@@ -1649,11 +1649,11 @@ QFontEngineBox::QFontEngineBox(int size)
 }
 
 QFontEngineBox::QFontEngineBox(Type type, int size)
-   : QFontEngine(type),
-     _size(size)
+   : QFontEngine(type), _size(size)
 {
    cache_cost = sizeof(QFontEngineBox);
 }
+
 QFontEngineBox::~QFontEngineBox()
 {
 }

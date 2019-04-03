@@ -44,12 +44,10 @@
 
 #ifdef Q_OS_UNIX
 #include <stdio.h>
-#include "private/qcore_unix_p.h"
+#include <qcore_unix_p.h>
 #endif
 
 #include <limits.h>
-
-QT_BEGIN_NAMESPACE
 
 static std::atomic<uint> cs_seed_value{0};
 
@@ -164,5 +162,3 @@ uint cs_getHashSeed()
       return expectedValue;
    }
 }
-
-QT_END_NAMESPACE

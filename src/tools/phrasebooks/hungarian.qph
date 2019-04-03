@@ -351,7 +351,6 @@
 <phrase>
     <source>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</source>
     <target>Ez a program abban a reményben került közreadásra, hogy hasznos lesz, de minden egyéb GARANCIA NÉLKÜL, az ELADHATÓSÁGRA vagy VALAMELY CÉLRA VALÓ ALKALMAZHATÓSÁGRA való származtatott garanciát is beleértve.</target>
-    <definition>License text in most Qt programs</definition>
 </phrase>
 <phrase>
     <source>Open Link</source>

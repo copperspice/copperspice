@@ -85,28 +85,28 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_PROPERTY_WRITE(keyboardInputInterval, cs_setKeyboardInputInterval)
 
 #ifndef QT_NO_WHEELEVENT
-   GUI_CS_PROPERTY_READ(wheelScrollLines, cs_wheelScrollLines)
+   GUI_CS_PROPERTY_READ(wheelScrollLines,  cs_wheelScrollLines)
    GUI_CS_PROPERTY_WRITE(wheelScrollLines, cs_setWheelScrollLines)
 #endif
 
-   GUI_CS_PROPERTY_READ(globalStrut, cs_globalStrut)
+   GUI_CS_PROPERTY_READ(globalStrut,  cs_globalStrut)
    GUI_CS_PROPERTY_WRITE(globalStrut, cs_setGlobalStrut)
 
-   GUI_CS_PROPERTY_READ(startDragTime, cs_startDragTime)
+   GUI_CS_PROPERTY_READ(startDragTime,  cs_startDragTime)
    GUI_CS_PROPERTY_WRITE(startDragTime, cs_setStartDragTime)
 
-   GUI_CS_PROPERTY_READ(startDragDistance, cs_startDragDistance)
+   GUI_CS_PROPERTY_READ(startDragDistance,  cs_startDragDistance)
    GUI_CS_PROPERTY_WRITE(startDragDistance, cs_setStartDragDistance)
 
-   GUI_CS_PROPERTY_READ(quitOnLastWindowClosed, cs_quitOnLastWindowClosed)
+   GUI_CS_PROPERTY_READ(quitOnLastWindowClosed,  cs_quitOnLastWindowClosed)
    GUI_CS_PROPERTY_WRITE(quitOnLastWindowClosed, cs_setQuitOnLastWindowClosed)
 
 #ifndef QT_NO_STYLE_STYLESHEET
-   GUI_CS_PROPERTY_READ(styleSheet, styleSheet)
+   GUI_CS_PROPERTY_READ(styleSheet,  styleSheet)
    GUI_CS_PROPERTY_WRITE(styleSheet, setStyleSheet)
 #endif
 
-   GUI_CS_PROPERTY_READ(autoSipEnabled, autoSipEnabled)
+   GUI_CS_PROPERTY_READ(autoSipEnabled,  autoSipEnabled)
    GUI_CS_PROPERTY_WRITE(autoSipEnabled, setAutoSipEnabled)
 
  public:

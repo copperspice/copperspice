@@ -58,6 +58,7 @@ enum HB_Compat_Error {
 
 typedef void (*qt_destroy_func_t) (void *user_data);
 typedef bool (*qt_get_font_table_func_t) (void *user_data, uint tag, uchar *buffer, uint *length);
+
 class Q_GUI_EXPORT QFontEngine
 {
  public:
@@ -98,8 +99,8 @@ class Q_GUI_EXPORT QFontEngine
 
 
    enum SynthesizedFlags {
-      SynthesizedItalic = 0x1,
-      SynthesizedBold = 0x2,
+      SynthesizedItalic  = 0x1,
+      SynthesizedBold    = 0x2,
       SynthesizedStretch = 0x4
    };
 
@@ -228,6 +229,7 @@ class Q_GUI_EXPORT QFontEngine
    virtual QFixed descent() const = 0;
    virtual QFixed leading() const = 0;
    virtual QFixed xHeight() const;
+
    virtual QFixed averageCharWidth() const;
 
    virtual QFixed lineThickness() const;
