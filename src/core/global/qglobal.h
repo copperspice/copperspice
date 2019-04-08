@@ -199,11 +199,11 @@
 #    undef MAC_OS_X_VERSION_MIN_REQUIRED
 #  endif
 
-#  define MAC_OS_X_VERSION_MIN_REQUIRED   MAC_OS_X_VERSION_10_8
+#  define MAC_OS_X_VERSION_MIN_REQUIRED  MAC_OS_X_VERSION_10_8
 #  include <AvailabilityMacros.h>
 
 #  if ! defined(MAC_OS_X_VERSION_10_9)
-#     define MAC_OS_X_VERSION_10_9    MAC_OS_X_VERSION_10_8 + 10
+#     define MAC_OS_X_VERSION_10_9  MAC_OS_X_VERSION_10_8 + 10
 #  endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_10)
@@ -220,6 +220,10 @@
 
 #  if ! defined(MAC_OS_X_VERSION_10_13)
 #     define MAC_OS_X_VERSION_10_13 101300
+#  endif
+
+#  if ! defined(MAC_OS_X_VERSION_10_14)
+#     define MAC_OS_X_VERSION_10_14 101400
 #  endif
 
 #endif
@@ -678,6 +682,7 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_11 = 0x000D,
       MV_10_12 = 0x000E,
       MV_10_13 = 0x000F,
+      MV_10_14 = 0x0010,
 
       MV_CHEETAH      = MV_10_0,
       MV_PUMA         = MV_10_1,
@@ -693,6 +698,7 @@ class Q_CORE_EXPORT QSysInfo
       MV_EL_CAPITAN   = MV_10_11,                // supported from here
       MV_SIERRA       = MV_10_12,
       MV_HIGH_SIERRA  = MV_10_13,
+      MV_MOJAVE       = MV_10_14,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
@@ -1207,8 +1213,9 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #ifndef QT_NO_TRANSLATION
 
 // Defined in qcoreapplication.cpp
-// The better name qTrId() is reserved for an upcoming function which would
-// return a much more powerful QStringFormatter instead of a QString
+// better name for qTrId() is reserved for an upcoming function which would return a more
+// more powerful QStringFormatter instead of a QString
+
 Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 
 #define QT_TRID_NOOP(id) id
@@ -1228,6 +1235,7 @@ inline int qIntCast(double f)
 {
    return int(f);
 }
+
 inline int qIntCast(float f)
 {
    return int(f);
@@ -1237,7 +1245,7 @@ Q_CORE_EXPORT void qsrand(uint seed);
 Q_CORE_EXPORT int qrand();
 
 #if defined (__ELF__)
-#  if defined (Q_OS_LINUX) || defined (Q_OS_SOLARIS) || defined (Q_OS_FREEBSD) || defined (Q_OS_OPENBSD) || defined (Q_OS_DRAGONFLY)
+#  if defined (Q_OS_LINUX) || defined (Q_OS_FREEBSD) || defined (Q_OS_OPENBSD) || defined (Q_OS_DRAGONFLY)
 #    define Q_OF_ELF
 #  endif
 #endif
