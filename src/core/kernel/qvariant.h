@@ -444,8 +444,15 @@ inline bool qvariant_cast_helper(const QVariant &v, QVariant::Type tp, void *ptr
    return QVariant::handler->convert(&v.d, tp, ptr, 0);
 }
 
+template <typename T>
+QVariant::Type qMetaTypeVariant(T * = nullptr)
+{
+   return static_cast<QVariant::Type>(QMetaTypeId2<T>::qt_metatype_id());
+}
+
 //
 inline QVariant::QVariant() {}
+
 inline bool QVariant::isValid() const
 {
    return d.type != Invalid;

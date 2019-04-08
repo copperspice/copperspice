@@ -215,6 +215,10 @@ inline int qMetaTypeId(T * = nullptr)
    return QMetaTypeId2<T>::qt_metatype_id();
 }
 
+// note, the following is located in QVariant.h
+//   template <typename T>
+//   inline QVariant::Type qMetaTypeVariant(T * = nullptr)
+
 template <typename T>
 inline int qRegisterMetaType(T *v = nullptr)
 {
