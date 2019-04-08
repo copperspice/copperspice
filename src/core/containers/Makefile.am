@@ -80,7 +80,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/containers/qlist.cpp \
    src/core/containers/qmap.cpp \
    src/core/containers/qqueue.cpp  \
+   src/core/containers/qstack.cpp  \
    src/core/containers/qstringlist.cpp \
    src/core/containers/qvector.cpp
-
 
