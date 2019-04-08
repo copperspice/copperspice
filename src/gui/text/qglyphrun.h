@@ -29,7 +29,6 @@
 #include <qpoint.h>
 #include <qrawfont.h>
 
-#if !defined(QT_NO_RAWFONT)
 class QGlyphRunPrivate;
 
 class Q_GUI_EXPORT QGlyphRun
@@ -112,7 +111,5 @@ class Q_GUI_EXPORT QGlyphRun
    void detach();
    QExplicitlySharedDataPointer<QGlyphRunPrivate> d;
 };
-
-#endif // QT_NO_RAWFONT
 
 #endif

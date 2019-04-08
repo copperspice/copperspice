@@ -532,9 +532,7 @@ class Q_GUI_EXPORT QTextEngine
    QString text;
    mutable QFont fnt;
 
-#ifndef QT_NO_RAWFONT
    QRawFont rawFont;
-#endif
 
    QTextBlock block;
    QTextOption option;
@@ -548,10 +546,7 @@ class Q_GUI_EXPORT QTextEngine
    uint forceJustification : 1;
    uint visualMovement : 1;
    uint delayDecorations: 1;
-
-#ifndef QT_NO_RAWFONT
    uint useRawFont : 1;
-#endif
 
    mutable LayoutData *layoutData;
 

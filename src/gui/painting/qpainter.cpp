@@ -3787,7 +3787,6 @@ void QPainter::drawImage(const QRectF &targetRect, const QImage &image, const QR
    d->engine->drawImage(QRectF(x, y, w, h), image, QRectF(sx, sy, sw, sh), flags);
 }
 
-#if !defined(QT_NO_RAWFONT)
 void QPainter::drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun)
 {
    Q_D(QPainter);
@@ -3916,7 +3915,6 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
       (underline ? QTextCharFormat::SingleUnderline : QTextCharFormat::NoUnderline),
       flags, width.toReal(), QTextCharFormat());
 }
-#endif // QT_NO_RAWFONT
 
 void QPainter::drawText(const QPointF &p, const QString &str)
 {

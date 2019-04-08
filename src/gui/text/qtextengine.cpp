@@ -1131,7 +1131,6 @@ void QTextEngine::shapeText(int item) const
    QFixed letterSpacing;
    QFixed wordSpacing;
 
-#ifndef QT_NO_RAWFONT
    if (useRawFont) {
       QTextCharFormat f = format(&si);
       kerningEnabled    = f.fontKerning();
@@ -1140,11 +1139,9 @@ void QTextEngine::shapeText(int item) const
 
       letterSpacingIsAbsolute = true;
 
-   } else
-#endif
-
-   {
+   } else {
       QFont font = this->font(si);
+
       kerningEnabled          = font.d->kerning;
       letterSpacingIsAbsolute = font.d->letterSpacingIsAbsolute;
       letterSpacing           = font.d->letterSpacing;
@@ -1429,9 +1426,6 @@ static inline void moveGlyphData(const QGlyphLayout &destination, const QGlyphLa
    }
 }
 
-
-
-
 void QTextEngine::init(QTextEngine *e)
 {
    e->ignoreBidi         = false;
@@ -1446,10 +1440,7 @@ void QTextEngine::init(QTextEngine *e)
 
    e->specialData        = 0;
    e->stackEngine        = false;
-
-#ifndef QT_NO_RAWFONT
    e->useRawFont         = false;
-#endif
 }
 
 QTextEngine::QTextEngine()
@@ -1757,8 +1748,6 @@ void QTextEngine::itemize() const
 
    } else {
 
-#ifndef QT_NO_RAWFONT
-
       if (useRawFont && specialData) {
          int lastIndex = 0;
 
@@ -1775,10 +1764,7 @@ void QTextEngine::itemize() const
 
          itemizer.generate(lastIndex, length - lastIndex, QFont::MixedCase);
 
-      } else
-#endif
-
-      {
+      } else {
          itemizer.generate(0, length, static_cast<QFont::Capitalization> (fnt.d->capital));
       }
 
@@ -2120,7 +2106,6 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
 
    QFont font = fnt;
 
-#ifndef QT_NO_RAWFONT
    if (useRawFont && rawFont.isValid()) {
       if (feCache.prevFontEngine && feCache.prevFontEngine->type() == QFontEngine::Multi && feCache.prevScript == script) {
          engine = feCache.prevFontEngine;
@@ -2155,10 +2140,8 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
          }
       }
 
-   } else
-#endif
+   } else {
 
-   {
       if (hasFormats()) {
          if (feCache.prevFontEngine && feCache.prevPosition == si.position && feCache.prevLength == length(&si) &&
             feCache.prevScript == script) {

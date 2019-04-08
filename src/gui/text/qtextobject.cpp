@@ -37,7 +37,6 @@
 
 #include <algorithm>
 
-
 QTextObject::QTextObject(QTextDocument *doc)
    : QObject(doc), d_ptr(new QTextObjectPrivate(doc))
 {
@@ -1044,8 +1043,6 @@ QTextBlock::iterator &QTextBlock::iterator::operator--()
    return *this;
 }
 
-#if ! defined(QT_NO_RAWFONT)
-
 QList<QGlyphRun> QTextFragment::glyphRuns(int pos, int len) const
 {
    if (!p || !n) {
@@ -1078,8 +1075,6 @@ QList<QGlyphRun> QTextFragment::glyphRuns(int pos, int len) const
 
    return ret;
 }
-#endif // QT_NO_RAWFONT
-
 
 int QTextFragment::position() const
 {

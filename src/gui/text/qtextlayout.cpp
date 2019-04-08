@@ -144,23 +144,18 @@ QTextLayout::~QTextLayout()
    }
 }
 
-#ifndef QT_NO_RAWFONT
 void QTextLayout::setRawFont(const QRawFont &rawFont)
 {
    d->rawFont    = rawFont;
    d->useRawFont = true;
    d->resetFontEngineCache();
 }
-#endif
+
 
 void QTextLayout::setFont(const QFont &font)
 {
    d->fnt = font;
-
-#ifndef QT_NO_RAWFONT
    d->useRawFont = false;
-#endif
-
    d->resetFontEngineCache();
 }
 
@@ -555,7 +550,6 @@ static inline QRectF clipIfValid(const QRectF &rect, const QRectF &clip)
    return clip.isValid() ? (rect & clip) : rect;
 }
 
-#if !defined(QT_NO_RAWFONT)
 QList<QGlyphRun> QTextLayout::glyphRuns(int from, int length) const
 {
    if (from < 0) {
@@ -608,7 +602,6 @@ QList<QGlyphRun> QTextLayout::glyphRuns(int from, int length) const
 
    return glyphRunHash.values();
 }
-#endif // QT_NO_RAWFONT
 
 void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRange> &selections,
    const QRectF &clip) const
@@ -1511,8 +1504,6 @@ static void setPenAndDrawBackground(QPainter *p, const QPen &defaultPen, const Q
 
 }
 
-#if ! defined(QT_NO_RAWFONT)
-
 static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &glyphLayout, const QPointF &pos,
    const QGlyphRun::GlyphRunFlags &flags, const QFixed &selectionX, const QFixed &selectionWidth,
    int glyphsStart, int glyphsEnd, unsigned short *logClusters, int textPosition, int textLength)
@@ -1800,14 +1791,11 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
 
    return glyphRuns;
 }
-#endif // QT_NO_RAWFONT
 
 void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatRange *selection) const
 {
-#ifndef QT_NO_RAWFONT
-   // Not intended to work with rawfont
+   // can not use this method with rawfont
    Q_ASSERT(! eng->useRawFont);
-#endif
 
    const QScriptLine &line = eng->lines[index];
    QPen pen = p->pen();

@@ -23,7 +23,6 @@
 
 #include <qglobal.h>
 
-#if !defined(QT_NO_RAWFONT)
 #include <qglyphrun.h>
 #include <qglyphrun_p.h>
 
@@ -316,4 +315,3 @@ bool QGlyphRun::isEmpty() const
    return d->glyphIndexDataSize == 0;
 }
 
-#endif // QT_NO_RAWFONT

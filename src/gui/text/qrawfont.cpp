@@ -23,8 +23,6 @@
 
 #include <qglobal.h>
 
-#if ! defined(QT_NO_RAWFONT)
-
 #include <qendian.h>
 #include <qrawfont.h>
 #include <qplatform_fontdatabase.h>
@@ -378,5 +376,4 @@ QRectF QRawFont::boundingRect(quint32 glyphIndex) const
    return QRectF(gm.x.toReal(), gm.y.toReal(), gm.width.toReal(), gm.height.toReal());
 }
 
-#endif // QT_NO_RAWFONT
 

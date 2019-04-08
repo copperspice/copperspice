@@ -351,7 +351,6 @@ class Q_GUI_EXPORT QTextBlock
 Q_DECLARE_TYPEINFO(QTextBlock, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(QTextBlock::iterator, Q_MOVABLE_TYPE);
 
-
 class Q_GUI_EXPORT QTextFragment
 {
  public:
@@ -395,9 +394,8 @@ class Q_GUI_EXPORT QTextFragment
    int charFormatIndex() const;
    QString text() const;
 
-#if ! defined(QT_NO_RAWFONT)
    QList<QGlyphRun> glyphRuns(int from = -1, int length = -1) const;
-#endif
+
  private:
    const QTextDocumentPrivate *p;
    int n;

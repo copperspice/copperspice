@@ -24,16 +24,15 @@
 #ifndef QRAWFONT_H
 #define QRAWFONT_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qiodevice.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qpoint.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qfontdatabase.h>
+#include <qstring.h>
+#include <qiodevice.h>
+#include <qglobal.h>
+#include <qobject.h>
+#include <qpoint.h>
+#include <qfont.h>
+#include <qtransform.h>
+#include <qfontdatabase.h>
 
-#if !defined(QT_NO_RAWFONT)
 class QRawFontPrivate;
 
 class Q_GUI_EXPORT QRawFont
@@ -138,6 +137,7 @@ class Q_GUI_EXPORT QRawFont
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QRawFont::LayoutFlags)
+
 inline QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes,
    QRawFont::LayoutFlags layoutFlags) const
 {
@@ -154,5 +154,4 @@ inline QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32>
    return advancesForGlyphIndexes(glyphIndexes, QRawFont::SeparateAdvances);
 }
 
-#endif // QT_NO_RAWFONT
 #endif

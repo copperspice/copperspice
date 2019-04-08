@@ -37,11 +37,7 @@
 
 class QTextEngine;
 class QFont;
-
-#ifndef QT_NO_RAWFONT
 class QRawFont;
-#endif
-
 class QRect;
 class QRegion;
 class QTextFormat;
@@ -89,9 +85,7 @@ class Q_GUI_EXPORT QTextInlineObject
 
 class Q_GUI_EXPORT QTextLayout
 {
-
  public:
-   // does itemization
    QTextLayout();
    QTextLayout(const QString &text);
    QTextLayout(const QString &text, const QFont &font, QPaintDevice *paintdevice = nullptr);
@@ -102,16 +96,13 @@ class Q_GUI_EXPORT QTextLayout
    void setFont(const QFont &f);
    QFont font() const;
 
-
    void setText(const QString &string);
    QString text() const;
 
    void setTextOption(const QTextOption &option);
    const QTextOption &textOption() const;
 
-#ifndef QT_NO_RAWFONT
    void setRawFont(const QRawFont &rawFont);
-#endif
 
    void setPreeditArea(int position, const QString &text);
    int preeditAreaPosition() const;
@@ -176,9 +167,7 @@ class Q_GUI_EXPORT QTextLayout
    qreal minimumWidth() const;
    qreal maximumWidth() const;
 
-#if !defined(QT_NO_RAWFONT)
    QList<QGlyphRun> glyphRuns(int from = -1, int length = -1) const;
-#endif
 
    QTextEngine *engine() const {
       return d;
@@ -258,9 +247,7 @@ class Q_GUI_EXPORT QTextLine
 
    void draw(QPainter *p, const QPointF &point, const QTextLayout::FormatRange *selection = nullptr) const;
 
-#if !defined(QT_NO_RAWFONT)
    QList<QGlyphRun> glyphRuns(int from = -1, int length = -1) const;
-#endif
 
  private:
    QTextLine(int line, QTextEngine *e) : index(line), eng(e) {}

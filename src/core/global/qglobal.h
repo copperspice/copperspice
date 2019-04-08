@@ -1250,9 +1250,6 @@ Q_CORE_EXPORT int qrand();
 #  endif
 #endif
 
-#if ! defined(Q_OS_WIN) && ! defined(Q_OS_MAC) && ! (defined(Q_WS_X11) && ! defined(QT_NO_FREETYPE)) && ! (defined(Q_WS_QPA))
-#  define QT_NO_RAWFONT
-#endif
 
 #endif      // block c
 

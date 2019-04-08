@@ -27,7 +27,6 @@
 #include <qglyphrun.h>
 #include <qrawfont.h>
 #include <qfont.h>
-#if !defined(QT_NO_RAWFONT)
 
 class QGlyphRunPrivate: public QSharedData
 {
@@ -77,7 +76,5 @@ class QGlyphRunPrivate: public QSharedData
       return glyphRun.d.data();
    }
 };
-
-#endif // QT_NO_RAWFONT
 
 #endif
