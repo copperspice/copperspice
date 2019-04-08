@@ -50,9 +50,8 @@ CsSignal::SignalBase::~SignalBase()
       }
 
    } catch (...) {
-      if (! std::uncaught_exception()) {
-         throw;
-      }
+     // least of the worst options
+     std::terminate();
    }
 }
 
