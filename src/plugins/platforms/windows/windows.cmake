@@ -3,7 +3,6 @@ set(EXTRA_PLATFORM_WIN_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
 set(PLATFORMS_WIN_PRIVATE_INCLUDES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/array.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsbackingstore.h
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontenginedirectwrite.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsgdiintegration.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsgdinativeinterface.h	
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowswindow.h
@@ -108,7 +107,6 @@ if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
       -DIN_TRUE
       -DQT_PLUGIN
       -DQT_NO_FONTCONFIG
-      -DQT_NO_DIRECTWRITE )
 
    install(TARGETS CsGuiWin${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

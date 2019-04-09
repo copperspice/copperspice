@@ -27,10 +27,6 @@
 #include <qplatform_fontdatabase.h>
 #include <QSharedPointer>
 #include <qtwindows_additional.h>
-#if !defined(QT_NO_DIRECTWRITE)
-struct IDWriteFactory;
-struct IDWriteGdiInterop;
-#endif
 
 class QWindowsFontEngineData
 {
@@ -45,12 +41,6 @@ class QWindowsFontEngineData
    bool clearTypeEnabled;
    qreal fontSmoothingGamma;
    HDC hdc;
-
-#if ! defined(QT_NO_DIRECTWRITE)
-   IDWriteFactory *directWriteFactory;
-   IDWriteGdiInterop *directWriteGdiInterop;
-#endif
-
 };
 
 class QWindowsFontDatabase : public QPlatformFontDatabase

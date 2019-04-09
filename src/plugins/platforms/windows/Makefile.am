@@ -3,7 +3,6 @@ PLATFORMS_DIRS += src/plugins/platforms/windows
 PLATFORMS_WINDOWS_PRIVATE_INCLUDES = \
 	array.h \
 	qwindowsbackingstore.h \
-	qwindowsfontenginedirectwrite.h \
 	qwindowsgdiintegration.h \
 	qwindowsgdinativeinterface.h \
 	qwindowswindow.h \
@@ -77,7 +76,6 @@ lib_CsGuiWin@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    -DBUILD_DATE=\"`date +%Y-%m-%d`\" -DIN_TRUE \
    -DQT_PLUGIN \
    -DQT_NO_FONTCONFIG \
-   -DQT_NO_DIRECTWRITE
 
 lib_CsGuiWin@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module  \
    -lopengl32 -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid -luser32
