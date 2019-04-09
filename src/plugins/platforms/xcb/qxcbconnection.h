@@ -27,7 +27,7 @@
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
 
-#include "qxcbexport.h"
+#include <qxcbexport.h>
 #include <QHash>
 #include <QList>
 #include <QMutex>
@@ -368,7 +368,7 @@ class QXcbSyncWindowRequest : public QEvent
    QXcbWindow *m_window;
 };
 
-class Q_XCB_EXPORT QXcbConnection : public QObject
+class QXcbConnection : public QObject
 {
    CS_OBJECT(QXcbConnection)
 
@@ -608,7 +608,7 @@ class Q_XCB_EXPORT QXcbConnection : public QObject
    bool xi2MouseEvents() const;
 #endif
 
-   CS_SLOT_1(Public, void flush())
+   CS_SLOT_1(Public, void flush() { xcb_flush(m_connection); } )
    CS_SLOT_2(flush)
 
  protected:
