@@ -21,13 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qwindowsfontdatabase_ft.h"
-#include "qwindowsfontdatabase.h"
-#include "qwindowscontext.h"
+#include <qwindowsfontdatabase_ft.h>
 
-#include <ft2build.h>
-#include FT_TRUETYPE_TABLES_H
-
+#include <qwindowsfontdatabase.h>
+#include <qwindowscontext.h>
 #include <QDir>
 #include <QDirIterator>
 #include <QSettings>

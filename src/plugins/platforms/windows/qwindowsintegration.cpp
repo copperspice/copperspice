@@ -30,21 +30,21 @@
 #include "qwindowstheme.h"
 #include "qwindowsservices.h"
 
-#ifndef QT_NO_FREETYPE
-#  include "qwindowsfontdatabase_ft.h"
+#if defined(QT_USE_FREETYPE)
+#  include <qwindowsfontdatabase_ft.h>
 #endif
 
-#include "qwindowsfontdatabase.h"
+#include <qwindowsfontdatabase.h>
 
 #ifndef QT_NO_CLIPBOARD
-#  include "qwindowsclipboard.h"
-#  ifndef QT_NO_DRAGANDDROP
-#    include "qwindowsdrag.h"
-#  endif
+#  include <qwindowsclipboard.h>
+#ifndef QT_NO_DRAGANDDROP
+#  include <qwindowsdrag.h>
+#endif
 #endif
 
-#include "qwindowsinputcontext.h"
-#include "qwindowskeymapper.h"
+#include <qwindowsinputcontext.h>
+#include <qwindowskeymapper.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #  include "qwindowsaccessibility.h"
@@ -54,7 +54,7 @@
 #include <qwindowsysteminterface.h>
 
 #if ! defined(QT_NO_SESSIONMANAGER)
-#  include "qwindowssessionmanager.h"
+#  include <qwindowssessionmanager.h>
 #endif
 
 #include <qguiapplication_p.h>
@@ -68,15 +68,14 @@
 #include <limits.h>
 
 #if defined(QT_OPENGL_ES_2) || defined(QT_OPENGL_DYNAMIC)
-#  include "qwindowseglcontext.h"
+#  include <qwindowseglcontext.h>
 #endif
 
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
-#  include "qwindowsglcontext.h"
+#if ! defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
+#  include <qwindowsglcontext.h>
 #endif
 
-#include "qwindowsopengltester.h"
-
+#include <qwindowsopengltester.h>
 
 struct QWindowsIntegrationPrivate {
    explicit QWindowsIntegrationPrivate(const QStringList &paramList);

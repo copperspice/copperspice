@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qwindowsclipboard.h"
-#include "qwindowscontext.h"
-#include "qwindowsole.h"
-#include "qwindowsmime.h"
+#include <qwindowsclipboard.h>
+#include <qwindowscontext.h>
+#include <qwindowsole.h>
+#include <qwindowsmime.h>
 
 #include <QtGui/QGuiApplication>
 #include <QtGui/QClipboard>
@@ -39,13 +39,14 @@
 
 #include <qwindowsguieventdispatcher_p.h>
 
-
 #ifndef QT_NO_DEBUG_STREAM
+
 static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 {
    QDebugStateSaver saver(d);
    d.nospace();
    d << "QMimeData(";
+
    if (mimeData) {
       const QStringList formats = mimeData->formats();
       d << "formats=" << formats.join(QString(", "));

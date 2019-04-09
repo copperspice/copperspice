@@ -21,28 +21,27 @@
 *
 ***********************************************************************/
 
-#include "qwindowscontext.h"
-#include "qwindowsintegration.h"
-#include "qwindowswindow.h"
-#include "qwindowskeymapper.h"
-#include "qwindowsmousehandler.h"
-#include "qtwindowsglobal.h"
-#include "qwindowsmime.h"
-#include "qwindowsinputcontext.h"
-#include "qwindowstabletsupport.h"
-#include "qwindowstheme.h"
+#include <qwindowscontext.h>
+#include <qwindowsintegration.h>
+#include <qwindowswindow.h>
+#include <qwindowskeymapper.h>
+#include <qwindowsmousehandler.h>
+#include <qtwindowsglobal.h>
+#include <qwindowsmime.h>
+#include <qwindowsinputcontext.h>
+#include <qwindowstheme.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-# include "qwindowsaccessibility.h"
+# include <qwindowsaccessibility.h>
 #endif
 
 #if ! defined(QT_NO_SESSIONMANAGER)
 # include <qsessionmanager_p.h>
-# include "qwindowssessionmanager.h"
+# include <qwindowssessionmanager.h>
 #endif
 
-#include "qwindowsscreen.h"
-#include "qwindowstheme.h"
+#include <qwindowsscreen.h>
+#include <qwindowstheme.h>
 
 #include <QWindow>
 #include <qwindowsysteminterface.h>
@@ -214,15 +213,12 @@ struct QWindowsContextPrivate {
    HandleBaseWindowHash m_windows;
    HDC m_displayContext;
    int m_defaultDPI;
+
    QWindowsKeyMapper m_keyMapper;
    QWindowsMouseHandler m_mouseHandler;
    QWindowsMimeConverter m_mimeConverter;
    QWindowsScreenManager m_screenManager;
    QSharedPointer<QWindowCreationContext> m_creationContext;
-
-#if !defined(QT_NO_TABLETEVENT)
-   QScopedPointer<QWindowsTabletSupport> m_tabletSupport;
-#endif
 
    const HRESULT m_oleInitializeResult;
    const QByteArray m_eventType;
@@ -260,25 +256,11 @@ QWindowsContextPrivate::QWindowsContextPrivate()
 
 QWindowsContext::QWindowsContext() : d(new QWindowsContextPrivate)
 {
-#ifdef Q_CC_MSVC
-#    pragma warning( disable : 4996 )
-#endif
-
    m_instance = this;
-
-
-#if ! defined(QT_NO_TABLETEVENT)
-   d->m_tabletSupport.reset(QWindowsTabletSupport::create());
-   qDebug() << "Tablet support: " << (d->m_tabletSupport.isNull() ? QString("None") : d->m_tabletSupport->description());
-#endif
 }
 
 QWindowsContext::~QWindowsContext()
 {
-#if ! defined(QT_NO_TABLETEVENT)
-   d->m_tabletSupport.reset(); // Destroy internal window before unregistering classes.
-#endif
-
    unregisterWindowClasses();
    if (d->m_oleInitializeResult == S_OK || d->m_oleInitializeResult == S_FALSE) {
       OleUninitialize();
@@ -321,18 +303,13 @@ bool QWindowsContext::initTouch(unsigned integrationOptions)
 
 void QWindowsContext::setTabletAbsoluteRange(int a)
 {
-#if !defined(QT_NO_TABLETEVENT)
-   if (!d->m_tabletSupport.isNull()) {
-      d->m_tabletSupport->setAbsoluteRange(a);
-   }
-#endif
 }
 
 int QWindowsContext::processDpiAwareness()
 {
    int result;
    if (QWindowsContext::shcoredll.getProcessDpiAwareness
-      && SUCCEEDED(QWindowsContext::shcoredll.getProcessDpiAwareness(NULL, &result))) {
+               && SUCCEEDED(QWindowsContext::shcoredll.getProcessDpiAwareness(NULL, &result))) {
       return result;
    }
 
@@ -717,20 +694,6 @@ QWindowsScreenManager &QWindowsContext::screenManager()
    return d->m_screenManager;
 }
 
-QWindowsTabletSupport *QWindowsContext::tabletSupport() const
-{
-#if !defined(QT_NO_TABLETEVENT)
-   return d->m_tabletSupport.data();
-#else
-   return 0;
-#endif
-}
-
-/*!
-    \brief Convenience to create a non-visible, message-only dummy
-    window for example used as clipboard watcher or for GL.
-*/
-
 HWND QWindowsContext::createDummyWindow(const QString &classNameIn,
    const wchar_t *windowName, WNDPROC wndProc, DWORD style)
 {
@@ -1109,11 +1072,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
             *result = LRESULT(MA_NOACTIVATE);
             return true;
          }
-#ifndef QT_NO_TABLETEVENT
-         if (!d->m_tabletSupport.isNull()) {
-            d->m_tabletSupport->notifyActivate();
-         }
-#endif
+
          if (platformWindow->testFlag(QWindowsWindow::BlockedByModal))
             if (const QWindow *modalWindow = QGuiApplication::modalWindow()) {
                QWindowsWindow::baseWindowOf(modalWindow)->alertWindow();

@@ -24,8 +24,8 @@
 #ifndef QWINDOWSWINDOW_H
 #define QWINDOWSWINDOW_H
 
-#include "qtwindows_additional.h"
-#include "qwindowscursor.h"
+#include <qtwindows_additional.h>
+#include <qwindowscursor.h>
 
 #include <qplatform_window.h>
 #include <platformheaders/qwindowswindowfunctions.h>

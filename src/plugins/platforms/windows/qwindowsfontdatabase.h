@@ -26,8 +26,7 @@
 
 #include <qplatform_fontdatabase.h>
 #include <QSharedPointer>
-#include "qtwindows_additional.h"
-
+#include <qtwindows_additional.h>
 #if !defined(QT_NO_DIRECTWRITE)
 struct IDWriteFactory;
 struct IDWriteGdiInterop;

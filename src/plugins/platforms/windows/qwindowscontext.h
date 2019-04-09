@@ -24,8 +24,8 @@
 #ifndef QWINDOWSCONTEXT_H
 #define QWINDOWSCONTEXT_H
 
-#include "qtwindowsglobal.h"
-#include "qtwindows_additional.h"
+#include <qtwindowsglobal.h>
+#include <qtwindows_additional.h>
 #include <QScopedPointer>
 #include <QSharedPointer>
 #include <qlist.h>
@@ -40,7 +40,6 @@ struct _SHSTOCKICONINFO;
 class QWindow;
 class QPlatformScreen;
 class QWindowsScreenManager;
-class QWindowsTabletSupport;
 class QWindowsWindow;
 class QWindowsMimeConverter;
 class QPoint;
@@ -61,9 +60,11 @@ struct QWindowsUser32DLL {
    typedef BOOL (WINAPI *GetTouchInputInfo)(HANDLE, UINT, PVOID, int);
    typedef BOOL (WINAPI *CloseTouchInputHandle)(HANDLE);
    typedef BOOL (WINAPI *SetLayeredWindowAttributes)(HWND, COLORREF, BYTE, DWORD);
+
    typedef BOOL (WINAPI *UpdateLayeredWindow)(HWND, HDC, const POINT *,
       const SIZE *, HDC, const POINT *, COLORREF,
       const BLENDFUNCTION *, DWORD);
+
    typedef BOOL (WINAPI *UpdateLayeredWindowIndirect)(HWND, const UPDATELAYEREDWINDOWINFO *);
    typedef BOOL (WINAPI *IsHungAppWindow)(HWND);
    typedef BOOL (WINAPI *SetProcessDPIAware)();
@@ -156,13 +157,9 @@ class QWindowsContext
    int defaultDPI() const;
 
    QString registerWindowClass(const QWindow *w);
-   QString registerWindowClass(QString cname, WNDPROC proc,
-      unsigned style = 0, HBRUSH brush = 0,
-      bool icon = false);
-   HWND createDummyWindow(const QString &classNameIn,
-      const wchar_t *windowName,
-      WNDPROC wndProc = 0, DWORD style = WS_OVERLAPPED);
+   QString registerWindowClass(QString cname, WNDPROC proc, unsigned style = 0, HBRUSH brush = 0, bool icon = false);
 
+   HWND createDummyWindow(const QString &classNameIn, const wchar_t *windowName, WNDPROC wndProc = 0, DWORD style = WS_OVERLAPPED);
    HDC displayContext() const;
    int screenDepth() const;
 
@@ -202,7 +199,6 @@ class QWindowsContext
 
    QWindowsMimeConverter &mimeConverter() const;
    QWindowsScreenManager &screenManager();
-   QWindowsTabletSupport *tabletSupport() const;
 
    static QWindowsUser32DLL user32dll;
    static QWindowsShell32DLL shell32dll;

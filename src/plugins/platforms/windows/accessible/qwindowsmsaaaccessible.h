@@ -28,15 +28,14 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include "qtwindows_additional.h"
-#include <QtCore/qsharedpointer.h>
-#include <QtGui/qaccessible.h>
+#include <qtwindows_additional.h>
+#include <qsharedpointer.h>
+#include <qaccessible.h>
 
 #ifndef Q_CC_MINGW
 # include <oleacc.h>
 # include "ia2_api_all.h"   // IAccessible2 inherits from IAccessible
 #else
-    // MinGW
 # include <basetyps.h>
 # include <oleacc.h>
 #endif

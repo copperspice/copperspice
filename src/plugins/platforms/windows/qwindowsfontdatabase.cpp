@@ -22,16 +22,15 @@
 ***********************************************************************/
 
 #include "qwindowsfontdatabase.h"
-#include "qwindowsfontdatabase_ft.h" // for default font
+#include "qwindowsfontdatabase_ft.h"             // for default font
 #include "qwindowscontext.h"
 #include "qwindowsfontengine.h"
-#include "qwindowsfontenginedirectwrite.h"
 #include "qtwindows_additional.h"
 
-#include <QFont>
-#include <QGuiApplication>
+#include <qfont.h>
+#include <qapplication.h>
 #include <qmath.h>
-#include <QDebug>
+#include <qdebug.h>
 #include <QtEndian>
 #include <QThreadStorage>
 
