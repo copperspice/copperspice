@@ -243,10 +243,7 @@
 #define XF86XK_TouchpadOff         0x1008FFB1
 #define XF86XK_AudioMicMute        0x1008FFB2
 
-
 // end of XF86keysyms.h
-
-QT_BEGIN_NAMESPACE
 
 // keyboard mapping table
 static const unsigned int KeyTbl[] = {
@@ -1679,4 +1676,3 @@ void QXcbKeyboard::handleMappingNotifyEvent(const void *event)
    }
 }
 
-QT_END_NAMESPACE

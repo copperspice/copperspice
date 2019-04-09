@@ -241,6 +241,7 @@ bool QWindowsIntegration::hasCapability(QPlatformIntegration::Capability cap) co
 #ifndef QT_NO_OPENGL
       case OpenGL:
          return true;
+
       case ThreadedOpenGL:
          if (const QWindowsStaticOpenGLContext *glContext = QWindowsIntegration::staticOpenGLContext()) {
             return glContext->supportsThreadedOpenGL();
@@ -250,19 +251,26 @@ bool QWindowsIntegration::hasCapability(QPlatformIntegration::Capability cap) co
 
       case WindowMasks:
          return true;
+
       case MultipleWindows:
          return true;
+
       case ForeignWindows:
          return true;
+
       case RasterGLSurface:
          return true;
+
       case AllGLFunctionsQueryable:
          return true;
+
       case SwitchableWidgetComposition:
          return true;
+
       default:
          return QPlatformIntegration::hasCapability(cap);
    }
+
    return false;
 }
 
@@ -271,8 +279,10 @@ QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) cons
    QWindowsWindowData requested;
    requested.flags = window->flags();
    requested.geometry = QHighDpi::toNativePixels(window->geometry(), window);
+
    // Apply custom margins (see  QWindowsWindow::setCustomMargins())).
    const QVariant customMarginsV = window->property("_q_windowsCustomMargins");
+
    if (customMarginsV.isValid()) {
       requested.customMargins = qvariant_cast<QMargins>(customMarginsV);
    }
@@ -436,18 +446,18 @@ QWindowsStaticOpenGLContext *QWindowsIntegration::staticOpenGLContext()
    }
    return d->m_staticOpenGLContext.data();
 }
-#endif // !QT_NO_OPENGL
+
+#endif // ! QT_NO_OPENGL
 
 
 QPlatformFontDatabase *QWindowsIntegration::fontDatabase() const
 {
-   if (!d->m_fontDatabase) {
+   if (! d->m_fontDatabase) {
 
-#ifdef QT_NO_FREETYPE
-      d->m_fontDatabase = new QWindowsFontDatabase();
-#else
+#if defined(QT_USE_FREETYPE)
       if (d->m_options & QWindowsIntegration::FontDatabaseFreeType) {
          d->m_fontDatabase = new QWindowsFontDatabaseFT;
+
       } else if (d->m_options & QWindowsIntegration::FontDatabaseNative) {
          d->m_fontDatabase = new QWindowsFontDatabase;
 
@@ -455,9 +465,12 @@ QPlatformFontDatabase *QWindowsIntegration::fontDatabase() const
          d->m_fontDatabase = new QWindowsFontDatabase;
 
       }
-#endif // QT_NO_FREETYPE
+#else
+      d->m_fontDatabase = new QWindowsFontDatabase();
+#endif
 
    }
+
    return d->m_fontDatabase;
 }
 
@@ -465,6 +478,7 @@ QPlatformFontDatabase *QWindowsIntegration::fontDatabase() const
 static inline int keyBoardAutoRepeatRateMS()
 {
    DWORD time = 0;
+
    if (SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &time, 0)) {
       return time ? 1000 / static_cast<int>(time) : 500;
    }

@@ -25,9 +25,9 @@
 #define QGENERICUNIXTHEMES_P_H
 
 #include <qplatform_theme.h>
-#include <QString>
-#include <QStringList>
-#include <QFont>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qfont.h>
 
 class ResourceHelper
 {

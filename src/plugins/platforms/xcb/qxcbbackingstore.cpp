@@ -281,7 +281,7 @@ void QXcbShmImage::put(xcb_window_t window, const QPoint &target, const QRect &s
       xcb_image_t *converted_image = xcb_image_native(xcb_connection(), m_xcb_image, 1);
 
       while (height > 0) {
-         int rows = std::min(height, rows_per_put);
+         int rows = (std::min)(height, rows_per_put);
 
          xcb_image_t *subimage = xcb_image_subimage(converted_image, src_x, src_y, width, rows,
                0, 0, 0);

@@ -221,16 +221,17 @@ class QWindowsWindow : public QPlatformWindow
 
    HDC getDC();
    void releaseDC();
-#ifndef Q_OS_WINCE // maybe available on some SDKs revisit WM_GETMINMAXINFO
+
    void getSizeHints(MINMAXINFO *mmi) const;
    bool handleNonClientHitTest(const QPoint &globalPos, LRESULT *result) const;
-#endif // !Q_OS_WINCE
+
 
 #ifndef QT_NO_CURSOR
    CursorHandlePtr cursor() const {
       return m_cursor;
    }
 #endif
+
    void setCursor(const CursorHandlePtr &c);
    void applyCursor();
 
@@ -252,19 +253,18 @@ class QWindowsWindow : public QPlatformWindow
    void invalidateSurface() override;
    void aboutToMakeCurrent();
 
-#ifndef Q_OS_WINCE
    void setAlertState(bool enabled) override;
    bool isAlertState() const override {
       return testFlag(AlertState);
    }
    void alertWindow(int durationMs = 0);
    void stopAlertWindow();
-#endif
 
    static void setTouchWindowTouchTypeStatic(QWindow *window, QWindowsWindowFunctions::TouchWindowTouchTypes touchTypes);
    void registerTouchWindow(QWindowsWindowFunctions::TouchWindowTouchTypes touchTypes = QWindowsWindowFunctions::NormalTouch);
    static void setHasBorderInFullScreenStatic(QWindow *window, bool border);
    void setHasBorderInFullScreen(bool border);
+
  private:
    inline void show_sys() const;
    inline void hide_sys() const;
@@ -277,6 +277,7 @@ class QWindowsWindow : public QPlatformWindow
    inline void setParent_sys(const QPlatformWindow *parent);
    inline void updateTransientParent() const;
    void destroyWindow();
+
    inline bool isDropSiteEnabled() const {
       return m_dropTarget != 0;
    }
@@ -292,30 +293,27 @@ class QWindowsWindow : public QPlatformWindow
    HDC m_hdc;
    Qt::WindowState m_windowState;
    qreal m_opacity;
+
 #ifndef QT_NO_CURSOR
    CursorHandlePtr m_cursor;
 #endif
+
    QWindowsOleDropTarget *m_dropTarget;
    unsigned m_savedStyle;
    QRect m_savedFrameGeometry;
    const QSurfaceFormat m_format;
-#ifdef Q_OS_WINCE
-   bool m_previouslyHidden;
-#endif
+
    HICON m_iconSmall;
    HICON m_iconBig;
    void *m_surface;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const RECT &r);
 QDebug operator<<(QDebug d, const POINT &);
-#  ifndef Q_OS_WINCE
+
 QDebug operator<<(QDebug d, const MINMAXINFO &i);
 QDebug operator<<(QDebug d, const NCCALCSIZE_PARAMS &p);
 QDebug operator<<(QDebug d, const WINDOWPLACEMENT &);
-#  endif // !Q_OS_WINCE
-#endif // !QT_NO_DEBUG_STREAM
 
 // ---------- QWindowsGeometryHint inline functions.
 QPoint QWindowsGeometryHint::mapToGlobal(HWND hwnd, const QPoint &qp)

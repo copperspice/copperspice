@@ -70,14 +70,16 @@ static inline QFontDatabase::WritingSystem writingSystemFromCharSet(uchar charSe
       default:
          break;
    }
+
    return QFontDatabase::Any;
 }
 
 static FontFile *createFontFile(const QString &fileName, int index)
 {
-   FontFile *fontFile = new FontFile;
-   fontFile->fileName = fileName;
+   FontFile *fontFile   = new FontFile;
+   fontFile->fileName   = fileName;
    fontFile->indexValue = index;
+
    return fontFile;
 }
 
@@ -157,16 +159,18 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
    const FONTSIGNATURE *signature, int type, bool registerAlias)
 {
    // the "@family" fonts are just the same as "family". Ignore them.
-   if (faceName.isEmpty() || faceName.at(0) == QLatin1Char('@') || faceName.startsWith(QLatin1String("WST_"))) {
+   if (faceName.isEmpty() || faceName.at(0) == QChar('@') || faceName.startsWith("WST_")) {
       return false;
    }
 
    static const int SMOOTH_SCALABLE = 0xffff;
-   const QString foundryName; // No such concept.
+   const QString foundryName; // No such concept
+
    const bool fixed = !(textmetric->tmPitchAndFamily & TMPF_FIXED_PITCH);
    const bool ttf = (textmetric->tmPitchAndFamily & TMPF_TRUETYPE);
    const bool scalable = textmetric->tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE);
    const int size = scalable ? SMOOTH_SCALABLE : textmetric->tmHeight;
+
    const QFont::Style style = textmetric->tmItalic ? QFont::StyleItalic : QFont::StyleNormal;
    const bool antialias = false;
    const QFont::Weight weight = QPlatformFontDatabase::weightFromInteger(textmetric->tmWeight);
@@ -174,8 +178,10 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
 
 #ifndef QT_NO_DEBUG_STREAM
    if (QWindowsContext::verbose > 2) {
+
       QString message;
       QTextStream str(&message);
+
       str << __FUNCTION__ << ' ' << faceName << "::" << fullName << ' ' << charSet << " TTF=" << ttf;
       if (type & DEVICE_FONTTYPE) {
          str << " DEVICE";
@@ -215,9 +221,10 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
       // display Thai text by default. As a temporary work around, we special case Segoe UI
       // and remove the Thai script from its list of supported writing systems.
       if (writingSystems.supported(QFontDatabase::Thai) &&
-         faceName == QLatin1String("Segoe UI")) {
+         faceName == QString("Segoe UI")) {
          writingSystems.setSupported(QFontDatabase::Thai, false);
       }
+
    } else {
       const QFontDatabase::WritingSystem ws = writingSystemFromCharSet(charSet);
       if (ws != QFontDatabase::Any) {
@@ -332,6 +339,7 @@ void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
 namespace {
 // Context for enumerating system fonts, records whether the default font has been
 // encountered, which is normally not enumerated.
+
 struct PopulateFamiliesContext {
    PopulateFamiliesContext(const QString &f) : systemDefaultFont(f), seenSystemDefaultFont(false) {}
 
@@ -437,6 +445,7 @@ QStringList QWindowsFontDatabaseFT::fallbacksForFamily(const QString &family, QF
 
    return result;
 }
+
 QString QWindowsFontDatabaseFT::fontDir() const
 {
    const QString result = qgetenv("windir") + "/Fonts";

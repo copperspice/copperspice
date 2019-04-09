@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qxcbxsettings.h"
+#include <qxcbxsettings.h>
 
-#include <QtCore/QByteArray>
-#include <QtCore/QtEndian>
+#include <QByteArray>
+#include <QtEndian>
 
 #ifdef XCB_USE_XLIB
 #include <X11/extensions/XIproto.h>
@@ -271,9 +271,11 @@ bool QXcbXSettings::initialized() const
 void QXcbXSettings::handlePropertyNotifyEvent(const xcb_property_notify_event_t *event)
 {
    Q_D(QXcbXSettings);
+
    if (event->window != d->x_settings_window) {
       return;
    }
+
 #ifdef XCB_USE_XLIB
    d->populateSettings(d->getSettings());
 #endif //XCB_USE_XLIB
@@ -288,8 +290,10 @@ void QXcbXSettings::registerCallbackForProperty(const QByteArray &property, QXcb
 void QXcbXSettings::removeCallbackForHandle(const QByteArray &property, void *handle)
 {
    Q_D(QXcbXSettings);
+
    QXcbXSettingsPropertyValue &value = d->settings[property];
    QLinkedList<QXcbXSettingsCallback>::iterator it = value.callback_links.begin();
+
    while (it != value.callback_links.end()) {
       if (it->handle == handle) {
          it = value.callback_links.erase(it);
@@ -302,6 +306,7 @@ void QXcbXSettings::removeCallbackForHandle(const QByteArray &property, void *ha
 void QXcbXSettings::removeCallbackForHandle(void *handle)
 {
    Q_D(QXcbXSettings);
+
    for (QMap<QByteArray, QXcbXSettingsPropertyValue>::const_iterator it = d->settings.cbegin();
       it != d->settings.cend(); ++it) {
       removeCallbackForHandle(it.key(), handle);

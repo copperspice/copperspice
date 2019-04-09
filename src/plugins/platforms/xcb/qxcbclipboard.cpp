@@ -462,17 +462,19 @@ xcb_window_t QXcbClipboard::requestor() const
 
       xcb_window_t window = xcb_generate_id(xcb_connection());
       Q_XCB_CALL(xcb_create_window(xcb_connection(),
-            XCB_COPY_FROM_PARENT,            // depth -- same as root
-            window,                        // window id
-            platformScreen->screen()->root,                   // parent window id
+            XCB_COPY_FROM_PARENT,                       // depth -- same as root
+            window,                                     // window id
+            platformScreen->screen()->root,             // parent window id
             x, y, w, h,
-            0,                               // border width
-            XCB_WINDOW_CLASS_INPUT_OUTPUT,   // window class
-            platformScreen->screen()->root_visual, // visual
-            0,                               // value mask
-            0));                             // value list
+            0,                                          // border width
+            XCB_WINDOW_CLASS_INPUT_OUTPUT,              // window class
+            platformScreen->screen()->root_visual,      // visual
+            0,                                          // value mask
+            0));                                        // value list
+
 #ifndef QT_NO_DEBUG
       QByteArray ba("Qt clipboard requestor window");
+
       Q_XCB_CALL(xcb_change_property(xcb_connection(),
             XCB_PROP_MODE_REPLACE,
             window,
@@ -488,6 +490,7 @@ xcb_window_t QXcbClipboard::requestor() const
 
       that->setRequestor(window);
    }
+
    return m_requestor;
 }
 

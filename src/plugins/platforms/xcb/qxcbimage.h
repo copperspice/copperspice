@@ -24,10 +24,12 @@
 #ifndef QXCBIMAGE_H
 #define QXCBIMAGE_H
 
-#include "qxcbscreen.h"
-#include <QtCore/QPair>
-#include <QtGui/QImage>
-#include <QtGui/QPixmap>
+#include <qxcbscreen.h>
+
+#include <qpair.h>
+#include <qimage.h>
+#include <qpixmap.h>
+
 #include <xcb/xcb_image.h>
 
 QImage::Format qt_xcb_imageFormatForVisual(QXcbConnection *connection,

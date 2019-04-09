@@ -25,7 +25,7 @@
 #define QGENERICUNIXDESKTOPSERVICES_H
 
 #include <qplatform_services.h>
-#include <QString>
+#include <qstring.h>
 
 class QGenericUnixServices : public QPlatformServices
 {

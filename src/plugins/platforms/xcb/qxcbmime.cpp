@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qxcbmime.h"
+#include <qxcbmime.h>
 
-#include <QtCore/QTextCodec>
-#include <QtGui/QImageWriter>
-#include <QtCore/QBuffer>
+#include <QTextCodec>
+#include <QImageWriter>
+#include <QBuffer>
 #include <qdebug.h>
 
 #include <X11/Xutil.h>
@@ -34,7 +34,7 @@
 #undef XCB_ATOM_PIXMAP
 #undef XCB_ATOM_BITMAP
 
-#if !(defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
+#if ! (defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
 
 QXcbMime::QXcbMime()
    : QInternalMimeData()

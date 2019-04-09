@@ -25,7 +25,7 @@
 #define QXCBSCREEN_H
 
 #include <qplatform_screen.h>
-#include <QString>
+#include <qstring.h>
 
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
