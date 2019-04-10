@@ -21,20 +21,18 @@
 *
 ***********************************************************************/
 
-#include "qbasicfontdatabase_p.h"
+#include <qbasicfontdatabase_p.h>
 
-#include <qguiapplication_p.h>
+#if defined(QT_USE_FREETYPE)
+
 #include <qplatform_screen.h>
-
 #include <QDir>
 #include <QFile>
 #include <QLibraryInfo>
 #include <QtEndian>
 #include <QUuid>
 
-// broom - freetype WAS disabled, need to consider what to do here
-#undef QT_NO_FREETYPE
-
+#include <qapplication_p.h>
 #include <qfontengine_ft_p.h>
 
 #include <ft2build.h>
@@ -80,10 +78,10 @@ QFontEngine *QBasicFontDatabase::fontEngine(const QFontDef &fontDef, void *usrPt
         QFontEngine::SubpixelAntialiasingType subpixelType = subpixelAntialiasingTypeHint();
 
         if (subpixelType == QFontEngine::Subpixel_None || (fontDef.styleStrategy & QFont::NoSubpixelAntialias)) {
-            format = QFontEngineFT::Format_A8;
+            format = QFontEngine::Format_A8;
             engine->subpixelType = QFontEngine::Subpixel_None;
         } else {
-            format = QFontEngineFT::Format_A32;
+            format = QFontEngine::Format_A32;
             engine->subpixelType = subpixelType;
         }
     }
@@ -174,7 +172,7 @@ QStringList QBasicFontDatabase::addTTFile(const QByteArray &fontData, const QByt
         FT_Face face;
         FT_Error error;
 
-        if (!fontData.isEmpty()) {
+        if (! fontData.isEmpty()) {
             error = FT_New_Memory_Face(library, (const FT_Byte *)fontData.constData(), fontData.size(), index, &face);
         } else {
             error = FT_New_Face(library, file.constData(), index, &face);
@@ -269,3 +267,4 @@ QStringList QBasicFontDatabase::addTTFile(const QByteArray &fontData, const QByt
     return families;
 }
 
+#endif

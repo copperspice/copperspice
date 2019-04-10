@@ -1,4 +1,4 @@
-set(EXTRA_PLATFORM_WIN_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
+set(EXTRA_PLATFORMS_WIN_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
 
 set(PLATFORMS_WIN_PRIVATE_INCLUDES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/array.h
@@ -40,8 +40,6 @@ set(PLATFORMS_WIN_OTHER_PRIVATE_INCLUDES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsaccessibility.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsmsaaaccessible.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwindowsguieventdispatcher_p.h
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/fonts/qbasicfontdatabase_p.h
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/fonts/qfontengine_ft_p.h
 )
 
 set(PLATFORMS_WIN_SOURCES
@@ -78,8 +76,6 @@ set(PLATFORMS_WIN_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsaccessibility.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsmsaaaccessible.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwindowsguieventdispatcher.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/fonts/qbasicfontdatabase.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/fonts/qfontengine_ft.cpp
 
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/cursors.qrc
 )
@@ -87,6 +83,8 @@ set(PLATFORMS_WIN_SOURCES
 if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
 
    set(EXTRA_PLATFORMS_WIN_LIBS
+      CsCore${BUILD_ABI}
+      CsGui${BUILD_ABI}
       ${WIN_LIB}
       opengl32
       gdi32
@@ -101,12 +99,19 @@ if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
    )
 
    add_library(CsGuiWin${BUILD_ABI} MODULE ${PLATFORMS_WIN_SOURCES})
-   target_link_libraries(CsGuiWin${BUILD_ABI} $EXTRA_PLATFORMS_WIN_LIBS})
+
+   target_link_libraries(CsGuiWin${BUILD_ABI}
+      $EXTRA_PLATFORMS_WIN_LIBS})
+
+   target_include_directories(
+      CsGuiWin${BUILD_ABI} PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
+   )
 
    target_compile_definitions(CsGuiWin${BUILD_ABI} PRIVATE
-      -DIN_TRUE
       -DQT_PLUGIN
-      -DQT_NO_FONTCONFIG
+      -DQT_USE_FREETYPE )
 
    install(TARGETS CsGuiWin${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

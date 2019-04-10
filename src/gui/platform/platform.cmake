@@ -1,3 +1,8 @@
+# Freetype
+add_definitions(
+   -DQT_USE_FREETYPE
+)
+
 set(GUI_PUBLIC_INCLUDES
    ${GUI_PUBLIC_INCLUDES}
 	QPlatform_Accessibility
@@ -69,13 +74,19 @@ set(GUI_INCLUDES
 set(GUI_PRIVATE_INCLUDES
    ${GUI_PRIVATE_INCLUDES}
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontext_p.h
-	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextfactory_p.h
-	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextplugin_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextfactory_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextplugin_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationfactory_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_theme_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_themefactory_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_window_p.h
+)
+
+set(GUI_PRIVATE_INCLUDES
+   ${GUI_PRIVATE_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/qbasicfontdatabase_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/qfontengine_ft_p.h
 )
 
 set(GUI_PLATFORMHEADERS_INCLUDES
@@ -103,15 +114,15 @@ set(GUI_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_inputcontextplugin.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integration.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationfactory.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationplugin.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_integrationplugin.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_menu.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_nativeinterface.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_offscreensurface.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_openglcontext.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_pixmap.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printdevice.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printersupport.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printplugin.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printdevice.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printersupport.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_printplugin.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_screen.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_services.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_sessionmanager.cpp
@@ -120,6 +131,9 @@ set(GUI_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_systemtrayicon.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_theme.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_themefactory.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_themeplugin.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_themeplugin.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/platform/qplatform_window.cpp
+
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/qbasicfontdatabase.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/qfontengine_ft.cpp
 )

@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef QBASICFONTDATABASE_H
-#define QBASICFONTDATABASE_H
+#ifndef QBASICFONTDATABASE_P_H
+#define QBASICFONTDATABASE_P_H
 
 #include <qplatform_fontdatabase.h>
-#include <QByteArray>
-#include <QString>
+#include <qbytearray.h>
+#include <qstring.h>
 
 struct FontFile
 {
@@ -34,7 +34,7 @@ struct FontFile
     int indexValue;
 };
 
-class QBasicFontDatabase : public QPlatformFontDatabase
+class Q_GUI_EXPORT QBasicFontDatabase : public QPlatformFontDatabase
 {
 public:
     void populateFontDatabase() override;

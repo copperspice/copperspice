@@ -1,4 +1,8 @@
-GUI_DIRS += src/gui/platform
+# Freetype
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += \
+   -DQT_USE_FREETYPE
+
+GUI_DIRS += src/gui/platform  src/gui/platform/platformheaders
 
 GUI_PUBLIC_INCLUDES += \
 	QPlatform_Accessibility \
@@ -74,6 +78,10 @@ GUI_PLATFORM_PRIVATE_INCLUDES = \
 	qplatform_themefactory_p.h \
 	qplatform_window_p.h
 
+GUI_PLATFORMHEADERS_PRIVATE_INCLUDES = \
+	platformheaders/qbasicfontdatabase_p.h \
+	platformheaders/qfontengine_ft_p.h
+
 GUI_PLATFORMHEADERS_INCLUDES = \
 	platformheaders/xcb/qxcbintegrationfunctions.h \
 	platformheaders/xcb/qxcbscreenfunctions.h \
@@ -87,10 +95,12 @@ GUI_PLATFORMHEADERS_DIRS = xcb windows cocoa
 GUI_INCLUDES += $(GUI_PLATFORM_INCLUDES) \
 	$(patsubst %,platformheaders/%,$(notdir $(GUI_PLATFORMHEADERS_INCLUDES)))
 
-GUI_PRIVATE_INCLUDES += $(GUI_PLATFORM_PRIVATE_INCLUDES)
+GUI_PRIVATE_INCLUDES += $(GUI_PLATFORM_PRIVATE_INCLUDES) \
+	$(notdir $(GUI_PLATFORMHEADERS_PRIVATE_INCLUDES))
 
 noinst_HEADERS+=$(patsubst %,src/gui/platform/%,$(GUI_PLATFORM_INCLUDES)) \
 	$(patsubst %,src/gui/platform/%,$(GUI_PLATFORM_PRIVATE_INCLUDES)) \
+	$(patsubst %,src/gui/platform/%,$(GUI_PLATFORMHEADERS_PRIVATE_INCLUDES))  \
 	$(patsubst %,src/gui/platform/%,$(GUI_PLATFORMHEADERS_INCLUDES))
 
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
@@ -126,7 +136,10 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/platform/qplatform_theme.cpp \
 	src/gui/platform/qplatform_themefactory.cpp \
 	src/gui/platform/qplatform_themeplugin.cpp \
-	src/gui/platform/qplatform_window.cpp
+	src/gui/platform/qplatform_window.cpp \
+	\
+	src/gui/platform/platformheaders/qbasicfontdatabase.cpp \
+	src/gui/platform/platformheaders/qfontengine_ft.cpp
 
 EXTRA_DIST+=
 

@@ -42,24 +42,18 @@ PLATFORMS_WINDOWS_ACCESSIBLE_PRIVATE_INCLUDES = \
 PLATFORMS_WINDOWS_EVENTS_PRIVATE_INCLUDES = \
 	events/qwindowsguieventdispatcher_p.h
 
-PLATFORMS_WINDOWS_FONTS_PRIVATE_INCLUDES = \
-	fonts/qbasicfontdatabase_p.h \
-	fonts/qfontengine_ft_p.h
-
-PLATFORMS_WINDOWS_DIRS = accessible events fonts
+PLATFORMS_WINDOWS_DIRS = accessible events
 
 noinst_HEADERS+=\
 	$(patsubst %,src/plugins/platforms/windows/%,$(PLATFORMS_WINDOWS_PRIVATE_INCLUDES)) \
 	$(patsubst %,src/plugins/platforms/windows/%,$(PLATFORMS_WINDOWS_ACCESSIBLE_PRIVATE_INCLUDES))  \
-	$(patsubst %,src/plugins/platforms/windows/%,$(PLATFORMS_WINDOWS_EVENTS_PRIVATE_INCLUDES))  \
-	$(patsubst %,src/plugins/platforms/windows/%,$(PLATFORMS_WINDOWS_FONTS_PRIVATE_INCLUDES))
+	$(patsubst %,src/plugins/platforms/windows/%,$(PLATFORMS_WINDOWS_EVENTS_PRIVATE_INCLUDES))
 
 if BUILD_PLATFORMS_WINDOWS_PLUGIN
 
 PLATFORMS_PRIVATE_INCLUDES += $(PLATFORMS_WINDOWS_PRIVATE_INCLUDES) \
    $(notdir $(PLATFORMS_WINDOWS_ACCESSIBLE_PRIVATE_INCLUDES)) \
-   $(notdir $(PLATFORMS_WINDOWS_EVENTS_PRIVATE_INCLUDES)) \
-   $(notdir $(PLATFORMS_WINDOWS_FONTS_PRIVATE_INCLUDES))
+   $(notdir $(PLATFORMS_WINDOWS_EVENTS_PRIVATE_INCLUDES))
 
 lib_LTLIBRARIES += lib/CsGuiWin@BUILD_ABI@.la
 
@@ -73,9 +67,9 @@ lib_CsGuiWin@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    -I$(top_srcdir)/src/3rdparty/freetype/include/freetype \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src \
    $(AM_CXXFLAGS) \
-   -DBUILD_DATE=\"`date +%Y-%m-%d`\" -DIN_TRUE \
+   -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
    -DQT_PLUGIN \
-   -DQT_NO_FONTCONFIG \
+   -DQT_USE_FREETYPE
 
 lib_CsGuiWin@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module  \
    -lopengl32 -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid -luser32
@@ -115,9 +109,7 @@ lib_CsGuiWin@BUILD_ABI@_la_SOURCES = \
 	src/plugins/platforms/windows/accessible/comutils.cpp \
 	src/plugins/platforms/windows/accessible/qwindowsaccessibility.cpp \
 	src/plugins/platforms/windows/accessible/qwindowsmsaaaccessible.cpp \
-	src/plugins/platforms/windows/events/qwindowsguieventdispatcher.cpp \
-	src/plugins/platforms/windows/fonts/qbasicfontdatabase.cpp \
-	src/plugins/platforms/windows/fonts/qfontengine_ft.cpp
+	src/plugins/platforms/windows/events/qwindowsguieventdispatcher.cpp
 
 nodist_lib_CsGuiWin@BUILD_ABI@_la_SOURCES = \
 	src/plugins/platforms/windows/qrc_cursors.cpp
@@ -146,5 +138,4 @@ EXTRA_DIST += src/plugins/platforms/windows/cursors.qrc \
 	src/plugins/platforms/windows/images/splitvcursor_32.png \
 	src/plugins/platforms/windows/images/splitvcursor_48.png \
 	src/plugins/platforms/windows/images/splitvcursor_64.png
-
 

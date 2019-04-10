@@ -26,11 +26,7 @@
 
 #include <qfontengine_p.h>
 
-
-// broom - freetype is disabled, need to consider what to do here
-
-
-#ifndef QT_NO_FREETYPE
+#if defined(QT_USE_FREETYPE)
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -202,7 +198,7 @@ class QFontEngineFT : public QFontEngine
 
    void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) override;
 
-   const QString &fontEngineName() const {
+   const QString &fontEngineName() const override {
       static QString retval = "freetype";
       return retval;
    }
@@ -281,9 +277,9 @@ class QFontEngineFT : public QFontEngine
 
    Glyph *loadGlyph(QGlyphSet *set, uint glyph, QFixed subPixelPosition, GlyphFormat = Format_None,
       bool fetchMetricsOnly = false) const;
+
    Glyph *loadGlyphFor(glyph_t g, QFixed subPixelPosition, GlyphFormat format, const QTransform &t, bool fetchBoundingBox = false);
    QGlyphSet *loadGlyphSet(const QTransform &matrix);
-
 
    QFontEngineFT(const QFontDef &fd);
    virtual ~QFontEngineFT();
@@ -368,6 +364,6 @@ inline QFontEngineFT::Glyph *QFontEngineFT::QGlyphSet::getGlyph(glyph_t index, Q
 
 extern FT_Library qt_getFreetype();
 
-#endif // QT_NO_FREETYPE
+#endif // QT_USE_FREETYPE
 
 #endif

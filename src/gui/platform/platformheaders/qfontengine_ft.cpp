@@ -29,11 +29,7 @@
 #include <qvariant.h>
 #include <qimage_p.h>
 
-
-// broom - freetype is disabled, need to consider what to do here
-
-
-#ifndef QT_NO_FREETYPE
+#if defined(QT_USE_FREETYPE)
 
 #include <qfile.h>
 #include <qscopedvaluerollback.h>
@@ -44,7 +40,6 @@
 #include <qharfbuzz_gui_p.h>
 
 #include <ft2build.h>
-
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 #include FT_SYNTHESIS_H
@@ -127,11 +122,13 @@ QtFreetypeData::~QtFreetypeData()
    FT_Done_FreeType(library);
    library = 0;
 }
+
 Q_GLOBAL_STATIC(QThreadStorage<QtFreetypeData *>, theFreetypeData)
 
 QtFreetypeData *qt_getFreetypeData()
 {
    QtFreetypeData *&freetypeData = theFreetypeData()->localData();
+
    if (! freetypeData) {
       freetypeData = new QtFreetypeData;
    }
@@ -878,8 +875,7 @@ void QFontEngineFT::setDefaultHintStyle(HintStyle style)
    default_hint_style = style;
 }
 
-int QFontEngineFT::loadFlags(QGlyphSet *set, GlyphFormat format, int flags,
-   bool &hsubpixel, int &vfactor) const
+int QFontEngineFT::loadFlags(QGlyphSet *set, GlyphFormat format, int flags, bool &hsubpixel, int &vfactor) const
 {
    int load_flags = FT_LOAD_DEFAULT | default_load_flags;
    int load_target = default_hint_style == HintLight
@@ -888,7 +884,8 @@ int QFontEngineFT::loadFlags(QGlyphSet *set, GlyphFormat format, int flags,
 
    if (format == Format_Mono) {
       load_target = FT_LOAD_TARGET_MONO;
-   } else if (format == Format_A32) {
+
+   } else if (format == QFontEngine::Format_A32) {
       if (subpixelType == QFontEngineFT::Subpixel_RGB || subpixelType == QFontEngineFT::Subpixel_BGR) {
          if (default_hint_style == HintFull) {
             load_target = FT_LOAD_TARGET_LCD;
@@ -1194,7 +1191,7 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
       }
 
       int pitch = (format == Format_Mono ? ((info.width + 31) & ~31) >> 3 :
-            (format == Format_A8 ? (info.width + 3) & ~3 : info.width * 4));
+            (format == QFontEngine::Format_A8 ? (info.width + 3) & ~3 : info.width * 4));
 
       if (glyph_buffer_size < pitch * info.height) {
          glyph_buffer_size = pitch * info.height;
@@ -1209,7 +1206,7 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
          bitmap.pitch = format == Format_Mono ? (((info.width + 31) & ~31) >> 3) : ((bitmap.width + 3) & ~3);
          int bitmap_buffer_size = bitmap.rows * bitmap.pitch;
 
-         if (! hsubpixel && vfactor == 1 && format != Format_A32) {
+         if (! hsubpixel && vfactor == 1 && format != QFontEngine::Format_A32) {
             Q_ASSERT(glyph_buffer_size <= bitmap_buffer_size);
             bitmap.buffer = glyph_buffer.data();
 
@@ -1242,13 +1239,16 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
                convoluteBitmap(bitmap.buffer, convoluted, bitmap.width, info.height, bitmap.pitch);
                buffer = convoluted;
             }
-            convertRGBToARGB(buffer + 1, (uint *)glyph_buffer.data(), info.width, info.height, bitmap.pitch, subpixelType != Subpixel_RGB,
-               useLegacyLcdFilter);
+
+            convertRGBToARGB(buffer + 1, (uint *)glyph_buffer.data(), info.width, info.height, bitmap.pitch,
+                  subpixelType != Subpixel_RGB, useLegacyLcdFilter);
             delete [] convoluted;
+
          } else if (vfactor != 1) {
-            convertRGBToARGB_V(bitmap.buffer, (uint *)glyph_buffer.data(), info.width, info.height, bitmap.pitch, subpixelType != Subpixel_VRGB,
-               true);
-         } else if (format == Format_A32 && bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
+            convertRGBToARGB_V(bitmap.buffer, (uint *)glyph_buffer.data(), info.width, info.height, bitmap.pitch,
+                  subpixelType != Subpixel_VRGB, true);
+
+         } else if (format == QFontEngine::Format_A32 && bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
             convertGRAYToARGB(bitmap.buffer, (uint *)glyph_buffer.data(), info.width, info.height, bitmap.pitch);
          }
 
@@ -1963,11 +1963,13 @@ QImage *QFontEngineFT::lockedAlphaMapForGlyph(glyph_t glyphIndex, QFixed subPixe
    Q_ASSERT(currentlyLockedAlphaMap.isNull());
 
    if (isBitmapFont()) {
-      neededFormat = Format_Mono;
+      neededFormat = QFontEngine::Format_Mono;
+
    } else if (neededFormat == Format_None && defaultFormat != Format_None) {
       neededFormat = defaultFormat;
-   } else if (neededFormat == Format_None) {
-      neededFormat = Format_A8;
+
+   } else if (neededFormat == QFontEngine::Format_None) {
+      neededFormat = QFontEngine::Format_A8;
    }
 
    Glyph *glyph = loadGlyphFor(glyphIndex, subPixelPosition, neededFormat, t);
@@ -2045,7 +2047,7 @@ QImage QFontEngineFT::alphaMapForGlyph(glyph_t g, QFixed subPixelPosition)
 }
 QImage QFontEngineFT::alphaMapForGlyph(glyph_t g, QFixed subPixelPosition, const QTransform &t)
 {
-   const GlyphFormat neededFormat = antialias ? Format_A8 : Format_Mono;
+   const GlyphFormat neededFormat = antialias ? QFontEngine::Format_A8 : QFontEngine::Format_Mono;
 
    Glyph *glyph = loadGlyphFor(g, subPixelPosition, neededFormat, t);
 
@@ -2069,7 +2071,7 @@ QImage QFontEngineFT::alphaRGBMapForGlyph(glyph_t g, QFixed subPixelPosition, co
       return QFontEngine::alphaRGBMapForGlyph(g, subPixelPosition, t);
    }
 
-   const GlyphFormat neededFormat = Format_A32;
+   const GlyphFormat neededFormat = QFontEngine::Format_A32;
 
    Glyph *glyph = loadGlyphFor(g, subPixelPosition, neededFormat, t);
 
@@ -2200,7 +2202,7 @@ int QFontEngineFT::getPointInOutline(glyph_t glyph, int flags, quint32 point, QF
    lockFace();
    bool hsubpixel = true;
    int vfactor = 1;
-   int load_flags = loadFlags(0, Format_A8, flags, hsubpixel, vfactor);
+   int load_flags = loadFlags(0, QFontEngine::Format_A8, flags, hsubpixel, vfactor);
    int result = freetype->getPointInOutline(glyph, load_flags, point, xpos, ypos, nPoints);
    unlockFace();
    return result;
