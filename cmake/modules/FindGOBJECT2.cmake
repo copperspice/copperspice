@@ -1,16 +1,14 @@
+#  Copyright (C) 2012-2019 Barbara Geller
+#  Copyright (C) 2012-2019 Ansel Sermersheim
 #
-# Copyright (C) 2012-2018 Barbara Geller
-# Copyright (C) 2012-2018 Ansel Sermersheim
-# All rights reserved.    
-#
-# Copyright (c) 2008 Laurent Montel, <montel@kde.org>
-# Redistribution and use is allowed according to the terms of the BSD license.
+#  Copyright (c) 2015 Ivailo Monev <xakepa10@gmail.com>
+#  Redistribution and use is allowed according to the terms of the BSD license.
 
 #  Find the GOBJECT2 libraries, will define
 #
-#  GOBJECT2_FOUND - system has gobject2
+#  GOBJECT2_FOUND       - system has gobject2
 #  GOBJECT2_INCLUDE_DIR - the gobject2 include directory
-#  GOBJECT2_LIBRARIES - gobject2 library
+#  GOBJECT2_LIBRARIES   - gobject2 library
 
 
 if(GOBJECT2_INCLUDE_DIR AND GOBJECT2_LIBRARIES)
@@ -26,8 +24,8 @@ find_path(GOBJECT2_MAIN_INCLUDE_DIR
           HINTS ${PC_LibGOBJECT2_INCLUDEDIR}
           PATH_SUFFIXES glib-2.0/gobject/)
 
-find_library(GOBJECT2_LIBRARY 
-          NAMES gobject-2.0 
+find_library(GOBJECT2_LIBRARY
+          NAMES gobject-2.0
           HINTS ${PC_LibGOBJECT2_LIBDIR}
 )
 

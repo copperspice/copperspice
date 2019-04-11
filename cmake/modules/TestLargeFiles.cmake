@@ -1,10 +1,7 @@
+#  Copyright (C) 2012-2019 Barbara Geller
+#  Copyright (C) 2012-2019 Ansel Sermersheim
 #
-# Copyright (C) 2012-2018 Barbara Geller
-# Copyright (C) 2012-2018 Ansel Sermersheim
-# All rights reserved.    
-#
-# Adapted from Gromacs project (http://www.gromacs.org/) by Julien Malik
-
+#  Adapted from Gromacs project (http://www.gromacs.org/) by Julien Malik
 
 #  Define macro to check large file support
 #
@@ -23,16 +20,16 @@
 
 macro(OPJ_TEST_LARGE_FILES VARIABLE)
 
-set(TestFileOffsetBits 
+set(TestFileOffsetBits
 
 "#include <sys/types.h>
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
   /* Cause a compile-time error if off_t is smaller than 64 bits */
 
   #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
-  int off_t_is_large[ (LARGE_OFF_T % 2147483629 == 721 && LARGE_OFF_T % 2147483647 == 1) ? 1 : -1 ];  
+  int off_t_is_large[ (LARGE_OFF_T % 2147483629 == 721 && LARGE_OFF_T % 2147483647 == 1) ? 1 : -1 ];
   return 0;
 }"
 )

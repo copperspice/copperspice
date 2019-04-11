@@ -1,10 +1,8 @@
+#  Copyright (C) 2012-2019 Barbara Geller
+#  Copyright (C) 2012-2019 Ansel Sermersheim
 #
-# Copyright (C) 2012-2018 Barbara Geller
-# Copyright (C) 2012-2018 Ansel Sermersheim
-# All rights reserved.    
-#
-# Copyright (c) 2006, Tim Beaulen <tbscope@gmail.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
+#  Copyright (c) 2006 Tim Beaulen <tbscope@gmail.com>
+#  Redistribution and use is allowed according to the terms of the BSD license.
 
 #  Find GStreamer, will define
 #
@@ -13,7 +11,7 @@
 #  GSTREAMER_LIBRARIES   - the libraries needed to use GStreamer
 #  GSTREAMER_DEFINITIONS - Compiler switches required for using GStreamer
 
-# TODO: may want to look for other versions of GStreamer
+#  TODO: may want to look for other versions of GStreamer
 #     GSTREAMER_X_Y_FOUND (Example: GSTREAMER_0_8_FOUND and GSTREAMER_0_10_FOUND etc)
 
 
@@ -31,7 +29,7 @@ IF (NOT WIN32)
    PKG_CHECK_MODULES(PC_GSTREAMER QUIET gstreamer-0.10)
    #MESSAGE(STATUS "DEBUG: GStreamer include directory = ${GSTREAMER_INCLUDE_DIRS}")
    #MESSAGE(STATUS "DEBUG: GStreamer link directory = ${GSTREAMER_LIBRARY_DIRS}")
-   #MESSAGE(STATUS "DEBUG: GStreamer CFlags = ${GSTREAMER_CFLAGS_OTHER}") 
+   #MESSAGE(STATUS "DEBUG: GStreamer CFlags = ${GSTREAMER_CFLAGS_OTHER}")
    SET(GSTREAMER_DEFINITIONS ${PC_GSTREAMER_CFLAGS_OTHER})
 ENDIF (NOT WIN32)
 
