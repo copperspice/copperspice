@@ -185,135 +185,159 @@ set_package_properties(Cups PROPERTIES
 
 find_package(ALSA)
 set_package_properties(ALSA PROPERTIES
-    PURPOSE "Required for ALSA audio support"
-    DESCRIPTION "Advanced Linux Sound Architecture"
-    URL "http://www.alsa-project.org"
-    TYPE RECOMMENDED
+   PURPOSE "Required for ALSA audio support"
+   DESCRIPTION "Advanced Linux Sound Architecture"
+   URL "http://www.alsa-project.org"
+   TYPE RECOMMENDED
 )
 
 find_package(PostgreSQL)
 set_package_properties(PostgreSQL PROPERTIES
-    PURPOSE "Required for PostgreSQL database support"
-    DESCRIPTION "Popular open source database"
-    URL "http://www.postgresql.org"
-    TYPE RECOMMENDED
+   PURPOSE "Required for PostgreSQL database support"
+   DESCRIPTION "Popular open source database"
+   URL "http://www.postgresql.org"
+   TYPE RECOMMENDED
 )
 
 find_package(MySQL)
 set_package_properties(MySQL PROPERTIES
-    PURPOSE "Required for MySQL database support"
-    DESCRIPTION "Popular open source database"
-    URL "http://www.mysql.com"
-    TYPE RECOMMENDED
+   PURPOSE "Required for MySQL database support"
+   DESCRIPTION "Popular open source database"
+   URL "http://www.mysql.com"
+   TYPE RECOMMENDED
 )
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    find_package(GTK2)
-    set_package_properties(GTK2 PROPERTIES
-        PURPOSE "Required for GTK style and application integration support"
-        DESCRIPTION "Multi-platform toolkit for creating graphical user interfaces"
-        URL "http://www.gtk.org"
-        TYPE RECOMMENDED
-    )
+   find_package(GTK2)
+   set_package_properties(GTK2 PROPERTIES
+      PURPOSE "Required for GTK style and application integration support"
+      DESCRIPTION "Multi-platform toolkit for creating graphical user interfaces"
+      URL "http://www.gtk.org"
+      TYPE RECOMMENDED
+   )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    find_package(Security)
    set_package_properties(Security PROPERTIES
-       PURPOSE "Required for HTTPS support"
-       DESCRIPTION "Support for secure network communications using Secure Trasnport for SSL and TLS"
-       URL "https://developer.apple.com/documentation/security/secure_transport"
-       TYPE RECOMMENDED
+      PURPOSE "Required for HTTPS support"
+      DESCRIPTION "Support for secure network communications using Secure Trasnport for SSL and TLS"
+      URL "https://developer.apple.com/documentation/security/secure_transport"
+      TYPE RECOMMENDED
    )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
-    # required by core component
-    find_package(Threads)
-    set_package_properties(Threads PROPERTIES
-        PURPOSE "Required for threading support"
-        DESCRIPTION "Platform dependant threading library"
-        URL ""
-        TYPE REQUIRED
+   find_package(Threads)
+   set_package_properties(Threads PROPERTIES
+      PURPOSE "Required for threading support"
+      DESCRIPTION "Platform dependant threading library"
+      URL ""
+      TYPE REQUIRED
     )
 
-    find_package(GLib2)
-    set_package_properties(GLib2 PROPERTIES
+   find_package(GLib2)
+   set_package_properties(GLib2 PROPERTIES
         PURPOSE "Required for glib mainloop support"
-        DESCRIPTION "Core application building blocks for libraries and applications written in C"
+        DESCRIPTION "GNOME core library"
         URL "https://developer.gnome.org/glib"
         TYPE REQUIRED
-    )
+   )
 
     find_package(GOBJECT2)
     set_package_properties(GOBJECT2 PROPERTIES
-        PURPOSE "Required for glib mainloop support"
-        DESCRIPTION "The object system used for Pango and GTK+"
-        URL "https://developer.gnome.org/gobject"
-        TYPE REQUIRED
+       PURPOSE "Required for glib mainloop support"
+       DESCRIPTION "The object system used for Pango and GTK+"
+       URL "https://developer.gnome.org/gobject"
+       TYPE REQUIRED
     )
 
     if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        find_package(Iconv)
-        set_package_properties(Iconv PROPERTIES
-            PURPOSE "Iconv support"
-            DESCRIPTION "iconv() implementation, for use on systems which do not have one or lack Unicode support"
-            URL "http://www.gnu.org/software/libiconv/"
-            TYPE REQUIRED
+       find_package(Iconv)
+       set_package_properties(Iconv PROPERTIES
+          PURPOSE "Iconv support"
+          DESCRIPTION "iconv() implementation, for use on systems which do not have one or lack Unicode support"
+          URL "http://www.gnu.org/software/libiconv/"
+          TYPE REQUIRED
         )
     endif()
 
     if(WITH_GUI)
-        find_package(NAS)
-        set_package_properties(NAS PROPERTIES
-            PURPOSE "Required for basic audio support"
-            DESCRIPTION "Network transparent, client/server audio transport system"
-            URL "http://www.radscan.com/nas.html"
-            TYPE REQUIRED
-        )
+       find_package(NAS)
+       set_package_properties(NAS PROPERTIES
+          PURPOSE "Required for basic audio support"
+          DESCRIPTION "Network transparent, client/server audio transport system"
+          URL "http://www.radscan.com/nas.html"
+          TYPE REQUIRED
+       )
 
-        find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11)
-        set_package_properties(X11 PROPERTIES
-            PURPOSE "Required for X11/X.Org integration support"
-            DESCRIPTION "Open source implementation of the X Window System"
-            URL "http://www.x.org"
-            TYPE REQUIRED
-        )
+       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11)
+       set_package_properties(X11 PROPERTIES
+          PURPOSE "Required for X11/X.Org integration support"
+          DESCRIPTION "Open source implementation of the X Window System"
+          URL "https://www.x.org"
+          TYPE REQUIRED
+       )
 
-        find_package(Fontconfig)
-        set_package_properties(Fontconfig PROPERTIES
-            PURPOSE "Required for fonts configuration support"
-            DESCRIPTION "Library for configuring and customizing font access"
-            URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
-            TYPE REQUIRED
-        )
+       find_package(XCB COMPONENTS xcb xcb-image xcb-icccm xcb-sync xcb-xfixes xcb-shm xcb-randr
+               xcb-shape xcb-keysyms xcb-xinerama xcb-xkb xcb-render xcb-render-util)
+       set_package_properties(XCB PROPERTIES
+          PURPOSE "Required for XCB/X.Org integration support"
+          DESCRIPTION "Open source implementation of the XCB Interface for the X11 Window System"
+          URL "https://xcb.freedesktop.org"
+          TYPE REQUIRED
+       )
 
-        find_package(Freetype)
-        set_package_properties(Freetype PROPERTIES
-            PURPOSE "Required for fonts configuration support"
-            DESCRIPTION "Freely available software library to render fonts"
-            URL "http://www.freetype.org"
-            TYPE REQUIRED
-        )
+       find_package(X11_XCB)
+       set_package_properties(X11_XCB PROPERTIES
+          PURPOSE "Required for X11 XCB support"
+          DESCRIPTION "Integration between X11 and XCB"
+          URL "https://xcb.freedesktop.org"
+          TYPE REQUIRED
+       )
+
+       find_package(XKBCommon)
+       set_package_properties(XKBCommon PROPERTIES
+          PURPOSE "Required for XKB integration support"
+          DESCRIPTION "Keyboard library"
+          URL "https://xkbcommon.org"
+          TYPE REQUIRED
+       )
+
+       find_package(XKBCommon_X11)
+       set_package_properties(XKBCommon_X11 PROPERTIES
+          PURPOSE "Required for XKB X11 integration support"
+          DESCRIPTION "Keyboard library"
+          URL "https://xkbcommon.org"
+          TYPE REQUIRED
+       )
+
+       find_package(Fontconfig)
+       set_package_properties(Fontconfig PROPERTIES
+          PURPOSE "Required for fonts configuration support"
+          DESCRIPTION "Library for configuring and customizing font access"
+          URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
+          TYPE REQUIRED
+       )
     endif()
 
     if(WITH_OPENGL)
         find_package(OpenGL)
         set_package_properties(OpenGL PROPERTIES
-            PURPOSE "Required for OpenGL support"
-            DESCRIPTION "The Mesa 3D Graphics Library"
-            URL "http://www.mesa3d.org/"
-            TYPE REQUIRED
+           PURPOSE "Required for OpenGL support"
+           DESCRIPTION "The Mesa 3D Graphics Library"
+           URL "http://www.mesa3d.org/"
+           TYPE REQUIRED
         )
     endif()
 
     if(WITH_PHONON)
         find_package(GStreamer)
         set_package_properties(GStreamer PROPERTIES
-            PURPOSE "Required for phonon support"
-            DESCRIPTION "Open source phonon framework"
-            URL "http://gstreamer.freedesktop.org"
-            TYPE REQUIRED
+           PURPOSE "Required for phonon support"
+           DESCRIPTION "Open source phonon framework"
+           URL "http://gstreamer.freedesktop.org"
+           TYPE REQUIRED
         )
     endif()
 
@@ -338,10 +362,6 @@ endif()
 
 if(NOT GLIB2_FOUND)
     add_definitions(-DQT_NO_GLIB)
-endif()
-
-if(NOT FREETYPE_FOUND)
-    add_definitions(-DQT_NO_FREETYPE)
 endif()
 
 if(NOT ZLIB_FOUND)
@@ -374,7 +394,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# The Ninja generator does not yet know how to build archives in pieces, and so response
+# The Ninja generator does not yet know how to build archives in pieces, so response
 # files must be used to deal with very long linker command lines.
 # See https://bugs.webkit.org/show_bug.cgi?id=129771
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
