@@ -96,12 +96,10 @@ if test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD; then
 AC_CHECK_HEADERS([xcb/xcb.h], [], missing="$missing xcb/xcb.h")
 
 AC_CHECK_HEADERS([xcb/xkb.h], [], missing="$missing xcb/xkb.h",
-[#define explicit dont_use_cxx_explicit
-])
+[#define explicit dont_use_cxx_explicit])
 
 # verify dependencies
 PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
-PKG_CHECK_MODULES(FREETYPE,   freetype2,  FREETYPE="yes",   missing="$missing FreeType")
 PKG_CHECK_MODULES(GLIB,       glib-2.0,   GLIB="yes",       missing="$missing GLIB")
 
 if test "x$enable_phonon" != "xno"; then
@@ -118,36 +116,36 @@ PKG_CHECK_MODULES(PULSEAUDIO_DEVICE_MANAGER, libpulse >= 0.9.21,     PULSEAUDIO_
 PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB,  libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes", true)
 
 # required xcb libraries
-PKG_CHECK_MODULES(LIB_XCB,      xcb >= 1.11.0,            LIB_XCB="yes",     missing="$missing xcb library")
-PKG_CHECK_MODULES(LIB_ICCCM,    xcb-icccm >= 0.3.9,       LIB_ICCCM="yes",   missing="$missing xcb-icccm library")
-PKG_CHECK_MODULES(LIB_IMAGE,    xcb-image >= 0.3.9,       LIB_IMAGE="yes",   missing="$missing xcb-image library")
-PKG_CHECK_MODULES(LIB_KEYSYMS,  xcb-keysyms >= .0.3.9,    LIB_KEYSYMS="yes", missing="$missing xcb-keysyms library")
-PKG_CHECK_MODULES(LIB_RANDR,    xcb-randr >=  1.11.0,     LIB_RANDR="yes",   missing="$missing xcb-randr library")
-PKG_CHECK_MODULES(LIB_RENDR,    xcb-render >= 1.11.0,     LIB_RENDR="yes",   missing="$missing xcb-render library")
-PKG_CHECK_MODULES(LIB_UTIL,     xcb-renderutil >= 0.3.8,  LIB_UTIL="yes",    missing="$missing xcb-renderutil library")
-PKG_CHECK_MODULES(LIB_SHAPE,    xcb-shape >= 1.11.0,      LIB_SHAPE="yes",   missing="$missing xcb-shape library")
-PKG_CHECK_MODULES(LIB_SHM,      xcb-shm >= 1.11.0,        LIB_SHM="yes",     missing="$missing xcb-shm library")
-PKG_CHECK_MODULES(LIB_SYNC,     xcb-sync >= 1.11.0,       LIB_SYNC="yes",    missing="$missing xcb-sync library")
-PKG_CHECK_MODULES(LIB_XFIXES,   xcb-xfixes >= 1.11.0,     LIB_XFIXES="yes",  missing="$missing xcb-xfixes library")
+PKG_CHECK_MODULES(LIB_XCB,         xcb >= 1.11.0,           LIB_XCB="yes",         missing="$missing xcb library")
+PKG_CHECK_MODULES(LIB_ICCCM,       xcb-icccm >= 0.3.9,      LIB_ICCCM="yes",       missing="$missing xcb-icccm library")
+PKG_CHECK_MODULES(LIB_IMAGE,       xcb-image >= 0.3.9,      LIB_IMAGE="yes",       missing="$missing xcb-image library")
+PKG_CHECK_MODULES(LIB_KEYSYMS,     xcb-keysyms >= .0.3.9,   LIB_KEYSYMS="yes",     missing="$missing xcb-keysyms library")
+PKG_CHECK_MODULES(LIB_RANDR,       xcb-randr >=  1.11.0,    LIB_RANDR="yes",       missing="$missing xcb-randr library")
+PKG_CHECK_MODULES(LIB_RENDR,       xcb-render >= 1.11.0,    LIB_RENDR="yes",       missing="$missing xcb-render library")
+PKG_CHECK_MODULES(LIB_UTIL,        xcb-renderutil >= 0.3.8, LIB_UTIL="yes",        missing="$missing xcb-renderutil library")
+PKG_CHECK_MODULES(LIB_SHAPE,       xcb-shape >= 1.11.0,     LIB_SHAPE="yes",       missing="$missing xcb-shape library")
+PKG_CHECK_MODULES(LIB_SHM,         xcb-shm >= 1.11.0,       LIB_SHM="yes",         missing="$missing xcb-shm library")
+PKG_CHECK_MODULES(LIB_SYNC,        xcb-sync >= 1.11.0,      LIB_SYNC="yes",        missing="$missing xcb-sync library")
+PKG_CHECK_MODULES(LIB_XFIXES,      xcb-xfixes >= 1.11.0,    LIB_XFIXES="yes",      missing="$missing xcb-xfixes library")
 
 PKG_CHECK_MODULES(LIB_XKB,         xcb-xkb >= 1.11.0,       LIB_XKB="yes",         missing="$missing xcb-xkb library")
 PKG_CHECK_MODULES(LIB_XKB_COMMON,  xkbcommon >= 0.4.1,      LIB_XKB_COMMON="yes",  missing="$missing xkbcommon library")
 PKG_CHECK_MODULES(LIB_COMMON_X11,  xkbcommon-x11 >= 0.4.1,  LIB_COMMON_X11="yes",  missing="$missing xkbcommon-x11 library")
 
 # verify dependencies
-AC_SEARCH_LIBS([IceOpenConnection], [ICE], [], missing="$missing ICE")
-AC_SEARCH_LIBS([AuOpenServer], [audio], [], missing="$missing Audio")
-AC_SEARCH_LIBS([glClear], [GL], [], missing="$missing OpenGL")
-AC_SEARCH_LIBS([pthread_create], [pthread], [], missing="$missing pthread")
-AC_SEARCH_LIBS([SmcOpenConnection], [SM], [], missing="$missing SM")
-AC_SEARCH_LIBS([XcursorImageCreate], [Xcursor], [], missing="$missing Xcursor")
-AC_SEARCH_LIBS([XShmCreateImage], [Xext], [], missing="$missing Xext")
-AC_SEARCH_LIBS([XFixesQueryVersion], [Xfixes], [], missing="$missing Xfixes")
-AC_SEARCH_LIBS([XGetExtensionVersion], [Xi], [], missing="$missing Xi")
-AC_SEARCH_LIBS([XineramaQueryExtension], [Xinerama], [], missing="$missing Xinerama")
-AC_SEARCH_LIBS([XRRSetScreenConfigAndRate], [Xrandr], [], missing="$missing Xrandr")
-AC_SEARCH_LIBS([XRenderCreateCursor], [Xrender], [], missing="$missing Xrender")
-AC_SEARCH_LIBS([XCreateWindow], [X11], [], missing="$missing X11")
+AC_SEARCH_LIBS([IceOpenConnection],         [ICE],      [], missing="$missing ICE")
+AC_SEARCH_LIBS([AuOpenServer],              [audio],    [], missing="$missing Audio")
+AC_SEARCH_LIBS([glClear],                   [GL],       [], missing="$missing OpenGL")
+AC_SEARCH_LIBS([pthread_create],            [pthread],  [], missing="$missing pthread")
+AC_SEARCH_LIBS([SmcOpenConnection],         [SM],       [], missing="$missing SM")
+AC_SEARCH_LIBS([XcursorImageCreate],        [Xcursor],  [], missing="$missing Xcursor")
+AC_SEARCH_LIBS([XShmCreateImage],           [Xext],     [], missing="$missing Xext")
+AC_SEARCH_LIBS([XFixesQueryVersion],        [Xfixes],   [], missing="$missing Xfixes")
+AC_SEARCH_LIBS([XGetExtensionVersion],      [Xi],       [], missing="$missing Xi")
+AC_SEARCH_LIBS([XineramaQueryExtension],    [Xinerama], [], missing="$missing Xinerama")
+AC_SEARCH_LIBS([XRRSetScreenConfigAndRate], [Xrandr],   [], missing="$missing Xrandr")
+AC_SEARCH_LIBS([XRenderCreateCursor],       [Xrender],  [], missing="$missing Xrender")
+AC_SEARCH_LIBS([XCreateWindow],             [X11],      [], missing="$missing X11")
 fi
 
 
@@ -180,10 +178,8 @@ AM_CONDITIONAL(CUPS, test "x$ac_cv_header_cups_cups_h" = x""yes)
 AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
-#AM_CONDITIONAL(FREETYPE, test "x$FREETYPE" = x""yes)
 
 AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
-AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 AM_CONDITIONAL(ALSA, test "$ALSA" = "yes")
 AM_CONDITIONAL(PULSEAUDIO, test "$PULSEAUDIO" = "yes")
 AM_CONDITIONAL(PULSEAUDIO_DEVICE_MANAGER, test "$PULSEAUDIO_DEVICE_MANAGER" = "yes")

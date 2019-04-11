@@ -18,16 +18,19 @@ EXTRA_LTLIBRARIES =
 EXTRA_DIST= \
 	README.md \
 	CMakeLists.txt \
-	cmake/modules/FindGLib2.cmake \
-	cmake/modules/TestLargeFiles.cmake \
-	cmake/modules/FindIconv.cmake \
-	cmake/modules/FindNAS.cmake \
-	cmake/modules/FindMySQL.cmake \
-	cmake/modules/FindGStreamer.cmake \
 	cmake/modules/CopperSpiceBuildMacros.cmake \
 	cmake/modules/FindFontconfig.cmake \
+	cmake/modules/FindGLib2.cmake \
 	cmake/modules/FindGOBJECT2.cmake \
-	cmake/modules/FindFreetype.cmake \
+	cmake/modules/FindGStreamer.cmake \
+	cmake/modules/FindIconv.cmake \
+	cmake/modules/FindMySQL.cmake \
+	cmake/modules/FindNAS.cmake \
+	cmake/modules/FindX11_XCB.cmake \
+	cmake/modules/FindXCB.cmake \
+	cmake/modules/FindXKBCommon.cmake \
+	cmake/modules/FindXKBCommon_X11.cmake \
+	cmake/modules/TestLargeFiles.cmake \
 	cmake/CopperSpiceMacros.cmake \
 	cmake/archlinux-mingw.cmake \
 	cmake/CopperSpiceConfig.cmake \
@@ -78,13 +81,6 @@ else
 AM_CFLAGS += -DQT_NO_GLIB
 endif
 
-if FREETYPE
-AM_CFLAGS += $(FREETYPE_CFLAGS)
-AM_LDFLAGS += $(FREETYPE_LIBS)
-else
-AM_CFLAGS += -DQT_NO_FREETYPE
-endif
-
 if ZLIB
 AM_CFLAGS += $(ZLIB_CFLAGS)
 AM_LDFLAGS += $(ZLIB_LIBS)
@@ -127,8 +123,7 @@ dist-hook:
 	echo $(VERSION) > $(distdir)/autotools/.tarball-version	
 	find $(distdir) -name qrc_\*.cpp -exec rm -f '{}' ';'
 
-# workaround automake issue with large distributions
-# requires GNU make
+# workaround automake issue with large distributions, requires GNU make
 write_entries_to_file_split=50
 DISTFILES.list:
 	$(shell rm -f DISTFILES.list || :) $(shell touch DISTFILES.list) \
@@ -237,9 +232,15 @@ lib/libCsWebKit@BUILD_ABI@.la: webkit-headers
 clean-local: clean-cs
 
 clean-cs:
-	rm -rf include/Qt* include/phonon privateinclude .*.mk	
+	rm -rf include/Qt*
+	rm -rf include/phonon
+	rm -rf privateinclude
+	rm -rf .*.mk
+	rm -rf src/webkit/.*.mk
+	rm -rf DISTFILES.list
+
 	find . -name 'qrc_*.cpp' -exec rm -f \{\} \;
-	find . -name 'ui_*.h' -exec rm -f \{\} \;	
+	find . -name 'ui_*.h' -exec rm -f \{\} \;
 
 install-data-hook: webkit-headers
 	mkdir -p $(DESTDIR)$(includedir)
@@ -247,12 +248,11 @@ install-data-hook: webkit-headers
 	if [ -d include/phonon ] ; then cp -r include/phonon $(DESTDIR)$(includedir) ; fi
 
 uninstall-hook:
-	for i in `cd include; find Qt* -type f`; do \
-		rm  $(DESTDIR)$(includedir)/$$i; \
-	done
-	for i in `cd include; find Qt* -type f`; do \
-		rmdir $(DESTDIR)$(includedir); \
-	done
+#  remove all the files and all the directories
+	rm -rf $(DESTDIR)$(includedir)/Qt*
+	rm -rf $(DESTDIR)$(includedir)/phonon
+
+	rm  $(DESTDIR)$(includedir)/qt-acconfig.h
 
 .PHONY: clean-qrc
 
