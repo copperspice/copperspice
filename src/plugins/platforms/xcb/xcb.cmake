@@ -82,31 +82,35 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
       ${XCB_XKB_LIB}
       ${XCB_RENDER_LIB}
       ${XCB_RENDER_UTIL_LIB}
-      ${SM_LIB}
-      ${ICE_LIB}
-      ${X11_LIB}
+      ${X11_SM_LIB}
+      ${X11_ICE_LIB}
+      ${X11_X11_LIB}
+      ${X11_Xi_LIB}
       ${X11_XCB_LIB}
-      ${XI_LIB}
-      ${XKBCOMON_LIB}
+      ${XKBCOMMON_LIB}
+      ${XKBCOMMON_X11_LIB}
    )
 
    add_library(CsGuiXcb${BUILD_ABI} MODULE ${PLATFORMS_XCB_SOURCES})
 
    target_link_libraries(CsGuiXcb${BUILD_ABI}
-
-${EXTRA_PLATFORMS_XCB_LIBS})
+      ${EXTRA_PLATFORMS_XCB_LIBS})
 
    target_include_directories(
       CsGuiXcb${BUILD_ABI} PRIVATE
       ${GLIB2_INCLUDES}
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/harbuzz/src
    )
 
    target_compile_definitions(CsGuiXcb${BUILD_ABI} PRIVATE
-      -DIN_TRUE
       -DQT_PLUGIN
-      -DQT_NO_DBUS
-      -DQT_NO_ACCESSIBILITY_ATSPI_BRIDGE
+      -DQT_USE_FONTCONFIG
+      -DQT_USE_FREETYPE
       -DHAVE_POSIX_MEMALIGN
+      -DQT_NO_ACCESSIBILITY_ATSPI_BRIDGE
+      -DQT_NO_DBUS
       -DXCB_USE_RENDER
       -DXCB_USE_SM
       -DXCB_USE_XLIB

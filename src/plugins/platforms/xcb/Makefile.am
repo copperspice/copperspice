@@ -45,11 +45,11 @@ noinst_HEADERS+=$(patsubst %,src/plugins/platforms/xcb/%,$(PLATFORMS_XCB_INCLUDE
 	$(patsubst %,src/plugins/platforms/xcb/%,$(PLATFORMS_XCB_EVENTS_PRIVATE_INCLUDES)) \
 	$(patsubst %,src/plugins/platforms/xcb/%,$(PLATFORMS_XCB_FONTS_PRIVATE_INCLUDES)) \
 	$(patsubst %,src/plugins/platforms/xcb/%,$(PLATFORMS_XCB_THEMES_PRIVATE_INCLUDES)) \
-	$(patsubst %,src/plugins/platforms/xcb/%,$(PLATFORMS_XCB_PRIVATE_INCLUDES))
+	$(patsubst %,src/plugins/platforms/xcb/%,$(PLATFORMS_XCB_XGL_PRIVATE_INCLUDES))
 
 if BUILD_PLATFORMS_XCB_PLUGIN
 
-PLATFORMS_PRIVATE_INCLUDES += \
+PLATFORMS_PRIVATE_INCLUDES += $(notdir $(PLATFORMS_XCB_PRIVATE_INCLUDES)) \
 	$(notdir $(PLATFORMS_XCB_EVENTS_PRIVATE_INCLUDES)) \
 	$(notdir $(PLATFORMS_XCB_FONTS_PRIVATE_INCLUDES)) \
 	$(notdir $(PLATFORMS_XCB_THEMES_PRIVATE_INCLUDES)) \
@@ -59,25 +59,31 @@ lib_LTLIBRARIES += lib/CsGuiXcb@BUILD_ABI@.la
 
 $(lib_CsGuiXcb@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(PLATFORMS_HEADERS_INSTALLED)
 
-lib_CsGuiXcb@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude/QtGui \
+lib_CsGuiXcb@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGui \
    -Iinclude/QtGui/platformheaders \
    -Iprivateinclude -Iprivateinclude/QtCore/private -Iprivateinclude/QtGui/private \
    -Iprivateinclude/QtGui/private/platforms \
    -I$(top_srcdir)/src/3rdparty/freetype/include \
+   -I$(top_srcdir)/src/3rdparty/freetype/include/freetype \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src \
-   -DBUILD_DATE=\"`date +%Y-%m-%d`\" -DIN_TRUE \
+   $(AM_CXXFLAGS) \
+   -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
+   -DQT_PLUGIN \
+   -DQT_USE_FONTCONFIG \
+   -DQT_USE_FREETYPE \
    -DHAVE_POSIX_MEMALIGN \
-   -DQT_NO_DBUS \
    -DQT_NO_ACCESSIBILITY_ATSPI_BRIDGE \
+   -DQT_NO_DBUS \
    -DXCB_USE_RENDER \
    -DXCB_USE_SM \
    -DXCB_USE_XLIB \
-   -DXCB_USE_XINPUT2 \
-   -DQT_PLUGIN
+   -DXCB_USE_XINPUT2
 
 lib_CsGuiXcb@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module \
-   -lxcb -lxcb-image -lxcb-icccm -lxcb-sync -lxcb-xfixes -lxcb-shm -lxcb-randr -lxcb-shape -lxcb-keysyms -lxcb-xinerama \
-   -lxcb-xkb -lxcb-render -lxcb-render-util -lSM -lICE -lX11 -lX11-xcb -lXi -lxkbcommon
+   -lxcb -lxcb-image -lxcb-icccm -lxcb-sync -lxcb-xfixes -lxcb-shm -lxcb-randr -lxcb-shape \
+   -lxcb-keysyms -lxcb-xinerama -lxcb-xkb -lxcb-render -lxcb-render-util \
+   -lSM -lICE -lX11 -lXi \
+   -lX11-xcb -lxkbcommon -lxkbcommon-x11
 
 lib_CsGuiXcb@BUILD_ABI@_la_LIBADD=lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la
 
