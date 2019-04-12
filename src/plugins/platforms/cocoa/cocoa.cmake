@@ -20,6 +20,9 @@ if(BUILD_PLATFORMS_COCOA_PLUGIN)
    target_link_libraries(CsGuiCocoa${BUILD_ABI} $EXTRA_PLATFORM_COCOA_LIBS})
 
    target_compile_definitions(CsGuiCocoa${BUILD_ABI} PRIVATE -DIN_TRUE -DQT_PLUGIN)
+   target_compile_definitions(CsGuiCocoa${BUILD_ABI} PRIVATE
+      -DQT_PLUGIN
+      -DQT_USE_FREETYPE )
 
    install(TARGETS CsGuiCocoa${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

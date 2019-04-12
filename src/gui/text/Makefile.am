@@ -3,7 +3,8 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += \
    -DHAVE_ATEXIT \
    -DHB_EXTERN=  \
    -DHB_NO_UNICODE_FUNCS \
-   -DHB_NDEBUG
+   -DHB_NDEBUG \
+   -DFT2_BUILD_LIBRARY
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += \
@@ -317,4 +318,57 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-shaper.cc \
    src/3rdparty/harfbuzz/src/hb-static.cc \
    src/3rdparty/harfbuzz/src/hb-unicode.cc
+	src/3rdparty/freetype/src/autofit/autofit.c \
+	src/3rdparty/freetype/src/base/ftapi.c \
+	src/3rdparty/freetype/src/base/ftbase.c \
+	src/3rdparty/freetype/src/base/ftbbox.c \
+	src/3rdparty/freetype/src/base/ftbdf.c \
+	src/3rdparty/freetype/src/base/ftbitmap.c \
+	src/3rdparty/freetype/src/base/ftcid.c \
+	src/3rdparty/freetype/src/base/ftdebug.c \
+	src/3rdparty/freetype/src/base/ftfstype.c \
+	src/3rdparty/freetype/src/base/ftgasp.c \
+	src/3rdparty/freetype/src/base/ftglyph.c \
+	src/3rdparty/freetype/src/base/ftgxval.c \
+	src/3rdparty/freetype/src/base/ftinit.c \
+	src/3rdparty/freetype/src/base/ftlcdfil.c \
+	src/3rdparty/freetype/src/base/ftmm.c \
+	src/3rdparty/freetype/src/base/ftotval.c \
+	src/3rdparty/freetype/src/base/ftpatent.c \
+	src/3rdparty/freetype/src/base/ftpfr.c \
+	src/3rdparty/freetype/src/base/ftstroke.c \
+	src/3rdparty/freetype/src/base/ftsynth.c \
+	src/3rdparty/freetype/src/base/ftsystem.c \
+	src/3rdparty/freetype/src/base/fttype1.c \
+	src/3rdparty/freetype/src/base/ftwinfnt.c \
+	src/3rdparty/freetype/src/base/ftxf86.c \
+	src/3rdparty/freetype/src/base/md5.c \
+	src/3rdparty/freetype/src/bdf/bdf.c \
+	src/3rdparty/freetype/src/bzip2/ftbzip2.c \
+	src/3rdparty/freetype/src/cache/ftccache.c \
+	src/3rdparty/freetype/src/cache/ftcmru.c \
+	src/3rdparty/freetype/src/cache/ftcmanag.c \
+	src/3rdparty/freetype/src/cff/cff.c \
+	src/3rdparty/freetype/src/cid/type1cid.c \
+	src/3rdparty/freetype/src/gxvalid/gxvalid.c \
+	src/3rdparty/freetype/src/gzip/ftgzip.c \
+	src/3rdparty/freetype/src/lzw/ftlzw.c \
+	src/3rdparty/freetype/src/otvalid/otvalid.c \
+	src/3rdparty/freetype/src/pcf/pcf.c \
+	src/3rdparty/freetype/src/pfr/pfrcmap.c \
+	src/3rdparty/freetype/src/pfr/pfrdrivr.c \
+	src/3rdparty/freetype/src/pfr/pfrgload.c \
+	src/3rdparty/freetype/src/pfr/pfrload.c \
+	src/3rdparty/freetype/src/pfr/pfrobjs.c \
+	src/3rdparty/freetype/src/pfr/pfrsbit.c \
+	src/3rdparty/freetype/src/psaux/psaux.c \
+	src/3rdparty/freetype/src/pshinter/pshinter.c \
+	src/3rdparty/freetype/src/psnames/psnames.c \
+	src/3rdparty/freetype/src/raster/raster.c \
+	src/3rdparty/freetype/src/sfnt/sfnt.c \
+	src/3rdparty/freetype/src/smooth/smooth.c \
+	src/3rdparty/freetype/src/truetype/truetype.c \
+	src/3rdparty/freetype/src/type1/type1.c \
+	src/3rdparty/freetype/src/type42/type42.c \
+	src/3rdparty/freetype/src/winfonts/winfnt.c \
 

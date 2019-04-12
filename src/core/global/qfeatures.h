@@ -68,7 +68,7 @@
 //#define QT_NO_FILESYSTEMWATCHER
 
 // Freetype Font Engine
-//#define QT_NO_FREETYPE
+//#define QT_USE_FREETYPE
 
 // Gesture
 //#define QT_NO_GESTURES

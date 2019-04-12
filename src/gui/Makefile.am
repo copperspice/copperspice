@@ -48,7 +48,7 @@ lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrand
 endif
 
 if OSTYPE_WIN
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR -DQT_NO_DIRECTWRITE
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid -lopengl32  \
     -lkernel32 -luser32 --export-all-symbols
 endif

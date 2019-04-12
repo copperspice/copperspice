@@ -46,14 +46,17 @@ lib_LTLIBRARIES += lib/CsGuiCocoa@BUILD_ABI@.la
 
 $(lib_CsGuiCocoa@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(PLATFORMS_HEADERS_INSTALLED)
 
-lib_CsGuiCOCOA@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude/QtGui \
+lib_CsGuiCocoa@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore -Iinclude/QtGui \
    -Iinclude/QtGui/platformheaders \
    -Iprivateinclude -Iprivateinclude/QtCore/private -Iprivateinclude/QtGui/private \
    -Iprivateinclude/QtGui/private/platforms \
    -I$(top_srcdir)/src/3rdparty/freetype/include \
+   -I$(top_srcdir)/src/3rdparty/freetype/include/freetype \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src \
-   -DBUILD_DATE=\"`date +%Y-%m-%d`\" -DIN_TRUE \
-   -DQT_PLUGIN
+   $(AM_CXXFLAGS) \
+   -DBUILD_DATE=\"`date +%Y-%m-%d`\"  \
+   -DQT_PLUGIN \
+   -DQT_USE_FREETYPE
 
 lib_CsGuiCocoa@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module \
    -framework Cocoa -framework Carbon -framework IOKit -lcups
