@@ -2,23 +2,29 @@ lib_LTLIBRARIES += lib/libCsGui@BUILD_ABI@.la
 lib_libCsGui@BUILD_ABI@_la_SOURCES =
 nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES =
 
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui -Iinclude/QtCore     \
-    -Iprivateinclude/QtCore -Iprivateinclude/QtCore/private -Iprivateinclude -Iprivateinclude/QtGui/private  -Iprivateinclude/QtGui  \
-    -I$(top_srcdir)/src/3rdparty/harfbuzz/src -I$(top_srcdir)/src/3rdparty/wintab \
-    -I$(top_srcdir)/src/3rdparty/zlib         \
-    -I$(top_srcdir)/src/3rdparty/libtiff/libtiff  \
-    -I$(top_srcdir)/src/3rdparty/libmng  -I$(top_srcdir)/src/3rdparty/libjpeg  \
-    -I$(top_srcdir)/src/gui/kernel \
-    -Isrc/gui/graphicsview  -Isrc/gui/itemviews  -Isrc/gui/dialogs \
-    -Isrc/gui/image  -Isrc/gui/kernel  -Isrc/gui/painting  -Isrc/gui/platform  -Isrc/gui/printing \
-    -Isrc/gui/styles -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets \
-    -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
-    -DQT_BUILD_GUI_LIB           \
-    -DQT_BUILTIN_GIF_READER      \
-    -DQOPENGL_DEPRECATEDFUNCTION \
-    -DMNG_BUILD_SO               \
-    -DMNG_NO_INCLUDE_JNG         \
-    -DPNG_NO_CONFIG_H
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGui \
+   -Iprivateinclude \
+   -Iprivateinclude/QtCore -Iprivateinclude/QtCore/private \
+   -Iprivateinclude/QtGui/private  -Iprivateinclude/QtGui  \
+   -I$(top_srcdir)/src/3rdparty/freetype/include \
+   -I$(top_srcdir)/src/3rdparty/freetype/include/freetype \
+   -I$(top_srcdir)/src/3rdparty/harfbuzz/src     \
+   -I$(top_srcdir)/src/3rdparty/zlib             \
+   -I$(top_srcdir)/src/3rdparty/libtiff/libtiff  \
+   -I$(top_srcdir)/src/3rdparty/libmng  \
+   -I$(top_srcdir)/src/3rdparty/libjpeg  \
+   -I$(top_srcdir)/src/gui/kernel \
+   -Isrc/gui/graphicsview  -Isrc/gui/itemviews  -Isrc/gui/dialogs \
+   -Isrc/gui/image  -Isrc/gui/kernel  -Isrc/gui/painting  -Isrc/gui/platform  -Isrc/gui/printing \
+   -Isrc/gui/styles -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets \
+   $(AM_CXXFLAGS) \
+   -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
+   -DQT_BUILD_GUI_LIB           \
+   -DQT_BUILTIN_GIF_READER      \
+   -DQOPENGL_DEPRECATEDFUNCTION \
+   -DMNG_BUILD_SO               \
+   -DMNG_NO_INCLUDE_JNG         \
+   -DPNG_NO_CONFIG_H
 
 lib_libCsGui@BUILD_ABI@_la_CFLAGS = $(lib_libCsGui@BUILD_ABI@_la_CXXFLAGS) -DQT_BUILD_GUI_LIB
 lib_libCsGui@BUILD_ABI@_la_OBJCXXFLAGS =
@@ -120,7 +126,7 @@ $(lib_libCsGui@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_
 	@- rm -rf $@
 	echo "include/QtGui:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
-   echo "	\$$(MKDIR_P) \$$@/platformheaders" >> $@ ; \
+	echo "	\$$(MKDIR_P) \$$@/platformheaders" >> $@ ; \
 	echo "privateinclude/QtGui/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(GUI_PUBLIC_INCLUDES); do \

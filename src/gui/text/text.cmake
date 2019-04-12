@@ -124,6 +124,8 @@ set(GUI_PRIVATE_INCLUDES
 
 set(GUI_SOURCES
     ${GUI_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser.cpp
+
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2.cpp
@@ -134,6 +136,9 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_gui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qsyntaxhighlighter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextcontrol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextengine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextlayout.cpp
@@ -151,12 +156,8 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttable.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextdocumentwriter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qsyntaxhighlighter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextodfwriter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzip.cpp
 )
 
 # might be missing files from 3rdparty/freetype

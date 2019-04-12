@@ -1,10 +1,11 @@
 lib_LTLIBRARIES += lib/libCsNetwork@BUILD_ABI@.la
 lib_libCsNetwork@BUILD_ABI@_la_SOURCES =
 
-lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtNetwork  \
+lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore -Iinclude/QtNetwork  \
    -Iprivateinclude/QtCore/private  -Iprivateinclude/QtNetwork/private    \
 	-Isrc/network/access -Isrc/network/bearer   \
-	-Isrc/network/socket     \
+	-Isrc/network/socket   \
+	$(AM_CXXFLAGS) \
 	-DBUILD_DATE=\"`date +%Y-%m-%d`\"  \
 	-DQT_BUILD_NETWORK_LIB
 

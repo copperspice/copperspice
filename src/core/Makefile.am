@@ -2,11 +2,12 @@ lib_LTLIBRARIES += lib/libCsCore@BUILD_ABI@.la
 lib_libCsCore@BUILD_ABI@_la_SOURCES =
 lib_libCsCore@BUILD_ABI@_la_LIB = lib/core/libkernel.la
 
-lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iprivateinclude/QtCore \
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore -Iprivateinclude/QtCore \
    -Iprivateinclude/QtCore/private \
    -I$(top_srcdir)/src/core/io -Isrc/core/animation -Isrc/core/kernel \
    -Isrc/core/io -Isrc/core/statemachine \
-   -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
+   -I$(top_srcdir)/src/3rdparty/harfbuzz/src  \
+   $(AM_CXXFLAGS) \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
    -DQT_BUILD_CORE_LIB  \
    -DBUILDING_LIB_CS_SIGNAL \
