@@ -139,6 +139,8 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedvaluerollback.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qshareddata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsharedpointer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd.cpp

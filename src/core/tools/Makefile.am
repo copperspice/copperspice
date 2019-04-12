@@ -137,6 +137,8 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/tools/qcommandlineparser.cpp \
    src/core/tools/qrect.cpp \
    src/core/tools/qrefcount.cpp \
+   src/core/tools/qscopedpointer.cpp \
+   src/core/tools/qscopedvaluerollback.cpp \
    src/core/tools/qshareddata.cpp \
    src/core/tools/qsharedpointer.cpp \
    src/core/tools/qsimd.cpp \
