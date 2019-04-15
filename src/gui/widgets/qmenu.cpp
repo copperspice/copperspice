@@ -34,7 +34,7 @@
 #include <qplatform_theme.h>
 
 #ifdef Q_OS_MAC
-#include "qmacnativewidget_mac.h"
+#include <qmacnativewidget_mac.h>
 #endif
 
 #include <qapplication.h>
