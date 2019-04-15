@@ -3426,10 +3426,10 @@
 
 #undef  ARRAY_BOUND_ERROR
 #define ARRAY_BOUND_ERROR                        \
-    {                                            \
+    do {                                         \
       CUR.error = FT_THROW( Invalid_Reference ); \
       return;                                    \
-    }
+    } while (0)
 
 
   /*************************************************************************/
