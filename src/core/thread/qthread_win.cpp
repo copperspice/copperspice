@@ -59,9 +59,6 @@ static void qt_free_tls()
 }
 Q_DESTRUCTOR_FUNCTION(qt_free_tls)
 
-/*
-    QThreadData
-*/
 void QThreadData::clearCurrentThreadData()
 {
    TlsSetValue(qt_current_thread_data_tls_index, 0);
@@ -312,9 +309,7 @@ unsigned int __stdcall QT_ENSURE_STACK_ALIGNED_FOR_SSE QThreadPrivate::start(voi
       objectName = thr->metaObject()->className();
     }
 
-    std::wstring tmp = objectName.toStdWString();
-
-    qt_set_thread_name((HANDLE)-1, tmp.data());
+    qt_set_thread_name((HANDLE)-1, objectName.constData());
 #endif
 
    emit thr->started();
