@@ -823,6 +823,7 @@ QDebug operator<<(QDebug dbg, const QBrush &b)
 
    QDebugStateSaver saver(dbg);
    dbg.nospace() << "QBrush(" << b.color() << ',' << BRUSH_STYLES[b.style()] << ')';
+
    return dbg;
 }
 
@@ -836,35 +837,31 @@ QDataStream &operator<<(QDataStream &s, const QBrush &b)
       gradient_style = true;
    }
 
-   if (s.version() < QDataStream::Qt_4_0 && gradient_style) {
-      style = Qt::NoBrush;
-   }
-
    s << style << b.color();
+
    if (b.style() == Qt::TexturePattern) {
       s << b.textureImage();
 
-   } else if (s.version() >= QDataStream::Qt_4_0 && gradient_style) {
+   } else if (gradient_style) {
       const QGradient *gradient = b.gradient();
+
       int type_as_int = int(gradient->type());
       s << type_as_int;
-      if (s.version() >= QDataStream::Qt_4_3) {
-         s << int(gradient->spread());
-         s << int(gradient->coordinateMode());
-      }
 
-
+      s << int(gradient->spread());
+      s << int(gradient->coordinateMode());
       s << int(gradient->interpolationMode());
-
 
       if (sizeof(qreal) == sizeof(double)) {
          s << gradient->stops();
+
       } else {
          // ensure that we write doubles here instead of streaming the stops
          // directly; otherwise, platforms that redefine qreal might generate
          // data that cannot be read on other platforms.
          QVector<QGradientStop> stops = gradient->stops();
          s << quint32(stops.size());
+
          for (int i = 0; i < stops.size(); ++i) {
             const QGradientStop &stop = stops.at(i);
             s << QPair<double, QColor>(double(stop.first), stop.second);
@@ -889,14 +886,15 @@ QDataStream &operator<<(QDataStream &s, const QBrush &b)
    return s;
 }
 
-
 QDataStream &operator>>(QDataStream &s, QBrush &b)
 {
    quint8 style;
    QColor color;
+
    s >> style;
    s >> color;
    b = QBrush(color);
+
    if (style == Qt::TexturePattern) {
       QImage img;
       s >> img;
@@ -915,20 +913,20 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
 
       s >> type_as_int;
       type = QGradient::Type(type_as_int);
-      if (s.version() >= QDataStream::Qt_4_3) {
-         s >> type_as_int;
-         spread = QGradient::Spread(type_as_int);
-         s >> type_as_int;
-         cmode = QGradient::CoordinateMode(type_as_int);
-      }
 
-      if (s.version() >= QDataStream::Qt_4_5) {
-         s >> type_as_int;
-         imode = QGradient::InterpolationMode(type_as_int);
-      }
+      s >> type_as_int;
+      spread = QGradient::Spread(type_as_int);
+
+      s >> type_as_int;
+      cmode = QGradient::CoordinateMode(type_as_int);
+
+      s >> type_as_int;
+      imode = QGradient::InterpolationMode(type_as_int);
+
 
       if (sizeof(qreal) == sizeof(double)) {
          s >> stops;
+
       } else {
          quint32 numStops;
          double n;
@@ -975,21 +973,22 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
          cg.setInterpolationMode(imode);
          b = QBrush(cg);
       }
+
    } else {
       b = QBrush(color, (Qt::BrushStyle)style);
    }
-   if (s.version() >= QDataStream::Qt_4_3) {
-      QTransform transform;
-      s >> transform;
-      b.setTransform(transform);
-   }
+
+   QTransform transform;
+   s >> transform;
+   b.setTransform(transform);
+
    return s;
 }
+
 QGradient::QGradient()
    : m_type(NoGradient), dummy(0)
 {
 }
-
 
 void QGradient::setColorAt(qreal pos, const QColor &color)
 {

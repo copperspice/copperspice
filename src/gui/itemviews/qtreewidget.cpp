@@ -1402,11 +1402,6 @@ QVariant QTreeWidgetItem::data(int column, int role) const
    return QVariant();
 }
 
-/*!
-  Returns true if the text in the item is less than the text in the
-  \a other item, otherwise returns false.
-*/
-
 bool QTreeWidgetItem::operator<(const QTreeWidgetItem &other) const
 {
    int column = view ? view->sortColumn() : 0;
@@ -1417,26 +1412,7 @@ bool QTreeWidgetItem::operator<(const QTreeWidgetItem &other) const
 
 void QTreeWidgetItem::read(QDataStream &in)
 {
-   // convert from streams written before we introduced display (4.2.0)
-
-   if (in.version() < QDataStream::Qt_4_2) {
-      d->display.clear();
-      in >> values;
-
-      // move the display value over to the display string list
-      for (int column = 0; column < values.count(); ++column) {
-         d->display << QVariant();
-         for (int i = 0; i < values.at(column).count(); ++i) {
-            if (values.at(column).at(i).role == Qt::DisplayRole) {
-               d->display[column] = values.at(column).at(i).value;
-               values[column].remove(i--);
-            }
-         }
-      }
-
-   } else {
-      in >> values >> d->display;
-   }
+   in >> values >> d->display;
 }
 
 void QTreeWidgetItem::write(QDataStream &out) const
@@ -1452,20 +1428,13 @@ QTreeWidgetItem::QTreeWidgetItem(const QTreeWidgetItem &other)
    d->display = other.d->display;
 }
 
-/*!
-    Assigns \a other's data and flags to this item. Note that type()
-    and treeWidget() are not copied.
-
-    This function is useful when reimplementing clone().
-
-    \sa data(), flags()
-*/
 QTreeWidgetItem &QTreeWidgetItem::operator=(const QTreeWidgetItem &other)
 {
    values = other.values;
    d->display = other.d->display;
    d->policy = other.d->policy;
    itemFlags = other.itemFlags;
+
    return *this;
 }
 

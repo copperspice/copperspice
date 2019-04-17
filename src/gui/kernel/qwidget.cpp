@@ -5367,29 +5367,31 @@ void QWidgetPrivate::setGeometry_sys(int x, int y, int w, int h, bool isMove)
    }
 
 }
+
 QByteArray QWidget::saveGeometry() const
 {
-
    QByteArray array;
-   QDataStream stream(&array, QIODevice::WriteOnly);
-   stream.setVersion(QDataStream::Qt_4_0);
+
    const quint32 magicNumber = 0x1D9D0CB;
    quint16 majorVersion = 2;
    quint16 minorVersion = 0;
+
    const int screenNumber = QApplication::desktop()->screenNumber(this);
+
+   QDataStream stream(&array, QIODevice::WriteOnly);
    stream << magicNumber
-      << majorVersion
-      << minorVersion
+          << majorVersion
+          << minorVersion
 
+          << frameGeometry()
+          << normalGeometry()
 
-      << frameGeometry()
-      << normalGeometry()
+          << qint32(screenNumber)
 
-      << qint32(screenNumber)
+          << quint8(windowState() & Qt::WindowMaximized)
+          << quint8(windowState() & Qt::WindowFullScreen)
+          << qint32(QApplication::desktop()->screenGeometry(screenNumber).width()); // 1.1 onwards
 
-      << quint8(windowState() & Qt::WindowMaximized)
-      << quint8(windowState() & Qt::WindowFullScreen)
-      << qint32(QApplication::desktop()->screenGeometry(screenNumber).width()); // 1.1 onwards
    return array;
 }
 
@@ -5399,11 +5401,10 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
       return false;
    }
 
-   QDataStream stream(geometry);
-   stream.setVersion(QDataStream::Qt_4_0);
-
    const quint32 magicNumber = 0x1D9D0CB;
    quint32 storedMagicNumber;
+
+   QDataStream stream(geometry);
    stream >> storedMagicNumber;
 
    if (storedMagicNumber != magicNumber) {
@@ -5419,6 +5420,7 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
    if (majorVersion > currentMajorVersion) {
       return false;
    }
+
    // (Allow all minor versions.)
 
    QRect restoredFrameGeometry;
@@ -5439,10 +5441,13 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
    }
 
    const QDesktopWidget *const desktop = QApplication::desktop();
+
    if (restoredScreenNumber >= desktop->numScreens()) {
       restoredScreenNumber = desktop->primaryScreen();
    }
+
    const qreal screenWidthF = qreal(desktop->screenGeometry(restoredScreenNumber).width());
+
    // Sanity check bailing out when large variations of screen sizes occur due to
    // high DPI scaling or different levels of DPI awareness.
    if (restoredScreenWidth) {
@@ -5532,8 +5537,6 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
 
    } else {
       QPoint offset;
-
-
 
       setWindowState(windowState() & ~(Qt::WindowMaximized | Qt::WindowFullScreen));
       move(restoredFrameGeometry.topLeft() + offset);

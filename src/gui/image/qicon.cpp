@@ -883,38 +883,15 @@ bool QIcon::isMask() const
    return d->is_mask;
 }
 
-
-
 QDataStream &operator<<(QDataStream &s, const QIcon &icon)
 {
-   if (s.version() >= QDataStream::Qt_4_3) {
-      if (icon.isNull()) {
-         s << QString();
-      } else {
-         s << icon.d->engine->key();
-         icon.d->engine->write(s);
-         // not really supported
-      }
-
-
-   } else if (s.version() == QDataStream::Qt_4_2) {
-      if (icon.isNull()) {
-         s << 0;
-      } else {
-         QPixmapIconEngine *engine = static_cast<QPixmapIconEngine *>(icon.d->engine);
-         int num_entries = engine->pixmaps.size();
-         s << num_entries;
-         for (int i = 0; i < num_entries; ++i) {
-            s << engine->pixmaps.at(i).pixmap;
-            s << engine->pixmaps.at(i).fileName;
-            s << engine->pixmaps.at(i).size;
-            s << (uint) engine->pixmaps.at(i).mode;
-            s << (uint) engine->pixmaps.at(i).state;
-         }
-      }
+   if (icon.isNull()) {
+      s << QString();
 
    } else {
-      s << QPixmap(icon.pixmap(22, 22));
+      s << icon.d->engine->key();
+      icon.d->engine->write(s);
+      // not really supported
    }
 
    return s;

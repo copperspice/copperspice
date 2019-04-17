@@ -587,23 +587,18 @@ QDataStream &operator>>(QDataStream &s, QPen &p)
 {
    quint16 style;
    quint8 width8 = 0;
-   double width = 0;
+   double width  = 0;
    QColor color;
    QBrush brush;
    double miterLimit = 2;
+
    QVector<qreal> dashPattern;
    double dashOffset = 0;
-   bool cosmetic = false;
+   bool cosmetic     = false;
    bool defaultWidth = false;
 
-   if (s.version() < QDataStream::Qt_4_3) {
-      quint8 style8;
-      s >> style8;
-      style = style8;
-   } else {
-      s >> style;
-      s >> cosmetic;
-   }
+   s >> style;
+   s >> cosmetic;
 
    s >> width;
    s >> brush;
@@ -624,12 +619,12 @@ QDataStream &operator>>(QDataStream &s, QPen &p)
       }
    }
 
-
    s >> dashOffset;
    s >> defaultWidth;
 
 
    p.detach();
+
    QPenData *dd = static_cast<QPenData *>(p.d);
    dd->width = width;
    dd->brush = brush;
