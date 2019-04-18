@@ -32,9 +32,7 @@
 
 #include <qnumeric_p.h>
 
-
 //#define QDEBUG_BEZIER
-
 
 QBezier QBezier::fromPoints(const QPointF &p1, const QPointF &p2,
    const QPointF &p3, const QPointF &p4)
@@ -361,6 +359,7 @@ static bool addCircle(const QBezier *b, qreal offset, QBezier *o)
 
    qreal angles[2];
    qreal sign = 1.;
+
    for (int i = 0; i < 2; ++i) {
       qreal cos_a = normals[i].x() * normals[i + 1].x() + normals[i].y() * normals[i + 1].y();
       if (cos_a > 1.) {
@@ -370,7 +369,7 @@ static bool addCircle(const QBezier *b, qreal offset, QBezier *o)
          cos_a = -1;
       }
 
-      angles[i] = qAcos(cos_a) * qreal(M_1_PI);
+      angles[i] = qAcos(cos_a) * qreal(1 / M_PI);
    }
 
    if (angles[0] + angles[1] > 1.) {
