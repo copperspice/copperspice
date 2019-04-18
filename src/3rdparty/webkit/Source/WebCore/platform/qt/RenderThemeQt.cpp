@@ -71,7 +71,6 @@
 #include <QColor>
 #include <QFile>
 #include <QLineEdit>
-#include <QMacStyle>
 #include <QPainter>
 #include <QPushButton>
 #include <QStyleFactory>
@@ -759,11 +758,10 @@ void RenderThemeQt::setPopupPadding(RenderStyle* style) const
     style->setPaddingBottom(Length(2, Fixed));
 }
 
-
 bool RenderThemeQt::paintMenuList(RenderObject* o, const PaintInfo& i, const IntRect& r)
 {
     StylePainter p(this, i);
-    if (!p.isValid())
+    if (! p.isValid())
         return true;
 
     QtStyleOptionWebComboBox opt(o);
@@ -772,12 +770,14 @@ bool RenderThemeQt::paintMenuList(RenderObject* o, const PaintInfo& i, const Int
 
     IntRect rect = r;
 
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
-    // QMacStyle makes the combo boxes a little bit smaller to leave space for the focus rect.
-    // Because of it, the combo button is drawn at a point to the left of where it was expect to be and may end up
-    // overlapped with the text. This will force QMacStyle to draw the combo box with the expected width.
-    if (qobject_cast<QMacStyle*>(p.style))
+#if defined(Q_OS_MAC)
+    // QMacStyle makes the combo boxes a little bit smaller to leave space for the focus rectangle
+    // Because of this the combo button is drawn at a point to the left of where it was expected to be and may end up
+    // overlapped with the text. This change will force QMacStyle to draw the combo box with the correct width.
+
+    if (p.style->inherits("QMacStyle") ) {
         rect.inflateX(3);
+    }
 #endif
 
     const QPoint topLeft = rect.location();
@@ -787,6 +787,7 @@ bool RenderThemeQt::paintMenuList(RenderObject* o, const PaintInfo& i, const Int
 
     p.drawComplexControl(QStyle::CC_ComboBox, opt);
     p.painter->translate(-topLeft);
+
     return false;
 }
 

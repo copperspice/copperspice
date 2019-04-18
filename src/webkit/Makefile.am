@@ -2765,7 +2765,7 @@ WEBKIT_INTERNAL_INCLUDES= \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/text/WTFString.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/CharacterNames.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/Collator.h \
-	 ../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/UTF8.h \
+	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/UTF8.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/Unicode.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/UnicodeMacrosFromICU.h \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/unicode/brew/UnicodeBrew.h \
