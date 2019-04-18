@@ -21,27 +21,26 @@
 *
 ***********************************************************************/
 
-#include "qnetworksession_impl.h"
-#include "qbearerengine_impl.h"
+#include <qnetworksession_impl.h>
+#include <qbearerengine_impl.h>
 
-#include <QtNetwork/qnetworksession.h>
-#include <QtNetwork/private/qnetworkconfigmanager_p.h>
+#include <qnetworksession.h>
+#include <qnetworkconfigmanager_p.h>
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qstringlist.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qmutex.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
-
-QT_BEGIN_NAMESPACE
 
 static QBearerEngineImpl *getEngineFromId(const QString &id)
 {
     QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
 
-    foreach (QBearerEngine *engine, priv->engines()) {
+    for (QBearerEngine *engine : priv->engines()) {
         QBearerEngineImpl *engineImpl = qobject_cast<QBearerEngineImpl *>(engine);
+
         if (engineImpl && engineImpl->hasIdentifier(id))
             return engineImpl;
     }
@@ -73,7 +72,7 @@ void QNetworkSessionPrivateImpl::syncStateWithInterface()
 
     opened = false;
     isOpen = false;
-    state = QNetworkSession::Invalid;
+    state  = QNetworkSession::Invalid;
     lastError = QNetworkSession::UnknownSessionError;
 
     qRegisterMetaType<QBearerEngineImpl::ConnectionError>("QBearerEngineImpl::ConnectionError");
@@ -92,13 +91,16 @@ void QNetworkSessionPrivateImpl::syncStateWithInterface()
                     Qt::QueuedConnection);
         }
         break;
+
     case QNetworkConfiguration::ServiceNetwork:
         serviceConfig = publicConfig;
         // Defer setting engine and signals until open().
         // fall through
+
     case QNetworkConfiguration::UserChoice:
         // Defer setting serviceConfig and activeConfig until open().
         // fall through
+
     default:
         engine = 0;
     }
@@ -111,7 +113,8 @@ void QNetworkSessionPrivateImpl::open()
     if (serviceConfig.isValid()) {
         lastError = QNetworkSession::OperationNotSupportedError;
         emit QNetworkSessionPrivate::error(lastError);
-    } else if (!isOpen) {
+
+    } else if (! isOpen) {
         if ((activeConfig.state() & QNetworkConfiguration::Discovered) != QNetworkConfiguration::Discovered) {
             lastError = QNetworkSession::InvalidConfigurationError;
             state = QNetworkSession::Invalid;
@@ -140,6 +143,7 @@ void QNetworkSessionPrivateImpl::close()
     if (serviceConfig.isValid()) {
         lastError = QNetworkSession::OperationNotSupportedError;
         emit QNetworkSessionPrivate::error(lastError);
+
     } else if (isOpen) {
         opened = false;
         isOpen = false;
@@ -396,6 +400,4 @@ void QNetworkSessionPrivateImpl::decrementTimeout()
     }
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_BEARERMANAGEMENT
+#endif

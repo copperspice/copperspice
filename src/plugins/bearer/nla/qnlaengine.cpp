@@ -21,24 +21,20 @@
 *
 ***********************************************************************/
 
-#include "qnlaengine.h"
+#include <qnlaengine.h>
+
 #include "../qnetworksession_impl.h"
-
-#include <QtNetwork/private/qnetworkconfiguration_p.h>
-
-#include <QtCore/qthread.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qstringlist.h>
-
-#include <QtCore/qdebug.h>
-
 #include "../platformdefs_win.h"
 
-QT_BEGIN_NAMESPACE
+#include <qnetworkconfiguration_p.h>
+#include <qthread.h>
+#include <qmutex.h>
+#include <qcoreapplication.h>
+#include <qstringlist.h>
+#include <qdebug.h>
 
 QWindowsSockInit2::QWindowsSockInit2()
-:   version(0)
+   :   version(0)
 {
     //### should we try for 2.2 on all platforms ??
     WSAData wsadata;
@@ -618,5 +614,4 @@ QNetworkConfigurationPrivatePointer QNlaEngine::defaultConfiguration()
     return QNetworkConfigurationPrivatePointer();
 }
 
-QT_END_NAMESPACE
 
