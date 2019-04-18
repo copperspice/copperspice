@@ -71,6 +71,10 @@ enum HBitmapFormat {
    HBitmapAlpha
 };
 
+#if OS(WINDOWS)
+   Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0);
+#endif
+
 namespace WebCore {
 
 static inline QPainter::CompositionMode toQtCompositionMode(CompositeOperator op)
@@ -1285,8 +1289,6 @@ void GraphicsContext::setPlatformShouldAntialias(bool enable)
 }
 
 #ifdef Q_OS_WIN
-
-Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0);
 
 HDC GraphicsContext::getWindowsContext(const IntRect& dstRect, bool supportAlphaBlend, bool mayCreateBitmap)
 {
