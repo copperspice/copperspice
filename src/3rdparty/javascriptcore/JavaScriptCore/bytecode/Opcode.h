@@ -184,7 +184,7 @@ namespace JSC {
     #define OPCODE_ID_LENGTHS(id, length) const int id##_length = length;
          FOR_EACH_OPCODE_ID(OPCODE_ID_LENGTHS);
     #undef OPCODE_ID_LENGTHS
-    
+
     #define OPCODE_LENGTH(opcode) opcode##_length
 
     #define OPCODE_ID_LENGTH_MAP(opcode, length) length,
@@ -215,7 +215,7 @@ namespace JSC {
     inline const char* padOpcodeName(OpcodeID op, unsigned width)
     {
         unsigned pad = width - strlen(opcodeNames[op]);
-        pad = std::min(pad, PADDING_STRING_LENGTH);
+        pad = (std::min)(pad, PADDING_STRING_LENGTH);
         return PADDING_STRING + PADDING_STRING_LENGTH - pad;
     }
 

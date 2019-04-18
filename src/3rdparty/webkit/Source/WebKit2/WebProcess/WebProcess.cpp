@@ -192,7 +192,7 @@ void WebProcess::initializeWebProcess(const WebProcessCreationParameters& parame
     StorageTracker::initializeTracker(parameters.localStorageDirectory);
     m_localStorageDirectory = parameters.localStorageDirectory;
 #endif
-    
+
 #if ENABLE(OFFLINE_WEB_APPLICATIONS)
     if (!parameters.applicationCacheDirectory.isEmpty()) {
         m_applicationCachePathExtension = SandboxExtension::create(parameters.applicationCacheDirectoryExtensionHandle);
@@ -223,7 +223,7 @@ void WebProcess::initializeWebProcess(const WebProcessCreationParameters& parame
 
     for (size_t i = 0; i < parameters.mimeTypesWithCustomRepresentation.size(); ++i)
         m_mimeTypesWithCustomRepresentations.add(parameters.mimeTypesWithCustomRepresentation[i]);
-    
+
 #if PLATFORM(MAC)
     m_presenterApplicationPid = parameters.presenterApplicationPid;
 #endif
@@ -396,7 +396,7 @@ void WebProcess::calculateCacheSizes(CacheModel cacheModel, uint64_t memorySize,
         else if (memorySize >= 512)
             urlCacheMemoryCapacity = 1 * 1024 * 1024;
         else
-            urlCacheMemoryCapacity =      512 * 1024; 
+            urlCacheMemoryCapacity =      512 * 1024;
 
         // Foundation disk cache capacity (in bytes)
         if (diskFreeSize >= 16384)
@@ -426,7 +426,7 @@ void WebProcess::calculateCacheSizes(CacheModel cacheModel, uint64_t memorySize,
 
         // Object cache capacities (in bytes)
         // (Testing indicates that value / MB depends heavily on content and
-        // browsing pattern. Even growth above 128MB can have substantial 
+        // browsing pattern. Even growth above 128MB can have substantial
         // value / MB for some content / browsing patterns.)
         if (memorySize >= 2048)
             cacheTotalCapacity = 128 * 1024 * 1024;
@@ -442,7 +442,7 @@ void WebProcess::calculateCacheSizes(CacheModel cacheModel, uint64_t memorySize,
 
         // This code is here to avoid a PLT regression. We can remove it if we
         // can prove that the overall system gain would justify the regression.
-        cacheMaxDeadCapacity = std::max(24u, cacheMaxDeadCapacity);
+        cacheMaxDeadCapacity = (std::max)(24u, cacheMaxDeadCapacity);
 
         deadDecodedDataDeletionInterval = 60;
 
@@ -455,7 +455,7 @@ void WebProcess::calculateCacheSizes(CacheModel cacheModel, uint64_t memorySize,
         else if (memorySize >= 256)
             urlCacheMemoryCapacity = 1 * 1024 * 1024;
         else
-            urlCacheMemoryCapacity =      512 * 1024; 
+            urlCacheMemoryCapacity =      512 * 1024;
 
         // Foundation disk cache capacity (in bytes)
         if (diskFreeSize >= 16384)
@@ -479,7 +479,7 @@ void WebProcess::calculateCacheSizes(CacheModel cacheModel, uint64_t memorySize,
 }
 
 WebPage* WebProcess::focusedWebPage() const
-{    
+{
     HashMap<uint64_t, RefPtr<WebPage> >::const_iterator end = m_pageMap.end();
     for (HashMap<uint64_t, RefPtr<WebPage> >::const_iterator it = m_pageMap.begin(); it != end; ++it) {
         WebPage* page = (*it).second.get();
@@ -488,7 +488,7 @@ WebPage* WebProcess::focusedWebPage() const
     }
     return 0;
 }
-    
+
 WebPage* WebProcess::webPage(uint64_t pageID) const
 {
     return m_pageMap.get(pageID).get();
@@ -497,7 +497,7 @@ WebPage* WebProcess::webPage(uint64_t pageID) const
 void WebProcess::createWebPage(uint64_t pageID, const WebPageCreationParameters& parameters)
 {
     // It is necessary to check for page existence here since during a window.open() (or targeted
-    // link) the WebPage gets created both in the synchronous handler and through the normal way. 
+    // link) the WebPage gets created both in the synchronous handler and through the normal way.
     std::pair<HashMap<uint64_t, RefPtr<WebPage> >::iterator, bool> result = m_pageMap.add(pageID, 0);
     if (result.second) {
         ASSERT(!result.first->second);
@@ -524,7 +524,7 @@ bool WebProcess::isSeparateProcess() const
     // If we're running on the main run loop, we assume that we're in a separate process.
     return m_runLoop == RunLoop::main();
 }
- 
+
 bool WebProcess::shouldTerminate()
 {
     // Keep running forever if we're running in the same process.
@@ -560,15 +560,15 @@ void WebProcess::terminate()
 }
 
 CoreIPC::SyncReplyMode WebProcess::didReceiveSyncMessage(CoreIPC::Connection* connection, CoreIPC::MessageID messageID, CoreIPC::ArgumentDecoder* arguments, CoreIPC::ArgumentEncoder* reply)
-{   
+{
     uint64_t pageID = arguments->destinationID();
     if (!pageID)
         return CoreIPC::AutomaticReply;
-    
+
     WebPage* page = webPage(pageID);
     if (!page)
         return CoreIPC::AutomaticReply;
-    
+
     page->didReceiveSyncMessage(connection, messageID, arguments, reply);
     return CoreIPC::AutomaticReply;
 }
@@ -628,18 +628,18 @@ void WebProcess::didReceiveMessage(CoreIPC::Connection* connection, CoreIPC::Mes
     if (messageID.is<CoreIPC::MessageClassInjectedBundle>()) {
         if (!m_injectedBundle)
             return;
-        m_injectedBundle->didReceiveMessage(connection, messageID, arguments);    
+        m_injectedBundle->didReceiveMessage(connection, messageID, arguments);
         return;
     }
 
     uint64_t pageID = arguments->destinationID();
     if (!pageID)
         return;
-    
+
     WebPage* page = webPage(pageID);
     if (!page)
         return;
-    
+
     page->didReceiveMessage(connection, messageID, arguments);
 }
 
@@ -660,7 +660,7 @@ void WebProcess::didClose(CoreIPC::Connection*)
 
     gcController().garbageCollectNow();
     memoryCache()->setDisabled(true);
-#endif    
+#endif
 
     // The UI process closed this connection, shut down.
     m_runLoop->stop();
@@ -816,14 +816,14 @@ void WebProcess::setEnhancedAccessibility(bool flag)
 {
     WebCore::AXObjectCache::setEnhancedUserInterfaceAccessibility(flag);
 }
-    
+
 void WebProcess::startMemorySampler(const SandboxExtension::Handle& sampleLogFileHandle, const String& sampleLogFilePath, const double interval)
 {
-#if ENABLE(MEMORY_SAMPLER)    
+#if ENABLE(MEMORY_SAMPLER)
     WebMemorySampler::shared()->start(sampleLogFileHandle, sampleLogFilePath, interval);
 #endif
 }
-    
+
 void WebProcess::stopMemorySampler()
 {
 #if ENABLE(MEMORY_SAMPLER)

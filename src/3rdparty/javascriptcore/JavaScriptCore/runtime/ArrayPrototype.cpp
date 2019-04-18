@@ -153,7 +153,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncToString(ExecState* exec, JSObject*, JSValue
     if (!isRealArray && !thisValue.inherits(&JSArray::info))
         return throwError(exec, TypeError);
     JSArray* thisObj = asArray(thisValue);
-    
+
     HashSet<JSObject*>& arrayVisitedElements = exec->globalData().arrayVisitedElements;
     if (arrayVisitedElements.size() >= MaxSecondaryThreadReentryDepth) {
         if (!isMainThread() || arrayVisitedElements.size() >= MaxMainThreadReentryDepth)
@@ -173,19 +173,19 @@ JSValue JSC_HOST_CALL arrayProtoFuncToString(ExecState* exec, JSObject*, JSValue
             element = thisObj->getIndex(k);
         else
             element = thisObj->get(exec, k);
-        
+
         if (element.isUndefinedOrNull())
             continue;
-        
+
         UString str = element.toString(exec);
         strBuffer[k] = str.rep();
         totalSize += str.size();
-        
+
         if (!strBuffer.data()) {
             JSObject* error = Error::create(exec, GeneralError, "Out of memory");
             exec->setException(error);
         }
-        
+
         if (exec->hadException())
             break;
     }
@@ -196,7 +196,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncToString(ExecState* exec, JSObject*, JSValue
     buffer.reserveCapacity(totalSize);
     if (!buffer.data())
         return throwError(exec, GeneralError, "Out of memory");
-        
+
     for (unsigned i = 0; i < length; i++) {
         if (i)
             buffer.append(',');
@@ -536,9 +536,10 @@ JSValue JSC_HOST_CALL arrayProtoFuncSplice(ExecState* exec, JSObject*, JSValue t
     if (!args.size())
         return jsUndefined();
 
-    unsigned length = thisObj->get(exec, exec->propertyNames().length).toUInt32(exec);
+    unsigned length      = thisObj->get(exec, exec->propertyNames().length).toUInt32(exec);
     double relativeBegin = args.at(0).toInteger(exec);
     unsigned begin;
+
     if (relativeBegin < 0) {
         relativeBegin += length;
         begin = (relativeBegin < 0) ? 0 : static_cast<unsigned>(relativeBegin);
@@ -634,7 +635,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncFilter(ExecState* exec, JSObject*, JSValue t
             cachedCall.setArgument(0, v);
             cachedCall.setArgument(1, jsNumber(exec, k));
             cachedCall.setArgument(2, thisObj);
-            
+
             JSValue result = cachedCall.call();
             if (result.toBoolean(exec))
                 resultArray->put(exec, filterIndex++, v);
@@ -744,7 +745,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncEvery(ExecState* exec, JSObject*, JSValue th
         for (; k < length && !exec->hadException(); ++k) {
             if (UNLIKELY(!array->canGetIndex(k)))
                 break;
-            
+
             cachedCall.setThis(applyThis);
             cachedCall.setArgument(0, array->getIndex(k));
             cachedCall.setArgument(1, jsNumber(exec, k));
@@ -845,7 +846,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncSome(ExecState* exec, JSObject*, JSValue thi
         for (; k < length && !exec->hadException(); ++k) {
             if (UNLIKELY(!array->canGetIndex(k)))
                 break;
-            
+
             cachedCall.setThis(applyThis);
             cachedCall.setArgument(0, array->getIndex(k));
             cachedCall.setArgument(1, jsNumber(exec, k));
@@ -878,7 +879,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncSome(ExecState* exec, JSObject*, JSValue thi
 JSValue JSC_HOST_CALL arrayProtoFuncReduce(ExecState* exec, JSObject*, JSValue thisValue, const ArgList& args)
 {
     JSObject* thisObj = thisValue.toThisObject(exec);
-    
+
     JSValue function = args.at(0);
     CallData callData;
     CallType callType = function.getCallData(callData);
@@ -933,13 +934,13 @@ JSValue JSC_HOST_CALL arrayProtoFuncReduce(ExecState* exec, JSObject*, JSValue t
         JSValue prop = getProperty(exec, thisObj, i);
         if (!prop)
             continue;
-        
+
         MarkedArgumentBuffer eachArguments;
         eachArguments.append(rv);
         eachArguments.append(prop);
         eachArguments.append(jsNumber(exec, i));
         eachArguments.append(thisObj);
-        
+
         rv = call(exec, function, callType, callData, jsNull(), eachArguments);
     }
     return rv;
@@ -948,13 +949,13 @@ JSValue JSC_HOST_CALL arrayProtoFuncReduce(ExecState* exec, JSObject*, JSValue t
 JSValue JSC_HOST_CALL arrayProtoFuncReduceRight(ExecState* exec, JSObject*, JSValue thisValue, const ArgList& args)
 {
     JSObject* thisObj = thisValue.toThisObject(exec);
-    
+
     JSValue function = args.at(0);
     CallData callData;
     CallType callType = function.getCallData(callData);
     if (callType == CallTypeNone)
         return throwError(exec, TypeError);
-    
+
     unsigned i = 0;
     JSValue rv;
     unsigned length = thisObj->get(exec, exec->propertyNames().length).toUInt32(exec);
@@ -963,7 +964,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncReduceRight(ExecState* exec, JSObject*, JSVa
     JSArray* array = 0;
     if (isJSArray(&exec->globalData(), thisObj))
         array = asArray(thisObj);
-    
+
     if (args.size() >= 2)
         rv = args.at(1);
     else if (array && array->canGetIndex(length - 1)){
@@ -979,7 +980,7 @@ JSValue JSC_HOST_CALL arrayProtoFuncReduceRight(ExecState* exec, JSObject*, JSVa
             return throwError(exec, TypeError);
         i++;
     }
-    
+
     if (callType == CallTypeJS && array) {
         CachedCall cachedCall(exec, asFunction(function), 4, exec->exceptionSlot());
         for (; i < length && !exec->hadException(); ++i) {
@@ -996,22 +997,22 @@ JSValue JSC_HOST_CALL arrayProtoFuncReduceRight(ExecState* exec, JSObject*, JSVa
         if (i == length) // only return if we reached the end of the array
             return rv;
     }
-    
+
     for (; i < length && !exec->hadException(); ++i) {
         unsigned idx = length - i - 1;
         JSValue prop = getProperty(exec, thisObj, idx);
         if (!prop)
             continue;
-        
+
         MarkedArgumentBuffer eachArguments;
         eachArguments.append(rv);
         eachArguments.append(prop);
         eachArguments.append(jsNumber(exec, idx));
         eachArguments.append(thisObj);
-        
+
         rv = call(exec, function, callType, callData, jsNull(), eachArguments);
     }
-    return rv;        
+    return rv;
 }
 
 JSValue JSC_HOST_CALL arrayProtoFuncIndexOf(ExecState* exec, JSObject*, JSValue thisValue, const ArgList& args)

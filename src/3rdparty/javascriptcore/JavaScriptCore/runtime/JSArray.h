@@ -90,7 +90,7 @@ namespace JSC {
         {
             return Structure::create(prototype, TypeInfo(ObjectType, StructureFlags));
         }
-        
+
         inline void markChildrenDirect(MarkStack& markStack);
 
     protected:
@@ -111,7 +111,7 @@ namespace JSC {
         void putSlowCase(ExecState*, unsigned propertyName, JSValue);
 
         bool increaseVectorLength(unsigned newLength);
-        
+
         unsigned compactForSorting();
 
         enum ConsistencyCheckType { NormalConsistencyCheck, DestructorConsistencyCheck, SortConsistencyCheck };
@@ -143,10 +143,10 @@ namespace JSC {
     inline void JSArray::markChildrenDirect(MarkStack& markStack)
     {
         JSObject::markChildrenDirect(markStack);
-        
+
         ArrayStorage* storage = m_storage;
 
-        unsigned usedVectorLength = std::min(storage->m_length, m_vectorLength);
+        unsigned usedVectorLength = (std::min)(storage->m_length, m_vectorLength);
         markStack.appendValues(storage->m_vector, usedVectorLength, MayContainNullValues);
 
         if (SparseArrayValueMap* map = storage->m_sparseValueMap) {
@@ -220,7 +220,7 @@ namespace JSC {
                 markChildren(m_values.removeLast());
         }
     }
-    
+
 } // namespace JSC
 
 #endif // JSArray_h

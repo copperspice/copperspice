@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -54,7 +54,7 @@ void CharacterClassConstructor::addSorted(Vector<UChar>& matches, UChar ch)
             range -= (index+1);
         }
     }
-    
+
     if (pos == matches.size())
         matches.append(ch);
     else
@@ -64,7 +64,7 @@ void CharacterClassConstructor::addSorted(Vector<UChar>& matches, UChar ch)
 void CharacterClassConstructor::addSortedRange(Vector<CharacterRange>& ranges, UChar lo, UChar hi)
 {
     unsigned end = ranges.size();
-    
+
     // Simple linear scan - I doubt there are that many ranges anyway...
     // feel free to fix this with something faster (eg binary chop).
     for (unsigned i = 0; i < end; ++i) {
@@ -84,8 +84,8 @@ void CharacterClassConstructor::addSortedRange(Vector<CharacterRange>& ranges, U
         // end of the last range they concatenate, which is just as good.
         if (lo <= (ranges[i].end + 1)) {
             // found an intersect! we'll replace this entry in the array.
-            ranges[i].begin = std::min(ranges[i].begin, lo);
-            ranges[i].end = std::max(ranges[i].end, hi);
+            ranges[i].begin = (std::min)(ranges[i].begin, lo);
+            ranges[i].end   = (std::max)(ranges[i].end, hi);
 
             // now check if the new range can subsume any subsequent ranges.
             unsigned next = i+1;
@@ -98,7 +98,7 @@ void CharacterClassConstructor::addSortedRange(Vector<CharacterRange>& ranges, U
                 } else
                     break;
             }
-            
+
             return;
         }
     }
@@ -130,18 +130,18 @@ void CharacterClassConstructor::put(UChar ch)
             // Reset back to the inital state.
             m_charBuffer = -1;
             m_isPendingDash = false;
-            
+
             // This is an error, detected lazily.  Do not proceed.
             if (lo > hi) {
                 m_isUpsideDown = true;
                 return;
             }
-            
+
             if (lo <= 0x7f) {
                 char asciiLo = lo;
-                char asciiHi = std::min(hi, (UChar)0x7f);
+                char asciiHi = (std::min)(hi, (UChar)0x7f);
                 addSortedRange(m_ranges, lo, asciiHi);
-                
+
                 if (m_isCaseInsensitive) {
                     if ((asciiLo <= 'Z') && (asciiHi >= 'A'))
                         addSortedRange(m_ranges, std::max(asciiLo, 'A')+('a'-'A'), std::min(asciiHi, 'Z')+('a'-'A'));
@@ -152,7 +152,7 @@ void CharacterClassConstructor::put(UChar ch)
             if (hi >= 0x80) {
                 UChar unicodeCurr = std::max(lo, (UChar)0x80);
                 addSortedRange(m_rangesUnicode, unicodeCurr, hi);
-                
+
                 if (m_isCaseInsensitive) {
                     // we're going to scan along, updating the start of the range
                     while (unicodeCurr <= hi) {
@@ -165,7 +165,7 @@ void CharacterClassConstructor::put(UChar ch)
                         // if we fall through to here, unicodeCurr <= hi & has another case. Get the other case.
                         UChar rangeStart = unicodeCurr;
                         UChar otherCurr = jsc_pcre_ucp_othercase(unicodeCurr);
-                        
+
                         // If unicodeCurr is not yet hi, check the next char in the range.  If it also has another case,
                         // and if it's other case value is one greater then the othercase value for the current last
                         // character included in the range, we can include next into the range.
@@ -175,10 +175,10 @@ void CharacterClassConstructor::put(UChar ch)
                             ++unicodeCurr;
                             ++otherCurr;
                         }
-                        
+
                         // otherChar is the last in the range of other case chars, calculate offset to get back to the start.
                         addSortedRange(m_rangesUnicode, otherCurr-(unicodeCurr-rangeStart), otherCurr);
-                        
+
                         // unicodeCurr has been added, move on to the next char.
                         ++unicodeCurr;
                     }
@@ -221,7 +221,7 @@ void CharacterClassConstructor::flush()
         }
         m_charBuffer = -1;
     }
-    
+
     if (m_isPendingDash) {
         addSorted(m_matches, '-');
         m_isPendingDash = false;
@@ -233,7 +233,7 @@ void CharacterClassConstructor::append(const CharacterClass& other)
     // [x-\s] will add, 'x', '-', and all unicode spaces to new class (same as [x\s-]).
     // Need to check the spec, really, but think this matches PCRE behaviour.
     flush();
-    
+
     if (other.numMatches) {
         for (size_t i = 0; i < other.numMatches; ++i)
             addSorted(m_matches, other.matches[i]);
