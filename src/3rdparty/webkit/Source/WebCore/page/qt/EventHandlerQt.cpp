@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -50,9 +50,8 @@
 #include "RenderWidget.h"
 #include "Scrollbar.h"
 
-QT_BEGIN_NAMESPACE
-Q_GUI_EXPORT extern bool qt_tab_all_widgets; // from qapplication.cpp
-QT_END_NAMESPACE
+// from qapplication_cs.cpp
+Q_GUI_EXPORT extern bool qt_tab_all_widgets();
 
 namespace WebCore {
 
@@ -64,7 +63,7 @@ const double EventHandler::TextDragDelay = 0.0;
 
 bool EventHandler::tabsToAllFormControls(KeyboardEvent* event) const
 {
-    return (isKeyboardOptionTab(event) ? !qt_tab_all_widgets : qt_tab_all_widgets);
+    return (isKeyboardOptionTab(event) ? ! qt_tab_all_widgets() : qt_tab_all_widgets() );
 }
 
 void EventHandler::focusDocumentView()
