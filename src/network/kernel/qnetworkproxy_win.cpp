@@ -211,8 +211,8 @@ static bool isBypassed(const QString &host, const QStringList &bypassList)
 
       } else {
          // do wildcard matching
-         QRegularExpression rx(entry, QPatternOption:CaseInsensitiveOption | QPatternOption:WildcardOption
-                     | QPatternOption:ExactMatchOption);
+         QRegularExpression rx(entry, QPatternOption::CaseInsensitiveOption | QPatternOption::WildcardOption
+                     | QPatternOption::ExactMatchOption);
 
          QRegularExpressionMatch match = rx.match(host);
 
