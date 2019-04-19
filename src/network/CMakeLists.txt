@@ -59,7 +59,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     set(EXTRA_NETWORK_LDFLAGS
         ${EXTRA_NETWORK_LDFLAGS}
-        -framework CoreServices -framework Security
+        -framework CoreServices -framework Security -framework SystemConfiguration
     )
 endif()
 
