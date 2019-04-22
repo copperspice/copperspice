@@ -757,10 +757,10 @@ int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
 
 #if defined(Q_OS_WIN32)
    QString16 tmp1(str1.begin(), str1.end());
-   QString16 tmp2(str1.begin(), str1.end());
+   QString16 tmp2(str2.begin(), str2.end());
 
    int retval = CompareString(GetUserDefaultLCID(), 0, (wchar_t *)tmp1.constData(), tmp1.size_storage(),
-                  (wchar_t *)tmp1.constData(), tmp2.size_storage());
+                  (wchar_t *)tmp2.constData(), tmp2.size_storage());
 
    switch (retval) {
       case CSTR_LESS_THAN:
