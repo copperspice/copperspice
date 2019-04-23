@@ -36,8 +36,6 @@
 typedef struct pg_conn PGconn;
 typedef struct pg_result PGresult;
 
-QT_BEGIN_NAMESPACE
-
 class QPSQLResultPrivate;
 class QPSQLDriverPrivate;
 class QPSQLDriver;
@@ -80,17 +78,25 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
  public:
    enum Protocol {
       VersionUnknown = -1,
-      Version6 = 6,
-      Version7 = 7,
+      Version6  = 6,
+      Version7  = 7,
       Version71 = 8,
       Version73 = 9,
       Version74 = 10,
-      Version8 = 11,
+      Version8  = 11,
       Version81 = 12,
       Version82 = 13,
       Version83 = 14,
       Version84 = 15,
-      Version9 = 16,
+      Version9  = 16,
+      Version91 = 17,
+      Version92 = 18,
+      Version93 = 19,
+      Version94 = 20,
+      Version95 = 21,
+      Version96 = 22,
+      Version97 = 23,
+      Version98 = 24,
    };
 
    explicit QPSQLDriver(QObject *parent = nullptr);
@@ -124,13 +130,11 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    QStringList subscribedToNotificationsImplementation() const;
 
  private :
-   SQL_CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
-   SQL_CS_SLOT_2(_q_handleNotification)
+   CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
+   CS_SLOT_2(_q_handleNotification)
 
    void init();
    QPSQLDriverPrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSQL_PSQL_H
+#endif
