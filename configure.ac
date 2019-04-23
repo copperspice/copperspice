@@ -210,32 +210,78 @@ eval realdir=${realdir}
 }
 
 echo
-echo "Checking PostgreSQL client library"
+echo "Checking for PostgreSQL client library"
 
-AC_CHECK_HEADERS([libpq-fe.h], [HAVE_LIBPQ_FE_H=yes])
-AC_CHECK_HEADERS([pg_config.h], [HAVE_PG_CONFIG_H=yes])
+if test "x"$PSQL_DIR != x""; then
+   SAVE_CPPFLAGS=$CPPFLAGS
+   SAVE_LDFLAGS=$LDFLAGS
+
+   CPPFLAGS="$CPPFLAGS -I$PSQL_DIR/include"
+   LDFLAGS="$LDFLAGS -L$PSQL_DIR/lib"
+fi
+
+AC_CHECK_HEADERS([libpq-fe.h],          [HAVE_LIBPQ_FE_H=yes])
+AC_CHECK_HEADERS([pg_config.h],         [HAVE_PG_CONFIG_H=yes])
 AC_CHECK_LIB([pq], [PQconnectdbParams], [HAVE_LIBPQ=yes])
+
+if test "$OSTYPE" == WIN -a "x"$HAVE_LIBPQ = x""yes -a "x"$HAVE_LIBPQ_FE_H = x""yes -a "x"$HAVE_PG_CONFIG_H = x""yes; then
+   # test for the header on Windows
+
+   if test -f $PSQL_DIR/include/pthread.h; then
+      # Postgres Bug
+
+      echo ""
+      echo "------------------------------------------------------------"
+      echo "WARNING WARNING WARNING"
+      echo "The '$PSQL_DIR/include' directory contains a file called pthread.h"
+      echo ""
+      echo "A conflict exists between pthread.h and the standard library "
+      echo "Rename or remove pthread.h in order to build the CopperSpice psql plugin"
+      echo "------------------------------------------------------------"
+      echo ""
+
+      echo "PostgreSQL client library was found, client driver will not be built"
+
+      # force to not found
+      HAVE_LIBPQ="bad"
+   fi
+fi
 
 AM_CONDITIONAL(BUILD_PSQL_PLUGIN, test "x"$HAVE_LIBPQ = x""yes -a "x"$HAVE_LIBPQ_FE_H = x""yes -a "x"$HAVE_PG_CONFIG_H = x""yes)
 
 if test "x"$BUILD_PSQL_PLUGIN_TRUE = x""; then
    echo "PostgreSQL client drivers will be built"
+   AC_SUBST(PSQL_DIR)
+
 else
-   echo "PostgreSQL client library not found, client drivers will not be built"
+
+   if test "x"$HAVE_LIBPQ != x""bad;  then
+      echo "PostgreSQL client library was not found, client driver will not be built"
+   fi
+
+fi
+
+if test "x"$PSQL_DIR != x""; then
+   CPPFLAGS=$SAVE_CPPFLAGS
+   LDFLAGS=$SAVE_LDFLAGS
 fi
 
 echo
-echo "Checking MySQL client library"
+echo "Checking for MySQL client library"
+
 AC_CHECK_HEADERS([mysql.h], [HAVE_MYSQL_H=yes])
 AC_CHECK_LIB([mysqlclient], [my_init], [HAVE_LIBMYSQLCLIENT=yes])
 AM_CONDITIONAL(BUILD_MYSQL_PLUGIN, test "x"$HAVE_MYSQL_H = x""yes -a "x"$HAVE_LIBMYSQLCLIENT = x""yes)
+
 if test "x"$BUILD_MYSQL_PLUGIN_TRUE = x""; then
    echo "MySQL client drivers will be built"
 else
-   echo "MySQL client library not found, client drivers will not be built"
+   echo "MySQL client library was not found, client driver will not be built"
 fi
 
 AM_CONDITIONAL(OPENSSL_FOUND, test "x$OPENSSL" = x""yes -a "x$enable_openssl" != "xno")
+echo ""
+
 if test "x$OPENSSL" = x""yes -a "x$enable_openssl" != "xno"; then
    echo "Building with OpenSSL"
 
@@ -260,6 +306,6 @@ echo "CopperSpice will be installed in:     " ${prefix}
 echo
 echo "CopperSpice is now configured"
 
-AC_CONFIG_FILES([Makefile    src/webkit/Makefile     src/core/global/cs_build_info.h])
+AC_CONFIG_FILES([Makefile  src/webkit/Makefile   src/core/global/cs_build_info.h])
 AC_CONFIG_MACRO_DIR([autotools/m4])
 AC_OUTPUT

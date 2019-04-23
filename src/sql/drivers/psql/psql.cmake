@@ -17,8 +17,6 @@ if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
 
     set(EXTRA_PSQL_LIBS
         ${EXTRA_PSQL_LIBS}
-        # NOTE: the CMake module documents PostgreSQL_LIBRARIES however in
-        # practice that causes build failure on FreeBSD with CMake v3.2.3
         ${PostgreSQL_LIBRARY}
     )
 

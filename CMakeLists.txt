@@ -199,6 +199,35 @@ set_package_properties(PostgreSQL PROPERTIES
    TYPE RECOMMENDED
 )
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows" AND ${PostgreSQL_FOUND})
+
+   foreach (fname ${PostgreSQL_INCLUDE_DIRS})
+      # exists is odd, tests if the file can be read or written
+
+      if (EXISTS ${fname}/pthread.h)
+         # Postgres Bug
+
+         message("")
+         message("------------------------------------------------------------")
+         message("WARNING WARNING WARNING")
+         message("The '${fname}' directory contains a file called pthread.h")
+         message("")
+         message("A conflict exists between pthread.h and the standard library ")
+         message("Rename or remove pthread.h in order to build the CopperSpice psql plugin")
+         message("------------------------------------------------------------")
+         message("")
+
+         # force to not found
+         set(PostgreSQL_FOUND false)
+
+         message("PostgreSQL client library was found, client driver will not be built")
+         message("")
+
+      endif()
+
+   endforeach()
+endif()
+
 find_package(MySQL)
 set_package_properties(MySQL PROPERTIES
    PURPOSE "Required for MySQL database support"
