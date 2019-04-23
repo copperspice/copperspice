@@ -110,8 +110,9 @@ static inline int isinf_ld (long double x)
 #define QBITOID 1560
 #define QVARBITOID 1562
 #define VARHDRSZ 4
+
 /* This is a compile time switch - if PQfreemem is declared, the compiler will use that one,
-   otherwise it'll run in this template */
+   otherwise it will run in this template */
 template <typename T>
 inline void PQfreemem(T *t, int = 0)
 {
@@ -132,12 +133,8 @@ class QPSQLDriverPrivate : public QSqlDriverPrivate
 
  public:
    QPSQLDriverPrivate() : QSqlDriverPrivate(),
-      connection(0),
-      isUtf8(false),
-      pro(QPSQLDriver::Version6),
-      sn(0),
-      pendingNotifyCheck(false),
-      hasBackslashEscape(false)
+      connection(0), isUtf8(false), pro(QPSQLDriver::Version6),
+      sn(0), pendingNotifyCheck(false), hasBackslashEscape(false)
    {
       dbmsType = QSqlDriver::PostgreSQL;
    }
@@ -181,7 +178,7 @@ void QPSQLDriverPrivate::appendTables(QStringList &tl, QSqlQuery &t, QChar type)
       if (schema.isEmpty() || schema == "public") {
          tl.append(t.value(0).toString());
       } else {
-         tl.append(t.value(0).toString().prepend(QLatin1Char('.')).prepend(schema));
+         tl.append(t.value(0).toString().prepend('.').prepend(schema));
       }
    }
 }
@@ -247,7 +244,7 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const
       msg += QString("(%1)").formatArg(errorCode);
    }
 
-   return QSqlError(QLatin1String("QPSQL: ") + err, msg, type, errorCode);
+   return QSqlError(QString("QPSQL: ") + err, msg, type, errorCode);
 }
 
 bool QPSQLResultPrivate::processResults()
@@ -287,9 +284,11 @@ static QVariant::Type qDecodePSQLType(int t)
       case QBOOLOID:
          type = QVariant::Bool;
          break;
+
       case QINT8OID:
          type = QVariant::LongLong;
          break;
+
       case QINT2OID:
       case QINT4OID:
       case QOIDOID:
@@ -298,27 +297,33 @@ static QVariant::Type qDecodePSQLType(int t)
       case QCIDOID:
          type = QVariant::Int;
          break;
+
       case QNUMERICOID:
       case QFLOAT4OID:
       case QFLOAT8OID:
          type = QVariant::Double;
          break;
+
       case QABSTIMEOID:
       case QRELTIMEOID:
       case QDATEOID:
          type = QVariant::Date;
          break;
+
       case QTIMEOID:
       case QTIMETZOID:
          type = QVariant::Time;
          break;
+
       case QTIMESTAMPOID:
       case QTIMESTAMPTZOID:
          type = QVariant::DateTime;
          break;
+
       case QBYTEAOID:
          type = QVariant::ByteArray;
          break;
+
       default:
          type = QVariant::String;
          break;
@@ -385,13 +390,17 @@ bool QPSQLResult::fetch(int i)
    if (i < 0) {
       return false;
    }
+
    if (i >= d->currentSize) {
       return false;
    }
+
    if (at() == i) {
       return true;
    }
+
    setAt(i);
+
    return true;
 }
 
@@ -410,7 +419,7 @@ QVariant QPSQLResult::data(int i)
 {
    Q_D(const QPSQLResult);
    if (i >= PQnfields(d->result)) {
-      qWarning("QPSQLResult::data: column %d out of range", i);
+      qWarning("QPSQLResult::data(): Column %d out of range", i);
       return QVariant();
    }
 
@@ -502,7 +511,7 @@ QVariant QPSQLResult::data(int i)
          } else {
             QChar sign = dtval[dtval.size() - 3];
             if (sign == '-' || sign == '+') {
-               dtval += QLatin1String(":00");
+               dtval += QString(":00");
             }
             return QVariant(QDateTime::fromString(dtval, Qt::ISODate).toLocalTime());
          }
@@ -518,9 +527,10 @@ QVariant QPSQLResult::data(int i)
          qPQfreemem(data);
          return QVariant(ba);
       }
-      default:
+
       case QVariant::Invalid:
-         qWarning("QPSQLResult::data: unknown data type");
+      default:
+         qWarning("QPSQLResult::data(): Unknown data type");
    }
    return QVariant();
 }
@@ -537,14 +547,16 @@ bool QPSQLResult::reset (const QString &query)
    Q_D(QPSQLResult);
 
    cleanup();
-   if (!driver()) {
+   if (! driver()) {
       return false;
    }
 
    if (!driver()->isOpen() || driver()->isOpenError()) {
       return false;
    }
+
    d->result = d->privDriver()->exec(query);
+
    return d->processResults();
 }
 
@@ -566,8 +578,9 @@ QVariant QPSQLResult::lastInsertId() const
 
    if (d->privDriver()->pro >= QPSQLDriver::Version81) {
       QSqlQuery qry(driver()->createResult());
+
       // Most recent sequence value obtained from nextval
-      if (qry.exec(QLatin1String("SELECT lastval();")) && qry.next()) {
+      if (qry.exec(QString("SELECT lastval();")) && qry.next()) {
          return qry.value(0);
       }
 
@@ -635,6 +648,7 @@ QSqlRecord QPSQLResult::record() const
       f.setSqlType(ptype);
       info.append(f);
    }
+
    return info;
 }
 
@@ -670,6 +684,7 @@ static QString qCreateParamString(const QVector<QVariant> &boundValues, const QS
 
       params.append(driver->formatValue(f));
    }
+
    return params;
 }
 
@@ -694,7 +709,7 @@ bool QPSQLResult::prepare(const QString &query)
 
    cleanup();
 
-   if (!d->preparedStmtId.isEmpty()) {
+   if (! d->preparedStmtId.isEmpty()) {
       d->deallocatePreparedStmt();
    }
 
@@ -713,6 +728,7 @@ bool QPSQLResult::prepare(const QString &query)
 
    PQclear(result);
    d->preparedStmtId = stmtId;
+
    return true;
 }
 
@@ -720,7 +736,7 @@ bool QPSQLResult::exec()
 {
    Q_D(QPSQLResult);
 
-   if (!d->preparedQueriesEnabled) {
+   if (! d->preparedQueriesEnabled) {
       return QSqlResult::exec();
    }
 
@@ -783,6 +799,7 @@ static QPSQLDriver::Protocol qMakePSQLVersion(int vMaj, int vMin)
    switch (vMaj) {
       case 6:
          return QPSQLDriver::Version6;
+
       case 7: {
          switch (vMin) {
             case 1:
@@ -796,6 +813,7 @@ static QPSQLDriver::Protocol qMakePSQLVersion(int vMaj, int vMin)
          }
          break;
       }
+
       case 8: {
          switch (vMin) {
             case 1:
@@ -811,18 +829,51 @@ static QPSQLDriver::Protocol qMakePSQLVersion(int vMaj, int vMin)
          }
          break;
       }
-      case 9:
-         return QPSQLDriver::Version9;
+
+      case 9: {
+         switch (vMin) {
+            case 1:
+               return QPSQLDriver::Version91;
+            case 2:
+               return QPSQLDriver::Version92;
+            case 3:
+               return QPSQLDriver::Version93;
+            case 4:
+               return QPSQLDriver::Version94;
+            case 5:
+               return QPSQLDriver::Version95;
+            case 6:
+               return QPSQLDriver::Version96;
+            case 7:
+               return QPSQLDriver::Version97;
+            case 8:
+               return QPSQLDriver::Version98;
+            default:
+               return QPSQLDriver::Version9;
+         }
          break;
+      }
+
+      case 10:
+         return QPSQLDriver::Version10;
+
+      case 11:
+         return QPSQLDriver::Version11;
+
       default:
+         if (vMaj >= 12) {
+            return QPSQLDriver::Version11;
+         }
+
          break;
    }
+
    return QPSQLDriver::VersionUnknown;
 }
 
 QPSQLDriver::Protocol QPSQLDriverPrivate::getPSQLVersion()
 {
-   QPSQLDriver::Protocol serverVersion = QPSQLDriver::Version6;
+   QPSQLDriver::Protocol serverVersion = QPSQLDriver::VersionUnknown;
 
    PGresult *result = exec("select version()");
    int status = PQresultStatus(result);
@@ -831,20 +882,28 @@ QPSQLDriver::Protocol QPSQLDriverPrivate::getPSQLVersion()
       QString val = QString::fromLatin1(PQgetvalue(result, 0, 0));
 
       // non greedy
-      QRegularExpression regExp("(\\d+?)\\.(\\d+?)");
-      QRegularExpressionMatch match = regExp.match(val);
+      QRegularExpression regexp("(\\d+)\\.(\\d+)");
+      QRegularExpressionMatch match = regexp.match(val);
 
       if (match.hasMatch())  {
-         int vMaj = match.captured(1).toInteger<int>();
-         int vMin = match.captured(2).toInteger<int>();
+         int vMajor = match.captured(1).toInteger<int>();
+         int vMinor;
 
-         serverVersion = qMakePSQLVersion(vMaj, vMin);
+         if (vMajor >= 10) {
+            // starting with version 10 there is no minor version
+            vMinor = 0;
+
+         } else {
+            vMinor = match.captured(2).toInteger<int>();
+         }
+
+         serverVersion = qMakePSQLVersion(vMajor, vMinor);
 
 #if defined(PG_MAJORVERSION)
-         match = regExp.match(PG_MAJORVERSION);
+         match = regexp.match(PG_MAJORVERSION);
 
 #elif defined(PG_VERSION)
-         match = regExp.match(PG_VERSION);
+         match = regexp.match(PG_VERSION);
 
 #else
          // clear match
@@ -852,16 +911,23 @@ QPSQLDriver::Protocol QPSQLDriverPrivate::getPSQLVersion()
 #endif
 
          if (match.hasMatch())  {
+            vMajor = match.captured(1).toInteger<int>();
 
-            vMaj = match.captured(1).toInteger<int>();
-            vMin = match.captured(2).toInteger<int>();
+            if (vMajor >= 10) {
+               // starting with version 10 there is no minor version
+               vMinor = 0;
 
-            QPSQLDriver::Protocol clientVersion = qMakePSQLVersion(vMaj, vMin);
+            } else {
+               vMinor = match.captured(2).toInteger<int>();
+            }
+
+            QPSQLDriver::Protocol clientVersion = qMakePSQLVersion(vMajor, vMinor);
 
             if (serverVersion >= QPSQLDriver::Version9 && clientVersion < QPSQLDriver::Version9) {
-               //Client version before QPSQLDriver::Version9 only supports escape mode for bytea type,
-               //but bytea format is set to hex by default in PSQL 9 and above. So need to force the
-               //server use the old escape mode when connects to the new server with old client library.
+               // Client version before QPSQLDriver::Version9 only supported escape mode for bytea type,
+               // however bytea format is set to hex by default in PSQL 9 and above. Need to force the
+               // server to use the old escape mode when connecting to a new server with old client library.
+
                PQclear(result);
                result = exec("SET bytea_output=escape; ");
                status = PQresultStatus(result);
@@ -876,9 +942,10 @@ QPSQLDriver::Protocol QPSQLDriverPrivate::getPSQLVersion()
          }
       }
    }
+
    PQclear(result);
 
-   //keep the old behavior unchanged
+   // keep the old behavior unchanged
    if (serverVersion == QPSQLDriver::VersionUnknown) {
       serverVersion = QPSQLDriver::Version6;
    }
@@ -962,9 +1029,9 @@ bool QPSQLDriver::hasFeature(DriverFeature f) const
  */
 static QString qQuote(QString s)
 {
-   s.replace(QLatin1Char('\\'), QLatin1String("\\\\"));
-   s.replace(QLatin1Char('\''), QLatin1String("\\'"));
-   s.append(QLatin1Char('\'')).prepend(QLatin1Char('\''));
+   s.replace(QChar('\\'), QString("\\\\"));
+   s.replace(QChar('\''), QString("\\'"));
+   s.append(QChar('\'')).prepend(QChar('\''));
 
    return s;
 }
@@ -980,30 +1047,30 @@ bool QPSQLDriver::open(const QString &db, const QString &user, const QString &pa
    QString connectString;
 
    if (!host.isEmpty()) {
-      connectString.append(QLatin1String("host=")).append(qQuote(host));
+      connectString.append(QString("host=")).append(qQuote(host));
    }
 
    if (!db.isEmpty()) {
-      connectString.append(QLatin1String(" dbname=")).append(qQuote(db));
+      connectString.append(QString(" dbname=")).append(qQuote(db));
    }
 
    if (!user.isEmpty()) {
-      connectString.append(QLatin1String(" user=")).append(qQuote(user));
+      connectString.append(QString(" user=")).append(qQuote(user));
    }
 
    if (!password.isEmpty()) {
-      connectString.append(QLatin1String(" password=")).append(qQuote(password));
+      connectString.append(QString(" password=")).append(qQuote(password));
    }
 
    if (port != -1) {
-      connectString.append(QLatin1String(" port=")).append(qQuote(QString::number(port)));
+      connectString.append(QString(" port=")).append(qQuote(QString::number(port)));
    }
 
    // add any connect options - the server will handle error detection
-   if (!connOpts.isEmpty()) {
+   if (! connOpts.isEmpty()) {
       QString opt = connOpts;
-      opt.replace(QLatin1Char(';'), QLatin1Char(' '), Qt::CaseInsensitive);
-      connectString.append(QLatin1Char(' ')).append(opt);
+      opt.replace(QChar(';'), QChar(' '), Qt::CaseInsensitive);
+      connectString.append(QChar(' ')).append(opt);
    }
 
    d->connection = PQconnectdb(connectString.toLatin1().constData());
@@ -1073,46 +1140,48 @@ bool QPSQLDriver::beginTransaction()
 bool QPSQLDriver::commitTransaction()
 {
    Q_D(QPSQLDriver);
-   if (!isOpen()) {
-      qWarning("QPSQLDriver::commitTransaction: Database not open");
+
+   if (! isOpen()) {
+      qWarning("QPSQLDriver::commitTransaction(): Database not open");
       return false;
    }
    PGresult *res = d->exec("COMMIT");
 
    bool transaction_failed = false;
 
-   // XXX
-   // This hack is used to tell if the transaction has succeeded for the protocol versions of
+   // used to tell if the transaction has succeeded for the protocol versions of
    // PostgreSQL below. For 7.x and other protocol versions we are left in the dark.
-   // This hack can dissapear once there is an API to query this sort of information.
-   if (d->pro == QPSQLDriver::Version8 ||
-      d->pro == QPSQLDriver::Version81 ||
-      d->pro == QPSQLDriver::Version82 ||
-      d->pro == QPSQLDriver::Version83 ||
-      d->pro == QPSQLDriver::Version84 ||
-      d->pro == QPSQLDriver::Version9) {
+   // This fix can dissapear once there is an API to query this sort of information.
+
+   if ( d->pro == QPSQLDriver::Version8  ||
+        d->pro == QPSQLDriver::Version81 ||
+        d->pro == QPSQLDriver::Version82 ||
+        d->pro == QPSQLDriver::Version83 ||
+        d->pro == QPSQLDriver::Version84 ||
+        d->pro >= QPSQLDriver::Version9) {
       transaction_failed = qstrcmp(PQcmdStatus(res), "ROLLBACK") == 0;
    }
 
-   if (!res || PQresultStatus(res) != PGRES_COMMAND_OK || transaction_failed) {
+   if (! res || PQresultStatus(res) != PGRES_COMMAND_OK || transaction_failed) {
       setLastError(qMakeError(tr("Could not commit transaction"),
             QSqlError::TransactionError, d, res));
       PQclear(res);
       return false;
    }
    PQclear(res);
+
    return true;
 }
 
 bool QPSQLDriver::rollbackTransaction()
 {
    Q_D(QPSQLDriver);
-   if (!isOpen()) {
-      qWarning("QPSQLDriver::rollbackTransaction: Database not open");
+   if (! isOpen()) {
+      qWarning("QPSQLDriver::rollbackTransaction(): Database not open");
       return false;
    }
    PGresult *res = d->exec("ROLLBACK");
-   if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
+   if (! res || PQresultStatus(res) != PGRES_COMMAND_OK) {
       setLastError(qMakeError(tr("Could not rollback transaction"),
             QSqlError::TransactionError, d, res));
       PQclear(res);
@@ -1126,21 +1195,21 @@ QStringList QPSQLDriver::tables(QSql::TableType type) const
 {
    Q_D(const QPSQLDriver);
    QStringList tl;
-   if (!isOpen()) {
+   if (! isOpen()) {
       return tl;
    }
    QSqlQuery t(createResult());
    t.setForwardOnly(true);
 
    if (type & QSql::Tables) {
-      const_cast<QPSQLDriverPrivate *>(d)->appendTables(tl, t, QLatin1Char('r'));
+      const_cast<QPSQLDriverPrivate *>(d)->appendTables(tl, t, QChar('r'));
    }
    if (type & QSql::Views) {
-      const_cast<QPSQLDriverPrivate *>(d)->appendTables(tl, t, QLatin1Char('v'));
+      const_cast<QPSQLDriverPrivate *>(d)->appendTables(tl, t, QChar('v'));
    }
 
    if (type & QSql::SystemTables) {
-      t.exec(QLatin1String("select relname from pg_class where (relkind = 'r') "
+      t.exec(QString("select relname from pg_class where (relkind = 'r') "
             "and (relname like 'pg_%') "));
       while (t.next()) {
          tl.append(t.value(0).toString());
@@ -1152,17 +1221,19 @@ QStringList QPSQLDriver::tables(QSql::TableType type) const
 
 static void qSplitTableName(QString &tablename, QString &schema)
 {
-   int dot = tablename.indexOf(QLatin1Char('.'));
+   int dot = tablename.indexOf(QChar('.'));
    if (dot == -1) {
       return;
    }
-   schema = tablename.left(dot);
+
+   schema    = tablename.left(dot);
    tablename = tablename.mid(dot + 1);
 }
 
 QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
 {
    Q_D(const QPSQLDriver);
+
    QSqlIndex idx(tablename);
    if (!isOpen()) {
       return idx;
@@ -1188,7 +1259,7 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
 
    switch (d->pro) {
       case QPSQLDriver::Version6:
-         stmt = QLatin1String("select pg_att1.attname, int(pg_att1.atttypid), pg_cl.relname "
+         stmt = QString("select pg_att1.attname, int(pg_att1.atttypid), pg_cl.relname "
                "from pg_attribute pg_att1, pg_attribute pg_att2, pg_class pg_cl, pg_index pg_ind "
                "where pg_cl.relname = '%1_pkey' "
                "and pg_cl.oid = pg_ind.indexrelid "
@@ -1197,9 +1268,10 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
                "and pg_att1.attnum = pg_ind.indkey[pg_att2.attnum-1] "
                "order by pg_att2.attnum");
          break;
+
       case QPSQLDriver::Version7:
       case QPSQLDriver::Version71:
-         stmt = QLatin1String("select pg_att1.attname, pg_att1.atttypid::int, pg_cl.relname "
+         stmt = QString("select pg_att1.attname, pg_att1.atttypid::int, pg_cl.relname "
                "from pg_attribute pg_att1, pg_attribute pg_att2, pg_class pg_cl, pg_index pg_ind "
                "where pg_cl.relname = '%1_pkey' "
                "and pg_cl.oid = pg_ind.indexrelid "
@@ -1208,6 +1280,7 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
                "and pg_att1.attnum = pg_ind.indkey[pg_att2.attnum-1] "
                "order by pg_att2.attnum");
          break;
+
       case QPSQLDriver::Version73:
       case QPSQLDriver::Version74:
       case QPSQLDriver::Version8:
@@ -1216,7 +1289,17 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
       case QPSQLDriver::Version83:
       case QPSQLDriver::Version84:
       case QPSQLDriver::Version9:
-         stmt = QLatin1String("SELECT pg_attribute.attname, pg_attribute.atttypid::int, "
+      case QPSQLDriver::Version91:
+      case QPSQLDriver::Version92:
+      case QPSQLDriver::Version93:
+      case QPSQLDriver::Version94:
+      case QPSQLDriver::Version95:
+      case QPSQLDriver::Version96:
+      case QPSQLDriver::Version97:
+      case QPSQLDriver::Version98:
+      case QPSQLDriver::Version10:
+      case QPSQLDriver::Version11:
+         stmt = QString("SELECT pg_attribute.attname, pg_attribute.atttypid::int, "
                "pg_class.relname "
                "FROM pg_attribute, pg_class "
                "WHERE %1 pg_class.oid IN "
@@ -1225,31 +1308,37 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
                "AND pg_attribute.attrelid = pg_class.oid "
                "AND pg_attribute.attisdropped = false "
                "ORDER BY pg_attribute.attnum");
+
          if (schema.isEmpty()) {
-            stmt = stmt.formatArg(QLatin1String("pg_table_is_visible(pg_class.oid) AND"));
+            stmt = stmt.formatArg(QString("pg_table_is_visible(pg_class.oid) AND"));
          } else
             stmt = stmt.formatArg(QString::fromLatin1("pg_class.relnamespace = (select oid from "
                      "pg_namespace where pg_namespace.nspname = '%1') AND ").formatArg(schema));
          break;
+
       case QPSQLDriver::VersionUnknown:
-         qFatal("PSQL version is unknown");
+      default:
+         qFatal("PSQL version is unknown, unable to format SQL statement");
          break;
    }
 
    i.exec(stmt.formatArg(tbl));
+
    while (i.isActive() && i.next()) {
       QSqlField f(i.value(0).toString(), qDecodePSQLType(i.value(1).toInt()));
       idx.append(f);
       idx.setName(i.value(2).toString());
    }
+
    return idx;
 }
 
 QSqlRecord QPSQLDriver::record(const QString &tablename) const
 {
    Q_D(const QPSQLDriver);
+
    QSqlRecord info;
-   if (!isOpen()) {
+   if (! isOpen()) {
       return info;
    }
 
@@ -1272,7 +1361,7 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
    QString stmt;
    switch (d->pro) {
       case QPSQLDriver::Version6:
-         stmt = QLatin1String("select pg_attribute.attname, int(pg_attribute.atttypid), "
+         stmt = QString("select pg_attribute.attname, int(pg_attribute.atttypid), "
                "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
                "int(pg_attribute.attrelid), pg_attribute.attnum "
                "from pg_class, pg_attribute "
@@ -1280,8 +1369,9 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
                "and pg_attribute.attnum > 0 "
                "and pg_attribute.attrelid = pg_class.oid ");
          break;
+
       case QPSQLDriver::Version7:
-         stmt = QLatin1String("select pg_attribute.attname, pg_attribute.atttypid::int, "
+         stmt = QString("select pg_attribute.attname, pg_attribute.atttypid::int, "
                "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
                "pg_attribute.attrelid::int, pg_attribute.attnum "
                "from pg_class, pg_attribute "
@@ -1289,8 +1379,9 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
                "and pg_attribute.attnum > 0 "
                "and pg_attribute.attrelid = pg_class.oid ");
          break;
+
       case QPSQLDriver::Version71:
-         stmt = QLatin1String("select pg_attribute.attname, pg_attribute.atttypid::int, "
+         stmt = QString("select pg_attribute.attname, pg_attribute.atttypid::int, "
                "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
                "pg_attrdef.adsrc "
                "from pg_class, pg_attribute "
@@ -1301,6 +1392,7 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
                "and pg_attribute.attrelid = pg_class.oid "
                "order by pg_attribute.attnum ");
          break;
+
       case QPSQLDriver::Version73:
       case QPSQLDriver::Version74:
       case QPSQLDriver::Version8:
@@ -1309,7 +1401,17 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
       case QPSQLDriver::Version83:
       case QPSQLDriver::Version84:
       case QPSQLDriver::Version9:
-         stmt = QLatin1String("select pg_attribute.attname, pg_attribute.atttypid::int, "
+      case QPSQLDriver::Version91:
+      case QPSQLDriver::Version92:
+      case QPSQLDriver::Version93:
+      case QPSQLDriver::Version94:
+      case QPSQLDriver::Version95:
+      case QPSQLDriver::Version96:
+      case QPSQLDriver::Version97:
+      case QPSQLDriver::Version98:
+      case QPSQLDriver::Version10:
+      case QPSQLDriver::Version11:
+         stmt = QString("select pg_attribute.attname, pg_attribute.atttypid::int, "
                "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
                "pg_attrdef.adsrc "
                "from pg_class, pg_attribute "
@@ -1321,30 +1423,36 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
                "and pg_attribute.attrelid = pg_class.oid "
                "and pg_attribute.attisdropped = false "
                "order by pg_attribute.attnum ");
+
          if (schema.isEmpty()) {
-            stmt = stmt.formatArg(QLatin1String("pg_table_is_visible(pg_class.oid)"));
+            stmt = stmt.formatArg(QString("pg_table_is_visible(pg_class.oid)"));
          } else
             stmt = stmt.formatArg(QString::fromLatin1("pg_class.relnamespace = (select oid from "
                      "pg_namespace where pg_namespace.nspname = '%1')").formatArg(schema));
          break;
+
       case QPSQLDriver::VersionUnknown:
-         qFatal("PSQL version is unknown");
+      default:
+         qFatal("PSQL version is unknown, unable to locate SQL record");
          break;
    }
 
    QSqlQuery query(createResult());
    query.exec(stmt.formatArg(tbl));
+
    if (d->pro >= QPSQLDriver::Version71) {
       while (query.next()) {
          int len = query.value(3).toInt();
          int precision = query.value(4).toInt();
+
          // swap length and precision if length == -1
          if (len == -1 && precision > -1) {
             len = precision - 4;
             precision = -1;
          }
+
          QString defVal = query.value(5).toString();
-         if (!defVal.isEmpty() && defVal.at(0) == QLatin1Char('\'')) {
+         if (!defVal.isEmpty() && defVal.at(0) == QChar('\'')) {
             defVal = defVal.mid(1, defVal.length() - 2);
          }
          QSqlField f(query.value(0).toString(), qDecodePSQLType(query.value(1).toInt()));
@@ -1355,20 +1463,24 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
          f.setSqlType(query.value(1).toInt());
          info.append(f);
       }
+
    } else {
       // Postgres < 7.1 cannot handle outer joins
       while (query.next()) {
          QString defVal;
-         QString stmt2 = QLatin1String("select pg_attrdef.adsrc from pg_attrdef where "
+         QString stmt2 = QString("select pg_attrdef.adsrc from pg_attrdef where "
                "pg_attrdef.adrelid = %1 and pg_attrdef.adnum = %2 ");
+
          QSqlQuery query2(createResult());
          query2.exec(stmt2.formatArg(query.value(5).toInt()).formatArg(query.value(6).toInt()));
          if (query2.isActive() && query2.next()) {
             defVal = query2.value(0).toString();
          }
-         if (!defVal.isEmpty() && defVal.at(0) == QLatin1Char('\'')) {
+
+         if (! defVal.isEmpty() && defVal.at(0) == QChar('\'')) {
             defVal = defVal.mid(1, defVal.length() - 2);
          }
+
          int len = query.value(3).toInt();
          int precision = query.value(4).toInt();
          // swap length and precision if length == -1
@@ -1376,6 +1488,7 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
             len = precision - 4;
             precision = -1;
          }
+
          QSqlField f(query.value(0).toString(), qDecodePSQLType(query.value(1).toInt()));
          f.setRequired(query.value(2).toBool());
          f.setLength(len);
@@ -1393,65 +1506,75 @@ template <class FloatType>
 inline void assignSpecialPsqlFloatValue(FloatType val, QString *target)
 {
    if (isnan(val)) {
-      *target = QLatin1String("'NaN'");
+      *target = QString("'NaN'");
+
    } else {
       switch (isinf(val)) {
          case 1:
-            *target = QLatin1String("'Infinity'");
+            *target = QString("'Infinity'");
             break;
          case -1:
-            *target = QLatin1String("'-Infinity'");
+            *target = QString("'-Infinity'");
             break;
       }
    }
 }
+
 QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
 {
    Q_D(const QPSQLDriver);
+
    QString r;
+
    if (field.isNull()) {
-      r = QLatin1String("NULL");
+      r = QString("NULL");
+
    } else {
       switch (int(field.type())) {
          case QVariant::DateTime:
+
 #ifndef QT_NO_DATESTRING
             if (field.value().toDateTime().isValid()) {
                // we force the value to be considered with a timezone information, and we force it to be UTC
                // this is safe since postgresql stores only the UTC value and not the timezone offset (only used
                // while parsing), so we have correct behavior in both case of with timezone and without tz
-               r = QLatin1String("TIMESTAMP WITH TIME ZONE ") + QLatin1Char('\'') +
-                  QLocale::c().toString(field.value().toDateTime().toUTC(), QLatin1String("yyyy-MM-ddThh:mm:ss.zzz")) +
-                  QLatin1Char('Z') + QLatin1Char('\'');
+
+               r = QString("TIMESTAMP WITH TIME ZONE ") + QChar('\'') +
+                  QLocale::c().toString(field.value().toDateTime().toUTC(), QString("yyyy-MM-ddThh:mm:ss.zzz")) + QChar('Z') + QChar('\'');
+
             } else {
-               r = QLatin1String("NULL");
+               r = QString("NULL");
             }
 #else
-            r = QLatin1String("NULL");
-#endif // QT_NO_DATESTRING
+            r = QString("NULL");
+#endif
             break;
+
          case QVariant::Time:
+
 #ifndef QT_NO_DATESTRING
             if (field.value().toTime().isValid()) {
-               r = QLatin1Char('\'') + field.value().toTime().toString(QLatin1String("hh:mm:ss.zzz")) + QLatin1Char('\'');
+               r = QChar('\'') + field.value().toTime().toString(QString("hh:mm:ss.zzz")) + QChar('\'');
             } else
 #endif
             {
-               r = QLatin1String("NULL");
+               r = QString("NULL");
             }
             break;
 
          case QVariant::String:
             r = QSqlDriver::formatValue(field, trimStrings);
+
             if (d->hasBackslashEscape) {
-               r.replace(QLatin1String("\\"), QLatin1String("\\\\"));
+               r.replace(QString("\\"), QString("\\\\"));
             }
             break;
 
          case QVariant::Bool:
             if (field.value().toBool()) {
-               r = QLatin1String("TRUE");
+               r = QString("TRUE");
             } else {
-               r = QLatin1String("FALSE");
+               r = QString("FALSE");
             }
             break;
 
@@ -1471,6 +1594,7 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
             qPQfreemem(data);
             break;
          }
+
          case QMetaType::Float:
             assignSpecialPsqlFloatValue(field.value().toFloat(), &r);
             if (r.isEmpty()) {
@@ -1484,8 +1608,9 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
                r = QSqlDriver::formatValue(field, trimStrings);
             }
             break;
+
          case QVariant::Uuid:
-            r = QLatin1Char('\'') + field.value().toString() + QLatin1Char('\'');
+            r = QChar('\'') + field.value().toString() + QChar('\'');
             break;
 
          default:
@@ -1493,6 +1618,7 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
             break;
       }
    }
+
    return r;
 }
 
@@ -1500,11 +1626,12 @@ QString QPSQLDriver::escapeIdentifier(const QString &identifier, IdentifierType)
 {
    QString res = identifier;
 
-   if (! identifier.isEmpty() && !identifier.startsWith(QLatin1Char('"')) && !identifier.endsWith(QLatin1Char('"')) ) {
-      res.replace(QLatin1Char('"'), QLatin1String("\"\""));
-      res.prepend(QLatin1Char('"')).append(QLatin1Char('"'));
-      res.replace(QLatin1Char('.'), QLatin1String("\".\""));
+   if (! identifier.isEmpty() && !identifier.startsWith(QChar('"')) && !identifier.endsWith(QChar('"')) ) {
+      res.replace(QChar('"'), QString("\"\""));
+      res.prepend(QChar('"')).append(QChar('"'));
+      res.replace(QChar('.'), QString("\".\""));
    }
+
    return res;
 }
 
@@ -1524,7 +1651,7 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
 {
    Q_D(QPSQLDriver);
    if (! isOpen()) {
-      qWarning("QPSQLDriver::subscribeToNotificationImplementation: database not open.");
+      qWarning("QPSQLDriver::subscribeToNotificationImplementation(): Database not open.");
       return false;
    }
 
@@ -1539,8 +1666,9 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
       // Add the name to the list of subscriptions here so that QSQLDriverPrivate::exec knows
       // to check for notifications immediately after executing the LISTEN
       d->seid << name;
-      QString query = QLatin1String("LISTEN ") + escapeIdentifier(name, QSqlDriver::TableName);
+      QString query = QString("LISTEN ") + escapeIdentifier(name, QSqlDriver::TableName);
       PGresult *result = d->exec(query);
+
       if (PQresultStatus(result) != PGRES_COMMAND_OK) {
          setLastError(qMakeError(tr("Unable to subscribe"), QSqlError::StatementError, d, result));
          PQclear(result);
@@ -1553,7 +1681,7 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
          connect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
       }
    } else {
-      qWarning("QPSQLDriver::subscribeToNotificationImplementation: PQsocket didn't return a valid socket to listen on");
+      qWarning("QPSQLDriver::subscribeToNotificationImplementation: PQsocket did not return a valid socket to listen on");
       return false;
    }
 
@@ -1563,19 +1691,21 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
 bool QPSQLDriver::unsubscribeFromNotification(const QString &name)
 {
    Q_D(QPSQLDriver);
+
    if (!isOpen()) {
       qWarning("QPSQLDriver::unsubscribeFromNotificationImplementation: database not open.");
       return false;
    }
 
-   if (!d->seid.contains(name)) {
-      qWarning("QPSQLDriver::unsubscribeFromNotificationImplementation: not subscribed to '%s'.",
+   if (! d->seid.contains(name)) {
+      qWarning("QPSQLDriver::unsubscribeFromNotificationImplementation(): Not subscribed to '%s'.",
          qPrintable(name));
       return false;
    }
 
-   QString query = QLatin1String("UNLISTEN ") + escapeIdentifier(name, QSqlDriver::TableName);
+   QString query = QString("UNLISTEN ") + escapeIdentifier(name, QSqlDriver::TableName);
    PGresult *result = d->exec(query);
+
    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
       setLastError(qMakeError(tr("Unable to unsubscribe"), QSqlError::StatementError, d, result));
       PQclear(result);

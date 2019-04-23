@@ -94,7 +94,6 @@
 QFactoryLoader *loader()
 {
    static QFactoryLoader retval(QSqlDriverInterface_ID, "/sqldrivers");
-
    return &retval;
 }
 
@@ -168,8 +167,9 @@ QSqlDatabasePrivate::QSqlDatabasePrivate(const QSqlDatabasePrivate &other) : ref
    hname   = other.hname;
    drvName = other.drvName;
    port    = other.port;
-   connOptions = other.connOptions;
-   driver = other.driver;
+
+   connOptions     = other.connOptions;
+   driver          = other.driver;
    precisionPolicy = other.precisionPolicy;
 }
 
@@ -265,8 +265,6 @@ void QSqlDatabasePrivate::addDatabase(const QSqlDatabase &db, const QString &nam
    db.d->connName = name;
 }
 
-/*! \internal
-*/
 QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
 {
    const QConnectionDict *dict = dbDict();
@@ -368,11 +366,11 @@ QStringList QSqlDatabase::drivers()
    list << "QIBASE";
 #endif
 
-   QFactoryLoader *fl = loader();
+   QFactoryLoader *factoryObj = loader();
 
-   if (fl != nullptr) {
+   if (factoryObj != nullptr) {
       // what keys are available
-      const QSet<QString> keySet = fl->keySet();
+      const QSet<QString> keySet = factoryObj->keySet();
 
       for (auto item : keySet) {
          if (! list.contains(item)) {
@@ -391,7 +389,6 @@ QStringList QSqlDatabase::drivers()
 
    return list;
 }
-
 
 void QSqlDatabase::registerSqlDriver(const QString &name, QSqlDriverCreatorBase *creator)
 {

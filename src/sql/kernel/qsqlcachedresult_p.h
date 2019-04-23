@@ -25,7 +25,7 @@
 #define QSQLCACHEDRESULT_P_H
 
 #include <qcontainerfwd.h>
-#include <QtSql/qsqlresult.h>
+#include <qsqlresult.h>
 
 class QVariant;
 
@@ -59,12 +59,12 @@ class Q_SQL_EXPORT QSqlCachedResult: public QSqlResult
    ValueCache &cache();
 
    void virtual_hook(int id, void *data) override;
-   void detachFromResultSet();
-   void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy);
+   void detachFromResultSet() override;
+   void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy) override;
 
  private:
    bool cacheNext();
    QSqlCachedResultPrivate *d;
 };
 
-#endif // QSQLCACHEDRESULT_P_H
+#endif
