@@ -36,7 +36,7 @@
 #include <QtCore/qt_windows.h>
 #endif
 
-#if defined(Q_WS_QPA)
+#if ! defined(Q_OS_WIN)
 #define QT_QSETTINGS_ALWAYS_CASE_SENSITIVE_AND_FORGET_ORIGINAL_KEY_ORDER
 #endif
 

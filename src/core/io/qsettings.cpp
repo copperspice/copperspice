@@ -1120,13 +1120,7 @@ static void initDefaultPaths(QMutexLocker *locker)
 
       if (env == 0) {
          userPath = homePath;
-         userPath += QLatin1Char('/');
-
-#if defined(Q_WS_QPA)
-         userPath += QLatin1String("Settings");
-#else
-         userPath += QLatin1String(".config");
-#endif
+         userPath += QString("/.config");
 
       } else if (*env == '/') {
 

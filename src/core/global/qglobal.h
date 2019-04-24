@@ -412,10 +412,7 @@
 
 #elif defined(Q_OS_UNIX)
 
-#  if defined(Q_OS_MAC) && ! defined(__USE_WS_X11__) && ! defined(Q_WS_QPA)
-#    define Q_OS_MAC
-
-#  elif ! defined(Q_WS_QPA)
+#  if ! defined(Q_OS_MAC)
 #    define Q_WS_X11
 #  endif
 
@@ -519,7 +516,7 @@ using ulong     = unsigned long;
 typedef int QNoImplicitBoolCast;
 
 #if defined(QT_ARCH_ARM) || defined(QT_ARCH_ARMV6) || defined(QT_ARCH_AVR32) ||  \
-     defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A) || (defined(QT_ARCH_MIPS) || defined(Q_WS_QPA))
+     defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A) || (defined(QT_ARCH_MIPS))
 
 #define QT_NO_FPU
 #endif

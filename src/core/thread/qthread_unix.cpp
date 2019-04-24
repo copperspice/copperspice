@@ -30,7 +30,7 @@
 #  include <qeventdispatcher_unix_p.h>
 #else
 
-#if !defined(QT_NO_GLIB)
+#if ! defined(QT_NO_GLIB)
 #include <qeventdispatcher_glib_p.h>
 #endif
 

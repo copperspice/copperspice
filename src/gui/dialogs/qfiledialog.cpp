@@ -27,7 +27,10 @@
 
 #include <qmessagebox.h>
 #include <qstylepainter.h>
+
+#if ! defined(QT_NO_MIMETYPE)
 // emerald   #include <qmimedatabase.h>
+#endif
 
 #include <qfiledialog_p.h>
 #include <ui_qfiledialog.h>
@@ -750,11 +753,11 @@ void QFileDialog::setFilter(QDir::Filters filters)
    d->showHiddenAction->setChecked((filters & QDir::Hidden));
 }
 
-#ifndef QT_NO_MIMETYPE
+#if ! defined(QT_NO_MIMETYPE)
 static QString nameFilterForMime(const QString &mimeType)
 {
 
-   /* emerald (mine types)
+   /* emerald (mime types)
 
        QMimeDatabase db;
        QMimeType mime(db.mimeTypeForName(mimeType));

@@ -267,7 +267,7 @@ void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
    entryFlags |= QFileSystemMetaData::ExistsAttribute;
    size_ = statBuffer.st_size;
 
-#if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC)
+#if defined(Q_OS_MAC)
    if (statBuffer.st_flags & UF_HIDDEN) {
       entryFlags     |= QFileSystemMetaData::HiddenAttribute;
       knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
