@@ -233,7 +233,7 @@ class QRegexTraits
          }
 
          if (cType & Char_Category::categoryDigit) {
-            retval = retval && c.isDigit();
+            retval = retval || c.isDigit();
          }
 
          if (cType & Char_Category::categoryHexDigit) {
