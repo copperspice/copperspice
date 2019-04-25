@@ -727,10 +727,8 @@ static int QT_WIN_CALLBACK storeFont(const LOGFONT *logFont, const TEXTMETRIC *t
 
 void QWindowsFontDatabase::populateFamily(const QString &familyName, bool registerAlias)
 {
-   qDebug() << familyName;
-
    if (familyName.size() >= LF_FACESIZE) {
-      qWarning() << "Unable to enumerate family '" << familyName << '\'';
+      qWarning() << "QWindowsFontDatabase::populateFamily(): Unable to enumerate font family =" << familyName;
       return;
    }
 
@@ -739,12 +737,20 @@ void QWindowsFontDatabase::populateFamily(const QString &familyName, bool regist
    lf.lfCharSet = DEFAULT_CHARSET;
 
    std::wstring tmp = familyName.toStdWString();
-   memcpy(lf.lfFaceName, tmp.data(), tmp.size());
+   memcpy(lf.lfFaceName, tmp.c_str(), tmp.size() * 2);
 
-   lf.lfFaceName[tmp.size()] = 0;
-   lf.lfPitchAndFamily = 0;
+   lf.lfFaceName[tmp.size()] = L'\0';
+   lf.lfPitchAndFamily       = 0;
 
-   EnumFontFamiliesEx(dummy, &lf, storeFont, LPARAM(registerAlias), 0);
+   // reset
+   storeFont_callback = false;
+
+   EnumFontFamiliesExW(dummy, &lf, storeFont, LPARAM(registerAlias), 0);
+
+   if (! storeFont_callback) {
+      Q_ASSERT_X(false, "QWindowsfontdatabase(): No font families were found for ", csPrintable(familyName));
+   }
+
    ReleaseDC(0, dummy);
 }
 
