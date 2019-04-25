@@ -312,6 +312,8 @@ class Q_CORE_EXPORT cs_typeName_internal
    public:
       static const QString &typeName() {
          static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
+         static QString retval = QString("");     // prevents a compiler warning
+         return retval;
       }
 };
 
@@ -418,13 +420,6 @@ const QString &cs_typeName_internal<T, typename std::enable_if< std::is_base_of<
 
 // 1   standard template functions
 class cs_internalEmpty;
-
-template<class ...Ts>
-typename std::enable_if<sizeof...(Ts) == 0, const QString &>::type cs_typeName()
-{
-   static QString retval("");
-   return retval;
-}
 
 template<class T1 = cs_internalEmpty>
 const QString &cs_typeName()

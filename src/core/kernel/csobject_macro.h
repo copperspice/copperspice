@@ -29,7 +29,6 @@
 #include <qglobal.h>
 
 class QMetaObject;
-extern "C" QMetaObject *cs_internal_plugin_metaobject();
 
 #define qPrintable(string)          QString8(string).constData()
 #define csPrintable(string)         QString8(string).constData()
@@ -75,7 +74,7 @@ extern "C" QMetaObject *cs_internal_plugin_metaobject();
 
 
 #define CS_PLUGIN_REGISTER(classname) \
-   QMetaObject * cs_internal_plugin_metaobject() {  \
+   extern "C" Q_DECL_EXPORT QMetaObject * cs_internal_plugin_metaobject() {  \
       return const_cast<QMetaObject_T<classname> *>(&classname::staticMetaObject()); \
    }
 
