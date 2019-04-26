@@ -52,6 +52,7 @@ public:
 // emerald     QMediaServiceProviderHint(QCamera::Position position);
     QMediaServiceProviderHint(Features features);
     QMediaServiceProviderHint(const QMediaServiceProviderHint &other);
+
     ~QMediaServiceProviderHint();
 
     QMediaServiceProviderHint& operator=(const QMediaServiceProviderHint &other);
@@ -79,9 +80,10 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QMediaServiceProviderHint::Features)
 
 struct Q_MULTIMEDIA_EXPORT QMediaServiceProviderFactoryInterface
 {
+    virtual ~QMediaServiceProviderFactoryInterface() {}
+
     virtual QMediaService* create(QString const& key) = 0;
     virtual void release(QMediaService *service) = 0;
-    virtual ~QMediaServiceProviderFactoryInterface();
 };
 
 #define QMediaServiceProviderFactoryInterface_iid \
@@ -92,6 +94,7 @@ CS_DECLARE_INTERFACE(QMediaServiceProviderFactoryInterface, QMediaServiceProvide
 struct Q_MULTIMEDIA_EXPORT QMediaServiceSupportedFormatsInterface
 {
     virtual ~QMediaServiceSupportedFormatsInterface() {}
+
     virtual QMultimedia::SupportEstimate hasSupport(const QString &mimeType, const QStringList& codecs) const = 0;
     virtual QStringList supportedMimeTypes() const = 0;
 };
@@ -104,6 +107,7 @@ CS_DECLARE_INTERFACE(QMediaServiceSupportedFormatsInterface, QMediaServiceSuppor
 struct Q_MULTIMEDIA_EXPORT QMediaServiceSupportedDevicesInterface
 {
     virtual ~QMediaServiceSupportedDevicesInterface() {}
+
     virtual QList<QByteArray> devices(const QByteArray &service) const = 0;
     virtual QString deviceDescription(const QByteArray &service, const QByteArray &device) = 0;
 };
