@@ -72,7 +72,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnslookup_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_unix.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy_generic.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy_mac.cpp
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(NETWORK_SOURCES
@@ -80,6 +80,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnslookup_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy_generic.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy_win.cpp
     )
 endif()

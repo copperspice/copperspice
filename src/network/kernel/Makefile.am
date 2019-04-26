@@ -79,7 +79,7 @@ lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/kernel/qdnslookup_unix.cpp \
 	src/network/kernel/qhostinfo_unix.cpp \
 	src/network/kernel/qnetworkinterface_unix.cpp \
-	src/network/kernel/qnetworkproxy_generic.cpp
+	src/network/kernel/qnetworkproxy_mac.cpp
 endif
 
 if OSTYPE_WIN
@@ -87,6 +87,6 @@ lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/kernel/qdnslookup_win.cpp \
 	src/network/kernel/qhostinfo_win.cpp \
 	src/network/kernel/qnetworkinterface_win.cpp \
-	src/network/kernel/qnetworkproxy_generic.cpp
+	src/network/kernel/qnetworkproxy_win.cpp
 endif
 
