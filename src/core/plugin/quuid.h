@@ -114,7 +114,8 @@ class Q_CORE_EXPORT QUuid
       return *this;
    }
 
-   constexpr operator GUID() const {
+   // emerald - 'constexpr operator GUID()' constdoes not work in MSVC 19.15
+   operator GUID() const {
       GUID guid = { data1, data2, data3, { data4[0], data4[1], data4[2], data4[3], data4[4], data4[5], data4[6], data4[7] } };
       return guid;
    }
