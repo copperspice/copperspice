@@ -47,11 +47,11 @@ bool QLibraryHandle::load_sys()
    // avoid 'Bad Image message box
    UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-   // if it is a plugin do not try the ".dll" extension
+   // if it is a plugin, do not try the ".dll" extension
 
    QStringList attempts;
    if (pluginState != IsAPlugin) {
-      attempts.append(fileName + QLatin1String(".dll"));
+      attempts.append(fileName + QString(".dll"));
    }
 
    QFileSystemEntry fsEntry(fileName);
@@ -63,8 +63,6 @@ bool QLibraryHandle::load_sys()
       attempts.append(fileName);
    }
 
-
-
    for (const QString &attempt : attempts) {
       pHnd = LoadLibrary(&QDir::toNativeSeparators(attempt).toStdWString()[0]);
 
@@ -75,7 +73,7 @@ bool QLibraryHandle::load_sys()
    }
 
    SetErrorMode(oldmode);
-   if (! pHnd) {
+   if (pHnd == nullptr) {
       errorString = QLibrary::tr("Unable to load library %1: %2").formatArgs(fileName, qt_error_string());
 
    } else {
@@ -97,13 +95,13 @@ bool QLibraryHandle::load_sys()
       }
    }
 
-   return (pHnd != 0);
+   return (pHnd != nullptr);
 }
 
 bool QLibraryHandle::unload_sys()
 {
    if (! FreeLibrary(pHnd)) {
-      errorString = QLibrary::tr("Can not unload library %1: %2").formatArg(fileName).formatArg(qt_error_string());
+      errorString = QLibrary::tr("Can not unload library %1: %2").formatArgs(fileName, qt_error_string());
       return false;
    }
 
@@ -113,11 +111,13 @@ bool QLibraryHandle::unload_sys()
 
 void *QLibraryHandle::resolve_sys(const QString &symbol)
 {
-   void *address = (void *)GetProcAddress(pHnd, symbol.constData());
+   void *address = (void *)GetProcAddress(pHnd, symbol.constData() );
 
    if (! address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(symbol).formatArg(fileName).formatArg(
-            qt_error_string());
+      errorString = QLibrary::tr("resolve_sys(): Unable to resolve symbol \"%1\" in %2. %3").formatArgs(symbol, fileName, qt_error_string());
+
+      // show the full error message
+      qWarning("%s", csPrintable(errorString));
 
    } else {
       errorString.clear();

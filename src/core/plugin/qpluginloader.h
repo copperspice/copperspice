@@ -29,7 +29,6 @@
 
 class QLibraryHandle;
 
-
 class Q_CORE_EXPORT QPluginLoader : public QObject
 {
    CORE_CS_OBJECT(QPluginLoader)
@@ -63,11 +62,10 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
    QLibrary::LoadHints loadHints() const;
 
  private:
-    Q_DISABLE_COPY(QPluginLoader)
+   Q_DISABLE_COPY(QPluginLoader)
 
    QLibraryHandle *mp_handle;
    bool mp_loaded;
 };
-
 
 #endif

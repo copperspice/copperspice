@@ -451,9 +451,11 @@ void QLibraryHandle::updatePluginState()
 
       if (metaPtr) {
          success = qt_get_metadata(metaPtr, this);
+
       } else {
          success = false;
-         errorString = QLibrary::tr("Unable to retrieve the meta object for the %1 plugin").formatArg(fileName);
+         errorString = QLibrary::tr("updatePluginState(): Unable to retrieve the meta object for the %1 plugin").formatArg(fileName);
+
       }
    }
 

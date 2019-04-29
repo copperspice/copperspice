@@ -116,6 +116,9 @@ void QFactoryLoader::update()
          library = QLibraryHandle::findOrLoad(QFileInfo(fileName).canonicalFilePath());
 
          if (! library->isPlugin()) {
+            // show the full error message
+            qWarning("%s", csPrintable(library->errorString));
+
             library->release();
             continue;
          }
