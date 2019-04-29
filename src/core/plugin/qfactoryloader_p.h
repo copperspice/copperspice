@@ -26,8 +26,9 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qmap.h>
-#include <QScopedPointer>
+#include <qmultimap.h>
+#include <qset.h>
+#include <qscopedpointer.h>
 
 #include <qlibrary_p.h>
 
@@ -52,14 +53,38 @@ class Q_CORE_EXPORT QFactoryLoader : public QObject
    QSet<QString> keySet() const;
    QSet<QLibraryHandle *> librarySet(QString key) const;
 
-   void update();
+   void setup();
    static void refreshAll();
+
+   //
+   struct PluginStatus {
+      QString pathName;
+      QString fileName;
+      QString keyFound;
+   };
+
+   QSet<QString> getPluginLocations() const {
+      QSet<QString> retval;
+
+      for (auto &item : mp_pluginsFound) {
+         // duplicates will be tossed
+         retval.insert(item.pathName);
+      }
+
+      return retval;
+   }
+
+   QVector<PluginStatus> getPluginStatus() const {
+      return mp_pluginsFound;
+   }
 
  protected:
    QScopedPointer<QFactoryLoaderPrivate> d_ptr;
 
  private:
    mutable QMultiMap<QString, QLibraryHandle *> m_pluginMap;
+
+   QVector<PluginStatus> mp_pluginsFound;
 };
 
 template <class PluginInterface, class FactoryInterface, class ...Ts>

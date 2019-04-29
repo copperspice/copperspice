@@ -32,8 +32,17 @@
 
 #include <qcoreapplication_p.h>
 
-Q_GLOBAL_STATIC(QList<QFactoryLoader *>, qt_factory_loaders)
-Q_GLOBAL_STATIC_WITH_ARGS(QMutex, qt_factoryloader_mutex, (QMutex::Recursive))
+QList<QFactoryLoader *> *qt_factory_loaders()
+{
+   static QList<QFactoryLoader *> retval;
+   return &retval;
+}
+
+QMutex *qt_factoryloader_mutex()
+{
+   static QMutex retval(QMutex::Recursive);
+   return &retval;
+}
 
 class QFactoryLoaderPrivate
 {
@@ -43,8 +52,9 @@ class QFactoryLoaderPrivate
    QFactoryLoaderPrivate() {}
    virtual ~QFactoryLoaderPrivate();
 
-   QString iid;
    Qt::CaseSensitivity cs;
+
+   QString iid;
    QString suffix;
    QStringList loadedPaths;
 
@@ -80,28 +90,30 @@ QFactoryLoader::QFactoryLoader(const QString &iid, const QString &suffix, Qt::Ca
    d->suffix = suffix;
 
    QMutexLocker locker(qt_factoryloader_mutex());
-   update();
+   setup();
 
    qt_factory_loaders()->append(this);
 }
 
-void QFactoryLoader::update()
+void QFactoryLoader::setup()
 {
 #ifdef QT_SHARED
    Q_D(QFactoryLoader);
+
    QStringList paths = QCoreApplication::libraryPaths();
+   mp_pluginsFound.clear();
 
    for (int i = 0; i < paths.count(); ++i) {
       const QString &pluginDir = paths.at(i);
 
-      // already loaded
+      // already looked in this path
       if (d->loadedPaths.contains(pluginDir)) {
          continue;
       }
-
-      d->loadedPaths << pluginDir;
+      d->loadedPaths.append(pluginDir);
 
       QString path = pluginDir + d->suffix;
+      mp_pluginsFound.append( PluginStatus{path} );
 
       if (! QDir(path).exists(".")) {
          continue;
@@ -111,9 +123,16 @@ void QFactoryLoader::update()
       QLibraryHandle *library = nullptr;
 
       for (int j = 0; j < plugins.count(); ++j) {
-         QString fileName = QDir::cleanPath(path + '/' + plugins.at(j));
+         QString fname = QDir::cleanPath(path + '/' + plugins.at(j));
 
-         library = QLibraryHandle::findOrLoad(QFileInfo(fileName).canonicalFilePath());
+         if (j > 0) {
+            mp_pluginsFound.append( PluginStatus{path} );
+         }
+
+         mp_pluginsFound.last().fileName = plugins.at(j);
+
+         //
+         library = QLibraryHandle::findOrLoad(QFileInfo(fname).canonicalFilePath());
 
          if (! library->isPlugin()) {
             // show the full error message
@@ -133,6 +152,7 @@ void QFactoryLoader::update()
          QString version;
 
          int index = library->m_metaObject->indexOfClassInfo("plugin_iid");
+
          if (index == -1) {
             library->release();
             continue;
@@ -161,8 +181,15 @@ void QFactoryLoader::update()
          QStringList keyList;
 
          if (iid == d->iid && ! key.isEmpty()) {
-            // we found an iid for the plugin and there are keys
-            keyList += d->cs ? key : key.toLower();
+            // found an iid for the plugin and there are keys
+            keyList.append(d->cs ? key : key.toLower());
+
+            if (keyList.count() > 0) {
+               // duplicate the last struture
+               // mp_pluginsFound.append( PluginStatus{ ?} );
+            }
+
+            mp_pluginsFound.last().keyFound = keyList[0];
          }
 
          //
@@ -298,7 +325,6 @@ QObject *QFactoryLoader::instance(QLibraryHandle * library) const
    return nullptr;
 }
 
-
 #if defined(Q_OS_UNIX) && ! defined (Q_OS_MAC)
 QLibraryHandle *QFactoryLoader::library(const QString &key) const
 {
@@ -313,7 +339,7 @@ void QFactoryLoader::refreshAll()
    QList<QFactoryLoader *> *loaders = qt_factory_loaders();
 
    for (auto item : *loaders) {
-      item->update();
+      item->setup();
    }
 }
 
@@ -325,7 +351,7 @@ QSet<QString> QFactoryLoader::keySet() const
    QSet<QString> retval;
 
    for (auto lib_handle : d->libraryList) {
-      // only works for one key
+      // only works for one key right now
       int index = lib_handle->m_metaObject->indexOfClassInfo("plugin_key");
 
       if (index != -1) {
