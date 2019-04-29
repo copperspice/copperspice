@@ -37,7 +37,7 @@ class QSignalEventGenerator : public QObject
  public:
    QSignalEventGenerator(QStateMachine *parent);
 
-   // broom (on hold, statemachine)
+   // emerald (on hold, statemachine)
    CORE_CS_SLOT_1(Public, void execute())     // const TeaCupAbstract &data))
    CORE_CS_SLOT_2(execute)
 

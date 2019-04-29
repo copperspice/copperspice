@@ -24,16 +24,16 @@
 #ifndef QSETTINGS_P_H
 #define QSETTINGS_P_H
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qiodevice.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qstringlist.h>
+#include <qdatetime.h>
+#include <qmap.h>
+#include <qmutex.h>
+#include <qiodevice.h>
+#include <qstack.h>
+#include <qstringlist.h>
 #include <qscopedpointer_p.h>
 
 #ifdef Q_OS_WIN
-#include <QtCore/qt_windows.h>
+#include <qt_windows.h>
 #endif
 
 #if ! defined(Q_OS_WIN)

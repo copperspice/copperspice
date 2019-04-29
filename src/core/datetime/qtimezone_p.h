@@ -143,7 +143,8 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
 };
 Q_DECLARE_TYPEINFO(QTimeZonePrivate::Data, Q_MOVABLE_TYPE);
 
-template<> QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone();
+template<>
+QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone();
 
 class  QUtcTimeZonePrivate final : public QTimeZonePrivate
 {

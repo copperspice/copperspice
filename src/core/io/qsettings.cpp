@@ -1095,23 +1095,21 @@ static void initDefaultPaths(QMutexLocker *locker)
 
    /*
       QLibraryInfo::location() uses QSettings, so in order to
-      avoid a dead-lock, we can't hold the global mutex while
-      calling it.
+      avoid a dead-lock, we can't hold the global mutex while calling it.
    */
    systemPath = QLibraryInfo::location(QLibraryInfo::SettingsPath);
    systemPath += QLatin1Char('/');
 
    locker->relock();
+
    if (pathHash->isEmpty()) {
-      /*
-         Lazy initialization of pathHash. We initialize the
-         IniFormat paths and (on Unix) the NativeFormat paths.
-         (The NativeFormat paths are not configurable for the
-         Windows registry and the Mac CFPreferences.)
-      */
+      // Lazy initialization of pathHash. We initialize the IniFormat paths and (on Unix) the NativeFormat paths.
+      // (The NativeFormat paths are not configurable for the Windows registry and the Mac CFPreferences.)
+
 #ifdef Q_OS_WIN
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::UserScope),
                        windowsConfigPath(CSIDL_APPDATA) + QDir::separator());
+
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::SystemScope),
                        windowsConfigPath(CSIDL_COMMON_APPDATA) + QDir::separator());
 #else
@@ -1123,15 +1121,15 @@ static void initDefaultPaths(QMutexLocker *locker)
          userPath += QString("/.config");
 
       } else if (*env == '/') {
-
          userPath = QFile::decodeName(env);
+
       } else {
          userPath = homePath;
-         userPath += QLatin1Char('/');
+         userPath += QChar('/');
          userPath += QFile::decodeName(env);
       }
 
-      userPath += QLatin1Char('/');
+      userPath += QChar('/');
 
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::SystemScope), systemPath);

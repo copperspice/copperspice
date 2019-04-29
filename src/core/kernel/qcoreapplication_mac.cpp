@@ -25,25 +25,25 @@
 #include <qcoreapplication_p.h>
 #include <qcore_mac_p.h>
 
-QT_BEGIN_NAMESPACE
 
-/*****************************************************************************
-  QCoreApplication utility functions
- *****************************************************************************/
 QString qAppFileName()
 {
    static QString appFileName;
+
    if (appFileName.isEmpty()) {
       QCFType<CFURLRef> bundleURL(CFBundleCopyExecutableURL(CFBundleGetMainBundle()));
+
       if (bundleURL) {
          QCFString cfPath(CFURLCopyFileSystemPath(bundleURL, kCFURLPOSIXPathStyle));
+
          if (cfPath) {
             appFileName = cfPath;
          }
       }
    }
+
    return appFileName;
 }
 
 
-QT_END_NAMESPACE
+

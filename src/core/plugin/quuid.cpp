@@ -437,7 +437,6 @@ QUuid QUuid::createUuid()
 #else // ! Q_OS_WIN
 
 
-
 #if defined(Q_OS_UNIX)
 Q_GLOBAL_STATIC(QThreadStorage<QFile *>, devUrandomStorage);
 #endif
