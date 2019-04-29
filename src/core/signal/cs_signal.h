@@ -288,8 +288,8 @@ bool connect(const Sender &sender, void (SignalClass::*signalMethod)(SignalArgs.
    std::unique_ptr<Internal::Bento<void (SignalClass::*)(SignalArgs...)>>
                   signalMethod_Bento(new Internal::Bento<void (SignalClass::*)(SignalArgs...)>(signalMethod));
 
-   std::unique_ptr<Internal::Bento<void (SlotClass::*)(SlotArgs...)>>
-                  slotMethod_Bento(new Internal::Bento<void (SlotClass::*)(SlotArgs...)>(slotMethod));
+   std::unique_ptr<Internal::Bento<SlotReturn (SlotClass::*)(SlotArgs...)>>
+                  slotMethod_Bento(new Internal::Bento<SlotReturn (SlotClass::*)(SlotArgs...)>(slotMethod));
 
    auto senderListHandle = sender.m_connectList.lock_write();
 
@@ -417,7 +417,7 @@ bool disconnect(const Sender &sender, void (SignalClass::*signalMethod)(SignalAr
    Internal::cs_testConnect_SignalSlotArgs_2< void (*)(SignalArgs...), void (*)(SlotArgs...) >();
 
    Internal::Bento<void (SignalClass::*)(SignalArgs...)> signalMethod_Bento(signalMethod);
-   Internal::Bento<void (SlotClass::*)(SlotArgs...)> slotMethod_Bento(slotMethod);
+   Internal::Bento<SlotReturn (SlotClass::*)(SlotArgs...)> slotMethod_Bento(slotMethod);
 
    if (! internal_disconnect(sender, &signalMethod_Bento, &receiver, &slotMethod_Bento)) {
       return false;
