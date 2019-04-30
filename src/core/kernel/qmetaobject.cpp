@@ -396,6 +396,26 @@ int QMetaObject::methodOffset() const
    return retval;
 }
 
+QObject *QMetaObject::newInstance() const
+{
+   // signature of the method being invoked
+   QString constructorSig = className() + "()";
+
+   int index = this->indexOfConstructor(constructorSig);
+
+   if (index == -1)  {
+      return 0;
+   }
+
+   QMetaMethod metaMethod = this->constructor(index);
+   QObject *retval = 0;
+
+   // about to call QMetaMethod::invoke()
+   metaMethod.invoke(0, Qt::DirectConnection, CSReturnArgument<QObject *>(retval));
+
+   return retval;
+}
+
 QString QMetaObject::normalizedSignature(const QString &method)
 {
    QString result;

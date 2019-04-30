@@ -120,6 +120,8 @@ class Q_CORE_EXPORT QMetaObject
    template<class ...Ts>
    QObject *newInstance(Ts... Vs) const;
 
+   QObject *newInstance() const;
+
  protected:
    static std::tuple<std::vector<QString>, QString, std::vector<QString>> getSignatures(const QString &fullName);
 
@@ -157,7 +159,6 @@ QMetaEnum QMetaObject::findEnum()
    return data;
 }
 
-
 template<class MethodClass, class... MethodArgs>
 QMetaMethod QMetaObject::method( void (MethodClass::*methodPtr)(MethodArgs...) ) const
 {
@@ -184,14 +185,14 @@ QMetaMethod QMetaObject::method( void (MethodClass::*methodPtr)(MethodArgs...) )
 template<class ...Ts>
 QObject *QMetaObject::newInstance(Ts... Vs) const
 {
-   QString constructorName = className();
+   QString constructorSig = className();
 
    // signature of the method being invoked
-   constructorName += "(";
-   constructorName += cs_typeName<Ts...>();
-   constructorName += ")";
+   constructorSig += "(";
+   constructorSig += cs_typeName<Ts...>();
+   constructorSig += ")";
 
-   int index = this->indexOfConstructor(constructorName);
+   int index = this->indexOfConstructor(constructorSig);
 
    if (index == -1)  {
       return 0;
