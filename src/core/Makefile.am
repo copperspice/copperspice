@@ -13,6 +13,12 @@ lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore -Iprivateinclu
    -DBUILDING_LIB_CS_SIGNAL \
    -DBUILDING_LIB_CS_STRING
 
+if GTK
+   # may need to add ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES}
+else
+   lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_GLIB
+endif
+
 lib_libCsCore@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS) -DQT_BUILD_CORE_LIB
 lib_libCsCore@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)
 lib_libCsCore@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined

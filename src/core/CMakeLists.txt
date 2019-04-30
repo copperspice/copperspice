@@ -4,7 +4,12 @@ add_definitions(
    -DBUILDING_LIB_CS_STRING
 )
 
-set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES})
+if(GTK2_FOUND)
+   set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES})
+else()
+   add_definitions(-DQT_NO_GLIB)
+endif()
+
 set(EXTRA_CORE_CXXFLAGS)
 set(EXTRA_CORE_LDFLAGS)
 
@@ -27,8 +32,6 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/thread
    ${CMAKE_CURRENT_SOURCE_DIR}/tools
    ${CMAKE_CURRENT_SOURCE_DIR}/xml
-   ${GLIB2_INCLUDES}
-   ${GOBJECT2_INCLUDES}
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 

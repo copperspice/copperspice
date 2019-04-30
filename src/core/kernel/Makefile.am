@@ -192,8 +192,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/kernel/qsharedmemory_unix.cpp \
 	src/core/kernel/qsystemsemaphore_unix.cpp \
 	src/core/kernel/qtimerinfo_unix.cpp \
-	src/core/kernel/qeventdispatcher_unix.cpp \
-	src/core/kernel/qeventdispatcher_glib.cpp
+	src/core/kernel/qeventdispatcher_unix.cpp
 endif
 
 if OSTYPE_BSD
@@ -203,8 +202,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/kernel/qsharedmemory_unix.cpp \
 	src/core/kernel/qtimerinfo_unix.cpp \
    src/core/kernel/qsystemsemaphore_unix.cpp \
-	src/core/kernel/qeventdispatcher_unix.cpp \
-	src/core/kernel/qeventdispatcher_glib.cpp
+	src/core/kernel/qeventdispatcher_unix.cpp
 endif
 
 if OSTYPE_DARWIN
@@ -219,4 +217,9 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/kernel/qsharedmemory_unix.cpp \
 	src/core/kernel/qsystemsemaphore_unix.cpp \
 	src/core/kernel/qeventdispatcher_cf.mm
+endif
+
+if GTK
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
+	src/core/kernel/qeventdispatcher_glib.cpp
 endif

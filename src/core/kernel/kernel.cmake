@@ -183,6 +183,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_win.cpp
     )
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
@@ -192,8 +193,14 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerinfo_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib.cpp
     )
+
+    if(GTK2_FOUND)
+       set(CORE_SOURCES
+           ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib.cpp
+       )
+    endif()
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
         ${CORE_SOURCES}
