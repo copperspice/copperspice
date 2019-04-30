@@ -28,25 +28,26 @@
 #include <limits>
 #include <atomic>
 
-
 QEvent::QEvent(Type type)
-   : d(0), t(type), posted(false), spont(false), m_accept(true)
+   : d(nullptr), t(type), posted(false), spont(false), m_accept(true)
 {}
 
 QEvent::QEvent(const QEvent &other)
-    : d(other.d), t(other.t), posted(other.posted), spont(other.spont),
-      m_accept(other.m_accept)
+    : d(other.d), t(other.t), posted(other.posted), spont(other.spont), m_accept(other.m_accept)
 {
-    Q_ASSERT_X(!d, "QEvent", "Impossible, this can't happen: QEventPrivate isn't defined anywhere");
+   Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
 }
+
 QEvent &QEvent::operator=(const QEvent &other)
 {
-    Q_ASSERT_X(!other.d, "QEvent", "Impossible, this can't happen: QEventPrivate isn't defined anywhere");
-    t = other.t;
-    posted = other.posted;
-    spont = other.spont;
-    m_accept = other.m_accept;
-    return *this;
+   Q_ASSERT_X(! other.d, "QEvent", "QEventPrivate is not defined anywhere");
+
+   t        = other.t;
+   posted   = other.posted;
+   spont    = other.spont;
+   m_accept = other.m_accept;
+
+   return *this;
 }
 
 QEvent::~QEvent()
@@ -55,7 +56,7 @@ QEvent::~QEvent()
       QCoreApplicationPrivate::removePostedEvent(this);
    }
 
-    Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
+   Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
 }
 
 namespace {

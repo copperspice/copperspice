@@ -328,8 +328,9 @@ struct QWindowsMessageWindowClassContext
     ATOM atom;
     std::wstring className;
 };
+
 QWindowsMessageWindowClassContext::QWindowsMessageWindowClassContext()
-    : atom(0), className(0)
+    : atom(0)
 {
    // make sure that multiple instances can coexist in the same process
    const QString classStr = "QEventDispatcherWin32_Internal_Widget" + QString::number(quintptr(qt_internal_proc));
@@ -374,8 +375,7 @@ static HWND qt_create_internal_window(const QEventDispatcherWin32 *eventDispatch
 
    HWND parent = HWND_MESSAGE;
 
-   HWND wnd = CreateWindow(&(ctx->className)[0],    // classname
-                           &(ctx->className)[0],    // window name
+   HWND wnd = CreateWindow(&(ctx->className)[0], &(ctx->className)[0],        // classname, window name
                            0,                 // style
                            0, 0, 0, 0,        // geometry
                            parent,            // parent
@@ -494,28 +494,32 @@ void QEventDispatcherWin32::createInternalHwnd()
 {
    Q_D(QEventDispatcherWin32);
 
-    if (d->internalHwnd)
-        return;
-    d->internalHwnd = qt_create_internal_window(this);
+   if (d->internalHwnd) {
+      return;
+   }
 
-    installMessageHook();
+   d->internalHwnd = qt_create_internal_window(this);
+   installMessageHook();
 
-    // start all normal timers
-    for (int i = 0; i < d->timerVec.count(); ++i)
-        d->registerTimer(d->timerVec.at(i));
+   // start all normal timers
+   for (int i = 0; i < d->timerVec.count(); ++i) {
+     d->registerTimer(d->timerVec.at(i));
+   }
 }
 
 void QEventDispatcherWin32::installMessageHook()
 {
-    Q_D(QEventDispatcherWin32);
+   Q_D(QEventDispatcherWin32);
 
-    if (d->getMessageHook)
-        return;
+   if (d->getMessageHook)
+      return;
+
    // setup GetMessage hook needed to drive our posted events
    d->getMessageHook = SetWindowsHookEx(WH_GETMESSAGE, (HOOKPROC) qt_GetMessageHook, NULL, GetCurrentThreadId());
 
-   if (!d->getMessageHook) {
+   if (! d->getMessageHook) {
       int errorCode = GetLastError();
+
       qFatal("INTERNAL ERROR: failed to install GetMessage hook: %d, %s",
                errorCode, csPrintable(qt_error_string(errorCode)));
    }
