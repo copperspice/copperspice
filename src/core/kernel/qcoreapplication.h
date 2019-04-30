@@ -40,6 +40,8 @@ class QTextCodec;
 class QTranslator;
 class QPostEventList;
 class QStringList;
+class QAbstractEventDispatcher;
+class QAbstractNativeEventFilter;
 
 #define qApp QCoreApplication::instance()
 
@@ -115,13 +117,12 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static void exit(int retcode = 0);
 
    static bool sendEvent(QObject *receiver, QEvent *event);
-   static void postEvent(QObject *receiver, QEvent *event);
-   static void postEvent(QObject *receiver, QEvent *event, int priority);
-   static void sendPostedEvents(QObject *receiver, int event_type);
-   static void sendPostedEvents();
-   static void removePostedEvents(QObject *receiver);
-   static void removePostedEvents(QObject *receiver, int eventType);
-   static bool hasPendingEvents();
+   static void postEvent(QObject *receiver, QEvent *event, int priority = Qt::NormalEventPriority);
+
+   static void sendPostedEvents(QObject *receiver = nullptr, int event_type = 0);
+   static void removePostedEvents(QObject *receiver, int eventType = 0);
+   static QAbstractEventDispatcher *eventDispatcher();
+   static void setEventDispatcher(QAbstractEventDispatcher *eventDispatcher);
 
    virtual bool notify(QObject *, QEvent *);
 
@@ -148,18 +149,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
                   Encoding encoding = CodecForTr, int n = -1);
 
    static void flush();
-
-#if defined(Q_OS_WIN)
-   virtual bool winEventFilter(MSG *message, long *result);
-#endif
-
-#if defined(Q_OS_UNIX)
-   static void watchUnixSignal(int signal, bool watch);
-#endif
-
-   typedef bool (*EventFilter)(void *message, long *result);
-   EventFilter setEventFilter(EventFilter filter);
-   bool filterEvent(void *message, long *result);
+    void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
+    void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);
 
    void cs_internal_maybeQuit();
 
@@ -278,12 +269,6 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
    return self ? self->notifyInternal(receiver, event) : false;
 }
 
-inline void QCoreApplication::sendPostedEvents()
-{
-   sendPostedEvents(0, 0);
-}
-
-
 // * *
 #ifdef QT_NO_TRANSLATION
 
@@ -306,8 +291,6 @@ inline QString QCoreApplication::translate(const char *, const char *sourceText,
    if (encoding == UnicodeUTF8) {
       return QString::fromUtf8(sourceText);
    }
-#else
-   Q_UNUSED(encoding)
 #endif
    return QString::fromLatin1(sourceText);
 }
@@ -330,9 +313,8 @@ public: \
                                              QCoreApplication::UnicodeUTF8, n); } \
 private:
 
-//
-using QtStartUpFunction = void (*)();
-using QtCleanUpFunction = void (*)();
+   using QtStartUpFunction = void (*)();
+   using QtCleanUpFunction = void (*)();
 
 Q_CORE_EXPORT void qAddPreRoutine(QtStartUpFunction);
 Q_CORE_EXPORT void qAddPostRoutine(QtCleanUpFunction);

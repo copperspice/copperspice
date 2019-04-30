@@ -187,27 +187,6 @@ Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cm
    Q_UNUSED(prevInstance);
 }
 
-/*!
-    The message procedure calls this function for every message
-    received. Reimplement this function if you want to process window
-    messages \a msg that are not processed by Qt. If you don't want
-    the event to be processed by Qt, then return true and set \a result
-    to the value that the window procedure should return. Otherwise
-    return false.
-
-    It is only directly addressed messages that are filtered. To
-    handle system wide messages, such as messages from a registered
-    hot key, you need to install an event filter on the event
-    dispatcher, which is returned from
-    QAbstractEventDispatcher::instance().
-*/
-bool QCoreApplication::winEventFilter(MSG *msg, long *result)        // Windows event filter
-{
-   Q_UNUSED(msg);
-   Q_UNUSED(result);
-   return false;
-}
-
 void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerId)
 {
    QThreadData *data = CSInternalThreadData::get_m_ThreadData(object);

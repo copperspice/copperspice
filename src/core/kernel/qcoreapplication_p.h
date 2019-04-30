@@ -74,38 +74,40 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    }
 
    void maybeQuit();
-   void checkReceiverThread(QObject *receiver);
 
-   static QThread *theMainThread;
    static QThread *mainThread();
 
    static bool checkInstance(const char *method);
    static void sendPostedEvents(QObject *receiver, int event_type, QThreadData *data);
 
+   void checkReceiverThread(QObject *receiver);
+
+   QThreadData *getThreadData() {
+      return CSInternalThreadData::get_m_ThreadData(q_ptr);
+   }
 
    int &argc;
    char **argv;
    void appendApplicationPathToLibraryPaths(void);
    void processCommandLineArguments();
 
-   static QString qmljsDebugArguments(); // access arguments from other libraries
+   static QString qmljsDebugArguments();          // access arguments from other libraries
 
 #ifndef QT_NO_TRANSLATION
    QTranslatorList translators;
+   static bool isTranslatorInstalled(QTranslator *translator);
 #endif
 
-   uint application_type;
-
-   QCoreApplication::EventFilter eventFilter;
+   QCoreApplicationPrivate::Type application_type;
 
    bool in_exec;
    bool aboutToQuitEmitted;
+
    QString cachedApplicationDirPath;
    QString cachedApplicationFilePath;
 
-   static bool isTranslatorInstalled(QTranslator *translator);
-
-   static QAbstractEventDispatcher *eventDispatcher;
+   static QThread *theMainThread;
+   static QAbstractEventDispatcher *eventDispatcher;  // points to the platform dispatcher
    static bool is_app_running;
    static bool is_app_closing;
 
