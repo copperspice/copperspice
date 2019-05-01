@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qxcbdrag.h"
 #include <xcb/xcb.h>
+
+#include "qxcbdrag.h"
 #include "qxcbconnection.h"
 #include "qxcbclipboard.h"
 #include "qxcbmime.h"
@@ -33,14 +34,13 @@
 #include <qdnd_p.h>
 #include <qdebug.h>
 #include <qevent.h>
-#include <qguiapplication.h>
+#include <qapplication.h>
 #include <qrect.h>
 #include <qpainter.h>
 #include <qtimer.h>
-
 #include <qwindowsysteminterface.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qshapedpixmapdndwindow_p.h>
 #include <qsimpledrag_p.h>
 #include <qhighdpiscaling_p.h>

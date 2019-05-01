@@ -29,11 +29,11 @@
 #include <qplatform_inputcontext.h>
 #include <qplatform_integration.h>
 #include <qplatform_cursor.h>
-
 #include <QTextCodec>
 #include <QMetaMethod>
 #include <QDir>
-#include <qguiapplication_p.h>
+
+#include <qapplication_p.h>
 
 #include <stdio.h>
 #include <X11/keysym.h>

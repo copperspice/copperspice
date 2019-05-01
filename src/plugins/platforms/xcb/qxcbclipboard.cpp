@@ -27,13 +27,11 @@
 #include "qxcbscreen.h"
 #include "qxcbmime.h"
 
-#include <qguiapplication_p.h>
-#include <QElapsedTimer>
-#include <QDebug>
+#include <qapplication_p.h>
+#include <qelapsedtimer.h>
+#include <qdebug.h>
 
-#define class class_name // Workaround XCB-ICCCM 3.8 breakage
 #include <xcb/xcb_icccm.h>
-#undef class
 
 #ifndef QT_NO_CLIPBOARD
 

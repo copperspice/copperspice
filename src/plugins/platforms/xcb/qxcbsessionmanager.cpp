@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qxcbsessionmanager.h"
+#include <qxcbsessionmanager.h>
 
-#include <qguiapplication.h>
+#include <qapplication.h>
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qsocketnotifier.h>

@@ -46,7 +46,7 @@
 #include <stdio.h>
 
 // this has to be included before egl, since egl pulls in X headers
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 
 #ifdef XCB_USE_EGL
 #include <EGL/egl.h>
@@ -63,7 +63,6 @@
 #include <QOpenGLContext>
 #include <QScreen>
 #include <QOffscreenSurface>
-
 #include <QFileInfo>
 
 #ifndef QT_NO_ACCESSIBILITY

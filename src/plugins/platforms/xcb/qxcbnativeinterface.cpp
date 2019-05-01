@@ -28,15 +28,15 @@
 #include "qxcbintegration.h"
 #include "qxcbsystemtraytracker.h"
 
-#include <qguiapplication_p.h>
 #include <QMap>
 #include <QDebug>
 #include <qopenglcontext.h>
 #include <qscreen.h>
-
 #include <qxcbwindowfunctions.h>
 #include <qxcbintegrationfunctions.h>
 #include <qxcbscreenfunctions.h>
+
+#include <qapplication_p.h>
 
 #ifndef QT_NO_DBUS
 #include <qdbusmenuconnection_p.h>

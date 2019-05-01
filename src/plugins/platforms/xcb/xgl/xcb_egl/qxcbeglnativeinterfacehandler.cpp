@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qxcbeglnativeinterfacehandler.h"
+#include <qxcbeglnativeinterfacehandler.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include "qxcbeglwindow.h"
 #include "qxcbintegration.h"
 #include "qxcbeglintegration.h"

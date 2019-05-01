@@ -26,7 +26,7 @@
 
 #include "qxcbglintegrationplugin.h"
 #include "qfactoryloader_p.h"
-#include "qguiapplication.h"
+#include "qapplication.h"
 #include "qdir.h"
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QXcbGlIntegrationInterface_ID, "/xcbglintegrations", Qt::CaseInsensitive))

@@ -21,10 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qguiapplication_p.h>
-#include <qhighdpiscaling_p.h>
-#include <QDebug>
-
 #include "qxcbconnection.h"
 #include "qxcbkeyboard.h"
 #include "qxcbscreen.h"
@@ -38,11 +34,15 @@
 #include "qxcbglintegrationfactory.h"
 #include "qxcbglintegration.h"
 
+#include <QDebug>
 #include <QSocketNotifier>
 #include <QAbstractEventDispatcher>
 #include <QTimer>
 #include <QByteArray>
 #include <QScopedPointer>
+
+#include <qapplication_p.h>
+#include <qhighdpiscaling_p.h>
 
 #include <algorithm>
 
@@ -321,7 +321,7 @@ void QXcbConnection::updateScreen(QXcbScreen *screen, const xcb_randr_output_cha
       if (!screen->isPrimary() && checkOutputIsPrimary(outputChange.window, outputChange.output)) {
          screen->setPrimary(true);
 
-         // If the screen became primary, reshuffle the order in QGuiApplicationPrivate
+         // If the screen became primary, reshuffle the order in QApplicationPrivate
          const int idx = m_screens.indexOf(screen);
          if (idx > 0) {
             m_screens.first()->setPrimary(false);
@@ -548,7 +548,7 @@ void QXcbConnection::initializeScreens()
          }
       }
 
-      // Push the screens to QGuiApplication
+      // Push the screens to QApplication
       for (QXcbScreen *screen : m_screens) {
          qDebug() << "adding" << screen << "(Primary:" << screen->isPrimary() << ")";
          QXcbIntegration::instance()->screenAdded(screen, screen->isPrimary());

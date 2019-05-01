@@ -21,27 +21,32 @@
 *
 ***********************************************************************/
 
-#include "qxcbwindow.h"
+#include <qxcbwindow.h>
 
 #include <qdebug.h>
-#include <QMetaEnum>
-#include <QScreen>
-#include <QIcon>
-#include <QRegion>
-#include <qhighdpiscaling_p.h>
+#include <qtextcodec.h>
+#include <qmetaenum.h>
+#include <qscreen.h>
+#include <qicon.h>
+#include <qregion.h>
 
-#include "qxcbintegration.h"
-#include "qxcbconnection.h"
-#include "qxcbscreen.h"
-#include "qxcbdrag.h"
-#include "qxcbkeyboard.h"
-#include "qxcbwmsupport.h"
-#include "qxcbimage.h"
-#include "qxcbnativeinterface.h"
-#include "qxcbsystemtraytracker.h"
-
+#include <qxcbintegration.h>
+#include <qxcbconnection.h>
+#include <qxcbscreen.h>
+#include <qxcbdrag.h>
+#include <qxcbkeyboard.h>
+#include <qxcbwmsupport.h>
+#include <qxcbimage.h>
+#include <qxcbnativeinterface.h>
+#include <qxcbsystemtraytracker.h>
 #include <qplatform_integration.h>
 #include <qplatform_cursor.h>
+#include <qplatform_backingstore.h>
+#include <qwindowsysteminterface.h>
+
+#include <qapplication_p.h>
+#include <qhighdpiscaling_p.h>
+#include <qwindow_p.h>
 
 #include <algorithm>
 

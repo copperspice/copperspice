@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qunixeventdispatcher_p.h"
+#include <qunixeventdispatcher_p.h>
 
-#include "qcoreapplication.h"
-#include "qguiapplication_p.h"
+#include <qcoreapplication.h>
+#include <qapplication_p.h>
 
 #include <qwindowsysteminterface.h>
 #include <QElapsedTimer>

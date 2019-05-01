@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qxcbeventdispatcher_glib_p.h"
+#include <qxcbeventdispatcher_glib_p.h>
 
-#include "qguiapplication.h"
-#include "qplatformdefs.h"
+#include <qapplication.h>
+#include <qplatformdefs.h>
 #include <qdebug.h>
 
-#include "qguiapplication_p.h"
+#include <qapplication_p.h>
 
 #include <glib.h>
 

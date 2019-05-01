@@ -30,7 +30,8 @@
 #include <QLibrary>
 #include <QWindow>
 #include <QBitmap>
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
+
 #include <X11/cursorfont.h>
 #include <xcb/xfixes.h>
 #include <xcb/xcb_image.h>
