@@ -687,7 +687,7 @@ void QGLXContext::queryDummyContext()
 
    if (!display) {
       // FIXME: Since Qt 5.6 we don't need to check whether primary screen is NULL
-      if (QScreen *screen = QGuiApplication::primaryScreen()) {
+      if (QScreen *screen = QApplication::primaryScreen()) {
          display = DISPLAY_FROM_XCB(static_cast<QXcbScreen *>(screen->handle()));
       }
    }

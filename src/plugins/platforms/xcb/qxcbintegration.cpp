@@ -447,7 +447,7 @@ QByteArray QXcbIntegration::wmClass() const
          name = argv0BaseName();
       }
 
-      // QCoreApplication::applicationName() can not be called from the QGuiApplication constructor
+      // QCoreApplication::applicationName() can not be called from the QApplication constructor
       QString className = QCoreApplication::applicationName();
 
       if (className.isEmpty()) {

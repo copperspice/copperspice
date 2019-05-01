@@ -505,7 +505,7 @@ xcb_cursor_t QXcbCursor::createNonStandardCursor(int cshape)
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 8, 8);
    } else if (cshape == Qt::DragCopyCursor || cshape == Qt::DragMoveCursor
       || cshape == Qt::DragLinkCursor) {
-      QImage image = QGuiApplicationPrivate::instance()->getPixmapCursor(static_cast<Qt::CursorShape>(cshape)).toImage();
+      QImage image = QApplicationPrivate::instance()->getPixmapCursor(static_cast<Qt::CursorShape>(cshape)).toImage();
       if (!image.isNull()) {
          xcb_pixmap_t pm = qt_xcb_XPixmapFromBitmap(m_screen, image);
          xcb_pixmap_t pmm = qt_xcb_XPixmapFromBitmap(m_screen, image.createAlphaMask());

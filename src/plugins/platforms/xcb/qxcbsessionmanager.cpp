@@ -288,7 +288,7 @@ static void sm_dieCallback(SmcConn smcConn, SmPointer /* clientData */)
    }
    resetSmState();
    QEvent quitEvent(QEvent::Quit);
-   QGuiApplication::sendEvent(qApp, &quitEvent);
+   QApplication::sendEvent(qApp, &quitEvent);
 }
 
 static void sm_shutdownCancelledCallback(SmcConn smcConn, SmPointer clientData)

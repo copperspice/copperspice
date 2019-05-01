@@ -80,7 +80,7 @@ QXcbNativeInterface::QXcbNativeInterface() :
 
 void QXcbNativeInterface::beep() // For QApplication::beep()
 {
-   QScreen *priScreen = QGuiApplication::primaryScreen();
+   QScreen *priScreen = QApplication::primaryScreen();
    if (!priScreen) {
       return;
    }
@@ -481,7 +481,7 @@ void *QXcbNativeInterface::connection()
 
 void *QXcbNativeInterface::atspiBus()
 {
-   QXcbIntegration *integration = static_cast<QXcbIntegration *>(QGuiApplicationPrivate::platformIntegration());
+   QXcbIntegration *integration = static_cast<QXcbIntegration *>(QApplicationPrivate::platformIntegration());
    QXcbConnection *defaultConnection = integration->defaultConnection();
    if (defaultConnection) {
       xcb_atom_t atspiBusAtom = defaultConnection->internAtom("AT_SPI_BUS");
@@ -532,7 +532,7 @@ QXcbScreen *QXcbNativeInterface::qPlatformScreenForWindow(QWindow *window)
       QScreen *qs = window->screen();
       screen = static_cast<QXcbScreen *>(qs ? qs->handle() : nullptr);
    } else {
-      QScreen *qs = QGuiApplication::primaryScreen();
+      QScreen *qs = QApplication::primaryScreen();
       screen = static_cast<QXcbScreen *>(qs ? qs->handle() : nullptr);
    }
    return screen;

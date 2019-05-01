@@ -1406,7 +1406,7 @@ void QXcbEventReader::registerForEvents()
    QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()), QSocketNotifier::Read, this);
    connect(notifier, SIGNAL(activated(int)), m_connection, SLOT(processXcbEvents()));
 
-   QAbstractEventDispatcher *dispatcher = QGuiApplicationPrivate::eventDispatcher;
+   QAbstractEventDispatcher *dispatcher = QApplicationPrivate::eventDispatcher;
    connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(processXcbEvents()));
    connect(dispatcher, SIGNAL(awake()), m_connection, SLOT(processXcbEvents()));
 }
@@ -2455,7 +2455,7 @@ QXcbSystemTrayTracker *QXcbConnection::systemTrayTracker() const
 
       if ((self->m_systemTrayTracker = QXcbSystemTrayTracker::create(self))) {
          connect(m_systemTrayTracker, SIGNAL(systemTrayWindowChanged(QScreen *)),
-            QGuiApplication::platformNativeInterface(), SLOT(systemTrayWindowChanged(QScreen *)));
+            QApplication::platformNativeInterface(), SLOT(systemTrayWindowChanged(QScreen *)));
       }
    }
    return m_systemTrayTracker;
@@ -2463,19 +2463,19 @@ QXcbSystemTrayTracker *QXcbConnection::systemTrayTracker() const
 
 bool QXcbConnection::xEmbedSystemTrayAvailable()
 {
-   if (!QGuiApplicationPrivate::platformIntegration()) {
+   if (!QApplicationPrivate::platformIntegration()) {
       return false;
    }
-   QXcbConnection *connection = static_cast<QXcbIntegration *>(QGuiApplicationPrivate::platformIntegration())->defaultConnection();
+   QXcbConnection *connection = static_cast<QXcbIntegration *>(QApplicationPrivate::platformIntegration())->defaultConnection();
    return connection->systemTrayTracker();
 }
 
 bool QXcbConnection::xEmbedSystemTrayVisualHasAlphaChannel()
 {
-   if (!QGuiApplicationPrivate::platformIntegration()) {
+   if (!QApplicationPrivate::platformIntegration()) {
       return false;
    }
-   QXcbConnection *connection = static_cast<QXcbIntegration *>(QGuiApplicationPrivate::platformIntegration())->defaultConnection();
+   QXcbConnection *connection = static_cast<QXcbIntegration *>(QApplicationPrivate::platformIntegration())->defaultConnection();
    return connection->systemTrayTracker() && connection->systemTrayTracker()->visualHasAlphaChannel();
 }
 

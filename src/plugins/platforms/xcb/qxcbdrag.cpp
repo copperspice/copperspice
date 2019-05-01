@@ -205,7 +205,7 @@ void QXcbDrag::startDrag()
 
    setUseCompositing(current_virtual_desktop->compositingActive());
    setScreen(current_virtual_desktop->screens().constFirst()->screen());
-   initiatorWindow = QGuiApplicationPrivate::currentMouseWindow;
+   initiatorWindow = QApplicationPrivate::currentMouseWindow;
 
    QBasicDrag::startDrag();
    if (connection()->mouseGrabber() == nullptr) {
@@ -498,7 +498,7 @@ void QXcbDrag::move(const QPoint &globalPos)
       move.data.data32[1] = 0; // flags
       move.data.data32[2] = (globalPos.x() << 16) + globalPos.y();
       move.data.data32[3] = connection()->time();
-      move.data.data32[4] = toXdndAction(defaultAction(currentDrag()->supportedActions(), QGuiApplication::keyboardModifiers()));
+      move.data.data32[4] = toXdndAction(defaultAction(currentDrag()->supportedActions(), QApplication::keyboardModifiers()));
       DEBUG() << "sending Xdnd position source=" << move.data.data32[0] << "target=" << move.window;
 
       source_time = connection()->time();
@@ -1025,7 +1025,7 @@ void QXcbDrag::handleDrop(QPlatformWindow *, const xcb_client_message_event_t *e
       supported_drop_actions = accepted_drop_action;
 
       // Drop coming from another app? Update keyboard modifiers.
-      QGuiApplicationPrivate::modifier_buttons = QGuiApplication::queryKeyboardModifiers();
+      QApplicationPrivate::modifier_buttons = QApplication::queryKeyboardModifiers();
    }
 
    if (!dropData) {

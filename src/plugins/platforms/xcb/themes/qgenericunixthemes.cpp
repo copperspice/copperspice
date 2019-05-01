@@ -25,7 +25,7 @@
 
 #include <QPalette>
 #include <QFont>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QDir>
 #include <QFileInfo>
 #include <QFile>
@@ -39,7 +39,7 @@
 #include <qplatform_services.h>
 #include <qplatform_dialoghelper.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qgenericunixservices_p.h>
 #include <qplatform_theme_p.h>
 
@@ -444,7 +444,7 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
    if (fontValue.isValid()) {
       // Read font value: Might be a QStringList as KDE stores fonts without quotes.
       // Also retrieve the family for the constructor since we cannot use the
-      // default constructor of QFont, which accesses QGuiApplication::systemFont()
+      // default constructor of QFont, which accesses QApplication::systemFont()
       // causing recursion.
       QString fontDescription;
       QString fontFamily;
@@ -767,8 +767,8 @@ QStringList QGenericUnixTheme::themeNames()
 {
    QStringList result;
 
-   if (QGuiApplication::desktopSettingsAware()) {
-      const QByteArray desktopEnvironment = QGuiApplicationPrivate::platformIntegration()->services()->desktopEnvironment();
+   if (QApplication::desktopSettingsAware()) {
+      const QByteArray desktopEnvironment = QApplicationPrivate::platformIntegration()->services()->desktopEnvironment();
       QList<QByteArray> gtkBasedEnvironments;
 
       gtkBasedEnvironments << "GNOME"

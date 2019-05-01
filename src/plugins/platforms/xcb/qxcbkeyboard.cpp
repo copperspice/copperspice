@@ -1540,7 +1540,7 @@ void QXcbKeyboard::handleKeyEvent(xcb_window_t sourceWindow, QEvent::Type type, 
 
    xcb_keysym_t sym = xkb_state_key_get_one_sym(kb_state, code);
 
-   QPlatformInputContext *inputContext = QGuiApplicationPrivate::platformIntegration()->inputContext();
+   QPlatformInputContext *inputContext = QApplicationPrivate::platformIntegration()->inputContext();
 
    // emerald - optional<QMetaMethod> method
    QMetaMethod method;
