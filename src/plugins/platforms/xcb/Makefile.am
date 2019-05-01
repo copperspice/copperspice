@@ -27,6 +27,8 @@ PLATFORMS_XCB_EVENTS_PRIVATE_INCLUDES = \
 	events/qxcbeventdispatcher_glib_p.h
 
 PLATFORMS_XCB_FONTS_PRIVATE_INCLUDES = \
+	fonts/qfontconfigdatabase_p.h \
+	fonts/qfontenginemultifontconfig_p.h \
 	fonts/qgenericunixfontdatabase_p.h
 
 PLATFORMS_XCB_THEMES_PRIVATE_INCLUDES = \
@@ -69,6 +71,7 @@ lib_CsGuiXcb@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    $(AM_CXXFLAGS) \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
    -DQT_PLUGIN \
+   -DQ_FONTCONFIGDATABASE \
    -DQT_USE_FONTCONFIG \
    -DQT_USE_FREETYPE \
    -DHAVE_POSIX_MEMALIGN \
@@ -78,6 +81,12 @@ lib_CsGuiXcb@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    -DXCB_USE_SM \
    -DXCB_USE_XLIB \
    -DXCB_USE_XINPUT2
+
+
+if ! GTK
+   lib_CsGuiXcb@BUILD_ABI@_la_CXXFLAGS += \
+      -DQT_NO_GLIB
+endif
 
 lib_CsGuiXcb@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module \
    -lxcb -lxcb-image -lxcb-icccm -lxcb-sync -lxcb-xfixes -lxcb-shm -lxcb-randr -lxcb-shape \
@@ -113,8 +122,14 @@ lib_CsGuiXcb@BUILD_ABI@_la_SOURCES = \
 	src/plugins/platforms/xcb/events/qgenericunixeventdispatcher.cpp \
 	src/plugins/platforms/xcb/events/qgenericunixservices.cpp \
 	src/plugins/platforms/xcb/events/qunixeventdispatcher.cpp \
-	src/plugins/platforms/xcb/events/qxcbeventdispatcher_glib.cpp \
+	src/plugins/platforms/xcb/fonts/qfontconfigdatabase.cpp \
+	src/plugins/platforms/xcb/fonts/qfontenginemultifontconfig.cpp \
 	src/plugins/platforms/xcb/themes/qgenericunixthemes.cpp
+
+if GTK
+   lib_CsGuiXcb@BUILD_ABI@_la_SOURCES += \
+      src/plugins/platforms/xcb/events/qxcbeventdispatcher_glib.cpp
+endif
 
 nodist_lib_CsGuiXcb@BUILD_ABI@_la_SOURCES =
 

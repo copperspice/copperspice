@@ -29,7 +29,9 @@ set(PLATFORMS_XCB_OTHER_PRIVATE_INCLUDES
 	${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qgenericunixeventdispatcher_p.h
 	${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qgenericunixservices_p.h
 	${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qunixeventdispatcher_p.h
-	${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qxcbeventdispatcher_glib_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qxcbeventdispatcher_glib_p.h
+	${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontconfigdatabase_p.h
+	${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontenginemultifontconfig_p.h
 	${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qgenericunixfontdatabase_p.h
 	${CMAKE_CURRENT_SOURCE_DIR}/xcb/themes/qgenericunixthemes_p.h
 )
@@ -60,9 +62,17 @@ set(PLATFORMS_XCB_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qgenericunixeventdispatcher.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qgenericunixservices.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qunixeventdispatcher.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qxcbeventdispatcher_glib.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontconfigdatabase.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontenginemultifontconfig.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xcb/themes/qgenericunixthemes.cpp
 )
+
+if(GTK2_FOUND)
+   set(PLATFORMS_XCB_SOURCES
+      ${PLATFORMS_XCB_SOURCES}
+      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qxcbeventdispatcher_glib.cpp
+   )
+endif()
 
 if(BUILD_PLATFORMS_XCB_PLUGIN)
 
@@ -114,7 +124,14 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
       -DXCB_USE_RENDER
       -DXCB_USE_SM
       -DXCB_USE_XLIB
-      -DXCB_USE_XINPUT2 )
+      -DXCB_USE_XINPUT2
+   )
+
+   if(NOT GTK2_FOUND)
+      target_compile_definitions(CsGuiXcb${BUILD_ABI} PRIVATE
+         -DQT_NO_GLIB
+      )
+   endif()
 
    install(TARGETS CsGuiXcb${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
