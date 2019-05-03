@@ -25,6 +25,18 @@
  * Red Hat Author(s): Behdad Esfahbod
  */
 
+
+/* https://github.com/harfbuzz/harfbuzz/issues/1308
+ * http://www.gnu.org/software/libc/manual/html_node/Feature-Test-Macros.html
+ * https://www.oracle.com/technetwork/articles/servers-storage-dev/standardheaderfiles-453865.html
+ */
+#ifndef _POSIX_C_SOURCE
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-macros"
+#define _POSIX_C_SOURCE 200809L
+#pragma GCC diagnostic pop
+#endif
+
 #include "hb.hh"
 #include "hb-blob.hh"
 
@@ -52,18 +64,6 @@
  * pass around other binary data.
  **/
 
-
-DEFINE_NULL_INSTANCE (hb_blob_t) =
-{
-  HB_OBJECT_HEADER_STATIC,
-
-  nullptr, /* data */
-  0, /* length */
-  HB_MEMORY_MODE_READONLY, /* mode */
-
-  nullptr, /* user_data */
-  nullptr  /* destroy */
-};
 
 /**
  * hb_blob_create: (skip)
@@ -200,7 +200,7 @@ hb_blob_copy_writable_or_fail (hb_blob_t *blob)
  * Since: 0.9.2
  **/
 hb_blob_t *
-hb_blob_get_empty (void)
+hb_blob_get_empty ()
 {
   return const_cast<hb_blob_t *> (&Null(hb_blob_t));
 }
@@ -390,7 +390,7 @@ hb_blob_get_data_writable (hb_blob_t *blob, unsigned int *length)
 
 
 bool
-hb_blob_t::try_make_writable_inplace_unix (void)
+hb_blob_t::try_make_writable_inplace_unix ()
 {
 #if defined(HAVE_SYS_MMAN_H) && defined(HAVE_MPROTECT)
   uintptr_t pagesize = -1, mask, length;
@@ -433,7 +433,7 @@ hb_blob_t::try_make_writable_inplace_unix (void)
 }
 
 bool
-hb_blob_t::try_make_writable_inplace (void)
+hb_blob_t::try_make_writable_inplace ()
 {
   DEBUG_MSG_FUNC (BLOB, this, "making writable inplace\n");
 
@@ -448,7 +448,7 @@ hb_blob_t::try_make_writable_inplace (void)
 }
 
 bool
-hb_blob_t::try_make_writable (void)
+hb_blob_t::try_make_writable ()
 {
   if (hb_object_is_immutable (this))
     return false;
@@ -493,7 +493,7 @@ hb_blob_t::try_make_writable (void)
 # include <fcntl.h>
 #endif
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+#ifdef _WIN32
 # include <windows.h>
 #else
 # ifndef O_BINARY
@@ -509,19 +509,19 @@ struct hb_mapped_file_t
 {
   char *contents;
   unsigned long length;
-#if defined(_WIN32) || defined(__CYGWIN__)
+#ifdef _WIN32
   HANDLE mapping;
 #endif
 };
 
-#if (defined(HAVE_MMAP) || defined(_WIN32) || defined(__CYGWIN__)) && !defined(HB_NO_MMAP)
+#if (defined(HAVE_MMAP) || defined(_WIN32)) && !defined(HB_NO_MMAP)
 static void
 _hb_mapped_file_destroy (void *file_)
 {
   hb_mapped_file_t *file = (hb_mapped_file_t *) file_;
 #ifdef HAVE_MMAP
   munmap (file->contents, file->length);
-#elif defined(_WIN32) || defined(__CYGWIN__)
+#elif defined(_WIN32)
   UnmapViewOfFile (file->contents);
   CloseHandle (file->mapping);
 #else
@@ -572,7 +572,7 @@ fail:
 fail_without_close:
   free (file);
 
-#elif (defined(_WIN32) || defined(__CYGWIN__)) && !defined(HB_NO_MMAP)
+#elif defined(_WIN32) && !defined(HB_NO_MMAP)
   hb_mapped_file_t *file = (hb_mapped_file_t *) calloc (1, sizeof (hb_mapped_file_t));
   if (unlikely (!file)) return hb_blob_get_empty ();
 

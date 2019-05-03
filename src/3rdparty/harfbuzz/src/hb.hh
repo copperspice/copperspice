@@ -29,14 +29,130 @@
 #ifndef HB_HH
 #define HB_HH
 
-#define _GNU_SOURCE 1
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC
+#if defined(_MSC_VER)
+#pragma warning( disable: 4068 ) /* Unknown pragma */
+#endif
+#if defined(__GNUC__) || defined(__clang__)
+/* Rules:
+ *
+ * - All pragmas are declared GCC even if they are clang ones.  Otherwise GCC
+ *   nags, even though we instruct it to ignore -Wunknown-pragmas. ¯\_(ツ)_/¯
+ *
+ * - Within each category, keep sorted.
+ *
+ * - Warnings whose scope can be expanded in future compiler versions shall
+ *   be declared as "warning".  Otherwise, either ignored or error.
+ */
+
+/* Setup.  Don't sort order within this category. */
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_WARNING
+#pragma GCC diagnostic warning "-Wall"
+#pragma GCC diagnostic warning "-Wextra"
+#endif
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_IGNORED
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#endif
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_WARNING
+//#pragma GCC diagnostic warning "-Weverything"
+#endif
+
+/* Error.  Should never happen. */
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_ERROR
+#pragma GCC diagnostic error   "-Wc++11-narrowing"
+#pragma GCC diagnostic error   "-Wcast-align"
+#pragma GCC diagnostic error   "-Wcast-function-type"
+#pragma GCC diagnostic error   "-Wdelete-non-virtual-dtor"
+#pragma GCC diagnostic error   "-Wformat-security"
+#pragma GCC diagnostic error   "-Wimplicit-function-declaration"
+#pragma GCC diagnostic error   "-Winit-self"
+#pragma GCC diagnostic error   "-Wmissing-braces"
+#pragma GCC diagnostic error   "-Wmissing-declarations"
+#pragma GCC diagnostic error   "-Wmissing-prototypes"
+#pragma GCC diagnostic error   "-Wnested-externs"
+#pragma GCC diagnostic error   "-Wold-style-definition"
+#pragma GCC diagnostic error   "-Wpointer-arith"
+#pragma GCC diagnostic error   "-Wredundant-decls"
+#pragma GCC diagnostic error   "-Wreorder"
+#pragma GCC diagnostic error   "-Wsign-compare"
+#pragma GCC diagnostic error   "-Wstrict-prototypes"
+#pragma GCC diagnostic error   "-Wstring-conversion"
+#pragma GCC diagnostic error   "-Wswitch-enum"
+#pragma GCC diagnostic error   "-Wtautological-overlap-compare"
+#pragma GCC diagnostic error   "-Wunneeded-internal-declaration"
+#pragma GCC diagnostic error   "-Wunused"
+#pragma GCC diagnostic error   "-Wunused-local-typedefs"
+#pragma GCC diagnostic error   "-Wunused-value"
+#pragma GCC diagnostic error   "-Wunused-variable"
+#pragma GCC diagnostic error   "-Wvla"
+#pragma GCC diagnostic error   "-Wwrite-strings"
+#endif
+
+/* Warning.  To be investigated if happens. */
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_WARNING
+#pragma GCC diagnostic warning "-Wbuiltin-macro-redefined"
+#pragma GCC diagnostic warning "-Wdisabled-optimization"
+#pragma GCC diagnostic warning "-Wformat=2"
+#pragma GCC diagnostic warning "-Wignored-pragma-optimize"
+#pragma GCC diagnostic warning "-Wlogical-op"
+#pragma GCC diagnostic warning "-Wmaybe-uninitialized"
+#pragma GCC diagnostic warning "-Wmissing-format-attribute"
+#pragma GCC diagnostic warning "-Wundef"
+#endif
+
+/* Ignored currently, but should be fixed at some point. */
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_IGNORED
+#pragma GCC diagnostic ignored "-Wconversion"			// TODO fix
+#pragma GCC diagnostic ignored "-Wformat-signedness"		// TODO fix
+#pragma GCC diagnostic ignored "-Wshadow"			// TODO fix
+#pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations"	// TODO fix
+#pragma GCC diagnostic ignored "-Wunused-parameter"		// TODO fix
+#endif
+
+/* Ignored intentionally. */
+#ifndef HB_NO_PRAGMA_GCC_DIAGNOSTIC_IGNORED
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wformat-zero-length"
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#pragma GCC diagnostic ignored "-Wpacked" // Erratic impl in clang
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#pragma GCC diagnostic ignored "-Wtype-limits"
+#endif
+
+#endif
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 200809L
+/*
+ * Following added based on what AC_USE_SYSTEM_EXTENSIONS adds to
+ * config.h.in.  Copied here for the convenience of those embedding
+ * HarfBuzz and not using our build system.
+ */
+/* Enable extensions on AIX 3, Interix.  */
+#ifndef _ALL_SOURCE
+# define _ALL_SOURCE 1
+#endif
+/* Enable GNU extensions on systems that have them.  */
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE 1
+#endif
+/* Enable threading extensions on Solaris.  */
+#ifndef _POSIX_PTHREAD_SEMANTICS
+# define _POSIX_PTHREAD_SEMANTICS 1
+#endif
+/* Enable extensions on HP NonStop.  */
+#ifndef _TANDEM_SOURCE
+# define _TANDEM_SOURCE 1
+#endif
+/* Enable general extensions on Solaris.  */
+#ifndef __EXTENSIONS__
+# define __EXTENSIONS__ 1
 #endif
 
 #if defined (_MSC_VER) && defined (HB_DLL_EXPORT)
@@ -47,6 +163,10 @@
 #define HB_H_IN
 #include "hb-ot.h"
 #define HB_OT_H_IN
+#include "hb-aat.h"
+#define HB_AAT_H_IN
+
+#include "hb-aat.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -109,7 +229,7 @@ extern "C" int hb_memalign_impl(void **memptr, size_t alignment, size_t size);
 	HB_UNUSED typedef int HB_PASTE(static_assertion_failed_at_line_, __LINE__) [(e) ? 1 : -1]
 #endif // static_assert
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
 #if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8))
 #define thread_local __thread
 #endif
@@ -133,14 +253,14 @@ struct _hb_alignof
 
 /* https://github.com/harfbuzz/harfbuzz/issues/1127 */
 #ifndef explicit_operator
-#define explicit_operator
+#define explicit_operator operator
 #endif
 
 #else /* __cplusplus >= 201103L */
 
 /* https://github.com/harfbuzz/harfbuzz/issues/1127 */
 #ifndef explicit_operator
-#define explicit_operator explicit
+#define explicit_operator explicit operator
 #endif
 
 #endif /* __cplusplus < 201103L */
@@ -159,7 +279,7 @@ struct _hb_alignof
 #define __attribute__(x)
 #endif
 
-#if __GNUC__ >= 3
+#if defined(__GNUC__) && (__GNUC__ >= 3)
 #define HB_PURE_FUNC	__attribute__((pure))
 #define HB_CONST_FUNC	__attribute__((const))
 #define HB_PRINTF_FUNC(format_idx, arg_idx) __attribute__((__format__ (__printf__, format_idx, arg_idx)))
@@ -168,7 +288,7 @@ struct _hb_alignof
 #define HB_CONST_FUNC
 #define HB_PRINTF_FUNC(format_idx, arg_idx)
 #endif
-#if __GNUC__ >= 4
+#if defined(__GNUC__) && (__GNUC__ >= 4)
 #define HB_UNUSED	__attribute__((unused))
 #elif defined(_MSC_VER) /* https://github.com/harfbuzz/harfbuzz/issues/635 */
 #define HB_UNUSED __pragma(warning(suppress: 4100 4101))
@@ -191,7 +311,7 @@ struct _hb_alignof
 # endif
 #endif
 
-#if __GNUC__ >= 3
+#if defined(__GNUC__) && (__GNUC__ >= 3)
 #define HB_FUNC __PRETTY_FUNCTION__
 #elif defined(_MSC_VER)
 #define HB_FUNC __FUNCSIG__
@@ -223,7 +343,7 @@ struct _hb_alignof
 #if defined(__clang__) && __cplusplus >= 201103L
    /* clang's fallthrough annotations are only available starting in C++11. */
 #  define HB_FALLTHROUGH [[clang::fallthrough]]
-#elif __GNUC__ >= 7
+#elif defined(__GNUC__) && (__GNUC__ >= 7)
    /* GNU fallthrough attribute is available from GCC7 */
 #  define HB_FALLTHROUGH __attribute__((fallthrough))
 #elif defined(_MSC_VER)
@@ -246,7 +366,7 @@ struct _hb_alignof
 #endif
 
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+#ifdef _WIN32
    /* We need Windows Vista for both Uniscribe backend and for
     * MemoryBarrier.  We don't support compiling on Windows XP,
     * though we run on it fine. */
@@ -281,7 +401,7 @@ static int errno = 0; /* Use something better? */
 #  endif
 #endif
 
-#if HAVE_ATEXIT
+#if defined(HAVE_ATEXIT) && !defined(HB_USE_ATEXIT)
 /* atexit() is only safe to be called from shared libraries on certain
  * platforms.  Whitelist.
  * https://bugs.freedesktop.org/show_bug.cgi?id=82246 */
@@ -312,6 +432,9 @@ static int errno = 0; /* Use something better? */
 #endif
 #ifdef HB_NO_ATEXIT
 #  undef HB_USE_ATEXIT
+#endif
+#ifndef HB_USE_ATEXIT
+#  define HB_USE_ATEXIT 0
 #endif
 
 #define HB_STMT_START do
@@ -346,25 +469,29 @@ static_assert ((sizeof (hb_var_int_t) == 4), "");
 #define HB_NO_COPY_ASSIGN(TypeName) \
   TypeName(const TypeName&); \
   void operator=(const TypeName&)
+#define HB_NO_COPY_ASSIGN_TEMPLATE(TypeName, T) \
+  TypeName(const TypeName<T>&); \
+  void operator=(const TypeName<T>&)
 #define HB_NO_COPY_ASSIGN_TEMPLATE2(TypeName, T1, T2) \
   TypeName(const TypeName<T1, T2>&); \
   void operator=(const TypeName<T1, T2>&)
 #define HB_NO_CREATE_COPY_ASSIGN(TypeName) \
-  TypeName(void); \
+  TypeName(); \
   TypeName(const TypeName&); \
   void operator=(const TypeName&)
 #define HB_NO_CREATE_COPY_ASSIGN_TEMPLATE(TypeName, T) \
-  TypeName(void); \
+  TypeName(); \
   TypeName(const TypeName<T>&); \
   void operator=(const TypeName<T>&)
 #define HB_NO_CREATE_COPY_ASSIGN_TEMPLATE2(TypeName, T1, T2) \
-  TypeName(void); \
+  TypeName(); \
   TypeName(const TypeName<T1, T2>&); \
   void operator=(const TypeName<T1, T2>&)
 
 #else /* __cpluspplus >= 201103L */
 
-#define HB_NO_COPY_ASSIGN(TypeName)
+#define HB_NO_COPY_ASSIGN(TypeName) static_assert (true, "")
+#define HB_NO_COPY_ASSIGN_TEMPLATE(TypeName, T) static_assert (true, "")
 #define HB_NO_COPY_ASSIGN_TEMPLATE2(TypeName, T1, T2) static_assert (true, "")
 #define HB_NO_CREATE_COPY_ASSIGN(TypeName) static_assert (true, "")
 #define HB_NO_CREATE_COPY_ASSIGN_TEMPLATE(TypeName, T) static_assert (true, "")
@@ -437,15 +564,18 @@ typedef uint64_t hb_vector_size_impl_t;
 	  static inline T& operator |= (T &l, T r) { l = l | r; return l; } \
 	  static inline T& operator &= (T& l, T r) { l = l & r; return l; } \
 	  static inline T& operator ^= (T& l, T r) { l = l ^ r; return l; } \
-	}
+	} \
+	static_assert (true, "")
 
 /* Useful for set-operations on small enums.
  * For example, for testing "x ∈ {x1, x2, x3}" use:
  * (FLAG_UNSAFE(x) & (FLAG(x1) | FLAG(x2) | FLAG(x3)))
  */
-#define FLAG(x) (ASSERT_STATIC_EXPR_ZERO ((unsigned int)(x) < 32) + (1U << (unsigned int)(x)))
-#define FLAG_UNSAFE(x) ((unsigned int)(x) < 32 ? (1U << (unsigned int)(x)) : 0)
+#define FLAG(x) (ASSERT_STATIC_EXPR_ZERO ((unsigned)(x) < 32) + (((uint32_t) 1U) << (unsigned)(x)))
+#define FLAG_UNSAFE(x) ((unsigned)(x) < 32 ? (((uint32_t) 1U) << (unsigned)(x)) : 0)
 #define FLAG_RANGE(x,y) (ASSERT_STATIC_EXPR_ZERO ((x) < (y)) + FLAG(y+1) - FLAG(x))
+#define FLAG64(x) (ASSERT_STATIC_EXPR_ZERO ((unsigned)(x) < 64) + (((uint64_t) 1ULL) << (unsigned)(x)))
+#define FLAG64_UNSAFE(x) ((unsigned)(x) < 64 ? (((uint64_t) 1ULL) << (unsigned)(x)) : 0)
 
 
 /* Size signifying variable-sized array */
@@ -503,19 +633,26 @@ _hb_memalign(void **memptr, size_t alignment, size_t size)
 /* Some really basic things everyone wants. */
 template <typename T> struct hb_remove_const { typedef T value; };
 template <typename T> struct hb_remove_const<const T> { typedef T value; };
+#define hb_remove_const(T) hb_remove_const<T>::value
 template <typename T> struct hb_remove_reference { typedef T value; };
 template <typename T> struct hb_remove_reference<T &> { typedef T value; };
+#define hb_remove_reference(T) hb_remove_reference<T>::value
 template <typename T> struct hb_remove_pointer { typedef T value; };
 template <typename T> struct hb_remove_pointer<T *> { typedef T value; };
+#define hb_remove_pointer(T) hb_remove_pointer<T>::value
 
 
-/* Headers we include for everyone.  Keep sorted.  They express dependency amongst
- * themselves, but no other file should include them.*/
+/* Headers we include for everyone.  Keep topologically sorted by dependency.
+ * They express dependency amongst themselves, but no other file should include
+ * them directly.*/
 #include "hb-atomic.hh"
-#include "hb-debug.hh"
-#include "hb-dsalgs.hh"
 #include "hb-mutex.hh"
 #include "hb-null.hh"
-#include "hb-object.hh"
+#include "hb-dsalgs.hh"	// Requires: hb-null
+#include "hb-iter.hh"	// Requires: hb-null
+#include "hb-debug.hh"	// Requires: hb-atomic hb-dsalgs
+#include "hb-array.hh"	// Requires: hb-dsalgs hb-iter hb-null
+#include "hb-vector.hh"	// Requires: hb-array hb-null
+#include "hb-object.hh"	// Requires: hb-atomic hb-mutex hb-vector
 
 #endif /* HB_HH */

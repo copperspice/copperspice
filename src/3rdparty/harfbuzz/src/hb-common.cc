@@ -51,7 +51,7 @@
 hb_atomic_int_t _hb_options;
 
 void
-_hb_options_init (void)
+_hb_options_init ()
 {
   hb_options_union_t u;
   u.i = 0;
@@ -204,7 +204,7 @@ static const char canon_map[256] = {
    0,   0,   0,   0,   0,   0,   0,   0,    0,   0,   0,   0,   0,   0,   0,   0,
    0,   0,   0,   0,   0,   0,   0,   0,    0,   0,   0,   0,   0,  '-',  0,   0,
   '0', '1', '2', '3', '4', '5', '6', '7',  '8', '9',  0,   0,   0,   0,   0,   0,
-  '-', 'a', 'b', 'c', 'd', 'e', 'f', 'g',  'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+   0,  'a', 'b', 'c', 'd', 'e', 'f', 'g',  'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
   'p', 'q', 'r', 's', 't', 'u', 'v', 'w',  'x', 'y', 'z',  0,   0,   0,   0,  '-',
    0,  'a', 'b', 'c', 'd', 'e', 'f', 'g',  'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
   'p', 'q', 'r', 's', 't', 'u', 'v', 'w',  'x', 'y', 'z',  0,   0,   0,   0,   0
@@ -247,11 +247,10 @@ struct hb_language_item_t {
   struct hb_language_item_t *next;
   hb_language_t lang;
 
-  inline bool operator == (const char *s) const {
-    return lang_equal (lang, s);
-  }
+  bool operator == (const char *s) const
+  { return lang_equal (lang, s); }
 
-  inline hb_language_item_t & operator = (const char *s) {
+  hb_language_item_t & operator = (const char *s) {
     /* If a custom allocated is used calling strdup() pairs
     badly with a call to the custom free() in fini() below.
     Therefore don't call strdup(), implement its behavior.
@@ -268,7 +267,7 @@ struct hb_language_item_t {
     return *this;
   }
 
-  void fini (void) { free ((void *) lang); }
+  void fini () { free ((void *) lang); }
 };
 
 
@@ -276,9 +275,9 @@ struct hb_language_item_t {
 
 static hb_atomic_ptr_t <hb_language_item_t> langs;
 
-#ifdef HB_USE_ATEXIT
+#if HB_USE_ATEXIT
 static void
-free_langs (void)
+free_langs ()
 {
 retry:
   hb_language_item_t *first_lang = langs;
@@ -323,7 +322,7 @@ retry:
     goto retry;
   }
 
-#ifdef HB_USE_ATEXIT
+#if HB_USE_ATEXIT
   if (!first_lang)
     atexit (free_langs); /* First person registers atexit() callback. */
 #endif
@@ -404,7 +403,7 @@ hb_language_to_string (hb_language_t language)
  * Since: 0.9.2
  **/
 hb_language_t
-hb_language_get_default (void)
+hb_language_get_default ()
 {
   static hb_atomic_ptr_t <hb_language_t> default_language;
 
@@ -668,7 +667,7 @@ hb_version (unsigned int *major,
  * Since: 0.9.2
  **/
 const char *
-hb_version_string (void)
+hb_version_string ()
 {
   return HB_VERSION_STRING;
 }
@@ -780,43 +779,43 @@ parse_uint32 (const char **pp, const char *end, uint32_t *pv)
 
 #ifdef USE_XLOCALE
 
-#ifdef HB_USE_ATEXIT
-static void free_static_C_locale (void);
+#if HB_USE_ATEXIT
+static void free_static_C_locale ();
 #endif
 
-static struct hb_C_locale_lazy_loader_t : hb_lazy_loader_t<hb_remove_pointer<HB_LOCALE_T>::value,
+static struct hb_C_locale_lazy_loader_t : hb_lazy_loader_t<hb_remove_pointer (HB_LOCALE_T),
 							  hb_C_locale_lazy_loader_t>
 {
-  static inline HB_LOCALE_T create (void)
+  static HB_LOCALE_T create ()
   {
     HB_LOCALE_T C_locale = HB_CREATE_LOCALE ("C");
 
-#ifdef HB_USE_ATEXIT
+#if HB_USE_ATEXIT
     atexit (free_static_C_locale);
 #endif
 
     return C_locale;
   }
-  static inline void destroy (HB_LOCALE_T p)
+  static void destroy (HB_LOCALE_T p)
   {
     HB_FREE_LOCALE (p);
   }
-  static inline HB_LOCALE_T get_null (void)
+  static HB_LOCALE_T get_null ()
   {
     return nullptr;
   }
 } static_C_locale;
 
-#ifdef HB_USE_ATEXIT
+#if HB_USE_ATEXIT
 static
-void free_static_C_locale (void)
+void free_static_C_locale ()
 {
   static_C_locale.free_instance ();
 }
 #endif
 
 static HB_LOCALE_T
-get_C_locale (void)
+get_C_locale ()
 {
   return static_C_locale.get_unconst ();
 }

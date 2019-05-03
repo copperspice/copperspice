@@ -336,13 +336,13 @@ hb_glib_unicode_decompose (hb_unicode_funcs_t *ufuncs HB_UNUSED,
 }
 
 
-#ifdef HB_USE_ATEXIT
-static void free_static_glib_funcs (void);
+#if HB_USE_ATEXIT
+static void free_static_glib_funcs ();
 #endif
 
 static struct hb_glib_unicode_funcs_lazy_loader_t : hb_unicode_funcs_lazy_loader_t<hb_glib_unicode_funcs_lazy_loader_t>
 {
-  static inline hb_unicode_funcs_t *create (void)
+  static hb_unicode_funcs_t *create ()
   {
     hb_unicode_funcs_t *funcs = hb_unicode_funcs_create (nullptr);
 
@@ -355,7 +355,7 @@ static struct hb_glib_unicode_funcs_lazy_loader_t : hb_unicode_funcs_lazy_loader
 
     hb_unicode_funcs_make_immutable (funcs);
 
-#ifdef HB_USE_ATEXIT
+#if HB_USE_ATEXIT
     atexit (free_static_glib_funcs);
 #endif
 
@@ -363,16 +363,16 @@ static struct hb_glib_unicode_funcs_lazy_loader_t : hb_unicode_funcs_lazy_loader
   }
 } static_glib_funcs;
 
-#ifdef HB_USE_ATEXIT
+#if HB_USE_ATEXIT
 static
-void free_static_glib_funcs (void)
+void free_static_glib_funcs ()
 {
   static_glib_funcs.free_instance ();
 }
 #endif
 
 hb_unicode_funcs_t *
-hb_glib_get_unicode_funcs (void)
+hb_glib_get_unicode_funcs ()
 {
   return static_glib_funcs.get_unconst ();
 }

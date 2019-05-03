@@ -40,17 +40,17 @@ namespace OT {
 
 struct SVGDocumentIndexEntry
 {
-  inline int cmp (hb_codepoint_t g) const
+  int cmp (hb_codepoint_t g) const
   { return g < startGlyphID ? -1 : g > endGlyphID ? 1 : 0; }
 
-  inline hb_blob_t *reference_blob (hb_blob_t *svg_blob, unsigned int index_offset) const
+  hb_blob_t *reference_blob (hb_blob_t *svg_blob, unsigned int index_offset) const
   {
     return hb_blob_create_sub_blob (svg_blob,
 				    index_offset + (unsigned int) svgDoc,
 				    svgDocLength);
   }
 
-  inline bool sanitize (hb_sanitize_context_t *c, const void *base) const
+  bool sanitize (hb_sanitize_context_t *c, const void *base) const
   {
     TRACE_SANITIZE (this);
     return_trace (c->check_struct (this) &&
@@ -62,7 +62,7 @@ struct SVGDocumentIndexEntry
 				 * this index entry. */
   HBUINT16	endGlyphID;	/* The last glyph ID in the range described by
 				 * this index entry. Must be >= startGlyphID. */
-  LOffsetTo<UnsizedArrayOf<HBUINT8>, false>
+  LNNOffsetTo<UnsizedArrayOf<HBUINT8> >
 		svgDoc;		/* Offset from the beginning of the SVG Document Index
 				 * to an SVG document. Must be non-zero. */
   HBUINT32	svgDocLength;	/* Length of the SVG document.
@@ -73,42 +73,32 @@ struct SVGDocumentIndexEntry
 
 struct SVG
 {
-  static const hb_tag_t tableTag = HB_OT_TAG_SVG;
+  static constexpr hb_tag_t tableTag = HB_OT_TAG_SVG;
 
-  inline bool has_data (void) const { return svgDocEntries; }
+  bool has_data () const { return svgDocEntries; }
 
   struct accelerator_t
   {
-    inline void init (hb_face_t *face)
+    void init (hb_face_t *face)
+    { table = hb_sanitize_context_t().reference_table<SVG> (face); }
+    void fini () { table.destroy (); }
+
+    hb_blob_t *reference_blob_for_glyph (hb_codepoint_t glyph_id) const
     {
-      svg_blob = hb_sanitize_context_t().reference_table<SVG> (face);
-      table = svg_blob->as<SVG> ();
+      return table->get_glyph_entry (glyph_id).reference_blob (table.get_blob (),
+							       table->svgDocEntries);
     }
 
-    inline void fini (void)
-    {
-      hb_blob_destroy (svg_blob);
-    }
-
-    inline hb_blob_t *reference_blob_for_glyph (hb_codepoint_t glyph_id) const
-    {
-      return table->get_glyph_entry (glyph_id).reference_blob (svg_blob, table->svgDocEntries);
-    }
-
-    inline bool has_data () const { return table->has_data (); }
+    bool has_data () const { return table->has_data (); }
 
     private:
-    hb_blob_t *svg_blob;
-    hb_nonnull_ptr_t<const SVG> table;
+    hb_blob_ptr_t<SVG> table;
   };
 
-  inline const SVGDocumentIndexEntry &get_glyph_entry (hb_codepoint_t glyph_id) const
-  {
-    const SortedArrayOf<SVGDocumentIndexEntry> &docs = this+svgDocEntries;
-    return docs[docs.bsearch (glyph_id)];
-  }
+  const SVGDocumentIndexEntry &get_glyph_entry (hb_codepoint_t glyph_id) const
+  { return (this+svgDocEntries).bsearch (glyph_id); }
 
-  inline bool sanitize (hb_sanitize_context_t *c) const
+  bool sanitize (hb_sanitize_context_t *c) const
   {
     TRACE_SANITIZE (this);
     return_trace (likely (c->check_struct (this) &&

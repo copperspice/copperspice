@@ -35,11 +35,11 @@
 struct hb_aat_feature_mapping_t
 {
   hb_tag_t otFeatureTag;
-  uint16_t aatFeatureType;
-  uint16_t selectorToEnable;
-  uint16_t selectorToDisable;
+  hb_aat_layout_feature_type_t aatFeatureType;
+  hb_aat_layout_feature_selector_t selectorToEnable;
+  hb_aat_layout_feature_selector_t selectorToDisable;
 
-  static inline int cmp (const void *key_, const void *entry_)
+  static int cmp (const void *key_, const void *entry_)
   {
     hb_tag_t key = * (unsigned int *) key_;
     const hb_aat_feature_mapping_t * entry = (const hb_aat_feature_mapping_t *) entry_;
@@ -56,27 +56,24 @@ HB_INTERNAL void
 hb_aat_layout_compile_map (const hb_aat_map_builder_t *mapper,
 			   hb_aat_map_t *map);
 
-HB_INTERNAL hb_bool_t
-hb_aat_layout_has_substitution (hb_face_t *face);
-
 HB_INTERNAL void
-hb_aat_layout_substitute (hb_ot_shape_plan_t *plan,
+hb_aat_layout_substitute (const hb_ot_shape_plan_t *plan,
 			  hb_font_t *font,
 			  hb_buffer_t *buffer);
 
-HB_INTERNAL hb_bool_t
-hb_aat_layout_has_positioning (hb_face_t *face);
+HB_INTERNAL void
+hb_aat_layout_zero_width_deleted_glyphs (hb_buffer_t *buffer);
 
 HB_INTERNAL void
-hb_aat_layout_position (hb_ot_shape_plan_t *plan,
+hb_aat_layout_remove_deleted_glyphs (hb_buffer_t *buffer);
+
+HB_INTERNAL void
+hb_aat_layout_position (const hb_ot_shape_plan_t *plan,
 			hb_font_t *font,
 			hb_buffer_t *buffer);
 
-HB_INTERNAL hb_bool_t
-hb_aat_layout_has_tracking (hb_face_t *face);
-
 HB_INTERNAL void
-hb_aat_layout_track (hb_ot_shape_plan_t *plan,
+hb_aat_layout_track (const hb_ot_shape_plan_t *plan,
 		     hb_font_t *font,
 		     hb_buffer_t *buffer);
 

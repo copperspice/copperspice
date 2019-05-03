@@ -46,25 +46,19 @@ struct TrackTableEntry
 {
   friend struct TrackData;
 
-  inline float get_track_value () const
-  {
-    return track.to_float ();
-  }
+  float get_track_value () const { return track.to_float (); }
 
-  inline int get_value (const void *base,
-			unsigned int index,
-			unsigned int nSizes) const
-  {
-    return (base+valuesZ).as_array (nSizes)[index];
-  }
+  int get_value (const void *base, unsigned int index,
+		 unsigned int table_size) const
+  { return (base+valuesZ).as_array (table_size)[index]; }
 
   public:
-  inline bool sanitize (hb_sanitize_context_t *c, const void *base,
-			unsigned int nSizes) const
+  bool sanitize (hb_sanitize_context_t *c, const void *base,
+		 unsigned int table_size) const
   {
     TRACE_SANITIZE (this);
     return_trace (likely (c->check_struct (this) &&
-			  (valuesZ.sanitize (c, base, nSizes))));
+			  (valuesZ.sanitize (c, base, table_size))));
   }
 
   protected:
@@ -72,7 +66,7 @@ struct TrackTableEntry
   NameID	trackNameID;	/* The 'name' table index for this track.
 				 * (a short word or phrase like "loose"
 				 * or "very tight") */
-  OffsetTo<UnsizedArrayOf<FWORD>, HBUINT16, false>
+  NNOffsetTo<UnsizedArrayOf<FWORD> >
 		valuesZ;	/* Offset from start of tracking table to
 				 * per-size tracking values for this track. */
 
@@ -82,10 +76,10 @@ struct TrackTableEntry
 
 struct TrackData
 {
-  inline float interpolate_at (unsigned int idx,
-			       float target_size,
-			       const TrackTableEntry &trackTableEntry,
-			       const void *base) const
+  float interpolate_at (unsigned int idx,
+			float target_size,
+			const TrackTableEntry &trackTableEntry,
+			const void *base) const
   {
     unsigned int sizes = nSizes;
     hb_array_t<const Fixed> size_table ((base+sizeTable).arrayZ, sizes);
@@ -97,7 +91,7 @@ struct TrackData
 	   (1.f - t) * trackTableEntry.get_value (base, idx, sizes);
   }
 
-  inline int get_tracking (const void *base, float ptem) const
+  int get_tracking (const void *base, float ptem) const
   {
     /* CoreText points are CSS pixels (96 per inch),
      * NOT typographic points (72 per inch).
@@ -133,7 +127,6 @@ struct TrackData
     if (!sizes) return 0.;
     if (sizes == 1) return trackTableEntry->get_value (base, 0, sizes);
 
-    /* TODO bfind() */
     hb_array_t<const Fixed> size_table ((base+sizeTable).arrayZ, sizes);
     unsigned int size_index;
     for (size_index = 0; size_index < sizes - 1; size_index++)
@@ -144,12 +137,12 @@ struct TrackData
 				  *trackTableEntry, base));
   }
 
-  inline bool sanitize (hb_sanitize_context_t *c, const void *base) const
+  bool sanitize (hb_sanitize_context_t *c, const void *base) const
   {
     TRACE_SANITIZE (this);
-    return_trace (c->check_struct (this) &&
-		  sizeTable.sanitize (c, base, nSizes) &&
-		  trackTable.sanitize (c, nTracks, base, nSizes));
+    return_trace (likely (c->check_struct (this) &&
+			  sizeTable.sanitize (c, base, nSizes) &&
+			  trackTable.sanitize (c, nTracks, base, nSizes)));
   }
 
   protected:
@@ -167,20 +160,11 @@ struct TrackData
 
 struct trak
 {
-  static const hb_tag_t tableTag = HB_AAT_TAG_trak;
+  static constexpr hb_tag_t tableTag = HB_AAT_TAG_trak;
 
-  inline bool has_data (void) const { return version.to_int () != 0; }
+  bool has_data () const { return version.to_int (); }
 
-  inline bool sanitize (hb_sanitize_context_t *c) const
-  {
-    TRACE_SANITIZE (this);
-
-    return_trace (unlikely (c->check_struct (this) &&
-			    horizData.sanitize (c, this, this) &&
-			    vertData.sanitize (c, this, this)));
-  }
-
-  inline bool apply (hb_aat_apply_context_t *c) const
+  bool apply (hb_aat_apply_context_t *c) const
   {
     TRACE_APPLY (this);
 
@@ -221,15 +205,27 @@ struct trak
     return_trace (true);
   }
 
+  bool sanitize (hb_sanitize_context_t *c) const
+  {
+    TRACE_SANITIZE (this);
+
+    return_trace (likely (c->check_struct (this) &&
+			  version.major == 1 &&
+			  horizData.sanitize (c, this, this) &&
+			  vertData.sanitize (c, this, this)));
+  }
+
   protected:
-  FixedVersion<>	version;	/* Version of the tracking table
+  FixedVersion<>version;	/* Version of the tracking table
 					 * (0x00010000u for version 1.0). */
-  HBUINT16		format; 	/* Format of the tracking table (set to 0). */
-  OffsetTo<TrackData>	horizData;	/* Offset from start of tracking table to TrackData
-					 * for horizontal text (or 0 if none). */
-  OffsetTo<TrackData>	vertData;	/* Offset from start of tracking table to TrackData
-					 * for vertical text (or 0 if none). */
-  HBUINT16		reserved;	/* Reserved. Set to 0. */
+  HBUINT16	format; 	/* Format of the tracking table (set to 0). */
+  OffsetTo<TrackData>
+		horizData;	/* Offset from start of tracking table to TrackData
+				 * for horizontal text (or 0 if none). */
+  OffsetTo<TrackData>
+		vertData;	/* Offset from start of tracking table to TrackData
+				 * for vertical text (or 0 if none). */
+  HBUINT16	reserved;	/* Reserved. Set to 0. */
 
   public:
   DEFINE_SIZE_STATIC (12);

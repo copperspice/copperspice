@@ -139,10 +139,10 @@ hb_font_get_nominal_glyphs_default (hb_font_t *font,
     for (unsigned int i = 0; i < count; i++)
     {
       if (!font->get_nominal_glyph (*first_unicode, first_glyph))
-        return i;
+	return i;
 
-      first_unicode = &StructAtOffset<hb_codepoint_t> (first_unicode, unicode_stride);
-      first_glyph = &StructAtOffset<hb_codepoint_t> (first_glyph, glyph_stride);
+      first_unicode = &StructAtOffsetUnaligned<hb_codepoint_t> (first_unicode, unicode_stride);
+      first_glyph = &StructAtOffsetUnaligned<hb_codepoint_t> (first_glyph, glyph_stride);
     }
     return count;
   }
@@ -238,8 +238,8 @@ hb_font_get_glyph_h_advances_default (hb_font_t* font,
     for (unsigned int i = 0; i < count; i++)
     {
       *first_advance = font->get_glyph_h_advance (*first_glyph);
-      first_glyph = &StructAtOffset<hb_codepoint_t> (first_glyph, glyph_stride);
-      first_advance = &StructAtOffset<hb_position_t> (first_advance, advance_stride);
+      first_glyph = &StructAtOffsetUnaligned<hb_codepoint_t> (first_glyph, glyph_stride);
+      first_advance = &StructAtOffsetUnaligned<hb_position_t> (first_advance, advance_stride);
     }
     return;
   }
@@ -250,7 +250,7 @@ hb_font_get_glyph_h_advances_default (hb_font_t* font,
   for (unsigned int i = 0; i < count; i++)
   {
     *first_advance = font->parent_scale_x_distance (*first_advance);
-    first_advance = &StructAtOffset<hb_position_t> (first_advance, advance_stride);
+    first_advance = &StructAtOffsetUnaligned<hb_position_t> (first_advance, advance_stride);
   }
 }
 
@@ -270,8 +270,8 @@ hb_font_get_glyph_v_advances_default (hb_font_t* font,
     for (unsigned int i = 0; i < count; i++)
     {
       *first_advance = font->get_glyph_v_advance (*first_glyph);
-      first_glyph = &StructAtOffset<hb_codepoint_t> (first_glyph, glyph_stride);
-      first_advance = &StructAtOffset<hb_position_t> (first_advance, advance_stride);
+      first_glyph = &StructAtOffsetUnaligned<hb_codepoint_t> (first_glyph, glyph_stride);
+      first_advance = &StructAtOffsetUnaligned<hb_position_t> (first_advance, advance_stride);
     }
     return;
   }
@@ -282,7 +282,7 @@ hb_font_get_glyph_v_advances_default (hb_font_t* font,
   for (unsigned int i = 0; i < count; i++)
   {
     *first_advance = font->parent_scale_y_distance (*first_advance);
-    first_advance = &StructAtOffset<hb_position_t> (first_advance, advance_stride);
+    first_advance = &StructAtOffsetUnaligned<hb_position_t> (first_advance, advance_stride);
   }
 }
 
@@ -523,7 +523,7 @@ static const hb_font_funcs_t _hb_font_funcs_default = {
  * Since: 0.9.2
  **/
 hb_font_funcs_t *
-hb_font_funcs_create (void)
+hb_font_funcs_create ()
 {
   hb_font_funcs_t *ffuncs;
 
@@ -545,7 +545,7 @@ hb_font_funcs_create (void)
  * Since: 0.9.2
  **/
 hb_font_funcs_t *
-hb_font_funcs_get_empty (void)
+hb_font_funcs_get_empty ()
 {
   return const_cast<hb_font_funcs_t *> (&_hb_font_funcs_default);
 }
@@ -1306,15 +1306,9 @@ DEFINE_NULL_INSTANCE (hb_font_t) =
   0, /* num_coords */
   nullptr, /* coords */
 
-  const_cast<hb_font_funcs_t *> (&_hb_Null_hb_font_funcs_t), /* klass */
-  nullptr, /* user_data */
-  nullptr, /* destroy */
+  const_cast<hb_font_funcs_t *> (&_hb_Null_hb_font_funcs_t),
 
-  {
-#define HB_SHAPER_IMPLEMENT(shaper) HB_ATOMIC_PTR_INIT (HB_SHAPER_DATA_INVALID),
-#include "hb-shaper-list.hh"
-#undef HB_SHAPER_IMPLEMENT
-  }
+  /* Zero for the rest is fine. */
 };
 
 
@@ -1332,7 +1326,7 @@ _hb_font_create (hb_face_t *face)
   font->parent = hb_font_get_empty ();
   font->face = hb_face_reference (face);
   font->klass = hb_font_funcs_get_empty ();
-
+  font->data.init0 (font);
   font->x_scale = font->y_scale = hb_face_get_upem (face);
 
   return font;
@@ -1414,7 +1408,7 @@ hb_font_create_sub_font (hb_font_t *parent)
  * Since: 0.9.2
  **/
 hb_font_t *
-hb_font_get_empty (void)
+hb_font_get_empty ()
 {
   return const_cast<hb_font_t *> (&Null(hb_font_t));
 }
@@ -1448,9 +1442,7 @@ hb_font_destroy (hb_font_t *font)
 {
   if (!hb_object_destroy (font)) return;
 
-#define HB_SHAPER_IMPLEMENT(shaper) HB_SHAPER_DATA_DESTROY(shaper, font);
-#include "hb-shaper-list.hh"
-#undef HB_SHAPER_IMPLEMENT
+  font->data.fini ();
 
   if (font->destroy)
     font->destroy (font->user_data);

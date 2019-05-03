@@ -62,20 +62,20 @@ struct SBIXGlyph
 
 struct SBIXStrike
 {
-  inline bool sanitize (hb_sanitize_context_t *c) const
+  bool sanitize (hb_sanitize_context_t *c) const
   {
     TRACE_SANITIZE (this);
     return_trace (c->check_struct (this) &&
 		  imageOffsetsZ.sanitize_shallow (c, c->get_num_glyphs () + 1));
   }
 
-  inline hb_blob_t *get_glyph_blob (unsigned int  glyph_id,
-				    hb_blob_t    *sbix_blob,
-				    hb_tag_t      file_type,
-				    int          *x_offset,
-				    int          *y_offset,
-				    unsigned int  num_glyphs,
-				    unsigned int *strike_ppem) const
+  hb_blob_t *get_glyph_blob (unsigned int  glyph_id,
+			     hb_blob_t    *sbix_blob,
+			     hb_tag_t      file_type,
+			     int          *x_offset,
+			     int          *y_offset,
+			     unsigned int  num_glyphs,
+			     unsigned int *strike_ppem) const
   {
     if (unlikely (!ppem)) return hb_blob_get_empty (); /* To get Null() object out of the way. */
 
@@ -130,46 +130,38 @@ struct SBIXStrike
 
 struct sbix
 {
-  static const hb_tag_t tableTag = HB_OT_TAG_sbix;
+  static constexpr hb_tag_t tableTag = HB_OT_TAG_sbix;
 
-  inline bool has_data (void) const { return version; }
+  bool has_data () const { return version; }
 
-  inline const SBIXStrike &get_strike (unsigned int i) const { return this+strikes[i]; }
+  const SBIXStrike &get_strike (unsigned int i) const { return this+strikes[i]; }
 
   struct accelerator_t
   {
-    inline void init (hb_face_t *face)
+    void init (hb_face_t *face)
     {
-      sbix_blob = hb_sanitize_context_t().reference_table<sbix> (face);
-      table = sbix_blob->as<sbix> ();
+      table = hb_sanitize_context_t().reference_table<sbix> (face);
       num_glyphs = face->get_num_glyphs ();
     }
+    void fini () { table.destroy (); }
 
-    inline void fini (void)
-    {
-      hb_blob_destroy (sbix_blob);
-    }
+    bool has_data () const { return table->has_data (); }
 
-    inline bool has_data () const
-    {
-      return table->has_data ();
-    }
-
-    inline bool get_extents (hb_font_t          *font,
-			     hb_codepoint_t      glyph,
-			     hb_glyph_extents_t *extents) const
+    bool get_extents (hb_font_t          *font,
+		      hb_codepoint_t      glyph,
+		      hb_glyph_extents_t *extents) const
     {
       /* We only support PNG right now, and following function checks type. */
       return get_png_extents (font, glyph, extents);
     }
 
-    inline hb_blob_t *reference_png (hb_font_t      *font,
-				     hb_codepoint_t  glyph_id,
-				     int            *x_offset,
-				     int            *y_offset,
-				     unsigned int   *available_ppem) const
+    hb_blob_t *reference_png (hb_font_t      *font,
+			      hb_codepoint_t  glyph_id,
+			      int            *x_offset,
+			      int            *y_offset,
+			      unsigned int   *available_ppem) const
     {
-      return choose_strike (font).get_glyph_blob (glyph_id, sbix_blob,
+      return choose_strike (font).get_glyph_blob (glyph_id, table.get_blob (),
 						  HB_TAG ('p','n','g',' '),
 						  x_offset, y_offset,
 						  num_glyphs, available_ppem);
@@ -177,7 +169,7 @@ struct sbix
 
     private:
 
-    inline const SBIXStrike &choose_strike (hb_font_t *font) const
+    const SBIXStrike &choose_strike (hb_font_t *font) const
     {
       unsigned count = table->strikes.len;
       if (unlikely (!count))
@@ -227,9 +219,9 @@ struct sbix
       DEFINE_SIZE_STATIC (29);
     };
 
-    inline bool get_png_extents (hb_font_t          *font,
-				 hb_codepoint_t      glyph,
-				 hb_glyph_extents_t *extents) const
+    bool get_png_extents (hb_font_t          *font,
+			  hb_codepoint_t      glyph,
+			  hb_glyph_extents_t *extents) const
     {
       /* Following code is safe to call even without data.
        * But faster to short-circuit. */
@@ -250,7 +242,7 @@ struct sbix
       /* Convert to font units. */
       if (strike_ppem)
       {
-	double scale = font->face->upem / (double) strike_ppem;
+	double scale = font->face->get_upem () / (double) strike_ppem;
 	extents->x_bearing = round (extents->x_bearing * scale);
 	extents->y_bearing = round (extents->y_bearing * scale);
 	extents->width = round (extents->width * scale);
@@ -263,13 +255,12 @@ struct sbix
     }
 
     private:
-    hb_blob_t *sbix_blob;
-    hb_nonnull_ptr_t<const sbix> table;
+    hb_blob_ptr_t<sbix> table;
 
     unsigned int num_glyphs;
   };
 
-  inline bool sanitize (hb_sanitize_context_t *c) const
+  bool sanitize (hb_sanitize_context_t *c) const
   {
     TRACE_SANITIZE (this);
     return_trace (likely (c->check_struct (this) &&

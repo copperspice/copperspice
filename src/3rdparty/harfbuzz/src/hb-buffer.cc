@@ -215,7 +215,7 @@ hb_buffer_t::get_scratch_buffer (unsigned int *size)
 /* HarfBuzz-Internal API */
 
 void
-hb_buffer_t::reset (void)
+hb_buffer_t::reset ()
 {
   if (unlikely (hb_object_is_immutable (this)))
     return;
@@ -230,7 +230,7 @@ hb_buffer_t::reset (void)
 }
 
 void
-hb_buffer_t::clear (void)
+hb_buffer_t::clear ()
 {
   if (unlikely (hb_object_is_immutable (this)))
     return;
@@ -287,7 +287,7 @@ hb_buffer_t::add_info (const hb_glyph_info_t &glyph_info)
 
 
 void
-hb_buffer_t::remove_output (void)
+hb_buffer_t::remove_output ()
 {
   if (unlikely (hb_object_is_immutable (this)))
     return;
@@ -300,7 +300,7 @@ hb_buffer_t::remove_output (void)
 }
 
 void
-hb_buffer_t::clear_output (void)
+hb_buffer_t::clear_output ()
 {
   if (unlikely (hb_object_is_immutable (this)))
     return;
@@ -313,7 +313,7 @@ hb_buffer_t::clear_output (void)
 }
 
 void
-hb_buffer_t::clear_positions (void)
+hb_buffer_t::clear_positions ()
 {
   if (unlikely (hb_object_is_immutable (this)))
     return;
@@ -328,7 +328,7 @@ hb_buffer_t::clear_positions (void)
 }
 
 void
-hb_buffer_t::swap_buffers (void)
+hb_buffer_t::swap_buffers ()
 {
   if (unlikely (!successful)) return;
 
@@ -480,7 +480,7 @@ hb_buffer_t::reverse_range (unsigned int start,
 }
 
 void
-hb_buffer_t::reverse (void)
+hb_buffer_t::reverse ()
 {
   if (unlikely (!len))
     return;
@@ -489,7 +489,7 @@ hb_buffer_t::reverse (void)
 }
 
 void
-hb_buffer_t::reverse_clusters (void)
+hb_buffer_t::reverse_clusters ()
 {
   unsigned int i, start, count, last_cluster;
 
@@ -636,7 +636,7 @@ hb_buffer_t::unsafe_to_break_from_outbuffer (unsigned int start, unsigned int en
 }
 
 void
-hb_buffer_t::guess_segment_properties (void)
+hb_buffer_t::guess_segment_properties ()
 {
   assert (content_type == HB_BUFFER_CONTENT_TYPE_UNICODE ||
 	  (!len && content_type == HB_BUFFER_CONTENT_TYPE_INVALID));
@@ -709,7 +709,7 @@ DEFINE_NULL_INSTANCE (hb_buffer_t) =
  * Since: 0.9.2
  **/
 hb_buffer_t *
-hb_buffer_create (void)
+hb_buffer_create ()
 {
   hb_buffer_t *buffer;
 
@@ -727,14 +727,14 @@ hb_buffer_create (void)
 /**
  * hb_buffer_get_empty:
  *
- * 
+ *
  *
  * Return value: (transfer full):
  *
  * Since: 0.9.2
  **/
 hb_buffer_t *
-hb_buffer_get_empty (void)
+hb_buffer_get_empty ()
 {
   return const_cast<hb_buffer_t *> (&Null(hb_buffer_t));
 }
@@ -785,14 +785,14 @@ hb_buffer_destroy (hb_buffer_t *buffer)
 /**
  * hb_buffer_set_user_data: (skip)
  * @buffer: an #hb_buffer_t.
- * @key: 
- * @data: 
- * @destroy: 
- * @replace: 
+ * @key:
+ * @data:
+ * @destroy:
+ * @replace:
  *
- * 
  *
- * Return value: 
+ *
+ * Return value:
  *
  * Since: 0.9.2
  **/
@@ -809,11 +809,11 @@ hb_buffer_set_user_data (hb_buffer_t        *buffer,
 /**
  * hb_buffer_get_user_data: (skip)
  * @buffer: an #hb_buffer_t.
- * @key: 
+ * @key:
  *
- * 
  *
- * Return value: 
+ *
+ * Return value:
  *
  * Since: 0.9.2
  **/
@@ -863,9 +863,9 @@ hb_buffer_get_content_type (hb_buffer_t *buffer)
 /**
  * hb_buffer_set_unicode_funcs:
  * @buffer: an #hb_buffer_t.
- * @unicode_funcs: 
+ * @unicode_funcs:
  *
- * 
+ *
  *
  * Since: 0.9.2
  **/
@@ -888,9 +888,9 @@ hb_buffer_set_unicode_funcs (hb_buffer_t        *buffer,
  * hb_buffer_get_unicode_funcs:
  * @buffer: an #hb_buffer_t.
  *
- * 
  *
- * Return value: 
+ *
+ * Return value:
  *
  * Since: 0.9.2
  **/
@@ -1094,7 +1094,7 @@ hb_buffer_set_flags (hb_buffer_t       *buffer,
  *
  * See hb_buffer_set_flags().
  *
- * Return value: 
+ * Return value:
  * The @buffer flags.
  *
  * Since: 0.9.7
@@ -1108,9 +1108,9 @@ hb_buffer_get_flags (hb_buffer_t *buffer)
 /**
  * hb_buffer_set_cluster_level:
  * @buffer: an #hb_buffer_t.
- * @cluster_level: 
+ * @cluster_level:
  *
- * 
+ *
  *
  * Since: 0.9.42
  **/
@@ -1128,9 +1128,9 @@ hb_buffer_set_cluster_level (hb_buffer_t       *buffer,
  * hb_buffer_get_cluster_level:
  * @buffer: an #hb_buffer_t.
  *
- * 
  *
- * Return value: 
+ *
+ * Return value:
  *
  * Since: 0.9.42
  **/
@@ -1169,7 +1169,7 @@ hb_buffer_set_replacement_codepoint (hb_buffer_t    *buffer,
  *
  * See hb_buffer_set_replacement_codepoint().
  *
- * Return value: 
+ * Return value:
  * The @buffer replacement #hb_codepoint_t.
  *
  * Since: 0.9.31
@@ -1209,7 +1209,7 @@ hb_buffer_set_invisible_glyph (hb_buffer_t    *buffer,
  *
  * See hb_buffer_set_invisible_glyph().
  *
- * Return value: 
+ * Return value:
  * The @buffer invisible #hb_codepoint_t.
  *
  * Since: 2.0.0
@@ -1320,7 +1320,7 @@ hb_buffer_add (hb_buffer_t    *buffer,
  * Similar to hb_buffer_pre_allocate(), but clears any new items added at the
  * end.
  *
- * Return value: 
+ * Return value:
  * %true if @buffer memory allocation succeeded, %false otherwise.
  *
  * Since: 0.9.2
@@ -2000,7 +2000,7 @@ hb_buffer_diff (hb_buffer_t *buffer,
  * @user_data:
  * @destroy:
  *
- * 
+ *
  *
  * Since: 1.1.3
  **/

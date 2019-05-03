@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011  Google, Inc.
+ * Copyright © 2018 Adobe Inc.
  *
  *  This is part of HarfBuzz, a text shaping library.
  *
@@ -21,26 +21,18 @@
  * ON AN "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO
  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *
- * Google Author(s): Behdad Esfahbod
+ * Adobe Author(s): Michiharu Ariza
  */
 
-#ifndef HB_UNISCRIBE_H
-#define HB_UNISCRIBE_H
+#ifndef HB_SUBSET_CFF2_HH
+#define HB_SUBSET_CFF2_HH
 
-#include "hb.h"
+#include "hb.hh"
 
-#include <windows.h>
+#include "hb-subset-plan.hh"
 
-HB_BEGIN_DECLS
+HB_INTERNAL bool
+hb_subset_cff2 (hb_subset_plan_t *plan,
+	       hb_blob_t       **cff2_prime /* OUT */);
 
-
-HB_EXTERN LOGFONTW *
-hb_uniscribe_font_get_logfontw (hb_font_t *font);
-
-HB_EXTERN HFONT
-hb_uniscribe_font_get_hfont (hb_font_t *font);
-
-
-HB_END_DECLS
-
-#endif /* HB_UNISCRIBE_H */
+#endif /* HB_SUBSET_CFF2_HH */

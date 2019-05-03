@@ -39,7 +39,7 @@ namespace OT {
 
 struct LayerRecord
 {
-  inline bool sanitize (hb_sanitize_context_t *c) const
+  bool sanitize (hb_sanitize_context_t *c) const
   {
     TRACE_SANITIZE (this);
     return_trace (c->check_struct (this));
@@ -63,17 +63,10 @@ struct LayerRecord
 
 struct BaseGlyphRecord
 {
-  inline int cmp (hb_codepoint_t g) const
+  int cmp (hb_codepoint_t g) const
   { return g < glyphId ? -1 : g > glyphId ? 1 : 0; }
 
-  static int cmp (const void *pa, const void *pb)
-  {
-    const hb_codepoint_t *a = (const hb_codepoint_t *) pa;
-    const BaseGlyphRecord *b = (const BaseGlyphRecord *) pb;
-    return b->cmp (*a);
-  }
-
-  inline bool sanitize (hb_sanitize_context_t *c) const
+  bool sanitize (hb_sanitize_context_t *c) const
   {
     TRACE_SANITIZE (this);
     return_trace (likely (c->check_struct (this)));
@@ -94,16 +87,16 @@ struct BaseGlyphRecord
 
 struct COLR
 {
-  static const hb_tag_t tableTag = HB_OT_TAG_COLR;
+  static constexpr hb_tag_t tableTag = HB_OT_TAG_COLR;
 
-  inline bool has_data (void) const { return numBaseGlyphs; }
+  bool has_data () const { return numBaseGlyphs; }
 
-  inline unsigned int get_glyph_layers (hb_codepoint_t       glyph,
-					unsigned int         start_offset,
-					unsigned int        *count, /* IN/OUT.  May be NULL. */
-					hb_ot_color_layer_t *layers /* OUT.     May be NULL. */) const
+  unsigned int get_glyph_layers (hb_codepoint_t       glyph,
+				 unsigned int         start_offset,
+				 unsigned int        *count, /* IN/OUT.  May be NULL. */
+				 hb_ot_color_layer_t *layers /* OUT.     May be NULL. */) const
   {
-    const BaseGlyphRecord &record = get_glyph_record (glyph);
+    const BaseGlyphRecord &record = (this+baseGlyphsZ).bsearch (numBaseGlyphs, glyph);
 
     hb_array_t<const LayerRecord> all_layers ((this+layersZ).arrayZ, numLayers);
     hb_array_t<const LayerRecord> glyph_layers = all_layers.sub_array (record.firstLayerIdx,
@@ -111,17 +104,17 @@ struct COLR
     if (count)
     {
       hb_array_t<const LayerRecord> segment_layers = glyph_layers.sub_array (start_offset, *count);
-      *count = segment_layers.len;
-      for (unsigned int i = 0; i < segment_layers.len; i++)
+      *count = segment_layers.length;
+      for (unsigned int i = 0; i < segment_layers.length; i++)
       {
         layers[i].glyph = segment_layers.arrayZ[i].glyphId;
         layers[i].color_index = segment_layers.arrayZ[i].colorIdx;
       }
     }
-    return glyph_layers.len;
+    return glyph_layers.length;
   }
 
-  inline bool sanitize (hb_sanitize_context_t *c) const
+  bool sanitize (hb_sanitize_context_t *c) const
   {
     TRACE_SANITIZE (this);
     return_trace (likely (c->check_struct (this) &&
@@ -129,23 +122,12 @@ struct COLR
 			  (this+layersZ).sanitize (c, numLayers)));
   }
 
-  private:
-  inline const BaseGlyphRecord &get_glyph_record (hb_codepoint_t glyph_id) const
-  {
-    const BaseGlyphRecord *rec = (BaseGlyphRecord *) bsearch (&glyph_id,
-							      &(this+baseGlyphsZ),
-							      numBaseGlyphs,
-							      sizeof (BaseGlyphRecord),
-							      BaseGlyphRecord::cmp);
-    return rec ? *rec : Null(BaseGlyphRecord);
-  }
-
   protected:
   HBUINT16	version;	/* Table version number (starts at 0). */
   HBUINT16	numBaseGlyphs;	/* Number of Base Glyph Records. */
-  LOffsetTo<UnsizedArrayOf<BaseGlyphRecord>, false>
+  LNNOffsetTo<SortedUnsizedArrayOf<BaseGlyphRecord> >
 		baseGlyphsZ;	/* Offset to Base Glyph records. */
-  LOffsetTo<UnsizedArrayOf<LayerRecord>, false>
+  LNNOffsetTo<UnsizedArrayOf<LayerRecord> >
 		layersZ;	/* Offset to Layer Records. */
   HBUINT16	numLayers;	/* Number of Layer Records. */
   public:

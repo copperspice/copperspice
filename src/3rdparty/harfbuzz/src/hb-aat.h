@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015  Ebrahim Byagowi
+ * Copyright © 2018  Ebrahim Byagowi
  *
  *  This is part of HarfBuzz, a text shaping library.
  *
@@ -22,18 +22,17 @@
  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 
-#ifndef HB_DIRECTWRITE_H
-#define HB_DIRECTWRITE_H
+#ifndef HB_AAT_H
+#define HB_AAT_H
+#define HB_AAT_H_IN
 
 #include "hb.h"
 
-HB_BEGIN_DECLS
+#include "hb-aat-layout.h"
 
-HB_EXTERN hb_bool_t
-hb_directwrite_shape_experimental_width (hb_font_t *font, hb_buffer_t *buffer,
-					 const hb_feature_t *features,
-					 unsigned int num_features, float width);
+HB_BEGIN_DECLS
 
 HB_END_DECLS
 
-#endif /* HB_DIRECTWRITE_H */
+#undef HB_AAT_H_IN
+#endif /* HB_AAT_H */

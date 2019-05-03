@@ -25,7 +25,7 @@
  */
 
 #include "hb-ot-shape-fallback.hh"
-#include "hb-ot-kern-table.hh"
+#include "hb-kern.hh"
 
 static unsigned int
 recategorize_combining_class (hb_codepoint_t u,
@@ -180,12 +180,18 @@ _hb_ot_shape_fallback_mark_position_recategorize_marks (const hb_ot_shape_plan_t
 static void
 zero_mark_advances (hb_buffer_t *buffer,
 		    unsigned int start,
-		    unsigned int end)
+		    unsigned int end,
+		    bool adjust_offsets_when_zeroing)
 {
   hb_glyph_info_t *info = buffer->info;
   for (unsigned int i = start; i < end; i++)
     if (_hb_glyph_info_get_general_category (&info[i]) == HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
     {
+      if (adjust_offsets_when_zeroing)
+      {
+	buffer->pos[i].x_offset -= buffer->pos[i].x_advance;
+	buffer->pos[i].y_offset -= buffer->pos[i].y_advance;
+      }
       buffer->pos[i].x_advance = 0;
       buffer->pos[i].y_advance = 0;
     }
@@ -303,7 +309,8 @@ position_around_base (const hb_ot_shape_plan_t *plan,
 		      hb_font_t *font,
 		      hb_buffer_t  *buffer,
 		      unsigned int base,
-		      unsigned int end)
+		      unsigned int end,
+		      bool adjust_offsets_when_zeroing)
 {
   hb_direction_t horiz_dir = HB_DIRECTION_INVALID;
 
@@ -314,11 +321,15 @@ position_around_base (const hb_ot_shape_plan_t *plan,
 				&base_extents))
   {
     /* If extents don't work, zero marks and go home. */
-    zero_mark_advances (buffer, base + 1, end);
+    zero_mark_advances (buffer, base + 1, end, adjust_offsets_when_zeroing);
     return;
   }
-  base_extents.x_bearing += buffer->pos[base].x_offset;
   base_extents.y_bearing += buffer->pos[base].y_offset;
+  /* Use horizontal advance for horizontal positioning.
+   * Generally a better idea.  Also works for zero-ink glyphs.  See:
+   * https://github.com/harfbuzz/harfbuzz/issues/1532 */
+  base_extents.x_bearing = 0;
+  base_extents.width = font->get_glyph_h_advance (buffer->info[base].codepoint);
 
   unsigned int lig_id = _hb_glyph_info_get_lig_id (&buffer->info[base]);
   /* Use integer for num_lig_components such that it doesn't convert to unsigned
@@ -394,7 +405,8 @@ position_cluster (const hb_ot_shape_plan_t *plan,
 		  hb_font_t *font,
 		  hb_buffer_t  *buffer,
 		  unsigned int start,
-		  unsigned int end)
+		  unsigned int end,
+		  bool adjust_offsets_when_zeroing)
 {
   if (end - start < 2)
     return;
@@ -410,7 +422,7 @@ position_cluster (const hb_ot_shape_plan_t *plan,
 	if (!HB_UNICODE_GENERAL_CATEGORY_IS_MARK (_hb_glyph_info_get_general_category (&info[j])))
 	  break;
 
-      position_around_base (plan, font, buffer, i, j);
+      position_around_base (plan, font, buffer, i, j, adjust_offsets_when_zeroing);
 
       i = j - 1;
     }
@@ -419,7 +431,8 @@ position_cluster (const hb_ot_shape_plan_t *plan,
 void
 _hb_ot_shape_fallback_mark_position (const hb_ot_shape_plan_t *plan,
 				     hb_font_t *font,
-				     hb_buffer_t  *buffer)
+				     hb_buffer_t  *buffer,
+				     bool adjust_offsets_when_zeroing)
 {
   _hb_buffer_assert_gsubgpos_vars (buffer);
 
@@ -428,10 +441,10 @@ _hb_ot_shape_fallback_mark_position (const hb_ot_shape_plan_t *plan,
   hb_glyph_info_t *info = buffer->info;
   for (unsigned int i = 1; i < count; i++)
     if (likely (!HB_UNICODE_GENERAL_CATEGORY_IS_MARK (_hb_glyph_info_get_general_category (&info[i])))) {
-      position_cluster (plan, font, buffer, start, i);
+      position_cluster (plan, font, buffer, start, i, adjust_offsets_when_zeroing);
       start = i;
     }
-  position_cluster (plan, font, buffer, start, count);
+  position_cluster (plan, font, buffer, start, count, adjust_offsets_when_zeroing);
 }
 
 
@@ -464,9 +477,18 @@ _hb_ot_shape_fallback_kern (const hb_ot_shape_plan_t *plan,
       !font->has_glyph_h_kerning_func () :
       !font->has_glyph_v_kerning_func ())
     return;
+
+  bool reverse = HB_DIRECTION_IS_BACKWARD (buffer->props.direction);
+
+  if (reverse)
+    buffer->reverse ();
+
   hb_ot_shape_fallback_kern_driver_t driver (font, buffer);
-  hb_kern_machine_t<hb_ot_shape_fallback_kern_driver_t> machine (driver);
+  OT::hb_kern_machine_t<hb_ot_shape_fallback_kern_driver_t> machine (driver);
   machine.kern (font, buffer, plan->kern_mask, false);
+
+  if (reverse)
+    buffer->reverse ();
 }
 
 
@@ -500,16 +522,16 @@ _hb_ot_shape_fallback_spaces (const hb_ot_shape_plan_t *plan HB_UNUSED,
 	case t::SPACE_EM_6:
 	case t::SPACE_EM_16:
 	  if (horizontal)
-	    pos[i].x_advance = (font->x_scale + ((int) space_type)/2) / (int) space_type;
+	    pos[i].x_advance = +(font->x_scale + ((int) space_type)/2) / (int) space_type;
 	  else
-	    pos[i].y_advance = (font->y_scale + ((int) space_type)/2) / (int) space_type;
+	    pos[i].y_advance = -(font->y_scale + ((int) space_type)/2) / (int) space_type;
 	  break;
 
 	case t::SPACE_4_EM_18:
 	  if (horizontal)
-	    pos[i].x_advance = (int64_t) font->x_scale * 4 / 18;
+	    pos[i].x_advance = (int64_t) +font->x_scale * 4 / 18;
 	  else
-	    pos[i].y_advance = (int64_t) font->y_scale * 4 / 18;
+	    pos[i].y_advance = (int64_t) -font->y_scale * 4 / 18;
 	  break;
 
 	case t::SPACE_FIGURE:

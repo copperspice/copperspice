@@ -56,12 +56,12 @@ union hb_options_union_t {
 static_assert ((sizeof (hb_atomic_int_t) >= sizeof (hb_options_union_t)), "");
 
 HB_INTERNAL void
-_hb_options_init (void);
+_hb_options_init ();
 
 extern HB_INTERNAL hb_atomic_int_t _hb_options;
 
 static inline hb_options_t
-hb_options (void)
+hb_options ()
 {
   /* Make a local copy, so we can access bitfield threadsafely. */
   hb_options_union_t u;
@@ -284,7 +284,7 @@ struct hb_auto_trace_t
     _hb_debug_msg_va<max_level> (what, obj, func, true, plevel ? *plevel : 0, +1, message, ap);
     va_end (ap);
   }
-  inline ~hb_auto_trace_t (void)
+  ~hb_auto_trace_t ()
   {
     _hb_warn_no_return<ret_t> (returned);
     if (!returned) {
@@ -293,14 +293,16 @@ struct hb_auto_trace_t
     if (plevel) --*plevel;
   }
 
-  inline ret_t ret (ret_t v, unsigned int line = 0)
+  ret_t ret (ret_t v,
+	     const char *func = "",
+	     unsigned int line = 0)
   {
     if (unlikely (returned)) {
       fprintf (stderr, "OUCH, double calls to return_trace().  This is a bug, please report.\n");
       return v;
     }
 
-    _hb_debug_msg<max_level> (what, obj, nullptr, true, plevel ? *plevel : 1, -1,
+    _hb_debug_msg<max_level> (what, obj, func, true, plevel ? *plevel : 1, -1,
 			      "return %s (line %d)",
 			      hb_printer_t<ret_t>().print (v), line);
     if (plevel) --*plevel;
@@ -325,17 +327,21 @@ struct hb_auto_trace_t<0, ret_t>
 				   const char *message,
 				   ...) HB_PRINTF_FUNC(6, 7) {}
 
-  inline ret_t ret (ret_t v, unsigned int line HB_UNUSED = 0) { return v; }
+  ret_t ret (ret_t v,
+	     const char *func HB_UNUSED = nullptr,
+	     unsigned int line HB_UNUSED = 0) { return v; }
 };
 
 /* For disabled tracing; optimize out everything.
  * https://github.com/harfbuzz/harfbuzz/pull/605 */
 template <typename ret_t>
 struct hb_no_trace_t {
-  inline ret_t ret (ret_t v, unsigned int line HB_UNUSED = 0) { return v; }
+  ret_t ret (ret_t v,
+	     const char *func HB_UNUSED = "",
+	     unsigned int line HB_UNUSED = 0) { return v; }
 };
 
-#define return_trace(RET) return trace.ret (RET, __LINE__)
+#define return_trace(RET) return trace.ret (RET, HB_FUNC, __LINE__)
 
 
 /*
@@ -395,30 +401,6 @@ struct hb_no_trace_t {
 #define TRACE_APPLY(this) hb_no_trace_t<bool> trace
 #endif
 
-#ifndef HB_DEBUG_CLOSURE
-#define HB_DEBUG_CLOSURE (HB_DEBUG+0)
-#endif
-#if HB_DEBUG_CLOSURE
-#define TRACE_CLOSURE(this) \
-	hb_auto_trace_t<HB_DEBUG_CLOSURE, hb_void_t> trace \
-	(&c->debug_depth, c->get_name (), this, HB_FUNC, \
-	 " ")
-#else
-#define TRACE_CLOSURE(this) hb_no_trace_t<hb_void_t> trace HB_UNUSED
-#endif
-
-#ifndef HB_DEBUG_COLLECT_GLYPHS
-#define HB_DEBUG_COLLECT_GLYPHS (HB_DEBUG+0)
-#endif
-#if HB_DEBUG_COLLECT_GLYPHS
-#define TRACE_COLLECT_GLYPHS(this) \
-	hb_auto_trace_t<HB_DEBUG_COLLECT_GLYPHS, hb_void_t> trace \
-	(&c->debug_depth, c->get_name (), this, HB_FUNC, \
-	 " ")
-#else
-#define TRACE_COLLECT_GLYPHS(this) hb_no_trace_t<hb_void_t> trace HB_UNUSED
-#endif
-
 #ifndef HB_DEBUG_SANITIZE
 #define HB_DEBUG_SANITIZE (HB_DEBUG+0)
 #endif
@@ -470,8 +452,6 @@ struct hb_no_trace_t {
 #ifndef HB_DEBUG_DISPATCH
 #define HB_DEBUG_DISPATCH ( \
 	HB_DEBUG_APPLY + \
-	HB_DEBUG_CLOSURE + \
-	HB_DEBUG_COLLECT_GLYPHS + \
 	HB_DEBUG_SANITIZE + \
 	HB_DEBUG_SERIALIZE + \
   HB_DEBUG_SUBSET + \
