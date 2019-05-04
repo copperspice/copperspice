@@ -172,11 +172,13 @@ QTipLabel::QTipLabel(const QString &text, QWidget *w)
    reuseTip(text);
 }
 
+#ifndef QT_NO_STYLE_STYLESHEET
 void QTipLabel::styleSheetParentDestroyed()
 {
    setProperty("_q_stylesheet_parent", QVariant());
    styleSheetParent = 0;
 }
+#endif
 
 void QTipLabel::restartExpireTimer()
 {
