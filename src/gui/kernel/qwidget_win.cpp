@@ -649,11 +649,13 @@ void QWidgetPrivate::setParent_sys(QWidget *parent, Qt::WindowFlags f)
          for (QWidget * w : extra->oleDropWidgets) {
             if (w && q->isAncestorOf(w)) {
                registeredDropChildren.push_back(w);
-               w->setAttribute(Qt::WA_DropSiteRegistered, false);
             }
          }
       }
    }
+
+   for (QWidget * w : registeredDropChildren)
+      w->setAttribute(Qt::WA_DropSiteRegistered, false);
 
    if ((q->windowType() == Qt::Desktop))  {
       old_winid = 0;
