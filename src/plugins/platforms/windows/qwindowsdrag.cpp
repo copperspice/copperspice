@@ -275,7 +275,7 @@ void QWindowsOleDropSource::createCursors()
    // Find screen for drag. Could be obtained from QDrag::source(), but that might be a QWidget.
    const QPlatformScreen *platformScreen = QWindowsContext::instance()->screenManager().screenAtDp(QWindowsCursor::mousePosition());
    if (!platformScreen) {
-      if (const QScreen *primaryScreen = QGuiApplication::primaryScreen()) {
+      if (const QScreen *primaryScreen = QApplication::primaryScreen()) {
          platformScreen = primaryScreen->handle();
       }
    }
@@ -427,7 +427,7 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinu
          }
       }
 
-      QGuiApplication::processEvents();
+      QApplication::processEvents();
 
    } while (false);
 
@@ -534,8 +534,8 @@ void QWindowsOleDropTarget::handleDrag(QWindow *window, DWORD grfKeyState,
 
    QWindowsDrag *windowsDrag = QWindowsDrag::instance();
    const Qt::DropActions actions = translateToQDragDropActions(*pdwEffect);
-   QGuiApplicationPrivate::modifier_buttons = toQtKeyboardModifiers(grfKeyState);
-   QGuiApplicationPrivate::mouse_buttons = QWindowsMouseHandler::keyStateToMouseButtons(grfKeyState);
+   QApplicationPrivate::modifier_buttons = toQtKeyboardModifiers(grfKeyState);
+   QApplicationPrivate::mouse_buttons = QWindowsMouseHandler::keyStateToMouseButtons(grfKeyState);
 
    const QPlatformDragQtResponse response =
       QWindowSystemInterface::handleDrag(window, windowsDrag->dropData(), m_lastPoint, actions);

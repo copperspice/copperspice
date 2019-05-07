@@ -165,7 +165,7 @@ static QSize systemCursorSize(const QPlatformScreen *screen = nullptr)
    if (screen) {
       // Correct the size if the DPI value of the screen differs from
       // that of the primary screen.
-      if (const QScreen *primaryQScreen = QGuiApplication::primaryScreen()) {
+      if (const QScreen *primaryQScreen = QApplication::primaryScreen()) {
          const QPlatformScreen *primaryScreen = primaryQScreen->handle();
          if (screen != primaryScreen) {
             const qreal logicalDpi = screen->logicalDpi().first;

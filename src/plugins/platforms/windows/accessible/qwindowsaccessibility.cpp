@@ -131,12 +131,12 @@ void QWindowsAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
     QWindow *window = QWindowsAccessibility::windowHelper(iface);
 
     if (!window) {
-        window = QGuiApplication::focusWindow();
+        window = QApplication::focusWindow();
         if (!window)
             return;
     }
 
-    QPlatformNativeInterface *platform = QGuiApplication::platformNativeInterface();
+    QPlatformNativeInterface *platform = QApplication::platformNativeInterface();
     if (!window->handle()) // Called before show(), no native window yet.
         return;
 
@@ -195,9 +195,9 @@ bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, W
 
     } else if (DWORD(lParam) == DWORD(OBJID_CLIENT)) {
         // Start handling accessibility internally
-        QGuiApplicationPrivate::platformIntegration()->accessibility()->setActive(true);
+        QApplicationPrivate::platformIntegration()->accessibility()->setActive(true);
+
         // Ignoring all requests while starting up
-        // ### Maybe QPA takes care of this???
         if (QCoreApplication::startingUp() || QCoreApplication::closingDown())
             return false;
 

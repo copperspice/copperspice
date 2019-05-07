@@ -107,7 +107,7 @@ QWindowsInputContext::QWindowsInputContext() :
    m_languageId(currentInputLanguageId()),
    m_locale(qt_localeFromLCID(m_languageId))
 {
-   connect(QGuiApplication::inputMethod(), &QInputMethod::cursorRectangleChanged,
+   connect(QApplication::inputMethod(), &QInputMethod::cursorRectangleChanged,
       this, &QWindowsInputContext::cursorRectChanged);
 }
 
@@ -161,10 +161,10 @@ void QWindowsInputContext::setFocusObject(QObject *)
 
 void QWindowsInputContext::updateEnabled()
 {
-   if (!QGuiApplication::focusObject()) {
+   if (!QApplication::focusObject()) {
       return;
    }
-   const QWindow *window = QGuiApplication::focusWindow();
+   const QWindow *window = QApplication::focusWindow();
    if (window && window->handle()) {
       QWindowsWindow *platformWindow = QWindowsWindow::baseWindowOf(window);
       const bool accepted = inputMethodAccepted();
@@ -211,7 +211,7 @@ void QWindowsInputContext::cursorRectChanged()
    if (!m_compositionContext.hwnd) {
       return;
    }
-   const QInputMethod *inputMethod = QGuiApplication::inputMethod();
+   const QInputMethod *inputMethod = QApplication::inputMethod();
    const QRectF cursorRectangleF = inputMethod->cursorRectangle();
    if (!cursorRectangleF.isValid()) {
       return;
@@ -324,7 +324,7 @@ static inline QTextFormat standardFormat(StandardFormat format)
          break;
       case SelectionFormat: {
          // TODO: Should be that of the widget?
-         const QPalette palette = QGuiApplication::palette();
+         const QPalette palette = QApplication::palette();
          const QColor background = palette.text().color();
          result.setBackground(QBrush(background));
          result.setForeground(palette.background());
@@ -336,12 +336,12 @@ static inline QTextFormat standardFormat(StandardFormat format)
 
 bool QWindowsInputContext::startComposition(HWND hwnd)
 {
-   QObject *fo = QGuiApplication::focusObject();
+   QObject *fo = QApplication::focusObject();
    if (!fo) {
       return false;
    }
    // This should always match the object.
-   QWindow *window = QGuiApplication::focusWindow();
+   QWindow *window = QApplication::focusWindow();
    if (!window) {
       return false;
    }
@@ -572,7 +572,7 @@ void QWindowsInputContext::handleInputLanguageChanged(WPARAM wparam, LPARAM lpar
 
 int QWindowsInputContext::reconvertString(RECONVERTSTRING *reconv)
 {
-   QObject *fo = QGuiApplication::focusObject();
+   QObject *fo = QApplication::focusObject();
    if (!fo) {
       return false;
    }

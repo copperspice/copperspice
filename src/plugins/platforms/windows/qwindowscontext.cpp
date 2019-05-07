@@ -105,7 +105,7 @@ static inline bool useRTL_Extensions(QSysInfo::WinVersion ver)
 #if ! defined(QT_NO_SESSIONMANAGER)
 static inline QWindowsSessionManager *platformSessionManager()
 {
-   QGuiApplicationPrivate *guiPrivate     = static_cast<QGuiApplicationPrivate *>(QApplicationPrivate::instance());
+   QApplicationPrivate *guiPrivate     = static_cast<QApplicationPrivate *>(QApplicationPrivate::instance());
    QSessionManagerPrivate *managerPrivate = QSessionManagerPrivate::get(guiPrivate->session_manager);
 
    return static_cast<QWindowsSessionManager *>(managerPrivate->platformSessionManager);
@@ -1074,7 +1074,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
          }
 
          if (platformWindow->testFlag(QWindowsWindow::BlockedByModal))
-            if (const QWindow *modalWindow = QGuiApplication::modalWindow()) {
+            if (const QWindow *modalWindow = QApplication::modalWindow()) {
                QWindowsWindow::baseWindowOf(modalWindow)->alertWindow();
             }
          break;
@@ -1112,7 +1112,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
          sessionManager->blocksInteraction();
          sessionManager->clearCancellation();
 
-         QGuiApplicationPrivate *qGuiAppPriv = static_cast<QGuiApplicationPrivate *>(QApplicationPrivate::instance());
+         QApplicationPrivate *qGuiAppPriv = static_cast<QApplicationPrivate *>(QApplicationPrivate::instance());
          qGuiAppPriv->commitData();
 
          if (lParam & ENDSESSION_LOGOFF) {
@@ -1132,7 +1132,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
 
          // we receive the message for each toplevel window included internal hidden ones,
          // but the aboutToQuit signal should be emitted only once.
-         QGuiApplicationPrivate *qGuiAppPriv = static_cast<QGuiApplicationPrivate *>(QApplicationPrivate::instance());
+         QApplicationPrivate *qGuiAppPriv = static_cast<QApplicationPrivate *>(QApplicationPrivate::instance());
 
          if (endsession && !qGuiAppPriv->aboutToQuitEmitted) {
             qGuiAppPriv->aboutToQuitEmitted = true;
@@ -1140,7 +1140,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
             qApp->aboutToQuit();
 
             // since the process will be killed immediately quit() has no real effect
-            QGuiApplication::quit();
+            QApplication::quit();
          }
          return true;
       }
@@ -1165,14 +1165,14 @@ void QWindowsContext::handleFocusEvent(QtWindows::WindowsEventType et,
    if (et == QtWindows::FocusInEvent) {
       QWindow *topWindow = QWindowsWindow::topLevelOf(platformWindow->window());
       QWindow *modalWindow = 0;
-      if (QGuiApplicationPrivate::instance()->isWindowBlocked(topWindow, &modalWindow) && topWindow != modalWindow) {
+      if (QApplicationPrivate::instance()->isWindowBlocked(topWindow, &modalWindow) && topWindow != modalWindow) {
          modalWindow->requestActivate();
          return;
       }
       // QTBUG-32867: Invoking WinAPI SetParent() can cause focus-in for the
       // window which is not desired for native child widgets.
       if (platformWindow->testFlag(QWindowsWindow::WithinSetParent)) {
-         QWindow *currentFocusWindow = QGuiApplication::focusWindow();
+         QWindow *currentFocusWindow = QApplication::focusWindow();
          if (currentFocusWindow && currentFocusWindow != platformWindow->window()) {
             currentFocusWindow->requestActivate();
             return;
