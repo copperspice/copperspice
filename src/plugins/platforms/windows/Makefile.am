@@ -37,7 +37,7 @@ PLATFORMS_WINDOWS_PRIVATE_INCLUDES = \
 PLATFORMS_WINDOWS_ACCESSIBLE_PRIVATE_INCLUDES = \
 	accessible/comutils.h \
 	accessible/qwindowsaccessibility.h \
-	accessible/qwindowsmsaaaccessible.h
+	accessible/qwindows_msaa_accessible.h
 
 PLATFORMS_WINDOWS_EVENTS_PRIVATE_INCLUDES = \
 	events/qwindowsguieventdispatcher_p.h
@@ -108,7 +108,7 @@ lib_CsGuiWin@BUILD_ABI@_la_SOURCES = \
 	\
 	src/plugins/platforms/windows/accessible/comutils.cpp \
 	src/plugins/platforms/windows/accessible/qwindowsaccessibility.cpp \
-	src/plugins/platforms/windows/accessible/qwindowsmsaaaccessible.cpp \
+	src/plugins/platforms/windows/accessible/qwindows_msaa_accessible.cpp \
 	src/plugins/platforms/windows/events/qwindowsguieventdispatcher.cpp
 
 nodist_lib_CsGuiWin@BUILD_ABI@_la_SOURCES = \

@@ -38,7 +38,7 @@ set(PLATFORMS_WIN_PRIVATE_INCLUDES
 set(PLATFORMS_WIN_OTHER_PRIVATE_INCLUDES
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/comutils.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsaccessibility.h
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsmsaaaccessible.h
+	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindows_msaa_accessible.h
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwindowsguieventdispatcher_p.h
 )
 
@@ -74,10 +74,11 @@ set(PLATFORMS_WIN_SOURCES
 
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/comutils.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsaccessibility.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsmsaaaccessible.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindows_msaa_accessible.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwindowsguieventdispatcher.cpp
 
 	${CMAKE_CURRENT_SOURCE_DIR}/windows/cursors.qrc
+	${CMAKE_CURRENT_BINARY_DIR}/qrc_cursors.cpp
 )
 
 if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
@@ -101,7 +102,8 @@ if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
    add_library(CsGuiWin${BUILD_ABI} MODULE ${PLATFORMS_WIN_SOURCES})
 
    target_link_libraries(CsGuiWin${BUILD_ABI}
-      $EXTRA_PLATFORMS_WIN_LIBS})
+      ${EXTRA_PLATFORMS_WIN_LIBS}
+   )
 
    target_include_directories(
       CsGuiWin${BUILD_ABI} PRIVATE
@@ -111,7 +113,10 @@ if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
 
    target_compile_definitions(CsGuiWin${BUILD_ABI} PRIVATE
       -DQT_PLUGIN
-      -DQT_USE_FREETYPE )
+      -DQT_USE_FREETYPE
+   )
+
+   macro_generate_resources("${PLATFORMS_WIN_SOURCES}")
 
    install(TARGETS CsGuiWin${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
