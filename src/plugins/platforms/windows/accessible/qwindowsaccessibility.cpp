@@ -176,11 +176,7 @@ IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
     if (!QAccessible::uniqueId(acc))
         QAccessible::registerAccessibleInterface(acc);
 
-# ifdef Q_CC_MINGW
     QWindowsMsaaAccessible *wacc = new QWindowsMsaaAccessible(acc);
-# else
-    QWindowsIA2Accessible *wacc = new QWindowsIA2Accessible(acc);
-# endif
 
     IAccessible *iacc = 0;
     wacc->QueryInterface(IID_IAccessible, reinterpret_cast<void **>(&iacc));
