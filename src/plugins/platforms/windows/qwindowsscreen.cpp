@@ -31,7 +31,7 @@
 
 #include <QSettings>
 #include <QPixmap>
-#include <QGuiApplication>
+#include <QApplication>
 #include <qwindowsysteminterface.h>
 #include <qhighdpiscaling_p.h>
 #include <QScreen>

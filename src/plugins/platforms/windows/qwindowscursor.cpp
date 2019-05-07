@@ -23,21 +23,21 @@
 
 #ifndef  QT_NO_CURSOR
 
-#include "qwindowscursor.h"
-#include "qwindowscontext.h"
-#include "qwindowswindow.h"
-#include "qwindowsscreen.h"
+#include <qwindowscursor.h>
+#include <qwindowscontext.h>
+#include <qwindowswindow.h>
+#include <qwindowsscreen.h>
+#include <qdebug.h>
 
-#include <QtGui/QBitmap>
-#include <QtGui/QImage>
-#include <QtGui/QBitmap>
-#include <QtGui/QGuiApplication>
-#include <QtGui/QScreen>
-#include <qguiapplication_p.h>
-#include <qhighdpiscaling_p.h>
-
-#include <QDebug>
 #include <QScopedArrayPointer>
+#include <QBitmap>
+#include <QImage>
+#include <QBitmap>
+#include <QApplication>
+#include <QScreen>
+
+#include <qapplication_p.h>
+#include <qhighdpiscaling_p.h>
 
 static bool initResources()
 {

@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qwindowsfontdatabase.h"
-#include "qwindowsfontdatabase_ft.h"             // for default font
-#include "qwindowscontext.h"
-#include "qwindowsfontengine.h"
-#include "qtwindows_additional.h"
+#include <qwindowsfontdatabase.h>
+#include <qwindowsfontdatabase_ft.h>             // for default font
+#include <qwindowscontext.h>
+#include <qwindowsfontengine.h>
+#include <qtwindows_additional.h>
 
 #include <qfont.h>
 #include <qapplication.h>

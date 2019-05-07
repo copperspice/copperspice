@@ -35,19 +35,18 @@
 #include "qwindowswindow.h"
 #include "qwindowsmousehandler.h"
 #include "qwindowscursor.h"
+#include <qdebug.h>
+#include <qbuffer.h>
+#include <qpoint.h>
 
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPainter>
 #include <QRasterWindow>
-#include <QGuiApplication>
+#include <QApplication>
 #include <qwindowsysteminterface_p.h>
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
-
-#include <QDebug>
-#include <QBuffer>
-#include <QPoint>
 
 #include <shlobj.h>
 

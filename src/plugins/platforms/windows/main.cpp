@@ -22,9 +22,8 @@
 ***********************************************************************/
 
 #include <qplatform_integrationplugin.h>
-#include <QStringList>
-
-#include "qwindowsgdiintegration.h"
+#include <qstringlist.h>
+#include <qwindowsgdiintegration.h>
 
 class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
 {

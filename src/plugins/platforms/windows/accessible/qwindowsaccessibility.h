@@ -24,8 +24,10 @@
 #ifndef QWINDOWSACCESSIBILITY_H
 #define QWINDOWSACCESSIBILITY_H
 
-#include "qtwindowsglobal.h"
-#include "qwindowscontext.h"
+#ifndef QT_NO_ACCESSIBILITY
+
+#include <qtwindowsglobal.h>
+#include <qwindowscontext.h>
 #include <qplatform_accessibility.h>
 
 #include <oleacc.h>
@@ -40,5 +42,6 @@ public:
     static QWindow *windowHelper(const QAccessibleInterface *iface);
 };
 
+#endif
 
 #endif

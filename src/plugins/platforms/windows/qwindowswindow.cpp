@@ -38,18 +38,18 @@
 #  include "qwindowscursor.h"
 #endif
 
-#include <QGuiApplication>
+#include <QApplication>
+#include <QDebug>
 #include <QScreen>
 #include <QWindow>
 #include <QRegion>
 #include <QOpenGLContext>
-#include <qsystemlibrary_p.h>
-#include <qwindow_p.h>
-#include <qguiapplication_p.h>
-#include <qhighdpiscaling_p.h>
 #include <qwindowsysteminterface.h>
 
-#include <QDebug>
+#include <qsystemlibrary_p.h>
+#include <qwindow_p.h>
+#include <qapplication_p.h>
+#include <qhighdpiscaling_p.h>
 
 enum {
    defaultWindowWidth = 160,

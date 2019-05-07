@@ -29,7 +29,7 @@
 #include <QDirIterator>
 #include <QSettings>
 #include <QRegularExpression>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QFontDatabase>
 
 #include <qfontengine_ft_p.h>

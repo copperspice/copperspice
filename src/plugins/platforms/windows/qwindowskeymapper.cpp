@@ -27,12 +27,13 @@
 #include "qwindowswindow.h"
 #include "qwindowsinputcontext.h"
 
-#include <QGuiApplication>
-#include <QWindow>
+#include <qapplication.h>
+#include <qkeyevent.h>
+#include <qwindow.h>
 #include <qwindowsysteminterface.h>
-#include <qguiapplication_p.h>
+
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
-#include <QKeyEvent>
 #include <qwindowsguieventdispatcher_p.h>
 
 #if defined(WM_APPCOMMAND)

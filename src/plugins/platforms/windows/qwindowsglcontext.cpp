@@ -28,7 +28,7 @@
 
 #include <QDebug>
 #include <QSysInfo>
-#include <QGuiApplication>
+#include <QApplication>
 #include <qplatform_nativeinterface.h>
 #include <qwglnativecontext.h>
 

@@ -29,7 +29,7 @@
 #include <QtGui/QWindow>
 #include <QtGui/QPainter>
 #include <QtGui/QCursor>
-#include <QtGui/QGuiApplication>
+#include <QtGui/QApplication>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QDebug>

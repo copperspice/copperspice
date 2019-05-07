@@ -29,7 +29,7 @@
 #include "qwindowsscreen.h"
 
 #include <qwindowsysteminterface.h>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QScreen>
 #include <QWindow>
 #include <QCursor>

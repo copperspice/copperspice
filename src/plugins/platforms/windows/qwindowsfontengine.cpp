@@ -38,9 +38,8 @@
 #include <QPaintEngine>
 
 #include <qtextengine_p.h>
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qpainter_p.h>
-
 #include <qpaintengine_raster_p.h>
 #include <qsystemlibrary_p.h>
 

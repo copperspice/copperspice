@@ -32,7 +32,7 @@
 #include "qwindowsintegration.h"
 #include "qwindowstheme.h"
 
-#include <QtGui/QGuiApplication>
+#include <QtGui/QApplication>
 #include <QtGui/QColor>
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>

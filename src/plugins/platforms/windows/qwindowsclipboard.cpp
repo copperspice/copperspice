@@ -26,16 +26,15 @@
 #include <qwindowsole.h>
 #include <qwindowsmime.h>
 
-#include <QtGui/QGuiApplication>
-#include <QtGui/QClipboard>
-#include <QtGui/QColor>
-#include <QtGui/QImage>
-
-#include <QtCore/QDebug>
-#include <QtCore/QMimeData>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtCore/QUrl>
+#include <QApplication>
+#include <QClipboard>
+#include <QColor>
+#include <QImage>
+#include <QDebug>
+#include <QMimeData>
+#include <QStringList>
+#include <QVariant>
+#include <QUrl>
 
 #include <qwindowsguieventdispatcher_p.h>
 

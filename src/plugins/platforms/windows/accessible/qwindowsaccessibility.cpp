@@ -25,7 +25,7 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include <qsystemlibrary_p.h>
+#include <qwindowsaccessibility.h>
 
 #include <qlocale.h>
 #include <qmap.h>
@@ -33,25 +33,18 @@
 #include <qpointer.h>
 #include <qsettings.h>
 #include <qaccessible.h>
-#include <qguiapplication_p.h>
 #include <qplatform_nativeinterface.h>
 #include <qplatform_integration.h>
+#include <qtwindows_additional.h>
 #include <qwindow.h>
-#include <qguiapplication.h>
+#include <qapplication.h>
 
-#include "qwindowsaccessibility.h"
+#include <qapplication_p.h>
+#include <qsystemlibrary_p.h>
 
-#ifdef Q_CC_MINGW
-#  include "qwindowsmsaaaccessible.h"
-# else
-#  include "iaccessible2.h"
-#endif
+#include <qwindows_msaa_accessible.h>
+#include <comutils.h>
 
-#include "comutils.h"
-
-#include <oleacc.h>
-
-//#include <uiautomationcoreapi.h>
 #ifndef UiaRootObjectId
 #define UiaRootObjectId        -25
 #endif
@@ -63,11 +56,10 @@
 #endif
 
 #include <servprov.h>
-#if !defined(Q_CC_BOR) && !defined (Q_CC_GNU)
+
+#if ! defined (Q_CC_GNU)
 #include <comdef.h>
 #endif
-
-#include "qtwindows_additional.h"
 
 QWindowsAccessibility::QWindowsAccessibility()
 {

@@ -26,7 +26,7 @@
 #include <ocidl.h>
 #include <olectl.h>
 
-#include "comutils.h"
+#include <comutils.h>
 #include <qdatetime.h>
 #include <qpixmap.h>
 #include <qfont.h>

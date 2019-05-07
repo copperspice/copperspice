@@ -46,7 +46,7 @@
 #include <QWindow>
 #include <qwindowsysteminterface.h>
 #include <qplatform_nativeinterface.h>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QSet>
 #include <QHash>
 #include <QStringList>
@@ -54,7 +54,7 @@
 #include <QSysInfo>
 #include <QScopedArrayPointer>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qsystemlibrary_p.h>
 #include <qwindowsguieventdispatcher_p.h>
 

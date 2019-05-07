@@ -51,7 +51,7 @@
 #include <QCache>
 #include <QColor>
 #include <QPalette>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QPainter>
 #include <QPixmapCache>
 #include <qwindowsysteminterface.h>

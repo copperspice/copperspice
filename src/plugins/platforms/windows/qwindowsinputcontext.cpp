@@ -36,7 +36,7 @@
 #include <QtGui/QInputMethodEvent>
 #include <QtGui/QTextCharFormat>
 #include <QtGui/QPalette>
-#include <QtGui/QGuiApplication>
+#include <QtGui/QApplication>
 
 #include <qhighdpiscaling_p.h>
 

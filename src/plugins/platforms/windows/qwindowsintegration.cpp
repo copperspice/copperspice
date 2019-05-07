@@ -25,10 +25,12 @@
 #include "qwindowswindow.h"
 #include "qwindowscontext.h"
 #include "qwindowsopenglcontext.h"
-
 #include "qwindowsscreen.h"
 #include "qwindowstheme.h"
 #include "qwindowsservices.h"
+
+#include <QDebug>
+#include <QVariant>
 
 #if defined(QT_USE_FREETYPE)
 #  include <qwindowsfontdatabase_ft.h>
@@ -47,7 +49,7 @@
 #include <qwindowskeymapper.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#  include "qwindowsaccessibility.h"
+#  include <qwindowsaccessibility.h>
 #endif
 
 #include <qplatform_nativeinterface.h>
@@ -57,13 +59,10 @@
 #  include <qwindowssessionmanager.h>
 #endif
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 #include <qplatform_inputcontextfactory_p.h>
 #include <qwindowsguieventdispatcher_p.h>
-
-#include <QDebug>
-#include <QVariant>
 
 #include <limits.h>
 
@@ -87,9 +86,9 @@ struct QWindowsIntegrationPrivate {
 
 #ifndef QT_NO_CLIPBOARD
    QWindowsClipboard m_clipboard;
-#  ifndef QT_NO_DRAGANDDROP
+#ifndef QT_NO_DRAGANDDROP
    QWindowsDrag m_drag;
-#  endif
+#endif
 #endif
 
 #ifndef QT_NO_OPENGL
