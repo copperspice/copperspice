@@ -403,7 +403,7 @@ void QWindowsTheme::clearPalettes()
 void QWindowsTheme::refreshPalettes()
 {
 
-   if (!QGuiApplication::desktopSettingsAware()) {
+   if (!QApplication::desktopSettingsAware()) {
       return;
    }
    m_palettes[SystemPalette] = new QPalette(systemPalette());

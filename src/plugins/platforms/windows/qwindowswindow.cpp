@@ -993,7 +993,7 @@ void QWindowsWindow::fireExpose(const QRegion &region, bool force)
 
 static inline QWindow *findTransientChild(const QWindow *parent)
 {
-   for (QWindow *w : QGuiApplication::topLevelWindows())
+   for (QWindow *w : QApplication::topLevelWindows())
       if (w->transientParent() == parent) {
          return w;
       }
@@ -1701,7 +1701,7 @@ void QWindowsWindow::handleWindowStateChange(Qt::WindowState state)
             exposeEventsSent = true;
          }
 
-         for (QWindow *child : QGuiApplication::allWindows()) {
+         for (QWindow *child : QApplication::allWindows()) {
             if (child != w && child->isVisible() && child->transientParent() == w) {
                QWindowsWindow *platformWindow = QWindowsWindow::baseWindowOf(child);
                if (platformWindow->isLayered()) {
@@ -1736,7 +1736,7 @@ bool QWindowsWindow::isFullScreen_sys() const
    }
    const QScreen *screen = w->screen();
    if (!screen) {
-      screen = QGuiApplication::primaryScreen();
+      screen = QApplication::primaryScreen();
    }
    return screen && geometry_sys() == QHighDpi::toNativePixels(screen->geometry(), w);
 }
@@ -1795,7 +1795,7 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowState newState)
          // window is in (QTBUG-31166, QTBUG-30724).
          const QScreen *screen = window()->screen();
          if (!screen) {
-            screen = QGuiApplication::primaryScreen();
+            screen = QApplication::primaryScreen();
          }
          const QRect r = screen ? QHighDpi::toNativePixels(screen->geometry(), window()) : m_savedFrameGeometry;
          const UINT swpf = SWP_FRAMECHANGED | SWP_NOACTIVATE;

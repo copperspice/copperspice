@@ -467,7 +467,8 @@ void QWindowsScreenManager::removeScreen(int index)
 {
    qDebug() << "Removing Monitor:" << m_screens.at(index)->data();
    QScreen *screen = m_screens.at(index)->screen();
-   QScreen *primaryScreen = QGuiApplication::primaryScreen();
+   QScreen *primaryScreen = QApplication::primaryScreen();
+
    // QTBUG-38650: When a screen is disconnected, Windows will automatically
    // move the Window to another screen. This will trigger a geometry change
    // event, but unfortunately after the screen destruction signal. To prevent
@@ -475,9 +476,11 @@ void QWindowsScreenManager::removeScreen(int index)
    // the primary screen first (which is likely the correct, final screen).
    // QTBUG-39320: Windows does not automatically move WS_EX_TOOLWINDOW (dock) windows;
    // move those manually.
+
    if (screen != primaryScreen) {
       unsigned movedWindowCount = 0;
-      for (QWindow *w : QGuiApplication::topLevelWindows()) {
+
+      for (QWindow *w : QApplication::topLevelWindows()) {
          if (w->screen() == screen && w->handle() && w->type() != Qt::Desktop) {
             if (w->isVisible() && w->windowState() != Qt::WindowMinimized
                && (QWindowsWindow::baseWindowOf(w)->exStyle() & WS_EX_TOOLWINDOW)) {
