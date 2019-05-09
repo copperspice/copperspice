@@ -316,13 +316,17 @@ static inline QStringList iconThemeSearchPaths()
 static inline QStringList styleNames()
 {
    QStringList result;
+
    if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA) {
       result.append(QString("WindowsVista"));
    }
+
    if (QSysInfo::WindowsVersion >= QSysInfo::WV_XP) {
       result.append(QString("WindowsXP"));
    }
+
    result.append(QString("Windows"));
+
    return result;
 }
 
@@ -480,9 +484,9 @@ void QWindowsTheme::refreshIconPixmapSizes()
    // Standard sizes: 16, 32, 48, 256
    fileIconSizes[SmallFileIcon] = GetSystemMetrics(SM_CXSMICON); // corresponds to SHGFI_SMALLICON);
    fileIconSizes[LargeFileIcon] = GetSystemMetrics(SM_CXICON); // corresponds to SHGFI_LARGEICON
-   fileIconSizes[ExtraLargeFileIcon] =
-      fileIconSizes[LargeFileIcon] + fileIconSizes[LargeFileIcon] / 2;
-   fileIconSizes[JumboFileIcon] = 8 * fileIconSizes[LargeFileIcon]; // empirical, has not been observed to work
+
+   fileIconSizes[ExtraLargeFileIcon] = fileIconSizes[LargeFileIcon] + fileIconSizes[LargeFileIcon] / 2;
+   fileIconSizes[JumboFileIcon]      = 8 * fileIconSizes[LargeFileIcon]; // empirical, has not been observed to work
 
    QList<int> sizes;
    sizes << fileIconSizes[SmallFileIcon] << fileIconSizes[LargeFileIcon];

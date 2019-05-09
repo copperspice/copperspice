@@ -392,7 +392,7 @@ void eatMouseMove()
    qDebug() << __FUNCTION__ << "triggered=" << (msg.message == WM_MOUSEMOVE);
 }
 
-} // namespace QWindowsDialogs
+} // namespace
 
 class QWindowsNativeDialogBase : public QObject
 {
@@ -517,8 +517,7 @@ void QWindowsDialogThread::run()
 
 template <class BaseClass>
 bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
-   Qt::WindowModality windowModality,
-   QWindow *parent)
+   Qt::WindowModality windowModality, QWindow *parent)
 {
    const bool modal = (windowModality != Qt::NonModal);
 
@@ -538,19 +537,23 @@ bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
    if (!modal && !supportsNonModalDialog(parent)) {
       return false;   // Was it changed in-between?
    }
+
    if (!ensureNativeDialog()) {
       return false;
    }
+
    // Start a background thread to show the dialog. For modal dialogs,
    // a subsequent call to exec() may follow. So, start an idle timer
    // which will start the dialog thread. If exec() is then called, the
    // timer is stopped and dialog->exec() is called directly.
    cleanupThread();
+
    if (modal) {
       m_timerId = this->startTimer(0);
    } else {
       startDialogThread();
    }
+
    return true;
 }
 
@@ -632,20 +635,6 @@ void QWindowsDialogHelperBase<BaseClass>::exec()
       m_nativeDialog.clear();
    }
 }
-
-/*!
-    \class QWindowsFileDialogSharedData
-    \brief Explicitly shared file dialog parameters that are not in QFileDialogOptions.
-
-    Contain Parameters that need to be cached while the native dialog does not
-    exist yet. In addition, the data are updated by the change notifications of the
-    IFileDialogEvent, as querying them after the dialog has closed
-    does not reliably work. Provides thread-safe setters (for the non-modal case).
-
-    \internal
-    \ingroup qt-lighthouse-win
-    \sa QFileDialogOptions
-*/
 
 class QWindowsFileDialogSharedData
 {
@@ -958,13 +947,16 @@ bool QWindowsNativeFileDialogBase::init(const CLSID &clsId, const IID &iid)
    }
 
    m_dialogEvents = QWindowsNativeFileDialogEventHandler::create(this);
-   if (!m_dialogEvents) {
+   if (! m_dialogEvents) {
       return false;
    }
+
    // Register event handler
    hr = m_fileDialog->Advise(m_dialogEvents, &m_cookie);
+
    if (FAILED(hr)) {
       qErrnoWarning("IFileDialog::Advise failed");
+
       return false;
    }
    qDebug() << __FUNCTION__ << m_fileDialog << m_dialogEvents <<  m_cookie;
@@ -1078,13 +1070,13 @@ void QWindowsNativeFileDialogBase::doExec(HWND owner)
 }
 
 void QWindowsNativeFileDialogBase::setMode(QFileDialogOptions::FileMode mode,
-   QFileDialogOptions::AcceptMode acceptMode,
-   QFileDialogOptions::FileDialogOptions options)
+   QFileDialogOptions::AcceptMode acceptMode, QFileDialogOptions::FileDialogOptions options)
 {
    DWORD flags = FOS_PATHMUSTEXIST | FOS_FORCESHOWHIDDEN;
    if (options & QFileDialogOptions::DontResolveSymlinks) {
       flags |= FOS_NODEREFERENCELINKS;
    }
+
    switch (mode) {
       case QFileDialogOptions::AnyFile:
          if (acceptMode == QFileDialogOptions::AcceptSave) {
@@ -1094,13 +1086,16 @@ void QWindowsNativeFileDialogBase::setMode(QFileDialogOptions::FileMode mode,
             flags |= FOS_OVERWRITEPROMPT;
          }
          break;
+
       case QFileDialogOptions::ExistingFile:
          flags |= FOS_FILEMUSTEXIST;
          break;
+
       case QFileDialogOptions::Directory:
       case QFileDialogOptions::DirectoryOnly:
          flags |= FOS_PICKFOLDERS | FOS_FILEMUSTEXIST;
          break;
+
       case QFileDialogOptions::ExistingFiles:
          flags |= FOS_FILEMUSTEXIST | FOS_ALLOWMULTISELECT;
          break;

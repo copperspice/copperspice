@@ -29,13 +29,13 @@
 #include "qwindowsintegration.h"
 
 #ifdef QT_OPENGL_DYNAMIC
-#  include "qwindowsglcontext.h"
+#  include <qwindowsglcontext.h>
 #else
-#  include "qwindowsopenglcontext.h"
+#  include <qwindowsopenglcontext.h>
 #endif
 
 #ifdef QT_NO_CURSOR
-#  include "qwindowscursor.h"
+#  include <qwindowscursor.h>
 #endif
 
 #include <QApplication>
@@ -452,19 +452,25 @@ struct WindowCreationData {
 QDebug operator<<(QDebug debug, const WindowCreationData &d)
 {
    QDebugStateSaver saver(debug);
+
    debug.nospace();
    debug.noquote();
+
    debug << "WindowCreationData: " << d.flags
-      << "\n  topLevel=" << d.topLevel;
+         << "\n  topLevel=" << d.topLevel;
+
    if (d.parentHandle) {
       debug << " parent=" << d.parentHandle;
    }
+
    debug << " popup=" << d.popup << " dialog=" << d.dialog << " desktop=" << d.desktop
       << " embedded=" << d.embedded << " tool=" << d.tool
       << "\n  style=" << debugWinStyle(d.style);
+
    if (d.exStyle) {
       debug << "\n  exStyle=" << debugWinExStyle(d.exStyle);
    }
+
    return debug;
 }
 
@@ -638,13 +644,15 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
    if ((flags & Qt::WindowType_Mask) == Qt::ForeignWindow) {
       result.hwnd = reinterpret_cast<HWND>(w->winId());
       Q_ASSERT(result.hwnd);
-      const LONG_PTR style = GetWindowLongPtr(result.hwnd, GWL_STYLE);
+
+      const LONG_PTR style   = GetWindowLongPtr(result.hwnd, GWL_STYLE);
       const LONG_PTR exStyle = GetWindowLongPtr(result.hwnd, GWL_EXSTYLE);
       result.embedded = false;
       result.frame = QWindowsGeometryHint::frame(style, exStyle);
-      result.geometry = frameGeometry(result.hwnd, !GetParent(result.hwnd))
-         .marginsRemoved(result.frame);
+      result.geometry = frameGeometry(result.hwnd, !GetParent(result.hwnd)).marginsRemoved(result.frame);
+
       qDebug() << "Foreign window: " << w << result.hwnd << result.geometry;
+
       return result;
    }
 
@@ -676,8 +684,7 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
             << '+' << context->frameX << '+' << context->frameY
             << " custom margins: " << context->customMargins;
 
-   result.hwnd = CreateWindowEx(exStyle, classNameUtf16, titleUtf16,
-         style,
+   result.hwnd = CreateWindowEx(exStyle, classNameUtf16, titleUtf16, style,
          context->frameX, context->frameY,
          context->frameWidth, context->frameHeight,
          parentHandle, NULL, appinst, NULL);
@@ -692,7 +699,7 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
          << "CreateWindowEx: returns " << w << ' ' << result.hwnd << " obtained geometry: "
             << context->obtainedGeometry << ' ' << context->margins;
 
-   if (!result.hwnd) {
+   if (! result.hwnd) {
       qErrnoWarning("%s: CreateWindowEx failed", __FUNCTION__);
       return result;
    }
@@ -733,10 +740,12 @@ void WindowCreationData::initialize(const QWindow *w, HWND hwnd, bool frameChang
    if (desktop || !hwnd) {
       return;
    }
+
    UINT swpFlags = SWP_NOMOVE | SWP_NOSIZE;
    if (frameChange) {
       swpFlags |= SWP_FRAMECHANGED;
    }
+
    if (topLevel) {
       swpFlags |= SWP_NOACTIVATE;
       if ((flags & Qt::WindowStaysOnTopHint) || (type == Qt::ToolTip)) {
@@ -801,6 +810,7 @@ bool QWindowsGeometryHint::validSize(const QSize &s) const
 {
    const int width = s.width();
    const int height = s.height();
+
    return width >= minimumSize.width() && width <= maximumSize.width()
       && height >= minimumSize.height() && height <= maximumSize.height();
 }
@@ -861,9 +871,11 @@ void QWindowsGeometryHint::applyToMinMaxInfo(DWORD style, DWORD exStyle, MINMAXI
    const QMargins margins = QWindowsGeometryHint::frame(style, exStyle);
    const int frameWidth = margins.left() + margins.right() + customMargins.left() + customMargins.right();
    const int frameHeight = margins.top() + margins.bottom() + customMargins.top() + customMargins.bottom();
+
    if (minimumSize.width() > 0) {
       mmi->ptMinTrackSize.x = minimumSize.width() + frameWidth;
    }
+
    if (minimumSize.height() > 0) {
       mmi->ptMinTrackSize.y = minimumSize.height() + frameHeight;
    }
@@ -887,41 +899,16 @@ bool QWindowsGeometryHint::positionIncludesFrame(const QWindow *w)
       == QWindowPrivate::WindowFrameInclusive;
 }
 
-/*!
-    \class QWindowCreationContext
-    \brief Active Context for creating windows.
-
-    There is a phase in window creation (WindowCreationData::create())
-    in which events are sent before the system API CreateWindowEx() returns
-    the handle. These cannot be handled by the platform window as the association
-    of the unknown handle value to the window does not exist yet and as not
-    to trigger recursive handle creation, etc.
-
-    In that phase, an instance of  QWindowCreationContext is set on
-    QWindowsContext.
-
-    QWindowCreationContext stores the information to answer the initial
-    WM_GETMINMAXINFO and obtains the corrected size/position.
-
-    \sa WindowCreationData, QWindowsContext
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
-QWindowCreationContext::QWindowCreationContext(const QWindow *w,
-   const QRect &geometry,
-   const QMargins &cm,
-   DWORD style_, DWORD exStyle_) :
-   geometryHint(w, cm), window(w), style(style_), exStyle(exStyle_),
-   requestedGeometry(geometry), obtainedGeometry(geometry),
-   margins(QWindowsGeometryHint::frame(style, exStyle)), customMargins(cm),
-   frameX(CW_USEDEFAULT), frameY(CW_USEDEFAULT),
-   frameWidth(CW_USEDEFAULT), frameHeight(CW_USEDEFAULT)
+QWindowCreationContext::QWindowCreationContext(const QWindow *w, const QRect &geometry, const QMargins &cm,
+                  DWORD style_, DWORD exStyle_)
+   : geometryHint(w, cm), window(w), style(style_), exStyle(exStyle_), requestedGeometry(geometry),
+     obtainedGeometry(geometry), margins(QWindowsGeometryHint::frame(style, exStyle)), customMargins(cm),
+     frameX(CW_USEDEFAULT), frameY(CW_USEDEFAULT),frameWidth(CW_USEDEFAULT), frameHeight(CW_USEDEFAULT)
 {
    // Geometry of toplevels does not consider window frames.
    // TODO: No concept of WA_wasMoved yet that would indicate a
-   // CW_USEDEFAULT unless set. For now, assume that 0,0 means 'default'
-   // for toplevels.
+   // CW_USEDEFAULT unless set. For now, assume that 0,0 means 'default' for toplevels.
+
    if (geometry.isValid()) {
       frameX = geometry.x();
       frameY = geometry.y();
@@ -929,6 +916,7 @@ QWindowCreationContext::QWindowCreationContext(const QWindow *w,
       frameWidth = effectiveMargins.left() + geometry.width() + effectiveMargins.right();
       frameHeight = effectiveMargins.top() + geometry.height() + effectiveMargins.bottom();
       const bool isDefaultPosition = !frameX && !frameY && w->isTopLevel();
+
       if (!QWindowsGeometryHint::positionIncludesFrame(w) && !isDefaultPosition) {
          frameX -= effectiveMargins.left();
          frameY -= effectiveMargins.top();
@@ -944,53 +932,20 @@ QWindowCreationContext::QWindowCreationContext(const QWindow *w,
             << " custom margins=" << customMargins;
 }
 
-/*!
-    \class QWindowsWindow
-    \brief Raster or OpenGL Window.
-
-    \list
-    \li Raster type: handleWmPaint() is implemented to
-       to bitblt the image. The DC can be accessed
-       via getDC/Relase DC, which has a special handling
-       when within a paint event (in that case, the DC obtained
-       from BeginPaint() is returned).
-
-    \li Open GL: The first time QWindowsGLContext accesses
-       the handle, it sets up the pixelformat on the DC
-       which in turn sets it on the window (see flag
-       PixelFormatInitialized).
-       handleWmPaint() is empty (although required).
-    \endlist
-
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
-QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data) :
-   QPlatformWindow(aWindow),
-   m_data(data),
-   m_flags(WithinCreate),
-   m_hdc(0),
-   m_windowState(Qt::WindowNoState),
-   m_opacity(1.0),
-   m_cursor(new CursorHandle),
-   m_dropTarget(0),
-   m_savedStyle(0),
-   m_format(aWindow->requestedFormat()),
-#ifdef Q_OS_WINCE
-   m_previouslyHidden(false),
-#endif
-   m_iconSmall(0),
-   m_iconBig(0),
-   m_surface(0)
+QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
+   : QPlatformWindow(aWindow), m_data(data), m_flags(WithinCreate), m_hdc(0), m_windowState(Qt::WindowNoState),
+     m_opacity(1.0), m_cursor(new CursorHandle), m_dropTarget(0), m_savedStyle(0),
+     m_format(aWindow->requestedFormat()), m_iconSmall(0), m_iconBig(0), m_surface(0)
 {
    // Clear the creation context as the window can be found in QWindowsContext's map.
    QWindowsContext::instance()->setWindowCreationContext(QSharedPointer<QWindowCreationContext>());
    QWindowsContext::instance()->addWindow(m_data.hwnd, this);
+
    const Qt::WindowType type = aWindow->type();
    if (type == Qt::Desktop) {
       return;   // No further handling for Qt::Desktop
    }
+
 #ifndef QT_NO_OPENGL
    if (aWindow->surfaceType() == QWindow::OpenGLSurface) {
       if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
@@ -1050,19 +1005,24 @@ void QWindowsWindow::destroyWindow()
    qDebug() << __FUNCTION__ << this << window() << m_data.hwnd;
    if (m_data.hwnd) { // Stop event dispatching before Window is destroyed.
       setFlag(WithinDestroy);
+
       // Clear any transient child relationships as Windows will otherwise destroy them (QTBUG-35499, QTBUG-36666)
       if (QWindow *transientChild = findTransientChild(window()))
          if (QWindowsWindow *tw = QWindowsWindow::baseWindowOf(transientChild)) {
             tw->updateTransientParent();
          }
+
       QWindowsContext *context = QWindowsContext::instance();
       if (context->windowUnderMouse() == window()) {
          context->clearWindowUnderMouse();
       }
+
       if (hasMouseCapture()) {
          setMouseGrabEnabled(false);
       }
+
       setDropSiteEnabled(false);
+
 #ifndef QT_NO_OPENGL
       if (m_surface) {
          if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
@@ -1131,7 +1091,7 @@ void QWindowsWindow::setDropSiteEnabled(bool dropEnabled)
       RevokeDragDrop(m_data.hwnd);
       m_dropTarget = 0;
    }
-#endif // !QT_NO_CLIPBOARD && !QT_NO_DRAGANDDROP
+#endif
 }
 
 // Returns topmost QWindowsWindow ancestor even if there are embedded windows in the chain.
@@ -1522,14 +1482,16 @@ void QWindowsWindow::handleGeometryChange()
    m_data.geometry = geometry_sys();
    QPlatformWindow::setGeometry(m_data.geometry);
    QWindowSystemInterface::handleGeometryChange(window(), m_data.geometry);
+
    // QTBUG-32121: OpenGL/normal windows (with exception of ANGLE) do not receive
    // expose events when shrinking, synthesize.
-   if (!testFlag(OpenGL_ES2) && isExposed()
-      && m_data.geometry.size() != previousGeometry.size() // Exclude plain move
-      // One dimension grew -> Windows will send expose, no need to synthesize.
-      && !(m_data.geometry.width() > previousGeometry.width() || m_data.geometry.height() > previousGeometry.height())) {
+   if (! testFlag(OpenGL_ES2) && isExposed()
+         && m_data.geometry.size() != previousGeometry.size() // Exclude plain move
+         // One dimension grew -> Windows will send expose, no need to synthesize.
+         && !(m_data.geometry.width() > previousGeometry.width() || m_data.geometry.height() > previousGeometry.height())) {
       fireExpose(QRect(QPoint(0, 0), m_data.geometry.size()), true);
    }
+
    if (previousGeometry.topLeft() != m_data.geometry.topLeft()) {
       QPlatformScreen *newScreen = screenForGeometry(m_data.geometry);
       if (newScreen != screen()) {
@@ -1558,12 +1520,15 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
    WINDOWPLACEMENT windowPlacement;
    windowPlacement.length = sizeof(WINDOWPLACEMENT);
    GetWindowPlacement(m_data.hwnd, &windowPlacement);
+
    // If the window is hidden and in maximized state or minimized, instead of moving the
    // window, set the normal position of the window.
    if ((windowPlacement.showCmd == SW_MAXIMIZE && !IsWindowVisible(m_data.hwnd))
-      || windowPlacement.showCmd == SW_SHOWMINIMIZED) {
+                  || windowPlacement.showCmd == SW_SHOWMINIMIZED) {
+
       windowPlacement.rcNormalPosition =
-         RECTfromQRect(frameGeometry.translated(-windowPlacementOffset(m_data.hwnd, frameGeometry.topLeft())));
+                  RECTfromQRect(frameGeometry.translated(-windowPlacementOffset(m_data.hwnd, frameGeometry.topLeft())));
+
       windowPlacement.showCmd = windowPlacement.showCmd == SW_SHOWMINIMIZED ? SW_SHOWMINIMIZED : SW_HIDE;
       result = SetWindowPlacement(m_data.hwnd, &windowPlacement);
 
@@ -1681,10 +1646,12 @@ void QWindowsWindow::setWindowFlags(Qt::WindowFlags flags)
          updateDropSite(window()->isTopLevel());
       }
    }
+
    // When switching to a frameless window, geometry
    // may change without a WM_MOVE. Report change manually.
    // Do not send synchronously as not to clobber the widget
    // geometry in a sequence of setting flags and geometry.
+
    const QRect newGeometry = geometry_sys();
    if (oldGeometry != newGeometry) {
       handleGeometryChange();
@@ -1715,6 +1682,7 @@ void QWindowsWindow::handleWindowStateChange(Qt::WindowState state)
       << "\n    from " << m_windowState << " to " << state;
    setFlag(FrameDirty);
    m_windowState = state;
+
    QWindowSystemInterface::handleWindowStateChanged(window(), state);
    switch (state) {
       case Qt::WindowMinimized:
@@ -1772,17 +1740,6 @@ bool QWindowsWindow::isFullScreen_sys() const
    }
    return screen && geometry_sys() == QHighDpi::toNativePixels(screen->geometry(), w);
 }
-
-/*!
-    \brief Change the window state.
-
-    \note Window frames change when maximized;
-    the top margin shrinks somewhat but that cannot be obtained using
-    AdjustWindowRectEx().
-
-    \note Some calls to SetWindowLong require a subsequent call
-    to ShowWindow.
-*/
 
 void QWindowsWindow::setWindowState_sys(Qt::WindowState newState)
 {
@@ -2015,10 +1972,10 @@ void QWindowsWindow::setOpacity(qreal level)
    qDebug() << __FUNCTION__ << level;
    if (m_opacity != level) {
       m_opacity = level;
+
       if (m_data.hwnd)
          setWindowOpacity(m_data.hwnd, m_data.flags,
-            window()->format().hasAlpha(), testFlag(OpenGLSurface),
-            level);
+            window()->format().hasAlpha(), testFlag(OpenGLSurface), level);
    }
 }
 
@@ -2119,6 +2076,7 @@ bool QWindowsWindow::setMouseGrabEnabled(bool grab)
          qPrintable(window()->objectName()));
       return false;
    }
+
    // release grab or an explicit grab overriding autocapture: Clear flag.
    clearFlag(QWindowsWindow::AutoMouseCapture);
    if (hasMouseCapture() != grab) {
@@ -2136,13 +2094,17 @@ static inline DWORD cornerToWinOrientation(Qt::Corner corner)
    switch (corner) {
       case Qt::TopLeftCorner:
          return 0xf004; // SZ_SIZETOPLEFT;
+
       case Qt::TopRightCorner:
          return 0xf005; // SZ_SIZETOPRIGHT
+
       case Qt::BottomLeftCorner:
          return 0xf007; // SZ_SIZEBOTTOMLEFT
+
       case Qt::BottomRightCorner:
          return 0xf008; // SZ_SIZEBOTTOMRIGHT
    }
+
    return 0;
 }
 
@@ -2421,15 +2383,15 @@ void QWindowsWindow::setCustomMargins(const QMargins &newCustomMargins)
       setFlag(FrameDirty);
       qDebug() << __FUNCTION__ << oldCustomMargins << "->" << newCustomMargins
          << currentFrameGeometry << "->" << newFrame;
-      SetWindowPos(m_data.hwnd, 0, newFrame.x(), newFrame.y(), newFrame.width(), newFrame.height(), SWP_NOZORDER | SWP_FRAMECHANGED);
+
+      SetWindowPos(m_data.hwnd, 0, newFrame.x(), newFrame.y(), newFrame.width(), newFrame.height(),
+                  SWP_NOZORDER | SWP_FRAMECHANGED);
    }
 }
 
 void *QWindowsWindow::surface(void *nativeConfig, int *err)
 {
 #ifdef QT_NO_OPENGL
-   Q_UNUSED(err)
-   Q_UNUSED(nativeConfig)
    return 0;
 #else
    if (!m_surface) {
@@ -2451,7 +2413,7 @@ void QWindowsWindow::invalidateSurface()
       }
       m_surface = 0;
    }
-#endif // QT_NO_OPENGL
+#endif
 }
 
 void QWindowsWindow::setTouchWindowTouchTypeStatic(QWindow *window, QWindowsWindowFunctions::TouchWindowTouchTypes touchTypes)

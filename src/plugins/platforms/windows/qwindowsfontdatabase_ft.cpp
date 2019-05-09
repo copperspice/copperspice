@@ -305,14 +305,6 @@ static int QT_WIN_CALLBACK storeFont(const LOGFONT *logFont, const TEXTMETRIC *t
    return 1;
 }
 
-/*!
-    \brief Populate font database using EnumFontFamiliesEx().
-
-    Normally, leaving the name empty should enumerate
-    all fonts, however, system fonts like "MS Shell Dlg 2"
-    are only found when specifying the name explicitly.
-*/
-
 void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
 {
    qDebug() << familyName;

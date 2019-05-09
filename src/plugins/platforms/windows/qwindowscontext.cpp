@@ -333,7 +333,7 @@ void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiA
 
    } else {
       if (dpiAwareness != QtWindows::ProcessDpiUnaware && QWindowsContext::user32dll.setProcessDPIAware) {
-         if (!QWindowsContext::user32dll.setProcessDPIAware()) {
+         if ( !QWindowsContext::user32dll.setProcessDPIAware()) {
             qErrnoWarning("SetProcessDPIAware() failed");
          }
       }
@@ -453,8 +453,7 @@ QString QWindowsContext::registerWindowClass(const QWindow *w)
    return registerWindowClass(cname, qWindowsWndProc, style, GetSysColorBrush(COLOR_WINDOW), icon);
 }
 
-QString QWindowsContext::registerWindowClass(QString cname,
-   WNDPROC proc, unsigned style, HBRUSH brush, bool icon)
+QString QWindowsContext::registerWindowClass(QString cname, WNDPROC proc, unsigned style, HBRUSH brush, bool icon)
 {
    // since multiple Qt versions can be used in one process
    // each one has to have window class names with a unique name
@@ -878,12 +877,13 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
 
    switch (et) {
       case QtWindows::GestureEvent:
-#if !defined(QT_NO_SESSIONMANAGER)
+#if ! defined(QT_NO_SESSIONMANAGER)
          return platformSessionManager()->isInteractionBlocked() ? true : d->m_mouseHandler.translateGestureEvent(platformWindow->window(),
                hwnd, et, msg, result);
 #else
          return d->m_mouseHandler.translateGestureEvent(platformWindow->window(), hwnd, et, msg, result);
 #endif
+
       case QtWindows::InputMethodOpenCandidateWindowEvent:
       case QtWindows::InputMethodCloseCandidateWindowEvent:
          // TODO: Release/regrab mouse if a popup has mouse grab.
@@ -969,7 +969,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
       case QtWindows::InputMethodKeyEvent:
       case QtWindows::InputMethodKeyDownEvent:
       case QtWindows::AppCommandEvent:
-#if  !defined(QT_NO_SESSIONMANAGER)
+#if ! defined(QT_NO_SESSIONMANAGER)
          return platformSessionManager()->isInteractionBlocked() ? true : d->m_keyMapper.translateKeyEvent(platformWindow->window(), hwnd, msg,
                result);
 #else
@@ -1252,9 +1252,11 @@ extern "C" LRESULT QT_WIN_CALLBACK qWindowsWndProc(HWND hwnd, UINT message, WPAR
             << GET_X_LPARAM(lParam) << GET_Y_LPARAM(lParam) << "handled=" << handled;
       }
    }
+
    if (!handled) {
       result = DefWindowProc(hwnd, message, wParam, lParam);
    }
+
    return result;
 }
 

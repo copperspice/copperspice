@@ -43,11 +43,13 @@
 static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 {
    QDebugStateSaver saver(d);
+
    d.nospace();
    d << "QMimeData(";
 
    if (mimeData) {
       const QStringList formats = mimeData->formats();
+
       d << "formats=" << formats.join(QString(", "));
       if (mimeData->hasText()) {
          d << ", text=" << mimeData->text();
@@ -64,35 +66,29 @@ static QDebug operator<<(QDebug d, const QMimeData *mimeData)
       if (mimeData->hasUrls()) {
          d << ", urls=" << mimeData->urls();
       }
+
    } else {
       d << '0';
    }
+
    d << ')';
+
    return d;
 }
-#endif // !QT_NO_DEBUG_STREAM
-
-/*!
-    \class QWindowsClipboardRetrievalMimeData
-    \brief Special mime data class managing delayed retrieval of clipboard data.
-
-    Implementation of QWindowsInternalMimeDataBase that obtains the
-    IDataObject from the clipboard.
-
-    \sa QWindowsInternalMimeDataBase, QWindowsClipboard
-    \internal
-    \ingroup qt-lighthouse-win
-*/
+#endif
 
 IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
 {
    IDataObject *pDataObj = 0;
+
    if (OleGetClipboard(&pDataObj) == S_OK) {
       if (QWindowsContext::verbose > 1) {
          qDebug() << __FUNCTION__ << pDataObj;
       }
+
       return pDataObj;
    }
+
    return 0;
 }
 
@@ -139,7 +135,7 @@ QWindowsClipboard::~QWindowsClipboard()
 
 void QWindowsClipboard::cleanup()
 {
-   unregisterViewer(); // Should release data if owner.
+   unregisterViewer(); // Should release data if owner
    releaseIData();
 }
 
@@ -156,8 +152,7 @@ void QWindowsClipboard::releaseIData()
 void QWindowsClipboard::registerViewer()
 {
    m_clipboardViewer = QWindowsContext::instance()->
-      createDummyWindow(QString("Qt5ClipboardView"), L"Qt5ClipboardView",
-         qClipboardViewerWndProc, WS_OVERLAPPED);
+      createDummyWindow(QString("CsClipboardView"), L"CsClipboardView", qClipboardViewerWndProc, WS_OVERLAPPED);
 
    // Try format listener API (Vista onwards) first.
    if (QWindowsContext::user32dll.addClipboardFormatListener && QWindowsContext::user32dll.removeClipboardFormatListener) {
@@ -191,8 +186,7 @@ void QWindowsClipboard::unregisterViewer()
    }
 }
 
-// ### FIXME: Qt 6: Remove the clipboard chain handling code and make the
-// format listener the default.
+// ### FIXME: Qt 6: Remove the clipboard chain handling code and make the format listener the default
 
 static bool isProcessBeingDebugged(HWND hwnd)
 {
@@ -200,13 +194,16 @@ static bool isProcessBeingDebugged(HWND hwnd)
    if (!GetWindowThreadProcessId(hwnd, &pid) || !pid) {
       return false;
    }
+
    const HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
    if (!processHandle) {
       return false;
    }
+
    BOOL debugged = FALSE;
    CheckRemoteDebuggerPresent(processHandle, &debugged);
    CloseHandle(processHandle);
+
    return debugged != FALSE;
 }
 
@@ -231,11 +228,6 @@ void QWindowsClipboard::propagateClipboardMessage(UINT message, WPARAM wParam, L
    }
 }
 
-/*!
-    \brief Windows procedure of the clipboard viewer. Emits changed and does
-    housekeeping of the viewer chain.
-*/
-
 bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam, LRESULT *result)
 {
    enum { wMClipboardUpdate = 0x031D };
@@ -255,8 +247,10 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
          }
       }
       return true;
-      case wMClipboardUpdate:  // Clipboard Format listener (Vista onwards)
-      case WM_DRAWCLIPBOARD: { // Clipboard Viewer Chain handling (up to XP)
+
+      case wMClipboardUpdate:     // Clipboard Format listener (Vista onwards)
+      case WM_DRAWCLIPBOARD: {
+         // Clipboard Viewer Chain handling (up to XP)
          const bool owned = ownsClipboard();
          qDebug() << "Clipboard changed owned " << owned;
          emitChanged(QClipboard::Clipboard);

@@ -122,6 +122,7 @@ class EmbeddedFont
    QByteArray data() const {
       return m_fontData;
    }
+
    TableDirectory *tableDirectoryEntry(const QByteArray &tagName);
    QString familyName(TableDirectory *nameTableDirectory = 0);
 
@@ -132,6 +133,7 @@ class EmbeddedFont
 TableDirectory *EmbeddedFont::tableDirectoryEntry(const QByteArray &tagName)
 {
    Q_ASSERT(tagName.size() == 4);
+
    quint32 tagId = *(reinterpret_cast<const quint32 *>(tagName.constData()));
    const size_t fontDataSize = m_fontData.size();
 
@@ -171,7 +173,7 @@ QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
          return QString();
       }
 
-      NameTable *nameTable = reinterpret_cast<NameTable *>(m_fontData.data() + offset);
+      NameTable *nameTable   = reinterpret_cast<NameTable *>(m_fontData.data() + offset);
       NameRecord *nameRecord = reinterpret_cast<NameRecord *>(nameTable + 1);
 
       quint16 nameTableCount = qFromBigEndian<quint16>(nameTable->count);
@@ -258,7 +260,6 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
       std::wstring tmp = newFamilyName.toStdWString();
 
       int i = 0;
-
       for (auto item : tmp) {
          stringStorage[i++] = qbswap<quint16>(item);
       }
@@ -267,7 +268,6 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
       tmp = regularString.toStdWString();
 
       i = 0;
-
       for (auto item : tmp) {
          stringStorage[i++] = qbswap<quint16>(item);
       }
@@ -278,7 +278,7 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
 
    quint32 checkSum = 0;
    while (p < tableEnd) {
-      checkSum +=  qFromBigEndian<quint32>(*(p++));
+      checkSum += qFromBigEndian<quint32>(*(p++));
    }
 
    nameTableDirectoryEntry->checkSum = qbswap<quint32>(checkSum);
@@ -323,6 +323,7 @@ qreal QWindowsFontDatabase::fontSmoothingGamma()
 {
    int winSmooth;
    qreal result = 1;
+
    if (SystemParametersInfo(0x200C /* SPI_GETFONTSMOOTHINGCONTRAST */, 0, &winSmooth, 0)) {
       result = qreal(winSmooth) / qreal(1000.0);
    }
@@ -544,7 +545,6 @@ static QString getEnglishName(const uchar *table, quint32 bytes)
          } else {
             // Apple Roman
             i18n_name.clear();
-
             const unsigned char *string = table + string_offset + offset;
 
             for (int i = 0; i < length; ++i) {
@@ -597,6 +597,7 @@ QString getEnglishName(const QString &familyName)
    }
 
    i18n_name = getEnglishName(table, bytes);
+
 error:
    delete [] table;
    SelectObject( hdc, oldobj );
@@ -608,25 +609,25 @@ error:
 }
 
 static bool addFontToDatabase(const QString &familyName, uchar charSet,
-   const TEXTMETRIC *textmetric,
-   const FONTSIGNATURE *signature,
-   int type,
-   bool registerAlias)
+   const TEXTMETRIC *textmetric, const FONTSIGNATURE *signature, int type, bool registerAlias)
 {
-   // the "@family" fonts are just the same as "family". Ignore them.
-   if (familyName.isEmpty() || familyName.at(0) == QLatin1Char('@') || familyName.startsWith(QLatin1String("WST_"))) {
+   // the "@family" fonts are the same as "family" so ignore them
+   if (familyName.isEmpty() || familyName.at(0) == '@' || familyName.startsWith("WST_")) {
       return false;
    }
 
    static const int SMOOTH_SCALABLE = 0xffff;
-   const QString foundryName; // No such concept.
-   const bool fixed = !(textmetric->tmPitchAndFamily & TMPF_FIXED_PITCH);
-   const bool ttf = (textmetric->tmPitchAndFamily & TMPF_TRUETYPE);
+   const QString foundryName;                   // No such concept
+
+   const bool fixed    = !(textmetric->tmPitchAndFamily & TMPF_FIXED_PITCH);
+   const bool ttf      = (textmetric->tmPitchAndFamily & TMPF_TRUETYPE);
    const bool scalable = textmetric->tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE);
-   const int size = scalable ? SMOOTH_SCALABLE : textmetric->tmHeight;
+   const int size      = scalable ? SMOOTH_SCALABLE : textmetric->tmHeight;
+
    const QFont::Style style = textmetric->tmItalic ? QFont::StyleItalic : QFont::StyleNormal;
    const bool antialias = false;
-   const QFont::Weight weight = QPlatformFontDatabase::weightFromInteger(textmetric->tmWeight);
+
+   const QFont::Weight weight   = QPlatformFontDatabase::weightFromInteger(textmetric->tmWeight);
    const QFont::Stretch stretch = QFont::Unstretched;
 
 #ifndef QT_NO_DEBUG_OUTPUT
@@ -637,9 +638,11 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
       if (type & DEVICE_FONTTYPE) {
          str << " DEVICE";
       }
+
       if (type & RASTER_FONTTYPE) {
          str << " RASTER";
       }
+
       if (type & TRUETYPE_FONTTYPE) {
          str << " TRUETYPE";
       }
@@ -662,20 +665,22 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
          signature->fsUsb[0], signature->fsUsb[1],
          signature->fsUsb[2], signature->fsUsb[3]
       };
+
       quint32 codePageRange[2] = {
          signature->fsCsb[0], signature->fsCsb[1]
       };
 
       writingSystems = QPlatformFontDatabase::writingSystemsFromTrueTypeBits(unicodeRange, codePageRange);
-      // ### Hack to work around problem with Thai text on Windows 7. Segoe UI contains
-      // the symbol for Baht, and Windows thus reports that it supports the Thai script.
-      // Since it's the default UI font on this platform, most widgets will be unable to
-      // display Thai text by default. As a temporary work around, we special case Segoe UI
-      // and remove the Thai script from its list of supported writing systems.
-      if (writingSystems.supported(QFontDatabase::Thai) &&
-         familyName == QLatin1String("Segoe UI")) {
+
+      // Hack to work around problem with Thai text on Windows 7. Segoe UI contains the symbol for Baht,
+      // and Windows thus reports that it supports the Thai script. Since it is the default UI font on
+      // this platform, most widgets will be unable to display Thai text by default. As a temporary work
+      // around we special case Segoe UI and remove the Thai script from its list of supported writing systems.
+
+      if (writingSystems.supported(QFontDatabase::Thai) && familyName == "Segoe UI") {
          writingSystems.setSupported(QFontDatabase::Thai, false);
       }
+
    } else {
       const QFontDatabase::WritingSystem ws = writingSystemFromCharSet(charSet);
       if (ws != QFontDatabase::Any) {
@@ -684,19 +689,22 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
    }
 
    QPlatformFontDatabase::registerFont(familyName, QString(), foundryName, weight,
-      style, stretch, antialias, scalable, size, fixed, writingSystems, 0);
-   // add fonts windows can generate for us:
+      style, stretch, antialias, scalable, size, fixed, writingSystems, nullptr);
+
+   // add fonts windows can generate for us
    if (weight <= QFont::DemiBold)
       QPlatformFontDatabase::registerFont(familyName, QString(), foundryName, QFont::Bold,
-         style, stretch, antialias, scalable, size, fixed, writingSystems, 0);
+         style, stretch, antialias, scalable, size, fixed, writingSystems, nullptr);
+
    if (style != QFont::StyleItalic)
       QPlatformFontDatabase::registerFont(familyName, QString(), foundryName, weight,
-         QFont::StyleItalic, stretch, antialias, scalable, size, fixed, writingSystems, 0);
+         QFont::StyleItalic, stretch, antialias, scalable, size, fixed, writingSystems, nullptr);
+
    if (weight <= QFont::DemiBold && style != QFont::StyleItalic)
       QPlatformFontDatabase::registerFont(familyName, QString(), foundryName, QFont::Bold,
-         QFont::StyleItalic, stretch, antialias, scalable, size, fixed, writingSystems, 0);
+         QFont::StyleItalic, stretch, antialias, scalable, size, fixed, writingSystems, nullptr);
 
-   if (!englishName.isEmpty()) {
+   if (! englishName.isEmpty()) {
       QPlatformFontDatabase::registerAliasToFontFamily(familyName, englishName);
    }
 
@@ -708,17 +716,20 @@ static int QT_WIN_CALLBACK storeFont(const LOGFONT *logFont, const TEXTMETRIC *t
 {
    const ENUMLOGFONTEX *f = reinterpret_cast<const ENUMLOGFONTEX *>(logFont);
    const QString familyName = QString::fromStdWString(std::wstring(f->elfLogFont.lfFaceName));
-   const uchar charSet = f->elfLogFont.lfCharSet;
+   const uchar charSet      = f->elfLogFont.lfCharSet;
    const bool registerAlias = bool(lParam);
+
 
    // NEWTEXTMETRICEX (passed for TT fonts) is a NEWTEXTMETRIC, which according
    // to the documentation is identical to a TEXTMETRIC except for the last four
-   // members, which we don't use anyway
+   // members, which we do not use anyway
 
    const FONTSIGNATURE *signature = nullptr;
    if (type & TRUETYPE_FONTTYPE) {
       signature = &reinterpret_cast<const NEWTEXTMETRICEX *>(textmetric)->ntmFontSig;
    }
+
+   // will call registerFont then q_registerFont ( which alters m_popluated mem var in gui\qfontdatabase.cpp )
    addFontToDatabase(familyName, charSet, textmetric, signature, type, registerAlias);
 
    // keep on enumerating
@@ -761,12 +772,14 @@ void QWindowsFontDatabase::populateFamily(const QString &familyName)
 
 namespace {
 // Context for enumerating system fonts, records whether the default font has been encountered,
-// which is normally not enumerated by EnumFontFamiliesEx().
-struct PopulateFamiliesContext {
-   PopulateFamiliesContext(const QString &f) : systemDefaultFont(f), seenSystemDefaultFont(false) {}
+// which is normally not enumerated by EnumFontFamiliesEx()
 
-   QString systemDefaultFont;
-   bool seenSystemDefaultFont;
+struct PopulateFamiliesContext {
+   PopulateFamiliesContext(const QString &f) : m_systemDefaultFont(f), m_seenSystemDefaultFont(false)
+   {}
+
+   QString m_systemDefaultFont;
+   bool m_seenSystemDefaultFont;
 };
 } // namespace
 
@@ -774,7 +787,7 @@ static int QT_WIN_CALLBACK populateFontFamilies(const LOGFONT *logFont, const TE
    DWORD, LPARAM lparam)
 {
    // the "@family" fonts are just the same as "family". Ignore them.
-   const ENUMLOGFONTEX *f = reinterpret_cast<const ENUMLOGFONTEX *>(logFont);
+   const ENUMLOGFONTEX *f   = reinterpret_cast<const ENUMLOGFONTEX *>(logFont);
    const wchar_t *faceNameW = f->elfLogFont.lfFaceName;
 
    if (faceNameW[0] && faceNameW[0] != L'@' && wcsncmp(faceNameW, L"WST_", 4)) {
@@ -782,41 +795,47 @@ static int QT_WIN_CALLBACK populateFontFamilies(const LOGFONT *logFont, const TE
 
       QPlatformFontDatabase::registerFontFamily(faceName);
       PopulateFamiliesContext *context = reinterpret_cast<PopulateFamiliesContext *>(lparam);
-      if (!context->seenSystemDefaultFont && faceName == context->systemDefaultFont) {
-         context->seenSystemDefaultFont = true;
+
+      if (! context->m_seenSystemDefaultFont && faceName == context->m_systemDefaultFont) {
+         context->m_seenSystemDefaultFont = true;
       }
 
       // Register current font's english name as alias
       const bool ttf = textmetric->tmPitchAndFamily & TMPF_TRUETYPE;
       if (ttf && localizedName(faceName)) {
          const QString englishName = getEnglishName(faceName);
-         if (!englishName.isEmpty()) {
+
+         if (! englishName.isEmpty()) {
             QPlatformFontDatabase::registerAliasToFontFamily(faceName, englishName);
             // Check whether the system default font name is an alias of the current font family name,
             // as on Chinese Windows, where the system font "SimSun" is an alias to a font registered under a local name
-            if (!context->seenSystemDefaultFont && englishName == context->systemDefaultFont) {
-               context->seenSystemDefaultFont = true;
+            if (! context->m_seenSystemDefaultFont && englishName == context->m_systemDefaultFont) {
+               context->m_seenSystemDefaultFont = true;
             }
          }
       }
    }
+
    return 1; // continue
 }
 
 void QWindowsFontDatabase::populateFontDatabase()
 {
    removeApplicationFonts();
+
    HDC dummy = GetDC(0);
    LOGFONT lf;
-   lf.lfCharSet = DEFAULT_CHARSET;
-   lf.lfFaceName[0] = 0;
+   lf.lfCharSet        = DEFAULT_CHARSET;
+   lf.lfFaceName[0]    = 0;
    lf.lfPitchAndFamily = 0;
+
    PopulateFamiliesContext context(QWindowsFontDatabase::systemDefaultFont().family());
    EnumFontFamiliesEx(dummy, &lf, populateFontFamilies, reinterpret_cast<LPARAM>(&context), 0);
    ReleaseDC(0, dummy);
+
    // Work around EnumFontFamiliesEx() not listing the system font.
-   if (!context.seenSystemDefaultFont) {
-      QPlatformFontDatabase::registerFontFamily(context.systemDefaultFont);
+   if (! context.m_seenSystemDefaultFont) {
+      QPlatformFontDatabase::registerFontFamily(context.m_systemDefaultFont);
    }
 }
 
@@ -853,9 +872,8 @@ extern Q_GUI_EXPORT bool qt_needs_a8_gamma_correction;
 QWindowsFontDatabase::QWindowsFontDatabase()
 {
    // Properties accessed by QWin32PrintEngine (Qt Print Support)
-   static const int hfontMetaTypeId = qRegisterMetaType<HFONT>();
+   static const int hfontMetaTypeId   = qRegisterMetaType<HFONT>();
    static const int logFontMetaTypeId = qRegisterMetaType<LOGFONT>();
-
 
    const QWindowsFontEngineDataPtr data = sharedFontData();
    qDebug() << __FUNCTION__ << "Clear type: "
@@ -986,6 +1004,7 @@ static QList<quint32> getTrueTypeFontOffsets(const uchar *fontData)
 {
    QList<quint32> offsets;
    const quint32 headerTag = *reinterpret_cast<const quint32 *>(fontData);
+
    if (headerTag != MAKE_TAG('t', 't', 'c', 'f')) {
       if (headerTag != MAKE_TAG(0, 1, 0, 0)
          && headerTag != MAKE_TAG('O', 'T', 'T', 'O')
@@ -1126,7 +1145,7 @@ QStringList QWindowsFontDatabase::addApplicationFont(const QByteArray &fontData,
          return families;
       }
 
-      if (AddFontResourceExW(fileName.toStdWString().data(), FR_PRIVATE, 0) == 0) {
+      if (AddFontResourceExW(fileName.toStdWString().c_str(), FR_PRIVATE, 0) == 0) {
          return QStringList();
       }
 
@@ -1149,7 +1168,7 @@ void QWindowsFontDatabase::removeApplicationFonts()
       if (font.handle) {
          RemoveFontMemResourceEx(font.handle);
       } else {
-         RemoveFontResourceExW(font.fileName.toStdWString().data(), FR_PRIVATE, 0);
+         RemoveFontResourceExW(font.fileName.toStdWString().c_str(), FR_PRIVATE, 0);
       }
    }
 
@@ -1394,9 +1413,11 @@ QStringList QWindowsFontDatabase::extraTryFontsForFamily(const QString &family)
                break;
          }
       }
+
       QFontDatabase db;
       const QStringList families = db.families();
       const char **tf = tryFonts;
+
       while (tf && *tf) {
          // QTBUG-31689, family might be an English alias for a localized font name.
          const QString family = QString::fromLatin1(*tf);
@@ -1408,6 +1429,7 @@ QStringList QWindowsFontDatabase::extraTryFontsForFamily(const QString &family)
    }
    result.append(QString("Segoe UI Emoji"));
    result.append(QString("Segoe UI Symbol"));
+
    return result;
 }
 
@@ -1416,22 +1438,30 @@ QString QWindowsFontDatabase::familyForStyleHint(QFont::StyleHint styleHint)
    switch (styleHint) {
       case QFont::Times:
          return QString("Times New Roman");
+
       case QFont::Courier:
          return QString("Courier New");
+
       case QFont::Monospace:
          return QString("Courier New");
+
       case QFont::Cursive:
          return QString("Comic Sans MS");
+
       case QFont::Fantasy:
          return QString("Impact");
+
       case QFont::Decorative:
          return QString("Old English");
+
       case QFont::Helvetica:
          return QString("Arial");
+
       case QFont::System:
       default:
          break;
    }
+
    return QString("MS Shell Dlg 2");
 }
 
@@ -1449,8 +1479,7 @@ QStringList QWindowsFontDatabase::fallbacksForFamily(const QString &family, QFon
 }
 
 
-QFontEngine *QWindowsFontDatabase::createEngine(const QFontDef &request,
-   int dpi,
+QFontEngine *QWindowsFontDatabase::createEngine(const QFontDef &request, int dpi,
    const QSharedPointer<QWindowsFontEngineData> &data)
 {
    QFontEngine *fe = 0;
@@ -1460,14 +1489,14 @@ QFontEngine *QWindowsFontDatabase::createEngine(const QFontDef &request,
 
    if (request.stretch != 100) {
       HFONT hfont = CreateFontIndirect(&lf);
-      if (!hfont) {
+      if (! hfont) {
          qErrnoWarning("%s: CreateFontIndirect failed", __FUNCTION__);
          hfont = QWindowsFontDatabase::systemFont();
       }
 
       HGDIOBJ oldObj = SelectObject(data->hdc, hfont);
       TEXTMETRIC tm;
-      if (!GetTextMetrics(data->hdc, &tm)) {
+      if (! GetTextMetrics(data->hdc, &tm)) {
          qErrnoWarning("%s: GetTextMetrics failed", __FUNCTION__);
       } else {
          lf.lfWidth = tm.tmAveCharWidth * request.stretch / 100;
@@ -1498,10 +1527,11 @@ QFont QWindowsFontDatabase::systemDefaultFont()
 {
    LOGFONT lf;
    GetObject(QWindowsFontDatabase::systemFont(), sizeof(lf), &lf);
-   QFont systemFont =  QWindowsFontDatabase::LOGFONT_to_QFont(lf);
+   QFont sysFont = QWindowsFontDatabase::LOGFONT_to_QFont(lf);
+
    // "MS Shell Dlg 2" is the correct system font >= Win2k
-   if (systemFont.family() == QLatin1String("MS Shell Dlg")) {
-      systemFont.setFamily(QString("MS Shell Dlg 2"));
+   if (sysFont.family() == "MS Shell Dlg") {
+      sysFont.setFamily("MS Shell Dlg 2");
    }
    qDebug() << __FUNCTION__ << systemFont;
    return systemFont;
@@ -1515,6 +1545,7 @@ QFont QWindowsFontDatabase::LOGFONT_to_QFont(const LOGFONT &logFont, int vertica
 
    QFont qFont(QString::fromStdWString(std::wstring(logFont.lfFaceName)));
    qFont.setItalic(logFont.lfItalic);
+
    if (logFont.lfWeight != FW_DONTCARE) {
       qFont.setWeight(QPlatformFontDatabase::weightFromInteger(logFont.lfWeight));
    }

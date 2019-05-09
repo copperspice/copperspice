@@ -73,6 +73,7 @@ static inline QString messageBoxAlertSound(const QObject *messageBox)
         Warning = 2,
         Critical = 3
     };
+
     switch (messageBox->property("icon").toInt()) {
     case Information:
         return QString("SystemAsterisk");
@@ -81,6 +82,7 @@ static inline QString messageBoxAlertSound(const QObject *messageBox)
     case Critical:
         return QString("SystemHand");
     }
+
     return QString();
 }
 
@@ -180,8 +182,8 @@ IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
 
     IAccessible *iacc = 0;
     wacc->QueryInterface(IID_IAccessible, reinterpret_cast<void **>(&iacc));
-    return iacc;
 
+    return iacc;
 }
 
 bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, WPARAM wParam, LPARAM lParam, LRESULT *lResult)
@@ -201,13 +203,15 @@ bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, W
         static PtrLresultFromObject ptrLresultFromObject = 0;
         static bool oleaccChecked = false;
 
-        if (!oleaccChecked) {
+        if (! oleaccChecked) {
             oleaccChecked = true;
-            ptrLresultFromObject = reinterpret_cast<PtrLresultFromObject>(QSystemLibrary::resolve(QLatin1String("oleacc"), "LresultFromObject"));
+            ptrLresultFromObject = reinterpret_cast<PtrLresultFromObject>
+                  (QSystemLibrary::resolve(QString("oleacc"), "LresultFromObject"));
         }
 
         if (ptrLresultFromObject) {
             QWindow *window = QWindowsContext::instance()->findWindow(hwnd);
+
             if (window) {
                 QAccessibleInterface *acc = window->accessibleRoot();
                 if (acc) {

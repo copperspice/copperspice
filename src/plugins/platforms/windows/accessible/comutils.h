@@ -24,7 +24,7 @@
 #ifndef COMUTILS_H
 #define COMUTILS_H
 
-#if !defined(_WINDOWS_) && !defined(_WINDOWS_H) && !defined(__WINDOWS__)
+#if ! defined(_WINDOWS_) && ! defined(_WINDOWS_H) && ! defined(__WINDOWS__)
 #error Must include windows.h first
 #endif
 

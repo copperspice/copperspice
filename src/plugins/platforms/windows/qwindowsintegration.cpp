@@ -187,7 +187,7 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
    }
 
    if (! dpiAwarenessSet) {
-      // Set only once in case of repeated instantiations of QGuiApplication.
+      // Set only once in case of repeated instantiations of QApplication.
       m_context.setProcessDpiAwareness(dpiAwareness);
       dpiAwarenessSet = true;
    }
@@ -313,6 +313,7 @@ QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) cons
          && requested.geometry != obtained.geometry) {
          QWindowSystemInterface::handleGeometryChange(window, obtained.geometry);
       }
+
       QPlatformScreen *screen = result->screenForGeometry(obtained.geometry);
       if (screen && result->screen() != screen) {
          QWindowSystemInterface::handleWindowScreenChanged(window, screen->screen());
@@ -411,6 +412,7 @@ QPlatformOpenGLContext *QWindowsIntegration::createPlatformOpenGLContext(QOpenGL
    qDebug() << __FUNCTION__ << context->format();
    if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
       QScopedPointer<QWindowsOpenGLContext> result(staticOpenGLContext->createContext(context));
+
       if (result->isValid()) {
          return result.take();
       }

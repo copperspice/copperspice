@@ -66,18 +66,6 @@
 #  endif
 #endif
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QWindowsKeyMapper
-    \brief Translates Windows keys to QWindowSystemInterface events.
-    \internal
-    \ingroup qt-lighthouse-win
-
-    In addition, handles some special keys to display system menus, etc.
-    The code originates from \c qkeymapper_win.cpp.
-*/
-
 static void clearKeyRecorderOnApplicationInActive(Qt::ApplicationState state);
 
 QWindowsKeyMapper::QWindowsKeyMapper()
@@ -860,9 +848,11 @@ bool QWindowsKeyMapper::translateMultimediaKeyEventInternal(QWindow *window, con
    if (GET_DEVICE_LPARAM(msg.lParam) == FAPPCOMMAND_MOUSE) {
       return false;
    }
-   const int cmd = GET_APPCOMMAND_LPARAM(msg.lParam);
+
+   const int cmd    = GET_APPCOMMAND_LPARAM(msg.lParam);
    const int dwKeys = GET_KEYSTATE_LPARAM(msg.lParam);
    int state = 0;
+
    state |= (dwKeys & MK_SHIFT ? int(Qt::ShiftModifier) : 0);
    state |= (dwKeys & MK_CONTROL ? int(Qt::ControlModifier) : 0);
 
@@ -881,9 +871,9 @@ bool QWindowsKeyMapper::translateMultimediaKeyEventInternal(QWindow *window, con
    return QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(sequence);
 
 #else
-   Q_UNREACHABLE();
    return false;
 #endif
+
 }
 
 bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &msg, bool /* grab */)

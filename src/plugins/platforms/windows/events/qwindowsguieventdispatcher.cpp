@@ -31,7 +31,7 @@ QWindowsGuiEventDispatcher::QWindowsGuiEventDispatcher(QObject *parent) :
     QEventDispatcherWin32(parent), m_flags(0)
 {
     setObjectName("QWindowsGuiEventDispatcher");
-    createInternalHwnd(); // QTBUG-40881: Do not delay registering timers, etc. for QtMfc.
+    createInternalHwnd();                            // Do not delay registering timers, etc. for QtMfc.
 }
 
 bool QWindowsGuiEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)

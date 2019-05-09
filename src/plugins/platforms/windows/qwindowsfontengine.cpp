@@ -232,24 +232,10 @@ int QWindowsFontEngine::getGlyphIndexes(QStringView strView, QGlyphLayout *glyph
 QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
    const QSharedPointer<QWindowsFontEngineData> &fontEngineData)
 
-   : QFontEngine(Win),
-     m_fontEngineData(fontEngineData),
-     _name(name),
-     hfont(0),
-     m_logfont(lf),
-     ttf(0),
-     hasOutline(0),
-     cmap(0),
-     cmapSize(0),
-     lbearing(SHRT_MIN),
-     rbearing(SHRT_MIN),
-     x_height(-1),
-     synthesized_flags(-1),
-     lineWidth(-1),
-     widthCache(0),
-     widthCacheSize(0),
-     designAdvances(0),
-     designAdvancesSize(0)
+   : QFontEngine(Win), m_fontEngineData(fontEngineData), _name(name), hfont(0),
+     m_logfont(lf), ttf(0), hasOutline(0), cmap(0), cmapSize(0), lbearing(SHRT_MIN),
+     rbearing(SHRT_MIN), x_height(-1), synthesized_flags(-1), lineWidth(-1),
+     widthCache(0), widthCacheSize(0), designAdvances(0), designAdvancesSize(0)
 {
    qDebug() << __FUNCTION__ << name << lf.lfHeight;
    hfont = CreateFontIndirect(&m_logfont);
@@ -272,14 +258,14 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
    cache_cost = tm.tmHeight * tm.tmAveCharWidth * 2000;
    getCMap();
 
-   if (!resolvedGetCharWidthI) {
+   if (! resolvedGetCharWidthI) {
       resolveGetCharWidthI();
    }
 
    // ### Properties accessed by QWin32PrintEngine (QtPrintSupport)
    QVariantMap userData;
-   userData.insert(QString("logFont"), QVariant::fromValue(m_logfont));
-   userData.insert(QString("hFont"), QVariant::fromValue(hfont));
+   userData.insert(QString("logFont"),  QVariant::fromValue(m_logfont));
+   userData.insert(QString("hFont"),    QVariant::fromValue(hfont));
    userData.insert(QString("trueType"), QVariant(bool(ttf)));
    setUserData(userData);
 

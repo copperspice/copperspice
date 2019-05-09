@@ -41,8 +41,9 @@
 
 static bool initResources()
 {
-#if ! defined (QT_NO_IMAGEFORMAT_PNG)
-   Q_INIT_RESOURCE(cursors);
+#if ! defined(QT_NO_IMAGEFORMAT_PNG)
+   extern int qInitResources_cursors();
+   qInitResources_cursors();
 #endif
 
    return true;
@@ -51,13 +52,13 @@ static bool initResources()
 Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat = 0);
 Q_GUI_EXPORT HBITMAP qt_createIconMask(const QBitmap &bitmap);
 
-
 QWindowsPixmapCursorCacheKey::QWindowsPixmapCursorCacheKey(const QCursor &c)
    : bitmapCacheKey(c.pixmap().cacheKey()), maskCacheKey(0)
 {
-   if (!bitmapCacheKey) {
+   if (! bitmapCacheKey) {
       Q_ASSERT(c.bitmap());
       Q_ASSERT(c.mask());
+
       bitmapCacheKey = c.bitmap()->cacheKey();
       maskCacheKey = c.mask()->cacheKey();
    }

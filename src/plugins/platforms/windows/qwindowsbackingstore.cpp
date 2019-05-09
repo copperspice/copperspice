@@ -33,8 +33,7 @@
 #include <QDebug>
 
 QWindowsBackingStore::QWindowsBackingStore(QWindow *window) :
-   QPlatformBackingStore(window),
-   m_alphaNeedsFill(false)
+   QPlatformBackingStore(window), m_alphaNeedsFill(false)
 {
    qDebug() << __FUNCTION__ << this << window;
 }
@@ -58,6 +57,7 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
    if (QWindowsContext::verbose > 1) {
       qDebug() << __FUNCTION__ << this << window << offset << br;
    }
+
    QWindowsWindow *rw = QWindowsWindow::baseWindowOf(window);
 
 
