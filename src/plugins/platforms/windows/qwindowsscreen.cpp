@@ -329,7 +329,7 @@ enum OrientationPreference // matching Win32 API ORIENTATION_PREFERENCE
 bool QWindowsScreen::setOrientationPreference(Qt::ScreenOrientation o)
 {
    bool result = false;
-#ifndef Q_OS_WINCE
+
    if (QWindowsContext::user32dll.setDisplayAutoRotationPreferences) {
       DWORD orientationPreference = 0;
       switch (o) {
@@ -351,14 +351,14 @@ bool QWindowsScreen::setOrientationPreference(Qt::ScreenOrientation o)
       }
       result = QWindowsContext::user32dll.setDisplayAutoRotationPreferences(orientationPreference);
    }
-#endif // !Q_OS_WINCE
+
    return result;
 }
 
 Qt::ScreenOrientation QWindowsScreen::orientationPreference()
 {
    Qt::ScreenOrientation result = Qt::PrimaryOrientation;
-#ifndef Q_OS_WINCE
+
    if (QWindowsContext::user32dll.getDisplayAutoRotationPreferences) {
       DWORD orientationPreference = 0;
       if (QWindowsContext::user32dll.getDisplayAutoRotationPreferences(&orientationPreference)) {
@@ -378,7 +378,7 @@ Qt::ScreenOrientation QWindowsScreen::orientationPreference()
          }
       }
    }
-#endif // !Q_OS_WINCE
+
    return result;
 }
 
@@ -387,13 +387,15 @@ Qt::ScreenOrientation QWindowsScreen::orientationPreference()
 */
 QPlatformScreen::SubpixelAntialiasingType QWindowsScreen::subpixelAntialiasingTypeHint() const
 {
-#if defined(Q_OS_WINCE) || !defined(FT_LCD_FILTER_H) || !defined(FT_CONFIG_OPTION_SUBPIXEL_RENDERING)
+#if ! defined(FT_LCD_FILTER_H) || ! defined(FT_CONFIG_OPTION_SUBPIXEL_RENDERING)
    return QPlatformScreen::Subpixel_None;
 #else
    QPlatformScreen::SubpixelAntialiasingType type = QPlatformScreen::subpixelAntialiasingTypeHint();
+
    if (type == QPlatformScreen::Subpixel_None) {
       QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Avalon.Graphics\\DISPLAY1"), QSettings::NativeFormat);
       int registryValue = settings.value(QLatin1String("PixelStructure"), -1).toInt();
+
       switch (registryValue) {
          case 0:
             type = QPlatformScreen::Subpixel_None;

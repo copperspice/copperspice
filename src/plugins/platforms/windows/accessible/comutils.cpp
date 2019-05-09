@@ -154,7 +154,8 @@ bool QVariant2VARIANT(const QVariant &var, VARIANT &arg, const QByteArray &typeN
     case QVariant::LongLong:
         if (out && arg.vt == (VT_CY|VT_BYREF)) {
             arg.pcyVal->int64 = qvar.toLongLong();
-#if !defined(Q_OS_WINCE) && defined(_MSC_VER) && _MSC_VER >= 1400
+
+#if defined(_MSC_VER)
         } else if (out && arg.vt == (VT_I8|VT_BYREF)) {
             *arg.pllVal = qvar.toLongLong();
         } else {
@@ -180,7 +181,8 @@ bool QVariant2VARIANT(const QVariant &var, VARIANT &arg, const QByteArray &typeN
     case QVariant::ULongLong:
         if (out && arg.vt == (VT_CY|VT_BYREF)) {
             arg.pcyVal->int64 = qvar.toULongLong();
-#if !defined(Q_OS_WINCE) && defined(_MSC_VER) && _MSC_VER >= 1400
+
+#if defined(_MSC_VER)
         } else if (out && arg.vt == (VT_UI8|VT_BYREF)) {
             *arg.pullVal = qvar.toULongLong();
         } else {

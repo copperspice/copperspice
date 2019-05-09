@@ -1049,13 +1049,13 @@ void QWindowsNativeFileDialogBase::setDirectory(const QUrl &directory)
 QString QWindowsNativeFileDialogBase::directory() const
 {
    QString result;
-#ifndef Q_OS_WINCE
+
    IShellItem *item = 0;
    if (m_fileDialog && SUCCEEDED(m_fileDialog->GetFolder(&item)) && item) {
       result = QWindowsNativeFileDialogBase::itemPath(item);
       item->Release();
    }
-#endif
+
    return result;
 }
 
@@ -1115,7 +1115,7 @@ void QWindowsNativeFileDialogBase::setMode(QFileDialogOptions::FileMode mode,
    }
 }
 
-#if !defined(Q_OS_WINCE) && defined(__IShellLibrary_INTERFACE_DEFINED__) // Windows SDK 7
+#if defined(__IShellLibrary_INTERFACE_DEFINED__) // Windows SDK 7
 
 // Helper for "Libraries": collections of folders appearing from Windows 7
 // on, visible in the file dialogs.

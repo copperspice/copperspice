@@ -110,11 +110,6 @@ static inline QColor getSysColor(int index)
    return COLORREFToQColor(GetSysColor(index));
 }
 
-#ifndef QT_NO_WINCE_SHELLSDK
-// QTBUG-48823/Windows 10: SHGetFileInfo() (as called by item views on file system
-// models has been observed to trigger a WM_PAINT on the mainwindow. Suppress the
-// behavior by running it in a thread.
-
 class ShGetFileInfoFunction
 {
  public:
@@ -150,7 +145,6 @@ static bool shGetFileInfoBackground(QWindowsThreadPoolRunner &r, const wchar_t *
 
    return result;
 }
-#endif // !QT_NO_WINCE_SHELLSDK
 
 // from QStyle::standardPalette
 static inline QPalette standardPalette()
@@ -364,12 +358,12 @@ QVariant QWindowsTheme::themeHint(ThemeHint hint) const
          return QVariant(iconThemeSearchPaths());
       case StyleNames:
          return QVariant(styleNames());
-#ifndef Q_OS_WINCE
+
       case TextCursorWidth:
          return QVariant(int(dWordSystemParametersInfo(SPI_GETCARETWIDTH, 1u)));
       case DropShadow:
          return QVariant(booleanSystemParametersInfo(SPI_GETDROPSHADOW, false));
-#endif // !Q_OS_WINCE
+
       case MaximumScrollBarDragDistance:
          return QVariant(qRound(qreal(QWindowsContext::instance()->defaultDPI()) * 1.375));
       case KeyboardScheme:
@@ -422,11 +416,11 @@ void QWindowsTheme::clearFonts()
 
 void QWindowsTheme::refreshFonts()
 {
-#ifndef Q_OS_WINCE // ALL THIS FUNCTIONALITY IS MISSING ON WINCE
    clearFonts();
-   if (!QGuiApplication::desktopSettingsAware()) {
+   if (!QApplication::desktopSettingsAware()) {
       return;
    }
+
    NONCLIENTMETRICS ncm;
    ncm.cbSize = FIELD_OFFSET(NONCLIENTMETRICS, lfMessageFont) + sizeof(LOGFONT);
    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0);
@@ -452,7 +446,6 @@ void QWindowsTheme::refreshFonts()
    m_fonts[DockWidgetTitleFont] = new QFont(titleFont);
    m_fonts[ItemViewFont] = new QFont(iconTitleFont);
    m_fonts[FixedFont] = new QFont(fixedFont);
-#endif // !Q_OS_WINCE
 }
 
 enum FileIconSize {
@@ -572,7 +565,7 @@ QPixmap QWindowsTheme::standardPixmap(StandardPixmap sp, const QSizeF &pixmapSiz
       case TrashIcon:
          resourceId = 191;
          break;
-#ifndef Q_OS_WINCE
+
       case MessageBoxInformation:
          iconName = IDI_INFORMATION;
          break;
@@ -603,7 +596,7 @@ QPixmap QWindowsTheme::standardPixmap(StandardPixmap sp, const QSizeF &pixmapSiz
             }
          }
          break;
-#endif
+
       default:
          break;
    }

@@ -148,7 +148,6 @@ QDebug operator<<(QDebug d, const POINT &p)
    return d;
 }
 
-#  ifndef Q_OS_WINCE
 QDebug operator<<(QDebug d, const NCCALCSIZE_PARAMS &p)
 {
    QDebugStateSaver saver(d);
@@ -179,27 +178,25 @@ QDebug operator<<(QDebug d, const WINDOWPLACEMENT &wp)
       << ", rcNormalPosition=" << wp.rcNormalPosition;
    return d;
 }
-#  endif // !Q_OS_WINCE
 #endif // !QT_NO_DEBUG_STREAM
 
 // QTBUG-43872, for windows that do not have WS_EX_TOOLWINDOW set, WINDOWPLACEMENT
 // is in workspace/available area coordinates.
 static QPoint windowPlacementOffset(HWND hwnd, const QPoint &point)
 {
-#ifndef Q_OS_WINCE
+
    if (GetWindowLongPtr(hwnd, GWL_EXSTYLE) & WS_EX_TOOLWINDOW) {
       return QPoint(0, 0);
    }
+
    const QWindowsScreenManager &screenManager = QWindowsContext::instance()->screenManager();
    const QWindowsScreen *screen = screenManager.screens().size() == 1
       ? screenManager.screens().constFirst() : screenManager.screenAtDp(point);
+
    if (screen) {
       return screen->availableGeometry().topLeft() - screen->geometry().topLeft();
    }
-#else
-   Q_UNUSED(hwnd)
-   Q_UNUSED(point)
-#endif
+
    return QPoint(0, 0);
 }
 
@@ -208,7 +205,7 @@ static QPoint windowPlacementOffset(HWND hwnd, const QPoint &point)
 static inline QRect frameGeometry(HWND hwnd, bool topLevel)
 {
    RECT rect = { 0, 0, 0, 0 };
-#ifndef Q_OS_WINCE
+
    if (topLevel) {
       WINDOWPLACEMENT windowPlacement;
       windowPlacement.length = sizeof(WINDOWPLACEMENT);
@@ -218,7 +215,7 @@ static inline QRect frameGeometry(HWND hwnd, bool topLevel)
          return result.translated(windowPlacementOffset(hwnd, result.topLeft()));
       }
    }
-#endif // !Q_OS_WINCE
+
    GetWindowRect(hwnd, &rect); // Screen coordinates.
    const HWND parent = GetParent(hwnd);
    if (parent && !topLevel) {
@@ -240,7 +237,7 @@ static QWindow::Visibility windowVisibility_sys(HWND hwnd)
    if (!IsWindowVisible(hwnd)) {
       return QWindow::Hidden;
    }
-#ifndef Q_OS_WINCE
+
    WINDOWPLACEMENT windowPlacement;
    windowPlacement.length = sizeof(WINDOWPLACEMENT);
    if (GetWindowPlacement(hwnd, &windowPlacement)) {
@@ -255,7 +252,7 @@ static QWindow::Visibility windowVisibility_sys(HWND hwnd)
             break;
       }
    }
-#endif // !Q_OS_WINCE
+
    return QWindow::Windowed;
 }
 
@@ -273,10 +270,6 @@ static inline bool windowIsOpenGL(const QWindow *w)
 
 static bool applyBlurBehindWindow(HWND hwnd)
 {
-#ifdef Q_OS_WINCE
-   Q_UNUSED(hwnd);
-   return false;
-#else
    enum { dwmBbEnable = 0x1, dwmBbBlurRegion = 0x2 };
 
    struct DwmBlurBehind {
@@ -336,7 +329,7 @@ static bool applyBlurBehindWindow(HWND hwnd)
    }
 
    return result;
-#endif // Q_OS_WINCE
+
 }
 
 // from qwidget_win.cpp, pass flags separately in case they have been "autofixed".
@@ -356,10 +349,11 @@ static bool shouldShowMaximizeButton(const QWindow *w, Qt::WindowFlags flags)
 // Qt::WindowTransparentForInput (in combination with WS_EX_TRANSPARENT).
 bool QWindowsWindow::setWindowLayered(HWND hwnd, Qt::WindowFlags flags, bool hasAlpha, qreal opacity)
 {
-#ifndef Q_OS_WINCE // maybe needs revisiting WS_EX_LAYERED
+   // maybe needs revisiting WS_EX_LAYERED
    const LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
    const bool needsLayered = (flags & Qt::WindowTransparentForInput)
       || (hasAlpha && (flags & Qt::FramelessWindowHint)) || opacity < 1.0;
+
    const bool isLayered = (exStyle & WS_EX_LAYERED);
    if (needsLayered != isLayered) {
       if (needsLayered) {
@@ -368,24 +362,12 @@ bool QWindowsWindow::setWindowLayered(HWND hwnd, Qt::WindowFlags flags, bool has
          SetWindowLong(hwnd, GWL_EXSTYLE, exStyle & ~WS_EX_LAYERED);
       }
    }
+
    return needsLayered;
-#else // !Q_OS_WINCE
-   Q_UNUSED(hwnd);
-   Q_UNUSED(flags);
-   Q_UNUSED(hasAlpha);
-   Q_UNUSED(opacity);
-   return false;
-#endif // Q_OS_WINCE
 }
 
 static void setWindowOpacity(HWND hwnd, Qt::WindowFlags flags, bool hasAlpha, bool openGL, qreal level)
 {
-#ifdef Q_OS_WINCE // WINCE does not support that feature and microsoft explicitly warns to use those calls
-   Q_UNUSED(hwnd);
-   Q_UNUSED(flags);
-   Q_UNUSED(hasAlpha);
-   Q_UNUSED(level);
-#else
    if (QWindowsWindow::setWindowLayered(hwnd, flags, hasAlpha, level)) {
       if (hasAlpha && !openGL && (flags & Qt::FramelessWindowHint)) {
          // Non-GL windows with alpha: Use blend function to update.
@@ -397,7 +379,6 @@ static void setWindowOpacity(HWND hwnd, Qt::WindowFlags flags, bool hasAlpha, bo
    } else if (IsWindowVisible(hwnd)) { // Repaint when switching from layered.
       InvalidateRect(hwnd, NULL, TRUE);
    }
-#endif // !Q_OS_WINCE
 }
 
 static inline void updateGLWindowSettings(const QWindow *w, HWND hwnd, Qt::WindowFlags flags, qreal opacity)
@@ -631,13 +612,11 @@ void WindowCreationData::fromWindow(const QWindow *w, const Qt::WindowFlags flag
             exStyle |= WS_EX_TOOLWINDOW;
          }
 
-#ifndef Q_OS_WINCE
          // make mouse events fall through this window
          // NOTE: WS_EX_TRANSPARENT flag can make mouse inputs fall through a layered window
          if (flagsIn & Qt::WindowTransparentForInput) {
             exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
          }
-#endif
       }
    }
 }
@@ -829,10 +808,10 @@ bool QWindowsGeometryHint::validSize(const QSize &s) const
 QMargins QWindowsGeometryHint::frame(DWORD style, DWORD exStyle)
 {
    RECT rect = {0, 0, 0, 0};
-#ifndef Q_OS_WINCE
-   style &= ~(WS_OVERLAPPED); // Not permitted, see docs.
-#endif
-   if (!AdjustWindowRectEx(&rect, style, FALSE, exStyle)) {
+
+   style &= ~(WS_OVERLAPPED);
+
+   if (! AdjustWindowRectEx(&rect, style, FALSE, exStyle)) {
       qErrnoWarning("%s: AdjustWindowRectEx failed", __FUNCTION__);
    }
    const QMargins result(qAbs(rect.left), qAbs(rect.top),
@@ -845,13 +824,14 @@ QMargins QWindowsGeometryHint::frame(DWORD style, DWORD exStyle)
 
 bool QWindowsGeometryHint::handleCalculateSize(const QMargins &customMargins, const MSG &msg, LRESULT *result)
 {
-#ifndef Q_OS_WINCE
    // NCCALCSIZE_PARAMS structure if wParam==TRUE
    if (!msg.wParam || customMargins.isNull()) {
       return false;
    }
+
    *result = DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
    NCCALCSIZE_PARAMS *ncp = reinterpret_cast<NCCALCSIZE_PARAMS *>(msg.lParam);
+
    const RECT oldClientArea = ncp->rgrc[0];
    ncp->rgrc[0].left += customMargins.left();
    ncp->rgrc[0].top += customMargins.top();
@@ -863,15 +843,8 @@ bool QWindowsGeometryHint::handleCalculateSize(const QMargins &customMargins, co
       << ncp->rgrc[0] << ' ' << ncp->rgrc[1] << ' ' << ncp->rgrc[2]
       << ' ' << ncp->lppos->cx << ',' << ncp->lppos->cy;
    return true;
-#else
-   Q_UNUSED(customMargins)
-   Q_UNUSED(msg)
-   Q_UNUSED(result)
-   return false;
-#endif
 }
 
-#ifndef Q_OS_WINCE
 void QWindowsGeometryHint::applyToMinMaxInfo(HWND hwnd, MINMAXINFO *mmi) const
 {
    return applyToMinMaxInfo(GetWindowLong(hwnd, GWL_STYLE),
@@ -907,7 +880,6 @@ void QWindowsGeometryHint::applyToMinMaxInfo(DWORD style, DWORD exStyle, MINMAXI
       << " frame=" << margins << ' ' << frameWidth << ',' << frameHeight
       << " out " << *mmi;
 }
-#endif // !Q_OS_WINCE
 
 bool QWindowsGeometryHint::positionIncludesFrame(const QWindow *w)
 {
@@ -1045,11 +1017,11 @@ QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
 QWindowsWindow::~QWindowsWindow()
 {
    setFlag(WithinDestroy);
-#ifndef Q_OS_WINCE
+
    if (testFlag(TouchRegistered)) {
       QWindowsContext::user32dll.unregisterTouchWindow(m_data.hwnd);
    }
-#endif // !Q_OS_WINCE
+
    destroyWindow();
    destroyIcon();
 }
@@ -1099,14 +1071,7 @@ void QWindowsWindow::destroyWindow()
          m_surface = 0;
       }
 #endif
-#ifdef Q_OS_WINCE
-      if ((m_windowState & Qt::WindowFullScreen) && !m_previouslyHidden) {
-         HWND handle = FindWindow(L"HHTaskBar", L"");
-         if (handle) {
-            ShowWindow(handle, SW_SHOW);
-         }
-      }
-#endif // !Q_OS_WINCE
+
       if (m_data.hwnd != GetDesktopWindow() && window()->type() != Qt::ForeignWindow) {
          DestroyWindow(m_data.hwnd);
       }
@@ -1286,7 +1251,6 @@ QPoint QWindowsWindow::mapFromGlobal(const QPoint &pos) const
    }
 }
 
-#ifndef Q_OS_WINCE
 static inline HWND transientParentHwnd(HWND hwnd)
 {
    if (GetAncestor(hwnd, GA_PARENT) == GetDesktopWindow()) {
@@ -1297,7 +1261,6 @@ static inline HWND transientParentHwnd(HWND hwnd)
    }
    return 0;
 }
-#endif // !Q_OS_WINCE
 
 // Update the transient parent for a toplevel window. The concept does not
 // really exist on Windows, the relationship is set by passing a parent along with !WS_CHILD
@@ -1305,22 +1268,23 @@ static inline HWND transientParentHwnd(HWND hwnd)
 // SetParent, which would make it a real child).
 void QWindowsWindow::updateTransientParent() const
 {
-#ifndef Q_OS_WINCE
    if (window()->type() == Qt::Popup) {
       return;   // QTBUG-34503, // a popup stays on top, no parent, see also WindowCreationData::fromWindow().
    }
+
    // Update transient parent.
    const HWND oldTransientParent = transientParentHwnd(m_data.hwnd);
    HWND newTransientParent = 0;
+
    if (const QWindow *tp = window()->transientParent())
       if (const QWindowsWindow *tw = QWindowsWindow::baseWindowOf(tp))
          if (!tw->testFlag(WithinDestroy)) { // Prevent destruction by parent window (QTBUG-35499, QTBUG-36666)
             newTransientParent = tw->handle();
          }
+
    if (newTransientParent != oldTransientParent) {
       SetWindowLongPtr(m_data.hwnd, GWL_HWNDPARENT, (LONG_PTR)newTransientParent);
    }
-#endif // !Q_OS_WINCE
 }
 
 static inline bool testShowWithoutActivating(const QWindow *window)
@@ -1458,16 +1422,13 @@ void QWindowsWindow::handleCompositionSettingsChanged()
 
 static QRect normalFrameGeometry(HWND hwnd)
 {
-#ifndef Q_OS_WINCE
    WINDOWPLACEMENT wp;
    wp.length = sizeof(WINDOWPLACEMENT);
    if (GetWindowPlacement(hwnd, &wp)) {
       const QRect result = qrectFromRECT(wp.rcNormalPosition);
       return result.translated(windowPlacementOffset(hwnd, result.topLeft()));
    }
-#else
-   Q_UNUSED(hwnd)
-#endif
+
    return QRect();
 }
 
@@ -1593,7 +1554,7 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
       << " new frame: " << frameGeometry;
 
    bool result = false;
-#ifndef Q_OS_WINCE
+
    WINDOWPLACEMENT windowPlacement;
    windowPlacement.length = sizeof(WINDOWPLACEMENT);
    GetWindowPlacement(m_data.hwnd, &windowPlacement);
@@ -1605,9 +1566,8 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
          RECTfromQRect(frameGeometry.translated(-windowPlacementOffset(m_data.hwnd, frameGeometry.topLeft())));
       windowPlacement.showCmd = windowPlacement.showCmd == SW_SHOWMINIMIZED ? SW_SHOWMINIMIZED : SW_HIDE;
       result = SetWindowPlacement(m_data.hwnd, &windowPlacement);
-   } else
-#endif // !Q_OS_WINCE
-   {
+
+   } else {
       result = MoveWindow(m_data.hwnd, frameGeometry.x(), frameGeometry.y(),
             frameGeometry.width(), frameGeometry.height(), true);
    }
