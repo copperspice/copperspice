@@ -192,9 +192,6 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
       dpiAwarenessSet = true;
    }
 
-   qDebug() << __FUNCTION__ << "DpiAwareness=" << dpiAwareness
-            << "effective process DPI awareness=" << QWindowsContext::processDpiAwareness();
-
    m_context.initTouch(m_options);
 }
 
@@ -287,13 +284,6 @@ QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) cons
    }
 
    QWindowsWindowData obtained = QWindowsWindowData::create(window, requested, window->title());
-   qDebug().nospace()
-         << __FUNCTION__ << ' ' << window
-            << "\n    Requested: " << requested.geometry << " frame incl.="
-            << QWindowsGeometryHint::positionIncludesFrame(window)
-            << ' ' << requested.flags
-            << "\n    Obtained : " << obtained.geometry << " margins=" << obtained.frame
-            << " handle=" << obtained.hwnd << ' ' << obtained.flags << '\n';
 
    if (! obtained.hwnd) {
       return nullptr;
@@ -409,7 +399,6 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::create()
 
 QPlatformOpenGLContext *QWindowsIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
-   qDebug() << __FUNCTION__ << context->format();
    if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
       QScopedPointer<QWindowsOpenGLContext> result(staticOpenGLContext->createContext(context));
 

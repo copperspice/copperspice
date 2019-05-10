@@ -604,7 +604,6 @@ error:
    DeleteObject( hfont );
    ReleaseDC( 0, hdc );
 
-   //qDebug("got i18n name of '%s' for font '%s'", i18n_name.latin1(), familyName.toLocal8Bit().data());
    return i18n_name;
 }
 
@@ -1181,7 +1180,6 @@ void QWindowsFontDatabase::releaseHandle(void *handle)
 QString QWindowsFontDatabase::fontDir() const
 {
    const QString result = QPlatformFontDatabase::fontDir();
-   qDebug() << __FUNCTION__ << result;
    return result;
 }
 
@@ -1472,8 +1470,6 @@ QStringList QWindowsFontDatabase::fallbacksForFamily(const QString &family, QFon
    result.append(QWindowsFontDatabase::extraTryFontsForFamily(family));
    result.append(QPlatformFontDatabase::fallbacksForFamily(family, style, styleHint, script));
 
-   qDebug() << __FUNCTION__ << family << style << styleHint
-      << script << result;
    return result;
 }
 

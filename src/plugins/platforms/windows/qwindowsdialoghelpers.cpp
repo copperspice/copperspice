@@ -1775,7 +1775,6 @@ QList<QUrl> QWindowsFileDialogHelper::selectedFiles() const
 
 void QWindowsFileDialogHelper::setFilter()
 {
-   qDebug() << __FUNCTION__;
 }
 
 void QWindowsFileDialogHelper::selectNameFilter(const QString &filter)

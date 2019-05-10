@@ -35,12 +35,10 @@
 QWindowsBackingStore::QWindowsBackingStore(QWindow *window) :
    QPlatformBackingStore(window), m_alphaNeedsFill(false)
 {
-   qDebug() << __FUNCTION__ << this << window;
 }
 
 QWindowsBackingStore::~QWindowsBackingStore()
 {
-   qDebug() << __FUNCTION__ << this;
 }
 
 QPaintDevice *QWindowsBackingStore::paintDevice()
