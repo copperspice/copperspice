@@ -319,7 +319,7 @@ void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
    lf.lfCharSet = DEFAULT_CHARSET;
 
    QString16 tmp = familyName.toUtf16();
-   memcpy(lf.lfFaceName, tmp.constData(), tmp.size_storage());
+   memcpy(lf.lfFaceName, tmp.constData(), tmp.size_storage() * 2);
 
    lf.lfFaceName[tmp.size_storage()] = 0;
    lf.lfPitchAndFamily = 0;
