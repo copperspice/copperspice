@@ -356,7 +356,8 @@ void QWindowsOleDropSource::createCursors()
    }
 
 #ifndef QT_NO_DEBUG_OUTPUT
-   qDebug() << __FUNCTION__ << "pixmap" << pixmap.size() << m_cursors.size() << "cursors:\n" << m_cursors;
+   qDebug() << "QWindowsOleDropSource::createCursors(): Pixmap =" << pixmap.size() << m_cursors.size() << "\n  "
+            << "Cursors =" << m_cursors;
 #endif
 }
 
@@ -429,8 +430,8 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinu
    } while (false);
 
    if (QWindowsContext::verbose > 1 || hr != S_OK) {
-      qDebug() << __FUNCTION__ << "fEscapePressed=" << fEscapePressed
-         << "grfKeyState=" << grfKeyState << "buttons" << m_currentButtons
+      qDebug() << __FUNCTION__ << "fEscapePressed =" << fEscapePressed
+         << "GrfKeyState =" << grfKeyState << "Buttons =" << m_currentButtons
          << "returns 0x" << hex << int(hr) << dec;
    }
 

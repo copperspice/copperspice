@@ -166,9 +166,8 @@ void QWindowsClipboard::registerViewer()
       m_nextClipboardViewer = SetClipboardViewer(m_clipboardViewer);
    }
 
-   qDebug() << __FUNCTION__ << "m_clipboardViewer:" << m_clipboardViewer
-      << "format listener:" << m_formatListenerRegistered
-      << "next:" << m_nextClipboardViewer;
+   qDebug() << "QWindowsClipboard::registerViewer():"
+      << "Format listener =" << m_formatListenerRegistered << " Next =" << m_nextClipboardViewer;
 }
 
 void QWindowsClipboard::unregisterViewer()

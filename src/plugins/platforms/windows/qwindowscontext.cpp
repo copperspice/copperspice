@@ -318,7 +318,7 @@ int QWindowsContext::processDpiAwareness()
 
 void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiAwareness)
 {
-   qDebug() << __FUNCTION__ << dpiAwareness;
+   qDebug() << "QWindowsContext::setProcessDpiAwareness(): Dpi =" << dpiAwareness;
 
    if (QWindowsContext::shcoredll.isValid()) {
       const HRESULT hr = QWindowsContext::shcoredll.setProcessDpiAwareness(dpiAwareness);
@@ -519,9 +519,9 @@ QString QWindowsContext::registerWindowClass(QString cname, WNDPROC proc, unsign
 
    d->m_registeredWindowClassNames.insert(cname);
 
-   qDebug().nospace() << __FUNCTION__ << ' ' << cname
-      << " style=0x" << hex << style << dec
-      << " brush=" << brush << " icon=" << icon << " atom=" << atom;
+   qDebug() << "QWindowsContext::registerWindowClass(): ClassName =" << cname << "\n  "
+      << "Style = 0x" << hex << style << dec
+      << "Brush =" << brush << " Icon = " << icon << " Atom =" << atom;
 
    return cname;
 }

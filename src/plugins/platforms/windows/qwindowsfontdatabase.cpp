@@ -634,7 +634,8 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
    if (QWindowsContext::verbose > 2) {
       QString message;
       QTextStream str(&message);
-      str << __FUNCTION__ << ' ' << familyName << ' ' << charSet << " TTF=" << ttf;
+
+      str << "addFontToDatabase(): FamilyName = " << familyName << " CharSet = " << charSet << " TTF = " << ttf;
       if (type & DEVICE_FONTTYPE) {
          str << " DEVICE";
       }
@@ -876,9 +877,8 @@ QWindowsFontDatabase::QWindowsFontDatabase()
    static const int logFontMetaTypeId = qRegisterMetaType<LOGFONT>();
 
    const QWindowsFontEngineDataPtr data = sharedFontData();
-   qDebug() << __FUNCTION__ << "Clear type: "
-      << data->clearTypeEnabled << "gamma: " << data->fontSmoothingGamma;
 
+   qDebug() << "QWindowsFontDatabase(): Clear type: " << data->clearTypeEnabled << " Gamma =" << data->fontSmoothingGamma;
    qt_needs_a8_gamma_correction = true;
 }
 
@@ -895,9 +895,8 @@ QFontEngineMulti *QWindowsFontDatabase::fontEngineMulti(QFontEngine *fontEngine,
 QFontEngine *QWindowsFontDatabase::fontEngine(const QFontDef &fontDef, void *handle)
 {
    QFontEngine *fe = QWindowsFontDatabase::createEngine(fontDef,
-         QWindowsContext::instance()->defaultDPI(),
-         sharedFontData());
-   qDebug() << __FUNCTION__ << "FONTDEF" << fontDef << fe << handle;
+         QWindowsContext::instance()->defaultDPI(), sharedFontData());
+   qDebug() << "QWindowsFontDatabase::fontEngine():" << "Fontdef = " << fontDef << fe << handle;
    return fe;
 }
 
@@ -996,7 +995,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
       }
    }
 
-   qDebug() << __FUNCTION__ << "FONTDATA" << fontData << pixelSize << hintingPreference << fontEngine;
+   qDebug() << __FUNCTION__ << "Fontdata =" << fontData << pixelSize << hintingPreference << fontEngine;
    return fontEngine;
 }
 
@@ -1533,8 +1532,10 @@ QFont QWindowsFontDatabase::systemDefaultFont()
    if (sysFont.family() == "MS Shell Dlg") {
       sysFont.setFamily("MS Shell Dlg 2");
    }
-   qDebug() << __FUNCTION__ << systemFont;
-   return systemFont;
+
+   qDebug() << "systemDefaultFont(): " << sysFont;
+
+   return sysFont;
 }
 
 QFont QWindowsFontDatabase::LOGFONT_to_QFont(const LOGFONT &logFont, int verticalDPI_In)

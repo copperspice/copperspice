@@ -728,11 +728,9 @@ void WindowCreationData::applyWindowFlags(HWND hwnd) const
       SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
    }
 
-   qDebug().nospace() << __FUNCTION__ << hwnd << *this
-      << "\n    Style from " << debugWinStyle(oldStyle) << "\n    to "
-      << debugWinStyle(newStyle) << "\n    ExStyle from "
-      << debugWinExStyle(oldExStyle) << " to "
-      << debugWinExStyle(newExStyle);
+   qDebug() << "WindowCreationData::applyWindowFlags(): Handle =" << hwnd << *this << "\n  "
+      << "Style from =" << debugWinStyle(oldStyle) << " To =" << debugWinStyle(newStyle) << "\n  "
+      << "ExStyle from =" << debugWinExStyle(oldExStyle) << " To =" << debugWinExStyle(newExStyle);
 }
 
 void WindowCreationData::initialize(const QWindow *w, HWND hwnd, bool frameChange, qreal opacityLevel) const
@@ -822,13 +820,13 @@ QMargins QWindowsGeometryHint::frame(DWORD style, DWORD exStyle)
    style &= ~(WS_OVERLAPPED);
 
    if (! AdjustWindowRectEx(&rect, style, FALSE, exStyle)) {
-      qErrnoWarning("%s: AdjustWindowRectEx failed", __FUNCTION__);
+      qErrnoWarning("QWindowsGeometryHint::frame(): AdjustWindowRectEx failed");
    }
-   const QMargins result(qAbs(rect.left), qAbs(rect.top),
-      qAbs(rect.right), qAbs(rect.bottom));
-   qDebug().nospace() << __FUNCTION__ << " style="
-      << showbase << hex << style << " exStyle=" << exStyle << dec << noshowbase
-      << ' ' << rect << ' ' << result;
+
+   const QMargins result(qAbs(rect.left), qAbs(rect.top), qAbs(rect.right), qAbs(rect.bottom));
+
+   qDebug() << "QWindowsGeometryHint::frame(): Style =" << showbase << hex << style << "\n  "
+      << "ExStyle =" << exStyle << dec << noshowbase << " Rect =" << rect << " Result =" << result;
    return result;
 }
 
@@ -923,13 +921,12 @@ QWindowCreationContext::QWindowCreationContext(const QWindow *w, const QRect &ge
       }
    }
 
-   qDebug().nospace()
-         << __FUNCTION__ << ' ' << w << ' ' << geometry
-            << " pos incl. frame=" << QWindowsGeometryHint::positionIncludesFrame(w)
-            << " frame=" << frameWidth << 'x' << frameHeight << '+'
-            << frameX << '+' << frameY
-            << " min=" << geometryHint.minimumSize << " max=" << geometryHint.maximumSize
-            << " custom margins=" << customMargins;
+   qDebug() << "QWindowCreationContext():  Window =" << w << "\n  "
+            << "Geometry =" << geometry << " Pos including frame =" << QWindowsGeometryHint::positionIncludesFrame(w)
+            << " Frame =" << frameWidth << 'x' << frameHeight << '+'
+            << frameX << '+' << frameY << "\n  "
+            << "Min =" << geometryHint.minimumSize << " Max =" << geometryHint.maximumSize
+            << " Custom Margins =" << customMargins;
 }
 
 QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
@@ -1134,7 +1131,7 @@ QWindowsWindowData QWindowsWindowData::create(const QWindow *w,
 void QWindowsWindow::setVisible(bool visible)
 {
    const QWindow *win = window();
-   qDebug() << __FUNCTION__ << this << win << m_data.hwnd << visible;
+   qDebug() << "QWindowsWindow::setVisible(): Window =" << this << win << m_data.hwnd << visible;
    if (m_data.hwnd) {
       if (visible) {
          show_sys();
@@ -1419,11 +1416,10 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
       // notify and warn.
       setGeometry_sys(rect);
       if (m_data.geometry != rect) {
-         qWarning("%s: Unable to set geometry %dx%d+%d+%d on %s/'%s'."
-            " Resulting geometry:  %dx%d+%d+%d "
-            "(frame: %d, %d, %d, %d, custom margin: %d, %d, %d, %d"
-            ", minimum size: %dx%d, maximum size: %dx%d).",
-            __FUNCTION__,
+         qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d on %s/'%s'."
+            " Resulting geometry = %dx%d+%d+%d "
+            "(Frame = %d, %d, %d, %d, Custom margin = %d, %d, %d, %d,"
+            "Minimum size = %dx%d, Maximum size = %dx%d).",
             rect.width(), rect.height(), rect.x(), rect.y(),
             window()->metaObject()->className(), qPrintable(window()->objectName()),
             m_data.geometry.width(), m_data.geometry.height(),
@@ -1502,7 +1498,8 @@ void QWindowsWindow::handleGeometryChange()
       QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ExcludeUserInputEvents);
    }
 
-   qDebug() << __FUNCTION__ << this << window() << m_data.geometry;
+   qDebug() << "QWindowsWindow::handleGeometryChange(): Window =" << window() << "\n  "
+            << "Geometry =" << m_data.geometry;
 }
 
 void QWindowsWindow::setGeometry_sys(const QRect &rect) const
@@ -1510,10 +1507,9 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
    const QMargins margins = frameMargins();
    const QRect frameGeometry = rect + margins;
 
-   qDebug() << '>' << __FUNCTION__ << window()
-      << "\n from " << geometry_sys() << " frame: "
-      << margins << " to " << rect
-      << " new frame: " << frameGeometry;
+   qDebug() << "QWindowsWindow::setGeometry_sys(): Window =" << window() << "\n  "
+      << "From =" << geometry_sys() << "Frame =" << margins << " To =" << rect << "\n  "
+      << "New frame =" << frameGeometry;
 
    bool result = false;
 
@@ -2046,13 +2042,14 @@ void QWindowsWindow::requestActivateWindow()
 
 bool QWindowsWindow::setKeyboardGrabEnabled(bool grab)
 {
-   if (!m_data.hwnd) {
-      qWarning("%s: No handle", __FUNCTION__);
+   if (! m_data.hwnd) {
+      qWarning("QWindowsWindow::setKeyboardGrabEnabled(): No handle");
       return false;
    }
    qDebug() << __FUNCTION__ << this << window() << grab;
 
    QWindowsContext *context = QWindowsContext::instance();
+
    if (grab) {
       context->setKeyGrabber(window());
    } else {
@@ -2060,20 +2057,20 @@ bool QWindowsWindow::setKeyboardGrabEnabled(bool grab)
          context->setKeyGrabber(0);
       }
    }
+
    return true;
 }
 
 bool QWindowsWindow::setMouseGrabEnabled(bool grab)
 {
-   qDebug() << __FUNCTION__ << window() << grab;
-   if (!m_data.hwnd) {
-      qWarning("%s: No handle", __FUNCTION__);
+   if (! m_data.hwnd) {
+      qWarning("QWindowsWindow::setMouseGrabEnabled(): No handle");
       return false;
    }
-   if (!isVisible() && grab) {
-      qWarning("%s: Not setting mouse grab for invisible window %s/'%s'",
-         __FUNCTION__, window()->metaObject()->className(),
-         qPrintable(window()->objectName()));
+
+   if (! isVisible() && grab) {
+      qWarning("QWindowsWindow::setMouseGrabEnabled(): Not setting mouse grab for invisible window %s/'%s'",
+         window()->metaObject()->className(), csPrintable(window()->objectName()));
       return false;
    }
 

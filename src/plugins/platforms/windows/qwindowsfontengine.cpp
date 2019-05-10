@@ -237,10 +237,10 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
      rbearing(SHRT_MIN), x_height(-1), synthesized_flags(-1), lineWidth(-1),
      widthCache(0), widthCacheSize(0), designAdvances(0), designAdvancesSize(0)
 {
-   qDebug() << __FUNCTION__ << name << lf.lfHeight;
+   qDebug() << "QWindowsFontEngine():  FontName = " << name << " FontSize =" << lf.lfHeight;
    hfont = CreateFontIndirect(&m_logfont);
-   if (!hfont) {
-      qErrnoWarning("%s: CreateFontIndirect failed for family '%s'", __FUNCTION__, qPrintable(name));
+   if (! hfont) {
+      qErrnoWarning("QWindowsFontEngine(): CreateFontIndirect failed for family '%s'", csPrintable(name));
       hfont = QWindowsFontDatabase::systemFont();
    }
 
@@ -248,7 +248,7 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
    SelectObject(hdc, hfont);
    const BOOL res = GetTextMetrics(hdc, &tm);
    if (!res) {
-      qErrnoWarning("%s: GetTextMetrics failed", __FUNCTION__);
+      qErrnoWarning("QWindowsFontEngine(): GetTextMetrics failed");
       ZeroMemory(&tm, sizeof(TEXTMETRIC));
    }
 

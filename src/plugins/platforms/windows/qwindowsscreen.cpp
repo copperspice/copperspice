@@ -99,8 +99,8 @@ static bool monitorData(HMONITOR hMonitor, QWindowsScreenData *data)
          DeleteDC(hdc);
 
       } else {
-         qWarning("%s: Unable to obtain handle for monitor '%s', defaulting to %g DPI.",
-            __FUNCTION__, qPrintable(QString::fromStdWString(std::wstring(info.szDevice))), data->dpi.first);
+         qWarning("monitorData(): Unable to obtain handle for monitor '%s', defaulting to %g DPI.",
+            csPrintable(QString::fromStdWString(std::wstring(info.szDevice))), data->dpi.first);
 
       } // CreateDC() failed
 
@@ -146,6 +146,7 @@ static inline WindowsScreenDataList monitorData()
 {
    WindowsScreenDataList result;
    EnumDisplayMonitors(0, 0, monitorEnumCallback, reinterpret_cast<LPARAM>(&result));
+
    return result;
 }
 
@@ -233,7 +234,7 @@ QWindow *QWindowsScreen::topLevelWindowAt(const QPoint &point) const
       result = QWindowsWindow::topLevelOf(child);
    }
 
-   qDebug() << __FUNCTION__ << point << result;
+   qDebug() << "QWindowsScreen::topLevelWindowAt():" << point << result;
 
    return result;
 }
@@ -247,7 +248,8 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
 
       result = bw->window();
    }
-   qDebug() << __FUNCTION__ << screenPoint << " returns " << result;
+
+   qDebug() << "QWindowsScreen::windowAt():" << screenPoint << " Return =" << result;
    return result;
 }
 
@@ -412,8 +414,9 @@ bool QWindowsScreenManager::handleDisplayChange(WPARAM wParam, LPARAM lParam)
       m_lastDepth = newDepth;
       m_lastHorizontalResolution = newHorizontalResolution;
       m_lastVerticalResolution = newVerticalResolution;
-      qDebug() << __FUNCTION__ << "Depth=" << newDepth
-         << ", resolution " << newHorizontalResolution << 'x' << newVerticalResolution;
+
+      qDebug() << "QWindowsScreenManager::handleDisplayChange(): Depth =" << newDepth
+               << ", Resolution =" << newHorizontalResolution << 'x =' << newVerticalResolution;
       handleScreenChanges();
    }
 
@@ -465,7 +468,8 @@ static void moveToVirtualScreen(QWindow *w, const QScreen *newScreen)
 
 void QWindowsScreenManager::removeScreen(int index)
 {
-   qDebug() << "Removing Monitor:" << m_screens.at(index)->data();
+
+   qDebug() << "Removing Monitor =" << m_screens.at(index)->data();
    QScreen *screen = m_screens.at(index)->screen();
    QScreen *primaryScreen = QApplication::primaryScreen();
 

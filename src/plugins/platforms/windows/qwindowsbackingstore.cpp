@@ -121,11 +121,11 @@ void QWindowsBackingStore::resize(const QSize &size, const QRegion &region)
 
 #ifndef QT_NO_DEBUG_OUTPUT
       if (QWindowsContext::verbose) {
-         qDebug()
-               << __FUNCTION__ << ' ' << window() << ' ' << size << ' ' << region
+         qDebug() << __FUNCTION__ << ' ' << window() << ' ' << size << ' ' << region
                   << " from: " << (m_image.isNull() ? QSize() : m_image->image().size());
       }
 #endif
+
       QImage::Format format = window()->format().hasAlpha() ?
          QImage::Format_ARGB32_Premultiplied : QWindowsNativeImage::systemFormat();
 
