@@ -646,9 +646,12 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
       if (type & TRUETYPE_FONTTYPE) {
          str << " TRUETYPE";
       }
-      str << " scalable=" << scalable << " Size=" << size
-         << " Style=" << style << " Weight=" << weight
-         << " stretch=" << stretch;
+
+      str << "\n  "
+          << " Scalable =" << scalable << " Size =" << size
+          << " Style =" << style << " Weight =" << weight
+          << " Stretch =" << stretch;
+
       qDebug() << message;
    }
 #endif

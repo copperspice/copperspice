@@ -677,12 +677,12 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
    const QWindowCreationContextPtr context(new QWindowCreationContext(w, rect, data.customMargins, style, exStyle));
    QWindowsContext::instance()->setWindowCreationContext(context);
 
-   qDebug().nospace()
-         << "CreateWindowEx: " << w << " class=" << windowClassName << " title=" << title
-            << '\n' << *this << "\nrequested: " << rect << ": "
-            << context->frameWidth << 'x' <<  context->frameHeight
-            << '+' << context->frameX << '+' << context->frameY
-            << " custom margins: " << context->customMargins;
+   qDebug() << "WindowCreationData::create(): Window =" << w << "\n  "
+            << "Class =" << windowClassName << "Title =" << title << "\n  "
+            << "Requested Size =" << rect << " Size Created =" << context->frameWidth
+            << "x" << context->frameHeight
+            << "+" << context->frameX << "+" << context->frameY << "\n  "
+            << "Custom Margins =" << context->customMargins;
 
    result.hwnd = CreateWindowEx(exStyle, classNameUtf16, titleUtf16, style,
          context->frameX, context->frameY,
@@ -696,7 +696,7 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
 #endif
 
    if (! result.hwnd) {
-      qErrnoWarning("%s: CreateWindowEx failed", __FUNCTION__);
+      qErrnoWarning("WindowCreationData::create(): CreateWindowEx failed");
       return result;
    }
 

@@ -533,9 +533,11 @@ bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
       m_ownerWindow = 0;
    }
 
-   if (!modal && !supportsNonModalDialog(parent)) {
+   qDebug() << "QWindowsDialog::show():" << "Modal = " << modal << "\n  "
       << "Modal supported? " << supportsNonModalDialog(parent)
       << "Native = " << m_nativeDialog.data() << "Owner = " << m_ownerWindow;
+
+   if (! modal && !supportsNonModalDialog(parent)) {
       return false;   // Was it changed in-between?
    }
 

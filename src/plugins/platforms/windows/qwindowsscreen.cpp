@@ -160,21 +160,26 @@ static QDebug operator<<(QDebug dbg, const QWindowsScreenData &d)
 
    dbg << "Screen = \"" << d.name << "\" "
       << d.geometry.width() << 'x' << d.geometry.height() << '+' << d.geometry.x() << '+' << d.geometry.y()
-      << " avail: "
-      << d.availableGeometry.width() << 'x' << d.availableGeometry.height() << '+' << d.availableGeometry.x() << '+' <<
-      d.availableGeometry.y()
-      << " physical: " << d.physicalSizeMM.width() << 'x' << d.physicalSizeMM.height()
-      << " DPI: " << d.dpi.first << 'x' << d.dpi.second << " Depth: " << d.depth
-      << " Format: " << d.format;
+
+      << "\n  Avail = " << d.availableGeometry.width() << 'x' << d.availableGeometry.height() << '+'
+      << d.availableGeometry.x() << '+' << d.availableGeometry.y()
+
+      << " Physical = " << d.physicalSizeMM.width() << 'x' << d.physicalSizeMM.height()
+      << "\n  DPI = " << d.dpi.first << 'x' << d.dpi.second << " Depth = " << d.depth
+      << " Format = " << d.format << " Flags = ";
+
    if (d.flags & QWindowsScreenData::PrimaryScreen) {
-      dbg << " primary";
+      dbg << "primary ";
    }
+
    if (d.flags & QWindowsScreenData::VirtualDesktop) {
-      dbg << " virtual desktop";
+      dbg << "virtual desktop ";
    }
+
    if (d.flags & QWindowsScreenData::LockScreen) {
-      dbg << " lock screen";
+      dbg << "lock screen";
    }
+
    return dbg;
 }
 #endif // !QT_NO_DEBUG_STREAM
@@ -522,11 +527,12 @@ bool QWindowsScreenManager::handleScreenChanges()
       } else {
          QWindowsScreen *newScreen = new QWindowsScreen(newData);
          m_screens.push_back(newScreen);
-         QWindowsIntegration::instance()->emitScreenAdded(newScreen,
-            newData.flags & QWindowsScreenData::PrimaryScreen);
-         qDebug() << "New Monitor: " << newData;
-      }    // exists
-   }        // for new screens.
+
+         QWindowsIntegration::instance()->emitScreenAdded(newScreen, newData.flags & QWindowsScreenData::PrimaryScreen);
+
+         qDebug() << "New Monitor:" << newData;
+      }
+   }
 
    // Remove deleted ones but keep main monitors if we get only the
    // temporary lock screen to avoid window recreation

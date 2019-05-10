@@ -253,8 +253,9 @@ QWindowsOleDropSource::~QWindowsOleDropSource()
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QWindowsOleDropSource::CursorEntry &e)
 {
-   d << "CursorEntry:" << e.pixmap.size() << '#' << e.cacheKey
-      << "HCURSOR" << e.cursor->handle() << "hotspot:" << e.hotSpot;
+
+   d << "QWindowsOleDropSource: CursorEntry = " << e.pixmap.size() << '#' << e.cacheKey
+     << "HCURSOR =" << e.cursor->handle() << "Hotspot =" << e.hotSpot;
    return d;
 }
 #endif // !QT_NO_DEBUG_STREAM

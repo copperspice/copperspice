@@ -326,9 +326,8 @@ void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiA
       // Silence warning in that case unless debug is enabled.
 
       if (FAILED(hr) && (hr != E_ACCESSDENIED)) {
-         qWarning().noquote().nospace() << "SetProcessDpiAwareness("
-            << dpiAwareness << ") failed: " << QWindowsContext::comErrorString(hr)
-            << ", using " << QWindowsContext::processDpiAwareness();
+         qWarning() << " QWindowsContext::setProcessDpiAwareness(): Dpi = " << dpiAwareness << "\n  "
+            << "Failed = " << QWindowsContext::comErrorString(hr) << " Using = " << QWindowsContext::processDpiAwareness();
       }
 
    } else {
@@ -1247,8 +1246,8 @@ extern "C" LRESULT QT_WIN_CALLBACK qWindowsWndProc(HWND hwnd, UINT message, WPAR
 
    if (QWindowsContext::verbose > 1) {
       if (const char *eventName = QWindowsGuiEventDispatcher::windowsMessageName(message)) {
-         qDebug() << "EVENT: hwd=" << hwnd << eventName << hex << "msg=0x"  << message
-            << "et=0x" << et << dec << "wp=" << int(wParam) << "at"
+         qDebug() << "EVENT: hwd = " << hwnd << eventName << hex << "msg = 0x"  << message
+            << "et = x" << et << dec << " wp = " << int(wParam) << "at"
             << GET_X_LPARAM(lParam) << GET_Y_LPARAM(lParam) << "handled=" << handled;
       }
    }
