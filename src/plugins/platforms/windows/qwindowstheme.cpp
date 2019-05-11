@@ -498,7 +498,10 @@ void QWindowsTheme::refreshIconPixmapSizes()
    }
 #endif
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "refreshIconPixmapSizes(): " << sizes;
+#endif
+
    m_fileIconSizes = QVariant::fromValue(sizes);
 }
 

@@ -150,7 +150,6 @@ static inline WindowsScreenDataList monitorData()
    return result;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 static QDebug operator<<(QDebug dbg, const QWindowsScreenData &d)
 {
    QDebugStateSaver saver(dbg);
@@ -182,7 +181,6 @@ static QDebug operator<<(QDebug dbg, const QWindowsScreenData &d)
 
    return dbg;
 }
-#endif // !QT_NO_DEBUG_STREAM
 
 
 QWindowsScreen::QWindowsScreen(const QWindowsScreenData &data) :
@@ -239,7 +237,9 @@ QWindow *QWindowsScreen::topLevelWindowAt(const QPoint &point) const
       result = QWindowsWindow::topLevelOf(child);
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsScreen::topLevelWindowAt():" << point << result;
+#endif
 
    return result;
 }
@@ -254,7 +254,10 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
       result = bw->window();
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsScreen::windowAt():" << screenPoint << " Return =" << result;
+#endif
+
    return result;
 }
 
@@ -420,8 +423,11 @@ bool QWindowsScreenManager::handleDisplayChange(WPARAM wParam, LPARAM lParam)
       m_lastHorizontalResolution = newHorizontalResolution;
       m_lastVerticalResolution = newVerticalResolution;
 
+#if defined(CS_SHOW_DEBUG)
       qDebug() << "QWindowsScreenManager::handleDisplayChange(): Depth =" << newDepth
                << ", Resolution =" << newHorizontalResolution << 'x =' << newVerticalResolution;
+#endif
+
       handleScreenChanges();
    }
 
@@ -474,7 +480,10 @@ static void moveToVirtualScreen(QWindow *w, const QScreen *newScreen)
 void QWindowsScreenManager::removeScreen(int index)
 {
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "Removing Monitor =" << m_screens.at(index)->data();
+#endif
+
    QScreen *screen = m_screens.at(index)->screen();
    QScreen *primaryScreen = QApplication::primaryScreen();
 
@@ -530,7 +539,9 @@ bool QWindowsScreenManager::handleScreenChanges()
 
          QWindowsIntegration::instance()->emitScreenAdded(newScreen, newData.flags & QWindowsScreenData::PrimaryScreen);
 
+#if defined(CS_SHOW_DEBUG)
          qDebug() << "New Monitor:" << newData;
+#endif
       }
    }
 

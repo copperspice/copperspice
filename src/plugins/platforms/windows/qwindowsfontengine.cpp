@@ -237,7 +237,12 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
      rbearing(SHRT_MIN), x_height(-1), synthesized_flags(-1), lineWidth(-1),
      widthCache(0), widthCacheSize(0), designAdvances(0), designAdvancesSize(0)
 {
+
+#if defined(CS_SHOW_DEBUG)
+   // emerald - saw fontSize as negative, why?
    qDebug() << "QWindowsFontEngine():  FontName = " << name << " FontSize =" << lf.lfHeight;
+#endif
+
    hfont = CreateFontIndirect(&m_logfont);
    if (! hfont) {
       qErrnoWarning("QWindowsFontEngine(): CreateFontIndirect failed for family '%s'", csPrintable(name));

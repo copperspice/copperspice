@@ -117,7 +117,7 @@ void QWindowsBackingStore::resize(const QSize &size, const QRegion &region)
 {
    if (m_image.isNull() || m_image->image().size() != size) {
 
-#ifndef QT_NO_DEBUG_OUTPUT
+#if defined(CS_SHOW_DEBUG)
       if (QWindowsContext::verbose) {
          qDebug() << __FUNCTION__ << ' ' << window() << ' ' << size << ' ' << region
                   << " from: " << (m_image.isNull() ? QSize() : m_image->image().size());

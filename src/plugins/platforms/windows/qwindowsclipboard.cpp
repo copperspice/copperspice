@@ -38,7 +38,7 @@
 
 #include <qwindowsguieventdispatcher_p.h>
 
-#ifndef QT_NO_DEBUG_STREAM
+#if defined(CS_SHOW_DEBUG)
 
 static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 {
@@ -166,8 +166,11 @@ void QWindowsClipboard::registerViewer()
       m_nextClipboardViewer = SetClipboardViewer(m_clipboardViewer);
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsClipboard::registerViewer():"
       << "Format listener =" << m_formatListenerRegistered << " Next =" << m_nextClipboardViewer;
+#endif
+
 }
 
 void QWindowsClipboard::unregisterViewer()

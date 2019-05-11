@@ -132,7 +132,6 @@ static inline RECT RECTfromQRect(const QRect &rect)
    return result;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const RECT &r)
 {
    QDebugStateSaver saver(d);
@@ -173,12 +172,12 @@ QDebug operator<<(QDebug d, const WINDOWPLACEMENT &wp)
 {
    QDebugStateSaver saver(d);
    d.nospace();
+
    d <<  "WINDOWPLACEMENT(flags=0x" << hex << wp.flags << dec << ", showCmd="
       << wp.showCmd << ", ptMinPosition=" << wp.ptMinPosition << ", ptMaxPosition=" << wp.ptMaxPosition
       << ", rcNormalPosition=" << wp.rcNormalPosition;
    return d;
 }
-#endif // !QT_NO_DEBUG_STREAM
 
 // QTBUG-43872, for windows that do not have WS_EX_TOOLWINDOW set, WINDOWPLACEMENT
 // is in workspace/available area coordinates.
@@ -677,12 +676,14 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
    const QWindowCreationContextPtr context(new QWindowCreationContext(w, rect, data.customMargins, style, exStyle));
    QWindowsContext::instance()->setWindowCreationContext(context);
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "WindowCreationData::create(): Window =" << w << "\n  "
             << "Class =" << windowClassName << "Title =" << title << "\n  "
             << "Requested Size =" << rect << " Size Created =" << context->frameWidth
             << "x" << context->frameHeight
             << "+" << context->frameX << "+" << context->frameY << "\n  "
             << "Custom Margins =" << context->customMargins;
+#endif
 
    result.hwnd = CreateWindowEx(exStyle, classNameUtf16, titleUtf16, style,
          context->frameX, context->frameY,
@@ -724,9 +725,11 @@ void WindowCreationData::applyWindowFlags(HWND hwnd) const
       SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "WindowCreationData::applyWindowFlags(): Handle =" << hwnd << *this << "\n  "
       << "Style from =" << debugWinStyle(oldStyle) << " To =" << debugWinStyle(newStyle) << "\n  "
       << "ExStyle from =" << debugWinExStyle(oldExStyle) << " To =" << debugWinExStyle(newExStyle);
+#endif
 }
 
 void WindowCreationData::initialize(const QWindow *w, HWND hwnd, bool frameChange, qreal opacityLevel) const
@@ -821,8 +824,11 @@ QMargins QWindowsGeometryHint::frame(DWORD style, DWORD exStyle)
 
    const QMargins result(qAbs(rect.left), qAbs(rect.top), qAbs(rect.right), qAbs(rect.bottom));
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsGeometryHint::frame(): Style =" << showbase << hex << style << "\n  "
       << "ExStyle =" << exStyle << dec << noshowbase << " Rect =" << rect << " Result =" << result;
+#endif
+
    return result;
 }
 
@@ -906,12 +912,14 @@ QWindowCreationContext::QWindowCreationContext(const QWindow *w, const QRect &ge
       }
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowCreationContext():  Window =" << w << "\n  "
             << "Geometry =" << geometry << " Pos including frame =" << QWindowsGeometryHint::positionIncludesFrame(w)
             << " Frame =" << frameWidth << 'x' << frameHeight << '+'
             << frameX << '+' << frameY << "\n  "
             << "Min =" << geometryHint.minimumSize << " Max =" << geometryHint.maximumSize
             << " Custom Margins =" << customMargins;
+#endif
 }
 
 QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
@@ -1113,7 +1121,11 @@ QWindowsWindowData QWindowsWindowData::create(const QWindow *w,
 void QWindowsWindow::setVisible(bool visible)
 {
    const QWindow *win = window();
+
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsWindow::setVisible(): Window =" << this << win << m_data.hwnd << visible;
+#endif
+
    if (m_data.hwnd) {
       if (visible) {
          show_sys();
@@ -1478,8 +1490,10 @@ void QWindowsWindow::handleGeometryChange()
       QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ExcludeUserInputEvents);
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsWindow::handleGeometryChange(): Window =" << window() << "\n  "
             << "Geometry =" << m_data.geometry;
+#endif
 }
 
 void QWindowsWindow::setGeometry_sys(const QRect &rect) const
@@ -1487,9 +1501,11 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
    const QMargins margins = frameMargins();
    const QRect frameGeometry = rect + margins;
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsWindow::setGeometry_sys(): Window =" << window() << "\n  "
       << "From =" << geometry_sys() << "Frame =" << margins << " To =" << rect << "\n  "
       << "New frame =" << frameGeometry;
+#endif
 
    bool result = false;
 

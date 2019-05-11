@@ -250,15 +250,16 @@ QWindowsOleDropSource::~QWindowsOleDropSource()
    delete m_touchDragWindow;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QWindowsOleDropSource::CursorEntry &e)
 {
 
+#if defined(CS_SHOW_DEBUG)
    d << "QWindowsOleDropSource: CursorEntry = " << e.pixmap.size() << '#' << e.cacheKey
      << "HCURSOR =" << e.cursor->handle() << "Hotspot =" << e.hotSpot;
+#endif
+
    return d;
 }
-#endif // !QT_NO_DEBUG_STREAM
 
 
 void QWindowsOleDropSource::createCursors()
@@ -353,7 +354,7 @@ void QWindowsOleDropSource::createCursors()
       }
    }
 
-#ifndef QT_NO_DEBUG_OUTPUT
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsOleDropSource::createCursors(): Pixmap =" << pixmap.size() << m_cursors.size() << "\n  "
             << "Cursors =" << m_cursors;
 #endif
