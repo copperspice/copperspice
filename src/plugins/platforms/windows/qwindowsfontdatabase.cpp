@@ -715,10 +715,15 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
    return true;
 }
 
+static bool storeFont_callback = false;
+
 static int QT_WIN_CALLBACK storeFont(const LOGFONT *logFont, const TEXTMETRIC *textmetric,
    DWORD type, LPARAM lParam)
 {
-   const ENUMLOGFONTEX *f = reinterpret_cast<const ENUMLOGFONTEX *>(logFont);
+   storeFont_callback = true;
+
+   const ENUMLOGFONTEX *f   = reinterpret_cast<const ENUMLOGFONTEX *>(logFont);
+
    const QString familyName = QString::fromStdWString(std::wstring(f->elfLogFont.lfFaceName));
    const uchar charSet      = f->elfLogFont.lfCharSet;
    const bool registerAlias = bool(lParam);
@@ -844,8 +849,6 @@ void QWindowsFontDatabase::populateFontDatabase()
 }
 
 typedef QSharedPointer<QWindowsFontEngineData> QWindowsFontEngineDataPtr;
-
-#ifndef QT_NO_THREAD
 typedef QThreadStorage<QWindowsFontEngineDataPtr> FontEngineThreadLocalData;
 
 Q_GLOBAL_STATIC(FontEngineThreadLocalData, fontEngineThreadLocalData)
@@ -856,20 +859,9 @@ QSharedPointer<QWindowsFontEngineData> sharedFontData()
    if (!data->hasLocalData()) {
       data->setLocalData(QSharedPointer<QWindowsFontEngineData>(new QWindowsFontEngineData));
    }
+
    return data->localData();
 }
-#else // !QT_NO_THREAD
-Q_GLOBAL_STATIC(QWindowsFontEngineDataPtr, fontEngineData)
-
-QWindowsFontEngineDataPtr sharedFontData()
-{
-   QWindowsFontEngineDataPtr *data = fontEngineData();
-   if (data->isNull()) {
-      *data = QWindowsFontEngineDataPtr(new QWindowsFontEngineData);
-   }
-   return *data;
-}
-#endif // QT_NO_THREAD
 
 extern Q_GUI_EXPORT bool qt_needs_a8_gamma_correction;
 
