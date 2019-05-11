@@ -1392,7 +1392,7 @@ LOGFONT QWindowsFontDatabase::fontDefToLOGFONT(const QFontDef &request)
    }
 
    std::wstring tmp = fam.toStdWString();
-   memcpy(lf.lfFaceName, tmp.data(), tmp.size() * sizeof(wchar_t));
+   memcpy(lf.lfFaceName, tmp.c_str(), tmp.size() * sizeof(wchar_t));
 
    return lf;
 }

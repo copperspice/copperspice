@@ -245,8 +245,7 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
    if (msg.message == WM_MOUSELEAVE) {
 
       // When moving out of a window, WM_MOUSEMOVE within the moved-to window is received first,
-      // so if m_trackedWindow is not the window here, it means the cursor has left the
-      // application.
+      // so if m_trackedWindow is not the window here, it means the cursor has left the application.
       if (window == m_trackedWindow) {
          QWindow *leaveTarget = m_windowUnderMouse ? m_windowUnderMouse : m_trackedWindow;
          QWindowSystemInterface::handleLeaveEvent(leaveTarget);

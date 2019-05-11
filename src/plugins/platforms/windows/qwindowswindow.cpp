@@ -690,10 +690,10 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
          context->frameWidth, context->frameHeight,
          parentHandle, NULL, appinst, NULL);
 
-#if defined(Q_OS_WINCE) && defined(QT_TOUCH_FROM_GESTURE)
-   if (DisableGestures(result.hwnd, TGF_GID_ALL, TGF_SCOPE_WINDOW)) {
-      EnableGestures(result.hwnd, TGF_GID_DIRECTMANIPULATION, TGF_SCOPE_WINDOW);
-   }
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "WindowCreationData::create(): Returns =" << w  << "\n  "
+            << "Handle =" << result.hwnd << "\n  "
+            << "Obtained geometry =" << context->obtainedGeometry << " Margins =" << context->margins;
 #endif
 
    if (! result.hwnd) {
@@ -876,8 +876,7 @@ void QWindowsGeometryHint::applyToMinMaxInfo(DWORD style, DWORD exStyle, MINMAXI
    const int maximumHeight = qMax(maximumSize.height(), minimumSize.height());
    if (maximumWidth < QWINDOWSIZE_MAX) {
       mmi->ptMaxTrackSize.x = maximumWidth + frameWidth;
-   }
-   if (maximumHeight < QWINDOWSIZE_MAX) {
+   }   if (maximumHeight < QWINDOWSIZE_MAX) {
       mmi->ptMaxTrackSize.y = maximumHeight + frameHeight;
    }
 }
@@ -944,7 +943,8 @@ QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
          setFlag(OpenGL_ES2);
       }
    }
-#endif // QT_NO_OPENGL
+#endif
+
    updateDropSite(window()->isTopLevel());
 
    registerTouchWindow();
@@ -1139,7 +1139,7 @@ void QWindowsWindow::setVisible(bool visible)
          // QTBUG-44928, QTBUG-7386: This is to resolve the problem where popups are
          // opened from the system tray and not being implicitly activated
 
-         if (win->type() == Qt::Popup && !win->parent() && !QGuiApplication::focusWindow()) {
+         if (win->type() == Qt::Popup && !win->parent() && !QApplication::focusWindow()) {
             SetForegroundWindow(m_data.hwnd);
          }
       } else {
@@ -1403,10 +1403,10 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
       m_data.geometry = rect;   // Otherwise set by handleGeometryChange() triggered by event.
    }
    if (m_data.hwnd) {
-      // A ResizeEvent with resulting geometry will be sent. If we cannot
-      // achieve that size (for example, window title minimal constraint),
-      // notify and warn.
+      // a ResizeEvent with resulting geometry will be sent. If we cannot
+      // achieve that size (for example, window title minimal constraint) notify and warn.
       setGeometry_sys(rect);
+
       if (m_data.geometry != rect) {
          qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d on %s/'%s'."
             " Resulting geometry = %dx%d+%d+%d "
@@ -1423,6 +1423,7 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
             window()->minimumWidth(), window()->minimumHeight(),
             window()->maximumWidth(), window()->maximumHeight());
       }
+
    } else {
       QPlatformWindow::setGeometry(rect);
    }
@@ -1462,10 +1463,11 @@ void QWindowsWindow::handleResized(int wParam)
 
 void QWindowsWindow::handleGeometryChange()
 {
-   //Prevent recursive resizes for Windows CE
+   // Prevent recursive resizes for Windows CE
    if (testFlag(WithinSetStyle)) {
       return;
    }
+
    const QRect previousGeometry = m_data.geometry;
    m_data.geometry = geometry_sys();
    QPlatformWindow::setGeometry(m_data.geometry);
@@ -1486,6 +1488,7 @@ void QWindowsWindow::handleGeometryChange()
          QWindowSystemInterface::handleWindowScreenChanged(window(), newScreen->screen());
       }
    }
+
    if (testFlag(SynchronousGeometryChangeEvent)) {
       QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ExcludeUserInputEvents);
    }
@@ -1888,13 +1891,16 @@ void QWindowsWindow::propagateSizeHints()
 
 bool QWindowsWindow::handleGeometryChangingMessage(MSG *message, const QWindow *qWindow, const QMargins &margins)
 {
-   if (!qWindow->isTopLevel()) { // Implement hasHeightForWidth().
+   if (!qWindow->isTopLevel()) {
+      // Implement hasHeightForWidth().
       return false;
    }
+
    WINDOWPOS *windowPos = reinterpret_cast<WINDOWPOS *>(message->lParam);
    if ((windowPos->flags & (SWP_NOCOPYBITS | SWP_NOSIZE))) {
       return false;
    }
+
    const QRect suggestedFrameGeometry(windowPos->x, windowPos->y,
       windowPos->cx, windowPos->cy);
    const QRect suggestedGeometry = suggestedFrameGeometry - margins;
@@ -2109,7 +2115,7 @@ void QWindowsWindow::getSizeHints(MINMAXINFO *mmi) const
       const QScreen *screen = window()->screen();
 
       // Documentation of MINMAXINFO states that it will only work for the primary screen
-      if (screen && screen == QGuiApplication::primaryScreen()) {
+      if (screen && screen == QApplication::primaryScreen()) {
          const QRect availableGeometry = QHighDpi::toNativePixels(screen->availableGeometry(), screen);
          mmi->ptMaxSize.y = availableGeometry.height();
 

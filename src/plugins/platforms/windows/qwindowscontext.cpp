@@ -322,7 +322,7 @@ void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiA
 
    if (QWindowsContext::shcoredll.isValid()) {
       const HRESULT hr = QWindowsContext::shcoredll.setProcessDpiAwareness(dpiAwareness);
-      // E_ACCESSDENIED means set externally (MSVC manifest or external app loading Qt plugin).
+      // E_ACCESSDENIED means set externally (MSVC manifest or external app loading plugin).
       // Silence warning in that case unless debug is enabled.
 
       if (FAILED(hr) && (hr != E_ACCESSDENIED)) {

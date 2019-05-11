@@ -1765,7 +1765,8 @@ void QWindowsFileDialogHelper::selectFile(const QUrl &fileName)
 {
    qDebug() << "QWindowsFileDialog::setDirectory(): FileName = " << fileName.toString();
 
-   if (hasNativeDialog()) { // Might be invoked from the QFileDialog constructor.
+   if (hasNativeDialog()) {
+      // Might be invoked from the QFileDialog constructor.
       nativeFileDialog()->selectFile(fileName.toLocalFile());   // ## should use QUrl::fileName() once it exists
    }
 }
