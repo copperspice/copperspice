@@ -250,10 +250,10 @@ void QRasterPaintEngine::init()
    // The antialiasing raster.
    d->grayRaster.reset(new QT_FT_Raster);
    Q_CHECK_PTR(d->grayRaster.data());
-   if (qt_ft_grays_raster.raster_new(d->grayRaster.data())) {
-      QT_THROW(std::bad_alloc());   // an error creating the raster is caused by a bad malloc
-   }
 
+   if (qt_ft_grays_raster.raster_new(d->grayRaster.data())) {
+      throw(std::bad_alloc());   // an error creating the raster is caused by a bad malloc
+   }
 
    d->rasterizer.reset(new QRasterizer);
    d->rasterBuffer.reset(new QRasterBuffer());
@@ -285,7 +285,7 @@ void QRasterPaintEngine::init()
 
    switch (d->device->devType()) {
       case QInternal::Pixmap:
-         qWarning("QRasterPaintEngine: unsupported for pixmaps...");
+         qWarning("QRasterPaintEngine: unsupported for pixmaps");
          break;
 
       case QInternal::Image:
@@ -2011,7 +2011,7 @@ static inline const QRect toAlignedRect_positive(const QRectF &rect)
 void QRasterPaintEngine::drawImage(const QPointF &p, const QImage &img)
 {
 #ifdef QT_DEBUG_DRAW
-   qDebug() << " - QRasterPaintEngine::drawImage(), p=" <<  p << " image=" << img.size() << "depth=" << img.depth();
+   qDebug() << "QRasterPaintEngine::drawImage(): P =" <<  p << " Image =" << img.size() << " Depth=" << img.depth();
 #endif
 
    Q_D(QRasterPaintEngine);
@@ -2111,8 +2111,8 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
    Qt::ImageConversionFlags)
 {
 #ifdef QT_DEBUG_DRAW
-   qDebug() << " - QRasterPaintEngine::drawImage(), r=" << r << " sr=" << sr << " image=" << img.size() << "depth=" <<
-      img.depth();
+   qDebug() << " - QRasterPaintEngine::drawImage(), r=" << r << " sr=" << sr << " image="
+            << img.size() << "depth=" << img.depth();
 #endif
 
    if (r.isEmpty()) {

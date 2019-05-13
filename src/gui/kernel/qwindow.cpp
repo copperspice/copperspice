@@ -2455,6 +2455,7 @@ void QWindowPrivate::setCursor(const QCursor *newCursor)
       cursor = QCursor(Qt::ArrowCursor);
       hasCursor = false;
    }
+
    // Only attempt to emit signal if there is an actual platform cursor
    if (applyCursor()) {
       QEvent event(QEvent::CursorChange);
@@ -2472,10 +2473,12 @@ bool QWindowPrivate::applyCursor()
          if (!platformWindow) {
             return true;
          }
+
          QCursor *c = QGuiApplication::overrideCursor();
          if (!c && hasCursor) {
             c = &cursor;
          }
+
          platformCursor->changeCursor(c, q);
          return true;
       }
@@ -2493,7 +2496,7 @@ QDebug operator<<(QDebug debug, const QWindow *window)
       debug << window->metaObject()->className() << '(' << (const void *)window;
 
       if (! window->objectName().isEmpty()) {
-         debug << ", name=" << window->objectName();
+         debug << ", Name = " << window->objectName();
       }
 
       if (debug.verbosity() > 2) {
@@ -2506,29 +2509,31 @@ QDebug operator<<(QDebug debug, const QWindow *window)
          if (window->isExposed()) {
             debug << ", exposed";
          }
-         debug << ", state=" << window->windowState()
-            << ", type=" << window->type() << ", flags=" << window->flags()
-            << ", surface type=" << window->surfaceType();
+         debug << ", State = " << window->windowState()
+               << ", Type = " << window->type() << ", Flags =" << window->flags()
+               << ", Surface Type = " << window->surfaceType();
 
          if (window->isTopLevel()) {
             debug << ", toplevel";
          }
+
          debug << ", " << geometry.width() << 'x' << geometry.height()
             << forcesign << geometry.x() << geometry.y() << noforcesign;
+
          const QMargins margins = window->frameMargins();
 
-         if (!margins.isNull()) {
-            debug << ", margins=" << margins;
+         if (! margins.isNull()) {
+            debug << ", Margins = " << margins;
          }
 
-         debug << ", devicePixelRatio=" << window->devicePixelRatio();
+         debug << ", DP Ratio = " << window->devicePixelRatio();
 
          if (const QPlatformWindow *platformWindow = window->handle()) {
-            debug << ", winId=0x" << hex << platformWindow->winId() << dec;
+            debug << ", winId = 0x" << hex << platformWindow->winId() << dec;
          }
 
          if (const QScreen *screen = window->screen()) {
-            debug << ", on " << screen->name();
+            debug << ", On = " << screen->name();
          }
       }
 

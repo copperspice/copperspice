@@ -45,7 +45,7 @@ static inline qreal initialGlobalScaleFactor()
 
       const qreal f = env_1.toDouble(&ok);
       if (ok && f > 0) {
-         qDebug() << "Apply " << scaleFactorEnvVar << f;
+         qDebug() << "initialGlobalScaleFactor(): Apply =" << scaleFactorEnvVar << f;
          result = f;
       }
 

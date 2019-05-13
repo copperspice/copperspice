@@ -907,6 +907,7 @@ QDebug operator<<(QDebug dbg, const QPageLayout &layout)
 
    if (layout.isValid()) {
       const QMarginsF margins = layout.margins();
+
       dbg << '"' << layout.pageSize().name() << "\", "
          << (layout.orientation() == QPageLayout::Portrait ? "Portrait" : "Landscape")
          << ", l:" << margins.left() << " r:" << margins.right() << " t:"
@@ -916,24 +917,35 @@ QDebug operator<<(QDebug dbg, const QPageLayout &layout)
          case QPageSize::Unit::Millimeter:
             dbg << "mm";
             break;
+
          case QPageSize::Unit::Point:
             dbg << "pt";
             break;
+
          case QPageSize::Unit::Inch:
             dbg << "in";
             break;
+
          case QPageSize::Unit::Pica:
             dbg << "pc";
             break;
+
          case QPageSize::Unit::Didot:
             dbg << "DD";
             break;
+
          case QPageSize::Unit::Cicero:
             dbg << "CC";
             break;
+
+         default:
+            dbg << "Unknown";
+            break;
       }
    }
+
    dbg << ')';
+
    return dbg;
 }
 

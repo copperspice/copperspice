@@ -55,18 +55,20 @@ void QBackingStore::flush(const QRegion &region, QWindow *win, const QPoint &off
       win = window();
    }
 
-   if (!win->handle()) {
-      qWarning() << "QBackingStore::flush() called for "
-         << win << " which does not have a handle.";
+   if (! win->handle()) {
+#if defined(CS_SHOW_DEBUG)
+      qWarning() << "QBackingStore::flush(): Called for "
+                 << win << " which does not have a handle.";
+#endif
       return;
    }
 
-#ifdef QBACKINGSTORE_DEBUG
-   if (win && win->isTopLevel() && !qt_window_private(win)->receivedExpose) {
-      qWarning().nospace() << "QBackingStore::flush() called with non-exposed window "
-         << win << ", behavior is undefined";
-   }
+   if (win && win->isTopLevel() && ! qt_window_private(win)->receivedExpose) {
+#if defined(CS_SHOW_DEBUG)
+      qWarning() << "QBackingStore::flush():  Called with non-exposed window "
+                 << win << ", behavior is undefined";
 #endif
+   }
 
    d_ptr->platformBackingStore->flush(win, QHighDpi::toNativeLocalRegion(region, win),
       QHighDpi::toNativeLocalPosition(offset, win));
@@ -118,22 +120,29 @@ void QBackingStore::beginPaint(const QRegion &region)
    QPaintDevice *device = d_ptr->platformBackingStore->paintDevice();
    if (QHighDpiScaling::isActive() && device->devType() == QInternal::Image) {
       QImage *source = static_cast<QImage *>(device);
+
       const bool needsNewImage = d_ptr->highDpiBackingstore.isNull()
          || source->data_ptr() != d_ptr->highDpiBackingstore->data_ptr()
          || source->size() != d_ptr->highDpiBackingstore->size()
          || source->devicePixelRatio() != d_ptr->highDpiBackingstore->devicePixelRatio();
 
       if (needsNewImage) {
-         qDebug() << "QBackingStore::beginPaint new backingstore for" << d_ptr->window;
-         qDebug() << "  source size" << source->size() << "dpr" << source->devicePixelRatio();
+
+#if defined(CS_SHOW_DEBUG)
+         qDebug() << "QBackingStore::beginPaint(): " << d_ptr->window << "\n  "
+                  << "Source size =" << source->size() << " DP ratio =" << source->devicePixelRatio();
+#endif
 
          d_ptr->highDpiBackingstore.reset(
             new QImage(source->bits(), source->width(), source->height(), source->bytesPerLine(), source->format()));
 
          qreal targetDevicePixelRatio = d_ptr->window->devicePixelRatio();
          d_ptr->highDpiBackingstore->setDevicePixelRatio(targetDevicePixelRatio);
-         qDebug() << "  destination size" << d_ptr->highDpiBackingstore->size()
-            << "dpr" << targetDevicePixelRatio;
+
+#if defined(CS_SHOW_DEBUG)
+         qDebug() << "   Destination Size =" << d_ptr->highDpiBackingstore->size()
+                  << "DP ratio = " << targetDevicePixelRatio;
+#endif
       }
    }
 }
