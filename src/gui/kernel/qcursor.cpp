@@ -275,7 +275,6 @@ QCursor &QCursor::operator=(const QCursor &c)
 }
 
 
-
 QCursor::operator QVariant() const
 {
    return QVariant(QVariant::Cursor, this);
@@ -285,6 +284,7 @@ QDebug operator<<(QDebug dbg, const QCursor &c)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace() << "QCursor(Qt::CursorShape(" << c.shape() << "))";
+
    return dbg;
 }
 

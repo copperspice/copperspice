@@ -114,9 +114,11 @@ class QInputDialogSpinBox : public QSpinBox
 
    void keyPressEvent(QKeyEvent *event) override {
       if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && ! hasAcceptableInput()) {
+
 #ifndef QT_NO_PROPERTIES
          setProperty("value", property("value"));
 #endif
+
       } else {
          QSpinBox::keyPressEvent(event);
       }
@@ -269,7 +271,7 @@ void QInputDialogPrivate::ensureLineEdit()
 {
    Q_Q(QInputDialog);
 
-   if (!lineEdit) {
+   if (! lineEdit) {
       lineEdit = new QLineEdit(q);
 
 #ifndef QT_NO_IM
@@ -283,7 +285,7 @@ void QInputDialogPrivate::ensurePlainTextEdit()
 {
    Q_Q(QInputDialog);
 
-   if (!plainTextEdit) {
+   if (! plainTextEdit) {
       plainTextEdit = new QPlainTextEdit(q);
       plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
 
@@ -299,11 +301,14 @@ void QInputDialogPrivate::ensurePlainTextEdit()
 void QInputDialogPrivate::ensureComboBox()
 {
    Q_Q(QInputDialog);
-   if (!comboBox) {
+
+   if (! comboBox) {
       comboBox = new QComboBox(q);
+
 #ifndef QT_NO_IM
       qt_widget_private(comboBox)->inheritsInputMethodHints = 1;
 #endif
+
       comboBox->hide();
       QObject::connect(comboBox, SIGNAL(editTextChanged(QString)), q, SLOT(_q_textChanged(QString)));
       QObject::connect(comboBox, SIGNAL(currentIndexChanged(QString)), q, SLOT(_q_textChanged(QString)));
@@ -313,7 +318,8 @@ void QInputDialogPrivate::ensureComboBox()
 void QInputDialogPrivate::ensureListView()
 {
    Q_Q(QInputDialog);
-   if (!listView) {
+
+   if (! listView) {
       ensureComboBox();
 
       listView = new QListView(q);
@@ -331,6 +337,7 @@ void QInputDialogPrivate::ensureListView()
 void QInputDialogPrivate::ensureIntSpinBox()
 {
    Q_Q(QInputDialog);
+
    if (!intSpinBox) {
       intSpinBox = new QInputDialogSpinBox(q);
       intSpinBox->hide();

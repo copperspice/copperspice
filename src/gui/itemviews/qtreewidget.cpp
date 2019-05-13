@@ -1901,7 +1901,6 @@ void QTreeWidgetPrivate::_q_dataChanged(const QModelIndex &topLeft,
    }
 }
 
-
 QTreeWidget::QTreeWidget(QWidget *parent)
    : QTreeView(*new QTreeWidgetPrivate(), parent)
 {
@@ -1931,29 +1930,15 @@ QTreeWidget::QTreeWidget(QWidget *parent)
    header()->setSectionsClickable(false);
 }
 
-/*!
-    Destroys the tree widget and all its items.
-*/
-
 QTreeWidget::~QTreeWidget()
 {
 }
-
-/*
-  Retuns the number of header columns in the view.
-
-  \sa sortColumn(), currentColumn(), topLevelItemCount()
-*/
 
 int QTreeWidget::columnCount() const
 {
    Q_D(const QTreeWidget);
    return d->model->columnCount();
 }
-
-/*
-  Sets the number of header \a columns in the tree widget.
-*/
 
 void QTreeWidget::setColumnCount(int columns)
 {
@@ -1964,44 +1949,17 @@ void QTreeWidget::setColumnCount(int columns)
    d->treeModel()->setColumnCount(columns);
 }
 
-/*!
-  \since 4.2
-
-  Returns the tree widget's invisible root item.
-
-  The invisible root item provides access to the tree widget's top-level items
-  through the QTreeWidgetItem API, making it possible to write functions that
-  can treat top-level items and their children in a uniform way; for example,
-  recursive functions.
-*/
-
 QTreeWidgetItem *QTreeWidget::invisibleRootItem() const
 {
    Q_D(const QTreeWidget);
    return d->treeModel()->rootItem;
 }
 
-/*!
-  Returns the top level item at the given \a index, or 0 if the item does
-  not exist.
-
-  \sa topLevelItemCount(), insertTopLevelItem()
-*/
-
 QTreeWidgetItem *QTreeWidget::topLevelItem(int index) const
 {
    Q_D(const QTreeWidget);
    return d->treeModel()->rootItem->child(index);
 }
-
-/*!
-    \property QTreeWidget::topLevelItemCount
-    \brief the number of top-level items
-
-    By default, this property has a value of 0.
-
-    \sa columnCount(), currentItem()
-*/
 
 int QTreeWidget::topLevelItemCount() const
 {
@@ -2025,7 +1983,6 @@ QTreeWidgetItem *QTreeWidget::takeTopLevelItem(int index)
    Q_D(QTreeWidget);
    return d->treeModel()->rootItem->takeChild(index);
 }
-
 
 int QTreeWidget::indexOfTopLevelItem(QTreeWidgetItem *item) const
 {

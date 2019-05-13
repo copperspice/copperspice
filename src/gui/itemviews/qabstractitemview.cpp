@@ -296,15 +296,14 @@ void QAbstractItemView::setModel(QAbstractItemModel *model)
 
    d->model = (model ? model : QAbstractItemModelPrivate::staticEmptyModel());
 
-   // These asserts do basic sanity checking of the model
+   // sserts do basic sanity checking of the model
    Q_ASSERT_X(d->model->index(0, 0) == d->model->index(0, 0),
       "QAbstractItemView::setModel",
       "A model should return the exact same index "
       "(including its internal id/pointer) when asked for it twice in a row.");
 
    Q_ASSERT_X(! d->model->index(0, 0).parent().isValid(),
-      "QAbstractItemView::setModel",
-      "The parent of a top level index should be invalid");
+      "QAbstractItemView::setModel", "The parent of a top level index should be invalid");
 
    if (d->model != QAbstractItemModelPrivate::staticEmptyModel()) {
       connect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
@@ -353,29 +352,12 @@ void QAbstractItemView::setModel(QAbstractItemModel *model)
    reset(); // kill editors, set new root and do layout
 }
 
-/*!
-    Returns the model that this view is presenting.
-*/
 QAbstractItemModel *QAbstractItemView::model() const
 {
    Q_D(const QAbstractItemView);
    return (d->model == QAbstractItemModelPrivate::staticEmptyModel() ? 0 : d->model);
 }
 
-/*!
-    Sets the current selection model to the given \a selectionModel.
-
-    Note that, if you call setModel() after this function, the given \a selectionModel
-    will be replaced by one created by the view.
-
-    \note It is up to the application to delete the old selection model if it is no
-    longer needed; i.e., if it is not being used by other views. This will happen
-    automatically when its parent object is deleted. However, if it does not have a
-    parent, or if the parent is a long-lived object, it may be preferable to call its
-    deleteLater() function to explicitly delete it.
-
-    \sa selectionModel(), setModel(), clearSelection()
-*/
 void QAbstractItemView::setSelectionModel(QItemSelectionModel *selectionModel)
 {
    // ### if the given model is null, we should use the original selection model
@@ -385,8 +367,7 @@ void QAbstractItemView::setSelectionModel(QItemSelectionModel *selectionModel)
 
    if (selectionModel->model() != d->model) {
       qWarning("QAbstractItemView::setSelectionModel() failed: "
-         "Trying to set a selection model, which works on "
-         "a different model than the view.");
+         "Trying to set a selection model, which works on a different model than the view.");
       return;
    }
 
@@ -470,7 +451,7 @@ QVariant QAbstractItemView::inputMethodQuery(Qt::InputMethodQuery query) const
 {
    const QModelIndex current = currentIndex();
 
-   if (!current.isValid() || query != Qt::ImCursorRectangle) {
+   if (! current.isValid() || query != Qt::ImCursorRectangle) {
       return QAbstractScrollArea::inputMethodQuery(query);
    }
 
@@ -1087,14 +1068,6 @@ bool QAbstractItemView::event(QEvent *event)
    return QAbstractScrollArea::event(event);
 }
 
-/*!
-    \fn bool QAbstractItemView::viewportEvent(QEvent *event)
-
-    This function is used to handle tool tips, and What's
-    This? mode, if the given \a event is a QEvent::ToolTip,or a
-    QEvent::WhatsThis. It passes all other
-    events on to its base class viewportEvent() handler.
-*/
 bool QAbstractItemView::viewportEvent(QEvent *event)
 {
    Q_D(QAbstractItemView);
@@ -1153,8 +1126,10 @@ bool QAbstractItemView::viewportEvent(QEvent *event)
       case QEvent::WindowDeactivate:
          d->viewport->update();
          break;
+
       case QEvent::ScrollPrepare:
          executeDelayedItemsLayout();
+
 #ifndef QT_NO_GESTURES
          connect(QScroller::scroller(d->viewport), SIGNAL(stateChanged(QScroller::State)), this, SLOT(_q_scrollerStateChanged()),
             Qt::UniqueConnection);
@@ -1172,7 +1147,7 @@ void QAbstractItemView::mousePressEvent(QMouseEvent *event)
 {
    Q_D(QAbstractItemView);
 
-   d->delayedAutoScroll.stop(); //any interaction with the view cancel the auto scrolling
+   d->delayedAutoScroll.stop();                   // any interaction with the view cancel the auto scrolling
    QPoint pos = event->pos();
    QPersistentModelIndex index = indexAt(pos);
 
@@ -2834,14 +2809,6 @@ void QAbstractItemView::dataChanged(const QModelIndex &topLeft, const QModelInde
    d->updateGeometry();
 }
 
-/*!
-    This slot is called when rows are inserted. The new rows are those
-    under the given \a parent from \a start to \a end inclusive. The
-    base class implementation calls fetchMore() on the model to check
-    for more data.
-
-    \sa rowsAboutToBeRemoved()
-*/
 void QAbstractItemView::rowsInserted(const QModelIndex &, int, int)
 {
    if (!isVisible()) {
@@ -2851,12 +2818,6 @@ void QAbstractItemView::rowsInserted(const QModelIndex &, int, int)
    }
 }
 
-/*!
-    This slot is called when rows are about to be removed. The deleted rows are
-    those under the given \a parent from \a start to \a end inclusive.
-
-    \sa rowsInserted()
-*/
 void QAbstractItemView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QAbstractItemView);

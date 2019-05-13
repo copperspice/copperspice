@@ -49,10 +49,9 @@ class QBackingStorePrivate
    QSize size;
 };
 
-
 void QBackingStore::flush(const QRegion &region, QWindow *win, const QPoint &offset)
 {
-   if (!win) {
+   if (! win) {
       win = window();
    }
 
@@ -73,11 +72,6 @@ void QBackingStore::flush(const QRegion &region, QWindow *win, const QPoint &off
       QHighDpi::toNativeLocalPosition(offset, win));
 }
 
-/*!
-    \fn QPaintDevice* QBackingStore::paintDevice()
-
-    Implement this function to return the appropriate paint device.
-*/
 QPaintDevice *QBackingStore::paintDevice()
 {
    QPaintDevice *device = d_ptr->platformBackingStore->paintDevice();
@@ -89,18 +83,12 @@ QPaintDevice *QBackingStore::paintDevice()
    return device;
 }
 
-/*!
-    Constructs an empty surface for the given top-level \a window.
-*/
 QBackingStore::QBackingStore(QWindow *window)
    : d_ptr(new QBackingStorePrivate(window))
 {
    d_ptr->platformBackingStore = QGuiApplicationPrivate::platformIntegration()->createPlatformBackingStore(window);
 }
 
-/*!
-    Destroys this surface.
-*/
 QBackingStore::~QBackingStore()
 {
    delete d_ptr->platformBackingStore;
@@ -110,13 +98,6 @@ QWindow *QBackingStore::window() const
 {
    return d_ptr->window;
 }
-
-/*!
-    This function is called before painting onto the surface begins,
-    with the \a region in which the painting will occur.
-
-    \sa endPaint(), paintDevice()
-*/
 
 void QBackingStore::beginPaint(const QRegion &region)
 {

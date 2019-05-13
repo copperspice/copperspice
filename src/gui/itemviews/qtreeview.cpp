@@ -125,7 +125,6 @@ void QTreeView::setRootIndex(const QModelIndex &index)
 void QTreeView::setSelectionModel(QItemSelectionModel *selectionModel)
 {
    Q_D(QTreeView);
-
    Q_ASSERT(selectionModel);
 
    if (d->selectionModel) {
@@ -620,12 +619,15 @@ void QTreeView::setSortingEnabled(bool enable)
       //sortByColumn has to be called before we connect or set the sortingEnabled flag
       // because otherwise it will not call sort on the model.
       sortByColumn(header()->sortIndicatorSection(), header()->sortIndicatorOrder());
+
       connect(header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
          this, SLOT(_q_sortIndicatorChanged(int, Qt::SortOrder)), Qt::UniqueConnection);
+
    } else {
       disconnect(header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
          this, SLOT(_q_sortIndicatorChanged(int, Qt::SortOrder)));
    }
+
    d->sortingEnabled = enable;
 }
 
@@ -2477,7 +2479,6 @@ void QTreeView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
    d->viewItems.clear();
 }
 
-
 void QTreeView::rowsRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTreeView);
@@ -2634,10 +2635,13 @@ void QTreeView::collapseAll()
    QSet<QPersistentModelIndex> old_expandedIndexes;
    old_expandedIndexes = d->expandedIndexes;
    d->expandedIndexes.clear();
-   if (!signalsBlocked() && isSignalConnected(QMetaMethod::fromSignal(&QTreeView::collapsed))) {
+
+   if (! signalsBlocked() && isSignalConnected(QMetaMethod::fromSignal(&QTreeView::collapsed))) {
       QSet<QPersistentModelIndex>::const_iterator i = old_expandedIndexes.constBegin();
+
       for (; i != old_expandedIndexes.constEnd(); ++i) {
          const QPersistentModelIndex &mi = (*i);
+
          if (mi.isValid() && !(mi.flags() & Qt::ItemNeverHasChildren)) {
             emit collapsed(mi);
          }

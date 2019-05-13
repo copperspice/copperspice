@@ -35,8 +35,6 @@
 #include <qfileiconprovider.h>
 #include <qfiledialog.h>
 
-QT_BEGIN_NAMESPACE
-
 void QSideBarDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
 {
    QStyledItemDelegate::initStyleOption(option, index);
@@ -324,6 +322,7 @@ void QUrlModel::dataChanged(const QModelIndex &topLeft, const QModelIndex &botto
 
    for (int i = 0; i < watching.count(); ++i) {
       QModelIndex index = watching.at(i).first;
+
       if (index.model() && topLeft.model()) {
          Q_ASSERT(index.model() == topLeft.model());
       }
@@ -517,7 +516,5 @@ bool QSidebar::event(QEvent *event)
    }
    return QListView::event(event);
 }
-
-QT_END_NAMESPACE
 
 #endif

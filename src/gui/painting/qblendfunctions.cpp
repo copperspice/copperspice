@@ -28,6 +28,7 @@ struct SourceOnlyAlpha {
    inline uchar alpha(uchar src) const {
       return src;
    }
+
    inline quint16 bytemul(quint16 spix) const {
       return spix;
    }

@@ -176,11 +176,15 @@ QDebug operator<<(QDebug s, const QRegion &r)
 {
    QDebugStateSaver saver(s);
    s.nospace();
+
    s << "QRegion(";
+
    if (r.isNull()) {
       s << "null";
+
    } else if (r.isEmpty()) {
       s << "empty";
+
    } else {
       const QVector<QRect> rects = r.rects();
       const int count = rects.size();
@@ -1063,9 +1067,9 @@ typedef void (*NonOverlapFunc)(QRegionPrivate &dest, const QRect *r, const QRect
 
 static bool EqualRegion(const QRegionPrivate *r1, const QRegionPrivate *r2);
 static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, QRegionPrivate &dest);
+
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
-   OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func,
-   NonOverlapFunc nonOverlap2Func);
+   OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func, NonOverlapFunc nonOverlap2Func);
 
 #define RectangleOut 0
 #define RectangleIn 1
@@ -1433,15 +1437,16 @@ static void miIntersectO(QRegionPrivate &dest, const QRect *r1, const QRect *r1E
  */
 static int miCoalesce(QRegionPrivate &dest, int prevStart, int curStart)
 {
-   QRect *pPrevBox;   /* Current box in previous band */
-   QRect *pCurBox;    /* Current box in current band */
-   QRect *pRegEnd;    /* End of region */
+   QRect *pPrevBox;    /* Current box in previous band */
+   QRect *pCurBox;     /* Current box in current band */
+   QRect *pRegEnd;     /* End of region */
    int curNumRects;    /* Number of rectangles in current band */
    int prevNumRects;   /* Number of rectangles in previous band */
    int bandY1;         /* Y1 coordinate for current band */
+
    QRect *rData = dest.rects.data();
 
-   pRegEnd = rData + dest.numRects;
+   pRegEnd  = rData + dest.numRects;
 
    pPrevBox = rData + prevStart;
    prevNumRects = curStart - prevStart;
@@ -1562,8 +1567,7 @@ static int miCoalesce(QRegionPrivate &dest, int prevStart, int curStart)
  *-----------------------------------------------------------------------
  */
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
-   OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func,
-   NonOverlapFunc nonOverlap2Func)
+   OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func, NonOverlapFunc nonOverlap2Func)
 {
    const QRect *r1;         // Pointer into first region
    const QRect *r2;         // Pointer into 2d region
@@ -1574,12 +1578,12 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
    const QRect *r1BandEnd;  // End of current band in r1
    const QRect *r2BandEnd;  // End of current band in r2
 
-   int top;                 // Top of non-overlapping band
-   int bot;                 // Bottom of non-overlapping band
-   int ybot;                // Bottom of intersection
-   int ytop;                // Top of intersection
-   int prevBand;            // Index of start of previous band in dest
-   int curBand;             // Index of start of current band in dest
+   int top;                  // Top of non-overlapping band
+   int bot;                  // Bottom of non-overlapping band
+   int ybot;                 // Bottom of intersection
+   int ytop;                 // Top of intersection
+   int prevBand;             // Index of start of previous band in dest
+   int curBand;              // Index of start of current band in dest
 
    /*
     * Initialization:
@@ -1784,26 +1788,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
    }
 }
 
-
-/*-
- *-----------------------------------------------------------------------
- * miUnionNonO --
- *      Handle a non-overlapping band for the union operation. Just
- *      Adds the rectangles into the region. Doesn't have to check for
- *      subsumption or anything.
- *
- * Results:
- *      None.
- *
- * Side Effects:
- *      dest.numRects is incremented and the final rectangles overwritten
- *      with the rectangles we're passed.
- *
- *-----------------------------------------------------------------------
- */
-
-static void miUnionNonO(QRegionPrivate &dest, const QRect *r, const QRect *rEnd,
-   int y1, int y2)
+static void miUnionNonO(QRegionPrivate &dest, const QRect *r, const QRect *rEnd, int y1, int y2)
 {
    QRect *pNextRect;
    pNextRect = dest.rects.data() + dest.numRects;
@@ -1820,23 +1805,6 @@ static void miUnionNonO(QRegionPrivate &dest, const QRect *r, const QRect *rEnd,
       ++r;
    }
 }
-
-
-/*-
- *-----------------------------------------------------------------------
- * miUnionO --
- *      Handle an overlapping band for the union operation. Picks the
- *      left-most rectangle each time and merges it into the region.
- *
- * Results:
- *      None.
- *
- * Side Effects:
- *      Rectangles are overwritten in dest.rects and dest.numRects will
- *      be changed.
- *
- *-----------------------------------------------------------------------
- */
 
 static void miUnionO(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
    const QRect *r2, const QRect *r2End, int y1, int y2)
@@ -1906,8 +1874,8 @@ static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, 
    miRegionOp(dest, reg1, reg2, miUnionO, miUnionNonO, miUnionNonO);
 
    dest.extents.setCoords(qMin(reg1->extents.left(), reg2->extents.left()),
-      qMin(reg1->extents.top(), reg2->extents.top()),
-      qMax(reg1->extents.right(), reg2->extents.right()),
+      qMin(reg1->extents.top(),    reg2->extents.top()),
+      qMax(reg1->extents.right(),  reg2->extents.right()),
       qMax(reg1->extents.bottom(), reg2->extents.bottom()));
 }
 
@@ -3117,9 +3085,8 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
       return nullptr;
    }
 
-   QT_TRY {
-      if (rule == EvenOddRule)
-      {
+   try {
+      if (rule == EvenOddRule) {
          /*
           *  for each scanline
           */
@@ -3163,8 +3130,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
             InsertionSort(AET);
          }
 
-      } else
-      {
+      } else {
          /*
           *  for each scanline
           */
@@ -3224,7 +3190,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
          }
       }
 
-   } QT_CATCH(...) {
+   } catch (...) {
       FreeStorage(SLLBlock.next);
       PtsToRegion(numFullPtBlocks, iPts, &FirstPtBlock, region);
 
@@ -3246,6 +3212,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
       free(curPtBlock);
       curPtBlock = tmpPtBlock;
    }
+
    delete AET;
    free(pETEs);
 

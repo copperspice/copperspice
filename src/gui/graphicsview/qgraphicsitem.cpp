@@ -83,6 +83,7 @@ class QGraphicsItemCustomDataStore
  public:
    QHash<const QGraphicsItem *, QMap<int, QVariant>> data;
 };
+
 Q_GLOBAL_STATIC(QGraphicsItemCustomDataStore, qt_dataStore)
 
 /*!
@@ -1306,12 +1307,15 @@ void QGraphicsItem::setCacheMode(CacheMode mode, const QSize &logicalCacheSize)
 {
    CacheMode lastMode = CacheMode(d_ptr->cacheMode);
    d_ptr->cacheMode = mode;
+
    bool noVisualChange = (mode == NoCache && lastMode == NoCache)
       || (mode == NoCache && lastMode == DeviceCoordinateCache)
       || (mode == DeviceCoordinateCache && lastMode == NoCache)
       || (mode == DeviceCoordinateCache && lastMode == DeviceCoordinateCache);
+
    if (mode == NoCache) {
       d_ptr->removeExtraItemCache();
+
    } else {
       QGraphicsItemCache *cache = d_ptr->extraItemCache();
 
@@ -4499,33 +4503,6 @@ void QGraphicsItem::update(const QRectF &rect)
    }
 }
 
-/*!
-    \since 4.4
-    Scrolls the contents of \a rect by \a dx, \a dy. If \a rect is a null rect
-    (the default), the item's bounding rect is scrolled.
-
-    Scrolling provides a fast alternative to simply redrawing when the
-    contents of the item (or parts of the item) are shifted vertically or
-    horizontally. Depending on the current transformation and the capabilities
-    of the paint device (i.e., the viewport), this operation may consist of
-    simply moving pixels from one location to another using memmove(). In most
-    cases this is faster than rerendering the entire area.
-
-    After scrolling, the item will issue an update for the newly exposed
-    areas. If scrolling is not supported (e.g., you are rendering to an OpenGL
-    viewport, which does not benefit from scroll optimizations), this function
-    is equivalent to calling update(\a rect).
-
-    \bold{Note:} Scrolling is only supported when QGraphicsItem::ItemCoordinateCache
-    is enabled; in all other cases calling this function is equivalent to calling
-    update(\a rect). If you for sure know that the item is opaque and not overlapped
-    by other items, you can map the \a rect to viewport coordinates and scroll the
-    viewport.
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 19
-
-    \sa boundingRect()
-*/
 void QGraphicsItem::scroll(qreal dx, qreal dy, const QRectF &rect)
 {
    Q_D(QGraphicsItem);
@@ -4610,6 +4587,7 @@ QPointF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QPointF &point
    if (item) {
       return itemTransform(item).map(point);
    }
+
    return mapToScene(point);
 }
 
@@ -4713,31 +4691,16 @@ QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QPolygonF &p
    return mapToScene(polygon);
 }
 
-/*!
-    Maps the polygon \a polygon, which is in this item's coordinate system, to
-    its parent's coordinate system, and returns the mapped polygon. If the
-    item has no parent, \a polygon will be mapped to the scene's coordinate
-    system.
-
-    \sa mapToScene(), mapToItem(), mapFromParent(), {The Graphics View
-    Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapToParent(const QPolygonF &polygon) const
 {
    // COMBINE
    if (!d_ptr->transformData) {
       return polygon.translated(d_ptr->pos);
    }
+
    return d_ptr->transformToParent().map(polygon);
 }
 
-/*!
-    Maps the polygon \a polygon, which is in this item's coordinate system, to
-    the scene's coordinate system, and returns the mapped polygon.
-
-    \sa mapToParent(), mapToItem(), mapFromScene(), {The Graphics View
-    Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapToScene(const QPolygonF &polygon) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -4746,15 +4709,6 @@ QPolygonF QGraphicsItem::mapToScene(const QPolygonF &polygon) const
    return d_ptr->sceneTransform.map(polygon);
 }
 
-/*!
-    Maps the path \a path, which is in this item's coordinate system, to
-    \a item's coordinate system, and returns the mapped path.
-
-    If \a item is 0, this function returns the same as mapToScene().
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QPainterPath QGraphicsItem::mapToItem(const QGraphicsItem *item, const QPainterPath &path) const
 {
    if (item) {
@@ -8160,8 +8114,8 @@ void QGraphicsTextItemPrivate::_q_update(QRectF rect)
 // internal
 void QGraphicsTextItemPrivate::_q_updateBoundingRect(const QSizeF &size)
 {
-   if (!control) {
-      return;   // can't happen
+   if (! control) {
+      return;   // can not happen
    }
 
    const QSizeF pageSize = control->document()->pageSize();
@@ -8179,8 +8133,6 @@ void QGraphicsTextItemPrivate::_q_updateBoundingRect(const QSizeF &size)
 // internal
 void QGraphicsTextItemPrivate::_q_ensureVisible(QRectF rect)
 {
-
-
    if (qq->hasFocus()) {
       rect.translate(-controlOffset());
       qq->ensureVisible(rect, /*xmargin=*/0, /*ymargin=*/0);
@@ -8189,7 +8141,7 @@ void QGraphicsTextItemPrivate::_q_ensureVisible(QRectF rect)
 
 QTextControl *QGraphicsTextItemPrivate::textControl() const
 {
-   if (!control) {
+   if (! control) {
       QGraphicsTextItem *that = const_cast<QGraphicsTextItem *>(qq);
       control = new QTextControl(that);
       control->setTextInteractionFlags(Qt::NoTextInteraction);
@@ -8210,6 +8162,7 @@ QTextControl *QGraphicsTextItemPrivate::textControl() const
          that->dd->_q_updateBoundingRect(control->size());
       }
    }
+
    return control;
 }
 
@@ -8981,19 +8934,24 @@ static void formatGraphicsItemHelper(QDebug debug, const QGraphicsItem *item)
    if (const QGraphicsItem *parent = item->parentItem()) {
       debug << ", parent=" << static_cast<const void *>(parent);
    }
+
    debug << ", pos=";
    QtDebugUtils::formatQPoint(debug, item->pos());
+
    if (const qreal z = item->zValue()) {
       debug << ", z=" << z;
    }
+
    if (item->flags()) {
       debug <<  ", flags=" << item->flags();
    }
 }
+
 QDebug operator<<(QDebug debug, QGraphicsItem *item)
 {
    QDebugStateSaver saver(debug);
    debug.nospace();
+
    if (! item) {
       debug << "QGraphicsItem(0)";
       return debug;
@@ -9007,13 +8965,17 @@ QDebug operator<<(QDebug debug, QGraphicsItem *item)
 
    debug << '(' << static_cast<const void *>(item);
    if (const QGraphicsProxyWidget *pw = qgraphicsitem_cast<const QGraphicsProxyWidget *>(item)) {
+
       debug << ", widget=";
+
       if (const QWidget *w = pw->widget()) {
          debug << w->metaObject()->className() << '(' << static_cast<const void *>(w);
          if (!w->objectName().isEmpty()) {
             debug << ", name=" << w->objectName();
          }
+
          debug << ')';
+
       } else {
          debug << "QWidget(0)";
       }
@@ -9028,6 +8990,7 @@ QDebug operator<<(QDebug debug, QGraphicsObject *item)
 {
    QDebugStateSaver saver(debug);
    debug.nospace();
+
    if (!item) {
       debug << "QGraphicsObject(0)";
       return debug;
@@ -9036,18 +8999,19 @@ QDebug operator<<(QDebug debug, QGraphicsObject *item)
    debug << item->metaObject()->className() << '(' << static_cast<const void *>(item);
 
    if (! item->objectName().isEmpty()) {
-      debug << ", name = " << item->objectName();
+      debug << ", Name = " << item->objectName();
    }
 
    formatGraphicsItemHelper(debug, item);
-
    debug << ')';
+
    return debug;
 }
 
 QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange change)
 {
    const char *str = "UnknownChange";
+
    switch (change) {
       case QGraphicsItem::ItemChildAddedChange:
          str = "ItemChildAddedChange";

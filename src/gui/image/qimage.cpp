@@ -51,7 +51,6 @@
 #include <limits.h>
 #include <math.h>
 
-
 static inline bool isLocked(QImageData *data)
 {
    return data != 0 && data->is_locked;
@@ -61,13 +60,11 @@ static inline bool isLocked(QImageData *data)
 #pragma message disable narrowptr
 #endif
 
-
 #define QIMAGE_SANITYCHECK_MEMORY(image) \
     if ((image).isNull()) { \
         qWarning("QImage: out of memory, returning null image"); \
         return QImage(); \
     }
-
 
 static QImage rotated90(const QImage &src);
 static QImage rotated180(const QImage &src);
@@ -77,10 +74,8 @@ QAtomicInt qimage_serial_number = 1;
 
 QImageData::QImageData()
    : ref(0), width(0), height(0), depth(0), nbytes(0), devicePixelRatio(1.0), data(0),
-
      format(QImage::Format_ARGB32), bytes_per_line(0),
-     ser_no(qimage_serial_number.fetchAndAddRelaxed(1)),
-     detach_no(0),
+     ser_no(qimage_serial_number.fetchAndAddRelaxed(1)), detach_no(0),
      dpmx(qt_defaultDpiX() * 100 / qreal(2.54)),
      dpmy(qt_defaultDpiY() * 100 / qreal(2.54)),
      offset(0, 0), own_data(true), ro_data(false), has_alpha_clut(false),
@@ -123,9 +118,9 @@ QImageData *QImageData::create(const QSize &size, QImage::Format format)
          break;
    }
 
-   d->width = width;
+   d->width  = width;
    d->height = height;
-   d->depth = depth;
+   d->depth  = depth;
    d->format = format;
    d->has_alpha_clut = false;
    d->is_cached = false;
@@ -133,15 +128,14 @@ QImageData *QImageData::create(const QSize &size, QImage::Format format)
    d->bytes_per_line = bytes_per_line;
 
    d->nbytes = d->bytes_per_line * height;
-   d->data  = (uchar *)malloc(d->nbytes);
+   d->data   = (uchar *)malloc(d->nbytes);
 
-   if (!d->data) {
+   if (! d->data) {
       return 0;
    }
 
    d->ref.ref();
    return d.take();
-
 }
 
 QImageData::~QImageData()
@@ -313,7 +307,7 @@ QImageData *QImageData::create(uchar *data, int width, int height,  int bpl, QIm
 
    const int depth = qt_depthForFormat(format);
    const int calc_bytes_per_line = ((width * depth + 31) / 32) * 4;
-   const int min_bytes_per_line = (width * depth + 7) / 8;
+   const int min_bytes_per_line  = (width * depth + 7) / 8;
 
    if (bpl <= 0) {
       bpl = calc_bytes_per_line;
@@ -333,18 +327,19 @@ QImageData *QImageData::create(uchar *data, int width, int height,  int bpl, QIm
    d->ref.ref();
 
    d->own_data = false;
-   d->ro_data = readOnly;
-   d->data = data;
-   d->width = width;
-   d->height = height;
-   d->depth = depth;
-   d->format = format;
+   d->ro_data  = readOnly;
+   d->data     = data;
+   d->width    = width;
+   d->height   = height;
+   d->depth    = depth;
+   d->format   = format;
 
    d->bytes_per_line = bpl;
    d->nbytes = d->bytes_per_line * height;
 
    d->cleanupFunction = cleanupFunction;
    d->cleanupInfo = cleanupInfo;
+
    return d;
 }
 
@@ -359,12 +354,14 @@ QImage::QImage(const uchar *data, int width, int height, Format format, QImageCl
 {
    d = QImageData::create(const_cast<uchar *>(data), width, height, 0, format, true, cleanupFunction, cleanupInfo);
 }
+
 QImage::QImage(uchar *data, int width, int height, int bytesPerLine, Format format, QImageCleanupFunction cleanupFunction,
    void *cleanupInfo)
    : QPaintDevice()
 {
    d = QImageData::create(data, width, height, bytesPerLine, format, false, cleanupFunction, cleanupInfo);
 }
+
 QImage::QImage(const uchar *data, int width, int height, int bytesPerLine, Format format, QImageCleanupFunction cleanupFunction,
    void *cleanupInfo)
    : QPaintDevice()
@@ -377,20 +374,24 @@ QImage::QImage(const QString &fileName, const char *format)
    d = 0;
    load(fileName, format);
 }
+
 #ifndef QT_NO_IMAGEFORMAT_XPM
 extern bool qt_read_xpm_image_or_array(QIODevice *device, const char *const *source, QImage &image);
+
 QImage::QImage(const char *const xpm[])
    : QPaintDevice()
 {
    d = 0;
+
    if (!xpm) {
       return;
    }
-   if (!qt_read_xpm_image_or_array(0, xpm, *this)) {
+
+   if (! qt_read_xpm_image_or_array(0, xpm, *this)) {
       qWarning("QImage::QImage(), XPM is not supported");
    }
 }
-#endif // QT_NO_IMAGEFORMAT_XPM
+#endif
 
 QImage::QImage(const QImage &image)
    : QPaintDevice()
@@ -1063,7 +1064,7 @@ void QImage::setColorCount(int colorCount)
    detach();
 
    // In case detach() ran out of memory
-   if (!d) {
+   if (! d) {
       return;
    }
 
@@ -1083,11 +1084,6 @@ void QImage::setColorCount(int colorCount)
    }
 }
 
-/*!
-    Returns the format of the image.
-
-    \sa {QImage#Image Formats}{Image Formats}
-*/
 QImage::Format QImage::format() const
 {
    return d ? d->format : Format_Invalid;
@@ -1095,7 +1091,7 @@ QImage::Format QImage::format() const
 
 QImage QImage::convertToFormat_helper(Format format, Qt::ImageConversionFlags flags) const
 {
-   if (!d || d->format == format) {
+   if (! d || d->format == format) {
       return *this;
    }
 
@@ -1105,7 +1101,7 @@ QImage QImage::convertToFormat_helper(Format format, Qt::ImageConversionFlags fl
 
    Image_Converter converter = QImageConversions::instance().image_converter_map[d->format][format];
 
-   if (!converter && format > QImage::Format_Indexed8 && d->format > QImage::Format_Indexed8) {
+   if (! converter && (format > QImage::Format_Indexed8) && (d->format > QImage::Format_Indexed8)) {
       converter = convert_generic;
    }
 
@@ -1121,8 +1117,8 @@ QImage QImage::convertToFormat_helper(Format format, Qt::ImageConversionFlags fl
       return image;
    }
 
-   // Convert indexed formats over ARGB32 or RGB32 to the final format.
-   Q_ASSERT(format != QImage::Format_ARGB32 && format != QImage::Format_RGB32);
+   // Convert indexed formats over ARGB32 or RGB32 to the final format
+   Q_ASSERT(format    != QImage::Format_ARGB32 && format != QImage::Format_RGB32);
    Q_ASSERT(d->format != QImage::Format_ARGB32 && d->format != QImage::Format_RGB32);
 
    if (! hasAlphaChannel()) {

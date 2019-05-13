@@ -34,8 +34,6 @@
 #include <qwindow.h>
 #include <qbackingstore.h>
 
-// emerald  #include "QtCore/qmimedata.h
-
 class QEventLoop;
 class QMouseEvent;
 class QPlatformDrag;
@@ -54,7 +52,6 @@ class Q_GUI_EXPORT QInternalMimeData : public QMimeData
    QStringList formats() const override;
    static bool canReadData(const QString &mimeType);
 
-
    static QStringList formatsHelper(const QMimeData *data);
    static bool hasFormatHelper(const QString &mimeType, const QMimeData *data);
    static QByteArray renderDataHelper(const QString &mimeType, const QMimeData *data);
@@ -67,20 +64,16 @@ class Q_GUI_EXPORT QInternalMimeData : public QMimeData
    virtual QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const = 0;
 };
 
-
-#endif //QT_NO_DRAGANDDROP && QT_NO_CLIPBOARD
+#endif
 
 #ifndef QT_NO_DRAGANDDROP
 
 class QDragPrivate
 {
-
  public:
 
    QDragPrivate()
-      : source(0)
-      , target(0)
-      , data(0)
+      : source(0), target(0), data(0)
    { }
 
    virtual ~QDragPrivate() {};
@@ -129,6 +122,6 @@ class QDragManager: public QObject
    Q_DISABLE_COPY(QDragManager)
 };
 
-#endif // !QT_NO_DRAGANDDROP
+#endif // ! QT_NO_DRAGANDDROP
 
 #endif

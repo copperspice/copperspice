@@ -1133,11 +1133,6 @@ void QTableView::setHorizontalHeader(QHeaderView *header)
    setSortingEnabled(d->sortingEnabled);
 }
 
-/*!
-    Sets the widget to use for the vertical header to \a header.
-
-    \sa verticalHeader() setHorizontalHeader()
-*/
 void QTableView::setVerticalHeader(QHeaderView *header)
 {
    Q_D(QTableView);

@@ -2641,11 +2641,6 @@ QItemSelection QSortFilterProxyModel::mapSelectionFromSource(const QItemSelectio
    return QAbstractProxyModel::mapSelectionFromSource(sourceSelection);
 }
 
-/*!
-  \fn QObject *QSortFilterProxyModel::parent() const
-  \internal
-*/
-
 void QSortFilterProxyModel::_q_sourceDataChanged(const QModelIndex &source_top_left,
    const QModelIndex &source_bottom_right, const QVector<int> &roles)
 {

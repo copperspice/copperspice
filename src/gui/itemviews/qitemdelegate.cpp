@@ -56,8 +56,6 @@
 #  define DBL_DIG 10
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QItemDelegatePrivate : public QAbstractItemDelegatePrivate
 {
    Q_DECLARE_PUBLIC(QItemDelegate)
@@ -107,14 +105,12 @@ class QItemDelegatePrivate : public QAbstractItemDelegatePrivate
       return option.widget;
    }
 
-   // ### temporary hack until we have QStandardItemDelegate
+   // ### emerald, temporary until we have QStandardItemDelegate
    mutable struct Icon {
       QIcon icon;
       QIcon::Mode mode;
       QIcon::State state;
    } tmp;
-
-
 };
 
 QRect QItemDelegatePrivate::textLayoutBounds(const QStyleOptionViewItem &option) const
@@ -127,6 +123,7 @@ QRect QItemDelegatePrivate::textLayoutBounds(const QStyleOptionViewItem &option)
       case QStyleOptionViewItem::Right:
          rect.setWidth(wrapText && rect.isValid() ? rect.width() : (QFIXED_MAX));
          break;
+
       case QStyleOptionViewItem::Top:
       case QStyleOptionViewItem::Bottom:
          rect.setWidth(wrapText ? option.decorationSize.width() : (QFIXED_MAX));
@@ -138,41 +135,34 @@ QRect QItemDelegatePrivate::textLayoutBounds(const QStyleOptionViewItem &option)
 
 QSizeF QItemDelegatePrivate::doTextLayout(int lineWidth) const
 {
-   qreal height = 0;
+   qreal height    = 0;
    qreal widthUsed = 0;
    textLayout.beginLayout();
+
    while (true) {
       QTextLine line = textLayout.createLine();
-      if (!line.isValid()) {
+      if (! line.isValid()) {
          break;
       }
+
       line.setLineWidth(lineWidth);
       line.setPosition(QPointF(0, height));
       height += line.height();
       widthUsed = qMax(widthUsed, line.naturalTextWidth());
    }
+
    textLayout.endLayout();
    return QSizeF(widthUsed, height);
 }
 
-/*!
-    Constructs an item delegate with the given \a parent.
-*/
-
 QItemDelegate::QItemDelegate(QObject *parent)
    : QAbstractItemDelegate(*new QItemDelegatePrivate(), parent)
 {
-
 }
-
-/*!
-    Destroys the item delegate.
-*/
 
 QItemDelegate::~QItemDelegate()
 {
 }
-
 
 bool QItemDelegate::hasClipping() const
 {
@@ -191,9 +181,7 @@ QString QItemDelegatePrivate::valueToText(const QVariant &value, const QStyleOpt
    return textForRole(Qt::DisplayRole, value, option.locale, DBL_DIG);
 }
 
-void QItemDelegate::paint(QPainter *painter,
-   const QStyleOptionViewItem &option,
-   const QModelIndex &index) const
+void QItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
    Q_D(const QItemDelegate);
    Q_ASSERT(index.isValid());
@@ -207,26 +195,29 @@ void QItemDelegate::paint(QPainter *painter,
    }
 
    // get the data and the rectangles
-
    QVariant value;
 
    QPixmap pixmap;
    QRect decorationRect;
    value = index.data(Qt::DecorationRole);
+
    if (value.isValid()) {
-      // ### we need the pixmap to call the virtual function
+      // ### need the pixmap to call the virtual function
       pixmap = decoration(opt, value);
+
       if (value.type() == QVariant::Icon) {
          d->tmp.icon = qvariant_cast<QIcon>(value);
          d->tmp.mode = d->iconMode(option.state);
          d->tmp.state = d->iconState(option.state);
-         const QSize size = d->tmp.icon.actualSize(option.decorationSize,
-               d->tmp.mode, d->tmp.state);
+
+         const QSize size = d->tmp.icon.actualSize(option.decorationSize, d->tmp.mode, d->tmp.state);
+
          decorationRect = QRect(QPoint(0, 0), size);
       } else {
          d->tmp.icon = QIcon();
          decorationRect = QRect(QPoint(0, 0), pixmap.size());
       }
+
    } else {
       d->tmp.icon = QIcon();
       decorationRect = QRect();
@@ -235,7 +226,8 @@ void QItemDelegate::paint(QPainter *painter,
    QString text;
    QRect displayRect;
    value = index.data(Qt::DisplayRole);
-   if (value.isValid() && !value.isNull()) {
+
+   if (value.isValid() && ! value.isNull()) {
       text = d->valueToText(value, opt);
       displayRect = textRectangle(painter, d->textLayoutBounds(opt), opt.font, text);
    }
@@ -243,17 +235,16 @@ void QItemDelegate::paint(QPainter *painter,
    QRect checkRect;
    Qt::CheckState checkState = Qt::Unchecked;
    value = index.data(Qt::CheckStateRole);
+
    if (value.isValid()) {
       checkState = static_cast<Qt::CheckState>(value.toInt());
       checkRect = doCheck(opt, opt.rect, value);
    }
 
    // do the layout
-
    doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
 
    // draw the item
-
    drawBackground(painter, opt, index);
    drawCheck(painter, opt, checkRect, checkState);
    drawDecoration(painter, opt, decorationRect, pixmap);
@@ -263,16 +254,6 @@ void QItemDelegate::paint(QPainter *painter,
    // done
    painter->restore();
 }
-
-/*!
-    Returns the size needed by the delegate to display the item
-    specified by \a index, taking into account the style information
-    provided by \a option.
-
-    When reimplementing this function, note that in case of text
-    items, QItemDelegate adds a margin (i.e. 2 *
-    QStyle::PM_FocusFrameHMargin) to the length of the text.
-*/
 
 QSize QItemDelegate::sizeHint(const QStyleOptionViewItem &option,
    const QModelIndex &index) const
@@ -289,14 +270,6 @@ QSize QItemDelegate::sizeHint(const QStyleOptionViewItem &option,
 
    return (decorationRect | displayRect | checkRect).size();
 }
-
-/*!
-    Returns the widget used to edit the item specified by \a index
-    for editing. The \a parent widget and style \a option are used to
-    control how the editor widget appears.
-
-    \sa QAbstractItemDelegate::createEditor()
-*/
 
 QWidget *QItemDelegate::createEditor(QWidget *parent,
    const QStyleOptionViewItem &,
@@ -326,9 +299,6 @@ QWidget *QItemDelegate::createEditor(QWidget *parent,
 void QItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 #ifndef QT_NO_PROPERTIES
-
-
-
    QVariant v = index.data(Qt::EditRole);
    QString n  = editor->metaObject()->userProperty().name();
 
@@ -344,12 +314,7 @@ void QItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
 
 void QItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-#ifdef QT_NO_PROPERTIES
-   Q_UNUSED(model);
-   Q_UNUSED(editor);
-   Q_UNUSED(index);
-
-#else
+#if ! defined(QT_NO_PROPERTIES)
    Q_D(const QItemDelegate);
    Q_ASSERT(model);
    Q_ASSERT(editor);
@@ -365,11 +330,6 @@ void QItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, con
    }
 #endif
 }
-
-/*!
-    Updates the \a editor for the item specified by \a index
-    according to the style \a option given.
-*/
 
 void QItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -391,29 +351,17 @@ void QItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionView
    editor->setGeometry(textRect);
 }
 
-/*!
-  Returns the editor factory used by the item delegate.
-  If no editor factory is set, the function will return null.
-
-  \sa setItemEditorFactory()
-*/
 QItemEditorFactory *QItemDelegate::itemEditorFactory() const
 {
    Q_D(const QItemDelegate);
    return d->f;
 }
 
-
 void QItemDelegate::setItemEditorFactory(QItemEditorFactory *factory)
 {
    Q_D(QItemDelegate);
    d->f = factory;
 }
-
-/*!
-   Renders the item view \a text within the rectangle specified by \a rect
-   using the given \a painter and style \a option.
-*/
 
 void QItemDelegate::drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
    const QRect &rect, const QString &text) const
@@ -501,10 +449,6 @@ void QItemDelegate::drawDisplay(QPainter *painter, const QStyleOptionViewItem &o
    }
 }
 
-/*!
-    Renders the decoration \a pixmap within the rectangle specified by
-    \a rect using the given \a painter and style \a option.
-*/
 void QItemDelegate::drawDecoration(QPainter *painter, const QStyleOptionViewItem &option,
    const QRect &rect, const QPixmap &pixmap) const
 {
@@ -529,19 +473,14 @@ void QItemDelegate::drawDecoration(QPainter *painter, const QStyleOptionViewItem
    }
 }
 
-/*!
-    Renders the region within the rectangle specified by \a rect, indicating
-    that it has the focus, using the given \a painter and style \a option.
-*/
-
-void QItemDelegate::drawFocus(QPainter *painter,
-   const QStyleOptionViewItem &option,
-   const QRect &rect) const
+void QItemDelegate::drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect) const
 {
    Q_D(const QItemDelegate);
+
    if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid()) {
       return;
    }
+
    QStyleOptionFocusRect o;
    o.QStyleOption::operator=(option);
    o.rect = rect;
@@ -556,15 +495,8 @@ void QItemDelegate::drawFocus(QPainter *painter,
    style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, widget);
 }
 
-/*!
-    Renders a check indicator within the rectangle specified by \a
-    rect, using the given \a painter and style \a option, using the
-    given \a state.
-*/
-
-void QItemDelegate::drawCheck(QPainter *painter,
-   const QStyleOptionViewItem &option,
-   const QRect &rect, Qt::CheckState state) const
+void QItemDelegate::drawCheck(QPainter *painter, const QStyleOptionViewItem &option,
+                  const QRect &rect, Qt::CheckState state) const
 {
    Q_D(const QItemDelegate);
    if (!rect.isValid()) {
@@ -592,20 +524,13 @@ void QItemDelegate::drawCheck(QPainter *painter,
    style->drawPrimitive(QStyle::PE_IndicatorViewItemCheck, &opt, painter, widget);
 }
 
-/*!
-    \since 4.2
-
-    Renders the item background for the given \a index,
-    using the given \a painter and style \a option.
-*/
-
-void QItemDelegate::drawBackground(QPainter *painter,
-   const QStyleOptionViewItem &option,
+void QItemDelegate::drawBackground(QPainter *painter, const QStyleOptionViewItem &option,
    const QModelIndex &index) const
 {
    if (option.showDecorationSelected && (option.state & QStyle::State_Selected)) {
       QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
          ? QPalette::Normal : QPalette::Disabled;
+
       if (cg == QPalette::Normal && !(option.state & QStyle::State_Active)) {
          cg = QPalette::Inactive;
       }
@@ -622,16 +547,12 @@ void QItemDelegate::drawBackground(QPainter *painter,
    }
 }
 
-
 /*!
-    \internal
-
     Code duplicated in QCommonStylePrivate::viewItemLayout
 */
 
 void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
-   QRect *checkRect, QRect *pixmapRect, QRect *textRect,
-   bool hint) const
+   QRect *checkRect, QRect *pixmapRect, QRect *textRect, bool hint) const
 {
    Q_ASSERT(checkRect && pixmapRect && textRect);
    Q_D(const QItemDelegate);
@@ -658,6 +579,7 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
       pm = pixmapRect->size();
       pm.rwidth() += 2 * pixmapMargin;
    }
+
    if (hint) {
       h = qMax(checkRect->height(), qMax(textRect->height(), pm.height()));
       if (option.decorationPosition == QStyleOptionViewItem::Left
@@ -666,6 +588,7 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
       } else {
          w = qMax(textRect->width(), pm.width());
       }
+
    } else {
       w = option.rect.width();
       h = option.rect.height();
@@ -810,20 +733,18 @@ static QString qPixmapSerial(quint64 i, bool enabled)
 }
 
 /*!
-  \internal
-  Returns the selected version of the given \a pixmap using the given \a palette.
-  The \a enabled argument decides whether the normal or disabled highlight color of
-  the palette is used.
+  Returns the selected version of the given pixmap using the given palette.
+  The enabled argument decides whether the normal or disabled highlight color of the palette is used.
 */
 QPixmap *QItemDelegate::selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const
 {
    QString key = qPixmapSerial(pixmap.cacheKey(), enabled);
    QPixmap *pm = QPixmapCache::find(key);
-   if (!pm) {
+
+   if (! pm) {
       QImage img = pixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
-      QColor color = palette.color(enabled ? QPalette::Normal : QPalette::Disabled,
-            QPalette::Highlight);
+      QColor color = palette.color(enabled ? QPalette::Normal : QPalette::Disabled, QPalette::Highlight);
       color.setAlphaF((qreal)0.3);
 
       QPainter painter(&img);
@@ -840,12 +761,9 @@ QPixmap *QItemDelegate::selected(const QPixmap &pixmap, const QPalette &palette,
       QPixmapCache::insert(key, selected);
       pm = QPixmapCache::find(key);
    }
+
    return pm;
 }
-
-/*!
-  \internal
-*/
 
 QRect QItemDelegate::rect(const QStyleOptionViewItem &option,
    const QModelIndex &index, int role) const
@@ -906,10 +824,11 @@ QRect QItemDelegate::doCheck(const QStyleOptionViewItem &option,
       opt.QStyleOption::operator=(option);
       opt.rect = bounding;
 
-      const QWidget *widget = d->widget(option); // cast
+      const QWidget *widget = d->widget(option);
       QStyle *style = widget ? widget->style() : QApplication::style();
       return style->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt, widget);
    }
+
    return QRect();
 }
 
@@ -926,11 +845,11 @@ QRect QItemDelegate::textRectangle(QPainter * /*painter*/, const QRect &rect,
    d->textLayout.setText(QItemDelegatePrivate::replaceNewLine(text));
    QSizeF fpSize = d->doTextLayout(rect.width());
    const QSize size = QSize(qCeil(fpSize.width()), qCeil(fpSize.height()));
+
    // ###: textRectangle should take style option as argument
    const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
    return QRect(0, 0, size.width() + 2 * textMargin, size.height());
 }
-
 
 bool QItemDelegate::eventFilter(QObject *object, QEvent *event)
 {
@@ -938,19 +857,17 @@ bool QItemDelegate::eventFilter(QObject *object, QEvent *event)
    return d->editorEventFilter(object, event);
 }
 
-
-bool QItemDelegate::editorEvent(QEvent *event,
-   QAbstractItemModel *model,
-   const QStyleOptionViewItem &option,
-   const QModelIndex &index)
+bool QItemDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
+   const QStyleOptionViewItem &option, const QModelIndex &index)
 {
    Q_ASSERT(event);
    Q_ASSERT(model);
 
-   // make sure that the item is checkable
+   // make sure the item is checkable
    Qt::ItemFlags flags = model->flags(index);
    if (!(flags & Qt::ItemIsUserCheckable) || !(option.state & QStyle::State_Enabled)
-      || !(flags & Qt::ItemIsEnabled)) {
+      || ! (flags & Qt::ItemIsEnabled)) {
+
       return false;
    }
 
@@ -998,10 +915,6 @@ bool QItemDelegate::editorEvent(QEvent *event,
    return model->setData(index, state, Qt::CheckStateRole);
 }
 
-/*!
-  \internal
-*/
-
 QStyleOptionViewItem QItemDelegate::setOptions(const QModelIndex &index,
    const QStyleOptionViewItem &option) const
 {
@@ -1031,6 +944,5 @@ QStyleOptionViewItem QItemDelegate::setOptions(const QModelIndex &index,
 
    return opt;
 }
-
 
 #endif // QT_NO_ITEMVIEWS

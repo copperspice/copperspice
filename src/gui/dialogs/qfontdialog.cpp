@@ -172,17 +172,21 @@ void QFontDialogPrivate::init()
    sampleEdit = new QLineEdit(sample);
    sampleEdit->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
    sampleEdit->setAlignment(Qt::AlignCenter);
+
    // Note that the sample text is *not* translated with tr(), as the
    // characters used depend on the charset encoding.
+
    sampleEdit->setText(QLatin1String("AaBbYyZz"));
    hbox->addWidget(sampleEdit);
 
    writingSystemCombo = new QComboBox(q);
 
    writingSystemAccel = new QLabel(q);
+
 #ifndef QT_NO_SHORTCUT
    writingSystemAccel->setBuddy(writingSystemCombo);
 #endif
+
    writingSystemAccel->setIndent(2);
 
    size = 0;
@@ -373,10 +377,12 @@ void QFontDialogPrivate::initHelper(QPlatformDialogHelper *h)
    QObject::connect(h, SIGNAL(fontSelected(QFont)), d, SLOT(fontSelected(QFont)));
    static_cast<QPlatformFontDialogHelper *>(h)->setOptions(options);
 }
+
 void QFontDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
 {
    options->setWindowTitle(q_func()->windowTitle());
 }
+
 /*
     Updates the contents of the "font family" list box. This
     function can be reimplemented if you have special requirements.
@@ -824,6 +830,7 @@ void QFontDialog::open(QObject *receiver, const QString &member)
    connect(this, SIGNAL(fontSelected(QFont)), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
    d->memberToDisconnectOnClose = member;
+
    QDialog::open();
 }
 

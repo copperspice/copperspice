@@ -39,8 +39,6 @@
 
 #include <qaccessiblewidget_simple_p.h> // let spinbox use line edit's interface
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACCESSIBILITY
 
 #ifndef QT_NO_SPINBOX
@@ -63,9 +61,10 @@ QAbstractSpinBox *QAccessibleAbstractSpinBox::abstractSpinBox() const
 QAccessibleInterface *QAccessibleAbstractSpinBox::lineEditIface() const
 {
    // QAccessibleLineEdit is only used to forward the text functions
-   if (!lineEdit) {
+   if (! lineEdit) {
       lineEdit = new QAccessibleLineEdit(abstractSpinBox()->lineEdit());
    }
+
    return lineEdit;
 }
 
@@ -214,29 +213,14 @@ void QAccessibleAbstractSpinBox::replaceText(int startOffset, int endOffset, con
    lineEditIface()->editableTextInterface()->replaceText(startOffset, endOffset, text);
 }
 
-
-/*!
-  \class QAccessibleSpinBox
-  \brief The QAccessibleSpinBox class implements the QAccessibleInterface for spinbox widgets.
-  \internal
-
-  \ingroup accessibility
-*/
-
-/*!
-  Constructs a QAccessibleSpinWidget object for \a w.
-*/
 QAccessibleSpinBox::QAccessibleSpinBox(QWidget *w)
    : QAccessibleAbstractSpinBox(w)
 {
    Q_ASSERT(spinBox());
-   addControllingSignal(QLatin1String("valueChanged(int)"));
-   addControllingSignal(QLatin1String("valueChanged(QString)"));
+   addControllingSignal("valueChanged(int)");
+   addControllingSignal("valueChanged(const QString &)");
 }
 
-/*!
-    Returns the underlying QSpinBox.
-*/
 QSpinBox *QAccessibleSpinBox::spinBox() const
 {
    return qobject_cast<QSpinBox *>(object());
@@ -248,8 +232,8 @@ QAccessibleDoubleSpinBox::QAccessibleDoubleSpinBox(QWidget *widget)
    : QAccessibleAbstractSpinBox(widget)
 {
    Q_ASSERT(qobject_cast<QDoubleSpinBox *>(widget));
-   addControllingSignal(QLatin1String("valueChanged(double)"));
-   addControllingSignal(QLatin1String("valueChanged(QString)"));
+   addControllingSignal("valueChanged(double)");
+   addControllingSignal("valueChanged(const QString &)");
 }
 
 /*!
@@ -270,27 +254,16 @@ QString QAccessibleDoubleSpinBox::text(QAccessible::Text textType) const
 
 #endif // QT_NO_SPINBOX
 
+
 #ifndef QT_NO_SCROLLBAR
-/*!
-  \class QAccessibleScrollBar
-  \brief The QAccessibleScrollBar class implements the QAccessibleInterface for scroll bars.
-  \internal
 
-  \ingroup accessibility
-*/
-
-/*!
-  Constructs a QAccessibleScrollBar object for \a w.
-  \a name is propagated to the QAccessibleWidget constructor.
-*/
 QAccessibleScrollBar::QAccessibleScrollBar(QWidget *w)
    : QAccessibleAbstractSlider(w, QAccessible::ScrollBar)
 {
    Q_ASSERT(scrollBar());
-   addControllingSignal(QLatin1String("valueChanged(int)"));
+   addControllingSignal("valueChanged(int)");
 }
 
-/*! Returns the scroll bar. */
 QScrollBar *QAccessibleScrollBar::scrollBar() const
 {
    return qobject_cast<QScrollBar *>(object());
@@ -301,32 +274,22 @@ QString QAccessibleScrollBar::text(QAccessible::Text t) const
    if (t == QAccessible::Value) {
       return QString::number(scrollBar()->value());
    }
+
    return QAccessibleAbstractSlider::text(t);
 }
 
 #endif // QT_NO_SCROLLBAR
 
+
 #ifndef QT_NO_SLIDER
-/*!
-  \class QAccessibleSlider
-  \brief The QAccessibleSlider class implements the QAccessibleInterface for sliders.
-  \internal
 
-  \ingroup accessibility
-*/
-
-/*!
-  Constructs a QAccessibleScrollBar object for \a w.
-  \a name is propagated to the QAccessibleWidget constructor.
-*/
 QAccessibleSlider::QAccessibleSlider(QWidget *w)
    : QAccessibleAbstractSlider(w)
 {
    Q_ASSERT(slider());
-   addControllingSignal(QLatin1String("valueChanged(int)"));
+   addControllingSignal("valueChanged(int)");
 }
 
-/*! Returns the slider. */
 QSlider *QAccessibleSlider::slider() const
 {
    return qobject_cast<QSlider *>(object());
@@ -387,13 +350,14 @@ QAbstractSlider *QAccessibleAbstractSlider::abstractSlider() const
 
 #endif // QT_NO_SLIDER
 
+
 #ifndef QT_NO_DIAL
-// ======================================= QAccessibleDial ======================================
+
 QAccessibleDial::QAccessibleDial(QWidget *widget)
    : QAccessibleAbstractSlider(widget, QAccessible::Dial)
 {
    Q_ASSERT(qobject_cast<QDial *>(widget));
-   addControllingSignal(QLatin1String("valueChanged(int)"));
+   addControllingSignal("valueChanged(int)");
 }
 
 QString QAccessibleDial::text(QAccessible::Text textType) const
@@ -413,4 +377,3 @@ QDial *QAccessibleDial::dial() const
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE

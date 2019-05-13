@@ -1609,7 +1609,7 @@ static DestStoreProc64 destStoreProc64[QImage::NImageFormats] = {
   transformed (tiled and not tiled)
   transformed bilinear (tiled and not tiled)
 
-  We don't need bounds checks for untransformed, but we need them for the other ones.
+  We do not need bounds checks for untransformed, but we need them for the other ones.
 
   The generic implementation does pixel by pixel fetches
 */
@@ -6431,8 +6431,8 @@ static void qt_rectfill_gray(QRasterBuffer *rasterBuffer,
       qGray(color.toArgb32()), x, y, width, height, rasterBuffer->bytesPerLine());
 }
 
-// Map table for destination image format. Contains function pointers
-// for blends of various types unto the destination
+// Map table for destination image format.
+// Contains function pointers r blends of various types onto the destination
 
 DrawHelper qDrawHelper[QImage::NImageFormats] = {
    // Format_Invalid,

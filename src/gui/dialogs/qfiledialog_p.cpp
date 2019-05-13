@@ -52,15 +52,8 @@ QFileDialogPrivate::QFileDialogPrivate()
    proxyModel(0),
 #endif
 
-   model(0),
-   currentHistoryLocation(-1),
-   renameAction(0),
-   deleteAction(0),
-   showHiddenAction(0),
-   useDefaultCaption(true),
-   defaultFileTypes(true),
-   qFileDialogUi(0),
-   options(new QFileDialogOptions)
+   model(0), currentHistoryLocation(-1), renameAction(0), deleteAction(0), showHiddenAction(0),
+   useDefaultCaption(true), defaultFileTypes(true), qFileDialogUi(0), options(new QFileDialogOptions)
 {
 }
 
@@ -87,12 +80,15 @@ void QFileDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
    Q_Q(QFileDialog);
    options->setWindowTitle(q->windowTitle());
    options->setHistory(q->history());
+
    if (usingWidgets()) {
       options->setSidebarUrls(qFileDialogUi->sidebar->urls());
    }
+
    if (options->initiallySelectedNameFilter().isEmpty()) {
       options->setInitiallySelectedNameFilter(q->selectedNameFilter());
    }
+
    if (options->initiallySelectedFiles().isEmpty()) {
       options->setInitiallySelectedFiles(userSelectedFiles());
    }
@@ -426,24 +422,27 @@ QStringList QFileDialogPrivate::addDefaultSuffixToFiles(const QStringList &files
       // if the filename has no suffix, add the default suffix
       const QString defaultSuffix = options->defaultSuffix();
 
-      if (!defaultSuffix.isEmpty() && !info.isDir() && name.lastIndexOf(QLatin1Char('.')) == -1) {
-         name += QLatin1Char('.') + defaultSuffix;
+      if (! defaultSuffix.isEmpty() && ! info.isDir() && name.lastIndexOf('.') == -1) {
+         name += QChar('.') + defaultSuffix;
       }
 
       if (info.isAbsolute()) {
          files.append(name);
       } else {
-         // at this point the path should only have Qt path separators.
-         // This check is needed since we might be at the root directory
+         // path should only have CS path separators
+         // check is needed since we might be at the root directory
          // and on Windows it already ends with slash.
          QString path = rootPath();
-         if (!path.endsWith(QLatin1Char('/'))) {
-            path += QLatin1Char('/');
+
+         if (! path.endsWith('/')) {
+            path += '/';
          }
+
          path += name;
          files.append(path);
       }
    }
+
    return files;
 }
 
@@ -455,11 +454,14 @@ QList<QUrl> QFileDialogPrivate::addDefaultSuffixToUrls(const QList<QUrl> &urlsTo
    for (int i = 0; i < numUrlsToFix; ++i) {
       QUrl url = urlsToFix.at(i);
       const QString defaultSuffix = options->defaultSuffix();
-      if (!defaultSuffix.isEmpty() && !url.path().endsWith(QLatin1Char('/')) && url.path().lastIndexOf(QLatin1Char('.')) == -1) {
-         url.setPath(url.path() + QLatin1Char('.') + defaultSuffix);
+
+      if (!defaultSuffix.isEmpty() && ! url.path().endsWith('/') && url.path().lastIndexOf('.') == -1) {
+         url.setPath(url.path() + QChar('.') + defaultSuffix);
       }
+
       urls.append(url);
    }
+
    return urls;
 }
 
@@ -500,6 +502,7 @@ int QFileDialogPrivate::maxNameLength(const QString &path)
    if (::GetVolumeInformation(reinterpret_cast<const wchar_t *>(&tmp[0]), NULL, 0, NULL, &maxLength, NULL, NULL, 0) == false) {
       return -1;
    }
+
    return maxLength;
 
 #endif
@@ -781,9 +784,11 @@ void QFileDialogPrivate::createWidgets()
 
    QSize preSize = q->testAttribute(Qt::WA_Resized) ? q->size() : QSize();
    Qt::WindowStates preState = q->windowState();
+
    model = new QFileSystemModel(q);
    model->setFilter(options->filter());
-   model->setObjectName(QLatin1String("qt_filesystem_model"));
+   model->setObjectName("qt_filesystem_model");
+
    if (QPlatformFileDialogHelper *helper = platformFileDialogHelper()) {
       model->setNameFilterDisables(helper->defaultNameFilterDisables());
    } else {
@@ -810,8 +815,7 @@ void QFileDialogPrivate::createWidgets()
    qFileDialogUi->setupUi(q);
 
    QList<QUrl> initialBookmarks;
-   initialBookmarks << QUrl("file:")
-      << QUrl::fromLocalFile(QDir::homePath());
+   initialBookmarks << QUrl("file:") << QUrl::fromLocalFile(QDir::homePath());
 
    qFileDialogUi->sidebar->setModelAndUrls(model, initialBookmarks);
    QFileDialog::connect(qFileDialogUi->sidebar, SIGNAL(goToUrl(QUrl)), q, SLOT(_q_goToUrl(QUrl)));
@@ -930,8 +934,8 @@ void QFileDialogPrivate::createWidgets()
 
 #ifndef QT_NO_SETTINGS
    // Try to restore from the FileDialog settings group; if it fails, fall back
-   // to the pre-5.5 QByteArray serialized settings.
-   if (!restoreFromSettings()) {
+   // to the older QByteArray serialized settings
+   if (! restoreFromSettings()) {
       const QSettings settings(QSettings::UserScope, "CsProject");
       q->restoreState(settings.value("CS/filedialog").toByteArray());
    }
@@ -942,9 +946,11 @@ void QFileDialogPrivate::createWidgets()
    q->setAcceptMode(static_cast<QFileDialog::AcceptMode>(options->acceptMode()));
    q->setViewMode(static_cast<QFileDialog::ViewMode>(options->viewMode()));
    q->setOptions(static_cast<QFileDialog::Options>(static_cast<int>(options->options())));
+
    if (!options->sidebarUrls().isEmpty()) {
       q->setSidebarUrls(options->sidebarUrls());
    }
+
    q->setDirectoryUrl(options->initialDirectory());
 
 #ifndef QT_NO_MIMETYPE
@@ -1049,21 +1055,21 @@ void QFileDialogPrivate::createMenuActions()
 
    renameAction = new QAction(q);
    renameAction->setEnabled(false);
-   renameAction->setObjectName(QLatin1String("qt_rename_action"));
+   renameAction->setObjectName("qt_rename_action");
    QObject::connect(renameAction, SIGNAL(triggered()), q, SLOT(_q_renameCurrent()));
 
    deleteAction = new QAction(q);
    deleteAction->setEnabled(false);
-   deleteAction->setObjectName(QLatin1String("qt_delete_action"));
+   deleteAction->setObjectName("qt_delete_action");
    QObject::connect(deleteAction, SIGNAL(triggered()), q, SLOT(_q_deleteCurrent()));
 
    showHiddenAction = new QAction(q);
-   showHiddenAction->setObjectName(QLatin1String("qt_show_hidden_action"));
+   showHiddenAction->setObjectName("qt_show_hidden_action");
    showHiddenAction->setCheckable(true);
    QObject::connect(showHiddenAction, SIGNAL(triggered()), q, SLOT(_q_showHidden()));
 
    newFolderAction = new QAction(q);
-   newFolderAction->setObjectName(QLatin1String("qt_new_folder_action"));
+   newFolderAction->setObjectName("qt_new_folder_action");
    QObject::connect(newFolderAction, SIGNAL(triggered()), q, SLOT(_q_createDirectory()));
 }
 

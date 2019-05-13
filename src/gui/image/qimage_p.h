@@ -175,12 +175,14 @@ inline QImage::Format qt_maybeAlphaVersionWithSameDepth(QImage::Format format)
 inline QImage::Format qt_alphaVersionForPainting(QImage::Format format)
 {
    QImage::Format toFormat = qt_alphaVersion(format);
+
 #if defined(__ARM_NEON__) || defined(__SSE2__)
    // If we are switching depth anyway and we have optimized ARGB32PM routines, upgrade to that.
    if (qt_depthForFormat(format) != qt_depthForFormat(toFormat)) {
       toFormat = QImage::Format_ARGB32_Premultiplied;
    }
 #endif
+
    return toFormat;
 }
 

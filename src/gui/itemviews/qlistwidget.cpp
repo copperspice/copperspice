@@ -635,12 +635,11 @@ QDataStream &operator>>(QDataStream &in, QListWidgetItem &item)
 void QListWidgetItem::setFlags(Qt::ItemFlags aflags)
 {
    itemFlags = aflags;
-   if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : 0)) {
+
+   if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
       model->itemChanged(this);
    }
 }
-
-
 
 void QListWidgetPrivate::setup()
 {

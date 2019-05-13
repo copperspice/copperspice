@@ -1107,11 +1107,11 @@ QTableWidgetItem::QTableWidgetItem(const QTableWidgetItem &other)
 
 QTableWidgetItem &QTableWidgetItem::operator=(const QTableWidgetItem &other)
 {
-   values = other.values;
+   values    = other.values;
    itemFlags = other.itemFlags;
+
    return *this;
 }
-
 
 void QTableWidgetPrivate::setup()
 {
@@ -1150,6 +1150,7 @@ void QTableWidgetPrivate::_q_emitItemPressed(const QModelIndex &index)
    if (QTableWidgetItem *item = tableModel()->item(index)) {
       emit q->itemPressed(item);
    }
+
    emit q->cellPressed(index.row(), index.column());
 }
 
@@ -1160,39 +1161,47 @@ void QTableWidgetPrivate::_q_emitItemClicked(const QModelIndex &index)
    if (QTableWidgetItem *item = tableModel()->item(index)) {
       emit q->itemClicked(item);
    }
+
    emit q->cellClicked(index.row(), index.column());
 }
 
 void QTableWidgetPrivate::_q_emitItemDoubleClicked(const QModelIndex &index)
 {
    Q_Q(QTableWidget);
+
    if (QTableWidgetItem *item = tableModel()->item(index)) {
       emit q->itemDoubleClicked(item);
    }
+
    emit q->cellDoubleClicked(index.row(), index.column());
 }
 
 void QTableWidgetPrivate::_q_emitItemActivated(const QModelIndex &index)
 {
    Q_Q(QTableWidget);
+
    if (QTableWidgetItem *item = tableModel()->item(index)) {
       emit q->itemActivated(item);
    }
+
    emit q->cellActivated(index.row(), index.column());
 }
 
 void QTableWidgetPrivate::_q_emitItemEntered(const QModelIndex &index)
 {
    Q_Q(QTableWidget);
+
    if (QTableWidgetItem *item = tableModel()->item(index)) {
       emit q->itemEntered(item);
    }
+
    emit q->cellEntered(index.row(), index.column());
 }
 
 void QTableWidgetPrivate::_q_emitItemChanged(const QModelIndex &index)
 {
    Q_Q(QTableWidget);
+
    if (QTableWidgetItem *item = tableModel()->item(index)) {
       emit q->itemChanged(item);
    }

@@ -26,11 +26,11 @@
 
 #ifndef QT_NO_ANIMATION
 
-#include <QtGui/qcolor.h>
-#include <QtGui/qvector2d.h>
-#include <QtGui/qvector3d.h>
-#include <QtGui/qvector4d.h>
-#include <QtGui/qquaternion.h>
+#include <qcolor.h>
+#include <qvector2d.h>
+#include <qvector3d.h>
+#include <qvector4d.h>
+#include <qquaternion.h>
 
 // emerald - may need review
 
