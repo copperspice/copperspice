@@ -246,7 +246,8 @@ void QAccessibleWidget::addControllingSignal(const QString &signal)
    QString s = QMetaObject::normalizedSignature(signal);
 
    if (object()->metaObject()->indexOfSignal(s) < 0) {
-      qWarning("Signal %s unknown in %s", csPrintable(s), csPrintable(object()->metaObject()->className()));
+      qWarning("QAccessibleWidget::addControllingSignal(): Signal %s unknown in %s", csPrintable(s),
+                  csPrintable(object()->metaObject()->className()));
    }
 
    d->primarySignals << s;
