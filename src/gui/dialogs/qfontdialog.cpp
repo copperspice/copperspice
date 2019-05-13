@@ -192,18 +192,19 @@ void QFontDialogPrivate::init()
    size = 0;
    smoothScalable = false;
 
-   QObject::connect(writingSystemCombo, SIGNAL(activated(int)), q, SLOT(_q_writingSystemHighlighted(int)));
-   QObject::connect(familyList, SIGNAL(highlighted(int)), q, SLOT(_q_familyHighlighted(int)));
-   QObject::connect(styleList, SIGNAL(highlighted(int)), q, SLOT(_q_styleHighlighted(int)));
-   QObject::connect(sizeList, SIGNAL(highlighted(int)), q, SLOT(_q_sizeHighlighted(int)));
-   QObject::connect(sizeEdit, SIGNAL(textChanged(QString)), q, SLOT(_q_sizeChanged(QString)));
+   QObject::connect(writingSystemCombo, SIGNAL(activated(int)),   q, SLOT(_q_writingSystemHighlighted(int)));
+   QObject::connect(familyList,         SIGNAL(highlighted(int)), q, SLOT(_q_familyHighlighted(int)));
+   QObject::connect(styleList,          SIGNAL(highlighted(int)), q, SLOT(_q_styleHighlighted(int)));
+   QObject::connect(sizeList,           SIGNAL(highlighted(int)), q, SLOT(_q_sizeHighlighted(int)));
 
-   QObject::connect(strikeout, SIGNAL(clicked()), q, SLOT(_q_updateSample()));
-   QObject::connect(underline, SIGNAL(clicked()), q, SLOT(_q_updateSample()));
+   QObject::connect(sizeEdit,           &QLineEdit::textChanged,  q, &QFontDialog::_q_sizeChanged);
+   QObject::connect(strikeout,          &QCheckBox::clicked,      q, &QFontDialog::_q_updateSample);
+   QObject::connect(underline,          &QCheckBox::clicked,      q, &QFontDialog::_q_updateSample);
 
    for (int i = 0; i < QFontDatabase::WritingSystemsCount; ++i) {
       QFontDatabase::WritingSystem ws = QFontDatabase::WritingSystem(i);
       QString writingSystemName = QFontDatabase::writingSystemName(ws);
+
       if (writingSystemName.isEmpty()) {
          break;
       }
@@ -373,8 +374,10 @@ bool QFontDialog::eventFilter(QObject *o, QEvent *e)
 void QFontDialogPrivate::initHelper(QPlatformDialogHelper *h)
 {
    QFontDialog *d = q_func();
+
    QObject::connect(h, SIGNAL(currentFontChanged(QFont)), d, SLOT(currentFontChanged(QFont)));
-   QObject::connect(h, SIGNAL(fontSelected(QFont)), d, SLOT(fontSelected(QFont)));
+   QObject::connect(h, SIGNAL(fontSelected(QFont)),       d, SLOT(fontSelected(QFont)));
+
    static_cast<QPlatformFontDialogHelper *>(h)->setOptions(options);
 }
 

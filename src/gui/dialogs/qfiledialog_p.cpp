@@ -65,13 +65,17 @@ void QFileDialogPrivate::initHelper(QPlatformDialogHelper *h)
 {
    QFileDialog *d = q_func();
 
-   QObject::connect(h, SIGNAL(fileSelected(QUrl)), d, SLOT(_q_emitUrlSelected(QUrl)));
-   QObject::connect(h, SIGNAL(filesSelected(QList<QUrl>)), d, SLOT(_q_emitUrlsSelected(QList<QUrl>)));
-   QObject::connect(h, SIGNAL(currentChanged(QUrl)), d, SLOT(_q_nativeCurrentChanged(QUrl)));
-   QObject::connect(h, SIGNAL(directoryEntered(QUrl)), d, SLOT(_q_nativeEnterDirectory(QUrl)));
-   QObject::connect(h, SIGNAL(filterSelected(QString)), d, SLOT(filterSelected(QString)));
+   auto obj = dynamic_cast<QPlatformFileDialogHelper *>(h);
+   assert(obj != nullptr);
 
-   static_cast<QPlatformFileDialogHelper *>(h)->setOptions(options);
+   QObject::connect(obj, &QPlatformFileDialogHelper::fileSelected,     d, &QFileDialog::_q_emitUrlSelected);
+   QObject::connect(obj, &QPlatformFileDialogHelper::filesSelected,    d, &QFileDialog::_q_emitUrlsSelected);
+   QObject::connect(obj, &QPlatformFileDialogHelper::currentChanged,   d, &QFileDialog::_q_nativeCurrentChanged);
+   QObject::connect(obj, &QPlatformFileDialogHelper::directoryEntered, d, &QFileDialog::_q_nativeEnterDirectory);
+   QObject::connect(obj, &QPlatformFileDialogHelper::filterSelected,   d, &QFileDialog::filterSelected);
+
+   obj->setOptions(options);
+
    nativeDialogInUse = true;
 }
 
@@ -800,14 +804,9 @@ void QFileDialogPrivate::createWidgets()
    }
 
    model->d_func()->disableRecursiveSort = true;
-   QFileDialog::connect(model, SIGNAL(fileRenamed(QString, QString, QString)),
-      q, SLOT(_q_fileRenamed(QString, QString, QString )));
-
-   QFileDialog::connect(model, SIGNAL(rootPathChanged(QString)),
-      q, SLOT(_q_pathChanged(QString)));
-
-   QFileDialog::connect(model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-      q, SLOT(_q_rowsInserted(QModelIndex)));
+   QFileDialog::connect(model, &QFileSystemModel::fileRenamed,     q, &QFileDialog::_q_fileRenamed);
+   QFileDialog::connect(model, &QFileSystemModel::rootPathChanged, q, &QFileDialog::_q_pathChanged);
+   QFileDialog::connect(model, &QFileSystemModel::rowsInserted,    q, &QFileDialog::_q_rowsInserted);
 
    model->setReadOnly(false);
 
@@ -818,14 +817,15 @@ void QFileDialogPrivate::createWidgets()
    initialBookmarks << QUrl("file:") << QUrl::fromLocalFile(QDir::homePath());
 
    qFileDialogUi->sidebar->setModelAndUrls(model, initialBookmarks);
-   QFileDialog::connect(qFileDialogUi->sidebar, SIGNAL(goToUrl(QUrl)), q, SLOT(_q_goToUrl(QUrl)));
+   QFileDialog::connect(qFileDialogUi->sidebar, &QSidebar::goToUrl, q, &QFileDialog::_q_goToUrl);
 
-   QObject::connect(qFileDialogUi->buttonBox, SIGNAL(accepted()), q, SLOT(accept()));
-   QObject::connect(qFileDialogUi->buttonBox, SIGNAL(rejected()), q, SLOT(reject()));
+   QObject::connect(qFileDialogUi->buttonBox, &QDialogButtonBox::accepted, q, &QFileDialog::accept);
+   QObject::connect(qFileDialogUi->buttonBox, &QDialogButtonBox::rejected, q, &QFileDialog::reject);
 
    qFileDialogUi->lookInCombo->setFileDialogPrivate(this);
-   QObject::connect(qFileDialogUi->lookInCombo, SIGNAL(activated(QString)), q,
-      SLOT(_q_goToDirectory(QString)));
+
+   QObject::connect(qFileDialogUi->lookInCombo, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated),
+            q, &QFileDialog::_q_goToDirectory);
 
    qFileDialogUi->lookInCombo->setInsertPolicy(QComboBox::NoInsert);
    qFileDialogUi->lookInCombo->setDuplicatesEnabled(false);
@@ -842,52 +842,48 @@ void QFileDialogPrivate::createWidgets()
    qFileDialogUi->fileNameEdit->setCompleter(completer);
 #endif
 
-   QObject::connect(qFileDialogUi->fileNameEdit, SIGNAL(textChanged(QString)),
-      q, SLOT(_q_autoCompleteFileName(QString)));
-
-   QObject::connect(qFileDialogUi->fileNameEdit, SIGNAL(textChanged(QString)),
-      q, SLOT(_q_updateOkButton()));
-
-   QObject::connect(qFileDialogUi->fileNameEdit, SIGNAL(returnPressed()), q, SLOT(accept()));
+   QObject::connect(qFileDialogUi->fileNameEdit, &QLineEdit::textChanged,   q, &QFileDialog::_q_autoCompleteFileName);
+   QObject::connect(qFileDialogUi->fileNameEdit, &QLineEdit::textChanged,   q, &QFileDialog::_q_updateOkButton);
+   QObject::connect(qFileDialogUi->fileNameEdit, &QLineEdit::returnPressed, q, &QFileDialog::accept);
 
    // filetype
    qFileDialogUi->fileTypeCombo->setDuplicatesEnabled(false);
    qFileDialogUi->fileTypeCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
    qFileDialogUi->fileTypeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-   QObject::connect(qFileDialogUi->fileTypeCombo, SIGNAL(activated(int)), q, SLOT(_q_useNameFilter(int)));
+   QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+                   q, &QFileDialog::_q_useNameFilter);
 
-   QObject::connect(qFileDialogUi->fileTypeCombo, SIGNAL(activated(QString)), q,
-      SLOT(filterSelected(QString)));
+   QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated),
+                   q, &QFileDialog::filterSelected);
 
    qFileDialogUi->listView->setFileDialogPrivate(this);
    qFileDialogUi->listView->setModel(model);
 
-   QObject::connect(qFileDialogUi->listView, SIGNAL(activated(QModelIndex)),
-      q, SLOT(_q_enterDirectory(QModelIndex)));
-
-   QObject::connect(qFileDialogUi->listView, SIGNAL(customContextMenuRequested(QPoint)),
-      q, SLOT(_q_showContextMenu(QPoint)));
+   QObject::connect(qFileDialogUi->listView, &QListView::activated,                  q, &QFileDialog::_q_enterDirectory);
+   QObject::connect(qFileDialogUi->listView, &QListView::customContextMenuRequested, q, &QFileDialog::_q_showContextMenu);
 
 #ifndef QT_NO_SHORTCUT
    QShortcut *shortcut = new QShortcut(qFileDialogUi->listView);
-   shortcut->setKey(QKeySequence(QLatin1String("Delete")));
-   QObject::connect(shortcut, SIGNAL(activated()), q, SLOT(_q_deleteCurrent()));
+   shortcut->setKey(QKeySequence("Delete"));
+   QObject::connect(shortcut, &QShortcut::activated, q, &QFileDialog::_q_deleteCurrent);
 #endif
 
    qFileDialogUi->treeView->setFileDialogPrivate(this);
    qFileDialogUi->treeView->setModel(model);
+
    QHeaderView *treeHeader = qFileDialogUi->treeView->header();
    QFontMetrics fm(q->font());
-   treeHeader->resizeSection(0, fm.width(QLatin1String("wwwwwwwwwwwwwwwwwwwwwwwwww")));
-   treeHeader->resizeSection(1, fm.width(QLatin1String("128.88 GB")));
-   treeHeader->resizeSection(2, fm.width(QLatin1String("mp3Folder")));
-   treeHeader->resizeSection(3, fm.width(QLatin1String("10/29/81 02:02PM")));
+
+   treeHeader->resizeSection(0, fm.width(QString("wwwwwwwwwwwwwwwwwwwwwwwwww")));
+   treeHeader->resizeSection(1, fm.width(QString("128.88 GB")));
+   treeHeader->resizeSection(2, fm.width(QString("mp3Folder")));
+   treeHeader->resizeSection(3, fm.width(QString("10/29/81 02:02PM")));
    treeHeader->setContextMenuPolicy(Qt::ActionsContextMenu);
 
    QActionGroup *showActionGroup = new QActionGroup(q);
    showActionGroup->setExclusive(false);
-   QObject::connect(showActionGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_showHeader(QAction *)));;
+   QObject::connect(showActionGroup, &QActionGroup::triggered, q, &QFileDialog::_q_showHeader);
 
    QAbstractItemModel *abstractModel = model;
 
@@ -896,6 +892,7 @@ void QFileDialogPrivate::createWidgets()
       abstractModel = proxyModel;
    }
 #endif
+
    for (int i = 1; i < abstractModel->columnCount(QModelIndex()); ++i) {
       QAction *showHeader = new QAction(showActionGroup);
       showHeader->setCheckable(true);
@@ -906,25 +903,19 @@ void QFileDialogPrivate::createWidgets()
    QScopedPointer<QItemSelectionModel> selModel(qFileDialogUi->treeView->selectionModel());
    qFileDialogUi->treeView->setSelectionModel(qFileDialogUi->listView->selectionModel());
 
-   QObject::connect(qFileDialogUi->treeView, SIGNAL(activated(QModelIndex)),
-      q, SLOT(_q_enterDirectory(QModelIndex)));
-
-   QObject::connect(qFileDialogUi->treeView, SIGNAL(customContextMenuRequested(QPoint)),
-      q, SLOT(_q_showContextMenu(QPoint)));
+   QObject::connect(qFileDialogUi->treeView, &QTreeView::activated,                  q, &QFileDialog::_q_enterDirectory);
+   QObject::connect(qFileDialogUi->treeView, &QTreeView::customContextMenuRequested, q, &QFileDialog::_q_showContextMenu);
 
 #ifndef QT_NO_SHORTCUT
    shortcut = new QShortcut(qFileDialogUi->treeView);
-   shortcut->setKey(QKeySequence(QLatin1String("Delete")));
-   QObject::connect(shortcut, SIGNAL(activated()), q, SLOT(_q_deleteCurrent()));
+   shortcut->setKey(QKeySequence("Delete"));
+   QObject::connect(shortcut, &QShortcut::activated, q, &QFileDialog::_q_deleteCurrent);
 #endif
 
    // Selections
    QItemSelectionModel *selections = qFileDialogUi->listView->selectionModel();
-   QObject::connect(selections, SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-      q, SLOT(_q_selectionChanged()));
-
-   QObject::connect(selections, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_currentChanged(QModelIndex)));
+   QObject::connect(selections, &QItemSelectionModel::selectionChanged, q, &QFileDialog::_q_selectionChanged);
+   QObject::connect(selections, &QItemSelectionModel::currentChanged,   q, &QFileDialog::_q_currentChanged);
 
    qFileDialogUi->splitter->setStretchFactor(qFileDialogUi->splitter->indexOf(qFileDialogUi->splitter->widget(1)),
       QSizePolicy::Expanding);

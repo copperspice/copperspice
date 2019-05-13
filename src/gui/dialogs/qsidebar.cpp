@@ -296,17 +296,15 @@ void QUrlModel::setFileSystemModel(QFileSystemModel *model)
       disconnect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
          this, SLOT(dataChanged(QModelIndex, QModelIndex)));
 
-      disconnect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
-      disconnect(model, SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SLOT(layoutChanged()));
+      disconnect(model, &QFileSystemModel::layoutChanged, this, &QUrlModel::layoutChanged);
+      disconnect(model, &QFileSystemModel::rowsRemoved,   this, &QUrlModel::layoutChanged);
    }
 
    fileSystemModel = model;
    if (fileSystemModel != 0) {
-      connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-         this, SLOT(dataChanged(QModelIndex, QModelIndex)));
-
-      connect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
-      connect(model, SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SLOT(layoutChanged()));
+      connect(model, &QFileSystemModel::dataChanged,   this, &QUrlModel::dataChanged);
+      connect(model, &QFileSystemModel::layoutChanged, this, &QUrlModel::layoutChanged);
+      connect(model, &QFileSystemModel::rowsRemoved,   this, &QUrlModel::layoutChanged);
    }
 
    clear();
@@ -386,15 +384,14 @@ void QSidebar::setModelAndUrls(QFileSystemModel *model, const QList<QUrl> &newUr
    setModel(urlModel);
    setItemDelegate(new QSideBarDelegate(this));
 
-   connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      this, SLOT(clicked(QModelIndex)));
+   connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &QSidebar::clicked);
 
 #ifndef QT_NO_DRAGANDDROP
    setDragDropMode(QAbstractItemView::DragDrop);
 #endif
 
    setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+   connect(this, &QSidebar::customContextMenuRequested, this, &QSidebar::showContextMenu);
    urlModel->setUrls(newUrls);
    setCurrentIndex(this->model()->index(0, 0));
 }
@@ -422,8 +419,7 @@ QSize QSidebar::sizeHint() const
 
 void QSidebar::selectUrl(const QUrl &url)
 {
-   disconnect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      this, SLOT(clicked(QModelIndex)));
+   disconnect(selectionModel(), &QItemSelectionModel::currentChanged, this, &QSidebar::clicked);
 
    selectionModel()->clear();
 
@@ -438,8 +434,7 @@ void QSidebar::selectUrl(const QUrl &url)
       }
    }
 
-   connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      this, SLOT(clicked(QModelIndex)));
+   connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &QSidebar::clicked);
 }
 
 #ifndef QT_NO_MENU

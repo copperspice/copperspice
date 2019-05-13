@@ -30,8 +30,6 @@
 #  include <sys/types.h>
 #endif
 
-
-
 #ifndef QT_NO_FILESYSTEMMODEL
 
 // Creates thread
@@ -49,8 +47,9 @@ QFileInfoGatherer::QFileInfoGatherer(QObject *parent)
 
 #ifndef QT_NO_FILESYSTEMWATCHER
    watcher = new QFileSystemWatcher(this);
-   connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(list(QString)));
-   connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(updateFile(QString)));
+
+   connect(watcher, &QFileSystemWatcher::directoryChanged, this, &QFileInfoGatherer::list);
+   connect(watcher, &QFileSystemWatcher::fileChanged,      this, &QFileInfoGatherer::updateFile);
 #endif
 
    start(LowPriority);

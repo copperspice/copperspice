@@ -1437,13 +1437,13 @@ void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
    }
 
    QModelIndex idx = d->rootIndex();
+
    if (d->proxyModel) {
-      disconnect(d->proxyModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_rowsInserted(QModelIndex)));
+      disconnect(d->proxyModel, &QAbstractProxyModel::rowsInserted, this, &QFileDialog::_q_rowsInserted);
 
    } else {
-      disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_rowsInserted(QModelIndex)));
+      disconnect(d->model, &QAbstractProxyModel::rowsInserted, this, &QFileDialog::_q_rowsInserted);
+
    }
 
    if (proxyModel != 0) {
@@ -1458,21 +1458,20 @@ void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
       d->completer->proxyModel = d->proxyModel;
 #endif
 
-      connect(d->proxyModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_rowsInserted(QModelIndex)));
+      connect(d->proxyModel, &QAbstractProxyModel::rowsInserted, this, &QFileDialog::_q_rowsInserted);
 
    } else {
       d->proxyModel = 0;
       d->qFileDialogUi->listView->setModel(d->model);
       d->qFileDialogUi->treeView->setModel(d->model);
+
 #ifndef QT_NO_FSCOMPLETER
       d->completer->setModel(d->model);
       d->completer->sourceModel = d->model;
       d->completer->proxyModel = 0;
 #endif
 
-      connect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_rowsInserted(QModelIndex)));
+      connect(d->model, &QAbstractProxyModel::rowsInserted, this, &QFileDialog::_q_rowsInserted);
    }
 
    QScopedPointer<QItemSelectionModel> selModel(d->qFileDialogUi->treeView->selectionModel());
@@ -1482,11 +1481,9 @@ void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
 
    // reconnect selection
    QItemSelectionModel *selections = d->qFileDialogUi->listView->selectionModel();
-   QObject::connect(selections, SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-      this, SLOT(_q_selectionChanged()));
 
-   QObject::connect(selections, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      this, SLOT(_q_currentChanged(QModelIndex)));
+   QObject::connect(selections, &QItemSelectionModel::selectionChanged, this, &QFileDialog::_q_selectionChanged);
+   QObject::connect(selections, &QItemSelectionModel::currentChanged,   this, &QFileDialog::_q_currentChanged);
 }
 
 QAbstractProxyModel *QFileDialog::proxyModel() const
