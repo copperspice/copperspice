@@ -126,14 +126,14 @@ void QDesktopWidgetPrivate::_q_updateScreens()
       } else {
          // a new screen, create a widget and connect the signals.
          screenWidget = new QDesktopScreenWidget(qScreen, screenGeometry);
-         QObject::connect(qScreen, SIGNAL(geometryChanged(QRect)),
-            q, SLOT(_q_updateScreens()), Qt::QueuedConnection);
-         QObject::connect(qScreen, SIGNAL(availableGeometryChanged(QRect)),
-            q, SLOT(_q_availableGeometryChanged()), Qt::QueuedConnection);
-         QObject::connect(qScreen, SIGNAL(destroyed()),
-            q, SLOT(_q_updateScreens()), Qt::QueuedConnection);
+
+         QObject::connect(qScreen, &QScreen::geometryChanged, q, &QDesktopWidget::_q_updateScreens, Qt::QueuedConnection);
+         QObject::connect(qScreen, &QScreen::availableGeometryChanged, q, &QDesktopWidget::_q_availableGeometryChanged, Qt::QueuedConnection);
+         QObject::connect(qScreen, &QScreen::destroyed, q, &QDesktopWidget::_q_updateScreens, Qt::QueuedConnection);
+
          screenCountChanged = true;
       }
+
       // record all the screens and the overall geometry.
       newScreens.push_back(screenWidget);
       virtualGeometry += screenGeometry;
@@ -178,9 +178,10 @@ QDesktopWidget::QDesktopWidget()
    setObjectName(QLatin1String("desktop"));
    d->_q_updateScreens();
 
-   connect(qApp, SIGNAL(screenAdded(QScreen *)),          this, SLOT(_q_updateScreens()));
-   connect(qApp, SIGNAL(primaryScreenChanged(QScreen *)), this, SLOT(primaryScreenChanged()));
+   connect(qApp, &QApplication::screenAdded,          this, &QDesktopWidget::_q_updateScreens);
+   connect(qApp, &QApplication::primaryScreenChanged, this, &QDesktopWidget::primaryScreenChanged);
 }
+
 QDesktopWidget::~QDesktopWidget()
 {
 }
