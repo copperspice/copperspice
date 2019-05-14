@@ -1198,9 +1198,8 @@ void QDateTimeEdit::mousePressEvent(QMouseEvent *event)
 QTimeEdit::QTimeEdit(QWidget *parent)
    : QDateTimeEdit(QDATETIMEEDIT_TIME_MIN, QVariant::Time, parent)
 {
-   connect(this, SIGNAL(timeChanged(QTime)), this, SLOT(userTimeChanged(QTime)));
+   connect(this, &QDateEdit::timeChanged, this, &QTimeEdit::userTimeChanged);
 }
-
 
 QTimeEdit::QTimeEdit(const QTime &time, QWidget *parent)
    : QDateTimeEdit(time, QVariant::Time, parent)
@@ -1214,7 +1213,7 @@ QTimeEdit::~QTimeEdit()
 QDateEdit::QDateEdit(QWidget *parent)
    : QDateTimeEdit(QDATETIMEEDIT_DATE_INITIAL, QVariant::Date, parent)
 {
-   connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(userDateChanged(QDate)));
+   connect(this, &QDateEdit::dateChanged, this, &QDateEdit::userDateChanged);
 }
 
 /*!
@@ -2171,17 +2170,18 @@ void QDateTimeEditPrivate::initCalendarPopup(QCalendarWidget *cw)
 
    if (! monthCalendar) {
       monthCalendar = new QCalendarPopup(q, cw);
-      monthCalendar->setObjectName(QLatin1String("qt_datetimedit_calendar"));
+      monthCalendar->setObjectName("qt_datetimedit_calendar");
 
-      QObject::connect(monthCalendar, SIGNAL(newDateSelected(QDate)), q, SLOT(setDate(QDate)));
-      QObject::connect(monthCalendar, SIGNAL(hidingCalendar(QDate)),  q, SLOT(setDate(QDate)));
-      QObject::connect(monthCalendar, SIGNAL(activated(QDate)),       q, SLOT(setDate(QDate)));
-      QObject::connect(monthCalendar, SIGNAL(activated(QDate)),       monthCalendar, SLOT(close()));
-      QObject::connect(monthCalendar, SIGNAL(resetButton()),          q, SLOT(_q_resetButton()));
+      QObject::connect(monthCalendar, &QCalendarPopup::newDateSelected, q, &QDateTimeEdit::setDate);
+      QObject::connect(monthCalendar, &QCalendarPopup::hidingCalendar,  q, &QDateTimeEdit::setDate);
+      QObject::connect(monthCalendar, &QCalendarPopup::activated,       q, &QDateTimeEdit::setDate);
+      QObject::connect(monthCalendar, &QCalendarPopup::activated,       monthCalendar, &QCalendarPopup::close);
+      QObject::connect(monthCalendar, &QCalendarPopup::resetButton,     q, &QDateTimeEdit::_q_resetButton);
 
    } else if (cw) {
       monthCalendar->setCalendarWidget(cw);
    }
+
    syncCalendarWidget();
 }
 
@@ -2282,13 +2282,14 @@ void QCalendarPopup::setCalendarWidget(QCalendarWidget *cw)
       widgetLayout->setMargin(0);
       widgetLayout->setSpacing(0);
    }
+
    delete calendar.data();
    calendar = QPointer<QCalendarWidget>(cw);
    widgetLayout->addWidget(cw);
 
-   connect(cw, SIGNAL(activated(QDate)),   this, SLOT(dateSelected(QDate)));
-   connect(cw, SIGNAL(clicked(QDate)),     this, SLOT(dateSelected(QDate)));
-   connect(cw, SIGNAL(selectionChanged()), this, SLOT(dateSelectionChanged()));
+   connect(cw, &QCalendarWidget::activated,        this, &QCalendarPopup::dateSelected);
+   connect(cw, &QCalendarWidget::clicked,          this, &QCalendarPopup::dateSelected);
+   connect(cw, &QCalendarWidget::selectionChanged, this, &QCalendarPopup::dateSelectionChanged);
 
    cw->setFocus();
 }

@@ -387,10 +387,12 @@ QFontComboBox::QFontComboBox(QWidget *parent)
    }
    setWritingSystem(QFontDatabase::Any);
 
-   connect(this, SIGNAL(currentIndexChanged(QString)), this, SLOT(_q_currentChanged(QString)));
-   connect(qApp, SIGNAL(fontDatabaseChanged()), this, SLOT(_q_updateModel()));
-}
+   // broom - should be QFontComboBox, resolve ( not a major issue )
+   connect(this, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
+                  this, &QFontComboBox::_q_currentChanged);
 
+   connect(qApp, &QApplication::fontDatabaseChanged,  this, &QFontComboBox::_q_updateModel);
+}
 
 QFontComboBox::~QFontComboBox()
 {

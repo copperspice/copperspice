@@ -611,9 +611,9 @@ void QTextBrowserPrivate::init()
    q->setUndoRedoEnabled(false);
    viewport->setMouseTracking(true);
 
-   QObject::connect(q->document(), SIGNAL(contentsChanged()), q, SLOT(_q_documentModified()));
-   QObject::connect(control, SIGNAL(linkActivated(QString)),  q, SLOT(_q_activateAnchor(QString)));
-   QObject::connect(control, SIGNAL(linkHovered(QString)),    q, SLOT(_q_highlightLink(QString)));
+   QObject::connect(q->document(), &QTextDocument::contentsChanged, q, &QTextBrowser::_q_documentModified);
+   QObject::connect(control,       &QTextControl::linkActivated,    q, &QTextBrowser::_q_activateAnchor);
+   QObject::connect(control,       &QTextControl::linkHovered,      q, &QTextBrowser::_q_highlightLink);
 }
 
 /*!

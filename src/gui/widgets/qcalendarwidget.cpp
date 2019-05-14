@@ -1804,14 +1804,20 @@ void QCalendarWidgetPrivate::setNavigatorEnabled(bool enable)
 
    if (enable) {
       m_navigator->setWidget(q);
-      q->connect(m_navigator, SIGNAL(dateChanged(QDate)), q, SLOT(_q_slotChangeDate(QDate)));
-      q->connect(m_navigator, SIGNAL(editingFinished()),  q, SLOT(_q_editingFinished()));
+
+      q->connect(m_navigator, &QCalendarTextNavigator::dateChanged,       q,
+                  static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
+
+      q->connect(m_navigator, &QCalendarTextNavigator::editingFinished,     q, &QCalendarWidget::_q_editingFinished);
       m_view->installEventFilter(m_navigator);
 
    } else {
       m_navigator->setWidget(0);
-      q->disconnect(m_navigator, SIGNAL(dateChanged(QDate)), q, SLOT(_q_slotChangeDate(QDate)));
-      q->disconnect(m_navigator, SIGNAL(editingFinished()),  q, SLOT(_q_editingFinished()));
+
+      q->disconnect(m_navigator, &QCalendarTextNavigator::dateChanged,      q,
+                  static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
+
+      q->disconnect(m_navigator, &QCalendarTextNavigator::editingFinished,  q, &QCalendarWidget::_q_editingFinished);
       m_view->removeEventFilter(m_navigator);
    }
 }
@@ -2133,16 +2139,19 @@ QCalendarWidget::QCalendarWidget(QWidget *parent)
    setFocusProxy(d->m_view);
    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-   connect(d->m_view, SIGNAL(showDate(QDate)),         this, SLOT(_q_slotShowDate(QDate)));
-   connect(d->m_view, SIGNAL(changeDate(QDate, bool)), this, SLOT(_q_slotChangeDate(QDate, bool)));
-   connect(d->m_view, SIGNAL(clicked(QDate)),          this, SLOT(clicked(const QDate &)));
-   connect(d->m_view, SIGNAL(editingFinished()),       this, SLOT(_q_editingFinished()));
+   connect(d->m_view,     &QCalendarView::showDate,            this, &QCalendarWidget::_q_slotShowDate);
 
-   connect(d->prevMonth, SIGNAL(clicked(bool)),        this, SLOT(_q_prevMonthClicked()));
-   connect(d->nextMonth, SIGNAL(clicked(bool)),        this, SLOT(_q_nextMonthClicked()));
-   connect(d->yearButton, SIGNAL(clicked(bool)),       this, SLOT(_q_yearClicked()));
-   connect(d->monthMenu, SIGNAL(triggered(QAction *)), this, SLOT(_q_monthChanged(QAction *)));
-   connect(d->yearEdit, SIGNAL(editingFinished()),     this, SLOT(_q_yearEditingFinished()));
+   connect(d->m_view,     &QCalendarView::changeDate,          this,
+                  static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
+
+   connect(d->m_view,     &QCalendarView::clicked,             this, &QCalendarWidget::clicked);
+   connect(d->m_view,     &QCalendarView::editingFinished,     this, &QCalendarWidget::_q_editingFinished);
+
+   connect(d->prevMonth,  &QToolButton::clicked,      this, &QCalendarWidget::_q_prevMonthClicked);
+   connect(d->nextMonth,  &QToolButton::clicked,      this, &QCalendarWidget::_q_nextMonthClicked);
+   connect(d->yearButton, &QCalToolButton::clicked,   this, &QCalendarWidget::_q_yearClicked);
+   connect(d->monthMenu,  &QMenu::triggered,          this, &QCalendarWidget::_q_monthChanged);
+   connect(d->yearEdit,   &QSpinBox::editingFinished, this, &QCalendarWidget::_q_yearEditingFinished);
 
    layoutV->setMargin(0);
    layoutV->setSpacing(0);

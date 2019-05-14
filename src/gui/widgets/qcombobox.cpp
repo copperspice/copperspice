@@ -545,9 +545,10 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
       view->viewport()->removeEventFilter(this);
 
 #ifndef QT_NO_SCROLLBAR
-      disconnect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateScrollers()));
+      disconnect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),      this, SLOT(updateScrollers()));
       disconnect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateScrollers()));
 #endif
+
       disconnect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
 
       delete view;
@@ -582,7 +583,7 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 #ifndef QT_NO_SCROLLBAR
-   connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateScrollers()));
+   connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),      this, SLOT(updateScrollers()));
    connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateScrollers()));
 #endif
 
@@ -853,15 +854,13 @@ QComboBoxPrivateContainer *QComboBoxPrivate::viewContainer()
    updateLayoutDirection();
    updateViewContainerPaletteAndOpacity();
 
-   QObject::connect(container, SIGNAL(itemSelected(QModelIndex)), q, SLOT(_q_itemSelected(QModelIndex)));
+   QObject::connect(container, &QComboBoxPrivateContainer::itemSelected,   q, &QComboBox::_q_itemSelected);
+   QObject::connect(container, &QComboBoxPrivateContainer::resetButton,    q, &QComboBox::_q_resetButton);
 
-   QObject::connect(container->itemView()->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_emitHighlighted(QModelIndex)));
+   QObject::connect(container->itemView()->selectionModel(), &QItemSelectionModel::currentChanged, q, &QComboBox::_q_emitHighlighted);
 
-   QObject::connect(container, SIGNAL(resetButton()), q, SLOT(_q_resetButton()));
    return container;
 }
-
 
 void QComboBoxPrivate::_q_resetButton()
 {
@@ -1296,8 +1295,11 @@ void QComboBox::setAutoCompletion(bool enable)
       if (d->lineEdit->completer()) {
          return;
       }
+
       d->completer = new QCompleter(d->model, d->lineEdit);
-      connect(d->completer, SIGNAL(activated(QModelIndex)), this, SLOT(_q_completerActivated(QModelIndex)));
+      connect(d->completer.data(), static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated),
+                  this, &QComboBox::_q_completerActivated);
+
       d->completer->setCaseSensitivity(d->autoCompletionCaseSensitivity);
       d->completer->setCompletionMode(QCompleter::InlineCompletion);
       d->completer->setCompletionColumn(d->modelColumn);
@@ -1540,12 +1542,12 @@ void QComboBox::setLineEdit(QLineEdit *edit)
       d->lineEdit->setParent(this);
    }
 
-   connect(d->lineEdit, SIGNAL(returnPressed()),      this, SLOT(_q_returnPressed()));
-   connect(d->lineEdit, SIGNAL(editingFinished()),    this, SLOT(_q_editingFinished()));
-   connect(d->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(editTextChanged(QString)));
-   connect(d->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(currentTextChanged(QString)));
-   connect(d->lineEdit, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(updateMicroFocus()));
-   connect(d->lineEdit, SIGNAL(selectionChanged()),             this, SLOT(updateMicroFocus()));
+   connect(d->lineEdit, &QLineEdit::returnPressed,         this, &QComboBox::_q_returnPressed);
+   connect(d->lineEdit, &QLineEdit::editingFinished,       this, &QComboBox::_q_editingFinished);
+   connect(d->lineEdit, &QLineEdit::textChanged,           this, &QComboBox::editTextChanged);
+   connect(d->lineEdit, &QLineEdit::textChanged,           this, &QComboBox::currentTextChanged);
+   connect(d->lineEdit, &QLineEdit::cursorPositionChanged, this, &QComboBox::updateMicroFocus);
+   connect(d->lineEdit, &QLineEdit::selectionChanged,      this, &QComboBox::updateMicroFocus);
 
    d->lineEdit->setFrame(false);
    d->lineEdit->setContextMenuPolicy(Qt::NoContextMenu);
@@ -1567,7 +1569,7 @@ void QComboBox::setLineEdit(QLineEdit *edit)
 
       if (d->completer) {
          d->completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
-         connect(d->completer, SIGNAL(activated(QModelIndex)), this, SLOT(_q_completerActivated()));
+         connect(d->completer, &QCompletere::activated, this, &QComboBox::_q_completerActivated);
       }
    }
 #endif
@@ -1614,9 +1616,11 @@ void QComboBox::setCompleter(QCompleter *c)
    if (!d->lineEdit) {
       return;
    }
+
    d->lineEdit->setCompleter(c);
+
    if (c) {
-      connect(c, SIGNAL(activated(QModelIndex)), this, SLOT(_q_completerActivated(QModelIndex)));
+      connect(c, static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated), this, &QComboBox::_q_completerActivated);
       c->setWidget(this);
    }
 }
@@ -1681,25 +1685,16 @@ void QComboBox::setModel(QAbstractItemModel *model)
       d->lineEdit->completer()->setModel(model);
    }
 #endif
+
    if (d->model) {
-      disconnect(d->model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-         this, SLOT(_q_dataChanged(QModelIndex, QModelIndex)));
-
-      disconnect(d->model, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
-         this, SLOT(_q_updateIndexBeforeChange()));
-
-      disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_rowsInserted(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_updateIndexBeforeChange()));
-
-      disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_rowsRemoved(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(destroyed()),           this, SLOT(_q_modelDestroyed()));
-      disconnect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_updateIndexBeforeChange()));
-      disconnect(d->model, SIGNAL(modelReset()),          this, SLOT(_q_modelReset()));
+      disconnect(d->model, &QAbstractItemModel::dataChanged,           this, &QComboBox::_q_dataChanged);
+      disconnect(d->model, &QAbstractItemModel::rowsAboutToBeInserted, this, &QComboBox::_q_updateIndexBeforeChange);
+      disconnect(d->model, &QAbstractItemModel::rowsInserted,          this, &QComboBox::_q_rowsInserted);
+      disconnect(d->model, &QAbstractItemModel::rowsAboutToBeRemoved,  this, &QComboBox::_q_updateIndexBeforeChange);
+      disconnect(d->model, &QAbstractItemModel::rowsRemoved,           this, &QComboBox::_q_rowsRemoved);
+      disconnect(d->model, &QAbstractItemModel::destroyed,             this, &QComboBox::_q_modelDestroyed);
+      disconnect(d->model, &QAbstractItemModel::modelAboutToBeReset,   this, &QComboBox::_q_updateIndexBeforeChange);
+      disconnect(d->model, &QAbstractItemModel::modelReset,            this, &QComboBox::_q_modelReset);
 
       if (d->model->QObject::parent() == this) {
          delete d->model;
@@ -1708,27 +1703,19 @@ void QComboBox::setModel(QAbstractItemModel *model)
 
    d->model = model;
 
-   connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      this, SLOT(_q_dataChanged(QModelIndex, QModelIndex)));
-
-   connect(model, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), this, SLOT(_q_updateIndexBeforeChange()));
-
-   connect(model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-      this, SLOT(_q_rowsInserted(QModelIndex, int, int)));
-
-   connect(model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),  this, SLOT(_q_updateIndexBeforeChange()));
-   connect(model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-      this, SLOT(_q_rowsRemoved(QModelIndex, int, int)));
-
-   connect(model, SIGNAL(destroyed()),           this, SLOT(_q_modelDestroyed()));
-   connect(model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_updateIndexBeforeChange()));
-   connect(model, SIGNAL(modelReset()),          this, SLOT(_q_modelReset()));
+   connect(model, &QAbstractItemModel::dataChanged,           this, &QComboBox::_q_dataChanged);
+   connect(model, &QAbstractItemModel::rowsAboutToBeInserted, this, &QComboBox::_q_updateIndexBeforeChange);
+   connect(model, &QAbstractItemModel::rowsInserted,          this, &QComboBox::_q_rowsInserted);
+   connect(model, &QAbstractItemModel::rowsAboutToBeRemoved,  this, &QComboBox::_q_updateIndexBeforeChange);
+   connect(model, &QAbstractItemModel::rowsRemoved,           this, &QComboBox::_q_rowsRemoved);
+   connect(model, &QAbstractItemModel::destroyed,             this, &QComboBox::_q_modelDestroyed);
+   connect(model, &QAbstractItemModel::modelAboutToBeReset,   this, &QComboBox::_q_updateIndexBeforeChange);
+   connect(model, &QAbstractItemModel::modelReset,            this, &QComboBox::_q_modelReset);
 
    if (d->container) {
       d->container->itemView()->setModel(model);
-      connect(d->container->itemView()->selectionModel(),
-         SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-         this, SLOT(_q_emitHighlighted(QModelIndex)), Qt::UniqueConnection);
+      connect(d->container->itemView()->selectionModel(), &QItemSelectionModel::currentChanged, this,
+                  &QComboBox::_q_emitHighlighted, Qt::UniqueConnection);
    }
 
    setRootModelIndex(QModelIndex());

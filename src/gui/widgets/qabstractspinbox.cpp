@@ -357,8 +357,8 @@ void QAbstractSpinBox::setLineEdit(QLineEdit *lineEdit)
    d->edit->setAcceptDrops(false);
 
    if (d->type != QVariant::Invalid) {
-      connect(d->edit, SIGNAL(textChanged(QString)), this, SLOT(_q_editorTextChanged(QString)));
-      connect(d->edit, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(_q_editorCursorPositionChanged(int, int)));
+      connect(d->edit, &QLineEdit::textChanged,           this, &QAbstractSpinBox::_q_editorTextChanged);
+      connect(d->edit, &QLineEdit::cursorPositionChanged, this, &QAbstractSpinBox::_q_editorCursorPositionChanged);
    }
 
    d->updateEditFieldGeometry();

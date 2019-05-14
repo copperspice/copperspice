@@ -170,27 +170,26 @@ void QLineEditPrivate::init(const QString &txt)
    control->setParent(q);
    control->setFont(q->font());
 
-   QObject::connect(control, SIGNAL(textChanged(QString)),             q, SLOT(textChanged(QString)));
-   QObject::connect(control, SIGNAL(textEdited(QString)),              q, SLOT(_q_textEdited(QString)));
-   QObject::connect(control, SIGNAL(cursorPositionChanged(int, int)),  q, SLOT(_q_cursorPositionChanged(int, int)));
-   QObject::connect(control, SIGNAL(selectionChanged()),               q, SLOT(_q_selectionChanged()));
-   QObject::connect(control, SIGNAL(accepted()),                       q, SLOT(returnPressed()));
-   QObject::connect(control, SIGNAL(editingFinished()),                q, SLOT(editingFinished()));
+   QObject::connect(control, &QLineControl::textChanged,           q, &QLineEdit::textChanged);
+   QObject::connect(control, &QLineControl::textEdited,            q, &QLineEdit::_q_textEdited);
+
+   QObject::connect(control, &QLineControl::cursorPositionChanged, q, &QLineEdit::_q_cursorPositionChanged);
+   QObject::connect(control, &QLineControl::selectionChanged,      q, &QLineEdit::_q_selectionChanged);
+   QObject::connect(control, &QLineControl::accepted,              q, &QLineEdit::returnPressed);
+   QObject::connect(control, &QLineControl::editingFinished,       q, &QLineEdit::editingFinished);
 
 #ifdef QT_KEYPAD_NAVIGATION
-   QObject::connect(control, SIGNAL(editFocusChange(bool)),            q, SLOT(_q_editFocusChange(bool)));
+   QObject::connect(control, &QLineControl::editFocusChange,       q, &QLineEdit::_q_editFocusChange);
 #endif
 
-   QObject::connect(control, SIGNAL(cursorPositionChanged(int, int)),  q, SLOT(updateMicroFocus()));
-   QObject::connect(control, SIGNAL(textChanged(QString)),        q, SLOT(updateMicroFocus()));
+   QObject::connect(control, &QLineControl::cursorPositionChanged, q, &QLineEdit::updateMicroFocus);
+   QObject::connect(control, &QLineControl::textChanged,           q, &QLineEdit::updateMicroFocus);
 
-   // for now, going completely overboard with updates.
-   QObject::connect(control, SIGNAL(selectionChanged()),          q, SLOT(update()));
+   QObject::connect(control, &QLineControl::selectionChanged,      q, static_cast<void (QLineEdit::*)()>(&QLineEdit::update));
 
-   QObject::connect(control, SIGNAL(selectionChanged()),         q, SLOT(updateMicroFocus()));
-
-   QObject::connect(control, SIGNAL(displayTextChanged(QString)), q, SLOT(update()));
-   QObject::connect(control, SIGNAL(updateNeeded(QRect)),         q, SLOT(_q_updateNeeded(QRect)));
+   QObject::connect(control, &QLineControl::selectionChanged,      q, &QLineEdit::updateMicroFocus);
+   QObject::connect(control, &QLineControl::displayTextChanged,    q, static_cast<void (QLineEdit::*)()>(&QLineEdit::update));
+   QObject::connect(control, &QLineControl::updateNeeded,          q, &QLineEdit::_q_updateNeeded);
 
    QStyleOptionFrame opt;
    q->initStyleOption(&opt);
@@ -498,8 +497,8 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
    if (!newAction) {
       return 0;
    }
-   if (!hasSideWidgets()) { // initial setup.
-      QObject::connect(q, SIGNAL(textChanged(QString)), q, SLOT(_q_textChanged(QString)));
+   if (! hasSideWidgets()) {
+      QObject::connect(q, &QLineEdit::textChanged, q, &QLineEdit::textChanged);
       lastTextSize = q->text().size();
    }
 
@@ -517,9 +516,11 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
       QLineEditIconButton *toolButton = new QLineEditIconButton(q);
       toolButton->setIcon(newAction->icon());
       toolButton->setOpacity(lastTextSize > 0 || !(flags & SideWidgetFadeInWithText) ? 1 : 0);
+
       if (flags & SideWidgetClearButton) {
-         QObject::connect(toolButton, SIGNAL(clicked()), q, SLOT(_q_clearButtonClicked()));
+         QObject::connect(toolButton, &QLineEditIconButton::clicked, q, &QLineEdit::_q_clearButtonClicked);
       }
+
       toolButton->setDefaultAction(newAction);
       w = toolButton;
    }
@@ -549,10 +550,13 @@ void QLineEditPrivate::removeAction(QAction *action)
    } else {
       delete entry.widget;
    }
+
    positionSideWidgets();
-   if (!hasSideWidgets()) { // Last widget, remove connection
-      QObject::disconnect(q, SIGNAL(textChanged(QString)), q, SLOT(_q_textChanged(QString)));
+   if (! hasSideWidgets()) {
+      // Last widget, remove connection
+      QObject::disconnect(q, &QLineEdit::textChanged, q, &QLineEdit::_q_textChanged);
    }
+
    q->update();
 }
 

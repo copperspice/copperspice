@@ -130,24 +130,24 @@ void QTextEditPrivate::createAutoBulletList()
 void QTextEditPrivate::init(const QString &html)
 {
    Q_Q(QTextEdit);
+
    control = new QTextEditControl(q);
    control->setPalette(q->palette());
 
-   QObject::connect(control, SIGNAL(microFocusChanged()),         q, SLOT(updateMicroFocus()));
-   QObject::connect(control, SIGNAL(documentSizeChanged(QSizeF)), q, SLOT(_q_adjustScrollbars()));
-   QObject::connect(control, SIGNAL(updateRequest(QRectF)),       q, SLOT(_q_repaintContents(QRectF)));
-   QObject::connect(control, SIGNAL(visibilityRequest(QRectF)),   q, SLOT(_q_ensureVisible(QRectF)));
+   QObject::connect(control, &QTextEditControl::microFocusChanged,     q, &QTextEdit::updateMicroFocus);
+   QObject::connect(control, &QTextEditControl::documentSizeChanged,   q, &QTextEdit::_q_adjustScrollbars);
+   QObject::connect(control, &QTextEditControl::updateRequest,         q, &QTextEdit::_q_repaintContents);
+   QObject::connect(control, &QTextEditControl::visibilityRequest,     q, &QTextEdit::_q_ensureVisible);
 
-   QObject::connect(control, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
-      q, SLOT(_q_currentCharFormatChanged(QTextCharFormat)));
+   QObject::connect(control, &QTextEditControl::currentCharFormatChanged, q, &QTextEdit::_q_currentCharFormatChanged);
 
-   QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(textChanged()));
-   QObject::connect(control, SIGNAL(undoAvailable(bool)),     q, SLOT(undoAvailable(bool)));
-   QObject::connect(control, SIGNAL(redoAvailable(bool)),     q, SLOT(redoAvailable(bool)));
-   QObject::connect(control, SIGNAL(copyAvailable(bool)),     q, SLOT(copyAvailable(bool)));
-   QObject::connect(control, SIGNAL(selectionChanged()),      q, SLOT(selectionChanged()));
-   QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(_q_cursorPositionChanged()));
-   QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(updateMicroFocus()));
+   QObject::connect(control, &QTextEditControl::textChanged,           q, &QTextEdit::textChanged);
+   QObject::connect(control, &QTextEditControl::undoAvailable,         q, &QTextEdit::undoAvailable);
+   QObject::connect(control, &QTextEditControl::redoAvailable,         q, &QTextEdit::redoAvailable);
+   QObject::connect(control, &QTextEditControl::copyAvailable,         q, &QTextEdit::copyAvailable);
+   QObject::connect(control, &QTextEditControl::selectionChanged,      q, &QTextEdit::selectionChanged);
+   QObject::connect(control, &QTextEditControl::cursorPositionChanged, q, &QTextEdit::_q_cursorPositionChanged);
+   QObject::connect(control, &QTextEditControl::textChanged,           q, &QTextEdit::updateMicroFocus);
 
    QTextDocument *doc = control->document();
    // set a null page size initially to avoid any relayouting until the textedit

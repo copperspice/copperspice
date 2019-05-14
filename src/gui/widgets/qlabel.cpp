@@ -1228,9 +1228,11 @@ void QLabelPrivate::ensureTextControl() const
       control->setPalette(q->palette());
       control->setFocus(q->hasFocus());
 
-      QObject::connect(control, SIGNAL(updateRequest(QRectF)),   q, SLOT(update()));
-      QObject::connect(control, SIGNAL(linkHovered(QString)),    q, SLOT(_q_linkHovered(QString)));
-      QObject::connect(control, SIGNAL(linkActivated(QString)),  q, SLOT(linkActivated(QString)));
+      QObject::connect(control, &QTextControl::updateRequest,  q,
+                  static_cast<void (QLabel::*)()>(&QLabel::update));
+
+      QObject::connect(control, &QTextControl::linkHovered,    q, &QLabel::_q_linkHovered);
+      QObject::connect(control, &QTextControl::linkActivated,  q, &QLabel::linkActivated);
 
       textLayoutDirty = true;
       textDirty = true;

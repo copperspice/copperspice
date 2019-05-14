@@ -734,7 +734,6 @@ QPlainTextEditPrivate::QPlainTextEditPrivate()
    inDrag = false;
 }
 
-
 void QPlainTextEditPrivate::init(const QString &txt)
 {
    Q_Q(QPlainTextEdit);
@@ -749,11 +748,11 @@ void QPlainTextEditPrivate::init(const QString &txt)
 
    QObject::connect(vbar, SIGNAL(actionTriggered(int)), q, SLOT(_q_verticalScrollbarActionTriggered(int)));
 
-   QObject::connect(control, SIGNAL(microFocusChanged()),          q, SLOT(updateMicroFocus()));
-   QObject::connect(control, SIGNAL(documentSizeChanged(QSizeF)),  q, SLOT(_q_adjustScrollbars()));
-   QObject::connect(control, SIGNAL(blockCountChanged(int)),       q, SLOT(blockCountChanged(int)));
-   QObject::connect(control, SIGNAL(updateRequest(QRectF)),        q, SLOT(_q_repaintContents(QRectF)));
-   QObject::connect(control, SIGNAL(modificationChanged(bool)),    q, SLOT(modificationChanged(bool)));
+   QObject::connect(control, &QPlainTextEditControl::microFocusChanged,      q, &QPlainTextEdit::updateMicroFocus);
+   QObject::connect(control, &QPlainTextEditControl::documentSizeChanged,    q, &QPlainTextEdit::_q_adjustScrollbars);
+   QObject::connect(control, &QPlainTextEditControl::blockCountChanged,      q, &QPlainTextEdit::blockCountChanged);
+   QObject::connect(control, &QPlainTextEditControl::updateRequest,          q, &QPlainTextEdit::_q_repaintContents);
+   QObject::connect(control, &QPlainTextEditControl::modificationChanged,    q, &QPlainTextEdit::modificationChanged);
 
    QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(textChanged()));
    QObject::connect(control, SIGNAL(undoAvailable(bool)),     q, SLOT(undoAvailable(bool)));
@@ -767,6 +766,7 @@ void QPlainTextEditPrivate::init(const QString &txt)
    // set a null page size initially to avoid any relayouting until the textedit
    // is shown. relayoutDocument() will take care of setting the page size to the
    // viewport dimensions later.
+
    doc->setTextWidth(-1);
    doc->documentLayout()->setPaintDevice(viewport);
    doc->setDefaultFont(q->font());

@@ -301,9 +301,8 @@ void QLineEdit::setCompleter(QCompleter *c)
    }
 
    if (hasFocus()) {
-      QObject::connect(d->control->completer(), SIGNAL(activated(QString)),   this, SLOT(setText(QString)));
-      QObject::connect(d->control->completer(), SIGNAL(highlighted(QString)), this,
-         SLOT(_q_completionHighlighted(QString)));
+      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::activated),   this, &QLineEdit::setText);
+      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::highlighted), this, &QLineEdit::_q_completionHighlighted);
    }
 }
 
@@ -1367,10 +1366,10 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
    if (d->control->completer()) {
       d->control->completer()->setWidget(this);
 
-      QObject::connect(d->control->completer(), SIGNAL(activated(QString)),   this, SLOT(setText(QString)));
-      QObject::connect(d->control->completer(), SIGNAL(highlighted(QString)), this,
-         SLOT(_q_completionHighlighted(QString)));
+      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::activated),   this, &QLineEdit::setText);
+      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::highlighted), this, &QLineEdit::_q_completionHighlighted);
    }
+
 #endif
    update();
 }
@@ -1646,12 +1645,12 @@ QMenu *QLineEdit::createStandardContextMenu()
       action->setEnabled(d->control->isUndoAvailable());
 
       setActionIcon(action, "edit-undo");
-      connect(action, SIGNAL(triggered()), this, SLOT(undo()));
+      connect(action, &QAction::triggered, this, &QLineEdit::undo);
 
       action = popup->addAction(QLineEdit::tr("&Redo") + ACCEL_KEY(QKeySequence::Redo));
       action->setEnabled(d->control->isRedoAvailable());
       setActionIcon(action, "edit-redo");
-      connect(action, SIGNAL(triggered()), this, SLOT(redo()));
+      connect(action, &QAction::triggered, this, &QLineEdit::redo);
 
       popup->addSeparator();
    }
@@ -1663,20 +1662,19 @@ QMenu *QLineEdit::createStandardContextMenu()
          && d->control->echoMode() == QLineEdit::Normal);
 
       setActionIcon(action, "edit-cut");
-      connect(action, SIGNAL(triggered()), this, SLOT(cut()));
+      connect(action, &QAction::triggered, this, &QLineEdit::cut);
    }
 
    action = popup->addAction(QLineEdit::tr("&Copy") + ACCEL_KEY(QKeySequence::Copy));
    action->setEnabled(d->control->hasSelectedText() && d->control->echoMode() == QLineEdit::Normal);
    setActionIcon(action, "edit-copy");
-   connect(action, SIGNAL(triggered()), this, SLOT(copy()));
+   connect(action, &QAction::triggered, this, &QLineEdit::copy);
 
-   if (!isReadOnly()) {
       action = popup->addAction(QLineEdit::tr("&Paste") + ACCEL_KEY(QKeySequence::Paste));
       action->setEnabled(!d->control->isReadOnly() && !QApplication::clipboard()->text().isEmpty());
 
       setActionIcon(action, "edit-paste");
-      connect(action, SIGNAL(triggered()), this, SLOT(paste()));
+      connect(action, &QAction::triggered, this, &QLineEdit::paste);
    }
 #endif
 
@@ -1685,7 +1683,7 @@ QMenu *QLineEdit::createStandardContextMenu()
       action->setEnabled(!d->control->isReadOnly() && !d->control->text().isEmpty() && d->control->hasSelectedText());
 
       setActionIcon(action, "edit-delete");
-      connect(action, SIGNAL(triggered()), d->control, SLOT(_q_deleteSelected()));
+      connect(action, &QAction::triggered, d->control, &QLineControl::_q_deleteSelected);
    }
 
    if (!popup->isEmpty()) {
@@ -1695,7 +1693,7 @@ QMenu *QLineEdit::createStandardContextMenu()
    action = popup->addAction(QLineEdit::tr("Select All") + ACCEL_KEY(QKeySequence::SelectAll));
    action->setEnabled(!d->control->text().isEmpty() && !d->control->allSelected());
    d->selectAllAction = action;
-   connect(action, SIGNAL(triggered()), this, SLOT(selectAll()));
+   connect(action, &QAction::triggered, this, &QLineEdit::selectAll);
 
 
    if (!d->control->isReadOnly() && QGuiApplication::styleHints()->useRtlExtensions()) {
