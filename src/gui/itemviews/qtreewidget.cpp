@@ -1905,27 +1905,20 @@ QTreeWidget::QTreeWidget(QWidget *parent)
    : QTreeView(*new QTreeWidgetPrivate(), parent)
 {
    QTreeView::setModel(new QTreeModel(1, this));
-   connect(this, SIGNAL(pressed(QModelIndex)),       this, SLOT(_q_emitItemPressed(QModelIndex)));
-   connect(this, SIGNAL(clicked(QModelIndex)),       this, SLOT(_q_emitItemClicked(QModelIndex)));
-   connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(_q_emitItemDoubleClicked(QModelIndex)));
-   connect(this, SIGNAL(activated(QModelIndex)),     this, SLOT(_q_emitItemActivated(QModelIndex)));
-   connect(this, SIGNAL(entered(QModelIndex)),       this, SLOT(_q_emitItemEntered(QModelIndex)));
-   connect(this, SIGNAL(expanded(QModelIndex)),      this, SLOT(_q_emitItemExpanded(QModelIndex)));
-   connect(this, SIGNAL(collapsed(QModelIndex)),     this, SLOT(_q_emitItemCollapsed(QModelIndex)));
 
-   connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      this, SLOT(_q_emitCurrentItemChanged(QModelIndex, QModelIndex)));
+   connect(this, &QTreeWidget::pressed,             this, &QTreeWidget::_q_emitItemPressed);
+   connect(this, &QTreeWidget::clicked,             this, &QTreeWidget::_q_emitItemClicked);
+   connect(this, &QTreeWidget::doubleClicked,       this, &QTreeWidget::_q_emitItemDoubleClicked);
+   connect(this, &QTreeWidget::activated,           this, &QTreeWidget::_q_emitItemActivated);
+   connect(this, &QTreeWidget::entered,             this, &QTreeWidget::_q_emitItemEntered);
+   connect(this, &QTreeWidget::expanded,            this, &QTreeWidget::_q_emitItemExpanded);
+   connect(this, &QTreeWidget::collapsed,           this, &QTreeWidget::_q_emitItemCollapsed);
 
-   connect(model(), SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      this, SLOT(_q_emitItemChanged(QModelIndex)));
-
-   connect(model(), SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      this, SLOT(_q_dataChanged(QModelIndex, QModelIndex)));
-
-   connect(model(), SIGNAL(columnsRemoved(QModelIndex, int, int)), this, SLOT(_q_sort()));
-
-   connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-      this, SLOT(_q_selectionChanged(QItemSelection, QItemSelection)));
+   connect(selectionModel(), &QItemSelectionModel::currentChanged,   this, &QTreeWidget::_q_emitCurrentItemChanged);
+   connect(model(), &QAbstractItemModel::dataChanged,                this, &QTreeWidget::_q_emitItemChanged);
+   connect(model(), &QAbstractItemModel::dataChanged,                this, &QTreeWidget::_q_dataChanged);
+   connect(model(), &QAbstractItemModel::columnsRemoved,             this, &QTreeWidget::_q_sort);
+   connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &QTreeWidget::_q_selectionChanged);
 
    header()->setSectionsClickable(false);
 }

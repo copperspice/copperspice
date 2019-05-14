@@ -74,7 +74,7 @@ void QTreeView::setModel(QAbstractItemModel *model)
 
    if (d->model && d->model != QAbstractItemModelPrivate::staticEmptyModel()) {
       disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-         this, SLOT(rowsRemoved(QModelIndex, int, int)));
+                  this, SLOT(rowsRemoved(QModelIndex, int, int)));
 
       disconnect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_modelAboutToBeReset()));
    }
@@ -82,12 +82,10 @@ void QTreeView::setModel(QAbstractItemModel *model)
    if (d->selectionModel) {
       // support row editing
       disconnect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-         d->model, SLOT(submit()));
+                  d->model, SLOT(submit()));
 
-      disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-         this, SLOT(rowsRemoved(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_modelAboutToBeReset()));
+      disconnect(d->model, &QAbstractItemModel::rowsRemoved,         this, &QTreeView::rowsRemoved);
+      disconnect(d->model, &QAbstractItemModel::modelAboutToBeReset, this, &QTreeView::_q_modelAboutToBeReset);
    }
 
    d->viewItems.clear();
@@ -104,10 +102,8 @@ void QTreeView::setModel(QAbstractItemModel *model)
    disconnect(d->model, SIGNAL(layoutChanged()), d->header, SLOT(_q_layoutChanged()));
 
    // QTreeView has a public slot for this
-   connect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-      this, SLOT(rowsRemoved(QModelIndex, int, int)));
-
-   connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_modelAboutToBeReset()));
+   connect(d->model, &QAbstractItemModel::rowsRemoved,         this, &QTreeView::rowsRemoved);
+   connect(d->model, &QAbstractItemModel::modelAboutToBeReset, this, &QTreeView::_q_modelAboutToBeReset);
 
    if (d->sortingEnabled) {
       d->_q_sortIndicatorChanged(header()->sortIndicatorSection(), header()->sortIndicatorOrder());
@@ -129,8 +125,7 @@ void QTreeView::setSelectionModel(QItemSelectionModel *selectionModel)
 
    if (d->selectionModel) {
       // support row editing
-      disconnect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-         d->model, SLOT(submit()));
+      disconnect(d->selectionModel.data(), &QItemSelectionModel::currentRowChanged, d->model, &QAbstractItemModel::submit);
    }
 
    d->header->setSelectionModel(selectionModel);
@@ -138,8 +133,7 @@ void QTreeView::setSelectionModel(QItemSelectionModel *selectionModel)
 
    if (d->selectionModel) {
       // support row editing
-      connect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-         d->model, SLOT(submit()));
+      connect(d->selectionModel.data(), &QItemSelectionModel::currentRowChanged, d->model, &QAbstractItemModel::submit);
    }
 }
 

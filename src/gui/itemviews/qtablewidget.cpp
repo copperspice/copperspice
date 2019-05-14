@@ -1118,29 +1118,23 @@ void QTableWidgetPrivate::setup()
    Q_Q(QTableWidget);
 
    // view signals
-   QObject::connect(q, SIGNAL(pressed(QModelIndex)),       q, SLOT(_q_emitItemPressed(QModelIndex)));
-   QObject::connect(q, SIGNAL(clicked(QModelIndex)),       q, SLOT(_q_emitItemClicked(QModelIndex)));
-
-   QObject::connect(q, SIGNAL(doubleClicked(QModelIndex)), q, SLOT(_q_emitItemDoubleClicked(QModelIndex)));
-   QObject::connect(q, SIGNAL(activated(QModelIndex)),     q, SLOT(_q_emitItemActivated(QModelIndex)));
-   QObject::connect(q, SIGNAL(entered(QModelIndex)),       q, SLOT(_q_emitItemEntered(QModelIndex)));
+   QObject::connect(q, &QTableWidget::pressed,        q, &QTableWidget::_q_emitItemPressed);
+   QObject::connect(q, &QTableWidget::clicked,        q, &QTableWidget::_q_emitItemClicked);
+   QObject::connect(q, &QTableWidget::doubleClicked,  q, &QTableWidget::_q_emitItemDoubleClicked);
+   QObject::connect(q, &QTableWidget::activated,      q, &QTableWidget::_q_emitItemActivated);
+   QObject::connect(q, &QTableWidget::entered,        q, &QTableWidget::_q_emitItemEntered);
 
    // model signals
-   QObject::connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_emitItemChanged(QModelIndex)));
+   QObject::connect(model, &QAbstractItemModel::dataChanged, q, &QTableWidget::_q_emitItemChanged);
 
    // selection signals
-   QObject::connect(q->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_emitCurrentItemChanged(QModelIndex, QModelIndex)));
-
-   QObject::connect(q->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-      q, SLOT(itemSelectionChanged()));
+   QObject::connect(q->selectionModel(), &QItemSelectionModel::currentChanged,   q, &QTableWidget::_q_emitCurrentItemChanged);
+   QObject::connect(q->selectionModel(), &QItemSelectionModel::selectionChanged, q, &QTableWidget::itemSelectionChanged);
 
    // sorting
-   QObject::connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_dataChanged(QModelIndex, QModelIndex)));
+   QObject::connect(model, &QAbstractItemModel::dataChanged,    q, &QTableWidget::_q_dataChanged);
 
-   QObject::connect(model, SIGNAL(columnsRemoved(QModelIndex, int, int)), q, SLOT(_q_sort()));
+   QObject::connect(model, &QAbstractItemModel::columnsRemoved, q, &QTableWidget::_q_sort);
 }
 
 void QTableWidgetPrivate::_q_emitItemPressed(const QModelIndex &index)

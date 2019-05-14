@@ -421,38 +421,18 @@ void QItemSelectionModelPrivate::initModel(QAbstractItemModel *model)
    this->model = model;
 
    if (model) {
-      QObject::connect(model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-         q, SLOT(_q_rowsAboutToBeRemoved(QModelIndex, int, int)));
-
-      QObject::connect(model, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int, int)),
-         q, SLOT(_q_columnsAboutToBeRemoved(QModelIndex, int, int)));
-
-      QObject::connect(model, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
-         q, SLOT(_q_rowsAboutToBeInserted(QModelIndex, int, int)));
-
-      QObject::connect(model, SIGNAL(columnsAboutToBeInserted(QModelIndex, int, int)),
-         q, SLOT(_q_columnsAboutToBeInserted(QModelIndex, int, int)));
-
-      QObject::connect(model, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int QModelIndex, int)),
-         q, SLOT(_q_layoutAboutToBeChanged()));
-
-      QObject::connect(model, SIGNAL(columnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-         q, SLOT(_q_layoutAboutToBeChanged()));
-
-      QObject::connect(model, SIGNAL(rowsMoved(QModelIndex, int, int, QModelIndex, int)),
-         q, SLOT(_q_layoutChanged()));
-      QObject::connect(model, SIGNAL(columnsMoved(QModelIndex, int, int, QModelIndex, int)),
-         q, SLOT(_q_layoutChanged()));
-
-      QObject::connect(model, SIGNAL(layoutAboutToBeChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)),
-         q, SLOT(_q_layoutAboutToBeChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)));
-      QObject::connect(model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)),
-         q, SLOT(_q_layoutChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)));
-      QObject::connect(model, SIGNAL(modelReset()),
-         q, SLOT(reset()));
+      QObject::connect(model, &QAbstractItemModel::rowsAboutToBeRemoved,     q, &QItemSelectionModel::_q_rowsAboutToBeRemoved);
+      QObject::connect(model, &QAbstractItemModel::columnsAboutToBeRemoved,  q, &QItemSelectionModel::_q_columnsAboutToBeRemoved);
+      QObject::connect(model, &QAbstractItemModel::rowsAboutToBeInserted,    q, &QItemSelectionModel::_q_rowsAboutToBeInserted);
+      QObject::connect(model, &QAbstractItemModel::columnsAboutToBeInserted, q, &QItemSelectionModel::_q_columnsAboutToBeInserted);
+      QObject::connect(model, &QAbstractItemModel::rowsAboutToBeMoved,       q, &QItemSelectionModel::_q_layoutAboutToBeChanged);
+      QObject::connect(model, &QAbstractItemModel::columnsAboutToBeMoved,    q, &QItemSelectionModel::_q_layoutAboutToBeChanged);
+      QObject::connect(model, &QAbstractItemModel::rowsMoved,                q, &QItemSelectionModel::_q_layoutChanged);
+      QObject::connect(model, &QAbstractItemModel::columnsMoved,             q, &QItemSelectionModel::_q_layoutChanged);
+      QObject::connect(model, &QAbstractItemModel::layoutAboutToBeChanged,   q, &QItemSelectionModel::_q_layoutAboutToBeChanged);
+      QObject::connect(model, &QAbstractItemModel::layoutChanged,            q, &QItemSelectionModel::_q_layoutChanged);
+      QObject::connect(model, &QAbstractItemModel::modelReset,               q, &QItemSelectionModel::reset);
    }
-
-
 }
 
 /*!

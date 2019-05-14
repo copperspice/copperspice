@@ -353,8 +353,8 @@ QStandardItemModelPrivate::~QStandardItemModelPrivate()
 void QStandardItemModelPrivate::init()
 {
    Q_Q(QStandardItemModel);
-   QObject::connect(q, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_emitItemChanged(QModelIndex, QModelIndex)));
+
+   QObject::connect(q, &QStandardItemModel::dataChanged, q, &QStandardItemModel::_q_emitItemChanged);
 }
 
 /*!
@@ -365,6 +365,7 @@ void QStandardItemModelPrivate::_q_emitItemChanged(const QModelIndex &topLeft,
 {
    Q_Q(QStandardItemModel);
    QModelIndex parent = topLeft.parent();
+
    for (int row = topLeft.row(); row <= bottomRight.row(); ++row) {
       for (int column = topLeft.column(); column <= bottomRight.column(); ++column) {
          QModelIndex index = q->index(row, column, parent);

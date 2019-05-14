@@ -976,38 +976,25 @@ void QTableView::setModel(QAbstractItemModel *model)
       return;
    }
 
-   //let's disconnect from the old model
+   // disconnect from the old model
    if (d->model && d->model != QAbstractItemModelPrivate::staticEmptyModel()) {
-      disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanInsertedRows(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(columnsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanInsertedColumns(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanRemovedRows(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(columnsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanRemovedColumns(QModelIndex, int, int)));
+      disconnect(d->model, &QAbstractItemModel::rowsInserted,    this, &QTableView::_q_updateSpanInsertedRows);
+      disconnect(d->model, &QAbstractItemModel::columnsInserted, this, &QTableView::_q_updateSpanInsertedColumns);
+      disconnect(d->model, &QAbstractItemModel::rowsRemoved,     this, &QTableView::_q_updateSpanRemovedRows);
+      disconnect(d->model, &QAbstractItemModel::columnsRemoved,  this, &QTableView::_q_updateSpanRemovedColumns);
    }
 
-   if (d->selectionModel) { // support row editing
-      disconnect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-         d->model, SLOT(submit()));
+   if (d->selectionModel) {
+      // support row editing
+      disconnect(d->selectionModel.data(), &QItemSelectionModel::currentRowChanged, d->model, &QAbstractItemModel::submit);
    }
 
-   if (model) {    // and connect to the new one
-      connect(model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanInsertedRows(QModelIndex, int, int)));
-
-      connect(model, SIGNAL(columnsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanInsertedColumns(QModelIndex, int, int)));
-
-      connect(model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanRemovedRows(QModelIndex, int, int)));
-
-      connect(model, SIGNAL(columnsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_updateSpanRemovedColumns(QModelIndex, int, int)));
+   if (model) {
+      // connect to the new one
+      connect(model, &QAbstractItemModel::rowsInserted,    this, &QTableView::_q_updateSpanInsertedRows);
+      connect(model, &QAbstractItemModel::columnsInserted, this, &QTableView::_q_updateSpanInsertedColumns);
+      connect(model, &QAbstractItemModel::rowsRemoved,     this, &QTableView::_q_updateSpanRemovedRows);
+      connect(model, &QAbstractItemModel::columnsRemoved,  this, &QTableView::_q_updateSpanRemovedColumns);
    }
 
    d->verticalHeader->setModel(model);
@@ -1050,10 +1037,10 @@ void QTableView::setSelectionModel(QItemSelectionModel *selectionModel)
 {
    Q_D(QTableView);
    Q_ASSERT(selectionModel);
+
    if (d->selectionModel) {
       // support row editing
-      disconnect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-         d->model, SLOT(submit()));
+      disconnect(d->selectionModel.data(), &QItemSelectionModel::currentRowChanged, d->model, &QAbstractItemModel::submit);
    }
 
    d->verticalHeader->setSelectionModel(selectionModel);
@@ -1062,8 +1049,7 @@ void QTableView::setSelectionModel(QItemSelectionModel *selectionModel)
 
    if (d->selectionModel) {
       // support row editing
-      connect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-         d->model, SLOT(submit()));
+      connect(d->selectionModel.data(), &QItemSelectionModel::currentRowChanged, d->model, &QAbstractItemModel::submit);
    }
 }
 
@@ -1121,8 +1107,8 @@ void QTableView::setHorizontalHeader(QHeaderView *header)
    connect(d->horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(columnResized(int, int, int)));
    connect(d->horizontalHeader, SIGNAL(sectionMoved(int, int, int)),   this, SLOT(columnMoved(int, int, int)));
    connect(d->horizontalHeader, SIGNAL(sectionCountChanged(int, int)), this, SLOT(columnCountChanged(int, int)));
-   connect(d->horizontalHeader, SIGNAL(sectionPressed(int)),          this, SLOT(selectColumn(int)));
-   connect(d->horizontalHeader, SIGNAL(sectionEntered(int)),          this, SLOT(_q_selectColumn(int)));
+   connect(d->horizontalHeader, SIGNAL(sectionPressed(int)),           this, SLOT(selectColumn(int)));
+   connect(d->horizontalHeader, SIGNAL(sectionEntered(int)),           this, SLOT(_q_selectColumn(int)));
 
    connect(d->horizontalHeader, SIGNAL(sectionHandleDoubleClicked(int)),
       this, SLOT(resizeColumnToContents(int)));

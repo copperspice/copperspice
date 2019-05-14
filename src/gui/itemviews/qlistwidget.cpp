@@ -647,25 +647,18 @@ void QListWidgetPrivate::setup()
    q->QListView::setModel(new QListModel(q));
 
    // view signals
-   QObject::connect(q, SIGNAL(pressed(QModelIndex)),       q, SLOT(_q_emitItemPressed(QModelIndex)));
-   QObject::connect(q, SIGNAL(clicked(QModelIndex)),       q, SLOT(_q_emitItemClicked(QModelIndex)));
-   QObject::connect(q, SIGNAL(doubleClicked(QModelIndex)), q, SLOT(_q_emitItemDoubleClicked(QModelIndex)));
-   QObject::connect(q, SIGNAL(activated(QModelIndex)),     q, SLOT(_q_emitItemActivated(QModelIndex)));
-   QObject::connect(q, SIGNAL(entered(QModelIndex)),       q, SLOT(_q_emitItemEntered(QModelIndex)));
+   QObject::connect(q,     &QListWidget::pressed,         q, &QListWidget::_q_emitItemPressed);
+   QObject::connect(q,     &QListWidget::clicked,         q, &QListWidget::_q_emitItemClicked);
+   QObject::connect(q,     &QListWidget::doubleClicked,   q, &QListWidget::_q_emitItemDoubleClicked);
+   QObject::connect(q,     &QListWidget::activated,       q, &QListWidget::_q_emitItemActivated);
+   QObject::connect(q,     &QListWidget::entered,         q, &QListWidget::_q_emitItemEntered);
+   QObject::connect(model, &QListModel::dataChanged,      q, &QListWidget::_q_emitItemChanged);
 
-   QObject::connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex )),
-      q, SLOT(_q_emitItemChanged(QModelIndex)));
+   QObject::connect(q->selectionModel(), &QItemSelectionModel::currentChanged,   q, &QListWidget::_q_emitCurrentItemChanged);
+   QObject::connect(q->selectionModel(), &QItemSelectionModel::selectionChanged, q, &QListWidget::itemSelectionChanged);
 
-   QObject::connect(q->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_emitCurrentItemChanged(QModelIndex, QModelIndex)));
-
-   QObject::connect(q->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-      q, SLOT(itemSelectionChanged()));
-
-   QObject::connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-      q, SLOT(_q_dataChanged(QModelIndex, QModelIndex)));
-
-   QObject::connect(model, SIGNAL(columnsRemoved(QModelIndex, int, int)), q, SLOT(_q_sort()));
+   QObject::connect(model, &QListModel::dataChanged,     q, &QListWidget::_q_dataChanged);
+   QObject::connect(model, &QListModel::columnsRemoved,  q, &QListWidget::_q_sort);
 }
 
 void QListWidgetPrivate::_q_emitItemPressed(const QModelIndex &index)

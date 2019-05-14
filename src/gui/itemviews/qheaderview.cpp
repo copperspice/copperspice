@@ -133,6 +133,7 @@ void QHeaderView::setModel(QAbstractItemModel *model)
 
          QObject::disconnect(d->model, SIGNAL(columnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
             this, SLOT(_q_layoutAboutToBeChanged()));
+
       } else {
          QObject::disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
             this, SLOT(sectionsInserted(QModelIndex, int, int)));
@@ -157,36 +158,20 @@ void QHeaderView::setModel(QAbstractItemModel *model)
    if (model && model != QAbstractItemModelPrivate::staticEmptyModel()) {
 
       if (d->orientation == Qt::Horizontal) {
-         QObject::connect(model, SIGNAL(columnsInserted(QModelIndex, int, int)),
-            this, SLOT(sectionsInserted(QModelIndex, int, int)));
+         QObject::connect(model, &QAbstractItemModel::columnsInserted,         this, &QHeaderView::sectionsInserted);
+         QObject::connect(model, &QAbstractItemModel::columnsAboutToBeRemoved, this, &QHeaderView::sectionsAboutToBeRemoved);
+         QObject::connect(model, &QAbstractItemModel::columnsRemoved,          this, &QHeaderView::_q_sectionsRemoved);
+         QObject::connect(model, &QAbstractItemModel::columnsAboutToBeMoved,   this, &QHeaderView::_q_layoutAboutToBeChanged);
 
-         QObject::connect(model, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(sectionsAboutToBeRemoved(QModelIndex, int, int)));
-
-         QObject::connect(model, SIGNAL(columnsRemoved(QModelIndex, int, int)),
-            this, SLOT(_q_sectionsRemoved(QModelIndex, int, int)));
-
-         QObject::connect(model, SIGNAL(columnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-            this, SLOT(_q_layoutAboutToBeChanged()));
       } else {
-         QObject::connect(model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-            this, SLOT(sectionsInserted(QModelIndex, int, int)));
-
-         QObject::connect(model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(sectionsAboutToBeRemoved(QModelIndex, int, int)));
-
-         QObject::connect(model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-            this, SLOT(_q_sectionsRemoved(QModelIndex, int, int)));
-
-         QObject::connect(model, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-            this, SLOT(_q_layoutAboutToBeChanged()));
+         QObject::connect(model, &QAbstractItemModel::rowsInserted,            this, &QHeaderView::sectionsInserted);
+         QObject::connect(model, &QAbstractItemModel::rowsAboutToBeRemoved,    this, &QHeaderView::sectionsAboutToBeRemoved);
+         QObject::connect(model, &QAbstractItemModel::rowsRemoved,             this, &QHeaderView::_q_sectionsRemoved);
+         QObject::connect(model, &QAbstractItemModel::rowsAboutToBeMoved,      this, &QHeaderView::_q_layoutAboutToBeChanged);
       }
 
-      QObject::connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
-         this, SLOT(headerDataChanged(Qt::Orientation, int, int)));
-
-      QObject::connect(model, SIGNAL(layoutAboutToBeChanged()),
-         this, SLOT(_q_layoutAboutToBeChanged()));
+      QObject::connect(model, &QAbstractItemModel::headerDataChanged,          this, &QHeaderView::headerDataChanged);
+      QObject::connect(model, &QAbstractItemModel::layoutAboutToBeChanged,     this, &QHeaderView::_q_layoutAboutToBeChanged);
    }
 
    d->state = QHeaderViewPrivate::NoClear;
@@ -196,6 +181,7 @@ void QHeaderView::setModel(QAbstractItemModel *model)
    // Users want to set sizes and modes before the widget is shown.
    // Thus, we have to initialize when the model is set,
    // and not lazily like we do in the other views.
+
    initializeSections();
 }
 
