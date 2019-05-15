@@ -2985,6 +2985,9 @@ InPlace_Image_Converter qimage_inplace_converter_map[QImage::NImageFormats][QIma
 
 QImageConversions::QImageConversions()
 {
+   memcpy(image_converter_map, qimage_converter_map, sizeof(image_converter_map));
+   memcpy(image_inplace_converter_map, qimage_inplace_converter_map, sizeof(image_inplace_converter_map));
+
 #if defined(__SSE2__) && defined(QT_COMPILER_SUPPORTS_SSSE3)
    if (qCpuHasFeature(SSSE3)) {
       extern void convert_RGB888_to_RGB32_ssse3(QImageData * dest, const QImageData * src, Qt::ImageConversionFlags);
@@ -3030,6 +3033,7 @@ QImageConversions::QImageConversions()
 #endif
 
 }
+
 const QImageConversions &QImageConversions::instance()
 {
    static QImageConversions retval;
