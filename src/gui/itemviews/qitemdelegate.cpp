@@ -717,19 +717,20 @@ QPixmap QItemDelegate::decoration(const QStyleOptionViewItem &option, const QVar
 }
 
 // hacky but faster version of "QString::sprintf("%d-%d", i, enabled)"
-static QString qPixmapSerial(quint64 i, bool enabled)
+static QString cs_internal_PixmapSerial(quint64 i, bool enabled)
 {
-   ushort arr[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-', ushort('0' + enabled) };
-   ushort *ptr = &arr[16];
+   char32_t arr[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-', char32_t('0' + enabled) };
+   char32_t *ptr  = std::end(arr);
 
    while (i > 0) {
-      // hey - it's our internal representation, so use the ascii character after '9'
-      // instead of 'a' for hex
-      *(--ptr) = '0' + i % 16;
+      // use ascii character after '9' instead of 'a' for hex
+      --ptr;
+
+      *ptr = '0' + i % 16;
       i >>= 4;
    }
 
-   return QString((const QChar *)ptr, int(&arr[sizeof(arr) / sizeof(ushort)] - ptr));
+   return QString(ptr, std::end(arr));
 }
 
 /*!
@@ -738,7 +739,7 @@ static QString qPixmapSerial(quint64 i, bool enabled)
 */
 QPixmap *QItemDelegate::selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const
 {
-   QString key = qPixmapSerial(pixmap.cacheKey(), enabled);
+   QString key = cs_internal_PixmapSerial(pixmap.cacheKey(), enabled);
    QPixmap *pm = QPixmapCache::find(key);
 
    if (! pm) {
