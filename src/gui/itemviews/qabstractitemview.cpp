@@ -4021,6 +4021,19 @@ void QAbstractItemView::_q_columnsInserted(const QModelIndex &un_named_arg1, int
    d->_q_columnsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
+void QAbstractItemView::_q_columnsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
+                  const QModelIndex &un_named_arg4, int un_named_arg5)
+{
+   Q_D(QAbstractItemView);
+   d->_q_columnsMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+}
+
+void QAbstractItemView::_q_headerDataChanged()
+{
+   Q_D(QAbstractItemView);
+   d->_q_headerDataChanged();
+}
+
 void QAbstractItemView::_q_rowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
    Q_D(QAbstractItemView);
@@ -4033,6 +4046,13 @@ void QAbstractItemView::_q_rowsRemoved(const QModelIndex &un_named_arg1, int un_
    d->_q_rowsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
+void QAbstractItemView::_q_rowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
+                  const QModelIndex &un_named_arg4, int un_named_arg5)
+{
+   Q_D(QAbstractItemView);
+   d->_q_rowsMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+}
+
 void QAbstractItemView::_q_modelDestroyed()
 {
    Q_D(QAbstractItemView);
@@ -4043,12 +4063,6 @@ void QAbstractItemView::_q_layoutChanged()
 {
    Q_D(QAbstractItemView);
    d->_q_layoutChanged();
-}
-
-void QAbstractItemView::_q_headerDataChanged()
-{
-   Q_D(QAbstractItemView);
-   d->_q_headerDataChanged();
 }
 
 void QAbstractItemView::_q_scrollerStateChanged()

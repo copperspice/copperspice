@@ -2668,13 +2668,13 @@ void QSortFilterProxyModel::_q_sourceRowsRemoved(const QModelIndex &source_paren
    d->_q_sourceRowsRemoved(source_parent, start, end);
 }
 
-void QSortFilterProxyModel::_q_sourceRowsAboutToBeMoved(QModelIndex arg1, int arg2, int arg3, QModelIndex arg4, int arg5)
+void QSortFilterProxyModel::_q_sourceRowsAboutToBeMoved(const QModelIndex &arg1, int arg2, int arg3, const QModelIndex &arg4, int arg5)
 {
    Q_D(QSortFilterProxyModel);
    d->_q_sourceRowsAboutToBeMoved(arg1, arg2, arg3, arg4, arg5);
 }
 
-void QSortFilterProxyModel::_q_sourceRowsMoved(QModelIndex arg1, int arg2, int arg3, QModelIndex arg4, int arg5)
+void QSortFilterProxyModel::_q_sourceRowsMoved(const QModelIndex &arg1, int arg2, int arg3, const QModelIndex &arg4, int arg5)
 {
    Q_D(QSortFilterProxyModel);
    d->_q_sourceRowsMoved(arg1, arg2, arg3, arg4, arg5);
@@ -2704,13 +2704,13 @@ void QSortFilterProxyModel::_q_sourceColumnsRemoved(const QModelIndex &source_pa
    d->_q_sourceColumnsRemoved(source_parent, start, end);
 }
 
-void QSortFilterProxyModel::_q_sourceColumnsAboutToBeMoved(QModelIndex arg1, int arg2, int arg3, QModelIndex arg4, int arg5)
+void QSortFilterProxyModel::_q_sourceColumnsAboutToBeMoved(const QModelIndex &arg1, int arg2, int arg3, const QModelIndex &arg4, int arg5)
 {
    Q_D(QSortFilterProxyModel);
    d->_q_sourceColumnsAboutToBeMoved(arg1, arg2, arg3, arg4, arg5);
 }
 
-void QSortFilterProxyModel::_q_sourceColumnsMoved(QModelIndex arg1, int arg2, int arg3, QModelIndex arg4, int arg5)
+void QSortFilterProxyModel::_q_sourceColumnsMoved(const QModelIndex &arg1, int arg2, int arg3, const QModelIndex &arg4, int arg5)
 {
    Q_D(QSortFilterProxyModel);
    d->_q_sourceColumnsMoved(arg1, arg2, arg3, arg4, arg5);
@@ -2721,7 +2721,5 @@ void QSortFilterProxyModel::_q_clearMapping()
    Q_D(QSortFilterProxyModel);
    d->_q_clearMapping();
 }
-
-
 
 #endif // QT_NO_SORTFILTERPROXYMODEL

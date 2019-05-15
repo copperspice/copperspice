@@ -206,10 +206,10 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &source_parent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceRowsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(const QModelIndex &, int, int, const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceRowsMoved)
 
    GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
@@ -224,10 +224,10 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &source_parent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(QModelIndex, int, int, QModelIndex, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(const QModelIndex &, int, int, const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceColumnsMoved)
 
    GUI_CS_SLOT_1(Private, void _q_clearMapping())

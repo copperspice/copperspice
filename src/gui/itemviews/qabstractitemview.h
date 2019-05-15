@@ -421,12 +421,12 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 #endif
 
    QSize viewportSizeHint() const override;
+
  private:
    Q_DECLARE_PRIVATE(QAbstractItemView)
    Q_DISABLE_COPY(QAbstractItemView)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-         int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_columnsAboutToBeRemoved)
 
    GUI_CS_SLOT_1(Private, void _q_columnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
@@ -435,11 +435,19 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_1(Private, void _q_columnsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_columnsInserted)
 
+   GUI_CS_SLOT_1(Private, void _q_columnsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
+                  const QModelIndex &un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_2(_q_columnsMoved)
+
    GUI_CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_rowsInserted)
 
    GUI_CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_rowsRemoved)
+
+   GUI_CS_SLOT_1(Private, void _q_rowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
+                  const QModelIndex &un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_2(_q_rowsMoved)
 
    GUI_CS_SLOT_1(Private, void _q_modelDestroyed())
    GUI_CS_SLOT_2(_q_modelDestroyed)
@@ -455,9 +463,9 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_2(_q_scrollerStateChanged)
 #endif
 
-   friend class QTreeViewPrivate; // needed to compile with MSVC
+   friend class QTreeViewPrivate;       // needed to compile with MSVC
    friend class QListModeViewBase;
-   friend class QListViewPrivate; // needed to compile for Symbian emulator
+   friend class QListViewPrivate;       // needed to compile for Symbian emulator
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemView::EditTriggers)
@@ -465,4 +473,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemView::EditTriggers)
 #endif // QT_NO_ITEMVIEWS
 
 
-#endif // QABSTRACTITEMVIEW_H
+#endif

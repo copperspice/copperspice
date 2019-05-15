@@ -73,48 +73,47 @@ class Q_GUI_EXPORT QIdentityProxyModel : public QAbstractProxyModel
    Q_DECLARE_PRIVATE(QIdentityProxyModel)
    Q_DISABLE_COPY(QIdentityProxyModel)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(QModelIndex un_named_arg1, int un_named_arg2,
-         int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(QModelIndex un_named_arg1, int un_named_arg2,
-         int un_named_arg3, QModelIndex un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
+         int un_named_arg3, const QModelIndex &un_named_arg4, int un_named_arg5))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(QModelIndex un_named_arg1, int un_named_arg2,
-         int un_named_arg3, QModelIndex un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
+         int un_named_arg3, const QModelIndex &un_named_arg4, int un_named_arg5))
    GUI_CS_SLOT_2(_q_sourceRowsMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsInserted(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceColumnsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(QModelIndex un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceColumnsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(QModelIndex un_named_arg1, int un_named_arg2,
-         int un_named_arg3, QModelIndex un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
+         int un_named_arg3, const QModelIndex &un_named_arg4, int un_named_arg5))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(QModelIndex un_named_arg1, int un_named_arg2,
-         int un_named_arg3, QModelIndex un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
+         int un_named_arg3, const QModelIndex &un_named_arg4, int un_named_arg5))
    GUI_CS_SLOT_2(_q_sourceColumnsMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceDataChanged(QModelIndex un_named_arg1, QModelIndex un_named_arg2, QVector<int> roles))
+   GUI_CS_SLOT_1(Private, void _q_sourceDataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2, const QVector<int> &roles))
    GUI_CS_SLOT_2(_q_sourceDataChanged)
 
    GUI_CS_SLOT_1(Private, void _q_sourceHeaderDataChanged(Qt::Orientation orientation, int first, int last))
@@ -126,6 +125,7 @@ class Q_GUI_EXPORT QIdentityProxyModel : public QAbstractProxyModel
 
    GUI_CS_SLOT_1(Private, void _q_sourceLayoutChanged(const QList<QPersistentModelIndex> &sourceParents,
          QAbstractItemModel::LayoutChangeHint hint))
+
    GUI_CS_SLOT_2(_q_sourceLayoutChanged)
 
    GUI_CS_SLOT_1(Private, void _q_sourceModelAboutToBeReset())
@@ -133,7 +133,6 @@ class Q_GUI_EXPORT QIdentityProxyModel : public QAbstractProxyModel
 
    GUI_CS_SLOT_1(Private, void _q_sourceModelReset())
    GUI_CS_SLOT_2(_q_sourceModelReset)
-
 };
 
 
