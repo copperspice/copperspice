@@ -75,8 +75,10 @@ static QImageIOHandler *createWriteHandlerHelper(QIODevice *device, const QByteA
    QByteArray suffix;
 
    // check if any plugins can write the image
-   QFactoryLoader *pluginLoader = loader();
-   auto keySet = pluginLoader->keySet();
+   QFactoryLoader *factoryObj = loader();
+
+   // what keys are available
+   const QSet<QString> keySet = factoryObj->keySet();
 
    bool found = false;
 
@@ -98,7 +100,7 @@ static QImageIOHandler *createWriteHandlerHelper(QIODevice *device, const QByteA
 
    if (found) {
       // when format is missing, check if we can find a plugin for the suffix
-      QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(pluginLoader->instance(suffix));
+      QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(factoryObj->instance(suffix));
 
       if (plugin && (plugin->capabilities(device, suffix) & QImageIOPlugin::CanWrite)) {
          handler = plugin->create(device, suffix);
@@ -164,7 +166,7 @@ static QImageIOHandler *createWriteHandlerHelper(QIODevice *device, const QByteA
    if (! testFormat.isEmpty()) {
 
       for (auto item : keySet) {
-         QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(pluginLoader->instance(item));
+         QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(factoryObj->instance(item));
 
          if (plugin && (plugin->capabilities(device, testFormat) & QImageIOPlugin::CanWrite)) {
             delete handler;
@@ -581,14 +583,14 @@ bool QImageWriter::supportsOption(QImageIOHandler::ImageOption option) const
    return d->handler->supportsOption(option);
 }
 
-void supportedImageHandlerFormats(QFactoryLoader *loader, QImageIOPlugin::Capability cap, QList<QByteArray> *result)
+void supportedImageHandlerFormats(QFactoryLoader *factoryObj, QImageIOPlugin::Capability cap, QList<QByteArray> *result)
 {
-   auto keySet = loader->keySet();
+   auto keySet = factoryObj->keySet();
 
    QImageIOPlugin *plugin = nullptr;
 
    for (auto item : keySet) {
-      plugin = qobject_cast<QImageIOPlugin *>(loader->instance(item));
+      plugin = qobject_cast<QImageIOPlugin *>(factoryObj->instance(item));
 
       QByteArray key = item.toUtf8();
 
@@ -598,12 +600,12 @@ void supportedImageHandlerFormats(QFactoryLoader *loader, QImageIOPlugin::Capabi
    }
 }
 
-void supportedImageHandlerMimeTypes(QFactoryLoader *loader, QImageIOPlugin::Capability cap, QList<QByteArray> *result)
+void supportedImageHandlerMimeTypes(QFactoryLoader *factoryObj, QImageIOPlugin::Capability cap, QList<QByteArray> *result)
 {
-   auto keySet = loader->keySet();
+   auto keySet = factoryObj->keySet();
 
    for (auto item : keySet) {
-      auto librarySet = loader->librarySet(item);
+      auto librarySet = factoryObj->librarySet(item);
 
       for (auto library : librarySet) {
          const QMetaObject *metaobj = library->m_metaObject;
@@ -614,7 +616,7 @@ void supportedImageHandlerMimeTypes(QFactoryLoader *loader, QImageIOPlugin::Capa
             // only one, may need to allow for multiple mime types
             QString mimeType = metaobj->classInfo(index).value();
 
-            QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(loader->instance(library));
+            QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(factoryObj->instance(library));
 
             if (plugin && (plugin->capabilities(0, item.toUtf8()) & cap) != 0) {
                result->append(mimeType.toLatin1());
@@ -664,9 +666,9 @@ QList<QByteArray> QImageWriter::supportedImageFormats()
 
    supportedImageHandlerFormats(loader(), QImageIOPlugin::CanWrite, &formats);
 
-
    std::sort(formats.begin(), formats.end());
    formats.erase(std::unique(formats.begin(), formats.end()), formats.end());
+
    return formats;
 }
 
