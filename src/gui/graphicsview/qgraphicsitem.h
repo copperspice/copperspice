@@ -1218,7 +1218,7 @@ inline T qgraphicsitem_cast(const QGraphicsItem *item)
       || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : 0;
 }
 
-Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem *item);
+Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QGraphicsItem *item);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsObject *item);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange change);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlag flag);
