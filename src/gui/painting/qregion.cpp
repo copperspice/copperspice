@@ -1585,6 +1585,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
    int prevBand;             // Index of start of previous band in dest
    int curBand;              // Index of start of current band in dest
 
+   QVector<QRect> regTmp;
    /*
     * Initialization:
     * set r1, r2, r1End and r2End appropriately
@@ -1592,15 +1593,33 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
     * in case it is one of the two source regions
     * then mark the "new" region empty, allocating another array of rectangles for it to use
     */
+
    if (reg1->numRects == 1) {
       r1 = &reg1->extents;
    } else {
-      r1 = reg1->rects.constData();
+      if (&dest == reg1) {
+         regTmp = reg1->rects;
+         r1 = regTmp.constData();
+
+      } else {
+         r1 = reg1->rects.constData();
+      }
    }
+
    if (reg2->numRects == 1) {
       r2 = &reg2->extents;
    } else {
-      r2 = reg2->rects.constData();
+      if (&dest == reg2) {
+
+         if (&dest != reg1 && reg1->numRects != 1) {
+            regTmp = reg2->rects;
+         }
+
+         r2 = regTmp.constData();
+
+      } else {
+         r2 = reg2->rects.constData();
+      }
    }
 
    r1End = r1 + reg1->numRects;
@@ -1608,8 +1627,11 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
 
    dest.vectorize();
 
-   QVector<QRect> oldRects = dest.rects;
-
+   /*
+    * Allocate a reasonable number of rectangles for the new region. The idea
+    * is to allocate enough so the individual call back functions do not need to
+    * reallocate and copy the array.
+    */
 
    dest.numRects = 0;
    dest.rects.resize(qMax(reg1->numRects, reg2->numRects) * 2);
