@@ -28,8 +28,6 @@
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qvariant.h>
-#include <QScopedPointer>
-
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -90,9 +88,6 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
 
    QRect doCheck(const QStyleOptionViewItem &option, const QRect &bounding, const QVariant &variant) const;
    QRect textRectangle(QPainter *painter, const QRect &rect, const QFont &font, const QString &text) const;
-
- protected:
-   QScopedPointer<QItemDelegatePrivate> d_ptr;
 
  private:
    Q_DECLARE_PRIVATE(QItemDelegate)
