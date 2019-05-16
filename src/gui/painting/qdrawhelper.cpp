@@ -3940,19 +3940,17 @@ const QRgba64 *qt_fetch_radial_gradient_rgb64(QRgba64 *buffer, const Operator *o
 
 template <class GradientBase, typename BlendType>
 static inline const BlendType *qt_fetch_conical_gradient_template(
-   BlendType *buffer, const QSpanData *data,
-   int y, int x, int length)
+   BlendType *buffer, const QSpanData *data, int y, int x, int length)
 {
    const BlendType *b = buffer;
-   qreal rx = data->m21 * (y + qreal(0.5))
-      + data->dx + data->m11 * (x + qreal(0.5));
-   qreal ry = data->m22 * (y + qreal(0.5))
-      + data->dy + data->m12 * (x + qreal(0.5));
+   qreal rx = data->m21 * (y + qreal(0.5)) + data->dx + data->m11 * (x + qreal(0.5));
+   qreal ry = data->m22 * (y + qreal(0.5)) + data->dy + data->m12 * (x + qreal(0.5));
    bool affine = !data->m13 && !data->m23;
 
-   const qreal inv2pi = M_1_PI / 2.0;
+   const qreal inv2pi = (1 / M_PI) / 2.0;
 
    const BlendType *end = buffer + length;
+
    if (affine) {
       rx -= data->gradient.conical.center.x;
       ry -= data->gradient.conical.center.y;
@@ -6730,13 +6728,16 @@ template<QtPixelOrder> const uint *convertA2RGB30PMFromARGB32PM_sse4(uint *buffe
 
 QDrawHelperFunctions::QDrawHelperFunctions()
 {
-   memset(blendFunctions, 0, sizeof(blendFunctions));
-   memset(scaleFunctions, 0, sizeof(scaleFunctions));
+   memset(blendFunctions,     0, sizeof(blendFunctions));
+   memset(scaleFunctions,     0, sizeof(scaleFunctions));
    memset(transformFunctions, 0, sizeof(transformFunctions));
    memset(memRotateFunctions, 0, sizeof(memRotateFunctions));
-   memset(drawHelper, 0, sizeof(drawHelper));
+   memset(drawHelper,         0, sizeof(drawHelper));
 
-   // Set up basic blend function tables
+   // copy file local static to data member
+   memcpy(drawHelper, qDrawHelper, sizeof(drawHelper));
+
+   // set up basic blend function tables
    initBlendFunctions();
    initMemRotate();
 
@@ -6750,11 +6751,8 @@ QDrawHelperFunctions::QDrawHelperFunctions()
    drawHelper[QImage::Format_RGBA8888_Premultiplied].bitmapBlit = qt_bitmapblit8888_sse2;
 
    extern void qt_scale_image_argb32_on_argb32_sse2(uchar * destPixels, int dbpl,
-      const uchar * srcPixels, int sbpl, int srch,
-      const QRectF & targetRect,
-      const QRectF & sourceRect,
-      const QRect & clip,
-      int const_alpha);
+      const uchar * srcPixels, int sbpl, int srch, const QRectF & targetRect,
+      const QRectF & sourceRect, const QRect & clip, int const_alpha);
 
    scaleFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32_sse2;
    scaleFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_scale_image_argb32_on_argb32_sse2;
@@ -6762,14 +6760,10 @@ QDrawHelperFunctions::QDrawHelperFunctions()
    scaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32_sse2;
 
    extern void qt_blend_rgb32_on_rgb32_sse2(uchar * destPixels, int dbpl,
-      const uchar * srcPixels, int sbpl,
-      int w, int h,
-      int const_alpha);
+      const uchar * srcPixels, int sbpl, int w, int h, int const_alpha);
 
    extern void qt_blend_argb32_on_argb32_sse2(uchar * destPixels, int dbpl,
-      const uchar * srcPixels, int sbpl,
-      int w, int h,
-      int const_alpha);
+      const uchar * srcPixels, int sbpl, int w, int h, int const_alpha);
 
    blendFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32_sse2;
    blendFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32_sse2;
@@ -6806,7 +6800,8 @@ QDrawHelperFunctions::QDrawHelperFunctions()
          const QRgb *);
       extern const uint *convertRGBA8888ToARGB32PM_sse4(uint * buffer, const uint * src, int count, const QPixelLayout *,
          const QRgb *);
-      qPixelLayouts[QImage::Format_ARGB32].convertToARGB32PM = convertARGB32ToARGB32PM_sse4;
+
+      qPixelLayouts[QImage::Format_ARGB32].convertToARGB32PM   = convertARGB32ToARGB32PM_sse4;
       qPixelLayouts[QImage::Format_RGBA8888].convertToARGB32PM = convertRGBA8888ToARGB32PM_sse4;
 #endif
 
