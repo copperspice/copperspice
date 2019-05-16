@@ -89,9 +89,9 @@ void qt_init(QApplicationPrivate *priv, int type);
 void qt_init_tooltip_palette();
 void qt_cleanup();
 
-#ifndef QT_NO_STATEMACHINE
-void qRegisterGuiStateMachine();
-void qUnregisterGuiStateMachine();
+#if ! defined(QT_NO_STATEMACHINE)
+int qRegisterGuiStateMachine();
+int qUnregisterGuiStateMachine();
 #endif
 
 // Helper macro for static functions to check on the existence of the application class.

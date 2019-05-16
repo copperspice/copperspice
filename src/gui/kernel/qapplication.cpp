@@ -132,9 +132,9 @@ void qt_init(QApplicationPrivate *priv, int type);
 void qt_init_tooltip_palette();
 void qt_cleanup();
 
-#ifndef QT_NO_STATEMACHINE
-void qRegisterGuiStateMachine();
-void qUnregisterGuiStateMachine();
+#if ! defined(QT_NO_STATEMACHINE)
+int qRegisterGuiStateMachine();
+int qUnregisterGuiStateMachine();
 #endif
 
 PaletteHash *cs_app_palettes_hash();
@@ -181,7 +181,7 @@ QStyleHints            *QApplicationPrivate::styleHints           = nullptr;
 QTouchDevice           *QApplicationPrivate::m_fakeTouchDevice    = nullptr;
 
 #ifndef QT_NO_ANIMATION
-extern void qRegisterGuiGetInterpolator();
+extern int qRegisterGuiGetInterpolator();
 #endif
 
 #ifndef QT_NO_CLIPBOARD
@@ -205,7 +205,7 @@ static QBasicMutex applicationFontMutex;
 static Qt::LayoutDirection layout_direction = Qt::LayoutDirectionAuto;
 
 #ifndef QT_NO_ANIMATION
-extern void qRegisterGuiGetInterpolator();
+extern int qRegisterGuiGetInterpolator();
 #endif
 
 static bool qt_detectRTLLanguage()
@@ -905,23 +905,21 @@ QString QApplication::platformName()
 }
 
 static void init_platform(const QString &pluginArgument, const QString &platformPluginPath,
-   const QString &platformThemeName, int &argc, char **argv)
+                  const QString &platformThemeName, int &argc, char **argv)
 {
-   // Split into platform name and arguments
-   QStringList arguments = pluginArgument.split(QLatin1Char(':'));
-   const QString name = arguments.takeFirst().toLower();
+   // Split into platform arguments and key
+   QStringList arguments   = pluginArgument.split(QChar(':'));
+   const QString pluginKey = arguments.takeFirst().toLower();
 
-   QString argumentsKey = name;
-   argumentsKey[0] = argumentsKey.at(0).toUpper()[0];
+   // look up the arguments in system settings
+   arguments.append(QLibraryInfo::platformPluginArguments(pluginKey));
 
-   arguments.append(QLibraryInfo::platformPluginArguments(argumentsKey));
-
-   // Create the platform integration.
-   QGuiApplicationPrivate::platform_integration = QPlatformIntegrationFactory::create(name, arguments,
+   // load the platform plugin
+   QGuiApplicationPrivate::platform_integration = QPlatformIntegrationFactory::create(pluginKey, arguments,
          argc, argv, platformPluginPath);
 
-   if (QGuiApplicationPrivate::platform_integration) {
-      QGuiApplicationPrivate::platform_name = new QString(name);
+   if (QGuiApplicationPrivate::platform_integration != nullptr) {
+      QGuiApplicationPrivate::platform_name = new QString(pluginKey);
 
    } else {
       QStringList keys = QPlatformIntegrationFactory::keys(platformPluginPath);
@@ -1046,23 +1044,30 @@ void QGuiApplicationPrivate::createPlatformIntegration()
 
    QHighDpiScaling::initHighDpiScaling();
 
-   // Load the platform integration
-   QString platformPluginPath = QString::fromUtf8(qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH"));
-
+   //
    QString platformName;
 
-#ifdef QT_QPA_DEFAULT_PLATFORM_NAME
-   platformName = QT_QPA_DEFAULT_PLATFORM_NAME;
+#if defined(Q_OS_WIN)
+   platformName = "windows";
+
+#elif defined(Q_OS_MAC)
+   platformName = "cocoa";
+
+#else
+   platformName = "xcb";
+
 #endif
 
+   // allow the plugin name to be changed
    QString platformNameEnv = QString::fromUtf8(qgetenv("QT_QPA_PLATFORM"));
    if (! platformNameEnv.isEmpty()) {
       platformName = platformNameEnv;
    }
 
-   QString platformThemeName = QString::fromUtf8(qgetenv("QT_QPA_PLATFORMTHEME"));
+   QString platformPluginPath = QString::fromUtf8(qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH"));
+   QString platformThemeName  = QString::fromUtf8(qgetenv("QT_QPA_PLATFORMTHEME"));
 
-   // Get command line params
+   // Get command line parameters
    QString icon;
 
    int j = argc ? 1 : 0;
@@ -1076,8 +1081,10 @@ void QGuiApplicationPrivate::createPlatformIntegration()
          continue;
       }
 
-      const bool isXcb = platformName == "xcb";
-      QString arg  = QString::fromUtf8(argv[i]);
+      const bool isXcb = (platformName.startsWith("CsGuiXcb"));
+
+      //
+      QString arg = QString::fromUtf8(argv[i]);
 
       if (arg.startsWith("--")) {
          arg = arg.mid(1);
