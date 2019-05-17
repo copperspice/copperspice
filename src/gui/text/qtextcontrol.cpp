@@ -405,23 +405,21 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
          palette = QApplication::palette("QTextControl");
          doc = new QTextDocument(q);
       }
+
       _q_documentLayoutChanged();
       cursor = QTextCursor(doc);
 
-      // ####        doc->documentLayout()->setPaintDevice(viewport);
+      // #### doc->documentLayout()->setPaintDevice(viewport);
 
-      QObject::connect(doc, SIGNAL(contentsChanged()),         q, SLOT(_q_updateCurrentCharFormatAndSelection()));
-
-      QObject::connect(doc, SIGNAL(cursorPositionChanged(QTextCursor)), q,
-         SLOT(_q_emitCursorPosChanged(QTextCursor)));
-
-      QObject::connect(doc, SIGNAL(documentLayoutChanged()),   q, SLOT(_q_documentLayoutChanged()));
+      QObject::connect(doc, &QTextDocument::contentsChanged,       q, &QTextControl::_q_updateCurrentCharFormatAndSelection);
+      QObject::connect(doc, &QTextDocument::cursorPositionChanged, q, &QTextControl::_q_emitCursorPosChanged);
+      QObject::connect(doc, &QTextDocument::documentLayoutChanged, q, &QTextControl::_q_documentLayoutChanged);
 
       // convenience signal forwards
-      QObject::connect(doc, SIGNAL(undoAvailable(bool)),       q, SLOT(undoAvailable(bool)));
-      QObject::connect(doc, SIGNAL(redoAvailable(bool)),       q, SLOT(redoAvailable(bool)));
-      QObject::connect(doc, SIGNAL(modificationChanged(bool)), q, SLOT(modificationChanged(bool)));
-      QObject::connect(doc, SIGNAL(blockCountChanged(int)),    q, SLOT(blockCountChanged(int)));
+      QObject::connect(doc, &QTextDocument::undoAvailable,       q, &QTextControl::undoAvailable);
+      QObject::connect(doc, &QTextDocument::redoAvailable,       q, &QTextControl::redoAvailable);
+      QObject::connect(doc, &QTextDocument::modificationChanged, q, &QTextControl::modificationChanged);
+      QObject::connect(doc, &QTextDocument::blockCountChanged,   q, &QTextControl::blockCountChanged);
    }
 
    bool previousUndoRedoState = doc->isUndoRedoEnabled();
@@ -429,9 +427,8 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
       doc->setUndoRedoEnabled(false);
    }
 
-
    // avoid multiple textChanged() signals being emitted
-   QObject::disconnect(doc, "contentsChanged()", q, "textChanged()");
+   QObject::disconnect(doc, &QTextDocument::contentsChanged, q, &QTextControl::textChanged);
 
    if (! text.isEmpty()) {
       // clear 'our' cursor for insertion to prevent the emission of the cursorPositionChanged() signal.
@@ -451,6 +448,7 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
          formatCursor.select(QTextCursor::Document);
          formatCursor.setCharFormat(charFormatForInsertion);
          formatCursor.endEditBlock();
+
       } else {
 #ifndef QT_NO_TEXTHTMLPARSER
          doc->setHtml(text);
@@ -459,18 +457,21 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
 #endif
          doc->setUndoRedoEnabled(false);
       }
+
       cursor = QTextCursor(doc);
+
    } else if (clearDocument) {
       doc->clear();
    }
    cursor.setCharFormat(charFormatForInsertion);
 
-   QObject::connect(doc, "contentsChanged()", q, "textChanged()");
+   QObject::connect(doc, &QTextDocument::contentsChanged, q, &QTextControl::textChanged);
    emit q->textChanged();
 
-   if (!document) {
+   if (! document) {
       doc->setUndoRedoEnabled(previousUndoRedoState);
    }
+
    _q_updateCurrentCharFormatAndSelection();
    if (!document) {
       doc->setModified(false);
@@ -478,7 +479,7 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
 
    q->ensureCursorVisible();
    emit q->cursorPositionChanged();
-   QObject::connect(doc, SIGNAL(contentsChange(int, int, int)), q, SLOT(_q_contentsChanged(int, int, int)), Qt::UniqueConnection);
+   QObject::connect(doc, &QTextDocument::contentsChange, q, &QTextControl::_q_contentsChanged, Qt::UniqueConnection);
 }
 
 void QTextControlPrivate::startDrag()
@@ -670,9 +671,9 @@ void QTextControlPrivate::_q_documentLayoutChanged()
 
    QAbstractTextDocumentLayout *layout = doc->documentLayout();
 
-   QObject::connect(layout, SIGNAL(update(QRectF)),              q, SLOT(updateRequest(QRectF)));
-   QObject::connect(layout, SIGNAL(updateBlock(QTextBlock)),     q, SLOT(_q_updateBlock(QTextBlock)));
-   QObject::connect(layout, SIGNAL(documentSizeChanged(QSizeF)), q, SLOT(documentSizeChanged(QSizeF)));
+   QObject::connect(layout, &QAbstractTextDocumentLayout::update,              q, &QTextControl::updateRequest);
+   QObject::connect(layout, &QAbstractTextDocumentLayout::updateBlock,         q, &QTextControl::_q_updateBlock);
+   QObject::connect(layout, &QAbstractTextDocumentLayout::documentSizeChanged, q, &QTextControl::documentSizeChanged);
 
 }
 

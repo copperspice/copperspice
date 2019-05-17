@@ -505,14 +505,14 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
 
-   GUI_CS_SIGNAL_1(Public, void displayTextChanged(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(displayTextChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void displayTextChanged(const QString &text))
+   GUI_CS_SIGNAL_2(displayTextChanged, text)
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textChanged(const QString &text))
+   GUI_CS_SIGNAL_2(textChanged, text)
 
-   GUI_CS_SIGNAL_1(Public, void textEdited(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(textEdited, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textEdited(const QString &text))
+   GUI_CS_SIGNAL_2(textEdited, text)
 
    GUI_CS_SIGNAL_1(Public, void resetInputContext())
    GUI_CS_SIGNAL_2(resetInputContext)
@@ -664,8 +664,8 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    GUI_CS_SLOT_1(Private, void _q_deleteSelected())
    GUI_CS_SLOT_2(_q_deleteSelected)
 
-
-
+ private:
+    friend class QLineEdit;
 };
 
 #endif // QT_NO_LINEEDIT

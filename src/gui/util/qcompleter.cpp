@@ -62,15 +62,15 @@ void QCompletionModel::setSourceModel(QAbstractItemModel *source)
 
    if (source) {
       // TODO: Optimize updates in the source model
-      connect(source, SIGNAL(modelReset()),    this, SLOT(invalidate()));
-      connect(source, SIGNAL(destroyed()),     this, SLOT(modelDestroyed()));
-      connect(source, SIGNAL(layoutChanged()), this, SLOT(invalidate()));
+      connect(source, &QAbstractItemModel::modelReset,      this, &QCompletionModel::invalidate);
+      connect(source, &QAbstractItemModel::destroyed,       this, &QCompletionModel::modelDestroyed);
+      connect(source, &QAbstractItemModel::layoutChanged,   this, &QCompletionModel::invalidate);
 
-      connect(source, SIGNAL(rowsInserted(QModelIndex, int, int)),    this, SLOT(rowsInserted()));
-      connect(source, SIGNAL(rowsRemoved(QModelIndex, int, int)),     this, SLOT(invalidate()));
-      connect(source, SIGNAL(columnsInserted(QModelIndex, int, int)), this, SLOT(invalidate()));
-      connect(source, SIGNAL(columnsRemoved(QModelIndex, int, int)),  this, SLOT(invalidate()));
-      connect(source, SIGNAL(dataChanged(QModelIndex, QModelIndex)),  this, SLOT(invalidate()));
+      connect(source, &QAbstractItemModel::rowsInserted,    this, &QCompletionModel::rowsInserted);
+      connect(source, &QAbstractItemModel::rowsRemoved,     this, &QCompletionModel::invalidate);
+      connect(source, &QAbstractItemModel::columnsInserted, this, &QCompletionModel::invalidate);
+      connect(source, &QAbstractItemModel::columnsRemoved,  this, &QCompletionModel::invalidate);
+      connect(source, &QAbstractItemModel::dataChanged,     this, &QCompletionModel::invalidate);
    }
 
    invalidate();
@@ -85,9 +85,11 @@ void QCompletionModel::createEngine()
          case QCompleter::UnsortedModel:
             sortedEngine = false;
             break;
+
          case QCompleter::CaseSensitivelySortedModel:
             sortedEngine = c->cs == Qt::CaseSensitive;
             break;
+
          case QCompleter::CaseInsensitivelySortedModel:
             sortedEngine = c->cs == Qt::CaseInsensitive;
             break;
@@ -110,11 +112,13 @@ QModelIndex QCompletionModel::mapToSource(const QModelIndex &index) const
 
    int row;
    QModelIndex parent = engine->curParent;
+
    if (!showAll) {
       if (!engine->matchCount()) {
          return QModelIndex();
       }
       Q_ASSERT(index.row() < engine->matchCount());
+
       QIndexMapper &rootIndices = engine->historyMatch.indices;
       if (index.row() < rootIndices.count()) {
          row = rootIndices[index.row()];
@@ -122,6 +126,7 @@ QModelIndex QCompletionModel::mapToSource(const QModelIndex &index) const
       } else {
          row = engine->curMatch.indices[index.row() - rootIndices.count()];
       }
+
    } else {
       row = index.row();
    }
@@ -989,17 +994,6 @@ QWidget *QCompleter::widget() const
    return d->widget;
 }
 
-/*!
-    Sets the model which provides completions to \a model. The \a model can
-    be list model or a tree model. If a model has been already previously set
-    and it has the QCompleter as its parent, it is deleted.
-
-    For convenience, if \a model is a QFileSystemModel, QCompleter switches its
-    caseSensitivity to Qt::CaseInsensitive on Windows and Qt::CaseSensitive
-    on other platforms.
-
-    \sa completionModel(), modelSorting, {Handling Tree Models}
-*/
 void QCompleter::setModel(QAbstractItemModel *model)
 {
    Q_D(QCompleter);
@@ -1041,7 +1035,7 @@ void QCompleter::setModel(QAbstractItemModel *model)
 #endif
 
       setCompletionRole(QFileSystemModel::FileNameRole);
-      connect(fsModel, SIGNAL(directoryLoaded(QString)), this, SLOT(_q_fileSystemModelDirectoryLoaded(QString)));
+      connect(fsModel, &QFileSystemModel::directoryLoaded, this, &QCompleter::_q_fileSystemModelDirectoryLoaded);
    }
 
 #endif
@@ -1088,9 +1082,7 @@ void QCompleter::setFilterMode(Qt::MatchFlags filterMode)
       return;
    }
 
-   if (filterMode != Qt::MatchStartsWith
-      && filterMode != Qt::MatchContains
-      && filterMode != Qt::MatchEndsWith) {
+   if (filterMode != Qt::MatchStartsWith && filterMode != Qt::MatchContains && filterMode != Qt::MatchEndsWith) {
       qWarning("Unhandled QCompleter::filterMode flag is used.");
       return;
    }
@@ -1106,18 +1098,21 @@ Qt::MatchFlags QCompleter::filterMode() const
    return d->filterMode;
 }
 
-
 void QCompleter::setPopup(QAbstractItemView *popup)
 {
    Q_D(QCompleter);
+
    Q_ASSERT(popup != 0);
+
    if (d->popup) {
       QObject::disconnect(d->popup->selectionModel(), 0, this, 0);
       QObject::disconnect(d->popup, 0, this, 0);
    }
+
    if (d->popup != popup) {
       delete d->popup;
    }
+
    if (popup->model() != d->proxy) {
       popup->setModel(d->proxy);
    }
@@ -1128,8 +1123,10 @@ void QCompleter::setPopup(QAbstractItemView *popup)
    if (d->widget) {
       origPolicy = d->widget->focusPolicy();
    }
+
    popup->setParent(0, Qt::Popup);
    popup->setFocusPolicy(Qt::NoFocus);
+
    if (d->widget) {
       d->widget->setFocusPolicy(origPolicy);
    }
@@ -1144,19 +1141,14 @@ void QCompleter::setPopup(QAbstractItemView *popup)
    }
 #endif
 
-   QObject::connect(popup, SIGNAL(clicked(QModelIndex)),  this, SLOT(_q_complete(QModelIndex)));
-   QObject::connect(this,  SIGNAL(activated(QModelIndex)), popup, SLOT(hide()));
+   QObject::connect(popup, &QAbstractItemView::clicked, this, &QCompleter::_q_complete);
+   QObject::connect(this,  static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated), popup, &QAbstractItemView::hide);
 
-   QObject::connect(popup->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-      this, SLOT(_q_completionSelected(QItemSelection)));
+   QObject::connect(popup->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QCompleter::_q_completionSelected);
+
    d->popup = popup;
 }
 
-/*!
-    Returns the popup used to display completions.
-
-    \sa setPopup()
-*/
 QAbstractItemView *QCompleter::popup() const
 {
    Q_D(const QCompleter);
@@ -1172,7 +1164,7 @@ QAbstractItemView *QCompleter::popup() const
       QCompleter *that = const_cast<QCompleter *>(this);
       that->setPopup(listView);
    }
-#endif // QT_NO_LISTVIEW
+#endif
 
    return d->popup;
 }
