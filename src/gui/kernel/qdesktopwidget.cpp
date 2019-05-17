@@ -101,6 +101,7 @@ QDesktopScreenWidget *QDesktopWidgetPrivate::widgetForScreen(QScreen *qScreen) c
 void QDesktopWidgetPrivate::_q_updateScreens()
 {
    Q_Q(QDesktopWidget);
+
    const QList<QScreen *> screenList = QGuiApplication::screens();
    const int targetLength = screenList.length();
    bool screenCountChanged = false;
@@ -116,7 +117,9 @@ void QDesktopWidgetPrivate::_q_updateScreens()
    for (int i = 0; i < targetLength; ++i) {
       QScreen *qScreen = screenList.at(i);
       const QRect screenGeometry = qScreen->geometry();
+
       QDesktopScreenWidget *screenWidget = widgetForScreen(qScreen);
+
       if (screenWidget) {
          // an old screen. update geometry and remember the index in the *new* list
          if (screenGeometry != screenWidget->screenGeometry()) {
@@ -142,10 +145,11 @@ void QDesktopWidgetPrivate::_q_updateScreens()
    // Now we apply the accumulated updates.
    screens.swap(newScreens); // now [newScreens] is the old screen list
    Q_ASSERT(screens.size() == targetLength);
+
    q->setGeometry(virtualGeometry.boundingRect());
 
    // Delete the QDesktopScreenWidget that are not used any more.
-   foreach (QDesktopScreenWidget *screen, newScreens) {
+   for (QDesktopScreenWidget *screen : newScreens) {
       if (!screens.contains(screen)) {
          delete screen;
          screenCountChanged = true;
@@ -163,13 +167,16 @@ void QDesktopWidgetPrivate::_q_updateScreens()
       emit q->resized(changedScreen);
    }
 }
+
 void QDesktopWidgetPrivate::_q_availableGeometryChanged()
 {
    Q_Q(QDesktopWidget);
+
    if (QScreen *screen = qobject_cast<QScreen *>(q->sender())) {
       emit q->workAreaResized(QGuiApplication::screens().indexOf(screen));
    }
 }
+
 QDesktopWidget::QDesktopWidget()
    : QWidget(*new QDesktopWidgetPrivate, 0, Qt::Desktop)
 {
@@ -285,17 +292,20 @@ int QDesktopWidget::screenNumber(const QWidget *w) const
    }
    return allScreens.indexOf(widgetScreen);
 }
+
 int QDesktopWidget::screenNumber(const QPoint &p) const
 {
    const QList<QScreen *> screens = QGuiApplication::screens();
-   if (!screens.isEmpty()) {
+   if (! screens.isEmpty()) {
       const QList<QScreen *> primaryScreens = screens.first()->virtualSiblings();
+
       // Find the screen index on the primary virtual desktop first
-      foreach (QScreen *screen, primaryScreens) {
+      for (QScreen *screen : primaryScreens) {
          if (screen->geometry().contains(p)) {
             return screens.indexOf(screen);
          }
       }
+
       // If the screen index is not found on primary virtual desktop, find
       // the screen index on all screens except the first which was for
       // sure in the previous loop. Some other screens may repeat. Find

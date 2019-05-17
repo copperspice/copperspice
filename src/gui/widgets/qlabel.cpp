@@ -1215,7 +1215,7 @@ void QLabelPrivate::ensureTextControl() const
 {
    Q_Q(const QLabel);
 
-   if (!isTextLabel) {
+   if (! isTextLabel) {
       return;
    }
 
@@ -1242,16 +1242,19 @@ void QLabelPrivate::ensureTextControl() const
 void QLabelPrivate::sendControlEvent(QEvent *e)
 {
    Q_Q(QLabel);
-   if (!isTextLabel || !control || textInteractionFlags == Qt::NoTextInteraction) {
+
+   if (! isTextLabel || !control || textInteractionFlags == Qt::NoTextInteraction) {
       e->ignore();
       return;
    }
+
    control->processEvent(e, -layoutRect().topLeft(), q);
 }
 
 void QLabelPrivate::_q_linkHovered(const QString &anchor)
 {
    Q_Q(QLabel);
+
 #ifndef QT_NO_CURSOR
    if (anchor.isEmpty()) { // restore cursor
       if (validCursor) {
@@ -1260,6 +1263,7 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
          q->unsetCursor();
       }
       onAnchor = false;
+
    } else if (!onAnchor) {
       validCursor = q->testAttribute(Qt::WA_SetCursor);
       if (validCursor) {
@@ -1269,6 +1273,7 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
       onAnchor = true;
    }
 #endif
+
    emit q->linkHovered(anchor);
 }
 
@@ -1305,6 +1310,7 @@ QMenu *QLabelPrivate::createStandardContextMenu(const QPoint &pos)
 {
    QString linkToCopy;
    QPoint p;
+
    if (control && isRichText) {
       p = layoutPoint(pos);
       linkToCopy = control->document()->documentLayout()->anchorAt(p);
@@ -1324,6 +1330,7 @@ void QLabel::_q_movieUpdated(const QRect &un_named_arg1)
    Q_D(QLabel);
    d->_q_movieUpdated(un_named_arg1);
 }
+
 void QLabel::_q_movieResized(const QSize &un_named_arg1)
 {
    Q_D(QLabel);

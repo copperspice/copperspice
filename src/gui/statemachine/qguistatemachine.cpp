@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qstatemachine.h>
+#include <qstatemachine.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -225,16 +225,19 @@ static QEvent *cloneEvent(QEvent *e)
          return new QHelpEvent(*static_cast<QHelpEvent *>(e));
       case QEvent::WhatsThis:
          return new QHelpEvent(*static_cast<QHelpEvent *>(e));
+
 #ifndef QT_NO_STATUSTIP
       case QEvent::StatusTip:
          return new QStatusTipEvent(*static_cast<QStatusTipEvent *>(e));
-#endif //QT_NO_STATUSTIP
+#endif
+
 #ifndef QT_NO_ACTION
       case QEvent::ActionChanged:
       case QEvent::ActionAdded:
       case QEvent::ActionRemoved:
          return new QActionEvent(*static_cast<QActionEvent *>(e));
 #endif
+
       case QEvent::FileOpen:
          return new QFileOpenEvent(*static_cast<QFileOpenEvent *>(e));
 
@@ -249,12 +252,12 @@ static QEvent *cloneEvent(QEvent *e)
 #ifndef QT_NO_WHATSTHIS
       case QEvent::WhatsThisClicked:
          return new QWhatsThisClickedEvent(*static_cast<QWhatsThisClickedEvent *>(e));
-#endif //QT_NO_WHATSTHIS
+#endif
 
 #ifndef QT_NO_TOOLBAR
       case QEvent::ToolBarChange:
          return new QToolBarChangeEvent(*static_cast<QToolBarChangeEvent *>(e));
-#endif //QT_NO_TOOLBAR
+#endif
 
       case QEvent::ApplicationActivate:
          return new QEvent(*e);
@@ -457,6 +460,7 @@ const QStateMachinePrivate::Handler qt_gui_statemachine_handler = {
 };
 
 static const QStateMachinePrivate::Handler *qt_guistatemachine_last_handler = 0;
+
 int qRegisterGuiStateMachine()
 {
    qt_guistatemachine_last_handler = QStateMachinePrivate::handler;

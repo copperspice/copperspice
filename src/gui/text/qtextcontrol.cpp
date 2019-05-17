@@ -393,12 +393,11 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
 {
    Q_Q(QTextControl);
 
-   // for use when called from setPlainText. we may want to re-use the currently
-   // set char format then.
+   // for use when called from setPlainText. may want to re-use the currently set char format then.
    const QTextCharFormat charFormatForInsertion = cursor.charFormat();
 
    bool clearDocument = true;
-   if (!doc) {
+   if (! doc) {
       if (document) {
          doc = document;
          clearDocument = false;
@@ -435,19 +434,17 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
    QObject::disconnect(doc, "contentsChanged()", q, "textChanged()");
 
    if (! text.isEmpty()) {
-      // clear 'our' cursor for insertion to prevent
-      // the emission of the cursorPositionChanged() signal.
-      // instead we emit it only once at the end instead of
-      // at the end of the document after loading and when
-      // positioning the cursor again to the start of the
-      // document.
+      // clear 'our' cursor for insertion to prevent the emission of the cursorPositionChanged() signal.
+      // instead we emit it only once at the end instead of at the end of the document after
+      // loading and when positioning the cursor again to the start of the document
       cursor = QTextCursor();
 
       if (format == Qt::PlainText) {
          QTextCursor formatCursor(doc);
-         // put the setPlainText and the setCharFormat into one edit block,
-         // so that the syntax highlight triggers only /once/ for the entire
-         // document, not twice.
+
+         // put the setPlainText and the setCharFormat into one edit block, so that the syntax
+         // highlight triggers only /once/ for the entire document, not twice
+
          formatCursor.beginEditBlock();
          doc->setPlainText(text);
          doc->setUndoRedoEnabled(false);
@@ -500,6 +497,7 @@ void QTextControlPrivate::startDrag()
 
    Qt::DropActions actions = Qt::CopyAction;
    Qt::DropAction action;
+
    if (interactionFlags & Qt::TextEditable) {
       actions |= Qt::MoveAction;
       action = drag->exec(actions, Qt::MoveAction);
@@ -542,21 +540,20 @@ void QTextControlPrivate::repaintCursor()
 void QTextControlPrivate::repaintOldAndNewSelection(const QTextCursor &oldSelection)
 {
    Q_Q(QTextControl);
-   if (cursor.hasSelection()
-      && oldSelection.hasSelection()
-      && cursor.currentFrame() == oldSelection.currentFrame()
-      && !cursor.hasComplexSelection()
-      && !oldSelection.hasComplexSelection()
-      && cursor.anchor() == oldSelection.anchor()
-   ) {
+
+   if (cursor.hasSelection() && oldSelection.hasSelection() && cursor.currentFrame() == oldSelection.currentFrame()
+      && !cursor.hasComplexSelection() && !oldSelection.hasComplexSelection() && cursor.anchor() == oldSelection.anchor() ) {
+
       QTextCursor differenceSelection(doc);
       differenceSelection.setPosition(oldSelection.position());
       differenceSelection.setPosition(cursor.position(), QTextCursor::KeepAnchor);
       emit q->updateRequest(q->selectionRect(differenceSelection));
+
    } else {
-      if (!oldSelection.isNull()) {
+      if (! oldSelection.isNull()) {
          emit q->updateRequest(q->selectionRect(oldSelection) | cursorRectPlusUnicodeDirectionMarkers(oldSelection));
       }
+
       emit q->updateRequest(q->selectionRect() | cursorRectPlusUnicodeDirectionMarkers(cursor));
    }
 }
@@ -659,6 +656,7 @@ void QTextControlPrivate::_q_contentsChanged(int from, int charsRemoved, int cha
       } else {
          ev = new QAccessibleTextUpdateEvent(q->parent(), from, oldText, newText);
       }
+
       QAccessible::updateAccessibility(ev);
       delete ev;
    }

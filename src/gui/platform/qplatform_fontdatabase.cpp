@@ -45,8 +45,6 @@ void qt_registerFont(const QString &familyname, const QString &stylename,
 void qt_registerFontFamily(const QString &familyName);
 void qt_registerAliasToFontFamily(const QString &familyName, const QString &alias);
 
-
-
 void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *handle)
 {
    if (dataArray.size() == 0) {
@@ -92,11 +90,9 @@ void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *
    }
 }
 
-
 void QPlatformFontDatabase::registerFont(const QString &familyname, const QString &stylename,
-   const QString &foundryname, QFont::Weight weight,
-   QFont::Style style, QFont::Stretch stretch, bool antialiased,
-   bool scalable, int pixelSize, bool fixedPitch,
+   const QString &foundryname, QFont::Weight weight, QFont::Style style, QFont::Stretch stretch,
+   bool antialiased, bool scalable, int pixelSize, bool fixedPitch,
    const QSupportedWritingSystems &writingSystems, void *usrPtr)
 {
    if (scalable) {
@@ -117,13 +113,11 @@ class QWritingSystemsPrivate
 {
  public:
    QWritingSystemsPrivate()
-      : ref(1)
-      , vector(QFontDatabase::WritingSystemsCount, false) {
+      : ref(1), vector(QFontDatabase::WritingSystemsCount, false) {
    }
 
    QWritingSystemsPrivate(const QWritingSystemsPrivate *other)
-      : ref(1)
-      , vector(other->vector) {
+      : ref(1), vector(other->vector) {
    }
 
    QAtomicInt ref;
@@ -236,8 +230,6 @@ void QPlatformFontDatabase::populateFontDatabase()
          registerQPF2Font(fileData, fileDataPtr);
       }
    }
-
-
 }
 
 void QPlatformFontDatabase::populateFamily(const QString &familyName)
@@ -257,7 +249,6 @@ QFontEngineMulti *QPlatformFontDatabase::fontEngineMulti(QFontEngine *fontEngine
 QFontEngine *QPlatformFontDatabase::fontEngine(const QFontDef &fontDef, void *handle)
 {
    QByteArray *fileDataPtr = static_cast<QByteArray *>(handle);
-
    QFontEngineQPF2 *engine = new QFontEngineQPF2(fontDef, *fileDataPtr);
 
    return engine;
@@ -270,20 +261,17 @@ QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal
    return nullptr;
 }
 
-
 QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData, const QString &fileName)
 {
    qWarning("This plugin does not support application fonts");
    return QStringList();
 }
 
-
 void QPlatformFontDatabase::releaseHandle(void *handle)
 {
    QByteArray *fileDataPtr = static_cast<QByteArray *>(handle);
    delete fileDataPtr;
 }
-
 
 QString QPlatformFontDatabase::fontDir() const
 {
@@ -300,14 +288,10 @@ QString QPlatformFontDatabase::fontDir() const
    return fontpath;
 }
 
-
 bool QPlatformFontDatabase::isPrivateFontFamily(const QString &family) const
 {
-   Q_UNUSED(family);
    return false;
 }
-
-
 
 QFont QPlatformFontDatabase::defaultFont() const
 {

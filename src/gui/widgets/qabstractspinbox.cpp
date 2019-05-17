@@ -24,7 +24,6 @@
 #include <qabstractspinbox.h>
 
 #include <qplatformdefs.h>
-
 #include <qabstractspinbox_p.h>
 #include <qdatetimeparser_p.h>
 #include <qdatetime_p.h>
@@ -333,7 +332,6 @@ QLineEdit *QAbstractSpinBox::lineEdit() const
    return d->edit;
 }
 
-
 void QAbstractSpinBox::setLineEdit(QLineEdit *lineEdit)
 {
    Q_D(QAbstractSpinBox);
@@ -342,8 +340,10 @@ void QAbstractSpinBox::setLineEdit(QLineEdit *lineEdit)
       Q_ASSERT(lineEdit);
       return;
    }
+
    delete d->edit;
    d->edit = lineEdit;
+
    if (!d->edit->validator()) {
       d->edit->setValidator(d->validator);
    }
@@ -372,8 +372,6 @@ void QAbstractSpinBox::setLineEdit(QLineEdit *lineEdit)
       d->updateEdit();
    }
 }
-
-
 
 void QAbstractSpinBox::interpretText()
 {
@@ -1129,31 +1127,16 @@ void QAbstractSpinBoxPrivate::updateEditFieldGeometry()
    edit->setGeometry(q->style()->subControlRect(QStyle::CC_SpinBox, &opt,
          QStyle::SC_SpinBoxEditField, q));
 }
-/*!
-    \internal
-    Returns true if a specialValueText has been set and the current value is minimum.
-*/
+
 
 bool QAbstractSpinBoxPrivate::specialValue() const
 {
    return (value == minimum && !specialValueText.isEmpty());
 }
 
-/*!
-    \internal Virtual function that emits signals when the value
-    changes. Reimplemented in the different subclasses.
-*/
-
 void QAbstractSpinBoxPrivate::emitSignals(EmitPolicy, const QVariant &)
 {
 }
-
-/*!
-    \internal
-
-    Slot connected to the line edit's textChanged(const QString &)
-    signal.
-*/
 
 void QAbstractSpinBoxPrivate::_q_editorTextChanged(const QString &t)
 {
@@ -1163,6 +1146,7 @@ void QAbstractSpinBoxPrivate::_q_editorTextChanged(const QString &t)
       QString tmp = t;
       int pos = edit->cursorPosition();
       QValidator::State state = q->validate(tmp, pos);
+
       if (state == QValidator::Acceptable) {
          const QVariant v = valueFromText(tmp);
          setValue(v, EmitIfChanged, tmp != t);
@@ -1170,20 +1154,11 @@ void QAbstractSpinBoxPrivate::_q_editorTextChanged(const QString &t)
       } else {
          pendingEmit = true;
       }
+
    } else {
       pendingEmit = true;
    }
 }
-
-/*!
-    \internal
-
-    Virtual slot connected to the line edit's
-    cursorPositionChanged(int, int) signal. Will move the cursor to a
-    valid position if the new one is invalid. E.g. inside the prefix.
-    Reimplemented in Q[Date|Time|DateTime]EditPrivate to account for
-    the different sections etc.
-*/
 
 void QAbstractSpinBoxPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos)
 {
@@ -1225,12 +1200,6 @@ void QAbstractSpinBoxPrivate::_q_editorCursorPositionChanged(int oldpos, int new
       ignoreCursorPositionChanged = false;
    }
 }
-
-/*!
-    \internal
-
-    Initialises the QAbstractSpinBoxPrivate object.
-*/
 
 void QAbstractSpinBoxPrivate::init()
 {

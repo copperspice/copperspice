@@ -370,18 +370,20 @@ void QFontComboBoxPrivate::_q_currentChanged(const QString &text)
    }
 }
 
-
 QFontComboBox::QFontComboBox(QWidget *parent)
    : QComboBox(*new QFontComboBoxPrivate, parent)
 {
    Q_D(QFontComboBox);
+
    d->currentFont = font();
    setEditable(true);
 
    QStringListModel *m = new QStringListModel(this);
    setModel(m);
    setItemDelegate(new QFontFamilyDelegate(this));
+
    QListView *lview = qobject_cast<QListView *>(view());
+
    if (lview) {
       lview->setUniformItemSizes(true);
    }
@@ -398,19 +400,10 @@ QFontComboBox::~QFontComboBox()
 {
 }
 
-/*!
-    \property QFontComboBox::writingSystem
-    \brief the writing system that serves as a filter for the combobox
-
-    If \a script is QFontDatabase::Any (the default), all fonts are
-    listed.
-
-    \sa fontFilters
-*/
-
 void QFontComboBox::setWritingSystem(QFontDatabase::WritingSystem script)
 {
    Q_D(QFontComboBox);
+
    QFontFamilyDelegate *delegate = qobject_cast<QFontFamilyDelegate *>(view()->itemDelegate());
    if (delegate) {
       delegate->writingSystem = script;
@@ -424,6 +417,7 @@ QFontDatabase::WritingSystem QFontComboBox::writingSystem() const
    if (delegate) {
       return delegate->writingSystem;
    }
+
    return QFontDatabase::Any;
 }
 

@@ -579,6 +579,7 @@ void QTextBrowserPrivate::restoreHistoryEntry(const HistoryEntry entry)
    setSource(entry.url);
    hbar->setValue(entry.hpos);
    vbar->setValue(entry.vpos);
+
    if (entry.focusIndicatorAnchor != -1 && entry.focusIndicatorPosition != -1) {
       QTextCursor cursor(control->document());
       cursor.setPosition(entry.focusIndicatorAnchor);
@@ -586,18 +587,19 @@ void QTextBrowserPrivate::restoreHistoryEntry(const HistoryEntry entry)
       control->setTextCursor(cursor);
       control->setCursorIsFocusIndicator(true);
    }
+
 #ifdef QT_KEYPAD_NAVIGATION
    lastKeypadScrollValue = vbar->value();
    prevFocus = control->textCursor();
 
    Q_Q(QTextBrowser);
+
    const QString href = prevFocus.charFormat().anchorHref();
    QUrl url = resolveUrl(href);
    emit q->highlighted(url);
    emit q->highlighted(url.toString());
 #endif
 }
-
 
 void QTextBrowserPrivate::init()
 {
@@ -616,9 +618,6 @@ void QTextBrowserPrivate::init()
    QObject::connect(control,       &QTextControl::linkHovered,      q, &QTextBrowser::_q_highlightLink);
 }
 
-/*!
-    Constructs an empty QTextBrowser with parent \a parent.
-*/
 QTextBrowser::QTextBrowser(QWidget *parent)
    : QTextEdit(*new QTextBrowserPrivate, parent)
 {
@@ -626,9 +625,6 @@ QTextBrowser::QTextBrowser(QWidget *parent)
    d->init();
 }
 
-/*!
-    \internal
-*/
 QTextBrowser::~QTextBrowser()
 {
 }
@@ -636,6 +632,7 @@ QTextBrowser::~QTextBrowser()
 QUrl QTextBrowser::source() const
 {
    Q_D(const QTextBrowser);
+
    if (d->stack.isEmpty()) {
       return QUrl();
    } else {

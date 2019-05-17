@@ -1783,9 +1783,9 @@ void QCalendarDelegate::paintCell(QPainter *painter, const QRect &rect, const QD
 QCalendarWidgetPrivate::QCalendarWidgetPrivate()
    : QWidgetPrivate()
 {
-   m_model = 0;
-   m_view = 0;
-   m_delegate = 0;
+   m_model     = 0;
+   m_view      = 0;
+   m_delegate  = 0;
    m_selection = 0;
    m_navigator = 0;
    m_dateEditEnabled = false;
@@ -2162,24 +2162,15 @@ QCalendarWidget::QCalendarWidget(QWidget *parent)
    setDateEditEnabled(true);
 }
 
-/*!
-   Destroys the calendar widget.
-*/
 QCalendarWidget::~QCalendarWidget()
 {
 }
 
-/*!
-   \reimp
-*/
 QSize QCalendarWidget::sizeHint() const
 {
    return minimumSizeHint();
 }
 
-/*!
-   \reimp
-*/
 QSize QCalendarWidget::minimumSizeHint() const
 {
    Q_D(const QCalendarWidget);

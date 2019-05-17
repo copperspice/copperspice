@@ -150,16 +150,16 @@ void QTextEditPrivate::init(const QString &html)
    QObject::connect(control, &QTextEditControl::textChanged,           q, &QTextEdit::updateMicroFocus);
 
    QTextDocument *doc = control->document();
-   // set a null page size initially to avoid any relayouting until the textedit
-   // is shown. relayoutDocument() will take care of setting the page size to the
-   // viewport dimensions later.
+
+   // set a null page size initially to avoid any relayouting until the textedit is shown
+   // relayoutDocument() will take care of setting the page size to the viewport dimensions later.
    doc->setPageSize(QSize(0, 0));
    doc->documentLayout()->setPaintDevice(viewport);
    doc->setDefaultFont(q->font());
-   doc->setUndoRedoEnabled(false); // flush undo buffer.
+   doc->setUndoRedoEnabled(false); // flush undo buffer
    doc->setUndoRedoEnabled(true);
 
-   if (!html.isEmpty()) {
+   if (! html.isEmpty()) {
       control->setHtml(html);
    }
 
@@ -180,7 +180,7 @@ void QTextEditPrivate::init(const QString &html)
 
 void QTextEditPrivate::_q_repaintContents(const QRectF &contentsRect)
 {
-   if (!contentsRect.isValid()) {
+   if (! contentsRect.isValid()) {
       viewport->update();
       return;
    }
@@ -207,12 +207,14 @@ void QTextEditPrivate::_q_cursorPositionChanged()
    QAccessible::updateAccessibility(&event);
 #endif
 }
+
 void QTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode)
 {
    QTextCursor cursor = control->textCursor();
    bool moved = false;
    qreal lastY = control->cursorRect(cursor).top();
    qreal distance = 0;
+
    // move using movePosition to keep the cursor's x
    do {
       qreal y = control->cursorRect(cursor).top();
@@ -248,6 +250,7 @@ static QSize documentSize(QTextControl *control)
       if (percentageDone > 0) {
          docSize.setHeight(docSize.height() * 100 / percentageDone);
       }
+
    } else {
       docSize = layout->documentSize().toSize();
    }
@@ -260,6 +263,7 @@ void QTextEditPrivate::_q_adjustScrollbars()
    if (ignoreAutomaticScrollbarAdjustment) {
       return;
    }
+
    ignoreAutomaticScrollbarAdjustment = true; // avoid recursion, #106108
 
    QSize viewportSize = viewport->size();

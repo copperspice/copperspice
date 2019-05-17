@@ -27,8 +27,6 @@
 #include <qwidget.h>
 #include <qdatetime.h>
 
-
-
 #ifndef QT_NO_CALENDARWIDGET
 
 class QDate;

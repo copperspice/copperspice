@@ -21,69 +21,68 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qabstracteventdispatcher.h"
-#include "qapplication.h"
-#include "qclipboard.h"
-#include "qcursor.h"
-#include "qdesktopwidget.h"
-#include "qdir.h"
-#include "qevent.h"
-#include "qfile.h"
-#include "qfileinfo.h"
-#include "qgraphicsscene.h"
-#include "qhash.h"
-#include "qset.h"
-#include "qlayout.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qstylefactory.h"
-#include "qtextcodec.h"
-#include "qtooltip.h"
-#include "qtranslator.h"
-#include "qvariant.h"
-#include "qwidget.h"
-#include "private/qdnd_p.h"
-#include "qguiapplication_p.h"
-#include "qcolormap.h"
-#include "qdebug.h"
-#include "qstylesheetstyle_p.h"
-#include "qstyle_p.h"
-#include "qmessagebox.h"
-#include "qwidgetwindow_p.h"
+#include <qplatformdefs.h>
+#include <qabstracteventdispatcher.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qdir.h>
+#include <qevent.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qgraphicsscene.h>
+#include <qhash.h>
+#include <qset.h>
+#include <qlayout.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qstylefactory.h>
+#include <qtextcodec.h>
+#include <qtooltip.h>
+#include <qtranslator.h>
+#include <qvariant.h>
+#include <qwidget.h>
+#include <qdnd_p.h>
+#include <qguiapplication_p.h>
+#include <qcolormap.h>
+#include <qdebug.h>
+#include <qstylesheetstyle_p.h>
+#include <qstyle_p.h>
+#include <qmessagebox.h>
+#include <qwidgetwindow_p.h>
 #include <qgraphicsproxywidget.h>
 #include <qstylehints.h>
 #include <qinputmethod.h>
 #include <qwindow_p.h>
 #include <qplatform_theme.h>
 #include <qplatform_fontdatabase.h>
-#include "qdatetime.h"
+#include <qdatetime.h>
 #include <qplatform_window.h>
-#include "qgesture.h"
+#include <qgesture.h>
 #include <qthread.h>
 
 #ifndef QT_NO_WHATSTHIS
-#include <QWhatsThis>
+#include <qwhatsthis.h>
 #endif
 
-#include "qkeymapper_p.h"
-#include "qaccessiblewidget_factory_p.h"
+#include <qkeymapper_p.h>
+#include <qaccessiblewidget_factory_p.h>
 #include <qthread_p.h>
 #include <qfont_p.h>
-#include "qapplication_p.h"
-#include "qevent_p.h"
-#include "qwidget_p.h"
-#include "qgesturemanager_p.h"
-
+#include <qapplication_p.h>
+#include <qevent_p.h>
+#include <qwidget_p.h>
+#include <qgesturemanager_p.h>
 
 #ifdef Q_OS_WIN
-#include <qt_windows.h> // for qt_win_display_dc()
+#include <qt_windows.h>       // for qt_win_display_dc()
 #endif
 
 #include <cmath>
 #include <stdlib.h>
 
-//#define ALIEN_DEBUG
+// #define ALIEN_DEBUG
 
 void qt_init(QApplicationPrivate *priv, int type);
 void qt_init_tooltip_palette();
@@ -1128,7 +1127,7 @@ void QApplication::aboutCs()
 void QApplication::aboutQt()
 {
 #ifndef QT_NO_MESSAGEBOX
-   QMessageBox::aboutQt(activeWindow());
+   QMessageBox::aboutCs(activeWindow());
 #endif
 }
 

@@ -23,16 +23,16 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "qprintdialog.h"
-#include "qabstractprintdialog_p.h"
+#include <qprintdialog.h>
+#include <qabstractprintdialog_p.h>
 
 #include <qcore_mac_p.h>
 #include <qapplication_p.h>
 #include <qprinter.h>
 #include <qprintengine.h>
 #include <qplatform_printdevice.h>
-#ifndef QT_NO_PRINTDIALOG
 
+#ifndef QT_NO_PRINTDIALOG
 
 extern qreal qt_pointMultiplier(QPageLayout::Unit unit);
 class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
@@ -165,9 +165,11 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
         }
     }
 
-    if (pageSize.isValid() && !pageSize.isEquivalentTo(printer->pageLayout().pageSize()))
+    if (pageSize.isValid() && !pageSize.isEquivalentTo(printer->pageLayout().pageSize())) {
         printer->setPageSize(pageSize);
-    printer->setOrientation(orientation == kPMLandscape ? QPrinter::Landscape : QPrinter::Portrait);
+    }
+
+    printer->setOrientation(orientation == kPMLandscape ? QPageLayout::Landscape : QPageLayout::Portrait);
 
    dialog->done((returnCode == NSModalResponseOK) ? QDialog::Accepted : QDialog::Rejected);
 }
@@ -175,35 +177,34 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
 
 
-
-
 void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
 {
    Q_Q(QPrintDialog);
 
-    // get the NSPrintInfo from the print engine in the platform plugin
-    void *voidp = 0;
-    (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(),
+   // get the NSPrintInfo from the print engine in the platform plugin
+   void *voidp = 0;
+   (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(),
                                      "NSPrintInfoForPrintEngine",
                                      Q_RETURN_ARG(void *, voidp),
                                      Q_ARG(QPrintEngine *, printer->printEngine()));
-    printInfo = static_cast<NSPrintInfo *>(voidp);
-    [printInfo retain];
+
+   printInfo = static_cast<NSPrintInfo *>(voidp);
+   [printInfo retain];
 
    // It seems the only way that PM lets you use all is if the minimum
    // for the page range is 1. This _kind of_ makes sense if you think about
-   // it. However, calling PMSetFirstPage() or PMSetLastPage() always enforces
-   // the range.
-    // get print settings from the platform plugin
-    PMPrintSettings settings = static_cast<PMPrintSettings>([printInfo PMPrintSettings]);
-    PMSetPageRange(settings, q->minPage(), q->maxPage());
+   // it. However, calling PMSetFirstPage() or PMSetLastPage() always enforces the range.
+   // get print settings from the platform plugin
 
-    if (q->printRange() == QAbstractPrintDialog::PageRange) {
-        PMSetFirstPage(settings, q->fromPage(), false);
-        PMSetLastPage(settings, q->toPage(), false);
-    }
+   PMPrintSettings settings = static_cast<PMPrintSettings>([printInfo PMPrintSettings]);
+   PMSetPageRange(settings, q->minPage(), q->maxPage());
 
-    [printInfo updateFromPMPrintSettings];
+   if (q->printRange() == QAbstractPrintDialog::PageRange) {
+      PMSetFirstPage(settings, q->fromPage(), false);
+      PMSetLastPage(settings, q->toPage(), false);
+   }
+
+   [printInfo updateFromPMPrintSettings];
 
    QPrintDialog::PrintDialogOptions qtOptions = q->options();
    NSPrintPanelOptions macOptions = NSPrintPanelShowsCopies;
@@ -212,8 +213,7 @@ void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
    }
 
    if (qtOptions & QPrintDialog::PrintShowPageSize)
-      macOptions |= NSPrintPanelShowsPaperSize | NSPrintPanelShowsPageSetupAccessory
-                    | NSPrintPanelShowsOrientation;
+      macOptions |= NSPrintPanelShowsPaperSize | NSPrintPanelShowsPageSetupAccessory | NSPrintPanelShowsOrientation;
 
     printPanel = [NSPrintPanel printPanel];
     [printPanel retain];

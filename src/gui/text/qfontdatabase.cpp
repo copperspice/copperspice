@@ -41,8 +41,6 @@
 #include <qplatform_fontdatabase.h>
 #include <qplatform_theme.h>
 
-
-
 #include <stdlib.h>
 #include <limits.h>
 
@@ -63,7 +61,6 @@
 #define SMOOTH_SCALABLE 0xffff
 
 static void initializeDb();
-
 
 static int getFontWeight(const QString &weightString)
 {
@@ -2608,12 +2605,13 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
                         blackListed.append(index);
                      }
                   }
-               } while (index >= 0 && !engine);
+               } while (index >= 0 && ! engine);
+
             }
          }
       }
 
-      if (!engine) {
+      if (! engine) {
          engine = new QFontEngineBox(request.pixelSize);
       }
 

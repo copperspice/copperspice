@@ -279,6 +279,7 @@ private:
     int addXrefEntry(int object, bool printostr = true);
     void printString(const QString &string);
     void xprintf(const char* fmt, ...);
+
     inline void write(const QByteArray &data) {
         stream->writeRawData(data.constData(), data.size());
         streampos += data.size();
@@ -294,8 +295,6 @@ private:
     QHash<qint64, uint> imageCache;
     QHash<QPair<uint, uint>, uint > alphaCache;
 };
-
-
 
 #endif // QT_NO_PDF
 

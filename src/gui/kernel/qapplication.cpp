@@ -147,17 +147,17 @@ Qt::MouseButtons QApplicationPrivate::buttons                = Qt::NoButton;
 Qt::MouseButtons QApplicationPrivate::mouse_buttons          = Qt::NoButton;
 Qt::MouseButton  QApplicationPrivate::mousePressButton       = Qt::NoButton;
 
-bool      QApplicationPrivate::scrollNoPhaseAllowed = false;
-bool      QApplicationPrivate::obey_desktop_settings = true;
-bool      QApplicationPrivate::highDpiScalingUpdated = false;
-int       QApplicationPrivate::mousePressX = 0;
-int       QApplicationPrivate::mousePressY = 0;
-int       QApplicationPrivate::mouse_double_click_distance = -1;
-int       QApplicationPrivate::m_fakeMouseSourcePointId    = 0;
-ulong     QApplicationPrivate::mousePressTime              = 0;
+bool  QApplicationPrivate::scrollNoPhaseAllowed  = false;
+bool  QApplicationPrivate::obey_desktop_settings = true;
+bool  QApplicationPrivate::highDpiScalingUpdated = false;
+int   QApplicationPrivate::mousePressX = 0;
+int   QApplicationPrivate::mousePressY = 0;
+int   QApplicationPrivate::mouse_double_click_distance = -1;
+int   QApplicationPrivate::m_fakeMouseSourcePointId    = 0;
+ulong QApplicationPrivate::mousePressTime              = 0;
 
-QPointF   QApplicationPrivate::lastCursorPosition(qInf(), qInf());
-QString   QApplicationPrivate::styleOverride;
+QPointF     QApplicationPrivate::lastCursorPosition(qInf(), qInf());
+QString     QApplicationPrivate::styleOverride;
 QWindowList QApplicationPrivate::window_list;
 
 QList<QObject *> QApplicationPrivate::generic_plugin_list;
@@ -512,7 +512,7 @@ QApplication::~QApplication()
    QApplicationPrivate::enabledAnimations = QPlatformTheme::GeneralUiEffect;
    QApplicationPrivate::widgetCount = false;
 
-#ifndef QT_NO_STATEMACHINE
+#if ! defined(QT_NO_STATEMACHINE)
    // trigger unregistering of QStateMachine's GUI types
    qUnregisterGuiStateMachine();
 #endif
@@ -935,8 +935,7 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       fatalMessage += "Reinstalling the application may fix this problem.";
 
 #if defined(Q_OS_WIN)
-      // Windows: Display message box unless it is a console application
-      // or debug build showing an assert box.
+      // display the message box unless it is a console application or debug build showing an assert box
 
       if (! GetConsoleWindow()) {
          MessageBox(0, &fatalMessage.toStdWString()[0],
@@ -948,8 +947,8 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       return;
    }
 
-   // Many platforms have created QScreens at this point. Finish initializing
-   // QHighDpiScaling to be prepared for early calls to qt_defaultDpi().
+   // Many platforms have created QScreens at this point. Finish initializing QHighDpiScaling
+   // to be prepared for early calls to qt_defaultDpi().
    if (QGuiApplication::primaryScreen()) {
       QGuiApplicationPrivate::highDpiScalingUpdated = true;
       QHighDpiScaling::updateHighDpiScaling();
@@ -957,16 +956,16 @@ static void init_platform(const QString &pluginArgument, const QString &platform
 
    // Create the platform theme:
 
-   // 1) Fetch the platform name from the environment if present.
+   // (1) Fetch the platform name from the environment if present.
    QStringList themeNames;
    if (!platformThemeName.isEmpty()) {
       themeNames.append(platformThemeName);
    }
 
-   // 2) Ask the platform integration for a list of theme names
+   // (2) Ask the platform integration for a list of theme names
    themeNames += QGuiApplicationPrivate::platform_integration->themeNames();
 
-   // 3) Look for a theme plugin.
+   // (3) Look for a theme plugin
    for (const QString &themeName : themeNames) {
       QGuiApplicationPrivate::platform_theme = QPlatformThemeFactory::create(themeName, platformPluginPath);
 
@@ -976,7 +975,7 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    }
 
    // 4) If no theme plugin was found ask the platform integration to create a theme
-   if (!QGuiApplicationPrivate::platform_theme) {
+   if (! QGuiApplicationPrivate::platform_theme) {
       for (const QString &themeName : themeNames) {
          QGuiApplicationPrivate::platform_theme = QGuiApplicationPrivate::platform_integration->createPlatformTheme(themeName);
          if (QGuiApplicationPrivate::platform_theme) {
@@ -995,21 +994,22 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    // Set arguments as dynamic properties on the native interface as
    // boolean 'foo' or strings: 'foo=bar'
 
-   if (!arguments.isEmpty()) {
+   if (! arguments.isEmpty()) {
       if (QObject *nativeInterface = QGuiApplicationPrivate::platform_integration->nativeInterface()) {
+
          for (const QString &argument : arguments) {
-            const int equalsPos = argument.indexOf(QLatin1Char('='));
+            const int equalsPos = argument.indexOf(QChar('='));
 
             const QString name   = equalsPos != -1 ? argument.left(equalsPos) : argument;
             const QVariant value = equalsPos != -1 ? QVariant(argument.mid(equalsPos + 1)) : QVariant(true);
+
             nativeInterface->setProperty(name, value);
          }
       }
    }
 #endif
 
-   fontSmoothingGamma = QGuiApplicationPrivate::platformIntegration()
-      ->styleHint(QPlatformIntegration::FontSmoothingGamma).toReal();
+   fontSmoothingGamma = QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::FontSmoothingGamma).toReal();
 }
 
 static void init_plugins(const QList<QString> &pluginList)
@@ -1038,8 +1038,8 @@ static void init_plugins(const QList<QString> &pluginList)
 
 void QGuiApplicationPrivate::createPlatformIntegration()
 {
-   // Use the Qt menus by default. Platform plugins that
-   // want to enable a native menu implementation can clear this flag.
+   // Use the CS menus by default. Platform plugins that want to enable a native
+   // menu implementation can clear this flag.
    QCoreApplication::setAttribute(Qt::AA_DontUseNativeMenuBar, true);
 
    QHighDpiScaling::initHighDpiScaling();
@@ -1132,21 +1132,21 @@ void QGuiApplicationPrivate::createPlatformIntegration()
 
    init_platform(platformName, platformPluginPath, platformThemeName, argc, argv);
 
-   if (!icon.isEmpty()) {
+   if (! icon.isEmpty()) {
       forcedWindowIcon = QDir::isAbsolutePath(icon) ? QIcon(icon) : QIcon::fromTheme(icon);
    }
 }
 
 void QGuiApplicationPrivate::createEventDispatcher()
 {
-   Q_ASSERT(!eventDispatcher);
+   Q_ASSERT(! eventDispatcher);
 
    if (platform_integration == 0) {
       createPlatformIntegration();
    }
 
-   // The platform integration should not mess with the event dispatcher
-   Q_ASSERT(!eventDispatcher);
+   //  platform integration should not mess with the event dispatcher
+   Q_ASSERT(! eventDispatcher);
 
    eventDispatcher = platform_integration->createEventDispatcher();
 }
@@ -1159,9 +1159,9 @@ void QGuiApplicationPrivate::eventDispatcherReady()
 
    platform_integration->initialize();
 
-   // All platforms should have added screens at this point. Finish
-   // QHighDpiScaling initialization if it has not been done so already.
-   if (!QGuiApplicationPrivate::highDpiScalingUpdated) {
+   // All platforms should have added screens at this point
+   // Finish QHighDpiScaling initialization if it has not been done so already
+   if (! QGuiApplicationPrivate::highDpiScalingUpdated) {
       QHighDpiScaling::updateHighDpiScaling();
    }
 }
@@ -1254,6 +1254,7 @@ void QGuiApplicationPrivate::init()
             is_session_restored = true;
          }
 #endif
+
       } else if (arg.startsWith("-style=")) {
          s = arg.mid(7).toLower();
 

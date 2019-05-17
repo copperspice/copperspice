@@ -45,6 +45,7 @@
 #include <algorithm>
 
 class QLineEditPrivate;
+
 class QLineEditIconButton : public QToolButton
 {
    GUI_CS_OBJECT(QLineEditIconButton)

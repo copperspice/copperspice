@@ -968,6 +968,7 @@ QSize QTableView::viewportSizeHint() const
          horizontalScrollBar()->isVisible() ? horizontalScrollBar()->height() : 0);
    return result;
 }
+
 void QTableView::setModel(QAbstractItemModel *model)
 {
    Q_D(QTableView);
@@ -1008,10 +1009,12 @@ void QTableView::setModel(QAbstractItemModel *model)
 void QTableView::setRootIndex(const QModelIndex &index)
 {
    Q_D(QTableView);
+
    if (index == d->root) {
       viewport()->update();
       return;
    }
+
    d->verticalHeader->setRootIndex(index);
    d->horizontalHeader->setRootIndex(index);
    QAbstractItemView::setRootIndex(index);
@@ -1023,6 +1026,7 @@ void QTableView::setRootIndex(const QModelIndex &index)
 void QTableView::doItemsLayout()
 {
    Q_D(QTableView);
+
    QAbstractItemView::doItemsLayout();
    d->verticalHeader->d_func()->setScrollOffset(verticalScrollBar(), verticalScrollMode());
    if (!d->verticalHeader->updatesEnabled()) {
@@ -1053,33 +1057,18 @@ void QTableView::setSelectionModel(QItemSelectionModel *selectionModel)
    }
 }
 
-/*!
-    Returns the table view's horizontal header.
-
-    \sa setHorizontalHeader(), verticalHeader(), QAbstractItemModel::headerData()
-*/
 QHeaderView *QTableView::horizontalHeader() const
 {
    Q_D(const QTableView);
    return d->horizontalHeader;
 }
 
-/*!
-    Returns the table view's vertical header.
-
-    \sa setVerticalHeader(), horizontalHeader(), QAbstractItemModel::headerData()
-*/
 QHeaderView *QTableView::verticalHeader() const
 {
    Q_D(const QTableView);
    return d->verticalHeader;
 }
 
-/*!
-    Sets the widget to use for the horizontal header to \a header.
-
-    \sa horizontalHeader() setVerticalHeader()
-*/
 void QTableView::setHorizontalHeader(QHeaderView *header)
 {
    Q_D(QTableView);

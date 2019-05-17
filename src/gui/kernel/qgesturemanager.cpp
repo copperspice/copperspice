@@ -265,8 +265,8 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
          }
 
          QGestureRecognizer::Result recognizerResult = recognizer->recognize(state, target, event);
-         QGestureRecognizer::Result recognizerState = recognizerResult & QGestureRecognizer::ResultState_Mask;
-         QGestureRecognizer::Result resultHint = recognizerResult & QGestureRecognizer::ResultHint_Mask;
+         QGestureRecognizer::Result recognizerState  = recognizerResult & QGestureRecognizer::ResultState_Mask;
+         QGestureRecognizer::Result resultHint       = recognizerResult & QGestureRecognizer::ResultHint_Mask;
 
          if (recognizerState == QGestureRecognizer::TriggerGesture) {
 #if defined(CS_SHOW_DEBUG)
@@ -312,8 +312,9 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
       }
    }
 
-   if (!triggeredGestures.isEmpty() || !finishedGestures.isEmpty()
-      || !newMaybeGestures.isEmpty() || !notGestures.isEmpty()) {
+   if (! triggeredGestures.isEmpty() || !finishedGestures.isEmpty()
+            || ! newMaybeGestures.isEmpty() || ! notGestures.isEmpty()) {
+
       QSet<QGesture *> startedGestures = triggeredGestures - m_activeGestures;
       triggeredGestures &= m_activeGestures;
 
@@ -384,9 +385,9 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
          gesture->d_func()->state = Qt::GestureFinished;
       }
 
-      if (! m_activeGestures.isEmpty() || !m_maybeGestures.isEmpty() ||
-         ! startedGestures.isEmpty() || !triggeredGestures.isEmpty() ||
-         ! finishedGestures.isEmpty() || !canceledGestures.isEmpty()) {
+      if (! m_activeGestures.isEmpty() || ! m_maybeGestures.isEmpty()   ||
+          ! startedGestures.isEmpty()  || ! triggeredGestures.isEmpty() ||
+          ! finishedGestures.isEmpty() || ! canceledGestures.isEmpty()) {
 
 #if defined(CS_SHOW_DEBUG)
          qDebug() << "QGestureManager::filterEventThroughContexts():"
@@ -437,10 +438,11 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
 void QGestureManager::cancelGesturesForChildren(QGesture *original)
 {
    Q_ASSERT(original);
+
    QWidget *originatingWidget = m_gestureTargets.value(original);
    Q_ASSERT(originatingWidget);
 
-   if (!originatingWidget) {
+   if (! originatingWidget) {
       return;
    }
 
@@ -763,6 +765,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
             qDebug() << "override event: gesture was accepted:" << gesture << w;
             QList<QGesture *> &gestures = normalStartedGestures[w];
             gestures.append(gesture);
+
             // override the target
             m_gestureTargets[gesture] = w;
 
@@ -787,8 +790,8 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
          bool eventAccepted = event.isAccepted();
 
          for (QGesture *gesture : event.gestures()) {
-            if (gesture->state() == Qt::GestureStarted &&
-               (eventAccepted || event.isAccepted(gesture))) {
+
+            if (gesture->state() == Qt::GestureStarted && (eventAccepted || event.isAccepted(gesture))) {
                QWidget *w = event.m_targetWidgets.value(gesture->gestureType(), 0);
                Q_ASSERT(w);
 

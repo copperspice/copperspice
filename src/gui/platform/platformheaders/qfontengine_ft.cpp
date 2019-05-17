@@ -728,15 +728,16 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format,
    return init(faceId, antialias, format, QFreetypeFace::getFace(faceId, fontData));
 }
 
-bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format,
-   QFreetypeFace *freetypeFace)
+bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFreetypeFace *freetypeFace)
 {
    freetype = freetypeFace;
-   if (!freetype) {
+
+   if (! freetype) {
       xsize = 0;
       ysize = 0;
       return false;
    }
+
    defaultFormat = format;
    this->antialias = antialias;
 
@@ -751,7 +752,8 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format,
 
    symbol = freetype->symbol_map != 0;
    PS_FontInfoRec psrec;
-   // don't assume that type1 fonts are symbol fonts by default
+
+   // do not assume that type1 fonts are symbol fonts by default
    if (FT_Get_PS_Font_Info(freetype->face, &psrec) == FT_Err_Ok) {
       symbol = bool(fontDef.family.contains(QLatin1String("symbol"), Qt::CaseInsensitive));
    }
@@ -783,8 +785,7 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format,
       underline_position = QFixed::fromFixed(-FT_MulFix(face->underline_position, face->size->metrics.y_scale));
 
    } else {
-      // copied from QFontEngineQPF
-      // ad hoc algorithm
+      // copied from QFontEngineQPF, ad hoc algorithm
       int score = fontDef.weight * fontDef.pixelSize;
       line_thickness = score / 700;
 
@@ -839,8 +840,8 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format,
       freetype->hbFace_destroy_func = face_destroy_func_ptr;
 
    } else {
-      Q_ASSERT(!face_);
-      face_ = freetype->hbFace;
+      Q_ASSERT(! m_hb_face);
+      m_hb_face = freetype->hbFace;
    }
 
    // we share the HB face in QFreeTypeFace, so do not let ~QFontEngine() destroy it

@@ -28,9 +28,6 @@
 
 #ifndef QT_NO_LINEEDIT
 
-
-
-
 #include <qlineedit.h>
 #include <qtextlayout.h>
 #include <qstyleoption.h>
@@ -45,8 +42,6 @@
 #include <qinputcontrol_p.h>
 #include <qtextengine_p.h>
 #include <qwidget_p.h>
-
-
 
 #ifdef DrawText
 #  undef DrawText
@@ -504,11 +499,6 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
       return &m_textLayout;
    }
 
-
-
-
-
-
    GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int un_named_arg1, int un_named_arg2))
    GUI_CS_SIGNAL_2(cursorPositionChanged, un_named_arg1, un_named_arg2)
 
@@ -680,4 +670,4 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
 
 #endif // QT_NO_LINEEDIT
 
-#endif // QLINECONTROL_P_H
+#endif

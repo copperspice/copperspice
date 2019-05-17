@@ -329,19 +329,18 @@ void QWindowsXPStylePrivate::cleanup(bool force)
 }
 
 /* In order to obtain the correct VistaTreeViewTheme (arrows for PE_IndicatorBranch),
- * we need to set the windows "explorer" theme explicitly on a native
- * window and open the "TREEVIEW" theme handle passing its window handle
- * in order to get Vista-style item view themes (particulary drawBackground()
- * for selected items needs this).
- * We invoke a service of the native Windows interface to create
- * a non-visible window handle, open the theme on it and insert it into
- * the cache so that it is found by XPThemeData::handle() first.
+ * need to set the windows "explorer" theme explicitly on a native window and open the
+ * "TREEVIEW" theme handle passing its window handle  in order to get Vista-style item
+ * view themes (particulary drawBackground() for selected items needs this).
+ * We invoke a service of the native Windows interface to create a non-visible window
+ * handle, open the theme on it and insert it into the cache so that it is found
+ * by XPThemeData::handle() first.
  */
 
 static inline HWND createTreeViewHelperWindow()
 {
    if (QPlatformNativeInterface *ni = QGuiApplication::platformNativeInterface()) {
-      void *hwnd = 0;
+      void *hwnd    = nullptr;
       void *wndProc = reinterpret_cast<void *>(DefWindowProc);
 
       if (QMetaObject::invokeMethod(ni, "createMessageWindow", Qt::DirectConnection,
@@ -352,8 +351,10 @@ static inline HWND createTreeViewHelperWindow()
          return reinterpret_cast<HWND>(hwnd);
       }
    }
-   return 0;
+
+   return nullptr;
 }
+
 bool QWindowsXPStylePrivate::initVistaTreeViewTheming()
 {
    if (m_vistaTreeViewHelper) {
@@ -361,15 +362,18 @@ bool QWindowsXPStylePrivate::initVistaTreeViewTheming()
    }
 
    m_vistaTreeViewHelper = createTreeViewHelperWindow();
-   if (!m_vistaTreeViewHelper) {
+
+   if (! m_vistaTreeViewHelper) {
       qWarning("Unable to create the treeview helper window.");
       return false;
    }
+
    if (FAILED(QWindowsXPStylePrivate::pSetWindowTheme(m_vistaTreeViewHelper, L"explorer", NULL))) {
       qErrnoWarning("SetWindowTheme() failed.");
       cleanupVistaTreeViewTheming();
       return false;
    }
+
    return true;
 }
 

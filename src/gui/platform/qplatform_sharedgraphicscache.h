@@ -27,7 +27,6 @@
 #include <qobject.h>
 #include <qimage.h>
 
-
 class Q_GUI_EXPORT QPlatformSharedGraphicsCache: public QObject
 {
    GUI_CS_OBJECT(QPlatformSharedGraphicsCache)

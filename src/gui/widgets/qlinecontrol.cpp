@@ -118,37 +118,23 @@ void QLineControl::updateDisplayText(bool forceUpdate)
 }
 
 #ifndef QT_NO_CLIPBOARD
-/*!
-    \internal
 
-    Copies the currently selected text into the clipboard using the given
-    \a mode.
-
-    \note If the echo mode is set to a mode other than Normal then copy
-    will not work.  This is to prevent using copy as a method of bypassing
-    password features of the line control.
-*/
 void QLineControl::copy(QClipboard::Mode mode) const
 {
    QString t = selectedText();
 
-   if (!t.isEmpty() && m_echoMode == QLineEdit::Normal) {
-      disconnect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, 0);
+   if (! t.isEmpty() && m_echoMode == QLineEdit::Normal) {
+      disconnect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, nullptr);
 
       QApplication::clipboard()->setText(t, mode);
       connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(_q_clipboardChanged()));
    }
 }
 
-/*!
-    \internal
-
-    Inserts the text stored in the application clipboard into the line  control.
-
-*/
 void QLineControl::paste(QClipboard::Mode clipboardMode)
 {
    QString clip = QApplication::clipboard()->text(clipboardMode);
+
    if (!clip.isEmpty() || hasSelectedText()) {
       separate(); //make it a separate undo/redo command
       insert(clip);
@@ -156,7 +142,7 @@ void QLineControl::paste(QClipboard::Mode clipboardMode)
    }
 }
 
-#endif // !QT_NO_CLIPBOARD
+#endif
 
 void QLineControl::commitPreedit()
 {
@@ -176,6 +162,7 @@ void QLineControl::commitPreedit()
    updateDisplayText(/*force*/ true);
 #endif
 }
+
 void QLineControl::backspace()
 {
    int priorState = m_undoState;

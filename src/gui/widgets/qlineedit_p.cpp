@@ -204,8 +204,8 @@ void QLineEditPrivate::init(const QString &txt)
    q->setFocusPolicy(Qt::StrongFocus);
    q->setAttribute(Qt::WA_InputMethodEnabled);
 
-   //   Specifies that this widget can use more, but is able to survive on
-   //   less, horizontal space; and is fixed vertically
+   // Specifies that this widget can use more, but is able to survive on
+   // less, horizontal space; and is fixed vertically
 
    q->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, QSizePolicy::LineEdit));
    q->setBackgroundRole(QPalette::Base);
@@ -235,9 +235,11 @@ QRect QLineEditPrivate::adjustedContentsRect() const
 void QLineEditPrivate::setCursorVisible(bool visible)
 {
    Q_Q(QLineEdit);
+
    if ((bool)cursorVisible == visible) {
       return;
    }
+
    cursorVisible = visible;
    if (control->inputMask().isEmpty()) {
       q->update(cursorRect());
@@ -260,10 +262,10 @@ void QLineEditPrivate::resetInputMethod()
       QGuiApplication::inputMethod()->reset();
    }
 }
+
 /*!
   This function is not intended as polymorphic usage. Just a shared code
-  fragment that calls QInputContext::mouseHandler for this
-  class.
+  fragment that calls QInputContext::mouseHandler for this class.
 */
 bool QLineEditPrivate::sendMouseEventToInputContext( QMouseEvent *e )
 {
@@ -494,7 +496,7 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
 {
    Q_Q(QLineEdit);
 
-   if (!newAction) {
+   if (! newAction) {
       return 0;
    }
    if (! hasSideWidgets()) {
@@ -524,12 +526,15 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
       toolButton->setDefaultAction(newAction);
       w = toolButton;
    }
+
    // If there is a 'before' action, it takes preference
    PositionIndexPair positionIndex = before ? findSideWidget(before) : PositionIndexPair(position, -1);
    SideWidgetEntryList &list = positionIndex.first == QLineEdit::TrailingPosition ? trailingSideWidgets : leadingSideWidgets;
+
    if (positionIndex.second < 0) {
       positionIndex.second = list.size();
    }
+
    list.insert(positionIndex.second, SideWidgetEntry(w, newAction, flags));
    positionSideWidgets();
    w->show();
@@ -539,12 +544,15 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
 void QLineEditPrivate::removeAction(QAction *action)
 {
    Q_Q(QLineEdit);
+
    const PositionIndexPair positionIndex = findSideWidget(action);
    if (positionIndex.second == -1) {
       return;
    }
+
    SideWidgetEntryList &list = positionIndex.first == QLineEdit::TrailingPosition ? trailingSideWidgets : leadingSideWidgets;
    SideWidgetEntry entry = list.takeAt(positionIndex.second);
+
    if (entry.flags & SideWidgetCreatedByWidgetAction) {
       static_cast<QWidgetAction *>(entry.action)->releaseWidget(entry.widget);
    } else {

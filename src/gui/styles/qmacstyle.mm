@@ -7263,12 +7263,11 @@ static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintD
 
 /*! \internal
 
-    Returns the CoreGraphics CGContextRef of the paint device. 0 is
-    returned if it can't be obtained. It is the caller's responsibility to
-    CGContextRelease the context when finished using it.
+   Returns the CoreGraphics CGContextRef of the paint device. 0 is
+   returned if it can't be obtained. It is the caller's responsibility to
+   CGContextRelease the context when finished using it.
 
-    \warning This function is only available on \macos.
-    \warning This function is duplicated in the Cocoa platform plugin.
+   \warning This function is duplicated in the Cocoa platform plugin.
 */
 
 CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
@@ -7295,14 +7294,18 @@ CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
         qreal devicePixelRatio = pdev->devicePixelRatioF();
         CGContextScaleCTM(ret, devicePixelRatio, devicePixelRatio);
         CGContextScaleCTM(ret, 1, -1);
+
         return ret;
+
     } else if (pdev->devType() == QInternal::Widget) {
-        //CGContextRef ret = static_cast<CGContextRef>(static_cast<const QWidget *>(pdev)->macCGHandle());
-        ///CGContextRetain(ret);
-        //return ret;
+        //   CGContextRef ret = static_cast<CGContextRef>(static_cast<const QWidget *>(pdev)->macCGHandle());
+        //   CGContextRetain(ret);
+        //   return ret;
+
         qDebug("qt_mac_cg_context: not implemented: Widget class");
         return 0;
     }
+
     return 0;
 }
 

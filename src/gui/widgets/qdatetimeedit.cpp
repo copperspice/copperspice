@@ -1190,6 +1190,7 @@ void QDateTimeEdit::mousePressEvent(QMouseEvent *event)
       d->positionCalendarPopup();
       //Show the calendar
       d->monthCalendar->show();
+
    } else {
       QAbstractSpinBox::mousePressEvent(event);
    }
@@ -1216,11 +1217,6 @@ QDateEdit::QDateEdit(QWidget *parent)
    connect(this, &QDateEdit::dateChanged, this, &QDateEdit::userDateChanged);
 }
 
-/*!
-  Constructs an empty date editor with a \a parent. The date is set
-  to \a date.
-*/
-
 QDateEdit::QDateEdit(const QDate &date, QWidget *parent)
    : QDateTimeEdit(date, QVariant::Date, parent)
 {
@@ -1228,15 +1224,6 @@ QDateEdit::QDateEdit(const QDate &date, QWidget *parent)
 QDateEdit::~QDateEdit()
 {
 }
-
-
-// --- QDateTimeEditPrivate ---
-
-/*!
-  \internal
-  Constructs a QDateTimeEditPrivate object
-*/
-
 
 QDateTimeEditPrivate::QDateTimeEditPrivate()
    : QDateTimeParser(QVariant::DateTime, QDateTimeParser::DateTimeEdit)
@@ -2148,7 +2135,6 @@ void QDateTimeEditPrivate::setRange(const QVariant &min, const QVariant &max)
    syncCalendarWidget();
 }
 
-
 bool QDateTimeEditPrivate::isSeparatorKey(const QKeyEvent *ke) const
 {
    if (!ke->text().isEmpty() && currentSectionIndex + 1 < sectionNodes.size() && currentSectionIndex >= 0) {
@@ -2156,11 +2142,13 @@ bool QDateTimeEditPrivate::isSeparatorKey(const QKeyEvent *ke) const
          if (ke->text().at(0).isNumber()) {
             return false;
          }
+
       } else if (ke->text().at(0).isLetterOrNumber()) {
          return false;
       }
       return separators.at(currentSectionIndex + 1).contains(ke->text());
    }
+
    return false;
 }
 
@@ -2261,13 +2249,16 @@ QCalendarWidget *QCalendarPopup::verifyCalendarInstance()
    if (calendar.isNull()) {
       QCalendarWidget *cw = new QCalendarWidget(this);
       cw->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
+
 #ifdef QT_KEYPAD_NAVIGATION
       if (QApplication::keypadNavigationEnabled()) {
          cw->setHorizontalHeaderFormat(QCalendarWidget::SingleLetterDayNames);
       }
 #endif
+
       setCalendarWidget(cw);
       return cw;
+
    } else {
       return calendar.data();
    }
@@ -2277,7 +2268,8 @@ void QCalendarPopup::setCalendarWidget(QCalendarWidget *cw)
 {
    Q_ASSERT(cw);
    QVBoxLayout *widgetLayout = qobject_cast<QVBoxLayout *>(layout());
-   if (!widgetLayout) {
+
+   if (! widgetLayout) {
       widgetLayout = new QVBoxLayout(this);
       widgetLayout->setMargin(0);
       widgetLayout->setSpacing(0);

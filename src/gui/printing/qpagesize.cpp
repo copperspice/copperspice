@@ -454,7 +454,9 @@ static QString qt_keyForCustomSize(const QSizeF &size, QPageSize::Unit units)
          abbrev = "CC";
          break;
    }
-   // Assumes size is already max 2 decimal places
+
+   // assumes size is already max 2 decimal places
+
    return key.formatArg(size.width()).formatArg(size.height()).formatArg(abbrev);
 }
 
@@ -462,33 +464,41 @@ static QString qt_keyForCustomSize(const QSizeF &size, QPageSize::Unit units)
 static QString qt_nameForCustomSize(const QSizeF &size, QPageSize::Unit units)
 {
    QString name;
+
    switch (units) {
       case QPageSize::Unit::Millimeter:
          //: Custom size name in millimeters
          name = QCoreApplication::translate("QPageSize", "Custom (%1mm x %2mm)");
          break;
+
       case QPageSize::Unit::Point:
          //: Custom size name in points
          name = QCoreApplication::translate("QPageSize", "Custom (%1pt x %2pt)");
          break;
+
       case QPageSize::Unit::Inch:
          //: Custom size name in inches
          name = QCoreApplication::translate("QPageSize", "Custom (%1in x %2in)");
          break;
+
       case QPageSize::Unit::Pica:
          //: Custom size name in picas
          name = QCoreApplication::translate("QPageSize", "Custom (%1pc x %2pc)");
          break;
+
       case QPageSize::Unit::Didot:
          //: Custom size name in didots
          name = QCoreApplication::translate("QPageSize", "Custom (%1DD x %2DD)");
          break;
+
       case QPageSize::Unit::Cicero:
          //: Custom size name in ciceros
          name = QCoreApplication::translate("QPageSize", "Custom (%1CC x %2CC)");
          break;
    }
-   // Assumes size is already max 2 decimal places
+
+   // assumes size is already max 2 decimal places
+
    return name.formatArg(size.width()).formatArg(size.height());
 }
 
@@ -498,14 +508,19 @@ static qreal qt_pointMultiplier(QPageSize::Unit unit)
    switch (unit) {
       case QPageSize::Unit::Millimeter:
          return 2.83464566929;
+
       case QPageSize::Unit::Point:
          return 1.0;
+
       case QPageSize::Unit::Inch:
          return 72.0;
+
       case QPageSize::Unit::Pica:
          return 12;
+
       case QPageSize::Unit::Didot:
          return 1.065826771;
+
       case QPageSize::Unit::Cicero:
          return 12.789921252;
    }
@@ -521,16 +536,18 @@ Q_GUI_EXPORT qreal qt_pixelMultiplier(int resolution)
 static QSizeF qt_definitionSize(QPageSize::PageSizeId pageSizeId)
 {
    QPageSize::Unit units = qt_pageSizes[pageSizeId].definitionUnits;
+
    if (units == QPageSize::Millimeter) {
       return QSizeF(qt_pageSizes[pageSizeId].widthMillimeters, qt_pageSizes[pageSizeId].heightMillimeters);
    }
+
    Q_ASSERT(units == QPageSize::Inch);  // We currently only support definitions in mm or inches
    return QSizeF(qt_pageSizes[pageSizeId].widthInches, qt_pageSizes[pageSizeId].heightInches);
 }
 
 static QSizeF qt_convertUnits(const QSizeF &size, QPageSize::Unit fromUnits, QPageSize::Unit toUnits)
 {
-   if (!size.isValid()) {
+   if (! size.isValid()) {
       return QSizeF();
    }
 
@@ -576,10 +593,13 @@ static QSizeF qt_convertPointsToUnits(const QSize &size, QPageSize::Unit units)
    if (!size.isValid()) {
       return QSizeF();
    }
+
    const qreal multiplier = qt_pointMultiplier(units);
+
    // Try force to 2 decimal places for consistency
-   const int width = qRound(size.width() * 100 / multiplier);
+   const int width  = qRound(size.width() * 100 / multiplier);
    const int height = qRound(size.height() * 100 / multiplier);
+
    return QSizeF(width / 100.0, height / 100.0);
 }
 

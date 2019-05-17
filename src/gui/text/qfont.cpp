@@ -111,7 +111,7 @@ bool QFontDef::exactMatch(const QFontDef &other) const
    this_family = QFontDatabase::resolveFontFamilyAlias(this_family);
    other_family = QFontDatabase::resolveFontFamilyAlias(other_family);
 
-   return (styleHint        == other.styleHint
+   return (styleHint     == other.styleHint
          && styleStrategy == other.styleStrategy
          && weight        == other.weight
          && style         == other.style
@@ -128,7 +128,7 @@ Q_GUI_EXPORT int qt_defaultDpiX()
       return 96;
    }
 
-   if (!qt_is_gui_used) {
+   if (! qt_is_gui_used) {
       return 75;
    }
 
@@ -145,7 +145,8 @@ Q_GUI_EXPORT int qt_defaultDpiY()
    if (QCoreApplication::instance()->testAttribute(Qt::AA_Use96Dpi)) {
       return 96;
    }
-   if (!qt_is_gui_used) {
+
+   if (! qt_is_gui_used) {
       return 75;
    }
 

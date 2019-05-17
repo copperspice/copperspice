@@ -1089,7 +1089,7 @@ void QTextEngine::shapeText(int item) const
 
    if (fontEngine->type() == QFontEngine::Multi) {
       // ask the font engine to find out which glyphs (as an index in the specific font)
-      // to use for the text in one item.
+      // to use for the text in one item
       QGlyphLayout initialGlyphs = availableGlyphs(&si);
 
       int nGlyphs = initialGlyphs.numGlyphs;
@@ -1155,7 +1155,7 @@ void QTextEngine::shapeText(int item) const
    si.num_glyphs = shapeTextWithHarfbuzz(si, str, fontEngine, itemBoundaries, kerningEnabled, letterSpacing != 0);
 
    if (si.num_glyphs == 0) {
-      // broom - report shaping errors somehow
+      // emerald - report shaping errors somehow
       return;
    }
    layoutData->used += si.num_glyphs;
@@ -1246,7 +1246,8 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
       hb_buffer_guess_segment_properties(buffer);
 
       uint buffer_flags = HB_BUFFER_FLAG_DEFAULT;
-      // Symbol encoding used to encode various crap in the 32..255 character code range,
+
+      // symbol encoding used to encode various crap in the 32..255 character code range,
       // and thus might override U+00AD [SHY]; avoid hiding default ignorables
 
       if (actualFontEngine->symbol) {
@@ -1262,7 +1263,7 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
 
          cs_font_set_use_design_metrics(hb_font, option.useDesignMetrics() ? uint(QFontEngine::DesignMetrics) : 0);
 
-         // Ligatures are incompatible with custom letter spacing, so when a letter spacing is set,
+         // ligatures are incompatible with custom letter spacing, so when a letter spacing is set,
          // we disable them for writing systems where they are purely cosmetic
 
          bool scriptRequiresOpenType = ((script >= QChar::Script_Syriac && script <= QChar::Script_Sinhala)
@@ -1271,11 +1272,11 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
          bool dontLigate = hasLetterSpacing && !scriptRequiresOpenType;
 
          const hb_feature_t features[5] = {
-            { HB_TAG('k', 'e', 'r', 'n'), !!kerningEnabled, 0, uint(-1) },
-            { HB_TAG('l', 'i', 'g', 'a'), !dontLigate, 0, uint(-1) },
-            { HB_TAG('c', 'l', 'i', 'g'), !dontLigate, 0, uint(-1) },
-            { HB_TAG('d', 'l', 'i', 'g'), !dontLigate, 0, uint(-1) },
-            { HB_TAG('h', 'l', 'i', 'g'), !dontLigate, 0, uint(-1) }
+            { HB_TAG('k', 'e', 'r', 'n'), !! kerningEnabled, 0, uint(-1) },
+            { HB_TAG('l', 'i', 'g', 'a'), ! dontLigate, 0, uint(-1) },
+            { HB_TAG('c', 'l', 'i', 'g'), ! dontLigate, 0, uint(-1) },
+            { HB_TAG('d', 'l', 'i', 'g'), ! dontLigate, 0, uint(-1) },
+            { HB_TAG('h', 'l', 'i', 'g'), ! dontLigate, 0, uint(-1) }
          };
 
          const int num_features = dontLigate ? 5 : 1;
@@ -1283,8 +1284,8 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
          const char *const *shaper_list = nullptr;
 
 #if defined(Q_OS_DARWIN)
-         // What's behind QFontEngine::FaceData::user_data isn't compatible between different font engines
-         // - specifically functions in hb-coretext.cc would run into undefined behavior with data
+         // What is behind QFontEngine::FaceData::user_data is not compatible between different font engines,
+         // specifically functions in hb-coretext.cc would run into undefined behavior with data
          // from non-CoreText engine. The other shapers works with that engine just fine.
 
          if (actualFontEngine->type() != QFontEngine::Mac) {
@@ -3712,9 +3713,9 @@ void QTextEngine::adjustUnderlines()
 
    adjustUnderlines(start, end, underlinePos, penWidth);
 }
+
 void QTextEngine::adjustUnderlines(ItemDecorationList::iterator start,
-   ItemDecorationList::iterator end,
-   qreal underlinePos, qreal penWidth)
+   ItemDecorationList::iterator end, qreal underlinePos, qreal penWidth)
 {
    for (ItemDecorationList::iterator it = start; it != end; ++it) {
       it->y = underlinePos;

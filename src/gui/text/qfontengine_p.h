@@ -317,7 +317,7 @@ class Q_GUI_EXPORT QFontEngine
 
    GlyphFormat glyphFormat;
    QImage currentlyLockedAlphaMap;
-   int m_subPixelPositionCount; // Number of positions within a single pixel for this cache
+   int m_subPixelPositionCount;             // number of positions within a single pixel for this cache
 
  protected:
    explicit QFontEngine(Type type);

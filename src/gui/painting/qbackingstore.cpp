@@ -147,41 +147,22 @@ void QBackingStore::beginPaint(const QRegion &region)
    }
 }
 
-/*!
-    This function is called after painting onto the surface has ended.
-
-    \sa beginPaint(), paintDevice()
-*/
 void QBackingStore::endPaint()
 {
    d_ptr->platformBackingStore->endPaint();
 }
 
-/*!
-      Sets the size of the windowsurface to be \a size.
-
-      \sa size()
-*/
 void QBackingStore::resize(const QSize &size)
 {
    d_ptr->size = size;
    d_ptr->platformBackingStore->resize(QHighDpi::toNativePixels(size, d_ptr->window), d_ptr->staticContents);
 }
 
-/*!
-    Returns the current size of the windowsurface.
-*/
 QSize QBackingStore::size() const
 {
    return d_ptr->size;
 }
 
-/*!
-    Scrolls the given \a area \a dx pixels to the right and \a dy
-    downward; both \a dx and \a dy may be negative.
-
-    Returns \c true if the area was scrolled successfully; false otherwise.
-*/
 bool QBackingStore::scroll(const QRegion &area, int dx, int dy)
 {
    // Disable scrolling for non-integer scroll deltas. For this case
@@ -197,27 +178,16 @@ bool QBackingStore::scroll(const QRegion &area, int dx, int dy)
          nativeDx, nativeDy);
 }
 
-/*!
-   Set \a region as the static contents of this window.
-*/
 void QBackingStore::setStaticContents(const QRegion &region)
 {
    d_ptr->staticContents = region;
 }
 
-/*!
-   Returns a pointer to the QRegion that has the static contents
-   of this window.
-*/
 QRegion QBackingStore::staticContents() const
 {
    return d_ptr->staticContents;
 }
 
-/*!
-   Returns a boolean indicating if this window
-   has static contents or not.
-*/
 bool QBackingStore::hasStaticContents() const
 {
    return !d_ptr->staticContents.isEmpty();
@@ -225,7 +195,7 @@ bool QBackingStore::hasStaticContents() const
 
 void Q_GUI_EXPORT qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &offset)
 {
-   // make sure we don't detach
+   // make sure we do not detach
    uchar *mem = const_cast<uchar *>(const_cast<const QImage &>(img).bits());
 
    int lineskip = img.bytesPerLine();

@@ -282,7 +282,7 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       return true;
    }
 
-   // ### This only works for scripts that require OpenType. More generally
+   // only works for scripts that require OpenType. More generally
    // for scripts that do not require OpenType we should just look at the list of
    // supported writing systems in the font's OS/2 table.
 
@@ -298,7 +298,6 @@ bool QFontEngine::supportsScript(QChar::Script script) const
    if (getSfntTableData(MAKE_TAG('m', 'o', 'r', 't'), 0, &len) || getSfntTableData(MAKE_TAG('m', 'o', 'r', 'x'), 0, &len)) {
       return true;
    }
-
 #endif
 
    bool retval = false;
@@ -375,10 +374,9 @@ void QFontEngine::getGlyphPositions(const QGlyphLayout &glyphs, const QTransform
    QFixed xpos;
    QFixed ypos;
 
-   const bool transform = matrix.m11() != 1.
-      || matrix.m12() != 0.
-      || matrix.m21() != 0.
-      || matrix.m22() != 1.;
+   const bool transform = matrix.m11() != 1.0 || matrix.m12() != 0.0 ||
+                  matrix.m21() != 0.0 || matrix.m22() != 1.0;
+
    if (! transform) {
       xpos = QFixed::fromReal(matrix.dx());
       ypos = QFixed::fromReal(matrix.dy());

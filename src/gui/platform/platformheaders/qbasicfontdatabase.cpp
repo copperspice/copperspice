@@ -50,15 +50,15 @@ void QBasicFontDatabase::populateFontDatabase()
     }
 
     QStringList nameFilters;
-    nameFilters << QLatin1String("*.ttf")
-                << QLatin1String("*.ttc")
-                << QLatin1String("*.pfa")
-                << QLatin1String("*.pfb")
-                << QLatin1String("*.otf");
+    nameFilters << QString("*.ttf")
+                << QString("*.ttc")
+                << QString("*.pfa")
+                << QString("*.pfb")
+                << QString("*.otf");
 
     for (const QFileInfo &fi : dir.entryInfoList(nameFilters, QDir::Files)) {
-        const QByteArray file = QFile::encodeName(fi.absoluteFilePath());
-        QBasicFontDatabase::addTTFile(QByteArray(), file);
+       const QByteArray file = QFile::encodeName(fi.absoluteFilePath());
+       QBasicFontDatabase::addTTFile(QByteArray(), file);
     }
 }
 

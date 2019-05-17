@@ -31,7 +31,7 @@
 
 #ifdef Q_OS_MAC
 
-#ifdef __OBJC__
+#if defined(__OBJC__)
 @class NSMenu;
 #else
 using NSMenu = objc_object;

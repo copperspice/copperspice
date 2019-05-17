@@ -199,6 +199,7 @@ void QLineEdit::setClearButtonEnabled(bool enable)
    if (enable == isClearButtonEnabled()) {
       return;
    }
+
    if (enable) {
       QAction *clearAction = new QAction(d->clearButtonIcon(), QString(), this);
       clearAction->setEnabled(!isReadOnly());
@@ -306,7 +307,6 @@ void QLineEdit::setCompleter(QCompleter *c)
    }
 }
 
-
 QCompleter *QLineEdit::completer() const
 {
    Q_D(const QLineEdit);
@@ -321,14 +321,18 @@ QSize QLineEdit::sizeHint() const
    Q_D(const QLineEdit);
    ensurePolished();
    QFontMetrics fm(font());
+
    int h = qMax(fm.height(), 14) + 2 * d->verticalMargin
       + d->topTextMargin + d->bottomTextMargin
       + d->topmargin + d->bottommargin;
+
    int w = fm.width(QLatin1Char('x')) * 17 + 2 * d->horizontalMargin
       + d->effectiveLeftTextMargin() + d->effectiveRightTextMargin()
       + d->leftmargin + d->rightmargin; // "some"
+
    QStyleOptionFrame opt;
    initStyleOption(&opt);
+
    return (style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(w, h).
             expandedTo(QApplication::globalStrut()), this));
 }
@@ -1344,15 +1348,14 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
    }
 
 #ifdef QT_KEYPAD_NAVIGATION
-   if (!QApplication::keypadNavigationEnabled() || (hasEditFocus() && ( e->reason() == Qt::PopupFocusReason
-         ))) {
+   if (! QApplication::keypadNavigationEnabled() || (hasEditFocus() && ( e->reason() == Qt::PopupFocusReason))) {
 #endif
 
       d->control->setCursorBlinkPeriod(QApplication::cursorFlashTime());
       QStyleOptionFrame opt;
       initStyleOption(&opt);
 
-      if ((!hasSelectedText() && d->control->preeditAreaText().isEmpty())
+      if ((! hasSelectedText() && d->control->preeditAreaText().isEmpty())
          || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this)) {
          d->setCursorVisible(true);
       }
@@ -1628,6 +1631,7 @@ void QLineEdit::contextMenuEvent(QContextMenuEvent *event)
 static inline void setActionIcon(QAction *action, const QString &name)
 {
    const QIcon icon = QIcon::fromTheme(name);
+
    if (!icon.isNull()) {
       action->setIcon(icon);
    }
@@ -1636,9 +1640,10 @@ static inline void setActionIcon(QAction *action, const QString &name)
 QMenu *QLineEdit::createStandardContextMenu()
 {
    Q_D(QLineEdit);
+
    QMenu *popup = new QMenu(this);
-   popup->setObjectName(QLatin1String("qt_edit_menu"));
-   QAction *action = 0;
+   popup->setObjectName("qt_edit_menu");
+   QAction *action = nullptr;
 
    if (!isReadOnly()) {
       action = popup->addAction(QLineEdit::tr("&Undo") + ACCEL_KEY(QKeySequence::Undo));
@@ -1656,10 +1661,10 @@ QMenu *QLineEdit::createStandardContextMenu()
    }
 
 #ifndef QT_NO_CLIPBOARD
-   if (!isReadOnly()) {
+   if (! isReadOnly()) {
       action = popup->addAction(QLineEdit::tr("Cu&t") + ACCEL_KEY(QKeySequence::Cut));
       action->setEnabled(!d->control->isReadOnly() && d->control->hasSelectedText()
-         && d->control->echoMode() == QLineEdit::Normal);
+                  && d->control->echoMode() == QLineEdit::Normal);
 
       setActionIcon(action, "edit-cut");
       connect(action, &QAction::triggered, this, &QLineEdit::cut);
@@ -1670,33 +1675,34 @@ QMenu *QLineEdit::createStandardContextMenu()
    setActionIcon(action, "edit-copy");
    connect(action, &QAction::triggered, this, &QLineEdit::copy);
 
+   if (! isReadOnly()) {
       action = popup->addAction(QLineEdit::tr("&Paste") + ACCEL_KEY(QKeySequence::Paste));
-      action->setEnabled(!d->control->isReadOnly() && !QApplication::clipboard()->text().isEmpty());
+      action->setEnabled(! d->control->isReadOnly() && ! QApplication::clipboard()->text().isEmpty());
 
       setActionIcon(action, "edit-paste");
       connect(action, &QAction::triggered, this, &QLineEdit::paste);
    }
 #endif
 
-   if (!isReadOnly()) {
+   if (! isReadOnly()) {
       action = popup->addAction(QLineEdit::tr("Delete"));
-      action->setEnabled(!d->control->isReadOnly() && !d->control->text().isEmpty() && d->control->hasSelectedText());
+      action->setEnabled(! d->control->isReadOnly() && ! d->control->text().isEmpty() && d->control->hasSelectedText());
 
       setActionIcon(action, "edit-delete");
       connect(action, &QAction::triggered, d->control, &QLineControl::_q_deleteSelected);
    }
 
-   if (!popup->isEmpty()) {
+   if (! popup->isEmpty()) {
       popup->addSeparator();
    }
 
    action = popup->addAction(QLineEdit::tr("Select All") + ACCEL_KEY(QKeySequence::SelectAll));
-   action->setEnabled(!d->control->text().isEmpty() && !d->control->allSelected());
+   action->setEnabled(!d->control->text().isEmpty() && ! d->control->allSelected());
    d->selectAllAction = action;
    connect(action, &QAction::triggered, this, &QLineEdit::selectAll);
 
 
-   if (!d->control->isReadOnly() && QGuiApplication::styleHints()->useRtlExtensions()) {
+   if (! d->control->isReadOnly() && QGuiApplication::styleHints()->useRtlExtensions()) {
 
       popup->addSeparator();
       QUnicodeControlCharacterMenu *ctrlCharacterMenu = new QUnicodeControlCharacterMenu(this, popup);
