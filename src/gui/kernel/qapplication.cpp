@@ -924,15 +924,14 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    } else {
       QStringList keys = QPlatformIntegrationFactory::keys(platformPluginPath);
 
-      QString fatalMessage = QString("Application failed to start because it could not find or load "
-            "the platform plugin \"%1\"\nin \"%2\".\n\n")
-         .formatArgs(name, QDir::toNativeSeparators(platformPluginPath));
+      QString fatalMessage = QString("The application failed to start because the platform plugin was not found or did not load.\n"
+                  "Requested Plugin Key: \"%1\"\n\n").formatArg(pluginKey);
 
       if (! keys.isEmpty()) {
-         fatalMessage += QString("Available platform plugins are: %1.\n\n").formatArg(keys.join(", "));
+         fatalMessage += QString("Available platform plugins: %1.\n\n").formatArg(keys.join(", "));
       }
 
-      fatalMessage += "Reinstalling the application may fix this problem.";
+      fatalMessage += "Reinstalling the application may resolve this problem.";
 
 #if defined(Q_OS_WIN)
       // display the message box unless it is a console application or debug build showing an assert box

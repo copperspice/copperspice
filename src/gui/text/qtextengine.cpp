@@ -3683,9 +3683,10 @@ void QTextEngine::clearDecorations()
    strikeOutList.clear();
    overlineList.clear();
 }
+
 void QTextEngine::adjustUnderlines()
 {
-   // qDebug() << __PRETTY_FUNCTION__ << underlineList.count() << "underlines";
+
    if (underlineList.isEmpty()) {
       return;
    }

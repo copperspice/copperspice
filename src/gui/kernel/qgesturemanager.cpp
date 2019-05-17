@@ -411,7 +411,6 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
          }
 
          if (g->gestureCancelPolicy() == QGesture::CancelAllInContext) {
-            qDebug() << "lets try to cancel some";
             // find gestures in context in Qt::GestureStarted or Qt::GestureUpdated state and cancel them
             cancelGesturesForChildren(g);
          }
@@ -741,11 +740,10 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
       QWidget *receiver = it.key();
 
       QList<QGesture *> gestures = it.value();
-      qDebug() << "QGestureManager::deliverEvents: sending GestureOverride to"
-         << receiver
-         << "gestures:" << gestures;
+
       QGestureEvent event(gestures);
       event.t = QEvent::GestureOverride;
+
       // mark event and individual gestures as ignored
       event.ignore();
 
@@ -762,7 +760,6 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
             QWidget *w = event.m_targetWidgets.value(gesture->gestureType(), 0);
             Q_ASSERT(w);
 
-            qDebug() << "override event: gesture was accepted:" << gesture << w;
             QList<QGesture *> &gestures = normalStartedGestures[w];
             gestures.append(gesture);
 
@@ -770,7 +767,6 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
             m_gestureTargets[gesture] = w;
 
          } else {
-            qDebug() << "override event: gesture wasn't accepted. putting back:" << gesture;
             QList<QGesture *> &gestures = normalStartedGestures[receiver];
             gestures.append(gesture);
          }
@@ -781,9 +777,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
    for (GesturesPerWidget::const_iterator it = normalStartedGestures.constBegin(),
       e = normalStartedGestures.constEnd(); it != e; ++it) {
 
-      if (!it.value().isEmpty()) {
-         qDebug() << "QGestureManager::deliverEvents: sending to" << it.key()
-            << "gestures:" << it.value();
+      if (! it.value().isEmpty()) {
 
          QGestureEvent event(it.value());
          QApplication::sendEvent(it.key(), &event);
@@ -795,7 +789,6 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
                QWidget *w = event.m_targetWidgets.value(gesture->gestureType(), 0);
                Q_ASSERT(w);
 
-               qDebug() << "started gesture was delivered and accepted by" << w;
                m_gestureTargets[gesture] = w;
             }
          }
