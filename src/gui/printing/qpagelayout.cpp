@@ -34,18 +34,25 @@ Q_GUI_EXPORT qreal qt_pointMultiplier(QPageLayout::Unit unit)
    switch (unit) {
       case QPageSize::Unit::Millimeter:
          return 2.83464566929;
+
       case QPageSize::Unit::Point:
          return 1.0;
+
       case QPageSize::Unit::Inch:
          return 72.0;
+
       case QPageSize::Unit::Pica:
          return 12;
+
       case QPageSize::Unit::Didot:
          return 1.065826771;
+
       case QPageSize::Unit::Cicero:
          return 12.789921252;
+
+      default:
+         return 1.0;
    }
-   return 1.0;
 }
 
 // Multiplier for converting pixels to points.

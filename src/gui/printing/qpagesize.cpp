@@ -439,19 +439,28 @@ static QString qt_keyForCustomSize(const QSizeF &size, QPageSize::Unit units)
       case QPageSize::Unit::Millimeter:
          abbrev = "mm";
          break;
+
       case QPageSize::Unit::Point:
          break;
+
       case QPageSize::Unit::Inch:
          abbrev = "in";
          break;
+
       case QPageSize::Unit::Pica:
          abbrev = "pc";
          break;
+
       case QPageSize::Unit::Didot:
          abbrev = "DD";
          break;
+
       case QPageSize::Unit::Cicero:
          abbrev = "CC";
+         break;
+
+      default:
+         abbrev = "Unknown";
          break;
    }
 
@@ -495,6 +504,10 @@ static QString qt_nameForCustomSize(const QSizeF &size, QPageSize::Unit units)
          //: Custom size name in ciceros
          name = QCoreApplication::translate("QPageSize", "Custom (%1CC x %2CC)");
          break;
+
+      default:
+         name = QCoreApplication::translate("QPageSize", "Unknown (%1 x %2)");
+         break;
    }
 
    // assumes size is already max 2 decimal places
@@ -523,8 +536,10 @@ static qreal qt_pointMultiplier(QPageSize::Unit unit)
 
       case QPageSize::Unit::Cicero:
          return 12.789921252;
+
+      default:
+         return 1.0;
    }
-   return 1.0;
 }
 
 // Multiplier for converting pixels to points.
@@ -620,8 +635,10 @@ static QSizeF qt_unitSize(QPageSize::PageSizeId pageSizeId, QPageSize::Unit unit
       case QPageSize::Unit::Cicero:
          return qt_convertPointsToUnits(QSize(qt_pageSizes[pageSizeId].widthPoints,
                   qt_pageSizes[pageSizeId].heightPoints), units);
+
+      default:
+         return QSizeF();
    }
-   return QSizeF();
 }
 
 // Find matching standard page size for point size
