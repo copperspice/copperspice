@@ -120,8 +120,6 @@ bool QFontDef::exactMatch(const QFontDef &other) const
          && (this_foundry.isEmpty() || other_foundry.isEmpty() || this_foundry == other_foundry) );
 }
 
-extern bool qt_is_gui_used;
-
 Q_GUI_EXPORT int qt_defaultDpiX()
 {
    if (QCoreApplication::instance()->testAttribute(Qt::AA_Use96Dpi)) {
