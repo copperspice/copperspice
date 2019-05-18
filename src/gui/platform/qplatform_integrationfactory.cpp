@@ -30,36 +30,49 @@
 #include <qguiapplication.h>
 #include <qdebug.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformIntegrationInterface_ID, "/platforms", Qt::CaseInsensitive))
+QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QPlatformIntegrationInterface_ID, "/platforms", Qt::CaseInsensitive);
+   return &retval;
+}
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QPlatformIntegrationInterface_ID, "", Qt::CaseInsensitive))
+QFactoryLoader *directLoader()
+{
+   static QFactoryLoader retval(QPlatformIntegrationInterface_ID, "", Qt::CaseInsensitive);
+   return &retval;
+}
 
 static inline QPlatformIntegration *loadIntegration(QFactoryLoader *loader, const QString &key,
                   const QStringList &parameters, int &argc, char ** argv)
 {
-    if (loader->keySet().contains(key)) {
-        if (QPlatformIntegrationPlugin *factory = qobject_cast<QPlatformIntegrationPlugin *>(loader->instance(key)))
-            if (QPlatformIntegration *result = factory->create(key, parameters, argc, argv)) {
-                return result;
-            }
-    }
+   if (loader->keySet().contains(key)) {
+      if (QPlatformIntegrationPlugin *factory = qobject_cast<QPlatformIntegrationPlugin *>(loader->instance(key))) {
 
-    return 0;
+         if (QPlatformIntegration *result = factory->create(key, parameters, argc, argv)) {
+            return result;
+         }
+
+      }
+   }
+
+   return 0;
 }
 
-QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platform,
-                  const QStringList &paramList, int &argc, char **argv, const QString &platformPluginPath)
+QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platform, const QStringList &paramList,
+                  int &argc, char **argv, const QString &platformPluginPath)
 {
-    // try loading the plugin from platformPluginPath first
-
+    // try loading the plugin from the passed value of platformPluginPath
     if (! platformPluginPath.isEmpty()) {
         QCoreApplication::addLibraryPath(platformPluginPath);
-        if (QPlatformIntegration *ret = loadIntegration(directLoader(), platform, paramList, argc, argv))
-            return ret;
+
+        if (QPlatformIntegration *retval = loadIntegration(directLoader(), platform, paramList, argc, argv)) {
+            return retval;
+        }
     }
 
-    if (QPlatformIntegration *ret = loadIntegration(loader(), platform, paramList, argc, argv)) {
-        return ret;
+    // try loading using the defualt path
+    if (QPlatformIntegration *retval = loadIntegration(loader(), platform, paramList, argc, argv)) {
+        return retval;
     }
 
     return nullptr;
