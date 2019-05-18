@@ -32,9 +32,8 @@
 #include <qpagedpaintdevice.h>
 #include <qpagelayout.h>
 
-#include <qpdf_p.h>
-
 class QIODevice;
+class QPdfEngine;
 
 class Q_GUI_EXPORT QPdfWriter : public QObject, public QPagedPaintDevice
 {
