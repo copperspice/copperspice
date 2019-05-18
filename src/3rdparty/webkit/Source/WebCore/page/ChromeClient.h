@@ -36,9 +36,16 @@
 #include <wtf/PassOwnPtr.h>
 #include <wtf/Vector.h>
 
-#ifndef __OBJC__
-class NSMenu;
-class NSResponder;
+#if PLATFORM(MAC)
+
+#if defined(__OBJC__)
+   // nothing
+
+#else
+   class NSMenu;
+   class NSResponder;
+#endif
+
 #endif
 
 namespace WebCore {
@@ -75,14 +82,14 @@ namespace WebCore {
     class ChromeClient {
     public:
         virtual void chromeDestroyed() = 0;
-        
+
         virtual void setWindowRect(const FloatRect&) = 0;
         virtual FloatRect windowRect() = 0;
-        
+
         virtual FloatRect pageRect() = 0;
-        
+
         virtual float scaleFactor() = 0;
-    
+
         virtual void focus() = 0;
         virtual void unfocus() = 0;
 
@@ -106,25 +113,25 @@ namespace WebCore {
 
         virtual void setToolbarsVisible(bool) = 0;
         virtual bool toolbarsVisible() = 0;
-        
+
         virtual void setStatusbarVisible(bool) = 0;
         virtual bool statusbarVisible() = 0;
-        
+
         virtual void setScrollbarsVisible(bool) = 0;
         virtual bool scrollbarsVisible() = 0;
-        
+
         virtual void setMenubarVisible(bool) = 0;
         virtual bool menubarVisible() = 0;
 
         virtual void setResizable(bool) = 0;
-        
+
         virtual void addMessageToConsole(MessageSource, MessageType, MessageLevel, const String& message, unsigned int lineNumber, const String& sourceID) = 0;
 
         virtual bool canRunBeforeUnloadConfirmPanel() = 0;
         virtual bool runBeforeUnloadConfirmPanel(const String& message, Frame* frame) = 0;
 
         virtual void closeWindowSoon() = 0;
-        
+
         virtual void runJavaScriptAlert(Frame*, const String&) = 0;
         virtual bool runJavaScriptConfirm(Frame*, const String&) = 0;
         virtual bool runJavaScriptPrompt(Frame*, const String& message, const String& defaultValue, String& result) = 0;
@@ -162,7 +169,7 @@ namespace WebCore {
 
         virtual void contentsSizeChanged(Frame*, const IntSize&) const = 0;
         virtual void scrollRectIntoView(const IntRect&, const ScrollView*) const = 0; // Currently only Mac has a non empty implementation.
-       
+
         virtual bool shouldMissingPluginMessageBeButton() const { return false; }
         virtual void missingPluginButtonClicked(Element*) const { }
         virtual void mouseDidMoveOverElement(const HitTestResult&, unsigned modifierFlags) = 0;
@@ -178,7 +185,7 @@ namespace WebCore {
 #if ENABLE(OFFLINE_WEB_APPLICATIONS)
         // Callback invoked when the application cache fails to save a cache object
         // because storing it would grow the database file past its defined maximum
-        // size or past the amount of free space on the device. 
+        // size or past the amount of free space on the device.
         // The chrome client would need to take some action such as evicting some
         // old caches.
         virtual void reachedMaxAppCacheSize(int64_t spaceNeeded) = 0;
@@ -204,11 +211,11 @@ namespace WebCore {
         virtual FloatRect customHighlightRect(Node*, const AtomicString& type, const FloatRect& lineRect);
         virtual void paintCustomHighlight(Node*, const AtomicString& type, const FloatRect& boxRect, const FloatRect& lineRect,
             bool behindText, bool entireLine);
-            
+
         virtual bool shouldReplaceWithGeneratedFileForUpload(const String& path, String& generatedFilename);
         virtual String generateReplacementFile(const String& path);
 
-        virtual bool paintCustomScrollbar(GraphicsContext*, const FloatRect&, ScrollbarControlSize, 
+        virtual bool paintCustomScrollbar(GraphicsContext*, const FloatRect&, ScrollbarControlSize,
                                           ScrollbarControlState, ScrollbarPart pressedPart, bool vertical,
                                           float value, float proportion, ScrollbarControlPartMask);
         virtual bool paintCustomScrollCorner(GraphicsContext*, const FloatRect&);
@@ -234,7 +241,7 @@ namespace WebCore {
         // Notification that the given form element has changed. This function
         // will be called frequently, so handling should be very fast.
         virtual void formStateDidChange(const Node*) = 0;
-        
+
         virtual void formDidFocus(const Node*) { };
         virtual void formDidBlur(const Node*) { };
 
@@ -268,7 +275,7 @@ namespace WebCore {
         virtual bool supportsFullscreenForNode(const Node*) { return false; }
         virtual void enterFullscreenForNode(Node*) { }
         virtual void exitFullscreenForNode(Node*) { }
-        virtual bool requiresFullscreenForVideoPlayback() { return false; } 
+        virtual bool requiresFullscreenForVideoPlayback() { return false; }
 
 #if ENABLE(FULLSCREEN_API)
         virtual bool supportsFullScreenForElement(const Element*, bool) { return false; }
@@ -277,7 +284,7 @@ namespace WebCore {
         virtual void fullScreenRendererChanged(RenderBox*) { }
         virtual void setRootFullScreenLayer(GraphicsLayer*) { }
 #endif
-        
+
 #if ENABLE(TILED_BACKING_STORE)
         virtual IntRect visibleRectForTiledBackingStore() const { return IntRect(); }
 #endif

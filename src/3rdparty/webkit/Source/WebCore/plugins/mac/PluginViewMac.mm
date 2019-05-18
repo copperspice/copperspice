@@ -64,7 +64,6 @@
 #include <runtime/JSValue.h>
 #include <wtf/RetainPtr.h>
 
-
 using JSC::ExecState;
 using JSC::Interpreter;
 using JSC::JSLock;
@@ -73,13 +72,55 @@ using JSC::JSValue;
 using JSC::UString;
 
 #if PLATFORM(QT)
-#include <QWidget>
+#include <QApplication>
 #include <QKeyEvent>
 #include <QPainter>
+#include <QWidget>
+#include <qplatform_pixmap.h>
+#include <qplatform_nativeinterface.h>
+
 #include "QWebPageClient.h"
-QT_BEGIN_NAMESPACE
-extern Q_GUI_EXPORT OSWindowRef qt_mac_window_for(const QWidget* w);
-QT_END_NAMESPACE
+
+CGContextRef qt_mac_cg_context(QPaintDevice *pdev)
+{
+   // from plugins/platforms/cocoa
+
+   // QWidget and QPixmap (and QImage) paint devices are all QImages under the hood
+   QImage *image = nullptr;
+
+   if (pdev->devType() == QInternal::Image) {
+      image = static_cast<QImage *>(pdev);
+
+   } else if (pdev->devType() == QInternal::Pixmap) {
+      const QPixmap *pm = static_cast<const QPixmap *>(pdev);
+
+      QPlatformPixmap *data = const_cast<QPixmap *>(pm)->handle();
+
+      if (data && data->classId() == QPlatformPixmap::RasterClass) {
+         image = data->buffer();
+      }
+   }
+
+   if (! image) {
+      return 0;   // Context type not supported
+   }
+
+   CGColorSpaceRef colorspace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+
+   uint flags = kCGImageAlphaPremultipliedFirst;
+   flags |= kCGBitmapByteOrder32Host;
+
+   CGContextRef retval = 0;
+
+   retval = CGBitmapContextCreate(image->bits(), image->width(), image->height(),
+         8, image->bytesPerLine(), colorspace, flags);
+
+   CGContextTranslateCTM(retval, 0, image->height());
+   CGContextScaleCTM(retval, 1, -1);
+
+   return retval;
+}
+
 #endif
 
 #if PLATFORM(WX)
@@ -102,26 +143,35 @@ static int modifiersForEvent(UIEventWithKeyState *event);
 static inline WindowRef nativeWindowFor(PlatformWidget widget)
 {
 #if PLATFORM(QT)
-    if (widget)
-        return static_cast<WindowRef>([qt_mac_window_for(widget) windowRef]);
+   if (widget) {
+      QWindow *window = widget->windowHandle();
+      auto obj = qGuiApp;
+
+      NSWindow *nsWindow = (NSWindow *)obj->platformNativeInterface()->nativeResourceForWindow("nswindow", window);
+
+      return static_cast<WindowRef>([nsWindow windowRef]);
+    }
 
 #elif PLATFORM(WX)
-    if (widget)
-        return (WindowRef)widget->MacGetTopLevelWindowRef();
+   if (widget)
+      return (WindowRef)widget->MacGetTopLevelWindowRef();
 #endif
-    return 0;
+
+   return 0;
 }
 
 static inline CGContextRef cgHandleFor(PlatformWidget widget)
 {
 #if PLATFORM(QT)
     if (widget)
-        return (CGContextRef)widget->macCGHandle();
+        return (CGContextRef)qt_mac_cg_context(widget);
 #endif
+
 #if PLATFORM(WX)
     if (widget)
         return (CGContextRef)widget->MacGetCGContextRef();
 #endif
+
     return 0;
 }
 
@@ -430,9 +480,18 @@ void PluginView::setNPWindowIfNeeded()
     PluginView::setCurrentPluginView(0);
 }
 
+/*! \internal
+
+   Returns the CoreGraphics CGContextRef of the paint device. 0 is
+   returned if it can't be obtained. It is the caller's responsibility to
+   CGContextRelease the context when finished using it.
+
+   \warning This function is duplicated in the cocoa plugin
+*/
+
 void PluginView::updatePluginWidget()
 {
-    if (!parent())
+    if (! parent())
        return;
 
     ASSERT(parent()->isFrameView());
@@ -445,13 +504,20 @@ void PluginView::updatePluginWidget()
     IntPoint offset = topLevelOffsetFor(platformPluginWidget());
     m_windowRect.move(offset.x(), offset.y());
 
-    if (!platformPluginWidget()) {
+    if (! platformPluginWidget()) {
         if (m_windowRect.size() != oldWindowRect.size()) {
             CGContextRelease(m_contextRef);
+
 #if PLATFORM(QT)
             m_pixmap = QPixmap(m_windowRect.size());
             m_pixmap.fill(Qt::transparent);
-            m_contextRef = m_pixmap.isNull() ? 0 : qt_mac_cg_context(&m_pixmap);
+
+            if (m_pixmap.isNull()) {
+               m_contextRef = nullptr;
+
+            } else {
+               m_contextRef = qt_mac_cg_context(&m_pixmap);
+            }
 #endif
         }
     }
@@ -522,7 +588,7 @@ void PluginView::paint(GraphicsContext* context, const IntRect& rect)
     if (!platformPluginWidget()) {
 #if PLATFORM(QT)
         QPainter* painter = context->platformContext();
-        painter->drawPixmap(targetRect.x(), targetRect.y(), m_pixmap, 
+        painter->drawPixmap(targetRect.x(), targetRect.y(), m_pixmap,
                             targetRect.x() - frameRect().x(), targetRect.y() - frameRect().y(), targetRect.width(), targetRect.height());
 #endif
     }

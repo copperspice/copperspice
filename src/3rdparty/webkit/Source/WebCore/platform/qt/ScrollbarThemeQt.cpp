@@ -35,11 +35,6 @@
 #include "Scrollbar.h"
 
 #include <QApplication>
-
-#ifdef Q_OS_MAC
-#include <QMacStyle>
-#endif
-
 #include <QMenu>
 #include <QPainter>
 #include <QStyle>
@@ -157,15 +152,15 @@ bool ScrollbarThemeQt::paint(Scrollbar* scrollbar, GraphicsContext* graphicsCont
 
     p.painter->setClipRect(opt->rect.intersected(damageRect), Qt::IntersectClip);
 
-#ifdef Q_OS_MAC
-    // FIXME: We also need to check the widget style but today ScrollbarTheme is not aware of the page so we
-    // can't get the widget.
-    if (qobject_cast<QMacStyle*>(style()))
+#if defined(Q_OS_MAC)
+    // need to check the widget style
+    if (p.style->inherits("QMacStyle") ) {
         p.drawComplexControl(QStyle::CC_ScrollBar, *opt);
-    else
+    } else
 #endif
+
     {
-        // The QStyle expects the background to be already filled.
+        // QStyle expects the background to be already filled.
         p.painter->fillRect(opt->rect, opt->palette.background());
 
         const QPoint topLeft = opt->rect.topLeft();
