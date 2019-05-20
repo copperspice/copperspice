@@ -161,15 +161,6 @@ struct QGlyphLayout {
    constexpr static const int SpaceRequired = sizeof(glyph_t) + sizeof(QFixed) + sizeof(QFixedPoint)
       + sizeof(QGlyphAttributes) + sizeof(QGlyphJustification);
 
-   QFixedPoint *offsets;                    // 8 bytes per element
-   glyph_t *glyphs;                         // 4 bytes per element
-   QFixed *advances;                        // 4 bytes per element
-
-   QGlyphAttributes *attributes;            // 1 byte  per element
-   QGlyphJustification *justifications;     // 4 bytes per element
-
-   int numGlyphs;
-
    inline QGlyphLayout()
       : numGlyphs(0) {}
 
@@ -235,6 +226,16 @@ struct QGlyphLayout {
    }
 
    void grow(char *address, int totalGlyphs);
+
+ public:
+   QFixedPoint *offsets;                    // 8 bytes per element
+   glyph_t *glyphs;                         // 4 bytes per element
+   QFixed *advances;                        // 4 bytes per element
+
+   QGlyphAttributes *attributes;            // 1 byte  per element
+   QGlyphJustification *justifications;     // 4 bytes per element
+
+   int numGlyphs;
 };
 
 class QVarLengthGlyphLayoutArray : private QVarLengthArray<void *>, public QGlyphLayout
@@ -647,7 +648,6 @@ class Q_GUI_EXPORT QTextEngine
    void setBoundary(int strPos) const;
    void addRequiredBoundaries() const;
    void shapeText(int item) const;
-
 
    int shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
       QFontEngine *fontEngine, const QVector<uint> &itemBoundaries,

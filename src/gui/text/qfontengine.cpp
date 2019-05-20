@@ -22,23 +22,16 @@
 ***********************************************************************/
 
 #include <qfontengine_p.h>
+#include <qharfbuzz_gui_p.h>
 
 #include <qbitmap.h>
 #include <qdebug.h>
-
-
-
 #include <qendian.h>
-
-#include <qharfbuzz_gui_p.h>
-
-
 #include <qmath.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
 #include <qplatform_fontdatabase.h>
 #include <qplatform_integration.h>
-
 #include <qvarlengtharray.h>
 
 #include <qapplication_p.h>
@@ -77,93 +70,14 @@ static inline bool qSafeFromBigEndian(const uchar *source, const uchar *end, T *
 }
 
 
-/*  Harfbuzz - uses old system
-
-
-static hb_bool_t hb_stringToGlyphs(hb_font_t *font, const HB_UCHAR16 *string, uint32_t length, HB_Glyph *glyphs,
-      uint32_t *numGlyphs, hb_bool_t rightToLeft)
-{
-    QFontEngine *fe = (QFontEngine *)font->userData;
-
-
-    //  BROOM - not done, neds work
-
-
-    // const QChar *str = reinterpret_cast<const QChar *>(string);
-    QStringView strView;
-
-    QGlyphLayout qglyphs;
-
-    qglyphs.numGlyphs = *numGlyphs;
-    qglyphs.glyphs    = glyphs;
-    int nGlyphs       = *numGlyphs;
-    bool result       = fe->stringToCMap(strView &qglyphs, &nGlyphs, QFontEngine::GlyphIndicesOnly);
-    *numGlyphs        = nGlyphs;
-
-    if (rightToLeft && result && ! fe->symbol) {
-
-       for (auto ch : strView) {
-
-          QChar mirrored = ch.mirroredChar();
-
-            if (mirrored != ch) {
-                *glyphs = fe->glyphIndex(mirrored.unicode());
-            }
-
-            ++glyphs;
-        }
-    }
-
-    return result;
-}
-static void hb_getAdvances(hb_font_t *font, const HB_Glyph *glyphs, uint32_t numGlyphs, HB_Fixed *advances, int flags)
-{
-    QFontEngine *fe = (QFontEngine *)font->userData;
-
-    QGlyphLayout qglyphs;
-    qglyphs.numGlyphs = numGlyphs;
-    qglyphs.glyphs    = const_cast<glyph_t *>(glyphs);
-    qglyphs.advances  = reinterpret_cast<QFixed *>(advances);
-
-    fe->recalcAdvances(&qglyphs, (flags & HB_ShaperFlag_UseDesignMetrics) ? QFontEngine::DesignMetrics : QFontEngine::ShaperFlags(0));
-}
-
-static hb_bool_t hb_canRender(hb_font_t *font, const HB_UChar16 *string, uint32_t length)
-{
-    QFontEngine *fe = (QFontEngine *)font->userData;
-    return fe->canRender(reinterpret_cast<const QChar *>(string), length);
-}
-
-static void hb_getGlyphMetrics(hb_font_t *font, HB_Glyph glyph, HB_GlyphMetrics *metrics)
-{
-    QFontEngine *fe = (QFontEngine *)font->userData;
-    glyph_metrics_t m = fe->boundingBox(glyph);
-    metrics->x = m.x.value();
-    metrics->y = m.y.value();
-    metrics->width = m.width.value();
-    metrics->height = m.height.value();
-    metrics->xOffset = m.xoff.value();
-    metrics->yOffset = m.yoff.value();
-}
-static HB_Fixed hb_getFontMetric(hb_font_t *font, HB_FontMetric metric)
-{
-    if (metric == HB_FontAscent) {
-        QFontEngine *fe = (QFontEngine *)font->userData;
-        return fe->ascent().value();
-    }
-    return 0;
-}
-
-
-*/
-
+// Harbuzz  ( BROOM - is this part of the old or new system ? )
 int QFontEngine::getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints)
 {
-   return HB_Error::HB_Err_Not_Covered;
+   //   return HB_Error::HB_Err_Not_Covered;
+   return 0;
 }
 
-/* BROOM - may be old Harfbuzz
-
+/* may be old Harfbuzz
 static HB_Error hb_getPointInOutline(hb_font_t *font, HB_Glyph glyph, int flags, uint32_t point, HB_Fixed *xpos,
          HB_Fixed *ypos, uint32_t *nPoints)
 {
@@ -171,35 +85,8 @@ static HB_Error hb_getPointInOutline(hb_font_t *font, HB_Glyph glyph, int flags,
     return (HB_Error)fe->getPointInOutline(glyph, flags, point, (QFixed *)xpos, (QFixed *)ypos, (quint32 *)nPoints);
 }
 
-static const HB_FontClass hb_fontClass = {
-    hb_stringToGlyphs,
-    hb_getAdvances,
-    hb_canRender,
-    hb_getPointInOutline,
-    hb_getGlyphMetrics,
-    hb_getFontMetric
-};
-static HB_Error hb_getSFntTable(void *font, hb_tag_t tableTag, uchar *buffer, uint *length)
-{
-   QFontEngine::FaceData *data = (QFontEngine::FaceData *)font;
-   Q_ASSERT(data);
-
-   qt_get_font_table_func_ptr funcPtr = data->font_table_func_ptr;
-   Q_ASSERT(funcPtr);
-
-   if (! funcPtr(data->user_data, tableTag, buffer, length)) {
-      return HB_Err_Invalid_Argument;
-   }
-
-   return HB_Error::HB_Err_Ok;
-}
-
-static void hb_freeFace(void *face)
-{
-    qHBFreeFace((hb_face_t *)face);
-}
-
 */
+
 
 static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, uint *length)
 {
@@ -208,8 +95,9 @@ static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, 
 }
 
 #define kBearingNotInitialized std::numeric_limits<qreal>::max()
+
 QFontEngine::QFontEngine(Type type)
-   : m_type(type), ref(0), font_(0), font_destroy_func_ptr(0), face_(0), face_destroy_func_ptr(0),
+   : m_type(type), ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr), face_destroy_func_ptr(nullptr),
      m_minLeftBearing(kBearingNotInitialized), m_minRightBearing(kBearingNotInitialized)
 {
    faceData.user_data = this;
@@ -228,14 +116,14 @@ QFontEngine::~QFontEngine()
 {
    m_glyphCaches.clear();
 
-   if (font_ && font_destroy_func_ptr) {
-      font_destroy_func_ptr(font_);
-      font_ = 0;
+   if (m_hb_font && font_destroy_func_ptr) {
+      font_destroy_func_ptr(m_hb_font);
+      m_hb_font = nullptr;
    }
 
-   if (face_ && face_destroy_func_ptr) {
-      face_destroy_func_ptr(face_);
-      face_ = 0;
+   if (m_hb_face && face_destroy_func_ptr) {
+      face_destroy_func_ptr(m_hb_face);
+      m_hb_face = nullptr;
    }
 }
 
@@ -262,14 +150,7 @@ QFixed QFontEngine::underlinePosition() const
    return ((lineThickness() * 2) + 3) / 6;
 }
 
-// BROOM - old HB, may not be used
-
-void *QFontEngine::harfbuzzFont() const
-{
-   Q_ASSERT(type() != QFontEngine::Multi);
-   return cs_font_get_for_engine(const_cast<QFontEngine *>(this));
-}
-
+// harbuzz method
 void *QFontEngine::harfbuzzFace() const
 {
    Q_ASSERT(type() != QFontEngine::Multi);
@@ -291,7 +172,7 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       return true;
    }
 
-#if defined(Q_OS_DARWIN)
+#if defined(Q_OS_MAC)
    // in AAT fonts, 'gsub' table is effectively replaced by 'mort'/'morx' table
    uint len;
 

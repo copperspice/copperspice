@@ -27,21 +27,14 @@
 #include <qharfbuzz_core_p.h>
 
 #include <hb.h>
-#include <hb-font.hh>
 #include <hb-ot.h>
 
 class QFontEngine;
 
-// following define is required due to something in Harfbuzz
-#undef round
-
-using glyph_t = quint32;
-using HB_Bool = hb_bool_t;
-
 using qt_destroy_func_ptr        = void (*)(void *);
 using qt_get_font_table_func_ptr = bool (*)(void *, uint, uchar *, uint *);
 
-// Font
+// font
 Q_GUI_EXPORT hb_font_funcs_t *cs_get_font_funcs();
 
 Q_GUI_EXPORT hb_face_t *cs_face_get_for_engine(QFontEngine *fe);

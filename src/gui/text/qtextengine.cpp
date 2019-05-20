@@ -1206,9 +1206,8 @@ void QTextEngine::shapeText(int item) const
    }
 }
 
-int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
-   QFontEngine *fontEngine, const QVector<uint> &itemBoundaries,
-   bool kerningEnabled, bool hasLetterSpacing) const
+int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, QFontEngine *fontEngine,
+   const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const
 {
    uint glyphs_shaped = 0;
    auto itemLength    = str.size();
@@ -1322,8 +1321,11 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
       QGlyphLayout g       = availableGlyphs(&si).mid(glyphs_shaped, num_glyphs);
       ushort *log_clusters = logClusters(&si) + item_pos;
 
-      hb_glyph_info_t *infos = hb_buffer_get_glyph_infos(buffer, 0);
-      hb_glyph_position_t *positions = hb_buffer_get_glyph_positions(buffer, 0);
+      uint hb_len1;
+      uint hb_len2;
+
+      hb_glyph_info_t *infos         = hb_buffer_get_glyph_infos(buffer, &hb_len1);
+      hb_glyph_position_t *positions = hb_buffer_get_glyph_positions(buffer, &hb_len2);
 
       uint str_pos        = 0;
       uint last_cluster   = ~0u;
@@ -1680,7 +1682,7 @@ void QTextEngine::itemize() const
 
    analysis = scriptAnalysis.data();
 
-   // broom - simulated HB old behavior, fix this
+   // emerald - simulated HB old behavior, fix this
 
    for (int i = 0; i < length; ++i) {
       switch (analysis[i].script) {
@@ -3677,6 +3679,7 @@ void QTextEngine::drawDecorations(QPainter *painter)
 
    painter->setPen(oldPen);
 }
+
 void QTextEngine::clearDecorations()
 {
    underlineList.clear();

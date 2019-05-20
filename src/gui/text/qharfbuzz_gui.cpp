@@ -28,8 +28,8 @@
 #include <qfontengine_p.h>
 
 // Font routines
-static hb_bool_t cs_font_get_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode, hb_codepoint_t,
-   hb_codepoint_t *glyph, void *)
+static hb_bool_t cs_font_get_glyph(hb_font_t *font, void *font_data, hb_codepoint_t unicode,
+      hb_codepoint_t variation_selector, hb_codepoint_t *glyph, void *unused2)
 {
    QFontEngine *fe = static_cast<QFontEngine *>(font_data);
    Q_ASSERT(fe);
@@ -37,6 +37,17 @@ static hb_bool_t cs_font_get_glyph(hb_font_t *, void *font_data, hb_codepoint_t 
    *glyph = fe->glyphIndex(unicode);
 
    return true;
+}
+
+static hb_bool_t cs_font_get_nominal_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,
+      hb_codepoint_t *glyph, void *unused)
+{
+
+}
+
+static hb_bool_t cs_font_get_variation_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,
+      hb_codepoint_t variation_selector, hb_codepoint_t *glyph, void *unused)
+{
 }
 
 static hb_position_t cs_font_get_glyph_h_advance(hb_font_t *font, void *font_data, hb_codepoint_t glyph, void *)
@@ -134,6 +145,7 @@ static hb_bool_t cs_font_get_glyph_contour_point(hb_font_t *, void *font_data, h
    }
 
    *x = *y = 0;
+
    return false;
 }
 
@@ -142,7 +154,7 @@ static hb_bool_t cs_font_get_glyph_name(hb_font_t *font, void *font_data,
 {
    qCritical("hb_qt_font_get_glyph_name: not implemented");
 
-   if (size) {
+   if (size != 0) {
       *name = '\0';
    }
 
@@ -153,8 +165,8 @@ static hb_bool_t cs_font_get_glyph_from_name(hb_font_t *font, void *font_data, c
    hb_codepoint_t *glyph, void *user_data)
 {
    qCritical("hb_qt_font_get_glyph_from_name: not implemented");
-
    *glyph = 0;
+
    return false;
 }
 
@@ -174,6 +186,12 @@ struct cs_hb_font_funcs_t {
 
    cs_hb_font_funcs_t() {
       funcs = hb_font_funcs_create();
+
+      hb_font_funcs_set_glyph_func(funcs,               cs_font_get_glyph, NULL, NULL);
+
+      // emerald - instead of hb_font_funcs_set_glyph_func use these two
+//    hb_font_funcs_set_nominal_gylph_func(funcs,       cs_font_get_nominal_glyph, NULL, NULL);
+//    hb_font_funcs_set_variation_gylph_func(funcs,     cs_font_get_variation_glyph, NULL, NULL);
 
       hb_font_funcs_set_glyph_h_advance_func(funcs,     cs_font_get_glyph_h_advance, NULL, NULL);
       hb_font_funcs_set_glyph_v_advance_func(funcs,     cs_font_get_glyph_v_advance, NULL, NULL);
@@ -239,7 +257,7 @@ static inline hb_face_t *internal_hb_face_create(QFontEngine *fe)
    hb_face_t *face = hb_face_create_for_tables(internal_hb_reference_table, (void *)data, free);
    if (hb_face_is_immutable(face)) {
       hb_face_destroy(face);
-      return NULL;
+      return nullptr;
    }
 
    hb_face_set_index(face, fe->faceId().index);
@@ -259,17 +277,17 @@ hb_face_t *cs_face_get_for_engine(QFontEngine *fe)
 {
    Q_ASSERT(fe && fe->type() != QFontEngine::Multi);
 
-   if (! fe->face_) {
-      fe->face_ = internal_hb_face_create(fe);
+   if (! fe->m_hb_face) {
+      fe->m_hb_face = internal_hb_face_create(fe);
 
-      if (! fe->face_) {
-         return NULL;
+      if (! fe->m_hb_face) {
+         return nullptr;
       }
 
       fe->face_destroy_func_ptr = internal_hb_face_release;
    }
 
-   return static_cast<hb_face_t *>(fe->face_);
+   return static_cast<hb_face_t *>(fe->m_hb_face);
 }
 
 static inline hb_font_t *internal_hb_font_create(QFontEngine *fe)
@@ -277,14 +295,14 @@ static inline hb_font_t *internal_hb_font_create(QFontEngine *fe)
    hb_face_t *face = cs_face_get_for_engine(fe);
 
    if (! face) {
-      return NULL;
+      return nullptr;
    }
 
    hb_font_t *font = hb_font_create(face);
 
    if (hb_font_is_immutable(font)) {
       hb_font_destroy(font);
-      return NULL;
+      return nullptr;
    }
 
    const int y_ppem = fe->fontDef.pixelSize;
@@ -314,15 +332,17 @@ hb_font_t *cs_font_get_for_engine(QFontEngine *fe)
 {
    Q_ASSERT(fe && fe->type() != QFontEngine::Multi);
 
-   if (! fe->font_) {
-      fe->font_ = internal_hb_font_create(fe);
+   if (! fe->m_hb_font) {
+      fe->m_hb_font = internal_hb_font_create(fe);
 
-      if (fe->font_) {
-         return NULL;
+      if (! fe->m_hb_font) {
+         return nullptr;
       }
 
       fe->font_destroy_func_ptr = internal_hb_font_release;
    }
 
-   return static_cast<hb_font_t *>(fe->font_);
+   return static_cast<hb_font_t *>(fe->m_hb_font);
 }
+
+

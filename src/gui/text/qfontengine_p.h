@@ -257,8 +257,6 @@ class Q_GUI_EXPORT QFontEngine
 
    virtual Qt::HANDLE handle() const;
 
-   void *harfbuzzFont() const;    // broom - is this used ?
-   void *harfbuzzFace() const;    // broom - is this used ?
    bool supportsScript(QChar::Script script) const;
 
    virtual int getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed  *xpos, QFixed  *ypos, quint32 *nPoints);
@@ -280,16 +278,17 @@ class Q_GUI_EXPORT QFontEngine
       return m_userData;
    }
 
+   // harfbuzz
+   void *harfbuzzFace() const;
+
    QAtomicInt ref;
    QFontDef fontDef;
 
-   // mutable HB_Font hbFont;  // broom - used?
-   // mutable HB_Face hbFace;  // broom - used?
-
-   mutable void *font_;
+   // harfbuzz
+   mutable void *m_hb_font;
    mutable qt_destroy_func_ptr  font_destroy_func_ptr;
 
-   mutable void *face_;
+   mutable void *m_hb_face;
    mutable qt_destroy_func_ptr  face_destroy_func_ptr;
 
    struct FaceData {
