@@ -154,26 +154,34 @@ set(CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-common.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-font.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff1-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff2-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-color.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-face.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-font.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-layout.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-math.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name-language.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hebrew.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-khmer.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-myanmar.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
@@ -184,7 +192,15 @@ set(CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff1.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff2.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff-common.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-glyf.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-input.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-plan.cc
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-warning.cc
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -207,5 +223,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_mac.mm
+
+#       ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-coretext.cc
     )
 endif()

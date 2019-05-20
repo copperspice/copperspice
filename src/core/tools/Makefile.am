@@ -113,7 +113,6 @@ CORE_TOOLS_PRIVATE_INCLUDES = \
    qunicodetables_p.h \
    qunicodetools_p.h
 
-
 CORE_PUBLIC_INCLUDES += $(CORE_TOOLS_PUBLIC_INCLUDES)
 CORE_INCLUDES += $(CORE_TOOLS_INCLUDES)
 CORE_PRIVATE_INCLUDES += $(CORE_TOOLS_PRIVATE_INCLUDES)
@@ -152,26 +151,34 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-aat-layout.cc \
    src/3rdparty/harfbuzz/src/hb-aat-map.cc \
    src/3rdparty/harfbuzz/src/hb-blob.cc \
+   src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc \
    src/3rdparty/harfbuzz/src/hb-buffer.cc \
    src/3rdparty/harfbuzz/src/hb-common.cc \
    src/3rdparty/harfbuzz/src/hb-face.cc \
    src/3rdparty/harfbuzz/src/hb-font.cc \
+   src/3rdparty/harfbuzz/src/hb-map.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-cff1-table.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-cff2-table.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-color.cc \
    src/3rdparty/harfbuzz/src/hb-ot-face.cc \
    src/3rdparty/harfbuzz/src/hb-ot-font.cc \
    src/3rdparty/harfbuzz/src/hb-ot-layout.cc \
    src/3rdparty/harfbuzz/src/hb-ot-map.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-math.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-name-language.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-name.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hebrew.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic-table.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-khmer.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-myanmar.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc \
-   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc \
+   src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc \
    src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc \
@@ -182,7 +189,15 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/3rdparty/harfbuzz/src/hb-shape-plan.cc \
    src/3rdparty/harfbuzz/src/hb-shaper.cc \
    src/3rdparty/harfbuzz/src/hb-static.cc \
-   src/3rdparty/harfbuzz/src/hb-unicode.cc
+   src/3rdparty/harfbuzz/src/hb-subset.cc \
+   src/3rdparty/harfbuzz/src/hb-subset-cff1.cc \
+   src/3rdparty/harfbuzz/src/hb-subset-cff2.cc \
+   src/3rdparty/harfbuzz/src/hb-subset-cff-common.cc \
+   src/3rdparty/harfbuzz/src/hb-subset-glyf.cc \
+   src/3rdparty/harfbuzz/src/hb-subset-input.cc \
+   src/3rdparty/harfbuzz/src/hb-subset-plan.cc \
+   src/3rdparty/harfbuzz/src/hb-unicode.cc \
+   src/3rdparty/harfbuzz/src/hb-warning.cc
 
 
 if OSTYPE_WIN
@@ -209,6 +224,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
    src/core/tools/qelapsedtimer_mac.cpp \
    src/core/tools/qlocale_mac.mm
 
+#  src/3rdparty/harfbuzz/src/hb-coretext.cc
 endif
 
 noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
@@ -474,16 +490,23 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
 	src/3rdparty/freetype/include/freetype/internal/services/svttglyf.h \
 	src/3rdparty/freetype/include/freetype/internal/services/svwinfnt.h \
 	src/3rdparty/freetype/include/freetype/internal/services/svxf86nm.h \
+	\
    src/3rdparty/harfbuzz/src/hb.h \
    src/3rdparty/harfbuzz/src/hb.hh \
+   src/3rdparty/harfbuzz/src/hb-array.hh \
    src/3rdparty/harfbuzz/src/hb-atomic.hh \
+   src/3rdparty/harfbuzz/src/hb-aat.h \
+   src/3rdparty/harfbuzz/src/hb-aat-fdsc-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-ltag-table.hh \
+   src/3rdparty/harfbuzz/src/hb-aat-layout.h \
    src/3rdparty/harfbuzz/src/hb-aat-layout.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-ankr-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-bsln-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-common.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-feat-table.hh \
+   src/3rdparty/harfbuzz/src/hb-aat-layout-lcar-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-kerx-table.hh \
+   src/3rdparty/harfbuzz/src/hb-aat-layout-just-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-morx-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-layout-trak-table.hh \
    src/3rdparty/harfbuzz/src/hb-aat-map.hh \
@@ -491,6 +514,15 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-blob.hh \
    src/3rdparty/harfbuzz/src/hb-buffer.h \
    src/3rdparty/harfbuzz/src/hb-buffer.hh \
+   src/3rdparty/harfbuzz/src/hb-buffer-deserialize-json.hh \
+   src/3rdparty/harfbuzz/src/hb-buffer-deserialize-text.hh \
+   src/3rdparty/harfbuzz/src/hb-cache.hh \
+   src/3rdparty/harfbuzz/src/hb-cff-interp-common.hh \
+   src/3rdparty/harfbuzz/src/hb-cff-interp-cs-common.hh \
+   src/3rdparty/harfbuzz/src/hb-cff-interp-dict-common.hh \
+   src/3rdparty/harfbuzz/src/hb-cff1-interp-cs.hh \
+   src/3rdparty/harfbuzz/src/hb-cff2-interp-cs.hh \
+   src/3rdparty/harfbuzz/src/hb-coretext.h \
    src/3rdparty/harfbuzz/src/hb-common.h \
    src/3rdparty/harfbuzz/src/hb-deprecated.h \
    src/3rdparty/harfbuzz/src/hb-debug.hh \
@@ -499,7 +531,13 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-face.hh \
    src/3rdparty/harfbuzz/src/hb-font.h \
    src/3rdparty/harfbuzz/src/hb-font.hh \
+   src/3rdparty/harfbuzz/src/hb-ft.h \
+   src/3rdparty/harfbuzz/src/hb-glib.h \
+   src/3rdparty/harfbuzz/src/hb-gobject.h \
+	src/3rdparty/harfbuzz/src/hb-gobject-enums.h \
+   src/3rdparty/harfbuzz/src/hb-gobject-structs.h \
    src/3rdparty/harfbuzz/src/hb-iter.hh \
+   src/3rdparty/harfbuzz/src/hb-kern.hh \
    src/3rdparty/harfbuzz/src/hb-machinery.hh \
    src/3rdparty/harfbuzz/src/hb-map.h \
    src/3rdparty/harfbuzz/src/hb-map.hh \
@@ -509,14 +547,22 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-open-file.hh \
    src/3rdparty/harfbuzz/src/hb-open-type.hh \
    src/3rdparty/harfbuzz/src/hb-ot.h \
+   src/3rdparty/harfbuzz/src/hb-ot-cff-common.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-cff1-table.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-cff2-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-color.h \
+   src/3rdparty/harfbuzz/src/hb-ot-color-colr-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-color-cbdt-table.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-color-cpal-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-color-sbix-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-color-svg-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-cmap-table.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-deprecated.h \
    src/3rdparty/harfbuzz/src/hb-ot-face.hh \
    src/3rdparty/harfbuzz/src/hb-ot-font.h \
+   src/3rdparty/harfbuzz/src/hb-ot-gasp-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-glyf-table.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-hdmx-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-head-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-hhea-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-hmtx-table.hh \
@@ -531,8 +577,9 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-ot-layout-gsubgpos.hh \
    src/3rdparty/harfbuzz/src/hb-ot-layout-jstf-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-map.hh \
-   src/3rdparty/harfbuzz/src/hb-ot-maxp-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-math.h \
+   src/3rdparty/harfbuzz/src/hb-ot-math-table.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-maxp-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-name.h \
    src/3rdparty/harfbuzz/src/hb-ot-name-language.hh \
    src/3rdparty/harfbuzz/src/hb-ot-name-table.hh \
@@ -557,6 +604,7 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.hh \
    src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.hh \
    src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.hh \
+   src/3rdparty/harfbuzz/src/hb-ot-stat-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-tag-table.hh \
    src/3rdparty/harfbuzz/src/hb-ot-var.h \
    src/3rdparty/harfbuzz/src/hb-ot-var-avar-table.hh \
@@ -576,6 +624,9 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-string-array.hh \
    src/3rdparty/harfbuzz/src/hb-subset.h \
    src/3rdparty/harfbuzz/src/hb-subset.hh \
+   src/3rdparty/harfbuzz/src/hb-subset-cff1.hh \
+   src/3rdparty/harfbuzz/src/hb-subset-cff2.hh \
+   src/3rdparty/harfbuzz/src/hb-subset-cff-common.hh \
    src/3rdparty/harfbuzz/src/hb-subset-glyf.hh \
    src/3rdparty/harfbuzz/src/hb-subset-input.hh \
    src/3rdparty/harfbuzz/src/hb-subset-plan.hh \
@@ -585,8 +636,6 @@ noinst_HEADERS+=$(patsubst %,src/core/tools/%,$(CORE_TOOLS_INCLUDES)) \
    src/3rdparty/harfbuzz/src/hb-unicode-emoji-table.hh \
    src/3rdparty/harfbuzz/src/hb-vector.hh \
    src/3rdparty/harfbuzz/src/hb-version.h
-
-
 
 EXTRA_DIST+= \
 	src/3rdparty/easing/easing.cpp \
@@ -749,4 +798,6 @@ EXTRA_DIST+= \
 	src/3rdparty/freetype/src/type42/t42objs.c \
 	src/3rdparty/freetype/src/type42/t42parse.c \
 	src/3rdparty/freetype/README \
+	src/3rdparty/harfbuzz/fonts/harfbuzz.qrc \
+	src/3rdparty/harfbuzz/fonts/DejaVuSans.ttf \
 	src/core/tools/qunicodetables.cpp

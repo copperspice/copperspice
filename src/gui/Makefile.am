@@ -6,6 +6,11 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    -Iprivateinclude \
    -Iprivateinclude/QtCore -Iprivateinclude/QtCore/private \
    -Iprivateinclude/QtGui/private  -Iprivateinclude/QtGui  \
+   -I$(top_srcdir)/src/gui/kernel \
+   -Isrc/gui/graphicsview  -Isrc/gui/itemviews  -Isrc/gui/dialogs \
+   -Isrc/gui/image  -Isrc/gui/kernel  -Isrc/gui/painting  \
+   -Isrc/gui/platform  -Isrc/gui/printing  -Isrc/gui/styles \
+   -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets \
    -I$(top_srcdir)/src/3rdparty/freetype/include \
    -I$(top_srcdir)/src/3rdparty/freetype/include/freetype \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src     \
@@ -13,10 +18,6 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGu
    -I$(top_srcdir)/src/3rdparty/libtiff/libtiff  \
    -I$(top_srcdir)/src/3rdparty/libmng  \
    -I$(top_srcdir)/src/3rdparty/libjpeg  \
-   -I$(top_srcdir)/src/gui/kernel \
-   -Isrc/gui/graphicsview  -Isrc/gui/itemviews  -Isrc/gui/dialogs \
-   -Isrc/gui/image  -Isrc/gui/kernel  -Isrc/gui/painting  -Isrc/gui/platform  -Isrc/gui/printing \
-   -Isrc/gui/styles -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets \
    $(AM_CXXFLAGS) \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
    -DQT_BUILD_GUI_LIB           \
@@ -36,7 +37,8 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DHAVE_POSIX_MEMALIGN -DQT_NO_XINPUT -DQT
    -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
    -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
 
-lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor \
+   -lXinerama -lSM -lICE -laudio -lpthread -lrt
 endif
 
 if OSTYPE_BSD
@@ -44,13 +46,15 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DHAVE_POSIX_MEMALIGN -DQT_NO_XINPUT -DQT
    -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
    -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
 
-lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor \
+   -lXinerama -lSM -lICE -laudio -lpthread -lrt
 endif
 
 if OSTYPE_WIN
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR
-lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid -lopengl32  \
-    -lkernel32 -luser32 --export-all-symbols
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 \
+   -limm32 -Wl,-luuid -lopengl32  \
+   -lkernel32 -luser32 --export-all-symbols
 endif
 
 if OSTYPE_DARWIN

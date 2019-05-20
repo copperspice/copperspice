@@ -1,11 +1,3 @@
-add_definitions(
-    -DQT_BUILD_GUI_LIB
-    -DQT_BUILTIN_GIF_READER
-    -DQOPENGL_DEPRECATEDFUNCTION
-    -DMNG_BUILD_SO
-    -DMNG_NO_INCLUDE_JNG
-    -DPNG_NO_CONFIG_H
-)
 
 set(EXTRA_GUI_LIBS
    CsCore${BUILD_ABI}
@@ -16,41 +8,39 @@ set(EXTRA_GUI_CXXFLAGS)
 set(EXTRA_GUI_LDFLAGS)
 
 include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-    ${CMAKE_BINARY_DIR}/include/QtGui
-    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
-    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
-    ${CMAKE_CURRENT_SOURCE_DIR}/accessible
-    ${CMAKE_CURRENT_SOURCE_DIR}/animation
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-    ${CMAKE_CURRENT_SOURCE_DIR}/effects
-    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview
-    ${CMAKE_CURRENT_SOURCE_DIR}/image
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
-    ${CMAKE_CURRENT_SOURCE_DIR}/math3d
-    ${CMAKE_CURRENT_SOURCE_DIR}/painting
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform
-    ${CMAKE_CURRENT_SOURCE_DIR}/printing
-    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles
-    ${CMAKE_CURRENT_SOURCE_DIR}/text
-    ${CMAKE_CURRENT_SOURCE_DIR}/util
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
-    ${GLIB2_INCLUDES}
-    ${GOBJECT2_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
+   ${CMAKE_BINARY_DIR}/include
+   ${CMAKE_BINARY_DIR}/privateinclude
+   ${CMAKE_BINARY_DIR}/include/QtCore
+   ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+   ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
+   ${CMAKE_BINARY_DIR}/include/QtGui
+   ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+   ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
+   ${CMAKE_CURRENT_SOURCE_DIR}/accessible
+   ${CMAKE_CURRENT_SOURCE_DIR}/animation
+   ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
+   ${CMAKE_CURRENT_SOURCE_DIR}/effects
+   ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview
+   ${CMAKE_CURRENT_SOURCE_DIR}/image
+   ${CMAKE_CURRENT_SOURCE_DIR}/itemviews
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel
+   ${CMAKE_CURRENT_SOURCE_DIR}/math3d
+   ${CMAKE_CURRENT_SOURCE_DIR}/painting
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform
+   ${CMAKE_CURRENT_SOURCE_DIR}/printing
+   ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
+   ${CMAKE_CURRENT_SOURCE_DIR}/styles
+   ${CMAKE_CURRENT_SOURCE_DIR}/text
+   ${CMAKE_CURRENT_SOURCE_DIR}/util
+   ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
 )
 
 include(accessible/accessible.cmake)
@@ -135,10 +125,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         kernel32
         user32
     )
-    set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS}
-         -Wl,--export-all-symbols
-    )
+
+#    set(EXTRA_GUI_LDFLAGS
+#        ${EXTRA_GUI_LDFLAGS}
+#        unsure this is required or valid  -Wl,--export-all-symbols
+#    )
+
     add_definitions(
         -DQT_NO_STYLE_MAC
         -DQT_NO_LPR
@@ -150,23 +142,38 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/mac/macresources.qrc
     )
+
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         objc
     )
+
     set(EXTRA_GUI_LDFLAGS
         ${EXTRA_GUI_LDFLAGS}
         -framework Carbon
         -framework OpenGL
     )
+
     add_definitions(-DQT_NO_STYLE_WINDOWSVISTA)
 endif()
 
 function_variable_fixup("${EXTRA_GUI_CXXFLAGS}" EXTRA_GUI_CXXFLAGS)
-function_variable_fixup("${EXTRA_GUI_LDFLAGS}" EXTRA_GUI_LDFLAGS)
+function_variable_fixup("${EXTRA_GUI_LDFLAGS}"  EXTRA_GUI_LDFLAGS)
 
 add_library(CsGui${BUILD_ABI} SHARED ${GUI_SOURCES} ${GUI_INCLUDES} ${GUI_PLATFORMHEADERS_INCLUDES})
-target_link_libraries(CsGui${BUILD_ABI} ${EXTRA_GUI_LIBS})
+
+target_compile_definitions(CsGui${BUILD_ABI} PRIVATE
+   -DQT_BUILD_GUI_LIB
+   -DQT_BUILTIN_GIF_READER
+   -DQOPENGL_DEPRECATEDFUNCTION
+   -DMNG_BUILD_SO
+   -DMNG_NO_INCLUDE_JNG
+   -DPNG_NO_CONFIG_H
+)
+
+target_link_libraries(CsGui${BUILD_ABI}
+   ${EXTRA_GUI_LIBS}
+)
 
 target_include_directories(CsGui${BUILD_ABI}
    PUBLIC
@@ -174,8 +181,8 @@ target_include_directories(CsGui${BUILD_ABI}
 )
 
 set_target_properties(CsGui${BUILD_ABI} PROPERTIES
-    VERSION "0" # for compat
-    SOVERSION "0.0.0" # for compat
+    VERSION "0"
+    SOVERSION "0.0.0"
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )

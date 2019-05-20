@@ -167,6 +167,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextdocumentwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextodfwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qzip.cpp
+
     ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/autofit/autofit.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftapi.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbase.c
@@ -220,7 +221,71 @@ set(GUI_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/type1/type1.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/type42/type42.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/winfonts/winfnt.c
+
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-common.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-font.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ft.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff1-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff2-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-color.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-face.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-font.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-layout.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-map.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-math.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name-language.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hebrew.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-khmer.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-myanmar.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use-table.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff1.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff2.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff-common.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-glyf.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-input.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-plan.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-warning.cc
 )
 
-# might be missing files from 3rdparty/freetype
+if(GTK2_FOUND)
+   set(GUI_SOURCES
+      ${GUI_SOURCES}
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-glib.cc
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-gobject-structs.cc
+   )
 
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   set(GUI_SOURCES
+      ${GUI_SOURCES}
+#     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-coretext.cc
+   )
+endif()
