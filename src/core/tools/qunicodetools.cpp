@@ -27,6 +27,7 @@
 #include <qharfbuzz_core_p.h>
 #include <qfile.h>
 
+// #define HB_NO_PRAGMA_GCC_DIAGNOSTIC_ERROR
 #include <hb.h>
 
 #define FLAG(x) (1 << (x))
@@ -562,7 +563,8 @@ static void getLineBreaks(const QString &str, QCharAttributes *attributes)
          // LB4: BK!, LB5: (CRxLF|CR|LF|NL)!
 
          if (last_bClass > QUnicodeTables::LineBreak_CR || cur_bClass != QUnicodeTables::LineBreak_LF) {
-            attributes[k].lineBreak = attributes[k].mandatoryBreak = true;
+            attributes[k].lineBreak      = true;
+            attributes[k].mandatoryBreak = true;
          }
 
          x_bClass    = cur_bClass;
@@ -640,8 +642,11 @@ static void getLineBreaks(const QString &str, QCharAttributes *attributes)
       }
    }
 
-   attributes[0].lineBreak = attributes[0].mandatoryBreak = false; // LB2
-   attributes[k].lineBreak = attributes[k].mandatoryBreak = true;  // LB3
+   attributes[0].lineBreak      = false;
+   attributes[0].mandatoryBreak = false; // LB2
+
+   attributes[k].lineBreak      = true;
+   attributes[k].mandatoryBreak = true;  // LB3
 }
 
 static void getWhiteSpaces(const QString &str, QCharAttributes *attributes)
@@ -658,64 +663,9 @@ static void getWhiteSpaces(const QString &str, QCharAttributes *attributes)
    }
 }
 
-static void CS_GetTailoredCharAttributes(const QString &str, QCharAttributes *attributes)
+static void resolveClusters(const QString &str, QCharAttributes *attributes)
 {
-   hb_buffer_t *buffer;
-   buffer = hb_buffer_create();
-
-   // set up HB callbacks, apply to this buffer
-   hb_buffer_set_unicode_funcs(buffer, cs_get_unicode_funcs());
-
-   hb_buffer_cluster_level_t level = HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS;      // level 1
-   hb_buffer_set_cluster_level(buffer, level);
-
-   hb_buffer_add_utf8(buffer, str.constData(), -1, 0, -1);
-
-   hb_buffer_guess_segment_properties(buffer);
-
-   // ** update glyph cluster id to match codepoint index
-   uint glyph_count = hb_buffer_get_length(buffer);
-   hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(buffer, NULL);
-
-   for (uint k = 0; k < glyph_count; ++k) {
-      glyph_info[k].cluster = k;
-   }
-
-   // ** get the shape
-   QString font_fn = ":/copperspice/harfbuzz/DejaVuSans.ttf";
-
-   QFile f(font_fn);
-   f.open(QIODevice::ReadOnly);
-   QByteArray fontData = f.readAll();
-   f.close();
-
-   hb_blob_t *blob = hb_blob_create(fontData.constData(), fontData.length(), HB_MEMORY_MODE_WRITABLE,
-                  (void *)fontData.constData(), NULL);
-
-   hb_face_t *face = hb_face_create(blob, 0);
-   hb_font_t *font = hb_font_create(face);
-
-   hb_shape(font, buffer, NULL, 0);
-
-   // check for glyph boundary
-   uint32_t prev_cluster = glyph_info[0].cluster;
-   uint32_t cur_cluster  = 0;
-
-   for (uint k = 1; k < glyph_count; ++k) {
-      cur_cluster = glyph_info[k].cluster;
-
-      if (prev_cluster != cur_cluster) {
-         // etermin cluster -  EMERALD
-
-         attributes[k].graphemeBoundary = true;
-      }
-
-      prev_cluster = cur_cluster;
-   }
-
-   // ** clean up
-   hb_buffer_destroy(buffer);
-   hb_font_destroy(font);
+   // emerald
 }
 
 Q_CORE_EXPORT void initCharAttributes(const QString &str, QVector<QUnicodeTools::ScriptItem> &items,
@@ -755,8 +705,8 @@ Q_CORE_EXPORT void initCharAttributes(const QString &str, QVector<QUnicodeTools:
       return;
    }
 
-   //
-   CS_GetTailoredCharAttributes(str, attributes);
+   // emerald - implement another function to resolve unicode clusters for Indic languages
+   // resolveClusters(Attributes(str, attributes);
 }
 
 Q_CORE_EXPORT void initScripts(const QString &str, QVector<QChar::Script> &items)
@@ -786,7 +736,8 @@ Q_CORE_EXPORT void initScripts(const QString &str, QVector<QChar::Script> &items
       }
 
       while (start < k) {
-        items[start++] = script;
+        items.append(script);
+        ++start;
       }
 
       script = QChar::Script(prop->script);
@@ -794,7 +745,8 @@ Q_CORE_EXPORT void initScripts(const QString &str, QVector<QChar::Script> &items
    }
 
    while (start < k) {
-      items[start++] = script;
+      items.append(script);
+      ++start;
    }
 }
 
