@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.4.3 FATAL_ERROR)
 
+# support using rpath on Mac OS X
 cmake_policy(SET CMP0042 NEW)
+
+# prefer OpenGL libraries from a hardware vendor if available
+set(OpenGL_GL_PREFERENCE GLVND)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 project(copperspice)
@@ -162,7 +167,7 @@ message(STATUS "Search for packages:\n")
 find_package(OpenSSL 1.0)
 set_package_properties(OpenSSL PROPERTIES
     PURPOSE "Required for HTTPS support"
-    DESCRIPTION "Support for secure network communications using OpenSSL for SSL and TLS"
+    DESCRIPTION "Support for SSL and TLS"
     URL "http://openssl.org"
     TYPE RECOMMENDED
 )
@@ -174,6 +179,8 @@ set_package_properties(ZLIB PROPERTIES
     URL "http://zlib.net"
     TYPE RECOMMENDED
 )
+
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 find_package(Cups)
 set_package_properties(Cups PROPERTIES
@@ -190,6 +197,8 @@ set_package_properties(ALSA PROPERTIES
    URL "http://www.alsa-project.org"
    TYPE RECOMMENDED
 )
+
+endif()
 
 find_package(PostgreSQL)
 set_package_properties(PostgreSQL PROPERTIES
@@ -235,6 +244,9 @@ set_package_properties(MySQL PROPERTIES
    URL "http://www.mysql.com"
    TYPE RECOMMENDED
 )
+
+# emerald - temporarily turn off GTK as a workaround, conflicts with freetype version in Harfbuzz
+set(CMAKE_DISABLE_FIND_PACKAGE_GTK2 TRUE)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    find_package(GTK2)
@@ -425,7 +437,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # The Ninja generator does not yet know how to build archives in pieces, so response
 # files must be used to deal with very long linker command lines.
-# See https://bugs.webkit.org/show_bug.cgi?id=129771
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 
 # check components dependencies
@@ -523,7 +534,8 @@ install(
 )
 
 message("")
-message(STATUS "The following components will be built:")
+message("--")
+message(STATUS "The following CopperSpice libraries will be built:")
 message("\n * ${BUILD_COMPONENTS}\n")
 
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+feature_summary(WHAT PACKAGES_FOUND PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
