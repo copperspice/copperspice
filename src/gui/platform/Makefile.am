@@ -83,12 +83,13 @@ GUI_PLATFORMHEADERS_PRIVATE_INCLUDES = \
 	platformheaders/qfontengine_ft_p.h
 
 GUI_PLATFORMHEADERS_INCLUDES = \
+	platformheaders/cocoa/qcocoawindowfunctions.h \
+	platformheaders/cocoa/qcocoanativecontext.h \
 	platformheaders/xcb/qxcbintegrationfunctions.h \
 	platformheaders/xcb/qxcbscreenfunctions.h \
 	platformheaders/xcb/qxcbwindowfunctions.h \
 	platformheaders/windows/qwindowswindowfunctions.h \
-	platformheaders/windows/qwglnativecontext.h \
-	platformheaders/cocoa/qcocoawindowfunctions.h
+	platformheaders/windows/qwglnativecontext.h
 
 GUI_PLATFORMHEADERS_DIRS = xcb windows cocoa
 

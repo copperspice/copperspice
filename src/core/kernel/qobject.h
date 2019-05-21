@@ -590,6 +590,7 @@ class Q_CORE_EXPORT CSInternalThreadData
    friend class QAbstractSocketPrivate;
    friend class QCoreApplication;
    friend class QCoreApplicationPrivate;
+   friend class QCocoaWindow;
    friend class QEventLoop;
    friend class QEventLoopPrivate;
    friend class QEventDispatcherMac;

@@ -90,12 +90,13 @@ set(GUI_PRIVATE_INCLUDES
 )
 
 set(GUI_PLATFORMHEADERS_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/cocoa/qcocoawindowfunctions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/cocoa/qcocoanativecontext.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qxcbintegrationfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qxcbscreenfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qxcbwindowfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/windows/qwindowswindowfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/windows/qwglnativecontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/cocoa/qcocoawindowfunctions.h
 )
 
 set(GUI_SOURCES
