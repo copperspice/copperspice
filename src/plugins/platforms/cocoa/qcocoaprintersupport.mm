@@ -21,16 +21,14 @@
 *
 ***********************************************************************/
 
-#include "qcocoaprintersupport.h"
+#include <qcocoaprintersupport.h>
 
 #ifndef QT_NO_PRINTER
 
-#include "qcocoaprintdevice.h"
-#include "qprintengine_mac_p.h"
+#include <qcocoaprintdevice.h>
 
+#include <qprintengine_mac_p.h>
 #include <qprinterinfo_p.h>
-
-QT_BEGIN_NAMESPACE
 
 QCocoaPrinterSupport::QCocoaPrinterSupport()
 { }
@@ -40,52 +38,51 @@ QCocoaPrinterSupport::~QCocoaPrinterSupport()
 
 QPrintEngine *QCocoaPrinterSupport::createNativePrintEngine(QPrinter::PrinterMode printerMode)
 {
-    return new QMacPrintEngine(printerMode);
+   return new QMacPrintEngine(printerMode);
 }
 
 QPaintEngine *QCocoaPrinterSupport::createPaintEngine(QPrintEngine *printEngine, QPrinter::PrinterMode printerMode)
 {
-    Q_UNUSED(printerMode);
-    /*
-        QMacPrintEngine multiply inherits from QPrintEngine and QPaintEngine,
-        the cast here allows conversion of QMacPrintEngine* to QPaintEngine*
-    */
-    return static_cast<QMacPrintEngine *>(printEngine);
+   Q_UNUSED(printerMode);
+   /*
+       QMacPrintEngine multiply inherits from QPrintEngine and QPaintEngine,
+       the cast here allows conversion of QMacPrintEngine* to QPaintEngine*
+   */
+   return static_cast<QMacPrintEngine *>(printEngine);
 }
 
 QPrintDevice QCocoaPrinterSupport::createPrintDevice(const QString &id)
 {
-    return QPlatformPrinterSupport::createPrintDevice(new QCocoaPrintDevice(id));
+   return QPlatformPrinterSupport::createPrintDevice(new QCocoaPrintDevice(id));
 }
 
 QStringList QCocoaPrinterSupport::availablePrintDeviceIds() const
 {
-    QStringList list;
-    QCFType<CFArrayRef> printerList;
-    if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr) {
-        CFIndex count = CFArrayGetCount(printerList);
-        for (CFIndex i = 0; i < count; ++i) {
-            PMPrinter printer = static_cast<PMPrinter>(const_cast<void *>(CFArrayGetValueAtIndex(printerList, i)));
-            list.append(QCFString::toQString(PMPrinterGetID(printer)));
-        }
-    }
-    return list;
+   QStringList list;
+   QCFType<CFArrayRef> printerList;
+   if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr) {
+      CFIndex count = CFArrayGetCount(printerList);
+      for (CFIndex i = 0; i < count; ++i) {
+         PMPrinter printer = static_cast<PMPrinter>(const_cast<void *>(CFArrayGetValueAtIndex(printerList, i)));
+         list.append(QCFString::toQString(PMPrinterGetID(printer)));
+      }
+   }
+   return list;
 }
 
 QString QCocoaPrinterSupport::defaultPrintDeviceId() const
 {
-    QCFType<CFArrayRef> printerList;
-    if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr) {
-        CFIndex count = CFArrayGetCount(printerList);
-        for (CFIndex i = 0; i < count; ++i) {
-            PMPrinter printer = static_cast<PMPrinter>(const_cast<void *>(CFArrayGetValueAtIndex(printerList, i)));
-            if (PMPrinterIsDefault(printer))
-                return QCFString::toQString(PMPrinterGetID(printer));
-        }
-    }
-    return QString();
+   QCFType<CFArrayRef> printerList;
+   if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr) {
+      CFIndex count = CFArrayGetCount(printerList);
+      for (CFIndex i = 0; i < count; ++i) {
+         PMPrinter printer = static_cast<PMPrinter>(const_cast<void *>(CFArrayGetValueAtIndex(printerList, i)));
+         if (PMPrinterIsDefault(printer)) {
+            return QCFString::toQString(PMPrinterGetID(printer));
+         }
+      }
+   }
+   return QString();
 }
-
-QT_END_NAMESPACE
 
 #endif  //QT_NO_PRINTER

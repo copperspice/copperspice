@@ -27,22 +27,18 @@
 #include <QObject>
 #include <qplatform_dialoghelper.h>
 
-QT_BEGIN_NAMESPACE
-
 class QCocoaColorDialogHelper : public QPlatformColorDialogHelper
 {
-public:
-    QCocoaColorDialogHelper();
-    ~QCocoaColorDialogHelper();
+ public:
+   QCocoaColorDialogHelper();
+   ~QCocoaColorDialogHelper();
 
-    void exec() override;
-    bool show(Qt::WindowFlags windowFlags, Qt::WindowModality windowModality, QWindow *parent) override;
-    void hide() override;
+   void exec() override;
+   bool show(Qt::WindowFlags windowFlags, Qt::WindowModality windowModality, QWindow *parent) override;
+   void hide() override;
 
-    void setCurrentColor(const QColor&) override;
-    QColor currentColor() const override;
+   void setCurrentColor(const QColor &) override;
+   QColor currentColor() const override;
 };
 
-QT_END_NAMESPACE
-
-#endif // QCOCOACOLORDIALOGHELPER_H
+#endif

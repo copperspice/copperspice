@@ -32,40 +32,41 @@ class QCocoaWindow;
 
 class QCocoaMenuBar : public QPlatformMenuBar
 {
-    CS_OBJECT(QCocoaMenuBar)
+   CS_OBJECT(QCocoaMenuBar)
 
-public:
-    QCocoaMenuBar();
-    ~QCocoaMenuBar();
+ public:
+   QCocoaMenuBar();
+   ~QCocoaMenuBar();
 
-    void insertMenu(QPlatformMenu *menu, QPlatformMenu* before) override;
-    void removeMenu(QPlatformMenu *menu) override;
-    void syncMenu(QPlatformMenu *menuItem) override;
-    void handleReparent(QWindow *newParentWindow) override;
-    QPlatformMenu *menuForTag(quintptr tag) const override;
+   void insertMenu(QPlatformMenu *menu, QPlatformMenu *before) override;
+   void removeMenu(QPlatformMenu *menu) override;
+   void syncMenu(QPlatformMenu *menuItem) override;
+   void handleReparent(QWindow *newParentWindow) override;
+   QPlatformMenu *menuForTag(quintptr tag) const override;
 
-    inline NSMenu *nsMenu() const
-        { return m_nativeMenu; }
+   inline NSMenu *nsMenu() const {
+      return m_nativeMenu;
+   }
 
-    static void redirectKnownMenuItemsToFirstResponder();
-    static void resetKnownMenuItemsToQt();
-    static void updateMenuBarImmediately();
+   static void redirectKnownMenuItemsToFirstResponder();
+   static void resetKnownMenuItemsToQt();
+   static void updateMenuBarImmediately();
 
-    QList<QCocoaMenuItem*> merged() const;
-    NSMenuItem *itemForRole(QPlatformMenuItem::MenuRole r);
+   QList<QCocoaMenuItem *> merged() const;
+   NSMenuItem *itemForRole(QPlatformMenuItem::MenuRole r);
 
-private:
-    static QCocoaWindow *findWindowForMenubar();
-    static QCocoaMenuBar *findGlobalMenubar();
+ private:
+   static QCocoaWindow *findWindowForMenubar();
+   static QCocoaMenuBar *findGlobalMenubar();
 
-    bool needsImmediateUpdate();
-    bool shouldDisable(QCocoaWindow *active) const;
+   bool needsImmediateUpdate();
+   bool shouldDisable(QCocoaWindow *active) const;
 
-    NSMenuItem *nativeItemForMenu(QCocoaMenu *menu) const;
+   NSMenuItem *nativeItemForMenu(QCocoaMenu *menu) const;
 
-    QList<QPointer<QCocoaMenu> > m_menus;
-    NSMenu *m_nativeMenu;
-    QCocoaWindow *m_window;
+   QList<QPointer<QCocoaMenu>> m_menus;
+   NSMenu *m_nativeMenu;
+   QCocoaWindow *m_window;
 };
 
 

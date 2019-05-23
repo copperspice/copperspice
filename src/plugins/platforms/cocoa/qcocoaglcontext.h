@@ -24,7 +24,7 @@
 #ifndef QCOCOAGLCONTEXT_H
 #define QCOCOAGLCONTEXT_H
 
-#include <QtCore/QPointer>
+#include <QPointer>
 #include <qplatform_openglcontext.h>
 #include <QOpenGLContext>
 #include <QWindow>
@@ -32,45 +32,41 @@
 #undef slots
 #include <Cocoa/Cocoa.h>
 
-QT_BEGIN_NAMESPACE
-
 class QCocoaGLContext : public QPlatformOpenGLContext
 {
-public:
-    QCocoaGLContext(const QSurfaceFormat &format, QPlatformOpenGLContext *share, const QVariant &nativeHandle);
-    ~QCocoaGLContext();
+ public:
+   QCocoaGLContext(const QSurfaceFormat &format, QPlatformOpenGLContext *share, const QVariant &nativeHandle);
+   ~QCocoaGLContext();
 
-    QSurfaceFormat format() const override;
+   QSurfaceFormat format() const override;
 
-    void swapBuffers(QPlatformSurface *surface) override;
+   void swapBuffers(QPlatformSurface *surface) override;
 
-    bool makeCurrent(QPlatformSurface *surface) override;
-    void doneCurrent() override;
+   bool makeCurrent(QPlatformSurface *surface) override;
+   void doneCurrent() override;
 
-    void (*getProcAddress(const QByteArray &procName)) () override;
+   void (*getProcAddress(const QByteArray &procName)) () override;
 
-    void update();
+   void update();
 
-    static NSOpenGLPixelFormat *createNSOpenGLPixelFormat(const QSurfaceFormat &format);
-    NSOpenGLContext *nsOpenGLContext() const;
+   static NSOpenGLPixelFormat *createNSOpenGLPixelFormat(const QSurfaceFormat &format);
+   NSOpenGLContext *nsOpenGLContext() const;
 
-    bool isSharing() const override;
-    bool isValid() const override;
+   bool isSharing() const override;
+   bool isValid() const override;
 
-    void windowWasHidden();
+   void windowWasHidden();
 
-    QVariant nativeHandle() const;
+   QVariant nativeHandle() const;
 
-private:
-    void setActiveWindow(QWindow *window);
-    void updateSurfaceFormat();
+ private:
+   void setActiveWindow(QWindow *window);
+   void updateSurfaceFormat();
 
-    NSOpenGLContext *m_context;
-    NSOpenGLContext *m_shareContext;
-    QSurfaceFormat m_format;
-    QPointer<QWindow> m_currentWindow;
+   NSOpenGLContext *m_context;
+   NSOpenGLContext *m_shareContext;
+   QSurfaceFormat m_format;
+   QPointer<QWindow> m_currentWindow;
 };
-
-QT_END_NAMESPACE
 
 #endif // QCOCOAGLCONTEXT_H

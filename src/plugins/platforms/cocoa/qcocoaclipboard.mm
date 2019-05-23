@@ -21,71 +21,71 @@
 *
 ***********************************************************************/
 
-#include "qcocoaclipboard.h"
-
-QT_BEGIN_NAMESPACE
+#include <qcocoaclipboard.h>
+#include <qapplication.h>
 
 QCocoaClipboard::QCocoaClipboard()
-    :m_clipboard(new QMacPasteboard(kPasteboardClipboard, QMacInternalPasteboardMime::MIME_CLIP))
-    ,m_find(new QMacPasteboard(kPasteboardFind, QMacInternalPasteboardMime::MIME_CLIP))
+   : m_clipboard(new QMacPasteboard(kPasteboardClipboard, QMacInternalPasteboardMime::MIME_CLIP))
+   , m_find(new QMacPasteboard(kPasteboardFind, QMacInternalPasteboardMime::MIME_CLIP))
 {
-    connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, &QCocoaClipboard::handleApplicationStateChanged);
+   connect(qApp, &QApplication::applicationStateChanged, this, &QCocoaClipboard::handleApplicationStateChanged);
 }
 
 QMimeData *QCocoaClipboard::mimeData(QClipboard::Mode mode)
 {
-    if (QMacPasteboard *pasteBoard = pasteboardForMode(mode)) {
-        pasteBoard->sync();
-        return pasteBoard->mimeData();
-    }
-    return 0;
+   if (QMacPasteboard *pasteBoard = pasteboardForMode(mode)) {
+      pasteBoard->sync();
+      return pasteBoard->mimeData();
+   }
+   return 0;
 }
 
 void QCocoaClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
 {
-    if (QMacPasteboard *pasteBoard = pasteboardForMode(mode)) {
-        if (data == 0) {
-            pasteBoard->clear();
-        }
+   if (QMacPasteboard *pasteBoard = pasteboardForMode(mode)) {
+      if (data == 0) {
+         pasteBoard->clear();
+      }
 
-        pasteBoard->sync();
-        pasteBoard->setMimeData(data);
-        emitChanged(mode);
-    }
+      pasteBoard->sync();
+      pasteBoard->setMimeData(data);
+      emitChanged(mode);
+   }
 }
 
 bool QCocoaClipboard::supportsMode(QClipboard::Mode mode) const
 {
-    return (mode == QClipboard::Clipboard || mode == QClipboard::FindBuffer);
+   return (mode == QClipboard::Clipboard || mode == QClipboard::FindBuffer);
 }
 
 bool QCocoaClipboard::ownsMode(QClipboard::Mode mode) const
 {
-    Q_UNUSED(mode);
-    return false;
+   return false;
 }
 
 QMacPasteboard *QCocoaClipboard::pasteboardForMode(QClipboard::Mode mode) const
 {
-    if (mode == QClipboard::Clipboard)
-        return m_clipboard.data();
-    else if (mode == QClipboard::FindBuffer)
-        return m_find.data();
-    else
-        return 0;
+   if (mode == QClipboard::Clipboard) {
+      return m_clipboard.data();
+   } else if (mode == QClipboard::FindBuffer) {
+      return m_find.data();
+   } else {
+      return 0;
+   }
 }
 
 void QCocoaClipboard::handleApplicationStateChanged(Qt::ApplicationState state)
 {
-    if (state != Qt::ApplicationActive)
-        return;
+   if (state != Qt::ApplicationActive) {
+      return;
+   }
 
-    if (m_clipboard->sync())
-        emitChanged(QClipboard::Clipboard);
-    if (m_find->sync())
-        emitChanged(QClipboard::FindBuffer);
+   if (m_clipboard->sync()) {
+      emitChanged(QClipboard::Clipboard);
+   }
+   if (m_find->sync()) {
+      emitChanged(QClipboard::FindBuffer);
+   }
 }
 
-#include "moc_qcocoaclipboard.cpp"
 
-QT_END_NAMESPACE

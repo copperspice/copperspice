@@ -24,7 +24,7 @@
 #ifndef QPRINTENGINE_MAC_P_H
 #define QPRINTENGINE_MAC_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_PRINTER
 
@@ -33,8 +33,8 @@
 #include <qpainter_p.h>
 #include <qpagelayout.h>
 
-#include "qcocoaprintdevice.h"
-#include "qpaintengine_mac_p.h"
+#include <qcocoaprintdevice.h>
+#include <qpaintengine_mac_p.h>
 
 #ifdef __OBJC__
 @class NSPrintInfo;
@@ -46,79 +46,87 @@ class QPrinterPrivate;
 class QMacPrintEnginePrivate;
 class QMacPrintEngine : public QPaintEngine, public QPrintEngine
 {
-    Q_DECLARE_PRIVATE(QMacPrintEngine)
-public:
-    QMacPrintEngine(QPrinter::PrinterMode mode);
+   Q_DECLARE_PRIVATE(QMacPrintEngine)
 
-    Qt::HANDLE handle() const;
+ public:
+   QMacPrintEngine(QPrinter::PrinterMode mode);
 
-    bool begin(QPaintDevice *dev);
-    bool end();
-    virtual QPaintEngine::Type type() const { return QPaintEngine::MacPrinter; }
+   Qt::HANDLE handle() const;
 
-    QPaintEngine *paintEngine() const;
+   bool begin(QPaintDevice *dev);
+   bool end();
+   virtual QPaintEngine::Type type() const {
+      return QPaintEngine::MacPrinter;
+   }
 
-    void setProperty(PrintEnginePropertyKey key, const QVariant &value);
-    QVariant property(PrintEnginePropertyKey key) const;
+   QPaintEngine *paintEngine() const;
 
-    QPrinter::PrinterState printerState() const;
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value);
+   QVariant property(PrintEnginePropertyKey key) const;
 
-    bool newPage();
-    bool abort();
-    int metric(QPaintDevice::PaintDeviceMetric) const;
+   QPrinter::PrinterState printerState() const;
 
-    //forwarded functions
+   bool newPage();
+   bool abort();
+   int metric(QPaintDevice::PaintDeviceMetric) const;
 
-    void updateState(const QPaintEngineState &state);
+   //forwarded functions
 
-    virtual void drawLines(const QLineF *lines, int lineCount);
-    virtual void drawRects(const QRectF *r, int num);
-    virtual void drawPoints(const QPointF *p, int pointCount);
-    virtual void drawEllipse(const QRectF &r);
-    virtual void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-    virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-    virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags);
-    virtual void drawTextItem(const QPointF &p, const QTextItem &ti);
-    virtual void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
-    virtual void drawPath(const QPainterPath &);
+   void updateState(const QPaintEngineState &state);
 
-private:
-    friend class QCocoaNativeInterface;
+   virtual void drawLines(const QLineF *lines, int lineCount);
+   virtual void drawRects(const QRectF *r, int num);
+   virtual void drawPoints(const QPointF *p, int pointCount);
+   virtual void drawEllipse(const QRectF &r);
+   virtual void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
+   virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
+   virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags);
+   virtual void drawTextItem(const QPointF &p, const QTextItem &ti);
+   virtual void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
+   virtual void drawPath(const QPainterPath &);
+
+ private:
+   friend class QCocoaNativeInterface;
 };
 
 class QMacPrintEnginePrivate : public QPaintEnginePrivate
 {
-    Q_DECLARE_PUBLIC(QMacPrintEngine)
-public:
-    QPrinter::PrinterMode mode;
-    QPrinter::PrinterState state;
-    QSharedPointer<QCocoaPrintDevice> m_printDevice;
-    QPageLayout m_pageLayout;
-    NSPrintInfo *printInfo;
-    PMResolution resolution;
-    QString outputFilename;
-    QString m_creator;
-    QPaintEngine *paintEngine;
-    QHash<QMacPrintEngine::PrintEnginePropertyKey, QVariant> valueCache;
-    uint embedFonts;
+   Q_DECLARE_PUBLIC(QMacPrintEngine)
+ public:
+   QPrinter::PrinterMode mode;
+   QPrinter::PrinterState state;
+   QSharedPointer<QCocoaPrintDevice> m_printDevice;
+   QPageLayout m_pageLayout;
+   NSPrintInfo *printInfo;
+   PMResolution resolution;
+   QString outputFilename;
+   QString m_creator;
+   QPaintEngine *paintEngine;
+   QHash<QMacPrintEngine::PrintEnginePropertyKey, QVariant> valueCache;
+   uint embedFonts;
 
-    QMacPrintEnginePrivate() : mode(QPrinter::ScreenResolution), state(QPrinter::Idle),
-                               m_pageLayout(QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
-                               printInfo(0), paintEngine(0), embedFonts(true) {}
-    ~QMacPrintEnginePrivate();
+   QMacPrintEnginePrivate() : mode(QPrinter::ScreenResolution), state(QPrinter::Idle),
+      m_pageLayout(QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
+      printInfo(0), paintEngine(0), embedFonts(true) {}
+   ~QMacPrintEnginePrivate();
 
-    void initialize();
-    void releaseSession();
-    bool newPage_helper();
-    void setPageSize(const QPageSize &pageSize);
-    inline bool isPrintSessionInitialized() const
-    {
-        return printInfo != 0;
-    }
+   void initialize();
+   void releaseSession();
+   bool newPage_helper();
+   void setPageSize(const QPageSize &pageSize);
+   inline bool isPrintSessionInitialized() const {
+      return printInfo != 0;
+   }
 
-    PMPageFormat format() const { return static_cast<PMPageFormat>([printInfo PMPageFormat]); }
-    PMPrintSession session() const { return static_cast<PMPrintSession>([printInfo PMPrintSession]); }
-    PMPrintSettings settings() const { return static_cast<PMPrintSettings>([printInfo PMPrintSettings]); }
+   PMPageFormat format() const {
+      return static_cast<PMPageFormat>([printInfo PMPageFormat]);
+   }
+   PMPrintSession session() const {
+      return static_cast<PMPrintSession>([printInfo PMPrintSession]);
+   }
+   PMPrintSettings settings() const {
+      return static_cast<PMPrintSettings>([printInfo PMPrintSettings]);
+   }
 };
 
 #endif // QT_NO_PRINTER

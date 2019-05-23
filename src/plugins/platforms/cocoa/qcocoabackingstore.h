@@ -33,27 +33,27 @@
 
 class QCocoaBackingStore : public QPlatformBackingStore
 {
-public:
-    QCocoaBackingStore(QWindow *window);
-    ~QCocoaBackingStore();
+ public:
+   QCocoaBackingStore(QWindow *window);
+   ~QCocoaBackingStore();
 
-    QPaintDevice *paintDevice() override;
-    void flush(QWindow *widget, const QRegion &region, const QPoint &offset) override;
+   QPaintDevice *paintDevice() override;
+   void flush(QWindow *widget, const QRegion &region, const QPoint &offset) override;
 
 #ifndef QT_NO_OPENGL
-    QImage toImage() const override;
+   QImage toImage() const override;
 #else
-    QImage toImage() const; // No QPlatformBackingStore::toImage() for NO_OPENGL builds.
+   QImage toImage() const; // No QPlatformBackingStore::toImage() for NO_OPENGL builds.
 #endif
 
-    void resize (const QSize &size, const QRegion &) override;
-    bool scroll(const QRegion &area, int dx, int dy) override;
-    void beginPaint(const QRegion &region) override;
-    qreal getBackingStoreDevicePixelRatio();
+   void resize (const QSize &size, const QRegion &) override;
+   bool scroll(const QRegion &area, int dx, int dy) override;
+   void beginPaint(const QRegion &region) override;
+   qreal getBackingStoreDevicePixelRatio();
 
-private:
-    QImage m_qImage;
-    QSize m_requestedSize;
+ private:
+   QImage m_qImage;
+   QSize m_requestedSize;
 };
 
 #endif

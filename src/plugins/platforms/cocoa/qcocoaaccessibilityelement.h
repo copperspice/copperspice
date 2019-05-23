@@ -24,9 +24,8 @@
 #ifndef QCOCOAACCESIBILITYELEMENT_H
 #define QCOCOAACCESIBILITYELEMENT_H
 
-#include <QtCore/qglobal.h>
-
-#include "qt_mac_p.h"
+#include <qglobal.h>
+#include <qt_mac_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
@@ -35,19 +34,18 @@
 
 #import <qaccessible.h>
 
-@class QT_MANGLE_NAMESPACE(QMacAccessibilityElement);
+@class QMacAccessibilityElement;
 
-@interface QT_MANGLE_NAMESPACE(QMacAccessibilityElement) : NSObject {
-    NSString *role;
-    QAccessible::Id axid;
+@interface QMacAccessibilityElement : NSObject
+{
+   NSString *role;
+   QAccessible::Id axid;
 }
 
-- (id)initWithId:(QAccessible::Id)anId;
-+ (QT_MANGLE_NAMESPACE(QMacAccessibilityElement) *)elementWithId:(QAccessible::Id)anId;
+- (id)initWithId: (QAccessible::Id)anId;
++ (QMacAccessibilityElement *)elementWithId: (QAccessible::Id)anId;
 
 @end
-
-QT_NAMESPACE_ALIAS_OBJC_CLASS(QMacAccessibilityElement);
 
 #endif // QT_NO_ACCESSIBILITY
 

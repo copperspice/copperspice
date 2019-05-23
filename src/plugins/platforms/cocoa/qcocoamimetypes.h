@@ -24,13 +24,10 @@
 #ifndef QCOCOAMIMETYPES_H
 #define QCOCOAMIMETYPES_H
 
-#include <QtCore/QtCore>
-
 class QCocoaMimeTypes
 {
-public:
-    static void initializeMimeTypes();
+ public:
+   static void initializeMimeTypes();
 };
-
 
 #endif

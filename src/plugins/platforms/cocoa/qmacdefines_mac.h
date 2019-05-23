@@ -28,7 +28,7 @@
 * Refer to APPLE_LICENSE.TXT (in this directory) for license terms
 ***********************************************************************/
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifdef __LP64__
 typedef signed int OSStatus;
@@ -48,29 +48,29 @@ typedef signed long OSStatus;
 #      undef old_slots
 #    endif
 #endif
-    typedef struct OpaqueEventHandlerCallRef * EventHandlerCallRef;
-    typedef struct OpaqueEventRef * EventRef;
-    typedef struct OpaqueMenuRef * MenuRef;
-    typedef struct OpaquePasteboardRef* PasteboardRef;
-    typedef struct OpaqueRgnHandle * RgnHandle;
-    typedef const struct __HIShape *HIShapeRef;
-    typedef struct __HIShape *HIMutableShapeRef;
-    typedef struct CGRect CGRect;
-    typedef struct CGImage *CGImageRef;
-    typedef struct CGContext *CGContextRef;
-    typedef struct GDevice * GDPtr;
-    typedef GDPtr * GDHandle;
-    typedef struct OpaqueIconRef * IconRef;
+typedef struct OpaqueEventHandlerCallRef *EventHandlerCallRef;
+typedef struct OpaqueEventRef *EventRef;
+typedef struct OpaqueMenuRef *MenuRef;
+typedef struct OpaquePasteboardRef *PasteboardRef;
+typedef struct OpaqueRgnHandle *RgnHandle;
+typedef const struct __HIShape *HIShapeRef;
+typedef struct __HIShape *HIMutableShapeRef;
+typedef struct CGRect CGRect;
+typedef struct CGImage *CGImageRef;
+typedef struct CGContext *CGContextRef;
+typedef struct GDevice *GDPtr;
+typedef GDPtr *GDHandle;
+typedef struct OpaqueIconRef *IconRef;
 #   ifdef __OBJC__
-        typedef NSWindow* OSWindowRef;
-        typedef NSView *OSViewRef;
-        typedef NSMenu *OSMenuRef;
-        typedef NSEvent *OSEventRef;
+typedef NSWindow *OSWindowRef;
+typedef NSView *OSViewRef;
+typedef NSMenu *OSMenuRef;
+typedef NSEvent *OSEventRef;
 #   else
-        typedef void *OSWindowRef;
-        typedef void *OSViewRef;
-        typedef void *OSMenuRef;
-        typedef void *OSEventRef;
+typedef void *OSWindowRef;
+typedef void *OSViewRef;
+typedef void *OSMenuRef;
+typedef void *OSEventRef;
 #   endif
 
 typedef PasteboardRef OSPasteboardRef;

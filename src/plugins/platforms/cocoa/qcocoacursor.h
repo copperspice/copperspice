@@ -26,28 +26,26 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include <QtCore>
+#include <qhash.h>
 #include <qplatform_cursor.h>
-
-QT_BEGIN_NAMESPACE
 
 class QCocoaCursor : public QPlatformCursor
 {
-public:
-    QCocoaCursor();
-    ~QCocoaCursor();
+ public:
+   QCocoaCursor();
+   ~QCocoaCursor();
 
-    void changeCursor(QCursor *cursor, QWindow *window) override;
-    QPoint pos() const override;
-    void setPos(const QPoint &position) override;
-private:
-    QHash<Qt::CursorShape, NSCursor *> m_cursors;
-    NSCursor *convertCursor(QCursor *cursor);
-    NSCursor *createCursorData(QCursor * cursor);
-    NSCursor *createCursorFromBitmap(const QBitmap *bitmap, const QBitmap *mask, const QPoint hotspot = QPoint());
-    NSCursor *createCursorFromPixmap(const QPixmap pixmap, const QPoint hotspot = QPoint());
+   void changeCursor(QCursor *cursor, QWindow *window) override;
+   QPoint pos() const override;
+   void setPos(const QPoint &position) override;
+
+ private:
+   QHash<Qt::CursorShape, NSCursor *> m_cursors;
+   NSCursor *convertCursor(QCursor *cursor);
+   NSCursor *createCursorData(QCursor *cursor);
+   NSCursor *createCursorFromBitmap(const QBitmap *bitmap, const QBitmap *mask, const QPoint hotspot = QPoint());
+   NSCursor *createCursorFromPixmap(const QPixmap pixmap, const QPoint hotspot = QPoint());
 };
 
-QT_END_NAMESPACE
 
-#endif // QWINDOWSCURSOR_H
+#endif

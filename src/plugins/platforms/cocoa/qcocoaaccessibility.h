@@ -26,20 +26,19 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include <QtGui>
 #include <qplatform_accessibility.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
 class QCocoaAccessibility : public QPlatformAccessibility
 {
-public:
-    QCocoaAccessibility();
-    ~QCocoaAccessibility();
-    void notifyAccessibilityUpdate(QAccessibleEvent *event) override;
-    void setRootObject(QObject *o) override;
-    void initialize() override;
-    void cleanup() override;
+ public:
+   QCocoaAccessibility();
+   ~QCocoaAccessibility();
+   void notifyAccessibilityUpdate(QAccessibleEvent *event) override;
+   void setRootObject(QObject *o) override;
+   void initialize() override;
+   void cleanup() override;
 };
 
 namespace QCocoaAccessible {

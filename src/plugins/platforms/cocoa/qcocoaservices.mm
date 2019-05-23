@@ -21,28 +21,28 @@
 *
 ***********************************************************************/
 
-#include "qcocoaservices.h"
-
-#include "qt_mac_p.h"
+#include <qcocoaservices.h>
+#include <qt_mac_p.h>
+#include <qurl.h>
 
 #include <AppKit/NSWorkspace.h>
 #include <Foundation/NSURL.h>
 
-#include <QtCore/QUrl>
-
 bool QCocoaServices::openUrl(const QUrl &url)
 {
-    const QString scheme = url.scheme();
-    if (scheme.isEmpty())
-        return openDocument(url);
-    return [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:QCFString::toNSString(url.toString(QUrl::FullyEncoded))]];
+   const QString scheme = url.scheme();
+   if (scheme.isEmpty()) {
+      return openDocument(url);
+   }
+   return [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString: QCFString::toNSString(url.toString(QUrl::FullyEncoded))]];
 }
 
 bool QCocoaServices::openDocument(const QUrl &url)
 {
-    if (!url.isValid())
-        return false;
+   if (!url.isValid()) {
+      return false;
+   }
 
-    return [[NSWorkspace sharedWorkspace] openFile:QCFString::toNSString(url.toLocalFile())];
+   return [[NSWorkspace sharedWorkspace] openFile: QCFString::toNSString(url.toLocalFile())];
 }
 

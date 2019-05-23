@@ -28,68 +28,64 @@
 
 #ifndef QT_NO_PRINTER
 
-#include "qt_mac_p.h"
+#include <qt_mac_p.h>
 
 #include <cups/ppd.h>
 
-QT_BEGIN_NAMESPACE
-
 class QCocoaPrintDevice : public QPlatformPrintDevice
 {
-public:
-    QCocoaPrintDevice();
-    explicit QCocoaPrintDevice(const QString &id);
-    virtual ~QCocoaPrintDevice();
+ public:
+   QCocoaPrintDevice();
+   explicit QCocoaPrintDevice(const QString &id);
+   virtual ~QCocoaPrintDevice();
 
-    bool isValid() const override;
-    bool isDefault() const override;
+   bool isValid() const override;
+   bool isDefault() const override;
 
-    QPrint::DeviceState state() const override;
+   QPrint::DeviceState state() const override;
 
-    QPageSize defaultPageSize() const override;
+   QPageSize defaultPageSize() const override;
 
-    QMarginsF printableMargins(const QPageSize &pageSize, QPageLayout::Orientation orientation,
-                               int resolution) const override;
+   QMarginsF printableMargins(const QPageSize &pageSize, QPageLayout::Orientation orientation,
+      int resolution) const override;
 
-    int defaultResolution() const override;
+   int defaultResolution() const override;
 
-    QPrint::InputSlot defaultInputSlot() const override;
+   QPrint::ColorMode defaultColorMode() const override;
+   QPrint::DuplexMode defaultDuplexMode() const override;
+   QPrint::InputSlot defaultInputSlot() const override;
+   QPrint::OutputBin defaultOutputBin() const override;
 
-    QPrint::OutputBin defaultOutputBin() const override;
+   PMPrinter macPrinter() const;
+   PMPaper macPaper(const QPageSize &pageSize) const;
 
-    QPrint::DuplexMode defaultDuplexMode() const override;
+ protected:
+   void loadPageSizes() const override;
+   void loadResolutions() const override;
+   void loadInputSlots() const override;
+   void loadOutputBins() const override;
+   void loadDuplexModes() const override;
+   void loadColorModes() const override;
 
-    QPrint::ColorMode defaultColorMode() const override;
+#if ! defined(QT_NO_MIMETYPE)
+   void loadMimeTypes() const;
+#endif
 
-    PMPrinter macPrinter() const;
-    PMPaper macPaper(const QPageSize &pageSize) const;
+ private:
+   QPageSize createPageSize(const PMPaper &paper) const;
+   bool openPpdFile();
 
-protected:
-    void loadPageSizes() const override;
-    void loadResolutions() const override;
-    void loadInputSlots() const override;
-    void loadOutputBins() const override;
-    void loadDuplexModes() const override;
-    void loadColorModes() const override;
-    void loadMimeTypes() const override;
+   // Mac Core Printing
+   PMPrinter m_printer;
+   PMPrintSession m_session;
+   mutable QHash<QString, PMPaper> m_macPapers;
 
-private:
-    QPageSize createPageSize(const PMPaper &paper) const;
-    bool openPpdFile();
+   // PPD File
+   ppd_file_t *m_ppd;
 
-    // Mac Core Printing
-    PMPrinter m_printer;
-    PMPrintSession m_session;
-    mutable QHash<QString, PMPaper> m_macPapers;
-
-    // PPD File
-    ppd_file_t *m_ppd;
-
-    QMarginsF m_customMargins;
-    mutable QHash<QString, QMarginsF> m_printableMargins;
+   QMarginsF m_customMargins;
+   mutable QHash<QString, QMarginsF> m_printableMargins;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_PRINTER
-#endif // QCOCOAPRINTDEVICE_H
+#endif

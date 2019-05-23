@@ -37,116 +37,120 @@ class QPlatformMenuBar;
 
 class QCocoaNativeInterface : public QPlatformNativeInterface
 {
-    CS_OBJECT(QCocoaNativeInterface)
+   CS_OBJECT(QCocoaNativeInterface)
 
-public:
-    QCocoaNativeInterface();
-
-#ifndef QT_NO_OPENGL
-    void *nativeResourceForContext(const QByteArray &resourceString, QOpenGLContext *context) override;
-#endif
-    void *nativeResourceForWindow(const QByteArray &resourceString, QWindow *window) override;
-
-    NativeResourceForIntegrationFunction nativeResourceFunctionForIntegration(const QByteArray &resource) override;
-
-    void beep();
+ public:
+   QCocoaNativeInterface();
 
 #ifndef QT_NO_OPENGL
-    static void *cglContextForContext(QOpenGLContext *context);
-    static void *nsOpenGLContextForContext(QOpenGLContext* context);
+   void *nativeResourceForContext(const QByteArray &resourceString, QOpenGLContext *context) override;
+#endif
+   void *nativeResourceForWindow(const QByteArray &resourceString, QWindow *window) override;
+
+   FP_Integration nativeResourceFunctionForIntegration(const QByteArray &resource) override;
+
+   void beep();
+
+#ifndef QT_NO_OPENGL
+   static void *cglContextForContext(QOpenGLContext *context);
+   static void *nsOpenGLContextForContext(QOpenGLContext *context);
 #endif
 
-    QFunctionPointer platformFunction(const QByteArray &function) const override;
+   FP_Void platformFunction(const QByteArray &function) const override;
 
-public :
-    CS_SLOT_1(Public, void onAppFocusWindowChanged(QWindow * window))
-    CS_SLOT_2(onAppFocusWindowChanged)
+   CS_SLOT_1(Public, void onAppFocusWindowChanged(QWindow *window))
+   CS_SLOT_2(onAppFocusWindowChanged)
 
-private:
-    /*
-        "Virtual" function to create the platform printer support
-        implementation.
+ private:
+   /*
+       "Virtual" function to create the platform printer support
+       implementation.
 
-        We use an invokable function instead of a virtual one, we do not want
-        this in the QPlatform* API yet.
+       We use an invokable function instead of a virtual one, we do not want
+       this in the QPlatform* API yet.
 
-        This was added here only because QPlatformNativeInterface is a QObject
-        and allow us to use QMetaObject::indexOfMethod() from the printsupport
-        plugin.
-    */
-    Q_INVOKABLE QPlatformPrinterSupport *createPlatformPrinterSupport();
-    /*
-        Function to return the NSPrintInfo * from QMacPaintEnginePrivate.
-        Needed by the native print dialog in the Qt Print Support module.
-    */
-    Q_INVOKABLE void *NSPrintInfoForPrintEngine(QPrintEngine *printEngine);
-    /*
-        Function to return the default background pixmap.
-        Needed by QWizard in the Qt widget module.
-    */
-    Q_INVOKABLE QPixmap defaultBackgroundPixmapForQWizard();
+       This was added here only because QPlatformNativeInterface is a QObject
+       and allow us to use QMetaObject::indexOfMethod() from the printsupport
+       plugin.
+   */
+   CS_INVOKABLE_METHOD_1(Private, QPlatformPrinterSupport *createPlatformPrinterSupport())
+   CS_INVOKABLE_METHOD_2(createPlatformPrinterSupport)
 
-    Q_INVOKABLE void clearCurrentThreadCocoaEventDispatcherInterruptFlag();
+   /*
+       Function to return the NSPrintInfo * from QMacPaintEnginePrivate.
+       Needed by the native print dialog in the Qt Print Support module.
+   */
+   CS_INVOKABLE_METHOD_1(Private, void *NSPrintInfoForPrintEngine(QPrintEngine *printEngine))
+   CS_INVOKABLE_METHOD_2(NSPrintInfoForPrintEngine)
 
-    // QMacPastebardMime support. The mac pasteboard void pointers are
-    // QMacPastebardMime instances from the cocoa plugin or qtmacextras
-    // These two classes are kept in sync and can be casted between.
-    static void addToMimeList(void *macPasteboardMime);
-    static void removeFromMimeList(void *macPasteboardMime);
-    static void registerDraggedTypes(const QStringList &types);
+   /*
+       Function to return the default background pixmap.
+       Needed by QWizard in the Qt widget module.
+   */
+   CS_INVOKABLE_METHOD_1(Private, QPixmap defaultBackgroundPixmapForQWizard())
+   CS_INVOKABLE_METHOD_2(defaultBackgroundPixmapForQWizard)
 
-    // Dock menu support
-    static void setDockMenu(QPlatformMenu *platformMenu);
+   CS_INVOKABLE_METHOD_1(Private, void clearCurrentThreadCocoaEventDispatcherInterruptFlag())
+   CS_INVOKABLE_METHOD_2(clearCurrentThreadCocoaEventDispatcherInterruptFlag)
 
-    // Function to return NSMenu * from QPlatformMenu
-    static void *qMenuToNSMenu(QPlatformMenu *platformMenu);
+   // QMacPastebardMime support. The mac pasteboard void pointers are
+   // QMacPastebardMime instances from the cocoa plugin or qtmacextras
+   // These two classes are kept in sync and can be casted between.
+   static void addToMimeList(void *macPasteboardMime);
+   static void removeFromMimeList(void *macPasteboardMime);
+   static void registerDraggedTypes(const QStringList &types);
 
-    // Function to return NSMenu * from QPlatformMenuBar
-    static void *qMenuBarToNSMenu(QPlatformMenuBar *platformMenuBar);
+   // Dock menu support
+   static void setDockMenu(QPlatformMenu *platformMenu);
 
-    // QImage <-> CGImage conversion functions
-    static CGImageRef qImageToCGImage(const QImage &image);
-    static QImage cgImageToQImage(CGImageRef image);
+   // Function to return NSMenu * from QPlatformMenu
+   static void *qMenuToNSMenu(QPlatformMenu *platformMenu);
 
-    // Embedding NSViews as child QWindows
-    static void setWindowContentView(QPlatformWindow *window, void *nsViewContentView);
+   // Function to return NSMenu * from QPlatformMenuBar
+   static void *qMenuBarToNSMenu(QPlatformMenuBar *platformMenuBar);
 
-    // Set a QWindow as a "guest" (subwindow) of a non-QWindow
-    static void setEmbeddedInForeignView(QPlatformWindow *window, bool embedded);
+   // QImage <-> CGImage conversion functions
+   static CGImageRef qImageToCGImage(const QImage &image);
+   static QImage cgImageToQImage(CGImageRef image);
 
-    // Register if a window should deliver touch events. Enabling
-    // touch events has implications for delivery of other events,
-    // for example by causing scrolling event lag.
-    //
-    // The registration is ref-counted: multiple widgets can enable
-    // touch events, which then will be delivered until the widget
-    // deregisters.
-    static void registerTouchWindow(QWindow *window,  bool enable);
+   // Embedding NSViews as child QWindows
+   static void setWindowContentView(QPlatformWindow *window, void *nsViewContentView);
 
-    // Enable the unified title and toolbar area for a window.
-    static void setContentBorderEnabled(QWindow *window, bool enable);
+   // Set a QWindow as a "guest" (subwindow) of a non-QWindow
+   static void setEmbeddedInForeignView(QPlatformWindow *window, bool embedded);
 
-    // Set the size of the unified title and toolbar area.
-    static void setContentBorderThickness(QWindow *window, int topThickness, int bottomThickness);
+   // Register if a window should deliver touch events. Enabling
+   // touch events has implications for delivery of other events,
+   // for example by causing scrolling event lag.
+   //
+   // The registration is ref-counted: multiple widgets can enable
+   // touch events, which then will be delivered until the widget
+   // deregisters.
+   static void registerTouchWindow(QWindow *window,  bool enable);
 
-    // Set the size for a unified toolbar content border area.
-    // Multiple callers can register areas and the platform plugin
-    // will extend the "unified" area to cover them.
-    static void registerContentBorderArea(QWindow *window, quintptr identifer, int upper, int lower);
+   // Enable the unified title and toolbar area for a window.
+   static void setContentBorderEnabled(QWindow *window, bool enable);
 
-    // Enables or disiables a content border area.
-    static void setContentBorderAreaEnabled(QWindow *window, quintptr identifier, bool enable);
+   // Set the size of the unified title and toolbar area.
+   static void setContentBorderThickness(QWindow *window, int topThickness, int bottomThickness);
 
-    // Returns true if the given coordinate is inside the current
-    // content border.
-    static bool testContentBorderPosition(QWindow *window, int position);
+   // Set the size for a unified toolbar content border area.
+   // Multiple callers can register areas and the platform plugin
+   // will extend the "unified" area to cover them.
+   static void registerContentBorderArea(QWindow *window, quintptr identifer, int upper, int lower);
 
-    // Sets a NSToolbar instance for the given QWindow. The
-    // toolbar will be attached to the native NSWindow when
-    // that is created;
+   // Enables or disiables a content border area.
+   static void setContentBorderAreaEnabled(QWindow *window, quintptr identifier, bool enable);
+
+   // Returns true if the given coordinate is inside the current
+   // content border.
+   static bool testContentBorderPosition(QWindow *window, int position);
+
+   // Sets a NSToolbar instance for the given QWindow. The
+   // toolbar will be attached to the native NSWindow when
+   // that is created;
    static void setNSToolbar(QWindow *window, void *nsToolbar);
 
 };
 
-#endif // QCOCOANATIVEINTERFACE_H
-
+#endif

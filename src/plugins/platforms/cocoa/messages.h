@@ -24,7 +24,7 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 
-#include <QString>
+#include <qstring.h>
 #include <qplatform_menu.h>
 
 QString msgAboutCs();

@@ -25,33 +25,37 @@
 #define QCOCOAINPUTCONTEXT_H
 
 #include <qplatform_inputcontext.h>
-#include <QtCore/QLocale>
-#include <QtCore/QPointer>
+#include <QLocale>
+#include <QPointer>
 
 class QCocoaInputContext : public QPlatformInputContext
 {
-    CS_OBJECT(QCocoaInputContext)
+   CS_OBJECT(QCocoaInputContext)
 
-public:
-    explicit QCocoaInputContext();
-    ~QCocoaInputContext();
+ public:
+   explicit QCocoaInputContext();
+   ~QCocoaInputContext();
 
-    bool isValid() const override { return true; }
+   bool isValid() const override {
+      return true;
+   }
 
-    void reset() override;
+   void reset() override;
 
-    QLocale locale() const override { return m_locale; }
-    void updateLocale();
+   QLocale locale() const override {
+      return m_locale;
+   }
+   void updateLocale();
 
-private:
-    CS_SLOT_1(Private, void connectSignals())
-    CS_SLOT_2(connectSignals)
+ private:
+   CS_SLOT_1(Private, void connectSignals())
+   CS_SLOT_2(connectSignals)
 
-    CS_SLOT_1(Private, void focusObjectChanged(QObject * focusObject))
-    CS_SLOT_2(focusObjectChanged)
+   CS_SLOT_1(Private, void focusObjectChanged(QObject *focusObject))
+   CS_SLOT_2(focusObjectChanged)
 
-    QPointer<QWindow> mWindow;
-    QLocale m_locale;
+   QPointer<QWindow> mWindow;
+   QLocale m_locale;
 };
 
 

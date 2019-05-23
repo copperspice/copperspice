@@ -29,10 +29,8 @@
 #include <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
 
-#include <QtCore/QList>
-#include <QtGui/QKeyEvent>
-
-QT_BEGIN_NAMESPACE
+#include <QList>
+#include <QKeyEvent>
 
 /*
     \internal
@@ -55,39 +53,37 @@ QT_BEGIN_NAMESPACE
         16. Meta + Alt + Control + Shift
 */
 struct KeyboardLayoutItem {
-    bool dirty;
-    quint32 qtKey[16]; // Can by any Qt::Key_<foo>, or unicode character
+   bool dirty;
+   quint32 qtKey[16]; // Can by any Qt::Key_<foo>, or unicode character
 };
 
 
 class QCocoaKeyMapper
 {
-public:
-    QCocoaKeyMapper();
-    ~QCocoaKeyMapper();
-    static Qt::KeyboardModifiers queryKeyboardModifiers();
-    QList<int> possibleKeys(const QKeyEvent *event) const;
-    bool updateKeyboard();
-    void deleteLayouts();
-    void updateKeyMap(unsigned short macVirtualKey, QChar unicodeKey);
-    void clearMappings();
+ public:
+   QCocoaKeyMapper();
+   ~QCocoaKeyMapper();
+   static Qt::KeyboardModifiers queryKeyboardModifiers();
+   QList<int> possibleKeys(const QKeyEvent *event) const;
+   bool updateKeyboard();
+   void deleteLayouts();
+   void updateKeyMap(unsigned short macVirtualKey, QChar unicodeKey);
+   void clearMappings();
 
-private:
-    QCFType<TISInputSourceRef> currentInputSource;
+ private:
+   QCFType<TISInputSourceRef> currentInputSource;
 
-    QLocale keyboardInputLocale;
-    Qt::LayoutDirection keyboardInputDirection;
-    enum { NullMode, UnicodeMode, OtherMode } keyboard_mode;
-    union {
-        const UCKeyboardLayout *unicode;
-        void *other;
-    } keyboard_layout_format;
-    KeyboardLayoutKind keyboard_kind;
-    UInt32 keyboard_dead;
-    KeyboardLayoutItem *keyLayout[256];
+   QLocale keyboardInputLocale;
+   Qt::LayoutDirection keyboardInputDirection;
+   enum { NullMode, UnicodeMode, OtherMode } keyboard_mode;
+   union {
+      const UCKeyboardLayout *unicode;
+      void *other;
+   } keyboard_layout_format;
+   KeyboardLayoutKind keyboard_kind;
+   UInt32 keyboard_dead;
+   KeyboardLayoutItem *keyLayout[256];
 };
-
-QT_END_NAMESPACE
 
 #endif
 

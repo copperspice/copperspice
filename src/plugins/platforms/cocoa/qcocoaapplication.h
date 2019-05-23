@@ -33,22 +33,21 @@
 
 #import <AppKit/AppKit.h>
 
-@class QT_MANGLE_NAMESPACE(QCocoaMenuLoader);
+@class QCocoaMenuLoader;
 
 @interface NSApplication (QT_MANGLE_NAMESPACE(QApplicationIntegration))
-- (void)QT_MANGLE_NAMESPACE(qt_setDockMenu):(NSMenu *)newMenu;
+- (void)QT_MANGLE_NAMESPACE(qt_setDockMenu): (NSMenu *)newMenu;
 - (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader);
-- (int)QT_MANGLE_NAMESPACE(qt_validModesForFontPanel):(NSFontPanel *)fontPanel;
+- (int)QT_MANGLE_NAMESPACE(qt_validModesForFontPanel): (NSFontPanel *)fontPanel;
 
-- (void)QT_MANGLE_NAMESPACE(qt_sendPostedMessage):(NSEvent *)event;
-- (BOOL)QT_MANGLE_NAMESPACE(qt_filterEvent):(NSEvent *)event;
+- (void)QT_MANGLE_NAMESPACE(qt_sendPostedMessage): (NSEvent *)event;
+- (BOOL)QT_MANGLE_NAMESPACE(qt_filterEvent): (NSEvent *)event;
 @end
 
-@interface QT_MANGLE_NAMESPACE(QNSApplication) : NSApplication {
+@interface QT_MANGLE_NAMESPACE(QNSApplication) : NSApplication
+{
 }
 @end
-
-QT_NAMESPACE_ALIAS_OBJC_CLASS(QNSApplication);
 
 void qt_redirectNSApplicationSendEvent();
 void qt_resetNSApplicationSendEvent();

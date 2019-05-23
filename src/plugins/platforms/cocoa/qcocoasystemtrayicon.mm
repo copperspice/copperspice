@@ -30,443 +30,473 @@
 
 #define QT_MAC_SYSTEMTRAY_USE_GROWL
 
-#include "qcocoasystemtrayicon.h"
+#include <qcocoasystemtrayicon.h>
 #include <qtemporaryfile.h>
 #include <qimagewriter.h>
 #include <qdebug.h>
 
-#include "qcocoamenu.h"
+#include <qcocoamenu.h>
 
-#include "qt_mac_p.h"
-#include "qcocoahelpers.h"
+#include <qt_mac_p.h>
+#include <qcocoahelpers.h>
 
 #import <AppKit/AppKit.h>
 
-QT_USE_NAMESPACE
+@class QNSMenu;
+@class QNSImageView;
 
-@class QT_MANGLE_NAMESPACE(QNSMenu);
-@class QT_MANGLE_NAMESPACE(QNSImageView);
+@interface QNSStatusItem : NSObject
 
-@interface QT_MANGLE_NAMESPACE(QNSStatusItem) : NSObject
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    <NSUserNotificationCenterDelegate>
+   <NSUserNotificationCenterDelegate>
 #endif
-    {
-@public
-    QCocoaSystemTrayIcon *systray;
-    NSStatusItem *item;
-    QCocoaMenu *menu;
-    QIcon icon;
-    QT_MANGLE_NAMESPACE(QNSImageView) *imageCell;
+{
+ @public
+   QCocoaSystemTrayIcon *systray;
+   NSStatusItem *item;
+   QCocoaMenu *menu;
+   QIcon icon;
+   QNSImageView *imageCell;
 }
--(id)initWithSysTray:(QCocoaSystemTrayIcon *)systray;
+-(id)initWithSysTray: (QCocoaSystemTrayIcon *)systray;
 -(void)dealloc;
--(NSStatusItem*)item;
+-(NSStatusItem *)item;
 -(QRectF)geometry;
-- (void)triggerSelector:(id)sender button:(Qt::MouseButton)mouseButton;
-- (void)doubleClickSelector:(id)sender;
+- (void)triggerSelector: (id)sender button: (Qt::MouseButton)mouseButton;
+- (void)doubleClickSelector: (id)sender;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification;
-- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification;
+- (BOOL)userNotificationCenter: (NSUserNotificationCenter *)center shouldPresentNotification: (NSUserNotification *)notification;
+- (void)userNotificationCenter: (NSUserNotificationCenter *)center didActivateNotification: (NSUserNotification *)notification;
 #endif
 @end
 
-@interface QT_MANGLE_NAMESPACE(QNSImageView) : NSImageView {
-    BOOL down;
-    QT_MANGLE_NAMESPACE(QNSStatusItem) *parent;
+@interface QNSImageView : NSImageView
+{
+   BOOL down;
+   QNSStatusItem *parent;
 }
--(id)initWithParent:(QT_MANGLE_NAMESPACE(QNSStatusItem)*)myParent;
--(void)menuTrackingDone:(NSNotification*)notification;
--(void)mousePressed:(NSEvent *)mouseEvent button:(Qt::MouseButton)mouseButton;
+
+-(id)initWithParent: (QNSStatusItem *)myParent;
+-(void)menuTrackingDone: (NSNotification *)notification;
+-(void)mousePressed: (NSEvent *)mouseEvent button: (Qt::MouseButton)mouseButton;
 @end
 
-@interface QT_MANGLE_NAMESPACE(QNSMenu) : NSMenu <NSMenuDelegate> {
-    QPlatformMenu *qmenu;
+@interface QNSMenu : NSMenu <NSMenuDelegate>
+{
+   QPlatformMenu *qmenu;
 }
--(QPlatformMenu*)menu;
--(id)initWithQMenu:(QPlatformMenu*)qmenu;
+-(QPlatformMenu *)menu;
+-(id)initWithQMenu: (QPlatformMenu *)qmenu;
 @end
 
-QT_NAMESPACE_ALIAS_OBJC_CLASS(QNSStatusItem);
-QT_NAMESPACE_ALIAS_OBJC_CLASS(QNSImageView);
-QT_NAMESPACE_ALIAS_OBJC_CLASS(QNSMenu);
 
-QT_BEGIN_NAMESPACE
 class QSystemTrayIconSys
 {
-public:
-    QSystemTrayIconSys(QCocoaSystemTrayIcon *sys) {
-        item = [[QNSStatusItem alloc] initWithSysTray:sys];
+ public:
+   QSystemTrayIconSys(QCocoaSystemTrayIcon *sys) {
+      item = [[QNSStatusItem alloc] initWithSysTray: sys];
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-        if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-            [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:item];
-        }
+      if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
+         [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: item];
+      }
 #endif
-    }
-    ~QSystemTrayIconSys() {
-        [[[item item] view] setHidden: YES];
+   }
+   ~QSystemTrayIconSys() {
+      [[[item item] view] setHidden: YES];
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-        if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-            [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:nil];
-        }
+      if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
+         [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: nil];
+      }
 #endif
-        [item release];
-    }
-    QNSStatusItem *item;
+      [item release];
+   }
+   QNSStatusItem *item;
 };
 
 void QCocoaSystemTrayIcon::init()
 {
-    if (!m_sys)
-        m_sys = new QSystemTrayIconSys(this);
+   if (!m_sys) {
+      m_sys = new QSystemTrayIconSys(this);
+   }
 }
 
 QRect QCocoaSystemTrayIcon::geometry() const
 {
-    if (!m_sys)
-        return QRect();
+   if (!m_sys) {
+      return QRect();
+   }
 
-    const QRectF geom = [m_sys->item geometry];
-    if (!geom.isNull())
-        return geom.toRect();
-    else
-        return QRect();
+   const QRectF geom = [m_sys->item geometry];
+   if (!geom.isNull()) {
+      return geom.toRect();
+   } else {
+      return QRect();
+   }
 }
 
 void QCocoaSystemTrayIcon::cleanup()
 {
-    delete m_sys;
-    m_sys = 0;
+   delete m_sys;
+   m_sys = 0;
 }
 
-static bool heightCompareFunction (QSize a, QSize b) { return (a.height() < b.height()); }
+static bool heightCompareFunction (QSize a, QSize b)
+{
+   return (a.height() < b.height());
+}
 static QList<QSize> sortByHeight(const QList<QSize> &sizes)
 {
-    QList<QSize> sorted = sizes;
-    std::sort(sorted.begin(), sorted.end(), heightCompareFunction);
-    return sorted;
+   QList<QSize> sorted = sizes;
+   std::sort(sorted.begin(), sorted.end(), heightCompareFunction);
+   return sorted;
 }
 
 void QCocoaSystemTrayIcon::updateIcon(const QIcon &icon)
 {
-    if (!m_sys)
-        return;
+   if (!m_sys) {
+      return;
+   }
 
-    m_sys->item->icon = icon;
+   m_sys->item->icon = icon;
 
-    // The reccomended maximum title bar icon height is 18 points
-    // (device independent pixels). The menu height on past and
-    // current OS X versions is 22 points. Provide some future-proofing
-    // by deriving the icon height from the menu height.
-    const int padding = 4;
-    const int menuHeight = [[NSStatusBar systemStatusBar] thickness];
-    const int maxImageHeight = menuHeight - padding;
+   // The reccomended maximum title bar icon height is 18 points
+   // (device independent pixels). The menu height on past and
+   // current OS X versions is 22 points. Provide some future-proofing
+   // by deriving the icon height from the menu height.
+   const int padding = 4;
+   const int menuHeight = [[NSStatusBar systemStatusBar] thickness];
+   const int maxImageHeight = menuHeight - padding;
 
-    // Select pixmap based on the device pixel height. Ideally we would use
-    // the devicePixelRatio of the target screen, but that value is not
-    // known until draw time. Use qApp->devicePixelRatio, which returns the
-    // devicePixelRatio for the "best" screen on the system.
-    qreal devicePixelRatio = qApp->devicePixelRatio();
-    const int maxPixmapHeight = maxImageHeight * devicePixelRatio;
-    QSize selectedSize;
+   // Select pixmap based on the device pixel height. Ideally we would use
+   // the devicePixelRatio of the target screen, but that value is not
+   // known until draw time. Use qApp->devicePixelRatio, which returns the
+   // devicePixelRatio for the "best" screen on the system.
+   qreal devicePixelRatio = qApp->devicePixelRatio();
+   const int maxPixmapHeight = maxImageHeight * devicePixelRatio;
+   QSize selectedSize;
 
-    for (const QSize& size : sortByHeight(icon.availableSizes())) {
-        // Select a pixmap based on the height. We want the largest pixmap
-        // with a height smaller or equal to maxPixmapHeight. The pixmap
-        // may rectangular; assume it has a reasonable size. If there is
-        // not suitable pixmap use the smallest one the icon can provide.
-        if (size.height() <= maxPixmapHeight) {
+   for (const QSize &size : sortByHeight(icon.availableSizes())) {
+      // Select a pixmap based on the height. We want the largest pixmap
+      // with a height smaller or equal to maxPixmapHeight. The pixmap
+      // may rectangular; assume it has a reasonable size. If there is
+      // not suitable pixmap use the smallest one the icon can provide.
+      if (size.height() <= maxPixmapHeight) {
+         selectedSize = size;
+      } else {
+         if (!selectedSize.isValid()) {
             selectedSize = size;
-        } else {
-            if (!selectedSize.isValid())
-                selectedSize = size;
-            break;
-        }
-    }
+         }
+         break;
+      }
+   }
 
-    // Handle SVG icons, which do not return anything for availableSizes().
-    if (!selectedSize.isValid())
-        selectedSize = icon.actualSize(QSize(maxPixmapHeight, maxPixmapHeight));
+   // Handle SVG icons, which do not return anything for availableSizes().
+   if (!selectedSize.isValid()) {
+      selectedSize = icon.actualSize(QSize(maxPixmapHeight, maxPixmapHeight));
+   }
 
-    QPixmap pixmap = icon.pixmap(selectedSize);
+   QPixmap pixmap = icon.pixmap(selectedSize);
 
-    // Draw a low-resolution icon if there is not enough pixels for a retina
-    // icon. This prevents showing a small icon on retina displays.
-    if (devicePixelRatio > 1.0 && selectedSize.height() < maxPixmapHeight / 2)
-        devicePixelRatio = 1.0;
+   // Draw a low-resolution icon if there is not enough pixels for a retina
+   // icon. This prevents showing a small icon on retina displays.
+   if (devicePixelRatio > 1.0 && selectedSize.height() < maxPixmapHeight / 2) {
+      devicePixelRatio = 1.0;
+   }
 
-    // Scale large pixmaps to fit the available menu bar area.
-    if (pixmap.height() > maxPixmapHeight)
-        pixmap = pixmap.scaledToHeight(maxPixmapHeight, Qt::SmoothTransformation);
+   // Scale large pixmaps to fit the available menu bar area.
+   if (pixmap.height() > maxPixmapHeight) {
+      pixmap = pixmap.scaledToHeight(maxPixmapHeight, Qt::SmoothTransformation);
+   }
 
-    // The icon will be stretched over the full height of the menu bar
-    // therefore we create a second pixmap which has the full height
-    QSize fullHeightSize(!pixmap.isNull() ? pixmap.width():
-                                            menuHeight * devicePixelRatio,
-                         menuHeight * devicePixelRatio);
-    QPixmap fullHeightPixmap(fullHeightSize);
-    fullHeightPixmap.fill(Qt::transparent);
-    if (!pixmap.isNull()) {
-        QPainter p(&fullHeightPixmap);
-        QRect r = pixmap.rect();
-        r.moveCenter(fullHeightPixmap.rect().center());
-        p.drawPixmap(r, pixmap);
-    }
+   // The icon will be stretched over the full height of the menu bar
+   // therefore we create a second pixmap which has the full height
+   QSize fullHeightSize(!pixmap.isNull() ? pixmap.width() :
+      menuHeight * devicePixelRatio,
+      menuHeight * devicePixelRatio);
+   QPixmap fullHeightPixmap(fullHeightSize);
+   fullHeightPixmap.fill(Qt::transparent);
+   if (!pixmap.isNull()) {
+      QPainter p(&fullHeightPixmap);
+      QRect r = pixmap.rect();
+      r.moveCenter(fullHeightPixmap.rect().center());
+      p.drawPixmap(r, pixmap);
+   }
 
-    NSImage *nsimage = static_cast<NSImage *>(qt_mac_create_nsimage(fullHeightPixmap));
-    [nsimage setTemplate:icon.isMask()];
-    [(NSImageView*)[[m_sys->item item] view] setImage: nsimage];
-    [nsimage release];
+   NSImage *nsimage = static_cast<NSImage *>(qt_mac_create_nsimage(fullHeightPixmap));
+   [nsimage setTemplate: icon.isMask()];
+   [(NSImageView *)[[m_sys->item item] view] setImage: nsimage];
+   [nsimage release];
 }
 
 void QCocoaSystemTrayIcon::updateMenu(QPlatformMenu *menu)
 {
-    if (!m_sys)
-        return;
+   if (!m_sys) {
+      return;
+   }
 
-    m_sys->item->menu = static_cast<QCocoaMenu *>(menu);
-    if (menu && [m_sys->item->menu->nsMenu() numberOfItems] > 0) {
-        [[m_sys->item item] setHighlightMode:YES];
-    } else {
-        [[m_sys->item item] setHighlightMode:NO];
-    }
+   m_sys->item->menu = static_cast<QCocoaMenu *>(menu);
+   if (menu && [m_sys->item->menu->nsMenu() numberOfItems] > 0) {
+      [[m_sys->item item] setHighlightMode: YES];
+   } else {
+      [[m_sys->item item] setHighlightMode: NO];
+   }
 }
 
 void QCocoaSystemTrayIcon::updateToolTip(const QString &toolTip)
 {
-    if (!m_sys)
-        return;
-    [[[m_sys->item item] view] setToolTip:QCFString::toNSString(toolTip)];
+   if (!m_sys) {
+      return;
+   }
+   [[[m_sys->item item] view] setToolTip: QCFString::toNSString(toolTip)];
 }
 
 bool QCocoaSystemTrayIcon::isSystemTrayAvailable() const
 {
-    return true;
+   return true;
 }
 
 bool QCocoaSystemTrayIcon::supportsMessages() const
 {
-    return true;
+   return true;
 }
 
 void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &message,
-                                       const QIcon& icon, MessageIcon, int)
+   const QIcon &icon, MessageIcon, int)
 {
-    if (!m_sys)
-        return;
+   if (!m_sys) {
+      return;
+   }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-        NSUserNotification *notification = [[NSUserNotification alloc] init];
-        notification.title = [NSString stringWithUTF8String:title.toUtf8().data()];
-        notification.informativeText = [NSString stringWithUTF8String:message.toUtf8().data()];
+   if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
+      NSUserNotification *notification = [[NSUserNotification alloc] init];
+      notification.title = [NSString stringWithUTF8String: title.toUtf8().data()];
+      notification.informativeText = [NSString stringWithUTF8String: message.toUtf8().data()];
 
-        [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+      [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification: notification];
 
-        return;
-    }
+      return;
+   }
 #endif
 
 #ifdef QT_MAC_SYSTEMTRAY_USE_GROWL
-    // Make sure that we have Growl installed on the machine we are running on.
-    QCFType<CFURLRef> cfurl;
-    OSStatus status = LSGetApplicationForInfo(kLSUnknownType, kLSUnknownCreator,
-                                              CFSTR("growlTicket"), kLSRolesAll, 0, &cfurl);
-    if (status == kLSApplicationNotFoundErr)
-        return;
-    QCFType<CFBundleRef> bundle = CFBundleCreate(0, cfurl);
+   // Make sure that we have Growl installed on the machine we are running on.
+   QCFType<CFURLRef> cfurl;
+   OSStatus status = LSGetApplicationForInfo(kLSUnknownType, kLSUnknownCreator,
+         CFSTR("growlTicket"), kLSRolesAll, 0, &cfurl);
+   if (status == kLSApplicationNotFoundErr) {
+      return;
+   }
+   QCFType<CFBundleRef> bundle = CFBundleCreate(0, cfurl);
 
-    if (CFStringCompare(CFBundleGetIdentifier(bundle), CFSTR("com.Growl.GrowlHelperApp"),
-                kCFCompareCaseInsensitive |  kCFCompareBackwards) != kCFCompareEqualTo)
-        return;
-    QPixmap notificationIconPixmap = icon.pixmap(32, 32);
-    QTemporaryFile notificationIconFile;
-    QString notificationType(QLatin1String("Notification")), notificationIcon, notificationApp(qt_mac_applicationName());
-    if (notificationApp.isEmpty())
-        notificationApp = QLatin1String("Application");
-    if (!notificationIconPixmap.isNull() && notificationIconFile.open()) {
-        QImageWriter writer(&notificationIconFile, "PNG");
-        if (writer.write(notificationIconPixmap.toImage()))
-            notificationIcon = QLatin1String("image from location \"file://") + notificationIconFile.fileName() + QLatin1String("\"");
-    }
-    const QString script(QLatin1String(
-        "tell application \"System Events\"\n"
-        "set isRunning to (count of (every process whose bundle identifier is \"com.Growl.GrowlHelperApp\")) > 0\n"
-        "end tell\n"
-        "if isRunning\n"
-        "tell application id \"com.Growl.GrowlHelperApp\"\n"
-        "-- Make a list of all the notification types (all)\n"
-        "set the allNotificationsList to {\"") + notificationType + QLatin1String("\"}\n"
+   if (CFStringCompare(CFBundleGetIdentifier(bundle), CFSTR("com.Growl.GrowlHelperApp"),
+         kCFCompareCaseInsensitive |  kCFCompareBackwards) != kCFCompareEqualTo) {
+      return;
+   }
 
-        "-- Make a list of the notifications (enabled)\n"
-        "set the enabledNotificationsList to {\"") + notificationType + QLatin1String("\"}\n"
+   QPixmap notificationIconPixmap = icon.pixmap(32, 32);
+   QTemporaryFile notificationIconFile;
+   QString notificationType("Notification"), notificationIcon, notificationApp(qt_mac_applicationName());
 
-        "-- Register our script with growl.\n"
-        "register as application \"") + notificationApp + QLatin1String("\" all notifications allNotificationsList default notifications enabledNotificationsList\n"
+   if (notificationApp.isEmpty()) {
+      notificationApp = QLatin1String("Application");
+   }
+   if (!notificationIconPixmap.isNull() && notificationIconFile.open()) {
+      QImageWriter writer(&notificationIconFile, "PNG");
+      if (writer.write(notificationIconPixmap.toImage())) {
+         notificationIcon = QLatin1String("image from location \"file://") + notificationIconFile.fileName() + QLatin1String("\"");
+      }
+   }
+   const QString script(QLatin1String(
+         "tell application \"System Events\"\n"
+         "set isRunning to (count of (every process whose bundle identifier is \"com.Growl.GrowlHelperApp\")) > 0\n"
+         "end tell\n"
+         "if isRunning\n"
+         "tell application id \"com.Growl.GrowlHelperApp\"\n"
+         "-- Make a list of all the notification types (all)\n"
+         "set the allNotificationsList to {\"") + notificationType + QLatin1String("\"}\n"
 
-        "-- Send a Notification...\n") +
-        QLatin1String("notify with name \"") + notificationType +
-        QLatin1String("\" title \"") + title +
-        QLatin1String("\" description \"") + message +
-        QLatin1String("\" application name \"") + notificationApp +
-        QLatin1String("\" ")  + notificationIcon +
-        QLatin1String("\nend tell\nend if"));
-    qt_mac_execute_apple_script(script, 0);
+         "-- Make a list of the notifications (enabled)\n"
+         "set the enabledNotificationsList to {\"") + notificationType + QLatin1String("\"}\n"
+
+         "-- Register our script with growl.\n"
+         "register as application \"") + notificationApp +
+      QLatin1String("\" all notifications allNotificationsList default notifications enabledNotificationsList\n"
+
+         "-- Send a Notification...\n") +
+      QLatin1String("notify with name \"") + notificationType +
+      QLatin1String("\" title \"") + title +
+      QLatin1String("\" description \"") + message +
+      QLatin1String("\" application name \"") + notificationApp +
+      QLatin1String("\" ")  + notificationIcon +
+      QLatin1String("\nend tell\nend if"));
+   qt_mac_execute_apple_script(script, 0);
 #else
-    Q_UNUSED(icon);
-    Q_UNUSED(title);
-    Q_UNUSED(message);
+   Q_UNUSED(icon);
+   Q_UNUSED(title);
+   Q_UNUSED(message);
 #endif
 }
-QT_END_NAMESPACE
 
 @implementation NSStatusItem (Qt)
 @end
 
 @implementation QNSImageView
--(id)initWithParent:(QNSStatusItem*)myParent {
-    self = [super init];
-    parent = myParent;
-    down = NO;
-    return self;
-}
-
--(void)menuTrackingDone:(NSNotification*)notification
+-(id)initWithParent: (QNSStatusItem *)myParent
 {
-    Q_UNUSED(notification);
-    down = NO;
-
-    [self setNeedsDisplay:YES];
+   self = [super init];
+   parent = myParent;
+   down = NO;
+   return self;
 }
 
--(void)mousePressed:(NSEvent *)mouseEvent button:(Qt::MouseButton)mouseButton
+-(void)menuTrackingDone: (NSNotification *)notification
 {
-    down = YES;
-    int clickCount = [mouseEvent clickCount];
-    [self setNeedsDisplay:YES];
+   Q_UNUSED(notification);
+   down = NO;
 
-    if (clickCount == 2) {
-        [self menuTrackingDone:nil];
-        [parent doubleClickSelector:self];
-    } else {
-        [parent triggerSelector:self button:mouseButton];
-    }
+   [self setNeedsDisplay: YES];
 }
 
--(void)mouseDown:(NSEvent *)mouseEvent
+-(void)mousePressed: (NSEvent *)mouseEvent button: (Qt::MouseButton)mouseButton
 {
-    [self mousePressed:mouseEvent button:Qt::LeftButton];
+   down = YES;
+   int clickCount = [mouseEvent clickCount];
+   [self setNeedsDisplay: YES];
+
+   if (clickCount == 2) {
+      [self menuTrackingDone: nil];
+      [parent doubleClickSelector: self];
+   } else {
+      [parent triggerSelector: self button: mouseButton];
+   }
 }
 
--(void)mouseUp:(NSEvent *)mouseEvent
+-(void)mouseDown: (NSEvent *)mouseEvent
 {
-    Q_UNUSED(mouseEvent);
-    [self menuTrackingDone:nil];
+   [self mousePressed: mouseEvent button: Qt::LeftButton];
 }
 
-- (void)rightMouseDown:(NSEvent *)mouseEvent
+-(void)mouseUp: (NSEvent *)mouseEvent
 {
-    [self mousePressed:mouseEvent button:Qt::RightButton];
+   Q_UNUSED(mouseEvent);
+   [self menuTrackingDone: nil];
 }
 
--(void)rightMouseUp:(NSEvent *)mouseEvent
+- (void)rightMouseDown: (NSEvent *)mouseEvent
 {
-    Q_UNUSED(mouseEvent);
-    [self menuTrackingDone:nil];
+   [self mousePressed: mouseEvent button: Qt::RightButton];
 }
 
-- (void)otherMouseDown:(NSEvent *)mouseEvent
+-(void)rightMouseUp: (NSEvent *)mouseEvent
 {
-    [self mousePressed:mouseEvent button:cocoaButton2QtButton([mouseEvent buttonNumber])];
+   Q_UNUSED(mouseEvent);
+   [self menuTrackingDone: nil];
 }
 
--(void)otherMouseUp:(NSEvent *)mouseEvent
+- (void)otherMouseDown: (NSEvent *)mouseEvent
 {
-    Q_UNUSED(mouseEvent);
-    [self menuTrackingDone:nil];
+   [self mousePressed: mouseEvent button: cocoaButton2QtButton([mouseEvent buttonNumber])];
 }
 
--(void)drawRect:(NSRect)rect {
-    [[parent item] drawStatusBarBackgroundInRect:rect withHighlight:down];
-    [super drawRect:rect];
+-(void)otherMouseUp: (NSEvent *)mouseEvent
+{
+   Q_UNUSED(mouseEvent);
+   [self menuTrackingDone: nil];
+}
+
+-(void)drawRect: (NSRect)rect
+{
+   [[parent item] drawStatusBarBackgroundInRect: rect withHighlight: down];
+   [super drawRect: rect];
 }
 @end
 
 @implementation QNSStatusItem
 
--(id)initWithSysTray:(QCocoaSystemTrayIcon *)sys
+-(id)initWithSysTray: (QCocoaSystemTrayIcon *)sys
 {
-    self = [super init];
-    if (self) {
-        item = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength] retain];
-        menu = 0;
-        systray = sys;
-        imageCell = [[QNSImageView alloc] initWithParent:self];
-        [item setView: imageCell];
-    }
-    return self;
+   self = [super init];
+   if (self) {
+      item = [[[NSStatusBar systemStatusBar] statusItemWithLength: NSSquareStatusItemLength] retain];
+      menu = 0;
+      systray = sys;
+      imageCell = [[QNSImageView alloc] initWithParent: self];
+      [item setView: imageCell];
+   }
+   return self;
 }
 
--(void)dealloc {
-    [[NSStatusBar systemStatusBar] removeStatusItem:item];
-    [[NSNotificationCenter defaultCenter] removeObserver:imageCell];
-    [imageCell release];
-    [item release];
-    [super dealloc];
+-(void)dealloc
+{
+   [[NSStatusBar systemStatusBar] removeStatusItem: item];
+   [[NSNotificationCenter defaultCenter] removeObserver: imageCell];
+   [imageCell release];
+   [item release];
+   [super dealloc];
 
 }
 
--(NSStatusItem*)item {
-    return item;
+-(NSStatusItem *)item
+{
+   return item;
 }
--(QRectF)geometry {
-    if (NSWindow *window = [[item view] window]) {
-        NSRect screenRect = [[window screen] frame];
-        NSRect windowRect = [window frame];
-        return QRectF(windowRect.origin.x, screenRect.size.height-windowRect.origin.y-windowRect.size.height, windowRect.size.width, windowRect.size.height);
-    }
-    return QRectF();
-}
-
-- (void)triggerSelector:(id)sender button:(Qt::MouseButton)mouseButton {
-    Q_UNUSED(sender);
-    if (!systray)
-        return;
-
-    if (mouseButton == Qt::MidButton)
-        emit systray->activated(QPlatformSystemTrayIcon::MiddleClick);
-    else
-        emit systray->activated(QPlatformSystemTrayIcon::Trigger);
-
-    if (menu) {
-        NSMenu *m = menu->nsMenu();
-        [[NSNotificationCenter defaultCenter] addObserver:imageCell
-         selector:@selector(menuTrackingDone:)
-             name:NSMenuDidEndTrackingNotification
-                 object:m];
-        [item popUpStatusItemMenu: m];
-    }
+-(QRectF)geometry
+{
+   if (NSWindow *window = [[item view] window]) {
+      NSRect screenRect = [[window screen] frame];
+      NSRect windowRect = [window frame];
+      return QRectF(windowRect.origin.x, screenRect.size.height - windowRect.origin.y - windowRect.size.height, windowRect.size.width,
+            windowRect.size.height);
+   }
+   return QRectF();
 }
 
-- (void)doubleClickSelector:(id)sender {
-    Q_UNUSED(sender);
-    if (!systray)
-        return;
-    emit systray->activated(QPlatformSystemTrayIcon::DoubleClick);
+- (void)triggerSelector: (id)sender button: (Qt::MouseButton)mouseButton
+{
+   if (!systray) {
+      return;
+   }
+
+   if (mouseButton == Qt::MiddleButton) {
+      emit systray->activated(QPlatformSystemTrayIcon::MiddleClick);
+   } else {
+      emit systray->activated(QPlatformSystemTrayIcon::Trigger);
+   }
+
+   if (menu) {
+      NSMenu *m = menu->nsMenu();
+      [[NSNotificationCenter defaultCenter] addObserver: imageCell
+                                               selector: @selector(menuTrackingDone:)
+                                                   name: NSMenuDidEndTrackingNotification
+                                                 object: m];
+      [item popUpStatusItemMenu: m];
+   }
+}
+
+- (void)doubleClickSelector: (id)sender
+{
+   Q_UNUSED(sender);
+   if (!systray) {
+      return;
+   }
+   emit systray->activated(QPlatformSystemTrayIcon::DoubleClick);
 }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
-    Q_UNUSED(center);
-    Q_UNUSED(notification);
-    return YES;
+- (BOOL)userNotificationCenter: (NSUserNotificationCenter *)center shouldPresentNotification: (NSUserNotification *)notification
+{
+   Q_UNUSED(center);
+   Q_UNUSED(notification);
+   return YES;
 }
 
-- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
-    Q_UNUSED(center);
-    Q_UNUSED(notification);
-    emit systray->messageClicked();
+- (void)userNotificationCenter: (NSUserNotificationCenter *)center didActivateNotification: (NSUserNotification *)notification
+{
+   Q_UNUSED(center);
+   Q_UNUSED(notification);
+   emit systray->messageClicked();
 }
 #endif
 
@@ -474,22 +504,26 @@ QT_END_NAMESPACE
 
 class QSystemTrayIconQMenu : public QPlatformMenu
 {
-public:
-    void doAboutToShow() { emit aboutToShow(); }
-private:
-    QSystemTrayIconQMenu();
+ public:
+   void doAboutToShow() {
+      emit aboutToShow();
+   }
+ private:
+   QSystemTrayIconQMenu();
 };
 
 @implementation QNSMenu
--(id)initWithQMenu:(QPlatformMenu*)qm {
-    self = [super init];
-    if (self) {
-        self->qmenu = qm;
-        [self setDelegate:self];
-    }
-    return self;
+-(id)initWithQMenu: (QPlatformMenu *)qm
+{
+   self = [super init];
+   if (self) {
+      self->qmenu = qm;
+      [self setDelegate: self];
+   }
+   return self;
 }
--(QPlatformMenu*)menu {
-    return qmenu;
+-(QPlatformMenu *)menu
+{
+   return qmenu;
 }
 @end

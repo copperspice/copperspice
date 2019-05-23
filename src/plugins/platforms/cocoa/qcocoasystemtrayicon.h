@@ -24,39 +24,35 @@
 #ifndef QCOCOASYSTEMTRAYICON_P_H
 #define QCOCOASYSTEMTRAYICON_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include "QtCore/qstring.h"
-#include "QtGui/qpa/qplatformsystemtrayicon.h"
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qplatform_systemtrayicon.h>
 
 class QSystemTrayIconSys;
 
 class Q_GUI_EXPORT QCocoaSystemTrayIcon : public QPlatformSystemTrayIcon
 {
-public:
-    QCocoaSystemTrayIcon() : m_sys(0) {}
+ public:
+   QCocoaSystemTrayIcon() : m_sys(0) {}
 
-    void init() override;
-    void cleanup() override;
-    void updateIcon(const QIcon &icon) override;
-    void updateToolTip(const QString &toolTip) override;
-    void updateMenu(QPlatformMenu *menu) override;
-    QRect geometry() const override;
-    void showMessage(const QString &title, const QString &msg,
-                     const QIcon& icon, MessageIcon iconType, int secs) override;
+   void init() override;
+   void cleanup() override;
+   void updateIcon(const QIcon &icon) override;
+   void updateToolTip(const QString &toolTip) override;
+   void updateMenu(QPlatformMenu *menu) override;
+   QRect geometry() const override;
+   void showMessage(const QString &title, const QString &msg,
+      const QIcon &icon, MessageIcon iconType, int secs) override;
 
-    bool isSystemTrayAvailable() const override;
-    bool supportsMessages() const override;
+   bool isSystemTrayAvailable() const override;
+   bool supportsMessages() const override;
 
-private:
-    QSystemTrayIconSys *m_sys;
+ private:
+   QSystemTrayIconSys *m_sys;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SYSTEMTRAYICON
 

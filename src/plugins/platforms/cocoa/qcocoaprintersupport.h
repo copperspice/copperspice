@@ -25,27 +25,25 @@
 #define QCOCOAPRINTERSUPPORT_H
 
 #include <qplatform_printersupport.h>
+
 #ifndef QT_NO_PRINTER
 
-#include "qt_mac_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qt_mac_p.h>
 
 class QCocoaPrinterSupport : public QPlatformPrinterSupport
 {
-public:
-    QCocoaPrinterSupport();
-    ~QCocoaPrinterSupport();
+ public:
+   QCocoaPrinterSupport();
+   ~QCocoaPrinterSupport();
 
-    QPrintEngine *createNativePrintEngine(QPrinter::PrinterMode printerMode) override;
-    QPaintEngine *createPaintEngine(QPrintEngine *, QPrinter::PrinterMode printerMode) override;
+   QPrintEngine *createNativePrintEngine(QPrinter::PrinterMode printerMode) override;
+   QPaintEngine *createPaintEngine(QPrintEngine *, QPrinter::PrinterMode printerMode) override;
 
-    QPrintDevice createPrintDevice(const QString &id) override;
-    QStringList availablePrintDeviceIds() const override;
-    QString defaultPrintDeviceId() const override;
+   QPrintDevice createPrintDevice(const QString &id) override;
+   QStringList availablePrintDeviceIds() const override;
+   QString defaultPrintDeviceId() const override;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_PRINTER
-#endif // QCOCOAPRINTERSUPPORT_H
+
+#endif

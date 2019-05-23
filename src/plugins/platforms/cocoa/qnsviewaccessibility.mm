@@ -38,37 +38,43 @@
 
 @implementation QNSView (QNSViewAccessibility)
 
-- (id)childAccessibleElement {
-    if (!m_window->accessibleRoot())
-        return nil;
+- (id)childAccessibleElement
+{
+   if (!m_window->accessibleRoot()) {
+      return nil;
+   }
 
-    QAccessible::Id childId = QAccessible::uniqueId(m_window->accessibleRoot());
-    return [QMacAccessibilityElement elementWithId: childId];
+   QAccessible::Id childId = QAccessible::uniqueId(m_window->accessibleRoot());
+   return [QMacAccessibilityElement elementWithId: childId];
 }
 
 // The QNSView is a container that the user does not interact directly with:
 // Remove it from the user-visible accessibility tree.
-- (BOOL)accessibilityIsIgnored {
-    return YES;
+- (BOOL)accessibilityIsIgnored
+{
+   return YES;
 }
 
-- (id)accessibilityAttributeValue:(NSString *)attribute {
-    // activate accessibility updates
-    QCocoaIntegration::instance()->accessibility()->setActive(true);
+- (id)accessibilityAttributeValue: (NSString *)attribute
+{
+   // activate accessibility updates
+   QCocoaIntegration::instance()->accessibility()->setActive(true);
 
-    if ([attribute isEqualToString:NSAccessibilityChildrenAttribute]) {
-        return NSAccessibilityUnignoredChildrenForOnlyChild([self childAccessibleElement]);
-    } else {
-        return [super accessibilityAttributeValue:attribute];
-    }
+   if ([attribute isEqualToString: NSAccessibilityChildrenAttribute]) {
+      return NSAccessibilityUnignoredChildrenForOnlyChild([self childAccessibleElement]);
+   } else {
+      return [super accessibilityAttributeValue: attribute];
+   }
 }
 
-- (id)accessibilityHitTest:(NSPoint)point {
-    return [[self childAccessibleElement] accessibilityHitTest: point];
+- (id)accessibilityHitTest: (NSPoint)point
+{
+   return [[self childAccessibleElement] accessibilityHitTest: point];
 }
 
-- (id)accessibilityFocusedUIElement {
-    return [[self childAccessibleElement] accessibilityFocusedUIElement];
+- (id)accessibilityFocusedUIElement
+{
+   return [[self childAccessibleElement] accessibilityFocusedUIElement];
 }
 
 @end
