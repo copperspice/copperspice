@@ -26,16 +26,13 @@
 
 #include <qframe.h>
 #include <qsizepolicy.h>
-
-
+#include <qcontainerfwd.h>
 
 #ifndef QT_NO_SPLITTER
 
 class QTextStream;
 class QSplitterPrivate;
 class QSplitterHandlePrivate;
-
-template <typename T> class QList;
 class QSplitterHandle;
 
 class Q_GUI_EXPORT QSplitter : public QFrame
@@ -123,7 +120,7 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
    GUI_CS_OBJECT(QSplitterHandle)
 
  public:
-   QSplitterHandle(Qt::Orientation o, QSplitter *parent);
+   explicit QSplitterHandle(Qt::Orientation o, QSplitter *parent);
    ~QSplitterHandle();
    void setOrientation(Qt::Orientation o);
    Qt::Orientation orientation() const;
