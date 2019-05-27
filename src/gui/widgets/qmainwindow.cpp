@@ -466,16 +466,17 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 
    Q_D(QMainWindow);
 
-   disconnect(this, SIGNAL(iconSizeChanged(QSize)), toolbar, SLOT(_q_updateIconSize(QSize)));
-   disconnect(this, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)), toolbar,
-      SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+   disconnect(this, &QMainWindow::iconSizeChanged,        toolbar, &QToolBar::_q_updateIconSize);
+   disconnect(this, &QMainWindow::toolButtonStyleChanged, toolbar, &QToolBar::_q_updateToolButtonStyle);
 
    if (toolbar->d_func()->state && toolbar->d_func()->state->dragging) {
       //removing a toolbar which is dragging will cause crash
+
 #ifndef QT_NO_DOCKWIDGET
       bool animated = isAnimated();
       setAnimated(false);
 #endif
+
       toolbar->d_func()->endDrag();
 #ifndef QT_NO_DOCKWIDGET
       setAnimated(animated);
@@ -490,10 +491,9 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 
    toolbar->d_func()->_q_updateIconSize(d->iconSize);
    toolbar->d_func()->_q_updateToolButtonStyle(d->toolButtonStyle);
-   connect(this, SIGNAL(iconSizeChanged(QSize)), toolbar, SLOT(_q_updateIconSize(QSize)));
 
-   connect(this, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)),
-      toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+   connect(this, &QMainWindow::iconSizeChanged,        toolbar, &QToolBar::_q_updateIconSize);
+   connect(this, &QMainWindow::toolButtonStyleChanged, toolbar, &QToolBar::_q_updateToolButtonStyle);
 
    d->layout->addToolBar(area, toolbar);
 }
@@ -538,10 +538,9 @@ void QMainWindow::insertToolBar(QToolBar *before, QToolBar *toolbar)
 
    toolbar->d_func()->_q_updateIconSize(d->iconSize);
    toolbar->d_func()->_q_updateToolButtonStyle(d->toolButtonStyle);
-   connect(this, SIGNAL(iconSizeChanged(QSize)), toolbar, SLOT(_q_updateIconSize(QSize)));
 
-   connect(this, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)),
-      toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+   connect(this, &QMainWindow::iconSizeChanged,        toolbar, &QToolBar::_q_updateIconSize);
+   connect(this, &QMainWindow::toolButtonStyleChanged, toolbar, &QToolBar::_q_updateToolButtonStyle);
 
    d->layout->insertToolBar(before, toolbar);
 }

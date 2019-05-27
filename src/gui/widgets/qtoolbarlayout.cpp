@@ -69,7 +69,7 @@ QToolBarLayout::QToolBarLayout(QWidget *parent)
    extension = new QToolBarExtension(tb);
    extension->setFocusPolicy(Qt::NoFocus);
    extension->hide();
-   QObject::connect(tb, SIGNAL(orientationChanged(Qt::Orientation)), extension, SLOT(setOrientation(Qt::Orientation)));
+   QObject::connect(tb, &QToolBar::orientationChanged, extension, &QToolBarExtension::setOrientation);
 
    setUsePopupMenu(qobject_cast<QMainWindow *>(tb->parentWidget()) == 0);
 }
@@ -111,20 +111,26 @@ void QToolBarLayout::setUsePopupMenu(bool set)
    if (!dirty && ((popupMenu == 0) == set)) {
       invalidate();
    }
-   if (!set) {
-      QObject::connect(extension, SIGNAL(clicked(bool)),
-         this, SLOT(setExpanded(bool)), Qt::UniqueConnection);
+
+   if (! set) {
+      QObject::connect(extension, &QToolBarExtension::clicked, this,
+                  &QToolBarLayout::setExpanded, Qt::UniqueConnection);
+
       extension->setPopupMode(QToolButton::DelayedPopup);
       extension->setMenu(0);
       delete popupMenu;
       popupMenu = 0;
+
    } else {
-      QObject::disconnect(extension, SIGNAL(clicked(bool)),
-         this, SLOT(setExpanded(bool)));
+      QObject::disconnect(extension, &QToolBarExtension::clicked, this,
+                  &QToolBarLayout::setExpanded);
+
       extension->setPopupMode(QToolButton::InstantPopup);
+
       if (!popupMenu) {
          popupMenu = new QMenu(extension);
       }
+
       extension->setMenu(popupMenu);
    }
 }
@@ -747,10 +753,10 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
          widget->setAttribute(Qt::WA_LayoutUsesWidgetRect);
          customWidget = true;
       }
+
    } else if (action->isSeparator()) {
       QToolBarSeparator *sep = new QToolBarSeparator(tb);
-      connect(tb, SIGNAL(orientationChanged(Qt::Orientation)),
-         sep, SLOT(setOrientation(Qt::Orientation)));
+      connect(tb, &QToolBar::orientationChanged, sep, &QToolBarSeparator::setOrientation);
       widget = sep;
    }
 
@@ -761,12 +767,11 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
       button->setIconSize(tb->iconSize());
       button->setToolButtonStyle(tb->toolButtonStyle());
 
-      QObject::connect(tb, SIGNAL(iconSizeChanged(QSize)), button, SLOT(setIconSize(QSize)));
-      QObject::connect(tb, SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)), button,
-         SLOT(setToolButtonStyle(Qt::ToolButtonStyle)));
+      QObject::connect(tb, &QToolBar::iconSizeChanged,        button, &QToolButton::setIconSize);
+      QObject::connect(tb, &QToolBar::toolButtonStyleChanged, button, &QToolButton::setToolButtonStyle);
 
       button->setDefaultAction(action);
-      QObject::connect(button, SIGNAL(triggered(QAction *)), tb, SLOT(actionTriggered(QAction *)));
+      QObject::connect(button, &QToolButton::triggered, tb, &QToolBar::actionTriggered);
 
       widget = button;
       standardButtonWidget = true;
