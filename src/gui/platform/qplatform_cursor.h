@@ -87,7 +87,7 @@ class Q_GUI_EXPORT QPlatformCursor : public QObject
  private:
    Q_DECLARE_PRIVATE(QPlatformCursor)
 
-   friend void qt_qpa_set_cursor(QWidget *w, bool force);
+   friend void cs_internal_set_cursor(QWidget *w, bool force);
    friend class QApplicationPrivate;
 };
 

@@ -1514,6 +1514,7 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
          // (downest on the screen)
       }
    }
+
    //check that we will not call qt_x11_enforce_cursor twice with the same native widget
    if (parentOfLeavingCursor && (!enterOnAlien
          || parentOfLeavingCursor->effectiveWinId() != enter->effectiveWinId())) {
@@ -1522,9 +1523,9 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
 #endif
       {
          if (enter == QApplication::desktop()) {
-            qt_qpa_set_cursor(enter, true);
+            cs_internal_set_cursor(enter, true);
          } else {
-            qt_qpa_set_cursor(parentOfLeavingCursor, true);
+            cs_internal_set_cursor(parentOfLeavingCursor, true);
          }
       }
    }
@@ -1544,7 +1545,7 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
       } else
 #endif
       {
-         qt_qpa_set_cursor(cursorWidget, true);
+         cs_internal_set_cursor(cursorWidget, true);
       }
    }
 #endif

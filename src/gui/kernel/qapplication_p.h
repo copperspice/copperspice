@@ -144,7 +144,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
       return platform_theme;
    }
 
-   static QAbstractEventDispatcher *qt_qpa_core_dispatcher() {
+   static QAbstractEventDispatcher *cs_internal_core_dispatcher() {
       if (QCoreApplication::instance()) {
          return CSInternalThreadData::get_m_ThreadData(QCoreApplication::instance())->eventDispatcher;
       } else {
@@ -499,8 +499,6 @@ Q_GUI_EXPORT uint qHash(const QApplicationPrivate::ActiveTouchPointsKey &k);
 Q_GUI_EXPORT bool operator==(const QApplicationPrivate::ActiveTouchPointsKey &a,
    const QApplicationPrivate::ActiveTouchPointsKey &b);
 
-
-extern void qt_qpa_set_cursor(QWidget *w, bool force);
-
+extern void cs_internal_set_cursor(QWidget *w, bool force);
 
 #endif

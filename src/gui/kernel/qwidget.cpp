@@ -2486,7 +2486,7 @@ void QWidgetPrivate::setEnabled_helper(bool enable)
 #ifndef QT_NO_CURSOR
    if (q->testAttribute(Qt::WA_SetCursor) || q->isWindow()) {
       // enforce the windows behavior of clearing the cursor on disabled widgets
-      qt_qpa_set_cursor(q, false);
+      cs_internal_set_cursor(q, false);
    }
 #endif
 #ifndef QT_NO_IM
@@ -3385,7 +3385,7 @@ void QWidget::setCursor(const QCursor &cursor)
 void QWidgetPrivate::setCursor_sys(const QCursor &cursor)
 {
    Q_Q(QWidget);
-   qt_qpa_set_cursor(q, false);
+   cs_internal_set_cursor(q, false);
 }
 void QWidget::unsetCursor()
 {
@@ -3406,7 +3406,7 @@ void QWidget::unsetCursor()
 void QWidgetPrivate::unsetCursor_sys()
 {
    Q_Q(QWidget);
-   qt_qpa_set_cursor(q, false);
+   cs_internal_set_cursor(q, false);
 }
 
 static inline void applyCursor(QWidget *w, QCursor c)
@@ -3423,7 +3423,7 @@ static inline void unsetCursor(QWidget *w)
    }
 }
 
-void qt_qpa_set_cursor(QWidget *w, bool force)
+void cs_internal_set_cursor(QWidget *w, bool force)
 {
    if (!w->testAttribute(Qt::WA_WState_Created)) {
       return;
@@ -5901,7 +5901,7 @@ void QWidgetPrivate::show_sys()
       }
 
 #ifndef QT_NO_CURSOR
-      qt_qpa_set_cursor(q, false); // Needed in case cursor was set before show
+      cs_internal_set_cursor(q, false); // Needed in case cursor was set before show
 #endif
       invalidateBuffer(q->rect());
       window->setVisible(true);

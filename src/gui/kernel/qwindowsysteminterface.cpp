@@ -406,7 +406,8 @@ void QWindowSystemInterfacePrivate::removeWindowSystemEvent(WindowSystemEvent *e
 void QWindowSystemInterfacePrivate::postWindowSystemEvent(WindowSystemEvent *ev)
 {
    windowSystemEventQueue.append(ev);
-   QAbstractEventDispatcher *dispatcher = QGuiApplicationPrivate::qt_qpa_core_dispatcher();
+   QAbstractEventDispatcher *dispatcher = QGuiApplicationPrivate::cs_internal_core_dispatcher();
+
    if (dispatcher) {
       dispatcher->wakeUp();
    }
