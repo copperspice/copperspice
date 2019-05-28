@@ -470,8 +470,8 @@ QWindowsCursor::PixmapCursor QWindowsCursor::customCursor(Qt::CursorShape cursor
       return PixmapCursor();
    }
 
-   const QPixmap rawImage(QString(":/qt-project.org/windows/cursors/images/") +
-      QString::fromLatin1(bestFit->fileName));
+   const QPixmap rawImage(":/copperspice/windows/cursors/images/" + QString::fromLatin1(bestFit->fileName));
+
    return PixmapCursor(rawImage, QPoint(bestFit->hotSpotX, bestFit->hotSpotY));
 }
 #endif // QT_NO_IMAGEFORMAT_PNG
