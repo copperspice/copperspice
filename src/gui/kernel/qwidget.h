@@ -428,10 +428,10 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setForegroundRole(QPalette::ColorRole);
    QPalette::ColorRole foregroundRole() const;
 
-   inline const QFont &font() const;
+   const QFont &font() const;
    void setFont(const QFont &);
-   inline QFontMetrics fontMetrics() const;
-   inline QFontInfo fontInfo() const;
+   QFontMetrics fontMetrics() const;
+   QFontInfo fontInfo() const;
 
 #ifndef QT_NO_CURSOR
    QCursor cursor() const;
@@ -439,9 +439,9 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void unsetCursor();
 #endif
 
-   inline void setMouseTracking(bool enable);
-   inline bool hasMouseTracking() const;
-   inline bool underMouse() const;
+   void setMouseTracking(bool enable);
+   bool hasMouseTracking() const;
+   bool underMouse() const;
 
    void setMask(const QBitmap &);
    void setMask(const QRegion &);

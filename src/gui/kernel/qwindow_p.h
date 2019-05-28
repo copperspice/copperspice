@@ -68,7 +68,7 @@ class Q_GUI_EXPORT QWindowPrivate
    void maybeQuitOnLastWindowClosed();
 
 #ifndef QT_NO_CURSOR
-   void setCursor(const QCursor *c = 0);
+   void setCursor(const QCursor *c = nullptr);
    bool applyCursor();
 #endif
 

@@ -44,6 +44,7 @@ QPoint QCursor::pos(const QScreen *screen)
          return QHighDpi::fromNativePixels(nativePos, ps->screen());
       }
    }
+
    return QGuiApplicationPrivate::lastCursorPosition.toPoint();
 }
 
@@ -168,7 +169,7 @@ QCursor::QCursor()
 QCursor::QCursor(Qt::CursorShape shape)
    : d(0)
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
 
@@ -177,7 +178,7 @@ QCursor::QCursor(Qt::CursorShape shape)
 
 Qt::CursorShape QCursor::shape() const
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
    return d->cshape;
@@ -185,20 +186,23 @@ Qt::CursorShape QCursor::shape() const
 
 void QCursor::setShape(Qt::CursorShape shape)
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
 
    QCursorData *c = uint(shape) <= Qt::LastCursor ? qt_cursorTable[shape] : 0;
 
-   if (!c) {
+   if (! c) {
       c = qt_cursorTable[0];
    }
+
    c->ref.ref();
-   if (!d) {
+
+   if (! d) {
       d = c;
+
    } else {
-      if (!d->ref.deref()) {
+      if (! d->ref.deref()) {
          delete d;
       }
       d = c;
@@ -207,7 +211,7 @@ void QCursor::setShape(Qt::CursorShape shape)
 
 const QBitmap *QCursor::bitmap() const
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
    return d->bm;
@@ -218,25 +222,23 @@ const QBitmap *QCursor::mask() const
    if (!QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    return d->bmm;
 }
 
-/*!
-    Returns the cursor pixmap. This is only valid if the cursor is a
-    pixmap cursor.
-*/
 
 QPixmap QCursor::pixmap() const
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    return d->pixmap;
 }
 
 QPoint QCursor::hotSpot() const
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
    return QPoint(d->hx, d->hy);
@@ -244,7 +246,7 @@ QPoint QCursor::hotSpot() const
 
 QCursor::QCursor(const QCursor &c)
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
 
@@ -254,7 +256,7 @@ QCursor::QCursor(const QCursor &c)
 
 QCursor::~QCursor()
 {
-   if (d && !d->ref.deref()) {
+   if (d && ! d->ref.deref()) {
       delete d;
    }
 }
@@ -264,13 +266,17 @@ QCursor &QCursor::operator=(const QCursor &c)
    if (!QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    if (c.d) {
       c.d->ref.ref();
    }
+
    if (d && !d->ref.deref()) {
       delete d;
    }
+
    d = c.d;
+
    return *this;
 }
 
@@ -307,12 +313,14 @@ void QCursorData::cleanup()
    if (!QCursorData::initialized) {
       return;
    }
+
    for (int shape = 0; shape <= Qt::LastCursor; ++shape) {
       if (!qt_cursorTable[shape]->ref.deref()) {
          delete qt_cursorTable[shape];
       }
       qt_cursorTable[shape] = 0;
    }
+
    QCursorData::initialized = false;
 }
 
@@ -321,23 +329,27 @@ void QCursorData::initialize()
    if (QCursorData::initialized) {
       return;
    }
+
    for (int shape = 0; shape <= Qt::LastCursor; ++shape) {
       qt_cursorTable[shape] = new QCursorData((Qt::CursorShape)shape);
    }
+
    QCursorData::initialized = true;
 }
 
 QCursorData *QCursorData::setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY, qreal devicePixelRatio)
 {
-   if (!QCursorData::initialized) {
+   if (! QCursorData::initialized) {
       QCursorData::initialize();
    }
+
    if (bitmap.depth() != 1 || mask.depth() != 1 || bitmap.size() != mask.size()) {
       qWarning("QCursor: Cannot create bitmap cursor; invalid bitmap(s)");
       QCursorData *c = qt_cursorTable[0];
       c->ref.ref();
       return c;
    }
+
    QCursorData *d = new QCursorData;
    d->bm  = new QBitmap(bitmap);
    d->bmm = new QBitmap(mask);

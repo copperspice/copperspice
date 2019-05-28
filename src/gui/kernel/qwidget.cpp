@@ -2468,8 +2468,8 @@ void QWidgetPrivate::setEnabled_helper(bool enable)
    updateSystemBackground();
 
    if (!enable && q->window()->focusWidget() == q) {
-      bool parentIsEnabled = (!q->parentWidget() || q->parentWidget()->isEnabled());
-      if (!parentIsEnabled || !q->focusNextChild()) {
+      bool parentIsEnabled = (! q->parentWidget() || q->parentWidget()->isEnabled());
+      if (! parentIsEnabled || ! q->focusNextChild()) {
          q->clearFocus();
       }
    }
@@ -3354,13 +3354,14 @@ void QWidget::unsetLayoutDirection()
 QCursor QWidget::cursor() const
 {
    Q_D(const QWidget);
+
    if (testAttribute(Qt::WA_SetCursor))
       return (d->extra && d->extra->curs)
-         ? *d->extra->curs
-         : QCursor(Qt::ArrowCursor);
-   if (isWindow() || !parentWidget()) {
+         ? *d->extra->curs : QCursor(Qt::ArrowCursor);
+   if (isWindow() || ! parentWidget()) {
       return QCursor(Qt::ArrowCursor);
    }
+
    return parentWidget()->cursor();
 }
 
@@ -3394,9 +3395,11 @@ void QWidget::unsetCursor()
       delete d->extra->curs;
       d->extra->curs = 0;
    }
-   if (!isWindow()) {
+
+   if (! isWindow()) {
       setAttribute(Qt::WA_SetCursor, false);
    }
+
    d->unsetCursor_sys();
 
    QEvent event(QEvent::CursorChange);
@@ -3425,45 +3428,55 @@ static inline void unsetCursor(QWidget *w)
 
 void cs_internal_set_cursor(QWidget *w, bool force)
 {
-   if (!w->testAttribute(Qt::WA_WState_Created)) {
+   if (! w->testAttribute(Qt::WA_WState_Created)) {
       return;
    }
 
    static QPointer<QWidget> lastUnderMouse = 0;
+
    if (force) {
       lastUnderMouse = w;
+
    } else if (lastUnderMouse) {
       const WId lastWinId = lastUnderMouse->effectiveWinId();
       const WId winId = w->effectiveWinId();
+
       if (lastWinId && lastWinId == winId) {
          w = lastUnderMouse;
       }
-   } else if (!w->internalWinId()) {
-      return; // The mouse is not under this widget, and it's not native, so don't change it.
+
+   } else if (! w->internalWinId()) {
+      return; // mouse is not under this widget and it is not native, do not change it
    }
 
-   while (!w->internalWinId() && w->parentWidget() && !w->isWindow()
-      && !w->testAttribute(Qt::WA_SetCursor)) {
+   while (! w->internalWinId() && w->parentWidget() && ! w->isWindow()
+                  && ! w->testAttribute(Qt::WA_SetCursor)) {
       w = w->parentWidget();
    }
 
+
+// BROOM
+// qDebug("BROOM - do not change cursor");
+
+
    QWidget *nativeParent = w;
-   if (!w->internalWinId()) {
+   if (! w->internalWinId()) {
       nativeParent = w->nativeParentWidget();
    }
-   if (!nativeParent || !nativeParent->internalWinId()) {
+
+   if (! nativeParent || ! nativeParent->internalWinId()) {
       return;
    }
 
    if (w->isWindow() || w->testAttribute(Qt::WA_SetCursor)) {
       if (w->isEnabled()) {
          applyCursor(nativeParent, w->cursor());
-      } else
-         // Enforce the windows behavior of clearing the cursor on
-         // disabled widgets.
-      {
+
+      } else {
+         // enforce the windows behavior of clearing the cursor on disabled widgets
          unsetCursor(nativeParent);
       }
+
    } else {
       unsetCursor(nativeParent);
    }
@@ -5905,10 +5918,12 @@ void QWidgetPrivate::show_sys()
 #endif
       invalidateBuffer(q->rect());
       window->setVisible(true);
+
       // Was the window moved by the Window system or QPlatformWindow::initialGeometry() ?
       if (window->isTopLevel()) {
          const QPoint crectTopLeft = q->data->crect.topLeft();
          const QPoint windowTopLeft = window->geometry().topLeft();
+
          if (crectTopLeft == QPoint(0, 0) && windowTopLeft != crectTopLeft) {
             q->data->crect.moveTopLeft(windowTopLeft);
          }

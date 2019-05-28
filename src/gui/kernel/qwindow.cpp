@@ -2391,46 +2391,21 @@ void QWindowPrivate::_q_clearAlert()
 }
 
 #ifndef QT_NO_CURSOR
-/*!
-    \brief set the cursor shape for this window
 
-    The mouse \a cursor will assume this shape when it is over this
-    window, unless an override cursor is set.
-    See the \l{Qt::CursorShape}{list of predefined cursor objects} for a
-    range of useful shapes.
-
-    If no cursor has been set, or after a call to unsetCursor(), the
-    parent window's cursor is used.
-
-    By default, the cursor has the Qt::ArrowCursor shape.
-
-    Some underlying window implementations will reset the cursor if it
-    leaves a window even if the mouse is grabbed. If you want to have
-    a cursor set for all windows, even when outside the window, consider
-    QGuiApplication::setOverrideCursor().
-
-    \sa QGuiApplication::setOverrideCursor()
-*/
 void QWindow::setCursor(const QCursor &cursor)
 {
    Q_D(QWindow);
    d->setCursor(&cursor);
 }
 
-/*!
-  \brief Restores the default arrow cursor for this window.
- */
+
 void QWindow::unsetCursor()
 {
    Q_D(QWindow);
    d->setCursor(0);
 }
 
-/*!
-    \brief the cursor shape for this window
 
-    \sa setCursor(), unsetCursor()
-*/
 QCursor QWindow::cursor() const
 {
    Q_D(const QWindow);
@@ -2439,43 +2414,46 @@ QCursor QWindow::cursor() const
 
 void QWindowPrivate::setCursor(const QCursor *newCursor)
 {
-
    Q_Q(QWindow);
+
    if (newCursor) {
       const Qt::CursorShape newShape = newCursor->shape();
+
       if (newShape <= Qt::LastCursor && hasCursor && newShape == cursor.shape()) {
-         return;   // Unchanged and no bitmap/custom cursor.
+         return;   // Unchanged and no bitmap/custom cursor
       }
+
       cursor = *newCursor;
       hasCursor = true;
+
    } else {
-      if (!hasCursor) {
+      if (! hasCursor) {
          return;
       }
       cursor = QCursor(Qt::ArrowCursor);
       hasCursor = false;
    }
 
-   // Only attempt to emit signal if there is an actual platform cursor
+   // only attempt to emit signal if there is an actual platform cursor
    if (applyCursor()) {
       QEvent event(QEvent::CursorChange);
-      QGuiApplication::sendEvent(q, &event);
+      QApplication::sendEvent(q, &event);
    }
 }
 
-// Apply the cursor and returns true iff the platform cursor exists
+// Apply the cursor and returns true if the platform cursor exists
 bool QWindowPrivate::applyCursor()
 {
    Q_Q(QWindow);
 
    if (QScreen *screen = q->screen()) {
       if (QPlatformCursor *platformCursor = screen->handle()->cursor()) {
-         if (!platformWindow) {
+         if (! platformWindow) {
             return true;
          }
 
-         QCursor *c = QGuiApplication::overrideCursor();
-         if (!c && hasCursor) {
+         QCursor *c = QApplication::overrideCursor();
+         if (! c && hasCursor) {
             c = &cursor;
          }
 
@@ -2483,6 +2461,7 @@ bool QWindowPrivate::applyCursor()
          return true;
       }
    }
+
    return false;
 }
 #endif // QT_NO_CURSOR

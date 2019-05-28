@@ -24,10 +24,10 @@
 #ifndef QCURSOR_P_H
 #define QCURSOR_P_H
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qnamespace.h>
-#include <QtGui/qpixmap.h>
+#include <qatomic.h>
+#include <qglobal.h>
+#include <qnamespace.h>
+#include <qpixmap.h>
 
 
 class QBitmap;
@@ -38,22 +38,26 @@ class QCursorData
    QCursorData(Qt::CursorShape s = Qt::ArrowCursor);
    ~QCursorData();
 
+   void update();
+
    static void initialize();
    static void cleanup();
 
-   QAtomicInt ref;
-   Qt::CursorShape cshape;
-   QBitmap *bm, *bmm;
-   QPixmap pixmap;
-   short hx, hy;
-
-   static bool initialized;
-   void update();
    static QCursorData *setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY,
       qreal devicePixelRatio);
+
+   QAtomicInt ref;
+   Qt::CursorShape cshape;
+   QBitmap *bm;
+   QBitmap *bmm;
+   QPixmap pixmap;
+   short hx;
+   short hy;
+
+   static bool initialized;
 };
 
 extern QCursorData *qt_cursorTable[Qt::LastCursor + 1]; // qcursor.cpp
 
 
-#endif // QCURSOR_P_H
+#endif

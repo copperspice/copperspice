@@ -38,14 +38,13 @@
 #include <qtextstream.h>
 #include <qvarlengtharray.h>
 #include <qvector.h>
-#include <qlayoutengine_p.h>
-#include <qsplitter_p.h>
 #include <qtimer.h>
 #include <qdebug.h>
 
+#include <qlayoutengine_p.h>
+#include <qsplitter_p.h>
+
 #include <ctype.h>
-
-
 
 QSplitterPrivate::~QSplitterPrivate()
 {
@@ -105,10 +104,12 @@ int QSplitterHandle::closestLegalPosition(int pos)
 {
    Q_D(QSplitterHandle);
    QSplitter *s = d->s;
+
    if (s->isRightToLeft() && d->orient == Qt::Horizontal) {
       int w = s->contentsRect().width();
       return w - s->closestLegalPosition(w - pos, s->indexOf(this));
    }
+
    return s->closestLegalPosition(pos, s->indexOf(this));
 }
 
@@ -122,6 +123,7 @@ QSize QSplitterHandle::sizeHint() const
    QStyleOption opt(0);
    opt.init(d->s);
    opt.state = QStyle::State_None;
+
    return parentWidget()->style()->sizeFromContents(QStyle::CT_Splitter, &opt, QSize(hw, hw), d->s)
       .expandedTo(QApplication::globalStrut());
 }
@@ -183,11 +185,14 @@ bool QSplitterHandle::event(QEvent *event)
 void QSplitterHandle::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QSplitterHandle);
+
    if (!(e->buttons() & Qt::LeftButton)) {
       return;
    }
+
    int pos = d->pick(parentWidget()->mapFromGlobal(e->globalPos()))
       - d->mouseOffset;
+
    if (opaqueResize()) {
       moveSplitter(pos);
    } else {
@@ -201,6 +206,7 @@ void QSplitterHandle::mouseMoveEvent(QMouseEvent *e)
 void QSplitterHandle::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QSplitterHandle);
+
    if (e->button() == Qt::LeftButton) {
       d->mouseOffset = d->pick(e->pos());
       d->pressed = true;
@@ -236,20 +242,25 @@ void QSplitterHandle::paintEvent(QPaintEvent *)
    QStyleOption opt(0);
    opt.rect = contentsRect();
    opt.palette = palette();
+
    if (orientation() == Qt::Horizontal) {
       opt.state = QStyle::State_Horizontal;
    } else {
       opt.state = QStyle::State_None;
    }
+
    if (d->hover) {
       opt.state |= QStyle::State_MouseOver;
    }
+
    if (d->pressed) {
       opt.state |= QStyle::State_Sunken;
    }
+
    if (isEnabled()) {
       opt.state |= QStyle::State_Enabled;
    }
+
    parentWidget()->style()->drawControl(QStyle::CE_Splitter, &opt, &p, d->s);
 }
 
@@ -307,9 +318,10 @@ void QSplitterPrivate::recalc(bool update)
    for (int i = 0; i < n ; ++i) {
       QSplitterLayoutStruct *s = list.at(i);
       bool widgetHidden = s->widget->isHidden();
-      if (allInvisible && !widgetHidden && !s->collapsed) {
+      if (allInvisible && ! widgetHidden && ! s->collapsed) {
          allInvisible = false;
       }
+
       s->handle->setHidden(first || widgetHidden);
       if (!widgetHidden) {
          first = false;
@@ -330,15 +342,15 @@ void QSplitterPrivate::recalc(bool update)
    int minl = fi;
    int maxt = QWIDGETSIZE_MAX;
    int mint = fi;
-   /*
-     calculate min/max sizes for the whole splitter
-   */
+
+   // calculate min/max sizes for the whole splitter
    bool empty = true;
    for (int j = 0; j < n; j++) {
       QSplitterLayoutStruct *s = list.at(j);
 
-      if (!s->widget->isHidden()) {
+      if (! s->widget->isHidden()) {
          empty = false;
+
          if (!s->handle->isHidden()) {
             minl += s->getHandleSize(orient);
             maxl += s->getHandleSize(orient);
@@ -349,6 +361,7 @@ void QSplitterPrivate::recalc(bool update)
          maxl += pick(s->widget->maximumSize());
          mint = qMax(mint, trans(minS));
          int tm = trans(s->widget->maximumSize());
+
          if (tm > 0) {
             maxt = qMin(maxt, tm);
          }
@@ -357,12 +370,14 @@ void QSplitterPrivate::recalc(bool update)
 
    if (empty) {
       if (qobject_cast<QSplitter *>(q->parent())) {
-         // nested splitters; be nice
+         // nested splitters
          maxl = maxt = 0;
+
       } else {
          // QSplitter with no children yet
          maxl = QWIDGETSIZE_MAX;
       }
+
    } else {
       maxl = qMin(maxl, QWIDGETSIZE_MAX);
    }
@@ -411,6 +426,7 @@ void QSplitterPrivate::doResize()
    int j = 0;
    for (i = 0; i < n; ++i) {
       QSplitterLayoutStruct *s = list.at(i);
+
 #ifdef QSPLITTER_DEBUG
       qDebug("widget %d hidden: %d collapsed: %d handle hidden: %d", i, s->widget->isHidden(),
          s->collapsed, s->handle->isHidden());
@@ -489,7 +505,7 @@ void QSplitterPrivate::addContribution(int index, int *min, int *max, bool mayCo
          *min += s->getHandleSize(orient);
          *max += s->getHandleSize(orient);
       }
-      if (mayCollapse || !s->collapsed) {
+      if (mayCollapse || ! s->collapsed) {
          *min += pick(qSmartMinSize(s->widget));
       }
 
@@ -774,6 +790,7 @@ void QSplitterPrivate::insertWidget_helper(int index, QWidget *widget, bool show
    if (widget->parentWidget() != q) {
       widget->setParent(q);
    }
+
    if (needShow) {
       widget->show();
    }
@@ -799,6 +816,7 @@ QSplitterLayoutStruct *QSplitterPrivate::insertWidget(int index, QWidget *w)
          break;
       }
    }
+
    if (index < 0 || index > last) {
       index = last;
    }
@@ -852,7 +870,7 @@ QSplitter::~QSplitter()
 
    delete d->rubberBand;
 
-   while (!d->list.isEmpty()) {
+   while (! d->list.isEmpty()) {
       delete d->list.takeFirst();
    }
 }
@@ -1122,7 +1140,7 @@ bool QSplitter::event(QEvent *e)
    switch (e->type()) {
       case QEvent::Hide:
          // Reset firstShow to false here since things can be done to the splitter in between
-         if (!d->firstShow) {
+         if (! d->firstShow) {
             d->firstShow = true;
          }
          break;

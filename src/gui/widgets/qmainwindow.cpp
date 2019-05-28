@@ -478,9 +478,11 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 #endif
 
       toolbar->d_func()->endDrag();
+
 #ifndef QT_NO_DOCKWIDGET
       setAnimated(animated);
 #endif
+
    }
 
    if (!d->layout->usesHIToolBar(toolbar)) {
@@ -498,22 +500,12 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
    d->layout->addToolBar(area, toolbar);
 }
 
-/*! \overload
-    Equivalent of calling addToolBar(Qt::TopToolBarArea, \a toolbar)
-*/
+
 void QMainWindow::addToolBar(QToolBar *toolbar)
 {
    addToolBar(Qt::TopToolBarArea, toolbar);
 }
 
-/*!
-    \overload
-
-    Creates a QToolBar object, setting its window title to \a title,
-    and inserts it into the top toolbar area.
-
-    \sa setWindowTitle()
-*/
 QToolBar *QMainWindow::addToolBar(const QString &title)
 {
    QToolBar *toolBar = new QToolBar(this);
@@ -522,14 +514,6 @@ QToolBar *QMainWindow::addToolBar(const QString &title)
    return toolBar;
 }
 
-/*!
-    Inserts the \a toolbar into the area occupied by the \a before toolbar
-    so that it appears before it. For example, in normal left-to-right
-    layout operation, this means that \a toolbar will appear to the left
-    of the toolbar specified by \a before in a horizontal toolbar area.
-
-    \sa insertToolBarBreak() addToolBar() addToolBarBreak()
-*/
 void QMainWindow::insertToolBar(QToolBar *before, QToolBar *toolbar)
 {
    Q_D(QMainWindow);
@@ -545,10 +529,6 @@ void QMainWindow::insertToolBar(QToolBar *before, QToolBar *toolbar)
    d->layout->insertToolBar(before, toolbar);
 }
 
-/*!
-    Removes the \a toolbar from the main window layout and hides
-    it. Note that the \a toolbar is \e not deleted.
-*/
 void QMainWindow::removeToolBar(QToolBar *toolbar)
 {
    if (toolbar) {
@@ -557,13 +537,6 @@ void QMainWindow::removeToolBar(QToolBar *toolbar)
    }
 }
 
-/*!
-    Returns the Qt::ToolBarArea for \a toolbar. If \a toolbar has not
-    been added to the main window, this function returns \c
-    Qt::NoToolBarArea.
-
-    \sa addToolBar() addToolBarBreak() Qt::ToolBarArea
-*/
 Qt::ToolBarArea QMainWindow::toolBarArea(QToolBar *toolbar) const
 {
    return d_func()->layout->toolBarArea(toolbar);

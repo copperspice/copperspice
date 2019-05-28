@@ -62,7 +62,7 @@ QToolBarLayout::QToolBarLayout(QWidget *parent)
      expanding(false), empty(true), expandFlag(false), popupMenu(0)
 {
    QToolBar *tb = qobject_cast<QToolBar *>(parent);
-   if (!tb) {
+   if (! tb) {
       return;
    }
 
@@ -108,7 +108,7 @@ bool QToolBarLayout::hasExpandFlag() const
 
 void QToolBarLayout::setUsePopupMenu(bool set)
 {
-   if (!dirty && ((popupMenu == 0) == set)) {
+   if (! dirty && ((popupMenu == 0) == set)) {
       invalidate();
    }
 
@@ -741,10 +741,12 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
 {
    bool customWidget = false;
    bool standardButtonWidget = false;
-   QWidget *widget = 0;
-   QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
-   if (!tb) {
-      return (QToolBarItem *)0;
+
+   QWidget *widget = nullptr;
+   QToolBar *tb    = qobject_cast<QToolBar *>(parentWidget());
+
+   if (! tb) {
+      return nullptr;
    }
 
    if (QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(action)) {
@@ -760,7 +762,7 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
       widget = sep;
    }
 
-   if (!widget) {
+   if (! widget) {
       QToolButton *button = new QToolButton(tb);
       button->setAutoRaise(true);
       button->setFocusPolicy(Qt::NoFocus);
