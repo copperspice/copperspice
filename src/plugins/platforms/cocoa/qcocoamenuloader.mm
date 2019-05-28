@@ -62,7 +62,7 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
    }
 
    // Copy nib files from resources to temp
-   QDir nibResource(":/qt-project.org/mac/qt_menu.nib/");
+   QDir nibResource(":/copperspice/mac/qt_menu.nib/");
 
    if (! nibResource.exists()) {
       qWarning("qt_mac_loadMenuNib: Unable to load nib from resources");
