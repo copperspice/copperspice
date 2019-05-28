@@ -499,7 +499,10 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
       }
    }
 
-   if (!isNull()) {
+   if (isNull()) {
+      qDebug("QPixmap::load(): Unable to load pixmap file %s", csPrintable(fileName));
+
+   } else {
       if (isQBitmap()) {
          *this = QBitmap();
       } else {
