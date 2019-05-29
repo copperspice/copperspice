@@ -322,7 +322,7 @@ void QGraphicsSceneIndexPrivate::init()
       return;
    }
 
-   QObject::connect(scene, SIGNAL(sceneRectChanged(QRectF)), q_func(), SLOT(updateSceneRect(QRectF)));
+   QObject::connect(scene, &QGraphicsScene::sceneRectChanged, q_func(), &QGraphicsSceneIndex::updateSceneRect);
 }
 
 /*!

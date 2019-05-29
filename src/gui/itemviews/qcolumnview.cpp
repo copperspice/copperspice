@@ -670,7 +670,7 @@ QAbstractItemView *QColumnViewPrivate::createColumn(const QModelIndex &index, bo
 
    if (model->hasChildren(index)) {
       view = q->createColumn(index);
-      q->connect(view, SIGNAL(clicked(QModelIndex)), q, SLOT(_q_clicked(QModelIndex)));
+      q->connect(view, &QAbstractItemView::clicked, q, &QColumnView::_q_clicked);
 
    } else {
       if (!previewColumn) {
@@ -681,11 +681,11 @@ QAbstractItemView *QColumnViewPrivate::createColumn(const QModelIndex &index, bo
       view->setMinimumWidth(qMax(view->minimumWidth(), previewWidget->minimumWidth()));
    }
 
-   q->connect(view, SIGNAL(activated(QModelIndex)),     q, SLOT(activated(QModelIndex)));
-   q->connect(view, SIGNAL(clicked(QModelIndex)),       q, SLOT(clicked(QModelIndex)));
-   q->connect(view, SIGNAL(doubleClicked(QModelIndex)), q, SLOT(doubleClicked(QModelIndex)));
-   q->connect(view, SIGNAL(entered(QModelIndex)),       q, SLOT(entered(QModelIndex)));
-   q->connect(view, SIGNAL(pressed(QModelIndex)),       q, SLOT(pressed(QModelIndex)));
+   q->connect(view, &QAbstractItemView::activated,     q, &QColumnView::activated);
+   q->connect(view, &QAbstractItemView::clicked,       q, &QColumnView::clicked);
+   q->connect(view, &QAbstractItemView::doubleClicked, q, &QColumnView::doubleClicked);
+   q->connect(view, &QAbstractItemView::entered,       q, &QColumnView::entered);
+   q->connect(view, &QAbstractItemView::pressed,       q, &QColumnView::pressed);
 
    view->setFocusPolicy(Qt::NoFocus);
    view->setParent(viewport);
