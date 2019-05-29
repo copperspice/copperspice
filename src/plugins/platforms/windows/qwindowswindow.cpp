@@ -1413,7 +1413,7 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
             "(Frame = %d, %d, %d, %d, Custom margin = %d, %d, %d, %d,"
             "Minimum size = %dx%d, Maximum size = %dx%d).",
             rect.width(), rect.height(), rect.x(), rect.y(),
-            window()->metaObject()->className(), qPrintable(window()->objectName()),
+            csPrintable(window()->metaObject()->className()), csPrintable(window()->objectName()),
             m_data.geometry.width(), m_data.geometry.height(),
             m_data.geometry.x(), m_data.geometry.y(),
             m_data.frame.left(), m_data.frame.top(),
@@ -2046,8 +2046,9 @@ bool QWindowsWindow::setMouseGrabEnabled(bool grab)
    }
 
    if (! isVisible() && grab) {
-      qWarning("QWindowsWindow::setMouseGrabEnabled(): Not setting mouse grab for invisible window %s/'%s'",
-         window()->metaObject()->className(), csPrintable(window()->objectName()));
+      qWarning("QWindowsWindow::setMouseGrabEnabled(): Unable to set mouse grab for invisible window %s/'%s'",
+         csPrintable(window()->metaObject()->className()), csPrintable(window()->objectName()));
+
       return false;
    }
 

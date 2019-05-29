@@ -529,7 +529,8 @@ HCURSOR QWindowsCursor::createCursorFromShape(Qt::CursorShape cursorShape, const
       }
    }
 
-   qWarning("%s: Invalid cursor shape %d", __FUNCTION__, cursorShape);
+   qWarning("QWindowsCursor::createCursorFromShape(): Invalid cursor shape %d", cursorShape);
+
    return 0;
 }
 
@@ -610,9 +611,9 @@ void QWindowsCursor::changeCursor(QCursor *cursorIn, QWindow *window)
       pixmapWindowCursor(*cursorIn) : standardWindowCursor(cursorIn->shape());
    if (wcursor->handle()) {
       QWindowsWindow::baseWindowOf(window)->setCursor(wcursor);
+
    } else {
-      qWarning("%s: Unable to obtain system cursor for %d",
-         __FUNCTION__, cursorIn->shape());
+      qWarning("QWindowsCursor::changeCursor(): Unable to obtain system cursor for %d", cursorIn->shape());
    }
 }
 

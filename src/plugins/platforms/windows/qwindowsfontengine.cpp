@@ -290,10 +290,9 @@ QWindowsFontEngine::~QWindowsFontEngine()
    // make sure we aren't by accident still selected
    SelectObject(m_fontEngineData->hdc, QWindowsFontDatabase::systemFont());
 
-   if (!DeleteObject(hfont)) {
-      qErrnoWarning("%s: QFontEngineWin: failed to delete font...", __FUNCTION__);
+   if (! DeleteObject(hfont)) {
+      qErrnoWarning("~QWindowsFontEngine(): Failed to delete font");
    }
-   qDebug() << __FUNCTION__ << _name;
 
    if (!uniqueFamilyName.isEmpty()) {
       QPlatformFontDatabase *pfdb = QWindowsIntegration::instance()->fontDatabase();
