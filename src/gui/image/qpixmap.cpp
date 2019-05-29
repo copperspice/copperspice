@@ -370,12 +370,12 @@ int QPixmap::depth() const
 void QPixmap::setMask(const QBitmap &mask)
 {
    if (paintingActive()) {
-      qWarning("QPixmap::setMask: Cannot set mask while pixmap is being painted on");
+      qWarning("QPixmap::setMask: Unable to set mask while pixmap is being painted on");
       return;
    }
 
    if (!mask.isNull() && mask.size() != size()) {
-      qWarning("QPixmap::setMask() mask size differs from pixmap size");
+      qWarning("QPixmap::setMask() Mask size differs from pixmap size");
       return;
    }
 
@@ -933,14 +933,18 @@ QDebug operator<<(QDebug dbg, const QPixmap &r)
    dbg.nospace();
 
    dbg << "QPixmap(";
+
    if (r.isNull()) {
-      dbg << "null";
+      dbg << "is null";
+
    } else {
-      dbg << r.size() << ",depth=" << r.depth()
-         << ",devicePixelRatio=" << r.devicePixelRatio()
-         << ",cacheKey=" << showbase << hex << r.cacheKey() << dec << noshowbase;
+      dbg << r.size() << ", depth =" << r.depth()
+         << ", devicePixelRatio =" << r.devicePixelRatio()
+         << ", cacheKey =" << showbase << hex << r.cacheKey() << dec << noshowbase;
    }
+
    dbg << ')';
+
    return dbg;
 }
 
