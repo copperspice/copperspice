@@ -927,12 +927,8 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
    }
 }
 
-
-/*
-    Adds an inter character justification opportunity after the number or letter
-    character and a space justification opportunity after the space character.
-*/
-static inline void qt_getDefaultJustificationOpportunities(QStringView str, QGlyphLayout g, ushort *log_clusters, int spaceAs)
+static inline void qt_getDefaultJustificationOpportunities(QStringView str, QGlyphLayout g,
+                  ushort *log_clusters, int spaceAs)
 {
    int str_pos = 0;
    auto iter   = str.constBegin();
@@ -1082,8 +1078,11 @@ void QTextEngine::shapeText(int item) const
 
    QFontEngine *fontEngine = this->fontEngine(si, &si.ascent, &si.descent, &si.leading);
 
-   // split up the item into parts that come from different font engines
-   // k * 3 entries, array[k] == index in string, array[k + 1] == index in glyphs, array[k + 2] == engine index
+   // split up the item into parts that come from 3 different font engines
+   // array[k + 0] == index in string
+   // array[k + 1] == index in glyphs
+   // array[k + 2] == engine index
+
    QVector<uint> itemBoundaries;
    itemBoundaries.reserve(24);
 
@@ -1110,7 +1109,7 @@ void QTextEngine::shapeText(int item) const
 
             if (engineIdx != 0) {
                QFontEngine *actualFontEngine = static_cast<QFontEngineMulti *>(fontEngine)->engine(engineIdx);
-               si.ascent  = qMax(actualFontEngine->ascent(), si.ascent);
+               si.ascent  = qMax(actualFontEngine->ascent(),  si.ascent);
                si.descent = qMax(actualFontEngine->descent(), si.descent);
                si.leading = qMax(actualFontEngine->leading(), si.leading);
             }
@@ -1210,11 +1209,11 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
    const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const
 {
    uint glyphs_shaped = 0;
-   auto itemLength    = str.size();
+   auto strLength     = str.size();
 
    hb_buffer_t *buffer = hb_buffer_create();
    hb_buffer_set_unicode_funcs(buffer, cs_get_unicode_funcs());
-   hb_buffer_pre_allocate(buffer, itemLength);
+   hb_buffer_pre_allocate(buffer, strLength);
 
    if (! hb_buffer_allocation_successful(buffer)) {
       hb_buffer_destroy(buffer);
@@ -1228,25 +1227,29 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
    props.script = cs_script_to_hb_script(script);
 
    for (int k = 0; k < itemBoundaries.size(); k += 3) {
+
       const uint item_pos    = itemBoundaries[k];
-      const uint item_length = (k + 4 < itemBoundaries.size() ? itemBoundaries[k + 3] : itemLength) - item_pos;
+      const uint item_length = (k + 4 < itemBoundaries.size() ? itemBoundaries[k + 3] : strLength) - item_pos;
       const uint engineIdx   = itemBoundaries[k + 2];
 
-      QFontEngine *actualFontEngine = fontEngine->type() != QFontEngine::Multi ?
-         fontEngine : static_cast<QFontEngineMulti *>(fontEngine)->engine(engineIdx);
+      QFontEngine *actualFontEngine = fontEngine;
+
+      if (fontEngine->type() == QFontEngine::Multi) {
+         actualFontEngine = static_cast<QFontEngineMulti *>(fontEngine)->engine(engineIdx);
+      }
 
       // prepare buffer
       hb_buffer_clear_contents(buffer);
 
-      QStringView tmp = str.mid(item_pos);
-      hb_buffer_add_utf8(buffer, tmp.charData(), item_length, 0, item_length);
+      QStringView tmp = str.mid(item_pos, item_length);
+      hb_buffer_add_utf8(buffer, tmp.charData(), tmp.size_storage(), 0, tmp.size_storage());
 
       hb_buffer_set_segment_properties(buffer, &props);
       hb_buffer_guess_segment_properties(buffer);
 
       uint buffer_flags = HB_BUFFER_FLAG_DEFAULT;
 
-      // symbol encoding used to encode various crap in the 32..255 character code range,
+      // symbol encoding used to encode various values in the 32..255 character code range,
       // and thus might override U+00AD [SHY]; avoid hiding default ignorables
 
       if (actualFontEngine->symbol) {
@@ -1262,13 +1265,13 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
          cs_font_set_use_design_metrics(hb_font, option.useDesignMetrics() ? uint(QFontEngine::DesignMetrics) : 0);
 
-         // ligatures are incompatible with custom letter spacing, so when a letter spacing is set,
-         // we disable them for writing systems where they are purely cosmetic
+         // ligatures are incompatible with custom letter spacing, so when a letter spacing is set
+         // disable them for writing systems where they are purely cosmetic
 
          bool scriptRequiresOpenType = ((script >= QChar::Script_Syriac && script <= QChar::Script_Sinhala)
                || script == QChar::Script_Khmer || script == QChar::Script_Nko);
 
-         bool dontLigate = hasLetterSpacing && !scriptRequiresOpenType;
+         bool dontLigate = hasLetterSpacing && ! scriptRequiresOpenType;
 
          const hb_feature_t features[5] = {
             { HB_TAG('k', 'e', 'r', 'n'), !! kerningEnabled, 0, uint(-1) },
@@ -1285,7 +1288,7 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 #if defined(Q_OS_DARWIN)
          // What is behind QFontEngine::FaceData::user_data is not compatible between different font engines,
          // specifically functions in hb-coretext.cc would run into undefined behavior with data
-         // from non-CoreText engine. The other shapers works with that engine just fine.
+         // from non-CoreText engine. The other shapers work with that engine just fine.
 
          if (actualFontEngine->type() != QFontEngine::Mac) {
             static const char *s_shaper_list_without_coretext[] = {
@@ -1311,7 +1314,7 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
       const uint num_glyphs = hb_buffer_get_length(buffer);
 
-      // ensure we have enough space for shaped glyphs and metrics
+      // ensure there is enough space for shaped glyphs and metrics
       if (num_glyphs == 0 || ! ensureSpace(glyphs_shaped + num_glyphs)) {
          hb_buffer_destroy(buffer);
          return 0;
@@ -1321,70 +1324,65 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
       QGlyphLayout g       = availableGlyphs(&si).mid(glyphs_shaped, num_glyphs);
       ushort *log_clusters = logClusters(&si) + item_pos;
 
-      uint hb_len1;
-      uint hb_len2;
+      uint hb_len;
 
-      hb_glyph_info_t *infos         = hb_buffer_get_glyph_infos(buffer, &hb_len1);
-      hb_glyph_position_t *positions = hb_buffer_get_glyph_positions(buffer, &hb_len2);
+      hb_glyph_info_t *infos         = hb_buffer_get_glyph_infos(buffer, &hb_len);
+      hb_glyph_position_t *positions = hb_buffer_get_glyph_positions(buffer, &hb_len);
 
-      uint str_pos        = 0;
-      uint last_cluster   = ~0u;
-      uint last_glyph_pos = glyphs_shaped;
+      // index into str by code points
+      uint str_index = 0;
+      uint previous_cluster = 0;
 
-      for (uint i = 0; i < num_glyphs; ++i, ++infos, ++positions) {
-         g.glyphs[i] = infos->codepoint;
+      for (uint i = 0; i < num_glyphs; ++i) {
+         g.glyphs[i]    = infos->codepoint;
 
          g.advances[i]  = QFixed::fromFixed(positions->x_advance);
          g.offsets[i].x = QFixed::fromFixed(positions->x_offset);
          g.offsets[i].y = QFixed::fromFixed(positions->y_offset);
 
-         uint cluster = infos->cluster;
+         uint current_cluster = infos->cluster;
 
-         if (last_cluster != cluster) {
-            g.attributes[i].clusterStart = true;
+         if (current_cluster == previous_cluster && i != 0) {
+            // multiple code points turned into a single glyph
 
-            // fix up clusters so that the cluster indices will be monotonic
-            // and thus we never return out-of-order indices
-            while (last_cluster++ < cluster && str_pos < item_length) {
-               log_clusters[str_pos++] = last_glyph_pos;
-            }
-
-            last_glyph_pos = i + glyphs_shaped;
-            last_cluster   = cluster;
-
-            // hide characters that should normally be invisible
-            switch (str[item_pos + str_pos].unicode()) {
-               case QChar::LineFeed:
-               case 0x000c:                      // FormFeed
-               case QChar::CarriageReturn:
-               case QChar::LineSeparator:
-               case QChar::ParagraphSeparator:
-                  g.attributes[i].dontPrint = true;
-                  break;
-
-               case QChar::SoftHyphen:
-                  if (! actualFontEngine->symbol) {
-                     // U+00AD [SOFT HYPHEN] is a default ignorable codepoint,
-                     // so we replace its glyph and metrics with ones for
-                     // U+002D [HYPHEN-MINUS] and make it visible if it appears at line-break
-                     g.glyphs[i] = actualFontEngine->glyphIndex('-');
-
-                     if (g.glyphs[i] != 0) {
-                        QGlyphLayout tmp = g.mid(i, 1);
-                        actualFontEngine->recalcAdvances(&tmp, 0);
-                     }
-                     g.attributes[i].dontPrint = true;
-                  }
-                  break;
-
-               default:
-                  break;
-            }
+            // pending changes
          }
-      }
 
-      while (str_pos < item_length) {
-         log_clusters[str_pos++] = last_glyph_pos;
+         g.attributes[i].clusterStart = true;
+         log_clusters[str_index]      = item_pos + str_index;
+
+         // hide characters that should normally be invisible
+         switch (str[item_pos + str_index].unicode()) {
+            case QChar::LineFeed:
+            case 0x000c:                      // FormFeed
+            case QChar::CarriageReturn:
+            case QChar::LineSeparator:
+            case QChar::ParagraphSeparator:
+               g.attributes[i].dontPrint = true;
+               break;
+
+            case QChar::SoftHyphen:
+               if (! actualFontEngine->symbol) {
+                  // U+00AD [SOFT HYPHEN] is a default ignorable codepoint,
+                  // replace its glyph and metrics with ones for
+                  // U+002D [HYPHEN-MINUS] and make it visible if it appears at line-break
+                  g.glyphs[i] = actualFontEngine->glyphIndex('-');
+
+                  if (g.glyphs[i] != 0) {
+                     QGlyphLayout tmp = g.mid(i, 1);
+                     actualFontEngine->recalcAdvances(&tmp, 0);
+                  }
+                  g.attributes[i].dontPrint = true;
+               }
+               break;
+
+            default:
+               break;
+         }
+
+         ++infos;
+         ++positions;
+         ++str_index;
       }
 
       if (engineIdx != 0) {
@@ -1395,10 +1393,8 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
 #ifdef Q_OS_DARWIN
       if (actualFontEngine->type() == QFontEngine::Mac) {
-         // CTRunGetPosition has a bug which applies matrix on 10.6, so we disable
-         // scaling the advances for this particular version
 
-         if (QSysInfo::MacintoshVersion != QSysInfo::MV_10_6 && actualFontEngine->fontDef.stretch != 100) {
+         if (actualFontEngine->fontDef.stretch != 100) {
             QFixed stretch = QFixed(int(actualFontEngine->fontDef.stretch)) / QFixed(100);
 
             for (uint i = 0; i < num_glyphs; ++i) {
@@ -1408,7 +1404,8 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
       }
 #endif
 
-      if (! actualFontEngine->supportsSubPixelPositions() || (actualFontEngine->fontDef.styleStrategy & QFont::ForceIntegerMetrics)) {
+      if (! actualFontEngine->supportsSubPixelPositions() ||
+                  (actualFontEngine->fontDef.styleStrategy & QFont::ForceIntegerMetrics)) {
          for (uint i = 0; i < num_glyphs; ++i) {
             g.advances[i] = g.advances[i].round();
          }
@@ -3825,7 +3822,6 @@ QTransform qt_true_matrix(qreal w, qreal h, QTransform x)
    QRectF rect = x.mapRect(QRectF(0, 0, w, h));
    return x * QTransform::fromTranslate(-rect.x(), -rect.y());
 }
-
 
 glyph_metrics_t glyph_metrics_t::transformed(const QTransform &matrix) const
 {

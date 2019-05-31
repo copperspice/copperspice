@@ -461,10 +461,17 @@ class Q_GUI_EXPORT QTextEngine
 
    int length(int item) const {
       const QScriptItem &si = layoutData->items[item];
-      int from = si.position;
       item++;
 
-      return (item < layoutData->items.size() ? layoutData->items[item].position : layoutData->string.size()) - from;
+      int retval;
+
+      if (item < layoutData->items.size()) {
+         retval = layoutData->items[item].position - si.position;
+      } else {
+         retval = layoutData->string.size() - si.position;
+      }
+
+      return retval;
    }
 
    int length(const QScriptItem *si) const {
