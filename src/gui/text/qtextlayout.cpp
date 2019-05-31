@@ -313,15 +313,15 @@ int QTextLayout::nextCursorPosition(int oldPos, CursorMode mode) const
          }
 
       } else {
-         while (oldPos < len && ! attributes[oldPos].whiteSpace && !d->atWordSeparator(oldPos)) {
+         while (oldPos < len && ! attributes[oldPos].whiteSpace && ! d->atWordSeparator(oldPos)) {
             oldPos++;
          }
-
-         while (oldPos < len && attributes[oldPos].whiteSpace) {
-            oldPos++;
-         }
-
       }
+
+      while (oldPos < len && attributes[oldPos].whiteSpace) {
+         oldPos++;
+      }
+
    }
 
    return oldPos;
