@@ -250,12 +250,13 @@ Qt::CursorMoveStyle QTextLayout::cursorMoveStyle() const
 
 void QTextLayout::beginLayout()
 {
-#ifndef QT_NO_DEBUG
+#if defined(CS_SHOW_DEBUG)
    if (d->layoutData && d->layoutData->layoutState == QTextEngine::InLayout) {
       qWarning("QTextLayout::beginLayout: Called while already doing layout");
       return;
    }
 #endif
+
    d->invalidate();
    d->clearLineData();
    d->itemize();
@@ -264,12 +265,13 @@ void QTextLayout::beginLayout()
 
 void QTextLayout::endLayout()
 {
-#ifndef QT_NO_DEBUG
-   if (!d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
+#if defined(CS_SHOW_DEBUG)
+   if (! d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
       qWarning("QTextLayout::endLayout: Called without beginLayout()");
       return;
    }
 #endif
+
    int l = d->lines.size();
    if (l && d->lines.at(l - 1).length < 0) {
       QTextLine(l - 1, d).setNumColumns(INT_MAX);
@@ -371,14 +373,14 @@ int QTextLayout::previousCursorPosition(int oldPos, CursorMode mode) const
 int QTextLayout::rightCursorPosition(int oldPos) const
 {
    int newPos = d->positionAfterVisualMovement(oldPos, QTextCursor::Right);
-   //    qDebug("%d -> %d", oldPos, newPos);
+
    return newPos;
 }
 
 int QTextLayout::leftCursorPosition(int oldPos) const
 {
    int newPos = d->positionAfterVisualMovement(oldPos, QTextCursor::Left);
-   //    qDebug("%d -> %d", oldPos, newPos);
+
    return newPos;
 }
 
@@ -395,9 +397,9 @@ bool QTextLayout::isValidCursorPosition(int pos) const
 
 QTextLine QTextLayout::createLine()
 {
-#ifndef QT_NO_DEBUG
-   if (!d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
-      qWarning("QTextLayout::createLine: Called without layouting");
+#if defined(CS_SHOW_DEBUG)
+   if (! d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
+      qWarning("QTextLayout::createLine: Called without layout");
       return QTextLine();
    }
 #endif
@@ -986,12 +988,6 @@ void QTextLine::setNumColumns(int numColumns, qreal alignmentWidth)
    layout_helper(numColumns);
 }
 
-#if 0
-#define LB_DEBUG qDebug
-#else
-#define LB_DEBUG if (0) qDebug
-#endif
-
 namespace {
 
 struct LineBreakHelper {
@@ -1083,7 +1079,9 @@ struct LineBreakHelper {
 const QFixed LineBreakHelper::RightBearingNotCalculated = QFixed(1);
 inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 {
-   LB_DEBUG("possible break width %f, spacew=%f", tmpData.textWidth.toReal(), spaceData.textWidth.toReal());
+#if defined(CS_SHOW_DEBUG)
+   qDebug("Possible break width %f, spacew = %f", tmpData.textWidth.toReal(), spaceData.textWidth.toReal());
+#endif
 
    QFixed newWidth = calculateNewWidth(line);
    if (line.length && !manualWrap && (newWidth > line.width || glyphCount > maxGlyphs)) {
@@ -1156,8 +1154,10 @@ void QTextLine::layout_helper(int maxGlyphs)
    int newItem = eng->findItem(line.from);
    Q_ASSERT(newItem >= 0);
 
-   LB_DEBUG("from: %d: item=%d, total %zd, width available %f", line.from, newItem, eng->layoutData->items.size(),
-      line.width.toReal());
+#if defined(CS_SHOW_DEBUG)
+   qDebug("From = %d: Item = %d, Total = %zd, Width available = %f",
+                  line.from, newItem, eng->layoutData->items.size(), line.width.toReal());
+#endif
 
    Qt::Alignment alignment = eng->option.alignment();
 
@@ -1380,7 +1380,7 @@ void QTextLine::layout_helper(int maxGlyphs)
          newItem = item + 1;
       }
    }
-   LB_DEBUG("reached end of line");
+
    lbh.checkFullOtherwiseExtend(line);
 
 found:
@@ -1395,15 +1395,24 @@ found:
    line.textWidth += lbh.negativeRightBearing();
 
    if (line.length == 0) {
-      LB_DEBUG("no break available in line, adding temp: length %d, width %f, space: length %d, width %f",
+
+#if defined(CS_SHOW_DEBUG)
+      qDebug("No break available in line, adding temp: length %d, width %f, space: length %d, width %f",
          lbh.tmpData.length, lbh.tmpData.textWidth.toReal(),
          lbh.spaceData.length, lbh.spaceData.textWidth.toReal());
+#endif
+
       line += lbh.tmpData;
    }
 
-   LB_DEBUG("line length = %d, ascent=%f, descent=%f, textWidth=%f (spacew=%f)", line.length, line.ascent.toReal(),
-      line.descent.toReal(), line.textWidth.toReal(), lbh.spaceData.width.toReal());
-   LB_DEBUG("        : '%s'", eng->layoutData->string.mid(line.from, line.length).toUtf8().data());
+#if defined(CS_SHOW_DEBUG)
+   qDebug("Line length =%d, Ascent =%f, Descent =%f, textWidth =%f (spacew =%f)",
+                  line.length, line.ascent.toReal(), line.descent.toReal(), line.textWidth.toReal(),
+                  lbh.spaceData.width.toReal());
+
+   qDebug("        : '%s'", csPrintable(eng->layoutData->string.mid(line.from, line.length)));
+#endif
+
 
    if (lbh.manualWrap) {
       eng->minWidth = qMax(eng->minWidth, line.textWidth);
@@ -2074,7 +2083,6 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
    const int l = eng->length(itm);
    pos = qBound(0, pos - si->position, l);
 
-
    QGlyphLayout glyphs = eng->shapedGlyphs(si);
    unsigned short *logClusters = eng->logClusters(si);
    Q_ASSERT(logClusters);
@@ -2209,7 +2217,6 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 
    x -= line.x;
    x -= eng->alignLine(line);
-   //     qDebug("xToCursor: x=%f, cpos=%d", x.toReal(), cpos);
 
    QVarLengthArray<int> visualOrder(nItems);
    QVarLengthArray<unsigned char> levels(nItems);
@@ -2271,7 +2278,6 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                ++g;
             }
          }
-         //             qDebug("      start=%d, end=%d, gs=%d, ge=%d item_width=%f", start, end, gs, ge, item_width.toReal());
 
          if (pos + item_width < x) {
             pos += item_width;
