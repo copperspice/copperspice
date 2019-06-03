@@ -1371,22 +1371,24 @@ static void replacePercentN(QString *result, int n)
 }
 
 QString QCoreApplication::translate(const char *context, const char *sourceText,
-                                    const char *disambiguation, Encoding encoding, int n)
+                  const char *disambiguation, Encoding encoding, int n)
 {
    QString result;
 
-   if (!sourceText) {
+   if (! sourceText) {
       return result;
    }
 
-   if (self && !self->d_func()->translators.isEmpty()) {
+   if (self && ! self->d_func()->translators.isEmpty()) {
       QList<QTranslator *>::const_iterator it;
       QTranslator *translationFile;
 
       for (it = self->d_func()->translators.constBegin(); it != self->d_func()->translators.constEnd(); ++it) {
          translationFile = *it;
+
          result = translationFile->translate(context, sourceText, disambiguation, n);
-         if (!result.isEmpty()) {
+
+         if (! result.isEmpty()) {
             break;
          }
       }
@@ -1399,8 +1401,10 @@ QString QCoreApplication::translate(const char *context, const char *sourceText,
 #else
       if (encoding == UnicodeUTF8) {
          result = QString::fromUtf8(sourceText);
+
       } else if (QTextCodec::codecForTr() != 0) {
          result = QTextCodec::codecForTr()->toUnicode(sourceText);
+
       } else
 #endif
 
@@ -1408,6 +1412,7 @@ QString QCoreApplication::translate(const char *context, const char *sourceText,
    }
 
    replacePercentN(&result, n);
+
    return result;
 }
 

@@ -149,8 +149,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
                   Encoding encoding = CodecForTr, int n = -1);
 
    static void flush();
-    void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
-    void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);
+   void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
+   void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);
 
    void cs_internal_maybeQuit();
 

@@ -1213,7 +1213,6 @@ QColorShower::QColorShower(QColorDialog *parent)
 #endif
    lab->setMinimumWidth(60);
 
-
    // On mobile, due to small screen and different screen layouts need to re-arrange the widgets.
    // For QVGA screens only the comboboxes and color label are visible.
    // For nHD screens only color and luminence pickers and color label are visible.
@@ -1266,11 +1265,14 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    vEd = new QColSpinBox(this);
    lblVal = new QLabel(this);
+
 #ifndef QT_NO_SHORTCUT
    lblVal->setBuddy(vEd);
 #endif
+
    lblVal->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-#if !defined(QT_SMALL_COLORDIALOG)
+
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblVal, 2, 1);
    gl->addWidget(vEd, 2, 2);
 #else
@@ -1287,7 +1289,7 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    lblRed->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-#if !defined(QT_SMALL_COLORDIALOG)
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblRed, 0, 3);
    gl->addWidget(rEd, 0, 4);
 #else
@@ -1299,11 +1301,14 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    gEd = new QColSpinBox(this);
    lblGreen = new QLabel(this);
+
 #ifndef QT_NO_SHORTCUT
    lblGreen->setBuddy(gEd);
 #endif
+
    lblGreen->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-#if !defined(QT_SMALL_COLORDIALOG)
+
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblGreen, 1, 3);
    gl->addWidget(gEd, 1, 4);
 #else
@@ -1313,11 +1318,14 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    bEd = new QColSpinBox(this);
    lblBlue = new QLabel(this);
+
 #ifndef QT_NO_SHORTCUT
    lblBlue->setBuddy(bEd);
 #endif
+
    lblBlue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-#if !defined(QT_SMALL_COLORDIALOG)
+
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblBlue, 2, 3);
    gl->addWidget(bEd, 2, 4);
 #else
@@ -1327,15 +1335,18 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    alphaEd = new QColSpinBox(this);
    alphaLab = new QLabel(this);
+
 #ifndef QT_NO_SHORTCUT
    alphaLab->setBuddy(alphaEd);
 #endif
+
    alphaLab->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-#if !defined(QT_SMALL_COLORDIALOG)
+
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(alphaLab, 3, 1, 1, 3);
    gl->addWidget(alphaEd, 3, 4);
-#else
 
+#else
    gl->addWidget(alphaLab, 1, 3, 3, 1);
    gl->addWidget(alphaEd, 4, 3);
 
@@ -1345,8 +1356,7 @@ QColorShower::QColorShower(QColorDialog *parent)
    alphaLab->hide();
 
    lblHtml = new QLabel(this);
-   htEd = new QLineEdit(this);
-
+   htEd    = new QLineEdit(this);
 
 #ifndef QT_NO_SHORTCUT
    lblHtml->setBuddy(htEd);
@@ -1366,13 +1376,14 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(lblHtml, 5, 1);
    gl->addWidget(htEd, 5, 2, 1, /*colspan=*/ 3);
 #endif
+
    connect(hEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
    connect(sEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
    connect(vEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
 
-   connect(rEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(gEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(bEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
+   connect(rEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
+   connect(gEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
+   connect(bEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(alphaEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(htEd,    &QLineEdit::textEdited,     this, &QColorShower::htmlEd);
 
