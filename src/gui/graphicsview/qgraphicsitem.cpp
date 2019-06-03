@@ -8948,7 +8948,7 @@ static void formatGraphicsItemHelper(QDebug debug, const QGraphicsItem *item)
    }
 }
 
-QDebug operator<<(QDebug debug, QGraphicsItem *item)
+QDebug operator<<(QDebug debug, const QGraphicsItem *item)
 {
    QDebugStateSaver saver(debug);
    debug.nospace();
@@ -8958,7 +8958,7 @@ QDebug operator<<(QDebug debug, QGraphicsItem *item)
       return debug;
    }
 
-   if (QGraphicsObject *o = item->toGraphicsObject()) {
+   if (const QGraphicsObject *o = item->toGraphicsObject()) {
       debug << o->metaObject()->className();
    } else {
       debug << "QGraphicsItem";

@@ -227,7 +227,6 @@ class Q_GUI_EXPORT QGraphicsItem
    void setOpacity(qreal opacity);
 
 #ifndef QT_NO_GRAPHICSEFFECT
-   // Effect
    QGraphicsEffect *graphicsEffect() const;
    void setGraphicsEffect(QGraphicsEffect *effect);
 #endif
@@ -1201,7 +1200,7 @@ class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
 };
 
 template <class T>
-inline T qgraphicsitem_cast(QGraphicsItem *item)
+T qgraphicsitem_cast(QGraphicsItem *item)
 {
    using Item = typename std::remove_cv<typename std::remove_pointer<T>::type>::type;
 
@@ -1210,7 +1209,7 @@ inline T qgraphicsitem_cast(QGraphicsItem *item)
 }
 
 template <class T>
-inline T qgraphicsitem_cast(const QGraphicsItem *item)
+T qgraphicsitem_cast(const QGraphicsItem *item)
 {
    using Item = typename std::remove_cv<typename std::remove_pointer<T>::type>::type;
 
@@ -1219,7 +1218,8 @@ inline T qgraphicsitem_cast(const QGraphicsItem *item)
 }
 
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QGraphicsItem *item);
-Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsObject *item);
+Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QGraphicsObject *item);
+
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange change);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlag flag);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags);
