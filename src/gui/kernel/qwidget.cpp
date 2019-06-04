@@ -3454,11 +3454,6 @@ void cs_internal_set_cursor(QWidget *w, bool force)
       w = w->parentWidget();
    }
 
-
-// BROOM
-// qDebug("BROOM - do not change cursor");
-
-
    QWidget *nativeParent = w;
    if (! w->internalWinId()) {
       nativeParent = w->nativeParentWidget();
@@ -7530,13 +7525,11 @@ void QWidget::setWindowFlags(Qt::WindowFlags flags)
    d->setWindowFlags(flags);
 }
 
-/*! \internal
-
-    Implemented in QWidgetPrivate so that QMdiSubWindowPrivate can reimplement it.
-*/
+// Implemented in QWidgetPrivate so that QMdiSubWindowPrivate can reimplement it
 void QWidgetPrivate::setWindowFlags(Qt::WindowFlags flags)
 {
    Q_Q(QWidget);
+
    if (q->data->window_flags == flags) {
       return;
    }
@@ -7545,7 +7538,9 @@ void QWidgetPrivate::setWindowFlags(Qt::WindowFlags flags)
       // the old type was a window and/or the new type is a window
       QPoint oldPos = q->pos();
       bool visible = q->isVisible();
+
       const bool windowFlagChanged = (q->data->window_flags ^ flags) & Qt::Window;
+
       q->setParent(q->parentWidget(), flags);
 
       // if both types are windows or neither of them are, we restore
@@ -7553,10 +7548,14 @@ void QWidgetPrivate::setWindowFlags(Qt::WindowFlags flags)
       if (!windowFlagChanged && (visible || q->testAttribute(Qt::WA_Moved))) {
          q->move(oldPos);
       }
-      // for backward-compatibility we change Qt::WA_QuitOnClose attribute value only when the window was recreated.
+
+      // for backward-compatibility we change Qt::WA_QuitOnClose attribute value only
+      // when the window was recreated.
       adjustQuitOnCloseAttribute();
+
    } else {
       q->data->window_flags = flags;
+
    }
 }
 

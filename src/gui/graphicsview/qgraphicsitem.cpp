@@ -8812,6 +8812,7 @@ void QGraphicsItemEffectSourcePrivate::draw(QPainter *painter)
       scened->draw(item, painter, info->viewTransform, info->transformPtr, info->exposedRegion,
          info->widget, info->opacity, info->effectTransform, info->wasDirtySceneTransform,
          info->drawItem);
+
    } else {
       QTransform effectTransform = info->painter->worldTransform().inverted();
       effectTransform *= painter->worldTransform();
@@ -8845,9 +8846,11 @@ QRect QGraphicsItemEffectSourcePrivate::paddedEffectRect(Qt::CoordinateSystem sy
          // no choice but to send a logical coordinate bounding rect to boundingRectFor
          effectRectF = item->graphicsEffect()->boundingRectFor(sourceRect);
       }
+
    } else if (mode == QGraphicsEffect::PadToTransparentBorder) {
       // adjust by 1.5 to account for cosmetic pens
       effectRectF = sourceRect.adjusted(-1.5, -1.5, 1.5, 1.5);
+
    } else {
       effectRectF = sourceRect;
       if (unpadded) {
@@ -8867,9 +8870,11 @@ QPixmap QGraphicsItemEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QP
       qWarning("QGraphicsEffectSource::pixmap: Not yet implemented, lacking device context");
       return QPixmap();
    }
+
    if (!item->d_ptr->scene) {
       return QPixmap();
    }
+
    QGraphicsScenePrivate *scened = item->d_ptr->scene->d_func();
 
    bool unpadded;
@@ -8933,18 +8938,18 @@ QPixmap QGraphicsItemEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QP
 static void formatGraphicsItemHelper(QDebug debug, const QGraphicsItem *item)
 {
    if (const QGraphicsItem *parent = item->parentItem()) {
-      debug << ", parent=" << static_cast<const void *>(parent);
+      debug << ", parent =" << static_cast<const void *>(parent);
    }
 
-   debug << ", pos=";
+   debug << ", pos =";
    QtDebugUtils::formatQPoint(debug, item->pos());
 
    if (const qreal z = item->zValue()) {
-      debug << ", z=" << z;
+      debug << ", z =" << z;
    }
 
    if (item->flags()) {
-      debug <<  ", flags=" << item->flags();
+      debug <<  ", flags =" << item->flags();
    }
 }
 
@@ -8966,13 +8971,12 @@ QDebug operator<<(QDebug debug, const QGraphicsItem *item)
 
    debug << '(' << static_cast<const void *>(item);
    if (const QGraphicsProxyWidget *pw = qgraphicsitem_cast<const QGraphicsProxyWidget *>(item)) {
-
-      debug << ", widget=";
+      debug << ", widget =";
 
       if (const QWidget *w = pw->widget()) {
          debug << w->metaObject()->className() << '(' << static_cast<const void *>(w);
-         if (!w->objectName().isEmpty()) {
-            debug << ", name=" << w->objectName();
+         if (! w->objectName().isEmpty()) {
+            debug << ", name =" << w->objectName();
          }
 
          debug << ')';
@@ -8981,8 +8985,10 @@ QDebug operator<<(QDebug debug, const QGraphicsItem *item)
          debug << "QWidget(0)";
       }
    }
+
    formatGraphicsItemHelper(debug, item);
    debug << ')';
+
    return debug;
 }
 

@@ -2360,23 +2360,13 @@ QWindow *QWindow::fromWinId(WId id)
    return window;
 }
 
-/*!
-    Causes an alert to be shown for \a msec miliseconds. If \a msec is \c 0 (the
-    default), then the alert is shown indefinitely until the window becomes
-    active again. This function has no effect on an active window.
-
-    In alert state, the window indicates that it demands attention, for example by
-    flashing or bouncing the taskbar entry.
-
-    \since 5.1
-*/
-
 void QWindow::alert(int msec)
 {
    Q_D(QWindow);
    if (!d->platformWindow || d->platformWindow->isAlertState() || isActive()) {
       return;
    }
+
    d->platformWindow->setAlertState(true);
    if (d->platformWindow->isAlertState() && msec) {
       QTimer::singleShot(msec, this, SLOT(_q_clearAlert()));
@@ -2398,13 +2388,11 @@ void QWindow::setCursor(const QCursor &cursor)
    d->setCursor(&cursor);
 }
 
-
 void QWindow::unsetCursor()
 {
    Q_D(QWindow);
    d->setCursor(0);
 }
-
 
 QCursor QWindow::cursor() const
 {
