@@ -2066,7 +2066,7 @@ void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags windowFlags)
    Q_Q(QMdiSubWindow);
 
    if (! q->parent()) {
-      q->setWindowFlags(windowFlags);
+      QWidgetPrivate::setWindowFlags(windowFlags);
       return;
    }
 
@@ -2105,7 +2105,7 @@ void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags windowFlags)
    }
 #endif
 
-   q->setWindowFlags(windowFlags);
+   QWidgetPrivate::setWindowFlags(windowFlags);
    updateGeometryConstraints();
    updateActions();
 
