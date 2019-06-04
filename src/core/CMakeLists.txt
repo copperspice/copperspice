@@ -126,7 +126,7 @@ target_link_libraries(CsCore${BUILD_ABI} ${EXTRA_CORE_LIBS})
 
 if(MSVC)
    target_compile_options(CsCore${BUILD_ABI}
-      PUBLIC /w /bigobj /DNOMINMAX
+      PUBLIC /bigobj /DNOMINMAX
    )
 endif()
 
