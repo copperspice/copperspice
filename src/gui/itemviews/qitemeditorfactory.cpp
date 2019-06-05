@@ -70,7 +70,8 @@ class QUIntSpinBox : public QSpinBox
  public:
    explicit QUIntSpinBox(QWidget *parent = nullptr)
       : QSpinBox(parent) {
-      connect(this, SIGNAL(valueChanged(int)), this, SLOT(uintValueChanged()));
+      connect(this, static_cast<void (QUIntSpinBox::*)(int)>(&QUIntSpinBox::valueChanged),
+          this, &QUIntSpinBox::uintValueChanged);
    }
 
    uint uintValue() const {
@@ -301,7 +302,7 @@ QItemEditorCreatorBase::~QItemEditorCreatorBase()
 QExpandingLineEdit::QExpandingLineEdit(QWidget *parent)
    : QLineEdit(parent), originalWidth(-1), widgetOwnsGeometry(false)
 {
-   connect(this, SIGNAL(textChanged(QString)), this, SLOT(resizeToContents()));
+   connect(this, &QExpandingLineEdit::textChanged, this, &QExpandingLineEdit::resizeToContents);
    updateMinimumWidth();
 }
 

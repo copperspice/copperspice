@@ -282,7 +282,7 @@ int QToolBox::insertItem(int index, QWidget *widget, const QIcon &icon, const QS
    }
 
    Q_D(QToolBox);
-   connect(widget, SIGNAL(destroyed(QObject *)), this, SLOT(_q_widgetDestroyed(QObject *)));
+   connect(widget, &QWidget::destroyed, this, &QToolBox::_q_widgetDestroyed);
 
    QToolBoxPrivate::Page c;
    c.widget = widget;
@@ -417,9 +417,12 @@ void QToolBoxPrivate::_q_widgetDestroyed(QObject *object)
 void QToolBox::removeItem(int index)
 {
    Q_D(QToolBox);
+
    if (QWidget *w = widget(index)) {
-      disconnect(w, SIGNAL(destroyed(QObject *)), this, SLOT(_q_widgetDestroyed(QObject *)));
+      disconnect(w, &QWidget::destroyed, this, &QToolBox::_q_widgetDestroyed);
+
       w->setParent(this);
+
       // destroy internal data
       d->_q_widgetDestroyed(w);
       itemRemoved(index);

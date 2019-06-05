@@ -952,8 +952,8 @@ void QLabel::setMovie(QMovie *movie)
    }
 
    d->movie = movie;
-   connect(movie, SIGNAL(resized(QSize)), this, SLOT(_q_movieResized(QSize)));
-   connect(movie, SIGNAL(updated(QRect)), this, SLOT(_q_movieUpdated(QRect)));
+   connect(movie, &QMovie::resized, this, &QLabel::_q_movieResized);
+   connect(movie, &QMovie::updated, this, &QLabel::_q_movieUpdated);
 
    // Assume that if the movie is running,
    // resize/update signals will come soon enough
@@ -998,8 +998,8 @@ void QLabelPrivate::clearContents()
 
 #ifndef QT_NO_MOVIE
    if (movie) {
-      QObject::disconnect(movie, SIGNAL(resized(QSize)), q, SLOT(_q_movieResized(QSize)));
-      QObject::disconnect(movie, SIGNAL(updated(QRect)), q, SLOT(_q_movieUpdated(QRect)));
+      QObject::disconnect(movie.data(), &QMovie::resized, q, &QLabel::_q_movieResized);
+      QObject::disconnect(movie.data(), &QMovie::updated, q, &QLabel::_q_movieUpdated);
    }
    movie = 0;
 #endif

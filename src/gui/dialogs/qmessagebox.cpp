@@ -306,7 +306,9 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
    buttonBox = new QDialogButtonBox;
    buttonBox->setObjectName(QLatin1String("qt_msgbox_buttonbox"));
    buttonBox->setCenterButtons(q->style()->styleHint(QStyle::SH_MessageBox_CenterButtons, 0, q));
-   QObject::connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), q, SLOT(_q_buttonClicked(QAbstractButton *)));
+
+   QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::_q_buttonClicked);
+
    setupLayout();
    if (!title.isEmpty() || !text.isEmpty()) {
       q->setWindowTitle(title);

@@ -257,21 +257,18 @@ void QDataWidgetMapper::setModel(QAbstractItemModel *model)
    }
 
    if (d->model) {
-      disconnect(d->model, SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)),
-         this, SLOT(_q_dataChanged(QModelIndex, QModelIndex, QVector<int>)));
-
-      disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
+      disconnect(d->model, &QAbstractItemModel::dataChanged, this, &QDataWidgetMapper::_q_dataChanged);
+      disconnect(d->model, &QAbstractItemModel::destroyed,   this, &QDataWidgetMapper::_q_modelDestroyed);
    }
+
    clearMapping();
    d->rootIndex = QModelIndex();
    d->currentTopLeft = QModelIndex();
 
    d->model = model;
 
-   connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)),
-      this, SLOT(_q_dataChanged(QModelIndex, QModelIndex, QVector<int>)));
-
-   connect(model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
+   connect(model, &QAbstractItemModel::dataChanged, this, &QDataWidgetMapper::_q_dataChanged);
+   connect(model, &QAbstractItemModel::destroyed,   this, &QDataWidgetMapper::_q_modelDestroyed);
 }
 
 QAbstractItemModel *QDataWidgetMapper::model() const
@@ -288,17 +285,15 @@ void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
    Q_D(QDataWidgetMapper);
    QAbstractItemDelegate *oldDelegate = d->delegate;
    if (oldDelegate) {
-      disconnect(oldDelegate, SIGNAL(commitData(QWidget *)), this, SLOT(_q_commitData(QWidget *)));
-      disconnect(oldDelegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)),
-         this, SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+      disconnect(oldDelegate, &QAbstractItemDelegate::commitData,  this, &QDataWidgetMapper::_q_commitData);
+      disconnect(oldDelegate, &QAbstractItemDelegate::closeEditor, this, &QDataWidgetMapper::_q_closeEditor);
    }
 
    d->delegate = delegate;
 
    if (delegate) {
-      connect(delegate, SIGNAL(commitData(QWidget *)), this, SLOT(_q_commitData(QWidget *)));
-      connect(delegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)), this,
-         SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+      connect(delegate, &QAbstractItemDelegate::commitData,  this, &QDataWidgetMapper::_q_commitData);
+      connect(delegate, &QAbstractItemDelegate::closeEditor, this, &QDataWidgetMapper::_q_closeEditor);
    }
 
    d->flipEventFilters(oldDelegate, delegate);

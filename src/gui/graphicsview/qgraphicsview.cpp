@@ -1423,8 +1423,8 @@ void QGraphicsView::setScene(QGraphicsScene *scene)
 
    // Remove the previously assigned scene.
    if (d->scene) {
-      disconnect(d->scene, SIGNAL(changed(QList<QRectF>)),   this, SLOT(updateScene(QList<QRectF>)));
-      disconnect(d->scene, SIGNAL(sceneRectChanged(QRectF)), this, SLOT(updateSceneRect(QRectF)));
+      disconnect(d->scene.data(), &QGraphicsScene::changed,          this, &QGraphicsView::updateScene);
+      disconnect(d->scene.data(), &QGraphicsScene::sceneRectChanged, this, &QGraphicsView::updateSceneRect);
 
       d->scene->d_func()->removeView(this);
       d->connectedToScene = false;
@@ -1440,7 +1440,7 @@ void QGraphicsView::setScene(QGraphicsScene *scene)
 
    // Assign the new scene and update the contents (scrollbars, etc.)).
    if ((d->scene = scene)) {
-      connect(d->scene, SIGNAL(sceneRectChanged(QRectF)), this, SLOT(updateSceneRect(QRectF)));
+      connect(d->scene.data(), &QGraphicsScene::sceneRectChanged, this, &QGraphicsView::updateSceneRect);
 
       d->updateSceneSlotReimplementedChecked = false;
       d->scene->d_func()->addView(this);
@@ -2534,9 +2534,10 @@ bool QGraphicsView::viewportEvent(QEvent *event)
 
                if (mo != &QGraphicsView::staticMetaObject()) {
 
-                  if (mo->indexOfSlot("updateScene(QList<QRectF>)")
-                     != QGraphicsView::staticMetaObject().indexOfSlot("updateScene(QList<QRectF>)")) {
-                     connect(d->scene, SIGNAL(changed(QList<QRectF>)), this, SLOT(updateScene(QList<QRectF>)));
+                  if (mo->indexOfSlot("updateScene(const QList<QRectF> &)") !=
+                        QGraphicsView::staticMetaObject().indexOfSlot("updateScene(const QList<QRectF> &)")) {
+
+                     connect(d->scene.data(), &QGraphicsScene::changed, this, &QGraphicsView::updateScene);
                   }
                }
             }

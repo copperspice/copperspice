@@ -293,9 +293,7 @@ void QUrlModel::setFileSystemModel(QFileSystemModel *model)
    }
 
    if (fileSystemModel != 0) {
-      disconnect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-         this, SLOT(dataChanged(QModelIndex, QModelIndex)));
-
+      disconnect(model, &QFileSystemModel::dataChanged,   this, &QUrlModel::dataChanged);
       disconnect(model, &QFileSystemModel::layoutChanged, this, &QUrlModel::layoutChanged);
       disconnect(model, &QFileSystemModel::rowsRemoved,   this, &QUrlModel::layoutChanged);
    }
@@ -442,6 +440,7 @@ void QSidebar::selectUrl(const QUrl &url)
 void QSidebar::showContextMenu(const QPoint &position)
 {
    QList<QAction *> actions;
+
    if (indexAt(position).isValid()) {
       QAction *action = new QAction(QFileDialog::tr("Remove"), this);
 
@@ -449,8 +448,7 @@ void QSidebar::showContextMenu(const QPoint &position)
          action->setEnabled(false);
       }
 
-      connect(action, SIGNAL(triggered()), this, SLOT(removeEntry()));
-
+      connect(action, &QAction::triggered, this, &QSidebar::removeEntry);
       actions.append(action);
    }
 

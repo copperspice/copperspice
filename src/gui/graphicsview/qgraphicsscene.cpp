@@ -148,7 +148,7 @@ void QGraphicsScenePrivate::init()
    index = new QGraphicsSceneBspTreeIndex(q);
 
    // Keep this index so we can check for connected slots later on.
-   changedSignalIndex = q->metaObject()->indexOfSignal("changed(QList<QRectF>)");
+   changedSignalIndex = q->metaObject()->indexOfSignal("changed(const QList<QRectF> &)");
 
    processDirtyItemsIndex = q->metaObject()->indexOfSlot("_q_processDirtyItems()");
    polishItemsIndex = q->metaObject()->indexOfSlot("_q_polishItems()");
@@ -193,7 +193,7 @@ void QGraphicsScenePrivate::_q_emitUpdated()
 
          if (!view->d_func()->connectedToScene) {
             view->d_func()->connectedToScene = true;
-            q->connect(q, SIGNAL(changed(QList<QRectF>)), views.at(i), SLOT(updateScene(QList<QRectF>)));
+            q->connect(q, &QGraphicsScene::changed, view, &QGraphicsView::updateScene);
          }
       }
    } else {

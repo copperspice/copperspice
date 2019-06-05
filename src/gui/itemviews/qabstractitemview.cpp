@@ -260,38 +260,22 @@ void QAbstractItemView::setModel(QAbstractItemModel *model)
    }
 
    if (d->model && d->model != QAbstractItemModelPrivate::staticEmptyModel()) {
-      disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
-      disconnect(d->model, SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)),
-         this, SLOT(dataChanged(QModelIndex, QModelIndex, QVector<int>)));
+      disconnect(d->model, &QAbstractItemModel::destroyed,               this, &QAbstractItemView::_q_modelDestroyed);
+      disconnect(d->model, &QAbstractItemModel::dataChanged,             this, &QAbstractItemView::dataChanged);
 
-      disconnect(d->model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(_q_headerDataChanged()));
-      disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),          this, SLOT(rowsInserted(QModelIndex, int, int)));
+      disconnect(d->model, &QAbstractItemModel::headerDataChanged,       this, &QAbstractItemView::_q_headerDataChanged);
+      disconnect(d->model, &QAbstractItemModel::rowsInserted,            this, &QAbstractItemView::rowsInserted);
+      disconnect(d->model, &QAbstractItemModel::rowsInserted,            this, &QAbstractItemView::_q_rowsInserted);
+      disconnect(d->model, &QAbstractItemModel::rowsAboutToBeRemoved,    this, &QAbstractItemView::rowsAboutToBeRemoved);
+      disconnect(d->model, &QAbstractItemModel::rowsRemoved,             this, &QAbstractItemView::_q_rowsRemoved);
+      disconnect(d->model, &QAbstractItemModel::rowsMoved,               this, &QAbstractItemView::_q_rowsMoved);
 
-      disconnect(d->model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-         this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)), this,
-         SLOT(_q_rowsRemoved(QModelIndex, int, int)));
-      disconnect(d->model, SIGNAL(rowsMoved(QModelIndex, int, int, QModelIndex, int)),
-         this, SLOT(_q_rowsMoved(QModelIndex, int, int, QModelIndex, int)));
-
-      disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)), this,
-         SLOT(_q_rowsInserted(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_columnsAboutToBeRemoved(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(columnsRemoved(QModelIndex, int, int)),  this,
-         SLOT(_q_columnsRemoved(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(columnsInserted(QModelIndex, int, int)), this,
-         SLOT(_q_columnsInserted(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(columnsMoved(QModelIndex, int, int, QModelIndex, int)),
-         this, SLOT(_q_columnsMoved(QModelIndex, int, int, QModelIndex, int)));
-
-      disconnect(d->model, SIGNAL(modelReset()),    this, SLOT(reset()));
-      disconnect(d->model, SIGNAL(layoutChanged()), this, SLOT(_q_layoutChanged()));
+      disconnect(d->model, &QAbstractItemModel::columnsAboutToBeRemoved, this, &QAbstractItemView::_q_columnsAboutToBeRemoved);
+      disconnect(d->model, &QAbstractItemModel::columnsRemoved,          this, &QAbstractItemView::_q_columnsRemoved);
+      disconnect(d->model, &QAbstractItemModel::columnsInserted,         this, &QAbstractItemView::_q_columnsInserted);
+      disconnect(d->model, &QAbstractItemModel::columnsMoved,            this, &QAbstractItemView::_q_columnsMoved);
+      disconnect(d->model, &QAbstractItemModel::modelReset,              this, &QAbstractItemView::reset);
+      disconnect(d->model, &QAbstractItemModel::layoutChanged,           this, &QAbstractItemView::_q_layoutChanged);
    }
 
    d->model = (model ? model : QAbstractItemModelPrivate::staticEmptyModel());
@@ -3704,7 +3688,7 @@ QWidget *QAbstractItemViewPrivate::editor(const QModelIndex &index, const QStyle
       if (w) {
          w->installEventFilter(delegate);
 
-         QObject::connect(w, SIGNAL(destroyed(QObject *)), q, SLOT(editorDestroyed(QObject *)));
+         QObject::connect(w, &QWidget::destroyed, q, &QAbstractItemView::editorDestroyed);
          delegate->updateEditorGeometry(w, options, index);
          delegate->setEditorData(w, index);
 

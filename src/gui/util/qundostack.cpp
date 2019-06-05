@@ -565,9 +565,9 @@ QAction *QUndoStack::createUndoAction(QObject *parent, const QString &prefix) co
    result->setEnabled(canUndo());
    result->setPrefixedText(undoText());
 
-   connect(this, SIGNAL(canUndoChanged(bool)), result, SLOT(setEnabled(bool)));
-   connect(this, SIGNAL(undoTextChanged(QString)), result, SLOT(setPrefixedText(QString)));
-   connect(result, SIGNAL(triggered()), this, SLOT(undo()));
+   connect(this,   &QUndoStack::canUndoChanged,  result, &QUndoAction::setEnabled);
+   connect(this,   &QUndoStack::undoTextChanged, result, &QUndoAction::setPrefixedText);
+   connect(result, &QUndoAction::triggered,      this,   &QUndoStack::undo);
 
    return result;
 }
@@ -584,9 +584,9 @@ QAction *QUndoStack::createRedoAction(QObject *parent, const QString &prefix) co
    result->setEnabled(canRedo());
    result->setPrefixedText(redoText());
 
-   connect(this, SIGNAL(canRedoChanged(bool)),     result, SLOT(setEnabled(bool)));
-   connect(this, SIGNAL(redoTextChanged(QString)), result, SLOT(setPrefixedText(QString)));
-   connect(result, SIGNAL(triggered()), this, SLOT(redo()));
+   connect(this,   &QUndoStack::canRedoChanged,  result, &QUndoAction::setEnabled);
+   connect(this,   &QUndoStack::redoTextChanged, result, &QUndoAction::setPrefixedText);
+   connect(result, &QUndoAction::triggered,      this,   &QUndoStack::redo);
 
    return result;
 }

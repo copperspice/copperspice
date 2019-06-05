@@ -73,16 +73,13 @@ void QTreeView::setModel(QAbstractItemModel *model)
    }
 
    if (d->model && d->model != QAbstractItemModelPrivate::staticEmptyModel()) {
-      disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-                  this, SLOT(rowsRemoved(QModelIndex, int, int)));
-
-      disconnect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_modelAboutToBeReset()));
+      disconnect(d->model, &QAbstractItemModel::rowsRemoved,         this, &QTreeView::rowsRemoved);
+      disconnect(d->model, &QAbstractItemModel::modelAboutToBeReset, this, &QTreeView::_q_modelAboutToBeReset);
    }
 
    if (d->selectionModel) {
       // support row editing
-      disconnect(d->selectionModel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-                  d->model, SLOT(submit()));
+      disconnect(d->selectionModel.data(), &QItemSelectionModel::currentRowChanged, d->model, &QAbstractItemModel::submit);
 
       disconnect(d->model, &QAbstractItemModel::rowsRemoved,         this, &QTreeView::rowsRemoved);
       disconnect(d->model, &QAbstractItemModel::modelAboutToBeReset, this, &QTreeView::_q_modelAboutToBeReset);
@@ -95,11 +92,10 @@ void QTreeView::setModel(QAbstractItemModel *model)
    QAbstractItemView::setModel(model);
 
    // QAbstractItemView connects to a private slot
-   disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-      this, SLOT(_q_rowsRemoved(QModelIndex, int, int)));
+   disconnect(d->model, &QAbstractItemModel::rowsRemoved, this, &QAbstractItemView::_q_rowsRemoved);
 
    // do header layout after the tree
-   disconnect(d->model, SIGNAL(layoutChanged()), d->header, SLOT(_q_layoutChanged()));
+   disconnect(d->model, &QAbstractItemModel::layoutChanged, d->header, &QHeaderView::_q_layoutChanged);
 
    // QTreeView has a public slot for this
    connect(d->model, &QAbstractItemModel::rowsRemoved,         this, &QTreeView::rowsRemoved);

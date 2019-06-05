@@ -121,7 +121,9 @@ QPollingFileSystemWatcherEngine::QPollingFileSystemWatcherEngine()
 void QPollingFileSystemWatcherEngine::run()
 {
    QTimer timer;
-   connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
+
+   connect(&timer, &QTimer::timeout, this, &QPollingFileSystemWatcherEngine::timeout);
+
    timer.start(PollingInterval);
    (void) exec();
 }
@@ -266,9 +268,8 @@ void QFileSystemWatcherPrivate::init()
    native = createNativeEngine();
 
    if (native) {
-      QObject::connect(native, SIGNAL(fileChanged(const QString &, bool)), q, SLOT(_q_fileChanged(const QString &, bool)));
-      QObject::connect(native, SIGNAL(directoryChanged(const QString &, bool)), q, SLOT(_q_directoryChanged(const QString &,
-                       bool)));
+      QObject::connect(native, &QFileSystemWatcherEngine::fileChanged,      q, &QFileSystemWatcher::_q_fileChanged);
+      QObject::connect(native, &QFileSystemWatcherEngine::directoryChanged, q, &QFileSystemWatcher::_q_directoryChanged);
    }
 }
 
@@ -294,9 +295,8 @@ void QFileSystemWatcherPrivate::initForcedEngine(const QString &forceName)
 #endif
 
    if (forced) {
-      QObject::connect(forced, SIGNAL(fileChanged(const QString &, bool)), q, SLOT(_q_fileChanged(const QString &, bool)));
-      QObject::connect(forced, SIGNAL(directoryChanged(const QString &, bool)), q, SLOT(_q_directoryChanged(const QString &,
-                       bool)));
+      QObject::connect(forced, &QFileSystemWatcherEngine::fileChanged,      q, &QFileSystemWatcher::_q_fileChanged);
+      QObject::connect(forced, &QFileSystemWatcherEngine::directoryChanged, q, &QFileSystemWatcher::_q_directoryChanged);
    }
 }
 
@@ -308,9 +308,9 @@ void QFileSystemWatcherPrivate::initPollerEngine()
 
    Q_Q(QFileSystemWatcher);
    poller = new QPollingFileSystemWatcherEngine; // that was a mouthful
-   QObject::connect(poller, SIGNAL(fileChanged(const QString &, bool)), q, SLOT(_q_fileChanged(const QString &, bool)));
-   QObject::connect(poller, SIGNAL(directoryChanged(const QString &, bool)), q, SLOT(_q_directoryChanged(const QString &,
-                    bool)));
+
+   QObject::connect(poller, &QPollingFileSystemWatcherEngine::fileChanged,      q, &QFileSystemWatcher::_q_fileChanged);
+   QObject::connect(poller, &QPollingFileSystemWatcherEngine::directoryChanged, q, &QFileSystemWatcher::_q_directoryChanged);
 }
 
 void QFileSystemWatcherPrivate::_q_fileChanged(const QString &path, bool removed)

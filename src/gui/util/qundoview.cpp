@@ -81,8 +81,7 @@ QUndoModel::QUndoModel(QObject *parent)
    m_stack = 0;
    m_sel_model = new QItemSelectionModel(this, this);
 
-   connect(m_sel_model, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-      this, SLOT(setStackCurrentIndex(QModelIndex)));
+   connect(m_sel_model, &QItemSelectionModel::currentChanged, this, &QUndoModel::setStackCurrentIndex);
 
    m_emty_label = tr("<empty>");
 }
@@ -104,15 +103,17 @@ void QUndoModel::setStack(QUndoStack *stack)
    }
 
    if (m_stack != 0) {
-      disconnect(m_stack, SIGNAL(cleanChanged(bool)),  this, SLOT(stackChanged()));
-      disconnect(m_stack, SIGNAL(indexChanged(int)),   this, SLOT(stackChanged()));
-      disconnect(m_stack, SIGNAL(destroyed(QObject *)), this, SLOT(stackDestroyed(QObject *)));
+      disconnect(m_stack, &QUndoStack::cleanChanged, this, &QUndoModel::stackChanged);
+      disconnect(m_stack, &QUndoStack::indexChanged, this, &QUndoModel::stackChanged);
+      disconnect(m_stack, &QUndoStack::destroyed,    this, &QUndoModel::stackDestroyed);
    }
+
    m_stack = stack;
+
    if (m_stack != 0) {
-      connect(m_stack, SIGNAL(cleanChanged(bool)),  this, SLOT(stackChanged()));
-      connect(m_stack, SIGNAL(indexChanged(int)),   this, SLOT(stackChanged()));
-      connect(m_stack, SIGNAL(destroyed(QObject *)), this, SLOT(stackDestroyed(QObject *)));
+      connect(m_stack, &QUndoStack::cleanChanged, this, &QUndoModel::stackChanged);
+      connect(m_stack, &QUndoStack::indexChanged, this, &QUndoModel::stackChanged);
+      connect(m_stack, &QUndoStack::destroyed,    this, &QUndoModel::stackDestroyed);
    }
 
    stackChanged();
@@ -389,13 +390,13 @@ void QUndoView::setGroup(QUndoGroup *group)
    }
 
    if (d->group != 0) {
-      disconnect(d->group, SIGNAL(activeStackChanged(QUndoStack *)), d->model, SLOT(setStack(QUndoStack *)));
+      disconnect(d->group.data(), &QUndoGroup::activeStackChanged, d->model, &QUndoModel::setStack);
    }
 
    d->group = group;
 
    if (d->group != 0) {
-      connect(d->group, SIGNAL(activeStackChanged(QUndoStack *)), d->model, SLOT(setStack(QUndoStack *)));
+      connect(d->group.data(), &QUndoGroup::activeStackChanged, d->model, &QUndoModel::setStack);
       d->model->setStack(d->group->activeStack());
 
    } else {

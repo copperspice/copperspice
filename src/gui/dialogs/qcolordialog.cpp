@@ -1225,8 +1225,8 @@ QColorShower::QColorShower(QColorDialog *parent)
 
 #endif
 
-   connect(lab, SIGNAL(colorDropped(QRgb)), this, SLOT(newCol(QRgb)));
-   connect(lab, SIGNAL(colorDropped(QRgb)), this, SLOT(setRgb(QRgb)));
+   connect(lab, &QColorShowLabel::colorDropped, this, &QColorShower::newCol);
+   connect(lab, &QColorShowLabel::colorDropped, this, &QColorShower::setRgb);
 
    hEd = new QColSpinBox(this);
    hEd->setRange(0, 359);
@@ -1806,8 +1806,9 @@ void QColorDialogPrivate::initWidgets()
       custom = new QColorWell(q, customColorRows, colorColumns, QColorDialogOptions::customColors());
       custom->setAcceptDrops(true);
 
-      q->connect(custom, SIGNAL(selected(int, int)), SLOT(_q_newCustom(int, int)));
-      q->connect(custom, SIGNAL(currentChanged(int, int)), SLOT(_q_nextCustom(int, int)));
+      QObject::connect(custom, &QColorWell::selected,       q, &QColorDialog::_q_newCustom);
+      QObject::connect(custom, &QColorWell::currentChanged, q, &QColorDialog::_q_nextCustom);
+
       lblCustomColors = new QLabel(q);
 
 #ifndef QT_NO_SHORTCUT
@@ -1874,16 +1875,18 @@ void QColorDialogPrivate::initWidgets()
    pickLay->addStretch();
 #endif
 
-   QObject::connect(cp, SIGNAL(newCol(int, int)), lp, SLOT(setCol(int, int)));
-   QObject::connect(lp, SIGNAL(newHsv(int, int, int)), q, SLOT(_q_newHsv(int, int, int)));
+   QObject::connect(cp, &QColorPicker::newCol, lp,
+                  static_cast<void (QColorLuminancePicker::*)(int, int)>(&QColorLuminancePicker::setCol));
+
+   QObject::connect(lp, &QColorLuminancePicker::newHsv, q,  &QColorDialog::_q_newHsv);
 
    rightLay->addStretch();
 
    cs = new QColorShower(q);
    pickLay->setMargin(cs->gl->margin());
 
-   QObject::connect(cs, SIGNAL(newCol(QRgb)), q, SLOT(_q_newColorTypedIn(QRgb)));
-   QObject::connect(cs, SIGNAL(currentColorChanged(QColor)), q, SLOT(currentColorChanged(QColor)));
+   QObject::connect(cs, &QColorShower::newCol,              q, &QColorDialog::_q_newColorTypedIn);
+   QObject::connect(cs, &QColorShower::currentColorChanged, q, &QColorDialog::currentColorChanged);
 
 #if defined(QT_SMALL_COLORDIALOG)
    topLay->addWidget(cs);
@@ -1913,10 +1916,13 @@ void QColorDialogPrivate::initWidgets()
 void QColorDialogPrivate::initHelper(QPlatformDialogHelper *h)
 {
    QColorDialog *d = q_func();
-   QObject::connect(h, SIGNAL(currentColorChanged(QColor)), d, SLOT(currentColorChanged(QColor)));
-   QObject::connect(h, SIGNAL(colorSelected(QColor)), d,  SLOT(colorSelected(QColor)));
 
-   static_cast<QPlatformColorDialogHelper *>(h)->setOptions(options);
+   QPlatformColorDialogHelper *tmp = static_cast<QPlatformColorDialogHelper *>(h);
+
+   QObject::connect(tmp, &QPlatformColorDialogHelper::currentColorChanged, d, &QColorDialog::currentColorChanged);
+   QObject::connect(tmp, &QPlatformColorDialogHelper::colorSelected,       d, &QColorDialog::colorSelected);
+
+   tmp->setOptions(options);
 }
 
 void QColorDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
@@ -2248,6 +2254,12 @@ void QColorDialog::_q_newCustom(int un_named_arg1, int un_named_arg2)
 {
    Q_D(QColorDialog);
    d->_q_newCustom(un_named_arg1, un_named_arg2);
+}
+
+void QColorDialog::_q_nextCustom(int un_named_arg1, int un_named_arg2)
+{
+   Q_D(QColorDialog);
+   d->_q_nextCustom(un_named_arg1, un_named_arg2);
 }
 
 void QColorDialog::_q_newStandard(int un_named_arg1, int un_named_arg2)

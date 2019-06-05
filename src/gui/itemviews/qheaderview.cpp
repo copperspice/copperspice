@@ -122,37 +122,20 @@ void QHeaderView::setModel(QAbstractItemModel *model)
    if (d->model && d->model != QAbstractItemModelPrivate::staticEmptyModel()) {
 
       if (d->orientation == Qt::Horizontal) {
-         QObject::disconnect(d->model, SIGNAL(columnsInserted(QModelIndex, int, int)),
-            this, SLOT(sectionsInserted(QModelIndex, int, int)));
-
-         QObject::disconnect(d->model, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(sectionsAboutToBeRemoved(QModelIndex, int, int)));
-
-         QObject::disconnect(d->model, SIGNAL(columnsRemoved(QModelIndex, int, int)),
-            this, SLOT(_q_sectionsRemoved(QModelIndex, int, int)));
-
-         QObject::disconnect(d->model, SIGNAL(columnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-            this, SLOT(_q_layoutAboutToBeChanged()));
+         QObject::disconnect(d->model, &QAbstractItemModel::columnsInserted,         this, &QHeaderView::sectionsInserted);
+         QObject::disconnect(d->model, &QAbstractItemModel::columnsAboutToBeRemoved, this, &QHeaderView::sectionsAboutToBeRemoved);
+         QObject::disconnect(d->model, &QAbstractItemModel::columnsRemoved,          this, &QHeaderView::_q_sectionsRemoved);
+         QObject::disconnect(d->model, &QAbstractItemModel::columnsAboutToBeMoved,   this, &QHeaderView::_q_layoutAboutToBeChanged);
 
       } else {
-         QObject::disconnect(d->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-            this, SLOT(sectionsInserted(QModelIndex, int, int)));
-
-         QObject::disconnect(d->model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(sectionsAboutToBeRemoved(QModelIndex, int, int)));
-
-         QObject::disconnect(d->model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-            this, SLOT(_q_sectionsRemoved(QModelIndex, int, int)));
-
-         QObject::disconnect(d->model, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-            this, SLOT(_q_layoutAboutToBeChanged()));
+         QObject::disconnect(d->model, &QAbstractItemModel::rowsInserted,            this, &QHeaderView::sectionsInserted);
+         QObject::disconnect(d->model, &QAbstractItemModel::rowsAboutToBeRemoved,    this, &QHeaderView::sectionsAboutToBeRemoved);
+         QObject::disconnect(d->model, &QAbstractItemModel::rowsRemoved,             this, &QHeaderView::_q_sectionsRemoved);
+         QObject::disconnect(d->model, &QAbstractItemModel::rowsAboutToBeMoved,      this, &QHeaderView::_q_layoutAboutToBeChanged);
       }
 
-      QObject::disconnect(d->model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
-         this, SLOT(headerDataChanged(Qt::Orientation, int, int)));
-
-      QObject::disconnect(d->model, SIGNAL(layoutAboutToBeChanged()),
-         this, SLOT(_q_layoutAboutToBeChanged()));
+      QObject::disconnect(d->model, &QAbstractItemModel::headerDataChanged,          this, &QHeaderView::headerDataChanged);
+      QObject::disconnect(d->model, &QAbstractItemModel::layoutAboutToBeChanged,     this, &QHeaderView::_q_layoutAboutToBeChanged);
    }
 
    if (model && model != QAbstractItemModelPrivate::staticEmptyModel()) {

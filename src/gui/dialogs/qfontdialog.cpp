@@ -375,10 +375,12 @@ void QFontDialogPrivate::initHelper(QPlatformDialogHelper *h)
 {
    QFontDialog *d = q_func();
 
-   QObject::connect(h, SIGNAL(currentFontChanged(QFont)), d, SLOT(currentFontChanged(QFont)));
-   QObject::connect(h, SIGNAL(fontSelected(QFont)),       d, SLOT(fontSelected(QFont)));
+   QPlatformFontDialogHelper *tmp = static_cast<QPlatformFontDialogHelper *>(h);
 
-   static_cast<QPlatformFontDialogHelper *>(h)->setOptions(options);
+   QObject::connect(tmp, &QPlatformFontDialogHelper::currentFontChanged, d, &QFontDialog::currentFontChanged);
+   QObject::connect(tmp, &QPlatformFontDialogHelper::fontSelected,       d, &QFontDialog::fontSelected);
+
+   tmp->setOptions(options);
 }
 
 void QFontDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)

@@ -463,9 +463,10 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_2(_q_scrollerStateChanged)
 #endif
 
+   friend class QTreeView;
    friend class QTreeViewPrivate;       // needed to compile with MSVC
    friend class QListModeViewBase;
-   friend class QListViewPrivate;       // needed to compile for Symbian emulator
+   friend class QListViewPrivate;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemView::EditTriggers)

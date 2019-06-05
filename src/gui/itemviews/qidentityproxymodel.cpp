@@ -292,47 +292,26 @@ void QIdentityProxyModel::setSourceModel(QAbstractItemModel *newSourceModel)
    beginResetModel();
 
    if (sourceModel()) {
-      disconnect(sourceModel(), SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
-         this, SLOT(_q_sourceRowsAboutToBeInserted(QModelIndex, int, int)));
-      disconnect(sourceModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_sourceRowsInserted(QModelIndex, int, int)));
-      disconnect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_sourceRowsAboutToBeRemoved(QModelIndex, int, int)));
-      disconnect(sourceModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_sourceRowsRemoved(QModelIndex, int, int)));
-      disconnect(sourceModel(), SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-         this, SLOT(_q_sourceRowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
-      disconnect(sourceModel(), SIGNAL(rowsMoved(QModelIndex, int, int, QModelIndex, int)),
-         this, SLOT(_q_sourceRowsMoved(QModelIndex, int, int, QModelIndex, int)));
-      disconnect(sourceModel(), SIGNAL(columnsAboutToBeInserted(QModelIndex, int, int)),
-         this, SLOT(_q_sourceColumnsAboutToBeInserted(QModelIndex, int, int)));
-      disconnect(sourceModel(), SIGNAL(columnsInserted(QModelIndex, int, int)),
-         this, SLOT(_q_sourceColumnsInserted(QModelIndex, int, int)));
-      disconnect(sourceModel(), SIGNAL(columnsAboutToBeRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_sourceColumnsAboutToBeRemoved(QModelIndex, int, int)));
+      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,    this, &QIdentityProxyModel::_q_sourceRowsAboutToBeInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsInserted,             this, &QIdentityProxyModel::_q_sourceRowsInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved,     this, &QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved,              this, &QIdentityProxyModel::_q_sourceRowsRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeMoved,       this, &QIdentityProxyModel::_q_sourceRowsAboutToBeMoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsMoved,                this, &QIdentityProxyModel::_q_sourceRowsMoved);
 
-      disconnect(sourceModel(), SIGNAL(columnsRemoved(QModelIndex, int, int)),
-         this, SLOT(_q_sourceColumnsRemoved(QModelIndex, int, int)));
+      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeInserted, this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsInserted,          this, &QIdentityProxyModel::_q_sourceColumnsInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeRemoved,  this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsRemoved,           this, &QIdentityProxyModel::_q_sourceColumnsRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeMoved,    this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsMoved,             this, &QIdentityProxyModel::_q_sourceColumnsMoved);
 
-      disconnect(sourceModel(), SIGNAL(columnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)),
-         this, SLOT(_q_sourceColumnsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
-
-      disconnect(sourceModel(), SIGNAL(columnsMoved(QModelIndex, int, int, QModelIndex, int)),
-         this, SLOT(_q_sourceColumnsMoved(QModelIndex, int, int, QModelIndex, int)));
-
-      disconnect(sourceModel(), SIGNAL(modelAboutToBeReset()),
-         this, SLOT(_q_sourceModelAboutToBeReset()));
-
-      disconnect(sourceModel(), SIGNAL(modelReset()),
-         this, SLOT(_q_sourceModelReset()));
-      disconnect(sourceModel(), SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)),
-         this, SLOT(_q_sourceDataChanged(QModelIndex, QModelIndex, const QVector<int> &)));
-      disconnect(sourceModel(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
-         this, SLOT(_q_sourceHeaderDataChanged(Qt::Orientation, int, int)));
-      disconnect(sourceModel(), SIGNAL(layoutAboutToBeChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)),
-         this, SLOT(_q_sourceLayoutAboutToBeChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)));
-      disconnect(sourceModel(), SIGNAL(layoutChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)),
-         this, SLOT(_q_sourceLayoutChanged(QList<QPersistentModelIndex>, QAbstractItemModel::LayoutChangeHint)));
+      disconnect(sourceModel(), &QAbstractItemModel::modelAboutToBeReset,      this, &QIdentityProxyModel::_q_sourceModelAboutToBeReset);
+      disconnect(sourceModel(), &QAbstractItemModel::modelReset,               this, &QIdentityProxyModel::_q_sourceModelReset);
+      disconnect(sourceModel(), &QAbstractItemModel::dataChanged,              this, &QIdentityProxyModel::_q_sourceDataChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::headerDataChanged,        this, &QIdentityProxyModel::_q_sourceHeaderDataChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged,   this, &QIdentityProxyModel::_q_sourceLayoutAboutToBeChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::layoutChanged,            this, &QIdentityProxyModel::_q_sourceLayoutChanged);
    }
 
    QAbstractProxyModel::setSourceModel(newSourceModel);
@@ -344,12 +323,14 @@ void QIdentityProxyModel::setSourceModel(QAbstractItemModel *newSourceModel)
       connect(sourceModel(), &QAbstractItemModel::rowsRemoved,              this, &QIdentityProxyModel::_q_sourceRowsRemoved);
       connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeMoved,       this, &QIdentityProxyModel::_q_sourceRowsAboutToBeMoved);
       connect(sourceModel(), &QAbstractItemModel::rowsMoved,                this, &QIdentityProxyModel::_q_sourceRowsMoved);
+
       connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeInserted, this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted);
       connect(sourceModel(), &QAbstractItemModel::columnsInserted,          this, &QIdentityProxyModel::_q_sourceColumnsInserted);
       connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeRemoved,  this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved);
       connect(sourceModel(), &QAbstractItemModel::columnsRemoved,           this, &QIdentityProxyModel::_q_sourceColumnsRemoved);
       connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeMoved,    this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved);
       connect(sourceModel(), &QAbstractItemModel::columnsMoved,             this, &QIdentityProxyModel::_q_sourceColumnsMoved);
+
       connect(sourceModel(), &QAbstractItemModel::modelAboutToBeReset,      this, &QIdentityProxyModel::_q_sourceModelAboutToBeReset);
       connect(sourceModel(), &QAbstractItemModel::modelReset,               this, &QIdentityProxyModel::_q_sourceModelReset);
       connect(sourceModel(), &QAbstractItemModel::dataChanged,              this, &QIdentityProxyModel::_q_sourceDataChanged);

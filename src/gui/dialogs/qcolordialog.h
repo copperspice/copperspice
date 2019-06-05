@@ -109,6 +109,9 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
    GUI_CS_SLOT_1(Private, void _q_newCustom(int arg1, int arg2))
    GUI_CS_SLOT_2(_q_newCustom)
 
+   GUI_CS_SLOT_1(Private, void _q_nextCustom(int arg1, int arg2))
+   GUI_CS_SLOT_2(_q_nextCustom)
+
    GUI_CS_SLOT_1(Private, void _q_newStandard(int arg1, int arg2))
    GUI_CS_SLOT_2(_q_newStandard)
 
