@@ -1579,7 +1579,7 @@ void QSortFilterProxyModelPrivate::_q_sourceColumnsRemoved(
 }
 
 void QSortFilterProxyModelPrivate::_q_sourceColumnsAboutToBeMoved(
-   const QModelIndex &sourceParent, int /* sourceStart */, int /* sourceEnd */, const QModelIndex &destParent, int /* dest */)
+   const QModelIndex &sourceParent, int , int, const QModelIndex &destParent, int)
 {
    Q_Q(QSortFilterProxyModel);
 

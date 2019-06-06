@@ -318,7 +318,7 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
 
 void QGraphicsSceneIndexPrivate::init()
 {
-   if (!scene) {
+   if (! scene) {
       return;
    }
 

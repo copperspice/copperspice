@@ -93,9 +93,9 @@ PluginInterface *cs_load_plugin(const QFactoryLoader *loader, const QString &key
    QObject *factoryObject = loader->instance(key);
 
    if (factoryObject != nullptr) {
-      FactoryInterface *factory = qobject_cast<FactoryInterface *>(factoryObject);
+      FactoryInterface *factory = dynamic_cast<FactoryInterface *>(factoryObject);
 
-      if (factory == nullptr) {
+      if (factory != nullptr) {
          PluginInterface *retval = factory->create(key, Vs...);
 
          if (retval != nullptr) {

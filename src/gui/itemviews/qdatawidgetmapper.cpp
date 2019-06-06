@@ -275,8 +275,7 @@ QAbstractItemModel *QDataWidgetMapper::model() const
 {
    Q_D(const QDataWidgetMapper);
    return d->model == QAbstractItemModelPrivate::staticEmptyModel()
-      ? static_cast<QAbstractItemModel *>(0)
-      : d->model;
+                  ? static_cast<QAbstractItemModel *>(0) : d->model;
 }
 
 

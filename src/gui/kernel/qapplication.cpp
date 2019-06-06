@@ -1369,24 +1369,22 @@ Qt::MouseButtons QApplication::mouseButtons()
    return QGuiApplicationPrivate::mouse_buttons;
 }
 
-
 QPlatformNativeInterface *QApplication::platformNativeInterface()
 {
-   QPlatformIntegration *pi = QGuiApplicationPrivate::platformIntegration();
-   return pi ? pi->nativeInterface() : 0;
+   QPlatformIntegration *platform_interface = QGuiApplicationPrivate::platformIntegration();
+   return platform_interface ? platform_interface->nativeInterface() : nullptr;
 }
-
 
 QApplication::FP_Void QApplication::platformFunction(const QByteArray &function)
 {
-   QPlatformIntegration *platform = QGuiApplicationPrivate::platformIntegration();
+   QPlatformIntegration *platform_interface = QGuiApplicationPrivate::platformIntegration();
 
-   if (! platform) {
-      qWarning() << "QGuiApplication::platformFunction(): Must construct a QGuiApplication before accessing a platform function";
+   if (! platform_interface) {
+      qWarning() << "QGuiApplication::platformFunction(): Please construct a QGuiApplication before accessing a platform function";
       return nullptr;
    }
 
-   return platform->nativeInterface() ? platform->nativeInterface()->platformFunction(function) : nullptr;
+   return platform_interface->nativeInterface() ? platform_interface->nativeInterface()->platformFunction(function) : nullptr;
 }
 
 
@@ -3154,7 +3152,7 @@ QStyle *QApplication::style()
    }
 
 #ifndef QT_NO_STYLE_STYLESHEET
-   if (!QApplicationPrivate::styleSheet.isEmpty()) {
+   if (! QApplicationPrivate::styleSheet.isEmpty()) {
       qApp->setStyleSheet(QApplicationPrivate::styleSheet);
    } else
 #endif
@@ -3165,7 +3163,7 @@ QStyle *QApplication::style()
 
 void QApplication::setStyle(QStyle *style)
 {
-   if (!style || style == QApplicationPrivate::app_style) {
+   if (! style || style == QApplicationPrivate::app_style) {
       return;
    }
 
@@ -3179,7 +3177,7 @@ void QApplication::setStyle(QStyle *style)
             QWidget *w = *it;
 
             // except desktop
-            if (!(w->windowType() == Qt::Desktop) &&  w->testAttribute(Qt::WA_WState_Polished)) {
+            if (! (w->windowType() == Qt::Desktop) &&  w->testAttribute(Qt::WA_WState_Polished)) {
                // has been polished
                QApplicationPrivate::app_style->unpolish(w);
             }
@@ -3217,7 +3215,7 @@ void QApplication::setStyle(QStyle *style)
       initSystemPalette();
       QApplicationPrivate::initializeWidgetPaletteHash();
       QApplicationPrivate::initializeWidgetFontHash();
-      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_pal, /*className=*/0, /*clearWidgetPaletteHash=*/false);
+      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_pal, 0,  false);
 
    } else if (!QApplicationPrivate::sys_pal) {
       // Initialize the sys_pal if it hasn't happened yet...
@@ -3228,7 +3226,7 @@ void QApplication::setStyle(QStyle *style)
    QApplicationPrivate::app_style->polish(qApp);
 
    // re-polish existing widgets if necessary
-   if (QApplicationPrivate::is_app_running && !QApplicationPrivate::is_app_closing) {
+   if (QApplicationPrivate::is_app_running && ! QApplicationPrivate::is_app_closing) {
       for (QWidgetList::const_iterator it = all.constBegin(), cend = all.constEnd(); it != cend; ++it) {
 
          QWidget *w = *it;
@@ -3248,7 +3246,7 @@ void QApplication::setStyle(QStyle *style)
       for (QWidgetList::const_iterator it = all.constBegin(), cend = all.constEnd(); it != cend; ++it) {
          QWidget *w = *it;
 
-         if (w->windowType() != Qt::Desktop && !w->testAttribute(Qt::WA_SetStyle)) {
+         if (w->windowType() != Qt::Desktop && ! w->testAttribute(Qt::WA_SetStyle)) {
             QEvent e(QEvent::StyleChange);
             QApplication::sendEvent(w, &e);
             w->update();
@@ -3275,7 +3273,6 @@ void QApplication::setStyle(QStyle *style)
 
 QPixmap QGuiApplicationPrivate::getPixmapCursor(Qt::CursorShape cshape)
 {
-   Q_UNUSED(cshape);
    return QPixmap();
 }
 

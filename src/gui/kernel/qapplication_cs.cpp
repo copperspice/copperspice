@@ -327,7 +327,7 @@ void QApplicationPrivate::initialize()
    }
 
    if (QApplication::desktopSettingsAware())
-      if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
+      if (const QPlatformTheme *theme = QApplicationPrivate::platformTheme()) {
          QApplicationPrivate::enabledAnimations = theme->themeHint(QPlatformTheme::UiEffects).toInt();
 
 #ifndef QT_NO_WHEELEVENT
@@ -3654,11 +3654,11 @@ QGestureManager *QGestureManager::instance()
 {
    QApplicationPrivate *qAppPriv = QApplicationPrivate::instance();
 
-   if (!qAppPriv) {
+   if (! qAppPriv) {
       return 0;
    }
 
-   if (!qAppPriv->gestureManager) {
+   if (! qAppPriv->gestureManager) {
       qAppPriv->gestureManager = new QGestureManager(qApp);
    }
    return qAppPriv->gestureManager;

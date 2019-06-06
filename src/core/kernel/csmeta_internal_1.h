@@ -540,7 +540,7 @@ template<class T>
 void CSBento<T>::invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
                   CSGenericReturnArgument *retval) const
 {
-   // T must be a class, will be a compiler error otherwise
+   // T must be a callable class
    auto methodPtr = &T::operator();
 
    this->invoke_internal(dataPack, methodPtr);
@@ -631,7 +631,7 @@ std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodCl
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
-void CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *receiver,
+void CSBento<MethodReturn (MethodClass::*)(MethodArgs...)>::invoke(QObject *receiver,
       const CsSignal::Internal::TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
 {
    if (! receiver)  {
@@ -641,6 +641,7 @@ void CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *recei
    MethodClass *t_receiver = dynamic_cast<MethodClass *>(receiver);
 
    if (t_receiver) {
+
       // dynamic cast will return a valid ptr if the slot has equal or less parameters
       // retrieve ptr to teaCup object, which contains the data
       const CsSignal::Internal::TeaCup<MethodArgs...> *teaCup = dynamic_cast<const CsSignal::Internal::TeaCup<MethodArgs...> *>(dataPack);
@@ -661,7 +662,6 @@ void CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *recei
 
             // unpacks the tuple, then calls the method or slot
             CsSignal::Internal::cs_unpack_method_args(t_receiver, this->m_methodPtr, args);
-
          }
 
       }

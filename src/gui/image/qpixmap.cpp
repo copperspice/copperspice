@@ -151,7 +151,7 @@ QPixmap::QPixmap(const QString &fileName, const char *format, Qt::ImageConversio
 QPixmap::QPixmap(const QPixmap &pixmap)
    : QPaintDevice()
 {
-   if (!qt_pixmap_thread_test()) {
+   if (! qt_pixmap_thread_test()) {
       doInit(0, 0, QPlatformPixmap::PixmapType);
       return;
    }
@@ -188,7 +188,7 @@ QPixmap::QPixmap(const char *const xpm[])
    }
 
    QImage image(xpm);
-   if (!image.isNull()) {
+   if (! image.isNull()) {
       if (data && data->pixelType() == QPlatformPixmap::BitmapType) {
          *this = QBitmap::fromImage(image);
       } else {
@@ -472,7 +472,7 @@ QBitmap QPixmap::createMaskFromColor(const QColor &maskColor, Qt::MaskMode mode)
 
 bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
 {
-   if (!fileName.isEmpty()) {
+   if (! fileName.isEmpty()) {
       QFileInfo info(fileName);
 
       // Note: If no extension is provided, we try to match the
@@ -480,8 +480,7 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
 
       if (info.completeSuffix().isEmpty() || info.exists()) {
 
-         QString key = QLatin1String("qt_pixmap")
-            + info.absoluteFilePath()
+         QString key = "qt_pixmap" + info.absoluteFilePath()
             + HexString<uint>(info.lastModified().toTime_t())
             + HexString<quint64>(info.size())
             + HexString<uint>(data ? data->pixelType() : QPlatformPixmap::PixmapType);
@@ -882,7 +881,9 @@ QPixmap QPixmap::fromImage(const QImage &image, Qt::ImageConversionFlags flags)
       return QPixmap();
    }
 
-   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(QPlatformPixmap::PixmapType));
+   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->
+                  createPlatformPixmap(QPlatformPixmap::PixmapType));
+
    data->fromImage(image, flags);
 
    return QPixmap(data.take());
@@ -894,7 +895,9 @@ QPixmap QPixmap::fromImageInPlace(QImage &image, Qt::ImageConversionFlags flags)
       return QPixmap();
    }
 
-   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(QPlatformPixmap::PixmapType));
+   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->
+                  createPlatformPixmap(QPlatformPixmap::PixmapType));
+
    data->fromImageInPlace(image, flags);
 
    return QPixmap(data.take());
@@ -903,7 +906,9 @@ QPixmap QPixmap::fromImageInPlace(QImage &image, Qt::ImageConversionFlags flags)
 
 QPixmap QPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags)
 {
-   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(QPlatformPixmap::PixmapType));
+   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->
+                  createPlatformPixmap(QPlatformPixmap::PixmapType));
+
    data->fromImageReader(imageReader, flags);
 
    return QPixmap(data.take());

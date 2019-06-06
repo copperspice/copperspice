@@ -2579,7 +2579,8 @@ void QGraphicsScene::setForegroundBrush(const QBrush &brush)
 QVariant QGraphicsScene::inputMethodQuery(Qt::InputMethodQuery query) const
 {
    Q_D(const QGraphicsScene);
-   if (!d->focusItem || !(d->focusItem->flags() & QGraphicsItem::ItemAcceptsInputMethod)) {
+
+   if (! d->focusItem || ! (d->focusItem->flags() & QGraphicsItem::ItemAcceptsInputMethod)) {
       return QVariant();
    }
    const QTransform matrix = d->focusItem->sceneTransform();
@@ -2644,7 +2645,7 @@ void QGraphicsScene::update(const QRectF &rect)
       }
    }
 
-   if (!d->calledEmitUpdated) {
+   if (! d->calledEmitUpdated) {
       d->calledEmitUpdated = true;
       QMetaObject::invokeMethod(this, "_q_emitUpdated", Qt::QueuedConnection);
    }

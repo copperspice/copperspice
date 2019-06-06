@@ -274,9 +274,9 @@ void QWellArray::paintEvent(QPaintEvent *e)
    int ch = r.height();
    int cw = r.width();
    int colfirst = columnAt(cx);
-   int collast = columnAt(cx + cw);
+   int collast  = columnAt(cx + cw);
    int rowfirst = rowAt(cy);
-   int rowlast = rowAt(cy + ch);
+   int rowlast  = rowAt(cy + ch);
 
    if (isRightToLeft()) {
       int t = colfirst;
@@ -1796,7 +1796,8 @@ void QColorDialogPrivate::initWidgets()
       // The screen color picker button
       screenColorPickerButton = new QPushButton();
       leftLay->addWidget(screenColorPickerButton);
-      lblScreenColorInfo = new QLabel(QLatin1String("\n"));
+
+      lblScreenColorInfo = new QLabel("\n");
       leftLay->addWidget(lblScreenColorInfo);
       q->connect(screenColorPickerButton, SIGNAL(clicked()), SLOT(_q_pickScreenColor()));
 #endif

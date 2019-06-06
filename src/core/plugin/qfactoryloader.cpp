@@ -77,7 +77,7 @@ QFactoryLoaderPrivate::~QFactoryLoaderPrivate()
    }
 }
 
-QFactoryLoader::QFactoryLoader(const QString &iid, const QString &suffix, Qt::CaseSensitivity cs)
+QFactoryLoader::QFactoryLoader(const QString &iid, const QString &pluginDir, Qt::CaseSensitivity cs)
    : QObject(nullptr), d_ptr(new QFactoryLoaderPrivate)
 {
    d_ptr->q_ptr = this;
@@ -87,7 +87,7 @@ QFactoryLoader::QFactoryLoader(const QString &iid, const QString &suffix, Qt::Ca
 
    d->iid    = iid;
    d->cs     = cs;
-   d->suffix = suffix;
+   d->suffix = pluginDir;
 
    QMutexLocker locker(qt_factoryloader_mutex());
    setup();
@@ -100,11 +100,10 @@ void QFactoryLoader::setup()
 #ifdef QT_SHARED
    Q_D(QFactoryLoader);
 
-   QStringList paths = QCoreApplication::libraryPaths();
+   QStringList libDirs = QCoreApplication::libraryPaths();
    mp_pluginsFound.clear();
 
-   for (int i = 0; i < paths.count(); ++i) {
-      const QString &pluginDir = paths.at(i);
+   for (const QString &pluginDir : libDirs)  {
 
       // already looked in this path
       if (d->loadedPaths.contains(pluginDir)) {
@@ -143,6 +142,7 @@ void QFactoryLoader::setup()
          }
 
          if (library->m_metaObject == nullptr) {
+            qWarning("Warning: metaObject is a nullptr");
             library->release();
             continue;
          }
@@ -215,8 +215,9 @@ void QFactoryLoader::setup()
 
          if (keyUsageCount  > 0 || keyList.isEmpty()) {
             // once loaded, do not unload
+
             library->setLoadHints(QLibrary::PreventUnloadHint);
-            d->libraryList += library;
+            d->libraryList.append(library);
 
          } else {
             library->release();
@@ -262,6 +263,7 @@ QObject *QFactoryLoader::instance(QString key) const
          if (! obj->parent()) {
             obj->moveToThread(QCoreApplicationPrivate::mainThread());
          }
+
          return obj;
       }
 

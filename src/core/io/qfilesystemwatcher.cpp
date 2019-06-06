@@ -51,8 +51,6 @@
 
 #endif
 
-QT_BEGIN_NAMESPACE
-
 enum { PollingInterval = 1000 };
 
 class QPollingFileSystemWatcherEngine : public QFileSystemWatcherEngine
@@ -252,7 +250,7 @@ QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
    return QKqueueFileSystemWatcherEngine::create();
 
 #else
-   return 0;
+   return nullptr;
 
 #endif
 }
@@ -282,16 +280,12 @@ void QFileSystemWatcherPrivate::initForcedEngine(const QString &forceName)
    Q_Q(QFileSystemWatcher);
 
 #if defined(Q_OS_LINUX)
-   if (forceName == QLatin1String("inotify")) {
+   if (forceName == "inotify") {
       forced = QInotifyFileSystemWatcherEngine::create();
 
-   } else if (forceName == QLatin1String("dnotify")) {
+   } else if (forceName == "dnotify") {
       forced = QDnotifyFileSystemWatcherEngine::create();
    }
-
-#else
-   Q_UNUSED(forceName);
-
 #endif
 
    if (forced) {
@@ -630,8 +624,6 @@ QStringList QFileSystemWatcher::files() const
    Q_D(const QFileSystemWatcher);
    return d->files;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILESYSTEMWATCHER
 

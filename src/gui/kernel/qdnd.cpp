@@ -105,14 +105,15 @@ QObject *QDragManager::currentTarget() const
 {
    return m_currentDropTarget;
 }
-Qt::DropAction QDragManager::drag(QDrag *o)
+
+Qt::DropAction QDragManager::drag(QDrag *objDrag)
 {
-   if (!o || m_object == o) {
+   if (! objDrag || m_object == objDrag) {
       return Qt::IgnoreAction;
    }
 
-   if (!m_platformDrag || !o->source()) {
-      o->deleteLater();
+   if (! m_platformDrag || ! objDrag->source()) {
+      objDrag->deleteLater();
       return Qt::IgnoreAction;
    }
 
@@ -121,16 +122,18 @@ Qt::DropAction QDragManager::drag(QDrag *o)
       return Qt::IgnoreAction;
    }
 
-   m_object = o;
+   m_object = objDrag;
+   m_object->d_func()->target = nullptr;
 
-   m_object->d_func()->target = 0;
+   QGuiApplicationPrivate::instance()->notifyDragStarted(objDrag);
 
-   QGuiApplicationPrivate::instance()->notifyDragStarted(o);
    const Qt::DropAction result = m_platformDrag->drag(m_object);
-   m_object = 0;
-   if (!m_platformDrag->ownsDragObject()) {
-      o->deleteLater();
+   m_object = nullptr;
+
+   if (! m_platformDrag->ownsDragObject()) {
+      objDrag->deleteLater();
    }
+
    return result;
 }
 
@@ -142,8 +145,9 @@ static QStringList imageReadMimeFormats()
 {
    QStringList formats;
    QList<QByteArray> imageFormats = QImageReader::supportedImageFormats();
+
    for (int i = 0; i < imageFormats.size(); ++i) {
-      QString format = QLatin1String("image/");
+      QString format = "image/";
       format += QString::fromLatin1(imageFormats.at(i).toLower());
       formats.append(format);
    }
