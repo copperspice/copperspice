@@ -391,11 +391,12 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
    }
 
    // store the signal data, false indicates the data will not be copied
-   CsSignal::Internal::TeaCup_Data<typename std::remove_reference<Ts>::type...> dataPack(false, std::forward<Ts>(Vs)...);
+   CsSignal::Internal::TeaCup_Data<Ts...> dataPack(false, std::forward<Ts>(Vs)...);
 
    if (type == Qt::DirectConnection) {
       // retval is passed by pointer
       m_bento->invoke(object, &dataPack, &retval);
+
 
    } else if (type == Qt::QueuedConnection) {
 
