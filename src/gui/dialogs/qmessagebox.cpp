@@ -314,6 +314,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
       q->setWindowTitle(title);
       q->setText(text);
    }
+
    q->setModal(true);
 
 #ifdef Q_OS_MAC
@@ -1627,8 +1628,10 @@ QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb
 void QMessageBoxPrivate::initHelper(QPlatformDialogHelper *h)
 {
    Q_Q(QMessageBox);
+
    QObject::connect(h, SIGNAL(clicked(QPlatformDialogHelper::StandardButton, QPlatformDialogHelper::ButtonRole)),
       q, SLOT(_q_clicked(QPlatformDialogHelper::StandardButton, QPlatformDialogHelper::ButtonRole)));
+
    static_cast<QPlatformMessageDialogHelper *>(h)->setOptions(options);
 }
 static QMessageDialogOptions::Icon helperIcon(QMessageBox::Icon i)

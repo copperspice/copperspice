@@ -26,7 +26,9 @@
 #include <qdebug.h>
 
 #include <algorithm>
+
 #ifndef QT_NO_ITEMVIEWS
+
 bool QItemSelectionRange::intersects(const QItemSelectionRange &other) const
 {
    return (isValid() && other.isValid()
@@ -413,8 +415,6 @@ void QItemSelectionModelPrivate::initModel(QAbstractItemModel *model)
 }
 
 /*!
-    \internal
-
     returns a QItemSelection where all ranges have been expanded to:
     Rows: left: 0 and right: columnCount()-1
     Columns: top: 0 and bottom: rowCount()-1
@@ -429,12 +429,14 @@ QItemSelection QItemSelectionModelPrivate::expandSelection(const QItemSelection 
    }
 
    QItemSelection expanded;
+
    if (command & QItemSelectionModel::Rows) {
       for (int i = 0; i < selection.count(); ++i) {
          QModelIndex parent = selection.at(i).parent();
          int colCount = model->columnCount(parent);
          QModelIndex tl = model->index(selection.at(i).top(), 0, parent);
          QModelIndex br = model->index(selection.at(i).bottom(), colCount - 1, parent);
+
          //we need to merge because the same row could have already been inserted
          expanded.merge(QItemSelection(tl, br), QItemSelectionModel::Select);
       }
@@ -453,9 +455,6 @@ QItemSelection QItemSelectionModelPrivate::expandSelection(const QItemSelection 
    return expanded;
 }
 
-/*!
-    \internal
-*/
 void QItemSelectionModelPrivate::_q_rowsAboutToBeRemoved(const QModelIndex &parent,
    int start, int end)
 {

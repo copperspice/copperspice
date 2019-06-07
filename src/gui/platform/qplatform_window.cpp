@@ -152,16 +152,16 @@ void QPlatformWindow::setParent(const QPlatformWindow *parent)
 
 void QPlatformWindow::setWindowTitle(const QString &title)
 {
-   Q_UNUSED(title);
 }
+
 void QPlatformWindow::setWindowFilePath(const QString &filePath)
 {
-   Q_UNUSED(filePath);
 }
+
 void QPlatformWindow::setWindowIcon(const QIcon &icon)
 {
-   Q_UNUSED(icon);
 }
+
 void QPlatformWindow::raise()
 {
    qWarning("This plugin does not support raise()");
@@ -170,15 +170,16 @@ void QPlatformWindow::lower()
 {
    qWarning("This plugin does not support lower()");
 }
+
 void QPlatformWindow::propagateSizeHints()
 {
    qWarning("This plugin does not support propagateSizeHints()");
 }
+
 void QPlatformWindow::setOpacity(qreal level)
 {
    qWarning("This plugin does not support setting window opacity");
 }
-
 
 void QPlatformWindow::setMask(const QRegion &region)
 {
@@ -191,7 +192,6 @@ void QPlatformWindow::requestActivateWindow()
    QWindowSystemInterface::handleWindowActivated(window());
 }
 
-
 void QPlatformWindow::handleContentOrientationChange(Qt::ScreenOrientation orientation)
 {
 }
@@ -202,10 +202,10 @@ qreal QPlatformWindow::devicePixelRatio() const
 
 bool QPlatformWindow::setKeyboardGrabEnabled(bool grab)
 {
-   Q_UNUSED(grab);
    qWarning("This plugin does not support grabbing the keyboard");
    return false;
 }
+
 bool QPlatformWindow::setMouseGrabEnabled(bool grab)
 {
    qWarning("This plugin does not support grabbing the mouse");

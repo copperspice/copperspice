@@ -314,7 +314,6 @@ void QWellArray::paintEvent(QPaintEvent *e)
    }
 }
 
-
 QWellArray::QWellArray(int rows, int cols, QWidget *parent)
    : QWidget(parent), nrows(rows), ncols(cols)
 {
@@ -359,7 +358,6 @@ void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
    }
    paintCellContents(p, row, col, opt.rect.adjusted(dfw, dfw, -dfw, -dfw));
 }
-
 
 //  Reimplement this function to change the contents of the well array.
 void QWellArray::paintCellContents(QPainter *p, int row, int col, const QRect &r)
@@ -412,12 +410,6 @@ void QWellArray::setCurrent(int row, int col)
    emit currentChanged(curRow, curCol);
 }
 
-/*
-  Sets the currently selected cell to \a row, \a column. If \a row or
-  \a column are less than zero, the current cell is unselected.
-
-  Does not set the position of the focus indicator.
-*/
 void QWellArray::setSelected(int row, int col)
 {
    int oldRow = selRow;
@@ -1206,11 +1198,13 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    gl = new QGridLayout(this);
    gl->setMargin(gl->spacing());
+
    lab = new QColorShowLabel(this);
 
 #ifdef QT_SMALL_COLORDIALOG
    lab->setMinimumHeight(60);
 #endif
+
    lab->setMinimumWidth(60);
 
    // On mobile, due to small screen and different screen layouts need to re-arrange the widgets.
@@ -1377,9 +1371,9 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(htEd, 5, 2, 1, /*colspan=*/ 3);
 #endif
 
-   connect(hEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
-   connect(sEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
-   connect(vEd, SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
+   connect(hEd,     SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
+   connect(sEd,     SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
+   connect(vEd,     SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
 
    connect(rEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(gEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
@@ -1622,19 +1616,24 @@ bool QColorDialogPrivate::selectColor(const QColor &col)
       const QRgb *customColors = QColorDialogOptions::customColors();
       const QRgb *customColorsEnd = customColors + customColorRows * colorColumns;
       const QRgb *match = std::find(customColors, customColorsEnd, color);
+
       if (match != customColorsEnd) {
          const int index = int(match - customColors);
          const int column = index / customColorRows;
          const int row = index % customColorRows;
+
          _q_newCustom(row, column);
+
          custom->setCurrent(row, column);
          custom->setSelected(row, column);
          custom->setFocus();
          return true;
       }
    }
+
    return false;
 }
+
 QColor QColorDialogPrivate::grabScreenColor(const QPoint &p)
 {
    const QDesktopWidget *desktop = QApplication::desktop();
@@ -1659,6 +1658,7 @@ void QColorDialogPrivate::_q_nextCustom(int r, int c)
 {
    nextCust = r + customColorRows * c;
 }
+
 void QColorDialogPrivate::_q_newCustom(int r, int c)
 {
    const int i = r + customColorRows * c;
@@ -1754,9 +1754,11 @@ void QColorDialogPrivate::init(const QColor &initial)
 
    q->setCurrentColor(initial);
 }
+
 void QColorDialogPrivate::initWidgets()
 {
    Q_Q(QColorDialog);
+
    QVBoxLayout *mainLay = new QVBoxLayout(q);
 
    // there's nothing in this dialog that benefits from sizing up
@@ -1783,11 +1785,13 @@ void QColorDialogPrivate::initWidgets()
       leftLay = new QVBoxLayout;
       topLay->addLayout(leftLay);
 
-      standard = new QColorWell(q, standardColorRows, colorColumns, QColorDialogOptions::standardColors());
+      standard       = new QColorWell(q, standardColorRows, colorColumns, QColorDialogOptions::standardColors());
       lblBasicColors = new QLabel(q);
+
 #ifndef QT_NO_SHORTCUT
       lblBasicColors->setBuddy(standard);
 #endif
+
       q->connect(standard, SIGNAL(selected(int, int)), SLOT(_q_newStandard(int, int)));
       leftLay->addWidget(lblBasicColors);
       leftLay->addWidget(standard);
@@ -1801,8 +1805,8 @@ void QColorDialogPrivate::initWidgets()
       leftLay->addWidget(lblScreenColorInfo);
       q->connect(screenColorPickerButton, SIGNAL(clicked()), SLOT(_q_pickScreenColor()));
 #endif
-      leftLay->addStretch();
 
+      leftLay->addStretch();
 
       custom = new QColorWell(q, customColorRows, colorColumns, QColorDialogOptions::customColors());
       custom->setAcceptDrops(true);
@@ -1902,8 +1906,10 @@ void QColorDialogPrivate::initWidgets()
    mainLay->addWidget(buttons);
 
    ok = buttons->addButton(QDialogButtonBox::Ok);
-   QObject::connect(ok, SIGNAL(clicked()), q, SLOT(accept()));
+   QObject::connect(ok, SIGNAL(clicked()),     q, SLOT(accept()));
+
    ok->setDefault(true);
+
    cancel = buttons->addButton(QDialogButtonBox::Cancel);
    QObject::connect(cancel, SIGNAL(clicked()), q, SLOT(reject()));
 
@@ -1911,6 +1917,7 @@ void QColorDialogPrivate::initWidgets()
    updateTimer = new QTimer(q);
    QObject::connect(updateTimer, SIGNAL(timeout()), q, SLOT(_q_updateColorPicking()));
 #endif
+
    retranslateStrings();
 }
 
@@ -2201,18 +2208,9 @@ bool QColorDialogPrivate::handleColorPickingKeyPress(QKeyEvent *e)
    return true;
 }
 
-/*!
-  Closes the dialog and sets its result code to \a result. If this dialog
-  is shown with exec(), done() causes the local event loop to finish,
-  and exec() to return \a result.
-
-  \sa QDialog::done()
-*/
 void QColorDialog::done(int result)
 {
    Q_D(QColorDialog);
-
-
 
    if (result == Accepted) {
       d->selectedQColor = d->currentQColor();
@@ -2226,12 +2224,11 @@ void QColorDialog::done(int result)
 
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, SIGNAL(colorSelected(QColor)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-
       d->receiverToDisconnectOnClose = 0;
    }
+
    d->memberToDisconnectOnClose.clear();
 }
-
 
 void QColorDialog::_q_addCustom()
 {

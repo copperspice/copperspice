@@ -56,10 +56,12 @@ static inline int isnan_f  (float       x)
 {
    return x != x;
 }
+
 static inline int isnan_d  (double      x)
 {
    return x != x;
 }
+
 static inline int isnan_ld (long double x)
 {
    return x != x;
@@ -539,6 +541,7 @@ bool QPSQLResult::isNull(int field)
 {
    Q_D(const QPSQLResult);
    PQgetvalue(d->result, at(), field);
+
    return PQgetisnull(d->result, at(), field);
 }
 
@@ -551,7 +554,7 @@ bool QPSQLResult::reset (const QString &query)
       return false;
    }
 
-   if (!driver()->isOpen() || driver()->isOpenError()) {
+   if (! driver()->isOpen() || driver()->isOpenError()) {
       return false;
    }
 
@@ -1040,25 +1043,26 @@ bool QPSQLDriver::open(const QString &db, const QString &user, const QString &pa
    const QString &host, int port, const QString &connOpts)
 {
    Q_D(QPSQLDriver);
+
    if (isOpen()) {
       close();
    }
 
    QString connectString;
 
-   if (!host.isEmpty()) {
+   if (! host.isEmpty()) {
       connectString.append(QString("host=")).append(qQuote(host));
    }
 
-   if (!db.isEmpty()) {
+   if (! db.isEmpty()) {
       connectString.append(QString(" dbname=")).append(qQuote(db));
    }
 
-   if (!user.isEmpty()) {
+   if (! user.isEmpty()) {
       connectString.append(QString(" user=")).append(qQuote(user));
    }
 
-   if (!password.isEmpty()) {
+   if (! password.isEmpty()) {
       connectString.append(QString(" password=")).append(qQuote(password));
    }
 
@@ -1090,12 +1094,14 @@ bool QPSQLDriver::open(const QString &db, const QString &user, const QString &pa
 
    setOpen(true);
    setOpenError(false);
+
    return true;
 }
 
 void QPSQLDriver::close()
 {
    Q_D(QPSQLDriver);
+
    if (isOpen()) {
 
       d->seid.clear();
@@ -1122,10 +1128,12 @@ QSqlResult *QPSQLDriver::createResult() const
 bool QPSQLDriver::beginTransaction()
 {
    Q_D(const QPSQLDriver);
-   if (!isOpen()) {
+
+   if (! isOpen()) {
       qWarning("QPSQLDriver::beginTransaction: Database not open");
       return false;
    }
+
    PGresult *res = d->exec("BEGIN");
    if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
       setLastError(qMakeError(tr("Could not begin transaction"),
@@ -1176,10 +1184,12 @@ bool QPSQLDriver::commitTransaction()
 bool QPSQLDriver::rollbackTransaction()
 {
    Q_D(QPSQLDriver);
+
    if (! isOpen()) {
       qWarning("QPSQLDriver::rollbackTransaction(): Database not open");
       return false;
    }
+
    PGresult *res = d->exec("ROLLBACK");
    if (! res || PQresultStatus(res) != PGRES_COMMAND_OK) {
       setLastError(qMakeError(tr("Could not rollback transaction"),
@@ -1194,7 +1204,9 @@ bool QPSQLDriver::rollbackTransaction()
 QStringList QPSQLDriver::tables(QSql::TableType type) const
 {
    Q_D(const QPSQLDriver);
+
    QStringList tl;
+
    if (! isOpen()) {
       return tl;
    }
@@ -1235,9 +1247,11 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
    Q_D(const QPSQLDriver);
 
    QSqlIndex idx(tablename);
-   if (!isOpen()) {
+
+   if (! isOpen()) {
       return idx;
    }
+
    QSqlQuery i(createResult());
    QString stmt;
 
@@ -1626,7 +1640,7 @@ QString QPSQLDriver::escapeIdentifier(const QString &identifier, IdentifierType)
 {
    QString res = identifier;
 
-   if (! identifier.isEmpty() && !identifier.startsWith(QChar('"')) && !identifier.endsWith(QChar('"')) ) {
+   if (! identifier.isEmpty() && ! identifier.startsWith(QChar('"')) && !identifier.endsWith(QChar('"')) ) {
       res.replace(QChar('"'), QString("\"\""));
       res.prepend(QChar('"')).append(QChar('"'));
       res.replace(QChar('.'), QString("\".\""));
@@ -1650,6 +1664,7 @@ QPSQLDriver::Protocol QPSQLDriver::protocol() const
 bool QPSQLDriver::subscribeToNotification(const QString &name)
 {
    Q_D(QPSQLDriver);
+
    if (! isOpen()) {
       qWarning("QPSQLDriver::subscribeToNotificationImplementation(): Database not open.");
       return false;

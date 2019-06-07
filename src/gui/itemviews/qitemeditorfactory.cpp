@@ -54,7 +54,7 @@ class QBooleanComboBox : public QComboBox
    bool value() const;
 };
 
-#endif // QT_NO_COMBOBOX
+#endif
 
 #ifndef QT_NO_SPINBOX
 
@@ -85,7 +85,8 @@ class QUIntSpinBox : public QSpinBox
    GUI_CS_SIGNAL_1(Public, void uintValueChanged())
    GUI_CS_SIGNAL_2(uintValueChanged)
 };
-#endif // QT_NO_SPINBOX
+#endif
+
 QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const
 {
    QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
@@ -120,14 +121,6 @@ QItemEditorFactory::~QItemEditorFactory()
    qDeleteAll(set);
 }
 
-/*!
-    Registers an item editor creator specified by \a creator for the given \a type of data.
-
-    \bold{Note:} The factory takes ownership of the item editor creator and will destroy
-    it if a new creator for the same type is registered later.
-
-    \sa createEditor()
-*/
 void QItemEditorFactory::registerEditor(QVariant::Type type, QItemEditorCreatorBase *creator)
 {
    QHash<QVariant::Type, QItemEditorCreatorBase *>::iterator it = creatorMap.find(type);
@@ -297,6 +290,7 @@ void QItemEditorFactory::setDefaultFactory(QItemEditorFactory *factory)
 QItemEditorCreatorBase::~QItemEditorCreatorBase()
 {
 }
+
 #ifndef QT_NO_LINEEDIT
 
 QExpandingLineEdit::QExpandingLineEdit(QWidget *parent)

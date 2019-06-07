@@ -35,14 +35,12 @@
 
 #include <qdebug.h>
 
-
-
 typedef QSqlTableModelSql Sql;
 
 QSqlTableModelPrivate::~QSqlTableModelPrivate()
 {
-
 }
+
 QSqlRecord QSqlTableModelPrivate::record(const QVector<QVariant> &values) const
 {
    QSqlRecord r = rec;
@@ -460,10 +458,10 @@ bool QSqlTableModel::selectRow(int row)
 QVariant QSqlTableModel::data(const QModelIndex &index, int role) const
 {
    Q_D(const QSqlTableModel);
-   if (!index.isValid() || (role != Qt::DisplayRole && role != Qt::EditRole)) {
+
+   if (! index.isValid() || (role != Qt::DisplayRole && role != Qt::EditRole)) {
       return QVariant();
    }
-
 
    const QSqlTableModelPrivate::ModifiedRow mrow = d->cache.value(index.row());
    if (mrow.op() != QSqlTableModelPrivate::None) {
@@ -479,6 +477,7 @@ QVariant QSqlTableModel::data(const QModelIndex &index, int role) const
 QVariant QSqlTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QSqlTableModel);
+
    if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
       const QSqlTableModelPrivate::Op op = d->cache.value(section).op();
       if (op == QSqlTableModelPrivate::Insert) {
@@ -528,16 +527,6 @@ bool QSqlTableModel::isDirty(const QModelIndex &index) const
          && row.rec().isGenerated(index.column()));
 }
 
-/*!
-    Sets the data for the item \a index for the role \a role to \a
-    value. Depending on the edit strategy, the value might be applied
-    to the database at once or cached in the model.
-
-    Returns true if the value could be set or false on error, for
-    example if \a index is out of bounds.
-
-    \sa editStrategy(), data(), submit(), submitAll(), revertRow()
-*/
 bool QSqlTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
    Q_D(QSqlTableModel);
@@ -662,25 +651,15 @@ bool QSqlTableModel::insertRowIntoTable(const QSqlRecord &values)
    return d->exec(stmt, prepStatement, rec, QSqlRecord() /* no where values */);
 }
 
-/*!
-    Deletes the given \a row from the currently active database table.
-
-    This is a low-level method that operates directly on the database
-    and should not be called directly. Use removeRow() or removeRows()
-    to delete values. The model will decide depending on its edit strategy
-    when to modify the database.
-
-    Returns true if the row was deleted; otherwise returns false.
-
-    \sa removeRow(), removeRows()
-*/
 bool QSqlTableModel::deleteRowFromTable(int row)
 {
    Q_D(QSqlTableModel);
+
    emit beforeDelete(row);
 
    const QSqlRecord whereValues = primaryValues(row);
    const bool prepStatement = d->db.driver()->hasFeature(QSqlDriver::PreparedQueries);
+
    const QString stmt = d->db.driver()->sqlStatement(QSqlDriver::DeleteStatement,
          d->tableName,
          QSqlRecord(),
@@ -699,29 +678,13 @@ bool QSqlTableModel::deleteRowFromTable(int row)
    return d->exec(Sql::concat(stmt, where), prepStatement, QSqlRecord() /* no new values */, whereValues);
 }
 
-/*!
-    Submits all pending changes and returns true on success.
-    Returns false on error, detailed error information can be
-    obtained with lastError().
-
-    On success the model will be repopulated. Any views
-    presenting it will lose their selections.
-
-    Note: In OnManualSubmit mode, already submitted changes won't
-    be cleared from the cache when submitAll() fails. This allows
-    transactions to be rolled back and resubmitted again without
-    losing data.
-
-    \sa revertAll(), lastError()
-*/
 bool QSqlTableModel::submitAll()
 {
    Q_D(QSqlTableModel);
 
-
    bool success = true;
 
-   foreach (int row, d->cache.keys()) {
+   for (int row : d->cache.keys()) {
       // be sure cache *still* contains the row since overridden selectRow() could have called select()
       QSqlTableModelPrivate::CacheMap::iterator it = d->cache.find(row);
       if (it == d->cache.end()) {
@@ -737,12 +700,15 @@ bool QSqlTableModel::submitAll()
          case QSqlTableModelPrivate::Insert:
             success = insertRowIntoTable(mrow.rec());
             break;
+
          case QSqlTableModelPrivate::Update:
             success = updateRowInTable(row, mrow.rec());
             break;
+
          case QSqlTableModelPrivate::Delete:
             success = deleteRowFromTable(row);
             break;
+
          case QSqlTableModelPrivate::None:
             Q_ASSERT_X(false, "QSqlTableModel::submitAll()", "Invalid cache operation");
             break;
@@ -761,7 +727,7 @@ bool QSqlTableModel::submitAll()
          }
       }
 
-      if (!success) {
+      if (! success) {
          break;
       }
    }
@@ -778,9 +744,11 @@ bool QSqlTableModel::submitAll()
 bool QSqlTableModel::submit()
 {
    Q_D(QSqlTableModel);
+
    if (d->strategy == OnRowChange || d->strategy == OnFieldChange) {
       return submitAll();
    }
+
    return true;
 }
 

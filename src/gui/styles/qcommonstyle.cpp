@@ -6451,7 +6451,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
          icon.addFile(QLatin1String(":/qt-project.org/qmessagebox/images/qtlogo-64.png"));
          break;
 
-#endif // QT_NO_IMAGEFORMAT_PNG
+#endif
 
       default:
          icon.addPixmap(proxy()->standardPixmap(standardIcon, option, widget));

@@ -36,16 +36,17 @@
 
 #include <algorithm>
 
-
 typedef QList<QPair<QModelIndex, QPersistentModelIndex>> QModelIndexPairList;
 
 static inline QSet<int> qVectorToSet(const QVector<int> &vector)
 {
    QSet<int> set;
    set.reserve(vector.size());
+
    for (int i = 0; i < vector.size(); ++i) {
       set << vector.at(i);
    }
+
    return set;
 }
 
@@ -1610,10 +1611,12 @@ void QSortFilterProxyModelPrivate::_q_sourceColumnsMoved(
    source_index_mapping.clear();
    update_persistent_indexes(saved_persistent_indexes);
    saved_persistent_indexes.clear();
+
    if (dynamic_sortfilter && update_source_sort_column()) {
       qDeleteAll(source_index_mapping);
       source_index_mapping.clear();
    }
+
    QList<QPersistentModelIndex> parents;
    parents << q->mapFromSource(sourceParent);
    if (sourceParent != destParent) {
@@ -1638,9 +1641,6 @@ QSortFilterProxyModel::QSortFilterProxyModel(QObject *parent)
    connect(this, SIGNAL(modelReset()), this, SLOT(_q_clearMapping()));
 }
 
-/*!
-    Destroys this sorting filter model.
-*/
 QSortFilterProxyModel::~QSortFilterProxyModel()
 {
    Q_D(QSortFilterProxyModel);
@@ -1648,9 +1648,6 @@ QSortFilterProxyModel::~QSortFilterProxyModel()
    d->source_index_mapping.clear();
 }
 
-/*!
-  \reimp
-*/
 void QSortFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
    Q_D(QSortFilterProxyModel);
@@ -1713,9 +1710,6 @@ void QSortFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
    }
 }
 
-/*!
-    \reimp
-*/
 QModelIndex QSortFilterProxyModel::index(int row, int column, const QModelIndex &parent) const
 {
    Q_D(const QSortFilterProxyModel);

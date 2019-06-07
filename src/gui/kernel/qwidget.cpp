@@ -4020,6 +4020,7 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
 void QWidgetPrivate::sendPaintEvent(const QRegion &toBePainted)
 {
    Q_Q(QWidget);
+
    QPaintEvent e(toBePainted);
    QCoreApplication::sendSpontaneousEvent(q, &e);
 
@@ -4029,6 +4030,7 @@ void QWidgetPrivate::sendPaintEvent(const QRegion &toBePainted)
    }
 #endif
 }
+
 void QWidgetPrivate::render(QPaintDevice *target, const QPoint &targetOffset,
    const QRegion &sourceRegion, QWidget::RenderFlags renderFlags)
 {
@@ -4376,18 +4378,15 @@ QString qt_setWindowTitle_helperHelper(const QString &title, const QWidget *widg
 {
    Q_ASSERT(widget);
 
-
    QString cap = title;
-
 
    if (cap.isEmpty()) {
       return cap;
    }
 
-   QLatin1String placeHolder("[*]");
+   QString placeHolder("[*]");
    int index = cap.indexOf(placeHolder);
 
-   // here the magic begins
    while (index != -1) {
       index += placeHolder.size();
       int count = 1;
@@ -4397,10 +4396,11 @@ QString qt_setWindowTitle_helperHelper(const QString &title, const QWidget *widg
          index += placeHolder.size();
       }
 
-      if (count % 2) { // odd number of [*] -> replace last one
+      if (count % 2) {
+         // odd number of [*] -> replace last one
          int lastIndex = cap.lastIndexOf(placeHolder, index - 1);
-         if (widget->isWindowModified()
-            && widget->style()->styleHint(QStyle::SH_TitleBar_ModifyNotification, 0, widget)) {
+
+         if (widget->isWindowModified() && widget->style()->styleHint(QStyle::SH_TitleBar_ModifyNotification, 0, widget)) {
             cap.replace(lastIndex, 3, QWidget::tr("*"));
          } else {
             cap.remove(lastIndex, 3);
@@ -4410,7 +4410,7 @@ QString qt_setWindowTitle_helperHelper(const QString &title, const QWidget *widg
       index = cap.indexOf(placeHolder, index);
    }
 
-   cap.replace(QLatin1String("[*][*]"), placeHolder);
+   cap.replace("[*][*]", placeHolder);
 
    return cap;
 }
@@ -4427,14 +4427,14 @@ void QWidgetPrivate::setWindowTitle_helper(const QString &title)
 void QWidgetPrivate::setWindowTitle_sys(const QString &caption)
 {
    Q_Q(QWidget);
-   if (!q->isWindow()) {
+
+   if (! q->isWindow()) {
       return;
    }
 
    if (QWindow *window = q->windowHandle()) {
       window->setTitle(caption);
    }
-
 }
 
 void QWidgetPrivate::setWindowIconText_helper(const QString &title)
@@ -4449,8 +4449,10 @@ void QWidgetPrivate::setWindowIconText_helper(const QString &title)
 void QWidgetPrivate::setWindowIconText_sys(const QString &iconText)
 {
    Q_Q(QWidget);
-   // ### The QWidget property is deprecated, but the XCB window function is not.
+
+   // QWidget property is deprecated, but the XCB window function is not.
    // It should remain available for the rare application that needs it.
+
    if (QWindow *window = q->windowHandle()) {
       QXcbWindowFunctions::setWmWindowIconText(window, iconText);
    }
@@ -4478,6 +4480,7 @@ void QWidget::setWindowTitle(const QString &title)
    }
 
    Q_D(QWidget);
+
    d->topData()->caption = title;
    d->setWindowTitle_helper(title);
 

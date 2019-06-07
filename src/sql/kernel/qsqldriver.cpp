@@ -53,7 +53,6 @@ QSqlDriver::QSqlDriver(QSqlDriverPrivate &dd, QObject *parent)
 {
 }
 
-
 QSqlDriver::~QSqlDriver()
 {
 }
@@ -63,104 +62,15 @@ bool QSqlDriver::isOpen() const
    return d_func()->isOpen;
 }
 
-/*!
-    Returns true if the there was an error opening the database
-    connection; otherwise returns false.
-*/
-
 bool QSqlDriver::isOpenError() const
 {
    return d_func()->isOpenError;
 }
 
-/*!
-    \enum QSqlDriver::DriverFeature
-
-    This enum contains a list of features a driver might support. Use
-    hasFeature() to query whether a feature is supported or not.
-
-    \value Transactions  Whether the driver supports SQL transactions.
-    \value QuerySize  Whether the database is capable of reporting the size
-    of a query. Note that some databases do not support returning the size
-    (i.e. number of rows returned) of a query, in which case
-    QSqlQuery::size() will return -1.
-    \value BLOB  Whether the driver supports Binary Large Object fields.
-    \value Unicode  Whether the driver supports Unicode strings if the
-    database server does.
-    \value PreparedQueries  Whether the driver supports prepared query execution.
-    \value NamedPlaceholders  Whether the driver supports the use of named placeholders.
-    \value PositionalPlaceholders  Whether the driver supports the use of positional placeholders.
-    \value LastInsertId  Whether the driver supports returning the Id of the last touched row.
-    \value BatchOperations  Whether the driver supports batched operations, see QSqlQuery::execBatch()
-    \value SimpleLocking  Whether the driver disallows a write lock on a table while other queries have a read lock on it.
-    \value LowPrecisionNumbers  Whether the driver allows fetching numerical values with low precision.
-    \value EventNotifications Whether the driver supports database event notifications.
-    \value FinishQuery Whether the driver can do any low-level resource cleanup when QSqlQuery::finish() is called.
-    \value MultipleResultSets Whether the driver can access multiple result sets returned from batched statements or stored procedures.
-
-    More information about supported features can be found in the
-    \l{sql-driver.html}{Qt SQL driver} documentation.
-
-    \sa hasFeature()
-*/
-
-/*!
-    \enum QSqlDriver::StatementType
-
-    This enum contains a list of SQL statement (or clause) types the
-    driver can create.
-
-    \value WhereStatement  An SQL \c WHERE statement (e.g., \c{WHERE f = 5}).
-    \value SelectStatement An SQL \c SELECT statement (e.g., \c{SELECT f FROM t}).
-    \value UpdateStatement An SQL \c UPDATE statement (e.g., \c{UPDATE TABLE t set f = 1}).
-    \value InsertStatement An SQL \c INSERT statement (e.g., \c{INSERT INTO t (f) values (1)}).
-    \value DeleteStatement An SQL \c DELETE statement (e.g., \c{DELETE FROM t}).
-
-    \sa sqlStatement()
-*/
-
-/*!
-    \enum QSqlDriver::IdentifierType
-
-    This enum contains a list of SQL identifier types.
-
-    \value FieldName A SQL field name
-    \value TableName A SQL table name
-*/
-
-/*!
-    \fn bool QSqlDriver::hasFeature(DriverFeature feature) const
-
-    Returns true if the driver supports feature \a feature; otherwise
-    returns false.
-
-    Note that some databases need to be open() before this can be
-    determined.
-
-    \sa DriverFeature
-*/
-
-/*!
-    This function sets the open state of the database to \a open.
-    Derived classes can use this function to report the status of
-    open().
-
-    \sa open(), setOpenError()
-*/
-
 void QSqlDriver::setOpen(bool open)
 {
    d_func()->isOpen = open;
 }
-
-/*!
-    This function sets the open error state of the database to \a
-    error. Derived classes can use this function to report the status
-    of open(). Note that if \a error is true the open state of the
-    database is set to closed (i.e., isOpen() returns false).
-
-    \sa open(), setOpen()
-*/
 
 void QSqlDriver::setOpenError(bool error)
 {
@@ -170,77 +80,30 @@ void QSqlDriver::setOpenError(bool error)
    }
 }
 
-/*!
-    This function is called to begin a transaction. If successful,
-    return true, otherwise return false. The default implementation
-    does nothing and returns false.
-
-    \sa commitTransaction(), rollbackTransaction()
-*/
-
 bool QSqlDriver::beginTransaction()
 {
    return false;
 }
-
-/*!
-    This function is called to commit a transaction. If successful,
-    return true, otherwise return false. The default implementation
-    does nothing and returns false.
-
-    \sa beginTransaction(), rollbackTransaction()
-*/
 
 bool QSqlDriver::commitTransaction()
 {
    return false;
 }
 
-/*!
-    This function is called to rollback a transaction. If successful,
-    return true, otherwise return false. The default implementation
-    does nothing and returns false.
-
-    \sa beginTransaction(), commitTransaction()
-*/
-
 bool QSqlDriver::rollbackTransaction()
 {
    return false;
 }
-
-/*!
-    This function is used to set the value of the last error, \a error,
-    that occurred on the database.
-
-    \sa lastError()
-*/
 
 void QSqlDriver::setLastError(const QSqlError &error)
 {
    d_func()->error = error;
 }
 
-/*!
-    Returns a QSqlError object which contains information about the
-    last error that occurred on the database.
-*/
-
 QSqlError QSqlDriver::lastError() const
 {
    return d_func()->error;
 }
-
-/*!
-    Returns a list of the names of the tables in the database. The
-    default implementation returns an empty list.
-
-    The \a tableType argument describes what types of tables
-    should be returned. Due to binary compatibility, the string
-    contains the value of the enum QSql::TableTypes as text.
-    An empty string should be treated as QSql::Tables for
-    backward compatibility.
-*/
 
 QStringList QSqlDriver::tables(QSql::TableType) const
 {
@@ -355,14 +218,18 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
             s.clear();
          }
          break;
+
       case DeleteStatement:
          s.append(QLatin1String("DELETE FROM ")).append(tableName);
          break;
+
       case InsertStatement: {
          s.append(QLatin1String("INSERT INTO ")).append(tableName).append(QLatin1String(" ("));
+
          QString vals;
+
          for (i = 0; i < rec.count(); ++i) {
-            if (!rec.isGenerated(i)) {
+            if (! rec.isGenerated(i)) {
                continue;
             }
             s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(QLatin1String(", "));
@@ -373,8 +240,10 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
             }
             vals.append(QLatin1String(", "));
          }
+
          if (vals.isEmpty()) {
             s.clear();
+
          } else {
             vals.chop(2); // remove trailing comma
             s[s.length() - 2] = QLatin1Char(')');
@@ -446,14 +315,17 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
             r = QLatin1Char('\'') + result + QLatin1Char('\'');
             break;
          }
+
          case QVariant::Bool:
             r = QString::number(field.value().toBool());
             break;
+
          case QVariant::ByteArray : {
             if (hasFeature(BLOB)) {
                QByteArray ba = field.value().toByteArray();
                QString res;
                static const char hexchars[] = "0123456789abcdef";
+
                for (int i = 0; i < ba.size(); ++i) {
                   uchar s = (uchar) ba[i];
                   res += QLatin1Char(hexchars[s >> 4]);
@@ -476,20 +348,15 @@ QVariant QSqlDriver::handle() const
    return QVariant();
 }
 
-
 bool QSqlDriver::subscribeToNotification(const QString &name)
 {
-
    return false;
 }
 
 bool QSqlDriver::unsubscribeFromNotification(const QString &name)
 {
-
    return false;
 }
-
-
 
 QStringList QSqlDriver::subscribedToNotifications() const
 {

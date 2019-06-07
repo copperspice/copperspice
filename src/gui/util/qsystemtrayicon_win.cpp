@@ -169,9 +169,10 @@ extern "C" LRESULT QT_WIN_CALLBACK qWindowsTrayconWndProc(HWND hwnd, UINT messag
 static inline HWND createTrayIconMessageWindow()
 {
    QPlatformNativeInterface *ni = QGuiApplication::platformNativeInterface();
-   if (!ni) {
+   if (! ni) {
       return 0;
    }
+
    // Register window class in the platform plugin.
    QString className;
    void *wndProc = reinterpret_cast<void *>(qWindowsTrayconWndProc);

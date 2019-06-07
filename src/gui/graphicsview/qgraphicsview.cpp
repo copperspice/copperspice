@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-static const int QGRAPHICSVIEW_REGION_RECT_THRESHOLD = 50;
+static const int QGRAPHICSVIEW_REGION_RECT_THRESHOLD  = 50;
 static const int QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS = 503; // largest prime < 2^9
 
 #include <qgraphicsview.h>
@@ -52,7 +52,6 @@ static const int QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS = 503; // largest prime < 
 
 #include <qevent_p.h>
 
-
 bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event);
 
 inline int q_round_bound(qreal d) //### (int)(qreal) INT_MAX != INT_MAX for single precision
@@ -62,16 +61,20 @@ inline int q_round_bound(qreal d) //### (int)(qreal) INT_MAX != INT_MAX for sing
    } else if (d >= (qreal) INT_MAX) {
       return INT_MAX;
    }
+
    return d >= 0.0 ? int(d + qreal(0.5)) : int(d - int(d - 1) + qreal(0.5)) + int(d - 1);
 }
 
 void QGraphicsViewPrivate::translateTouchEvent(QGraphicsViewPrivate *d, QTouchEvent *touchEvent)
 {
    QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+
    for (int i = 0; i < touchPoints.count(); ++i) {
       QTouchEvent::TouchPoint &touchPoint = touchPoints[i];
+
       // the scene will set the item local pos, startPos, lastPos, and rect before delivering to
       // an item, but for now those functions are returning the view's local coordinates
+
       touchPoint.setSceneRect(d->mapToScene(touchPoint.rect()));
       touchPoint.setStartScenePos(d->mapToScene(touchPoint.startPos()));
       touchPoint.setLastScenePos(d->mapToScene(touchPoint.lastPos()));
@@ -123,19 +126,17 @@ QGraphicsViewPrivate::QGraphicsViewPrivate()
 {
    styleOptions.reserve(QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS);
 }
+
 QGraphicsViewPrivate::~QGraphicsViewPrivate()
 {
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::recalculateContentSize()
 {
    Q_Q(QGraphicsView);
 
    QSize maxSize = q->maximumViewportSize();
-   int width = maxSize.width();
+   int width  = maxSize.width();
    int height = maxSize.height();
    QRectF viewRect = matrix.mapRect(q->sceneRect());
 
@@ -1447,15 +1448,15 @@ void QGraphicsView::setScene(QGraphicsScene *scene)
       d->recalculateContentSize();
       d->lastCenterPoint = sceneRect().center();
       d->keepLastCenterPoint = true;
+
       // We are only interested in mouse tracking if items accept
       // hover events or use non-default cursors.
-      if (!d->scene->d_func()->allItemsIgnoreHoverEvents
-         || !d->scene->d_func()->allItemsUseDefaultCursor) {
+      if (! d->scene->d_func()->allItemsIgnoreHoverEvents || ! d->scene->d_func()->allItemsUseDefaultCursor) {
          d->viewport->setMouseTracking(true);
       }
 
       // enable touch events if any items is interested in them
-      if (!d->scene->d_func()->allItemsIgnoreTouchEvents) {
+      if (! d->scene->d_func()->allItemsIgnoreTouchEvents) {
          d->viewport->setAttribute(Qt::WA_AcceptTouchEvents);
       }
 
@@ -1463,6 +1464,7 @@ void QGraphicsView::setScene(QGraphicsScene *scene)
          QEvent windowActivate(QEvent::WindowActivate);
          QApplication::sendEvent(d->scene, &windowActivate);
       }
+
    } else {
       d->recalculateContentSize();
    }
@@ -2524,11 +2526,10 @@ bool QGraphicsView::viewportEvent(QEvent *event)
          d->dirtyScrollOffset = QPoint();
 
          if (d->scene) {
-            // Check if this view reimplements the updateScene slot; if it
-            // does, we can't do direct update delivery and have to fall back
-            // to connecting the changed signal.
+            // Check if this view reimplements the updateScene slot. If it does we can not
+            // direct update delivery and have to fall back to connecting the changed signal.
 
-            if (!d->updateSceneSlotReimplementedChecked) {
+            if (! d->updateSceneSlotReimplementedChecked) {
                d->updateSceneSlotReimplementedChecked = true;
                const QMetaObject *mo = metaObject();
 

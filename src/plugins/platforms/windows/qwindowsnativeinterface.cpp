@@ -161,13 +161,16 @@ void *QWindowsNativeInterface::nativeResourceForContext(const QByteArray &resour
    QWindowsOpenGLContext *glcontext = static_cast<QWindowsOpenGLContext *>(context->handle());
 
    switch (resourceType(resource)) {
-      case RenderingContextType: // Fall through.
+      case RenderingContextType:
       case EglContextType:
          return glcontext->nativeContext();
+
       case EglDisplayType:
          return glcontext->nativeDisplay();
+
       case EglConfigType:
          return glcontext->nativeConfig();
+
       default:
          break;
    }
@@ -191,10 +194,6 @@ void *QWindowsNativeInterface::createMessageWindow(const QString &classNameTempl
 
    return hwnd;
 }
-
-/*!
-    \brief Registers a unique window class with a callback function based on \a classNameIn.
-*/
 
 QString QWindowsNativeInterface::registerWindowClass(const QString &classNameIn, void *eventProc) const
 {

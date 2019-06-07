@@ -117,7 +117,6 @@ QPalette::QPalette(const QBrush &windowText, const QBrush &button,
       base, window);
 }
 
-
 QPalette::QPalette(const QColor &windowText, const QColor &window,
    const QColor &light, const QColor &dark, const QColor &mid,
    const QColor &text, const QColor &base)
@@ -132,11 +131,6 @@ QPalette::QPalette(const QColor &windowText, const QColor &window,
       QBrush(base), windowBrush);
 }
 
-/*!
-    Constructs a palette from a \a button color and a \a window.
-    The other colors are automatically calculated, based on these
-    colors.
-*/
 QPalette::QPalette(const QColor &button, const QColor &window)
 {
    init();
@@ -169,7 +163,6 @@ QPalette::QPalette(const QColor &button, const QColor &window)
       whiteBrush, baseBrush, windowBrush);
 }
 
-
 QPalette::QPalette(const QPalette &p)
    : d(p.d)
 {
@@ -186,7 +179,7 @@ QPalette::~QPalette()
    }
 }
 
-/*!\internal*/
+// internal
 void QPalette::init()
 {
    d = new QPalettePrivate;
@@ -205,12 +198,10 @@ QPalette &QPalette::operator=(const QPalette &p)
    }
 
    d = p.d;
+
    return *this;
 }
 
-/*!
-   Returns the palette as a QVariant
-*/
 QPalette::operator QVariant() const
 {
    return QVariant(QVariant::Palette, this);
@@ -287,7 +278,6 @@ void QPalette::detach()
    }
    ++d->detach_no;
 }
-
 
 bool QPalette::operator==(const QPalette &p) const
 {
@@ -407,7 +397,6 @@ QDataStream &operator>>(QDataStream &s, QPalette &p)
 
    return s;
 }
-
 
 bool QPalette::isCopyOf(const QPalette &p) const
 {

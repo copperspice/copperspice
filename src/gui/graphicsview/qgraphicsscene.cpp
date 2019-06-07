@@ -64,7 +64,6 @@
 #include <QtGui/qinputmethod.h>
 #include <QtGui/qgraphicseffect.h>
 
-
 #include <qapplication_p.h>
 
 #include <qgraphicseffect_p.h>
@@ -77,8 +76,6 @@
 #else
 # define DEBUG qDebug
 #endif
-
-QT_BEGIN_NAMESPACE
 
 bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event);
 
@@ -138,9 +135,6 @@ QGraphicsScenePrivate::QGraphicsScenePrivate()
 {
 }
 
-/*!
-    \internal
-*/
 void QGraphicsScenePrivate::init()
 {
    Q_Q(QGraphicsScene);
@@ -157,9 +151,6 @@ void QGraphicsScenePrivate::init()
    q->update();
 }
 
-/*!
-    \internal
-*/
 QGraphicsScenePrivate *QGraphicsScenePrivate::get(QGraphicsScene *q)
 {
    return q->d_func();
@@ -171,9 +162,10 @@ void QGraphicsScenePrivate::_q_emitUpdated()
    calledEmitUpdated = false;
 
    if (dirtyGrowingItemsBoundingRect) {
-      if (!hasSceneRect) {
+      if (! hasSceneRect) {
          const QRectF oldGrowingItemsBoundingRect = growingItemsBoundingRect;
          growingItemsBoundingRect |= q->itemsBoundingRect();
+
          if (oldGrowingItemsBoundingRect != growingItemsBoundingRect) {
             emit q->sceneRectChanged(growingItemsBoundingRect);
          }
@@ -191,20 +183,23 @@ void QGraphicsScenePrivate::_q_emitUpdated()
       for (int i = 0; i < views.size(); ++i) {
          QGraphicsView *view = views.at(i);
 
-         if (!view->d_func()->connectedToScene) {
+         if (! view->d_func()->connectedToScene) {
             view->d_func()->connectedToScene = true;
             q->connect(q, &QGraphicsScene::changed, view, &QGraphicsView::updateScene);
          }
       }
+
    } else {
       if (views.isEmpty()) {
          updateAll = false;
          return;
       }
+
       for (int i = 0; i < views.size(); ++i) {
          views.at(i)->d_func()->processPendingUpdates();
       }
-      // It's important that we update all views before we dispatch, hence two for-loops.
+
+      // important that we update all views before we dispatch, hence two for-loops.
       for (int i = 0; i < views.size(); ++i) {
          views.at(i)->d_func()->dispatchPendingUpdateRequests();
       }
@@ -216,6 +211,7 @@ void QGraphicsScenePrivate::_q_emitUpdated()
    oldUpdatedRects = updateAll ? (QList<QRectF>() << q->sceneRect()) : updatedRects;
    updateAll = false;
    updatedRects.clear();
+
    emit q->changed(oldUpdatedRects);
 }
 
@@ -564,6 +560,7 @@ void QGraphicsScenePrivate::removeItemHelper(QGraphicsItem *item)
 
    // Reenable selectionChanged() for individual items
    --selectionChanging;
+
    if (! selectionChanging && selectedItems.size() != oldSelectedItemsSize) {
       emit q->selectionChanged();
    }
@@ -673,9 +670,6 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
    emit q->focusItemChanged(focusItem, oldFocusItem, Qt::ActiveWindowFocusReason);
 }
 
-/*!
-    \internal
-*/
 void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *item,
    Qt::FocusReason focusReason, bool emitFocusChanged)
 {
@@ -1601,6 +1595,7 @@ QRectF QGraphicsScene::sceneRect() const
       QRectF oldGrowingBoundingRect = thatd->growingItemsBoundingRect;
       thatd->growingItemsBoundingRect |= itemsBoundingRect();
       thatd->dirtyGrowingItemsBoundingRect = false;
+
       if (oldGrowingBoundingRect != thatd->growingItemsBoundingRect) {
          emit const_cast<QGraphicsScene *>(this)->sceneRectChanged(thatd->growingItemsBoundingRect);
       }
@@ -2567,15 +2562,6 @@ void QGraphicsScene::setForegroundBrush(const QBrush &brush)
    update();
 }
 
-/*!
-    This method is used by input methods to query a set of properties of
-    the scene to be able to support complex input method operations as support
-    for surrounding text and reconversions.
-
-    The \a query parameter specifies which property is queried.
-
-    \sa QWidget::inputMethodQuery()
-*/
 QVariant QGraphicsScene::inputMethodQuery(Qt::InputMethodQuery query) const
 {
    Q_D(const QGraphicsScene);
@@ -2583,8 +2569,10 @@ QVariant QGraphicsScene::inputMethodQuery(Qt::InputMethodQuery query) const
    if (! d->focusItem || ! (d->focusItem->flags() & QGraphicsItem::ItemAcceptsInputMethod)) {
       return QVariant();
    }
+
    const QTransform matrix = d->focusItem->sceneTransform();
    QVariant value = d->focusItem->inputMethodQuery(query);
+
    if (value.type() == QVariant::RectF) {
       value = matrix.mapRect(value.toRectF());
    } else if (value.type() == QVariant::PointF) {
@@ -2594,24 +2582,20 @@ QVariant QGraphicsScene::inputMethodQuery(Qt::InputMethodQuery query) const
    } else if (value.type() == QVariant::Point) {
       value = matrix.map(value.toPoint());
    }
+
    return value;
 }
 
-/*!
-    \fn void QGraphicsScene::update(const QRectF &rect)
-    Schedules a redraw of the area \a rect on the scene.
-
-    \sa sceneRect(), changed()
-*/
 void QGraphicsScene::update(const QRectF &rect)
 {
    Q_D(QGraphicsScene);
-   if (d->updateAll || (rect.isEmpty() && !rect.isNull())) {
+
+   if (d->updateAll || (rect.isEmpty() && ! rect.isNull())) {
       return;
    }
 
-   // Check if anyone's connected; if not, we can send updates directly to
-   // the views. Otherwise or if there are no views, use old behavior
+   // Check if anyone's connected. If not, we can send updates directly to the views.
+   // Otherwise or if there are no views, use old behavior
 
    int signalIndex = d->changedSignalIndex;
    const QMetaMethod &metaMethod = this->metaObject()->method(signalIndex);
@@ -2623,7 +2607,8 @@ void QGraphicsScene::update(const QRectF &rect)
       d->updatedRects.clear();
 
       if (directUpdates) {
-         // Update all views.
+         // Update all views
+
          for (int i = 0; i < d->views.size(); ++i) {
             d->views.at(i)->d_func()->fullUpdatePending = true;
          }
@@ -2634,6 +2619,7 @@ void QGraphicsScene::update(const QRectF &rect)
          // Update all views.
          for (int i = 0; i < d->views.size(); ++i) {
             QGraphicsView *view = d->views.at(i);
+
             if (view->isTransformed()) {
                view->d_func()->updateRectF(view->viewportTransform().mapRect(rect));
             } else {
@@ -2660,20 +2646,6 @@ void QGraphicsScene::invalidate(const QRectF &rect, SceneLayers layers)
    update(rect);
 }
 
-/*!
-    \fn void QGraphicsScene::invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers)
-    \overload
-    \since 4.3
-
-    This convenience function is equivalent to calling invalidate(QRectF(\a x, \a
-    y, \a w, \a h), \a layers);
-*/
-
-/*!
-    Returns a list of all the views that display this scene.
-
-    \sa QGraphicsView::scene()
-*/
 QList <QGraphicsView *> QGraphicsScene::views() const
 {
    Q_D(const QGraphicsScene);
@@ -4513,7 +4485,7 @@ void QGraphicsScenePrivate::markDirty(QGraphicsItem *item, const QRectF &rect, b
       const QMetaMethod &metaMethod = q_ptr->metaObject()->method(changedSignalIndex);
 
       if (q_ptr->isSignalConnected(metaMethod) || views.isEmpty()) {
-         // This block of code is kept for compatibility. Since 4.5, by default
+         // This block of code is kept for compatibility. Since 4.5, by default,
          // QGraphicsView does not connect the signal and we use the below
          // method of delivering updates.
 
@@ -5954,7 +5926,5 @@ void QGraphicsScene::_q_updateScenePosDescendants()
    Q_D(QGraphicsScene);
    d->_q_updateScenePosDescendants();
 }
-
-
 
 #endif // QT_NO_GRAPHICSVIEW

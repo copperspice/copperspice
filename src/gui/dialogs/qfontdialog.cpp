@@ -324,18 +324,15 @@ QFont QFontDialogPrivate::getFont(bool *ok, const QFont &initial, QWidget *paren
    }
 }
 
-/*!
-    \internal
-    An event filter to make the Up, Down, PageUp and PageDown keys work
-    correctly in the line edits. The source of the event is the object
-    \a o and the event is \a e.
-*/
-
+//  event filter to make the Up, Down, PageUp and PageDown keys work correctly in the line edits.
+//  the source of the event is the object o and the event is e.
 bool QFontDialog::eventFilter(QObject *o, QEvent *e)
 {
    Q_D(QFontDialog);
+
    if (e->type() == QEvent::KeyPress) {
       QKeyEvent *k = (QKeyEvent *)e;
+
       if (o == d->sizeEdit &&
          (k->key() == Qt::Key_Up ||
             k->key() == Qt::Key_Down ||
@@ -349,15 +346,20 @@ bool QFontDialog::eventFilter(QObject *o, QEvent *e)
             && style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, 0, this)) {
             d->sizeEdit->selectAll();
          }
+
          return true;
+
       } else if ((o == d->familyList || o == d->styleList) &&
          (k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)) {
          k->accept();
          accept();
+
          return true;
       }
+
    } else if (e->type() == QEvent::FocusIn
-      && style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, 0, this)) {
+         && style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, 0, this)) {
+
       if (o == d->familyList) {
          d->familyEdit->selectAll();
       } else if (o == d->styleList) {
@@ -365,9 +367,11 @@ bool QFontDialog::eventFilter(QObject *o, QEvent *e)
       } else if (o == d->sizeList) {
          d->sizeEdit->selectAll();
       }
+
    } else if (e->type() == QEvent::MouseButtonPress && o == d->sizeList) {
       d->sizeEdit->setFocus();
    }
+
    return QDialog::eventFilter(o, e);
 }
 
@@ -392,7 +396,6 @@ void QFontDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
     Updates the contents of the "font family" list box. This
     function can be reimplemented if you have special requirements.
 */
-
 void QFontDialogPrivate::updateFamilies()
 {
    Q_Q(QFontDialog);
@@ -826,8 +829,6 @@ QFontDialog::FontDialogOptions QFontDialog::options() const
    return QFontDialog::FontDialogOptions(int(d->options->options()));
 }
 
-
-
 void QFontDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QFontDialog);
@@ -838,7 +839,6 @@ void QFontDialog::open(QObject *receiver, const QString &member)
 
    QDialog::open();
 }
-
 
 
 /*!
@@ -897,7 +897,6 @@ void QFontDialog::done(int result)
    }
    d->memberToDisconnectOnClose.clear();
 }
-
 
 bool QFontDialogPrivate::canBeNativeDialog() const
 {

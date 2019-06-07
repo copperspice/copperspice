@@ -1256,7 +1256,9 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
    Q_Q(QLabel);
 
 #ifndef QT_NO_CURSOR
-   if (anchor.isEmpty()) { // restore cursor
+   if (anchor.isEmpty()) {
+      // restore cursor
+
       if (validCursor) {
          q->setCursor(cursor);
       } else {

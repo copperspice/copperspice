@@ -52,56 +52,56 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleInterface_ID, "/styles"
 
 QStyle *QStyleFactory::create(const QString &key)
 {
-   QStyle *ret = 0;
-   QString style = key.toLower();
+   QStyle *retval = nullptr;
+   QString style  = key.toLower();
 
 #ifndef QT_NO_STYLE_WINDOWS
-   if (style == QLatin1String("windows")) {
-      ret = new QWindowsStyle;
+   if (style == "windows") {
+      retval = new QWindowsStyle;
    } else
 #endif
 
 #ifndef QT_NO_STYLE_WINDOWSXP
-      if (style == QLatin1String("windowsxp")) {
-         ret = new QWindowsXPStyle;
+      if (style == "windowsxp") {
+         retval = new QWindowsXPStyle;
       } else
 #endif
 
 #ifndef QT_NO_STYLE_WINDOWSVISTA
-         if (style == QLatin1String("windowsvista")) {
-            ret = new QWindowsVistaStyle;
+         if (style == "windowsvista") {
+            retval = new QWindowsVistaStyle;
          } else
 #endif
 
 #ifndef QT_NO_STYLE_FUSION
-            if (style == QLatin1String("fusion")) {
-               ret = new QFusionStyle;
+            if (style == "fusion") {
+               retval = new QFusionStyle;
             } else
 #endif
 
 #ifndef QT_NO_STYLE_GTK
-               if (style == QLatin1String("gtk") || style == QLatin1String("gtk+")) {
-                  ret = new QGtkStyle;
+               if (style == "gtk" || style == "gtk+") {
+                  retval = new QGtkStyle;
                } else
 #endif
 
 #ifndef QT_NO_STYLE_MAC
-                  if (style.startsWith(QLatin1String("macintosh"))) {
-                     ret = new QMacStyle;
+                  if (style.startsWith("macintosh")) {
+                     retval = new QMacStyle;
                   } else
 #endif
 
                   { } // Keep these here
 
-   if (! ret) {
-      ret = cs_load_plugin<QStyle, QStylePlugin>(loader(), style);
+   if (! retval) {
+      retval = cs_load_plugin<QStyle, QStylePlugin>(loader(), style);
    }
 
-   if (ret) {
-      ret->setObjectName(style);
+   if (retval) {
+      retval->setObjectName(style);
    }
 
-   return ret;
+   return retval;
 }
 
 QStringList QStyleFactory::keys()

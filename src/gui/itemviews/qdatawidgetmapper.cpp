@@ -31,7 +31,6 @@
 #include <qwidget.h>
 #include <qabstractitemmodel_p.h>
 
-
 class QDataWidgetMapperPrivate
 {
 
@@ -278,11 +277,12 @@ QAbstractItemModel *QDataWidgetMapper::model() const
                   ? static_cast<QAbstractItemModel *>(0) : d->model;
 }
 
-
 void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
 {
    Q_D(QDataWidgetMapper);
+
    QAbstractItemDelegate *oldDelegate = d->delegate;
+
    if (oldDelegate) {
       disconnect(oldDelegate, &QAbstractItemDelegate::commitData,  this, &QDataWidgetMapper::_q_commitData);
       disconnect(oldDelegate, &QAbstractItemDelegate::closeEditor, this, &QDataWidgetMapper::_q_closeEditor);
@@ -298,9 +298,6 @@ void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
    d->flipEventFilters(oldDelegate, delegate);
 }
 
-/*!
-    Returns the current item delegate.
- */
 QAbstractItemDelegate *QDataWidgetMapper::itemDelegate() const
 {
    Q_D(const QDataWidgetMapper);
@@ -312,7 +309,6 @@ void QDataWidgetMapper::setRootIndex(const QModelIndex &index)
    Q_D(QDataWidgetMapper);
    d->rootIndex = index;
 }
-
 
 QModelIndex QDataWidgetMapper::rootIndex() const
 {
@@ -329,15 +325,6 @@ void QDataWidgetMapper::addMapping(QWidget *widget, int section)
    widget->installEventFilter(d->delegate);
 }
 
-/*!
-  \since 4.3
-
-  Essentially the same as addMapping(), but adds the possibility to specify
-  the property to use specifying \a propertyName.
-
-  \sa addMapping()
-*/
-
 void QDataWidgetMapper::addMapping(QWidget *widget, int section, const QString &propertyName)
 {
    Q_D(QDataWidgetMapper);
@@ -347,11 +334,6 @@ void QDataWidgetMapper::addMapping(QWidget *widget, int section, const QString &
    widget->installEventFilter(d->delegate);
 }
 
-/*!
-    Removes the mapping for the given \a widget.
-
-    \sa addMapping(), clearMapping()
- */
 void QDataWidgetMapper::removeMapping(QWidget *widget)
 {
    Q_D(QDataWidgetMapper);

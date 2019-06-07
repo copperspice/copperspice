@@ -81,7 +81,6 @@ void QPixmap::doInit(int w, int h, int type)
    }
 }
 
-
 QPixmap::QPixmap()
    : QPaintDevice()
 {
@@ -109,9 +108,7 @@ QPixmap::QPixmap(const QSize &size)
    }
 }
 
-/*!
-  \internal
-*/
+// internal
 QPixmap::QPixmap(const QSize &s, int type)
 {
    if (! qt_pixmap_thread_test()) {
@@ -121,14 +118,11 @@ QPixmap::QPixmap(const QSize &s, int type)
    }
 }
 
-/*!
-    \internal
-*/
+// internal
 QPixmap::QPixmap(QPlatformPixmap *d)
    : QPaintDevice(), data(d)
 {
 }
-
 
 QPixmap::QPixmap(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
    : QPaintDevice()
@@ -142,12 +136,6 @@ QPixmap::QPixmap(const QString &fileName, const char *format, Qt::ImageConversio
    load(fileName, format, flags);
 }
 
-/*!
-    Constructs a pixmap that is a copy of the given \a pixmap.
-
-    \sa copy()
-*/
-
 QPixmap::QPixmap(const QPixmap &pixmap)
    : QPaintDevice()
 {
@@ -155,6 +143,7 @@ QPixmap::QPixmap(const QPixmap &pixmap)
       doInit(0, 0, QPlatformPixmap::PixmapType);
       return;
    }
+
    if (pixmap.paintingActive()) {                // make a deep copy
       pixmap.copy().swap(*this);
    } else {
@@ -162,21 +151,6 @@ QPixmap::QPixmap(const QPixmap &pixmap)
    }
 }
 
-/*!
-    Constructs a pixmap from the given \a xpm data, which must be a
-    valid XPM image.
-
-    Errors are silently ignored.
-
-    Note that it's possible to squeeze the XPM variable a little bit
-    by using an unusual declaration:
-
-    \snippet doc/src/snippets/code/src_gui_image_qpixmap.cpp 0
-
-    The extra \c const makes the entire definition read-only, which is
-    slightly more efficient (for example, when the code is in a shared
-    library) and ROMable when the application is to be stored in ROM.
-*/
 #ifndef QT_NO_IMAGEFORMAT_XPM
 
 QPixmap::QPixmap(const char *const xpm[])
@@ -198,24 +172,16 @@ QPixmap::QPixmap(const char *const xpm[])
 }
 #endif
 
-
-/*!
-    Destroys the pixmap.
-*/
-
 QPixmap::~QPixmap()
 {
-   Q_ASSERT(!data || data->ref.load() >= 1); // Catch if ref-counting changes again
+   Q_ASSERT(! data || data->ref.load() >= 1); // Catch if ref-counting changes again
 }
 
-/*!
-  \internal
-*/
+// internal
 int QPixmap::devType() const
 {
    return QInternal::Pixmap;
 }
-
 
 QPixmap QPixmap::copy(const QRect &rect) const
 {
@@ -232,7 +198,6 @@ QPixmap QPixmap::copy(const QRect &rect) const
    d->copy(data.data(), r);
    return QPixmap(d);
 }
-
 
 void QPixmap::scroll(int dx, int dy, const QRect &rect, QRegion *exposed)
 {
@@ -268,13 +233,6 @@ void QPixmap::scroll(int dx, int dy, const QRect &rect, QRegion *exposed)
    }
 }
 
-/*!
-    Assigns the given \a pixmap to this pixmap and returns a reference
-    to this pixmap.
-
-    \sa copy(), QPixmap()
-*/
-
 QPixmap &QPixmap::operator=(const QPixmap &pixmap)
 {
    if (paintingActive()) {
@@ -295,7 +253,6 @@ QPixmap::operator QVariant() const
    return QVariant(QVariant::Pixmap, this);
 }
 
-
 QImage QPixmap::toImage() const
 {
    if (isNull()) {
@@ -310,18 +267,10 @@ QTransform QPixmap::trueMatrix(const QTransform &m, int w, int h)
    return QImage::trueMatrix(m, w, h);
 }
 
-
 QMatrix QPixmap::trueMatrix(const QMatrix &m, int w, int h)
 {
    return trueMatrix(QTransform(m), w, h).toAffine();
 }
-
-
-/*!
-    \fn bool QPixmap::isQBitmap() const
-
-    Returns true if this is a QBitmap; otherwise returns false.
-*/
 
 bool QPixmap::isQBitmap() const
 {
@@ -330,9 +279,8 @@ bool QPixmap::isQBitmap() const
 
 bool QPixmap::isNull() const
 {
-   return !data || data->isNull();
+   return ! data || data->isNull();
 }
-
 
 int QPixmap::width() const
 {
@@ -344,28 +292,20 @@ int QPixmap::height() const
    return data ? data->height() : 0;
 }
 
-
 QSize QPixmap::size() const
 {
    return data ? QSize(data->width(), data->height()) : QSize(0, 0);
 }
-
 
 QRect QPixmap::rect() const
 {
    return data ? QRect(0, 0, data->width(), data->height()) : QRect();
 }
 
-
 int QPixmap::depth() const
 {
    return data ? data->depth() : 0;
 }
-
-
-
-
-
 
 void QPixmap::setMask(const QBitmap &mask)
 {
@@ -396,6 +336,7 @@ void QPixmap::setMask(const QBitmap &mask)
       if (image.depth() != 1) { // hw: ????
          image = image.convertToFormat(QImage::Format_RGB32);
       }
+
    } else {
       const int w = image.width();
       const int h = image.height();
@@ -431,6 +372,7 @@ void QPixmap::setMask(const QBitmap &mask)
    }
    data->fromImage(image, Qt::AutoColor);
 }
+
 qreal QPixmap::devicePixelRatio() const
 {
    if (!data) {
@@ -438,6 +380,7 @@ qreal QPixmap::devicePixelRatio() const
    }
    return data->devicePixelRatio();
 }
+
 void QPixmap::setDevicePixelRatio(qreal scaleFactor)
 {
    if (isNull()) {
@@ -453,7 +396,6 @@ void QPixmap::setDevicePixelRatio(qreal scaleFactor)
 }
 
 #ifndef QT_NO_IMAGE_HEURISTIC_MASK
-
 QBitmap QPixmap::createHeuristicMask(bool clipTight) const
 {
    QBitmap m = QBitmap::fromImage(toImage().createHeuristicMask(clipTight));
@@ -461,22 +403,18 @@ QBitmap QPixmap::createHeuristicMask(bool clipTight) const
 }
 #endif
 
-
 QBitmap QPixmap::createMaskFromColor(const QColor &maskColor, Qt::MaskMode mode) const
 {
    QImage image = toImage().convertToFormat(QImage::Format_ARGB32);
    return QBitmap::fromImage(image.createMaskFromColor(maskColor.rgba(), mode));
 }
 
-
-
 bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
 {
    if (! fileName.isEmpty()) {
       QFileInfo info(fileName);
 
-      // Note: If no extension is provided, we try to match the
-      // file against known plugin extensions
+      // if no extension is provided try to match the file against known plugin extensions
 
       if (info.completeSuffix().isEmpty() || info.exists()) {
 
@@ -512,14 +450,13 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
    return false;
 }
 
-
-
 bool QPixmap::loadFromData(const uchar *buf, uint len, const char *format, Qt::ImageConversionFlags flags)
 {
    if (len == 0 || buf == 0) {
       data.reset();
       return false;
    }
+
    data = QPlatformPixmap::create(0, 0, QPlatformPixmap::PixmapType);
 
    if (data->fromData(buf, len, format, flags)) {
@@ -527,13 +464,9 @@ bool QPixmap::loadFromData(const uchar *buf, uint len, const char *format, Qt::I
    }
 
    data.reset();
+
    return false;
 }
-
-
-
-
-
 
 bool QPixmap::save(const QString &fileName, const char *format, int quality) const
 {
@@ -545,16 +478,6 @@ bool QPixmap::save(const QString &fileName, const char *format, int quality) con
    return doImageIO(&writer, quality);
 }
 
-/*!
-    \overload
-
-    This function writes a QPixmap to the given \a device using the
-    specified image file \a format and \a quality factor. This can be
-    used, for example, to save a pixmap directly into a QByteArray:
-
-    \snippet doc/src/snippets/image/image.cpp 1
-*/
-
 bool QPixmap::save(QIODevice *device, const char *format, int quality) const
 {
    if (isNull()) {
@@ -565,8 +488,7 @@ bool QPixmap::save(QIODevice *device, const char *format, int quality) const
    return doImageIO(&writer, quality);
 }
 
-/*! \internal
-*/
+// internal
 bool QPixmap::doImageIO(QImageWriter *writer, int quality) const
 {
    if (quality > 100  || quality < -1) {
@@ -580,19 +502,12 @@ bool QPixmap::doImageIO(QImageWriter *writer, int quality) const
    return writer->write(toImage());
 }
 
-
-
 void QPixmap::fill(const QPaintDevice *device, const QPoint &p)
 {
    Q_UNUSED(device)
    Q_UNUSED(p)
    qWarning("this function is deprecated, ignored");
 }
-
-
-
-
-
 
 void QPixmap::fill(const QColor &color)
 {
@@ -621,7 +536,6 @@ void QPixmap::fill(const QColor &color)
    data->fill(color);
 }
 
-
 qint64 QPixmap::cacheKey() const
 {
    if (isNull()) {
@@ -645,14 +559,10 @@ QPixmap QPixmap::grabWidget(QObject *widget, const QRect &rectangle)
    return pixmap;
 }
 
-
-
-
 QDataStream &operator<<(QDataStream &stream, const QPixmap &pixmap)
 {
    return stream << pixmap.toImage();
 }
-
 
 QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap)
 {
@@ -669,19 +579,11 @@ QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap)
    return stream;
 }
 
-
-
-
-/*!
-    \internal
-*/
-
+// internal
 bool QPixmap::isDetached() const
 {
    return data && data->ref.load() == 1;
 }
-
-
 
 bool QPixmap::convertFromImage(const QImage &image, Qt::ImageConversionFlags flags)
 {
@@ -696,8 +598,6 @@ bool QPixmap::convertFromImage(const QImage &image, Qt::ImageConversionFlags fla
    return !isNull();
 }
 
-
-
 QPixmap QPixmap::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::TransformationMode mode) const
 {
    if (isNull()) {
@@ -711,7 +611,7 @@ QPixmap QPixmap::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::Tran
 
    QSize newSize = size();
    newSize.scale(s, aspectMode);
-   newSize.rwidth() = qMax(newSize.width(), 1);
+   newSize.rwidth()  = qMax(newSize.width(), 1);
    newSize.rheight() = qMax(newSize.height(), 1);
 
    if (newSize == size()) {
@@ -721,9 +621,9 @@ QPixmap QPixmap::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::Tran
    QTransform wm = QTransform::fromScale((qreal)newSize.width() / width(),
          (qreal)newSize.height() / height());
    QPixmap pix = transformed(wm, mode);
+
    return pix;
 }
-
 
 QPixmap QPixmap::scaledToWidth(int w, Qt::TransformationMode mode) const
 {
@@ -740,7 +640,6 @@ QPixmap QPixmap::scaledToWidth(int w, Qt::TransformationMode mode) const
    QTransform wm = QTransform::fromScale(factor, factor);
    return transformed(wm, mode);
 }
-
 
 QPixmap QPixmap::scaledToHeight(int h, Qt::TransformationMode mode) const
 {
@@ -767,12 +666,6 @@ QPixmap QPixmap::transformed(const QTransform &transform,
    return data->transformed(transform, mode);
 }
 
-/*!
-  \overload
-
-  This convenience function loads the \a matrix into a
-  QTransform and calls the overloaded function.
- */
 QPixmap QPixmap::transformed(const QMatrix &matrix, Qt::TransformationMode mode) const
 {
    return transformed(QTransform(matrix), mode);
@@ -795,8 +688,6 @@ int QPixmap::metric(PaintDeviceMetric metric) const
 {
    return data ? data->metric(metric) : 0;
 }
-
-
 
 /*!
     \internal
@@ -848,7 +739,6 @@ int QPixmap::defaultDepth()
 {
    return QGuiApplication::primaryScreen()->depth();
 }
-
 
 void QPixmap::detach()
 {
@@ -903,7 +793,6 @@ QPixmap QPixmap::fromImageInPlace(QImage &image, Qt::ImageConversionFlags flags)
    return QPixmap(data.take());
 }
 
-
 QPixmap QPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags)
 {
    QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->
@@ -952,7 +841,4 @@ QDebug operator<<(QDebug dbg, const QPixmap &r)
 
    return dbg;
 }
-
-
-
 

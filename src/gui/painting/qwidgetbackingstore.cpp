@@ -1451,9 +1451,10 @@ void QWidgetBackingStore::doSync()
    }
 
 #ifndef QT_NO_OPENGL
-   foreach (QPlatformTextureList *tl, tlwExtra->widgetTextures) {
+   for (QPlatformTextureList *tl : tlwExtra->widgetTextures) {
       for (int i = 0; i < tl->count(); ++i) {
          QWidget *w = static_cast<QWidget *>(tl->source(i));
+
          if (dirtyRenderToTextureWidgets.contains(w)) {
             const QRect rect = tl->geometry(i); // mapped to the tlw already
             // Set a flag to indicate that the paint event for this
@@ -1464,9 +1465,11 @@ void QWidgetBackingStore::doSync()
          }
       }
    }
+
    for (int i = 0; i < dirtyRenderToTextureWidgets.count(); ++i) {
       resetWidget(dirtyRenderToTextureWidgets.at(i));
    }
+
    dirtyRenderToTextureWidgets.clear();
 #endif
 
@@ -1763,6 +1766,7 @@ void QWidgetPrivate::invalidateBuffer(const QRect &rect)
 
    QRegion wRgn(extra->mask);
    wRgn &= wRect;
+
    if (wRgn.isEmpty()) {
       return;
    }
@@ -1790,17 +1794,15 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
 
    QPaintEngine *engine = q->paintEngine();
 
-
    // QGLWidget does not support partial updates if:
    // 1) The context is double buffered
    // 2) The context is single buffered and auto-fill background is enabled.
+
    const bool noPartialUpdateSupport = (engine && (engine->type() == QPaintEngine::OpenGL
             || engine->type() == QPaintEngine::OpenGL2))
-      && (usesDoubleBufferedGLContext || q->autoFillBackground());
+            && (usesDoubleBufferedGLContext || q->autoFillBackground());
 
    QRegion toBePainted(noPartialUpdateSupport ? q->rect() : rgn);
-
-
 
    toBePainted &= clipRect();
    clipToEffectiveMask(toBePainted);

@@ -287,14 +287,14 @@ QWindowsFontEngine::~QWindowsFontEngine()
       free(widthCache);
    }
 
-   // make sure we aren't by accident still selected
+   // make sure we are not by accident still selected
    SelectObject(m_fontEngineData->hdc, QWindowsFontDatabase::systemFont());
 
    if (! DeleteObject(hfont)) {
       qErrnoWarning("~QWindowsFontEngine(): Failed to delete font");
    }
 
-   if (!uniqueFamilyName.isEmpty()) {
+   if (! uniqueFamilyName.isEmpty()) {
       QPlatformFontDatabase *pfdb = QWindowsIntegration::instance()->fontDatabase();
       static_cast<QWindowsFontDatabase *>(pfdb)->derefUniqueFont(uniqueFamilyName);
    }

@@ -105,7 +105,6 @@ class QPollingFileSystemWatcherEngine : public QFileSystemWatcherEngine
    void stop() override;
 
  private:
-
    CORE_CS_SLOT_1(Private, void timeout())
    CORE_CS_SLOT_2(timeout)
 
@@ -136,9 +135,11 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
    while (it.hasNext()) {
       QString path = it.next();
       QFileInfo fi(path);
+
       if (!fi.exists()) {
          continue;
       }
+
       if (fi.isDir()) {
          if (!directories->contains(path)) {
             directories->append(path);
@@ -147,6 +148,7 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
             fi = QFileInfo(path + QLatin1Char('/'));
          }
          this->directories.insert(path, fi);
+
       } else {
          if (!files->contains(path)) {
             files->append(path);
@@ -155,7 +157,9 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
       }
       it.remove();
    }
+
    start();
+
    return p;
 }
 
@@ -347,60 +351,6 @@ void QFileSystemWatcher::_q_directoryChanged(const QString &path, bool removed)
    d->_q_directoryChanged(path, removed);
 }
 
-
-/*!
-    \class QFileSystemWatcher
-    \brief The QFileSystemWatcher class provides an interface for monitoring files and directories for modifications.
-    \ingroup io
-    \since 4.2
-    \reentrant
-
-    QFileSystemWatcher monitors the file system for changes to files
-    and directories by watching a list of specified paths.
-
-    Call addPath() to watch a particular file or directory. Multiple
-    paths can be added using the addPaths() function. Existing paths can
-    be removed by using the removePath() and removePaths() functions.
-
-    QFileSystemWatcher examines each path added to it. Files that have
-    been added to the QFileSystemWatcher can be accessed using the
-    files() function, and directories using the directories() function.
-
-    The fileChanged() signal is emitted when a file has been modified,
-    renamed or removed from disk. Similarly, the directoryChanged()
-    signal is emitted when a directory or its contents is modified or
-    removed.  Note that QFileSystemWatcher stops monitoring files once
-    they have been renamed or removed from disk, and directories once
-    they have been removed from disk.
-
-    \note On systems running a Linux kernel without inotify support,
-    file systems that contain watched paths cannot be unmounted.
-
-    \note Windows CE does not support directory monitoring by
-    default as this depends on the file system driver installed.
-
-    \note The act of monitoring files and directories for
-    modifications consumes system resources. This implies there is a
-    limit to the number of files and directories your process can
-    monitor simultaneously. On Mac OS X 10.4 and all BSD variants, for
-    example, an open file descriptor is required for each monitored
-    file. Some system limits the number of open file descriptors to 256
-    by default. This means that addPath() and addPaths() will fail if
-    your process tries to add more than 256 files or directories to
-    the file system monitor. Also note that your process may have
-    other file descriptors open in addition to the ones for files
-    being monitored, and these other open descriptors also count in
-    the total. Mac OS X 10.5 and up use a different backend and do not
-    suffer from this issue.
-
-
-    \sa QFile, QDir
-*/
-
-
-/*!
-    Constructs a new file system watcher object with the given \a parent.
-*/
 QFileSystemWatcher::QFileSystemWatcher(QObject *parent)
    : QObject(parent), d_ptr(new QFileSystemWatcherPrivate)
 {
@@ -408,10 +358,6 @@ QFileSystemWatcher::QFileSystemWatcher(QObject *parent)
    d_func()->init();
 }
 
-/*!
-    Constructs a new file system watcher object with the given \a parent
-    which monitors the specified \a paths list.
-*/
 QFileSystemWatcher::QFileSystemWatcher(const QStringList &paths, QObject *parent)
    : QObject(parent), d_ptr(new QFileSystemWatcherPrivate)
 {
@@ -421,9 +367,6 @@ QFileSystemWatcher::QFileSystemWatcher(const QStringList &paths, QObject *parent
    addPaths(paths);
 }
 
-/*!
-    Destroys the file system watcher.
-*/
 QFileSystemWatcher::~QFileSystemWatcher()
 {
    Q_D(QFileSystemWatcher);
@@ -447,23 +390,6 @@ QFileSystemWatcher::~QFileSystemWatcher()
    }
 }
 
-/*!
-    Adds \a path to the file system watcher if \a path exists. The
-    path is not added if it does not exist, or if it is already being
-    monitored by the file system watcher.
-
-    If \a path specifies a directory, the directoryChanged() signal
-    will be emitted when \a path is modified or removed from disk;
-    otherwise the fileChanged() signal is emitted when \a path is
-    modified, renamed or removed.
-
-    \note There is a system dependent limit to the number of files and
-    directories that can be monitored simultaneously. If this limit
-    has been reached, \a path will not be added to the file system
-    watcher, and a warning message will be printed to \e{stderr}.
-
-    \sa addPaths(), removePath()
-*/
 void QFileSystemWatcher::addPath(const QString &path)
 {
    if (path.isEmpty()) {
@@ -473,24 +399,6 @@ void QFileSystemWatcher::addPath(const QString &path)
    addPaths(QStringList(path));
 }
 
-/*!
-    Adds each path in \a paths to the file system watcher. Paths are
-    not added if they not exist, or if they are already being
-    monitored by the file system watcher.
-
-    If a path specifies a directory, the directoryChanged() signal
-    will be emitted when the path is modified or removed from disk;
-    otherwise the fileChanged() signal is emitted when the path is
-    modified, renamed, or removed.
-
-    \note There is a system dependent limit to the number of files and
-    directories that can be monitored simultaneously. If this limit
-    has been reached, the excess \a paths will not be added to the
-    file system watcher, and a warning message will be printed to
-    \e{stderr} for each path that could not be added.
-
-    \sa addPath(), removePaths()
-*/
 void QFileSystemWatcher::addPaths(const QStringList &paths)
 {
    Q_D(QFileSystemWatcher);
@@ -537,11 +445,6 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
                qPrintable(p.join(QLatin1String(", "))));
 }
 
-/*!
-    Removes the specified \a path from the file system watcher.
-
-    \sa removePaths(), addPath()
-*/
 void QFileSystemWatcher::removePath(const QString &path)
 {
    if (path.isEmpty()) {
@@ -551,19 +454,16 @@ void QFileSystemWatcher::removePath(const QString &path)
    removePaths(QStringList(path));
 }
 
-/*!
-    Removes the specified \a paths from the file system watcher.
-
-    \sa removePath(), addPaths()
-*/
 void QFileSystemWatcher::removePaths(const QStringList &paths)
 {
    if (paths.isEmpty()) {
       qWarning("QFileSystemWatcher::removePaths: list is empty");
       return;
    }
+
    Q_D(QFileSystemWatcher);
    QStringList p = paths;
+
    if (d->native) {
       p = d->native->removePaths(p, &d->files, &d->directories);
    }
@@ -574,44 +474,6 @@ void QFileSystemWatcher::removePaths(const QStringList &paths)
       p = d->forced->removePaths(p, &d->files, &d->directories);
    }
 }
-
-/*!
-    \fn void QFileSystemWatcher::fileChanged(const QString &path)
-
-    This signal is emitted when the file at the specified \a path is
-    modified, renamed or removed from disk.
-
-    \sa directoryChanged()
-*/
-
-/*!
-    \fn void QFileSystemWatcher::directoryChanged(const QString &path)
-
-    This signal is emitted when the directory at a specified \a path,
-    is modified (e.g., when a file is added, modified or deleted) or
-    removed from disk. Note that if there are several changes during a
-    short period of time, some of the changes might not emit this
-    signal. However, the last change in the sequence of changes will
-    always generate this signal.
-
-    \sa fileChanged()
-*/
-
-/*!
-    \fn QStringList QFileSystemWatcher::directories() const
-
-    Returns a list of paths to directories that are being watched.
-
-    \sa files()
-*/
-
-/*!
-    \fn QStringList QFileSystemWatcher::files() const
-
-    Returns a list of paths to files that are being watched.
-
-    \sa directories()
-*/
 
 QStringList QFileSystemWatcher::directories() const
 {

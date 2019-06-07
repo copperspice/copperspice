@@ -27,7 +27,6 @@
 
 #ifndef QT_NO_UNDOGROUP
 
-
 class QUndoGroupPrivate
 {
    Q_DECLARE_PUBLIC(QUndoGroup)
@@ -49,9 +48,6 @@ QUndoGroup::QUndoGroup(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the QUndoGroup.
-*/
 QUndoGroup::~QUndoGroup()
 {
    // Ensure all QUndoStacks no longer refer to this group.
@@ -65,15 +61,6 @@ QUndoGroup::~QUndoGroup()
       ++it;
    }
 }
-
-/*!
-    Adds \a stack to this group. The group does not take ownership of the stack. Another
-    way of adding a stack to a group is by specifying the group as the stack's parent
-    QObject in QUndoStack::QUndoStack(). In this case, the stack is deleted when the
-    group is deleted, in the usual manner of QObjects.
-
-    \sa removeStack() stacks() QUndoStack::QUndoStack()
-*/
 
 void QUndoGroup::addStack(QUndoStack *stack)
 {
@@ -90,13 +77,6 @@ void QUndoGroup::addStack(QUndoStack *stack)
    stack->d_func()->group = this;
 }
 
-/*!
-    Removes \a stack from this group. If the stack was the active stack in the group,
-    the active stack becomes 0.
-
-    \sa addStack() stacks() QUndoStack::~QUndoStack()
-*/
-
 void QUndoGroup::removeStack(QUndoStack *stack)
 {
    Q_D(QUndoGroup);
@@ -110,35 +90,16 @@ void QUndoGroup::removeStack(QUndoStack *stack)
    stack->d_func()->group = 0;
 }
 
-/*!
-    Returns a list of stacks in this group.
-
-    \sa addStack() removeStack()
-*/
-
 QList<QUndoStack *> QUndoGroup::stacks() const
 {
    Q_D(const QUndoGroup);
    return d->stack_list;
 }
 
-/*!
-    Sets the active stack of this group to \a stack.
-
-    If the stack is not a member of this group, this function does nothing.
-
-    Synonymous with calling QUndoStack::setActive() on \a stack.
-
-    The actions returned by createUndoAction() and createRedoAction() will now behave
-    in the same way as those returned by \a stack's QUndoStack::createUndoAction()
-    and QUndoStack::createRedoAction().
-
-    \sa QUndoStack::setActive() activeStack()
-*/
-
 void QUndoGroup::setActiveStack(QUndoStack *stack)
 {
    Q_D(QUndoGroup);
+
    if (d->active == stack) {
       return;
    }
@@ -181,29 +142,11 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
    emit activeStackChanged(d->active);
 }
 
-/*!
-    Returns the active stack of this group.
-
-    If none of the stacks are active, or if the group is empty, this function
-    returns 0.
-
-    \sa setActiveStack() QUndoStack::setActive()
-*/
-
 QUndoStack *QUndoGroup::activeStack() const
 {
    Q_D(const QUndoGroup);
    return d->active;
 }
-
-/*!
-    Calls QUndoStack::undo() on the active stack.
-
-    If none of the stacks are active, or if the group is empty, this function
-    does nothing.
-
-    \sa redo() canUndo() setActiveStack()
-*/
 
 void QUndoGroup::undo()
 {
@@ -213,16 +156,6 @@ void QUndoGroup::undo()
    }
 }
 
-/*!
-    Calls QUndoStack::redo() on the active stack.
-
-    If none of the stacks are active, or if the group is empty, this function
-    does nothing.
-
-    \sa undo() canRedo() setActiveStack()
-*/
-
-
 void QUndoGroup::redo()
 {
    Q_D(QUndoGroup);
@@ -231,29 +164,11 @@ void QUndoGroup::redo()
    }
 }
 
-/*!
-    Returns the value of the active stack's QUndoStack::canUndo().
-
-    If none of the stacks are active, or if the group is empty, this function
-    returns false.
-
-    \sa canRedo() setActiveStack()
-*/
-
 bool QUndoGroup::canUndo() const
 {
    Q_D(const QUndoGroup);
    return d->active != 0 && d->active->canUndo();
 }
-
-/*!
-    Returns the value of the active stack's QUndoStack::canRedo().
-
-    If none of the stacks are active, or if the group is empty, this function
-    returns false.
-
-    \sa canUndo() setActiveStack()
-*/
 
 bool QUndoGroup::canRedo() const
 {
@@ -261,44 +176,17 @@ bool QUndoGroup::canRedo() const
    return d->active != 0 && d->active->canRedo();
 }
 
-/*!
-    Returns the value of the active stack's QUndoStack::undoText().
-
-    If none of the stacks are active, or if the group is empty, this function
-    returns an empty string.
-
-    \sa redoText() setActiveStack()
-*/
-
 QString QUndoGroup::undoText() const
 {
    Q_D(const QUndoGroup);
    return d->active == 0 ? QString() : d->active->undoText();
 }
 
-/*!
-    Returns the value of the active stack's QUndoStack::redoText().
-
-    If none of the stacks are active, or if the group is empty, this function
-    returns an empty string.
-
-    \sa undoText() setActiveStack()
-*/
-
 QString QUndoGroup::redoText() const
 {
    Q_D(const QUndoGroup);
    return d->active == 0 ? QString() : d->active->redoText();
 }
-
-/*!
-    Returns the value of the active stack's QUndoStack::isClean().
-
-    If none of the stacks are active, or if the group is empty, this function
-    returns true.
-
-    \sa setActiveStack()
-*/
 
 bool QUndoGroup::isClean() const
 {
@@ -307,21 +195,6 @@ bool QUndoGroup::isClean() const
 }
 
 #ifndef QT_NO_ACTION
-
-/*!
-    Creates an undo QAction object with parent \a parent.
-
-    Triggering this action will cause a call to QUndoStack::undo() on the active stack.
-    The text of this action will always be the text of the command which will be undone
-    in the next call to undo(), prefixed by \a prefix. If there is no command available
-    for undo, if the group is empty or if none of the stacks are active, this action will
-    be disabled.
-
-    If \a prefix is empty, the default template "Undo %1" is used instead of prefix.
-    Before Qt 4.8, the prefix "Undo" was used by default.
-
-    \sa createRedoAction() canUndo() QUndoCommand::text()
-*/
 
 QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) const
 {
@@ -339,21 +212,6 @@ QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) co
 
    return result;
 }
-
-/*!
-    Creates an redo QAction object with parent \a parent.
-
-    Triggering this action will cause a call to QUndoStack::redo() on the active stack.
-    The text of this action will always be the text of the command which will be redone
-    in the next call to redo(), prefixed by \a prefix. If there is no command available
-    for redo, if the group is empty or if none of the stacks are active, this action will
-    be disabled.
-
-    If \a prefix is empty, the default template "Redo %1" is used instead of prefix.
-    Before Qt 4.8, the prefix "Redo" was used by default.
-
-    \sa createUndoAction() canRedo() QUndoCommand::text()
-*/
 
 QAction *QUndoGroup::createRedoAction(QObject *parent, const QString &prefix) const
 {
@@ -373,6 +231,5 @@ QAction *QUndoGroup::createRedoAction(QObject *parent, const QString &prefix) co
 }
 
 #endif // QT_NO_ACTION
-
 
 #endif // QT_NO_UNDOGROUP

@@ -95,13 +95,17 @@ void QColumnView::setResizeGripsVisible(bool visible)
    if (d->showResizeGrips == visible) {
       return;
    }
+
    d->showResizeGrips = visible;
+
    for (int i = 0; i < d->columns.count(); ++i) {
       QAbstractItemView *view = d->columns[i];
+
       if (visible) {
          QColumnViewGrip *grip = new QColumnViewGrip(view);
          view->setCornerWidget(grip);
          connect(grip, SIGNAL(gripMoved(int)), this, SLOT(_q_gripMoved(int)));
+
       } else {
          QWidget *widget = view->cornerWidget();
          view->setCornerWidget(0);
@@ -645,6 +649,7 @@ void QColumnViewPrivate::_q_clicked(const QModelIndex &index)
          break;
       }
    }
+
    if (q->selectionModel() && columnClicked) {
       QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::Current;
       if (columnClicked->selectionModel()->isSelected(index)) {
@@ -654,16 +659,6 @@ void QColumnViewPrivate::_q_clicked(const QModelIndex &index)
    }
 }
 
-/*!
-    \internal
-    Create a new column for \a index.  A grip is attached if requested and it is shown
-    if requested.
-
-    Return the new view
-
-    \sa createColumn() setPreviewWidget()
-    \sa doLayout()
-*/
 QAbstractItemView *QColumnViewPrivate::createColumn(const QModelIndex &index, bool show)
 {
    Q_Q(QColumnView);

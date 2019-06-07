@@ -37,8 +37,6 @@ QUndoCommand::QUndoCommand(const QString &text, QUndoCommand *parent)
    setText(text);
 }
 
-
-
 QUndoCommand::QUndoCommand(QUndoCommand *parent)
 {
    d = new QUndoCommandPrivate;
@@ -540,21 +538,6 @@ QString QUndoStack::redoText() const
 }
 
 #ifndef QT_NO_ACTION
-
-/*!
-    Creates an undo QAction object with the given \a parent.
-
-    Triggering this action will cause a call to undo(). The text of this action
-    is the text of the command which will be undone in the next call to undo(),
-    prefixed by the specified \a prefix. If there is no command available for undo,
-    this action will be disabled.
-
-    If \a prefix is empty, the default template "Undo %1" is used instead of prefix.
-    Before Qt 4.8, the prefix "Undo" was used by default.
-
-    \sa createRedoAction(), canUndo(), QUndoCommand::text()
-*/
-
 QAction *QUndoStack::createUndoAction(QObject *parent, const QString &prefix) const
 {
    QUndoAction *result = new QUndoAction(prefix, parent);
@@ -571,8 +554,6 @@ QAction *QUndoStack::createUndoAction(QObject *parent, const QString &prefix) co
 
    return result;
 }
-
-
 
 QAction *QUndoStack::createRedoAction(QObject *parent, const QString &prefix) const
 {
@@ -591,7 +572,7 @@ QAction *QUndoStack::createRedoAction(QObject *parent, const QString &prefix) co
    return result;
 }
 
-#endif // QT_NO_ACTION
+#endif
 
 void QUndoStack::beginMacro(const QString &text)
 {

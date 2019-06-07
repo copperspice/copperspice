@@ -39,7 +39,6 @@
 #include <qdnd_p.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
-#include <qdebug.h>
 #include <qplatform_integration.h>
 #include <qplatform_drag.h>
 #include <qguiapplication_p.h>
@@ -53,8 +52,7 @@ QDragManager *QDragManager::m_instance = 0;
 
 QDragManager::QDragManager()
    : QObject(qApp), m_platformDropData(0), m_currentDropTarget(0),
-     m_platformDrag(QGuiApplicationPrivate::platformIntegration()->drag()),
-     m_object(0)
+     m_platformDrag(QGuiApplicationPrivate::platformIntegration()->drag()), m_object(0)
 {
    Q_ASSERT(! m_instance);
 
@@ -63,7 +61,6 @@ QDragManager::QDragManager()
    }
 
 }
-
 
 QDragManager::~QDragManager()
 {
@@ -98,7 +95,6 @@ void QDragManager::setCurrentTarget(QObject *target, bool dropped)
       m_object->d_func()->target = target;
       emit m_object->targetChanged(target);
    }
-
 }
 
 QObject *QDragManager::currentTarget() const

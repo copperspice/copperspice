@@ -1357,73 +1357,37 @@ void QGraphicsWidget::setWindowFlags(Qt::WindowFlags wFlags)
    }
 }
 
-/*!
-    Returns true if this widget's window is in the active window, or if the
-    widget does not have a window but is in an active scene (i.e., a scene
-    that currently has focus).
-
-    The active window is the window that either contains a child widget that
-    currently has input focus, or that itself has input focus.
-
-    \sa QGraphicsScene::activeWindow(), QGraphicsScene::setActiveWindow(), isActive()
-*/
 bool QGraphicsWidget::isActiveWindow() const
 {
    return isActive();
 }
 
-/*!
-    \property QGraphicsWidget::windowTitle
-    \brief This property holds the window title (caption).
-
-    This property is only used for windows.
-
-    By default, if no title has been set, this property contains an
-    empty string.
-*/
 void QGraphicsWidget::setWindowTitle(const QString &title)
 {
    Q_D(QGraphicsWidget);
    d->ensureWindowData();
    d->windowData->windowTitle = title;
 }
+
 QString QGraphicsWidget::windowTitle() const
 {
    Q_D(const QGraphicsWidget);
    return d->windowData ? d->windowData->windowTitle : QString();
 }
 
-/*!
-    \property QGraphicsWidget::focusPolicy
-    \brief the way the widget accepts keyboard focus
-
-    The focus policy is Qt::TabFocus if the widget accepts keyboard focus by
-    tabbing, Qt::ClickFocus if the widget accepts focus by clicking,
-    Qt::StrongFocus if it accepts both, and Qt::NoFocus (the default) if it
-    does not accept focus at all.
-
-    You must enable keyboard focus for a widget if it processes keyboard
-    events. This is normally done from the widget's constructor. For instance,
-    the QLineEdit constructor calls setFocusPolicy(Qt::StrongFocus).
-
-    If you enable a focus policy (i.e., not Qt::NoFocus), QGraphicsWidget will
-    automatically enable the ItemIsFocusable flag.  Setting Qt::NoFocus on a
-    widget will clear the ItemIsFocusable flag. If the widget currently has
-    keyboard focus, the widget will automatically lose focus.
-
-    \sa focusInEvent(), focusOutEvent(), keyPressEvent(), keyReleaseEvent(), enabled
-*/
 Qt::FocusPolicy QGraphicsWidget::focusPolicy() const
 {
    Q_D(const QGraphicsWidget);
    return d->focusPolicy;
 }
+
 void QGraphicsWidget::setFocusPolicy(Qt::FocusPolicy policy)
 {
    Q_D(QGraphicsWidget);
    if (d->focusPolicy == policy) {
       return;
    }
+
    d->focusPolicy = policy;
    if (hasFocus() && policy == Qt::NoFocus) {
       clearFocus();
@@ -1431,13 +1395,6 @@ void QGraphicsWidget::setFocusPolicy(Qt::FocusPolicy policy)
    setFlag(ItemIsFocusable, policy != Qt::NoFocus);
 }
 
-/*!
-    If this widget, a child or descendant of this widget currently has input
-    focus, this function will return a pointer to that widget. If
-    no descendant widget has input focus, 0 is returned.
-
-    \sa QGraphicsItem::focusItem(), QWidget::focusWidget()
-*/
 QGraphicsWidget *QGraphicsWidget::focusWidget() const
 {
    Q_D(const QGraphicsWidget);
@@ -1448,33 +1405,7 @@ QGraphicsWidget *QGraphicsWidget::focusWidget() const
 }
 
 #ifndef QT_NO_SHORTCUT
-/*!
-    \since 4.5
 
-    Adds a shortcut to Qt's shortcut system that watches for the given key \a
-    sequence in the given \a context. If the \a context is
-    Qt::ApplicationShortcut, the shortcut applies to the application as a
-    whole. Otherwise, it is either local to this widget, Qt::WidgetShortcut,
-    or to the window itself, Qt::WindowShortcut. For widgets that are not part
-    of a window (i.e., top-level widgets and their children),
-    Qt::WindowShortcut shortcuts apply to the scene.
-
-    If the same key \a sequence has been grabbed by several widgets,
-    when the key \a sequence occurs a QEvent::Shortcut event is sent
-    to all the widgets to which it applies in a non-deterministic
-    order, but with the ``ambiguous'' flag set to true.
-
-    \warning You should not normally need to use this function;
-    instead create \l{QAction}s with the shortcut key sequences you
-    require (if you also want equivalent menu options and toolbar
-    buttons), or create \l{QShortcut}s if you just need key sequences.
-    Both QAction and QShortcut handle all the event filtering for you,
-    and provide signals which are triggered when the user triggers the
-    key sequence, so are much easier to use than this low-level
-    function.
-
-    \sa releaseShortcut() setShortcutEnabled() QWidget::grabShortcut()
-*/
 int QGraphicsWidget::grabShortcut(const QKeySequence &sequence, Qt::ShortcutContext context)
 {
    Q_ASSERT(qApp);
@@ -1485,23 +1416,6 @@ int QGraphicsWidget::grabShortcut(const QKeySequence &sequence, Qt::ShortcutCont
    return qApp->d_func()->shortcutMap.addShortcut(this, sequence, context, qWidgetShortcutContextMatcher);
 }
 
-/*!
-    \since 4.5
-
-    Removes the shortcut with the given \a id from Qt's shortcut
-    system. The widget will no longer receive QEvent::Shortcut events
-    for the shortcut's key sequence (unless it has other shortcuts
-    with the same key sequence).
-
-    \warning You should not normally need to use this function since
-    Qt's shortcut system removes shortcuts automatically when their
-    parent widget is destroyed. It is best to use QAction or
-    QShortcut to handle shortcuts, since they are easier to use than
-    this low-level function. Note also that this is an expensive
-    operation.
-
-    \sa grabShortcut() setShortcutEnabled() , QWidget::releaseShortcut()
-*/
 void QGraphicsWidget::releaseShortcut(int id)
 {
    Q_ASSERT(qApp);
@@ -1510,20 +1424,6 @@ void QGraphicsWidget::releaseShortcut(int id)
    }
 }
 
-/*!
-    \since 4.5
-
-    If \a enabled is true, the shortcut with the given \a id is
-    enabled; otherwise the shortcut is disabled.
-
-    \warning You should not normally need to use this function since
-    Qt's shortcut system enables/disables shortcuts automatically as
-    widgets become hidden/visible and gain or lose focus. It is best
-    to use QAction or QShortcut to handle shortcuts, since they are
-    easier to use than this low-level function.
-
-    \sa grabShortcut() releaseShortcut(), QWidget::setShortcutEnabled()
-*/
 void QGraphicsWidget::setShortcutEnabled(int id, bool enabled)
 {
    Q_ASSERT(qApp);
@@ -1532,14 +1432,6 @@ void QGraphicsWidget::setShortcutEnabled(int id, bool enabled)
    }
 }
 
-/*!
-    \since 4.5
-
-    If \a enabled is true, auto repeat of the shortcut with the
-    given \a id is enabled; otherwise it is disabled.
-
-    \sa grabShortcut() releaseShortcut() QWidget::setShortcutAutoRepeat()
-*/
 void QGraphicsWidget::setShortcutAutoRepeat(int id, bool enabled)
 {
    Q_ASSERT(qApp);
@@ -1550,32 +1442,12 @@ void QGraphicsWidget::setShortcutAutoRepeat(int id, bool enabled)
 #endif
 
 #ifndef QT_NO_ACTION
-/*!
-    \since 4.5
 
-    Appends the action \a action to this widget's list of actions.
-
-    All QGraphicsWidgets have a list of \l{QAction}s, however they can be
-    represented graphically in many different ways. The default use of the
-    QAction list (as returned by actions()) is to create a context QMenu.
-
-    A QGraphicsWidget should only have one of each action and adding an action
-    it already has will not cause the same action to be in the widget twice.
-
-    \sa removeAction(), insertAction(), actions(), QWidget::addAction()
-*/
 void QGraphicsWidget::addAction(QAction *action)
 {
    insertAction(0, action);
 }
 
-/*!
-    \since 4.5
-
-    Appends the actions \a actions to this widget's list of actions.
-
-    \sa removeAction(), QMenu, addAction(), QWidget::addActions()
-*/
 void QGraphicsWidget::addActions(const QList<QAction *> &actions)
 {
    for (int i = 0; i < actions.count(); ++i) {

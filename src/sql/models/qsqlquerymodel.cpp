@@ -29,8 +29,6 @@
 
 #include <qsqlquerymodel_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #define QSQL_PREFETCH 255
 
 void QSqlQueryModelPrivate::prefetch(int limit)
@@ -87,74 +85,17 @@ int QSqlQueryModelPrivate::columnInQuery(int modelColumn) const
    }
    return modelColumn - colOffsets[modelColumn];
 }
-/*!
-    \class QSqlQueryModel
-    \brief The QSqlQueryModel class provides a read-only data model for SQL
-    result sets.
 
-    \ingroup database
-    \inmodule QtSql
-
-    QSqlQueryModel is a high-level interface for executing SQL
-    statements and traversing the result set. It is built on top of
-    the lower-level QSqlQuery and can be used to provide data to
-    view classes such as QTableView. For example:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 16
-
-    We set the model's query, then we set up the labels displayed in
-    the view header.
-
-    QSqlQueryModel can also be used to access a database
-    programmatically, without binding it to a view:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 21
-
-    The code snippet above extracts the \c salary field from record 4 in
-    the result set of the query \c{SELECT * from employee}. Assuming
-    that \c salary is column 2, we can rewrite the last line as follows:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 22
-
-    The model is read-only by default. To make it read-write, you
-    must subclass it and reimplement setData() and flags(). Another
-    option is to use QSqlTableModel, which provides a read-write
-    model based on a single database table.
-
-    The \l{sql/querymodel} example illustrates how to use
-    QSqlQueryModel to display the result of a query. It also shows
-    how to subclass QSqlQueryModel to customize the contents of the
-    data before showing it to the user, and how to create a
-    read-write model based on QSqlQueryModel.
-
-    If the database doesn't return the number of selected rows in
-    a query, the model will fetch rows incrementally.
-    See fetchMore() for more information.
-
-    \sa QSqlTableModel, QSqlRelationalTableModel, QSqlQuery,
-        {Model/View Programming}, {Query Model Example}
-*/
-
-/*!
-    Creates an empty QSqlQueryModel with the given \a parent.
- */
 QSqlQueryModel::QSqlQueryModel(QObject *parent)
    : QAbstractTableModel(*new QSqlQueryModelPrivate, parent)
 {
 }
 
-/*! \internal
- */
 QSqlQueryModel::QSqlQueryModel(QSqlQueryModelPrivate &dd, QObject *parent)
    : QAbstractTableModel(dd, parent)
 {
 }
 
-/*!
-    Destroys the object and frees any allocated resources.
-
-    \sa clear()
-*/
 QSqlQueryModel::~QSqlQueryModel()
 {
 }
@@ -299,18 +240,11 @@ int QSqlQueryModel::columnCount(const QModelIndex &index) const
    return index.isValid() ? 0 : d->rec.count();
 }
 
-/*!
-    Returns the value for the specified \a item and \a role.
-
-    If \a item is out of bounds or if an error occurred, an invalid
-    QVariant is returned.
-
-    \sa lastError()
-*/
 QVariant QSqlQueryModel::data(const QModelIndex &item, int role) const
 {
    Q_D(const QSqlQueryModel);
-   if (!item.isValid()) {
+
+   if (! item.isValid()) {
       return QVariant();
    }
 
@@ -319,15 +253,16 @@ QVariant QSqlQueryModel::data(const QModelIndex &item, int role) const
       return v;
    }
 
-   if (!d->rec.isGenerated(item.column())) {
+   if (! d->rec.isGenerated(item.column())) {
       return v;
    }
+
    QModelIndex dItem = indexInQuery(item);
    if (dItem.row() > d->bottom.row()) {
       const_cast<QSqlQueryModelPrivate *>(d)->prefetch(dItem.row());
    }
 
-   if (!d->query.seek(dItem.row())) {
+   if (! d->query.seek(dItem.row())) {
       d->error = d->query.lastError();
       return v;
    }
@@ -610,17 +545,6 @@ bool QSqlQueryModel::insertColumns(int column, int count, const QModelIndex &par
    return true;
 }
 
-/*!
-    Removes \a count columns from the model starting from position \a
-    column. The \a parent parameter must always be an invalid
-    QModelIndex, since the model does not support parent-child
-    relationships.
-
-    Removing columns effectively hides them. It does not affect the
-    underlying QSqlQuery.
-
-    Returns true if the columns were removed; otherwise returns false.
- */
 bool QSqlQueryModel::removeColumns(int column, int count, const QModelIndex &parent)
 {
    Q_D(QSqlQueryModel);
@@ -642,18 +566,6 @@ bool QSqlQueryModel::removeColumns(int column, int count, const QModelIndex &par
    return true;
 }
 
-/*!
-    Returns the index of the value in the database result set for the
-    given \a item in the model.
-
-    The return value is identical to \a item if no columns or rows
-    have been inserted, removed, or moved around.
-
-    Returns an invalid model index if \a item is out of bounds or if
-    \a item does not point to a value in the result set.
-
-    \sa QSqlTableModel::indexInQuery(), insertColumns(), removeColumns()
-*/
 QModelIndex QSqlQueryModel::indexInQuery(const QModelIndex &item) const
 {
    Q_D(const QSqlQueryModel);
@@ -666,4 +578,3 @@ QModelIndex QSqlQueryModel::indexInQuery(const QModelIndex &item) const
 
 }
 
-QT_END_NAMESPACE

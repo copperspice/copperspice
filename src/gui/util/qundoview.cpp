@@ -27,9 +27,9 @@
 #ifndef QT_NO_UNDOVIEW
 
 #include <qundogroup.h>
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qpointer.h>
-#include <QtGui/qicon.h>
+#include <qabstractitemmodel.h>
+#include <qpointer.h>
+#include <qicon.h>
 #include <qlistview_p.h>
 
 class QUndoModel : public QAbstractItemModel
@@ -411,16 +411,7 @@ QUndoGroup *QUndoView::group() const
    return d->group;
 }
 
-#endif // QT_NO_UNDOGROUP
-
-/*!
-    \property QUndoView::emptyLabel
-    \brief the label used for the empty state.
-
-    The empty label is the topmost element in the list of commands, which represents
-    the state of the document before any commands were pushed on the stack. The default
-    is the string "<empty>".
-*/
+#endif
 
 void QUndoView::setEmptyLabel(const QString &label)
 {
@@ -434,16 +425,6 @@ QString QUndoView::emptyLabel() const
    return d->model->emptyLabel();
 }
 
-/*!
-    \property QUndoView::cleanIcon
-    \brief the icon used to represent the clean state.
-
-    A stack may have a clean state set with QUndoStack::setClean(). This is usually
-    the state of the document at the point it was saved. QUndoView can display an
-    icon in the list of commands to show the clean state. If this property is
-    a null icon, no icon is shown. The default value is the null icon.
-*/
-
 void QUndoView::setCleanIcon(const QIcon &icon)
 {
    Q_D(const QUndoView);
@@ -456,7 +437,5 @@ QIcon QUndoView::cleanIcon() const
    Q_D(const QUndoView);
    return d->model->cleanIcon();
 }
-
-
 
 #endif // QT_NO_UNDOVIEW

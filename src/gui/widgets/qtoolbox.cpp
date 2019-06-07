@@ -268,12 +268,9 @@ QToolBox::QToolBox(QWidget *parent, Qt::WindowFlags f)
    setBackgroundRole(QPalette::Button);
 }
 
-
 QToolBox::~QToolBox()
 {
 }
-
-
 
 int QToolBox::insertItem(int index, QWidget *widget, const QIcon &icon, const QString &text)
 {
@@ -340,13 +337,6 @@ void QToolBoxPrivate::_q_buttonClicked()
 
    q->setCurrentIndex(q->indexOf(item));
 }
-
-/*!
-    \property QToolBox::count
-    \brief The number of items contained in the toolbox.
-
-    By default, this property has a value of 0.
-*/
 
 int QToolBox::count() const
 {
@@ -435,7 +425,6 @@ int QToolBox::currentIndex() const
    return d->currentPage ? indexOf(d->currentPage->widget) : -1;
 }
 
-
 QWidget *QToolBox::currentWidget() const
 {
    Q_D(const QToolBox);
@@ -445,6 +434,7 @@ QWidget *QToolBox::currentWidget() const
 void QToolBox::setCurrentWidget(QWidget *widget)
 {
    int i = indexOf(widget);
+
    if (i >= 0) {
       setCurrentIndex(i);
    } else {
@@ -452,41 +442,29 @@ void QToolBox::setCurrentWidget(QWidget *widget)
    }
 }
 
-/*!
-    Returns the widget at position \a index, or 0 if there is no such
-    item.
-*/
-
 QWidget *QToolBox::widget(int index) const
 {
    Q_D(const QToolBox);
    if (index < 0 || index >= (int) d->pageList.size()) {
       return 0;
    }
+
    return d->pageList.at(index).widget;
 }
-
-/*!
-    Returns the index of \a widget, or -1 if the item does not
-    exist.
-*/
 
 int QToolBox::indexOf(QWidget *widget) const
 {
    Q_D(const QToolBox);
    const QToolBoxPrivate::Page *c = (widget ? d->page(widget) : 0);
+
    return c ? d->pageList.indexOf(*c) : -1;
 }
-
-/*!
-    If \a enabled is true then the item at position \a index is enabled; otherwise
-    the item at position \a index is disabled.
-*/
 
 void QToolBox::setItemEnabled(int index, bool enabled)
 {
    Q_D(QToolBox);
    QToolBoxPrivate::Page *c = d->page(index);
+
    if (!c) {
       return;
    }
@@ -496,6 +474,7 @@ void QToolBox::setItemEnabled(int index, bool enabled)
       int curIndexUp = index;
       int curIndexDown = curIndexUp;
       const int count = d->pageList.count();
+
       while (curIndexUp > 0 || curIndexDown < count - 1) {
          if (curIndexDown < count - 1) {
             if (d->page(++curIndexDown)->button->isEnabled()) {
@@ -523,10 +502,6 @@ void QToolBox::setItemText(int index, const QString &text)
    }
 }
 
-/*!
-    Sets the icon of the item at position \a index to \a icon.
-*/
-
 void QToolBox::setItemIcon(int index, const QIcon &icon)
 {
    Q_D(QToolBox);
@@ -537,10 +512,6 @@ void QToolBox::setItemIcon(int index, const QIcon &icon)
 }
 
 #ifndef QT_NO_TOOLTIP
-/*!
-    Sets the tooltip of the item at position \a index to \a toolTip.
-*/
-
 void QToolBox::setItemToolTip(int index, const QString &toolTip)
 {
    Q_D(QToolBox);
@@ -549,11 +520,7 @@ void QToolBox::setItemToolTip(int index, const QString &toolTip)
       c->setToolTip(toolTip);
    }
 }
-#endif // QT_NO_TOOLTIP
-
-/*!
-    Returns true if the item at position \a index is enabled; otherwise returns false.
-*/
+#endif
 
 bool QToolBox::isItemEnabled(int index) const
 {
@@ -562,22 +529,12 @@ bool QToolBox::isItemEnabled(int index) const
    return c && c->button->isEnabled();
 }
 
-/*!
-    Returns the text of the item at position \a index, or an empty string if
-    \a index is out of range.
-*/
-
 QString QToolBox::itemText(int index) const
 {
    Q_D(const QToolBox);
    const QToolBoxPrivate::Page *c = d->page(index);
    return (c ? c->text() : QString());
 }
-
-/*!
-    Returns the icon of the item at position \a index, or a null
-    icon if \a index is out of range.
-*/
 
 QIcon QToolBox::itemIcon(int index) const
 {
@@ -587,10 +544,6 @@ QIcon QToolBox::itemIcon(int index) const
 }
 
 #ifndef QT_NO_TOOLTIP
-/*!
-    Returns the tooltip of the item at position \a index, or an
-    empty string if \a index is out of range.
-*/
 
 QString QToolBox::itemToolTip(int index) const
 {
@@ -598,15 +551,13 @@ QString QToolBox::itemToolTip(int index) const
    const QToolBoxPrivate::Page *c = d->page(index);
    return (c ? c->toolTip() : QString());
 }
-#endif // QT_NO_TOOLTIP
+#endif
 
-/*! \reimp */
 void QToolBox::showEvent(QShowEvent *e)
 {
    QWidget::showEvent(e);
 }
 
-/*! \reimp */
 void QToolBox::changeEvent(QEvent *ev)
 {
    Q_D(QToolBox);
@@ -616,22 +567,10 @@ void QToolBox::changeEvent(QEvent *ev)
    QFrame::changeEvent(ev);
 }
 
-/*!
-  This virtual handler is called after a new item was added or
-  inserted at position \a index.
-
-  \sa itemRemoved()
- */
 void QToolBox::itemInserted(int index)
 {
 }
 
-/*!
-  This virtual handler is called after an item was removed from
-  position \a index.
-
-  \sa itemInserted()
- */
 void QToolBox::itemRemoved(int index)
 {
 }

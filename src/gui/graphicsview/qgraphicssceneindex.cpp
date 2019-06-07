@@ -304,12 +304,15 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
    if (itemHasChildren) {
       for (; i < item->d_ptr->children.size(); ++i) {
          QGraphicsItem *child = item->d_ptr->children.at(i);
+
          if (wasDirtyParentSceneTransform) {
             child->d_ptr->dirtySceneTransform = 1;
          }
+
          if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
             continue;
          }
+
          recursive_items_helper(child, exposeRect, intersect, items, viewTransform,
             mode, opacity, intersectData);
       }
@@ -325,9 +328,6 @@ void QGraphicsSceneIndexPrivate::init()
    QObject::connect(scene, &QGraphicsScene::sceneRectChanged, q_func(), &QGraphicsSceneIndex::updateSceneRect);
 }
 
-/*!
-    Constructs an abstract scene index for a given \a scene.
-*/
 QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsScene *scene)
    : QObject(scene), d_ptr(new QGraphicsSceneIndexPrivate(scene) )
 {
@@ -335,16 +335,13 @@ QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsScene *scene)
    d_func()->init();
 }
 
-/*!
-    \internal
-*/
+// internal
 QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsSceneIndexPrivate &dd, QGraphicsScene *scene)
    : QObject(scene), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
    d_func()->init();
 }
-
 
 QGraphicsSceneIndex::~QGraphicsSceneIndex()
 {

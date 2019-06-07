@@ -252,9 +252,8 @@ void QCocoaGLContext::setActiveWindow(QWindow *window)
 
 void QCocoaGLContext::updateSurfaceFormat()
 {
-   // At present it is impossible to turn an option off on a QSurfaceFormat (see
-   // https://codereview.qt-project.org/#change,70599). So we have to populate
-   // the actual surface format from scratch
+   // need to populate the actual surface format from scratch
+
    QSurfaceFormat requestedFormat = m_format;
    m_format = QSurfaceFormat();
    m_format.setRenderableType(QSurfaceFormat::OpenGL);

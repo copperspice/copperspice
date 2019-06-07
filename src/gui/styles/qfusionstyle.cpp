@@ -3376,6 +3376,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
       case CC_Slider:
          if (const QStyleOptionSlider *slider = qstyleoption_cast<const QStyleOptionSlider *>(option)) {
             int tickSize = proxy()->pixelMetric(PM_SliderTickmarkOffset, option, widget);
+
             switch (subControl) {
                case SC_SliderHandle: {
                   if (slider->orientation == Qt::Horizontal) {
@@ -3403,6 +3404,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   }
                }
                break;
+
                case SC_SliderGroove: {
                   QPoint grooveCenter = slider->rect.center();
                   const int grooveThickness = QStyleHelper::dpiScaled(7);
@@ -3431,6 +3433,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
             }
          }
          break;
+
       case CC_SpinBox:
          if (const QStyleOptionSpinBox *spinbox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
             int center = spinbox->rect.height() / 2;
@@ -3525,16 +3528,18 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
          switch (subControl) {
             case SC_ComboBoxArrow:
                rect = visualRect(option->direction, option->rect, rect);
-               rect.setRect(rect.right() - 18, rect.top() - 2,
-                  19, rect.height() + 4);
+               rect.setRect(rect.right() - 18, rect.top() - 2, 19, rect.height() + 4);
+
                rect = visualRect(option->direction, option->rect, rect);
                break;
+
             case SC_ComboBoxEditField: {
                int frameWidth = 2;
                rect = visualRect(option->direction, option->rect, rect);
                rect.setRect(option->rect.left() + frameWidth, option->rect.top() + frameWidth,
                   option->rect.width() - 19 - 2 * frameWidth,
                   option->rect.height() - 2 * frameWidth);
+
                if (const QStyleOptionComboBox *box = qstyleoption_cast<const QStyleOptionComboBox *>(option)) {
                   if (!box->editable) {
                      rect.adjust(2, 0, 0, 0);
@@ -3550,16 +3555,20 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                break;
          }
          break;
+
       case CC_TitleBar:
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(option)) {
             SubControl sc = subControl;
+
             QRect &ret = rect;
             const int indent = 3;
-            const int controlTopMargin = 3;
+
+            const int controlTopMargin    = 3;
             const int controlBottomMargin = 3;
-            const int controlWidthMargin = 2;
+            const int controlWidthMargin  = 2;
             const int controlHeight = tb->rect.height() - controlTopMargin - controlBottomMargin ;
             const int delta = controlHeight + controlWidthMargin;
+
             int offset = 0;
 
             bool isMinimized = tb->titleBarState & Qt::WindowMinimized;
@@ -3569,33 +3578,41 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                case SC_TitleBarLabel:
                   if (tb->titleBarFlags & (Qt::WindowTitleHint | Qt::WindowSystemMenuHint)) {
                      ret = tb->rect;
+
                      if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                         ret.adjust(delta, 0, -delta, 0);
                      }
+
                      if (tb->titleBarFlags & Qt::WindowMinimizeButtonHint) {
                         ret.adjust(0, 0, -delta, 0);
                      }
+
                      if (tb->titleBarFlags & Qt::WindowMaximizeButtonHint) {
                         ret.adjust(0, 0, -delta, 0);
                      }
+
                      if (tb->titleBarFlags & Qt::WindowShadeButtonHint) {
                         ret.adjust(0, 0, -delta, 0);
                      }
+
                      if (tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                         ret.adjust(0, 0, -delta, 0);
                      }
                   }
                   break;
+
                case SC_TitleBarContextHelpButton:
                   if (tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                      offset += delta;
                   }
+
                case SC_TitleBarMinButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarMinButton) {
                      break;
                   }
+
                case SC_TitleBarNormalButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
                      offset += delta;
@@ -3604,39 +3621,46 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   } else if (sc == SC_TitleBarNormalButton) {
                      break;
                   }
+
                case SC_TitleBarMaxButton:
                   if (!isMaximized && (tb->titleBarFlags & Qt::WindowMaximizeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarMaxButton) {
                      break;
                   }
+
                case SC_TitleBarShadeButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarShadeButton) {
                      break;
                   }
+
                case SC_TitleBarUnshadeButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarUnshadeButton) {
                      break;
                   }
+
                case SC_TitleBarCloseButton:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                      offset += delta;
                   } else if (sc == SC_TitleBarCloseButton) {
                      break;
                   }
+
                   ret.setRect(tb->rect.right() - indent - offset, tb->rect.top() + controlTopMargin,
                      controlHeight, controlHeight);
                   break;
+
                case SC_TitleBarSysMenu:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                      ret.setRect(tb->rect.left() + controlWidthMargin + indent, tb->rect.top() + controlTopMargin,
                         controlHeight, controlHeight);
                   }
                   break;
+
                default:
                   break;
             }

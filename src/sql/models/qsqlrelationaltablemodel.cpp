@@ -36,7 +36,6 @@
 #include <qsqltablemodel_p.h>
 #include <qdebug.h>
 
-
 class QSqlRelationalTableModelSql: public QSqlTableModelSql
 {
  public:
@@ -81,11 +80,7 @@ class QRelatedTableModel : public QSqlTableModel
    bool firstSelect;
    QRelation *relation;
 };
-/*
-    A QRelation must be initialized before it is considered valid.
-    Note: population of the model and dictionary are kept separate
-          from initialization, and are populated on an as needed basis.
-*/
+
 void QRelation::init(QSqlRelationalTableModel *parent, const QSqlRelation &relation)
 {
    Q_ASSERT(parent != NULL);
@@ -162,8 +157,6 @@ bool QRelation::isValid()
    return (rel.isValid() && m_parent != NULL);
 }
 
-
-
 QRelatedTableModel::QRelatedTableModel(QRelation *rel, QObject *parent, QSqlDatabase db) :
    QSqlTableModel(parent, db), firstSelect(true), relation(rel)
 {
@@ -184,7 +177,6 @@ bool QRelatedTableModel::select()
 
    return res;
 }
-
 
 class QSqlRelationalTableModelPrivate: public QSqlTableModelPrivate
 {
@@ -244,102 +236,12 @@ void QSqlRelationalTableModelPrivate::clearCache()
    QSqlTableModelPrivate::clearCache();
 }
 
-/*!
-    \class QSqlRelationalTableModel
-    \brief The QSqlRelationalTableModel class provides an editable
-    data model for a single database table, with foreign key support.
 
-    \ingroup database
-    \inmodule QtSql
-
-    QSqlRelationalTableModel acts like QSqlTableModel, but allows
-    columns to be set as foreign keys into other database tables.
-
-    \table
-    \row \o \inlineimage noforeignkeys.png
-         \o \inlineimage foreignkeys.png
-    \endtable
-
-    The screenshot on the left shows a plain QSqlTableModel in a
-    QTableView. Foreign keys (\c city and \c country) aren't resolved
-    to human-readable values. The screenshot on the right shows a
-    QSqlRelationalTableModel, with foreign keys resolved into
-    human-readable text strings.
-
-    The following code snippet shows how the QSqlRelationalTableModel
-    was set up:
-
-    \snippet examples/sql/relationaltablemodel/relationaltablemodel.cpp 0
-    \codeline
-    \snippet examples/sql/relationaltablemodel/relationaltablemodel.cpp 1
-    \snippet examples/sql/relationaltablemodel/relationaltablemodel.cpp 2
-
-    The setRelation() function calls establish a relationship between
-    two tables. The first call specifies that column 2 in table \c
-    employee is a foreign key that maps with field \c id of table \c
-    city, and that the view should present the \c{city}'s \c name
-    field to the user. The second call does something similar with
-    column 3.
-
-    If you use a read-write QSqlRelationalTableModel, you probably
-    want to use QSqlRelationalDelegate on the view. Unlike the default
-    delegate, QSqlRelationalDelegate provides a combobox for fields
-    that are foreign keys into other tables. To use the class, simply
-    call QAbstractItemView::setItemDelegate() on the view with an
-    instance of QSqlRelationalDelegate:
-
-    \snippet examples/sql/relationaltablemodel/relationaltablemodel.cpp 4
-
-    The \l{sql/relationaltablemodel} example illustrates how to use
-    QSqlRelationalTableModel in conjunction with
-    QSqlRelationalDelegate to provide tables with foreign key
-    support.
-
-    \image relationaltable.png
-
-    Notes:
-
-    \list
-    \o The table must have a primary key declared.
-    \o The table's primary key may not contain a relation to
-       another table.
-    \o If a relational table contains keys that refer to non-existent
-       rows in the referenced table, the rows containing the invalid
-       keys will not be exposed through the model. The user or the
-       database is responsible for keeping referential integrity.
-    \o If a relation's display column name is also used as a column
-       name in the main table, or if it is used as display column
-       name in more than one relation it will be aliased. The alias is
-       is the relation's table name and display column name joined
-       by an underscore (e.g. tablename_columnname). All occurrences
-       of the duplicate display column name are aliased when
-       duplication is detected, but no aliasing is done to the column
-       names in the main table. The aliasing doesn't affect
-       QSqlRelation, so QSqlRelation::displayColumn() will return the
-       original display column name, but QSqlRecord::fieldName() will
-       return aliases.
-    \o When using setData() the role should always be Qt::EditRole,
-       and when using data() the role should always be Qt::DisplayRole.
-    \endlist
-
-    \sa QSqlRelation, QSqlRelationalDelegate,
-        {Relational Table Model Example}
-*/
-
-
-/*!
-    Creates an empty QSqlRelationalTableModel and sets the parent to \a parent
-    and the database connection to \a db. If \a db is not valid, the
-    default database connection will be used.
-*/
 QSqlRelationalTableModel::QSqlRelationalTableModel(QObject *parent, QSqlDatabase db)
    : QSqlTableModel(*new QSqlRelationalTableModelPrivate, parent, db)
 {
 }
 
-/*!
-    Destroys the object and frees any allocated resources.
-*/
 QSqlRelationalTableModel::~QSqlRelationalTableModel()
 {
 }
@@ -362,8 +264,10 @@ QVariant QSqlRelationalTableModel::data(const QModelIndex &index, int role) cons
       //when the value at index has been changed or added.
       //At an unmodified index, the underlying model will
       //already have the correct display value.
+
       if (d->strategy != OnFieldChange) {
          const QSqlTableModelPrivate::ModifiedRow row = d->cache.value(index.row());
+
          if (row.op() != QSqlTableModelPrivate::None && row.rec().isGenerated(index.column())) {
             if (d->strategy == OnManualSubmit || row.op() != QSqlTableModelPrivate::Delete) {
                QVariant v = row.rec().value(index.column());
@@ -374,28 +278,16 @@ QVariant QSqlRelationalTableModel::data(const QModelIndex &index, int role) cons
          }
       }
    }
+
    return QSqlTableModel::data(index, role);
 }
 
-/*!
-    Sets the data for the \a role in the item with the specified \a
-    index to the \a value given. Depending on the edit strategy, the
-    value might be applied to the database at once, or it may be
-    cached in the model.
 
-    Returns true if the value could be set, or false on error (for
-    example, if \a index is out of bounds).
-
-    For relational columns, \a value must be the index, not the
-    display value. The index must also exist in the referenced
-    table, otherwise the function returns false.
-
-    \sa editStrategy(), data(), submit(), revertRow()
-*/
 bool QSqlRelationalTableModel::setData(const QModelIndex &index, const QVariant &value,
    int role)
 {
    Q_D(QSqlRelationalTableModel);
+
    if ( role == Qt::EditRole && index.column() > 0 && index.column() < d->relations.count()
       && d->relations.value(index.column()).isValid()) {
       QRelation &relation = d->relations[index.column()];
@@ -462,6 +354,7 @@ QString QSqlRelationalTableModel::selectStatement() const
    if (tableName().isEmpty()) {
       return QString();
    }
+
    if (d->relations.isEmpty()) {
       return QSqlTableModel::selectStatement();
    }
@@ -469,9 +362,11 @@ QString QSqlRelationalTableModel::selectStatement() const
    // Count how many times each field name occurs in the record
    QHash<QString, int> fieldNames;
    QStringList fieldList;
+
    for (int i = 0; i < d->baseRec.count(); ++i) {
       QSqlRelation relation = d->relations.value(i).rel;
       QString name;
+
       if (relation.isValid()) {
          // Count the display column name, not the original foreign key
          name = relation.displayColumn();

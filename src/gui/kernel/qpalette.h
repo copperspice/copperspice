@@ -28,7 +28,6 @@
 #include <qcolor.h>
 #include <qbrush.h>
 
-
 class QPalettePrivate;
 class QVariant;
 
@@ -90,7 +89,6 @@ class Q_GUI_EXPORT QPalette
 
    QPalette &operator=(const QPalette &palette);
 
-
    inline QPalette &operator=(QPalette &&other) {
       resolve_mask  = other.resolve_mask;
       current_group = other.current_group;
@@ -98,9 +96,6 @@ class Q_GUI_EXPORT QPalette
 
       return *this;
    }
-
-
-
 
    operator QVariant() const;
 
@@ -141,69 +136,89 @@ class Q_GUI_EXPORT QPalette
    inline const QColor &color(ColorRole cr) const {
       return color(Current, cr);
    }
+
    inline const QBrush &brush(ColorRole cr) const {
       return brush(Current, cr);
    }
+
    inline const QBrush &foreground() const {
       return brush(WindowText);
    }
+
    inline const QBrush &windowText() const {
       return brush(WindowText);
    }
+
    inline const QBrush &button() const {
       return brush(Button);
    }
+
    inline const QBrush &light() const {
       return brush(Light);
    }
+
    inline const QBrush &dark() const {
       return brush(Dark);
    }
+
    inline const QBrush &mid() const {
       return brush(Mid);
    }
+
    inline const QBrush &text() const {
       return brush(Text);
    }
+
    inline const QBrush &base() const {
       return brush(Base);
    }
+
    inline const QBrush &alternateBase() const {
       return brush(AlternateBase);
    }
+
    inline const QBrush &toolTipBase() const {
       return brush(ToolTipBase);
    }
+
    inline const QBrush &toolTipText() const {
       return brush(ToolTipText);
    }
+
    inline const QBrush &background() const {
       return brush(Window);
    }
    inline const QBrush &window() const {
       return brush(Window);
    }
+
    inline const QBrush &midlight() const {
       return brush(Midlight);
    }
+
    inline const QBrush &brightText() const {
       return brush(BrightText);
    }
+
    inline const QBrush &buttonText() const {
       return brush(ButtonText);
    }
    inline const QBrush &shadow() const {
       return brush(Shadow);
    }
+
    inline const QBrush &highlight() const {
       return brush(Highlight);
    }
+
    inline const QBrush &highlightedText() const {
       return brush(HighlightedText);
    }
+
    inline const QBrush &link() const {
       return brush(Link);
    }
+
    inline const QBrush &linkVisited() const {
       return brush(LinkVisited);
    }
@@ -212,8 +227,8 @@ class Q_GUI_EXPORT QPalette
    inline bool operator!=(const QPalette &p) const {
       return !(operator==(p));
    }
-   bool isCopyOf(const QPalette &p) const;
 
+   bool isCopyOf(const QPalette &p) const;
 
    qint64 cacheKey() const;
 
@@ -246,6 +261,7 @@ class Q_GUI_EXPORT QPalette
       const QBrush &highlight, const QBrush &highlighted_text,
       const QBrush &link, const QBrush &link_visited,
       const QBrush &toolTipBase, const QBrush &toolTipText);
+
    void init();
    void detach();
 
@@ -272,11 +288,8 @@ inline void QPalette::setBrush(ColorRole acr, const QBrush &abrush)
    setBrush(All, acr, abrush);
 }
 
-
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &ds, const QPalette &p);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &ds, QPalette &p);
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPalette &);
-
-
 
 #endif

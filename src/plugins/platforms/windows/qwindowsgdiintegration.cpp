@@ -36,8 +36,7 @@ class QWindowsGdiIntegrationPrivate
 };
 
 QWindowsGdiIntegration::QWindowsGdiIntegration(const QStringList &paramList)
-   : QWindowsIntegration(paramList)
-   , d(new QWindowsGdiIntegrationPrivate)
+   : QWindowsIntegration(paramList), d(new QWindowsGdiIntegrationPrivate)
 {}
 
 QWindowsGdiIntegration::~QWindowsGdiIntegration()

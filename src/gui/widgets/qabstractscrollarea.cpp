@@ -220,9 +220,6 @@ void QAbstractScrollAreaPrivate::init()
 #endif
 }
 
-
-
-
 void QAbstractScrollAreaPrivate::layoutChildren()
 {
    Q_Q(QAbstractScrollArea);
@@ -270,10 +267,12 @@ void QAbstractScrollAreaPrivate::layoutChildren()
       QRect frameRect = widgetRect;
       frameRect.adjust(0, 0, -cornerOffset.x() - cornerExtra.x(), -cornerOffset.y() - cornerExtra.y());
       q->setFrameRect(QStyle::visualRect(opt.direction, opt.rect, frameRect));
+
       // The frame rect needs to be in logical coords, however we need to flip
       // the contentsRect back before passing it on to the viewportRect
       // since the viewportRect has its logical coords calculated later.
       viewportRect = QStyle::visualRect(opt.direction, opt.rect, q->contentsRect());
+
    } else {
       q->setFrameRect(QStyle::visualRect(opt.direction, opt.rect, widgetRect));
       controlsRect = q->contentsRect();
@@ -286,8 +285,6 @@ void QAbstractScrollAreaPrivate::layoutChildren()
    if (hasCornerWidget && ((needv && vscrollOverlap == 0) || (needh && hscrollOverlap == 0))) {
       cornerOffset =  extPoint;
    }
-
-
 
    // The corner point is where the scroll bar rects, the corner widget rect and the
    // viewport rect meets.
@@ -438,14 +435,11 @@ void QAbstractScrollArea::setViewport(QWidget *widget)
    }
 }
 
-
 QWidget *QAbstractScrollArea::viewport() const
 {
    Q_D(const QAbstractScrollArea);
    return d->viewport;
 }
-
-
 
 QSize QAbstractScrollArea::maximumViewportSize() const
 {
@@ -455,6 +449,7 @@ QSize QAbstractScrollArea::maximumViewportSize() const
 
    int f = 2 * d->frameWidth;
    QSize max = size() - QSize(f + d->left + d->right, f + d->top + d->bottom);
+
    if (d->vbarpolicy == Qt::ScrollBarAlwaysOn) {
       max.rwidth() -= vsbExt;
    }
@@ -464,8 +459,6 @@ QSize QAbstractScrollArea::maximumViewportSize() const
    }
    return max;
 }
-
-
 
 Qt::ScrollBarPolicy QAbstractScrollArea::verticalScrollBarPolicy() const
 {

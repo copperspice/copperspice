@@ -27,7 +27,7 @@
 #include <qpoint.h>
 
 #include <qdnd_p.h>
-#include "qguiapplication_p.h"
+#include <qguiapplication_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
@@ -35,23 +35,22 @@ QDrag::QDrag(QObject *dragSource)
    : QObject(dragSource), d_ptr(new QDragPrivate)
 {
    Q_D(QDrag);
-   d->source = dragSource;
-   d->target = 0;
-   d->data = 0;
+
+   d->source  = dragSource;
+   d->target  = 0;
+   d->data    = 0;
    d->hotspot = QPoint(-10, -10);
 
-   d->executed_action = Qt::IgnoreAction;
+   d->executed_action   = Qt::IgnoreAction;
    d->supported_actions = Qt::IgnoreAction;
-   d->default_action = Qt::IgnoreAction;
+   d->default_action   = Qt::IgnoreAction;
 }
-
 
 QDrag::~QDrag()
 {
    Q_D(QDrag);
    delete d->data;
 }
-
 
 void QDrag::setMimeData(QMimeData *data)
 {
@@ -65,73 +64,42 @@ void QDrag::setMimeData(QMimeData *data)
    d->data = data;
 }
 
-/*!
-    Returns the MIME data that is encapsulated by the drag object.
-*/
 QMimeData *QDrag::mimeData() const
 {
    Q_D(const QDrag);
    return d->data;
 }
 
-/*!
-    Sets \a pixmap as the pixmap used to represent the data in a drag
-    and drop operation. You can only set a pixmap before the drag is
-    started.
-*/
 void QDrag::setPixmap(const QPixmap &pixmap)
 {
    Q_D(QDrag);
    d->pixmap = pixmap;
 }
 
-/*!
-    Returns the pixmap used to represent the data in a drag and drop operation.
-*/
 QPixmap QDrag::pixmap() const
 {
    Q_D(const QDrag);
    return d->pixmap;
 }
 
-/*!
-    Sets the position of the hot spot relative to the top-left corner of the
-    pixmap used to the point specified by \a hotspot.
-
-    \bold{Note:} on X11, the pixmap may not be able to keep up with the mouse
-    movements if the hot spot causes the pixmap to be displayed
-    directly under the cursor.
-*/
 void QDrag::setHotSpot(const QPoint &hotspot)
 {
    Q_D(QDrag);
    d->hotspot = hotspot;
 }
 
-/*!
-    Returns the position of the hot spot relative to the top-left corner of the
-    cursor.
-*/
 QPoint QDrag::hotSpot() const
 {
    Q_D(const QDrag);
    return d->hotspot;
 }
 
-/*!
-    Returns the source of the drag object. This is the widget where the drag
-    and drop operation originated.
-*/
 QObject *QDrag::source() const
 {
    Q_D(const QDrag);
    return d->source;
 }
 
-/*!
-    Returns the target of the drag and drop operation. This is the widget where
-    the drag object was dropped.
-*/
 QObject *QDrag::target() const
 {
    Q_D(const QDrag);
@@ -142,11 +110,13 @@ Qt::DropAction QDrag::exec(Qt::DropActions supportedActions)
 {
    return exec(supportedActions, Qt::IgnoreAction);
 }
+
 Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defaultDropAction)
 {
    Q_D(QDrag);
-   if (!d->data) {
-      qWarning("QDrag: No mimedata set before starting the drag");
+
+   if (! d->data) {
+      qWarning("QDrag::exec(): No mimedata set before starting the drag");
       return d->executed_action;
    }
 
@@ -155,22 +125,24 @@ Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defa
    if (defaultDropAction == Qt::IgnoreAction) {
       if (supportedActions & Qt::MoveAction) {
          transformedDefaultDropAction = Qt::MoveAction;
+
       } else if (supportedActions & Qt::CopyAction) {
          transformedDefaultDropAction = Qt::CopyAction;
+
       } else if (supportedActions & Qt::LinkAction) {
          transformedDefaultDropAction = Qt::LinkAction;
       }
+
    } else {
       transformedDefaultDropAction = defaultDropAction;
    }
 
    d->supported_actions = supportedActions;
-   d->default_action = transformedDefaultDropAction;
-   d->executed_action = QDragManager::self()->drag(this);
+   d->default_action   = transformedDefaultDropAction;
+   d->executed_action   = QDragManager::self()->drag(this);
 
    return d->executed_action;
 }
-
 
 Qt::DropAction QDrag::start(Qt::DropActions request)
 {

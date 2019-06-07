@@ -250,7 +250,6 @@ QAbstractItemView::~QAbstractItemView()
    d->fetchMoreTimer.stop();
 }
 
-
 void QAbstractItemView::setModel(QAbstractItemModel *model)
 {
    Q_D(QAbstractItemView);
@@ -2156,30 +2155,15 @@ void QAbstractItemView::horizontalScrollbarValueChanged(int value)
    }
 }
 
-/*!
-    \internal
-*/
 void QAbstractItemView::verticalScrollbarAction(int)
 {
    //do nothing
 }
 
-/*!
-    \internal
-*/
 void QAbstractItemView::horizontalScrollbarAction(int)
 {
    //do nothing
 }
-
-/*!
-    Closes the given \a editor, and releases it. The \a hint is
-    used to specify how the view should respond to the end of the editing
-    operation. For example, the hint may indicate that the next item in
-    the view should be opened for editing.
-
-    \sa edit(), commitData()
-*/
 
 void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
 {
@@ -3666,10 +3650,12 @@ void QAbstractItemViewPrivate::updateGeometry()
    if (sizeAdjustPolicy == QAbstractScrollArea::AdjustIgnored) {
       return;
    }
+
    if (sizeAdjustPolicy == QAbstractScrollArea::AdjustToContents || !shownOnce) {
       q->updateGeometry();
    }
 }
+
 QWidget *QAbstractItemViewPrivate::editor(const QModelIndex &index, const QStyleOptionViewItem &options)
 {
    Q_Q(QAbstractItemView);

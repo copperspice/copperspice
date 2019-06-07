@@ -23,7 +23,7 @@
 
 #include <qwindows_style_p.h>
 
-#if !defined(QT_NO_STYLE_WINDOWS) || defined(QT_PLUGIN)
+#if ! defined(QT_NO_STYLE_WINDOWS) || defined(QT_PLUGIN)
 
 #include <qsystemlibrary_p.h>
 #include <qapplication.h>
@@ -113,7 +113,7 @@ qreal QWindowsStylePrivate::appDevicePixelRatio()
    return qApp->devicePixelRatio();
 }
 
-// Returns true if the toplevel parent of \a widget has seen the Alt-key
+// Returns true if the toplevel parent of widget has seen the Alt-key
 bool QWindowsStylePrivate::hasSeenAlt(const QWidget *widget) const
 {
    widget = widget->window();
@@ -126,7 +126,7 @@ bool QWindowsStylePrivate::hasSeenAlt(const QWidget *widget) const
 */
 bool QWindowsStyle::eventFilter(QObject *o, QEvent *e)
 {
-   // Records Alt- and Focus events
+   // Records Alt and Focus events
    if (! o->isWidgetType()) {
       return QObject::eventFilter(o, e);
    }
@@ -192,8 +192,6 @@ bool QWindowsStyle::eventFilter(QObject *o, QEvent *e)
    return QCommonStyle::eventFilter(o, e);
 }
 
-
-
 QWindowsStyle::QWindowsStyle() : QCommonStyle(*new QWindowsStylePrivate)
 {
 }
@@ -218,8 +216,9 @@ void QWindowsStyle::polish(QApplication *app)
 {
    QCommonStyle::polish(app);
    QWindowsStylePrivate *d = const_cast<QWindowsStylePrivate *>(d_func());
+
    // We only need the overhead when shortcuts are sometimes hidden
-   if (!proxy()->styleHint(SH_UnderlineShortcut, 0) && app) {
+   if (! proxy()->styleHint(SH_UnderlineShortcut, 0) && app) {
       app->installEventFilter(this);
    }
 
@@ -230,7 +229,7 @@ void QWindowsStyle::polish(QApplication *app)
    d->inactiveCaptionText = app->palette().background().color();
 
 #if defined(Q_OS_WIN)
-   //fetch native title bar colors
+   // fetch native title bar colors
 
    if (app->desktopSettingsAware()) {
       DWORD activeCaption = GetSysColor(COLOR_ACTIVECAPTION);
@@ -246,7 +245,6 @@ void QWindowsStyle::polish(QApplication *app)
    }
 #endif
 }
-
 
 void QWindowsStyle::unpolish(QApplication *app)
 {
@@ -287,7 +285,6 @@ int QWindowsStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, const 
          }
          return GetSystemMetrics(SM_CYCAPTION) - 1;
 
-
       case QStyle::PM_ScrollBarExtent: {
          NONCLIENTMETRICS ncm;
          ncm.cbSize = FIELD_OFFSET(NONCLIENTMETRICS, lfMessageFont) + sizeof(LOGFONT);
@@ -299,9 +296,7 @@ int QWindowsStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, const 
 
 
       case  QStyle::PM_MdiSubWindowFrameWidth:
-
          return GetSystemMetrics(SM_CYFRAME);
-
 
       default:
          break;
@@ -324,8 +319,10 @@ int QWindowsStylePrivate::fixedPixelMetric(QStyle::PixelMetric pm)
       case QStyle::PM_ToolBarItemMargin:
          return 1;
          break;
+
       case QStyle::PM_DockWidgetSeparatorExtent:
          return 4;
+
 #ifndef QT_NO_TABBAR
       case QStyle::PM_TabBarTabShiftHorizontal:
          return 0;
@@ -336,29 +333,36 @@ int QWindowsStylePrivate::fixedPixelMetric(QStyle::PixelMetric pm)
 #ifndef QT_NO_SLIDER
       case QStyle::PM_SliderLength:
          return 11;
-#endif // QT_NO_SLIDER
+#endif
 
 #ifndef QT_NO_MENU
       case QStyle::PM_MenuBarHMargin:
       case QStyle::PM_MenuBarVMargin:
       case QStyle::PM_MenuBarPanelWidth:
          return 0;
+
       case QStyle::PM_SmallIconSize:
          return 16;
+
       case QStyle::PM_LargeIconSize:
          return 32;
+
       case QStyle::PM_DockWidgetTitleMargin:
          return 2;
+
       case QStyle::PM_DockWidgetTitleBarButtonMargin:
       case QStyle::PM_DockWidgetFrameWidth:
          return 4;
 
-#endif // QT_NO_MENU
+#endif
+
       case QStyle::PM_ToolBarHandleExtent:
          return 10;
+
       default:
          break;
    }
+
    return QWindowsStylePrivate::InvalidMetric;
 }
 static QWindow *windowOf(const QWidget *w)
@@ -392,10 +396,13 @@ qreal QWindowsStylePrivate::nativeMetricScaleFactor(const QWidget *widget)
    if (!QHighDpiScaling::isActive()) {
       return 1;
    }
+
    qreal result = qreal(1) / QWindowsStylePrivate::devicePixelRatio(widget);
+
    if (QGuiApplicationPrivate::screen_list.size() > 1) {
       const QScreen *primaryScreen = QGuiApplication::primaryScreen();
       const QScreen *screen = screenOf(widget);
+
       if (screen != primaryScreen) {
          const qreal primaryLogicalDpi = primaryScreen->handle()->logicalDpi().first;
          const qreal logicalDpi = screen->handle()->logicalDpi().first;
@@ -466,12 +473,11 @@ int QWindowsStyle::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QW
             ret = 0;
          }
          break;
-#endif // QT_NO_SLIDER
+#endif
 
       case PM_IconViewIconSize:
          ret = proxy()->pixelMetric(PM_LargeIconSize, opt, widget);
          break;
-
 
       case PM_SplitterWidth:
          ret = qMax(int(QStyleHelper::dpiScaled(4)), QApplication::globalStrut().width());
@@ -736,6 +742,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
       case PE_FrameButtonTool:
       case PE_PanelButtonTool: {
          QPen oldPen = p->pen();
+
 #ifndef QT_NO_DOCKWIDGET
          if (w && w->inherits("QDockWidgetTitleButton")) {
             if (const QWidget *dw = w->parentWidget())
@@ -1969,11 +1976,11 @@ QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, cons
       case SE_ToolBoxTabContents:
          r = visualRect(opt->direction, opt->rect, opt->rect);
          break;
+
       case SE_DockWidgetTitleBarText: {
          r = QCommonStyle::subElementRect(sr, opt, w);
 
-         const QStyleOptionDockWidget *dwOpt
-            = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
+         const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
          const bool verticalTitleBar = dwOpt && dwOpt->verticalTitleBar;
          int m = proxy()->pixelMetric(PM_DockWidgetTitleMargin, opt, w);
 
@@ -1988,10 +1995,12 @@ QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, cons
          }
          break;
       }
+
       case SE_ProgressBarContents:
          r = QCommonStyle::subElementRect(SE_ProgressBarGroove, opt, w);
          r.adjust(3, 3, -3, -3);
          break;
+
       default:
          r = QCommonStyle::subElementRect(sr, opt, w);
    }

@@ -504,7 +504,6 @@ void QSqlDatabasePrivate::init(const QString &type)
       QHash<QString, QSqlDriverCreatorBase *> dict = QSqlDatabasePrivate::driverDict();
 
       for (auto it = dict.constBegin(); it != dict.constEnd() && ! driver; ++it) {
-
          if (type == it.key()) {
             driver = ((QSqlDriverCreatorBase *)(*it))->createObject();
          }
@@ -566,24 +565,17 @@ bool QSqlDatabase::isOpen() const
    return d->driver->isOpen();
 }
 
-
 bool QSqlDatabase::isOpenError() const
 {
    return d->driver->isOpenError();
 }
 
-/*!
-  Begins a transaction on the database if the driver supports
-  transactions. Returns \c{true} if the operation succeeded.
-  Otherwise it returns \c{false}.
-
-  \sa QSqlDriver::hasFeature(), commit(), rollback()
-*/
 bool QSqlDatabase::transaction()
 {
-   if (!d->driver->hasFeature(QSqlDriver::Transactions)) {
+   if (! d->driver->hasFeature(QSqlDriver::Transactions)) {
       return false;
    }
+
    return d->driver->beginTransaction();
 }
 

@@ -1348,9 +1348,6 @@ void QGuiApplicationPrivate::init()
 
 }
 
-
-
-
 Qt::KeyboardModifiers QApplication::keyboardModifiers()
 {
    return QGuiApplicationPrivate::modifier_buttons;
@@ -1387,7 +1384,6 @@ QApplication::FP_Void QApplication::platformFunction(const QByteArray &function)
    return platform_interface->nativeInterface() ? platform_interface->nativeInterface()->platformFunction(function) : nullptr;
 }
 
-
 int QApplication::exec()
 {
 #ifndef QT_NO_ACCESSIBILITY
@@ -1395,9 +1391,6 @@ int QApplication::exec()
 #endif
    return QCoreApplication::exec();
 }
-
-
-
 
 void QGuiApplicationPrivate::sendQWindowEventToQPlatformWindow(QWindow *window, QEvent *event)
 {
@@ -3132,8 +3125,8 @@ QStyle *QApplication::style()
             }
          }
       }
-      if (!app_style) {
-         Q_ASSERT(!"No styles available!");
+      if (! app_style) {
+         Q_ASSERT(! "No styles are available");
          return 0;
       }
 
@@ -3185,12 +3178,14 @@ void QApplication::setStyle(QStyle *style)
       }
       QApplicationPrivate::app_style->unpolish(qApp);
    }
+
    QStyle *old = QApplicationPrivate::app_style;
    QApplicationPrivate::overrides_native_style = (nativeStyleClassName() == style->metaObject()->className());
 
 #ifndef QT_NO_STYLE_STYLESHEET
    if (! QApplicationPrivate::styleSheet.isEmpty() && !qobject_cast<QStyleSheetStyle *>(style)) {
       // have a stylesheet already and a new style is being set
+
       QStyleSheetStyle *newProxy = new QStyleSheetStyle(style);
       style->setParent(newProxy);
       QApplicationPrivate::app_style = newProxy;
@@ -3203,8 +3198,8 @@ void QApplication::setStyle(QStyle *style)
 
    QApplicationPrivate::app_style->setParent(qApp); // take ownership
 
-   // take care of possible palette requirements of certain gui
-   // styles. Do it before polishing the application since the style
+   // take care of possible palette requirements of certain gui styles
+   // must be done before polishing the application since the style
    // might call QApplication::setPalette() itself
 
    if (QApplicationPrivate::set_pal) {
@@ -3218,7 +3213,7 @@ void QApplication::setStyle(QStyle *style)
       QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_pal, 0,  false);
 
    } else if (!QApplicationPrivate::sys_pal) {
-      // Initialize the sys_pal if it hasn't happened yet...
+      // Initialize the sys_pal if it has not happened yet
       QApplicationPrivate::setSystemPalette(QApplicationPrivate::app_style->standardPalette());
    }
 
@@ -3235,9 +3230,10 @@ void QApplication::setStyle(QStyle *style)
             if (w->style() == QApplicationPrivate::app_style) {
                QApplicationPrivate::app_style->polish(w);   // repolish
             }
+
 #ifndef QT_NO_STYLE_STYLESHEET
             else {
-               w->setStyleSheet(w->styleSheet());   // touch
+               w->setStyleSheet(w->styleSheet());           // touch
             }
 #endif
          }

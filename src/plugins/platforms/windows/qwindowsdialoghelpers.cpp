@@ -372,6 +372,7 @@ inline QDebug operator<<(QDebug d, const GUID &g)
    QDebugStateSaver saver(d);
    d.nospace();
    d << guidToString(g);
+
    return d;
 }
 
@@ -537,11 +538,11 @@ bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
       << "Modal supported? " << supportsNonModalDialog(parent)
       << "Native = " << m_nativeDialog.data() << "Owner = " << m_ownerWindow;
 
-   if (! modal && !supportsNonModalDialog(parent)) {
+   if (! modal && ! supportsNonModalDialog(parent)) {
       return false;   // Was it changed in-between?
    }
 
-   if (!ensureNativeDialog()) {
+   if (! ensureNativeDialog()) {
       return false;
    }
 

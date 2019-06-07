@@ -5083,31 +5083,21 @@ void QPainter::setRedirected(const QPaintDevice *device, QPaintDevice *replaceme
 void QPainter::restoreRedirected(const QPaintDevice *device)
 {
    qWarning("QPainter::restoreRedirected(): ignoring call to deprecated function, use QWidget::render() instead");
-
 }
-
 
 QPaintDevice *QPainter::redirected(const QPaintDevice *device, QPoint *offset)
 {
-
    return 0;
 }
 
-void qt_format_text(const QFont &fnt, const QRectF &_r,
-   int tf, const QString &str, QRectF *brect,
-   int tabstops, int *ta, int tabarraylen,
-   QPainter *painter)
+void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QString &str, QRectF *brect,
+   int tabstops, int *ta, int tabarraylen, QPainter *painter)
 {
-   qt_format_text(fnt, _r,
-      tf, 0, str, brect,
-      tabstops, ta, tabarraylen,
-      painter);
+   qt_format_text(fnt, _r, tf, 0, str, brect, tabstops, ta, tabarraylen, painter);
 }
 
-void qt_format_text(const QFont &fnt, const QRectF &_r,
-   int tf, const QTextOption *option, const QString &str, QRectF *brect,
-   int tabstops, int *ta, int tabarraylen,
-   QPainter *painter)
+void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QTextOption *option,
+   const QString &str, QRectF *brect, int tabstops, int *ta, int tabarraylen, QPainter *painter)
 {
 
    Q_ASSERT( !((tf & ~Qt::TextDontPrint) != 0 && option != 0) ); // we either have an option or flags
@@ -5212,7 +5202,6 @@ start_lengthVariant:
    if ((hidemnmemonic || showmnemonic) && maxUnderlines > 0) {
 
       QString::const_iterator iter = text.begin() + old_offset;
-
       int len = length;
 
       while (len) {
@@ -5375,7 +5364,7 @@ start_lengthVariant:
 
    QRectF bounds = QRectF(r.x() + xoff, r.y() + yoff, width, height);
 
-   if (hasMoreLengthVariants && !(tf & Qt::TextLongestVariant) && !r.contains(bounds)) {
+   if (hasMoreLengthVariants && ! (tf & Qt::TextLongestVariant) && !r.contains(bounds)) {
       offset++;
       goto start_lengthVariant;
    }
@@ -5402,8 +5391,7 @@ start_lengthVariant:
          xoff = 0;
 
          if (tf & Qt::AlignRight) {
-            xoff = r.width() - advance -
-               eng->leadingSpaceWidth(eng->lines[line.lineNumber()]).toReal();
+            xoff = r.width() - advance - eng->leadingSpaceWidth(eng->lines[line.lineNumber()]).toReal();
 
          } else if (tf & Qt::AlignHCenter) {
             xoff = (r.width() - advance) / 2;
