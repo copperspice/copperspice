@@ -3644,7 +3644,6 @@ void QApplicationPrivate::translateTouchCancel(QTouchDevice *device, ulong times
 void QApplicationPrivate::notifyDragStarted(const QDrag *drag)
 {
    // Prevent pickMouseReceiver() from using the widget where the drag was started after a drag operation.
-   QGuiApplicationPrivate::notifyDragStarted(drag);
    qt_button_down = 0;
 }
 #endif
