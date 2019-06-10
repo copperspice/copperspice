@@ -2598,9 +2598,12 @@ void QGraphicsScene::update(const QRectF &rect)
    // Otherwise or if there are no views, use old behavior
 
    int signalIndex = d->changedSignalIndex;
-   const QMetaMethod &metaMethod = this->metaObject()->method(signalIndex);
+   bool directUpdates = false;
 
-   bool directUpdates = ! ( this->isSignalConnected(metaMethod) ) && ! d->views.isEmpty();
+   if (signalIndex != -1) {
+      const QMetaMethod &metaMethod = this->metaObject()->method(signalIndex);
+      directUpdates = ! ( this->isSignalConnected(metaMethod) ) && ! d->views.isEmpty();
+   }
 
    if (rect.isNull()) {
       d->updateAll = true;
