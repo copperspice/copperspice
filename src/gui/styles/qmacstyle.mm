@@ -7035,7 +7035,8 @@ QIcon QMacStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *o
         return QCommonStyle::standardIcon(standardIcon, opt, widget);
     case SP_ToolBarHorizontalExtensionButton:
     case SP_ToolBarVerticalExtensionButton: {
-        QPixmap pixmap(QLatin1String(":/qt-project.org/styles/macstyle/images/toolbar-ext.png"));
+        QPixmap pixmap(":/copperspice/styles/macstyle/images/toolbar-ext.png");
+
         if (standardIcon == SP_ToolBarVerticalExtensionButton) {
             QPixmap pix2(pixmap.height(), pixmap.width());
             pix2.setDevicePixelRatio(pixmap.devicePixelRatio());
