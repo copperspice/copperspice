@@ -177,9 +177,9 @@ static inline HWND createTrayIconMessageWindow()
    QString className;
    void *wndProc = reinterpret_cast<void *>(qWindowsTrayconWndProc);
 
-   if (!QMetaObject::invokeMethod(ni, "registerWindowClass", Qt::DirectConnection,
+   if (! QMetaObject::invokeMethod(ni, "registerWindowClass", Qt::DirectConnection,
          Q_RETURN_ARG(QString, className),
-         Q_ARG(QString, "QTrayIconMessageWindowClass"),
+         Q_ARG(const QString &, "QTrayIconMessageWindowClass"),
          Q_ARG(void *, wndProc))) {
       return 0;
    }
