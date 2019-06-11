@@ -336,7 +336,8 @@ HGDIOBJ QWindowsFontEngine::selectDesignFont() const
    return SelectObject(m_fontEngineData->hdc, designFont);
 }
 
-bool QWindowsFontEngine::stringToCMap(QStringView strView, QGlyphLayout *glyphs, int *nglyphs, QFontEngine::ShaperFlags flags) const
+bool QWindowsFontEngine::stringToCMap(QStringView strView, QGlyphLayout *glyphs,
+                  int *nglyphs, QFontEngine::ShaperFlags flags) const
 {
    Q_ASSERT(glyphs->numGlyphs >= *nglyphs);
 
@@ -463,7 +464,7 @@ glyph_metrics_t QWindowsFontEngine::boundingBox(const QGlyphLayout &glyphs)
 
    return glyph_metrics_t(0, -tm.tmAscent, w - lastRightBearing(glyphs), tm.tmHeight, w, 0);
 }
-#ifndef Q_OS_WINCE
+
 bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, glyph_metrics_t *metrics) const
 {
    Q_ASSERT(metrics != 0);
@@ -517,11 +518,9 @@ bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, g
       return false;
    }
 }
-#endif
 
 glyph_metrics_t QWindowsFontEngine::boundingBox(glyph_t glyph, const QTransform &t)
 {
-#ifndef Q_OS_WINCE
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
 
@@ -539,33 +538,6 @@ glyph_metrics_t QWindowsFontEngine::boundingBox(glyph_t glyph, const QTransform 
    }
 
    return glyphMetrics;
-#else
-   HDC hdc = m_fontEngineData->hdc;
-   HGDIOBJ oldFont = SelectObject(hdc, hfont);
-
-   ABC abc;
-   int width;
-   int advance;
-#ifdef GWES_MGTT    // true type fonts
-   if (GetCharABCWidths(hdc, glyph, glyph, &abc)) {
-      width = qAbs(abc.abcA) + abc.abcB + qAbs(abc.abcC);
-      advance = abc.abcA + abc.abcB + abc.abcC;
-   } else
-#endif
-#if defined(GWES_MGRAST) || defined(GWES_MGRAST2)   // raster fonts
-      if (GetCharWidth32(hdc, glyph, glyph, &width)) {
-         advance = width;
-      } else
-#endif
-      {
-         // fallback
-         width = tm.tmMaxCharWidth;
-         advance = width;
-      }
-
-   SelectObject(hdc, oldFont);
-   return glyph_metrics_t(0, -tm.tmAscent, width, tm.tmHeight, advance, 0).transformed(t);
-#endif
 }
 
 QFixed QWindowsFontEngine::ascent() const
@@ -633,10 +605,7 @@ void QWindowsFontEngine::getGlyphBearings(glyph_t glyph, qreal *leftBearing, qre
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
 
-#ifndef Q_OS_WINCE
-   if (ttf)
-#endif
-   {
+   if (ttf) {
       ABC abcWidths;
       GetCharABCWidthsI(hdc, glyph, 1, 0, &abcWidths);
       if (leftBearing) {
@@ -645,12 +614,11 @@ void QWindowsFontEngine::getGlyphBearings(glyph_t glyph, qreal *leftBearing, qre
       if (rightBearing) {
          *rightBearing = abcWidths.abcC;
       }
-   }
-#ifndef Q_OS_WINCE
-   else {
+
+   } else {
       QFontEngine::getGlyphBearings(glyph, leftBearing, rightBearing);
    }
-#endif
+
 }
 #endif // Q_CC_MINGW
 
@@ -670,7 +638,6 @@ qreal QWindowsFontEngine::minLeftBearing() const
 
 qreal QWindowsFontEngine::minRightBearing() const
 {
-#ifndef Q_OS_WINCE
    if (rbearing == SHRT_MIN) {
       int ml = 0;
       int mr = 0;
@@ -728,41 +695,6 @@ qreal QWindowsFontEngine::minRightBearing() const
    }
 
    return rbearing;
-#else // !Q_OS_WINCE
-   if (rbearing == SHRT_MIN) {
-      int ml = 0;
-      int mr = 0;
-      HDC hdc = m_fontEngineData->hdc;
-      SelectObject(hdc, hfont);
-      if (ttf) {
-         ABC *abc = 0;
-         int n = tm.tmLastChar - tm.tmFirstChar;
-         if (n <= max_font_count) {
-            abc = new ABC[n + 1];
-            GetCharABCWidths(hdc, tm.tmFirstChar, tm.tmLastChar, abc);
-         } else {
-            abc = new ABC[char_table_entries + 1];
-            for (int i = 0; i < char_table_entries; i++) {
-               GetCharABCWidths(hdc, char_table[i], char_table[i], abc + i);
-            }
-            n = char_table_entries;
-         }
-         ml = abc[0].abcA;
-         mr = abc[0].abcC;
-         for (int i = 1; i < n; i++) {
-            if (abc[i].abcA + abc[i].abcB + abc[i].abcC != 0) {
-               ml = qMin(ml, abc[i].abcA);
-               mr = qMin(mr, abc[i].abcC);
-            }
-         }
-         delete [] abc;
-      }
-      lbearing = ml;
-      rbearing = mr;
-   }
-
-   return rbearing;
-#endif // Q_OS_WINCE
 }
 
 static inline double qt_fixed_to_double(const FIXED &p)
@@ -791,7 +723,6 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
    GLYPHMETRICS gMetric;
    memset(&gMetric, 0, sizeof(GLYPHMETRICS));
 
-#ifndef Q_OS_WINCE
    if (metric) {
       // If metrics requested, retrieve first using GGO_METRICS, because the returned
       // values are incorrect for OpenType PS fonts if obtained at the same time as the
@@ -808,7 +739,6 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
             int(gMetric.gmBlackBoxX), int(gMetric.gmBlackBoxY),
             gMetric.gmCellIncX, gMetric.gmCellIncY);
    }
-#endif
 
    uint glyphFormat = GGO_NATIVE;
 
@@ -828,15 +758,6 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
       delete [] dataBuffer;
       return false;
    }
-
-#ifdef Q_OS_WINCE
-   if (metric) {
-      // #### obey scale
-      *metric = glyph_metrics_t(gMetric.gmptGlyphOrigin.x, -gMetric.gmptGlyphOrigin.y,
-            (int)gMetric.gmBlackBoxX, (int)gMetric.gmBlackBoxY,
-            gMetric.gmCellIncX, gMetric.gmCellIncY);
-   }
-#endif
 
    DWORD offset = 0;
    DWORD headerOffset = 0;
@@ -1068,7 +989,6 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
 
    bool has_transformation = t.type() > QTransform::TxTranslate;
 
-#ifndef Q_OS_WINCE
    unsigned int options = ttf ? ETO_GLYPH_INDEX : 0;
    XFORM xform;
 
@@ -1112,13 +1032,6 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
       xform.eDx -= tgm.gmptGlyphOrigin.x;
       xform.eDy += tgm.gmptGlyphOrigin.y;
    }
-#else // else wince
-   unsigned int options = 0;
-   if (has_transformation) {
-      qWarning() << "QWindowsFontEngine is unable to apply transformations other than translations for fonts on Windows CE."
-         << "If you need them anyway, start your application with -platform windows:fontengine=freetype.";
-   }
-#endif // wince
 
    // The padding here needs to be kept in sync with the values in alphaMapBoundingBox.
    QWindowsNativeImage *ni = new QWindowsNativeImage(iw + 2 * margin,
@@ -1140,14 +1053,12 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
 
    HGDIOBJ old_font = SelectObject(hdc, font);
 
-#ifndef Q_OS_WINCE
    if (has_transformation) {
       SetGraphicsMode(hdc, GM_ADVANCED);
       SetWorldTransform(hdc, &xform);
       ExtTextOut(hdc, 0, 0, options, 0, reinterpret_cast<LPCWSTR>(&glyph), 1, 0);
-   } else
-#endif // !Q_OS_WINCE
-   {
+
+   } else {
       ExtTextOut(hdc, -gx + margin, -gy + margin, options, 0, reinterpret_cast<LPCWSTR>(&glyph), 1, 0);
    }
 
