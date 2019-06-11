@@ -105,12 +105,12 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
    }
 
    if (d->active != 0) {
-      disconnect(d->active, SIGNAL(canUndoChanged(bool)),     this, SLOT(canUndoChanged(bool)));
-      disconnect(d->active, SIGNAL(undoTextChanged(QString)), this, SLOT(undoTextChanged(QString)));
-      disconnect(d->active, SIGNAL(canRedoChanged(bool)),     this, SLOT(canRedoChanged(bool)));
-      disconnect(d->active, SIGNAL(redoTextChanged(QString)), this, SLOT(redoTextChanged(QString)));
-      disconnect(d->active, SIGNAL(indexChanged(int)),        this, SLOT(indexChanged(int)));
-      disconnect(d->active, SIGNAL(cleanChanged(bool)),       this, SLOT(cleanChanged(bool)));
+      disconnect(d->active, &QUndoStack::canUndoChanged,  this, &QUndoGroup::canUndoChanged);
+      disconnect(d->active, &QUndoStack::undoTextChanged, this, &QUndoGroup::undoTextChanged);
+      disconnect(d->active, &QUndoStack::canRedoChanged,  this, &QUndoGroup::canRedoChanged);
+      disconnect(d->active, &QUndoStack::redoTextChanged, this, &QUndoGroup::redoTextChanged);
+      disconnect(d->active, &QUndoStack::indexChanged,    this, &QUndoGroup::indexChanged);
+      disconnect(d->active, &QUndoStack::cleanChanged,    this, &QUndoGroup::cleanChanged);
    }
 
    d->active = stack;
@@ -124,12 +124,12 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
       emit indexChanged(0);
 
    } else {
-      connect(d->active, SIGNAL(canUndoChanged(bool)),      this, SLOT(canUndoChanged(bool)));
-      connect(d->active, SIGNAL(undoTextChanged(QString)),  this, SLOT(undoTextChanged(QString)));
-      connect(d->active, SIGNAL(canRedoChanged(bool)),      this, SLOT(canRedoChanged(bool)));
-      connect(d->active, SIGNAL(redoTextChanged(QString)),  this, SLOT(redoTextChanged(QString)));
-      connect(d->active, SIGNAL(indexChanged(int)),         this, SLOT(indexChanged(int)));
-      connect(d->active, SIGNAL(cleanChanged(bool)),        this, SLOT(cleanChanged(bool)));
+      connect(d->active, &QUndoStack::canUndoChanged,  this, &QUndoGroup::canUndoChanged);
+      connect(d->active, &QUndoStack::undoTextChanged, this, &QUndoGroup::undoTextChanged);
+      connect(d->active, &QUndoStack::canRedoChanged,  this, &QUndoGroup::canRedoChanged);
+      connect(d->active, &QUndoStack::redoTextChanged, this, &QUndoGroup::redoTextChanged);
+      connect(d->active, &QUndoStack::indexChanged,    this, &QUndoGroup::indexChanged);
+      connect(d->active, &QUndoStack::cleanChanged,    this, &QUndoGroup::cleanChanged);
 
       emit canUndoChanged(d->active->canUndo());
       emit undoTextChanged(d->active->undoText());

@@ -1132,7 +1132,7 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
    QObject *p = parent();
    if (p) {
       const QMetaObject *me = p->metaObject();
-      int index = me->indexOfMethod("loadResource(int,QUrl)");
+      int index = me->indexOfMethod("loadResource(int,const QUrl &)");
 
       if (index >= 0) {
          QMetaMethod loader = me->method(index);
