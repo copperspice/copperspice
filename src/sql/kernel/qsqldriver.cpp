@@ -245,9 +245,10 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
             s.clear();
 
          } else {
-            vals.chop(2); // remove trailing comma
-            s[s.length() - 2] = QLatin1Char(')');
-            s.append(QLatin1String("VALUES (")).append(vals).append(QLatin1Char(')'));
+            vals.chop(2);                // remove trailing comma
+
+            s.chop(2);
+            s.append(") VALUES (").append(vals).append(QLatin1Char(')'));
          }
          break;
       }
