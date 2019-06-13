@@ -43,19 +43,40 @@ class QSqlRelationalDelegate: public QItemDelegate
    }
 
    QWidget *createEditor(QWidget *aParent, const QStyleOptionViewItem &option, const QModelIndex &index) const {
-      const QSqlRelationalTableModel *sqlModel = qobject_cast<const QSqlRelationalTableModel *>(index.model());
-      QSqlTableModel *childModel = sqlModel ? sqlModel->relationModel(index.column()) : 0;
 
-      if (!childModel) {
-         return QItemDelegate::createEditor(aParent, option, index);
+      const QSqlRelationalTableModel *sqlModel = dynamic_cast<const QSqlRelationalTableModel *>(index.model());
+
+      QSqlTableModel *childModel = nullptr;
+
+      if (sqlModel) {
+         childModel = sqlModel->relationModel(index.column());
       }
 
-      QComboBox *combo = new QComboBox(aParent);
-      combo->setModel(childModel);
-      combo->setModelColumn(childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn()));
-      combo->installEventFilter(const_cast<QSqlRelationalDelegate *>(this));
+      if (childModel) {
+         QComboBox *combo = new QComboBox(aParent);
+         combo->setModel(childModel);
+         combo->setModelColumn(childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn()));
+         combo->installEventFilter(const_cast<QSqlRelationalDelegate *>(this));
 
-      return combo;
+         return combo;
+
+      } else {
+         return QItemDelegate::createEditor(aParent, option, index);
+
+      }
+   }
+
+   void setEditorData(QWidget *editor, const QModelIndex &index) const {
+      const QSqlRelationalTableModel *sqlModel = qobject_cast<const QSqlRelationalTableModel *>(index.model());
+
+      QComboBox *combo = qobject_cast<QComboBox *>(editor);
+
+      if (! sqlModel || ! combo) {
+         QItemDelegate::setEditorData(editor, index);
+         return;
+      }
+
+      combo->setCurrentIndex(combo->findText(sqlModel->data(index).toString()));
    }
 
    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
