@@ -463,8 +463,8 @@ QWindowsCursor::PixmapCursor QWindowsCursor::customCursor(Qt::CursorShape cursor
    };
 
    const QSize cursorSize = systemCursorSize(screen);
-   const QWindowsCustomPngCursor *sEnd = pngCursors + sizeof(pngCursors) / sizeof(pngCursors[0]);
-   const QWindowsCustomPngCursor *bestFit = 0;
+   const QWindowsCustomPngCursor *sEnd    = pngCursors + sizeof(pngCursors) / sizeof(pngCursors[0]);
+   const QWindowsCustomPngCursor *bestFit = nullptr;
 
    int sizeDelta = INT_MAX;
    for (const QWindowsCustomPngCursor *s = pngCursors; s < sEnd; ++s) {
@@ -607,8 +607,7 @@ CursorHandlePtr QWindowsCursor::pixmapWindowCursor(const QCursor &c)
 QWindowsCursor::QWindowsCursor(const QPlatformScreen *screen)
    : m_screen(screen)
 {
-   static const bool dummy = initResources();
-   Q_UNUSED(dummy)
+   initResources();
 }
 
 void QWindowsCursor::changeCursor(QCursor *cursorIn, QWindow *window)
@@ -621,9 +620,17 @@ void QWindowsCursor::changeCursor(QCursor *cursorIn, QWindow *window)
       QWindowsWindow::baseWindowOf(window)->setCursor(CursorHandlePtr(new CursorHandle));
       return;
    }
-   const CursorHandlePtr wcursor =
-      cursorIn->shape() == Qt::BitmapCursor ?
-      pixmapWindowCursor(*cursorIn) : standardWindowCursor(cursorIn->shape());
+
+   CursorHandlePtr wcursor;
+
+   if (cursorIn->shape() == Qt::BitmapCursor)  {
+      wcursor = pixmapWindowCursor(*cursorIn);
+
+   } else {
+      wcursor = standardWindowCursor(cursorIn->shape());
+
+   }
+
    if (wcursor->handle()) {
       QWindowsWindow::baseWindowOf(window)->setCursor(wcursor);
 

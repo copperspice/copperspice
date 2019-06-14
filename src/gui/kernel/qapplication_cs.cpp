@@ -292,15 +292,12 @@ void qt_init_tooltip_palette()
 #endif
 }
 
-
 void QApplicationPrivate::initialize()
 {
    is_app_running = false; // Starting up
 
    QWidgetPrivate::mapper     = new QWidgetMapper;
    QWidgetPrivate::allWidgets = new QWidgetSet;
-
-
 
    // emerald - needed for widgets in QML, not supported at this time
    // QAbstractDeclarativeData::setWidgetParent = QWidgetPrivate::setWidgetParentHelper;
@@ -603,14 +600,20 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 {
    QApplicationPrivate::styleSheet = styleSheet;
    QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(QApplicationPrivate::app_style);
-   if (styleSheet.isEmpty()) { // application style sheet removed
-      if (!proxy) {
+
+   if (styleSheet.isEmpty()) {
+      // application style sheet removed
+      if (! proxy) {
          return;   // there was no stylesheet before
       }
       setStyle(proxy->base);
-   } else if (proxy) { // style sheet update, just repolish
+
+   } else if (proxy) {
+      // style sheet update, just repolish
       proxy->repolish(qApp);
-   } else { // stylesheet set the first time
+
+   } else {
+      // stylesheet set the first time
       QStyleSheetStyle *newProxy = new QStyleSheetStyle(QApplicationPrivate::app_style);
       QApplicationPrivate::app_style->setParent(newProxy);
       setStyle(newProxy);
@@ -618,8 +621,6 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 }
 
 #endif // QT_NO_STYLE_STYLESHEET
-
-
 
 /*!
     \overload
@@ -640,8 +641,9 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 QStyle *QApplication::setStyle(const QString &style)
 {
    QStyle *s = QStyleFactory::create(style);
-   if (!s) {
-      return 0;
+
+   if (! s) {
+      return nullptr;
    }
 
    setStyle(s);
@@ -1109,13 +1111,11 @@ bool QApplicationPrivate::tryCloseAllWindows()
       && QGuiApplicationPrivate::tryCloseRemainingWindows(processedWindows);
 }
 
-
 void QApplication::closeAllWindows()
 {
    QWindowList processedWindows;
    QApplicationPrivate::tryCloseAllWidgetWindows(&processedWindows);
 }
-
 
 void QApplication::aboutCs()
 {
@@ -1299,20 +1299,24 @@ QWidget *qt_tlw_for_window(QWindow *wnd)
 
 void QApplicationPrivate::notifyActiveWindowChange(QWindow *previous)
 {
-   Q_UNUSED(previous);
    QWindow *wnd = QGuiApplicationPrivate::focus_window;
-   if (inPopupMode()) { // some delayed focus event to ignore
+   if (inPopupMode()) {
+      // some delayed focus event to ignore
       return;
    }
+
    QWidget *tlw = qt_tlw_for_window(wnd);
    QApplication::setActiveWindow(tlw);
+
    // QTBUG-37126, Active X controls may set the focus on native child widgets.
    if (wnd && tlw && wnd != tlw->windowHandle()) {
       if (QWidgetWindow *widgetWindow = qobject_cast<QWidgetWindow *>(wnd))
-         if (QWidget *widget = widgetWindow->widget())
+
+         if (QWidget *widget = widgetWindow->widget())  {
             if (widget->inherits("QAxHostWidget")) {
                widget->setFocus(Qt::ActiveWindowFocusReason);
             }
+         }
    }
 }
 
@@ -2046,7 +2050,6 @@ static inline void closeAllPopups()
    }
 }
 
-
 bool QApplication::notify(QObject *receiver, QEvent *e)
 {
    Q_D(QApplication);
@@ -2430,20 +2433,22 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   QApplicationPrivate::giveFocusAccordingToFocusPolicy(w, e, relpos);
                }
 
-               QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(), wheel->delta(), wheel->orientation(),
-                  wheel->buttons(),
-                  wheel->modifiers(), phase, wheel->source());
+               QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(), wheel->delta(),
+                  wheel->orientation(), wheel->buttons(), wheel->modifiers(), phase, wheel->source());
+
                bool eventAccepted;
                while (w) {
                   we.spont = spontaneous && w == receiver;
                   we.ignore();
                   res = d->notify_helper(w, &we);
                   eventAccepted = we.isAccepted();
+
                   if (res && eventAccepted) {
                      // A new scrolling sequence or partial sequence starts and w has accepted
                      // the event. Therefore, we can set wheel_widget, but only if it's not
                      // the end of a sequence.
-                     if (spontaneous && (phase == Qt::ScrollBegin || phase == Qt::ScrollUpdate) && QGuiApplicationPrivate::scrollNoPhaseAllowed) {
+                     if (spontaneous && (phase == Qt::ScrollBegin || phase == Qt::ScrollUpdate) &&
+                            QGuiApplicationPrivate::scrollNoPhaseAllowed) {
                         QApplicationPrivate::wheel_widget = w;
                      }
                      break;
@@ -3630,6 +3635,7 @@ void QApplicationPrivate::translateTouchCancel(QTouchDevice *device, ulong times
       }
       ++it;
    }
+
    for (QSet<QWidget *>::const_iterator widIt = widgetsNeedingCancel.constBegin(),
       widItEnd = widgetsNeedingCancel.constEnd(); widIt != widItEnd; ++widIt) {
       QWidget *widget = *widIt;
@@ -3638,7 +3644,6 @@ void QApplicationPrivate::translateTouchCancel(QTouchDevice *device, ulong times
       QApplication::sendSpontaneousEvent(widget, &touchEvent);
    }
 }
-
 
 #ifndef QT_NO_DRAGANDDROP
 void QApplicationPrivate::notifyDragStarted(const QDrag *drag)

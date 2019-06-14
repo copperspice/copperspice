@@ -1118,9 +1118,11 @@ QRect QLabelPrivate::documentRect() const
    cr.adjust(margin, margin, -margin, -margin);
    const int align = QStyle::visualAlignment(isTextLabel ? textDirection()
          : q->layoutDirection(), QFlag(this->align));
+
    int m = indent;
-   if (m < 0 && q->frameWidth()) { // no indent, but we do have a frame
-      m = q->fontMetrics().width(QLatin1Char('x')) / 2 - margin;
+   if (m < 0 && q->frameWidth()) {
+      // no indent, but we do have a frame
+      m = q->fontMetrics().width('x') / 2 - margin;
    }
    if (m > 0) {
       if (align & Qt::AlignLeft) {

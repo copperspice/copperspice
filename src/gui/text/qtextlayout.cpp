@@ -45,7 +45,7 @@
 #include <limits.h>
 
 #define ObjectSelectionBrush (QTextFormat::ForegroundBrush + 1)
-#define SuppressText 0x5012
+#define SuppressText       0x5012
 #define SuppressBackground 0x513
 
 QRectF QTextInlineObject::rect() const
@@ -150,7 +150,6 @@ void QTextLayout::setRawFont(const QRawFont &rawFont)
    d->useRawFont = true;
    d->resetFontEngineCache();
 }
-
 
 void QTextLayout::setFont(const QFont &font)
 {
@@ -278,7 +277,7 @@ void QTextLayout::endLayout()
    }
 
    d->layoutData->layoutState = QTextEngine::LayoutEmpty;
-   if (!d->cacheGlyphs) {
+   if (! d->cacheGlyphs) {
       d->freeMemory();
    }
 }
@@ -297,7 +296,7 @@ int QTextLayout::nextCursorPosition(int oldPos, CursorMode mode) const
 
    Q_ASSERT(len <= d->layoutData->string.length());
 
-   if (!attributes || oldPos < 0 || oldPos >= len) {
+   if (! attributes || oldPos < 0 || oldPos >= len) {
       return oldPos;
    }
 
@@ -446,6 +445,7 @@ QTextLine QTextLayout::lineAt(int i) const
 QTextLine QTextLayout::lineForTextPosition(int pos) const
 {
    int lineNum = d->lineNumberForTextPosition(pos);
+
    return lineNum >= 0 ? lineAt(lineNum) : QTextLine();
 }
 
@@ -465,7 +465,8 @@ QRectF QTextLayout::boundingRect() const
       return QRectF();
    }
 
-   QFixed xmax, ymax;
+   QFixed xmax;
+   QFixed ymax;
    QFixed xmin = d->lines.at(0).x;
    QFixed ymin = d->lines.at(0).y;
 
@@ -473,11 +474,14 @@ QRectF QTextLayout::boundingRect() const
       const QScriptLine &si = d->lines[i];
       xmin = qMin(xmin, si.x);
       ymin = qMin(ymin, si.y);
+
       QFixed lineWidth = si.width < QFIXED_MAX ? qMax(si.width, si.textWidth) : si.textWidth;
       xmax = qMax(xmax, si.x + lineWidth);
-      // ### shouldn't the ascent be used in ymin???
+
+      // ### shouldn't the ascent be used in ymin?
       ymax = qMax(ymax, si.y + si.height().ceil());
    }
+
    return QRectF(xmin.toReal(), ymin.toReal(), (xmax - xmin).toReal(), (ymax - ymin).toReal());
 }
 
@@ -612,7 +616,7 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
       return;
    }
 
-   if (!d->layoutData) {
+   if (! d->layoutData) {
       d->itemize();
    }
 
@@ -683,13 +687,13 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
             if (!selectionEndInLine) {
                region.addRect(clipIfValid(QRectF(lineRect.topRight(), fullLineRect.bottomRight()), clip));
             }
+
             if (!selectionStartInLine) {
                region.addRect(clipIfValid(QRectF(fullLineRect.topLeft(), lineRect.bottomLeft()), clip));
             }
 
-         } else if (!selectionEndInLine
-            && isLastLineInBlock
-            && !(d->option.flags() & QTextOption::ShowLineAndParagraphSeparators)) {
+         } else if (!selectionEndInLine && isLastLineInBlock
+                  && !(d->option.flags() & QTextOption::ShowLineAndParagraphSeparators)) {
             region.addRect(clipIfValid(QRectF(lineRect.right(), lineRect.top(),
                      lineRect.height() / 4, lineRect.height()), clip));
          }
@@ -764,7 +768,8 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
       QPainterPath path;
       QRectF br = boundingRect().translated(position);
       br.setRight(QFIXED_MAX);
-      if (!clip.isNull()) {
+
+      if (! clip.isNull()) {
          br = br.intersected(clip);
       }
 
@@ -777,10 +782,10 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
       QTextLine l(i, d);
       l.draw(p, position);
    }
-   if (!excludedRegion.isEmpty()) {
+
+   if (! excludedRegion.isEmpty()) {
       p->restore();
    }
-
 
    if (!d->cacheGlyphs) {
       d->freeMemory();
@@ -810,6 +815,7 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
    if (line < 0) {
       line = 0;
    }
+
    if (line >= d->lines.size()) {
       return;
    }
@@ -825,7 +831,9 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
       if (cursorPosition == sl.from + sl.length) {
          cursorPosition--;
       }
+
       itm = d->findItem(cursorPosition);
+
    } else {
       itm = d->findItem(cursorPosition - 1);
    }
@@ -864,6 +872,7 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
       p->drawLine(QLineF(x, y, x + (sign * arrow_extent / 2), y + arrow_extent / 2));
       p->drawLine(QLineF(x, y + arrow_extent, x + (sign * arrow_extent / 2), y + arrow_extent / 2));
    }
+
    return;
 }
 
@@ -973,7 +982,7 @@ void QTextLine::setLineWidth(qreal width)
 void QTextLine::setNumColumns(int numColumns)
 {
    QScriptLine &line = eng->lines[index];
-   line.width = QFIXED_MAX;
+   line.width  = QFIXED_MAX;
    line.length = 0;
    line.textWidth = 0;
    layout_helper(numColumns);
@@ -1042,7 +1051,7 @@ struct LineBreakHelper {
       }
    }
 
-   inline void calculateRightBearing(glyph_t glyph)      {
+   inline void calculateRightBearing(glyph_t glyph) {
       qreal rb;
       fontEngine->getGlyphBearings(glyph, 0, &rb);
       rightBearing = qMin(QFixed::fromReal(rb), QFixed(0));

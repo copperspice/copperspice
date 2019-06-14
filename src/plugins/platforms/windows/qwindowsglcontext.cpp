@@ -362,18 +362,24 @@ QDebug operator<<(QDebug d, const QOpenGLStaticContext &s)
 {
    QDebugStateSaver saver(d);
    d.nospace();
+
    d << "OpenGL: " << s.vendor << ',' << s.renderer << " default "
       <<  s.defaultFormat;
+
    if (s.extensions &  QOpenGLStaticContext::SampleBuffers) {
       d << ",SampleBuffers";
    }
+
    if (s.hasExtensions()) {
       d << ", Extension-API present";
    }
+
    d << "\nExtensions: " << (s.extensionNames.count(' ') + 1);
+
    if (QWindowsContext::verbose > 1) {
       d << s.extensionNames;
    }
+
    return d;
 }
 
@@ -381,8 +387,10 @@ QDebug operator<<(QDebug d, const QWindowsOpenGLContextFormat &f)
 {
    QDebugStateSaver saver(d);
    d.nospace();
+
    d << "ContextFormat: v" << (f.version >> 8) << '.' << (f.version & 0xFF)
       << " profile: " << f.profile << " options: " << f.options;
+
    return d;
 }
 #endif // !QT_NO_DEBUG_STREAM
@@ -555,7 +563,8 @@ static int choosePixelFormat(HDC hdc, const QSurfaceFormat &format,
          qDebug() << __FUNCTION__ << "    checking  " << pfi << '/' << pfiMax
             << " score=" << score << " (best " << bestPfi << '/' << bestScore << ") " << checkPfd;
       }
-   } // for
+   }
+
    if (bestPfi > 0) {
       pixelFormat = bestPfi;
    }
@@ -578,11 +587,10 @@ static inline HGLRC createContext(HDC hdc, HGLRC shared)
 
 // ARB OpenGL extension API
 namespace ARB {
+
 // Choose a suitable pixelformat using ARB extension functions.
-static int choosePixelFormat(HDC hdc,
-   const QOpenGLStaticContext &staticContext,
-   const QSurfaceFormat &format,
-   const QWindowsOpenGLAdditionalFormat &additional,
+static int choosePixelFormat(HDC hdc, const QOpenGLStaticContext &staticContext,
+   const QSurfaceFormat &format, const QWindowsOpenGLAdditionalFormat &additional,
    PIXELFORMATDESCRIPTOR *obtainedPfd)
 {
    enum { attribSize = 40 };
@@ -707,7 +715,9 @@ static int choosePixelFormat(HDC hdc,
 
    QString message;
    QDebug nsp(&message);
+
    nsp << __FUNCTION__;
+
    if (sampleBuffersRequested) {
       nsp << " samples=" << iAttributes[samplesValuePosition];
    }
@@ -725,8 +735,7 @@ static int choosePixelFormat(HDC hdc,
 }
 
 static QSurfaceFormat qSurfaceFormatFromHDC(const QOpenGLStaticContext &staticContext,
-   HDC hdc, int pixelFormat,
-   QWindowsOpenGLAdditionalFormat *additionalIn = 0)
+   HDC hdc, int pixelFormat, QWindowsOpenGLAdditionalFormat *additionalIn = 0)
 {
    enum { attribSize = 40 };
 
@@ -793,16 +802,14 @@ static QSurfaceFormat qSurfaceFormatFromHDC(const QOpenGLStaticContext &staticCo
 }
 
 static HGLRC createContext(const QOpenGLStaticContext &staticContext,
-   HDC hdc,
-   const QSurfaceFormat &format,
-   const QWindowsOpenGLAdditionalFormat &,
-   HGLRC shared = 0)
+   HDC hdc, const QSurfaceFormat &format, const QWindowsOpenGLAdditionalFormat &, HGLRC shared = 0)
 {
    enum { attribSize = 11 };
 
-   if (!staticContext.hasExtensions()) {
+   if (! staticContext.hasExtensions()) {
       return 0;
    }
+
    int attributes[attribSize];
    int attribIndex = 0;
    std::fill(attributes, attributes + attribSize, int(0));
@@ -811,8 +818,7 @@ static HGLRC createContext(const QOpenGLStaticContext &staticContext,
    // wglCreateContextAttribsARB fails and returns NULL if the requested context
    // version is not supported. This means that we will get the closest supported
    // context format that that which was requested and is supported by the driver
-   const int requestedVersion = qMin((format.majorVersion() << 8) + format.minorVersion(),
-         staticContext.defaultFormat.version);
+   const int requestedVersion = qMin((format.majorVersion() << 8) + format.minorVersion(), staticContext.defaultFormat.version);
    const int majorVersion = requestedVersion >> 8;
    const int minorVersion = requestedVersion & 0xFF;
 
@@ -827,6 +833,7 @@ static HGLRC createContext(const QOpenGLStaticContext &staticContext,
    if (format.testOption(QSurfaceFormat::DebugContext)) {
       flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
    }
+
    if (requestedVersion >= 0x0300) {
       if (!format.testOption(QSurfaceFormat::DeprecatedFunctions)) {
          flags |= WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;

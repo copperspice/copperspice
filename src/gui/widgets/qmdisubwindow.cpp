@@ -41,7 +41,6 @@
 #include <qmacstyle.h>
 #endif
 
-
 using namespace QMdi;
 
 static const QStyle::SubControl SubControls[] = {
@@ -96,11 +95,13 @@ static inline bool isChildOfQMdiSubWindow(const QWidget *child)
 {
    Q_ASSERT(child);
    QWidget *parent = child->parentWidget();
+
    while (parent) {
       if (qobject_cast<QMdiSubWindow *>(parent)) {
          return true;
       }
       parent = parent->parentWidget();
+
    }
    return false;
 }
@@ -301,6 +302,7 @@ bool ControlLabel::event(QEvent *event)
    if (event->type() == QEvent::WindowIconChange) {
       updateWindowIcon();
    }
+
 #ifndef QT_NO_TOOLTIP
    else if (event->type() == QEvent::ToolTip) {
       QStyleOptionTitleBar options;
@@ -309,6 +311,7 @@ bool ControlLabel::event(QEvent *event)
          QStyle::CC_TitleBar, QStyle::SC_TitleBarSysMenu);
    }
 #endif
+
    return QWidget::event(event);
 }
 
@@ -489,13 +492,16 @@ void ControllerWidget::paintEvent(QPaintEvent * /*paintEvent*/)
 {
    QStyleOptionComplex opt;
    initStyleOption(&opt);
+
    if (activeControl == hoverControl) {
       opt.activeSubControls = activeControl;
       opt.state |= QStyle::State_Sunken;
+
    } else if (hoverControl != QStyle::SC_None && (activeControl == QStyle::SC_None)) {
       opt.activeSubControls = hoverControl;
       opt.state |= QStyle::State_MouseOver;
    }
+
    QPainter painter(this);
    style()->drawComplexControl(QStyle::CC_MdiControls, &opt, &painter, mdiArea);
 }
@@ -773,6 +779,7 @@ QMdiSubWindowPrivate::QMdiSubWindowPrivate()
 #ifndef QT_NO_SIZEGRIP
      sizeGrip(0),
 #endif
+
 #ifndef QT_NO_RUBBERBAND
      rubberBand(0),
 #endif
@@ -810,6 +817,7 @@ void QMdiSubWindowPrivate::_q_updateStaysOnTopHint()
 {
 #ifndef QT_NO_ACTION
    Q_Q(QMdiSubWindow);
+
    if (QAction *senderAction = qobject_cast<QAction *>(q->sender())) {
       if (senderAction->isChecked()) {
          q->setWindowFlags(q->windowFlags() | Qt::WindowStaysOnTopHint);
@@ -819,7 +827,7 @@ void QMdiSubWindowPrivate::_q_updateStaysOnTopHint()
          q->lower();
       }
    }
-#endif // QT_NO_ACTION
+#endif
 }
 
 /*!
@@ -829,6 +837,7 @@ void QMdiSubWindowPrivate::_q_enterInteractiveMode()
 {
 #ifndef QT_NO_ACTION
    Q_Q(QMdiSubWindow);
+
    QAction *action = qobject_cast<QAction *>(q->sender());
    if (!action) {
       return;
@@ -1513,25 +1522,28 @@ void QMdiSubWindowPrivate::processClickedSubControl()
 */
 QRegion QMdiSubWindowPrivate::getRegion(Operation operation) const
 {
-   Q_Q(const QMdiSubWindow);
-   int width = q->width();
-   int height = q->height();
+   Q_Q(const  QMdiSubWindow);
+
+   int width          = q->width();
+   int height         = q->height();
    int titleBarHeight = this->titleBarHeight();
-   int frameWidth = q->style()->pixelMetric(QStyle::PM_MdiSubWindowFrameWidth, 0, q);
-   int cornerConst = titleBarHeight - frameWidth;
-   int titleBarConst = 2 * titleBarHeight;
+   int frameWidth     = q->style()->pixelMetric(QStyle::PM_MdiSubWindowFrameWidth, 0, q);
+   int cornerConst    = titleBarHeight - frameWidth;
+   int titleBarConst  = 2 * titleBarHeight;
 
    if (operation == Move) {
       QStyleOptionTitleBar titleBarOptions = this->titleBarOptions();
       QRegion move(frameWidth, frameWidth, width - 2 * frameWidth, cornerConst);
+
       // Depending on which window flags are set, activated sub controllers will
       // be subtracted from the 'move' region.
+
       for (int i = 0; i < NumSubControls; ++i) {
          if (SubControls[i] == QStyle::SC_TitleBarLabel) {
             continue;
          }
-         move -= QRegion(q->style()->subControlRect(QStyle::CC_TitleBar, &titleBarOptions,
-                  SubControls[i]));
+
+         move -= QRegion(q->style()->subControlRect(QStyle::CC_TitleBar, &titleBarOptions, SubControls[i]));
       }
       return move;
    }
@@ -1700,7 +1712,7 @@ int QMdiSubWindowPrivate::titleBarHeight(const QStyleOptionTitleBar &options) co
    Q_Q(const QMdiSubWindow);
 
    if (! q->parent() || q->windowFlags() & Qt::FramelessWindowHint
-      || (q->isMaximized() && !drawTitleBarWhenMaximized())) {
+                     || (q->isMaximized() && ! drawTitleBarWhenMaximized())) {
       return 0;
    }
 
@@ -2079,10 +2091,13 @@ void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags windowFlags)
    if (!(windowFlags & CustomizeWindowFlags)) {
       windowFlags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint |
          Qt::WindowCloseButtonHint;
+
    } else if (windowFlags & Qt::FramelessWindowHint && windowFlags & Qt::WindowStaysOnTopHint) {
       windowFlags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
+
    } else if (windowFlags & Qt::FramelessWindowHint) {
       windowFlags = Qt::FramelessWindowHint;
+
    }
 
    windowFlags &= ~windowType;
@@ -2211,9 +2226,6 @@ void QMdiSubWindowPrivate::setSizeGrip(QSizeGrip *newSizeGrip)
    newSizeGrip->installEventFilter(q);
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::setSizeGripVisible(bool visible) const
 {
    // See if we can find any size grips
@@ -2222,15 +2234,12 @@ void QMdiSubWindowPrivate::setSizeGripVisible(bool visible) const
       grip->setVisible(visible);
    }
 }
-
 #endif // QT_NO_SIZEGRIP
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::updateInternalWindowTitle()
 {
    Q_Q(QMdiSubWindow);
+
    if (q->isWindowModified()) {
       windowTitle = q->windowTitle();
       windowTitle.replace(QLatin1String("[*]"), QLatin1String("*"));
@@ -2251,14 +2260,18 @@ QMdiSubWindow::QMdiSubWindow(QWidget *parent, Qt::WindowFlags flags)
 #endif
 
    d->setWindowFlags(flags);
+
    setBackgroundRole(QPalette::Window);
    setAutoFillBackground(true);
    setMouseTracking(true);
    setLayout(new QVBoxLayout);
    setFocusPolicy(Qt::StrongFocus);
+
    layout()->setMargin(0);
+
    d->updateGeometryConstraints();
    setAttribute(Qt::WA_Resized, false);
+
    d->titleBarPalette = d->desktopPalette();
    d->font = QApplication::font("QMdiSubWindowTitleBar");
 
@@ -2270,17 +2283,19 @@ QMdiSubWindow::QMdiSubWindow(QWidget *parent, Qt::WindowFlags flags)
       d->menuIcon = windowIcon();
    }
 #endif
+
    connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)),
       this, SLOT(_q_processFocusChanged(QWidget *, QWidget *)));
 }
 
-
 QMdiSubWindow::~QMdiSubWindow()
 {
    Q_D(QMdiSubWindow);
+
 #ifndef QT_NO_MENUBAR
    d->removeButtonsFromMenuBar();
 #endif
+
    d->setActive(false);
 }
 
@@ -3113,12 +3128,13 @@ void QMdiSubWindow::timerEvent(QTimerEvent *timerEvent)
 */
 void QMdiSubWindow::moveEvent(QMoveEvent *moveEvent)
 {
-   if (!parent()) {
+   if (! parent()) {
       QWidget::moveEvent(moveEvent);
       return;
    }
 
    Q_D(QMdiSubWindow);
+
    if (d->isMaximizeMode) {
       d->ensureWindowState(Qt::WindowMaximized);
    }
@@ -3142,19 +3158,20 @@ void QMdiSubWindow::paintEvent(QPaintEvent *paintEvent)
 
    if (d->resizeTimerId != -1) {
       // Only update the style option rect and the window title
-      int border = d->hasBorder(d->cachedStyleOptions) ? 4 : 0;
+      int border         = d->hasBorder(d->cachedStyleOptions) ? 4 : 0;
       int titleBarHeight = d->titleBarHeight(d->cachedStyleOptions);
-      titleBarHeight -= isMinimized() ? 2 * border : border;
+      titleBarHeight    -= isMinimized() ? 2 * border : border;
 
       d->cachedStyleOptions.rect = QRect(border, border, width() - 2 * border, titleBarHeight);
 
-      if (!d->windowTitle.isEmpty()) {
+      if (! d->windowTitle.isEmpty()) {
          int width = style()->subControlRect(QStyle::CC_TitleBar, &d->cachedStyleOptions,
-               QStyle::SC_TitleBarLabel, this).width();
+                  QStyle::SC_TitleBarLabel, this).width();
 
-         d->cachedStyleOptions.text = d->cachedStyleOptions.fontMetrics
-            .elidedText(d->windowTitle, Qt::ElideRight, width);
+         d->cachedStyleOptions.text = d->cachedStyleOptions.fontMetrics.elidedText(
+                  d->windowTitle, Qt::ElideRight, width);
       }
+
    } else {
       // Force full update
       d->cachedStyleOptions = d->titleBarOptions();
@@ -3162,13 +3179,13 @@ void QMdiSubWindow::paintEvent(QPaintEvent *paintEvent)
    }
 
    QStylePainter painter(this);
-   if (!d->windowTitle.isEmpty()) {
+   if (! d->windowTitle.isEmpty()) {
       painter.setFont(d->font);
    }
 
    painter.drawComplexControl(QStyle::CC_TitleBar, d->cachedStyleOptions);
 
-   if (isMinimized() && !d->hasBorder(d->cachedStyleOptions)) {
+   if (isMinimized() && ! d->hasBorder(d->cachedStyleOptions)) {
       return;
    }
 
@@ -3183,10 +3200,11 @@ void QMdiSubWindow::paintEvent(QPaintEvent *paintEvent)
    }
 
    // ### Ensure that we do not require setting the cliprect
-   if (!isMinimized() && !d->hasBorder(d->cachedStyleOptions)) {
+   if (! isMinimized() && ! d->hasBorder(d->cachedStyleOptions)) {
       painter.setClipRect(rect().adjusted(0, d->titleBarHeight(d->cachedStyleOptions), 0, 0));
    }
-   if (!isMinimized() || d->hasBorder(d->cachedStyleOptions)) {
+
+   if (! isMinimized() || d->hasBorder(d->cachedStyleOptions)) {
       painter.drawPrimitive(QStyle::PE_FrameWindow, frameOptions);
    }
 }
@@ -3339,6 +3357,7 @@ void QMdiSubWindow::mouseMoveEvent(QMouseEvent *mouseEvent)
    }
 
    Q_D(QMdiSubWindow);
+
    // No update needed if we're in a move/resize operation
    if (!d->isMoveOperation() && !d->isResizeOperation()) {
       // Find previous and current hover region.

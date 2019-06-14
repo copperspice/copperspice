@@ -240,7 +240,6 @@ struct QGlyphLayout {
 
 class QVarLengthGlyphLayoutArray : private QVarLengthArray<void *>, public QGlyphLayout
 {
- private:
    using Array = QVarLengthArray<void *>;
 
  public:
@@ -437,22 +436,18 @@ class Q_GUI_EXPORT QTextEngine
       WidthOnly = 0x07
    };
 
-   void invalidate();
    void clearLineData();
-
-   void validate() const;
-   void itemize() const;
-
+   void invalidate();
    bool isRightToLeft() const;
-   static bool isRightToLeft(QStringView str);
+   void itemize() const;
+   void justify(const QScriptLine &si);
+   void shape(int item) const;
+   void validate() const;
 
+   static bool isRightToLeft(QStringView str);
    static void bidiReorder(int numRuns, const quint8 *levels, int *visualOrder);
 
    const QCharAttributes *attributes() const;
-
-   void shape(int item) const;
-
-   void justify(const QScriptLine &si);
    QFixed alignLine(const QScriptLine &line);
 
    QFixed width(int charFrom, int numChars) const;
@@ -486,7 +481,8 @@ class Q_GUI_EXPORT QTextEngine
       return end - si->position;
    }
 
-   QFontEngine *fontEngine(const QScriptItem &si, QFixed *ascent = nullptr, QFixed *descent = nullptr, QFixed *leading = nullptr) const;
+   QFontEngine *fontEngine(const QScriptItem &si, QFixed *ascent = nullptr, QFixed *descent = nullptr,
+                  QFixed *leading = nullptr) const;
 
    QFont font(const QScriptItem &si) const;
    inline QFont font() const {

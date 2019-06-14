@@ -242,7 +242,8 @@ bool shouldBeIgnored(QAccessibleInterface *interface)
       // VoiceOver focusing on tool tips can be confusing. The contents of the
       // tool tip is available through the description attribute anyway, so
       // we disable accessibility for tool tips.
-      if (className == QLatin1String("QTipLabel")) {
+
+      if (className == "QTipLabel") {
          return true;
       }
    }

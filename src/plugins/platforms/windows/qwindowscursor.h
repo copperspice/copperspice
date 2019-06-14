@@ -24,11 +24,11 @@
 #ifndef QWINDOWSCURSOR_H
 #define QWINDOWSCURSOR_H
 
-#include "qtwindows_additional.h"
+#include <qtwindows_additional.h>
 
 #include <qplatform_cursor.h>
-#include <QSharedPointer>
-#include <QHash>
+#include <qsharedpointer.h>
+#include <qhash.h>
 
 struct QWindowsPixmapCursorCacheKey {
    explicit QWindowsPixmapCursorCacheKey(const QCursor &c);
@@ -70,7 +70,7 @@ class CursorHandle
    const HCURSOR m_hcursor;
 };
 
-typedef QSharedPointer<CursorHandle> CursorHandlePtr;
+using CursorHandlePtr = QSharedPointer<CursorHandle>;
 
 class QWindowsCursor : public QPlatformCursor
 {
