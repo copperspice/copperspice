@@ -510,7 +510,10 @@ void QSqlDatabasePrivate::init(const QString &type)
       }
    }
 
-   if (! driver && loader()) {
+   if (! driver) {
+      // does the work to call keyset() in QFactoryLoader
+      QSqlDatabase::drivers();
+
       driver = cs_load_plugin<QSqlDriver, QSqlDriverPlugin>(loader(), type);
    }
 
