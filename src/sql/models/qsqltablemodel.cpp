@@ -661,17 +661,13 @@ bool QSqlTableModel::deleteRowFromTable(int row)
    const bool prepStatement = d->db.driver()->hasFeature(QSqlDriver::PreparedQueries);
 
    const QString stmt = d->db.driver()->sqlStatement(QSqlDriver::DeleteStatement,
-         d->tableName,
-         QSqlRecord(),
-         prepStatement);
+         d->tableName, QSqlRecord(), prepStatement);
+
    const QString where = d->db.driver()->sqlStatement(QSqlDriver::WhereStatement,
-         d->tableName,
-         whereValues,
-         prepStatement);
+         d->tableName, whereValues, prepStatement);
 
    if (stmt.isEmpty() || where.isEmpty()) {
-      d->error = QSqlError(QLatin1String("Unable to delete row"), QString(),
-            QSqlError::StatementError);
+      d->error = QSqlError(QLatin1String("Unable to delete row"), QString(), QSqlError::StatementError);
       return false;
    }
 

@@ -274,8 +274,8 @@ QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
    QSqlDatabase db = dict->value(name);
    dict->lock.unlock();
 
-   if (db.isValid() && !db.isOpen() && open) {
-      if (!db.open()) {
+   if (db.isValid() && ! db.isOpen() && open) {
+      if (! db.open()) {
          qWarning() << "QSqlDatabasePrivate::database: unable to open database:" << db.lastError().text();
       }
 
@@ -286,12 +286,12 @@ QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
 void QSqlDatabasePrivate::copy(const QSqlDatabasePrivate *other)
 {
    q = other->q;
-   dbname = other->dbname;
-   uname = other->uname;
-   pword = other->pword;
-   hname = other->hname;
-   drvName = other->drvName;
-   port = other->port;
+   dbname   = other->dbname;
+   uname    = other->uname;
+   pword    = other->pword;
+   hname    = other->hname;
+   drvName  = other->drvName;
+   port     = other->port;
    connOptions = other->connOptions;
    precisionPolicy = other->precisionPolicy;
 }
@@ -374,7 +374,7 @@ QStringList QSqlDatabase::drivers()
 
       for (auto item : keySet) {
          if (! list.contains(item)) {
-            list << item;
+            list.append(item);
          }
       }
    }
@@ -518,7 +518,7 @@ void QSqlDatabasePrivate::init(const QString &type)
    }
 
    if (! driver) {
-      qWarning("QSqlDatabase: %s driver not loaded", type.toLatin1().data());
+      qWarning("QSqlDatabase: %s driver not loaded", csPrintable(type));
       qWarning("QSqlDatabase: available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
 
       if (QCoreApplication::instance() == 0) {

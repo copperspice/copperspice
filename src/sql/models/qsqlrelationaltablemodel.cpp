@@ -40,7 +40,7 @@ class QSqlRelationalTableModelSql: public QSqlTableModelSql
 {
  public:
    inline const static QString relTablePrefix(int i) {
-      return QString::number(i).prepend(QLatin1String("relTblAl_"));
+      return QString::number(i).prepend("relTblAl_");
    }
 };
 

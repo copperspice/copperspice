@@ -24,18 +24,16 @@
 #ifndef QSQLRELATIONALDELEGATE_H
 #define QSQLRELATIONALDELEGATE_H
 
-#include <QtGui/qitemdelegate.h>
-#include <QtGui/qlistview.h>
-#include <QtGui/qcombobox.h>
-#include <QtSql/qsqlrelationaltablemodel.h>
-
-QT_BEGIN_NAMESPACE
+#include <qitemdelegate.h>
+#include <qlistview.h>
+#include <qcombobox.h>
+#include <qsqlrelationaltablemodel.h>
 
 class QSqlRelationalDelegate: public QItemDelegate
 {
  public:
 
-   explicit QSqlRelationalDelegate(QObject *aParent = 0)
+   explicit QSqlRelationalDelegate(QObject *aParent = nullptr)
       : QItemDelegate(aParent) {
    }
 
@@ -80,31 +78,30 @@ class QSqlRelationalDelegate: public QItemDelegate
    }
 
    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
-      if (!index.isValid()) {
+      if (! index.isValid()) {
          return;
       }
 
       QSqlRelationalTableModel *sqlModel = qobject_cast<QSqlRelationalTableModel *>(model);
-      QSqlTableModel *childModel = sqlModel ? sqlModel->relationModel(index.column()) : 0;
+
+      QSqlTableModel *childModel = sqlModel ? sqlModel->relationModel(index.column()) : nullptr;
       QComboBox *combo = qobject_cast<QComboBox *>(editor);
-      if (!sqlModel || !childModel || !combo) {
+
+      if (! sqlModel || ! childModel || ! combo) {
          QItemDelegate::setModelData(editor, model, index);
          return;
       }
 
-      int currentItem = combo->currentIndex();
-      int childColIndex = childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn());
+      int currentItem    = combo->currentIndex();
+      int childColIndex  = childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn());
       int childEditIndex = childModel->fieldIndex(sqlModel->relation(index.column()).indexColumn());
-      sqlModel->setData(index,
-         childModel->data(childModel->index(currentItem, childColIndex), Qt::DisplayRole),
+
+      sqlModel->setData(index, childModel->data(childModel->index(currentItem, childColIndex), Qt::DisplayRole),
          Qt::DisplayRole);
-      sqlModel->setData(index,
-         childModel->data(childModel->index(currentItem, childEditIndex), Qt::EditRole),
+
+      sqlModel->setData(index, childModel->data(childModel->index(currentItem, childEditIndex), Qt::EditRole),
          Qt::EditRole);
    }
-
 };
 
-
-
-#endif // QSQLRELATIONALDELEGATE_H
+#endif

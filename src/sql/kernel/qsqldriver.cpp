@@ -34,7 +34,7 @@ static QString prepareIdentifier(const QString &identifier, QSqlDriver::Identifi
    Q_ASSERT( driver != NULL );
    QString ret = identifier;
 
-   if (!driver->isIdentifierEscaped(identifier, type)) {
+   if (! driver->isIdentifierEscaped(identifier, type)) {
       ret = driver->escapeIdentifier(identifier, type);
    }
    return ret;
@@ -278,8 +278,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
 #ifndef QT_NO_DATESTRING
          case QVariant::Date:
             if (field.value().toDate().isValid())
-               r = QLatin1Char('\'') + field.value().toDate().toString(Qt::ISODate)
-                  + QLatin1Char('\'');
+               r = QLatin1Char('\'') + field.value().toDate().toString(Qt::ISODate) + QLatin1Char('\'');
             else {
                r = nullTxt;
             }
