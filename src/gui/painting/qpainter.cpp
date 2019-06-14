@@ -5074,15 +5074,13 @@ void QPainter::setViewTransformEnabled(bool enable)
 void QPainter::setRedirected(const QPaintDevice *device, QPaintDevice *replacement, const QPoint &offset)
 {
    Q_ASSERT(device != 0);
-
-
-   qWarning("QPainter::setRedirected(): ignoring call to deprecated function, use QWidget::render() instead");
+   qWarning("QPainter::setRedirected(): Ignoring call to deprecated method, use QWidget::render() instead");
 }
 
 // obsolete
 void QPainter::restoreRedirected(const QPaintDevice *device)
 {
-   qWarning("QPainter::restoreRedirected(): ignoring call to deprecated function, use QWidget::render() instead");
+   qWarning("QPainter::restoreRedirected(): Ignoring call to deprecated method, use QWidget::render() instead");
 }
 
 QPaintDevice *QPainter::redirected(const QPaintDevice *device, QPoint *offset)

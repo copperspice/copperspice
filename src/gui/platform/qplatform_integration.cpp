@@ -103,9 +103,8 @@ QPlatformOpenGLContext *QPlatformIntegration::createPlatformOpenGLContext(QOpenG
 
 QPlatformSharedGraphicsCache *QPlatformIntegration::createPlatformSharedGraphicsCache(const char *cacheId) const
 {
-   qWarning("This plugin does not support createPlatformSharedGraphicsBuffer for cacheId: %s",
-      cacheId);
-   return 0;
+   qWarning("This plugin does not support createPlatformSharedGraphicsBuffer for cacheId: %s", cacheId);
+   return nullptr;
 }
 
 QPaintEngine *QPlatformIntegration::createImagePaintEngine(QPaintDevice *paintDevice) const

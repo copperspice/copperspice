@@ -440,7 +440,7 @@ void QToolBox::setCurrentWidget(QWidget *widget)
    if (i >= 0) {
       setCurrentIndex(i);
    } else {
-      qWarning("QToolBox::setCurrentWidget: widget not contained in tool box");
+      qWarning("QToolBox::setCurrentWidget(): Widget not contained in tool box");
    }
 }
 

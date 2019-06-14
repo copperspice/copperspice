@@ -1948,7 +1948,7 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFla
    // Widget is already a QMdiSubWindow
    if (child) {
       if (d->childWindows.indexOf(child) != -1) {
-         qWarning("QMdiArea::addSubWindow: window is already added");
+         qWarning("QMdiArea::addSubWindow(): Window was already added");
          return child;
       }
       child->setParent(viewport(), windowFlags ? windowFlags : child->windowFlags());
@@ -1971,8 +1971,8 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFla
 
 void QMdiArea::removeSubWindow(QWidget *widget)
 {
-   if (!widget) {
-      qWarning("QMdiArea::removeSubWindow: null pointer to widget");
+   if (! widget) {
+      qWarning("QMdiArea::removeSubWindow(): null pointer to widget");
       return;
    }
 

@@ -1113,8 +1113,9 @@ QRect QLabelPrivate::documentRect() const
 {
    Q_Q(const QLabel);
 
-   Q_ASSERT_X(isTextLabel, "documentRect", "document rect called for label that is not a text label!");
+   Q_ASSERT_X(isTextLabel, "documentRect():", "Called for label that is not a text label");
    QRect cr = q->contentsRect();
+
    cr.adjust(margin, margin, -margin, -margin);
    const int align = QStyle::visualAlignment(isTextLabel ? textDirection()
          : q->layoutDirection(), QFlag(this->align));

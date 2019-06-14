@@ -57,7 +57,7 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
    QString nibDir = temp.canonicalPath() + "/qt_menu.nib/";
 
    if (! QDir(nibDir).exists()) {
-      qWarning("qt_mac_loadMenuNib: could not create nib directory in temp");
+      qWarning("qt_mac_loadMenuNib: Could not create nib directory in temp");
       return;
    }
 

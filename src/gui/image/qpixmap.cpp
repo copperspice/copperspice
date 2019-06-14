@@ -437,7 +437,9 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
    }
 
    if (isNull()) {
-      qDebug("QPixmap::load(): Unable to load pixmap file %s", csPrintable(fileName));
+      if (! fileName.isEmpty()) {
+         qDebug("QPixmap::load(): Unable to load pixmap file %s", csPrintable(fileName));
+      }
 
    } else {
       if (isQBitmap()) {
@@ -805,7 +807,7 @@ QPixmap QPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionF
 
 QPixmap QPixmap::grabWindow(WId window, int x, int y, int w, int h)
 {
-   qWarning("Deprecated method, use QScreen::grabWindow() instead."
+   qWarning("QPixmap::grabWindow(): Deprecated method, use QScreen::grabWindow() instead."
       " Defaulting to primary screen.");
 
    return QGuiApplication::primaryScreen()->grabWindow(window, x, y, w, h);
