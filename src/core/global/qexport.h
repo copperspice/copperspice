@@ -91,10 +91,10 @@
 #      define Q_GUI_EXPORT           Q_DECL_IMPORT
 #    endif
 
-#    if defined(QT_BUILD_SQL_LIB)
-#      define Q_SQL_EXPORT           Q_DECL_EXPORT
+#    if defined(QT_BUILD_MULTIMEDIA_LIB)
+#      define Q_MULTIMEDIA_EXPORT    Q_DECL_EXPORT
 #    else
-#      define Q_SQL_EXPORT           Q_DECL_IMPORT
+#      define Q_MULTIMEDIA_EXPORT    Q_DECL_IMPORT
 #    endif
 
 #    if defined(QT_BUILD_NETWORK_LIB)
@@ -103,28 +103,40 @@
 #      define Q_NETWORK_EXPORT       Q_DECL_IMPORT
 #    endif
 
-#    if defined(QT_BUILD_SVG_LIB)
-#      define Q_SVG_EXPORT           Q_DECL_EXPORT
-#    else
-#      define Q_SVG_EXPORT           Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_DECLARATIVE_LIB)
-#      define Q_DECLARATIVE_EXPORT   Q_DECL_EXPORT
-#    else
-#      define Q_DECLARATIVE_EXPORT   Q_DECL_IMPORT
-#    endif
-
 #    if defined(QT_BUILD_OPENGL_LIB)
 #      define Q_OPENGL_EXPORT        Q_DECL_EXPORT
 #    else
 #      define Q_OPENGL_EXPORT        Q_DECL_IMPORT
 #    endif
 
-#    if defined(QT_BUILD_MULTIMEDIA_LIB)
-#      define Q_MULTIMEDIA_EXPORT    Q_DECL_EXPORT
+#    if defined(QT_BUILD_PHONON_LIB)
+#      define Q_PHONON_EXPORT        Q_DECL_EXPORT
 #    else
-#      define Q_MULTIMEDIA_EXPORT    Q_DECL_IMPORT
+#      define Q_PHONON_EXPORT        Q_DECL_IMPORT
+#    endif
+
+#    if defined(QT_BUILD_SQL_LIB)
+#      define Q_SQL_EXPORT           Q_DECL_EXPORT
+#    else
+#      define Q_SQL_EXPORT           Q_DECL_IMPORT
+#    endif
+
+#    if defined(QT_BUILD_SVG_LIB)
+#      define Q_SVG_EXPORT           Q_DECL_EXPORT
+#    else
+#      define Q_SVG_EXPORT           Q_DECL_IMPORT
+#    endif
+
+#    if defined(QT_BUILD_SCRIPT_LIB)
+#      define Q_SCRIPT_EXPORT        Q_DECL_EXPORT
+#    else
+#      define Q_SCRIPT_EXPORT        Q_DECL_IMPORT
+#    endif
+
+#    if defined(QT_BUILD_SCRIPTTOOLS_LIB)
+#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_EXPORT
+#    else
+#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_IMPORT
 #    endif
 
 #    if defined(QT_BUILD_XML_LIB)
@@ -139,16 +151,10 @@
 #      define Q_XMLPATTERNS_EXPORT   Q_DECL_IMPORT
 #    endif
 
-#    if defined(QT_BUILD_SCRIPT_LIB)
-#      define Q_SCRIPT_EXPORT        Q_DECL_EXPORT
+#    if defined(QT_BUILD_DECLARATIVE_LIB)
+#      define Q_DECLARATIVE_EXPORT   Q_DECL_EXPORT
 #    else
-#      define Q_SCRIPT_EXPORT        Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_SCRIPTTOOLS_LIB)
-#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_EXPORT
-#    else
-#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_IMPORT
+#      define Q_DECLARATIVE_EXPORT   Q_DECL_IMPORT
 #    endif
 
 #    if defined(QT_BUILD_DBUS_LIB)
