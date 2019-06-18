@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="/copperspice/qmessagebox">
+<qresource prefix="/copperspice/dialogs">
    <file>images/cslogo-64.png</file>
 </qresource>
 </RCC>

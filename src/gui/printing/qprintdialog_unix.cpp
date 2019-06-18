@@ -246,15 +246,17 @@ void QPrintDialogPrivate::init()
    bottom = new QWidget(q);
    options.setupUi(bottom);
    options.color->setIconSize(QSize(32, 32));
-   options.color->setIcon(QIcon(QLatin1String(":/copperspice/dialogs/qprintdialog/images/status-color.png")));
+   options.color->setIcon(QIcon(":/copperspice/printing/images/status-color.png"));
    options.grayscale->setIconSize(QSize(32, 32));
-   options.grayscale->setIcon(QIcon(QLatin1String(":/copperspice/dialogs/qprintdialog/images/status-gray-scale.png")));
+   options.grayscale->setIcon(QIcon(":/copperspice/printing/images/status-gray-scale.png"));
+
 #ifndef QT_NO_CUPS
    // Add Page Set widget if CUPS is available
    options.pageSetCombo->addItem(tr("All Pages"),  QVariant::fromValue(QCUPSSupport::AllPages));
    options.pageSetCombo->addItem(tr("Odd Pages"),  QVariant::fromValue(QCUPSSupport::OddPages));
    options.pageSetCombo->addItem(tr("Even Pages"), QVariant::fromValue(QCUPSSupport::EvenPages));
 #endif
+
    top->d->setOptionsPane(this);
 
    buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, q);

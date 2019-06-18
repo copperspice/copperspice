@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="/copperspice/printing/qprintpreviewdialog">
+<qresource prefix="/copperspice/printing">
 <file>images/fit-page-24.png</file>
 <file>images/fit-page-32.png</file>
 <file>images/fit-width-24.png</file>
@@ -30,8 +30,6 @@
 <file>images/zoom-in-32.png</file>
 <file>images/zoom-out-24.png</file>
 <file>images/zoom-out-32.png</file>
-</qresource>
-<qresource prefix="/copperspice/printing/qprintdialog">
 <file>images/status-color.png</file>
 <file>images/status-gray-scale.png</file>
 </qresource>

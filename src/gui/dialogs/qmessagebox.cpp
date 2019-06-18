@@ -96,7 +96,7 @@ void cs_require_version(int argc, char *argv[], const char *str)
 
       QMessageBox box(QMessageBox::Critical, QApplication::tr("Incompatible Library"), errMsg, QMessageBox::Abort, 0);
 
-      QIcon icon(QLatin1String(":/copperspice/qmessagebox/images/cslogo-64.png"));
+      QIcon icon(":/copperspice/dialogs/images/cslogo-64.png");
       box.setWindowIcon(icon);
       box.exec();
 
@@ -1228,7 +1228,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
       aboutBox->setWindowTitle(title);
    }
 
-   QIcon icon(":/copperspice/qmessagebox/images/cslogo-64.png");
+   QIcon icon(":/copperspice/dialogs/images/cslogo-64.png");
    aboutBox->setWindowIcon(icon);
 
    QLabel *msg1 = new QLabel;
@@ -1258,7 +1258,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    msg3->setFont(font);
 
    QLabel *csImage = 0;
-   QPixmap pm(":/copperspice/qmessagebox/images/cslogo-64.png");
+   QPixmap pm(":/copperspice/dialogs/images/cslogo-64.png");
 
    if (! pm.isNull()) {
       csImage = new QLabel;

@@ -359,13 +359,15 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       case PE_IndicatorTabClose: {
          if (d->tabBarcloseButtonIcon.isNull()) {
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
-                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-16.png")),
+               QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-16.png")),
                QIcon::Normal, QIcon::Off);
+
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
-                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-down-16.png")),
+               QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-down-16.png")),
                QIcon::Normal, QIcon::On);
+
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
-                  QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-hover-16.png")),
+               QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-closetab-hover-16.png")),
                QIcon::Active, QIcon::Off);
          }
 
@@ -6448,7 +6450,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
 #ifndef QT_NO_IMAGEFORMAT_XPM
          icon.addPixmap(titleBarMenuCachedPixmapFromXPM());
 #endif
-         icon.addFile(":/copperspice/qmessagebox/images/cslogo-64.png");
+         icon.addFile(":/copperspice/dialogs/images/cslogo-64.png");
          break;
 
 #endif

@@ -340,10 +340,11 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
 
 static inline void qt_setupActionIcon(QAction *action, const QString &name)
 {
-   QLatin1String imagePrefix(":/copperspice/dialogs/qprintpreviewdialog/images/");
+   static const QString imagePrefix(":/copperspice/printing/images/");
+
    QIcon icon;
-   icon.addFile(imagePrefix + name + QLatin1String("-24.png"), QSize(24, 24));
-   icon.addFile(imagePrefix + name + QLatin1String("-32.png"), QSize(32, 32));
+   icon.addFile(imagePrefix + name + "-24.png", QSize(24, 24));
+   icon.addFile(imagePrefix + name + "-32.png", QSize(32, 32));
    action->setIcon(icon);
 }
 
