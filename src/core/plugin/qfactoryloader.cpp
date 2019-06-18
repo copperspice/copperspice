@@ -101,7 +101,7 @@ void QFactoryLoader::setup()
    Q_D(QFactoryLoader);
 
    QStringList libDirs = QCoreApplication::libraryPaths();
-   mp_pluginsFound.clear();
+   // mp_pluginsFound.clear();
 
    for (const QString &pluginDir : libDirs)  {
 
@@ -112,7 +112,7 @@ void QFactoryLoader::setup()
       d->loadedPaths.append(pluginDir);
 
       QString path = pluginDir + d->suffix;
-      mp_pluginsFound.append( PluginStatus{path} );
+      // mp_pluginsFound.append( PluginStatus{path} );
 
       if (! QDir(path).exists(".")) {
          continue;
@@ -124,13 +124,13 @@ void QFactoryLoader::setup()
       for (int j = 0; j < plugins.count(); ++j) {
          QString fname = QDir::cleanPath(path + '/' + plugins.at(j));
 
-         if (j > 0) {
+/*       if (j > 0) {
             mp_pluginsFound.append( PluginStatus{path} );
          }
 
          mp_pluginsFound.last().fileName = plugins.at(j);
+*/
 
-         //
          library = QLibraryHandle::findOrLoad(QFileInfo(fname).canonicalFilePath());
 
          if (! library->isPlugin()) {
@@ -148,7 +148,7 @@ void QFactoryLoader::setup()
          }
 
          QString iid;
-         QString key;
+         QString keyString;
          QString version;
 
          int index = library->m_metaObject->indexOfClassInfo("plugin_iid");
@@ -167,7 +167,7 @@ void QFactoryLoader::setup()
 
          index = library->m_metaObject->indexOfClassInfo("plugin_key");
          if (index != -1) {
-            key = library->m_metaObject->classInfo(index).value();
+            keyString = library->m_metaObject->classInfo(index).value();
          }
 
          index = library->m_metaObject->indexOfClassInfo("plugin_version");
@@ -180,19 +180,32 @@ void QFactoryLoader::setup()
          //
          QStringList keyList;
 
-         if (iid == d->iid && ! key.isEmpty()) {
+         if (iid == d->iid && ! keyString.isEmpty()) {
             // found an iid for the plugin and there are keys
-            keyList.append(d->cs ? key : key.toLower());
 
-            if (keyList.count() > 0) {
-               // duplicate the last struture
-               // mp_pluginsFound.append( PluginStatus{ ?} );
+            // there may be multiple keys
+            QStringList tmpKeyList = keyString.split(",");
+
+            for (const QString &item : tmpKeyList) {
+               const QString key = item.trimmed();
+
+               if (d->cs) {
+                  keyList.append(key);
+
+               } else {
+                  keyList.append(key.toLower());
+
+               }
+            }
+
+/*          if (keyList.count() > 0) {
+               mp_pluginsFound.append( PluginStatus{path} );
             }
 
             mp_pluginsFound.last().keyFound = keyList[0];
+*/
          }
 
-         //
          int keyUsageCount = 0;
 
          for (const auto &item : keyList) {
@@ -353,14 +366,20 @@ QSet<QString> QFactoryLoader::keySet() const
    QSet<QString> retval;
 
    for (auto lib_handle : d->libraryList) {
-      // only works for one key right now
       int index = lib_handle->m_metaObject->indexOfClassInfo("plugin_key");
 
       if (index != -1) {
-         const QString key = lib_handle->m_metaObject->classInfo(index).value();
+         const QString keyString = lib_handle->m_metaObject->classInfo(index).value();
 
-         m_pluginMap.insert(key, lib_handle);
-         retval.insert(key);
+         // there may be multiple keys
+         QStringList keyList = keyString.split(",");
+
+         for (const QString &item : keyList) {
+            const QString key = item.trimmed();
+
+            m_pluginMap.insert(key, lib_handle);
+            retval.insert(key);
+         }
       }
    }
 
@@ -369,6 +388,10 @@ QSet<QString> QFactoryLoader::keySet() const
 
 QSet<QLibraryHandle *> QFactoryLoader::librarySet(QString key) const
 {
+   if (m_pluginMap.isEmpty()) {
+      keySet();
+   }
+
    QSet<QLibraryHandle *> retval = m_pluginMap.values(key).toSet();
    return retval;
 }

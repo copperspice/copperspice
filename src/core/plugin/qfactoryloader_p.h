@@ -56,13 +56,13 @@ class Q_CORE_EXPORT QFactoryLoader : public QObject
    void setup();
    static void refreshAll();
 
-   //
    struct PluginStatus {
       QString pathName;
       QString fileName;
       QString keyFound;
    };
 
+/*
    QSet<QString> getPluginLocations() const {
       QSet<QString> retval;
 
@@ -77,14 +77,14 @@ class Q_CORE_EXPORT QFactoryLoader : public QObject
    QVector<PluginStatus> getPluginStatus() const {
       return mp_pluginsFound;
    }
+*/
 
  protected:
    QScopedPointer<QFactoryLoaderPrivate> d_ptr;
 
  private:
    mutable QMultiMap<QString, QLibraryHandle *> m_pluginMap;
-
-   QVector<PluginStatus> mp_pluginsFound;
+   // QVector<PluginStatus> mp_pluginsFound;
 };
 
 template <class PluginInterface, class FactoryInterface, class ...Ts>
