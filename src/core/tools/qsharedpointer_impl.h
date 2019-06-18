@@ -601,71 +601,71 @@ class QWeakPointer
       return *this = QWeakPointer(ptr);
    }
 
-   inline QWeakPointer(const QWeakPointer<T> &o) : d(o.d), value(o.value) {
+   inline QWeakPointer(const QWeakPointer<T> &other) : d(other.d), value(other.value) {
       if (d) {
          d->weakref.ref();
       }
    }
 
-   inline QWeakPointer<T> &operator=(const QWeakPointer<T> &o) {
-      internalSet(o.d, o.value);
+   inline QWeakPointer<T> &operator=(const QWeakPointer<T> &other) {
+      internalSet(other.d, other.value);
       return *this;
    }
 
-   inline QWeakPointer(const QSharedPointer<T> &o) : d(o.d), value(o.data()) {
+   inline QWeakPointer(const QSharedPointer<T> &other) : d(other.d), value(other.data()) {
       if (d) {
          d->weakref.ref();
       }
    }
 
-   inline QWeakPointer<T> &operator=(const QSharedPointer<T> &o) {
-      internalSet(o.d, o.value);
+   inline QWeakPointer<T> &operator=(const QSharedPointer<T> &other) {
+      internalSet(other.d, other.value);
       return *this;
    }
 
    template <class X>
-   inline QWeakPointer(const QWeakPointer<X> &o) : d(0), value(0) {
-      *this = o;
+   inline QWeakPointer(const QWeakPointer<X> &other) : d(0), value(0) {
+      *this = other;
    }
 
    template <class X>
-   inline QWeakPointer<T> &operator=(const QWeakPointer<X> &o) {
+   inline QWeakPointer<T> &operator=(const QWeakPointer<X> &other) {
       // conversion between X and T could require access to the virtual table
       // so force the operation to go through QSharedPointer
-      *this = o.toStrongRef();
+      *this = other.toStrongRef();
       return *this;
    }
 
    template <class X>
-   inline bool operator==(const QWeakPointer<X> &o) const {
-      return d == o.d && value == static_cast<const T *>(o.value);
+   inline bool operator==(const QWeakPointer<X> &other) const {
+      return d == other.d && value == static_cast<const T *>(other.value);
    }
 
    template <class X>
-   inline bool operator!=(const QWeakPointer<X> &o) const {
-      return !(*this == o);
+   inline bool operator!=(const QWeakPointer<X> &other) const {
+      return !(*this == other);
    }
 
    template <class X>
-   inline QWeakPointer(const QSharedPointer<X> &o) : d(0), value(0) {
-      *this = o;
+   inline QWeakPointer(const QSharedPointer<X> &other) : d(0), value(0) {
+      *this = other;
    }
 
    template <class X>
-   inline QWeakPointer<T> &operator=(const QSharedPointer<X> &o) {
+   inline QWeakPointer<T> &operator=(const QSharedPointer<X> &other) {
       QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X); // if you get an error in this line, the cast is invalid
-      internalSet(o.d, o.data());
+      internalSet(other.d, other.data());
       return *this;
    }
 
    template <class X>
-   inline bool operator==(const QSharedPointer<X> &o) const {
-      return d == o.d;
+   inline bool operator==(const QSharedPointer<X> &other) const {
+      return d == other.d;
    }
 
    template <class X>
-   inline bool operator!=(const QSharedPointer<X> &o) const {
-      return !(*this == o);
+   inline bool operator!=(const QSharedPointer<X> &other) const {
+      return !(*this == other);
    }
 
    inline void clear() {

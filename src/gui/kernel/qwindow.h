@@ -390,35 +390,35 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    GUI_CS_SIGNAL_2(opacityChanged, opacity)
 
  protected:
-   virtual void exposeEvent(QExposeEvent *);
-   virtual void resizeEvent(QResizeEvent *);
-   virtual void moveEvent(QMoveEvent *);
-   virtual void focusInEvent(QFocusEvent *);
-   virtual void focusOutEvent(QFocusEvent *);
+   virtual void exposeEvent(QExposeEvent *event);
+   virtual void resizeEvent(QResizeEvent *event);
+   virtual void moveEvent(QMoveEvent *event);
+   virtual void focusInEvent(QFocusEvent *event);
+   virtual void focusOutEvent(QFocusEvent *event);
 
-   virtual void showEvent(QShowEvent *);
-   virtual void hideEvent(QHideEvent *);
+   virtual void showEvent(QShowEvent *event);
+   virtual void hideEvent(QHideEvent *event);
 
    // emerald  add closeEvent virtual handler
 
    bool event(QEvent *) override;
    bool cs_isWindowType() const override;
 
-   virtual void keyPressEvent(QKeyEvent *);
-   virtual void keyReleaseEvent(QKeyEvent *);
-   virtual void mousePressEvent(QMouseEvent *);
-   virtual void mouseReleaseEvent(QMouseEvent *);
-   virtual void mouseDoubleClickEvent(QMouseEvent *);
-   virtual void mouseMoveEvent(QMouseEvent *);
+   virtual void keyPressEvent(QKeyEvent *event);
+   virtual void keyReleaseEvent(QKeyEvent *event);
+   virtual void mousePressEvent(QMouseEvent *event);
+   virtual void mouseReleaseEvent(QMouseEvent *event);
+   virtual void mouseDoubleClickEvent(QMouseEvent *event);
+   virtual void mouseMoveEvent(QMouseEvent *event);
 
 #ifndef QT_NO_WHEELEVENT
-   virtual void wheelEvent(QWheelEvent *);
+   virtual void wheelEvent(QWheelEvent *event);
 #endif
 
-   virtual void touchEvent(QTouchEvent *);
+   virtual void touchEvent(QTouchEvent *event);
 
 #ifndef QT_NO_TABLETEVENT
-   virtual void tabletEvent(QTabletEvent *);
+   virtual void tabletEvent(QTabletEvent *event);
 #endif
 
    virtual bool nativeEvent(const QByteArray &eventType, void *message, long *result);
