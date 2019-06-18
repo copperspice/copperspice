@@ -39,8 +39,6 @@
 #include <qicon_p.h>
 #include <qhexstring_p.h>
 
-
-
 Q_GLOBAL_STATIC(QIconLoader, iconLoaderInstance)
 
 /* Theme to use in last resort, if the theme does not have the icon, neither the parents  */
@@ -71,6 +69,7 @@ static inline QString systemThemeName()
    }
    return QString();
 }
+
 static inline QStringList systemIconSearchPaths()
 {
    if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
@@ -82,7 +81,7 @@ static inline QStringList systemIconSearchPaths()
    return QStringList();
 }
 
-extern QFactoryLoader *qt_iconEngineFactoryLoader(); // qicon.cpp
+extern QFactoryLoader *cs_internal_iconLoader();    // qicon.cpp
 
 void QIconLoader::ensureInitialized()
 {
@@ -95,7 +94,7 @@ void QIconLoader::ensureInitialized()
          m_systemTheme = fallbackTheme();
       }
 
-      if (qt_iconEngineFactoryLoader()->keySet().contains("svg")) {
+      if (cs_internal_iconLoader()->keySet().contains("svg")) {
          m_supportsSvg = true;
       }
    }

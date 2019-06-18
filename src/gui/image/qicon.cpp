@@ -44,12 +44,9 @@
 
 #ifndef QT_NO_ICON
 
-
-
-
 static QAtomicInt serialNumCounter = QAtomicInt { 1 };
-
 static void qt_cleanup_icon_cache();
+
 namespace {
 struct IconCache : public QCache<QString, QIcon> {
    IconCache() {
@@ -526,22 +523,21 @@ void QPixmapIconEngine::virtual_hook(int id, void *data)
    }
 }
 
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QIconEngineInterface_ID, "/iconengines", Qt::CaseInsensitive);
+   return &retval;
+}
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QIconEngineInterface_ID, "/iconengines", Qt::CaseInsensitive))
-
-QFactoryLoader *qt_iconEngineFactoryLoader()
+QFactoryLoader *cs_internal_iconLoader()
 {
    return loader();
 }
-
-
-
 
 QIcon::QIcon()
    : d(0)
 {
 }
-
 
 QIcon::QIcon(const QPixmap &pixmap)
    : d(0)
@@ -549,9 +545,6 @@ QIcon::QIcon(const QPixmap &pixmap)
    addPixmap(pixmap);
 }
 
-/*!
-  Constructs a copy of \a other. This is very fast.
-*/
 QIcon::QIcon(const QIcon &other)
    : d(other.d)
 {
@@ -559,7 +552,6 @@ QIcon::QIcon(const QIcon &other)
       d->ref.ref();
    }
 }
-
 
 QIcon::QIcon(const QString &fileName)
    : d(0)
@@ -745,7 +737,6 @@ void QIcon::addPixmap(const QPixmap &pixmap, Mode mode, State state)
    d->engine->addPixmap(pixmap, mode, state);
 }
 
-
 void QIcon::addFile(const QString &fileName, const QSize &size, Mode mode, State state)
 {
    if (fileName.isEmpty()) {
@@ -759,20 +750,26 @@ void QIcon::addFile(const QString &fileName, const QSize &size, Mode mode, State
 
       if (! suffix.isEmpty()) {
          // first try version 2 engines
+         QFactoryLoader *factoryObj = loader();
 
-         if (loader()->keySet().contains(suffix)) {
+         if (factoryObj != nullptr) {
+            // what keys are available
+            const QSet<QString> keySet = factoryObj->keySet();
 
-            if (QIconEnginePlugin *factory = qobject_cast<QIconEnginePlugin *>(loader()->instance(suffix))) {
-               if (QIconEngine *engine = factory->create(fileName)) {
-                  d = new QIconPrivate;
-                  d->engine = engine;
+            if (keySet.contains(suffix)) {
+               QIconEnginePlugin *factory = dynamic_cast<QIconEnginePlugin *>(factoryObj->instance(suffix));
+
+               if (factory) {
+                  if (QIconEngine *engine = factory->create(fileName)) {
+                     d = new QIconPrivate;
+                     d->engine = engine;
+                  }
                }
             }
-
          }
       }
 
-      // ...then fall back to the default engine
+      // then fall back to the default engine
       if (! d) {
          d = new QIconPrivate;
          d->engine = new QPixmapIconEngine;

@@ -30,8 +30,7 @@ class QPSQLDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QPSQLDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QPSQL")
-   // CS_PLUGIN_KEY("QPSQL7")
+   CS_PLUGIN_KEY("QPSQL, QPSQL7")
 
 public:
     QPSQLDriverPlugin();

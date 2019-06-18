@@ -30,8 +30,7 @@ class QODBCDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QODBCDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QODBC")
-   // CS_PLUGIN_KEY("QODBC3")
+   CS_PLUGIN_KEY("QODBC, QODBC3")
 
 public:
     QODBCDriverPlugin();

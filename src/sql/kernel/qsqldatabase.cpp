@@ -91,7 +91,7 @@
 
 #include <stdlib.h>
 
-QFactoryLoader *loader()
+static QFactoryLoader *loader()
 {
    static QFactoryLoader retval(QSqlDriverInterface_ID, "/sqldrivers");
    return &retval;

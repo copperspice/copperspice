@@ -37,8 +37,7 @@ class QJpegPlugin : public QImageIOPlugin
    CS_OBJECT(QJpegPlugin)
 
    CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
-   CS_PLUGIN_KEY("jpeg")
-   // CS_PLUGIN_KEY("jpg")
+   CS_PLUGIN_KEY("jpeg, jpg")
 
 public:
     QStringList keys() const;

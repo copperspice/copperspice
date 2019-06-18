@@ -30,8 +30,7 @@ class QMYSQLDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QMYSQLDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QMYSQL")
-   // CS_PLUGIN_KEY("QMYSQL3")
+   CS_PLUGIN_KEY("QMYSQL, QMYSQL3")
 
 public:
     QMYSQLDriverPlugin();

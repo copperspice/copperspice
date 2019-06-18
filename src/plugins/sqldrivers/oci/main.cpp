@@ -30,8 +30,7 @@ class QOCIDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QOCIDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QOCI")
-   // CS_PLUGIN_KEY("QOCI8")
+   CS_PLUGIN_KEY("QOCI, QOCI8")
 
 public:
     QOCIDriverPlugin();

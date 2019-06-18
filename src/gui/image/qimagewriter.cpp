@@ -65,7 +65,11 @@
 
 Q_DECLARE_METATYPE(QList<QByteArray>)
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QImageIOHandlerInterface_ID, "/imageformats"))
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QImageIOHandlerInterface_ID, "/imageformats");
+   return &retval;
+}
 
 static QImageIOHandler *createWriteHandlerHelper(QIODevice *device, const QByteArray &format)
 {

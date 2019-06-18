@@ -39,8 +39,7 @@ class QTDSDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QTDSDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QTDS")
-   // CS_PLUGIN_KEY("QTDS7")
+   CS_PLUGIN_KEY("QTDS, QTDS7")
 
 public:
     QTDSDriverPlugin();

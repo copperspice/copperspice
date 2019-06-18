@@ -37,8 +37,7 @@ class QSvgPlugin : public QImageIOPlugin
    CS_OBJECT(QSvgPlugin)
 
    CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
-   CS_PLUGIN_KEY("svg")
-   // CS_PLUGIN_KEY("svgz")
+   CS_PLUGIN_KEY("svg, svgz")
 
 public:
     QStringList keys() const;

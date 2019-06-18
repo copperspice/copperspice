@@ -37,8 +37,7 @@ class QTiffPlugin : public QImageIOPlugin
    CS_OBJECT(QTiffPlugin)
 
    CS_PLUGIN_IID(QImageIOHandlerInterface_ID)
-   CS_PLUGIN_KEY("tiff")
-   // CS_PLUGIN_KEY("tif")
+   CS_PLUGIN_KEY("tiff, tif")
 
 public:
     Capabilities capabilities(QIODevice * device, const QByteArray & format) const;

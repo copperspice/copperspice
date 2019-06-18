@@ -35,10 +35,11 @@ static QString defaultKey()
    return QString("default");
 }
 
-#if ! defined(QT_NO_SETTINGS)
-Q_GLOBAL_STATIC_WITH_ARGS(QMediaPluginLoader, audioLoader,
-        (QAudioSystemFactoryInterface_iid, "audio", Qt::CaseInsensitive))
-#endif
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QAudioSystemFactoryInterface_iid, "/audio", Qt::CaseInsensitive);
+   return &retval;
+}
 
 class QNullDeviceInfo : public QAbstractAudioDeviceInfo
 {
@@ -210,26 +211,30 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
 {
    QList<QAudioDeviceInfo> devices;
 
-#if ! defined(QT_NO_SETTINGS)
-    QMediaPluginLoader *loader = audioLoader();
+   QFactoryLoader *factoryObj = loader();
 
-    for (const QString &key : loader->keys()) {
-        QAudioSystemFactoryInterface *plugin = qobject_cast<QAudioSystemFactoryInterface*>(loader->instanceForKey(key));
+   if (factoryObj != nullptr) {
+      // what keys are available
+      const QSet<QString> keySet = factoryObj->keySet();
 
-        if (plugin) {
-            for (QString const& handle : plugin->availableDevices(mode)) {
+      for (const QString &key : keySet) {
+         QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(key));
+
+         if (plugin) {
+            for (QString const &handle : plugin->availableDevices(mode)) {
                 devices << QAudioDeviceInfo(key, handle, mode);
             }
-        }
+         }
+      }
     }
-#endif
+
    return devices;
 }
 
 QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 {
-#if ! defined(QT_NO_SETTINGS)
-   QAudioSystemFactoryInterface* plugin = qobject_cast<QAudioSystemFactoryInterface*>(audioLoader()->instanceForKey(defaultKey()));
+   QFactoryLoader *factoryObj = loader();
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(defaultKey()));
 
    if (plugin) {
       QList<QString> list = plugin->availableDevices(QAudio::AudioInput);
@@ -246,15 +251,15 @@ QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 
    if (! inputDevices.isEmpty())
       return inputDevices.first();
-#endif
+
 
    return QAudioDeviceInfo();
 }
 
 QAudioDeviceInfo QAudioDeviceFactory::defaultOutputDevice()
 {
-#if !defined(QT_NO_SETTINGS)
-   QAudioSystemFactoryInterface *plugin = qobject_cast<QAudioSystemFactoryInterface*>(audioLoader()->instanceForKey(defaultKey()));
+   QFactoryLoader *factoryObj = loader();
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(defaultKey()));
 
    if (plugin) {
       QList<QString> list = plugin->availableDevices(QAudio::AudioOutput);
@@ -271,24 +276,20 @@ QAudioDeviceInfo QAudioDeviceFactory::defaultOutputDevice()
    if (! outputDevices.isEmpty())
       return outputDevices.first();
 
-#endif
-
    return QAudioDeviceInfo();
 }
 
 QAbstractAudioDeviceInfo *QAudioDeviceFactory::audioDeviceInfo(const QString &realm, const QString &handle,
       QAudio::Mode mode)
 {
-   QAbstractAudioDeviceInfo *rc = 0;
+   QAbstractAudioDeviceInfo *rc = nullptr;
 
-#if ! defined(QT_NO_SETTINGS)
-    QAudioSystemFactoryInterface* plugin =
-        qobject_cast<QAudioSystemFactoryInterface*>(audioLoader()->instanceForKey(realm));
+   QFactoryLoader *factoryObj = loader();
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(realm));
 
    if (plugin) {
       rc = plugin->createDeviceInfo(handle, mode);
    }
-#endif
 
    return rc == 0 ? new QNullDeviceInfo() : rc;
 }
@@ -310,16 +311,16 @@ QAbstractAudioInput *QAudioDeviceFactory::createInputDevice(QAudioDeviceInfo con
       return new QNullInputDevice();
    }
 
-#if ! defined(QT_NO_SETTINGS)
-    QAudioSystemFactoryInterface* plugin =
-        qobject_cast<QAudioSystemFactoryInterface*>(audioLoader()->instanceForKey(deviceInfo.realm()));
+   QFactoryLoader *factoryObj = loader();
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(deviceInfo.realm()));
 
    if (plugin) {
      QAbstractAudioInput* p = plugin->createInput(deviceInfo.handle());
+
      if (p) p->setFormat(format);
         return p;
    }
-#endif
+
    return new QNullInputDevice();
 }
 
@@ -330,16 +331,14 @@ QAbstractAudioOutput *QAudioDeviceFactory::createOutputDevice(QAudioDeviceInfo c
       return new QNullOutputDevice();
    }
 
-#if ! defined(QT_NO_SETTINGS)
-    QAudioSystemFactoryInterface* plugin =
-        qobject_cast<QAudioSystemFactoryInterface*>(audioLoader()->instanceForKey(deviceInfo.realm()));
+   QFactoryLoader *factoryObj = loader();
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(deviceInfo.realm()));
 
     if (plugin) {
         QAbstractAudioOutput* p = plugin->createOutput(deviceInfo.handle());
         if (p) p->setFormat(format);
            return p;
     }
-#endif
 
    return new QNullOutputDevice();
 }

@@ -24,11 +24,15 @@
 #include "qplatform_printplugin.h"
 #include "qplatform_printersupport.h"
 
-#include "qprinterinfo.h"
-#include "qfactoryloader_p.h"
+#include <qprinterinfo.h>
+#include <qfactoryloader_p.h>
 #include <qcoreapplication.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformPrinterSupportInterface_ID, "/printsupport", Qt::CaseInsensitive))
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QPlatformPrinterSupportPlugin_ID, "/printerdrivers", Qt::CaseInsensitive);
+   return &retval;
+}
 
 QPlatformPrinterSupportPlugin::QPlatformPrinterSupportPlugin(QObject *parent)
     : QObject(parent)
@@ -47,24 +51,19 @@ static void cleanupPrinterSupport()
     delete printerSupport;
 #endif
 
-    printerSupport = 0;
+    printerSupport = nullptr;
 }
 
-/*!
-    \internal
-
-    Returns a lazily-initialized singleton. Ownership is granted to the
-    QPlatformPrinterSupportPlugin, which is never unloaded or destroyed until
-    application exit, i.e. you can expect this pointer to always be valid and
-    multiple calls to this function will always return the same pointer.
-*/
 QPlatformPrinterSupport *QPlatformPrinterSupportPlugin::get()
 {
     if (! printerSupport) {
-        auto keySet = loader()->keySet();
+        QFactoryLoader *factoryObj = loader();
+
+        // what keys are available
+        auto keySet = factoryObj->keySet();
 
         if (! keySet.isEmpty()) {
-            printerSupport = cs_load_plugin<QPlatformPrinterSupport, QPlatformPrinterSupportPlugin>(loader(), *(keySet.constBegin()));
+            printerSupport = cs_load_plugin<QPlatformPrinterSupport, QPlatformPrinterSupportPlugin>(factoryObj, *(keySet.constBegin()));
         }
 
         if (printerSupport) {
