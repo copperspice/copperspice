@@ -1,10 +1,12 @@
 lib_LTLIBRARIES += lib/libCsSql@BUILD_ABI@.la
 lib_libCsSql@BUILD_ABI@_la_SOURCES =
 
-lib_libCsSql@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude/QtSql  \
-   -Iprivateinclude/QtCore/private  -Iprivateinclude/QtSql/private  \
-   -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
-   -DQT_SQL_SQLITE   \
+lib_libCsSql@BUILD_ABI@_la_CXXFLAGS = -Iinclude \
+	-Iinclude/QtCore -Iprivateinclude/QtCore/private \
+	-Iinclude/QtSql -Iprivateinclude/QtSql/private  \
+	$(AM_CXXFLAGS) \
+	-DBUILD_DATE=\"`date +%Y-%m-%d`\"  \
+	-DQT_SQL_SQLITE   \
 	-DQT_BUILD_SQL_LIB
 
 lib_libCsSql@BUILD_ABI@_la_CFLAGS =
@@ -20,27 +22,30 @@ SQL_PUBLIC_INCLUDES =
 SQL_PRIVATE_INCLUDES =
 SQL_DIRS =
 
-include src/sql/drivers/db2/Makefile.am
-include src/sql/drivers/ibase/Makefile.am
-include src/sql/drivers/mysql/Makefile.am
-include src/sql/drivers/oci/Makefile.am
-include src/sql/drivers/odbc/Makefile.am
-include src/sql/drivers/psql/Makefile.am
-include src/sql/drivers/sqlite/Makefile.am
 include src/sql/kernel/Makefile.am
 include src/sql/models/Makefile.am
+
+# plugins
+include src/plugins/sqldrivers/db2/Makefile.am
+include src/plugins/sqldrivers/ibase/Makefile.am
+include src/plugins/sqldrivers/mysql/Makefile.am
+include src/plugins/sqldrivers/oci/Makefile.am
+include src/plugins/sqldrivers/odbc/Makefile.am
+include src/plugins/sqldrivers/psql/Makefile.am
+include src/plugins/sqldrivers/sqlite/Makefile.am
 
 EXTRA_DIST += \
 	src/sql/CMakeLists.txt \
 	src/sql/kernel/kernel.cmake \
 	src/sql/models/models.cmake \
-	src/sql/drivers/db2/db2.cmake \
-	src/sql/drivers/ibase/ibase.cmake \
-	src/sql/drivers/mysql/mysql.cmake \
-	src/sql/drivers/oci/oci.cmake \
-	src/sql/drivers/odbc/odbc.cmake \
-	src/sql/drivers/psql/psql.cmake \
-	src/sql/drivers/sqlite/sqlite.cmake
+	\
+	src/plugins/sqldrivers/db2/db2.cmake \
+	src/plugins/sqldrivers/ibase/ibase.cmake \
+	src/plugins/sqldrivers/mysql/mysql.cmake \
+	src/plugins/sqldrivers/oci/oci.cmake \
+	src/plugins/sqldrivers/odbc/odbc.cmake \
+	src/plugins/sqldrivers/psql/psql.cmake \
+	src/plugins/sqldrivers/sqlite/sqlite.cmake
 
 SQL_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtSql/%,$(SQL_INCLUDES)) \

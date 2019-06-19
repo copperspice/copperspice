@@ -15,27 +15,30 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtSql
     ${CMAKE_BINARY_DIR}/privateinclude/QtSql
     ${CMAKE_BINARY_DIR}/privateinclude/QtSql/private
+
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/models
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/db2
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/ibase
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/mysql
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/oci
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/odbc
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/psql
-    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/sqlite
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/db2
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/ibase
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/mysql
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/oci
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/odbc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/psql
+    ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/sqldrivers/sqlite
 )
 
 include(kernel/kernel.cmake)
 include(models/models.cmake)
-include(drivers/db2/db2.cmake)
-include(drivers/ibase/ibase.cmake)
-include(drivers/mysql/mysql.cmake)
-include(drivers/oci/oci.cmake)
-include(drivers/odbc/odbc.cmake)
-include(drivers/psql/psql.cmake)
-include(drivers/sqlite/sqlite.cmake)
+
+include(../plugins/sqldrivers/db2/db2.cmake)
+include(../plugins/sqldrivers/ibase/ibase.cmake)
+include(../plugins/sqldrivers/mysql/mysql.cmake)
+include(../plugins/sqldrivers/oci/oci.cmake)
+include(../plugins/sqldrivers/odbc/odbc.cmake)
+include(../plugins/sqldrivers/psql/psql.cmake)
+include(../plugins/sqldrivers/sqlite/sqlite.cmake)
 
 macro_generate_public("${SQL_PUBLIC_INCLUDES}" QtSql)
 macro_generate_private("${SQL_PRIVATE_INCLUDES}" QtSql)
