@@ -61,7 +61,6 @@ QPlatformClipboard *QPlatformIntegration::clipboard() const
 }
 #endif
 
-
 #ifndef QT_NO_DRAGANDDROP
 QPlatformDrag *QPlatformIntegration::drag() const
 {
@@ -75,12 +74,12 @@ QPlatformDrag *QPlatformIntegration::drag() const
 
 QPlatformNativeInterface *QPlatformIntegration::nativeInterface() const
 {
-   return 0;
+   return nullptr;
 }
 
 QPlatformServices *QPlatformIntegration::services() const
 {
-   return 0;
+   return nullptr;
 }
 
 bool QPlatformIntegration::hasCapability(Capability cap) const
@@ -97,7 +96,7 @@ QPlatformPixmap *QPlatformIntegration::createPlatformPixmap(QPlatformPixmap::Pix
 QPlatformOpenGLContext *QPlatformIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
    qWarning("This plugin does not support createPlatformOpenGLContext");
-   return 0;
+   return nullptr;
 }
 #endif
 
@@ -109,7 +108,7 @@ QPlatformSharedGraphicsCache *QPlatformIntegration::createPlatformSharedGraphics
 
 QPaintEngine *QPlatformIntegration::createImagePaintEngine(QPaintDevice *paintDevice) const
 {
-   return 0;
+   return nullptr;
 }
 
 void QPlatformIntegration::initialize()
@@ -122,7 +121,7 @@ void QPlatformIntegration::destroy()
 
 QPlatformInputContext *QPlatformIntegration::inputContext() const
 {
-   return 0;
+   return nullptr;
 }
 
 #ifndef QT_NO_ACCESSIBILITY

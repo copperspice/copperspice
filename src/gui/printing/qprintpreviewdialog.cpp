@@ -331,6 +331,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
       || printer->outputFormat() != QPrinter::NativeFormat
 #endif
+
    ) {
       pageSetupAction->setEnabled(false);
    }
@@ -355,33 +356,36 @@ void QPrintPreviewDialogPrivate::setupActions()
    // Navigation
    navGroup = new QActionGroup(q);
    navGroup->setExclusive(false);
-   nextPageAction = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Next page"));
-   prevPageAction = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Previous page"));
+   nextPageAction  = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Next page"));
+   prevPageAction  = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Previous page"));
    firstPageAction = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "First page"));
-   lastPageAction = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Last page"));
-   qt_setupActionIcon(nextPageAction, QLatin1String("go-next"));
-   qt_setupActionIcon(prevPageAction, QLatin1String("go-previous"));
-   qt_setupActionIcon(firstPageAction, QLatin1String("go-first"));
-   qt_setupActionIcon(lastPageAction, QLatin1String("go-last"));
-   QObject::connect(navGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_navigate(QAction *)));
+   lastPageAction  = navGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Last page"));
 
+   qt_setupActionIcon(nextPageAction,  "go-next");
+   qt_setupActionIcon(prevPageAction,  "go-previous");
+   qt_setupActionIcon(firstPageAction, "go-first");
+   qt_setupActionIcon(lastPageAction,  "go-last");
+   QObject::connect(navGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_navigate(QAction *)));
 
    fitGroup = new QActionGroup(q);
    fitWidthAction = fitGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Fit width"));
-   fitPageAction = fitGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Fit page"));
-   fitWidthAction->setObjectName(QLatin1String("fitWidthAction"));
-   fitPageAction->setObjectName(QLatin1String("fitPageAction"));
+   fitPageAction  = fitGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Fit page"));
+
+   fitWidthAction->setObjectName("fitWidthAction");
+   fitPageAction->setObjectName("fitPageAction");
    fitWidthAction->setCheckable(true);
    fitPageAction->setCheckable(true);
-   qt_setupActionIcon(fitWidthAction, QLatin1String("fit-width"));
-   qt_setupActionIcon(fitPageAction, QLatin1String("fit-page"));
+
+   qt_setupActionIcon(fitWidthAction, "fit-width");
+   qt_setupActionIcon(fitPageAction,  "fit-page");
+
    QObject::connect(fitGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_fit(QAction *)));
 
    // Zoom
    zoomGroup = new QActionGroup(q);
    zoomInAction = zoomGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Zoom in"));
    zoomOutAction = zoomGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Zoom out"));
-   qt_setupActionIcon(zoomInAction, QLatin1String("zoom-in"));
+   qt_setupActionIcon(zoomInAction,  QLatin1String("zoom-in"));
    qt_setupActionIcon(zoomOutAction, QLatin1String("zoom-out"));
 
    // Portrait/Landscape

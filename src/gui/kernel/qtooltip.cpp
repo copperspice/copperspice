@@ -112,6 +112,7 @@ QTipLabel::QTipLabel(const QString &text, QWidget *w, int msecDisplayTime)
    fadingOut = false;
    reuseTip(text, msecDisplayTime);
 }
+
 void QTipLabel::restartExpireTimer(int msecDisplayTime)
 {
    int time = 10000 + 40 * qMax(0, text().length() - 100);
@@ -189,14 +190,14 @@ QTipLabel::~QTipLabel()
 
 void QTipLabel::hideTip()
 {
-   if (!hideTimer.isActive()) {
+   if (! hideTimer.isActive()) {
       hideTimer.start(300, this);
    }
 }
 
 void QTipLabel::hideTipImmediately()
 {
-   close(); // to trigger QEvent::Close which stops the animation
+   close();          // to trigger QEvent::Close which stops the animation
    deleteLater();
 }
 
@@ -218,9 +219,7 @@ void QTipLabel::timerEvent(QTimerEvent *e)
       hideTimer.stop();
       expireTimer.stop();
 
-
       hideTipImmediately();
-
    }
 }
 
@@ -276,18 +275,15 @@ void QTipLabel::placeTip(const QPoint &pos, QWidget *w)
       QTipLabel::instance->styleSheetParent = w;
 
       if (w) {
-         connect(w, SIGNAL(destroyed()),
-            QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+         connect(w, SIGNAL(destroyed()), QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
       }
    }
 #endif
-
 
    QRect screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
 
    QPoint p = pos;
    p += QPoint(2, 16);
-
 
    if (p.x() + this->width() > screen.x() + screen.width()) {
       p.rx() -= 4 + this->width();
@@ -327,7 +323,6 @@ bool QTipLabel::tipChanged(const QPoint &pos, const QString &text, QObject *o)
    }
 }
 
-
 void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect)
 {
    showText(pos, text, w, rect, -1);
@@ -363,7 +358,6 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, cons
       QTipLabel::instance->placeTip(pos, w);
       QTipLabel::instance->setObjectName(QLatin1String("qtooltip_label"));
 
-
 #if ! defined(QT_NO_EFFECTS)
       if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip)) {
          qFadeEffect(QTipLabel::instance);
@@ -380,18 +374,15 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, cons
    }
 }
 
-
 void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w)
 {
    QToolTip::showText(pos, text, w, QRect());
 }
 
-
 bool QToolTip::isVisible()
 {
    return (QTipLabel::instance != 0 && QTipLabel::instance->isVisible());
 }
-
 
 QString QToolTip::text()
 {
@@ -401,7 +392,6 @@ QString QToolTip::text()
    return QString();
 }
 
-
 Q_GLOBAL_STATIC(QPalette, tooltip_palette)
 
 QPalette QToolTip::palette()
@@ -409,21 +399,19 @@ QPalette QToolTip::palette()
    return *tooltip_palette();
 }
 
-
 QFont QToolTip::font()
 {
    return QApplication::font("QTipLabel");
 }
 
-
 void QToolTip::setPalette(const QPalette &palette)
 {
    *tooltip_palette() = palette;
+
    if (QTipLabel::instance) {
       QTipLabel::instance->setPalette(palette);
    }
 }
-
 
 void QToolTip::setFont(const QFont &font)
 {

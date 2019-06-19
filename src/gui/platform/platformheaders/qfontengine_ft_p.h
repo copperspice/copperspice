@@ -77,8 +77,10 @@ class QFreetypeFace
    int fsType() const;
 
    int getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints);
-   static void addGlyphToPath(FT_Face face, FT_GlyphSlot g, const QFixedPoint &point, QPainterPath *path, FT_Fixed x_scale,
-      FT_Fixed y_scale);
+
+   static void addGlyphToPath(FT_Face face, FT_GlyphSlot g, const QFixedPoint &point, QPainterPath *path,
+                  FT_Fixed x_scale, FT_Fixed y_scale);
+
    static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path);
 
  private:

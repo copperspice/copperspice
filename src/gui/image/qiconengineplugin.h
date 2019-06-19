@@ -42,5 +42,4 @@ class Q_GUI_EXPORT QIconEnginePlugin : public QObject
    virtual QIconEngine *create(const QString &filename = QString()) = 0;
 };
 
-
 #endif

@@ -1142,7 +1142,6 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
 
    // handle data: URLs
    if (r.isNull() && name.scheme().compare(QLatin1String("data"), Qt::CaseInsensitive) == 0) {
-
       r = qDecodeDataUrl(name).second;
    }
 
@@ -1155,8 +1154,7 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
 
          // For the second case QUrl can merge "#someanchor" with "foo.html"
          // correctly to "foo.html#someanchor"
-         if (! (currentURL.isRelative()
-               || (currentURL.scheme() == QLatin1String("file")
+         if (! (currentURL.isRelative() || (currentURL.scheme() == "file"
                   && !QFileInfo(currentURL.toLocalFile()).isAbsolute()))
             || (name.hasFragment() && name.path().isEmpty())) {
             resourceUrl =  currentURL.resolved(name);

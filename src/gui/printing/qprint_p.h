@@ -29,8 +29,8 @@
 #include <qstring.h>
 #include <qlist.h>
 
-#if (defined Q_OS_MAC && !defined Q_OS_IOS) || (defined Q_OS_UNIX && !defined QT_NO_CUPS)
-#include <cups/ppd.h>  // Use for type defs only, don't want to actually link in main module
+#if (defined Q_OS_MAC && ! defined Q_OS_IOS) || (defined Q_OS_UNIX && ! defined QT_NO_CUPS)
+#include <cups/ppd.h>  // Use for type defs only, do not want to actually link in main module
 #endif
 
 QT_BEGIN_NAMESPACE

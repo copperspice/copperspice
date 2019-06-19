@@ -34,12 +34,10 @@
 
 #if !defined(PD_NOCURRENTPAGE)
 #define PD_NOCURRENTPAGE    0x00800000
-#define PD_RESULT_PRINT	1
-#define PD_RESULT_APPLY	2
+#define PD_RESULT_PRINT	    1
+#define PD_RESULT_APPLY	    2
 #define START_PAGE_GENERAL  0XFFFFFFFF
 #endif
-
-
 
 extern void qt_win_eatMouseMove();
 
@@ -71,6 +69,7 @@ static void qt_win_setup_PRINTDLGEX(PRINTDLGEX *pd, QWidget *parent,
          memcpy(dest, devMode, size);
          GlobalUnlock(pd->hDevMode);
       }
+
    } else {
       pd->hDevMode = NULL;
    }
@@ -137,12 +136,15 @@ static void qt_win_read_back_PRINTDLGEX(PRINTDLGEX *pd, QPrintDialog *pdlg, QPri
    if (pd->Flags & PD_SELECTION) {
       pdlg->setPrintRange(QPrintDialog::Selection);
       pdlg->setFromTo(0, 0);
+
    } else if (pd->Flags & PD_PAGENUMS) {
       pdlg->setPrintRange(QPrintDialog::PageRange);
       pdlg->setFromTo(pd->lpPageRanges[0].nFromPage, pd->lpPageRanges[0].nToPage);
+
    } else if (pd->Flags & PD_CURRENTPAGE) {
       pdlg->setPrintRange(QPrintDialog::CurrentPage);
       pdlg->setFromTo(0, 0);
+
    } else { // PD_ALLPAGES
       pdlg->setPrintRange(QPrintDialog::AllPages);
       pdlg->setFromTo(0, 0);
@@ -167,6 +169,7 @@ static bool warnIfNotNative(QPrinter *printer)
       qWarning("QPrintDialog: Cannot be used on non-native printers");
       return false;
    }
+
    return true;
 }
 
@@ -174,7 +177,8 @@ QPrintDialog::QPrintDialog(QPrinter *printer, QWidget *parent)
    : QAbstractPrintDialog( *(new QPrintDialogPrivate), printer, parent)
 {
    Q_D(QPrintDialog);
-   if (!warnIfNotNative(d->printer)) {
+
+   if ( ! warnIfNotNative(d->printer)) {
       return;
    }
 
@@ -189,7 +193,8 @@ QPrintDialog::QPrintDialog(QWidget *parent)
    : QAbstractPrintDialog( *(new QPrintDialogPrivate), 0, parent)
 {
    Q_D(QPrintDialog);
-   if (!warnIfNotNative(d->printer)) {
+
+   if (! warnIfNotNative(d->printer)) {
       return;
    }
 
@@ -215,7 +220,9 @@ int QPrintDialog::exec()
 int QPrintDialogPrivate::openWindowsPrintDialogModally()
 {
    Q_Q(QPrintDialog);
+
    QWidget *parent = q->parentWidget();
+
    if (parent) {
       parent = parent->window();
    } else {
@@ -291,19 +298,17 @@ void QPrintDialog::setVisible(bool visible)
 {
    Q_D(QPrintDialog);
 
-   // its always modal, so we cannot hide a native print dialog
-   if (!visible) {
+   // its always modal, so we can not hide a native print dialog
+   if (! visible) {
       return;
    }
 
-   if (!warnIfNotNative(d->printer)) {
+   if (! warnIfNotNative(d->printer)) {
       return;
    }
 
    (void)d->openWindowsPrintDialogModally();
    return;
 }
-
-
 
 #endif

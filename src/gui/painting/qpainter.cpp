@@ -4186,11 +4186,11 @@ void QPainter::drawText(const QRectF &r, int flags, const QString &str, QRectF *
 
    Q_D(QPainter);
 
-   if (!d->engine || str.length() == 0 || pen().style() == Qt::NoPen) {
+   if (! d->engine || str.length() == 0 || pen().style() == Qt::NoPen) {
       return;
    }
 
-   if (!d->extended) {
+   if (! d->extended) {
       d->updateState(d->state);
    }
 
@@ -4628,6 +4628,7 @@ QRectF QPainter::boundingRect(const QRectF &r, const QString &text, const QTextO
 
    QRectF br;
    qt_format_text(d->state->font, r, Qt::TextDontPrint, &o, text, &br, 0, 0, 0, this);
+
    return br;
 }
 
@@ -5097,8 +5098,7 @@ void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QString &s
 void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QTextOption *option,
    const QString &str, QRectF *brect, int tabstops, int *ta, int tabarraylen, QPainter *painter)
 {
-
-   Q_ASSERT( !((tf & ~Qt::TextDontPrint) != 0 && option != 0) ); // we either have an option or flags
+   Q_ASSERT( !((tf & ~Qt::TextDontPrint) != 0 && option != 0) ); //  either have an option or flags
 
    if (option) {
       tf |= option->alignment();

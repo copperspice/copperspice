@@ -26,10 +26,10 @@
 
 #include <qprint_p.h>
 
-#include <QtCore/qvector.h>
-#include <QtGui/qpagelayout.h>
+#include <qvector.h>
+#include <qpagelayout.h>
 
-// emerald   #include <QtCore/qmimetype.h>
+// emerald   #include <qmimetype.h>
 
 
 #ifndef QT_NO_PRINTER

@@ -646,9 +646,6 @@ void QWidgetPrivate::createRecursively()
    }
 }
 
-
-
-
 void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
 {
    Q_D(QWidget);
@@ -709,8 +706,6 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
       << "Alien?" << !testAttribute(Qt::WA_NativeWindow);
 #endif
 
-
-
    d->updateIsOpaque();
 
    setAttribute(Qt::WA_WState_Created);                        // set created flag
@@ -727,7 +722,7 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
 
    d->setModal_sys();
 
-   if (!isWindow() && parentWidget() && parentWidget()->testAttribute(Qt::WA_DropSiteRegistered)) {
+   if (! isWindow() && parentWidget() && parentWidget()->testAttribute(Qt::WA_DropSiteRegistered)) {
       setAttribute(Qt::WA_DropSiteRegistered, true);
    }
 
@@ -8176,15 +8171,19 @@ void QWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
 
 #ifndef QT_NO_DRAGANDDROP
       case Qt::WA_AcceptDrops:  {
-         if (on && !testAttribute(Qt::WA_DropSiteRegistered)) {
+         if (on && ! testAttribute(Qt::WA_DropSiteRegistered)) {
             setAttribute(Qt::WA_DropSiteRegistered, true);
-         } else if (!on && (isWindow() || !parentWidget() || !parentWidget()->testAttribute(Qt::WA_DropSiteRegistered))) {
+
+         } else if (!on && (isWindow() || ! parentWidget() || ! parentWidget()->testAttribute(Qt::WA_DropSiteRegistered))) {
             setAttribute(Qt::WA_DropSiteRegistered, false);
+
          }
+
          QEvent e(QEvent::AcceptDropsChange);
          QApplication::sendEvent(this, &e);
          break;
       }
+
       case Qt::WA_DropSiteRegistered:  {
          d->registerDropSite(on);
 
@@ -9438,6 +9437,7 @@ int QWidget::metric(PaintDeviceMetric m) const
    }
    return val;
 }
+
 void QWidget::initPainter(QPainter *painter) const
 {
    const QPalette &pal = palette();
@@ -9447,10 +9447,12 @@ void QWidget::initPainter(QPainter *painter) const
    painter->d_func()->state->deviceFont = f;
    painter->d_func()->state->font = f;
 }
+
 QPaintDevice *QWidget::redirected(QPoint *offset) const
 {
    return d_func()->redirected(offset);
 }
+
 QPainter *QWidget::sharedPainter() const
 {
    // Someone sent a paint event directly to the widget
@@ -9469,6 +9471,7 @@ QPainter *QWidget::sharedPainter() const
 
    return sp;
 }
+
 void QWidget::setMask(const QRegion &newMask)
 {
    Q_D(QWidget);

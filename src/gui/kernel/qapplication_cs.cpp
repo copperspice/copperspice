@@ -623,20 +623,8 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 #endif // QT_NO_STYLE_STYLESHEET
 
 /*!
-    \overload
-
-    Requests a QStyle object for \a style from the QStyleFactory.
-
-    The string must be one of the QStyleFactory::keys(), typically one of
-    "windows", "fusion", "windowsxp", or "macintosh". Style
-    names are case insensitive.
-
-    Returns 0 if an unknown \a style is passed, otherwise the QStyle object
-    returned is set as the application's GUI style.
-
-    \warning To ensure that the application's style is set correctly, it is
-    best to call this function before the QApplication constructor, if
-    possible.
+    string must be one of the QStyleFactory::keys(), typically
+    "windows", "fusion", "windowsxp", or "macintosh". Style names are case insensitive.
 */
 QStyle *QApplication::setStyle(const QString &style)
 {
@@ -647,74 +635,14 @@ QStyle *QApplication::setStyle(const QString &style)
    }
 
    setStyle(s);
+
    return s;
 }
-
-/*!
-    Returns the color specification.
-
-    \sa QApplication::setColorSpec()
-*/
 
 int QApplication::colorSpec()
 {
    return QApplicationPrivate::app_cspec;
 }
-
-/*!
-    Sets the color specification for the application to \a spec.
-
-    The color specification controls how the application allocates colors when
-    run on a display with a limited amount of colors, e.g. 8 bit / 256 color
-    displays.
-
-    The color specification must be set before you create the QApplication
-    object.
-
-    The options are:
-    \list
-        \li  QApplication::NormalColor. This is the default color allocation
-            strategy. Use this option if your application uses buttons, menus,
-            texts and pixmaps with few colors. With this option, the
-            application uses system global colors. This works fine for most
-            applications under X11, but on the Windows platform, it may cause
-            dithering of non-standard colors.
-        \li  QApplication::CustomColor. Use this option if your application
-            needs a small number of custom colors. On X11, this option is the
-            same as NormalColor. On Windows, Qt creates a Windows palette, and
-            allocates colors to it on demand.
-        \li  QApplication::ManyColor. Use this option if your application is
-            very color hungry, e.g., it requires thousands of colors. \br
-            Under X11 the effect is:
-            \list
-                \li  For 256-color displays which have at best a 256 color true
-                    color visual, the default visual is used, and colors are
-                    allocated from a color cube. The color cube is the 6x6x6
-                    (216 color) "Web palette" (the red, green, and blue
-                    components always have one of the following values: 0x00,
-                    0x33, 0x66, 0x99, 0xCC, or 0xFF), but the number of colors
-                    can be changed by the \e -ncols option. The user can force
-                    the application to use the true color visual with the
-                    \l{QApplication::QApplication()}{-visual} option.
-                \li  For 256-color displays which have a true color visual with
-                    more than 256 colors, use that visual. Silicon Graphics X
-                    servers this feature, for example. They provide an 8 bit
-                    visual by default but can deliver true color when asked.
-            \endlist
-            On Windows, Qt creates a Windows palette, and fills it with a color
-            cube.
-    \endlist
-
-    Be aware that the CustomColor and ManyColor choices may lead to colormap
-    flashing: The foreground application gets (most) of the available colors,
-    while the background windows will look less attractive.
-
-    Example:
-
-    \snippet code/src_gui_kernel_qapplication.cpp 2
-
-    \sa colorSpec()
-*/
 
 void QApplication::setColorSpec(int spec)
 {
@@ -724,21 +652,6 @@ void QApplication::setColorSpec(int spec)
    QApplicationPrivate::app_cspec = spec;
 }
 
-/*!
-    \property QApplication::globalStrut
-    \brief the minimum size that any GUI element that the user can interact
-           with should have
-
-    For example, no button should be resized to be smaller than the global
-    strut size. The strut size should be considered when reimplementing GUI
-    controls that may be used on touch-screens or similar I/O devices.
-
-    Example:
-
-    \snippet code/src_gui_kernel_qapplication.cpp 3
-
-    By default, this property contains a QSize object with zero width and height.
-*/
 QSize QApplication::globalStrut()
 {
    return QApplicationPrivate::app_strut;
@@ -900,8 +813,7 @@ void QApplicationPrivate::setSystemFont(const QFont &font)
 */
 QString QApplicationPrivate::desktopStyleKey()
 {
-   // The platform theme might return a style that is not available, find
-   // first valid one.
+   // The platform theme might return a style that is not available, find first valid one
    if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
       const QStringList availableKeys = QStyleFactory::keys();
       foreach (const QString &style, theme->themeHint(QPlatformTheme::StyleNames).toStringList())

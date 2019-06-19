@@ -24,8 +24,6 @@
 #include <qiconengine.h>
 #include <qpainter.h>
 
-
-
 QSize QIconEngine::actualSize(const QSize &size, QIcon::Mode /*mode*/, QIcon::State /*state*/)
 {
    return size;
@@ -34,6 +32,7 @@ QSize QIconEngine::actualSize(const QSize &size, QIcon::Mode /*mode*/, QIcon::St
 QIconEngine::QIconEngine()
 {
 }
+
 QIconEngine::~QIconEngine()
 {
 }
@@ -57,12 +56,10 @@ void QIconEngine::addFile(const QString &fileName, const QSize &size, QIcon::Mod
 {
 }
 
-
 QString QIconEngine::key() const
 {
    return QString();
 }
-
 
 bool QIconEngine::read(QDataStream &)
 {
@@ -95,6 +92,7 @@ QList<QSize> QIconEngine::availableSizes(QIcon::Mode mode, QIcon::State state) c
    arg.mode = mode;
    arg.state = state;
    const_cast<QIconEngine *>(this)->virtual_hook(QIconEngine::AvailableSizesHook, reinterpret_cast<void *>(&arg));
+
    return arg.sizes;
 }
 
@@ -102,6 +100,7 @@ QString QIconEngine::iconName() const
 {
    QString name;
    const_cast<QIconEngine *>(this)->virtual_hook(QIconEngine::IconNameHook, reinterpret_cast<void *>(&name));
+
    return name;
 }
 

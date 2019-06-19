@@ -1013,15 +1013,15 @@ void QFusionStyle::drawControl(ControlElement element, const QStyleOption *optio
             QRect editRect = proxy()->subControlRect(CC_ComboBox, cb, SC_ComboBoxEditField, widget);
             painter->save();
             painter->setClipRect(editRect);
+
             if (!cb->currentIcon.isNull()) {
-               QIcon::Mode mode = cb->state & State_Enabled ? QIcon::Normal
-                  : QIcon::Disabled;
+               QIcon::Mode mode = cb->state & State_Enabled ? QIcon::Normal : QIcon::Disabled;
                QPixmap pixmap = cb->currentIcon.pixmap(cb->iconSize, mode);
+
                QRect iconRect(editRect);
                iconRect.setWidth(cb->iconSize.width() + 4);
-               iconRect = alignedRect(cb->direction,
-                     Qt::AlignLeft | Qt::AlignVCenter,
-                     iconRect.size(), editRect);
+               iconRect = alignedRect(cb->direction, Qt::AlignLeft | Qt::AlignVCenter, iconRect.size(), editRect);
+
                if (cb->editable) {
                   painter->fillRect(iconRect, cb->palette.brush(QPalette::Base));
                }
@@ -1033,6 +1033,7 @@ void QFusionStyle::drawControl(ControlElement element, const QStyleOption *optio
                   editRect.translate(cb->iconSize.width() + 4, 0);
                }
             }
+
             if (!cb->currentText.isEmpty() && !cb->editable) {
                proxy()->drawItemText(painter, editRect.adjusted(1, 0, -1, 0),
                   visualAlignment(cb->direction, Qt::AlignLeft | Qt::AlignVCenter),
@@ -1963,6 +1964,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
    QColor outline = d->outline(option->palette);
 
    QColor alphaCornerColor;
+
    if (widget) {
       // ### backgroundrole/foregroundrole should be part of the style option
       alphaCornerColor = mergedColors(option->palette.color(widget->backgroundRole()), outline);
@@ -2018,6 +2020,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
          }
          painter->restore();
          break;
+
       case CC_SpinBox:
          if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
             QPixmap cache;
@@ -2172,8 +2175,10 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
             painter->drawPixmap(spinBox->rect.topLeft(), cache);
          }
          break;
+
       case CC_TitleBar:
          painter->save();
+
          if (const QStyleOptionTitleBar *titleBar = qstyleoption_cast<const QStyleOptionTitleBar *>(option)) {
             const int buttonMargin = 5;
             bool active = (titleBar->titleBarState & State_Active);
@@ -2230,17 +2235,21 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                painter->setPen(titleBarHighlight);
                painter->drawLine(fullRect.left() + 6, fullRect.top() + 1, fullRect.right() - 6, fullRect.top() + 1);
             }
+
             // draw title
             QRect textRect = proxy()->subControlRect(CC_TitleBar, titleBar, SC_TitleBarLabel, widget);
             painter->setPen(active ? (titleBar->palette.text().color().lighter(120)) :
                titleBar->palette.text().color() );
+
             // Note workspace also does elliding but it does not use the correct font
             QString title = painter->fontMetrics().elidedText(titleBar->text, Qt::ElideRight, textRect.width() - 14);
             painter->drawText(textRect.adjusted(1, 1, 1, 1), title, QTextOption(Qt::AlignHCenter | Qt::AlignVCenter));
             painter->setPen(Qt::white);
+
             if (active) {
                painter->drawText(textRect, title, QTextOption(Qt::AlignHCenter | Qt::AlignVCenter));
             }
+
             // min button
             if ((titleBar->subControls & SC_TitleBarMinButton) && (titleBar->titleBarFlags & Qt::WindowMinimizeButtonHint) &&
                !(titleBar->titleBarState & Qt::WindowMinimized)) {
@@ -2262,6 +2271,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                      minButtonIconRect.center().x() + 4, minButtonIconRect.center().y() + 4);
                }
             }
+
             // max button
             if ((titleBar->subControls & SC_TitleBarMaxButton) && (titleBar->titleBarFlags & Qt::WindowMaximizeButtonHint) &&
                !(titleBar->titleBarState & Qt::WindowMaximized)) {
@@ -2522,7 +2532,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                   }
                }
                painter->setOpacity(opacity);
-#endif // !QT_NO_ANIMATION
+#endif
             }
 
             bool transient = proxy()->styleHint(SH_ScrollBar_Transient, option, widget);
@@ -2760,6 +2770,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
             bool sunken = comboBox->state & State_On; // play dead, if combobox has no items
             bool isEnabled = (comboBox->state & State_Enabled);
             QPixmap cache;
+
             QString pixmapName = QStyleHelper::uniqueName(QLatin1String("combobox"), option, comboBox->rect.size());
             if (sunken) {
                pixmapName += QLatin1String("-sunken");
@@ -2780,8 +2791,8 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                comboBoxCopy.rect = pixmapRect;
 
                QRect rect = pixmapRect;
-               QRect downArrowRect = proxy()->subControlRect(CC_ComboBox, &comboBoxCopy,
-                     SC_ComboBoxArrow, widget);
+               QRect downArrowRect = proxy()->subControlRect(CC_ComboBox, &comboBoxCopy, SC_ComboBoxArrow, widget);
+
                // Draw a line edit
                if (comboBox->editable) {
                   QStyleOptionFrame  buttonOption;
@@ -2836,6 +2847,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                   }
                   proxy()->drawPrimitive(PE_PanelButtonCommand, &buttonOption, &cachePainter, widget);
                }
+
                if (comboBox->subControls & SC_ComboBoxArrow) {
                   // Draw the up/down arrow
                   QColor arrowColor = option->palette.buttonText().color();
@@ -2845,8 +2857,9 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                   cachePainter.drawPixmap(QRectF(downArrowRect.center().x() - downArrow.width() / 4.0 + 1.0,
                         downArrowRect.center().y() - downArrow.height() / 4.0 + 1.0,
                         downArrow.width() / 2.0, downArrow.height() / 2.0),
-                     downArrow, QRectF(QPointF(0.0, 0.0), downArrow.size()));
+                        downArrow, QRectF(QPointF(0.0, 0.0), downArrow.size()));
                }
+
                cachePainter.end();
                QPixmapCache::insert(pixmapName, cache);
             }
