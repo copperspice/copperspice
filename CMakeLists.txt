@@ -156,6 +156,9 @@ add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "Popular open source database")
 option(WITH_MYSQL_PLUGIN "Build MySQL database plugin (if possible)" ON)
 add_feature_info(MySQL WITH_MYSQL_PLUGIN "Popular open source database")
 
+option(WITH_ODBC_PLUGIN "Build ODBC database plugin (if possible)" ON)
+add_feature_info(ODBC WITH_ODBC_PLUGIN "Popular open source database")
+
 foreach(component ${_OPTIONAL_COMPONENTS})
     string(TOUPPER ${component} uppercomp)
     option(WITH_${uppercomp} "Build ${component} component" ON)

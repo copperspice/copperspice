@@ -279,6 +279,20 @@ else
    echo "MySQL client library was not found, client driver will not be built"
 fi
 
+
+echo
+echo "Checking for ODBC client library"
+
+#   AC_CHECK_HEADERS([mysql.h], [HAVE_ODBC_H=yes])
+#   AC_CHECK_LIB([mysqlclient], [my_init], [HAVE_LIBMYSQLCLIENT=yes])
+AM_CONDITIONAL(BUILD_ODBC_PLUGIN, test "x"$HAVE_ODBC_H = x""yes -a "x"$HAVE_LIBMYSQLCLIENT = x""yes)
+
+if test "x"$BUILD_ODBC_PLUGIN_TRUE = x""; then
+   echo "ODBC client drivers will be built"
+else
+   echo "ODBC client library was not found, client driver will not be built"
+fi
+
 AM_CONDITIONAL(OPENSSL_FOUND, test "x$OPENSSL" = x""yes -a "x$enable_openssl" != "xno")
 echo ""
 
