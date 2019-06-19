@@ -23,7 +23,7 @@
 
 #include <qsqldriverplugin.h>
 #include <qstringlist.h>
-#include "../../../sql/drivers/db2/qsql_db2.h"
+#include <qsql_db2.h>
 
 class QDB2DriverPlugin : public QSqlDriverPlugin
 {

@@ -23,7 +23,7 @@
 
 #include <qsqldriverplugin.h>
 #include <qstringlist.h>
-#include "../../../sql/drivers/mysql/qsql_mysql.h"
+#include <qsql_mysql.h>
 
 class QMYSQLDriverPlugin : public QSqlDriverPlugin
 {

@@ -23,7 +23,7 @@
 
 #include <qsqldriverplugin.h>
 #include <qstringlist.h>
-#include "../../../sql/drivers/oci/qsql_oci.h"
+#include <qsql_oci.h>
 
 class QOCIDriverPlugin : public QSqlDriverPlugin
 {

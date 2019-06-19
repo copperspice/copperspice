@@ -23,7 +23,7 @@
 
 #include <qsqldriverplugin.h>
 #include <qstringlist.h>
-#include "../../../sql/drivers/ibase/qsql_ibase.h"
+#include <qsql_ibase.h>
 
 class QIBaseDriverPlugin : public QSqlDriverPlugin
 {

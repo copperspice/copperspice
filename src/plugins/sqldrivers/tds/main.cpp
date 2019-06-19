@@ -22,17 +22,19 @@
 ***********************************************************************/
 
 #define Q_UUIDIMPL
+
 #include <qsqldriverplugin.h>
 #include <qstringlist.h>
 
-#ifdef Q_OS_WIN32    // We assume that MS SQL Server is used. Set Q_USE_SYBASE to force Sybase.
+#ifdef Q_OS_WIN32
+
+// assume MS SQL Server is used, set Q_USE_SYBASE to force Sybase.
+#include <qsql_tds.h>
 
 // Conflicting declarations of LPCBYTE in sqlfront.h and winscard.h
 #define _WINSCARD_H_
 #include <windows.h>
 #endif
-
-#include "../../../sql/drivers/tds/qsql_tds.h"
 
 class QTDSDriverPlugin : public QSqlDriverPlugin
 {
