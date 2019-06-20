@@ -343,12 +343,13 @@ class Q_GUI_EXPORT QGraphicsItem
    virtual QPainterPath shape() const;
    bool isClipped() const;
    QPainterPath clipPath() const;
+
    virtual bool contains(const QPointF &point) const;
    virtual bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    virtual bool collidesWithPath(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QList<QGraphicsItem *> collidingItems(Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
 
-   bool isObscured(const QRectF &rect) const;
+   bool isObscured(const QRectF &rect = QRectF()) const;
    inline bool isObscured(qreal x, qreal y, qreal w, qreal h) const;
    virtual bool isObscuredBy(const QGraphicsItem *item) const;
    virtual QPainterPath opaqueArea() const;
