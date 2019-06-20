@@ -43,7 +43,7 @@ class QWin32PrintEnginePrivate;
 class QPrinterPrivate;
 class QPainterState;
 
-class QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
+class Q_GUI_EXPORT QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
 {
    Q_DECLARE_PRIVATE(QWin32PrintEngine)
 
