@@ -390,7 +390,9 @@ void eatMouseMove()
       PostMessage(msg.hwnd, msg.message, 0, msg.lParam);
    }
 
-   qDebug() << "QWindowsDialogs::eatMouseMove():" << "Triggered = " << (msg.message == WM_MOUSEMOVE);
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "QWindowsDialogs::eatMouseMove():" << "Triggered =" << (msg.message == WM_MOUSEMOVE);
+#endif
 }
 
 } // namespace
@@ -511,11 +513,7 @@ class QWindowsDialogThread : public QThread
 
 void QWindowsDialogThread::run()
 {
-   qDebug() << "QWindowsDialogThread::run():  Begin";
-
    m_dialog->exec(m_owner);
-
-   qDebug() << "QWindowsDialogThread::run():  End";
 }
 
 template <class BaseClass>
@@ -534,9 +532,11 @@ bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
       m_ownerWindow = 0;
    }
 
-   qDebug() << "QWindowsDialog::show():" << "Modal = " << modal << "\n  "
-      << "Modal supported? " << supportsNonModalDialog(parent)
-      << "Native = " << m_nativeDialog.data() << "Owner = " << m_ownerWindow;
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "QWindowsDialog::show(): Modal =" << modal
+      << "Is modal supported?" << supportsNonModalDialog(parent) << "\n  "
+      << "Native =" << m_nativeDialog.data() << "Owner =" << m_ownerWindow;
+#endif
 
    if (! modal && ! supportsNonModalDialog(parent)) {
       return false;   // Was it changed in-between?
@@ -632,7 +632,6 @@ void QWindowsDialogHelperBase<BaseClass>::hide()
 template <class BaseClass>
 void QWindowsDialogHelperBase<BaseClass>::exec()
 {
-   qDebug() << "QWindowsDialog::exec():";
    stopTimer();
 
    if (QWindowsNativeDialogBase *nd = nativeDialog()) {
@@ -965,7 +964,9 @@ bool QWindowsNativeFileDialogBase::init(const CLSID &clsId, const IID &iid)
       return false;
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsNativeFileDialog::init():" << m_fileDialog << m_dialogEvents <<  m_cookie;
+#endif
 
    return true;
 }
@@ -1059,15 +1060,11 @@ QString QWindowsNativeFileDialogBase::directory() const
 
 void QWindowsNativeFileDialogBase::doExec(HWND owner)
 {
-   qDebug() << "QWindowsNativeFileDialog::doExec():";
-
    // Show() blocks until the user closes the dialog, the dialog window
    // gets a WM_CLOSE or the parent window is destroyed.
 
    const HRESULT hr = m_fileDialog->Show(owner);
    QWindowsDialogs::eatMouseMove();
-
-   qDebug() << "\n  Returns = " << hex << hr;
 
    if (hr == S_OK) {
       emit accepted();
@@ -1109,9 +1106,11 @@ void QWindowsNativeFileDialogBase::setMode(QFileDialogOptions::FileMode mode,
 
    }
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsNativeFileDialog::setMode():" << "Mode = " << mode << "\n  "
       << "AcceptMode = " << acceptMode << " Options = " << options
       << " Results in = " << showbase << hex << flags;
+#endif
 
    if (FAILED(m_fileDialog->SetOptions(flags))) {
       qErrnoWarning("%s: SetOptions() failed", __FUNCTION__);
@@ -1472,8 +1471,6 @@ void QWindowsNativeFileDialogBase::close()
 
    const HWND hwnd = findDialogWindow(m_title);
 
-   qDebug() << "QWindowsNativeFileDialog::close(): Handle = " << hwnd;
-
    if (hwnd && IsWindowVisible(hwnd)) {
       PostMessageW(hwnd, WM_CLOSE, 0, 0);
    }
@@ -1749,7 +1746,9 @@ QWindowsNativeDialogBase *QWindowsFileDialogHelper::createNativeDialog()
 
 void QWindowsFileDialogHelper::setDirectory(const QUrl &directory)
 {
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsFileDialog::setDirectory(): Directory = " << directory.toString();
+#endif
 
    m_data.setDirectory(directory);
    if (hasNativeDialog()) {
@@ -1764,7 +1763,9 @@ QUrl QWindowsFileDialogHelper::directory() const
 
 void QWindowsFileDialogHelper::selectFile(const QUrl &fileName)
 {
+#if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsFileDialog::setDirectory(): FileName = " << fileName.toString();
+#endif
 
    if (hasNativeDialog()) {
       // Might be invoked from the QFileDialog constructor.

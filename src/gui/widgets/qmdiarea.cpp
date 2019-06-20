@@ -1908,7 +1908,6 @@ void QMdiArea::activateNextSubWindow()
    }
 }
 
-
 void QMdiArea::activatePreviousSubWindow()
 {
    Q_D(QMdiArea);
@@ -1922,12 +1921,11 @@ void QMdiArea::activatePreviousSubWindow()
    }
 }
 
-
 QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFlags)
 {
-   if (!widget) {
-      qWarning("QMdiArea::addSubWindow: null pointer to widget");
-      return 0;
+   if (! widget) {
+      qWarning("QMdiArea::addSubWindow(): Widget was a null pointer to widget");
+      return nullptr;
    }
 
    Q_D(QMdiArea);

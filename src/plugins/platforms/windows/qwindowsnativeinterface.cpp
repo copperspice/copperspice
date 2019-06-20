@@ -153,9 +153,9 @@ void *QWindowsNativeInterface::nativeResourceForIntegration(const QByteArray &re
 #ifndef QT_NO_OPENGL
 void *QWindowsNativeInterface::nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context)
 {
-   if (!context || !context->handle()) {
-      qWarning("%s: '%s' requested for null context or context without handle.", __FUNCTION__, resource.constData());
-      return 0;
+   if (!context || ! context->handle()) {
+      qWarning("nativeResourceForContext(): '%s' requested for null context or context without handle.", resource.constData());
+      return nullptr;
    }
 
    QWindowsOpenGLContext *glcontext = static_cast<QWindowsOpenGLContext *>(context->handle());
@@ -175,14 +175,11 @@ void *QWindowsNativeInterface::nativeResourceForContext(const QByteArray &resour
          break;
    }
 
-   qWarning("%s: Invalid key '%s' requested.", __FUNCTION__, resource.constData());
-   return 0;
-}
-#endif // !QT_NO_OPENGL
+   qWarning("nativeResourceForContext(): Invalid key '%s' requested.", resource.constData());
 
-/*!
-    \brief Creates a non-visible window handle for filtering messages.
-*/
+   return nullptr;
+}
+#endif
 
 void *QWindowsNativeInterface::createMessageWindow(const QString &classNameTemplate,
    const QString &windowName, void *eventProc) const

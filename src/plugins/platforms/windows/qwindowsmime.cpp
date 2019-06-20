@@ -412,7 +412,8 @@ QDebug operator<<(QDebug d, const FORMATETC &tc)
    }
 
    d << ", dwAspect=" << tc.dwAspect << ", lindex=" << tc.lindex
-      << ", tymed=" << tc.tymed << ", ptd=" << tc.ptd << ')';
+     << ", tymed=" << tc.tymed << ", ptd=" << tc.ptd << ')';
+
    return d;
 }
 
@@ -1580,7 +1581,10 @@ QStringList QWindowsMimeConverter::allMimesForFormats(IDataObject *pDataObj) con
 QWindowsMime *QWindowsMimeConverter::converterFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
 {
    ensureInitialized();
-   qDebug() << __FUNCTION__ << formatetc;
+
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "converterFromMime():" << formatetc;
+#endif
 
    for (int i = m_mimes.size() - 1; i >= 0; --i) {
       if (m_mimes.at(i)->canConvertFromMime(formatetc, mimeData)) {
