@@ -43,25 +43,25 @@ class QTDSDriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QTDS, QTDS7")
 
-public:
-    QTDSDriverPlugin();
+ public:
+   QTDSDriverPlugin();
 
-    QSqlDriver* create(const QString &) override;
+   QSqlDriver *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QTDSDriverPlugin)
 
 QTDSDriverPlugin::QTDSDriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QTDSDriverPlugin::create(const QString &name)
+QSqlDriver *QTDSDriverPlugin::create(const QString &name)
 {
-    if (name == "QTDS" || name == "QTDS7") {
-        QTDSDriver* driver = new QTDSDriver();
-        return driver;
-    }
-    return 0;
+   if (name == "QTDS" || name == "QTDS7") {
+      QTDSDriver *driver = new QTDSDriver();
+      return driver;
+   }
+   return 0;
 }
 

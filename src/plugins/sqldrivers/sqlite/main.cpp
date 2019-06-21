@@ -32,25 +32,25 @@ class QSQLiteDriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QSQLITE")
 
-public:
-    QSQLiteDriverPlugin();
+ public:
+   QSQLiteDriverPlugin();
 
-    QSqlDriver *create(const QString &) override;
+   QSqlDriver *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QSQLiteDriverPlugin)
 
 QSQLiteDriverPlugin::QSQLiteDriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QSQLiteDriverPlugin::create(const QString &name)
+QSqlDriver *QSQLiteDriverPlugin::create(const QString &name)
 {
-    if (name == "QSQLITE") {
-        QSQLiteDriver* driver = new QSQLiteDriver();
-        return driver;
-    }
-    return 0;
+   if (name == "QSQLITE") {
+      QSQLiteDriver *driver = new QSQLiteDriver();
+      return driver;
+   }
+   return 0;
 }
 

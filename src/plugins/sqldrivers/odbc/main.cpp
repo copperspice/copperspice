@@ -32,25 +32,25 @@ class QODBCDriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QODBC, QODBC3")
 
-public:
-    QODBCDriverPlugin();
+ public:
+   QODBCDriverPlugin();
 
-    QSqlDriver *create(const QString &) override;
+   QSqlDriver *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QODBCDriverPlugin)
 
 QODBCDriverPlugin::QODBCDriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QODBCDriverPlugin::create(const QString &name)
+QSqlDriver *QODBCDriverPlugin::create(const QString &name)
 {
-    if (name == "QODBC" || name == "QODBC3") {
-        QODBCDriver* driver = new QODBCDriver();
-        return driver;
-    }
+   if (name == "QODBC" || name == "QODBC3") {
+      QODBCDriver *driver = new QODBCDriver();
+      return driver;
+   }
 
-    return 0;
+   return 0;
 }

@@ -156,13 +156,13 @@ Q_GLOBAL_STATIC(QTDSErrorHash, errs)
 
 extern "C" {
    static int CS_PUBLIC qTdsMsgHandler (DBPROCESS *dbproc,
-                                        DBINT msgno,
-                                        int msgstate,
-                                        int severity,
-                                        char *msgtext,
-                                        char *srvname,
-                                        char * /*procname*/,
-                                        int line)
+      DBINT msgno,
+      int msgstate,
+      int severity,
+      char *msgtext,
+      char *srvname,
+      char * /*procname*/,
+      int line)
    {
       QTDSResultPrivate *p = errs()->value(dbproc);
 
@@ -174,12 +174,12 @@ extern "C" {
 
       if (severity > 0) {
          QString errMsg = QString::fromLatin1("%1 (Msg %2, Level %3, State %4, Server %5, Line %6)")
-                          .formatArg(QString::fromLatin1(msgtext))
-                          .formatArg(msgno)
-                          .formatArg(severity)
-                          .formatArg(msgstate)
-                          .formatArg(QString::fromLatin1(srvname))
-                          .formatArg(line);
+            .formatArg(QString::fromLatin1(msgtext))
+            .formatArg(msgno)
+            .formatArg(severity)
+            .formatArg(msgstate)
+            .formatArg(QString::fromLatin1(srvname))
+            .formatArg(line);
          p->addErrorMsg(errMsg);
          if (severity > 10) {
             // Severe messages are really errors in the sense of lastError
@@ -193,11 +193,11 @@ extern "C" {
    }
 
    static int CS_PUBLIC qTdsErrHandler(DBPROCESS *dbproc,
-                                       int /*severity*/,
-                                       int dberr,
-                                       int /*oserr*/,
-                                       char *dberrstr,
-                                       char *oserrstr)
+      int /*severity*/,
+      int dberr,
+      int /*oserr*/,
+      char *dberrstr,
+      char *oserrstr)
    {
       QTDSResultPrivate *p = errs()->value(dbproc);
       if (!p) {
@@ -215,7 +215,7 @@ extern "C" {
 
 
       QString errMsg = QString::fromLatin1("%1 %2\n").formatArg(QLatin1String(dberrstr)).formatArg(
-                          QLatin1String(oserrstr));
+            QLatin1String(oserrstr));
       errMsg += p->getErrorMsgs();
       p->lastError = qMakeError(errMsg, QSqlError::UnknownError, dberr);
       p->clearErrorMsgs();
@@ -568,11 +568,11 @@ bool QTDSDriver::hasFeature(DriverFeature f) const
 }
 
 bool QTDSDriver::open(const QString &db,
-                      const QString &user,
-                      const QString &password,
-                      const QString &host,
-                      int /*port*/,
-                      const QString & /*connOpts*/)
+   const QString &user,
+   const QString &password,
+   const QString &host,
+   int /*port*/,
+   const QString & /*connOpts*/)
 {
    if (isOpen()) {
       close();
@@ -721,7 +721,7 @@ QSqlRecord QTDSDriver::record(const QString &tablename) const
    }
 
    QString stmt (QLatin1String("select name, type, length, prec from syscolumns "
-                               "where id = (select id from sysobjects where name = '%1')"));
+         "where id = (select id from sysobjects where name = '%1')"));
    t.exec(stmt.formatArg(table));
    while (t.next()) {
       QSqlField f(t.value(0).toString().simplified(), qDecodeTDSType(t.value(1).toInt()));
@@ -768,7 +768,7 @@ QStringList QTDSDriver::tables(QSql::TableType type) const
 }
 
 QString QTDSDriver::formatValue(const QSqlField &field,
-                                bool trim) const
+   bool trim) const
 {
    QString r;
    if (field.isNull()) {

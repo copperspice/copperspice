@@ -98,8 +98,8 @@ static QString qWarnDB2Handle(int handleType, SQLHANDLE handle)
    SQLTCHAR description[SQL_MAX_MESSAGE_LENGTH];
 
    r = SQLGetDiagRec(handleType, handle, 1, (SQLTCHAR *) state, &nativeCode, (SQLTCHAR *) description,
-                     SQL_MAX_MESSAGE_LENGTH - 1, /* in bytes, not in characters */
-                     &msgLen);
+         SQL_MAX_MESSAGE_LENGTH - 1, /* in bytes, not in characters */
+         &msgLen);
 
    if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
       return QString(qFromTChar(description));
@@ -111,26 +111,26 @@ static QString qWarnDB2Handle(int handleType, SQLHANDLE handle)
 static QString qDB2Warn(const QDB2DriverPrivate *d)
 {
    return (qWarnDB2Handle(SQL_HANDLE_ENV, d->hEnv) + QLatin1Char(' ')
-           + qWarnDB2Handle(SQL_HANDLE_DBC, d->hDbc));
+         + qWarnDB2Handle(SQL_HANDLE_DBC, d->hDbc));
 }
 
 static QString qDB2Warn(const QDB2ResultPrivate *d)
 {
    return (qWarnDB2Handle(SQL_HANDLE_ENV, d->dp->hEnv) + QLatin1Char(' ')
-           + qWarnDB2Handle(SQL_HANDLE_DBC, d->dp->hDbc)
-           + qWarnDB2Handle(SQL_HANDLE_STMT, d->hStmt));
+         + qWarnDB2Handle(SQL_HANDLE_DBC, d->dp->hDbc)
+         + qWarnDB2Handle(SQL_HANDLE_STMT, d->hStmt));
 }
 
 static void qSqlWarning(const QString &message, const QDB2DriverPrivate *d)
 {
    qWarning("%s\tError: %s", message.toLocal8Bit().constData(),
-            qDB2Warn(d).toLocal8Bit().constData());
+      qDB2Warn(d).toLocal8Bit().constData());
 }
 
 static void qSqlWarning(const QString &message, const QDB2ResultPrivate *d)
 {
    qWarning("%s\tError: %s", message.toLocal8Bit().constData(),
-            qDB2Warn(d).toLocal8Bit().constData());
+      qDB2Warn(d).toLocal8Bit().constData());
 }
 
 static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const QDB2DriverPrivate *p)
@@ -139,7 +139,7 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const
 }
 
 static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type,
-                            const QDB2ResultPrivate *p)
+   const QDB2ResultPrivate *p)
 {
    return QSqlError(QLatin1String("QDB2: ") + err, qDB2Warn(p), type);
 }
@@ -209,14 +209,14 @@ static QSqlField qMakeFieldInfo(const QDB2ResultPrivate *d, int i)
    SQLRETURN r = SQL_ERROR;
    SQLTCHAR colName[COLNAMESIZE];
    r = SQLDescribeCol(d->hStmt,
-                      i + 1,
-                      colName,
-                      (SQLSMALLINT) COLNAMESIZE,
-                      &colNameLen,
-                      &colType,
-                      &colSize,
-                      &colScale,
-                      &nullable);
+         i + 1,
+         colName,
+         (SQLSMALLINT) COLNAMESIZE,
+         &colNameLen,
+         &colType,
+         &colSize,
+         &colScale,
+         &nullable);
 
    if (r != SQL_SUCCESS) {
       qSqlWarning(QString::fromLatin1("qMakeFieldInfo: Unable to describe column %1").fromatArg(i), d);
@@ -242,11 +242,11 @@ static int qGetIntData(SQLHANDLE hStmt, int column, bool &isNull)
    isNull = false;
    SQLINTEGER lengthIndicator = 0;
    SQLRETURN r = SQLGetData(hStmt,
-                            column + 1,
-                            SQL_C_SLONG,
-                            (SQLPOINTER) &intbuf,
-                            0,
-                            &lengthIndicator);
+         column + 1,
+         SQL_C_SLONG,
+         (SQLPOINTER) &intbuf,
+         0,
+         &lengthIndicator);
    if ((r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) || lengthIndicator == SQL_NULL_DATA) {
       isNull = true;
       return 0;
@@ -260,11 +260,11 @@ static double qGetDoubleData(SQLHANDLE hStmt, int column, bool &isNull)
    isNull = false;
    SQLINTEGER lengthIndicator = 0;
    SQLRETURN r = SQLGetData(hStmt,
-                            column + 1,
-                            SQL_C_DOUBLE,
-                            (SQLPOINTER) &dblbuf,
-                            0,
-                            &lengthIndicator);
+         column + 1,
+         SQL_C_DOUBLE,
+         (SQLPOINTER) &dblbuf,
+         0,
+         &lengthIndicator);
    if ((r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) || lengthIndicator == SQL_NULL_DATA) {
       isNull = true;
       return 0.0;
@@ -279,11 +279,11 @@ static SQLBIGINT qGetBigIntData(SQLHANDLE hStmt, int column, bool &isNull)
    isNull = false;
    SQLINTEGER lengthIndicator = 0;
    SQLRETURN r = SQLGetData(hStmt,
-                            column + 1,
-                            SQL_C_SBIGINT,
-                            (SQLPOINTER) &lngbuf,
-                            0,
-                            &lengthIndicator);
+         column + 1,
+         SQL_C_SBIGINT,
+         (SQLPOINTER) &lngbuf,
+         0,
+         &lengthIndicator);
    if ((r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) || lengthIndicator == SQL_NULL_DATA) {
       isNull = true;
    }
@@ -308,11 +308,11 @@ static QString qGetStringData(SQLHANDLE hStmt, int column, int colSize, bool &is
 
    while (true) {
       r = SQLGetData(hStmt,
-                     column + 1,
-                     SQL_C_WCHAR,
-                     (SQLPOINTER)buf,
-                     colSize * sizeof(SQLTCHAR),
-                     &lengthIndicator);
+            column + 1,
+            SQL_C_WCHAR,
+            (SQLPOINTER)buf,
+            colSize * sizeof(SQLTCHAR),
+            &lengthIndicator);
       if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
          if (lengthIndicator == SQL_NULL_DATA || lengthIndicator == SQL_NO_TOTAL) {
             fieldVal.clear();
@@ -344,14 +344,14 @@ static QByteArray qGetBinaryData(SQLHANDLE hStmt, int column, SQLINTEGER &length
 
    SQLTCHAR colName[COLNAMESIZE];
    r = SQLDescribeCol(hStmt,
-                      column + 1,
-                      colName,
-                      COLNAMESIZE,
-                      &colNameLen,
-                      &colType,
-                      &colSize,
-                      &colScale,
-                      &nullable);
+         column + 1,
+         colName,
+         COLNAMESIZE,
+         &colNameLen,
+         &colType,
+         &colSize,
+         &colScale,
+         &nullable);
    if (r != SQL_SUCCESS) {
       qWarning("qGetBinaryData: Unable to describe column %d", column);
    }
@@ -364,11 +364,11 @@ static QByteArray qGetBinaryData(SQLHANDLE hStmt, int column, SQLINTEGER &length
    char *buf = new char[colSize];
    while (true) {
       r = SQLGetData(hStmt,
-                     column + 1,
-                     colType == SQL_DBCLOB ? SQL_C_CHAR : SQL_C_BINARY,
-                     (SQLPOINTER) buf,
-                     colSize,
-                     &lengthIndicator);
+            column + 1,
+            colType == SQL_DBCLOB ? SQL_C_CHAR : SQL_C_BINARY,
+            (SQLPOINTER) buf,
+            colSize,
+            &lengthIndicator);
       if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
          if (lengthIndicator == SQL_NULL_DATA) {
             isNull = true;
@@ -393,7 +393,7 @@ static QByteArray qGetBinaryData(SQLHANDLE hStmt, int column, SQLINTEGER &length
 }
 
 static void qSplitTableQualifier(const QString &qualifier, QString *catalog,
-                                 QString *schema, QString *table)
+   QString *schema, QString *table)
 {
    if (!catalog || !schema || !table) {
       return;
@@ -456,8 +456,8 @@ static bool qMakeStatement(QDB2ResultPrivate *d, bool forwardOnly, bool setForwa
    SQLRETURN r;
    if (!d->hStmt) {
       r = SQLAllocHandle(SQL_HANDLE_STMT,
-                         d->dp->hDbc,
-                         &d->hStmt);
+            d->dp->hDbc,
+            &d->hStmt);
       if (r != SQL_SUCCESS) {
          qSqlWarning(QLatin1String("QDB2Result::reset: Unable to allocate statement handle"), d);
          return false;
@@ -476,19 +476,19 @@ static bool qMakeStatement(QDB2ResultPrivate *d, bool forwardOnly, bool setForwa
 
    if (forwardOnly) {
       r = SQLSetStmtAttr(d->hStmt,
-                         SQL_ATTR_CURSOR_TYPE,
-                         (SQLPOINTER) SQL_CURSOR_FORWARD_ONLY,
-                         SQL_IS_UINTEGER);
+            SQL_ATTR_CURSOR_TYPE,
+            (SQLPOINTER) SQL_CURSOR_FORWARD_ONLY,
+            SQL_IS_UINTEGER);
    } else {
       r = SQLSetStmtAttr(d->hStmt,
-                         SQL_ATTR_CURSOR_TYPE,
-                         (SQLPOINTER) SQL_CURSOR_STATIC,
-                         SQL_IS_UINTEGER);
+            SQL_ATTR_CURSOR_TYPE,
+            (SQLPOINTER) SQL_CURSOR_STATIC,
+            SQL_IS_UINTEGER);
    }
 
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QString::fromLatin1("QDB2Result::reset: Unable to set %1 attribute.")
-                  .fromatArg(forwardOnly ? QLatin1String("SQL_CURSOR_FORWARD_ONLY") : QLatin1String("SQL_CURSOR_STATIC")), d);
+         .fromatArg(forwardOnly ? QLatin1String("SQL_CURSOR_FORWARD_ONLY") : QLatin1String("SQL_CURSOR_STATIC")), d);
 
       return false;
    }
@@ -514,7 +514,7 @@ QDB2Result::~QDB2Result()
       SQLRETURN r = SQLFreeHandle(SQL_HANDLE_STMT, d->hStmt);
       if (r != SQL_SUCCESS)
          qSqlWarning(QLatin1String("QDB2Driver: Unable to free statement handle ")
-                     + QString::number(r), d);
+            + QString::number(r), d);
    }
    delete d;
 }
@@ -533,11 +533,11 @@ bool QDB2Result::reset (const QString &query)
    }
 
    r = SQLExecDirect(d->hStmt,
-                     qToTChar(query),
-                     (SQLINTEGER) query.length());
+         qToTChar(query),
+         (SQLINTEGER) query.length());
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                              "Unable to execute statement"), QSqlError::StatementError, d));
+               "Unable to execute statement"), QSqlError::StatementError, d));
       return false;
    }
    SQLSMALLINT count;
@@ -570,12 +570,12 @@ bool QDB2Result::prepare(const QString &query)
    }
 
    r = SQLPrepare(d->hStmt,
-                  qToTChar(query),
-                  (SQLINTEGER) query.length());
+         qToTChar(query),
+         (SQLINTEGER) query.length());
 
    if (r != SQL_SUCCESS) {
       setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                              "Unable to prepare statement"), QSqlError::StatementError, d));
+               "Unable to prepare statement"), QSqlError::StatementError, d));
       return false;
    }
    return true;
@@ -621,15 +621,15 @@ bool QDB2Result::exec()
             dt->month = qdt.month();
             dt->day = qdt.day();
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_DATE,
-                                 SQL_DATE,
-                                 0,
-                                 0,
-                                 (void *) dt,
-                                 0,
-                                 *ind == SQL_NULL_DATA ? ind : NULL);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_DATE,
+                  SQL_DATE,
+                  0,
+                  0,
+                  (void *) dt,
+                  0,
+                  *ind == SQL_NULL_DATA ? ind : NULL);
             tmpStorage.append(ba);
             break;
          }
@@ -642,15 +642,15 @@ bool QDB2Result::exec()
             dt->minute = qdt.minute();
             dt->second = qdt.second();
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_TIME,
-                                 SQL_TIME,
-                                 0,
-                                 0,
-                                 (void *) dt,
-                                 0,
-                                 *ind == SQL_NULL_DATA ? ind : NULL);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_TIME,
+                  SQL_TIME,
+                  0,
+                  0,
+                  (void *) dt,
+                  0,
+                  *ind == SQL_NULL_DATA ? ind : NULL);
             tmpStorage.append(ba);
             break;
          }
@@ -667,41 +667,41 @@ bool QDB2Result::exec()
             dt->second = qdt.time().second();
             dt->fraction = qdt.time().msec() * 1000000;
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_TIMESTAMP,
-                                 SQL_TIMESTAMP,
-                                 0,
-                                 0,
-                                 (void *) dt,
-                                 0,
-                                 *ind == SQL_NULL_DATA ? ind : NULL);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_TIMESTAMP,
+                  SQL_TIMESTAMP,
+                  0,
+                  0,
+                  (void *) dt,
+                  0,
+                  *ind == SQL_NULL_DATA ? ind : NULL);
             tmpStorage.append(ba);
             break;
          }
          case QVariant::Int:
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_SLONG,
-                                 SQL_INTEGER,
-                                 0,
-                                 0,
-                                 (void *)values.at(i).constData(),
-                                 0,
-                                 *ind == SQL_NULL_DATA ? ind : NULL);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_SLONG,
+                  SQL_INTEGER,
+                  0,
+                  0,
+                  (void *)values.at(i).constData(),
+                  0,
+                  *ind == SQL_NULL_DATA ? ind : NULL);
             break;
          case QVariant::Double:
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_DOUBLE,
-                                 SQL_DOUBLE,
-                                 0,
-                                 0,
-                                 (void *)values.at(i).constData(),
-                                 0,
-                                 *ind == SQL_NULL_DATA ? ind : NULL);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_DOUBLE,
+                  SQL_DOUBLE,
+                  0,
+                  0,
+                  (void *)values.at(i).constData(),
+                  0,
+                  *ind == SQL_NULL_DATA ? ind : NULL);
             break;
          case QVariant::ByteArray: {
             int len = values.at(i).toByteArray().size();
@@ -709,15 +709,15 @@ bool QDB2Result::exec()
                *ind = len;
             }
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_BINARY,
-                                 SQL_LONGVARBINARY,
-                                 len,
-                                 0,
-                                 (void *)values.at(i).toByteArray().constData(),
-                                 len,
-                                 ind);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_BINARY,
+                  SQL_LONGVARBINARY,
+                  len,
+                  0,
+                  (void *)values.at(i).toByteArray().constData(),
+                  len,
+                  ind);
             break;
          }
          case QVariant::String: {
@@ -728,29 +728,29 @@ bool QDB2Result::exec()
             if (bindValueType(i) & QSql::Out) {
                QByteArray ba((char *)str.utf16(), str.capacity() * sizeof(QChar));
                r = SQLBindParameter(d->hStmt,
-                                    i + 1,
-                                    qParamType[(QFlag)(bindValueType(i)) & 3],
-                                    SQL_C_WCHAR,
-                                    SQL_WVARCHAR,
-                                    str.length(),
-                                    0,
-                                    (void *)ba.constData(),
-                                    ba.size(),
-                                    ind);
+                     i + 1,
+                     qParamType[(QFlag)(bindValueType(i)) & 3],
+                     SQL_C_WCHAR,
+                     SQL_WVARCHAR,
+                     str.length(),
+                     0,
+                     (void *)ba.constData(),
+                     ba.size(),
+                     ind);
                tmpStorage.append(ba);
             } else {
                void *data = (void *)str.utf16();
                int len = str.length();
                r = SQLBindParameter(d->hStmt,
-                                    i + 1,
-                                    qParamType[(QFlag)(bindValueType(i)) & 3],
-                                    SQL_C_WCHAR,
-                                    SQL_WVARCHAR,
-                                    len,
-                                    0,
-                                    data,
-                                    len * sizeof(QChar),
-                                    ind);
+                     i + 1,
+                     qParamType[(QFlag)(bindValueType(i)) & 3],
+                     SQL_C_WCHAR,
+                     SQL_WVARCHAR,
+                     len,
+                     0,
+                     data,
+                     len * sizeof(QChar),
+                     ind);
             }
             break;
          }
@@ -761,24 +761,24 @@ bool QDB2Result::exec()
                *ind = ba.length();
             }
             r = SQLBindParameter(d->hStmt,
-                                 i + 1,
-                                 qParamType[(QFlag)(bindValueType(i)) & 3],
-                                 SQL_C_CHAR,
-                                 SQL_VARCHAR,
-                                 len,
-                                 0,
-                                 (void *) ba.constData(),
-                                 len,
-                                 ind);
+                  i + 1,
+                  qParamType[(QFlag)(bindValueType(i)) & 3],
+                  SQL_C_CHAR,
+                  SQL_VARCHAR,
+                  len,
+                  0,
+                  (void *) ba.constData(),
+                  len,
+                  ind);
             tmpStorage.append(ba);
             break;
          }
       }
       if (r != SQL_SUCCESS) {
          qWarning("QDB2Result::exec: unable to bind variable: %s",
-                  qDB2Warn(d).toLocal8Bit().constData());
+            qDB2Warn(d).toLocal8Bit().constData());
          setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                                 "Unable to bind variable"), QSqlError::StatementError, d));
+                  "Unable to bind variable"), QSqlError::StatementError, d));
          return false;
       }
    }
@@ -786,9 +786,9 @@ bool QDB2Result::exec()
    r = SQLExecute(d->hStmt);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qWarning("QDB2Result::exec: Unable to execute statement: %s",
-               qDB2Warn(d).toLocal8Bit().constData());
+         qDB2Warn(d).toLocal8Bit().constData());
       setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                              "Unable to execute statement"), QSqlError::StatementError, d));
+               "Unable to execute statement"), QSqlError::StatementError, d));
       return false;
    }
    SQLSMALLINT count;
@@ -825,7 +825,7 @@ bool QDB2Result::exec()
          case QVariant::DateTime: {
             TIMESTAMP_STRUCT dt = *((TIMESTAMP_STRUCT *)tmpStorage.takeFirst().constData());
             values[i] = QVariant(QDateTime(QDate(dt.year, dt.month, dt.day),
-                                           QTime(dt.hour, dt.minute, dt.second, dt.fraction / 1000000)));
+                     QTime(dt.hour, dt.minute, dt.second, dt.fraction / 1000000)));
             break;
          }
          case QVariant::Int:
@@ -872,12 +872,12 @@ bool QDB2Result::fetch(int i)
       return ok;
    } else {
       r = SQLFetchScroll(d->hStmt,
-                         SQL_FETCH_ABSOLUTE,
-                         actualIdx);
+            SQL_FETCH_ABSOLUTE,
+            actualIdx);
    }
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO && r != SQL_NO_DATA) {
       setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                              "Unable to fetch record %1").fromatArg(i), QSqlError::StatementError, d));
+               "Unable to fetch record %1").fromatArg(i), QSqlError::StatementError, d));
       return false;
    } else if (r == SQL_NO_DATA) {
       return false;
@@ -891,12 +891,12 @@ bool QDB2Result::fetchNext()
    SQLRETURN r;
    d->clearValueCache();
    r = SQLFetchScroll(d->hStmt,
-                      SQL_FETCH_NEXT,
-                      0);
+         SQL_FETCH_NEXT,
+         0);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       if (r != SQL_NO_DATA)
          setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                                 "Unable to fetch next"), QSqlError::StatementError, d));
+                  "Unable to fetch next"), QSqlError::StatementError, d));
       return false;
    }
    setAt(at() + 1);
@@ -914,12 +914,12 @@ bool QDB2Result::fetchFirst()
    d->clearValueCache();
    SQLRETURN r;
    r = SQLFetchScroll(d->hStmt,
-                      SQL_FETCH_FIRST,
-                      0);
+         SQL_FETCH_FIRST,
+         0);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       if (r != SQL_NO_DATA)
          setLastError(qMakeError(QCoreApplication::translate("QDB2Result", "Unable to fetch first"),
-                                 QSqlError::StatementError, d));
+               QSqlError::StatementError, d));
       return false;
    }
    setAt(0);
@@ -991,11 +991,11 @@ QVariant QDB2Result::data(int field)
       case QVariant::Date: {
          DATE_STRUCT dbuf;
          r = SQLGetData(d->hStmt,
-                        field + 1,
-                        SQL_C_DATE,
-                        (SQLPOINTER) &dbuf,
-                        0,
-                        &lengthIndicator);
+               field + 1,
+               SQL_C_DATE,
+               (SQLPOINTER) &dbuf,
+               0,
+               &lengthIndicator);
          if ((r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) && (lengthIndicator != SQL_NULL_DATA)) {
             v = new QVariant(QDate(dbuf.year, dbuf.month, dbuf.day));
          } else {
@@ -1007,11 +1007,11 @@ QVariant QDB2Result::data(int field)
       case QVariant::Time: {
          TIME_STRUCT tbuf;
          r = SQLGetData(d->hStmt,
-                        field + 1,
-                        SQL_C_TIME,
-                        (SQLPOINTER) &tbuf,
-                        0,
-                        &lengthIndicator);
+               field + 1,
+               SQL_C_TIME,
+               (SQLPOINTER) &tbuf,
+               0,
+               &lengthIndicator);
          if ((r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) && (lengthIndicator != SQL_NULL_DATA)) {
             v = new QVariant(QTime(tbuf.hour, tbuf.minute, tbuf.second));
          } else {
@@ -1023,14 +1023,14 @@ QVariant QDB2Result::data(int field)
       case QVariant::DateTime: {
          TIMESTAMP_STRUCT dtbuf;
          r = SQLGetData(d->hStmt,
-                        field + 1,
-                        SQL_C_TIMESTAMP,
-                        (SQLPOINTER) &dtbuf,
-                        0,
-                        &lengthIndicator);
+               field + 1,
+               SQL_C_TIMESTAMP,
+               (SQLPOINTER) &dtbuf,
+               0,
+               &lengthIndicator);
          if ((r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) && (lengthIndicator != SQL_NULL_DATA)) {
             v = new QVariant(QDateTime(QDate(dtbuf.year, dtbuf.month, dtbuf.day),
-                                       QTime(dtbuf.hour, dtbuf.minute, dtbuf.second, dtbuf.fraction / 1000000)));
+                  QTime(dtbuf.hour, dtbuf.minute, dtbuf.second, dtbuf.fraction / 1000000)));
          } else {
             v = new QVariant(QDateTime());
             isNull = true;
@@ -1120,7 +1120,7 @@ bool QDB2Result::nextResult()
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       if (r != SQL_NO_DATA) {
          setLastError(qMakeError(QCoreApplication::translate("QODBCResult",
-                                 "Unable to fetch last"), QSqlError::ConnectionError, d));
+                  "Unable to fetch last"), QSqlError::ConnectionError, d));
       }
       return false;
    }
@@ -1183,15 +1183,15 @@ QDB2Driver::~QDB2Driver()
 }
 
 bool QDB2Driver::open(const QString &db, const QString &user, const QString &password, const QString &host, int port,
-                      const QString &connOpts)
+   const QString &connOpts)
 {
    if (isOpen()) {
       close();
    }
    SQLRETURN r;
    r = SQLAllocHandle(SQL_HANDLE_ENV,
-                      SQL_NULL_HANDLE,
-                      &d->hEnv);
+         SQL_NULL_HANDLE,
+         &d->hEnv);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QLatin1String("QDB2Driver::open: Unable to allocate environment"), d);
       setOpenError(true);
@@ -1199,8 +1199,8 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
    }
 
    r = SQLAllocHandle(SQL_HANDLE_DBC,
-                      d->hEnv,
-                      &d->hDbc);
+         d->hEnv,
+         &d->hDbc);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QLatin1String("QDB2Driver::open: Unable to allocate connection"), d);
       setOpenError(true);
@@ -1215,7 +1215,7 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
       int idx;
       if ((idx = tmp.indexOf(QLatin1Char('='))) == -1) {
          qWarning("QDB2Driver::open: Illegal connect option value '%s'",
-                  tmp.toLocal8Bit().constData());
+            tmp.toLocal8Bit().constData());
          continue;
       }
 
@@ -1231,7 +1231,7 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
             v = SQL_MODE_READ_WRITE;
          } else {
             qWarning("QDB2Driver::open: Unknown option value '%s'",
-                     tmp.toLocal8Bit().constData());
+               tmp.toLocal8Bit().constData());
             continue;
          }
          r = SQLSetConnectAttr(d->hDbc, SQL_ATTR_ACCESS_MODE, (SQLPOINTER) v, 0);
@@ -1242,11 +1242,11 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
          protocol = tmp;
       } else {
          qWarning("QDB2Driver::open: Unknown connection attribute '%s'",
-                  tmp.toLocal8Bit().constData());
+            tmp.toLocal8Bit().constData());
       }
       if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO)
          qSqlWarning(QString::fromLatin1("QDB2Driver::open: "
-                                         "Unable to set connection attribute '%1'").fromatArg(opt), d);
+               "Unable to set connection attribute '%1'").fromatArg(opt), d);
    }
 
    if (protocol.isEmpty()) {
@@ -1259,24 +1259,24 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
 
    QString connQStr;
    connQStr =  protocol + QLatin1String(";DATABASE=") + db + QLatin1String(";HOSTNAME=") + host
-               + QLatin1String(";PORT=") + QString::number(port) + QLatin1String(";UID=") + user
-               + QLatin1String(";PWD=") + password;
+      + QLatin1String(";PORT=") + QString::number(port) + QLatin1String(";UID=") + user
+      + QLatin1String(";PWD=") + password;
 
 
    SQLTCHAR connOut[SQL_MAX_OPTION_STRING_LENGTH];
    SQLSMALLINT cb;
 
    r = SQLDriverConnect(d->hDbc,
-                        NULL,
-                        qToTChar(connQStr),
-                        (SQLSMALLINT) connQStr.length(),
-                        connOut,
-                        SQL_MAX_OPTION_STRING_LENGTH,
-                        &cb,
-                        SQL_DRIVER_NOPROMPT);
+         NULL,
+         qToTChar(connQStr),
+         (SQLSMALLINT) connQStr.length(),
+         connOut,
+         SQL_MAX_OPTION_STRING_LENGTH,
+         &cb,
+         SQL_DRIVER_NOPROMPT);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       setLastError(qMakeError(tr("Unable to connect"),
-                              QSqlError::ConnectionError, d));
+            QSqlError::ConnectionError, d));
       setOpenError(true);
       return false;
    }
@@ -1354,48 +1354,48 @@ QSqlRecord QDB2Driver::record(const QString &tableName) const
    }
 
    SQLRETURN r = SQLAllocHandle(SQL_HANDLE_STMT,
-                                d->hDbc,
-                                &hStmt);
+         d->hDbc,
+         &hStmt);
    if (r != SQL_SUCCESS) {
       qSqlWarning(QLatin1String("QDB2Driver::record: Unable to allocate handle"), d);
       return fil;
    }
 
    r = SQLSetStmtAttr(hStmt,
-                      SQL_ATTR_CURSOR_TYPE,
-                      (SQLPOINTER) SQL_CURSOR_FORWARD_ONLY,
-                      SQL_IS_UINTEGER);
+         SQL_ATTR_CURSOR_TYPE,
+         (SQLPOINTER) SQL_CURSOR_FORWARD_ONLY,
+         SQL_IS_UINTEGER);
 
 
    //Aside: szSchemaName and szTableName parameters of SQLColumns
    //are case sensitive search patterns, so no escaping is used.
    r =  SQLColumns(hStmt,
-                   NULL,
-                   0,
-                   qToTChar(schema),
-                   schema.length(),
-                   qToTChar(table),
-                   table.length(),
-                   NULL,
-                   0);
+         NULL,
+         0,
+         qToTChar(schema),
+         schema.length(),
+         qToTChar(table),
+         table.length(),
+         NULL,
+         0);
 
    if (r != SQL_SUCCESS) {
       qSqlWarning(QLatin1String("QDB2Driver::record: Unable to execute column list"), d);
    }
    r = SQLFetchScroll(hStmt,
-                      SQL_FETCH_NEXT,
-                      0);
+         SQL_FETCH_NEXT,
+         0);
    while (r == SQL_SUCCESS) {
       fil.append(qMakeFieldInfo(hStmt));
       r = SQLFetchScroll(hStmt,
-                         SQL_FETCH_NEXT,
-                         0);
+            SQL_FETCH_NEXT,
+            0);
    }
 
    r = SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
    if (r != SQL_SUCCESS)
       qSqlWarning(QLatin1String("QDB2Driver: Unable to free statement handle ")
-                  + QString::number(r), d);
+         + QString::number(r), d);
 
    return fil;
 }
@@ -1410,16 +1410,16 @@ QStringList QDB2Driver::tables(QSql::TableType type) const
    SQLHANDLE hStmt;
 
    SQLRETURN r = SQLAllocHandle(SQL_HANDLE_STMT,
-                                d->hDbc,
-                                &hStmt);
+         d->hDbc,
+         &hStmt);
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QLatin1String("QDB2Driver::tables: Unable to allocate handle"), d);
       return tl;
    }
    r = SQLSetStmtAttr(hStmt,
-                      SQL_ATTR_CURSOR_TYPE,
-                      (SQLPOINTER)SQL_CURSOR_FORWARD_ONLY,
-                      SQL_IS_UINTEGER);
+         SQL_ATTR_CURSOR_TYPE,
+         (SQLPOINTER)SQL_CURSOR_FORWARD_ONLY,
+         SQL_IS_UINTEGER);
 
    QString tableType;
    if (type & QSql::Tables) {
@@ -1437,21 +1437,21 @@ QStringList QDB2Driver::tables(QSql::TableType type) const
    tableType.chop(1);
 
    r = SQLTables(hStmt,
-                 NULL,
-                 0,
-                 NULL,
-                 0,
-                 NULL,
-                 0,
-                 qToTChar(tableType),
-                 tableType.length());
+         NULL,
+         0,
+         NULL,
+         0,
+         NULL,
+         0,
+         qToTChar(tableType),
+         tableType.length());
 
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QLatin1String("QDB2Driver::tables: Unable to execute table list"), d);
    }
    r = SQLFetchScroll(hStmt,
-                      SQL_FETCH_NEXT,
-                      0);
+         SQL_FETCH_NEXT,
+         0);
    while (r == SQL_SUCCESS) {
       bool isNull;
       QString fieldVal = qGetStringData(hStmt, 2, -1, isNull);
@@ -1468,14 +1468,14 @@ QStringList QDB2Driver::tables(QSql::TableType type) const
       }
       tl.append(fieldVal);
       r = SQLFetchScroll(hStmt,
-                         SQL_FETCH_NEXT,
-                         0);
+            SQL_FETCH_NEXT,
+            0);
    }
 
    r = SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
    if (r != SQL_SUCCESS)
       qSqlWarning(QLatin1String("QDB2Driver::tables: Unable to free statement handle ")
-                  + QString::number(r), d);
+         + QString::number(r), d);
    return tl;
 }
 
@@ -1489,8 +1489,8 @@ QSqlIndex QDB2Driver::primaryIndex(const QString &tablename) const
 
    SQLHANDLE hStmt;
    SQLRETURN r = SQLAllocHandle(SQL_HANDLE_STMT,
-                                d->hDbc,
-                                &hStmt);
+         d->hDbc,
+         &hStmt);
    if (r != SQL_SUCCESS) {
       qSqlWarning(QLatin1String("QDB2Driver::primaryIndex: Unable to list primary key"), d);
       return index;
@@ -1517,20 +1517,20 @@ QSqlIndex QDB2Driver::primaryIndex(const QString &tablename) const
    }
 
    r = SQLSetStmtAttr(hStmt,
-                      SQL_ATTR_CURSOR_TYPE,
-                      (SQLPOINTER)SQL_CURSOR_FORWARD_ONLY,
-                      SQL_IS_UINTEGER);
+         SQL_ATTR_CURSOR_TYPE,
+         (SQLPOINTER)SQL_CURSOR_FORWARD_ONLY,
+         SQL_IS_UINTEGER);
 
    r = SQLPrimaryKeys(hStmt,
-                      NULL,
-                      0,
-                      qToTChar(schema),
-                      schema.length(),
-                      qToTChar(table),
-                      table.length());
+         NULL,
+         0,
+         qToTChar(schema),
+         schema.length(),
+         qToTChar(table),
+         table.length());
    r = SQLFetchScroll(hStmt,
-                      SQL_FETCH_NEXT,
-                      0);
+         SQL_FETCH_NEXT,
+         0);
 
    bool isNull;
    QString cName, idxName;
@@ -1541,13 +1541,13 @@ QSqlIndex QDB2Driver::primaryIndex(const QString &tablename) const
       index.append(rec.field(cName));
       index.setName(idxName);
       r = SQLFetchScroll(hStmt,
-                         SQL_FETCH_NEXT,
-                         0);
+            SQL_FETCH_NEXT,
+            0);
    }
    r = SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
    if (r != SQL_SUCCESS)
       qSqlWarning(QLatin1String("QDB2Driver: Unable to free statement handle ")
-                  + QString::number(r), d);
+         + QString::number(r), d);
    return index;
 }
 
@@ -1591,11 +1591,11 @@ bool QDB2Driver::commitTransaction()
       return false;
    }
    SQLRETURN r = SQLEndTran(SQL_HANDLE_DBC,
-                            d->hDbc,
-                            SQL_COMMIT);
+         d->hDbc,
+         SQL_COMMIT);
    if (r != SQL_SUCCESS) {
       setLastError(qMakeError(tr("Unable to commit transaction"),
-                              QSqlError::TransactionError, d));
+            QSqlError::TransactionError, d));
       return false;
    }
    return setAutoCommit(true);
@@ -1608,11 +1608,11 @@ bool QDB2Driver::rollbackTransaction()
       return false;
    }
    SQLRETURN r = SQLEndTran(SQL_HANDLE_DBC,
-                            d->hDbc,
-                            SQL_ROLLBACK);
+         d->hDbc,
+         SQL_ROLLBACK);
    if (r != SQL_SUCCESS) {
       setLastError(qMakeError(tr("Unable to rollback transaction"),
-                              QSqlError::TransactionError, d));
+            QSqlError::TransactionError, d));
       return false;
    }
    return setAutoCommit(true);
@@ -1622,12 +1622,12 @@ bool QDB2Driver::setAutoCommit(bool autoCommit)
 {
    SQLUINTEGER ac = autoCommit ? SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF;
    SQLRETURN r  = SQLSetConnectAttr(d->hDbc,
-                                    SQL_ATTR_AUTOCOMMIT,
-                                    (SQLPOINTER)ac,
-                                    sizeof(ac));
+         SQL_ATTR_AUTOCOMMIT,
+         (SQLPOINTER)ac,
+         sizeof(ac));
    if (r != SQL_SUCCESS) {
       setLastError(qMakeError(tr("Unable to set autocommit"),
-                              QSqlError::TransactionError, d));
+            QSqlError::TransactionError, d));
       return false;
    }
    return true;
@@ -1647,15 +1647,15 @@ QString QDB2Driver::formatValue(const QSqlField &field, bool trimStrings) const
             QTime tm = field.value().toDateTime().time();
             // Dateformat has to be "yyyy-MM-dd hh:mm:ss", with leading zeroes if month or day < 10
             return QLatin1Char('\'') + QString::number(dt.year()) + QLatin1Char('-')
-                   + QString::number(dt.month()) + QLatin1Char('-')
-                   + QString::number(dt.day()) + QLatin1Char('-')
-                   + QString::number(tm.hour()) + QLatin1Char('.')
-                   + QString::number(tm.minute()).rightJustified(2, QLatin1Char('0'), true)
-                   + QLatin1Char('.')
-                   + QString::number(tm.second()).rightJustified(2, QLatin1Char('0'), true)
-                   + QLatin1Char('.')
-                   + QString::number(tm.msec() * 1000).rightJustified(6, QLatin1Char('0'), true)
-                   + QLatin1Char('\'');
+               + QString::number(dt.month()) + QLatin1Char('-')
+               + QString::number(dt.day()) + QLatin1Char('-')
+               + QString::number(tm.hour()) + QLatin1Char('.')
+               + QString::number(tm.minute()).rightJustified(2, QLatin1Char('0'), true)
+               + QLatin1Char('.')
+               + QString::number(tm.second()).rightJustified(2, QLatin1Char('0'), true)
+               + QLatin1Char('.')
+               + QString::number(tm.msec() * 1000).rightJustified(6, QLatin1Char('0'), true)
+               + QLatin1Char('\'');
          } else {
             return QLatin1String("NULL");
          }

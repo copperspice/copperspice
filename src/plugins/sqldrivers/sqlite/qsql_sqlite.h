@@ -52,7 +52,7 @@ class Q_EXPORT_SQLDRIVER_SQLITE QSQLiteDriver : public QSqlDriver
    bool hasFeature(DriverFeature f) const override;
 
    bool open(const QString &db, const QString &user, const QString &password, const QString &host,
-                  int port, const QString &connOpts) override;
+      int port, const QString &connOpts) override;
 
    void close() override;
    QSqlResult *createResult() const override;
@@ -66,7 +66,7 @@ class Q_EXPORT_SQLDRIVER_SQLITE QSQLiteDriver : public QSqlDriver
    QVariant handle() const override;
    QString escapeIdentifier(const QString &identifier, IdentifierType) const override;
 
-private:
+ private:
    friend class QSQLiteResult;
 
 };

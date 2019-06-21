@@ -136,8 +136,7 @@ class QPSQLDriverPrivate : public QSqlDriverPrivate
  public:
    QPSQLDriverPrivate() : QSqlDriverPrivate(),
       connection(0), isUtf8(false), pro(QPSQLDriver::Version6),
-      sn(0), pendingNotifyCheck(false), hasBackslashEscape(false)
-   {
+      sn(0), pendingNotifyCheck(false), hasBackslashEscape(false) {
       dbmsType = QSqlDriver::PostgreSQL;
    }
 
@@ -1162,11 +1161,11 @@ bool QPSQLDriver::commitTransaction()
    // This fix can dissapear once there is an API to query this sort of information.
 
    if ( d->pro == QPSQLDriver::Version8  ||
-        d->pro == QPSQLDriver::Version81 ||
-        d->pro == QPSQLDriver::Version82 ||
-        d->pro == QPSQLDriver::Version83 ||
-        d->pro == QPSQLDriver::Version84 ||
-        d->pro >= QPSQLDriver::Version9) {
+      d->pro == QPSQLDriver::Version81 ||
+      d->pro == QPSQLDriver::Version82 ||
+      d->pro == QPSQLDriver::Version83 ||
+      d->pro == QPSQLDriver::Version84 ||
+      d->pro >= QPSQLDriver::Version9) {
       transaction_failed = qstrcmp(PQcmdStatus(res), "ROLLBACK") == 0;
    }
 

@@ -582,20 +582,6 @@ bool QSqlDatabase::transaction()
    return d->driver->beginTransaction();
 }
 
-/*!
-  Commits a transaction to the database if the driver supports
-  transactions and a transaction() has been started. Returns \c{true}
-  if the operation succeeded. Otherwise it returns \c{false}.
-
-  \note For some databases, the commit will fail and return \c{false}
-  if there is an \l{QSqlQuery::isActive()} {active query} using the
-  database for a \c{SELECT}. Make the query \l{QSqlQuery::isActive()}
-  {inactive} before doing the commit.
-
-  Call lastError() to get information about errors.
-
-  \sa QSqlQuery::isActive() QSqlDriver::hasFeature() rollback()
-*/
 bool QSqlDatabase::commit()
 {
    if (!d->driver->hasFeature(QSqlDriver::Transactions)) {
@@ -604,20 +590,6 @@ bool QSqlDatabase::commit()
    return d->driver->commitTransaction();
 }
 
-/*!
-  Rolls back a transaction on the database, if the driver supports
-  transactions and a transaction() has been started. Returns \c{true}
-  if the operation succeeded. Otherwise it returns \c{false}.
-
-  \note For some databases, the rollback will fail and return
-  \c{false} if there is an \l{QSqlQuery::isActive()} {active query}
-  using the database for a \c{SELECT}. Make the query
-  \l{QSqlQuery::isActive()} {inactive} before doing the rollback.
-
-  Call lastError() to get information about errors.
-
-  \sa QSqlQuery::isActive() QSqlDriver::hasFeature() commit()
-*/
 bool QSqlDatabase::rollback()
 {
    if (!d->driver->hasFeature(QSqlDriver::Transactions)) {
@@ -626,52 +598,12 @@ bool QSqlDatabase::rollback()
    return d->driver->rollbackTransaction();
 }
 
-/*!
-    Sets the connection's database name to \a name. To have effect,
-    the database name must be set \e{before} the connection is
-    \l{open()} {opened}.  Alternatively, you can close() the
-    connection, set the database name, and call open() again.  \note
-    The \e{database name} is not the \e{connection name}. The
-    connection name must be passed to addDatabase() at connection
-    object create time.
-
-    For the QOCI (Oracle) driver, the database name is the TNS
-    Service Name.
-
-    For the QODBC driver, the \a name can either be a DSN, a DSN
-    filename (in which case the file must have a \c .dsn extension),
-    or a connection string.
-
-    For example, Microsoft Access users can use the following
-    connection string to open an \c .mdb file directly, instead of
-    having to create a DSN entry in the ODBC manager:
-
-    \snippet doc/src/snippets/code/src_sql_kernel_qsqldatabase.cpp 3
-
-    There is no default value.
-
-    \sa databaseName() setUserName() setPassword() setHostName()
-    \sa setPort() setConnectOptions() open()
-*/
-
 void QSqlDatabase::setDatabaseName(const QString &name)
 {
    if (isValid()) {
       d->dbname = name;
    }
 }
-
-/*!
-    Sets the connection's user name to \a name. To have effect, the
-    user name must be set \e{before} the connection is \l{open()}
-    {opened}.  Alternatively, you can close() the connection, set the
-    user name, and call open() again.
-
-    There is no default value.
-
-    \sa userName() setDatabaseName() setPassword() setHostName()
-    \sa setPort() setConnectOptions() open()
-*/
 
 void QSqlDatabase::setUserName(const QString &name)
 {
@@ -680,40 +612,12 @@ void QSqlDatabase::setUserName(const QString &name)
    }
 }
 
-/*!
-    Sets the connection's password to \a password. To have effect, the
-    password must be set \e{before} the connection is \l{open()}
-    {opened}.  Alternatively, you can close() the connection, set the
-    password, and call open() again.
-
-    There is no default value.
-
-    \warning This function stores the password in plain text within
-    Qt. Use the open() call that takes a password as parameter to
-    avoid this behavior.
-
-    \sa password() setUserName() setDatabaseName() setHostName()
-    \sa setPort() setConnectOptions() open()
-*/
-
 void QSqlDatabase::setPassword(const QString &password)
 {
    if (isValid()) {
       d->pword = password;
    }
 }
-
-/*!
-    Sets the connection's host name to \a host. To have effect, the
-    host name must be set \e{before} the connection is \l{open()}
-    {opened}.  Alternatively, you can close() the connection, set the
-    host name, and call open() again.
-
-    There is no default value.
-
-    \sa hostName() setUserName() setPassword() setDatabaseName()
-    \sa setPort() setConnectOptions() open()
-*/
 
 void QSqlDatabase::setHostName(const QString &host)
 {
@@ -722,18 +626,6 @@ void QSqlDatabase::setHostName(const QString &host)
    }
 }
 
-/*!
-    Sets the connection's port number to \a port. To have effect, the
-    port number must be set \e{before} the connection is \l{open()}
-    {opened}.  Alternatively, you can close() the connection, set the
-    port number, and call open() again..
-
-    There is no default value.
-
-    \sa port() setUserName() setPassword() setHostName()
-    \sa setDatabaseName() setConnectOptions() open()
-*/
-
 void QSqlDatabase::setPort(int port)
 {
    if (isValid()) {
@@ -741,134 +633,60 @@ void QSqlDatabase::setPort(int port)
    }
 }
 
-/*!
-    Returns the connection's database name, which may be empty.
-    \note The database name is not the connection name.
-
-    \sa setDatabaseName()
-*/
 QString QSqlDatabase::databaseName() const
 {
    return d->dbname;
 }
 
-/*!
-    Returns the connection's user name; it may be empty.
-
-    \sa setUserName()
-*/
 QString QSqlDatabase::userName() const
 {
    return d->uname;
 }
 
-/*!
-    Returns the connection's password. If the password was not set
-    with setPassword(), and if the password was given in the open()
-    call, or if no password was used, an empty string is returned.
-*/
 QString QSqlDatabase::password() const
 {
    return d->pword;
 }
 
-/*!
-    Returns the connection's host name; it may be empty.
-
-    \sa setHostName()
-*/
 QString QSqlDatabase::hostName() const
 {
    return d->hname;
 }
 
-/*!
-    Returns the connection's driver name.
-
-    \sa addDatabase(), driver()
-*/
 QString QSqlDatabase::driverName() const
 {
    return d->drvName;
 }
 
-/*!
-    Returns the connection's port number. The value is undefined if
-    the port number has not been set.
-
-    \sa setPort()
-*/
 int QSqlDatabase::port() const
 {
    return d->port;
 }
-
-/*!
-    Returns the database driver used to access the database
-    connection.
-
-    \sa addDatabase() drivers()
-*/
 
 QSqlDriver *QSqlDatabase::driver() const
 {
    return d->driver;
 }
 
-/*!
-    Returns information about the last error that occurred on the
-    database.
-
-    Failures that occur in conjunction with an individual query are
-    reported by QSqlQuery::lastError().
-
-    \sa QSqlError, QSqlQuery::lastError()
-*/
-
 QSqlError QSqlDatabase::lastError() const
 {
    return d->driver->lastError();
 }
-
-
-/*!
-    Returns a list of the database's tables, system tables and views,
-    as specified by the parameter \a type.
-
-    \sa primaryIndex(), record()
-*/
 
 QStringList QSqlDatabase::tables(QSql::TableType type) const
 {
    return d->driver->tables(type);
 }
 
-/*!
-    Returns the primary index for table \a tablename. If no primary
-    index exists an empty QSqlIndex is returned.
-
-    \sa tables(), record()
-*/
-
 QSqlIndex QSqlDatabase::primaryIndex(const QString &tablename) const
 {
    return d->driver->primaryIndex(tablename);
 }
 
-
-/*!
-    Returns a QSqlRecord populated with the names of all the fields in
-    the table (or view) called \a tablename. The order in which the
-    fields appear in the record is undefined. If no such table (or
-    view) exists, an empty record is returned.
-*/
-
 QSqlRecord QSqlDatabase::record(const QString &tablename) const
 {
    return d->driver->record(tablename);
 }
-
-
 
 void QSqlDatabase::setConnectOptions(const QString &options)
 {
@@ -877,23 +695,10 @@ void QSqlDatabase::setConnectOptions(const QString &options)
    }
 }
 
-/*!
-    Returns the connection options string used for this connection.
-    The string may be empty.
-
-    \sa setConnectOptions()
- */
 QString QSqlDatabase::connectOptions() const
 {
    return d->connOptions;
 }
-
-/*!
-    Returns true if a driver called \a name is available; otherwise
-    returns false.
-
-    \sa drivers()
-*/
 
 bool QSqlDatabase::isDriverAvailable(const QString &name)
 {
@@ -907,12 +712,10 @@ QSqlDatabase QSqlDatabase::addDatabase(QSqlDriver *driver, const QString &connec
    return db;
 }
 
-
 bool QSqlDatabase::isValid() const
 {
    return d->driver && d->driver != d->shared_null()->driver;
 }
-
 
 QSqlDatabase QSqlDatabase::cloneDatabase(const QSqlDatabase &other, const QString &connectionName)
 {
@@ -926,14 +729,6 @@ QSqlDatabase QSqlDatabase::cloneDatabase(const QSqlDatabase &other, const QStrin
    return db;
 }
 
-/*!
-    \since 4.4
-
-    Returns the connection name, which may be empty.  \note The
-    connection name is not the \l{databaseName()} {database name}.
-
-    \sa addDatabase()
-*/
 QString QSqlDatabase::connectionName() const
 {
    return d->connName;
@@ -947,14 +742,6 @@ void QSqlDatabase::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy pr
    d->precisionPolicy = precisionPolicy;
 }
 
-/*!
-    \since 4.6
-
-    Returns the current default precision policy for the database connection.
-
-    \sa QSql::NumericalPrecisionPolicy, setNumericalPrecisionPolicy(),
-    QSqlQuery::numericalPrecisionPolicy(), QSqlQuery::setNumericalPrecisionPolicy()
-*/
 QSql::NumericalPrecisionPolicy QSqlDatabase::numericalPrecisionPolicy() const
 {
    if (driver()) {

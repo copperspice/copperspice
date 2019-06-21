@@ -166,12 +166,14 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
       case SelectStatement:
          for (i = 0; i < rec.count(); ++i) {
             if (rec.isGenerated(i)) {
-               s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(QLatin1String(", "));
+               s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(", ");
             }
          }
+
          if (s.isEmpty()) {
             return s;
          }
+
          s.chop(2);
          s.prepend("SELECT ").append(" FROM ").append(tableName);
          break;
@@ -303,16 +305,19 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
          case QVariant::String:
          case QVariant::Char: {
             QString result = field.value().toString();
+
             if (trimStrings) {
                int end = result.length();
-               while (end && result.at(end - 1).isSpace()) { /* skip white space from end */
+               while (end && result.at(end - 1).isSpace()) {
+                  // skip white space from end
                   end--;
                }
                result.truncate(end);
             }
+
             /* escape the "'" character */
-            result.replace(QLatin1Char('\''), QLatin1String("''"));
-            r = QLatin1Char('\'') + result + QLatin1Char('\'');
+            result.replace('\'', "''");
+            r = QChar('\'') + result + QChar('\'');
             break;
          }
 
@@ -324,14 +329,16 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
             if (hasFeature(BLOB)) {
                QByteArray ba = field.value().toByteArray();
                QString res;
+
                static const char hexchars[] = "0123456789abcdef";
 
                for (int i = 0; i < ba.size(); ++i) {
                   uchar s = (uchar) ba[i];
-                  res += QLatin1Char(hexchars[s >> 4]);
-                  res += QLatin1Char(hexchars[s & 0x0f]);
+                  res += QChar(hexchars[s >> 4]);
+                  res += QChar(hexchars[s & 0x0f]);
                }
-               r = QLatin1Char('\'') + res +  QLatin1Char('\'');
+
+               r = QChar('\'') + res +  QChar('\'');
                break;
             }
          }

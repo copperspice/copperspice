@@ -88,11 +88,11 @@ class Q_EXPORT_SQLDRIVER_DB2 QDB2Driver : public QSqlDriver
    QString formatValue(const QSqlField &field, bool trimStrings) const;
    QVariant handle() const;
    bool open(const QString &db,
-             const QString &user,
-             const QString &password,
-             const QString &host,
-             int port,
-             const QString &connOpts);
+      const QString &user,
+      const QString &password,
+      const QString &host,
+      int port,
+      const QString &connOpts);
    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
 
  private:

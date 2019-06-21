@@ -32,25 +32,25 @@ class QIBaseDriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QIBASE")
 
-public:
-    QIBaseDriverPlugin();
+ public:
+   QIBaseDriverPlugin();
 
-    QSqlDriver* create(const QString &) override;
+   QSqlDriver *create(const QString &) override;
 
 };
 
 QIBaseDriverPlugin::QIBaseDriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QIBaseDriverPlugin::create(const QString &name)
+QSqlDriver *QIBaseDriverPlugin::create(const QString &name)
 {
-    if (name == "QIBASE") {
-        QIBaseDriver* driver = new QIBaseDriver();
-        return driver;
-    }
+   if (name == "QIBASE") {
+      QIBaseDriver *driver = new QIBaseDriver();
+      return driver;
+   }
 
-    return 0;
+   return 0;
 }
 

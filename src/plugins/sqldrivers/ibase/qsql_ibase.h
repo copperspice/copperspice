@@ -71,16 +71,16 @@ class QIBaseDriver : public QSqlDriver
    virtual ~QIBaseDriver();
    bool hasFeature(DriverFeature f) const;
    bool open(const QString &db,
-             const QString &user,
-             const QString &password,
-             const QString &host,
-             int port,
-             const QString &connOpts);
+      const QString &user,
+      const QString &password,
+      const QString &host,
+      int port,
+      const QString &connOpts);
    bool open(const QString &db,
-             const QString &user,
-             const QString &password,
-             const QString &host,
-             int port) {
+      const QString &user,
+      const QString &password,
+      const QString &host,
+      int port) {
       return open (db, user, password, host, port, QString());
    }
    void close();

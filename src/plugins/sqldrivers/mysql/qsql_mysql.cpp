@@ -142,7 +142,7 @@ static inline QVariant qDateTimeFromString(QString &val)
 
 class QMYSQLResultPrivate : public QObject
 {
- SQL_CS_OBJECT(QMYSQLResultPrivate)
+   SQL_CS_OBJECT(QMYSQLResultPrivate)
 
  public:
    QMYSQLResultPrivate(const QMYSQLDriver *dp, const QMYSQLResult *d) : driver(dp), result(0), q(d),

@@ -32,25 +32,25 @@ class QDB2DriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QDB2")
 
-public:
-    QDB2DriverPlugin();
+ public:
+   QDB2DriverPlugin();
 
-    QSqlDriver* create(const QString &) override;
+   QSqlDriver *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QDB2DriverPlugin)
 
 QDB2DriverPlugin::QDB2DriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QDB2DriverPlugin::create(const QString &name)
+QSqlDriver *QDB2DriverPlugin::create(const QString &name)
 {
-    if (name == "QDB2") {
-        QDB2Driver* driver = new QDB2Driver();
-        return driver;
-    }
-    return 0;
+   if (name == "QDB2") {
+      QDB2Driver *driver = new QDB2Driver();
+      return driver;
+   }
+   return 0;
 }
 

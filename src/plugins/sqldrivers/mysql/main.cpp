@@ -32,24 +32,24 @@ class QMYSQLDriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QMYSQL, QMYSQL3")
 
-public:
-    QMYSQLDriverPlugin();
+ public:
+   QMYSQLDriverPlugin();
 
-    QSqlDriver* create(const QString &) override;
+   QSqlDriver *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QMYSQLDriverPlugin)
 
 QMYSQLDriverPlugin::QMYSQLDriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QMYSQLDriverPlugin::create(const QString &name)
+QSqlDriver *QMYSQLDriverPlugin::create(const QString &name)
 {
    if (name == "QMYSQL" || name == "QMYSQL3") {
-     QMYSQLDriver* driver = new QMYSQLDriver();
-     return driver;
+      QMYSQLDriver *driver = new QMYSQLDriver();
+      return driver;
    }
 
    return 0;

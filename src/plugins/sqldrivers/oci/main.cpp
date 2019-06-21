@@ -32,27 +32,27 @@ class QOCIDriverPlugin : public QSqlDriverPlugin
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
    CS_PLUGIN_KEY("QOCI, QOCI8")
 
-public:
-    QOCIDriverPlugin();
+ public:
+   QOCIDriverPlugin();
 
-    QSqlDriver* create(const QString &);
-    QStringList keys() const;
+   QSqlDriver *create(const QString &);
+   QStringList keys() const;
 };
 
 CS_PLUGIN_REGISTER(QOCIDriverPlugin)
 
 QOCIDriverPlugin::QOCIDriverPlugin()
-    : QSqlDriverPlugin()
+   : QSqlDriverPlugin()
 {
 }
 
-QSqlDriver* QOCIDriverPlugin::create(const QString &name)
+QSqlDriver *QOCIDriverPlugin::create(const QString &name)
 {
-    if (name == "QOCI" || name == "QOCI8") {
-        QOCIDriver* driver = new QOCIDriver();
-        return driver;
-    }
-    return 0;
+   if (name == "QOCI" || name == "QOCI8") {
+      QOCIDriver *driver = new QOCIDriver();
+      return driver;
+   }
+   return 0;
 }
 
 
