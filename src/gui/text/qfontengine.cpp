@@ -69,24 +69,11 @@ static inline bool qSafeFromBigEndian(const uchar *source, const uchar *end, T *
    return true;
 }
 
-
-// Harbuzz  ( BROOM - is this part of the old or new system ? )
 int QFontEngine::getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints)
 {
-   //   return HB_Error::HB_Err_Not_Covered;
-   return 0;
+   // not valid at the base class, returns Err_Not_Covered in harfbuzz
+   return -1;
 }
-
-/* may be old Harfbuzz
-static HB_Error hb_getPointInOutline(hb_font_t *font, HB_Glyph glyph, int flags, uint32_t point, HB_Fixed *xpos,
-         HB_Fixed *ypos, uint32_t *nPoints)
-{
-    QFontEngine *fe = (QFontEngine *)font->user_data;
-    return (HB_Error)fe->getPointInOutline(glyph, flags, point, (QFixed *)xpos, (QFixed *)ypos, (quint32 *)nPoints);
-}
-
-*/
-
 
 static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, uint *length)
 {
@@ -97,8 +84,9 @@ static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, 
 #define kBearingNotInitialized std::numeric_limits<qreal>::max()
 
 QFontEngine::QFontEngine(Type type)
-   : m_type(type), ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr), face_destroy_func_ptr(nullptr),
-     m_minLeftBearing(kBearingNotInitialized), m_minRightBearing(kBearingNotInitialized)
+   : m_type(type), ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr),
+     face_destroy_func_ptr(nullptr), m_minLeftBearing(kBearingNotInitialized),
+     m_minRightBearing(kBearingNotInitialized)
 {
    faceData.user_data = this;
    faceData.font_table_func_ptr = qt_get_font_table_default;

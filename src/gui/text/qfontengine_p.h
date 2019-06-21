@@ -47,15 +47,6 @@ struct QGlyphLayout;
     ((quint32)(ch4)) \
    )
 
-// ### this only used in getPointInOutline(), refactor it and then remove these magic numbers
-enum HB_Compat_Error {
-   Err_Ok                           = 0x0000,
-   Err_Not_Covered                  = 0xFFFF,
-   Err_Invalid_Argument             = 0x1A66,
-   Err_Invalid_SubTable_Format      = 0x157F,
-   Err_Invalid_SubTable             = 0x1570
-};
-
 typedef void (*qt_destroy_func_t) (void *user_data);
 typedef bool (*qt_get_font_table_func_t) (void *user_data, uint tag, uchar *buffer, uint *length);
 
@@ -473,7 +464,6 @@ class Q_GUI_EXPORT QFontEngineMulti : public QFontEngine
 
    void setFallbackFamiliesList(const QStringList &fallbackFamilies);
 
-   // broom - still used?
    const QString &fontEngineName() const override {
       static QString retval("Multi");
       return retval;

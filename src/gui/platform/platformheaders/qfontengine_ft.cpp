@@ -154,6 +154,7 @@ int QFreetypeFace::fsType() const
    if (os2) {
       fsType = os2->fsType;
    }
+
    return fsType;
 }
 
@@ -164,22 +165,24 @@ int QFreetypeFace::getPointInOutline(glyph_t glyph, int flags, quint32 point, QF
    }
 
    if (face->glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
-      return Err_Invalid_SubTable;
+      // some error, might be an Invalid_SubTable
+      return -1;
    }
 
    *nPoints = face->glyph->outline.n_points;
-   if (!(*nPoints)) {
-      return Err_Ok;
+   if (! (*nPoints)) {
+      return 0;
    }
 
    if (point > *nPoints) {
-      return Err_Invalid_SubTable;
+      // some error, might be an Invalid_SubTable
+      return -1;
    }
 
    *xpos = QFixed::fromFixed(face->glyph->outline.points[point].x);
    *ypos = QFixed::fromFixed(face->glyph->outline.points[point].y);
 
-   return Err_Ok;
+   return 0;
 }
 
 extern QByteArray qt_fontdata_from_index(int);
@@ -1611,6 +1614,7 @@ glyph_t QFontEngineFT::glyphIndex(char32_t ch) const
    glyph_t glyph = ch < QFreetypeFace::cmapCacheSize ? freetype->cmapCache[ch] : 0;
 
    if (glyph == 0) {
+
       FT_Face face = freetype->face;
       glyph = FT_Get_Char_Index(face, ch);
 
@@ -2202,10 +2206,12 @@ int QFontEngineFT::getPointInOutline(glyph_t glyph, int flags, quint32 point, QF
 {
    lockFace();
    bool hsubpixel = true;
-   int vfactor = 1;
+
+   int vfactor    = 1;
    int load_flags = loadFlags(0, QFontEngine::Format_A8, flags, hsubpixel, vfactor);
-   int result = freetype->getPointInOutline(glyph, load_flags, point, xpos, ypos, nPoints);
+   int result     = freetype->getPointInOutline(glyph, load_flags, point, xpos, ypos, nPoints);
    unlockFace();
+
    return result;
 }
 

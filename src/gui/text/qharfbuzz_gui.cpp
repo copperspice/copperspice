@@ -42,7 +42,6 @@ static hb_bool_t cs_font_get_glyph(hb_font_t *font, void *font_data, hb_codepoin
 static hb_bool_t cs_font_get_nominal_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,
       hb_codepoint_t *glyph, void *unused)
 {
-
 }
 
 static hb_bool_t cs_font_get_variation_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,
@@ -190,8 +189,8 @@ struct cs_hb_font_funcs_t {
       hb_font_funcs_set_glyph_func(funcs,               cs_font_get_glyph, NULL, NULL);
 
       // emerald - instead of hb_font_funcs_set_glyph_func use these two
-//    hb_font_funcs_set_nominal_gylph_func(funcs,       cs_font_get_nominal_glyph, NULL, NULL);
-//    hb_font_funcs_set_variation_gylph_func(funcs,     cs_font_get_variation_glyph, NULL, NULL);
+//    hb_font_funcs_set_nominal_gylph_func(funcs,        cs_font_get_nominal_glyph, NULL, NULL);
+//    hb_font_funcs_set_variation_gylph_func(funcs,      cs_font_get_variation_glyph, NULL, NULL);
 
       hb_font_funcs_set_glyph_h_advance_func(funcs,     cs_font_get_glyph_h_advance, NULL, NULL);
       hb_font_funcs_set_glyph_v_advance_func(funcs,     cs_font_get_glyph_v_advance, NULL, NULL);
