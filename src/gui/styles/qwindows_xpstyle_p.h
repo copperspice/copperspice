@@ -24,7 +24,6 @@
 #ifndef QWINDOWSXPSTYLE_P_H
 #define QWINDOWSXPSTYLE_P_H
 
-
 #include <qwindows_style_p.h>
 
 #include <qmap.h>
