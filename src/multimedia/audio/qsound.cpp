@@ -25,13 +25,13 @@
 #include <qsoundeffect.h>
 #include <qcoreapplication.h>
 
-void QSound::play(const QString& filename)
+void QSound::play(const QString &filename)
 {
-    // Object destruction is generaly handled via deleteOnComplete
-    // Unexpected cases will be handled via parenting of QSound objects to qApp
-    QSound *sound = new QSound(filename, qApp);
-    sound->connect(sound->m_soundEffect, SIGNAL(playingChanged()), SLOT(deleteOnComplete()));
-    sound->play();
+   // Object destruction is generaly handled via deleteOnComplete
+   // Unexpected cases will be handled via parenting of QSound objects to qApp
+   QSound *sound = new QSound(filename, qApp);
+   sound->connect(sound->m_soundEffect, SIGNAL(playingChanged()), SLOT(deleteOnComplete()));
+   sound->play();
 }
 
 /*!
@@ -40,11 +40,11 @@ void QSound::play(const QString& filename)
 
     \sa play()
 */
-QSound::QSound(const QString& filename, QObject* parent)
-    : QObject(parent)
+QSound::QSound(const QString &filename, QObject *parent)
+   : QObject(parent)
 {
-    m_soundEffect = new QSoundEffect(this);
-    m_soundEffect->setSource(QUrl::fromLocalFile(filename));
+   m_soundEffect = new QSoundEffect(this);
+   m_soundEffect->setSource(QUrl::fromLocalFile(filename));
 }
 
 /*!
@@ -56,8 +56,9 @@ QSound::QSound(const QString& filename, QObject* parent)
 */
 QSound::~QSound()
 {
-    if (!isFinished())
-        stop();
+   if (!isFinished()) {
+      stop();
+   }
 }
 
 /*!
@@ -65,12 +66,12 @@ QSound::~QSound()
 */
 bool QSound::isFinished() const
 {
-    return !m_soundEffect->isPlaying();
+   return !m_soundEffect->isPlaying();
 }
 
 void QSound::play()
 {
-    m_soundEffect->play();
+   m_soundEffect->play();
 }
 
 /*!
@@ -81,12 +82,13 @@ void QSound::play()
 */
 int QSound::loops() const
 {
-    // retain old API value for infite loops
-    int loopCount = m_soundEffect->loopCount();
-    if (loopCount == QSoundEffect::Infinite)
-        loopCount = Infinite;
+   // retain old API value for infite loops
+   int loopCount = m_soundEffect->loopCount();
+   if (loopCount == QSoundEffect::Infinite) {
+      loopCount = Infinite;
+   }
 
-    return loopCount;
+   return loopCount;
 }
 
 /*!
@@ -98,12 +100,13 @@ int QSound::loops() const
 */
 int QSound::loopsRemaining() const
 {
-    // retain old API value for infite loops
-    int loopsRemaining = m_soundEffect->loopsRemaining();
-    if (loopsRemaining == QSoundEffect::Infinite)
-        loopsRemaining = Infinite;
+   // retain old API value for infite loops
+   int loopsRemaining = m_soundEffect->loopsRemaining();
+   if (loopsRemaining == QSoundEffect::Infinite) {
+      loopsRemaining = Infinite;
+   }
 
-    return loopsRemaining;
+   return loopsRemaining;
 }
 
 /*!
@@ -119,10 +122,11 @@ int QSound::loopsRemaining() const
 */
 void QSound::setLoops(int n)
 {
-    if (n == Infinite)
-        n = QSoundEffect::Infinite;
+   if (n == Infinite) {
+      n = QSoundEffect::Infinite;
+   }
 
-    m_soundEffect->setLoopCount(n);
+   m_soundEffect->setLoopCount(n);
 }
 
 /*!
@@ -132,7 +136,7 @@ void QSound::setLoops(int n)
 */
 QString QSound::fileName() const
 {
-    return m_soundEffect->source().toLocalFile();
+   return m_soundEffect->source().toLocalFile();
 }
 
 /*!
@@ -142,7 +146,7 @@ QString QSound::fileName() const
 */
 void QSound::stop()
 {
-    m_soundEffect->stop();
+   m_soundEffect->stop();
 }
 
 /*!
@@ -150,7 +154,8 @@ void QSound::stop()
 */
 void QSound::deleteOnComplete()
 {
-    if (!m_soundEffect->isPlaying())
-        deleteLater();
+   if (!m_soundEffect->isPlaying()) {
+      deleteLater();
+   }
 }
 

@@ -30,37 +30,36 @@ class QSoundEffect;
 
 class Q_MULTIMEDIA_EXPORT QSound : public QObject
 {
-    MULTI_CS_OBJECT(QSound)
+   MULTI_CS_OBJECT(QSound)
 
-public:
-    enum Loop
-    {
-       Infinite = -1
-    };
+ public:
+   enum Loop {
+      Infinite = -1
+   };
 
-    explicit QSound(const QString &filename, QObject *parent = nullptr);
-    ~QSound();
+   explicit QSound(const QString &filename, QObject *parent = nullptr);
+   ~QSound();
 
-    static void play(const QString &filename);
+   static void play(const QString &filename);
 
-    int loops() const;
-    int loopsRemaining() const;
-    void setLoops(int);
-    QString fileName() const;
+   int loops() const;
+   int loopsRemaining() const;
+   void setLoops(int);
+   QString fileName() const;
 
-    bool isFinished() const;
+   bool isFinished() const;
 
-    MULTI_CS_SLOT_1(Public, void play())
-    MULTI_CS_SLOT_OVERLOAD(play, ())
+   MULTI_CS_SLOT_1(Public, void play())
+   MULTI_CS_SLOT_OVERLOAD(play, ())
 
-    MULTI_CS_SLOT_1(Public, void stop())
-    MULTI_CS_SLOT_2(stop)
+   MULTI_CS_SLOT_1(Public, void stop())
+   MULTI_CS_SLOT_2(stop)
 
-private:
-    MULTI_CS_SLOT_1(Private, void deleteOnComplete())
-    MULTI_CS_SLOT_2(deleteOnComplete)
+ private:
+   MULTI_CS_SLOT_1(Private, void deleteOnComplete())
+   MULTI_CS_SLOT_2(deleteOnComplete)
 
-    QSoundEffect *m_soundEffect;
+   QSoundEffect *m_soundEffect;
 };
 
 #endif

@@ -34,72 +34,75 @@
 QSoundEffect::QSoundEffect(QObject *parent)
    : QObject(parent)
 {
-    d = new QSoundEffectPrivate(this);
+   d = new QSoundEffectPrivate(this);
 
-    connect(d, SIGNAL(loopsRemainingChanged()), this, SLOT(loopsRemainingChanged()));
-    connect(d, SIGNAL(volumeChanged()),         this, SLOT(volumeChanged()));
-    connect(d, SIGNAL(mutedChanged()),          this, SLOT(mutedChanged()));
-    connect(d, SIGNAL(loadedChanged()),         this, SLOT(loadedChanged()));
-    connect(d, SIGNAL(playingChanged()),        this, SLOT(playingChanged()));
-    connect(d, SIGNAL(statusChanged()),         this, SLOT(statusChanged()));
-    connect(d, SIGNAL(categoryChanged()),       this, SLOT(categoryChanged()));
+   connect(d, SIGNAL(loopsRemainingChanged()), this, SLOT(loopsRemainingChanged()));
+   connect(d, SIGNAL(volumeChanged()),         this, SLOT(volumeChanged()));
+   connect(d, SIGNAL(mutedChanged()),          this, SLOT(mutedChanged()));
+   connect(d, SIGNAL(loadedChanged()),         this, SLOT(loadedChanged()));
+   connect(d, SIGNAL(playingChanged()),        this, SLOT(playingChanged()));
+   connect(d, SIGNAL(statusChanged()),         this, SLOT(statusChanged()));
+   connect(d, SIGNAL(categoryChanged()),       this, SLOT(categoryChanged()));
 }
 
 QSoundEffect::~QSoundEffect()
 {
-    d->release();
+   d->release();
 }
 
 QStringList QSoundEffect::supportedMimeTypes()
 {
-    return QSoundEffectPrivate::supportedMimeTypes();
+   return QSoundEffectPrivate::supportedMimeTypes();
 }
 
 /*! Returns the URL of the current source to play */
 QUrl QSoundEffect::source() const
 {
-    return d->source();
+   return d->source();
 }
 
 /*! Set the current URL to play to \a url. */
 void QSoundEffect::setSource(const QUrl &url)
 {
-    if (d->source() == url)
-        return;
+   if (d->source() == url) {
+      return;
+   }
 
-    d->setSource(url);
+   d->setSource(url);
 
-    emit sourceChanged();
+   emit sourceChanged();
 }
 
 int QSoundEffect::loopCount() const
 {
-    return d->loopCount();
+   return d->loopCount();
 }
 
 void QSoundEffect::setLoopCount(int loopCount)
 {
-    if (loopCount < 0 && loopCount != Infinite) {
-        qWarning("SoundEffect: loops should be SoundEffect.Infinite, 0 or positive integer");
-        return;
-    }
-    if (loopCount == 0)
-        loopCount = 1;
-    if (d->loopCount() == loopCount)
-        return;
+   if (loopCount < 0 && loopCount != Infinite) {
+      qWarning("SoundEffect: loops should be SoundEffect.Infinite, 0 or positive integer");
+      return;
+   }
+   if (loopCount == 0) {
+      loopCount = 1;
+   }
+   if (d->loopCount() == loopCount) {
+      return;
+   }
 
-    d->setLoopCount(loopCount);
-    emit loopCountChanged();
+   d->setLoopCount(loopCount);
+   emit loopCountChanged();
 }
 
 int QSoundEffect::loopsRemaining() const
 {
-    return d->loopsRemaining();
+   return d->loopsRemaining();
 }
 
 qreal QSoundEffect::volume() const
 {
-    return d->volume();
+   return d->volume();
 }
 
 /*!
@@ -107,11 +110,12 @@ qreal QSoundEffect::volume() const
  */
 void QSoundEffect::setVolume(qreal volume)
 {
-    volume = qBound(qreal(0.0), volume, qreal(1.0));
-    if (qFuzzyCompare(d->volume(), volume))
-        return;
+   volume = qBound(qreal(0.0), volume, qreal(1.0));
+   if (qFuzzyCompare(d->volume(), volume)) {
+      return;
+   }
 
-    d->setVolume(volume);
+   d->setVolume(volume);
 }
 
 /*!
@@ -129,7 +133,7 @@ void QSoundEffect::setVolume(qreal volume)
 /*! Returns whether this sound effect is muted */
 bool QSoundEffect::isMuted() const
 {
-    return d->isMuted();
+   return d->isMuted();
 }
 
 /*!
@@ -141,10 +145,11 @@ bool QSoundEffect::isMuted() const
 */
 void QSoundEffect::setMuted(bool muted)
 {
-    if (d->isMuted() == muted)
-        return;
+   if (d->isMuted() == muted) {
+      return;
+   }
 
-    d->setMuted(muted);
+   d->setMuted(muted);
 }
 
 /*!
@@ -159,7 +164,7 @@ void QSoundEffect::setMuted(bool muted)
 */
 bool QSoundEffect::isLoaded() const
 {
-    return d->isLoaded();
+   return d->isLoaded();
 }
 
 /*!
@@ -180,7 +185,7 @@ bool QSoundEffect::isLoaded() const
 */
 void QSoundEffect::play()
 {
-    d->play();
+   d->play();
 }
 
 /*!
@@ -197,18 +202,18 @@ void QSoundEffect::play()
 /*! Returns true if the sound effect is currently playing, or false otherwise */
 bool QSoundEffect::isPlaying() const
 {
-    return d->isPlaying();
+   return d->isPlaying();
 }
 
 QSoundEffect::Status QSoundEffect::status() const
 {
-    return d->status();
+   return d->status();
 }
 
 
 QString QSoundEffect::category() const
 {
-    return d->category();
+   return d->category();
 }
 
 /*!
@@ -229,7 +234,7 @@ QString QSoundEffect::category() const
  */
 void QSoundEffect::setCategory(const QString &category)
 {
-    d->setCategory(category);
+   d->setCategory(category);
 }
 
 
@@ -247,5 +252,5 @@ void QSoundEffect::setCategory(const QString &category)
  */
 void QSoundEffect::stop()
 {
-    d->stop();
+   d->stop();
 }

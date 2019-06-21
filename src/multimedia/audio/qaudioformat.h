@@ -24,11 +24,9 @@
 #ifndef QAUDIOFORMAT_H
 #define QAUDIOFORMAT_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qshareddata.h>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qshareddata.h>
+#include <qmultimedia.h>
 
 class QAudioFormatPrivate;
 
@@ -75,6 +73,5 @@ class Q_MULTIMEDIA_EXPORT QAudioFormat
 };
 
 
-QT_END_NAMESPACE
 
-#endif  // QAUDIOFORMAT_H
+#endif

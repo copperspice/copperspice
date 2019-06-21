@@ -31,8 +31,6 @@
 #include <QtGui/qimage.h>
 #include <QtMultimedia/qvideoframe.h>
 
-
-
 class QDebug;
 class QVideoSurfaceFormatPrivate;
 
@@ -97,7 +95,7 @@ class Q_MULTIMEDIA_EXPORT QVideoSurfaceFormat
    QSize sizeHint() const;
 
    QList<QString > propertyNames() const;
-   QVariant property(QStringView name) const;
+   QVariant property(const QString &name) const;
    void setProperty(QStringView name, const QVariant &value);
 
  private:

@@ -32,31 +32,31 @@ using VideoFrameConvertFunc = void (*)(const QVideoFrame &frame, uchar *output);
 
 inline quint32 qConvertBGRA32ToARGB32(quint32 bgra)
 {
-    return (((bgra & 0xFF000000) >> 24)
-            | ((bgra & 0x00FF0000) >> 8)
-            | ((bgra & 0x0000FF00) << 8)
-            | ((bgra & 0x000000FF) << 24));
+   return (((bgra & 0xFF000000) >> 24)
+         | ((bgra & 0x00FF0000) >> 8)
+         | ((bgra & 0x0000FF00) << 8)
+         | ((bgra & 0x000000FF) << 24));
 }
 
 inline quint32 qConvertBGR24ToARGB32(const uchar *bgr)
 {
-    return 0xFF000000 | bgr[0] | bgr[1] << 8 | bgr[2] << 16;
+   return 0xFF000000 | bgr[0] | bgr[1] << 8 | bgr[2] << 16;
 }
 
 inline quint32 qConvertBGR565ToARGB32(quint16 bgr)
 {
-    return 0xff000000
-            | ((((bgr) >> 8) & 0xf8) | (((bgr) >> 13) & 0x7))
-            | ((((bgr) << 5) & 0xfc00) | (((bgr) >> 1) & 0x300))
-            | ((((bgr) << 19) & 0xf80000) | (((bgr) << 14) & 0x70000));
+   return 0xff000000
+      | ((((bgr) >> 8) & 0xf8) | (((bgr) >> 13) & 0x7))
+      | ((((bgr) << 5) & 0xfc00) | (((bgr) >> 1) & 0x300))
+      | ((((bgr) << 19) & 0xf80000) | (((bgr) << 14) & 0x70000));
 }
 
 inline quint32 qConvertBGR555ToARGB32(quint16 bgr)
 {
-    return 0xff000000
-            | ((((bgr) >> 7) & 0xf8) | (((bgr) >> 12) & 0x7))
-            | ((((bgr) << 6) & 0xf800) | (((bgr) << 1) & 0x700))
-            | ((((bgr) << 19) & 0xf80000) | (((bgr) << 11) & 0x70000));
+   return 0xff000000
+      | ((((bgr) >> 7) & 0xf8) | (((bgr) >> 12) & 0x7))
+      | ((((bgr) << 6) & 0xf800) | (((bgr) << 1) & 0x700))
+      | ((((bgr) << 19) & 0xf80000) | (((bgr) << 11) & 0x70000));
 }
 
 #define FETCH_INFO_PACKED(frame) \

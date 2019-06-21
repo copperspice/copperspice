@@ -24,51 +24,44 @@
 #ifndef QMULTIMEDIA_H
 #define QMULTIMEDIA_H
 
-#include <QtCore/qpair.h>
-#include <QtCore/qmetatype.h>
-#include <QtCore/qstring.h>
+#include <qpair.h>
+#include <qmetatype.h>
+#include <qstring.h>
 
-namespace QMultimedia
-{
-    enum SupportEstimate
-    {
-        NotSupported,
-        MaybeSupported,
-        ProbablySupported,
-        PreferredService
-    };
+namespace QMultimedia {
+enum SupportEstimate {
+   NotSupported,
+   MaybeSupported,
+   ProbablySupported,
+   PreferredService
+};
 
-    enum EncodingQuality
-    {
-        VeryLowQuality,
-        LowQuality,
-        NormalQuality,
-        HighQuality,
-        VeryHighQuality
-    };
+enum EncodingQuality {
+   VeryLowQuality,
+   LowQuality,
+   NormalQuality,
+   HighQuality,
+   VeryHighQuality
+};
 
-    enum EncodingMode
-    {
-        ConstantQualityEncoding,
-        ConstantBitRateEncoding,
-        AverageBitRateEncoding,
-        TwoPassEncoding
-    };
+enum EncodingMode {
+   ConstantQualityEncoding,
+   ConstantBitRateEncoding,
+   AverageBitRateEncoding,
+   TwoPassEncoding
+};
 
-    enum AvailabilityStatus
-    {
-        Available,
-        ServiceMissing,
-        Busy,
-        ResourceError
-    };
-
+enum AvailabilityStatus {
+   Available,
+   ServiceMissing,
+   Busy,
+   ResourceError
+};
 }
 
 Q_DECLARE_METATYPE(QMultimedia::AvailabilityStatus)
 Q_DECLARE_METATYPE(QMultimedia::SupportEstimate)
 Q_DECLARE_METATYPE(QMultimedia::EncodingMode)
 Q_DECLARE_METATYPE(QMultimedia::EncodingQuality)
-
 
 #endif

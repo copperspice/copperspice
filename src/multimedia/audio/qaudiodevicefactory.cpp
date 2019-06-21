@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-
 #include <qaudiosystem.h>
 #include <qaudiosystemplugin.h>
 
@@ -77,7 +76,7 @@ class QNullDeviceInfo : public QAbstractAudioDeviceInfo
       return QList<QAudioFormat::Endian>();
    }
 
-   QList<QAudioFormat::SampleType> supportedSampleTypes()  override{
+   QList<QAudioFormat::SampleType> supportedSampleTypes()  override {
       return QList<QAudioFormat::SampleType>();
    }
 };
@@ -85,12 +84,12 @@ class QNullDeviceInfo : public QAbstractAudioDeviceInfo
 class QNullInputDevice : public QAbstractAudioInput
 {
  public:
-   void start(QIODevice*) override {
+   void start(QIODevice *) override {
       qWarning() << "using null input device, none available";
    }
 
    QIODevice *start() override {
-      qWarning()<<"using null input device, none available";
+      qWarning() << "using null input device, none available";
       return nullptr;
    }
 
@@ -133,7 +132,7 @@ class QNullInputDevice : public QAbstractAudioInput
       return QAudio::StoppedState;
    }
 
-   void setFormat(const QAudioFormat&) override {
+   void setFormat(const QAudioFormat &) override {
    }
 
    QAudioFormat format() const override {
@@ -199,7 +198,7 @@ class QNullOutputDevice : public QAbstractAudioOutput
       return QAudio::StoppedState;
    }
 
-   void setFormat(const QAudioFormat&) override {
+   void setFormat(const QAudioFormat &) override {
    }
 
    QAudioFormat format() const override {
@@ -218,15 +217,15 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
       const QSet<QString> keySet = factoryObj->keySet();
 
       for (const QString &key : keySet) {
-         QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(key));
+         QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface *>(factoryObj->instance(key));
 
          if (plugin) {
             for (QString const &handle : plugin->availableDevices(mode)) {
-                devices << QAudioDeviceInfo(key, handle, mode);
+               devices << QAudioDeviceInfo(key, handle, mode);
             }
          }
       }
-    }
+   }
 
    return devices;
 }
@@ -234,7 +233,7 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
 QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 {
    QFactoryLoader *factoryObj = loader();
-   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(defaultKey()));
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface *>(factoryObj->instance(defaultKey()));
 
    if (plugin) {
       QList<QString> list = plugin->availableDevices(QAudio::AudioInput);
@@ -249,8 +248,9 @@ QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 
    QList<QAudioDeviceInfo> inputDevices = availableDevices(QAudio::AudioInput);
 
-   if (! inputDevices.isEmpty())
+   if (! inputDevices.isEmpty()) {
       return inputDevices.first();
+   }
 
 
    return QAudioDeviceInfo();
@@ -259,7 +259,7 @@ QAudioDeviceInfo QAudioDeviceFactory::defaultInputDevice()
 QAudioDeviceInfo QAudioDeviceFactory::defaultOutputDevice()
 {
    QFactoryLoader *factoryObj = loader();
-   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(defaultKey()));
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface *>(factoryObj->instance(defaultKey()));
 
    if (plugin) {
       QList<QString> list = plugin->availableDevices(QAudio::AudioOutput);
@@ -273,19 +273,20 @@ QAudioDeviceInfo QAudioDeviceFactory::defaultOutputDevice()
    // return the first output available from other plugins
    QList<QAudioDeviceInfo> outputDevices = availableDevices(QAudio::AudioOutput);
 
-   if (! outputDevices.isEmpty())
+   if (! outputDevices.isEmpty()) {
       return outputDevices.first();
+   }
 
    return QAudioDeviceInfo();
 }
 
 QAbstractAudioDeviceInfo *QAudioDeviceFactory::audioDeviceInfo(const QString &realm, const QString &handle,
-      QAudio::Mode mode)
+   QAudio::Mode mode)
 {
    QAbstractAudioDeviceInfo *rc = nullptr;
 
    QFactoryLoader *factoryObj = loader();
-   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(realm));
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface *>(factoryObj->instance(realm));
 
    if (plugin) {
       rc = plugin->createDeviceInfo(handle, mode);
@@ -305,40 +306,44 @@ QAbstractAudioOutput *QAudioDeviceFactory::createDefaultOutputDevice(QAudioForma
 }
 
 QAbstractAudioInput *QAudioDeviceFactory::createInputDevice(QAudioDeviceInfo const &deviceInfo,
-      QAudioFormat const &format)
+   QAudioFormat const &format)
 {
    if (deviceInfo.isNull()) {
       return new QNullInputDevice();
    }
 
    QFactoryLoader *factoryObj = loader();
-   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(deviceInfo.realm()));
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface *>(factoryObj->instance(deviceInfo.realm()));
 
    if (plugin) {
-     QAbstractAudioInput* p = plugin->createInput(deviceInfo.handle());
+      QAbstractAudioInput *p = plugin->createInput(deviceInfo.handle());
 
-     if (p) p->setFormat(format);
-        return p;
+      if (p) {
+         p->setFormat(format);
+      }
+      return p;
    }
 
    return new QNullInputDevice();
 }
 
 QAbstractAudioOutput *QAudioDeviceFactory::createOutputDevice(QAudioDeviceInfo const &deviceInfo,
-      QAudioFormat const &format)
+   QAudioFormat const &format)
 {
    if (deviceInfo.isNull()) {
       return new QNullOutputDevice();
    }
 
    QFactoryLoader *factoryObj = loader();
-   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface*>(factoryObj->instance(deviceInfo.realm()));
+   QAudioSystemFactoryInterface *plugin = dynamic_cast<QAudioSystemFactoryInterface *>(factoryObj->instance(deviceInfo.realm()));
 
-    if (plugin) {
-        QAbstractAudioOutput* p = plugin->createOutput(deviceInfo.handle());
-        if (p) p->setFormat(format);
-           return p;
-    }
+   if (plugin) {
+      QAbstractAudioOutput *p = plugin->createOutput(deviceInfo.handle());
+      if (p) {
+         p->setFormat(format);
+      }
+      return p;
+   }
 
    return new QNullOutputDevice();
 }

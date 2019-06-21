@@ -32,33 +32,32 @@
 #include <qaudiodeviceinfo.h>
 #include <qaudiosystem.h>
 
-struct Q_MULTIMEDIA_EXPORT QAudioSystemFactoryInterface
-{
-    virtual QList<QString> availableDevices(QAudio::Mode) const = 0;
+struct Q_MULTIMEDIA_EXPORT QAudioSystemFactoryInterface {
+   virtual QList<QString> availableDevices(QAudio::Mode) const = 0;
 
-    virtual QAbstractAudioInput  *createInput(const QString  &device) = 0;
-    virtual QAbstractAudioOutput *createOutput(const QString &device) = 0;
-    virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QString &device, QAudio::Mode mode) = 0;
+   virtual QAbstractAudioInput  *createInput(const QString  &device) = 0;
+   virtual QAbstractAudioOutput *createOutput(const QString &device) = 0;
+   virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QString &device, QAudio::Mode mode) = 0;
 
-    virtual ~QAudioSystemFactoryInterface();
+   virtual ~QAudioSystemFactoryInterface();
 };
 
-#define QAudioSystemFactoryInterface_iid  "com.copperspice.cs.audiosystemfactory/1.0"
+#define QAudioSystemFactoryInterface_iid  "com.copperspice.CS.audioSystemFactory/1.0"
 CS_DECLARE_INTERFACE(QAudioSystemFactoryInterface, QAudioSystemFactoryInterface_iid)
 
 class Q_MULTIMEDIA_EXPORT QAudioSystemPlugin : public QObject, public QAudioSystemFactoryInterface
 {
-    MULTI_CS_OBJECT_MULTIPLE(QAudioSystemPlugin, QObject)
-    CS_INTERFACES(QAudioSystemFactoryInterface)
+   MULTI_CS_OBJECT_MULTIPLE(QAudioSystemPlugin, QObject)
+   CS_INTERFACES(QAudioSystemFactoryInterface)
 
-public:
+ public:
    explicit QAudioSystemPlugin(QObject *parent = nullptr);
    ~QAudioSystemPlugin();
 
    QList<QString> availableDevices(QAudio::Mode) const override = 0;
 
-   QAbstractAudioInput* createInput(const QString  &device) override = 0;
-   QAbstractAudioOutput* createOutput(const QString &device) override = 0;
+   QAbstractAudioInput *createInput(const QString  &device) override = 0;
+   QAbstractAudioOutput *createOutput(const QString &device) override = 0;
    QAbstractAudioDeviceInfo *createDeviceInfo(const QString &device, QAudio::Mode mode) override = 0;
 
 };

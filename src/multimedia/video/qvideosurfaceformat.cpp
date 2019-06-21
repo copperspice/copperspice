@@ -38,9 +38,8 @@ class QVideoSurfaceFormatPrivate : public QSharedData
       , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
       , pixelAspectRatio(1, 1)
       , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
-        , frameRate(0.0)
-        , mirrored(false)
-   {
+      , frameRate(0.0)
+      , mirrored(false) {
    }
 
    QVideoSurfaceFormatPrivate(
@@ -54,9 +53,8 @@ class QVideoSurfaceFormatPrivate : public QSharedData
       , pixelAspectRatio(1, 1)
       , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
       , viewport(QPoint(0, 0), size)
-        , frameRate(0.0)
-        , mirrored(false)
-    {
+      , frameRate(0.0)
+      , mirrored(false) {
    }
 
    QVideoSurfaceFormatPrivate(const QVideoSurfaceFormatPrivate &other)
@@ -69,23 +67,22 @@ class QVideoSurfaceFormatPrivate : public QSharedData
       , ycbcrColorSpace(other.ycbcrColorSpace)
       , viewport(other.viewport)
       , frameRate(other.frameRate)
-        , mirrored(other.mirrored)
+      , mirrored(other.mirrored)
       , propertyNames(other.propertyNames)
-        , propertyValues(other.propertyValues)
-    {
+      , propertyValues(other.propertyValues) {
    }
 
    bool operator ==(const QVideoSurfaceFormatPrivate &other) const {
       if (pixelFormat == other.pixelFormat
-            && handleType == other.handleType
-            && scanLineDirection == other.scanLineDirection
-            && frameSize == other.frameSize
-            && pixelAspectRatio == other.pixelAspectRatio
-            && viewport == other.viewport
-            && frameRatesEqual(frameRate, other.frameRate)
-            && ycbcrColorSpace == other.ycbcrColorSpace
-            && mirrored == other.mirrored
-            && propertyNames.count() == other.propertyNames.count()) {
+         && handleType == other.handleType
+         && scanLineDirection == other.scanLineDirection
+         && frameSize == other.frameSize
+         && pixelAspectRatio == other.pixelAspectRatio
+         && viewport == other.viewport
+         && frameRatesEqual(frameRate, other.frameRate)
+         && ycbcrColorSpace == other.ycbcrColorSpace
+         && mirrored == other.mirrored
+         && propertyNames.count() == other.propertyNames.count()) {
          for (int i = 0; i < propertyNames.count(); ++i) {
             int j = other.propertyNames.indexOf(propertyNames.at(i));
 
@@ -396,25 +393,21 @@ QSize QVideoSurfaceFormat::sizeHint() const
 QList<QString > QVideoSurfaceFormat::propertyNames() const
 {
    return (QList<QString>()
-           << "handleType"
-           << "pixelFormat"
-           << "frameSize"
-           << "frameWidth"
-           << "viewport"
-           << "scanLineDirection"
-           << "frameRate"
-           << "pixelAspectRatio"
-           << "sizeHint"
-            << "yCbCrColorSpace"
-            << "mirrored")
-          + d->propertyNames;
+         << "handleType"
+         << "pixelFormat"
+         << "frameSize"
+         << "frameWidth"
+         << "viewport"
+         << "scanLineDirection"
+         << "frameRate"
+         << "pixelAspectRatio"
+         << "sizeHint"
+         << "yCbCrColorSpace"
+         << "mirrored")
+      + d->propertyNames;
 }
 
-/*!
-    Returns the value of the video format's \a name property.
-*/
-
-QVariant QVideoSurfaceFormat::property(QStringView name) const
+QVariant QVideoSurfaceFormat::property(const QString &name) const
 {
    if (name == "handleType") {
       return QVariant::fromValue(d->handleType);
@@ -512,7 +505,7 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
 
    } else if (name == "mirrored") {
       if (value.canConvert<bool>()) {
-          d->mirrored = qvariant_cast<bool>(value);
+         d->mirrored = qvariant_cast<bool>(value);
       }
 
    } else {
@@ -540,64 +533,65 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
 
 QDebug operator<<(QDebug dbg, QVideoSurfaceFormat::YCbCrColorSpace cs)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
-    switch (cs) {
-        case QVideoSurfaceFormat::YCbCr_BT601:
-            dbg << "YCbCr_BT601";
-            break;
-        case QVideoSurfaceFormat::YCbCr_BT709:
-            dbg << "YCbCr_BT709";
-            break;
-        case QVideoSurfaceFormat::YCbCr_JPEG:
-            dbg << "YCbCr_JPEG";
-            break;
-        case QVideoSurfaceFormat::YCbCr_xvYCC601:
-            dbg << "YCbCr_xvYCC601";
-            break;
-        case QVideoSurfaceFormat::YCbCr_xvYCC709:
-            dbg << "YCbCr_xvYCC709";
-            break;
-        case QVideoSurfaceFormat::YCbCr_CustomMatrix:
-            dbg << "YCbCr_CustomMatrix";
-            break;
-        default:
-            dbg << "YCbCr_Undefined";
-            break;
-    }
-    return dbg;
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   switch (cs) {
+      case QVideoSurfaceFormat::YCbCr_BT601:
+         dbg << "YCbCr_BT601";
+         break;
+      case QVideoSurfaceFormat::YCbCr_BT709:
+         dbg << "YCbCr_BT709";
+         break;
+      case QVideoSurfaceFormat::YCbCr_JPEG:
+         dbg << "YCbCr_JPEG";
+         break;
+      case QVideoSurfaceFormat::YCbCr_xvYCC601:
+         dbg << "YCbCr_xvYCC601";
+         break;
+      case QVideoSurfaceFormat::YCbCr_xvYCC709:
+         dbg << "YCbCr_xvYCC709";
+         break;
+      case QVideoSurfaceFormat::YCbCr_CustomMatrix:
+         dbg << "YCbCr_CustomMatrix";
+         break;
+      default:
+         dbg << "YCbCr_Undefined";
+         break;
+   }
+   return dbg;
 }
 
 QDebug operator<<(QDebug dbg, QVideoSurfaceFormat::Direction dir)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
 
-    switch (dir) {
-        case QVideoSurfaceFormat::BottomToTop:
-            dbg << "BottomToTop";
-            break;
-        case QVideoSurfaceFormat::TopToBottom:
-            dbg << "TopToBottom";
-            break;
-    }
-    return dbg;
+   switch (dir) {
+      case QVideoSurfaceFormat::BottomToTop:
+         dbg << "BottomToTop";
+         break;
+      case QVideoSurfaceFormat::TopToBottom:
+         dbg << "TopToBottom";
+         break;
+   }
+   return dbg;
 }
 
 QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
 
-    dbg << "QVideoSurfaceFormat(" << f.pixelFormat() << ", " << f.frameSize()
-        << ", viewport=" << f.viewport() << ", pixelAspectRatio=" << f.pixelAspectRatio()
-        << ", handleType=" << f.handleType() <<  ", yCbCrColorSpace=" << f.yCbCrColorSpace()
-        << ')';
+   dbg << "QVideoSurfaceFormat(" << f.pixelFormat() << ", " << f.frameSize()
+      << ", viewport=" << f.viewport() << ", pixelAspectRatio=" << f.pixelAspectRatio()
+      << ", handleType=" << f.handleType() <<  ", yCbCrColorSpace=" << f.yCbCrColorSpace()
+      << ')';
 
-    for(const QString &propertyName : f.propertyNames())
-        dbg << "\n    " << propertyName << " = " << f.property(propertyName);
+   for (const QString &propertyName : f.propertyNames()) {
+      dbg << "\n    " << propertyName << " = " << f.property(propertyName);
+   }
 
-    return dbg;
+   return dbg;
 }
 
 

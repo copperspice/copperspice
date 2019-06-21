@@ -258,18 +258,18 @@ QAudio::State QAudioOutput::state() const
 
 void QAudioOutput::setVolume(qreal volume)
 {
-    qreal v = qBound(qreal(0.0), volume, qreal(1.0));
-    d->setVolume(v);
+   qreal v = qBound(qreal(0.0), volume, qreal(1.0));
+   d->setVolume(v);
 }
 qreal QAudioOutput::volume() const
 {
-    return d->volume();
+   return d->volume();
 }
 QString QAudioOutput::category() const
 {
-    return d->category();
+   return d->category();
 }
 void QAudioOutput::setCategory(const QString &category)
 {
-    d->setCategory(category);
+   d->setCategory(category);
 }

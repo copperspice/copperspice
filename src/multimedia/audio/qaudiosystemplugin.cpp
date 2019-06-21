@@ -27,8 +27,8 @@ QAudioSystemFactoryInterface::~QAudioSystemFactoryInterface()
 {
 }
 
-QAudioSystemPlugin::QAudioSystemPlugin(QObject* parent) :
-    QObject(parent)
+QAudioSystemPlugin::QAudioSystemPlugin(QObject *parent) :
+   QObject(parent)
 {}
 
 QAudioSystemPlugin::~QAudioSystemPlugin()

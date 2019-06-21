@@ -24,15 +24,14 @@
 #ifndef QAUDIODEVICEINFO_H
 #define QAUDIODEVICEINFO_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qlist.h>
+#include <qobject.h>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qlist.h>
 #include <qmultimedia.h>
 #include <qaudio.h>
 #include <qaudioformat.h>
-
 
 class QAudioDeviceFactory;
 class QAudioDeviceInfoPrivate;

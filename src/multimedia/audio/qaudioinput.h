@@ -39,7 +39,7 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
  public:
    explicit QAudioInput(const QAudioFormat &format = QAudioFormat(), QObject *parent = nullptr);
    explicit QAudioInput(const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(),
-                        QObject *parent = nullptr);
+      QObject *parent = nullptr);
    ~QAudioInput();
 
    QAudioFormat format() const;
@@ -61,8 +61,8 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    void setNotifyInterval(int milliSeconds);
    int notifyInterval() const;
 
-    void setVolume(qreal volume);
-    qreal volume() const;
+   void setVolume(qreal volume);
+   qreal volume() const;
    qint64 processedUSecs() const;
    qint64 elapsedUSecs() const;
 

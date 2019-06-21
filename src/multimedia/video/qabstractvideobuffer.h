@@ -79,18 +79,18 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoBuffer
 
 class Q_MULTIMEDIA_EXPORT QAbstractPlanarVideoBuffer : public QAbstractVideoBuffer
 {
-public:
-    QAbstractPlanarVideoBuffer(HandleType type);
-    virtual ~QAbstractPlanarVideoBuffer();
+ public:
+   QAbstractPlanarVideoBuffer(HandleType type);
+   virtual ~QAbstractPlanarVideoBuffer();
 
-    uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
-    virtual int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]) = 0;
+   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
+   virtual int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]) = 0;
 
-protected:
-    QAbstractPlanarVideoBuffer(QAbstractPlanarVideoBufferPrivate &dd, HandleType type);
+ protected:
+   QAbstractPlanarVideoBuffer(QAbstractPlanarVideoBufferPrivate &dd, HandleType type);
 
-private:
-    Q_DISABLE_COPY(QAbstractPlanarVideoBuffer)
+ private:
+   Q_DISABLE_COPY(QAbstractPlanarVideoBuffer)
 };
 
 

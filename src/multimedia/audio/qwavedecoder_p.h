@@ -29,73 +29,70 @@
 
 class QWaveDecoder : public QIODevice
 {
-    MULTI_CS_OBJECT(QWaveDecoder)
+   MULTI_CS_OBJECT(QWaveDecoder)
 
-public:
-    explicit QWaveDecoder(QIODevice *source, QObject *parent = 0);
-    ~QWaveDecoder();
+ public:
+   explicit QWaveDecoder(QIODevice *source, QObject *parent = 0);
+   ~QWaveDecoder();
 
-    QAudioFormat audioFormat() const;
-    int duration() const;
+   QAudioFormat audioFormat() const;
+   int duration() const;
 
-    qint64 size() const override;
-    bool isSequential() const override;
-    qint64 bytesAvailable() const override;
+   qint64 size() const override;
+   bool isSequential() const override;
+   qint64 bytesAvailable() const override;
 
-    MULTI_CS_SIGNAL_1(Public, void formatKnown())
-    MULTI_CS_SIGNAL_2(formatKnown)
+   MULTI_CS_SIGNAL_1(Public, void formatKnown())
+   MULTI_CS_SIGNAL_2(formatKnown)
 
-    MULTI_CS_SIGNAL_1(Public, void parsingError())
-    MULTI_CS_SIGNAL_2(parsingError)
+   MULTI_CS_SIGNAL_1(Public, void parsingError())
+   MULTI_CS_SIGNAL_2(parsingError)
 
-private:
-    qint64 readData(char *data, qint64 maxlen) override;
-    qint64 writeData(const char *data, qint64 len) override;
+ private:
+   qint64 readData(char *data, qint64 maxlen) override;
+   qint64 writeData(const char *data, qint64 len) override;
 
-    bool enoughDataAvailable();
-    bool findChunk(const char *chunkId);
-    void discardBytes(qint64 numBytes);
-    void parsingFailed();
+   bool enoughDataAvailable();
+   bool findChunk(const char *chunkId);
+   void discardBytes(qint64 numBytes);
+   void parsingFailed();
 
-    enum State {
-        InitialState,
-        WaitingForFormatState,
-        WaitingForDataState
-    };
+   enum State {
+      InitialState,
+      WaitingForFormatState,
+      WaitingForDataState
+   };
 
-    struct chunk
-    {
-        char        id[4];
-        quint32     size;
-    };
-    bool peekChunk(chunk* pChunk, bool handleEndianness = true);
+   struct chunk {
+      char        id[4];
+      quint32     size;
+   };
+   bool peekChunk(chunk *pChunk, bool handleEndianness = true);
 
-    struct RIFFHeader
-    {
-        chunk       descriptor;
-        char        type[4];
-    };
-    struct WAVEHeader
-    {
-        chunk       descriptor;
-        quint16     audioFormat;
-        quint16     numChannels;
-        quint32     sampleRate;
-        quint32     byteRate;
-        quint16     blockAlign;
-        quint16     bitsPerSample;
-    };
+   struct RIFFHeader {
+      chunk       descriptor;
+      char        type[4];
+   };
+   struct WAVEHeader {
+      chunk       descriptor;
+      quint16     audioFormat;
+      quint16     numChannels;
+      quint32     sampleRate;
+      quint32     byteRate;
+      quint16     blockAlign;
+      quint16     bitsPerSample;
+   };
 
-    bool haveFormat;
-    qint64 dataSize;
-    QAudioFormat format;
-    QIODevice *source;
-    State state;
-    quint32 junkToSkip;
-    bool bigEndian;
+   bool haveFormat;
+   qint64 dataSize;
+   QAudioFormat format;
+   QIODevice *source;
+   State state;
+   quint32 junkToSkip;
+   bool bigEndian;
 
-    MULTI_CS_SLOT_1(Private, void handleData())
-    MULTI_CS_SLOT_2(handleData)
+   MULTI_CS_SLOT_1(Private, void handleData())
+   MULTI_CS_SLOT_2(handleData)
 };
 
 #endif

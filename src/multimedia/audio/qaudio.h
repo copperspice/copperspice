@@ -30,21 +30,21 @@
 #include <qstring.h>
 
 namespace QAudio {
-   enum Error { NoError, OpenError, IOError, UnderrunError, FatalError };
-   enum State { ActiveState, SuspendedState, StoppedState, IdleState };
-   enum Mode  { AudioInput, AudioOutput };
-    enum Role {
-        UnknownRole,
-        MusicRole,
-        VideoRole,
-        VoiceCommunicationRole,
-        AlarmRole,
-        NotificationRole,
-        RingtoneRole,
-        AccessibilityRole,
-        SonificationRole,
-        GameRole
-    };
+enum Error { NoError, OpenError, IOError, UnderrunError, FatalError };
+enum State { ActiveState, SuspendedState, StoppedState, IdleState };
+enum Mode  { AudioInput, AudioOutput };
+enum Role {
+   UnknownRole,
+   MusicRole,
+   VideoRole,
+   VoiceCommunicationRole,
+   AlarmRole,
+   NotificationRole,
+   RingtoneRole,
+   AccessibilityRole,
+   SonificationRole,
+   GameRole
+};
 }
 
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug dbg, QAudio::Error error);
