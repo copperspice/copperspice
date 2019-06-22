@@ -1,21 +1,25 @@
 MULTIMEDIA_DIRS += src/multimedia/audio
 
 MULTIMEDIA_PUBLIC_INCLUDES += \
+	QAbstractAudioDeviceInfo \
+	QAbstractAudioInput \
+	QAbstractAudioOutput \
 	QAudio \
 	QAudioFormat \
 	QAudioInput \
 	QAudioOutput \
 	QAudioDeviceInfo \
 	QAudioEngineFactoryInterface \
-	QAbstractAudioDeviceInfo \
-	QAbstractAudioInput \
-	QAbstractAudioOutput
+	QSound \
+	QSoundEffect
 
 MULTIMEDIA_AUDIO_INCLUDES = \
 	qabstractaudiodeviceinfo.h \
 	qabstractaudioinput.h \
 	qabstractaudiooutput.h \
 	qaudio.h \
+	qaudiodecoder.h \
+	qaudiobuffer.h \
 	qaudioformat.h \
 	qaudioinput.h \
 	qaudiooutput.h \
@@ -27,6 +31,7 @@ MULTIMEDIA_AUDIO_INCLUDES = \
 	qsoundeffect.h
 
 MULTIMEDIA_AUDIO_PRIVATE_INCLUDES = \
+	qaudiobuffer_p.h \
 	qaudiodevicefactory_p.h \
 	qsamplecache_p.h \
 	qsoundeffect_qaudio_p.h \
@@ -41,6 +46,8 @@ noinst_HEADERS+=$(patsubst %,src/multimedia/audio/%,$(MULTIMEDIA_AUDIO_INCLUDES)
 
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/audio/qaudio.cpp \
+	src/multimedia/audio/qaudiobuffer.cpp \
+	src/multimedia/audio/qaudiodecoder.cpp \
 	src/multimedia/audio/qaudiodevicefactory.cpp \
 	src/multimedia/audio/qaudiodeviceinfo.cpp \
 	src/multimedia/audio/qaudiosystem.cpp \
