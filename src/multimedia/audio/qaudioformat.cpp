@@ -199,21 +199,101 @@ QAudioFormat::SampleType QAudioFormat::sampleType() const
    return d->sampleType;
 }
 
-/*!
-    \enum QAudioFormat::SampleType
 
-    \value Unknown       Not Set
-    \value SignedInt     samples are signed integers
-    \value UnSignedInt   samples are unsigned intergers
-    \value Float         samples are floats
-*/
+qint32 QAudioFormat::bytesForDuration(qint64 duration) const
+{
+   return bytesPerFrame() * framesForDuration(duration);
+}
+qint64 QAudioFormat::durationForBytes(qint32 bytes) const
+{
+   if (!isValid() || bytes <= 0) {
+      return 0;
+   }
 
-/*!
-    \enum QAudioFormat::Endian
+   // We round the byte count to ensure whole frames
+   return qint64(1000000LL * (bytes / bytesPerFrame())) / sampleRate();
+}
+qint32 QAudioFormat::bytesForFrames(qint32 frameCount) const
+{
+   return frameCount * bytesPerFrame();
+}
+qint32 QAudioFormat::framesForBytes(qint32 byteCount) const
+{
+   int size = bytesPerFrame();
+   if (size > 0) {
+      return byteCount / size;
+   }
+   return 0;
+}
+qint32 QAudioFormat::framesForDuration(qint64 duration) const
+{
+   if (!isValid()) {
+      return 0;
+   }
 
-    \value BigEndian     samples are big endian byte order
-    \value LittleEndian  samples are little endian byte order
-*/
+   return qint32((duration * sampleRate()) / 1000000LL);
+}
+qint64 QAudioFormat::durationForFrames(qint32 frameCount) const
+{
+   if (!isValid() || frameCount <= 0) {
+      return 0;
+   }
 
-QT_END_NAMESPACE
+   return (frameCount * 1000000LL) / sampleRate();
+}
+int QAudioFormat::bytesPerFrame() const
+{
+   if (!isValid()) {
+      return 0;
+   }
+
+   return (sampleSize() * channelCount()) / 8;
+}
+QDebug operator<<(QDebug dbg, QAudioFormat::Endian endian)
+{
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   switch (endian) {
+      case QAudioFormat::BigEndian:
+         dbg << "BigEndian";
+         break;
+      case QAudioFormat::LittleEndian:
+         dbg << "LittleEndian";
+         break;
+   }
+   return dbg;
+}
+
+QDebug operator<<(QDebug dbg, QAudioFormat::SampleType type)
+{
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   switch (type) {
+      case QAudioFormat::SignedInt:
+         dbg << "SignedInt";
+         break;
+      case QAudioFormat::UnSignedInt:
+         dbg << "UnSignedInt";
+         break;
+      case QAudioFormat::Float:
+         dbg << "Float";
+         break;
+      default:
+         dbg << "Unknown";
+         break;
+   }
+   return dbg;
+}
+
+QDebug operator<<(QDebug dbg, const QAudioFormat &f)
+{
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   dbg << "QAudioFormat(" << f.sampleRate() << "Hz, "
+      << f.sampleSize() << "bit, channelCount=" << f.channelCount()
+      << ", sampleType=" << f.sampleType() << ", byteOrder=" << f.byteOrder()
+      << ", codec=" << f.codec() << ')';
+
+   return dbg;
+}
 

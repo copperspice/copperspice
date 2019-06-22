@@ -46,13 +46,9 @@ class Q_MULTIMEDIA_EXPORT QAudioFormat
 
    bool isValid() const;
 
-   void setFrequency(int frequency);
-   int frequency() const;
    void setSampleRate(int sampleRate);
    int sampleRate() const;
 
-   void setChannels(int channels);
-   int channels() const;
    void setChannelCount(int channelCount);
    int channelCount() const;
 
@@ -68,10 +64,27 @@ class Q_MULTIMEDIA_EXPORT QAudioFormat
    void setSampleType(QAudioFormat::SampleType sampleType);
    QAudioFormat::SampleType sampleType() const;
 
+   // Helper functions
+   qint32 bytesForDuration(qint64 duration) const;
+   qint64 durationForBytes(qint32 byteCount) const;
+
+   qint32 bytesForFrames(qint32 frameCount) const;
+   qint32 framesForBytes(qint32 byteCount) const;
+
+   qint32 framesForDuration(qint64 duration) const;
+   qint64 durationForFrames(qint32 frameCount) const;
+
+   int bytesPerFrame() const;
  private:
    QSharedDataPointer<QAudioFormatPrivate> d;
 };
 
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QAudioFormat &);
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAudioFormat::SampleType);
+Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAudioFormat::Endian);
 
+Q_DECLARE_METATYPE(QAudioFormat)
+Q_DECLARE_METATYPE(QAudioFormat::SampleType)
+Q_DECLARE_METATYPE(QAudioFormat::Endian)
 
 #endif
