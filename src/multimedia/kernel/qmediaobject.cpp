@@ -1,0 +1,255 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://www.gnu.org/licenses/
+*
+***********************************************************************/
+
+#include <qmediaobject_p.h>
+
+#include <qmetaobject.h>
+#include <qdebug.h>
+#include <qmediaservice.h>
+#include <qmetadatareadercontrol.h>
+#include <qmediabindableinterface.h>
+#include <qmediaavailabilitycontrol.h>
+
+void QMediaObjectPrivate::_q_notify()
+{
+   Q_Q(QMediaObject);
+
+   const QMetaObject *m = q->metaObject();
+
+   for (int pi : notifyProperties) {
+      QMetaProperty p = m->property(pi);
+
+      // BROOM  p.notifySignal().invoke(q, CSGenericArgument(QMetaType::typeName(p.userType()), p.read(q).data()));
+
+   }
+}
+
+void QMediaObjectPrivate::_q_availabilityChanged()
+{
+   Q_Q(QMediaObject);
+
+   // Really this should not always emit, but we are unable to tell from here (isAvailable
+   // may not have changed, or the mediaobject's overridden availability() may not have changed)
+
+   q->availabilityChanged(q->availability());
+   q->availabilityChanged(q->isAvailable());
+}
+
+QMediaObject::~QMediaObject()
+{
+   delete d_ptr;
+}
+
+QMultimedia::AvailabilityStatus QMediaObject::availability() const
+{
+   if (d_func()->service == 0) {
+      return QMultimedia::ServiceMissing;
+   }
+
+   if (d_func()->availabilityControl) {
+      return d_func()->availabilityControl->availability();
+   }
+
+   return QMultimedia::Available;
+}
+
+bool QMediaObject::isAvailable() const
+{
+   return availability() == QMultimedia::Available;
+}
+
+QMediaService *QMediaObject::service() const
+{
+   return d_func()->service;
+}
+
+int QMediaObject::notifyInterval() const
+{
+   return d_func()->notifyTimer->interval();
+}
+
+void QMediaObject::setNotifyInterval(int milliSeconds)
+{
+   Q_D(QMediaObject);
+
+   if (d->notifyTimer->interval() != milliSeconds) {
+      d->notifyTimer->setInterval(milliSeconds);
+
+      emit notifyIntervalChanged(milliSeconds);
+   }
+}
+
+bool QMediaObject::bind(QObject *object)
+{
+   QMediaBindableInterface *helper = dynamic_cast<QMediaBindableInterface *>(object);
+   if (! helper) {
+      return false;
+   }
+
+   QMediaObject *currentObject = helper->mediaObject();
+
+   if (currentObject == this) {
+      return true;
+   }
+
+   if (currentObject) {
+      currentObject->unbind(object);
+   }
+
+   return helper->setMediaObject(this);
+}
+
+void QMediaObject::unbind(QObject *object)
+{
+   QMediaBindableInterface *helper = dynamic_cast<QMediaBindableInterface *>(object);
+
+   if (helper && helper->mediaObject() == this) {
+      helper->setMediaObject(0);
+   } else {
+      qWarning() << "QMediaObject:unbind(): Trying to unbind a helper object which was never bound";
+   }
+}
+
+QMediaObject::QMediaObject(QObject *parent, QMediaService *service)
+   : QObject(parent), d_ptr(new QMediaObjectPrivate)
+{
+   Q_D(QMediaObject);
+
+   d->q_ptr = this;
+
+   d->notifyTimer = new QTimer(this);
+   d->notifyTimer->setInterval(1000);
+   connect(d->notifyTimer, SIGNAL(timeout()), SLOT(_q_notify()));
+
+   d->service = service;
+
+   setupControls();
+}
+
+QMediaObject::QMediaObject(QMediaObjectPrivate &dd, QObject *parent, QMediaService *service)
+   : QObject(parent), d_ptr(&dd)
+{
+   Q_D(QMediaObject);
+   d->q_ptr = this;
+
+   d->notifyTimer = new QTimer(this);
+   d->notifyTimer->setInterval(1000);
+   connect(d->notifyTimer, SIGNAL(timeout()), SLOT(_q_notify()));
+
+   d->service = service;
+
+   setupControls();
+}
+
+void QMediaObject::addPropertyWatch(QByteArray const &name)
+{
+   Q_D(QMediaObject);
+
+   const QMetaObject *m = metaObject();
+
+   int index = m->indexOfProperty(name);
+
+   if (index != -1 && m->property(index).hasNotifySignal()) {
+      d->notifyProperties.insert(index);
+
+      if (!d->notifyTimer->isActive()) {
+         d->notifyTimer->start();
+      }
+   }
+}
+
+void QMediaObject::removePropertyWatch(QByteArray const &name)
+{
+   Q_D(QMediaObject);
+
+   int index = metaObject()->indexOfProperty(name);
+
+   if (index != -1) {
+      d->notifyProperties.remove(index);
+
+      if (d->notifyProperties.isEmpty()) {
+         d->notifyTimer->stop();
+      }
+   }
+}
+
+bool QMediaObject::isMetaDataAvailable() const
+{
+   Q_D(const QMediaObject);
+
+   return d->metaDataControl ? d->metaDataControl->isMetaDataAvailable() : false;
+}
+
+QVariant QMediaObject::metaData(const QString &key) const
+{
+   Q_D(const QMediaObject);
+
+   return d->metaDataControl ? d->metaDataControl->metaData(key) : QVariant();
+}
+
+QStringList QMediaObject::availableMetaData() const
+{
+   Q_D(const QMediaObject);
+
+   return d->metaDataControl ? d->metaDataControl->availableMetaData() : QStringList();
+}
+
+void QMediaObject::setupControls()
+{
+   Q_D(QMediaObject);
+
+   if (d->service != 0) {
+      d->metaDataControl = qobject_cast<QMetaDataReaderControl *>(d->service->requestControl(QMetaDataReaderControl_iid));
+
+      if (d->metaDataControl) {
+
+         connect(d->metaDataControl, static_cast<void (QMetaDataReaderControl::*)()>(&QMetaDataReaderControl::metaDataChanged),
+            this, static_cast<void (QMediaObject::*)()>(&QMediaObject::metaDataChanged));
+
+         connect(d->metaDataControl, static_cast<void (QMetaDataReaderControl::*)(const QString &, const QVariant &)>
+            (&QMetaDataReaderControl::metaDataChanged),
+            this, static_cast<void (QMediaObject::*)(const QString &, const QVariant &)>(&QMediaObject::metaDataChanged));
+
+         connect(d->metaDataControl, &QMetaDataReaderControl::metaDataAvailableChanged, this, &QMediaObject::metaDataAvailableChanged);
+      }
+
+      d->availabilityControl = d->service->requestControl<QMediaAvailabilityControl *>();
+
+      if (d->availabilityControl) {
+         connect(d->availabilityControl, &QMediaAvailabilityControl::availabilityChanged, this, &QMediaObject::_q_availabilityChanged);
+      }
+   }
+}
+
+void QMediaObject::_q_notify()
+{
+   Q_D(QMediaObject);
+   d->_q_notify();
+}
+
+void QMediaObject::_q_availabilityChanged()
+{
+   Q_D(QMediaObject);
+   d->_q_availabilityChanged();
+}
+
