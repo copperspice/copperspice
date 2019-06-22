@@ -1,23 +1,55 @@
 set(MULTIMEDIA_PUBLIC_INCLUDES
-    ${MULTIMEDIA_PUBLIC_INCLUDES}
-    QtMultimedia
+   ${MULTIMEDIA_PUBLIC_INCLUDES}
+   QMediaBindableInterface
+   QMediaControl
+   QMediaObject
+   QMediaMetaData
+   QMediaService
+   QMediaTimeRange
+   QMultimedia
+   QtMultimedia
 )
 
 set(MULTIMEDIA_INCLUDES
-    ${MULTIMEDIA_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimedia.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice_provider_plugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtmultimedia.h
+   ${MULTIMEDIA_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediabindableinterface.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaenumdebug.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaobject.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediametadata.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice_provider_plugin.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediatimerange.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimedia.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtmultimedia.h
 )
 
 set(MULTIMEDIA_PRIVATE_INCLUDES
-    ${MULTIMEDIA_PRIVATE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediapluginloader_p.h
+   ${MULTIMEDIA_PRIVATE_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaobject_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaopenglhelper_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourceset_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaserviceprovider_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicy_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicyplugin_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimediautils_p.h
 )
 
 set(MULTIMEDIA_SOURCES
    ${MULTIMEDIA_SOURCES}
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediapluginloader.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediabindableinterface.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediametadata.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourceset.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaserviceprovider.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediatimerange.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicy.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicyplugin.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimediautils.cpp
 )
 
 
