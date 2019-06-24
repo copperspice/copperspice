@@ -4,15 +4,19 @@ endif
 
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES =
 
-lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui \
-   -Iinclude/QtNetwork -Iinclude/QtMultimedia \
-   -Iprivateinclude/QtCore/private  -Iprivateinclude/QtMultimedia/private  \
+lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = -Iinclude \
+   -Iinclude/QtCore -Iprivateinclude/QtCore/private  \
+   -Iinclude/QtGui \
+   -Iinclude/QtNetwork \
+   -Iinclude/QtOpenGL \
+   -Iinclude/QtMultimedia -Iprivateinclude/QtMultimedia/private \
+   $(AM_CXXFLAGS) \
    -DQT_BUILD_MULTIMEDIA_LIB
 
 lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 
 lib_libCsMultimedia@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la  lib/libCsGui@BUILD_ABI@.la \
-   lib/libCsNetwork@BUILD_ABI@.la
+   lib/libCsNetwork@BUILD_ABI@.la lib/libCsOpenGL@BUILD_ABI@.la
 
 MULTIMEDIA_INCLUDES =
 MULTIMEDIA_PUBLIC_INCLUDES =
@@ -28,6 +32,7 @@ EXTRA_DIST += \
 include src/multimedia/audio/Makefile.am
 include src/multimedia/kernel/Makefile.am
 include src/multimedia/video/Makefile.am
+include src/multimedia/widgets/Makefile.am
 
 MULTIMEDIA_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtMultimedia/%,$(MULTIMEDIA_INCLUDES)) \
