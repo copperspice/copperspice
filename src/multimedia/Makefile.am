@@ -31,6 +31,7 @@ EXTRA_DIST += \
 
 include src/multimedia/audio/Makefile.am
 include src/multimedia/kernel/Makefile.am
+include src/multimedia/playback/Makefile.am
 include src/multimedia/video/Makefile.am
 include src/multimedia/widgets/Makefile.am
 

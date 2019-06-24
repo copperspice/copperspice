@@ -20,12 +20,14 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtOpenGL
     ${CMAKE_CURRENT_SOURCE_DIR}/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
+    ${CMAKE_CURRENT_SOURCE_DIR}/playback
     ${CMAKE_CURRENT_SOURCE_DIR}/video
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
 )
 
 include(audio/audio.cmake)
 include(kernel/kernel.cmake)
+include(playback/playback.cmake)
 include(video/video.cmake)
 include(widgets/widgets.cmake)
 
