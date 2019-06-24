@@ -1,0 +1,153 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://www.gnu.org/licenses/
+*
+***********************************************************************/
+
+#ifndef QVIDEOWIDGET_H
+#define QVIDEOWIDGET_H
+
+#include <qwidget.h>
+#include <qmediabindableinterface.h>
+
+class QMediaObject;
+class QVideoWidgetPrivate;
+
+class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableInterface
+{
+   MULTI_CS_OBJECT_MULTIPLE(QVideoWidget, QWidget)
+
+   CS_INTERFACES(QMediaBindableInterface)
+
+   MULTI_CS_PROPERTY_READ(mediaObject, mediaObject)
+   MULTI_CS_PROPERTY_WRITE(mediaObject, cs_setMediaObject)
+
+   MULTI_CS_PROPERTY_READ(fullScreen, isFullScreen)
+   MULTI_CS_PROPERTY_WRITE(fullScreen, setFullScreen)
+   MULTI_CS_PROPERTY_NOTIFY(fullScreen, fullScreenChanged)
+
+   MULTI_CS_PROPERTY_READ(aspectRatioMode, aspectRatioMode)
+   MULTI_CS_PROPERTY_WRITE(aspectRatioMode, setAspectRatioMode)
+
+   MULTI_CS_PROPERTY_READ(brightness, brightness)
+   MULTI_CS_PROPERTY_WRITE(brightness, setBrightness)
+   MULTI_CS_PROPERTY_NOTIFY(brightness, brightnessChanged)
+
+   MULTI_CS_PROPERTY_READ(contrast, contrast)
+   MULTI_CS_PROPERTY_WRITE(contrast, setContrast)
+   MULTI_CS_PROPERTY_NOTIFY(contrast, contrastChanged)
+
+   MULTI_CS_PROPERTY_READ(hue, hue)
+   MULTI_CS_PROPERTY_WRITE(hue, setHue)
+   MULTI_CS_PROPERTY_NOTIFY(hue, hueChanged)
+
+   MULTI_CS_PROPERTY_READ(saturation, saturation)
+   MULTI_CS_PROPERTY_WRITE(saturation, setSaturation)
+   MULTI_CS_PROPERTY_NOTIFY(saturation, saturationChanged)
+
+ public:
+   explicit QVideoWidget(QWidget *parent = nullptr);
+   ~QVideoWidget();
+
+   QMediaObject *mediaObject() const;
+
+   Qt::AspectRatioMode aspectRatioMode() const;
+
+   int brightness() const;
+   int contrast() const;
+   int hue() const;
+   int saturation() const;
+
+   QSize sizeHint() const;
+
+   MULTI_CS_SLOT_1(Public, void setFullScreen(bool fullScreen))
+   MULTI_CS_SLOT_2(setFullScreen)
+   MULTI_CS_SLOT_1(Public, void setAspectRatioMode(Qt::AspectRatioMode mode))
+   MULTI_CS_SLOT_2(setAspectRatioMode)
+   MULTI_CS_SLOT_1(Public, void setBrightness(int brightness))
+   MULTI_CS_SLOT_2(setBrightness)
+   MULTI_CS_SLOT_1(Public, void setContrast(int contrast))
+   MULTI_CS_SLOT_2(setContrast)
+   MULTI_CS_SLOT_1(Public, void setHue(int hue))
+   MULTI_CS_SLOT_2(setHue)
+   MULTI_CS_SLOT_1(Public, void setSaturation(int saturation))
+   MULTI_CS_SLOT_2(setSaturation)
+
+   MULTI_CS_SIGNAL_1(Public, void fullScreenChanged(bool fullScreen))
+   MULTI_CS_SIGNAL_2(fullScreenChanged, fullScreen)
+   MULTI_CS_SIGNAL_1(Public, void brightnessChanged(int brightness))
+   MULTI_CS_SIGNAL_2(brightnessChanged, brightness)
+   MULTI_CS_SIGNAL_1(Public, void contrastChanged(int contrast))
+   MULTI_CS_SIGNAL_2(contrastChanged, contrast)
+   MULTI_CS_SIGNAL_1(Public, void hueChanged(int hue))
+   MULTI_CS_SIGNAL_2(hueChanged, hue)
+   MULTI_CS_SIGNAL_1(Public, void saturationChanged(int saturation))
+   MULTI_CS_SIGNAL_2(saturationChanged, saturation)
+
+ protected:
+   bool event(QEvent *event);
+   void showEvent(QShowEvent *event);
+   void hideEvent(QHideEvent *event);
+   void resizeEvent(QResizeEvent *event);
+   void moveEvent(QMoveEvent *event);
+   void paintEvent(QPaintEvent *event);
+
+   bool setMediaObject(QMediaObject *object);
+
+#if defined(Q_WS_WIN)
+   bool winEvent(MSG *message, long *result);
+#endif
+
+   QVideoWidget(QVideoWidgetPrivate &dd, QWidget *parent);
+   QVideoWidgetPrivate *d_ptr;
+
+ private:
+   Q_DECLARE_PRIVATE(QVideoWidget)
+
+   // wrapper
+   void cs_setMediaObject(QMediaObject *object) {
+      setMediaObject(object);
+   }
+
+   MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
+   MULTI_CS_SLOT_2(_q_serviceDestroyed)
+
+   MULTI_CS_SLOT_1(Private, void _q_brightnessChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_brightnessChanged)
+
+   MULTI_CS_SLOT_1(Private, void _q_contrastChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_contrastChanged)
+
+   MULTI_CS_SLOT_1(Private, void _q_hueChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_hueChanged)
+
+   MULTI_CS_SLOT_1(Private, void _q_saturationChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_saturationChanged)
+
+   MULTI_CS_SLOT_1(Private, void _q_fullScreenChanged(bool un_named_arg1))
+   MULTI_CS_SLOT_2(_q_fullScreenChanged)
+
+   MULTI_CS_SLOT_1(Private, void _q_dimensionsChanged())
+   MULTI_CS_SLOT_2(_q_dimensionsChanged)
+};
+
+#endif
+
+
