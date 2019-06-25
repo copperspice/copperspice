@@ -41,6 +41,7 @@ void QCUPSSupport::setCupsOption(QStringList &cupsOptions, const QString &option
 {
    if (cupsOptions.contains(option)) {
       cupsOptions.replace(cupsOptions.indexOf(option) + 1, value);
+
    } else {
       cupsOptions.append(option);
       cupsOptions.append(value);
@@ -49,11 +50,11 @@ void QCUPSSupport::setCupsOption(QStringList &cupsOptions, const QString &option
 
 void QCUPSSupport::clearCupsOption(QStringList &cupsOptions, const QString &option)
 {
-   const QStringList::const_iterator it = std::find(cupsOptions.begin(), cupsOptions.end(), option);
+   const QStringList::const_iterator iter = std::find(cupsOptions.begin(), cupsOptions.end(), option);
 
-   if (it != cupsOptions.end()) {
-      Q_ASSERT(it + 1 < cupsOptions.end());
-      cupsOptions.erase(it, it + 1);
+   if (iter != cupsOptions.end()) {
+      Q_ASSERT(iter + 1 < cupsOptions.end());
+      cupsOptions.erase(iter);
    }
 }
 
@@ -95,7 +96,7 @@ static inline QString jobHoldToString(const QCUPSSupport::JobHoldUntil jobHold, 
       // else fall through:
       case QCUPSSupport::NoHold:
          return QString();
-   }   
+   }
 
    // error, may wan to throw
 
@@ -154,7 +155,7 @@ static inline QString bannerPageToString(const QCUPSSupport::BannerPage bannerPa
       case QCUPSSupport::TopSecret:
          return QString("topsecret");
    }
-  
+
    // error, may want to throw
 
    return QString();
@@ -213,7 +214,7 @@ void QCUPSSupport::setPagesPerSheetLayout(QPrinter *printer,  const PagesPerShee
 void QCUPSSupport::setPageRange(QPrinter *printer, int pageFrom, int pageTo)
 {
    QStringList cupsOptions = cupsOptionsList(printer);
-   setCupsOption(cupsOptions, "page-ranges"), QStringl("%1-%2").formtArg(pageFrom).formatArg(pageTo));
+   setCupsOption(cupsOptions, "page-ranges", QString("%1-%2").formatArg(pageFrom).formatArg(pageTo));
    setCupsOptions(printer, cupsOptions);
 }
 

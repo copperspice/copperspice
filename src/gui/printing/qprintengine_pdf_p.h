@@ -47,7 +47,6 @@ class QPen;
 class QPointF;
 class QRegion;
 class QFile;
-
 class QPdfPrintEnginePrivate;
 
 class QPdfPrintEngine: public QPdfEngine, public QPrintEngine

@@ -42,6 +42,7 @@ class QPageSetupWidget : public QWidget
  public:
    explicit QPageSetupWidget(QWidget *parent = nullptr);
    explicit QPageSetupWidget(QPrinter *printer, QWidget *parent = nullptr);
+
    void setPrinter(QPrinter *printer);
    void selectPrinter(QPrinter::OutputFormat outputFormat, const QString &printerName);
    void setupPrinter() const;
@@ -71,6 +72,8 @@ class QPageSetupWidget : public QWidget
    GUI_CS_SLOT_1(Private, void rightMarginChanged(double newValue))
    GUI_CS_SLOT_2(rightMarginChanged)
 
+   friend class QUnixPrintWidgetPrivate;  // Needed by checkFields()
+
    void updateWidget();
    void initUnits();
    void initPagesPerSheet();
@@ -89,4 +92,5 @@ class QPageSetupWidget : public QWidget
 };
 
 #endif // QT_NO_PRINTDIALOG
+
 #endif

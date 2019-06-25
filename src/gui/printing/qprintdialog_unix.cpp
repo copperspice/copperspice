@@ -829,13 +829,14 @@ bool QUnixPrintWidgetPrivate::checkFields()
 
 #ifndef QT_NO_CUPS
    if (propertiesDialogShown) {
-      QCUPSSupport::PagesPerSheet pagesPerSheet = propertiesDialog->widget.pageSetup->m_ui.pagesPerSheetCombo
-         ->currentData().value<QCUPSSupport::PagesPerSheet>();
+      QCUPSSupport::PagesPerSheet pagesPerSheet =
+            propertiesDialog->widget.pageSetup->m_ui.pagesPerSheetCombo->currentData().value<QCUPSSupport::PagesPerSheet>();
 
       QCUPSSupport::PageSet pageSet = optionsPane->options.pageSetCombo->currentData().value<QCUPSSupport::PageSet>();
+
       if (pagesPerSheet != QCUPSSupport::OnePagePerSheet && pageSet != QCUPSSupport::AllPages) {
-         QMessageBox::warning(q, q->windowTitle(),
-            QPrintDialog::tr("Options 'Pages Per Sheet' and 'Page Set' cannot be used together.\nPlease turn one of those options off."));
+            QMessageBox::warning(q, q->windowTitle(),
+            QPrintDialog::tr("Options 'Pages Per Sheet' and 'Page Set' can not be used together.\nPlease turn one of those options off."));
 
          return false;
       }
