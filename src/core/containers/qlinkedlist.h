@@ -256,11 +256,11 @@ class QLinkedList
       return m_data.rend();
    }
 
-   iterator erase(iterator begin, iterator end) {
+   iterator erase(const_iterator begin, const_iterator end) {
       return m_data.erase(begin, end);
    }
 
-   iterator erase(iterator pos) {
+   iterator erase(const_iterator pos) {
       return  m_data.erase(pos);
    }
 
