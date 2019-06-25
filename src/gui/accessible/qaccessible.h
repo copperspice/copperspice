@@ -327,11 +327,11 @@ class Q_GUI_EXPORT QAccessible
       NoBoundary
    };
 
-   typedef QAccessibleInterface *(*InterfaceFactory)(const QString &key, QObject *);
-   typedef void(*UpdateHandler)(QAccessibleEvent *event);
-   typedef void(*RootObjectHandler)(QObject *);
+   using InterfaceFactory  = QAccessibleInterface *(*)(const QString &key, QObject *);
+   using UpdateHandler     = void(*)(QAccessibleEvent *event);
+   using RootObjectHandler = void(*)(QObject *);
+   using Id = unsigned;
 
-   typedef unsigned Id;
    static void installFactory(InterfaceFactory);
    static void removeFactory(InterfaceFactory);
    static UpdateHandler installUpdateHandler(UpdateHandler);
