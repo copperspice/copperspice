@@ -1,0 +1,52 @@
+set(MULTIMEDIA_PUBLIC_INCLUDES
+   ${MULTIMEDIA_PUBLIC_INCLUDES}
+	QAudioRoleControl
+	QAudioInputSelectorControl
+	QAudioOutputSelectorControl
+	QMediaAvailabilityControl
+	QMediaNetworkAccessControl
+	QMediaPlayerControl
+	QMetaDataReaderControl
+	QVideoRendererControl
+)
+
+set(MULTIMEDIA_INCLUDES
+   ${MULTIMEDIA_INCLUDES}
+	${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioinputselectorcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiooutputselectorcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaaudioprobecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaavailabilitycontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmedianetworkaccesscontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplayercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediastreamscontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideowindowcontrol.h
+)
+
+set(MULTIMEDIA_PRIVATE_INCLUDES
+   ${MULTIMEDIA_PRIVATE_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistcontrol_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistsourcecontrol_p.h
+)
+
+set(MULTIMEDIA_SOURCES
+   ${MULTIMEDIA_SOURCES}
+	${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioinputselectorcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiooutputselectorcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaaudioprobecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaavailabilitycontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmedianetworkaccesscontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplayercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediastreamscontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistsourcecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideowindowcontrol.cpp
+)
+
