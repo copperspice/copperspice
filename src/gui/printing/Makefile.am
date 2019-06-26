@@ -32,6 +32,7 @@ GUI_PRINTING_INCLUDES = \
 
 GUI_PRINTING_PRIVATE_INCLUDES = \
 	qabstractprintdialog_p.h \
+	qcupsjobwidget_p.h \
 	qcups_p.h \
 	qpagesetupdialog_p.h \
 	qpagesetupdialog_unix_p.h \
@@ -43,14 +44,11 @@ GUI_PRINTING_PRIVATE_INCLUDES = \
 	qprintengine_pdf_p.h \
 	qprintengine_win_p.h
 
-
 GUI_INCLUDES += $(GUI_PRINTING_INCLUDES)
 GUI_PRIVATE_INCLUDES += $(GUI_PRINTING_PRIVATE_INCLUDES)
 
 noinst_HEADERS+=$(patsubst %,src/gui/printing/%,$(GUI_PRINTING_INCLUDES)) \
-		$(patsubst %,src/gui/printing/%,$(GUI_PRINTING_PRIVATE_INCLUDES)) \
-		src/gui/printing/qpagesetupwidget.ui
-
+		$(patsubst %,src/gui/printing/%,$(GUI_PRINTING_PRIVATE_INCLUDES))
 
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/printing/qabstractprintdialog.cpp \
@@ -71,6 +69,8 @@ nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES +=
 
 
 EXTRA_DIST+=\
+	src/gui/printing/qcupsjobwidget.ui \
+	src/gui/printing/qpagesetupwidget.ui \
 	src/gui/printing/qprintdialog.qrc \
 	src/gui/printing/qprintsettingsoutput.ui \
 	src/gui/printing/qprintwidget.ui \
@@ -110,6 +110,7 @@ EXTRA_DIST+=\
 
 
 $(lib_libCsGui@BUILD_ABI@_la_OBJECTS): \
+	src/gui/printing/ui_qcupsjobwidget.h \
 	src/gui/printing/ui_qpagesetupwidget.h \
 	src/gui/printing/ui_qprintpropertieswidget.h \
 	src/gui/printing/ui_qprintsettingsoutput.h \
@@ -129,6 +130,7 @@ endif
 if OSTYPE_LINUX
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/printing/qcups.cpp \
+	src/gui/printing/qcupsjobwidget.cpp \
 	src/gui/printing/qprintdialog_unix.cpp \
 	src/gui/printing/qpagesetupdialog_unix.cpp
 endif
@@ -136,6 +138,7 @@ endif
 if OSTYPE_BSD
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/printing/qcups.cpp \
+	src/gui/printing/qcupsjobwidget.cpp \
 	src/gui/printing/qprintdialog_unix.cpp \
 	src/gui/printing/qpagesetupdialog_unix.cpp
 endif

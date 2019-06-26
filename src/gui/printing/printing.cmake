@@ -35,6 +35,7 @@ set(GUI_INCLUDES
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qabstractprintdialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcupsjobwidget_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcups_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_unix_p.h
@@ -78,6 +79,8 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcups.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcupsjobwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/printing/qcupsjobwidget.ui
         ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintdialog_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/printing/qpagesetupdialog_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/printing/qprintsettingsoutput.ui
