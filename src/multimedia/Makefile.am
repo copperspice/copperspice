@@ -36,6 +36,8 @@ include src/multimedia/playback/Makefile.am
 include src/multimedia/video/Makefile.am
 include src/multimedia/widgets/Makefile.am
 
+include src/plugins/multimedia/playlistformats/Makefile.am
+
 MULTIMEDIA_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtMultimedia/%,$(MULTIMEDIA_INCLUDES)) \
 	$(patsubst %,include/QtMultimedia/%,$(MULTIMEDIA_PUBLIC_INCLUDES)) \

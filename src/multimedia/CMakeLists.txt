@@ -34,6 +34,8 @@ include(playback/playback.cmake)
 include(video/video.cmake)
 include(widgets/widgets.cmake)
 
+include(../plugins/multimedia/playlistformats/playlistformats.cmake)
+
 macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
 macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
 macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
