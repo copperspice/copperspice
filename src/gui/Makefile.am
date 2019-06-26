@@ -114,6 +114,8 @@ include src/gui/text/Makefile.am
 include src/gui/util/Makefile.am
 include src/gui/widgets/Makefile.am
 
+include src/plugins/printerdrivers/Makefile.am
+
 GUI_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtGui/%,$(GUI_INCLUDES)) \
 	$(patsubst %,include/QtGui/%,$(GUI_PUBLIC_INCLUDES)) \
