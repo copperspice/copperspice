@@ -137,6 +137,7 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
       return;   // nothing to do (menu is the current menu bar)
    }
 
+   Q_ASSERT(mainMenu);
 
    // Grab the app menu out of the current menu.
    int numItems = [mainMenu numberOfItems];

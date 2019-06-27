@@ -1132,21 +1132,6 @@ QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
    return result;
 }
 
-/*!
-    \class QWindowsGLContext
-    \brief Open GL context.
-
-    An Open GL context for use with several windows.
-    As opposed to other implementations, activating a GL context for
-    a window requires a HDC allocated for it. The first time this
-    HDC is created for the window, the pixel format must be applied,
-    which will affect the window as well. The HDCs are stored in a list of
-    QOpenGLContextData and are released in doneCurrent().
-
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
 QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext,
    QOpenGLContext *context) :
    m_staticContext(staticContext),
