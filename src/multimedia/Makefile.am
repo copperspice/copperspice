@@ -36,6 +36,8 @@ include src/multimedia/playback/Makefile.am
 include src/multimedia/video/Makefile.am
 include src/multimedia/widgets/Makefile.am
 
+# plugins
+include src/plugins/multimedia/mediaservices/directshow/Makefile.am
 include src/plugins/multimedia/playlistformats/Makefile.am
 
 MULTIMEDIA_HEADERS_INSTALLED= \
