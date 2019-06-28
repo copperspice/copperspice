@@ -22,6 +22,7 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qmemoryvideobuffer_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframe_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframeconversionhelper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideosurfaceoutput_p.h
 )
 
 set(MULTIMEDIA_SOURCES
@@ -33,4 +34,5 @@ set(MULTIMEDIA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideosurfaceformat.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideoframeconversionhelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/video/qvideosurfaceoutput.cpp
 )

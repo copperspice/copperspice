@@ -24,6 +24,8 @@ set(MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideowindowcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideodeviceselectorcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.h
 )
 
 set(MULTIMEDIA_PRIVATE_INCLUDES
@@ -48,5 +50,6 @@ set(MULTIMEDIA_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideowindowcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideodeviceselectorcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.cpp
 )
-

@@ -22,7 +22,9 @@ MULTIMEDIA_CONTROLS_INCLUDES = \
 	qmediastreamscontrol.h \
 	qmetadatareadercontrol.h \
 	qvideorenderercontrol.h \
-	qvideowindowcontrol.h
+	qvideowindowcontrol.h \
+	qvideodeviceselectorcontrol.h \
+	qmediavideoprobecontrol.h
 
 MULTIMEDIA_CONTROLS_PRIVATE_INCLUDES = \
 	qmediaplaylistcontrol_p.h \
@@ -48,5 +50,7 @@ lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/controls/qmediaplaylistsourcecontrol.cpp \
 	src/multimedia/controls/qmetadatareadercontrol.cpp \
 	src/multimedia/controls/qvideorenderercontrol.cpp \
-	src/multimedia/controls/qvideowindowcontrol.cpp
+	src/multimedia/controls/qvideowindowcontrol.cpp \
+	src/multimedia/controls/qvideodeviceselectorcontrol.cpp \
+	src/multimedia/controls/qmediavideoprobecontrol.cpp
 
