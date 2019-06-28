@@ -97,21 +97,22 @@ QAudioDecoder::QAudioDecoder(QObject *parent)
       d->control = qobject_cast<QAudioDecoderControl *>(d->service->requestControl(QAudioDecoderControl_iid));
 
       if (d->control != 0) {
-         connect(d->control, SIGNAL(stateChanged(QAudioDecoder::State)), this, SLOT(_q_stateChanged(QAudioDecoder::State)));
-         connect(d->control, &QAudioDecoderControl::error,               this, &QAudioDecoder::_q_error);
+         connect(d->control, &QAudioDecoderControl::stateChanged,           this, &QAudioDecoder::_q_stateChanged);
+         connect(d->control, &QAudioDecoderControl::error,                  this, &QAudioDecoder::_q_error);
 
-         connect(d->control, SIGNAL(formatChanged(QAudioFormat)),  this, SLOT(formatChanged(QAudioFormat)));
-         connect(d->control, SIGNAL(sourceChanged()),              this, SLOT(sourceChanged()));
-         connect(d->control, SIGNAL(bufferReady()),                this, SLOT(bufferReady()));
-         connect(d->control, SIGNAL(bufferAvailableChanged(bool)), this, SLOT(bufferAvailableChanged(bool)));
-         connect(d->control, SIGNAL(finished()),                   this, SLOT(finished()));
-         connect(d->control, SIGNAL(positionChanged(qint64)),      this, SLOT(positionChanged(qint64)));
-         connect(d->control, SIGNAL(durationChanged(qint64)),      this, SLOT(durationChanged(qint64)));
+         connect(d->control, &QAudioDecoderControl::formatChanged,          this, &QAudioDecoder::formatChanged);
+         connect(d->control, &QAudioDecoderControl::sourceChanged,          this, &QAudioDecoder::sourceChanged);
+         connect(d->control, &QAudioDecoderControl::bufferReady,            this, &QAudioDecoder::bufferReady);
+         connect(d->control, &QAudioDecoderControl::bufferAvailableChanged, this, &QAudioDecoder::bufferAvailableChanged);
+         connect(d->control, &QAudioDecoderControl::finished,               this, &QAudioDecoder::finished);
+         connect(d->control, &QAudioDecoderControl::positionChanged,        this, &QAudioDecoder::positionChanged);
+         connect(d->control, &QAudioDecoderControl::durationChanged,        this, &QAudioDecoder::durationChanged);
       }
    }
-   if (!d->control) {
+
+   if (! d->control) {
       d->error = ServiceMissingError;
-      d->errorString = tr("The QAudioDecoder object does not have a valid service");
+      d->errorString = tr("QAudioDecoder unable to find a valid service");
    }
 }
 
