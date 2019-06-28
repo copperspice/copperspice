@@ -149,16 +149,19 @@ void QMediaPlayerPrivate::_q_stateChanged(QMediaPlayer::State ps)
    Q_Q(QMediaPlayer);
 
    // Backend switches into stopped state every time new media is about to be loaded.
-   // If media player has a playlist loaded make sure player doesn' stop.
+   // If media player has a playlist loaded make sure player does not stop.
+
    if (playlist && playlist->currentIndex() != -1 && ps != state && ps == QMediaPlayer::StoppedState) {
       if (control->mediaStatus() == QMediaPlayer::EndOfMedia ||
          control->mediaStatus() == QMediaPlayer::InvalidMedia) {
          // if media player is not stopped, and
          // we have finished playback for the current media,
          // advance to the next item in the playlist
+
          Q_ASSERT(state != QMediaPlayer::StoppedState);
          playlist->next();
          return;
+
       } else if (control->mediaStatus() == QMediaPlayer::LoadingMedia) {
          return;
       }
@@ -209,6 +212,7 @@ void QMediaPlayerPrivate::_q_error(int error, const QString &errorString)
 
    if (error == int(QMediaPlayer::MediaIsPlaylist)) {
       loadPlaylist();
+
    } else {
       this->error = QMediaPlayer::Error(error);
       this->errorString = errorString;

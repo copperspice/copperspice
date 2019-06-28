@@ -28,33 +28,29 @@
 #include <qmediaresourceset_p.h>
 
 namespace {
-    class QDummyMediaPlayerResourceSet : public QMediaPlayerResourceSetInterface
-    {
-    public:
-        QDummyMediaPlayerResourceSet(QObject *parent)
-            : QMediaPlayerResourceSetInterface(parent)
-        {
-        }
+class QDummyMediaPlayerResourceSet : public QMediaPlayerResourceSetInterface
+{
+ public:
+   QDummyMediaPlayerResourceSet(QObject *parent)
+      : QMediaPlayerResourceSetInterface(parent) {
+   }
 
-        bool isVideoEnabled() const
-        {
-            return true;
-        }
+   bool isVideoEnabled() const {
+      return true;
+   }
 
-        bool isGranted() const
-        {
-            return true;
-        }
+   bool isGranted() const {
+      return true;
+   }
 
-        bool isAvailable() const
-        {
-            return true;
-        }
+   bool isAvailable() const {
+      return true;
+   }
 
-        void acquire() {}
-        void release() {}
-        void setVideoEnabled(bool) {}
-    };
+   void acquire() {}
+   void release() {}
+   void setVideoEnabled(bool) {}
+};
 }
 
 static QFactoryLoader *loader()
@@ -65,24 +61,24 @@ static QFactoryLoader *loader()
 
 Q_GLOBAL_STATIC(QObject, dummyRoot)
 
-QObject* QMediaResourcePolicy::createResourceSet(const QString& interfaceId)
+QObject *QMediaResourcePolicy::createResourceSet(const QString &interfaceId)
 {
    QObject *obj = nullptr;
 
    QFactoryLoader *factoryObj = loader();
 
    if (factoryObj != nullptr) {
-       QMediaResourceSetFactoryInterface *plugin = dynamic_cast<QMediaResourceSetFactoryInterface*>(factoryObj->instance("default"));
+      QMediaResourceSetFactoryInterface *plugin = dynamic_cast<QMediaResourceSetFactoryInterface *>(factoryObj->instance("default"));
 
-       if (plugin) {
-          obj = plugin->create(interfaceId);
-       }
+      if (plugin) {
+         obj = plugin->create(interfaceId);
+      }
 
-       if (! obj) {
-          if (interfaceId == QMediaPlayerResourceSetInterface_iid) {
-              obj = new QDummyMediaPlayerResourceSet(dummyRoot());
-          }
-       }
+      if (! obj) {
+         if (interfaceId == QMediaPlayerResourceSetInterface_iid) {
+            obj = new QDummyMediaPlayerResourceSet(dummyRoot());
+         }
+      }
    }
 
    Q_ASSERT(obj);
@@ -90,26 +86,26 @@ QObject* QMediaResourcePolicy::createResourceSet(const QString& interfaceId)
    return obj;
 }
 
-void QMediaResourcePolicy::destroyResourceSet(QObject* resourceSet)
+void QMediaResourcePolicy::destroyResourceSet(QObject *resourceSet)
 {
-    if (resourceSet->parent() == dummyRoot()) {
-        delete resourceSet;
-        return;
-    }
+   if (resourceSet->parent() == dummyRoot()) {
+      delete resourceSet;
+      return;
+   }
 
-    QFactoryLoader *factoryObj = loader();
+   QFactoryLoader *factoryObj = loader();
 
-    if (factoryObj == nullptr) {
-       return;
-    }
+   if (factoryObj == nullptr) {
+      return;
+   }
 
-    QMediaResourceSetFactoryInterface *plugin = dynamic_cast<QMediaResourceSetFactoryInterface*>(factoryObj->instance("default"));
-    Q_ASSERT(plugin);
+   QMediaResourceSetFactoryInterface *plugin = dynamic_cast<QMediaResourceSetFactoryInterface *>(factoryObj->instance("default"));
+   Q_ASSERT(plugin);
 
-    if (plugin == nullptr) {
-        return;
-    }
+   if (plugin == nullptr) {
+      return;
+   }
 
-    return plugin->destroy(resourceSet);
+   return plugin->destroy(resourceSet);
 }
 

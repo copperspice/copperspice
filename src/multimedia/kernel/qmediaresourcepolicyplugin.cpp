@@ -24,7 +24,7 @@
 #include <qmediaresourcepolicyplugin_p.h>
 
 QMediaResourcePolicyPlugin::QMediaResourcePolicyPlugin(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 

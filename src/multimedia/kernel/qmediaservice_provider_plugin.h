@@ -204,7 +204,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderPlugin : public QObject, public Q
     Required Controls: QAudioDecoderControl
     Optional: that streams control
 */
-#define Q_MEDIASERVICE_AUDIODECODER "com.copperspice.CS.audioDecode"
+#define Q_MEDIASERVICE_AUDIODECODER "com.copperspice.CS.audioDecoder"
 
 
 #endif

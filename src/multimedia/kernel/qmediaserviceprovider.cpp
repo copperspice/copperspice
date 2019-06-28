@@ -219,8 +219,6 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
       for (QString tmpKey : keySet)  {
 
-         qDebug("BROOM (PROVDER)   key passsed in = %s    key in keySet = %s", csPrintable(key), csPrintable(tmpKey) );
-
          for (QLibraryHandle *handle : factoryObj->librarySet(tmpKey) )  {
             QObject *obj = factoryObj->instance(handle);
 

@@ -24,10 +24,10 @@
 #ifndef QMEDIAPLAYERCONTROL_H
 #define QMEDIAPLAYERCONTROL_H
 
+#include <qpair.h>
 #include <qmediacontrol.h>
 #include <qmediaplayer.h>
 #include <qmediatimerange.h>
-#include <qpair.h>
 
 class QMediaPlaylist;
 

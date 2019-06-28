@@ -29,22 +29,22 @@
 
 class Q_MULTIMEDIA_EXPORT QMediaAudioProbeControl : public QMediaControl
 {
-    MULTI_CS_OBJECT(QMediaAudioProbeControl)
+   MULTI_CS_OBJECT(QMediaAudioProbeControl)
 
-public:
-    virtual ~QMediaAudioProbeControl();
+ public:
+   virtual ~QMediaAudioProbeControl();
 
-    MULTI_CS_SIGNAL_1(Public, void audioBufferProbed(const QAudioBuffer & buffer))
-    MULTI_CS_SIGNAL_2(audioBufferProbed,buffer)
+   MULTI_CS_SIGNAL_1(Public, void audioBufferProbed(const QAudioBuffer &buffer))
+   MULTI_CS_SIGNAL_2(audioBufferProbed, buffer)
 
-    MULTI_CS_SIGNAL_1(Public, void flush())
-    MULTI_CS_SIGNAL_2(flush)
+   MULTI_CS_SIGNAL_1(Public, void flush())
+   MULTI_CS_SIGNAL_2(flush)
 
-protected:
-    explicit QMediaAudioProbeControl(QObject *parent = nullptr);
+ protected:
+   explicit QMediaAudioProbeControl(QObject *parent = nullptr);
 };
 
 #define QMediaAudioProbeControl_iid "com.copperspice.CS.mediaAudioProbeControl/1.0"
-Q_MEDIA_DECLARE_CONTROL(QMediaAudioProbeControl, QMediaAudioProbeControl_iid)
+CS_DECLARE_INTERFACE(QMediaAudioProbeControl, QMediaAudioProbeControl_iid)
 
 #endif

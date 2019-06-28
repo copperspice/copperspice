@@ -28,21 +28,21 @@
 
 class Q_MULTIMEDIA_EXPORT QMediaResourcePolicy
 {
-public:
-    //a dummy object will always be provided if the interfaceId is not supported
-    template<typename T>
-    static T *createResourceSet();
+ public:
+   //a dummy object will always be provided if the interfaceId is not supported
+   template<typename T>
+   static T *createResourceSet();
 
-    static void destroyResourceSet(QObject *resourceSet);
+   static void destroyResourceSet(QObject *resourceSet);
 
-private:
-    static QObject *createResourceSet(const QString& interfaceId);
+ private:
+   static QObject *createResourceSet(const QString &interfaceId);
 };
 
 template<typename T>
-T* QMediaResourcePolicy::createResourceSet()
+T *QMediaResourcePolicy::createResourceSet()
 {
-    return qobject_cast<T*>(QMediaResourcePolicy::createResourceSet(T::iid()));
+   return qobject_cast<T *>(QMediaResourcePolicy::createResourceSet(T::iid()));
 }
 
 #endif
