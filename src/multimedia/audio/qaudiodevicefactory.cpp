@@ -25,7 +25,6 @@
 #include <qaudiosystem.h>
 #include <qaudiosystemplugin.h>
 
-#include <qmediapluginloader_p.h>
 #include <qaudiodevicefactory_p.h>
 #include <qfactoryloader_p.h>
 

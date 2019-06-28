@@ -36,9 +36,8 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 {
    MULTI_CS_OBJECT(QAbstractVideoSurface)
 
-   // BROOM - fix the property
-   // Q_PROPERTY(QSize nativeResolution READ nativeResolution NOTIFY nativeResolutionChanged)
-
+   MULTI_CS_PROPERTY_READ(nativeResolution,   nativeResolution)
+   MULTI_CS_PROPERTY_NOTIFY(nativeResolution, nativeResolutionChanged)
 
  public:
    enum Error {
