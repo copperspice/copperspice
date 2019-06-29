@@ -28,6 +28,8 @@
 #include <qstringlist.h>
 #include <qmultimedia.h>
 
+#include <functional>
+
 class QMediaService;
 class QMediaBindableInterface;
 class QMediaObjectPrivate;
@@ -81,8 +83,10 @@ class Q_MULTIMEDIA_EXPORT QMediaObject : public QObject
    QMediaObject(QObject *parent, QMediaService *service);
    QMediaObject(QMediaObjectPrivate &dd, QObject *parent, QMediaService *service);
 
-   void addPropertyWatch(QByteArray const &name);
-   void removePropertyWatch(QByteArray const &name);
+   template <typename T>
+   void addPropertyWatch(const QString &name);
+
+   void removePropertyWatch(const QString &name);
 
    QMediaObjectPrivate *d_ptr;
 
@@ -91,6 +95,8 @@ class Q_MULTIMEDIA_EXPORT QMediaObject : public QObject
 
    Q_DECLARE_PRIVATE(QMediaObject)
 
+   void cs_internal_addPropertyWatch(const QString &name, std::function<void ()> callBack);
+
    MULTI_CS_SLOT_1(Private, void _q_notify())
    MULTI_CS_SLOT_2(_q_notify)
 
@@ -98,5 +104,29 @@ class Q_MULTIMEDIA_EXPORT QMediaObject : public QObject
    MULTI_CS_SLOT_2(_q_availabilityChanged)
 };
 
-#endif
+template <typename T>
+void QMediaObject::addPropertyWatch(const QString &name)
+{
+   const QMetaObject *metaObj = metaObject();
+   int propIndex = metaObj->indexOfProperty(name);
 
+   if (propIndex!= -1 && metaObj->property(propIndex).hasNotifySignal()) {
+
+      QMetaProperty metaProp   = metaObj->property(propIndex);
+      QMetaMethod signalMethod = metaProp.notifySignal();
+
+      int typeId       = metaProp.userType();
+      QString typeName = QMetaType::typeName(typeId);
+
+      auto callBack = [this, metaProp, signalMethod, typeName]()
+         {
+            QVariant data = metaProp.read(this);
+            signalMethod.invoke(this, CSArgument<T>(data.value<T>(), typeName));
+         };
+
+      cs_internal_addPropertyWatch(name, callBack);
+   }
+}
+
+
+#endif

@@ -32,15 +32,8 @@
 
 void QMediaObjectPrivate::_q_notify()
 {
-   Q_Q(QMediaObject);
-
-   const QMetaObject *m = q->metaObject();
-
-   for (int pi : notifyProperties) {
-      QMetaProperty p = m->property(pi);
-
-      // BROOM  p.notifySignal().invoke(q, CSGenericArgument(QMetaType::typeName(p.userType()), p.read(q).data()));
-
+   for (const auto &callBack : notifyProperties) {
+      callBack();
    }
 }
 
@@ -139,7 +132,8 @@ QMediaObject::QMediaObject(QObject *parent, QMediaService *service)
 
    d->notifyTimer = new QTimer(this);
    d->notifyTimer->setInterval(1000);
-   connect(d->notifyTimer, SIGNAL(timeout()), SLOT(_q_notify()));
+
+   connect(d->notifyTimer, &QTimer::timeout, this, &QMediaObject::_q_notify);
 
    d->service = service;
 
@@ -154,42 +148,33 @@ QMediaObject::QMediaObject(QMediaObjectPrivate &dd, QObject *parent, QMediaServi
 
    d->notifyTimer = new QTimer(this);
    d->notifyTimer->setInterval(1000);
-   connect(d->notifyTimer, SIGNAL(timeout()), SLOT(_q_notify()));
+
+   connect(d->notifyTimer, &QTimer::timeout, this, &QMediaObject::_q_notify);
 
    d->service = service;
 
    setupControls();
 }
 
-void QMediaObject::addPropertyWatch(QByteArray const &name)
+void QMediaObject::cs_internal_addPropertyWatch(const QString &name, std::function<void ()> callBack)
 {
    Q_D(QMediaObject);
 
-   const QMetaObject *m = metaObject();
+   d->notifyProperties.insert(name, callBack);
 
-   int index = m->indexOfProperty(name);
-
-   if (index != -1 && m->property(index).hasNotifySignal()) {
-      d->notifyProperties.insert(index);
-
-      if (!d->notifyTimer->isActive()) {
-         d->notifyTimer->start();
-      }
+   if (! d->notifyTimer->isActive()) {
+      d->notifyTimer->start();
    }
 }
 
-void QMediaObject::removePropertyWatch(QByteArray const &name)
+void QMediaObject::removePropertyWatch(const QString &name)
 {
    Q_D(QMediaObject);
 
-   int index = metaObject()->indexOfProperty(name);
+   d->notifyProperties.remove(name);
 
-   if (index != -1) {
-      d->notifyProperties.remove(index);
-
-      if (d->notifyProperties.isEmpty()) {
-         d->notifyTimer->stop();
-      }
+   if (d->notifyProperties.isEmpty()) {
+      d->notifyTimer->stop();
    }
 }
 

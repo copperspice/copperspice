@@ -171,7 +171,8 @@ void QMediaPlayerPrivate::_q_stateChanged(QMediaPlayer::State ps)
       state = ps;
 
       if (ps == QMediaPlayer::PlayingState) {
-         q->addPropertyWatch("position");
+         q->addPropertyWatch<qint64>("position");
+
       } else {
          q->removePropertyWatch("position");
       }
@@ -195,8 +196,9 @@ void QMediaPlayerPrivate::_q_mediaStatusChanged(QMediaPlayer::MediaStatus s)
       switch (s) {
          case QMediaPlayer::StalledMedia:
          case QMediaPlayer::BufferingMedia:
-            q->addPropertyWatch("bufferStatus");
+            q->addPropertyWatch<int>("bufferStatus");
             break;
+
          default:
             q->removePropertyWatch("bufferStatus");
             break;
@@ -579,11 +581,11 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
          d->status = d->control->mediaStatus();
 
          if (d->state == PlayingState) {
-            addPropertyWatch("position");
+            addPropertyWatch<qint64>("position");
          }
 
          if (d->status == StalledMedia || d->status == BufferingMedia) {
-            addPropertyWatch("bufferStatus");
+            addPropertyWatch<int>("bufferStatus");
          }
 
          d->hasStreamPlaybackFeature = d->provider->supportedFeatures(d->service).testFlag(QMediaServiceProviderHint::StreamPlayback);

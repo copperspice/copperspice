@@ -32,16 +32,17 @@
 class QMetaDataReaderControl;
 class QMediaAvailabilityControl;
 
-#define Q_DECLARE_NON_CONST_PUBLIC(Class) \
-    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
-    friend class Class;
+#define Q_DECLARE_NON_CONST_PUBLIC(T) \
+    inline T *q_func() { return static_cast<T *>(q_ptr); } \
+    friend class Ts;
 
 class QMediaObjectPrivate
 {
    Q_DECLARE_PUBLIC(QMediaObject)
 
  public:
-   QMediaObjectPrivate(): service(0), metaDataControl(0), availabilityControl(0), notifyTimer(0), q_ptr(0)
+   QMediaObjectPrivate()
+      : service(nullptr), metaDataControl(nullptr), availabilityControl(nullptr), notifyTimer(nullptr), q_ptr(nullptr)
    {}
 
    virtual ~QMediaObjectPrivate()
@@ -55,7 +56,7 @@ class QMediaObjectPrivate
    QMediaAvailabilityControl *availabilityControl;
 
    QTimer *notifyTimer;
-   QSet<int> notifyProperties;
+   QMap<QString, std::function<void ()>  > notifyProperties;
 
    QMediaObject *q_ptr;
 };
