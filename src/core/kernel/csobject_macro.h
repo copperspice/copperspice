@@ -1247,81 +1247,7 @@ class cs_number<0>
 
 #endif
 
-
 // ** 6
-#if defined(QT_BUILD_PHONON_LIB) || ! defined(Q_OS_WIN)
-
-#define PHN_CS_OBJECT(className)                                  CS_OBJECT(className)
-#define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
-#define PHN_CS_GADGET(className)                                  CS_GADGET(className)
-#define PHN_CS_CLASSINFO(name, data)                              CS_CLASSINFO(name, data)
-
-#define PHN_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
-#define PHN_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
-#define PHN_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define PHN_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define PHN_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define PHN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
-
-#define PHN_CS_ENUM(name)                                         CS_ENUM(name)
-#define PHN_CS_REGISTER_ENUM(...)                                 CS_REGISTER_ENUM(__VA_ARGS__)
-#define PHN_CS_FLAG(enumName, flagName)                           CS_FLAG(enumName, flagName)
-
-#define PHN_CS_PROPERTY_READ(name, method)                        CS_PROPERTY_READ(name, method)
-#define PHN_CS_PROPERTY_WRITE(name, method)                       CS_PROPERTY_WRITE(name, method)
-#define PHN_CS_PROPERTY_NOTIFY(name, method)                      CS_PROPERTY_NOTIFY(name, method)
-#define PHN_CS_PROPERTY_RESET(name, method)                       CS_PROPERTY_RESET(name, method)
-#define PHN_CS_PROPERTY_REVISION(name, data)                      CS_PROPERTY_REVISION(name, data)
-#define PHN_CS_PROPERTY_DESIGNABLE(name, data)                    CS_PROPERTY_DESIGNABLE(name, data)
-#define PHN_CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)          CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_SCRIPTABLE(name, data)                    CS_PROPERTY_SCRIPTABLE(name, data)
-#define PHN_CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)          CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_STORED(name, data)                        CS_PROPERTY_STORED(name, data)
-#define PHN_CS_PROPERTY_STORED_NONSTATIC(name, data)              CS_PROPERTY_STORED_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_USER(name, data)                          CS_PROPERTY_USER(name, data)
-#define PHN_CS_PROPERTY_USER_NONSTATIC(name, data)                CS_PROPERTY_USER_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_CONSTANT(name)                            CS_PROPERTY_CONSTANT(name)
-#define PHN_CS_PROPERTY_FINAL(name)                               CS_PROPERTY_FINAL(name)
-
-#else
-#define PHN_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
-#define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
-#define PHN_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
-#define PHN_CS_CLASSINFO(name, data)
-
-#define PHN_CS_SLOT_1(access, ...)                                __VA_ARGS__;
-#define PHN_CS_SLOT_2(slotName)
-#define PHN_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define PHN_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
-#define PHN_CS_SIGNAL_2(signalName, ...)
-#define PHN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
-
-#define PHN_CS_ENUM(name)
-#define PHN_CS_REGISTER_ENUM(...)                                 __VA_ARGS__           // do not add ;
-#define PHN_CS_FLAG(enumName, flagName)
-
-#define PHN_CS_PROPERTY_READ(name, method)
-#define PHN_CS_PROPERTY_WRITE(name, method)
-#define PHN_CS_PROPERTY_NOTIFY(name, method)
-#define PHN_CS_PROPERTY_RESET(name, method)
-#define PHN_CS_PROPERTY_REVISION(name, data)
-#define PHN_CS_PROPERTY_DESIGNABLE(name, data)
-#define PHN_CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_SCRIPTABLE(name, data)
-#define PHN_CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_STORED(name, data)
-#define PHN_CS_PROPERTY_STORED_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_USER(name, data)
-#define PHN_CS_PROPERTY_USER_NONSTATIC(name, data)
-#define PHN_CS_PROPERTY_CONSTANT(name)
-#define PHN_CS_PROPERTY_FINAL(name)
-
-#endif
-
-
-// ** 7
 #if defined(QT_BUILD_SCRIPT_LIB) || ! defined(Q_OS_WIN)
 
 #define SCRIPT_CS_OBJECT(className)                               CS_OBJECT(className)
@@ -1352,7 +1278,7 @@ class cs_number<0>
 
 #endif
 
-// ** 8
+// ** 7
 #if defined(QT_BUILD_SCRIPTTOOLS_LIB) || ! defined(Q_OS_WIN)
 
 #define SCRIPT_T_CS_OBJECT(className)                             CS_OBJECT(className)
@@ -1382,7 +1308,7 @@ class cs_number<0>
 
 #endif
 
-// ** 9
+// ** 8
 #if defined(QT_BUILD_SQL_LIB) || ! defined(Q_OS_WIN)
 
 #define SQL_CS_OBJECT(className)                                  CS_OBJECT(className)
@@ -1413,7 +1339,7 @@ class cs_number<0>
 #endif
 
 
-// ** 10
+// ** 9
 #if defined(QT_BUILD_SVG_LIB) || ! defined(Q_OS_WIN)
 
 #define SVG_CS_OBJECT(className)                                  CS_OBJECT(className)
@@ -1478,7 +1404,7 @@ class cs_number<0>
 #endif
 
 
-// ** 11
+// ** 10
 #if defined(QT_BUILD_XMLPATTERNS_LIB) || ! defined(Q_OS_WIN)
 
 #define XMLP_CS_OBJECT(className)                                 CS_OBJECT(className)
@@ -1508,7 +1434,7 @@ class cs_number<0>
 
 #endif
 
-// ** 12
+// ** 11
 #if defined(BUILDING_WEBKIT) || ! defined(Q_OS_WIN)
 
 #define WEB_CS_OBJECT(className)                                  CS_OBJECT(className)
@@ -1585,7 +1511,7 @@ class cs_number<0>
 #endif
 
 
-// ** 13
+// ** 12
 #if defined(QT_BUILD_DECLARE_LIB) || ! defined(Q_OS_WIN)
 
 #define DECL_CS_OBJECT(className)                                 CS_OBJECT(className)
@@ -1664,99 +1590,5 @@ class cs_number<0>
 #define DECL_CS_PROPERTY_FINAL(name)
 
 #endif
-
-
-// ** 14
-#if defined(QT_BUILD_GSTREAMER_LIB) || ! defined(Q_OS_WIN)
-
-#define GSTRM_CS_OBJECT(className)                                CS_OBJECT(className)
-#define GSTRM_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE(className, parentX)
-#define GSTRM_CS_GADGET(className)                                CS_GADGET(className)
-
-#define GSTRM_CS_SLOT_1(access, ...)                              CS_SLOT_1(access, __VA_ARGS__)
-#define GSTRM_CS_SLOT_2(slotName)                                 CS_SLOT_2(slotName)
-#define GSTRM_CS_SLOT_OVERLOAD(slotName, argTypes)                CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define GSTRM_CS_SIGNAL_1(access, ...)                            CS_SIGNAL_1(access, __VA_ARGS__)
-#define GSTRM_CS_SIGNAL_2(signalName, ...)                        CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define GSTRM_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)       CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
-
-#else
-#define GSTRM_CS_OBJECT(className)                                CS_OBJECT_OUTSIDE(className)
-#define GSTRM_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
-#define GSTRM_CS_GADGET(className)                                CS_GADGET_OUTSIDE(className)
-
-#define GSTRM_CS_SLOT_1(access, ...)                              __VA_ARGS__;
-#define GSTRM_CS_SLOT_2(slotName)
-#define GSTRM_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define GSTRM_CS_SIGNAL_1(access, ...)                            __VA_ARGS__;
-#define GSTRM_CS_SIGNAL_2(signalName, ...)
-#define GSTRM_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
-
-#endif
-
-
-// ** 15
-#if defined(QT_BUILD_DS9_LIB) || ! defined(Q_OS_WIN)
-
-#define DS9_CS_OBJECT(className)                                  CS_OBJECT(className)
-#define DS9_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
-#define DS9_CS_GADGET(className)                                  CS_GADGET(className)
-
-#define DS9_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
-#define DS9_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
-#define DS9_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define DS9_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define DS9_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define DS9_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
-
-#else
-#define DS9_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
-#define DS9_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
-#define DS9_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
-
-#define DS9_CS_SLOT_1(access, ...)                                __VA_ARGS__;
-#define DS9_CS_SLOT_2(slotName)
-#define DS9_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define DS9_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
-#define DS9_CS_SIGNAL_2(signalName, ...)
-#define DS9_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
-
-#endif
-
-
-// ** 16
-#if defined(QT_BUILD_QT7_LIB) || ! defined(Q_OS_WIN)
-
-#define QT7_CS_OBJECT(className)                                  CS_OBJECT(className)
-#define QT7_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
-#define QT7_CS_GADGET(className)                                  CS_GADGET(className)
-
-#define QT7_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
-#define QT7_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
-#define QT7_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define QT7_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define QT7_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define QT7_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
-
-#else
-#define QT7_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
-#define QT7_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
-#define QT7_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
-
-#define QT7_CS_SLOT_1(access, ...)                                __VA_ARGS__;
-#define QT7_CS_SLOT_2(slotName)
-#define QT7_CS_SLOT_OVERLOAD(slotName, argTypes)
-
-#define QT7_CS_SIGNAL_1(access, ...)                              __VA_ARGS__;
-#define QT7_CS_SIGNAL_2(signalName, ...)
-#define QT7_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
-
-#endif
-
 
 #endif // CSOBJECT_MACRO_H

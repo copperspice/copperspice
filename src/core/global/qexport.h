@@ -109,12 +109,6 @@
 #      define Q_OPENGL_EXPORT        Q_DECL_IMPORT
 #    endif
 
-#    if defined(QT_BUILD_PHONON_LIB)
-#      define Q_PHONON_EXPORT        Q_DECL_EXPORT
-#    else
-#      define Q_PHONON_EXPORT        Q_DECL_IMPORT
-#    endif
-
 #    if defined(QT_BUILD_SQL_LIB)
 #      define Q_SQL_EXPORT           Q_DECL_EXPORT
 #    else

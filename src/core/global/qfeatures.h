@@ -121,24 +121,6 @@
 // Qt::WA_PaintOnScreen
 //#define QT_NO_PAINTONSCREEN
 
-// Phonon::AbstractMediaStream
-//#define QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-// Support for Audio Capture
-//#define QT_NO_PHONON_AUDIOCAPTURE
-
-// Phonon::Effect
-//#define QT_NO_PHONON_EFFECT
-
-// Phonon::MediaController
-//#define QT_NO_PHONON_MEDIACONTROLLER
-
-// Phonon::ObjectDescriptionModel
-//#define QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
-
-// Phonon::VideoWidget
-//#define QT_NO_PHONON_VIDEO
-
 // QPicture
 //#define QT_NO_PICTURE
 
@@ -314,7 +296,6 @@
 #define QT_NO_FILESYSTEMMODEL
 #endif
 
-
 // QMenu
 #if !defined(QT_NO_MENU) && (defined(QT_NO_ACTION))
 #define QT_NO_MENU
@@ -323,26 +304,6 @@
 // QNetworkDiskCache
 #if !defined(QT_NO_NETWORKDISKCACHE) && (defined(QT_NO_TEMPORARYFILE))
 #define QT_NO_NETWORKDISKCACHE
-#endif
-
-// Phonon::SeekSlider
-#if !defined(QT_NO_PHONON_SEEKSLIDER) && (defined(QT_NO_SLIDER))
-#define QT_NO_PHONON_SEEKSLIDER
-#endif
-
-// Phonon::AbstractMediaStream
-#if !defined(QT_NO_PHONON_SETTINGSGROUP) && (defined(QT_NO_SETTINGS))
-#define QT_NO_PHONON_SETTINGSGROUP
-#endif
-
-// Phonon::VideoPlayer
-#if !defined(QT_NO_PHONON_VIDEOPLAYER) && (defined(QT_NO_PHONON_VIDEO))
-#define QT_NO_PHONON_VIDEOPLAYER
-#endif
-
-// Phonon::VolumeFaderEffect
-#if !defined(QT_NO_PHONON_VOLUMEFADEREFFECT) && (defined(QT_NO_PHONON_EFFECT))
-#define QT_NO_PHONON_VOLUMEFADEREFFECT
 #endif
 
 // QProgressDialog
@@ -493,11 +454,6 @@
 // QMdiArea
 #if !defined(QT_NO_MDIAREA) && (defined(QT_NO_SCROLLAREA))
 #define QT_NO_MDIAREA
-#endif
-
-// Phonon::VolumeSlider
-#if !defined(QT_NO_PHONON_VOLUMESLIDER) && (defined(QT_NO_SLIDER) || defined(QT_NO_TOOLBUTTON))
-#define QT_NO_PHONON_VOLUMESLIDER
 #endif
 
 // QPrinter
@@ -748,11 +704,6 @@
 // QInputDialog
 #if !defined(QT_NO_INPUTDIALOG) && (defined(QT_NO_COMBOBOX) || defined(QT_NO_SPINBOX) || defined(QT_NO_STACKEDWIDGET))
 #define QT_NO_INPUTDIALOG
-#endif
-
-// Phonon::EffectWidget
-#if !defined(QT_NO_PHONON_EFFECTWIDGET) && (defined(QT_NO_PHONON_EFFECT) || defined(QT_NO_COMBOBOX) || defined(QT_NO_SPINBOX))
-#define QT_NO_PHONON_EFFECTWIDGET
 #endif
 
 // QFontComboBox
