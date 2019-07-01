@@ -37,8 +37,8 @@ set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 # required library
 set(BUILD_COMPONENTS "Core")
 
-# might add DBus, Declarative and ScriptTools later
-set(_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Phonon Script Sql Svg WebKit Xml XmlPatterns)
+# consider DBus, Declarative and ScriptTools
+set(_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg WebKit Xml XmlPatterns)
 
 set(PACKAGE "copperspice")
 set(PACKAGE_NAME "copperspice")
@@ -375,16 +375,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         )
     endif()
 
-    if(WITH_PHONON)
-        find_package(GStreamer)
-        set_package_properties(GStreamer PROPERTIES
-           PURPOSE "Required for phonon support"
-           DESCRIPTION "Open source phonon framework"
-           URL "http://gstreamer.freedesktop.org"
-           TYPE REQUIRED
-        )
-    endif()
-
     if(WITH_WEBKIT)
         find_package(LibXml2)
         set_package_properties(LibXml2 PROPERTIES
@@ -445,9 +435,6 @@ set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 # check components dependencies
 if(WITH_MULTIMEDIA AND NOT WITH_GUI)
     message(SEND_ERROR "Multimedia component requires Gui component")
-
-elseif(WITH_PHONON AND NOT (WITH_GUI AND WITH_NETWORK))
-    message(SEND_ERROR "Phonon component requires Gui and Network components")
 
 elseif(WITH_OPENGL AND NOT WITH_GUI)
     message(SEND_ERROR "OpenGL component requires Gui component")

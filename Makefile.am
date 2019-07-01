@@ -101,15 +101,12 @@ include src/multimedia/Makefile.am
 include src/opengl/Makefile.am
 include src/sql/Makefile.am
 include src/svg/Makefile.am
-include src/phonon/Makefile.am
 include src/script/Makefile.am
 include src/xml/Makefile.am
 include src/xmlpatterns/Makefile.am
 
-include src/plugins/platforms/Makefile.am
-
-#out for now   include src/scripttools/Makefile.am
-#out for now   include src/declarative/Makefile.am
+#  include src/scripttools/Makefile.am
+#  include src/declarative/Makefile.am
 
 # extra files for distribution
 EXTRA_DIST+= autotools/build-aux/git-version-gen \
@@ -233,7 +230,6 @@ clean-local: clean-cs
 
 clean-cs:
 	rm -rf include/Qt*
-	rm -rf include/phonon
 	rm -rf privateinclude
 	rm -rf .*.mk
 	rm -rf src/webkit/.*.mk
@@ -244,14 +240,10 @@ clean-cs:
 
 install-data-hook: webkit-headers
 	mkdir -p $(DESTDIR)$(includedir)
-	cp -r include/Qt* include/qt-acconfig.h $(DESTDIR)$(includedir)
-	if [ -d include/phonon ] ; then cp -r include/phonon $(DESTDIR)$(includedir) ; fi
+	cp -r include/Qt* include/qt-acconfig.h $(DESTDIR)$(includedir)	
 
 uninstall-hook:
-#  remove all the files and all the directories
 	rm -rf $(DESTDIR)$(includedir)/Qt*
-	rm -rf $(DESTDIR)$(includedir)/phonon
-
 	rm  $(DESTDIR)$(includedir)/qt-acconfig.h
 
 .PHONY: clean-qrc

@@ -194,13 +194,10 @@ AM_CONDITIONAL(ZLIB, test "x" = x""yes)
 
 AC_ARG_ENABLE([openssl],    AS_HELP_STRING([--disable-openssl],    [Do not include OpenSSL in CsNetwork]))
 AC_ARG_ENABLE([multimedia], AS_HELP_STRING([--disable-multimedia], [Do not build CsMultimedia]))
-AC_ARG_ENABLE([phonon],	    AS_HELP_STRING([--disable-phonon],     [Do not build CsPhonon]))
 AC_ARG_ENABLE([webkit],	    AS_HELP_STRING([--disable-webkit],     [Do not build CsWebKit]))
 
 AM_CONDITIONAL(MULTIMEDIA, test "x$enable_multimedia" != "xno")
-AM_CONDITIONAL(PHONON, test "x$enable_phonon" != "xno")
-AM_CONDITIONAL(WEBKIT, test "x$enable_webkit" != "xno")
-
+AM_CONDITIONAL(WEBKIT,     test "x$enable_webkit" != "xno")
 
 real_dir_name()
 {
