@@ -67,8 +67,7 @@ WriteIncludes::WriteIncludes(Uic *uic)
    : m_uic(uic), m_output(uic->output()), m_scriptsActivated(false), m_laidOut(false)
 {
    // When possible (no namespace) use the "QtModule/QClass" convention
-   // and create a re-mapping of the old header "qclass.h" to it. Do not do this
-   // for the "Phonon::Someclass" classes, however.
+   // and create a re-mapping of the old header "qclass.h" to it.
 
    const QString namespaceDelimiter = "::";
    const ClassInfoEntry *classLibEnd = qclass_lib_map + sizeof(qclass_lib_map) / sizeof(ClassInfoEntry);
