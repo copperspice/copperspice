@@ -57,26 +57,25 @@ void showHelp(const char *appName)
 
 int runUic(int argc, char *argv[])
 {
-
-   const char *fileName = 0;
+   const char *fileName = nullptr;
    int arg = 1;
    Driver driver;
 
    while (arg < argc) {
       QString opt = QString::fromUtf8(argv[arg]);
 
-      if (opt == QLatin1String("-h") || opt == "-help") {
+      if (opt == "-h" || opt == "-help" || opt == "--help") {
          showHelp(argv[0]);
          return 0;
 
-      } else if (opt == QLatin1String("-d") || opt == "-dependencies") {
+      } else if (opt == "-d" || opt == "-dependencies") {
          driver.option().dependencies = true;
 
-      } else if (opt == QLatin1String("-v") || opt == "-version") {
+      } else if (opt == "-v" || opt == "-version" || opt == "--version") {
          fprintf(stderr, "CopperSpice User Interface Compiler version %s\n", UIC_VERSION_STR);
          return 0;
 
-      } else if (opt == QLatin1String("-o") || opt == QLatin1String("-output")) {
+      } else if (opt == "-o" || opt == "-output") {
          ++arg;
 
          if (! argv[arg]) {
@@ -85,13 +84,13 @@ int runUic(int argc, char *argv[])
          }
          driver.option().outputFile = QFile::decodeName(argv[arg]);
 
-      } else if (opt == QLatin1String("-p") || opt == QLatin1String("-no-protection")) {
+      } else if (opt == "-p" || opt == "-no-protection") {
          driver.option().headerProtection = false;
 
-      } else if (opt == QLatin1String("-n") || opt == QLatin1String("-no-implicit-includes")) {
+      } else if (opt == "-n" || opt == "-no-implicit-includes") {
          driver.option().implicitIncludes = false;
 
-      } else if (opt == QLatin1String("-postfix")) {
+      } else if (opt == "-postfix") {
          ++arg;
 
          if (! argv[arg]) {
@@ -100,7 +99,7 @@ int runUic(int argc, char *argv[])
          }
          driver.option().postfix = QString::fromUtf8(argv[arg]);
 
-      } else if (opt == QLatin1String("-tr") || opt == QLatin1String("-translate")) {
+      } else if (opt == "-tr" || opt == "-translate") {
          ++arg;
          if (!argv[arg]) {
             showHelp(argv[0]);
@@ -135,8 +134,11 @@ int runUic(int argc, char *argv[])
 
    if (fileName) {
       inputFile = QString::fromUtf8(fileName);
+
    } else {
-      driver.option().headerProtection = false;
+      // no file name provide so there is nothing to do
+      showHelp(argv[0]);
+      return 1;
    }
 
    if (driver.option().dependencies) {
@@ -172,6 +174,7 @@ int runUic(int argc, char *argv[])
 
    return !rtn;
 }
+
 int main(int argc, char *argv[])
 {
    return runUic(argc, argv);
