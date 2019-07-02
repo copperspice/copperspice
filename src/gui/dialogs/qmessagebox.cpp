@@ -143,7 +143,8 @@ class QMessageBoxDetailsText : public QWidget
       textEdit->setReadOnly(true);
       layout->addWidget(textEdit);
       setLayout(layout);
-      connect(textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(textCopyAvailable(bool)));
+
+      connect(textEdit, &TextEdit::copyAvailable, this, &QMessageBoxDetailsText::textCopyAvailable);
    }
 
    void setText(const QString &text) {
