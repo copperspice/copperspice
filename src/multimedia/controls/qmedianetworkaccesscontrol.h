@@ -48,6 +48,6 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkAccessControl : public QMediaControl
 };
 
 #define QMediaNetworkAccessControl_iid "com.copperspice.CS.mediaNetworkAccessControl/1.0"
-CS_DECLARE_INTERFACE(QMediaNetworkAccessControl, QMediaNetworkAccessControl_iid)    // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QMediaNetworkAccessControl, QMediaNetworkAccessControl_iid)
 
 #endif

@@ -83,6 +83,6 @@ class Q_MULTIMEDIA_EXPORT QVideoWindowControl : public QMediaControl
 };
 
 #define QVideoWindowControl_iid "com.copperspice.CS.videoWindowControl/1.0"
-CS_DECLARE_INTERFACE(QVideoWindowControl, QVideoWindowControl_iid)                // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QVideoWindowControl, QVideoWindowControl_iid)
 
 #endif

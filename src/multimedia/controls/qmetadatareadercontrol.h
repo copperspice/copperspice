@@ -56,6 +56,6 @@ class Q_MULTIMEDIA_EXPORT QMetaDataReaderControl : public QMediaControl
 };
 
 #define QMetaDataReaderControl_iid "com.copperspice.CS.metaDataReaderControl/1.0"
-CS_DECLARE_INTERFACE(QMetaDataReaderControl, QMetaDataReaderControl_iid)         // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QMetaDataReaderControl, QMetaDataReaderControl_iid)
 
 #endif

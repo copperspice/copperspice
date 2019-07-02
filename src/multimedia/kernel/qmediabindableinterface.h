@@ -41,6 +41,6 @@ class Q_MULTIMEDIA_EXPORT QMediaBindableInterface
 };
 
 #define QMediaBindableInterface_iid  "com.copperspice.CS.mediaBindable/1.0"
-CS_DECLARE_INTERFACE(QMediaBindableInterface, QMediaBindableInterface_iid)         // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QMediaBindableInterface, QMediaBindableInterface_iid)
 
 #endif

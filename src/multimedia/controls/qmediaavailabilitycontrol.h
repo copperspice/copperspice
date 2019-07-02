@@ -45,6 +45,6 @@ class Q_MULTIMEDIA_EXPORT QMediaAvailabilityControl : public QMediaControl
 };
 
 #define QMediaAvailabilityControl_iid "com.copperspice.CS.mediaAvailabilityControl/1.0"
-CS_DECLARE_INTERFACE(QMediaAvailabilityControl, QMediaAvailabilityControl_iid)         // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QMediaAvailabilityControl, QMediaAvailabilityControl_iid)
 
 #endif

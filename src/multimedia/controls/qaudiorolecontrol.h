@@ -48,6 +48,6 @@ class Q_MULTIMEDIA_EXPORT QAudioRoleControl : public QMediaControl
 };
 
 #define QAudioRoleControl_iid "com.copperspice.CS.audioRoleControl/1.0"
-CS_DECLARE_INTERFACE(QAudioRoleControl, QAudioRoleControl_iid)    // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QAudioRoleControl, QAudioRoleControl_iid)
 
 #endif

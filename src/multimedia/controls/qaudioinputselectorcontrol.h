@@ -54,6 +54,6 @@ class Q_MULTIMEDIA_EXPORT QAudioInputSelectorControl : public QMediaControl
 };
 
 #define QAudioInputSelectorControl_iid "com.copperspice.CS.audioInputSelectorControl/1.0"
-CS_DECLARE_INTERFACE(QAudioInputSelectorControl, QAudioInputSelectorControl_iid)    // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QAudioInputSelectorControl, QAudioInputSelectorControl_iid)
 
 #endif

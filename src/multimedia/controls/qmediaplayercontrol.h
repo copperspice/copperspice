@@ -106,8 +106,8 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayerControl : public QMediaControl
    explicit QMediaPlayerControl(QObject *parent = nullptr);
 };
 
-#define QMediaPlayerControl_iid "com.copperspice.CS.mediaPlayerControl/1.0"
-CS_DECLARE_INTERFACE(QMediaPlayerControl, QMediaPlayerControl_iid)
+#define QMediaPlayerControl_Key "com.copperspice.CS.mediaPlayerControl/1.0"
+CS_DECLARE_INTERFACE(QMediaPlayerControl, QMediaPlayerControl_Key)
 
 #endif
 

@@ -90,7 +90,7 @@ class Q_MULTIMEDIA_EXPORT QAudioDecoderControl : public QMediaControl
    explicit QAudioDecoderControl(QObject *parent = nullptr);
 };
 
-#define QAudioDecoderControl_iid "com.copperspice.CS.audioDecoderControl/1.0"
-CS_DECLARE_INTERFACE(QAudioDecoderControl, QAudioDecoderControl_iid)
+#define QAudioDecoderControl_Key "com.copperspice.CS.audioDecoderControl/1.0"
+CS_DECLARE_INTERFACE(QAudioDecoderControl, QAudioDecoderControl_Key)
 
 #endif

@@ -43,6 +43,6 @@ class Q_MULTIMEDIA_EXPORT QVideoRendererControl : public QMediaControl
 };
 
 #define QVideoRendererControl_iid "com.copperspice.CS.videoRendererControl/1.0"
-CS_DECLARE_INTERFACE(QVideoRendererControl, QVideoRendererControl_iid)    // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QVideoRendererControl, QVideoRendererControl_iid)
 
 #endif

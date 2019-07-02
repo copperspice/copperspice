@@ -72,7 +72,7 @@ class Q_MULTIMEDIA_EXPORT QVideoWidgetControl : public QMediaControl
    explicit QVideoWidgetControl(QObject *parent = nullptr);
 };
 
-#define QVideoWidgetControl_iid "org.qt-project.qt.videoWidgetControl/1.0"
-CS_DECLARE_INTERFACE(QVideoWidgetControl, QVideoWidgetControl_iid)                // emerald, was Q_MEDIA_DECLARE_CONTROL
+#define QVideoWidgetControl_iid "com.copperpsice.CS.videoWidgetControl/1.0"
+CS_DECLARE_INTERFACE(QVideoWidgetControl, QVideoWidgetControl_iid)
 
 #endif
