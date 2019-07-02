@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qvideoframeconversionhelper_p.h"
+#include <qvideoframeconversionhelper_p.h>
 
 #define CLAMP(n) (n > 255 ? 255 : (n < 0 ? 0 : n))
 

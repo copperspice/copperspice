@@ -24,10 +24,10 @@
 #ifndef QAUDIOSYSTEM_H
 #define QAUDIOSYSTEM_H
 
-#include <QtMultimedia/qmultimedia.h>
-#include <QtMultimedia/qaudio.h>
-#include <QtMultimedia/qaudioformat.h>
-#include <QtMultimedia/qaudiodeviceinfo.h>
+#include <qmultimedia.h>
+#include <qaudio.h>
+#include <qaudioformat.h>
+#include <qaudiodeviceinfo.h>
 
 class QIODevice;
 

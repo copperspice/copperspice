@@ -26,6 +26,7 @@
 
 #include <qmediaservice.h>
 #include <qmediaplayer.h>
+#include <qmediaplayercontrol.h>
 
 #include <qfactoryloader_p.h>
 #include <qmediaserviceprovider_p.h>

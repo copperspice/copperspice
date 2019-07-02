@@ -22,7 +22,7 @@
 ***********************************************************************/
 
 #include <qaudio.h>
-#include <QDebug>
+#include <qdebug.h>
 
 namespace QAudio {
 

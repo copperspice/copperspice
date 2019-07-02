@@ -24,13 +24,11 @@
 #ifndef QAUDIOOUTPUT_H
 #define QAUDIOOUTPUT_H
 
-#include <QtCore/qiodevice.h>
-#include <QtMultimedia/qmultimedia.h>
-#include <QtMultimedia/qaudio.h>
-#include <QtMultimedia/qaudioformat.h>
-#include <QtMultimedia/qaudiodeviceinfo.h>
-
-
+#include <qiodevice.h>
+#include <qmultimedia.h>
+#include <qaudio.h>
+#include <qaudioformat.h>
+#include <qaudiodeviceinfo.h>
 
 class QAbstractAudioOutput;
 
@@ -75,7 +73,6 @@ class Q_MULTIMEDIA_EXPORT QAudioOutput : public QObject
    QString category() const;
    void setCategory(const QString &category);
 
-
    MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
    MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
 
@@ -87,7 +84,5 @@ class Q_MULTIMEDIA_EXPORT QAudioOutput : public QObject
 
    QAbstractAudioOutput *d;
 };
-
-
 
 #endif

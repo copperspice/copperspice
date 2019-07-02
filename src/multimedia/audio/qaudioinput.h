@@ -25,10 +25,10 @@
 #define QAUDIOINPUT_H
 
 #include <qiodevice.h>
-#include <QtMultimedia/qmultimedia.h>
-#include <QtMultimedia/qaudio.h>
-#include <QtMultimedia/qaudioformat.h>
-#include <QtMultimedia/qaudiodeviceinfo.h>
+#include <qmultimedia.h>
+#include <qaudio.h>
+#include <qaudioformat.h>
+#include <qaudiodeviceinfo.h>
 
 class QAbstractAudioInput;
 
@@ -81,4 +81,4 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    QAbstractAudioInput *d;
 };
 
-#endif // QAUDIOINPUT_H
+#endif

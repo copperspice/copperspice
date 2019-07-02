@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include "qgraphicsvideoitem.h"
-#include "qpaintervideosurface_p.h"
+#include <qgraphicsvideoitem.h>
 
+#include <qcoreevent.h>
+#include <qpointer.h>
 #include <qmediaobject.h>
 #include <qmediaservice.h>
 #include <qvideorenderercontrol.h>
 #include <qvideosurfaceformat.h>
 
-#include <qcoreevent.h>
-#include <qpointer.h>
+#include <qpaintervideosurface_p.h>
+
 
 #if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_1_CL) && ! defined(QT_OPENGL_ES_1)
 #include <QtOpenGL/qgl.h>
