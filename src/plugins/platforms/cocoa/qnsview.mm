@@ -50,7 +50,7 @@
 #include <accessibilityinspector.h>
 #endif
 
-static QTouchDevice *touchDevice = 0;
+static QTouchDevice *touchDevice = nullptr;
 static bool _q_dontOverrideCtrlLMB = false;
 
 @interface NSEvent (Qt_Compile_Leopard_DeviceDelta)
@@ -171,7 +171,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 - (id)initWithQWindow: (QWindow *)window platformWindow: (QCocoaWindow *) platformWindow
 {
    self = [self init];
-   if (!self) {
+   if (! self) {
       return 0;
    }
 

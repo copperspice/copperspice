@@ -33,8 +33,6 @@
 #include "qbuffer.h"
 #include "qdebug.h"
 
-QT_BEGIN_NAMESPACE
-
 class QSvgIOHandlerPrivate
 {
 public:
@@ -61,6 +59,7 @@ bool QSvgIOHandlerPrivate::load(QIODevice *device)
 {
     if (loaded)
         return true;
+
     if (q->format().isEmpty())
         q->canRead();
 
@@ -244,6 +243,4 @@ bool QSvgIOHandler::canRead(QIODevice *device)
     return buf.startsWith("\x1f\x8b") || buf.contains("<?xml") || buf.contains("<svg");
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SVGRENDERER
+#endif

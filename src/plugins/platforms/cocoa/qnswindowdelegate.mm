@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qnswindowdelegate.h"
+#include <qnswindowdelegate.h>
 
-#include <QDebug>
+#include <qdebug.h>
 #include <qwindowsysteminterface.h>
 
 @implementation QNSWindowDelegate
@@ -93,7 +93,6 @@
 
 - (BOOL)windowShouldZoom: (NSWindow *)window toFrame: (NSRect)newFrame
 {
-   Q_UNUSED(newFrame);
    if (m_cocoaWindow && m_cocoaWindow->m_qtView) {
       [m_cocoaWindow->m_qtView notifyWindowWillZoom: ![window isZoomed]];
    }

@@ -2454,6 +2454,7 @@ QXcbSystemTrayTracker *QXcbConnection::systemTrayTracker() const
       QXcbConnection *self = const_cast<QXcbConnection *>(this);
 
       if ((self->m_systemTrayTracker = QXcbSystemTrayTracker::create(self))) {
+
          connect(m_systemTrayTracker, SIGNAL(systemTrayWindowChanged(QScreen *)),
             QApplication::platformNativeInterface(), SLOT(systemTrayWindowChanged(QScreen *)));
       }

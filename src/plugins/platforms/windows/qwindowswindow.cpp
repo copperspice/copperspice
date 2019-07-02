@@ -1373,6 +1373,7 @@ static QRect normalFrameGeometry(HWND hwnd)
 {
    WINDOWPLACEMENT wp;
    wp.length = sizeof(WINDOWPLACEMENT);
+
    if (GetWindowPlacement(hwnd, &wp)) {
       const QRect result = qrectFromRECT(wp.rcNormalPosition);
       return result.translated(windowPlacementOffset(hwnd, result.topLeft()));
@@ -1387,6 +1388,7 @@ QRect QWindowsWindow::normalGeometry() const
    const bool fakeFullScreen = m_savedFrameGeometry.isValid() && window()->windowState() == Qt::WindowFullScreen;
    const QRect frame = fakeFullScreen ? m_savedFrameGeometry : normalFrameGeometry(m_data.hwnd);
    const QMargins margins = fakeFullScreen ? QWindowsGeometryHint::frame(m_savedStyle, 0) : frameMargins();
+
    return frame.isValid() ? frame.marginsRemoved(margins) : frame;
 }
 
@@ -1399,12 +1401,14 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
       const QMargins margins = frameMargins();
       rect.moveTopLeft(rect.topLeft() + QPoint(margins.left(), margins.top()));
    }
+
    if (m_windowState == Qt::WindowMinimized) {
       m_data.geometry = rect;   // Otherwise set by handleGeometryChange() triggered by event.
    }
+
    if (m_data.hwnd) {
-      // a ResizeEvent with resulting geometry will be sent. If we cannot
-      // achieve that size (for example, window title minimal constraint) notify and warn.
+      // ResizeEvent with resulting geometry will be sent, if we cannot achieve that size
+      // (for example, window title minimal constraint) notify and warn
       setGeometry_sys(rect);
 
       if (m_data.geometry != rect) {
@@ -1432,7 +1436,7 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
 void QWindowsWindow::handleMoved()
 {
    // Minimize/Set parent can send nonsensical move events.
-   if (!IsIconic(m_data.hwnd) && !testFlag(WithinSetParent)) {
+   if (! IsIconic(m_data.hwnd) && !testFlag(WithinSetParent)) {
       handleGeometryChange();
    }
 }
@@ -1443,19 +1447,23 @@ void QWindowsWindow::handleResized(int wParam)
       case SIZE_MAXHIDE: // Some other window affected.
       case SIZE_MAXSHOW:
          return;
+
       case SIZE_MINIMIZED:
          handleWindowStateChange(Qt::WindowMinimized);
          return;
+
       case SIZE_MAXIMIZED:
          handleWindowStateChange(Qt::WindowMaximized);
          handleGeometryChange();
          break;
+
       case SIZE_RESTORED:
          if (isFullScreen_sys()) {
             handleWindowStateChange(Qt::WindowFullScreen);
          } else if (m_windowState != Qt::WindowNoState && !testFlag(MaximizeToFullScreen)) {
             handleWindowStateChange(Qt::WindowNoState);
          }
+
          handleGeometryChange();
          break;
    }

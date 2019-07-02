@@ -75,14 +75,19 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayerControl : public QMediaControl
 
    MULTI_CS_SIGNAL_1(Public, void mediaChanged(const QMediaContent &content))
    MULTI_CS_SIGNAL_2(mediaChanged, content)
+
    MULTI_CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
    MULTI_CS_SIGNAL_2(durationChanged, duration)
+
    MULTI_CS_SIGNAL_1(Public, void positionChanged(qint64 position))
    MULTI_CS_SIGNAL_2(positionChanged, position)
+
    MULTI_CS_SIGNAL_1(Public, void stateChanged(QMediaPlayer::State newState))
    MULTI_CS_SIGNAL_2(stateChanged, newState)
+
    MULTI_CS_SIGNAL_1(Public, void mediaStatusChanged(QMediaPlayer::MediaStatus status))
    MULTI_CS_SIGNAL_2(mediaStatusChanged, status)
+
    MULTI_CS_SIGNAL_1(Public, void volumeChanged(int volume))
    MULTI_CS_SIGNAL_2(volumeChanged, volume)
    MULTI_CS_SIGNAL_1(Public, void mutedChanged(bool muted))

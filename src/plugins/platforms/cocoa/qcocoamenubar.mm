@@ -32,8 +32,6 @@
 #include <QApplication>
 #include <QDebug>
 
-QT_BEGIN_NAMESPACE
-
 static QList<QCocoaMenuBar *> static_menubars;
 
 static inline QCocoaMenuLoader *getMenuLoader()
@@ -41,12 +39,13 @@ static inline QCocoaMenuLoader *getMenuLoader()
    return [NSApp QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)];
 }
 
-QCocoaMenuBar::QCocoaMenuBar() :
-   m_window(0)
+QCocoaMenuBar::QCocoaMenuBar()
+   : m_window(0)
 {
    static_menubars.append(this);
 
    m_nativeMenu = [[NSMenu alloc] init];
+
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
    qDebug() << "Construct QCocoaMenuBar" << this << m_nativeMenu;
 #endif
@@ -57,10 +56,12 @@ QCocoaMenuBar::~QCocoaMenuBar()
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
    qDebug() << "~QCocoaMenuBar" << this;
 #endif
+
    for (QCocoaMenu *menu : m_menus) {
-      if (!menu) {
+      if (! menu) {
          continue;
       }
+
       NSMenuItem *item = nativeItemForMenu(menu);
       if (menu->attachedItem() == item) {
          menu->setAttachedItem(nil);
@@ -85,15 +86,18 @@ bool QCocoaMenuBar::needsImmediateUpdate()
 {
    if (m_window && m_window->window()->isActive()) {
       return true;
+
    } else if (!m_window) {
       // Only update if the focus/active window has no
       // menubar, which means it'll be using this menubar.
       // This is to avoid a modification in a parentless
       // menubar to affect a window-assigned menubar.
+
       QWindow *fw = QApplication::focusWindow();
       if (!fw) {
          // Same if there's no focus window, BTW.
          return true;
+
       } else {
          QCocoaWindow *cw = static_cast<QCocoaWindow *>(fw->handle());
          if (cw && !cw->menubar()) {
@@ -112,6 +116,7 @@ void QCocoaMenuBar::insertMenu(QPlatformMenu *platformMenu, QPlatformMenu *befor
 {
    QCocoaMenu *menu = static_cast<QCocoaMenu *>(platformMenu);
    QCocoaMenu *beforeMenu = static_cast<QCocoaMenu *>(before);
+
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
    qDebug() << "QCocoaMenuBar" << this << "insertMenu" << menu << "before" << before;
 #endif
@@ -138,9 +143,11 @@ void QCocoaMenuBar::insertMenu(QPlatformMenu *platformMenu, QPlatformMenu *befor
          // QMenuBar::toNSMenu() exposes the native menubar and
          // the user could have inserted its own items in there.
          // Same remark applies to removeMenu().
+
          NSMenuItem *beforeItem = nativeItemForMenu(beforeMenu);
          NSInteger nativeIndex = [m_nativeMenu indexOfItem: beforeItem];
          [m_nativeMenu insertItem: item atIndex: nativeIndex];
+
       } else {
          [m_nativeMenu addItem: item];
       }
@@ -156,7 +163,7 @@ void QCocoaMenuBar::insertMenu(QPlatformMenu *platformMenu, QPlatformMenu *befor
 void QCocoaMenuBar::removeMenu(QPlatformMenu *platformMenu)
 {
    QCocoaMenu *menu = static_cast<QCocoaMenu *>(platformMenu);
-   if (!m_menus.contains(menu)) {
+   if (! m_menus.contains(menu)) {
       qWarning("Trying to remove a menu that does not belong to the menubar");
       return;
    }
@@ -188,8 +195,9 @@ void QCocoaMenuBar::syncMenu(QPlatformMenu *menu)
       // If the NSMenu has no visble items, or only separators, we should hide it
       // on the menubar. This can happen after syncing the menu items since they
       // can be moved to other menus.
+
       for (NSMenuItem * item in [cocoaMenu->nsMenu() itemArray])
-         if (![item isSeparatorItem] && ![item isHidden]) {
+         if (! [item isSeparatorItem] && ![item isHidden]) {
             shouldHide = NO;
             break;
          }
@@ -204,7 +212,7 @@ void QCocoaMenuBar::syncMenu(QPlatformMenu *menu)
 
 NSMenuItem *QCocoaMenuBar::nativeItemForMenu(QCocoaMenu *menu) const
 {
-   if (!menu) {
+   if (! menu) {
       return nil;
    }
 
@@ -270,34 +278,44 @@ void QCocoaMenuBar::redirectKnownMenuItemsToFirstResponder()
    // resetKnownMenuItemsToQt() to put back the target and action so that
    // those menu items will go back to invoking their associated QActions.
 
-   for (QCocoaMenuBar *mb : static_menubars)
-      for (QCocoaMenu *m : mb->m_menus)
+   for (QCocoaMenuBar *mb : static_menubars) {
+      for (QCocoaMenu *m : mb->m_menus) {
 
          for (QCocoaMenuItem *i : m->items()) {
             bool known = true;
+
             switch (i->effectiveRole()) {
                case QPlatformMenuItem::CutRole:
                   [i->nsItem() setAction: @selector(cut:)];
                   break;
+
                case QPlatformMenuItem::CopyRole:
                   [i->nsItem() setAction: @selector(copy:)];
                   break;
+
                case QPlatformMenuItem::PasteRole:
                   [i->nsItem() setAction: @selector(paste:)];
                   break;
+
                case QPlatformMenuItem::SelectAllRole:
                   [i->nsItem() setAction: @selector(selectAll:)];
                   break;
+
                // We may discover later that there are other roles/actions which
-               // are meaningful to standard native widgets; they can be added.
+                // are meaningful to standard native widgets; they can be added.
+
                default:
                   known = false;
                   break;
             }
+
             if (known) {
                [i->nsItem() setTarget: nil];
             }
          }
+      }
+   }
+
 }
 
 void QCocoaMenuBar::resetKnownMenuItemsToQt()
@@ -315,6 +333,7 @@ void QCocoaMenuBar::updateMenuBarImmediately()
    QCocoaWindow *cw = findWindowForMenubar();
 
    QWindow *win = cw ? cw->window() : 0;
+
    if (win && (win->flags() & Qt::Popup) == Qt::Popup) {
       // context menus, comboboxes, etc. don't need to update the menubar,
       // but if an application has only Qt::Tool window(s) on start,
@@ -322,11 +341,13 @@ void QCocoaMenuBar::updateMenuBarImmediately()
       if ((win->flags() & Qt::WindowType_Mask) != Qt::Tool) {
          return;
       }
+
       typedef QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) AppDelegate;
       NSApplication *app = [NSApplication sharedApplication];
       if (![app.delegate isKindOfClass: [AppDelegate class]]) {
          return;
       }
+
       // We apply this logic _only_ during the startup.
       AppDelegate *appDelegate = app.delegate;
       if (!appDelegate.inLaunch) {
@@ -408,6 +429,7 @@ bool QCocoaMenuBar::shouldDisable(QCocoaWindow *active) const
    // modal window is the only window on screen, then we enable the menu bar.
    for (QWindow *w : topWindows) {
       if (w->isVisible() && w->modality() == Qt::ApplicationModal) {
+
          // check for other visible windows
          for (QWindow *other : topWindows) {
             if ((w != other) && (other->isVisible())) {
@@ -436,18 +458,19 @@ QPlatformMenu *QCocoaMenuBar::menuForTag(quintptr tag) const
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 NSMenuItem *QCocoaMenuBar::itemForRole(QPlatformMenuItem::MenuRole r)
 {
-   for (QCocoaMenu *m : m_menus)
-      for (QCocoaMenuItem *i : m->items())
+   for (QCocoaMenu *m : m_menus) {
+      for (QCocoaMenuItem *i : m->items()) {
          if (i->effectiveRole() == r) {
             return i->nsItem();
          }
+      }
+   }
+
    return nullptr;
 }
-
-QT_END_NAMESPACE
 

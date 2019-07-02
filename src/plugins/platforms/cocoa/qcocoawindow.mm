@@ -304,8 +304,8 @@ static bool isMouseEvent(NSEvent *ev)
    }
 
    for (NSWindow * window in windowEnumerator) {
-      // We're meddling with normal and floating windows, so leave others alone
-      if (!(window.level == NSNormalWindowLevel || window.level == NSFloatingWindowLevel)) {
+      // meddling with normal and floating windows, so leave others alone
+      if (! (window.level == NSNormalWindowLevel || window.level == NSFloatingWindowLevel)) {
          continue;
       }
 
@@ -593,7 +593,7 @@ void QCocoaWindow::setGeometry(const QRect &rectIn)
 QRect QCocoaWindow::geometry() const
 {
    // QWindows that are embedded in a NSView hiearchy may be considered
-   // top-level from Qt's point of view but are not from Cocoa's point
+   // top-level from a CS point of view but are not from Cocoa's point
    // of view. Embedded QWindows get global (screen) geometry.
 
    if (m_contentViewIsEmbedded) {
@@ -641,7 +641,7 @@ void QCocoaWindow::setCocoaGeometry(const QRect &rect)
       [m_contentView setFrame: NSMakeRect(rect.x(), rect.y(), rect.width(), rect.height())];
    }
 
-   if (!m_qtView) {
+   if (! m_qtView) {
       QPlatformWindow::setGeometry(rect);
    }
 
@@ -1112,7 +1112,7 @@ void QCocoaWindow::setWindowState(Qt::WindowState state)
 void QCocoaWindow::setWindowTitle(const QString &title)
 {
    QMacAutoReleasePool pool;
-   if (!m_nsWindow) {
+   if (! m_nsWindow) {
       return;
    }
 
@@ -1216,7 +1216,7 @@ void QCocoaWindow::raise()
 
 void QCocoaWindow::lower()
 {
-   if (!m_nsWindow) {
+   if (! m_nsWindow) {
       return;
    }
    if (m_isNSWindowChild) {
@@ -1267,7 +1267,7 @@ bool QCocoaWindow::isOpaque() const
 void QCocoaWindow::propagateSizeHints()
 {
    QMacAutoReleasePool pool;
-   if (!m_nsWindow) {
+   if (! m_nsWindow) {
       return;
    }
 
@@ -1611,7 +1611,7 @@ void QCocoaWindow::recreateWindow(const QPlatformWindow *parentWindow)
    }
 
    const qreal opacity = qt_window_private(window())->opacity;
-   if (!qFuzzyCompare(opacity, qreal(1.0))) {
+   if (! qFuzzyCompare(opacity, qreal(1.0))) {
       setOpacity(opacity);
    }
 
@@ -1750,7 +1750,7 @@ bool QCocoaWindow::alwaysShowToolWindow() const
 
 void QCocoaWindow::removeMonitor()
 {
-   if (!monitor) {
+   if (! monitor) {
       return;
    }
    [NSEvent removeMonitor: monitor];
@@ -1760,7 +1760,7 @@ void QCocoaWindow::removeMonitor()
 // Returns the current global screen geometry for the nswindow associated with this window.
 QRect QCocoaWindow::nativeWindowGeometry() const
 {
-   if (!m_nsWindow || m_isNSWindowChild) {
+   if (! m_nsWindow || m_isNSWindowChild) {
       return geometry();
    }
 
@@ -2080,7 +2080,7 @@ void QCocoaWindow::exposeWindow()
 {
    m_geometryUpdateExposeAllowed = true;
 
-   if (!isWindowExposable()) {
+   if (! isWindowExposable()) {
       return;
    }
 

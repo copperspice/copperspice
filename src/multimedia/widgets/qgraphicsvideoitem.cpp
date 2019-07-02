@@ -150,32 +150,6 @@ void QGraphicsVideoItemPrivate::_q_serviceDestroyed()
 }
 
 
-/*!
-    \class QGraphicsVideoItem
-
-    \brief The QGraphicsVideoItem class provides a graphics item which display video produced by a QMediaObject.
-
-    \inmodule QtMultimediaWidgets
-    \ingroup multimedia
-
-    Attaching a QGraphicsVideoItem to a QMediaObject allows it to display
-    the video or image output of that media object.  A QGraphicsVideoItem
-    is attached to a media object by passing a pointer to the QMediaObject
-    to the setMediaObject() function.
-
-    \snippet multimedia-snippets/video.cpp Video graphics item
-
-    \b {Note}: Only a single display output can be attached to a media
-    object at one time.
-
-    \sa QMediaObject, QMediaPlayer, QVideoWidget
-*/
-
-/*!
-    Constructs a graphics item that displays video.
-
-    The \a parent is passed to QGraphicsItem.
-*/
 QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
    : QGraphicsObject(parent)
    , d_ptr(new QGraphicsVideoItemPrivate)
@@ -235,12 +209,13 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
 
       if (d->service) {
          QMediaControl *control = d->service->requestControl(QVideoRendererControl_iid);
+
          if (control) {
             d->rendererControl = qobject_cast<QVideoRendererControl *>(control);
 
             if (d->rendererControl) {
-               //don't set the surface untill the item is painted
-               //at least once and the surface is configured
+               // do not set the surface untill the item is painted
+               // at least once and the surface is configured
                if (!d->updatePaintDevice) {
                   d->rendererControl->setSurface(d->surface);
                } else {
@@ -357,7 +332,7 @@ void QGraphicsVideoItem::paint(
    if (d->surface && d->updatePaintDevice) {
       d->updatePaintDevice = false;
 
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
+#if ! defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
       if (widget) {
          connect(widget, SIGNAL(destroyed()), d->surface, SLOT(viewportDestroyed()));
       }
@@ -382,8 +357,6 @@ void QGraphicsVideoItem::paint(
 }
 
 /*!
-    \reimp
-
     \internal
 */
 QVariant QGraphicsVideoItem::itemChange(GraphicsItemChange change, const QVariant &value)

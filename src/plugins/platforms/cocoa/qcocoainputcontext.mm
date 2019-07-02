@@ -33,8 +33,7 @@
 #include <QWindow>
 
 QCocoaInputContext::QCocoaInputContext()
-   : QPlatformInputContext()
-   , mWindow(QApplication::focusWindow())
+   : QPlatformInputContext(), mWindow(QApplication::focusWindow())
 {
    QMetaObject::invokeMethod(this, "connectSignals", Qt::QueuedConnection);
    updateLocale();
@@ -84,6 +83,7 @@ void QCocoaInputContext::updateLocale()
       CFStringRef langRef = (CFStringRef)CFArrayGetValueAtIndex(languages, 0);
       QString name = QCFString::toQString(langRef);
       QLocale locale(name);
+
       if (m_locale != locale) {
          m_locale = locale;
          emitLocaleChanged();

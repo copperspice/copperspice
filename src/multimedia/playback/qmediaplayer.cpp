@@ -554,7 +554,8 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
    Q_D(QMediaPlayer);
 
    d->provider = QMediaServiceProvider::defaultServiceProvider();
-   if (d->service == 0) {
+
+   if (d->service == nullptr) {
       d->error = ServiceMissingError;
 
    } else {
@@ -631,13 +632,12 @@ const QIODevice *QMediaPlayer::mediaStream() const
 {
    Q_D(const QMediaPlayer);
 
-   // When playing a resource file, we might have passed a QFile to the backend. Hide it from
-   // the user.
+   // When playing a resource file, we might have passed a QFile to the backend. Hide it from the user.
    if (d->control && d->qrcMedia.isNull()) {
       return d->control->mediaStream();
    }
 
-   return 0;
+   return nullptr;
 }
 
 QMediaPlaylist *QMediaPlayer::playlist() const
@@ -651,9 +651,8 @@ QMediaContent QMediaPlayer::currentMedia() const
 {
    Q_D(const QMediaPlayer);
 
-   // When playing a resource file, don't return the backend's current media, which
-   // can be a temporary file.
-   if (!d->qrcMedia.isNull()) {
+   // When playing a resource file, do not return the backend's current media, which can be a temporary file.
+   if (! d->qrcMedia.isNull()) {
       return d->qrcMedia;
    }
 
@@ -795,10 +794,6 @@ qreal QMediaPlayer::playbackRate() const
    return 0.0;
 }
 
-/*!
-    Returns the current error state.
-*/
-
 QMediaPlayer::Error QMediaPlayer::error() const
 {
    return d_func()->error;
@@ -809,12 +804,6 @@ QString QMediaPlayer::errorString() const
    return d_func()->errorString;
 }
 
-/*!
-    Returns the current network access point  in use.
-    If a default contructed QNetworkConfiguration is returned
-    this feature is not available or that none of the
-    current supplied configurations are in use.
-*/
 QNetworkConfiguration QMediaPlayer::currentNetworkConfiguration() const
 {
    Q_D(const QMediaPlayer);
@@ -837,7 +826,7 @@ void QMediaPlayer::play()
       return;
    }
 
-   //if playlist control is available, the service should advance itself
+   // if playlist control is available, the service should advance itself
    if (d->rootMedia.playlist() && ! d->rootMedia.playlist()->isEmpty()) {
       // switch to playing state
 
@@ -991,18 +980,6 @@ QMultimedia::SupportEstimate QMediaPlayer::hasSupport(const QString &mimeType,
    return QMediaServiceProvider::defaultServiceProvider()->hasSupport(Q_MEDIASERVICE_MEDIAPLAYER, mimeType, codecs, flags);
 }
 
-/*!
-    \deprecated
-    Returns a list of MIME types supported by the media player.
-
-    The \a flags argument causes the resultant list to be restricted to MIME types which can be supported
-    given additional requirements, such as performance indicators.
-
-    This function may not return useful results on some platforms, and support for a specific file of a
-    given mime type is not guaranteed even if the mime type is in general supported.  In addition, in some
-    cases this function will need to load all available media plugins and query them for their support, which
-    may take some time.
-*/
 QStringList QMediaPlayer::supportedMimeTypes(Flags flags)
 {
    return QMediaServiceProvider::defaultServiceProvider()->
@@ -1060,7 +1037,7 @@ QMultimedia::AvailabilityStatus QMediaPlayer::availability() const
 {
    Q_D(const QMediaPlayer);
 
-   if (!d->control) {
+   if (! d->control) {
       return QMultimedia::ServiceMissing;
    }
 

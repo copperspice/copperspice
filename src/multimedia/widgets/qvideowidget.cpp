@@ -605,7 +605,6 @@ bool QVideoWidget::setMediaObject(QMediaObject *object)
    }
 
    d->clearService();
-
    d->mediaObject = object;
 
    if (d->mediaObject) {
@@ -614,24 +613,29 @@ bool QVideoWidget::setMediaObject(QMediaObject *object)
 
    if (d->service) {
       if (d->createWidgetBackend()) {
-         // Nothing to do here.
+         // Nothing to do here
+
       } else if ((!window() || !window()->testAttribute(Qt::WA_DontShowOnScreen))
-         && d->createWindowBackend()) {
+            && d->createWindowBackend()) {
+
          if (isVisible()) {
             d->windowBackend->showEvent();
          }
+
       } else if (d->createRendererBackend()) {
          if (isVisible()) {
             d->rendererBackend->showEvent();
          }
+
       } else {
-         d->service = 0;
+         d->service     = 0;
          d->mediaObject = 0;
 
          return false;
       }
 
-      connect(d->service, SIGNAL(destroyed()), SLOT(_q_serviceDestroyed()));
+      connect(d->service, SIGNAL(destroyed()), this, SLOT(_q_serviceDestroyed()));
+
    } else {
       d->mediaObject = 0;
 
@@ -640,11 +644,6 @@ bool QVideoWidget::setMediaObject(QMediaObject *object)
 
    return true;
 }
-
-/*!
-    \property QVideoWidget::aspectRatioMode
-    \brief how video is scaled with respect to its aspect ratio.
-*/
 
 Qt::AspectRatioMode QVideoWidget::aspectRatioMode() const
 {
