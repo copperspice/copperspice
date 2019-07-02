@@ -1,4 +1,4 @@
-AC_INIT([copperspice], [1.5.1], [info@copperspice.com])
+AC_INIT([copperspice], [1.5.2], [info@copperspice.com])
 
 # derive CS hex version from "@PACKAGE_VERSION@" for cs_build_info.h.in
 HEX_VERSION=$(printf "0x%02x%02x%02x" `echo $PACKAGE_VERSION | tr '.' ' '`)
@@ -251,7 +251,6 @@ if test "x"$BUILD_PSQL_PLUGIN_TRUE = x""; then
    AC_SUBST(PSQL_DIR)
 
 else
-
    if test "x"$HAVE_LIBPQ != x""bad;  then
       echo "PostgreSQL client library was not found, client driver will not be built"
    fi
@@ -262,6 +261,7 @@ if test "x"$PSQL_DIR != x""; then
    CPPFLAGS=$SAVE_CPPFLAGS
    LDFLAGS=$SAVE_LDFLAGS
 fi
+
 
 echo
 echo "Checking for MySQL client library"

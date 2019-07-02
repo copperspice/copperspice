@@ -2,8 +2,8 @@ lib_LTLIBRARIES += lib/libCsGui@BUILD_ABI@.la
 lib_libCsGui@BUILD_ABI@_la_SOURCES =
 nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES =
 
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iinclude/QtCore  -Iinclude/QtGui \
-   -Iprivateinclude \
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iprivateinclude \
+   -Iinclude/QtCore  -Iinclude/QtGui \
    -Iprivateinclude/QtCore -Iprivateinclude/QtCore/private \
    -Iprivateinclude/QtGui/private  -Iprivateinclude/QtGui  \
    -I$(top_srcdir)/src/gui/kernel \
@@ -88,7 +88,10 @@ EXTRA_DIST += src/gui/mac/macresources.qrc \
 	src/gui/styles/styles.cmake \
 	src/gui/text/text.cmake \
 	src/gui/util/util.cmake \
-	src/gui/widgets/widgets.cmake
+	src/gui/widgets/widgets.cmake \
+	\
+	src/plugins/platforms/CMakeLists.txt \
+	src/plugins/printerdrivers/CMakeLists.txt
 
 GUI_INCLUDES =
 GUI_PUBLIC_INCLUDES =
@@ -114,6 +117,8 @@ include src/gui/text/Makefile.am
 include src/gui/util/Makefile.am
 include src/gui/widgets/Makefile.am
 
+#plugins
+include src/plugins/platforms/Makefile.am
 include src/plugins/printerdrivers/Makefile.am
 
 GUI_HEADERS_INSTALLED= \

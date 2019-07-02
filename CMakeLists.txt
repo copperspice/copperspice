@@ -31,7 +31,7 @@ endif()
 
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "5")
-set(BUILD_MICRO "1")
+set(BUILD_MICRO "2")
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
 # required library
