@@ -21,19 +21,12 @@
 *
 ***********************************************************************/
 
-/****************************************************************************
-**
-** Copyright (C) 2012 David Faure <faure@kde.org>
-** Contact: http://www.qt-project.org/legal
-**
-****************************************************************************/
+// Copyright (C) 2012 David Faure <faure@kde.org>
 
 #ifndef QSAVEFILE_P_H
 #define QSAVEFILE_P_H
 
 #include <qfiledevice_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QSaveFilePrivate : public QFileDevicePrivate
 {
@@ -51,6 +44,4 @@ class QSaveFilePrivate : public QFileDevicePrivate
    bool directWriteFallback;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSAVEFILE_P_H
+#endif

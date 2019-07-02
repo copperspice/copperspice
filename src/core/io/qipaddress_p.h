@@ -21,12 +21,7 @@
 *
 ***********************************************************************/
 
-/****************************************************************************
-**
-** Copyright (C) 2012 Intel Corporation
-** Contact: http://www.qt-project.org/
-**
-****************************************************************************/
+// Copyright (C) 2012 Intel Corporation
 
 #ifndef QIPADDRESS_P_H
 #define QIPADDRESS_P_H
@@ -45,6 +40,5 @@ Q_CORE_EXPORT void toString(QString &appendTo, IPv4Address address);
 Q_CORE_EXPORT void toString(QString &appendTo, IPv6Address address);
 
 } // namespace
-
 
 #endif

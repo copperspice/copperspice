@@ -422,9 +422,9 @@ QTextLine QTextLayout::createLine()
    }
 
    QScriptLine line;
-   line.from = from;
-   line.length = -1;
-   line.justified = false;
+   line.from       = from;
+   line.length     = -1;
+   line.justified  = false;
    line.gridfitted = false;
 
    d->lines.append(line);
@@ -973,7 +973,7 @@ void QTextLine::setLineWidth(qreal width)
       return;
    }
 
-   line.length = 0;
+   line.length    = 0;
    line.textWidth = 0;
 
    layout_helper(INT_MAX);
@@ -982,8 +982,8 @@ void QTextLine::setLineWidth(qreal width)
 void QTextLine::setNumColumns(int numColumns)
 {
    QScriptLine &line = eng->lines[index];
-   line.width  = QFIXED_MAX;
-   line.length = 0;
+   line.width     = QFIXED_MAX;
+   line.length    = 0;
    line.textWidth = 0;
    layout_helper(numColumns);
 }
@@ -1044,9 +1044,9 @@ struct LineBreakHelper {
    inline void saveCurrentGlyph() {
       previousGlyph = 0;
 
-      if (currentPosition > 0 &&
-         logClusters[currentPosition - 1] < glyphs.numGlyphs) {
-         previousGlyph = currentGlyph(); // needed to calculate right bearing later
+      if (currentPosition > 0 && logClusters[currentPosition - 1] < glyphs.numGlyphs) {
+         // needed to calculate right bearing later
+         previousGlyph = currentGlyph();
 
       }
    }
@@ -1093,7 +1093,7 @@ inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 #endif
 
    QFixed newWidth = calculateNewWidth(line);
-   if (line.length && !manualWrap && (newWidth > line.width || glyphCount > maxGlyphs)) {
+   if (line.length && ! manualWrap && (newWidth > line.width || glyphCount > maxGlyphs)) {
       return true;
    }
 
@@ -1115,8 +1115,10 @@ inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 static inline void addNextCluster(int &pos, int end, QScriptLine &line, int &glyphCount,
    const QScriptItem &current, const unsigned short *logClusters, const QGlyphLayout &glyphs)
 {
-   int glyphPosition = logClusters[pos];
-   do { // got to the first next cluster
+   int x_index = logClusters[pos];
+
+   do {
+      // at the first next cluster
       ++pos;
       ++line.length;
    } while (pos < end && logClusters[pos] == glyphPosition);
@@ -1139,12 +1141,12 @@ static inline void addNextCluster(int &pos, int end, QScriptLine &line, int &gly
 void QTextLine::layout_helper(int maxGlyphs)
 {
    QScriptLine &line = eng->lines[index];
-   line.length = 0;
-   line.trailingSpaces = 0;
-   line.textWidth = 0;
+   line.length            = 0;
+   line.trailingSpaces    = 0;
+   line.textWidth         = 0;
    line.hasTrailingSpaces = false;
 
-   if (!eng->layoutData->items.size() || line.from >= eng->layoutData->string.length()) {
+   if (! eng->layoutData->items.size() || line.from >= eng->layoutData->string.length()) {
       line.setDefaultHeight(eng);
       return;
    }
@@ -1152,11 +1154,10 @@ void QTextLine::layout_helper(int maxGlyphs)
    Q_ASSERT(line.from < eng->layoutData->string.length());
 
    LineBreakHelper lbh;
-
    lbh.maxGlyphs = maxGlyphs;
 
    QTextOption::WrapMode wrapMode = eng->option.wrapMode();
-   bool breakany = (wrapMode == QTextOption::WrapAnywhere);
+   bool breakany  = (wrapMode == QTextOption::WrapAnywhere);
    lbh.manualWrap = (wrapMode == QTextOption::ManualWrap || wrapMode == QTextOption::NoWrap);
 
    int item = -1;
@@ -1177,44 +1178,52 @@ void QTextLine::layout_helper(int maxGlyphs)
 
    lbh.currentPosition = line.from;
    int end = 0;
-   lbh.logClusters = eng->layoutData->logClustersPtr;
+
+   lbh.logClusters   = eng->layoutData->logClustersPtr;
    lbh.previousGlyph = 0;
 
    while (newItem < eng->layoutData->items.size()) {
       lbh.resetRightBearing();
       lbh.softHyphenWidth = 0;
+
       if (newItem != item) {
          item = newItem;
          const QScriptItem &current = eng->layoutData->items[item];
-         if (!current.num_glyphs) {
+
+         if (! current.num_glyphs) {
             eng->shape(item);
             attributes = eng->attributes();
-            if (!attributes) {
+            if (! attributes) {
                return;
             }
             lbh.logClusters = eng->layoutData->logClustersPtr;
          }
+
          lbh.currentPosition = qMax(line.from, current.position);
-         end = current.position + eng->length(item);
          lbh.glyphs = eng->shapedGlyphs(&current);
+
+         end = current.position + eng->glyphLength(item);
+
          QFontEngine *fontEngine = eng->fontEngine(current);
+
          if (lbh.fontEngine != fontEngine) {
             lbh.fontEngine = fontEngine;
-            lbh.minimumRightBearing = qMin(QFixed(),
-                  QFixed::fromReal(fontEngine->minRightBearing()));
+            lbh.minimumRightBearing = qMin(QFixed(), QFixed::fromReal(fontEngine->minRightBearing()));
          }
       }
+
       const QScriptItem &current = eng->layoutData->items[item];
 
       lbh.tmpData.leading = qMax(lbh.tmpData.leading + lbh.tmpData.ascent,
-            current.leading + current.ascent) - qMax(lbh.tmpData.ascent,
-            current.ascent);
-      lbh.tmpData.ascent = qMax(lbh.tmpData.ascent, current.ascent);
+            current.leading + current.ascent) - qMax(lbh.tmpData.ascent, current.ascent);
+
+      lbh.tmpData.ascent  = qMax(lbh.tmpData.ascent, current.ascent);
       lbh.tmpData.descent = qMax(lbh.tmpData.descent, current.descent);
 
       if (current.analysis.flags == QScriptAnalysis::Tab &&
          (alignment & (Qt::AlignLeft | Qt::AlignRight | Qt::AlignCenter | Qt::AlignJustify))) {
          lbh.whiteSpaceOrObject = true;
+
          if (lbh.checkFullOtherwiseExtend(line)) {
             goto found;
          }
@@ -1223,9 +1232,10 @@ void QTextLine::layout_helper(int maxGlyphs)
          QFixed tabWidth = eng->calculateTabWidth(item, x);
 
          attributes = eng->attributes();
-         if (!attributes) {
+         if (! attributes) {
             return;
          }
+
          lbh.logClusters = eng->layoutData->logClustersPtr;
          lbh.glyphs = eng->shapedGlyphs(&current);
 
@@ -1242,11 +1252,12 @@ void QTextLine::layout_helper(int maxGlyphs)
 
       } else if (current.analysis.flags == QScriptAnalysis::LineOrParagraphSeparator) {
          lbh.whiteSpaceOrObject = true;
-         // if the line consists only of the line separator make sure
-         // we have a sane height
-         if (!line.length && !lbh.tmpData.length) {
+
+         // if the line consists only of the line separator make sure there is a sane height
+         if (! line.length && !lbh.tmpData.length) {
             line.setDefaultHeight(eng);
          }
+
          if (eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) {
             if (lbh.checkFullOtherwiseExtend(line)) {
                goto found;
@@ -1258,6 +1269,7 @@ void QTextLine::layout_helper(int maxGlyphs)
             lbh.tmpData.length++;
             lbh.calculateRightBearingForPreviousGlyph();
          }
+
          line += lbh.tmpData;
          goto found;
 
@@ -1265,10 +1277,10 @@ void QTextLine::layout_helper(int maxGlyphs)
          lbh.whiteSpaceOrObject = true;
          lbh.tmpData.length++;
 
-
          if (eng->block.docHandle()) {
             QTextInlineObject inlineObject(item, eng);
-            eng->docLayout()->positionInlineObject(inlineObject, eng->block.position() + current.position, inlineObject.format());
+            eng->docLayout()->positionInlineObject(inlineObject,
+                  eng->block.position() + current.position, inlineObject.format());
          }
 
          lbh.tmpData.textWidth += current.width;
@@ -1290,30 +1302,33 @@ void QTextLine::layout_helper(int maxGlyphs)
                current, lbh.logClusters, lbh.glyphs);
          }
 
-         if (!lbh.manualWrap && lbh.spaceData.textWidth > line.width) {
+         if (! lbh.manualWrap && lbh.spaceData.textWidth > line.width) {
             lbh.spaceData.textWidth = line.width; // ignore spaces that fall out of the line.
             goto found;
          }
+
       } else {
          lbh.whiteSpaceOrObject = false;
          bool sb_or_ws = false;
          lbh.saveCurrentGlyph();
+
          do {
             addNextCluster(lbh.currentPosition, end, lbh.tmpData, lbh.glyphCount,
                current, lbh.logClusters, lbh.glyphs);
 
             // This is a hack to fix a regression caused by the introduction of the
             // whitespace flag to non-breakable spaces and will cause the non-breakable
-            // spaces to behave as in previous Qt versions in the line breaking algorithm.
+            // spaces to behave as in previous versions in the line breaking algorithm.
             // The line breaks do not currently follow the Unicode specs, but fixing this would
             // require refactoring the code and would cause behavioral regressions.
+
             bool isBreakableSpace = lbh.currentPosition < eng->layoutData->string.length()
                && attributes[lbh.currentPosition].whiteSpace
                && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak;
 
             if (lbh.currentPosition >= eng->layoutData->string.length()
-               || isBreakableSpace
-               || attributes[lbh.currentPosition].lineBreak) {
+                  || isBreakableSpace || attributes[lbh.currentPosition].lineBreak) {
+
                sb_or_ws = true;
                break;
 
@@ -1329,22 +1344,17 @@ void QTextLine::layout_helper(int maxGlyphs)
             && attributes[lbh.currentPosition].lineBreak
             && eng->layoutData->string.at(lbh.currentPosition - 1).unicode() == QChar::SoftHyphen) {
 
-            // if we are splitting up a word because of
-            // a soft hyphen then we ...
+            // if we are splitting up a word because of a soft hyphen then:
             //
-            //  a) have to take the width of the soft hyphen into
-            //     account to see if the first syllable(s) /and/
-            //     the soft hyphen fit into the line
+            //  a) have to take the width of the soft hyphen into account to see if the
+            //     first syllable(s) /and/ the soft hyphen fit into the line
             //
-            //  b) if we are so short of available width that the
-            //     soft hyphen is the first breakable position, then
-            //     we don't want to show it. However we initially
-            //     have to take the width for it into account so that
-            //     the text document layout sees the overflow and
-            //     switch to break-anywhere mode, in which we
-            //     want the soft-hyphen to slip into the next line
-            //     and thus become invisible again.
-            //
+            //  b) if we are so short of available width that the soft hyphen is the first
+            //     breakable position, then we do no want to show it. However we initially have
+            //     to take the width for it into account so that the text document layout
+            //     sees the overflow and switch to break-anywhere mode, in which we want the
+            //     soft-hyphen to slip into the next line and thus become invisible again.
+
             if (line.length) {
                lbh.softHyphenWidth = lbh.glyphs.advances[lbh.logClusters[lbh.currentPosition - 1]];
             } else if (breakany) {
@@ -1352,12 +1362,11 @@ void QTextLine::layout_helper(int maxGlyphs)
             }
          }
 
-         // The actual width of the text needs to take the right bearing into account. The
-         // right bearing is left-ward, which means that if the rightmost pixel is to the right
-         // of the advance of the glyph, the bearing will be negative. We flip the sign
-         // for the code to be more readable. Logic borrowed from qfontmetrics.cpp.
-         // We ignore the right bearing if the minimum negative bearing is too little to
-         // expand the text beyond the edge.
+         // The actual width of the text needs to take the right bearing into account. The right
+         // bearing is left-ward, which means that if the rightmost pixel is to the right of the
+         // advance of the glyph, the bearing will be negative. We flip the sign for the code to
+         // be more readable. Logic borrowed from qfontmetrics.cpp. We ignore the right bearing if
+         // the minimum negative bearing is too little to expand the text beyond the edge.
 
          if (sb_or_ws | breakany) {
             QFixed previousRightBearing = lbh.rightBearing;
@@ -1370,6 +1379,7 @@ void QTextLine::layout_helper(int maxGlyphs)
                // We are too wide to accept the next glyph with its bearing, so we restore the
                // right bearing to that of the previous glyph (the one that was already accepted),
                // so that the bearing can be be applied to the final width of the text below.
+
                if (previousRightBearing != LineBreakHelper::RightBearingNotCalculated) {
                   lbh.rightBearing = previousRightBearing;
                } else {
@@ -1383,8 +1393,10 @@ void QTextLine::layout_helper(int maxGlyphs)
                goto found;
             }
          }
+
          lbh.saveCurrentGlyph();
       }
+
       if (lbh.currentPosition == end) {
          newItem = item + 1;
       }
@@ -1400,7 +1412,7 @@ found:
       lbh.calculateRightBearing();
    }
 
-   // Then apply any negative right bearing
+   // apply any negative right bearing
    line.textWidth += lbh.negativeRightBearing();
 
    if (line.length == 0) {
@@ -1460,35 +1472,22 @@ found:
    }
 }
 
-/*!
-    Moves the line to position \a pos.
-*/
 void QTextLine::setPosition(const QPointF &pos)
 {
    eng->lines[index].x = QFixed::fromReal(pos.x());
    eng->lines[index].y = QFixed::fromReal(pos.y());
 }
 
-/*!
-    Returns the line's position relative to the text layout's position.
-*/
 QPointF QTextLine::position() const
 {
    return QPointF(eng->lines[index].x.toReal(), eng->lines[index].y.toReal());
 }
 
-// ### DOC: I have no idea what this means/does.
-// You create a text layout with a string of text. Once you laid
-// it out, it contains a number of QTextLines. from() returns the position
-// inside the text string where this line starts. If you e.g. has a
-// text of "This is a string", laid out into two lines (the second
-// starting at the word 'a'), layout.lineAt(0).from() == 0 and
-// layout.lineAt(1).from() == 8.
+// Create a text layout with a string of text. Once laid it out it contains a number of QTextLines.
+// from() returns the position inside the text string where each line starts.
+// Given the text, "This is a string", laid out into two lines (the second starting at the word 'a'),
+// layout.lineAt(0).from() == 0 and layout.lineAt(1).from() == 8
 
-/*!
-    Returns the start of the line from the beginning of the string
-    passed to the QTextLayout.
-*/
 int QTextLine::textStart() const
 {
    return eng->lines[index].from;
@@ -1516,6 +1515,7 @@ static void setPenAndDrawBackground(QPainter *p, const QPen &defaultPen, const Q
    if (bg.style() != Qt::NoBrush && !chf.property(SuppressBackground).toBool()) {
       p->fillRect(QRectF(qFloor(r.x()), qFloor(r.y()), r.width(), r.height()), bg);
    }
+
    if (c.style() != Qt::NoBrush) {
       p->setPen(QPen(c, 0));
    }
@@ -1559,12 +1559,15 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
    if (flags.testFlag(QGlyphRun::Overline)) {
       renderFlags |= QTextItem::Overline;
    }
+
    if (flags.testFlag(QGlyphRun::Underline)) {
       renderFlags |= QTextItem::Underline;
    }
+
    if (flags.testFlag(QGlyphRun::StrikeOut)) {
       renderFlags |= QTextItem::StrikeOut;
    }
+
    if (flags.testFlag(QGlyphRun::RightToLeft)) {
       renderFlags |= QTextItem::RightToLeft;
    }
@@ -1576,10 +1579,13 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
    qreal fontHeight = font.ascent() + font.descent();
    qreal minY = 0;
    qreal maxY = 0;
+
    QVector<quint32> glyphs;
    glyphs.reserve(glyphsArray.size());
+
    QVector<QPointF> positions;
    positions.reserve(glyphsArray.size());
+
    for (int i = 0; i < glyphsArray.size(); ++i) {
       glyphs.append(glyphsArray.at(i) & 0xffffff);
 
@@ -1606,7 +1612,6 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
 
    return glyphRun;
 }
-
 
 QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
 {
@@ -1657,9 +1662,11 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
          if (font.overline()) {
             flags |= QGlyphRun::Overline;
          }
+
          if (font.underline()) {
             flags |= QGlyphRun::Underline;
          }
+
          if (font.strikeOut()) {
             flags |= QGlyphRun::StrikeOut;
          }
@@ -1672,10 +1679,11 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
       }
 
       int relativeFrom = qMax(iterator.itemStart, from) - si.position;
-      int relativeTo = qMin(iterator.itemEnd, from + length) - 1 - si.position;
+      int relativeTo   = qMin(iterator.itemEnd, from + length) - 1 - si.position;
+
       unsigned short *logClusters = eng->logClusters(&si);
       int glyphsStart = logClusters[relativeFrom];
-      int glyphsEnd = (relativeTo == iterator.itemLength) ? si.num_glyphs - 1 : logClusters[relativeTo];
+      int glyphsEnd   = (relativeTo == iterator.itemLength) ? si.num_glyphs - 1 : logClusters[relativeTo];
 
       // the glyph index right next to the requested range
       int nextGlyphIndex = (relativeTo < iterator.itemLength - 1) ? logClusters[relativeTo + 1] : si.num_glyphs;
@@ -1708,8 +1716,10 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
       QFixed x;
       QFixed width;
       iterator.getSelectionBounds(&x, &width);
+
       if (glyphLayout.numGlyphs > 0) {
          QFontEngine *mainFontEngine;
+
          if (eng->useRawFont && eng->rawFont.isValid()) {
             mainFontEngine = eng->fontEngine(si);
 
@@ -1719,9 +1729,11 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
 
          if (mainFontEngine->type() == QFontEngine::Multi) {
             QFontEngineMulti *multiFontEngine = static_cast<QFontEngineMulti *>(mainFontEngine);
+
             int start = rtl ? glyphLayout.numGlyphs : 0;
             int end = start - 1;
             int which = glyphLayout.glyphs[rtl ? start - 1 : end + 1] >> 24;
+
             for (; (rtl && start > 0) || (!rtl && end < glyphLayout.numGlyphs - 1);
                rtl ? --start : ++end) {
                const int e = glyphLayout.glyphs[rtl ? start - 1 : end + 1] >> 24;
@@ -1736,24 +1748,16 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
                if (start == 0 && startsInsideLigature) {
                   subFlags |= QGlyphRun::SplitLigature;
                }
-               glyphRuns.append(glyphRunWithInfo(multiFontEngine->engine(which),
-                     subLayout,
-                     pos,
-                     subFlags,
-                     x,
-                     width,
-                     glyphsStart + start,
-                     glyphsStart + end,
-                     logClusters + relativeFrom,
-                     relativeFrom + si.position,
-                     relativeTo - relativeFrom + 1));
 
+               glyphRuns.append(glyphRunWithInfo(multiFontEngine->engine(which),
+                     subLayout, pos, subFlags, x, width, glyphsStart + start, glyphsStart + end,
+                     logClusters + relativeFrom, relativeFrom + si.position,
+                     relativeTo - relativeFrom + 1));
 
                for (int i = 0; i < subLayout.numGlyphs; ++i) {
                   QFixed justification = QFixed::fromFixed(subLayout.justifications[i].space_18d6);
                   pos.rx() += (subLayout.advances[i] + justification).toReal();
                }
-
 
                if (rtl) {
                   end = start - 1;
@@ -1772,35 +1776,24 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
             }
 
             QGlyphRun glyphRun = glyphRunWithInfo(multiFontEngine->engine(which),
-                  subLayout,
-                  pos,
-                  subFlags,
-                  x,
-                  width,
-                  glyphsStart + start,
-                  glyphsStart + end,
-                  logClusters + relativeFrom,
-                  relativeFrom + si.position,
+                  subLayout, pos, subFlags, x, width, glyphsStart + start, glyphsStart + end,
+                  logClusters + relativeFrom, relativeFrom + si.position,
                   relativeTo - relativeFrom + 1);
-            if (!glyphRun.isEmpty()) {
+
+            if (! glyphRun.isEmpty()) {
                glyphRuns.append(glyphRun);
             }
+
          } else {
             if (startsInsideLigature || endsInsideLigature) {
                flags |= QGlyphRun::SplitLigature;
             }
             QGlyphRun glyphRun = glyphRunWithInfo(mainFontEngine,
-                  glyphLayout,
-                  pos,
-                  flags,
-                  x,
-                  width,
-                  glyphsStart,
-                  glyphsEnd,
-                  logClusters + relativeFrom,
-                  relativeFrom + si.position,
+                  glyphLayout, pos, flags, x, width, glyphsStart, glyphsEnd,
+                  logClusters + relativeFrom, relativeFrom + si.position,
                   relativeTo - relativeFrom + 1);
-            if (!glyphRun.isEmpty()) {
+
+            if (! glyphRun.isEmpty()) {
                glyphRuns.append(glyphRun);
             }
          }
@@ -1834,6 +1827,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
    }
 
    QTextLineItemIterator iterator(eng, index, pos, selection);
+
    QFixed lineBase = line.base();
    eng->clearDecorations();
    eng->enableDelayDecorations();
@@ -1850,7 +1844,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
       }
 
       if (si.analysis.flags == QScriptAnalysis::LineOrParagraphSeparator
-         && !(eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators)) {
+                  && ! (eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators)) {
          continue;
       }
 
@@ -1923,7 +1917,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
                QFont f = eng->font(si);
 
                QTextItemInt gf(si, &f, format);
-               gf.width  = iterator.itemWidth;
+               gf.width = iterator.itemWidth;
 
                QPainterPrivate::get(p)->drawTextItem(QPointF(iterator.x.toReal(), y.toReal()), gf, eng);
 
@@ -1999,8 +1993,8 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
          p->save();
          p->setRenderHint(QPainter::Antialiasing);
 
-         //Currently QPen with a Qt::NoPen style still returns a default
-         //QBrush which != Qt::NoBrush so we need this specialcase to reset it
+         // Currently QPen with a Qt::NoPen style still returns a default
+         // QBrush which != Qt::NoBrush so we need this specialcase to reset it
 
          if (p->pen().style() == Qt::NoPen) {
             p->setBrush(Qt::NoBrush);
@@ -2250,8 +2244,8 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
       pos = qMax(line.from, pos);
       pos = qMin(line.from + line_length, pos);
       return pos;
-   } else if (x < line.textWidth
-      || (line.justified && x < line.width)) {
+
+   } else if (x < line.textWidth || (line.justified && x < line.width)) {
       // has to be in one of the runs
       QFixed pos;
       bool rtl = eng->isRightToLeft();
@@ -2265,11 +2259,10 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
       for (int i = 0; i < nItems; ++i) {
          int item = visualOrder[i] + firstItem;
          QScriptItem &si = eng->layoutData->items[item];
-         int item_length = eng->length(item);
-         //             qDebug("    item %d, visual %d x_remain=%f", i, item, x.toReal());
 
+         int item_length = eng->length(item);
          int start = qMax(line.from - si.position, 0);
-         int end = qMin(line.from + line_length - si.position, item_length);
+         int end   = qMin(line.from + line_length - si.position, item_length);
 
          unsigned short *logClusters = eng->logClusters(&si);
 
@@ -2341,6 +2334,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                   ++gs;
                }
             }
+
          } else {
             QFixed dist = INT_MAX / 256;
             if (si.analysis.bidiLevel % 2) {
@@ -2355,6 +2349,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                      pos -= glyphs.effectiveAdvance(gs);
                      ++gs;
                   }
+
                } else {
                   while (ge >= gs) {
                      if (glyphs.attributes[ge].clusterStart && qAbs(x - pos) < dist) {
@@ -2366,6 +2361,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                      --ge;
                   }
                }
+
             } else {
                if (!visual || !rtl || (lastLine && i == 0)) {
                   while (gs <= ge) {
@@ -2391,6 +2387,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                   pos = oldPos;
                }
             }
+
             if (qAbs(x - pos) < dist) {
                if (visual) {
                   if (!rtl && i < nItems - 1) {
@@ -2430,7 +2427,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
    // except for the last line we assume that the character between lines is a space and we want
    // to position the cursor to the left of that character.
 
-   // ###### breaks with japanese for example
+   // ### breaks with japanese for example
    if (this->index < eng->lines.count() - 1) {
       --maxPos;
    }

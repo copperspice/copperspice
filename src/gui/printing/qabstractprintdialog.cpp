@@ -30,7 +30,6 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
-
 // awful implementation
 class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 {
@@ -309,7 +308,5 @@ void QPrintDialog::open(QObject *receiver, const QString &member)
 
    QDialog::open();
 }
-
-
 
 #endif // QT_NO_PRINTDIALOG

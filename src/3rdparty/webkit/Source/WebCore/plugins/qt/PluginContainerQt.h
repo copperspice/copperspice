@@ -28,7 +28,7 @@ namespace WebCore {
 
     class PluginView;
 
-    class PluginContainerQt : public QObject    // QX11EmbedContainer   BROOM - fix this
+    class PluginContainerQt : public QObject
     {
         WEB_CS_OBJECT(PluginContainerQt)
 

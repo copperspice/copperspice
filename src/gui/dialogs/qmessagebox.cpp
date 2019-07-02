@@ -28,25 +28,23 @@
 #include <qdialogbuttonbox.h>
 #include <qlist.h>
 #include <qdebug.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qstyleoption.h>
-#include <QtGui/qgridlayout.h>
-#include <QtGui/qdesktopwidget.h>
-#include <QtGui/qpushbutton.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qgridlayout.h>
+#include <qdesktopwidget.h>
+#include <qpushbutton.h>
 #include <qcheckbox.h>
 
-#include <QtGui/qaccessible.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qfontmetrics.h>
-#include <QtGui/qclipboard.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qtextdocument.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qtextbrowser.h>
-#include <QtGui/qmenu.h>
-
-
+#include <qaccessible.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
+#include <qclipboard.h>
+#include <qicon.h>
+#include <qtextdocument.h>
+#include <qapplication.h>
+#include <qtextedit.h>
+#include <qtextbrowser.h>
+#include <qmenu.h>
 
 #include <qlabel_p.h>
 #include <qapplication_p.h>
@@ -133,9 +131,11 @@ class QMessageBoxDetailsText : public QWidget
       : QWidget(parent), copyAvailable(false) {
       QVBoxLayout *layout = new QVBoxLayout;
       layout->setMargin(0);
+
       QFrame *line = new QFrame(this);
       line->setFrameShape(QFrame::HLine);
       line->setFrameShadow(QFrame::Sunken);
+
       layout->addWidget(line);
       textEdit = new TextEdit();
       textEdit->setFixedHeight(100);
@@ -158,9 +158,10 @@ class QMessageBoxDetailsText : public QWidget
 #ifdef QT_NO_CLIPBOARD
       return false;
 #else
-      if (!copyAvailable) {
+      if (! copyAvailable) {
          return false;
       }
+
       textEdit->copy();
       return true;
 #endif
@@ -1634,6 +1635,7 @@ void QMessageBoxPrivate::initHelper(QPlatformDialogHelper *h)
 
    static_cast<QPlatformMessageDialogHelper *>(h)->setOptions(options);
 }
+
 static QMessageDialogOptions::Icon helperIcon(QMessageBox::Icon i)
 {
    switch (i) {

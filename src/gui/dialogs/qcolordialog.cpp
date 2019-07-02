@@ -1379,7 +1379,7 @@ QColorShower::QColorShower(QColorDialog *parent)
    connect(gEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(bEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
    connect(alphaEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(htEd,    &QLineEdit::textEdited,     this, &QColorShower::htmlEd);
+   connect(htEd,    &QLineEdit::textEdited,    this, &QColorShower::htmlEd);
 
    retranslateStrings();
 }

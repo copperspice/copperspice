@@ -1561,8 +1561,10 @@ void QWizardPrivate::updateButtonTexts()
       if (btns[i]) {
          if (q->currentPage() && (q->currentPage()->d_func()->buttonCustomTexts.contains(i))) {
             btns[i]->setText(q->currentPage()->d_func()->buttonCustomTexts.value(i));
+
          } else if (buttonCustomTexts.contains(i)) {
             btns[i]->setText(buttonCustomTexts.value(i));
+
          } else if (i < QWizard::NStandardButtons) {
             btns[i]->setText(buttonDefaultText(wizStyle, i, this));
          }
@@ -1984,16 +1986,6 @@ int QWizard::addPage(QWizardPage *page)
    return theid;
 }
 
-/*!
-    \fn void QWizard::setPage(int id, QWizardPage *page)
-
-    Adds the given \a page to the wizard with the given \a id.
-
-    \note Adding a page may influence the value of the startId property
-    in case it was not set explicitly.
-
-    \sa addPage(), page(), pageAdded()
-*/
 void QWizard::setPage(int theid, QWizardPage *page)
 {
    Q_D(QWizard);

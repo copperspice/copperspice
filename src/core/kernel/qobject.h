@@ -468,7 +468,6 @@ template <class T>
 inline const QString &qobject_interface_iid()
 {
    static QString retval;
-
    return retval;
 }
 

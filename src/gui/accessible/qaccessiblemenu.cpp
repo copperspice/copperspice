@@ -30,8 +30,6 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_MENU
 
 QString qt_accStripAmp(const QString &text);
@@ -40,10 +38,12 @@ QString qt_accHotKey(const QString &text);
 QAccessibleInterface *getOrCreateMenu(QWidget *menu, QAction *action)
 {
    QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(action);
-   if (!iface) {
+
+   if (! iface) {
       iface = new QAccessibleMenuItem(menu, action);
       QAccessible::registerAccessibleInterface(iface);
    }
+
    return iface;
 }
 
@@ -95,7 +95,8 @@ QAccessibleInterface *QAccessibleMenu::child(int index) const
    if (index < childCount()) {
       return getOrCreateMenu(menu(), menu()->actions().at(index));
    }
-   return 0;
+
+   return nullptr;
 }
 
 QAccessibleInterface *QAccessibleMenu::parent() const
@@ -347,13 +348,16 @@ void QAccessibleMenuItem::doAction(const QString &actionName)
 
    if (actionName == pressAction()) {
       m_action->trigger();
+
    } else if (actionName == showMenuAction()) {
+
       if (QMenuBar *bar = qobject_cast<QMenuBar *>(owner())) {
          if (m_action->menu() && m_action->menu()->isVisible()) {
             m_action->menu()->hide();
          } else {
             bar->setActiveAction(m_action);
          }
+
       } else if (QMenu *menu = qobject_cast<QMenu *>(owner())) {
          if (m_action->menu() && m_action->menu()->isVisible()) {
             m_action->menu()->hide();
@@ -369,7 +373,6 @@ QStringList QAccessibleMenuItem::keyBindingsForAction(const QString &) const
    return QStringList();
 }
 
-
 QAction *QAccessibleMenuItem::action() const
 {
    return m_action;
@@ -381,8 +384,6 @@ QWidget *QAccessibleMenuItem::owner() const
 }
 
 #endif // QT_NO_MENU
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACCESSIBILITY
 

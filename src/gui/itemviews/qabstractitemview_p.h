@@ -219,11 +219,13 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
    inline void releaseEditor(QWidget *editor, const QModelIndex &index = QModelIndex()) const {
       if (editor) {
-         QObject::disconnect(editor, SIGNAL(destroyed(QObject *)),
-            q_func(), SLOT(editorDestroyed(QObject *)));
+         QObject::disconnect(editor, SIGNAL(destroyed(QObject *)), q_func(), SLOT(editorDestroyed(QObject *)));
+
          editor->removeEventFilter(itemDelegate);
          editor->hide();
+
          QAbstractItemDelegate *delegate = delegateForIndex(index);
+
          if (delegate) {
             delegate->destroyEditor(editor, index);
          } else {

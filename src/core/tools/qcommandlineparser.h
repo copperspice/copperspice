@@ -21,21 +21,14 @@
 *
 ***********************************************************************/
 
-/**********************************************************************
-**
-** Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
-** Contact: http://www.qt-project.org/legal
-**
-***********************************************************************/
+// Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
 
 #ifndef QCOMMANDLINEPARSER_H
 #define QCOMMANDLINEPARSER_H
 
-#include <QtCore/qstringlist.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qcommandlineoption.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstringlist.h>
+#include <qcoreapplication.h>
+#include <qcommandlineoption.h>
 
 class QCommandLineParserPrivate;
 class QCoreApplication;
@@ -90,6 +83,4 @@ class Q_CORE_EXPORT QCommandLineParser
    QCommandLineParserPrivate *const d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QCOMMANDLINEPARSER_H
+#endif

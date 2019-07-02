@@ -1656,23 +1656,6 @@ QWidget *QFormLayout::labelForField(QLayout *field) const
    return 0;
 }
 
-/*!
-    \property QFormLayout::fieldGrowthPolicy
-    \brief the way in which the form's fields grow
-
-    The default value depends on the widget or application style. For
-    QMacStyle, the default is FieldsStayAtSizeHint; for QCommonStyle
-    derived styles (like Plastique and Windows), the default
-    is ExpandingFieldsGrow; for Qt Extended styles, the default is
-    AllNonFixedFieldsGrow.
-
-    If none of the fields can grow and the form is resized, extra
-    space is distributed according to the current
-    \l{formAlignment}{form alignment}.
-
-    \sa formAlignment, rowWrapPolicy
-*/
-
 void QFormLayout::setFieldGrowthPolicy(FieldGrowthPolicy policy)
 {
    Q_D(QFormLayout);

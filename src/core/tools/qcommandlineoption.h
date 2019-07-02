@@ -21,20 +21,13 @@
 *
 ***********************************************************************/
 
-/***********************************************************************
-**
-** Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
-** Contact: http://www.qt-project.org/legal
-**
-***********************************************************************/
+// Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
 
 #ifndef QCOMMANDLINEOPTION_H
 #define QCOMMANDLINEOPTION_H
 
-#include <QtCore/qstringlist.h>
-#include <QtCore/qshareddata.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstringlist.h>
+#include <qshareddata.h>
 
 class QCommandLineOptionPrivate;
 
@@ -78,6 +71,4 @@ class Q_CORE_EXPORT QCommandLineOption
    QSharedDataPointer<QCommandLineOptionPrivate> d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QCOMMANDLINEOPTION_H
+#endif

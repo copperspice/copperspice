@@ -324,23 +324,7 @@ void QPushButton::focusOutEvent(QFocusEvent *e)
 }
 
 #ifndef QT_NO_MENU
-/*!
-    Associates the popup menu \a menu with this push button. This
-    turns the button into a menu button, which in some styles will
-    produce a small triangle to the right of the button's text.
 
-    Ownership of the menu is \e not transferred to the push button.
-
-    \table 100%
-    \row
-    \o \inlineimage plastique-pushbutton-menu.png Screenshot of a Plastique style push button with popup menu.
-    \o \inlineimage cleanlooks-pushbutton-menu.png Screenshot of a Cleanlooks style push button with popup menu.
-    \o Push buttons with popup menus shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}
-    (left) and \l{Cleanlooks Style Widget Gallery}{Cleanlooks widget style} (right).
-    \endtable
-
-    \sa menu()
-*/
 void QPushButton::setMenu(QMenu *menu)
 {
    Q_D(QPushButton);

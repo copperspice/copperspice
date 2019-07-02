@@ -27,8 +27,6 @@
 #include <qaccessiblewidget.h>
 #include <qpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACCESSIBILITY
 
 #ifndef QT_NO_MENU
@@ -101,8 +99,10 @@ class QAccessibleMenuItem : public QAccessibleInterface, public QAccessibleActio
    QStringList keyBindingsForAction(const QString &actionName) const override;
 
    QWidget *owner() const;
+
  protected:
    QAction *action() const;
+
  private:
    QAction *m_action;
    QPointer<QWidget> m_owner; // can hold either QMenu or the QMenuBar that contains the action
@@ -110,6 +110,5 @@ class QAccessibleMenuItem : public QAccessibleInterface, public QAccessibleActio
 
 #endif // QT_NO_MENU
 
-QT_END_NAMESPACE
 #endif // QT_NO_ACCESSIBILITY
 #endif // QACCESSIBLEMENU_H

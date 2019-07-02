@@ -33,8 +33,6 @@
 #include <qdatetime.h>
 #include <qdir.h>
 
-QT_BEGIN_NAMESPACE
-
 void QWindowsFileSystemWatcherEngine::stop()
 {
    for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
@@ -71,8 +69,8 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       QString path = it.next();
       QString normalPath = path;
 
-      if ((normalPath.endsWith(QLatin1Char('/')) && !normalPath.endsWith(QLatin1String(":/")))
-            || (normalPath.endsWith(QLatin1Char('\\')) && !normalPath.endsWith(QLatin1String(":\\")))  ) {
+      if ((normalPath.endsWith('/') && ! normalPath.endsWith(":/"))
+            || (normalPath.endsWith('\\') && ! normalPath.endsWith(":\\"))  ) {
 
          normalPath.chop(1);
       }
@@ -117,6 +115,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       QWindowsFileSystemWatcherEngine::Handle handle;
       QList<QWindowsFileSystemWatcherEngineThread *>::const_iterator jt, end;
       end = threads.constEnd();
+
       for (jt = threads.constBegin(); jt != end; ++jt) {
          thread = *jt;
          QMutexLocker locker(&(thread->mutex));
@@ -183,8 +182,10 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
                break;
             }
          }
+
          if (!found) {
             QWindowsFileSystemWatcherEngineThread *thread = new QWindowsFileSystemWatcherEngineThread();
+
             //qDebug()<<"  ###Creating new thread"<<thread<<"("<<(threads.count()+1)<<"threads)";
             thread->handles.append(handle.handle);
             thread->handleForDir.insert(absolutePath, handle);
@@ -209,6 +210,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          }
       }
    }
+
    return p;
 }
 
@@ -223,7 +225,7 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
       QString path = it.next();
       QString normalPath = path;
 
-      if (normalPath.endsWith(QLatin1Char('/')) || normalPath.endsWith(QLatin1Char('\\'))) {
+      if (normalPath.endsWith('/') || normalPath.endsWith('\\')) {
          normalPath.chop(1);
       }
 
@@ -365,11 +367,14 @@ void QWindowsFileSystemWatcherEngineThread::run()
 
                QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo> &h = pathInfoForHandle[handle];
                QMutableHashIterator<QString, QWindowsFileSystemWatcherEngine::PathInfo> it(h);
+
                while (it.hasNext()) {
                   QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo>::iterator x = it.next();
                   QString absolutePath = x.value().absolutePath;
                   QFileInfo fileInfo(x.value().path);
+
                   // qDebug() << "checking" << x.key();
+
                   if (!fileInfo.exists()) {
                      // qDebug() << x.key() << "removed!";
                      if (x.value().isDir) {
@@ -391,10 +396,12 @@ void QWindowsFileSystemWatcherEngineThread::run()
                         handleForDir.remove(absolutePath);
                         // h is now invalid
                      }
+
                   } else if (x.value().isDir) {
                      // qDebug() << x.key() << "directory changed!";
                      emit directoryChanged(x.value().path, false);
                      x.value() = fileInfo;
+
                   } else if (x.value() != fileInfo) {
                      // qDebug() << x.key() << "file changed!";
                      emit fileChanged(x.value().path, false);
@@ -406,8 +413,10 @@ void QWindowsFileSystemWatcherEngineThread::run()
             // qErrnoWarning("QFileSystemWatcher: error while waiting for change notification");
             break;  // avoid endless loop
          }
+
          handlesCopy = handles;
          r = WaitForMultipleObjects(handlesCopy.count(), handlesCopy.constData(), false, 0);
+
       } while (r != WAIT_TIMEOUT);
    }
 }
@@ -424,6 +433,4 @@ void QWindowsFileSystemWatcherEngineThread::wakeup()
    msg = '@';
    SetEvent(handles.at(0));
 }
-
-QT_END_NAMESPACE
 #endif // QT_NO_FILESYSTEMWATCHER

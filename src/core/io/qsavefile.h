@@ -21,12 +21,7 @@
 *
 ***********************************************************************/
 
-/****************************************************************************
-**
-** Copyright (C) 2012 David Faure <faure@kde.org>
-** Contact: http://www.qt-project.org/legal
-**
-****************************************************************************/
+// Copyright (C) 2012 David Faure <faure@kde.org>
 
 #ifndef QSAVEFILE_H
 #define QSAVEFILE_H
@@ -37,8 +32,6 @@
 #ifdef open
 #error qsavefile.h must be included before any header file that defines open
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QAbstractFileEngine;
 class QSaveFilePrivate;
@@ -74,6 +67,4 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
    Q_DISABLE_COPY(QSaveFile)
 };
 
-QT_END_NAMESPACE
-
-#endif // QSAVEFILE_H
+#endif
