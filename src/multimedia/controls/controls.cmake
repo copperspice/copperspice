@@ -8,24 +8,34 @@ set(MULTIMEDIA_PUBLIC_INCLUDES
 	QMediaPlayerControl
 	QMetaDataReaderControl
 	QVideoRendererControl
+	QVideoWindowControl
 )
 
 set(MULTIMEDIA_INCLUDES
    ${MULTIMEDIA_INCLUDES}
-	${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioencodersettingscontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioinputselectorcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiooutputselectorcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qimageencodercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediagaplessplaybackcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaaudioprobecontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaavailabilitycontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmedianetworkaccesscontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplayercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediarecordercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediastreamscontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatawritercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediacontainercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qradiodatacontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qradiotunercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideowindowcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideodeviceselectorcontrol.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideoencodersettingscontrol.h
 )
 
 set(MULTIMEDIA_PRIVATE_INCLUDES
@@ -36,20 +46,29 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
 
 set(MULTIMEDIA_SOURCES
    ${MULTIMEDIA_SOURCES}
-	${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioencodersettingscontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioinputselectorcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiooutputselectorcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qimageencodercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediagaplessplaybackcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaaudioprobecontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaavailabilitycontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmedianetworkaccesscontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplayercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediarecordercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediastreamscontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistsourcecontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatawritercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediacontainercontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qradiodatacontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qradiotunercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideowindowcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideodeviceselectorcontrol.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideoencodersettingscontrol.cpp
 )
