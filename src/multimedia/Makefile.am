@@ -26,8 +26,17 @@ MULTIMEDIA_DIRS =
 EXTRA_DIST += \
 	src/multimedia/CMakeLists.txt \
 	src/multimedia/audio/audio.cmake \
+	src/multimedia/audio/controls.cmake \
 	src/multimedia/kernel/kernel.cmake \
-	src/multimedia/video/video.cmake
+	src/multimedia/playback/plaback.cmake \
+	src/multimedia/radio/radio.cmake \
+	src/multimedia/recoding/recording.cmake \
+	src/multimedia/video/video.cmake \
+	src/multimedia/video/widgets.cmake \
+	src/plugins/multimedia/mediaservices/avfoundation/avfoundation.cmake \
+	src/plugins/multimedia/mediaservices/directshow/directshow.cmake \
+	src/plugins/multimedia/mediaservices/gstreamer/gstreamer.cmake \
+	src/plugins/multimedia/playlistformats/playlistformats.cmake
 
 include src/multimedia/audio/Makefile.am
 include src/multimedia/controls/Makefile.am
