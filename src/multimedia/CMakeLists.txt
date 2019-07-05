@@ -1,7 +1,14 @@
 add_definitions(
    -DQT_BUILD_MULTIMEDIA_LIB
 )
-set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI}  CsNetwork${BUILD_ABI} CsOpenGL${BUILD_ABI} )
+
+set(EXTRA_MULTIMEDIA_LIBS
+   CsCore${BUILD_ABI}
+   CsGui${BUILD_ABI}
+   CsNetwork${BUILD_ABI}
+   CsOpenGL${BUILD_ABI}
+)
+
 set(EXTRA_MULTIMEDIA_CXXFLAGS)
 set(EXTRA_MULTIMEDIA_LDFLAGS)
 
@@ -24,6 +31,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/playback
     ${CMAKE_CURRENT_SOURCE_DIR}/radio
+    ${CMAKE_CURRENT_SOURCE_DIR}/recording
     ${CMAKE_CURRENT_SOURCE_DIR}/video
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
 )
@@ -33,6 +41,7 @@ include(controls/controls.cmake)
 include(kernel/kernel.cmake)
 include(playback/playback.cmake)
 include(radio/radio.cmake)
+include(recording/recording.cmake)
 include(video/video.cmake)
 include(widgets/widgets.cmake)
 
