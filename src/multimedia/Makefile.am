@@ -33,6 +33,7 @@ include src/multimedia/audio/Makefile.am
 include src/multimedia/controls/Makefile.am
 include src/multimedia/kernel/Makefile.am
 include src/multimedia/playback/Makefile.am
+include src/multimedia/radio/Makefile.am
 include src/multimedia/video/Makefile.am
 include src/multimedia/widgets/Makefile.am
 

@@ -23,6 +23,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/controls
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/playback
+    ${CMAKE_CURRENT_SOURCE_DIR}/radio
     ${CMAKE_CURRENT_SOURCE_DIR}/video
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
 )
@@ -31,6 +32,7 @@ include(audio/audio.cmake)
 include(controls/controls.cmake)
 include(kernel/kernel.cmake)
 include(playback/playback.cmake)
+include(radio/radio.cmake)
 include(video/video.cmake)
 include(widgets/widgets.cmake)
 
