@@ -38,6 +38,7 @@ EXTRA_DIST= \
 	cmake/InstallMinGW.cmake \
 	cmake/pkgconfig.cmake \
 	cmake/qt-acconfig.h.cmake \
+	\
 	src/tools/lconvert/CMakeLists.txt \
 	src/tools/lrelease/CMakeLists.txt \
 	src/tools/lupdate/CMakeLists.txt \

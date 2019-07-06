@@ -111,9 +111,12 @@ fi
 PKG_CHECK_MODULES(GTK,  gtk+-2.0, GTK="yes",  true)
 PKG_CHECK_MODULES(ALSA, alsa,     ALSA="yes", true)
 
-PKG_CHECK_MODULES(PULSEAUDIO,                libpulse >= 0.9.15,     PULSEAUDIO="yes", true)
+# not required
+PKG_CHECK_MODULES(GTK,                       gtk+-2.0,               GTK="yes",                       true)
+PKG_CHECK_MODULES(ALSA,                      alsa,                   ALSA="yes",                      true)
+PKG_CHECK_MODULES(PULSEAUDIO,                libpulse >= 0.9.15,     PULSEAUDIO="yes",                true)
 PKG_CHECK_MODULES(PULSEAUDIO_DEVICE_MANAGER, libpulse >= 0.9.21,     PULSEAUDIO_DEVICE_MANAGER="yes", true)
-PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB,  libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes", true)
+PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB,  libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes",  true)
 
 # required xcb libraries
 PKG_CHECK_MODULES(LIB_XCB,         xcb >= 1.11.0,           LIB_XCB="yes",         missing="$missing xcb library")
@@ -180,10 +183,10 @@ AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
 
 AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
-AM_CONDITIONAL(ALSA, test "$ALSA" = "yes")
-AM_CONDITIONAL(PULSEAUDIO, test "$PULSEAUDIO" = "yes")
-AM_CONDITIONAL(PULSEAUDIO_DEVICE_MANAGER, test "$PULSEAUDIO_DEVICE_MANAGER" = "yes")
-AM_CONDITIONAL(PULSEAUDIO_MAINLOOP_GLIB, test "$PULSEAUDIO_MAINLOOP_GLIB" = "yes")
+AM_CONDITIONAL(ALSA,                       test "$ALSA" = "yes")
+AM_CONDITIONAL(PULSEAUDIO,                 test "$PULSEAUDIO" = "yes")
+AM_CONDITIONAL(PULSEAUDIO_DEVICE_MANAGER,  test "$PULSEAUDIO_DEVICE_MANAGER" = "yes")
+AM_CONDITIONAL(PULSEAUDIO_MAINLOOP_GLIB,   test "$PULSEAUDIO_MAINLOOP_GLIB" = "yes")
 
 AM_CONDITIONAL(BUILD_PLATFORMS_COCOA_PLUGIN, test "$OSTYPE" == DARWIN)
 AM_CONDITIONAL(BUILD_PLATFORMS_WINDOWS_PLUGIN, test "$OSTYPE" == WIN)

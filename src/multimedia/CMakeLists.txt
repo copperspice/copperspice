@@ -52,14 +52,27 @@ macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
 macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
 macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
 
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   set(EXTRA_MULTIMEDIA_LDFLAGS
+      ${EXTRA_MULTIMEDIAL_LDFLAGS}
+      -framework OpenGL
+   )
+endif()
+
 function_variable_fixup("${EXTRA_MULTIMEDIA_CXXFLAGS}" EXTRA_MULTIMEDIA_CXXFLAGS)
-function_variable_fixup("${EXTRA_MULTIMEDIA_LDFLAGS}" EXTRA_MULTIMEDIA_LDFLAGS)
+function_variable_fixup("${EXTRA_MULTIMEDIA_LDFLAGS}"  EXTRA_MULTIMEDIA_LDFLAGS)
 
-add_library(CsMultimedia${BUILD_ABI} SHARED ${MULTIMEDIA_SOURCES} ${MULTIMEDIA_INCLUDES})
-target_link_libraries(CsMultimedia${BUILD_ABI} ${EXTRA_MULTIMEDIA_LIBS})
+add_library(CsMultimedia${BUILD_ABI} SHARED
+   ${MULTIMEDIA_SOURCES}
+   ${MULTIMEDIA_INCLUDES}
+)
 
-target_include_directories(CsMultimedia${BUILD_ABI}
-   PUBLIC
+target_link_libraries(CsMultimedia${BUILD_ABI}
+   ${EXTRA_MULTIMEDIA_LIBS}
+)
+
+target_include_directories(CsMultimedia${BUILD_ABI} PUBLIC
    $<INSTALL_INTERFACE:include/QtMultimedia>
 )
 
@@ -71,6 +84,7 @@ set_target_properties(CsMultimedia${BUILD_ABI} PROPERTIES
 )
 
 macro_generate_resources("${MULTIMEDIA_SOURCES}")
+
 macro_generate_package(
     CsMultimedia${BUILD_ABI}
     QtMultimedia

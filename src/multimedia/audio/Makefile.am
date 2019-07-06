@@ -18,12 +18,13 @@ MULTIMEDIA_AUDIO_INCLUDES = \
 	qabstractaudioinput.h \
 	qabstractaudiooutput.h \
 	qaudio.h \
-	qaudiodecoder.h \
 	qaudiobuffer.h \
+	qaudiodecoder.h \
+	qaudiodeviceinfo.h \
 	qaudioformat.h \
 	qaudioinput.h \
 	qaudiooutput.h \
-	qaudiodeviceinfo.h \
+	qaudioprobe.h \
 	qaudioenginefactoryinterface.h \
 	qaudiosystem.h \
 	qaudiosystemplugin.h \
@@ -33,10 +34,9 @@ MULTIMEDIA_AUDIO_INCLUDES = \
 MULTIMEDIA_AUDIO_PRIVATE_INCLUDES = \
 	qaudiobuffer_p.h \
 	qaudiodevicefactory_p.h \
+	qaudiohelpers_p.h \
 	qsamplecache_p.h \
-	qsoundeffect_qaudio_p.h \
 	qwavedecoder_p.h
-
 
 MULTIMEDIA_INCLUDES += $(MULTIMEDIA_AUDIO_INCLUDES)
 MULTIMEDIA_PRIVATE_INCLUDES += $(MULTIMEDIA_AUDIO_PRIVATE_INCLUDES)
@@ -50,23 +50,58 @@ lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/audio/qaudiodecoder.cpp \
 	src/multimedia/audio/qaudiodevicefactory.cpp \
 	src/multimedia/audio/qaudiodeviceinfo.cpp \
-	src/multimedia/audio/qaudiosystem.cpp \
-	src/multimedia/audio/qaudiosystemplugin.cpp \
 	src/multimedia/audio/qaudioformat.cpp \
+	src/multimedia/audio/qaudiohelpers.cpp \
 	src/multimedia/audio/qaudioinput.cpp \
 	src/multimedia/audio/qaudiooutput.cpp \
+	src/multimedia/audio/qaudioprobe.cpp \
+	src/multimedia/audio/qaudiosystem.cpp \
+	src/multimedia/audio/qaudiosystemplugin.cpp \
 	src/multimedia/audio/qsamplecache_p.cpp \
 	src/multimedia/audio/qsound.cpp \
 	src/multimedia/audio/qsoundeffect.cpp \
-	src/multimedia/audio/qsoundeffect_qaudio_p.cpp \
 	src/multimedia/audio/qwavedecoder_p.cpp
+
+
+if PULSEAUDIO
+
+lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS +=\
+   -DQT_MULTIMEDIA_PULSEAUDIO \
+   -DQTM_PULSEAUDIO_DEFAULTBUFFER
+
+lib_libCsMultimedia@BUILD_ABI@_la_LIBADD += ${PULSEAUDIO_LIBS}
+
+MULTIMEDIA_AUDIO_PRIVATE_INCLUDES += \
+	qsoundeffect_pulse_p.h
+
+lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
+	src/multimedia/audio/qsoundeffect_pulse_p.cpp
+
+else
+
+lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS +=\
+   -DQT_MULTIMEDIA_QAUDIO
+
+MULTIMEDIA_AUDIO_PRIVATE_INCLUDES += \
+	qsoundeffect_qaudio_p.h
+
+lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
+	src/multimedia/audio/qsoundeffect_qaudio_p.cpp
+
+endif
+
 
 if OSTYPE_WIN
 lib_libCsMultimedia@BUILD_ABI@_la_LIBADD+= -lwinmm
 endif
 
 if OSTYPE_DARWIN
-lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS += -framework AudioUnit -framework CoreAudio -framework AudioToolbox
+lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS += \
+   -framework AudioUnit \
+   -framework CoreAudio \
+   -framework AudioToolbox
 endif
+
+
 
 

@@ -201,6 +201,14 @@ set_package_properties(ALSA PROPERTIES
    TYPE RECOMMENDED
 )
 
+find_package(PulseAudio)
+set_package_properties(PulseAudio PROPERTIES
+   PURPOSE "Required for pulseaudio support"
+   DESCRIPTION "Sound processing daemon for Unix"
+   URL "http://www.pulseaudio.org"
+   TYPE RECOMMENDED
+)
+
 endif()
 
 find_package(PostgreSQL)
@@ -363,6 +371,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
           URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
           TYPE REQUIRED
        )
+    endif()
+
+    if(WITH_MULTIMEDIA)
+        find_package(GStreamer)
+        set_package_properties(GStreamer PROPERTIES
+           PURPOSE "Required for multimedia audio and video support"
+           DESCRIPTION "Open source media playback library"
+           URL "http://gstreamer.freedesktop.org"
+           TYPE REQUIRED
+        )
     endif()
 
     if(WITH_OPENGL)
