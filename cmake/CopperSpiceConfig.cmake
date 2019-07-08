@@ -34,34 +34,26 @@ set(COPPERSPICE_LIBRARIES)
 set(COPPERSPICE_COMPONENTS @BUILD_COMPONENTS@)
 
 foreach(component ${COPPERSPICE_COMPONENTS})
-    string(TOUPPER ${component} uppercomp)
-    string(TOLOWER ${component} lowercomp)
+   string(TOUPPER ${component} uppercomp)
+   string(TOLOWER ${component} lowercomp)
 
-    if(${lowercomp} STREQUAL "phonon")
-        set(COPPERSPICE_INCLUDES
-            ${COPPERSPICE_INCLUDES}
-            @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon
-        )
-        set(COPPERSPICE_${uppercomp}_INCLUDES
-            @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon
-        )
-    else()
-        set(COPPERSPICE_INCLUDES
-            ${COPPERSPICE_INCLUDES}
-            @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
-        )
-        set(COPPERSPICE_${uppercomp}_INCLUDES
-            @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
-        )
-    endif()
+   set(COPPERSPICE_INCLUDES
+      ${COPPERSPICE_INCLUDES}
+      @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
+   )
 
-    set(COPPERSPICE_LIBRARIES
-        ${COPPERSPICE_LIBRARIES}
-        CopperSpice::Cs${component}@BUILD_ABI@
-    )
-    set(COPPERSPICE_${uppercomp}_LIBRARIES
-        CopperSpice::Cs${component}@BUILD_ABI@
-    )
+   set(COPPERSPICE_${uppercomp}_INCLUDES
+      @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
+   )
+
+   set(COPPERSPICE_LIBRARIES
+      ${COPPERSPICE_LIBRARIES}
+      CopperSpice::Cs${component}@BUILD_ABI@
+   )
+
+   set(COPPERSPICE_${uppercomp}_LIBRARIES
+      CopperSpice::Cs${component}@BUILD_ABI@
+   )
 endforeach()
 
 # set compiler standard to C++14    (todo: switch to using compiler features)
