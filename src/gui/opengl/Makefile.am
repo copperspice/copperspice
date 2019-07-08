@@ -4,16 +4,26 @@ GUI_PUBLIC_INCLUDES += \
 	QOpenGL \
 	QOpenGLBuffer \
 	QOpenGLDebugMessage \
+	QOpenGLExtraFunctions \
+	QOpenGLFramebufferObject \
 	QOpenGLFunctions \
 	QOpenGLFunctions_1_0 \
 	QOpenGLFunctions_2_0 \
 	QOpenGLFunctions_3_0 \
 	QOpenGLFunctions_3_2_Core \
+	QOpenGLFunctions_3_3_Core \
+	QOpenGLFunctions_4_0_Core \
+	QOpenGLFunctions_4_1_Core \
+	QOpenGLFunctions_4_2_Core \
+	QOpenGLFunctions_4_3_Core \
+	QOpenGLFunctions_4_4_Core \
+	QOpenGLFunctions_4_5_Core \
+	QOpenGLPaintDevice \
 	QOpenGLShader \
 	QOpenGLShaderProgram \
+	QOpenGLTexture \
 	QOpenGLVertexArrayObject \
 	QOpenGLVersionFunctions
-
 
 GUI_OPENGL_INCLUDES = \
 	qopengl.h \
