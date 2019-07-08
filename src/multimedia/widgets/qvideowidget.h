@@ -66,7 +66,7 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
    explicit QVideoWidget(QWidget *parent = nullptr);
    ~QVideoWidget();
 
-   QMediaObject *mediaObject() const;
+   QMediaObject *mediaObject() const override;
 
    Qt::AspectRatioMode aspectRatioMode() const;
 
@@ -75,7 +75,7 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
    int hue() const;
    int saturation() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    MULTI_CS_SLOT_1(Public, void setFullScreen(bool fullScreen))
    MULTI_CS_SLOT_2(setFullScreen)
@@ -102,14 +102,14 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
    MULTI_CS_SIGNAL_2(saturationChanged, saturation)
 
  protected:
-   bool event(QEvent *event);
-   void showEvent(QShowEvent *event);
-   void hideEvent(QHideEvent *event);
-   void resizeEvent(QResizeEvent *event);
-   void moveEvent(QMoveEvent *event);
-   void paintEvent(QPaintEvent *event);
+   bool event(QEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void hideEvent(QHideEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void moveEvent(QMoveEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 
-   bool setMediaObject(QMediaObject *object);
+   bool setMediaObject(QMediaObject *object) override;
 
 #if defined(Q_WS_WIN)
    bool winEvent(MSG *message, long *result);

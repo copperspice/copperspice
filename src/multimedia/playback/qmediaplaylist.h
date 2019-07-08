@@ -60,7 +60,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
    explicit QMediaPlaylist(QObject *parent = nullptr);
    virtual ~QMediaPlaylist();
 
-   QMediaObject *mediaObject() const;
+   QMediaObject *mediaObject() const override;
 
    PlaybackMode playbackMode() const;
    void setPlaybackMode(PlaybackMode mode);
@@ -130,7 +130,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
    MULTI_CS_SIGNAL_2(loadFailed)
 
  protected:
-   bool setMediaObject(QMediaObject *object);
+   bool setMediaObject(QMediaObject *object) override;
    QMediaPlaylistPrivate *d_ptr;
 
  private:

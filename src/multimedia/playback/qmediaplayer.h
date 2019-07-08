@@ -170,7 +170,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
 
    QNetworkConfiguration currentNetworkConfiguration() const;
 
-   QMultimedia::AvailabilityStatus availability() const;
+   QMultimedia::AvailabilityStatus availability() const override;
 
    QAudio::Role audioRole() const;
    void setAudioRole(QAudio::Role audioRole);
@@ -213,6 +213,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
 
    MULTI_CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
    MULTI_CS_SIGNAL_2(durationChanged, duration)
+
    MULTI_CS_SIGNAL_1(Public, void positionChanged(qint64 position))
    MULTI_CS_SIGNAL_2(positionChanged, position)
 
