@@ -115,18 +115,14 @@ void QMediaObject::addPropertyWatch(const QString &name)
       QMetaProperty metaProp   = metaObj->property(propIndex);
       QMetaMethod signalMethod = metaProp.notifySignal();
 
-      int typeId       = metaProp.userType();
-      QString typeName = QMetaType::typeName(typeId);
-
-      auto callBack = [this, metaProp, signalMethod, typeName]()
+      auto callBack = [this, metaProp, signalMethod]()
          {
             QVariant data = metaProp.read(this);
-            signalMethod.invoke(this, CSArgument<T>(data.value<T>(), typeName));
-         };
+            signalMethod.invoke(this, data.value<T>());
+        };
 
       cs_internal_addPropertyWatch(name, callBack);
    }
 }
-
 
 #endif
