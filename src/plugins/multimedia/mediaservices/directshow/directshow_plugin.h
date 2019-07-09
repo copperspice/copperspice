@@ -25,15 +25,16 @@
 #define DIRECTSHOW_PLUGIN_H
 
 #include <qmediaservice_provider_plugin.h>
+#include <qmediaplayercontrol.h>
 
 class DSServicePlugin
-   : public QMediaServiceProviderPlugin, public QMediaServiceSupportedDevicesInterface
-   , public QMediaServiceDefaultDeviceInterface, public QMediaServiceFeaturesInterface
+   : public QMediaServiceProviderPlugin, public QMediaServiceSupportedDevicesInterface,
+     public QMediaServiceDefaultDeviceInterface, public QMediaServiceFeaturesInterface
 {
    CS_OBJECT_MULTIPLE(DSServicePlugin, QMediaServiceProviderPlugin)
 
    CS_PLUGIN_IID(QMediaServiceProviderInterface_ID)
-   CS_PLUGIN_KEY("directshow")
+   CS_PLUGIN_KEY(QMediaPlayerControl_Key)
 
    CS_INTERFACES(QMediaServiceSupportedDevicesInterface, QMediaServiceDefaultDeviceInterface, QMediaServiceFeaturesInterface)
 

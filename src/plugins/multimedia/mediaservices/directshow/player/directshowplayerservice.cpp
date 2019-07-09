@@ -173,6 +173,7 @@ QMediaControl *DirectShowPlayerService::requestControl(const QString &name)
 
 #ifdef HAVE_EVR
          DirectShowEvrVideoWindowControl *evrControl = new DirectShowEvrVideoWindowControl;
+
          if ((filter = evrControl->filter())) {
             m_videoWindowControl = evrControl;
          } else {
@@ -180,7 +181,7 @@ QMediaControl *DirectShowPlayerService::requestControl(const QString &name)
          }
 #endif
          // Fall back to the VMR9 if the EVR is not available
-         if (!m_videoWindowControl) {
+         if (! m_videoWindowControl) {
             Vmr9VideoWindowControl *vmr9Control = new Vmr9VideoWindowControl;
             filter = vmr9Control->filter();
             m_videoWindowControl = vmr9Control;
@@ -192,26 +193,25 @@ QMediaControl *DirectShowPlayerService::requestControl(const QString &name)
       }
 
    }
-   return 0;
+
+   return nullptr;
 }
 
 void DirectShowPlayerService::releaseControl(QMediaControl *control)
 {
-   if (!control) {
-      qWarning("QMediaService::releaseControl():"
-         " Attempted release of null control");
+   if (! control) {
+      qWarning("QMediaService::releaseControl(): Attempted release of null control");
+
    } else if (control == m_videoRendererControl) {
       setVideoOutput(0);
 
       delete m_videoRendererControl;
-
       m_videoRendererControl = 0;
 
    } else if (control == m_videoWindowControl) {
       setVideoOutput(0);
 
       delete m_videoWindowControl;
-
       m_videoWindowControl = 0;
 
    }
@@ -1190,19 +1190,23 @@ void DirectShowPlayerService::customEvent(QEvent *event)
          m_playerControl->updateState(QMediaPlayer::StoppedState);
          updateStatus();
       }
+
    } else if (event->type() == QEvent::Type(RateChange)) {
       QMutexLocker locker(&m_mutex);
 
       m_playerControl->updatePlaybackRate(m_rate);
+
    } else if (event->type() == QEvent::Type(StatusChange)) {
       QMutexLocker locker(&m_mutex);
 
       updateStatus();
       m_playerControl->updatePosition(m_position);
+
    } else if (event->type() == QEvent::Type(DurationChange)) {
       QMutexLocker locker(&m_mutex);
 
       m_playerControl->updateMediaInfo(m_duration, m_streamTypes, m_seekable);
+
    } else if (event->type() == QEvent::Type(EndOfMedia)) {
       QMutexLocker locker(&m_mutex);
 
@@ -1211,6 +1215,7 @@ void DirectShowPlayerService::customEvent(QEvent *event)
          m_playerControl->updateStatus(QMediaPlayer::EndOfMedia);
          m_playerControl->updatePosition(m_position);
       }
+
    } else if (event->type() == QEvent::Type(PositionChange)) {
       QMutexLocker locker(&m_mutex);
 
@@ -1218,6 +1223,7 @@ void DirectShowPlayerService::customEvent(QEvent *event)
          m_playerControl->updateStatus(QMediaPlayer::LoadedMedia);
       }
       m_playerControl->updatePosition(m_position);
+
    } else {
       QMediaService::customEvent(event);
    }

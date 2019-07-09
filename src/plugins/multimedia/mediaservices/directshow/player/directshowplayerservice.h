@@ -34,33 +34,30 @@
 #include "directshoweventloop.h"
 #include "directshowglobal.h"
 
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qurl.h>
-#include <QtCore/qwaitcondition.h>
+#include <qcoreevent.h>
+#include <qmutex.h>
+#include <qurl.h>
+#include <qwaitcondition.h>
 
 class DirectShowAudioEndpointControl;
 class DirectShowMetaDataControl;
 class DirectShowPlayerControl;
 class DirectShowVideoRendererControl;
 
-QT_BEGIN_NAMESPACE
 class QMediaContent;
 class QVideoWindowControl;
-QT_END_NAMESPACE
-
-QT_USE_NAMESPACE
 
 class DirectShowPlayerService : public QMediaService
 {
    CS_OBJECT(DirectShowPlayerService)
+
  public:
    enum StreamType {
       AudioStream = 0x01,
       VideoStream = 0x02
    };
 
-   DirectShowPlayerService(QObject *parent = 0);
+   DirectShowPlayerService(QObject *parent = nullptr);
    ~DirectShowPlayerService();
 
    QMediaControl *requestControl(const QString &name);
@@ -157,14 +154,11 @@ class DirectShowPlayerService : public QMediaService
    };
 
    DirectShowPlayerControl *m_playerControl;
-#ifndef Q_OS_WINCE
    DirectShowMetaDataControl *m_metaDataControl;
-#endif
    DirectShowVideoRendererControl *m_videoRendererControl;
-#ifndef Q_OS_WINCE
+
    QVideoWindowControl *m_videoWindowControl;
    DirectShowAudioEndpointControl *m_audioEndpointControl;
-#endif
 
    QThread *m_taskThread;
    DirectShowEventLoop *m_loop;
@@ -197,6 +191,5 @@ class DirectShowPlayerService : public QMediaService
 
    friend class DirectShowPlayerServiceThread;
 };
-
 
 #endif

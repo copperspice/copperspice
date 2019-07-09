@@ -27,19 +27,22 @@
 
 #include "directshowplayerservice.h"
 
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qmath.h>
+#include <qcoreapplication.h>
+#include <qmath.h>
 
 static int volumeToDecibels(int volume)
 {
    if (volume == 0) {
       return -10000;
+
    } else if (volume == 100) {
       return 0;
+
 #ifdef QT_USE_MATH_H_FLOATS
    } else if (sizeof(qreal) == sizeof(float)) {
       return qRound(::log10f(float(volume) / 100) * 5000);
 #endif
+
    } else {
       return qRound(::log10(qreal(volume) / 100) * 5000);
    }
@@ -275,8 +278,8 @@ void DirectShowPlayerControl::customEvent(QEvent *event)
 {
    if (event->type() == QEvent::Type(PropertiesChanged)) {
       emitPropertyChanges();
-
       event->accept();
+
    } else {
       QMediaPlayerControl::customEvent(event);
    }

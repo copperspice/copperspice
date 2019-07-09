@@ -24,9 +24,9 @@
 #ifndef DIRECTSHOWEVENTLOOP_H
 #define DIRECTSHOWEVENTLOOP_H
 
-#include <QtCore/qmutex.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qwaitcondition.h>
+#include <qmutex.h>
+#include <qobject.h>
+#include <qwaitcondition.h>
 
 #include <qt_windows.h>
 

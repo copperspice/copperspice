@@ -87,7 +87,7 @@ QMediaService *DSServicePlugin::create(QString const &key)
 #endif
 
 #ifdef QMEDIA_DIRECTSHOW_PLAYER
-   if (key == Q_MEDIASERVICE_MEDIAPLAYER) {
+   if (key == QMediaPlayerControl_Key) {
       addRefCount();
       return new DirectShowPlayerService;
    }
@@ -104,7 +104,7 @@ void DSServicePlugin::release(QMediaService *service)
 
 QMediaServiceProviderHint::Features DSServicePlugin::supportedFeatures(const QString &service) const
 {
-   if (service == Q_MEDIASERVICE_MEDIAPLAYER) {
+   if (service == QMediaPlayerControl_Key) {
       return QMediaServiceProviderHint::StreamPlayback | QMediaServiceProviderHint::VideoSurface;
    } else {
       return QMediaServiceProviderHint::Features();
@@ -147,7 +147,8 @@ QString DSServicePlugin::deviceDescription(const QString &service, const QString
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
    if (service == Q_MEDIASERVICE_CAMERA) {
       const QList<DSVideoDeviceInfo> &devs = DSVideoDeviceControl::availableDevices();
-      Q_FOREACH (const DSVideoDeviceInfo &info, devs) {
+
+      for (const DSVideoDeviceInfo &info : devs) {
          if (info.first == device) {
             return info.second;
          }
