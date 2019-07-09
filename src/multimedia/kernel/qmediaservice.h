@@ -37,7 +37,7 @@ class Q_MULTIMEDIA_EXPORT QMediaService : public QObject
  public:
    ~QMediaService();
 
-   virtual QMediaControl *requestControl(const char *name) = 0;
+   virtual QMediaControl *requestControl(const QString &name) = 0;
 
    template <typename T>
    inline T requestControl() {
