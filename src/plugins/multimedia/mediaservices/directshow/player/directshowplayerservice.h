@@ -63,7 +63,7 @@ class DirectShowPlayerService : public QMediaService
    DirectShowPlayerService(QObject *parent = 0);
    ~DirectShowPlayerService();
 
-   QMediaControl *requestControl(const char *name);
+   QMediaControl *requestControl(const QString &name);
    void releaseControl(QMediaControl *control);
 
    void load(const QMediaContent &media, QIODevice *stream);

@@ -147,18 +147,19 @@ DirectShowPlayerService::~DirectShowPlayerService()
    ::CloseHandle(m_taskHandle);
 }
 
-QMediaControl *DirectShowPlayerService::requestControl(const char *name)
+QMediaControl *DirectShowPlayerService::requestControl(const QString &name)
 {
-   if (qstrcmp(name, QMediaPlayerControl_iid) == 0) {
+   if (name == QMediaPlayerControl_Key) {
       return m_playerControl;
 
-   } else if (qstrcmp(name, QAudioOutputSelectorControl_iid) == 0) {
+   } else if (name == QAudioOutputSelectorControl_iid) {
       return m_audioEndpointControl;
-   } else if (qstrcmp(name, QMetaDataReaderControl_iid) == 0) {
+
+   } else if (name == QMetaDataReaderControl_iid) {
       return m_metaDataControl;
 
-   } else if (qstrcmp(name, QVideoRendererControl_iid) == 0) {
-      if (!m_videoRendererControl && !m_videoWindowControl) {
+   } else if (name == QVideoRendererControl_iid) {
+      if (! m_videoRendererControl && !m_videoWindowControl) {
          m_videoRendererControl = new DirectShowVideoRendererControl(m_loop);
 
          connect(m_videoRendererControl, SIGNAL(filterChanged()), this, SLOT(videoOutputChanged()));
@@ -166,8 +167,8 @@ QMediaControl *DirectShowPlayerService::requestControl(const char *name)
          return m_videoRendererControl;
       }
 
-   } else if (qstrcmp(name, QVideoWindowControl_iid) == 0) {
-      if (!m_videoRendererControl && !m_videoWindowControl) {
+   } else if (name == QVideoWindowControl_iid) {
+      if (! m_videoRendererControl && !m_videoWindowControl) {
          IBaseFilter *filter;
 
 #ifdef HAVE_EVR

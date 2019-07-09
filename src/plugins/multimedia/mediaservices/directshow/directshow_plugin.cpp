@@ -102,8 +102,7 @@ void DSServicePlugin::release(QMediaService *service)
    releaseRefCount();
 }
 
-QMediaServiceProviderHint::Features DSServicePlugin::supportedFeatures(
-   const QByteArray &service) const
+QMediaServiceProviderHint::Features DSServicePlugin::supportedFeatures(const QString &service) const
 {
    if (service == Q_MEDIASERVICE_MEDIAPLAYER) {
       return QMediaServiceProviderHint::StreamPlayback | QMediaServiceProviderHint::VideoSurface;
@@ -112,7 +111,7 @@ QMediaServiceProviderHint::Features DSServicePlugin::supportedFeatures(
    }
 }
 
-QByteArray DSServicePlugin::defaultDevice(const QByteArray &service) const
+QString DSServicePlugin::defaultDevice(const QString &service) const
 {
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
    if (service == Q_MEDIASERVICE_CAMERA) {
@@ -123,12 +122,12 @@ QByteArray DSServicePlugin::defaultDevice(const QByteArray &service) const
    }
 #endif
 
-   return QByteArray();
+   return QString ();
 }
 
-QList<QByteArray> DSServicePlugin::devices(const QByteArray &service) const
+QList<QString> DSServicePlugin::devices(const QString &service) const
 {
-   QList<QByteArray> result;
+   QList<QString > result;
 
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
    if (service == Q_MEDIASERVICE_CAMERA) {
@@ -143,7 +142,7 @@ QList<QByteArray> DSServicePlugin::devices(const QByteArray &service) const
    return result;
 }
 
-QString DSServicePlugin::deviceDescription(const QByteArray &service, const QByteArray &device)
+QString DSServicePlugin::deviceDescription(const QString &service, const QString  &device)
 {
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
    if (service == Q_MEDIASERVICE_CAMERA) {
