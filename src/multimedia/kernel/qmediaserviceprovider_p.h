@@ -36,22 +36,22 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProvider : public QObject
    MULTI_CS_OBJECT(QMediaServiceProvider)
 
  public:
-   virtual QMediaService *requestService(const QByteArray &type, const QMediaServiceProviderHint &hint = QMediaServiceProviderHint()) = 0;
+   virtual QMediaService *requestService(const QString &type, const QMediaServiceProviderHint &hint = QMediaServiceProviderHint()) = 0;
    virtual void releaseService(QMediaService *service) = 0;
 
    virtual QMediaServiceProviderHint::Features supportedFeatures(const QMediaService *service) const;
 
-   virtual QMultimedia::SupportEstimate hasSupport(const QByteArray &serviceType,
+   virtual QMultimedia::SupportEstimate hasSupport(const QString &serviceType,
       const QString &mimeType, const QStringList &codecs, int flags = 0) const;
 
-   virtual QStringList supportedMimeTypes(const QByteArray &serviceType, int flags = 0) const;
+   virtual QStringList supportedMimeTypes(const QString &serviceType, int flags = 0) const;
 
-   virtual QByteArray defaultDevice(const QByteArray &serviceType) const;
-   virtual QList<QByteArray> devices(const QByteArray &serviceType) const;
-   virtual QString deviceDescription(const QByteArray &serviceType, const QByteArray &device);
+   virtual QString defaultDevice(const QString &serviceType) const;
+   virtual QList<QString> devices(const QString &serviceType) const;
+   virtual QString deviceDescription(const QString &serviceType, const QString &device);
 
-   // emerald   virtual QCamera::Position cameraPosition(const QByteArray &device) const;
-   // emerald    virtual int cameraOrientation(const QByteArray &device) const;
+   // emerald   virtual QCamera::Position cameraPosition(const QString &device) const;
+   // emerald   virtual int cameraOrientation(const QString &device) const;
 
    static QMediaServiceProvider *defaultServiceProvider();
    static void setDefaultServiceProvider(QMediaServiceProvider *provider);

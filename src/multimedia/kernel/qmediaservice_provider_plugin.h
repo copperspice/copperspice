@@ -48,7 +48,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint
 
    QMediaServiceProviderHint();
    QMediaServiceProviderHint(const QString &mimeType, const QStringList &codecs);
-   QMediaServiceProviderHint(const QByteArray &device);
+   QMediaServiceProviderHint(const QString &device);
    // emerald     QMediaServiceProviderHint(QCamera::Position position);
    QMediaServiceProviderHint(Features features);
    QMediaServiceProviderHint(const QMediaServiceProviderHint &other);
@@ -67,7 +67,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint
    QString mimeType() const;
    QStringList codecs() const;
 
-   QByteArray device() const;
+   QString device() const;
    // emerald     QCamera::Position cameraPosition() const;
 
    Features features() const;
@@ -101,8 +101,8 @@ CS_DECLARE_INTERFACE(QMediaServiceSupportedFormatsInterface, QMediaServiceSuppor
 struct Q_MULTIMEDIA_EXPORT QMediaServiceSupportedDevicesInterface {
    virtual ~QMediaServiceSupportedDevicesInterface() {}
 
-   virtual QList<QByteArray> devices(const QByteArray &service) const = 0;
-   virtual QString deviceDescription(const QByteArray &service, const QByteArray &device) = 0;
+   virtual QList<QString> devices(const QString &service) const = 0;
+   virtual QString deviceDescription(const QString &service, const QString &device) = 0;
 };
 
 #define QMediaServiceSupportedDevicesInterface_ID "com.copperspice.CS.mediaServiceSupportedDevices/1.0"
@@ -115,7 +115,7 @@ CS_DECLARE_INTERFACE(QMediaServiceSupportedDevicesInterface, QMediaServiceSuppor
 
 struct Q_MULTIMEDIA_EXPORT QMediaServiceDefaultDeviceInterface {
    virtual ~QMediaServiceDefaultDeviceInterface() {}
-   virtual QByteArray defaultDevice(const QByteArray &service) const = 0;
+   virtual QString defaultDevice(const QString &service) const = 0;
 };
 
 #define QMediaServiceDefaultDeviceInterface_ID  "com.copperspice.CS.mediaServiceDefaultDevice/1.0"
@@ -127,8 +127,8 @@ CS_DECLARE_INTERFACE(QMediaServiceDefaultDeviceInterface, QMediaServiceDefaultDe
 struct Q_MULTIMEDIA_EXPORT QMediaServiceCameraInfoInterface
 {
     virtual ~QMediaServiceCameraInfoInterface() {}
-    virtual QCamera::Position cameraPosition(const QByteArray &device) const = 0;
-    virtual int cameraOrientation(const QByteArray &device) const = 0;
+    virtual QCamera::Position cameraPosition(const QString &device) const = 0;
+    virtual int cameraOrientation(const QString &device) const = 0;
 };
 
 #define QMediaServiceCameraInfoInterface_ID "com.copperspice.CS.mediaServiceCameraInfo/1.0"
@@ -139,7 +139,7 @@ CS_DECLARE_INTERFACE(QMediaServiceCameraInfoInterface, QMediaServiceCameraInfoIn
 
 struct Q_MULTIMEDIA_EXPORT QMediaServiceFeaturesInterface {
    virtual ~QMediaServiceFeaturesInterface() {}
-   virtual QMediaServiceProviderHint::Features supportedFeatures(const QByteArray &service) const = 0;
+   virtual QMediaServiceProviderHint::Features supportedFeatures(const QString &service) const = 0;
 };
 
 #define QMediaServiceFeaturesInterface_ID "com.copperspice.CS.mediaServiceFeatures/1.0"
@@ -163,7 +163,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderPlugin : public QObject, public Q
                         Required: QVideoOutputControl
                         Optional: QVideoWindowControl, QVideoRendererControl, QVideoWidgetControl
 */
-#define Q_MEDIASERVICE_MEDIAPLAYER "com.copperspice.CS.mediaPlayer"
+#define Q_MEDIASERVICE_MEDIAPLAYER "com.copperspice.CS.mediaPlayer"   // broom key thing
 
 /*!
    Service with support for recording from audio sources
