@@ -540,13 +540,12 @@ static QMediaService *playerService(QMediaPlayer::Flags flags)
          features |= QMediaServiceProviderHint::VideoSurface;
       }
 
-      return provider->requestService(Q_MEDIASERVICE_MEDIAPLAYER, QMediaServiceProviderHint(features));
+      return provider->requestService(QMediaPlayerControl_Key, QMediaServiceProviderHint(features));
 
    } else {
-      return provider->requestService(Q_MEDIASERVICE_MEDIAPLAYER);
+      return provider->requestService(QMediaPlayerControl_Key);
    }
 }
-
 
 QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
    : QMediaObject(*new QMediaPlayerPrivate, parent, playerService(flags))
@@ -559,8 +558,8 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
       d->error = ServiceMissingError;
 
    } else {
-      d->control = qobject_cast<QMediaPlayerControl *>(d->service->requestControl(QMediaPlayerControl_iid));
-      d->networkAccessControl = qobject_cast<QMediaNetworkAccessControl *>(d->service->requestControl(QMediaNetworkAccessControl_iid));
+      d->control = dynamic_cast<QMediaPlayerControl *>(d->service->requestControl(QMediaPlayerControl_Key));
+      d->networkAccessControl = dynamic_cast<QMediaNetworkAccessControl *>(d->service->requestControl(QMediaNetworkAccessControl_iid));
 
       if (d->control != 0) {
          connect(d->control, &QMediaPlayerControl::mediaChanged,           this, &QMediaPlayer::_q_handleMediaChanged);
@@ -977,13 +976,12 @@ void QMediaPlayer::setMedia(const QMediaContent &media, QIODevice *stream)
 QMultimedia::SupportEstimate QMediaPlayer::hasSupport(const QString &mimeType,
    const QStringList &codecs, Flags flags)
 {
-   return QMediaServiceProvider::defaultServiceProvider()->hasSupport(Q_MEDIASERVICE_MEDIAPLAYER, mimeType, codecs, flags);
+   return QMediaServiceProvider::defaultServiceProvider()->hasSupport(QMediaPlayerControl_Key, mimeType, codecs, flags);
 }
 
 QStringList QMediaPlayer::supportedMimeTypes(Flags flags)
 {
-   return QMediaServiceProvider::defaultServiceProvider()->
-      supportedMimeTypes(QByteArray(Q_MEDIASERVICE_MEDIAPLAYER), flags);
+   return QMediaServiceProvider::defaultServiceProvider()->supportedMimeTypes(QByteArray(QMediaPlayerControl_Key), flags);
 }
 
 void QMediaPlayer::setVideoOutput(QVideoWidget *output)

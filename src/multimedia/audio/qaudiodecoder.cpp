@@ -94,7 +94,7 @@ QAudioDecoder::QAudioDecoder(QObject *parent)
    d->provider = QMediaServiceProvider::defaultServiceProvider();
 
    if (d->service) {
-      d->control = qobject_cast<QAudioDecoderControl *>(d->service->requestControl(QAudioDecoderControl_iid));
+      d->control = qobject_cast<QAudioDecoderControl *>(d->service->requestControl(QAudioDecoderControl_Key));
 
       if (d->control != 0) {
          connect(d->control, &QAudioDecoderControl::stateChanged,           this, &QAudioDecoder::_q_stateChanged);

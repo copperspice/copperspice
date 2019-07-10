@@ -241,7 +241,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
                // special case for media player, if low latency was not asked,
                // prefer services not offering it, since they are likely to support more formats
 
-               if (type == Q_MEDIASERVICE_MEDIAPLAYER) {
+               if (key == QMediaPlayerControl_Key) {
                   for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
 
                      QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(currentPlugin);
@@ -260,7 +260,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
                   QMediaServiceFeaturesInterface *iface = qobject_cast<QMediaServiceFeaturesInterface *>(currentPlugin);
 
                   if (iface) {
-                     if ((iface->supportedFeatures(type) & hint.features()) == hint.features()) {
+                     if ((iface->supportedFeatures(key) & hint.features()) == hint.features()) {
                         plugin = currentPlugin;
                         break;
                      }
@@ -270,11 +270,12 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
             case QMediaServiceProviderHint::Device: {
                plugin = plugins[0];
-               foreach (QMediaServiceProviderPlugin *currentPlugin, plugins) {
-                  QMediaServiceSupportedDevicesInterface *iface =
-                     qobject_cast<QMediaServiceSupportedDevicesInterface *>(currentPlugin);
 
-                  if (iface && iface->devices(type).contains(hint.device())) {
+               for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
+                  QMediaServiceSupportedDevicesInterface *iface =
+                     dynamic_cast<QMediaServiceSupportedDevicesInterface *>(currentPlugin);
+
+                  if (iface && iface->devices(key).contains(hint.device())) {
                      plugin = currentPlugin;
                      break;
                   }
@@ -341,8 +342,9 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
             if (service != 0) {
                MediaServiceData d;
-               d.type = type;
+               d.type   = key;
                d.plugin = plugin;
+
                mediaServiceData.insert(service, d);
             }
 
