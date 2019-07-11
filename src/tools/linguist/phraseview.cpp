@@ -130,7 +130,7 @@ void PhraseView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void PhraseView::guessShortcut(int key)
 {
-   foreach (const Phrase * phrase, m_phraseModel->phraseList())
+   for (const Phrase * phrase : m_phraseModel->phraseList())
    if (phrase->shortcut() == key) {
       emit phraseSelected(m_modelIndex, phrase->target());
       return;
@@ -215,14 +215,14 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
       return;
    }
 
-   foreach (Phrase * p, getPhrases(model, sourceText))
+   for (Phrase * p : getPhrases(model, sourceText))
    m_phraseModel->addPhrase(p);
 
    if (!sourceText.isEmpty() && m_doGuesses) {
       CandidateList cl = similarTextHeuristicCandidates(m_dataModel, model,
                          sourceText.toLatin1(), MaxCandidates);
       int n = 0;
-      foreach (const Candidate & candidate, cl) {
+      for (const Candidate & candidate : cl) {
          QString def;
          if (n < 9) {
             def = tr("Guess (%1)").arg(QString(QKeySequence(Qt::CTRL | (Qt::Key_0 + (n + 1)))));
@@ -243,9 +243,9 @@ QList<Phrase *> PhraseView::getPhrases(int model, const QString &source)
    QString f = MainWindow::friendlyString(source);
    QStringList lookupWords = f.split(QLatin1Char(' '));
 
-   foreach (const QString & s, lookupWords) {
+   for (const QString & s : lookupWords) {
       if (m_phraseDict->at(model).contains(s)) {
-         foreach (Phrase * p, m_phraseDict->at(model).value(s)) {
+         for (Phrase * p : m_phraseDict->at(model).value(s)) {
             if (f.contains(MainWindow::friendlyString(p->source()))) {
                phrases.append(p);
             }

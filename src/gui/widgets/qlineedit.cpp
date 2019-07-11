@@ -1722,24 +1722,33 @@ void QLineEdit::changeEvent(QEvent *ev)
             update();
          }
          break;
+
       case QEvent::FontChange:
          d->control->setFont(font());
          break;
+
       case QEvent::StyleChange: {
          QStyleOptionFrame opt;
          initStyleOption(&opt);
          d->control->setPasswordCharacter(style()->styleHint(QStyle::SH_LineEdit_PasswordCharacter, &opt, this));
          d->control->setPasswordMaskDelay(style()->styleHint(QStyle::SH_LineEdit_PasswordMaskDelay, &opt, this));
-      }
-      update();
-      break;
+       }
+
+       update();
+       break;
+
       case QEvent::LayoutDirectionChange:
-         foreach (const QLineEditPrivate::SideWidgetEntry &e, d->trailingSideWidgets) // Refresh icon to show arrow in right direction.
+         for (const QLineEditPrivate::SideWidgetEntry &e : d->trailingSideWidgets) {
+            // Refresh icon to show arrow in right direction.
+
             if (e.flags & QLineEditPrivate::SideWidgetClearButton) {
                static_cast<QLineEditIconButton *>(e.widget)->setIcon(d->clearButtonIcon());
             }
+         }
+
          d->positionSideWidgets();
          break;
+
       default:
          break;
    }

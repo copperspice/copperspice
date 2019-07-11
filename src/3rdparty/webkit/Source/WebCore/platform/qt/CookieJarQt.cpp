@@ -90,7 +90,7 @@ String cookies(const Document* document, const KURL& url)
         return String();
 
     QStringList resultCookies;
-    foreach (const QNetworkCookie& networkCookie, cookies) {
+    for (const QNetworkCookie& networkCookie : cookies) {
         if (networkCookie.isHttpOnly())
             continue;
         resultCookies.append(QString::fromLatin1(networkCookie.toRawForm(QNetworkCookie::NameAndValueOnly).constData()));
@@ -110,7 +110,7 @@ String cookieRequestHeaderFieldValue(const Document* document, const KURL &url)
         return String();
 
     QStringList resultCookies;
-    foreach (QNetworkCookie networkCookie, cookies)
+    for (QNetworkCookie networkCookie : cookies)
         resultCookies.append(QString::fromLatin1(networkCookie.toRawForm(QNetworkCookie::NameAndValueOnly).constData()));
 
     return resultCookies.join(QLatin1String("; "));

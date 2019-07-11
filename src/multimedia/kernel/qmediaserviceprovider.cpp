@@ -256,8 +256,9 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
             case QMediaServiceProviderHint::SupportedFeatures:
                plugin = plugins[0];
-               foreach (QMediaServiceProviderPlugin *currentPlugin, plugins) {
-                  QMediaServiceFeaturesInterface *iface = qobject_cast<QMediaServiceFeaturesInterface *>(currentPlugin);
+
+               for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
+                  QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(currentPlugin);
 
                   if (iface) {
                      if ((iface->supportedFeatures(key) & hint.features()) == hint.features()) {

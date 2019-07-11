@@ -40,13 +40,14 @@ namespace WebCore {
 Vector<ProxyServer> proxyServersForURL(const KURL& url, const NetworkingContext* context)
 {
     Vector<ProxyServer> servers;
-    
+
     const QNetworkAccessManager* accessManager = context ? context->networkAccessManager() : 0;
     QNetworkProxyFactory* proxyFactory = accessManager ? accessManager->proxyFactory() : 0;
 
     if (proxyFactory) {
         const QList<QNetworkProxy> proxies = proxyFactory->queryProxy(QNetworkProxyQuery(url));
-        Q_FOREACH(const QNetworkProxy& proxy, proxies) {
+
+        for (const QNetworkProxy& proxy : proxies) {
             ProxyServer::Type proxyType;
             switch (proxy.type()) {
             case QNetworkProxy::Socks5Proxy:

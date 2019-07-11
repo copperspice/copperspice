@@ -40,8 +40,6 @@
 #ifndef QT_NO_BEARERMANAGEMENT
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_NAMESPACE
-
 QNetworkManagerEngine::QNetworkManagerEngine(QObject *parent)
 :   QBearerEngineImpl(parent),
     interface(new QNetworkManagerInterface(this)),
@@ -89,26 +87,26 @@ void QNetworkManagerEngine::initialize()
     QMutexLocker locker(&mutex);
 
     // Get current list of access points.
-    foreach (const QDBusObjectPath &devicePath, interface->getDevices()) {
+    for (const QDBusObjectPath &devicePath : interface->getDevices()) {
         locker.unlock();
         deviceAdded(devicePath);
         locker.relock();
     }
 
     // Get connections.
-    foreach (const QDBusObjectPath &settingsPath, systemSettings->listConnections()) {
+    for (const QDBusObjectPath &settingsPath : systemSettings->listConnections()) {
         locker.unlock();
         newConnection(settingsPath, systemSettings);
         locker.relock();
     }
-    foreach (const QDBusObjectPath &settingsPath, userSettings->listConnections()) {
+    for (const QDBusObjectPath &settingsPath : userSettings->listConnections()) {
         locker.unlock();
         newConnection(settingsPath, userSettings);
         locker.relock();
     }
 
     // Get active connections.
-    foreach (const QDBusObjectPath &acPath, interface->activeConnections()) {
+    for (const QDBusObjectPath &acPath : interface->activeConnections()) {
         QNetworkManagerConnectionActive *activeConnection =
             new QNetworkManagerConnectionActive(acPath.path());
         activeConnections.insert(acPath.path(), activeConnection);
@@ -130,7 +128,7 @@ QString QNetworkManagerEngine::getInterfaceFromId(const QString &id)
 {
     QMutexLocker locker(&mutex);
 
-    foreach (const QDBusObjectPath &acPath, interface->activeConnections()) {
+    for (const QDBusObjectPath &acPath : interface->activeConnections()) {
         QNetworkManagerConnectionActive activeConnection(acPath.path());
 
         const QString identifier = QString::number(qHash(activeConnection.serviceName() + ' ' +
@@ -183,7 +181,7 @@ void QNetworkManagerEngine::connectToId(const QString &id)
     const QString connectionType = map.value("connection").value("type").toString();
 
     QString dbusDevicePath;
-    foreach (const QDBusObjectPath &devicePath, interface->getDevices()) {
+    for (const QDBusObjectPath &devicePath : interface->getDevices()) {
         QNetworkManagerInterfaceDevice device(devicePath.path());
         if (device.deviceType() == DEVICE_TYPE_802_3_ETHERNET &&
             connectionType == QLatin1String("802-3-ethernet")) {
@@ -212,7 +210,7 @@ void QNetworkManagerEngine::disconnectFromId(const QString &id)
 {
     QMutexLocker locker(&mutex);
 
-    foreach (const QDBusObjectPath &acPath, interface->activeConnections()) {
+    for (const QDBusObjectPath &acPath : interface->activeConnections()) {
         QNetworkManagerConnectionActive activeConnection(acPath.path());
 
         const QString identifier = QString::number(qHash(activeConnection.serviceName() + ' ' +
@@ -248,12 +246,12 @@ void QNetworkManagerEngine::interfacePropertiesChanged(const QString &path,
                 qdbus_cast<QList<QDBusObjectPath> >(i.value().value<QDBusArgument>());
 
             QStringList identifiers = accessPointConfigurations.keys();
-            foreach (const QString &id, identifiers)
+            for (const QString &id : identifiers)
                 QNetworkConfigurationPrivatePointer ptr = accessPointConfigurations.value(id);
 
             QStringList priorActiveConnections = this->activeConnections.keys();
 
-            foreach (const QDBusObjectPath &acPath, activeConnections) {
+            for (const QDBusObjectPath &acPath : activeConnections) {
                 priorActiveConnections.removeOne(acPath.path());
                 QNetworkManagerConnectionActive *activeConnection =
                     this->activeConnections.value(acPath.path());
@@ -366,7 +364,7 @@ void QNetworkManagerEngine::deviceAdded(const QDBusObjectPath &path)
         connect(wirelessDevice, SIGNAL(propertiesChanged(QString,QMap<QString,QVariant>)),
                 this, SLOT(devicePropertiesChanged(QString,QMap<QString,QVariant>)));
 
-        foreach (const QDBusObjectPath &apPath, wirelessDevice->getAccessPoints())
+        for (const QDBusObjectPath &apPath : wirelessDevice->getAccessPoints())
             newAccessPoint(QString(), apPath);
 
         mutex.lock();
@@ -409,7 +407,7 @@ void QNetworkManagerEngine::newConnection(const QDBusObjectPath &path,
         parseConnection(service, settingsPath, connection->getSettings());
 
     // Check if connection is active.
-    foreach (const QDBusObjectPath &acPath, interface->activeConnections()) {
+    for (const QDBusObjectPath &acPath : interface->activeConnections()) {
         QNetworkManagerConnectionActive activeConnection(acPath.path());
 
         if (activeConnection.serviceName() == service &&
@@ -466,7 +464,7 @@ void QNetworkManagerEngine::updateConnection(const QNmSettingsMap &settings)
     QNetworkConfigurationPrivate *cpPriv = parseConnection(service, settingsPath, settings);
 
     // Check if connection is active.
-    foreach (const QDBusObjectPath &acPath, interface->activeConnections()) {
+    for (const QDBusObjectPath &acPath : interface->activeConnections()) {
         QNetworkManagerConnectionActive activeConnection(acPath.path());
 
         if (activeConnection.serviceName() == service &&
@@ -697,7 +695,7 @@ QNetworkConfigurationPrivate *QNetworkManagerEngine::parseConnection(const QStri
         cpPriv->bearerType = QNetworkConfiguration::BearerEthernet;
         cpPriv->purpose = QNetworkConfiguration::PublicPurpose;
 
-        foreach (const QDBusObjectPath &devicePath, interface->getDevices()) {
+        for (const QDBusObjectPath &devicePath : interface->getDevices()) {
             QNetworkManagerInterfaceDevice device(devicePath.path());
             if (device.deviceType() == DEVICE_TYPE_802_3_ETHERNET) {
                 QNetworkManagerInterfaceDeviceWired wiredDevice(device.connectionInterface()->path());
@@ -775,7 +773,7 @@ QNetworkSession::State QNetworkManagerEngine::sessionStateForId(const QString &i
     if (!ptr->isValid)
         return QNetworkSession::Invalid;
 
-    foreach (const QString &acPath, activeConnections.keys()) {
+    for (const QString &acPath : activeConnections.keys()) {
         QNetworkManagerConnectionActive *activeConnection = activeConnections.value(acPath);
 
         const QString identifier = QString::number(qHash(activeConnection->serviceName() + ' ' +
@@ -885,8 +883,6 @@ QNetworkConfigurationPrivatePointer QNetworkManagerEngine::defaultConfiguration(
 {
     return QNetworkConfigurationPrivatePointer();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_DBUS
 #endif // QT_NO_BEARERMANAGEMENT

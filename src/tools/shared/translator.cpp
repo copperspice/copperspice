@@ -169,7 +169,8 @@ void Translator::appendSorted(const TranslatorMessage &msg)
    // Working vars
    int prevLine = 0;
    int curIdx = 0;
-   foreach (const TranslatorMessage & mit, m_messages) {
+
+   for (const TranslatorMessage & mit : m_messages) {
       bool sameFile = mit.fileName() == msg.fileName() && mit.context() == msg.context();
       int curLine;
       if (sameFile && (curLine = mit.lineNumber()) >= prevLine) {
@@ -216,7 +217,7 @@ static QString guessFormat(const QString &filename, const QString &format)
       return format;
    }
 
-   foreach (const Translator::FileFormat & fmt, Translator::registeredFileFormats()) {
+   for (const Translator::FileFormat &fmt : Translator::registeredFileFormats()) {
       if (filename.endsWith(QLatin1Char('.') + fmt.extension, Qt::CaseInsensitive)) {
          return fmt.extension;
       }
@@ -369,14 +370,20 @@ int Translator::find(const QString &context, const QString &comment, const Trans
    if (!refs.isEmpty()) {
       for (TMM::const_iterator it = m_messages.constBegin(); it != m_messages.constEnd(); ++it) {
 
-         if (it->context() == context && it->comment() == comment)
-            foreach (const TranslatorMessage::Reference & itref, it->allReferences())
-            foreach (const TranslatorMessage::Reference & ref, refs)
-            if (itref == ref) {
-               return it - m_messages.constBegin();
-            }
+         if (it->context() == context && it->comment() == comment) {
+            for (const TranslatorMessage::Reference & itref : it->allReferences()) {
+
+               for (const TranslatorMessage::Reference & ref : refs) {
+                  if (itref == ref) {
+                     return it - m_messages.constBegin();
+                  }
+               }
+
+             }
+         }
       }
    }
+
    return -1;
 }
 
@@ -463,7 +470,7 @@ void Translator::dropUiLines()
       QHash<QString, int> have;
       QList<TranslatorMessage::Reference> refs;
 
-      foreach (const TranslatorMessage::Reference & itref, it->allReferences()) {
+      for (const TranslatorMessage::Reference & itref : it->allReferences()) {
          const QString &fn = itref.fileName();
          if (fn.endsWith(uiXt) || fn.endsWith(juiXt)) {
             if (++have[fn] == 1) {
@@ -608,16 +615,21 @@ void Translator::reportDuplicates(const Duplicates &dupes,
 {
    if (!dupes.byId.isEmpty() || !dupes.byContents.isEmpty()) {
       std::cerr << "Warning: dropping duplicate messages in '" << qPrintable(fileName);
+
       if (!verbose) {
          std::cerr << "'\n(try -verbose for more info).\n";
+
       } else {
          std::cerr << "':\n";
-         foreach (int i, dupes.byId)
+
+         for (int i : dupes.byId)
          std::cerr << "\n* ID: " << qPrintable(message(i).id()) << std::endl;
-         foreach (int j, dupes.byContents) {
+
+         for (int j : dupes.byContents) {
             const TranslatorMessage &msg = message(j);
             std::cerr << "\n* Context: " << qPrintable(msg.context())
                       << "\n* Source: " << qPrintable(msg.sourceText()) << std::endl;
+
             if (!msg.comment().isEmpty()) {
                std::cerr << "* Comment: " << qPrintable(msg.comment()) << std::endl;
             }
@@ -634,7 +646,8 @@ void Translator::makeFileNamesAbsolute(const QDir &originalPath)
       TranslatorMessage &msg = *it;
       TranslatorMessage::References refs = msg.allReferences();
       msg.setReferences(TranslatorMessage::References());
-      foreach (const TranslatorMessage::Reference & ref, refs) {
+
+      for (const TranslatorMessage::Reference & ref : refs) {
          QString fileName = ref.fileName();
          QFileInfo fi (fileName);
          if (fi.isRelative()) {

@@ -57,14 +57,16 @@ class LU
 };
 
 static void recursiveFileInfoList(const QDir &dir,
-                                  const QSet<QString> &nameFilters, QDir::Filters filter,
-                                  QFileInfoList *fileinfolist)
+   const QSet<QString> &nameFilters, QDir::Filters filter, QFileInfoList *fileinfolist)
 {
-   foreach (const QFileInfo & fi, dir.entryInfoList(filter))
-   if (fi.isDir()) {
-      recursiveFileInfoList(QDir(fi.absoluteFilePath()), nameFilters, filter, fileinfolist);
-   } else if (nameFilters.contains(fi.suffix())) {
-      fileinfolist->append(fi);
+   for (const QFileInfo &fi : dir.entryInfoList(filter)) {
+
+      if (fi.isDir()) {
+         recursiveFileInfoList(QDir(fi.absoluteFilePath()), nameFilters, filter, fileinfolist);
+
+      } else if (nameFilters.contains(fi.suffix())) {
+         fileinfolist->append(fi);
+      }
    }
 }
 
@@ -134,7 +136,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
    QDir dir;
    QString err;
 
-   foreach (const QString & fileName, tsFileNames) {
+   for (const QString &fileName : tsFileNames) {
       QString fn = dir.relativeFilePath(fileName);
 
       ConversionData cd;
@@ -452,9 +454,9 @@ int main(int argc, char **argv)
       }
 
       if (metTsFlag) {
-         foreach (const QString & file, files) {
+         for (const QString &file : files) {
             bool found = false;
-            foreach (const Translator::FileFormat & fmt, Translator::registeredFileFormats()) {
+            for (const Translator::FileFormat &fmt : Translator::registeredFileFormats()) {
                if (file.endsWith(QLatin1Char('.') + fmt.extension, Qt::CaseInsensitive)) {
                   QFileInfo fi(file);
                   if (!fi.exists() || fi.isWritable()) {
@@ -474,7 +476,7 @@ int main(int argc, char **argv)
          numFiles++;
 
       } else {
-         foreach (const QString & file, files) {
+         for (const QString &file : files) {
             QFileInfo fi(file);
             if (!fi.exists()) {
                printErr(LU::tr("lupdate error: File '%1' does not exist.\n").formatArg(file));
@@ -489,7 +491,7 @@ int main(int argc, char **argv)
                projectRoots.insert(dir.absolutePath() + QLatin1Char('/'));
 
                if (extensionsNameFilters.isEmpty()) {
-                  foreach (QString ext, extensions.split(QLatin1Char(','))) {
+                  for (QString ext : extensions.split(',')) {
                      ext = ext.trimmed();
                      if (ext.startsWith(QLatin1Char('.'))) {
                         ext.remove(0, 1);
@@ -506,7 +508,7 @@ int main(int argc, char **argv)
                recursiveFileInfoList(dir, extensionsNameFilters, filters, &fileinfolist);
                int scanRootLen = dir.absolutePath().length();
 
-               foreach (const QFileInfo & fi, fileinfolist) {
+               for (const QFileInfo &fi : fileinfolist) {
                   QString fn = QDir::cleanPath(fi.absoluteFilePath());
                   sourceFiles << fn;
 

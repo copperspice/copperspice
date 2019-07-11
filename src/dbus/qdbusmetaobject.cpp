@@ -59,7 +59,7 @@ private:
         QVarLengthArray<int, 4> outputTypes;
         int flags;
     };
-    
+
     struct Property {
         QByteArray typeName;
         QByteArray signature;
@@ -109,14 +109,14 @@ private:
 
     QMap<QByteArray, Method> methods;
     QMap<QByteArray, Property> properties;
-    
+
     const QDBusIntrospection::Interface *data;
     QString interface;
 
     Type findType(const QByteArray &signature,
                   const QDBusIntrospection::Annotations &annotations,
                   const char *direction = "Out", int id = -1);
-    
+
     void parseMethods();
     void parseSignals();
     void parseProperties();
@@ -134,7 +134,7 @@ struct QDBusMetaObjectPrivate
     int methodCount, methodData;
     int propertyCount, propertyData;
     int enumeratorCount, enumeratorData;
-    
+
     // this is specific for QDBusMetaObject:
     int propertyDBusData;
     int methodDBusData;
@@ -256,7 +256,7 @@ void QDBusMetaObjectGenerator::parseMethods()
 
             mm.parameters.append(arg.name.toLatin1());
             mm.parameters.append(',');
-            
+
             prototype.append(type.name);
             prototype.append(',');
         }
@@ -338,7 +338,7 @@ void QDBusMetaObjectGenerator::parseSignals()
 
             mm.parameters.append(arg.name.toLatin1());
             mm.parameters.append(',');
-            
+
             prototype.append(type.name);
             prototype.append(',');
         }
@@ -370,7 +370,7 @@ void QDBusMetaObjectGenerator::parseProperties()
         Type type = findType(p.type.toLatin1(), p.annotations);
         if (type.id == QVariant::Invalid)
             continue;
-        
+
         QByteArray name = p.name.toLatin1();
         mp.signature = p.type.toLatin1();
         mp.type = type.id;
@@ -398,7 +398,7 @@ void QDBusMetaObjectGenerator::write(QDBusMetaObject *obj)
 {
     // this code here is mostly copied from qaxbase.cpp
     // with a few modifications to make it cleaner
-    
+
     QString className = interface;
     className.replace(QLatin1Char('.'), QLatin1String("::"));
     if (className.isEmpty())
@@ -424,8 +424,10 @@ void QDBusMetaObjectGenerator::write(QDBusMetaObject *obj)
     int data_size = idata.size() +
                     (header->methodCount * (5+intsPerMethod)) +
                     (header->propertyCount * (3+intsPerProperty));
-    foreach (const Method &mm, methods)
+    for (const Method &mm : methods) {
         data_size += 2 + mm.inputTypes.count() + mm.outputTypes.count();
+    }
+
     idata.resize(data_size + 1);
 
     char null('\0');
@@ -535,7 +537,7 @@ void QDBusMetaObjectGenerator::writeWithoutXml(const QString &interface)
 
     char *stringdata = new char[name.length() + 1];
     stringdata[name.length()] = '\0';
-    
+
     d.data = reinterpret_cast<uint*>(header);
     d.extradata = 0;
     d.stringdata = stringdata;
@@ -584,7 +586,7 @@ QDBusMetaObject *QDBusMetaObject::createMetaObject(const QString &interface, con
     if (we)
         return we;
     // still nothing?
-    
+
     if (parsed.isEmpty()) {
         // object didn't return introspection
         we = new QDBusMetaObject;
@@ -596,7 +598,7 @@ QDBusMetaObject *QDBusMetaObject::createMetaObject(const QString &interface, con
         // merge all interfaces
         it = parsed.constBegin();
         QDBusIntrospection::Interface merged = *it.value().constData();
- 
+
         for (++it; it != end; ++it) {
             merged.annotations.unite(it.value()->annotations);
             merged.methods.unite(it.value()->methods);

@@ -481,7 +481,7 @@ void QMediaTimeRange::addInterval(const QMediaTimeInterval &interval)
 */
 void QMediaTimeRange::addTimeRange(const QMediaTimeRange &range)
 {
-   foreach (const QMediaTimeInterval &i, range.intervals()) {
+   for (const QMediaTimeInterval &i : range.intervals()) {
       d->addInterval(i);
    }
 }
@@ -530,7 +530,7 @@ void QMediaTimeRange::removeInterval(const QMediaTimeInterval &interval)
 */
 void QMediaTimeRange::removeTimeRange(const QMediaTimeRange &range)
 {
-   foreach (const QMediaTimeInterval &i, range.intervals()) {
+   for (const QMediaTimeInterval &i : range.intervals()) {
       d->removeInterval(i);
    }
 }
@@ -701,13 +701,17 @@ QMediaTimeRange operator-(const QMediaTimeRange &r1, const QMediaTimeRange &r2)
 QDebug operator<<(QDebug dbg, const QMediaTimeRange &range)
 {
    QDebugStateSaver saver(dbg);
+
    dbg.nospace();
    dbg << "QMediaTimeRange( ";
-   foreach (const QMediaTimeInterval &interval, range.intervals()) {
+
+   for (const QMediaTimeInterval &interval : range.intervals()) {
       dbg << '(' <<  interval.start() << ", " << interval.end() << ") ";
    }
+
    dbg.space();
    dbg << ')';
+
    return dbg;
 }
 

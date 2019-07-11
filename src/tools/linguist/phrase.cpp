@@ -293,22 +293,26 @@ bool PhraseBook::save(const QString &fileName)
    if (sourceLanguage() != QLocale::C)
       t << " sourcelanguage=\""
         << Translator::makeLanguageCode(sourceLanguage(), sourceCountry()) << '"';
+
    if (language() != QLocale::C) {
       t << " language=\"" << Translator::makeLanguageCode(language(), country()) << '"';
    }
    t << ">\n";
-   foreach (Phrase * p, m_phrases) {
+   for (Phrase * p : m_phrases) {
       t << "<phrase>\n";
       t << "    <source>" << protect( p->source() ) << "</source>\n";
       t << "    <target>" << protect( p->target() ) << "</target>\n";
+
       if (!p->definition().isEmpty())
          t << "    <definition>" << protect( p->definition() )
            << "</definition>\n";
       t << "</phrase>\n";
    }
+
    t << "</QPH>\n";
    f.close();
    setModified(false);
+
    return true;
 }
 

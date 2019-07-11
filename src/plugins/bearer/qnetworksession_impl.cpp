@@ -281,7 +281,7 @@ void QNetworkSessionPrivateImpl::updateStateFromServiceNetwork()
 {
     QNetworkSession::State oldState = state;
 
-    foreach (const QNetworkConfiguration &config, serviceConfig.children()) {
+    for (const QNetworkConfiguration &config : serviceConfig.children()) {
         if ((config.state() & QNetworkConfiguration::Active) != QNetworkConfiguration::Active)
             continue;
 

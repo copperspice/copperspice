@@ -1167,8 +1167,9 @@ void QDeclarativeData::disconnectNotifiers()
    }
 
    if (extendedData) {
-      Q_FOREACH (QDeclarativeAbstractBoundSignal * signal, extendedData->boundSignals)
-      signal->disconnect();
+      for(QDeclarativeAbstractBoundSignal * signal : extendedData->boundSignals){
+         signal->disconnect();
+      }
    }
 }
 

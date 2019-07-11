@@ -89,7 +89,7 @@ const QRect QDesktopWidget::availableGeometry(const QWidget *widget) const
 
 QDesktopScreenWidget *QDesktopWidgetPrivate::widgetForScreen(QScreen *qScreen) const
 {
-   foreach (QDesktopScreenWidget *widget, screens) {
+   for (QDesktopScreenWidget *widget : screens) {
       if (widget->screen() == qScreen) {
          return widget;
       }
@@ -163,7 +163,8 @@ void QDesktopWidgetPrivate::_q_updateScreens()
       // to notice that a screen was swapped out against another one.
       emit q->screenCountChanged(targetLength);
    }
-   foreach (int changedScreen, changedScreens) {
+
+   for (int changedScreen : changedScreens) {
       emit q->resized(changedScreen);
    }
 }
@@ -280,16 +281,18 @@ int QDesktopWidget::screenNumber(const QWidget *w) const
 
    QScreen *widgetScreen = nullptr;
    int largestArea = 0;
-   foreach (QScreen *screen, screens) {
-      const QRect deviceIndependentScreenGeometry =
-         QHighDpi::fromNativePixels(screen->handle()->geometry(), screen);
+
+   for (QScreen *screen : screens) {
+      const QRect deviceIndependentScreenGeometry = QHighDpi::fromNativePixels(screen->handle()->geometry(), screen);
       const QRect intersected = deviceIndependentScreenGeometry.intersected(frame);
+
       int area = intersected.width() * intersected.height();
       if (largestArea < area) {
          widgetScreen = screen;
          largestArea = area;
       }
    }
+
    return allScreens.indexOf(widgetScreen);
 }
 
@@ -327,12 +330,12 @@ void QDesktopWidget::resizeEvent(QResizeEvent *)
 
 void QDesktopWidget::_q_updateScreens()
 {
-	Q_D(QDesktopWidget);
-	d->_q_updateScreens();
+   Q_D(QDesktopWidget);
+   d->_q_updateScreens();
 }
 
 void QDesktopWidget::_q_availableGeometryChanged()
 {
-	Q_D(QDesktopWidget);
-	d->_q_availableGeometryChanged();
+   Q_D(QDesktopWidget);
+   d->_q_availableGeometryChanged();
 }

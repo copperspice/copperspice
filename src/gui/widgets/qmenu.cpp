@@ -898,13 +898,17 @@ void QMenuPrivate::updateLayoutDirection()
    //we need to mimic the cause of the popup's layout direction
    //to allow setting it on a mainwindow for example
    //we call setLayoutDirection_helper to not overwrite a user-defined value
-   if (!q->testAttribute(Qt::WA_SetLayoutDirection)) {
+
+   if (! q->testAttribute(Qt::WA_SetLayoutDirection)) {
       if (QWidget *w = causedPopup.widget) {
          setLayoutDirection_helper(w->layoutDirection());
+
       } else if (QWidget *w = q->parentWidget()) {
          setLayoutDirection_helper(w->layoutDirection());
+
       } else {
          setLayoutDirection_helper(QApplication::layoutDirection());
+
       }
    }
 }
@@ -1411,13 +1415,17 @@ void QMenuPrivate::_q_platformMenuAboutToShow()
 
 #ifdef Q_OS_MAC
    if (platformMenu)
-      Q_FOREACH (QAction *action, q->actions())
-         if (QWidget *widget = widgetItems.value(action))
+
+      for (QAction *action : q->actions()) {
+
+         if (QWidget *widget = widgetItems.value(action)) {
             if (widget->parent() == q) {
                QPlatformMenuItem *menuItem = platformMenu->menuItemForTag(reinterpret_cast<quintptr>(action));
                moveWidgetToPlatformItem(widget, menuItem);
                platformMenu->syncMenuItem(menuItem);
             }
+         }
+      }
 #endif
 
    emit q->aboutToShow();
@@ -1586,7 +1594,6 @@ QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QS
    return action;
 }
 
-
 QAction *QMenu::addAction(const QIcon &icon, const QString &text, const QObject *receiver,
    const QString &member, const QKeySequence &shortcut)
 {
@@ -1602,7 +1609,6 @@ QAction *QMenu::addAction(const QIcon &icon, const QString &text, const QObject 
    addAction(action);
    return action;
 }
-
 
 QAction *QMenu::addMenu(QMenu *menu)
 {

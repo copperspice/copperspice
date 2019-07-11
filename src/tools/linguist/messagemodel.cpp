@@ -210,14 +210,15 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    if (!dupes.byId.isEmpty() || !dupes.byContents.isEmpty()) {
       QString err = tr("<qt>Duplicate messages found in '%1':").arg(Qt::escape(fileName));
       int numdups = 0;
-      foreach (int i, dupes.byId) {
+      for (int i : dupes.byId) {
          if (++numdups >= 5) {
             err += tr("<p>[more duplicates omitted]");
             goto doWarn;
          }
          err += tr("<p>* ID: %1").arg(Qt::escape(tor.message(i).id()));
       }
-      foreach (int j, dupes.byContents) {
+
+      for (int j : dupes.byContents) {
          const TranslatorMessage &msg = tor.message(j);
          if (++numdups >= 5) {
             err += tr("<p>[more duplicates omitted]");
@@ -246,7 +247,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    m_srcChars = 0;
    m_srcCharsSpc = 0;
 
-   foreach (const TranslatorMessage & msg, tor.messages()) {
+   for (const TranslatorMessage & msg : tor.messages()) {
       if (!contexts.contains(msg.context())) {
          contexts.insert(msg.context(), m_contextList.size());
          m_contextList.append(ContextItem(msg.context()));
@@ -448,7 +449,7 @@ void DataModel::updateStatistics()
    for (DataModelIterator it(this); it.isValid(); ++it) {
       const MessageItem *mi = it.current();
       if (mi->isFinished())
-         foreach (const QString & trnsl, mi->translations())
+         for (const QString & trnsl : mi->translations())
          doCharCounting(trnsl, trW, trC, trCS);
    }
 
@@ -609,7 +610,7 @@ void MultiContextItem::appendMessageItems(const QList<MessageItem *> &m)
       m_messageLists[i] += nullItems;
    }
    m_messageLists.last() += m;
-   foreach (MessageItem * mi, m)
+   for (MessageItem * mi : m)
    m_multiMessageList.append(MultiMessageItem(mi));
 }
 
@@ -850,7 +851,7 @@ QStringList MultiDataModel::prettifyFileNames(const QStringList &names)
 {
    QStringList out;
 
-   foreach (const QString & name, names)
+   for (const QString & name : names)
    out << DataModel::prettifyFileName(name);
    return out;
 }
@@ -923,7 +924,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 QStringList MultiDataModel::srcFileNames(bool pretty) const
 {
    QStringList names;
-   foreach (DataModel * dm, m_dataModels)
+   for (DataModel * dm : m_dataModels)
    names << (dm->isWritable() ? QString() : QString::fromLatin1("=")) + dm->srcFileName(pretty);
    return names;
 }
@@ -935,7 +936,7 @@ QString MultiDataModel::condensedSrcFileNames(bool pretty) const
 
 bool MultiDataModel::isModified() const
 {
-   foreach (const DataModel * mdl, m_dataModels)
+   for (const DataModel * mdl : m_dataModels)
    if (mdl->isModified()) {
       return true;
    }

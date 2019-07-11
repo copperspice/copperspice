@@ -303,7 +303,7 @@ QStringList QConnmanManagerInterface::getTechnologies()
     QStringList list;
     QDBusReply<ConnmanMapList> replyList = this->call(QLatin1String("GetTechnologies"));
     if (replyList.isValid()) {
-        Q_FOREACH (ConnmanMap map, replyList.value()) {
+        for  (ConnmanMap map : replyList.value()) {
             list << map.objectPath.path();
         }
     } else {
@@ -321,7 +321,7 @@ QStringList QConnmanManagerInterface::getServices()
     QStringList list;
     QDBusReply<ConnmanMapList> replyList = this->call(QLatin1String("GetServices"));
     if (replyList.isValid()) {
-        Q_FOREACH (ConnmanMap map, replyList.value()) {
+        for  (ConnmanMap map : replyList.value()) {
             list << map.objectPath.path();
         }
     } else {
@@ -336,7 +336,7 @@ QStringList QConnmanManagerInterface::getServices()
 
 QString QConnmanManagerInterface::getPathForTechnology(const QString &name)
 {
-    foreach(const QString path, getTechnologies()) {
+    for(const QString path : getTechnologies()) {
         if(path.contains(name)) {
             return path;
         }

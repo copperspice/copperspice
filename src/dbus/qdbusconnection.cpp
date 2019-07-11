@@ -804,7 +804,7 @@ bool QDBusConnection::registerObject(const QString &path, QObject *object, Regis
             if (options & QDBusConnectionPrivate::VirtualObject) {
                 // technically the check for children needs to go even deeper
                 if (options & SubPath) {
-                    foreach (const QDBusConnectionPrivate::ObjectTreeNode &child, node->children) {
+                    for (const QDBusConnectionPrivate::ObjectTreeNode &child : node->children) {
                         if (child.obj)
                             return false;
                     }

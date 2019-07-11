@@ -1454,7 +1454,7 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
 
 
                   QList<QVariant> out;
-                  foreach (const QPrint::InputSlot inputSlot, d->m_printDevice.supportedInputSlots()) {
+                  for (const QPrint::InputSlot inputSlot : d->m_printDevice.supportedInputSlots()) {
                      out << QVariant(inputSlot.id == QPrint::CustomInputSlot ? inputSlot.windowsId : int(inputSlot.id));
                   }
                   value = out;

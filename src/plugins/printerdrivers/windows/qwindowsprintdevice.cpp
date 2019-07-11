@@ -227,7 +227,7 @@ QPageSize QWindowsPrintDevice::defaultPageSize() const
       // Get the default paper size
       if (pDevMode->dmFields & DM_PAPERSIZE) {
          // Find the supported page size that matches, in theory default should be one of them
-         foreach (const QPageSize &ps, m_pageSizes) {
+         for (const QPageSize &ps : m_pageSizes) {
             if (ps.windowsId() == pDevMode->dmPaperSize) {
                pageSize = ps;
                break;
@@ -379,7 +379,7 @@ QPrint::InputSlot QWindowsPrintDevice::defaultInputSlot() const
       // Get the default input slot
       if (pDevMode->dmFields & DM_DEFAULTSOURCE) {
          QPrint::InputSlot tempSlot = paperBinToInputSlot(pDevMode->dmDefaultSource, QString());
-         foreach (const QPrint::InputSlot &slot, supportedInputSlots()) {
+         for (const QPrint::InputSlot &slot : supportedInputSlots()) {
             if (slot.key == tempSlot.key) {
                inputSlot = slot;
                break;

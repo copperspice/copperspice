@@ -86,7 +86,7 @@ bool QMediaPlaylistProvider::addMedia(const QMediaContent &media)
 */
 bool QMediaPlaylistProvider::addMedia(const QList<QMediaContent> &items)
 {
-   foreach (const QMediaContent &item, items) {
+   for (const QMediaContent &item : items) {
       if (!addMedia(item)) {
          return false;
       }

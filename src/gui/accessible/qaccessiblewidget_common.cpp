@@ -280,13 +280,11 @@ void QAccessibleTextEdit::scrollToSubstring(int startIndex, int endIndex)
 
    cursor.setPosition(endIndex);
    r.setBottomRight(edit->cursorRect(cursor).bottomRight());
-
-   r.moveTo(r.x() + edit->horizontalScrollBar()->value(),
-      r.y() + edit->verticalScrollBar()->value());
+   r.moveTo(r.x() + edit->horizontalScrollBar()->value(), r.y() + edit->verticalScrollBar()->value());
 
    // E V I L, but ensureVisible is not public
-   if (!QMetaObject::invokeMethod(edit, "_q_ensureVisible", Q_ARG(QRectF, r))) {
-      qWarning("AccessibleTextEdit::scrollToSubstring failed!");
+   if (! QMetaObject::invokeMethod(edit, "_q_ensureVisible", Q_ARG(const QRectF &, r))) {
+      qWarning("AccessibleTextEdit::scrollToSubstring failed");
    }
 }
 
@@ -561,7 +559,7 @@ QCalendarWidget *QAccessibleCalendarWidget::calendarWidget() const
 
 QAbstractItemView *QAccessibleCalendarWidget::calendarView() const
 {
-   foreach (QObject *child, calendarWidget()->children()) {
+   for (QObject *child : calendarWidget()->children()) {
       if (child->objectName() == QLatin1String("qt_calendar_calendarview")) {
          return static_cast<QAbstractItemView *>(child);
       }
@@ -571,7 +569,7 @@ QAbstractItemView *QAccessibleCalendarWidget::calendarView() const
 
 QWidget *QAccessibleCalendarWidget::navigationBar() const
 {
-   foreach (QObject *child, calendarWidget()->children()) {
+   for (QObject *child : calendarWidget()->children()) {
       if (child->objectName() == QLatin1String("qt_calendar_navigationbar")) {
          return static_cast<QWidget *>(child);
       }

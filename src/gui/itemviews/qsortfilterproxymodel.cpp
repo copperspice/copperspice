@@ -1407,7 +1407,7 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersisten
    }
 
    QList<QPersistentModelIndex> parents;
-   foreach (const QPersistentModelIndex &parent, sourceParents) {
+   for (const QPersistentModelIndex &parent : sourceParents) {
       if (!parent.isValid()) {
          parents << QPersistentModelIndex();
          continue;
@@ -1428,10 +1428,9 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersisten
 void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeInserted(
    const QModelIndex &source_parent, int start, int end)
 {
-   Q_UNUSED(start);
-   Q_UNUSED(end);
    //Force the creation of a mapping now, even if its empty.
    //We need it because the proxy can be acessed at the moment it emits rowsAboutToBeInserted in insert_source_items
+
    if (can_create_mapping(source_parent)) {
       create_mapping(source_parent);
    }

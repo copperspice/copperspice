@@ -1617,10 +1617,13 @@ void QFileDialogPrivate::_q_emitUrlsSelected(const QList<QUrl> &files)
    Q_Q(QFileDialog);
    emit q->urlsSelected(files);
    QStringList localFiles;
-   foreach (const QUrl &file, files)
+
+   for (const QUrl &file : files) {
       if (file.isLocalFile()) {
          localFiles.append(file.toLocalFile());
       }
+   }
+
    if (!localFiles.isEmpty()) {
       emit q->filesSelected(localFiles);
    }

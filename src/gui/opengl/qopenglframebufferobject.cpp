@@ -926,7 +926,7 @@ QOpenGLFramebufferObject::~QOpenGLFramebufferObject()
     if (isBound())
         release();
 
-    foreach (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color, d->colorAttachments) {
+    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments) {
         if (color.guard)
             color.guard->free();
     }
@@ -1148,7 +1148,8 @@ QVector<GLuint> QOpenGLFramebufferObject::textures() const
     if (d->format.samples() != 0)
         return ids;
     ids.reserve(d->colorAttachments.count());
-    foreach (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color, d->colorAttachments)
+
+    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments)
         ids.append(color.guard ? color.guard->id() : 0);
     return ids;
 }
@@ -1232,7 +1233,8 @@ QVector<QSize> QOpenGLFramebufferObject::sizes() const
     Q_D(const QOpenGLFramebufferObject);
     QVector<QSize> sz;
     sz.reserve(d->colorAttachments.size());
-    foreach (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color, d->colorAttachments)
+
+    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments)
         sz.append(color.size);
     return sz;
 }

@@ -690,7 +690,8 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
 
 static bool containsStripped(const Translator &translator, const TranslatorMessage &msg)
 {
-   foreach (const TranslatorMessage & tmsg, translator.messages())
+   for (const TranslatorMessage & tmsg : translator.messages())
+
    if (tmsg.sourceText() == msg.sourceText()
          && tmsg.context() == msg.context()
          && tmsg.comment().isEmpty()) {

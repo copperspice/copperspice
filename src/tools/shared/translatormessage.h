@@ -125,7 +125,7 @@ class TranslatorMessage
       m_translations.append(translation);
    }
    bool isTranslated() const {
-      foreach (const QString & trans, m_translations)
+      for (const QString & trans : m_translations)
       if (!trans.isEmpty()) {
          return true;
       }

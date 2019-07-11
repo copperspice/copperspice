@@ -816,7 +816,8 @@ QString QApplicationPrivate::desktopStyleKey()
    // The platform theme might return a style that is not available, find first valid one
    if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme()) {
       const QStringList availableKeys = QStyleFactory::keys();
-      foreach (const QString &style, theme->themeHint(QPlatformTheme::StyleNames).toStringList())
+
+      for (const QString &style : theme->themeHint(QPlatformTheme::StyleNames).toStringList())
          if (availableKeys.contains(style, Qt::CaseInsensitive)) {
             return style;
          }
@@ -1201,11 +1202,13 @@ QWidget *qt_tlw_for_window(QWindow *wnd)
          break;
       }
    }
+
    if (wnd)
-      foreach (QWidget *tlw, qApp->topLevelWidgets())
+      for (QWidget *tlw : qApp->topLevelWidgets())
          if (tlw->windowHandle() == wnd) {
             return tlw;
          }
+
    return 0;
 }
 
@@ -2730,15 +2733,19 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   }
                   w = w->parentWidget();
                }
-               foreach (QGesture *g, allGestures) {
+
+               for (QGesture *g : allGestures) {
                   gestureEvent->setAccepted(g, false);
                }
+
                gestureEvent->m_accept = false; // to make sure we check individual gestures
+
             } else {
                res = d->notify_helper(receiver, e);
             }
             break;
          }
+
 #endif // QT_NO_GESTURES
 
 #ifdef Q_OS_MAC
@@ -3008,7 +3015,7 @@ void QApplication::alert(QWidget *widget, int duration)
          window->alert(duration);
       }
    } else {
-      foreach (QWidget *topLevel, topLevelWidgets()) {
+      for (QWidget *topLevel : topLevelWidgets()) {
          QApplication::alert(topLevel, duration);
       }
    }

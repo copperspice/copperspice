@@ -931,9 +931,9 @@ void WriteInitialization::acceptWidget(DomWidget *node)
          || m_uic->customWidgetsInfo()->extends(className, QLatin1String("QTreeWidget"))) {
 
       DomPropertyList headerProperties;
-      foreach (const QString & realPropertyName, realPropertyNames) {
-         const QString upperPropertyName = realPropertyName.at(0).toUpper()
-                                           + realPropertyName.mid(1);
+
+      for (const QString &realPropertyName : realPropertyNames) {
+         const QString upperPropertyName = realPropertyName.at(0).toUpper() + realPropertyName.mid(1);
          const QString fakePropertyName = QLatin1String("header") + upperPropertyName;
          if (DomProperty *fakeProperty = attributes.value(fakePropertyName)) {
             fakeProperty->setAttributeName(realPropertyName);
@@ -950,12 +950,12 @@ void WriteInitialization::acceptWidget(DomWidget *node)
          (QStringList() << QLatin1String("horizontalHeader")
           << QLatin1String("verticalHeader"));
 
-      foreach (const QString & headerPrefix, headerPrefixes) {
+      for (const QString &headerPrefix : headerPrefixes) {
          DomPropertyList headerProperties;
-         foreach (const QString & realPropertyName, realPropertyNames) {
-            const QString upperPropertyName = realPropertyName.at(0).toUpper()
-                                              + realPropertyName.mid(1);
+         for (const QString &realPropertyName : realPropertyNames) {
+            const QString upperPropertyName = realPropertyName.at(0).toUpper() + realPropertyName.mid(1);
             const QString fakePropertyName = headerPrefix + upperPropertyName;
+
             if (DomProperty *fakeProperty = attributes.value(fakePropertyName)) {
                fakeProperty->setAttributeName(realPropertyName);
                headerProperties << fakeProperty;
@@ -2473,9 +2473,11 @@ QList<WriteInitialization::Item *> WriteInitialization::initializeTreeWidgetItem
       addQtFlagsInitializer(item, map, QLatin1String("flags"));
 
       QList<Item *> subItems = initializeTreeWidgetItems(domItem->elementItem());
-      foreach (Item * subItem, subItems)
-      item->addChild(subItem);
+      for (Item *subItem : subItems) {
+         item->addChild(subItem);
+      }
    }
+
    return items;
 }
 
@@ -2730,7 +2732,7 @@ void WriteInitialization::acceptWidgetScripts(const DomScripts &widgetScripts, D
 
    // concatenate script snippets
    QString script;
-   foreach (const DomScript * domScript, scripts) {
+   for (const DomScript *domScript : scripts) {
       const QString snippet = domScript->text();
       if (!snippet.isEmpty()) {
          script += snippet.trimmed();
@@ -2745,7 +2747,7 @@ void WriteInitialization::acceptWidgetScripts(const DomScripts &widgetScripts, D
    m_output << m_indent << "childWidgets.clear();\n";
    if (!childWidgets.empty()) {
       m_output << m_indent <<  "childWidgets";
-      foreach (DomWidget * child, childWidgets) {
+      for (DomWidget *child : childWidgets) {
          m_output << " << " << m_driver->findOrInsertWidget(child);
       }
       m_output << ";\n";
@@ -2764,8 +2766,10 @@ static void generateMultiDirectiveBegin(QTextStream &outputStream, const QSet<QS
 
    QMap<QString, bool>
    map; // bool is dummy. The idea is to sort that (always generate in the same order) by putting a set into a map
-   foreach (const QString & str, directives)
-   map.insert(str, true);
+
+   for (const QString &str : directives) {
+      map.insert(str, true);
+   }
 
    if (map.size() == 1) {
       outputStream << "#ifndef " << map.constBegin().key() << endl;
@@ -2774,10 +2778,11 @@ static void generateMultiDirectiveBegin(QTextStream &outputStream, const QSet<QS
 
    outputStream << "#if";
    bool doOr = false;
-   foreach (const QString & str, map.keys()) {
+   for (const QString &str : map.keys()) {
       if (doOr) {
          outputStream << " ||";
       }
+
       outputStream << " !defined(" << str << ')';
       doOr = true;
    }
@@ -2808,8 +2813,9 @@ WriteInitialization::Item::Item(const QString &itemClassName, const QString &ind
 
 WriteInitialization::Item::~Item()
 {
-   foreach (Item * child, m_children)
-   delete child;
+   for (Item *child : m_children) {
+      delete child;
+   }
 }
 
 QString WriteInitialization::Item::writeSetupUi(const QString &parent, Item::EmptyItemPolicy emptyItemPolicy)
@@ -2849,8 +2855,11 @@ QString WriteInitialization::Item::writeSetupUi(const QString &parent, Item::Emp
       closeIfndef(m_setupUiStream, it.key());
       ++it;
    }
-   foreach (Item * child, m_children)
-   child->writeSetupUi(uniqueName);
+
+   for (Item *child : m_children) {
+      child->writeSetupUi(uniqueName);
+   }
+
    return uniqueName;
 }
 

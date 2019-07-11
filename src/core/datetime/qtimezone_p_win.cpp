@@ -617,7 +617,7 @@ QTimeZonePrivate::Data QWinTimeZonePrivate::data(qint64 forMSecsSinceEpoch) cons
 
 bool QWinTimeZonePrivate::hasTransitions() const
 {
-   foreach (const QWinTransitionRule &rule, m_tranRules) {
+   for (const QWinTransitionRule &rule : m_tranRules) {
       if (rule.standardTimeRule.wMonth > 0 && rule.daylightTimeRule.wMonth > 0) {
          return true;
       }
@@ -757,8 +757,8 @@ QByteArray QWinTimeZonePrivate::systemTimeZoneId() const
 QList<QByteArray> QWinTimeZonePrivate::availableTimeZoneIds() const
 {
    QList<QByteArray> result;
-   foreach (const QByteArray &winId, availableWindowsIds()) {
-      foreach (const QByteArray &ianaId, windowsIdToIanaIds(winId)) {
+   for (const QByteArray &winId : availableWindowsIds()) {
+      for (const QByteArray &ianaId : windowsIdToIanaIds(winId)) {
          result << ianaId;
       }
    }

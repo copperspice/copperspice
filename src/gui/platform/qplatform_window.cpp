@@ -33,7 +33,6 @@
 #include <qhighdpiscaling_p.h>
 #include <qwindow_p.h>
 
-
 QPlatformWindow::QPlatformWindow(QWindow *window)
    : QPlatformSurface(window), d_ptr(new QPlatformWindowPrivate)
 {
@@ -236,29 +235,36 @@ bool QPlatformWindow::frameStrutEventsEnabled() const
 QString QPlatformWindow::formatWindowTitle(const QString &title, const QString &separator)
 {
    QString fullTitle = title;
+
    if (QGuiApplicationPrivate::displayName && !title.endsWith(*QGuiApplicationPrivate::displayName)) {
       if (!fullTitle.isEmpty()) {
          fullTitle += separator;
       }
       fullTitle += *QGuiApplicationPrivate::displayName;
+
    } else if (fullTitle.isEmpty()) {
       fullTitle = QCoreApplication::applicationName();
    }
+
    return fullTitle;
 }
+
 QPlatformScreen *QPlatformWindow::screenForGeometry(const QRect &newGeometry) const
 {
    QPlatformScreen *currentScreen = screen();
    QPlatformScreen *fallback = currentScreen;
    QPoint center = newGeometry.isEmpty() ? newGeometry.topLeft() : newGeometry.center();
+
    if (window()->type() == Qt::ForeignWindow) {
       center = mapToGlobal(center - newGeometry.topLeft());
    }
+
    if (!parent() && currentScreen && !currentScreen->geometry().contains(center)) {
-      Q_FOREACH (QPlatformScreen *screen, currentScreen->virtualSiblings()) {
+      for  (QPlatformScreen *screen : currentScreen->virtualSiblings()) {
          if (screen->geometry().contains(center)) {
             return screen;
          }
+
          if (screen->geometry().intersects(newGeometry)) {
             fallback = screen;
          }
@@ -283,15 +289,18 @@ static inline const QScreen *effectiveScreen(const QWindow *window)
    if (!window) {
       return QGuiApplication::primaryScreen();
    }
+
    const QScreen *screen = window->screen();
    if (!screen) {
       return QGuiApplication::primaryScreen();
    }
+
    const QList<QScreen *> siblings = screen->virtualSiblings();
+
 #ifndef QT_NO_CURSOR
    if (siblings.size() > 1) {
       const QPoint referencePoint = window->transientParent() ? window->transientParent()->geometry().center() : QCursor::pos();
-      foreach (const QScreen *sibling, siblings)
+      for (const QScreen *sibling : siblings)
          if (sibling->geometry().contains(referencePoint)) {
             return sibling;
          }

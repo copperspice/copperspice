@@ -115,8 +115,9 @@ QLinuxInputMouseHandler::QLinuxInputMouseHandler(const QString &key,
     m_smooth = false;
     int jitterLimit = 0;
     
-    QStringList args = specification.split(QLatin1Char(':'));
-    foreach (const QString &arg, args) {
+
+    QStringList args = specification.split(':');
+    for (const QString &arg : args) {
         if (arg == "nocompress")
             m_compression = false;
         else if (arg.startsWith("dejitter="))
@@ -379,7 +380,7 @@ QLinuxInputKeyboardHandler::QLinuxInputKeyboardHandler(const QString &key, const
     bool ttymode = false;
 
     QStringList args = specification.split(QLatin1Char(':'));
-    foreach (const QString &arg, args) {
+    for (const QString &arg : args) {
         if (arg.startsWith(QLatin1String("repeat-delay=")))
             repeat_delay = arg.mid(13).toInt();
         else if (arg.startsWith(QLatin1String("repeat-rate=")))

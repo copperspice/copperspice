@@ -3389,6 +3389,7 @@ bool QHeaderViewPrivate::read(QDataStream &in)
    QVector<SectionItem> newSectionItems;
    for (int u = 0; u < sectionItemsIn.count(); ++u) {
       int count = sectionItemsIn.at(u).tmpDataStreamSectionCount;
+
       if (count > 0) {
          sectionItemsIn[u].size /= count;
       }
@@ -3398,30 +3399,31 @@ bool QHeaderViewPrivate::read(QDataStream &in)
    }
 
    int sectionItemsLengthTotal = 0;
-   foreach (const SectionItem &section, newSectionItems) {
+   for (const SectionItem &section : newSectionItems) {
       sectionItemsLengthTotal += section.size;
    }
+
    if (sectionItemsLengthTotal != lengthIn) {
       return false;
    }
 
    orientation = static_cast<Qt::Orientation>(orient);
-   sortIndicatorOrder = static_cast<Qt::SortOrder>(order);
+   sortIndicatorOrder   = static_cast<Qt::SortOrder>(order);
    sortIndicatorSection = sortIndicatorSectionIn;
-   sortIndicatorShown = sortIndicatorShownIn;
-   visualIndices = visualIndicesIn;
-   logicalIndices = logicalIndicesIn;
-   hiddenSectionSize = hiddenSectionSizeIn;
-   length = lengthIn;
-   movableSections = movableSectionsIn;
-   clickableSections = clickableSectionsIn;
-   highlightSelected = highlightSelectedIn;
-   stretchLastSection = stretchLastSectionIn;
-   cascadingResizing = cascadingResizingIn;
-   stretchSections = stretchSectionsIn;
-   contentsSections = contentsSectionsIn;
-   defaultSectionSize = defaultSectionSizeIn;
-   minimumSectionSize = minimumSectionSizeIn;
+   sortIndicatorShown   = sortIndicatorShownIn;
+   visualIndices        = visualIndicesIn;
+   logicalIndices       = logicalIndicesIn;
+   hiddenSectionSize    = hiddenSectionSizeIn;
+   length               = lengthIn;
+   movableSections      = movableSectionsIn;
+   clickableSections    = clickableSectionsIn;
+   highlightSelected    = highlightSelectedIn;
+   stretchLastSection   = stretchLastSectionIn;
+   cascadingResizing    = cascadingResizingIn;
+   stretchSections      = stretchSectionsIn;
+   contentsSections     = contentsSectionsIn;
+   defaultSectionSize   = defaultSectionSizeIn;
+   minimumSectionSize   = minimumSectionSizeIn;
 
    defaultAlignment = Qt::Alignment(align);
    globalResizeMode = static_cast<QHeaderView::ResizeMode>(global);

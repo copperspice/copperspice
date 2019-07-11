@@ -405,9 +405,11 @@ void QFontDialogPrivate::updateFamilies()
    const QFontDialog::FontDialogOptions scalableMask = (QFontDialog::ScalableFonts | QFontDialog::NonScalableFonts);
    const QFontDialog::FontDialogOptions spacingMask = (QFontDialog::ProportionalFonts | QFontDialog::MonospacedFonts);
    const QFontDialog::FontDialogOptions options = q->options();
+
    QFontDatabase fdb;
    QStringList familyNames;
-   foreach (const QString &family, fdb.families(writingSystem)) {
+
+   for (const QString &family : fdb.families(writingSystem)) {
       if (fdb.isPrivateFamily(family)) {
          continue;
       }

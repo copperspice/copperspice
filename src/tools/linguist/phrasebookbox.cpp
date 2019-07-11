@@ -81,8 +81,9 @@ PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
    targetLed->installEventFilter(this);
    definitionLed->installEventFilter(this);
 
-   foreach (Phrase * p, phraseBook->phrases())
-   phrMdl->addPhrase(p);
+   for (Phrase *p : phraseBook->phrases()) {
+      phrMdl->addPhrase(p);
+   }
 
    phraseList->sortByColumn(0, Qt::AscendingOrder);
 

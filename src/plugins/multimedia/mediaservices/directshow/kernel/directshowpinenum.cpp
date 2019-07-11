@@ -33,7 +33,7 @@ DirectShowPinEnum::DirectShowPinEnum(const QList<IPin *> &pins)
 
 DirectShowPinEnum::~DirectShowPinEnum()
 {
-   foreach (IPin *pin, m_pins) {
+   for (IPin *pin : m_pins) {
       pin->Release();
    }
 }

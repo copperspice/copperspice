@@ -155,23 +155,30 @@ static bool saveQPH(const Translator &translator, QIODevice &dev, ConversionData
    QTextStream t(&dev);
    t.setCodec(QTextCodec::codecForName("UTF-8"));
    t << "<!DOCTYPE QPH>\n<QPH";
+
    QString languageCode = translator.languageCode();
+
    if (!languageCode.isEmpty() && languageCode != QLatin1String("C")) {
       t << " language=\"" << languageCode << "\"";
    }
+
    languageCode = translator.sourceLanguageCode();
    if (!languageCode.isEmpty() && languageCode != QLatin1String("C")) {
       t << " sourcelanguage=\"" << languageCode << "\"";
    }
    t << ">\n";
-   foreach (const TranslatorMessage & msg, translator.messages()) {
+
+   for (const TranslatorMessage & msg : translator.messages()) {
       t << "<phrase>\n";
       t << "    <source>" << protect(msg.sourceText()) << "</source>\n";
+
       QString str = msg.translations().join(QLatin1String("@"));
       str.replace(QChar(Translator::BinaryVariantSeparator),
                   QChar(Translator::TextVariantSeparator));
+
       t << "    <target>" << protect(str)
         << "</target>\n";
+
       if (!msg.comment().isEmpty()) {
          t << "    <definition>" << protect(msg.comment()) << "</definition>\n";
       }

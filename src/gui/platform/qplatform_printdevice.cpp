@@ -164,7 +164,7 @@ QPageSize QPlatformPrintDevice::supportedPageSize(const QPageSize &pageSize) con
     // e.g. Windows defines DMPAPER_11X17 and DMPAPER_TABLOID with names "11x17" and "Tabloid", but both
     // map to QPageSize::Tabloid / PPD Key "Tabloid" / ANSI B Tabloid
     if (pageSize.id() != QPageSize::Custom) {
-        foreach (const QPageSize &ps, m_pageSizes) {
+        for (const QPageSize &ps : m_pageSizes) {
             if (ps.id() == pageSize.id() && ps.name() == pageSize.name())
                 return ps;
         }
@@ -172,7 +172,7 @@ QPageSize QPlatformPrintDevice::supportedPageSize(const QPageSize &pageSize) con
 
     // Next try match on id only if not custom
     if (pageSize.id() != QPageSize::Custom) {
-        foreach (const QPageSize &ps, m_pageSizes) {
+        for (const QPageSize &ps : m_pageSizes) {
             if (ps.id() == pageSize.id())
                 return ps;
         }
@@ -187,7 +187,7 @@ QPageSize QPlatformPrintDevice::supportedPageSize(QPageSize::PageSizeId pageSize
     if (!m_havePageSizes)
         loadPageSizes();
 
-    foreach (const QPageSize &ps, m_pageSizes) {
+    for (const QPageSize &ps : m_pageSizes) {
         if (ps.id() == pageSizeId)
             return ps;
     }
@@ -201,7 +201,7 @@ QPageSize QPlatformPrintDevice::supportedPageSize(const QString &pageName) const
     if (!m_havePageSizes)
         loadPageSizes();
 
-    foreach (const QPageSize &ps, m_pageSizes) {
+    for (const QPageSize &ps : m_pageSizes) {
         if (ps.name() == pageName)
             return ps;
     }
@@ -230,7 +230,7 @@ QPageSize QPlatformPrintDevice::supportedPageSize(const QSizeF &size, QPageSize:
 QPageSize QPlatformPrintDevice::supportedPageSizeMatch(const QPageSize &pageSize) const
 {
     // Try to find a supported page size based on point size
-    foreach (const QPageSize &ps, m_pageSizes) {
+    for (const QPageSize &ps : m_pageSizes) {
         if (ps.sizePoints() == pageSize.sizePoints())
             return ps;
     }

@@ -62,12 +62,12 @@ QSampleCache::~QSampleCache()
    // Killing the loading thread means that no samples can be
    // deleted using deleteLater.  And some samples that had deleteLater
    // already called won't have been processed (m_staleSamples)
-   foreach (QSample *sample, m_samples) {
+   for (QSample *sample : m_samples) {
       delete sample;
    }
 
-   foreach (QSample *sample, m_staleSamples) {
-      delete sample;   // deleting a sample does affect the m_staleSamples list, but foreach copies it
+   for (QSample *sample : m_staleSamples) {
+      delete sample;   // deleting a sample does affect the m_staleSamples list, but for each copies it
    }
 
    m_networkAccessManager->deleteLater();

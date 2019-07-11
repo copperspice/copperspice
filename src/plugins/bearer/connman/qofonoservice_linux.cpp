@@ -77,8 +77,9 @@ QList <QDBusObjectPath> QOfonoManagerInterface::getModems()
     QList <QDBusObjectPath> modemList;
     QList<QVariant> argumentList;
     QDBusReply<PathPropertiesList > reply = this->asyncCallWithArgumentList(QLatin1String("GetModems"), argumentList);
+
     if (reply.isValid()) {
-        foreach (ObjectPathProperties modem, reply.value()) {
+        for (ObjectPathProperties modem : reply.value()) {
             modemList << modem.path;
         }
     }
@@ -89,7 +90,7 @@ QList <QDBusObjectPath> QOfonoManagerInterface::getModems()
 QDBusObjectPath QOfonoManagerInterface::currentModem()
 {
     QList<QDBusObjectPath> modems = getModems();
-    foreach (const QDBusObjectPath modem, modems) {
+    for (const QDBusObjectPath modem : modems) {
         QOfonoModemInterface device(modem.path());
         if (device.isPowered() && device.isOnline())
         return modem;;
@@ -241,7 +242,7 @@ QStringList QOfonoModemInterface::getInterfaces()
 
 QString QOfonoModemInterface::defaultInterface()
 {
-    foreach (const QString &modem,getInterfaces()) {
+    for (const QString &modem : getInterfaces()) {
      return modem;
     }
     return QString();
@@ -372,7 +373,7 @@ QList <QDBusObjectPath> QOfonoNetworkRegistrationInterface::getOperators()
     QDBusReply<PathPropertiesList > reply = this->asyncCallWithArgumentList(QLatin1String("GetOperators"),
                                                                                 argumentList);
     if (reply.isValid()) {
-        foreach (ObjectPathProperties netop, reply.value()) {
+        for (ObjectPathProperties netop : reply.value()) {
             operatorList << netop.path;
         }
     }
@@ -652,7 +653,7 @@ QList<QDBusObjectPath> QOfonoDataConnectionManagerInterface::getPrimaryContexts(
     QDBusReply<PathPropertiesList > reply = this->asyncCallWithArgumentList(QLatin1String("GetContexts"),
                                                                          argumentList);
     if (reply.isValid()) {
-        foreach (ObjectPathProperties context, reply.value()) {
+        for (ObjectPathProperties context : reply.value()) {
             contextList << context.path;
         }
     }

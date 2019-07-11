@@ -223,7 +223,7 @@ CandidateList similarTextHeuristicCandidates(const Translator *tor,
    QList<int> scores;
    CandidateList candidates;
 
-   foreach (const TranslatorMessage & mtm, tor->messages()) {
+   for (const TranslatorMessage &mtm : tor->messages()) {
       if (mtm.type() == TranslatorMessage::Unfinished
             || mtm.translation().isEmpty()) {
          continue;

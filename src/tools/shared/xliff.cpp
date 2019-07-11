@@ -912,7 +912,8 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
    }
    QString languageCode = translator.languageCode();
    languageCode.replace(QLatin1Char('_'), QLatin1Char('-'));
-   foreach (const QString & fn, fileOrder) {
+
+   for (const QString & fn : fileOrder) {
       writeIndent(ts, indent);
       ts << "<file original=\"" << fn << "\""
          << " datatype=\"" << dataType(messageOrder[fn].begin()->first()) << "\""
@@ -921,16 +922,17 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
          << "><body>\n";
       ++indent;
 
-      foreach (const QString & ctx, contextOrder[fn]) {
-         if (!ctx.isEmpty()) {
+      for (const QString & ctx : contextOrder[fn]) {
+         if (! ctx.isEmpty()) {
             writeIndent(ts, indent);
             ts << "<group restype=\"" << restypeContext << "\""
                << " resname=\"" << protect(ctx) << "\">\n";
             ++indent;
          }
 
-         foreach (const TranslatorMessage & msg, messageOrder[fn][ctx])
-         writeMessage(ts, msg, drops, indent);
+         for (const TranslatorMessage & msg : messageOrder[fn][ctx]) {
+            writeMessage(ts, msg, drops, indent);
+         }
 
          if (!ctx.isEmpty()) {
             --indent;

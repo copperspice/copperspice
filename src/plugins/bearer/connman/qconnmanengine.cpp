@@ -63,7 +63,7 @@ void QConnmanEngine::initialize()
     connect(connmanManager,SIGNAL(propertyChangedContext(QString,QString,QDBusVariant)),
             this,SLOT(propertyChangedContext(QString,QString,QDBusVariant)));
 
-    foreach(const QString techPath, connmanManager->getTechnologies()) {
+    for(const QString techPath : connmanManager->getTechnologies()) {
         QConnmanTechnologyInterface *tech;
         tech = new QConnmanTechnologyInterface(techPath, this);
 
@@ -71,7 +71,7 @@ void QConnmanEngine::initialize()
                 this,SLOT(technologyPropertyChangedContext(QString,QString,QDBusVariant)));
     }
 
-    foreach(const QString servPath, connmanManager->getServices()) {
+    for(const QString servPath : connmanManager->getServices()) {
         addServiceConfiguration(servPath);
     }
 
@@ -138,7 +138,7 @@ void QConnmanEngine::connectToId(const QString &id)
             QOfonoManagerInterface ofonoManager(0);
             QString modemPath = ofonoManager.currentModem().path();
             QOfonoDataConnectionManagerInterface dc(modemPath,0);
-            foreach(const QDBusObjectPath dcPath,dc.getPrimaryContexts()) {
+            for(const QDBusObjectPath dcPath : dc.getPrimaryContexts()) {
                 if(dcPath.path().contains(servicePath.section("_",-1))) {
                     QOfonoPrimaryDataContextInterface primaryContext(dcPath.path(),0);
                     primaryContext.setActive(true);
@@ -162,7 +162,7 @@ void QConnmanEngine::disconnectFromId(const QString &id)
             QOfonoManagerInterface ofonoManager(0);
             QString modemPath = ofonoManager.currentModem().path();
             QOfonoDataConnectionManagerInterface dc(modemPath,0);
-            foreach(const QDBusObjectPath dcPath,dc.getPrimaryContexts()) {
+            for(const QDBusObjectPath dcPath : dc.getPrimaryContexts()) {
                 if(dcPath.path().contains(servicePath.section("_",-1))) {
                     QOfonoPrimaryDataContextInterface primaryContext(dcPath.path(),0);
                     primaryContext.setActive(false);
@@ -181,7 +181,7 @@ void QConnmanEngine::requestUpdate()
 QString QConnmanEngine::serviceFromId(const QString &id)
 {
     QMutexLocker locker(&mutex);
-    foreach(const QString service, serviceNetworks) {
+    for(const QString service : serviceNetworks) {
         if (id == QString::number(qHash(service)))
             return service;
     }
@@ -296,7 +296,7 @@ void QConnmanEngine::propertyChangedContext(const QString &path,const QString &i
         QStringList list = qdbus_cast<QStringList>(arg);
 
         if(list.count() > accessPointConfigurations.count()) {
-            foreach(const QString service, list) {
+            for(const QString service : list) {
                 addServiceConfiguration(service);
             }
         }
@@ -308,7 +308,7 @@ void QConnmanEngine::propertyChangedContext(const QString &path,const QString &i
         if(newlist.count() > 0) {
             QMap<QString,QConnmanTechnologyInterface *> oldtech = technologies;
 
-            foreach(const QString listPath, newlist) {
+            for(const QString listPath : newlist) {
                 if(!oldtech.contains(listPath)) {
                     QConnmanTechnologyInterface *tech;
                     tech = new QConnmanTechnologyInterface(listPath,this);
@@ -442,10 +442,10 @@ QNetworkConfiguration::BearerType QConnmanEngine::ofonoTechToBearerType(const QS
     QOfonoNetworkRegistrationInterface ofonoNetwork(ofonoManager.currentModem().path(),this);
 
     if(ofonoNetwork.isValid()) {
-        foreach(const QDBusObjectPath op,ofonoNetwork.getOperators() ) {
+        for(const QDBusObjectPath op : ofonoNetwork.getOperators() ) {
             QOfonoNetworkOperatorInterface opIface(op.path(),this);
 
-            foreach(const QString opTech, opIface.getTechnologies()) {
+            for(const QString opTech : opIface.getTechnologies()) {
 
                 if(opTech == "gsm") {
                     return QNetworkConfiguration::Bearer2G;
@@ -473,7 +473,8 @@ bool QConnmanEngine::isRoamingAllowed(const QString &context)
     QOfonoManagerInterface ofonoManager(this);
     QString modemPath = ofonoManager.currentModem().path();
     QOfonoDataConnectionManagerInterface dc(modemPath,this);
-    foreach(const QDBusObjectPath dcPath,dc.getPrimaryContexts()) {
+
+    for(const QDBusObjectPath dcPath : dc.getPrimaryContexts()) {
         if(dcPath.path().contains(context.section("_",-1))) {
             return dc.isRoamingAllowed();
         }
@@ -555,7 +556,7 @@ void QConnmanEngine::addServiceConfiguration(const QString &servicePath)
         QNetworkConfigurationPrivatePointer ptr(cpPriv);
         accessPointConfigurations.insert(ptr->id, ptr);
         foundConfigurations.append(cpPriv);
-        configInterfaces[cpPriv->id] = serv->getInterface(); 
+        configInterfaces[cpPriv->id] = serv->getInterface();
 
         locker.unlock();
         emit configurationAdded(ptr);

@@ -101,8 +101,10 @@ static QString poEscapedString(const QString &prefix, const QString &keyword,
             QStringList olines = lines;
             lines = QStringList(QString());
             const int maxlen = MAX_LEN - prefix.length() - 2;
-            foreach (const QString & line, olines) {
+
+            for (const QString & line : olines) {
                int off = 0;
+
                while (off + maxlen < line.length()) {
                   int idx = line.lastIndexOf(QLatin1Char(' '), off + maxlen - 1) + 1;
                   if (idx == off) {
@@ -134,7 +136,7 @@ static QString poEscapedString(const QString &prefix, const QString &keyword,
 static QString poEscapedLines(const QString &prefix, bool addSpace, const QStringList &lines)
 {
    QString out;
-   foreach (const QString & line, lines) {
+   for (const QString & line : lines) {
       out += prefix;
       if (addSpace && !line.isEmpty()) {
          out += QLatin1Char(' ' );
@@ -818,7 +820,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
    }
 
    bool qtContexts = false;
-   foreach (const TranslatorMessage & msg, translator.messages())
+   for (const TranslatorMessage & msg : translator.messages())
 
    if (!msg.context().isEmpty()) {
       qtContexts = true;
@@ -862,7 +864,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
    }
 
    QString hdrStr;
-   foreach (const QString & hdr, hdrOrder) {
+   for (const QString & hdr : hdrOrder) {
       hdrStr += hdr;
       hdrStr += QLatin1String(": ");
       hdrStr += headers.value(makePoHeader(hdr));
@@ -870,7 +872,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
    }
    out << poEscapedString(QString(), QString::fromLatin1("msgstr"), true, hdrStr);
 
-   foreach (const TranslatorMessage & msg, translator.messages()) {
+   for (const TranslatorMessage & msg : translator.messages()) {
       out << endl;
 
       if (!msg.translatorComment().isEmpty()) {
@@ -889,7 +891,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
       if (!msg.fileName().isEmpty() || !xrefs.isEmpty()) {
          QStringList refs;
 
-         foreach (const TranslatorMessage::Reference & ref, msg.allReferences())
+         for (const TranslatorMessage::Reference &ref : msg.allReferences())
          refs.append(QString("%2:%1").formatArg(ref.lineNumber()).formatArg(ref.fileName()));
 
          if (! xrefs.isEmpty()) {
@@ -908,7 +910,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
          msg.extras().find(QLatin1String("po-flags"));
       if (itr != msg.extras().end()) {
          QStringList atoms = itr->split(QLatin1String(", "));
-         foreach (const QString & atom, atoms)
+         for (const QString & atom : atoms)
          if (atom.endsWith(str_format)) {
             skipFormat = true;
             break;

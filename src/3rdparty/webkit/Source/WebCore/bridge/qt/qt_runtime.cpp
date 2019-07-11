@@ -1257,7 +1257,7 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
     QVector<int> tooFewArgs;
     QVector<int> conversionFailed;
 
-    foreach(int index, matchingIndices) {
+    for(int index : matchingIndices) {
         QMetaMethod method = meta->method(index);
 
         QVector<QtMethodMatchType> types;

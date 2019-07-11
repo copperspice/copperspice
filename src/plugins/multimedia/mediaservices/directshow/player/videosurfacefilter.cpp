@@ -604,7 +604,7 @@ void VideoSurfaceFilter::supportedFormatsChanged()
    type.cbFormat = 0;
    type.pbFormat = 0;
 
-   foreach (QVideoFrame::PixelFormat format, formats) {
+   for (QVideoFrame::PixelFormat format : formats) {
       type.subtype = DirectShowMediaType::convertPixelFormat(format);
 
       if (type.subtype != none) {

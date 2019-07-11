@@ -70,7 +70,7 @@ void QDBusServiceWatcherPrivate::setConnection(const QStringList &s, const QDBus
 {
     if (connection.isConnected()) {
         // remove older rules
-        foreach (const QString &s, servicesWatched)
+        for (const QString &s : servicesWatched)
             removeService(s);
     }
 
@@ -80,7 +80,7 @@ void QDBusServiceWatcherPrivate::setConnection(const QStringList &s, const QDBus
 
     if (connection.isConnected()) {
         // add new rules
-        foreach (const QString &s, servicesWatched)
+        for (const QString &s : servicesWatched)
             addService(s);
     }
 }

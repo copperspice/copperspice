@@ -88,7 +88,8 @@ MediaPlayer::SupportsType MediaPlayerPrivateQt::supportsType(const String& mime,
     QString codecStr = codec;
     QStringList codecList = codecStr.split(QLatin1Char(','), QString::SkipEmptyParts);
     QStringList codecListTrimmed;
-    foreach (const QString& codecStrNotTrimmed, codecList) {
+
+    for (const QString& codecStrNotTrimmed ; codecList) {
         QString codecStrTrimmed = codecStrNotTrimmed.trimmed();
         if (!codecStrTrimmed.isEmpty())
             codecListTrimmed.append(codecStrTrimmed);
@@ -338,7 +339,7 @@ PassRefPtr<TimeRanges> MediaPlayerPrivateQt::buffered() const
 
     QMediaTimeRange playbackRanges = m_mediaPlayerControl->availablePlaybackRanges();
 
-    foreach (const QMediaTimeInterval interval, playbackRanges.intervals()) {
+    for (const QMediaTimeInterval interval ; playbackRanges.intervals()) {
         float rangeMin = static_cast<float>(interval.start()) / 1000.0f;
         float rangeMax = static_cast<float>(interval.end()) / 1000.0f;
         buffered->add(rangeMin, rangeMax);

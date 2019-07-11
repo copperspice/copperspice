@@ -65,7 +65,7 @@ static void fillCountryCombo(const QVariant &lng, QComboBox *combo)
    combo->clear();
    QLocale::Language lang = QLocale::Language(lng.toInt());
    if (lang != QLocale::C) {
-      foreach (QLocale::Country cntr, QLocale::countriesForLanguage(lang)) {
+      for (QLocale::Country cntr : QLocale::countriesForLanguage(lang)) {
          QString country = QLocale::countryToString(cntr);
          combo->addItem(country, QVariant(cntr));
       }

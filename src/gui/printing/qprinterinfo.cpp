@@ -216,7 +216,7 @@ QList<QPrinter::DuplexMode> QPrinterInfo::supportedDuplexModes() const
    QList<QPrinter::DuplexMode> list;
    const QList<QPrint::DuplexMode> supportedDuplexModes = d->m_printDevice.supportedDuplexModes();
 
-   foreach (QPrint::DuplexMode mode, supportedDuplexModes) {
+   for (QPrint::DuplexMode mode : supportedDuplexModes) {
       list << QPrinter::DuplexMode(mode);
    }
    return list;
@@ -233,10 +233,11 @@ QList<QPrinterInfo> QPrinterInfo::availablePrinters()
 {
    QList<QPrinterInfo> list;
    QPlatformPrinterSupport *ps = QPlatformPrinterSupportPlugin::get();
+
    if (ps) {
       const QStringList availablePrintDeviceIds = ps->availablePrintDeviceIds();
 
-      foreach (const QString &id, availablePrintDeviceIds) {
+      for (const QString &id : availablePrintDeviceIds) {
          list.append(QPrinterInfo(id));
       }
    }

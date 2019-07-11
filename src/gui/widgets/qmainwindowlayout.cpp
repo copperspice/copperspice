@@ -316,35 +316,39 @@ void QDockWidgetGroupWindow::destroyOrHideIfEmpty()
       return;
    }
    // There might still be placeholders
-   if (!layoutInfo()->item_list.isEmpty()) {
+   if (! layoutInfo()->item_list.isEmpty()) {
       hide();
       return;
    }
 
    // Make sure to reparent the possibly floating or hidden QDockWidgets to the parent
-   foreach (QDockWidget *dw, findChildren<QDockWidget *>(QString(), Qt::FindDirectChildrenOnly)) {
+   for (QDockWidget *dw : findChildren<QDockWidget *>(QString(), Qt::FindDirectChildrenOnly)) {
       bool wasFloating = dw->isFloating();
-      bool wasHidden = dw->isHidden();
+      bool wasHidden   = dw->isHidden();
       dw->setParent(parentWidget());
+
       if (wasFloating) {
          dw->setFloating(true);
       } else {
          // maybe it was hidden, we still have to put it back in the main layout.
-         QMainWindowLayout *ml =
-            qt_mainwindow_layout(static_cast<QMainWindow *>(parentWidget()));
+         QMainWindowLayout *ml = qt_mainwindow_layout(static_cast<QMainWindow *>(parentWidget()));
          Qt::DockWidgetArea area = ml->dockWidgetArea(this);
+
          if (area == Qt::NoDockWidgetArea) {
             area = Qt::LeftDockWidgetArea;
          }
          static_cast<QMainWindow *>(parentWidget())->addDockWidget(area, dw);
       }
+
       if (!wasHidden) {
          dw->show();
       }
    }
-   foreach (QTabBar *tb, findChildren<QTabBar *>(QString(), Qt::FindDirectChildrenOnly)) {
+
+   for (QTabBar *tb : findChildren<QTabBar *>(QString(), Qt::FindDirectChildrenOnly)) {
       tb->setParent(parentWidget());
    }
+
    deleteLater();
 }
 
@@ -358,6 +362,7 @@ void QDockWidgetGroupWindow::adjustFlags()
    const bool nativeDeco = static_cast<QDockWidgetGroupLayout *>(layout())->nativeWindowDeco();
    Qt::WindowFlags oldFlags = windowFlags();
    Qt::WindowFlags flags = oldFlags;
+
    if (nativeDeco) {
       flags |= Qt::CustomizeWindowHint | Qt::WindowTitleHint;
       if (top->features() & QDockWidget::DockWidgetClosable) {
@@ -884,6 +889,7 @@ bool QMainWindowLayoutState::checkFormat(QDataStream &stream)
       uchar marker;
       stream >> marker;
       switch (marker) {
+
 #ifndef QT_NO_TOOLBAR
          case QToolBarAreaLayout::ToolBarStateMarker:
          case QToolBarAreaLayout::ToolBarStateMarkerEx: {
@@ -894,7 +900,7 @@ bool QMainWindowLayoutState::checkFormat(QDataStream &stream)
          }
          break;
 
-#endif // QT_NO_TOOLBAR
+#endif
 
 #ifndef QT_NO_DOCKWIDGET
          case QDockAreaLayout::DockWidgetStateMarker: {
@@ -904,26 +910,30 @@ bool QMainWindowLayoutState::checkFormat(QDataStream &stream)
                dockWidgets += findChildrenHelper<QDockWidget *>(floating);
             }
 
-            if (!dockAreaLayout.restoreState(stream, dockWidgets, true /*testing*/)) {
+            if (! dockAreaLayout.restoreState(stream, dockWidgets, true /*testing*/)) {
                return false;
             }
          }
          break;
+
 #ifndef QT_NO_TABBAR
          case QDockAreaLayout::FloatingDockWidgetTabMarker: {
             QRect geom;
             stream >> geom;
             QDockAreaLayoutInfo info;
             QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
-            foreach (QDockWidgetGroupWindow *floating, findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
+
+            for (QDockWidgetGroupWindow *floating : findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
                dockWidgets += findChildrenHelper<QDockWidget *>(floating);
             }
-            if (!info.restoreState(stream, dockWidgets, true /* testing*/)) {
+
+            if (! info.restoreState(stream, dockWidgets, true /* testing*/)) {
                return false;
             }
          }
          break;
-#endif // QT_NO_TABBAR
+#endif
+
 #endif // QT_NO_DOCKWIDGET
 
          default:
@@ -936,13 +946,14 @@ bool QMainWindowLayoutState::checkFormat(QDataStream &stream)
    return true;
 }
 
-bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
-   const QMainWindowLayoutState &oldState)
+bool QMainWindowLayoutState::restoreState(QDataStream &_stream, const QMainWindowLayoutState &oldState)
 {
    //make a copy of the data so that we can read it more than once
    QByteArray copy;
+
    while (!_stream.atEnd()) {
       int length = 1024;
+
       QByteArray ba(length, '\0');
       length = _stream.readRawData(ba.data(), ba.size());
       ba.resize(length);
@@ -960,10 +971,12 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
    while (!stream.atEnd()) {
       uchar marker;
       stream >> marker;
+
       switch (marker) {
 #ifndef QT_NO_DOCKWIDGET
          case QDockAreaLayout::DockWidgetStateMarker: {
             QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
+
             for (QDockWidgetGroupWindow *floating : findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
                dockWidgets += findChildrenHelper<QDockWidget *>(floating);
             }
@@ -975,6 +988,7 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
             for (int i = 0; i < dockWidgets.size(); ++i) {
                QDockWidget *w = dockWidgets.at(i);
                QList<int> path = dockAreaLayout.indexOf(w);
+
                if (path.isEmpty()) {
                   QList<int> oldPath = oldState.dockAreaLayout.indexOf(w);
                   if (oldPath.isEmpty()) {
@@ -989,15 +1003,19 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
             }
          }
          break;
+
 #ifndef QT_NO_TABBAR
          case QDockAreaLayout::FloatingDockWidgetTabMarker: {
             QList<QDockWidget *> dockWidgets = findChildrenHelper<QDockWidget *>(mainWindow);
-            foreach (QDockWidgetGroupWindow *floating, findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
+
+            for (QDockWidgetGroupWindow *floating : findChildrenHelper<QDockWidgetGroupWindow *>(mainWindow)) {
                dockWidgets += findChildrenHelper<QDockWidget *>(floating);
             }
+
             QDockWidgetGroupWindow *floatingTab = qt_mainwindow_layout(mainWindow)->createTabbedDockWindow();
             *floatingTab->layoutInfo() = QDockAreaLayoutInfo(&dockAreaLayout.sep, QInternal::LeftDock,
                   Qt::Horizontal, QTabBar::RoundedSouth, mainWindow);
+
             QRect geometry;
             stream >> geometry;
             if (!floatingTab->layoutInfo()->restoreState(stream, dockWidgets, false)) {
@@ -1009,7 +1027,8 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
             floatingTab->show();
          }
          break;
-#endif // QT_NO_TABBAR
+
+#endif
 #endif // QT_NO_DOCKWIDGET
 
 #ifndef QT_NO_TOOLBAR
@@ -1033,12 +1052,13 @@ bool QMainWindowLayoutState::restoreState(QDataStream &_stream,
             }
          }
          break;
-#endif //QT_NO_TOOLBAR
+#endif
+
          default:
             return false;
       }// switch
-   } //while
 
+   } //while
 
    return true;
 }
@@ -1660,13 +1680,16 @@ QDockAreaLayoutInfo *QMainWindowLayout::dockInfo(QWidget *widget)
    if (info) {
       return info;
    }
-   foreach (QDockWidgetGroupWindow *dwgw,
-      parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+
+   for (QDockWidgetGroupWindow *dwgw :
+                  parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
       info = dwgw->layoutInfo()->info(widget);
+
       if (info) {
          return info;
       }
    }
+
    return 0;
 }
 void QMainWindowLayout::tabChanged()
@@ -1957,12 +1980,15 @@ bool QMainWindowLayout::plug(QLayoutItem *widgetItem)
    if (currentHoveredFloat) {
       QWidget *widget = widgetItem->widget();
       QList<int> previousPath = layoutState.indexOf(widget);
-      if (!previousPath.isEmpty()) {
+
+      if (! previousPath.isEmpty()) {
          layoutState.remove(previousPath);
       }
+
       // Let's remove the widget from any possible group window
-      foreach (QDockWidgetGroupWindow *dwgw,
-         parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+      for (QDockWidgetGroupWindow *dwgw :
+               parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+
          QList<int> path = dwgw->layoutInfo()->indexOf(widget);
          if (!path.isEmpty()) {
             dwgw->layoutInfo()->remove(path);
@@ -2013,15 +2039,17 @@ bool QMainWindowLayout::plug(QLayoutItem *widgetItem)
    QWidget *widget = widgetItem->widget();
 
 #ifndef QT_NO_DOCKWIDGET
-   // Let's remove the widget from any possible group window
-   foreach (QDockWidgetGroupWindow *dwgw,
-      parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+   // remove the widget from any possible group window
+   for (QDockWidgetGroupWindow *dwgw :
+               parent()->findChildren<QDockWidgetGroupWindow *>(QString(), Qt::FindDirectChildrenOnly)) {
+
       QList<int> path = dwgw->layoutInfo()->indexOf(widget);
       if (!path.isEmpty()) {
          dwgw->layoutInfo()->remove(path);
       }
    }
 #endif
+
    QList<int> previousPath = layoutState.indexOf(widget);
 
    const QLayoutItem *it = layoutState.plug(currentGapPos);
@@ -2417,20 +2445,24 @@ void QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mousePos)
 
       // Check if we are over another floating dock widget
       QVarLengthArray<QWidget *, 10> candidates;
-      foreach (QObject *c, parentWidget()->children()) {
+
+      for (QObject *c : parentWidget()->children()) {
          QWidget *w = qobject_cast<QWidget *>(c);
+
          if (!w) {
             continue;
          }
+
          if (!qobject_cast<QDockWidget *>(w) && !qobject_cast<QDockWidgetGroupWindow *>(w)) {
             continue;
          }
+
          if (w != widget && w->isTopLevel() && w->isVisible() && !w->isMinimized()) {
             candidates << w;
          }
          if (QDockWidgetGroupWindow *group = qobject_cast<QDockWidgetGroupWindow *>(w)) {
             // Sometimes, there are floating QDockWidget that have a QDockWidgetGroupWindow as a parent.
-            foreach (QObject *c, group->children()) {
+            for (QObject *c : group->children()) {
                if (QDockWidget *dw = qobject_cast<QDockWidget *>(c)) {
                   if (dw != widget && dw->isFloating() && dw->isVisible() && !dw->isMinimized()) {
                      candidates << dw;
@@ -2439,12 +2471,15 @@ void QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mousePos)
             }
          }
       }
-      foreach (QWidget *w, candidates) {
+
+      for (QWidget *w : candidates) {
          QWindow *handle1 = widget->windowHandle();
          QWindow *handle2 = w->windowHandle();
+
          if (handle1 && handle2 && handle1->screen() != handle2->screen()) {
             continue;
          }
+
          if (!w->geometry().contains(mousePos)) {
             continue;
          }
@@ -2621,10 +2656,9 @@ bool QMainWindowLayout::restoreState(QDataStream &stream)
    return true;
 }
 
-
 // Returns if this toolbar *should* be using HIToolbar. Won't work for all in between cases
-// for example, you have a toolbar in the top area and then you suddenly turn on
-// HIToolbar.
+// for example, you have a toolbar in the top area and then you suddenly turn on HIToolbar.
+
 bool QMainWindowLayout::usesHIToolBar(QToolBar *toolbar) const
 {
 
@@ -2653,8 +2687,8 @@ void QMainWindowLayout::timerEvent(QTimerEvent *e)
       movingSeparatorPos = movingSeparatorOrigin;
    }
 #endif
+
    QLayout::timerEvent(e);
 }
-
 
 #endif // QT_NO_MAINWINDOW

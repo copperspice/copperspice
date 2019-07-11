@@ -609,7 +609,7 @@ void QOpenGLContext::destroy()
    delete d->functions;
    d->functions = 0;
 
-   foreach (QAbstractOpenGLFunctions *func, d->externalVersionFunctions) {
+   for (QAbstractOpenGLFunctions *func : d->externalVersionFunctions) {
       QAbstractOpenGLFunctionsPrivate *func_d = QAbstractOpenGLFunctionsPrivate::get(func);
       func_d->owningContext = 0;
       func_d->initialized = false;

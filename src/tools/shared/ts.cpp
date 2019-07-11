@@ -617,7 +617,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd, in
    QHash<QString, QList<TranslatorMessage> > messageOrder;
    QList<QString> contextOrder;
 
-   foreach (const TranslatorMessage & msg, translator.messages()) {
+   for (const TranslatorMessage & msg : translator.messages()) {
       // no need for such noise
       if (msg.type() == TranslatorMessage::Obsolete && msg.translation().isEmpty()) {
          continue;
@@ -682,7 +682,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd, in
             {
                QString cfile = currentFile;
                bool first = true;
-               foreach (const TranslatorMessage::Reference & ref, msg.allReferences()) {
+               for (const TranslatorMessage::Reference &ref : msg.allReferences()) {
                   QString fn = cd.m_targetDir.relativeFilePath(ref.fileName())
                                .replace(QLatin1Char('\\'), QLatin1Char('/'));
                   int ln = ref.lineNumber();

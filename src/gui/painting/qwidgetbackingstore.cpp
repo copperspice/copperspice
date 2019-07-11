@@ -182,7 +182,7 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
    }
    i = (i + 1) & 3;
 
-   foreach (const QRect &rect, region.rects()) {
+   for (const QRect &rect : region.rects()) {
       RECT winRect;
       SetRect(&winRect, rect.left(), rect.top(), rect.right(), rect.bottom());
       FillRect(hdc, &winRect, brush);
@@ -1078,7 +1078,7 @@ static void findAllTextureWidgetsRecursively(QWidget *tlw, QWidget *widget)
       }
 
       // Native child widgets, if there was any, get their own separate QPlatformTextureList.
-      foreach (QWidget *ncw, nativeChildren) {
+      for (QWidget *ncw : nativeChildren) {
          if (QWidgetPrivate::get(ncw)->textureChildSeen) {
             findAllTextureWidgetsRecursively(tlw, ncw);
          }
@@ -1145,7 +1145,7 @@ void QPlatformTextureListWatcher::watch(QPlatformTextureList *textureList)
 
 bool QPlatformTextureListWatcher::isLocked() const
 {
-   foreach (bool v, m_locked) {
+   for (bool v : m_locked) {
       if (v) {
          return true;
       }
@@ -1191,7 +1191,7 @@ bool QWidgetBackingStore::syncAllowed()
       textureListWatcher = 0;
    } else if (!tlwExtra->widgetTextures.isEmpty()) {
       bool skipSync = false;
-      foreach (QPlatformTextureList *tl, tlwExtra->widgetTextures) {
+      for (QPlatformTextureList *tl : tlwExtra->widgetTextures) {
          if (tl->isLocked()) {
             if (!textureListWatcher) {
                textureListWatcher = new QPlatformTextureListWatcher(this);

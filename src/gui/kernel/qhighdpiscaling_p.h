@@ -362,7 +362,7 @@ inline QRegion fromNativeLocalRegion(const QRegion &pixelRegion, const QWindow *
 
    qreal scaleFactor = QHighDpiScaling::factor(window);
    QRegion pointRegion;
-   foreach (const QRect &rect, pixelRegion.rects()) {
+   for (const QRect &rect : pixelRegion.rects()) {
       pointRegion += QRect(fromNative(rect.topLeft(), scaleFactor),
             fromNative(rect.size(), scaleFactor));
    }
@@ -379,7 +379,7 @@ inline QRegion fromNativeLocalExposedRegion(const QRegion &pixelRegion, const QW
 
    const qreal scaleFactor = QHighDpiScaling::factor(window);
    QRegion pointRegion;
-   foreach (const QRect &rect, pixelRegion.rects()) {
+   for (const QRect &rect : pixelRegion.rects()) {
       const QPointF topLeftP = QPointF(rect.topLeft()) / scaleFactor;
       const QPointF bottomRightP = QPointF(rect.bottomRight()) / scaleFactor;
       pointRegion += QRect(QPoint(qFloor(topLeftP.x()), qFloor(topLeftP.y())),
@@ -396,9 +396,8 @@ inline QRegion toNativeLocalRegion(const QRegion &pointRegion, const QWindow *wi
 
    qreal scaleFactor = QHighDpiScaling::factor(window);
    QRegion pixelRegon;
-   foreach (const QRect &rect, pointRegion.rects()) {
-      pixelRegon += QRect(toNative(rect.topLeft(), scaleFactor),
-            toNative(rect.size(), scaleFactor));
+   for (const QRect &rect : pointRegion.rects()) {
+      pixelRegon += QRect(toNative(rect.topLeft(), scaleFactor), toNative(rect.size(), scaleFactor));
    }
    return pixelRegon;
 }
@@ -457,7 +456,7 @@ QVector<T> fromNativePixels(const QVector<T> &pixelValues, const QWindow *window
    }
 
    QVector<T> pointValues;
-   foreach (const T &pixelValue, pixelValues) {
+   for (const T &pixelValue : pixelValues) {
       pointValues.append(pixelValue / QHighDpiScaling::factor(window));
    }
    return pointValues;
@@ -472,7 +471,7 @@ QVector<T> toNativePixels(const QVector<T> &pointValues, const QWindow *window)
    }
 
    QVector<T> pixelValues;
-   foreach (const T &pointValue, pointValues) {
+   for (const T &pointValue : pointValues) {
       pixelValues.append(pointValue * QHighDpiScaling::factor(window));
    }
    return pixelValues;

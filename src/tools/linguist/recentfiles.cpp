@@ -114,17 +114,18 @@ void RecentFiles::readConfig()
    m_strLists.clear();
    QVariant val = QSettings().value(configKey());
    if (val.type() == QVariant::StringList) // Backwards compat to Qt < 4.5
-      foreach (const QString & s, val.toStringList())
+      for (const QString & s : val.toStringList())
       m_strLists << QStringList(QFileInfo(s).canonicalFilePath());
+
    else
-      foreach (const QVariant & v, val.toList())
-      m_strLists << v.toStringList();
+      for (const QVariant & v : val.toList())
+         m_strLists << v.toStringList();
 }
 
 void RecentFiles::writeConfig() const
 {
    QList<QVariant> vals;
-   foreach (const QStringList & sl, m_strLists)
+   for (const QStringList & sl : m_strLists)
    vals << sl;
    QSettings().setValue(configKey(), vals);
 }

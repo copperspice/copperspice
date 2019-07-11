@@ -105,7 +105,8 @@ QAccessibleInterface *QAccessibleMenu::parent() const
       QList<QWidget *> parentCandidates;
       parentCandidates << menu()->parentWidget();
       parentCandidates << menuAction->associatedWidgets();
-      foreach (QWidget *w, parentCandidates) {
+
+      for (QWidget *w : parentCandidates) {
          if (qobject_cast<QMenu *>(w) || qobject_cast<QMenuBar *>(w)) {
             if (w->actions().indexOf(menuAction) != -1) {
                return getOrCreateMenu(w, menuAction);

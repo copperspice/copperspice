@@ -317,7 +317,7 @@ void QPageSetupWidget::initPageSizes()
       QPlatformPrinterSupport *ps = QPlatformPrinterSupportPlugin::get();
       if (ps) {
          QPrintDevice printDevice = ps->createPrintDevice(m_printerName);
-         foreach (const QPageSize &pageSize, printDevice.supportedPageSizes()) {
+         for (const QPageSize &pageSize : printDevice.supportedPageSizes()) {
             m_ui.pageSizeCombo->addItem(pageSize.name(), QVariant::fromValue(pageSize.id()));
          }
          if (m_ui.pageSizeCombo->count() > 0 && printDevice.supportsCustomPageSizes()) {

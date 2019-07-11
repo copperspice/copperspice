@@ -521,8 +521,10 @@ void DirectShowMetaDataControl::updateMetadata(IFilterGraph2 *graph, IBaseFilter
    IWMHeaderInfo *info = com_cast<IWMHeaderInfo>(source, IID_IWMHeaderInfo);
 
    if (info) {
-      Q_FOREACH (const QWMMetaDataKey &key, *qt_wmMetaDataKeys()) {
+
+      for (const QWMMetaDataKey &key : *qt_wmMetaDataKeys()) {
          QVariant var = getValue(info, key.wmName);
+
          if (var.isValid()) {
             if (key.qtName == QMediaMetaData::Duration) {
                // duration is provided in 100-nanosecond units, convert to milliseconds

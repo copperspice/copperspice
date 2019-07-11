@@ -70,11 +70,11 @@ FormDataIODevice::~FormDataIODevice()
     delete m_currentFile;
 }
 
-qint64 FormDataIODevice::computeSize() 
+qint64 FormDataIODevice::computeSize()
 {
     for (int i = 0; i < m_formElements.size(); ++i) {
         const FormDataElement& element = m_formElements[i];
-        if (element.m_type == FormDataElement::data) 
+        if (element.m_type == FormDataElement::data)
             m_dataSize += element.m_data.size();
         else {
             QFileInfo fi(element.m_filename);
@@ -121,7 +121,7 @@ qint64 FormDataIODevice::readData(char* destination, qint64 size)
 
         if (element.m_type == FormDataElement::data) {
             const qint64 toCopy = qMin(available, element.m_data.size() - m_currentDelta);
-            memcpy(destination+copied, element.m_data.data()+m_currentDelta, toCopy); 
+            memcpy(destination+copied, element.m_data.data()+m_currentDelta, toCopy);
             m_currentDelta += toCopy;
             copied += toCopy;
 
@@ -417,7 +417,7 @@ void QNetworkReplyHandler::abort()
         m_replyWrapper->reply()->abort();
 	m_replyWrapper.reset();
     }
-    
+
     deleteLater();
 }
 
@@ -526,7 +526,7 @@ void QNetworkReplyHandler::sendResponseIfNeeded()
         response.setHTTPStatusText(m_replyWrapper->reply()->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toByteArray().constData());
 
         // Add remaining headers.
-        foreach (const QNetworkReply::RawHeaderPair& pair, m_replyWrapper->reply()->rawHeaderPairs())
+        for (const QNetworkReply::RawHeaderPair& pair : m_replyWrapper->reply()->rawHeaderPairs())
             response.setHTTPHeaderField(QString::fromLatin1(pair.first), QString::fromLatin1(pair.second));
     }
 

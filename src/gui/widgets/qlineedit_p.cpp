@@ -398,14 +398,16 @@ void QLineEditPrivate::_q_textChanged(const QString &text)
       const int newTextSize = text.size();
       if (!newTextSize || !lastTextSize) {
          lastTextSize = newTextSize;
+
 #ifndef QT_NO_ANIMATION
          const bool fadeIn = newTextSize > 0;
-         foreach (const SideWidgetEntry &e, leadingSideWidgets) {
+         for (const SideWidgetEntry &e : leadingSideWidgets) {
             if (e.flags & SideWidgetFadeInWithText) {
                static_cast<QLineEditIconButton *>(e.widget)->animateShow(fadeIn);
             }
          }
-         foreach (const SideWidgetEntry &e, trailingSideWidgets) {
+
+         for (const SideWidgetEntry &e : trailingSideWidgets) {
             if (e.flags & SideWidgetFadeInWithText) {
                static_cast<QLineEditIconButton *>(e.widget)->animateShow(fadeIn);
             }
@@ -444,7 +446,7 @@ QIcon QLineEditPrivate::clearButtonIcon() const
 
 void QLineEditPrivate::setClearButtonEnabled(bool enabled)
 {
-   foreach (const SideWidgetEntry &e, trailingSideWidgets) {
+   for (const SideWidgetEntry &e : trailingSideWidgets) {
       if (e.flags & SideWidgetClearButton) {
          e.action->setEnabled(enabled);
          break;
@@ -459,16 +461,20 @@ void QLineEditPrivate::positionSideWidgets()
       const QRect contentRect = q->rect();
       const SideWidgetParameters p = sideWidgetParameters();
       const int delta = p.margin + p.widgetWidth;
+
       QRect widgetGeometry(QPoint(p.margin, (contentRect.height() - p.widgetHeight) / 2),
          QSize(p.widgetWidth, p.widgetHeight));
-      foreach (const SideWidgetEntry &e, leftSideWidgetList()) {
+
+      for (const SideWidgetEntry &e : leftSideWidgetList()) {
          e.widget->setGeometry(widgetGeometry);
          if (e.action->isVisible()) {
             widgetGeometry.moveLeft(widgetGeometry.left() + delta);
          }
       }
+
       widgetGeometry.moveLeft(contentRect.width() - p.widgetWidth - p.margin);
-      foreach (const SideWidgetEntry &e, rightSideWidgetList()) {
+
+      for (const SideWidgetEntry &e : rightSideWidgetList()) {
          e.widget->setGeometry(widgetGeometry);
          if (e.action->isVisible()) {
             widgetGeometry.moveLeft(widgetGeometry.left() - delta);
