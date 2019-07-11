@@ -166,7 +166,7 @@ void QNetworkReplyImplPrivate::_q_copyReadyRead()
    // Needs to be done where sendCacheContents() (?) of HTTP is emitting
    // metaDataChanged ?
 
-   forever {
+   while(true) {
       qint64 bytesToRead = nextDownstreamBlockSize();
       if (bytesToRead == 0) {
          // we'll be called again, eventually
@@ -264,7 +264,7 @@ void QNetworkReplyImplPrivate::_q_bufferOutgoingData()
    qint64 bytesToBuffer = 0;
 
    // read data into our buffer
-   forever {
+   while(true) {
       bytesToBuffer = outgoingData->bytesAvailable();
 
       // unknown? just try 2 kB, this also ensures we always try to read the EOF

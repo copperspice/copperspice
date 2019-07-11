@@ -1051,9 +1051,8 @@ restart:
                   yyCh = getChar();
                }
 
-               forever {
-                  if (yyCh == EOF || yyCh == '\n')
-                  {
+               while (true) {
+                  if (yyCh == EOF || yyCh == '\n') {
                      yyMsg() << "Unterminated C++ character\n";
                      break;
                   }

@@ -1692,7 +1692,7 @@ bool QAbstractSocket::waitForBytesWritten(int msecs)
       }
    }
 
-   forever {
+   while(true) {
       bool readyToRead = false;
       bool readyToWrite = false;
       if (! d->socketEngine->waitForReadOrWrite(&readyToRead, &readyToWrite, true, ! d->writeBuffer.isEmpty(),
@@ -1763,7 +1763,7 @@ bool QAbstractSocket::waitForDisconnected(int msecs)
       }
    }
 
-   forever {
+   while(true) {
       bool readyToRead = false;
       bool readyToWrite = false;
 

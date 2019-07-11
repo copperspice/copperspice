@@ -1176,12 +1176,13 @@ void MainWindow::translate(int mode)
 
       QModelIndex index = m_messageView->currentIndex();
       int prevRemained = m_remainingCount;
-      forever {
-         if (--m_remainingCount <= 0)
-         {
+
+      while (true) {
+         if (--m_remainingCount <= 0) {
             if (!m_hitCount) {
                break;
             }
+
             m_remainingCount = m_dataModel->messageCount() - 1;
             if (QMessageBox::question(m_translateDialog, tr("Translate - Qt Linguist"),
                                       tr("No more occurrences of '%1'. Start over?").arg(findText),

@@ -169,7 +169,8 @@ void QLinuxInputMouseHandler::readMouseData()
     bool posChanged = false;
     bool pendingMouseEvent = false;
     int eventCompressCount = 0;
-    forever {
+
+    while (true) {
         n = QT_READ(m_fd, reinterpret_cast<char *>(buffer) + n, sizeof(buffer) - n);
 
         if (n == 0) {
@@ -470,7 +471,7 @@ void QLinuxInputKeyboardHandler::readKeycode()
     struct ::input_event buffer[32];
     int n = 0;
 
-    forever {
+    while (true) {
         n = QT_READ(m_fd, reinterpret_cast<char *>(buffer) + n, sizeof(buffer) - n);
 
         if (n == 0) {

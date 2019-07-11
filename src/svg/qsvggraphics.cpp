@@ -392,7 +392,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
          tl.setFormats(formatRanges[i]);
          tl.beginLayout();
 
-         forever {
+         while (true) {
             QTextLine line = tl.createLine();
             if (!line.isValid())
             {

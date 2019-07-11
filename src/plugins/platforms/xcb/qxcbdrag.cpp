@@ -629,7 +629,8 @@ int QXcbDrag::findTransactionByTime(xcb_timestamp_t timestamp)
 static Window findXdndAwareParent(Window window)
 {
    Window target = 0;
-   forever {
+
+   while (true) {
       // check if window has XdndAware
       Atom type = 0;
       int f;
@@ -1161,7 +1162,8 @@ void QXcbDrag::cancel()
 static xcb_window_t findXdndAwareParent(QXcbConnection *c, xcb_window_t window)
 {
    xcb_window_t target = 0;
-   forever {
+
+   while (true) {
       // check if window has XdndAware
       xcb_get_property_cookie_t gpCookie = Q_XCB_CALL(
             xcb_get_property(c->xcb_connection(), false, window,

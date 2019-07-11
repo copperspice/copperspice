@@ -778,7 +778,7 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
    QElapsedTimer stopWatch;
    stopWatch.start();
 
-   forever {
+    while (true) {
       fd_set fdread;
       fd_set fdwrite;
 
@@ -940,7 +940,7 @@ bool QProcessPrivate::waitForFinished(int msecs)
    QElapsedTimer stopWatch;
    stopWatch.start();
 
-   forever {
+    while (true) {
       fd_set fdread;
       fd_set fdwrite;
       int nfds = -1;

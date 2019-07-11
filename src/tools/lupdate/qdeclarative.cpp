@@ -350,9 +350,9 @@ bool processComment(const QChar *chars, int length, Comment &comment)
       comment.sourcetext.reserve(comment.sourcetext.length() + length - 2);
       ushort *ptr = (ushort *)comment.sourcetext.data() + comment.sourcetext.length();
       int p = 2, c;
-      forever {
-         if (p >= length)
-         {
+
+      while (true) {
+         if (p >= length) {
             break;
          }
          c = chars[p++].unicode();
@@ -364,9 +364,9 @@ bool processComment(const QChar *chars, int length, Comment &comment)
          {
             break;
          }
-         forever {
-            if (p >= length)
-            {
+
+         while (true) {
+            if (p >= length) {
                break;
             }
             c = chars[p++].unicode();

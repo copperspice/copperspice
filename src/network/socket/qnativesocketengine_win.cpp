@@ -765,7 +765,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
       }
    }
 
-   forever {
+   while(true) {
       int connectResult = ::WSAConnect(socketDescriptor, &aa.a, sockAddrSize, 0, 0, 0, 0);
 
       if (connectResult == SOCKET_ERROR)    {

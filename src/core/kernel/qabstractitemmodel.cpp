@@ -1508,7 +1508,8 @@ bool QAbstractItemModelPrivate::allowMove(const QModelIndex &srcParent, int star
 
    QModelIndex destinationAncestor = destinationParent;
    int pos = (Qt::Vertical == orientation) ? destinationAncestor.row() : destinationAncestor.column();
-   forever {
+
+   while (true) {
       if (destinationAncestor == srcParent)
       {
          if (pos >= start && pos <= end) {

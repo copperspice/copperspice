@@ -67,7 +67,7 @@ int qt_safe_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
 
    // loop and recalculate the timeout as needed
    int ret;
-   forever {
+   while (true) {
 
       ret = ::pselect(nfds, fdread, fdwrite, fdexcept, &timeout, 0);
       if (ret != -1 || errno != EINTR) {

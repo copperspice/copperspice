@@ -551,7 +551,8 @@ static void writeVariants(QTextStream &t, const char *indent, const QString &inp
    if ((offset = input.indexOf(QChar(Translator::BinaryVariantSeparator))) >= 0) {
       t << " variants=\"yes\">";
       int start = 0;
-      forever {
+
+      while (true) {
          t << "\n    " << indent << "<lengthvariant>"
          << protect(input.mid(start, offset - start))
          << "</lengthvariant>";
@@ -650,7 +651,8 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd, in
 
          bool isUtf8 = msg.isUtf8();
          bool second = false;
-         forever {
+
+         while (true) {
 
             t << "    <message";
             if (!msg.id().isEmpty())

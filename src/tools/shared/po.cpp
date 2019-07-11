@@ -229,7 +229,8 @@ static QByteArray slurpEscapedString(const QList<QByteArray> &lines, int &l,
          break;
       }
       offset++;
-      forever {
+
+      while (true) {
          if (offset == line.length())
          {
             goto premature_eol;

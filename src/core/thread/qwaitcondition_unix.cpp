@@ -52,7 +52,7 @@ class QWaitConditionPrivate
 
    bool wait(unsigned long time) {
       int code;
-      forever {
+      while (true) {
          if (time != ULONG_MAX) {
             struct timeval tv;
             gettimeofday(&tv, 0);

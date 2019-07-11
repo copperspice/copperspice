@@ -61,7 +61,8 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
    HANDLE hServer;
    wchar_t pipeName[256];
    unsigned int attempts = 1000;
-   forever {
+
+    while (true) {
       _snwprintf(pipeName, sizeof(pipeName) / sizeof(pipeName[0]), L"\\\\.\\pipe\\qt-%X", qrand());
 
       DWORD dwOpenMode = FILE_FLAG_OVERLAPPED;
@@ -787,7 +788,7 @@ bool QProcessPrivate::waitForFinished(int msecs)
 
    QIncrementalSleepTimer timer(msecs);
 
-   forever {
+    while (true) {
       if (!stdinChannel.buffer.isEmpty() && !_q_canWrite()) {
          return false;
       }

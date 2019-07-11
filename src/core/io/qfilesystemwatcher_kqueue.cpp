@@ -237,7 +237,7 @@ void QKqueueFileSystemWatcherEngine::stop()
 
 void QKqueueFileSystemWatcherEngine::run()
 {
-   forever {
+   while (true) {
       int r;
       struct kevent kev;
       DEBUG() << "QKqueueFileSystemWatcherEngine: waiting for kevents...";

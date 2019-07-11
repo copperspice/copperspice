@@ -1000,7 +1000,7 @@ qint64 QIODevice::write(const char *data, qint64 maxSize)
 
       qint64 writtenSoFar = 0;
 
-      forever {
+      while (true) {
          const char *endOfBlock = startOfBlock;
          while (endOfBlock < endOfData && *endOfBlock != '\n')
          {

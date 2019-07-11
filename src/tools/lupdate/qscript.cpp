@@ -2637,9 +2637,8 @@ void QScriptParser::processComment(const QChar *chars, int length)
       ushort *ptr = (ushort *)sourcetext.data() + sourcetext.length();
       int p = 2, c;
 
-      forever {
-         if (p >= length)
-         {
+      while (true) {
+         if (p >= length) {
             break;
          }
          c = chars[p++].unicode();
@@ -2652,9 +2651,9 @@ void QScriptParser::processComment(const QChar *chars, int length)
             yyMsg() << qPrintable(LU::tr("Unexpected character in meta string\n"));
             break;
          }
-         forever {
-            if (p >= length)
-            {
+
+         while (true) {
+            if (p >= length) {
             whoops:
                yyMsg() << qPrintable(LU::tr("Unterminated meta string\n"));
                break;

@@ -119,7 +119,7 @@ static QSet<QByteArray> interfaceNames(int socket)
    struct ifconf interfaceList;
    static const int STORAGEBUFFER_GROWTH = 256;
 
-   forever {
+   while(true) {
       // grow the storage buffer
       storageBuffer.resize(storageBuffer.size() + STORAGEBUFFER_GROWTH);
       interfaceList.ifc_buf = storageBuffer.data();

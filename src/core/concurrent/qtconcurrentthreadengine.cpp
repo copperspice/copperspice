@@ -30,7 +30,7 @@ ThreadEngineBarrier::ThreadEngineBarrier()
 
 void ThreadEngineBarrier::acquire()
 {
-   forever {
+   while (true) {
       int localCount = count.load();
       if (localCount < 0)
       {
@@ -48,7 +48,7 @@ void ThreadEngineBarrier::acquire()
 
 int ThreadEngineBarrier::release()
 {
-   forever {
+   while (true)  {
       int localCount = count.load();
       if (localCount == -1)
       {
@@ -73,7 +73,7 @@ int ThreadEngineBarrier::release()
 // Wait until all threads have been released
 void ThreadEngineBarrier::wait()
 {
-   forever {
+   while (true)  {
       int localCount = count.load();
       if (localCount == 0)
       {
@@ -98,7 +98,7 @@ int ThreadEngineBarrier::currentCount()
 // returns true if the thread was released.
 bool ThreadEngineBarrier::releaseUnlessLast()
 {
-   forever {
+   while (true)  {
       int localCount = count.load();
       if (qAbs(localCount) == 1)
       {

@@ -401,7 +401,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
    ulong len = qMax(expectedSize, 1ul);
    QScopedPointer<QByteArray::Data, QScopedPointerPodDeleter> d;
 
-   forever {
+   while (true) {
       ulong alloc = len;
       if (len  >= (1u << 31u) - sizeof(QByteArray::Data))
       {

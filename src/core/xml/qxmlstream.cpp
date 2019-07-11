@@ -1773,7 +1773,7 @@ QString QXmlStreamReader::readElementText(ReadElementTextBehaviour behaviour)
    if (isStartElement()) {
       QString result;
 
-      forever {
+      while (true) {
          switch (readNext())
          {
             case Characters:
@@ -2377,7 +2377,7 @@ QXmlStreamPrivateTagStack::NamespaceDeclaration &QXmlStreamWriterPrivate::findNa
       QString s;
       int n = ++namespacePrefixCount;
 
-      forever {
+      while (true) {
          s     = "n" + QString::number(n++);
          int j = namespaceDeclarations.size() - 2;
 
