@@ -159,7 +159,7 @@ class DerivedString : public AtomicValue
    static QString attributeNormalize(const QString &input) {
       QString retval(input);
       const int len = retval.length();
-      const QLatin1Char space(' ');
+      const QChar space(' ');
 
       for (int i = 0; i < len; ++i) {
          const QChar ati(retval.at(i));

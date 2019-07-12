@@ -237,12 +237,11 @@ QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int
 
    pieceTable->beginEditBlock();
 
-   //     qDebug("---> createTable: rows=%d, cols=%d at %d", rows, cols, pos);
+   // qDebug("---> createTable: rows=%d, cols=%d at %d", rows, cols, pos);
    // add block after table
    QTextCharFormat charFmt;
    charFmt.setObjectIndex(table->objectIndex());
    charFmt.setObjectType(QTextFormat::TableCellObject);
-
 
    int charIdx = pieceTable->formatCollection()->indexForFormat(charFmt);
    int cellIdx = pieceTable->formatCollection()->indexForFormat(QTextBlockFormat());
@@ -256,12 +255,12 @@ QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int
 
    for (int i = 1; i < rows * cols; ++i) {
       d->cells.append(pieceTable->insertBlock(QTextBeginningOfFrame, pos, cellIdx, charIdx));
-      // 	    qDebug("      addCell at %d", pos);
+      // qDebug("      addCell at %d", pos);
       ++pos;
    }
 
    d->fragment_end = pieceTable->insertBlock(QTextEndOfFrame, pos, cellIdx, charIdx);
-   // 	qDebug("      addEOR at %d", pos);
+   //    qDebug("      addEOR at %d", pos);
    ++pos;
 
    d->blockFragmentUpdates = false;
@@ -274,7 +273,9 @@ QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int
 
 struct QFragmentFindHelper {
    inline QFragmentFindHelper(int _pos, const QTextDocumentPrivate::FragmentMap &map)
-      : pos(_pos), fragmentMap(map) {}
+      : pos(_pos), fragmentMap(map)
+  {}
+
    uint pos;
    const QTextDocumentPrivate::FragmentMap &fragmentMap;
 };
@@ -398,7 +399,7 @@ void QTextTablePrivate::update() const
          for (int jj = 0; jj < colspan; ++jj) {
             Q_ASSERT(grid[(r + ii)*nCols + c + jj] == 0);
             grid[(r + ii)*nCols + c + jj] = fragment;
-            //  		    qDebug("    setting cell %d span=%d/%d at %d/%d", fragment, rowspan, colspan, r+ii, c+jj);
+            //           qDebug("    setting cell %d span=%d/%d at %d/%d", fragment, rowspan, colspan, r+ii, c+jj);
          }
       }
    }

@@ -110,6 +110,7 @@ static inline bool is_brush_transparent(const QBrush &brush)
    if (s != Qt::TexturePattern) {
       return s >= Qt::Dense1Pattern && s <= Qt::DiagCrossPattern;
    }
+
    if (qHasPixmapTexture(brush)) {
       return brush.texture().isQBitmap() || brush.texture().hasAlphaChannel();
    } else {
@@ -224,7 +225,7 @@ QTransform QPainterPrivate::viewTransform() const
 
 qreal QPainterPrivate::effectiveDevicePixelRatio() const
 {
-   // Special cases for devices that does not support PdmDevicePixelRatio go here:
+   // Special cases for devices that does not support PdmDevicePixelRatio go here
    if (device->devType() == QInternal::Printer) {
       return qreal(1);
    }
@@ -263,12 +264,14 @@ bool QPainterPrivate::attachPainterPrivate(QPainter *q, QPaintDevice *pdev)
       sp->d_ptr->d_ptrs_size = 4;
       sp->d_ptr->d_ptrs = (QPainterPrivate **)malloc(4 * sizeof(QPainterPrivate *));
       Q_CHECK_PTR(sp->d_ptr->d_ptrs);
+
    } else if (sp->d_ptr->refcount - 1 == sp->d_ptr->d_ptrs_size) {
       // However, to support corner cases we grow the array dynamically if needed.
       sp->d_ptr->d_ptrs_size <<= 1;
       const int newSize = sp->d_ptr->d_ptrs_size * sizeof(QPainterPrivate *);
       sp->d_ptr->d_ptrs = q_check_ptr((QPainterPrivate **)realloc(sp->d_ptr->d_ptrs, newSize));
    }
+
    sp->d_ptr->d_ptrs[++sp->d_ptr->refcount - 2] = q->d_ptr.data();
    q->d_ptr.take();
    q->d_ptr.reset(sp->d_ptr.data());
@@ -320,6 +323,7 @@ void QPainterPrivate::detachPainterPrivate(QPainter *q)
       if (original) {
          original->inDestructor = true;
       }
+
    } else if (!original) {
       original = new QPainterPrivate(q);
    }
@@ -614,7 +618,7 @@ void QPainterPrivate::drawStretchedGradient(const QPainterPath &path, DrawOperat
             Q_ASSERT(engine->hasFeature(QPaintEngine::PatternTransform));
 
             // avoid computing the bounding rect twice
-            if (!needsFill || brushMode != QGradient::ObjectBoundingMode) {
+            if (! needsFill || brushMode != QGradient::ObjectBoundingMode) {
                boundingRect = path.boundingRect();
             }
 
@@ -643,6 +647,7 @@ void QPainterPrivate::drawStretchedGradient(const QPainterPath &path, DrawOperat
    if (changedPen) {
       q->setPen(pen);
    }
+
    if (changedBrush) {
       q->setBrush(brush);
    }
@@ -870,7 +875,7 @@ void QPainterPrivate::updateEmulationSpecifier(QPainterState *s)
 
 void QPainterPrivate::updateStateImpl(QPainterState *newState)
 {
-   // ### we might have to call QPainter::begin() here...
+   // ### we might have to call QPainter::begin() here
    if (!engine->state) {
       engine->state = newState;
       engine->setDirty(QPaintEngine::AllDirty);
@@ -4077,9 +4082,6 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
          // error - may want to throw
       }
 
-
-
-
       QTextItemInt gf(glyphs, &d->state->font, str.begin(), str.end(), fontEngine);
       drawTextItem(p, gf);
 
@@ -4462,6 +4464,7 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
 
       bool aa = true;
       const QTransform &m = state->matrix;
+
       if (state->matrix.type() < QTransform::TxShear) {
          bool isPlain90DegreeRotation =
             (qFuzzyIsNull(m.m11())
@@ -4482,19 +4485,22 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
                && qFuzzyIsNull(m.m22())
             )
             ;
-         aa = !isPlain90DegreeRotation;
+         aa = ! isPlain90DegreeRotation;
       }
+
       if (aa) {
          q->setRenderHint(QPainter::Antialiasing, true);
       }
    }
+*/
 
-   if (!extended) {
+   if (! extended) {
       updateState(state);
    }
 
-   if (!ti.glyphs.numGlyphs) {
+   if (! ti.glyphs.numGlyphs) {
       // nothing to do
+
    } else if (ti.fontEngine->type() == QFontEngine::Multi) {
       QFontEngineMulti *multi = static_cast<QFontEngineMulti *>(ti.fontEngine);
 
@@ -4510,17 +4516,20 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
       }
 
       int start = 0;
-      int end, i;
+      int end;
+      int i;
+
       for (end = 0; end < ti.glyphs.numGlyphs; ++end) {
          const int e = glyphs.glyphs[end] >> 24;
+
          if (e == which) {
             continue;
          }
 
-
          multi->ensureEngineAt(which);
          QTextItemInt ti2 = ti.midItem(multi->engine(which), start, end - start);
          ti2.width = 0;
+
          // set the high byte to zero and calc the width
          for (i = start; i < end; ++i) {
             glyphs.glyphs[i] = glyphs.glyphs[i] & 0xffffff;
@@ -4537,12 +4546,13 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
             engine->drawTextItem(QPointF(x, y), ti2);
          }
 
-         if (!rtl) {
+         if (! rtl) {
             x += ti2.width.toReal();
          }
 
          // reset the high byte for all glyphs and advance to the next sub-string
          const int hi = which << 24;
+
          for (i = start; i < end; ++i) {
             glyphs.glyphs[i] = hi | glyphs.glyphs[i];
          }
@@ -4555,6 +4565,7 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
       multi->ensureEngineAt(which);
       QTextItemInt ti2 = ti.midItem(multi->engine(which), start, end - start);
       ti2.width = 0;
+
       // set the high byte to zero and calc the width
       for (i = start; i < end; ++i) {
          glyphs.glyphs[i] = glyphs.glyphs[i] & 0xffffff;
@@ -4584,11 +4595,13 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
          engine->drawTextItem(p, ti);
       }
    }
+
    drawTextItemDecoration(q, p, ti.fontEngine, textEngine, ti.underlineStyle,
       ti.flags, ti.width.toReal(), ti.charFormat);
 
    if (state->renderHints != oldRenderHints) {
       state->renderHints = oldRenderHints;
+
       if (extended) {
          extended->renderHintsChanged();
       } else {
@@ -5116,7 +5129,7 @@ void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QTextOptio
       }
    }
 
-   // we need to copy r here to protect against the case (&r == brect).
+   // we need to copy r here to protect against the case (&r == brect)
    QRectF r(_r);
 
    bool dontclip      = (tf & Qt::TextDontClip);
@@ -5164,7 +5177,7 @@ void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QTextOptio
 start_lengthVariant:
    bool hasMoreLengthVariants = false;
 
-   // compatible behaviour to the old implementation. Replace tabs by spaces
+   // Replace tabs by spaces
    int old_offset = offset;
 
    for (; offset < text.length(); offset++) {
@@ -5310,7 +5323,7 @@ start_lengthVariant:
          lineWidth = qMax(0, r.width());
       }
 
-      if (!wordwrap) {
+      if (! wordwrap) {
          tf |= Qt::TextIncludeTrailingSpaces;
       }
 
@@ -5329,16 +5342,18 @@ start_lengthVariant:
          l.setLineWidth(lineWidth);
          height += leading;
 
+         // Make sure lines are positioned on whole pixels
          height = qCeil(height);
          l.setPosition(QPointF(0., height));
          height += textLayout.engine()->lines[l.lineNumber()].height().toReal();
 
-         width   = qMax(width, l.naturalTextWidth());
+         width  = qMax(width, l.naturalTextWidth());
 
          if (! dontclip && ! brect && height >= r.height()) {
             break;
          }
       }
+
       textLayout.endLayout();
    }
 
@@ -5381,7 +5396,8 @@ start_lengthVariant:
       }
 
       for (int i = 0; i < textLayout.lineCount(); i++) {
-         QTextLine line = textLayout.lineAt(i);
+         QTextLine line   = textLayout.lineAt(i);
+
          QTextEngine *eng = textLayout.engine();
          eng->enableDelayDecorations();
 
@@ -5414,11 +5430,7 @@ void QPainter::setLayoutDirection(Qt::LayoutDirection direction)
    }
 }
 
-/*!
-    Returns the layout direction used by the painter when drawing text.
 
-    \sa QTextOption::textDirection(), setLayoutDirection(), drawText(), {QPainter#Settings}{Settings}
-*/
 Qt::LayoutDirection QPainter::layoutDirection() const
 {
    Q_D(const QPainter);
@@ -5505,65 +5517,21 @@ QPointF QPaintEngineState::brushOrigin() const
    return static_cast<const QPainterState *>(this)->brushOrigin;
 }
 
-/*!
-    Returns the background brush in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyBackground flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 QBrush QPaintEngineState::backgroundBrush() const
 {
    return static_cast<const QPainterState *>(this)->bgBrush;
 }
 
-/*!
-    Returns the background mode in the current paint engine
-    state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyBackgroundMode flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
 Qt::BGMode QPaintEngineState::backgroundMode() const
 {
    return static_cast<const QPainterState *>(this)->bgMode;
 }
 
-/*!
-    Returns the font in the current paint engine
-    state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyFont flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
 QFont QPaintEngineState::font() const
 {
    return static_cast<const QPainterState *>(this)->font;
 }
-
-/*!
-    \since 4.2
-    \obsolete
-
-    Returns the matrix in the current paint engine
-    state.
-
-    \note It is advisable to use transform() instead of this function to
-    preserve the properties of perspective transformations.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyTransform flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 QMatrix QPaintEngineState::matrix() const
 {
@@ -5572,36 +5540,12 @@ QMatrix QPaintEngineState::matrix() const
    return st->matrix.toAffine();
 }
 
-/*!
-    \since 4.3
-
-    Returns the matrix in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyTransform flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
-
 QTransform QPaintEngineState::transform() const
 {
    const QPainterState *st = static_cast<const QPainterState *>(this);
 
    return st->matrix;
 }
-
-
-/*!
-    Returns the clip operation in the current paint engine
-    state.
-
-    This variable should only be used when the state() returns a
-    combination which includes either the QPaintEngine::DirtyClipPath
-    or the QPaintEngine::DirtyClipRegion flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 Qt::ClipOperation QPaintEngineState::clipOperation() const
 {
@@ -5622,41 +5566,16 @@ bool QPaintEngineState::brushNeedsResolving() const
 }
 
 
-/*!
-    \since 4.3
-
-    Returns whether the coordinate of the stroke have been specified
-    as bounded by the current rendering operation and have to be
-    resolved (about the currently rendered primitive).
-*/
 bool QPaintEngineState::penNeedsResolving() const
 {
    const QPen &pen = static_cast<const QPainterState *>(this)->pen;
    return needsResolving(pen.brush());
 }
 
-/*!
-    Returns the clip region in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyClipRegion flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
 QRegion QPaintEngineState::clipRegion() const
 {
    return static_cast<const QPainterState *>(this)->clipRegion;
 }
-
-/*!
-    Returns the clip path in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyClipPath flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 QPainterPath QPaintEngineState::clipPath() const
 {
@@ -5796,11 +5715,13 @@ const QTransform &QPainter::deviceTransform() const
 void QPainter::resetTransform()
 {
    Q_D(QPainter);
+
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output) {
       printf("QPainter::resetMatrix()\n");
    }
 #endif
+
    if (!d->engine) {
       qWarning("QPainter::resetMatrix: Painter not active");
       return;
@@ -5812,6 +5733,7 @@ void QPainter::resetTransform()
    d->state->worldMatrix = QTransform();
    setMatrixEnabled(false);
    setViewTransformEnabled(false);
+
    if (d->extended) {
       d->extended->transformChanged();
    } else {

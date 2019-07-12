@@ -24,11 +24,10 @@
 #include <qlcdnumber.h>
 
 #ifndef QT_NO_LCDNUMBER
+
 #include <qbitarray.h>
 #include <qpainter.h>
 #include <qframe_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QLCDNumberPrivate : public QFramePrivate
 {
@@ -127,6 +126,7 @@ static QString double2string(double num, int base, int ndigits, bool *oflow)
 
    if (base != QLCDNumber::Dec) {
       bool of = num >= 2147483648.0 || num < -2147483648.0;
+
       if (of) {                             // oops, integer overflow
          if (oflow) {
             *oflow = true;
@@ -304,7 +304,6 @@ void QLCDNumber::setDigitCount(int numDigits)
 
    if (numDigits > 99) {
       qWarning("QLCDNumber::setNumDigits: (%s) Max 99 digits allowed", csPrintable(objectName()));
-
       numDigits = 99;
    }
 
@@ -324,8 +323,10 @@ void QLCDNumber::setDigitCount(int numDigits)
       if (numDigits == d->ndigits) {           // no change
          return;
       }
+
       int i;
       int dif;
+
       if (numDigits > d->ndigits) {            // expand
          dif = numDigits - d->ndigits;
          QString buf;
@@ -372,19 +373,12 @@ bool QLCDNumber::checkOverflow(int num) const
    return of;
 }
 
-
-/*!
-    Returns true if \a num is too big to be displayed in its entirety;
-    otherwise returns false.
-
-    \sa display(), digitCount(), smallDecimalPoint()
-*/
-
 bool QLCDNumber::checkOverflow(double num) const
 {
    Q_D(const QLCDNumber);
    bool of;
    double2string(num, d->base, d->ndigits, &of);
+
    return of;
 }
 
@@ -406,18 +400,14 @@ double QLCDNumber::value() const
    Q_D(const QLCDNumber);
    return d->val;
 }
-
-/*!
-    \overload
-
-    Displays the number \a num.
-*/
 void QLCDNumber::display(double num)
 {
    Q_D(QLCDNumber);
+
    d->val = num;
    bool of;
    QString s = double2string(d->val, d->base, d->ndigits, &of);
+
    if (of) {
       emit overflow();
    } else {
@@ -581,9 +571,11 @@ void QLCDNumber::paintEvent(QPaintEvent *)
 void QLCDNumberPrivate::internalSetString(const QString &s)
 {
    Q_Q(QLCDNumber);
+
    QString buffer;
    int i;
    int len = s.length();
+
    QBitArray newPoints(ndigits);
 
    if (!smallPoint) {
@@ -592,31 +584,43 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
       } else {
          buffer = s.right(ndigits).rightJustified(ndigits, QLatin1Char(' '));
       }
+
    } else {
       int  index = -1;
       bool lastWasPoint = true;
       newPoints.clearBit(0);
+
       for (i = 0; i < len; i++) {
          if (s[i] == QLatin1Char('.')) {
-            if (lastWasPoint) {           // point already set for digit?
-               if (index == ndigits - 1) { // no more digits
+
+            if (lastWasPoint) {
+               // point already set for digit?
+
+               if (index == ndigits - 1) {
+                  // no more digits
                   break;
                }
                index++;
                buffer[index] = QLatin1Char(' ');        // 2 points in a row, add space
             }
-            newPoints.setBit(index);        // set decimal point
+
+            newPoints.setBit(index);             // set decimal point
             lastWasPoint = true;
+
          } else {
             if (index == ndigits - 1) {
                break;
             }
+
             index++;
             buffer[index] = s[i];
             newPoints.clearBit(index);      // decimal point default off
+
+            newPoints.clearBit(index);           // decimal point default off
             lastWasPoint = false;
          }
       }
+
       if (index < ((int) ndigits) - 1) {
          for (i = index; i >= 0; i--) {
             buffer[ndigits - 1 - index + i] = buffer[i];
@@ -641,12 +645,7 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
    q->update();
 }
 
-/*!
-  \internal
-*/
-
-void QLCDNumberPrivate::drawString(const QString &s, QPainter &p,
-   QBitArray *newPoints, bool newString)
+void QLCDNumberPrivate::drawString(const QString &s, QPainter &p, QBitArray *newPoints, bool newString)
 {
    Q_Q(QLCDNumber);
    QPoint  pos;
@@ -661,11 +660,13 @@ void QLCDNumberPrivate::drawString(const QString &s, QPainter &p,
 
    for (int i = 0;  i < ndigits; i++) {
       pos = QPoint(xOffset + xAdvance * i, yOffset);
+
       if (newString) {
          drawDigit(pos, p, segLen, s[i].toLatin1(), digitStr[i].toLatin1());
       } else {
          drawDigit(pos, p, segLen, s[i].toLatin1());
       }
+
       if (newPoints) {
          char newPoint = newPoints->testBit(i) ? '.' : ' ';
          if (newString) {
@@ -676,6 +677,7 @@ void QLCDNumberPrivate::drawString(const QString &s, QPainter &p,
          }
       }
    }
+
    if (newString) {
       digitStr = s;
       digitStr.truncate(ndigits);

@@ -1067,12 +1067,14 @@ bool qt_read_xpm_image_or_array(QIODevice *device, const char *const *source, QI
       }
 
       if (buf.indexOf("/* XPM") != 0) {
+         // possible editor issue */
+
          while (readBytes > 0) {
             device->ungetChar(buf.at(readBytes - 1));
             --readBytes;
          }
          return false;
-      }// bad magic
+      } // bad magic
    }
 
    if (!read_xpm_header(device, source, index, state, &cpp, &ncols, &w, &h)) {
@@ -1086,7 +1088,8 @@ static const char *xpm_color_name(int cpp, int index)
 {
    static char returnable[5];
    static const char code[] = ".#abcdefghijklmnopqrstuvwxyzABCD"
-      "EFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                               "EFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
    // cpp is limited to 4 and index is limited to 64^cpp
    if (cpp > 1) {
       if (cpp > 2) {
@@ -1098,9 +1101,11 @@ static const char *xpm_color_name(int cpp, int index)
          }
          returnable[2] = code[index % 64];
          index /= 64;
+
       } else {
          returnable[2] = '\0';
       }
+
       // the following 4 lines are a joke!
       if (index == 0) {
          index = 64 * 44 + 21;
@@ -1109,9 +1114,11 @@ static const char *xpm_color_name(int cpp, int index)
       }
       returnable[1] = code[index % 64];
       index /= 64;
+
    } else {
       returnable[1] = '\0';
    }
+
    returnable[0] = code[index];
 
    return returnable;
@@ -1121,7 +1128,7 @@ static const char *xpm_color_name(int cpp, int index)
 // write XPM image data
 static bool write_xpm_image(const QImage &sourceImage, QIODevice *device, const QString &fileName)
 {
-   if (!device->isWritable()) {
+   if (! device->isWritable()) {
       return false;
    }
 
@@ -1166,8 +1173,8 @@ static bool write_xpm_image(const QImage &sourceImage, QIODevice *device, const 
    // write header
    QTextStream s(device);
    s << "/* XPM */" << endl
-      << "static char *" << fbname(fileName) << "[]={" << endl
-      << '\"' << w << ' ' << h << ' ' << ncolors << ' ' << cpp << '\"';
+     << "static char *" << fbname(fileName) << "[]={" << endl
+     << '\"' << w << ' ' << h << ' ' << ncolors << ' ' << cpp << '\"';
 
    // write palette
    QMap<QRgb, int>::iterator c = colorMap.begin();
@@ -1175,7 +1182,7 @@ static bool write_xpm_image(const QImage &sourceImage, QIODevice *device, const 
    while (c != colorMap.end()) {
       QRgb color = c.key();
 
-      if (image.format() != QImage::Format_RGB32 && !qAlpha(color)) {
+      if (image.format() != QImage::Format_RGB32 && ! qAlpha(color)) {
          line = QString("\"%1 c None\"").formatArg(QString::fromLatin1(xpm_color_name(cpp, *c)));
 
       } else {
@@ -1187,29 +1194,36 @@ static bool write_xpm_image(const QImage &sourceImage, QIODevice *device, const 
       s << ',' << endl << line;
    }
 
-   // write pixels, limit to 4 characters per pixel
-   line.truncate(cpp * w);
    for (y = 0; y < h; y++) {
       const QRgb *yp = reinterpret_cast<const QRgb *>(image.constScanLine(y));
-      int cc = 0;
+
+      // reuse line
+      line.clear();
 
       for (x = 0; x < w; x++) {
          int color = (int)(*(yp + x));
+
          QByteArray chars(xpm_color_name(cpp, colorMap[color]));
-         line[cc++] = QLatin1Char(chars[0]);
+         line.append(QChar(chars[0]));
+
          if (cpp > 1) {
-            line[cc++] = QLatin1Char(chars[1]);
+            line.append(QChar(chars[1]));
+
             if (cpp > 2) {
-               line[cc++] = QLatin1Char(chars[2]);
+               line.append(QChar(chars[2]));
+
                if (cpp > 3) {
-                  line[cc++] = QLatin1Char(chars[3]);
+                  line.append(QChar(chars[3]));
                }
             }
          }
       }
+
       s << ',' << endl << '\"' << line << '\"';
    }
+
    s << "};" << endl;
+
    return (s.status() == QTextStream::Ok);
 }
 

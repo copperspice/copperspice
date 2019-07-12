@@ -147,7 +147,7 @@ struct WriteInitialization : public TreeWalker {
       m_LayoutDefaultHandler.acceptLayoutDefault(node);
    }
 
-   void acceptLayoutFunction(DomLayoutFunction *node)  override{
+   void acceptLayoutFunction(DomLayoutFunction *node)  override {
       m_LayoutDefaultHandler.acceptLayoutFunction(node);
    }
 
@@ -181,7 +181,7 @@ struct WriteInitialization : public TreeWalker {
 
    // Apply a comma-separated list of values using a function "setSomething(int idx, value)"
    void writePropertyList(const QString &varName, const QString &setFunction, const QString &value,
-                          const QString &defaultValue);
+      const QString &defaultValue);
 
    enum { WritePropertyIgnoreMargin = 1, WritePropertyIgnoreSpacing = 2, WritePropertyIgnoreObjectName = 4 };
    void writeProperties(const QString &varName, const QString &className, const DomPropertyList &lst, unsigned flags = 0);
@@ -193,7 +193,7 @@ struct WriteInitialization : public TreeWalker {
    {
     public:
       Item(const QString &itemClassName, const QString &indent, QTextStream &setupUiStream, QTextStream &retranslateUiStream,
-           Driver *driver);
+         Driver *driver);
       ~Item();
       enum EmptyItemPolicy {
          DontConstruct,
@@ -205,7 +205,7 @@ struct WriteInitialization : public TreeWalker {
       void writeRetranslateUi(const QString &parentPath);
 
       void addSetter(const QString &setter, const QString &directive = QString(),
-                     bool translatable = false); // do not call it if you already added *this as a child of another Item
+         bool translatable = false); // do not call it if you already added *this as a child of another Item
 
       void addChild(Item *child); // all setters should already been added
 
@@ -240,7 +240,7 @@ struct WriteInitialization : public TreeWalker {
    };
 
    void addInitializer(Item *item, const QString &name, int column, const QString &value, const QString &directive = QString(),
-                  bool translatable = false) const;
+      bool translatable = false) const;
 
    void addQtFlagsInitializer(Item *item, const DomPropertyMap &properties, const QString &name, int column = -1) const;
 
@@ -249,7 +249,7 @@ struct WriteInitialization : public TreeWalker {
    void addBrushInitializer(Item *item, const DomPropertyMap &properties, const QString &name, int column = -1);
 
    void addStringInitializer(Item *item, const DomPropertyMap &properties, const QString &name, int column = -1,
-                  const QString &directive = QString()) const;
+      const QString &directive = QString()) const;
 
    void addCommonInitializers(Item *item, const DomPropertyMap &properties, int column = -1);
 
@@ -335,11 +335,11 @@ struct WriteInitialization : public TreeWalker {
 
       // Write out the layout margin and spacing properties applying the defaults.
       void writeProperties(const QString &indent, const QString &varName,  const DomPropertyMap &pm, int marginType,
-                           bool suppressMarginDefault, QTextStream &str) const;
+         bool suppressMarginDefault, QTextStream &str) const;
     private:
       void writeProperty(int p, const QString &indent, const QString &objectName, const DomPropertyMap &pm,
-                         const QString &propertyName, const QString &setter, int defaultStyleValue,
-                         bool suppressDefault, QTextStream &str) const;
+         const QString &propertyName, const QString &setter, int defaultStyleValue,
+         bool suppressDefault, QTextStream &str) const;
 
       enum Properties { Margin, Spacing, NumProperties };
       enum StateFlags { HasDefaultValue = 1, HasDefaultFunction = 2};

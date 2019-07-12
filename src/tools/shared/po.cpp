@@ -98,6 +98,7 @@ static QString poEscapedString(const QString &prefix, const QString &keyword,
       if (!noWrap) {
          if (lines.count() != 1 ||
                lines.first().length() > MAX_LEN - keyword.length() - prefix.length() - 3) {
+
             QStringList olines = lines;
             lines = QStringList(QString());
             const int maxlen = MAX_LEN - prefix.length() - 2;
@@ -107,6 +108,7 @@ static QString poEscapedString(const QString &prefix, const QString &keyword,
 
                while (off + maxlen < line.length()) {
                   int idx = line.lastIndexOf(QLatin1Char(' '), off + maxlen - 1) + 1;
+
                   if (idx == off) {
 #ifdef HARD_WRAP_LONG_WORDS
                      // This doesn't seem too nice, but who knows ...
@@ -219,12 +221,15 @@ static QByteArray slurpEscapedString(const QList<QByteArray> &lines, int &l,
 
    for (; l < lines.size(); ++l) {
       const QByteArray &line = lines.at(l);
+
       if (line.isEmpty() || !line.startsWith(prefix)) {
          break;
       }
+
       while (isspace(line[offset])) { // No length check, as string has no trailing spaces.
          offset++;
       }
+
       if (line[offset] != '"') {
          break;
       }

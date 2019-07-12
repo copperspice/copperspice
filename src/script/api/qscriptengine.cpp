@@ -3163,6 +3163,7 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
             *reinterpret_cast<QChar *>(ptr) = QChar(QScript::ToUInt16(toNumber(exec, value)));
          }
          return true;
+
       case QMetaType::QDateTime:
          if (isDate(value)) {
             *reinterpret_cast<QDateTime *>(ptr) = toDateTime(exec, value);
@@ -3176,14 +3177,12 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
          }
          break;
 
-#ifndef QT_NO_REGEXP
       case QMetaType::QRegularExpression:
          if (isRegExp(value)) {
             *reinterpret_cast<QRegularExpression *>(ptr) = toRegExp(exec, value);
             return true;
          }
          break;
-#endif
 
       case QMetaType::QObjectStar:
          if (isQObject(value) || value.isNull()) {

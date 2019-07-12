@@ -453,6 +453,6 @@ void QOpenGLVertexArrayObject::release()
 
 void QOpenGLVertexArrayObject::_q_contextAboutToBeDestroyed()
 {
-	Q_D(QOpenGLVertexArrayObject);
-	d->_q_contextAboutToBeDestroyed();
+   Q_D(QOpenGLVertexArrayObject);
+   d->_q_contextAboutToBeDestroyed();
 }

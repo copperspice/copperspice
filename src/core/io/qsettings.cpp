@@ -759,7 +759,8 @@ inline static void iniChopTrailingSpaces(QString &str)
 {
    int n = str.size() - 1;
    QChar ch;
-   while (n >= 0 && ((ch = str.at(n)) == QLatin1Char(' ') || ch == QLatin1Char('\t'))) {
+
+   while (n >= 0 && ((ch = str.at(n)) == ' ' || ch == '\t')) {
       str.truncate(n--);
    }
 }

@@ -47,7 +47,6 @@ static QString MagicComment("TRANSLATOR");
 
 class HashString
 {
-
  public:
    HashString() : m_hash(0x80000000) {}
    explicit HashString(const QString &str) : m_str(str), m_hash(0x80000000) {}
@@ -213,7 +212,7 @@ class CppParser
       tor = _tor;
    }
    void parse(const QString &initialContext, ConversionData &cd, const QStringList &includeStack,
-              QSet<QString> &inclusions);
+      QSet<QString> &inclusions);
    void parseInternal(ConversionData &cd, const QStringList &includeStack, QSet<QString> &inclusions);
    const ParseResults *recordResults(bool isHeader);
    void deleteResults() {
@@ -264,7 +263,7 @@ class CppParser
       bool utf8, bool plural);
 
    void processInclude(const QString &file, ConversionData &cd,
-                       const QStringList &includeStack, QSet<QString> &inclusions);
+      const QStringList &includeStack, QSet<QString> &inclusions);
 
    void saveState(SavedState *state);
    void loadState(const SavedState *state);
@@ -275,29 +274,29 @@ class CppParser
    typedef bool (CppParser::*VisitNamespaceCallback)(const Namespace *ns, void *context) const;
 
    bool visitNamespace(const QList<HashString> &namespaces, int nsCount,
-                       VisitNamespaceCallback callback, void *context,
-                       VisitRecorder &vr, const ParseResults *rslt) const;
+      VisitNamespaceCallback callback, void *context,
+      VisitRecorder &vr, const ParseResults *rslt) const;
 
    bool visitNamespace(const QList<HashString> &namespaces, int nsCount,
-                       VisitNamespaceCallback callback, void *context) const;
+      VisitNamespaceCallback callback, void *context) const;
 
    static QStringList stringListifySegments(const QList<HashString> &namespaces);
    bool qualifyOneCallbackOwn(const Namespace *ns, void *context) const;
    bool qualifyOneCallbackUsing(const Namespace *ns, void *context) const;
 
    bool qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-                   QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const;
+      QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const;
    bool qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-                   QList<HashString> *resolved) const;
+      QList<HashString> *resolved) const;
    bool fullyQualify(const QList<HashString> &namespaces, int nsCnt,
-                     const QList<HashString> &segments, bool isDeclaration,
-                     QList<HashString> *resolved, QStringList *unresolved) const;
+      const QList<HashString> &segments, bool isDeclaration,
+      QList<HashString> *resolved, QStringList *unresolved) const;
    bool fullyQualify(const QList<HashString> &namespaces,
-                     const QList<HashString> &segments, bool isDeclaration,
-                     QList<HashString> *resolved, QStringList *unresolved) const;
+      const QList<HashString> &segments, bool isDeclaration,
+      QList<HashString> *resolved, QStringList *unresolved) const;
    bool fullyQualify(const QList<HashString> &namespaces,
-                     const QString &segments, bool isDeclaration,
-                     QList<HashString> *resolved, QStringList *unresolved) const;
+      const QString &segments, bool isDeclaration,
+      QList<HashString> *resolved, QStringList *unresolved) const;
 
    bool findNamespaceCallback(const Namespace *ns, void *context) const;
    const Namespace *findNamespace(const QList<HashString> &namespaces, int nsCount = -1) const;
@@ -729,10 +728,10 @@ restart:
                      if (is.elseLine != -1) {
 
                         if (yyBracketDepth != is.bracketDepth1st || yyBraceDepth != is.braceDepth1st
-                              || yyParenDepth != is.parenDepth1st) {
+                           || yyParenDepth != is.parenDepth1st) {
 
                            yyMsg(is.elseLine) << qPrintable(LU::tr("Parenthesis/bracket/brace mismatch between "
-                                                 "#if and #else branches; using #if branch\n"));
+                                    "#if and #else branches; using #if branch\n"));
                         }
 
                      } else {
@@ -756,11 +755,11 @@ restart:
                      IfdefState is = yyIfdefStack.pop();
                      if (is.elseLine != -1) {
                         if (yyBracketDepth != is.bracketDepth1st
-                              || yyBraceDepth != is.braceDepth1st
-                              || yyParenDepth != is.parenDepth1st)
+                           || yyBraceDepth != is.braceDepth1st
+                           || yyParenDepth != is.parenDepth1st)
                            yyMsg(is.elseLine)
                                  << qPrintable(LU::tr("Parenthesis/brace mismatch between "
-                                                      "#if and #else branches; using #if branch\n"));
+                                          "#if and #else branches; using #if branch\n"));
                         yyBracketDepth = is.bracketDepth1st;
                         yyBraceDepth = is.braceDepth1st;
                         yyParenDepth = is.parenDepth1st;
@@ -787,17 +786,14 @@ restart:
 
                   forever {
                      yyCh = getChar();
-                     if (yyCh == EOF)
-                     {
+                     if (yyCh == EOF) {
                         yyMsg() << qPrintable(LU::tr("Unterminated C++ comment\n"));
                         break;
                      }
 
-                     if (yyCh == '*')
-                     {
+                     if (yyCh == '*') {
                         metAster = true;
-                     } else if (metAster && yyCh == '/')
-                     {
+                     } else if (metAster && yyCh == '/') {
                         yyCh = getChar();
                         break;
                      } else {
@@ -898,9 +894,9 @@ restart:
                   }
 
                   while (yyCh == '+' || yyCh == '-' || yyCh == '*' || yyCh == '/' || yyCh == '%'
-                         || yyCh == '=' || yyCh == '<' || yyCh == '>' || yyCh == '!'
-                         || yyCh == '&' || yyCh == '|' || yyCh == '~' || yyCh == '^'
-                         || yyCh == '[' || yyCh == ']') {
+                     || yyCh == '=' || yyCh == '<' || yyCh == '>' || yyCh == '!'
+                     || yyCh == '&' || yyCh == '|' || yyCh == '~' || yyCh == '^'
+                     || yyCh == '[' || yyCh == ']') {
                      yyCh = getChar();
                   }
                }
@@ -1057,8 +1053,7 @@ restart:
                      break;
                   }
                   yyCh = getChar();
-                  if (yyCh == '\'')
-                  {
+                  if (yyCh == '\'') {
                      yyCh = getChar();
                      break;
                   }
@@ -1076,7 +1071,7 @@ restart:
                   if (!inDefine)
                      yyMsg(yyCurLineNo)
                            << qPrintable(LU::tr("Excess closing brace in C++ code"
-                                                " (or abuse of the C++ preprocessor)\n"));
+                                    " (or abuse of the C++ preprocessor)\n"));
                   // Avoid things getting messed up even more
                   yyCh = getChar();
                   return Tok_Semicolon;
@@ -1095,7 +1090,7 @@ restart:
                if (yyParenDepth == 0)
                   yyMsg(yyCurLineNo)
                         << qPrintable(LU::tr("Excess closing parenthesis in C++ code"
-                                             " (or abuse of the C++ preprocessor)\n"));
+                                 " (or abuse of the C++ preprocessor)\n"));
                else {
                   yyParenDepth--;
                }
@@ -1112,7 +1107,7 @@ restart:
                if (yyBracketDepth == 0)
                   yyMsg(yyCurLineNo)
                         << qPrintable(LU::tr("Excess closing bracket in C++ code"
-                                             " (or abuse of the C++ preprocessor)\n"));
+                                 " (or abuse of the C++ preprocessor)\n"));
                else {
                   yyBracketDepth--;
                }
@@ -1130,7 +1125,7 @@ restart:
                   do {
                      yyCh = getChar();
                   } while ((yyCh >= '0' && yyCh <= '9')
-                           || (yyCh >= 'a' && yyCh <= 'f') || (yyCh >= 'A' && yyCh <= 'F'));
+                     || (yyCh >= 'a' && yyCh <= 'f') || (yyCh >= 'A' && yyCh <= 'F'));
                   return Tok_Integer;
                }
                if (yyCh < '0' || yyCh > '9') {
@@ -1225,8 +1220,8 @@ QStringList CppParser::stringListifyNamespace(const QList<HashString> &namespace
 }
 
 bool CppParser::visitNamespace(const QList<HashString> &namespaces, int nsCount,
-                               VisitNamespaceCallback callback, void *context,
-                               VisitRecorder &vr, const ParseResults *rslt) const
+   VisitNamespaceCallback callback, void *context,
+   VisitRecorder &vr, const ParseResults *rslt) const
 {
    const Namespace *ns = &rslt->rootNamespace;
    for (int i = 1; i < nsCount; ++i)
@@ -1236,6 +1231,7 @@ bool CppParser::visitNamespace(const QList<HashString> &namespaces, int nsCount,
    if ((this->*callback)(ns, context)) {
       return true;
    }
+
 supers:
    for (const ParseResults *sup : rslt->includes) {
 
@@ -1248,7 +1244,7 @@ supers:
 }
 
 bool CppParser::visitNamespace(const QList<HashString> &namespaces, int nsCount,
-                               VisitNamespaceCallback callback, void *context) const
+   VisitNamespaceCallback callback, void *context) const
 {
    VisitRecorder vr;
    return visitNamespace(namespaces, nsCount, callback, context, vr, results);
@@ -1265,7 +1261,7 @@ QStringList CppParser::stringListifySegments(const QList<HashString> &segments)
 
 struct QualifyOneData {
    QualifyOneData(const QList<HashString> &ns, int nsc, const HashString &seg, QList<HashString> *rslvd,
-                  QSet<HashStringList> *visited)
+      QSet<HashStringList> *visited)
       : namespaces(ns), nsCount(nsc), segment(seg), resolved(rslvd), visitedUsings(visited) {
    }
 
@@ -1324,7 +1320,7 @@ bool CppParser::qualifyOneCallbackUsing(const Namespace *ns, void *context) cons
 }
 
 bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-                           QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const
+   QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const
 {
    QualifyOneData data(namespaces, nsCnt, segment, resolved, visitedUsings);
 
@@ -1336,7 +1332,7 @@ bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const
 }
 
 bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-                           QList<HashString> *resolved) const
+   QList<HashString> *resolved) const
 {
    QSet<HashStringList> visitedUsings;
 
@@ -1344,8 +1340,8 @@ bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const
 }
 
 bool CppParser::fullyQualify(const QList<HashString> &namespaces, int nsCnt,
-                             const QList<HashString> &segments, bool isDeclaration,
-                             QList<HashString> *resolved, QStringList *unresolved) const
+   const QList<HashString> &segments, bool isDeclaration,
+   QList<HashString> *resolved, QStringList *unresolved) const
 {
    int nsIdx;
    int initSegIdx;
@@ -1387,16 +1383,16 @@ bool CppParser::fullyQualify(const QList<HashString> &namespaces, int nsCnt,
 }
 
 bool CppParser::fullyQualify(const QList<HashString> &namespaces,
-                             const QList<HashString> &segments, bool isDeclaration,
-                             QList<HashString> *resolved, QStringList *unresolved) const
+   const QList<HashString> &segments, bool isDeclaration,
+   QList<HashString> *resolved, QStringList *unresolved) const
 {
    return fullyQualify(namespaces, namespaces.count(),
-                       segments, isDeclaration, resolved, unresolved);
+         segments, isDeclaration, resolved, unresolved);
 }
 
 bool CppParser::fullyQualify(const QList<HashString> &namespaces,
-                             const QString &quali, bool isDeclaration,
-                             QList<HashString> *resolved, QStringList *unresolved) const
+   const QString &quali, bool isDeclaration,
+   QList<HashString> *resolved, QStringList *unresolved) const
 {
    static QString strColons(QLatin1String("::"));
 
@@ -1417,10 +1413,12 @@ bool CppParser::findNamespaceCallback(const Namespace *ns, void *context) const
 
 const Namespace *CppParser::findNamespace(const QList<HashString> &namespaces, int nsCount) const
 {
-   const Namespace *ns = 0;
+   const Namespace *ns = nullptr;
+
    if (nsCount == -1) {
       nsCount = namespaces.count();
    }
+
    visitNamespace(namespaces, nsCount, &CppParser::findNamespaceCallback, &ns);
    return ns;
 }
@@ -1540,7 +1538,7 @@ static bool isHeader(const QString &name)
 }
 
 void CppParser::processInclude(const QString &file, ConversionData &cd, const QStringList &includeStack,
-                               QSet<QString> &inclusions)
+   QSet<QString> &inclusions)
 {
    QString cleanFile = QDir::cleanPath(file);
 
@@ -1556,9 +1554,9 @@ void CppParser::processInclude(const QString &file, ConversionData &cd, const QS
    // namespace data for inclusion into other files.
    bool isIndirect = false;
    if (namespaces.count() == 1 && functionContext.count() == 1
-         && functionContextUnresolved.isEmpty() && pendingContext.isEmpty()
-         && !CppFiles::isBlacklisted(cleanFile)
-         && isHeader(cleanFile)) {
+      && functionContextUnresolved.isEmpty() && pendingContext.isEmpty()
+      && !CppFiles::isBlacklisted(cleanFile)
+      && isHeader(cleanFile)) {
 
       QSet<const ParseResults *> res = CppFiles::getResults(cleanFile);
       if (!res.isEmpty()) {
@@ -1571,7 +1569,7 @@ void CppParser::processInclude(const QString &file, ConversionData &cd, const QS
 
    QFile f(cleanFile);
    if (!f.open(QIODevice::ReadOnly)) {
-      yyMsg() << qPrintable(LU::tr("Cannot open %1: %2\n").formatArgs(cleanFile, f.errorString()));
+      yyMsg() << qPrintable(LU::tr("Unable to open %1: %2\n").formatArgs(cleanFile, f.errorString()));
       return;
    }
 
@@ -1591,10 +1589,12 @@ void CppParser::processInclude(const QString &file, ConversionData &cd, const QS
       }
 
       parser.setInput(ts, cleanFile);
+
       QStringList stack = includeStack;
       stack << cleanFile;
       parser.parse(cd.m_defaultContext, cd, stack, inclusions);
       results->includes.insert(parser.recordResults(true));
+
    } else {
       CppParser parser(results);
       parser.namespaces = namespaces;
@@ -1609,6 +1609,7 @@ void CppParser::processInclude(const QString &file, ConversionData &cd, const QS
       // Avoid that messages obtained by direct scanning are used
       CppFiles::setBlacklisted(cleanFile);
    }
+
    inclusions.remove(cleanFile);
 }
 
@@ -1784,7 +1785,7 @@ QString CppParser::transcode(const QString &str, bool utf8)
       }
    }
    return (utf8 || yyForceUtf8) ? QString::fromUtf8(out.constData(), out.length())
-          : tor->codec()->toUnicode(out);
+      : tor->codec()->toUnicode(out);
 }
 
 void CppParser::recordMessage(
@@ -1806,7 +1807,7 @@ void CppParser::recordMessage(
 }
 
 void CppParser::parse(const QString &initialContext, ConversionData &cd, const QStringList &includeStack,
-                      QSet<QString> &inclusions)
+   QSet<QString> &inclusions)
 {
    if (tor) {
       yyCodecIsUtf8 = (tor->codecName() == "UTF-8");
@@ -2097,7 +2098,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
                      functionContextUnresolved = unresolved.join(strColons);
 
                      yyMsg() << qPrintable(LU::tr("Qualifying with unknown namespace/class %1::%2\n")
-                                           .formatArg(stringifyNamespace(functionContext)).formatArg(unresolved.first()));
+                           .formatArg(stringifyNamespace(functionContext)).formatArg(unresolved.first()));
                   }
                   pendingContext.clear();
                }
@@ -2140,7 +2141,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
                      }
                   } else {
                      context = (stringListifyNamespace(functionContext)
-                                << functionContextUnresolved).join(strColons);
+                           << functionContextUnresolved).join(strColons);
                   }
 
                } else {
@@ -2189,9 +2190,9 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
             line = yyLineNo;
             yyTok = getToken();
             if (match(Tok_LeftParen)
-                  && matchString(&context)
-                  && match(Tok_Comma)
-                  && matchString(&text) && !text.isEmpty()) {
+               && matchString(&context)
+               && match(Tok_Comma)
+               && matchString(&text) && !text.isEmpty()) {
                comment.clear();
                bool plural = false;
                if (!match(Tok_RightParen)) {
@@ -2248,7 +2249,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
             if (match(Tok_LeftParen) && matchString(&msgid) && !msgid.isEmpty()) {
                bool plural = match(Tok_Comma);
                recordMessage(line, QString(), sourcetext, QString(), extracomment,
-                             msgid, extra, false, plural);
+                  msgid, extra, false, plural);
             }
             sourcetext.clear();
             extracomment.clear();
@@ -2377,7 +2378,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
                QString::const_iterator iter = yyWord.begin();
                QChar c;
 
-               while (iter!= yyWord.end()) {
+               while (iter != yyWord.end()) {
                   c = *iter;
 
                   if (c == ' ' || c == '\t' || c == '\n') {
@@ -2468,7 +2469,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
 
          case Tok_Colon:
             if (!prospectiveContext.isEmpty()
-                  && yyBraceDepth == namespaceDepths.count() && yyParenDepth == 0) {
+               && yyBraceDepth == namespaceDepths.count() && yyParenDepth == 0) {
                pendingContext = prospectiveContext;
             }
             yyTokColonSeen = true;
@@ -2476,7 +2477,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
             break;
          case Tok_LeftBrace:
             if (!prospectiveContext.isEmpty()
-                  && yyBraceDepth == namespaceDepths.count() + 1 && yyParenDepth == 0) {
+               && yyBraceDepth == namespaceDepths.count() + 1 && yyParenDepth == 0) {
                pendingContext = prospectiveContext;
             }
          // fallthrough
@@ -2502,15 +2503,15 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
    if (yyBraceDepth != 0)
       yyMsg(yyBraceLineNo)
             << qPrintable(LU::tr("Unbalanced opening brace in C++ code"
-                                 " (or abuse of the C++ preprocessor)\n"));
+                     " (or abuse of the C++ preprocessor)\n"));
    else if (yyParenDepth != 0)
       yyMsg(yyParenLineNo)
             << qPrintable(LU::tr("Unbalanced opening parenthesis in C++ code"
-                                 " (or abuse of the C++ preprocessor)\n"));
+                     " (or abuse of the C++ preprocessor)\n"));
    else if (yyBracketDepth != 0)
       yyMsg(yyBracketLineNo)
             << qPrintable(LU::tr("Unbalanced opening bracket in C++ code"
-                                 " (or abuse of the C++ preprocessor)\n"));
+                     " (or abuse of the C++ preprocessor)\n"));
 }
 
 const ParseResults *CppParser::recordResults(bool isHeader)
@@ -2528,9 +2529,9 @@ const ParseResults *CppParser::recordResults(bool isHeader)
       const ParseResults *pr;
 
       if (! tor && results->includes.count() == 1
-            && results->rootNamespace.children.isEmpty()
-            && results->rootNamespace.aliases.isEmpty()
-            && results->rootNamespace.usings.isEmpty()) {
+         && results->rootNamespace.children.isEmpty()
+         && results->rootNamespace.aliases.isEmpty()
+         && results->rootNamespace.usings.isEmpty()) {
 
          // This is a forwarding header. Slash it.
          pr = *results->includes.begin();

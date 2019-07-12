@@ -441,7 +441,9 @@ static inline ThemeTabDirection getTabDirection(QTabBar::Shape shape)
     case QTabBar::TriangularSouth:
         ttd = kThemeTabSouth;
         break;
-    default:  // Added to remove the warning, since all values are taken care of, really!
+
+    default:  // Added to remove the warning, since all values are taken care of, really
+
     case QTabBar::RoundedNorth:
     case QTabBar::TriangularNorth:
         ttd = kThemeTabNorth;
@@ -499,34 +501,50 @@ namespace {
 class QMacCGContext
 {
     CGContextRef context;
+
 public:
     QMacCGContext(QPainter *p);
-    inline QMacCGContext() { context = 0; }
+
+    inline QMacCGContext() {
+       context = 0;
+    }
+
     inline QMacCGContext(const QPaintDevice *pdev) {
         context = qt_mac_cg_context(pdev);
     }
+
     inline QMacCGContext(CGContextRef cg, bool takeOwnership=false) {
         context = cg;
-        if (!takeOwnership)
+        if (! takeOwnership) {
             CGContextRetain(context);
+        }
     }
+
     inline QMacCGContext(const QMacCGContext &copy) : context(0) { *this = copy; }
     inline ~QMacCGContext() {
-        if (context)
+        if (context) {
             CGContextRelease(context);
+        }
     }
+
     inline bool isNull() const { return context; }
     inline operator CGContextRef() { return context; }
+
     inline QMacCGContext &operator=(const QMacCGContext &copy) {
-        if (context)
+        if (context) {
             CGContextRelease(context);
+       }
+
         context = copy.context;
         CGContextRetain(context);
         return *this;
     }
+
     inline QMacCGContext &operator=(CGContextRef cg) {
-        if (context)
+        if (context) {
             CGContextRelease(context);
+        }
+
         context = cg;
         CGContextRetain(context); //we do not take ownership
         return *this;
@@ -573,12 +591,14 @@ HIMutableShapeRef qt_mac_toHIMutableShape(const QRegion &region)
             HIShapeUnionWithRect(shape, &cgRect);
         }
     }
+
     return shape;
 }
 
 QRegion qt_mac_fromHIShapeRef(HIShapeRef shape)
 {
     QRegion returnRegion;
+
     //returnRegion.detach();
     HIShapeEnumerate(shape, kHIShapeParseFromTopLeft, qt_mac_shape2QRegionHelper, &returnRegion);
     return returnRegion;
@@ -617,12 +637,14 @@ static void qt_mac_cleanUpMacColorSpaces()
         CFRelease(m_genericColorSpace);
         m_genericColorSpace = 0;
     }
+
     QHash<CGDirectDisplayID, CGColorSpaceRef>::const_iterator it = m_displayColorSpaceHash.constBegin();
     while (it != m_displayColorSpaceHash.constEnd()) {
         if (it.value())
             CFRelease(it.value());
         ++it;
     }
+
     m_displayColorSpaceHash.clear();
 }
 
@@ -736,14 +758,14 @@ static int qt_mac_aqua_get_metric(ThemeMetric met)
     return ret;
 }
 
-static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg, QSize szHint,
-                                    QAquaWidgetSize sz)
+static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg, QSize szHint, QAquaWidgetSize sz)
 {
     QSize ret(-1, -1);
     if (sz != QAquaSizeSmall && sz != QAquaSizeLarge && sz != QAquaSizeMini) {
         qDebug("Not sure how to return this...");
         return ret;
     }
+
     if ((widg && widg->testAttribute(Qt::WA_SetFont)) || !QApplication::desktopSettingsAware()) {
         // If you're using a custom font and it's bigger than the default font,
         // then no constraints for you. If you are smaller, we can try to help you out
@@ -781,19 +803,25 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
     }
 
     switch (ct) {
+
     case QStyle::CT_PushButton: {
         const QPushButton *psh = qobject_cast<const QPushButton *>(widg);
         // If this comparison is false, then the widget was not a push button.
         // This is bad and there's very little we can do since we were requested to find a
         // sensible size for a widget that pretends to be a QPushButton but is not.
+
         if(psh) {
             QString buttonText = qt_mac_removeMnemonics(psh->text());
-            if (buttonText.contains(QLatin1Char('\n')))
+
+            if (buttonText.contains('\n'))
                 ret = QSize(-1, -1);
+
             else if (sz == QAquaSizeLarge)
                 ret = QSize(-1, qt_mac_aqua_get_metric(kThemeMetricPushButtonHeight));
+
             else if (sz == QAquaSizeSmall)
                 ret = QSize(-1, qt_mac_aqua_get_metric(kThemeMetricSmallPushButtonHeight));
+
             else if (sz == QAquaSizeMini)
                 ret = QSize(-1, qt_mac_aqua_get_metric(kThemeMetricMiniPushButtonHeight));
 
@@ -804,6 +832,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
                 if (ret.height() < psh->iconSize().height())
                     ret.setHeight(-1);
             }
+
             else if (buttonText == QLatin1String("OK") || buttonText == QLatin1String("Cancel")){
                 // Aqua Style guidelines restrict the size of OK and Cancel buttons to 68 pixels.
                 // However, this doesn't work for German, therefore only do it for English,
@@ -811,6 +840,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
                 // that like to have really long words.
                 ret.setWidth(77 - 8);
             }
+
         } else {
             // The only sensible thing to do is to return whatever the style suggests...
             if (sz == QAquaSizeLarge)
@@ -823,7 +853,9 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
                 // Since there's no default size we return the large size...
                 ret = QSize(-1, qt_mac_aqua_get_metric(kThemeMetricPushButtonHeight));
          }
-#if 0 //Not sure we are applying the rules correctly for RadioButtons/CheckBoxes --Sam
+
+#if 0 //Not sure we are applying the rules correctly for RadioButtons/CheckBoxes
+
     } else if (ct == QStyle::CT_RadioButton) {
         QRadioButton *rdo = static_cast<QRadioButton *>(widg);
         // Exception for case where multiline radio button text requires no size constrainment
@@ -1796,7 +1828,6 @@ QMacStylePrivate::QMacStylePrivate()
         library.setLoadHints(QLibrary::ExportExternalSymbolsHint);
         ptrHIShapeGetBounds = reinterpret_cast<PtrHIShapeGetBounds>(library.resolve("HIShapeGetBounds"));
     }
-
 }
 
 QMacStylePrivate::~QMacStylePrivate()
@@ -4102,6 +4133,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
 
                 if (themeId == kThemePushButtonFont) {
                     QCommonStyle::drawControl(ce, &btn, p, w);
+
                 } else {
                     p->save();
                     CGContextSetShouldAntialias(cg, true);
@@ -4121,23 +4153,29 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
                     tti.options = kHIThemeTextBoxOptionNone;
                     tti.truncationPosition = kHIThemeTextTruncationNone;
                     tti.truncationMaxLines = 1 + btn.text.count(QLatin1Char('\n'));
+
                     QCFString buttonText = qt_mac_removeMnemonics(btn.text);
                     QRect r = btn.rect;
                     HIRect bounds = qt_hirectForQRect(r);
                     CS_HIThemeDrawTextBox(buttonText, &bounds, &tti, cg, kHIThemeOrientationNormal);
                     p->restore();
                 }
+
             } else {
                 if (hasIcon && !hasText) {
                     QCommonStyle::drawControl(ce, &btn, p, w);
+
                 } else {
                     QRect freeContentRect = btn.rect;
+
                     QRect textRect = itemTextRect(
                         btn.fontMetrics, freeContentRect, Qt::AlignCenter, btn.state & State_Enabled, btn.text);
+
                     if (hasMenu) {
                         textRect.moveTo(w ? 15 : 11, textRect.top()); // Supports Qt Quick Controls
                     }
-                    // Draw the icon:
+
+                    // Draw the icon
                     if (hasIcon) {
                         int contentW = textRect.width();
                         if (hasMenu)
@@ -4360,24 +4398,27 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
                                         static_cast<CGFloat>(textColor.blueF()), static_cast<CGFloat>(textColor.alphaF()) };
                 CGContextSetFillColorSpace(cg, qt_mac_genericColorSpace());
                 CGContextSetFillColor(cg, colorComp);
+
                 switch (d->aquaSizeConstrain(opt, w)) {
-                default:
-                case QAquaSizeUnknown:
-                case QAquaSizeLarge:
-                    tti.fontID = kThemeSystemFont;
-                    break;
-                case QAquaSizeSmall:
-                    tti.fontID = kThemeSmallSystemFont;
-                    break;
-                case QAquaSizeMini:
-                    tti.fontID = kThemeMiniSystemFont;
-                    break;
+                   default:
+                   case QAquaSizeUnknown:
+                   case QAquaSizeLarge:
+                       tti.fontID = kThemeSystemFont;
+                       break;
+                   case QAquaSizeSmall:
+                       tti.fontID = kThemeSmallSystemFont;
+                       break;
+                   case QAquaSizeMini:
+                       tti.fontID = kThemeMiniSystemFont;
+                       break;
                 }
+
                 tti.horizontalFlushness = kHIThemeTextHorizontalFlushCenter;
                 tti.verticalFlushness = kHIThemeTextVerticalFlushCenter;
                 tti.options = verticalTabs ? kHIThemeTextBoxOptionStronglyVertical : kHIThemeTextBoxOptionNone;
                 tti.truncationPosition = kHIThemeTextTruncationNone;
                 tti.truncationMaxLines = 1 + myTab.text.count(QLatin1Char('\n'));
+
                 QCFString tabText = qt_mac_removeMnemonics(myTab.text);
                 QRect r = myTab.rect.adjusted(0, 0, 0, -1);
                 HIRect bounds = qt_hirectForQRect(r);
@@ -4386,6 +4427,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
             }
         }
         break;
+
     case CE_DockWidgetTitle:
         if (const QDockWidget *dockWidget = qobject_cast<const QDockWidget *>(w)) {
             bool floating = dockWidget->isFloating();
@@ -4409,8 +4451,10 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
                     newr.translate(newr.x() - int(tmpRect.origin.x), newr.y() - int(tmpRect.origin.y));
                     titleBarRect = qt_hirectForQRect(newr);
                 }
+
                 QMacCGContext cg(p);
                 CS_HIThemeDrawWindowFrame(&titleBarRect, &wdi, cg, kHIThemeOrientationNormal, 0);
+
             } else {
                 // fill title bar background
                 QLinearGradient linearGrad(0, opt->rect.top(), 0, opt->rect.bottom());
@@ -5976,7 +6020,9 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                 groupBox.subControls = groupBox.subControls & ~SC_GroupBoxLabel;
                 didModifySubControls = true;
             }
+
             QCommonStyle::drawComplexControl(cc, &groupBox, p, widget);
+
             if (didModifySubControls) {
                 p->save();
                 CGContextSetShouldAntialias(cg, true);
@@ -5995,6 +6041,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                 tti.options = kHIThemeTextBoxOptionNone;
                 tti.truncationPosition = kHIThemeTextTruncationNone;
                 tti.truncationMaxLines = 1 + groupBox.text.count(QLatin1Char('\n'));
+
                 QCFString groupText = qt_mac_removeMnemonics(groupBox.text);
                 QRect r = proxy()->subControlRect(CC_GroupBox, &groupBox, SC_GroupBoxLabel, widget);
                 HIRect bounds = qt_hirectForQRect(r);
@@ -6003,6 +6050,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
             }
         }
         break;
+
     case CC_ToolButton:
         if (const QStyleOptionToolButton *tb
                 = qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
@@ -6450,6 +6498,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
                     tti.truncationMaxLines = 1 + groupBox->text.count(QLatin1Char('\n'));
                     CGFloat width;
                     CGFloat height;
+
                     QCFString groupText = qt_mac_removeMnemonics(groupBox->text);
                     CS_HIThemeGetTextDimensions(groupText, 0, &tti, &width, &height, 0);
                     tw = qRound(width);
@@ -7182,7 +7231,7 @@ static void qt_mac_clip_cg(CGContextRef hd, const QRegion &rgn, CGAffineTransfor
 // move to QRegion?
 void qt_mac_scale_region(QRegion *region, qreal scaleFactor)
 {
-    if (!region || !region->rectCount())
+    if (!region || ! region->rectCount())
         return;
 
     QVector<QRect> scaledRects;

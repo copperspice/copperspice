@@ -69,22 +69,26 @@ void QSvgFont::draw(QPainter *p, const QPointF &point, const QString &str, qreal
             continue;
          }
       }
+
       textWidth += static_cast<int>(m_glyphs[unicode].m_horizAdvX);
    }
 
    QPoint alignmentOffset(0, 0);
    if (alignment == Qt::AlignHCenter) {
       alignmentOffset.setX(-textWidth / 2);
+
    } else if (alignment == Qt::AlignRight) {
       alignmentOffset.setX(-textWidth);
    }
 
    p->translate(alignmentOffset);
 
-   // since in SVG the embedded font ain't really a path
-   // the outline has got to stay untransformed...
+   // since in SVG the embedded font is not really a path
+   // the outline must stay untransformed
+
    qreal penWidth = p->pen().widthF();
    penWidth /= (pixelSize / m_unitsPerEm);
+
    QPen pen = p->pen();
    pen.setWidthF(penWidth);
    p->setPen(pen);

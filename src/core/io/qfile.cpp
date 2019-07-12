@@ -469,20 +469,7 @@ QFile::link(const QString &fileName, const QString &linkName)
    return QFile(fileName).link(linkName);
 }
 
-/*!
-    Copies the file currently specified by fileName() to a file called
-    \a newName.  Returns true if successful; otherwise returns false.
-
-    Note that if a file with the name \a newName already exists,
-    copy() returns false (i.e. QFile will not overwrite it).
-
-    The source file is closed before it is copied.
-
-    \sa setFileName()
-*/
-
-bool
-QFile::copy(const QString &newName)
+bool QFile::copy(const QString &newName)
 {
    Q_D(QFile);
 
@@ -492,8 +479,8 @@ QFile::copy(const QString &newName)
    }
 
    if (QFile(newName).exists()) {
-      // ### Race condition. If a file is moved in after this, it WILL be overwritten
-      // On Unix, the proper solution is to use hardlinks:
+      // ### Race condition. If a file is moved in after thi, it WILL be overwritten
+      // On Unix, the proper solution is to use hardlinks
       // return ::link(old, new) && ::remove(old); See also rename().
 
       d->setError(QFile::CopyError, tr("Destination file exists"));

@@ -176,5 +176,3 @@ QString CompressedWhitespace::decompress(const QString &input)
    return retval;
 }
 
-QT_END_NAMESPACE
-

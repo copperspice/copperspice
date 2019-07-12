@@ -26,14 +26,14 @@
 
 #include <qfontengine_p.h>
 
-
-
 class QFontSubset
 {
  public:
    explicit QFontSubset(QFontEngine *fe, int obj_id = 0)
-      : object_id(obj_id), noEmbed(false), fontEngine(fe), downloaded_glyphs(0), standard_font(false) {
+      : object_id(obj_id), noEmbed(false), fontEngine(fe), downloaded_glyphs(0), standard_font(false)
+   {
       fontEngine->ref.ref();
+
 #ifndef QT_NO_PDF
       addGlyph(0);
 #endif

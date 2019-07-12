@@ -70,35 +70,35 @@ void closeNameSpaces(const QStringList &namespaceList, QTextStream &output)
 void writeScriptContextClass(const QString &indent, QTextStream &str)
 {
    str << indent << "class ScriptContext\n"
-       << indent << "{\n"
-       << indent << "public:\n"
-       << indent << "    void run(const QString &script, QWidget *widget, const QWidgetList &childWidgets)\n"
-       << indent << "    {\n"
-       << indent << "        QScriptValue widgetObject =  scriptEngine.newQObject(widget);\n"
-       << indent << "        QScriptValue childWidgetArray = scriptEngine.newArray (childWidgets.size());\n"
-       << indent << "        for (int i = 0; i < childWidgets.size(); i++)\n"
-       << indent << "               childWidgetArray.setProperty(i, scriptEngine.newQObject(childWidgets[i]));\n"
-       << indent << "        QScriptContext *ctx = scriptEngine.pushContext();\n"
-       << indent << "        ctx ->activationObject().setProperty(QLatin1String(\"widget\"), widgetObject);\n"
-       << indent << "        ctx ->activationObject().setProperty(QLatin1String(\"childWidgets\"), childWidgetArray);\n\n"
-       << indent << "        scriptEngine.evaluate(script);\n"
-       << indent << "        if (scriptEngine.hasUncaughtException ()) {\n"
-       << indent <<
-       "            qWarning() << \"An exception occurred at line \" << scriptEngine.uncaughtExceptionLineNumber()\n"
-       << indent <<
-       "                       << \" of the script for \" << widget->objectName() << \": \" << engineError() << '\\n'\n"
-       << indent << "                       << script;\n"
-       << indent << "        }\n\n"
-       << indent << "        scriptEngine.popContext();\n"
-       << indent << "    }\n\n"
-       << indent << "private:\n"
-       << indent << "    QString engineError()\n"
-       << indent << "    {\n"
-       << indent << "        QScriptValue error = scriptEngine.evaluate(\"Error\");\n"
-       << indent << "        return error.toString();\n"
-       << indent << "    }\n\n"
-       << indent << "    QScriptEngine scriptEngine;\n"
-       << indent << "};\n\n";
+      << indent << "{\n"
+      << indent << "public:\n"
+      << indent << "    void run(const QString &script, QWidget *widget, const QWidgetList &childWidgets)\n"
+      << indent << "    {\n"
+      << indent << "        QScriptValue widgetObject =  scriptEngine.newQObject(widget);\n"
+      << indent << "        QScriptValue childWidgetArray = scriptEngine.newArray (childWidgets.size());\n"
+      << indent << "        for (int i = 0; i < childWidgets.size(); i++)\n"
+      << indent << "               childWidgetArray.setProperty(i, scriptEngine.newQObject(childWidgets[i]));\n"
+      << indent << "        QScriptContext *ctx = scriptEngine.pushContext();\n"
+      << indent << "        ctx ->activationObject().setProperty(QLatin1String(\"widget\"), widgetObject);\n"
+      << indent << "        ctx ->activationObject().setProperty(QLatin1String(\"childWidgets\"), childWidgetArray);\n\n"
+      << indent << "        scriptEngine.evaluate(script);\n"
+      << indent << "        if (scriptEngine.hasUncaughtException ()) {\n"
+      << indent <<
+      "            qWarning() << \"An exception occurred at line \" << scriptEngine.uncaughtExceptionLineNumber()\n"
+      << indent <<
+      "                       << \" of the script for \" << widget->objectName() << \": \" << engineError() << '\\n'\n"
+      << indent << "                       << script;\n"
+      << indent << "        }\n\n"
+      << indent << "        scriptEngine.popContext();\n"
+      << indent << "    }\n\n"
+      << indent << "private:\n"
+      << indent << "    QString engineError()\n"
+      << indent << "    {\n"
+      << indent << "        QScriptValue error = scriptEngine.evaluate(\"Error\");\n"
+      << indent << "        return error.toString();\n"
+      << indent << "    }\n\n"
+      << indent << "    QScriptEngine scriptEngine;\n"
+      << indent << "};\n\n";
 }
 }
 
@@ -138,7 +138,7 @@ void WriteDeclaration::acceptUI(DomUI *node)
    // In this case the generated Ui helper classes will also end up in
    // the Qt namespace (which is harmless, but not "pretty")
    const bool needsMacro = namespaceList.count() == 0
-                           || namespaceList[0] == QLatin1String("qdesigner_internal");
+      || namespaceList[0] == QLatin1String("qdesigner_internal");
 
    if (needsMacro) {
       m_output << "QT_BEGIN_NAMESPACE\n\n";
@@ -151,8 +151,8 @@ void WriteDeclaration::acceptUI(DomUI *node)
    }
 
    m_output << "class " << exportMacro << m_option.prefix << className << "\n"
-            << "{\n"
-            << "public:\n";
+      << "{\n"
+      << "public:\n";
 
    const QStringList connections = m_uic->databaseInfo()->connections();
    for (int i = 0; i < connections.size(); ++i) {
@@ -179,13 +179,13 @@ void WriteDeclaration::acceptUI(DomUI *node)
          ExtractImages(m_uic->option()).acceptUI(node);
       } else {
          m_output << "\n"
-                  << "protected:\n"
-                  << m_option.indent << "enum IconID\n"
-                  << m_option.indent << "{\n";
+            << "protected:\n"
+            << m_option.indent << "enum IconID\n"
+            << m_option.indent << "{\n";
          WriteIconDeclaration(m_uic).acceptUI(node);
 
          m_output << m_option.indent << m_option.indent << "unknown_ID\n"
-                  << m_option.indent << "};\n";
+            << m_option.indent << "};\n";
 
          WriteIconInitialization(m_uic).acceptUI(node);
       }
@@ -210,7 +210,7 @@ void WriteDeclaration::acceptUI(DomUI *node)
       openNameSpaces(namespaceList, m_output);
 
       m_output << m_option.indent << "class " << exportMacro << className << ": public " << m_option.prefix << className <<
-               " {};\n";
+         " {};\n";
 
       closeNameSpaces(namespaceList, m_output);
 
@@ -232,7 +232,7 @@ void WriteDeclaration::acceptWidget(DomWidget *node)
    }
 
    m_output << m_option.indent << m_uic->customWidgetsInfo()->realClassName(className) << " *" <<
-            m_driver->findOrInsertWidget(node) << ";\n";
+      m_driver->findOrInsertWidget(node) << ";\n";
 
    TreeWalker::acceptWidget(node);
 }

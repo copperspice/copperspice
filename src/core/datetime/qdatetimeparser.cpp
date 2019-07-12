@@ -31,7 +31,7 @@
 #include <qdebug.h>
 
 //#define QDATETIMEPARSER_DEBUG
-#if defined (QDATETIMEPARSER_DEBUG) && !defined(QT_NO_DEBUG_STREAM)
+#if defined (QDATETIMEPARSER_DEBUG)
 #  define QDTPDEBUG qDebug()
 #  define QDTPDEBUGN qDebug
 #else
@@ -324,23 +324,16 @@ int QDateTimeParser::sectionPos(const SectionNode &sn) const
    return sn.pos;
 }
 
-
-/*!
-  \internal
-
-  helper function for parseFormat. removes quotes that are
-  not escaped and removes the escaping on those that are escaped
-
-*/
-
 static QString unquote(const QString &str)
 {
-   const QChar quote(QLatin1Char('\''));
-   const QChar slash(QLatin1Char('\\'));
-   const QChar zero(QLatin1Char('0'));
-   QString ret;
+   const QChar quote('\'');
+   const QChar slash('\\');
+   const QChar zero('0');
+
+   QString retval;
    QChar status(zero);
    const int max = str.size();
+
    for (int i = 0; i < max; ++i) {
       if (str.at(i) == quote) {
          if (status != quote) {
@@ -354,21 +347,16 @@ static QString unquote(const QString &str)
          ret += str.at(i);
       }
    }
-   return ret;
+
+   return retval;
 }
-/*!
-  \internal
-
-  Parses the format \a newFormat. If successful, returns \c true and
-  sets up the format. Else keeps the old format and returns \c false.
-
-*/
 
 static inline int countRepeat(const QString &str, int index, int maxCount)
 {
    int count = 1;
    const QChar ch(str.at(index));
    const int max = qMin(index + maxCount, str.size());
+
    while (index + count < max && str.at(index + count) == ch) {
       ++count;
    }
@@ -398,12 +386,15 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
 
    QVector<SectionNode> newSectionNodes;
    Sections newDisplay = 0;
+
    QStringList newSeparators;
    int i, index = 0;
    int add = 0;
+
    QChar status(zero);
    const int max = newFormat.size();
    int lastQuote = -1;
+
    for (i = 0; i < max; ++i) {
       if (newFormat.at(i) == quote) {
          lastQuote = i;
@@ -553,12 +544,6 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
 
    return true;
 }
-
-/*!
-  \internal
-
-  Returns the size of section \a s.
-*/
 
 int QDateTimeParser::sectionSize(int sectionIndex) const
 {
@@ -1383,6 +1368,7 @@ int QDateTimeParser::findDay(const QString &str1, int startDay, int sectionIndex
 {
    int bestMatch = -1;
    int bestCount = 0;
+
    if (!str1.isEmpty()) {
       const SectionNode &sn = sectionNode(sectionIndex);
       if (!(sn.type & DaySectionMask)) {
@@ -1408,6 +1394,7 @@ int QDateTimeParser::findDay(const QString &str1, int startDay, int sectionIndex
          *usedDay = l.dayName(bestMatch, sn.count == 4 ? QLocale::LongFormat : QLocale::ShortFormat);
       }
    }
+
    if (used) {
       *used = bestCount;
    }
@@ -1430,26 +1417,32 @@ int QDateTimeParser::findDay(const QString &str1, int startDay, int sectionIndex
 QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionIndex, int *used) const
 {
    const SectionNode &s = sectionNode(sectionIndex);
+
    if (s.type != AmPmSection) {
       qWarning("QDateTimeParser::findAmPm Internal error");
       return Neither;
    }
+
    if (used) {
       *used = str.size();
    }
+
    if (str.trimmed().isEmpty()) {
       return PossibleBoth;
    }
-   const QLatin1Char space(' ');
+
+   const QChar space(' ');
    int size = sectionMaxSize(sectionIndex);
 
    enum {
       amindex = 0,
       pmindex = 1
    };
+
    QString ampm[2];
    ampm[amindex] = getAmPmText(AmText, s.count == 1 ? UpperCase : LowerCase);
    ampm[pmindex] = getAmPmText(PmText, s.count == 1 ? UpperCase : LowerCase);
+
    for (int i = 0; i < 2; ++i) {
       ampm[i].truncate(size);
    }
@@ -1459,38 +1452,50 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
    if (str.indexOf(ampm[amindex], 0, Qt::CaseInsensitive) == 0) {
       str = ampm[amindex];
       return AM;
+
    } else if (str.indexOf(ampm[pmindex], 0, Qt::CaseInsensitive) == 0) {
       str = ampm[pmindex];
       return PM;
+
    } else if (context == FromString || (str.count(space) == 0 && str.size() >= size)) {
       return Neither;
    }
    size = qMin(size, str.size());
 
    bool broken[2] = {false, false};
+
    for (int i = 0; i < size; ++i) {
       if (str.at(i) != space) {
          for (int j = 0; j < 2; ++j) {
-            if (!broken[j]) {
+
+            if (! broken[j]) {
                int index = ampm[j].indexOf(str.at(i));
+
                QDTPDEBUG << "looking for" << str.at(i)
-                  << "in" << ampm[j] << "and got" << index;
+                         << "in" << ampm[j] << "and got" << index;
+
                if (index == -1) {
                   if (str.at(i).category() == QChar::Letter_Uppercase) {
                      index = ampm[j].indexOf(str.at(i).toLower());
+
                      QDTPDEBUG << "trying with" << str.at(i).toLower()
-                        << "in" << ampm[j] << "and got" << index;
+                               << "in" << ampm[j] << "and got" << index;
+
                   } else if (str.at(i).category() == QChar::Letter_Lowercase) {
                      index = ampm[j].indexOf(str.at(i).toUpper());
+
                      QDTPDEBUG << "trying with" << str.at(i).toUpper()
-                        << "in" << ampm[j] << "and got" << index;
+                               << "in" << ampm[j] << "and got" << index;
                   }
+
                   if (index == -1) {
                      broken[j] = true;
+
                      if (broken[amindex] && broken[pmindex]) {
-                        QDTPDEBUG << str << "didn't make it";
+                        QDTPDEBUG << str << "did not work";
                         return Neither;
                      }
+
                      continue;
                   } else {
                      str[i] = ampm[j].at(index); // fix case
@@ -1501,9 +1506,11 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
          }
       }
    }
+
    if (!broken[pmindex] && !broken[amindex]) {
       return PossibleBoth;
    }
+
    return (!broken[amindex] ? PossibleAM : PossiblePM);
 }
 

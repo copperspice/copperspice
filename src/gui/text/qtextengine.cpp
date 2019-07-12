@@ -1014,7 +1014,7 @@ void QTextEngine::shapeLine(const QScriptLine &line)
    }
 
    QFixed x;
-   bool first    = true;
+   bool first = true;
    const int end = findItem(line.from + line.length + line.trailingSpaces - 1, item);
 
    for ( ; item <= end; ++item) {
@@ -1154,13 +1154,12 @@ void QTextEngine::shapeText(int item) const
    si.num_glyphs = shapeTextWithHarfbuzz(si, str, fontEngine, itemBoundaries, kerningEnabled, letterSpacing != 0);
 
    if (si.num_glyphs == 0) {
-      // emerald - report shaping errors somehow
+      // emerald - report shaping error
       return;
    }
    layoutData->used += si.num_glyphs;
 
    QGlyphLayout glyphs = shapedGlyphs(&si);
-
    qt_getJustificationOpportunities(str, si, glyphs, logClusters(&si));
 
    if (letterSpacing != 0) {
@@ -1679,7 +1678,7 @@ void QTextEngine::itemize() const
 
    analysis = scriptAnalysis.data();
 
-   // emerald - simulated HB old behavior, fix this
+   // emerald - simulated HB old behavior, enhance
 
    for (int i = 0; i < length; ++i) {
       switch (analysis[i].script) {
@@ -3074,7 +3073,6 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
 
 void QTextEngine::setBoundary(int strPos) const
 {
-
    const int item = findItem(strPos);
 
    if (item < 0) {
@@ -3087,7 +3085,6 @@ void QTextEngine::setBoundary(int strPos) const
       newItem.position = strPos;
       layoutData->items.insert(item + 1, newItem);
    }
-
 }
 
 QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
@@ -3883,12 +3880,12 @@ QScriptItem &QTextLineItemIterator::next()
    itemLength = eng->length(item);
    si = &eng->layoutData->items[item];
 
-   if (!si->num_glyphs) {
+   if (! si->num_glyphs) {
       eng->shape(item);
    }
 
    itemStart = qMax(line.from, si->position);
-   itemEnd = qMin(lineEnd, si->position + itemLength);
+   itemEnd   = qMin(lineEnd, si->position + itemLength);
 
    if (si->analysis.flags >= QScriptAnalysis::TabOrObject) {
       glyphsStart = 0;
@@ -3900,7 +3897,6 @@ QScriptItem &QTextLineItemIterator::next()
 
    unsigned short *logClusters = eng->logClusters(si);
    QGlyphLayout glyphs = eng->shapedGlyphs(si);
-
 
    glyphsStart = logClusters[itemStart - si->position];
    glyphsEnd   = (itemEnd == si->position + itemLength) ? si->num_glyphs : logClusters[itemEnd - si->position];

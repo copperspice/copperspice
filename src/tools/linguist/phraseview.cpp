@@ -36,9 +36,6 @@
 #include <QWidget>
 #include <QDebug>
 
-
-QT_BEGIN_NAMESPACE
-
 // Maximum number of guesses to display
 static const int MaxCandidates = 5;
 
@@ -260,5 +257,3 @@ void PhraseView::deleteGuesses()
    qDeleteAll(m_guesses);
    m_guesses.clear();
 }
-
-QT_END_NAMESPACE

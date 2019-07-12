@@ -23,8 +23,7 @@
 
 /*  TRANSLATOR PhraseBookBox
 
-  Go to Phrase > Edit Phrase Book...  The dialog that pops up is a
-  PhraseBookBox.
+  Go to Phrase > Edit Phrase Book, The dialog that pops up is a PhraseBookBox.
 */
 
 #include "phrasebookbox.h"
@@ -36,19 +35,14 @@
 #include <QHeaderView>
 #include <QSortFilterProxyModel>
 
-QT_BEGIN_NAMESPACE
-
 PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
-   : QDialog(parent),
-     m_phraseBook(phraseBook),
-     m_translationSettingsDialog(0)
+   : QDialog(parent), m_phraseBook(phraseBook), m_translationSettingsDialog(0)
 {
-
    // This definition needs to be within class context for lupdate to find it
 #define NewPhrase tr("(New Entry)")
 
    setupUi(this);
-   setWindowTitle(tr("%1[*] - Qt Linguist").arg(m_phraseBook->friendlyPhraseBookName()));
+   setWindowTitle(tr("%1[*] - Linguist").arg(m_phraseBook->friendlyPhraseBookName()));
    setWindowModified(m_phraseBook->isModified());
 
    phrMdl = new PhraseModel(this);
@@ -63,19 +57,18 @@ PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
    phraseList->header()->setDefaultSectionSize(150);
    phraseList->header()->setResizeMode(QHeaderView::Interactive);
 
-   connect(sourceLed, SIGNAL(textChanged(QString)),
-           this, SLOT(sourceChanged(QString)));
-   connect(targetLed, SIGNAL(textChanged(QString)),
-           this, SLOT(targetChanged(QString)));
-   connect(definitionLed, SIGNAL(textChanged(QString)),
-           this, SLOT(definitionChanged(QString)));
-   connect(phraseList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-           this, SLOT(selectionChanged()));
-   connect(newBut, SIGNAL(clicked()), this, SLOT(newPhrase()));
-   connect(removeBut, SIGNAL(clicked()), this, SLOT(removePhrase()));
-   connect(settingsBut, SIGNAL(clicked()), this, SLOT(settings()));
-   connect(saveBut, SIGNAL(clicked()), this, SLOT(save()));
-   connect(m_phraseBook, SIGNAL(modifiedChanged(bool)), this, SLOT(setWindowModified(bool)));
+   connect(sourceLed,     &QLineEdit::textChanged,      this, &PhraseBookBox::sourceChanged);
+   connect(targetLed,     &QLineEdit::textChanged,      this, &PhraseBookBox::targetChanged);
+   connect(definitionLed, &QLineEdit::textChanged,      this, &PhraseBookBox::definitionChanged);
+
+   connect(phraseList->selectionModel(), &QItemSelectionModel::currentChanged,
+                  this, &PhraseBookBox::selectionChanged);
+
+   connect(newBut,        &QAbstractButton::clicked,    this, &PhraseBookBox::newPhrase);
+   connect(removeBut,     &QAbstractButton::clicked,    this, &PhraseBookBox::removePhrase);
+   connect(settingsBut,   &QAbstractButton::clicked,    this, &PhraseBookBox::settings);
+   connect(saveBut,       &QAbstractButton::clicked,    this, &PhraseBookBox::save);
+   connect(m_phraseBook,  &PhraseBook:modifiedChanged,  this, &PhraseBookBox::setWindowModified);
 
    sourceLed->installEventFilter(this);
    targetLed->installEventFilter(this);
@@ -224,4 +217,3 @@ QModelIndex PhraseBookBox::currentPhraseIndex() const
    return m_sortedPhraseModel->mapToSource(phraseList->currentIndex());
 }
 
-QT_END_NAMESPACE

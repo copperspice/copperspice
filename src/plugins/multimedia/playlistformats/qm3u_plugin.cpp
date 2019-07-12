@@ -42,11 +42,14 @@ class QM3uPlaylistReader : public QMediaPlaylistReader
 
    QM3uPlaylistReader(const QUrl &location)
       : m_location(location), m_ownDevice(true) {
+
       QFile *f = new QFile(location.toLocalFile());
+
       if (f->open(QIODevice::ReadOnly | QIODevice::Text)) {
          m_device = f;
          m_textStream = new QTextStream(m_device);
          readItem();
+
       } else {
          delete f;
          m_device = 0;

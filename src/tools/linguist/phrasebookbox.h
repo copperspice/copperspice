@@ -29,15 +29,13 @@
 #include "phrasemodel.h"
 #include <QDialog>
 
-QT_BEGIN_NAMESPACE
-
 class TranslationSettingsDialog;
-
 class QSortFilterProxyModel;
 
 class PhraseBookBox : public QDialog, public Ui::PhraseBookBox
 {
    Q_OBJECT
+
  public:
    PhraseBookBox(PhraseBook *phraseBook, QWidget *parent = nullptr);
 
@@ -65,7 +63,5 @@ class PhraseBookBox : public QDialog, public Ui::PhraseBookBox
    QSortFilterProxyModel *m_sortedPhraseModel;
    TranslationSettingsDialog *m_translationSettingsDialog;
 };
-
-QT_END_NAMESPACE
 
 #endif

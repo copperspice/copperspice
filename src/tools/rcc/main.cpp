@@ -41,19 +41,19 @@ void showHelp(const QString &argv0, const QString &error)
    }
 
    fprintf(stderr, "Usage: %s  [options] <inputs>\n\n"
-           "Options:\n"
-           "  -o file              write output to file rather than stdout\n"
-           "  -name name           create an external initialization function with name\n"
-           "  -threshold level     threshold to consider compressing files\n"
-           "  -compress level      compress input files by level\n"
-           "  -root path           prefix resource access path with root path\n"
-           "  -no-compress         disable all compression\n"
-           "  -binary              output a binary file for use as a dynamic resource\n"
-           "  -namespace           turn off namespace macros\n"
-           "  -project             generate resource file containing all files from the current directory\n"
-           "  -version             display rcc version\n"
-           "  -help                display this information\n",
-           qPrintable(argv0));
+      "Options:\n"
+      "  -o file              write output to file rather than stdout\n"
+      "  -name name           create an external initialization function with name\n"
+      "  -threshold level     threshold to consider compressing files\n"
+      "  -compress level      compress input files by level\n"
+      "  -root path           prefix resource access path with root path\n"
+      "  -no-compress         disable all compression\n"
+      "  -binary              output a binary file for use as a dynamic resource\n"
+      "  -namespace           turn off namespace macros\n"
+      "  -project             generate resource file containing all files from the current directory\n"
+      "  -version             display rcc version\n"
+      "  -help                display this information\n",
+      qPrintable(argv0));
 }
 
 void dumpRecursive(const QDir &dir, QTextStream &out)
@@ -67,8 +67,8 @@ void dumpRecursive(const QDir &dir, QTextStream &out)
 
       } else {
          out << QLatin1String("<file>")
-             << entry.filePath()
-             << QLatin1String("</file>\n");
+            << entry.filePath()
+            << QLatin1String("</file>\n");
       }
    }
 }
@@ -94,7 +94,7 @@ int createProject(const QString &outFileName)
    }
    if (! isOk) {
       fprintf(stderr, "Unable to open %s: %s\n",
-              outFileName.isEmpty() ? csPrintable(outFileName) : "standard output", csPrintable(file.errorString()));
+         outFileName.isEmpty() ? csPrintable(outFileName) : "standard output", csPrintable(file.errorString()));
       return 1;
    }
 

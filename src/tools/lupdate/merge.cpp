@@ -33,8 +33,6 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QVector>
 
-QT_BEGIN_NAMESPACE
-
 class LU
 {
    Q_DECLARE_TR_FUNCTIONS(LUpdate)
@@ -55,13 +53,13 @@ static int numberLength(const QString &s, int i)
    do {
       ++i;
    } while (i < s.size()
-            && (s.at(i).isDigit()
-                || (isDigitFriendly(s[i])
-                    && i + 1 < s.size()
-                    && (s[i + 1].isDigit()
-                        || (isDigitFriendly(s[i + 1])
-                            && i + 2 < s.size()
-                            && s[i + 2].isDigit())))));
+      && (s.at(i).isDigit()
+         || (isDigitFriendly(s[i])
+            && i + 1 < s.size()
+            && (s[i + 1].isDigit()
+               || (isDigitFriendly(s[i + 1])
+                  && i + 2 < s.size()
+                  && s[i + 2].isDigit())))));
    return i - pos;
 }
 
@@ -89,7 +87,7 @@ static QString zeroKey(const QString &key)
 }
 
 static QString translationAttempt(const QString &oldTranslation,
-                                  const QString &oldSource, const QString &newSource)
+   const QString &oldSource, const QString &newSource)
 {
    int p = zeroKey(oldSource).count(QLatin1Char('0'));
    QString attempt;
@@ -151,8 +149,8 @@ static QString translationAttempt(const QString &oldTranslation,
          best = p; // an impossible value
          for (k = 0; k < p; k++) {
             if ((!met[k] || pass > 0) &&
-                  matchedYet[k] == oldNumbers[k].length() &&
-                  numberLength(oldTranslation, i + 1 - matchedYet[k]) == matchedYet[k]) {
+               matchedYet[k] == oldNumbers[k].length() &&
+               numberLength(oldTranslation, i + 1 - matchedYet[k]) == matchedYet[k]) {
                // the longer the better
                if (best == p || matchedYet[k] > matchedYet[best]) {
                   best = k;
@@ -193,9 +191,9 @@ static QString translationAttempt(const QString &oldTranslation,
    for (k = 0; k < p; k++) {
       for (ell = 0; ell < p; ell++) {
          if (k != ell && oldNumbers[k] == oldNumbers[ell] &&
-               newNumbers[k] < newNumbers[ell])
+            newNumbers[k] < newNumbers[ell])
             attempt += QLatin1String(" {") + newNumbers[k] + QLatin1String(" or ") +
-                       newNumbers[ell] + QLatin1String("?}");
+               newNumbers[ell] + QLatin1String("?}");
       }
    }
    return attempt;
@@ -214,7 +212,7 @@ static QString translationAttempt(const QString &oldTranslation,
 */
 int applyNumberHeuristic(Translator &tor)
 {
-   QMap<QString, QPair<QString, QString> > translated;
+   QMap<QString, QPair<QString, QString>> translated;
    QVector<bool> untranslated(tor.messageCount());
    int inserted = 0;
 
@@ -239,7 +237,7 @@ int applyNumberHeuristic(Translator &tor)
          const QString &key = zeroKey(msg.sourceText());
 
          if (!key.isEmpty()) {
-            QMap<QString, QPair<QString, QString> >::const_iterator t = translated.constFind(key);
+            QMap<QString, QPair<QString, QString>>::const_iterator t = translated.constFind(key);
 
             if (t != translated.constEnd() && t->first != msg.sourceText()) {
                msg.setTranslation(translationAttempt(t->second, t->first, msg.sourceText()));
@@ -320,7 +318,7 @@ int applySameTextHeuristic(Translator &tor)
 */
 
 Translator merge(const Translator &tor, const Translator &virginTor,
-                 UpdateOptions options, QString &err)
+   UpdateOptions options, QString &err)
 {
    int known = 0;
    int neww = 0;
@@ -396,9 +394,9 @@ Translator merge(const Translator &tor, const Translator &virginTor,
          } else {
             mv = &virginTor.message(mvi);
             if (!mv->id().isEmpty()
-                  && (mv->context() != m.context()
-                      || mv->sourceText() != m.sourceText()
-                      || mv->comment() != m.comment())) {
+               && (mv->context() != m.context()
+                  || mv->sourceText() != m.sourceText()
+                  || mv->comment() != m.comment())) {
                known++;
                newType = TranslatorMessage::Unfinished;
                m.setContext(mv->context());
@@ -462,7 +460,7 @@ Translator merge(const Translator &tor, const Translator &virginTor,
             int mi = tor.find(mv.context(), mv.comment(), mv.allReferences());
             if (mi >= 0) {
                if (getSimilarityScore(tor.constMessage(mi).sourceText(), mv.sourceText())
-                     >= textSimilarityThreshold) {
+                  >= textSimilarityThreshold) {
                   continue;
                }
             }
@@ -493,7 +491,8 @@ Translator merge(const Translator &tor, const Translator &virginTor,
 
    if (options & Verbose) {
       int totalFound = neww + known;
-      err += LU::tr("    Found %n source text(s) (%1 new and %2 already existing)\n", 0, totalFound).formatArg(neww).formatArg(known);
+      err += LU::tr("    Found %n source text(s) (%1 new and %2 already existing)\n",
+                  0, totalFound).formatArg(neww).formatArg(known);
 
       if (obsoleted) {
          if (options & NoObsolete) {
@@ -505,15 +504,14 @@ Translator merge(const Translator &tor, const Translator &virginTor,
 
       if (sameNumberHeuristicCount)
          err += LU::tr("    Number heuristic provided %n translation(s)\n",
-                       0, sameNumberHeuristicCount);
+               0, sameNumberHeuristicCount);
       if (sameTextHeuristicCount)
          err += LU::tr("    Same-text heuristic provided %n translation(s)\n",
-                       0, sameTextHeuristicCount);
+               0, sameTextHeuristicCount);
       if (similarTextHeuristicCount)
          err += LU::tr("    Similar-text heuristic provided %n translation(s)\n",
-                       0, similarTextHeuristicCount);
+               0, similarTextHeuristicCount);
    }
    return outTor;
 }
 
-QT_END_NAMESPACE

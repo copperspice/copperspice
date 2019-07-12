@@ -763,8 +763,11 @@ bool XLIFFHandler::characters(const QString &ch)
       // handle the content of <ph> elements
       for (int i = 0; i < ch.count(); ++i) {
          QChar chr = ch.at(i);
-         if (accum.endsWith(QLatin1Char('\\'))) {
-            accum[accum.size() - 1] = QLatin1Char(charFromEscape(chr.toLatin1()));
+
+         if (accum.endsWith('\\')) {
+            accum.chop(1);
+            accum.append( QChar(charFromEscape(chr.toLatin1())) );
+
          } else {
             accum.append(chr);
          }
@@ -772,7 +775,7 @@ bool XLIFFHandler::characters(const QString &ch)
 
    } else {
       QString t = ch;
-      t.replace(QLatin1String("\r"), QLatin1String(""));
+      t.replace("\r", "");
       accum.append(t);
    }
 
@@ -910,6 +913,7 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
    } else {
       sourceLanguageCode.replace(QLatin1Char('_'), QLatin1Char('-'));
    }
+
    QString languageCode = translator.languageCode();
    languageCode.replace(QLatin1Char('_'), QLatin1Char('-'));
 

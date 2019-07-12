@@ -189,11 +189,12 @@ static bool read_xbm_image(QIODevice *device, QImage *outImage)
 static bool write_xbm_image(const QImage &sourceImage, QIODevice *device, const QString &fileName)
 {
    QImage image = sourceImage;
-   int	       w = image.width();
-   int	       h = image.height();
-   int	       i;
-   QString    s = fileName; // get file base name
-   int        msize = s.length() + 100;
+   int w = image.width();
+   int h = image.height();
+   int i;
+
+   QString s = fileName; // get file base name
+   int msize = s.length() + 100;
    char *buf = new char[msize];
 
    std::snprintf(buf, msize, "#define %s_width %d\n", s.toLatin1().data(), w);

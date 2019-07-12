@@ -927,8 +927,6 @@ QDataStream &operator>>(QDataStream &s, QIcon &icon)
    return s;
 }
 
-
-
 QString qt_findAtNxFile(const QString &baseFileName, qreal targetDevicePixelRatio,
    qreal *sourceDevicePixelRatio)
 {
@@ -942,20 +940,24 @@ QString qt_findAtNxFile(const QString &baseFileName, qreal targetDevicePixelRati
       return baseFileName;
    }
 
-   int dotIndex = baseFileName.lastIndexOf(QLatin1Char('.'));
-   if (dotIndex == -1) { /* no dot */
-      dotIndex = baseFileName.size();   /* append */
+   int dotIndex = baseFileName.lastIndexOf('.');
+   if (dotIndex == -1) {
+      /* no dot */
+      dotIndex = baseFileName.size();
    }
 
    QString atNxfileName = baseFileName;
-   atNxfileName.insert(dotIndex, QLatin1String("@2x"));
+   atNxfileName.insert(dotIndex, "@2x");
+
    // Check for @Nx, ..., @3x, @2x file versions,
    for (int n = qMin(qCeil(targetDevicePixelRatio), 9); n > 1; --n) {
-      atNxfileName[dotIndex + 1] = QLatin1Char('0' + n);
+      atNxfileName.replace(dotIndex + 1, 1, '0' + n);
+
       if (QFile::exists(atNxfileName)) {
          if (sourceDevicePixelRatio) {
             *sourceDevicePixelRatio = n;
          }
+
          return atNxfileName;
       }
    }

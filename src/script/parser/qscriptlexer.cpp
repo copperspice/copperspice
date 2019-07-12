@@ -52,11 +52,11 @@ QScript::Lexer::Lexer(QScriptEnginePrivate *eng)
      err(NoError), check_reserved(true), parenthesesState(IgnoreParentheses), prohibitAutomaticSemicolon(false)
 {
    // allocate space for read buffers
-   buffer8 = new char[size8];
+   buffer8  = new char[size8];
    buffer16 = new QChar[size16];
-   pattern = 0;
-   flags = 0;
 
+   pattern  = 0;
+   flags    = 0;
 }
 
 QScript::Lexer::~Lexer()
@@ -1076,6 +1076,7 @@ void QScript::Lexer::record16(QChar c)
       QChar *tmp = new QChar[2 * size16];
       memcpy(tmp, buffer16, size16 * sizeof(QChar));
       delete [] buffer16;
+
       buffer16 = tmp;
       size16 *= 2;
    }

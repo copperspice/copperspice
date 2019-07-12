@@ -27,7 +27,7 @@
 #include <qelapsedtimer.h>
 #include <qthread_p.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QEventLoopPrivate
 {
@@ -54,7 +54,7 @@ QEventLoop::QEventLoop(QObject *parent)
    d_ptr->q_ptr = this;
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-   if (!QCoreApplication::instance()) {
+   if (! QCoreApplication::instance()) {
       qWarning("QEventLoop: Can not be used without QApplication");
 
    } else if (! threadData->eventDispatcher) {
@@ -80,29 +80,6 @@ bool QEventLoop::processEvents(ProcessEventsFlags flags)
    return threadData->eventDispatcher.load()->processEvents(flags);
 }
 
-/*!
-    Enters the main event loop and waits until exit() is called.
-    Returns the value that was passed to exit().
-
-    If \a flags are specified, only events of the types allowed by
-    the \a flags will be processed.
-
-    It is necessary to call this function to start event handling. The
-    main event loop receives events from the window system and
-    dispatches these to the application widgets.
-
-    Generally speaking, no user interaction can take place before
-    calling exec(). As a special case, modal widgets like QMessageBox
-    can be used before calling exec(), because modal widgets
-    use their own local event loop.
-
-    To make your application perform idle processing (i.e. executing a
-    special function whenever there are no pending events), use a
-    QTimer with 0 timeout. More sophisticated idle processing schemes
-    can be achieved using processEvents().
-
-    \sa QApplication::quit(), exit(), processEvents()
-*/
 int QEventLoop::exec(ProcessEventsFlags flags)
 {
    Q_D(QEventLoop);
@@ -169,22 +146,6 @@ int QEventLoop::exec(ProcessEventsFlags flags)
    return d->returnCode;
 }
 
-/*!
-    Process pending events that match \a flags for a maximum of \a
-    maxTime milliseconds, or until there are no more events to
-    process, whichever is shorter.
-    This function is especially useful if you have a long running
-    operation and want to show its progress without allowing user
-    input, i.e. by using the \l ExcludeUserInputEvents flag.
-
-    \bold{Notes:}
-    \list
-    \o This function does not process events continuously; it
-       returns after all available events are processed.
-    \o Specifying the \l WaitForMoreEvents flag makes no sense
-       and will be ignored.
-    \endlist
-*/
 void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
 {
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
@@ -204,27 +165,13 @@ void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
       if (start.elapsed() > maxTime) {
          break;
       }
+
       if (flags & DeferredDeletion) {
          QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
       }
    }
 }
 
-/*!
-    Tells the event loop to exit with a return code.
-
-    After this function has been called, the event loop returns from
-    the call to exec(). The exec() function returns \a returnCode.
-
-    By convention, a \a returnCode of 0 means success, and any non-zero
-    value indicates an error.
-
-    Note that unlike the C library function of the same name, this
-    function \e does return to the caller -- it is event processing that
-    stops.
-
-    \sa QCoreApplication::quit(), quit(), exec()
-*/
 void QEventLoop::exit(int returnCode)
 {
    Q_D(QEventLoop);
@@ -268,16 +215,8 @@ void QEventLoop::wakeUp()
    threadData->eventDispatcher.load()->wakeUp();
 }
 
-/*!
-    Tells the event loop to exit normally.
-
-    Same as exit(0).
-
-    \sa QCoreApplication::quit(), exit()
-*/
 void QEventLoop::quit()
 {
    exit(0);
 }
 
-QT_END_NAMESPACE

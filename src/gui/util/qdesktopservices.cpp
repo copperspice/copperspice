@@ -78,7 +78,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
    QMutexLocker locker(&registry->mutex);
    static bool insideOpenUrlHandler = false;
 
-   if (!insideOpenUrlHandler) {
+   if (! insideOpenUrlHandler) {
       QOpenUrlHandlerRegistry::HandlerHash::const_iterator handler = registry->handlers.constFind(url.scheme());
 
       if (handler != registry->handlers.constEnd()) {

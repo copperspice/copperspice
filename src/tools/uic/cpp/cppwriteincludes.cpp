@@ -207,7 +207,7 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
 
       if (warnHeaderGeneration) {
          qWarning("%s: Warning: generated header '%s' for class '%s'.",
-                  csPrintable(m_uic->option().messagePrefix()), csPrintable(header), csPrintable(className));
+            csPrintable(m_uic->option().messagePrefix()), csPrintable(header), csPrintable(className));
       }
 
       global = true;

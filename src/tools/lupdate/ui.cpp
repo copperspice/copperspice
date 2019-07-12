@@ -35,9 +35,6 @@
 #include <QtXml/QXmlLocator>
 #include <QtXml/QXmlParseException>
 
-
-QT_BEGIN_NAMESPACE
-
 class LU
 {
    Q_DECLARE_TR_FUNCTIONS(LUpdate)
@@ -52,9 +49,9 @@ class UiReader : public QXmlDefaultHandler
    }
 
    bool startElement(const QString &namespaceURI, const QString &localName,
-                     const QString &qName, const QXmlAttributes &atts);
+      const QString &qName, const QXmlAttributes &atts);
    bool endElement(const QString &namespaceURI, const QString &localName,
-                   const QString &qName);
+      const QString &qName);
    bool characters(const QString &ch);
    bool fatalError(const QXmlParseException &exception);
 
@@ -80,7 +77,7 @@ class UiReader : public QXmlDefaultHandler
 };
 
 bool UiReader::startElement(const QString &namespaceURI,
-                            const QString &localName, const QString &qName, const QXmlAttributes &atts)
+   const QString &localName, const QString &qName, const QXmlAttributes &atts)
 {
    Q_UNUSED(namespaceURI);
    Q_UNUSED(localName);
@@ -96,14 +93,17 @@ bool UiReader::startElement(const QString &namespaceURI,
       }
    } else if (qName == QLatin1String("string")) {
       flush();
+
       if (atts.value(QLatin1String("notr")).isEmpty() ||
-            atts.value(QLatin1String("notr")) != QLatin1String("true")) {
+         atts.value(QLatin1String("notr")) != QLatin1String("true")) {
          m_isTrString = true;
          m_comment = atts.value(QLatin1String("comment"));
          m_extracomment = atts.value(QLatin1String("extracomment"));
-         if (!m_cd.m_noUiLines) {
+
+         if (! m_cd.m_noUiLines) {
             m_lineNumber = m_locator->lineNumber();
          }
+
       } else {
          m_isTrString = false;
       }
@@ -113,27 +113,33 @@ bool UiReader::startElement(const QString &namespaceURI,
 }
 
 bool UiReader::endElement(const QString &namespaceURI,
-                          const QString &localName, const QString &qName)
+                  const QString &localName, const QString &qName)
 {
-   Q_UNUSED(namespaceURI);
-   Q_UNUSED(localName);
+   m_accum.replace("\r\n", "\n");
 
-   m_accum.replace(QLatin1String("\r\n"), QLatin1String("\n"));
+   if (qName == "class") {
+      // UI "header"
 
-   if (qName == QLatin1String("class")) { // UI "header"
       if (m_context.isEmpty()) {
          m_context = m_accum;
       }
-   } else if (qName == QLatin1String("string") && m_isTrString) {
+
+   } else if (qName == "string" && m_isTrString) {
       m_source = m_accum;
-   } else if (qName == QLatin1String("comment")) { // FIXME: what's that?
+
+   } else if (qName == "comment") {
+      // FIXME
       m_comment = m_accum;
       flush();
-   } else if (qName == QLatin1String("function")) { // UI3 embedded code
+
+   } else if (qName == "function") {
+      // UI3 embedded code
       fetchtrInlinedCpp(m_accum, m_translator, m_context);
+
    } else {
       flush();
    }
+
    return true;
 }
 
@@ -146,7 +152,7 @@ bool UiReader::characters(const QString &ch)
 bool UiReader::fatalError(const QXmlParseException &exception)
 {
    QString msg = LU::tr("XML error: Parse error at line %1, column %2 (%3).")
-                 .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
+      .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
 
    m_cd.appendError(msg);
    return false;
@@ -154,9 +160,11 @@ bool UiReader::fatalError(const QXmlParseException &exception)
 
 void UiReader::flush()
 {
-   if (!m_context.isEmpty() && !m_source.isEmpty()) {
+   if (! m_context.isEmpty() && !m_source.isEmpty()) {
 
-      TranslatorMessage msg(m_context, m_source, m_comment, QString(), m_cd.m_sourceFileName, m_lineNumber, QStringList());
+      TranslatorMessage msg(m_context, m_source, m_comment, QString(),
+                  m_cd.m_sourceFileName, m_lineNumber, QStringList());
+
       msg.setExtraComment(m_extracomment);
 
       if (m_needUtf8 && msg.needs8Bit()) {
@@ -174,10 +182,11 @@ bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
    cd.m_sourceFileName = filename;
    QFile file(filename);
 
-   if (!file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Can not open %1: %2").formatArgs(filename, file.errorString()));
+   if (! file.open(QIODevice::ReadOnly)) {
+      cd.appendError(LU::tr("Unable to open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
+
    QXmlInputSource in(&file);
    QXmlSimpleReader reader;
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), false);
@@ -199,4 +208,3 @@ bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
    return result;
 }
 
-QT_END_NAMESPACE

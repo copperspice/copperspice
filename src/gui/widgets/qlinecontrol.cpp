@@ -41,13 +41,13 @@
 
 #include <qguiapplication_p.h>
 
-
 int QLineControl::redoTextLayout() const
 {
    m_textLayout.clearLayout();
    m_textLayout.beginLayout();
    QTextLine l = m_textLayout.createLine();
    m_textLayout.endLayout();
+
    return qRound(l.ascent());
 }
 void QLineControl::updateDisplayText(bool forceUpdate)
@@ -56,7 +56,7 @@ void QLineControl::updateDisplayText(bool forceUpdate)
    QString str;
 
    if (m_echoMode == QLineEdit::NoEcho) {
-      str = QString("");
+      str.clear();
    } else {
       str = m_text;
    }

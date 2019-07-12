@@ -1032,37 +1032,41 @@ void QFtpPI::readyRead()
             }
          }
       }
+
       QString endOfMultiLine;
-      endOfMultiLine[0] = '0' + replyCode[0];
-      endOfMultiLine[1] = '0' + replyCode[1];
-      endOfMultiLine[2] = '0' + replyCode[2];
+      endOfMultiLine.append('0' + replyCode[0]);
+      endOfMultiLine.append('0' + replyCode[1]);
+      endOfMultiLine.append('0' + replyCode[2]);
+      endOfMultiLine.append(' ');
 
-      endOfMultiLine[3] = QLatin1Char(' ');
-
-      QString lineCont(endOfMultiLine);
-      lineCont[3] = QLatin1Char('-');
+      QString lineCont = endOfMultiLine.left(3);
+      lineCont.append('-');
 
       QString lineLeft4 = line.left(4);
 
       while (lineLeft4 != endOfMultiLine) {
          if (lineLeft4 == lineCont) {
             replyText += line.mid(4);   // strip 'xyz-'
+
          } else {
             replyText += line;
          }
-         if (!commandSocket.canReadLine()) {
+
+         if (! commandSocket.canReadLine()) {
             return;
          }
+
          line = QString::fromUtf8(commandSocket.readLine());
          lineLeft4 = line.left(4);
       }
+
       replyText += line.mid(4); // strip reply code 'xyz '
-      if (replyText.endsWith(QLatin1String("\r\n"))) {
+      if (replyText.endsWith("\r\n")) {
          replyText.chop(2);
       }
 
       if (processReply()) {
-         replyText = QLatin1String("");
+         replyText = "";
       }
    }
 }
@@ -1181,7 +1185,7 @@ bool QFtpPI::processReply()
 
    } else if (replyCodeInt == 229) {
       // 229 Extended Passive mode OK (|||10982|)
-      int portPos = replyText.indexOf(QLatin1Char('('));
+      int portPos = replyText.indexOf('(');
 
       if (portPos == -1) {
 
@@ -2126,12 +2130,13 @@ void QFtpPrivate::_q_startNextCommand()
    // Proxy support, replace the Login argument in place, then fall through.
    if (c->command == QFtp::Login && ! proxyHost.isEmpty()) {
       QString loginString = c->rawCmds.first().trimmed();
-      loginString += QLatin1Char('@') + host;
+      loginString += QChar('@') + host;
 
       if (port && port != 21) {
          loginString += QLatin1Char(':') + QString::number(port);
       }
-      loginString += QLatin1String("\r\n");
+
+      loginString.append("\r\n");
       c->rawCmds[0] = loginString;
    }
 
@@ -2146,14 +2151,17 @@ void QFtpPrivate::_q_startNextCommand()
       _q_piFinished(QLatin1String("Proxy set to ") + proxyHost + QLatin1Char(':') + QString::number(proxyPort));
 
    } else if (c->command == QFtp::ConnectToHost) {
+
 #ifndef QT_NO_BEARERMANAGEMENT
       //copy network session down to the PI
       pi.setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
+
       if (!proxyHost.isEmpty()) {
          host = c->rawCmds[0];
          port = c->rawCmds[1].toInteger<uint>();
          pi.connectToHost(proxyHost, proxyPort);
+
       } else {
          pi.connectToHost(c->rawCmds[0], c->rawCmds[1].toInteger<uint>());
       }

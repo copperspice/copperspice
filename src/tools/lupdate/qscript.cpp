@@ -40,8 +40,6 @@
 #include <stdio.h>
 #include <string.h>
 
-QT_BEGIN_NAMESPACE
-
 class LU
 {
    Q_DECLARE_TR_FUNCTIONS(LUpdate)
@@ -827,29 +825,29 @@ class Lexer
    }
 
    enum State { Start,
-                Identifier,
-                InIdentifier,
-                InSingleLineComment,
-                InMultiLineComment,
-                InNum,
-                InNum0,
-                InHex,
-                InOctal,
-                InDecimal,
-                InExponentIndicator,
-                InExponent,
-                Hex,
-                Octal,
-                Number,
-                String,
-                Eof,
-                InString,
-                InEscapeSequence,
-                InHexEscape,
-                InUnicodeEscape,
-                Other,
-                Bad
-              };
+      Identifier,
+      InIdentifier,
+      InSingleLineComment,
+      InMultiLineComment,
+      InNum,
+      InNum0,
+      InHex,
+      InOctal,
+      InDecimal,
+      InExponentIndicator,
+      InExponent,
+      Hex,
+      Octal,
+      Number,
+      String,
+      Eof,
+      InString,
+      InEscapeSequence,
+      InHexEscape,
+      InUnicodeEscape,
+      Other,
+      Bad
+   };
 
    enum Error {
       NoError,
@@ -926,7 +924,7 @@ class Lexer
 
    int matchPunctuator(ushort c1, ushort c2, ushort c3, ushort c4);
    ushort singleEscape(ushort c) const;
-   ushort convertOctal(ushort c1, ushort c2,ushort c3) const;
+   ushort convertOctal(ushort c1, ushort c2, ushort c3) const;
 
  public:
    static unsigned char convertHex(ushort c1);
@@ -1034,7 +1032,7 @@ double integerFromString(const char *buf, int size, int radix)
 
    if (((size - i) >= 2) && (buf[i] == '0')) {
       if (((buf[i + 1] == 'x') || (buf[i + 1] == 'X'))
-            && (radix < 34)) {
+         && (radix < 34)) {
          if ((radix != 0) && (radix != 16)) {
             return 0;
          }
@@ -1179,41 +1177,41 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
       case 4: {
          if (c[0] == QLatin1Char('c') && c[1] == QLatin1Char('a')
-               && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('e')) {
             return QScriptGrammar::T_CASE;
          } else if (c[0] == QLatin1Char('e') && c[1] == QLatin1Char('l')
-                    && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('e')) {
             return QScriptGrammar::T_ELSE;
          } else if (c[0] == QLatin1Char('t') && c[1] == QLatin1Char('h')
-                    && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('s')) {
+            && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('s')) {
             return QScriptGrammar::T_THIS;
          } else if (c[0] == QLatin1Char('v') && c[1] == QLatin1Char('o')
-                    && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('d')) {
+            && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('d')) {
             return QScriptGrammar::T_VOID;
          } else if (c[0] == QLatin1Char('w') && c[1] == QLatin1Char('i')
-                    && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('h')) {
+            && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('h')) {
             return QScriptGrammar::T_WITH;
          } else if (c[0] == QLatin1Char('t') && c[1] == QLatin1Char('r')
-                    && c[2] == QLatin1Char('u') && c[3] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('u') && c[3] == QLatin1Char('e')) {
             return QScriptGrammar::T_TRUE;
          } else if (c[0] == QLatin1Char('n') && c[1] == QLatin1Char('u')
-                    && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('l')) {
+            && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('l')) {
             return QScriptGrammar::T_NULL;
          } else if (check_reserved) {
             if (c[0] == QLatin1Char('e') && c[1] == QLatin1Char('n')
-                  && c[2] == QLatin1Char('u') && c[3] == QLatin1Char('m')) {
+               && c[2] == QLatin1Char('u') && c[3] == QLatin1Char('m')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('b') && c[1] == QLatin1Char('y')
-                       && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('l') && c[1] == QLatin1Char('o')
-                       && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('g')) {
+               && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('g')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('c') && c[1] == QLatin1Char('h')
-                       && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('r')) {
+               && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('r')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('g') && c[1] == QLatin1Char('o')
-                       && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('o')) {
+               && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('o')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1222,49 +1220,49 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
       case 5: {
          if (c[0] == QLatin1Char('b') && c[1] == QLatin1Char('r')
-               && c[2] == QLatin1Char('e') && c[3] == QLatin1Char('a')
-               && c[4] == QLatin1Char('k')) {
+            && c[2] == QLatin1Char('e') && c[3] == QLatin1Char('a')
+            && c[4] == QLatin1Char('k')) {
             return QScriptGrammar::T_BREAK;
          } else if (c[0] == QLatin1Char('c') && c[1] == QLatin1Char('a')
-                    && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('c')
-                    && c[4] == QLatin1Char('h')) {
+            && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('c')
+            && c[4] == QLatin1Char('h')) {
             return QScriptGrammar::T_CATCH;
          } else if (c[0] == QLatin1Char('t') && c[1] == QLatin1Char('h')
-                    && c[2] == QLatin1Char('r') && c[3] == QLatin1Char('o')
-                    && c[4] == QLatin1Char('w')) {
+            && c[2] == QLatin1Char('r') && c[3] == QLatin1Char('o')
+            && c[4] == QLatin1Char('w')) {
             return QScriptGrammar::T_THROW;
          } else if (c[0] == QLatin1Char('w') && c[1] == QLatin1Char('h')
-                    && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('l')
-                    && c[4] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('l')
+            && c[4] == QLatin1Char('e')) {
             return QScriptGrammar::T_WHILE;
          } else if (c[0] == QLatin1Char('c') && c[1] == QLatin1Char('o')
-                    && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('s')
-                    && c[4] == QLatin1Char('t')) {
+            && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('s')
+            && c[4] == QLatin1Char('t')) {
             return QScriptGrammar::T_CONST;
          } else if (c[0] == QLatin1Char('f') && c[1] == QLatin1Char('a')
-                    && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('s')
-                    && c[4] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('s')
+            && c[4] == QLatin1Char('e')) {
             return QScriptGrammar::T_FALSE;
          } else if (check_reserved) {
             if (c[0] == QLatin1Char('s') && c[1] == QLatin1Char('h')
-                  && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('r')
-                  && c[4] == QLatin1Char('t')) {
+               && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('r')
+               && c[4] == QLatin1Char('t')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('s') && c[1] == QLatin1Char('u')
-                       && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('e')
-                       && c[4] == QLatin1Char('r')) {
+               && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('e')
+               && c[4] == QLatin1Char('r')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('f') && c[1] == QLatin1Char('i')
-                       && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('a')
-                       && c[4] == QLatin1Char('l')) {
+               && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('a')
+               && c[4] == QLatin1Char('l')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('c') && c[1] == QLatin1Char('l')
-                       && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('s')
-                       && c[4] == QLatin1Char('s')) {
+               && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('s')
+               && c[4] == QLatin1Char('s')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('f') && c[1] == QLatin1Char('l')
-                       && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('a')
-                       && c[4] == QLatin1Char('t')) {
+               && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('a')
+               && c[4] == QLatin1Char('t')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1273,49 +1271,49 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
       case 6: {
          if (c[0] == QLatin1Char('d') && c[1] == QLatin1Char('e')
-               && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('e')
-               && c[4] == QLatin1Char('t') && c[5] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('e')
+            && c[4] == QLatin1Char('t') && c[5] == QLatin1Char('e')) {
             return QScriptGrammar::T_DELETE;
          } else if (c[0] == QLatin1Char('r') && c[1] == QLatin1Char('e')
-                    && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('u')
-                    && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('n')) {
+            && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('u')
+            && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('n')) {
             return QScriptGrammar::T_RETURN;
          } else if (c[0] == QLatin1Char('s') && c[1] == QLatin1Char('w')
-                    && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('t')
-                    && c[4] == QLatin1Char('c') && c[5] == QLatin1Char('h')) {
+            && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('t')
+            && c[4] == QLatin1Char('c') && c[5] == QLatin1Char('h')) {
             return QScriptGrammar::T_SWITCH;
          } else if (c[0] == QLatin1Char('t') && c[1] == QLatin1Char('y')
-                    && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('e')
-                    && c[4] == QLatin1Char('o') && c[5] == QLatin1Char('f')) {
+            && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('e')
+            && c[4] == QLatin1Char('o') && c[5] == QLatin1Char('f')) {
             return QScriptGrammar::T_TYPEOF;
          } else if (check_reserved) {
             if (c[0] == QLatin1Char('e') && c[1] == QLatin1Char('x')
-                  && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('o')
-                  && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('t')) {
+               && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('o')
+               && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('t')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('s') && c[1] == QLatin1Char('t')
-                       && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('t')
-                       && c[4] == QLatin1Char('i') && c[5] == QLatin1Char('c')) {
+               && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('t')
+               && c[4] == QLatin1Char('i') && c[5] == QLatin1Char('c')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('d') && c[1] == QLatin1Char('o')
-                       && c[2] == QLatin1Char('u') && c[3] == QLatin1Char('b')
-                       && c[4] == QLatin1Char('l') && c[5] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('u') && c[3] == QLatin1Char('b')
+               && c[4] == QLatin1Char('l') && c[5] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('i') && c[1] == QLatin1Char('m')
-                       && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('o')
-                       && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('t')) {
+               && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('o')
+               && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('t')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('p') && c[1] == QLatin1Char('u')
-                       && c[2] == QLatin1Char('b') && c[3] == QLatin1Char('l')
-                       && c[4] == QLatin1Char('i') && c[5] == QLatin1Char('c')) {
+               && c[2] == QLatin1Char('b') && c[3] == QLatin1Char('l')
+               && c[4] == QLatin1Char('i') && c[5] == QLatin1Char('c')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('n') && c[1] == QLatin1Char('a')
-                       && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('i')
-                       && c[4] == QLatin1Char('v') && c[5] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('i')
+               && c[4] == QLatin1Char('v') && c[5] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('t') && c[1] == QLatin1Char('h')
-                       && c[2] == QLatin1Char('r') && c[3] == QLatin1Char('o')
-                       && c[4] == QLatin1Char('w') && c[5] == QLatin1Char('s')) {
+               && c[2] == QLatin1Char('r') && c[3] == QLatin1Char('o')
+               && c[4] == QLatin1Char('w') && c[5] == QLatin1Char('s')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1324,35 +1322,35 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
       case 7: {
          if (c[0] == QLatin1Char('d') && c[1] == QLatin1Char('e')
-               && c[2] == QLatin1Char('f') && c[3] == QLatin1Char('a')
-               && c[4] == QLatin1Char('u') && c[5] == QLatin1Char('l')
-               && c[6] == QLatin1Char('t')) {
+            && c[2] == QLatin1Char('f') && c[3] == QLatin1Char('a')
+            && c[4] == QLatin1Char('u') && c[5] == QLatin1Char('l')
+            && c[6] == QLatin1Char('t')) {
             return QScriptGrammar::T_DEFAULT;
          } else if (c[0] == QLatin1Char('f') && c[1] == QLatin1Char('i')
-                    && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('a')
-                    && c[4] == QLatin1Char('l') && c[5] == QLatin1Char('l')
-                    && c[6] == QLatin1Char('y')) {
+            && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('a')
+            && c[4] == QLatin1Char('l') && c[5] == QLatin1Char('l')
+            && c[6] == QLatin1Char('y')) {
             return QScriptGrammar::T_FINALLY;
          } else if (check_reserved) {
             if (c[0] == QLatin1Char('b') && c[1] == QLatin1Char('o')
-                  && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('l')
-                  && c[4] == QLatin1Char('e') && c[5] == QLatin1Char('a')
-                  && c[6] == QLatin1Char('n')) {
+               && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('l')
+               && c[4] == QLatin1Char('e') && c[5] == QLatin1Char('a')
+               && c[6] == QLatin1Char('n')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('e') && c[1] == QLatin1Char('x')
-                       && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('e')
-                       && c[4] == QLatin1Char('n') && c[5] == QLatin1Char('d')
-                       && c[6] == QLatin1Char('s')) {
+               && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('e')
+               && c[4] == QLatin1Char('n') && c[5] == QLatin1Char('d')
+               && c[6] == QLatin1Char('s')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('p') && c[1] == QLatin1Char('a')
-                       && c[2] == QLatin1Char('c') && c[3] == QLatin1Char('k')
-                       && c[4] == QLatin1Char('a') && c[5] == QLatin1Char('g')
-                       && c[6] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('c') && c[3] == QLatin1Char('k')
+               && c[4] == QLatin1Char('a') && c[5] == QLatin1Char('g')
+               && c[6] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('p') && c[1] == QLatin1Char('r')
-                       && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('v')
-                       && c[4] == QLatin1Char('a') && c[5] == QLatin1Char('t')
-                       && c[6] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('i') && c[3] == QLatin1Char('v')
+               && c[4] == QLatin1Char('a') && c[5] == QLatin1Char('t')
+               && c[6] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1361,30 +1359,30 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
       case 8: {
          if (c[0] == QLatin1Char('c') && c[1] == QLatin1Char('o')
-               && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('t')
-               && c[4] == QLatin1Char('i') && c[5] == QLatin1Char('n')
-               && c[6] == QLatin1Char('u') && c[7] == QLatin1Char('e')) {
+            && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('t')
+            && c[4] == QLatin1Char('i') && c[5] == QLatin1Char('n')
+            && c[6] == QLatin1Char('u') && c[7] == QLatin1Char('e')) {
             return QScriptGrammar::T_CONTINUE;
          } else if (c[0] == QLatin1Char('f') && c[1] == QLatin1Char('u')
-                    && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('c')
-                    && c[4] == QLatin1Char('t') && c[5] == QLatin1Char('i')
-                    && c[6] == QLatin1Char('o') && c[7] == QLatin1Char('n')) {
+            && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('c')
+            && c[4] == QLatin1Char('t') && c[5] == QLatin1Char('i')
+            && c[6] == QLatin1Char('o') && c[7] == QLatin1Char('n')) {
             return QScriptGrammar::T_FUNCTION;
          } else if (c[0] == QLatin1Char('d') && c[1] == QLatin1Char('e')
-                    && c[2] == QLatin1Char('b') && c[3] == QLatin1Char('u')
-                    && c[4] == QLatin1Char('g') && c[5] == QLatin1Char('g')
-                    && c[6] == QLatin1Char('e') && c[7] == QLatin1Char('r')) {
+            && c[2] == QLatin1Char('b') && c[3] == QLatin1Char('u')
+            && c[4] == QLatin1Char('g') && c[5] == QLatin1Char('g')
+            && c[6] == QLatin1Char('e') && c[7] == QLatin1Char('r')) {
             return QScriptGrammar::T_DEBUGGER;
          } else if (check_reserved) {
             if (c[0] == QLatin1Char('a') && c[1] == QLatin1Char('b')
-                  && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('t')
-                  && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('a')
-                  && c[6] == QLatin1Char('c') && c[7] == QLatin1Char('t')) {
+               && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('t')
+               && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('a')
+               && c[6] == QLatin1Char('c') && c[7] == QLatin1Char('t')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('v') && c[1] == QLatin1Char('o')
-                       && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('a')
-                       && c[4] == QLatin1Char('t') && c[5] == QLatin1Char('i')
-                       && c[6] == QLatin1Char('l') && c[7] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('l') && c[3] == QLatin1Char('a')
+               && c[4] == QLatin1Char('t') && c[5] == QLatin1Char('i')
+               && c[6] == QLatin1Char('l') && c[7] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1394,22 +1392,22 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
       case 9: {
          if (check_reserved) {
             if (c[0] == QLatin1Char('i') && c[1] == QLatin1Char('n')
-                  && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('e')
-                  && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('f')
-                  && c[6] == QLatin1Char('a') && c[7] == QLatin1Char('c')
-                  && c[8] == QLatin1Char('e')) {
+               && c[2] == QLatin1Char('t') && c[3] == QLatin1Char('e')
+               && c[4] == QLatin1Char('r') && c[5] == QLatin1Char('f')
+               && c[6] == QLatin1Char('a') && c[7] == QLatin1Char('c')
+               && c[8] == QLatin1Char('e')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('t') && c[1] == QLatin1Char('r')
-                       && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('n')
-                       && c[4] == QLatin1Char('s') && c[5] == QLatin1Char('i')
-                       && c[6] == QLatin1Char('e') && c[7] == QLatin1Char('n')
-                       && c[8] == QLatin1Char('t')) {
+               && c[2] == QLatin1Char('a') && c[3] == QLatin1Char('n')
+               && c[4] == QLatin1Char('s') && c[5] == QLatin1Char('i')
+               && c[6] == QLatin1Char('e') && c[7] == QLatin1Char('n')
+               && c[8] == QLatin1Char('t')) {
                return QScriptGrammar::T_RESERVED_WORD;
             } else if (c[0] == QLatin1Char('p') && c[1] == QLatin1Char('r')
-                       && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('t')
-                       && c[4] == QLatin1Char('e') && c[5] == QLatin1Char('c')
-                       && c[6] == QLatin1Char('t') && c[7] == QLatin1Char('e')
-                       && c[8] == QLatin1Char('d')) {
+               && c[2] == QLatin1Char('o') && c[3] == QLatin1Char('t')
+               && c[4] == QLatin1Char('e') && c[5] == QLatin1Char('c')
+               && c[6] == QLatin1Char('t') && c[7] == QLatin1Char('e')
+               && c[8] == QLatin1Char('d')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1418,17 +1416,17 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
       case 10: {
          if (c[0] == QLatin1Char('i') && c[1] == QLatin1Char('n')
-               && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('t')
-               && c[4] == QLatin1Char('a') && c[5] == QLatin1Char('n')
-               && c[6] == QLatin1Char('c') && c[7] == QLatin1Char('e')
-               && c[8] == QLatin1Char('o') && c[9] == QLatin1Char('f')) {
+            && c[2] == QLatin1Char('s') && c[3] == QLatin1Char('t')
+            && c[4] == QLatin1Char('a') && c[5] == QLatin1Char('n')
+            && c[6] == QLatin1Char('c') && c[7] == QLatin1Char('e')
+            && c[8] == QLatin1Char('o') && c[9] == QLatin1Char('f')) {
             return QScriptGrammar::T_INSTANCEOF;
          } else if (check_reserved) {
             if (c[0] == QLatin1Char('i') && c[1] == QLatin1Char('m')
-                  && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('l')
-                  && c[4] == QLatin1Char('e') && c[5] == QLatin1Char('m')
-                  && c[6] == QLatin1Char('e') && c[7] == QLatin1Char('n')
-                  && c[8] == QLatin1Char('t') && c[9] == QLatin1Char('s')) {
+               && c[2] == QLatin1Char('p') && c[3] == QLatin1Char('l')
+               && c[4] == QLatin1Char('e') && c[5] == QLatin1Char('m')
+               && c[6] == QLatin1Char('e') && c[7] == QLatin1Char('n')
+               && c[8] == QLatin1Char('t') && c[9] == QLatin1Char('s')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1438,11 +1436,11 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
       case 12: {
          if (check_reserved) {
             if (c[0] == QLatin1Char('s') && c[1] == QLatin1Char('y')
-                  && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('c')
-                  && c[4] == QLatin1Char('h') && c[5] == QLatin1Char('r')
-                  && c[6] == QLatin1Char('o') && c[7] == QLatin1Char('n')
-                  && c[8] == QLatin1Char('i') && c[9] == QLatin1Char('z')
-                  && c[10] == QLatin1Char('e') && c[11] == QLatin1Char('d')) {
+               && c[2] == QLatin1Char('n') && c[3] == QLatin1Char('c')
+               && c[4] == QLatin1Char('h') && c[5] == QLatin1Char('r')
+               && c[6] == QLatin1Char('o') && c[7] == QLatin1Char('n')
+               && c[8] == QLatin1Char('i') && c[9] == QLatin1Char('z')
+               && c[10] == QLatin1Char('e') && c[11] == QLatin1Char('d')) {
                return QScriptGrammar::T_RESERVED_WORD;
             }
          }
@@ -1532,8 +1530,8 @@ int QScript::Lexer::lex()
                token = matchPunctuator(current, next1, next2, next3);
                if (token != -1) {
                   if (terminator && !delimited && !prohibitAutomaticSemicolon
-                        && (token == QScriptGrammar::T_PLUS_PLUS
-                            || token == QScriptGrammar::T_MINUS_MINUS)) {
+                     && (token == QScriptGrammar::T_PLUS_PLUS
+                        || token == QScriptGrammar::T_MINUS_MINUS)) {
                      // automatic semicolon insertion
                      stackToken = token;
                      token = QScriptGrammar::T_SEMICOLON;
@@ -1564,12 +1562,12 @@ int QScript::Lexer::lex()
          case InEscapeSequence:
             if (isOctalDigit(current)) {
                if (current >= '0' && current <= '3' &&
-                     isOctalDigit(next1) && isOctalDigit(next2)) {
+                  isOctalDigit(next1) && isOctalDigit(next2)) {
                   record16(convertOctal(current, next1, next2));
                   shift(2);
                   state = InString;
                } else if (isOctalDigit(current) &&
-                          isOctalDigit(next1)) {
+                  isOctalDigit(next1)) {
                   record16(convertOctal('0', current, next1));
                   shift(1);
                   state = InString;
@@ -1607,7 +1605,7 @@ int QScript::Lexer::lex()
             break;
          case InUnicodeEscape:
             if (isHexDigit(current) && isHexDigit(next1) &&
-                  isHexDigit(next2) && isHexDigit(next3)) {
+               isHexDigit(next2) && isHexDigit(next3)) {
                record16(convertUnicode(current, next1, next2, next3));
                shift(3);
                state = InString;
@@ -1761,7 +1759,7 @@ int QScript::Lexer::lex()
 
    // no identifiers allowed directly after numeric literal, e.g. "3in" is bad
    if ((state == Number || state == Octal || state == Hex)
-         && isIdentLetter(current)) {
+      && isIdentLetter(current)) {
       state = Bad;
       err = IllegalIdentifier;
       errmsg = LU::tr("Identifier cannot start with numeric literal");
@@ -1817,10 +1815,10 @@ int QScript::Lexer::lex()
             return QScriptGrammar::T_IDENTIFIER;
          }
          if (token == QScriptGrammar::T_CONTINUE || token == QScriptGrammar::T_BREAK
-               || token == QScriptGrammar::T_RETURN || token == QScriptGrammar::T_THROW) {
+            || token == QScriptGrammar::T_RETURN || token == QScriptGrammar::T_THROW) {
             restrKeyword = true;
          } else if (token == QScriptGrammar::T_IF || token == QScriptGrammar::T_FOR
-                    || token == QScriptGrammar::T_WHILE || token == QScriptGrammar::T_WITH) {
+            || token == QScriptGrammar::T_WHILE || token == QScriptGrammar::T_WITH) {
             parenthesesState = CountParentheses;
             parenthesesCount = 0;
          } else if (token == QScriptGrammar::T_DO) {
@@ -1844,7 +1842,7 @@ int QScript::Lexer::lex()
 bool QScript::Lexer::isWhiteSpace() const
 {
    return (current == ' ' || current == '\t' ||
-           current == 0x0b || current == 0x0c);
+         current == 0x0b || current == 0x0c);
 }
 
 bool QScript::Lexer::isLineTerminator() const
@@ -1856,9 +1854,9 @@ bool QScript::Lexer::isIdentLetter(ushort c)
 {
    /* TODO: allow other legitimate unicode chars */
    return ((c >= 'a' && c <= 'z')
-           || (c >= 'A' && c <= 'Z')
-           || c == '$'
-           || c == '_');
+         || (c >= 'A' && c <= 'Z')
+         || c == '$'
+         || c == '_');
 }
 
 bool QScript::Lexer::isDecimalDigit(ushort c)
@@ -1869,8 +1867,8 @@ bool QScript::Lexer::isDecimalDigit(ushort c)
 bool QScript::Lexer::isHexDigit(ushort c) const
 {
    return ((c >= '0' && c <= '9')
-           || (c >= 'a' && c <= 'f')
-           || (c >= 'A' && c <= 'F'));
+         || (c >= 'a' && c <= 'f')
+         || (c >= 'A' && c <= 'F'));
 }
 
 bool QScript::Lexer::isOctalDigit(ushort c) const
@@ -1879,7 +1877,7 @@ bool QScript::Lexer::isOctalDigit(ushort c) const
 }
 
 int QScript::Lexer::matchPunctuator(ushort c1, ushort c2,
-                                    ushort c3, ushort c4)
+   ushort c3, ushort c4)
 {
    if (c1 == '>' && c2 == '>' && c3 == '>' && c4 == '=') {
       shift(4);
@@ -2262,8 +2260,8 @@ inline void QScriptParser::reallocateStack()
 inline static bool automatic(QScript::Lexer *lexer, int token)
 {
    return (token == QScriptGrammar::T_RBRACE)
-          || (token == 0)
-          || lexer->prevTerminator();
+      || (token == 0)
+      || lexer->prevTerminator();
 }
 
 QScriptParser::QScriptParser():
@@ -2401,7 +2399,7 @@ bool QScriptParser::parse()
 
                   } else {
                      if ((args.at(0).type() != QVariant::String)
-                           || (args.at(1).type() != QVariant::String)) {
+                        || (args.at(1).type() != QVariant::String)) {
                         yyMsg(identLineNo) << qPrintable(LU::tr("%1(): both arguments must be literal strings.\n").formatArg(name));
                      } else {
                         QString context = args.at(0).toString();
@@ -2409,7 +2407,7 @@ bool QScriptParser::parse()
                         QString comment = args.value(2).toString();
                         bool plural = (args.size() > 4);
                         recordMessage(translator, context, text, comment, extracomment,
-                                      msgid, extra, plural, fileName(), identLineNo);
+                           msgid, extra, plural, fileName(), identLineNo);
                      }
                   }
                   sourcetext.clear();
@@ -2431,7 +2429,7 @@ bool QScriptParser::parse()
                         QString comment = args.value(1).toString();
                         bool plural = (args.size() > 2);
                         recordMessage(translator, trcontext, text, comment, extracomment,
-                                      msgid, extra, plural, fileName(), identLineNo);
+                           msgid, extra, plural, fileName(), identLineNo);
                      }
                   }
                   sourcetext.clear();
@@ -2452,7 +2450,7 @@ bool QScriptParser::parse()
                         msgid = args.at(0).toString();
                         bool plural = (args.size() > 1);
                         recordMessage(translator, QString(), sourcetext, QString(), extracomment,
-                                      msgid, extra, plural, fileName(), identLineNo);
+                           msgid, extra, plural, fileName(), identLineNo);
                      }
                   }
                   sourcetext.clear();
@@ -2641,13 +2639,13 @@ void QScriptParser::processComment(const QChar *chars, int length)
          if (p >= length) {
             break;
          }
+
          c = chars[p++].unicode();
-         if (isspace(c))
-         {
+         if (isspace(c)) {
             continue;
          }
-         if (c != '"')
-         {
+
+         if (c != '"') {
             yyMsg() << qPrintable(LU::tr("Unexpected character in meta string\n"));
             break;
          }
@@ -2658,22 +2656,26 @@ void QScriptParser::processComment(const QChar *chars, int length)
                yyMsg() << qPrintable(LU::tr("Unterminated meta string\n"));
                break;
             }
+
             c = chars[p++].unicode();
-            if (c == '"')
-            {
+
+            if (c == '"') {
                break;
             }
-            if (c == '\\')
-            {
+
+            if (c == '\\') {
                if (p >= length) {
                   goto whoops;
                }
+
                c = chars[p++].unicode();
                if (c == '\n') {
                   goto whoops;
                }
+
                *ptr++ = '\\';
             }
+
             *ptr++ = c;
          }
       }
@@ -2701,7 +2703,8 @@ void QScriptParser::processComment(const QChar *chars, int length)
             trcontext = comment.left(k);
             comment.remove(0, k + 1);
 
-            TranslatorMessage msg(trcontext, QString(),comment, QString(), fileName(), lexer->startLineNo(), QStringList(),
+            TranslatorMessage msg(trcontext, QString(), comment, QString(),
+                  fileName(), lexer->startLineNo(), QStringList(),
                   TranslatorMessage::Finished, /*plural=*/false);
 
             msg.setExtraComment(extracomment.simplified());
@@ -2719,7 +2722,7 @@ bool loadQScript(Translator &translator, const QString &filename, ConversionData
    QFile file(filename);
 
    if (! file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Can not open %1: %2").formatArgs(filename, file.errorString()));
+      cd.appendError(LU::tr("Unable to open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
 
@@ -2745,7 +2748,7 @@ bool loadQScript(Translator &translator, const QString &filename, ConversionData
 
    if (!parser.parse()) {
       std::cerr << qPrintable(filename) << ':' << parser.errorLineNumber() << ": "
-                << qPrintable(parser.errorMessage()) << std::endl;
+         << qPrintable(parser.errorMessage()) << std::endl;
       return false;
    }
 
@@ -2754,4 +2757,3 @@ bool loadQScript(Translator &translator, const QString &filename, ConversionData
    return true;
 }
 
-QT_END_NAMESPACE

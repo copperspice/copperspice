@@ -115,8 +115,8 @@ void ExtractImages::acceptImage(DomImage *image)
    }
    if (!f.open(openMode)) {
       fprintf(stderr, "%s: Error: Could not create image file %s: %s",
-              qPrintable(m_option.messagePrefix()),
-              qPrintable(fname), qPrintable(f.errorString()));
+         qPrintable(m_option.messagePrefix()),
+         qPrintable(fname), qPrintable(f.errorString()));
       return;
    }
 

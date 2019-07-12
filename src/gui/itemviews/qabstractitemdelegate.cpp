@@ -240,16 +240,16 @@ bool QAbstractItemDelegatePrivate::editorEventFilter(QObject *object, QEvent *ev
             return true;
          case Qt::Key_Enter:
          case Qt::Key_Return:
-            // We want the editor to be able to process the key press
-            // before committing the data (e.g. so it can do
-            // validation/fixup of the input).
-            if (!tryFixup(editor)) {
+            // We want the editor to be able to process the key press before
+            // committing the data (e.g. so it can do validation/fixup of the input)
+
+            if (! tryFixup(editor)) {
                return true;
             }
 
-            QMetaObject::invokeMethod(q, "_q_commitDataAndCloseEditor",
-               Qt::QueuedConnection, Q_ARG(QWidget *, editor));
+            QMetaObject::invokeMethod(q, "_q_commitDataAndCloseEditor", Qt::QueuedConnection, Q_ARG(QWidget *, editor));
             return false;
+
          default:
             return false;
       }

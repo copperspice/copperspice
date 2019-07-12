@@ -317,9 +317,11 @@ void QMediaPlayerPrivate::setMedia(const QMediaContent &media, QIODevice *stream
       if (!file->open(QFile::ReadOnly)) {
          QMetaObject::invokeMethod(q, "_q_error", Qt::QueuedConnection,
             Q_ARG(int, QMediaPlayer::ResourceError),
-            Q_ARG(QString, QMediaPlayer::tr("Attempting to play invalid Qt resource")));
+            Q_ARG(QString, QMediaPlayer::tr("Attempting to play invalid resource")));
+
          QMetaObject::invokeMethod(q, "_q_mediaStatusChanged", Qt::QueuedConnection,
             Q_ARG(QMediaPlayer::MediaStatus, QMediaPlayer::InvalidMedia));
+
          file.reset();
          // Ignore the next NoMedia status change, we just want to clear the current media
          // on the backend side since we can't load the new one and we want to be in the

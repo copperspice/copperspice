@@ -48,12 +48,12 @@ struct WriteIncludes : public TreeWalker {
    void acceptSpacer(DomSpacer *node) override;
    void acceptProperty(DomProperty *node) override;
    void acceptWidgetScripts(const DomScripts &, DomWidget *, const DomWidgets &) override;
-  
+
    // custom widgets
    void acceptCustomWidgets(DomCustomWidgets *node) override;
    void acceptCustomWidget(DomCustomWidget *node) override;
 
-   // include hints   
+   // include hints
    void acceptIncludes(DomIncludes *node) override;
    void acceptInclude(DomInclude *node) override;
 

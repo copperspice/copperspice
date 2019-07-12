@@ -113,11 +113,6 @@ QMediaServiceProviderHint &QMediaServiceProviderHint::operator=(const QMediaServ
    return *this;
 }
 
-/*!
-    Identifies if \a other is of equal value to a media service provider hint.
-
-    Returns true if the hints are equal, and false if they are not.
-*/
 bool QMediaServiceProviderHint::operator == (const QMediaServiceProviderHint &other) const
 {
    return (d == other.d) ||
@@ -129,43 +124,26 @@ bool QMediaServiceProviderHint::operator == (const QMediaServiceProviderHint &ot
          d->features == other.d->features);
 }
 
-/*!
-    Identifies if \a other is not of equal value to a media service provider hint.
-
-    Returns true if the hints are not equal, and false if they are.
-*/
 bool QMediaServiceProviderHint::operator != (const QMediaServiceProviderHint &other) const
 {
    return !(*this == other);
 }
 
-/*!
-    Returns true if a media service provider is null.
-*/
 bool QMediaServiceProviderHint::isNull() const
 {
    return d->type == Null;
 }
 
-/*!
-    Returns the type of a media service provider hint.
-*/
 QMediaServiceProviderHint::Type QMediaServiceProviderHint::type() const
 {
    return d->type;
 }
 
-/*!
-    Returns the mime type of the media a service is expected to be able play.
-*/
 QString QMediaServiceProviderHint::mimeType() const
 {
    return d->mimeType;
 }
 
-/*!
-    Returns a list of codes a media service is expected to be able to decode.
-*/
 QStringList QMediaServiceProviderHint::codecs() const
 {
    return d->codecs;
@@ -211,7 +189,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
  public:
    QMediaService *requestService(const QString &key, const QMediaServiceProviderHint &hint) {
 
-      QList<QMediaServiceProviderPlugin *>plugins;
+      QList<QMediaServiceProviderPlugin *> plugins;
       QFactoryLoader *factoryObj = loader();
 
       // what keys are available
@@ -228,6 +206,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
                plugins.append(plugin);
             }
          }
+
       }
 
       if (! plugins.isEmpty()) {
@@ -246,7 +225,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
                      QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(currentPlugin);
 
-                     if (! iface || ! (iface->supportedFeatures(type) & QMediaServiceProviderHint::LowLatencyPlayback)) {
+                     if (! iface || ! (iface->supportedFeatures(key) & QMediaServiceProviderHint::LowLatencyPlayback)) {
                         plugin = currentPlugin;
                         break;
                      }
@@ -287,29 +266,31 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
             /* emerald
 
-                        case QMediaServiceProviderHint::CameraPosition: {
-                                plugin = plugins[0];
-                                if (type == QByteArray(Q_MEDIASERVICE_CAMERA)
-                                        && hint.cameraPosition() != QCamera::UnspecifiedPosition) {
-                                    foreach (QMediaServiceProviderPlugin *currentPlugin, plugins) {
-                                        const QMediaServiceSupportedDevicesInterface *deviceIface =
-                                                qobject_cast<QMediaServiceSupportedDevicesInterface*>(currentPlugin);
-                                        const QMediaServiceCameraInfoInterface *cameraIface =
-                                                qobject_cast<QMediaServiceCameraInfoInterface*>(currentPlugin);
+               case QMediaServiceProviderHint::CameraPosition: {
+                  plugin = plugins[0];
 
-                                        if (deviceIface && cameraIface) {
-                                            const QList<QByteArray> cameras = deviceIface->devices(type);
-                                            foreach (const QByteArray &camera, cameras) {
-                                                if (cameraIface->cameraPosition(camera) == hint.cameraPosition()) {
-                                                    plugin = currentPlugin;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            break;
+                  if (key == Q_MEDIASERVICE_CAMERA && hint.cameraPosition() != QCamera::UnspecifiedPosition) {
+                     for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
+                        const QMediaServiceSupportedDevicesInterface *deviceIface =
+                           qobject_cast<QMediaServiceSupportedDevicesInterface*>(currentPlugin);
+
+                        const QMediaServiceCameraInfoInterface *cameraIface =
+                           qobject_cast<QMediaServiceCameraInfoInterface*>(currentPlugin);
+
+                        if (deviceIface && cameraIface) {
+                           const QList<QString> cameras = deviceIface->devices(key);
+
+                           for (const QString &camera : cameras) {
+                              if (cameraIface->cameraPosition(camera) == hint.cameraPosition()) {
+                                 plugin = currentPlugin;
+                                 break;
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+               break;
             */
 
             case QMediaServiceProviderHint::ContentType: {
@@ -537,7 +518,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
             continue;
          }
 
-         QMediaServiceSupportedDevicesInterface *iface = qobject_cast<QMediaServiceSupportedDevicesInterface *>(obj);
+         QMediaServiceSupportedDevicesInterface *iface = dynamic_cast<QMediaServiceSupportedDevicesInterface *>(obj);
 
          if (iface) {
             list.append(iface->devices(serviceType));
@@ -636,9 +617,6 @@ QMultimedia::SupportEstimate QMediaServiceProvider::hasSupport(const QString &se
 
 QStringList QMediaServiceProvider::supportedMimeTypes(const QString &serviceType, int flags) const
 {
-   Q_UNUSED(serviceType);
-   Q_UNUSED(flags);
-
    return QStringList();
 }
 
@@ -654,8 +632,6 @@ QList<QString> QMediaServiceProvider::devices(const QString &service) const
 
 QString QMediaServiceProvider::deviceDescription(const QString &serviceType, const QString &device)
 {
-   Q_UNUSED(serviceType);
-   Q_UNUSED(device);
    return QString();
 }
 
@@ -683,8 +659,12 @@ void QMediaServiceProvider::setDefaultServiceProvider(QMediaServiceProvider *pro
 
 QMediaServiceProvider *QMediaServiceProvider::defaultServiceProvider()
 {
-   return qt_defaultMediaServiceProvider != 0
-      ? qt_defaultMediaServiceProvider
-      : static_cast<QMediaServiceProvider *>(pluginProvider());
+   if (qt_defaultMediaServiceProvider != 0) {
+      return qt_defaultMediaServiceProvider;
+
+   } else {
+      return static_cast<QMediaServiceProvider *>(pluginProvider());
+
+   }
 }
 

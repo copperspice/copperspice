@@ -1713,7 +1713,7 @@ static bool parsePathDataFast(QStringView dataStr, QPainterPath &path)
       }
 
       const qreal *num = arg.constData();
-      int count        = arg.count();
+      int count = arg.count();
 
       while (count > 0) {
          qreal offsetX = x;        // correction offsets
@@ -1736,9 +1736,10 @@ static bool parsePathDataFast(QStringView dataStr, QPainterPath &path)
                // As per 1.2  spec 8.3.2 The "moveto" commands
                // If a 'moveto' is followed by multiple pairs of coordinates without explicit commands,
                // the subsequent pairs shall be treated as implicit 'lineto' commands.
-               pathElem = QLatin1Char('l');
+               pathElem = 'l';
             }
             break;
+
             case 'M': {
                if (count < 2) {
                   num++;

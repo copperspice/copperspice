@@ -27,7 +27,6 @@
 #include "utils.h"
 
 QT_BEGIN_NAMESPACE
-
 CustomWidgetsInfo::CustomWidgetsInfo()
 {
 }

@@ -658,14 +658,14 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
       // use the first proxy that works
       // for non-encrypted connections, any transparent or HTTP proxy
       // for encrypted, only transparent proxies
-      if (!ssl
-            && (p.capabilities() & QNetworkProxy::CachingCapability)
-            && (p.type() == QNetworkProxy::HttpProxy ||
-                p.type() == QNetworkProxy::HttpCachingProxy)) {
+
+      if (! ssl && (p.capabilities() & QNetworkProxy::CachingCapability)
+            && (p.type() == QNetworkProxy::HttpProxy || p.type() == QNetworkProxy::HttpCachingProxy)) {
          cacheProxy = p;
          transparentProxy = QNetworkProxy::NoProxy;
          break;
       }
+
       if (p.isTransparentProxy()) {
          transparentProxy = p;
          cacheProxy = QNetworkProxy::NoProxy;
@@ -1151,7 +1151,8 @@ void QNetworkReplyHttpImplPrivate::onRedirected(QUrl redirectUrl, int httpStatus
       return;
    }
 
-   if (httpRequest.isFollowRedirects()) { // update the reply's url as it could've changed
+   if (httpRequest.isFollowRedirects()) {
+      // update the reply's url as it could've changed
       url = redirectUrl;
    }
 
@@ -1184,9 +1185,11 @@ void QNetworkReplyHttpImplPrivate::checkForRedirect(const int statusCode)
          // all of the others is cacheable if the headers indicate it to be
          QByteArray header = q->rawHeader("location");
          QUrl url = QUrl(QString::fromUtf8(header));
-         if (!url.isValid()) {
-            url = QUrl(QLatin1String(header));
+
+         if (! url.isValid()) {
+            url = QUrl(header);
          }
+
          q->setAttribute(QNetworkRequest::RedirectionTargetAttribute, url);
    }
 }
@@ -1514,7 +1517,7 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
       setRawHeader(it->first, it->second);
    }
 
-   if (!isHttpRedirectResponse()) {
+   if (! isHttpRedirectResponse()) {
       checkForRedirect(status);
    }
 
@@ -1525,9 +1528,8 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    // This needs to be emitted in the event loop because it can be reached at
    // the direct code path of qnam.get(...) before the user has a chance
    // to connect any signals.
-   QMetaObject::invokeMethod(q, "_q_metaDataChanged", Qt::QueuedConnection);
+   QMetaObject::invokeMethod(q, "_q_metaDataChanged",    Qt::QueuedConnection);
    QMetaObject::invokeMethod(q, "_q_cacheLoadReadyRead", Qt::QueuedConnection);
-
 
 #if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
    qDebug() << "Successfully sent cache:" << url << contents->size() << "bytes";
@@ -1535,15 +1537,15 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
 
    // Do redirect processing
    if (httpRequest.isFollowRedirects() && QHttpNetworkReply::isHttpRedirect(status)) {
-      QMetaObject::invokeMethod(q, "onRedirected", Qt::QueuedConnection,
-                                Q_ARG(QUrl, redirectUrl),
-                                Q_ARG(int, status),
-                                Q_ARG(int, httpRequest.redirectCount() - 1));
+
+      QMetaObject::invokeMethod(q, "onRedirected", Qt::QueuedConnection, Q_ARG(QUrl, redirectUrl),
+                  Q_ARG(int, status), Q_ARG(int, httpRequest.redirectCount() - 1));
    }
 
    // Set the following flag so we can ignore some signals from HTTP thread
    // that would still come
    loadingFromCache = true;
+
    return true;
 }
 
@@ -1799,9 +1801,11 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
    state = Working;
 
 #ifndef QT_NO_BEARERMANAGEMENT
+
    // Do not start background requests if they are not allowed by session policy
    QSharedPointer<QNetworkSession> session(manager->d_func()->getNetworkSession());
    QVariant isBackground = request.attribute(QNetworkRequest::BackgroundRequestAttribute, QVariant::fromValue(false));
+
    if (isBackground.toBool() && session && session->usagePolicies().testFlag(QNetworkSession::NoBackgroundTrafficPolicy)) {
       QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::BackgroundRequestNotAllowedError),
@@ -1820,7 +1824,7 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
          QObject::connect(session.data(), SIGNAL(error(QNetworkSession::SessionError)),
                           q, SLOT(_q_networkSessionFailed()), Qt::QueuedConnection);
 
-         if (!session->isOpen()) {
+         if (! session->isOpen()) {
             session->setSessionProperty("ConnectInBackground", isBackground);
             session->open();
          }

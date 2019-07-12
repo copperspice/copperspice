@@ -1489,30 +1489,6 @@ QWebElementCollectionPrivate* QWebElementCollectionPrivate::create(const PassRef
 }
 
 /*
-    \class QWebElementCollection
-    \since 4.6
-    \brief The QWebElementCollection class represents a collection of web elements.
-    \preliminary
-
-    Elements in a document can be selected using QWebElement::findAll() or using the
-    QWebElement constructor. The collection is composed by choosing all elements in the
-    document that match a specified CSS selector expression.
-
-    The number of selected elements is provided through the count() property. Individual
-    elements can be retrieved by index using at().
-
-    It is also possible to iterate through all elements in the collection using Qt's foreach
-    macro:
-
-    \code
-        QWebElementCollection collection = document.findAll("p");
-        foreach (QWebElement paraElement, collection) {
-            ...
-        }
-    \endcode
-*/
-
-/*
     Constructs an empty collection.
 */
 QWebElementCollection::QWebElementCollection()

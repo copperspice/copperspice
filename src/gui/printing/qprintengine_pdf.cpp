@@ -60,7 +60,7 @@ bool QPdfPrintEngine::begin(QPaintDevice *pdev)
 {
    Q_D(QPdfPrintEngine);
 
-   if (!d->openPrintDevice()) {
+   if (! d->openPrintDevice()) {
       state = QPrinter::Error;
       return false;
    }
@@ -370,7 +370,6 @@ void QPdfPrintEnginePrivate::closePrintDevice()
          ::_close(fd);
 #else
          ::close(fd);
-
 #endif
 
       fd = -1;
@@ -380,20 +379,16 @@ void QPdfPrintEnginePrivate::closePrintDevice()
    }
 }
 
-
-
 QPdfPrintEnginePrivate::QPdfPrintEnginePrivate(QPrinter::PrinterMode m)
-   : QPdfEnginePrivate(),
-     duplex(QPrint::DuplexNone),
-     collate(true),
-     copies(1),
-     pageOrder(QPrinter::FirstPageFirst),
-     paperSource(QPrinter::Auto),
-     fd(-1)
+   : QPdfEnginePrivate(), duplex(QPrint::DuplexNone), collate(true),
+     copies(1), pageOrder(QPrinter::FirstPageFirst),
+     paperSource(QPrinter::Auto), fd(-1)
 {
    resolution = 72;
+
    if (m == QPrinter::HighResolution) {
       resolution = 1200;
+
    } else if (m == QPrinter::ScreenResolution) {
       resolution = qt_defaultDpi();
    }

@@ -484,5 +484,5 @@ StyleSheet QStyleSheetStyle::getDefaultStyleSheet() const
    return sheet;
 }
 
-#endif // #ifndef QT_NO_STYLE_STYLESHEET
+#endif // QT_NO_STYLE_STYLESHEET
 

@@ -163,7 +163,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderPlugin : public QObject, public Q
                         Required: QVideoOutputControl
                         Optional: QVideoWindowControl, QVideoRendererControl, QVideoWidgetControl
 */
-#define Q_MEDIASERVICE_MEDIAPLAYER "com.copperspice.CS.mediaPlayer"   // broom key thing
+#define Q_MEDIASERVICE_MEDIAPLAYER "com.copperspice.CS.mediaPlayer"
 
 /*!
    Service with support for recording from audio sources

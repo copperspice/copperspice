@@ -74,11 +74,11 @@ class RCCFileInfo
    };
 
    RCCFileInfo(const QString &name = QString(), const QFileInfo &fileInfo = QFileInfo(),
-               QLocale::Language language = QLocale::C,
-               QLocale::Country country = QLocale::AnyCountry,
-               uint flags = NoFlags,
-               int compressLevel = CONSTANT_COMPRESSLEVEL_DEFAULT,
-               int compressThreshold = CONSTANT_COMPRESSTHRESHOLD_DEFAULT);
+      QLocale::Language language = QLocale::C,
+      QLocale::Country country = QLocale::AnyCountry,
+      uint flags = NoFlags,
+      int compressLevel = CONSTANT_COMPRESSLEVEL_DEFAULT,
+      int compressThreshold = CONSTANT_COMPRESSTHRESHOLD_DEFAULT);
 
    ~RCCFileInfo();
 
@@ -108,7 +108,7 @@ class RCCFileInfo
 };
 
 RCCFileInfo::RCCFileInfo(const QString &name, const QFileInfo &fileInfo, QLocale::Language language,
-                  QLocale::Country country, uint flags, int compressLevel, int compressThreshold)
+   QLocale::Country country, uint flags, int compressLevel, int compressThreshold)
 {
    m_name              = name;
    m_fileInfo          = fileInfo;
@@ -365,7 +365,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice, const QSt
          }
 
          const QString msg = QString("RCC Parse Error: '%1' Line: %2 Column: %3 [%4]\n")
-                  .formatArg(fname).formatArg(errorLine).formatArg(errorColumn).formatArg(errorMsg);
+            .formatArg(fname).formatArg(errorLine).formatArg(errorColumn).formatArg(errorMsg);
 
          m_errorDevice->write(msg.toUtf8());
 
@@ -462,8 +462,8 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice, const QSt
                   if (! file.exists()) {
                      m_failedResources.push_back(absFileName);
 
-                     const QString msg = QString("RCC: Error in '%1': Can not find file '%2'\n")
-                           .formatArg(fname).formatArg(fileName);
+                     const QString msg = QString("RCC: Error in '%1': Unable to find file '%2'\n")
+                        .formatArg(fname).formatArg(fileName);
 
                      m_errorDevice->write(msg.toUtf8());
 
@@ -475,7 +475,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice, const QSt
 
                   } else if (file.isFile()) {
                      const bool arc = addFile(alias, RCCFileInfo(alias.section(slash, -1), file, language, country,
-                           RCCFileInfo::NoFlags, compressLevel, compressThreshold));
+                              RCCFileInfo::NoFlags, compressLevel, compressThreshold));
 
                      if (! arc) {
                         m_failedResources.push_back(absFileName);
@@ -510,7 +510,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice, const QSt
 
                            const bool arc = addFile(alias + child.fileName(),
                                  RCCFileInfo(child.fileName(), child, language, country,
-                                 RCCFileInfo::NoFlags, compressLevel, compressThreshold));
+                                    RCCFileInfo::NoFlags, compressLevel, compressThreshold));
 
                            if (! arc) {
                               m_failedResources.push_back(child.fileName());
@@ -680,7 +680,7 @@ QStringList RCCResourceLibrary::dataFiles() const
 
 // Determine map of resource identifier (':/newPrefix/images/p1.png') to file via recursion
 static void resourceDataFileMapRecursion(const RCCFileInfo *m_root, const QString &path,
-      RCCResourceLibrary::ResourceDataFileMap &m)
+   RCCResourceLibrary::ResourceDataFileMap &m)
 {
    const QChar slash = '/';
    const auto cend = m_root->m_children.constEnd();
@@ -1024,12 +1024,12 @@ bool RCCResourceLibrary::writeInitializer()
       }
       if (m_root) {
          writeString("extern Q_CORE_EXPORT bool qRegisterResourceData\n    "
-                     "(int, const unsigned char *, "
-                     "const unsigned char *, const unsigned char *);\n\n");
+            "(int, const unsigned char *, "
+            "const unsigned char *, const unsigned char *);\n\n");
 
          writeString("extern Q_CORE_EXPORT bool qUnregisterResourceData\n    "
-                     "(int, const unsigned char *, "
-                     "const unsigned char *, const unsigned char *);\n\n");
+            "(int, const unsigned char *, "
+            "const unsigned char *, const unsigned char *);\n\n");
       }
 
       if (m_useNameSpace) {
@@ -1046,7 +1046,7 @@ bool RCCResourceLibrary::writeInitializer()
          writeString("    ");
          writeAddNamespaceFunction("qRegisterResourceData");
          writeString("\n        (0x01, qt_resource_struct, "
-                     "qt_resource_name, qt_resource_data);\n");
+            "qt_resource_name, qt_resource_data);\n");
       }
 
       writeString("    return 1;\n");
@@ -1067,7 +1067,7 @@ bool RCCResourceLibrary::writeInitializer()
          writeString("    ");
          writeAddNamespaceFunction("qUnregisterResourceData");
          writeString("\n       (0x01, qt_resource_struct, "
-                     "qt_resource_name, qt_resource_data);\n");
+            "qt_resource_name, qt_resource_data);\n");
       }
 
       writeString("    return 1;\n");

@@ -75,8 +75,8 @@ struct Option {
 
    QString messagePrefix() const {
       return inputFile.isEmpty() ?
-             QString(QLatin1String("stdin")) :
-             QDir::toNativeSeparators(inputFile);
+         QString(QLatin1String("stdin")) :
+         QDir::toNativeSeparators(inputFile);
    }
 };
 

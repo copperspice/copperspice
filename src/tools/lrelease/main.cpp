@@ -23,19 +23,17 @@
 
 #include "translator.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QTranslator>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QCoreApplication>
+#include <QTranslator>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <qregularexpression.h>
 #include <qstring.h>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
-#include <QtCore/QLibraryInfo>
-
-QT_USE_NAMESPACE
+#include <QStringList>
+#include <QTextStream>
+#include <QLibraryInfo>
 
 class LR
 {
@@ -87,16 +85,19 @@ static void printUsage()
 static bool loadTsFile(Translator &tor, const QString &tsFileName, bool /* verbose */)
 {
    ConversionData cd;
-   bool ok = tor.load(tsFileName, cd, QLatin1String("auto"));
+   bool ok = tor.load(tsFileName, cd, "auto");
 
    if (!ok) {
       printErr(LR::tr("lrelease error: %1").formatArg(cd.error()));
+
    } else {
       if (!cd.errors().isEmpty()) {
          printOut(cd.error());
       }
    }
+
    cd.clearErrors();
+
    return ok;
 }
 
@@ -172,15 +173,15 @@ int main(int argc, char **argv)
    QTranslator qtTranslator;
    QString sysLocale = QLocale::system().name();
    QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-   if (translator.load(QLatin1String("linguist_") + sysLocale, resourceDir)
-         && qtTranslator.load(QLatin1String("qt_") + sysLocale, resourceDir)) {
+
+   if (translator.load("linguist_" + sysLocale, resourceDir) && qtTranslator.load("qt_" + sysLocale, resourceDir)) {
       app.installTranslator(&translator);
       app.installTranslator(&qtTranslator);
    }
 #endif
 
    ConversionData cd;
-   cd.m_verbose = true; // the default is true starting with Qt 4.2
+   cd.m_verbose = true;
    bool removeIdentical = false;
    Translator tor;
 
@@ -258,6 +259,7 @@ int main(int argc, char **argv)
          if (!releaseTsFile(inputFile, cd, removeIdentical)) {
             return 1;
          }
+
       } else {
          if (!loadTsFile(tor, inputFile, cd.isVerbose())) {
             return 1;
@@ -266,7 +268,7 @@ int main(int argc, char **argv)
 
    }
 
-   if (!outputFile.isEmpty()) {
+   if (! outputFile.isEmpty()) {
       return releaseTranslator(tor, outputFile, cd, removeIdentical) ? 0 : 1;
    }
 

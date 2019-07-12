@@ -176,17 +176,15 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 @end
 
 
-
 void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
 {
    Q_Q(QPrintDialog);
 
    // get the NSPrintInfo from the print engine in the platform plugin
-   void *voidp = 0;
-   (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(),
-                                     "NSPrintInfoForPrintEngine",
-                                     Q_RETURN_ARG(void *, voidp),
-                                     Q_ARG(QPrintEngine *, printer->printEngine()));
+   void *voidp = nullptr;
+
+   (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(), "NSPrintInfoForPrintEngine",
+                  Q_RETURN_ARG(void *, voidp), Q_ARG(QPrintEngine *, printer->printEngine()));
 
    printInfo = static_cast<NSPrintInfo *>(voidp);
    [printInfo retain];

@@ -81,7 +81,7 @@ bool Uic::printDependencies()
    }
 
    if (DomIncludes *includes = ui->elementIncludes()) {
-      for (DomInclude * incl : includes->elementInclude()) {
+      for (DomInclude *incl : includes->elementInclude()) {
          QString file = incl->text();
 
          if (file.isEmpty()) {
@@ -93,7 +93,7 @@ bool Uic::printDependencies()
    }
 
    if (DomCustomWidgets *customWidgets = ui->elementCustomWidgets()) {
-      for (DomCustomWidget * customWidget : customWidgets->elementCustomWidget()) {
+      for (DomCustomWidget *customWidget : customWidgets->elementCustomWidget()) {
          if (DomHeader *header = customWidget->elementHeader()) {
             QString file = header->text();
             if (file.isEmpty()) {
@@ -167,7 +167,7 @@ DomUI *Uic::parseUiFile(QXmlStreamReader &reader)
       ui = nullptr;
 
       fprintf(stderr, "%s\n", csPrintable(QString("Uic: Parse error on line %1, column %2 : %3")
-                  .formatArg(reader.lineNumber()).formatArg(reader.columnNumber()).formatArg(reader.errorString())));
+            .formatArg(reader.lineNumber()).formatArg(reader.columnNumber()).formatArg(reader.errorString())));
    }
 
    return ui;
@@ -316,7 +316,7 @@ void Uic::writeHeaderProtectionStart()
 {
    QString h = drv->headerFileName();
    out << "#ifndef " << h << "\n"
-       << "#define " << h << "\n";
+      << "#define " << h << "\n";
 }
 
 void Uic::writeHeaderProtectionEnd()
@@ -339,21 +339,21 @@ bool Uic::isToolBar(const QString &className) const
 bool Uic::isButton(const QString &className) const
 {
    return customWidgetsInfo()->extends(className, QLatin1String("QRadioButton"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QToolButton"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QCheckBox"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QPushButton"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QCommandLinkButton"));
+      || customWidgetsInfo()->extends(className, QLatin1String("QToolButton"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QCheckBox"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QPushButton"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QCommandLinkButton"));
 }
 
 bool Uic::isContainer(const QString &className) const
 {
    return customWidgetsInfo()->extends(className, QLatin1String("QStackedWidget"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QToolBox"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QTabWidget"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QScrollArea"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QMdiArea"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QWizard"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QDockWidget"));
+      || customWidgetsInfo()->extends(className, QLatin1String("QToolBox"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QTabWidget"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QScrollArea"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QMdiArea"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QWizard"))
+      || customWidgetsInfo()->extends(className, QLatin1String("QDockWidget"));
 }
 
 bool Uic::isCustomWidgetContainer(const QString &className) const
@@ -374,7 +374,7 @@ bool Uic::isMenuBar(const QString &className) const
 bool Uic::isMenu(const QString &className) const
 {
    return customWidgetsInfo()->extends(className, QLatin1String("QMenu"))
-          || customWidgetsInfo()->extends(className, QLatin1String("QPopupMenu"));
+      || customWidgetsInfo()->extends(className, QLatin1String("QPopupMenu"));
 }
 
 

@@ -537,8 +537,7 @@ int QTextDocumentPrivate::remove_block(int pos, int *blockFormat, int command, Q
 
    } else {
       // non empty block, merge with next one into this block
-      //	qDebug("merging block with next");
-
+      //    qDebug("merging block with next");
 
       int n = blocks.next(b);
       Q_ASSERT((int)blocks.position(n) == pos + 1);
@@ -639,7 +638,7 @@ void QTextDocumentPrivate::move(int pos, int to, int length, QTextUndoCommand::O
          blockRevision);
 
       if (key + 1 != blocks.position(b)) {
-         //	    qDebug("remove_string from %d length %d", key, X->size_array[0]);
+         //        qDebug("remove_string from %d length %d", key, X->size_array[0]);
          Q_ASSERT(noBlockInString(text.mid(X->stringPosition, X->size_array[0])));
          w = remove_string(key, X->size_array[0], op);
 

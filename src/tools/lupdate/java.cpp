@@ -38,20 +38,18 @@
 
 #include <ctype.h>
 
-QT_BEGIN_NAMESPACE
-
 class LU
 {
    Q_DECLARE_TR_FUNCTIONS(LUpdate)
 };
 
 enum { Tok_Eof, Tok_class, Tok_return, Tok_tr,
-       Tok_translate, Tok_Ident, Tok_Package,
-       Tok_Comment, Tok_String, Tok_Colon, Tok_Dot,
-       Tok_LeftBrace, Tok_RightBrace, Tok_LeftParen,
-       Tok_RightParen, Tok_Comma, Tok_Semicolon,
-       Tok_Integer, Tok_Plus, Tok_PlusPlus, Tok_PlusEq, Tok_null
-     };
+   Tok_translate, Tok_Ident, Tok_Package,
+   Tok_Comment, Tok_String, Tok_Colon, Tok_Dot,
+   Tok_LeftBrace, Tok_RightBrace, Tok_LeftParen,
+   Tok_RightParen, Tok_Comma, Tok_Semicolon,
+   Tok_Integer, Tok_Plus, Tok_PlusPlus, Tok_PlusEq, Tok_null
+};
 
 class Scope
 {
@@ -386,8 +384,8 @@ static bool matchString( QString &s )
          s += yyString;
       } else {
          yyMsg() << qPrintable(LU::tr(
-                                  "String used in translation can contain only literals"
-                                  " concatenated with other literals, not expressions or numbers.\n"));
+                  "String used in translation can contain only literals"
+                  " concatenated with other literals, not expressions or numbers.\n"));
          return false;
       }
       yyTok = getToken();
@@ -530,9 +528,9 @@ static void parse( Translator *tor )
             QString contextOverride;
             yyTok = getToken();
             if ( match(Tok_LeftParen) &&
-                  matchString(contextOverride) &&
-                  match(Tok_Comma) &&
-                  matchString(text) ) {
+               matchString(contextOverride) &&
+               match(Tok_Comma) &&
+               matchString(text) ) {
 
                com.clear();
                bool plural = false;
@@ -625,7 +623,7 @@ bool loadJava(Translator &translator, const QString &filename, ConversionData &c
    QFile file(filename);
 
    if (!file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Can not open %1: %2").formatArgs(filename, file.errorString()));
+      cd.appendError(LU::tr("Unable to open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
 
@@ -663,4 +661,3 @@ bool loadJava(Translator &translator, const QString &filename, ConversionData &c
    return true;
 }
 
-QT_END_NAMESPACE

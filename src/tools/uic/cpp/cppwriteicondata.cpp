@@ -103,7 +103,7 @@ void WriteIconData::acceptImage(DomImage *image)
 }
 
 void WriteIconData::writeImage(QTextStream &output, const QString &indent,
-                               bool limitXPM_LineLength, const DomImage *image)
+   bool limitXPM_LineLength, const DomImage *image)
 {
    QString img = image->attributeName() + QLatin1String("_data");
    QString data = image->elementData()->text();
@@ -120,7 +120,7 @@ void WriteIconData::writeImage(QTextStream &output, const QString &indent,
       int column = 0;
       bool inQuote = false;
       output << indent << "/* XPM */\n"
-             << indent << "static const char* const " << img << "[] = { \n";
+         << indent << "static const char* const " << img << "[] = { \n";
       while (baunzip[a] != '\"') {
          a++;
       }

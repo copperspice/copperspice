@@ -24,7 +24,7 @@
 #ifndef LUPDATE_H
 #define LUPDATE_H
 
-#include "qglobal.h"
+#include <qglobal.h>
 #include <qlist.h>
 #include <qstringfwd.h>
 

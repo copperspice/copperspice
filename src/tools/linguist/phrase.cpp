@@ -35,8 +35,6 @@
 #include <QXmlDefaultHandler>
 #include <QXmlParseException>
 
-QT_BEGIN_NAMESPACE
-
 static QString protect(const QString &str)
 {
    QString p = str;
@@ -342,8 +340,6 @@ void PhraseBook::setModified(bool modified)
 
 void PhraseBook::phraseChanged(Phrase *p)
 {
-   Q_UNUSED(p);
-
    setModified(true);
 }
 
@@ -352,7 +348,8 @@ QString PhraseBook::friendlyPhraseBookName() const
    if (!m_fileName.isEmpty()) {
       return QFileInfo(m_fileName).fileName();
    }
+
    return QString();
 }
 
-QT_END_NAMESPACE
+

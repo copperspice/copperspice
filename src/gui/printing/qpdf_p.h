@@ -28,15 +28,15 @@
 
 #ifndef QT_NO_PDF
 
-#include "qmatrix.h"
-#include "qstring.h"
-#include "qvector.h"
+#include <qmatrix.h>
+#include <qstring.h>
+#include <qvector.h>
 
-#include "qstroker_p.h"
-#include "qpaintengine_p.h"
-#include "qfontengine_p.h"
-#include "qfontsubset_p.h"
-#include "qpagelayout.h"
+#include <qfontengine_faceid_p.h>
+#include <qfontsubset_p.h>
+#include <qstroker_p.h>
+#include <qpaintengine_p.h>
+#include <qpagelayout.h>
 
 const char *qt_real_to_string(qreal val, char *buf);
 const char *qt_int_to_string(int val, char *buf);

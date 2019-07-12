@@ -227,6 +227,7 @@ QChar QSystemLocalePrivate::zeroDigit()
    if (zero.isNull()) {
       zero = getLocaleInfo_qchar(LOCALE_SNATIVEDIGITS);
    }
+
    return zero;
 }
 

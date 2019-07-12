@@ -24,16 +24,13 @@
 #ifndef RCC_H
 #define RCC_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QHash>
-#include <QtCore/QString>
-
-QT_BEGIN_NAMESPACE
+#include <qstringlist.h>
+#include <qhash.h>
+#include <qstring.h>
 
 class RCCFileInfo;
 class QIODevice;
 class QTextStream;
-
 
 class RCCResourceLibrary
 {
@@ -134,7 +131,7 @@ class RCCResourceLibrary
    bool addFile(const QString &alias, const RCCFileInfo &file);
 
    bool interpretResourceFile(QIODevice *inputDevice, const QString &file,
-                  QString currentPath = QString(), bool ignoreErrors = false);
+      QString currentPath = QString(), bool ignoreErrors = false);
 
    bool writeHeader();
    bool writeDataBlobs();
@@ -173,7 +170,5 @@ class RCCResourceLibrary
    QIODevice *m_errorDevice;
    QByteArray m_out;
 };
-
-QT_END_NAMESPACE
 
 #endif

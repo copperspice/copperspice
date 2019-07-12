@@ -24,19 +24,16 @@
 #include "recentfiles.h"
 #include "globals.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
-#include <QtCore/QSettings>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-
-QT_BEGIN_NAMESPACE
+#include <QDebug>
+#include <QFileInfo>
+#include <QSettings>
+#include <QString>
+#include <QStringList>
 
 static QString configKey()
 {
    return settingPath("RecentlyOpenedFiles");
 }
-
 
 RecentFiles::RecentFiles(const int maxEntries)
    : m_groupOpen(false),
@@ -130,4 +127,3 @@ void RecentFiles::writeConfig() const
    QSettings().setValue(configKey(), vals);
 }
 
-QT_END_NAMESPACE

@@ -50,7 +50,7 @@ void WriteIconInitialization::acceptUI(DomUI *node)
    QString className = node->elementClass() + option.postfix;
 
    output << option.indent << "static QPixmap " << iconFromDataFunction() << "(IconID id)\n"
-          << option.indent << "{\n";
+      << option.indent << "{\n";
 
    WriteIconData(uic).acceptUI(node);
 
@@ -61,7 +61,7 @@ void WriteIconInitialization::acceptUI(DomUI *node)
    output << option.indent << option.indent << "default: return QPixmap();\n";
 
    output << option.indent << "} // switch\n"
-          << option.indent << "} // icon\n\n";
+      << option.indent << "} // icon\n\n";
 }
 
 QString WriteIconInitialization::iconFromDataFunction()
@@ -90,7 +90,7 @@ void WriteIconInitialization::acceptImage(DomImage *image)
       output << "return " << "QPixmap((const char**)" << imageData << ");\n";
    } else {
       output << " { QImage img; img.loadFromData(" << imageData << ", sizeof(" << imageData << "), " << fixString(fmt,
-             ind) << "); return QPixmap::fromImage(img); }\n";
+            ind) << "); return QPixmap::fromImage(img); }\n";
    }
 }
 

@@ -310,7 +310,9 @@ Item TranslateFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       if (mapPos == -1) {
          result[outI] = argCh;
          ++outI;
+
          continue;
+
       } else if (mapPos >= transLen) {
          continue;
       }

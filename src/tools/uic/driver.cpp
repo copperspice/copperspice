@@ -29,7 +29,6 @@
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
-
 Driver::Driver()
    : m_stdout(stdout, QFile::WriteOnly | QFile::Text)
 {
@@ -173,7 +172,7 @@ QString Driver::unique(const QString &instanceName, const QString &className)
 
    if (alreadyUsed && className.size()) {
       fprintf(stderr, "%s: Warning: The name '%s' (%s) is already in use, defaulting to '%s'.\n",
-              qPrintable(m_option.messagePrefix()), qPrintable(instanceName), qPrintable(className), qPrintable(name));
+         qPrintable(m_option.messagePrefix()), qPrintable(instanceName), qPrintable(className), qPrintable(name));
    }
 
    m_nameRepository.insert(name, true);
@@ -209,7 +208,7 @@ QString Driver::qtify(const QString &name)
 static bool isAnsiCCharacter(const QChar &c)
 {
    return (c.toUpper() >= QLatin1Char('A') && c.toUpper() <= QLatin1Char('Z'))
-          || c.isDigit() || c == QLatin1Char('_');
+      || c.isDigit() || c == QLatin1Char('_');
 }
 
 QString Driver::headerFileName() const
@@ -266,7 +265,7 @@ bool Driver::uic(const QString &fileName, DomUI *ui, QTextStream *out)
    if (out != nullptr) {
       m_output = out;
    } else {
-      m_output =&m_stdout;
+      m_output = &m_stdout;
    }
 
    Uic tool(this);

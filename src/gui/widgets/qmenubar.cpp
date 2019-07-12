@@ -40,16 +40,15 @@
 #include <qtoolbutton.h>
 #include <qwhatsthis.h>
 #include <qplatform_theme.h>
-#include "qplatform_integration.h"
+#include <qplatform_integration.h>
 
-#include "qguiapplication_p.h"
+#include <qguiapplication_p.h>
 
 #ifndef QT_NO_MENUBAR
 
 #include <qmenu_p.h>
 #include <qmenubar_p.h>
 #include <qdebug.h>
-
 
 class QMenuBarExtension : public QToolButton
 {
@@ -82,17 +81,12 @@ void QMenuBarExtension::paintEvent(QPaintEvent *)
    p.drawComplexControl(QStyle::CC_ToolButton, opt);
 }
 
-
 QSize QMenuBarExtension::sizeHint() const
 {
    int ext = style()->pixelMetric(QStyle::PM_ToolBarExtensionExtent, 0, parentWidget());
    return QSize(ext, ext);
 }
 
-
-/*!
-    \internal
-*/
 QAction *QMenuBarPrivate::actionAt(QPoint p) const
 {
    for (int i = 0; i < actions.size(); ++i) {
@@ -148,7 +142,7 @@ bool QMenuBarPrivate::isVisible(QAction *action)
 void QMenuBarPrivate::updateGeometries()
 {
    Q_Q(QMenuBar);
-   if (!itemsDirty) {
+   if (! itemsDirty) {
       return;
    }
 
@@ -180,7 +174,8 @@ void QMenuBarPrivate::updateGeometries()
    }
 
 #ifdef Q_OS_MAC
-   if (q->isNativeMenuBar()) { //nothing to see here folks, move along..
+   if (q->isNativeMenuBar()) {
+      //nothing to see here folks, move along
       itemsDirty = false;
       return;
    }
@@ -616,6 +611,7 @@ void QMenuBarPrivate::init()
    Q_Q(QMenuBar);
    q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
    q->setAttribute(Qt::WA_CustomWhatsThis);
+
    if (!QApplication::instance()->testAttribute(Qt::AA_DontUseNativeMenuBar)) {
       platformMenuBar = QGuiApplicationPrivate::platformTheme()->createPlatformMenuBar();
    }
@@ -744,14 +740,6 @@ QAction *QMenuBar::addSeparator()
    return ret;
 }
 
-/*!
-    This convenience function creates a new separator action, i.e. an
-    action with QAction::isSeparator() returning true. The function inserts
-    the newly created action into this menu bar's list of actions before
-    action \a before and returns it.
-
-    \sa QWidget::insertAction(), addSeparator()
-*/
 QAction *QMenuBar::insertSeparator(QAction *before)
 {
    QAction *action = new QAction(this);
@@ -760,12 +748,6 @@ QAction *QMenuBar::insertSeparator(QAction *before)
    return action;
 }
 
-/*!
-  This convenience function inserts \a menu before action \a before
-  and returns the menus menuAction().
-
-  \sa QWidget::insertAction() addMenu()
-*/
 QAction *QMenuBar::insertMenu(QAction *before, QMenu *menu)
 {
    QAction *action = menu->menuAction();
@@ -773,40 +755,18 @@ QAction *QMenuBar::insertMenu(QAction *before, QMenu *menu)
    return action;
 }
 
-/*!
-  Returns the QAction that is currently highlighted. A null pointer
-  will be returned if no action is currently selected.
-*/
 QAction *QMenuBar::activeAction() const
 {
    Q_D(const QMenuBar);
    return d->currentAction;
 }
 
-/*!
-    \since 4.1
-
-    Sets the currently highlighted action to \a act.
-*/
 void QMenuBar::setActiveAction(QAction *act)
 {
    Q_D(QMenuBar);
    d->setCurrentAction(act, true, false);
 }
 
-
-/*!
-    Removes all the actions from the menu bar.
-
-    \note On Mac OS X, menu items that have been merged to the system
-    menu bar are not removed by this function. One way to handle this
-    would be to remove the extra actions yourself. You can set the
-    \l{QAction::MenuRole}{menu role} on the different menus, so that
-    you know ahead of time which menu items get merged and which do
-    not. Then decide what to recreate or remove yourself.
-
-    \sa removeAction()
-*/
 void QMenuBar::clear()
 {
    QList<QAction *> acts = actions();
@@ -814,7 +774,6 @@ void QMenuBar::clear()
       removeAction(acts[i]);
    }
 }
-
 
 void QMenuBar::setDefaultUp(bool b)
 {
@@ -1147,48 +1106,57 @@ void QMenuBar::actionEvent(QActionEvent *e)
 
       QPlatformMenuBar *nativeMenuBar = d->platformMenuBar;
 
-
       if (!nativeMenuBar) {
          return;
       }
+
       if (e->type() == QEvent::ActionAdded) {
          QPlatformMenu *menu = getPlatformMenu(e->action());
+
          if (menu) {
-            QPlatformMenu *beforeMenu = NULL;
+            QPlatformMenu *beforeMenu = nullptr;
+
             for (int beforeIndex = d->indexOf(e->action()) + 1;
                !beforeMenu && (beforeIndex < actions().size());
                ++beforeIndex) {
                beforeMenu = getPlatformMenu(actions().at(beforeIndex));
             }
+
             menu->setTag(reinterpret_cast<quintptr>(e->action()));
             menu->setText(e->action()->text());
             d->platformMenuBar->insertMenu(menu, beforeMenu);
          }
+
       } else if (e->type() == QEvent::ActionRemoved) {
          QPlatformMenu *menu = getPlatformMenu(e->action());
          if (menu) {
             d->platformMenuBar->removeMenu(menu);
          }
+
       } else if (e->type() == QEvent::ActionChanged) {
-         QPlatformMenu *cur = d->platformMenuBar->menuForTag(reinterpret_cast<quintptr>(e->action()));
+         QPlatformMenu *cur  = d->platformMenuBar->menuForTag(reinterpret_cast<quintptr>(e->action()));
          QPlatformMenu *menu = getPlatformMenu(e->action());
+
          // the menu associated with the action can change, need to
          // remove and/or insert the new platform menu
+
          if (menu != cur) {
             if (cur) {
                d->platformMenuBar->removeMenu(cur);
             }
+
             if (menu) {
                menu->setTag(reinterpret_cast<quintptr>(e->action()));
 
-               QPlatformMenu *beforeMenu = NULL;
-               for (int beforeIndex = d->indexOf(e->action()) + 1;
-                  !beforeMenu && (beforeIndex < actions().size());
-                  ++beforeIndex) {
+               QPlatformMenu *beforeMenu = nullptr;
+
+               for (int beforeIndex = d->indexOf(e->action()) + 1; ! beforeMenu && (beforeIndex < actions().size()); ++beforeIndex) {
                   beforeMenu = getPlatformMenu(actions().at(beforeIndex));
                }
+
                d->platformMenuBar->insertMenu(menu, beforeMenu);
             }
+
          } else if (menu) {
             menu->setText(e->action()->text());
             menu->setVisible(e->action()->isVisible());
@@ -1245,7 +1213,6 @@ void QMenuBar::timerEvent (QTimerEvent *e)
    }
    QWidget::timerEvent(e);
 }
-
 
 void QMenuBarPrivate::handleReparent()
 {

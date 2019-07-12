@@ -166,6 +166,7 @@ void Translator::appendSorted(const TranslatorMessage &msg)
    int thisIdx = 0;
    int thisScore = 0;
    int thisSize = 0;
+
    // Working vars
    int prevLine = 0;
    int curIdx = 0;
@@ -243,14 +244,14 @@ bool Translator::load(const QString &filename, ConversionData &cd, const QString
 #endif
 
       if (!file.open(stdin, QIODevice::ReadOnly)) {
-         cd.appendError(QString::fromLatin1("Can not open stdin (%1)").formatArg(file.errorString()));
+         cd.appendError(QString::fromLatin1("Unable to open stdin (%1)").formatArg(file.errorString()));
          return false;
       }
 
    } else {
       file.setFileName(filename);
       if (!file.open(QIODevice::ReadOnly)) {
-         cd.appendError(QString::fromLatin1("Can not open %1: %2").formatArgs(filename, file.errorString()));
+         cd.appendError(QString::fromLatin1("Unable to open %1: %2").formatArgs(filename, file.errorString()));
          return false;
       }
    }
@@ -285,14 +286,14 @@ bool Translator::save(const QString &filename, ConversionData &cd, const QString
 #endif
 
       if (!file.open(stdout, QIODevice::WriteOnly)) {
-         cd.appendError(QString("Can not open stdout (%1)").formatArg(file.errorString()));
+         cd.appendError(QString("Unable to open stdout (%1)").formatArg(file.errorString()));
          return false;
       }
 
    } else {
       file.setFileName(filename);
       if (!file.open(QIODevice::WriteOnly)) {
-         cd.appendError(QString("Can not create %1: %2").formatArgs(filename, file.errorString()));
+         cd.appendError(QString("Unable to create %1: %2").formatArgs(filename, file.errorString()));
          return false;
       }
    }
@@ -306,7 +307,7 @@ bool Translator::save(const QString &filename, ConversionData &cd, const QString
             return (*format.saver)(*this, file, cd);
          }
 
-         cd.appendError(QString("Can not save %1 files").formatArg(fmt));
+         cd.appendError(QString("Unable to save %1 files").formatArg(fmt));
 
          return false;
       }
