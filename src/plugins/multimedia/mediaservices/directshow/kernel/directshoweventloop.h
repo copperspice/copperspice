@@ -37,7 +37,7 @@ class DirectShowEventLoop : public QObject
    CS_OBJECT(DirectShowEventLoop)
 
  public:
-   DirectShowEventLoop(QObject *parent = 0);
+   DirectShowEventLoop(QObject *parent = nullptr);
    ~DirectShowEventLoop();
 
    void wait(QMutex *mutex);

@@ -45,7 +45,7 @@ class DirectShowSampleScheduler : public QObject, public IMemInputPin
       Flushing = 0x04
    };
 
-   DirectShowSampleScheduler(IUnknown *pin, QObject *parent = 0);
+   DirectShowSampleScheduler(IUnknown *pin, QObject *parent = nullptr);
    ~DirectShowSampleScheduler();
 
    // IUnknown

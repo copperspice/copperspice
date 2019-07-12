@@ -40,7 +40,7 @@ class DirectShowVideoRendererControl : public QVideoRendererControl
 {
    CS_OBJECT(DirectShowVideoRendererControl)
  public:
-   DirectShowVideoRendererControl(DirectShowEventLoop *loop, QObject *parent = 0);
+   DirectShowVideoRendererControl(DirectShowEventLoop *loop, QObject *parent = nullptr);
    ~DirectShowVideoRendererControl();
 
    QAbstractVideoSurface *surface() const;

@@ -38,7 +38,7 @@ class QVideoSurfaceOutput : public QObject, public QMediaBindableInterface
    CS_INTERFACES(QMediaBindableInterface)
 
  public:
-   QVideoSurfaceOutput(QObject *parent = 0);
+   QVideoSurfaceOutput(QObject *parent = nullptr);
    ~QVideoSurfaceOutput();
 
    QMediaObject *mediaObject() const;

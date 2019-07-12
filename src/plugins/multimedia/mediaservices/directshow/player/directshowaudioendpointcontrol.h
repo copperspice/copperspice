@@ -36,7 +36,7 @@ class DirectShowAudioEndpointControl : public QAudioOutputSelectorControl
 {
    CS_OBJECT(DirectShowAudioEndpointControl)
  public:
-   DirectShowAudioEndpointControl(DirectShowPlayerService *service, QObject *parent = 0);
+   DirectShowAudioEndpointControl(DirectShowPlayerService *service, QObject *parent = nullptr);
    ~DirectShowAudioEndpointControl();
 
    QList<QString> availableOutputs() const;

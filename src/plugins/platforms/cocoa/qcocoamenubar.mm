@@ -40,7 +40,7 @@ static inline QCocoaMenuLoader *getMenuLoader()
 }
 
 QCocoaMenuBar::QCocoaMenuBar()
-   : m_window(0)
+   : m_window(nullptr)
 {
    static_menubars.append(this);
 

@@ -35,7 +35,7 @@ class Vmr9VideoWindowControl : public QVideoWindowControl
    CS_OBJECT(Vmr9VideoWindowControl)
 
  public:
-   Vmr9VideoWindowControl(QObject *parent = 0);
+   Vmr9VideoWindowControl(QObject *parent = nullptr);
    ~Vmr9VideoWindowControl();
 
    IBaseFilter *filter() const {

@@ -335,7 +335,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       }
 
       qWarning() << "QPluginServiceProvider::requestService(): No plugin was found for QMediaService with the key of: " << key;
-      return 0;
+      return nullptr;
    }
 
    void releaseService(QMediaService *service) {

@@ -54,7 +54,7 @@ class VideoSurfaceFilter
    CS_OBJECT(VideoSurfaceFilter)
  public:
    VideoSurfaceFilter(
-      QAbstractVideoSurface *surface, DirectShowEventLoop *loop, QObject *parent = 0);
+      QAbstractVideoSurface *surface, DirectShowEventLoop *loop, QObject *parent = nullptr);
    ~VideoSurfaceFilter();
 
    // IUnknown

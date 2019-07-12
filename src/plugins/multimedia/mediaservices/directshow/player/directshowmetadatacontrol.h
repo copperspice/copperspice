@@ -40,7 +40,7 @@ class DirectShowMetaDataControl : public QMetaDataReaderControl
 {
    CS_OBJECT(DirectShowMetaDataControl)
  public:
-   DirectShowMetaDataControl(QObject *parent = 0);
+   DirectShowMetaDataControl(QObject *parent = nullptr);
    ~DirectShowMetaDataControl();
 
    bool isMetaDataAvailable() const;

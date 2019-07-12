@@ -39,7 +39,7 @@ class DirectShowPlayerControl : public QMediaPlayerControl
 {
    CS_OBJECT(DirectShowPlayerControl)
  public:
-   DirectShowPlayerControl(DirectShowPlayerService *service, QObject *parent = 0);
+   DirectShowPlayerControl(DirectShowPlayerService *service, QObject *parent = nullptr);
    ~DirectShowPlayerControl();
 
    QMediaPlayer::State state() const;
