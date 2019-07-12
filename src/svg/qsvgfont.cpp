@@ -31,7 +31,6 @@
 QSvgGlyph::QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX)
    : m_unicode(unicode), m_path(path), m_horizAdvX(horizAdvX)
 {
-
 }
 
 QSvgFont::QSvgFont(qreal horizAdvX)
@@ -60,12 +59,13 @@ void QSvgFont::draw(QPainter *p, const QPointF &point, const QString &str, qreal
 
    // Calculate the text width to be used for alignment
    int textWidth = 0;
-   QString::const_iterator itr = str.constBegin();
-   for ( ; itr != str.constEnd(); ++itr) {
-      QChar unicode = *itr;
-      if (!m_glyphs.contains(*itr)) {
+
+   for (QChar unicode : str) {
+
+      if (! m_glyphs.contains(unicode)) {
          unicode = 0;
-         if (!m_glyphs.contains(unicode)) {
+
+         if (! m_glyphs.contains(unicode)) {
             continue;
          }
       }
@@ -93,10 +93,9 @@ void QSvgFont::draw(QPainter *p, const QPointF &point, const QString &str, qreal
    pen.setWidthF(penWidth);
    p->setPen(pen);
 
-   itr = str.constBegin();
-   for ( ; itr != str.constEnd(); ++itr) {
-      QChar unicode = *itr;
-      if (!m_glyphs.contains(*itr)) {
+   for (QChar unicode : str) {
+
+      if (! m_glyphs.contains(unicode)) {
          unicode = 0;
 
          if (! m_glyphs.contains(unicode)) {
