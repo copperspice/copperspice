@@ -805,9 +805,8 @@ bool QGLShaderProgram::link()
 
 #if !defined(QT_OPENGL_ES_2)
    // Set up the geometry shader parameters
-   if (!QOpenGLContext::currentContext()->isOpenGLES()
-      && d->glfuncs->glProgramParameteri) {
-      foreach (QGLShader *shader, d->shaders) {
+   if (!QOpenGLContext::currentContext()->isOpenGLES() && d->glfuncs->glProgramParameteri) {
+      for (QGLShader *shader : d->shaders) {
          if (shader->shaderType() & QGLShader::Geometry) {
             d->glfuncs->glProgramParameteri(program, GL_GEOMETRY_INPUT_TYPE_EXT,
                d->geometryInputType);

@@ -1228,7 +1228,7 @@ void QMenuBarPrivate::handleReparent()
    // Remove event filters on ex-parents, keep them on still-parents
    // The parents are always ordered in the vector
 
-   foreach (const QPointer<QWidget> &w, oldParents) {
+   for (const QPointer<QWidget> &w : oldParents) {
       if (w) {
          if (newParent == w) {
             newParents.append(w);

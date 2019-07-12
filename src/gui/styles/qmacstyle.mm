@@ -585,8 +585,9 @@ HIMutableShapeRef qt_mac_toHIMutableShape(const QRegion &region)
         QRect qtRect = region.boundingRect();
         CGRect cgRect = CGRectMake(qtRect.x(), qtRect.y(), qtRect.width(), qtRect.height());
         HIShapeUnionWithRect(shape, &cgRect);
+
     } else {
-        foreach (const QRect &qtRect, region.rects()) {
+        for (const QRect &qtRect : region.rects()) {
             CGRect cgRect = CGRectMake(qtRect.x(), qtRect.y(), qtRect.width(), qtRect.height());
             HIShapeUnionWithRect(shape, &cgRect);
         }
@@ -1833,8 +1834,10 @@ QMacStylePrivate::QMacStylePrivate()
 QMacStylePrivate::~QMacStylePrivate()
 {
     QMacAutoReleasePool pool;
-    Q_FOREACH (NSView *b, cocoaControls)
+
+    for  (NSView *b : cocoaControls) {
         [b release];
+    }
 }
 
 ThemeDrawState QMacStylePrivate::getDrawState(QStyle::State flags)
@@ -7237,7 +7240,7 @@ void qt_mac_scale_region(QRegion *region, qreal scaleFactor)
     QVector<QRect> scaledRects;
     scaledRects.reserve(region->rects().count());
 
-    foreach (const QRect &rect, region->rects()) {
+    for (const QRect &rect : region->rects()) {
         scaledRects.append(QRect(rect.topLeft() * scaleFactor, rect.size() * scaleFactor));
     }
     region->setRects(&scaledRects[0], scaledRects.count());

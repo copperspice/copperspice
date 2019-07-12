@@ -784,7 +784,7 @@ restart:
                } else if (yyCh == '*') {
                   bool metAster = false;
 
-                  forever {
+                  while (true) {
                      yyCh = getChar();
                      if (yyCh == EOF) {
                         yyMsg() << qPrintable(LU::tr("Unterminated C++ comment\n"));
