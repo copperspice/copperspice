@@ -47,8 +47,9 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 
  public:
    enum ButtonRole {
-      // keep this in sync with QMessageBox::ButtonRole
-      InvalidRole = -1,
+      // keep QDialogButtonBox::ButtonRole, QMessageBox::ButtonRole, QPlatformDialogHelper ALL in sync
+
+      InvalidRole = 0,
       AcceptRole,
       RejectRole,
       DestructiveRole,

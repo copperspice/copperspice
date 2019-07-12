@@ -579,26 +579,33 @@ QDialogButtonBox::StandardButton QDialogButtonBox::standardButton(QAbstractButto
 void QDialogButtonBoxPrivate::_q_handleButtonClicked()
 {
    Q_Q(QDialogButtonBox);
-   if (QAbstractButton *button = qobject_cast<QAbstractButton *>(q->sender())) {
+
+   if (QAbstractButton *button = dynamic_cast<QAbstractButton *>(q->sender())) {
+
       const QDialogButtonBox::ButtonRole buttonRole = q->buttonRole(button);
+
       QPointer<QDialogButtonBox> guard(q);
       emit q->clicked(button);
 
-      if (!guard) {
+      if (! guard) {
          return;
       }
+
       switch (buttonRole) {
-         case QPlatformDialogHelper::AcceptRole:
-         case QPlatformDialogHelper::YesRole:
+         case QDialogButtonBox::AcceptRole:
+         case QDialogButtonBox::YesRole:
             emit q->accepted();
             break;
-         case QPlatformDialogHelper::RejectRole:
-         case QPlatformDialogHelper::NoRole:
+
+         case QDialogButtonBox::RejectRole:
+         case QDialogButtonBox::NoRole:
             emit q->rejected();
             break;
-         case QPlatformDialogHelper::HelpRole:
+
+         case QDialogButtonBox::HelpRole:
             emit q->helpRequested();
             break;
+
          default:
             break;
       }

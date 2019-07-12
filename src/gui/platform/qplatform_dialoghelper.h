@@ -87,10 +87,8 @@ class Q_GUI_EXPORT QPlatformDialogHelper : public QObject
    using StandardButtons = QFlags<StandardButton>;
 
    enum ButtonRole {
-      // keep this in sync with QDialogButtonBox::ButtonRole and QMessageBox::ButtonRole
-      // TODO Qt 6: make the enum copies explicit, and make InvalidRole == 0 so that
-      // AcceptRole can be or'ed with flags, and EOL can be the same as InvalidRole (null-termination)
-      InvalidRole = -1,
+      // keep QDialogButtonBox::ButtonRole, QMessageBox::ButtonRole, QPlatformDialogHelper ALL in sync
+      InvalidRole = 0,
       AcceptRole,
       RejectRole,
       DestructiveRole,
