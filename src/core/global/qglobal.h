@@ -1153,20 +1153,6 @@ typedef uint Flags;
 
 #endif
 
-// expands to a C++11 range based for (undocumented)
-#define Q_FOREACH(variable, container)  \
-for (variable : container)
-
-#ifndef QT_NO_KEYWORDS
-#  ifndef foreach
-#    define foreach Q_FOREACH
-#  endif
-
-#  ifndef forever
-#    define forever for(;;)
-#  endif
-#endif
-
 // raw pointer ( QEasingCurvePrivate, maybe a few other classes 12/28/2013 )
 template <typename T>
 T *qGetPtrHelper(T *ptr)
