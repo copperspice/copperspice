@@ -46,14 +46,10 @@
 #include <mutex>
 #include <type_traits>
 
-typedef QList<QObject *> QObjectList;
+using QObjectList = QList<QObject *>;
 
-#if defined(QT_NO_KEYWORDS)
-# define QT_NO_EMIT
-#endif
-
-#ifndef QT_NO_EMIT
-#  define emit
+#if ! defined(QT_NO_EMIT)
+#define emit
 #endif
 
 class CSAbstractDeclarativeData;
@@ -69,7 +65,6 @@ class QChildEvent;
 class QTimerEvent;
 class QThread;
 class QThreadData;
-
 
 struct CS_Internal_TimerInfo
 {
