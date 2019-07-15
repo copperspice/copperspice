@@ -469,6 +469,11 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
 
       UnicodeVersion unicodeVersion() const;
       static UnicodeVersion currentUnicodeVersion();
+
+      QChar32 &operator=(QChar32 c) & {
+         CsString::CsChar::operator=(c);
+         return *this;
+      }
 };
 
 class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow

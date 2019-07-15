@@ -78,8 +78,8 @@ class CsChar
       bool operator>(const CsChar &other) const;
       bool operator>=(const CsChar &other) const;
 
-      CsChar &operator=(char c);
-      CsChar &operator=(char32_t c);
+      CsChar &operator=(char c) &;
+      CsChar &operator=(char32_t c) &;
       CsChar &operator=(CsChar c) &;
 
       uint32_t unicode() const;
@@ -119,13 +119,13 @@ inline bool CsChar::operator>=(const CsChar &other) const
    return m_char >= other.m_char;
 }
 
-inline CsChar &CsChar::operator=(char c)
+inline CsChar &CsChar::operator=(char c) &
 {
    m_char = c;
    return *this;
 }
 
-inline CsChar &CsChar::operator=(char32_t c)
+inline CsChar &CsChar::operator=(char32_t c) &
 {
    m_char = c;
    return *this;
