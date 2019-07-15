@@ -770,12 +770,16 @@ inline bool QTextStreamPrivate::getChar(QChar *ch)
 */
 inline void QTextStreamPrivate::ungetChar(const QChar &ch)
 {
-   if (m_string) {
+   if (m_string != nullptr) {
       if (stringOffset == 0) {
          m_string->prepend(ch);
+
       } else {
-         (*m_string)[--stringOffset] = ch;
+         --stringOffset;
+         m_string->replace(stringOffset, 1, ch);
+
       }
+
       return;
    }
 
@@ -784,7 +788,8 @@ inline void QTextStreamPrivate::ungetChar(const QChar &ch)
       return;
    }
 
-   readBuffer[--readBufferOffset] = ch;
+   --readBufferOffset;
+   readBuffer.replace(readBufferOffset, 1, ch);
 }
 
 /*! \internal

@@ -165,7 +165,7 @@ class DerivedString : public AtomicValue
          const QChar ati(retval.at(i));
 
          if (ati.isSpace() && ati != space) {
-            retval[i] = space;
+            retval.replace(i, 1, space);
          }
       }
 

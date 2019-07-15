@@ -308,7 +308,7 @@ Item TranslateFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       const int mapPos = mapString.indexOf(argCh);
 
       if (mapPos == -1) {
-         result[outI] = argCh;
+         result.replace(outI, 1, argCh);
          ++outI;
 
          continue;
@@ -323,7 +323,7 @@ Item TranslateFN::evaluateSingleton(const DynamicContext::Ptr &context) const
          continue;
       }
 
-      result[outI] = transCh;
+      result.replace(outI, 1, transCh);
       ++outI;
    }
 

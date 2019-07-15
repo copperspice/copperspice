@@ -338,13 +338,17 @@ static QString unquote(const QString &str)
       if (str.at(i) == quote) {
          if (status != quote) {
             status = quote;
-         } else if (!ret.isEmpty() && str.at(i - 1) == slash) {
-            ret[ret.size() - 1] = quote;
+
+         } else if (! retval.isEmpty() && str.at(i - 1) == slash) {
+            retval.chop(1);
+            retval.append(quote);
+
          } else {
             status = zero;
          }
+
       } else {
-         ret += str.at(i);
+         retval.append(str.at(i));
       }
    }
 
@@ -1497,10 +1501,12 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
                      }
 
                      continue;
+
                   } else {
-                     str[i] = ampm[j].at(index); // fix case
+                     str.replace(i, 1, ampm[j].at(index));
                   }
                }
+
                ampm[j].remove(index, 1);
             }
          }

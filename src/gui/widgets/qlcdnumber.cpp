@@ -100,13 +100,17 @@ static QString int2string(int num, int base, int ndigits, bool *oflow)
    }
 
    if (negative) {
-      for (int i = 0; i < (int)s.length(); i++) {
-         if (s[i] != QLatin1Char(' ')) {
+      for (QString::size_type i = 0; i < s.length(); i++) {
+
+         if (s[i] != ' ') {
+
             if (i != 0) {
-               s[i - 1] = QLatin1Char('-');
+               s.replace(i - 1, 1, '-');
+
             } else {
-               s.insert(0, QLatin1Char('-'));
+               s.insert(0, '-');
             }
+
             break;
          }
       }
@@ -143,8 +147,8 @@ static QString double2string(double num, int base, int ndigits, bool *oflow)
          int i = s.indexOf('e');
 
          if (i > 0 && s[i + 1] == '+') {
-            s[i]     = ' ';
-            s[i + 1] = 'e';
+            s.replace(i, 2, " e");
+
          }
 
       } while (nd-- && (int)s.length() > ndigits);
@@ -316,7 +320,10 @@ void QLCDNumber::setDigitCount(int numDigits)
       d->ndigits = numDigits;
       d->digitStr.fill(QLatin1Char(' '), d->ndigits);
       d->points.fill(0, d->ndigits);
-      d->digitStr[d->ndigits - 1] = QLatin1Char('0'); // "0" is the default number
+
+      // "0" is the default number
+      d->digitStr.replace(d->ndigits - 1, 1, '0');
+
 
    } else {
       bool doDisplay = d->ndigits == 0;
@@ -600,8 +607,9 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
                   // no more digits
                   break;
                }
+
                index++;
-               buffer[index] = QLatin1Char(' ');        // 2 points in a row, add space
+               buffer.replace(index, 1, ' ');    // 2 points in a row, add space
             }
 
             newPoints.setBit(index);             // set decimal point
@@ -613,8 +621,7 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
             }
 
             index++;
-            buffer[index] = s[i];
-            newPoints.clearBit(index);      // decimal point default off
+            buffer.replace(index, 1, s[i]);
 
             newPoints.clearBit(index);           // decimal point default off
             lastWasPoint = false;
@@ -623,12 +630,13 @@ void QLCDNumberPrivate::internalSetString(const QString &s)
 
       if (index < ((int) ndigits) - 1) {
          for (i = index; i >= 0; i--) {
-            buffer[ndigits - 1 - index + i] = buffer[i];
-            newPoints.setBit(ndigits - 1 - index + i,
-               newPoints.testBit(i));
+
+            buffer.replace(ndigits - 1 - index + i, 1, buffer[i]);
+            newPoints.setBit(ndigits - 1 - index + i, newPoints.testBit(i));
          }
+
          for (i = 0; i < ndigits - index - 1; i++) {
-            buffer[i] = QLatin1Char(' ');
+            buffer.replace(i, 1, ' ');
             newPoints.clearBit(i);
          }
       }

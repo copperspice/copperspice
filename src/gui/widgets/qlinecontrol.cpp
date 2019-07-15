@@ -66,19 +66,9 @@ void QLineControl::updateDisplayText(bool forceUpdate)
 
       if (m_passwordEchoTimer != 0 && m_cursor > 0 && m_cursor <= m_text.length()) {
          int cursor = m_cursor - 1;
+
          QChar uc   = m_text.at(cursor);
-
-         str[cursor] = uc;
-
-         if (cursor > 0 && uc.unicode() >= 0xdc00 && uc.unicode() < 0xe000) {
-            // second half of a surrogate, check if we have the first half as well,
-            // if yes restore both at once
-            uc = m_text.at(cursor - 1);
-
-            if (uc.unicode() >= 0xd800 && uc.unicode() < 0xdc00) {
-               str[cursor - 1] = uc;
-            }
-         }
+         str.replace(cursor, 1, uc);
       }
 
    } else if (m_echoMode == QLineEdit::PasswordEchoOnEdit && !m_passwordEchoEditing) {

@@ -126,7 +126,9 @@ QString CompressedWhitespace::compress(QStringView input)
          } else {
             resultCP = resultCP << 8;
             resultCP |= result.at(result.size() - 1).unicode();
-            result[result.size() - 1] = resultCP;
+
+            result.chop(1);
+            result.append(resultCP);
          }
 
          ++compressedChars;
@@ -166,10 +168,11 @@ QString CompressedWhitespace::decompress(const QString &input)
       const int oldSize = retval.size();
       const int newSize = retval.size() + wsLen;
       retval.resize(newSize);
+
       const QChar ch(toChar(CharIdentifier(id)));
 
       for (int f = oldSize; f < newSize; ++f) {
-         retval[f] = ch;
+         retval.replace(f, 1, ch);
       }
    }
 
