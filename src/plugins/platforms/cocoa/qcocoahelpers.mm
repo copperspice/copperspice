@@ -345,46 +345,40 @@ void qt_mac_transformProccessToForegroundApplication()
    }
 }
 
-QString qt_mac_removeMnemonics(const QString &original)
+QString qt_mac_removeMnemonics(const QString &str)
 {
-   QString returnText(original.size(), 0);
-   int finalDest = 0;
-   int currPos   = 0;
-   int l         = original.length();
+   QString retval;
 
-   while (l) {
-      if (original.at(currPos) == '&' && (l == 1 || original.at(currPos + 1) != '&')) {
-         ++currPos;
-         --l;
+   int curPos = 0;
+   int maxLen  = str.length();
 
-         if (l == 0) {
+   while (maxLen > 0) {
+
+      if (str.at(curPos) == '&' && (maxLen == 1 || str.at(curPos + 1) != '&')) {
+         ++curPos;
+         --maxLen;
+
+         if (maxLen == 0) {
             break;
          }
 
-      } else if (original.at(currPos) == '(' && l >= 4 && original.at(currPos + 1) == '&' &&
-         original.at(currPos + 2) != '&' && original.at(currPos + 3) == ')') {
+      } else if (str.at(curPos) == '(' &&
+         maxLen >= 4 && str.at(curPos + 1) == '&' && str.at(curPos + 2) != '&' && str.at(curPos + 3) == ')') {
 
-         /* remove mnemonics its format is "\s*(&X)" */
-         int n = 0;
-         while (finalDest > n && returnText.at(finalDest - n - 1).isSpace()) {
-            ++n;
-         }
+         // remove mnemonics which match "(&X)"
+         curPos += 4;
+         maxLen -= 4;
 
-         finalDest -= n;
-         currPos += 4;
-         l -= 4;
          continue;
       }
 
-      returnText[finalDest] = original.at(currPos);
-      ++currPos;
-      ++finalDest;
-      --l;
+      retval.append(str.at(curPos));
+
+      ++curPos;
+      --maxLen;
    }
 
-   returnText.truncate(finalDest);
-
-   return returnText;
+   return retval;
 }
 
 static CGColorSpaceRef m_genericColorSpace = 0;

@@ -460,39 +460,40 @@ static inline ThemeTabDirection getTabDirection(QTabBar::Shape shape)
     return ttd;
 }
 
-static QString qt_mac_removeMnemonics(const QString &original)
+static QString qt_mac_removeMnemonics(const QString &str)
 {
-    QString returnText(original.size(), 0);
-    int finalDest = 0;
-    int currPos = 0;
-    int l = original.length();
-    while (l) {
-        if (original.at(currPos) == QLatin1Char('&')
-            && (l == 1 || original.at(currPos + 1) != QLatin1Char('&'))) {
-            ++currPos;
-            --l;
-            if (l == 0)
-                break;
-        } else if (original.at(currPos) == QLatin1Char('(') && l >= 4 &&
-                   original.at(currPos + 1) == QLatin1Char('&') &&
-                   original.at(currPos + 2) != QLatin1Char('&') &&
-                   original.at(currPos + 3) == QLatin1Char(')')) {
-            /* remove mnemonics its format is "\s*(&X)" */
-            int n = 0;
-            while (finalDest > n && returnText.at(finalDest - n - 1).isSpace())
-                ++n;
-            finalDest -= n;
-            currPos += 4;
-            l -= 4;
-            continue;
-        }
-        returnText[finalDest] = original.at(currPos);
-        ++currPos;
-        ++finalDest;
-        --l;
-    }
-    returnText.truncate(finalDest);
-    return returnText;
+   QString retval;
+
+   int curPos = 0;
+   int maxLen  = str.length();
+
+   while (maxLen > 0) {
+
+      if (str.at(curPos) == '&' && (maxLen == 1 || str.at(curPos + 1) != '&')) {
+         ++curPos;
+         --maxLen;
+
+         if (maxLen == 0) {
+            break;
+         }
+
+      } else if (str.at(curPos) == '(' &&
+               maxLen >= 4 && str.at(curPos + 1) == '&' && str.at(curPos + 2) != '&' && str.at(curPos + 3) == ')') {
+
+         // remove mnemonics which match "(&X)"
+         curPos += 4;
+         maxLen -= 4;
+
+         continue;
+      }
+
+      retval.append(str.at(curPos));
+
+      ++curPos;
+      --maxLen;
+   }
+
+   return retval;
 }
 
 static CGContextRef qt_mac_cg_context(const QPaintDevice *pdev);
@@ -762,8 +763,9 @@ static int qt_mac_aqua_get_metric(ThemeMetric met)
 static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg, QSize szHint, QAquaWidgetSize sz)
 {
     QSize ret(-1, -1);
+
     if (sz != QAquaSizeSmall && sz != QAquaSizeLarge && sz != QAquaSizeMini) {
-        qDebug("Not sure how to return this...");
+        qDebug("qt_aqua_get_known_size(), invalid size parameter");
         return ret;
     }
 
