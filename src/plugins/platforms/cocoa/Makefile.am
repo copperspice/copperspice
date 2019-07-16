@@ -151,12 +151,20 @@ nodist_lib_CsGuiCocoa@BUILD_ABI@_la_SOURCES = \
 
 endif
 
-EXTRA_DIST += src/plugins/platforms/cocoa/qcocoaresources.qrc \
+EXTRA_DIST += \
 	src/plugins/platforms/cocoa/APPLE_LICENSE.TXT  \
+	src/plugins/platforms/cocoa/qcocoaresources.qrc \
 	src/plugins/platforms/cocoa/images/copyarrowcursor.png \
 	src/plugins/platforms/cocoa/images/forbiddencursor.png \
 	src/plugins/platforms/cocoa/images/leopard-unified-toolbar-on.png\
 	src/plugins/platforms/cocoa/images/pluscursor.png \
 	src/plugins/platforms/cocoa/images/sizeallcursor.png \
 	src/plugins/platforms/cocoa/images/spincursor.png \
-	src/plugins/platforms/cocoa/images/waitcursor.png
+	src/plugins/platforms/cocoa/images/waitcursor.png \
+	src/plugins/platforms/cocoa/qt_menu.nib/classes.nib \
+	src/plugins/platforms/cocoa/qt_menu.nib/info.nib \
+	src/plugins/platforms/cocoa/qt_menu.nib/keyedobjects.nib
+
+
+
+
