@@ -58,19 +58,12 @@ lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleau
 endif
 
 if OSTYPE_DARWIN
-nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += src/gui/mac/qrc_macresources.cpp
 lib_libCsGui@BUILD_ABI@_la_OBJCXXFLAGS += $(lib_libCsGui@BUILD_ABI@_la_CXXFLAGS)
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSVISTA
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lobjc -framework Carbon -framework OpenGL
 endif
 
-EXTRA_DIST += src/gui/mac/macresources.qrc \
-	src/gui/mac/images/copyarrowcursor.png \
-	src/gui/mac/images/forbiddencursor.png \
-	src/gui/mac/images/leopard-unified-toolbar-on.png \
-	src/gui/mac/images/pluscursor.png \
-	src/gui/mac/images/spincursor.png \
-	src/gui/mac/images/waitcursor.png \
+EXTRA_DIST +=  \
 	src/gui/CMakeLists.txt \
 	src/gui/accessible/accessible.cmake \
 	src/gui/animation/animation.cmake \
@@ -156,16 +149,4 @@ $(lib_libCsGui@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_
 		echo "privateinclude/QtGui/private/%: $$i/% | privateinclude/QtGui/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
-
-
-macnibdir=$(prefix)/mac/qt_menu.nib
-dist_macnib_DATA =
-
-if OSTYPE_DARWIN
-dist_macnib_DATA += \
-		src/gui/mac/qt_menu.nib/classes.nib \
-		src/gui/mac/qt_menu.nib/info.nib \
-		src/gui/mac/qt_menu.nib/keyedobjects.nib
-endif
-
 

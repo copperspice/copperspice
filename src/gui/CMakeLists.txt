@@ -138,10 +138,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/mac/macresources.qrc
-    )
 
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
@@ -186,15 +182,6 @@ set_target_properties(CsGui${BUILD_ABI} PROPERTIES
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-   set_target_properties(CsGui${BUILD_ABI} PROPERTIES
-       RESOURCE
-       ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/classes.nib
-       ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/info.nib
-       ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/keyedobjects.nib
-   )
-endif()
 
 macro_generate_resources("${GUI_SOURCES}")
 macro_generate_package(
