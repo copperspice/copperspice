@@ -65,7 +65,7 @@ void QCocoaInputContext::reset()
 
 void QCocoaInputContext::connectSignals()
 {
-   connect(qApp, SIGNAL(focusObjectChanged(QObject *)), this, SLOT(focusObjectChanged(QObject *)));
+   connect(qApp, &QApplication::focusObjectChanged, this, &QCocoaInputContext::focusObjectChanged);
    focusObjectChanged(qApp->focusObject());
 }
 
