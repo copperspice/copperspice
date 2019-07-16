@@ -172,10 +172,11 @@ NSString *macRole(QAccessibleInterface *interface)
       return roleMap[qtRole];
    }
 
-   // Treat unknown Qt roles as generic group container items. Returning
+   // Treat unknown roles as generic group container items. Returning
    // NSAccessibilityUnknownRole is also possible but makes the screen
    // reader focus on the item instead of passing focus to child items.
-   // MAC_ACCESSIBILTY_DEBUG() << "return NSAccessibilityGroupRole for unknown Qt role";
+   // MAC_ACCESSIBILTY_DEBUG() << "return NSAccessibilityGroupRole for unknown role";
+
    return NSAccessibilityGroupRole;
 }
 
@@ -277,8 +278,7 @@ NSArray *unignoredChildren(QAccessibleInterface *interface)
 }
 /*
     Translates a predefined QAccessibleActionInterface action to a Mac action constant.
-    Returns 0 if the Qt Action has no mac equivalent. Ownership of the NSString is
-    not transferred.
+    Returns 0 if the Action has no mac equivalent. Ownership of the NSString is not transferred
 */
 NSString *getTranslatedAction(const QString &qtAction)
 {
@@ -314,7 +314,7 @@ NSString *getTranslatedAction(const QString &qtAction)
 
 /*
     Translates between a Mac action constant and a QAccessibleActionInterface action
-    Returns an empty QString if there is no Qt predefined equivalent.
+    Returns an empty QString if there is no predefined equivalent
 */
 QString translateAction(NSString *nsAction, QAccessibleInterface *interface)
 {

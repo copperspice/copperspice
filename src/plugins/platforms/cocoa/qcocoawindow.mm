@@ -494,9 +494,11 @@ QCocoaWindow::QCocoaWindow(QWindow *tlw)
    setGeometry(tlw->geometry());
    recreateWindow(parent());
    tlw->setGeometry(geometry());
+
    if (tlw->isTopLevel()) {
       setWindowIcon(tlw->icon());
    }
+
    m_inConstructor = false;
 }
 
@@ -510,6 +512,7 @@ QCocoaWindow::~QCocoaWindow()
    [m_nsWindow makeFirstResponder: nil];
    [m_nsWindow setContentView: nil];
    [m_nsWindow.helper detachFromPlatformWindow];
+
    if (m_isNSWindowChild) {
       if (m_parentCocoaWindow) {
          m_parentCocoaWindow->removeChildWindow(this);
@@ -699,16 +702,19 @@ void QCocoaWindow::hide(bool becauseOfAncestor)
 {
    bool visible = [m_nsWindow isVisible];
 
-   if (!m_hiddenByAncestor && !visible) { // Already explicitly hidden
+   if (!m_hiddenByAncestor && !visible) {
+      // Already explicitly hidden
       return;
    }
-   if (m_hiddenByAncestor && becauseOfAncestor) { // Trying to hide some child again
+   if (m_hiddenByAncestor && becauseOfAncestor) {
+      // Trying to hide some child again
       return;
    }
 
    m_hiddenByAncestor = becauseOfAncestor;
 
-   if (!visible) { // Could have been clipped before
+   if (! visible) {
+      // Could have been clipped before
       return;
    }
 
@@ -864,6 +870,7 @@ void QCocoaWindow::setVisible(bool visible)
       if ([m_contentView isHidden]) {
          [m_contentView setHidden: NO];
       }
+
    } else {
       // qDebug() << "close" << this;
 
@@ -948,7 +955,8 @@ NSInteger QCocoaWindow::windowLevel(Qt::WindowFlags flags)
    if (flags & Qt::WindowStaysOnTopHint) {
       windowLevel = NSModalPanelWindowLevel;
    }
-   // Tooltips should appear above StayOnTop windows.
+
+   // Tooltips should appear above StayOnTop windows
    if (type == Qt::ToolTip) {
       windowLevel = NSScreenSaverWindowLevel;
    }
@@ -995,6 +1003,7 @@ NSUInteger QCocoaWindow::windowStyleMask(Qt::WindowFlags flags)
             }
          }
       }
+
    } else {
       if (type == Qt::Window && !(flags & Qt::CustomizeWindowHint)) {
          styleMask = (NSWindowStyleMaskResizable | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskTitled);
@@ -1020,6 +1029,7 @@ NSUInteger QCocoaWindow::windowStyleMask(Qt::WindowFlags flags)
          } else {
             styleMask = NSWindowStyleMaskResizable | NSWindowStyleMaskClosable | NSWindowStyleMaskTitled;
          }
+
       } else {
          if (flags & Qt::WindowMaximizeButtonHint) {
             styleMask |= NSWindowStyleMaskResizable;
@@ -1059,9 +1069,10 @@ void QCocoaWindow::setWindowShadow(Qt::WindowFlags flags)
 void QCocoaWindow::setWindowZoomButton(Qt::WindowFlags flags)
 {
    // Disable the zoom (maximize) button for fixed-sized windows and customized
-   // no-WindowMaximizeButtonHint windows. From a Qt perspective it migth be expected
+   // no-WindowMaximizeButtonHint windows. From a CS perspective it migth be expected
    // that the button would be removed in the latter case, but disabling it is more
    // in line with the platform style guidelines.
+
    bool fixedSizeNoZoom = (windowMinimumSize().isValid() && windowMaximumSize().isValid()
          && windowMinimumSize() == windowMaximumSize());
    bool customizeNoZoom = ((flags & Qt::CustomizeWindowHint) && !(flags & Qt::WindowMaximizeButtonHint));
@@ -1174,10 +1185,12 @@ bool QCocoaWindow::isAlertState() const
 void QCocoaWindow::raise()
 {
    //qDebug() << "raise" << this;
-   // ### handle spaces (see Qt 4 raise_sys in qwidget_mac.mm)
-   if (!m_nsWindow) {
+   // ### handle spaces (see raise_sys in qwidget_mac.mm)
+
+   if (! m_nsWindow) {
       return;
    }
+
    if (m_isNSWindowChild) {
       QList<QCocoaWindow *> &siblings = m_parentCocoaWindow->m_childWindows;
       siblings.removeOne(this);
@@ -1186,6 +1199,7 @@ void QCocoaWindow::raise()
          return;
       }
    }
+
    if ([m_nsWindow isVisible]) {
       if (m_isNSWindowChild) {
          // -[NSWindow orderFront:] doesn't work with attached windows.
@@ -1219,6 +1233,7 @@ void QCocoaWindow::lower()
    if (! m_nsWindow) {
       return;
    }
+
    if (m_isNSWindowChild) {
       QList<QCocoaWindow *> &siblings = m_parentCocoaWindow->m_childWindows;
       siblings.removeOne(this);
@@ -1514,8 +1529,9 @@ void QCocoaWindow::recreateWindow(const QPlatformWindow *parentWindow)
    bool usesNSPanel = [m_nsWindow isKindOfClass: [QNSPanel class]];
 
    // No child QNSWindow should notify its QNSView
-   if (m_nsWindow && m_qtView && m_parentCocoaWindow && !oldParentCocoaWindow)
+   if (m_nsWindow && m_qtView && m_parentCocoaWindow && !oldParentCocoaWindow) {
       [[NSNotificationCenter defaultCenter] removeObserver: m_qtView name: nil object: m_nsWindow];
+   }
 
    // Remove current window (if any)
    if ((m_nsWindow && !needsNSWindow) || (usesNSPanel != shouldUseNSPanel())) {
@@ -1728,9 +1744,12 @@ void QCocoaWindow::setNSWindow(QCocoaNSWindow *window)
    if (window.contentView != m_contentView) {
       [m_contentView setPostsFrameChangedNotifications: NO];
       [m_contentView retain];
-      if (m_contentView.superview) { // m_contentView comes from another NSWindow
+
+      if (m_contentView.superview) {
+         // m_contentView comes from another NSWindow
          [m_contentView removeFromSuperview];
       }
+
       [window setContentView: m_contentView];
       [m_contentView release];
       [m_contentView setPostsFrameChangedNotifications: YES];
@@ -1753,6 +1772,7 @@ void QCocoaWindow::removeMonitor()
    if (! monitor) {
       return;
    }
+
    [NSEvent removeMonitor: monitor];
    monitor = nil;
 }

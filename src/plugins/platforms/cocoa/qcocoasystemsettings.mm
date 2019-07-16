@@ -61,10 +61,12 @@ QColor qt_mac_colorForThemeTextColor(ThemeTextColor themeColor)
       case kThemeTextColorBevelButtonInactive:
       case kThemeTextColorMenuItemDisabled:
          return QColor(127, 127, 127, 255);
+
       case kThemeTextColorMenuItemSelected:
          return Qt::white;
+
       default:
-         return QColor(0, 0, 0, 255); // ### TODO: Sample color like Qt 4.
+         return QColor(0, 0, 0, 255);
    }
 }
 
@@ -72,7 +74,7 @@ QPalette *qt_mac_createSystemPalette()
 {
    QColor qc;
 
-   // Standard palette initialization (copied from Qt 4 styles)
+   // Standard palette initialization (copied from prior version of styles)
    QColor background = QColor(237, 237, 237);
    QColor light(background.lighter(110));
    QColor dark(background.darker(160));

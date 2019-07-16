@@ -147,7 +147,8 @@ QPageSize QCocoaPrintDevice::createPageSize(const PMPaper &paper) const
    double height;
    CFStringRef localizedName;
 
-   if (PMPaperGetPPDPaperName(paper, &key) == noErr && PMPaperGetWidth(paper, &width) == noErr && PMPaperGetHeight(paper, &height) == noErr
+   if (PMPaperGetPPDPaperName(paper, &key) == noErr && PMPaperGetWidth(paper, &width) == noErr &&
+      PMPaperGetHeight(paper, &height) == noErr
       && PMPaperCreateLocalizedName(paper, m_printer, &localizedName) == noErr) {
 
       QPageSize pageSize = QPlatformPrintDevice::createPageSize(QString::fromCFString(key), QSize(width, height),
@@ -340,7 +341,7 @@ void QCocoaPrintDevice::loadOutputBins() const
    // NOTE: Implemented in both CUPS and Mac plugins, please keep in sync
    m_outputBins.clear();
 
-  if (m_ppd) {
+   if (m_ppd) {
       ppd_option_t *outputBins = ppdFindOption(m_ppd, "OutputBin");
       if (outputBins) {
          for (int i = 0; i < outputBins->num_choices; ++i) {
@@ -475,35 +476,35 @@ QPrint::ColorMode QCocoaPrintDevice::defaultColorMode() const
 void QCocoaPrintDevice::loadMimeTypes() const
 {
 
-/* emerald (mime types)
+   /* emerald (mime types)
 
-   // TODO Check how settings affect returned list
-   m_mimeTypes.clear();
+      // TODO Check how settings affect returned list
+      m_mimeTypes.clear();
 
-   QMimeDatabase db;
-   PMPrintSettings settings;
+      QMimeDatabase db;
+      PMPrintSettings settings;
 
-   if (PMCreatePrintSettings(&settings) == noErr) {
-      CFArrayRef mimeTypes;
+      if (PMCreatePrintSettings(&settings) == noErr) {
+         CFArrayRef mimeTypes;
 
-      if (PMPrinterGetMimeTypes(m_printer, settings, &mimeTypes) == noErr) {
-         int count = CFArrayGetCount(mimeTypes);
-         for (int i = 0; i < count; ++i) {
-            CFStringRef mimeName = static_cast<CFStringRef>(const_cast<void *>(CFArrayGetValueAtIndex(mimeTypes, i)));
+         if (PMPrinterGetMimeTypes(m_printer, settings, &mimeTypes) == noErr) {
+            int count = CFArrayGetCount(mimeTypes);
+            for (int i = 0; i < count; ++i) {
+               CFStringRef mimeName = static_cast<CFStringRef>(const_cast<void *>(CFArrayGetValueAtIndex(mimeTypes, i)));
 
-            QMimeType mimeType = db.mimeTypeForName(QCFString::toQString(mimeName));
-            if (mimeType.isValid()) {
-               m_mimeTypes.append(mimeType);
+               QMimeType mimeType = db.mimeTypeForName(QCFString::toQString(mimeName));
+               if (mimeType.isValid()) {
+                  m_mimeTypes.append(mimeType);
+               }
             }
          }
+
+         PMRelease(settings);
       }
 
-      PMRelease(settings);
-   }
+      m_haveMimeTypes = true;
 
-   m_haveMimeTypes = true;
-
-*/
+   */
 
 }
 #endif

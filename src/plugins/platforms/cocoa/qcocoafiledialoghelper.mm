@@ -267,11 +267,11 @@ static QString strippedText(QString s)
    NSWindow *nsparent = static_cast<NSWindow *>(qGuiApp->platformNativeInterface()->nativeResourceForWindow("nswindow", parent));
 
    [mSavePanel beginSheetModalForWindow: nsparent completionHandler: ^ (NSInteger result) {
-         mReturnCode = result;
+                 mReturnCode = result;
 
-         if (mHelper) {
-            mHelper->QNSOpenSavePanelDelegate_panelClosed(result == NSModalResponseOK);
-         }
+                 if (mHelper) {
+         mHelper->QNSOpenSavePanelDelegate_panelClosed(result == NSModalResponseOK);
+      }
    }];
 }
 

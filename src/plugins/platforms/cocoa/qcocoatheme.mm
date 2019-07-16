@@ -263,18 +263,23 @@ QVariant QCocoaTheme::themeHint(ThemeHint hint) const
 
       case IconPixmapSizes: {
          qreal devicePixelRatio = qGuiApp->devicePixelRatio();
+
          QList<int> sizes;
-         sizes << 16 * devicePixelRatio
-            << 32 * devicePixelRatio
-            << 64 * devicePixelRatio
+         sizes << 16  * devicePixelRatio
+            << 32  * devicePixelRatio
+            << 64  * devicePixelRatio
             << 128 * devicePixelRatio;
+
          return QVariant::fromValue(sizes);
       }
+
       case QPlatformTheme::PasswordMaskCharacter:
          return QVariant(QChar(kBulletUnicode));
+
       default:
          break;
    }
+
    return QPlatformTheme::themeHint(hint);
 }
 
@@ -296,8 +301,9 @@ QPlatformMenu *QCocoaTheme::createPlatformMenu() const
 QPlatformMenuBar *QCocoaTheme::createPlatformMenuBar() const
 {
    static bool haveMenubar = false;
-   if (!haveMenubar) {
+   if (! haveMenubar) {
       haveMenubar = true;
+
       QObject::connect(qGuiApp, SIGNAL(focusWindowChanged(QWindow *)),
          QApplicationPrivate::platformIntegration()->nativeInterface(),
          SLOT(onAppFocusWindowChanged(QWindow *)));

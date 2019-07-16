@@ -104,7 +104,7 @@ void QCocoaEventDispatcherPrivate::maybeStartCFRunLoopTimer()
       ttf += interval;
       CFRunLoopTimerContext info = { 0, this, 0, 0, 0 };
       // create the timer with a large interval, as recommended by the CFRunLoopTimerSetNextFireDate()
-      // documentation, since we will adjust the timer's time-to-fire as needed to keep Qt timers working
+      // documentation, since we will adjust the timer's time-to-fire as needed to keep timers working
       runLoopTimerRef = CFRunLoopTimerCreate(0, ttf, oneyear, 0, 0, QCocoaEventDispatcherPrivate::runLoopTimerCallback, &info);
       Q_ASSERT(runLoopTimerRef != 0);
 
@@ -753,8 +753,9 @@ void QCocoaEventDispatcherPrivate::cleanupModalSessions()
 void QCocoaEventDispatcherPrivate::beginModalSession(QWindow *window)
 {
    // We need to start spinning the modal session. Usually this is done with
-   // QDialog::exec() for Qt Widgets based applications, but for others that
+   // QDialog::exec() for Widgets based applications, but for others that
    // just call show(), we need to interrupt().
+
    Q_Q(QCocoaEventDispatcher);
    q->interrupt();
 
@@ -765,6 +766,7 @@ void QCocoaEventDispatcherPrivate::beginModalSession(QWindow *window)
    // currentModalSession). A QCocoaModalSessionInfo is considered pending to be stopped if
    // the window pointer is zero, and the session pointer is non-zero (it will be fully
    // stopped in cleanupModalSessions()).
+
    QCocoaModalSessionInfo info = {window, 0, 0};
    cocoaModalSessionStack.push(info);
    updateChildrenWorksWhenModal();
@@ -972,16 +974,17 @@ void QCocoaEventDispatcherPrivate::cancelWaitForMoreEvents()
    QMacAutoReleasePool pool;
 
    [NSApp postEvent: [NSEvent otherEventWithType: NSEventTypeApplicationDefined location: NSZeroPoint
-                                                   modifierFlags: 0 timestamp: 0. windowNumber: 0 context: 0
-                                                         subtype: QtCocoaEventSubTypeWakeup data1: 0 data2: 0] atStart: NO];
+                                                      modifierFlags: 0 timestamp: 0. windowNumber: 0 context: 0
+                                                            subtype: QtCocoaEventSubTypeWakeup data1: 0 data2: 0] atStart: NO];
 }
 
 void QCocoaEventDispatcherPrivate::maybeCancelWaitForMoreEvents()
 {
    if ((processEventsFlags & (QEventLoop::EventLoopExec | QEventLoop::WaitForMoreEvents)) == QEventLoop::WaitForMoreEvents) {
-      // RunLoop sources are not NSEvents, but they do generate Qt events. If
+      // RunLoop sources are not NSEvents, but they do generate CS events. If
       // WaitForMoreEvents was set, but EventLoopExec is not, processEvents()
-      // should return after a source has sent some Qt events.
+      // should return after a source has sent some CS events.
+
       cancelWaitForMoreEvents();
    }
 }

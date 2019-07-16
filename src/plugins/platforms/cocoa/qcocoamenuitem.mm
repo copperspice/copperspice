@@ -35,7 +35,7 @@
 
 static inline QCocoaMenuLoader *getMenuLoader()
 {
-   return [NSApp QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)];
+   return [NSApp qt_qcocoamenuLoader];
 }
 
 static quint32 constructModifierMask(quint32 accel_key)
@@ -112,12 +112,14 @@ QCocoaMenuItem::~QCocoaMenuItem()
    if (m_menu && m_menu->menuParent() == this) {
       m_menu->setMenuParent(0);
    }
+
    if (m_merged) {
       [m_native setHidden: YES];
    } else {
       if (m_menu && m_menu->attachedItem() == m_native) {
          m_menu->setAttachedItem(nil);
       }
+
       [m_native release];
    }
 
@@ -142,8 +144,10 @@ void QCocoaMenuItem::setMenu(QPlatformMenu *menu)
 
    if (m_menu && m_menu->menuParent() == this) {
       m_menu->setMenuParent(0);
+
       // Free the menu from its parent's influence
       m_menu->propagateEnabledState(true);
+
       if (m_native && m_menu->attachedItem() == m_native) {
          m_menu->setAttachedItem(nil);
       }
@@ -158,6 +162,7 @@ void QCocoaMenuItem::setMenu(QPlatformMenu *menu)
       }
       m_menu->setMenuParent(this);
       m_menu->propagateEnabledState(isEnabled());
+
    } else {
       // we previously had a menu, but no longer
       // clear out our item so the nexy sync() call builds a new one
@@ -215,6 +220,7 @@ void QCocoaMenuItem::setNativeContents(WId item)
    if (m_itemView == itemView) {
       return;
    }
+
    [m_itemView release];
    m_itemView = [itemView retain];
    [m_itemView setAutoresizesSubviews: YES];
@@ -319,13 +325,15 @@ NSMenuItem *QCocoaMenuItem::sync()
          [m_native release];
          m_native = mergeItem;
          [m_native setTag: reinterpret_cast<NSInteger>(this)];
+
       } else if (m_merged) {
          // was previously merged, but no longer
          [m_native release];
          m_native = nil; // create item below
          m_merged = false;
       }
-   } else if (!m_text.isEmpty()) {
+
+   } else if (! m_text.isEmpty()) {
       m_textSynced = true; // NoRole, and that was set explicitly. So, nothing to do anymore.
    }
 
@@ -362,7 +370,8 @@ NSMenuItem *QCocoaMenuItem::sync()
          useAttributedTitle = true;
       }
    }
-   if (!useAttributedTitle) {
+
+   if (! useAttributedTitle) {
       [m_native setTitle: QCFString::toNSString(finalString)];
    }
 
@@ -386,13 +395,12 @@ NSMenuItem *QCocoaMenuItem::sync()
    return m_native;
 }
 
-QT_BEGIN_NAMESPACE
 extern QString qt_mac_applicationmenu_string(int type);
-QT_END_NAMESPACE
 
 QString QCocoaMenuItem::mergeText()
 {
    QCocoaMenuLoader *loader = getMenuLoader();
+
    if (m_native == [loader aboutMenuItem]) {
       return qt_mac_applicationmenu_string(6).formatArg(qt_mac_applicationName());
 

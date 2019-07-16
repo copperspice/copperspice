@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qcocoamenuloader.h"
+#include <qcocoamenuloader.h>
 
-#include "messages.h"
-#include "qcocoahelpers.h"
-#include "qcocoamenubar.h"
-#include "qcocoamenuitem.h"
+#include <messages.h>
+#include <qcocoahelpers.h>
+#include <qcocoamenubar.h>
+#include <qcocoamenuitem.h>
 
 #include <qcoreapplication.h>
 #include <qdir.h>
@@ -44,13 +44,12 @@ class QCFString;
 
     The main app menu contains the Quit, Hide  About, Preferences entries, and
     The reason for having the nib file is that those can not be created
-    programmatically. To ease deployment the nib files are stored in Qt resources
-    and written to QDir::temp() before loading. (Earlier Qt versions used
-    to require having the nib file in the Qt GUI framework.)
+    programmatically. To ease deployment the nib files are stored in resources
+    and written to QDir::temp() before loading.
 */
 void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 {
-   // Create qt_menu.nib dir in temp.
+   // Create qt_menu.nib dir in temp
    QDir temp = QDir::temp();
    temp.mkdir("qt_menu.nib");
 
@@ -70,7 +69,8 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
    }
 
    for (const QFileInfo &file : nibResource.entryInfoList()) {
-      QFileInfo destinationFile(nibDir + QLatin1String("/") + file.fileName());
+      QFileInfo destinationFile(nibDir + "/" + file.fileName());
+
       if (destinationFile.exists() && destinationFile.size() != file.size()) {
          QFile::remove(destinationFile.absoluteFilePath());
       }
@@ -80,17 +80,18 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 
    // Load and instantiate nib file from temp
    NSURL *nibUrl = [NSURL fileURLWithPath: QCFString::toNSString(nibDir)];
-   NSNib *nib = [[NSNib alloc] initWithContentsOfURL: nibUrl];
+   NSNib *nib    = [[NSNib alloc] initWithContentsOfURL: nibUrl];
    [nib autorelease];
 
-   if (!nib) {
-      qWarning("qt_mac_loadMenuNib: could not load nib from  temp");
+   if (! nib) {
+      qWarning("qt_mac_loadMenuNib: Unable to load nib from temp");
       return;
    }
 
    bool ok = [nib instantiateNibWithOwner: qtMenuLoader topLevelObjects: nil];
+
    if (! ok) {
-      qWarning("qt_mac_loadMenuNib: could not instantiate nib");
+      qWarning("qt_mac_loadMenuNib: Unable to instantiate nib");
    }
 }
 
@@ -112,8 +113,9 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
    [aboutItem setTitle: [[aboutItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
                    withString: const_cast<NSString *>(appName)]];
 
-   // Disable the items that don't do anything. If someone associates a QAction with them
-   // They should get synced back in.
+   // Disable the items that do not do anything. If someone associates a QAction with them
+   // they should get synced back in.
+
    [preferencesItem setEnabled: NO];
    [preferencesItem setHidden: YES];
 
@@ -130,7 +132,8 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
    // The application menu is the menu in the menu bar that contains the
    // 'Quit' item. When changing menu bar (e.g when switching between
    // windows with different menu bars), we never recreate this menu, but
-   // instead pull it out the current menu bar and place into the new one:
+   // instead pull it out the current menu bar and place into the new one
+
    NSMenu *mainMenu = [NSApp mainMenu];
 
    if ([NSApp mainMenu] == menu) {
@@ -139,12 +142,13 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 
    Q_ASSERT(mainMenu);
 
-   // Grab the app menu out of the current menu.
+   // Grab the app menu out of the current menu
    int numItems = [mainMenu numberOfItems];
    NSMenuItem *oldAppMenuItem = 0;
 
    for (int i = 0; i < numItems; ++i) {
       NSMenuItem *item = [mainMenu itemAtIndex: i];
+
       if ([item submenu] == appMenu) {
          oldAppMenuItem = item;
          [oldAppMenuItem retain];
@@ -221,7 +225,7 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 {
    NSMenuItem *item = [appMenu itemWithTag: tag];
 
-   // No reason to create the item if it already exists. See QTBUG-27202.
+   // No reason to create the item if it already exists
    if (item) {
       return [[item retain] autorelease];
    }
@@ -316,9 +320,11 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
       || [menuItem action] == @selector(hideOtherApplications:)
       || [menuItem action] == @selector(unhideAllApplications:)) {
       return [NSApp validateMenuItem: menuItem];
+
    } else if ([menuItem tag]) {
       QCocoaMenuItem *cocoaItem = reinterpret_cast<QCocoaMenuItem *>([menuItem tag]);
       return cocoaItem->isEnabled();
+
    } else {
       return [menuItem isEnabled];
    }

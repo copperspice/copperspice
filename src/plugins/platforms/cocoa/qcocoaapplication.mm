@@ -36,22 +36,22 @@
 #include <qapplication.h>
 #include <qdebug.h>
 
-@implementation NSApplication (QT_MANGLE_NAMESPACE(QApplicationIntegration))
+@implementation NSApplication (QApplicationIntegration)
 
-- (void)QT_MANGLE_NAMESPACE(qt_setDockMenu): (NSMenu *)newMenu
+- (void) qt_setDockMenu: (NSMenu *)newMenu
 {
-   [[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate] setDockMenu: newMenu];
+   [[QCocoaApplicationDelegate sharedDelegate] setDockMenu: newMenu];
 }
 
-- (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)
+- (QCocoaMenuLoader *) qt_qcocoamenuLoader
 {
-   return [[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate] menuLoader];
+   return [[QCocoaApplicationDelegate sharedDelegate] menuLoader];
 }
 
-- (int)QT_MANGLE_NAMESPACE(qt_validModesForFontPanel): (NSFontPanel *)fontPanel
+- (int)qt_validModesForFontPanel: (NSFontPanel *)fontPanel
 {
-   Q_UNUSED(fontPanel);
    // only display those things that QFont can handle
+
    return NSFontPanelFaceModeMask
       | NSFontPanelSizeModeMask
       | NSFontPanelCollectionModeMask
@@ -59,24 +59,30 @@
       | NSFontPanelStrikethroughEffectModeMask;
 }
 
-- (void)QT_MANGLE_NAMESPACE(qt_sendPostedMessage): (NSEvent *)event
+- (void) qt_sendPostedMessage: (NSEvent *)event
 {
-   // WARNING: data1 and data2 is truncated to from 64-bit to 32-bit on OS 10.5!
+   // WARNING: data1 and data2 is truncated to from 64-bit to 32-bit on OS 10.5
    // That is why we need to split the address in two parts:
+
    quint64 lower = [event data1];
    quint64 upper = [event data2];
    QCocoaPostMessageArgs *args = reinterpret_cast<QCocoaPostMessageArgs *>(lower | (upper << 32));
+
    // Special case for convenience: if the argument is an NSNumber, we unbox it directly.
    // Use NSValue instead if this behaviour is unwanted.
+
    id a1 = ([args->arg1 isKindOfClass: [NSNumber class]]) ? (id)[args->arg1 longValue] : args->arg1;
    id a2 = ([args->arg2 isKindOfClass: [NSNumber class]]) ? (id)[args->arg2 longValue] : args->arg2;
+
    switch (args->argCount) {
       case 0:
          [args->target performSelector: args->selector];
          break;
+
       case 1:
          [args->target performSelector: args->selector withObject: a1];
          break;
+
       case 3:
          [args->target performSelector: args->selector withObject: a1 withObject: a2];
          break;
@@ -87,7 +93,7 @@
 
 static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
 
-- (BOOL)QT_MANGLE_NAMESPACE(qt_filterEvent): (NSEvent *)event
+- (BOOL) qt_filterEvent: (NSEvent *)event
 {
    if (qApp && qApp->eventDispatcher()->filterNativeEvent(q_macLocalEventType, static_cast<void *>(event), 0)) {
       return true;
@@ -96,8 +102,9 @@ static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
    if ([event type] == NSEventTypeApplicationDefined) {
       switch (static_cast<short>([event subtype])) {
          case QtCocoaEventSubTypePostMessage:
-            [NSApp QT_MANGLE_NAMESPACE(qt_sendPostedMessage): event];
+            [NSApp qt_sendPostedMessage: event];
             return true;
+
          default:
             break;
       }
@@ -108,9 +115,9 @@ static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
 
 @end
 
-@implementation QT_MANGLE_NAMESPACE(QNSApplication)
+@implementation QNSApplication
 
-- (void)QT_MANGLE_NAMESPACE(qt_sendEvent_original): (NSEvent *)event
+- (void) qt_sendEvent_original: (NSEvent *)event
 {
    Q_UNUSED(event);
    // This method will only be used as a signature
@@ -118,22 +125,23 @@ static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
    // containing the original [NSApplication sendEvent:] implementation
 }
 
-- (void)QT_MANGLE_NAMESPACE(qt_sendEvent_replacement): (NSEvent *)event
+- (void) qt_sendEvent_replacement: (NSEvent *)event
 {
    // This method (or its implementation to be precise) will
    // be called instead of sendEvent if redirection occurs.
    // 'self' will then be an instance of NSApplication
    // (and not QNSApplication)
-   if (![NSApp QT_MANGLE_NAMESPACE(qt_filterEvent): event]) {
-      [self QT_MANGLE_NAMESPACE(qt_sendEvent_original): event];
+
+   if (! [NSApp qt_filterEvent: event]) {
+      [self qt_sendEvent_original: event];
    }
 }
 
-- (void)sendEvent: (NSEvent *)event
+- (void) sendEvent: (NSEvent *)event
 {
    // This method will be called if
    // no redirection occurs
-   if (![NSApp QT_MANGLE_NAMESPACE(qt_filterEvent): event]) {
+   if (! [NSApp qt_filterEvent: event]) {
       [super sendEvent: event];
    }
 }
@@ -142,17 +150,16 @@ static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
 
 void qt_redirectNSApplicationSendEvent()
 {
-   if (QCoreApplication::testAttribute(Qt::AA_MacPluginApplication))
-      // In a plugin we cannot chain sendEvent hooks: a second plugin could
-      // store the implementation of the first, which during the program flow
-      // can be unloaded.
-   {
+   if (QCoreApplication::testAttribute(Qt::AA_MacPluginApplication)) {
+      // In a plugin we can not chain sendEvent hooks: a second plugin could store
+      // the implementation of the first, which during the program flow can be unloaded
+
       return;
    }
 
-   if ([NSApp isMemberOfClass: [QT_MANGLE_NAMESPACE(QNSApplication) class]]) {
-      // No need to change implementation since Qt
-      // already controls a subclass of NSApplication
+   if ([NSApp isMemberOfClass: [QNSApplication class]]) {
+      // No need to change implementation since we
+      // already control a subclass of NSApplication
       return;
    }
 
@@ -160,12 +167,13 @@ void qt_redirectNSApplicationSendEvent()
    // implementation of qt_sendEvent_replacement found in QNSApplication.
    // And keep the old implementation that gets overwritten inside a new
    // method 'qt_sendEvent_original' that we add to NSApplication
+
    qt_cocoa_change_implementation(
       [NSApplication class],
       @selector(sendEvent:),
-      [QT_MANGLE_NAMESPACE(QNSApplication) class],
-      @selector(QT_MANGLE_NAMESPACE(qt_sendEvent_replacement):),
-      @selector(QT_MANGLE_NAMESPACE(qt_sendEvent_original):));
+      [QNSApplication class],
+      @selector(qt_sendEvent_replacement:),
+      @selector(qt_sendEvent_original:));
 }
 
 void qt_resetNSApplicationSendEvent()
@@ -174,9 +182,8 @@ void qt_resetNSApplicationSendEvent()
       return;
    }
 
-
    qt_cocoa_change_back_implementation([NSApplication class],
       @selector(sendEvent:),
-      @selector(QT_MANGLE_NAMESPACE(qt_sendEvent_original):));
+      @selector(qt_sendEvent_original:));
 }
 

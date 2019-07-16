@@ -318,7 +318,7 @@ bool QCoreTextFontEngine::stringToCMap(QStringView strView, QGlyphLayout *glyphs
 
       const char16_t *ch = str.constData();
 
-      if ( (ch[i] >= 0xD800 && ch[i] <= 0xDBFF) && (i + 1 < len) && (ch[i+1] >= 0xDC00 && ch[i+1] <= 0xDFFF) ) {
+      if ( (ch[i] >= 0xD800 && ch[i] <= 0xDBFF) && (i + 1 < len) && (ch[i + 1] >= 0xDC00 && ch[i + 1] <= 0xDFFF) ) {
          // test hi then lo surrogate
          ++i;
       }

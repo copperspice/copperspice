@@ -69,5 +69,4 @@ class QCocoaMenuBar : public QPlatformMenuBar
    QCocoaWindow *m_window;
 };
 
-
 #endif

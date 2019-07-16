@@ -220,7 +220,7 @@ static void cleanupCocoaApplicationDelegate()
    */
 
    /*
-       If Qt is used as a plugin, we let the 3rd party application handle
+       If CS is used as a plugin, we let the 3rd party application handle
        events like quit and open file events. Otherwise, if we install our own
        handlers, we easily end up breaking functionality the 3rd party
        application depends on.
@@ -258,8 +258,9 @@ static void cleanupCocoaApplicationDelegate()
       if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_12) {
          // Move the application window to front to avoid launching behind the terminal.
          // Ignoring other apps is necessary (we must ignore the terminal), but makes
-         // Qt apps play slightly less nice with other apps when lanching from Finder
+         // CSt apps play slightly less nice with other apps when lanching from Finder
          // (See the activateIgnoringOtherApps docs.)
+
          [[NSApplication sharedApplication] activateIgnoringOtherApps: YES];
       }
    }
@@ -275,7 +276,7 @@ static void cleanupCocoaApplicationDelegate()
       if (inLaunch) {
          // We need to be careful because Cocoa will be nice enough to take
          // command line arguments and send them to us as events. Given the history
-         // of Qt Applications, this will result in behavior people don't want, as
+         // of CS Applications, this will result in behavior people don't want, as
          // they might be doing the opening themselves with the command line parsing.
          if (qApp->arguments().contains(qtFileName)) {
             continue;

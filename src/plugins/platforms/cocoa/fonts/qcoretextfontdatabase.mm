@@ -214,7 +214,7 @@ void QCoreTextFontDatabase::populateFontDatabase()
 
 #if defined(Q_OS_MAC)
       QString localizedFamilyName = QString::fromNSString([[NSFontManager sharedFontManager] localizedNameForFamily:
-                                                 (NSString *)familyNameRef face: nil]);
+             (NSString *)familyNameRef face: nil]);
       if (familyName != localizedFamilyName) {
          QPlatformFontDatabase::registerAliasToFontFamily(familyName, localizedFamilyName);
       }
@@ -658,7 +658,7 @@ static CFArrayRef createDescriptorArrayForFont(CTFontRef font, const QString &fi
    QCFType<CTFontDescriptorRef> descriptor = CTFontCopyFontDescriptor(font);
 
 #if defined(QT_USE_FREETYPE)
-   // The physical font source URL (usually a local file or Qt resource) is only required for
+   // The physical font source URL (usually a local file or resource) is only required for
    // FreeType, when using non-system fonts, and needs some hackery to attach in a format agreeable to OSX.
 
    if (! fileName.isEmpty()) {

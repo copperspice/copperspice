@@ -23,20 +23,20 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "qcocoamenubar.h"
-#include "qcocoawindow.h"
-#include "qcocoamenuloader.h"
-#include "qcocoaapplication.h" // for custom application category
-#include "qcocoaapplicationdelegate.h"
+#include <qcocoamenubar.h>
+#include <qcocoawindow.h>
+#include <qcocoamenuloader.h>
+#include <qcocoaapplication.h>             // for custom application category
+#include <qcocoaapplicationdelegate.h>
 
-#include <QApplication>
-#include <QDebug>
+#include <qapplication.h>
+#include <qdebug.h>
 
 static QList<QCocoaMenuBar *> static_menubars;
 
 static inline QCocoaMenuLoader *getMenuLoader()
 {
-   return [NSApp QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)];
+   return [NSApp qt_qcocoamenuLoader];
 }
 
 QCocoaMenuBar::QCocoaMenuBar()
@@ -87,15 +87,14 @@ bool QCocoaMenuBar::needsImmediateUpdate()
    if (m_window && m_window->window()->isActive()) {
       return true;
 
-   } else if (!m_window) {
-      // Only update if the focus/active window has no
-      // menubar, which means it'll be using this menubar.
-      // This is to avoid a modification in a parentless
-      // menubar to affect a window-assigned menubar.
+   } else if (! m_window) {
+
+      // Only update if the focus/active window has no menubar, which means it will be using this menubar.
+      // This is to avoid a modification in a parentless menubar to affect a window-assigned menubar.
 
       QWindow *fw = QApplication::focusWindow();
-      if (!fw) {
-         // Same if there's no focus window, BTW.
+      if (! fw) {
+         // Same if there is no focus window
          return true;
 
       } else {
@@ -114,20 +113,20 @@ bool QCocoaMenuBar::needsImmediateUpdate()
 
 void QCocoaMenuBar::insertMenu(QPlatformMenu *platformMenu, QPlatformMenu *before)
 {
-   QCocoaMenu *menu = static_cast<QCocoaMenu *>(platformMenu);
+   QCocoaMenu *menu       = static_cast<QCocoaMenu *>(platformMenu);
    QCocoaMenu *beforeMenu = static_cast<QCocoaMenu *>(before);
 
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
-   qDebug() << "QCocoaMenuBar" << this << "insertMenu" << menu << "before" << before;
+   qDebug() << "QCocoaMenuBar::insertMenu()" << menu << "before" << before;
 #endif
 
    if (m_menus.contains(QPointer<QCocoaMenu>(menu))) {
-      qWarning("This menu already belongs to the menubar, remove it first");
+      qWarning("Menu already belongs to the menubar remove it first");
       return;
    }
 
-   if (beforeMenu && !m_menus.contains(QPointer<QCocoaMenu>(beforeMenu))) {
-      qWarning("The before menu does not belong to the menubar");
+   if (beforeMenu && ! m_menus.contains(QPointer<QCocoaMenu>(beforeMenu))) {
+      qWarning("Before menu does not belong to the menubar");
       return;
    }
 
@@ -302,7 +301,7 @@ void QCocoaMenuBar::redirectKnownMenuItemsToFirstResponder()
                   break;
 
                // We may discover later that there are other roles/actions which
-                // are meaningful to standard native widgets; they can be added.
+               // are meaningful to standard native widgets; they can be added.
 
                default:
                   known = false;
@@ -330,7 +329,7 @@ void QCocoaMenuBar::updateMenuBarImmediately()
 {
    QMacAutoReleasePool pool;
    QCocoaMenuBar *mb = findGlobalMenubar();
-   QCocoaWindow *cw = findWindowForMenubar();
+   QCocoaWindow *cw  = findWindowForMenubar();
 
    QWindow *win = cw ? cw->window() : 0;
 
@@ -342,15 +341,16 @@ void QCocoaMenuBar::updateMenuBarImmediately()
          return;
       }
 
-      typedef QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) AppDelegate;
+      typedef QCocoaApplicationDelegate AppDelegate;
+
       NSApplication *app = [NSApplication sharedApplication];
-      if (![app.delegate isKindOfClass: [AppDelegate class]]) {
+      if (! [app.delegate isKindOfClass: [AppDelegate class]]) {
          return;
       }
 
       // We apply this logic _only_ during the startup.
       AppDelegate *appDelegate = app.delegate;
-      if (!appDelegate.inLaunch) {
+      if (! appDelegate.inLaunch) {
          return;
       }
    }
@@ -359,25 +359,28 @@ void QCocoaMenuBar::updateMenuBarImmediately()
       mb = cw->menubar();
    }
 
-   if (!mb) {
+   if (! mb) {
       return;
    }
 
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
    qDebug() << "QCocoaMenuBar" << "updateMenuBarImmediately" << cw;
 #endif
+
    bool disableForModal = mb->shouldDisable(cw);
 
    for (QCocoaMenu *menu : mb->m_menus) {
-      if (!menu) {
+      if (! menu) {
          continue;
       }
+
       NSMenuItem *item = mb->nativeItemForMenu(menu);
       menu->setAttachedItem(item);
       menu->setMenuParent(mb);
+
       // force a sync?
       mb->syncMenu(menu);
-      menu->propagateEnabledState(!disableForModal);
+      menu->propagateEnabledState(! disableForModal);
    }
 
    QCocoaMenuLoader *loader = getMenuLoader();
@@ -389,9 +392,9 @@ void QCocoaMenuBar::updateMenuBarImmediately()
       m->syncMerged();
    }
 
-   // hide+disable all mergeable items we're not currently using
+   // hide+disable all mergeable items we are not currently using
    for (NSMenuItem * mergeable in [loader mergeable]) {
-      if (![mergedItems containsObject: mergeable]) {
+      if (! [mergedItems containsObject: mergeable]) {
          [mergeable setHidden: YES];
          [mergeable setEnabled: NO];
       }
@@ -424,9 +427,11 @@ bool QCocoaMenuBar::shouldDisable(QCocoaWindow *active) const
    }
 
    QWindowList topWindows(qApp->topLevelWindows());
+
    // When there is an application modal window on screen, the entries of
-   // the menubar should be disabled. The exception in Qt is that if the
-   // modal window is the only window on screen, then we enable the menu bar.
+   // the menubar should be disabled. The exception in CS is that if the
+   // modal window is the only window on screen then we enable the menu bar.
+
    for (QWindow *w : topWindows) {
       if (w->isVisible() && w->modality() == Qt::ApplicationModal) {
 

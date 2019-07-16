@@ -378,7 +378,7 @@ class QCocoaFontPanel
 {
  public:
    QCocoaFontPanel() {
-      mDelegate = [[QT_MANGLE_NAMESPACE(QNSFontPanelDelegate) alloc] init];
+      mDelegate = [[QNSFontPanelDelegate alloc] init];
    }
 
    ~QCocoaFontPanel() {

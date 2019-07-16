@@ -285,7 +285,8 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 
    for (int i = 0; qt_mac_keyboard_symbols[i].qt_code; i++) {
       if (qt_mac_keyboard_symbols[i].mac_code == key) {
-         /* To work like Qt for X11 we issue Backtab when Shift + Tab are pressed */
+
+         // To work like X11 we issue Backtab when Shift + Tab are pressed
          if (qt_mac_keyboard_symbols[i].qt_code == Qt::Key_Tab && (modif & Qt::ShiftModifier)) {
 
 #ifdef DEBUG_KEY_BINDINGS
@@ -402,9 +403,9 @@ void QCocoaKeyMapper::clearMappings()
 void QCocoaKeyMapper::updateKeyMap(unsigned short macVirtualKey, QChar unicodeKey)
 {
    if (updateKeyboard()) {
-      // ### Qt 4 did this:
-      // QKeyMapper::changeKeyboard();
+      // do nothing
    }
+
    if (keyLayout[macVirtualKey]) {
       return;
    }
@@ -412,6 +413,7 @@ void QCocoaKeyMapper::updateKeyMap(unsigned short macVirtualKey, QChar unicodeKe
    UniCharCount buffer_size = 10;
    UniChar buffer[buffer_size];
    keyLayout[macVirtualKey] = new KeyboardLayoutItem;
+
    for (int i = 0; i < 16; ++i) {
       UniCharCount out_buffer_size = 0;
       keyLayout[macVirtualKey]->qtKey[i] = 0;
@@ -426,6 +428,7 @@ void QCocoaKeyMapper::updateKeyMap(unsigned short macVirtualKey, QChar unicodeKe
             qtkey = unicode.unicode();
          }
          keyLayout[macVirtualKey]->qtKey[i] = qtkey;
+
       } else {
          int qtkey = qt_mac_get_key(keyModifier, unicodeKey, macVirtualKey);
          if (qtkey == Qt::Key_unknown) {
@@ -434,8 +437,10 @@ void QCocoaKeyMapper::updateKeyMap(unsigned short macVirtualKey, QChar unicodeKe
          keyLayout[macVirtualKey]->qtKey[i] = qtkey;
       }
    }
+
 #ifdef DEBUG_KEY_MAPS
-   qDebug("updateKeyMap for virtual key = 0x%02x!", (uint)macVirtualKey);
+   qDebug("updateKeyMap for virtual key = 0x%02x", (uint)macVirtualKey);
+
    for (int i = 0; i < 16; ++i) {
       qDebug("    [%d] (%d,0x%02x,'%c')", i,
          keyLayout[macVirtualKey]->qtKey[i],
@@ -452,7 +457,8 @@ QList<int> QCocoaKeyMapper::possibleKeys(const QKeyEvent *event) const
 
    KeyboardLayoutItem *kbItem = keyLayout[event->nativeVirtualKey()];
 
-   if (!kbItem) { // Key is not in any keyboard layout (e.g. eisu-key on Japanese keyboard)
+   if (! kbItem) {
+      // Key is not in any keyboard layout (e.g. eisu-key on Japanese keyboard)
       return ret;
    }
 

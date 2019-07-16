@@ -96,6 +96,7 @@
    if (m_cocoaWindow && m_cocoaWindow->m_qtView) {
       [m_cocoaWindow->m_qtView notifyWindowWillZoom: ![window isZoomed]];
    }
+
    return YES;
 }
 

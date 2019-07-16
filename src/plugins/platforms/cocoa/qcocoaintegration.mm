@@ -310,7 +310,7 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
    if (qgetenv("QT_MAC_DISABLE_FOREGROUND_APPLICATION_TRANSFORM").isEmpty()) {
       // Applications launched from plain executables (without an app
       // bundle) are "background" applications that does not take keybaord
-      // focus or have a dock icon or task switcher entry. Qt Gui apps generally
+      // focus or have a dock icon or task switcher entry. Gui apps generally
       // wants to be foreground applications so change the process type. (But
       // see the function implementation for exceptions.)
       qt_mac_transformProccessToForegroundApplication();
@@ -327,8 +327,9 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
       }
    }
 
-   // ### For AA_MacPluginApplication we don't want to load the menu nib.
-   // Qt 4 also does not set the application delegate, so that behavior is matched here.
+   // ### For AA_MacPluginApplication we do not want to load the menu nib.
+   // prior versions did not set the application delegate so that behavior is matched here.
+
    if (!QCoreApplication::testAttribute(Qt::AA_MacPluginApplication)) {
 
       // Set app delegate, link to the current delegate (if any)
@@ -414,13 +415,16 @@ void QCocoaIntegration::updateScreens()
    QSet<QCocoaScreen *> remainingScreens = QSet<QCocoaScreen *>::fromList(mScreens);
    QList<QPlatformScreen *> siblings;
    uint screenCount = [screens count];
+
    for (uint i = 0; i < screenCount; i++) {
       NSScreen *scr = [screens objectAtIndex: i];
       CGDirectDisplayID dpy = [[[scr deviceDescription] objectForKey: @"NSScreenNumber"] unsignedIntValue];
+
       // If this screen is a mirror and is not the primary one of the mirror set, ignore it.
       // Exception: The NSScreen API has been observed to a return a screen list with one
-      // mirrored, non-primary screen when Qt is running as a startup item. Always use the
+      // mirrored, non-primary screen when CS is running as a startup item. Always use the
       // screen if there's only one screen in the list.
+
       if (screenCount > 1 && CGDisplayIsInMirrorSet(dpy)) {
          CGDirectDisplayID primary = CGDisplayMirrorsDisplay(dpy);
          if (primary != kCGNullDirectDisplay && primary != dpy) {
@@ -456,7 +460,7 @@ void QCocoaIntegration::updateScreens()
    }
 
    // Now the leftovers in remainingScreens are no longer current, so we can delete them.
-   for (QCocoaScreen *screen: remainingScreens) {
+   for (QCocoaScreen *screen : remainingScreens) {
       mScreens.removeOne(screen);
       destroyScreen(screen);
    }

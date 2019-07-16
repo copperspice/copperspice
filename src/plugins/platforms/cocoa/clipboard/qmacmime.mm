@@ -41,12 +41,14 @@
 
 using MimeList = QList<QMacInternalPasteboardMime *>;
 
-MimeList & globalMimeList() {
+MimeList &globalMimeList()
+{
    static MimeList retval;
    return retval;
 }
 
-QStringList & globalDraggedTypesList() {
+QStringList &globalDraggedTypesList()
+{
    static QStringList retval;
    return retval;
 }
@@ -493,9 +495,9 @@ QVariant QMacPasteboardMimeRtfText::convertToMime(const QString &mimeType, QList
 
    // Read RTF into to NSAttributedString, then convert the string to HTML
    NSAttributedString *string = [[NSAttributedString alloc] initWithData: data.at(0).toNSData()
-                  options: [NSDictionary dictionaryWithObject: NSRTFTextDocumentType forKey: NSDocumentTypeDocumentAttribute]
-                  documentAttributes: nil
-                  error: nil];
+                                                                 options: [NSDictionary dictionaryWithObject: NSRTFTextDocumentType forKey: NSDocumentTypeDocumentAttribute]
+                                                      documentAttributes: nil
+                                                                   error: nil];
 
    NSError *error;
    NSRange range = NSMakeRange(0, [string length]);
@@ -512,9 +514,9 @@ QList<QByteArray> QMacPasteboardMimeRtfText::convertFromMime(const QString &mime
    }
 
    NSAttributedString *string = [[NSAttributedString alloc] initWithData: data.toByteArray().toNSData()
-                  options            : [NSDictionary dictionaryWithObject: NSHTMLTextDocumentType forKey: NSDocumentTypeDocumentAttribute]
-                  documentAttributes : nil
-                  error              : nil];
+                                                                 options: [NSDictionary dictionaryWithObject: NSHTMLTextDocumentType forKey: NSDocumentTypeDocumentAttribute]
+                                                      documentAttributes: nil
+                                                                   error: nil];
 
    NSError *error;
    NSRange range = NSMakeRange(0, [string length]);

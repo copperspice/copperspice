@@ -113,9 +113,10 @@ NSCursor *QCocoaCursor::convertCursor(QCursor *cursor)
       case Qt::DragLinkCursor:
          cocoaCursor = [NSCursor dragLinkCursor];
          break;
+
       default : {
-         // No suitable OS cursor exist, use cursors provided
-         // by Qt for the rest. Check for a cached cursor:
+         // No suitable OS cursor exist, use cursors provided by CS, Check for a cached cursor
+
          cocoaCursor = m_cursors.value(newShape);
          if (cocoaCursor && cursor->shape() == Qt::BitmapCursor) {
             [cocoaCursor release];

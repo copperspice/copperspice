@@ -35,6 +35,7 @@
 #include <qcocoamenuloader.h>
 #include <qcocoamenubar.h>
 #include <qcocoawindow.h>
+
 #import <qnsview.h>
 
 NSString *qt_mac_removePrivateUnicode(NSString *string)
@@ -207,6 +208,7 @@ static inline QCocoaMenuLoader *getMenuLoader()
                ch = QChar([charactersIgnoringModifiers characterAtIndex: 0]);
             }
             keyCode = qt_mac_cocoaKey2QtKey(ch);
+
          } else {
             // might be a dead key
             ch = QChar::ReplacementCharacter;
@@ -216,6 +218,7 @@ static inline QCocoaMenuLoader *getMenuLoader()
          QKeyEvent accel_ev(QEvent::ShortcutOverride, (keyCode & (~Qt::KeyboardModifierMask)),
             Qt::KeyboardModifiers(modifiers & Qt::KeyboardModifierMask));
          accel_ev.ignore();
+
          QCoreApplication::sendEvent(object, &accel_ev);
          if (accel_ev.isAccepted()) {
             [[NSApp keyWindow] sendEvent: event];
@@ -234,6 +237,7 @@ static inline QCocoaMenuLoader *getMenuLoader()
       if (![item isEnabled] || [item isHidden] || [item isSeparatorItem]) {
          continue;
       }
+
       if ([item hasSubmenu]) {
          if (NSMenuItem *nested = [self findItem: [item submenu] forKey: key forModifiers: modifier]) {
             return nested;
@@ -241,9 +245,7 @@ static inline QCocoaMenuLoader *getMenuLoader()
       }
 
       NSString *menuKey = [item keyEquivalent];
-      if (menuKey
-         && NSOrderedSame == [menuKey compare: key]
-         && modifier == [item keyEquivalentModifierMask]) {
+      if (menuKey && NSOrderedSame == [menuKey compare: key] && modifier == [item keyEquivalentModifierMask]) {
          return item;
       }
    }
@@ -252,7 +254,6 @@ static inline QCocoaMenuLoader *getMenuLoader()
 
 @end
 
-QT_BEGIN_NAMESPACE
 QCocoaMenu::QCocoaMenu() :
    m_attachedItem(0),
    m_tag(0),
@@ -286,6 +287,7 @@ QCocoaMenu::~QCocoaMenu()
 void QCocoaMenu::setText(const QString &text)
 {
    QMacAutoReleasePool pool;
+
    QString stripped = qt_mac_removeAmpersandEscapes(text);
    [m_nativeMenu setTitle: QCFString::toNSString(stripped)];
 }
@@ -330,7 +332,7 @@ void QCocoaMenu::insertNative(QCocoaMenuItem *item, QCocoaMenuItem *beforeItem)
 {
    NSMenuItem *nativeItem = item->nsItem();
    nativeItem.target = m_nativeMenu.delegate;
-   if (!item->menu()) {
+   if (! item->menu()) {
       nativeItem.action = @selector(itemFired:);
    } else if (isOpen() && nativeItem) { // Someone's adding new items after aboutToShow() was emitted
       item->menu()->setAttachedItem(nativeItem);
@@ -472,9 +474,10 @@ void QCocoaMenu::syncSeparatorsCollapsible(bool enable)
          }
          [previousItem setHidden: YES];
       }
+
    } else {
       for (QCocoaMenuItem *item : m_menuItems) {
-         if (!item->isSeparator()) {
+         if (! item->isSeparator()) {
             continue;
          }
 
@@ -489,6 +492,7 @@ void QCocoaMenu::setEnabled(bool enabled)
    if (m_enabled == enabled) {
       return;
    }
+
    m_enabled = enabled;
    const bool wasParentEnabled = m_parentEnabled;
    propagateEnabledState(m_enabled);
@@ -514,11 +518,12 @@ void QCocoaMenu::showPopup(const QWindow *parentWindow, const QRect &targetRect,
    NSView *view = cocoaWindow ? cocoaWindow->contentView() : nil;
    NSMenuItem *nsItem = item ? ((QCocoaMenuItem *)item)->nsItem() : nil;
 
-   QScreen *screen = 0;
+   QScreen *screen = nullptr;
    if (parentWindow) {
       screen = parentWindow->screen();
    }
-   if (!screen && !QApplication::screens().isEmpty()) {
+
+   if (!screen && ! QApplication::screens().isEmpty()) {
       screen = QApplication::screens().at(0);
    }
    Q_ASSERT(screen);
@@ -648,7 +653,8 @@ void QCocoaMenu::propagateEnabledState(bool enabled)
    QMacAutoReleasePool pool; // FIXME Is this still needed for Creator? See 6a0bb4206a2928b83648
 
    m_parentEnabled = enabled;
-   if (!m_enabled && enabled) { // Some ancestor was enabled, but this menu is not
+   if (! m_enabled && enabled) {
+      // Some ancestor was enabled, but this menu is not
       return;
    }
 

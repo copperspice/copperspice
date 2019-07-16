@@ -46,8 +46,8 @@ class QCocoaMenu;
 class QCocoaMenuObject
 {
  public:
-   void setMenuParent(QObject *o) {
-      parent = o;
+   void setMenuParent(QObject *obj) {
+      parent = obj;
    }
 
    QObject *menuParent() const {
@@ -67,6 +67,7 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
    void setTag(quintptr tag) override {
       m_tag = tag;
    }
+
    quintptr tag() const override {
       return m_tag;
    }
@@ -79,9 +80,11 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
    void setFont(const QFont &font) override;
    void setRole(MenuRole role) override;
    void setShortcut(const QKeySequence &shortcut) override;
+
    void setCheckable(bool checkable) override {
       Q_UNUSED(checkable)
    }
+
    void setChecked(bool isChecked) override;
    void setEnabled(bool isEnabled) override;
    void setIconSize(int size) override;
@@ -91,6 +94,7 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
    inline QString text() const {
       return m_text;
    }
+
    inline NSMenuItem *nsItem() {
       return m_native;
    }
@@ -102,9 +106,11 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
    inline bool isMerged() const {
       return m_merged;
    }
+
    inline bool isEnabled() const {
       return m_enabled && m_parentEnabled;
    }
+
    inline bool isSeparator() const {
       return m_isSeparator;
    }
@@ -112,6 +118,7 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
    QCocoaMenu *menu() const {
       return m_menu;
    }
+
    MenuRole effectiveRole() const;
 
  private:
@@ -120,15 +127,19 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
 
    NSMenuItem *m_native;
    NSView *m_itemView;
+
    QString m_text;
    QIcon m_icon;
    QPointer<QCocoaMenu> m_menu;
    QFont m_font;
+
    MenuRole m_role;
    MenuRole m_detectedRole;
+
    QKeySequence m_shortcut;
    quintptr m_tag;
    int m_iconSize;
+
    bool m_textSynced: 1;
    bool m_isVisible: 1;
    bool m_enabled: 1;

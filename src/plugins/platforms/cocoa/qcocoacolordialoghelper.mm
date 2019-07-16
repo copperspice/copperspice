@@ -380,7 +380,7 @@ class QCocoaColorPanel
 {
  public:
    QCocoaColorPanel() {
-      mDelegate = [[QT_MANGLE_NAMESPACE(QNSColorPanelDelegate) alloc] init];
+      mDelegate = [[QNSColorPanelDelegate alloc] init];
    }
 
    ~QCocoaColorPanel() {
