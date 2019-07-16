@@ -207,9 +207,9 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
    return [[aboutItem retain] autorelease];
 }
 
-- (NSMenuItem *)aboutQtMenuItem
+- (NSMenuItem *)aboutCsMenuItem
 {
-   return [[aboutQtItem retain] autorelease];
+   return [[aboutCsItem retain] autorelease];
 }
 
 - (NSMenuItem *)hideMenuItem
@@ -232,7 +232,7 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 
    NSInteger location;
    if (lastAppSpecificItem == nil) {
-      location = [appMenu indexOfItem: aboutQtItem];
+      location = [appMenu indexOfItem: aboutCsItem];
    } else {
       location = [appMenu indexOfItem: lastAppSpecificItem];
       [lastAppSpecificItem release];
@@ -326,8 +326,8 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 
 - (NSArray *) mergeable
 {
-   // don't include the quitItem here, since we want it always visible and enabled regardless
-   return [NSArray arrayWithObjects: preferencesItem, aboutItem, aboutQtItem, lastAppSpecificItem, nil];
+   // do not include the quitItem here since we want it always visible and enabled regardless
+   return [NSArray arrayWithObjects: preferencesItem, aboutItem, aboutCsItem, lastAppSpecificItem, nil];
 }
 
 @end

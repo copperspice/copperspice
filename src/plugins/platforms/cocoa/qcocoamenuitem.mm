@@ -250,7 +250,7 @@ NSMenuItem *QCocoaMenuItem::sync()
             break;
 
          case AboutCsRole:
-            mergeItem = [loader aboutQtMenuItem];
+            mergeItem = [loader aboutCsMenuItem];
             break;
 
          case QuitRole:
@@ -284,7 +284,7 @@ NSMenuItem *QCocoaMenuItem::sync()
                   if (m_text.indexOf(QRegularExpression("qt$", QPatternOption::CaseInsensitiveOption)) == -1) {
                      mergeItem = [loader aboutMenuItem];
                   } else {
-                     mergeItem = [loader aboutQtMenuItem];
+                     mergeItem = [loader aboutCsMenuItem];
                   }
                   break;
 
@@ -396,9 +396,10 @@ QString QCocoaMenuItem::mergeText()
    if (m_native == [loader aboutMenuItem]) {
       return qt_mac_applicationmenu_string(6).formatArg(qt_mac_applicationName());
 
-   } else if (m_native == [loader aboutQtMenuItem]) {
+   } else if (m_native == [loader aboutCsMenuItem]) {
       if (m_text == QString("About CS")) {
          return msgAboutCs();
+
       } else {
          return m_text;
       }
