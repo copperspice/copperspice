@@ -104,6 +104,7 @@ GUI_TEXT_PRIVATE_INCLUDES = \
 	qcssparser_p.h \
 	qfont_p.h \
 	qfontengine_p.h \
+	qfontengine_faceid_p.h \
 	qfontengine_qpf2_p.h \
 	qfontengineglyphcache_p.h \
 	qfontsubset_p.h \

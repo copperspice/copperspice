@@ -103,6 +103,7 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_faceid_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpf2_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengineglyphcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset_p.h
