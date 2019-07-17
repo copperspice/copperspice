@@ -108,7 +108,6 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
 
    target_include_directories(
       CsGuiXcb${BUILD_ABI} PRIVATE
-      ${GLIB2_INCLUDES}
       ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
       ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
       ${CMAKE_SOURCE_DIR}/src/3rdparty/harbuzz/src
@@ -133,6 +132,8 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
          -DQT_NO_GLIB
       )
    endif()
+
+   set_target_properties(CsGuiXcb${BUILD_ABI} PROPERTIES PREFIX "")
 
    install(TARGETS CsGuiXcb${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
