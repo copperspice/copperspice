@@ -1412,10 +1412,9 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
       setGeometry_sys(rect);
 
       if (m_data.geometry != rect) {
-         qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d on %s/'%s'."
-            " Resulting geometry = %dx%d+%d+%d "
-            "(Frame = %d, %d, %d, %d, Custom margin = %d, %d, %d, %d,"
-            "Minimum size = %dx%d, Maximum size = %dx%d).",
+         qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d on %s/'%s'.\n"
+            "Resulting geometry = %dx%d+%d+%d, Frame = %d, %d, %d, %d \n"
+            "Custom margin = %d, %d, %d, %d, Minimum size = %dx%d, Maximum size = %dx%d)\n",
             rect.width(), rect.height(), rect.x(), rect.y(),
             csPrintable(window()->metaObject()->className()), csPrintable(window()->objectName()),
             m_data.geometry.width(), m_data.geometry.height(),
