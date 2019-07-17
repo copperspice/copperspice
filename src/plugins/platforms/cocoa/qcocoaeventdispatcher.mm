@@ -299,8 +299,8 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
    Q_D(QCocoaEventDispatcher);
 
-   bool oldValue = d->interrupt;
-   d->interrupt  = false;
+   bool oldValue1 = d->interrupt;
+   d->interrupt   = false;
 
    bool interruptLater = false;
    QtCocoaInterruptDispatcher::cancelInterruptLater();
@@ -358,7 +358,7 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
          // [NSApp run], which is the normal code path for cocoa applications.
 
          if (NSModalSession session = d->currentModalSession()) {
-            bool oldValue = d->currentExecIsNSAppRun;
+            bool oldValue2 = d->currentExecIsNSAppRun;
             d->currentExecIsNSAppRun = false;
 
             while ([NSApp runModalSession: session] == NSModalResponseContinue && ! d->interrupt) {
@@ -377,17 +377,17 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
                d->cleanupModalSessions();
             }
 
-            d->currentExecIsNSAppRun = oldValue;
+            d->currentExecIsNSAppRun = oldValue2;
 
          } else {
             d->nsAppRunCalledByQt = true;
 
-            bool oldValue = d->currentExecIsNSAppRun;
-            d->currentExecIsNSAppRun = false;
+            bool oldValue3 = d->currentExecIsNSAppRun;
+            d->currentExecIsNSAppRun = true;
 
             [NSApp run];
 
-            d->currentExecIsNSAppRun = oldValue;
+            d->currentExecIsNSAppRun = oldValue3;
          }
 
          retVal = true;
@@ -447,7 +447,7 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
                      }
                   }
                } while (!d->interrupt && event != nil);
-       }
+            }
 
          } else {
             do {
@@ -472,7 +472,7 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
                }
 
             } while (!d->interrupt && event != nil);
-    }
+         }
 
          if ((d->processEventsFlags & QEventLoop::EventLoopExec) == 0) {
             // when called "manually", always send posted events and timers
@@ -528,7 +528,7 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
       QtCocoaInterruptDispatcher::interruptLater();
    }
 
-   d->interrupt = oldValue;
+   d->interrupt = oldValue1;
 
    return retVal;
 }
