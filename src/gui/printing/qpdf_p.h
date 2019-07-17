@@ -237,8 +237,7 @@ public:
     bool simplePen;
     qreal opacity;
 
-    QHash<QFontEngine::FaceId, QFontSubset *> fonts;
-
+    QHash<QFontEngine_FaceId, QFontSubset *> fonts;
     QPaintDevice *pdev;
 
     // the device the output is in the end streamed to.

@@ -30,7 +30,7 @@
 #include <qlinkedlist.h>
 #include <qvarlengtharray.h>
 #include <qstringfwd.h>
-
+#include <qfontengine_faceid_p.h>
 #include <qtextengine_p.h>
 #include <qfont_p.h>
 
@@ -52,7 +52,10 @@ typedef bool (*qt_get_font_table_func_t) (void *user_data, uint tag, uchar *buff
 
 class Q_GUI_EXPORT QFontEngine
 {
+
  public:
+   using FaceId = QFontEngine_FaceId;
+
    enum Type {
       Box,
       Multi,
@@ -138,18 +141,6 @@ class Q_GUI_EXPORT QFontEngine
 
    QByteArray getSfntTable(uint tag) const;
    virtual bool getSfntTableData(uint tag, uchar *buffer, uint *length) const;
-
-   struct FaceId {
-      FaceId()
-         : index(0), encoding(0)
-      { }
-
-      QString    filename;
-      QByteArray uuid;
-
-      int index;
-      int encoding;
-   };
 
    virtual FaceId faceId() const {
       return FaceId();

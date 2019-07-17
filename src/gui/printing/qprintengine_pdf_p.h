@@ -35,7 +35,7 @@
 #include <qpaintengine.h>
 #include <qpainterpath.h>
 #include <qdatastream.h>
-#include <qfontengine_p.h>
+
 #include <qpdf_p.h>
 #include <qpaintengine_p.h>
 #include <qpaintengine_p.h>
