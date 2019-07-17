@@ -221,7 +221,7 @@ NSMenuItem *QCocoaMenuBar::nativeItemForMenu(QCocoaMenu *menu) const
 void QCocoaMenuBar::handleReparent(QWindow *newParentWindow)
 {
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
-   qDebug() << "QCocoaMenuBar" << this << "handleReparent" << newParentWindow;
+   qDebug() << "QCocoaMenuBar::handleReparent()" << newParentWindow;
 #endif
 
    if (m_window) {
@@ -364,7 +364,7 @@ void QCocoaMenuBar::updateMenuBarImmediately()
    }
 
 #ifdef QT_COCOA_ENABLE_MENU_DEBUG
-   qDebug() << "QCocoaMenuBar" << "updateMenuBarImmediately" << cw;
+   qDebug() << "QCocoaMenuBar::updateMenuBarImmediately" << cw << ", number of menus" << mb->m_menus.size();
 #endif
 
    bool disableForModal = mb->shouldDisable(cw);
@@ -382,6 +382,10 @@ void QCocoaMenuBar::updateMenuBarImmediately()
       mb->syncMenu(menu);
       menu->propagateEnabledState(! disableForModal);
    }
+
+#ifdef QT_COCOA_ENABLE_MENU_DEBUG
+   qDebug() << "Updated menus\n" << mb->m_nativeMenu;
+#endif
 
    QCocoaMenuLoader *loader = getMenuLoader();
    [loader ensureAppMenuInMenu: mb->nsMenu()];
