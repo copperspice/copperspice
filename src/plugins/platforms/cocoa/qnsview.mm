@@ -266,6 +266,22 @@ static bool _q_dontOverrideCtrlLMB = false;
 - (void)viewDidMoveToWindow
 {
    m_backingStore = nullptr;
+
+   m_isMenuView = [self.window.className isEqualToString: @"NSCarbonMenuWindow"];
+
+   if (self.window) {
+      // get here when WidgetAction  inserted in an NSMenu
+      // 10.9 and newer get the NSWindowDidChangeOcclusionStateNotification
+
+      if (! NSWindowDidChangeOcclusionStateNotification && m_isMenuView) {
+         m_exposedOnMoveToWindow = true;
+         m_platformWindow->exposeWindow();
+      }
+
+   } else if (m_exposedOnMoveToWindow) {
+      m_exposedOnMoveToWindow = false;
+      m_platformWindow->obscureWindow();
+   }
 }
 
 - (void)viewWillMoveToWindow: (NSWindow *)newWindow
