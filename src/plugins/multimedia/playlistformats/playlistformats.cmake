@@ -14,4 +14,6 @@ target_link_libraries(CsMultimedia_m3u${BUILD_ABI} PRIVATE ${EXTRA_MULTIMEDIA_PL
 
 target_compile_definitions(CsMultimedia_m3u${BUILD_ABI} PRIVATE -DIN_TRUE -DQT_PLUGIN)
 
+set_target_properties(CsMultimedia_m3u${BUILD_ABI} PROPERTIES PREFIX "")
+
 install(TARGETS CsMultimedia_m3u${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
