@@ -275,17 +275,7 @@ class cs_number<0>
    inline const QString &qobject_interface_iid<IFace *>() \
       {  \
          static QString retval(IId); \
-         return retval;               \
-      } \
-   template<> \
-   inline IFace * qobject_cast<IFace *>(QObject *object) \
-      { \
-         return dynamic_cast<IFace *>(object); \
-      } \
-   template<> \
-   inline const IFace * qobject_cast<const IFace *>(const QObject *object) \
-      {  \
-         return dynamic_cast<const IFace *>(object); \
+         return retval;              \
       }
 
 
