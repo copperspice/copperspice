@@ -463,7 +463,7 @@ void QtFontFamily::ensurePopulated()
    }
 
    QApplicationPrivate::platformIntegration()->fontDatabase()->populateFamily(m_familyName);
-   Q_ASSERT_X(m_populated, Q_FUNC_INFO, csPrintable(m_familyName));
+   Q_ASSERT_X(m_populated, "QtFontFamily::ensurePopulated()", csPrintable(m_familyName));
 }
 
 struct FallbacksCacheKey {

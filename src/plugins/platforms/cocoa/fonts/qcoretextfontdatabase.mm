@@ -235,13 +235,15 @@ void QCoreTextFontDatabase::populateFamily(const QString &familyName)
 {
    QCFType<CFMutableDictionaryRef> attributes = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks,
          &kCFTypeDictionaryValueCallBacks);
+
    CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, QCFString(familyName));
    QCFType<CTFontDescriptorRef> nameOnlyDescriptor = CTFontDescriptorCreateWithAttributes(attributes);
 
-   // A single family might match several different fonts with different styles eg.
+   // A single family might match several different fonts with different styles
    QCFType<CFArrayRef> matchingFonts = (CFArrayRef) CTFontDescriptorCreateMatchingFontDescriptors(nameOnlyDescriptor, 0);
-   if (!matchingFonts) {
-      qWarning() << "QCoreTextFontDatabase: Found no matching fonts for family" << familyName;
+
+   if (! matchingFonts) {
+      qWarning() << "QCoreTextFontDatabase::populateFamily(): No matching fonts for family" << familyName;
       return;
    }
 

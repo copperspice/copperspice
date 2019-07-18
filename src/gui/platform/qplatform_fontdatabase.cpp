@@ -240,7 +240,6 @@ void QPlatformFontDatabase::invalidate()
 {
 }
 
-
 QFontEngineMulti *QPlatformFontDatabase::fontEngineMulti(QFontEngine *fontEngine, QChar::Script script)
 {
    return new QFontEngineMulti(fontEngine, script);
@@ -257,13 +256,13 @@ QFontEngine *QPlatformFontDatabase::fontEngine(const QFontDef &fontDef, void *ha
 QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal pixelSize,
    QFont::HintingPreference hintingPreference)
 {
-   qWarning("This plugin does not support font engines created directly from font data");
+   qWarning("Plugin does not support font engines created directly from font data");
    return nullptr;
 }
 
 QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData, const QString &fileName)
 {
-   qWarning("This plugin does not support application fonts");
+   qWarning("Plugin does not support application fonts");
    return QStringList();
 }
 
@@ -298,8 +297,6 @@ QFont QPlatformFontDatabase::defaultFont() const
    return QFont(QLatin1String("Helvetica"));
 }
 
-
-
 QString qt_resolveFontFamilyAlias(const QString &alias);
 
 QString QPlatformFontDatabase::resolveFontFamilyAlias(const QString &family) const
@@ -311,12 +308,6 @@ bool QPlatformFontDatabase::fontsAlwaysScalable() const
 {
    return false;
 }
-
-/*!
-    Return list of standard font sizes when using this font database.
-
-    \since 5.0
- */
 
 QList<int> QPlatformFontDatabase::standardSizes() const
 {
@@ -403,7 +394,6 @@ enum {
    KoreanJohabCsbBit = 21,
    SymbolCsbBit = 31
 };
-
 
 QSupportedWritingSystems QPlatformFontDatabase::writingSystemsFromTrueTypeBits(quint32 unicodeRange[4], quint32 codePageRange[2])
 {
@@ -493,8 +483,6 @@ QSupportedWritingSystems QPlatformFontDatabase::writingSystemsFromTrueTypeBits(q
    return writingSystems;
 }
 
-
-
 // convert 0 ~ 1000 integer to QFont::Weight
 QFont::Weight QPlatformFontDatabase::weightFromInteger(int weight)
 {
@@ -524,8 +512,6 @@ QFont::Weight QPlatformFontDatabase::weightFromInteger(int weight)
    }
    return QFont::Black;
 }
-
-
 
 void QPlatformFontDatabase::registerAliasToFontFamily(const QString &familyName, const QString &alias)
 {
