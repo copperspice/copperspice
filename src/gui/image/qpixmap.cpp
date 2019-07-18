@@ -552,12 +552,14 @@ QPixmap QPixmap::grabWidget(QObject *widget, const QRect &rectangle)
 {
    QPixmap pixmap;
    qWarning("QPixmap::grabWidget is deprecated, use QWidget::grab() instead");
-   if (!widget) {
+
+   if (! widget) {
       return pixmap;
    }
-   QMetaObject::invokeMethod(widget, "grab", Qt::DirectConnection,
-      Q_RETURN_ARG(QPixmap, pixmap),
-      Q_ARG(QRect, rectangle));
+
+   QWidget *obj = dynamic_cast<QWidget *>(widget);
+   pixmap = obj->grab(rectangle);
+
    return pixmap;
 }
 
