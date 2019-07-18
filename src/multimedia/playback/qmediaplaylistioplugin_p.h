@@ -66,28 +66,17 @@ struct Q_MULTIMEDIA_EXPORT QMediaPlaylistIOInterface {
 };
 
 #define QMediaPlaylistInterface_ID "com.copperspice.CS.mediaPlayList/1.0"
-CS_DECLARE_INTERFACE(QMediaPlaylistIOInterface, QMediaPlaylistInterface_ID)    // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QMediaPlaylistIOInterface, QMediaPlaylistInterface_ID)
 
 
 class Q_MULTIMEDIA_EXPORT QMediaPlaylistIOPlugin : public QObject, public QMediaPlaylistIOInterface
 {
    MULTI_CS_OBJECT(QMediaPlaylistIOPlugin)
-
    CS_INTERFACES(QMediaPlaylistIOInterface)
 
  public:
    explicit QMediaPlaylistIOPlugin(QObject *parent = nullptr);
    virtual ~QMediaPlaylistIOPlugin();
-
-   virtual bool canRead(QIODevice *device, const QByteArray &format = QByteArray() ) const = 0;
-   virtual bool canRead(const QUrl &location, const QByteArray &format = QByteArray()) const = 0;
-
-   virtual bool canWrite(QIODevice *device, const QByteArray &format) const = 0;
-
-   virtual QMediaPlaylistReader *createReader(QIODevice *device, const QByteArray &format = QByteArray()) = 0;
-   virtual QMediaPlaylistReader *createReader(const QUrl &location, const QByteArray &format = QByteArray()) = 0;
-
-   virtual QMediaPlaylistWriter *createWriter(QIODevice *device, const QByteArray &format) = 0;
 };
 
 #endif
