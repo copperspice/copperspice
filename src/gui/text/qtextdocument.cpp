@@ -1140,7 +1140,7 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
 
       if (index >= 0) {
          QMetaMethod loader = me->method(index);
-         loader.invoke(p, Q_RETURN_ARG(QVariant, r), Q_ARG(int, type), Q_ARG(QUrl, name));
+         loader.invoke(p, Q_RETURN_ARG(QVariant, r), Q_ARG(int, type), Q_ARG(const QUrl &, name));
       }
    }
 

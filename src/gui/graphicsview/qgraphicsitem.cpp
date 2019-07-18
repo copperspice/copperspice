@@ -1451,7 +1451,7 @@ void QGraphicsItem::setCursor(const QCursor &cursor)
 
             for (QGraphicsItem *itemUnderCursor : view->items(view->mapFromGlobal(QCursor::pos()))) {
                if (itemUnderCursor->hasCursor()) {
-                  QMetaObject::invokeMethod(view, "_q_setViewportCursor", Q_ARG(QCursor, itemUnderCursor->cursor()));
+                  QMetaObject::invokeMethod(view, "_q_setViewportCursor", Q_ARG(const QCursor &, itemUnderCursor->cursor()));
                   break;
                }
             }

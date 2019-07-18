@@ -105,11 +105,12 @@ void QMacPageSetupDialogPrivate::openCocoaPageLayout(Qt::WindowModality modality
    Q_Q(QPageSetupDialog);
 
    // If someone is reusing a QPrinter object, the end released all our old
-    void *voidp = 0;
-    (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(),
-                                     "NSPrintInfoForPrintEngine",
-                                     Q_RETURN_ARG(void *, voidp),
-                                     Q_ARG(QPrintEngine *, printer->printEngine()));
+
+   void *voidp = nullptr;
+
+   (void) QMetaObject::invokeMethod(qApp->platformNativeInterface(), "NSPrintInfoForPrintEngine",
+                  Q_RETURN_ARG(void *, voidp), Q_ARG(QPrintEngine *, printer->printEngine()));
+
     printInfo = static_cast<NSPrintInfo *>(voidp);
     [printInfo retain];
 

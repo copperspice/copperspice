@@ -674,12 +674,11 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
    }
 
    // check if at least one of the proxies
-   if (transparentProxy.type() == QNetworkProxy::DefaultProxy &&
-         cacheProxy.type() == QNetworkProxy::DefaultProxy) {
+   if (transparentProxy.type() == QNetworkProxy::DefaultProxy && cacheProxy.type() == QNetworkProxy::DefaultProxy) {
       // unsuitable proxies
       QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ProxyNotFoundError),
-                                Q_ARG(QString, QNetworkReplyHttpImpl::tr("No suitable proxy found")));
+                                Q_ARG(const QString &, QNetworkReplyHttpImpl::tr("No suitable proxy found")));
 
       QMetaObject::invokeMethod(q, "_q_finished", synchronous ? Qt::DirectConnection : Qt::QueuedConnection);
       return;
@@ -1166,8 +1165,7 @@ void QNetworkReplyHttpImplPrivate::onRedirected(QUrl redirectUrl, int httpStatus
    }
 
    // Recurse
-   QMetaObject::invokeMethod(q, "start", Qt::QueuedConnection,
-                             Q_ARG(QNetworkRequest, redirectRequest));
+   QMetaObject::invokeMethod(q, "start", Qt::QueuedConnection, Q_ARG(const QNetworkRequest &, redirectRequest));
 
    emit q->redirected(redirectUrl);
 }
@@ -1809,7 +1807,8 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
    if (isBackground.toBool() && session && session->usagePolicies().testFlag(QNetworkSession::NoBackgroundTrafficPolicy)) {
       QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::BackgroundRequestNotAllowedError),
-                                Q_ARG(QString, QCoreApplication::translate("QNetworkReply", "Background request not allowed.")));
+                                Q_ARG(const QString &, QCoreApplication::translate("QNetworkReply", "Background request not allowed.")));
+
       QMetaObject::invokeMethod(q, "_q_finished", synchronous ? Qt::DirectConnection : Qt::QueuedConnection);
       return;
    }
@@ -1828,25 +1827,29 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
             session->setSessionProperty("ConnectInBackground", isBackground);
             session->open();
          }
+
       } else {
-         qWarning("Backend is waiting for QNetworkSession to connect, but there is none!");
+         qWarning("Backend is waiting for QNetworkSession to connect, but there is none");
          QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
                                    Q_ARG(QNetworkReply::NetworkError, QNetworkReply::NetworkSessionFailedError),
-                                   Q_ARG(QString, QCoreApplication::translate("QNetworkReply", "Network session error.")));
+                                   Q_ARG(const QString &, QCoreApplication::translate("QNetworkReply", "Network session error.")));
+
          QMetaObject::invokeMethod(q, "_q_finished", synchronous ? Qt::DirectConnection : Qt::QueuedConnection);
          return;
       }
+
    } else if (session) {
       QObject::connect(session.data(), SIGNAL(stateChanged(QNetworkSession::State)),
-                       q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)),
-                       Qt::QueuedConnection);
+                       q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)), Qt::QueuedConnection);
    }
 #else
+
    if (!start(request)) {
       qWarning("Backend start failed");
       QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::UnknownNetworkError),
-                                Q_ARG(QString, QCoreApplication::translate("QNetworkReply", "backend start error.")));
+                                Q_ARG(const QString &, QCoreApplication::translate("QNetworkReply", "Backend start error.")));
+
       QMetaObject::invokeMethod(q, "_q_finished", synchronous ? Qt::DirectConnection : Qt::QueuedConnection);
       return;
    }
