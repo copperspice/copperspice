@@ -220,7 +220,7 @@ class PLSParser : public ParserBase
       : ParserBase(parent)
    { }
 
-   void parseLine(int, const QString &line, const QUrl &root) {
+   void parseLine(int, const QString &line, const QUrl &root) override {
       // ignore everything but 'File' entries, since that's the only thing we care about.
       if (! line.startsWith("File")) {
          return;

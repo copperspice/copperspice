@@ -41,12 +41,12 @@ class QVideoSurfaceOutput : public QObject, public QMediaBindableInterface
    QVideoSurfaceOutput(QObject *parent = nullptr);
    ~QVideoSurfaceOutput();
 
-   QMediaObject *mediaObject() const;
+   QMediaObject *mediaObject() const override;
 
    void setVideoSurface(QAbstractVideoSurface *surface);
 
  protected:
-   bool setMediaObject(QMediaObject *object);
+   bool setMediaObject(QMediaObject *object) override;
 
  private:
    QPointer<QAbstractVideoSurface> m_surface;

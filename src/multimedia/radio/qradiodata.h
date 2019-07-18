@@ -82,7 +82,7 @@ public:
 
     QMultimedia::AvailabilityStatus availability() const;
 
-    QMediaObject *mediaObject() const;
+    QMediaObject *mediaObject() const override;
 
     QString stationId() const;
     ProgramType programType() const;
@@ -119,7 +119,7 @@ public:
     MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioData::Error), error)
 
 protected:
-    bool setMediaObject(QMediaObject *);
+    bool setMediaObject(QMediaObject *) override;
 
     QRadioDataPrivate *d_ptr;
 

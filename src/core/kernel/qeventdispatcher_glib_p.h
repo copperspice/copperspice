@@ -54,7 +54,7 @@ class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
    bool unregisterTimers(QObject *object) override;
    QList<TimerInfo> registeredTimers(QObject *object) const override;
 
-   int remainingTime(int timerId);
+   int remainingTime(int timerId) override;
    void wakeUp() override;
    void interrupt() override;
    void flush() override;

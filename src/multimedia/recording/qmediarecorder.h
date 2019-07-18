@@ -107,7 +107,7 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
    explicit QMediaRecorder(QMediaObject *mediaObject, QObject *parent = nullptr);
    ~QMediaRecorder();
 
-   QMediaObject *mediaObject() const;
+   QMediaObject *mediaObject() const override;
 
    bool isAvailable() const;
    QMultimedia::AvailabilityStatus availability() const;
@@ -213,7 +213,7 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
 
  protected:
    QMediaRecorder(QMediaRecorderPrivate &dd, QMediaObject *mediaObject, QObject *parent = nullptr);
-   bool setMediaObject(QMediaObject *object);
+   bool setMediaObject(QMediaObject *object) override;
 
    QMediaRecorderPrivate *d_ptr;
 

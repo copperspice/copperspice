@@ -88,8 +88,8 @@ class Q_MULTIMEDIA_EXPORT QAudioDecoder : public QMediaObject
    qint64 position() const;
    qint64 duration() const;
 
-   virtual bool bind(QObject *);
-   virtual void unbind(QObject *);
+   bool bind(QObject *) override;
+   void unbind(QObject *) override;
 
    MULTI_CS_SLOT_1(Public, void start())
    MULTI_CS_SLOT_2(start)

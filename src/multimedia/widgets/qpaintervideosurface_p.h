@@ -65,14 +65,14 @@ class QPainterVideoSurface : public QAbstractVideoSurface
    ~QPainterVideoSurface();
 
    QList<QVideoFrame::PixelFormat> supportedPixelFormats(
-      QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle) const;
+      QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle) const override;
 
-   bool isFormatSupported(const QVideoSurfaceFormat &format) const;
+   bool isFormatSupported(const QVideoSurfaceFormat &format) const override;
 
-   bool start(const QVideoSurfaceFormat &format);
-   void stop();
+   bool start(const QVideoSurfaceFormat &format) override;
+   void stop() override;
 
-   bool present(const QVideoFrame &frame);
+   bool present(const QVideoFrame &frame) override;
 
    int brightness() const;
    void setBrightness(int brightness);

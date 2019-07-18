@@ -108,39 +108,45 @@ class QMediaNetworkPlaylistControl : public QMediaPlaylistControl
 
    virtual ~QMediaNetworkPlaylistControl() {};
 
-   QMediaPlaylistProvider *playlistProvider() const {
+   QMediaPlaylistProvider *playlistProvider() const override {
       return m_navigator->playlist();
    }
-   bool setPlaylistProvider(QMediaPlaylistProvider *mediaPlaylist) {
+
+   bool setPlaylistProvider(QMediaPlaylistProvider *mediaPlaylist) override {
       m_navigator->setPlaylist(mediaPlaylist);
       emit playlistProviderChanged();
       return true;
    }
 
-   int currentIndex() const {
+   int currentIndex() const override {
       return m_navigator->currentIndex();
    }
-   void setCurrentIndex(int position) {
+
+   void setCurrentIndex(int position) override {
       m_navigator->jump(position);
    }
-   int nextIndex(int steps) const {
+
+   int nextIndex(int steps) const override {
       return m_navigator->nextIndex(steps);
    }
-   int previousIndex(int steps) const {
+
+   int previousIndex(int steps) const override {
       return m_navigator->previousIndex(steps);
    }
 
-   void next() {
+   void next() override {
       m_navigator->next();
    }
-   void previous() {
+
+   void previous() override {
       m_navigator->previous();
    }
 
-   QMediaPlaylist::PlaybackMode playbackMode() const {
+   QMediaPlaylist::PlaybackMode playbackMode() const override {
       return m_navigator->playbackMode();
    }
-   void setPlaybackMode(QMediaPlaylist::PlaybackMode mode) {
+
+   void setPlaybackMode(QMediaPlaylist::PlaybackMode mode) override {
       m_navigator->setPlaybackMode(mode);
    }
 

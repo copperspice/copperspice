@@ -36,17 +36,16 @@ class QM3uPlaylistPlugin : public QMediaPlaylistIOPlugin
 
  public:
    explicit QM3uPlaylistPlugin(QObject *parent = nullptr);
-   virtual ~QM3uPlaylistPlugin();
 
-   virtual bool canRead(QIODevice *device, const QByteArray &format = QByteArray() ) const;
-   virtual bool canRead(const QUrl &location, const QByteArray &format = QByteArray()) const;
+   bool canRead(QIODevice *device, const QByteArray &format = QByteArray() ) const override;
+   bool canRead(const QUrl &location, const QByteArray &format = QByteArray()) const override;
 
-   virtual bool canWrite(QIODevice *device, const QByteArray &format) const;
+   bool canWrite(QIODevice *device, const QByteArray &format) const override;
 
-   virtual QMediaPlaylistReader *createReader(QIODevice *device, const QByteArray &format = QByteArray());
-   virtual QMediaPlaylistReader *createReader(const QUrl &location, const QByteArray &format = QByteArray());
+   QMediaPlaylistReader *createReader(QIODevice *device, const QByteArray &format = QByteArray()) override;
+   QMediaPlaylistReader *createReader(const QUrl &location, const QByteArray &format = QByteArray()) override;
 
-   virtual QMediaPlaylistWriter *createWriter(QIODevice *device, const QByteArray &format);
+   QMediaPlaylistWriter *createWriter(QIODevice *device, const QByteArray &format) override;
 };
 
 #endif

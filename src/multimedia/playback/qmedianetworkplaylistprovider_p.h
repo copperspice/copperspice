@@ -37,22 +37,22 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
    QMediaNetworkPlaylistProvider(QObject *parent = 0);
    virtual ~QMediaNetworkPlaylistProvider();
 
-   virtual bool load(const QNetworkRequest &request, const char *format = 0);
+   virtual bool load(const QNetworkRequest &request, const char *format = nullptr) override;
 
-   virtual int mediaCount() const;
-   virtual QMediaContent media(int pos) const;
+   virtual int mediaCount() const override;
+   virtual QMediaContent media(int pos) const override;
 
-   virtual bool isReadOnly() const;
+   virtual bool isReadOnly() const override;
 
-   virtual bool addMedia(const QMediaContent &content);
-   virtual bool addMedia(const QList<QMediaContent> &items);
-   virtual bool insertMedia(int pos, const QMediaContent &content);
-   virtual bool insertMedia(int pos, const QList<QMediaContent> &items);
-   virtual bool removeMedia(int pos);
-   virtual bool removeMedia(int start, int end);
-   virtual bool clear();
+   virtual bool addMedia(const QMediaContent &content) override;
+   virtual bool addMedia(const QList<QMediaContent> &items) override;
+   virtual bool insertMedia(int pos, const QMediaContent &content) override;
+   virtual bool insertMedia(int pos, const QList<QMediaContent> &items) override;
+   virtual bool removeMedia(int pos) override;
+   virtual bool removeMedia(int start, int end) override;
+   virtual bool clear() override;
 
-   MULTI_CS_SLOT_1(Public, virtual void shuffle())
+   MULTI_CS_SLOT_1(Public, virtual void shuffle() override)
    MULTI_CS_SLOT_2(shuffle)
 
  private:
@@ -67,6 +67,5 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
 };
 
 #endif
-
 
 

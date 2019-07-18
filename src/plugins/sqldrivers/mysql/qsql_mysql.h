@@ -95,10 +95,10 @@ class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 
    void close() override;
 
-   QSqlResult *createResult() const;
-   QStringList tables(QSql::TableType) const;
-   QSqlIndex primaryIndex(const QString &tablename) const;
-   QSqlRecord record(const QString &tablename) const;
+   QSqlResult *createResult() const override;
+   QStringList tables(QSql::TableType) const override;
+   QSqlIndex primaryIndex(const QString &tablename) const override;
+   QSqlRecord record(const QString &tablename) const override;
 
    QString formatValue(const QSqlField &field, bool trimStrings) const override;
    QVariant handle() const override;
