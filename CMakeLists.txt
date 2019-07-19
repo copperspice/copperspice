@@ -415,7 +415,7 @@ if(WIN32)
     add_definitions(-DUNICODE)
 endif()
 
-if(NOT CUPS_FOUND)
+if(NOT Cups_FOUND)
     add_definitions(-DQT_NO_CUPS)
 endif()
 
@@ -512,6 +512,8 @@ if(WITH_GUI)
    endif()
 
    add_subdirectory(src/plugins/platforms)
+
+   add_subdirectory(src/plugins/printerdrivers)
 endif()
 
 configure_file(

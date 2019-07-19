@@ -174,10 +174,10 @@ AM_CONDITIONAL(OSTYPE_LINUX, test "$OSTYPE" == LINUX)
 AM_CONDITIONAL(OSTYPE_DARWIN, test "$OSTYPE" == DARWIN)
 AM_CONDITIONAL(OSTYPE_BSD, test "$OSTYPE" == BSD)
 
+AM_CONDITIONAL(Cups_FOUND,    test "x$ac_cv_header_cups_cups_h" = x""yes)
 AM_CONDITIONAL(X11, test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
 AM_CONDITIONAL(COCOA, test "$OSTYPE" == DARWIN)
 
-AM_CONDITIONAL(CUPS, test "x$ac_cv_header_cups_cups_h" = x""yes)
 AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)

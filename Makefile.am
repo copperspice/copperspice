@@ -70,7 +70,7 @@ if OSTYPE_WIN
 AM_CFLAGS += -DUNICODE
 endif
 
-if CUPS
+if Cups_FOUND
 else
 AM_CFLAGS += -DQT_NO_CUPS
 endif
