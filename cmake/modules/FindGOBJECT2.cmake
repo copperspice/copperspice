@@ -4,7 +4,7 @@
 #  Copyright (c) 2015 Ivailo Monev <xakepa10@gmail.com>
 #  Redistribution and use is allowed according to the terms of the BSD license.
 
-#  Find the GOBJECT2 libraries, will define
+#  Find the GObject2 libraries, will define
 #
 #  GOBJECT2_FOUND       - system has gobject2
 #  GOBJECT2_INCLUDE_DIR - the gobject2 include directory

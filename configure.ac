@@ -92,24 +92,26 @@ AC_SEARCH_LIBS(clock_gettime, rt)
 
 if test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD; then
 
-# xcb headers
-AC_CHECK_HEADERS([xcb/xcb.h], [], missing="$missing xcb/xcb.h")
-
-AC_CHECK_HEADERS([xcb/xkb.h], [], missing="$missing xcb/xkb.h",
-[#define explicit dont_use_cxx_explicit])
-
 # verify dependencies
 PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
 PKG_CHECK_MODULES(GLIB,       glib-2.0,   GLIB="yes",       missing="$missing GLIB")
 
-if test "x$enable_phonon" != "xno"; then
-PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
-PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
-fi
+# gstreamer
+PKG_CHECK_MODULES(    [GSTREAMER],  [gstreamer-1.0],  [GSTREAMER="yes" GSTREAMER_VERSION="1.0"],
+   [PKG_CHECK_MODULES([GSTREAMER],  [gstreamer-0.10], [GSTREAMER="yes" GSTREAMER_VERSION="0.10"], [true]) ])
 
-# not mandatory
-PKG_CHECK_MODULES(GTK,  gtk+-2.0, GTK="yes",  true)
-PKG_CHECK_MODULES(ALSA, alsa,     ALSA="yes", true)
+if test "x$GSTREAMER_VERSION" == "x1.0"; then
+   PKG_CHECK_MODULES(GSTREAMER_BASE,  gstreamer-base-1.0,  GSTREAMER_BASE="yes",  true)
+   PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-1.0, GSTREAMER_AUDIO="yes", true)
+   PKG_CHECK_MODULES(GSTREAMER_VIDEO, gstreamer-video-1.0, GSTREAMER_VIDEO="yes", true)
+   PKG_CHECK_MODULES(GSTREAMER_APP,   gstreamer-app-1.0,   GSTREAMER_APP="yes",   true)
+
+elif test "x$GSTREAMER_VERSION" == "x0.10"; then
+   PKG_CHECK_MODULES(GSTREAMER_BASE,  gstreamer-base-0.10,  GSTREAMER_BASE="yes",  true)
+   PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", true)
+   PKG_CHECK_MODULES(GSTREAMER_VIDEO, gstreamer-video-0.10, GSTREAMER_VIDEO="yes", true)
+   PKG_CHECK_MODULES(GSTREAMER_APP,   gstreamer-app-0.10,   GSTREAMER_APP="yes",   true)
+fi
 
 # not required
 PKG_CHECK_MODULES(GTK,                       gtk+-2.0,               GTK="yes",                       true)
@@ -117,6 +119,9 @@ PKG_CHECK_MODULES(ALSA,                      alsa,                   ALSA="yes",
 PKG_CHECK_MODULES(PULSEAUDIO,                libpulse >= 0.9.15,     PULSEAUDIO="yes",                true)
 PKG_CHECK_MODULES(PULSEAUDIO_DEVICE_MANAGER, libpulse >= 0.9.21,     PULSEAUDIO_DEVICE_MANAGER="yes", true)
 PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB,  libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes",  true)
+
+# xcb headers
+AC_CHECK_HEADERS([xcb/xkb.h], [], missing="$missing xcb/xkb.h", [#define explicit dont_use_cxx_explicit])
 
 # required xcb libraries
 PKG_CHECK_MODULES(LIB_XCB,         xcb >= 1.11.0,           LIB_XCB="yes",         missing="$missing xcb library")
@@ -169,28 +174,33 @@ if test "x$missing" != "x"; then
    exit
 fi
 
-AM_CONDITIONAL(OSTYPE_WIN, test "$OSTYPE" == WIN)
-AM_CONDITIONAL(OSTYPE_LINUX, test "$OSTYPE" == LINUX)
+AM_CONDITIONAL(OSTYPE_WIN,    test "$OSTYPE" == WIN)
+AM_CONDITIONAL(OSTYPE_LINUX,  test "$OSTYPE" == LINUX)
 AM_CONDITIONAL(OSTYPE_DARWIN, test "$OSTYPE" == DARWIN)
-AM_CONDITIONAL(OSTYPE_BSD, test "$OSTYPE" == BSD)
+AM_CONDITIONAL(OSTYPE_BSD,    test "$OSTYPE" == BSD)
+
+AM_CONDITIONAL(X11,           test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
+AM_CONDITIONAL(COCOA,         test "$OSTYPE" == DARWIN)
 
 AM_CONDITIONAL(Cups_FOUND,    test "x$ac_cv_header_cups_cups_h" = x""yes)
-AM_CONDITIONAL(X11, test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
-AM_CONDITIONAL(COCOA, test "$OSTYPE" == DARWIN)
+AM_CONDITIONAL(GTK,           test "x$GTK"  = x""yes -a "$OSTYPE" != DARWIN)
+AM_CONDITIONAL(GLIB,          test "x$GLIB" = x""yes)
 
-AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
+AM_CONDITIONAL(GSTREAMER,                  test "$GSTREAMER"       = "yes")
+AM_CONDITIONAL(GSTREAMER_BASE,             test "$GSTREAMER_BASE"  = "yes")
+AM_CONDITIONAL(GSTREAMER_AUDIO,            test "$GSTREAMER_AUDIO" = "yes")
+AM_CONDITIONAL(GSTREAMER_VIDEO,            test "$GSTREAMER_VIDEO" = "yes")
 
-#AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
+AM_CONDITIONAL(GSTREAMER_ABI_VERSION_0_10, test "x$GSTREAMER_VERSION" == "x0.10" )
 
-AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 AM_CONDITIONAL(ALSA,                       test "$ALSA" = "yes")
 AM_CONDITIONAL(PULSEAUDIO,                 test "$PULSEAUDIO" = "yes")
 AM_CONDITIONAL(PULSEAUDIO_DEVICE_MANAGER,  test "$PULSEAUDIO_DEVICE_MANAGER" = "yes")
 AM_CONDITIONAL(PULSEAUDIO_MAINLOOP_GLIB,   test "$PULSEAUDIO_MAINLOOP_GLIB" = "yes")
 
-AM_CONDITIONAL(BUILD_PLATFORMS_COCOA_PLUGIN, test "$OSTYPE" == DARWIN)
+AM_CONDITIONAL(BUILD_PLATFORMS_COCOA_PLUGIN,   test "$OSTYPE" == DARWIN)
 AM_CONDITIONAL(BUILD_PLATFORMS_WINDOWS_PLUGIN, test "$OSTYPE" == WIN)
-AM_CONDITIONAL(BUILD_PLATFORMS_XCB_PLUGIN, test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
+AM_CONDITIONAL(BUILD_PLATFORMS_XCB_PLUGIN,     test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
 
 # turns zlib off always
 AM_CONDITIONAL(ZLIB, test "x" = x""yes)

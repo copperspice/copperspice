@@ -293,7 +293,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       DESCRIPTION "Platform dependant threading library"
       URL ""
       TYPE REQUIRED
-    )
+   )
 
    find_package(GLib2)
    set_package_properties(GLib2 PROPERTIES
@@ -303,15 +303,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         TYPE REQUIRED
    )
 
-    find_package(GOBJECT2)
-    set_package_properties(GOBJECT2 PROPERTIES
+   find_package(GObject2)
+   set_package_properties(GObject2 PROPERTIES
        PURPOSE "Required for glib mainloop support"
        DESCRIPTION "The object system used for Pango and GTK+"
        URL "https://developer.gnome.org/gobject"
        TYPE REQUIRED
-    )
+   )
 
-    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+   if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
        find_package(Iconv)
        set_package_properties(Iconv PROPERTIES
           PURPOSE "Iconv support"
@@ -319,7 +319,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
           URL "http://www.gnu.org/software/libiconv/"
           TYPE REQUIRED
         )
-    endif()
+   endif()
 
     if(WITH_GUI)
        find_package(NAS)

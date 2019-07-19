@@ -1,106 +1,65 @@
 #  Copyright (C) 2012-2019 Barbara Geller
 #  Copyright (C) 2012-2019 Ansel Sermersheim
 #
-#  Copyright (c) 2006 Tim Beaulen <tbscope@gmail.com>
-#  Redistribution and use is allowed according to the terms of the BSD license.
-
 #  Find GStreamer, will define
 #
-#  GSTREAMER_FOUND       - system has GStreamer
-#  GSTREAMER_INCLUDE_DIR - the GStreamer include directory
-#  GSTREAMER_LIBRARIES   - the libraries needed to use GStreamer
-#  GSTREAMER_DEFINITIONS - Compiler switches required for using GStreamer
+#  GSTREAMER_FOUND        - system has GStreamer
+#  GSTREAMER_INCLUDE_DIRS - the GStreamer include directories
+#  GSTREAMER_LIBRARY      - the libraries needed to use GStreamer
+#  GSTREAMER_DEFINITIONS  - Compiler switches required for using GStreamer
+#
+#  For plugin libraries specified in the COMPONENTS of find_package, this module will define:
+#
+#  GSTREAMER_<plugin_lib>_LIBRARY_FOUND - system has <plugin_lib>
+#  GSTREAMER_<plugin_lib>_INCLUDE_DIRS  - the <plugin_lib> include directory
+#  GSTREAMER_<plugin_lib>_LIBRARY       - the <plugin_lib> library
 
-#  TODO: may want to look for other versions of GStreamer
-#     GSTREAMER_X_Y_FOUND (Example: GSTREAMER_0_8_FOUND and GSTREAMER_0_10_FOUND etc)
+find_package(PkgConfig)
+
+# Helper macro to find a GStreamer plugin (or GStreamer itself)
+#   _component_prefix is prepended to the _INCLUDE_DIRS and _LIBRARIES variables (eg. "GSTREAMER_AUDIO")
+#   _pkgconfig_name is the component's pkg-config name (eg. "gstreamer-1.0", or "gstreamer-video-1.0").
+#   _library is the component's library name (eg. "gstreamer-1.0" or "gstvideo-1.0")
+macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
+
+    pkg_check_modules(PKG_${_component_prefix} ${_pkgconfig_name})
+    set(${_component_prefix}_INCLUDE_DIRS ${PKG_${_component_prefix}_INCLUDE_DIRS})
+
+    find_library(${_component_prefix}_LIBRARIES
+        NAMES ${_library}
+        HINTS ${PKG_${_component_prefix}_LIBRARY_DIRS} ${PKG_${_component_prefix}_LIBDIR}
+    )
+endmacro()
+
+# find heders and libraries
+FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-1.0 gstreamer-1.0)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-1.0 gstbase-1.0)
+
+if (DEFINED GSTREAMER_LIBRARIES)
+   set(GSTREAMER_ABI_VERSION "1.0")
+
+else()
+   FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-0.10 gstreamer-0.10)
+   FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-0.10 gstbase-0.10)
+
+   if (DEFINED GSTREAMER_LIBRARIES)
+      set(GSTREAMER_ABI_VERSION "0.10")
+   else()
+      # nothing was found
+      return()
+   endif()
+endif()
 
 
-IF (GSTREAMER_INCLUDE_DIR AND GSTREAMER_LIBRARIES AND GSTREAMER_BASE_LIBRARY AND GSTREAMER_AUDIO_LIBRARY AND GSTREAMER_VIDEO_LIBRARY AND GSTREAMER_INTERFACE_LIBRARY)
-   # in cache already
-   SET(GStreamer_FIND_QUIETLY TRUE)
-ELSE ()
-   SET(GStreamer_FIND_QUIETLY FALSE)
-ENDIF ()
+# find plugins
+FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE_LIBRARY  gstreamer-base-${GSTREAMER_ABI_VERSION}  gstbase-${GSTREAMER_ABI_VERSION})
+FIND_GSTREAMER_COMPONENT(GSTREAMER_APP           gstreamer-app-${GSTREAMER_ABI_VERSION}   gstapp-${GSTREAMER_ABI_VERSION})
+FIND_GSTREAMER_COMPONENT(GSTREAMER_AUDIO_LIBRARY gstreamer-audio-${GSTREAMER_ABI_VERSION} gstaudio-${GSTREAMER_ABI_VERSION})
+FIND_GSTREAMER_COMPONENT(GSTREAMER_VIDEO_LIBRARY gstreamer-video-${GSTREAMER_ABI_VERSION} gstvideo-${GSTREAMER_ABI_VERSION})
 
-IF (NOT WIN32)
-   # use pkg-config to get the directories and then use these values
-   # in the FIND_PATH() and FIND_LIBRARY() calls
-   FIND_PACKAGE(PkgConfig)
-   PKG_CHECK_MODULES(PC_GSTREAMER QUIET gstreamer-0.10)
-   #MESSAGE(STATUS "DEBUG: GStreamer include directory = ${GSTREAMER_INCLUDE_DIRS}")
-   #MESSAGE(STATUS "DEBUG: GStreamer link directory = ${GSTREAMER_LIBRARY_DIRS}")
-   #MESSAGE(STATUS "DEBUG: GStreamer CFlags = ${GSTREAMER_CFLAGS_OTHER}")
-   SET(GSTREAMER_DEFINITIONS ${PC_GSTREAMER_CFLAGS_OTHER})
-ENDIF (NOT WIN32)
-
-FIND_PATH(GSTREAMER_INCLUDE_DIR gst/gst.h
-   PATHS
-   ${PC_GSTREAMER_INCLUDEDIR}
-   ${PC_GSTREAMER_INCLUDE_DIRS}
-   #PATH_SUFFIXES gst
-   )
-
-FIND_LIBRARY(GSTREAMER_LIBRARIES NAMES gstreamer-0.10
-   PATHS
-   ${PC_GSTREAMER_LIBDIR}
-   ${PC_GSTREAMER_LIBRARY_DIRS}
-   )
-
-FIND_LIBRARY(GSTREAMER_BASE_LIBRARY NAMES gstbase-0.10
-   PATHS
-   ${PC_GSTREAMER_LIBDIR}
-   ${PC_GSTREAMER_LIBRARY_DIRS}
-   )
-
-FIND_LIBRARY(GSTREAMER_AUDIO_LIBRARY NAMES gstaudio-0.10
-   PATHS
-   ${PC_GSTREAMER_LIBDIR}
-   ${PC_GSTREAMER_LIBRARY_DIRS}
-   )
-
-FIND_LIBRARY(GSTREAMER_VIDEO_LIBRARY NAMES gstvideo-0.10
-   PATHS
-   ${PC_GSTREAMER_LIBDIR}
-   ${PC_GSTREAMER_LIBRARY_DIRS}
-   )
-
-FIND_LIBRARY(GSTREAMER_INTERFACE_LIBRARY NAMES gstinterfaces-0.10
-   PATHS
-   ${PC_GSTREAMER_LIBDIR}
-   ${PC_GSTREAMER_LIBRARY_DIRS}
-   )
-
-IF (GSTREAMER_INCLUDE_DIR)
-   #MESSAGE(STATUS "DEBUG: Found GStreamer include dir: ${GSTREAMER_INCLUDE_DIR}")
-ELSE (GSTREAMER_INCLUDE_DIR)
-   MESSAGE(STATUS "GStreamer: WARNING: include dir not found")
-ENDIF (GSTREAMER_INCLUDE_DIR)
-
-IF (GSTREAMER_LIBRARIES)
-   #MESSAGE(STATUS "DEBUG: Found GStreamer library: ${GSTREAMER_LIBRARIES}")
-ELSE (GSTREAMER_LIBRARIES)
-   MESSAGE(STATUS "GStreamer: WARNING: library not found")
-ENDIF (GSTREAMER_LIBRARIES)
-
-IF (GSTREAMER_AUDIO_LIBRARY)
-   #MESSAGE(STATUS "DEBUG: Found GStreamer audio library: ${GSTREAMER_AUDIO_LIBRARY}")
-ELSE (GSTREAMER_AUDIO_LIBRARY)
-   MESSAGE(STATUS "GStreamer: WARNING: audio library not found")
-ENDIF (GSTREAMER_AUDIO_LIBRARY)
-
-IF (GSTREAMER_VIDEO_LIBRARY)
-   #MESSAGE(STATUS "DEBUG: Found GStreamer video library: ${GSTREAMER_VIDEO_LIBRARY}")
-ELSE (GSTREAMER_VIDEO_LIBRARY)
-   MESSAGE(STATUS "GStreamer: WARNING: video library not found")
-ENDIF (GSTREAMER_VIDEO_LIBRARY)
-
-IF (GSTREAMER_INTERFACE_LIBRARY)
-   #MESSAGE(STATUS "DEBUG: Found GStreamer interface library: ${GSTREAMER_INTERFACE_LIBRARY}")
-ELSE (GSTREAMER_INTERFACE_LIBRARY)
-   MESSAGE(STATUS "GStreamer: WARNING: interface library not found")
-ENDIF (GSTREAMER_INTERFACE_LIBRARY)
-
-INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(GStreamer  DEFAULT_MSG  GSTREAMER_LIBRARIES GSTREAMER_INCLUDE_DIR GSTREAMER_BASE_LIBRARY GSTREAMER_AUDIO_LIBRARY GSTREAMER_INTERFACE_LIBRARY)
-
-MARK_AS_ADVANCED(GSTREAMER_INCLUDE_DIR GSTREAMER_LIBRARIES GSTREAMER_BASE_LIBRARY GSTREAMER_AUDIO_LIBRARY GSTREAMER_INTERFACE_LIBRARY)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(GStreamer
+   DEFAULT_MSG
+   GSTREAMER_LIBRARIES
+   GSTREAMER_INCLUDE_DIRS
+)

@@ -5,7 +5,10 @@ add_definitions(
 )
 
 if(GTK2_FOUND)
-   set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES})
+   set(EXTRA_CORE_LIBS
+      ${GLIB2_LIBRARIES}
+      ${GOBJECT2_LIBRARIES}
+   )
 else()
    add_definitions(-DQT_NO_GLIB)
 endif()
