@@ -164,10 +164,6 @@ QM3uPlaylistPlugin::QM3uPlaylistPlugin(QObject *parent)
 {
 }
 
-QM3uPlaylistPlugin::~QM3uPlaylistPlugin()
-{
-}
-
 bool QM3uPlaylistPlugin::canRead(QIODevice *device, const QByteArray &format) const
 {
    return device->isReadable() && (format == "m3u" || format == "m3u8" || format.isEmpty());

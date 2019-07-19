@@ -40,9 +40,9 @@ class Q_MULTIMEDIA_EXPORT QMediaService : public QObject
    virtual QMediaControl *requestControl(const QString &name) = 0;
 
    template <typename T>
-   inline T requestControl() {
-      if (QMediaControl *control = requestControl(qmediacontrol_iid<T>())) {
-         if (T typedControl = qobject_cast<T>(control)) {
+   T requestControl() {
+      if (QMediaControl *control = requestControl(qobject_interface_iid<T>())) {
+         if (T typedControl = dynamic_cast<T>(control)) {
             return typedControl;
          }
 

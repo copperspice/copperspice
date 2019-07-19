@@ -34,6 +34,8 @@
 #include <qfont_p.h>
 
 class QWritingSystemsPrivate;
+class QFontRequestPrivate;
+class QFontEngineMulti;
 
 class Q_GUI_EXPORT QSupportedWritingSystems
 {
@@ -57,9 +59,6 @@ class Q_GUI_EXPORT QSupportedWritingSystems
 
 Q_GUI_EXPORT bool operator==(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
 Q_GUI_EXPORT bool operator!=(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
-
-class QFontRequestPrivate;
-class QFontEngineMulti;
 
 class Q_GUI_EXPORT QPlatformFontDatabase
 {

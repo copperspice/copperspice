@@ -33,7 +33,7 @@ class Q_MULTIMEDIA_EXPORT QPlaylistFileParser : public QObject
    MULTI_CS_OBJECT(QPlaylistFileParser)
 
  public:
-   QPlaylistFileParser(QObject *parent = 0);
+   QPlaylistFileParser(QObject *parent = nullptr);
 
    enum FileType {
       UNKNOWN,

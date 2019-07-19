@@ -108,13 +108,12 @@ QLinuxInputMouseHandler::QLinuxInputMouseHandler(const QString &key,
     qDebug() << "QLinuxInputMouseHandler" << key << specification;
 
 
-    setObjectName(QLatin1String("LinuxInputSubsystem Mouse Handler"));
+    setObjectName("LinuxInputSubsystem Mouse Handler");
 
-    QString dev = QLatin1String("/dev/input/event0");
-    m_compression = true;
-    m_smooth = false;
+    QString dev = "/dev/input/event0";
+    m_compression   = true;
+    m_smooth        = false;
     int jitterLimit = 0;
-    
 
     QStringList args = specification.split(':');
     for (const QString &arg : args) {
@@ -129,8 +128,8 @@ QLinuxInputMouseHandler::QLinuxInputMouseHandler(const QString &key,
         else if (arg.startsWith(QLatin1String("/dev/")))
             dev = arg;
     }
-    m_jitterLimitSquared = jitterLimit*jitterLimit; 
-    
+    m_jitterLimitSquared = jitterLimit*jitterLimit;
+
     m_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDONLY | O_NDELAY, 0);
     if (m_fd >= 0) {
         m_notify = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
@@ -141,7 +140,7 @@ QLinuxInputMouseHandler::QLinuxInputMouseHandler(const QString &key,
     }
 #ifdef QT_QPA_EXPERIMENTAL_TOUCHEVENT
     d = new QLinuxInputMouseHandlerData;
-#endif    
+#endif
 }
 
 
@@ -323,7 +322,7 @@ void QLinuxInputMouseHandler::readMouseData()
         if (unknown) {
             qWarning("unknown mouse event type=%x, code=%x, value=%x", data->type, data->code, data->value);
         }
-#endif        
+#endif
     }
     if (m_compression && pendingMouseEvent) {
         int distanceSquared = (m_x - m_prevx)*(m_x - m_prevx) + (m_y - m_prevy)*(m_y - m_prevy);
@@ -372,9 +371,9 @@ bool QWSLinuxInputKeyboardHandler::filterInputEvent(quint16 &, qint32 &)
 QLinuxInputKeyboardHandler::QLinuxInputKeyboardHandler(const QString &key, const QString &specification)
     : m_handler(0), m_fd(-1), m_tty_fd(-1), m_orig_kbmode(K_XLATE)
 {
-    setObjectName(QLatin1String("LinuxInputSubsystem Keyboard Handler"));
+    setObjectName("LinuxInputSubsystem Keyboard Handler");
 
-    QString dev = QLatin1String("/dev/input/event1");
+    QString dev = "/dev/input/event1";
     int repeat_delay = -1;
     int repeat_rate = -1;
 

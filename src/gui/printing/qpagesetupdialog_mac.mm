@@ -115,10 +115,11 @@ void QMacPageSetupDialogPrivate::openCocoaPageLayout(Qt::WindowModality modality
     [printInfo retain];
 
    pageLayout = [NSPageLayout pageLayout];
+
    // Keep a copy to this since we plan on using it for a bit.
    [pageLayout retain];
 
-    QT_MANGLE_NAMESPACE(QCocoaPageLayoutDelegate) *delegate = [[QT_MANGLE_NAMESPACE(QCocoaPageLayoutDelegate) alloc] initWithNSPrintInfo:printInfo];
+    QCocoaPageLayoutDelegate *delegate = [[QCocoaPageLayoutDelegate alloc] initWithNSPrintInfo:printInfo];
 
     if (modality == Qt::ApplicationModal) {
 
