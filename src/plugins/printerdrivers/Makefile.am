@@ -1,9 +1,8 @@
 EXTRA_DIST += \
 	src/plugins/printerdrivers/CMakeLists.txt \
-	src/plugins/printerdrivers/windows/windowsprinter.cmake
-
-#	src/plugins/printerdrivers/cocoa/cocoaprinter.cmake
-#	src/plugins/printerdrivers/cups/cupsprinter.cmake
+	src/plugins/printerdrivers/cocoa/cocoaprinter.cmake \
+	src/plugins/printerdrivers/windows/windowsprinter.cmake \
+	src/plugins/printerdrivers/cups/cupsprinter.cmake
 
 PRINTERDRIVERS_PRIVATE_INCLUDES =
 PRINTERDRIVERS_DIRS =
@@ -13,9 +12,9 @@ PRINTERDRIVERS_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtGui/%,$(PLATFORMS_PUBLIC_INCLUDES)) \
 	privateinclude/QtGui/private/printerdrivers
 
-#   include src/plugins/printerdrivers/cocoa/Makefile.am
+include src/plugins/printerdrivers/cocoa/Makefile.am
 include src/plugins/printerdrivers/windows/Makefile.am
-#   include src/plugins/printerdrivers/cups/Makefile.am
+include src/plugins/printerdrivers/cups/Makefile.am
 
 -include .printerdrivers-header-deps.mk
 

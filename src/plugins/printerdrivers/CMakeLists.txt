@@ -15,9 +15,9 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/cups
 )
 
-#   include(cocoa/cocoaprinter.cmake)
+include(cocoa/cocoaprinter.cmake)
 include(windows/windowsprinter.cmake)
-#   include(cups/cupsprinter.cmake)
+include(cups/cupsprinter.cmake)
 
 macro_generate_misc_private("${PRINTERDRIVERS_COCOA_PRIVATE_INCLUDES}" QtGui/private/printerdrivers)
 macro_generate_misc_private("${PRINTERDRIVERS_WIN_PRIVATE_INCLUDES}"   QtGui/private/printerdrivers)
