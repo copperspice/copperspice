@@ -43,9 +43,11 @@
 #include <qfont_p.h>
 #include <qtextformat_p.h>
 #include <qtextdocument_p.h>
-
-#include <qharfbuzz_gui_p.h>
 #include <qunicodetools_p.h>
+
+#if ! defined(CS_BUILDING_CUPS)
+#include <qharfbuzz_gui_p.h>
+#endif
 
 #include <stdlib.h>
 
@@ -156,8 +158,15 @@ struct QGlyphAttributes {
 };
 static_assert(sizeof(QGlyphAttributes) == 1, "Type mismatch");
 
-struct QGlyphLayout {
+#if defined(CS_BUILDING_CUPS)
+   using glyph_t = uint32_t;
 
+   using qt_destroy_func_ptr        = void *;
+   using qt_get_font_table_func_ptr = void *;
+
+#endif
+
+struct QGlyphLayout {
    constexpr static const int SpaceRequired = sizeof(glyph_t) + sizeof(QFixed) + sizeof(QFixedPoint)
       + sizeof(QGlyphAttributes) + sizeof(QGlyphJustification);
 
@@ -454,6 +463,12 @@ class Q_GUI_EXPORT QTextEngine
    glyph_metrics_t boundingBox(int from,  int len) const;
    glyph_metrics_t tightBoundingBox(int from,  int len) const;
 
+   int glyphLength(int item) const {
+      const QScriptItem &si = layoutData->items[item];
+
+      return si.num_glyphs;
+   }
+
    int length(int item) const {
       const QScriptItem &si = layoutData->items[item];
       item++;
@@ -652,9 +667,11 @@ class Q_GUI_EXPORT QTextEngine
    void addRequiredBoundaries() const;
    void shapeText(int item) const;
 
+#if ! defined(CS_BUILDING_CUPS)
    int shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
       QFontEngine *fontEngine, const QVector<uint> &itemBoundaries,
       bool kerningEnabled,  bool hasLetterSpacing) const;
+#endif
 
    int endOfLine(int lineNum);
    int beginningOfLine(int lineNum);
