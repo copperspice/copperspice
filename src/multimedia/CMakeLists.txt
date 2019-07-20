@@ -45,7 +45,9 @@ include(recording/recording.cmake)
 include(video/video.cmake)
 include(widgets/widgets.cmake)
 
+include(../plugins/multimedia/mediaservices/avfoundation/avfoundation.cmake)
 include(../plugins/multimedia/mediaservices/directshow/directshow.cmake)
+include(../plugins/multimedia/mediaservices/gstreamer/gstreamer.cmake)
 include(../plugins/multimedia/playlistformats/playlistformats.cmake)
 
 macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)

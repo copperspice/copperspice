@@ -52,9 +52,9 @@ lib_CsMultimedia_DirectShow@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iprivateinclude 
    -Iinclude/QtMultimedia -Iprivateinclude/QtMultimedia/private \
    $(AM_CXXFLAGS) \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
+   -DQT_PLUGIN \
    -DQMEDIA_DIRECTSHOW_PLAYER \
-   -DNO_DSHOW_STRSAFE  \
-   -DQT_PLUGIN
+   -DNO_DSHOW_STRSAFE
 
 lib_CsMultimedia_DirectShow@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) \
    -avoid-version -no-undefined -module \
