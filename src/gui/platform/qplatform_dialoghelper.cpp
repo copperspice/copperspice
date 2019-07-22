@@ -687,7 +687,7 @@ QStringList QPlatformFileDialogHelper::cleanFilterList(const QString &filter)
    QRegularExpressionMatch match;
 
    QString f = filter;
-   match = regexp.match(f);
+   match = regexp.match(filter);
 
    if (match.hasMatch()) {
       f = match.capturedView(2);
