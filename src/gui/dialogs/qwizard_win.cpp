@@ -389,23 +389,25 @@ static LOGFONT getCaptionLogFont(HANDLE hTheme)
 
    return result;
 }
+
 static bool getCaptionQFont(int dpi, QFont *result)
 {
    if (!pOpenThemeData) {
       return false;
    }
-   const HANDLE hTheme =
-      pOpenThemeData(QApplicationPrivate::getHWNDForWidget(QApplication::desktop()), L"WINDOW");
-   if (!hTheme) {
+
+   const HANDLE hTheme = pOpenThemeData(QApplicationPrivate::getHWNDForWidget(QApplication::desktop()), L"WINDOW");
+
+   if (! hTheme) {
       return false;
    }
-   // Call into QWindowsNativeInterface to convert the LOGFONT into a QFont.
+
+   // Call into QWindowsNativeInterface to convert the LOGFONT into a QFont
    const LOGFONT logFont = getCaptionLogFont(hTheme);
    QPlatformNativeInterface *ni = QGuiApplication::platformNativeInterface();
+
    return ni && QMetaObject::invokeMethod(ni, "logFontToQFont", Qt::DirectConnection,
-         Q_RETURN_ARG(QFont, *result),
-         Q_ARG(const void *, &logFont),
-         Q_ARG(int, dpi));
+         Q_RETURN_ARG(QFont, *result), Q_ARG(const void *, &logFont), Q_ARG(int, dpi));
 }
 
 void QVistaHelper::drawTitleBar(QPainter *painter)

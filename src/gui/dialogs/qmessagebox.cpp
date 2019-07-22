@@ -510,7 +510,7 @@ int QMessageBoxPrivate::execReturnCode(QAbstractButton *button)
    int ret = buttonBox->standardButton(button);
 
    if (ret == QMessageBox::NoButton) {
-      ret = customButtonList.indexOf(button); // if button == 0, correctly sets ret = -1
+      ret = customButtonList.indexOf(button);    // if button == nullptr, sets to InvalidRole
 
    } else if (compatMode) {
       ret = oldButton(ret);
@@ -589,9 +589,11 @@ QMessageBox::~QMessageBox()
 void QMessageBox::addButton(QAbstractButton *button, ButtonRole role)
 {
    Q_D(QMessageBox);
-   if (!button) {
+
+   if (! button) {
       return;
    }
+
    removeButton(button);
    d->buttonBox->addButton(button, (QDialogButtonBox::ButtonRole)role);
    d->customButtonList.append(button);
@@ -602,9 +604,11 @@ void QMessageBox::addButton(QAbstractButton *button, ButtonRole role)
 QPushButton *QMessageBox::addButton(const QString &text, ButtonRole role)
 {
    Q_D(QMessageBox);
+
    QPushButton *pushButton = new QPushButton(text);
    addButton(pushButton, role);
    d->updateSize();
+
    return pushButton;
 }
 
@@ -612,23 +616,28 @@ QPushButton *QMessageBox::addButton(const QString &text, ButtonRole role)
 QPushButton *QMessageBox::addButton(StandardButton button)
 {
    Q_D(QMessageBox);
+
    QPushButton *pushButton = d->buttonBox->addButton((QDialogButtonBox::StandardButton)button);
    if (pushButton) {
       d->autoAddOkButton = false;
    }
+
    return pushButton;
 }
 
 void QMessageBox::removeButton(QAbstractButton *button)
 {
    Q_D(QMessageBox);
+
    d->customButtonList.removeAll(button);
    if (d->escapeButton == button) {
-      d->escapeButton = 0;
+      d->escapeButton = nullptr;
    }
+
    if (d->defaultButton == button) {
-      d->defaultButton = 0;
+      d->defaultButton = nullptr;
    }
+
    d->buttonBox->removeButton(button);
    d->updateSize();
 }
@@ -639,12 +648,14 @@ void QMessageBox::setStandardButtons(StandardButtons buttons)
    d->buttonBox->setStandardButtons(QDialogButtonBox::StandardButtons(int(buttons)));
 
    QList<QAbstractButton *> buttonList = d->buttonBox->buttons();
-   if (!buttonList.contains(d->escapeButton)) {
-      d->escapeButton = 0;
+   if (! buttonList.contains(d->escapeButton)) {
+      d->escapeButton = nullptr;
    }
+
    if (!buttonList.contains(d->defaultButton)) {
-      d->defaultButton = 0;
+      d->defaultButton = nullptr;
    }
+
    d->autoAddOkButton = false;
    d->updateSize();
 }
@@ -654,7 +665,6 @@ QMessageBox::StandardButtons QMessageBox::standardButtons() const
    Q_D(const QMessageBox);
    return QMessageBox::StandardButtons(int(d->buttonBox->standardButtons()));
 }
-
 
 QMessageBox::StandardButton QMessageBox::standardButton(QAbstractButton *button) const
 {
@@ -667,7 +677,6 @@ QAbstractButton *QMessageBox::button(StandardButton which) const
    Q_D(const QMessageBox);
    return d->buttonBox->button(QDialogButtonBox::StandardButton(which));
 }
-
 
 QAbstractButton *QMessageBox::escapeButton() const
 {
@@ -712,7 +721,7 @@ void QMessageBoxPrivate::detectEscapeButton()
    // if the message box has one RejectRole button, make it the escape button
    for (int i = 0; i < buttons.count(); i++) {
       if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::RejectRole) {
-         if (detectedEscapeButton) { // already detected!
+         if (detectedEscapeButton) { // already detected
             detectedEscapeButton = 0;
             break;
          }
@@ -747,14 +756,6 @@ QPushButton *QMessageBox::defaultButton() const
    return d->defaultButton;
 }
 
-/*!
-    \since 4.2
-
-    Sets the message box's \l{QPushButton::setDefault()}{default button}
-    to \a button.
-
-    \sa addButton(), QPushButton::setDefault()
-*/
 void QMessageBox::setDefaultButton(QPushButton *button)
 {
    Q_D(QMessageBox);

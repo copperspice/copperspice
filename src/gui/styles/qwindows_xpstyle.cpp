@@ -4027,7 +4027,7 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
                   rect = cmb->rect;
                   break;
 
-               case SC_ComboBoxArrow:   // BROOM - arrow test
+               case SC_ComboBoxArrow:   // emerald - arrow test
                   rect = QRect(xpos, y + qRound(QStyleHelper::dpiScaled(1)),
                              qRound(QStyleHelper::dpiScaled(16)), he - qRound(QStyleHelper::dpiScaled(2)));
                   break;

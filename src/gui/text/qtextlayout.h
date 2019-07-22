@@ -178,16 +178,17 @@ class Q_GUI_EXPORT QTextLayout
    QTextLayout(QTextEngine *e) : d(e) {}
    Q_DISABLE_COPY(QTextLayout)
 
+    QTextEngine *d;
+
    friend class QPainter;
 
    friend class QGraphicsSimpleTextItemPrivate;
    friend class QGraphicsSimpleTextItem;
 
    friend void qt_format_text(const QFont &font, const QRectF &_r, int tf, const QTextOption *, const QString &str,
-      QRectF *brect, int tabstops, int *tabarray, int tabarraylen, QPainter *painter);
-   QTextEngine *d;
-};
+                  QRectF *brect, int tabstops, int *tabarray, int tabarraylen, QPainter *painter);
 
+};
 
 class Q_GUI_EXPORT QTextLine
 {
@@ -224,11 +225,12 @@ class Q_GUI_EXPORT QTextLine
    qreal horizontalAdvance() const;
    QRectF naturalTextRect() const;
 
-   /* cursorPos gets set to the valid position */
+   // cursorPos gets set to the valid position
    qreal cursorToX(int *cursorPos, Edge edge = Leading) const;
    inline qreal cursorToX(int cursorPos, Edge edge = Leading) const {
       return cursorToX(&cursorPos, edge);
    }
+
    int xToCursor(qreal x, CursorPosition = CursorBetweenCharacters) const;
 
    void setLineWidth(qreal width);

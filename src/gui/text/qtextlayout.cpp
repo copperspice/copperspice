@@ -599,6 +599,7 @@ QList<QGlyphRun> QTextLayout::glyphRuns(int from, int length) const
                oldGlyphRun.setGlyphIndexes(indexes);
                oldGlyphRun.setPositions(positions);
                oldGlyphRun.setBoundingRect(boundingRect);
+
             } else {
                glyphRunHash[key] = glyphRun;
             }
@@ -692,13 +693,15 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
                region.addRect(clipIfValid(QRectF(fullLineRect.topLeft(), lineRect.bottomLeft()), clip));
             }
 
-         } else if (!selectionEndInLine && isLastLineInBlock
+         } else if (! selectionEndInLine && isLastLineInBlock
                   && !(d->option.flags() & QTextOption::ShowLineAndParagraphSeparators)) {
+
             region.addRect(clipIfValid(QRectF(lineRect.right(), lineRect.top(),
                      lineRect.height() / 4, lineRect.height()), clip));
          }
 
       }
+
       {
          const QPen oldPen = p->pen();
          const QBrush oldBrush = p->brush();
@@ -787,7 +790,7 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
       p->restore();
    }
 
-   if (!d->cacheGlyphs) {
+   if (! d->cacheGlyphs) {
       d->freeMemory();
    }
 }
@@ -804,7 +807,7 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
       return;
    }
 
-   if (!d->layoutData) {
+   if (! d->layoutData) {
       d->itemize();
    }
 

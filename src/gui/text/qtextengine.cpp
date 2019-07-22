@@ -107,7 +107,7 @@ class Itemizer
       generateScriptItems(start, length);
 
       if (m_items.isEmpty()) {
-         // the next loop won't work in that case
+         // the next loop will not work in that case
          return;
       }
 
@@ -133,7 +133,7 @@ class Itemizer
 
          if (m_analysis[i].bidiLevel == m_analysis[start].bidiLevel
             && m_analysis[i].flags == m_analysis[start].flags
-            && (m_analysis[i].script == m_analysis[start].script || m_string[i] == QLatin1Char('.'))
+            && (m_analysis[i].script == m_analysis[start].script || m_string[i] == QChar('.'))
             && m_analysis[i].flags < QScriptAnalysis::SpaceTabOrObject
             && i - start < MaxItemLength) {
             continue;
@@ -142,6 +142,7 @@ class Itemizer
          m_items.append(QScriptItem(start, m_analysis[start]));
          start = i;
       }
+
       m_items.append(QScriptItem(start, m_analysis[start]));
    }
 
@@ -1027,7 +1028,9 @@ void QTextEngine::shapeLine(const QScriptLine &line)
          shape(item);
       }
 
-      if (first && si.position != line.from) { // that means our x position has to be offset
+      if (first && si.position != line.from) {
+         // that means our x position has to be offset
+
          QGlyphLayout glyphs = shapedGlyphs(&si);
          Q_ASSERT(line.from > si.position);
 
@@ -1044,6 +1047,7 @@ void QTextEngine::shapeLine(const QScriptLine &line)
 void QTextEngine::shapeText(int item) const
 {
    Q_ASSERT(item < layoutData->items.size());
+
    QScriptItem &si = layoutData->items[item];
 
    if (si.num_glyphs) {
@@ -1157,6 +1161,7 @@ void QTextEngine::shapeText(int item) const
       // emerald - report shaping error
       return;
    }
+
    layoutData->used += si.num_glyphs;
 
    QGlyphLayout glyphs = shapedGlyphs(&si);
@@ -1869,6 +1874,7 @@ QFixed QTextEngine::width(int from, int len) const
          if (si->analysis.flags == QScriptAnalysis::Object) {
             w += si->width;
             continue;
+
          } else if (si->analysis.flags == QScriptAnalysis::Tab) {
             w += calculateTabWidth(i, w);
             continue;
@@ -2695,7 +2701,6 @@ int QTextEngine::formatIndex(const QScriptItem *si) const
    return it.value()->format;
 }
 
-
 QTextCharFormat QTextEngine::format(const QScriptItem *si) const
 {
    if (const QTextFormatCollection *collection = formatCollection()) {
@@ -3128,6 +3133,7 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
 
       for (int i = 0; i < tabArray.size(); ++i) {
          QFixed tab = QFixed::fromReal(tabArray[i].position) * dpiScale;
+
          if (tab > x) {  // this is the tab we need.
             QTextOption::Tab tabSpec = tabArray[i];
             int tabSectionEnd = layoutData->string.count();
@@ -3152,12 +3158,15 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
 
             if (tabSectionEnd > si.position) {
                QFixed length;
+
                // Calculate the length of text between this tab and the tabSectionEnd
                for (int i = item; i < layoutData->items.count(); i++) {
                   QScriptItem &item = layoutData->items[i];
+
                   if (item.position > tabSectionEnd || item.position <= si.position) {
                      continue;
                   }
+
                   shape(i); // first, lets make sure relevant text is already shaped
 
                   if (item.analysis.flags == QScriptAnalysis::Object) {
@@ -3541,6 +3550,7 @@ void QTextEngine::insertionPointsForLine(int lineNum, QVector<int> &insertionPoi
          for (int i = end - 1; i >= iterator.itemStart; --i) {
             insertionPoints.push_back(i);
          }
+
       } else {
          for (int i = iterator.itemStart; i < end; ++i) {
             insertionPoints.push_back(i);
@@ -3851,7 +3861,7 @@ glyph_metrics_t glyph_metrics_t::transformed(const QTransform &matrix) const
 
 QTextLineItemIterator::QTextLineItemIterator(QTextEngine *_eng, int _lineNum, const QPointF &pos,
    const QTextLayout::FormatRange *_selection)
-   : eng(_eng), line(eng->lines[_lineNum]), si(0), lineNum(_lineNum), lineEnd(line.from + line.length),
+   : eng(_eng), line(eng->lines[_lineNum]), si(nullptr), lineNum(_lineNum), lineEnd(line.from + line.length),
      firstItem(eng->findItem(line.from)), lastItem(eng->findItem(lineEnd - 1, firstItem)),
      nItems((firstItem >= 0 && lastItem >= firstItem) ? (lastItem - firstItem + 1) : 0),
      logicalItem(-1), item(-1), visualOrder(nItems), selection(_selection)
@@ -3876,8 +3886,9 @@ QScriptItem &QTextLineItemIterator::next()
    x += itemWidth;
 
    ++logicalItem;
-   item = visualOrder[logicalItem] + firstItem;
+   item       = visualOrder[logicalItem] + firstItem;
    itemLength = eng->length(item);
+
    si = &eng->layoutData->items[item];
 
    if (! si->num_glyphs) {
@@ -3903,7 +3914,7 @@ QScriptItem &QTextLineItemIterator::next()
 
    // show soft-hyphen at line-break
    if (si->position + itemLength >= lineEnd
-      && eng->layoutData->string.at(lineEnd - 1) == QChar::SoftHyphen) {
+         && eng->layoutData->string.at(lineEnd - 1) == QChar::SoftHyphen) {
       glyphs.attributes[glyphsEnd - 1].dontPrint = false;
    }
 

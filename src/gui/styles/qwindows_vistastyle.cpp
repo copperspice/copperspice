@@ -2297,7 +2297,7 @@ QRect QWindowsVistaStyle::subControlRect(ComplexControl control, const QStyleOpt
                   rect = cb->rect;
                   break;
 
-               case SC_ComboBoxArrow:    // BROOM - arrow test
+               case SC_ComboBoxArrow:    // emerald - arrow test
                   rect.setRect(xpos, y , arrowButtonWidth, he);
                   break;
 
@@ -2342,9 +2342,6 @@ QRect QWindowsVistaStyle::subControlRect(ComplexControl control, const QStyleOpt
 
             switch (subControl) {
                case SC_TitleBarLabel:
-
-
-// BROOM
 
                   // modified values trying to move the text label up 2 and to the right by 1
                   // rect = QRect(frameWidth + 2 * dpiScale, 0, width - (buttonWidth + frameWidth + 12 * dpiScale), height - 2 * dpiScale);

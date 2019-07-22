@@ -35,7 +35,7 @@
 #include <qplatform_theme.h>
 #include <qpushbutton.h>
 #include <qmenu.h>
-#include "qmessagebox.h"
+#include <qmessagebox.h>
 #include <qsizegrip.h>
 #include <qwhatsthis.h>
 
@@ -327,21 +327,6 @@ int QDialog::exec()
 
    return res;
 }
-
-
-/*!
-  Closes the dialog and sets its result code to \a r. If this dialog
-  is shown with exec(), done() causes the local event loop to finish,
-  and exec() to return \a r.
-
-  As with QWidget::close(), done() deletes the dialog if the
-  Qt::WA_DeleteOnClose flag is set. If the dialog is the application's
-  main widget, the application terminates. If the dialog is the
-  last window closed, the QApplication::lastWindowClosed() signal is
-  emitted.
-
-  \sa accept(), reject(), QApplication::activeWindow(), QApplication::quit()
-*/
 
 void QDialog::done(int r)
 {

@@ -63,7 +63,6 @@
 #include <qapplication_p.h>
 #include <qwidget_p.h>
 
-
 #define QGradient_StretchToDevice 0x10000000
 #define QPaintEngine_OpaqueBackground 0x40000000
 
@@ -95,9 +94,11 @@ static inline QGradient::CoordinateMode coordinateMode(const QBrush &brush)
       case Qt::RadialGradientPattern:
       case Qt::ConicalGradientPattern:
          return brush.gradient()->coordinateMode();
+
       default:
-         ;
+         break;
    }
+
    return QGradient::LogicalMode;
 }
 
@@ -1979,14 +1980,11 @@ const QMatrix &QPainter::worldMatrix() const
    return d->state->worldMatrix.toAffine();
 }
 
-
 // obsolete
 void QPainter::setMatrix(const QMatrix &matrix, bool combine)
 {
    setWorldTransform(QTransform(matrix), combine);
 }
-
-
 
 // obsolete
 const QMatrix &QPainter::matrix() const
@@ -1994,18 +1992,13 @@ const QMatrix &QPainter::matrix() const
    return worldMatrix();
 }
 
-
-
-
 // obsolete
 QMatrix QPainter::combinedMatrix() const
 {
    return combinedTransform().toAffine();
 }
 
-
 // obsolete
-
 const QMatrix &QPainter::deviceMatrix() const
 {
    Q_D(const QPainter);
@@ -2017,13 +2010,10 @@ const QMatrix &QPainter::deviceMatrix() const
 }
 
 // obsolete
-
 void QPainter::resetMatrix()
 {
    resetTransform();
 }
-
-
 
 void QPainter::setWorldMatrixEnabled(bool enable)
 {
@@ -2046,15 +2036,6 @@ void QPainter::setWorldMatrixEnabled(bool enable)
    d->updateMatrix();
 }
 
-/*!
-    \since 4.2
-
-    Returns true if world transformation is enabled; otherwise returns
-    false.
-
-    \sa setWorldMatrixEnabled(), worldTransform(), {Coordinate System}
-*/
-
 bool QPainter::worldMatrixEnabled() const
 {
    Q_D(const QPainter);
@@ -2066,14 +2047,12 @@ bool QPainter::worldMatrixEnabled() const
 }
 
 // obsolete
-
 void QPainter::setMatrixEnabled(bool enable)
 {
    setWorldMatrixEnabled(enable);
 }
 
 // obsolete
-
 bool QPainter::matrixEnabled() const
 {
    return worldMatrixEnabled();
@@ -2096,13 +2075,6 @@ void QPainter::scale(qreal sx, qreal sy)
    d->updateMatrix();
 }
 
-/*!
-    Shears the coordinate system by (\a{sh}, \a{sv}).
-
-    \sa setWorldTransform(), {QPainter#Coordinate Transformations}{Coordinate
-    Transformations}
-*/
-
 void QPainter::shear(qreal sh, qreal sv)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2122,8 +2094,6 @@ void QPainter::shear(qreal sh, qreal sv)
    d->updateMatrix();
 }
 
-
-
 void QPainter::rotate(qreal a)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2142,13 +2112,6 @@ void QPainter::rotate(qreal a)
    d->updateMatrix();
 }
 
-/*!
-    Translates the coordinate system by the given \a offset; i.e. the
-    given \a offset is added to points.
-
-    \sa setWorldTransform(), {QPainter#Coordinate Transformations}{Coordinate
-    Transformations}
-*/
 void QPainter::translate(const QPointF &offset)
 {
    qreal dx = offset.x();
@@ -2215,12 +2178,6 @@ void QPainter::setClipPath(const QPainterPath &path, Qt::ClipOperation op)
    d->updateState(d->state);
 }
 
-/*!
-    Draws the outline (strokes) the path \a path with the pen specified
-    by \a pen
-
-    \sa fillPath(), {QPainter#Drawing}{Drawing}
-*/
 void QPainter::strokePath(const QPainterPath &path, const QPen &pen)
 {
    Q_D(QPainter);
@@ -2255,7 +2212,6 @@ void QPainter::strokePath(const QPainterPath &path, const QPen &pen)
    setBrush(oldBrush);
 }
 
-
 void QPainter::fillPath(const QPainterPath &path, const QBrush &brush)
 {
    Q_D(QPainter);
@@ -2289,7 +2245,6 @@ void QPainter::fillPath(const QPainterPath &path, const QBrush &brush)
    setPen(oldPen);
    setBrush(oldBrush);
 }
-
 
 void QPainter::drawPath(const QPainterPath &path)
 {
@@ -2377,7 +2332,6 @@ void QPainter::drawRects(const QRectF *rects, int rectCount)
    }
 }
 
-
 void QPainter::drawRects(const QRect *rects, int rectCount)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2435,9 +2389,6 @@ void QPainter::drawRects(const QRect *rects, int rectCount)
       }
    }
 }
-
-
-
 
 void QPainter::drawPoints(const QPointF *points, int pointCount)
 {
@@ -2497,13 +2448,6 @@ void QPainter::drawPoints(const QPointF *points, int pointCount)
    }
 }
 
-/*!
-    \overload
-
-    Draws the first \a pointCount points in the array \a points using
-    the current pen's color.
-*/
-
 void QPainter::drawPoints(const QPoint *points, int pointCount)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2562,10 +2506,6 @@ void QPainter::drawPoints(const QPoint *points, int pointCount)
    }
 }
 
-
-
-
-
 void QPainter::setBackgroundMode(Qt::BGMode mode)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2591,11 +2531,6 @@ void QPainter::setBackgroundMode(Qt::BGMode mode)
    }
 }
 
-/*!
-    Returns the current background mode.
-
-    \sa setBackgroundMode(), {QPainter#Settings}{Settings}
-*/
 Qt::BGMode QPainter::backgroundMode() const
 {
    Q_D(const QPainter);
@@ -2605,14 +2540,6 @@ Qt::BGMode QPainter::backgroundMode() const
    }
    return d->state->bgMode;
 }
-
-
-/*!
-    \overload
-
-    Sets the painter's pen to have style Qt::SolidLine, width 0 and the
-    specified \a color.
-*/
 
 void QPainter::setPen(const QColor &color)
 {
@@ -3125,7 +3052,6 @@ void QPainter::drawLines(const QLine *lines, int lineCount)
    d->engine->drawLines(lines, lineCount);
 }
 
-
 void QPainter::drawLines(const QPointF *pointPairs, int lineCount)
 {
    Q_ASSERT(sizeof(QLineF) == 2 * sizeof(QPointF));
@@ -3133,21 +3059,12 @@ void QPainter::drawLines(const QPointF *pointPairs, int lineCount)
    drawLines((const QLineF *)pointPairs, lineCount);
 }
 
-/*!
-    \overload
-
-    Draws the first \a lineCount lines in the array \a pointPairs
-    using the current pen.
-*/
 void QPainter::drawLines(const QPoint *pointPairs, int lineCount)
 {
    Q_ASSERT(sizeof(QLine) == 2 * sizeof(QPoint));
 
    drawLines((const QLine *)pointPairs, lineCount);
 }
-
-
-
 
 void QPainter::drawPolyline(const QPointF *points, int pointCount)
 {
@@ -3187,12 +3104,6 @@ void QPainter::drawPolyline(const QPointF *points, int pointCount)
    }
 }
 
-/*!
-    \overload
-
-    Draws the polyline defined by the first \a pointCount points in \a
-    points using the current pen.
- */
 void QPainter::drawPolyline(const QPoint *points, int pointCount)
 {
 #ifdef QT_DEBUG_DRAW
@@ -3231,9 +3142,6 @@ void QPainter::drawPolyline(const QPoint *points, int pointCount)
    }
 }
 
-
-
-
 void QPainter::drawPolygon(const QPointF *points, int pointCount, Qt::FillRule fillRule)
 {
 #ifdef QT_DEBUG_DRAW
@@ -3271,11 +3179,6 @@ void QPainter::drawPolygon(const QPointF *points, int pointCount, Qt::FillRule f
    d->engine->drawPolygon(points, pointCount, QPaintEngine::PolygonDrawMode(fillRule));
 }
 
-/*! \overload
-
-    Draws the polygon defined by the first \a pointCount points in the
-    array \a points.
-*/
 void QPainter::drawPolygon(const QPoint *points, int pointCount, Qt::FillRule fillRule)
 {
 #ifdef QT_DEBUG_DRAW
@@ -3312,12 +3215,6 @@ void QPainter::drawPolygon(const QPoint *points, int pointCount, Qt::FillRule fi
 
    d->engine->drawPolygon(points, pointCount, QPaintEngine::PolygonDrawMode(fillRule));
 }
-
-
-
-
-
-
 
 void QPainter::drawConvexPolygon(const QPoint *points, int pointCount)
 {
@@ -3610,12 +3507,6 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
    }
 }
 
-
-
-
-
-
-
 void QPainter::drawImage(const QPointF &p, const QImage &image)
 {
    Q_D(QPainter);
@@ -3835,9 +3726,7 @@ void QPainter::drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun)
 }
 
 void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positions,
-   int glyphCount,
-   QFontEngine *fontEngine, bool overline, bool underline,
-   bool strikeOut)
+   int glyphCount, QFontEngine *fontEngine, bool overline, bool underline, bool strikeOut)
 {
    Q_Q(QPainter);
 
@@ -4458,9 +4347,9 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
    }
 
    const QPainter::RenderHints oldRenderHints = state->renderHints;
-   if (!(state->renderHints & QPainter::Antialiasing) && state->matrix.type() >= QTransform::TxScale) {
-      // draw antialias decoration (underline/overline/strikeout) with
-      // transformed text
+
+   if (! (state->renderHints & QPainter::Antialiasing) && state->matrix.type() >= QTransform::TxScale) {
+      // draw antialias decoration (underline/overline/strikeout) with transformed text
 
       bool aa = true;
       const QTransform &m = state->matrix;
@@ -4492,7 +4381,6 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
          q->setRenderHint(QPainter::Antialiasing, true);
       }
    }
-*/
 
    if (! extended) {
       updateState(state);
@@ -4578,8 +4466,10 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
 
       if (extended) {
          extended->drawTextItem(QPointF(x, y), ti2);
+
       } else {
          engine->drawTextItem(QPointF(x, y), ti2);
+
       }
 
       // reset the high byte for all glyphs
@@ -4589,8 +4479,10 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
       }
 
    } else {
+
       if (extended) {
          extended->drawTextItem(p, ti);
+
       } else {
          engine->drawTextItem(p, ti);
       }
@@ -4730,9 +4622,7 @@ void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPo
    d->engine->drawTiledPixmap(QRectF(x, y, r.width(), r.height()), pixmap, QPointF(sx, sy));
 }
 
-
 #ifndef QT_NO_PICTURE
-
 
 void QPainter::drawPicture(const QPointF &p, const QPicture &picture)
 {
@@ -4752,8 +4642,7 @@ void QPainter::drawPicture(const QPointF &p, const QPicture &picture)
    restore();
 }
 
-#endif // QT_NO_PICTURE
-
+#endif
 
 void QPainter::eraseRect(const QRectF &r)
 {
@@ -4769,7 +4658,6 @@ static inline bool needsResolving(const QBrush &brush)
             s == Qt::ConicalGradientPattern) &&
          brush.gradient()->coordinateMode() == QGradient::ObjectBoundingMode);
 }
-
 
 void QPainter::fillRect(const QRectF &r, const QBrush &brush)
 {
@@ -4803,13 +4691,6 @@ void QPainter::fillRect(const QRectF &r, const QBrush &brush)
    setPen(oldPen);
 }
 
-/*!
-    \fn void QPainter::fillRect(const QRect &rectangle, const QBrush &brush)
-    \overload
-
-    Fills the given \a rectangle with the specified \a brush.
-*/
-
 void QPainter::fillRect(const QRect &r, const QBrush &brush)
 {
    Q_D(QPainter);
@@ -4841,9 +4722,6 @@ void QPainter::fillRect(const QRect &r, const QBrush &brush)
    setBrush(oldBrush);
    setPen(oldPen);
 }
-
-
-
 
 void QPainter::fillRect(const QRect &r, const QColor &color)
 {
@@ -4895,16 +4773,6 @@ void QPainter::setRenderHint(RenderHint hint, bool on)
    setRenderHints(hint, on);
 }
 
-/*!
-    \since 4.2
-
-    Sets the given render \a hints on the painter if \a on is true;
-    otherwise clears the render hints.
-
-    \sa setRenderHint(), renderHints(), {QPainter#Rendering
-    Quality}{Rendering Quality}
-*/
-
 void QPainter::setRenderHints(RenderHints hints, bool on)
 {
    Q_D(QPainter);
@@ -4927,12 +4795,6 @@ void QPainter::setRenderHints(RenderHints hints, bool on)
    }
 }
 
-/*!
-    Returns a flag that specifies the rendering hints that are set for
-    this painter.
-
-    \sa testRenderHint(), {QPainter#Rendering Quality}{Rendering Quality}
-*/
 QPainter::RenderHints QPainter::renderHints() const
 {
    Q_D(const QPainter);
@@ -4944,7 +4806,6 @@ QPainter::RenderHints QPainter::renderHints() const
    return d->state->renderHints;
 }
 
-
 bool QPainter::viewTransformEnabled() const
 {
    Q_D(const QPainter);
@@ -4954,7 +4815,6 @@ bool QPainter::viewTransformEnabled() const
    }
    return d->state->VxF;
 }
-
 
 void QPainter::setWindow(const QRect &r)
 {
@@ -4980,12 +4840,6 @@ void QPainter::setWindow(const QRect &r)
    d->updateMatrix();
 }
 
-/*!
-    Returns the window rectangle.
-
-    \sa setWindow(), setViewTransformEnabled()
-*/
-
 QRect QPainter::window() const
 {
    Q_D(const QPainter);
@@ -4995,31 +4849,6 @@ QRect QPainter::window() const
    }
    return QRect(d->state->wx, d->state->wy, d->state->ww, d->state->wh);
 }
-
-/*!
-    \fn void QPainter::setViewport(const QRect &rectangle)
-
-    Sets the painter's viewport rectangle to the given \a rectangle,
-    and enables view transformations.
-
-    The viewport rectangle is part of the view transformation. The
-    viewport specifies the device coordinate system. Its sister, the
-    window(), specifies the logical coordinate system.
-
-    The default viewport rectangle is the same as the device's
-    rectangle.
-
-    \sa viewport(), viewTransformEnabled() {Coordinate
-    System#Window-Viewport Conversion}{Window-Viewport Conversion}
-*/
-
-/*!
-    \fn void QPainter::setViewport(int x, int y, int width, int height)
-    \overload
-
-    Sets the painter's viewport rectangle to be the rectangle
-    beginning at (\a x, \a y) with the given \a width and \a height.
-*/
 
 void QPainter::setViewport(const QRect &r)
 {
@@ -5045,12 +4874,6 @@ void QPainter::setViewport(const QRect &r)
    d->updateMatrix();
 }
 
-/*!
-    Returns the viewport rectangle.
-
-    \sa setViewport(), setViewTransformEnabled()
-*/
-
 QRect QPainter::viewport() const
 {
    Q_D(const QPainter);
@@ -5060,7 +4883,6 @@ QRect QPainter::viewport() const
    }
    return QRect(d->state->vx, d->state->vy, d->state->vw, d->state->vh);
 }
-
 
 void QPainter::setViewTransformEnabled(bool enable)
 {
@@ -5430,7 +5252,6 @@ void QPainter::setLayoutDirection(Qt::LayoutDirection direction)
    }
 }
 
-
 Qt::LayoutDirection QPainter::layoutDirection() const
 {
    Q_D(const QPainter);
@@ -5552,13 +5373,6 @@ Qt::ClipOperation QPaintEngineState::clipOperation() const
    return static_cast<const QPainterState *>(this)->clipOperation;
 }
 
-/*!
-    \since 4.3
-
-    Returns whether the coordinate of the fill have been specified
-    as bounded by the current rendering operation and have to be
-    resolved (about the currently rendered primitive).
-*/
 bool QPaintEngineState::brushNeedsResolving() const
 {
    const QBrush &brush = static_cast<const QPainterState *>(this)->brush;
@@ -5582,116 +5396,40 @@ QPainterPath QPaintEngineState::clipPath() const
    return static_cast<const QPainterState *>(this)->clipPath;
 }
 
-/*!
-    Returns whether clipping is enabled or not in the current paint
-    engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyClipEnabled
-    flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
 bool QPaintEngineState::isClipEnabled() const
 {
    return static_cast<const QPainterState *>(this)->clipEnabled;
 }
-
-/*!
-    Returns the render hints in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyHints
-    flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 QPainter::RenderHints QPaintEngineState::renderHints() const
 {
    return static_cast<const QPainterState *>(this)->renderHints;
 }
 
-/*!
-    Returns the composition mode in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyCompositionMode
-    flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
 QPainter::CompositionMode QPaintEngineState::compositionMode() const
 {
    return static_cast<const QPainterState *>(this)->composition_mode;
 }
-
-
-/*!
-    Returns a pointer to the painter currently updating the paint
-    engine.
-*/
 
 QPainter *QPaintEngineState::painter() const
 {
    return static_cast<const QPainterState *>(this)->painter;
 }
 
-
-/*!
-    \since 4.2
-
-    Returns the opacity in the current paint engine state.
-*/
-
 qreal QPaintEngineState::opacity() const
 {
    return static_cast<const QPainterState *>(this)->opacity;
 }
-
-/*!
-    \since 4.3
-
-    Sets the world transformation matrix.
-    If \a combine is true, the specified \a transform is combined with
-    the current matrix; otherwise it replaces the current matrix.
-
-    \sa transform() setWorldTransform()
-*/
 
 void QPainter::setTransform(const QTransform &transform, bool combine )
 {
    setWorldTransform(transform, combine);
 }
 
-/*!
-    Returns the world transformation matrix.
-
-    \sa worldTransform()
-*/
-
 const QTransform &QPainter::transform() const
 {
    return worldTransform();
 }
-
-
-/*!
-    Returns the matrix that transforms from logical coordinates to
-    device coordinates of the platform dependent paint device.
-
-    This function is \e only needed when using platform painting
-    commands on the platform dependent handle (Qt::HANDLE), and the
-    platform does not do transformations nativly.
-
-    The QPaintEngine::PaintEngineFeature enum can be queried to
-    determine whether the platform performs the transformations or
-    not.
-
-    \sa worldTransform(), QPaintEngine::hasFeature(),
-*/
 
 const QTransform &QPainter::deviceTransform() const
 {
@@ -5702,15 +5440,6 @@ const QTransform &QPainter::deviceTransform() const
    }
    return d->state->matrix;
 }
-
-
-/*!
-    Resets any transformations that were made using translate(),
-    scale(), shear(), rotate(), setWorldTransform(), setViewport()
-    and setWindow().
-
-    \sa {Coordinate Transformations}
-*/
 
 void QPainter::resetTransform()
 {
@@ -5741,19 +5470,11 @@ void QPainter::resetTransform()
    }
 }
 
-/*!
-    Sets the world transformation matrix.
-    If \a combine is true, the specified \a matrix is combined with the current matrix;
-    otherwise it replaces the current matrix.
-
-    \sa transform(), setTransform()
-*/
-
 void QPainter::setWorldTransform(const QTransform &matrix, bool combine )
 {
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setWorldTransform: Painter not active");
       return;
    }
@@ -5768,10 +5489,6 @@ void QPainter::setWorldTransform(const QTransform &matrix, bool combine )
    d->updateMatrix();
 }
 
-/*!
-    Returns the world transformation matrix.
-*/
-
 const QTransform &QPainter::worldTransform() const
 {
    Q_D(const QPainter);
@@ -5781,13 +5498,6 @@ const QTransform &QPainter::worldTransform() const
    }
    return d->state->worldMatrix;
 }
-
-/*!
-    Returns the transformation matrix combining the current
-    window/viewport and world transformation.
-
-    \sa setWorldTransform(), setWindow(), setViewport()
-*/
 
 QTransform QPainter::combinedTransform() const
 {
@@ -5800,7 +5510,6 @@ QTransform QPainter::combinedTransform() const
 
    return d->state->worldMatrix * d->viewTransform() * d->hidpiScaleTransform();
 }
-
 
 void QPainter::drawPixmapFragments(const PixmapFragment *fragments, int fragmentCount,
    const QPixmap &pixmap, PixmapFragmentHints hints)
@@ -5853,7 +5562,6 @@ void QPainter::drawPixmapFragments(const PixmapFragment *fragments, int fragment
    }
 }
 
-
 QPainter::PixmapFragment QPainter::PixmapFragment::create(const QPointF &pos, const QRectF &sourceRect,
    qreal scaleX, qreal scaleY, qreal rotation,
    qreal opacity)
@@ -5863,7 +5571,6 @@ QPainter::PixmapFragment QPainter::PixmapFragment::create(const QPointF &pos, co
                   };
    return fragment;
 }
-
 
 void qt_draw_helper(QPainterPrivate *p, const QPainterPath &path, QPainterPrivate::DrawOperation operation)
 {

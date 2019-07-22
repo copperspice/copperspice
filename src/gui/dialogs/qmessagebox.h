@@ -26,7 +26,6 @@
 
 #include <qdialog.h>
 
-
 #ifndef QT_NO_MESSAGEBOX
 
 class QLabel;
@@ -66,16 +65,16 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
  public:
    enum Icon {
-      NoIcon = 0,
+      NoIcon   = 0,
       Information = 1,
-      Warning = 2,
+      Warning  = 2,
       Critical = 3,
       Question = 4
    };
 
    enum ButtonRole {
       // keep QDialogButtonBox::ButtonRole, QMessageBox::ButtonRole, QPlatformDialogHelper ALL in sync
-      InvalidRole = 0,
+      InvalidRole = -1,
       AcceptRole,
       RejectRole,
       DestructiveRole,
