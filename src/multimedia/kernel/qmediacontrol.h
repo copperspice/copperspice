@@ -47,13 +47,4 @@ class Q_MULTIMEDIA_EXPORT QMediaControl : public QObject
    Q_DECLARE_PRIVATE(QMediaControl)
 };
 
-template <typename T>
-const char *qmediacontrol_iid()
-{
-   return 0;
-}
-
-#define Q_MEDIA_DECLARE_CONTROL(Class, IId) \
-    template <> inline const char *qmediacontrol_iid<Class *>() { return IId; }
-
 #endif
