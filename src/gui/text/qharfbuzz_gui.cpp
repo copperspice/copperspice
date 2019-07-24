@@ -42,11 +42,13 @@ static hb_bool_t cs_font_get_glyph(hb_font_t *font, void *font_data, hb_codepoin
 static hb_bool_t cs_font_get_nominal_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,
       hb_codepoint_t *glyph, void *unused)
 {
+   return false;
 }
 
 static hb_bool_t cs_font_get_variation_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,
       hb_codepoint_t variation_selector, hb_codepoint_t *glyph, void *unused)
 {
+   return false;
 }
 
 static hb_position_t cs_font_get_glyph_h_advance(hb_font_t *font, void *font_data, hb_codepoint_t glyph, void *)
