@@ -133,7 +133,7 @@ static const char *const filedialog_end_xpm[] = {
 };
 
 /* XPM */
-static const char *const qt_menu_xpm[] = {
+static const char *const cs_menu_xpm[] = {
    "16 16 72 1",
    "  c None",
    ". c #65AF36",
