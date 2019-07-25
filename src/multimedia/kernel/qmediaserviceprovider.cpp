@@ -196,14 +196,18 @@ class QPluginServiceProvider : public QMediaServiceProvider
       const QSet<QString> keySet = factoryObj->keySet();
 
       for (QString tmpKey : keySet)  {
+         // may want to optimize, only load the plugin when the keys match
 
-         for (QLibraryHandle *handle : factoryObj->librarySet(tmpKey) )  {
-            QObject *obj = factoryObj->instance(handle);
+         if (tmpKey == key) {
 
-            QMediaServiceProviderPlugin *plugin = dynamic_cast<QMediaServiceProviderPlugin *>(obj);
+            for (QLibraryHandle *handle : factoryObj->librarySet(tmpKey) )  {
+               QObject *obj = factoryObj->instance(handle);
 
-            if (plugin) {
-               plugins.append(plugin);
+               QMediaServiceProviderPlugin *plugin = dynamic_cast<QMediaServiceProviderPlugin *>(obj);
+
+               if (plugin) {
+                  plugins.append(plugin);
+               }
             }
          }
 
@@ -602,7 +606,10 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
 };
 
-Q_GLOBAL_STATIC(QPluginServiceProvider, pluginProvider);
+QPluginServiceProvider *pluginProvider() {
+   static QPluginServiceProvider retval;
+   return &retval;
+}
 
 QMediaServiceProviderHint::Features QMediaServiceProvider::supportedFeatures(const QMediaService *service) const
 {
