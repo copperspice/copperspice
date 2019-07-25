@@ -26,14 +26,14 @@
 
 #include <qdialog.h>
 #include <QElapsedTimer>
+#include <QShortcut>
 #ifndef QT_NO_PROGRESSDIALOG
 
 class QLabel;
 class QProgressBar;
 class QPushButton;
-class QShortcut;
 class QTimer;
-
+class QVBoxLayout;
 
 class Q_GUI_EXPORT QProgressDialog : public QDialog
 {
@@ -76,7 +76,7 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    void setBar(QProgressBar *bar);
 
    void setCancelButton(QPushButton *button);
-
+   void setCancelButtonCentered(bool value = true);
 
    QSize sizeHint() const override;
 
@@ -125,7 +125,6 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    GUI_CS_SIGNAL_2(canceled)
 
  protected:
-   void resizeEvent(QResizeEvent *event) override;
    void closeEvent(QCloseEvent *event) override;
    void changeEvent(QEvent *event) override;
    void showEvent(QShowEvent *event) override;
@@ -140,41 +139,38 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    GUI_CS_SLOT_2(disconnectOnClose)
 
    void init(const QString &labelText, const QString &cancelText, int min, int max);
-   void layout();
 
-   void adoptChildWidget(QWidget *c);
    void ensureSizeIsAtLeastSizeHint();
-
+   void setCancelButtonAlignment();
    void retranslateStrings();
 
    QLabel *m_label;
    QProgressBar *m_progressBar;
    QPushButton *m_cancelButton;
+   QVBoxLayout *m_layout;
 
    QTimer *forceTimer;
-   bool shown_once;
-   bool cancellation_flag;
-   bool setValue_called;
    QElapsedTimer starttime;
 
 #ifndef QT_NO_CURSOR
    QCursor parentCursor;
 #endif
 
-   int  showTime;
-   bool m_autoClose;
-   bool m_autoReset;
-   bool forceHide;
-
 #ifndef QT_NO_SHORTCUT
    QShortcut *escapeShortcut;
 #endif
-
+   int  showTime;
+   bool shown_once;
+   bool cancellation_flag;
+   bool setValue_called;
+   bool m_autoClose;
+   bool m_autoReset;
+   bool forceHide;
    bool useDefaultCancelText;
+   bool m_centerCancelPB;
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
 };
-
 
 #endif // QT_NO_PROGRESSDIALOG
 

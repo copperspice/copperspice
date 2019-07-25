@@ -36,8 +36,8 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qshortcut.h>
-#include <QTimer>
-#include <QVBoxLayout>
+#include <qtimer.h>
+#include <qvboxlayout.h>
 
 #include <qdialog_p.h>
 
@@ -45,10 +45,13 @@
 
 // If the operation is expected to take this long (as predicted by progress time),
 // show the progress dialog
-static const int defaultShowTime = 4000;
+static const int defaultShowTime = 1500;
 
 // wait at least the minWaitTime long before attempting to make a prediction
 static const int minWaitTime = 50;
+static const int LABEL_INDEX         = 0;
+static const int PROGRESS_BAR_INDEX  = 1;
+static const int CANCEL_BUTTON_INDEX = 2;
 
 QProgressDialog::QProgressDialog(QWidget *parent, Qt::WindowFlags f)
    : QDialog(parent, f)
@@ -61,6 +64,7 @@ QProgressDialog::QProgressDialog(const QString &labelText, const QString &cancel
    int minimum, int maximum, QWidget *parent, Qt::WindowFlags f)
    : QDialog(parent, f)
 {
+   useDefaultCancelText = false;
    init(labelText, cancelButtonText, minimum, maximum);
 }
 
@@ -68,13 +72,15 @@ QProgressDialog::~QProgressDialog()
 {
 }
 
-void QProgressDialog::init(const QString &labelText, const QString &cancelText, int min, int max)
+void QProgressDialog::init(const QString &labelText, const QString &cancelButtonText, int min, int max)
 {
    m_autoClose       = true;
    m_autoReset       = true;
    forceHide         = false;
    cancellation_flag = false;
    shown_once        = false;
+
+   m_centerCancelPB  = false;
 
    //
    m_label = new QLabel(labelText, this);
@@ -86,15 +92,28 @@ void QProgressDialog::init(const QString &labelText, const QString &cancelText, 
    m_progressBar->setRange(min, max);
    m_progressBar->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
+   m_cancelButton =  new QPushButton();
+   m_centerCancelPB = style()->styleHint(QStyle::SH_ProgressDialog_CenterCancelButton, 0, this);
    if (useDefaultCancelText) {
       retranslateStrings();
 
    } else {
-      setCancelButtonText(cancelText);
+      setCancelButtonText(cancelButtonText);
 
    }
 
+   connect(m_cancelButton, SIGNAL(clicked()),  this, SLOT(canceled()));
    QObject::connect(this,  SIGNAL(canceled()), this, SLOT(cancel()));
+
+   m_layout = new QVBoxLayout();
+   m_layout->addWidget(m_label);
+   m_layout->addWidget(m_progressBar);
+   m_layout->addWidget(m_cancelButton);
+   m_layout->setSpacing(9);
+   setCancelButtonAlignment();
+
+   setWindowTitle(tr("Progress Bar"));
+   setLayout(m_layout);
 
    starttime.start();
 
@@ -111,54 +130,6 @@ void QProgressDialog::cancel()
 
    forceHide = false;
    cancellation_flag = true;
-}
-
-void QProgressDialog::layout()
-{
-   int sp  = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-   int mtb = style()->pixelMetric(QStyle::PM_DefaultTopLevelMargin);
-   int mlr = qMin(width() / 10, mtb);
-
-   const bool centered = bool(style()->styleHint(QStyle::SH_ProgressDialog_CenterCancelButton, 0, this));
-
-   int additionalSpacing = 0;
-   QSize cs = m_cancelButton ? m_cancelButton->sizeHint() : QSize(0, 0);
-   QSize bh = m_progressBar->sizeHint();
-   int cspc;
-   int lh = 0;
-
-   // Find spacing and sizes that fit.  It is important that a progress
-   // dialog can be made very small if the user demands it so.
-   for (int attempt = 5; attempt--;) {
-      cspc = m_cancelButton ? cs.height() + sp : 0;
-      lh = qMax(0, height() - mtb - bh.height() - sp - cspc);
-
-      if (lh < height() / 4) {
-         // Getting cramped
-         sp  /= 2;
-         mtb /= 2;
-
-         if (m_cancelButton) {
-            cs.setHeight(qMax(4, cs.height() - sp - 2));
-         }
-         bh.setHeight(qMax(4, bh.height() - sp - 1));
-
-      } else {
-         break;
-      }
-   }
-
-   if (m_cancelButton) {
-      m_cancelButton->setGeometry(
-         centered ? width() / 2 - cs.width() / 2 : width() - mlr - cs.width(),
-         height() - mtb - cs.height(), cs.width(), cs.height());
-   }
-
-   if (m_label) {
-      m_label->setGeometry(mlr, additionalSpacing, width() - mlr * 2, lh);
-   }
-
-   m_progressBar->setGeometry(mlr, lh + sp + additionalSpacing, width() - mlr * 2, bh.height());
 }
 
 void QProgressDialog::disconnectOnClose()
@@ -179,15 +150,6 @@ QString QProgressDialog::labelText() const
 
    return QString();
 }
-
-void QProgressDialog::setLabelText(const QString &text)
-{
-   if (m_label) {
-      m_label->setText(text);
-      ensureSizeIsAtLeastSizeHint();
-   }
-}
-
 void QProgressDialog::reset()
 {
 
@@ -211,7 +173,7 @@ void QProgressDialog::reset()
    forceTimer->stop();
 
    /*
-       we could disconnect the user slot provided to open() here but unfortunately reset() is
+       could disconnect the user slot provided to open() here but unfortunately reset() is
        usually called before the slot has been invoked.
        reset() is itself invoked when canceled() is emitted.
    */
@@ -242,6 +204,7 @@ void QProgressDialog::setCancelButton(QPushButton *newButton)
    m_cancelButton = newButton;
 
    if (m_cancelButton) {
+      m_layout->insertWidget(CANCEL_BUTTON_INDEX, m_cancelButton);
       connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(canceled()));
 
 #ifndef QT_NO_SHORTCUT
@@ -257,9 +220,33 @@ void QProgressDialog::setCancelButton(QPushButton *newButton)
 
    }
 
-   adoptChildWidget(newButton);
+   if (m_cancelButton) {
+      m_cancelButton->show();
+   }
 }
 
+void QProgressDialog::setCancelButtonAlignment()
+{
+   Qt::Alignment alignPB;
+
+   if (m_centerCancelPB) {
+      alignPB = Qt::AlignHCenter;
+
+   }  else {
+      alignPB = Qt::AlignRight;
+
+   }
+
+   if (m_cancelButton) {
+      m_layout->itemAt(CANCEL_BUTTON_INDEX)->setAlignment(alignPB);
+   }
+}
+
+void QProgressDialog::setCancelButtonCentered(bool value)
+{
+   m_centerCancelPB = value;
+   setCancelButtonAlignment();
+}
 void QProgressDialog::setLabel(QLabel *newLabel)
 {
    if (newLabel == m_label) {
@@ -273,13 +260,14 @@ void QProgressDialog::setLabel(QLabel *newLabel)
    delete m_label;
    m_label = newLabel;
 
-   adoptChildWidget(newLabel);
+   if (m_label) {
+      m_layout->insertWidget(LABEL_INDEX, m_label);
+   }
 }
 
 void QProgressDialog::setCancelButtonText(const QString &cancelButtonText)
 {
    useDefaultCancelText = false;
-   setCancelButtonText(cancelButtonText);
 
    if (! cancelButtonText.isEmpty()) {
 
@@ -306,7 +294,6 @@ void QProgressDialog::setBar(QProgressBar *newBar)
       return;
    }
 
-
    if (newBar == m_progressBar) {
       qWarning("QProgressDialog::setBar: Attempt to set the same progress bar twice");
       return;
@@ -315,26 +302,18 @@ void QProgressDialog::setBar(QProgressBar *newBar)
    delete m_progressBar;
    m_progressBar = newBar;
 
-   adoptChildWidget(newBar);
+   if ( m_progressBar) {
+      m_layout->insertWidget(PROGRESS_BAR_INDEX, m_progressBar);
+   }
 }
 
-void QProgressDialog::adoptChildWidget(QWidget *control)
+void QProgressDialog::setLabelText(const QString &text)
 {
-   if (control) {
-      if (control->parentWidget() == this)  {
-         control->hide();
-      } else {
-         control->setParent(this, 0);
-      }
-   }
-
-   ensureSizeIsAtLeastSizeHint();
-
-   if (control) {
-      control->show();
+   if (m_label) {
+      m_label->setText(text);
+      ensureSizeIsAtLeastSizeHint();
    }
 }
-
 QSize QProgressDialog::sizeHint() const
 {
    QSize sh = m_label ? m_label->sizeHint() : QSize(0, 0);
@@ -362,11 +341,6 @@ void QProgressDialog::ensureSizeIsAtLeastSizeHint()
    resize(size);
 }
 
-bool QProgressDialog::wasCanceled() const
-{
-   return cancellation_flag;
-}
-
 int QProgressDialog::maximum() const
 {
    return m_progressBar->maximum();
@@ -392,6 +366,10 @@ void QProgressDialog::setRange(int minimum, int maximum)
    m_progressBar->setRange(minimum, maximum);
 }
 
+bool QProgressDialog::wasCanceled() const
+{
+   return cancellation_flag;
+}
 
 int QProgressDialog::value() const
 {
@@ -413,7 +391,7 @@ void QProgressDialog::setValue(int progress)
 
    } else {
 
-      if ((!setValue_called && progress == 0) || progress == minimum()) {
+      if ((! setValue_called && progress == 0) || progress == minimum()) {
          starttime.start();
          forceTimer->start(showTime);
          setValue_called = true;
@@ -463,20 +441,10 @@ void QProgressDialog::setValue(int progress)
       reset();
    }
 }
-
-void QProgressDialog::resizeEvent(QResizeEvent *)
-{
-   layout();
-}
-
 void QProgressDialog::changeEvent(QEvent *ev)
 {
-   if (ev->type() == QEvent::StyleChange) {
-      layout();
-
-   } else if (ev->type() == QEvent::LanguageChange) {
+   if (ev->type() == QEvent::LanguageChange) {
       retranslateStrings();
-
    }
 
    QDialog::changeEvent(ev);
