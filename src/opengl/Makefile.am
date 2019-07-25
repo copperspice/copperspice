@@ -83,11 +83,14 @@ lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 
 if OSTYPE_WIN
 lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK -DQT_NO_STYLE_WINDOWSVISTA -DQT_BUILD_OPENGL_LIB
-lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -lopengl32 -lgdi32 -lkernel32 -luser32
+lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS += -lopengl32 -lgdi32 -lkernel32 -luser32
 endif
 
 if OSTYPE_DARWIN
-lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -framework AppKit -framework Carbon -framework OpenGL
+lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS += \
+	-framework AppKit \
+	-framework Carbon \
+	-framework OpenGL
 endif
 
 noinst_HEADERS+=$(patsubst %,src/opengl/%,$(OPENGL_INCLUDES)) \
@@ -98,7 +101,7 @@ OPENGL_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtOpenGL/%,$(OPENGL_INCLUDES)) \
 	$(patsubst %,include/QtOpenGL/%,$(OPENGL_PUBLIC_INCLUDES)) \
 	$(patsubst %,privateinclude/QtOpenGL/private/%,$(OPENGL_ROOT_PRIVATE_INCLUDES)) \
-   $(patsubst %,privateinclude/QtOpenGL/private/%,$(OPENGL_GL2_PRIVATE_INCLUDES))  \
+	$(patsubst %,privateinclude/QtOpenGL/private/%,$(OPENGL_GL2_PRIVATE_INCLUDES))  \
 	include/QtOpenGL privateinclude/QtOpenGL/private
 
 BUILT_SOURCES+=.opengl-header-deps.mk

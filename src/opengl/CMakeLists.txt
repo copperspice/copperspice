@@ -140,6 +140,7 @@ set_target_properties(CsOpenGL${BUILD_ABI} PROPERTIES
 )
 
 macro_generate_resources("${OPENGL_SOURCES}")
+
 macro_generate_package(
     CsOpenGL${BUILD_ABI}
     QtOpenGL
