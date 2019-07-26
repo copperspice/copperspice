@@ -479,7 +479,7 @@ QRectF QTextLayout::boundingRect() const
       QFixed lineWidth = si.width < QFIXED_MAX ? qMax(si.width, si.textWidth) : si.textWidth;
       xmax = qMax(xmax, si.x + lineWidth);
 
-      // ### shouldn't the ascent be used in ymin?
+      // ### should the ascent be used in ymin?
       ymax = qMax(ymax, si.y + si.height().ceil());
    }
 
@@ -589,11 +589,11 @@ QList<QGlyphRun> QTextLayout::glyphRuns(int from, int length) const
             if (glyphRunHash.contains(key)) {
                QGlyphRun &oldGlyphRun = glyphRunHash[key];
 
-               QVector<quint32> indexes = oldGlyphRun.glyphIndexes();
+               QVector<quint32> indexes   = oldGlyphRun.glyphIndexes();
                QVector<QPointF> positions = oldGlyphRun.positions();
                QRectF boundingRect = oldGlyphRun.boundingRect();
 
-               indexes += glyphRun.glyphIndexes();
+               indexes   += glyphRun.glyphIndexes();
                positions += glyphRun.positions();
                boundingRect = boundingRect.united(glyphRun.boundingRect());
 
@@ -880,7 +880,6 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
    return;
 }
 
-
 QRectF QTextLine::rect() const
 {
    const QScriptLine &sl = m_textEngine->lines[index];
@@ -1034,8 +1033,7 @@ struct LineBreakHelper {
    bool checkFullOtherwiseExtend(QScriptLine &line);
 
    QFixed calculateNewWidth(const QScriptLine &line) const {
-      return line.textWidth + tmpData.textWidth + spaceData.textWidth + softHyphenWidth
-         + negativeRightBearing();
+      return line.textWidth + tmpData.textWidth + spaceData.textWidth + softHyphenWidth + negativeRightBearing();
    }
 
    inline glyph_t currentGlyph() const {
@@ -1051,7 +1049,6 @@ struct LineBreakHelper {
       if (m_currentPosition > 0 && (logClusters[m_currentPosition - 1] < glyphs.numGlyphs)) {
          // needed to calculate right bearing later
          previousGlyph = currentGlyph();
-
       }
    }
 
@@ -1061,10 +1058,11 @@ struct LineBreakHelper {
       rightBearing = qMin(QFixed::fromReal(rb), QFixed(0));
    }
 
-   inline void calculateRightBearing( ) {
+   inline void calculateRightBearing() {
       if (m_currentPosition <= 0) {
          return;
       }
+
       calculateRightBearing(currentGlyph());
    }
 
@@ -1090,10 +1088,11 @@ struct LineBreakHelper {
 };
 
 const QFixed LineBreakHelper::RightBearingNotCalculated = QFixed(1);
+
 inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 {
 #if defined(CS_SHOW_DEBUG)
-   qDebug("Possible break width %f, spacew = %f", tmpData.textWidth.toReal(), spaceData.textWidth.toReal());
+   qDebug("Possible break width %f, space w = %f", tmpData.textWidth.toReal(), spaceData.textWidth.toReal());
 #endif
 
    QFixed newWidth = calculateNewWidth(line);
@@ -1106,10 +1105,10 @@ inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
    line.textWidth += spaceData.textWidth;
 
    line.length += spaceData.length;
-   tmpData.textWidth = 0;
-   tmpData.length = 0;
+   tmpData.textWidth   = 0;
+   tmpData.length      = 0;
    spaceData.textWidth = 0;
-   spaceData.length = 0;
+   spaceData.length    = 0;
 
    return false;
 }
@@ -1207,6 +1206,7 @@ void QTextLine::layout_helper(int maxGlyphs)
          }
 
          lbh.m_currentPosition = qMax(line.from, current.position);
+
          end = current.position + m_textEngine->length(item);
 
          lbh.glyphs = m_textEngine->shapedGlyphs(&current);
@@ -1224,7 +1224,7 @@ void QTextLine::layout_helper(int maxGlyphs)
       lbh.tmpData.leading = qMax(lbh.tmpData.leading + lbh.tmpData.ascent,
             current.leading + current.ascent) - qMax(lbh.tmpData.ascent, current.ascent);
 
-      lbh.tmpData.ascent  = qMax(lbh.tmpData.ascent, current.ascent);
+      lbh.tmpData.ascent  = qMax(lbh.tmpData.ascent,  current.ascent);
       lbh.tmpData.descent = qMax(lbh.tmpData.descent, current.descent);
 
       if (current.analysis.flags == QScriptAnalysis::Tab &&
@@ -1261,7 +1261,7 @@ void QTextLine::layout_helper(int maxGlyphs)
          lbh.whiteSpaceOrObject = true;
 
          // if the line consists only of the line separator make sure there is a sane height
-         if (! line.length && !lbh.tmpData.length) {
+         if (! line.length && ! lbh.tmpData.length) {
             line.setDefaultHeight(m_textEngine);
          }
 
@@ -1272,6 +1272,7 @@ void QTextLine::layout_helper(int maxGlyphs)
 
             addNextCluster(lbh.m_currentPosition, end, lbh.tmpData, lbh.glyphCount,
                current, lbh.glyphs, lbh.logClusters);
+
          } else {
             lbh.tmpData.length++;
             lbh.calculateRightBearingForPreviousGlyph();
@@ -1294,6 +1295,7 @@ void QTextLine::layout_helper(int maxGlyphs)
 
          newItem = item + 1;
          ++lbh.glyphCount;
+
          if (lbh.checkFullOtherwiseExtend(line)) {
             goto found;
          }
@@ -1318,6 +1320,7 @@ void QTextLine::layout_helper(int maxGlyphs)
       } else {
          lbh.whiteSpaceOrObject = false;
          bool sb_or_ws = false;
+
          lbh.saveCurrentGlyph();
 
          do {
@@ -1327,11 +1330,6 @@ void QTextLine::layout_helper(int maxGlyphs)
             bool isBreakableSpace = lbh.m_currentPosition < m_textEngine->layoutData->string.length()
                && attributes[lbh.m_currentPosition].whiteSpace
                && m_textEngine->layoutData->string.at(lbh.m_currentPosition).decompositionTag() != QChar::NoBreak;
-            // This is a hack to fix a regression caused by the introduction of the
-            // whitespace flag to non-breakable spaces and will cause the non-breakable
-            // spaces to behave as in previous versions in the line breaking algorithm.
-            // The line breaks do not currently follow the Unicode specs, but fixing this would
-            // require refactoring the code and would cause behavioral regressions.
 
             if (lbh.m_currentPosition >= m_textEngine->layoutData->string.length()
                   || isBreakableSpace || attributes[lbh.m_currentPosition].lineBreak) {
@@ -1371,14 +1369,26 @@ void QTextLine::layout_helper(int maxGlyphs)
             }
          }
 
-         // The actual width of the text needs to take the right bearing into account. The right
-         // bearing is left-ward, which means that if the rightmost pixel is to the right of the
-         // advance of the glyph, the bearing will be negative. We flip the sign for the code to
-         // be more readable. Logic borrowed from qfontmetrics.cpp. We ignore the right bearing if
-         // the minimum negative bearing is too little to expand the text beyond the edge.
-
          if (sb_or_ws | breakany) {
+            // To compute the final width of the text we need to take negative right bearing
+            // into account (negative right bearing means the glyph has pixel data past the
+            // advance length). Note that the negative right bearing is an absolute number,
+            // so that we can apply it to the width using straight forward addition.
+
+            // Store previous right bearing (for the already accepted glyph) in case we
+            // end up breaking due to the current glyph being too wide.
+
             QFixed previousRightBearing = lbh.rightBearing;
+
+            // We skip calculating the right bearing if the minimum negative bearing is too
+            // small to possibly expand the text beyond the edge. Note that this optimization
+            // will in some cases fail, as the minimum right bearing reported by the font
+            // engine may not cover all the glyphs in the font. The result is that we think
+            // we don't need to break at the current glyph (because the right bearing is 0),
+            // and when we then end up breaking on the next glyph we compute the right bearing
+            // and end up with a line width that is slightly larger width than what was requested.
+            // Unfortunately we can't remove this optimization as it will slow down text
+            // layouting significantly, so we accept the slight correctnes issue.
 
             if ((lbh.calculateNewWidth(line) + qAbs(lbh.minimumRightBearing)) > line.width) {
                lbh.calculateRightBearing();
@@ -1417,7 +1427,7 @@ found:
    line.textAdvance = line.textWidth;
 
    // If right bearing has not been calculated yet, do that now
-   if (lbh.rightBearing == LineBreakHelper::RightBearingNotCalculated && !lbh.whiteSpaceOrObject) {
+   if (lbh.rightBearing == LineBreakHelper::RightBearingNotCalculated && ! lbh.whiteSpaceOrObject) {
       lbh.calculateRightBearing();
    }
 
@@ -1459,6 +1469,7 @@ found:
    if (m_textEngine->option.flags() & QTextOption::IncludeTrailingSpaces) {
       line.textWidth += lbh.spaceData.textWidth;
    }
+
    if (lbh.spaceData.length) {
       line.trailingSpaces = lbh.spaceData.length;
       line.hasTrailingSpaces = true;
@@ -1650,7 +1661,7 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
    qreal y = line.y.toReal() + line.base().toReal();
    QList<QGlyphRun> glyphRuns;
 
-   while (!iterator.atEnd()) {
+   while (! iterator.atEnd()) {
       QScriptItem &si = iterator.next();
 
       if (si.analysis.flags >= QScriptAnalysis::TabOrObject) {
@@ -1704,7 +1715,7 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
       bool endsInsideLigature = nextGlyphIndex == glyphsEnd;
 
       int itemGlyphsStart = logClusters[iterator.itemStart - si.position];
-      int itemGlyphsEnd = logClusters[iterator.itemEnd - 1 - si.position];
+      int itemGlyphsEnd   = logClusters[iterator.itemEnd - 1 - si.position];
 
       QGlyphLayout glyphLayout = m_textEngine->shapedGlyphs(&si);
 
@@ -1713,6 +1724,7 @@ QList<QGlyphRun> QTextLine::glyphRuns(int from, int length) const
             QFixed justification = QFixed::fromFixed(glyphLayout.justifications[i].space_18d6);
             pos.rx() += (glyphLayout.advances[i] + justification).toReal();
          }
+
       } else if (relativeTo != (iterator.itemEnd - si.position - 1) && rtl) {
          for (int i = itemGlyphsEnd; i > glyphsEnd; --i) {
             QFixed justification = QFixed::fromFixed(glyphLayout.justifications[i].space_18d6);
@@ -2118,6 +2130,7 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
 
    QVarLengthArray<int> visualOrder(nItems);
    QVarLengthArray<uchar> levels(nItems);
+
    for (int i = 0; i < nItems; ++i) {
       levels[i] = m_textEngine->layoutData->items[i + firstItem].analysis.bidiLevel;
    }
@@ -2140,7 +2153,7 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
       }
       const int itemLength = m_textEngine->length(item);
       int start = qMax(line.from, si.position);
-      int end = qMin(lineEnd, si.position + itemLength);
+      int end   = qMin(lineEnd, si.position + itemLength);
 
       logClusters = m_textEngine->logClusters(&si);
 
@@ -2178,11 +2191,12 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
          for (int i = glyph_end - 1; i >= glyph_start; i--) {
             x += glyphs.effectiveAdvance(i);
          }
+
       } else {
          int start = qMax(line.from - si->position, 0);
          int glyph_start = logClusters[start];
          int glyph_end = glyph_pos;
-         if (!visual || ! rtl || (lastLine && itm == visualOrder[0] + firstItem)) {
+         if (! visual || ! rtl || (lastLine && itm == visualOrder[0] + firstItem)) {
             glyph_end--;
          }
 
@@ -2202,6 +2216,7 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
    }
 
    *cursorPos = pos + si->position;
+
    return x.toReal();
 }
 
@@ -2218,7 +2233,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 
    int line_length = textLength();
 
-   if (!line_length) {
+   if (! line_length) {
       return line.from;
    }
 
@@ -2226,7 +2241,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
    int lastItem  = m_textEngine->findItem(line.from + line_length - 1, firstItem);
    int nItems = (firstItem >= 0 && lastItem >= firstItem) ? (lastItem - firstItem + 1) : 0;
 
-   if (!nItems) {
+   if (! nItems) {
       return 0;
    }
 
@@ -2235,9 +2250,11 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 
    QVarLengthArray<int> visualOrder(nItems);
    QVarLengthArray<unsigned char> levels(nItems);
+
    for (int i = 0; i < nItems; ++i) {
       levels[i] = m_textEngine->layoutData->items[i + firstItem].analysis.bidiLevel;
    }
+
    QTextEngine::bidiReorder(nItems, levels.data(), visualOrder.data());
 
    bool visual = m_textEngine->visualCursorMovement();
@@ -2254,6 +2271,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
       if (si.analysis.bidiLevel % 2) {
          pos += m_textEngine->length(item);
       }
+
       pos = qMax(line.from, pos);
       pos = qMin(line.from + line_length, pos);
       return pos;
@@ -2268,7 +2286,9 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
       if (visual && rtl) {
          m_textEngine->insertionPointsForLine(lineNum, insertionPoints);
       }
+
       int nchars = 0;
+
       for (int i = 0; i < nItems; ++i) {
          int item = visualOrder[i] + firstItem;
          QScriptItem &si = m_textEngine->layoutData->items[item];
@@ -2286,6 +2306,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
          QFixed item_width = 0;
          if (si.analysis.flags >= QScriptAnalysis::TabOrObject) {
             item_width = si.width;
+
          } else {
             int g = gs;
             while (g <= ge) {
@@ -2333,6 +2354,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                   pos -= glyphs.effectiveAdvance(gs);
                   ++gs;
                }
+
             } else {
                glyph_pos = gs;
                while (gs <= ge) {
@@ -2403,7 +2425,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 
             if (qAbs(x - pos) < dist) {
                if (visual) {
-                  if (!rtl && i < nItems - 1) {
+                  if (! rtl && i < nItems - 1) {
                      nchars += end;
                      continue;
                   }
@@ -2434,7 +2456,6 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
    }
 
    pos = qMax(line.from, pos);
-
    int maxPos = line.from + line_length;
 
    // except for the last line we assume that the character between lines is a space and we want
@@ -2446,5 +2467,6 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
    }
 
    pos = qMin(pos, maxPos);
+
    return pos;
 }
