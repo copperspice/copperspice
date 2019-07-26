@@ -463,12 +463,6 @@ class Q_GUI_EXPORT QTextEngine
    glyph_metrics_t boundingBox(int from,  int len) const;
    glyph_metrics_t tightBoundingBox(int from,  int len) const;
 
-   int glyphLength(int item) const {
-      const QScriptItem &si = layoutData->items[item];
-
-      return si.num_glyphs;
-   }
-
    int length(int item) const {
       const QScriptItem &si = layoutData->items[item];
       item++;
@@ -477,6 +471,7 @@ class Q_GUI_EXPORT QTextEngine
 
       if (item < layoutData->items.size()) {
          retval = layoutData->items[item].position - si.position;
+
       } else {
          retval = layoutData->string.size() - si.position;
       }
