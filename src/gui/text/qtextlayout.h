@@ -203,10 +203,10 @@ class Q_GUI_EXPORT QTextLine
       CursorOnCharacter
    };
 
-   inline QTextLine() : index(0), eng(nullptr) {}
+   inline QTextLine() : index(0), m_textEngine(nullptr) {}
 
    inline bool isValid() const {
-      return eng;
+      return m_textEngine;
    }
 
    QRectF rect() const;
@@ -252,14 +252,14 @@ class Q_GUI_EXPORT QTextLine
    QList<QGlyphRun> glyphRuns(int from = -1, int length = -1) const;
 
  private:
-   QTextLine(int line, QTextEngine *e) : index(line), eng(e) {}
+   QTextLine(int line, QTextEngine *e) : index(line), m_textEngine(e) {}
    void layout_helper(int numGlyphs);
+
+   int index;
+   QTextEngine *m_textEngine;
 
    friend class QTextLayout;
    friend class QTextFragment;
-
-   int index;
-   QTextEngine *eng;
 };
 
 #endif
