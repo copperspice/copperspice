@@ -1115,8 +1115,8 @@ inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 
 } // anonymous namespace
 
-static inline void addNextCluster(int &pos, int end, QScriptLine &line, int &glyphCount,
-   const QScriptItem &current, const unsigned short *logClusters, const QGlyphLayout &glyphs)
+static void addNextCluster(int &pos, int end, QScriptLine &line, int &glyphCount,
+   const QScriptItem &current, const QGlyphLayout &glyphs, const ushort *logClusters)
 {
    int x_index = logClusters[pos];
 
@@ -1124,18 +1124,21 @@ static inline void addNextCluster(int &pos, int end, QScriptLine &line, int &gly
       // at the first next cluster
       ++pos;
       ++line.length;
-   } while (pos < end && logClusters[pos] == glyphPosition);
 
-   do { // calculate the textWidth for the rest of the current cluster.
-      if (!glyphs.attributes[glyphPosition].dontPrint) {
-         line.textWidth += glyphs.advances[glyphPosition];
+   } while (pos < end && logClusters[pos] == x_index);
+
+   do {
+      // calculate the textWidth for the rest of the current cluster
+
+      if (! glyphs.attributes[x_index].dontPrint) {
+         line.textWidth += glyphs.advances[x_index];
       }
 
-      ++glyphPosition;
+      ++x_index;
 
-   } while (glyphPosition < current.num_glyphs && !glyphs.attributes[glyphPosition].clusterStart);
+   } while (x_index < current.num_glyphs && ! glyphs.attributes[x_index].clusterStart);
 
-   Q_ASSERT((pos == end && glyphPosition == current.num_glyphs) || logClusters[pos] == glyphPosition);
+   Q_ASSERT((pos == end && x_index == current.num_glyphs) || logClusters[pos] == x_index);
 
    ++glyphCount;
 }
