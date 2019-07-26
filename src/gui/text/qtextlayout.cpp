@@ -407,16 +407,16 @@ QTextLine QTextLayout::createLine()
       return QTextLine();
    }
 
-   int l = d->lines.size();
-   if (l && d->lines.at(l - 1).length < 0) {
-      QTextLine(l - 1, d).setNumColumns(INT_MAX);
+   int max = d->lines.size();
+   if (max && d->lines.at(max - 1).length < 0) {
+      QTextLine(max - 1, d).setNumColumns(INT_MAX);
    }
 
-   int from = l > 0 ? d->lines.at(l - 1).from + d->lines.at(l - 1).length + d->lines.at(l - 1).trailingSpaces : 0;
+   int from   = max > 0 ? d->lines.at(max - 1).from + d->lines.at(max - 1).length + d->lines.at(max - 1).trailingSpaces : 0;
    int strlen = d->layoutData->string.length();
 
-   if (l && from >= strlen) {
-      if (!d->lines.at(l - 1).length || d->layoutData->string.at(strlen - 1) != QChar::LineSeparator) {
+   if (max && from >= strlen) {
+      if (! d->lines.at(max - 1).length || d->layoutData->string.at(strlen - 1) != QChar::LineSeparator) {
          return QTextLine();
       }
    }
@@ -428,7 +428,8 @@ QTextLine QTextLayout::createLine()
    line.gridfitted = false;
 
    d->lines.append(line);
-   return QTextLine(l, d);
+
+   return QTextLine(max, d);
 }
 
 
@@ -2097,7 +2098,8 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
    unsigned short *logClusters = m_textEngine->logClusters(si);
    Q_ASSERT(logClusters);
 
-   int glyph_pos = pos == l ? si->num_glyphs : logClusters[pos];
+   int glyph_pos = pos == max ? si->num_glyphs : logClusters[pos];
+
    if (edge == Trailing && glyph_pos < si->num_glyphs) {
       // trailing edge is leading edge of next cluster
       glyph_pos++;
@@ -2155,22 +2157,24 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
 
    logClusters = m_textEngine->logClusters(si);
    glyphs      = m_textEngine->shapedGlyphs(si);
+
    if (si->analysis.flags >= QScriptAnalysis::TabOrObject) {
-      if (pos == (reverse ? 0 : l)) {
+      if (pos == (reverse ? 0 : max)) {
          x += si->width;
       }
 
    } else {
       bool rtl    = m_textEngine->isRightToLeft();
       bool visual = m_textEngine->visualCursorMovement();
-      int end = qMin(lineEnd, si->position + l) - si->position;
+      int end     = qMin(lineEnd, si->position + max) - si->position;
 
       if (reverse) {
-         int glyph_end = end == l ? si->num_glyphs : logClusters[end];
+         int glyph_end = end == max ? si->num_glyphs : logClusters[end];
          int glyph_start = glyph_pos;
-         if (visual && !rtl && !(lastLine && itm == (visualOrder[nItems - 1] + firstItem))) {
+         if (visual && ! rtl && ! (lastLine && itm == (visualOrder[nItems - 1] + firstItem))) {
             glyph_start++;
          }
+
          for (int i = glyph_end - 1; i >= glyph_start; i--) {
             x += glyphs.effectiveAdvance(i);
          }
