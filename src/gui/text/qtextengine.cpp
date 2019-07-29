@@ -928,37 +928,36 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
    }
 }
 
-static inline void qt_getDefaultJustificationOpportunities(QStringView str, QGlyphLayout g,
-                  ushort *log_clusters, int spaceAs)
+static inline void qt_getDefaultJustificationOpportunities(QStringView str,
+                  QGlyphLayout glyphs, const ushort *logClusters, int spaceAs)
 {
-   int str_pos = 0;
-   auto iter   = str.constBegin();
+   auto iter  = str.begin();
+   uint index = 0;
 
-   while (iter != str.constEnd()) {
-      int glyph_pos = log_clusters[str_pos];
-      Q_ASSERT(glyph_pos < g.numGlyphs && g.attributes[glyph_pos].clusterStart);
+   while (iter != str.end()) {
 
       QChar ch = *iter;
 
-      // skip whole cluster
+      int position = logClusters[index];
+
+      // skip rest of  glyph
       do {
-         ++str_pos;
+         ++index;
          ++iter;
-      } while (iter != str.constEnd() && log_clusters[str_pos] == glyph_pos);
+      } while (iter != str.end() && logClusters[index] == position);
 
       do {
-         ++glyph_pos;
+         ++position;
+      } while (position < glyphs.numGlyphs && ! glyphs.attributes[position].clusterStart);
 
-      } while (glyph_pos < g.numGlyphs && ! g.attributes[glyph_pos].clusterStart);
-
-      --glyph_pos;
+     --position;
 
       // justification opportunity at the end of cluster
       if (ch.isLetterOrNumber()) {
-         g.attributes[glyph_pos].justification = Justification_Character;
+         glyphs.attributes[position].justification = Justification_Character;
 
       } else if (ch.isSpace()) {
-         g.attributes[glyph_pos].justification = spaceAs;
+         glyphs.attributes[position].justification = spaceAs;
 
       }
    }
