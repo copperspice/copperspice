@@ -1673,8 +1673,9 @@ void QTextEngine::itemize() const
       ++analysis;
    }
 
-   layoutData->string = tmp;
-
+   if (layoutData->string != tmp)  {
+      layoutData->string = std::move(tmp);
+   }
 
    if (option.flags() & QTextOption::ShowLineAndParagraphSeparators) {
       // to exclude it from width
