@@ -1229,6 +1229,12 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
    QChar::Script script = QChar::Script(si.analysis.script);
    props.script = cs_script_to_hb_script(script);
 
+   uint current_cluster  = 0;
+   uint expected_cluster = 0;
+   int offset_cluster    = 0;
+
+   int delta = 0;
+
    for (int k = 0; k < itemBoundaries.size(); k += 3) {
 
       const uint item_pos    = itemBoundaries[k];
@@ -1244,8 +1250,8 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
       // prepare buffer
       hb_buffer_clear_contents(buffer);
 
-      QStringView tmp = str.mid(item_pos, item_length);
-      hb_buffer_add_utf8(buffer, tmp.charData(), tmp.size_storage(), 0, tmp.size_storage());
+      QStringView strBlock = str.mid(item_pos, item_length);
+      hb_buffer_add_utf8(buffer, strBlock.charData(), strBlock.size_storage(), 0, strBlock.size_storage());
 
       hb_buffer_set_segment_properties(buffer, &props);
       hb_buffer_guess_segment_properties(buffer);
@@ -1317,8 +1323,11 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
       const uint num_glyphs = hb_buffer_get_length(buffer);
 
+      // multiple code points were turned into a single glyph
+      const uint spaceForClusters = qMax(num_glyphs, strBlock.size());
+
       // ensure there is enough space for shaped glyphs and metrics
-      if (num_glyphs == 0 || ! ensureSpace(glyphs_shaped + num_glyphs)) {
+      if (num_glyphs == 0 || ! ensureSpace(glyphs_shaped + spaceForClusters)) {
          hb_buffer_destroy(buffer);
          return 0;
       }
@@ -1332,36 +1341,25 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
       hb_glyph_info_t *infos         = hb_buffer_get_glyph_infos(buffer, &hb_len);
       hb_glyph_position_t *positions = hb_buffer_get_glyph_positions(buffer, &hb_len);
 
-      // index into str by code points
-      uint str_index = 0;
-      uint previous_cluster = 0;
+      uint infos_position = 0;
+      uint merge_count    = 0;
 
-      for (uint i = 0; i < num_glyphs; ++i) {
-         g.glyphs[i]    = infos->codepoint;
+      for (QChar ch : strBlock) {
+         // save the glyph id
+         g.glyphs[infos_position]    = infos[infos_position].codepoint;
 
-         g.advances[i]  = QFixed::fromFixed(positions->x_advance);
-         g.offsets[i].x = QFixed::fromFixed(positions->x_offset);
-         g.offsets[i].y = QFixed::fromFixed(positions->y_offset);
-
-         uint current_cluster = infos->cluster;
-
-         if (current_cluster == previous_cluster && i != 0) {
-            // multiple code points turned into a single glyph
-
-            // pending changes
-         }
-
-         g.attributes[i].clusterStart = true;
-         log_clusters[str_index]      = item_pos + str_index;
+         g.advances[infos_position]  = QFixed::fromFixed(positions[infos_position].x_advance);
+         g.offsets[infos_position].x = QFixed::fromFixed(positions[infos_position].x_offset);
+         g.offsets[infos_position].y = QFixed::fromFixed(positions[infos_position].y_offset);
 
          // hide characters that should normally be invisible
-         switch (str[item_pos + str_index].unicode()) {
+         switch (ch.unicode()) {
             case QChar::LineFeed:
             case 0x000c:                      // FormFeed
             case QChar::CarriageReturn:
             case QChar::LineSeparator:
             case QChar::ParagraphSeparator:
-               g.attributes[i].dontPrint = true;
+               g.attributes[infos_position].dontPrint = true;
                break;
 
             case QChar::SoftHyphen:
@@ -1369,13 +1367,13 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
                   // U+00AD [SOFT HYPHEN] is a default ignorable codepoint,
                   // replace its glyph and metrics with ones for
                   // U+002D [HYPHEN-MINUS] and make it visible if it appears at line-break
-                  g.glyphs[i] = actualFontEngine->glyphIndex('-');
+                  g.glyphs[infos_position] = actualFontEngine->glyphIndex('-');
 
-                  if (g.glyphs[i] != 0) {
-                     QGlyphLayout tmp = g.mid(i, 1);
+                  if (g.glyphs[infos_position] != 0) {
+                     QGlyphLayout tmp = g.mid(infos_position, 1);
                      actualFontEngine->recalcAdvances(&tmp, 0);
                   }
-                  g.attributes[i].dontPrint = true;
+                  g.attributes[infos_position].dontPrint = true;
                }
                break;
 
@@ -1383,9 +1381,64 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
                break;
          }
 
-         ++infos;
-         ++positions;
-         ++str_index;
+         current_cluster = infos[infos_position].cluster + offset_cluster;
+
+         if (current_cluster > expected_cluster ) {
+            // one
+
+            // multiple code points were turned into a single glyph
+            log_clusters[infos_position + merge_count] = log_clusters[infos_position + merge_count - 1];
+
+            ++merge_count;
+
+         } else if (current_cluster < expected_cluster) {
+            // two
+            g.attributes[infos_position].clusterStart = false;
+
+            // code point is part of the same cluster
+            log_clusters[infos_position + merge_count] = log_clusters[infos_position + merge_count - 1];
+
+            ++infos_position;
+
+         } else {
+            // three
+            g.attributes[infos_position].clusterStart = true;
+
+            // save 'value' to logClusters
+            log_clusters[infos_position + merge_count] = current_cluster - merge_count - delta;
+
+            ++infos_position;
+         }
+
+         if (infos_position == num_glyphs)  {
+            // ran out of glyphs, all done
+            break;
+         }
+
+         if (ch < 0x80) {
+            expected_cluster += 1;
+
+         } else if (ch < 0x800) {
+            expected_cluster += 2;
+            delta += 1;
+
+         } else if (ch < 0x10000) {
+            expected_cluster += 3;
+            delta += 2;
+
+         } else {
+            expected_cluster += 4;
+            delta += 3;
+         }
+      }
+
+      // keep for the next possible loop
+      offset_cluster = expected_cluster;
+
+      // pad log clusters when there are more code points than glyphs
+      while (infos_position + merge_count < item_length) {
+         log_clusters[infos_position + merge_count] = log_clusters[infos_position + merge_count - 1];
+         ++merge_count;
       }
 
       if (engineIdx != 0) {
