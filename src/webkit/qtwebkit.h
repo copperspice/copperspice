@@ -1,6 +1,8 @@
 #ifndef QT_WEBKIT_H
 #define QT_WEBKIT_H
 
+#include "qtcore.h"
+#include "qtgui.h"
 #include "qtnetwork.h"
 #include "qwebframe.h"
 #include "qgraphicswebview.h"
