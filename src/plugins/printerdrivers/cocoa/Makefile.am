@@ -31,6 +31,6 @@ lib_CsPrinterDriverCocoa@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) \
 lib_CsPrinterDriverCocoa@BUILD_ABI@_la_LIBADD=lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la
 
 lib_CsPrinterDriverCocoa@BUILD_ABI@_la_SOURCES = \
-	src/plugins/printerdrivers/cocoa/main.cop
+	src/plugins/printerdrivers/cocoa/main.cpp
 
 endif
