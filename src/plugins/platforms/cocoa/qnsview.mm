@@ -1513,15 +1513,13 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 
    NSEventPhase phase = [theEvent phase];
    Qt::ScrollPhase ph = Qt::ScrollUpdate;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-   if (QSysInfo::QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-      // On 10.8 and above, MayBegin is likely to happen.  We treat it the same as an actual begin.
-      if (phase == NSEventPhaseMayBegin) {
-         m_scrolling = true;
-         ph = Qt::ScrollBegin;
-      }
+
+   if (phase == NSEventPhaseMayBegin) {
+      m_scrolling = true;
+      ph = Qt::ScrollBegin;
    }
-#endif
+
+
    if (phase == NSEventPhaseBegan) {
       // If MayBegin did not happen, Began is the actual beginning.
       if (! m_scrolling) {

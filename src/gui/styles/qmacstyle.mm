@@ -611,22 +611,21 @@ static QHash<CGDirectDisplayID, CGColorSpaceRef> m_displayColorSpaceHash;
 bool m_postRoutineRegistered = false;
 
 static CGColorSpaceRef qt_mac_displayColorSpace(const QWidget *widget);
+
 static CGColorSpaceRef qt_mac_genericColorSpace()
 {
 #if 0
-    if (!m_genericColorSpace) {
-        if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_4) {
-            m_genericColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-        } else
-        {
-            m_genericColorSpace = CGColorSpaceCreateDeviceRGB();
-        }
+    if (! m_genericColorSpace) {
+        m_genericColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+
         if (!m_postRoutineRegistered) {
             m_postRoutineRegistered = true;
             qAddPostRoutine(QCoreGraphicsPaintEngine::cleanUpMacColorSpaces);
         }
     }
+
     return m_genericColorSpace;
+
 #else
     // Just return the main display colorspace for the moment.
     return qt_mac_displayColorSpace(0);
@@ -1415,14 +1414,15 @@ void QMacStylePrivate::initComboboxBdi(const QStyleOptionComboBox *combo, HIThem
     bdi->version = qt_mac_hitheme_version;
     bdi->adornment = kThemeAdornmentArrowLeftArrow;
     bdi->value = kThemeButtonOff;
+
     if (combo->state & QStyle::State_HasFocus)
         bdi->adornment = kThemeAdornmentFocus;
+
     if (combo->activeSubControls & QStyle::SC_ComboBoxArrow)
         bdi->state = kThemeStatePressed;
-    else if (tds == kThemeStateInactive && QSysInfo::MacintoshVersion <= QSysInfo::MV_10_9)
-        bdi->state = kThemeStateActive;
     else
         bdi->state = tds;
+
 
     QAquaWidgetSize aSize = aquaSizeConstrain(combo, widget);
     switch (aSize) {
@@ -1748,14 +1748,17 @@ void QMacStylePrivate::getSliderInfo(QStyle::ComplexControl cc, const QStyleOpti
             || slider->tickPosition == QSlider::TicksBothSides;
 
     tdi->bounds = qt_hirectForQRect(slider->rect);
-    if (isScrollbar || QSysInfo::MacintoshVersion <= QSysInfo::MV_10_9) {
+
+    if (isScrollbar) {
         tdi->min = slider->minimum;
         tdi->max = slider->maximum;
         tdi->value = slider->sliderPosition;
+
     } else {
         // Fix min and max positions. HITheme seems confused when it comes to rendering
         // a slider at those positions. We give it a hand by extending and offsetting
         // the slider range accordingly. See also comment for CC_Slider in drawComplexControl()
+
         tdi->min = 0;
         if (slider->orientation == Qt::Horizontal)
             tdi->max = 10 * slider->rect.width();
@@ -2058,10 +2061,11 @@ void QMacStylePrivate::drawColorlessButton(const HIRect &macRect, HIThemeButtonD
     const bool editableCombo = bdi->kind == kThemeComboBox
                                || bdi->kind == kThemeComboBoxSmall
                                || bdi->kind == kThemeComboBoxMini;
+
     const bool button = opt->type == QStyleOption::SO_Button;
     const bool viewItem = opt->type == QStyleOption::SO_ViewItem;
     const bool pressed = bdi->state == kThemeStatePressed;
-    const bool usingYosemiteOrLater = QSysInfo::MacintoshVersion >= QSysInfo::MV_10_10;
+    const bool usingYosemiteOrLater = true;
 
     if (button && pressed) {
         if (bdi->kind == kThemePushButton) {
@@ -3715,10 +3719,13 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
     Q_D(const QMacStyle);
     ThemeDrawState tds = d->getDrawState(opt->state);
     QMacCGContext cg(p);
+
     QWindow *window = w && w->window() ? w->window()->windowHandle() :
                      QStyleHelper::styleObjectWindow(opt->styleObject);
     const_cast<QMacStylePrivate *>(d)->resolveCurrentNSView(window);
-    const bool usingYosemiteOrLater = QSysInfo::MacintoshVersion >= QSysInfo::MV_10_10;
+
+    const bool usingYosemiteOrLater = true;
+
     switch (ce) {
     case CE_HeaderSection:
         if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
@@ -4097,6 +4104,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
             }
         }
         break;
+
     case CE_PushButtonLabel:
         if (const QStyleOptionButton *b = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             QStyleOptionButton btn(*b);
@@ -4108,11 +4116,12 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter
             bool hasIcon = !btn.icon.isNull();
             bool hasText = !btn.text.isEmpty();
 
-            if (!hasMenu && QSysInfo::QSysInfo::MacintoshVersion > QSysInfo::MV_10_9) {
-                if (tds == kThemeStatePressed
-                    || (tds == kThemeStateActive
+            if (! hasMenu ) {
+
+                if (tds == kThemeStatePressed || (tds == kThemeStateActive
                         && ((btn.features & QStyleOptionButton::DefaultButton && !d->autoDefaultButton)
                             || d->autoDefaultButton == btn.styleObject)))
+
                 btn.palette.setColor(QPalette::ButtonText, Qt::white);
             }
 
@@ -5419,10 +5428,12 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
     Q_D(const QMacStyle);
     ThemeDrawState tds = d->getDrawState(opt->state);
     QMacCGContext cg(p);
+
     QWindow *window = widget && widget->window() ? widget->window()->windowHandle() :
                      QStyleHelper::styleObjectWindow(opt->styleObject);
     const_cast<QMacStylePrivate *>(d)->resolveCurrentNSView(window);
-    const bool usingYosemiteOrLater = QSysInfo::MacintoshVersion >= QSysInfo::MV_10_10;
+    const bool usingYosemiteOrLater = true;
+
     switch (cc) {
     case CC_Slider:
     case CC_ScrollBar:
@@ -6444,14 +6455,17 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
             switch (sc) {
             case SC_ComboBoxEditField:{
                 ret = QMacStylePrivate::comboboxEditBounds(combo->rect, bdi);
-                if (QSysInfo::MacintoshVersion > QSysInfo::MV_10_9)
-                    ret.setHeight(ret.height() - 1);
-                break; }
+                ret.setHeight(ret.height() - 1);
+                break;
+            }
+
             case SC_ComboBoxArrow:{
                 ret = QMacStylePrivate::comboboxEditBounds(combo->rect, bdi);
                 ret.setX(ret.x() + ret.width());
                 ret.setWidth(combo->rect.right() - ret.right());
-                break; }
+                break;
+            }
+
             case SC_ComboBoxListBoxPopup:{
                 if (combo->editable) {
                     HIRect inner = QMacStylePrivate::comboboxInnerBounds(qt_hirectForQRect(combo->rect), bdi.kind);
@@ -6892,13 +6906,16 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
         sz.rwidth() += 10;
         sz.rheight() += 10;
         return sz;
+
     case CT_ComboBox: {
         sz.rwidth() += 50;
         const QStyleOptionComboBox *cb = qstyleoption_cast<const QStyleOptionComboBox *>(opt);
-        if (QSysInfo::MacintoshVersion < QSysInfo::MV_10_10 || (cb && !cb->editable))
-            sz.rheight() += 2;
+        if (cb && !cb->editable) {
+           sz.rheight() += 2;
+        }
         break;
     }
+
     case CT_Menu: {
         QStyleHintReturnMask menuMask;
         QStyleOption myOption = *opt;

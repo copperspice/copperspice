@@ -96,19 +96,14 @@ class QSystemTrayIconSys
  public:
    QSystemTrayIconSys(QCocoaSystemTrayIcon *sys) {
       item = [[QNSStatusItem alloc] initWithSysTray: sys];
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-      if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-         [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: item];
-      }
-#endif
+      [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: item];
    }
+
    ~QSystemTrayIconSys() {
       [[[item item] view] setHidden: YES];
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-      if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-         [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: nil];
-      }
-#endif
+      [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: nil];
+
+
       [item release];
    }
    QNSStatusItem *item;
@@ -264,79 +259,17 @@ bool QCocoaSystemTrayIcon::supportsMessages() const
 void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &message,
    const QIcon &icon, MessageIcon, int)
 {
-   if (!m_sys) {
+   if (! m_sys) {
       return;
    }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-   if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
-      NSUserNotification *notification = [[NSUserNotification alloc] init];
-      notification.title = [NSString stringWithUTF8String: title.toUtf8().data()];
-      notification.informativeText = [NSString stringWithUTF8String: message.toUtf8().data()];
+   NSUserNotification *notification = [[NSUserNotification alloc] init];
+   notification.title = [NSString stringWithUTF8String: title.toUtf8().data()];
+   notification.informativeText = [NSString stringWithUTF8String: message.toUtf8().data()];
 
-      [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification: notification];
+   [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification: notification];
 
-      return;
-   }
-#endif
-
-#ifdef QT_MAC_SYSTEMTRAY_USE_GROWL
-   // Make sure that we have Growl installed on the machine we are running on.
-   QCFType<CFURLRef> cfurl;
-   OSStatus status = LSGetApplicationForInfo(kLSUnknownType, kLSUnknownCreator,
-         CFSTR("growlTicket"), kLSRolesAll, 0, &cfurl);
-   if (status == kLSApplicationNotFoundErr) {
-      return;
-   }
-   QCFType<CFBundleRef> bundle = CFBundleCreate(0, cfurl);
-
-   if (CFStringCompare(CFBundleGetIdentifier(bundle), CFSTR("com.Growl.GrowlHelperApp"),
-         kCFCompareCaseInsensitive |  kCFCompareBackwards) != kCFCompareEqualTo) {
-      return;
-   }
-
-   QPixmap notificationIconPixmap = icon.pixmap(32, 32);
-   QTemporaryFile notificationIconFile;
-   QString notificationType("Notification"), notificationIcon, notificationApp(qt_mac_applicationName());
-
-   if (notificationApp.isEmpty()) {
-      notificationApp = QLatin1String("Application");
-   }
-   if (!notificationIconPixmap.isNull() && notificationIconFile.open()) {
-      QImageWriter writer(&notificationIconFile, "PNG");
-      if (writer.write(notificationIconPixmap.toImage())) {
-         notificationIcon = QLatin1String("image from location \"file://") + notificationIconFile.fileName() + QLatin1String("\"");
-      }
-   }
-   const QString script(QLatin1String(
-         "tell application \"System Events\"\n"
-         "set isRunning to (count of (every process whose bundle identifier is \"com.Growl.GrowlHelperApp\")) > 0\n"
-         "end tell\n"
-         "if isRunning\n"
-         "tell application id \"com.Growl.GrowlHelperApp\"\n"
-         "-- Make a list of all the notification types (all)\n"
-         "set the allNotificationsList to {\"") + notificationType + QLatin1String("\"}\n"
-
-         "-- Make a list of the notifications (enabled)\n"
-         "set the enabledNotificationsList to {\"") + notificationType + QLatin1String("\"}\n"
-
-         "-- Register our script with growl.\n"
-         "register as application \"") + notificationApp +
-      QLatin1String("\" all notifications allNotificationsList default notifications enabledNotificationsList\n"
-
-         "-- Send a Notification...\n") +
-      QLatin1String("notify with name \"") + notificationType +
-      QLatin1String("\" title \"") + title +
-      QLatin1String("\" description \"") + message +
-      QLatin1String("\" application name \"") + notificationApp +
-      QLatin1String("\" ")  + notificationIcon +
-      QLatin1String("\nend tell\nend if"));
-   qt_mac_execute_apple_script(script, 0);
-#else
-   Q_UNUSED(icon);
-   Q_UNUSED(title);
-   Q_UNUSED(message);
-#endif
+   return;
 }
 
 @implementation NSStatusItem (Qt)
@@ -353,7 +286,6 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
 
 -(void)menuTrackingDone: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
    down = NO;
 
    [self setNeedsDisplay: YES];

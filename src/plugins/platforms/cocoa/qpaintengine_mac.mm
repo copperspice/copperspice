@@ -322,12 +322,7 @@ CGColorSpaceRef QCoreGraphicsPaintEngine::macGenericColorSpace()
 {
 #if 0
    if (!m_genericColorSpace) {
-
-      if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_4) {
-         m_genericColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-      } else {
-         m_genericColorSpace = CGColorSpaceCreateDeviceRGB();
-      }
+      m_genericColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
 
       if (!m_postRoutineRegistered) {
          m_postRoutineRegistered = true;
