@@ -499,6 +499,8 @@ template <class T> class QSharedPointer
       qSwap(this->value, other.value);
    }
 
+
+#if ! defined (CS_DOXYPRESS)
    template <class X>
    friend class QSharedPointer;
 
@@ -508,6 +510,8 @@ template <class T> class QSharedPointer
    template <class X, class Y>
    friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr,
          const QSharedPointer<Y> &src);
+#endif
+
 
    inline void ref() const {
       d->weakref.ref();

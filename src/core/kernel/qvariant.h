@@ -168,25 +168,25 @@ class Q_CORE_EXPORT QVariant
    QVariant(int typeOrUserType, const void *copy, uint flags);
    QVariant(const QVariant &other);
 
-   QVariant(QDataStream &s);
+   QVariant(QDataStream &stream);
 
-   QVariant(int i);
-   QVariant(uint ui);
-   QVariant(qint64 ll);
-   QVariant(quint64 ull);
-   QVariant(bool b);
-   QVariant(double d);
+   QVariant(int value);
+   QVariant(uint value);
+   QVariant(qint64 value);
+   QVariant(quint64 value);
+   QVariant(bool value);
+   QVariant(double value);
 
-   QVariant(float f) {
+   QVariant(float value) {
       d.is_null = false;
       d.type = QMetaType::Float;
-      d.data.f = f;
+      d.data.f = value;
    }
 
    QVariant(const QByteArray &bytearray);
    QVariant(const QBitArray &bitarray);
 
-   QVariant(const QChar32 &qchar);
+   QVariant(const QChar32 &ch);
    QVariant(const QString8 &string);
    QVariant(const QString16 &string);
 
@@ -197,7 +197,7 @@ class Q_CORE_EXPORT QVariant
    QVariant(const QDateTime &datetime);
 
    QVariant(const QList<QVariant> &list);
-   QVariant(const QStringList &stringlist);
+   QVariant(const QStringList &stringList);
 
    QVariant(const QMap<QString, QVariant> &map);
    QVariant(const QHash<QString, QVariant> &hash);
@@ -206,8 +206,8 @@ class Q_CORE_EXPORT QVariant
 
    QVariant(const QSize &size);
    QVariant(const QSizeF &size);
-   QVariant(const QPoint &pt);
-   QVariant(const QPointF &pt);
+   QVariant(const QPoint &point);
+   QVariant(const QPointF &point);
    QVariant(const QLine &line);
    QVariant(const QLineF &line);
    QVariant(const QRect &rect);
@@ -398,12 +398,12 @@ class Q_CORE_EXPORT QVariant
       f_debugStream debugStream;
    };
 
-   inline bool operator==(const QVariant &v) const {
-      return cmp(v);
+   inline bool operator==(const QVariant &other) const {
+      return cmp(other);
    }
 
-   inline bool operator!=(const QVariant &v) const {
-      return !cmp(v);
+   inline bool operator!=(const QVariant &other) const {
+      return ! cmp(other);
    }
 
    typedef Private DataPtr;
