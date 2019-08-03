@@ -24,8 +24,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
    add_library(CsPrinterDriverWin${BUILD_ABI} MODULE ${PRINTERDRIVERS_WIN_SOURCES})
 
+   target_link_libraries(CsPrinterDriverWin${BUILD_ABI}
+      ${EXTRA_PRINTERDRIVERS_WIN_LIBS}
+   )
+
    target_include_directories(
-      CsPrinterDriverWin{BUILD_ABI} PRIVATE
+      CsPrinterDriverWin${BUILD_ABI} PRIVATE
    )
 
    target_compile_definitions(CsPrinterDriverWin${BUILD_ABI} PRIVATE
