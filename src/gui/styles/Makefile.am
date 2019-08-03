@@ -252,30 +252,9 @@ EXTRA_DIST+=\
 	src/gui/styles/images/toolbar-ext.png \
 	src/gui/styles/images/toolbar-ext@2x.png
 
-
-if OSTYPE_WIN
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/styles/qwindows_style.cpp \
-	src/gui/styles/qwindows_xpstyle.cpp  \
-	src/gui/styles/qwindows_vistastyle.cpp
-endif
-
 if X11
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qwindows_style.cpp
-endif
-
-if OSTYPE_BSD
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP
-endif
-
-if OSTYPE_DARWIN
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/styles/qwindows_style.cpp \
-	src/gui/styles/qmacstyle.mm
-
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK
-
 endif
 
 if GTK
@@ -289,3 +268,25 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 else
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK
 endif
+
+if OSTYPE_BSD
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP
+endif
+
+if OSTYPE_WIN
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
+	src/gui/styles/qwindows_style.cpp \
+	src/gui/styles/qwindows_xpstyle.cpp  \
+	src/gui/styles/qwindows_vistastyle.cpp
+endif
+
+if OSTYPE_DARWIN
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
+	src/gui/styles/qwindows_style.cpp \
+	src/gui/styles/qmacstyle.mm
+
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK
+
+endif
+
+
