@@ -1162,13 +1162,15 @@ void QMainWindowLayout::moveToolBar(QToolBar *toolbar, int pos)
 void QMainWindowLayout::removeToolBar(QToolBar *toolbar)
 {
    if (toolbar) {
-      QObject::disconnect(parentWidget(), SIGNAL(iconSizeChanged(QSize)),
-         toolbar, SLOT(_q_updateIconSize(QSize)));
+      QMainWindow *obj = dynamic_cast<QMainWindow *>(parentWidget());
 
-      QObject::disconnect(parentWidget(), SIGNAL(toolButtonStyleChanged(Qt::ToolButtonStyle)),
-         toolbar, SLOT(_q_updateToolButtonStyle(Qt::ToolButtonStyle)));
+      if (obj != nullptr) {
+         QObject::disconnect(obj, &QMainWindow::iconSizeChanged, toolbar,
+                     &QToolBar::_q_updateIconSize);
 
-
+         QObject::disconnect(obj, &QMainWindow::toolButtonStyleChanged, toolbar,
+                     &QToolBar::_q_updateToolButtonStyle);
+      }
 
       removeWidget(toolbar);
 
