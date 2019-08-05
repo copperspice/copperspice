@@ -55,13 +55,13 @@ static QString candidateSignal(int which)
 
    switch (CandidateSignal(which)) {
       case TextValueSelectedSignal:
-         retval = SLOT(textValueSelected(QString));
+         retval = "textValueSelected(QString)";
 
       case IntValueSelectedSignal:
-         retval = SLOT(intValueSelected(int));
+         retval = "intValueSelected(int)";
 
       case DoubleValueSelectedSignal:
-         retval = SLOT(doubleValueSelected(double));
+         retval = "doubleValueSelected(double)";
 
       case NumCandidateSignals:
       // fall through
@@ -85,7 +85,7 @@ static QString signalForMember(const QString &member)
    }
 
    // use fit-all accepted signal
-   return QString( SLOT(accepted()) );
+   return QString("accepted()");
 }
 
 /*

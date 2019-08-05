@@ -147,25 +147,25 @@ static QString changed_signal(int which)
 
    switch (which) {
       case 0:
-         retval = SLOT(toggled(bool));
+         retval = "toggled(bool)";
 
       case 1:
-         retval = SLOT(valueChanged(int));
+         retval = "valueChanged(int)";
 
       case 2:
-         retval = SLOT(currentIndexChanged(int));
+         retval = "currentIndexChanged(int)";
 
       case 3:
-         retval = SLOT(dateTimeChanged(QDateTime));
+         retval = "dateTimeChanged(QDateTime)";
 
       case 4:
-         retval = SLOT(textChanged(QString));
+         retval = "textChanged(QString)";
 
       case 5:
-         retval = SLOT(currentRowChanged(int));
+         retval = "currentRowChanged(int)";
 
       case 6:
-         retval = SLOT(valueChanged(int));
+         retval = "valueChanged(int)";
    };
 
    static_assert(7 == NFallbackDefaultProperties, "Incorrect values");
@@ -961,20 +961,20 @@ static QString buttonSlots(QWizard::WizardButton which)
 {
    switch (which) {
       case QWizard::BackButton:
-         return SLOT(back());
+         return QString("back()");
 
       case QWizard::NextButton:
       case QWizard::CommitButton:
-         return SLOT(next());
+         return QString("next()");
 
       case QWizard::FinishButton:
-         return SLOT(accept());
+         return QString("accept()");
 
       case QWizard::CancelButton:
-         return SLOT(reject());
+         return QString("reject()");
 
       case QWizard::HelpButton:
-         return SLOT(helpRequested());
+         return QString("helpRequested()");
 
       case QWizard::CustomButton1:
       case QWizard::CustomButton2:

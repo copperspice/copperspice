@@ -1330,7 +1330,7 @@ void QFont::cacheStatistics()
 
 QString QFont::lastResortFamily() const
 {
-   return "helvetica";
+   return QString("helvetica");
 }
 
 extern QStringList qt_fallbacksForFamily(const QString &family, QFont::Style style,
@@ -1349,7 +1349,7 @@ QString QFont::defaultFamily() const
 
 QString QFont::lastResortFont() const
 {
-   return "arial";
+   return QString("arial");
 }
 QDataStream &operator<<(QDataStream &s, const QFont &font)
 {
