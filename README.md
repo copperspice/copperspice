@@ -88,7 +88,7 @@ www.copperspice.com/docs/cs_api_1.5/index.html
 
 ### Presentations
 
-Our YouTube channel contains videos are about modern C++, graphics, build systems, CopperSpice, DoxyPress, and other topics
+Our YouTube channel contains videos about modern C++, graphics, build systems, CopperSpice, DoxyPress, and other topics
 related to software development.
 
 https://www.youtube.com/copperspice
