@@ -1,11 +1,12 @@
 ## CopperSpice
 
 ### Introduction
-CopperSpice is of a set of C++ libraries used to develop cross-platform software applications. This is an open source project
-released under the LGPL V2.1 license. CopperSpice was derived from the Qt framework. Our motivation for developing CopperSpice was to
-change the core design and leverage modern C++ functionality.
+CopperSpice is a set of C++ libraries used to develop cross-platform software applications. This is an open source project
+released under the LGPL V2.1 license. CopperSpice was derived from the Qt framework and has diverged as the libraries
+are enhanced to work seamlessly with the C++ standard library. Our motivation for developing CopperSpice was to change
+the core design to provide a consistent and feature rich API.
 
-The libraies provided in CopperSpice include:
+The libraries provided in CopperSpice include:
 
  * CsCore
  * CsGui
@@ -28,7 +29,7 @@ for anyone developing a C++ application.
  * libGuarded
 
 
-###### Major enhancements
+###### Major Enhancements
 
 Reflection
  * No Meta-Object Compiler is required for generating meta data, all references were removed
@@ -38,16 +39,17 @@ Reflection
  * Complex data types such as **QMap&lt;QString, int&gt;** can be used without restriction
 
 Enhanced Functionality
- * CopperSpice makes extensive use of modern C++ features like variadic templates, constexpr, SFINAE, lambdas, atomics,
-   tuple, etc
- * Reimplemented container classes in CsCore using the C++ standard library containers, iterators, and algorithms
- * CopperSpice includes several of the Qt 5 classes
+ * CopperSpice makes extensive use of modern C++ features
+   * variadic templates, constexpr, SFINAE, lambda expressions, atomics, tuple, etc
+ * Reimplemented all container classes to use the C++ standard library containers, iterators, and algorithms
+ * CopperSpice includes a large number of classes from Qt 5
  * Integration of CsSignal
    * Improved thread aware Signal/Slot delivery
    * Increased efficiency while maintaining the full Signal/Slot API
  * Integration of CsString
    * Improved storage of Unicode strings
    * QString8 (UTF-8) and QString16 (UTF-16)
+   * New classes for QStringView and QStringParser
 
 Using the Libraries
  * Any application using CopperSpice can be built with CMake, GNU Autotools, or any other build system
@@ -70,25 +72,24 @@ The CopperSpice libraries can be built using CMake or GNU Autotools.
 
 ### Documentation
 
-###### API
+###### Overview
 
-Full class documentation for CopperSpice is available on the CopperSpice website or downloaded from our forum.
-
-www.copperspice.com/docs/cs_api/index.html
-
-
-###### Overview and Building
-
-The CopperSpice Overview documentation includes information on how to build the CopperSpice libraries, setting up a
-project which uses CopperSpice, how to migrate from Qt to CopperSpice, and other general information.
+The CopperSpice Overview documentation includes information on building CopperSpice, downloading prebuilt binary files,
+package requirements, setting up an an application which links with CopperSpice, migrating to CopperSpice, and other
+general information.
 
 www.copperspice.com/docs/cs_overview/index.html
 
+###### API
+
+The API contains full class documentation and multiple tutorials for CopperSpice.
+
+www.copperspice.com/docs/cs_api_1.5/index.html
 
 ### Presentations
 
-Our YouTube channel videos are about modern C++, build systems, CopperSpice, DoxyPress, and other topics related to our
-open source work.
+Our YouTube channel contains videos are about modern C++, graphics, build systems, CopperSpice, DoxyPress, and other topics
+related to software development.
 
 https://www.youtube.com/copperspice
 
