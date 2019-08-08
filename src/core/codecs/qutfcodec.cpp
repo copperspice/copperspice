@@ -285,16 +285,17 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
       uint8_t byte = *iter;
       ++iter;
 
-     if (bytesRead == 1 || bytesRead == 3) {
+      if (bytesRead == 1 || bytesRead == 3) {
 
          if (endian == LittleEndianness) {
-            data = (data << 16) | (byte << 8) | (data & 0xFF);
-            ++bytesRead;
+            data = (data & 0xFFFF0000) | (byte << 8) | (data & 0xFF);
 
          } else {
-            data = data << 8 | byte;
-            ++bytesRead;
+            data = (data & 0xFFFF0000) | ((data & 0xFF) << 8) | byte;
+
          }
+
+         ++bytesRead;
 
          if (! headerDone) {
             headerDone = true;
@@ -314,12 +315,13 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
                   continue;
 
                } else {
-                  if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-                     endian = BigEndianness;
-
-                  } else {
+                  if (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
                      endian = LittleEndianness;
                      data = ((data & 0xFF) << 8) | (data >> 8);
+
+                  } else {
+                     endian = BigEndianness;
+
                   }
                }
             }
@@ -332,7 +334,7 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
             data = 0;
 
          } else if (bytesRead == 2 && (data >= 0xD800 && data <= 0xDBFF)) {
-            // do nothing
+            data = data << 16;
 
          } else if (bytesRead == 4) {
             data = data - 0xD800DC00;
@@ -361,7 +363,7 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
          }
 
      } else {
-         data = data << 8 | byte;
+         data = (data & 0xFFFF0000) | byte;
          ++bytesRead;
      }
    }
