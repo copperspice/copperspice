@@ -720,31 +720,32 @@ class QWeakPointer
 template <class T>
 class QEnableSharedFromThis
 {
- protected:
-    QEnableSharedFromThis() = default;
-    QEnableSharedFromThis(const QEnableSharedFromThis &) { }
-    QEnableSharedFromThis &operator=(const QEnableSharedFromThis &) {
-	return *this;
-    }
-
  public:
-    inline QSharedPointer<T> sharedFromThis() {
-	return QSharedPointer<T>(weakPointer);
-    }
+   QSharedPointer<T> sharedFromThis() {
+	   return QSharedPointer<T>(weakPointer);
+   }
 
-    inline QSharedPointer<const T> sharedFromThis() const {
-	return QSharedPointer<const T>(weakPointer);
-    }
+   QSharedPointer<const T> sharedFromThis() const {
+	   return QSharedPointer<const T>(weakPointer);
+   }
+
+ protected:
+   QEnableSharedFromThis() = default;
+   QEnableSharedFromThis(const QEnableSharedFromThis &) { }
+
+   QEnableSharedFromThis &operator=(const QEnableSharedFromThis &) {
+      return *this;
+   }
 
  private:
-    template <class X> friend class QSharedPointer;
+   template <class X> friend class QSharedPointer;
 
-    template <class X>
-    void initializeFromSharedPointer(const QSharedPointer<X> &ptr) const {
-	weakPointer = ptr;
-    }
+   template <class X>
+   void initializeFromSharedPointer(const QSharedPointer<X> &ptr) const {
+      weakPointer = ptr;
+   }
 
-    mutable QWeakPointer<T> weakPointer;
+   mutable QWeakPointer<T> weakPointer;
 };
 
 //

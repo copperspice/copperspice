@@ -60,20 +60,16 @@ QAbstractItemDelegate::QAbstractItemDelegate(QAbstractItemDelegatePrivate &dd, Q
 
 QAbstractItemDelegate::~QAbstractItemDelegate()
 {
-
 }
 
 QWidget *QAbstractItemDelegate::createEditor(QWidget *,
    const QStyleOptionViewItem &, const QModelIndex &) const
 {
-   return 0;
+   return nullptr;
 }
-
-
 
 void QAbstractItemDelegate::destroyEditor(QWidget *editor, const QModelIndex &index) const
 {
-
    editor->deleteLater();
 }
 
@@ -82,21 +78,11 @@ void QAbstractItemDelegate::setEditorData(QWidget *, const QModelIndex &) const
    // does nothing
 }
 
-/*!
-    Sets the data for the item at the given \a index in the \a model
-    to the contents of the given \a editor.
-
-    The base implementation does nothing. If you want custom editing
-    you will need to reimplement this function.
-
-    \sa setEditorData()
-*/
 void QAbstractItemDelegate::setModelData(QWidget *,
    QAbstractItemModel *, const QModelIndex &) const
 {
    // does nothing
 }
-
 
 void QAbstractItemDelegate::updateEditorGeometry(QWidget *,
    const QStyleOptionViewItem &,

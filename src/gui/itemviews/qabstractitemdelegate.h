@@ -24,10 +24,8 @@
 #ifndef QABSTRACTITEMDELEGATE_H
 #define QABSTRACTITEMDELEGATE_H
 
-#include <QtCore/qobject.h>
-#include <QtGui/qstyleoption.h>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qstyleoption.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -99,7 +97,6 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
 
  private:
    Q_DISABLE_COPY(QAbstractItemDelegate)
-
 
    GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget *))
    GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)

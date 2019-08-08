@@ -258,13 +258,14 @@ void QMimeData::setUrls(const QList<QUrl> &urls)
 
 bool QMimeData::hasUrls() const
 {
-   return hasFormat(QLatin1String("text/uri-list"));
+   return hasFormat("text/uri-list");
 }
 
 QString QMimeData::text() const
 {
    Q_D(const QMimeData);
-   QVariant data = d->retrieveTypedData(QLatin1String("text/plain"), QVariant::String);
+   QVariant data = d->retrieveTypedData("text/plain", QVariant::String);
+
    return data.toString();
 }
 
@@ -282,53 +283,54 @@ bool QMimeData::hasText() const
 QString QMimeData::html() const
 {
    Q_D(const QMimeData);
-   QVariant data = d->retrieveTypedData(QLatin1String("text/html"), QVariant::String);
+   QVariant data = d->retrieveTypedData("text/html", QVariant::String);
+
    return data.toString();
 }
 
 void QMimeData::setHtml(const QString &html)
 {
    Q_D(QMimeData);
-   d->setData(QLatin1String("text/html"), html);
+   d->setData("text/html", html);
 }
 
 bool QMimeData::hasHtml() const
 {
-   return hasFormat(QLatin1String("text/html"));
+   return hasFormat("text/html");
 }
 
 QVariant QMimeData::imageData() const
 {
    Q_D(const QMimeData);
-   return d->retrieveTypedData(QLatin1String("application/x-qt-image"), QVariant::Image);
+   return d->retrieveTypedData("application/x-qt-image", QVariant::Image);
 }
 
 void QMimeData::setImageData(const QVariant &image)
 {
    Q_D(QMimeData);
-   d->setData(QLatin1String("application/x-qt-image"), image);
+   d->setData("application/x-qt-image", image);
 }
 
 bool QMimeData::hasImage() const
 {
-   return hasFormat(QLatin1String("application/x-qt-image"));
+   return hasFormat("application/x-qt-image");
 }
 
 QVariant QMimeData::colorData() const
 {
    Q_D(const QMimeData);
-   return d->retrieveTypedData(QLatin1String("application/x-color"), QVariant::Color);
+   return d->retrieveTypedData("application/x-color", QVariant::Color);
 }
 
 void QMimeData::setColorData(const QVariant &color)
 {
    Q_D(QMimeData);
-   d->setData(QLatin1String("application/x-color"), color);
+   d->setData("application/x-color", color);
 }
 
 bool QMimeData::hasColor() const
 {
-   return hasFormat(QLatin1String("application/x-color"));
+   return hasFormat("application/x-color");
 }
 
 QByteArray QMimeData::data(const QString &mimeType) const

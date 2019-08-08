@@ -1713,7 +1713,7 @@ static inline bool isValid(xcb_generic_event_t *event)
        queue while waiting on unresponsive GUI thread.
     2) Use QAbstractNativeEventFilter to get all events from X connection. This is not optimal
        because it requires working with native event types.
-    3) Or add public API to Qt for disabling event compression QTBUG-44964
+    3) Or add public API to CS for disabling event compression QTBUG-44964
 
 */
 bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex, QXcbEventArray *eventqueue) const

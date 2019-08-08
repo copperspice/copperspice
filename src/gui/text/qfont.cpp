@@ -1374,27 +1374,17 @@ QDataStream &operator<<(QDataStream &s, const QFont &font)
 
    s << (quint16) font.d->request.styleStrategy;
 
-
-
    s << (quint8) 0
       << (quint8) font.d->request.weight
       << get_font_bits(s.version(), font.d.data());
-
-
 
    s << (quint16)font.d->request.stretch;
    s << get_extended_font_bits(font.d.data());
    s << font.d->letterSpacing.value();
    s << font.d->wordSpacing.value();
 
-
-
    s << (quint8)font.d->request.hintingPreference;
-
-
-
    s << (quint8)font.d->capital;
-
 
    return s;
 }
@@ -1470,20 +1460,12 @@ QFontInfo::~QFontInfo()
 {
 }
 
-/*!
-    Assigns the font info in \a fi.
-*/
 QFontInfo &QFontInfo::operator=(const QFontInfo &fi)
 {
    d = fi.d.data();
    return *this;
 }
 
-/*!
-    Returns the family name of the matched window system font.
-
-    \sa QFont::family()
-*/
 QString QFontInfo::family() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1500,11 +1482,6 @@ QString QFontInfo::styleName() const
    return engine->fontDef.styleName;
 }
 
-/*!
-    Returns the point size of the matched window system font.
-
-    \sa pointSizeF() QFont::pointSize()
-*/
 int QFontInfo::pointSize() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1513,11 +1490,6 @@ int QFontInfo::pointSize() const
    return qRound(engine->fontDef.pointSize);
 }
 
-/*!
-    Returns the point size of the matched window system font.
-
-    \sa QFont::pointSizeF()
-*/
 qreal QFontInfo::pointSizeF() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1525,11 +1497,6 @@ qreal QFontInfo::pointSizeF() const
    return engine->fontDef.pointSize;
 }
 
-/*!
-    Returns the pixel size of the matched window system font.
-
-    \sa QFont::pointSize()
-*/
 int QFontInfo::pixelSize() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1537,11 +1504,6 @@ int QFontInfo::pixelSize() const
    return engine->fontDef.pixelSize;
 }
 
-/*!
-    Returns the italic value of the matched window system font.
-
-    \sa QFont::italic()
-*/
 bool QFontInfo::italic() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1549,11 +1511,6 @@ bool QFontInfo::italic() const
    return engine->fontDef.style != QFont::StyleNormal;
 }
 
-/*!
-    Returns the style value of the matched window system font.
-
-    \sa QFont::style()
-*/
 QFont::Style QFontInfo::style() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1561,11 +1518,6 @@ QFont::Style QFontInfo::style() const
    return (QFont::Style)engine->fontDef.style;
 }
 
-/*!
-    Returns the weight of the matched window system font.
-
-    \sa QFont::weight(), bold()
-*/
 int QFontInfo::weight() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -1574,53 +1526,16 @@ int QFontInfo::weight() const
 
 }
 
-/*!
-    \fn bool QFontInfo::bold() const
-
-    Returns true if weight() would return a value greater than
-    QFont::Normal; otherwise returns false.
-
-    \sa weight(), QFont::bold()
-*/
-
-/*!
-    Returns the underline value of the matched window system font.
-
-  \sa QFont::underline()
-
-  \internal
-
-  Here we read the underline flag directly from the QFont.
-  This is OK for X11 and for Windows because we always get what we want.
-*/
 bool QFontInfo::underline() const
 {
    return d->underline;
 }
 
-/*!
-    Returns the overline value of the matched window system font.
-
-    \sa QFont::overline()
-
-    \internal
-
-    Here we read the overline flag directly from the QFont.
-    This is OK for X11 and for Windows because we always get what we want.
-*/
 bool QFontInfo::overline() const
 {
    return d->overline;
 }
 
-/*!
-    Returns the strikeout value of the matched window system font.
-
-  \sa QFont::strikeOut()
-
-  \internal Here we read the strikeOut flag directly from the QFont.
-  This is OK for X11 and for Windows because we always get what we want.
-*/
 bool QFontInfo::strikeOut() const
 {
    return d->strikeOut;
@@ -1660,7 +1575,6 @@ bool QFontInfo::exactMatch() const
 
    return d->request.exactMatch(engine->fontDef);
 }
-
 
 #ifdef QFONTCACHE_DEBUG
 // fast timeouts for debugging

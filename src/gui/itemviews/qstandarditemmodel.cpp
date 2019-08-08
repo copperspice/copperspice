@@ -25,15 +25,15 @@
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qbitarray.h>
-#include <QtCore/qmimedata.h>
+#include <qdatetime.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qpair.h>
+#include <qvariant.h>
+#include <qvector.h>
+#include <qstringlist.h>
+#include <qbitarray.h>
+#include <qmimedata.h>
 #include <qstandarditemmodel_p.h>
 #include <qdebug.h>
 
@@ -93,6 +93,7 @@ QPair<int, int> QStandardItemPrivate::position() const
       }
       return QPair<int, int>(idx / par->columnCount(), idx % par->columnCount());
    }
+
    // ### support header items?
    return QPair<int, int>(-1, -1);
 }
@@ -727,11 +728,6 @@ QStandardItem::~QStandardItem()
 {
 }
 
-/*!
-  Returns the item's parent item, or 0 if the item has no parent.
-
-  \sa child()
-*/
 QStandardItem *QStandardItem::parent() const
 {
    Q_D(const QStandardItem);
@@ -741,19 +737,6 @@ QStandardItem *QStandardItem::parent() const
    return 0;
 }
 
-/*!
-    Sets the item's data for the given \a role to the specified \a value.
-
-    If you subclass QStandardItem and reimplement this function, your
-    reimplementation should call emitDataChanged() if you do not call
-    the base implementation of setData(). This will ensure that e.g.
-    views using the model are notified of the changes.
-
-    \note The default implementation treats Qt::EditRole and Qt::DisplayRole
-    as referring to the same data.
-
-    \sa Qt::ItemDataRole, data(), setFlags()
-*/
 void QStandardItem::setData(const QVariant &value, int role)
 {
    Q_D(QStandardItem);
@@ -783,13 +766,6 @@ void QStandardItem::setData(const QVariant &value, int role)
    }
 }
 
-/*!
-    Returns the item's data for the given \a role, or an invalid
-    QVariant if there is no data for the role.
-
-    \note The default implementation treats Qt::EditRole and Qt::DisplayRole
-    as referring to the same data.
-*/
 QVariant QStandardItem::data(int role) const
 {
    Q_D(const QStandardItem);
@@ -804,18 +780,6 @@ QVariant QStandardItem::data(int role) const
    return QVariant();
 }
 
-/*!
-  \since 4.4
-
-  Causes the model associated with this item to emit a
-  \l{QAbstractItemModel::dataChanged()}{dataChanged}() signal for this
-  item.
-
-  You normally only need to call this function if you have subclassed
-  QStandardItem and reimplemented data() and/or setData().
-
-  \sa setData()
-*/
 void QStandardItem::emitDataChanged()
 {
    Q_D(QStandardItem);
@@ -824,29 +788,11 @@ void QStandardItem::emitDataChanged()
    }
 }
 
-/*!
-  Sets the item flags for the item to \a flags.
-
-  The item flags determine how the user can interact with the item.
-  This is often used to disable an item.
-
-  \sa flags(), setData()
-*/
 void QStandardItem::setFlags(Qt::ItemFlags flags)
 {
    setData((int)flags, Qt::UserRole - 1);
 }
 
-/*!
-  Returns the item flags for the item.
-
-  The item flags determine how the user can interact with the item.
-
-  By default, items are enabled, editable, selectable, checkable, and can be
-  used both as the source of a drag and drop operation and as a drop target.
-
-  \sa setFlags()
-*/
 Qt::ItemFlags QStandardItem::flags() const
 {
    QVariant v = data(Qt::UserRole - 1);
@@ -876,29 +822,10 @@ void QStandardItem::setSelectable(bool selectable)
    d->changeFlags(selectable, Qt::ItemIsSelectable);
 }
 
-/*!
-  \fn bool QStandardItem::isSelectable() const
-
-  Returns whether the item is selectable by the user.
-
-  The default value is true.
-
-  \sa setSelectable(), flags()
-*/
-
-/*!
-  Sets whether the item is user-checkable. If \a checkable is true, the
-  item can be checked by the user; otherwise, the user cannot check
-  the item.
-
-  The item delegate will render a checkable item with a check box next to the
-  item's text.
-
-  \sa isCheckable(), setCheckState(), setTristate()
-*/
 void QStandardItem::setCheckable(bool checkable)
 {
    Q_D(QStandardItem);
+
    if (checkable && !isCheckable()) {
       // make sure there's data for the checkstate role
       if (!data(Qt::CheckStateRole).isValid()) {
@@ -908,39 +835,19 @@ void QStandardItem::setCheckable(bool checkable)
    d->changeFlags(checkable, Qt::ItemIsUserCheckable);
 }
 
-/*!
-  \fn bool QStandardItem::isCheckable() const
-
-  Returns whether the item is user-checkable.
-
-  The default value is false.
-
 void QStandardItem::setAutoTristate(bool tristate)
 {
     Q_D(QStandardItem);
     d->changeFlags(tristate, Qt::ItemIsAutoTristate);
 }
-  \sa setCheckable(), checkState(), isTristate()
-*/
 
-/*!
-  Sets whether the item is tristate. If \a tristate is true, the
-  item is checkable with three separate states; otherwise, the item
-  is checkable with two states. (Note that this also requires that
-  the item is checkable; see isCheckable().)
-
-  \sa isTristate(), setCheckable(), setCheckState()
-*/
 void QStandardItem::setUserTristate(bool tristate)
 {
    Q_D(QStandardItem);
    d->changeFlags(tristate, Qt::ItemIsUserTristate);
 }
 
-
-
 #ifndef QT_NO_DRAGANDDROP
-
 
 void QStandardItem::setDragEnabled(bool dragEnabled)
 {
@@ -948,32 +855,14 @@ void QStandardItem::setDragEnabled(bool dragEnabled)
    d->changeFlags(dragEnabled, Qt::ItemIsDragEnabled);
 }
 
-
 void QStandardItem::setDropEnabled(bool dropEnabled)
 {
    Q_D(QStandardItem);
    d->changeFlags(dropEnabled, Qt::ItemIsDropEnabled);
 }
 
-/*!
-  \fn bool QStandardItem::isDropEnabled() const
-
-  Returns whether the item is drop enabled. When an item is drop enabled, it
-  can be used as a drop target.
-
-  The default value is true.
-
-  \sa setDropEnabled(), isDragEnabled(), flags()
-*/
-
 #endif // QT_NO_DRAGANDDROP
 
-/*!
-  Returns the row where the item is located in its parent's child table, or
-  -1 if the item has no parent.
-
-  \sa column(), parent()
-*/
 int QStandardItem::row() const
 {
    Q_D(const QStandardItem);
@@ -981,12 +870,6 @@ int QStandardItem::row() const
    return pos.first;
 }
 
-/*!
-  Returns the column where the item is located in its parent's child table,
-  or -1 if the item has no parent.
-
-  \sa row(), parent()
-*/
 int QStandardItem::column() const
 {
    Q_D(const QStandardItem);
@@ -994,44 +877,18 @@ int QStandardItem::column() const
    return pos.second;
 }
 
-/*!
-  Returns the QModelIndex associated with this item.
-
-  When you need to invoke item functionality in a QModelIndex-based API (e.g.
-  QAbstractItemView), you can call this function to obtain an index that
-  corresponds to the item's location in the model.
-
-  If the item is not associated with a model, an invalid QModelIndex is
-  returned.
-
-  \sa model(), QStandardItemModel::itemFromIndex()
-*/
 QModelIndex QStandardItem::index() const
 {
    Q_D(const QStandardItem);
    return d->model ? d->model->indexFromItem(this) : QModelIndex();
 }
 
-/*!
-  Returns the QStandardItemModel that this item belongs to.
-
-  If the item is not a child of another item that belongs to the model, this
-  function returns 0.
-
-  \sa index()
-*/
 QStandardItemModel *QStandardItem::model() const
 {
    Q_D(const QStandardItem);
    return d->model;
 }
 
-/*!
-    Sets the number of child item rows to \a rows. If this is less than
-    rowCount(), the data in the unwanted rows is discarded.
-
-    \sa rowCount(), setColumnCount()
-*/
 void QStandardItem::setRowCount(int rows)
 {
    int rc = rowCount();
@@ -1045,23 +902,12 @@ void QStandardItem::setRowCount(int rows)
    }
 }
 
-/*!
-    Returns the number of child item rows that the item has.
-
-    \sa setRowCount(), columnCount()
-*/
 int QStandardItem::rowCount() const
 {
    Q_D(const QStandardItem);
    return d->rowCount();
 }
 
-/*!
-    Sets the number of child item columns to \a columns. If this is less than
-    columnCount(), the data in the unwanted columns is discarded.
-
-    \sa columnCount(), setRowCount()
-*/
 void QStandardItem::setColumnCount(int columns)
 {
    int cc = columnCount();
@@ -1075,23 +921,12 @@ void QStandardItem::setColumnCount(int columns)
    }
 }
 
-/*!
-    Returns the number of child item columns that the item has.
-
-    \sa setColumnCount(), rowCount()
-*/
 int QStandardItem::columnCount() const
 {
    Q_D(const QStandardItem);
    return d->columnCount();
 }
 
-/*!
-    Inserts a row at \a row containing \a items. If necessary, the column
-    count is increased to the size of \a items.
-
-    \sa insertRows(), insertColumn()
-*/
 void QStandardItem::insertRow(int row, const QList<QStandardItem *> &items)
 {
    Q_D(QStandardItem);
@@ -1104,11 +939,6 @@ void QStandardItem::insertRow(int row, const QList<QStandardItem *> &items)
    d->insertRows(row, 1, items);
 }
 
-/*!
-    Inserts \a items at \a row. The column count wont be changed.
-
-    \sa insertRow(), insertColumn()
-*/
 void QStandardItem::insertRows(int row, const QList<QStandardItem *> &items)
 {
    Q_D(QStandardItem);
@@ -1118,12 +948,6 @@ void QStandardItem::insertRows(int row, const QList<QStandardItem *> &items)
    d->insertRows(row, items);
 }
 
-/*!
-    Inserts a column at \a column containing \a items. If necessary,
-    the row count is increased to the size of \a items.
-
-    \sa insertColumns(), insertRow()
-*/
 void QStandardItem::insertColumn(int column, const QList<QStandardItem *> &items)
 {
    Q_D(QStandardItem);
@@ -1136,11 +960,6 @@ void QStandardItem::insertColumn(int column, const QList<QStandardItem *> &items
    d->insertColumns(column, 1, items);
 }
 
-/*!
-    Inserts \a count rows of child items at row \a row.
-
-    \sa insertRow(), insertColumns()
-*/
 void QStandardItem::insertRows(int row, int count)
 {
    Q_D(QStandardItem);
@@ -1151,11 +970,6 @@ void QStandardItem::insertRows(int row, int count)
    d->insertRows(row, count, QList<QStandardItem *>());
 }
 
-/*!
-    Inserts \a count columns of child items at column \a column.
-
-    \sa insertColumn(), insertRows()
-*/
 void QStandardItem::insertColumns(int column, int count)
 {
    Q_D(QStandardItem);
@@ -1171,23 +985,11 @@ void QStandardItem::removeRow(int row)
    removeRows(row, 1);
 }
 
-/*!
-    Removes the given \a column. The items that were in the
-    column are deleted.
-
-    \sa takeColumn(), removeColumns(), removeRow()
-*/
 void QStandardItem::removeColumn(int column)
 {
    removeColumns(column, 1);
 }
 
-/*!
-    Removes \a count rows at row \a row. The items that were in those rows are
-    deleted.
-
-    \sa removeRow(), removeColumn()
-*/
 void QStandardItem::removeRows(int row, int count)
 {
    Q_D(QStandardItem);
@@ -1245,42 +1047,17 @@ void QStandardItem::removeColumns(int column, int count)
    }
 }
 
-/*!
-    Returns true if this item has any children; otherwise returns false.
-
-    \sa rowCount(), columnCount(), child()
-*/
 bool QStandardItem::hasChildren() const
 {
    return (rowCount() > 0) && (columnCount() > 0);
 }
 
-/*!
-    Sets the child item at (\a row, \a column) to \a item. This item (the parent
-    item) takes ownership of \a item. If necessary, the row count and column
-    count are increased to fit the item.
-
-    \sa child()
-*/
 void QStandardItem::setChild(int row, int column, QStandardItem *item)
 {
    Q_D(QStandardItem);
    d->setChild(row, column, item, true);
 }
 
-/*!
-    \fn QStandardItem::setChild(int row, QStandardItem *item)
-    \overload
-
-    Sets the child at \a row to \a item.
-*/
-
-/*!
-    Returns the child item at (\a row, \a column) if one has been set; otherwise
-    returns 0.
-
-    \sa setChild(), takeChild(), parent()
-*/
 QStandardItem *QStandardItem::child(int row, int column) const
 {
    Q_D(const QStandardItem);
@@ -1291,16 +1068,6 @@ QStandardItem *QStandardItem::child(int row, int column) const
    return d->children.at(index);
 }
 
-/*!
-    Removes the child item at (\a row, \a column) without deleting it, and returns
-    a pointer to the item. If there was no child at the given location, then
-    this function returns 0.
-
-    Note that this function, unlike takeRow() and takeColumn(), does not affect
-    the dimensions of the child table.
-
-    \sa child(), takeRow(), takeColumn()
-*/
 QStandardItem *QStandardItem::takeChild(int row, int column)
 {
    Q_D(QStandardItem);
@@ -1316,24 +1083,20 @@ QStandardItem *QStandardItem::takeChild(int row, int column)
    return item;
 }
 
-/*!
-    Removes \a row without deleting the row items, and returns a list of
-    pointers to the removed items. For items in the row that have not been
-    set, the corresponding pointers in the list will be 0.
-
-    \sa removeRow(), insertRow(), takeColumn()
-*/
 QList<QStandardItem *> QStandardItem::takeRow(int row)
 {
    Q_D(QStandardItem);
    if ((row < 0) || (row >= rowCount())) {
       return QList<QStandardItem *>();
    }
+
    if (d->model) {
       d->model->d_func()->rowsAboutToBeRemoved(this, row, row);
    }
+
    QList<QStandardItem *> items;
    int index = d->childIndex(row, 0);  // Will return -1 if there are no columns
+
    if (index != -1) {
       int col_count = d->columnCount();
       for (int column = 0; column < col_count; ++column) {
@@ -1352,13 +1115,6 @@ QList<QStandardItem *> QStandardItem::takeRow(int row)
    return items;
 }
 
-/*!
-    Removes \a column without deleting the column items, and returns a list of
-    pointers to the removed items. For items in the column that have not been
-    set, the corresponding pointers in the list will be 0.
-
-    \sa removeColumn(), insertColumn(), takeRow()
-*/
 QList<QStandardItem *> QStandardItem::takeColumn(int column)
 {
    Q_D(QStandardItem);
@@ -1386,18 +1142,6 @@ QList<QStandardItem *> QStandardItem::takeColumn(int column)
    return items;
 }
 
-/*!
-    Returns true if this item is less than \a other; otherwise returns false.
-
-    The default implementation uses the data for the item's sort role (see
-    QStandardItemModel::sortRole) to perform the comparison if the item
-    belongs to a model; otherwise, the data for the item's Qt::DisplayRole
-    (text()) is used to perform the comparison.
-
-    sortChildren() and QStandardItemModel::sort() use this function when
-    sorting items. If you want custom sorting, you can subclass QStandardItem
-    and reimplement this function.
-*/
 bool QStandardItem::operator<(const QStandardItem &other) const
 {
    const int role = model() ? model()->sortRole() : Qt::DisplayRole;
@@ -1440,15 +1184,6 @@ bool QStandardItem::operator<(const QStandardItem &other) const
    }
 }
 
-/*!
-    Sorts the children of the item using the given \a order, by the values in
-    the given \a column.
-
-    \note This function is recursive, therefore it sorts the children of the
-    item, its grandchildren, etc.
-
-    \sa {operator<()}
-*/
 void QStandardItem::sortChildren(int column, Qt::SortOrder order)
 {
    Q_D(QStandardItem);
@@ -1468,15 +1203,6 @@ void QStandardItem::sortChildren(int column, Qt::SortOrder order)
    }
 }
 
-/*!
-    Returns a copy of this item. The item's children are not copied.
-
-    When subclassing QStandardItem, you can reimplement this function
-    to provide QStandardItemModel with a factory that it can use to
-    create new items on demand.
-
-    \sa QStandardItemModel::setItemPrototype(), operator=()
-*/
 QStandardItem *QStandardItem::clone() const
 {
    return new QStandardItem(*this);
@@ -1487,8 +1213,6 @@ int QStandardItem::type() const
    return Type;
 }
 
-
-
 void QStandardItem::read(QDataStream &in)
 {
    Q_D(QStandardItem);
@@ -1498,12 +1222,6 @@ void QStandardItem::read(QDataStream &in)
    setFlags(Qt::ItemFlags(flags));
 }
 
-/*!
-    Writes the item to stream \a out. Only the data and flags of the item
-    are written, not the child items.
-
-    \sa read()
-*/
 void QStandardItem::write(QDataStream &out) const
 {
    Q_D(const QStandardItem);
@@ -1524,97 +1242,6 @@ QDataStream &operator<<(QDataStream &out, const QStandardItem &item)
    return out;
 }
 
-
-
-/*!
-    \class QStandardItemModel
-    \brief The QStandardItemModel class provides a generic model for storing custom data.
-    \ingroup model-view
-
-    QStandardItemModel can be used as a repository for standard Qt
-    data types. It is one of the \l {Model/View Classes} and is part
-    of Qt's \l {Model/View Programming}{model/view} framework.
-
-    QStandardItemModel provides a classic item-based approach to working with
-    the model.  The items in a QStandardItemModel are provided by
-    QStandardItem.
-
-    QStandardItemModel implements the QAbstractItemModel interface, which
-    means that the model can be used to provide data in any view that supports
-    that interface (such as QListView, QTableView and QTreeView, and your own
-    custom views). For performance and flexibility, you may want to subclass
-    QAbstractItemModel to provide support for different kinds of data
-    repositories. For example, the QDirModel provides a model interface to the
-    underlying file system.
-
-    When you want a list or tree, you typically create an empty
-    QStandardItemModel and use appendRow() to add items to the model, and
-    item() to access an item.  If your model represents a table, you typically
-    pass the dimensions of the table to the QStandardItemModel constructor and
-    use setItem() to position items into the table. You can also use setRowCount()
-    and setColumnCount() to alter the dimensions of the model. To insert items,
-    use insertRow() or insertColumn(), and to remove items, use removeRow() or
-    removeColumn().
-
-    You can set the header labels of your model with setHorizontalHeaderLabels()
-    and setVerticalHeaderLabels().
-
-    You can search for items in the model with findItems(), and sort the model by
-    calling sort().
-
-    Call clear() to remove all items from the model.
-
-    An example usage of QStandardItemModel to create a table:
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qstandarditemmodel.cpp 0
-
-    An example usage of QStandardItemModel to create a tree:
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qstandarditemmodel.cpp 1
-
-    After setting the model on a view, you typically want to react to user
-    actions, such as an item being clicked. Since a QAbstractItemView provides
-    QModelIndex-based signals and functions, you need a way to obtain the
-    QStandardItem that corresponds to a given QModelIndex, and vice
-    versa. itemFromIndex() and indexFromItem() provide this mapping. Typical
-    usage of itemFromIndex() includes obtaining the item at the current index
-    in a view, and obtaining the item that corresponds to an index carried by
-    a QAbstractItemView signal, such as QAbstractItemView::clicked(). First
-    you connect the view's signal to a slot in your class:
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qstandarditemmodel.cpp 2
-
-    When you receive the signal, you call itemFromIndex() on the given model
-    index to get a pointer to the item:
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qstandarditemmodel.cpp 3
-
-    Conversely, you must obtain the QModelIndex of an item when you want to
-    invoke a model/view function that takes an index as argument. You can
-    obtain the index either by using the model's indexFromItem() function, or,
-    equivalently, by calling QStandardItem::index():
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qstandarditemmodel.cpp 4
-
-    You are, of course, not required to use the item-based approach; you could
-    instead rely entirely on the QAbstractItemModel interface when working with
-    the model, or use a combination of the two as appropriate.
-
-    \sa QStandardItem, {Model/View Programming}, QAbstractItemModel,
-    {itemviews/simpletreemodel}{Simple Tree Model example},
-    {Item View Convenience Classes}
-*/
-
-/*!
-    \fn void QStandardItemModel::itemChanged(QStandardItem *item)
-    \since 4.2
-
-    This signal is emitted whenever the data of \a item has changed.
-*/
-
-/*!
-    Constructs a new item model with the given \a parent.
-*/
 QStandardItemModel::QStandardItemModel(QObject *parent)
    : QAbstractItemModel(*new QStandardItemModelPrivate, parent)
 {
@@ -1623,10 +1250,6 @@ QStandardItemModel::QStandardItemModel(QObject *parent)
    d->root->d_func()->setModel(this);
 }
 
-/*!
-    Constructs a new item model that initially has \a rows rows and \a columns
-    columns, and that has the given \a parent.
-*/
 QStandardItemModel::QStandardItemModel(int rows, int columns, QObject *parent)
    : QAbstractItemModel(*new QStandardItemModelPrivate, parent)
 {
@@ -1676,25 +1299,6 @@ void QStandardItemModel::clear()
    endResetModel();
 }
 
-/*!
-    \since 4.2
-
-    Returns a pointer to the QStandardItem associated with the given \a index.
-
-    Calling this function is typically the initial step when processing
-    QModelIndex-based signals from a view, such as
-    QAbstractItemView::activated(). In your slot, you call itemFromIndex(),
-    with the QModelIndex carried by the signal as argument, to obtain a
-    pointer to the corresponding QStandardItem.
-
-    Note that this function will lazily create an item for the index (using
-    itemPrototype()), and set it in the parent item's child table, if no item
-    already exists at that index.
-
-    If \a index is an invalid index, this function returns 0.
-
-    \sa indexFromItem()
-*/
 QStandardItem *QStandardItemModel::itemFromIndex(const QModelIndex &index) const
 {
    Q_D(const QStandardItemModel);
@@ -1714,18 +1318,6 @@ QStandardItem *QStandardItemModel::itemFromIndex(const QModelIndex &index) const
    return item;
 }
 
-/*!
-    \since 4.2
-
-    Returns the QModelIndex associated with the given \a item.
-
-    Use this function when you want to perform an operation that requires the
-    QModelIndex of the item, such as
-    QAbstractItemView::scrollTo(). QStandardItem::index() is provided as
-    convenience; it is equivalent to calling this function.
-
-    \sa itemFromIndex(), QStandardItem::index()
-*/
 QModelIndex QStandardItemModel::indexFromItem(const QStandardItem *item) const
 {
    if (item && item->d_func()->parent) {
@@ -1735,100 +1327,36 @@ QModelIndex QStandardItemModel::indexFromItem(const QStandardItem *item) const
    return QModelIndex();
 }
 
-/*!
-    \since 4.2
-
-    Sets the number of rows in this model to \a rows. If
-    this is less than rowCount(), the data in the unwanted rows
-    is discarded.
-
-    \sa setColumnCount()
-*/
 void QStandardItemModel::setRowCount(int rows)
 {
    Q_D(QStandardItemModel);
    d->root->setRowCount(rows);
 }
 
-/*!
-    \since 4.2
-
-    Sets the number of columns in this model to \a columns. If
-    this is less than columnCount(), the data in the unwanted columns
-    is discarded.
-
-    \sa setRowCount()
-*/
 void QStandardItemModel::setColumnCount(int columns)
 {
    Q_D(QStandardItemModel);
    d->root->setColumnCount(columns);
 }
 
-/*!
-    \since 4.2
-
-    Sets the item for the given \a row and \a column to \a item. The model
-    takes ownership of the item. If necessary, the row count and column count
-    are increased to fit the item. The previous item at the given location (if
-    there was one) is deleted.
-
-    \sa item()
-*/
 void QStandardItemModel::setItem(int row, int column, QStandardItem *item)
 {
    Q_D(QStandardItemModel);
    d->root->d_func()->setChild(row, column, item, true);
 }
 
-/*!
-  \fn QStandardItemModel::setItem(int row, QStandardItem *item)
-  \overload
-*/
-
-/*!
-    \since 4.2
-
-    Returns the item for the given \a row and \a column if one has been set;
-    otherwise returns 0.
-
-    \sa setItem(), takeItem(), itemFromIndex()
-*/
 QStandardItem *QStandardItemModel::item(int row, int column) const
 {
    Q_D(const QStandardItemModel);
    return d->root->child(row, column);
 }
 
-/*!
-    \since 4.2
-
-    Returns the model's invisible root item.
-
-    The invisible root item provides access to the model's top-level items
-    through the QStandardItem API, making it possible to write functions that
-    can treat top-level items and their children in a uniform way; for
-    example, recursive functions involving a tree model.
-
-    \note Calling \l{QAbstractItemModel::index()}{index()} on the QStandardItem object
-    retrieved from this function is not valid.
-*/
 QStandardItem *QStandardItemModel::invisibleRootItem() const
 {
    Q_D(const QStandardItemModel);
    return d->root.data();
 }
 
-/*!
-    \since 4.2
-
-    Sets the horizontal header item for \a column to \a item.  The model takes
-    ownership of the item. If necessary, the column count is increased to fit
-    the item. The previous header item (if there was one) is deleted.
-
-    \sa horizontalHeaderItem(), setHorizontalHeaderLabels(),
-    setVerticalHeaderItem()
-*/
 void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item)
 {
    Q_D(QStandardItemModel);
@@ -1863,14 +1391,6 @@ void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item
    emit headerDataChanged(Qt::Horizontal, column, column);
 }
 
-/*!
-    \since 4.2
-
-    Returns the horizontal header item for \a column if one has been set;
-    otherwise returns 0.
-
-    \sa setHorizontalHeaderItem(), verticalHeaderItem()
-*/
 QStandardItem *QStandardItemModel::horizontalHeaderItem(int column) const
 {
    Q_D(const QStandardItemModel);
@@ -1880,16 +1400,6 @@ QStandardItem *QStandardItemModel::horizontalHeaderItem(int column) const
    return d->columnHeaderItems.at(column);
 }
 
-/*!
-    \since 4.2
-
-    Sets the vertical header item for \a row to \a item.  The model takes
-    ownership of the item. If necessary, the row count is increased to fit the
-    item. The previous header item (if there was one) is deleted.
-
-    \sa verticalHeaderItem(), setVerticalHeaderLabels(),
-    setHorizontalHeaderItem()
-*/
 void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
 {
    Q_D(QStandardItemModel);
@@ -1924,14 +1434,6 @@ void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
    emit headerDataChanged(Qt::Vertical, row, row);
 }
 
-/*!
-    \since 4.2
-
-    Returns the vertical header item for row \a row if one has been set;
-    otherwise returns 0.
-
-    \sa setVerticalHeaderItem(), horizontalHeaderItem()
-*/
 QStandardItem *QStandardItemModel::verticalHeaderItem(int row) const
 {
    Q_D(const QStandardItemModel);
@@ -1941,14 +1443,6 @@ QStandardItem *QStandardItemModel::verticalHeaderItem(int row) const
    return d->rowHeaderItems.at(row);
 }
 
-/*!
-    \since 4.2
-
-    Sets the horizontal header labels using \a labels. If necessary, the
-    column count is increased to the size of \a labels.
-
-    \sa setHorizontalHeaderItem()
-*/
 void QStandardItemModel::setHorizontalHeaderLabels(const QStringList &labels)
 {
    Q_D(QStandardItemModel);
@@ -1965,14 +1459,6 @@ void QStandardItemModel::setHorizontalHeaderLabels(const QStringList &labels)
    }
 }
 
-/*!
-    \since 4.2
-
-    Sets the vertical header labels using \a labels. If necessary, the row
-    count is increased to the size of \a labels.
-
-    \sa setVerticalHeaderItem()
-*/
 void QStandardItemModel::setVerticalHeaderLabels(const QStringList &labels)
 {
    Q_D(QStandardItemModel);
@@ -1989,21 +1475,6 @@ void QStandardItemModel::setVerticalHeaderLabels(const QStringList &labels)
    }
 }
 
-/*!
-    \since 4.2
-
-    Sets the item prototype for the model to the specified \a item. The model
-    takes ownership of the prototype.
-
-    The item prototype acts as a QStandardItem factory, by relying on the
-    QStandardItem::clone() function.  To provide your own prototype, subclass
-    QStandardItem, reimplement QStandardItem::clone() and set the prototype to
-    be an instance of your custom class. Whenever QStandardItemModel needs to
-    create an item on demand (for instance, when a view or item delegate calls
-    setData())), the new items will be instances of your custom class.
-
-    \sa itemPrototype(), QStandardItem::clone()
-*/
 void QStandardItemModel::setItemPrototype(const QStandardItem *item)
 {
    Q_D(QStandardItemModel);
@@ -2013,15 +1484,6 @@ void QStandardItemModel::setItemPrototype(const QStandardItem *item)
    }
 }
 
-/*!
-    \since 4.2
-
-    Returns the item prototype used by the model. The model uses the item
-    prototype as an item factory when it needs to construct new items on
-    demand (for instance, when a view or item delegate calls setData()).
-
-    \sa setItemPrototype()
-*/
 const QStandardItem *QStandardItemModel::itemPrototype() const
 {
    Q_D(const QStandardItemModel);
@@ -2361,6 +1823,7 @@ QMap<int, QVariant> QStandardItemModel::itemData(const QModelIndex &index) const
 {
    Q_D(const QStandardItemModel);
    QStandardItem *item = d->itemFromIndex(index);
+
    return item ? item->d_func()->itemData() : QMap<int, QVariant>();
 }
 
@@ -2370,9 +1833,11 @@ QMap<int, QVariant> QStandardItemModel::itemData(const QModelIndex &index) const
 QModelIndex QStandardItemModel::parent(const QModelIndex &child) const
 {
    Q_D(const QStandardItemModel);
+
    if (!d->indexValid(child)) {
       return QModelIndex();
    }
+
    QStandardItem *parentItem = static_cast<QStandardItem *>(child.internalPointer());
    return indexFromItem(parentItem);
 }
@@ -2486,12 +1951,6 @@ void QStandardItemModel::sort(int column, Qt::SortOrder order)
    Q_D(QStandardItemModel);
    d->root->sortChildren(column, order);
 }
-
-/*!
-  \fn QObject *QStandardItemModel::parent() const
-  \internal
-*/
-
 
 /*!
   \reimp
@@ -2632,7 +2091,6 @@ bool QStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
    QByteArray encoded = data->data(format);
    QDataStream stream(&encoded, QIODevice::ReadOnly);
 
-
    //code based on QAbstractItemModel::decodeData
    // adapted to work with QStandardItem
    int top = INT_MAX;
@@ -2733,7 +2191,5 @@ void QStandardItemModel::_q_emitItemChanged(const QModelIndex &topLeft, const QM
    Q_D(QStandardItemModel);
    d->_q_emitItemChanged(topLeft, bottomRight);
 }
-
-
 
 #endif // QT_NO_STANDARDITEMMODEL

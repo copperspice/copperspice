@@ -24,11 +24,11 @@
 #ifndef QSTYLEDITEMDELEGATE_H
 #define QSTYLEDITEMDELEGATE_H
 
-#include <QtGui/qabstractitemdelegate.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qpixmap.h>
-#include <QtCore/qvariant.h>
-#include <QScopedPointer>
+#include <qabstractitemdelegate.h>
+#include <qstring.h>
+#include <qpixmap.h>
+#include <qvariant.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_ITEMVIEWS
 

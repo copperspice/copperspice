@@ -42,8 +42,6 @@
 #include <qdebug.h>
 #include <qtextstream.h>
 
-
-
 #include <qapplication_p.h>
 #include <qlayoutengine_p.h>
 #include <qwidgetresizehandler_p.h>
@@ -55,7 +53,6 @@
 
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 
-
 #if ! defined(QT_NO_DOCKWIDGET) && ! defined(QT_NO_DEBUG_STREAM)
 
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QString indent);
@@ -63,11 +60,11 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QSt
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutItem &item, QString indent)
 {
    qout << indent << "QDockAreaLayoutItem: "
-      << "pos: " << item.pos << " size:" << item.size
-      << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
-      << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize) << '\n';
+        << "pos: " << item.pos << " size:" << item.size
+        << " gap:" << (item.flags & QDockAreaLayoutItem::GapItem)
+        << " keepSize:" << (item.flags & QDockAreaLayoutItem::KeepSize) << '\n';
 
-   indent += QLatin1String("  ");
+   indent += QString("  ");
 
    if (item.widgetItem != 0) {
       qout << indent << "widget: "
@@ -96,17 +93,18 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutItem &item, QStri
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QString indent)
 {
    const QSize minSize = layout.minimumSize();
+
    qout << indent << "QDockAreaLayoutInfo: "
       << layout.rect.left() << ','
       << layout.rect.top() << ' '
       << layout.rect.width() << 'x'
       << layout.rect.height()
       << " min size: " << minSize.width() << ',' << minSize.height()
-      << " orient:" << layout.o
-      << " tabbed:" << layout.tabbed
+      << " orient:"  << layout.o
+      << " tabbed:"  << layout.tabbed
       << " tbshape:" << layout.tabBarShape << '\n';
 
-   indent += QLatin1String("  ");
+   indent += QString("  ");
 
    for (int i = 0; i < layout.item_list.count(); ++i) {
       qout << indent << "Item: " << i << '\n';
@@ -1133,6 +1131,7 @@ void QMainWindowLayout::addToolBarBreak(Qt::ToolBarArea area)
 void QMainWindowLayout::insertToolBarBreak(QToolBar *before)
 {
    layoutState.toolBarAreaLayout.insertToolBarBreak(before);
+
    if (savedState.isValid()) {
       savedState.toolBarAreaLayout.insertToolBarBreak(before);
    }
@@ -1142,23 +1141,25 @@ void QMainWindowLayout::insertToolBarBreak(QToolBar *before)
 void QMainWindowLayout::removeToolBarBreak(QToolBar *before)
 {
    layoutState.toolBarAreaLayout.removeToolBarBreak(before);
+
    if (savedState.isValid()) {
       savedState.toolBarAreaLayout.removeToolBarBreak(before);
    }
+
    invalidate();
 }
 
 void QMainWindowLayout::moveToolBar(QToolBar *toolbar, int pos)
 {
    layoutState.toolBarAreaLayout.moveToolBar(toolbar, pos);
+
    if (savedState.isValid()) {
       savedState.toolBarAreaLayout.moveToolBar(toolbar, pos);
    }
+
    invalidate();
 }
 
-/* Removes the toolbar from the mainwindow so that it can be added again. Does not
-   explicitly hide the toolbar. */
 void QMainWindowLayout::removeToolBar(QToolBar *toolbar)
 {
    if (toolbar) {
@@ -1173,22 +1174,18 @@ void QMainWindowLayout::removeToolBar(QToolBar *toolbar)
       }
 
       removeWidget(toolbar);
-
    }
 }
 
-/*!
-    Adds \a toolbar to \a area, continuing the current line.
-*/
 void QMainWindowLayout::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar, bool)
 {
    validateToolBarArea(area);
 
-
    {
-      //let's add the toolbar to the layout
+      // add the toolbar to the layout
       addChildWidget(toolbar);
       QLayoutItem *item = layoutState.toolBarAreaLayout.addToolBar(toDockPos(area), toolbar);
+
       if (savedState.isValid() && item) {
          // copy the toolbar also in the saved state
          savedState.toolBarAreaLayout.insertItem(toDockPos(area), item);
@@ -1200,17 +1197,16 @@ void QMainWindowLayout::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar, bool
    }
 }
 
-
 void QMainWindowLayout::insertToolBar(QToolBar *before, QToolBar *toolbar)
 {
-
-
    addChildWidget(toolbar);
    QLayoutItem *item = layoutState.toolBarAreaLayout.insertToolBar(before, toolbar);
+
    if (savedState.isValid() && item) {
       // copy the toolbar also in the saved state
       savedState.toolBarAreaLayout.insertItem(before, item);
    }
+
    if (!currentGapPos.isEmpty() && currentGapPos.first() == 0) {
       currentGapPos = layoutState.toolBarAreaLayout.currentGapIndex();
       if (!currentGapPos.isEmpty()) {

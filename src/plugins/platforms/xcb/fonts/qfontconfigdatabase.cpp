@@ -55,7 +55,7 @@ static inline int weightFromFcWeight(int fcweight)
 {
    // Font Config uses weights from 0 to 215 (the highest enum value) while QFont ranges from
    // 0 to 99. The spacing between the values for the enums are uneven so a linear mapping from
-   // Font Config values to Qt would give surprising results.  So, we do a piecewise linear
+   // Font Config values to CSt would give surprising results.  So, we do a piecewise linear
    // mapping.  This ensures that where there is a corresponding enum on both sides (for example
    // FC_WEIGHT_DEMIBOLD and QFont::DemiBold) we map one to the other but other values map to intermediate weights.
 
@@ -104,7 +104,7 @@ static inline int weightFromFcWeight(int fcweight)
 
 static inline int stretchFromFcWidth(int fcwidth)
 {
-   // Font Config enums for width match pretty closely with those used by Qt so just use
+   // Font Config enums for width match pretty closely with those used by CS so just use
    // Font Config values directly while enforcing the same limits imposed by QFont.
    const int maxStretch = 4000;
    int qtstretch;

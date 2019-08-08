@@ -685,8 +685,7 @@ void QGLXContext::queryDummyContext()
    QScopedPointer<QSurface> surface;
    Display *display = glXGetCurrentDisplay();
 
-   if (!display) {
-      // FIXME: Since Qt 5.6 we don't need to check whether primary screen is NULL
+   if (! display) {
       if (QScreen *screen = QApplication::primaryScreen()) {
          display = DISPLAY_FROM_XCB(static_cast<QXcbScreen *>(screen->handle()));
       }

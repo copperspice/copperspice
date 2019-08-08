@@ -85,7 +85,6 @@ class QPlainTextDocumentLayoutPrivate : public QAbstractTextDocumentLayoutPrivat
    void relayout();
 };
 
-
 QPlainTextDocumentLayout::QPlainTextDocumentLayout(QTextDocument *document)
    : QAbstractTextDocumentLayout(* new QPlainTextDocumentLayoutPrivate, document)
 {
@@ -101,11 +100,9 @@ void QPlainTextDocumentLayout::draw(QPainter *, const PaintContext &)
 
 int QPlainTextDocumentLayout::hitTest(const QPointF &, Qt::HitTestAccuracy ) const
 {
-   //     this function is used from
-   //     QAbstractTextDocumentLayout::anchorAt(), but is not
-   //     implementable in a plain text document layout, because the
-   //     layout depends on the top block and top line which depends on
-   //     the view
+   //  used from QAbstractTextDocumentLayout::anchorAt()
+   //  is not implementable in a plain text document layout, because the
+   //  layout depends on the top block and top line which depends on the view
    return -1;
 }
 
@@ -157,12 +154,8 @@ QRectF QPlainTextDocumentLayout::blockBoundingRect(const QTextBlock &block) cons
    }
 
    return br;
-
 }
 
-/*!
-  Ensures that \a block has a valid layout
- */
 void QPlainTextDocumentLayout::ensureBlockLayout(const QTextBlock &block) const
 {
    if (!block.isValid()) {
@@ -173,7 +166,6 @@ void QPlainTextDocumentLayout::ensureBlockLayout(const QTextBlock &block) const
       const_cast<QPlainTextDocumentLayout *>(this)->layoutBlock(block);
    }
 }
-
 
 void QPlainTextDocumentLayout::setCursorWidth(int width)
 {
@@ -382,10 +374,8 @@ qreal QPlainTextDocumentLayout::blockWidth(const QTextBlock &block)
    return blockWidth;
 }
 
-
 QPlainTextEditControl::QPlainTextEditControl(QPlainTextEdit *parent)
-   : QTextControl(parent), textEdit(parent),
-     topBlock(0)
+   : QTextControl(parent), textEdit(parent), topBlock(0)
 {
    setAcceptRichText(false);
 }
@@ -425,6 +415,7 @@ QMimeData *QPlainTextEditControl::createMimeDataFromSelection() const
 bool QPlainTextEditControl::canInsertFromMimeData(const QMimeData *source) const
 {
    QPlainTextEdit *ed = qobject_cast<QPlainTextEdit *>(parent());
+
    if (!ed) {
       return QTextControl::canInsertFromMimeData(source);
    }
@@ -434,6 +425,7 @@ bool QPlainTextEditControl::canInsertFromMimeData(const QMimeData *source) const
 void QPlainTextEditControl::insertFromMimeData(const QMimeData *source)
 {
    QPlainTextEdit *ed = qobject_cast<QPlainTextEdit *>(parent());
+
    if (!ed) {
       QTextControl::insertFromMimeData(source);
    } else {
@@ -464,7 +456,6 @@ qreal QPlainTextEditPrivate::verticalOffset(int topBlock, int topLine) const
    }
    return offset;
 }
-
 
 qreal QPlainTextEditPrivate::verticalOffset() const
 {
@@ -721,16 +712,15 @@ void QPlainTextEditPrivate::updateViewport()
 }
 
 QPlainTextEditPrivate::QPlainTextEditPrivate()
-   : control(0),
-     tabChangesFocus(false),
+   : control(0), tabChangesFocus(false),
      lineWrap(QPlainTextEdit::WidgetWidth),
      wordWrap(QTextOption::WrapAtWordBoundaryOrAnywhere),
      clickCausedFocus(0), topLine(0), topLineFracture(0),
      pageUpDownLastCursorYIsValid(false)
 {
    showCursorOnInitialShow = true;
-   backgroundVisible = false;
-   centerOnScroll = false;
+   backgroundVisible       = false;
+   centerOnScroll          = false;
    inDrag = false;
 }
 
@@ -748,11 +738,11 @@ void QPlainTextEditPrivate::init(const QString &txt)
 
    QObject::connect(vbar, SIGNAL(actionTriggered(int)), q, SLOT(_q_verticalScrollbarActionTriggered(int)));
 
-   QObject::connect(control, &QPlainTextEditControl::microFocusChanged,      q, &QPlainTextEdit::updateMicroFocus);
-   QObject::connect(control, &QPlainTextEditControl::documentSizeChanged,    q, &QPlainTextEdit::_q_adjustScrollbars);
-   QObject::connect(control, &QPlainTextEditControl::blockCountChanged,      q, &QPlainTextEdit::blockCountChanged);
-   QObject::connect(control, &QPlainTextEditControl::updateRequest,          q, &QPlainTextEdit::_q_repaintContents);
-   QObject::connect(control, &QPlainTextEditControl::modificationChanged,    q, &QPlainTextEdit::modificationChanged);
+   QObject::connect(control, &QPlainTextEditControl::microFocusChanged,    q, &QPlainTextEdit::updateMicroFocus);
+   QObject::connect(control, &QPlainTextEditControl::documentSizeChanged,  q, &QPlainTextEdit::_q_adjustScrollbars);
+   QObject::connect(control, &QPlainTextEditControl::blockCountChanged,    q, &QPlainTextEdit::blockCountChanged);
+   QObject::connect(control, &QPlainTextEditControl::updateRequest,        q, &QPlainTextEdit::_q_repaintContents);
+   QObject::connect(control, &QPlainTextEditControl::modificationChanged,  q, &QPlainTextEdit::modificationChanged);
 
    QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(textChanged()));
    QObject::connect(control, SIGNAL(undoAvailable(bool)),     q, SLOT(undoAvailable(bool)));
@@ -815,7 +805,6 @@ void QPlainTextEditPrivate::_q_repaintContents(const QRectF &contentsRect)
 
 void QPlainTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode, bool moveCursor)
 {
-
    Q_Q(QPlainTextEdit);
 
    QTextCursor cursor = control->textCursor();
@@ -835,6 +824,7 @@ void QPlainTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCurso
       QRectF br = q->blockBoundingRect(block);
       qreal h = 0;
       int atEnd = false;
+
       while (h + br.height() <= visible.bottom()) {
          if (!block.next().isValid()) {
             atEnd = true;
@@ -983,8 +973,6 @@ void QPlainTextEditPrivate::_q_adjustScrollbars()
       vSliderLength = lineSpacing != 0 ? viewport->height() / lineSpacing : 0;
    }
 
-
-
    QSizeF documentSize = documentLayout->documentSize();
    vbar->setRange(0, qMax(0, vmax));
    vbar->setPageStep(vSliderLength);
@@ -1032,8 +1020,6 @@ QPlainTextEdit::QPlainTextEdit(const QString &text, QWidget *parent)
    d->init(text);
 }
 
-
-
 QPlainTextEdit::~QPlainTextEdit()
 {
    Q_D(QPlainTextEdit);
@@ -1043,7 +1029,6 @@ QPlainTextEdit::~QPlainTextEdit()
       }
    }
 }
-
 
 void QPlainTextEdit::setDocument(QTextDocument *document)
 {
@@ -1082,10 +1067,13 @@ QTextDocument *QPlainTextEdit::document() const
 void QPlainTextEdit::setPlaceholderText(const QString &placeholderText)
 {
     Q_D(QPlainTextEdit);
+
     if (d->placeholderText != placeholderText) {
         d->placeholderText = placeholderText;
-        if (d->control->document()->isEmpty())
-            d->viewport->update();
+
+        if (d->control->document()->isEmpty()) {
+           d->viewport->update();
+        }
     }
 }
 
@@ -1110,7 +1098,6 @@ QTextCursor QPlainTextEdit::textCursor() const
    Q_D(const QPlainTextEdit);
    return d->control->textCursor();
 }
-
 
 QString QPlainTextEdit::anchorAt(const QPoint &pos) const
 {
@@ -1141,16 +1128,12 @@ void QPlainTextEdit::redo()
 }
 
 
-
 #ifndef QT_NO_CLIPBOARD
-
-
 void QPlainTextEdit::cut()
 {
    Q_D(QPlainTextEdit);
    d->control->cut();
 }
-
 
 void QPlainTextEdit::copy()
 {
@@ -1174,15 +1157,13 @@ void QPlainTextEdit::clear()
    d->control->clear();
 }
 
-
 void QPlainTextEdit::selectAll()
 {
    Q_D(QPlainTextEdit);
    d->control->selectAll();
 }
 
-/*! \internal
-*/
+// internal
 bool QPlainTextEdit::event(QEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1198,11 +1179,13 @@ bool QPlainTextEdit::event(QEvent *e)
       e->setAccepted(ce.isAccepted());
       return result;
    }
-#endif // QT_NO_CONTEXTMENU
+#endif
+
    if (e->type() == QEvent::ShortcutOverride
       || e->type() == QEvent::ToolTip) {
       d->sendControlEvent(e);
    }
+
 #ifdef QT_KEYPAD_NAVIGATION
    else if (e->type() == QEvent::EnterEditFocus || e->type() == QEvent::LeaveEditFocus) {
       if (QApplication::keypadNavigationEnabled()) {
@@ -1210,6 +1193,7 @@ bool QPlainTextEdit::event(QEvent *e)
       }
    }
 #endif
+
 #ifndef QT_NO_GESTURES
    else if (e->type() == QEvent::Gesture) {
       QGestureEvent *ge = static_cast<QGestureEvent *>(e);
@@ -1239,13 +1223,12 @@ bool QPlainTextEdit::event(QEvent *e)
       }
       return true;
    }
-#endif // QT_NO_GESTURES
+#endif
+
    return QAbstractScrollArea::event(e);
 }
 
-/*! \internal
-*/
-
+// internal
 void QPlainTextEdit::timerEvent(QTimerEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1297,13 +1280,11 @@ void QPlainTextEdit::timerEvent(QTimerEvent *e)
 #endif
 }
 
-
 void QPlainTextEdit::setPlainText(const QString &text)
 {
    Q_D(QPlainTextEdit);
    d->control->setPlainText(text);
 }
-
 
 void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
 {
@@ -1673,7 +1654,6 @@ void QPlainTextEdit::paintEvent(QPaintEvent *e)
    }
 }
 
-
 void QPlainTextEditPrivate::updateDefaultTextOption()
 {
    QTextDocument *doc = control->document();
@@ -2011,10 +1991,6 @@ QRect QPlainTextEdit::cursorRect(const QTextCursor &cursor) const
    return r;
 }
 
-/*!
-  returns a rectangle (in viewport coordinates) that includes the
-  cursor of the text edit.
- */
 QRect QPlainTextEdit::cursorRect() const
 {
    Q_D(const QPlainTextEdit);
@@ -2022,8 +1998,6 @@ QRect QPlainTextEdit::cursorRect() const
    r.translate(-d->horizontalOffset(), -(int)d->verticalOffset());
    return r;
 }
-
-
 
 bool QPlainTextEdit::overwriteMode() const
 {
@@ -2036,13 +2010,6 @@ void QPlainTextEdit::setOverwriteMode(bool overwrite)
    Q_D(QPlainTextEdit);
    d->control->setOverwriteMode(overwrite);
 }
-
-/*!
-    \property QPlainTextEdit::tabStopWidth
-    \brief the tab stop width in pixels
-
-    By default, this property contains a value of 80.
-*/
 
 int QPlainTextEdit::tabStopWidth() const
 {
@@ -2061,11 +2028,6 @@ void QPlainTextEdit::setTabStopWidth(int width)
    d->control->document()->setDefaultTextOption(opt);
 }
 
-/*!
-    \property QPlainTextEdit::cursorWidth
-
-    This property specifies the width of the cursor in pixels. The default value is 1.
-*/
 int QPlainTextEdit::cursorWidth() const
 {
    Q_D(const QPlainTextEdit);
@@ -2084,17 +2046,11 @@ void QPlainTextEdit::setExtraSelections(const QList<QTextEdit::ExtraSelection> &
    d->control->setExtraSelections(selections);
 }
 
-/*!
-    Returns previously set extra selections.
-
-    \sa setExtraSelections()
-*/
 QList<QTextEdit::ExtraSelection> QPlainTextEdit::extraSelections() const
 {
    Q_D(const QPlainTextEdit);
    return d->control->extraSelections();
 }
-
 
 QMimeData *QPlainTextEdit::createMimeDataFromSelection() const
 {
@@ -2108,13 +2064,6 @@ bool QPlainTextEdit::canInsertFromMimeData(const QMimeData *source) const
    return d->control->QTextControl::canInsertFromMimeData(source);
 }
 
-/*!
-    This function inserts the contents of the MIME data object, specified
-    by \a source, into the text edit at the current cursor position. It is
-    called whenever text is inserted as the result of a clipboard paste
-    operation, or when the text edit accepts data from a drag and drop
-    operation.
-*/
 void QPlainTextEdit::insertFromMimeData(const QMimeData *source)
 {
    Q_D(QPlainTextEdit);
@@ -2166,7 +2115,6 @@ void QPlainTextEdit::setCurrentCharFormat(const QTextCharFormat &format)
    d->control->setCurrentCharFormat(format);
 }
 
-
 QTextCharFormat QPlainTextEdit::currentCharFormat() const
 {
    Q_D(const QPlainTextEdit);
@@ -2179,16 +2127,12 @@ void QPlainTextEdit::insertPlainText(const QString &text)
    d->control->insertPlainText(text);
 }
 
-
 void QPlainTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
 {
    Q_D(QPlainTextEdit);
    d->control->moveCursor(operation, mode);
 }
 
-/*!
-    Returns whether text can be pasted from the clipboard into the textedit.
-*/
 bool QPlainTextEdit::canPaste() const
 {
    Q_D(const QPlainTextEdit);
@@ -2196,14 +2140,12 @@ bool QPlainTextEdit::canPaste() const
 }
 
 #ifndef QT_NO_PRINTER
-
 void QPlainTextEdit::print(QPagedPaintDevice *printer) const
 {
    Q_D(const QPlainTextEdit);
    d->control->print(printer);
 }
-#endif // QT _NO_PRINTER
-
+#endif
 
 bool QPlainTextEdit::tabChangesFocus() const
 {
@@ -2216,7 +2158,6 @@ void QPlainTextEdit::setTabChangesFocus(bool b)
    Q_D(QPlainTextEdit);
    d->tabChangesFocus = b;
 }
-
 
 QPlainTextEdit::LineWrapMode QPlainTextEdit::lineWrapMode() const
 {
@@ -2273,7 +2214,6 @@ void QPlainTextEdit::setBackgroundVisible(bool visible)
    d->backgroundVisible = visible;
    d->updateViewport();
 }
-
 
 bool QPlainTextEdit::centerOnScroll() const
 {
@@ -2373,12 +2313,6 @@ void QPlainTextEdit::appendPlainText(const QString &text)
    d->append(text, Qt::PlainText);
 }
 
-/*!
-    Appends a new paragraph with \a html to the end of the text edit.
-
-    appendPlainText()
-*/
-
 void QPlainTextEdit::appendHtml(const QString &html)
 {
    Q_D(QPlainTextEdit);
@@ -2407,18 +2341,12 @@ void QPlainTextEdit::ensureCursorVisible()
    d->ensureCursorVisible(d->centerOnScroll);
 }
 
-
 void QPlainTextEdit::centerCursor()
 {
    Q_D(QPlainTextEdit);
    d->ensureVisible(textCursor().position(), true, true);
 }
 
-/*!
-  Returns the first visible block.
-
-  \sa blockBoundingRect()
- */
 QTextBlock QPlainTextEdit::firstVisibleBlock() const
 {
    Q_D(const QPlainTextEdit);
@@ -2438,7 +2366,6 @@ QRectF QPlainTextEdit::blockBoundingGeometry(const QTextBlock &block) const
    return d->control->blockBoundingRect(block);
 }
 
-
 QRectF QPlainTextEdit::blockBoundingRect(const QTextBlock &block) const
 {
    QPlainTextDocumentLayout *documentLayout = qobject_cast<QPlainTextDocumentLayout *>(document()->documentLayout());
@@ -2446,20 +2373,11 @@ QRectF QPlainTextEdit::blockBoundingRect(const QTextBlock &block) const
    return documentLayout->blockBoundingRect(block);
 }
 
-/*!
-    \property QPlainTextEdit::blockCount
-    \brief the number of text blocks in the document.
-
-    By default, in an empty document, this property contains a value of 1.
-*/
 int QPlainTextEdit::blockCount() const
 {
    return document()->blockCount();
 }
 
-/*!  Returns the paint context for the viewport(), useful only when
-  reimplementing paintEvent().
- */
 QAbstractTextDocumentLayout::PaintContext QPlainTextEdit::getPaintContext() const
 {
    Q_D(const QPlainTextEdit);

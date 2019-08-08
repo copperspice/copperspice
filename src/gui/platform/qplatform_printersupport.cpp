@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qplatform_printersupport.h"
-#include "qplatform_printdevice.h"
+#include <qplatform_printersupport.h>
 
+#include <qplatform_printdevice.h>
 #include <qpagesize.h>
 #include <qprinterinfo.h>
 
@@ -31,18 +31,6 @@
 #include <qprintdevice_p.h>
 
 #ifndef QT_NO_PRINTER
-
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QPlatformPrinterSupport
-    \since 5.0
-    \internal
-    \preliminary
-    \ingroup qpa
-
-    \brief The QPlatformPrinterSupport class provides an abstraction for print support.
- */
 
 QPlatformPrinterSupport::QPlatformPrinterSupport()
 {
@@ -52,14 +40,14 @@ QPlatformPrinterSupport::~QPlatformPrinterSupport()
 {
 }
 
-QPrintEngine *QPlatformPrinterSupport::createNativePrintEngine(QPrinter::PrinterMode)
+QPrintEngine *QPlatformPrinterSupport::createNativePrintEngine(QPrinter::PrinterMode mode)
 {
-    return 0;
+    return nullptr;
 }
 
-QPaintEngine *QPlatformPrinterSupport::createPaintEngine(QPrintEngine *, QPrinter::PrinterMode)
+QPaintEngine *QPlatformPrinterSupport::createPaintEngine(QPrintEngine *engine, QPrinter::PrinterMode mode)
 {
-    return 0;
+    return nullptr;
 }
 
 QPrintDevice QPlatformPrinterSupport::createPrintDevice(QPlatformPrintDevice *device)
@@ -69,7 +57,6 @@ QPrintDevice QPlatformPrinterSupport::createPrintDevice(QPlatformPrintDevice *de
 
 QPrintDevice QPlatformPrinterSupport::createPrintDevice(const QString &id)
 {
-    Q_UNUSED(id)
     return QPrintDevice();
 }
 
@@ -90,12 +77,7 @@ QString QPlatformPrinterSupport::defaultPrintDeviceId() const
 
 QPageSize QPlatformPrinterSupport::createPageSize(const QString &id, QSize size, const QString &localizedName)
 {
-    Q_UNUSED(id)
-    Q_UNUSED(size)
-    Q_UNUSED(localizedName)
     return QPageSize();
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTER

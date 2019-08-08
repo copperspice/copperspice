@@ -319,11 +319,6 @@ QPaintEvent::~QPaintEvent()
 {
 }
 
-
-
-
-
-
 QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
    : QEvent(Move), p(pos), oldp(oldPos)
 {}
@@ -337,10 +332,10 @@ QMoveEvent::~QMoveEvent()
 
 
 QExposeEvent::QExposeEvent(const QRegion &exposeRegion)
-   : QEvent(Expose)
-   , rgn(exposeRegion)
+   : QEvent(Expose), rgn(exposeRegion)
 {
 }
+
 /*!
   \internal
 */

@@ -449,6 +449,7 @@ class Q_GUI_EXPORT QFontEngineMulti : public QFontEngine
    inline int fallbackFamilyCount() const {
       return m_fallbackFamilies.size();
    }
+
    inline QString fallbackFamilyAt(int at) const {
       return m_fallbackFamilies.at(at);
    }

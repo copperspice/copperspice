@@ -1218,17 +1218,7 @@ void QWindowsFontEngine::initFontInfo(const QFontDef &request,
    }
 }
 
-/*!
-    \class QWindowsMultiFontEngine
-    \brief Standard Windows Multi font engine.
-    \internal
-    \ingroup qt-lighthouse-win
-
-    "Merges" several font engines that have gaps in the
-    supported writing systems.
-
-    Will probably be superseded by a common Free Type font engine in Qt 5.X.
-*/
+// emerald (multi)
 QWindowsMultiFontEngine::QWindowsMultiFontEngine(QFontEngine *fe, int script)
    : QFontEngineMulti(fe, script)
 {

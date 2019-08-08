@@ -78,14 +78,14 @@ class QCocoaNativeInterface : public QPlatformNativeInterface
 
    /*
        Function to return the NSPrintInfo * from QMacPaintEnginePrivate.
-       Needed by the native print dialog in the Qt Print Support module.
+       Needed by the native print dialog in the Print Support module.
    */
    CS_INVOKABLE_METHOD_1(Private, void *NSPrintInfoForPrintEngine(QPrintEngine *printEngine))
    CS_INVOKABLE_METHOD_2(NSPrintInfoForPrintEngine)
 
    /*
        Function to return the default background pixmap.
-       Needed by QWizard in the Qt widget module.
+       Needed by QWizard
    */
    CS_INVOKABLE_METHOD_1(Private, QPixmap defaultBackgroundPixmapForQWizard())
    CS_INVOKABLE_METHOD_2(defaultBackgroundPixmapForQWizard)

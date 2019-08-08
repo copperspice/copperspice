@@ -820,7 +820,7 @@ QTextEncoder *QTextCodec::makeEncoder(QTextCodec::ConversionFlags flags) const
 
 QString QTextCodec::toUnicode(const QByteArray &a) const
 {
-   return convertToUnicode(a.constData(), a.length(), 0);
+   return convertToUnicode(a.constData(), a.length(), nullptr);
 }
 
 bool QTextCodec::canEncode(QChar ch) const
@@ -849,42 +849,12 @@ QString QTextCodec::toUnicode(const char *chars) const
    return convertToUnicode(chars, len, 0);
 }
 
-
-/*!
-    \class QTextEncoder
-    \brief The QTextEncoder class provides a state-based encoder.
-    \reentrant
-    \ingroup i18n
-
-    A text encoder converts text from Unicode into an encoded text format
-    using a specific codec.
-
-    The encoder converts Unicode into another format, remembering any
-    state that is required between calls.
-
-    \sa QTextCodec::makeEncoder(), QTextDecoder
-*/
-
-/*!
-    \fn QTextEncoder::QTextEncoder(const QTextCodec *codec)
-
-    Constructs a text encoder for the given \a codec.
-*/
-
-/*!
-    Constructs a text encoder for the given \a codec and conversion \a flags.
-
-    \since 4.7
-*/
 QTextEncoder::QTextEncoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags)
    : c(codec), state()
 {
    state.flags = flags;
 }
 
-/*!
-    Destroys the encoder.
-*/
 QTextEncoder::~QTextEncoder()
 {
 }
@@ -966,10 +936,10 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
       if ((pos = header.indexOf("http-equiv=")) != -1) {
          if ((pos = header.lastIndexOf("meta ", pos)) != -1) {
             pos = header.indexOf("charset=", pos) + int(strlen("charset="));
+
             if (pos != -1) {
                int pos2 = header.indexOf('\"', pos + 1);
                QByteArray cs = header.mid(pos, pos2 - pos);
-               //            qDebug("found charset: %s", cs.data());
                c = QTextCodec::codecForName(cs);
             }
          }

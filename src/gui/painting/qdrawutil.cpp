@@ -32,7 +32,6 @@
 #include <qmath.h>
 #include <qhexstring_p.h>
 
-
 void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2, const QPalette &pal,
    bool sunken, int lineWidth, int midLineWidth)
 {
@@ -124,9 +123,7 @@ void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2, const QPalette 
 
 
 void qDrawShadeRect(QPainter *p, int x, int y, int w, int h,
-   const QPalette &pal, bool sunken,
-   int lineWidth, int midLineWidth,
-   const QBrush *fill)
+   const QPalette &pal, bool sunken, int lineWidth, int midLineWidth, const QBrush *fill)
 {
    if (w == 0 || h == 0) {
       return;
@@ -196,6 +193,7 @@ void qDrawShadeRect(QPainter *p, int x, int y, int w, int h,
          k++;
       }
    }
+
    if (fill) {
       QBrush oldBrush = p->brush();
       int tlw = lineWidth + midLineWidth;
@@ -204,20 +202,18 @@ void qDrawShadeRect(QPainter *p, int x, int y, int w, int h,
       p->drawRect(x + tlw, y + tlw, w - 2 * tlw, h - 2 * tlw);
       p->setBrush(oldBrush);
    }
+
    p->setPen(oldPen);                        // restore pen
 }
 
-
-
 void qDrawShadePanel(QPainter *p, int x, int y, int w, int h,
-   const QPalette &pal, bool sunken,
-   int lineWidth, const QBrush *fill)
+   const QPalette &pal, bool sunken, int lineWidth, const QBrush *fill)
 {
    if (w == 0 || h == 0) {
       return;
    }
 
-   if (!(w > 0 && h > 0 && lineWidth >= 0)) {
+   if (! (w > 0 && h > 0 && lineWidth >= 0)) {
       qWarning("qDrawShadePanel: Invalid parameters");
    }
 

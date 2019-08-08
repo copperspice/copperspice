@@ -42,7 +42,7 @@
 // Helper classes for creating font engines directly from font data
 namespace {
 
-#   pragma pack(1)
+#pragma pack(1)
 
 // Common structure for all formats of the "name" table
 struct NameTable {
@@ -885,6 +885,7 @@ QWindowsFontDatabase::~QWindowsFontDatabase()
    removeApplicationFonts();
 }
 
+// emerald (multi)
 QFontEngineMulti *QWindowsFontDatabase::fontEngineMulti(QFontEngine *fontEngine, QChar::Script script)
 {
    return new QWindowsMultiFontEngine(fontEngine, script);

@@ -37,8 +37,6 @@
 
 #ifndef QT_NO_TEXTEDIT
 
-
-
 class QMimeData;
 class QPlainTextEdit;
 class ExtraArea;
@@ -72,14 +70,13 @@ class QPlainTextEditControl : public QTextControl
       emit microFocusChanged();
    }
 
-   QPlainTextEdit *textEdit;
-   int topBlock;
-   QTextBlock firstVisibleBlock() const;
-
    QVariant loadResource(int type, const QUrl &name) override {
       return textEdit->loadResource(type, name);
    }
 
+   QPlainTextEdit *textEdit;
+   int topBlock;
+   QTextBlock firstVisibleBlock() const;
 };
 
 class QPlainTextEditPrivate : public QAbstractScrollAreaPrivate

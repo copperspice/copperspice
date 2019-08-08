@@ -271,22 +271,22 @@ QSize QItemDelegate::sizeHint(const QStyleOptionViewItem &option,
    return (decorationRect | displayRect | checkRect).size();
 }
 
-QWidget *QItemDelegate::createEditor(QWidget *parent,
-   const QStyleOptionViewItem &,
+QWidget *QItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &,
    const QModelIndex &index) const
 {
    Q_D(const QItemDelegate);
-   if (!index.isValid()) {
-      return 0;
+
+   if (! index.isValid()) {
+      return nullptr;
    }
 
-   QVariant::Type t = static_cast<QVariant::Type>(index.data(Qt::EditRole).userType());
    const QItemEditorFactory *factory = d->f;
 
-   if (factory == 0) {
+   if (factory == nullptr) {
       factory = QItemEditorFactory::defaultFactory();
    }
 
+   QVariant::Type t = static_cast<QVariant::Type>(index.data(Qt::EditRole).userType());
    QWidget *w = factory->createEditor(t, parent);
 
    if (w) {

@@ -296,7 +296,7 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
 
    // QTBUG-44332: When running at low integrity level and a Window is parented on a Window
    // of a higher integrity process, using QWindow::fromWinId() (for example in a browser plugin)
-   // ChildWindowFromPointEx() may not find the Qt window (failing with ERROR_ACCESS_DENIED)
+   // ChildWindowFromPointEx() may not find the window (failing with ERROR_ACCESS_DENIED)
 
    if (!currentWindowUnderMouse) {
       const QRect clientRect(QPoint(0, 0), window->size());
@@ -306,8 +306,9 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
    }
 
    compressMouseMove(&msg);
-   // Qt expects the platform plugin to capture the mouse on
-   // any button press until release.
+
+   // expects the platform plugin to capture the mouse on any button press until release.
+
    if (!platformWindow->hasMouseCapture()
       && (msg.message == WM_LBUTTONDOWN || msg.message == WM_MBUTTONDOWN
          || msg.message == WM_RBUTTONDOWN || msg.message == WM_XBUTTONDOWN
@@ -449,14 +450,14 @@ bool QWindowsMouseHandler::translateMouseWheelEvent(QWindow *window, HWND,
       delta = int(msg.wParam);
    }
 
-   Qt::Orientation orientation = (msg.message == WM_MOUSEHWHEEL
-         || (mods & Qt::AltModifier)) ?
-      Qt::Horizontal : Qt::Vertical;
+   Qt::Orientation orientation = (msg.message == WM_MOUSEHWHEEL || (mods & Qt::AltModifier))
+                  ? Qt::Horizontal : Qt::Vertical;
 
    // according to the MSDN documentation on WM_MOUSEHWHEEL:
    // a positive value indicates that the wheel was rotated to the right;
    // a negative value indicates that the wheel was rotated to the left.
-   // Qt defines this value as the exact opposite, so we have to flip the value!
+   // defines this value as the exact opposite, so we have to flip the value
+
    if (msg.message == WM_MOUSEHWHEEL) {
       delta = -delta;
    }

@@ -24,10 +24,10 @@
 #ifndef QDRAWUTIL_H
 #define QDRAWUTIL_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qstring.h>       // char*->QString conversion
-#include <QtCore/qmargins.h>
-#include <QtGui/qpixmap.h>
+#include <qnamespace.h>
+#include <qstring.h>       // char*->QString conversion
+#include <qmargins.h>
+#include <qpixmap.h>
 
 class QPainter;
 class QColorGroup;

@@ -93,8 +93,9 @@ QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) 
 
    if (! creator) {
       const QItemEditorFactory *dfactory = defaultFactory();
-      return dfactory == this ? 0 : dfactory->createEditor(type, parent);
+      return dfactory == this ? nullptr : dfactory->createEditor(type, parent);
    }
+
    return creator->createWidget(parent);
 }
 
@@ -110,9 +111,6 @@ QString QItemEditorFactory::valuePropertyName(QVariant::Type type) const
    return creator->valuePropertyName();
 }
 
-/*!
-    Destroys the item editor factory.
-*/
 QItemEditorFactory::~QItemEditorFactory()
 {
    //we make sure we delete all the QItemEditorCreatorBase
@@ -258,14 +256,14 @@ QString QDefaultItemEditorFactory::valuePropertyName(QVariant::Type type) const
    }
 }
 
-static QItemEditorFactory *q_default_factory = 0;
+static QItemEditorFactory *q_default_factory = nullptr;
 
 struct QDefaultFactoryCleaner {
    inline QDefaultFactoryCleaner() {}
 
    ~QDefaultFactoryCleaner() {
       delete q_default_factory;
-      q_default_factory = 0;
+      q_default_factory = nullptr;
    }
 };
 

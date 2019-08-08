@@ -52,15 +52,16 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
    Q_ASSERT(window);
 
    const QRect br = region.boundingRect();
+
    if (QWindowsContext::verbose > 1) {
       qDebug() << __FUNCTION__ << this << window << offset << br;
    }
 
    QWindowsWindow *rw = QWindowsWindow::baseWindowOf(window);
 
-
    const bool hasAlpha = rw->format().hasAlpha();
    const Qt::WindowFlags flags = window->flags();
+
    if ((flags & Qt::FramelessWindowHint) && QWindowsWindow::setWindowLayered(rw->handle(), flags, hasAlpha, rw->opacity()) && hasAlpha) {
       // Windows with alpha: Use blend function to update.
       QRect r = QHighDpi::toNativePixels(window->frameGeometry(), window);
@@ -205,6 +206,7 @@ QImage QWindowsBackingStore::toImage() const
       qWarning() << __FUNCTION__ << "Image is null.";
       return QImage();
    }
+
    return m_image.data()->image();
 }
 #endif

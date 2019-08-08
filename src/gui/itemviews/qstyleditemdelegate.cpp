@@ -62,7 +62,8 @@ class QStyledItemDelegatePrivate : public QAbstractItemDelegatePrivate
    Q_DECLARE_PUBLIC(QStyledItemDelegate)
 
  public:
-   QStyledItemDelegatePrivate() : factory(0)
+   QStyledItemDelegatePrivate()
+      : factory(nullptr)
    { }
 
    static const QWidget *widget(const QStyleOptionViewItem &option) {
@@ -70,7 +71,13 @@ class QStyledItemDelegatePrivate : public QAbstractItemDelegatePrivate
    }
 
    const QItemEditorFactory *editorFactory() const {
-      return factory ? factory : QItemEditorFactory::defaultFactory();
+
+      if (factory == nullptr) {
+         return QItemEditorFactory::defaultFactory();
+
+      } else {
+         return factory;
+      }
    }
 
    QItemEditorFactory *factory;
@@ -126,7 +133,7 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
             option->icon = qvariant_cast<QIcon>(value);
             QIcon::Mode mode;
 
-            if (!(option->state & QStyle::State_Enabled)) {
+            if (! (option->state & QStyle::State_Enabled)) {
                mode = QIcon::Disabled;
 
             } else if (option->state & QStyle::State_Selected) {
@@ -213,62 +220,40 @@ QSize QStyledItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QM
    return style->sizeFromContents(QStyle::CT_ItemViewItem, &opt, QSize(), widget);
 }
 
-/*!
-    Returns the widget used to edit the item specified by \a index
-    for editing. The \a parent widget and style \a option are used to
-    control how the editor widget appears.
-
-    \sa QAbstractItemDelegate::createEditor()
-*/
 QWidget *QStyledItemDelegate::createEditor(QWidget *parent,
    const QStyleOptionViewItem &, const QModelIndex &index) const
 {
    Q_D(const QStyledItemDelegate);
-   if (!index.isValid()) {
-      return 0;
+
+   if (! index.isValid()) {
+      return nullptr;
    }
 
    QVariant::Type t = static_cast<QVariant::Type>(index.data(Qt::EditRole).userType());
+
    return d->editorFactory()->createEditor(t, parent);
 }
 
-/*!
-    Sets the data to be displayed and edited by the \a editor from the
-    data model item specified by the model \a index.
-
-    The default implementation stores the data in the \a editor
-    widget's \l {Qt's Property System} {user property}.
-
-    \sa QMetaProperty::isUser()
-*/
 void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-#ifdef QT_NO_PROPERTIES
-   Q_UNUSED(editor);
-   Q_UNUSED(index);
-#else
-
-
    QVariant v = index.data(Qt::EditRole);
+   QString n  = editor->metaObject()->userProperty().name();
 
-   QString n = editor->metaObject()->userProperty().name();
-
-   if (!n.isEmpty()) {
+   if (! n.isEmpty()) {
       if (! v.isValid()) {
          v = QVariant(editor->property(n).userType(), (const void *)0);
       }
 
       editor->setProperty(n, v);
    }
-#endif
 }
 
 void QStyledItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
 #ifndef QT_NO_PROPERTIES
 
-
    Q_D(const QStyledItemDelegate);
+
    Q_ASSERT(model);
    Q_ASSERT(editor);
 
@@ -287,7 +272,7 @@ void QStyledItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
 
 void QStyledItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-   if (!editor) {
+   if (! editor) {
       return;
    }
 
@@ -321,25 +306,12 @@ void QStyledItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpti
    editor->setGeometry(geom);
 }
 
-/*!
-  Returns the editor factory used by the item delegate.
-  If no editor factory is set, the function will return null.
-
-  \sa setItemEditorFactory()
-*/
 QItemEditorFactory *QStyledItemDelegate::itemEditorFactory() const
 {
    Q_D(const QStyledItemDelegate);
    return d->factory;
 }
 
-/*!
-  Sets the editor factory to be used by the item delegate to be the \a factory
-  specified. If no editor factory is set, the item delegate will use the
-  default editor factory.
-
-  \sa itemEditorFactory()
-*/
 void QStyledItemDelegate::setItemEditorFactory(QItemEditorFactory *factory)
 {
    Q_D(QStyledItemDelegate);
@@ -363,14 +335,14 @@ bool QStyledItemDelegate::editorEvent(QEvent *event,
 
    // make sure that the item is checkable
    Qt::ItemFlags flags = model->flags(index);
-   if (!(flags & Qt::ItemIsUserCheckable) || !(option.state & QStyle::State_Enabled)
+   if (! (flags & Qt::ItemIsUserCheckable) || !(option.state & QStyle::State_Enabled)
       || !(flags & Qt::ItemIsEnabled)) {
       return false;
    }
 
    // make sure that we have a check state
    QVariant value = index.data(Qt::CheckStateRole);
-   if (!value.isValid()) {
+   if (! value.isValid()) {
       return false;
    }
 
@@ -411,6 +383,7 @@ bool QStyledItemDelegate::editorEvent(QEvent *event,
    } else {
       state = (state == Qt::Checked) ? Qt::Unchecked : Qt::Checked;
    }
+
    return model->setData(index, state, Qt::CheckStateRole);
 }
 

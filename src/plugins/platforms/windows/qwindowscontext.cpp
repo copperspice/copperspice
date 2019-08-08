@@ -454,10 +454,10 @@ QString QWindowsContext::registerWindowClass(const QWindow *w)
 
 QString QWindowsContext::registerWindowClass(QString cname, WNDPROC proc, unsigned style, HBRUSH brush, bool icon)
 {
-   // since multiple Qt versions can be used in one process
+   // since multiple versions can be used in one process
    // each one has to have window class names with a unique name
    // The first instance gets the unmodified name; if the class
-   // has already been registered by another instance of Qt then
+   // has already been registered by another instance of CS then
    // add an instance-specific ID, the address of the window proc.
    static int classExists = -1;
 
@@ -657,7 +657,7 @@ static inline bool findPlatformWindowHelper(const POINT &screenPoint, unsigned c
    // QTBUG-40555: despite CWP_SKIPINVISIBLE, it is possible to hit on invisible
    // full screen windows of other applications that have WS_EX_TRANSPARENT set
    // (for example created by  screen sharing applications). In that case, try to
-   // find a Qt window by searching again with CWP_SKIPTRANSPARENT.
+   // find a window by searching again with CWP_SKIPTRANSPARENT.
    // uses WS_EX_TRANSPARENT for Qt::WindowTransparentForInput as well.
 
    if (!(cwexFlags & CWP_SKIPTRANSPARENT)
@@ -944,6 +944,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
             break;
       }
    }
+
    if (platformWindow) {
       // Suppress events sent during DestroyWindow() for native children.
       if (platformWindow->testFlag(QWindowsWindow::WithinDestroy)) {
@@ -955,7 +956,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
       }
 
    } else {
-      qWarning("%s: No Qt Window found for event 0x%x (%s), hwnd=0x%p.", __FUNCTION__, message,
+      qWarning("%s: No Window found for event 0x%x (%s), hwnd=0x%p.", __FUNCTION__, message,
          QWindowsGuiEventDispatcher::windowsMessageName(message), hwnd);
       return false;
    }
@@ -976,6 +977,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
 #else
          return d->m_keyMapper.translateKeyEvent(platformWindow->window(), hwnd, msg, result);
 #endif
+
       case QtWindows::MoveEvent:
          platformWindow->handleMoved();
          return true;

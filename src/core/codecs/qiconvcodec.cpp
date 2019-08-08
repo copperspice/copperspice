@@ -156,8 +156,8 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
       return QString::fromLatin1(chars, len);
    }
 
-   int invalidCount = 0;
-   int remainingCount = 0;
+   int invalidCount      = 0;
+   int remainingCount    = 0;
    char *remainingBuffer = 0;
    IconvState *temporaryState = 0;
    IconvState **pstate;
@@ -165,6 +165,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
    if (convState) {
       // stateful conversion
       pstate = reinterpret_cast<IconvState **>(&convState->d);
+
       if (convState->d) {
          // restore state
          remainingCount = convState->remainingChars;
@@ -174,6 +175,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
          convState->flags |= FreeFunction;
          QTextCodecUnalignedPointer::encode(convState->state_data, qIconvCodecStateFree);
       }
+
    } else {
       QThreadStorage<QIconvCodec::IconvState *> *ts = toUnicodeState();
       if (!qt_locale_initialized || !ts) {
@@ -230,6 +232,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
    char *outBytes = ba.data();
    do {
       size_t ret = iconv(state->cd, &inBytes, &inBytesLeft, &outBytes, &outBytesLeft);
+
       if (ret == (size_t) - 1) {
          if (errno == E2BIG) {
             int offset = ba.size() - outBytesLeft;
@@ -243,6 +246,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
          if (errno == EILSEQ) {
             // conversion stopped because of an invalid character in the sequence
             ++invalidCount;
+
          } else if (errno == EINVAL && convState) {
             // conversion stopped because the remaining inBytesLeft make up
             // an incomplete multi-byte sequence; save them for later
@@ -259,7 +263,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
          }
 
          // some other error
-         // note, cannot use qWarning() since we are implementing the codecForLocale :)
+         // note, can not use qWarning() since we are implementing the codecForLocale
 
          perror("QIconvCodec::convertToUnicode: using Latin1 for conversion, iconv failed");
 

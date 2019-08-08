@@ -2848,7 +2848,6 @@ void QWizard::cleanupPage(int theid)
    }
 }
 
-
 bool QWizard::validateCurrentPage()
 {
    QWizardPage *page = currentPage();
@@ -2870,10 +2869,8 @@ int QWizard::nextId() const
    return page->nextId();
 }
 
-
-
 QWizardPage::QWizardPage(QWidget *parent)
-   : QWidget(*new QWizardPagePrivate, parent, 0)
+   : QWidget(*new QWizardPagePrivate, parent, nullptr)
 {
    connect(this, SIGNAL(completeChanged()), this, SLOT(_q_updateCachedCompleteState()));
 }

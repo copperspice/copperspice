@@ -323,7 +323,7 @@ void QXcbConnection::xi2Select(xcb_window_t window)
       mask.mask_len = sizeof(bitMask);
       mask.mask = xiBitMask;
       // When xi2MouseEvents() is true (the default), pointer emulation for touch and tablet
-      // events will get disabled. This is preferable for touch, as Qt Quick handles touch events
+      // events will get disabled. This is preferable for touch, as QtQuick handles touch events
       // directly while for others QtGui synthesizes mouse events, not so much for tablets. For
       // the latter we will synthesize the events ourselves.
       mask.deviceid = XIAllMasterDevices;
@@ -1126,7 +1126,8 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
       }
       case XI_Motion:
          // Report TabletMove only when the stylus is touching the tablet or any button is pressed.
-         // TODO: report proximity (hover) motion (no suitable Qt event exists yet).
+         // TODO: report proximity (hover) motion (no suitable CS event exists yet).
+
          if (tabletData->buttons != Qt::NoButton) {
             xi2ReportTabletEvent(*tabletData, xiEvent);
          }

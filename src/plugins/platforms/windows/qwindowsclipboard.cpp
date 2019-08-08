@@ -82,6 +82,7 @@ IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
    IDataObject *pDataObj = 0;
 
    if (OleGetClipboard(&pDataObj) == S_OK) {
+
       if (QWindowsContext::verbose > 1) {
          qDebug() << __FUNCTION__ << pDataObj;
       }
@@ -275,6 +276,7 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
          }
          return true;
    } // switch (message)
+
    return false;
 }
 

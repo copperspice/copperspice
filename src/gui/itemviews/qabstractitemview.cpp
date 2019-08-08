@@ -3664,7 +3664,7 @@ QWidget *QAbstractItemViewPrivate::editor(const QModelIndex &index, const QStyle
       QAbstractItemDelegate *delegate = delegateForIndex(index);
 
       if (! delegate) {
-         return 0;
+         return nullptr;
       }
 
       w = delegate->createEditor(viewport, options, index);

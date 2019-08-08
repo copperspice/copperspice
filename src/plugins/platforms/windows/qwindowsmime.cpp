@@ -656,6 +656,7 @@ class QWindowsMimeURI : public QWindowsMime
    bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
    bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
    QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+
  private:
    int CF_INETURL_W; // wide char version
    int CF_INETURL;

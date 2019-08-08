@@ -1457,6 +1457,7 @@ QDirPrivate* QDir::d_func()
 {
     return d_ptr.data();
 }
+
 QStringList QDir::nameFiltersFromString(const QString &nameFilter)
 {
    return QDirPrivate::splitFilters(nameFilter);

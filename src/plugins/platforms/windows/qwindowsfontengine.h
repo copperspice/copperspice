@@ -37,8 +37,6 @@ class QWindowsFontEngineData;
 
 class QWindowsFontEngine : public QFontEngine
 {
-   friend class QWindowsMultiFontEngine;
-
  public:
    QWindowsFontEngine(const QString &name, LOGFONT lf,
       const QSharedPointer<QWindowsFontEngineData> &fontEngineData);
@@ -135,12 +133,15 @@ class QWindowsFontEngine : public QFontEngine
    uint        hasOutline : 1;
    uint        hasUnreliableOutline : 1;
    uint        cffTable   : 1;
+
    TEXTMETRIC  tm;
    const unsigned char *cmap;
    int cmapSize;
+
    QByteArray cmapTable;
    mutable qreal lbearing;
    mutable qreal rbearing;
+
    QFixed designToDevice;
    int unitsPerEm;
    QFixed x_height;
@@ -152,8 +153,12 @@ class QWindowsFontEngine : public QFontEngine
    mutable uint widthCacheSize;
    mutable QFixed *designAdvances;
    mutable int designAdvancesSize;
+
+   // emerald (multi)
+   friend class QWindowsMultiFontEngine;
 };
 
+// emerald (multi)
 class QWindowsMultiFontEngine : public QFontEngineMulti
 {
  public:

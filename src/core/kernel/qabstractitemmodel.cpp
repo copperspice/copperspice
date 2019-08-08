@@ -1036,12 +1036,11 @@ QMimeData *QAbstractItemModel::mimeData(const QModelIndexList &indexes) const
    return data;
 }
 
-
 bool QAbstractItemModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
             int row, int column, const QModelIndex &parent) const
 {
 
-    if (!(action & supportedDropActions()))
+    if (! (action & supportedDropActions()))
         return false;
 
     const QStringList modelTypes = mimeTypes();
@@ -1054,7 +1053,7 @@ bool QAbstractItemModel::canDropMimeData(const QMimeData *data, Qt::DropAction a
 }
 
 bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                      int row, int column, const QModelIndex &parent)
+                  int row, int column, const QModelIndex &parent)
 {
    // check if the action is supported
    if (!data || !(action == Qt::CopyAction || action == Qt::MoveAction)) {
@@ -1065,8 +1064,9 @@ bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
    if (types.isEmpty()) {
       return false;
    }
+
    QString format = types.at(0);
-   if (!data->hasFormat(format)) {
+   if (! data->hasFormat(format)) {
       return false;
    }
    if (row > rowCount(parent)) {
@@ -1078,9 +1078,11 @@ bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
    if (column == -1) {
       column = 0;
    }
+
    // decode and insert
    QByteArray encoded = data->data(format);
    QDataStream stream(&encoded, QIODevice::ReadOnly);
+
    return decodeData(row, column, parent, stream);
 }
 
@@ -2016,6 +2018,7 @@ bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
    if (types.isEmpty()) {
       return false;
    }
+
    QString format = types.at(0);
    if (!data->hasFormat(format)) {
       return false;

@@ -1905,7 +1905,7 @@ void QXcbWindow::setWmWindowType(QXcbWindowFunctions::WmWindowTypes types, Qt::W
 {
    QVector<xcb_atom_t> atoms;
 
-   // manual selection 1 (these are never set by Qt and take precedence)
+   // manual selection 1 (these are never set by CS and take precedence)
    if (types & QXcbWindowFunctions::Normal) {
       atoms.append(atom(QXcbAtom::_NET_WM_WINDOW_TYPE_NORMAL));
    }
@@ -1919,7 +1919,7 @@ void QXcbWindow::setWmWindowType(QXcbWindowFunctions::WmWindowTypes types, Qt::W
       atoms.append(atom(QXcbAtom::_NET_WM_WINDOW_TYPE_NOTIFICATION));
    }
 
-   // manual selection 2 (Qt uses these during auto selection);
+   // manual selection 2 (CS uses these during auto selection);
    if (types & QXcbWindowFunctions::Utility) {
       atoms.append(atom(QXcbAtom::_NET_WM_WINDOW_TYPE_UTILITY));
    }

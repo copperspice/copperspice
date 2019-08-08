@@ -865,9 +865,9 @@ bool QWindowsKeyMapper::translateMultimediaKeyEventInternal(QWindow *window, con
    const int qtKey = int(CmdTbl[cmd]);
    sendExtendedPressRelease(receiver, qtKey, Qt::KeyboardModifier(state), 0, 0, 0);
 
-   // QTBUG-43343: Make sure to return false if Qt does not handle the key, otherwise,
-   // the keys are not passed to the active media player.
+   // make sure to return false if CS does not handle the key
    const QKeySequence sequence(Qt::Modifier(state) + qtKey);
+
    return QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(sequence);
 
 #else
@@ -1280,7 +1280,7 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
 
          result = true;
 
-         // don't pass Alt to Windows unless we are embedded in a non-Qt window
+         // don't pass Alt to Windows unless we are embedded in a non-CS window
          if (code == Qt::Key_Alt) {
             const QWindowsContext *context = QWindowsContext::instance();
             HWND parent = GetParent(QWindowsWindow::handleOf(receiver));

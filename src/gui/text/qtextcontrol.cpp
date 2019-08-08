@@ -937,9 +937,11 @@ void QTextControl::cut()
 void QTextControl::copy()
 {
    Q_D(QTextControl);
+
    if (!d->cursor.hasSelection()) {
       return;
    }
+
    QMimeData *data = createMimeDataFromSelection();
    QApplication::clipboard()->setMimeData(data);
 }
@@ -947,6 +949,7 @@ void QTextControl::copy()
 void QTextControl::paste(QClipboard::Mode mode)
 {
    const QMimeData *md = QApplication::clipboard()->mimeData(mode);
+
    if (md) {
       insertFromMimeData(md);
    }
@@ -961,10 +964,10 @@ void QTextControl::clear()
    d->setContent();
 }
 
-
 void QTextControl::selectAll()
 {
    Q_D(QTextControl);
+
    const int selectionLength = qAbs(d->cursor.position() - d->cursor.anchor());
    d->cursor.select(QTextCursor::Document);
    d->selectionChanged(selectionLength != qAbs(d->cursor.position() - d->cursor.anchor()));
@@ -1871,9 +1874,9 @@ void QTextControlPrivate::mouseReleaseEvent(QEvent *e, Qt::MouseButton button, c
       setClipboardSelection();
       selectionChanged(true);
 
-   } else if (button == Qt::MiddleButton
-      && (interactionFlags & Qt::TextEditable)
-      && QApplication::clipboard()->supportsSelection()) {
+   } else if (button == Qt::MiddleButton && (interactionFlags & Qt::TextEditable)
+         && QApplication::clipboard()->supportsSelection()) {
+
       setCursorPosition(pos);
       const QMimeData *md = QApplication::clipboard()->mimeData(QClipboard::Selection);
 
@@ -2012,7 +2015,8 @@ void QTextControlPrivate::contextMenuEvent(const QPoint &screenPos, const QPoint
 bool QTextControlPrivate::dragEnterEvent(QEvent *e, const QMimeData *mimeData)
 {
    Q_Q(QTextControl);
-   if (!(interactionFlags & Qt::TextEditable) || !q->canInsertFromMimeData(mimeData)) {
+
+   if (!(interactionFlags & Qt::TextEditable) || ! q->canInsertFromMimeData(mimeData)) {
       e->ignore();
       return false;
    }
@@ -2664,6 +2668,7 @@ bool QTextControl::canPaste() const
 {
 #ifndef QT_NO_CLIPBOARD
    Q_D(const QTextControl);
+
    if (d->interactionFlags & Qt::TextEditable) {
       const QMimeData *md = QApplication::clipboard()->mimeData();
       return md && canInsertFromMimeData(md);
@@ -2777,7 +2782,7 @@ void QTextControl::insertFromMimeData(const QMimeData *source)
 {
    Q_D(QTextControl);
 
-   if (!(d->interactionFlags & Qt::TextEditable) || !source) {
+   if (! (d->interactionFlags & Qt::TextEditable) || !source) {
       return;
    }
 
@@ -2785,11 +2790,12 @@ void QTextControl::insertFromMimeData(const QMimeData *source)
    QTextDocumentFragment fragment;
 
 #ifndef QT_NO_TEXTHTMLPARSER
-   if (source->hasFormat(QLatin1String("application/x-qrichtext")) && d->acceptRichText) {
+
+   if (source->hasFormat("application/x-qrichtext") && d->acceptRichText) {
       // x-qrichtext is always UTF-8
 
-      QString richtext = QString::fromUtf8(source->data(QLatin1String("application/x-qrichtext")));
-      richtext.prepend(QLatin1String("<meta name=\"qrichtext\" content=\"1\" />"));
+      QString richtext = QString::fromUtf8(source->data("application/x-qrichtext"));
+      richtext.prepend("<meta name=\"qrichtext\" content=\"1\" />");
       fragment = QTextDocumentFragment::fromHtml(richtext, d->doc);
       hasData = true;
 
@@ -2805,6 +2811,7 @@ void QTextControl::insertFromMimeData(const QMimeData *source)
          hasData = true;
       }
    }
+
 #else
    fragment = QTextDocumentFragment::fromPlainText(source->text());
 

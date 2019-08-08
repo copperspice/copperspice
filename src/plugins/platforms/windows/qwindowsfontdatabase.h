@@ -51,7 +51,10 @@ class QWindowsFontDatabase : public QPlatformFontDatabase
 
    void populateFontDatabase() override;
    void populateFamily(const QString &familyName) override;
+
+   // emerald (multi)
    QFontEngineMulti *fontEngineMulti(QFontEngine *fontEngine, QChar::Script script) override;
+
    QFontEngine *fontEngine(const QFontDef &fontDef, void *handle) override;
    QFontEngine *fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference) override;
    QStringList fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint,
@@ -63,6 +66,7 @@ class QWindowsFontDatabase : public QPlatformFontDatabase
    QFont defaultFont() const  override {
       return systemDefaultFont();
    }
+
    bool fontsAlwaysScalable() const override;
    void derefUniqueFont(const QString &uniqueFont);
    void refUniqueFont(const QString &uniqueFont);
@@ -100,6 +104,5 @@ class QWindowsFontDatabase : public QPlatformFontDatabase
 };
 
 QDebug operator<<(QDebug, const QFontDef &def);
-
 
 #endif

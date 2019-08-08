@@ -155,8 +155,8 @@ class QRgba64
       return rgba;
    }
 
-   QRgba64 operator=(quint64 _rgba) {
-      rgba = _rgba;
+   QRgba64 operator=(quint64 rgba64) {
+      rgba = rgba64;
       return *this;
    }
 

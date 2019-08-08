@@ -574,7 +574,7 @@ class Q_GUI_EXPORT QMoveEvent : public QEvent
 class Q_GUI_EXPORT QExposeEvent : public QEvent
 {
  public:
-   explicit QExposeEvent(const QRegion &rgn);
+   explicit QExposeEvent(const QRegion &exposeRegion);
    ~QExposeEvent();
 
    inline const QRegion &region() const {

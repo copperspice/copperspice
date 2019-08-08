@@ -26,9 +26,9 @@
 
 #include <qprinter.h>
 
-#include <QtCore/qstringlist.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qhash.h>
+#include <qstringlist.h>
+#include <qlist.h>
+#include <qhash.h>
 
 #ifndef QT_NO_PRINTER
 
@@ -59,7 +59,5 @@ protected:
 };
 
 #endif // QT_NO_PRINTER
-
-
 
 #endif // QPLATFORMPRINTERSUPPORT_H
