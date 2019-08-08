@@ -236,8 +236,9 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
    enum { wMClipboardUpdate = 0x031D };
 
    *result = 0;
+
    if (QWindowsContext::verbose) {
-      qDebug() << __FUNCTION__ << hwnd << message << QWindowsGuiEventDispatcher::windowsMessageName(message);
+      qDebug() << "QWindowsClipboard::clipboardViewerWndProc:" << hwnd << message << QWindowsGuiEventDispatcher::windowsMessageName(message);
    }
 
    switch (message) {
@@ -282,7 +283,9 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
 
 QMimeData *QWindowsClipboard::mimeData(QClipboard::Mode mode)
 {
-   qDebug() << __FUNCTION__ <<  mode;
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "QWindowsClipboard::mimeData: mode =" <<  mode;
+#endif
 
    if (mode != QClipboard::Clipboard) {
       return 0;
@@ -297,7 +300,10 @@ QMimeData *QWindowsClipboard::mimeData(QClipboard::Mode mode)
 
 void QWindowsClipboard::setMimeData(QMimeData *mimeData, QClipboard::Mode mode)
 {
-   qDebug() << __FUNCTION__ <<  mode << mimeData;
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "QWindowsClipboard::setMimeData: mode =" <<  mode << mimeData;
+#endif
+
    if (mode != QClipboard::Clipboard) {
       return;
    }
@@ -311,12 +317,13 @@ void QWindowsClipboard::setMimeData(QMimeData *mimeData, QClipboard::Mode mode)
    }
 
    const HRESULT src = OleSetClipboard(m_data);
+
    if (src != S_OK) {
-      QString mimeDataFormats = mimeData ?
-         mimeData->formats().join(QString(", ")) : QString(QString("NULL"));
+      QString mimeDataFormats = mimeData ? mimeData->formats().join(QString(", ")) : QString("NULL");
+
       qErrnoWarning("OleSetClipboard: Failed to set mime data (%s) on clipboard: %s",
-         qPrintable(mimeDataFormats),
-         QWindowsContext::comErrorString(src).constData());
+         qPrintable(mimeDataFormats), QWindowsContext::comErrorString(src).constData());
+
       releaseIData();
       return;
    }
@@ -325,6 +332,7 @@ void QWindowsClipboard::setMimeData(QMimeData *mimeData, QClipboard::Mode mode)
 void QWindowsClipboard::clear()
 {
    const HRESULT src = OleSetClipboard(0);
+
    if (src != S_OK) {
       qErrnoWarning("OleSetClipboard: Failed to clear the clipboard: 0x%lx", src);
    }
@@ -343,9 +351,12 @@ bool QWindowsClipboard::ownsClipboard() const
 
 bool QWindowsClipboard::ownsMode(QClipboard::Mode mode) const
 {
-   const bool result = mode == QClipboard::Clipboard ?
-      ownsClipboard() : false;
-   qDebug() << __FUNCTION__ <<  mode << result;
+   const bool result = mode == QClipboard::Clipboard ? ownsClipboard() : false;
+
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "QWindowsClipboard::ownsMode: mode =" <<  mode << result;
+#endif
+
    return result;
 }
 

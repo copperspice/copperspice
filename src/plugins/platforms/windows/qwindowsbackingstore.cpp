@@ -203,7 +203,7 @@ HDC QWindowsBackingStore::getDC() const
 QImage QWindowsBackingStore::toImage() const
 {
    if (m_image.isNull()) {
-      qWarning() << __FUNCTION__ << "Image is null.";
+      qWarning() << "QWindowsBackingStore::toImage(): Image is null";
       return QImage();
    }
 

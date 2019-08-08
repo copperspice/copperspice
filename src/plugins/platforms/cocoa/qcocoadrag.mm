@@ -225,10 +225,12 @@ QStringList QCocoaDropData::formats_sys() const
 {
    QStringList formats;
    PasteboardRef board;
+
    if (PasteboardCreate(dropPasteboard, &board) != noErr) {
-      qDebug("DnD: Cannot get PasteBoard!");
+      qDebug("DnD: Can not get PasteBoard");
       return formats;
    }
+
    formats = QMacPasteboard(board, QMacInternalPasteboardMime::MIME_DND).formats();
    return formats;
 }
@@ -237,8 +239,9 @@ QVariant QCocoaDropData::retrieveData_sys(const QString &mimeType, QVariant::Typ
 {
    QVariant data;
    PasteboardRef board;
+
    if (PasteboardCreate(dropPasteboard, &board) != noErr) {
-      qDebug("DnD: Cannot get PasteBoard!");
+      qDebug("DnD: Can not get PasteBoard");
       return data;
    }
    data = QMacPasteboard(board, QMacInternalPasteboardMime::MIME_DND).retrieveData(mimeType, type);
@@ -250,11 +253,14 @@ bool QCocoaDropData::hasFormat_sys(const QString &mimeType) const
 {
    bool has = false;
    PasteboardRef board;
+
    if (PasteboardCreate(dropPasteboard, &board) != noErr) {
-      qDebug("DnD: Cannot get PasteBoard!");
+      qDebug("DnD: Can not get PasteBoard");
       return has;
    }
+
    has = QMacPasteboard(board, QMacInternalPasteboardMime::MIME_DND).hasFormat(mimeType);
    CFRelease(board);
+
    return has;
 }
