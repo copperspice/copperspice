@@ -49,6 +49,7 @@ GUI_PUBLIC_INCLUDES += \
 	QMoveEvent \
 	QOffscreenSurface \
 	QOpenGLContext \
+	QOpenGLWidget \
 	QOpenGLWindow \
 	QPaintDeviceWindow \
 	QPaintEvent \
@@ -145,6 +146,7 @@ GUI_KERNEL_INCLUDES = \
 	qmoveevent.h \
 	qoffscreensurface.h \
 	qopenglcontext.h \
+	qopenglwidget.h \
 	qopenglwindow.h \
 	qpaintdevicewindow.h \
 	qpaintevent.h \
@@ -270,6 +272,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qlayoutitem.cpp \
 	src/gui/kernel/qoffscreensurface.cpp \
 	src/gui/kernel/qopenglcontext.cpp \
+	src/gui/kernel/qopenglwidget.cpp \
 	src/gui/kernel/qopenglwindow.cpp \
 	src/gui/kernel/qpaintdevicewindow.cpp \
 	src/gui/kernel/qpalette.cpp \

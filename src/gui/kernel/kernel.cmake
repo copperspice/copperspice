@@ -48,6 +48,7 @@ set(GUI_PUBLIC_INCLUDES
     QMoveEvent
     QOffscreenSurface
     QOpenGLContext
+    QOpenGLWidget
     QOpenGLWindow
     QPaintDeviceWindow
     QPaintEvent
@@ -146,6 +147,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmoveevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintevent.h
@@ -267,6 +269,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpalette.cpp
