@@ -70,14 +70,8 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
  private:
    Q_DECLARE_PRIVATE(QStyledItemDelegate)
    Q_DISABLE_COPY(QStyledItemDelegate)
-
- protected:
-   QScopedPointer<QStyledItemDelegatePrivate> d_ptr;
-
 };
 
 #endif // QT_NO_ITEMVIEWS
-
-
 
 #endif // QSTYLEDITEMDELEGATE_H
