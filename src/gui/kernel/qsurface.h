@@ -43,7 +43,8 @@ class Q_GUI_EXPORT QSurface
    enum SurfaceType {
       RasterSurface,
       OpenGLSurface,
-      RasterGLSurface
+      RasterGLSurface,
+      VulkanSurface
    };
 
    virtual ~QSurface();
