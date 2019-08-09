@@ -833,7 +833,9 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
             const int max = qMin(sectionmaxsize, sectiontextSize);
             for (int digits = max; digits >= 1; --digits) {
                digitsStr.truncate(digits);
-               int tmp = (int)loc.toUInt(digitsStr, &ok);
+
+               int tmp = (int)loc.toUInt(digitsStr, &ok, 10);
+
                if (ok && sn.type == Hour12Section) {
                   if (tmp > 12) {
                      tmp = -1;
@@ -1683,7 +1685,7 @@ bool QDateTimeParser::potentialValue(const QString &str, int min, int max, int i
       return true;
    }
    const int size = sectionMaxSize(index);
-   int val = (int)locale().toUInt(str);
+   int val = (int)locale().toUInt(str, nullptr, 10);
    const SectionNode &sn = sectionNode(index);
 
    if (sn.type == YearSection2Digits) {
