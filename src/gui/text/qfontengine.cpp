@@ -1671,7 +1671,9 @@ QImage QFontEngineBox::alphaMapForGlyph(glyph_t)
    return image;
 }
 
-static inline uchar highByte(glyph_t glyph)
+// emerald (multi)
+
+static uchar highByte(glyph_t glyph)
 {
    return glyph >> 24;
 }
@@ -1794,7 +1796,8 @@ glyph_t QFontEngineMulti::glyphIndex(char32_t ch) const
 {
    glyph_t glyph = engine(0)->glyphIndex(ch);
 
-   if (glyph == 0 && ch != QChar::LineSeparator) {
+   if (glyph == 0 && ch != QChar::LineSeparator && ch != QChar::LineFeed &&
+         ch != QChar::ParagraphSeparator && ch != QChar::CarriageReturn) {
 
       if (! m_fallbackFamiliesQueried) {
          const_cast<QFontEngineMulti *>(this)->ensureFallbackFamiliesQueried();
@@ -1844,7 +1847,8 @@ bool QFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *
 
    for (QChar ch : str) {
 
-      if (glyphs->glyphs[glyph_pos] == 0 && ch != QChar::LineSeparator) {
+      if (glyphs->glyphs[glyph_pos] == 0 && ch != QChar::LineSeparator && ch != QChar::LineFeed &&
+            ch != QChar::ParagraphSeparator && ch != QChar::CarriageReturn) {
 
          if (! m_fallbackFamiliesQueried) {
             const_cast<QFontEngineMulti *>(this)->ensureFallbackFamiliesQueried();
