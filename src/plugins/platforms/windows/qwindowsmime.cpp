@@ -599,19 +599,15 @@ QVector<FORMATETC> QWindowsMimeText::formatsForMime(const QString &mimeType, con
 
 QVariant QWindowsMimeText::convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const
 {
-   QVariant ret;
+   QVariant retval;
 
    if (canConvertToMime(mime, pDataObj)) {
       QString str;
+
       QByteArray data = getData(CF_UNICODETEXT, pDataObj);
 
-      if (! data.isEmpty()) {
-         QTextCodec *codec = QTextCodec::codecForName("UTF-16");
-         str = codec->toUnicode(data);
+      if (data.isEmpty()) {
 
-         str.replace("\r\n", "\n");
-
-      } else {
          data = getData(CF_TEXT, pDataObj);
 
          if (! data.isEmpty()) {
@@ -628,21 +624,36 @@ QVariant QWindowsMimeText::convertToMime(const QString &mime, LPDATAOBJECT pData
                   o[j++] = c;
                }
             }
+
             o[j] = 0;
             str = QString::fromUtf8(r);
          }
+
+
+      } else {
+         QTextCodec *codec = QTextCodec::codecForName("UTF-16");
+
+         str = codec->toUnicode(data);
+
+         while (str.endsWith('\0')) {
+            str.chop(1);
+         }
+
+         str.replace("\r\n", "\n");
       }
 
       if (preferredType == QVariant::String) {
-         ret = str;
+         retval = str;                  // retval is a QVariant containing a QString
       } else {
-         ret = str.toUtf8();
+         retval = str.toUtf8();         // retval is a QVariant containing a QByteArray
       }
    }
 
-   qDebug() << __FUNCTION__ << ret;
+#if defined(CS_SHOW_DEBUG)
+   qDebug() << "QWindowsMimeText::convertToMime:" << retval;
+#endif
 
-   return ret;
+   return retval;
 }
 
 class QWindowsMimeURI : public QWindowsMime
