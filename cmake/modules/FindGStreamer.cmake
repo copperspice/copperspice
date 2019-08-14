@@ -21,7 +21,6 @@ find_package(PkgConfig)
 #   _pkgconfig_name is the component's pkg-config name (eg. "gstreamer-1.0", or "gstreamer-video-1.0").
 #   _library is the component's library name (eg. "gstreamer-1.0" or "gstvideo-1.0")
 macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
-
     pkg_check_modules(PKG_${_component_prefix} ${_pkgconfig_name})
     set(${_component_prefix}_INCLUDE_DIRS ${PKG_${_component_prefix}_INCLUDE_DIRS})
 
@@ -31,7 +30,7 @@ macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
     )
 endmacro()
 
-# find heders and libraries
+# find headers and libraries
 FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-1.0 gstreamer-1.0)
 FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-1.0 gstbase-1.0)
 
@@ -52,10 +51,9 @@ endif()
 
 
 # find plugins
-FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE_LIBRARY  gstreamer-base-${GSTREAMER_ABI_VERSION}  gstbase-${GSTREAMER_ABI_VERSION})
-FIND_GSTREAMER_COMPONENT(GSTREAMER_APP           gstreamer-app-${GSTREAMER_ABI_VERSION}   gstapp-${GSTREAMER_ABI_VERSION})
-FIND_GSTREAMER_COMPONENT(GSTREAMER_AUDIO_LIBRARY gstreamer-audio-${GSTREAMER_ABI_VERSION} gstaudio-${GSTREAMER_ABI_VERSION})
-FIND_GSTREAMER_COMPONENT(GSTREAMER_VIDEO_LIBRARY gstreamer-video-${GSTREAMER_ABI_VERSION} gstvideo-${GSTREAMER_ABI_VERSION})
+FIND_GSTREAMER_COMPONENT(GSTREAMER_APP   gstreamer-app-${GSTREAMER_ABI_VERSION}   gstapp-${GSTREAMER_ABI_VERSION})
+FIND_GSTREAMER_COMPONENT(GSTREAMER_AUDIO gstreamer-audio-${GSTREAMER_ABI_VERSION} gstaudio-${GSTREAMER_ABI_VERSION})
+FIND_GSTREAMER_COMPONENT(GSTREAMER_VIDEO gstreamer-video-${GSTREAMER_ABI_VERSION} gstvideo-${GSTREAMER_ABI_VERSION})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GStreamer

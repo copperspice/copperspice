@@ -75,6 +75,7 @@ target_link_libraries(CsMultimedia${BUILD_ABI}
 )
 
 target_include_directories(CsMultimedia${BUILD_ABI} PUBLIC
+   ${GSTREAMER_INCLUDE_DIRS}
    $<INSTALL_INTERFACE:include/QtMultimedia>
 )
 
