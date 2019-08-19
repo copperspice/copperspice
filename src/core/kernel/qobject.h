@@ -66,8 +66,9 @@ class QTimerEvent;
 class QThread;
 class QThreadData;
 
-struct CS_Internal_TimerInfo
+class CS_Internal_TimerInfo
 {
+ public:
    int timerId;
    int interval;
    Qt::TimerType timerType;
