@@ -48,27 +48,24 @@
 
 QLabelPrivate::QLabelPrivate()
    : QFramePrivate(),
-     sh(),
-     msh(),
-     text(),
-     pixmap(nullptr),
-     scaledpixmap(nullptr),
-     cachedimage(nullptr),
+
 #ifndef QT_NO_PICTURE
      picture(nullptr),
 #endif
+
 #ifndef QT_NO_MOVIE
      movie(),
 #endif
-     control(nullptr),
-     shortcutCursor(),
+
 #ifndef QT_NO_CURSOR
      cursor(),
 #endif
+
 #ifndef QT_NO_SHORTCUT
      buddy(),
      shortcutId(0),
 #endif
+
      textformat(Qt::AutoText),
      textInteractionFlags(Qt::LinksAccessibleByMouse),
      sizePolicy(),
@@ -78,10 +75,12 @@ QLabelPrivate::QLabelPrivate()
      valid_hints(false),
      scaledcontents(false),
      textLayoutDirty(false),
-     textDirty(false),
-     isRichText(false),
-     isTextLabel(false),
+     textDirty(false), isRichText(false), isTextLabel(false),
      hasShortcut(/*???*/),
+     control(nullptr),
+     shortcutCursor(), sh(), msh(), text(),
+     pixmap(nullptr), scaledpixmap(nullptr), cachedimage(nullptr),
+
 #ifndef QT_NO_CURSOR
      validCursor(false),
      onAnchor(false),

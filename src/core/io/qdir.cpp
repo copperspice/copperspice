@@ -87,15 +87,9 @@ QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, Q
 }
 
 QDirPrivate::QDirPrivate(const QDirPrivate &copy)
-   : QSharedData(copy)
-   , fileListsInitialized(false)
-   , nameFilters(copy.nameFilters)
-   , sort(copy.sort)
-   , filters(copy.filters)
-   , dirEntry(copy.dirEntry)
-   , metaData(copy.metaData)
-{
-}
+   : QSharedData(copy), nameFilters(copy.nameFilters), sort(copy.sort), filters(copy.filters),
+     fileListsInitialized(false), dirEntry(copy.dirEntry), metaData(copy.metaData)
+{}
 
 bool QDirPrivate::exists() const
 {

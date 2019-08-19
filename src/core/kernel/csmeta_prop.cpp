@@ -26,7 +26,7 @@
 #include <qmetaobject.h>
 
 QMetaProperty::QMetaProperty(const QString &name, QMetaObject *obj)
-   :  m_name(name), m_metaObject(obj)
+   :  m_metaObject(obj), m_name(name)
 {
    m_typeName     = QString();
 

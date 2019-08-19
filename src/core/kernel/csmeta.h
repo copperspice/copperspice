@@ -145,10 +145,10 @@ class Q_CORE_EXPORT QMetaMethod
 
    QList<QString> m_paramNames;
 
+   Access       m_access;
    MethodType   m_methodType;
    Attributes   m_attributes;
    QMetaObject *m_metaObject;
-   Access       m_access;
 
    QString m_tag;
    const CSBentoAbstract *m_bento;

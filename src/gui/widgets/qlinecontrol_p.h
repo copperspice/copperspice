@@ -61,9 +61,8 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
         m_ascent(0), m_maxLength(32767), m_lastCursorPos(-1),
         m_tripleClickTimer(0), m_maskData(0), m_modifiedState(0), m_undoState(0),
         m_selstart(0), m_selend(0), m_passwordEchoEditing(false),
-        m_passwordEchoTimer(0), m_passwordMaskDelay(-1),
-
-        m_keyboardScheme(0), m_accessibleObject(0) {
+        m_passwordEchoTimer(0), m_keyboardScheme(0), m_passwordMaskDelay(-1), m_accessibleObject(0)
+   {
       init(txt);
    }
 
