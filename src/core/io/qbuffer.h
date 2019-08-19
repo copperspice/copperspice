@@ -24,10 +24,8 @@
 #ifndef QBUFFER_H
 #define QBUFFER_H
 
-#include <QtCore/qiodevice.h>
-#include <QtCore/qbytearray.h>
-
-QT_BEGIN_NAMESPACE
+#include <qiodevice.h>
+#include <qbytearray.h>
 
 class QObject;
 class QBufferPrivate;
@@ -60,8 +58,8 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    bool canReadLine() const override;
 
  protected:
-   void connectNotify(const char *);
-   void disconnectNotify(const char *);
+   void connectNotify(const QMetaMethod &signalMethod) const override;
+   void disconnectNotify(const QMetaMethod &signalMethod) const override;
 
    qint64 readData(char *data, qint64 maxlen) override;
    qint64 writeData(const char *data, qint64 len) override;
@@ -78,7 +76,5 @@ inline void QBuffer::setData(const char *adata, int alen)
 {
    setData(QByteArray(adata, alen));
 }
-
-QT_END_NAMESPACE
 
 #endif // QBUFFER_H

@@ -24,8 +24,6 @@
 #include <qbuffer.h>
 #include <qiodevice_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /** QBufferPrivate **/
 class QBufferPrivate : public QIODevicePrivate
 {
@@ -44,11 +42,11 @@ class QBufferPrivate : public QIODevicePrivate
 
    qint64 peek(char *data, qint64 maxSize) override;
    QByteArray peek(qint64 maxSize) override;
-   
+
    void _q_emitSignals();
 
    qint64 writtenSinceLastEmit;
-   int signalConnectionCount;
+   mutable int signalConnectionCount;
    bool signalsEmitted;
 };
 
@@ -56,8 +54,10 @@ class QBufferPrivate : public QIODevicePrivate
 void QBufferPrivate::_q_emitSignals()
 {
    Q_Q(QBuffer);
+
    emit q->bytesWritten(writtenSinceLastEmit);
    writtenSinceLastEmit = 0;
+
    emit q->readyRead();
    signalsEmitted = false;
 }
@@ -429,28 +429,19 @@ qint64 QBuffer::writeData(const char *data, qint64 len)
    return len;
 }
 
-
-/*!
-    \reimp
-    \internal
-*/
-void QBuffer::connectNotify(const char *signal)
+// internal
+void QBuffer::connectNotify(const QMetaMethod &signalMethod) const
 {
-   if (strcmp(signal + 1, "readyRead()") == 0 || strcmp(signal + 1, "bytesWritten(qint64)") == 0) {
+   if (signalMethod.name() == "readyRead" || signalMethod.name() == "bytesWritten") {
       d_func()->signalConnectionCount++;
    }
 }
 
-/*!
-    \reimp
-    \internal
-*/
-void QBuffer::disconnectNotify(const char *signal)
+// internal
+void QBuffer::disconnectNotify(const QMetaMethod &signalMethod) const
 {
-   if (!signal || strcmp(signal + 1, "readyRead()") == 0 || strcmp(signal + 1, "bytesWritten(qint64)") == 0) {
+   if (signalMethod.name() == "readyRead" || signalMethod.name() == "bytesWritten") {
       d_func()->signalConnectionCount--;
    }
 }
 
-
-QT_END_NAMESPACE
