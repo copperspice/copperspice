@@ -296,8 +296,8 @@ void toString(QString &appendTo, IPv6Address address)
    // and the longest with an IPv4 address is:
    //   "::ffff:255.255.255.255"
 
-   static const int Ip6AddressMaxLen = sizeof "1111:2222:3333:4444:5555:6666:7777:8888";
-   static const int Ip6WithIp4AddressMaxLen = sizeof "::ffff:255.255.255.255";
+   // static const int Ip6AddressMaxLen = sizeof "1111:2222:3333:4444:5555:6666:7777:8888";
+   // static const int Ip6WithIp4AddressMaxLen = sizeof "::ffff:255.255.255.255";
 
    // check for the special cases
    const quint64 zeroes[] = { 0, 0 };

@@ -1337,12 +1337,8 @@ void QTextCursor::deletePreviousChar()
    if (d->anchor < 1 || !d->canDelete(d->anchor - 1)) {
       return;
    }
+
    d->anchor--;
-
-   QTextDocumentPrivate::FragmentIterator fragIt = d->priv->find(d->anchor);
-   const QTextFragmentData *const frag = fragIt.value();
-
-   int fpos = fragIt.position();
 
    d->adjusted_anchor = d->anchor;
    d->remove();

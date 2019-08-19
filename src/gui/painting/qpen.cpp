@@ -586,7 +586,6 @@ QDataStream &operator<<(QDataStream &s, const QPen &p)
 QDataStream &operator>>(QDataStream &s, QPen &p)
 {
    quint16 style;
-   quint8 width8 = 0;
    double width  = 0;
    QColor color;
    QBrush brush;

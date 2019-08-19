@@ -339,8 +339,6 @@ QString QLocaleId::name(char separator) const
    const unsigned char *script  = (script_id  != QLocale::AnyScript  ? script_code_list + 4  * script_id : 0);
    const unsigned char *country = (country_id != QLocale::AnyCountry ? country_code_list + 3 * country_id : 0);
 
-   char len = (lang[2] != 0 ? 3 : 2) + (script ? 4 + 1 : 0) + (country ? (country[2] != 0 ? 3 : 2) + 1 : 0);
-
    QString name;
    name.append(lang[0]);
    name.append(lang[1]);

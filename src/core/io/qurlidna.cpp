@@ -2260,7 +2260,6 @@ static void qt_punycodeEncoder(QStringView str, QString *output)
 
       // find the character in the input string with the lowest unicode value
       uint m = std::numeric_limits<uint>::max();
-      uint j;
 
       for (auto ch : str) {
          char32_t uc = ch.unicode();
@@ -2498,7 +2497,6 @@ QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
 
    QString::const_iterator last_iter = domain.begin();
 
-
    while (true) {
       QString::const_iterator next_iter = nextDotDelimiter(domain, last_iter);
 
@@ -2550,8 +2548,7 @@ QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
       } else {
          qt_nameprep(&retval, prevLen);
 
-         labelLength   = retval.length() - prevLen;
-         int toReserve = labelLength + 4 + 6;         // "xn--" plus some extra bytes
+         labelLength  = retval.length() - prevLen;
 
          aceForm.clear();
          qt_punycodeEncoder(QStringView(retval.begin() + prevLen, retval.end()), &aceForm);

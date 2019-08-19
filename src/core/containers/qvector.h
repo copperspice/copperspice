@@ -459,7 +459,7 @@ class QVector
 template <typename T>
 inline typename QVector<T>::const_reference QVector<T>::at(size_type i) const
 {
-   Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::at", "index out of range");
+   Q_ASSERT_X(i < size(), "QVector<T>::at", "index out of range");
    return m_data[i];
 }
 
@@ -633,7 +633,7 @@ inline typename QVector<T>::const_reference QVector<T>::operator[](size_type i) 
 template <typename T>
 inline typename QVector<T>::reference QVector<T>::operator[](size_type i)
 {
-   Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::operator[]", "index out of range");
+   Q_ASSERT_X(i < size(), "QVector<T>::operator[]", "index out of range");
    return m_data[i];
 }
 

@@ -325,6 +325,9 @@ static bool setByteOrder(iconv_t cd)
 
 QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *convState) const
 {
+
+/*
+
    char   *inBytes;
    char   *outBytes;
    size_t inBytesLeft;
@@ -334,6 +337,8 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
 #else
    char **inBytesPtr = &inBytes;
 #endif
+
+*/
 
    // remove when enabled
    perror("QIconvCodec::convertFromUnicode: using Latin1 for conversion, iconv failed for BOM");

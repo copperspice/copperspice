@@ -135,7 +135,6 @@ QPalette::QPalette(const QColor &button, const QColor &window)
 {
    init();
 
-   QColor bg = window, btn = button, fg, base, disfg;
    int h, s, v;
    window.getHsv(&h, &s, &v);
 

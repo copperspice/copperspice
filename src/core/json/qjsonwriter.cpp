@@ -38,11 +38,7 @@ static uchar hexdig(uint u)
 static QString escapedString(const QString &s)
 {
    QString retval;
-
    const uchar replacement = '?';
-
-   QString::const_iterator iter = s.begin();
-   QString::const_iterator end  = s.begin();
 
    for (QChar c : s) {
       char32_t uc = c.unicode();
