@@ -225,7 +225,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    virtual void connectNotify(const QMetaMethod &signalMethod) const;
    virtual void customEvent(QEvent *event);
 
-   virtual void disconnectNotify(const QMetaMethod &signal) const;
+   virtual void disconnectNotify(const QMetaMethod &signalMethod) const;
    virtual void timerEvent(QTimerEvent *event);
 
    bool isSignalConnected(const QMetaMethod &signalMethod) const;

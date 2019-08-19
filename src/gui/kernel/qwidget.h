@@ -335,13 +335,13 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    bool isEnabledTo(const QWidget *) const;
    inline bool isEnabledToTLW() const;
 
-   GUI_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setEnabled(bool enabled))
    GUI_CS_SLOT_2(setEnabled)
 
-   GUI_CS_SLOT_1(Public, void setDisabled(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setDisabled(bool disable))
    GUI_CS_SLOT_2(setDisabled)
 
-   GUI_CS_SLOT_1(Public, void setWindowModified(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setWindowModified(bool modified))
    GUI_CS_SLOT_2(setWindowModified)
 
    // Widget coordinates
@@ -392,7 +392,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    inline void cs_setSizeIncrement(const QSize &un_named_arg1);
 
    QSize baseSize() const;
-   inline void setBaseSize(const QSize &);
+   inline void setBaseSize(const QSize &size);
    void setBaseSize(int basew, int baseh);
 
    // wrapper for overloaded property
@@ -467,7 +467,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void ungrabGesture(Qt::GestureType type);
 #endif
 
-   GUI_CS_SLOT_1(Public, void setWindowTitle(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setWindowTitle(const QString &title))
    GUI_CS_SLOT_2(setWindowTitle)
 
 #ifndef QT_NO_STYLE_STYLESHEET
@@ -499,7 +499,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    bool isWindowModified() const;
 
 #ifndef QT_NO_TOOLTIP
-   void setToolTip(const QString &);
+   void setToolTip(const QString &data);
    QString toolTip() const;
 
    void setToolTipDuration(int msec);
@@ -507,12 +507,12 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 #endif
 
 #ifndef QT_NO_STATUSTIP
-   void setStatusTip(const QString &);
+   void setStatusTip(const QString &data);
    QString statusTip() const;
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-   void setWhatsThis(const QString &);
+   void setWhatsThis(const QString &str);
    QString whatsThis() const;
 #endif
 
@@ -564,7 +564,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void grabMouse();
 
 #ifndef QT_NO_CURSOR
-   void grabMouse(const QCursor &);
+   void grabMouse(const QCursor &cursor);
 #endif
 
    void releaseMouse();
@@ -697,14 +697,14 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    QRect contentsRect() const;
 
    QLayout *layout() const;
-   void setLayout(QLayout *);
+   void setLayout(QLayout *layout);
    void updateGeometry();
 
    void setParent(QWidget *parent);
    void setParent(QWidget *parent, Qt::WindowFlags f);
 
    void scroll(int dx, int dy);
-   void scroll(int dx, int dy, const QRect &);
+   void scroll(int dx, int dy, const QRect &rect);
 
    // misc functions
    QWidget *focusWidget() const;
