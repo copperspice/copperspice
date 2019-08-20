@@ -226,8 +226,7 @@ int qstrnicmp(const char *str1, const char *str2, uint len)
    const uchar *s1 = reinterpret_cast<const uchar *>(str1);
    const uchar *s2 = reinterpret_cast<const uchar *>(str2);
 
-
-   if (! s1 || !s2) {
+   if (! s1 || ! s2) {
       return s1 ? 1 : (s2 ? -1 : 0);
    }
 

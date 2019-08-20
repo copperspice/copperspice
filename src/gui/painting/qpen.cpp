@@ -29,15 +29,10 @@
 #include <qdebug.h>
 
 typedef QPenPrivate QPenData;
-
-
-/*!
-  \internal
-*/
+// internal
 inline QPenPrivate::QPenPrivate(const QBrush &_brush, qreal _width, Qt::PenStyle penStyle,
    Qt::PenCapStyle _capStyle, Qt::PenJoinStyle _joinStyle, bool _defaultWidth)
-   : ref(1), dashOffset(0), miterLimit(2),
-     cosmetic(false), defaultWidth(_defaultWidth)
+   : ref(1), dashOffset(0), miterLimit(2), cosmetic(false), defaultWidth(_defaultWidth)
 {
    width = _width;
    brush = _brush;
@@ -620,7 +615,6 @@ QDataStream &operator>>(QDataStream &s, QPen &p)
 
    s >> dashOffset;
    s >> defaultWidth;
-
 
    p.detach();
 

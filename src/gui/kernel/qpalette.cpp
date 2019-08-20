@@ -135,31 +135,34 @@ QPalette::QPalette(const QColor &button, const QColor &window)
 {
    init();
 
-   int h, s, v;
+   int h;
+   int s;
+   int v;
+
    window.getHsv(&h, &s, &v);
 
    const QBrush windowBrush = QBrush(window);
-   const QBrush whiteBrush = QBrush(Qt::white);
-   const QBrush blackBrush = QBrush(Qt::black);
-   const QBrush baseBrush = v > 128 ? whiteBrush : blackBrush;
-   const QBrush foregroundBrush = v > 128 ? blackBrush : whiteBrush;
+   const QBrush whiteBrush  = QBrush(Qt::white);
+   const QBrush blackBrush  = QBrush(Qt::black);
+
+   const QBrush baseBrush          = v > 128 ? whiteBrush : blackBrush;
+   const QBrush foregroundBrush    = v > 128 ? blackBrush : whiteBrush;
    const QBrush disabledForeground = QBrush(Qt::darkGray);
 
-   const QBrush buttonBrush = QBrush(button);
-   const QBrush buttonBrushDark = QBrush(button.darker());
-   const QBrush buttonBrushDark150 = QBrush(button.darker(150));
+   const QBrush buttonBrush         = QBrush(button);
+   const QBrush buttonBrushDark     = QBrush(button.darker());
+   const QBrush buttonBrushDark150  = QBrush(button.darker(150));
    const QBrush buttonBrushLight150 = QBrush(button.lighter(150));
 
    //inactive and active are identical
    setColorGroup(Inactive, foregroundBrush, buttonBrush, buttonBrushLight150, buttonBrushDark,
-      buttonBrushDark150, foregroundBrush, whiteBrush, baseBrush,
-      windowBrush);
+      buttonBrushDark150, foregroundBrush, whiteBrush, baseBrush, windowBrush);
+
    setColorGroup(Active, foregroundBrush, buttonBrush, buttonBrushLight150, buttonBrushDark,
-      buttonBrushDark150, foregroundBrush, whiteBrush, baseBrush,
-      windowBrush);
+      buttonBrushDark150, foregroundBrush, whiteBrush, baseBrush, windowBrush);
+
    setColorGroup(Disabled, disabledForeground, buttonBrush, buttonBrushLight150,
-      buttonBrushDark, buttonBrushDark150, disabledForeground,
-      whiteBrush, baseBrush, windowBrush);
+      buttonBrushDark, buttonBrushDark150, disabledForeground, whiteBrush, baseBrush, windowBrush);
 }
 
 QPalette::QPalette(const QPalette &p)
@@ -379,14 +382,12 @@ static void readV1ColorGroup(QDataStream &s, QPalette &pal, QPalette::ColorGroup
       pal.setColor(grp, (QPalette::ColorRole)oldRoles[i], col);
    }
 }
-
 QDataStream &operator>>(QDataStream &s, QPalette &p)
 {
    int max = QPalette::NColorRoles;
 
-
-
    QBrush tmp;
+
    for (int grp = 0; grp < (int)QPalette::NColorGroups; ++grp) {
       for (int role = 0; role < max; ++role) {
          s >> tmp;

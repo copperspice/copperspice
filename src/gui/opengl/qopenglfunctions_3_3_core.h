@@ -652,13 +652,11 @@ inline void QOpenGLFunctions_3_3_Core::glCullFace(GLenum mode)
 // OpenGL 1.1 core functions
 inline void QOpenGLFunctions_3_3_Core::glIndexubv(const GLubyte *c)
 {
-    Q_UNUSED(c);
     QOPENGL_DEPRECATEDFUNCTION;
 }
 
 inline void QOpenGLFunctions_3_3_Core::glIndexub(GLubyte c)
 {
-    Q_UNUSED(c);
     QOPENGL_DEPRECATEDFUNCTION;
 }
 

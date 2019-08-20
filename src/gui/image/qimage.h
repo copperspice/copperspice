@@ -43,8 +43,6 @@ class QImageDataMisc;
 
 struct QImageData;
 
-
-
 typedef void (*QImageCleanupFunction)(void *);
 
 class Q_GUI_EXPORT QImage : public QPaintDevice
@@ -316,10 +314,9 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    friend class QBlittablePlatformPixmap;
    friend class QImagePixmapCleanupHooks;
    friend class QRasterPlatformPixmap;
-   friend class QSpanData;
    friend class QFontEngineFT;
-
    friend class QPixmapCacheEntry;
+   friend struct QSpanData;
 };
 
 inline bool QImage::valid(const QPoint &pt) const

@@ -575,6 +575,7 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    int m_ascent;
    int m_maxLength;
    int m_lastCursorPos;
+
    QList<int> m_transactions;
    QPoint m_tripleClick;
    int m_tripleClickTimer;
@@ -592,7 +593,9 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
 #ifndef QT_NO_VALIDATOR
    QPointer<QValidator> m_validator;
 #endif
+
    QPointer<QCompleter> m_completer;
+
 #ifndef QT_NO_COMPLETER
    bool advanceToEnabledItem(int dir);
 #endif
@@ -603,6 +606,7 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
       bool separator;
       Casemode caseMode;
    };
+
    QString m_inputMask;
    QChar m_blank;
    MaskInputData *m_maskData;

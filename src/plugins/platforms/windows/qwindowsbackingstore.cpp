@@ -21,19 +21,20 @@
 *
 ***********************************************************************/
 
-#include "qwindowsbackingstore.h"
-#include "qwindowswindow.h"
-#include "qwindowsnativeimage.h"
-#include "qwindowscontext.h"
+#include <qwindowsbackingstore.h>
 
-#include <QWindow>
-#include <QPainter>
+#include <qdebug.h>
+#include <qwindow.h>
+#include <qpainter.h>
+#include <qwindowswindow.h>
+#include <qwindowsnativeimage.h>
+#include <qwindowscontext.h>
+
 #include <qhighdpiscaling_p.h>
 #include <qimage_p.h>
-#include <QDebug>
 
-QWindowsBackingStore::QWindowsBackingStore(QWindow *window) :
-   QPlatformBackingStore(window), m_alphaNeedsFill(false)
+QWindowsBackingStore::QWindowsBackingStore(QWindow *window)
+   : QPlatformBackingStore(window), m_alphaNeedsFill(false)
 {
 }
 
@@ -128,12 +129,13 @@ void QWindowsBackingStore::resize(const QSize &size, const QRegion &region)
       QImage::Format format = window()->format().hasAlpha() ?
          QImage::Format_ARGB32_Premultiplied : QWindowsNativeImage::systemFormat();
 
-      // The backingstore composition (enabling render-to-texture widgets)
-      // punches holes in the backingstores using the alpha channel. Hence
-      // the need for a true alpha format.
+      // The backingstore composition (enabling render-to-texture widgets) punches holes in the
+      // backingstores using the alpha channel. Hence the need for a true alpha format.
+
       if (QImage::toPixelFormat(format).alphaUsage() == QPixelFormat::UsesAlpha) {
          m_alphaNeedsFill = true;
-      } else { // upgrade but here we know app painting does not rely on alpha hence no need to fill
+      } else {
+         // upgrade but here we know app painting does not rely on alpha hence no need to fill
          format = qt_maybeAlphaVersionWithSameDepth(format);
       }
 
@@ -142,10 +144,12 @@ void QWindowsBackingStore::resize(const QSize &size, const QRegion &region)
 
       if (oldwni && !region.isEmpty()) {
          const QImage &oldimg(oldwni->image());
+
          QImage &newimg(newwni->image());
          QRegion staticRegion(region);
          staticRegion &= QRect(0, 0, oldimg.width(), oldimg.height());
          staticRegion &= QRect(0, 0, newimg.width(), newimg.height());
+
          QPainter painter(&newimg);
          painter.setCompositionMode(QPainter::CompositionMode_Source);
 
@@ -185,6 +189,7 @@ void QWindowsBackingStore::beginPaint(const QRegion &region)
       QPainter p(&m_image->image());
       p.setCompositionMode(QPainter::CompositionMode_Source);
       const QColor blank = Qt::transparent;
+
       for (const QRect &r : region.rects()) {
          p.fillRect(r, blank);
       }
@@ -193,7 +198,7 @@ void QWindowsBackingStore::beginPaint(const QRegion &region)
 
 HDC QWindowsBackingStore::getDC() const
 {
-   if (!m_image.isNull()) {
+   if ( !m_image.isNull()) {
       return m_image->hdc();
    }
    return 0;

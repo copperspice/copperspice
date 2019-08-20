@@ -36,7 +36,6 @@
 #include <qpicture.h>
 #include <qmenu.h>
 
-
 class QLabelPrivate : public QFramePrivate
 {
    Q_DECLARE_PUBLIC(QLabel)
@@ -87,9 +86,11 @@ class QLabelPrivate : public QFramePrivate
 #ifndef QT_NO_MOVIE
    QPointer<QMovie> movie;
 #endif
+
 #ifndef QT_NO_CURSOR
    QCursor cursor;
 #endif
+
 #ifndef QT_NO_SHORTCUT
    QPointer<QWidget> buddy;
    int shortcutId;
@@ -130,6 +131,4 @@ class QLabelPrivate : public QFramePrivate
    friend class QMessageBoxPrivate;
 };
 
-
-
-#endif // QLABEL_P_H
+#endif

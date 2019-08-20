@@ -1325,7 +1325,7 @@ void QTextCursor::deleteChar()
 
 void QTextCursor::deletePreviousChar()
 {
-   if (! d || !d->priv) {
+   if (! d || ! d->priv) {
       return;
    }
 
@@ -1345,12 +1345,9 @@ void QTextCursor::deletePreviousChar()
    d->setX();
 }
 
-/*!
-    Selects text in the document according to the given \a selection.
-*/
 void QTextCursor::select(SelectionType selection)
 {
-   if (!d || !d->priv) {
+   if (! d || !d->priv) {
       return;
    }
 

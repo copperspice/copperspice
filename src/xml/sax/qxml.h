@@ -31,8 +31,6 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlNamespaceSupport;
 class QXmlAttributes;
 class QXmlContentHandler;
@@ -400,7 +398,5 @@ inline int QXmlAttributes::count() const
 {
    return length();
 }
-
-QT_END_NAMESPACE
 
 #endif // QXML_H

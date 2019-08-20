@@ -35,10 +35,11 @@
 #include <QtGui/qpixmap.h>
 
 struct QBrushData;
+struct QBrushDataPointerDeleter;
+
 class QPixmap;
 class QGradient;
 class QVariant;
-struct QBrushDataPointerDeleter;
 
 class Q_GUI_EXPORT QBrush
 {
@@ -108,9 +109,10 @@ class Q_GUI_EXPORT QBrush
  private:
    friend class QRasterPaintEngine;
    friend class QRasterPaintEnginePrivate;
-   friend struct QSpanData;
    friend class QPainter;
+   friend struct QSpanData;
    friend bool Q_GUI_EXPORT qHasPixmapTexture(const QBrush &brush);
+
    void detach(Qt::BrushStyle newStyle);
    void init(const QColor &color, Qt::BrushStyle bs);
    QScopedPointer<QBrushData, QBrushDataPointerDeleter> d;
@@ -121,7 +123,6 @@ inline void QBrush::setColor(Qt::GlobalColor acolor)
 {
    setColor(QColor(acolor));
 }
-
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QBrush &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QBrush &);

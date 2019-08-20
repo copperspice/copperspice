@@ -27,8 +27,6 @@
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QDirPrivate : public QSharedData
 {
  public:
@@ -69,7 +67,5 @@ class QDirPrivate : public QSharedData
    mutable QFileSystemEntry absoluteDirEntry;
    mutable QFileSystemMetaData metaData;
 };
-
-QT_END_NAMESPACE
 
 #endif

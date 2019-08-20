@@ -320,7 +320,6 @@ void toString(QString &appendTo, IPv6Address address)
       }
    }
 
-
    // for finding where to place the "::"
    int zeroRunLength = 0; // in octets
    int zeroRunOffset = 0; // in octets

@@ -26,9 +26,9 @@
 
 #include "qtwindows_additional.h"
 
-#include <QtCore/QVector>
-#include <QtCore/QList>
-#include <QtCore/QVariant>
+#include <QVector>
+#include <QList>
+#include <QVariant>
 
 class QDebug;
 class QMimeData;
@@ -36,11 +36,12 @@ class QMimeData;
 class QWindowsMime
 {
    Q_DISABLE_COPY(QWindowsMime)
+
  public:
    QWindowsMime();
    virtual ~QWindowsMime();
 
-   // for converting from Qt
+   // for converting from CS
    virtual bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const = 0;
    virtual bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const = 0;
    virtual QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const = 0;
@@ -65,7 +66,6 @@ class QWindowsMimeConverter
    QWindowsMime *converterFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
    QVector<FORMATETC> allFormatsForMime(const QMimeData *mimeData) const;
 
-   // Convenience.
    QVariant convertToMime(const QStringList &mimeTypes, IDataObject *pDataObj, QVariant::Type preferredType,
       QString *format = 0) const;
 
@@ -85,6 +85,5 @@ class QWindowsMimeConverter
 
 QDebug operator<<(QDebug, const FORMATETC &);
 QDebug operator<<(QDebug d, IDataObject *);
-
 
 #endif // QWINDOWSMIME_H

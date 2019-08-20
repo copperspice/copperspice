@@ -34,7 +34,6 @@
 #include <qclipboard.h>
 #include <qdebug.h>
 #include <qurl.h>
-
 #include <qmath.h>
 
 #include <qstylesheetstyle_p.h>
@@ -43,8 +42,6 @@
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
-
-
 
 QLabelPrivate::QLabelPrivate()
    : QFramePrivate(),
@@ -85,13 +82,13 @@ QLabelPrivate::QLabelPrivate()
      validCursor(false),
      onAnchor(false),
 #endif
+
      openExternalLinks(false)
-{
-}
+{}
 
 QLabelPrivate::~QLabelPrivate()
-{
-}
+{}
+
 #ifndef QT_NO_PICTURE
 
 const QPicture *QLabel::picture() const

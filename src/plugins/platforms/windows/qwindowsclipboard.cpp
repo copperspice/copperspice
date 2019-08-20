@@ -90,7 +90,7 @@ IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
       return pDataObj;
    }
 
-   return 0;
+   return nullptr;
 }
 
 void QWindowsClipboardRetrievalMimeData::releaseDataObject(IDataObject *dataObject) const
@@ -102,16 +102,15 @@ extern "C" LRESULT QT_WIN_CALLBACK qClipboardViewerWndProc(HWND hwnd, UINT messa
 {
    LRESULT result = 0;
    if (QWindowsClipboard::instance()
-      && QWindowsClipboard::instance()->clipboardViewerWndProc(hwnd, message, wParam, lParam, &result)) {
+            && QWindowsClipboard::instance()->clipboardViewerWndProc(hwnd, message, wParam, lParam, &result)) {
       return result;
    }
+
    return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
-// QTBUG-36958, ensure the clipboard is flushed before
-// QApplication is destroyed since OleFlushClipboard()
-// might query the data again which causes problems
-// for QMimeData-derived classes using QPixmap/QImage.
+// ensure the clipboard is flushed before QApplication is destroyed since OleFlushClipboard()
+// might query the data again which causes problems for QMimeData-derived classes using QPixmap/QImage
 static void cleanClipboardPostRoutine()
 {
    if (QWindowsClipboard *cl = QWindowsClipboard::instance()) {
@@ -121,8 +120,8 @@ static void cleanClipboardPostRoutine()
 
 QWindowsClipboard *QWindowsClipboard::m_instance = 0;
 
-QWindowsClipboard::QWindowsClipboard() :
-   m_data(0), m_clipboardViewer(0), m_nextClipboardViewer(0), m_formatListenerRegistered(false)
+QWindowsClipboard::QWindowsClipboard()
+   : m_data(0), m_clipboardViewer(0), m_nextClipboardViewer(0), m_formatListenerRegistered(false)
 {
    QWindowsClipboard::m_instance = this;
    qAddPostRoutine(cleanClipboardPostRoutine);
@@ -158,7 +157,7 @@ void QWindowsClipboard::registerViewer()
    // Try format listener API (Vista onwards) first.
    if (QWindowsContext::user32dll.addClipboardFormatListener && QWindowsContext::user32dll.removeClipboardFormatListener) {
       m_formatListenerRegistered = QWindowsContext::user32dll.addClipboardFormatListener(m_clipboardViewer);
-      if (!m_formatListenerRegistered) {
+      if (! m_formatListenerRegistered) {
          qErrnoWarning("AddClipboardFormatListener() failed.");
       }
    }
@@ -189,7 +188,7 @@ void QWindowsClipboard::unregisterViewer()
    }
 }
 
-// ### FIXME: Qt 6: Remove the clipboard chain handling code and make the format listener the default
+// ### FIXME: Qt6: Remove the clipboard chain handling code and make the format listener the default
 
 static bool isProcessBeingDebugged(HWND hwnd)
 {
@@ -215,13 +214,15 @@ void QWindowsClipboard::propagateClipboardMessage(UINT message, WPARAM wParam, L
    if (!m_nextClipboardViewer) {
       return;
    }
+
    // In rare cases, a clipboard viewer can hang (application crashed,
    // suspended by a shell prompt 'Select' or debugger).
    if (QWindowsContext::user32dll.isHungAppWindow
-      && QWindowsContext::user32dll.isHungAppWindow(m_nextClipboardViewer)) {
+         && QWindowsContext::user32dll.isHungAppWindow(m_nextClipboardViewer)) {
       qWarning("Cowardly refusing to send clipboard message to hung application...");
       return;
    }
+
    // Do not block if the process is being debugged, specifically, if it is
    // displaying a runtime assert, which is not caught by isHungAppWindow().
    if (isProcessBeingDebugged(m_nextClipboardViewer)) {
@@ -244,6 +245,7 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
    switch (message) {
       case WM_CHANGECBCHAIN: {
          const HWND toBeRemoved = reinterpret_cast<HWND>(wParam);
+
          if (toBeRemoved == m_nextClipboardViewer) {
             m_nextClipboardViewer = reinterpret_cast<HWND>(lParam);
          } else {
@@ -276,7 +278,8 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
             releaseIData();
          }
          return true;
-   } // switch (message)
+
+   }
 
    return false;
 }
@@ -288,7 +291,7 @@ QMimeData *QWindowsClipboard::mimeData(QClipboard::Mode mode)
 #endif
 
    if (mode != QClipboard::Clipboard) {
-      return 0;
+      return nullptr;
    }
 
    if (ownsClipboard()) {
