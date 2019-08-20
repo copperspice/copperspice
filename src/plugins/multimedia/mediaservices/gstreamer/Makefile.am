@@ -37,10 +37,12 @@ MULTIMEDIA_GSTREAMER_TOOLS_PRIVATE_INCLUDES = \
 	qgstreamervideooverlay_p.h \
 	qgstreamervideowindow_p.h \
 	qgstreamervideorenderer_p.h \
-	qvideosurfacegstsink_p.h \
+	qgstbufferpoolinterface_p.h \
 	qgstvideorenderersink_p.h \
 	qgstvideorendererplugin_p.h \
-	qgstvideobuffer_p.h
+	qgstvideobuffer_p.h \
+	qvideosurfacegstsink_p.h \
+	gstvideoconnector_p.h
 
 MULTIMEDIA_PUBLIC_INCLUDES += $(MULTIMEDIA_GSTREAMER_PUBLIC_INCLUDES)
 MULTIMEDIA_INCLUDES += $(MULTIMEDIA_GSTREAMER_INCLUDES)
@@ -162,17 +164,15 @@ lib_CsMultimedia_gst_mediaplayer@BUILD_ABI@_la_SOURCES = \
 	src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer.cpp \
 	src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer.cpp
 
-
 if GSTREAMER_ABI_VERSION_0_10
 
 lib_CsMultimedia_gst_audiodecoder@BUILD_ABI@_la_SOURCES += \
 	src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
 
 lib_CsMultimedia_gst_mediaplayer@BUILD_ABI@_la_SOURCES += \
-	src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
-
-#   qgstbufferpoolinterface.cpp
-#   gstvideoconnector.c
+	src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp \
+	src/plugins/multimedia/mediaservices/gstreamer/tools/qgstbufferpoolinterface.cpp \
+	src/plugins/multimedia/mediaservices/gstreamer/tools/gstvideoconnector.cpp
 
 else
 

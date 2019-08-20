@@ -35,10 +35,12 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideooverlay_p.h
     ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowindow_p.h
     ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer_p.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink_p.h
+    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstbufferpoolinterface_p.h
     ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink_p.h
     ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin_p.h
     ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer_p.h
+    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink_p.h
+    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/gstvideoconnector_p.h
 )
 
 if(WITH_MULTIMEDIA AND GStreamer_FOUND)
@@ -85,14 +87,12 @@ if (${GSTREAMER_ABI_VERSION} STREQUAL "0.10")
         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
    )
 
-   set(GSTREAMER_GST_MEDIAPLAYER_SOURCES
-        ${GSTREAMER_GST_MEDIAPLAYER_SOURCES}
+   set(GSTREAMER_MEDIAPLAYER_SOURCES
+        ${GSTREAMER_MEDIAPLAYER_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
+        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstbufferpoolinterface.cpp
+        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/gstvideoconnector.cpp
    )
-
-#     qgstbufferpoolinterface.cpp
-#     gstvideoconnector.c
-#     ${GSTREAMER_INTERFACE_LIBRARY}
 
 else()
    set(GSTREAMER_AUDIODECODER_SOURCES
@@ -128,6 +128,12 @@ endif()
       ${GOBJECT2_LIBRARIES}
    )
 
+if (${GSTREAMER_ABI_VERSION} STREQUAL "0.10")
+   target_link_libraries(CsMultimedia_gst_audiodecoder${BUILD_ABI}
+      ${GSTREAMER_INTERFACES_LIBRARIES}
+   )
+endif()
+
    target_include_directories(
       CsMultimedia_gst_audiodecoder${BUILD_ABI} PRIVATE
       ${GSTREAMER_INCLUDE_DIR}
@@ -156,6 +162,12 @@ endif()
       ${GLIB2_LIBRARIES}
       ${GOBJECT2_LIBRARIES}
    )
+
+if (${GSTREAMER_ABI_VERSION} STREQUAL "0.10")
+   target_link_libraries(CsMultimedia_gst_mediaplayer${BUILD_ABI}
+      ${GSTREAMER_INTERFACES_LIBRARIES}
+   )
+endif()
 
    target_include_directories(
       CsMultimedia_gst_mediaplayer${BUILD_ABI} PRIVATE
