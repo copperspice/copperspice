@@ -411,8 +411,8 @@ QDebug operator<<(QDebug d, const FORMATETC &tc)
          break;
    }
 
-   d << ", dwAspect=" << tc.dwAspect << ", lindex=" << tc.lindex
-     << ", tymed=" << tc.tymed << ", ptd=" << tc.ptd << ')';
+   d << ", dwAspect =" << tc.dwAspect << ", lindex =" << tc.lindex
+     << ", tymed =" << tc.tymed << ", ptd =" << tc.ptd << ')';
 
    return d;
 }
@@ -948,7 +948,10 @@ QVariant QWindowsMimeHtml::convertToMime(const QString &mime, IDataObject *pData
 
    if (canConvertToMime(mime, pDataObj)) {
       QByteArray html = getData(CF_HTML, pDataObj);
-      qDebug() << __FUNCTION__ << "raw:" << html;
+
+#if defined(CS_SHOW_DEBUG)
+      qDebug() << "QWindowsMimeHtml::convertToMime(): Raw =" << html;
+#endif
 
       int start = html.indexOf("StartHTML:");
       int end   = html.indexOf("EndHTML:");
@@ -1057,9 +1060,12 @@ QVector<FORMATETC> QWindowsMimeImage::formatsForMime(const QString &mimeType, co
 
       formatetcs += setCf(CF_DIB);
    }
-   if (!formatetcs.isEmpty()) {
-      qDebug() << __FUNCTION__ << mimeType << formatetcs;
+
+#if defined(CS_SHOW_DEBUG)
+   if (! formatetcs.isEmpty()) {
+      qDebug() << "QWindowsMimeImage::formatsForMime():" << mimeType << "\n" << formatetcs;
    }
+#endif
 
    return formatetcs;
 }
@@ -1172,8 +1178,10 @@ QVariant QWindowsMimeImage::convertToMime(const QString &mimeType, IDataObject *
       QImage img;
       QByteArray data = getData(CF_DIBV5, pDataObj);
       QDataStream s(&data, QIODevice::ReadOnly);
+
       s.setByteOrder(QDataStream::LittleEndian);
-      if (qt_read_dibv5(s, img)) { // #### supports only 32bit DIBV5
+      if (qt_read_dibv5(s, img)) {
+         // #### supports only 32bit DIBV5
          return img;
       }
    }
@@ -1306,7 +1314,6 @@ QVariant QBuiltInMimes::convertToMime(const QString &mimeType, IDataObject *pDat
       QByteArray data = getData(inFormats.key(mimeType), pDataObj);
 
       if (! data.isEmpty()) {
-         qDebug() << __FUNCTION__;
 
          if (mimeType == "text/html" && preferredType == QVariant::String) {
             // text/html is in wide chars on windows (compatible with Mozilla)
@@ -1416,9 +1423,11 @@ QVector<FORMATETC> QLastResortMimes::formatsForMime(const QString &mimeType, con
       formatetcs += setCf(cf);
    }
 
-   if (!formatetcs.isEmpty()) {
-      qDebug() << __FUNCTION__ << mimeType << formatetcs;
+#if defined(CS_SHOW_DEBUG)
+   if (! formatetcs.isEmpty()) {
+      qDebug() << "QLastResortMimes::formatsForMime():" << mimeType << formatetcs;
    }
+#endif
 
    return formatetcs;
 }
@@ -1577,7 +1586,6 @@ QWindowsMime *QWindowsMimeConverter::converterToMime(const QString &mimeType, ID
 
 QStringList QWindowsMimeConverter::allMimesForFormats(IDataObject *pDataObj) const
 {
-   qDebug() << "QWindowsMime::allMimesForFormats()";
    ensureInitialized();
 
    QStringList formats;
@@ -1594,10 +1602,6 @@ QStringList QWindowsMimeConverter::allMimesForFormats(IDataObject *pDataObj) con
 
             if (! format.isEmpty() && !formats.contains(format)) {
                formats += format;
-
-               if (QWindowsContext::verbose > 1) {
-                  qDebug() << __FUNCTION__ << fmtetc << format;
-               }
             }
          }
 
@@ -1610,7 +1614,6 @@ QStringList QWindowsMimeConverter::allMimesForFormats(IDataObject *pDataObj) con
       fmtenum->Release();
    }
 
-   qDebug() << pDataObj << formats;
    return formats;
 }
 
@@ -1690,9 +1693,6 @@ QVariant QWindowsMimeConverter::convertToMime(const QStringList &mimeTypes, IDat
             const QVariant dataV = converter->convertToMime(format, pDataObj, preferredType);
 
             if (dataV.isValid()) {
-               qDebug() << __FUNCTION__ << mimeTypes << "\nFormat: "
-                  << format << pDataObj << " returns " << dataV;
-
                if (formatIn) {
                   *formatIn = format;
                }
@@ -1703,7 +1703,6 @@ QVariant QWindowsMimeConverter::convertToMime(const QStringList &mimeTypes, IDat
       }
    }
 
-   qDebug() << __FUNCTION__ << "fails" << mimeTypes << pDataObj << preferredType;
    return QVariant();
 }
 

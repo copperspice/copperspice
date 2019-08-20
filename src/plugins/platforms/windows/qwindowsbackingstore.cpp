@@ -55,7 +55,7 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
    const QRect br = region.boundingRect();
 
    if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ << this << window << offset << br;
+      qDebug() << "QWindowsBackingStore::flush():" << this << window << offset << br;
    }
 
    QWindowsWindow *rw = QWindowsWindow::baseWindowOf(window);
@@ -103,6 +103,7 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
             qErrnoWarning(int(lastError), "%s: BitBlt failed", __FUNCTION__);
          }
       }
+
       rw->releaseDC();
    }
 
@@ -111,7 +112,11 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
       static int n = 0;
       const QString fileName = QString::fromLatin1("win%1_%2.png").formatArg(rw->winId()).formatArg(n++);
       m_image->image().save(fileName);
-      qDebug() << "Wrote " << m_image->image().size() << fileName;
+
+#if defined(CS_SHOW_DEBUG)
+      qDebug() << "Wrote =" << m_image->image().size() << fileName;
+#endif
+
    }
 }
 
@@ -121,7 +126,7 @@ void QWindowsBackingStore::resize(const QSize &size, const QRegion &region)
 
 #if defined(CS_SHOW_DEBUG)
       if (QWindowsContext::verbose) {
-         qDebug() << __FUNCTION__ << ' ' << window() << ' ' << size << ' ' << region
+         qDebug() << "QWindowsBackingStore::resize(): " << window() << ' ' << size << ' ' << region
                   << " from: " << (m_image.isNull() ? QSize() : m_image->image().size());
       }
 #endif

@@ -38,8 +38,6 @@
 
 #include <qwindowsguieventdispatcher_p.h>
 
-#if defined(CS_SHOW_DEBUG)
-
 static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 {
    QDebugStateSaver saver(d);
@@ -50,21 +48,21 @@ static QDebug operator<<(QDebug d, const QMimeData *mimeData)
    if (mimeData) {
       const QStringList formats = mimeData->formats();
 
-      d << "formats=" << formats.join(QString(", "));
+      d << "formats =" << formats.join(QString(", "));
       if (mimeData->hasText()) {
-         d << ", text=" << mimeData->text();
+         d << ", text =" << mimeData->text();
       }
       if (mimeData->hasHtml()) {
-         d << ", html=" << mimeData->html();
+         d << ", html =" << mimeData->html();
       }
       if (mimeData->hasColor()) {
-         d << ", colorData=" << qvariant_cast<QColor>(mimeData->colorData());
+         d << ", colorData =" << qvariant_cast<QColor>(mimeData->colorData());
       }
       if (mimeData->hasImage()) {
-         d << ", imageData=" << qvariant_cast<QImage>(mimeData->imageData());
+         d << ", imageData =" << qvariant_cast<QImage>(mimeData->imageData());
       }
       if (mimeData->hasUrls()) {
-         d << ", urls=" << mimeData->urls();
+         d << ", urls =" << mimeData->urls();
       }
 
    } else {
@@ -75,7 +73,6 @@ static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 
    return d;
 }
-#endif
 
 IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
 {
@@ -84,7 +81,7 @@ IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
    if (OleGetClipboard(&pDataObj) == S_OK) {
 
       if (QWindowsContext::verbose > 1) {
-         qDebug() << __FUNCTION__ << pDataObj;
+         qDebug() << "retrieveDataObject():" << pDataObj;
       }
 
       return pDataObj;
@@ -168,7 +165,7 @@ void QWindowsClipboard::registerViewer()
 
 #if defined(CS_SHOW_DEBUG)
    qDebug() << "QWindowsClipboard::registerViewer():"
-      << "Format listener =" << m_formatListenerRegistered << " Next =" << m_nextClipboardViewer;
+            << "Format listener =" << m_formatListenerRegistered << " Next =" << m_nextClipboardViewer;
 #endif
 
 }
@@ -239,7 +236,8 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
    *result = 0;
 
    if (QWindowsContext::verbose) {
-      qDebug() << "QWindowsClipboard::clipboardViewerWndProc:" << hwnd << message << QWindowsGuiEventDispatcher::windowsMessageName(message);
+      qDebug() << "QWindowsClipboard::clipboardViewerWndProc:" << hwnd << message
+               << QWindowsGuiEventDispatcher::windowsMessageName(message);
    }
 
    switch (message) {
@@ -258,7 +256,6 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
       case WM_DRAWCLIPBOARD: {
          // Clipboard Viewer Chain handling (up to XP)
          const bool owned = ownsClipboard();
-         qDebug() << "Clipboard changed owned " << owned;
          emitChanged(QClipboard::Clipboard);
 
          // clean up the clipboard object if we no longer own the clipboard
@@ -273,7 +270,6 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
       case WM_DESTROY:
          // Recommended shutdown
          if (ownsClipboard()) {
-            qDebug() << "Clipboard owner on shutdown, releasing.";
             OleFlushClipboard();
             releaseIData();
          }
