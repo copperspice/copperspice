@@ -374,14 +374,6 @@ QDataStream &operator<<(QDataStream &s, const QPalette &p)
    return s;
 }
 
-static void readV1ColorGroup(QDataStream &s, QPalette &pal, QPalette::ColorGroup grp)
-{
-   for (int i = 0; i < NumOldRoles; ++i) {
-      QColor col;
-      s >> col;
-      pal.setColor(grp, (QPalette::ColorRole)oldRoles[i], col);
-   }
-}
 QDataStream &operator>>(QDataStream &s, QPalette &p)
 {
    int max = QPalette::NColorRoles;

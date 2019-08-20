@@ -49,7 +49,7 @@ inline QString HexString<double>::toString() const
 
    QString retval;
 
-   for (int i = 0; i < sizeof(double); ++i) {
+   for (std::size_t i = 0; i < sizeof(double); ++i) {
       retval += QString("%1").formatArg(buffer[i], 2, 16, '0');
    }
 
@@ -65,7 +65,7 @@ inline QString HexString<float>::toString() const
 
    QString retval;
 
-   for (int i = 0; i < sizeof(float); ++i) {
+   for (std::size_t i = 0; i < sizeof(float); ++i) {
       retval += QString("%1").formatArg(buffer[i], 2, 16, '0');
    }
 

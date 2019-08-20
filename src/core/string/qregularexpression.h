@@ -457,7 +457,7 @@ class Q_CORE_EXPORT QRegularExpressionMatch
 
       S captured(int index = 0) const {
 
-         if (index < m_results.size()) {
+         if (index < int(m_results.size())) {
             return S(m_results[index].first, m_results[index].second);
 
          } else {
@@ -484,7 +484,7 @@ class Q_CORE_EXPORT QRegularExpressionMatch
 
       QStringView<S> capturedView(int index = 0) const {
 
-         if (index < m_results.size()) {
+         if (index < int(m_results.size())) {
             return QStringView<S>(m_results[index].first, m_results[index].second);
 
          } else {
@@ -905,7 +905,7 @@ int QRegularExpressionMatch<S>::capturedLength(QStringView<S> name) const
 template <typename S>
 typename S::const_iterator QRegularExpressionMatch<S>::capturedEnd(int index) const
 {
-   if (index < m_results.size()) {
+   if (index < int(m_results.size())) {
       return m_results[index].second;
 
    } else {
@@ -949,7 +949,7 @@ typename S::const_iterator QRegularExpressionMatch<S>::capturedEnd(QStringView<S
 template <typename S>
 typename S::const_iterator QRegularExpressionMatch<S>::capturedStart(int index) const
 {
-   if (index < m_results.size()) {
+   if (index < int(m_results.size())) {
       return m_results[index].first;
 
    } else {
@@ -1049,8 +1049,6 @@ template<typename S>
 S QRegularExpression<S>::convert_wildcard(const S &str, const bool enableEscaping)
 {
    S retval;
-
-   const int len = str.length();
 
    // previous character is '\'
    bool isEscaping = false;
@@ -1199,7 +1197,6 @@ static S wc2rx(const S &str, bool enableEscaping)
 {
    S retval;
 
-   int i           = 0;
    bool isEscaping = false;                // the previous character is '\'
 
    typename S::const_iterator iter = str.begin();
