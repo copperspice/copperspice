@@ -43,7 +43,9 @@ noinst_HEADERS+=$(patsubst %,src/plugins/multimedia/mediaservices/directshow/%,$
 
 if OSTYPE_WIN
 
+if MULTIMEDIA
 lib_LTLIBRARIES += lib/CsMultimedia_DirectShow@BUILD_ABI@.la
+endif
 
 lib_CsMultimedia_DirectShow@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iprivateinclude \
    -Iinclude/QtCore  -Iprivateinclude/QtCore/private  \

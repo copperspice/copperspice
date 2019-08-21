@@ -13,7 +13,9 @@ MULTIMEDIA_PRIVATE_INCLUDES += $(MULTIMEDIA_PLAYLISTFORMATS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/plugins/multimedia/playlistformats/%,$(MULTIMEDIA_PLAYLISTFORMATS_INCLUDES)) \
 	$(patsubst %,src/plugins/multimedia/playlistformats/%,$(MULTIMEDIA_PLAYLISTFORMATS_PRIVATE_INCLUDES))
 
+if MULTIMEDIA
 lib_LTLIBRARIES += lib/CsMultimedia_m3u@BUILD_ABI@.la
+endif
 
 lib_CsMultimedia_m3u@BUILD_ABI@_la_CXXFLAGS = -Iinclude -Iprivateinclude \
    -Iinclude/QtCore  -Iprivateinclude/QtCore  -Iinclude/QtNetwork \
