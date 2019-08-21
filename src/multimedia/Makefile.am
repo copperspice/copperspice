@@ -11,6 +11,7 @@ lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = -Iinclude \
    -Iinclude/QtOpenGL \
    -Iinclude/QtMultimedia -Iprivateinclude/QtMultimedia/private \
    $(AM_CXXFLAGS) \
+   -DBUILD_DATE=\"`date +%Y-%m-%d`\" \
    -DQT_BUILD_MULTIMEDIA_LIB
 
 lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
@@ -63,7 +64,7 @@ MULTIMEDIA_HEADERS_INSTALLED= \
 BUILT_SOURCES+=.multimedia-header-deps.mk
 
 $(lib_libCsMultimedia@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) \
-   $(NETWORK_HEADERS_INSTALLED) $(MULTIMEDIA_HEADERS_INSTALLED) \
+   $(NETWORK_HEADERS_INSTALLED) $(MULTIMEDIA_HEADERS_INSTALLED) $(OPENGL_HEADERS_INSTALLED) \
    include/QtMultimedia privateinclude/QtMultimedia/private
 
 -include .multimedia-header-deps.mk
