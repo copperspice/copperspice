@@ -49,9 +49,13 @@ static QFactoryLoader *loader()
 QVideoSurfaceGstDelegate::QVideoSurfaceGstDelegate(QAbstractVideoSurface *surface)
    : m_surface(surface), m_pool(0), m_renderReturn(GST_FLOW_ERROR), m_bytesPerLine(0), m_startCanceled(false)
 {
+   QFactoryLoader *factoryObj = loader();
+
    if (m_surface) {
-      for (QObject *instance : loader()->instances(QGstBufferPoolPluginKey)) {
-         QGstBufferPoolInterface *plugin = qobject_cast<QGstBufferPoolInterface *>(instance);
+      for (QLibraryHandle *handle : factoryObj->librarySet(QGstBufferPoolPluginKey)) {
+
+         QObject *instance = factoryObj->instance(handle);
+         QGstBufferPoolInterface *plugin = dynamic_cast<QGstBufferPoolInterface *>(instance);
 
          if (plugin) {
             m_pools.append(plugin);
