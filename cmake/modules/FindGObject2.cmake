@@ -40,11 +40,10 @@ find_path(GOBJECT2_INTERNAL_INCLUDE_DIR glibconfig.h
 
 set(GOBJECT2_INCLUDE_DIR "${GOBJECT2_MAIN_INCLUDE_DIR}")
 
-# not sure if this include dir is optional or required
-# for now it is optional
+# not sure if this include dir is optional or required, for now it is optional
 if(GOBJECT2_INTERNAL_INCLUDE_DIR)
   set(GOBJECT2_INCLUDE_DIR ${GOBJECT2_INCLUDE_DIR} "${GOBJECT2_INTERNAL_INCLUDE_DIR}")
-endif(GOBJECT2_INTERNAL_INCLUDE_DIR)
+endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GOBJECT2  DEFAULT_MSG  GOBJECT2_LIBRARIES GOBJECT2_MAIN_INCLUDE_DIR)
