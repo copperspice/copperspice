@@ -40,7 +40,6 @@
 #include <qfactoryloader_p.h>
 
 // register by hand
-template <>
 Q_MULTIMEDIA_EXPORT const QString &cs_typeName_internal<QMediaPlaylist, void>::typeName()
 {
    static QString retval("QMediaPlaylist");
