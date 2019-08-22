@@ -640,7 +640,7 @@ QVariant QWindowsMimeText::convertToMime(const QString &mime, LPDATAOBJECT pData
 
          str = codec->toUnicode(data);
 
-         while (str.endsWith('\0')) {
+         while (str.endsWith(QChar('\0'))) {
             str.chop(1);
          }
 
