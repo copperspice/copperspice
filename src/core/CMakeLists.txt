@@ -95,6 +95,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    )
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
 
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD|DragonFly)")
+   set(EXTRA_CORE_LIBS
+      ${EXTRA_CORE_LIBS}
+      ${CMAKE_THREAD_LIBS_INIT}
+      iconv
+   )
+   include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    set(EXTRA_CORE_LDFLAGS
       ${EXTRA_CORE_LDFLAGS}

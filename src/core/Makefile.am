@@ -29,7 +29,7 @@ lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/forkfd
 endif
 
 if OSTYPE_BSD
-lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -liconv
 lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/forkfd
 endif
 
