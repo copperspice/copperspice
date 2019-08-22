@@ -24,127 +24,122 @@
 #ifndef QMEDIAMETADATA_H
 #define QMEDIAMETADATA_H
 
-#include <qmetatype.h>
-#include <qpair.h>
 #include <qstring.h>
-
-#define Q_DECLARE_METADATA(key) Q_MULTIMEDIA_EXPORT extern const QString key
 
 namespace QMediaMetaData {
 
 // Common
-Q_DECLARE_METADATA(Title);
-Q_DECLARE_METADATA(SubTitle);
-Q_DECLARE_METADATA(Author);
-Q_DECLARE_METADATA(Comment);
-Q_DECLARE_METADATA(Description);
-Q_DECLARE_METADATA(Category);
-Q_DECLARE_METADATA(Genre);
-Q_DECLARE_METADATA(Year);
-Q_DECLARE_METADATA(Date);
-Q_DECLARE_METADATA(UserRating);
-Q_DECLARE_METADATA(Keywords);
-Q_DECLARE_METADATA(Language);
-Q_DECLARE_METADATA(Publisher);
-Q_DECLARE_METADATA(Copyright);
-Q_DECLARE_METADATA(ParentalRating);
-Q_DECLARE_METADATA(RatingOrganization);
+static const QString Title               = "Title";
+static const QString SubTitle            = "SubTitle";
+static const QString Author              = "Author";
+static const QString Comment             = "Comment";
+static const QString Description         = "Description";
+static const QString Category            = "Category";
+static const QString Genre               = "Genre";
+static const QString Year                = "Year";
+static const QString Date                = "Date";
+static const QString UserRating          = "UserRating";
+static const QString Keywords            = "Keywords";
+static const QString Language            = "Language";
+static const QString Publisher           = "Publisher";
+static const QString Copyright           = "Copyright";
+static const QString ParentalRating      = "ParentalRating";
+static const QString RatingOrganization  = "RatingOrganization";
 
 // Media
-Q_DECLARE_METADATA(Size);
-Q_DECLARE_METADATA(MediaType);
-Q_DECLARE_METADATA(Duration);
+static const QString Size                = "Size";
+static const QString MediaType           = "MediaType";
+static const QString Duration            = "Duration";
 
 // Audio
-Q_DECLARE_METADATA(AudioBitRate);
-Q_DECLARE_METADATA(AudioCodec);
-Q_DECLARE_METADATA(AverageLevel);
-Q_DECLARE_METADATA(ChannelCount);
-Q_DECLARE_METADATA(PeakValue);
-Q_DECLARE_METADATA(SampleRate);
+static const QString AudioBitRate        = "AudioBitRate";
+static const QString AudioCodec          = "AudioCodec";
+static const QString AverageLevel        = "AverageLevel";
+static const QString ChannelCount        = "ChannelCount";
+static const QString PeakValue           = "PeakValue";
+static const QString SampleRate          = "SampleRate";
 
 // Music
-Q_DECLARE_METADATA(AlbumTitle);
-Q_DECLARE_METADATA(AlbumArtist);
-Q_DECLARE_METADATA(ContributingArtist);
-Q_DECLARE_METADATA(Composer);
-Q_DECLARE_METADATA(Conductor);
-Q_DECLARE_METADATA(Lyrics);
-Q_DECLARE_METADATA(Mood);
-Q_DECLARE_METADATA(TrackNumber);
-Q_DECLARE_METADATA(TrackCount);
+static const QString AlbumTitle          = "AlbumTitle";
+static const QString AlbumArtist         = "AlbumArtist";
+static const QString ContributingArtist  = "ContributingArtist";
+static const QString Composer            = "Composer";
+static const QString Conductor           = "Conductor";
+static const QString Lyrics              = "Lyrics";
+static const QString Mood                = "Mood";
+static const QString TrackNumber         = "TrackNumber";
+static const QString TrackCount          = "TrackCount";
 
-Q_DECLARE_METADATA(CoverArtUrlSmall);
-Q_DECLARE_METADATA(CoverArtUrlLarge);
+static const QString CoverArtUrlSmall    = "CoverArtUrlSmall";
+static const QString CoverArtUrlLarge    = "CoverArtUrlLarge";
 
 // Image/Video
-Q_DECLARE_METADATA(Resolution);
-Q_DECLARE_METADATA(PixelAspectRatio);
+static const QString Resolution          = "Resolution";
+static const QString PixelAspectRatio    = "PixelAspectRatio";
 
 // Video
-Q_DECLARE_METADATA(VideoFrameRate);
-Q_DECLARE_METADATA(VideoBitRate);
-Q_DECLARE_METADATA(VideoCodec);
+static const QString VideoFrameRate      = "VideoFrameRate";
+static const QString VideoBitRate        = "VideoBitRate";
+static const QString VideoCodec          = "VideoCodec";
 
-Q_DECLARE_METADATA(PosterUrl);
+static const QString PosterUrl           = "PosterUrl";
 
 // Movie
-Q_DECLARE_METADATA(ChapterNumber);
-Q_DECLARE_METADATA(Director);
-Q_DECLARE_METADATA(LeadPerformer);
-Q_DECLARE_METADATA(Writer);
+static const QString ChapterNumber       = "ChapterNumber";
+static const QString Director            = "Director";
+static const QString LeadPerformer       = "LeadPerformer";
+static const QString Writer              = "Writer";
 
 // Photos
-Q_DECLARE_METADATA(CameraManufacturer);
-Q_DECLARE_METADATA(CameraModel);
-Q_DECLARE_METADATA(Event);
-Q_DECLARE_METADATA(Subject);
-Q_DECLARE_METADATA(Orientation);
-Q_DECLARE_METADATA(ExposureTime);
-Q_DECLARE_METADATA(FNumber);
-Q_DECLARE_METADATA(ExposureProgram);
-Q_DECLARE_METADATA(ISOSpeedRatings);
-Q_DECLARE_METADATA(ExposureBiasValue);
-Q_DECLARE_METADATA(DateTimeOriginal);
-Q_DECLARE_METADATA(DateTimeDigitized);
-Q_DECLARE_METADATA(SubjectDistance);
-Q_DECLARE_METADATA(MeteringMode);
-Q_DECLARE_METADATA(LightSource);
-Q_DECLARE_METADATA(Flash);
-Q_DECLARE_METADATA(FocalLength);
-Q_DECLARE_METADATA(ExposureMode);
-Q_DECLARE_METADATA(WhiteBalance);
-Q_DECLARE_METADATA(DigitalZoomRatio);
-Q_DECLARE_METADATA(FocalLengthIn35mmFilm);
-Q_DECLARE_METADATA(SceneCaptureType);
-Q_DECLARE_METADATA(GainControl);
-Q_DECLARE_METADATA(Contrast);
-Q_DECLARE_METADATA(Saturation);
-Q_DECLARE_METADATA(Sharpness);
-Q_DECLARE_METADATA(DeviceSettingDescription);
+static const QString CameraManufacturer  = "CameraManufacturer";
+static const QString CameraModel         = "CameraModel";
+static const QString Event               = "Event";
+static const QString Subject             = "Subject";
+static const QString Orientation         = "Orientation";
+static const QString ExposureTime        = "ExposureTime";
+static const QString FNumber             = "FNumber";
+static const QString ExposureProgram     = "ExposureProgram";
+static const QString ISOSpeedRatings     = "ISOSpeedRatings";
+static const QString ExposureBiasValue   = "ExposureBiasValue";
+static const QString DateTimeOriginal    = "DateTimeOriginal";
+static const QString DateTimeDigitized   = "DateTimeDigitized";
+static const QString SubjectDistance     = "SubjectDistance";
+static const QString MeteringMode        = "MeteringMode";
+static const QString LightSource         = "LightSource";
+static const QString Flash               = "Flash";
+static const QString FocalLength         = "FocalLength";
+static const QString ExposureMode        = "ExposureMode";
+static const QString WhiteBalance        = "WhiteBalance";
+static const QString DigitalZoomRatio    = "DigitalZoomRatio";
+static const QString SceneCaptureType    = "SceneCaptureType";
+static const QString GainControl         = "GainControl";
+static const QString Contrast            = "Contrast";
+static const QString Saturation          = "Saturation";
+static const QString Sharpness           = "Sharpness";
+
+static const QString FocalLengthIn35mmFilm    = "FocalLengthIn35mmFilm";
+static const QString DeviceSettingDescription = "DeviceSettingDescription";
 
 // Location
-Q_DECLARE_METADATA(GPSLatitude);
-Q_DECLARE_METADATA(GPSLongitude);
-Q_DECLARE_METADATA(GPSAltitude);
-Q_DECLARE_METADATA(GPSTimeStamp);
-Q_DECLARE_METADATA(GPSSatellites);
-Q_DECLARE_METADATA(GPSStatus);
-Q_DECLARE_METADATA(GPSDOP);
-Q_DECLARE_METADATA(GPSSpeed);
-Q_DECLARE_METADATA(GPSTrack);
-Q_DECLARE_METADATA(GPSTrackRef);
-Q_DECLARE_METADATA(GPSImgDirection);
-Q_DECLARE_METADATA(GPSImgDirectionRef);
-Q_DECLARE_METADATA(GPSMapDatum);
-Q_DECLARE_METADATA(GPSProcessingMethod);
-Q_DECLARE_METADATA(GPSAreaInformation);
+static const QString GPSLatitude         = "GPSLatitude";
+static const QString GPSLongitude        = "GPSLongitude";
+static const QString GPSAltitude         = "GPSAltitude";
+static const QString GPSTimeStamp        = "GPSTimeStamp";
+static const QString GPSSatellites       = "GPSSatellites";
+static const QString GPSStatus           = "GPSStatus";
+static const QString GPSDOP              = "GPSDOP";
+static const QString GPSSpeed            = "GPSSpeed";
+static const QString GPSTrack            = "GPSTrack";
+static const QString GPSTrackRef         = "GPSTrackRef";
+static const QString GPSImgDirection     = "GPSImgDirection";
+static const QString GPSImgDirectionRef  = "GPSImgDirectionRef";
+static const QString GPSMapDatum         = "GPSMapDatum";
+static const QString GPSProcessingMethod = "GPSProcessingMethod";
+static const QString GPSAreaInformation  = "GPSAreaInformation";
 
-Q_DECLARE_METADATA(PosterImage);
-Q_DECLARE_METADATA(CoverArtImage);
-Q_DECLARE_METADATA(ThumbnailImage);
+static const QString PosterImage         = "PosterImage";
+static const QString CoverArtImage       = "CoverArtImage";
+static const QString ThumbnailImage      = "ThumbnailImage";
 }
-
-#undef Q_DECLARE_METADATA
 
 #endif
