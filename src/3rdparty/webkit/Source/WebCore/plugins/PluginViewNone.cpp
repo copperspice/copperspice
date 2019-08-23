@@ -143,7 +143,7 @@ void PluginView::handleFocusOutEvent()
 // if new functions like this are added, make sure they have the proper platform #ifs
 // so that changes do not break ports who compile both this file and PluginView.cpp.
 
-#if PLATFORM(MAC) || PLATFORM(CHROMIUM) || PLATFORM(EFL) || (OS(WINCE) && !PLATFORM(QT)) || (PLATFORM(QT) && !OS(WINCE)) || PLATFORM(BREWMP)
+#if PLATFORM(MAC) || PLATFORM(CHROMIUM) || PLATFORM(EFL) || PLATFORM(BREWMP)
 
 #if ENABLE(NETSCAPE_PLUGIN_API)
 void PluginView::keepAlive(NPP)
@@ -166,5 +166,14 @@ void PluginView::setJavaScriptPaused(bool)
 {
 }
 #endif
+
+#if USE(ACCELERATED_COMPOSITING)
+#if USE(ACCELERATED_COMPOSITING_PLUGIN_LAYER)
+   PlatformLayer * PluginView::platformLayer() const {
+      return 0;
+   }
+#endif
+#endif
+
 
 } // namespace WebCore

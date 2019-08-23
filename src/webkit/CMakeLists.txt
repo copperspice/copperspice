@@ -2396,9 +2396,13 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(WEBKIT_SOURCES
         ${WEBKIT_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorPosix.cpp
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+        ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/PluginPackageNone.cpp
+        ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/PluginViewNone.cpp
+
+#       emerald - out for now
+#       ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+#       ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp
+#       ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
     )
     include_directories(${X11_X11_INCLUDE_PATH})
 

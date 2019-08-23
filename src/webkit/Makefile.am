@@ -5270,9 +5270,13 @@ ______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += \
 	-DENABLE_NETSCAPE_PLUGIN_API=1
 ______lib_libCsWebKit@BUILD_ABI@_la_SOURCES+= \
 	../3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorPosix.cpp \
-	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp \
-	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp \
-	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+	../3rdparty/webkit/Source/WebCore/plugins/PluginPackageNone.cpp \
+	../3rdparty/webkit/Source/WebCore/plugins/PluginViewNone.cpp
+
+#  emerald - out for now
+#	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+#	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp
+#	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
 endif
 
 if OSTYPE_BSD
@@ -5282,9 +5286,13 @@ ______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += \
         -DENABLE_NETSCAPE_PLUGIN_API=1
 ______lib_libCsWebKit@BUILD_ABI@_la_SOURCES+= \
         ../3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorPosix.cpp \
-        ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp \
-        ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp \
-        ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+        ../3rdparty/webkit/Source/WebCore/plugins/PluginPackageNone.cpp \
+        ../3rdparty/webkit/Source/WebCore/plugins/PluginViewNone.cpp
+
+#       emerald - out for now
+#       ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp \
+#       ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp \
+#       ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
 endif
 
 

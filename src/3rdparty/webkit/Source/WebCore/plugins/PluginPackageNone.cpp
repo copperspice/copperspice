@@ -28,9 +28,11 @@
 
 namespace WebCore {
 
+#ifdef never
 void PluginPackage::determineQuirks(const String&)
 {
 }
+#endif
 
 bool PluginPackage::fetchInfo()
 {
@@ -40,6 +42,10 @@ bool PluginPackage::fetchInfo()
 bool PluginPackage::load()
 {
     return false;
+}
+
+void PluginPackage::setMIMEDescription(const String& mimeDescription)
+{
 }
 
 #if ENABLE(NETSCAPE_PLUGIN_API)
