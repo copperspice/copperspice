@@ -27,8 +27,8 @@
 #include <qiodevice.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <QFile>
-#include <QUrl>
+#include <qfile.h>
+#include <qurl.h>
 
 CS_PLUGIN_REGISTER(QM3uPlaylistPlugin)
 

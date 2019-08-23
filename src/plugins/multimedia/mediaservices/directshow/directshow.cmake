@@ -70,9 +70,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 
     target_compile_definitions(CsMultimedia_DirectShow${BUILD_ABI} PRIVATE
+       -DQT_PLUGIN
        -DQMEDIA_DIRECTSHOW_PLAYER
        -DNO_DSHOW_STRSAFE
-       -DQT_PLUGIN
     )
 
     install(TARGETS CsMultimedia_DirectShow${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -106,13 +106,13 @@ struct QWMMetaDataKey {
 }
 
 using QWMMetaDataKeys = QList<QWMMetaDataKey>;
-static QWMMetaDataKeys, metadataKeys;
+static QWMMetaDataKeys metadataKeys;
 
 static const QWMMetaDataKeys *qt_wmMetaDataKeys()
 {
-   if (metadataKeys->isEmpty()) {
+   if (metadataKeys.isEmpty()) {
 
-      metadataKeys->append(QWMMetaDataKey(QMediaMetaData::Title, L"Title"));
+      metadataKeys.append(QWMMetaDataKey(QMediaMetaData::Title, L"Title"));
       metadataKeys.append(QWMMetaDataKey(QMediaMetaData::SubTitle, L"WM/SubTitle"));
       metadataKeys.append(QWMMetaDataKey(QMediaMetaData::Author, L"Author"));
       metadataKeys.append(QWMMetaDataKey(QMediaMetaData::Comment, L"Comment"));

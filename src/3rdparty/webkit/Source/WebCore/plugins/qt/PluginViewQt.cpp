@@ -289,7 +289,7 @@ void PluginView::paintUsingXPixmap(QPainter* painter, const QRect &exposedRect)
 
     const bool syncX = m_pluginDisplay && m_pluginDisplay != QX11Info::display();
 
-    // When printing, Qt uses a QPicture to capture the output in preview mode. The
+    // When printing, we use a QPicture to capture the output in preview mode. The
     // QPicture holds a reference to the X Pixmap. As a result, the print preview would
     // update itself when the X Pixmap changes. To prevent this, we create a copy.
     if (m_element->document()->printing())

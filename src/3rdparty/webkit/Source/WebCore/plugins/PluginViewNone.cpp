@@ -138,12 +138,13 @@ void PluginView::handleFocusOutEvent()
 }
 #endif
 
-// The functions below are for platforms that do not use PluginView for plugins
-// due to architectural differences. The plan is to eventually have all
-// ports using PluginView, but until then, if new functions like this are 
-// added, please make sure they have the proper platform #ifs so that changes
-// do not break ports who compile both this file and PluginView.cpp.   
+// The functions below are for platforms that do not use PluginView for plugins.
+// The plan is to eventually have all ports using PluginView, but until then,
+// if new functions like this are added, make sure they have the proper platform #ifs
+// so that changes do not break ports who compile both this file and PluginView.cpp.
+
 #if PLATFORM(MAC) || PLATFORM(CHROMIUM) || PLATFORM(EFL) || (OS(WINCE) && !PLATFORM(QT)) || (PLATFORM(QT) && !OS(WINCE)) || PLATFORM(BREWMP)
+
 #if ENABLE(NETSCAPE_PLUGIN_API)
 void PluginView::keepAlive(NPP)
 {
