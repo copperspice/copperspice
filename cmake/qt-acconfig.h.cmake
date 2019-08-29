@@ -1,8 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2018 Barbara Geller
-* Copyright (c) 2012-2018 Ansel Sermersheim
-* All rights reserved.
+* Copyright (c) 2012-2019 Barbara Geller
+* Copyright (c) 2012-2019 Ansel Sermersheim
 *
 * This file is part of CopperSpice.
 *
@@ -14,7 +13,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
-* <http://www.gnu.org/licenses/>.
+* https://www.gnu.org/licenses/
 *
 ***********************************************************************/
 

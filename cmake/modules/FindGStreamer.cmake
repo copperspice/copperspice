@@ -1,6 +1,20 @@
-#  Copyright (C) 2012-2019 Barbara Geller
-#  Copyright (C) 2012-2019 Ansel Sermersheim
+# Copyright (c) 2012-2019 Barbara Geller
+# Copyright (c) 2012-2019 Ansel Sermersheim
+# Copyright (c) 2015 Ivailo Monev, <xakepa10@gmail.com>
 #
+# This file is part of CopperSpice.
+#
+# CopperSpice is free software. You can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# version 2.1 as published by the Free Software Foundation.
+#
+# CopperSpice is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# https://www.gnu.org/licenses/
+#
+
 #  Find GStreamer, will define
 #
 #  GSTREAMER_FOUND        - system has GStreamer
@@ -62,3 +76,4 @@ find_package_handle_standard_args(GStreamer
    GSTREAMER_LIBRARIES
    GSTREAMER_INCLUDE_DIRS
 )
+

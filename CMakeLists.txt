@@ -6,6 +6,7 @@ cmake_policy(SET CMP0042 NEW)
 # prefer OpenGL libraries from a hardware vendor if available
 set(OpenGL_GL_PREFERENCE GLVND)
 
+cmake_policy(VERSION 3.4.3..3.13)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 project(copperspice)
@@ -32,6 +33,7 @@ endif()
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "5")
 set(BUILD_MICRO "2")
+
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
 # required library
@@ -533,26 +535,34 @@ configure_file(
     @ONLY
 )
 
+if(APPLE)
+    set(PKG_PREFIX "CopperSpice.framework/Resources")
+elseif(WIN32)
+    set(PKG_PREFIX "cmake/CopperSpice")
+else()
+    set(PKG_PREFIX "${CMAKE_INSTALL_LIBDIR}/cmake/CopperSpice")
+endif()
+
 install(
    FILES
       ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
       ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
       ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
       ${CMAKE_SOURCE_DIR}/cmake/InstallMinGW.cmake
-   DESTINATION cmake/CopperSpice
+   DESTINATION ${PKG_PREFIX}
 )
 
 install(EXPORT CopperSpiceLibraryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceLibraryTargets.cmake
-    DESTINATION cmake/CopperSpice
+    DESTINATION ${PKG_PREFIX}
 )
 
 install(
     EXPORT CopperSpiceBinaryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceBinaryTargets.cmake
-    DESTINATION cmake/CopperSpice
+    DESTINATION ${PKG_PREFIX}
 )
 
 message("")
