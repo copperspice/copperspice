@@ -21,7 +21,7 @@ EXTRA_DIST= \
 	cmake/modules/CopperSpiceBuildMacros.cmake \
 	cmake/modules/FindFontconfig.cmake \
 	cmake/modules/FindGLib2.cmake \
-	cmake/modules/FindGOBJECT2.cmake \
+	cmake/modules/FindGObject2.cmake \
 	cmake/modules/FindGStreamer.cmake \
 	cmake/modules/FindIconv.cmake \
 	cmake/modules/FindMySQL.cmake \
