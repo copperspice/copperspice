@@ -39,6 +39,8 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiodevicefactory_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiohelpers_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsamplecache_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsoundeffect_qaudio_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsoundeffect_pulse_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/audio/qwavedecoder_p.h
 )
 
@@ -75,11 +77,6 @@ set(EXTRA_MULTIMEDIA_LIBS
    ${PULSEAUDIO_LIBRARY}
 )
 
-set(MULTIMEDIA_PRIVATE_INCLUDES
-   ${MULTIMEDIA_PRIVATE_INCLUDES}
-   ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsoundeffect_pulse_p.h
-)
-
 set(MULTIMEDIA_SOURCES
    ${MULTIMEDIA_SOURCES}
    ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsoundeffect_pulse_p.cpp
@@ -92,19 +89,12 @@ set(EXTRA_MULTIMEDIA_CXXFLAGS
    -DQT_MULTIMEDIA_QAUDIO
 )
 
-set(MULTIMEDIA_PRIVATE_INCLUDES
-   ${MULTIMEDIA_PRIVATE_INCLUDES}
-   ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsoundeffect_qaudio_p.h
-)
-
 set(MULTIMEDIA_SOURCES
    ${MULTIMEDIA_SOURCES}
    ${CMAKE_CURRENT_SOURCE_DIR}/audio/qsoundeffect_qaudio_p.cpp
 )
 
 endif()
-
-
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_MULTIMEDIA_LIBS

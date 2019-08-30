@@ -36,6 +36,8 @@ MULTIMEDIA_AUDIO_PRIVATE_INCLUDES = \
 	qaudiodevicefactory_p.h \
 	qaudiohelpers_p.h \
 	qsamplecache_p.h \
+	qsoundeffect_qaudio_p.h \
+	qsoundeffect_pulse_p.h \
 	qwavedecoder_p.h
 
 MULTIMEDIA_INCLUDES += $(MULTIMEDIA_AUDIO_INCLUDES)
@@ -71,9 +73,6 @@ lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS +=\
 
 lib_libCsMultimedia@BUILD_ABI@_la_LIBADD += ${PULSEAUDIO_LIBS}
 
-MULTIMEDIA_AUDIO_PRIVATE_INCLUDES += \
-	qsoundeffect_pulse_p.h
-
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/audio/qsoundeffect_pulse_p.cpp
 
@@ -81,9 +80,6 @@ else
 
 lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS +=\
    -DQT_MULTIMEDIA_QAUDIO
-
-MULTIMEDIA_AUDIO_PRIVATE_INCLUDES += \
-	qsoundeffect_qaudio_p.h
 
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/audio/qsoundeffect_qaudio_p.cpp
