@@ -385,7 +385,7 @@ void QObject::deleteChildren()
 
 void QObject::deleteLater()
 {
-   QCoreApplication::postEvent(this, new QEvent(QEvent::DeferredDelete));
+   QCoreApplication::postEvent(this, new QDeferredDeleteEvent());
 }
 
 // signal & slot are strings
