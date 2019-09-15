@@ -183,6 +183,12 @@ set_target_properties(CsGui${BUILD_ABI} PROPERTIES
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
 
+if(MSVC)
+   target_compile_options(CsGui${BUILD_ABI}
+      PRIVATE /bigobj /DNOMINMAX
+   )
+endif()
+
 macro_generate_resources("${GUI_SOURCES}")
 macro_generate_package(
     CsGui${BUILD_ABI}

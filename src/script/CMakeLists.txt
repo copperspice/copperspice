@@ -551,6 +551,12 @@ set_target_properties(CsScript${BUILD_ABI} PROPERTIES
     LINK_FLAGS ${EXTRA_SCRIPT_LDFLAGS}
 )
 
+if(MSVC)
+   target_compile_options(CsScript${BUILD_ABI}
+      PRIVATE /DNOMINMAX
+   )
+endif()
+
 macro_generate_resources("${SCRIPT_SOURCES}")
 macro_generate_package(
     CsScript${BUILD_ABI}
