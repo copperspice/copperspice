@@ -1,0 +1,156 @@
+trigger:
+- master
+
+jobs:
+- job: msvc_2019_Release_x64
+  timeoutInMinutes: 0
+  pool: 
+    vmImage: windows-2019
+  steps:
+  - script: choco install ninja
+    displayName: Install Ninja
+  - script: |
+      set
+      mkdir release_x64
+      pushd release_x64
+      cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release ..
+      popd
+    displayName: 'Configure CMake Generator for VS2019 solution files'
+  - script: |
+      cmake --build release_x64 --target CsCore1.6
+    displayName: 'Build Core'
+  - script: |
+      cmake --build release_x64 --target CsGui1.6
+      del release_x64\*.obj /s /q
+    displayName: 'Build CsGui'
+  - script: |
+      cmake --build release_x64 --target CsNetwork1.6
+      del release_x64\*.obj /s /q
+    displayName: 'Build CsNetwork'    
+  - script: |
+      cmake --build release_x64 --target CsMultimedia1.6
+      del release_x64\*.obj /s /q
+    displayName: 'Build CsMultimedia'
+  - script: |
+      cmake --build release_x64 --target CsOpenGL1.6
+      del release_x64\*.obj /s /q
+    displayName: 'Build CsOpenGL'
+  - script: |
+      cmake --build release_x64 --target CsScript1.6
+      del release_x64\*.obj /s /q
+    displayName: 'Build CsScript'
+  - script: |
+      cmake --build release_x64 --target CsSql1.6
+    displayName: 'Build CsSql'
+  - script: |
+      cmake --build release_x64 --target CsSvg1.6
+    displayName: 'Build CsSvg'
+  - script: |
+      cmake --build release_x64 --target CsXml1.6
+    displayName: 'Build CsXml'
+  - script: |
+      cmake --build release_x64 --target CsXmlPatterns1.6
+    displayName: 'Build CsXmlPatterns'
+  - script: |
+      cmake --build release_x64 
+    displayName: 'Build leftovers'
+    
+- job: Ubuntu_16_04_Release_x64
+  timeoutInMinutes: 0
+  pool: 
+    vmImage: Ubuntu-16.04
+  steps:
+  - script: |
+      set
+      sudo apt-get update
+      sudo apt-get -yq install ninja-build libaudio-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libglib2.0-dev libxfixes-dev	libxcursor-dev libfreetype6-dev libxext-dev libxrender-dev libxml2-dev libxi-dev libxinerama-dev libxrandr-dev libxcursor-dev libsm-dev libice-dev libxcb1-dev libx11-xcb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-shm0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxkbcommon-dev libxkbcommon-x11-dev libasound2-dev libpulse-dev libxt6
+      mkdir release_x64
+      pushd release_x64
+      cmake -G Ninja -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=TRUE -DCMAKE_BUILD_TYPE=Release ..
+      popd
+    displayName: 'Configure CMake Generator for Ubuntu ninja'
+  - script: |
+      cmake --build release_x64 --target CsCore1.6
+    displayName: 'Build Core'
+  - script: |
+      cmake --build release_x64 --target CsGui1.6
+    displayName: 'Build CsGui'
+  - script: |
+      cmake --build release_x64 --target CsNetwork1.6
+    displayName: 'Build CsNetwork'    
+  - script: |
+      cmake --build release_x64 --target CsMultimedia1.6
+    displayName: 'Build CsMultimedia'  
+  - script: |
+      cmake --build release_x64 --target CsOpenGL1.6
+    displayName: 'Build CsOpenGL'
+  - script: |
+      cmake --build release_x64 --target CsScript1.6
+    displayName: 'Build CsScript'
+  - script: |
+      cmake --build release_x64 --target CsSql1.6
+    displayName: 'Build CsSql'
+  - script: |
+      cmake --build release_x64 --target CsSvg1.6
+    displayName: 'Build CsSvg'
+  - script: |
+      cmake --build release_x64 --target CsXml1.6
+    displayName: 'Build CsXml'
+  - script: |
+      cmake --build release_x64 --target CsXmlPatterns1.6
+    displayName: 'Build CsXmlPatterns'
+  - script: |
+      cmake --build release_x64
+    displayName: 'Build leftovers'
+
+- job: macos_10_13_Release_x64
+  timeoutInMinutes: 0
+  pool: 
+    vmImage: macos-10.13
+  steps:
+  - script: |
+      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+      brew install ninja
+    displayName: 'Prepare System'
+  - script: |
+      set
+      set CMAKE_OSX_DEPLOYMENT_TARGET=10.12
+      mkdir release_x64
+      pushd release_x64
+      cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+      popd
+    displayName: 'Configure CMake Generator for XCode 10.12'
+  - script: |
+      cmake --build release_x64 --target CsCore1.6
+    displayName: 'Build Core'
+  - script: |
+      cmake --build release_x64 --target CsGui1.6
+    displayName: 'Build CsGui'
+  - script: |
+      cmake --build release_x64 --target CsNetwork1.6
+    displayName: 'Build CsNetwork'
+  - script: |
+      cmake --build release_x64 --target CsMultimedia1.6
+    displayName: 'Build CsMultimedia'
+  - script: |
+      cmake --build release_x64 --target CsOpenGL1.6
+    displayName: 'Build CsOpenGL'
+  - script: |
+      cmake --build release_x64 --target CsScript1.6
+    displayName: 'Build CsScript'
+  - script: |
+      cmake --build release_x64 --target CsSql1.6
+    displayName: 'Build CsSql'
+  - script: |
+      cmake --build release_x64 --target CsSvg1.6
+    displayName: 'Build CsSvg'
+  - script: |
+      cmake --build release_x64 --target CsXml1.6
+    displayName: 'Build CsXml'
+  - script: |
+      cmake --build release_x64 --target CsXmlPatterns1.6
+    displayName: 'Build CsXmlPatterns'
+  - script: |
+      cmake --build release_x64
+    displayName: 'Build leftovers'
+
