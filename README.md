@@ -2,12 +2,16 @@
 
 ### Introduction
 
-CopperSpice is a set of C++ libraries used to develop cross-platform software applications. This is an open source project
-released under the LGPL V2.1 license. CopperSpice was derived from the Qt framework and has diverged as the libraries
-are enhanced to work seamlessly with the C++ standard library. Our motivation for developing CopperSpice was to change the
-core design to provide a consistent and feature rich API.
+CopperSpice is a set of individual libraries which can be used to develop cross platform software applications in C++.
+It is a totally open source project released under the LGPL V2.1 license and was initially derived from the Qt
+framework. Over the last several years CopperSpice has completely diverged, with a goal of providing a first class GUI
+library to unite the C++ community.
 
-The libraries provided in CopperSpice include:
+Our motivation for developing CopperSpice was to change the fundamental design and turn the existing framework into a
+set of libraries for C++ developers. We are accomplishing this by leveraging modern C++ functionality, new technology,
+and modern tooling. CopperSpice currently requires C++14 or newer.
+
+The libraries avaiable in CopperSpice include:
 
  * CsCore
  * CsGui
@@ -21,12 +25,53 @@ The libraries provided in CopperSpice include:
  * CsXml
  * CsXmlPatterns
 
-There are also three open source BSD licensed libraries which are used by CopperSpice and available as stand alone
-libraries for anyone developing a C++ application.
+There are also open source BSD licensed libraries which are used by CopperSpice and available as stand alone libraries
+for anyone developing a C++ application.
 
  * CsSignal
  * CsString
  * libGuarded
+
+
+### System Requirements
+
+To use the CopperSpice libraries a C++14 compiler and a C++14 standard library are required.
+
+CopperSpice CMake build files are provided with the source distribution. We recommend your project should also use 
+CMake for the build system. 
+
+For additional information about building from source, refer to our CopperSpice Overview Documentation or our 
+KitchenSink demo application for sample CMake project files.
+
+
+### Building
+
+The CopperSpice libraries are built using the CMake build system.
+
+
+### Documentation
+
+###### Overview
+
+The CopperSpice Overview documentation includes information on building CopperSpice, downloading prebuilt binary
+files, package requirements, setting up an application which links with CopperSpice, migrating to CopperSpice, and
+other general information.
+
+www.copperspice.com/docs/cs_overview/index.html
+
+
+###### API
+
+The API contains full class documentation and multiple tutorials for CopperSpice. It is available on the website or
+from our download page.
+
+
+|URL      |Description|
+|---------|-----------|
+|www.copperspice.com/docs/cs_api_1.5/index.html|CopperSpice 1.5  (stable)|
+|www.copperspice.com/docs/cs_api_1.6/index.html|CopperSpice 1.6|
+|         |           |
+|https://download.copperspice.com/copperspice/documentation|Overview and API (tar and zip formats)|
 
 
 ###### Major Enhancements
@@ -54,48 +99,8 @@ Enhanced Functionality
    * New classes for QStringView and QStringParser
 
 Using the Libraries
- * Any application using CopperSpice can be built with CMake, GNU Autotools, or any other build system
+ * Any application using CopperSpice can be built with CMake or any build system which imports CMake files
  * CopperSpice can be linked directly into any standard C++ application
-
-
-### System Requirements
-
-To use the CopperSpice libraries you will need a C++14 compiler and a C++14 standard library.
-
-Uses CMake or Autotools for building binary files. Your project can be built with either CMake
-or Autotools. Refer to our CopperSpice Overview documentation, DoxyPress application, or our
-KitchenSink demo for sample build files.
-
-
-### Building
-
-The CopperSpice libraries can be built using CMake or GNU Autotools.
-
-
-### Documentation
-
-###### Overview
-
-The CopperSpice Overview documentation includes information on building CopperSpice, downloading prebuilt binary
-files, package requirements, setting up an an application which links with CopperSpice, migrating to CopperSpice, and
-other general information.
-
-www.copperspice.com/docs/cs_overview/index.html
-
-
-###### API
-
-The API contains full class documentation and multiple tutorials for CopperSpice. It is available on the website or
-from our download page.
-
-
-|URL      |Description|
-|---------|-----------|
-|www.copperspice.com/docs/cs_api_1.5/index.html|CopperSpice 1.5  (stable)|
-|www.copperspice.com/docs/cs_api_1.6/index.html|CopperSpice 1.6|
-|         |           |
-|https://download.copperspice.com/copperspice/documentation|Overview and API (tar and zip formats)|
-
 
 
 ### Presentations
