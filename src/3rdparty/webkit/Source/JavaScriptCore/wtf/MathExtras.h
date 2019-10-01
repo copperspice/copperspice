@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef WTF_MathExtras_h
@@ -31,10 +31,6 @@
 #include <float.h>
 #include <limits>
 #include <stdlib.h>
-
-#if OS(SOLARIS)
-#include <ieeefp.h>
-#endif
 
 #if OS(OPENBSD)
 #include <sys/types.h>
@@ -63,21 +59,6 @@ const float piOverFourFloat = 0.785398163397448309616f;
 #else
 const double piOverFourDouble = M_PI_4;
 const float piOverFourFloat = static_cast<float>(M_PI_4);
-#endif
-
-#if OS(DARWIN)
-
-// Work around a bug in the Mac OS X libc where ceil(-0.1) return +0.
-inline double wtf_ceil(double x) { return copysign(ceil(x), x); }
-
-#define ceil(x) wtf_ceil(x)
-
-#endif
-
-#if OS(SOLARIS)
-
-#ifndef isfinite
-inline bool isfinite(double x) { return finite(x) && !isnand(x); }
 #endif
 
 #ifndef isinf
@@ -137,7 +118,7 @@ inline int clampToInteger(float x)
 {
     static const int s_intMax = std::numeric_limits<int>::max();
     static const int s_intMin = std::numeric_limits<int>::min();
-    
+
     if (x >= static_cast<float>(s_intMax))
         return s_intMax;
 
@@ -150,7 +131,7 @@ inline int clampToInteger(float x)
 inline int clampToPositiveInteger(float x)
 {
     static const int s_intMax = std::numeric_limits<int>::max();
-    
+
     if (x >= static_cast<float>(s_intMax))
         return s_intMax;
     if (x < 0)
@@ -164,4 +145,4 @@ inline int clampToInteger(unsigned value)
 }
 
 
-#endif // #ifndef WTF_MathExtras_h
+#endif

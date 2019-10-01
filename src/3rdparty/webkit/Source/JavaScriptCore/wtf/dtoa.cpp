@@ -615,7 +615,7 @@ static ALWAYS_INLINE void diff(BigInt& c, const BigInt& aRef, const BigInt& bRef
 
 static double ulp(U *x)
 {
-    register int32_t L;
+    int32_t L;
     U u;
 
     L = (word0(x) & Exp_mask) - (P - 1) * Exp_msk1;

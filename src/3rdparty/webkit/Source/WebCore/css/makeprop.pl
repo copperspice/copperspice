@@ -80,7 +80,7 @@ foreach my $alias (@aliases) {
 
 print GPERF<< "EOF";
 %%
-const Property* findProperty(register const char* str, register unsigned int len)
+const Property* findProperty(const char* str, unsigned int len)
 {
     return CSSPropertyNamesHash::findPropertyImpl(str, len);
 }

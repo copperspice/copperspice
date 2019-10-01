@@ -95,7 +95,7 @@ struct PubIDInfo;
 "-/w3c/dtd html 4.0 transitional/en", PubIDInfo::eQuirks, PubIDInfo::eQuirks
 "html", PubIDInfo::eQuirks3, PubIDInfo::eQuirks3
 %%
-const PubIDInfo* findDoctypeEntry(register const char* str, register unsigned int len)
+const PubIDInfo* findDoctypeEntry(const char* str, unsigned int len)
 {
     return DocTypeStringsHash::findDoctypeEntryImpl(str, len);
 }

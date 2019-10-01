@@ -49,10 +49,10 @@ struct Value {
     int id;
 };
 
-const PubIDInfo* findDoctypeEntry(register const char* str, register unsigned int len);
-const NamedColor* findColor(register const char* str, register unsigned int len);
-const Property* findProperty(register const char* str, register unsigned int len);
-const Value* findValue(register const char* str, register unsigned int len);
+const PubIDInfo* findDoctypeEntry(const char* str, unsigned int len);
+const NamedColor* findColor(const char* str, unsigned int len);
+const Property* findProperty(const char* str, unsigned int len);
+const Value* findValue(const char* str, unsigned int len);
 
 } // namespace WebCore
 

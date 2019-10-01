@@ -54,7 +54,7 @@ public:
 };
 
 inline unsigned int
-DocTypeStringsHash::doctype_hash_function (register const char *str, register unsigned int len)
+DocTypeStringsHash::doctype_hash_function (const char *str, unsigned int len)
 {
   static const unsigned short asso_values[] =
     {
@@ -85,7 +85,7 @@ DocTypeStringsHash::doctype_hash_function (register const char *str, register un
       716, 716, 716, 716, 716, 716, 716, 716, 716, 716,
       716, 716, 716, 716, 716, 716
     };
-  register int hval = len;
+  int hval = len;
 
   switch (hval)
     {
@@ -1131,15 +1131,15 @@ static const struct PubIDInfo wordlist[] =
   };
 
 const struct PubIDInfo *
-DocTypeStringsHash::findDoctypeEntryImpl (register const char *str, register unsigned int len)
+DocTypeStringsHash::findDoctypeEntryImpl (const char *str, unsigned int len)
 {
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
-      register int key = doctype_hash_function (str, len);
+      int key = doctype_hash_function (str, len);
 
       if (key <= MAX_HASH_VALUE && key >= 0)
         {
-          register const char *s = wordlist[key].name;
+          const char *s = wordlist[key].name;
 
           if (*str == *s && !strncmp (str + 1, s + 1, len - 1) && s[len] == '\0')
             return &wordlist[key];
@@ -1149,7 +1149,7 @@ DocTypeStringsHash::findDoctypeEntryImpl (register const char *str, register uns
 }
 #line 97 "/Source/WebCore/html/DocTypeStrings.gperf"
 
-const PubIDInfo* findDoctypeEntry(register const char* str, register unsigned int len)
+const PubIDInfo* findDoctypeEntry(const char* str, unsigned int len)
 {
     return DocTypeStringsHash::findDoctypeEntryImpl(str, len);
 }

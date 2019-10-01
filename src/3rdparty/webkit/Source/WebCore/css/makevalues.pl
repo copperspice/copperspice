@@ -79,7 +79,7 @@ print GPERF << "EOF";
     0
 };
 
-const Value* findValue(register const char* str, register unsigned int len)
+const Value* findValue(const char* str, unsigned int len)
 {
     return CSSValueKeywordsHash::findValueImpl(str, len);
 }

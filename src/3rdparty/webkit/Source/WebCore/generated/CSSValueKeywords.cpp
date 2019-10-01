@@ -48,7 +48,7 @@ public:
 };
 
 inline unsigned int
-CSSValueKeywordsHash::value_hash_function (register const char *str, register unsigned int len)
+CSSValueKeywordsHash::value_hash_function (const char *str, unsigned int len)
 {
   static const unsigned short asso_values[] =
     {
@@ -79,7 +79,7 @@ CSSValueKeywordsHash::value_hash_function (register const char *str, register un
       9220, 9220, 9220, 9220, 9220, 9220, 9220, 9220, 9220, 9220,
       9220, 9220, 9220, 9220, 9220, 9220, 9220
     };
-  register int hval = 0;
+  int hval = 0;
 
   switch (len)
     {
@@ -196,7 +196,7 @@ CSSValueKeywordsHash::value_hash_function (register const char *str, register un
 }
 
 const struct Value *
-CSSValueKeywordsHash::findValueImpl (register const char *str, register unsigned int len)
+CSSValueKeywordsHash::findValueImpl (const char *str, unsigned int len)
 {
   enum
     {
@@ -2475,15 +2475,15 @@ CSSValueKeywordsHash::findValueImpl (register const char *str, register unsigned
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
-      register int key = value_hash_function (str, len);
+      int key = value_hash_function (str, len);
 
       if (key <= MAX_HASH_VALUE && key >= 0)
         {
-          register int index = lookup[key];
+          int index = lookup[key];
 
           if (index >= 0)
             {
-              register const char *s = value_word_list[index].name;
+              const char *s = value_word_list[index].name;
 
               if (*str == *s && !strncmp (str + 1, s + 1, len - 1) && s[len] == '\0')
                 return &value_word_list[index];
@@ -3167,7 +3167,7 @@ static const char* const valueList[] = {
     0
 };
 
-const Value* findValue(register const char* str, register unsigned int len)
+const Value* findValue(const char* str, unsigned int len)
 {
     return CSSValueKeywordsHash::findValueImpl(str, len);
 }

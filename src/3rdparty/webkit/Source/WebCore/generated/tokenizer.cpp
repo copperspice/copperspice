@@ -1579,9 +1579,9 @@ static yyconst flex_int16_t yy_chk[5656] =
 #line 1 "<stdin>"
 YY_DECL
 {
-	register yy_state_type yy_current_state;
-	register UChar *yy_cp, *yy_bp;
-	register int yy_act;
+	yy_state_type yy_current_state;
+	UChar *yy_cp, *yy_bp;
+	int yy_act;
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
 		yy_cp = (yy_c_buf_p);
@@ -1597,7 +1597,7 @@ YY_DECL
 		yy_current_state = (yy_start);
 		do
 			{
-			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
 			if ( yy_accept[yy_current_state] )
 				{
 				(yy_last_accepting_state) = yy_current_state;

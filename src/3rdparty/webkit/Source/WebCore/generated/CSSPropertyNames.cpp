@@ -56,7 +56,7 @@ public:
 };
 
 inline unsigned int
-CSSPropertyNamesHash::propery_hash_function (register const char *str, register unsigned int len)
+CSSPropertyNamesHash::propery_hash_function (const char *str, unsigned int len)
 {
   static const unsigned short asso_values[] =
     {
@@ -87,7 +87,7 @@ CSSPropertyNamesHash::propery_hash_function (register const char *str, register 
       3232, 3232, 3232, 3232, 3232, 3232, 3232, 3232, 3232, 3232,
       3232, 3232, 3232, 3232, 3232, 3232
     };
-  register int hval = 0;
+  int hval = 0;
 
   switch (len)
     {
@@ -1243,19 +1243,19 @@ static const short lookup[] =
   };
 
 const struct Property *
-CSSPropertyNamesHash::findPropertyImpl (register const char *str, register unsigned int len)
+CSSPropertyNamesHash::findPropertyImpl (const char *str, unsigned int len)
 {
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
-      register int key = propery_hash_function (str, len);
+      int key = propery_hash_function (str, len);
 
       if (key <= MAX_HASH_VALUE && key >= 0)
         {
-          register int index = lookup[key];
+          int index = lookup[key];
 
           if (index >= 0)
             {
-              register const char *s = property_wordlist[index].name;
+              const char *s = property_wordlist[index].name;
 
               if (*str == *s && !strncmp (str + 1, s + 1, len - 1) && s[len] == '\0')
                 return &property_wordlist[index];
@@ -1266,7 +1266,7 @@ CSSPropertyNamesHash::findPropertyImpl (register const char *str, register unsig
 }
 #line 365 "CSSPropertyNames.gperf"
 
-const Property* findProperty(register const char* str, register unsigned int len)
+const Property* findProperty(const char* str, unsigned int len)
 {
     return CSSPropertyNamesHash::findPropertyImpl(str, len);
 }
