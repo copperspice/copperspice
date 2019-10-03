@@ -26,8 +26,8 @@
 
 #include <qglobal.h>
 
-// configure generate the following h file, contains the defines for have_x_h
-#include <qt-acconfig.h>
+// configure generates the following h file and it contains the defines for have_x_h
+#include <cs-config.h>
 
 #ifdef HAVE_FEATURES_H
 #include <features.h>

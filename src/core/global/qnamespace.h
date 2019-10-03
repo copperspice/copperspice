@@ -999,8 +999,8 @@ class Q_CORE_EXPORT Qt
       Key_Context2 = 0x01100001,
       Key_Context3 = 0x01100002,
       Key_Context4 = 0x01100003,
-      Key_Call     = 0x01100004,      // set absolute state to in a call (do not toggle state)
-      Key_Hangup   = 0x01100005,    // set absolute state to hang up (do not toggle state)
+      Key_Call     = 0x01100004,         // set absolute state to in a call (do not toggle state)
+      Key_Hangup   = 0x01100005,         // set absolute state to hang up (do not toggle state)
       Key_Flip     = 0x01100006,
       Key_ToggleCallHangup = 0x01100007, // a toggle key for answering, or hanging up, based on current call state
       Key_VoiceDial = 0x01100008,
@@ -1020,6 +1020,7 @@ class Q_CORE_EXPORT Qt
       RightArrow
    };
 
+   // keep in sync with enum UnderlineStyle in gui/text/qtextformat.h
    enum PenStyle {
       NoPen,
       SolidLine,

@@ -370,25 +370,35 @@ QVariant QPlatformTheme::defaultThemeHint(ThemeHint hint)
          return QVariant(QStringList());
       case QPlatformTheme::StyleNames:
          return QVariant(QStringList());
+
       case TextCursorWidth:
          return QVariant(1);
+
       case DropShadow:
          return QVariant(false);
+
       case MaximumScrollBarDragDistance:
          return QVariant(-1);
+
       case KeyboardScheme:
          return QVariant(int(WindowsKeyboardScheme));
+
       case UiEffects:
          return QVariant(int(0));
+
       case SpellCheckUnderlineStyle:
          return QVariant(int(QTextCharFormat::SpellCheckUnderline));
+
       case TabFocusBehavior:
          return QVariant(int(Qt::TabFocusAllControls));
+
       case IconPixmapSizes:
          return QVariant::fromValue(QList<int>());
+
       case DialogSnapToDefaultButton:
       case ContextMenuOnMouseRelease:
          return QVariant(false);
+
       case MousePressAndHoldInterval:
          return QVariant(800);
 

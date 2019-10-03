@@ -434,10 +434,11 @@ void QMediaPlayerPrivate::loadPlaylist()
       && ! isInChain(q->currentMedia().canonicalUrl())) {
 
       pendingPlaylist = QMediaContent(new QMediaPlaylist, q->currentMedia().canonicalUrl(), true);
-      QObject::connect(pendingPlaylist.playlist(), SIGNAL(loaded()),     q, SLOT(_q_handlePlaylistLoaded()));
-      QObject::connect(pendingPlaylist.playlist(), SIGNAL(loadFailed()), q, SLOT(_q_handlePlaylistLoadFailed()));
+      QObject::connect(pendingPlaylist.playlist(), &QMediaPlaylist::loaded,     q, &QMediaPlayer::_q_handlePlaylistLoaded);
+      QObject::connect(pendingPlaylist.playlist(), &QMediaPlaylist::loadFailed, q, &QMediaPlayer::_q_handlePlaylistLoadFailed);
 
       pendingPlaylist.playlist()->load(pendingPlaylist.canonicalRequest());
+
    } else if (playlist) {
       playlist->next();
    }
@@ -448,10 +449,8 @@ void QMediaPlayerPrivate::disconnectPlaylist()
    Q_Q(QMediaPlayer);
 
    if (playlist) {
-      QObject::disconnect(playlist, SIGNAL(currentMediaChanged(QMediaContent)),
-         q, SLOT(_q_updateMedia(QMediaContent)));
-
-      QObject::disconnect(playlist, SIGNAL(destroyed()), q, SLOT(_q_playlistDestroyed()));
+      QObject::disconnect(playlist, &QMediaPlaylist::currentMediaChanged, q, &QMediaPlayer::_q_updateMedia);
+      QObject::disconnect(playlist, &QMediaPlaylist::destroyed,           q, &QMediaPlayer::_q_playlistDestroyed);
       q->unbind(playlist);
    }
 }
@@ -459,12 +458,12 @@ void QMediaPlayerPrivate::disconnectPlaylist()
 void QMediaPlayerPrivate::connectPlaylist()
 {
    Q_Q(QMediaPlayer);
+
    if (playlist) {
       q->bind(playlist);
-      QObject::connect(playlist, SIGNAL(currentMediaChanged(QMediaContent)),
-         q, SLOT(_q_updateMedia(QMediaContent)));
 
-      QObject::connect(playlist, SIGNAL(destroyed()), q, SLOT(_q_playlistDestroyed()));
+      QObject::connect(playlist, &QMediaPlaylist::currentMediaChanged, q, &QMediaPlayer::_q_updateMedia);
+      QObject::connect(playlist, &QMediaPlaylist::destroyed,           q, &QMediaPlayer::_q_playlistDestroyed);
    }
 }
 
@@ -579,7 +578,7 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
          connect(d->control, &QMediaPlayerControl::playbackRateChanged,    this, &QMediaPlayer::playbackRateChanged);
          connect(d->control, &QMediaPlayerControl::bufferStatusChanged,    this, &QMediaPlayer::bufferStatusChanged);
 
-         d->state = d->control->state();
+         d->state  = d->control->state();
          d->status = d->control->mediaStatus();
 
          if (d->state == PlayingState) {
@@ -597,6 +596,7 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
             connect(d->audioRoleControl, &QAudioRoleControl::audioRoleChanged, this, &QMediaPlayer::audioRoleChanged);
          }
       }
+
       if (d->networkAccessControl != 0) {
          connect(d->networkAccessControl, SIGNAL(configurationChanged(QNetworkConfiguration)),
             this, SLOT(networkConfigurationChanged(QNetworkConfiguration)));

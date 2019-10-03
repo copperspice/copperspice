@@ -479,13 +479,13 @@ void DirectShowPlayerService::doRender(QMutexLocker *locker)
       filter->Release();
    }
 
-   if (m_audioOutput && !isConnected(m_audioOutput, PINDIR_INPUT)) {
+   if (m_audioOutput && ! isConnected(m_audioOutput, PINDIR_INPUT)) {
       graph->RemoveFilter(m_audioOutput);
 
       m_executedTasks &= ~SetAudioOutput;
    }
 
-   if (m_videoOutput && !isConnected(m_videoOutput, PINDIR_INPUT)) {
+   if (m_videoOutput && ! isConnected(m_videoOutput, PINDIR_INPUT)) {
       graph->RemoveFilter(m_videoOutput);
 
       m_executedTasks &= ~SetVideoOutput;
@@ -618,7 +618,7 @@ int DirectShowPlayerService::findStreamTypes(IBaseFilter *source) const
 
    int streamTypes = 0;
 
-   while (!filters.isEmpty()) {
+   while (! filters.isEmpty()) {
       IEnumPins *pins = 0;
       IBaseFilter *filter = filters[filters.size() - 1];
       filters.removeLast();
@@ -626,15 +626,19 @@ int DirectShowPlayerService::findStreamTypes(IBaseFilter *source) const
       if (SUCCEEDED(filter->EnumPins(&pins))) {
          for (IPin *pin = 0; pins->Next(1, &pin, 0) == S_OK; pin->Release()) {
             PIN_DIRECTION direction;
+
             if (pin->QueryDirection(&direction) == S_OK && direction == PINDIR_OUTPUT) {
                AM_MEDIA_TYPE connectionType;
+
                if (SUCCEEDED(pin->ConnectionMediaType(&connectionType))) {
                   IPin *peer = 0;
 
                   if (connectionType.majortype == MEDIATYPE_Audio) {
                      streamTypes |= AudioStream;
+
                   } else if (connectionType.majortype == MEDIATYPE_Video) {
                      streamTypes |= VideoStream;
+
                   } else if (SUCCEEDED(pin->ConnectedTo(&peer))) {
                      PIN_INFO peerInfo;
                      if (SUCCEEDED(peer->QueryPinInfo(&peerInfo))) {
@@ -642,6 +646,7 @@ int DirectShowPlayerService::findStreamTypes(IBaseFilter *source) const
                      }
                      peer->Release();
                   }
+
                } else {
                   streamTypes |= findStreamType(pin);
                }
@@ -1054,7 +1059,6 @@ void DirectShowPlayerService::setAudioOutput(IBaseFilter *filter)
 
 void DirectShowPlayerService::doReleaseAudioOutput(QMutexLocker *locker)
 {
-   Q_UNUSED(locker)
    m_pendingTasks |= m_executedTasks & (Play | Pause);
 
    if (IMediaControl *control = com_cast<IMediaControl>(m_graph, IID_IMediaControl)) {
@@ -1343,25 +1347,24 @@ bool DirectShowPlayerService::isConnected(IBaseFilter *filter, PIN_DIRECTION dir
    return connected;
 }
 
-IBaseFilter *DirectShowPlayerService::getConnected(
-   IBaseFilter *filter, PIN_DIRECTION direction) const
+IBaseFilter *DirectShowPlayerService::getConnected(IBaseFilter *filter, PIN_DIRECTION direction) const
 {
    IBaseFilter *connected = 0;
-
    IEnumPins *pins = 0;
 
    if (SUCCEEDED(filter->EnumPins(&pins))) {
       for (IPin *pin = 0; pins->Next(1, &pin, 0) == S_OK; pin->Release()) {
          PIN_DIRECTION dir;
+
          if (SUCCEEDED(pin->QueryDirection(&dir)) && dir == direction) {
             IPin *peer = 0;
+
             if (SUCCEEDED(pin->ConnectedTo(&peer))) {
                PIN_INFO info;
 
                if (SUCCEEDED(peer->QueryPinInfo(&info))) {
                   if (connected) {
-                     qWarning("DirectShowPlayerService::getConnected: "
-                        "Multiple connected filters");
+                     qWarning("DirectShowPlayerService::getConnected: Multiple connected filters");
                      connected->Release();
                   }
                   connected = info.pFilter;
@@ -1411,40 +1414,49 @@ void DirectShowPlayerService::run()
             return;
          }
          m_pendingTasks = 0;
+
       } else if (m_pendingTasks & Shutdown) {
          return;
+
       } else if (m_pendingTasks & ReleaseAudioOutput) {
          m_pendingTasks ^= ReleaseAudioOutput;
          m_executingTask = ReleaseAudioOutput;
 
          doReleaseAudioOutput(&locker);
+
       } else if (m_pendingTasks & ReleaseVideoOutput) {
          m_pendingTasks ^= ReleaseVideoOutput;
          m_executingTask = ReleaseVideoOutput;
 
          doReleaseVideoOutput(&locker);
+
       } else if (m_pendingTasks & SetUrlSource) {
          m_pendingTasks ^= SetUrlSource;
          m_executingTask = SetUrlSource;
 
          doSetUrlSource(&locker);
+
       } else if (m_pendingTasks & SetStreamSource) {
          m_pendingTasks ^= SetStreamSource;
          m_executingTask = SetStreamSource;
 
          doSetStreamSource(&locker);
+
       } else if (m_pendingTasks & Render) {
          m_pendingTasks ^= Render;
          m_executingTask = Render;
 
          doRender(&locker);
+
       } else if (!(m_executedTasks & Render)) {
          m_pendingTasks &= ~(FinalizeLoad | SetRate | Stop | Pause | Seek | Play);
+
       } else if (m_pendingTasks & FinalizeLoad) {
          m_pendingTasks ^= FinalizeLoad;
          m_executingTask = FinalizeLoad;
 
          doFinalizeLoad(&locker);
+
       } else if (m_pendingTasks & Stop) {
          m_pendingTasks ^= Stop;
          m_executingTask = Stop;
@@ -1460,11 +1472,13 @@ void DirectShowPlayerService::run()
          m_executingTask = Pause;
 
          doPause(&locker);
+
       } else if (m_pendingTasks & Seek) {
          m_pendingTasks ^= Seek;
          m_executingTask = Seek;
 
          doSeek(&locker);
+
       } else if (m_pendingTasks & Play) {
          m_pendingTasks ^= Play;
          m_executingTask = Play;
