@@ -63,13 +63,16 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const QString &signature   = signalMetaMethod.methodSignature();
 
    if (signature.isEmpty())  {
-      qWarning("%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::<Invalid Signal> ");
+      const QMetaObject *receiverMetaObject = receiver->metaObject();
+      QString receiverClass = receiverMetaObject->className();
+
+      qWarning("QObject::connect() Invalid Signal, sender: %s  receiver: %s", csPrintable(senderClass), csPrintable(receiverClass));
       return false;
    }
 
    // is signalMethod a signal
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
-      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), " was not a valid signal");
+      qWarning("QObject::connect() Invalid Signal, sender: %s  signature: %s", csPrintable(senderClass), csPrintable(signature));
       return false;
    }
 
@@ -119,7 +122,10 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const QString &signature   = signalMetaMethod.methodSignature();
 
    if (signature.isEmpty())  {
-      qWarning("%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::<Invalid Signal> ");
+      const QMetaObject *receiverMetaObject = receiver->metaObject();
+      QString receiverClass = receiverMetaObject->className();
+
+      qWarning("QObject::connect() Invalid Signal, sender: %s  receiver: %s", csPrintable(senderClass), csPrintable(receiverClass));
       return false;
    }
 
