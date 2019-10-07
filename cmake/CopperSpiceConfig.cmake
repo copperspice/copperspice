@@ -15,13 +15,12 @@
 # https://www.gnu.org/licenses/
 #
 
-
-#  Config file for the CopperSpice package, defines the following variables:
+#  Configuration file for CopperSpice installation, defines the following variables:
 #
-#  COPPERSPICE_INCLUDES               - all include directories
-#  COPPERSPICE_LIBRARIES              - all libraries to link against
-#  COPPERSPICE_<COMPONENT>_INCLUDES   - component linclude directories for e.g. CsCore
-#  COPPERSPICE_<COMPONENT>_LIBRARIES  - component libraries to link against e.g. CsCore
+#  COPPERSPICE_INCLUDES               - list of every include directory
+#  COPPERSPICE_LIBRARIES              - list of every library
+#  COPPERSPICE_<COMPONENT>_INCLUDES   - <CsCore> include directories for this component
+#  COPPERSPICE_<COMPONENT>_LIBRARIES  - <CsCore> libraries required to link this component
 
 if(COPPERSPICE_FOUND)
    return()
@@ -29,7 +28,7 @@ endif()
 
 set(COPPERSPICE_FOUND TRUE)
 
-# compute paths
+# figure out install path
 get_filename_component(COPPERSPICE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
 get_filename_component(COPPERSPICE_PREFIX ${COPPERSPICE_CMAKE_DIR}/ ABSOLUTE)
 
@@ -37,8 +36,9 @@ get_filename_component(COPPERSPICE_PREFIX ${COPPERSPICE_CMAKE_DIR}/ ABSOLUTE)
 include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceLibraryTargets.cmake")
 include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceBinaryTargets.cmake")
 
-# macros needed to build software linking with CopperSpice
+# macros required to build software which links with CopperSpice
 include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceMacros.cmake")
+include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceDeploy.cmake")
 
 # IMPORTED targets
 set(COPPERSPICE_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@)
@@ -60,20 +60,15 @@ foreach(component ${COPPERSPICE_COMPONENTS})
 
    set(COPPERSPICE_LIBRARIES
       ${COPPERSPICE_LIBRARIES}
-      CopperSpice::Cs${component}@BUILD_ABI@
+      CopperSpice::Cs${component}
    )
 
    set(COPPERSPICE_${uppercomp}_LIBRARIES
-      CopperSpice::Cs${component}@BUILD_ABI@
+      CopperSpice::Cs${component}
    )
 endforeach()
 
-# set compiler standard to C++14    (todo: switch to using compiler features)
-if(NOT CMAKE_VERSION VERSION_LESS "3.1.0")
-   set(CMAKE_CXX_STANDARD_REQUIRED ON)
-   set(CMAKE_CXX_STANDARD 14)
+# change to use compiler features
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 14)
 
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-
-endif()

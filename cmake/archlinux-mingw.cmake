@@ -24,9 +24,9 @@ else()
 endif()
 
 # which compilers to use for C and C++
-set(CMAKE_C_COMPILER ${mingwtriplet}-gcc)
+set(CMAKE_C_COMPILER   ${mingwtriplet}-gcc)
 set(CMAKE_CXX_COMPILER ${mingwtriplet}-g++)
-set(CMAKE_RC_COMPILER ${mingwtriplet}-windres)
+set(CMAKE_RC_COMPILER  ${mingwtriplet}-windres)
 
 # target environment located
 set(CMAKE_FIND_ROOT_PATH /usr/${mingwtriplet})

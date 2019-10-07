@@ -14,7 +14,7 @@
 # https://www.gnu.org/licenses/
 #
 
-# Adapted from Gromacs project (http://www.gromacs.org/) by Julien Malik
+#  Adapted from Gromacs project (http://www.gromacs.org/) by Julien Malik
 
 #  Define macro to check large file support
 #
@@ -45,6 +45,7 @@ int main(int argc, char **argv)
   int off_t_is_large[ (LARGE_OFF_T % 2147483629 == 721 && LARGE_OFF_T % 2147483647 == 1) ? 1 : -1 ];
   return 0;
 }"
+
 )
 
     if(${VARIABLE} MATCHES "^${VARIABLE}$")
