@@ -1,34 +1,32 @@
-set(CORE_PUBLIC_INCLUDES
-    ${CORE_PUBLIC_INCLUDES}
-    QChar
-    QChar32
-    QString
-    QString8
-    QString16
-    QStringParser
-    QStringView
-    QRegularExpression
+list(APPEND CORE_PUBLIC_INCLUDES
+   QChar
+   QChar32
+   QString
+   QString8
+   QString16
+   QStringParser
+   QStringView
+   QRegularExpression
 )
 
-set(CORE_INCLUDES
-    ${CORE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_iterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_encoding.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_char.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_view.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qregularexpression.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringfwd.h
+list(APPEND CORE_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_iterator.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_encoding.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_char.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_view.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qregularexpression.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringfwd.h
 )
 
-set(CORE_REGEX_INCLUDES
+list(APPEND CORE_REGEX_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/basic_regex.h
    ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/basic_regex_creator.h
    ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/basic_regex_parser.h
@@ -59,23 +57,19 @@ set(CORE_REGEX_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/r_states.h
 )
 
-set(CORE_PRIVATE_INCLUDES
-    ${CORE_PRIVATE_INCLUDES}
+target_sources(CsCore
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/regex_raw_buffer.cpp
 )
 
-set(CORE_SOURCES
-    ${CORE_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/regex_raw_buffer.cpp
-)
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(CORE_SOURCES
-        ${CORE_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring_mac.mm
-    )
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+   target_sources(CsCore
+      PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring_mac.mm
+   )
 endif()
