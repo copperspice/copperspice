@@ -61,16 +61,6 @@ const double piOverFourDouble = M_PI_4;
 const float piOverFourFloat = static_cast<float>(M_PI_4);
 #endif
 
-#ifndef isinf
-inline bool isinf(double x) { return !finite(x) && !isnand(x); }
-#endif
-
-#ifndef signbit
-inline bool signbit(double x) { return copysign(1.0, x) < 0; }
-#endif
-
-#endif
-
 #if OS(OPENBSD)
 
 #ifndef isfinite
