@@ -9,7 +9,7 @@ library to unite the C++ community.
 
 Our motivation for developing CopperSpice was to change the fundamental design and turn the existing framework into a
 set of libraries for C++ developers. We are accomplishing this by leveraging modern C++ functionality, new technology,
-and modern tooling. CopperSpice currently requires C++14 or newer.
+and modern tooling. CopperSpice currently requires C++17 or newer.
 
 The libraries avaiable in CopperSpice include:
 
@@ -35,12 +35,12 @@ for anyone developing a C++ application.
 
 ### System Requirements
 
-To use the CopperSpice libraries a C++14 compiler and a C++14 standard library are required.
+To use the CopperSpice libraries a C++17 compiler and a C++17 standard library are required.
 
-CopperSpice CMake build files are provided with the source distribution. We recommend your project should also use 
-CMake for the build system. 
+CopperSpice CMake build files are provided with the source distribution. We recommend your project should also use
+CMake for the build system.
 
-For additional information about building from source, refer to our CopperSpice Overview Documentation or our 
+For additional information about building from source, refer to our CopperSpice Overview Documentation or our
 KitchenSink demo application for sample CMake project files.
 
 
@@ -81,22 +81,24 @@ Reflection
  * The functionality provided by moc was replaced with compile time templates
  * CopperSpice automatically generates meta data for processing Signals/ Slots and Introspection
  * A template class can now inherit from QObject with no restrictions on types
- * Complex data types such as **QMap&lt;QString, int&gt;** can be used without restriction
+ * Complex data types such as **QMap&lt;QString, int&gt;** can be used for signal or slot arguments
 
 Enhanced Functionality
  * CopperSpice makes extensive use of modern C++ features
    * constexpr, variadic templates, SFINAE, lambda expressions, tuple, move semantics, and type traits
  * Redesigned all container classes to use the C++ standard library containers, iterators, and algorithms
+ * CopperSpice includes a majority of the Qt 5 classes
  * New platform independent plugin system based on C++
  * High DPI Support
- * CopperSpice includes a large number of classes from Qt5
+
  * Integration of CsSignal
    * Improved thread aware Signal/Slot delivery
    * Increased efficiency while maintaining the full Signal/Slot API
+   * Deadlocks in Signal/Slot processing have been eliminated
  * Integration of CsString
-   * Improved storage of Unicode strings
-   * QString8 (UTF-8) and QString16 (UTF-16)
-   * New classes for QStringView and QStringParser
+   * Improved storage to properly represent Unicode strings
+   * QString8 (UTF-8) and QString16 (UTF-16) classes
+   * Added QStringView and QStringParser
 
 Using the Libraries
  * Any application using CopperSpice can be built with CMake or any build system which imports CMake files
