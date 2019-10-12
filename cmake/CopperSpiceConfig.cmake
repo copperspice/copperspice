@@ -67,8 +67,3 @@ foreach(component ${COPPERSPICE_COMPONENTS})
       CopperSpice::Cs${component}
    )
 endforeach()
-
-# change to use compiler features
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 14)
-
