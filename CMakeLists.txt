@@ -28,19 +28,32 @@ include(FeatureSummary)
 include(ResourceMacros)
 include(TestLargeFiles)
 
-# location deploy or install
-if(UNIX)
+# location for install or package
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    include(GNUInstallDirs)
-else()
+
+   # rpath
+   file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}" "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+   set(CMAKE_INSTALL_RPATH "@executable_path/${CS_BIN_RPATH}")
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+   include(GNUInstallDirs)
+
+   # rpath
+   file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}" "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+   set(CMAKE_INSTALL_RPATH "${CS_BIN_RPATH}")
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
    set(CMAKE_INSTALL_LIBDIR lib)
    set(CMAKE_INSTALL_INCLUDEDIR include)
+
 endif()
 
 # required library
 set(BUILD_COMPONENTS "Core")
 
-# unused at this time: DBus, Declarative and ScriptTools
+# unused at this time: DBus, Declarative, and ScriptTools
 set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg WebKit Xml XmlPatterns)
 
 set(PACKAGE           "copperspice")
