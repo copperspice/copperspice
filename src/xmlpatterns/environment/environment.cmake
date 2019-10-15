@@ -1,39 +1,38 @@
-set(XMLPATTERNS_PRIVATE_INCLUDES
-    ${XMLPATTERNS_PRIVATE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qcurrentitemcontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingdynamiccontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingstaticcontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdynamiccontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qfocus_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericdynamiccontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericstaticcontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreceiverdynamiccontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreportcontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstackcontextbase_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticbaseuricontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcurrentcontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticfocuscontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcompatibilitycontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticnamespacecontext_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstackcontextbase.cpp
+list(APPEND XMLPATTERNS_PRIVATE_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qcurrentitemcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingdynamiccontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingstaticcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdynamiccontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qfocus_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericdynamiccontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericstaticcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreceiverdynamiccontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreportcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstackcontextbase_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticbaseuricontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcurrentcontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticfocuscontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcompatibilitycontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticnamespacecontext_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstackcontextbase.cpp
 )
 
-set(XMLPATTERNS_SOURCES
-    ${XMLPATTERNS_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qcurrentitemcontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingdynamiccontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingstaticcontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdynamiccontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qfocus.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericdynamiccontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericstaticcontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreceiverdynamiccontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreportcontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticbaseuricontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcurrentcontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticfocuscontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcompatibilitycontext.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticnamespacecontext.cpp
+target_sources(CsXmlPatterns
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qcurrentitemcontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingdynamiccontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdelegatingstaticcontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qdynamiccontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qfocus.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericdynamiccontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qgenericstaticcontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreceiverdynamiccontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qreportcontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticbaseuricontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcurrentcontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticfocuscontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticcompatibilitycontext.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/environment/qstaticnamespacecontext.cpp
 )

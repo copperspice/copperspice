@@ -1,5 +1,4 @@
-set(XML_PUBLIC_INCLUDES
-    ${XML_PUBLIC_INCLUDES}
+list(APPEND XML_PUBLIC_INCLUDES
     QXmlAttributes
     QXmlContentHandler
     QXmlDTDHandler
@@ -16,8 +15,7 @@ set(XML_PUBLIC_INCLUDES
     QXmlSimpleReader
 )
 
-set(XML_INCLUDES
-    ${XML_INCLUDES}
+list(APPEND XML_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/sax/qxml.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sax/qxmlattributes.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sax/qxmlcontenthandler.h
@@ -35,7 +33,7 @@ set(XML_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/sax/qxmlsimplereader.h
 )
 
-set(XML_SOURCES
-    ${XML_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/sax/qxml.cpp
+target_sources(CsXml
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/sax/qxml.cpp
 )

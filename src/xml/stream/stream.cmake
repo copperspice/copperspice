@@ -1,5 +1,4 @@
-set(XML_PUBLIC_INCLUDES
-    ${XML_PUBLIC_INCLUDES}
+list(APPEND XML_PUBLIC_INCLUDES
     QXmlStreamAttribute
     QXmlStreamAttributes
     QXmlStreamEntityDeclaration
@@ -13,8 +12,7 @@ set(XML_PUBLIC_INCLUDES
     QXmlStreamWriter
 )
 
-set(XML_INCLUDES
-    ${XML_INCLUDES}
+list(APPEND XML_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamattribute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamattributes.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamentitydeclaration.h

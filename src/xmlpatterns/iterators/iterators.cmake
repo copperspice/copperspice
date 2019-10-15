@@ -1,5 +1,4 @@
-set(XMLPATTERNS_PRIVATE_INCLUDES
-    ${XMLPATTERNS_PRIVATE_INCLUDES}
+list(APPEND XMLPATTERNS_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qcachingiterator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdeduplicateiterator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdistinctiterator_p.h
@@ -18,18 +17,18 @@ set(XMLPATTERNS_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qunioniterator_p.h
 )
 
-set(XMLPATTERNS_SOURCES
-    ${XMLPATTERNS_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qcachingiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdeduplicateiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdistinctiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qexceptiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qindexofiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qinsertioniterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qintersectiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qrangeiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qremovaliterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qsubsequenceiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qtocodepointsiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qunioniterator.cpp
+target_sources(CsXmlPatterns
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qcachingiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdeduplicateiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdistinctiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qexceptiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qindexofiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qinsertioniterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qintersectiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qrangeiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qremovaliterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qsubsequenceiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qtocodepointsiterator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qunioniterator.cpp
 )

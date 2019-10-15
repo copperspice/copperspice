@@ -1,22 +1,28 @@
+add_library(CsXmlPatterns SHARED "")
+add_library(CopperSpice::CsXmlPatterns ALIAS CsXmlPatterns)
+
+set_target_properties(CsXmlPatterns PROPERTIES OUTPUT_NAME CsXmlPatterns${BUILD_ABI})
+
 add_definitions(
-    -DQT_BUILD_XMLPATTERNS_LIB
+   -DQT_BUILD_XMLPATTERNS_LIB
 )
-set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_ABI} CsNetwork${BUILD_ABI})
+
 set(EXTRA_XMLPATTERNS_CXXFLAGS)
 set(EXTRA_XMLPATTERNS_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_BINARY_DIR}/privateinclude
+
     ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
+
     ${CMAKE_BINARY_DIR}/include/QtNetwork
-    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
+
     ${CMAKE_BINARY_DIR}/include/QtXmlPatterns
-    ${CMAKE_BINARY_DIR}/privateinclude/QtXmlPatterns
     ${CMAKE_BINARY_DIR}/privateinclude/QtXmlPatterns/private
+
     ${CMAKE_CURRENT_SOURCE_DIR}/acceltree
     ${CMAKE_CURRENT_SOURCE_DIR}/api
     ${CMAKE_CURRENT_SOURCE_DIR}/data
@@ -54,31 +60,39 @@ macro_generate_misc("${XMLPATTERNS_INCLUDES}" QtXmlPatterns)
 function_variable_fixup("${EXTRA_XMLPATTERNS_CXXFLAGS}" EXTRA_XMLPATTERNS_CXXFLAGS)
 function_variable_fixup("${EXTRA_XMLPATTERNS_LDFLAGS}" EXTRA_XMLPATTERNS_LDFLAGS)
 
-add_library(CsXmlPatterns${BUILD_ABI} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
-target_link_libraries(CsXmlPatterns${BUILD_ABI} ${EXTRA_XMLPATTERNS_LIBS})
+target_sources(CsXmlPatterns
+   PRIVATE
+   ${XMLPATTERNS_INCLUDES}
+)
 
-target_include_directories(CsXmlPatterns${BUILD_ABI}
+target_include_directories(CsXmlPatterns
    PUBLIC
    $<INSTALL_INTERFACE:include/QtXmlPatterns>
 )
 
-set_target_properties(CsXmlPatterns${BUILD_ABI} PROPERTIES
-    VERSION "0" # for compat
-    SOVERSION "0.0.0" # for compat
-    COMPILE_FLAGS ${EXTRA_XMLPATTERNS_CXXFLAGS}
-    LINK_FLAGS ${EXTRA_XMLPATTERNS_LDFLAGS}
+target_link_libraries(CsXmlPatterns
+   PRIVATE
+   CsCore
+   CsNetwork
 )
 
-macro_generate_resources("${XMLPATTERNS_SOURCES}")
+set_target_properties(CsXmlPatterns
+   PROPERTIES
+   COMPILE_FLAGS ${EXTRA_XMLPATTERNS_CXXFLAGS}
+   LINK_FLAGS ${EXTRA_XMLPATTERNS_LDFLAGS}
+)
+
+function_generate_resources(CsXmlPatterns)
+
 macro_generate_package(
-    CsXmlPatterns${BUILD_ABI}
-    QtXmlPatterns
-    "${EXTRA_XMLPATTERNS_CXXFLAGS}"
-    "CsCore${BUILD_ABI} CsNetwork${BUILD_ABI}"
+   CsXmlPatterns
+   QtXmlPatterns
+   "${EXTRA_XMLPATTERNS_CXXFLAGS}"
+   "CsCore CsNetwork"
 )
 
 install(
-    TARGETS CsXmlPatterns${BUILD_ABI}
+    TARGETS CsXmlPatterns
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
