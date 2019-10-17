@@ -1,7 +1,16 @@
+add_library(CsGui SHARED "")
+add_library(CopperSpice::CsGui ALIAS CsGui)
 
-set(EXTRA_GUI_LIBS
-   CsCore${BUILD_ABI}
-   ${OPENGL_LIBRARIES}
+set_target_properties(CsGui PROPERTIES OUTPUT_NAME CsGui${BUILD_ABI})
+
+target_compile_definitions(CsGui
+   PRIVATE
+   -DQT_BUILD_GUI_LIB
+   -DQT_BUILTIN_GIF_READER
+   -DQOPENGL_DEPRECATEDFUNCTION
+   -DMNG_BUILD_SO
+   -DMNG_NO_INCLUDE_JNG
+   -DPNG_NO_CONFIG_H
 )
 
 set(EXTRA_GUI_CXXFLAGS)
@@ -10,12 +19,13 @@ set(EXTRA_GUI_LDFLAGS)
 include_directories(
    ${CMAKE_BINARY_DIR}/include
    ${CMAKE_BINARY_DIR}/privateinclude
+
    ${CMAKE_BINARY_DIR}/include/QtCore
-   ${CMAKE_BINARY_DIR}/privateinclude/QtCore
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
+
    ${CMAKE_BINARY_DIR}/include/QtGui
-   ${CMAKE_BINARY_DIR}/privateinclude/QtGui
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
+
    ${CMAKE_CURRENT_SOURCE_DIR}/accessible
    ${CMAKE_CURRENT_SOURCE_DIR}/animation
    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
@@ -33,6 +43,7 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/text
    ${CMAKE_CURRENT_SOURCE_DIR}/util
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
@@ -68,135 +79,125 @@ macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_PLATFORMHEADERS_INCLUDES}" QtGui/platformheaders)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
-    set(EXTRA_GUI_LIBS
-        ${EXTRA_GUI_LIBS}
-        ${FONTCONFIG_LIBRARIES}
-        ${X11_X11_LIB}
-        ${X11_Xrender_LIB}
-        ${X11_Xrandr_LIB}
-        ${X11_Xcursor_LIB}
-        ${X11_Xinerama_LIB}
-        ${X11_Xext_LIB}
-        ${X11_Xfixes_LIB}
-        ${X11_SM_LIB}
-        ${X11_ICE_LIB}
-        ${NAS_LIBRARIES}
-        ${CMAKE_THREAD_LIBS_INIT}
-        rt
-    )
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
-    add_definitions(
-        -DHAVE_POSIX_MEMALIGN
-        -DQT_NO_XINPUT
-        -DQT_NO_STYLE_MAC
-        -DQT_NO_STYLE_WINDOWSXP
-        -DQT_NO_STYLE_WINDOWSVISTA
-        -DQT_NO_TABLET
-    )
+   target_link_libraries(CsGui
+      PRIVATE
+      objc
+   )
 
-    include_directories(
-        ${FONTCONFIG_INCLUDES}
-        ${X11_X11_INCLUDE_PATH}
-        ${X11_Xrender_INCLUDE_PATH}
-        ${X11_Xrandr_INCLUDE_PATH}
-        ${X11_Xcursor_INCLUDE_PATH}
-        ${X11_Xinerama_INCLUDE_PATH}
-        ${X11_Xext_INCLUDE_PATH}
-        ${X11_Xfixes_INCLUDE_PATH}
-        ${X11_SM_INCLUDE_PATH}
-        ${X11_ICE_INCLUDE_PATH}
-        ${NAS_INCLUDES}
-    )
-endif()
+   list(APPEND EXTRA_GUI_LDFLAGS
+      -framework Carbon
+      -framework OpenGL
+   )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(EXTRA_GUI_LIBS
-        ${EXTRA_GUI_LIBS}
-        gdi32
-        winmm
-        ole32
-        winspool
-        oleaut32
-        comdlg32
-        imm32
-        uuid
-        opengl32
-        kernel32
-        user32
-    )
+   add_definitions(-DQT_NO_STYLE_WINDOWSVISTA)
 
-#    set(EXTRA_GUI_LDFLAGS
-#        ${EXTRA_GUI_LDFLAGS}
-#        unsure this is required or valid  -Wl,--export-all-symbols
-#    )
+elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
-    add_definitions(
-        -DQT_NO_STYLE_MAC
-        -DQT_NO_LPR
-    )
-endif()
+   target_link_libraries(CsGui
+      PRIVATE
+      ${X11_X11_LIB}
+      ${X11_Xrender_LIB}
+      ${X11_Xrandr_LIB}
+      ${X11_Xcursor_LIB}
+      ${X11_Xinerama_LIB}
+      ${X11_Xext_LIB}
+      ${X11_Xfixes_LIB}
+      ${X11_SM_LIB}
+      ${X11_ICE_LIB}
+      ${NAS_LIBRARIES}
+      ${CMAKE_THREAD_LIBS_INIT}
+      rt
+   )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   add_definitions(
+      -DHAVE_POSIX_MEMALIGN
+      -DQT_NO_XINPUT
+      -DQT_NO_STYLE_MAC
+      -DQT_NO_STYLE_WINDOWSXP
+      -DQT_NO_STYLE_WINDOWSVISTA
+      -DQT_NO_TABLET
+   )
 
-    set(EXTRA_GUI_LIBS
-        ${EXTRA_GUI_LIBS}
-        objc
-    )
+   include_directories(
+      ${FONTCONFIG_INCLUDES}
+      ${X11_X11_INCLUDE_PATH}
+      ${X11_Xrender_INCLUDE_PATH}
+      ${X11_Xrandr_INCLUDE_PATH}
+      ${X11_Xcursor_INCLUDE_PATH}
+      ${X11_Xinerama_INCLUDE_PATH}
+      ${X11_Xext_INCLUDE_PATH}
+      ${X11_Xfixes_INCLUDE_PATH}
+      ${X11_SM_INCLUDE_PATH}
+      ${X11_ICE_INCLUDE_PATH}
+      ${NAS_INCLUDES}
+   )
 
-    set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS}
-        -framework Carbon
-        -framework OpenGL
-    )
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
-    add_definitions(-DQT_NO_STYLE_WINDOWSVISTA)
+   target_link_libraries(CsGui
+      PRIVATE
+      gdi32
+      winmm
+      ole32
+      winspool
+      oleaut32
+      comdlg32
+      imm32
+      uuid
+      opengl32
+      kernel32
+      user32
+   )
+
+   add_definitions(
+      -DQT_NO_STYLE_MAC
+      -DQT_NO_LPR
+   )
 endif()
 
 function_variable_fixup("${EXTRA_GUI_CXXFLAGS}" EXTRA_GUI_CXXFLAGS)
 function_variable_fixup("${EXTRA_GUI_LDFLAGS}"  EXTRA_GUI_LDFLAGS)
 
-add_library(CsGui${BUILD_ABI} SHARED ${GUI_SOURCES} ${GUI_INCLUDES} ${GUI_PLATFORMHEADERS_INCLUDES})
-
-target_compile_definitions(CsGui${BUILD_ABI} PRIVATE
-   -DQT_BUILD_GUI_LIB
-   -DQT_BUILTIN_GIF_READER
-   -DQOPENGL_DEPRECATEDFUNCTION
-   -DMNG_BUILD_SO
-   -DMNG_NO_INCLUDE_JNG
-   -DPNG_NO_CONFIG_H
+target_sources(CsGui
+   PRIVATE
+   ${GUI_INCLUDES}
+   ${GUI_PLATFORMHEADERS_INCLUDES}
 )
 
-target_link_libraries(CsGui${BUILD_ABI}
-   ${EXTRA_GUI_LIBS}
-)
-
-target_include_directories(CsGui${BUILD_ABI}
+target_include_directories(CsGui
    PUBLIC
    $<INSTALL_INTERFACE:include/QtGui>
 )
 
-set_target_properties(CsGui${BUILD_ABI} PROPERTIES
-    VERSION "0"
-    SOVERSION "0.0.0"
-    COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
-    LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
+target_link_libraries(CsGui
+   PRIVATE
+   CsCore
+   ${OPENGL_LIBRARIES}
 )
 
-macro_generate_resources("${GUI_SOURCES}")
+set_target_properties(CsGui
+   PROPERTIES
+   COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
+   LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
+)
+
+function_generate_resources(CsGui)
+
 macro_generate_package(
-    CsGui${BUILD_ABI}
-    QtGui
-    "${EXTRA_GUI_CXXFLAGS}"
-    "CsCore${BUILD_ABI}"
+   CsGui
+   QtGui
+   "${EXTRA_GUI_CXXFLAGS}"
+   "CsCore"
 )
 
 install(
-    TARGETS CsGui${BUILD_ABI}
-    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   TARGETS CsGui
+   EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

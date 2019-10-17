@@ -1,5 +1,4 @@
-set(GUI_PUBLIC_INCLUDES
-   ${GUI_PUBLIC_INCLUDES}
+list(APPEND GUI_PUBLIC_INCLUDES
    QOpenGL
    QOpenGLBuffer
    QOpenGLDebugMessage
@@ -25,8 +24,7 @@ set(GUI_PUBLIC_INCLUDES
    QOpenGLVersionFunctions
 )
 
-set(GUI_INCLUDES
-   ${GUI_INCLUDES}
+list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengles2ext.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglbuffer.h
@@ -73,8 +71,7 @@ set(GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglfunctions_es2.h
 )
 
-set(GUI_PRIVATE_INCLUDES
-   ${GUI_PRIVATE_INCLUDES}
+list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglframebufferobject_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpaintdevice_p.h
@@ -98,8 +95,8 @@ set(GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qrbtree_p.h
 )
 
-set(GUI_SOURCES
-   ${GUI_SOURCES}
+target_sources(CsGui
+   PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglbuffer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengldebug.cpp

@@ -417,7 +417,9 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
       AlignBottom,
       AlignBaseline
    };
-   enum UnderlineStyle { // keep in sync with Qt::PenStyle!
+
+   // keep in sync with enum PenStyle in core/global/qnamespace.h
+   enum UnderlineStyle {
       NoUnderline,
       SingleUnderline,
       DashUnderline,
