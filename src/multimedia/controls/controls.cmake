@@ -1,5 +1,4 @@
-set(MULTIMEDIA_PUBLIC_INCLUDES
-   ${MULTIMEDIA_PUBLIC_INCLUDES}
+list(APPEND MULTIMEDIA_PUBLIC_INCLUDES
 	QAudioRoleControl
 	QAudioInputSelectorControl
 	QAudioOutputSelectorControl
@@ -11,8 +10,7 @@ set(MULTIMEDIA_PUBLIC_INCLUDES
 	QVideoWindowControl
 )
 
-set(MULTIMEDIA_INCLUDES
-   ${MULTIMEDIA_INCLUDES}
+list(APPEND MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioencodersettingscontrol.h
@@ -38,14 +36,13 @@ set(MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideoencodersettingscontrol.h
 )
 
-set(MULTIMEDIA_PRIVATE_INCLUDES
-   ${MULTIMEDIA_PRIVATE_INCLUDES}
+list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistcontrol_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplaylistsourcecontrol_p.h
 )
 
-set(MULTIMEDIA_SOURCES
-   ${MULTIMEDIA_SOURCES}
+target_sources(CsMultimedia
+   PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioencodersettingscontrol.cpp

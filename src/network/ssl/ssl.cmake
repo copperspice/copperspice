@@ -1,5 +1,4 @@
-set(NETWORK_PUBLIC_INCLUDES
-    ${NETWORK_PUBLIC_INCLUDES}
+list(APPEND NETWORK_PUBLIC_INCLUDES
     QSsl
     QSslCertificate
     QSslCertificateExtension
@@ -12,8 +11,7 @@ set(NETWORK_PUBLIC_INCLUDES
     QSslSocket
 )
 
-set(NETWORK_INCLUDES
-    ${NETWORK_INCLUDES}
+list(APPEND NETWORK_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension.h
@@ -26,8 +24,7 @@ set(NETWORK_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.h
 )
 
-set(NETWORK_PRIVATE_INCLUDES
-    ${NETWORK_PRIVATE_INCLUDES}
+list(APPEND NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension_p.h
@@ -44,8 +41,8 @@ set(NETWORK_PRIVATE_INCLUDES
 )
 
 if(OPENSSL_FOUND OR SECURETRANSPORT_FOUND)
-   set(NETWORK_SOURCES
-      ${NETWORK_SOURCES}
+   target_sources(CsNetwork
+      PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qasn1element.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate.cpp
@@ -61,8 +58,8 @@ if(OPENSSL_FOUND OR SECURETRANSPORT_FOUND)
 endif()
 
 if(OPENSSL_FOUND AND NOT SECURETRANSPORT_FOUND)
-   set(NETWORK_SOURCES
-      ${NETWORK_SOURCES}
+   target_sources(CsNetwork
+      PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_openssl.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcontext_openssl.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve_openssl.cpp
@@ -73,12 +70,12 @@ if(OPENSSL_FOUND AND NOT SECURETRANSPORT_FOUND)
 endif()
 
 if(SECURETRANSPORT_FOUND)
-    set(NETWORK_SOURCES
-        ${NETWORK_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_etc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_etc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve_etc.cpp
+   target_sources(CsNetwork
+      PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_mac.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_mac.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_etc.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_etc.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve_etc.cpp
     )
 endif()

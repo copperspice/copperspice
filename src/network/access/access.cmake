@@ -1,5 +1,4 @@
-set(NETWORK_PUBLIC_INCLUDES
-    ${NETWORK_PUBLIC_INCLUDES}
+list(APPEND NETWORK_PUBLIC_INCLUDES
     QAbstractNetworkCache
     QHttpMultiPart
     QHttpPart
@@ -12,8 +11,7 @@ set(NETWORK_PUBLIC_INCLUDES
     QNetworkRequest
 )
 
-set(NETWORK_INCLUDES
-    ${NETWORK_INCLUDES}
+list(APPEND NETWORK_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpmultipart.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttppart.h
@@ -26,8 +24,7 @@ set(NETWORK_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkrequest.h
 )
 
-set(NETWORK_PRIVATE_INCLUDES
-    ${NETWORK_PRIVATE_INCLUDES}
+list(APPEND NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractprotocolhandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qftp_p.h
@@ -59,35 +56,35 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qspdyprotocolhandler_p.h
 )
 
-set(NETWORK_SOURCES
-    ${NETWORK_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractprotocolhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qftp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpheader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkheader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkrequest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkreply.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkconnection.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkconnectionchannel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessauthenticationmanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessmanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccesscache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessbackend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessfilebackend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccesscachebackend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessftpbackend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkcookie.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkcookiejar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkrequest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreply.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyimpl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplydataimpl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyfileimpl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkdiskcache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpthreaddelegate.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpmultipart.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyhttpimpl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpprotocolhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qspdyprotocolhandler.cpp
+target_sources(CsNetwork
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractprotocolhandler.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qftp.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpheader.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkheader.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkrequest.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkreply.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkconnection.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkconnectionchannel.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessauthenticationmanager.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessmanager.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccesscache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessbackend.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessfilebackend.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccesscachebackend.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkaccessftpbackend.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkcookie.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkcookiejar.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkrequest.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreply.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyimpl.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplydataimpl.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyfileimpl.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkdiskcache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpthreaddelegate.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpmultipart.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyhttpimpl.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpprotocolhandler.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qspdyprotocolhandler.cpp
 )

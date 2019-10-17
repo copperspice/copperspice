@@ -1,5 +1,4 @@
-set(MULTIMEDIA_PUBLIC_INCLUDES
-   ${MULTIMEDIA_PUBLIC_INCLUDES}
+list(APPEND MULTIMEDIA_PUBLIC_INCLUDES
    QMediaBindableInterface
    QMediaControl
    QMediaObject
@@ -10,8 +9,7 @@ set(MULTIMEDIA_PUBLIC_INCLUDES
    QtMultimedia
 )
 
-set(MULTIMEDIA_INCLUDES
-   ${MULTIMEDIA_INCLUDES}
+list(APPEND MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediabindableinterface.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaenumdebug.h
@@ -24,8 +22,7 @@ set(MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtmultimedia.h
 )
 
-set(MULTIMEDIA_PRIVATE_INCLUDES
-   ${MULTIMEDIA_PRIVATE_INCLUDES}
+list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaobject_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaopenglhelper_p.h
@@ -37,8 +34,8 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimediautils_p.h
 )
 
-set(MULTIMEDIA_SOURCES
-   ${MULTIMEDIA_SOURCES}
+target_sources(CsMultimedia
+   PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediabindableinterface.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaobject.cpp

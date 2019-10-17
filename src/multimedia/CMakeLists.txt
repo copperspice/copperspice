@@ -1,12 +1,11 @@
-add_definitions(
-   -DQT_BUILD_MULTIMEDIA_LIB
-)
+add_library(CsMultimedia SHARED "")
+add_library(CopperSpice::CsMultimedia ALIAS CsMultimedia)
 
-set(EXTRA_MULTIMEDIA_LIBS
-   CsCore${BUILD_ABI}
-   CsGui${BUILD_ABI}
-   CsNetwork${BUILD_ABI}
-   CsOpenGL${BUILD_ABI}
+set_target_properties(CsMultimedia PROPERTIES OUTPUT_NAME CsMultimedia${BUILD_ABI})
+
+target_compile_definitions(CsMultimedia
+   PRIVATE
+   -DQT_BUILD_MULTIMEDIA_LIB
 )
 
 set(EXTRA_MULTIMEDIA_CXXFLAGS)
@@ -19,6 +18,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
 
     ${CMAKE_BINARY_DIR}/include/QtGui
+
     ${CMAKE_BINARY_DIR}/include/QtNetwork
 
     ${CMAKE_BINARY_DIR}/include/QtMultimedia
@@ -54,10 +54,8 @@ macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
 macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
 macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
 
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-   set(EXTRA_MULTIMEDIA_LDFLAGS
-      ${EXTRA_MULTIMEDIAL_LDFLAGS}
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+   list(APPEND EXTRA_MULTIMEDIA_LDFLAGS
       -framework OpenGL
    )
 endif()
@@ -65,38 +63,42 @@ endif()
 function_variable_fixup("${EXTRA_MULTIMEDIA_CXXFLAGS}" EXTRA_MULTIMEDIA_CXXFLAGS)
 function_variable_fixup("${EXTRA_MULTIMEDIA_LDFLAGS}"  EXTRA_MULTIMEDIA_LDFLAGS)
 
-add_library(CsMultimedia${BUILD_ABI} SHARED
-   ${MULTIMEDIA_SOURCES}
+target_sources(CsMultimedia
+   PRIVATE
    ${MULTIMEDIA_INCLUDES}
 )
 
-target_link_libraries(CsMultimedia${BUILD_ABI}
-   ${EXTRA_MULTIMEDIA_LIBS}
+target_link_libraries(CsMultimedia
+   PUBLIC
+   CsCore
+   CsGui
+   CsNetwork
+   CsOpenGL
 )
 
-target_include_directories(CsMultimedia${BUILD_ABI} PUBLIC
+target_include_directories(CsMultimedia
+   PUBLIC
    ${GSTREAMER_INCLUDE_DIRS}
    $<INSTALL_INTERFACE:include/QtMultimedia>
 )
 
-set_target_properties(CsMultimedia${BUILD_ABI} PROPERTIES
-    VERSION "0" # for compat
-    SOVERSION "0.0.0" # for compat
-    COMPILE_FLAGS ${EXTRA_MULTIMEDIA_CXXFLAGS}
-    LINK_FLAGS ${EXTRA_MULTIMEDIA_LDFLAGS}
+set_target_properties(CsMultimedia
+   PROPERTIES
+   COMPILE_FLAGS ${EXTRA_MULTIMEDIA_CXXFLAGS}
+   LINK_FLAGS ${EXTRA_MULTIMEDIA_LDFLAGS}
 )
 
-macro_generate_resources("${MULTIMEDIA_SOURCES}")
+function_generate_resources(CsMultimedia)
 
 macro_generate_package(
-    CsMultimedia${BUILD_ABI}
-    QtMultimedia
-    "${EXTRA_MULTIMEDIA_CXXFLAGS}"
-    "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
+   CsMultimedia
+   QtMultimedia
+   "${EXTRA_MULTIMEDIA_CXXFLAGS}"
+   "CsCore CsGui"
 )
 
 install(
-    TARGETS CsMultimedia${BUILD_ABI}
+    TARGETS CsMultimedia
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
