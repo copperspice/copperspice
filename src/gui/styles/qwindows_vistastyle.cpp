@@ -244,8 +244,12 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
             int oldState = styleObject->property("_q_stylestate").toInt();
             oldRect = styleObject->property("_q_stylerect").toRect();
             newRect = option->rect;
-            styleObject->setProperty("_q_stylestate", (int)option->state);
-            styleObject->setProperty("_q_stylerect", option->rect);
+            if (oldState != (int)option->state) {
+              styleObject->setProperty("_q_stylestate", (int)option->state);
+            }
+            if (oldRect != newRect) {
+              styleObject->setProperty("_q_stylerect", option->rect);
+            }
 
             bool doTransition = oldState &&
                ((state & State_Sunken)    != (oldState & State_Sunken) ||
@@ -810,8 +814,12 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
          int oldState = styleObject->property("_q_stylestate").toInt();
          oldRect = styleObject->property("_q_stylerect").toRect();
          newRect = option->rect;
-         styleObject->setProperty("_q_stylestate", (int)option->state);
-         styleObject->setProperty("_q_stylerect", option->rect);
+         if (oldState != (int)option->state) {
+           styleObject->setProperty("_q_stylestate", (int)option->state);
+         }
+         if (oldRect != newRect) {
+           styleObject->setProperty("_q_stylerect", option->rect);
+         }
 
          bool wasDefault = false;
          bool isDefault = false;
@@ -1566,9 +1574,15 @@ void QWindowsVistaStyle::drawComplexControl(ComplexControl control, const QStyle
          int oldActiveControls = styleObject->property("_q_stylecontrols").toInt();
 
          QRect oldRect = styleObject->property("_q_stylerect").toRect();
-         styleObject->setProperty("_q_stylestate",    (int)option->state);
-         styleObject->setProperty("_q_stylecontrols", (int)option->activeSubControls);
-         styleObject->setProperty("_q_stylerect", option->rect);
+         if (oldState != (int)option->state) {
+           styleObject->setProperty("_q_stylestate", (int)option->state);
+         }
+         if (oldActiveControls != (int)option->activeSubControls) {
+           styleObject->setProperty("_q_stylecontrols", (int)option->activeSubControls);
+         }
+         if (oldRect != option->rect) {
+           styleObject->setProperty("_q_stylerect", option->rect);
+         }
 
          bool doTransition = ((state & State_Sunken) != (oldState & State_Sunken)    ||
                (state & State_On)         != (oldState & State_On)        ||
