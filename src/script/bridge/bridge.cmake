@@ -1,5 +1,4 @@
-set(SCRIPT_PRIVATE_INCLUDES
-    ${SCRIPT_PRIVATE_INCLUDES}
+list(APPEND SCRIPT_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptfunction_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptobject_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptclassobject_p.h
@@ -12,16 +11,16 @@ set(SCRIPT_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeclass_p.h
 )
 
-set(SCRIPT_SOURCES
-    ${SCRIPT_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptfunction.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptclassobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptvariant.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptqobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptglobalobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptactivationobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptstaticscopeobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeobject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeclass.cpp
+target_sources(CsScript
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptfunction.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptclassobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptvariant.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptqobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptglobalobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptactivationobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptstaticscopeobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeclass.cpp
 )

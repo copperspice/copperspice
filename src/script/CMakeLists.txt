@@ -1,3 +1,8 @@
+add_library(CsScript SHARED "")
+add_library(CopperSpice::CsScript ALIAS CsScript)
+
+set_target_properties(CsScript PROPERTIES OUTPUT_NAME CsScript${BUILD_ABI})
+
 add_definitions(
     -DQT_BUILD_SCRIPT_LIB
     -DQLALR_NO_SCRIPTGRAMMAR_DEBUG_INFO
@@ -15,22 +20,24 @@ add_definitions(
     -DUSE_SYSTEM_MALLOC
     -DQT_BUILD_SCRIPT_LIB
 )
-set(EXTRA_SCRIPT_LIBS CsCore${BUILD_ABI})
+
 set(EXTRA_SCRIPT_CXXFLAGS)
 set(EXTRA_SCRIPT_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_BINARY_DIR}/privateinclude
+
     ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
+
     ${CMAKE_BINARY_DIR}/include/QtScript
-    ${CMAKE_BINARY_DIR}/privateinclude/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript/private
+
     ${CMAKE_CURRENT_SOURCE_DIR}/api
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
+
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API
@@ -58,8 +65,7 @@ include(api/api.cmake)
 include(bridge/bridge.cmake)
 include(parser/parser.cmake)
 
-set(SCRIPT_INCLUDES
-    ${SCRIPT_INCLUDES}
+list(APPEND JSCORE_SCRIPT_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/CodeBlock.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/Opcode.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/SamplingTool.h
@@ -350,227 +356,242 @@ set(SCRIPT_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfileNode.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfilerServer.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/CallIdentifier.h
+
     # https://bugreports.qt.io/browse/QTBUG-9958
     # ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated/chartables.c
+
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/ucptable.cpp
 )
 
-set(SCRIPT_SOURCES
-    ${SCRIPT_SOURCES}
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSBase.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackFunction.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSClassRef.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSContextRef.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSObjectRef.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSStringRef.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSValueRef.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/OpaqueJSString.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/assembler/ARMAssembler.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/assembler/MacroAssemblerARM.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/CodeBlock.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/JumpTable.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/Opcode.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/SamplingTool.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/StructureStubInfo.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecompiler/NodesCodegen.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger/DebuggerActivation.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger/DebuggerCallFrame.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger/Debugger.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter/CallFrame.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter/Interpreter.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter/RegisterFile.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocatorFixedVMPool.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocatorPosix.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocatorWin.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocator.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITArithmetic.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITCall.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JIT.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITOpcodes.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITPropertyAccess.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITStubs.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/Lexer.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/Nodes.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/ParserArena.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/Parser.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/Profile.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfileGenerator.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfileNode.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/Profiler.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ArgList.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Arguments.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ArrayConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ArrayPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/BooleanConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/BooleanObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/BooleanPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/CallData.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/CommonIdentifiers.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Completion.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ConstructData.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DateConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DateConversion.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DateInstance.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DatePrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ErrorConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Error.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ErrorInstance.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ErrorPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ExceptionHelpers.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Executable.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/FunctionConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/FunctionPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/GetterSetter.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/GlobalEvalFunction.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Identifier.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/InitializeThreading.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/InternalFunction.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSActivation.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSAPIValueWrapper.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSArray.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSByteArray.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSCell.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSFunction.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSGlobalData.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSGlobalObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSGlobalObjectFunctions.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSImmediate.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSLock.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSNotAnObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSNumberCell.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSONObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSPropertyNameIterator.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSStaticScopeObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSString.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSValue.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSVariableObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSWrapperObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/LiteralParser.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Lookup.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MarkStackPosix.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MarkStackWin.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MarkStack.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MathObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NativeErrorConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NativeErrorPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NumberConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NumberObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NumberPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ObjectConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ObjectPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Operations.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PropertyDescriptor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PropertyNameArray.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PropertySlot.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PrototypeFunction.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExpConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExp.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExpObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExpPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ScopeChain.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/SmallStrings.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StringConstructor.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StringObject.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StringPrototype.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StructureChain.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Structure.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/TimeoutChecker.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/UString.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/UStringImpl.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Assertions.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/ByteArray.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/CurrentTime.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/DateMath.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/dtoa.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/FastMalloc.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/HashTable.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/MainThread.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt/MainThreadQt.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt/ThreadingQt.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/RandomNumber.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/RefCountedLeakCounter.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/ThreadingNone.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/TypeTraits.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/CollatorDefault.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/UTF8.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexCompiler.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexInterpreter.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexJIT.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated/Grammar.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_compile.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_exec.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_tables.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_ucp_searchfuncs.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_xclass.cpp
+target_sources(CsScript
+   PRIVATE
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSBase.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackFunction.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSClassRef.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSContextRef.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSObjectRef.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSStringRef.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/JSValueRef.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API/OpaqueJSString.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/assembler/ARMAssembler.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/assembler/MacroAssemblerARM.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/CodeBlock.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/JumpTable.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/Opcode.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/SamplingTool.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode/StructureStubInfo.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecompiler/NodesCodegen.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger/DebuggerActivation.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger/DebuggerCallFrame.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger/Debugger.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter/CallFrame.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter/Interpreter.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter/RegisterFile.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocatorFixedVMPool.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocatorPosix.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocatorWin.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/ExecutableAllocator.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITArithmetic.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITCall.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JIT.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITOpcodes.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITPropertyAccess.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit/JITStubs.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/Lexer.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/Nodes.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/ParserArena.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser/Parser.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/Profile.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfileGenerator.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfileNode.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/Profiler.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ArgList.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Arguments.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ArrayConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ArrayPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/BooleanConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/BooleanObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/BooleanPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/CallData.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/CommonIdentifiers.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Completion.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ConstructData.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DateConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DateConversion.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DateInstance.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/DatePrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ErrorConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Error.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ErrorInstance.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ErrorPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ExceptionHelpers.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Executable.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/FunctionConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/FunctionPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/GetterSetter.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/GlobalEvalFunction.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Identifier.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/InitializeThreading.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/InternalFunction.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSActivation.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSAPIValueWrapper.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSArray.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSByteArray.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSCell.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSFunction.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSGlobalData.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSGlobalObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSGlobalObjectFunctions.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSImmediate.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSLock.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSNotAnObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSNumberCell.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSONObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSPropertyNameIterator.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSStaticScopeObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSString.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSValue.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSVariableObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/JSWrapperObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/LiteralParser.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Lookup.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MarkStackPosix.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MarkStackWin.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MarkStack.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/MathObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NativeErrorConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NativeErrorPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NumberConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NumberObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/NumberPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ObjectConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ObjectPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Operations.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PropertyDescriptor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PropertyNameArray.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PropertySlot.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/PrototypeFunction.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExpConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExp.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExpObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/RegExpPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/ScopeChain.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/SmallStrings.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StringConstructor.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StringObject.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StringPrototype.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/StructureChain.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Structure.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/TimeoutChecker.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/UString.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime/UStringImpl.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Assertions.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/ByteArray.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/CurrentTime.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/DateMath.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/dtoa.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/FastMalloc.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/HashTable.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/MainThread.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt/MainThreadQt.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt/ThreadingQt.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/RandomNumber.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/RefCountedLeakCounter.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/ThreadingNone.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/TypeTraits.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/CollatorDefault.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/UTF8.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexCompiler.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexInterpreter.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexJIT.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated/Grammar.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_compile.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_exec.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_tables.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_ucp_searchfuncs.cpp
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_xclass.cpp
 )
 
-macro_generate_public("${SCRIPT_PUBLIC_INCLUDES}" QtScript)
+macro_generate_public("${SCRIPT_PUBLIC_INCLUDES}"   QtScript)
 macro_generate_private("${SCRIPT_PRIVATE_INCLUDES}" QtScript)
-macro_generate_misc("${SCRIPT_INCLUDES}" QtScript)
+macro_generate_misc("${SCRIPT_INCLUDES}"            QtScript)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(EXTRA_SCRIPT_LIBS
-        ${EXTRA_SCRIPT_LIBS}
-        winmm
-    )
-    if(NOT MSVC)
-        set(EXTRA_SCRIPT_LDFLAGS
-            ${EXTRA_SCRIPT_LDFLAGS}
-            -Wl,-s
-        )
-    endif()
-    set(SCRIPT_INCLUDES
-        ${SCRIPT_INCLUDES}
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdbool.h
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdint.h
-    )
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
-    set(EXTRA_SCRIPT_LDFLAGS ${EXTRA_SCRIPT_LDFLAGS} -framework CoreFoundation)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+   add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
+
+   list(APPEND EXTRA_SCRIPT_LDFLAGS
+      -framework
+      CoreFoundation
+   )
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+   target_link_libraries(CsScript
+      PRIVATE
+      winmm
+   )
+
+   if(NOT MSVC)
+      list(APPEND EXTRA_SCRIPT_LDFLAGS
+         -Wl,-s
+      )
+   endif()
+
+   list(APPEND SCRIPT_INCLUDES
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdbool.h
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdint.h
+   )
+
 endif()
 
 function_variable_fixup("${EXTRA_SCRIPT_CXXFLAGS}" EXTRA_SCRIPT_CXXFLAGS)
-function_variable_fixup("${EXTRA_SCRIPT_LDFLAGS}" EXTRA_SCRIPT_LDFLAGS)
+function_variable_fixup("${EXTRA_SCRIPT_LDFLAGS}"  EXTRA_SCRIPT_LDFLAGS)
 
-add_library(CsScript${BUILD_ABI} SHARED ${SCRIPT_SOURCES} ${SCRIPT_INCLUDES})
-target_link_libraries(CsScript${BUILD_ABI} ${EXTRA_SCRIPT_LIBS})
+target_sources(CsScript
+   PRIVATE
+   ${SCRIPT_INCLUDES}
+)
 
-target_include_directories(CsScript${BUILD_ABI}
+target_include_directories(CsScript
    PUBLIC
    $<INSTALL_INTERFACE:include/QtScript>
 )
 
-set_target_properties(CsScript${BUILD_ABI} PROPERTIES
-    VERSION "0" # for compat
-    SOVERSION "0.0.0" # for compat
-    COMPILE_FLAGS ${EXTRA_SCRIPT_CXXFLAGS}
-    LINK_FLAGS ${EXTRA_SCRIPT_LDFLAGS}
+target_link_libraries(CsScript
+   PRIVATE
+   CsCore
 )
 
-macro_generate_resources("${SCRIPT_SOURCES}")
+set_target_properties(CsScript
+   PROPERTIES
+   COMPILE_FLAGS ${EXTRA_SCRIPT_CXXFLAGS}
+   LINK_FLAGS ${EXTRA_SCRIPT_LDFLAGS}
+)
+
+function_generate_resources(CsScript)
+
 macro_generate_package(
-    CsScript${BUILD_ABI}
-    QtScript
-    "${EXTRA_SCRIPT_CXXFLAGS}"
-    "CsCore${BUILD_ABI}"
+   CsScript
+   QtScript
+   "${EXTRA_SCRIPT_CXXFLAGS}"
+   "CsCore"
 )
 
 install(
-    TARGETS CsScript${BUILD_ABI}
-    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   TARGETS CsScript
+   EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScript
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    COMPONENT Devel
+   DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScript
+   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+   COMPONENT Devel
 )
