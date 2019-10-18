@@ -22,9 +22,6 @@ else()
 
 endif()
 
-set(EXTRA_CORE_CXXFLAGS)
-set(EXTRA_CORE_LDFLAGS)
-
 include_directories(
    ${CMAKE_BINARY_DIR}/include
    ${CMAKE_BINARY_DIR}/privateinclude
@@ -100,8 +97,7 @@ else(ZLIB_FOUND)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-   set(EXTRA_CORE_LDFLAGS
-      ${EXTRA_CORE_LDFLAGS}
+   list(APPEND EXTRA_CORE_LDFLAGS
       -framework CoreFoundation
       -framework Foundation
       -framework Security
