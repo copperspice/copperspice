@@ -1,19 +1,27 @@
-set(EXTRA_MULTIMEDIA_PLAYLISTFORMATS_LIBS CsMultimedia${BUILD_ABI})
+add_library(CsMultimedia_m3u MODULE "")
+add_library(CopperSpice::CsMultimedia_m3u ALIAS CsMultimedia_m3u)
 
-set(MULTIMEDIA_PRIVATE_INCLUDES
-   ${MULTIMEDIA_PRIVATE_INCLUDES}
+set_target_properties(CsMultimedia_m3u PROPERTIES OUTPUT_NAME CsMultimedia_m3u${BUILD_ABI} PREFIX "")
+
+
+list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.h
 )
 
-set(MULTIMEDIA_PLAYLISTFORMATS_SOURCES
-  ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.cpp
+target_sources(CsMultimedia_m3u
+   PRIVATE
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.cpp
 )
 
-add_library(CsMultimedia_m3u${BUILD_ABI} MODULE ${MULTIMEDIA_PLAYLISTFORMATS_SOURCES})
-target_link_libraries(CsMultimedia_m3u${BUILD_ABI} PRIVATE ${EXTRA_MULTIMEDIA_PLAYLISTFORMATS_LIBS})
+target_link_libraries(CsMultimedia_m3u
+   PRIVATE
+   CsMultimedia
+)
 
-target_compile_definitions(CsMultimedia_m3u${BUILD_ABI} PRIVATE -DIN_TRUE -DQT_PLUGIN)
+target_compile_definitions(CsMultimedia_m3u
+   PRIVATE
+   -DIN_TRUE
+   -DQT_PLUGIN
+)
 
-set_target_properties(CsMultimedia_m3u${BUILD_ABI} PROPERTIES PREFIX "")
-
-install(TARGETS CsMultimedia_m3u${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS CsMultimedia_m3u DESTINATION ${CMAKE_INSTALL_LIBDIR})

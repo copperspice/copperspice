@@ -1,23 +1,4 @@
-set(EXTRA_AVFOUNDATION_LIBS
-   CsCore${BUILD_ABI}
-   CsGui${BUILD_ABI}
-   CsNetwork${BUILD_ABI}
-   CsMultimedia${BUILD_ABI}
-)
-
-set(EXTRA_AVFOUNDATION_CXXFLAGS)
-set(EXTRA_AVFOUNDATION_LDFLAGS)
-
-set(MULTIMEDIA_PUBLIC_INCLUDES
-    ${MULTIMEDIA_PUBLIC_INCLUDES}
-)
-
-set(MULTIMEDIA_INCLUDES
-    ${MULTIMEDIA_INCLUDES}
-)
-
-set(MULTIMEDIA_PRIVATE_INCLUDES
-   ${MULTIMEDIA_PRIVATE_INCLUDES}
+list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfdisplaylink.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayercontrol.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayermetadatacontrol.h
@@ -32,9 +13,15 @@ set(MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideoframerenderer.h
 )
 
-if(WITH_MULTIMEDIA AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(WITH_MULTIMEDIA AND CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
-   set(AVFOUNDATION_MEDIAPLAYER_SOURCES
+   add_library(CsMultimedia_avf_mediaplayer MODULE "")
+   add_library(CopperSpice::CsMultimedia_avf_mediaplayer ALIAS CsMultimedia_avf_mediaplayer)
+
+   set_target_properties(CsMultimedia_avf_mediaplayer PROPERTIES OUTPUT_NAME CsMultimedia_avf_mediaplayer${BUILD_ABI} PREFIX "")
+
+   target_sources(CsMultimedia_avf_mediaplayer
+      PRIVATE
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfdisplaylink.mm
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayercontrol.mm
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayermetadatacontrol.mm
@@ -47,10 +34,9 @@ if(WITH_MULTIMEDIA AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidget.mm
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideorenderercontrol.mm
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideoframerenderer.mm
-)
+   )
 
-   set(EXTRA_AVFOUNDATION_LDFLAGS
-      ${EXTRA_AVFOUNDATION_LDFLAGS}
+   list(APPEND EXTRA_AVFOUNDATION_LDFLAGS
       -framework AVFoundation
       -framework CoreMedia
       -framework QuartzCore
@@ -61,31 +47,25 @@ if(WITH_MULTIMEDIA AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    function_variable_fixup("${EXTRA_AVFOUNDATION_CXXFLAGS}" EXTRA_AVFOUNDATION_CXXFLAGS)
    function_variable_fixup("${EXTRA_AVFOUNDATION_LDFLAGS}"  EXTRA_AVFOUNDATION_LDFLAGS)
 
-   add_library(CsMultimedia_avf_mediaplayer${BUILD_ABI} MODULE
-      ${AVFOUNDATION_MEDIAPLAYER_SOURCES}
+   target_link_libraries(CsMultimedia_avf_mediaplayer
+      PRIVATE
+      CsCore
+      CsGui
+      CsNetwork
+      CsMultimedia
    )
 
-   target_link_libraries(CsMultimedia_avf_mediaplayer${BUILD_ABI}
-      ${EXTRA_AVFOUNDATION_LIBS}
-   )
-
-   target_include_directories(
-      CsMultimedia_avf_mediaplayer${BUILD_ABI} PRIVATE
-   )
-
-   target_compile_definitions(CsMultimedia_avf_mediaplayer${BUILD_ABI} PRIVATE
+   target_compile_definitions(CsMultimedia_avf_mediaplayer
+      PRIVATE
       -DQT_PLUGIN
       -DQMEDIA_AVF_MEDIAPLAYER
    )
 
-   set_target_properties(CsMultimedia_avf_mediaplayer${BUILD_ABI} PROPERTIES
-       VERSION "0"
-       SOVERSION "0.0.0"
-       COMPILE_FLAGS ${EXTRA_AVFOUNDATION_CXXFLAGS}
-       LINK_FLAGS ${EXTRA_AVFOUNDATION_LDFLAGS}
+   set_target_properties(CsMultimedia_avf_mediaplayer
+      PROPERTIES
+      COMPILE_FLAGS ${EXTRA_AVFOUNDATION_CXXFLAGS}
+      LINK_FLAGS ${EXTRA_AVFOUNDATION_LDFLAGS}
    )
 
-   set_target_properties(CsMultimedia_avf_mediaplayer${BUILD_ABI} PROPERTIES PREFIX "")
-
-   install(TARGETS CsMultimedia_avf_mediaplayer${BUILD_ABI}  DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   install(TARGETS CsMultimedia_avf_mediaplayer  DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

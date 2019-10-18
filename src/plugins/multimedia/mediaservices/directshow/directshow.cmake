@@ -1,65 +1,61 @@
-set(EXTRA_DIRECTSHOW_LIBS CsCore${BUILD_ABI} CsMultimedia_DirectShow${BUILD_ABI})
+list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.h
 
-set(MULTIMEDIA_PUBLIC_INCLUDES
-    ${MULTIMEDIA_PUBLIC_INCLUDES}
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowglobal.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.h
+
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.h
+
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.h
 )
 
-set(MULTIMEDIA_PRIVATE_INCLUDES
-    ${MULTIMEDIA_PRIVATE_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.h
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowglobal.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.h
+   add_library(CsMultimedia_DirectShow MODULE "")
+   add_library(CopperSpice::CsMultimedia_DirectShow ALIAS CsMultimedia_DirectShow)
 
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.h
+   set_target_properties(CsMultimedia_DirectShow PROPERTIES OUTPUT_NAME CsMultimedia_DirectShow${BUILD_ABI} PREFIX "")
 
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.h
-)
+   target_sources(CsMultimedia_DirectShow
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.cpp
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.cpp
 
-    set(MULTIMEDIA_DIRECTSHOW_SOURCES
-        ${MULTIMEDIA_DIRECTSHOW_SOURCES}
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.cpp
 
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.cpp
-
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.cpp
-
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.cpp
     )
 
-    add_library(CsMultimedia_DirectShow${BUILD_ABI} MODULE ${MULTIMEDIA_DIRECTSHOW_SOURCES})
-
-    target_link_libraries(CsMultimedia_DirectShow${BUILD_ABI}
-       CsCore${BUILD_ABI}
-       CsGui${BUILD_ABI}
-       CsNetwork${BUILD_ABI}
-       CsMultimedia${BUILD_ABI}
+    target_link_libraries(CsMultimedia_DirectShow
+       CsCore
+       CsGui
+       CsNetwork
+       CsMultimedia
        strmiids
        dmoguids
        uuid
@@ -69,11 +65,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
        gdi32
     )
 
-    target_compile_definitions(CsMultimedia_DirectShow${BUILD_ABI} PRIVATE
+    target_compile_definitions(CsMultimedia_DirectShow
+       PRIVATE
        -DQT_PLUGIN
        -DQMEDIA_DIRECTSHOW_PLAYER
        -DNO_DSHOW_STRSAFE
     )
 
-    install(TARGETS CsMultimedia_DirectShow${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    install(TARGETS CsMultimedia_DirectShow DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

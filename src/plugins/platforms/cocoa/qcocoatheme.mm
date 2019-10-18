@@ -41,6 +41,7 @@
 #include <qpainter.h>
 #include <qplatform_integration.h>
 #include <qplatform_nativeinterface.h>
+#include <qtextformat.h>
 
 #include <qapplication_p.h>
 #include <qcoretextfontdatabase_p.h>
@@ -275,6 +276,9 @@ QVariant QCocoaTheme::themeHint(ThemeHint hint) const
 
       case QPlatformTheme::PasswordMaskCharacter:
          return QVariant(QChar(kBulletUnicode));
+
+      case QPlatformTheme::SpellCheckUnderlineStyle:
+         return QVariant(int(QTextCharFormat::DotLine));
 
       default:
          break;

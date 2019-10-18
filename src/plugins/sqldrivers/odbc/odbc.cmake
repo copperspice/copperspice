@@ -1,39 +1,42 @@
-set(EXTRA_ODBC_LIBS CsCore${BUILD_ABI} CsSql${BUILD_ABI})
-
-set(SQL_PUBLIC_INCLUDES
-    ${SQL_PUBLIC_INCLUDES}
+list(APPEND SQL_PUBLIC_INCLUDES
     QODBCDriver
     QODBCResult
 )
 
-set(SQL_INCLUDES
-    ${SQL_INCLUDES}
+list(APPEND SQL_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.h
     ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcdriver.h
     ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
 )
 
-#   if(WITH_ODBC_PLUGIN AND ODBC_FOUND)
-
+# if(WITH_ODBC_PLUGIN AND ODBC_FOUND), unsupported as this time
 if (FALSE)
 
-    set(EXTRA_ODBC_LIBS
-        ${EXTRA_ODBC_LIBS}
-        ${ODBC_LIBRARY}
-    )
+   add_library(CsSqlOdbc MODULE "")
+   add_library(CopperSpice::CsSqlOdbc ALIAS CsSqlOdbc)
 
-   set(SQL_SOURCES
-       ${SQL_SOURCES}
-       ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/main.cpp
-       ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
+   set_target_properties(CsSqlOdbc PROPERTIES OUTPUT_NAME CsSqlOdbc${BUILD_ABI} PREFIX "")
+
+   include_directories(${ODBC_INCLUDE_DIRS})
+
+   target_sources(CsSqlOdbc
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/main.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
    )
 
-    include_directories(${ODBC_INCLUDE_DIRS})
-    add_library(CsSqlDb2${BUILD_ABI} MODULE ${ODBC_SOURCES})
-    target_link_libraries(CsSqlOdbc${BUILD_ABI} ${EXTRA_ODBC_LIBS})
+   target_link_libraries(CsSqlOdbc
+      CsCore
+      CsSql
+      ${ODBC_LIBRARY}
+   )
 
-    target_compile_definitions(CsSqlOdbc${BUILD_ABI} PRIVATE -DIN_TRUE -DQT_PLUGIN)
+   target_compile_definitions(CsSqlOdbc
+      PRIVATE
+      -DIN_TRUE
+      -DQT_PLUGIN
+   )
 
-    install(TARGETS CsSqlOdbc${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   install(TARGETS CsSqlOdbc DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 endif()

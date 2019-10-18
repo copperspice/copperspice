@@ -1,37 +1,29 @@
-set(PRINTERDRIVERS_COCOA_PRIVATE_INCLUDES)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
-set(PRINTERDRIVERS_COCOA_OTHER_PRIVATE_INCLUDES)
+   add_library(CsPrinterDriverCocoa MODULE "")
+   add_library(CopperSpice::CsPrinterDriverCocoa ALIAS CsPrinterDriverCocoa)
 
-set(PRINTERDRIVERS_COCOA_SOURCES
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/main.cpp
-)
+   set_target_properties(CsPrinterDriverCocoa PROPERTIES OUTPUT_NAME CsPrinterDriverCocoa${BUILD_ABI})
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-
-   set(EXTRA_PRINTERDRIVERS_COCOA_LIBS
-      CsCore${BUILD_ABI}
-      CsGui${BUILD_ABI}
+   target_sources(CsPrinterDriverCocoa
+      PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/main.cpp
    )
 
-   set(EXTRA_PRINTERDRIVERS_COCOA_LDFLAGS
+   list(APPEND EXTRA_PRINTERDRIVERS_COCOA_LDFLAGS
       -framework Cocoa
    )
 
-   add_library(CsPrinterDriverCocoa${BUILD_ABI} MODULE ${PRINTERDRIVERS_COCOA_SOURCES})
-
-   target_link_libraries(CsPrinterDriverCocoa${BUILD_ABI}
-      ${EXTRA_PRINTERDRIVERS_COCOA_LIBS}
+   target_link_libraries(CsPrinterDriverCocoa
+      PRIVATE
+      CsCore
+      CsGui
    )
 
-   target_include_directories(
-      CsPrinterDriverCocoa${BUILD_ABI} PRIVATE
-   )
-
-   target_compile_definitions(CsPrinterDriverCocoa${BUILD_ABI} PRIVATE
+   target_compile_definitions(CsPrinterDriverCocoa
+      PRIVATE
       -DQT_PLUGIN
    )
 
-   macro_generate_resources("${PRINTERDRIVERS_COCOA_SOURCES}")
-
-   install(TARGETS CsPrinterDriverCocoa${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   install(TARGETS CsPrinterDriverCocoa DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

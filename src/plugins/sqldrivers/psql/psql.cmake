@@ -1,36 +1,40 @@
-set(EXTRA_PSQL_LIBS CsCore${BUILD_ABI} CsSql${BUILD_ABI})
-
-set(SQL_PUBLIC_INCLUDES
-    ${SQL_PUBLIC_INCLUDES}
-    QPSQLDriver
-    QPSQLResult
+list(APPEND SQL_PUBLIC_INCLUDES
+   QPSQLDriver
+   QPSQLResult
 )
 
-set(SQL_INCLUDES
-    ${SQL_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qsql_psql.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qpsqldriver.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qpsqlresult.h
+list(APPEND SQL_INCLUDES
+   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qsql_psql.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qpsqldriver.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qpsqlresult.h
 )
 
 if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
 
-    set(EXTRA_PSQL_LIBS
-        ${EXTRA_PSQL_LIBS}
-        ${PostgreSQL_LIBRARY}
-    )
+   add_library(CsSqlPsql MODULE "")
+   add_library(CopperSpice::CsSqlPsql ALIAS CsSqlPsql)
 
-    set(PSQL_SOURCES
-        ${PSQL_SOURCES}
-        ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qsql_psql.cpp
-        ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/main.cpp
-    )
+   set_target_properties(CsSqlPsql PROPERTIES OUTPUT_NAME CsSqlPsql${BUILD_ABI} PREFIX "")
 
-    include_directories(${PostgreSQL_INCLUDE_DIRS})
-    add_library(CsSqlPsql${BUILD_ABI} MODULE ${PSQL_SOURCES})
-    target_link_libraries(CsSqlPsql${BUILD_ABI} ${EXTRA_PSQL_LIBS})
+   include_directories(${PostgreSQL_INCLUDE_DIRS})
 
-    target_compile_definitions(CsSqlPsql${BUILD_ABI} PRIVATE -DIN_TRUE -DQT_PLUGIN)
+   target_sources(CsSqlPsql
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/qsql_psql.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/main.cpp
+   )
 
-    install(TARGETS CsSqlPsql${BUILD_ABI} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   target_link_libraries(CsSqlPsql
+      CsCore
+      CsSql
+      ${PostgreSQL_LIBRARY}
+   )
+
+   target_compile_definitions(CsSqlPsql
+      PRIVATE
+      -DIN_TRUE
+      -DQT_PLUGIN
+   )
+
+   install(TARGETS CsSqlPsql DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
