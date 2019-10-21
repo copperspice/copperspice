@@ -46,40 +46,34 @@ function(cs_copy_plugins LIB_NAME)
    if(LIB_NAME STREQUAL "CsGui")
 
       if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-#        PENDING, NOT COMPLETED
-#        install(FILES ${CS_PLUGIN_DIR}/CsGuiCocoa1.6.so DESTINATION ${APP_INSTALL_DIR}/platforms)
+         install(FILES ${CS_PLUGIN_DIR}/CsGuiCocoa1.6.so DESTINATION ${APP_INSTALL_DIR}/platforms)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
          install(FILES ${CS_PLUGIN_DIR}/CsGuiXcb1.6.so DESTINATION ${APP_INSTALL_DIR}/platforms)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
-#        get_target_property(GUI_PLATFORM_LIB  CopperSpice::CsGuiWin LOCATION)
-#        install(FILES  ${GUI_PLATFORM_LIB} DESTINATION ${APP_INSTALL_DIR}/platforms)
-
          install(FILES ${CS_PLUGIN_DIR}/CsGuiWin1.6.dll DESTINATION ${APP_INSTALL_DIR}/platforms)
 
       endif()
-
 
    endif()
 
    if(LIB_NAME STREQUAL "CsMultimedia")
 
       if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-#        PENDING, NOT COMPLETED
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_avf_mediaplayer1.6.so DESTINATION ${APP_INSTALL_DIR}/mediaservices)
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u1.6.so DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_gst_mediaplayer1.6.so DESTINATION ${APP_INSTALL_DIR}/mediaservices)
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_gst_audiodecoder1.6.so DESTINATION ${APP_INSTALL_DIR}/audio)
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u1.6.so DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 #        get_target_property(DIRECTSHOW_LIB  CopperSpice::CsMultimedia_DirectShow LOCATION)
 #        install(FILES  ${DIRECTSHOW_LIB}  DESTINATION ${APP_INSTALL_DIR}/mediaservices)
 
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_DirectShow1.6.dll DESTINATION ${APP_INSTALL_DIR}/mediaservices)
-
-#        get_target_property(MU3_LIB  CopperSpice::CsMultimedia_m3u LOCATION)
-#        install(FILES  ${MU3_LIB}  DESTINATION ${APP_INSTALL_DIR}/playlistformats)
-
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u1.6.dll DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       endif()
