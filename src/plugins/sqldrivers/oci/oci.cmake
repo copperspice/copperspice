@@ -9,7 +9,7 @@ list(APPEND SQL_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/oci/qociresult.h
 )
 
-# if(WITH_OCI_PLUGIN AND OCI_FOUND), unsupported as this time
+# if(WITH_OCI_PLUGIN AND OCI_FOUND), unsupported at this time
 if (FALSE)
 
    add_library(CsSqlOci MODULE "")

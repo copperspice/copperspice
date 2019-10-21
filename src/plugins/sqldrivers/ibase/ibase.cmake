@@ -9,7 +9,7 @@ list(APPEND SQL_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/ibase/qibaseresult.h
 )
 
-# if(WITH_IBASE_PLUGIN AND IBASE_FOUND), unsupported as this time
+# if(WITH_IBASE_PLUGIN AND IBASE_FOUND), unsupported at this time
 if (FALSE)
 
    add_library(CsSqlIBase MODULE "")

@@ -9,7 +9,7 @@ list(APPEND SQL_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
 )
 
-# if(WITH_ODBC_PLUGIN AND ODBC_FOUND), unsupported as this time
+# if(WITH_ODBC_PLUGIN AND ODBC_FOUND), unsupported at this time
 if (FALSE)
 
    add_library(CsSqlOdbc MODULE "")

@@ -9,7 +9,7 @@ list(APPEND SQL_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/db2/qdb2result.h
 )
 
-# if(WITH_DB2_PLUGIN AND DB2_FOUND), unsupported as this time
+# if(WITH_DB2_PLUGIN AND DB2_FOUND), unsupported at this time
 if (FALSE)
 
    add_library(CsSqlDb2 MODULE "")
