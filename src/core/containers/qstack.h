@@ -24,6 +24,7 @@
 #ifndef QSTACK_H
 #define QSTACK_H
 
+#include <qcontainerfwd.h>
 #include <qvector.h>
 
 template<class T>

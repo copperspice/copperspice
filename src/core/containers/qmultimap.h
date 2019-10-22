@@ -28,8 +28,8 @@
 #include <map>
 
 #include <qcontainerfwd.h>
-#include <qmapfunc.h>
 #include <qlist.h>
+#include <qmapfunc.h>
 
 template <typename Key, typename Val, typename C>
 class QMultiMapIterator;

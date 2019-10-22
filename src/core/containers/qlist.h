@@ -37,13 +37,8 @@
 #include <string.h>
 
 #include <qassert.h>
+#include <qcontainerfwd.h>
 #include <qglobal.h>
-
-template <typename T>
-class QSet;
-
-template <typename T>
-class QVector;
 
 template <class T>
 class QListIterator;

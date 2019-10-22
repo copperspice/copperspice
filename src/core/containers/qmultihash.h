@@ -38,7 +38,6 @@ class QMultiHashIterator;
 template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>>
 class QMutableMultiHashIterator;
 
-// **
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
 class QMultiHash
 {
