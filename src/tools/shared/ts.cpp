@@ -25,38 +25,22 @@
 
 #include <translator.h>
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QByteArray>
+#include <QDebug>
+#include <QTextCodec>
+#include <QTextStream>
 
-#include <QtXml/QXmlStreamReader>
-#include <QtXml/QXmlStreamAttribute>
+#include <QXmlStreamReader>
+#include <QXmlStreamAttribute>
 
-#define STRINGIFY_INTERNAL(x) #x
-#define STRINGIFY(x) STRINGIFY_INTERNAL(x)
-#define STRING(s) static QString str##s(QLatin1String(STRINGIFY(s)))
-
-QT_BEGIN_NAMESPACE
-
-/*
- * The encodings are a total mess.
- * A Translator has a codecForTr(). Each message's text will be passed to tr()
- * in that encoding or as UTF-8 to trUtf8() if it is flagged as such.
- * For ts 2.0, the file content is always uniformly in UTF-8. The file stores
- * the codecForTr default and marks deviating messages accordingly.
- * For ts 1.1, the file content is in mixed encoding. Each message is encoded
- * the way it will be passed to tr() (with 8-bit characters encoded as numeric
- * entities) or trUtf8(). The file stores the encoding and codecForTr in one
- * attribute, for both the default and each deviating message.
- */
-
+#define STRINGIFY_INTERNAL(p1)  #p1
+#define STRINGIFY(p2)           STRINGIFY_INTERNAL(p2)
+#define STRING(p3)              static QString str##p3(QString(STRINGIFY(p3)))
 
 QDebug &operator<<(QDebug &d, const QXmlStreamAttribute &attr)
 {
    return d << "[" << attr.name().toString() << "," << attr.value().toString() << "]";
 }
-
 
 class TSReader : public QXmlStreamReader
 {
@@ -101,8 +85,9 @@ void TSReader::handleError()
    const QString loc = QString("at %3:%1:%2").formatArg(lineNumber()).formatArg(columnNumber()).formatArg(m_cd.m_sourceFileName);
 
    switch (tokenType()) {
-      case NoToken:    // Cannot happen
-      default:          // likewise
+      case NoToken:       // Cannot happen
+         default:          // likewise
+
       case Invalid:
          raiseError(QString("Parse error %1: %2").formatArg(loc).formatArg(errorString()));
          break;
@@ -292,17 +277,22 @@ bool TSReader::read(Translator &translator)
             } else if (elementStarts(strcontext)) {
                // <context>
                QString context;
+
                while (!atEnd()) {
                   readNext();
+
                   if (isEndElement()) {
                      // </context> found, finish local loop
                      break;
+
                   } else if (isWhiteSpace()) {
                      // ignore these, just whitespace
+
                   } else if (elementStarts(strname)) {
                      // <name>
                      context = readElementText();
                      // </name>
+
                   } else if (elementStarts(strmessage)) {
                      // <message>
                      TranslatorMessage::References refs;
@@ -313,12 +303,14 @@ bool TSReader::read(Translator &translator)
                      msg.setContext(context);
                      msg.setType(TranslatorMessage::Finished);
                      msg.setPlural(attributes().value(strnumerus) == stryes);
-                     const QStringView &utf8Attr = attributes().value(strutf8);
+
+                     QString utf8Attr = attributes().value(strutf8);
                      msg.setNonUtf8(utf8Attr == strboth);
-                     msg.setUtf8(msg.isNonUtf8() || utf8Attr == strtrue
-                                 ||  attributes().value(strencoding) == strUtf8);
-                     while (!atEnd()) {
+                     msg.setUtf8(msg.isNonUtf8() || utf8Attr == strtrue ||  attributes().value(strencoding) == strUtf8);
+
+                     while (! atEnd()) {
                         readNext();
+
                         if (isEndElement()) {
                            // </message> found, finish local loop
                            msg.setReferences(refs);
@@ -855,5 +847,3 @@ int initTS()
 }
 
 Q_CONSTRUCTOR_FUNCTION(initTS)
-
-QT_END_NAMESPACE
