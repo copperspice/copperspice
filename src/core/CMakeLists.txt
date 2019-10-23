@@ -73,7 +73,7 @@ if(ZLIB_FOUND)
       ${ZLIB_LIBRARIES}
    )
 
-else(ZLIB_FOUND)
+else()
    target_sources(CsCore
       PRIVATE
       ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib/adler32.c
