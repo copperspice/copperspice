@@ -1093,7 +1093,7 @@ QString8 &QString8::replace(const QRegularExpression8 &regExp, const QString8 &a
 
    auto iter = after.indexOfFast('\\');
 
-   if (iter != after.end() && iter != end() - 1) {
+   if (iter != after.end() && iter != after.end() - 1) {
       splitMatch = regSplit.match(after);
 
       if (splitMatch.hasMatch()) {

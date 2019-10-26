@@ -1095,7 +1095,7 @@ QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString1
 
    auto iter = after.indexOfFast('\\');
 
-   if (iter != after.end() && iter != end() - 1) {
+   if (iter != after.end() && iter != after.end() - 1) {
       splitMatch = regSplit.match(after);
 
       if (splitMatch.hasMatch()) {
