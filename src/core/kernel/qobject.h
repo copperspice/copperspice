@@ -412,7 +412,7 @@ T QObject::property(const QString &name) const
    QMetaProperty p = meta->property(id);
 
    if (! p.isReadable()) {
-      qWarning("%s::property() Property \"%s\" is invalid or does not exist", meta->className(), csPrintable(name));
+      qWarning("%s::property() Property \"%s\" is invalid or does not exist", csPrintable(meta->className()), csPrintable(name));
    }
 
    return p.read<T>(this);
