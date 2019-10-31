@@ -689,6 +689,7 @@ void QSslSocketPrivate::resetDefaultEllipticCurves()
 
    if (q_EC_get_builtin_curves(builtinCurves.data(), curveCount) == curveCount) {
       curves.reserve(int(curveCount));
+
       for (size_t i = 0; i < curveCount; ++i) {
          QSslEllipticCurve curve;
          curve.id = builtinCurves[int(i)].nid;
@@ -1277,7 +1278,6 @@ bool QSslSocketBackendPrivate::startHandshake()
 
    // Translate errors from the error list into QSslErrors.
    const int numErrors = errorList.size();
-   errors.reserve(errors.size() + numErrors);
 
    for (int i = 0; i < numErrors; ++i) {
       const QPair<int, int> &errorAndDepth = errorList.at(i);
@@ -1898,7 +1898,7 @@ QList<QSslError> QSslSocketBackendPrivate::verify(const QList<QSslCertificate> &
 
    // Translate errors from the error list into QSslErrors.
    const int numErrors = errorList.size();
-   errors.reserve(errors.size() + numErrors);
+
    for (int i = 0; i < numErrors; ++i) {
       const QPair<int, int> &errorAndDepth = errorList.at(i);
       int err = errorAndDepth.first;

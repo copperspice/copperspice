@@ -28,8 +28,6 @@
 #include <qsslcertificateextension_p.h>
 #include <qmutexpool_p.h>
 
-QT_BEGIN_NAMESPACE
-
 // forward declaration
 static QMultiMap<QByteArray, QString> _q_mapFromX509Name(X509_NAME *name);
 
@@ -93,6 +91,7 @@ QByteArray QSslCertificate::serialNumber() const
 
    if (d->serialNumberString.isEmpty() && d->x509) {
       ASN1_INTEGER *serialNumber = d->x509->cert_info->serialNumber;
+
       QByteArray hexString;
       hexString.reserve(serialNumber->length * 3);
 
@@ -475,12 +474,11 @@ QList<QSslCertificateExtension> QSslCertificate::extensions() const
 {
    QList<QSslCertificateExtension> result;
 
-   if (!d->x509) {
+   if (! d->x509) {
       return result;
    }
 
    int count = q_X509_get_ext_count(d->x509);
-   result.reserve(count);
 
    for (int i = 0; i < count; i++) {
       X509_EXTENSION *ext = q_X509_get_ext(d->x509, i);
@@ -730,4 +728,3 @@ QList<QSslCertificate> QSslCertificatePrivate::certificatesFromDer(const QByteAr
    return certificates;
 }
 
-QT_END_NAMESPACE
