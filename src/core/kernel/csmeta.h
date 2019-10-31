@@ -31,6 +31,7 @@
 #include <qstring8.h>
 #include <qvariant.h>
 #include <qstringfwd.h>
+#include <qsharedpointer.h>
 
 #include <utility>
 #include <tuple>
@@ -286,7 +287,7 @@ QMetaMethod QMetaMethod::fromSignal(void (SignalClass::* signalMethod)(SignalArg
    return QMetaMethod();
 }
 
-// QMetaMethod::invoke moved to csobject_internal.h becasue Invoke calls methods in QObject
+// QMetaMethod::invoke moved to csobject_internal.h becasue invoke() calls methods in QObject
 // template<class ...Ts>
 // bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgument<R> retval, Ts&&...Vs)
 
@@ -619,16 +620,18 @@ CS_DECLARE_TYPE(void)
 //
 CS_REGISTER_TEMPLATE(QFlatMap)
 CS_REGISTER_TEMPLATE(QHash)
-CS_REGISTER_TEMPLATE(QMultiHash)
-CS_REGISTER_TEMPLATE(QLinkedList)
 CS_REGISTER_TEMPLATE(QList)
+CS_REGISTER_TEMPLATE(QLinkedList)
+
 CS_REGISTER_TEMPLATE(QMap)
+CS_REGISTER_TEMPLATE(QMultiHash)
 CS_REGISTER_TEMPLATE(QMultiMap)
 CS_REGISTER_TEMPLATE(QQueue)
 CS_REGISTER_TEMPLATE(QSet)
 CS_REGISTER_TEMPLATE(QStack)
 CS_REGISTER_TEMPLATE(QVector)
 CS_REGISTER_TEMPLATE(QDeclarativeListProperty)
+CS_REGISTER_TEMPLATE(QSharedPointer)
 CS_REGISTER_TEMPLATE(qMapCompare)
 CS_REGISTER_TEMPLATE(std::tuple)
 CS_REGISTER_TEMPLATE(std::pair)
