@@ -335,9 +335,9 @@ inline const QMetaObject *QMetaObject_T<QObject>::superClass() const
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method_rev(U method, int revision)
+void QMetaObject_T<T>::register_method_rev(U methodPtr, int revision)
 {
-   CSBento<U> temp = CSBento<U>(method);
+   CSBento<U> temp = CSBento<U>(methodPtr);
 
    QString tokenName;
    QMetaMethod data;
@@ -367,9 +367,9 @@ void QMetaObject_T<T>::register_method_rev(U method, int revision)
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method_s2(const QString &name, U method, QMetaMethod::MethodType kind)
+void QMetaObject_T<T>::register_method_s2(const QString &name, U methodPtr, QMetaMethod::MethodType kind)
 {
-   CSBento<U> *methodBento = new CSBento<U>(method);
+   CSBento<U> *methodBento = new CSBento<U>(methodPtr);
    cs_internal_reg2(name, methodBento, kind);
 }
 
@@ -456,7 +456,7 @@ void QMetaObject_T<T>::cs_internal_reg2(const QString &name, CSBentoAbstract *me
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method(const QString &name, U method, QMetaMethod::MethodType kind,
+void QMetaObject_T<T>::register_method(const QString &name, U methodPtr, QMetaMethod::MethodType kind,
                   const QString &va_args, QMetaMethod::Access access)
 {
    if (name.isEmpty() || va_args.isEmpty()) {
@@ -499,7 +499,7 @@ void QMetaObject_T<T>::register_method(const QString &name, U method, QMetaMetho
       // save the key/value into the master map
       QMetaMethod data(typeReturn, tokenKey, tmpArgNames, access, kind, attr, this);
 
-      CSBento<U> *temp = new CSBento<U>(method);
+      CSBento<U> *temp = new CSBento<U>(methodPtr);
       data.setBentoBox(temp);
 
       if (kind == QMetaMethod::Constructor) {
@@ -514,7 +514,7 @@ void QMetaObject_T<T>::register_method(const QString &name, U method, QMetaMetho
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_property_notify(const QString &name, U method)
+void QMetaObject_T<T>::register_property_notify(const QString &name, U methodPtr)
 {
    if (name.isEmpty()) {
       return;
@@ -535,7 +535,7 @@ void QMetaObject_T<T>::register_property_notify(const QString &name, U method)
 
    }
 
-   data.setNotifyMethod(method);
+   data.setNotifyMethod(methodPtr);
 
    // update QMetaProperty
    m_properties.insert(name, data);
@@ -544,7 +544,7 @@ void QMetaObject_T<T>::register_property_notify(const QString &name, U method)
 
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_property_reset(const QString &name, U method)
+void QMetaObject_T<T>::register_property_reset(const QString &name, U methodPtr)
 {
    if (name.isEmpty()) {
       return;
@@ -566,7 +566,7 @@ void QMetaObject_T<T>::register_property_reset(const QString &name, U method)
    }
 
    //
-   data.setResetMethod(method);
+   data.setResetMethod(methodPtr);
 
    // update QMetaProperty
    m_properties.insert(name, data);

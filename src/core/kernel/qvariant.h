@@ -464,8 +464,6 @@ inline void QVariant::setValue(const T &v)
    // reuse the current QVariant private if possible
    const uint type = qMetaTypeId<T>(static_cast<T *>(nullptr));
 
-   QVariant::Private &d = data_ptr();
-
    if (isDetached() && (type == d.type || (type < uint(QVariant::FirstConstructedType) &&
                   d.type < uint(QVariant::FirstConstructedType)))) {
 
