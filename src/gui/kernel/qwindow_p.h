@@ -57,10 +57,9 @@ class Q_GUI_EXPORT QWindowPrivate
 #endif
 
       , compositing(false) {
-
    }
 
-   ~QWindowPrivate() {
+   virtual ~QWindowPrivate() {
    }
 
    void init();
