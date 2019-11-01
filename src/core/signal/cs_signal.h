@@ -48,6 +48,20 @@ enum class DisconnectKind {
    DisconnectOne
 };
 
+template <class Iter1, class Iter2, class T>
+Iter1 find(Iter1 iter1, const Iter2 &iter2, const T &value)
+{
+   while (iter1 != iter2) {
+      if (value == *iter1) {
+         break;
+      }
+
+      ++iter1;
+   }
+
+   return iter1;
+}
+
 template<class Sender, class SignalClass, class ...SignalArgs, class Receiver,
                   class SlotClass, class ...SlotArgs, class SlotReturn>
 bool connect(const Sender &sender, void (SignalClass::*signalMethod)(SignalArgs...),
@@ -489,7 +503,7 @@ bool internal_disconnect(const Sender &sender, const Internal::BentoAbstract *si
 
          // lock temp.receiver and erase
          auto receiverListHandle = temp.receiver->m_possibleSenders.lock_write();
-         receiverListHandle->erase(std::find(receiverListHandle->begin(), receiverListHandle->end(), &sender));
+         receiverListHandle->erase(find(receiverListHandle->begin(), receiverListHandle->end(), &sender));
 
          // delete conneciton in sender
          senderListHandle->erase(iter);
