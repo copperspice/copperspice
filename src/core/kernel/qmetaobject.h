@@ -239,6 +239,8 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 
    void register_method_s1(const QString &name, QMetaMethod::Access access, QMetaMethod::MethodType kind);
 
+   void register_method_s2_part2(QString className, const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind);
+
    // properties
    int register_property_read(const QString &name, const QString &dataType, JarReadAbstract *readJar);
    int register_property_write(const QString &name, JarWriteAbstract *method);
@@ -252,7 +254,7 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    QMap<QString, QMetaMethod>    m_methods;             // methds, signals, slots
    QMap<QString, QMetaEnum>      m_enums;
    QMap<QString, QMetaProperty>  m_properties;
-   QMultiMap<QString, QString>  m_flag;
+   QMultiMap<QString, QString>   m_flag;
 };
 
 // **
@@ -276,8 +278,6 @@ class QMetaObject_T : public QMetaObject_X
       template<class U>
       void register_method_s2(const QString &name, U method, QMetaMethod::MethodType kind);
 
-      void cs_internal_reg2(const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind);
-
       // slots, invokables
       template<class U>
       void register_method(const QString &name, U method, QMetaMethod::MethodType kind,
@@ -290,7 +290,6 @@ class QMetaObject_T : public QMetaObject_X
       template<class U>
       void register_property_reset(const QString &name, U method);
 };
-
 
 template<class T>
 QMetaObject_T<T>::QMetaObject_T()
@@ -352,7 +351,7 @@ void QMetaObject_T<T>::register_method_rev(U methodPtr, int revision)
    }
 
    if (tokenName.isEmpty())  {
-      qWarning("Macro CS_REVISION() Method has not been registered for class %s", this->className());
+      qWarning("Macro CS_REVISION() method has not been registered for class %s", this->className());
       return;
    }
 
@@ -370,86 +369,13 @@ template<class U>
 void QMetaObject_T<T>::register_method_s2(const QString &name, U methodPtr, QMetaMethod::MethodType kind)
 {
    CSBento<U> *methodBento = new CSBento<U>(methodPtr);
-   cs_internal_reg2(name, methodBento, kind);
-}
 
-template<class T>
-void QMetaObject_T<T>::cs_internal_reg2(const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind)
-{
    if (name.isEmpty()) {
       return;
    }
 
-   QMap<QString, QMetaMethod> *map;
-
-   if (kind == QMetaMethod::Constructor) {
-      map = &m_constructor;
-
-   } else {
-      map = &m_methods;
-
-   }
-
-   QString tokenName = name;
-   tokenName.remove(' ');
-
-   QMetaMethod data;
-
-   if (tokenName.contains("("))  {
-      // has a paren in name, overloaded method
-
-      tokenName = normalizedSignature(name);
-      tokenName.remove(' ');
-
-      auto item  = map->find(tokenName);
-      bool found = ( item != map->end() );
-
-      if (! found)  {
-         // entry not found in QMap
-
-         QString msg = T::staticMetaObject().className();
-         msg += "::" + name + " Unable to register overloaded method pointer, verify signal/slot";
-
-         qDebug("%s", csPrintable(msg));
-         throw std::logic_error(std::string {msg.constData()});
-
-      } else {
-         // retrieve existing obj
-         data = item.value();
-      }
-
-      data.setBentoBox(methodBento);
-
-      // update master map
-      map->insert(tokenName, data);
-
-   } else {
-      // no paren in name, set itemU to one past the last matching method
-
-      auto itemL = map->lowerBound(tokenName + '(' );
-      auto itemU = map->lowerBound(tokenName + ')' );
-
-      if (itemL == itemU) {
-         // no matches found in QMap
-
-         QString msg = T::staticMetaObject().className();
-         msg += "::" + name + " Unable to register method pointer, verify signal/slot";
-
-         qDebug("%s", csPrintable(msg));
-         throw std::logic_error(std::string {msg.constData()});
-      }
-
-      for (auto index = itemL; index != itemU; ++index)  {
-         // retrieve existing obj
-         QString key = index.key();
-         data = index.value();
-
-         data.setBentoBox(methodBento);
-
-         // update existing obj
-         map->insert(key, data);
-      }
-   }
+   QString className = T::staticMetaObject().className();
+   register_method_s2_part2(className, name, methodBento, kind);
 }
 
 
@@ -463,14 +389,8 @@ void QMetaObject_T<T>::register_method(const QString &name, U methodPtr, QMetaMe
       return;
    }
 
-   // declare first
-   std::vector<QString> signatures;
-   QString typeReturn;
+   auto [signatures, typeReturn, paramNames] = this->getSignatures(va_args);
 
-   std::vector<QString> paramNames;
-   std::tie(signatures, typeReturn, paramNames) = this->getSignatures(va_args);
-
-   //
    QMetaMethod::Attributes attr = QMetaMethod::Attributes();
    auto count = signatures.size();                              // base method plus number of defaulted parameters
 

@@ -1888,6 +1888,80 @@ void QMetaObject_X::register_method_s1(const QString &name, QMetaMethod::Access 
    }
 }
 
+void QMetaObject_X::register_method_s2_part2(QString className, const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind)
+{
+   QMap<QString, QMetaMethod> *map;
+
+   if (kind == QMetaMethod::Constructor) {
+      map = &m_constructor;
+
+   } else {
+      map = &m_methods;
+
+   }
+
+   QString tokenName = name;
+   tokenName.remove(' ');
+
+   QMetaMethod data;
+
+   if (tokenName.contains("("))  {
+      // has a paren in name, overloaded method
+
+      tokenName = normalizedSignature(name);
+      tokenName.remove(' ');
+
+      auto item  = map->find(tokenName);
+      bool found = ( item != map->end() );
+
+      if (! found)  {
+         // entry not found in QMap
+
+         QString msg = className;
+         msg += "::" + name + " Unable to register overloaded method pointer, verify signal/slot";
+
+         qDebug("%s", csPrintable(msg));
+         throw std::logic_error(std::string {msg.constData()});
+
+      } else {
+         // retrieve existing obj
+         data = item.value();
+      }
+
+      data.setBentoBox(methodBento);
+
+      // update master map
+      map->insert(tokenName, data);
+
+   } else {
+      // no paren in name, set itemU to one past the last matching method
+
+      auto itemL = map->lowerBound(tokenName + '(' );
+      auto itemU = map->lowerBound(tokenName + ')' );
+
+      if (itemL == itemU) {
+         // no matches found in QMap
+
+         QString msg = className;
+         msg += "::" + name + " Unable to register method pointer, verify signal/slot";
+
+         qDebug("%s", csPrintable(msg));
+         throw std::logic_error(std::string {msg.constData()});
+      }
+
+      for (auto index = itemL; index != itemU; ++index)  {
+         // retrieve existing obj
+         QString key = index.key();
+         data = index.value();
+
+         data.setBentoBox(methodBento);
+
+         // update existing obj
+         map->insert(key, data);
+      }
+   }
+}
+
 void QMetaObject_X::register_tag(const QString &name, const QString &method)
 {
    if (name.isEmpty()) {
