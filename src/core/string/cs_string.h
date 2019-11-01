@@ -4066,7 +4066,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
    if (size >= 0) {
       iter_end = iter_begin;
 
-      for (size_type j = 0; i < size && iter_end != cend(); ++j)  {
+      for (size_type j = 0; j < size && iter_end != cend(); ++j)  {
          ++iter_end;
       }
 
@@ -4128,7 +4128,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
    if (size >= 0) {
       iter_end = iter_begin;
 
-      for (size_type j = 0; i < size && iter_end != cend(); ++j)  {
+      for (size_type j = 0; j < size && iter_end != cend(); ++j)  {
          ++iter_end;
       }
 
@@ -4219,7 +4219,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
    if (size >= 0) {
       iter_end = iter_begin;
 
-      for (size_type j = 0; i < size && iter_end != cend(); ++j)  {
+      for (size_type j = 0; j < size && iter_end != cend(); ++j)  {
          ++iter_end;
       }
 
