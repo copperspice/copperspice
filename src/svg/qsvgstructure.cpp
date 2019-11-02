@@ -21,19 +21,20 @@
 *
 ***********************************************************************/
 
-#include "qsvgstructure_p.h"
+#include <qsvgstructure_p.h>
+
+#include <qalgorithms.h>
+#include <qpainter.h>
+#include <qlocale.h>
+#include <qdebug.h>
 
 #include "qsvgnode_p.h"
 #include "qsvgstyle_p.h"
 #include "qsvgtinydocument_p.h"
-#include "qpainter.h"
-#include "qlocale.h"
-#include "qdebug.h"
 
 QSvgG::QSvgG(QSvgNode *parent)
    : QSvgStructureNode(parent)
 {
-
 }
 
 QSvgStructureNode::~QSvgStructureNode()

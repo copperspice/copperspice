@@ -22,15 +22,17 @@
 ***********************************************************************/
 
 #include <qpaintengine_preview_p.h>
-#include <qpainter_p.h>
-#include <qpaintengine_p.h>
-#include <qpicture_p.h>
+
+#include <qalgorithms.h>
 #include <qprintengine.h>
 #include <qpainter.h>
 #include <qpicture.h>
 
-#ifndef QT_NO_PRINTPREVIEWWIDGET
+#include <qpainter_p.h>
+#include <qpaintengine_p.h>
+#include <qpicture_p.h>
 
+#ifndef QT_NO_PRINTPREVIEWWIDGET
 
 class QPreviewPaintEnginePrivate : public QPaintEnginePrivate
 {
@@ -47,7 +49,6 @@ class QPreviewPaintEnginePrivate : public QPaintEnginePrivate
    QPaintEngine *proxy_paint_engine;
    QPrintEngine *proxy_print_engine;
 };
-
 
 QPreviewPaintEngine::QPreviewPaintEngine()
    : QPaintEngine(*(new QPreviewPaintEnginePrivate), PaintEngineFeatures(AllFeatures & ~ObjectBoundingModeGradients))

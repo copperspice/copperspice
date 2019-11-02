@@ -25,24 +25,24 @@
 
 #ifndef QT_NO_DOCKWIDGET
 
+#include <qalgorithms.h>
 #include <qaction.h>
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qdesktopwidget.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qfontmetrics.h>
-#include <qwindow.h>
-#include <qscreen.h>
 #include <qmainwindow.h>
 #include <qrubberband.h>
 #include <qstylepainter.h>
+#include <qscreen.h>
 #include <qtoolbutton.h>
-#include <qdebug.h>
-#include <qwidgetresizehandler_p.h>
+#include <qwindow.h>
 
+#include <qwidgetresizehandler_p.h>
 #include <qdockwidget_p.h>
 #include <qmainwindowlayout_p.h>
-
 
 extern QString qt_setWindowTitle_helperHelper(const QString &, const QWidget *); // qwidget.cpp
 
@@ -1421,6 +1421,7 @@ bool QDockWidget::event(QEvent *event)
             return true;
          }
          break;
+
       // return true after calling the handler since we don't want
       // them to be passed onto the default handlers
       case QEvent::MouseButtonPress:
@@ -1444,21 +1445,25 @@ bool QDockWidget::event(QEvent *event)
             return true;
          }
          break;
+
       case QEvent::NonClientAreaMouseMove:
       case QEvent::NonClientAreaMouseButtonPress:
       case QEvent::NonClientAreaMouseButtonRelease:
       case QEvent::NonClientAreaMouseButtonDblClick:
          d->nonClientAreaMouseEvent(static_cast<QMouseEvent *>(event));
          return true;
+
       case QEvent::Move:
          d->moveEvent(static_cast<QMoveEvent *>(event));
          break;
+
       case QEvent::Resize:
          // if the mainwindow is plugging us, we don't want to update undocked geometry
          if (isFloating() && layout != 0 && layout->pluggingWidget != this) {
             d->undockedGeometry = geometry();
          }
          break;
+
       default:
          break;
    }
@@ -1478,16 +1483,16 @@ QAction *QDockWidget::toggleViewAction() const
 void QDockWidget::setTitleBarWidget(QWidget *widget)
 {
    Q_D(QDockWidget);
-   QDockWidgetLayout *layout
-      = qobject_cast<QDockWidgetLayout *>(this->layout());
+
+   QDockWidgetLayout *layout = qobject_cast<QDockWidgetLayout *>(this->layout());
    layout->setWidgetForRole(QDockWidgetLayout::TitleBar, widget);
    d->updateButtons();
+
    if (isWindow()) {
       //this ensures the native decoration is drawn
       d->setWindowState(true /*floating*/, true /*unplug*/);
    }
 }
-
 
 QWidget *QDockWidget::titleBarWidget() const
 {
@@ -1508,6 +1513,4 @@ void QDockWidget::_q_toggleTopLevel()
    d->_q_toggleTopLevel();
 }
 
-
-
-#endif // QT_NO_DOCKWIDGET
+#endif

@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+#include <qalgorithms.h>
 #include <qapplication.h>
 #include <qdebug.h>
 #include <qformlayout.h>

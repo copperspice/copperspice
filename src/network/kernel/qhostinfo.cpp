@@ -22,9 +22,8 @@
 ***********************************************************************/
 
 #include <qhostinfo.h>
-#include <qhostinfo_p.h>
-#include <qnetworksession_p.h>
 
+#include <qalgorithms.h>
 #include <qscopedpointer.h>
 #include <qabstracteventdispatcher.h>
 #include <qcoreapplication.h>
@@ -32,6 +31,9 @@
 #include <qstringlist.h>
 #include <qthread.h>
 #include <qurl.h>
+
+#include <qhostinfo_p.h>
+#include <qnetworksession_p.h>
 
 #ifdef Q_OS_UNIX
 #  include <unistd.h>

@@ -26,11 +26,10 @@
 
 #ifndef QT_NO_PICTURE
 
-#include <qfactoryloader_p.h>
-#include <qpaintengine_pic_p.h>
-#include <qfont_p.h>
+#include <qalgorithms.h>
 #include <qguiapplication.h>
 #include <qdatastream.h>
+#include <qdebug.h>
 #include <qfile.h>
 #include <qimage.h>
 #include <qmutex.h>
@@ -38,17 +37,17 @@
 #include <qpainterpath.h>
 #include <qpixmap.h>
 #include <qregion.h>
-#include <qdebug.h>
+
+#include <qfactoryloader_p.h>
+#include <qpaintengine_pic_p.h>
+#include <qfont_p.h>
 
 #include <algorithm>
-QT_BEGIN_NAMESPACE
 
 void qt_format_text(const QFont &fnt, const QRectF &_r,
    int tf, const QTextOption *opt, const QString &str, QRectF *brect,
    int tabstops, int *, int tabarraylen,
    QPainter *painter);
-
-
 
 const char  *qt_mfhdr_tag = "QPIC"; // header tag
 static const quint16 mfhdr_maj = 11; // major version #
@@ -1508,7 +1507,6 @@ bool QPictureIO::write()
    return d->iostat == 0;                   // picture successfully written?
 }
 #endif //QT_NO_PICTUREIO
-
 
 #endif // QT_NO_PICTURE
 

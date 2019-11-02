@@ -24,6 +24,7 @@
 #ifndef QCOMMONSTYLE_P_H
 #define QCOMMONSTYLE_P_H
 
+#include <qalgorithms.h>
 #include <qcommonstyle.h>
 #include <qstyle_p.h>
 #include <qstyleanimation_p.h>
@@ -52,6 +53,7 @@ class QCommonStylePrivate : public QStylePrivate
       delete cachedOption;
 #endif
    }
+
 #ifndef QT_NO_ITEMVIEWS
    void viewItemDrawText(QPainter *p, const QStyleOptionViewItem *option, const QRect &rect) const;
    void viewItemLayout(const QStyleOptionViewItem *opt,  QRect *checkRect,
@@ -93,10 +95,11 @@ class QCommonStylePrivate : public QStylePrivate
    QStyleAnimation *animation(const QObject *target) const;
    void startAnimation(QStyleAnimation *animation) const;
    void stopAnimation(const QObject *target) const;
+
  private:
    mutable QHash<const QObject *, QStyleAnimation *> animations;
 #endif
 
 };
 
-#endif //QCOMMONSTYLE_P_H
+#endif

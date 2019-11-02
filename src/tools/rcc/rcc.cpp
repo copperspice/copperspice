@@ -21,21 +21,22 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include "rcc.h"
 
+#include <qalgorithms.h>
 #include <qmultihash.h>
-#include <QByteArray>
-#include <QDateTime>
-#include <QDebug>
-#include <QDir>
-#include <QDirIterator>
-#include <QFile>
-#include <QIODevice>
-#include <QLocale>
-#include <QStack>
-#include <QDomDocument>
+#include <qbytearray.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qdiriterator.h>
+#include <qdomdocument.h>
+#include <qfile.h>
+#include <qiodevice.h>
+#include <qlocale.h>
+#include <qstack.h>
+
+#include <algorithm>
 
 enum {
    CONSTANT_USENAMESPACE = 1,

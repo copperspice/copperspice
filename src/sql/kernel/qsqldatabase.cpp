@@ -22,6 +22,8 @@
 ***********************************************************************/
 
 #include <qsqldatabase.h>
+
+#include <qalgorithms.h>
 #include <qsqlquery.h>
 
 #ifdef Q_OS_WIN32

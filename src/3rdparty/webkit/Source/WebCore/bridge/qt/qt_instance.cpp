@@ -34,6 +34,7 @@
 #include "runtime_object.h"
 #include "runtime/FunctionPrototype.h"
 
+#include <qalgorithms.h>
 #include <qdebug.h>
 #include <qhash.h>
 #include <qmultihash.h>

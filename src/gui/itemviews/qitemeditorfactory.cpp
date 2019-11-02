@@ -22,11 +22,13 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
+
 #include <qitemeditorfactory.h>
 #include <qitemeditorfactory_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
+#include <qalgorithms.h>
 #include <qapplication.h>
 #include <qcombobox.h>
 #include <qdatetimeedit.h>
@@ -378,7 +380,6 @@ bool QBooleanComboBox::value() const
 }
 
 #endif // QT_NO_COMBOBOX
-
 
 
 #endif // QT_NO_ITEMVIEWS

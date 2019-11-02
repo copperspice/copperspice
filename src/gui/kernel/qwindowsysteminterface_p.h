@@ -26,14 +26,13 @@
 
 #include <qwindowsysteminterface.h>
 
+#include <qalgorithms.h>
+#include <QAtomicInt>
 #include <QElapsedTimer>
 #include <QPointer>
 #include <QMutex>
 #include <QList>
 #include <QWaitCondition>
-#include <QAtomicInt>
-
-QT_BEGIN_NAMESPACE
 
 class QWindowSystemEventHandler;
 
@@ -538,6 +537,4 @@ class Q_GUI_EXPORT QWindowSystemEventHandler
    virtual bool sendEvent(QWindowSystemInterfacePrivate::WindowSystemEvent *event);
 };
 
-
-
-#endif // QWINDOWSYSTEMINTERFACE_P_H
+#endif

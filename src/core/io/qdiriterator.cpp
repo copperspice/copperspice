@@ -23,19 +23,19 @@
 
 #include <qdiriterator.h>
 
-#include <qdir_p.h>
+#include <qalgorithms.h>
 #include <qabstractfileengine.h>
 #include <qset.h>
 #include <qstack.h>
 #include <qregularexpression.h>
 #include <qvariant.h>
 
+#include <qdir_p.h>
+#include <qfileinfo_p.h>
 #include <qfilesystemiterator_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qfilesystemengine_p.h>
-
-#include <qfileinfo_p.h>
 
 template <class Iterator>
 class QDirIteratorPrivateIteratorStack : public QStack<Iterator *>

@@ -25,7 +25,7 @@
 #define QSSLSOCKET_H
 
 #include <qlist.h>
-#include <qregularexpression.h>
+#include <qstring.h>
 
 #ifdef QT_SSL
 

@@ -23,15 +23,16 @@
 
 #include "lupdate.h"
 
+#include <qalgorithms.h>
+#include <QBitArray>
+#include <QDebug>
+#include <QFileInfo>
+#include <QStack>
+#include <QString>
+#include <QTextCodec>
+#include <QTextStream>
+#include <QCoreApplication>
 #include <translator.h>
-#include <QtCore/QBitArray>
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStack>
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
-#include <QtCore/QCoreApplication>
 
 #include <iostream>
 #include <ctype.h>              // for isXXX()

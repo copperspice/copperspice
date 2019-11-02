@@ -21,14 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qwidget.h>
+#include <qalgorithms.h>
 #include <qapplication.h>
+#include <qfile.h>
 #include <qlinkedlist.h>
 #include <qstack.h>
-
-#ifdef QT_DEBUG
-#include <qfile.h>
-#endif
+#include <qwidget.h>
 
 #include <qgraphicsanchorlayout_p.h>
 

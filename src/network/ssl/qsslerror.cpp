@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qsslerror.h>
-#include <qsslsocket.h>
+
+#include <qalgorithms.h>
 #include <qdebug.h>
+#include <qsslsocket.h>
 
 class QSslErrorPrivate
 {

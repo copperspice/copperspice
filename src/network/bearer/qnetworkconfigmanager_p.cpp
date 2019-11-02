@@ -22,13 +22,16 @@
 ***********************************************************************/
 
 #include <qnetworkconfigmanager_p.h>
+
+#include <qalgorithms.h>
+#include <qdebug.h>
+#include <qstringlist.h>
+#include <qtimer.h>
+#include <qthread.h>
+
+#include <qcoreapplication_p.h>
 #include <qbearerplugin_p.h>
 #include <qfactoryloader_p.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qthread.h>
-#include <qcoreapplication_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

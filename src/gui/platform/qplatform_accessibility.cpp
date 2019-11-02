@@ -22,6 +22,8 @@
 ***********************************************************************/
 
 #include <qplatform_accessibility.h>
+
+#include <qalgorithms.h>
 #include <qaccessibleplugin.h>
 #include <qaccessibleobject.h>
 #include <qaccessiblebridge.h>

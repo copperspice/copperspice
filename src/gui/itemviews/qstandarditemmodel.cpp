@@ -25,17 +25,19 @@
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
+#include <qalgorithms.h>
 #include <qdatetime.h>
+#include <qdebug.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qpair.h>
-#include <qvariant.h>
-#include <qvector.h>
 #include <qstringlist.h>
 #include <qbitarray.h>
 #include <qmimedata.h>
+#include <qvariant.h>
+#include <qvector.h>
+
 #include <qstandarditemmodel_p.h>
-#include <qdebug.h>
 
 #include <algorithm>
 

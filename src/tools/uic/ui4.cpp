@@ -23,8 +23,10 @@
 
 #include "ui4.h"
 
+#include <qalgorithms.h>
+
 #ifdef QUILOADER_QDOM_READ
-#include <QtXml/QDomElement>
+#include <QDomElement>
 #endif
 
 #ifdef QFORMINTERNAL_NAMESPACE

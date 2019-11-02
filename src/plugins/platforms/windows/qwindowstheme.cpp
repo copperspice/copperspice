@@ -27,21 +27,14 @@
 #  define _WIN32_WINNT 0x0600
 #endif
 
+#include <qalgorithms.h>
 #include "qwindowstheme.h"
 #include "qwindowsdialoghelpers.h"
 #include "qwindowscontext.h"
 #include "qwindowsintegration.h"
 #include "qt_windows.h"
 #include "qwindowsfontdatabase.h"
-
-#include <commctrl.h>
-#include <objbase.h>
-
-#ifndef Q_CC_MINGW
-#    include <commoncontrols.h>
-#endif
-
-#include <shellapi.h>
+#include <qwindowsysteminterface.h>
 
 #include <QVariant>
 #include <QCoreApplication>
@@ -54,11 +47,18 @@
 #include <QApplication>
 #include <QPainter>
 #include <QPixmapCache>
-#include <qwindowsysteminterface.h>
+
 #include <qhighdpiscaling_p.h>
 #include <qsystemlibrary_p.h>
 
+#ifndef Q_CC_MINGW
+#include <commoncontrols.h>
+#endif
+
 #include <algorithm>
+#include <commctrl.h>
+#include <objbase.h>
+#include <shellapi.h>
 
 #if defined(__IImageList_INTERFACE_DEFINED__) && defined(__IID_DEFINED__)
 #  define USE_IIMAGELIST

@@ -23,20 +23,18 @@
 ***********************************************************************/
 
 #include "qopenglengineshadermanager_p.h"
-#include "qopenglengineshadersource_p.h"
-#include "qopenglpaintengine_p.h"
-#include "qopenglshadercache_p.h"
 
-#include <qopenglcontext_p.h>
+#include <qalgorithms.h>
+#include <qmetaenum.h>
+
 #include <qthreadstorage.h>
 
-#if defined(QT_DEBUG)
-#include <QMetaEnum>
-#endif
+#include <qopenglcontext_p.h>
+#include <qopenglengineshadersource_p.h>
+#include <qopenglpaintengine_p.h>
+#include <qopenglshadercache_p.h>
 
 // #define QT_GL_SHARED_SHADER_DEBUG
-
-QT_BEGIN_NAMESPACE
 
 class QOpenGLEngineSharedShadersResource : public QOpenGLSharedResource
 {
@@ -878,5 +876,3 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
     shaderProgNeedsChanging = false;
     return true;
 }
-
-QT_END_NAMESPACE

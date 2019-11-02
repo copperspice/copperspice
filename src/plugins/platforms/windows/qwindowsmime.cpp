@@ -22,17 +22,19 @@
 ***********************************************************************/
 
 #include <qwindowsmime.h>
+
+#include <qalgorithms.h>
+#include <qbuffer.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qmap.h>
+#include <qtextcodec.h>
+#include <qurl.h>
 #include <qwindowscontext.h>
 
 #include <qdnd_p.h>
-#include <QTextCodec>
-#include <QMap>
-#include <QUrl>
-#include <QDir>
-#include <QDebug>
-#include <QBuffer>
-#include <QImageReader>
-#include <QImageWriter>
 
 #include <shlobj.h>
 

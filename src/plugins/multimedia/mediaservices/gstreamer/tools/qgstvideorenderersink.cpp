@@ -21,17 +21,19 @@
 *
 ***********************************************************************/
 
+#include <qgstvideorenderersink_p.h>
+
+#include <qalgorithms.h>
 #include <qabstractvideosurface.h>
+#include <qcoreapplication.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qmap.h>
+#include <qthread.h>
 #include <qvideoframe.h>
-#include <QDebug>
-#include <QMap>
-#include <QThread>
-#include <QEvent>
-#include <QCoreApplication>
 
 #include <qfactoryloader_p.h>
 #include <qgstvideobuffer_p.h>
-#include <qgstvideorenderersink_p.h>
 #include <qgstutils_p.h>
 
 #include <gst/video/video.h>

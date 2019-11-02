@@ -23,6 +23,7 @@
 
 #include <qfontengine_ft_p.h>
 
+#include <qalgorithms.h>
 #include <qdir.h>
 #include <qmetatype.h>
 #include <qtextstream.h>

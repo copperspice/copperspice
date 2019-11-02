@@ -22,6 +22,8 @@
 ***********************************************************************/
 
 #include <qstackedlayout.h>
+
+#include <qalgorithms.h>
 #include <qlayout_p.h>
 #include <qlist.h>
 #include <qwidget.h>

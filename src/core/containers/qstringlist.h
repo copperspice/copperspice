@@ -24,7 +24,6 @@
 #ifndef QSTRINGLIST_H
 #define QSTRINGLIST_H
 
-#include <qalgorithms.h>
 #include <qdatastream.h>
 #include <qlist.h>
 #include <qregularexpression.h>

@@ -21,8 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qdebug.h>
 #include <qundostack.h>
+
+#include <qalgorithms.h>
+#include <qdebug.h>
 #include <qundogroup.h>
 #include <qundostack_p.h>
 
@@ -31,9 +33,11 @@
 QUndoCommand::QUndoCommand(const QString &text, QUndoCommand *parent)
 {
    d = new QUndoCommandPrivate;
+
    if (parent != 0) {
       parent->d->child_list.append(this);
    }
+
    setText(text);
 }
 
@@ -45,29 +49,21 @@ QUndoCommand::QUndoCommand(QUndoCommand *parent)
    }
 }
 
-
-
 QUndoCommand::~QUndoCommand()
 {
    qDeleteAll(d->child_list);
    delete d;
 }
 
-
-
 int QUndoCommand::id() const
 {
    return -1;
 }
 
-
-
 bool QUndoCommand::mergeWith(const QUndoCommand *command)
 {
-   Q_UNUSED(command);
    return false;
 }
-
 
 void QUndoCommand::redo()
 {
@@ -76,15 +72,12 @@ void QUndoCommand::redo()
    }
 }
 
-
 void QUndoCommand::undo()
 {
    for (int i = d->child_list.size() - 1; i >= 0; --i) {
       d->child_list.at(i)->undo();
    }
 }
-
-
 
 QString QUndoCommand::text() const
 {
@@ -95,8 +88,6 @@ QString QUndoCommand::actionText() const
 {
    return d->actionText;
 }
-
-
 
 void QUndoCommand::setText(const QString &text)
 {
@@ -669,7 +660,6 @@ int QUndoStack::undoLimit() const
    return d->undo_limit;
 }
 
-
 void QUndoStack::setActive(bool active)
 {
 #ifdef QT_NO_UNDOGROUP
@@ -697,4 +687,4 @@ bool QUndoStack::isActive() const
 #endif
 }
 
-#endif // QT_NO_UNDOSTACK
+#endif

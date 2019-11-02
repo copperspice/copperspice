@@ -21,21 +21,23 @@
 *
 ***********************************************************************/
 
-#include "qpdf_p.h"
+#include <qpdf_p.h>
 
 #ifndef QT_NO_PDF
 
-#include <qplatformdefs.h>
-#include <qdebug.h>
-#include <qfile.h>
-#include <qtemporaryfile.h>
-#include <qmath_p.h>
-#include <qpainter_p.h>
-#include <qnumeric.h>
-#include <qfont_p.h>
-#include <qimagewriter.h>
+#include <qalgorithms.h>
 #include <qbuffer.h>
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qfile.h>
+#include <qimagewriter.h>
+#include <qnumeric.h>
+#include <qplatformdefs.h>
+#include <qtemporaryfile.h>
+
+#include <qfont_p.h>
+#include <qmath_p.h>
+#include <qpainter_p.h>
 
 #include <cstdio>
 
@@ -50,7 +52,7 @@ static const bool do_compress = true;
 #endif
 
 // might be helpful for smooth transforms of images
-// Can't use it though, as gs generates completely wrong images if this is true.
+// can not use it though, as gs generates completely wrong images if this is true.
 static const bool interpolateImages = false;
 
 inline QPaintEngine::PaintEngineFeatures qt_pdf_decide_features()
@@ -2736,4 +2738,4 @@ void QPdfEnginePrivate::newPage()
                  << "q q\n";
 }
 
-#endif // QT_NO_PDF
+#endif

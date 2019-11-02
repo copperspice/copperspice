@@ -22,8 +22,8 @@
 ***********************************************************************/
 
 #include <qprintpreviewwidget.h>
-#include <qwidget_p.h>
 
+#include <qalgorithms.h>
 #include <qmath.h>
 #include <qboxlayout.h>
 #include <qgraphicsitem.h>
@@ -32,9 +32,9 @@
 #include <qstyleoption.h>
 
 #include <qprinter_p.h>
+#include <qwidget_p.h>
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
-
 
 class PageItem : public QGraphicsItem
 {
@@ -671,8 +671,6 @@ void QPrintPreviewWidget::updatePreview()
    d->graphicsView->updateGeometry();
 }
 
-/*! \reimp
-*/
 void QPrintPreviewWidget::setVisible(bool visible)
 {
    Q_D(QPrintPreviewWidget);
@@ -694,4 +692,4 @@ void QPrintPreviewWidget::_q_updateCurrentPage()
    d->_q_updateCurrentPage();
 }
 
-#endif // QT_NO_PRINTPREVIEWWIDGET
+#endif

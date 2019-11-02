@@ -26,14 +26,12 @@
 #include "qpaintengineex_opengl2_p.h"
 #include "qglshadercache_p.h"
 
+#include <qalgorithms.h>
+#include <qmetaenum.h>
+
 #include <qopenglcontext_p.h>
-#if defined(QT_DEBUG)
-#include <QMetaEnum>
-#endif
 
 // #define QT_GL_SHARED_SHADER_DEBUG
-
-QT_BEGIN_NAMESPACE
 
 class QGLEngineSharedShadersResource : public QOpenGLSharedResource
 {

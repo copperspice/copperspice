@@ -24,20 +24,19 @@
 #ifndef QTABLEVIEW_P_H
 #define QTABLEVIEW_P_H
 
-#include <QtCore/QList>
-#include <QtCore/QLinkedList>
-#include <QtCore/QMap>
-#include <QtCore/QSet>
-#include <QtCore/QDebug>
+#include <qalgorithms.h>
+#include <qdebug.h>
+#include <qlist.h>
+#include <qlinkedlist.h>
+#include <qmap.h>
+#include <qset.h>
+
 #include <qabstractitemview_p.h>
 
 #ifndef QT_NO_TABLEVIEW
 
-QT_BEGIN_NAMESPACE
-
 class QSpanCollection
 {
-
  public:
    struct Span {
       int m_top;
@@ -47,10 +46,13 @@ class QSpanCollection
       bool will_be_deleted;
 
       Span()
-         : m_top(-1), m_left(-1), m_bottom(-1), m_right(-1), will_be_deleted(false) { }
+         : m_top(-1), m_left(-1), m_bottom(-1), m_right(-1), will_be_deleted(false)
+      { }
+
       Span(int row, int column, int rowCount, int columnCount)
          : m_top(row), m_left(column), m_bottom(row + rowCount - 1), m_right(column + columnCount - 1),
-           will_be_deleted(false) { }
+           will_be_deleted(false)
+      { }
 
       inline int top() const {
          return m_top;
@@ -247,7 +249,6 @@ class QTableViewPrivate : public QAbstractItemViewPrivate
    void _q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end);
    void _q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end);
 };
-
 
 #endif // QT_NO_TABLEVIEW
 

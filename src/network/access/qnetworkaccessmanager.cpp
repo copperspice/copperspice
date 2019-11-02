@@ -24,6 +24,21 @@
 #include <qnetworkaccessmanager.h>
 #include <qnetworkaccessmanager_p.h>
 
+#include <qalgorithms.h>
+#include <qabstractnetworkcache.h>
+#include <qbuffer.h>
+#include <qhttpmultipart.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <qnetworkcookie.h>
+#include <qnetworkcookiejar.h>
+#include <qnetworksession.h>
+#include <qnetworkconfigmanager.h>
+#include <qsslconfiguration.h>
+#include <qthread.h>
+#include <qurl.h>
+#include <qvector.h>
+
 #include <qauthenticator_p.h>
 #include <qsharednetworksession_p.h>
 #include <qnetworkaccessftpbackend_p.h>
@@ -34,21 +49,6 @@
 #include <qnetworkreplyhttpimpl_p.h>
 #include <qnetworkreply_p.h>
 #include <qhttpmultipart_p.h>
-
-#include <qnetworkrequest.h>
-#include <qnetworkreply.h>
-#include <qnetworkcookie.h>
-#include <qnetworkcookiejar.h>
-#include <qabstractnetworkcache.h>
-#include <qnetworksession.h>
-#include <qsslconfiguration.h>
-#include <qnetworkconfigmanager.h>
-#include <qhttpmultipart.h>
-
-#include <qbuffer.h>
-#include <qthread.h>
-#include <qurl.h>
-#include <qvector.h>
 
 Q_GLOBAL_STATIC(QNetworkAccessFileBackendFactory, fileBackend)
 

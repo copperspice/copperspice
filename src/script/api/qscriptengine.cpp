@@ -23,23 +23,39 @@
 
 #include <config.h>
 #include <qscriptengine.h>
-#include <qscriptsyntaxchecker_p.h>
 
+#include <qalgorithms.h>
+#include <qcoreapplication.h>
+#include <qdir.h>
+#include <qdebug.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qmetaobject.h>
+#include <qscriptclass.h>
+#include <qscriptcontextinfo.h>
+#include <qscriptprogram.h>
+#include <qstringlist.h>
+#include <qshareddata.h>
+#include <qpluginloader.h>
+#include <qset.h>
+#include <qtextstream.h>
+#include <qscriptextensioninterface.h>
+
+#include <qscriptsyntaxchecker_p.h>
 #include <qscriptengine_p.h>
 #include <qscriptengineagent_p.h>
 #include <qscriptcontext_p.h>
 #include <qscriptstring_p.h>
 #include <qscriptvalue_p.h>
 #include <qscriptvalueiterator.h>
-#include <qscriptclass.h>
-#include <qscriptcontextinfo.h>
-#include <qscriptprogram.h>
 #include <qscriptprogram_p.h>
-#include <qdebug.h>
-
-#include <QtCore/qstringlist.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qmetaobject.h>
+#include <qscriptfunction_p.h>
+#include <qscriptclassobject_p.h>
+#include <qscriptvariant_p.h>
+#include <qscriptqobject_p.h>
+#include <qscriptglobalobject_p.h>
+#include <qscriptactivationobject_p.h>
+#include <qscriptstaticscopeobject_p.h>
 
 #include <math.h>
 #include <algorithm>
@@ -59,23 +75,6 @@
 #include <Parser.h>
 #include <PropertyNameArray.h>
 #include <Operations.h>
-
-#include <qscriptfunction_p.h>
-#include <qscriptclassobject_p.h>
-#include <qscriptvariant_p.h>
-#include <qscriptqobject_p.h>
-#include <qscriptglobalobject_p.h>
-#include <qscriptactivationobject_p.h>
-#include <qscriptstaticscopeobject_p.h>
-
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qdir.h>
-#include <QtCore/qfile.h>
-#include <QtCore/qfileinfo.h>
-#include <QtCore/qpluginloader.h>
-#include <QtCore/qset.h>
-#include <QtCore/qtextstream.h>
-#include <qscriptextensioninterface.h>
 
 #include <stdlib.h>
 
