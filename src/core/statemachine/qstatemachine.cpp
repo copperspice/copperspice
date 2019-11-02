@@ -1542,7 +1542,7 @@ void QStateMachinePrivate::registerSignalTransition(QSignalTransition *transitio
    }
 
    std::unique_ptr<CSBento<void (QSignalEventGenerator::*)()>> slotBento =
-                  CsSignal::Internal::make_unique<CSBento<void (QSignalEventGenerator::*)()>>(&QSignalEventGenerator::execute);
+                  std::make_unique<CSBento<void (QSignalEventGenerator::*)()>>(&QSignalEventGenerator::execute);
 
    // emerald (on hold, statemachine passed data is missing, change this form CsSignal to QObject)
    CsSignal::connect(*sender, std::move(signalBento), *m_signalEventGenerator, std::move(slotBento),

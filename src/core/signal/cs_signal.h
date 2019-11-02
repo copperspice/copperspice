@@ -191,7 +191,7 @@ void activate(Sender &sender, void (SignalClass::*signal)(SignalArgTypes...), Ts
 
             // passing true indicates the data will be copied (stored on the heap)
             PendingSlot tempObj(&sender, signal_Bento.clone(), receiver, slot_Bento->clone(),
-                  Internal::make_unique<CsSignal::Internal::TeaCup_Data<SignalArgTypes...>>(true, std::forward<Ts>(Vs)... ));
+                  std::make_unique<CsSignal::Internal::TeaCup_Data<SignalArgTypes...>>(true, std::forward<Ts>(Vs)... ));
 
             receiver->queueSlot(std::move(tempObj), ConnectionKind::QueuedConnection);
 
@@ -199,7 +199,7 @@ void activate(Sender &sender, void (SignalClass::*signal)(SignalArgTypes...), Ts
 
             // passing false indicates the data will not be copied
             PendingSlot tempObj(&sender, signal_Bento.clone(), receiver, slot_Bento->clone(),
-                     Internal::make_unique<CsSignal::Internal::TeaCup_Data<SignalArgTypes...>>(false, std::forward<Ts>(Vs)... ));
+                  std::make_unique<CsSignal::Internal::TeaCup_Data<SignalArgTypes...>>(false, std::forward<Ts>(Vs)... ));
 
             receiver->queueSlot(std::move(tempObj), ConnectionKind::BlockingQueuedConnection);
 

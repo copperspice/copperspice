@@ -533,7 +533,7 @@ CSBento<T>::CSBento(T lambda)
 template<class T>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<T>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<T>>(*this);
+   return std::make_unique<CSBento<T>>(*this);
 }
 
 template<class T>
@@ -569,7 +569,7 @@ CSBento<FunctionReturn (*)(FunctionArgs...)>::CSBento(FunctionReturn (*ptr)(Func
 template<class FunctionReturn, class ...FunctionArgs>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<FunctionReturn (*)(FunctionArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<FunctionReturn (*)(FunctionArgs...)>>(*this);
+   return std::make_unique<CSBento<FunctionReturn (*)(FunctionArgs...)>>(*this);
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
@@ -627,7 +627,7 @@ CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::CSBento(MethodReturn(Metho
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this);
+   return std::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
@@ -693,7 +693,7 @@ CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::CSBento(MethodReturn
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this);
+   return std::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>

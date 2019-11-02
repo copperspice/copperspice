@@ -116,12 +116,6 @@ void cs_testConnect_SignalSlotArgs_2()
                   "Incompatible signal/slot arguments");
 }
 
-// available in C++14
-template <class T, class... Args>
-std::unique_ptr<T> make_unique(Args &&... args) {
-   return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-
 // marker for a function which returns a void
 class CSVoidReturn
 {
@@ -542,7 +536,7 @@ Bento<T>::Bento(T lambda)
 template<class T>
 std::unique_ptr<BentoAbstract> Bento<T>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<T>>(*this);
+   return std::make_unique<Bento<T>>(*this);
 }
 
 template<class T>
@@ -611,7 +605,7 @@ Bento<FunctionReturn (*)(FunctionArgs...)>::Bento(FunctionReturn (*ptr)(Function
 template<class FunctionReturn, class ...FunctionArgs>
 std::unique_ptr<BentoAbstract> Bento<FunctionReturn (*)(FunctionArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<FunctionReturn (*)(FunctionArgs...)>>(*this);
+   return std::make_unique<Bento<FunctionReturn (*)(FunctionArgs...)>>(*this);
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
@@ -658,7 +652,7 @@ Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::Bento(MethodReturn(MethodCla
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<BentoAbstract> Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this);
+   return std::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
@@ -711,7 +705,7 @@ Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::Bento(MethodReturn(Met
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<BentoAbstract> Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this);
+   return std::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
