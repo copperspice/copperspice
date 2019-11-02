@@ -424,14 +424,8 @@ QString QMetaObject::normalizedSignature(const QString &method)
       return result;
    }
 
-   std::vector<QString> signatures;
-   QString typeReturn;
-   std::vector<QString> paramNames;
-
    // no return type was passed
-   QString fullMethod = "void " + method;
-
-   std::tie(signatures, typeReturn, paramNames) = getSignatures(fullMethod);
+   auto [signatures, typeReturn, paramNames] = getSignatures("void " + method);
    result = signatures[signatures.size() - 1];
 
    return result;
@@ -1844,14 +1838,8 @@ void QMetaObject_X::register_method_s1(const QString &name, QMetaMethod::Access 
       return;
    }
 
-   // declare first
-   std::vector<QString> signatures;
-   QString typeReturn;
-   std::vector<QString> paramNames;
+   auto [signatures, typeReturn, paramNames] = this->getSignatures(name);
 
-   std::tie(signatures, typeReturn, paramNames) = this->getSignatures(name);
-
-   //
    QMetaMethod::Attributes attr = QMetaMethod::Attributes();
    auto count = signatures.size();                              // base method plus number of defaulted parameters
 
