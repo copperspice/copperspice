@@ -21,10 +21,13 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
 #include <qstringlist.h>
+
+#include <qdatastream.h>
 #include <qset.h>
 #include <qregularexpression.h>
+
+#include <algorithm>
 
 bool QStringList::contains(const QString &str, Qt::CaseSensitivity cs) const
 {
@@ -177,4 +180,12 @@ int QStringList::removeDuplicates()
    return n - j;
 }
 
+QDataStream &operator>>(QDataStream &in, QStringList &list)
+{
+   return operator>>(in, static_cast<QList<QString> &>(list));
+}
 
+QDataStream &operator<<(QDataStream &out, const QStringList &list)
+{
+   return operator<<(out, static_cast<const QList<QString> &>(list));
+}

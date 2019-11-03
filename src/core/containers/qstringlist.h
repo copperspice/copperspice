@@ -24,10 +24,10 @@
 #ifndef QSTRINGLIST_H
 #define QSTRINGLIST_H
 
-#include <qdatastream.h>
 #include <qlist.h>
-#include <qregularexpression.h>
 #include <qstring.h>
+
+class QDataStream;
 
 using QStringListIterator        = QListIterator<QString>;
 using QMutableStringListIterator = QMutableListIterator<QString>;
@@ -94,14 +94,7 @@ class QStringList : public QList<QString>
 
 Q_DECLARE_TYPEINFO(QStringList, Q_MOVABLE_TYPE);
 
-inline QDataStream &operator>>(QDataStream &in, QStringList &list)
-{
-   return operator>>(in, static_cast<QList<QString> &>(list));
-}
-
-inline QDataStream &operator<<(QDataStream &out, const QStringList &list)
-{
-   return operator<<(out, static_cast<const QList<QString> &>(list));
-}
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QStringList &list);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QStringList &list);
 
 #endif
