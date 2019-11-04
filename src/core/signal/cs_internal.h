@@ -121,59 +121,13 @@ class CSVoidReturn
 {
 };
 
-// ** index sequence (available in C++14)
-// ** generate list of integers corresponding to the number of data types in a parameter pack
-template<size_t...Ks>
-class Index_Sequence
-{
-};
-
-template<size_t S, class K1, class K2>
-class Concat_Sequence;
-
-template<size_t S, size_t ...M, size_t ...N>
-class Concat_Sequence<S, Index_Sequence<M...>, Index_Sequence<N...>>
-{
- public:
-   using type = Index_Sequence < M... , (N + S)... >;
-};
-
-template<size_t N>
-class Make_Index_Sequence
-{
- public:
-   using type = typename Concat_Sequence < (N / 2), typename Make_Index_Sequence < (N / 2) >::type,
-         typename Make_Index_Sequence < (N - (N / 2)) >::type >::type;
-};
-
-template<>
-class Make_Index_Sequence<0>
-{
- public:
-   using type = Index_Sequence<>;
-};
-
-template<>
-class Make_Index_Sequence<1>
-{
- public:
-   using type = Index_Sequence<0>;
-};
-
-template<class ...Ts>
-class Index_Sequence_For
-{
- public:
-   using type = typename Make_Index_Sequence<sizeof ...(Ts)>::type;
-};
-
 
 // ** unpack_function   (1)
-// ** uses Index_Sequence Class to unpack a tuple into arguments for function pointer
+// ** index_sequence unpacks a tuple into arguments for function pointer
 
 template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes, size_t ...Ks>
 FunctionReturn cs_unpack_function_args_internal(FunctionReturn (*functionPtr)(FunctionArgTypes...),
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
+                  const std::tuple<TupleTypes...> &data, std::index_sequence<Ks...>)
 {
    return functionPtr(std::get<Ks>(data)...);
 }
@@ -181,26 +135,26 @@ FunctionReturn cs_unpack_function_args_internal(FunctionReturn (*functionPtr)(Fu
 // (api) specialization function pointer
 template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes>
 FunctionReturn cs_unpack_function_args(FunctionReturn (*functionPtr)(FunctionArgTypes...),
-                                       const std::tuple<TupleTypes...> &data)
+                  const std::tuple<TupleTypes...> &data)
 {
-   return cs_unpack_function_args_internal(functionPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
+   return cs_unpack_function_args_internal(functionPtr, data, std::index_sequence_for<TupleTypes...> {} );
 }
 
 // (api) specialization function pointer, return type is void
 template<typename ...FunctionArgTypes, typename ...TupleTypes>
 CSVoidReturn cs_unpack_function_args(void (*functionPtr)(FunctionArgTypes...), const std::tuple<TupleTypes...> &data)
 {
-   cs_unpack_function_args_internal(functionPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
+   cs_unpack_function_args_internal(functionPtr, data, std::index_sequence_for<TupleTypes...> {} );
    return CSVoidReturn {};
 }
 
 
 // ** unpack_function   (2)
-// ** uses Index_Sequence Class to unpack a tuple into arguments for a method pointer
+// ** index_sequence unpacks a tuple into arguments for a method pointer
 
 template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
 MethodReturn cs_unpack_method_args_internal(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
-                  const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
+                  const std::tuple<TupleTypes...> &data, std::index_sequence<Ks...>)
 {
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
@@ -210,7 +164,7 @@ template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, t
 MethodReturn cs_unpack_method_args(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
                   const std::tuple<TupleTypes...> &data)
 {
-   return cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
+   return cs_unpack_method_args_internal(obj, methodPtr, data, std::index_sequence_for<TupleTypes...> {} );
 }
 
 // (api) specialization for method pointer, return type is void
@@ -218,16 +172,16 @@ template<typename MethodClass, typename ...MethodArgTypes, typename ...TupleType
 CSVoidReturn cs_unpack_method_args(MethodClass *obj, void (MethodClass::*methodPtr)(MethodArgTypes...),
                   const std::tuple<TupleTypes...> &data)
 {
-   cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
+   cs_unpack_method_args_internal(obj, methodPtr, data, std::index_sequence_for<TupleTypes...> {} );
    return CSVoidReturn {};
 }
 
-// ** uses Index_Sequence Class to unpack a tuple into arguments for a const method pointer
+// ** index_sequence unpacks a tuple into arguments for a const method pointer
 
 template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
 MethodReturn cs_unpack_method_args_internal(const MethodClass *obj,
                   MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...) const,
-                  const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
+                  const std::tuple<TupleTypes...> &data, std::index_sequence<Ks...>)
 {
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
@@ -238,7 +192,7 @@ MethodReturn cs_unpack_method_args(const MethodClass *obj,
                   MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...) const,
                   const std::tuple<TupleTypes...> &data)
 {
-   return cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
+   return cs_unpack_method_args_internal(obj, methodPtr, data, std::index_sequence_for<TupleTypes...> {} );
 }
 
 // (api) specialization for const method pointer, return type is void
@@ -246,7 +200,7 @@ template<typename MethodClass, typename ...MethodArgTypes, typename ...TupleType
 CSVoidReturn cs_unpack_method_args(const MethodClass *obj, void (MethodClass::*methodPtr)(MethodArgTypes...) const,
                   const std::tuple<TupleTypes...> &data)
 {
-   cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
+   cs_unpack_method_args_internal(obj, methodPtr, data, std::index_sequence_for<TupleTypes...> {} );
    return CSVoidReturn {};
 }
 
@@ -403,7 +357,7 @@ TeaCup<std::tuple<Ts...>>::TeaCup(T lambda)
 // ** template functions use Index_Sequence to convert a tuple to R
 
 template<class R, class T, size_t ...Ks>
-R convert_tuple_internal(T &data, Index_Sequence<Ks...>)
+R convert_tuple_internal(T &data, std::index_sequence<Ks...>)
 {
    return R {std::get<Ks>(data)...};
 }
@@ -411,7 +365,7 @@ R convert_tuple_internal(T &data, Index_Sequence<Ks...>)
 template<class R, class ...Ts>
 R convert_tuple(std::tuple<Ts...> &data)
 {
-   return convert_tuple_internal<R> (data, typename Index_Sequence_For<Ts...>::type {} );
+   return convert_tuple_internal<R> (data, std::index_sequence_for<Ts...> {} );
 }
 
 
