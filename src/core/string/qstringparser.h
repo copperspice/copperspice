@@ -24,20 +24,19 @@
 #ifndef QSTRING_PARSER_H
 #define QSTRING_PARSER_H
 
+#include <qglobal.h>
+#include <qchar32.h>
+#include <qlist.h>
+#include <qlocale.h>
+#include <qlog.h>
+#include <qmap.h>
+#include <qnamespace.h>
+
 #include <cctype>
 #include <ios>
 #include <iomanip>
 #include <locale>
 #include <sstream>
-
-#include <qglobal.h>
-#include <qlog.h>
-#include <qnamespace.h>
-
-#include <qchar32.h>
-#include <qlist.h>
-#include <qlocale.h>
-#include <qmap.h>
 
 // returns an integer data type for use with an output stream
 template <typename V>

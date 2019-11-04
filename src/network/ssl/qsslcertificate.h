@@ -24,15 +24,15 @@
 #ifndef QSSLCERTIFICATE_H
 #define QSSLCERTIFICATE_H
 
-#include <qnamespace.h>
 #include <qbytearray.h>
+#include <qcontainerfwd.h>
 #include <qcryptographichash.h>
 #include <qdatetime.h>
+#include <qmetatype.h>
+#include <qnamespace.h>
 #include <qregularexpression.h>
 #include <qsharedpointer.h>
 #include <qssl.h>
-#include <qcontainerfwd.h>
-#include <qmetatype.h>
 
 #ifdef QT_SSL
 
@@ -43,8 +43,8 @@ class QSslKey;
 class QSslCertificateExtension;
 class QStringList;
 class QSslCertificatePrivate;
-
 class QSslCertificate;
+
 Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed = 0);
 
 class Q_NETWORK_EXPORT QSslCertificate
