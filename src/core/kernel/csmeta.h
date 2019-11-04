@@ -425,8 +425,8 @@ class cs_internalEmpty;
 template<class T1 = cs_internalEmpty>
 const QString &cs_typeName()
 {
-   if (std::is_same<T1, cs_internalEmpty>::value) {
-      static QString retval("");
+   if constexpr (std::is_same<T1, cs_internalEmpty>::value) {
+      static const QString retval("");
       return retval;
 
    } else {
@@ -437,7 +437,7 @@ const QString &cs_typeName()
 template<class T1, class T2, class ...Ts>
 const QString &cs_typeName()
 {
-   static QString tmp = cs_typeName_internal<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
+   static const QString tmp = cs_typeName_internal<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
    return tmp;
 }
 
@@ -453,7 +453,7 @@ class cs_typeName_internal<T *>
 template<class T>
 const QString &cs_typeName_internal<T *>::typeName()
 {
-   static QString tmp = cs_typeName<T>() + "*";
+   static const QString tmp = cs_typeName<T>() + "*";
    return tmp;
 }
 
@@ -469,7 +469,7 @@ class cs_typeName_internal<const T *>
 template<class T>
 const QString &cs_typeName_internal<const T *>::typeName()
 {
-   static QString tmp = "const " + cs_typeName<T>() + "*";
+   static const QString tmp = "const " + cs_typeName<T>() + "*";
    return tmp;
 }
 
@@ -486,7 +486,7 @@ class cs_typeName_internal<T &>
 template<class T>
 const QString &cs_typeName_internal<T &>::typeName()
 {
-   static QString tmp = cs_typeName<T>() + "&";
+   static const QString tmp = cs_typeName<T>() + "&";
    return tmp;
 }
 
@@ -503,7 +503,7 @@ class cs_typeName_internal<const T &>
 template<class T>
 const QString &cs_typeName_internal<const T &>::typeName()
 {
-   static QString tmp = "const " + cs_typeName<T>() + "&";
+   static const QString tmp = "const " + cs_typeName<T>() + "&";
    return tmp;
 }
 
@@ -520,7 +520,7 @@ class cs_typeName_internal<const T>
 template<class T>
 const QString &cs_typeName_internal<const T>::typeName()
 {
-   static QString tmp = "const " + cs_typeName<T>();
+   static const QString tmp = "const " + cs_typeName<T>();
    return tmp;
 }
 
