@@ -40,7 +40,6 @@
 #include <qsharedpointer.h>
 #include <qreadwritelock.h>
 #include <qstring8.h>
-#include <qregularexpression.h>
 
 #include <atomic>
 #include <mutex>
@@ -348,10 +347,7 @@ template<class T>
 void QObject::findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
                   Qt::FindChildOptions options) const
 {
-   QObject *temp;
-
-   for (int i = 0; i < m_children.size(); ++i) {
-      temp    = m_children.at(i);
+   for (QObject *temp : m_children) {
       T child = dynamic_cast<T>(temp);
 
       if (child) {

@@ -24,27 +24,29 @@
 #include <qplaintextedit_p.h>
 
 #include <qaccessible.h>
-#include <qtextformat.h>
-#include <qdatetime.h>
 #include <qapplication.h>
-#include <limits.h>
-#include <qtexttable.h>
-#include <qvariant.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qevent.h>
+#include <qclipboard.h>
+#include <qdatetime.h>
 #include <qdebug.h>
 #include <qdrag.h>
-#include <qclipboard.h>
+#include <qevent.h>
+#include <qfont.h>
 #include <qmenu.h>
+#include <qpainter.h>
+#include <qregularexpression.h>
 #include <qstyle.h>
+#include <qtextformat.h>
+#include <qtextlist.h>
+#include <qtexttable.h>
 #include <qtimer.h>
+#include <qvariant.h>
 
 #include <qtextdocumentlayout_p.h>
 #include <qabstracttextdocumentlayout_p.h>
 #include <qtextdocument.h>
 #include <qtextdocument_p.h>
-#include <qtextlist.h>
+
+#include <limits.h>
 
 #ifndef QT_NO_TEXTEDIT
 

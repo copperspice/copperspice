@@ -25,13 +25,13 @@
 #define QPLAINTEXTEDIT_H
 
 #include <qtextedit.h>
+
 #include <qabstractscrollarea.h>
+#include <qabstracttextdocumentlayout.h>
 #include <qtextdocument.h>
 #include <qtextoption.h>
 #include <qtextcursor.h>
 #include <qtextformat.h>
-#include <qabstracttextdocumentlayout.h>
-#include <qregularexpression.h>
 
 #ifndef QT_NO_TEXTEDIT
 
