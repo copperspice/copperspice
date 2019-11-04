@@ -198,8 +198,8 @@ void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_c
 }
 
 template <class charT, class traits>
-void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_code, std::ptrdiff_t position, std::string message,
-      std::ptrdiff_t start_pos)
+void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_code, std::ptrdiff_t position,
+                  std::string message, std::ptrdiff_t start_pos)
 {
    if (0 == this->m_pdata->m_status) {
       // update the error code if not already set
@@ -219,17 +219,19 @@ void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_c
    if (error_code != regex_constants::error_empty) {
 
       if ((start_pos != 0) || (end_pos != (m_end - m_base))) {
-         message += "  Error occurred while parsing the regular expression fragment: '";
+         message.append("  Error occurred while parsing the regular expression fragment: '");
       } else {
-         message += "  Error occurred while parsing the regular expression: '";
+         message.append("  Error occurred while parsing the regular expression: '");
       }
 
       if (start_pos != end_pos) {
          typename traits::string_type text{m_base + position, m_base + end_pos};
-         message += std::string(text.toStdString());
+
+         auto tmp = text.toUtf8();
+         message.append(tmp.begin(), tmp.end());
       }
 
-      message += "'.";
+      message.append("'.");
    }
 
    if (0 == (this->flags() & regex_constants::no_except)) {

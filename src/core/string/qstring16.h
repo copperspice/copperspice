@@ -764,10 +764,6 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       std::wstring toStdWString() const;
 
-      std::string toStdString() const {
-         return std::string(cbegin().codePointBegin(), cend().codePointBegin() );
-      }
-
       QString16 trimmed() const & Q_REQUIRED_RESULT;
       QString16 trimmed() && Q_REQUIRED_RESULT;
 
