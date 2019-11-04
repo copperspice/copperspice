@@ -1273,10 +1273,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::erase(size_type indexStart, size_type 
 template <typename E, typename A>
 typename CsBasicString<E, A>::iterator CsBasicString<E, A>::erase(const_iterator iter)
 {
-   str_iter vbegin;
-   str_iter vend;
-
-   std::tie(vbegin, vend) = iter.codePointRange();
+   auto [vbegin, vend] = iter.codePointRange();
    auto retval = m_string.erase(vbegin, vend);
 
    return const_iterator(retval);
