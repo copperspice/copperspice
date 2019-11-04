@@ -26,12 +26,12 @@
 
 #include "regex/regex.h"
 
-#include <locale>
-
 #include <qglobal.h>
 #include <qchar32.h>
 #include <qlist.h>
 #include <qstringfwd.h>
+
+#include <locale>
 
 template <typename S>
 uint qHash(const Cs::QRegularExpression<S> &key, uint seed = 0);

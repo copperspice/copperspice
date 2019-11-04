@@ -37,7 +37,7 @@
 #include <qplatform_accessibility.h>
 #include <qplatform_integration.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qfactoryloader_p.h>
 
 QAccessibleInterface::~QAccessibleInterface()

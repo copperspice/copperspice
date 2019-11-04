@@ -22,14 +22,15 @@
 ***********************************************************************/
 
 #include <qobject.h>
+
 #include <csmeta_callevent.h>
-#include <qorderedmutexlocker_p.h>
+#include <qabstracteventdispatcher.h>
+#include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qregularexpression.h>
-#include <qthread_p.h>
 
-#include <QAbstractEventDispatcher>
-#include <QCoreApplication>
+#include <qorderedmutexlocker_p.h>
+#include <qthread_p.h>
 
 QObject::QObject(QObject *t_parent)
 {

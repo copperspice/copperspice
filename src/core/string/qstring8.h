@@ -26,9 +26,6 @@
 
 #define CS_STRING_ALLOW_UNSAFE
 
-#include <cstddef>
-#include <string>
-
 #include <cs_string.h>
 
 #include <qglobal.h>
@@ -36,6 +33,9 @@
 #include <qchar32.h>
 #include <qstringview.h>
 #include <qstringfwd.h>
+
+#include <cstddef>
+#include <string>
 
 class QStringParser;
 
