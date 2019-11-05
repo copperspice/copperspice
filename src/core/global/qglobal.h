@@ -24,22 +24,23 @@
 #ifndef QGLOBAL_H
 #define QGLOBAL_H
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <cs_build_info.h>
 #include <qexport.h>
 #include <qfeatures.h>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
 
 // usage: #if (CS_VERSION >= CS_VERSION_CHECK(1, 1, 0))
 #define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 #if defined(__cplusplus)
 
+#include <qstringfwd.h>
+
 #include <algorithm>
 #include <type_traits>
-
-#include <qstringfwd.h>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
 #define QT_FORWARD_DECLARE_CLASS(name)   class name;
@@ -828,17 +829,13 @@ static inline bool qIsNull(double d)
 }
 
 
-// tests a float for a null value, it does not check whether the
-// actual value is 0 or close to 0, but whether it is binary 0.
-static inline bool qIsNull(float f)
+// tests a float to see if all the bits are zero
+static inline bool qIsNull(float data)
 {
-   union U {
-      float f;
-      quint32 u;
-   };
-   U val;
-   val.f = f;
-   return val.u == 0u;
+   quint32 tmp;
+   memcpy(&tmp, &data, sizeof(quint32));
+
+   return tmp == 0u;
 }
 
 template <typename T>
@@ -855,6 +852,7 @@ class QTypeInfo
       sizeOf     = sizeof(T)
     };
 };
+
 template<>
 class QTypeInfo<void>
 {
