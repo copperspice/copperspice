@@ -1,22 +1,3 @@
-# This file is used to ignore files
-# -------------------------------------------------
-
-*.a
-*.dll
-*.la
-*.o
-*.obj
-*.lo
-*.so
-*.Po
-
-*~
-.*.swp
-.DS_Store
-
-qrc_*.cpp
-ui_*.h
-
 /utilitiesities/unicode/bin
 
 /utilities/unicode/autom4te.cache
@@ -45,5 +26,8 @@ ui_*.h
 /utilities/unicode/libtool
 /utilities/unicode/qunicodetables*
 /utilities/unicode/result
+
+/utilities/unicode/*.o
+/utilities/unicode/**/*.Po
 
 /utilities/harfbuzz_fonts/generate_qrc.sh
