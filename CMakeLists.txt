@@ -41,7 +41,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
    # rpath
    file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}" "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-   set(CMAKE_INSTALL_RPATH "${CS_BIN_RPATH}")
+   set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
@@ -110,9 +110,9 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY   ${CMAKE_INSTALL_PREFIX})
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY  OFF)
 
 set(CPACK_SOURCE_PACKAGE_FILE_NAME    "${PROJECT_NAME}-${PACKAGE_VERSION}")
-file(STRINGS cmake/dist_ignore.txt CPACK_SOURCE_IGNORE_FILES)
+set(CPACK_SOURCE_GENERATOR            ZIP TBZ2)
 
-set(CPACK_SOURCE_GENERATOR ZIP TBZ2)
+file(STRINGS cmake/dist_ignore.txt    CPACK_SOURCE_IGNORE_FILES)
 
 include(CPack)
 
@@ -507,7 +507,7 @@ elseif(WITH_XMLPATTERNS AND NOT WITH_NETWORK)
    message(SEND_ERROR "XmlPatterns component requires Network component")
 
 elseif(WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
-   message(SEND_ERROR "WebKit component requires Gui, Network and Script components")
+   message(SEND_ERROR "WebKit component requires Gui, Network, and Script components")
 
 endif()
 

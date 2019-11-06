@@ -17,8 +17,13 @@
 
 # location of CsCore
 get_target_property(CS_CORE_LIB CopperSpice::CsCore LOCATION)
-get_filename_component(CS_INSTALLED_LIB_DIR "${CS_CORE_LIB}" DIRECTORY)
-get_filename_component(CS_PLUGIN_DIR "${CS_INSTALLED_LIB_DIR}/../lib" ABSOLUTE)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+   get_filename_component(CS_INSTALLED_LIB_DIR "${CS_CORE_LIB}" DIRECTORY)
+   get_filename_component(CS_PLUGIN_DIR        "${CS_INSTALLED_LIB_DIR}/../lib" ABSOLUTE)
+else()
+   get_filename_component(CS_PLUGIN_DIR "${CS_CORE_LIB}" DIRECTORY)
+endif()
 
 
 function(cs_copy_library LIB_NAME)
@@ -55,7 +60,6 @@ function(cs_copy_plugins LIB_NAME)
          install(FILES ${CS_PLUGIN_DIR}/CsGuiWin1.6.dll DESTINATION ${APP_INSTALL_DIR}/platforms)
 
       endif()
-
    endif()
 
    if(LIB_NAME STREQUAL "CsMultimedia")
@@ -77,7 +81,34 @@ function(cs_copy_plugins LIB_NAME)
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u1.6.dll DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       endif()
+   endif()
 
+   if(LIB_NAME STREQUAL "CsSqlPsql")
+
+      if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         install(FILES ${CS_PLUGIN_DIR}/CsSqlPsql1.6.so DESTINATION ${APP_INSTALL_DIR}/sqldrivers)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         install(FILES ${CS_PLUGIN_DIR}/CsSqlPsql1.6.so DESTINATION ${APP_INSTALL_DIR}/sqldrivers)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+         install(FILES ${CS_PLUGIN_DIR}/CsSqlPsql1.6.dll DESTINATION ${APP_INSTALL_DIR}/sqldrivers)
+
+      endif()
+   endif()
+
+   if(LIB_NAME STREQUAL "CsPrinterDriver")
+
+      if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         install(FILES ${CS_PLUGIN_DIR}/CsPrinterDriverCups1.6.so DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         install(FILES ${CS_PLUGIN_DIR}/CsPrinterDriverCups1.6.so DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+         install(FILES ${CS_PLUGIN_DIR}/CsPrinterDriverWin1.6.dll DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+
+      endif()
    endif()
 
 endfunction()

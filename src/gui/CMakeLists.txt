@@ -169,10 +169,11 @@ target_sources(CsGui
 target_include_directories(CsGui
    PUBLIC
    $<INSTALL_INTERFACE:include/QtGui>
+   ${OPENGL_INCLUDE_DIR}
 )
 
 target_link_libraries(CsGui
-   PRIVATE
+   PUBLIC
    CsCore
    ${OPENGL_LIBRARIES}
 )

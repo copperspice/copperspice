@@ -4,27 +4,27 @@ add_library(CopperSpice::CsSvg ALIAS CsSvg)
 set_target_properties(CsSvg PROPERTIES OUTPUT_NAME CsSvg${BUILD_ABI})
 
 add_definitions(
-    -DQT_BUILD_SVG_LIB
+   -DQT_BUILD_SVG_LIB
 )
 
 set(EXTRA_SVG_CXXFLAGS)
 set(EXTRA_SVG_LDFLAGS)
 
 include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
+   ${CMAKE_BINARY_DIR}/include
+   ${CMAKE_BINARY_DIR}/privateinclude
 
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
+   ${CMAKE_BINARY_DIR}/include/QtCore
+   ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
 
-    ${CMAKE_BINARY_DIR}/include/QtGui
-    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
+   ${CMAKE_BINARY_DIR}/include/QtGui
+   ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
 
-    ${CMAKE_BINARY_DIR}/include/QtSvg
-    ${CMAKE_BINARY_DIR}/privateinclude/QtSvg/private
+   ${CMAKE_BINARY_DIR}/include/QtSvg
+   ${CMAKE_BINARY_DIR}/privateinclude/QtSvg/private
 
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
 set(SVG_PUBLIC_INCLUDES
