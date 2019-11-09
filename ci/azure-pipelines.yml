@@ -17,7 +17,7 @@ jobs:
       pushd release_x64
       cmake -G "Visual Studio 15 2017 Win64" .. -DWITH_WEBKIT=NO
       popd
-    displayName: 'Configure CMake Generator for VS2017 solution files'
+    displayName: 'Configure CMake Generator for VS2017 x64 projects'
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
@@ -56,9 +56,9 @@ jobs:
       mkdir release_x64
       mkdir logs
       pushd release_x64
-      cmake -G "Visual Studio 16 2019" -A x64 .. -DWITH_WEBKIT=NO
+      cmake -G Ninja .. -DWITH_WEBKIT=NO
       popd
-    displayName: 'Configure CMake Generator for VS2019 solution files'
+    displayName: 'Configure CMake Generator for VS2019 + Ninja'
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
