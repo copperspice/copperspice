@@ -1,5 +1,5 @@
 # available vmImages on azure pipelines:
-# windows-2019, ubuntu-18.04, ubuntu-16.04, macOS-10.14, macOS-10.13
+# vs2017-win2016, windows-2019, ubuntu-18.04, ubuntu-16.04, macOS-10.14, macOS-10.13
 
 trigger:
 - master
@@ -8,7 +8,7 @@ jobs:
 - job: msvc_2017_Release_x64
   timeoutInMinutes: 0
   pool:
-    vmImage: windows-2019
+    vmImage: vs2017-win2016
   steps:
   - script: |
       set
