@@ -5,6 +5,47 @@ trigger:
 - master
 
 jobs:
+- job: msvc_2017_Release_x64
+  timeoutInMinutes: 0
+  pool:
+    vmImage: windows-2019
+  steps:
+  - script: |
+      set
+      mkdir release_x64
+      mkdir logs
+      pushd release_x64
+      cmake -G "Visual Studio 15 2017 Win64" .. -DWITH_WEBKIT=NO
+      popd
+    displayName: 'Configure CMake Generator for VS2017 solution files'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+  - script: python ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore --verbose
+    displayName: 'Build Core'
+  - script: python ci\pype.py logs\log_Network.txt -- cmake --build release_x64 --config Release --target CsNetwork --verbose
+    displayName: 'Build Network'
+  - script: python ci\pype.py logs\log_Xml.txt -- cmake --build release_x64 --config Release --target CsXml --verbose
+    displayName: 'Build Xml'
+  - script: python ci\pype.py logs\log_Gui.txt -- cmake --build release_x64 --config Release --target CsGui --verbose
+    displayName: 'Build Gui'
+  - script: python ci\pype.py logs\log_Svg.txt -- cmake --build release_x64 --config Release  --target CsSvg --verbose
+    displayName: 'Build Svg'
+  - script: python ci\pype.py logs\log_OpenGL.txt -- cmake --build release_x64 --config Release  --target CsOpenGL --verbose
+    displayName: 'Build OpenGL'
+  - script: python ci\pype.py logs\log_Multimedia.txt -- cmake --build release_x64 --config Release --target CsMultimedia --verbose
+    displayName: 'Build Multimedia'
+  - script: python ci\pype.py logs\log_Script.txt -- cmake --build release_x64 --config Release --target CsScript --verbose
+    displayName: 'Build Script'
+  - script: python ci\pype.py logs\log_Sql.txt -- cmake --build release_x64 --config Release --target CsSql --verbose
+    displayName: 'Build Sql'
+  - script: python ci\pype.py logs\log_XmlPatterns.txt -- cmake --build release_x64 --config Release --target CsXmlPatterns --verbose
+    displayName: 'Build XmlPatterns'
+  - script: python ci\pype.py logs\log_leftovers.txt -- cmake --build release_x64 --config Release --verbose
+    displayName: 'Build leftovers'
+  - publish: $(System.DefaultWorkingDirectory)/logs
+    artifact: logs
+
 - job: msvc_2019_Release_x64
   timeoutInMinutes: 0
   pool:
