@@ -12,7 +12,6 @@ jobs:
   steps:
   - script: |
       set
-      choco install ninja
       mkdir release_x64
       mkdir logs
       pushd release_x64
@@ -54,6 +53,7 @@ jobs:
   steps:
   - script: |
       set
+      choco install ninja
       mkdir release_x64
       mkdir logs
       pushd release_x64
