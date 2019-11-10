@@ -54,8 +54,8 @@ jobs:
   - script: |
       echo on
       set
-      dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build"
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvars64.bat"
+      dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\" /s
+      
       mkdir release_x64
       mkdir logs
       pushd release_x64
