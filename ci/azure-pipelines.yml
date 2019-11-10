@@ -12,11 +12,10 @@ jobs:
   steps:
   - script: |
       set
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       mkdir release_x64
       mkdir logs
       pushd release_x64
-      cmake -G "Visual Studio 15 2017 Win64" .. -DWITH_WEBKIT=NO
+      cmake -DWITH_WEBKIT=NO -G "Visual Studio 15 2017" -A x64 -T v141,host=x64 ..
       popd
     displayName: 'Configure CMake Generator for VS2017 x64 projects'
   - task: UsePythonVersion@0
@@ -55,12 +54,10 @@ jobs:
   - script: |
       echo on
       set
-      choco uninstall mingw
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       mkdir release_x64
       mkdir logs
       pushd release_x64
-      cmake -G Ninja .. -DWITH_WEBKIT=NO
+      cmake -DWITH_WEBKIT=NO -DCMAKE_C_COMPILER="cl.exe" -DCMAKE_CXX_COMPILER="cl.exe" -DMSVC_TOOLSET_VERSION=142 -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja ..
       popd
     displayName: 'Configure CMake Generator for VS2019 + Ninja'
   - task: UsePythonVersion@0
