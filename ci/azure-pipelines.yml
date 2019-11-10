@@ -55,6 +55,7 @@ jobs:
       echo on
       set
       choco install ninja
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
       mkdir release_x64
       mkdir logs
       pushd release_x64
