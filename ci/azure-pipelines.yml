@@ -54,6 +54,7 @@ jobs:
   - script: |
       echo on
       set
+      choco install ninja
       mkdir release_x64
       mkdir logs
       pushd release_x64
