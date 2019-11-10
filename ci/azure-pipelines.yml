@@ -55,6 +55,7 @@ jobs:
   - script: |
       echo on
       set
+      choco uninstall mingw
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       mkdir release_x64
       mkdir logs
