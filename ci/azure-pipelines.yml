@@ -59,7 +59,7 @@ jobs:
       mkdir release_x64
       mkdir logs
       pushd release_x64
-      cmake -DWITH_WEBKIT=NO -DCMAKE_C_COMPILER="cl.exe" -DCMAKE_CXX_COMPILER="cl.exe" -DMSVC_TOOLSET_VERSION=142 -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja ..
+      cmake -DWITH_WEBKIT=NO -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja ..
       popd
     displayName: 'Configure CMake Generator for VS2019 + Ninja'
   - task: UsePythonVersion@0
