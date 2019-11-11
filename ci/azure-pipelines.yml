@@ -53,9 +53,7 @@ jobs:
   steps:
   - script: |
       echo on
-      del C:\ProgramData\chocolatey\bin\gcc.exe
-      del C:\Strawberry\c\bin\c++.exe
-      choco feature enable -n=allowGlobalConfirmation
+      choco uninstall strawberryperl mingw
       choco install ninja
       choco list --localonly  
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
