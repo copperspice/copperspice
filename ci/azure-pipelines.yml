@@ -53,9 +53,10 @@ jobs:
   steps:
   - script: |
       echo on
+      choco list --localonly  
       choco install ninja
-      del C:\ProgramData\chocolatey\bin\gcc.exe
-      del C:\Strawberry\c\bin\c++.exe
+      echo C:\ProgramData\chocolatey\bin\gcc.exe
+      echo C:\Strawberry\c\bin\c++.exe
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
       set
       mkdir release_x64
