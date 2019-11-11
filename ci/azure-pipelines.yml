@@ -53,9 +53,9 @@ jobs:
   steps:
   - script: |
       echo on
-      choco uninstall mingw
-      choco uninstall strawberry
-      choco install ninja
+      choco uninstall mingw -y
+      choco uninstall strawberry -y
+      choco install ninja -y
       choco list --localonly  
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
       set
