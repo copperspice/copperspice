@@ -53,16 +53,11 @@ jobs:
   steps:
   - script: |
       echo on
-      :: clear all environment variables
-      @echo off
-      for /f "tokens=1* delims==" %%a in ('set') do (
-          set %%a=
-      )
       set PATH=%WINDIR%;%WINDIR%\System32
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
       set
-      mkdir release_x64
       mkdir logs
+      mkdir release_x64
       pushd release_x64
       cmake -DWITH_WEBKIT=NO -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER="cl.exe" -DCMAKE_CXX_COMPILER="cl.exe" -DMSVC_TOOLSET_VERSION=142 -G Ninja ..
       popd
