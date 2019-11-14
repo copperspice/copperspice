@@ -65,8 +65,8 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
-  - script: python |
-       ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore -- -d keeprsp -v -n
+  - script: |
+       python ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore -- -d keeprsp -v -n
        type release_x64\src\core\CMakeFiles\CsCore.dir\json\qjsonobject.cpp.obj.rsp
     displayName: 'Build Core'
   - script: python ci\pype.py logs\log_Network.txt -- cmake --build release_x64 --config Release --target CsNetwork -- -v
