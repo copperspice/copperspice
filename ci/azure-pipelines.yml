@@ -49,14 +49,11 @@ jobs:
 - job: msvc_2019_Release_x64
   timeoutInMinutes: 0
   pool:
-    vmImage: windows-2019
+    vmImage: windows-latest
   steps:
   - script: |
       echo on
-      rd /s /q c:\Strawberry
-      del /q C:\ProgramData\chocolatey\bin\gcc.exe
-      choco install ninja
-      choco list --localonly  
+      set PATH=
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
       set
       mkdir release_x64
