@@ -59,25 +59,26 @@ jobs:
       mkdir logs
       mkdir release_x64
       pushd release_x64
-      cmake -DWITH_WEBKIT=NO -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER="cl.exe" -DCMAKE_CXX_COMPILER="cl.exe" -DMSVC_TOOLSET_VERSION=142 -G Ninja ..
+      :: Ninja, works fine locally, but on azure pipelines is missing the standard library includes, I could not track down why.
+      ::cmake -DWITH_WEBKIT=NO -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER="cl.exe" -DCMAKE_CXX_COMPILER="cl.exe" -DMSVC_TOOLSET_VERSION=142 -G Ninja ..
+      :: use the latest defaults
+      cmake -DWITH_WEBKIT=NO -G "Visual Studio 16 2019" -A x64  ..
       popd
     displayName: 'Configure CMake Generator for VS2019 + Ninja'
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
-  - script: |
-       python ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore -- -d keeprsp -v -n
-       type release_x64\src\core\CMakeFiles\CsCore.dir\json\qjsonobject.cpp.obj.rsp
+  - script: python ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore
     displayName: 'Build Core'
-  - script: python ci\pype.py logs\log_Network.txt -- cmake --build release_x64 --config Release --target CsNetwork -- -v
+  - script: python ci\pype.py logs\log_Network.txt -- cmake --build release_x64 --config Release --target CsNetwork
     displayName: 'Build Network'
-  - script: python ci\pype.py logs\log_Xml.txt -- cmake --build release_x64 --config Release --target CsXml --verbose
+  - script: python ci\pype.py logs\log_Xml.txt -- cmake --build release_x64 --config Release --target CsXml
     displayName: 'Build Xml'
-  - script: python ci\pype.py logs\log_Gui.txt -- cmake --build release_x64 --config Release --target CsGui --verbose
+  - script: python ci\pype.py logs\log_Gui.txt -- cmake --build release_x64 --config Release --target CsGui
     displayName: 'Build Gui'
-  - script: python ci\pype.py logs\log_Svg.txt -- cmake --build release_x64 --config Release  --target CsSvg --verbose
+  - script: python ci\pype.py logs\log_Svg.txt -- cmake --build release_x64 --config Release  --target CsSvg
     displayName: 'Build Svg'
-  - script: python ci\pype.py logs\log_OpenGL.txt -- cmake --build release_x64 --config Release  --target CsOpenGL --verbose
+  - script: python ci\pype.py logs\log_OpenGL.txt -- cmake --build release_x64 --config Release  --target CsOpenGL
     displayName: 'Build OpenGL'
   - script: python ci\pype.py logs\log_Multimedia.txt -- cmake --build release_x64 --config Release --target CsMultimedia --verbose
     displayName: 'Build Multimedia'
