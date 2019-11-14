@@ -53,8 +53,8 @@ jobs:
   steps:
   - script: |
       echo on
-      set PATH=%WINDIR%;%WINDIR%\System32
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+      ::set Path=%ProgramFiles%\dotnet\;%WINDIR%;%WINDIR%\System32;%WINDIR%\System32\Wbem;%WINDIR%\System32\WindowsPowerShell\v1.0
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
       set
       mkdir logs
       mkdir release_x64
