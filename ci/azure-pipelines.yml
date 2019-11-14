@@ -53,7 +53,7 @@ jobs:
   steps:
   - script: |
       echo on
-      set PATH=
+      set PATH=%WINDIR%;%WINDIR%\System32
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
       set
       mkdir release_x64
@@ -65,9 +65,9 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
-  - script: python ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore --verbose
+  - script: python ci\pype.py logs\log_Core.txt -- cmake --build release_x64 --config Release --target CsCore -- -v
     displayName: 'Build Core'
-  - script: python ci\pype.py logs\log_Network.txt -- cmake --build release_x64 --config Release --target CsNetwork --verbose
+  - script: python ci\pype.py logs\log_Network.txt -- cmake --build release_x64 --config Release --target CsNetwork -- -v
     displayName: 'Build Network'
   - script: python ci\pype.py logs\log_Xml.txt -- cmake --build release_x64 --config Release --target CsXml --verbose
     displayName: 'Build Xml'
