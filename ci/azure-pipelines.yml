@@ -15,7 +15,10 @@ jobs:
       mkdir release_x64
       mkdir logs
       pushd release_x64
-      cmake -DWITH_WEBKIT=NO -G "Visual Studio 15 2017" -A x64 -T v141,host=x64 ..
+      ::cmake -DWITH_WEBKIT=NO -G "Visual Studio 15 2017" -A x64 -T v141,host=x64 ..
+      set Path=%ProgramFiles%\dotnet\;%WINDIR%;%WINDIR%\System32;%WINDIR%\System32\Wbem;%WINDIR%\System32\WindowsPowerShell\v1.0
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+      cmake -DWITH_WEBKIT=NO -G Ninja -A x64 ..
       popd
     displayName: 'Configure CMake Generator for VS2017 x64 projects'
   - task: UsePythonVersion@0
@@ -49,7 +52,7 @@ jobs:
 - job: msvc_2019_Release_x64
   timeoutInMinutes: 0
   pool:
-    vmImage: vs2017-win2016
+    vmImage: windows-latest
   steps:
   - script: |
       echo on
