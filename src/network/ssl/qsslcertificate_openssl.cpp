@@ -52,9 +52,18 @@ uint qHash(const QSslCertificate &key, uint seed)
 {
    if (X509 *const x509 = key.d->x509) {
       // populate x509->sha1_hash
-
       (void)q_X509_cmp(x509, x509);
-      return qHashBits(x509->sha1_hash, SHA_DIGEST_LENGTH, seed);
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+        unsigned int n;
+        unsigned char md[EVP_MAX_MD_SIZE];
+        const EVP_MD* digest = q_EVP_sha1();
+        q_X509_digest(x509, digest, md, &n);
+
+        return qHashBits(md, n, seed);
+#else
+        return qHashBits(x509->sha1_hash, SHA_DIGEST_LENGTH, seed);
+#endif
 
    } else {
       return seed;
@@ -79,7 +88,13 @@ QByteArray QSslCertificate::version() const
 {
    QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
    if (d->versionString.isEmpty() && d->x509) {
-      d->versionString = QByteArray::number(qint64(q_ASN1_INTEGER_get(d->x509->cert_info->version)) + 1);
+      int64_t version;
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+      version = q_X509_get_version(d->x509);
+#else
+      version = q_ASN1_INTEGER_get(d->x509->cert_info->version);
+#endif
+      d->versionString = QByteArray::number(qint64(version) + 1);
    }
 
    return d->versionString;
@@ -90,7 +105,12 @@ QByteArray QSslCertificate::serialNumber() const
    QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    if (d->serialNumberString.isEmpty() && d->x509) {
-      ASN1_INTEGER *serialNumber = d->x509->cert_info->serialNumber;
+      ASN1_INTEGER *serialNumber;
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+      serialNumber = q_X509_get_serialNumber(d->x509);
+#else
+      serialNumber = d->x509->cert_info->serialNumber;
+#endif
 
       QByteArray hexString;
       hexString.reserve(serialNumber->length * 3);
@@ -206,7 +226,11 @@ QMultiMap<QSsl::AlternativeNameEntryType, QString> QSslCertificate::subjectAlter
             result.insert(QSsl::EmailEntry, altName);
          }
       }
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
       q_sk_pop_free((STACK *)altNames, reinterpret_cast<void(*)(void *)>(q_sk_free));
+#else
+      q_OPENSSL_sk_pop_free((STACK *)altNames, reinterpret_cast<void(*)(void *)>(q_OPENSSL_sk_free));
+#endif
    }
 
    return result;
@@ -234,31 +258,40 @@ QSslKey QSslCertificate::publicKey() const
    }
 
    QSslKey key;
+   int pkey_type{};
+   EVP_PKEY* pkey;
 
    key.d->type       = QSsl::PublicKey;
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+   pkey = q_X509_get_pubkey(d->x509);
+   pkey_type = q_EVP_PKEY_base_id(pkey);
+#else
    X509_PUBKEY *xkey = d->x509->cert_info->key;
-   EVP_PKEY *pkey    = q_X509_PUBKEY_get(xkey);
+   pkey              = q_X509_PUBKEY_get(xkey);
+   pkey_type         = q_EVP_PKEY_type(pkey->type);
+#endif
 
    Q_ASSERT(pkey);
 
-   if (q_EVP_PKEY_type(pkey->type) == EVP_PKEY_RSA) {
+   if (pkey_type == EVP_PKEY_RSA) {
       key.d->rsa = q_EVP_PKEY_get1_RSA(pkey);
       key.d->algorithm = QSsl::Rsa;
       key.d->isNull = false;
 
-   } else if (q_EVP_PKEY_type(pkey->type) == EVP_PKEY_DSA) {
+   } else if (pkey_type == EVP_PKEY_DSA) {
       key.d->dsa = q_EVP_PKEY_get1_DSA(pkey);
       key.d->algorithm = QSsl::Dsa;
       key.d->isNull = false;
 
 #ifndef OPENSSL_NO_EC
-   } else if (q_EVP_PKEY_type(pkey->type) == EVP_PKEY_EC) {
+   } else if (pkey_type == EVP_PKEY_EC) {
       key.d->ec = q_EVP_PKEY_get1_EC_KEY(pkey);
       key.d->algorithm = QSsl::Ec;
       key.d->isNull = false;
 #endif
 
-   } else if (q_EVP_PKEY_type(pkey->type) == EVP_PKEY_DH) {
+   } else if (pkey_type == EVP_PKEY_DH) {
       // DH unsupported
 
    } else {
@@ -389,8 +422,10 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
             }
          }
 
-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L && OPENSSL_VERSION_NUMBER < 0x10100000L
          q_sk_pop_free((_STACK *)info, reinterpret_cast<void(*)(void *)>(q_sk_free));
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+         q_OPENSSL_sk_pop_free((_STACK *)info, reinterpret_cast<void(*)(void *)>(q_OPENSSL_sk_free));
 #else
          q_sk_pop_free((STACK *)info, reinterpret_cast<void(*)(void *)>(q_sk_free));
 #endif

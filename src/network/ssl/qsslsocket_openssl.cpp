@@ -69,6 +69,8 @@ bool QSslSocketPrivate::s_loadRootCertsOnDemand = false;
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
 int QSslSocketBackendPrivate::s_indexForSSLExtraData = -1;
 #endif
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 /* \internal
 
     From OpenSSL's thread(3) manual page:
@@ -131,6 +133,7 @@ class QOpenSslLocks
    QMutex **locks;
 };
 Q_GLOBAL_STATIC(QOpenSslLocks, openssl_locks)
+#endif
 
 QString QSslSocketBackendPrivate::getErrorsFromOpenSsl()
 {
@@ -146,6 +149,9 @@ QString QSslSocketBackendPrivate::getErrorsFromOpenSsl()
    return errorString;
 }
 extern "C" {
+
+// Multi-threading is taken care of by OpenSSL from 1.1.0.
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
    static void locking_function(int mode, int lockNumber, const char *, int)
    {
       QMutex *mutex = openssl_locks()->lock(lockNumber);
@@ -161,6 +167,8 @@ extern "C" {
    {
       return (quintptr)QThread::currentThreadId();
    }
+#endif
+
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L && !defined(OPENSSL_NO_PSK)
    static unsigned int q_ssl_psk_client_callback(SSL *ssl,
          const char *hint,
@@ -447,9 +455,11 @@ void QSslSocketBackendPrivate::destroySslContext()
 */
 void QSslSocketPrivate::deinitialize()
 {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
    q_CRYPTO_set_id_callback(0);
    q_CRYPTO_set_locking_callback(0);
    q_ERR_free_strings();
+#endif
 }
 
 /*!
@@ -471,10 +481,14 @@ bool QSslSocketPrivate::ensureLibraryLoaded()
    }
 
    // Check if the library itself needs to be initialized.
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
    QMutexLocker locker(openssl_locks()->initLock());
+#endif
+
    if (!s_libraryLoaded) {
       s_libraryLoaded = true;
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
       // Initialize OpenSSL.
       q_CRYPTO_set_id_callback(id_function);
       q_CRYPTO_set_locking_callback(locking_function);
@@ -485,12 +499,21 @@ bool QSslSocketPrivate::ensureLibraryLoaded()
 
       q_SSL_load_error_strings();
       q_OpenSSL_add_all_algorithms();
+#else
+      q_OPENSSL_init_crypto(0, nullptr);
+      q_OPENSSL_init_ssl(0, nullptr);
+#endif
 
-#if OPENSSL_VERSION_NUMBER >= 0x10001000L
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L && OPENSSL_VERSION_NUMBER < 0x10100000L
       if (q_SSLeay() >= 0x10001000L) {
          QSslSocketBackendPrivate::s_indexForSSLExtraData = q_SSL_get_ex_new_index(0L, NULL, NULL, NULL, NULL);
       }
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+      if (q_SSLeay() >= 0x10100000L) {
+         QSslSocketBackendPrivate::s_indexForSSLExtraData = q_CRYPTO_get_ex_new_index(CRYPTO_EX_INDEX_SSL, 0L, NULL, NULL, NULL, NULL);
+      }
 #endif
+
       // Initialize OpenSSL's random seed.
       if (! q_RAND_status()) {
          qWarning("Random number generator not seeded, disabling SSL support");
@@ -502,7 +525,9 @@ bool QSslSocketPrivate::ensureLibraryLoaded()
 
 void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
 {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
    QMutexLocker locker(openssl_locks()->initLock());
+#endif
    if (s_loadedCiphersAndCerts) {
       return;
    }
@@ -644,7 +669,13 @@ QString QSslSocketPrivate::sslLibraryBuildVersionString()
 */
 void QSslSocketPrivate::resetDefaultCiphers()
 {
-   SSL_CTX *myCtx = q_SSL_CTX_new(q_SSLv23_client_method());
+   SSL_CTX *myCtx;
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   myCtx = q_SSL_CTX_new(q_SSLv23_client_method());
+#else
+   myCtx = q_SSL_CTX_new(q_TLS_client_method());
+#endif
+
    SSL *mySsl = q_SSL_new(myCtx);
 
    QList<QSslCipher> ciphers;
@@ -1681,7 +1712,13 @@ void QSslSocketBackendPrivate::continueHandshake()
       plainSocket->setReadBufferSize(readBufferMaxSize);
    }
 
+// The q_SSL_session_reused() function _should_ be available in 1.0.2 too,
+// however, I've found 1.0.2u doesn't have it :-/
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
    if (q_SSL_ctrl((ssl), SSL_CTRL_GET_SESSION_REUSED, 0, NULL)) {
+#else
+   if (q_SSL_session_reused(ssl)) {
+#endif
       configuration.peerSessionShared = true;
    }
 
@@ -1825,7 +1862,11 @@ QList<QSslError> QSslSocketBackendPrivate::verify(const QList<QSslCertificate> &
    // Build the chain of intermediate certificates
    STACK_OF(X509) *intermediates = 0;
    if (certificateChain.length() > 1) {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
       intermediates = (STACK_OF(X509) *) q_sk_new_null();
+#else
+      intermediates = (STACK_OF(X509) *) q_OPENSSL_sk_new_null();
+#endif
 
       if (!intermediates) {
          q_X509_STORE_free(certStore);
@@ -1840,8 +1881,10 @@ QList<QSslError> QSslSocketBackendPrivate::verify(const QList<QSslCertificate> &
             continue;
          }
 
-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L && OPENSSL_VERSION_NUMBER < 0x10100000L
          q_sk_push( (_STACK *)intermediates, reinterpret_cast<X509 *>(cert.handle()));
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+         q_OPENSSL_sk_push( (_STACK *)intermediates, reinterpret_cast<X509 *>(cert.handle()));
 #else
          q_sk_push( (STACK *)intermediates, reinterpret_cast<char *>(cert.handle()));
 #endif
@@ -1869,8 +1912,10 @@ QList<QSslError> QSslSocketBackendPrivate::verify(const QList<QSslCertificate> &
    (void) q_X509_verify_cert(storeContext);
 
    q_X509_STORE_CTX_free(storeContext);
-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L && OPENSSL_VERSION_NUMBER < 0x10100000L
    q_sk_free( (_STACK *) intermediates);
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+   q_OPENSSL_sk_free( (_STACK *) intermediates);
 #else
    q_sk_free( (STACK *) intermediates);
 #endif
@@ -1954,7 +1999,11 @@ bool QSslSocketBackendPrivate::importPkcs12(QIODevice *device, QSslKey *key, QSs
    if (! key->d->fromEVP_PKEY(pkey)) {
       qWarning("Unable to convert private key");
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
       q_sk_pop_free(reinterpret_cast<STACK *>(ca), reinterpret_cast<void(*)(void *)>(q_sk_free));
+#else
+      q_OPENSSL_sk_pop_free(reinterpret_cast<STACK *>(ca), reinterpret_cast<void(*)(void *)>(q_OPENSSL_sk_free));
+#endif
       q_X509_free(x509);
       q_EVP_PKEY_free(pkey);
       q_PKCS12_free(p12);
@@ -1970,7 +2019,11 @@ bool QSslSocketBackendPrivate::importPkcs12(QIODevice *device, QSslKey *key, QSs
    }
 
    // Clean up
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
    q_sk_pop_free(reinterpret_cast<STACK *>(ca), reinterpret_cast<void(*)(void *)>(q_sk_free));
+#else
+   q_OPENSSL_sk_pop_free(reinterpret_cast<STACK *>(ca), reinterpret_cast<void(*)(void *)>(q_OPENSSL_sk_free));
+#endif
    q_X509_free(x509);
    q_EVP_PKEY_free(pkey);
    q_PKCS12_free(p12);
