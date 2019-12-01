@@ -86,7 +86,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
 elseif(MSVC)
    enable_language(ASM_MASM)
    set(target "MSVC")
-
+   add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 else()
    message(WARNING
       "Your compiler (${CMAKE_CXX_COMPILER}) may not be supported. "
