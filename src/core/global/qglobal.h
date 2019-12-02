@@ -513,8 +513,6 @@ using ulong     = unsigned long;
 #  define QT_WIN_CALLBACK CALLBACK             QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #endif
 
-typedef int QNoImplicitBoolCast;
-
 #if defined(QT_ARCH_ARM) || defined(QT_ARCH_ARMV6) || defined(QT_ARCH_AVR32) ||  \
      defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A) || (defined(QT_ARCH_MIPS))
 

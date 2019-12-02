@@ -404,9 +404,8 @@ class Q_CORE_EXPORT QByteArray
 #endif
 
  private:
-   operator QNoImplicitBoolCast() const;
-
    Data *d;
+
    void reallocData(uint alloc, Data::AllocationOptions options);
    void expand(int i);
    QByteArray nulTerminated() const;

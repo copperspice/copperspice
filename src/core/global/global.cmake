@@ -23,7 +23,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QInternal
    QLibraryInfo
    QLog
-   QNoImplicitBoolCast
    QSysInfo
    QTypeInfo
    Qt
@@ -62,7 +61,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlog.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qnoimplicitboolcast.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformdefs.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
