@@ -48,7 +48,6 @@
 
 #endif
 
-#define QT_USE_NAMESPACE
 #define QT_BEGIN_NAMESPACE
 #define QT_END_NAMESPACE
 

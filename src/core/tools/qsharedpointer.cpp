@@ -185,7 +185,6 @@ QT_END_NAMESPACE
 
 namespace {
 
-QT_USE_NAMESPACE
 struct Data {
    const volatile void *pointer;
 

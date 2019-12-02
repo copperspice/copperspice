@@ -34,10 +34,8 @@
 #include "JSString.h"
 
 namespace JSC {
-QT_USE_NAMESPACE ASSERT_CLASS_FITS_IN_CELL(QScript::QVariantPrototype);
+ASSERT_CLASS_FITS_IN_CELL(QScript::QVariantPrototype);
 }
-
-QT_BEGIN_NAMESPACE
 
 namespace QScript {
 
@@ -155,5 +153,3 @@ QVariantPrototype::QVariantPrototype(JSC::ExecState *exec, WTF::PassRefPtr<JSC::
 
 
 } // namespace QScript
-
-QT_END_NAMESPACE

@@ -41,8 +41,6 @@
 #include <QtGui/QFileOpenEvent>
 #endif
 
-QT_USE_NAMESPACE
-
 #ifdef Q_OS_MAC
 class ApplicationEventFilter : public QObject
 {

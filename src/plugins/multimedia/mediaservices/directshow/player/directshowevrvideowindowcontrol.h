@@ -28,8 +28,6 @@
 
 struct IBaseFilter;
 
-QT_USE_NAMESPACE
-
 class DirectShowEvrVideoWindowControl : public EvrVideoWindowControl
 {
  public:

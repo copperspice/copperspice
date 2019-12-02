@@ -30,11 +30,10 @@
 
 class DirectShowPlayerService;
 
-QT_USE_NAMESPACE
-
 class DirectShowAudioEndpointControl : public QAudioOutputSelectorControl
 {
    CS_OBJECT(DirectShowAudioEndpointControl)
+
  public:
    DirectShowAudioEndpointControl(DirectShowPlayerService *service, QObject *parent = nullptr);
    ~DirectShowAudioEndpointControl();

@@ -67,8 +67,6 @@
 
 namespace WTF {
 
-QT_USE_NAMESPACE
-
 class ThreadPrivate : public QThread {
 
 public:

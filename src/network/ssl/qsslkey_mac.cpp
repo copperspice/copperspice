@@ -26,8 +26,6 @@
 
 #include <CommonCrypto/CommonCrypto.h>
 
-QT_USE_NAMESPACE
-
 static QByteArray wrapCCCrypt(CCOperation ccOp, QSslKeyPrivate::Cipher cipher, const QByteArray &data,
                               const QByteArray &key, const QByteArray &iv)
 {

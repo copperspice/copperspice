@@ -46,14 +46,13 @@
 #include "RegExpConstructor.h"
 
 namespace JSC {
-QT_USE_NAMESPACE ASSERT_CLASS_FITS_IN_CELL(QScript::QObjectPrototype);
+
+ASSERT_CLASS_FITS_IN_CELL(QScript::QObjectPrototype);
 ASSERT_CLASS_FITS_IN_CELL(QScript::QMetaObjectWrapperObject);
 ASSERT_CLASS_FITS_IN_CELL(QScript::QMetaObjectPrototype);
 ASSERT_CLASS_FITS_IN_CELL(QScript::QtFunction);
 ASSERT_CLASS_FITS_IN_CELL(QScript::QtPropertyFunction);
 }
-
-QT_BEGIN_NAMESPACE
 
 namespace QScript {
 

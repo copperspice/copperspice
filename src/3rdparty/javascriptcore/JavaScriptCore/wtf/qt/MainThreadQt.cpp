@@ -59,8 +59,6 @@
 
 namespace WTF {
 
-QT_USE_NAMESPACE
-
 class MainThreadInvoker : public QObject {
     SCRIPT_CS_OBJECT(MainThreadInvoker)
 

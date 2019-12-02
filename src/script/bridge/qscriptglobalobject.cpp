@@ -28,13 +28,10 @@
 #include "../api/qscriptengine_p.h"
 
 namespace JSC {
-QT_USE_NAMESPACE
 ASSERT_CLASS_FITS_IN_CELL(QScript::GlobalObject);
 ASSERT_CLASS_FITS_IN_CELL(QScript::OriginalGlobalObjectProxy);
 
 } // namespace JSC
-
-QT_BEGIN_NAMESPACE
 
 namespace QScript {
 
@@ -165,4 +162,3 @@ JSC::JSValue GlobalObject::lookupSetter(JSC::ExecState *exec, const JSC::Identif
 
 } // namespace QScript
 
-QT_END_NAMESPACE

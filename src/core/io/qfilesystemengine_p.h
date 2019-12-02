@@ -29,8 +29,6 @@
 #include <qfilesystemmetadata_p.h>
 #include <qsystemerror_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFileSystemEngine
 {
  public:

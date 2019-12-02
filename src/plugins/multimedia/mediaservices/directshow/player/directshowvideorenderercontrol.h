@@ -34,11 +34,10 @@ class DirectShowEventLoop;
 class EVRCustomPresenter;
 #endif
 
-QT_USE_NAMESPACE
-
 class DirectShowVideoRendererControl : public QVideoRendererControl
 {
    CS_OBJECT(DirectShowVideoRendererControl)
+
  public:
    DirectShowVideoRendererControl(DirectShowEventLoop *loop, QObject *parent = nullptr);
    ~DirectShowVideoRendererControl();

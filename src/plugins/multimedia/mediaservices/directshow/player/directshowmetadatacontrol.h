@@ -30,15 +30,14 @@
 
 #include "directshowglobal.h"
 
-#include <QtCore/qcoreevent.h>
+#include <qcoreevent.h>
 
 class DirectShowPlayerService;
-
-QT_USE_NAMESPACE
 
 class DirectShowMetaDataControl : public QMetaDataReaderControl
 {
    CS_OBJECT(DirectShowMetaDataControl)
+
  public:
    DirectShowMetaDataControl(QObject *parent = nullptr);
    ~DirectShowMetaDataControl();

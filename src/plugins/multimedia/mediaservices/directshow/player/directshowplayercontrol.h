@@ -29,15 +29,14 @@
 #include "qmediacontent.h"
 #include "qmediaplayercontrol.h"
 
-#include <QtCore/qcoreevent.h>
+#include <qcoreevent.h>
 
 #include "directshowplayerservice.h"
-
-QT_USE_NAMESPACE
 
 class DirectShowPlayerControl : public QMediaPlayerControl
 {
    CS_OBJECT(DirectShowPlayerControl)
+
  public:
    DirectShowPlayerControl(DirectShowPlayerService *service, QObject *parent = nullptr);
    ~DirectShowPlayerControl();
