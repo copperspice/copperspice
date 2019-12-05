@@ -42,7 +42,6 @@ static const int windowsDataTableSize = sizeof(windowsDataTable) / sizeof(QWindo
 static const int zoneDataTableSize = sizeof(zoneDataTable) / sizeof(QZoneData) - 1;
 static const int utcDataTableSize = sizeof(utcDataTable) / sizeof(QUtcData) - 1;
 
-
 static const QZoneData *zoneData(quint16 index)
 {
    Q_ASSERT(index < zoneDataTableSize);
@@ -691,30 +690,34 @@ QString QUtcTimeZonePrivate::comment() const
 
 QString QUtcTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType, const QLocale &locale) const
 {
+   (void) timeType;
+   (void) locale;
 
    if (nameType == QTimeZone::ShortName) {
       return m_abbreviation;
+
    } else if (nameType == QTimeZone::OffsetName) {
       return isoOffsetFormat(m_offsetFromUtc);
    }
+
    return m_name;
 }
 
 QString QUtcTimeZonePrivate::abbreviation(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
    return m_abbreviation;
 }
 
 qint32 QUtcTimeZonePrivate::standardTimeOffset(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
    return m_offsetFromUtc;
 }
 
 qint32 QUtcTimeZonePrivate::daylightTimeOffset(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
    return 0;
 }
 
@@ -730,8 +733,10 @@ QList<QByteArray> QUtcTimeZonePrivate::availableTimeZoneIds() const
    for (int i = 0; i < utcDataTableSize; ++i) {
       result << utcId(utcData(i));
    }
+
    std::sort(result.begin(), result.end()); // ### or already sorted??
    // ### assuming no duplicates
+
    return result;
 }
 
@@ -753,8 +758,10 @@ QList<QByteArray> QUtcTimeZonePrivate::availableTimeZoneIds(qint32 offsetSeconds
          result << utcId(data);
       }
    }
+
    std::sort(result.begin(), result.end()); // ### or already sorted??
    // ### assuming no duplicates
+
    return result;
 }
 
@@ -763,6 +770,4 @@ void QUtcTimeZonePrivate::serialize(QDataStream &ds) const
    ds << "OffsetFromUtc" << QString::fromUtf8(m_id) << m_offsetFromUtc << m_name
       << m_abbreviation << (qint32) m_country << m_comment;
 }
-
-
 

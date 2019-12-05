@@ -431,12 +431,12 @@ inline void QUrlPrivate::appendAuthority(QString &appendTo, QUrl::FormattingOpti
 
 inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptions options, Section appendingTo) const
 {
-   if (Q_LIKELY(!hasUserInfo())) {
+   if (! hasUserInfo()) {
       return;
    }
 
-   const ushort *userNameActions;
-   const ushort *passwordActions;
+   const ushort *userNameActions = nullptr;
+   const ushort *passwordActions = nullptr;
 
    if (options & QUrl::EncodeDelimiters) {
       userNameActions = userNameInUrl;
@@ -460,7 +460,7 @@ inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptio
             break;
 
          default:
-            // ca not happen
+            // can not happen
             break;
       }
    }

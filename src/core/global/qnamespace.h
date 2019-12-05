@@ -37,9 +37,6 @@ class QMetaObject_T;
 
 class Q_CORE_EXPORT Qt
 {
-   private:
-      ~Qt();
-
    public:
       using cs_parent = CSGadget_Fake_Parent;
       using cs_class  = Qt;
@@ -1615,7 +1612,7 @@ class Q_CORE_EXPORT Qt
    using MouseEventFlags = QFlags<MouseEventFlag>;
 
 
-   // following enum and 3 methods declarations, moved from gui/text/qtextdocument.h 1/5/2014
+   // following enum and 3 methods declarations moved from gui/text/qtextdocument.h
    enum HitTestAccuracy { ExactHit, FuzzyHit };
 
    static bool mightBeRichText(const QString &);
@@ -1712,6 +1709,8 @@ class Q_CORE_EXPORT Qt
    CORE_CS_ENUM(GestureType)
 #endif
 
+   private:
+      ~Qt();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MouseButtons)

@@ -45,7 +45,6 @@
 #endif
 
 #if defined QPROCESS_DEBUG
-
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
    if (! data) {
@@ -85,7 +84,6 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 
    return out;
 }
-
 #endif
 
 
@@ -1372,6 +1370,7 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
    if (maxlen == 1 && !readBuffer->isEmpty()) {
       int c = readBuffer->getChar();
       if (c == -1) {
+
 #if defined QPROCESS_DEBUG
          qDebug("QProcess::readData(%p \"%s\", %d) == -1",
                 data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
@@ -1380,10 +1379,12 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
       }
 
       *data = (char) c;
+
 #if defined QPROCESS_DEBUG
       qDebug("QProcess::readData(%p \"%s\", %d) == 1",
              data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
+
       return 1;
    }
 
@@ -1467,6 +1468,7 @@ QByteArray QProcess::readAllStandardOutput()
 {
    ProcessChannel tmp = readChannel();
    setReadChannel(StandardOutput);
+
    QByteArray data = readAll();
    setReadChannel(tmp);
 

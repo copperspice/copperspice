@@ -41,9 +41,6 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 #include <new>
 #include <stdlib.h>
 
-
-
-
 // Returns a human readable representation of the first \a len characters in \a data.
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
@@ -376,31 +373,33 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    // On Windows there is no non-blocking stdin so we fall back to reading lines instead.
    // If there is no QOBJECT, we read lines for all sequential devices; otherwise, we read lines only for stdin.
 
-   QFile *file = 0;
-   Q_UNUSED(file);
+   QFile *file = nullptr;
 
-   if (device->isSequential() && (file = qobject_cast<QFile *>(device)) && file->handle() == 0 ) {
+   if (device->isSequential() && (file = dynamic_cast<QFile *>(device)) && file->handle() == 0 ) {
       if (maxBytes != -1) {
-         bytesRead = device->readLine(buf, qMin(sizeof(buf), maxBytes));
+         bytesRead = device->readLine(buf, qMin(static_cast<qint64>(sizeof(buf)), maxBytes));
       } else {
          bytesRead = device->readLine(buf, sizeof(buf));
       }
+
    } else
+
 #endif
    {
       if (maxBytes != -1) {
-         bytesRead = device->read(buf, qMin(sizeof(buf), maxBytes));
+         bytesRead = device->read(buf, qMin(static_cast<qint64>(sizeof(buf)), maxBytes));
       } else {
          bytesRead = device->read(buf, sizeof(buf));
       }
    }
 
-   // reset the Text flag.
-   if (textModeEnabled)
-        device->setTextModeEnabled(true);
+   // reset the Text flag
+   if (textModeEnabled) {
+      device->setTextModeEnabled(true);
+   }
 
    if (bytesRead <= 0)  {
-        return false;
+      return false;
    }
 
 #ifndef QT_NO_TEXTCODEC
@@ -418,10 +417,6 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    }
 #endif
 
-
-
-   int oldReadBufferSize = readBuffer.size();
-
    QString tmpBuffer;
 
 #ifndef QT_NO_TEXTCODEC
@@ -430,8 +425,6 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
 #else
    tmpBuffer = QString::fromUtf8(buf, bytesRead);
 #endif
-
-
 
    if (! tmpBuffer.isEmpty() && textModeEnabled) {
       tmpBuffer.replace("\r", "");

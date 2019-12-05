@@ -869,13 +869,13 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
 
 QByteArray QIODevice::readLine(qint64 maxSize)
 {
-   Q_D(QIODevice);
-
    QByteArray result;
 
    CHECK_MAXLEN(readLine, result);
 
 #if defined QIODEVICE_DEBUG
+   Q_D(QIODevice);
+
    printf("%p QIODevice::readLine(%d), d->pos = %d, d->buffer.size() = %d\n",
           this, int(maxSize), int(d->pos), int(d->buffer.size()));
 #endif

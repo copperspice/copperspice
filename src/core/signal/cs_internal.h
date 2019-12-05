@@ -269,6 +269,7 @@ class removeLastType
 template<unsigned int ...Vs, class ...Ts>
 typename removeLastType<Ts...>::type internalRemoveData(intValues<Vs...>, std::tuple<Ts...> tupleValue)
 {
+   (void) tupleValue;
    return std::forward_as_tuple(std::get<Vs>(tupleValue)...);
 }
 

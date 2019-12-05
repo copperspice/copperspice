@@ -623,8 +623,6 @@ void QProcessPrivate::killProcess()
 
 bool QProcessPrivate::waitForStarted(int)
 {
-   Q_Q(QProcess);
-
    if (processStarted()) {
       return true;
    }
@@ -639,7 +637,7 @@ bool QProcessPrivate::waitForStarted(int)
 
 bool QProcessPrivate::drainOutputPipes()
 {
-   if (!stdoutChannel.reader && !stderrChannel.reader) {
+   if (!stdoutChannel.reader && ! stderrChannel.reader) {
       return false;
    }
 

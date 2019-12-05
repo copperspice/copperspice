@@ -24,12 +24,13 @@
 #include <qstandardpaths.h>
 
 #include <qdir.h>
-#include <qsystemlibrary_p.h>
 #include <qstringlist.h>
 #include <qcoreapplication.h>
 #include <qt_windows.h>
 #include <shlobj.h>
 #include <intshcut.h>
+
+#include <qsystemlibrary_p.h>
 
 #ifndef CSIDL_MYMUSIC
 #define CSIDL_MYMUSIC 13
@@ -38,14 +39,13 @@
 
 #ifndef QT_NO_STANDARDPATHS
 
-QT_BEGIN_NAMESPACE
+using GetSpecialFolderPath = BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL);
 
-typedef BOOL (WINAPI *GetSpecialFolderPath)(HWND, LPWSTR, int, BOOL);
 static GetSpecialFolderPath resolveGetSpecialFolderPath()
 {
    static GetSpecialFolderPath gsfp = 0;
 
-   if (!gsfp) {
+   if (! gsfp) {
       QSystemLibrary library("shell32");
       gsfp = (GetSpecialFolderPath)library.resolve("SHGetSpecialFolderPathW");
    }
@@ -156,7 +156,11 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case TempLocation:
          result = QDir::tempPath();
          break;
+
+      default:
+         break;
    }
+
    return result;
 }
 
@@ -207,9 +211,8 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
 
    const QString localDir = writableLocation(type);
    dirs.prepend(localDir);
+
    return dirs;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_STANDARDPATHS
+#endif

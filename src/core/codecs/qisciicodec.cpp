@@ -187,9 +187,8 @@ QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *stat
 
          } else if (iscii) {
             const uchar *pair = uni_to_iscii_pairs + 2 * iscii;
-            char32_t tmp = (static_cast<char32_t>(pair[0]) - 0xD800) << 10 | static_cast<char32_t>(pair[1]) - 0xDC00;
+            char32_t tmp = (static_cast<char32_t>(pair[0]) - 0xD800) << 10 | (static_cast<char32_t>(pair[1]) - 0xDC00);
             retval.append(tmp);
-
 
          } else {
             retval.append(replacement);

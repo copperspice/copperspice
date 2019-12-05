@@ -1427,6 +1427,8 @@ static const NameprepCaseFoldingEntry NameprepCaseFolding[] = {
 
 static void mapToLowerCase(QString &str, int from)
 {
+   (void) from;
+
    int arraySize = sizeof(NameprepCaseFolding) / sizeof(NameprepCaseFolding[0]);
 
    QString retval;
@@ -2254,7 +2256,7 @@ static void qt_punycodeEncoder(QStringView str, QString *output)
    }
 
    // while there are still unprocessed non-basic code points left in the input string
-   int strLen = str.size();
+   uint strLen = str.size();
 
    while (h < strLen) {
 

@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qurl.h>
+#include <qstring.h>
+
 #include <qutfcodec_p.h>
 #include <qtools_p.h>
-#include <qstring.h>
 
 // ### move to qurl_p.h
 enum EncodingAction {
@@ -278,6 +279,9 @@ void non_trivial ( QChar c, QString::const_iterator &iter, QString &retval, Enco
                    QString::const_iterator begin, QString::const_iterator end,
                    QUrl::FormattingOptions encoding, const uchar *actionTable)
 {
+   (void) begin;
+   (void) end;
+
    QChar decoded;
 
    if (c == '%') {

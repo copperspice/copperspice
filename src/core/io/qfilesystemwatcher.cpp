@@ -277,6 +277,8 @@ void QFileSystemWatcherPrivate::init()
 
 void QFileSystemWatcherPrivate::initForcedEngine(const QString &forceName)
 {
+   (void) forceName;
+
    if (forced) {
       return;
    }

@@ -39,7 +39,6 @@
 #  define QDTPDEBUGN if (false) qDebug
 #endif
 
-
 /*!
   \internal
   Gets the digit from a datetime. E.g.
@@ -52,6 +51,7 @@
 int QDateTimeParser::getDigit(const QDateTime &t, int index) const
 {
    if (index < 0 || index >= sectionNodes.size()) {
+
 #ifndef QT_NO_DATESTRING
       qWarning("QDateTimeParser::getDigit() Internal error (%s %d)", csPrintable(t.toString()), index);
 #else
@@ -60,7 +60,9 @@ int QDateTimeParser::getDigit(const QDateTime &t, int index) const
 
       return -1;
    }
+
    const SectionNode &node = sectionNodes.at(index);
+
    switch (node.type) {
       case Hour24Section:
       case Hour12Section:
@@ -102,6 +104,7 @@ int QDateTimeParser::getDigit(const QDateTime &t, int index) const
 #else
    qWarning("QDateTimeParser::getDigit() Internal error 2 (%d)", index);
 #endif
+
    return -1;
 }
 
@@ -611,8 +614,10 @@ int QDateTimeParser::sectionMaxSize(Section s, int count) const
       case AmPmSection: {
          const int lowerMax = qMin(getAmPmText(AmText, LowerCase).size(),
                getAmPmText(PmText, LowerCase).size());
+
          const int upperMax = qMin(getAmPmText(AmText, UpperCase).size(),
                getAmPmText(PmText, UpperCase).size());
+
          return qMin(4, qMin(lowerMax, upperMax));
       }
 
@@ -629,8 +634,8 @@ int QDateTimeParser::sectionMaxSize(Section s, int count) const
          return 2;
 #else
          mcount = 7;
-         // fall through
 #endif
+      [[fallthrough]];
 
       case MonthSection:
 #ifdef QT_NO_TEXTDATE
@@ -653,6 +658,7 @@ int QDateTimeParser::sectionMaxSize(Section s, int count) const
             return ret;
          }
 #endif
+
       case MSecSection:
          return 3;
       case YearSection:
@@ -749,6 +755,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
       << index;
 
    int used = 0;
+
    switch (sn.type) {
       case AmPmSection: {
          const int ampm = findAmPm(sectiontext, sectionIndex, &used);
@@ -780,6 +787,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
          }
          break;
       }
+
       case MonthSection:
       case DayOfWeekSectionShort:
       case DayOfWeekSectionLong:
@@ -802,7 +810,9 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                state = Intermediate;
             }
             break;
-         } // else: fall through
+         }
+         [[fallthrough]];
+
       case DaySection:
       case YearSection:
       case YearSection2Digits:
@@ -898,9 +908,9 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
          }
          break;
       }
+
       default:
-         qWarning("QDateTimeParser::parseSection Internal error (%s %d)",
-            qPrintable(sn.name()), sectionIndex);
+         qWarning("QDateTimeParser::parseSection Internal error (%s %d)", csPrintable(sn.name()), sectionIndex);
          return -1;
    }
 
@@ -1163,25 +1173,31 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
          newCurrentValue = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), spec);
          QDTPDEBUG << year << month << day << hour << minute << second << msec;
       }
+
       QDTPDEBUGN("'%s' => '%s'(%s)", input.toLatin1().constData(),
-         newCurrentValue.toString(QLatin1String("yyyy/MM/dd hh:mm:ss.zzz")).toLatin1().constData(),
+         newCurrentValue.toString(QString("yyyy/MM/dd hh:mm:ss.zzz")).toLatin1().constData(),
          stateName(state).toLatin1().constData());
    }
+
 end:
    if (newCurrentValue.isValid()) {
       if (context != FromString && state != Invalid && newCurrentValue < minimum) {
-         const QLatin1Char space(' ');
+         const QChar space(' ');
+
          if (newCurrentValue >= minimum)
             qWarning("QDateTimeParser::parse Internal error 3 (%s %s)",
-               qPrintable(newCurrentValue.toString()), qPrintable(minimum.toString()));
+               csPrintable(newCurrentValue.toString()), csPrintable(minimum.toString()));
 
          bool done = false;
          state = Invalid;
+
          for (int i = 0; i < sectionNodesCount && !done; ++i) {
             const SectionNode &sn = sectionNodes.at(i);
             QString t = sectionText(input, i, sn.pos).toLower();
-            if ((t.size() < sectionMaxSize(i) && (((int)fieldInfo(i) & (FixedWidth | Numeric)) != Numeric))
-               || t.contains(space)) {
+
+            if ((t.size() < sectionMaxSize(i) && (((int)fieldInfo(i) &
+                     (FixedWidth | Numeric)) != Numeric)) || t.contains(space)) {
+
                switch (sn.type) {
                   case AmPmSection:
                      switch (findAmPm(t, i)) {
@@ -1190,10 +1206,12 @@ end:
                            state = Acceptable;
                            done = true;
                            break;
+
                         case Neither:
                            state = Invalid;
                            done = true;
                            break;
+
                         case PossibleAM:
                         case PossiblePM:
                         case PossibleBoth: {
@@ -1205,6 +1223,8 @@ end:
                            break;
                         }
                      }
+                     [[fallthrough]];
+
                   case MonthSection:
                      if (sn.count >= 3) {
                         int tmp = newCurrentValue.date().month();
@@ -1222,7 +1242,8 @@ end:
                         done = true;
                         break;
                      }
-                  // fallthrough
+                     [[fallthrough]];
+
                   default: {
                      int toMin;
                      int toMax;
@@ -1241,6 +1262,7 @@ end:
                         toMin = newCurrentValue.daysTo(minimum);
                         toMax = newCurrentValue.daysTo(maximum);
                      }
+
                      const int maxChange = sn.maxChange();
                      if (toMin > maxChange) {
                         QDTPDEBUG << "invalid because toMin > maxChange" << toMin
@@ -1266,13 +1288,15 @@ end:
                      if (pos < 0 || pos >= t.size()) {
                         pos = -1;
                      }
-                     if (!potentialValue(t.simplified(), min, max, i, newCurrentValue, pos)) {
+
+                     if (! potentialValue(t.simplified(), min, max, i, newCurrentValue, pos)) {
                         QDTPDEBUG << "invalid because potentialValue(" << t.simplified() << min << max
                            << sn.name() << "returned" << toMax << toMin << pos;
                         state = Invalid;
                         done = true;
                         break;
                      }
+
                      state = Intermediate;
                      done = true;
                      break;
@@ -1280,13 +1304,16 @@ end:
                }
             }
          }
+
       } else {
          if (context == FromString) {
             // optimization
             Q_ASSERT(getMaximum().date().toJulianDay() == 4642999);
+
             if (newCurrentValue.date().toJulianDay() > 4642999) {
                state = Invalid;
             }
+
          } else {
             if (newCurrentValue > getMaximum()) {
                state = Invalid;
@@ -1296,12 +1323,14 @@ end:
          QDTPDEBUG << "not checking intermediate because newCurrentValue is" << newCurrentValue << getMinimum() << getMaximum();
       }
    }
+
    StateNode node;
    node.input = input;
    node.state = state;
    node.conflicts = conflicts;
    node.value = newCurrentValue.toTimeSpec(spec);
    text = input;
+
    return node;
 }
 #endif // QT_NO_DATESTRING

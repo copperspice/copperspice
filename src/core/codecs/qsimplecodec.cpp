@@ -781,7 +781,7 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
 
    QByteArray *rmap = reverseMap.load();
 
-   if (!rmap) {
+   if (! rmap) {
       rmap = buildReverseMap(this->forwardIndex);
 
       if (!reverseMap.testAndSetRelease(0, rmap)) {
@@ -791,7 +791,7 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
    }
 
    const unsigned char *rmp = (const unsigned char *)rmap->constData();
-   int rmsize = (int) rmap->size();
+   uint rmsize = rmap->size();
 
    QByteArray retval;
 

@@ -255,8 +255,6 @@ QFactoryLoader::~QFactoryLoader()
 
 QObject *QFactoryLoader::instance(QString key) const
 {
-   Q_D(const QFactoryLoader);
-
    if (key.isEmpty()) {
       return nullptr;
    }

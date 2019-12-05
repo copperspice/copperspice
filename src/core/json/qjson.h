@@ -85,7 +85,7 @@ class QJsonDataObject : public QJsonData
          return std::make_unique<QJsonDataObject>(*this);
       }
 
-      QJsonObject toObject(const QJsonObject &defaultValue) const override {
+      QJsonObject toObject(const QJsonObject &) const override {
          return QJsonObject(m_map.begin(), m_map.end());
       }
 
@@ -110,7 +110,7 @@ class QJsonDataArray : public QJsonData
          return std::make_unique<QJsonDataArray>(*this);
       }
 
-      QJsonArray toArray(const QJsonArray &defaultValue) const override {
+      QJsonArray toArray(const QJsonArray &) const override {
          return QJsonArray(m_vector.begin(), m_vector.end());
       }
 
@@ -133,7 +133,7 @@ class QJsonDataBool : public QJsonData
          return std::make_unique<QJsonDataBool>(*this);
       }
 
-      bool toBool(bool defaultValue) const override {
+      bool toBool(bool) const override {
          return m_data;
       }
 
@@ -179,11 +179,11 @@ class QJsonDataNumber : public QJsonData
          return std::make_unique<QJsonDataNumber>(*this);
       }
 
-      int toInt(int defaultValue) const override {
+      int toInt(int) const override {
          return m_data;
       }
 
-      double toDouble(double defaultValue) const override {
+      double toDouble(double) const override {
          return m_data;
       }
 
@@ -206,7 +206,7 @@ class QJsonDataString : public QJsonData
          return std::make_unique<QJsonDataString>(*this);
       }
 
-      QString toString(const QString &defaultValue) const override {
+      QString toString(const QString &) const override {
          return m_data;
       }
 

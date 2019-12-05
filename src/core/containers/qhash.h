@@ -117,7 +117,7 @@ class QHash
          return *this;
       }
 
-      iterator operator++(int n) {
+      iterator operator++(int) {
          return m_iter++;
       }
 
