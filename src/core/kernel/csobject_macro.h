@@ -829,7 +829,7 @@ class cs_number<0>
 // ** macros used when compiling
 
 // ** 1
-#if defined(QT_BUILD_CORE_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_CORE_LIB)
 
 #define CORE_CS_OBJECT(className)                              CS_OBJECT(className)
 #define CORE_CS_OBJECT_MULTIPLE(className, parentX)            CS_OBJECT_MULTIPLE(className, parentX)
@@ -873,7 +873,7 @@ class cs_number<0>
 #define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL_OUTSIDE(className)
 #define CORE_CS_GADGET(className)                              CS_GADGET_OUTSIDE(className)
 
-#define CORE_CS_SLOT_1(access, ...)                             __VA_ARGS__;
+#define CORE_CS_SLOT_1(access, ...)                            __VA_ARGS__;
 #define CORE_CS_SLOT_2(slotName)
 #define CORE_CS_SLOT_OVERLOAD(slotName, argTypes)
 
@@ -908,7 +908,7 @@ class cs_number<0>
 
 
 // ** 2
-#if defined(QT_BUILD_GUI_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_GUI_LIB)
 
 #define GUI_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define GUI_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
@@ -980,7 +980,7 @@ class cs_number<0>
 #endif
 
 // ** 3
-#if defined(QT_BUILD_MULTIMEDIA_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_MULTIMEDIA_LIB)
 
 #define MULTI_CS_OBJECT(className)                                CS_OBJECT(className)
 #define MULTI_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE(className, parentX)
@@ -1049,7 +1049,7 @@ class cs_number<0>
 
 
 // ** 4
-#if defined(QT_BUILD_NETWORK_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_NETWORK_LIB)
 
 #define NET_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define NET_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
@@ -1124,7 +1124,7 @@ class cs_number<0>
 
 
 // ** 5
-#if defined(QT_BUILD_OPENGL_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_OPENGL_LIB)
 
 #define OPENGL_CS_OBJECT(className)                               CS_OBJECT(className)
 #define OPENGL_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE(className, parentX)
@@ -1154,7 +1154,7 @@ class cs_number<0>
 #endif
 
 // ** 6
-#if defined(QT_BUILD_SCRIPT_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_SCRIPT_LIB)
 
 #define SCRIPT_CS_OBJECT(className)                               CS_OBJECT(className)
 #define SCRIPT_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE(className, parentX)
@@ -1185,7 +1185,7 @@ class cs_number<0>
 #endif
 
 // ** 7
-#if defined(QT_BUILD_SCRIPTTOOLS_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_SCRIPTTOOLS_LIB)
 
 #define SCRIPT_T_CS_OBJECT(className)                             CS_OBJECT(className)
 #define SCRIPT_T_CS_OBJECT_MULTIPLE(className, parentX)           CS_OBJECT_MULTIPLE(className, parentX)
@@ -1215,7 +1215,7 @@ class cs_number<0>
 #endif
 
 // ** 8
-#if defined(QT_BUILD_SQL_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_SQL_LIB)
 
 #define SQL_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define SQL_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
@@ -1246,7 +1246,7 @@ class cs_number<0>
 
 
 // ** 9
-#if defined(QT_BUILD_SVG_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_SVG_LIB)
 
 #define SVG_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define SVG_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
@@ -1311,7 +1311,7 @@ class cs_number<0>
 
 
 // ** 10
-#if defined(QT_BUILD_XMLPATTERNS_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_XMLPATTERNS_LIB)
 
 #define XMLP_CS_OBJECT(className)                                 CS_OBJECT(className)
 #define XMLP_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE(className, parentX)
@@ -1341,7 +1341,7 @@ class cs_number<0>
 #endif
 
 // ** 11
-#if defined(BUILDING_WEBKIT) || ! defined(Q_OS_WIN)
+#if defined(BUILDING_WEBKIT)
 
 #define WEB_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define WEB_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
@@ -1418,7 +1418,7 @@ class cs_number<0>
 
 
 // ** 12
-#if defined(QT_BUILD_DECLARE_LIB) || ! defined(Q_OS_WIN)
+#if defined(QT_BUILD_DECLARE_LIB)
 
 #define DECL_CS_OBJECT(className)                                 CS_OBJECT(className)
 #define DECL_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE(className, parentX)

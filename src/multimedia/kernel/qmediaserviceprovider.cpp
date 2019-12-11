@@ -32,6 +32,11 @@
 #include <qmediaserviceprovider_p.h>
 #include <qmediaservice_provider_plugin.h>
 
+QMediaServiceProviderPlugin::~QMediaServiceProviderPlugin()
+{
+   // required so a symbol is generated for staticMetaObject()
+}
+
 class QMediaServiceProviderHintPrivate : public QSharedData
 {
  public:
