@@ -24,11 +24,11 @@
 #ifndef QABSTRACTITEMMODEL_H
 #define QABSTRACTITEMMODEL_H
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qobject.h>
+#include <qvariant.h>
+#include <qobject.h>
 #include <qmultihash.h>
 #include <qvector.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 #include <qcontainerfwd.h>
 
 class QAbstractItemModel;

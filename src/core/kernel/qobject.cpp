@@ -355,7 +355,7 @@ bool QObject::connect(const QObject *sender, const QString8 &signalMethod, const
    return QObject::connect(sender, signalMethod, this, slotMethod, type);
 }
 
-void QObject::connectNotify(const QMetaMethod &signalMethod) const
+void QObject::connectNotify(const QMetaMethod &) const
 {
    // no code is suppose to appear here
 }

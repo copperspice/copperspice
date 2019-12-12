@@ -1360,43 +1360,54 @@ Q_CORE_EXPORT double qstrtod(const char *s00, const char **se, bool *ok)
          }
       }
    }
+
 dig_done:
    e = 0;
+
    if (c == 'e' || c == 'E') {
-      if (!nd && !nz && !nz0) {
+      if (! nd && !nz && !nz0) {
          s = s00;
          goto ret;
       }
+
       s00 = s;
       esign = 0;
+
       switch (c = *++s) {
          case '-':
             esign = 1;
+            [[fallthrough]];
+
          case '+':
             c = *++s;
+            break;
       }
+
       if (c >= '0' && c <= '9') {
          while (c == '0') {
             c = *++s;
          }
+
          if (c > '0' && c <= '9') {
-            L = c - '0';
+            L  = c - '0';
             s1 = s;
+
             while ((c = *++s) >= '0' && c <= '9') {
                L = 10 * L + c - '0';
             }
-            if (s - s1 > 8 || L > 19999)
-               /* Avoid confusion from exponents
-                * so large that e might overflow.
-                */
-            {
+
+            if (s - s1 > 8 || L > 19999) {
+               /* Avoid confusion from exponents * so large that e might overflow. */
                e = 19999;   /* safe for 16 bit ints */
+
             } else {
                e = int(L);
             }
+
             if (esign) {
                e = -e;
             }
+
          } else {
             e = 0;
          }
@@ -1404,6 +1415,7 @@ dig_done:
          s = s00;
       }
    }
+
    if (!nd) {
       if (!nz && !nz0) {
          s = s00;
@@ -1414,10 +1426,9 @@ dig_done:
 
    /* Now we have nd0 digits, starting at s0, followed by a
     * decimal point, followed by nd-nd0 digits.  The number we're
-    * after is the integer represented by those digits times
-    * 10**e */
+    * after is the integer represented by those digits times 10**e */
 
-   if (!nd0) {
+   if (! nd0) {
       nd0 = nd;
    }
    k = nd < DBL_DIG + 1 ? nd : DBL_DIG + 1;
@@ -2237,32 +2248,35 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
 
       case 2:
          leftright = 0;
+         [[fallthrough]];
 
-      /* no break */
       case 4:
          if (ndigits <= 0) {
             ndigits = 1;
          }
+
          ilim = ilim1 = i = ndigits;
          break;
+
       case 3:
          leftright = 0;
+         [[fallthrough]];
 
-      /* no break */
       case 5:
          i = ndigits + k + 1;
-         ilim = i;
+         ilim  = i;
          ilim1 = i - 1;
+
          if (i <= 0) {
             i = 1;
          }
    }
 
-   QT_TRY {
+   try {
       *resultp = static_cast<char *>(malloc(i + 1));
       Q_CHECK_PTR(*resultp);
 
-   } QT_CATCH(...) {
+   } catch (...) {
       Bfree(b);
       QT_RETHROW;
    }

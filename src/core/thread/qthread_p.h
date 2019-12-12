@@ -24,14 +24,12 @@
 #ifndef QTHREAD_P_H
 #define QTHREAD_P_H
 
-
-
 #include <qplatformdefs.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qwaitcondition.h>
-#include <QtCore/qmap.h>
+#include <qthread.h>
+#include <qmutex.h>
+#include <qstack.h>
+#include <qwaitcondition.h>
+#include <qmap.h>
 
 #include <algorithm>
 
@@ -43,6 +41,7 @@ class QPostEvent
  public:
    QObject *receiver;
    QEvent *event;
+
    int priority;
    inline QPostEvent()
       : receiver(0), event(0), priority(0) {
@@ -96,22 +95,23 @@ class QPostEventList : public QVector<QPostEvent>
 
  private:
    // hides because they do not keep that list sorted. addEvent must be used
-    using QVector<QPostEvent>::append;
-    using QVector<QPostEvent>::insert;
+   using QVector<QPostEvent>::append;
+   using QVector<QPostEvent>::insert;
 };
 
 class Q_CORE_EXPORT QDaemonThread : public QThread
 {
 public:
-    QDaemonThread(QObject *parent = 0);
+    QDaemonThread(QObject *parent = nullptr);
     ~QDaemonThread();
 };
+
 class QThreadPrivate
 {
    Q_DECLARE_PUBLIC(QThread)
 
  public:
-   QThreadPrivate(QThreadData *d = 0);
+   QThreadPrivate(QThreadData *d = nullptr);
    virtual ~QThreadPrivate();
 
     void setPriority(QThread::Priority prio);
@@ -120,11 +120,10 @@ class QThreadPrivate
 
    bool running;
    bool finished;
-
-   bool isInFinish; //when in QThreadPrivate::finish
+   bool isInFinish;                   //when in QThreadPrivate::finish
    bool interruptionRequested;
-
    bool exited;
+
    int returnCode;
 
    uint stackSize;
@@ -204,6 +203,7 @@ class QThreadData
    QPostEventList postEventList;
 
    QVector<void *> tls;
+
    int loopLevel;
    bool quitNow;
    bool canWait;
@@ -211,8 +211,9 @@ class QThreadData
    bool requiresCoreApplication;
 
    QThreadPrivate *get_QThreadPrivate() const;
+
 private:
-    QAtomicInt _ref;
+    QAtomicInt m_ref;
 };
 
 class QScopedLoopLevelCounter

@@ -111,6 +111,8 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
 static inline QStringList qCmdLineArgs(int t1, char *t2[])
 {
    // windows only
+   (void) t1;
+   (void) t2;
 
    QStringList args;
    int argc = 0;

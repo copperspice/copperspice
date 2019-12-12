@@ -24,24 +24,25 @@
 #include <qthread.h>
 #include <qthreadstorage.h>
 #include <qmutex.h>
-#include <qmutexpool_p.h>
 #include <qreadwritelock.h>
 #include <qabstracteventdispatcher.h>
 #include <qeventloop.h>
 #include <qhash.h>
+
+#include <qmutexpool_p.h>
 #include <qthread_p.h>
 #include <qcoreapplication_p.h>
 
 QThreadData::QThreadData(int initialRefCount)
-    : _ref(initialRefCount), loopLevel(0), thread(0), threadId(0), eventDispatcher(0),
-      quitNow(false), canWait(true), isAdopted(false), requiresCoreApplication(true)
+    : thread(0), threadId(0), eventDispatcher(0), loopLevel(0),
+      quitNow(false), canWait(true), isAdopted(false), requiresCoreApplication(true), m_ref(initialRefCount)
 {
    // fprintf(stderr, "QThreadData %p created\n", this);
 }
 
 QThreadData::~QThreadData()
 {
-   Q_ASSERT(_ref.load() == 0);
+   Q_ASSERT(m_ref.load() == 0);
 
    // In the odd case that Qt is running on a secondary thread, the main
    // thread instance will have been dereffed asunder because of the deref in
@@ -75,13 +76,13 @@ QThreadData::~QThreadData()
 
 void QThreadData::ref()
 {
-   (void) _ref.ref();
-   Q_ASSERT(_ref.load() != 0);
+   m_ref.ref();
+   Q_ASSERT(m_ref.load() != 0);
 }
 
 void QThreadData::deref()
 {
-   if (!_ref.deref()) {
+   if (! m_ref.deref()) {
       delete this;
    }
 }
@@ -116,11 +117,9 @@ void QAdoptedThread::run()
    qFatal("QAdoptedThread::run(): Internal error, this implementation should never be called.");
 }
 
-
 QThreadPrivate::QThreadPrivate(QThreadData *d)
-   : running(false),
-     isInFinish(false), finished(false), interruptionRequested(false),
-     exited(false), returnCode(-1),
+   : running(false), finished(false), isInFinish(false),
+     interruptionRequested(false), exited(false), returnCode(-1),
      stackSize(0), priority(QThread::InheritPriority), data(d)
 {
 

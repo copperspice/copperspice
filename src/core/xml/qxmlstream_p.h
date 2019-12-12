@@ -1801,7 +1801,7 @@ bool QXmlStreamReaderPrivate::parse()
 
                      attributeStack.pop();
 
-                     if ( (namespacePrefix == "xml" ^ namespaceUri == "http://www.w3.org/XML/1998/namespace")
+                     if ( ((namespacePrefix == "xml") ^ (namespaceUri == "http://www.w3.org/XML/1998/namespace"))
                            || namespaceUri == "http://www.w3.org/2000/xmlns/" || namespaceUri.isEmpty() || namespacePrefix == "xmlns") {
 
                         raiseWellFormedError(QXmlStream::tr("Illegal namespace declaration."));

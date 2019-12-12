@@ -428,6 +428,9 @@ QString QMetaObject::normalizedSignature(const QString &method)
    auto [signatures, typeReturn, paramNames] = getSignatures("void " + method);
    result = signatures[signatures.size() - 1];
 
+   (void) typeReturn;
+   (void) paramNames;
+
    return result;
 }
 
@@ -1816,7 +1819,7 @@ void QMetaObject_X::register_enum_data(const QString &args)
    }
 
    // save enum data in QMap
-   for (int i = 0; i < tempName.size(); ++i) {
+   for (uint i = 0; i < tempName.size(); ++i) {
       auto iter_enum = m_enums.find(tempName.at(i));
 
       if (iter_enum == m_enums.end()) {

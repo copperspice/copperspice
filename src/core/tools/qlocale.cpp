@@ -24,9 +24,7 @@
 #include <qglobal.h>
 
 #include <qlocale.h>
-#include <qlocale_p.h>
-#include <qlocale_data_p.h>
-#include <qlocale_tools_p.h>
+
 
 #include <qplatformdefs.h>
 #include <qdatastream.h>
@@ -41,10 +39,13 @@
 
 #include <qdatetime_p.h>
 #include <qdatetimeparser_p.h>
+#include <qlocale_p.h>
+#include <qlocale_data_p.h>
+#include <qlocale_tools_p.h>
 #include <qnumeric_p.h>
 #include <qsystemlibrary_p.h>
 
-#if ! defined(QWS) && defined(Q_OS_DARWIN)
+#if defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
 #endif
 
@@ -63,13 +64,13 @@ static QSystemLocale *_systemLocale = 0;
 static QSystemLocale *QSystemLocale_globalSystemLocale();
 Q_GLOBAL_STATIC_WITH_ARGS(QSystemLocale, QSystemLocale_globalSystemLocale, (QSystemLocale::cs_internal_private_tag()) )
 
-static QLocaleData *system_data = 0;
+static QLocaleData *system_data = nullptr;
 Q_GLOBAL_STATIC(QLocaleData, globalLocaleData)
 
 #endif
 
 static const QLocaleData *defaultData();
-static uint default_number_options     = 0;
+static uint default_number_options = 0;
 
 static const int locale_data_size      = sizeof(locale_data) / sizeof(QLocaleData) - 1;
 static const QLocaleData *default_data = 0;
@@ -77,17 +78,6 @@ static const QLocaleData *const c_data = locale_data;
 
 Q_GLOBAL_STATIC_WITH_ARGS(QSharedDataPointer<QLocalePrivate>, defaultLocalePrivate,
                   (QLocalePrivate::create(defaultData(), default_number_options)))
-
-static QString timeZone()
-{
-#if defined(Q_OS_WIN)
-   _tzset();
-   return QString::fromUtf8(_tzname[1]);
-#else
-   tzset();
-   return QString::fromUtf8(tzname[1]);
-#endif
-}
 
 QLocale::Language QLocalePrivate::codeToLanguage(const QString &code)
 {
@@ -130,15 +120,18 @@ QLocale::Language QLocalePrivate::codeToLanguage(const QString &code)
    }
 
    // Android uses the following deprecated codes
-   if (uc1 == 'i' && uc2 == 'w' && uc3 == 0) { // iw -> he
+   if (uc1 == 'i' && uc2 == 'w' && uc3 == 0) {
+      // iw -> he
       return QLocale::Hebrew;
    }
 
-   if (uc1 == 'i' && uc2 == 'n' && uc3 == 0) { // in -> id
+   if (uc1 == 'i' && uc2 == 'n' && uc3 == 0) {
+      // in -> id
       return QLocale::Indonesian;
    }
 
-   if (uc1 == 'j' && uc2 == 'i' && uc3 == 0) { // ji -> yi
+   if (uc1 == 'j' && uc2 == 'i' && uc3 == 0) {
+      // ji -> yi
       return QLocale::Yiddish;
    }
 
@@ -270,6 +263,7 @@ QLocaleId QLocaleId::withLikelySubtagsAdded() const
          return id;
       }
    }
+
    // language_script
    if (country_id) {
       QLocaleId id = QLocaleId::fromIds(language_id, script_id, 0);
@@ -278,6 +272,7 @@ QLocaleId QLocaleId::withLikelySubtagsAdded() const
          return id;
       }
    }
+
    // language_region
    if (script_id) {
       QLocaleId id = QLocaleId::fromIds(language_id, 0, country_id);
@@ -286,6 +281,7 @@ QLocaleId QLocaleId::withLikelySubtagsAdded() const
          return id;
       }
    }
+
    // language
    if (script_id && country_id) {
       QLocaleId id = QLocaleId::fromIds(language_id, 0, 0);
@@ -301,6 +297,7 @@ QLocaleId QLocaleId::withLikelySubtagsAdded() const
 QLocaleId QLocaleId::withLikelySubtagsRemoved() const
 {
    QLocaleId max = withLikelySubtagsAdded();
+
    // language
    {
       QLocaleId id = QLocaleId::fromIds(language_id, 0, 0);
@@ -308,6 +305,7 @@ QLocaleId QLocaleId::withLikelySubtagsRemoved() const
          return id;
       }
    }
+
    // language_region
    if (country_id) {
       QLocaleId id = QLocaleId::fromIds(language_id, 0, country_id);
@@ -315,6 +313,7 @@ QLocaleId QLocaleId::withLikelySubtagsRemoved() const
          return id;
       }
    }
+
    // language_script
    if (script_id) {
       QLocaleId id = QLocaleId::fromIds(language_id, script_id, 0);
@@ -348,7 +347,7 @@ QString QLocaleId::name(char separator) const
    }
 
    if (script) {
-      name.append('-');
+      name.append(separator);
       name.append(script[0]);
       name.append(script[1]);
       name.append(script[2]);
@@ -356,7 +355,7 @@ QString QLocaleId::name(char separator) const
    }
 
    if (country) {
-      name.append('-');
+      name.append(separator);
       name.append(country[0]);
       name.append(country[1]);
 
@@ -472,9 +471,9 @@ bool qt_splitLocaleName(const QString &name, QString &lang, QString &script, QSt
    const int length         = name.length();
    const QString separators = "_-.@";
 
-   lang   = QString();
-   script = QString();
-   cntry  = QString();
+   lang.clear();
+   script.clear();
+   cntry.clear();
 
    enum ParserState { NoState, LangState, ScriptState, CountryState };
    ParserState state = LangState;
@@ -482,7 +481,7 @@ bool qt_splitLocaleName(const QString &name, QString &lang, QString &script, QSt
    for (int i = 0; i < length && state != NoState; ) {
       QString value;
 
-      if (!parse_locale_tag(name, i, &value, separators) || value.isEmpty()) {
+      if (! parse_locale_tag(name, i, &value, separators) || value.isEmpty()) {
          break;
       }
 
@@ -491,7 +490,7 @@ bool qt_splitLocaleName(const QString &name, QString &lang, QString &script, QSt
       switch (state) {
          case LangState:
 
-            if (! sep.isNull() && !separators.contains(sep)) {
+            if (! sep.isNull() && ! separators.contains(sep)) {
                state = NoState;
                break;
             }
@@ -526,12 +525,12 @@ bool qt_splitLocaleName(const QString &name, QString &lang, QString &script, QSt
             break;
 
          case NoState:
-            // shouldn't happen
             qWarning("QLocale: This should never happen");
             break;
       }
       ++i;
    }
+
    return lang.length() == 2 || lang.length() == 3;
 }
 
@@ -553,6 +552,7 @@ void QLocalePrivate::getLangAndCountry(const QString &name, QLocale::Language &l
    if (lang == QLocale::C) {
       return;
    }
+
    script = QLocalePrivate::codeToScript(script_code);
    cntry = QLocalePrivate::codeToCountry(cntry_code);
 }
@@ -615,9 +615,11 @@ int qt_repeatCount(const QString &s, int i)
 {
    QChar c = s.at(i);
    int j = i + 1;
+
    while (j < s.size() && s.at(j) == c) {
       ++j;
    }
+
    return j - i;
 }
 
@@ -640,7 +642,7 @@ QSystemLocale::QSystemLocale()
 }
 
 
-QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_private_tag unused)
+QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_private_tag)
 {
 }
 
@@ -672,7 +674,7 @@ void QLocalePrivate::updateSystemPrivate()
       system_data = globalLocaleData();
    }
 
-   // tell the object the system locale has changed.
+   // tell the object the system locale has changed
    sys_locale->query(QSystemLocale::LocaleChanged, QVariant());
 
    *system_data = *sys_locale->fallbackUiLocale().d->m_data;
@@ -745,6 +747,7 @@ const QLocaleData *defaultData()
    if (! default_data) {
       default_data = systemData();
    }
+
    return default_data;
 }
 
@@ -1301,17 +1304,21 @@ QString QLocale::timeFormat(FormatType format) const
    }
 #endif
 
-   quint32 idx, size;
+   quint32 idx;
+   quint32 size;
+
    switch (format) {
       case LongFormat:
-         idx = d->m_data->m_long_time_format_idx;
+         idx  = d->m_data->m_long_time_format_idx;
          size = d->m_data->m_long_time_format_size;
          break;
+
       default:
-         idx = d->m_data->m_short_time_format_idx;
+         idx  = d->m_data->m_short_time_format_idx;
          size = d->m_data->m_short_time_format_size;
          break;
    }
+
    return getLocaleData(time_format_data + idx, size);
 }
 

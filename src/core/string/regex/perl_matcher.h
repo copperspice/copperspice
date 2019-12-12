@@ -35,7 +35,7 @@ namespace cs_regex_ns {
 
 namespace cs_regex_detail_ns {
 
-inline void verify_options(cs_regex_ns::regex_constants::syntax_option_type ef, match_flag_type mf)
+inline void verify_options(cs_regex_ns::regex_constants::syntax_option_type, match_flag_type mf)
 {
    if ((mf & match_extra) && (mf & match_posix)) {
       std::logic_error msg("Usage Error: Can not mix regular expression captures with POSIX matching rules");
@@ -102,13 +102,14 @@ inline int string_compare(const std::basic_string<C, T, A> &s, const C *p)
          return 0;
       }
    }
+
    return s.compare(p);
 }
 
 template <class Seq, class C>
 inline int string_compare(const Seq &s, const C *p)
 {
-   std::size_t i = 0;
+   typename Seq::size_type i = 0;
 
    while ((i < s.size()) && (p[i] == s[i])) {
       ++i;

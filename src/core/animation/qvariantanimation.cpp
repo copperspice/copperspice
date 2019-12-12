@@ -21,19 +21,18 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qvariantanimation.h>
+
+#include <qrect.h>
+#include <qline.h>
+#include <qmutex.h>
+
+#include <qmutexpool_p.h>
 #include <qvariantanimation_p.h>
 
-#include <QtCore/qrect.h>
-#include <QtCore/qline.h>
-#include <QtCore/qmutex.h>
-#include <qmutexpool_p.h>
+#include <algorithm>
 
 #ifndef QT_NO_ANIMATION
-
-QT_BEGIN_NAMESPACE
 
 static bool animationValueLessThan(const QVariantAnimation::KeyValue &p1, const QVariantAnimation::KeyValue &p2)
 {
@@ -84,30 +83,30 @@ QVariantAnimationPrivate::QVariantAnimationPrivate() : duration(250), interpolat
 
 void QVariantAnimationPrivate::convertValues(int t)
 {
-   //this ensures that all the keyValues are of type t
+   // ensures all the keyValues are of type t
    for (int i = 0; i < keyValues.count(); ++i) {
       QVariantAnimation::KeyValue &pair = keyValues[i];
       pair.second.convert(static_cast<QVariant::Type>(t));
    }
-   //we also need update to the current interval if needed
+
+   // also need update to the current interval if needed
    currentInterval.start.second.convert(static_cast<QVariant::Type>(t));
    currentInterval.end.second.convert(static_cast<QVariant::Type>(t));
 
-   //... and the interpolator
    updateInterpolator();
 }
 
 void QVariantAnimationPrivate::updateInterpolator()
 {
-   int type = currentInterval.start.second.userType();
+   uint type = currentInterval.start.second.userType();
+
    if (type == currentInterval.end.second.userType()) {
       interpolator = getInterpolator(type);
    } else {
-      interpolator = 0;
+      interpolator = nullptr;
    }
 
-   //we make sure that the interpolator is always set to something
-   if (!interpolator) {
+   if (interpolator == nullptr) {
       interpolator = &defaultInterpolator;
    }
 }
@@ -526,14 +525,8 @@ bool QVariantAnimation::event(QEvent *event)
    return QAbstractAnimation::event(event);
 }
 
-/*!
-    \reimp
-*/
-void QVariantAnimation::updateState(QAbstractAnimation::State newState,
-                                    QAbstractAnimation::State oldState)
+void QVariantAnimation::updateState(QAbstractAnimation::State, QAbstractAnimation::State)
 {
-   Q_UNUSED(oldState);
-   Q_UNUSED(newState);
 }
 
 /*!
@@ -561,14 +554,9 @@ QVariant QVariantAnimation::interpolated(const QVariant &from, const QVariant &t
    return d_func()->interpolator(from.constData(), to.constData(), progress);
 }
 
-/*!
-    \reimp
- */
 void QVariantAnimation::updateCurrentTime(int)
 {
    d_func()->recalculateCurrentInterval();
 }
 
-QT_END_NAMESPACE
-
-#endif //QT_NO_ANIMATION
+#endif

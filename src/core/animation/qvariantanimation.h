@@ -24,13 +24,11 @@
 #ifndef QVariantAnimation_H
 #define QVariantAnimation_H
 
-#include <QtCore/qeasingcurve.h>
-#include <QtCore/qabstractanimation.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qpair.h>
-
-QT_BEGIN_NAMESPACE
+#include <qeasingcurve.h>
+#include <qabstractanimation.h>
+#include <qvector.h>
+#include <qvariant.h>
+#include <qpair.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -108,7 +106,5 @@ void qRegisterAnimationInterpolator(QVariant (*func)(const T &from, const T &to,
 }
 
 #endif //QT_NO_ANIMATION
-
-QT_END_NAMESPACE
 
 #endif //QANIMATION_H

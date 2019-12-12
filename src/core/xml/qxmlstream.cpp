@@ -39,12 +39,12 @@ QXmlStreamEntityResolver::~QXmlStreamEntityResolver()
 {
 }
 
-QString QXmlStreamEntityResolver::resolveEntity(const QString &publicId, const QString &systemId)
+QString QXmlStreamEntityResolver::resolveEntity(const QString &, const QString &)
 {
    return QString();
 }
 
-QString QXmlStreamEntityResolver::resolveUndeclaredEntity(const QString &name)
+QString QXmlStreamEntityResolver::resolveUndeclaredEntity(const QString &)
 {
    return QString();
 }
@@ -1223,13 +1223,13 @@ void QXmlStreamReaderPrivate::resolveTag()
             }
 
          } else if (dtdAttribute.attributePrefix == "xmlns") {
-             namespaceDeclarations.push(NamespaceDeclaration());
+            namespaceDeclarations.push(NamespaceDeclaration());
             NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
 
             QStringView namespacePrefix = dtdAttribute.attributeName;
             QStringView namespaceUri    = dtdAttribute.defaultValue;
 
-            if ((namespacePrefix == "xml" ^ namespaceUri == "http://www.w3.org/XML/1998/namespace")
+            if (( (namespacePrefix == "xml") ^ (namespaceUri == "http://www.w3.org/XML/1998/namespace"))
                   || namespaceUri    == "http://www.w3.org/2000/xmlns/" || namespaceUri.isEmpty()
                   || namespacePrefix == "xmlns") {
 
@@ -1783,6 +1783,7 @@ QString QXmlStreamReader::readElementText(ReadElementTextBehaviour behaviour)
 
             case EndElement:
                return result;
+
             case ProcessingInstruction:
             case Comment:
                break;
@@ -1797,7 +1798,8 @@ QString QXmlStreamReader::readElementText(ReadElementTextBehaviour behaviour)
                   break;
                }
 
-            // Fall through (for ErrorOnUnexpectedElement)
+               // Fall through for ErrorOnUnexpectedElement
+               [[fallthrough]];
 
             default:
                if (d->error || behaviour == ErrorOnUnexpectedElement) {

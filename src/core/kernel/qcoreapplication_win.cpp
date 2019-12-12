@@ -138,6 +138,8 @@ Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, QStringView str)
    // cannot use QMutex here, because qWarning()s in the QMutex
    // implementation may cause this function to recurse
 
+   (void) t;
+
    static QWinMsgHandlerCriticalSection staticCriticalSection;
 
    if (str.isEmpty()) {

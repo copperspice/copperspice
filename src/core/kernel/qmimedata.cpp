@@ -128,22 +128,23 @@ QVariant QMimeDataPrivate::retrieveTypedData(const QString &format, QVariant::Ty
          }
 #endif
 
-         case QVariant::Color: {
-            QVariant newData = data;
-            newData.convert(QVariant::Color);
-            return newData;
-         }
+         case QVariant::Color:
+            {
+               QVariant newData = data;
+               newData.convert(QVariant::Color);
+               return newData;
+            }
+            [[fallthrough]];
 
-         case QVariant::List: {
+         case QVariant::List:
             if (format != "text/uri-list") {
                break;
             }
-
-            // fall through
-         }
+            [[fallthrough]];
 
          case QVariant::Url: {
             QByteArray ba = data.toByteArray();
+
             // Qt 3.x will send text/uri-list with a trailing
             // null-terminator (that is *not* sent for any other text mime-type, so chop it off
 

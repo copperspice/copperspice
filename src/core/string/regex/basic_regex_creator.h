@@ -635,13 +635,16 @@ void basic_regex_creator<charT, traits>::fixup_pointers(re_syntax_base *state)
          case syntax_element_long_set_rep:
             // set the state_id of this repeat:
             static_cast<re_repeat *>(state)->state_id = m_repeater_id++;
+            [[fallthrough]];
 
          case syntax_element_alt:
             std::memset(static_cast<re_alt *>(state)->_map, 0, sizeof(static_cast<re_alt *>(state)->_map));
             static_cast<re_alt *>(state)->can_be_null = 0;
+            [[fallthrough]];
 
          case syntax_element_jump:
             static_cast<re_jump *>(state)->alt.p = getaddress(static_cast<re_jump *>(state)->alt.i, state);
+            [[fallthrough]];
 
          default:
             if (state->next.i) {
@@ -803,6 +806,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base *state)
             m_icase = static_cast<re_case *>(state)->icase;
             state = state->next.p;
             continue;
+
          case syntax_element_alt:
          case syntax_element_rep:
          case syntax_element_dot_rep:
@@ -813,20 +817,23 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base *state)
             v.push_back(std::pair<bool, re_syntax_base *>(m_icase, state));
             state = state->next.p;
             break;
+
          case syntax_element_backstep:
             // we need to calculate how big the backstep is:
-            static_cast<re_brace *>(state)->index
-               = this->calculate_backstep(state->next.p);
+            static_cast<re_brace *>(state)->index = this->calculate_backstep(state->next.p);
+
             if (static_cast<re_brace *>(state)->index < 0) {
                // Oops error:
                if (0 == this->m_pdata->m_status) { // update the error code if not already set
                   this->m_pdata->m_status = cs_regex_ns::regex_constants::error_bad_pattern;
                }
+
                //
                // clear the expression, we should be empty:
                //
                this->m_pdata->m_expression = 0;
                this->m_pdata->m_expression_len = 0;
+
                //
                // and throw if required:
                //
@@ -836,6 +843,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base *state)
                   e.raise();
                }
             }
+            [[fallthrough]];
 
          default:
             state = state->next.p;
@@ -1000,6 +1008,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
 
             return;
          }
+
          case syntax_element_end_line: {
             // next character must be a line separator (if there is one):
             if (l_map) {
@@ -1009,64 +1018,74 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
                l_map[static_cast<unsigned>('\f')] |= mask;
                l_map[0x85] |= mask;
             }
+
             // now figure out if we can match a NULL string at this point:
             if (pnull) {
                create_startmap(state->next.p, 0, pnull, mask);
             }
             return;
          }
-         case syntax_element_recurse: {
-            assert(static_cast<const re_jump *>(state)->alt.p->type == syntax_element_startmark);
-            recursion_sub = static_cast<re_brace *>(static_cast<const re_jump *>(state)->alt.p)->index;
-            if (m_recursion_checks[recursion_sub] & 1u) {
-               // Infinite recursion!!
-               if (0 == this->m_pdata->m_status) { // update the error code if not already set
-                  this->m_pdata->m_status = cs_regex_ns::regex_constants::error_bad_pattern;
+
+         case syntax_element_recurse:
+            {
+               assert(static_cast<const re_jump *>(state)->alt.p->type == syntax_element_startmark);
+               recursion_sub = static_cast<re_brace *>(static_cast<const re_jump *>(state)->alt.p)->index;
+
+               if (m_recursion_checks[recursion_sub] & 1u) {
+                  // Infinite recursion
+                  if (0 == this->m_pdata->m_status) { // update the error code if not already set
+                     this->m_pdata->m_status = cs_regex_ns::regex_constants::error_bad_pattern;
+                  }
+
+                  // clear the expression, we should be empty:
+                  this->m_pdata->m_expression = 0;
+                  this->m_pdata->m_expression_len = 0;
+
+                  // and throw if required:
+                  if (0 == (this->flags() & regex_constants::no_except)) {
+                     std::string message = "Encountered an infinite recursion.";
+                     cs_regex_ns::regex_error e(message, cs_regex_ns::regex_constants::error_bad_pattern, 0);
+                     e.raise();
+                  }
+
+               } else if (recursion_start == 0) {
+                  recursion_start = state;
+                  recursion_restart = state->next.p;
+                  state = static_cast<re_jump *>(state)->alt.p;
+                  m_recursion_checks[recursion_sub] |= 1u;
+                  break;
                }
-               //
-               // clear the expression, we should be empty:
-               //
-               this->m_pdata->m_expression = 0;
-               this->m_pdata->m_expression_len = 0;
-               //
-               // and throw if required:
-               //
-               if (0 == (this->flags() & regex_constants::no_except)) {
-                  std::string message = "Encountered an infinite recursion.";
-                  cs_regex_ns::regex_error e(message, cs_regex_ns::regex_constants::error_bad_pattern, 0);
-                  e.raise();
-               }
-            } else if (recursion_start == 0) {
-               recursion_start = state;
-               recursion_restart = state->next.p;
-               state = static_cast<re_jump *>(state)->alt.p;
+
                m_recursion_checks[recursion_sub] |= 1u;
-               break;
+               // can not handle nested recursion here
             }
-            m_recursion_checks[recursion_sub] |= 1u;
-            // can't handle nested recursion here...
-         }
+            [[fallthrough]];
 
          case syntax_element_backref:
             // can be null, and any character can match:
             if (pnull) {
                *pnull |= mask;
             }
+            [[fallthrough]];
 
-         case syntax_element_wild: {
-            // can't be null, any character can match:
-            set_all_masks(l_map, mask);
-            return;
-         }
-         case syntax_element_accept:
-         case syntax_element_match: {
-            // must be null, any character can match:
-            set_all_masks(l_map, mask);
-            if (pnull) {
-               *pnull |= mask;
+         case syntax_element_wild:
+            {
+               // can not be null, any character can match:
+               set_all_masks(l_map, mask);
+               return;
             }
-            return;
-         }
+
+         case syntax_element_accept:
+         case syntax_element_match:
+            {
+               // must be null, any character can match:
+               set_all_masks(l_map, mask);
+
+               if (pnull) {
+                  *pnull |= mask;
+               }
+               return;
+            }
 
          case syntax_element_word_start: {
             // recurse, then AND with all the word characters:
@@ -1268,12 +1287,14 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
             // Continue scanning so we can figure out whether we can be null:
             state = state->next.p;
             break;
+
          case syntax_element_startmark:
             // need to handle independent subs as a special case:
             if (static_cast<re_brace *>(state)->index == -3) {
                state = state->next.p->next.p;
                break;
             }
+            [[fallthrough]];
 
          default:
             state = state->next.p;
