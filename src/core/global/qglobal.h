@@ -255,9 +255,6 @@
 #  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
-#  define Q_PACKED          __attribute__ ((__packed__))
-
-#  define Q_NO_PACKED_REFERENCE
 
 #  ifndef __ARM_EABI__
 #     define QT_NO_ARM_EABI
@@ -290,8 +287,6 @@
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 
 #  if (defined(Q_CC_GNU) || defined(Q_CC_INTEL))
-#    define Q_PACKED __attribute__ ((__packed__))
-#    define Q_NO_PACKED_REFERENCE
 
 #    ifndef __ARM_EABI__
 #      define QT_NO_ARM_EABI
@@ -359,11 +354,6 @@
 
 #  error "CopperSpice has not been tested with this Compiler"
 
-#endif
-
-#ifndef Q_PACKED
-#  define Q_PACKED
-#  undef Q_NO_PACKED_REFERENCE
 #endif
 
 #ifndef Q_LIKELY
