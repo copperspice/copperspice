@@ -250,7 +250,7 @@
 #  define Q_CC_GNU
 #  define Q_C_CALLBACKS
 
-#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
+#  define Q_FUNC_INFO       __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
 #  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
@@ -295,7 +295,7 @@
 
 
 #elif defined(_MSC_VER)
-//  **
+//  ****
 
 #  if _MSC_VER < 1914
 #    error "CopperSpice requires Visual Studio 2017 Version 15.8 or newer"
@@ -310,7 +310,7 @@
 
 
 #elif defined(__PGI)
-//  **
+//  ****
 
 #  define Q_CC_PGI
 
@@ -321,26 +321,14 @@
 #  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
 
-#elif ! defined(Q_OS_HPUX) && (defined(__EDG) || defined(__EDG__))
+#elif defined(__EDG) || defined(__EDG__)
 //  **
 
-#  define Q_CC_EDG
-
 #  if defined(__COMO__)
-#    define Q_CC_COMEAU
 #    define Q_C_CALLBACKS
-
-#  elif defined(__KCC)
-#    define Q_CC_KAI
 
 #  elif defined(__INTEL_COMPILER)
 #    define Q_CC_INTEL
-
-#  elif defined(CENTERLINE_CLPP) || defined(OBJECTCENTER)
-#    define Q_CC_OC
-
-#  elif defined(sinix)
-#    define Q_CC_CDS
 
 #  elif defined(__sgi)
 #    define Q_CC_MIPS
@@ -509,12 +497,12 @@ using ulong     = unsigned long;
 #define QT_NO_FPU
 #endif
 
-// must match both files:  qmetatype.h & qglobal.h
+// keep these files in sync: qmetatype.h & qglobal.h
 #if defined(QT_COORD_TYPE)
-   typedef QT_COORD_TYPE  qreal;
+   using qreal = QT_COORD_TYPE;
 
 #else
-   typedef double         qreal;
+   using qreal = double;
 
 #endif
 
@@ -572,7 +560,7 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
 #    define QMAC_QMENUBAR_NO_EVENT
 #  endif
 
-// Implemented in qcore_mac_objc.mm
+// implemented in qcore_mac_objc.mm
 class Q_CORE_EXPORT QMacAutoReleasePool
 {
    public:
@@ -678,7 +666,6 @@ class Q_CORE_EXPORT QSysInfo
    static QString machineHostName();
 };
 
-
 Q_CORE_EXPORT const char *qVersion();
 
 // avoid "unused parameter" warnings
@@ -701,7 +688,6 @@ inline T *q_check_ptr(T *p)
    Q_CHECK_PTR(p);
    return p;
 }
-
 
 // * *
 template <typename T>
@@ -799,7 +785,6 @@ constexpr inline bool qFuzzyIsNull(float f)
 {
    return qAbs(f) <= 0.00001f;
 }
-
 
 // tests a double for a null value. It does not check whether the
 // actual value is 0 or close to 0, but whether it is binary 0.
