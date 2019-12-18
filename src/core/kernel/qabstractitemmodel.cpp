@@ -791,9 +791,10 @@ void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
    }
 }
 
-void QAbstractItemModelPrivate::columnsAboutToBeInserted(const QModelIndex &parent,
-      int first, int last)
+void QAbstractItemModelPrivate::columnsAboutToBeInserted(const QModelIndex &parent, int first, int last)
 {
+   (void) last;
+
    Q_Q(QAbstractItemModel);
 
    QVector<QPersistentModelIndexData *> persistent_moved;
@@ -993,6 +994,10 @@ QMap<int, QVariant> QAbstractItemModel::itemData(const QModelIndex &index) const
 */
 bool QAbstractItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+   (void) index;
+   (void) value;
+   (void) role;
+
    return false;
 }
 
@@ -1039,6 +1044,9 @@ QMimeData *QAbstractItemModel::mimeData(const QModelIndexList &indexes) const
 bool QAbstractItemModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
             int row, int column, const QModelIndex &parent) const
 {
+   (void) row;
+   (void) column;
+   (void) parent;
 
     if (! (action & supportedDropActions()))
         return false;
@@ -1164,6 +1172,8 @@ Qt::ItemFlags QAbstractItemModel::flags(const QModelIndex &index) const
 
 void QAbstractItemModel::sort(int column, Qt::SortOrder order)
 {
+   (void) column;
+   (void) order;
 
    // do nothing
 }
@@ -1330,7 +1340,8 @@ void QAbstractItemModel::revert()
 
 QVariant QAbstractItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-   Q_UNUSED(orientation);
+   (void) orientation;
+
    if (role == Qt::DisplayRole) {
       return section + 1;
    }
@@ -1339,6 +1350,10 @@ QVariant QAbstractItemModel::headerData(int section, Qt::Orientation orientation
 
 bool QAbstractItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
+   (void) section;
+   (void) orientation;
+   (void) value;
+   (void) role;
 
    return false;
 }

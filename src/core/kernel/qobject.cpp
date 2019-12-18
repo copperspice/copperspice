@@ -575,7 +575,7 @@ bool QObject::disconnect(const QObject *receiver, const QString8 &slotMethod) co
    return QObject::disconnect(this, QString8(), receiver, slotMethod);
 }
 
-void QObject::disconnectNotify(const QMetaMethod &signalMethod) const
+void QObject::disconnectNotify(const QMetaMethod &) const
 {
    // no code is suppose to appear here
 }

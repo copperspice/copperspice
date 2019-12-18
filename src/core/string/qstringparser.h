@@ -455,7 +455,7 @@ class Q_CORE_EXPORT QStringParser
          for (auto iter = begin; iter != end; ++iter) {
 
             if (*iter == QChar32('%')) {
-               std::pair<int, decltype(iter)> tmp = getEscape(iter, begin, end);
+               std::pair<int, decltype(iter)> tmp = getEscape(iter, end);
 
                int id = tmp.first;
                iter   = tmp.second;
@@ -489,7 +489,7 @@ class Q_CORE_EXPORT QStringParser
          for (auto iter = begin; iter != end; ++iter) {
 
             if (*iter == QChar32('%')) {
-               std::pair<int, decltype(iter)> tmp = getEscape(iter, begin, end, lastNumber);
+               std::pair<int, decltype(iter)> tmp = getEscape(iter, end, lastNumber);
                int id = tmp.first;
                iter   = tmp.second;
 
@@ -513,7 +513,7 @@ class Q_CORE_EXPORT QStringParser
       }
 
       template <typename Iterator>
-      static std::pair<int, Iterator> getEscape(Iterator current, Iterator begin, Iterator end, int maxNumber = 999)
+      static std::pair<int, Iterator> getEscape(Iterator current, Iterator end, int maxNumber = 999)
       {
          Iterator origCurrent = current;
          ++current;

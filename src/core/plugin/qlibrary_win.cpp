@@ -32,7 +32,7 @@
 
 extern QString qt_error_string(int code);
 
-QStringList QLibraryHandle::suffixes_sys(const QString &fullVersion)
+QStringList QLibraryHandle::suffixes_sys(const QString &)
 {
    return QStringList(".dll");
 }

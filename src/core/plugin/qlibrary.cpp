@@ -90,8 +90,6 @@ inline void QLibraryStore::cleanup()
       return;
    }
 
-   auto it = data->libraryMap.begin();
-
    for (auto lib : data->libraryMap) {
 
       if (lib->libraryRefCount.load() == 1) {
@@ -200,8 +198,8 @@ inline void QLibraryStore::releaseLibrary(QLibraryHandle *lib)
 }
 
 QLibraryHandle::QLibraryHandle(const QString &canonicalFileName, const QString &version, QLibrary::LoadHints loadHints)
-   : pHnd(0), fileName(canonicalFileName), fullVersion(version),
-     libraryRefCount(0), libraryUnloadCount(0), pluginState(MightBeAPlugin)
+   : pluginState(MightBeAPlugin), pHnd(0), fileName(canonicalFileName), fullVersion(version),
+     libraryRefCount(0), libraryUnloadCount(0)
 {
    loadHintsInt.store(loadHints);
 
