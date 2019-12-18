@@ -111,7 +111,7 @@ class Q_CORE_EXPORT QUrl
 
    ~QUrl();
 
-   QUrl adjusted(FormattingOptions options) const Q_REQUIRED_RESULT;
+   [[nodiscard]] QUrl adjusted(FormattingOptions options) const;
 
    void clear();
    void detach();
@@ -141,7 +141,7 @@ class Q_CORE_EXPORT QUrl
 
    bool matches(const QUrl &url, FormattingOptions options) const;
 
-   QUrl resolved(const QUrl &relative) const Q_REQUIRED_RESULT;
+   [[nodiscard]] QUrl resolved(const QUrl &relative) const;
 
    void swap(QUrl &other) {
       qSwap(d, other.d);

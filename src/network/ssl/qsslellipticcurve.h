@@ -46,8 +46,8 @@ public:
    static QSslEllipticCurve fromShortName(const QString &name);
    static QSslEllipticCurve fromLongName(const QString &name);
 
-   QString shortName() const Q_REQUIRED_RESULT;
-   QString longName() const Q_REQUIRED_RESULT;
+   [[nodiscard]] QString shortName() const;
+   [[nodiscard]] QString longName() const;
 
    constexpr bool isValid() const {
       return id != 0;

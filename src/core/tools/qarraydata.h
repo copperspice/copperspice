@@ -90,8 +90,8 @@ struct Q_CORE_EXPORT QArrayData {
       return result;
    }
 
-   static QArrayData *allocate(size_t objectSize, size_t alignment,
-                               size_t capacity, AllocationOptions options = Default) Q_REQUIRED_RESULT;
+   [[nodiscard]] static QArrayData *allocate(size_t objectSize, size_t alignment,
+                               size_t capacity, AllocationOptions options = Default);
 
    static void deallocate(QArrayData *data, size_t objectSize, size_t alignment);
 
@@ -131,7 +131,7 @@ struct QTypedArrayData : QArrayData {
       T data;
    };
 
-   static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) Q_REQUIRED_RESULT {
+   [[nodiscard]] static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) {
       return static_cast<QTypedArrayData *>(QArrayData::allocate(sizeof(T),
       Q_ALIGNOF(AlignmentDummy), capacity, options));
    }

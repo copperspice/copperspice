@@ -232,9 +232,9 @@ class QStringView : public CsString::CsBasicStringView<S>
 
       bool startsWith(QStringView<S> str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-      S toCaseFolded() const Q_REQUIRED_RESULT;
-      S toLower() const Q_REQUIRED_RESULT;
-      S toUpper() const Q_REQUIRED_RESULT;
+      [[nodiscard]] S toCaseFolded() const;
+      [[nodiscard]] S toLower() const;
+      [[nodiscard]] S toUpper() const;
 
       QByteArray toLatin1() const;
       QByteArray toUtf8() const;

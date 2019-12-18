@@ -373,17 +373,6 @@
 # define Q_DESTRUCTOR_FUNCTION(AFUNC)      Q_DESTRUCTOR_FUNCTION0(AFUNC)
 #endif
 
-
-// *****
-#ifndef Q_REQUIRED_RESULT
-#  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
-#    define Q_REQUIRED_RESULT              __attribute__ ((warn_unused_result))
-#  else
-#    define Q_REQUIRED_RESULT
-#  endif
-#endif
-
-
 // *****
 #if defined(_WIN32_X11_)
 #  define Q_WS_X11
