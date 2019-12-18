@@ -23,7 +23,10 @@
 
 #include "qgenericunixeventdispatcher_p.h"
 #include "qunixeventdispatcher_p.h"
+
+#if ! defined(QT_NO_GLIB) && ! defined(Q_OS_WIN)
 #include "qxcbeventdispatcher_glib_p.h"
+#endif
 
 class QAbstractEventDispatcher *createUnixEventDispatcher()
 {
