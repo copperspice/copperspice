@@ -43,17 +43,14 @@ class Q_CORE_EXPORT QEventLoop : public QObject
    ~QEventLoop();
 
    enum ProcessEventsFlag {
-      AllEvents = 0x00,
+      AllEvents              = 0x00,
       ExcludeUserInputEvents = 0x01,
       ExcludeSocketNotifiers = 0x02,
-      WaitForMoreEvents = 0x04,
-      X11ExcludeTimers = 0x08,
-
-#ifdef QT_DEPRECATED
-      DeferredDeletion = 0x10,
-#endif
-      EventLoopExec = 0x20,
-      DialogExec = 0x40
+      WaitForMoreEvents      = 0x04,
+      X11ExcludeTimers       = 0x08,
+      DeferredDeletion       = 0x10,
+      EventLoopExec          = 0x20,
+      DialogExec             = 0x40
    };
    using ProcessEventsFlags = QFlags<ProcessEventsFlag>;
 

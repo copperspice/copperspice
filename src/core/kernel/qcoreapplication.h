@@ -72,11 +72,6 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    QCoreApplication(int &argc, char **argv, int = ApplicationFlags );
    ~QCoreApplication();
 
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED static int argc();
-   QT_DEPRECATED static char **argv();
-#endif
-
    static QStringList arguments();
 
    static void setAttribute(Qt::ApplicationAttribute attribute, bool on = true);

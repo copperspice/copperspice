@@ -1482,14 +1482,15 @@ QString QCoreApplication::applicationFilePath()
    }
 #  endif
 
-   QString argv0 = QFile::decodeName(QByteArray(argv()[0]));
+   QString argv0 = arguments().at(0);
+
    QString absPath;
 
-   if (!argv0.isEmpty() && argv0.at(0) == QLatin1Char('/')) {
+   if (! argv0.isEmpty() && argv0.at(0) == QChar('/')) {
       // If argv0 starts with a slash, it is already an absolute file path.
       absPath = argv0;
 
-   } else if (argv0.contains(QLatin1Char('/'))) {
+   } else if (argv0.contains(QChar('/'))) {
       // If argv0 contains one or more slashes, it is a file path relative to the current directory.
       absPath = QDir::current().absoluteFilePath(argv0);
 
@@ -1529,35 +1530,6 @@ qint64 QCoreApplication::applicationPid()
 #else
    return getpid();
 #endif
-}
-
-/*!
-    \obsolete
-    Use arguments().size() instead.
-*/
-int QCoreApplication::argc()
-{
-   if (! self) {
-      qWarning("QCoreApplication::argc: Please instantiate the QApplication object first");
-      return 0;
-   }
-   return self->d_func()->argc;
-}
-
-
-/*!
-    \obsolete
-
-    Use arguments() instead.
-*/
-char **QCoreApplication::argv()
-{
-   if (! self) {
-      qWarning("QCoreApplication::argv: Please instantiate the QApplication object first");
-      return nullptr;
-   }
-
-   return self->d_func()->argv;
 }
 
 QStringList QCoreApplication::arguments()

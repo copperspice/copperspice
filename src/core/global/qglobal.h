@@ -445,21 +445,6 @@ using ulong     = unsigned long;
 #  define FALSE false
 #endif
 
-// warnings for deprecated classes or methods
-#if defined(QT_DEPRECATED_WARNINGS)
-
-#  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
-#    define QT_DEPRECATED       __attribute__ ((__deprecated__))
-#  else
-#    define QT_DEPRECATED
-#  endif
-
-#else
-#  define QT_DEPRECATED
-
-#endif
-
-
 #if defined(__i386__) || defined(_WIN32)
 #  if defined(Q_CC_GNU)
 
@@ -670,7 +655,6 @@ Q_CORE_EXPORT const char *qVersion();
 
 // avoid "unused parameter" warnings
 #define Q_UNUSED(x) (void)x;
-
 
 // Debugging and error handling
 #if ! defined(QT_NO_DEBUG) && ! defined(QT_DEBUG)
