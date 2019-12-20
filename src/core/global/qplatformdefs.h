@@ -242,7 +242,7 @@ typedef enum {
 
 
 // ***********
-#elif defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
+#elif defined(Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
 
 // may need to reset default environment if _BSD_SOURCE is defined
 

@@ -271,8 +271,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
    }
 }
 
-
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 # include <crt_externs.h>
 # define environ (*_NSGetEnviron())
 
@@ -365,7 +364,7 @@ void QProcessPrivate::startProcess()
    // Encode the program name
    QByteArray encodedProgramName = QFile::encodeName(program);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // allow invoking of .app bundles on the Mac
    QFileInfo fileInfo(program);
 

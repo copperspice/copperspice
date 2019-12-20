@@ -35,14 +35,15 @@
 #include <qdatetime.h>
 #include <qvarlengtharray.h>
 
+#if defined(Q_OS_DARWIN)
+# include <qcore_mac_p.h>
+#endif
+
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
 
-#if ! defined(QWS) && defined(Q_OS_MAC)
-# include <qcore_mac_p.h>
-#endif
 
 QT_BEGIN_NAMESPACE
 

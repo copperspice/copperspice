@@ -55,7 +55,7 @@ Q_GUI_EXPORT extern bool qt_tab_all_widgets();
 
 namespace WebCore {
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 const double EventHandler::TextDragDelay = 0.15;
 #else
 const double EventHandler::TextDragDelay = 0.0;

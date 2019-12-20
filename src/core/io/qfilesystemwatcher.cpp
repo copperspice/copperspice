@@ -41,9 +41,9 @@
 #  include <qfilesystemwatcher_inotify_p.h>
 #  include <qfilesystemwatcher_dnotify_p.h>
 
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
 
-#  if (defined Q_OS_MAC)
+#  if (defined Q_OS_DARWIN)
 #  include <qfilesystemwatcher_fsevents_p.h>
 #  endif
 
@@ -250,7 +250,7 @@ QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
    }
    return eng;
 
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
    return QKqueueFileSystemWatcherEngine::create();
 
 #else

@@ -187,7 +187,7 @@ QString QStandardPaths::findExecutable(const QString &executableName, const QStr
    return searchExecutable(searchPaths, executableName);
 }
 
-#if !defined(Q_OS_MAC)
+#if !defined(Q_OS_DARWIN)
 QString QStandardPaths::displayName(StandardLocation type)
 {
    switch (type) {

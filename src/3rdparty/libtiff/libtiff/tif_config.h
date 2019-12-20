@@ -402,7 +402,7 @@
 /* #undef ZIP_SUPPORT */
 
 /* Enable large inode numbers on Mac OS X 10.5.  */
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #ifndef _DARWIN_USE_64_BIT_INODE
 # define _DARWIN_USE_64_BIT_INODE 1
 #endif

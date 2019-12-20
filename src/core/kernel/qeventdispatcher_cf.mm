@@ -32,7 +32,7 @@
 
 #include <limits>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #  include <AppKit/NSApplication.h>
 #else
 #  include <UIKit/UIApplication.h>
@@ -54,11 +54,13 @@
             addObserver:self
             selector:@selector(receivedNotification:)
             name:nil
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
             object:[NSApplication sharedApplication]];
 #else
             object:[UIApplication sharedApplication]];
 #endif
+
     }
 
     return self;

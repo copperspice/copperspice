@@ -41,7 +41,7 @@
 #include <locale.h>
 #endif
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
 #endif
 

@@ -341,7 +341,7 @@ QObject *QFactoryLoader::instance(QLibraryHandle * library) const
    return nullptr;
 }
 
-#if defined(Q_OS_UNIX) && ! defined (Q_OS_MAC)
+#if defined(Q_OS_UNIX) && ! defined (Q_OS_DARWIN)
 QLibraryHandle *QFactoryLoader::library(const QString &key) const
 {
    Q_D(const QFactoryLoader);

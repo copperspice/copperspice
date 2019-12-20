@@ -798,7 +798,7 @@ void QObject::moveToThread(QThread *targetThread)
                "Can not move to target thread (%p)\n", currentData->thread.load(),
                threadData->thread.load(), targetData ? targetData->thread.load() : nullptr);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
       qWarning("Multiple libraries might be loaded in the same process. Verify all plugins are "
                "linked with the correct binaries. Export DYLD_PRINT_LIBRARIES=1 and verify only one set of "

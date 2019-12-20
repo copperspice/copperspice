@@ -23,7 +23,7 @@
 
 #include <qurl.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <Foundation/Foundation.h>
 #endif
 

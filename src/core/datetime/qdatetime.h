@@ -32,7 +32,7 @@
 
 class QTimeZone;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 using CFDateRef = const struct __CFDate *;
 
@@ -365,7 +365,7 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromMSecsSinceEpoch(qint64 msecs, const QTimeZone &timeZone);
    static qint64 currentMSecsSinceEpoch();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    static QDateTime fromCFDate(CFDateRef date);
    CFDateRef toCFDate() const;
 

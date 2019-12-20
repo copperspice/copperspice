@@ -39,7 +39,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
 #endif
 

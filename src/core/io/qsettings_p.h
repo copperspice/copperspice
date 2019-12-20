@@ -278,7 +278,7 @@ class QConfFileSettingsPrivate : public QSettingsPrivate
    void syncConfFile(int confFileNo);
    bool writeIniFile(QIODevice &device, const ParsedSettingsMap &map);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    bool readPlistFile(const QString &fileName, ParsedSettingsMap *map) const;
    bool writePlistFile(const QString &fileName, const ParsedSettingsMap &map) const;
 #endif

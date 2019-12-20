@@ -343,7 +343,7 @@ after_loop:
 
 // see also qsettings_win.cpp and qsettings_mac.cpp
 
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+#if ! defined(Q_OS_WIN) && ! defined(Q_OS_DARWIN)
 QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format, QSettings::Scope scope,
       const QString &organization, const QString &application)
 {
@@ -1014,7 +1014,8 @@ void QConfFileSettingsPrivate::initFormat()
    extension = (format == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini");
    readFunc = 0;
    writeFunc = 0;
-#if defined(Q_OS_MAC)
+
+#if defined(Q_OS_DARWIN)
    caseSensitivity = (format == QSettings::NativeFormat) ? Qt::CaseSensitive : IniCaseSensitivity;
 #else
    caseSensitivity = IniCaseSensitivity;
@@ -1135,7 +1136,7 @@ static void initDefaultPaths(QMutexLocker *locker)
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::SystemScope), systemPath);
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
       pathHash->insert(pathHashKey(QSettings::NativeFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::NativeFormat, QSettings::SystemScope), systemPath);
 #endif
@@ -1555,7 +1556,8 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
           because they don't exist) are treated as empty files.
       */
       if (file.isReadable() && fileInfo.size() != 0) {
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
          if (format == QSettings::NativeFormat) {
             ok = readPlistFile(confFile->name, &confFile->originalKeys);
          } else
@@ -1602,7 +1604,8 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       ParsedSettingsMap mergedKeys = confFile->mergedKeyMap();
 
       if (file.isWritable()) {
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
          if (format == QSettings::NativeFormat) {
             ok = writePlistFile(confFile->name, mergedKeys);
          } else
@@ -2196,7 +2199,7 @@ QSettings::QSettings(const QString &fileName, Format format, QObject *parent)
 QSettings::QSettings(QObject *parent)
    : QObject(parent), d_ptr(QSettingsPrivate::create(globalDefaultFormat, UserScope,
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                             QCoreApplication::organizationDomain().isEmpty() ? QCoreApplication::organizationName()
                             : QCoreApplication::organizationDomain(),
 #else
@@ -2862,7 +2865,8 @@ QSettings::Format QSettings::defaultFormat()
 void QSettings::setSystemIniPath(const QString &dir)
 {
    setPath(IniFormat, SystemScope, dir);
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+
+#if !defined(Q_OS_WIN) && ! defined(Q_OS_DARWIN)
    setPath(NativeFormat, SystemScope, dir);
 #endif
 }
@@ -2876,7 +2880,7 @@ void QSettings::setSystemIniPath(const QString &dir)
 void QSettings::setUserIniPath(const QString &dir)
 {
    setPath(IniFormat, UserScope, dir);
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+#if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN)
    setPath(NativeFormat, UserScope, dir);
 #endif
 }

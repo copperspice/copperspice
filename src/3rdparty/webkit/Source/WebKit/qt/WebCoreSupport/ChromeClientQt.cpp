@@ -369,7 +369,7 @@ KeyboardUIMode ChromeClientQt::keyboardUIMode()
 
 IntRect ChromeClientQt::windowResizerRect() const
 {
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     if (!m_webPage)
         return IntRect();
 

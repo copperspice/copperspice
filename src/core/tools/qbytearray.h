@@ -388,7 +388,7 @@ class Q_CORE_EXPORT QByteArray
    static QByteArray fromHex(const QByteArray &hexEncoded);
    static QByteArray fromPercentEncoding(const QByteArray &pctEncoded, char percent = '%');
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     static QByteArray fromCFData(CFDataRef data);
     static QByteArray fromRawCFData(CFDataRef data);
     CFDataRef toCFData() const;

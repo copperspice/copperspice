@@ -3762,7 +3762,7 @@ QString QWebPage::userAgentForUrl(const QUrl&) const
         firstPartTemp += QString::fromLatin1("Mozilla/5.0 ("
 
     // Platform
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
         "Macintosh; "
 #elif defined Q_WS_QWS
         "QtEmbedded; "

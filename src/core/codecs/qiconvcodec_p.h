@@ -28,7 +28,7 @@
 
 #if defined(Q_OS_UNIX) && !defined(QT_NO_ICONV)
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 typedef void *iconv_t;
 #else
 #include <iconv.h>

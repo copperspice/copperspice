@@ -52,7 +52,7 @@
 #include <qlocale_p.h>
 
 #if defined(Q_OS_UNIX)
-#  if defined(Q_OS_MAC)
+#  if defined(Q_OS_DARWIN)
 #    include <qeventdispatcher_cf_p.h>
 #    include <qeventdispatcher_unix_p.h>
 #  else
@@ -69,7 +69,7 @@
 
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #endif
 
@@ -106,14 +106,14 @@ class QMutexUnlocker
    QMutex *mtx;
 };
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
 extern QString qAppFileName();
 #endif
 
 bool QCoreApplicationPrivate::setuidAllowed = false;
 #if ! defined(Q_OS_WIN)
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 QString QCoreApplicationPrivate::macMenuBarName()
 {
    QString bundleName;
@@ -130,7 +130,7 @@ QString QCoreApplicationPrivate::appName() const
 {
    QString applicationName;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    applicationName = macMenuBarName();
 #endif
 
@@ -1468,7 +1468,7 @@ QString QCoreApplication::applicationFilePath()
    d->cachedApplicationFilePath = QFileInfo(qAppFileName()).filePath();
    return d->cachedApplicationFilePath;
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    QString qAppFileName_str = qAppFileName();
 
    if (!qAppFileName_str.isEmpty()) {

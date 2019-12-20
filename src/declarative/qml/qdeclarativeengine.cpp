@@ -2657,12 +2657,12 @@ const QMetaObject *QDeclarativeEnginePrivate::metaObjectForType(int t) const
 
 bool QDeclarative_isFileCaseCorrect(const QString &fileName)
 {
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN32)
+#if defined(Q_OS_DARWIN) || defined(Q_OS_WIN32)
    QFileInfo info(fileName);
 
    QString absolute = info.absoluteFilePath();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    QString canonical = info.canonicalFilePath();
 #elif defined(Q_OS_WIN32)
    wchar_t buffer[1024];

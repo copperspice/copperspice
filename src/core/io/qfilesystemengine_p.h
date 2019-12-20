@@ -54,7 +54,7 @@ class QFileSystemEngine
    static QString resolveGroupName(uint groupId);
 #endif
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    static QString bundleName(const QFileSystemEntry &entry);
 #else
    static QString bundleName(const QFileSystemEntry &entry) {

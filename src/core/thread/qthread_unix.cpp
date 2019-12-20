@@ -25,7 +25,7 @@
 #include <qplatformdefs.h>
 #include <qcoreapplication_p.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #  include <qeventdispatcher_cf_p.h>
 #  include <qeventdispatcher_unix_p.h>
 #else
@@ -52,7 +52,7 @@
 #include <sys/pstat.h>
 #endif
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 # ifdef qDebug
 #   define old_qDebug qDebug
 #   undef qDebug
@@ -246,7 +246,7 @@ extern "C" {
 
 void QThreadPrivate::createEventDispatcher(QThreadData *data)
 {
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     bool ok = false;
     int value = qgetenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION").toInt(&ok);
 
@@ -268,14 +268,14 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
    data->eventDispatcher.load()->startingUp();
 }
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#if defined(Q_OS_LINUX) || defined(Q_OS_DARWIN)
 
 static void setCurrentThreadName(pthread_t threadId, const QString &name)
 {
 #if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
    prctl(PR_SET_NAME, (unsigned long)name.constData(), 0, 0, 0);
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    pthread_setname_np(name.constData());
 
 #endif
@@ -310,7 +310,7 @@ void *QThreadPrivate::start(void *arg)
    else
       createEventDispatcher(data);
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#if defined(Q_OS_LINUX) || defined(Q_OS_DARWIN)
    // sets the name of the current thread.
    QString objectName = thr->objectName();
 

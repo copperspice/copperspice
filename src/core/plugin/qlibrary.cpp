@@ -35,7 +35,7 @@
 #include <qcoreapplication_p.h>
 #include <qplatformdefs.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #  include <qcore_mac_p.h>
 #endif
 
@@ -418,7 +418,7 @@ void QLibraryHandle::updatePluginState()
 
    bool success = false;
 
-#if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
+#if defined(Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
    if (fileName.endsWith(".debug")) {
 
       // do not load a file which ends in .debug, these are the debug symbols from the libraries

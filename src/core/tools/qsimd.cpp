@@ -29,7 +29,6 @@
 #if defined(Q_OS_WIN)
 #include <intrin.h>
 
-
 #elif defined(Q_OS_LINUX) && (defined(Q_PROCESSOR_ARM) || defined(Q_PROCESSOR_MIPS_32))
 #include <qcore_unix_p.h>
 
@@ -576,7 +575,7 @@ int ffsll(quint64 i)
 }
 #endif
 
-#elif defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD) || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#elif defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD) || defined(Q_OS_ANDROID) || defined(Q_OS_DARWIN)
 # define ffsll __builtin_ffsll
 
 #endif

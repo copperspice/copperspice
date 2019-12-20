@@ -41,7 +41,7 @@
 #if defined(Q_OS_HPUX)
 #  define NO_BOM
 #  define UTF16 "ucs2"
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
 #  define NO_BOM
 #  if Q_BYTE_ORDER == Q_BIG_ENDIAN
 #    define UTF16 "UTF-16BE"
@@ -81,7 +81,8 @@ QIconvCodec::QIconvCodec()
       fprintf(stderr, "QIconvCodec::convertToUnicode: internal error, UTF-16 codec not found\n");
       utf16Codec = reinterpret_cast<QTextCodec *>(~0);
    }
-#if defined(Q_OS_MAC)
+
+#if defined(Q_OS_DARWIN)
    if (ptr_iconv_open == 0) {
       QLibrary libiconv("/usr/lib/libiconv");
       libiconv.setLoadHints(QLibrary::ExportExternalSymbolsHint);

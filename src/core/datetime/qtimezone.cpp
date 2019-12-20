@@ -38,7 +38,7 @@ static QTimeZonePrivate *newBackendTimeZone()
 
 #else
 
-#if defined Q_OS_MAC
+#if defined Q_OS_DARWIN
    return new QMacTimeZonePrivate();
 
 #elif defined Q_OS_ANDROID
@@ -67,7 +67,7 @@ static QTimeZonePrivate *newBackendTimeZone(const QByteArray &ianaId)
 
 #else
 
-#if defined Q_OS_MAC
+#if defined Q_OS_DARWIN
    return new QMacTimeZonePrivate(ianaId);
 
 #elif defined Q_OS_ANDROID

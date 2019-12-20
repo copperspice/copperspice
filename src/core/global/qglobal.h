@@ -162,10 +162,7 @@
 
 #if defined(Q_OS_DARWIN)
 
-// backward compatibility
-#  define Q_OS_MAC
-
-// ensure IOS is not defined at this time
+// ensure it is not defined right now
 #  undef Q_OS_IOS
 
 #endif
@@ -379,7 +376,7 @@
 
 #elif defined(Q_OS_UNIX)
 
-#  if ! defined(Q_OS_MAC)
+#  if ! defined(Q_OS_DARWIN)
 #    define Q_WS_X11
 #  endif
 
@@ -528,7 +525,7 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
    return qMax(min, qMin(max, val));
 }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 
 #  ifndef QMAC_QMENUBAR_NO_EVENT
 #    define QMAC_QMENUBAR_NO_EVENT

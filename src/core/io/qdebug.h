@@ -514,7 +514,7 @@ inline QDebug qWarning()
    return QDebug(QtWarningMsg);
 }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 // provide QDebug stream operators for commonly used Core Foundation
 // and Core Graphics types, as well as NSObject. Additional CF/CG types
@@ -570,6 +570,6 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, CGColorRef);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const NSObject *);
 Q_CORE_EXPORT QDebug operator<<(QDebug, CFStringRef);
 
-#endif // Q_OS_MAC
+#endif // Q_OS_DARWIN
 
 #endif

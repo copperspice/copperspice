@@ -23,7 +23,7 @@
 
 #include <qtconcurrentiteratekernel.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 #include <unistd.h>

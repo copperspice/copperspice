@@ -63,7 +63,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    static void removePostedTimerEvent(QObject *object, int timerId);
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    static QString macMenuBarName();
 #endif
 

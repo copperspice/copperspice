@@ -36,7 +36,7 @@
 
 #include <stdlib.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <mach/mach_time.h>
 #endif
 
