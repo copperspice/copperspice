@@ -36,12 +36,12 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QSplashScreen>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <QtCore/QUrl>
 #include <QtGui/QFileOpenEvent>
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 class ApplicationEventFilter : public QObject
 {
    Q_OBJECT
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
    QApplication app(argc, argv);
    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    ApplicationEventFilter eventFilter;
    app.installEventFilter(&eventFilter);
 #endif
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
    MainWindow mw;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    eventFilter.setMainWindow(&mw);
 #endif
 

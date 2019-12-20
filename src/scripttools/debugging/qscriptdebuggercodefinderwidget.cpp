@@ -112,7 +112,7 @@ QScriptDebuggerCodeFinderWidget::QScriptDebuggerCodeFinderWidget(QWidget *parent
    Q_D(QScriptDebuggerCodeFinderWidget);
    QString system = QLatin1String("win");
    QHBoxLayout *hboxLayout = new QHBoxLayout(this);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    system = QLatin1String("mac");
 #else
    hboxLayout->setSpacing(6);

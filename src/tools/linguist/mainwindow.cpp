@@ -268,7 +268,7 @@ MainWindow::MainWindow()
    setUnifiedTitleAndToolBarOnMac(true);
    m_ui.setupUi(this);
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    setWindowIcon(QPixmap(QLatin1String(":/images/appicon.png") ));
 #endif
 
@@ -722,7 +722,7 @@ RecentFiles &MainWindow::recentFiles()
 
 const QString &MainWindow::resourcePrefix()
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    static const QString prefix(QLatin1String(":/images/mac"));
 #else
    static const QString prefix(QLatin1String(":/images/win"));
@@ -1394,7 +1394,7 @@ void MainWindow::manual()
 
    if (m_assistantProcess->state() != QProcess::Running) {
       QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-#if !defined(Q_OS_MAC)
+#if !defined(Q_OS_DARWIN)
       app += QLatin1String("assistant");
 #else
       app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");
@@ -2034,7 +2034,7 @@ void MainWindow::setupMenuBar()
    m_ui.menuViewViews->addAction(m_sourceAndFormDock->toggleViewAction());
    m_ui.menuViewViews->addAction(m_errorsDock->toggleViewAction());
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    // Window menu
    QMenu *windowMenu = new QMenu(tr("&Window"), this);
    menuBar()->insertMenu(m_ui.menuHelp->menuAction(), windowMenu);

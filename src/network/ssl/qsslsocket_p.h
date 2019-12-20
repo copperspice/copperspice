@@ -38,7 +38,7 @@ class QSslContext;
 #include <qstringlist.h>
 #include <qringbuffer_p.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #  include <Security/SecCertificate.h>
 #  include <CoreFoundation/CFArray.h>
 
@@ -52,7 +52,7 @@ class QSslContext;
 #  endif
 #endif
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 typedef CFDataRef (*PtrSecCertificateCopyData)(SecCertificateRef);
 typedef OSStatus (*PtrSecTrustSettingsCopyCertificates)(int, CFArrayRef*);
 typedef OSStatus (*PtrSecTrustCopyAnchorCertificates)(CFArrayRef*);
@@ -124,7 +124,7 @@ public:
    static bool isMatchingHostname(const QSslCertificate &cert, const QString &peerName);
    static bool isMatchingHostname(const QString &cn, const QString &hostname);
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    static PtrSecCertificateCopyData ptrSecCertificateCopyData;
    static PtrSecTrustSettingsCopyCertificates ptrSecTrustSettingsCopyCertificates;
    static PtrSecTrustCopyAnchorCertificates ptrSecTrustCopyAnchorCertificates;

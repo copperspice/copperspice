@@ -26,7 +26,7 @@
 
 #ifndef QT_OPENGL_ES
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
 # ifndef APIENTRYP
 #   ifdef APIENTRY
 #     define APIENTRYP APIENTRY *

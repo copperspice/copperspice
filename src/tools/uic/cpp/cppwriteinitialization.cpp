@@ -373,7 +373,7 @@ int IconHandle::compare(const IconHandle &rhs) const
 }
 
 
-#if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
 inline uint qHash(const SizePolicyHandle &handle)
 {
    return qHash(handle.m_domSizePolicy);
@@ -501,7 +501,7 @@ void WriteInitialization::LayoutDefaultHandler::writeProperty(int p, const QStri
          bool ifndefMac = (!(m_state[p] & (HasDefaultFunction | HasDefaultValue))
                && value == defaultStyleValue);
          if (ifndefMac) {
-            str << "#ifndef Q_OS_MAC\n";
+            str << "#ifndef Q_OS_DARWIN\n";
          }
          if (p == Margin) { // Use setContentsMargins for numeric values
             writeContentsMargins(indent, objectName, value, str);
