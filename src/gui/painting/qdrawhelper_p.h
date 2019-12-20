@@ -35,6 +35,8 @@
 #include <qrasterdefs_p.h>
 #include <qsimd_p.h>
 
+#include <algorithm>
+
 struct QSolidData;
 struct QTextureData;
 struct QGradientData;
@@ -784,31 +786,7 @@ template<> inline void qt_memfill(quint8 *dest, quint8 color, int count)
 template <class T>
 inline void qt_memfill(T *dest, T value, int count)
 {
-   if (! count) {
-      return;
-   }
-
-   int n = (count + 7) / 8;
-   switch (count & 0x07) {
-      case 0:
-         do {
-            *dest++ = value;
-         case 7:
-            *dest++ = value;
-         case 6:
-            *dest++ = value;
-         case 5:
-            *dest++ = value;
-         case 4:
-            *dest++ = value;
-         case 3:
-            *dest++ = value;
-         case 2:
-            *dest++ = value;
-         case 1:
-            *dest++ = value;
-         } while (--n > 0);
-   }
+   std::fill_n(dest, count, value);
 }
 
 template <class T>

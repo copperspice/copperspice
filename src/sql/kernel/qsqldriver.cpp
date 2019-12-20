@@ -140,6 +140,8 @@ QString QSqlDriver::escapeIdentifier(const QString &identifier, IdentifierType) 
 
 bool QSqlDriver::isIdentifierEscaped(const QString &identifier, IdentifierType type) const
 {
+   (void) type;
+
    return identifier.size() > 2
       && identifier.startsWith(QLatin1Char('"')) //left delimited
       && identifier.endsWith(QLatin1Char('"')); //right delimited
@@ -341,7 +343,10 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
                r = QChar('\'') + res +  QChar('\'');
                break;
             }
+
+            [[fallthrough]];
          }
+
          default:
             r = field.value().toString();
             break;
@@ -357,11 +362,15 @@ QVariant QSqlDriver::handle() const
 
 bool QSqlDriver::subscribeToNotification(const QString &name)
 {
+   (void) name;
+
    return false;
 }
 
 bool QSqlDriver::unsubscribeFromNotification(const QString &name)
 {
+   (void) name;
+
    return false;
 }
 

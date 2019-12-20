@@ -612,6 +612,8 @@ void QSqlResult::virtual_hook(int, void *)
 
 bool QSqlResult::execBatch(bool arrayBind)
 {
+   (void) arrayBind;
+
    Q_D(QSqlResult);
 
    QVector<QVariant> values = d->values;

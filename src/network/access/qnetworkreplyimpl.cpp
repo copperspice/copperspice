@@ -858,7 +858,7 @@ void QNetworkReplyImplPrivate::finished()
          // only content with a known size will fail with a temporary network failure error
          if (!totalSize.isNull()) {
 
-            if (bytesDownloaded != totalSize) {
+            if (bytesDownloaded != totalSize.toLongLong()) {
 
                if (migrateBackend()) {
                   // either we are migrating or the request is finished/aborted

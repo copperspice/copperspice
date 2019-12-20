@@ -276,6 +276,7 @@ void WriteIncludes::acceptCustomWidget(DomCustomWidget *node)
 
 void WriteIncludes::acceptCustomWidgets(DomCustomWidgets *node)
 {
+   (void) node;
 }
 
 void WriteIncludes::acceptIncludes(DomIncludes *node)

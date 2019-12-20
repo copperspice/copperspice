@@ -115,7 +115,7 @@ class QMultiMap
          return *this;
       }
 
-      iterator operator++(int n) {
+      iterator operator++(int) {
          return m_iter++;
       }
 
@@ -213,7 +213,7 @@ class QMultiMap
          return *this;
       }
 
-      const_iterator operator++(int n) {
+      const_iterator operator++(int) {
          return m_iter++;
       }
 

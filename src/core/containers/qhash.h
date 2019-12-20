@@ -205,7 +205,7 @@ class QHash
          return *this;
       }
 
-      const_iterator operator++(int n) {
+      const_iterator operator++(int) {
          return m_iter++;
       }
 
