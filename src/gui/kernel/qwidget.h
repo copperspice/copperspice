@@ -906,7 +906,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    friend class QWinNativePanGestureRecognizer;
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    friend bool qt_mac_is_metal(const QWidget *w);
 #endif
 

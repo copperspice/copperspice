@@ -44,7 +44,7 @@
 #include <qvarlengtharray.h>
 #include <qwindow.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 
 #include <qplatform_nativeinterface.h>
 
@@ -664,7 +664,7 @@ class QWizardPrivate : public QDialogPrivate
    void _q_handleFieldObjectDestroyed(QObject *);
    void setStyle(QStyle *style);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    static QPixmap findDefaultBackgroundPixmap();
 #endif
 
@@ -1526,7 +1526,7 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
       }
       pushButton->setObjectName(object_name_for_button(which));
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       pushButton->setAutoDefault(false);
 #endif
 
@@ -1895,7 +1895,7 @@ void QWizardPrivate::setStyle(QStyle *style)
    }
 }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 QPixmap QWizardPrivate::findDefaultBackgroundPixmap()
 {
@@ -2549,7 +2549,7 @@ QPixmap QWizard::pixmap(WizardPixmap which) const
    Q_D(const QWizard);
    Q_ASSERT(uint(which) < NPixmaps);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (which == BackgroundPixmap && d->defaultPixmaps[BackgroundPixmap].isNull()) {
       d->defaultPixmaps[BackgroundPixmap] = d->findDefaultBackgroundPixmap();
    }

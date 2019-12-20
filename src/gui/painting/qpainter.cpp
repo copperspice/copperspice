@@ -5056,7 +5056,7 @@ start_lengthVariant:
                underlineFormats.append(range);
             }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          } else if (hidemnmemonic) {
 
             QStringView tmp(iter, text.end());

@@ -679,7 +679,7 @@ QSize QDateTimeEdit::sizeHint() const
 
       QSize hint(w, h);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       if (d->calendarPopupEnabled()) {
          QStyleOptionComboBox opt;
          d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, hint, this);
@@ -720,7 +720,7 @@ bool QDateTimeEdit::event(QEvent *event)
          break;
       case QEvent::StyleChange:
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       case QEvent::MacSizeChange:
 #endif
          d->setLayoutItemMargins(QStyle::SE_DateTimeEditLayoutItem);

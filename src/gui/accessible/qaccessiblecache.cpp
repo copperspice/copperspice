@@ -107,7 +107,7 @@ void QAccessibleCache::deleteInterface(QAccessible::Id id, QObject *obj)
    }
    delete iface;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    removeCocoaElement(id);
 #endif
 }

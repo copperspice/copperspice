@@ -25,7 +25,7 @@
 
 #include <sys/param.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #import <Cocoa/Cocoa.h>
 #import <IOKit/graphics/IOGraphicsLib.h>
 
@@ -82,7 +82,7 @@ static const char *languageForWritingSystem[] = {
 };
 enum { LanguageCount = sizeof(languageForWritingSystem) / sizeof(const char *) };
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 static NSInteger languageMapSort(id obj1, id obj2, void *context)
 {
    NSArray *map1 = (NSArray *) obj1;
@@ -102,7 +102,7 @@ QCoreTextFontDatabase::QCoreTextFontDatabase(bool useFreeType)
 #endif
 {
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    QSettings appleSettings("apple.com");
    QVariant appleValue = appleSettings.value("AppleAntiAliasingThreshold");
 
@@ -178,7 +178,7 @@ QCoreTextFontDatabase::~QCoreTextFontDatabase()
 
 static CFArrayRef availableFamilyNames()
 {
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    return CTFontManagerCopyAvailableFontFamilyNames();
 #elif defined(Q_OS_IOS)
    return (CFArrayRef) [[UIFont familyNames] retain];
@@ -212,7 +212,7 @@ void QCoreTextFontDatabase::populateFontDatabase()
 
       QPlatformFontDatabase::registerFontFamily(familyName);
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
       QString localizedFamilyName = QString::fromNSString([[NSFontManager sharedFontManager] localizedNameForFamily:
              (NSString *)familyNameRef face: nil]);
       if (familyName != localizedFamilyName) {
@@ -523,7 +523,7 @@ QFont::StyleHint styleHintFromNSString(NSString *style)
    }
 }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 static QString familyNameFromPostScriptName(NSString *psName)
 {
    QCFType<CTFontDescriptorRef> fontDescriptor = (CTFontDescriptorRef) CTFontDescriptorCreateWithNameAndSize((CFStringRef)psName, 12.0);
@@ -569,7 +569,7 @@ QStringList QCoreTextFontDatabase::fallbacksForFamily(const QString &family, QFo
                   fallbackList.append(QCFString::toQString(fallbackFamilyName));
                }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
                // Since we are only returning a list of default fonts for the current language, we do not
                // cover all unicode completely. This was especially an issue for some of the common script
                // symbols such as mathematical symbols, currency or geometric shapes. To minimize the risk
@@ -596,7 +596,7 @@ QStringList QCoreTextFontDatabase::fallbacksForFamily(const QString &family, QFo
    static bool didPopulateStyleFallbacks = false;
    if (!didPopulateStyleFallbacks) {
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
       NSArray *languages = [defaults stringArrayForKey: @"AppleLanguages"];
 

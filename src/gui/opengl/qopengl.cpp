@@ -305,7 +305,7 @@ QString OsTypeTerm::hostOs()
 #elif defined(Q_OS_LINUX)
     return QString("linux");
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
     return  QString("macosx");
 
 #elif defined(Q_OS_ANDROID)

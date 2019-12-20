@@ -42,7 +42,7 @@
 #include <qwidgetaction_p.h>
 #include <qmainwindowlayout_p.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
 
@@ -242,7 +242,7 @@ bool QToolBarPrivate::mousePressEvent(QMouseEvent *event)
    q->initStyleOption(&opt);
 
    if (q->style()->subElementRect(QStyle::SE_ToolBarHandle, &opt, q).contains(event->pos()) == false) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       // When using the unified toolbar on Mac OS X the user can can click and
       // drag between toolbar contents to move the window. Make this work by
       // implementing the standard mouse-dragging code and then call
@@ -278,7 +278,7 @@ bool QToolBarPrivate::mouseReleaseEvent(QMouseEvent *)
       endDrag();
       return true;
    } else {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       if (!macWindowDragging) {
          return false;
       }
@@ -296,7 +296,7 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
 
    if (!state) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       if (!macWindowDragging) {
          return false;
       }
@@ -764,7 +764,7 @@ static bool waitForPopup(QToolBar *tb, QWidget *popup)
    return false;
 }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 static void enableMacToolBar(QToolBar *toolbar, bool enable)
 {
    QPlatformNativeInterface *nativeInterface = QApplication::platformNativeInterface();
@@ -806,7 +806,7 @@ bool QToolBar::event(QEvent *event)
 
       case QEvent::Show:
          d->toggleViewAction->setChecked(event->type() == QEvent::Show);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          enableMacToolBar(this, event->type() == QEvent::Show);
 #endif
          emit visibilityChanged(event->type() == QEvent::Show);

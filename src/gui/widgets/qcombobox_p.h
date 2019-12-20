@@ -371,7 +371,7 @@ class QComboBoxPrivate : public QWidgetPrivate
    void updateViewContainerPaletteAndOpacity();
    void updateFocusPolicy();
    void showPopupFromMouseEvent(QMouseEvent *e);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    void cleanupNativePopup();
    bool showNativePopup();
 #endif
@@ -402,7 +402,7 @@ class QComboBoxPrivate : public QWidgetPrivate
    Qt::CaseSensitivity autoCompletionCaseSensitivity;
    int indexBeforeChange;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    QPlatformMenu *m_platformMenu;
 #endif
 

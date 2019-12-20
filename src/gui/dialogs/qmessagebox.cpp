@@ -319,7 +319,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
 
    q->setModal(true);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    QFont f = q->font();
    f.setBold(true);
    label->setFont(f);
@@ -342,7 +342,7 @@ void QMessageBoxPrivate::setupLayout()
 
    iconLabel->setVisible(hasIcon);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    QSpacerItem *indentSpacer = new QSpacerItem(14, 1, QSizePolicy::Fixed, QSizePolicy::Fixed);
 #else
    QSpacerItem *indentSpacer = new QSpacerItem(hasIcon ? 7 : 15, 1, QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -352,20 +352,20 @@ void QMessageBoxPrivate::setupLayout()
    grid->addWidget(label, 0, hasIcon ? 2 : 1, 1, 1);
 
    if (informativeLabel) {
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
       informativeLabel->setContentsMargins(0, 7, 0, 7);
 #endif
       grid->addWidget(informativeLabel, 1, hasIcon ? 2 : 1, 1, 1);
    }
    if (checkbox) {
       grid->addWidget(checkbox, informativeLabel ? 2 : 1, hasIcon ? 2 : 1, 1, 1, Qt::AlignLeft);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       grid->addItem(new QSpacerItem(1, 15, QSizePolicy::Fixed, QSizePolicy::Fixed), grid->rowCount(), 0);
 #else
       grid->addItem(new QSpacerItem(1, 7, QSizePolicy::Fixed, QSizePolicy::Fixed), grid->rowCount(), 0);
 #endif
    }
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    grid->addWidget(buttonBox, grid->rowCount(), hasIcon ? 2 : 1, 1, 1);
    grid->setMargin(0);
    grid->setVerticalSpacing(8);
@@ -413,7 +413,7 @@ void QMessageBoxPrivate::updateSize()
 
 
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    int softLimit = qMin(screenSize.width() / 2, 420);
 
 #else
@@ -948,7 +948,7 @@ void QMessageBox::changeEvent(QEvent *ev)
 
       case QEvent::FontChange:
       case QEvent::ApplicationFontChange:
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       {
          QFont f = font();
          f.setBold(true);
@@ -973,7 +973,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 
       if (d->detectedEscapeButton) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          d->detectedEscapeButton->animateClick();
 #else
          d->detectedEscapeButton->click();
@@ -1179,7 +1179,7 @@ QMessageBox::StandardButton QMessageBox::critical(QWidget *parent, const QString
 void QMessageBox::about(QWidget *parent, const QString &title, const QString &text)
 {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    static QPointer<QMessageBox> oldMsgBox;
 
    if (oldMsgBox && oldMsgBox->text() == text) {
@@ -1192,7 +1192,7 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
 
    QMessageBox *msgBox = new QMessageBox(title, text, Information, 0, 0, 0, parent
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       , Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
 #else
       );
@@ -1204,7 +1204,7 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
    msgBox->setIconPixmap(icon.pixmap(size));
 
    // should perhaps be a style hint
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    oldMsgBox = msgBox;
 
    msgBox->d_func()->buttonBox->setCenterButtons(true);
@@ -1553,7 +1553,7 @@ void QMessageBox::setInformativeText(const QString &text)
          label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
          label->setOpenExternalLinks(true);
          label->setWordWrap(true);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          // apply a smaller font the information label on the mac
          label->setFont(cs_app_fonts_hash()->value("QTipLabel"));
 #endif
@@ -1568,7 +1568,7 @@ void QMessageBox::setInformativeText(const QString &text)
 void QMessageBox::setWindowTitle(const QString &title)
 {
    // Message boxes on the mac do not have a title
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    QDialog::setWindowTitle(title);
 #else
    Q_UNUSED(title);

@@ -421,7 +421,7 @@ static inline bool isCaseSensitiveFileSystem(const QString &path)
 
 #if defined(Q_OS_WIN)
    return false;
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    return pathconf(QFile::encodeName(path).constData(), _PC_CASE_SENSITIVE);
 #else
    return true;

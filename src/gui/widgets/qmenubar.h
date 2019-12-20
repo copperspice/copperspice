@@ -82,7 +82,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
 
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    NSMenu *toNSMenu();
 #endif
 

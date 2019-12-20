@@ -79,7 +79,7 @@ extern QClipboard *qt_clipboard;
 #if defined (Q_OS_WIN32)
 extern QSysInfo::WinVersion qt_winver;
 
-#elif defined (Q_OS_MAC)
+#elif defined (Q_OS_DARWIN)
 extern QSysInfo::MacVersion qt_macver;
 
 #endif

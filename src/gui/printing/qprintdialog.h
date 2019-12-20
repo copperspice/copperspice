@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
    int exec() override;
 
-#if defined (Q_OS_UNIX) && ! defined(Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
    void accept() override;
 #endif
 
@@ -73,7 +73,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
  private:
 
-#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_DARWIN)
 
    GUI_CS_SLOT_1(Private, void _q_togglePageSetCombo(bool arg1))
    GUI_CS_SLOT_2(_q_togglePageSetCombo)

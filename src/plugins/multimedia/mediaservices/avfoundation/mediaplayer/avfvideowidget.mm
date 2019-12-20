@@ -30,7 +30,7 @@
 
 #include <AVFoundation/AVFoundation.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #import <AppKit/AppKit.h>
 #else
 #import <UIKit/UIKit.h>

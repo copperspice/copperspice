@@ -819,7 +819,7 @@ bool QSpinBox::event(QEvent *event)
 
    if (event->type() == QEvent::StyleChange
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       || event->type() == QEvent::MacSizeChange
 #endif
    ) {

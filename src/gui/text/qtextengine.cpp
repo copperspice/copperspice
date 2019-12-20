@@ -1447,7 +1447,7 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
          }
       }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       if (actualFontEngine->type() == QFontEngine::Mac) {
 
          if (actualFontEngine->fontDef.stretch != 100) {

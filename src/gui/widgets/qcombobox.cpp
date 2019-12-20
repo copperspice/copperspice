@@ -80,7 +80,7 @@ QComboBoxPrivate::QComboBoxPrivate()
      hoverControl(QStyle::SC_None),
      autoCompletionCaseSensitivity(Qt::CaseInsensitive),
      indexBeforeChange(-1)
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    , m_platformMenu(0)
 #endif
 
@@ -92,7 +92,7 @@ QComboBoxPrivate::QComboBoxPrivate()
 
 QComboBoxPrivate::~QComboBoxPrivate()
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    cleanupNativePopup();
 #endif
 }
@@ -828,7 +828,7 @@ void QComboBoxPrivate::init()
 {
    Q_Q(QComboBox);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // On OS X, only line edits and list views always get tab focus. It's only
    // when we enable full keyboard access that other controls can get tab focus.
    // When it's not editable, a combobox looks like a button, and it behaves as
@@ -999,7 +999,7 @@ void QComboBoxPrivate::updateViewContainerPaletteAndOpacity()
 
 void QComboBoxPrivate::updateFocusPolicy()
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    Q_Q(QComboBox);
 
    // See comment in QComboBoxPrivate::init()
@@ -2061,7 +2061,7 @@ QSize QComboBox::sizeHint() const
    return d->recomputeSizeHint(d->sizeHint);
 }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 namespace {
 struct IndexSetter {
@@ -2146,7 +2146,7 @@ bool QComboBoxPrivate::showNativePopup()
 
    m_platformMenu->showPopup(tlw, QRect(tlw->mapFromGlobal(q->mapToGlobal(offset)), QSize()), currentItem);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // The Cocoa popup will swallow any mouse release event.
    // We need to fake one here to un-press the button.
    QMouseEvent mouseReleased(QEvent::MouseButtonRelease, q->pos(), Qt::LeftButton,
@@ -2157,7 +2157,7 @@ bool QComboBoxPrivate::showNativePopup()
    return true;
 }
 
-#endif // Q_OS_MAC
+#endif // Q_OS_DARWIN
 
 void QComboBox::showPopup()
 {
@@ -2172,7 +2172,7 @@ void QComboBox::showPopup()
    initStyleOption(&opt);
    const bool usePopup = style->styleHint(QStyle::SH_ComboBox_Popup, &opt, this);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (usePopup && (!d->container
          || (view()->metaObject()->className() == QByteArray("QComboBoxListView")
             && view()->itemDelegate()->metaObject()->className() == QByteArray("QComboMenuDelegate")))
@@ -2353,7 +2353,7 @@ void QComboBox::showPopup()
    }
    container->setGeometry(listRect);
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    const bool updatesEnabled = container->updatesEnabled();
 #endif
 
@@ -2370,7 +2370,7 @@ void QComboBox::showPopup()
    // which means that the window will be visible before the call to container->show() returns.
    // If updates are disabled at this point we'll miss our chance at painting the popup
    // menu before it's shown, causing flicker since the window then displays the standard gray background.
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    container->setUpdatesEnabled(false);
 #endif
 
@@ -2385,7 +2385,7 @@ void QComboBox::showPopup()
       ? QAbstractItemView::PositionAtCenter
       : QAbstractItemView::EnsureVisible);
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    container->setUpdatesEnabled(updatesEnabled);
 #endif
 
@@ -2439,7 +2439,7 @@ void QComboBox::hidePopup()
 
       if (needFade) {
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
          QPlatformNativeInterface *platformNativeInterface = qApp->platformNativeInterface();
          int at = platformNativeInterface->metaObject()->indexOfMethod("fadeWindow()");
 
@@ -2546,7 +2546,7 @@ void QComboBox::changeEvent(QEvent *e)
    switch (e->type()) {
       case QEvent::StyleChange:
          d->updateDelegate();
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       case QEvent::MacSizeChange:
 #endif
          d->sizeHint = QSize(); // invalidate size hint
@@ -2940,7 +2940,7 @@ void QComboBox::keyReleaseEvent(QKeyEvent *e)
 void QComboBox::wheelEvent(QWheelEvent *e)
 {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 #else
    Q_D(QComboBox);

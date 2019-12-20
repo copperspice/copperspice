@@ -348,7 +348,7 @@ QPointer<QWidget> qt_last_mouse_receiver = 0;
 
 void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
 {
-#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS) // Cocoa tracks popups
+#if !defined(Q_OS_DARWIN) && !defined(Q_OS_IOS) // Cocoa tracks popups
    // Ignore all enter/leave events from QPA if we are not on the first-level context menu.
    // This prevents duplicated events on most platforms. Fake events will be delivered in
    // QWidgetWindow::handleMouseEvent(QMouseEvent *). Make an exception whether the widget
@@ -502,7 +502,7 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
             widgetPos = receiver->mapFromGlobal(event->globalPos());
          }
 
-#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS) // Cocoa tracks popups
+#if !defined(Q_OS_DARWIN) && !defined(Q_OS_IOS) // Cocoa tracks popups
          const bool reallyUnderMouse = activePopupWidget->rect().contains(mapped);
          const bool underMouse = activePopupWidget->underMouse();
          if (underMouse != reallyUnderMouse) {

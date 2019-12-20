@@ -953,7 +953,7 @@ void QUnixPrintWidget::_q_btnPropertiesClicked()
    d->_q_btnPropertiesClicked();
 }
 
-#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_DARWIN)
 
 void QPrintDialog::_q_togglePageSetCombo(bool arg1)
 {

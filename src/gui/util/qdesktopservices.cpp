@@ -141,7 +141,7 @@ QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation t
       const QString compatAppName = qt_applicationName_noFallback();
       const QString baseDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
       QString result = baseDir;
       if (!QCoreApplication::organizationName().isEmpty()) {
          result += QLatin1Char('/') + QCoreApplication::organizationName();

@@ -160,7 +160,7 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       return true;
    }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    // in AAT fonts, 'gsub' table is effectively replaced by 'mort'/'morx' table
    uint len;
 

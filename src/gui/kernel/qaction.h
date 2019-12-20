@@ -262,7 +262,7 @@ class Q_GUI_EXPORT QAction : public QObject
    friend class QMenuBar;
    friend class QToolButton;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    friend void qt_mac_clear_status_text(QAction *action);
 #endif
 

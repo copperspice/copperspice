@@ -29,7 +29,7 @@
 #include <qicon.h>
 #include <qaction.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 #if defined(__OBJC__)
 @class NSMenu;
@@ -185,7 +185,7 @@ class Q_GUI_EXPORT QMenu : public QWidget
    QPlatformMenu *platformMenu();
    void setPlatformMenu(QPlatformMenu *platformMenu);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    NSMenu *toNSMenu();
    void setAsDockMenu();
 #endif

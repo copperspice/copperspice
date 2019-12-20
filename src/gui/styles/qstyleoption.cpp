@@ -24,7 +24,7 @@
 #include <qstyleoption.h>
 #include <qapplication.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 # include <qmacstyle.h>
 #endif
 
@@ -65,7 +65,7 @@ void QStyleOption::init(const QWidget *widget)
    }
 
 
-#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
    switch (QMacStyle::widgetSizePolicy(widget)) {
       case QMacStyle::SizeSmall:
          state |= QStyle::State_Small;

@@ -252,7 +252,7 @@ bool QWindowSystemInterface::handleKeyEvent(QWindow *w, QEvent::Type t, int k, Q
 bool QWindowSystemInterface::handleKeyEvent(QWindow *tlw, ulong timestamp, QEvent::Type t, int k, Qt::KeyboardModifiers mods,
    const QString &text, bool autorep, ushort count)
 {
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    if (t == QEvent::KeyPress && QWindowSystemInterface::handleShortcutEvent(tlw, timestamp, k, mods, 0, 0, 0, text, autorep, count)) {
       return true;
    }
@@ -281,7 +281,7 @@ bool QWindowSystemInterface::handleExtendedKeyEvent(QWindow *tlw, ulong timestam
    const QString &text, bool autorep,
    ushort count, bool tryShortcutOverride)
 {
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    if (tryShortcutOverride && type == QEvent::KeyPress && QWindowSystemInterface::handleShortcutEvent(tlw,
          timestamp, key, modifiers, nativeScanCode, nativeVirtualKey, nativeModifiers, text, autorep, count)) {
       return true;

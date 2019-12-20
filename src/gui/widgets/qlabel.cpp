@@ -687,7 +687,7 @@ bool QLabel::event(QEvent *e)
             d->textLayoutDirty = true;
          }
       } else if (e->type() == QEvent::StyleChange
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          || e->type() == QEvent::MacSizeChange
 #endif
       ) {

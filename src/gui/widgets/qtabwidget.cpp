@@ -807,7 +807,7 @@ bool QTabWidget::event(QEvent *ev)
 void QTabWidget::changeEvent(QEvent *ev)
 {
    if (ev->type() == QEvent::StyleChange
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       || ev->type() == QEvent::MacSizeChange
 #endif
    ) {

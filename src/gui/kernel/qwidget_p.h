@@ -718,7 +718,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 
 
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    void macUpdateSizeAttribute();
 
 

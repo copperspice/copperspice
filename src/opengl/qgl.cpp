@@ -1260,7 +1260,7 @@ QGLTemporaryContext::QGLTemporaryContext(bool, QWidget *)
    if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
       // On desktop, request latest released version
       QSurfaceFormat format;
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
       // OS X is limited to OpenGL 3.2 Core Profile at present
       // so set that here. If we use compatibility profile it
       // only reports 2.x contexts.

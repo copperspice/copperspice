@@ -311,7 +311,7 @@ static inline hb_font_t *internal_hb_font_create(QFontEngine *fe)
 
    hb_font_set_funcs(font, cs_get_font_funcs(), (void *)fe, NULL);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    hb_font_set_scale(font, QFixed(x_ppem).value(),  QFixed(y_ppem).value());
 #else
    hb_font_set_scale(font, QFixed(x_ppem).value(), -QFixed(y_ppem).value());

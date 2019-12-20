@@ -552,7 +552,7 @@ void QGroupBox::changeEvent(QEvent *ev)
          }
       }
    } else if (ev->type() == QEvent::FontChange
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       || ev->type() == QEvent::MacSizeChange
 #endif
       || ev->type() == QEvent::StyleChange) {

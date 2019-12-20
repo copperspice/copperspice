@@ -36,14 +36,14 @@
 #include <qapplication_p.h>
 #include <qwidgetwindow_p.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qmacgesturerecognizer_p.h>
 #endif
 
 #ifndef QT_NO_GESTURES
 
 Q_DECLARE_METATYPE(Qt::GestureState);
-#if !  defined(Q_OS_MAC)
+#if !  defined(Q_OS_DARWIN)
 static inline int panTouchPoints()
 {
    // Override by environment variable for testing.
@@ -72,7 +72,7 @@ QGestureManager::QGestureManager(QObject *parent)
 {
    // emerald - qRegisterMetaType<Qt::GestureState>();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    registerGestureRecognizer(new QMacSwipeGestureRecognizer);
    registerGestureRecognizer(new QMacPinchGestureRecognizer);
    registerGestureRecognizer(new QMacPanGestureRecognizer);

@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QAccessibleCache : public QObject
    QAccessible::Id insert(QObject *object, QAccessibleInterface *iface) const;
    void deleteInterface(QAccessible::Id id, QObject *obj = 0);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    QMacAccessibilityElement *elementForId(QAccessible::Id axid) const;
    void insertElement(QAccessible::Id axid, QMacAccessibilityElement *element) const;
 #endif
@@ -66,7 +66,7 @@ class Q_GUI_EXPORT QAccessibleCache : public QObject
    mutable QHash<QAccessibleInterface *, QAccessible::Id> interfaceToId;
    mutable QHash<QObject *, QAccessible::Id> objectToId;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    void removeCocoaElement(QAccessible::Id axid);
    mutable QHash<QAccessible::Id, QMacAccessibilityElement *> cocoaElements;
 #endif

@@ -42,7 +42,7 @@ class Q_GUI_EXPORT QPageSetupDialog : public QDialog
 
    ~QPageSetupDialog();
 
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#if defined(Q_OS_DARWIN) || defined(Q_OS_WIN)
    void setVisible(bool visible) override;
 #endif
 

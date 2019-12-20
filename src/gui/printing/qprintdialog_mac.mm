@@ -341,7 +341,7 @@ void QPrintDialog::setVisible(bool visible)
 }
 
 // wrappers, duplicated code in _win, _unix, _mac
-#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_DARWIN)
 void QPrintDialog::_q_collapseOrExpandDialog()
 {
    Q_D(QPrintDialog);
@@ -350,7 +350,7 @@ void QPrintDialog::_q_collapseOrExpandDialog()
 #endif
 
 
-#if defined(Q_OS_UNIX) && !defined (Q_OS_MAC) && !defined(QT_NO_MESSAGEBOX)
+#if defined(Q_OS_UNIX) && !defined (Q_OS_DARWIN) && !defined(QT_NO_MESSAGEBOX)
 void QPrintDialog::_q_checkFields()
 {
    Q_D(QPrintDialog);

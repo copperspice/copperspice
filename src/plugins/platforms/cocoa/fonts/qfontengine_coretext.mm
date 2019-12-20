@@ -32,7 +32,7 @@
 
 #include <cmath>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #import <AppKit/AppKit.h>
 #endif
 
@@ -44,7 +44,7 @@
 // but they are not documented and are not in public headers so are private API and exposed
 // only through the NSFontWeightXXX and UIFontWeightXXX aliases in AppKit and UIKit (rdar://26109857)
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #define kCTFontWeightUltraLight NSFontWeightUltraLight
 #define kCTFontWeightThin NSFontWeightThin
 #define kCTFontWeightLight NSFontWeightLight

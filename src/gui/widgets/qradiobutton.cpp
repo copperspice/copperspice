@@ -176,7 +176,7 @@ bool QRadioButton::event(QEvent *e)
 {
    Q_D(QRadioButton);
    if (e->type() == QEvent::StyleChange
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       || e->type() == QEvent::MacSizeChange
 #endif
    ) {

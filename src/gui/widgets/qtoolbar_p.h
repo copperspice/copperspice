@@ -45,7 +45,7 @@ class QToolBarPrivate : public QWidgetPrivate
         allowedAreas(Qt::AllToolBarAreas), orientation(Qt::Horizontal),
         toolButtonStyle(Qt::ToolButtonIconOnly),
         layout(0), state(0)
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       , macWindowDragging(false)
 #endif
    { }
@@ -77,7 +77,7 @@ class QToolBarPrivate : public QWidgetPrivate
    };
    DragState *state;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    bool macWindowDragging;
    QPoint macWindowDragPressPosition;
 #endif

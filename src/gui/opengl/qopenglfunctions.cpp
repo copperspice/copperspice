@@ -3196,7 +3196,7 @@ QOpenGLFunctionsPrivate::QOpenGLFunctionsPrivate(QOpenGLContext *)
         StencilFunc = ::glStencilFunc;
         StencilMask = ::glStencilMask;
         StencilOp = ::glStencilOp;
-#if defined(Q_OS_MAC) && MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
+#if defined(Q_OS_DARWIN) && MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
         TexImage2D = reinterpret_cast<void (*)(GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *)>(glTexImage2D);
 #else
         TexImage2D = glTexImage2D;

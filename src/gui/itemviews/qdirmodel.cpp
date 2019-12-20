@@ -393,7 +393,7 @@ QVariant QDirModel::headerData(int section, Qt::Orientation orientation, int rol
             return tr("Size");
          case 2:
             return
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                tr("Kind", "Match OS X Finder");
 #else
                tr("Type", "All other platforms");
@@ -1297,7 +1297,7 @@ QString QDirModelPrivate::size(const QModelIndex &index) const
 {
    const QDirNode *n = node(index);
    if (n->info.isDir()) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       return QLatin1String("--");
 #else
       return QLatin1String("");

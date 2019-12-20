@@ -26,7 +26,7 @@
 #if defined(Q_OS_IOS)
 #import <UIKit/UIKit.h>
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
 #import <Cocoa/Cocoa.h>
 
 #endif

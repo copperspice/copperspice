@@ -275,7 +275,7 @@ class QMenuPrivate : public QWidgetPrivate
    void setPlatformMenu(QPlatformMenu *menu);
    void syncPlatformMenu();
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    void moveWidgetToPlatformItem(QWidget *w, QPlatformMenuItem *item);
 #endif
 

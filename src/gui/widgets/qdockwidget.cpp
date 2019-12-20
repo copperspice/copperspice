@@ -993,7 +993,7 @@ void QDockWidgetPrivate::nonClientAreaMouseEvent(QMouseEvent *event)
             break;
          }
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
          if (state->nca) {
             endDrag();
          }
@@ -1001,7 +1001,7 @@ void QDockWidgetPrivate::nonClientAreaMouseEvent(QMouseEvent *event)
          break;
       case QEvent::NonClientAreaMouseButtonRelease:
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          if (state) {
             endDrag();
          }

@@ -422,7 +422,7 @@ bool QProgressBar::event(QEvent *e)
 
    switch (e->type()) {
       case QEvent::StyleChange:
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       case QEvent::MacSizeChange:
 #endif
          d->resetLayoutItemMargins();

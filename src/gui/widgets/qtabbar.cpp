@@ -40,7 +40,7 @@
 #include <qaccessible.h>
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
 
@@ -75,7 +75,7 @@ inline static bool verticalTabs(QTabBar::Shape shape)
 
 void QTabBarPrivate::updateMacBorderMetrics()
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
    Q_Q(QTabBar);
    // Extend the unified title and toolbar area to cover the tab bar iff
@@ -2101,7 +2101,7 @@ void QTabBar::keyPressEvent(QKeyEvent *event)
 #ifndef QT_NO_WHEELEVENT
 void QTabBar::wheelEvent(QWheelEvent *event)
 {
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    Q_D(QTabBar);
 
    int offset = event->delta() > 0 ? -1 : 1;

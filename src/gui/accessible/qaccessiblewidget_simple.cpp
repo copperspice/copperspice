@@ -42,7 +42,7 @@
 #include <qwindow.h>
 #include <qvarlengtharray.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qfocusframe.h>
 #endif
 

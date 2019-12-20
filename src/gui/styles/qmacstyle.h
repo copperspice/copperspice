@@ -26,7 +26,7 @@
 
 #include <qcommonstyle.h>
 
-#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
 
 class QPalette;
 class QPushButton;

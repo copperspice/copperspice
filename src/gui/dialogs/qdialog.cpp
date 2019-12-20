@@ -236,7 +236,7 @@ void QDialogPrivate::resetModalitySetByOpen()
       q->setWindowModality(Qt::WindowModality(resetModalityTo));
       q->setAttribute(Qt::WA_SetWindowModality, wasModalitySet);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       Q_ASSERT(resetModalityTo != Qt::WindowModal);
       q->setParent(q->parentWidget(), Qt::Dialog);
 #endif
@@ -269,7 +269,7 @@ void QDialog::open()
       setWindowModality(Qt::WindowModal);
       setAttribute(Qt::WA_SetWindowModality, false);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       setParent(parentWidget(), Qt::Sheet);
 #endif
    }

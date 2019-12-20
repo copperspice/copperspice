@@ -407,7 +407,7 @@ QString QFileIconProvider::type(const QFileInfo &info) const
 
    if (info.isSymLink())
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       return QApplication::translate("QFileDialog", "Alias", "OS X Finder");
 #else
       return QApplication::translate("QFileDialog", "Shortcut", "All other platforms");

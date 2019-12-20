@@ -44,7 +44,7 @@
 #include <qwindows_vistastyle_p.h>
 #endif
 
-#if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_MAC)
+#if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_DARWIN)
 #include <qmacstyle.h>
 #endif
 

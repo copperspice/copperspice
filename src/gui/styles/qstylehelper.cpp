@@ -72,7 +72,7 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
 
 qreal dpiScaled(qreal value)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // On mac the DPI is always 72 so we should not scale it
    return value;
 #else

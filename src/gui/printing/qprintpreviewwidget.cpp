@@ -121,7 +121,7 @@ class GraphicsView : public QGraphicsView
    GraphicsView(QWidget *parent = nullptr)
       : QGraphicsView(parent) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       setFrameStyle(QFrame::NoFrame);
 #endif
 

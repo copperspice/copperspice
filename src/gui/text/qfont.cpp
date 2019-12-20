@@ -1546,7 +1546,7 @@ bool QFontInfo::fixedPitch() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (!engine->fontDef.fixedPitchComputed) {
       QGlyphLayoutArray<2> g;
       int l = 2;
