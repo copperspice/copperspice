@@ -26,22 +26,21 @@
 
 // #define QTIMERINFO_DEBUG
 
-#include "qabstracteventdispatcher.h"
+#include <qabstracteventdispatcher.h>
 
 #include <sys/time.h> // struct timeval
 
-
 // internal timer info
 struct QTimerInfo {
-    int id;           // - timer identifier
-    int interval;     // - timer interval in milliseconds
-    Qt::TimerType timerType; // - timer type
-    timespec timeout;  // - when to actually fire
-    QObject *obj;     // - object to receive event
-    QTimerInfo **activateRef; // - ref from activateTimers
+    int id;                        // timer identifier
+    int interval;                  // timer interval in milliseconds
+    Qt::TimerType timerType;       // timer type
+    timespec timeout;              // when to actually fire
+    QObject *obj;                  // object to receive event
+    QTimerInfo **activateRef;      // ref from activateTimers
 
 #ifdef QTIMERINFO_DEBUG
-    timeval expected; // when timer is expected to fire
+    timeval expected;              // when timer is expected to fire
     float cumulativeError;
     uint count;
 #endif
@@ -49,7 +48,7 @@ struct QTimerInfo {
 
 class Q_CORE_EXPORT QTimerInfoList : public QList<QTimerInfo*>
 {
-#if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_DARWIN)) || defined(QT_BOOTSTRAPPED)
+#if (_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_DARWIN)
     timespec previousTime;
     clock_t previousTicks;
     int ticksPerSecond;
@@ -84,5 +83,4 @@ public:
     int activateTimers();
 };
 
-
-#endif // QTIMERINFO_UNIX_P_H
+#endif
