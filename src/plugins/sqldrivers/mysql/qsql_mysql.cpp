@@ -23,10 +23,11 @@
 
 #include <qsql_mysql.h>
 
-#include <qsqldriver_p.h>
+#include <qalgorithms.h>
 #include <qcoreapplication.h>
-#include <qvariant.h>
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qfile.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlindex.h>
@@ -34,10 +35,10 @@
 #include <qsqlrecord.h>
 #include <qstringlist.h>
 #include <qtextcodec.h>
+#include <qvariant.h>
 #include <qvector.h>
-#include <qfile.h>
 
-#include <qdebug.h>
+#include <qsqldriver_p.h>
 
 #ifdef Q_OS_WIN32
 // comment the next line out if you want to use MySQL/embedded on Win32 systems
