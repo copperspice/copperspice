@@ -267,21 +267,36 @@ bool QNetmaskAddress::setAddress(const QHostAddress &address)
          // the rest always falls through
          case 254:
             ++netmask;
+            [[fallthrough]];
+
          case 252:
             ++netmask;
+            [[fallthrough]];
+
          case 248:
             ++netmask;
+            [[fallthrough]];
+
          case 240:
             ++netmask;
+            [[fallthrough]];
+
          case 224:
             ++netmask;
+            [[fallthrough]];
+
          case 192:
             ++netmask;
+            [[fallthrough]];
+
          case 128:
             ++netmask;
+            [[fallthrough]];
+
          case 0:
             break;
       }
+
       break;
    }
 
@@ -292,12 +307,14 @@ bool QNetmaskAddress::setAddress(const QHostAddress &address)
    }
 
    length = netmask;
+
    return true;
 }
 
 static void clearBits(quint8 *where, int start, int end)
 {
    Q_ASSERT(end == 32 || end == 128);
+
    if (start == end) {
       return;
    }

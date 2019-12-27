@@ -1077,6 +1077,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
    pendingDownloadDataCopy.clear();
 
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
+
    if (preMigrationDownloaded != Q_INT64_C(-1)) {
       totalSize = totalSize.toLongLong() + preMigrationDownloaded;
    }
@@ -1088,8 +1089,10 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
    bytesDownloaded += bytesWritten;
 
    emit q->readyRead();
+
    // emit readyRead before downloadProgress incase this will cause events to be
-   // processed and we get into a recursive call (as in QProgressDialog).
+   // processed and we get into a recursive call (as in QProgressDialog)
+
    if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
       downloadProgressSignalChoke.restart();
       emit q->downloadProgress(bytesDownloaded,
@@ -1876,7 +1879,6 @@ void QNetworkReplyHttpImplPrivate::_q_cacheLoadReadyRead()
    // Needs to be done where sendCacheContents() (?) of HTTP is emitting
    // metaDataChanged ?
 
-
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
 
    // emit readyRead before downloadProgress incase this will cause events to be
@@ -2129,6 +2131,7 @@ void QNetworkReplyHttpImplPrivate::finished()
    }
 
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
+
    if (preMigrationDownloaded != Q_INT64_C(-1)) {
       totalSize = totalSize.toLongLong() + preMigrationDownloaded;
    }

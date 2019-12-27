@@ -40,10 +40,9 @@
 #   include <qbytearray.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 //Some distributions of mingw (including 4.7.2 from mingw.org) are missing this from headers.
 //Also microsoft headers don't include it when building on XP and earlier.
+
 #ifndef IPV6_V6ONLY
 #define IPV6_V6ONLY 27
 #endif
@@ -829,33 +828,42 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
                   }
                   tries++;
                } while (tryAgain && (tries < 2));
+
                if (errorDetected) {
                   break;
                }
-               // fall through
+
             }
+            [[fallthrough]];
+
             case WSAEINPROGRESS:
                setError(QAbstractSocket::UnfinishedSocketOperationError, InvalidSocketErrorString);
                socketState = QAbstractSocket::ConnectingState;
                break;
+
             case WSAEADDRINUSE:
                setError(QAbstractSocket::NetworkError, AddressInuseErrorString);
                break;
+
             case WSAECONNREFUSED:
                setError(QAbstractSocket::ConnectionRefusedError, ConnectionRefusedErrorString);
                socketState = QAbstractSocket::UnconnectedState;
                break;
+
             case WSAETIMEDOUT:
                setError(QAbstractSocket::NetworkError, ConnectionTimeOutErrorString);
                break;
+
             case WSAEACCES:
                setError(QAbstractSocket::SocketAccessError, AccessErrorString);
                socketState = QAbstractSocket::UnconnectedState;
                break;
+
             case WSAEHOSTUNREACH:
                setError(QAbstractSocket::NetworkError, HostUnreachableErrorString);
                socketState = QAbstractSocket::UnconnectedState;
                break;
+
             case WSAENETUNREACH:
                setError(QAbstractSocket::NetworkError, NetworkUnreachableErrorString);
                socketState = QAbstractSocket::UnconnectedState;
@@ -867,6 +875,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
             default:
                break;
          }
+
          if (socketState != QAbstractSocket::ConnectedState) {
 #if defined (QNATIVESOCKETENGINE_DEBUG)
             qDebug("QNativeSocketEnginePrivate::nativeConnect(%s, %i) == false (%s)",
@@ -874,9 +883,11 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
                    socketState == QAbstractSocket::ConnectingState
                    ? "Connection in progress" : socketErrorString.toLatin1().constData());
 #endif
+
             return false;
          }
       }
+
       break;
    }
 
@@ -1014,56 +1025,67 @@ int QNativeSocketEnginePrivate::nativeAccept()
          case WSAEACCES:
             setError(QAbstractSocket::SocketAccessError, AccessErrorString);
             break;
+
          case WSAECONNREFUSED:
             setError(QAbstractSocket::ConnectionRefusedError, ConnectionRefusedErrorString);
             break;
+
          case WSAECONNRESET:
             setError(QAbstractSocket::NetworkError, RemoteHostClosedErrorString);
             break;
+
          case WSAENETDOWN:
             setError(QAbstractSocket::NetworkError, NetworkUnreachableErrorString);
+            break;
+
          case WSAENOTSOCK:
             setError(QAbstractSocket::SocketResourceError, NotSocketErrorString);
             break;
+
          case WSAEINVAL:
          case WSAEOPNOTSUPP:
             setError(QAbstractSocket::UnsupportedSocketOperationError, ProtocolUnsupportedErrorString);
             break;
+
          case WSAEFAULT:
          case WSAEMFILE:
          case WSAENOBUFS:
             setError(QAbstractSocket::SocketResourceError, ResourceErrorString);
             break;
+
          case WSAEWOULDBLOCK:
             setError(QAbstractSocket::TemporaryError, TemporaryErrorString);
             break;
+
          default:
             setError(QAbstractSocket::UnknownSocketError, UnknownSocketErrorString);
             break;
       }
+
    } else if (acceptedDescriptor != -1 && QAbstractEventDispatcher::instance()) {
       // Because of WSAAsyncSelect() WSAAccept returns a non blocking socket
       // with the same attributes as the listening socket including the current
       // WSAAsyncSelect(). To be able to change the socket to blocking mode the
       // WSAAsyncSelect() call must be cancled.
+
       QSocketNotifier n(acceptedDescriptor, QSocketNotifier::Read);
       n.setEnabled(true);
       n.setEnabled(false);
    }
+
 #if defined (QNATIVESOCKETENGINE_DEBUG)
    qDebug("QNativeSocketEnginePrivate::nativeAccept() == %i", acceptedDescriptor);
 #endif
+
    return acceptedDescriptor;
 }
 
-static bool multicastMembershipHelper(QNativeSocketEnginePrivate *d,
-                                      int how6,
-                                      int how4,
-                                      const QHostAddress &groupAddress,
-                                      const QNetworkInterface &iface)
+static bool multicastMembershipHelper(QNativeSocketEnginePrivate *d, int how6, int how4,
+                  const QHostAddress &groupAddress, const QNetworkInterface &iface)
 {
-   int level = 0;
+   int level   = 0;
    int sockOpt = 0;
+
    char *sockArg;
    int sockArgSize;
 
@@ -1777,5 +1799,3 @@ void QNativeSocketEnginePrivate::nativeClose()
    // do it manually with socketDescriptor()/setSocketDescriptor();
    ::closesocket(socketDescriptor);
 }
-
-QT_END_NAMESPACE

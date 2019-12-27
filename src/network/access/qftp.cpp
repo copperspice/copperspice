@@ -1228,10 +1228,12 @@ bool QFtpPI::processReply()
       case Begin:
          // should never happen
          break;
+
       case Success:
          // success handling
          state = Idle;
-      // no break!
+         [[fallthrough]];
+
       case Idle:
          if (dtp.hasError()) {
             emit error(QFtp::UnknownError, dtp.errorMessage());
@@ -1239,30 +1241,37 @@ bool QFtpPI::processReply()
          }
          startNextCmd();
          break;
+
       case Waiting:
-         // do nothing
          break;
+
       case Failure:
          // If the EPSV or EPRT commands fail, replace them with
          // the old PASV and PORT instead and try again.
          if (currentCmd.startsWith(QLatin1String("EPSV"))) {
             transferConnectionExtended = false;
             pendingCommands.prepend(QLatin1String("PASV\r\n"));
+
          } else if (currentCmd.startsWith(QLatin1String("EPRT"))) {
             transferConnectionExtended = false;
             pendingCommands.prepend(QLatin1String("PORT\r\n"));
+
          } else {
             emit error(QFtp::UnknownError, replyText);
          }
+
          if (state != Waiting) {
             state = Idle;
             startNextCmd();
          }
+
          break;
    }
+
 #if defined(QFTPPI_DEBUG)
    //    qDebug("QFtpPI state: %d [processReply() end]", state);
 #endif
+
    return true;
 }
 

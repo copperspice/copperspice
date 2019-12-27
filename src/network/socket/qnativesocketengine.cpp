@@ -35,8 +35,6 @@
 # include <qtcpserver.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 //#define QNATIVESOCKETENGINE_DEBUG
 
 #define Q_VOID
@@ -1013,19 +1011,12 @@ void QNativeSocketEngine::setSendBufferSize(qint64 size)
    setOption(SendBufferSocketOption, size);
 }
 
-
-/*!
-    Sets the option \a option to the value \a value.
-*/
 bool QNativeSocketEngine::setOption(SocketOption option, int value)
 {
    Q_D(QNativeSocketEngine);
    return d->setOption(option, value);
 }
 
-/*!
-    Returns the value of the option \a socketOption.
-*/
 int QNativeSocketEngine::option(SocketOption socketOption) const
 {
    Q_D(const QNativeSocketEngine);
@@ -1065,6 +1056,7 @@ bool QReadNotifier::event(QEvent *e)
    if (e->type() == QEvent::SockAct) {
       engine->readNotification();
       return true;
+
    } else if (e->type() == QEvent::SockClose) {
       engine->closeNotification();
       return true;
@@ -1191,4 +1183,3 @@ void QNativeSocketEngine::setExceptionNotificationEnabled(bool enable)
    }
 }
 
-QT_END_NAMESPACE

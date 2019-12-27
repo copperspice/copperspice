@@ -48,11 +48,7 @@
 
 #include <algorithm>
 
-QT_BEGIN_NAMESPACE
-
 /*
-    Note to maintainer:
-    -------------------
 
     We load OpenSSL symbols dynamically. Because symbols are known to
     disappear, and signatures sometimes change, between releases, we need to
@@ -92,23 +88,20 @@ QT_BEGIN_NAMESPACE
 #ifndef QT_LINKED_OPENSSL
 
 namespace {
-void qsslSocketUnresolvedSymbolWarning(const char *functionName)
-{
-   qWarning("QSslSocket: Can not call unresolved function %s", functionName);
-}
 
 void qsslSocketCannotResolveSymbolWarning(const char *functionName)
 {
    qWarning("QSslSocket: Can not resolve %s", functionName);
 }
 
-}
+}  // namespace
 
-#endif // QT_LINKED_OPENSSL
+#endif
 
 #ifdef SSLEAY_MACROS
 DEFINEFUNC3(void *, ASN1_dup, i2d_of_void *a, a, d2i_of_void *b, b, char *c, c, return 0, return)
 #endif
+
 DEFINEFUNC(long, ASN1_INTEGER_get, ASN1_INTEGER *a, a, return 0, return)
 DEFINEFUNC(unsigned char *, ASN1_STRING_data, ASN1_STRING *a, a, return 0, return)
 DEFINEFUNC(int, ASN1_STRING_length, ASN1_STRING *a, a, return 0, return)
@@ -970,7 +963,7 @@ bool q_resolveOpenSslSymbols()
 #endif
    return true;
 }
-#endif // !defined QT_LINKED_OPENSSL
+#endif
 
 //==============================================================================
 // contributed by Jay Case of Sarvega, Inc.; http://sarvega.com/
@@ -1029,12 +1022,13 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
       }
 
       tm lTime;
-      lTime.tm_sec = ((lBuffer[10] - '0') * 10) + (lBuffer[11] - '0');
-      lTime.tm_min = ((lBuffer[8] - '0') * 10) + (lBuffer[9] - '0');
+      lTime.tm_sec  = ((lBuffer[10] - '0') * 10) + (lBuffer[11] - '0');
+      lTime.tm_min  = ((lBuffer[8] - '0') * 10) + (lBuffer[9] - '0');
       lTime.tm_hour = ((lBuffer[6] - '0') * 10) + (lBuffer[7] - '0');
       lTime.tm_mday = ((lBuffer[4] - '0') * 10) + (lBuffer[5] - '0');
-      lTime.tm_mon = (((lBuffer[2] - '0') * 10) + (lBuffer[3] - '0')) - 1;
+      lTime.tm_mon  = (((lBuffer[2] - '0') * 10) + (lBuffer[3] - '0')) - 1;
       lTime.tm_year = ((lBuffer[0] - '0') * 10) + (lBuffer[1] - '0');
+
       if (lTime.tm_year < 50) {
          lTime.tm_year += 100;   // RFC 2459
       }
@@ -1054,11 +1048,11 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
 
       // generalized time is always YYYYMMDDHHMMSSZ (RFC 2459, section 4.1.2.5.2)
       tm lTime;
-      lTime.tm_sec = ((pString[12] - '0') * 10) + (pString[13] - '0');
-      lTime.tm_min = ((pString[10] - '0') * 10) + (pString[11] - '0');
+      lTime.tm_sec  = ((pString[12] - '0') * 10) + (pString[13] - '0');
+      lTime.tm_min  = ((pString[10] - '0') * 10) + (pString[11] - '0');
       lTime.tm_hour = ((pString[8] - '0') * 10) + (pString[9] - '0');
       lTime.tm_mday = ((pString[6] - '0') * 10) + (pString[7] - '0');
-      lTime.tm_mon = (((pString[4] - '0') * 10) + (pString[5] - '0'));
+      lTime.tm_mon  = (((pString[4] - '0') * 10) + (pString[5] - '0'));
       lTime.tm_year = ((pString[0] - '0') * 1000) + ((pString[1] - '0') * 100) +
                       ((pString[2] - '0') * 10) + (pString[3] - '0');
 
@@ -1074,5 +1068,3 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
    }
 
 }
-
-QT_END_NAMESPACE

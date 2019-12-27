@@ -68,6 +68,7 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
    QList<QNetworkProxy> proxies;
    if (proxy.type() != QNetworkProxy::DefaultProxy) {
       // a non-default proxy was set with setProxy
+
       proxies << proxy;
    } else {
       // try the application settings instead

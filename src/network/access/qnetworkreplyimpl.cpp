@@ -22,7 +22,8 @@
 ***********************************************************************/
 
 #include <qnetworkreplyimpl_p.h>
-#include <qnetworkaccessbackend_p.h>
+
+#include <qcoreapplication.h>
 #include <qnetworkcookie.h>
 #include <qnetworkcookiejar.h>
 #include <qabstractnetworkcache.h>
@@ -30,13 +31,12 @@
 #include <qdatetime.h>
 #include <qsslconfiguration.h>
 #include <qnetworksession.h>
+
+#include <qnetworkaccessbackend_p.h>
 #include <qnetworkaccessmanager_p.h>
 
-#include <QCoreApplication>
-
 inline QNetworkReplyImplPrivate::QNetworkReplyImplPrivate()
-   : backend(0), outgoingData(0),
-     copyDevice(0),
+   : backend(0), outgoingData(0), copyDevice(0),
      cacheEnabled(false), cacheSaveDevice(0),
      notificationHandlingPaused(false),
      bytesDownloaded(0), lastBytesDownloaded(-1), bytesUploaded(-1), preMigrationDownloaded(-1),
@@ -418,16 +418,17 @@ void QNetworkReplyImplPrivate::setup(QNetworkAccessManager::Operation op, const 
          // fixed size non-sequential
          // just start the operation
          QMetaObject::invokeMethod(q, "_q_startOperation", Qt::QueuedConnection);
+
       } else {
          bool bufferingDisallowed =
-            req.attribute(QNetworkRequest::DoNotBufferUploadDataAttribute,
-                          false).toBool();
+            req.attribute(QNetworkRequest::DoNotBufferUploadDataAttribute, false).toBool();
 
          if (bufferingDisallowed) {
             // if a valid content-length header for the request was supplied, we can disable buffering
             // if not, we will buffer anyway
             if (req.header(QNetworkRequest::ContentLengthHeader).isValid()) {
                QMetaObject::invokeMethod(q, "_q_startOperation", Qt::QueuedConnection);
+
             } else {
                state = ReplyState::Buffering;
                QMetaObject::invokeMethod(q, "_q_bufferOutgoingData", Qt::QueuedConnection);
@@ -693,6 +694,7 @@ void QNetworkReplyImplPrivate::appendDownstreamDataSignalEmissions()
    Q_Q(QNetworkReplyImpl);
 
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
+
    if (preMigrationDownloaded != Q_INT64_C(-1)) {
       totalSize = totalSize.toLongLong() + preMigrationDownloaded;
    }
@@ -843,11 +845,12 @@ void QNetworkReplyImplPrivate::finished()
 
    pauseNotificationHandling();
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
+
    if (preMigrationDownloaded != Q_INT64_C(-1)) {
       totalSize = totalSize.toLongLong() + preMigrationDownloaded;
    }
 
-   if (!manager.isNull()) {
+   if (! manager.isNull()) {
 
 #ifndef QT_NO_BEARERMANAGEMENT
       QSharedPointer<QNetworkSession> session (manager->d_func()->getNetworkSession());
@@ -866,6 +869,7 @@ void QNetworkReplyImplPrivate::finished()
                      resumeNotificationHandling();
                      return; // exit early if we are migrating.
                   }
+
                } else {
                   error(QNetworkReply::TemporaryNetworkFailureError,
                         QNetworkReply::tr("Temporary network failure."));
@@ -875,6 +879,7 @@ void QNetworkReplyImplPrivate::finished()
       }
 #endif
    }
+
    resumeNotificationHandling();
 
    state = ReplyState::Finished;
@@ -892,6 +897,7 @@ void QNetworkReplyImplPrivate::finished()
    if (bytesUploaded == -1 && (outgoingData || outgoingDataBuffer)) {
       emit q->uploadProgress(0, 0);
    }
+
    resumeNotificationHandling();
 
    // if we don't know the total size of or we received everything save the cache
@@ -899,9 +905,9 @@ void QNetworkReplyImplPrivate::finished()
       completeCacheSave();
    }
 
-   // note: might not be a good idea, since users could decide to delete us
-   // which would delete the backend too...
-   // maybe we should protect the backend
+   // note: might not be a good idea, since users could decide to delete this
+   // which would delete the backend, maybe the backend should be protected
+
    pauseNotificationHandling();
    emit q->readChannelFinished();
    emit q->finished();
