@@ -31,8 +31,6 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ITEMVIEWS
 /*
 Implementation of the IAccessible2 table2 interface. Much simpler than
@@ -297,39 +295,45 @@ bool QAccessibleTable::selectRow(int row)
 
 bool QAccessibleTable::selectColumn(int column)
 {
-   if (!view()->model() || !view()->selectionModel()) {
+   if (! view()->model() || ! view()->selectionModel()) {
       return false;
    }
+
    QModelIndex index = view()->model()->index(0, column, view()->rootIndex());
 
-   if (!index.isValid() || view()->selectionBehavior() == QAbstractItemView::SelectRows) {
+   if (! index.isValid() || view()->selectionBehavior() == QAbstractItemView::SelectRows) {
       return false;
    }
 
    switch (view()->selectionMode()) {
       case QAbstractItemView::NoSelection:
          return false;
+
       case QAbstractItemView::SingleSelection:
          if (view()->selectionBehavior() != QAbstractItemView::SelectColumns && rowCount() > 1) {
             return false;
          }
+         [[fallthrough]];
+
       case QAbstractItemView::ContiguousSelection:
-         if ((!column || !view()->selectionModel()->isColumnSelected(column - 1, view()->rootIndex()))
-            && !view()->selectionModel()->isColumnSelected(column + 1, view()->rootIndex())) {
+         if ((! column || !view()->selectionModel()->isColumnSelected(column - 1, view()->rootIndex()))
+               && ! view()->selectionModel()->isColumnSelected(column + 1, view()->rootIndex())) {
             view()->clearSelection();
          }
          break;
+
       default:
          break;
    }
 
    view()->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Columns);
+
    return true;
 }
 
 bool QAccessibleTable::unselectRow(int row)
 {
-   if (!view()->model() || !view()->selectionModel()) {
+   if (! view()->model() || !view()->selectionModel()) {
       return false;
    }
 
@@ -1255,31 +1259,36 @@ QAccessibleInterface *QAccessibleTableHeaderCell::parent() const
 
 QAccessibleInterface *QAccessibleTableHeaderCell::child(int) const
 {
-   return 0;
+   return nullptr;
 }
 
 QHeaderView *QAccessibleTableHeaderCell::headerView() const
 {
-   QHeaderView *header = 0;
+   QHeaderView *header = nullptr;
+
    if (false) {
+      // here for readability
+
 #ifndef QT_NO_TABLEVIEW
    } else if (const QTableView *tv = qobject_cast<const QTableView *>(view)) {
+
       if (orientation == Qt::Horizontal) {
          header = tv->horizontalHeader();
       } else {
          header = tv->verticalHeader();
       }
 #endif
+
 #ifndef QT_NO_TREEVIEW
    } else if (const QTreeView *tv = qobject_cast<const QTreeView *>(view)) {
       header = tv->header();
 #endif
+
    }
+
    return header;
 }
 
 #endif // QT_NO_ITEMVIEWS
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACCESSIBILITY

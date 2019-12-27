@@ -29,11 +29,9 @@
 #include <qlocale.h>
 #include <qset.h>
 #include <qregion.h>
-
-#include "qinputmethod.h"
-#include "qopengl.h"
-#include "qsurfaceformat.h"
-
+#include <qinputmethod.h>
+#include <qopengl.h>
+#include <qsurfaceformat.h>
 #include <qsizepolicy.h>
 #include <qstyle.h>
 #include <qapplication.h>
@@ -44,13 +42,9 @@
 #include <qgraphicsview.h>
 #include <qgesture_p.h>
 
-
-
-
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used
 //  - top-level widgets have extra extra data to reduce cost further
-
 
 class QPaintEngine;
 class QPixmap;
@@ -711,27 +705,8 @@ class Q_GUI_EXPORT QWidgetPrivate
    uint noPaintOnScreen : 1;    // see qwidget.cpp ::paintEngine()
 #endif
 
-
-
-
-
-
-
-
 #if defined(Q_OS_DARWIN)
    void macUpdateSizeAttribute();
-
-
-
-
-
-
-
-
-
-
-
-
 #endif
 
    void setNetWmWindowTypes(bool skipIfMissing = false);

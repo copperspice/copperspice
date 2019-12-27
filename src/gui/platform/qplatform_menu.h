@@ -117,6 +117,10 @@ class Q_GUI_EXPORT QPlatformMenu : public QObject
    }
 
    virtual void showPopup(const QWindow *parentWindow, const QRect &targetRect, const QPlatformMenuItem *item) {
+      (void) parentWindow;
+      (void) targetRect;
+      (void) item;
+
       setVisible(true);
    }
 

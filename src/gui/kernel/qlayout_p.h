@@ -53,8 +53,12 @@ class Q_GUI_EXPORT QLayoutPrivate
 
    static QSpacerItem *createSpacerItem(const QLayout *layout, int w, int h,
       QSizePolicy::Policy hPolicy = QSizePolicy::Minimum, QSizePolicy::Policy vPolicy = QSizePolicy::Minimum);
+
    virtual QLayoutItem *replaceAt(int index, QLayoutItem *newitem) {
-      return 0;
+      (void) index;
+      (void) newitem;
+
+      return nullptr;
    }
 
    static QWidgetItemFactoryMethod widgetItemFactoryMethod;

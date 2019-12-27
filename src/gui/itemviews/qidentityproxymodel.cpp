@@ -28,7 +28,6 @@
 #include <qitemselectionmodel.h>
 #include <qabstractproxymodel_p.h>
 
-
 class QIdentityProxyModelPrivate : public QAbstractProxyModelPrivate
 {
    Q_DECLARE_PUBLIC(QIdentityProxyModel)
@@ -506,6 +505,9 @@ void QIdentityProxyModelPrivate::_q_sourceRowsAboutToBeRemoved(const QModelIndex
 
 void QIdentityProxyModelPrivate::_q_sourceRowsInserted(const QModelIndex &parent, int start, int end)
 {
+   (void) start;
+   (void) end;
+
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
 
@@ -515,8 +517,12 @@ void QIdentityProxyModelPrivate::_q_sourceRowsInserted(const QModelIndex &parent
 void QIdentityProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
    const QModelIndex &destParent, int dest)
 {
+   (void) sourceStart;
+   (void) sourceEnd;
+
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
    Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
 
    q->endMoveRows();

@@ -32,13 +32,13 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qplaintextedit.h>
-
 #include <qlistwidget.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qstackedlayout.h>
 #include <qvalidator.h>
 #include <qevent.h>
+
 #include <qdialog_p.h>
 
 enum CandidateSignal {
@@ -56,15 +56,18 @@ static QString candidateSignal(int which)
    switch (CandidateSignal(which)) {
       case TextValueSelectedSignal:
          retval = "textValueSelected(QString)";
+         break;
 
       case IntValueSelectedSignal:
          retval = "intValueSelected(int)";
+         break;
 
       case DoubleValueSelectedSignal:
          retval = "doubleValueSelected(double)";
+         break;
 
       case NumCandidateSignals:
-      // fall through
+         [[fallthrough]];
 
       default:
          // error, may want to throw

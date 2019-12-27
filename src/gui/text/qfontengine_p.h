@@ -195,8 +195,11 @@ class Q_GUI_EXPORT QFontEngine
       return false;
    }
 
-   virtual glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition, const QTransform &matrix,
-      GlyphFormat format) {
+   virtual glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition,
+                  const QTransform &matrix, GlyphFormat format) {
+      (void) subPixelPosition;
+      (void) format;
+
       return boundingBox(glyph, matrix);
    }
 
@@ -234,6 +237,8 @@ class Q_GUI_EXPORT QFontEngine
    }
 
    virtual QFontEngine *cloneWithSize(qreal pixelSize) const {
+      (void) pixelSize;
+
       return nullptr;
    }
 

@@ -64,7 +64,6 @@ class QPlatformCursorPrivate
 {
  public:
    static QList<QPlatformCursor *> getInstances();
-
 };
 
 class Q_GUI_EXPORT QPlatformCursor : public QObject
@@ -75,6 +74,7 @@ class Q_GUI_EXPORT QPlatformCursor : public QObject
 
    // input methods
    virtual void pointerEvent(const QMouseEvent &event) {
+      (void) event;
    }
 
    virtual void changeCursor(QCursor *windowCursor, QWindow *window) = 0;

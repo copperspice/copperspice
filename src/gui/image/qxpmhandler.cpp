@@ -33,18 +33,6 @@
 
 #include <algorithm>
 
-static quint64 xpmHash(const QString &str)
-{
-   unsigned int hashValue = 0;
-
-   for (int i = 0; i < str.size(); ++i) {
-      hashValue <<= 8;
-      hashValue += (unsigned int)str.at(i).unicode();
-   }
-
-   return hashValue;
-}
-
 static quint64 xpmHash(const char *str)
 {
    unsigned int hashValue = 0;

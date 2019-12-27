@@ -3455,26 +3455,35 @@ QItemSelectionModel::SelectionFlags QAbstractItemViewPrivate::extendedSelectionC
             }
             break;
          }
+
          case QEvent::MouseButtonRelease: {
             // ClearAndSelect on MouseButtonRelease if MouseButtonPress on selected item or empty area
             modifiers = static_cast<const QMouseEvent *>(event)->modifiers();
-            const Qt::MouseButton button = static_cast<const QMouseEvent *>(event)->button();
+
+            const Qt::MouseButton button  = static_cast<const QMouseEvent *>(event)->button();
             const bool rightButtonPressed = button & Qt::RightButton;
-            const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
-            const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+            const bool shiftKeyPressed    = modifiers & Qt::ShiftModifier;
+            const bool controlKeyPressed  = modifiers & Qt::ControlModifier;
+
             if (((index == pressedIndex && selectionModel->isSelected(index))
                   || !index.isValid()) && state != QAbstractItemView::DragSelectingState
-               && !shiftKeyPressed && !controlKeyPressed && (!rightButtonPressed || !index.isValid())) {
+                  && !shiftKeyPressed && !controlKeyPressed && (!rightButtonPressed || !index.isValid())) {
                return QItemSelectionModel::ClearAndSelect | selectionBehaviorFlags();
             }
+
             return QItemSelectionModel::NoUpdate;
          }
+
          case QEvent::KeyPress: {
             // NoUpdate on Key movement and Ctrl
             modifiers = static_cast<const QKeyEvent *>(event)->modifiers();
+
             switch (static_cast<const QKeyEvent *>(event)->key()) {
                case Qt::Key_Backtab:
-                  modifiers = modifiers & ~Qt::ShiftModifier; // special case for backtab
+                  // special case for backtab
+                  modifiers = modifiers & ~Qt::ShiftModifier;
+                  [[fallthrough]];
+
                case Qt::Key_Down:
                case Qt::Key_Up:
                case Qt::Key_Left:
@@ -3483,23 +3492,31 @@ QItemSelectionModel::SelectionFlags QAbstractItemViewPrivate::extendedSelectionC
                case Qt::Key_End:
                case Qt::Key_PageUp:
                case Qt::Key_PageDown:
+
                case Qt::Key_Tab:
-                  if (modifiers & Qt::ControlModifier
+
 #ifdef QT_KEYPAD_NAVIGATION
+                  if (modifiers & Qt::ControlModifier ||
+                     QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder) {
                      // Preserve historical tab order navigation behavior
-                     || QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+#else
+                  if (modifiers & Qt::ControlModifier) {
 #endif
-                  ) {
                      return QItemSelectionModel::NoUpdate;
                   }
+
                   break;
+
                case Qt::Key_Select:
                   return QItemSelectionModel::Toggle | selectionBehaviorFlags();
+
                case Qt::Key_Space:// Toggle on Ctrl-Qt::Key_Space, Select on Space
                   if (modifiers & Qt::ControlModifier) {
                      return QItemSelectionModel::Toggle | selectionBehaviorFlags();
                   }
+
                   return QItemSelectionModel::Select | selectionBehaviorFlags();
+
                default:
                   break;
             }

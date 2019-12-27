@@ -104,20 +104,25 @@ QByteArray QImageIOHandler::name() const
 
 bool QImageIOHandler::write(const QImage &image)
 {
+   (void) image;
    return false;
 }
 
 void QImageIOHandler::setOption(ImageOption option, const QVariant &value)
 {
+   (void) option;
+   (void) value;
 }
 
 QVariant QImageIOHandler::option(ImageOption option) const
 {
+   (void) option;
    return QVariant();
 }
 
 bool QImageIOHandler::supportsOption(ImageOption option) const
 {
+   (void) option;
    return false;
 }
 
@@ -143,6 +148,7 @@ bool QImageIOHandler::jumpToNextImage()
 
 bool QImageIOHandler::jumpToImage(int imageNumber)
 {
+   (void) imageNumber;
    return false;
 }
 

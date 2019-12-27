@@ -3269,6 +3269,8 @@ void QApplication::setStyle(QStyle *style)
 
 QPixmap QGuiApplicationPrivate::getPixmapCursor(Qt::CursorShape cshape)
 {
+   (void) cshape;
+
    return QPixmap();
 }
 

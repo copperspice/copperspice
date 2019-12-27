@@ -346,7 +346,9 @@ QString cs_tildeExpansion(const QString &path, bool *expanded = nullptr)
 
 QStringList QFileDialogPrivate::typedFiles() const
 {
+#ifdef Q_OS_UNIX
    Q_Q(const QFileDialog);
+#endif
 
    QStringList files;
    QString editText = lineEdit()->text();
@@ -378,6 +380,7 @@ QStringList QFileDialogPrivate::typedFiles() const
 #ifdef Q_OS_UNIX
          const QString token = tokens.at(i);
          const QString prefix = q->directory().absolutePath() + QDir::separator();
+
          if (QFile::exists(prefix + token)) {
             files << token;
          } else {

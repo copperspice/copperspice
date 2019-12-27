@@ -981,19 +981,21 @@ void QImage::invertPixels(InvertMode mode)
 
    if (depth() < 32) {
       // number of used bytes pr line
-      int bpl = (d->width * d->depth + 7) / 8;
-      int pad = d->bytes_per_line - bpl;
+      int bpl   = (d->width * d->depth + 7) / 8;
+      int pad   = d->bytes_per_line - bpl;
       uchar *sl = d->data;
+
       for (int y = 0; y < d->height; ++y) {
          for (int x = 0; x < bpl; ++x) {
             *sl++ ^= 0xff;
          }
+
          sl += pad;
       }
 
    } else {
-      quint32 *p = (quint32 *)d->data;
-      quint32 *end = (quint32 *)(d->data + d->nbytes);
+      quint32 *p      = (quint32 *)d->data;
+      quint32 *end    = (quint32 *)(d->data + d->nbytes);
       quint32 xorbits = 0xffffffff;
 
       switch (d->format) {
@@ -1001,8 +1003,10 @@ void QImage::invertPixels(InvertMode mode)
             if (mode == InvertRgba) {
                break;
             }
-         // no break
+            [[fallthrough]];
+
          case QImage::Format_RGBX8888:
+
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
             xorbits = 0xffffff00;
             break;
@@ -1010,18 +1014,22 @@ void QImage::invertPixels(InvertMode mode)
             xorbits = 0x00ffffff;
             break;
 #endif
+
          case QImage::Format_ARGB32:
             if (mode == InvertRgba) {
                break;
             }
-         // no break
+            [[fallthrough]];
+
          case QImage::Format_RGB32:
             xorbits = 0x00ffffff;
             break;
+
          case QImage::Format_BGR30:
          case QImage::Format_RGB30:
             xorbits = 0x3fffffff;
             break;
+
          default:
             // error, should not reach here
             xorbits = 0;

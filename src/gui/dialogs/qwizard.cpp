@@ -148,24 +148,31 @@ static QString changed_signal(int which)
    switch (which) {
       case 0:
          retval = "toggled(bool)";
+         break;
 
       case 1:
          retval = "valueChanged(int)";
+         break;
 
       case 2:
          retval = "currentIndexChanged(int)";
+         break;
 
       case 3:
          retval = "dateTimeChanged(QDateTime)";
+         break;
 
       case 4:
          retval = "textChanged(QString)";
+         break;
 
       case 5:
          retval = "currentRowChanged(int)";
+         break;
 
       case 6:
          retval = "valueChanged(int)";
+         break;
    };
 
    static_assert(7 == NFallbackDefaultProperties, "Incorrect values");
@@ -304,6 +311,8 @@ class QWizardHeader : public QWidget
 
    inline QWizardHeader(RulerType ruler, QWidget *parent = nullptr)
       : QWidget(parent) {
+
+      (void) ruler;
       setFixedHeight(2);
    }
 

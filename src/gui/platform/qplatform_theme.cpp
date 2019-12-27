@@ -519,6 +519,7 @@ QList<QKeySequence> QPlatformTheme::keyBindings(QKeySequence::StandardKey key) c
 #else
          it->shortcut;
 #endif
+
       if (it->priority > 0) {
          list.prepend(QKeySequence(shortcut));
       } else {
@@ -528,13 +529,6 @@ QList<QKeySequence> QPlatformTheme::keyBindings(QKeySequence::StandardKey key) c
 
    return list;
 }
-
-/*!
-   Returns the text of a standard \a button.
-
-  \since 5.3
-  \sa QPlatformDialogHelper::StandardButton
- */
 
 QString QPlatformTheme::standardButtonText(int button) const
 {

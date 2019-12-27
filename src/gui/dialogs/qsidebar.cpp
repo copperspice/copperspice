@@ -123,11 +123,16 @@ bool QUrlModel::canDrop(QDragEnterEvent *event)
 bool QUrlModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
    int row, int column, const QModelIndex &parent)
 {
-   if (!data->formats().contains(mimeTypes().first())) {
+   (void) action;
+   (void) column;
+   (void) parent;
+
+   if (! data->formats().contains(mimeTypes().first())) {
       return false;
    }
 
    addUrls(data->urls(), row);
+
    return true;
 }
 

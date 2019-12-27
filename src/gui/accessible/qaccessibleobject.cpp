@@ -74,6 +74,8 @@ QRect QAccessibleObject::rect() const
 
 void QAccessibleObject::setText(QAccessible::Text text, const QString &str)
 {
+   (void) text;
+   (void) str;
 }
 
 QAccessibleInterface *QAccessibleObject::childAt(int x, int y) const
@@ -85,12 +87,10 @@ QAccessibleInterface *QAccessibleObject::childAt(int x, int y) const
          return childIface;
       }
    }
+
    return 0;
 }
 
-/*!
-    Creates a QAccessibleApplication for the QApplication object referenced by qApp.
-*/
 QAccessibleApplication::QAccessibleApplication()
    : QAccessibleObject(qApp)
 {

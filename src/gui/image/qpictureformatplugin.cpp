@@ -24,9 +24,8 @@
 #include <qpictureformatplugin.h>
 
 #if ! defined(QT_NO_PICTURE)
+
 #include <qpicture.h>
-
-
 
 QPictureFormatPlugin::QPictureFormatPlugin(QObject *parent)
    : QObject(parent)
@@ -39,6 +38,9 @@ QPictureFormatPlugin::~QPictureFormatPlugin()
 
 bool QPictureFormatPlugin::loadPicture(const QString &format, const QString &fileName, QPicture *picture)
 {
+   (void) format;
+   (void) fileName;
+   (void) picture;
 
    return false;
 }
@@ -46,6 +48,9 @@ bool QPictureFormatPlugin::loadPicture(const QString &format, const QString &fil
 
 bool QPictureFormatPlugin::savePicture(const QString &format, const QString &fileName, const QPicture &picture)
 {
+   (void) format;
+   (void) fileName;
+   (void) picture;
 
    return false;
 }
