@@ -4,7 +4,6 @@ add_library(CopperSpice::CsScript ALIAS CsScript)
 set_target_properties(CsScript PROPERTIES OUTPUT_NAME CsScript${BUILD_ABI})
 
 add_definitions(
-    -DQT_BUILD_SCRIPT_LIB
     -DQLALR_NO_SCRIPTGRAMMAR_DEBUG_INFO
     -DJS_NO_EXPORT
     -DQLALR_NO_QSCRIPTGRAMMAR_DEBUG_INFO
@@ -20,6 +19,17 @@ add_definitions(
     -DUSE_SYSTEM_MALLOC
     -DQT_BUILD_SCRIPT_LIB
 )
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+
+   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "7.1.0")
+      set_target_properties(CsScript
+         PROPERTIES
+         COMPILE_OPTIONS -Wno-expansion-to-defined
+      )
+   endif()
+
+endif()
 
 set(EXTRA_SCRIPT_CXXFLAGS)
 set(EXTRA_SCRIPT_LDFLAGS)

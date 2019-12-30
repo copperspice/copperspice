@@ -127,21 +127,6 @@ void Uic::writeCopyrightHeader(DomUI *ui)
    out << "********************************************************************************/\n\n";
 }
 
-// Check the version with a stream reader at the <ui> element.
-
-static double versionFromUiAttribute(QXmlStreamReader &reader)
-{
-   const QXmlStreamAttributes attributes = reader.attributes();
-   const QString versionAttribute = QLatin1String("version");
-
-   if (! attributes.hasAttribute(versionAttribute)) {
-      return 4.0;
-   }
-
-   const QString version = attributes.value(versionAttribute).toString();
-   return version.toDouble();
-}
-
 DomUI *Uic::parseUiFile(QXmlStreamReader &reader)
 {
    DomUI *ui = nullptr;

@@ -820,7 +820,7 @@ T QStringParser::section(const T &str, const T &separator, int firstSection, int
       }
    }
 
-   if ( (flags & SectionFlag::SectionIncludeLeadingSep) && first_index) {
+   if ( (flags & SectionFlag::SectionIncludeLeadingSep) && first_index != 0) {
       retval.prepend(separator);
    }
 
