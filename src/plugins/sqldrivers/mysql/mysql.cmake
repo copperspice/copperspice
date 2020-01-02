@@ -9,14 +9,14 @@ list(APPEND SQL_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/mysql/qmysqlresult.h
 )
 
-if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
+if(WITH_MYSQL_PLUGIN AND MySQL_FOUND)
 
    add_library(CsSqlMySql MODULE "")
    add_library(CopperSpice::CsSqlMySql ALIAS CsSqlMySql)
 
    set_target_properties(CsSqlMySql PROPERTIES OUTPUT_NAME CsSqlMySql${BUILD_ABI} PREFIX "")
 
-   include_directories(${MYSQL_INCLUDES})
+   include_directories(${MySQL_INCLUDE_DIRS})
 
    target_sources(CsSqlMySql
       PRIVATE
@@ -27,7 +27,7 @@ if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
    target_link_libraries(CsSqlMySql
       CsCore
       CsSql
-      ${MYSQL_LIBRARIES}
+      ${MySQL_LIBRARIES}
       ${ZLIB_LIBRARIES}
    )
 

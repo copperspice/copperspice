@@ -52,6 +52,6 @@ QSqlDriver *QMYSQLDriverPlugin::create(const QString &name)
       return driver;
    }
 
-   return 0;
+   return nullptr;
 }
 
