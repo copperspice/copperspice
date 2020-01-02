@@ -1,11 +1,10 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2015-2020 Ansel Sermersheim
 *
-* This file is part of libguarded.
+* This file is part of CsLibGuarded.
 *
-* libguarded is free software, released under the BSD 2-Clause license.
+* CsLibGuarded is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
 *
 * CopperSpice is distributed in the hope that it will be useful,
@@ -95,8 +94,7 @@ class rcu_guarded
         using pointer      = const T *;
         using element_type = const T;
 
-        read_handle(const T * ptr)
-            : m_ptr(ptr), m_accessed(false)
+        read_handle(const T *ptr) : m_ptr(ptr), m_accessed(false)
         {
         }
 
@@ -122,7 +120,7 @@ class rcu_guarded
       private:
         void access() const
         {
-            if (! m_accessed) {
+            if (!m_accessed) {
                 m_guard.rcu_read_lock(*m_ptr);
                 m_accessed = true;
             }

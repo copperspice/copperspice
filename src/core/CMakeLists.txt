@@ -34,6 +34,7 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/codecs
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent
    ${CMAKE_CURRENT_SOURCE_DIR}/global
+   ${CMAKE_CURRENT_SOURCE_DIR}/guarded
    ${CMAKE_CURRENT_SOURCE_DIR}/io
    ${CMAKE_CURRENT_SOURCE_DIR}/json
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
@@ -51,6 +52,7 @@ include(concurrent/concurrent.cmake)
 include(containers/containers.cmake)
 include(datetime/datetime.cmake)
 include(global/global.cmake)
+include(guarded/guarded.cmake)
 include(io/io.cmake)
 include(json/json.cmake)
 include(kernel/kernel.cmake)
