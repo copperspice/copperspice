@@ -25,14 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_3_2_CORE_H
 #define QOPENGLVERSIONFUNCTIONS_3_2_CORE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
 
-#include <QtGui/QOpenGLVersionFunctions>
-#include <QtGui/qopenglcontext.h>
-
-QT_BEGIN_NAMESPACE
+#include <QOpenGLVersionFunctions>
+#include <qopenglcontext.h>
 
 class Q_GUI_EXPORT QOpenGLFunctions_3_2_Core : public QAbstractOpenGLFunctions
 {
@@ -93,8 +91,6 @@ public:
     void glCullFace(GLenum mode);
 
     // OpenGL 1.1 core functions
-    void glIndexubv(const GLubyte *c);
-    void glIndexub(GLubyte c);
     GLboolean glIsTexture(GLuint texture);
     void glGenTextures(GLsizei n, GLuint *textures);
     void glDeleteTextures(GLsizei n, const GLuint *textures);
@@ -106,7 +102,6 @@ public:
     void glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
     void glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
     void glPolygonOffset(GLfloat factor, GLfloat units);
-    void glGetPointerv(GLenum pname, GLvoid* *params);
     void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices);
     void glDrawArrays(GLenum mode, GLint first, GLsizei count);
 
@@ -587,19 +582,7 @@ inline void QOpenGLFunctions_3_2_Core::glCullFace(GLenum mode)
     d_1_0_Core->CullFace(mode);
 }
 
-
 // OpenGL 1.1 core functions
-inline void QOpenGLFunctions_3_2_Core::glIndexubv(const GLubyte *c)
-{
-    Q_UNUSED(c);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_3_2_Core::glIndexub(GLubyte c)
-{
-    Q_UNUSED(c);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
 
 inline GLboolean QOpenGLFunctions_3_2_Core::glIsTexture(GLuint texture)
 {
@@ -654,13 +637,6 @@ inline void QOpenGLFunctions_3_2_Core::glCopyTexImage1D(GLenum target, GLint lev
 inline void QOpenGLFunctions_3_2_Core::glPolygonOffset(GLfloat factor, GLfloat units)
 {
     d_1_1_Core->PolygonOffset(factor, units);
-}
-
-inline void QOpenGLFunctions_3_2_Core::glGetPointerv(GLenum pname, GLvoid* *params)
-{
-    Q_UNUSED(pname);
-    Q_UNUSED(params);
-    QOPENGL_DEPRECATEDFUNCTION;
 }
 
 inline void QOpenGLFunctions_3_2_Core::glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
@@ -1685,10 +1661,6 @@ inline void QOpenGLFunctions_3_2_Core::glGetInteger64i_v(GLenum target, GLuint i
 {
     d_3_2_Core->GetInteger64i_v(target, index, data);
 }
-
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_OPENGL && !QT_OPENGL_ES_2
 
