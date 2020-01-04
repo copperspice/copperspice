@@ -1,7 +1,8 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2017-2020 Barbara Geller
+* Copyright (c) 2017-2020 Ansel Sermersheim
+
 * Copyright (c) 1998-2009 John Maddock
 *
 * This file is part of CsString.
