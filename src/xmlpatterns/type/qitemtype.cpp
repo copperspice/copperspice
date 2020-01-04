@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -21,13 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QtGlobal>
+#include <qglobal.h>
 
 #include "qcommonsequencetypes_p.h"
-
 #include "qitemtype_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -80,5 +77,3 @@ ItemType::InstanceOf ItemType::instanceOf() const
 {
    return ClassOther;
 }
-
-QT_END_NAMESPACE
