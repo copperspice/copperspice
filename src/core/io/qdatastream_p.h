@@ -26,18 +26,14 @@
 
 #include <qdatastream.h>
 
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_NO_DATASTREAM)
 class QDataStreamPrivate
 {
  public:
-   QDataStreamPrivate() : floatingPointPrecision(QDataStream::DoublePrecision) { }
+   QDataStreamPrivate()
+      : floatingPointPrecision(QDataStream::DoublePrecision)
+   { }
 
    QDataStream::FloatingPointPrecision floatingPointPrecision;
 };
+
 #endif
-
-QT_END_NAMESPACE
-
-#endif // QDATASTREAM_P_H

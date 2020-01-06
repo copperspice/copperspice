@@ -66,6 +66,10 @@ class Q_CORE_EXPORT QSize
    inline QSize &operator*=(qreal c);
    inline QSize &operator/=(qreal c);
 
+ private:
+   int wd;
+   int ht;
+
    friend inline bool operator==(const QSize &, const QSize &);
    friend inline bool operator!=(const QSize &, const QSize &);
    friend inline const QSize operator+(const QSize &, const QSize &);
@@ -73,14 +77,9 @@ class Q_CORE_EXPORT QSize
    friend inline const QSize operator*(const QSize &, qreal);
    friend inline const QSize operator*(qreal, const QSize &);
    friend inline const QSize operator/(const QSize &, qreal);
-
- private:
-   int wd;
-   int ht;
 };
 
 Q_DECLARE_TYPEINFO(QSize, Q_MOVABLE_TYPE);
-
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
 
@@ -274,6 +273,12 @@ class Q_CORE_EXPORT QSizeF
    inline QSizeF &operator*=(qreal c);
    inline QSizeF &operator/=(qreal c);
 
+   inline QSize toSize() const;
+
+ private:
+   qreal wd;
+   qreal ht;
+
    friend inline bool operator==(const QSizeF &, const QSizeF &);
    friend inline bool operator!=(const QSizeF &, const QSizeF &);
    friend inline const QSizeF operator+(const QSizeF &, const QSizeF &);
@@ -281,12 +286,6 @@ class Q_CORE_EXPORT QSizeF
    friend inline const QSizeF operator*(const QSizeF &, qreal);
    friend inline const QSizeF operator*(qreal, const QSizeF &);
    friend inline const QSizeF operator/(const QSizeF &, qreal);
-
-   inline QSize toSize() const;
-
- private:
-   qreal wd;
-   qreal ht;
 };
 Q_DECLARE_TYPEINFO(QSizeF, Q_MOVABLE_TYPE);
 

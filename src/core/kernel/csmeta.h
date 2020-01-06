@@ -20,6 +20,7 @@
 * https://www.gnu.org/licenses/
 *
 ***********************************************************************/
+
 #ifndef CSMETA_H
 #define CSMETA_H
 
@@ -28,9 +29,9 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qstring8.h>
-#include <qvariant.h>
 #include <qstringfwd.h>
 #include <qsharedpointer.h>
+#include <qvariant.h>
 
 #include <utility>
 #include <tuple>
@@ -312,7 +313,7 @@ class Q_CORE_EXPORT cs_typeName_internal
    public:
       static const QString &typeName() {
          static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
-         static QString retval = QString("");     // prevents a compiler warning
+         static QString retval = QString("");
          return retval;
       }
 };

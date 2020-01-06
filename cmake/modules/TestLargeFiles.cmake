@@ -18,40 +18,37 @@
 # ***********************************************************************
 
 #  Adapted from Gromacs project (http://www.gromacs.org/) by Julien Malik
-
-#  Define macro to check large file support
 #
-#  OPJ_TEST_LARGE_FILES(VARIABLE)
+#  Define macro to check large file support:  OPJ_TEST_LARGE_FILES(VARIABLE)
 #
 #  VARIABLE will be set to true if off_t is 64 bits, and fseeko/ftello present.
 #  This macro will also defines the necessary variable enable large file support, for instance
-#  _LARGE_FILES
-#  _LARGEFILE_SOURCE
-#  _FILE_OFFSET_BITS 64
-#  HAVE_FSEEKO
+#     _LARGE_FILES
+#     _LARGEFILE_SOURCE
+#     _FILE_OFFSET_BITS 64
+#     HAVE_FSEEKO
 #
-#  It is your job to make sure these defines are set in a #cmakedefine so they
-#  end up in a config.h file that is included in your source if necessary
-
+#  user is responsible for setting up a config.h file which contains "#cmakedefine" for each
+#  macro which is required for your project
 
 macro(OPJ_TEST_LARGE_FILES VARIABLE)
 
-set(TestFileOffsetBits
+   set(TestFileOffsetBits
 
-"#include <sys/types.h>
+   "#include <sys/types.h>
 
-int main(int argc, char **argv)
-{
-  /* Cause a compile-time error if off_t is smaller than 64 bits */
+   int main(int argc, char **argv)
+   {
+     /* Cause a compile-time error if off_t is smaller than 64 bits */
 
-  #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
-  int off_t_is_large[ (LARGE_OFF_T % 2147483629 == 721 && LARGE_OFF_T % 2147483647 == 1) ? 1 : -1 ];
-  return 0;
-}"
+     #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+     int off_t_is_large[ (LARGE_OFF_T % 2147483629 == 721 && LARGE_OFF_T % 2147483647 == 1) ? 1 : -1 ];
+     return 0;
+   }"
 
-)
+   )
 
-    if(${VARIABLE} MATCHES "^${VARIABLE}$")
+   if(${VARIABLE} MATCHES "^${VARIABLE}$")
 
         # On most platforms it is probably overkill to first test the flags for 64-bit off_t,
         # and then separately fseeko. However, in the future we might have 128-bit filesystems

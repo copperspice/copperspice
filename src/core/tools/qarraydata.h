@@ -47,8 +47,7 @@ struct Q_CORE_EXPORT QArrayData {
    }
 
    // This refers to array data mutability, not "header data" represented by
-   // data members in QArrayData. Shared data (array and header) must still
-   // follow COW principles.
+   // data members in QArrayData. Shared data (array and header) must still follow COW principles.
    bool isMutable() const {
       return alloc != 0;
    }
@@ -115,12 +114,15 @@ struct QTypedArrayData : QArrayData {
    T *begin() {
       return data();
    }
+
    T *end() {
       return data() + size;
    }
+
    const T *begin() const {
       return data();
    }
+
    const T *end() const {
       return data() + size;
    }
@@ -183,4 +185,4 @@ struct QArrayDataPointerRef {
         & ~(Q_ALIGNOF(type) - 1) } \
     /**/
 
-#endif // include guard
+#endif

@@ -36,17 +36,18 @@
 #endif
 
 #ifdef Q_OS_WIN
+
 #include <qt_windows.h>
 typedef HANDLE Q_PIPE;
 #define INVALID_Q_PIPE INVALID_HANDLE_VALUE
+
 #else
 typedef int Q_PIPE;
 #define INVALID_Q_PIPE -1
+
 #endif
 
 #ifndef QT_NO_PROCESS
-
-QT_BEGIN_NAMESPACE
 
 class QSocketNotifier;
 class QWindowsPipeReader;
@@ -133,7 +134,6 @@ Q_DECLARE_TYPEINFO(QProcEnvValue, Q_MOVABLE_TYPE);
 #endif
 
 Q_DECLARE_TYPEINFO(QProcEnvKey, Q_MOVABLE_TYPE);
-
 class QProcessEnvironmentPrivate: public QSharedData
 {
  public:
@@ -224,6 +224,7 @@ class QProcessEnvironmentPrivate: public QSharedData
    QStringList keys() const;
    void insert(const QProcessEnvironmentPrivate &other);
 };
+
 /**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 
 template<>
@@ -251,16 +252,17 @@ class QProcessPrivate : public QIODevicePrivate
 
    struct Channel {
       enum ProcessChannelType {
-         Normal = 0,
+         Normal     = 0,
          PipeSource = 1,
-         PipeSink = 2,
-         Redirect = 3
+         PipeSink   = 2,
+         Redirect   = 3
          // if you add "= 4" here, increase the number of bits below
       };
 
       Channel() : process(0), notifier(0), type(Normal), closed(false), append(false) {
          pipe[0] = INVALID_Q_PIPE;
          pipe[1] = INVALID_Q_PIPE;
+
 #ifdef Q_OS_WIN
             reader = 0;
 #endif
@@ -292,12 +294,13 @@ class QProcessPrivate : public QIODevicePrivate
       QSocketNotifier *notifier;
 
 #ifdef Q_OS_WIN
-        union {
-            QWindowsPipeReader *reader;
-            QWindowsPipeWriter *writer;
-        };
+      union {
+         QWindowsPipeReader *reader;
+         QWindowsPipeWriter *writer;
+      };
 #endif
-        QRingBuffer buffer;
+
+      QRingBuffer buffer;
       Q_PIPE pipe[2];
 
       unsigned type : 2;
@@ -382,12 +385,11 @@ class QProcessPrivate : public QIODevicePrivate
 #endif
 
    static bool startDetached(const QString &program, const QStringList &arguments,
-                             const QString &workingDirectory = QString(), qint64 *pid = 0);
+                             const QString &workingDirectory = QString(), qint64 *pid = nullptr);
 
    int exitCode;
    QProcess::ExitStatus exitStatus;
    bool crashed;
-
 
    bool waitForStarted(int msecs = 30000);
    bool waitForReadyRead(int msecs = 30000);
@@ -403,12 +405,8 @@ class QProcessPrivate : public QIODevicePrivate
    void setError(QProcess::ProcessError error, const QString &description = QString());
    void setErrorAndEmit(QProcess::ProcessError error, const QString &description = QString());
 
-
-
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PROCESS
 
-#endif // QPROCESS_P_H
+#endif

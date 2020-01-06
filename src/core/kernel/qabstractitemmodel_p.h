@@ -28,8 +28,6 @@
 #include <qset.h>
 #include <qmultihash.h>
 
-QT_BEGIN_NAMESPACE
-
 class QPersistentModelIndexData
 {
  public:
@@ -154,6 +152,4 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    QAbstractItemModel *q_ptr;
 };
 
-QT_END_NAMESPACE
-
-#endif // QABSTRACTITEMMODEL_P_H
+#endif

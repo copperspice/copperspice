@@ -72,21 +72,11 @@ QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::ge
    return x;
 }
 
-/**
-    \internal
-    Returns a QSharedPointer<QObject> if the variant contains
-    a QSharedPointer<T> where T inherits QObject. Otherwise the behaviour is undefined.
-*/
 QSharedPointer<QObject> QtSharedPointer::sharedPointerFromVariant_internal(const QVariant &variant)
 {
    return *reinterpret_cast<const QSharedPointer<QObject>*>(variant.constData());
 }
 
-/**
-    \internal
-    Returns a QWeakPointer<QObject> if the variant contains
-    a QWeakPointer<T> where T inherits QObject. Otherwise the behaviour is undefined.
-*/
 QWeakPointer<QObject> QtSharedPointer::weakPointerFromVariant_internal(const QVariant &variant)
 {
    return *reinterpret_cast<const QWeakPointer<QObject>*>(variant.constData());

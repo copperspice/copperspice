@@ -24,11 +24,9 @@
 #ifndef QFILEINFO_H
 #define QFILEINFO_H
 
-#include <QtCore/qfile.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qshareddata.h>
-
-QT_BEGIN_NAMESPACE
+#include <qfile.h>
+#include <qlist.h>
+#include <qshareddata.h>
 
 class QDir;
 class QDirIteratorPrivate;
@@ -37,8 +35,6 @@ class QFileInfoPrivate;
 
 class Q_CORE_EXPORT QFileInfo
 {
-   friend class QDirIteratorPrivate;
-
  public:
    explicit QFileInfo(QFileInfoPrivate *d);
 
@@ -132,6 +128,8 @@ class Q_CORE_EXPORT QFileInfo
    QSharedDataPointer<QFileInfoPrivate> d_ptr;
 
  private:
+   friend class QDirIteratorPrivate;
+
    inline QFileInfoPrivate *d_func() {
       detach();
       return const_cast<QFileInfoPrivate *>(d_ptr.constData());
@@ -142,10 +140,7 @@ class Q_CORE_EXPORT QFileInfo
    }
 };
 
+using QFileInfoList = QList<QFileInfo>;
 Q_DECLARE_TYPEINFO(QFileInfo, Q_MOVABLE_TYPE);
 
-typedef QList<QFileInfo> QFileInfoList;
-
-QT_END_NAMESPACE
-
-#endif // QFILEINFO_H
+#endif

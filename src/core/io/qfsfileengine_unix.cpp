@@ -44,10 +44,6 @@
 #include <limits.h>
 #include <errno.h>
 
-
-QT_BEGIN_NAMESPACE
-
-
 /*!
     \internal
 
@@ -775,7 +771,5 @@ bool QFSFileEnginePrivate::unmap(uchar *ptr)
    return true;
 
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FSFILEENGINE

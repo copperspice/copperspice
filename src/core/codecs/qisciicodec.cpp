@@ -26,8 +26,6 @@
 
 #ifndef QT_NO_CODECS
 
-QT_BEGIN_NAMESPACE
-
 struct Codecs {
    const char name[10];
    ushort base;
@@ -272,6 +270,5 @@ QString QIsciiCodec::convertToUnicode(const char *chars, int len, ConverterState
    return result;
 }
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_CODECS
+

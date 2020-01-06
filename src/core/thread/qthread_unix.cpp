@@ -86,7 +86,7 @@ enum { ThreadPriorityResetFlag = 0x80000000 };
 #endif
 
 #ifdef HAVE_TLS
-static __thread QThreadData *currentThreadData = 0;
+static __thread QThreadData *currentThreadData = nullptr;
 #endif
 
 static pthread_once_t current_thread_data_once = PTHREAD_ONCE_INIT;
@@ -111,7 +111,7 @@ static void destroy_current_thread_data(void *p)
    }
    data->deref();
 
-   // ... but we must reset it to zero before returning so we aren't
+   // reset it to zero before returning so we are not
    // called again (POSIX allows implementations to call destructor
    // functions repeatedly until all values are zero)
    pthread_setspecific(current_thread_data_key, 0);

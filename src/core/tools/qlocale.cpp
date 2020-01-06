@@ -22,13 +22,10 @@
 ***********************************************************************/
 
 #include <qglobal.h>
-
 #include <qlocale.h>
-
 
 #include <qplatformdefs.h>
 #include <qdatastream.h>
-
 #include <qdatetime.h>
 #include <qhashfunc.h>
 #include <qnamespace.h>

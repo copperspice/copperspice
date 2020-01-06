@@ -393,12 +393,10 @@ QList<QByteArray> QTimeZonePrivate::availableTimeZoneIds(int offsetFromUtc) cons
    return result;
 }
 
-#ifndef QT_NO_DATASTREAM
 void QTimeZonePrivate::serialize(QDataStream &ds) const
 {
    ds << QString::fromUtf8(m_id);
 }
-#endif // QT_NO_DATASTREAM
 
 // Static Utility Methods
 

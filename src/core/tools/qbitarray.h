@@ -30,11 +30,6 @@ class QBitRef;
 
 class Q_CORE_EXPORT QBitArray
 {
-   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
-   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &);
-   friend Q_CORE_EXPORT uint qHash(const QBitArray &key, uint seed);
-   QByteArray d;
-
  public:
    inline QBitArray() {}
    explicit QBitArray(int size, bool val = false);
@@ -125,6 +120,14 @@ class Q_CORE_EXPORT QBitArray
    inline DataPtr &data_ptr() {
       return d.data_ptr();
    }
+
+ private:
+   QByteArray d;
+
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &);
+   friend Q_CORE_EXPORT uint qHash(const QBitArray &key, uint seed);
+
 };
 
 inline bool QBitArray::fill(bool aval, int asize)
@@ -171,6 +174,7 @@ inline bool QBitArray::toggleBit(int i)
    uchar *p = reinterpret_cast<uchar *>(d.data()) + 1 + (i >> 3);
    uchar c = uchar(*p & b);
    *p ^= b;
+
    return c != 0;
 }
 
@@ -191,27 +195,34 @@ inline bool QBitArray::at(int i) const
 
 class Q_CORE_EXPORT QBitRef
 {
- private:
-   QBitArray &a;
-   int i;
-   inline QBitRef(QBitArray &array, int idx) : a(array), i(idx) {}
-   friend class QBitArray;
-
  public:
    inline operator bool() const {
       return a.testBit(i);
    }
+
    inline bool operator!() const {
       return !a.testBit(i);
    }
+
    QBitRef &operator=(const QBitRef &val) {
       a.setBit(i, val);
       return *this;
    }
+
    QBitRef &operator=(bool val) {
       a.setBit(i, val);
       return *this;
    }
+
+ private:
+   inline QBitRef(QBitArray &array, int idx)
+      : a(array), i(idx)
+   {}
+
+   QBitArray &a;
+   int i;
+
+   friend class QBitArray;
 };
 
 inline QBitRef QBitArray::operator[](int i)

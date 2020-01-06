@@ -25,10 +25,10 @@
 #define QVariantAnimation_P_H
 
 #include <qvariantanimation.h>
-
-#include <qabstractanimation_p.h>
 #include <qeasingcurve.h>
 #include <qvector.h>
+
+#include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
 

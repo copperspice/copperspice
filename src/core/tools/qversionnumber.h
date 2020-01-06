@@ -31,19 +31,16 @@
 #include <qtypeinfo.h>
 
 class QVersionNumber;
+
 Q_CORE_EXPORT uint qHash(const QVersionNumber &key, uint seed = 0);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QVersionNumber &version);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QVersionNumber &version);
 
-
 class QVersionNumber
 {
-
    struct SegmentStorage {
       QVector<int> pointer_segments;
-
-
 
       // set the InlineSegmentMarker and set length to zero
       SegmentStorage()
@@ -51,10 +48,6 @@ class QVersionNumber
 
       SegmentStorage(const QVector<int> &seg) : pointer_segments(seg) {
       }
-
-
-
-
 
       explicit SegmentStorage(QVector<int> &&seg) : pointer_segments(std::move(seg)) {
 
@@ -64,19 +57,12 @@ class QVersionNumber
 
       }
 
-
-
-
-
       int size() const {
          return pointer_segments.size();
       }
 
-
       void resize(int len) {
-
          pointer_segments.resize(len);
-
       }
 
       int at(int index) const {
@@ -84,15 +70,10 @@ class QVersionNumber
       }
 
       void setSegments(int len, int maj, int min = 0, int mic = 0) {
-
-
          setVector(len, maj, min, mic);
-
       }
 
     private:
-
-
       Q_CORE_EXPORT void setVector(int len, int maj, int min, int mic);
 
    } m_segments;
@@ -104,12 +85,9 @@ class QVersionNumber
    explicit QVersionNumber(const QVector<int> &seg) : m_segments(seg)
    {}
 
-
    explicit QVersionNumber(QVector<int> &&seg)
       : m_segments(std::move(seg))
    {}
-
-
 
    inline QVersionNumber(std::initializer_list<int> args)
       : m_segments(args)
@@ -173,11 +151,7 @@ class QVersionNumber
    friend Q_CORE_EXPORT uint qHash(const QVersionNumber &key, uint seed);
 };
 
-
-
-
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVersionNumber &version);
-
 
 inline bool operator> (const QVersionNumber &lhs, const QVersionNumber &rhs)
 {
@@ -208,7 +182,6 @@ inline bool operator!=(const QVersionNumber &lhs, const QVersionNumber &rhs)
 {
    return QVersionNumber::compare(lhs, rhs) != 0;
 }
-
 
 Q_DECLARE_METATYPE(QVersionNumber)
 

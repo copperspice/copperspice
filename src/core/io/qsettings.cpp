@@ -1012,7 +1012,7 @@ QStringList QSettingsPrivate::splitArgs(const QString &s, int idx)
 void QConfFileSettingsPrivate::initFormat()
 {
    extension = (format == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini");
-   readFunc = 0;
+   readFunc  = 0;
    writeFunc = 0;
 
 #if defined(Q_OS_DARWIN)
@@ -2212,15 +2212,6 @@ QSettings::QSettings(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-
-/*!
-    Destroys the QSettings object.
-
-    Any unsaved changes will eventually be written to permanent
-    storage.
-
-    \sa sync()
-*/
 QSettings::~QSettings()
 {
    Q_D(QSettings);
@@ -2233,17 +2224,6 @@ QSettings::~QSettings()
    }
 }
 
-/*!
-    Removes all entries in the primary location associated to this
-    QSettings object.
-
-    Entries in fallback locations are not removed.
-
-    If you only want to remove the entries in the current group(),
-    use remove("") instead.
-
-    \sa remove(), setFallbacksEnabled()
-*/
 void QSettings::clear()
 {
    Q_D(QSettings);

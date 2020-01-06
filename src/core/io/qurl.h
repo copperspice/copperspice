@@ -29,9 +29,10 @@
 #include <qstring.h>
 #include <qhash.h>
 
+class QDataStream;
+class QUrl;
 class QUrlPrivate;
 class QUrlQuery;
-class QDataStream;
 
 #ifdef Q_OS_DARWIN
 using CFURLRef = const struct __CFURL *;
@@ -42,7 +43,6 @@ using CFURLRef = const struct __CFURL *;
 
 #endif
 
-class QUrl;
 Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed = 0);
 
 class Q_CORE_EXPORT QUrl
@@ -301,12 +301,12 @@ class Q_CORE_EXPORT QUrl
    }
 
  private:
+   friend class QUrlQuery;
+   friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed);
+
    static QString fromEncodedComponent_helper(const QByteArray &ba);
 
    QUrlPrivate *d;
-
-   friend class QUrlQuery;
-   friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed);
 };
 
 Q_DECLARE_TYPEINFO(QUrl, Q_MOVABLE_TYPE);

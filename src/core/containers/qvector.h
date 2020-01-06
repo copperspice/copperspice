@@ -24,11 +24,11 @@
 #ifndef QVECTOR_H
 #define QVECTOR_H
 
-#include <initializer_list>
-#include <vector>
-
 #include <qcontainerfwd.h>
 #include <qlist.h>
+
+#include <initializer_list>
+#include <vector>
 
 template <class T>
 class QVectorIterator;

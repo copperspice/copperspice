@@ -37,12 +37,6 @@ class Q_CORE_EXPORT QLocale
 {
    CORE_CS_GADGET(QLocale)
 
-   friend class QByteArray;
-   friend class QIntValidator;
-   friend class QDoubleValidatorPrivate;
-   friend class QTextStream;
-   friend class QTextStreamPrivate;
-
  public:
    // GENERATED PART STARTS HERE
    // see qlocale_data_p.h for more info on generated data
@@ -894,7 +888,7 @@ class Q_CORE_EXPORT QLocale
    QDateTime toDateTime(const QString &string, const QString &format) const;
 #endif
 
-   // ### Qt5/We need to return QString since unicode data contains several characters for these fields.
+   // ### Qt5 need to return QString since unicode data contains several characters for these fields.
    QChar decimalPoint() const;
    QChar groupSeparator() const;
    QChar percent() const;
@@ -965,6 +959,11 @@ class Q_CORE_EXPORT QLocale
 
    friend class QLocalePrivate;
    friend Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed);
+   friend class QByteArray;
+   friend class QIntValidator;
+   friend class QDoubleValidatorPrivate;
+   friend class QTextStream;
+   friend class QTextStreamPrivate;
 };
 
 Q_DECLARE_TYPEINFO(QLocale, Q_MOVABLE_TYPE);

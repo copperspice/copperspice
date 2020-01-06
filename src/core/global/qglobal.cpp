@@ -484,6 +484,7 @@ bool qunsetenv(const char *varName)
 
 typedef uint SeedStorageType;
 typedef QThreadStorage<SeedStorageType *> SeedStorage;
+
 Q_GLOBAL_STATIC(SeedStorage, randTLS)  // Thread Local Storage for seed value
 
 #endif
@@ -502,10 +503,10 @@ void qsrand(uint seed)
       *pseed = seed;
 
    } else {
-      //global static seed storage should always exist,
-      //except after being deleted by QGlobalStaticDeleter.
-      //But since it still can be called from destructor of another
-      //global static object, fallback to srand(seed)
+      // global static seed storage should always exist,
+      // except after being deleted by QGlobalStaticDeleter.
+      // But since it still can be called from destructor of another
+      // global static object, fallback to srand(seed)
       srand(seed);
    }
 
@@ -530,10 +531,10 @@ int qrand()
       return rand_r(pseed);
 
    } else {
-      //global static seed storage should always exist,
-      //except after being deleted by QGlobalStaticDeleter.
-      //But since it still can be called from destructor of another
-      //global static object, fallback to rand()
+      // global static seed storage should always exist,
+      // except after being deleted by QGlobalStaticDeleter.
+      // But since it still can be called from destructor of another
+      // global static object, fallback to rand()
       return rand();
    }
 #else

@@ -1379,18 +1379,18 @@ class Q_CORE_EXPORT Qt
    };
 
    enum FindChildOption {
-      FindDirectChildrenOnly = 0x0,
+      FindDirectChildrenOnly  = 0x0,
       FindChildrenRecursively = 0x1
    };
    using FindChildOptions = QFlags<FindChildOption>;
 
    enum DropAction {
-      CopyAction = 0x1,
-      MoveAction = 0x2,
-      LinkAction = 0x4,
-      ActionMask = 0xff,
+      CopyAction       = 0x1,
+      MoveAction       = 0x2,
+      LinkAction       = 0x4,
+      ActionMask       = 0xff,
       TargetMoveAction = 0x8002,
-      IgnoreAction = 0x0
+      IgnoreAction     = 0x0
    };
    using DropActions = QFlags<DropAction>;
 

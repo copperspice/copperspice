@@ -58,5 +58,4 @@ class Q_CORE_EXPORT QBasicTimer
 Q_DECLARE_TYPEINFO(QBasicTimer, Q_MOVABLE_TYPE);
 
 
-
-#endif // QBASICTIMER_H
+#endif
