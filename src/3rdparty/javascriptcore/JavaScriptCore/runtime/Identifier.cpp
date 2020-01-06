@@ -42,7 +42,7 @@ public:
         for (HashSet<UString::Rep*>::iterator iter = m_table.begin(); iter != end; ++iter)
             (*iter)->setIsIdentifier(false);
     }
-    
+
     std::pair<HashSet<UString::Rep*>::iterator, bool> add(UString::Rep* value)
     {
         std::pair<HashSet<UString::Rep*>::iterator, bool> result = m_table.add(value);
@@ -180,7 +180,7 @@ struct UCharBufferTranslator {
         for (unsigned i = 0; i != buf.length; i++)
             d[i] = buf.s[i];
         r->setHash(hash);
-        location = r; 
+        location = r;
     }
 };
 
@@ -195,7 +195,7 @@ PassRefPtr<UString::Rep> Identifier::add(JSGlobalData* globalData, const UChar* 
         UString::Rep::empty().hash();
         return &UString::Rep::empty();
     }
-    UCharBuffer buf = {s, static_cast<unsigned int>(length)}; 
+    UCharBuffer buf = {s, static_cast<unsigned int>(length)};
     pair<HashSet<UString::Rep*>::iterator, bool> addResult = globalData->identifierTable->add<UCharBuffer, UCharBufferTranslator>(buf);
 
     // If the string is newly-translated, then we need to adopt it.
@@ -211,21 +211,27 @@ PassRefPtr<UString::Rep> Identifier::add(ExecState* exec, const UChar* s, int le
 PassRefPtr<UString::Rep> Identifier::addSlowCase(JSGlobalData* globalData, UString::Rep* r)
 {
     ASSERT(!r->isIdentifier());
+
     if (r->size() == 1) {
         UChar c = r->data()[0];
-        if (c <= 0xFF)
-            r = globalData->smallStrings.singleCharacterStringRep(c);
-            if (r->isIdentifier()) {
+
+        if (c <= 0xFF) {
+           r = globalData->smallStrings.singleCharacterStringRep(c);
+        }
+
+        if (r->isIdentifier()) {
 #ifndef NDEBUG
-                checkSameIdentifierTable(globalData, r);
+           checkSameIdentifierTable(globalData, r);
 #endif
-                return r;
-            }
+           return r;
+        }
     }
+
     if (!r->size()) {
         UString::Rep::empty().hash();
         return &UString::Rep::empty();
     }
+
     return *globalData->identifierTable->add(r).first;
 }
 
@@ -279,7 +285,7 @@ void createIdentifierTableSpecific()
     ASSERT(g_identifierTableSpecific);
 }
 
-#else 
+#else
 
 void createIdentifierTableSpecific()
 {

@@ -50,11 +50,6 @@
 #include <inttypes.h>
 #endif
 
-#if OS(SYMBIAN)
-#include <e32def.h>
-#include <e32debug.h>
-#endif
-
 #ifdef NDEBUG
 #define ASSERTIONS_DISABLED_DEFAULT 1
 #else
@@ -112,7 +107,7 @@
 /* WTF logging functions can process %@ in the format string to log a NSObject* but the printf format attribute
    emits a warning when %@ is used in the format string.  Until <rdar://problem/5195437> is resolved we can't include
    the attribute when being used from Objective-C code in case it decides to use %@. */
-#if COMPILER(GCC) && !defined(__OBJC__)
+#if COMPILER(GCC) && ! defined(__OBJC__)
 #define WTF_ATTRIBUTE_PRINTF(formatStringArgument, extraArguments) __attribute__((__format__(printf, formatStringArgument, extraArguments)))
 #else
 #define WTF_ATTRIBUTE_PRINTF(formatStringArgument, extraArguments)
@@ -145,32 +140,14 @@ void WTFLogVerbose(const char* file, int line, const char* function, WTFLogChann
 #endif
 
 /* CRASH -- gets us into the debugger or the crash reporter -- signals are ignored by the crash reporter so we must do better */
-
 #ifndef CRASH
-#if OS(SYMBIAN)
-#define CRASH() do { \
-    __DEBUGGER(); \
-    User::Panic(_L("Webkit CRASH"),0); \
-    } while(false)
-#else
 #define CRASH() do { \
     *(int *)(uintptr_t)0xbbadbeef = 0; \
     ((void(*)())0)(); /* More reliable, but doesn't say BBADBEEF */ \
 } while(false)
 #endif
-#endif
 
-/* ASSERT, ASSERT_NOT_REACHED, ASSERT_UNUSED */
-
-#if OS(WINCE) && !PLATFORM(TORCHMOBILE)
-/* FIXME: We include this here only to avoid a conflict with the ASSERT macro. */
-#include <windows.h>
-#undef min
-#undef max
-#undef ERROR
-#endif
-
-#if OS(WINDOWS) || OS(SYMBIAN)
+#if OS(WINDOWS)
 /* FIXME: Change to use something other than ASSERT to avoid this conflict with the underlying platform */
 #undef ASSERT
 #endif
@@ -200,12 +177,7 @@ while (0)
 #endif
 
 /* ASSERT_WITH_MESSAGE */
-
-#if COMPILER(MSVC7)
-#define ASSERT_WITH_MESSAGE(assertion) ((void)0)
-#elif COMPILER(WINSCW)
-#define ASSERT_WITH_MESSAGE(assertion, arg...) ((void)0)
-#elif ASSERT_MSG_DISABLED
+#if ASSERT_MSG_DISABLED
 #define ASSERT_WITH_MESSAGE(assertion, ...) ((void)0)
 #else
 #define ASSERT_WITH_MESSAGE(assertion, ...) do \
@@ -218,9 +190,7 @@ while (0)
 
 
 /* ASSERT_ARG */
-
 #if ASSERT_ARG_DISABLED
-
 #define ASSERT_ARG(argName, assertion) ((void)0)
 
 #else
@@ -236,16 +206,22 @@ while (0)
 
 /* COMPILE_ASSERT */
 #ifndef COMPILE_ASSERT
+
+#if defined(__cplusplus)
+#define COMPILE_ASSERT(exp, name) static_assert((exp), #name)
+
+#elif __STDC_VERSION__ >= 201112L
+#define COMPILE_ASSERT(exp, name) _Static_assert((exp), #name)
+
+#else
 #define COMPILE_ASSERT(exp, name) typedef int dummy##name [(exp) ? 1 : -1]
+
+#endif
+
 #endif
 
 /* FATAL */
-
-#if COMPILER(MSVC7)
-#define FATAL() ((void)0)
-#elif COMPILER(WINSCW)
-#define FATAL(arg...) ((void)0)
-#elif FATAL_DISABLED
+#if FATAL_DISABLED
 #define FATAL(...) ((void)0)
 #else
 #define FATAL(...) do { \
@@ -255,24 +231,14 @@ while (0)
 #endif
 
 /* LOG_ERROR */
-
-#if COMPILER(MSVC7)
-#define LOG_ERROR() ((void)0)
-#elif COMPILER(WINSCW)
-#define LOG_ERROR(arg...)  ((void)0)
-#elif ERROR_DISABLED
+#if ERROR_DISABLED
 #define LOG_ERROR(...) ((void)0)
 #else
 #define LOG_ERROR(...) WTFReportError(__FILE__, __LINE__, WTF_PRETTY_FUNCTION, __VA_ARGS__)
 #endif
 
 /* LOG */
-
-#if COMPILER(MSVC7)
-#define LOG() ((void)0)
-#elif COMPILER(WINSCW)
-#define LOG(arg...) ((void)0)
-#elif LOG_DISABLED
+#if LOG_DISABLED
 #define LOG(channel, ...) ((void)0)
 #else
 #define LOG(channel, ...) WTFLog(&JOIN_LOG_CHANNEL_WITH_PREFIX(LOG_CHANNEL_PREFIX, channel), __VA_ARGS__)
@@ -281,15 +247,10 @@ while (0)
 #endif
 
 /* LOG_VERBOSE */
-
-#if COMPILER(MSVC7)
-#define LOG_VERBOSE(channel) ((void)0)
-#elif COMPILER(WINSCW)
-#define LOG_VERBOSE(channel, arg...) ((void)0)
-#elif LOG_DISABLED
+#if LOG_DISABLED
 #define LOG_VERBOSE(channel, ...) ((void)0)
 #else
 #define LOG_VERBOSE(channel, ...) WTFLogVerbose(__FILE__, __LINE__, WTF_PRETTY_FUNCTION, &JOIN_LOG_CHANNEL_WITH_PREFIX(LOG_CHANNEL_PREFIX, channel), __VA_ARGS__)
 #endif
 
-#endif /* WTF_Assertions_h */
+#endif
