@@ -112,9 +112,9 @@ static CFStringRef runLoopMode(NSDictionary *dictionary)
 
 class RunLoopDebugger : public QObject
 {
-    GUI_CS_OBJECT(RunLoopDebugger)
-    GUI_CS_ENUM(Activity)
-    GUI_CS_ENUM(Result)
+    CORE_CS_OBJECT(RunLoopDebugger)
+    CORE_CS_ENUM(Activity)
+    CORE_CS_ENUM(Result)
 
 public:
     #define Q_MIRROR_ENUM(name) name = name
