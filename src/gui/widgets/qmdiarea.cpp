@@ -31,7 +31,6 @@
 #include <QChildEvent>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QtAlgorithms>
 #include <QMutableVectorIterator>
 #include <QPainter>
 #include <QFontMetrics>

@@ -24,8 +24,8 @@
 #ifndef QDECLARATIVEDOM_P_P_H
 #define QDECLARATIVEDOM_P_P_H
 
-#include "qdeclarativeparser_p.h"
-#include <QtCore/QtGlobal>
+#include <qglobal.h>
+#include <qdeclarativeparser_p.h>
 
 QT_BEGIN_NAMESPACE
 

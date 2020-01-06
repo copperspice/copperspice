@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qspdyprotocolhandler_p.h>
+
+#include <qendian.h>
+
 #include <qnoncontiguousbytedevice_p.h>
 #include <qhttpnetworkconnectionchannel_p.h>
-#include <QtEndian>
 
 #ifdef QT_SSL
 

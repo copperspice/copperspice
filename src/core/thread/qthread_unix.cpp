@@ -48,10 +48,6 @@
 #include <sys/sysctl.h>
 #endif
 
-#ifdef Q_OS_HPUX
-#include <sys/pstat.h>
-#endif
-
 #if defined(Q_OS_DARWIN)
 # ifdef qDebug
 #   define old_qDebug qDebug

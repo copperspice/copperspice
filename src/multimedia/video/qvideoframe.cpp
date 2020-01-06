@@ -29,7 +29,7 @@
 #include <qvariant.h>
 #include <qvector.h>
 #include <qmutex.h>
-#include <QDebug>
+#include <qdebug.h>
 
 #include <qvideoframe_p.h>
 #include <qimagevideobuffer_p.h>

@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <QtGlobal>
+#include <qglobal.h>
 
+#include "qhexbinary_p.h"
 #include "qbase64binary_p.h"
 #include "qbuiltintypes_p.h"
 #include "qpatternistlocale_p.h"
 #include "qvalidationerror_p.h"
 
-#include "qhexbinary_p.h"
 
 QT_BEGIN_NAMESPACE
 

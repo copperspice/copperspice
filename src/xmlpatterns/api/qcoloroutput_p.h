@@ -24,8 +24,8 @@
 #ifndef QColorOutput_P_H
 #define QColorOutput_P_H
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QHash>
+#include <qglobal.h>
+#include <qhash.h>
 
 QT_BEGIN_NAMESPACE
 

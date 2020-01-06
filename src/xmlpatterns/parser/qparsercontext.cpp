@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include <QtGlobal>
+#include <qglobal.h>
 
+#include "qparsercontext_p.h"
 #include "qexpression_p.h"
 #include "qstaticcontext_p.h"
 #include "qtokenizer_p.h"
 
-#include "qparsercontext_p.h"
 
 QT_BEGIN_NAMESPACE
 

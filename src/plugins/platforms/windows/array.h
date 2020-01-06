@@ -24,7 +24,7 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include <QtGlobal>
+#include <qglobal.h>
 #include <algorithm>
 
 /* A simple, non-shared array. */

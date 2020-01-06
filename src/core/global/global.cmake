@@ -20,9 +20,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QSysInfo
    QTypeInfo
    QtCore
-   QtEndian
-   QtGlobal
-   QtNamespace
 )
 
 list(APPEND CORE_INCLUDES
@@ -53,9 +50,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qsysinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtendian.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtglobal.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtnamespace.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtypeinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qt_windows.h
 )

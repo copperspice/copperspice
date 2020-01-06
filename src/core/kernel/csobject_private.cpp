@@ -23,7 +23,7 @@
 
 #include <qobject.h>
 #include <qthread_p.h>
-#include <QAbstractEventDispatcher>
+#include <qabstracteventdispatcher.h>
 
 void CSInternalChildren::deleteChildren(QObject *object)
 {

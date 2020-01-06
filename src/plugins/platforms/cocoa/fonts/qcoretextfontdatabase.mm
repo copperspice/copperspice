@@ -22,6 +22,11 @@
 ***********************************************************************/
 
 #include <qglobal.h>
+#include <qendian.h>
+#include <qsettings.h>
+
+#include <qcoretextfontdatabase_p.h>
+#include <qfontengine_coretext_p.h>
 
 #include <sys/param.h>
 
@@ -32,11 +37,6 @@
 #elif defined(Q_OS_IOS)
 #import <UIKit/UIFont.h>
 #endif
-
-#include <qcoretextfontdatabase_p.h>
-#include <qfontengine_coretext_p.h>
-#include <QSettings>
-#include <QtEndian>
 
 #if defined(QT_USE_FREETYPE)
 #include <qfontengine_ft_p.h>

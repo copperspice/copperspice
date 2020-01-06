@@ -24,10 +24,10 @@
 #ifndef QSSLPRESHAREDKEYAUTHENTICATOR_H
 #define QSSLPRESHAREDKEYAUTHENTICATOR_H
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QString>
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QMetaType>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qshareddatapointer.h>
+#include <qmetatype.h>
 
 class QSslPreSharedKeyAuthenticatorPrivate;
 

@@ -24,12 +24,12 @@
 #ifndef QParserContext_P_H
 #define QParserContext_P_H
 
-#include <QFlags>
-#include <QSharedData>
-#include <QStack>
-#include <QStringList>
-#include <QtGlobal>
-#include <QXmlQuery>
+#include <qflags.h>
+#include <qshareddata.h>
+#include <qstack.h>
+#include <qstringlist.h>
+#include <qglobal.h>
+#include <qxmlquery.h>
 
 #include <qbuiltintypes_p.h>
 #include <qfunctionsignature_p.h>

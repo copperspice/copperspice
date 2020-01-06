@@ -24,9 +24,9 @@
 #ifndef QSSLELLIPTICCURVE_H
 #define QSSLELLIPTICCURVE_H
 
-#include <QtGlobal>
-#include <QString>
-#include <QMetaType>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qmetatype.h>
 #include <qhashfunc.h>
 
 class QDebug;

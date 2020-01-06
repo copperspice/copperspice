@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QStringList>
+#include <qstringlist.h>
 
 #include "qbuiltintypes_p.h"
 #include "qcommonnamespaces_p.h"

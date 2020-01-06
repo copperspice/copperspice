@@ -26,11 +26,11 @@
 #if defined(QT_USE_FREETYPE)
 
 #include <qplatform_screen.h>
-#include <QDir>
-#include <QFile>
-#include <QLibraryInfo>
-#include <QtEndian>
-#include <QUuid>
+#include <qdir.h>
+#include <qfile.h>
+#include <qendian.h>
+#include <qlibraryinfo.h>
+#include <quuid.h>
 
 #include <qapplication_p.h>
 #include <qfontengine_ft_p.h>

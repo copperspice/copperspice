@@ -31,8 +31,8 @@
 #include <qapplication.h>
 #include <qmath.h>
 #include <qdebug.h>
-#include <QtEndian>
-#include <QThreadStorage>
+#include <qendian.h>
+#include <qthreadstorage.h>
 
 #include <qhighdpiscaling_p.h>
 #include <qsystemlibrary_p.h>

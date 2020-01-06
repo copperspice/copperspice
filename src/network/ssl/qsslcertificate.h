@@ -45,6 +45,8 @@ class QStringList;
 class QSslCertificatePrivate;
 class QSslCertificate;
 
+class QDebug;
+
 Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed = 0);
 
 class Q_NETWORK_EXPORT QSslCertificate
@@ -133,7 +135,6 @@ private:
    friend Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed);
 };
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCertificate &certificate);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info);
 

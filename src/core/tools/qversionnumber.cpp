@@ -22,13 +22,12 @@
 ***********************************************************************/
 
 #include <qversionnumber.h>
+
 #include <qhash.h>
-#include <qlocale_tools_p.h>
-
 #include <qdatastream.h>
-
 #include <qdebug.h>
 
+#include <qlocale_tools_p.h>
 
 #include <algorithm>
 #include <limits>

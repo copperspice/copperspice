@@ -23,8 +23,8 @@
 
 #include <qxcbxsettings.h>
 
-#include <QByteArray>
-#include <QtEndian>
+#include <qbytearray.h>
+#include <qendian.h>
 
 #ifdef XCB_USE_XLIB
 #include <X11/extensions/XIproto.h>

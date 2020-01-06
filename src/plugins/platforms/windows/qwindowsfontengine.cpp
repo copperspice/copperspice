@@ -21,21 +21,21 @@
 *
 ***********************************************************************/
 
-#include "qwindowsintegration.h"
-#include "qwindowsfontengine.h"
-#include "qwindowsnativeimage.h"
-#include "qwindowscontext.h"
-#include "qwindowsfontdatabase.h"
-#include "qtwindows_additional.h"
+#include <qwindowsintegration.h>
+#include <qwindowsfontengine.h>
+#include <qwindowsnativeimage.h>
+#include <qwindowscontext.h>
+#include <qwindowsfontdatabase.h>
+#include <qtwindows_additional.h>
 
-#include <QDebug>
-#include <QPaintDevice>
-#include <QBitmap>
-#include <QPainter>
-#include <QtEndian>
+#include <qdebug.h>
+#include <qpaintdevice.h>
+#include <qbitmap.h>
+#include <qpainter.h>
+#include <qendian.h>
 #include <qmath.h>
-#include <QThreadStorage>
-#include <QPaintEngine>
+#include <qthreadstorage.h>
+#include <qpaintengine.h>
 
 #include <qtextengine_p.h>
 #include <qapplication_p.h>

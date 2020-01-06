@@ -52,13 +52,11 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QVarLengthArray
    QVersionNumber
    QWeakPointer
-   QtAlgorithms
 )
 
 list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qalgorithms.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qarraydata.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qarraydataops.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitref.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.h
@@ -93,7 +91,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsystemlocale.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtalgorithms.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvarlengtharray.h

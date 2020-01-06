@@ -39,7 +39,7 @@
 #include "TimeRanges.h"
 
 #if PLATFORM(QT)
-#include <QtGlobal>
+#include <qglobal.h>
 #endif
 
 #if USE(GSTREAMER)

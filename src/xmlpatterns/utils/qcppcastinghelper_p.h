@@ -24,7 +24,7 @@
 #ifndef QCppCastingHelper_P_H
 #define QCppCastingHelper_P_H
 
-#include <QtCore/QtGlobal>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

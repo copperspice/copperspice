@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <QByteArray>
-#include <QtGlobal>
+#include <qbytearray.h>
+#include <qglobal.h>
 
 #include "qbuiltintypes_p.h"
 #include "qvalidationerror_p.h"

@@ -36,6 +36,8 @@ class QDateTime;
 class QUrl;
 class QNetworkCookiePrivate;
 
+class QDebug;
+
 class Q_NETWORK_EXPORT QNetworkCookie
 {
  public:
@@ -96,7 +98,6 @@ class Q_NETWORK_EXPORT QNetworkCookie
    friend class QNetworkCookiePrivate;
 };
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
 
 Q_DECLARE_METATYPE(QNetworkCookie)

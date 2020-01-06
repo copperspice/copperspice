@@ -31,6 +31,7 @@
 #include <limits>
 
 class QTimeZone;
+class QDateTimePrivate;
 
 #ifdef Q_OS_DARWIN
 
@@ -258,7 +259,6 @@ class Q_CORE_EXPORT QTime
 };
 Q_DECLARE_TYPEINFO(QTime, Q_MOVABLE_TYPE);
 
-class QDateTimePrivate;
 
 class Q_CORE_EXPORT QDateTime
 {

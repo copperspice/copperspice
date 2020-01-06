@@ -24,7 +24,7 @@
 #ifndef QABSTRACTXMLPULLPROVIDER_P_H
 #define QABSTRACTXMLPULLPROVIDER_P_H
 
-#include <QtCore/QtGlobal>
+#include <qglobal.h>
 #include <qcontainerfwd.h>
 #include <qstringfwd.h>
 

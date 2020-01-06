@@ -24,7 +24,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QtGlobal>
+#include <qglobal.h>
 
 namespace WebKit {
 Q_DECL_IMPORT int WebProcessMainQt(int argc, char** argv);

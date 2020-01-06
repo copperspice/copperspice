@@ -24,8 +24,8 @@
 #ifndef QSchemaComponent_P_H
 #define QSchemaComponent_P_H
 
-#include <QSharedData>
-#include <QtGlobal>
+#include <qshareddata.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

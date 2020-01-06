@@ -26,7 +26,7 @@
 #define QOPENGL_CUSTOM_SHADER_STAGE_H
 
 #include <QOpenGLShaderProgram>
-#include <QtGlobal>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

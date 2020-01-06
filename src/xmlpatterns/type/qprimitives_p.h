@@ -24,9 +24,9 @@
 #ifndef QPrimitives_P_H
 #define QPrimitives_P_H
 
-#include <QtGlobal>
-#include <QtCore/QHash>
-#include <QtCore/QUrl>
+#include <qglobal.h>
+#include <qhash.h>
+#include <qurl.h>
 #include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
