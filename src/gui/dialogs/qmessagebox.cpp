@@ -1218,9 +1218,6 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
 
 void QMessageBox::aboutCs(QWidget *parent, const QString &title)
 {
-
-
-
    QDialog *aboutBox = new QDialog(parent);
    aboutBox->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -1251,7 +1248,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    msg2->setFont(font);
 
    QLabel *msg3 = new QLabel;
-   msg3->setText(tr("Copyright (C) 2012-2019 Ansel Sermersheim & Barbara Geller\n"
+   msg3->setText(tr("Copyright (C) 2012-2020 Ansel Sermersheim & Barbara Geller\n"
          "\n"
          "Copyright (C) 2012-2016 Digia Plc and/or its subsidiary(-ies)\n"
          "Copyright (C) 2008-2012 Nokia Corporation and/or its subsidiary(-ies)"));
