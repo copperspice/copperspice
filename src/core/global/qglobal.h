@@ -615,11 +615,13 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_12 = 0x000E,
       MV_10_13 = 0x000F,
       MV_10_14 = 0x0010,
+      MV_10_15 = 0x0011,
 
       MV_EL_CAPITAN   = MV_10_11,                // supported from here
       MV_SIERRA       = MV_10_12,
       MV_HIGH_SIERRA  = MV_10_13,
       MV_MOJAVE       = MV_10_14,
+      MV_CATALINA     = MV_10_15,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
