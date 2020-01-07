@@ -324,6 +324,8 @@ class Q_OPENGL_EXPORT QGLTextureDestroyer
 {
  public:
    void emitFreeTexture(QGLContext *context, QPlatformPixmap *boundPixmap, GLuint id) {
+      (void) boundPixmap;
+
       if (context->contextHandle()) {
          (new QOpenGLSharedResourceGuard(context->contextHandle(), id, freeTextureFunc))->free();
       }

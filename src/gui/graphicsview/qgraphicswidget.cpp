@@ -1051,6 +1051,8 @@ void QGraphicsWidget::changeEvent(QEvent *event)
          if (d->layout) {
             d->layout->invalidate();
          }
+         [[fallthrough]];
+
       case QEvent::FontChange:
          update();
          updateGeometry();

@@ -456,15 +456,12 @@ class QGLShaderProgramPrivate
 
  public:
    QGLShaderProgramPrivate(const QGLContext *context)
-      : programGuard(0)
-      , linked(false)
-      , inited(false)
-      , removingShaders(false)
-      , geometryVertexCount(64)
-      , geometryInputType(0)
-      , geometryOutputType(0)
-      , glfuncs(new ShaderProgramOpenGLFunctions)
-   { }
+      : programGuard(0), linked(false), inited(false), removingShaders(false), geometryVertexCount(64)
+      , geometryInputType(0), geometryOutputType(0), glfuncs(new ShaderProgramOpenGLFunctions)
+   {
+      (void) context;
+   }
+
    ~QGLShaderProgramPrivate();
 
    QGLSharedResourceGuardBase *programGuard;

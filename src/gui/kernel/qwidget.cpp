@@ -6694,7 +6694,7 @@ bool QWidget::event(QEvent *event)
                      0, this);
                   break;
                }
-               // fall through
+               [[fallthrough]];
 #endif
 
             default:
@@ -6985,7 +6985,7 @@ bool QWidget::event(QEvent *event)
 
          }
 
-         // fall through
+         [[fallthrough]];
       }
 #endif
 

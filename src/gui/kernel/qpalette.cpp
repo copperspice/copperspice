@@ -255,6 +255,8 @@ void QPalette::setBrush(ColorGroup cg, ColorRole cr, const QBrush &b)
 
 bool QPalette::isBrushSet(ColorGroup cg, ColorRole cr) const
 {
+   (void) cg;
+
    return (resolve_mask & (1 << cr));
 }
 

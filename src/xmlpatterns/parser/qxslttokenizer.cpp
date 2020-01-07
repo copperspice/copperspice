@@ -1923,8 +1923,10 @@ bool XSLTTokenizer::insideSequenceConstructor(TokenSource::Queue *const to,
 
             return hasWrittenExpression;
          }
+
          case QXmlStreamReader::ProcessingInstruction:
-         /* Fallthrough. */
+          [[fallthrough]];
+
          case QXmlStreamReader::Comment:
             /* We do nothing, we just ignore them. */
             continue;
@@ -2443,7 +2445,7 @@ void XSLTTokenizer::queueSorting(const bool oneSortRequired, TokenSource::Queue 
                continue;
             }
 
-            if (QXmlStreamReader::Characters && whitespaceToSkip()) {
+            if (whitespaceToSkip()) {
                continue;
             }
 

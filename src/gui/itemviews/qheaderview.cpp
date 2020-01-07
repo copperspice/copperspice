@@ -2000,22 +2000,30 @@ void QHeaderView::mouseReleaseEvent(QMouseEvent *e)
    int pos = d->orientation == Qt::Horizontal ? e->x() : e->y();
    switch (d->state) {
       case QHeaderViewPrivate::MoveSection:
-         if (!d->sectionIndicator->isHidden()) { // moving
+         if (! d->sectionIndicator->isHidden()) {
+            // moving
             int from = visualIndex(d->section);
             Q_ASSERT(from != -1);
+
             int to = visualIndex(d->target);
             Q_ASSERT(to != -1);
+
             moveSection(from, to);
             d->section = d->target = -1;
             d->updateSectionIndicator(d->section, pos);
             break;
-         } // not moving
+         }
+
+         [[fallthrough]];
+
       case QHeaderViewPrivate::SelectSections:
          if (!d->clickableSections) {
             int section = logicalIndexAt(pos);
             updateSection(section);
          }
-      // fall through
+
+         [[fallthrough]];
+
       case QHeaderViewPrivate::NoState:
          if (d->clickableSections) {
             int section = logicalIndexAt(pos);

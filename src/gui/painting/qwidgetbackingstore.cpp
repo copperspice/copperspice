@@ -164,7 +164,7 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
    }
    const HDC hdc = reinterpret_cast<HDC>(hdcV);
 
-   HBRUSH brush;
+   HBRUSH brush = nullptr;
    static int i = 0;
    switch (i) {
       case 0:
@@ -334,6 +334,8 @@ void QWidgetBackingStore::releaseBuffer()
 void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBackingStore *backingStore,
    BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates)
 {
+   (void) widget;
+   (void) toCleanIsInTopLevelCoordinates;
 
    // Always flush repainted areas.
    dirtyOnScreen += toClean;

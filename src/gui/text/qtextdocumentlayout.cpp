@@ -3278,6 +3278,8 @@ void QTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int posInDo
 
 void QTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format)
 {
+   (void) posInDocument;
+
    Q_D(QTextDocumentLayout);
 
    if (item.width() != 0) {

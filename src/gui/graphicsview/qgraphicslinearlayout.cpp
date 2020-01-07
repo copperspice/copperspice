@@ -461,7 +461,7 @@ void QGraphicsLinearLayout::invalidate()
 */
 void QGraphicsLinearLayout::dump(int indent) const
 {
-
+   (void) indent;
 }
 
 

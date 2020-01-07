@@ -244,6 +244,8 @@ class QFontEngineFT : public QFontEngine
 
    void removeGlyphFromCache(glyph_t glyph) override;
    int glyphMargin(QFontEngine::GlyphFormat format) override {
+      (void) format;
+
       return 0;
    }
 

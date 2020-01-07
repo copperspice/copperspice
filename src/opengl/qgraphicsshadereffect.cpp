@@ -187,6 +187,7 @@ void QGraphicsShaderEffect::setUniformsDirty()
 */
 void QGraphicsShaderEffect::setUniforms(QGLShaderProgram *program)
 {
+   (void) program;
 }
 
 

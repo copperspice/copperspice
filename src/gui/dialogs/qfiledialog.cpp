@@ -418,6 +418,7 @@ QUrl QFileDialog::directoryUrl() const
 }
 static inline bool isCaseSensitiveFileSystem(const QString &path)
 {
+   (void) path;
 
 #if defined(Q_OS_WIN)
    return false;
@@ -756,6 +757,7 @@ void QFileDialog::setFilter(QDir::Filters filters)
 #if ! defined(QT_NO_MIMETYPE)
 static QString nameFilterForMime(const QString &mimeType)
 {
+   (void) mimeType;
 
    /* emerald (mime types)
 

@@ -964,7 +964,7 @@ class QCalendarView : public QTableView
    void setReadOnly(bool enable);
 
    void keyboardSearch(const QString &search)  override {
-
+      (void) search;
    }
 
    GUI_CS_SIGNAL_1(Public, void showDate(const QDate &date))

@@ -6656,20 +6656,34 @@ inline void qt_memfill_template(T *dest, T color, int count)
       case 0:
          do {
             *dest++ = color;
+            [[fallthrough]];
+
          case 7:
             *dest++ = color;
+            [[fallthrough]];
+
          case 6:
             *dest++ = color;
+            [[fallthrough]];
+
          case 5:
             *dest++ = color;
+            [[fallthrough]];
+
          case 4:
             *dest++ = color;
+            [[fallthrough]];
+
          case 3:
             *dest++ = color;
+            [[fallthrough]];
+
          case 2:
             *dest++ = color;
+            [[fallthrough]];
          case 1:
             *dest++ = color;
+
          } while (--n > 0);
    }
 }
