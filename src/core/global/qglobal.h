@@ -678,62 +678,61 @@ template <typename T>
 class QGlobalStaticDeleter
 {
  public:
-   QGlobalStatic<T> &globalStatic;
    QGlobalStaticDeleter(QGlobalStatic<T> &_globalStatic)
       : globalStatic(_globalStatic) {
    }
 
    inline ~QGlobalStaticDeleter() {
       delete globalStatic.pointer.load();
-      globalStatic.pointer.store(0);
+      globalStatic.pointer.store(nullptr);
       globalStatic.destroyed = true;
    }
+
+   QGlobalStatic<T> &globalStatic;
 };
 
-#define Q_GLOBAL_STATIC_INIT(TYPE, NAME)   \
-   static QGlobalStatic<TYPE> this_ ## NAME = { QAtomicPointer<TYPE>(0), false }
+#define Q_GLOBAL_STATIC(TYPE, NAME)                                              \
+   static TYPE *NAME()                                                           \
+   {                                                                             \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
+         TYPE *x = new TYPE;                                                     \
+         if (! staticVar.pointer.testAndSetOrdered(nullptr, x)) {                \
+            delete x;                                                            \
+         } else {                                                                \
+            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
+         }                                                                       \
+      }                                                                          \
+      return staticVar.pointer.load();                                           \
+   }                                                                             \
 
-#define Q_GLOBAL_STATIC(TYPE, NAME)                                       \
-   static TYPE *NAME()                                                    \
-   {                                                                      \
-   Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                               \
-   if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) { \
-       TYPE *x = new TYPE;                                                \
-       if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))             \
-      delete x;                                                           \
-       else                                                               \
-      static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_);       \
-   }                                                                      \
-   return this__StaticVar_.pointer.load();                                \
+#define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                              \
+   static TYPE *NAME()                                                           \
+   {                                                                             \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
+         TYPE *x = new TYPE ARGS;                                                \
+         if (! staticVar.pointer.testAndSetOrdered(nullptr, x))                  \
+            delete x;                                                            \
+         else                                                                    \
+            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
+      }                                                                          \
+      return staticVar.pointer.load();                                           \
    }
 
-#define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                       \
-   static TYPE *NAME()                                                    \
-   {                                                                      \
-   Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                               \
-   if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) { \
-       TYPE *x = new TYPE ARGS;                                           \
-       if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))             \
-      delete x;                                                           \
-       else                                                               \
-      static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_);       \
-   }                                                                      \
-   return this__StaticVar_.pointer.load();                                \
-   }
-
-#define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)         \
-   static TYPE *NAME()                                                    \
-   {                                                                      \
-   Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                               \
-   if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) { \
-       QScopedPointer<TYPE > x(new TYPE);                                 \
-       INITIALIZER;                                                       \
-       if (this__StaticVar_.pointer.testAndSetOrdered(0, x.data())) {     \
-      static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_);       \
-      x.take();                                                           \
-       }                                                                  \
-   }                                                                      \
-   return this__StaticVar_.pointer.load();                                \
+#define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)                \
+   static TYPE *NAME()                                                           \
+   {                                                                             \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
+         QScopedPointer<TYPE > x(new TYPE);                                      \
+         INITIALIZER;                                                            \
+         if (staticVar.pointer.testAndSetOrdered(nullptr, x.data())) {           \
+            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
+            x.take();                                                            \
+         }                                                                       \
+      }                                                                          \
+      return staticVar.pointer.load();                                           \
    }
 
 constexpr inline bool qFuzzyCompare(double p1, double p2)
