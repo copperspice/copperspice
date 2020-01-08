@@ -24,7 +24,7 @@
 #ifndef QSSLPRESHAREDKEYAUTHENTICATOR_P_H
 #define QSSLPRESHAREDKEYAUTHENTICATOR_P_H
 
-#include <QSharedData>
+#include <qshareddata.h>
 
 class QSslPreSharedKeyAuthenticatorPrivate : public QSharedData
 {
@@ -40,4 +40,4 @@ public:
     int maximumPreSharedKeyLength;
 };
 
-#endif // QSSLPRESHAREDKEYAUTHENTICATOR_P_H
+#endif

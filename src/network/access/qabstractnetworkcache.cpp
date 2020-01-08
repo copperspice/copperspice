@@ -27,7 +27,7 @@
 #include <qdatetime.h>
 #include <qurl.h>
 #include <qdebug.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 class QNetworkCacheMetaDataPrivate : public QSharedData
 {

@@ -24,12 +24,10 @@
 #ifndef QABSTRACTNETWORKCACHE_H
 #define QABSTRACTNETWORKCACHE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qpair.h>
-#include <QtNetwork/qnetworkrequest.h>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qshareddata.h>
+#include <qpair.h>
+#include <qnetworkrequest.h>
 
 class QIODevice;
 class QDateTime;
@@ -123,7 +121,5 @@ class Q_NETWORK_EXPORT QAbstractNetworkCache : public QObject
    Q_DISABLE_COPY(QAbstractNetworkCache)
 
 };
-
-QT_END_NAMESPACE
 
 #endif

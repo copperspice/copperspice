@@ -25,7 +25,7 @@
 #define QSSLSOCKET_OPENSSL_SYMBOLS_P_H
 
 #include <qsslsocket_openssl_p.h>
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

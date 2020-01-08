@@ -21,18 +21,7 @@
 *
 ***********************************************************************/
 
-#include <string.h>
-
-#include <qssl_p.h>
 #include <qsslsocket_openssl_p.h>
-#include <qsslsocket_openssl_symbols_p.h>
-#include <qsslsocket.h>
-#include <qsslcertificate_p.h>
-#include <qsslcipher_p.h>
-#include <qsslkey_p.h>
-#include <qsslellipticcurve.h>
-#include <qsslpresharedkeyauthenticator.h>
-#include <qsslpresharedkeyauthenticator_p.h>
 
 #include <qdatetime.h>
 #include <qdebug.h>
@@ -41,15 +30,24 @@
 #include <qelapsedtimer.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qlibrary.h>
 #include <qmutex.h>
+#include <qsslpresharedkeyauthenticator.h>
+#include <qsslsocket.h>
+#include <qsslellipticcurve.h>
 #include <qthread.h>
 #include <qurl.h>
 #include <qvarlengtharray.h>
 #include <qstring.h>
 
-#include <QLibrary>                      // for loading the security lib for the CA store
+#include <qsslcertificate_p.h>
+#include <qsslcipher_p.h>
+#include <qssl_p.h>
+#include <qsslkey_p.h>
+#include <qsslpresharedkeyauthenticator_p.h>
+#include <qsslsocket_openssl_symbols_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <string.h>
 
 #if defined(Q_OS_DARWIN)
 #define kSecTrustSettingsDomainSystem 2 // so we do not need to include the header file
@@ -1981,4 +1979,3 @@ bool QSslSocketBackendPrivate::importPkcs12(QIODevice *device, QSslKey *key, QSs
    return true;
 }
 
-QT_END_NAMESPACE

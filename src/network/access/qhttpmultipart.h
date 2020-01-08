@@ -24,11 +24,10 @@
 #ifndef QHTTPMULTIPART_H
 #define QHTTPMULTIPART_H
 
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QByteArray>
-#include <QtNetwork/QNetworkRequest>
-#include <QScopedPointer>
-
+#include <qshareddatapointer.h>
+#include <qbytearray.h>
+#include <qnetworkrequest.h>
+#include <qscopedpointer.h>
 
 class QHttpPartPrivate;
 class QHttpMultiPart;

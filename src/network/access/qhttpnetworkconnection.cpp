@@ -22,32 +22,27 @@
 ***********************************************************************/
 
 #include <qhttpnetworkconnection_p.h>
+
+#include <qnetworkproxy.h>
+#include <qauthenticator.h>
+#include <qcoreapplication.h>
+#include <qbuffer.h>
+#include <qpair.h>
+#include <qdebug.h>
+
+#ifdef QT_SSL
+#include <qsslsocket_p.h>
+#include <qsslkey.h>
+#include <qsslcipher.h>
+#include <qsslconfiguration.h>
+#endif
+
 #include <qabstractsocket_p.h>
 #include <qhttpnetworkconnectionchannel_p.h>
 #include <qnoncontiguousbytedevice_p.h>
 #include <qnetworkrequest_p.h>
 #include <qauthenticator_p.h>
 #include <qhostinfo_p.h>
-
-#include <qnetworkproxy.h>
-#include <qauthenticator.h>
-#include <qcoreapplication.h>
-
-#include <qbuffer.h>
-#include <qpair.h>
-
-#include <qdebug.h>
-
-
-#ifdef QT_SSL
-#include <qsslsocket_p.h>
-#include <QtNetwork/qsslkey.h>
-#include <QtNetwork/qsslcipher.h>
-#include <QtNetwork/qsslconfiguration.h>
-#endif
-
-
-
 
 const int QHttpNetworkConnectionPrivate::defaultHttpChannelCount = 6;
 

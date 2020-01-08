@@ -25,7 +25,6 @@
 #define QHOSTINFO_P_H
 
 #include <qcoreapplication.h>
-#include <qcoreapplication_p.h>
 #include <qhostinfo.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
@@ -37,12 +36,12 @@
 #include <qrunnable.h>
 #include <qlist.h>
 #include <qqueue.h>
-#include <QElapsedTimer>
-#include <QCache>
-#include <QNetworkSession>
-#include <QSharedPointer>
+#include <qelapsedtimer.h>
+#include <qcache.h>
+#include <qnetworksession.h>
+#include <qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
+#include <qcoreapplication_p.h>
 
 class QHostInfoResult : public QObject
 {
@@ -194,7 +193,4 @@ class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
    NET_CS_SLOT_2(waitForThreadPoolDone)
 };
 
-
-QT_END_NAMESPACE
-
-#endif // QHOSTINFO_P_H
+#endif

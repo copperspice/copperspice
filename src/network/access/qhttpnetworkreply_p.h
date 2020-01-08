@@ -30,16 +30,15 @@
 struct z_stream_s;
 #endif
 
-#include <QtNetwork/qtcpsocket.h>
+#include <qtcpsocket.h>
 
 // it's safe to include these even if SSL support is not enabled
-#include <QtNetwork/qsslsocket.h>
-#include <QtNetwork/qsslerror.h>
-
-#include <QtNetwork/qnetworkrequest.h>
-#include <QtNetwork/qnetworkreply.h>
+#include <qsslsocket.h>
+#include <qsslerror.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
 #include <qbuffer.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #include <qhttpnetworkheader_p.h>
 #include <qhttpnetworkrequest_p.h>

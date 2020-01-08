@@ -23,7 +23,8 @@
 
 #include <qnetworkreply.h>
 #include <qnetworkreply_p.h>
-#include <QtNetwork/qsslconfiguration.h>
+#include <qsslconfiguration.h>
+#include <qsslerror.h>
 
 const int QNetworkReplyPrivate::progressSignalInterval = 100;
 QNetworkReplyPrivate::QNetworkReplyPrivate()
@@ -40,9 +41,7 @@ QNetworkReply::QNetworkReply(QObject *parent)
 {
 }
 
-/*!
-    \internal
-*/
+// internal
 QNetworkReply::QNetworkReply(QNetworkReplyPrivate &dd, QObject *parent)
    : QIODevice(dd, parent)
 {
@@ -57,9 +56,7 @@ void QNetworkReply::close()
    QIODevice::close();
 }
 
-/*!
-    \internal
-*/
+// internal
 bool QNetworkReply::isSequential() const
 {
    return true;
@@ -194,12 +191,10 @@ void QNetworkReply::ignoreSslErrors()
 {
 }
 
-/*!
-    \internal
-*/
+// internal
 qint64 QNetworkReply::writeData(const char *, qint64)
 {
-   return -1;                  // you can't write
+   return -1;                  // unable to write
 }
 
 void QNetworkReply::setOperation(QNetworkAccessManager::Operation operation)
@@ -244,9 +239,11 @@ void QNetworkReply::setRawHeader(const QByteArray &headerName, const QByteArray 
    Q_D(QNetworkReply);
    d->setRawHeader(headerName, value);
 }
+
 void QNetworkReply::setAttribute(QNetworkRequest::Attribute code, const QVariant &value)
 {
    Q_D(QNetworkReply);
+
    if (value.isValid()) {
       d->attributes.insert(code, value);
    } else {

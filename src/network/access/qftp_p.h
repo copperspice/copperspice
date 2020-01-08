@@ -24,11 +24,11 @@
 #ifndef QFTP_P_H
 #define QFTP_P_H
 
-#include <qurlinfo_p.h>
-
 #include <qstring.h>
 #include <qobject.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
+
+#include <qurlinfo_p.h>
 
 #ifndef QT_NO_FTP
 

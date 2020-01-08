@@ -24,12 +24,13 @@
 #ifndef QSSLERROR_H
 #define QSSLERROR_H
 
+#ifdef QT_SSL
+
 #include <qvariant.h>
 #include <qsslcertificate.h>
 
-#ifdef QT_SSL
-
 class QSslErrorPrivate;
+class QDebug;
 
 class Q_NETWORK_EXPORT QSslError
 {
@@ -99,14 +100,13 @@ private:
 
 Q_NETWORK_EXPORT uint qHash(const QSslError &key, uint seed = 0);
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError &error);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError::SslError &error);
 
 #else
 
-class QSslError {};
+class QSslError { };
 
-#endif
+#endif   // QT_SSL
 
 #endif

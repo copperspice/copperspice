@@ -24,11 +24,10 @@
 #ifndef QNETWORKCOOKIE_H
 #define QNETWORKCOOKIE_H
 
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QList>
-#include <QtCore/QMetaType>
-#include <QtCore/QObject>
-
+#include <qlist.h>
+#include <qmetatype.h>
+#include <qobject.h>
+#include <qshareddatapointer.h>
 #include <qstring.h>
 
 class QByteArray;
