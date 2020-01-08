@@ -294,10 +294,11 @@ JSValue LiteralParser::parse(ParserState initialState)
             case StartParseArray: {
                 JSArray* array = constructEmptyArray(m_exec);
                 objectStack.append(array);
-                [[fallthrough]];
             }
 
             doParseArrayStartExpression:
+            [[fallthrough]];
+
             case DoParseArrayStartExpression: {
                 TokenType lastToken = m_lexer.currentToken().type;
                 if (m_lexer.next() == TokRBracket) {
