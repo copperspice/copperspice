@@ -24,11 +24,11 @@
 #ifndef QSQL_ODBC_H
 #define QSQL_ODBC_H
 
-#include <QtSql/qsqldriver.h>
-#include <QtSql/qsqlresult.h>
+#include <qsqldriver.h>
+#include <qsqlresult.h>
 
 #if defined (Q_OS_WIN32)
-#include <QtCore/qt_windows.h>
+#include <qt_windows.h>
 #endif
 
 #ifdef QT_PLUGIN

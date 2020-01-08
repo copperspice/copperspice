@@ -32,10 +32,8 @@
 
 #include <qpainter.h>
 #include <qgraphicsitem.h>
+
 #include <qgraphicseffect_p.h>
-
-
-
 
 static const char qglslDefaultImageFragmentShader[] = "\
     lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) { \
@@ -189,7 +187,5 @@ void QGraphicsShaderEffect::setUniforms(QGLShaderProgram *program)
 {
    (void) program;
 }
-
-
 
 #endif

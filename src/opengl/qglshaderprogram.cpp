@@ -22,12 +22,14 @@
 ***********************************************************************/
 
 #include <qglshaderprogram.h>
+
+#include <qdebug.h>
+#include <qfile.h>
+#include <qvarlengtharray.h>
+#include <qvector.h>
+
 #include <qopenglextensions_p.h>
 #include <qgl_p.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qfile.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qvector.h>
 
 #ifndef GL_FRAGMENT_SHADER
 #define GL_FRAGMENT_SHADER 0x8B30

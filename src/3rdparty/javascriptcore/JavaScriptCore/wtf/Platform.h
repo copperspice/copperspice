@@ -679,10 +679,6 @@
 #define HAVE_SYS_TIMEB_H 1
 #define HAVE_VIRTUALALLOC 1
 
-#if !COMPILER(RVCT)
-#define HAVE_SYS_PARAM_H 1
-#endif
-
 #elif OS(ANDROID)
 
 #define HAVE_ERRNO_H 1

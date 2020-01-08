@@ -24,21 +24,23 @@
 #ifndef QSQL_TDS_H
 #define QSQL_TDS_H
 
-#include <QtSql/qsqlresult.h>
-#include <QtSql/qsqldriver.h>
+#include <qsqlresult.h>
+#include <qsqldriver.h>
 #include <qsqlcachedresult_p.h>
 
 #ifdef Q_OS_WIN32
 #define WIN32_LEAN_AND_MEAN
+
 #ifndef Q_USE_SYBASE
 #define DBNTWIN32 // indicates 32bit windows dblib
 #endif
 
 #include <winsock2.h>
-#include <QtCore/qt_windows.h>
+#include <qt_windows.h>
 #include <sqlfront.h>
 #include <sqldb.h>
 #define CS_PUBLIC
+
 #else
 #include <sybfront.h>
 #include <sybdb.h>
@@ -49,8 +51,6 @@
 #else
 #define Q_EXPORT_SQLDRIVER_TDS Q_SQL_EXPORT
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QTDSDriverPrivate;
 class QTDSResultPrivate;
@@ -112,6 +112,4 @@ class Q_EXPORT_SQLDRIVER_TDS QTDSDriver : public QSqlDriver
    QTDSDriverPrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSQL_TDS_H
+#endif

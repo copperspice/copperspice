@@ -24,9 +24,9 @@
 #ifndef QSQL_OCI_H
 #define QSQL_OCI_H
 
-#include <QtSql/qsqlresult.h>
-#include <QtSql/qsqldriver.h>
-#include <QtSql/qsqlcachedresult_p.h>
+#include <qsqlresult.h>
+#include <qsqldriver.h>
+#include <qsqlcachedresult_p.h>
 
 #ifdef QT_PLUGIN
 #define Q_EXPORT_SQLDRIVER_OCI
@@ -36,8 +36,6 @@
 
 typedef struct OCIEnv OCIEnv;
 typedef struct OCISvcCtx OCISvcCtx;
-
-QT_BEGIN_NAMESPACE
 
 class QOCIDriver;
 class QOCICols;
@@ -101,10 +99,9 @@ class Q_EXPORT_SQLDRIVER_OCI QOCIDriver : public QSqlDriver
    bool                beginTransaction();
    bool                commitTransaction();
    bool                rollbackTransaction();
+
  private:
    QOCIDriverPrivate *d;
 };
-
-QT_END_NAMESPACE
 
 #endif // QSQL_OCI_H

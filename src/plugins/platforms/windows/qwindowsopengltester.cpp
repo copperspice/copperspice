@@ -21,18 +21,18 @@
 *
 ***********************************************************************/
 
-#include "qwindowsopengltester.h"
-#include "qwindowscontext.h"
+#include <qwindowsopengltester.h>
+#include <qwindowscontext.h>
 
-#include <QtCore/QVariantMap>
-#include <QtCore/QDebug>
-#include <QtCore/QTextStream>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QLibraryInfo>
-#include <QtCore/QHash>
+#include <qdebug.h>
+#include <qcoreapplication.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qhash.h>
+#include <qlibraryinfo.h>
+#include <qstandardpaths.h>
+#include <qtextstream.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_OPENGL
 #include <qopengl_p.h>
@@ -42,7 +42,6 @@
 #include <qsystemlibrary_p.h>
 
 #include <d3d9.h>
-
 
 GpuDescription GpuDescription::detect()
 {

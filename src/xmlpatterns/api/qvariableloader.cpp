@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <QVariant>
-#include <QStringList>
+#include <qvariant.h>
+#include <qstringlist.h>
 
 #include "qanyuri_p.h"
 #include "qatomicstring_p.h"

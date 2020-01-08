@@ -30,10 +30,8 @@
 #define Q_EXPORT_SQLDRIVER_DB2 Q_SQL_EXPORT
 #endif
 
-#include <QtSql/qsqlresult.h>
-#include <QtSql/qsqldriver.h>
-
-QT_BEGIN_NAMESPACE
+#include <qsqlresult.h>
+#include <qsqldriver.h>
 
 class QDB2Driver;
 class QDB2DriverPrivate;
@@ -100,6 +98,4 @@ class Q_EXPORT_SQLDRIVER_DB2 QDB2Driver : public QSqlDriver
    QDB2DriverPrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSQL_DB2_H
+#endif

@@ -31,15 +31,13 @@
 #include <qstringlist.h>
 #include <qvarlengtharray.h>
 #include <qvector.h>
-#include <QDebug>
+#include <qdebug.h>
 
 #define UNICODE
 
 #include <sqlcli1.h>
 
 #include <string.h>
-
-QT_BEGIN_NAMESPACE
 
 static const int COLNAMESIZE = 255;
 static const SQLSMALLINT qParamType[4] = { SQL_PARAM_INPUT, SQL_PARAM_INPUT, SQL_PARAM_OUTPUT, SQL_PARAM_INPUT_OUTPUT };
@@ -1693,4 +1691,3 @@ QString QDB2Driver::escapeIdentifier(const QString &identifier, IdentifierType) 
    return res;
 }
 
-QT_END_NAMESPACE

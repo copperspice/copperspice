@@ -38,10 +38,8 @@
 #include <qvarlengtharray.h>
 #include <qvector.h>
 #include <qmath.h>
-#include <QDebug>
-#include <QSqlQuery>
-
-QT_BEGIN_NAMESPACE
+#include <qdebug.h>
+#include <qsqlquery.h>
 
 // undefine this to prevent initial check of the ODBC driver
 #define ODBC_CHECK_DRIVER
@@ -2685,4 +2683,3 @@ bool QODBCDriver::isIdentifierEscapedImplementation(const QString &identifier, I
       && identifier.endsWith(quote); //right delimited
 }
 
-QT_END_NAMESPACE

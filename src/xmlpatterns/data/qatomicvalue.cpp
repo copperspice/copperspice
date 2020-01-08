@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QVariant>
+#include <qvariant.h>
 
 #include "qabstractdatetime_p.h"
 #include "qabstractfloat_p.h"
