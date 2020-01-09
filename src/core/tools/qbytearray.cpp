@@ -63,13 +63,13 @@ static int findChar(const char *str, int len, char ch, int from)
 }
 
 // internal only
-static int qFindByteArray(const char *haystack_X, int haystackLen, int from, const char *needle, int needleLen)
+static int cs_internal_FindByteArray(const char *haystack_X, uint haystackLen, int from, const char *needle, uint needleLen)
 {
    if (from < 0) {
       from += haystackLen;
    }
 
-   if (uint(needleLen + from) > (uint)haystackLen) {
+   if ((needleLen + from) > haystackLen) {
       return -1;
    }
 
@@ -90,9 +90,8 @@ static int qFindByteArray(const char *haystack_X, int haystackLen, int from, con
 
    uint hashNeedle   = 0;
    uint hashHaystack = 0;
-   int idx;
 
-   for (idx = 0; idx < needleLen; ++idx) {
+   for (uint idx = 0; idx < needleLen; ++idx) {
       hashNeedle   = ((hashNeedle << 1) + needle[idx]);
       hashHaystack = ((hashHaystack << 1) + haystack[idx]);
    }
@@ -107,7 +106,8 @@ static int qFindByteArray(const char *haystack_X, int haystackLen, int from, con
       }
 
       // rehash haystack
-      if ((needleLen - 1) < sizeof(uint) * CHAR_BIT) {
+      if ((needleLen - 1) < (sizeof(uint) * CHAR_BIT)) {
+
         hashHaystack -= (*haystack) << (needleLen - 1);
       }
 
@@ -1143,38 +1143,44 @@ QByteArray QByteArray::repeated(int times) const
 
 int QByteArray::indexOf(const QByteArray &ba, int from) const
 {
-   const int ol = ba.d->size;
-   if (ol == 0) {
+   const int origLen = ba.d->size;
+
+   if (origLen == 0) {
       return from;
    }
-   if (ol == 1) {
+
+   if (origLen == 1) {
       return indexOf(*ba.d->data(), from);
    }
 
-   const int l = d->size;
-   if (from > d->size || ol + from > l) {
+   const int len = d->size;
+   if (from > d->size || origLen + from > len) {
       return -1;
    }
 
-   return qFindByteArray(d->data(), d->size, from, ba.d->data(), ol);
+   return cs_internal_FindByteArray(d->data(), static_cast<uint>(d->size), from,
+                  ba.d->data(), static_cast<uint>(origLen));
 }
 
 int QByteArray::indexOf(const char *c, int from) const
 {
-   const int ol = qstrlen(c);
-   if (ol == 1) {
+   const int origLen = qstrlen(c);
+
+   if (origLen == 1) {
       return indexOf(*c, from);
    }
 
-   const int l = d->size;
-   if (from > d->size || ol + from > l) {
+   const int len = d->size;
+   if (from > d->size || origLen + from > len) {
       return -1;
    }
-   if (ol == 0) {
+
+   if (origLen == 0) {
       return from;
    }
 
-   return qFindByteArray(d->data(), d->size, from, c, ol);
+   return cs_internal_FindByteArray(d->data(), static_cast<uint>(d->size), from,
+                  c, static_cast<uint>(origLen));
 }
 
 int QByteArray::indexOf(char ch, int from) const
@@ -1182,18 +1188,22 @@ int QByteArray::indexOf(char ch, int from) const
    if (from < 0) {
       from = qMax(from + d->size, 0);
    }
+
    if (from < d->size) {
       const char *n = d->data() + from - 1;
       const char *e = d->data() + d->size;
-      while (++n != e)
+
+      while (++n != e)  {
          if (*n == ch) {
             return  n - d->data();
          }
+      }
    }
+
    return -1;
 }
 
-static int lastIndexOfHelper(const char *haystack, int haystackLen, const char *needle, int needleLen, int from)
+static int lastIndexOfHelper(const char *haystack, uint haystackLen, const char *needle, uint needleLen, int from)
 {
    int delta = haystackLen - needleLen;
 
@@ -1201,7 +1211,7 @@ static int lastIndexOfHelper(const char *haystack, int haystackLen, const char *
       from = delta;
    }
 
-   if (from < 0 || from > haystackLen) {
+   if (from < 0 || static_cast<uint>(from) > haystackLen) {
       return -1;
    }
 
@@ -1217,10 +1227,9 @@ static int lastIndexOfHelper(const char *haystack, int haystackLen, const char *
 
    uint hashNeedle   = 0;
    uint hashHaystack = 0;
-   int idx;
 
-   for (idx = 0; idx < needleLen; ++idx) {
-      hashNeedle = ((hashNeedle << 1) + * (n - idx));
+   for (uint idx = 0; idx < needleLen; ++idx) {
+      hashNeedle   = ((hashNeedle << 1) + * (n - idx));
       hashHaystack = ((hashHaystack << 1) + * (h - idx));
    }
 
@@ -1236,7 +1245,7 @@ static int lastIndexOfHelper(const char *haystack, int haystackLen, const char *
       --haystack;
 
       // rehash haystack
-      if ((needleLen - 1) < sizeof(uint) * CHAR_BIT) {
+      if ((needleLen - 1) < (sizeof(uint) * CHAR_BIT)) {
         hashHaystack -= (*(haystack + needleLen)) << (needleLen - 1);
       }
 
@@ -1248,25 +1257,25 @@ static int lastIndexOfHelper(const char *haystack, int haystackLen, const char *
 
 int QByteArray::lastIndexOf(const QByteArray &ba, int from) const
 {
-   const int ol = ba.d->size;
-   if (ol == 1) {
+   const int origLen = ba.d->size;
+
+   if (origLen == 1) {
       return lastIndexOf(*ba.d->data(), from);
    }
 
-   return lastIndexOfHelper(d->data(), d->size, ba.d->data(), ol, from);
+   return lastIndexOfHelper(d->data(), static_cast<uint>(d->size), ba.d->data(), static_cast<uint>(origLen), from);
 }
 
 int QByteArray::lastIndexOf(const char *str, int from) const
 {
-   const int ol = qstrlen(str);
+   const uint origLen = qstrlen(str);
 
-   if (ol == 1) {
+   if (origLen == 1) {
       return lastIndexOf(*str, from);
    }
 
-   return lastIndexOfHelper(d->data(), d->size, str, ol, from);
+   return lastIndexOfHelper(d->data(), static_cast<uint>(d->size), str, origLen, from);
 }
-
 
 int QByteArray::lastIndexOf(char ch, int from) const
 {
