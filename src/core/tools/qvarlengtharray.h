@@ -72,8 +72,9 @@ class QVarLengthArray
    }
 
    ~QVarLengthArray() {
-      if (QTypeInfo<T>::isComplex) {
+      if constexpr (! std::is_trivially_destructible_v<T>) {
          T *i = ptr + s;
+
          while (i-- != ptr) {
             i->~T();
          }
@@ -89,15 +90,15 @@ class QVarLengthArray
 
    void append(const T &t) {
       if (s == a) {
-         // for example, s != 0
          realloc(s, s << 1);
       }
+
       const int idx = s++;
 
-      if (QTypeInfo<T>::isComplex) {
-         new (ptr + idx) T(t);
-      } else {
+      if constexpr (std::is_trivially_copy_assignable_v<T>) {
          ptr[idx] = t;
+      } else {
+         new (ptr + idx) T(t);
       }
    }
 
@@ -352,13 +353,15 @@ QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
       ptr = reinterpret_cast<T *>(malloc(s * sizeof(T)));
       Q_CHECK_PTR(ptr);
       a = s;
+
    } else {
       ptr = reinterpret_cast<T *>(array);
       a = Prealloc;
    }
 
-   if (QTypeInfo<T>::isComplex) {
+   if constexpr (! std::is_trivially_constructible_v<T>) {
       T *i = ptr + s;
+
       while (i != ptr) {
          new (--i) T;
       }
@@ -368,33 +371,45 @@ QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
 template <class T, int Prealloc>
 int QVarLengthArray<T, Prealloc>::indexOf(const T &t, int from) const
 {
-    if (from < 0)
-        from = qMax(from + s, 0);
-    if (from < s) {
-        T *n = ptr + from - 1;
-        T *e = ptr + s;
-        while (++n != e)
-            if (*n == t)
-                return n - ptr;
-    }
-    return -1;
+   if (from < 0) {
+      from = qMax(from + s, 0);
+   }
+
+   if (from < s) {
+      T *n = ptr + from - 1;
+      T *e = ptr + s;
+
+      while (++n != e) {
+         if (*n == t) {
+            return n - ptr;
+         }
+      }
+   }
+
+   return -1;
 }
 
 template <class T, int Prealloc>
 int QVarLengthArray<T, Prealloc>::lastIndexOf(const T &t, int from) const
 {
-    if (from < 0)
+    if (from < 0) {
         from += s;
-    else if (from >= s)
+
+    } else if (from >= s) {
         from = s - 1;
+    }
+
     if (from >= 0) {
         T *b = ptr;
         T *n = ptr + from + 1;
+
         while (n != b) {
-            if (*--n == t)
+            if (*--n == t) {
                 return n - b;
+            }
         }
     }
+
     return -1;
 }
 
@@ -412,15 +427,16 @@ void QVarLengthArray<T, Prealloc>::append(const T *abuf, int increment)
       realloc(s, qMax(s * 2, asize));
    }
 
-   if (QTypeInfo<T>::isComplex) {
+   if constexpr (std::is_trivially_copy_constructible_v<T>) {
+      memcpy(&ptr[s], abuf, increment * sizeof(T));
+      s = asize;
+
+   } else {
       // call constructor for new objects (which can throw)
+
       while (s < asize) {
          new (ptr + (s++)) T(*abuf++);
       }
-
-   } else {
-      memcpy(&ptr[s], abuf, increment * sizeof(T));
-      s = asize;
    }
 }
 
@@ -455,7 +471,10 @@ void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
          s = 0;
          a = aalloc;
 
-         if (QTypeInfo<T>::isStatic) {
+         if constexpr (std::is_trivially_copy_constructible_v<T>) {
+            memcpy(ptr, oldPtr, copySize * sizeof(T));
+
+         } else {
             try {
                // copy all the old elements
                while (s < copySize) {
@@ -478,9 +497,6 @@ void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
 
                throw;
             }
-
-         } else {
-            memcpy(ptr, oldPtr, copySize * sizeof(T));
          }
 
       } else {
@@ -490,7 +506,7 @@ void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
    }
    s = copySize;
 
-   if (QTypeInfo<T>::isComplex) {
+   if constexpr (! std::is_trivially_destructible_v<T>) {
       // destroy remaining old objects
       while (osize > asize) {
          (oldPtr + (--osize))->~T();
@@ -501,13 +517,14 @@ void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
       free(oldPtr);
    }
 
-   if (QTypeInfo<T>::isComplex) {
+   if constexpr (std::is_trivially_constructible_v<T>) {
+      s = asize;
+
+   } else {
       // call default constructor for new objects (which can throw)
       while (s < asize) {
          new (ptr + (s++)) T;
       }
-   } else {
-      s = asize;
    }
 }
 
@@ -523,6 +540,7 @@ T QVarLengthArray<T, Prealloc>::value(int i) const
    if (i < 0 || i >= size()) {
       return T();
    }
+
    return at(i);
 }
 
@@ -570,6 +588,7 @@ template <class T, int Prealloc>
 inline void QVarLengthArray<T, Prealloc>::replace(int i, const T &t)
 {
    Q_ASSERT_X(i >= 0 && i < s, "QVarLengthArray::replace", "index out of range");
+
    const T copy(t);
    data()[i] = copy;
 }
@@ -578,11 +597,24 @@ template <class T, int Prealloc>
 typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(const_iterator before, size_type n, const T &t)
 {
    int offset = int(before - ptr);
+
    if (n != 0) {
       resize(s + n);
       const T copy(t);
 
-      if (QTypeInfo<T>::isStatic) {
+      if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T> &&
+                  std::is_trivially_copyable_v<T> ) {
+
+         T *b = ptr + offset;
+         T *i = b + n;
+         memmove(i, b, (s - offset - n) * sizeof(T));
+
+         while (i != b) {
+            new (--i) T(copy);
+         }
+
+      } else {
+
          T *b = ptr + offset;
          T *j = ptr + s;
          T *i = j - n;
@@ -596,16 +628,9 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::in
          while (i != b) {
             *--i = copy;
          }
-
-      } else {
-         T *b = ptr + offset;
-         T *i = b + n;
-         memmove(i, b, (s - offset - n) * sizeof(T));
-         while (i != b) {
-            new (--i) T(copy);
-         }
       }
    }
+
    return ptr + offset;
 }
 
@@ -616,7 +641,13 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::er
    int l = int(aend - ptr);
    int n = l - f;
 
-   if (QTypeInfo<T>::isComplex) {
+   if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T> &&
+                  std::is_trivially_copyable_v<T> ) {
+
+      memmove(ptr + f, ptr + l, (s - l) * sizeof(T));
+
+   } else {
+
       std::copy(ptr + l, ptr + s, ptr + f);
 
       T *i = ptr + s;
@@ -626,9 +657,6 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::er
          --i;
          i->~T();
       }
-
-   } else {
-      memmove(ptr + f, ptr + l, (s - l) * sizeof(T));
    }
 
    s -= n;

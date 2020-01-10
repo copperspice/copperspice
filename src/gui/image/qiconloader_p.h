@@ -33,7 +33,6 @@
 #include <qicon_p.h>
 #include <qhash.h>
 #include <qvector.h>
-#include <QTypeInfo>
 
 #include <qfactoryloader_p.h>
 

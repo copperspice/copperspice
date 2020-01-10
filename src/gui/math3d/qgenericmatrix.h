@@ -352,8 +352,9 @@ template <int N, int M, typename T>
 QDebug operator<<(QDebug dbg, const QGenericMatrix<N, M, T> &m)
 {
    dbg.nospace() << "QGenericMatrix<" << N << ", " << M
-                 << ", " << QTypeInfo<T>::name()
+                 << ", " << typeid(T).name()
                  << ">(" << endl << qSetFieldWidth(10);
+
    for (int row = 0; row < M; ++row) {
       for (int col = 0; col < N; ++col) {
          dbg << m(row, col);
