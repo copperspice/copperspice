@@ -1205,9 +1205,9 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
 */
 void QMatrix4x4::rotate(const QQuaternion &quaternion)
 {
-   // Algorithm from:
-   // http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q54
-   QMatrix4x4 m(1);
+   // Algorithm from: http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q54
+   QMatrix4x4 tmp(1);
+
    qreal xx = quaternion.x() * quaternion.x();
    qreal xy = quaternion.x() * quaternion.y();
    qreal xz = quaternion.x() * quaternion.z();
@@ -1217,29 +1217,28 @@ void QMatrix4x4::rotate(const QQuaternion &quaternion)
    qreal yw = quaternion.y() * quaternion.scalar();
    qreal zz = quaternion.z() * quaternion.z();
    qreal zw = quaternion.z() * quaternion.scalar();
-   m.m[0][0] = 1.0f - 2 * (yy + zz);
-   m.m[1][0] =        2 * (xy - zw);
-   m.m[2][0] =        2 * (xz + yw);
-   m.m[3][0] = 0.0f;
-   m.m[0][1] =        2 * (xy + zw);
-   m.m[1][1] = 1.0f - 2 * (xx + zz);
-   m.m[2][1] =        2 * (yz - xw);
-   m.m[3][1] = 0.0f;
-   m.m[0][2] =        2 * (xz - yw);
-   m.m[1][2] =        2 * (yz + xw);
-   m.m[2][2] = 1.0f - 2 * (xx + yy);
-   m.m[3][2] = 0.0f;
-   m.m[0][3] = 0.0f;
-   m.m[1][3] = 0.0f;
-   m.m[2][3] = 0.0f;
-   m.m[3][3] = 1.0f;
-   int flags = flagBits;
-   *this *= m;
-   if (flags != Identity) {
-      flagBits = flags | Rotation;
-   } else {
-      flagBits = Rotation;
-   }
+
+   tmp.m[0][0] = 1.0f - 2 * (yy + zz);
+   tmp.m[1][0] =        2 * (xy - zw);
+   tmp.m[2][0] =        2 * (xz + yw);
+   tmp.m[3][0] = 0.0f;
+   tmp.m[0][1] =        2 * (xy + zw);
+   tmp.m[1][1] = 1.0f - 2 * (xx + zz);
+   tmp.m[2][1] =        2 * (yz - xw);
+   tmp.m[3][1] = 0.0f;
+   tmp.m[0][2] =        2 * (xz - yw);
+   tmp.m[1][2] =        2 * (yz + xw);
+   tmp.m[2][2] = 1.0f - 2 * (xx + yy);
+   tmp.m[3][2] = 0.0f;
+   tmp.m[0][3] = 0.0f;
+   tmp.m[1][3] = 0.0f;
+   tmp.m[2][3] = 0.0f;
+   tmp.m[3][3] = 1.0f;
+
+   tmp.flagBits = QMatrix4x4::Rotation;
+
+   QMatrix4x4 &self = *this;
+   self *= tmp;
 }
 
 #endif
@@ -1311,26 +1310,32 @@ void QMatrix4x4::ortho(qreal left, qreal right, qreal bottom, qreal top, qreal n
       return;
    }
 #endif
-   QMatrix4x4 m(1);
-   m.m[0][0] = 2.0f / width;
-   m.m[1][0] = 0.0f;
-   m.m[2][0] = 0.0f;
-   m.m[3][0] = -(left + right) / width;
-   m.m[0][1] = 0.0f;
-   m.m[1][1] = 2.0f / invheight;
-   m.m[2][1] = 0.0f;
-   m.m[3][1] = -(top + bottom) / invheight;
-   m.m[0][2] = 0.0f;
-   m.m[1][2] = 0.0f;
-   m.m[2][2] = -2.0f / clip;
-   m.m[3][2] = -(nearPlane + farPlane) / clip;
-   m.m[0][3] = 0.0f;
-   m.m[1][3] = 0.0f;
-   m.m[2][3] = 0.0f;
-   m.m[3][3] = 1.0f;
 
-   // Apply the projection.
-   *this *= m;
+   QMatrix4x4 tmp(1);
+
+   tmp.m[0][0] = 2.0f / width;
+   tmp.m[1][0] = 0.0f;
+   tmp.m[2][0] = 0.0f;
+   tmp.m[3][0] = -(left + right) / width;
+   tmp.m[0][1] = 0.0f;
+   tmp.m[1][1] = 2.0f / invheight;
+   tmp.m[2][1] = 0.0f;
+   tmp.m[3][1] = -(top + bottom) / invheight;
+   tmp.m[0][2] = 0.0f;
+   tmp.m[1][2] = 0.0f;
+   tmp.m[2][2] = -2.0f / clip;
+   tmp.m[3][2] = -(nearPlane + farPlane) / clip;
+   tmp.m[0][3] = 0.0f;
+   tmp.m[1][3] = 0.0f;
+   tmp.m[2][3] = 0.0f;
+   tmp.m[3][3] = 1.0f;
+
+   tmp.flagBits = QMatrix4x4::General;
+
+   // Apply the projection
+   QMatrix4x4 &self = *this;
+   self *= tmp;
+
    return;
 }
 
@@ -1349,32 +1354,36 @@ void QMatrix4x4::frustum(qreal left, qreal right, qreal bottom, qreal top, qreal
       return;
    }
 
-   // Construct the projection.
-   QMatrix4x4 m(1);
-   qreal width = right - left;
+   // Construct the projection
+   QMatrix4x4 tmp(1);
+
+   qreal width     = right - left;
    qreal invheight = top - bottom;
-   qreal clip = farPlane - nearPlane;
-   m.m[0][0] = 2.0f * nearPlane / width;
-   m.m[1][0] = 0.0f;
-   m.m[2][0] = (left + right) / width;
-   m.m[3][0] = 0.0f;
-   m.m[0][1] = 0.0f;
-   m.m[1][1] = 2.0f * nearPlane / invheight;
-   m.m[2][1] = (top + bottom) / invheight;
-   m.m[3][1] = 0.0f;
-   m.m[0][2] = 0.0f;
-   m.m[1][2] = 0.0f;
-   m.m[2][2] = -(nearPlane + farPlane) / clip;
-   m.m[3][2] = -2.0f * nearPlane * farPlane / clip;
-   m.m[0][3] = 0.0f;
-   m.m[1][3] = 0.0f;
-   m.m[2][3] = -1.0f;
-   m.m[3][3] = 0.0f;
+   qreal clip      = farPlane - nearPlane;
 
-   // Apply the projection.
-   *this *= m;
+   tmp.m[0][0] = 2.0f * nearPlane / width;
+   tmp.m[1][0] = 0.0f;
+   tmp.m[2][0] = (left + right) / width;
+   tmp.m[3][0] = 0.0f;
+   tmp.m[0][1] = 0.0f;
+   tmp.m[1][1] = 2.0f * nearPlane / invheight;
+   tmp.m[2][1] = (top + bottom) / invheight;
+   tmp.m[3][1] = 0.0f;
+   tmp.m[0][2] = 0.0f;
+   tmp.m[1][2] = 0.0f;
+   tmp.m[2][2] = -(nearPlane + farPlane) / clip;
+   tmp.m[3][2] = -2.0f * nearPlane * farPlane / clip;
+   tmp.m[0][3] = 0.0f;
+   tmp.m[1][3] = 0.0f;
+   tmp.m[2][3] = -1.0f;
+   tmp.m[3][3] = 0.0f;
+
+   tmp.flagBits = QMatrix4x4::General;
+
+   // Apply the projection
+   QMatrix4x4 &self = *this;
+   self *= tmp;
 }
-
 /*!
     Multiplies this matrix by another that applies a perspective
     projection.  The field of view will be \a angle degrees within
@@ -1391,33 +1400,40 @@ void QMatrix4x4::perspective(qreal angle, qreal aspect, qreal nearPlane, qreal f
    }
 
    // Construct the projection.
-   QMatrix4x4 m(1);
+   QMatrix4x4 tmp(1);
+
    qreal radians = (angle / 2.0f) * M_PI / 180.0f;
    qreal sine = qSin(radians);
+
    if (sine == 0.0f) {
       return;
    }
+
    qreal cotan = qCos(radians) / sine;
    qreal clip = farPlane - nearPlane;
-   m.m[0][0] = cotan / aspect;
-   m.m[1][0] = 0.0f;
-   m.m[2][0] = 0.0f;
-   m.m[3][0] = 0.0f;
-   m.m[0][1] = 0.0f;
-   m.m[1][1] = cotan;
-   m.m[2][1] = 0.0f;
-   m.m[3][1] = 0.0f;
-   m.m[0][2] = 0.0f;
-   m.m[1][2] = 0.0f;
-   m.m[2][2] = -(nearPlane + farPlane) / clip;
-   m.m[3][2] = -(2.0f * nearPlane * farPlane) / clip;
-   m.m[0][3] = 0.0f;
-   m.m[1][3] = 0.0f;
-   m.m[2][3] = -1.0f;
-   m.m[3][3] = 0.0f;
 
-   // Apply the projection.
-   *this *= m;
+   tmp.m[0][0] = cotan / aspect;
+   tmp.m[1][0] = 0.0f;
+   tmp.m[2][0] = 0.0f;
+   tmp.m[3][0] = 0.0f;
+   tmp.m[0][1] = 0.0f;
+   tmp.m[1][1] = cotan;
+   tmp.m[2][1] = 0.0f;
+   tmp.m[3][1] = 0.0f;
+   tmp.m[0][2] = 0.0f;
+   tmp.m[1][2] = 0.0f;
+   tmp.m[2][2] = -(nearPlane + farPlane) / clip;
+   tmp.m[3][2] = -(2.0f * nearPlane * farPlane) / clip;
+   tmp.m[0][3] = 0.0f;
+   tmp.m[1][3] = 0.0f;
+   tmp.m[2][3] = -1.0f;
+   tmp.m[3][3] = 0.0f;
+
+   tmp.flagBits = QMatrix4x4::Perspective;
+
+   // Apply the projection
+   QMatrix4x4 &self = *this;
+   self *= tmp;
 }
 
 #ifndef QT_NO_VECTOR3D
@@ -1434,26 +1450,31 @@ void QMatrix4x4::lookAt(const QVector3D &eye, const QVector3D &center, const QVe
    QVector3D side = QVector3D::crossProduct(forward, up).normalized();
    QVector3D upVector = QVector3D::crossProduct(side, forward);
 
-   QMatrix4x4 m(1);
+   QMatrix4x4 tmp(1);
 
-   m.m[0][0] = side.x();
-   m.m[1][0] = side.y();
-   m.m[2][0] = side.z();
-   m.m[3][0] = 0.0f;
-   m.m[0][1] = upVector.x();
-   m.m[1][1] = upVector.y();
-   m.m[2][1] = upVector.z();
-   m.m[3][1] = 0.0f;
-   m.m[0][2] = -forward.x();
-   m.m[1][2] = -forward.y();
-   m.m[2][2] = -forward.z();
-   m.m[3][2] = 0.0f;
-   m.m[0][3] = 0.0f;
-   m.m[1][3] = 0.0f;
-   m.m[2][3] = 0.0f;
-   m.m[3][3] = 1.0f;
+   tmp.m[0][0] = side.x();
+   tmp.m[1][0] = side.y();
+   tmp.m[2][0] = side.z();
+   tmp.m[3][0] = 0.0f;
+   tmp.m[0][1] = upVector.x();
+   tmp.m[1][1] = upVector.y();
+   tmp.m[2][1] = upVector.z();
+   tmp.m[3][1] = 0.0f;
+   tmp.m[0][2] = -forward.x();
+   tmp.m[1][2] = -forward.y();
+   tmp.m[2][2] = -forward.z();
+   tmp.m[3][2] = 0.0f;
+   tmp.m[0][3] = 0.0f;
+   tmp.m[1][3] = 0.0f;
+   tmp.m[2][3] = 0.0f;
+   tmp.m[3][3] = 1.0f;
 
-   *this *= m;
+   tmp.flagBits = QMatrix4x4::General;
+
+   // Apply the projection
+   QMatrix4x4 &self = *this;
+   self *= tmp;
+
    translate(-eye);
 }
 
