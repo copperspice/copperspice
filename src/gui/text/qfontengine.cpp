@@ -84,9 +84,9 @@ static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, 
 #define kBearingNotInitialized std::numeric_limits<qreal>::max()
 
 QFontEngine::QFontEngine(Type type)
-   : ref(0), m_type(type), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr),
-     face_destroy_func_ptr(nullptr), m_minLeftBearing(kBearingNotInitialized),
-     m_minRightBearing(kBearingNotInitialized)
+   : ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr), face_destroy_func_ptr(nullptr),
+     m_type(type),
+     m_minLeftBearing(kBearingNotInitialized), m_minRightBearing(kBearingNotInitialized)
 {
    faceData.user_data = this;
    faceData.font_table_func_ptr = qt_get_font_table_default;

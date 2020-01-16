@@ -178,6 +178,8 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
          if (o != widget) {
             break;
          }
+         [[fallthrough]];
+
       case QEvent::MouseButtonPress:
       case QEvent::MouseButtonDblClick:
          showWidget = false;

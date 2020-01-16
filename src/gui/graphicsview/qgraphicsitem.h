@@ -38,10 +38,11 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
+#include <qgraphicseffect.h>
+
 class QBrush;
 class QCursor;
 class QFocusEvent;
-class QGraphicsEffect;
 class QGraphicsItemGroup;
 class QGraphicsObject;
 class QGraphicsSceneContextMenuEvent;
@@ -53,6 +54,7 @@ class QGraphicsSceneWheelEvent;
 class QGraphicsScene;
 class QGraphicsTransform;
 class QGraphicsWidget;
+class QStyleOptionGraphicsItem;
 class QInputMethodEvent;
 class QKeyEvent;
 class QMatrix;
@@ -61,8 +63,6 @@ class QPainter;
 class QPen;
 class QPointF;
 class QRectF;
-
-class QStyleOptionGraphicsItem;
 
 class QGraphicsItemPrivate;
 class QAbstractGraphicsShapeItemPrivate;

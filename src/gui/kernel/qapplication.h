@@ -31,6 +31,7 @@
 #include <qlocale.h>
 #include <qpalette.h>
 #include <qpoint.h>
+#include <qscreen.h>
 #include <qsize.h>
 #include <qstring.h>
 #include <qsessionmanager.h>
@@ -43,7 +44,6 @@ class QEventLoop;
 class QPlatformNativeInterface;
 class QStyle;
 class QStyleHints;
-class QScreen;
 
 #if defined(qApp)
 #undef qApp

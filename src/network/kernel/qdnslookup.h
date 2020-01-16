@@ -25,14 +25,12 @@
 #define QDNSLOOKUP_H
 
 #include <qlist.h>
+#include <qhostaddress.h>
 #include <qobject.h>
 #include <qshareddata.h>
 #include <qsharedpointer.h>
 #include <qstring.h>
 
-
-
-class QHostAddress;
 class QDnsLookupPrivate;
 class QDnsDomainNameRecordPrivate;
 class QDnsHostAddressRecordPrivate;

@@ -362,6 +362,8 @@ void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
 //  Reimplement this function to change the contents of the well array.
 void QWellArray::paintCellContents(QPainter *p, int row, int col, const QRect &r)
 {
+   (void) row;
+   (void) col;
 
    p->fillRect(r, Qt::white);
    p->setPen(Qt::black);

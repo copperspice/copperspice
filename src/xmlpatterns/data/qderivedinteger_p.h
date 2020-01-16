@@ -533,7 +533,7 @@ class DerivedInteger : public Numeric
 
    quint64 toUnsignedInteger() const override {
       switch (DerivedType) {
-         /* Fallthrough all these. */
+
          case TypeByte:
          case TypeInt:
          case TypeLong:
@@ -544,8 +544,8 @@ class DerivedInteger : public Numeric
 
          case TypeShort:
             Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
+            break;
 
-         /* Fallthrough all these. */
          case TypeUnsignedByte:
          case TypeUnsignedInt:
          case TypeUnsignedLong:

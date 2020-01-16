@@ -395,6 +395,12 @@ QMatchData QCompletionEngine::filterHistory()
 #else
    const bool isFsModel = false;
 #endif
+
+#if defined(Q_OS_WIN)
+   (void) isDirModel;
+   (void) isFsModel;
+#endif
+
    QVector<int> v;
    QIndexMapper im(v);
    QMatchData m(im, -1, true);

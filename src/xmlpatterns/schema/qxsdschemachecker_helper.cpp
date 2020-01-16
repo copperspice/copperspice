@@ -294,15 +294,19 @@ bool XsdSchemaChecker::elementSequenceAccepted(const XsdModelGroup::Ptr &sequenc
 
       // 2.3
       const XsdParticle::List particles(sequence->particles());
+
       for (int i = 0; i < particles.count(); ++i) {
-         bool isValid = false;
+         // bool isValid = false;
+
          if (particles.at(i)->term()->isElement()) {
             const XsdElement::Ptr seqElement(particles.at(i)->term());
 
             // 2.3.1
+/*
             if (element->name(m_namePool) == seqElement->name(m_namePool)) {
-               isValid = true;
+               // isValid = true;
             }
+*/
 
             // 2.3.2
             if (element->scope() && element->scope()->variety() == XsdElement::Scope::Global) {

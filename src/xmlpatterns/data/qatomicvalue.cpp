@@ -116,9 +116,9 @@ Item AtomicValue::toXDM(const QVariant &value)
 
    switch (value.userType()) {
       case QVariant::Char:
-      /* Fallthrough. A single codepoint is a string in XQuery. */
       case QVariant::String:
          return AtomicString::fromValue(value.toString());
+
       case QVariant::Url: {
          /* QUrl doesn't follow the spec properly, so we
           * have to let it be an xs:string. Calling QVariant::toString()

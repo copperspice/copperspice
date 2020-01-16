@@ -135,7 +135,7 @@ QVariant QPlatformDialogHelper::styleHint(StyleHint hint) const
 
 QVariant  QPlatformDialogHelper::defaultStyleHint(QPlatformDialogHelper::StyleHint hint)
 {
-   Q_UNUSED(hint);
+   (void) hint;
    return QVariant();
 }
 

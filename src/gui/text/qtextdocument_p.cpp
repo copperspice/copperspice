@@ -1591,6 +1591,10 @@ void QTextDocumentPrivate::clearFrame(QTextFrame *f)
 
 void QTextDocumentPrivate::scan_frames(int pos, int charsRemoved, int charsAdded)
 {
+   (void) pos;
+   (void) charsRemoved;
+   (void) charsAdded;
+
    QTextFrame *f = rootFrame();
    clearFrame(f);
 

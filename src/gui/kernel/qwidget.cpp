@@ -790,8 +790,11 @@ void q_createNativeChildrenAndSetParent(const QWidget *parentWidget)
 
 void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyOldWindow)
 {
-   Q_Q(QWidget);
+   (void) window;
+   (void) initializeWindow;
+   (void) destroyOldWindow;
 
+   Q_Q(QWidget);
 
    Qt::WindowFlags flags = data.window_flags;
 

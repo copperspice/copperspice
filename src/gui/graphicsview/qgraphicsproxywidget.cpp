@@ -865,6 +865,7 @@ bool QGraphicsProxyWidget::eventFilter(QObject *object, QEvent *event)
 */
 void QGraphicsProxyWidget::showEvent(QShowEvent *event)
 {
+   (void) event;
 }
 
 /*!
@@ -872,7 +873,7 @@ void QGraphicsProxyWidget::showEvent(QShowEvent *event)
 */
 void QGraphicsProxyWidget::hideEvent(QHideEvent *event)
 {
-
+   (void) event;
 }
 
 #ifndef QT_NO_CONTEXTMENU
@@ -942,7 +943,8 @@ void QGraphicsProxyWidget::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 */
 void QGraphicsProxyWidget::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
+
 #ifndef QT_NO_DRAGANDDROP
    Q_D(QGraphicsProxyWidget);
    if (!d->widget || !d->dragDropWidget) {
@@ -960,9 +962,11 @@ void QGraphicsProxyWidget::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 void QGraphicsProxyWidget::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
 #ifdef QT_NO_DRAGANDDROP
-   Q_UNUSED(event);
+   (void) event;
 #else
+
    Q_D(QGraphicsProxyWidget);
+
    if (!d->widget) {
       return;
    }
@@ -1030,9 +1034,10 @@ void QGraphicsProxyWidget::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 void QGraphicsProxyWidget::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
 #ifdef QT_NO_DRAGANDDROP
-   Q_UNUSED(event);
+   (void) event;
 #else
    Q_D(QGraphicsProxyWidget);
+
    if (d->widget && d->dragDropWidget) {
       QPoint widgetPos = d->mapToReceiver(event->pos(), d->dragDropWidget).toPoint();
       QDropEvent dropEvent(widgetPos, event->possibleActions(), event->mimeData(), event->buttons(), event->modifiers());
@@ -1049,7 +1054,7 @@ void QGraphicsProxyWidget::dropEvent(QGraphicsSceneDragDropEvent *event)
 */
 void QGraphicsProxyWidget::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 /*!
@@ -1093,7 +1098,7 @@ void QGraphicsProxyWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 */
 void QGraphicsProxyWidget::grabMouseEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 /*!
@@ -1101,8 +1106,9 @@ void QGraphicsProxyWidget::grabMouseEvent(QEvent *event)
 */
 void QGraphicsProxyWidget::ungrabMouseEvent(QEvent *event)
 {
-   Q_D(QGraphicsProxyWidget);
+   (void) event;
 
+   Q_D(QGraphicsProxyWidget);
    d->embeddedMouseGrabber = 0;
 }
 
@@ -1405,8 +1411,9 @@ void QGraphicsProxyWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 */
 void QGraphicsProxyWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+   (void) widget;
+
    Q_D(QGraphicsProxyWidget);
-   Q_UNUSED(widget);
    if (!d->widget || !d->widget->isVisible()) {
       return;
    }

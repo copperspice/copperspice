@@ -4373,6 +4373,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                   if (tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                      offset += delta;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarMinButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
@@ -4380,6 +4381,8 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                   } else if (sc == SC_TitleBarMinButton) {
                      break;
                   }
+                  [[fallthrough]];
+
                case SC_TitleBarNormalButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
                      offset += delta;
@@ -4388,24 +4391,32 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                   } else if (sc == SC_TitleBarNormalButton) {
                      break;
                   }
+                  [[fallthrough]];
+
                case SC_TitleBarMaxButton:
                   if (!isMaximized && (tb->titleBarFlags & Qt::WindowMaximizeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarMaxButton) {
                      break;
                   }
+                  [[fallthrough]];
+
                case SC_TitleBarShadeButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarShadeButton) {
                      break;
                   }
+                  [[fallthrough]];
+
                case SC_TitleBarUnshadeButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
                      offset += delta;
                   } else if (sc == SC_TitleBarUnshadeButton) {
                      break;
                   }
+                  [[fallthrough]];
+
                case SC_TitleBarCloseButton:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                      offset += delta;
@@ -4433,7 +4444,6 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          if (const QStyleOptionGroupBox *groupBox = qstyleoption_cast<const QStyleOptionGroupBox *>(opt)) {
             switch (sc) {
                case SC_GroupBoxFrame:
-               // FALL THROUGH
                case SC_GroupBoxContents: {
                   int topMargin = 0;
                   int topHeight = 0;
@@ -4466,8 +4476,6 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                }
 
                case SC_GroupBoxCheckBox:
-               // fall through
-
                case SC_GroupBoxLabel: {
                   QFontMetrics fontMetrics = groupBox->fontMetrics;
                   int h = fontMetrics.height();

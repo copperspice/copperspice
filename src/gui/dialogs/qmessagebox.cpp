@@ -548,6 +548,8 @@ void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
 
 void QMessageBoxPrivate::_q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role)
 {
+   (void) role;
+
    Q_Q(QMessageBox);
    q->done(button);
 }

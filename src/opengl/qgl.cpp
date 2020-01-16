@@ -849,17 +849,28 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
          switch (versionString[2].toLatin1()) {
             case '5':
                versionFlags |= QGLFormat::OpenGL_Version_1_5;
+               [[fallthrough]];
+
             case '4':
                versionFlags |= QGLFormat::OpenGL_Version_1_4;
+               [[fallthrough]];
+
             case '3':
                versionFlags |= QGLFormat::OpenGL_Version_1_3;
+               [[fallthrough]];
+
             case '2':
                versionFlags |= QGLFormat::OpenGL_Version_1_2;
+               [[fallthrough]];
+
             case '1':
                versionFlags |= QGLFormat::OpenGL_Version_1_1;
+               [[fallthrough]];
+
             default:
                break;
          }
+
       } else if (versionString.startsWith(QLatin1String("2."))) {
          versionFlags |= QGLFormat::OpenGL_Version_1_1 |
             QGLFormat::OpenGL_Version_1_2 |
@@ -885,12 +896,19 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
          switch (versionString[2].toLatin1()) {
             case '3':
                versionFlags |= QGLFormat::OpenGL_Version_3_3;
+               [[fallthrough]];
+
             case '2':
                versionFlags |= QGLFormat::OpenGL_Version_3_2;
+               [[fallthrough]];
+
             case '1':
                versionFlags |= QGLFormat::OpenGL_Version_3_1;
+               [[fallthrough]];
+
             case '0':
                break;
+
             default:
                versionFlags |= QGLFormat::OpenGL_Version_3_1 |
                   QGLFormat::OpenGL_Version_3_2 |
@@ -914,15 +932,19 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
          switch (versionString[2].toLatin1()) {
             case '3':
                versionFlags |= QGLFormat::OpenGL_Version_4_3;
-            // fall through
+               [[fallthrough]];
+
             case '2':
                versionFlags |= QGLFormat::OpenGL_Version_4_2;
-            // fall through
+               [[fallthrough]];
+
             case '1':
                versionFlags |= QGLFormat::OpenGL_Version_4_1;
-            // fall through
+               [[fallthrough]];
+
             case '0':
                break;
+
             default:
                versionFlags |= QGLFormat::OpenGL_Version_4_1 |
                   QGLFormat::OpenGL_Version_4_2 |
@@ -2791,6 +2813,7 @@ const QGLContext *QGLContext::currentContext()
 
 void QGLContextPrivate::setCurrentContext(QGLContext *context)
 {
+   (void) context;
 }
 
 void QGLContext::moveToThread(QThread *thread)
@@ -3293,10 +3316,12 @@ void QGLWidget::resizeEvent(QResizeEvent *e)
    resizeGL(width() * scaleFactor, height() * scaleFactor);
 }
 
-
 QPixmap QGLWidget::renderPixmap(int w, int h, bool useContext)
 {
+   (void) useContext;
+
    Q_D(QGLWidget);
+
    QSize sz = size();
    if ((w > 0) && (h > 0)) {
       sz = QSize(w, h);
@@ -3477,7 +3502,9 @@ const QGLColormap &QGLWidget::colormap() const
 
 void QGLWidget::setColormap(const QGLColormap &c)
 {
+   (void) c;
 }
+
 #ifndef QT_OPENGL_ES
 
 static void qt_save_gl_state()

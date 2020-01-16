@@ -25,15 +25,13 @@
 #define QGRAPHICSWIDGET_H
 
 #include <qfont.h>
+#include <qgraphicslayout.h>
 #include <qgraphicslayoutitem.h>
 #include <qgraphicsitem.h>
 #include <qpalette.h>
 
-
-
 class QFont;
 class QFontMetrics;
-class QGraphicsLayout;
 class QGraphicsSceneMoveEvent;
 class QGraphicsWidgetPrivate;
 class QGraphicsSceneResizeEvent;
