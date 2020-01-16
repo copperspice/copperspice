@@ -62,48 +62,53 @@ void QDebug::putByteArray(const QByteArray &str)
 QDebug &QDebug::resetFormat()
 {
     stream->ts.reset();
-    stream->space = true;
 
-    stream->flags = 0;
+    stream->space = true;
+    stream->m_flags = 0;
 
     stream->setVerbosity(Stream::defaultVerbosity);
 
     return *this;
 }
+
 class QDebugStateSaverPrivate
 {
 public:
-    QDebugStateSaverPrivate(QDebug &dbg)
-        : m_dbg(dbg),
-          m_spaces(dbg.autoInsertSpaces()),
-          m_flags(0),
-          m_streamParams(dbg.stream->ts.getParams())
-    {
+   QDebugStateSaverPrivate(QDebug &dbg)
+        : m_dbg(dbg), m_spaces(dbg.autoInsertSpaces()), m_streamParams(dbg.stream->ts.getParams())
+   {
+      m_flags     = m_dbg.stream->m_flags;
+      m_verbosity = m_dbg.stream->m_verbosity;
+   }
 
-        m_flags = m_dbg.stream->flags;
-    }
+   void restoreState()
+   {
+      const bool currentSpaces = m_dbg.autoInsertSpaces();
 
-    void restoreState()
-    {
-        const bool currentSpaces = m_dbg.autoInsertSpaces();
-        if (currentSpaces && ! m_spaces)
-            if (m_dbg.stream->buffer.endsWith(' ')) {
-                m_dbg.stream->buffer.chop(1);
-            }
+      if (currentSpaces && ! m_spaces)
+         if (m_dbg.stream->buffer.endsWith(' ')) {
+             m_dbg.stream->buffer.chop(1);
+         }
 
-        m_dbg.setAutoInsertSpaces(m_spaces);
-        m_dbg.stream->ts.setParams(m_streamParams);
-        m_dbg.stream->flags = m_flags;
+      m_dbg.setAutoInsertSpaces(m_spaces);
+      m_dbg.stream->ts.setParams(m_streamParams);
 
-        if (! currentSpaces && m_spaces) {
-            m_dbg.stream->ts << ' ';
-        }
-    }
-    QDebug &m_dbg;
-    const bool m_spaces;
-    int m_flags;
-    const QTextStream::Params m_streamParams;
+      m_dbg.stream->m_flags     = m_flags;
+      m_dbg.stream->m_verbosity = m_verbosity;
+
+      if (! currentSpaces && m_spaces) {
+         m_dbg.stream->ts << ' ';
+      }
+   }
+
+   QDebug &m_dbg;
+   const bool m_spaces;
+   int m_flags;
+   int m_verbosity;
+
+   const QTextStream::Params m_streamParams;
 };
+
 QDebugStateSaver::QDebugStateSaver(QDebug &dbg)
     : d_ptr(new QDebugStateSaverPrivate(dbg))
 {

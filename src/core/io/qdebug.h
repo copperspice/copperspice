@@ -39,10 +39,7 @@ class QDebugStateSaverPrivate;
 class Q_CORE_EXPORT QDebug
 {
    struct Stream {
-      enum { defaultVerbosity = 2,
-             verbosityShift   = 29,
-             verbosityMask    = 0x7
-           };
+      static constexpr const int defaultVerbosity = 2;
 
       enum FormatFlag {
          NoQuotes = 0x1
@@ -50,46 +47,49 @@ class Q_CORE_EXPORT QDebug
 
       Stream(QIODevice *device)
          : ts(device), ref(1), type(QtDebugMsg),
-           space(true), message_output(false), flags(defaultVerbosity << verbosityShift)
+           space(true), message_output(false), m_flags(0), m_verbosity(defaultVerbosity)
       {}
 
       Stream(QString *string)
          : ts(string, QIODevice::WriteOnly), ref(1), type(QtDebugMsg),
-           space(true), message_output(false), flags(defaultVerbosity << verbosityShift)
+           space(true), message_output(false), m_flags(0), m_verbosity(defaultVerbosity)
       {}
 
       Stream(QtMsgType t)
          : ts(&buffer, QIODevice::WriteOnly), ref(1), type(t),
-           space(true), message_output(true), flags(defaultVerbosity << verbosityShift)
+           space(true), message_output(true), m_flags(0), m_verbosity(defaultVerbosity)
       {}
 
       QTextStream ts;
       QString buffer;
       int ref;
       QtMsgType type;
+
       bool space;
       bool message_output;
 
-      // logging system, not enabled at this time
-
       bool testFlag(FormatFlag flag) const {
-         return false;
+         return (m_flags & flag);
       }
 
       void setFlag(FormatFlag flag) {
+         m_flags = m_flags | flag;
       }
 
       void unsetFlag(FormatFlag flag) {
-      }
-
-      int verbosity() const {
-         return 2;
+         m_flags = m_flags & (~flag);
       }
 
       void setVerbosity(int v) {
+         m_verbosity = v;
       }
 
-      int flags;
+      int verbosity() const {
+         return m_verbosity;
+      }
+
+      int m_flags;
+      int m_verbosity;
 
    } *stream;
 
@@ -142,8 +142,8 @@ class Q_CORE_EXPORT QDebug
 
    inline QDebug &maybeQuote(char c = '"') { if (!(stream->testFlag(Stream::NoQuotes))) stream->ts << c; return *this; }
 
-   inline QDebug &quote() { stream->unsetFlag(Stream::NoQuotes); return *this; }
-   inline QDebug &noquote() { stream->setFlag(Stream::NoQuotes); return *this; }
+   inline QDebug &quote()   { stream->unsetFlag(Stream::NoQuotes); return *this; }
+   inline QDebug &noquote() { stream->setFlag(Stream::NoQuotes);   return *this; }
 
    QDebug &resetFormat();
 
