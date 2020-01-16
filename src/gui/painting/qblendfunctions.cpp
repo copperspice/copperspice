@@ -185,12 +185,15 @@ void qt_blend_rgb16_on_rgb16(uchar *dst, int dbpl,
    if (const_alpha == 256) {
       if (w <= 64) {
          while (h--) {
-            QT_MEMCPY_USHORT(dst, src, w);
+            std::copy_n(src, w, dst);
+
             dst += dbpl;
             src += sbpl;
          }
+
       } else {
          int length = w << 1;
+
          while (h--) {
             memcpy(dst, src, length);
             dst += dbpl;
