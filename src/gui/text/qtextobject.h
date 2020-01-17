@@ -28,7 +28,7 @@
 #include <qtextformat.h>
 #include <qtextlayout.h>
 #include <qglyphrun.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 class QTextObjectPrivate;
 class QTextDocument;
@@ -36,7 +36,6 @@ class QTextDocumentPrivate;
 class QTextCursor;
 class QTextBlock;
 class QTextFragment;
-
 class QTextList;
 class QTextBlockGroupPrivate;
 class QTextFramePrivate;

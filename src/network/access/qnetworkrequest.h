@@ -29,7 +29,6 @@
 #include <QUrl>
 #include <QVariant>
 
-
 class QSslConfiguration;
 class QNetworkRequestPrivate;
 
@@ -142,6 +141,7 @@ class Q_NETWORK_EXPORT QNetworkRequest
    // HTTP redirect related
    int maximumRedirectsAllowed() const;
    void setMaximumRedirectsAllowed(int maximumRedirectsAllowed);
+
  private:
    QSharedDataPointer<QNetworkRequestPrivate> d;
    friend class QNetworkRequestPrivate;

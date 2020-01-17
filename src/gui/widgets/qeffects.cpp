@@ -173,6 +173,7 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
          move(widget->geometry().x(), widget->geometry().y());
          update();
          break;
+
       case QEvent::Hide:
       case QEvent::Close:
          if (o != widget) {
@@ -185,6 +186,7 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
          showWidget = false;
          render();
          break;
+
       case QEvent::KeyPress: {
          QKeyEvent *ke = (QKeyEvent *)e;
          if (ke->matches(QKeySequence::Cancel)) {
@@ -194,7 +196,9 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
          }
          render();
          break;
+
       }
+
       default:
          break;
    }

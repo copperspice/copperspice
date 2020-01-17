@@ -28,10 +28,9 @@
 #error Must include windows.h first
 #endif
 
-#include <ocidl.h>
 #include <qstring.h>
 
-class QVariant;
+#include <ocidl.h>
 
 // Originally QVariantToVARIANT copied from ActiveQt, renamed to avoid conflicts in static builds
 bool QVariant2VARIANT(const QVariant &var, VARIANT &arg, const QByteArray &typeName, bool out);

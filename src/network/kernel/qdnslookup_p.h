@@ -31,10 +31,7 @@
 #include <qdnslookup.h>
 #include <qhostaddress.h>
 
-QT_BEGIN_NAMESPACE
-
 //#define QDNSLOOKUP_DEBUG
-
 class QDnsLookupRunnable;
 
 class QDnsLookupReply
@@ -181,8 +178,6 @@ class QDnsTextRecordPrivate : public QDnsRecordPrivate
     QList<QByteArray> values;
 };
 
-QT_END_NAMESPACE
-
 Q_DECLARE_METATYPE(QDnsLookupReply)
 
-#endif // QDNSLOOKUP_P_H
+#endif

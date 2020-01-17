@@ -23,13 +23,13 @@
 
 #include <qabstracteventdispatcher.h>
 #include <qabstracteventdispatcher_p.h>
-#include <qabstractnativeeventfilter.h>
 
+#include <qabstractnativeeventfilter.h>
 #include <qthread.h>
+
 #include <qthread_p.h>
 #include <qcoreapplication_p.h>
 #include <qfreelist_p.h>
-
 
 // we allow for 2^24 = 8^8 = 16777216 simultaneously running timers
 struct QtTimerIdFreeListConstants : public QFreeListDefaultConstants
@@ -75,7 +75,6 @@ int QAbstractEventDispatcherPrivate::allocateTimerId()
    return timerIdFreeList()->next();
 }
 
-
 void QAbstractEventDispatcherPrivate::releaseTimerId(int timerId)
 {
     // this function may be called by a global destructor after
@@ -90,19 +89,15 @@ QAbstractEventDispatcher::QAbstractEventDispatcher(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-/*!
-    \internal
-*/
+// internal
 QAbstractEventDispatcher::QAbstractEventDispatcher(QAbstractEventDispatcherPrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
 
-
 QAbstractEventDispatcher::~QAbstractEventDispatcher()
 { }
-
 
 QAbstractEventDispatcher *QAbstractEventDispatcher::instance(QThread *thread)
 {
@@ -118,129 +113,16 @@ int QAbstractEventDispatcher::registerTimer(int interval, Qt::TimerType timerTyp
    return id;
 }
 
-/*!
-    \fn void QAbstractEventDispatcher::registerTimer(int timerId, int interval, QObject *object)
-
-    Register a timer with the specified \a timerId and \a interval for
-    the given \a object.
-*/
-
-/*!
-    \fn bool QAbstractEventDispatcher::unregisterTimer(int timerId)
-
-    Unregisters the timer with the given \a timerId.
-    Returns true if successful; otherwise returns false.
-
-    \sa registerTimer(), unregisterTimers()
-*/
-
-/*!
-    \fn bool QAbstractEventDispatcher::unregisterTimers(QObject *object)
-
-    Unregisters all the timers associated with the given \a object.
-    Returns true if all timers were successful removed; otherwise returns false.
-
-    \sa unregisterTimer(), registeredTimers()
-*/
-
-/*!
-    \fn QList<TimerInfo> QAbstractEventDispatcher::registeredTimers(QObject *object) const
-
-    Returns a list of registered timers for \a object. The timer ID
-    is the first member in each pair; the interval is the second.
-*/
-
-/*! \fn void QAbstractEventDispatcher::wakeUp()
-    \threadsafe
-
-    Wakes up the event loop.
-
-    \sa awake()
-*/
-
-/*!
-    \fn void QAbstractEventDispatcher::interrupt()
-
-    Interrupts event dispatching; i.e. the event dispatcher will
-    return from processEvents() as soon as possible.
-*/
-
-/*! \fn void QAbstractEventDispatcher::flush()
-
-    Flushes the event queue. This normally returns almost
-    immediately. Does nothing on platforms other than X11.
-*/
-
 // ### DOC: Are these called when the _application_ starts/stops or just
 // when the current _event loop_ starts/stops?
-/*! \internal */
+
+// internal
 void QAbstractEventDispatcher::startingUp()
 { }
 
-/*! \internal */
+// internal
 void QAbstractEventDispatcher::closingDown()
 { }
-
-/*!
-    \typedef QAbstractEventDispatcher::TimerInfo
-
-    Typedef for QPair<int, int>. The first component of
-    the pair is the timer ID; the second component is
-    the interval.
-
-    \sa registeredTimers()
-*/
-
-/*!
-    \typedef QAbstractEventDispatcher::EventFilter
-
-    Typedef for a function with the signature
-
-    \snippet doc/src/snippets/code/src_corelib_kernel_qabstracteventdispatcher.cpp 0
-
-    Note that the type of the \a message is platform dependent. The
-    following table shows the \a {message}'s type on Windows, Mac, and
-    X11. You can do a static cast to these types.
-
-    \table
-        \header
-            \o Platform
-            \o type
-        \row
-            \o Windows
-            \o MSG
-        \row
-            \o X11
-            \o XEvent
-        \row
-            \o Mac
-            \o NSEvent
-    \endtable
-
-
-
-    \sa setEventFilter(), filterEvent()
-*/
-
-/*!
-    Replaces the event filter function for this
-    QAbstractEventDispatcher with \a filter and returns the replaced
-    event filter function. Only the current event filter function is
-    called. If you want to use both filter functions, save the
-    replaced EventFilter in a place where yours can call it.
-
-    The event filter function set here is called for all messages
-    taken from the system event loop before the event is dispatched to
-    the respective target, including the messages not meant for Qt
-    objects.
-
-    The event filter function should return true if the message should
-    be filtered, (i.e. stopped). It should return false to allow
-    processing the message to continue.
-
-    By default, no event filter function is set (i.e., this function
-    returns a null EventFilter the first time it is called).
-*/
 
 void QAbstractEventDispatcher::installNativeEventFilter(QAbstractNativeEventFilter *filterObj)
 {
@@ -255,6 +137,7 @@ void QAbstractEventDispatcher::installNativeEventFilter(QAbstractNativeEventFilt
 void QAbstractEventDispatcher::removeNativeEventFilter(QAbstractNativeEventFilter *filter)
 {
     Q_D(QAbstractEventDispatcher);
+
     for (int i = 0; i < d->eventFilters.count(); ++i) {
         if (d->eventFilters.at(i) == filter) {
             d->eventFilters[i] = 0;
@@ -269,7 +152,7 @@ bool QAbstractEventDispatcher::filterNativeEvent(const QByteArray &eventType, vo
 
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-   if (!d->eventFilters.isEmpty()) {
+   if (! d->eventFilters.isEmpty()) {
       // Raise the loopLevel so that deleteLater() calls in or triggered
       // by event_filter() will be processed from the main event loop.
       QScopedLoopLevelCounter loopLevelCounter(threadData);

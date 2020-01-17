@@ -238,7 +238,6 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    void register_tag(const QString &name, const QString &method);
 
    void register_method_s1(const QString &name, QMetaMethod::Access access, QMetaMethod::MethodType kind);
-
    void register_method_s2_part2(QString className, const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind);
 
    // properties
@@ -391,10 +390,10 @@ void QMetaObject_T<T>::register_method(const QString &name, U methodPtr, QMetaMe
 
    auto [signatures, typeReturn, paramNames] = this->getSignatures(va_args);
 
-   QMetaMethod::Attributes attr = QMetaMethod::Attributes();
    auto count = signatures.size();                              // base method plus number of defaulted parameters
-
    std::vector<QString> tmpArgNames = paramNames;
+
+   QMetaMethod::Attributes attr = QMetaMethod::Attributes();
 
    for (std::vector<QString>::size_type k = 0; k < count; ++k)  {
 

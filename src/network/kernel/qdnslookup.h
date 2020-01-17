@@ -53,7 +53,6 @@ class Q_NETWORK_EXPORT QDnsDomainNameRecord
       return *this;
     }
 
-
     void swap(QDnsDomainNameRecord &other) {
       qSwap(d, other.d);
     }
@@ -284,6 +283,4 @@ class Q_NETWORK_EXPORT QDnsLookup : public QObject
     NET_CS_SLOT_2(_q_lookupFinished)
 };
 
-
-
-#endif // QDNSLOOKUP_H
+#endif

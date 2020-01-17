@@ -24,15 +24,18 @@
 #ifndef QHOSTADDRESS_H
 #define QHOSTADDRESS_H
 
-#include <QtCore/qpair.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtNetwork/qabstractsocket.h>
+#include <qpair.h>
+#include <qstring.h>
+#include <qscopedpointer.h>
+#include <qabstractsocket.h>
 
 struct sockaddr;
 
-
 class QHostAddressPrivate;
+class QHostAddress;
+
+
+Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 
 class Q_NETWORK_EXPORT QIPv6Address
 {
@@ -48,9 +51,7 @@ class Q_NETWORK_EXPORT QIPv6Address
    quint8 c[16];
 };
 
-typedef QIPv6Address Q_IPV6ADDR;
-class QHostAddress;
-Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
+using Q_IPV6ADDR = QIPv6Address;
 
 class Q_NETWORK_EXPORT QHostAddress
 {
@@ -66,12 +67,14 @@ class Q_NETWORK_EXPORT QHostAddress
    };
 
    QHostAddress();
+
    explicit QHostAddress(quint32 ip4Addr);
    explicit QHostAddress(const quint8 *ip6Addr);
    explicit QHostAddress(const Q_IPV6ADDR &ip6Addr);
 
    explicit QHostAddress(const sockaddr *address);
    explicit QHostAddress(const QString &address);
+
    QHostAddress(const QHostAddress &other);
    QHostAddress(SpecialAddress address);
    ~QHostAddress();
@@ -140,7 +143,4 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QHostAddress &);
 Q_NETWORK_EXPORT QDataStream &operator<<(QDataStream &, const QHostAddress &);
 Q_NETWORK_EXPORT QDataStream &operator>>(QDataStream &, QHostAddress &);
 
-
-
-
-#endif // QHOSTADDRESS_H
+#endif

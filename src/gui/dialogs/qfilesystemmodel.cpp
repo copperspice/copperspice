@@ -583,6 +583,7 @@ QVariant QFileSystemModel::myComputer(int role) const
    switch (role) {
       case Qt::DisplayRole:
          return QFileSystemModelPrivate::myComputer();
+
 #ifndef QT_NO_FILESYSTEMWATCHER
       case Qt::DecorationRole:
          return d->fileInfoGatherer.iconProvider()->icon(QFileIconProvider::Computer);
@@ -606,12 +607,16 @@ QVariant QFileSystemModel::data(const QModelIndex &index, int role) const
          switch (index.column()) {
             case 0:
                return d->displayName(index);
+
             case 1:
                return d->size(index);
+
             case 2:
                return d->type(index);
+
             case 3:
                return d->time(index);
+
             default:
                qWarning("QFileSystemModel:data() Invalid display value column %d", index.column());
                break;
@@ -657,7 +662,7 @@ QVariant QFileSystemModel::data(const QModelIndex &index, int role) const
 
 QString QFileSystemModelPrivate::size(const QModelIndex &index) const
 {
-   if (!index.isValid()) {
+   if (! index.isValid()) {
       return QString();
    }
 
@@ -1921,7 +1926,6 @@ void QFileSystemModelPrivate::init()
    roleNames.insert(QFileSystemModel::FilePathRole,      "filePath");
    roleNames.insert(QFileSystemModel::FileNameRole,      "fileName");
    roleNames.insert(QFileSystemModel::FilePermissions,   "filePermissions");
-
 }
 
 bool QFileSystemModelPrivate::filtersAcceptsNode(const QFileSystemNode *node) const

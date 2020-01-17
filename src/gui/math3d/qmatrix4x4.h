@@ -24,11 +24,11 @@
 #ifndef QMATRIX4X4_H
 #define QMATRIX4X4_H
 
-#include <QtGui/qvector3d.h>
-#include <QtGui/qvector4d.h>
-#include <QtGui/qquaternion.h>
-#include <QtGui/qgenericmatrix.h>
-#include <QtCore/qrect.h>
+#include <qvector3d.h>
+#include <qvector4d.h>
+#include <qquaternion.h>
+#include <qgenericmatrix.h>
+#include <qrect.h>
 
 #ifndef QT_NO_MATRIX4X4
 
@@ -38,7 +38,6 @@ class QVariant;
 
 class Q_GUI_EXPORT QMatrix4x4
 {
-
  public:
    inline QMatrix4x4() {
       setToIdentity();
@@ -195,7 +194,7 @@ class Q_GUI_EXPORT QMatrix4x4
       General         = 0x001f    // General matrix, unknown contents
    };
 
-   // Construct without initializing identity matrix.
+   // Construct without initializing identity matrix
    explicit QMatrix4x4(int) {
    }
 
@@ -206,13 +205,10 @@ class Q_GUI_EXPORT QMatrix4x4
    friend class QGraphicsRotation;
 };
 
-Q_DECLARE_TYPEINFO(QMatrix4x4, Q_MOVABLE_TYPE);
-
-inline QMatrix4x4::QMatrix4x4
-(qreal m11, qreal m12, qreal m13, qreal m14,
- qreal m21, qreal m22, qreal m23, qreal m24,
- qreal m31, qreal m32, qreal m33, qreal m34,
- qreal m41, qreal m42, qreal m43, qreal m44)
+inline QMatrix4x4::QMatrix4x4(qreal m11, qreal m12, qreal m13, qreal m14,
+                  qreal m21, qreal m22, qreal m23, qreal m24,
+                  qreal m31, qreal m32, qreal m33, qreal m34,
+                  qreal m41, qreal m42, qreal m43, qreal m44)
 {
    m[0][0] = m11;
    m[0][1] = m21;
@@ -230,6 +226,7 @@ inline QMatrix4x4::QMatrix4x4
    m[3][1] = m24;
    m[3][2] = m34;
    m[3][3] = m44;
+
    flagBits = General;
 }
 
@@ -237,6 +234,7 @@ template <int N, int M>
 inline QMatrix4x4::QMatrix4x4(const QGenericMatrix<N, M, qreal> &matrix)
 {
    const qreal *values = matrix.constData();
+
    for (int matrixCol = 0; matrixCol < 4; ++matrixCol) {
       for (int matrixRow = 0; matrixRow < 4; ++matrixRow) {
          if (matrixCol < N && matrixRow < M) {
@@ -295,6 +293,7 @@ inline QVector4D QMatrix4x4::column(int index) const
 inline void QMatrix4x4::setColumn(int index, const QVector4D &value)
 {
    Q_ASSERT(index >= 0 && index < 4);
+
    m[index][0] = value.x();
    m[index][1] = value.y();
    m[index][2] = value.z();
@@ -325,23 +324,29 @@ inline bool QMatrix4x4::isAffine() const
 {
     return m[0][3] == 0.0f && m[1][3] == 0.0f && m[2][3] == 0.0f && m[3][3] == 1.0f;
 }
+
 inline bool QMatrix4x4::isIdentity() const
 {
    if (flagBits == Identity) {
       return true;
    }
+
    if (m[0][0] != 1.0f || m[0][1] != 0.0f || m[0][2] != 0.0f) {
       return false;
    }
+
    if (m[0][3] != 0.0f || m[1][0] != 0.0f || m[1][1] != 1.0f) {
       return false;
    }
+
    if (m[1][2] != 0.0f || m[1][3] != 0.0f || m[2][0] != 0.0f) {
       return false;
    }
+
    if (m[2][1] != 0.0f || m[2][2] != 1.0f || m[2][3] != 0.0f) {
       return false;
    }
+
    if (m[3][0] != 0.0f || m[3][1] != 0.0f || m[3][2] != 0.0f) {
       return false;
    }
@@ -409,6 +414,7 @@ inline QMatrix4x4 &QMatrix4x4::operator+=(const QMatrix4x4 &other)
    m[3][2] += other.m[3][2];
    m[3][3] += other.m[3][3];
    flagBits = General;
+
    return *this;
 }
 
@@ -431,12 +437,14 @@ inline QMatrix4x4 &QMatrix4x4::operator-=(const QMatrix4x4 &other)
    m[3][2] -= other.m[3][2];
    m[3][3] -= other.m[3][3];
    flagBits = General;
+
    return *this;
 }
 
 inline QMatrix4x4 &QMatrix4x4::operator*=(QMatrix4x4 other)
 {
     flagBits |= other.flagBits;
+
     if (flagBits < Rotation2D) {
         m[3][0] += m[0][0] * other.m[3][0];
         m[3][1] += m[1][1] * other.m[3][1];
@@ -454,6 +462,7 @@ inline QMatrix4x4 &QMatrix4x4::operator*=(QMatrix4x4 other)
             + m[1][0] * other.m[0][1]
             + m[2][0] * other.m[0][2]
             + m[3][0] * other.m[0][3];
+
     m1 = m[0][0] * other.m[1][0]
             + m[1][0] * other.m[1][1]
             + m[2][0] * other.m[1][2]
@@ -1110,9 +1119,9 @@ inline QVector4D QMatrix4x4::map(const QVector4D &point) const
 
 inline qreal *QMatrix4x4::data()
 {
-   // We have to assume that the caller will modify the matrix elements,
-   // so we flip it over to "General" mode.
+   // assume the caller will modify the matrix elements, so we flip it over to "General" mode
    flagBits = General;
+
    return *m;
 }
 
@@ -1120,12 +1129,11 @@ inline void QMatrix4x4::viewport(const QRectF &rect)
 {
     viewport(rect.x(), rect.y(), rect.width(), rect.height());
 }
-Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QMatrix4x4 &m);
 
+Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QMatrix4x4 &m);
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QMatrix4x4 &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QMatrix4x4 &);
-
 
 #endif
 

@@ -1097,23 +1097,23 @@ void QTextDocumentPrivate::appendUndoItem(QAbstractUndoItem *item)
    }
 
    QTextUndoCommand c;
-   c.command = QTextUndoCommand::Custom;
-   c.block_part = editBlock != 0;
-   c.block_end = 0;
-   c.operation = QTextUndoCommand::MoveCursor;
-   c.format = 0;
-   c.strPos = 0;
-   c.pos = 0;
+   c.command     = QTextUndoCommand::Custom;
+   c.block_part  = editBlock != 0;
+   c.block_end   = 0;
+   c.operation   = QTextUndoCommand::MoveCursor;
+   c.format      = 0;
+   c.strPos      = 0;
+   c.pos         = 0;
    c.blockFormat = 0;
+   c.custom      = item;
 
-   c.custom = item;
    appendUndoItem(c);
 }
 
 void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
 {
    PMDEBUG("appendUndoItem, command=%d enabled=%d", c.command, undoEnabled);
-   if (!undoEnabled) {
+   if (! undoEnabled) {
       return;
    }
    if (undoState < undoStack.size()) {

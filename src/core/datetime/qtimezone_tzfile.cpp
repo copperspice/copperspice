@@ -107,17 +107,17 @@ struct QTzHeader {
 };
 
 struct QTzTransition {
-   qint64 tz_time;     // Transition time
-   quint8 tz_typeind;  // Type Index
+   qint64 tz_time;        // Transition time
+   quint8 tz_typeind;     // Type Index
 };
 Q_DECLARE_TYPEINFO(QTzTransition, Q_PRIMITIVE_TYPE);
 
 struct QTzType {
-   int tz_gmtoff;  // UTC offset in seconds
-   bool   tz_isdst;   // Is DST
-   quint8 tz_abbrind; // abbreviation list index
-   bool   tz_ttisgmt; // Is in UTC time
-   bool   tz_ttisstd; // Is in Standard time
+   int tz_gmtoff;        // UTC offset in seconds
+   bool   tz_isdst;      // Is DST
+   quint8 tz_abbrind;    // abbreviation list index
+   bool   tz_ttisgmt;    // Is in UTC time
+   bool   tz_ttisstd;    // Is in Standard time
 };
 Q_DECLARE_TYPEINFO(QTzType, Q_PRIMITIVE_TYPE);
 

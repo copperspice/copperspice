@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qgl.h"
+#include <qgl.h>
 
 #include <qapplication.h>
-
-
 #include <qcolormap.h>
 #include <qdebug.h>
 #include <qdatetime.h>
@@ -41,7 +39,6 @@
 #include <qplatform_openglcontext.h>
 #include <qsurfaceformat.h>
 
-
 #include <qapplication_p.h>
 #include <qimage_p.h>
 #include <qimagepixmapcleanuphooks_p.h>
@@ -55,6 +52,7 @@
 #ifndef QT_OPENGL_ES_2
 #include <qopenglfunctions_1_1.h>
 #endif
+
 #include <stdlib.h>
 
 class QGLDefaultExtensions
@@ -802,7 +800,6 @@ QGLFormat::OpenGLContextProfile QGLFormat::profile() const
    return d->profile;
 }
 
-
 bool QGLFormat::hasOpenGL()
 {
    return QApplicationPrivate::platformIntegration()
@@ -817,8 +814,9 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
 {
    QGLFormat::OpenGLVersionFlags versionFlags = QGLFormat::OpenGL_Version_None;
 
-   if (versionString.startsWith(QLatin1String("OpenGL ES"))) {
+   if (versionString.startsWith(QString("OpenGL ES"))) {
       QStringList parts = versionString.split(QLatin1Char(' '));
+
       if (parts.size() >= 3) {
          if (parts[2].startsWith(QLatin1String("1."))) {
             if (parts[1].endsWith(QLatin1String("-CM"))) {
@@ -915,6 +913,7 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
                   QGLFormat::OpenGL_Version_3_3;
                break;
          }
+
       } else if (versionString.startsWith(QLatin1String("4."))) {
          versionFlags |= QGLFormat::OpenGL_Version_1_1 |
             QGLFormat::OpenGL_Version_1_2 |
@@ -1014,71 +1013,20 @@ QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
    return versionFlags;
 }
 
-
 QGLFormat QGLFormat::defaultFormat()
 {
    return *qgl_default_format();
 }
-
-/*!
-    Sets a new default QGLFormat for the application to \a f. For
-    example, to set single buffering as the default instead of double
-    buffering, your main() might contain code like this:
-    \snippet doc/src/snippets/code/src_opengl_qgl.cpp 4
-
-    \sa defaultFormat()
-*/
 
 void QGLFormat::setDefaultFormat(const QGLFormat &f)
 {
    *qgl_default_format() = f;
 }
 
-
-/*!
-    Returns the default QGLFormat for overlay contexts.
-
-    The default overlay format is:
-    \list
-    \i \link setDoubleBuffer() Double buffer:\endlink Disabled.
-    \i \link setDepth() Depth buffer:\endlink Disabled.
-    \i \link setRgba() RGBA:\endlink Disabled (i.e., color index enabled).
-    \i \link setAlpha() Alpha channel:\endlink Disabled.
-    \i \link setAccum() Accumulator buffer:\endlink Disabled.
-    \i \link setStencil() Stencil buffer:\endlink Disabled.
-    \i \link setStereo() Stereo:\endlink Disabled.
-    \i \link setDirectRendering() Direct rendering:\endlink Enabled.
-    \i \link setOverlay() Overlay:\endlink Disabled.
-    \i \link setSampleBuffers() Multisample buffers:\endlink Disabled.
-    \i \link setPlane() Plane:\endlink 1 (i.e., first overlay plane).
-    \endlist
-
-    \sa setDefaultFormat()
-*/
-
 QGLFormat QGLFormat::defaultOverlayFormat()
 {
    return *defaultOverlayFormatInstance();
 }
-
-/*!
-    Sets a new default QGLFormat for overlay contexts to \a f. This
-    format is used whenever a QGLWidget is created with a format that
-    hasOverlay() enabled.
-
-    For example, to get a double buffered overlay context (if
-    available), use code like this:
-
-    \snippet doc/src/snippets/code/src_opengl_qgl.cpp 5
-
-    As usual, you can find out after widget creation whether the
-    underlying OpenGL system was able to provide the requested
-    specification:
-
-    \snippet doc/src/snippets/code/src_opengl_qgl.cpp 6
-
-    \sa defaultOverlayFormat()
-*/
 
 void QGLFormat::setDefaultOverlayFormat(const QGLFormat &f)
 {
@@ -1089,14 +1037,6 @@ void QGLFormat::setDefaultOverlayFormat(const QGLFormat &f)
    // infinitely many planes...
    defaultFormat->setOverlay(false);
 }
-
-
-/*!
-    Returns true if all the options of the two QGLFormat objects
-    \a a and \a b are equal; otherwise returns false.
-
-    \relates QGLFormat
-*/
 
 bool operator==(const QGLFormat &a, const QGLFormat &b)
 {
@@ -3297,7 +3237,6 @@ void QGLWidget::paintEvent(QPaintEvent *)
    }
 }
 
-
 void QGLWidget::resizeEvent(QResizeEvent *e)
 {
    Q_D(QGLWidget);
@@ -3329,7 +3268,6 @@ QPixmap QGLWidget::renderPixmap(int w, int h, bool useContext)
 
    QPixmap pm;
 
-
    if (d->glcx->isValid()) {
       d->glcx->makeCurrent();
       QGLFramebufferObject fbo(sz, QGLFramebufferObject::CombinedDepthStencil);
@@ -3340,6 +3278,7 @@ QPixmap QGLWidget::renderPixmap(int w, int h, bool useContext)
       d->glcx->d_ptr->readback_target_size = sz;
       updateGL();
       fbo.release();
+
       pm = QPixmap::fromImage(fbo.toImage());
       d->glcx->d_ptr->default_fbo = prevDefaultFbo;
       d->glcx->setInitialized(false);
@@ -3485,7 +3424,6 @@ void QGLWidget::qglClearColor(const QColor &c) const
    }
 #endif
 }
-
 
 QImage QGLWidget::convertToGLFormat(const QImage &img)
 {

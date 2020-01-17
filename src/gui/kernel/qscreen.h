@@ -25,12 +25,13 @@
 #define QSCREEN_H
 
 #include <qlist.h>
+#include <qnamespace.h>
 #include <qobject.h>
 #include <qrect.h>
 #include <qsize.h>
 #include <qsizef.h>
 #include <qtransform.h>
-#include <qnamespace.h>
+
 #include <qscopedpointer.h>
 
 class QPlatformScreen;

@@ -2795,6 +2795,7 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
          if (e->modifiers() & Qt::ControlModifier) {
             break;   // pass to line edit for auto completion
          }
+
       case Qt::Key_PageUp:
 #ifdef QT_KEYPAD_NAVIGATION
          if (QApplication::keypadNavigationEnabled()) {
@@ -2803,6 +2804,7 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
 #endif
             move = MoveUp;
          break;
+
       case Qt::Key_Down:
          if (e->modifiers() & Qt::AltModifier) {
             showPopup();
@@ -2820,16 +2822,19 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
 #endif
             move = MoveDown;
          break;
+
       case Qt::Key_Home:
          if (!d->lineEdit) {
             move = MoveFirst;
          }
          break;
+
       case Qt::Key_End:
          if (!d->lineEdit) {
             move = MoveLast;
          }
          break;
+
       case Qt::Key_F4:
          if (!e->modifiers()) {
             showPopup();
@@ -2860,12 +2865,14 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
             return;
          }
          break;
+
       case Qt::Key_Left:
       case Qt::Key_Right:
          if (QApplication::keypadNavigationEnabled() && !hasEditFocus()) {
             e->ignore();
          }
          break;
+
       case Qt::Key_Back:
          if (QApplication::keypadNavigationEnabled()) {
             if (!hasEditFocus() || !d->lineEdit) {
@@ -2876,6 +2883,7 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
          }
          break;
 #endif
+
       default:
          if (!d->lineEdit) {
             if (!e->text().isEmpty()) {
@@ -2908,6 +2916,7 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
                newIndex--;
             }
             break;
+
          default:
             e->ignore();
             break;
@@ -2917,6 +2926,7 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
          setCurrentIndex(newIndex);
          d->emitActivated(d->currentIndex);
       }
+
    } else if (d->lineEdit) {
       d->lineEdit->event(e);
    }

@@ -155,27 +155,32 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
 {
    // We expect to be passed a native parent.
    QWindow *nativeWindow = widget->windowHandle();
-   if (!nativeWindow) {
+   if (! nativeWindow) {
       return;
    }
+
    void *hdcV = QGuiApplication::platformNativeInterface()->nativeResourceForWindow(QByteArrayLiteral("getDC"), nativeWindow);
-   if (!hdcV) {
+   if (! hdcV) {
       return;
    }
    const HDC hdc = reinterpret_cast<HDC>(hdcV);
 
    HBRUSH brush = nullptr;
    static int i = 0;
+
    switch (i) {
       case 0:
          brush = CreateSolidBrush(RGB(255, 255, 0));
          break;
+
       case 1:
          brush = CreateSolidBrush(RGB(255, 200, 55));
          break;
+
       case 2:
          brush = CreateSolidBrush(RGB(200, 255, 55));
          break;
+
       case 3:
          brush = CreateSolidBrush(RGB(200, 200, 0));
          break;
@@ -187,6 +192,7 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
       SetRect(&winRect, rect.left(), rect.top(), rect.right(), rect.bottom());
       FillRect(hdc, &winRect, brush);
    }
+
    DeleteObject(brush);
    QGuiApplication::platformNativeInterface()->nativeResourceForWindow(QByteArrayLiteral("releaseDC"), nativeWindow);
    ::Sleep(msec);
@@ -303,7 +309,8 @@ void QWidgetBackingStore::unflushPaint(QWidget *widget, const QRegion &rgn)
 
    QWidget *tlw = widget->window();
    QTLWExtra *tlwExtra = tlw->d_func()->maybeTopData();
-   if (!tlwExtra) {
+
+   if (! tlwExtra) {
       return;
    }
 
@@ -330,7 +337,6 @@ void QWidgetBackingStore::releaseBuffer()
    }
 }
 
-
 void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBackingStore *backingStore,
    BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates)
 {
@@ -342,12 +348,13 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
 
 #ifdef QT_NO_PAINT_DEBUG
    backingStore->beginPaint(toClean);
+
 #else
    returnInfo->wasFlushed = QWidgetBackingStore::flushPaint(tlw, toClean);
+
    // Avoid deadlock with QT_FLUSH_PAINT: the server will wait for
    // the BackingStore lock, so if we hold that, the server will
-   // never release the Communication lock that we are waiting for in
-   // sendSynchronousCommand
+   // never release the Communication lock that we are waiting for in sendSynchronousCommand
    if (!returnInfo->wasFlushed) {
       backingStore->beginPaint(toClean);
    }
@@ -355,8 +362,7 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
 
 }
 
-void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backingStore,
-   BeginPaintInfo *beginPaintInfo)
+void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backingStore, BeginPaintInfo *beginPaintInfo)
 {
 #ifndef QT_NO_PAINT_DEBUG
    if (!beginPaintInfo->wasFlushed) {
@@ -371,7 +377,6 @@ void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backin
    flush();
 
 }
-
 
 QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
 {

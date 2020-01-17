@@ -109,10 +109,8 @@ static bool runningUnderDebugger()
 QXcbIntegration *QXcbIntegration::m_instance = nullptr;
 
 QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char **argv)
-   : m_services(new QGenericUnixServices)
-   , m_instanceName(0)
-   , m_canGrab(true)
-   , m_defaultVisualId(UINT_MAX)
+   : m_services(new QGenericUnixServices), m_instanceName(0), m_canGrab(true),
+    m_defaultVisualId(UINT_MAX)
 {
    m_instance = this;
 
@@ -120,12 +118,14 @@ QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char 
 #ifdef XCB_USE_XLIB
    XInitThreads();
 #endif
+
    m_nativeInterface.reset(new QXcbNativeInterface);
 
    // Parse arguments
    const char *displayName = 0;
    bool noGrabArg = false;
    bool doGrabArg = false;
+
    if (argc) {
       int j = 1;
       for (int i = 1; i < argc; i++) {

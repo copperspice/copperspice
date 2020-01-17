@@ -48,6 +48,7 @@ class QGLTemporaryContextPrivate;
 class QGLTexture;
 class QGLTextureDestroyer;
 class QGLContextResourceBase;
+
 QString cs_glGetString(GLenum data);
 QString cs_glGetStringI(GLenum data, GLuint index);
 
@@ -331,7 +332,7 @@ class Q_OPENGL_EXPORT QGLTextureDestroyer
       }
    }
 
- private :
+ private:
    static void freeTextureFunc(QOpenGLFunctions *, GLuint id) {
       QOpenGLContext::currentContext()->functions()->glDeleteTextures(1, &id);
    }

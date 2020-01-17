@@ -2157,28 +2157,38 @@ void QTriangulator<T>::MonotoneToTriangles::decompose()
 {
     QVector<T> result;
     QDataBuffer<int> stack(m_parent->m_indices.size());
+
     m_first = 0;
+
     // Require at least three more indices.
     while (m_first + 3 <= m_parent->m_indices.size()) {
         m_length = 0;
-        while (m_parent->m_indices.at(m_first + m_length) != T(-1)) { // Q_TRIANGULATE_END_OF_POLYGON
+
+        while (m_parent->m_indices.at(m_first + m_length) != static_cast<T>(-1)) {
+            // q_triangulate_end_of_polygon
+
             ++m_length;
             Q_ASSERT(m_first + m_length < m_parent->m_indices.size());
         }
+
         if (m_length < 3) {
             m_first += m_length + 1;
             continue;
         }
 
         int minimum = 0;
-        while (less(next(minimum), minimum))
+        while (less(next(minimum), minimum)) {
             minimum = next(minimum);
-        while (less(previous(minimum), minimum))
+        }
+
+        while (less(previous(minimum), minimum)) {
             minimum = previous(minimum);
+        }
 
         stack.reset();
         stack.add(minimum);
-        int left = previous(minimum);
+
+        int left  = previous(minimum);
         int right = next(minimum);
         bool stackIsOnLeftSide;
         bool clockwiseOrder = leftOfEdge(minimum, left, right);
@@ -2196,15 +2206,19 @@ void QTriangulator<T>::MonotoneToTriangles::decompose()
         for (int count = 0; count + 2 < m_length; ++count)
         {
             Q_ASSERT(stack.size() >= 2);
+
             if (less(left, right)) {
                 if (stackIsOnLeftSide == false) {
+
                     for (int i = 0; i + 1 < stack.size(); ++i) {
                         result.push_back(indices(stack.at(i + 1)));
                         result.push_back(indices(left));
                         result.push_back(indices(stack.at(i)));
                     }
+
                     stack.first() = stack.last();
                     stack.resize(1);
+
                 } else {
                     while (stack.size() >= 2 && (clockwiseOrder ^ !leftOfEdge(left, stack.at(stack.size() - 2), stack.last()))) {
                         result.push_back(indices(stack.at(stack.size() - 2)));
@@ -2216,6 +2230,7 @@ void QTriangulator<T>::MonotoneToTriangles::decompose()
                 stack.add(left);
                 left = previous(left);
                 stackIsOnLeftSide = true;
+
             } else {
                 if (stackIsOnLeftSide == true) {
                     for (int i = 0; i + 1 < stack.size(); ++i) {
@@ -2225,6 +2240,7 @@ void QTriangulator<T>::MonotoneToTriangles::decompose()
                     }
                     stack.first() = stack.last();
                     stack.resize(1);
+
                 } else {
                     while (stack.size() >= 2 && (clockwiseOrder ^ !leftOfEdge(right, stack.last(), stack.at(stack.size() - 2)))) {
                         result.push_back(indices(stack.last()));

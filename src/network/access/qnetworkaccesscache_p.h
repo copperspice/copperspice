@@ -32,8 +32,6 @@
 #include <qmetatype.h>
 #include <qqueue.h>
 
-QT_BEGIN_NAMESPACE
-
 class QNetworkRequest;
 class QUrl;
 
@@ -45,7 +43,6 @@ class QNetworkAccessCache : public QObject
    NET_CS_OBJECT(QNetworkAccessCache)
 
  public:
-
 
    class CacheableObject
    {
@@ -124,8 +121,6 @@ class QNetworkAccessCache : public QObject
    void updateTimer();
    bool emitEntryReady(Node *node, QObject *target, const QString &member);
 };
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QNetworkAccessCache::CacheableObject *)
 

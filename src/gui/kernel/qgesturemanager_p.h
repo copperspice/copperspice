@@ -31,9 +31,9 @@
 
 #ifndef QT_NO_GESTURES
 
-
 class QBasicTimer;
 class QGraphicsObject;
+
 class QGestureManager : public QObject
 {
    GUI_CS_OBJECT(QGestureManager)
@@ -114,7 +114,6 @@ class QGestureManager : public QObject
    void cancelGesturesForChildren(QGesture *originatingGesture);
 };
 
-
 #endif // QT_NO_GESTURES
 
-#endif // QGESTUREMANAGER_P_H
+#endif

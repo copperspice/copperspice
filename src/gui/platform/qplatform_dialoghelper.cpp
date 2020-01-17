@@ -23,12 +23,12 @@
 
 #include <qplatform_dialoghelper.h>
 
-#include <QVariant>
-#include <QSharedData>
-#include <QSettings>
-#include <QUrl>
-#include <QColor>
-#include <QRegularExpression>
+#include <qshareddata.h>
+#include <qsettings.h>
+#include <qurl.h>
+#include <qcolor.h>
+#include <qregularexpression.h>
+#include <qvariant.h>
 
 #include <algorithm>
 
@@ -71,8 +71,10 @@ static const int buttonRoleLayouts[2][5][14] = {
       // MacModelessLayout
       {
          QPlatformDialogHelper::ResetRole, QPlatformDialogHelper::ApplyRole, QPlatformDialogHelper::ActionRole, QPlatformDialogHelper::Stretch,
-         QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
-         QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL
+         QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL
       }
    },
 
@@ -80,40 +82,54 @@ static const int buttonRoleLayouts[2][5][14] = {
    {
       // WinLayout
       {
-         QPlatformDialogHelper::ActionRole, QPlatformDialogHelper::YesRole, QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::AlternateRole,
-         QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::RejectRole, QPlatformDialogHelper::ApplyRole,
+         QPlatformDialogHelper::ActionRole, QPlatformDialogHelper::YesRole, QPlatformDialogHelper::AcceptRole,
+         QPlatformDialogHelper::AlternateRole,
+         QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::RejectRole,
+         QPlatformDialogHelper::ApplyRole,
          QPlatformDialogHelper::ResetRole,
-         QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::Stretch, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL
+         QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::Stretch, QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL
       },
 
       // MacLayout
       {
-         QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::RejectRole,
-         QPlatformDialogHelper::AlternateRole, QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::Stretch, QPlatformDialogHelper::ActionRole,
+         QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::AcceptRole,
+         QPlatformDialogHelper::RejectRole,
+         QPlatformDialogHelper::AlternateRole, QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::Stretch,
+         QPlatformDialogHelper::ActionRole,
          QPlatformDialogHelper::ApplyRole,
          QPlatformDialogHelper::ResetRole, QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL
       },
 
       // KdeLayout
       {
-         QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::AlternateRole, QPlatformDialogHelper::ApplyRole, QPlatformDialogHelper::ActionRole,
-         QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::Stretch, QPlatformDialogHelper::ResetRole,
-         QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::RejectRole, QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL
+         QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::AlternateRole, QPlatformDialogHelper::ApplyRole,
+         QPlatformDialogHelper::ActionRole,
+         QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::Stretch,
+         QPlatformDialogHelper::ResetRole,
+         QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::RejectRole, QPlatformDialogHelper::HelpRole,
+         QPlatformDialogHelper::EOL
       },
 
       // GnomeLayout
       {
-         QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::RejectRole,
-         QPlatformDialogHelper::AlternateRole, QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::ApplyRole, QPlatformDialogHelper::ActionRole,
+         QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole, QPlatformDialogHelper::AcceptRole,
+         QPlatformDialogHelper::RejectRole,
+         QPlatformDialogHelper::AlternateRole, QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::ApplyRole,
+         QPlatformDialogHelper::ActionRole,
          QPlatformDialogHelper::Stretch,
-         QPlatformDialogHelper::ResetRole, QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL
+         QPlatformDialogHelper::ResetRole, QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL
       },
 
       // MacModelessLayout
       {
-         QPlatformDialogHelper::ActionRole, QPlatformDialogHelper::ApplyRole, QPlatformDialogHelper::ResetRole, QPlatformDialogHelper::Stretch,
-         QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
-         QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL
+         QPlatformDialogHelper::ActionRole, QPlatformDialogHelper::ApplyRole, QPlatformDialogHelper::ResetRole,
+         QPlatformDialogHelper::Stretch,
+         QPlatformDialogHelper::HelpRole, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL, QPlatformDialogHelper::EOL,
+         QPlatformDialogHelper::EOL
       }
    }
 };
@@ -144,7 +160,9 @@ QVariant  QPlatformDialogHelper::defaultStyleHint(QPlatformDialogHelper::StyleHi
 class QFontDialogOptionsPrivate : public QSharedData
 {
  public:
-   QFontDialogOptionsPrivate() : options(0) {}
+   QFontDialogOptionsPrivate()
+      : options(0)
+    {}
 
    QFontDialogOptions::FontDialogOptions options;
    QString windowTitle;
@@ -163,6 +181,7 @@ QFontDialogOptions &QFontDialogOptions::operator=(const QFontDialogOptions &rhs)
    if (this != &rhs) {
       d = rhs.d;
    }
+
    return *this;
 }
 
@@ -204,15 +223,6 @@ QFontDialogOptions::FontDialogOptions QFontDialogOptions::options() const
    return d->options;
 }
 
-/*!
-    \class QPlatformFontDialogHelper
-    \since 5.0
-    \internal
-    \ingroup qpa
-
-    \brief The QPlatformFontDialogHelper class allows for platform-specific customization of font dialogs.
-
-*/
 const QSharedPointer<QFontDialogOptions> &QPlatformFontDialogHelper::options() const
 {
    return m_options;
@@ -242,11 +252,15 @@ class QColorDialogStaticData
 QColorDialogStaticData::QColorDialogStaticData() : customSet(false)
 {
    int i = 0;
-   for (int g = 0; g < 4; ++g)
-      for (int r = 0;  r < 4; ++r)
+
+   for (int g = 0; g < 4; ++g)  {
+      for (int r = 0;  r < 4; ++r) {
          for (int b = 0; b < 3; ++b) {
             standardRgb[i++] = qRgb(r * 255 / 3, g * 255 / 3, b * 255 / 2);
          }
+      }
+   }
+
    std::fill(customRgb, customRgb + CustomColorCount, 0xffffffff);
    readSettings();
 }
@@ -283,7 +297,9 @@ Q_GLOBAL_STATIC(QColorDialogStaticData, qColorDialogStaticData)
 class QColorDialogOptionsPrivate : public QSharedData
 {
  public:
-   QColorDialogOptionsPrivate() : options(0) {}
+   QColorDialogOptionsPrivate()
+      : options(0)
+   {}
 
    // Write out settings around destruction of dialogs
    ~QColorDialogOptionsPrivate() {

@@ -1381,6 +1381,7 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutAboutToBeChanged(const QList<Q
          parents << mappedParent;
       }
    }
+
    // All parents filtered out.
    if (!sourceParents.isEmpty() && parents.isEmpty()) {
       return;
@@ -1425,7 +1426,7 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersisten
       }
    }
 
-   if (!sourceParents.isEmpty() && parents.isEmpty()) {
+   if (! sourceParents.isEmpty() && parents.isEmpty()) {
       return;
    }
 
@@ -1450,22 +1451,20 @@ void QSortFilterProxyModelPrivate::_q_sourceRowsInserted(
    const QModelIndex &source_parent, int start, int end)
 {
    source_items_inserted(source_parent, start, end, Qt::Vertical);
+
    if (update_source_sort_column() && dynamic_sortfilter) {
       //previous call to update_source_sort_column may fail if the model has no column.
       sort();   // now it should succeed so we need to make sure to sort again
    }
 }
 
-void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeRemoved(
-   const QModelIndex &source_parent, int start, int end)
+void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeRemoved(const QModelIndex &source_parent, int start, int end)
 {
    itemsBeingRemoved = QRowsRemoval(source_parent, start, end);
-   source_items_about_to_be_removed(source_parent, start, end,
-      Qt::Vertical);
+   source_items_about_to_be_removed(source_parent, start, end, Qt::Vertical);
 }
 
-void QSortFilterProxyModelPrivate::_q_sourceRowsRemoved(
-   const QModelIndex &source_parent, int start, int end)
+void QSortFilterProxyModelPrivate::_q_sourceRowsRemoved(const QModelIndex &source_parent, int start, int end)
 {
    itemsBeingRemoved = QRowsRemoval();
    source_items_removed(source_parent, start, end, Qt::Vertical);
@@ -1488,6 +1487,7 @@ void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeMoved(const QModelIndex
 
    QList<QPersistentModelIndex> parents;
    parents << q->mapFromSource(sourceParent);
+
    if (sourceParent != destParent) {
       parents << q->mapFromSource(destParent);
    }
@@ -2467,24 +2467,33 @@ bool QSortFilterProxyModel::lessThan(const QModelIndex &source_left, const QMode
    switch (l.userType()) {
       case QVariant::Int:
          return l.toInt() < r.toInt();
+
       case QVariant::UInt:
          return l.toUInt() < r.toUInt();
+
       case QVariant::LongLong:
          return l.toLongLong() < r.toLongLong();
+
       case QVariant::ULongLong:
          return l.toULongLong() < r.toULongLong();
       case QMetaType::Float:
          return l.toFloat() < r.toFloat();
+
       case QVariant::Double:
          return l.toDouble() < r.toDouble();
+
       case QVariant::Char:
          return l.toChar() < r.toChar();
+
       case QVariant::Date:
          return l.toDate() < r.toDate();
+
       case QVariant::Time:
          return l.toTime() < r.toTime();
+
       case QVariant::DateTime:
          return l.toDateTime() < r.toDateTime();
+
       case QVariant::String:
       default:
          if (d->sort_localeaware) {

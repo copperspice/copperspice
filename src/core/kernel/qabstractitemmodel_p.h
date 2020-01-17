@@ -109,9 +109,10 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       Change() : first(-1), last(-1) {}
       Change(const Change &c) : parent(c.parent), first(c.first), last(c.last), needsAdjust(c.needsAdjust) {}
       Change(const QModelIndex &p, int f, int l) : parent(p), first(f), last(l), needsAdjust(false) {}
-      QModelIndex parent;
-      int first, last;
 
+      QModelIndex parent;
+      int first;
+      int last;
 
       // In cases such as this:
       // - A
@@ -123,8 +124,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       //
       // If B is moved to above E, C is the source parent in the signal and its row is 2. When the move is
       // completed however, C is at row 1 and there is no row 2 at the same level in the model at all.
-      // The QModelIndex is adjusted to correct that in those cases before reporting it though the
-      // rowsMoved signal.
+      // The QModelIndex is adjusted to correct that in those cases before reporting it though the rowsMoved signal.
       bool needsAdjust;
 
       bool isValid() {

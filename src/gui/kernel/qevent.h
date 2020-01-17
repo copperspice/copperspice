@@ -1222,9 +1222,8 @@ class Q_GUI_EXPORT QTouchEvent : public QInputEvent
 Q_DECLARE_TYPEINFO(QTouchEvent::TouchPoint, Q_MOVABLE_TYPE);
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTouchEvent::TouchPoint::InfoFlags)
 
-
-
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTouchEvent::TouchPoint &);
+
 class Q_GUI_EXPORT QScrollPrepareEvent : public QEvent
 {
  public:
@@ -1293,9 +1292,5 @@ class Q_GUI_EXPORT QApplicationStateChangeEvent : public QEvent
  private:
    Qt::ApplicationState m_applicationState;
 };
-
-
-
-
 
 #endif

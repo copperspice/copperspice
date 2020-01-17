@@ -3291,7 +3291,7 @@ void QTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posIn
    Q_ASSERT(f.isValid());
 
    QTextObjectHandler handler = d->handlers.value(f.objectType());
-   if (!handler.component) {
+   if (! handler.component) {
       return;
    }
 

@@ -24,17 +24,15 @@
 #ifndef QGESTURE_H
 #define QGESTURE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qmetatype.h>
+#include <qobject.h>
+#include <qdatetime.h>
 #include <qevent.h>
+#include <qlist.h>
+#include <qmetatype.h>
+#include <qpoint.h>
+#include <qrect.h>
 
 #ifndef QT_NO_GESTURES
-
-QT_BEGIN_NAMESPACE
 
 class QGesturePrivate;
 class QPanGesturePrivate;
@@ -88,7 +86,6 @@ class Q_GUI_EXPORT QGesture : public QObject
    friend class QGestureRecognizer;
    friend class QGestureManager;
    friend class QGraphicsScenePrivate;
-
 };
 
 class Q_GUI_EXPORT QPanGesture : public QGesture
@@ -141,7 +138,6 @@ class Q_GUI_EXPORT QPanGesture : public QGesture
 
    // wrapper for overloaded method
    void cs_setVerticalVelocity(qreal velocity);
-
 };
 
 class Q_GUI_EXPORT QPinchGesture : public QGesture
@@ -220,7 +216,6 @@ class Q_GUI_EXPORT QPinchGesture : public QGesture
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPinchGesture::ChangeFlags)
 
-
 class Q_GUI_EXPORT QSwipeGesture : public QGesture
 {
    GUI_CS_OBJECT(QSwipeGesture)
@@ -258,7 +253,6 @@ class Q_GUI_EXPORT QSwipeGesture : public QGesture
 
    // wrapper for overloaded method
    void cs_setVelocity(qreal velocity);
-
 };
 
 class Q_GUI_EXPORT QTapGesture : public QGesture

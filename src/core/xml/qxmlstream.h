@@ -159,7 +159,9 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
 
    inline bool operator==(const QXmlStreamNamespaceDeclaration &other) const {
       return (prefix() == other.prefix() && namespaceUri() == other.namespaceUri());
-   }   inline bool operator!=(const QXmlStreamNamespaceDeclaration &other) const {
+   }
+
+   inline bool operator!=(const QXmlStreamNamespaceDeclaration &other) const {
       return !operator==(other);
    }
 

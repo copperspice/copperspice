@@ -6721,14 +6721,14 @@ void qt_memfill64(quint64 *dest, quint64 color, int count)
    qt_memfill_template<quint64>(dest, color, count);
 }
 
-#if !defined(__SSE2__)
+#if ! defined(__SSE2__)
 void qt_memfill16(quint16 *dest, quint16 color, int count)
 {
    qt_memfill_template<quint16>(dest, color, count);
 }
 #endif
 
-#if !defined(__SSE2__) && !defined(__ARM_NEON__)
+#if ! defined(__SSE2__) && !defined(__ARM_NEON__)
 #  ifdef QT_COMPILER_SUPPORTS_MIPS_DSP
 extern "C" void qt_memfill32_asm_mips_dsp(quint32 *, quint32, int);
 #  endif

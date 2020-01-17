@@ -26,7 +26,6 @@
 
 #include <qpair.h>
 #include <qurl.h>
-
 #include <qmultimedia.h>
 #include <qmediaobject.h>
 #include <qmediaencodersettings.h>
@@ -115,11 +114,7 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
    QUrl outputLocation() const;
    bool setOutputLocation(const QUrl &location);
 
-
    QUrl actualLocation() const;
-
-   State state() const;
-   Status status() const;
 
    Error error() const;
    QString errorString() const;
@@ -128,6 +123,9 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
 
    bool isMuted() const;
    qreal volume() const;
+
+   State state() const;
+   Status status() const;
 
    QStringList supportedContainers() const;
    QString containerDescription(const QString &format) const;

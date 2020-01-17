@@ -22,7 +22,7 @@
 ***********************************************************************/
 
 #include <qwindowsfontdatabase.h>
-#include <qwindowsfontdatabase_ft.h>             // for default font
+#include <qwindowsfontdatabase_ft.h>
 #include <qwindowscontext.h>
 #include <qwindowsfontengine.h>
 #include <qtwindows_additional.h>

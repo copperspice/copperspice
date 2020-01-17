@@ -316,6 +316,7 @@ void QT_FASTCALL comp_func_solid_SourceOver_sse2(uint *destPixels, int length, u
 {
    if ((const_alpha & qAlpha(color)) == 255) {
       qt_memfill32(destPixels, color, length);
+
    } else {
       if (const_alpha != 255) {
          color = BYTE_MUL(color, const_alpha);
@@ -344,8 +345,6 @@ void QT_FASTCALL comp_func_solid_SourceOver_sse2(uint *destPixels, int length, u
       }
    }
 }
-
-
 
 void qt_memfill16(quint16 *dest, quint16 value, int count)
 {
@@ -376,8 +375,7 @@ void qt_memfill16(quint16 *dest, quint16 value, int count)
    }
 }
 
-void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y,
-   quint32 color,
+void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint32 color,
    const uchar *src, int width, int height, int stride)
 {
    quint32 *dest = reinterpret_cast<quint32 *>(rasterBuffer->scanLine(y)) + x;

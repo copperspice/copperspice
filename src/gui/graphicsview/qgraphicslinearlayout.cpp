@@ -415,20 +415,22 @@ QGraphicsLayoutItem *QGraphicsLinearLayout::itemAt(int index) const
 void QGraphicsLinearLayout::setGeometry(const QRectF &rect)
 {
    Q_D(QGraphicsLinearLayout);
+
    QGraphicsLayout::setGeometry(rect);
    QRectF effectiveRect = geometry();
    qreal left, top, right, bottom;
    getContentsMargins(&left, &top, &right, &bottom);
+
    Qt::LayoutDirection visualDir = d->visualDirection();
    d->engine.setVisualDirection(visualDir);
+
    if (visualDir == Qt::RightToLeft) {
       qSwap(left, right);
    }
+
    effectiveRect.adjust(+left, +top, -right, -bottom);
 
-
    d->engine.setGeometries(effectiveRect, d->styleInfo());
-
 }
 
 /*!
@@ -437,9 +439,11 @@ void QGraphicsLinearLayout::setGeometry(const QRectF &rect)
 QSizeF QGraphicsLinearLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    Q_D(const QGraphicsLinearLayout);
+
    qreal left, top, right, bottom;
    getContentsMargins(&left, &top, &right, &bottom);
    const QSizeF extraMargins(left + right, top + bottom);
+
    return d->engine.sizeHint(which, constraint - extraMargins, d->styleInfo()) + extraMargins;
 }
 
@@ -449,10 +453,12 @@ QSizeF QGraphicsLinearLayout::sizeHint(Qt::SizeHint which, const QSizeF &constra
 void QGraphicsLinearLayout::invalidate()
 {
    Q_D(QGraphicsLinearLayout);
+
    d->engine.invalidate();
    if (d->m_styleInfo) {
       d->m_styleInfo->invalidate();
    }
+
    QGraphicsLayout::invalidate();
 }
 
@@ -464,6 +470,4 @@ void QGraphicsLinearLayout::dump(int indent) const
    (void) indent;
 }
 
-
-
-#endif //QT_NO_GRAPHICSVIEW
+#endif

@@ -1352,6 +1352,7 @@ void QTreeWidgetItem::setData(int column, int role, const QVariant &value)
             if (!found) {
                values[column].append(QWidgetItemData(role, value));
             }
+
          } else {
             if (model && this == model->headerItem) {
                model->setColumnCount(column + 1);
@@ -1364,6 +1365,7 @@ void QTreeWidgetItem::setData(int column, int role, const QVariant &value)
 
    if (model) {
       model->emitDataChanged(this, column);
+
       if (role == Qt::CheckStateRole) {
          QTreeWidgetItem *p;
          for (p = par; p && (p->itemFlags & Qt::ItemIsAutoTristate); p = p->par) {
@@ -1385,6 +1387,7 @@ QVariant QTreeWidgetItem::data(int column, int role) const
             return d->display.at(column);
          }
          break;
+
       case Qt::CheckStateRole:
          // special case for check state in tristate
          if (children.count() && (itemFlags & Qt::ItemIsAutoTristate)) {
@@ -1395,6 +1398,7 @@ QVariant QTreeWidgetItem::data(int column, int role) const
       default:
          if (column >= 0 && column < values.size()) {
             const QVector<QWidgetItemData> &column_values = values.at(column);
+
             for (int i = 0; i < column_values.count(); ++i)
                if (column_values.at(i).role == role) {
                   return column_values.at(i).value;
@@ -2469,23 +2473,16 @@ bool QTreeWidget::dropMimeData(QTreeWidgetItem *parent, int index,
    return model()->QAbstractItemModel::dropMimeData(data, action, index, 0, idx);
 }
 
-/*!
-  Returns the drop actions supported by this view.
-
-  \sa Qt::DropActions
-*/
 Qt::DropActions QTreeWidget::supportedDropActions() const
 {
    return model()->QAbstractItemModel::supportedDropActions() | Qt::MoveAction;
 }
-
 
 QList<QTreeWidgetItem *> QTreeWidget::items(const QMimeData *data) const
 {
    (void) data;
    return QList<QTreeWidgetItem *>();
 }
-
 
 QModelIndex QTreeWidget::indexFromItem(QTreeWidgetItem *item, int column) const
 {
@@ -2504,11 +2501,14 @@ QTreeWidgetItem *QTreeWidget::itemFromIndex(const QModelIndex &index) const
 void QTreeWidget::dropEvent(QDropEvent *event)
 {
    Q_D(QTreeWidget);
+
    if (event->source() == this && (event->dropAction() == Qt::MoveAction ||
          dragDropMode() == QAbstractItemView::InternalMove)) {
       QModelIndex topIndex;
+
       int col = -1;
       int row = -1;
+
       if (d->dropOn(event, &row, &col, &topIndex)) {
          QList<QModelIndex> idxs = selectedIndexes();
          QList<QPersistentModelIndex> indexes;
@@ -2658,6 +2658,5 @@ void QTreeWidget::_q_selectionChanged(const QItemSelection &selected, const QIte
    Q_D(QTreeWidget);
    d->_q_selectionChanged(selected, deselected);
 }
-
 
 #endif // QT_NO_TREEWIDGET

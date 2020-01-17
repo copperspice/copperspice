@@ -389,7 +389,6 @@ QMatchData QCompletionEngine::filterHistory()
    const bool isDirModel = false;
 #endif
 
-
 #ifndef QT_NO_FILESYSTEMMODEL
    const bool isFsModel = (qobject_cast<QFileSystemModel *>(source) != 0);
 #else
@@ -408,13 +407,16 @@ QMatchData QCompletionEngine::filterHistory()
    for (int i = 0; i < source->rowCount(); i++) {
       QString str = source->index(i, c->column).data().toString();
       if (str.startsWith(c->prefix, c->cs)
+
 #if ! defined(Q_OS_WIN)
-         && ((!isFsModel && !isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
+         && ((!isFsModel && ! isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
 #endif
+
       ) {
          m.indices.append(i);
       }
    }
+
    return m;
 }
 

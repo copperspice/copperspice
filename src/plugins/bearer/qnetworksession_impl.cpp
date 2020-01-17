@@ -84,11 +84,10 @@ void QNetworkSessionPrivateImpl::syncStateWithInterface()
         if (engine) {
             qRegisterMetaType<QNetworkConfigurationPrivatePointer>("QNetworkConfigurationPrivatePointer");
             connect(engine, SIGNAL(configurationChanged(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)),
-                    Qt::QueuedConnection);
+                    this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+
             connect(engine, SIGNAL(connectionError(QString,QBearerEngineImpl::ConnectionError)),
-                    this, SLOT(connectionError(QString,QBearerEngineImpl::ConnectionError)),
-                    Qt::QueuedConnection);
+                    this, SLOT(connectionError(QString,QBearerEngineImpl::ConnectionError)), Qt::QueuedConnection);
         }
         break;
 

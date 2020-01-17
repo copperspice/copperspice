@@ -131,9 +131,9 @@ Q_DECLARE_TYPEINFO(QResourceRoot, Q_MOVABLE_TYPE);
 Q_GLOBAL_STATIC_WITH_ARGS(QMutex, resourceMutex, (QMutex::Recursive))
 
 using ResourceList = QList<QResourceRoot *>;
-Q_GLOBAL_STATIC(ResourceList, resourceList)
 
-Q_GLOBAL_STATIC(QStringList, resourceSearchPaths)
+Q_GLOBAL_STATIC(ResourceList, resourceList)
+Q_GLOBAL_STATIC(QStringList,  resourceSearchPaths)
 
 class QResourcePrivate
 {

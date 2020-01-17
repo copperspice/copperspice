@@ -22,44 +22,15 @@
 ***********************************************************************/
 
 #include <qmatrix4x4.h>
-#include <QtCore/qmath.h>
-#include <QtCore/qvariant.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qtransform.h>
-
-QT_BEGIN_NAMESPACE
+#include <qmath.h>
+#include <qmatrix.h>
+#include <qtransform.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_MATRIX4X4
 
-/*!
-    \class QMatrix4x4
-    \brief The QMatrix4x4 class represents a 4x4 transformation matrix in 3D space.
-    \since 4.6
-    \ingroup painting-3D
-
-    \sa QVector3D, QGenericMatrix
-*/
-
 static const qreal inv_dist_to_plane = 1. / 1024.;
 
-/*!
-    \fn QMatrix4x4::QMatrix4x4()
-
-    Constructs an identity matrix.
-*/
-
-/*!
-    Constructs a matrix from the given 16 floating-point \a values.
-    The contents of the array \a values is assumed to be in
-    row-major order.
-
-    If the matrix has a special type (identity, translate, scale, etc),
-    the programmer should follow this constructor with a call to
-    optimize() if they wish QMatrix4x4 to optimize further
-    calls to translate(), scale(), etc.
-
-    \sa copyDataTo(), optimize()
-*/
 QMatrix4x4::QMatrix4x4(const qreal *values)
 {
    for (int row = 0; row < 4; ++row)
@@ -1138,6 +1109,7 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
          m.setToIdentity();
          m.m[0][0] = c;
          m.m[2][2] = 1.0f;
+
          if (y < 0.0f) {
             m.m[0][3] = -s * inv_dist_to_plane;
          } else {
@@ -1146,11 +1118,13 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
          m.flagBits = General;
          quick = true;
       }
+
    } else if (y == 0.0f && z == 0.0f) {
       // Rotate around the X axis.
       m.setToIdentity();
       m.m[1][1] = c;
       m.m[2][2] = 1.0f;
+
       if (x < 0.0f) {
          m.m[1][3] = s * inv_dist_to_plane;
       } else {
@@ -1159,7 +1133,8 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
       m.flagBits = General;
       quick = true;
    }
-   if (!quick) {
+
+   if (! quick) {
       qreal len = x * x + y * y + z * z;
       if (!qFuzzyIsNull(len - 1.0f) && !qFuzzyIsNull(len)) {
          len = qSqrt(len);
@@ -1185,8 +1160,10 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
       m.m[2][3] = 0.0f;
       m.m[3][3] = 1.0f;
    }
+
    int flags = flagBits;
    *this *= m;
+
    if (flags != Identity) {
       flagBits = flags | Rotation;
    } else {
@@ -1196,13 +1173,6 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
 
 #ifndef QT_NO_QUATERNION
 
-/*!
-    Multiples this matrix by another that rotates coordinates according
-    to a specified \a quaternion.  The \a quaternion is assumed to have
-    been normalized.
-
-    \sa scale(), translate(), QQuaternion
-*/
 void QMatrix4x4::rotate(const QQuaternion &quaternion)
 {
    // Algorithm from: http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q54
@@ -1243,15 +1213,6 @@ void QMatrix4x4::rotate(const QQuaternion &quaternion)
 
 #endif
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that applies an orthographic
-    projection for a window with boundaries specified by \a rect.
-    The near and far clipping planes will be -1 and 1 respectively.
-
-    \sa frustum(), perspective()
-*/
 void QMatrix4x4::ortho(const QRect &rect)
 {
    // Note: rect.right() and rect.bottom() subtract 1 in QRect,
@@ -1261,28 +1222,11 @@ void QMatrix4x4::ortho(const QRect &rect)
    ortho(rect.x(), rect.x() + rect.width(), rect.y() + rect.height(), rect.y(), -1.0f, 1.0f);
 }
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that applies an orthographic
-    projection for a window with boundaries specified by \a rect.
-    The near and far clipping planes will be -1 and 1 respectively.
-
-    \sa frustum(), perspective()
-*/
 void QMatrix4x4::ortho(const QRectF &rect)
 {
    ortho(rect.left(), rect.right(), rect.bottom(), rect.top(), -1.0f, 1.0f);
 }
 
-/*!
-    Multiplies this matrix by another that applies an orthographic
-    projection for a window with lower-left corner (\a left, \a bottom),
-    upper-right corner (\a right, \a top), and the specified \a nearPlane
-    and \a farPlane clipping planes.
-
-    \sa frustum(), perspective()
-*/
 void QMatrix4x4::ortho(qreal left, qreal right, qreal bottom, qreal top, qreal nearPlane, qreal farPlane)
 {
    // Bail out if the projection volume is zero-sized.
@@ -1291,22 +1235,19 @@ void QMatrix4x4::ortho(qreal left, qreal right, qreal bottom, qreal top, qreal n
    }
 
    // Construct the projection.
-   qreal width = right - left;
+   qreal width     = right - left;
    qreal invheight = top - bottom;
-   qreal clip = farPlane - nearPlane;
+   qreal clip      = farPlane - nearPlane;
+
 #ifndef QT_NO_VECTOR3D
    if (clip == 2.0f && (nearPlane + farPlane) == 0.0f) {
       // We can express this projection as a translate and scale
       // which will be more efficient to modify with further
       // transformations than producing a "General" matrix.
-      translate(QVector3D
-                (-(left + right) / width,
-                 -(top + bottom) / invheight,
-                 0.0f));
-      scale(QVector3D
-            (2.0f / width,
-             2.0f / invheight,
-             -1.0f));
+
+      translate(QVector3D(-(left + right) / width, -(top + bottom) / invheight, 0.0f));
+      scale(QVector3D(2.0f / width, 2.0f / invheight, -1.0f));
+
       return;
    }
 #endif
@@ -1339,14 +1280,6 @@ void QMatrix4x4::ortho(qreal left, qreal right, qreal bottom, qreal top, qreal n
    return;
 }
 
-/*!
-    Multiplies this matrix by another that applies a perspective
-    frustum projection for a window with lower-left corner (\a left, \a bottom),
-    upper-right corner (\a right, \a top), and the specified \a nearPlane
-    and \a farPlane clipping planes.
-
-    \sa ortho(), perspective()
-*/
 void QMatrix4x4::frustum(qreal left, qreal right, qreal bottom, qreal top, qreal nearPlane, qreal farPlane)
 {
    // Bail out if the projection volume is zero-sized.
@@ -1384,14 +1317,7 @@ void QMatrix4x4::frustum(qreal left, qreal right, qreal bottom, qreal top, qreal
    QMatrix4x4 &self = *this;
    self *= tmp;
 }
-/*!
-    Multiplies this matrix by another that applies a perspective
-    projection.  The field of view will be \a angle degrees within
-    a window with a given \a aspect ratio.  The projection will
-    have the specified \a nearPlane and \a farPlane clipping planes.
 
-    \sa ortho(), frustum()
-*/
 void QMatrix4x4::perspective(qreal angle, qreal aspect, qreal nearPlane, qreal farPlane)
 {
    // Bail out if the projection volume is zero-sized.
@@ -1438,16 +1364,10 @@ void QMatrix4x4::perspective(qreal angle, qreal aspect, qreal nearPlane, qreal f
 
 #ifndef QT_NO_VECTOR3D
 
-/*!
-    Multiplies this matrix by another that applies an \a eye position
-    transformation.  The \a center value indicates the center of the
-    view that the \a eye is looking at.  The \a up value indicates
-    which direction should be considered up with respect to the \a eye.
-*/
 void QMatrix4x4::lookAt(const QVector3D &eye, const QVector3D &center, const QVector3D &up)
 {
-   QVector3D forward = (center - eye).normalized();
-   QVector3D side = QVector3D::crossProduct(forward, up).normalized();
+   QVector3D forward  = (center - eye).normalized();
+   QVector3D side     = QVector3D::crossProduct(forward, up).normalized();
    QVector3D upVector = QVector3D::crossProduct(side, forward);
 
    QMatrix4x4 tmp(1);
@@ -1962,4 +1882,4 @@ QDataStream &operator>>(QDataStream &stream, QMatrix4x4 &matrix)
 
 #endif // QT_NO_MATRIX4X4
 
-QT_END_NAMESPACE
+

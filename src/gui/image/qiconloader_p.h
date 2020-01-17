@@ -25,17 +25,17 @@
 #define QIconLoader_P_H
 
 #include <qglobal.h>
+
 #ifndef QT_NO_ICON
 
 #include <QIcon>
-#include <QIconEngine>
-#include <QPixmapCache>
+#include <qiconengine.h>
+#include <qpixmapcache.h>
 #include <qicon_p.h>
 #include <qhash.h>
 #include <qvector.h>
 
 #include <qfactoryloader_p.h>
-
 
 class QIconLoader;
 

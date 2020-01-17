@@ -24,10 +24,8 @@
 #ifndef QQUATERNION_H
 #define QQUATERNION_H
 
-#include <QtGui/qvector3d.h>
-#include <QtGui/qvector4d.h>
-
-QT_BEGIN_NAMESPACE
+#include <qvector3d.h>
+#include <qvector4d.h>
 
 #ifndef QT_NO_QUATERNION
 
@@ -321,13 +319,9 @@ inline QVector4D QQuaternion::toVector4D() const
 
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QQuaternion &q);
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QQuaternion &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QQuaternion &);
-#endif
 
 #endif
-
-QT_END_NAMESPACE
 
 #endif

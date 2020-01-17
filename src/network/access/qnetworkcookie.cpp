@@ -46,51 +46,23 @@ QNetworkCookie::QNetworkCookie(const QByteArray &name, const QByteArray &value)
    d->value = value;
 }
 
-/*!
-    Creates a new QNetworkCookie object by copying the contents of \a
-    other.
-*/
 QNetworkCookie::QNetworkCookie(const QNetworkCookie &other)
    : d(other.d)
 {
 }
 
-/*!
-    Destroys this QNetworkCookie object.
-*/
 QNetworkCookie::~QNetworkCookie()
 {
    // QSharedDataPointer auto deletes
    d = 0;
 }
 
-/*!
-    Copies the contents of the QNetworkCookie object \a other to this
-    object.
-*/
 QNetworkCookie &QNetworkCookie::operator=(const QNetworkCookie &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    \fn bool QNetworkCookie::operator!=(const QNetworkCookie &other) const
-
-    Returns true if this cookie is not equal to \a other.
-
-    \sa operator==()
-*/
-
-/*!
-    Returns true if this cookie is equal to \a other. This function
-    only returns true if all fields of the cookie are the same.
-
-    However, in some contexts, two cookies of the same name could be
-    considered equal.
-
-    \sa operator!=()
-*/
 bool QNetworkCookie::operator==(const QNetworkCookie &other) const
 {
    if (d == other.d) {
@@ -125,145 +97,63 @@ bool QNetworkCookie::isHttpOnly() const
    return d->httpOnly;
 }
 
-/*!
-    \since 4.5
-
-    Sets this cookie's "HttpOnly" flag to \a enable.
-*/
 void QNetworkCookie::setHttpOnly(bool enable)
 {
    d->httpOnly = enable;
 }
 
-/*!
-    Returns true if this cookie is a session cookie. A session cookie
-    is a cookie which has no expiration date, which means it should be
-    discarded when the application's concept of session is over
-    (usually, when the application exits).
-
-    \sa expirationDate(), setExpirationDate()
-*/
 bool QNetworkCookie::isSessionCookie() const
 {
    return !d->expirationDate.isValid();
 }
 
-/*!
-    Returns the expiration date for this cookie. If this cookie is a
-    session cookie, the QDateTime returned will not be valid. If the
-    date is in the past, this cookie has already expired and should
-    not be sent again back to a remote server.
-
-    The expiration date corresponds to the parameters of the "expires"
-    entry in the cookie string.
-
-    \sa isSessionCookie(), setExpirationDate()
-*/
 QDateTime QNetworkCookie::expirationDate() const
 {
    return d->expirationDate;
 }
 
-/*!
-    Sets the expiration date of this cookie to \a date. Setting an
-    invalid expiration date to this cookie will mean it's a session
-    cookie.
-
-    \sa isSessionCookie(), expirationDate()
-*/
 void QNetworkCookie::setExpirationDate(const QDateTime &date)
 {
    d->expirationDate = date;
 }
 
-/*!
-    Returns the domain this cookie is associated with. This
-    corresponds to the "domain" field of the cookie string.
 
-    Note that the domain here may start with a dot, which is not a
-    valid hostname. However, it means this cookie matches all
-    hostnames ending with that domain name.
-
-    \sa setDomain()
-*/
 QString QNetworkCookie::domain() const
 {
    return d->domain;
 }
 
-/*!
-    Sets the domain associated with this cookie to be \a domain.
 
-    \sa domain()
-*/
 void QNetworkCookie::setDomain(const QString &domain)
 {
    d->domain = domain;
 }
 
-/*!
-    Returns the path associated with this cookie. This corresponds to
-    the "path" field of the cookie string.
-
-    \sa setPath()
-*/
 QString QNetworkCookie::path() const
 {
    return d->path;
 }
 
-/*!
-    Sets the path associated with this cookie to be \a path.
-
-    \sa path()
-*/
 void QNetworkCookie::setPath(const QString &path)
 {
    d->path = path;
 }
 
-/*!
-    Returns the name of this cookie. The only mandatory field of a
-    cookie is its name, without which it is not considered valid.
-
-    \sa setName(), value()
-*/
 QByteArray QNetworkCookie::name() const
 {
    return d->name;
 }
 
-/*!
-    Sets the name of this cookie to be \a cookieName. Note that
-    setting a cookie name to an empty QByteArray will make this cookie
-    invalid.
-
-    \sa name(), value()
-*/
 void QNetworkCookie::setName(const QByteArray &cookieName)
 {
    d->name = cookieName;
 }
 
-/*!
-    Returns this cookies value, as specified in the cookie
-    string. Note that a cookie is still valid if its value is empty.
-
-    Cookie name-value pairs are considered opaque to the application:
-    that is, their values don't mean anything.
-
-    \sa setValue(), name()
-*/
 QByteArray QNetworkCookie::value() const
 {
    return d->value;
 }
 
-/*!
-    Sets the value of this cookie to be \a value.
-
-    \sa value(), name()
-*/
 void QNetworkCookie::setValue(const QByteArray &value)
 {
    d->value = value;
@@ -305,37 +195,6 @@ static QPair<QByteArray, QByteArray> nextField(const QByteArray &text, int &posi
    return qMakePair(first, second);
 }
 
-/*!
-    \enum QNetworkCookie::RawForm
-
-    This enum is used with the toRawForm() function to declare which
-    form of a cookie shall be returned.
-
-    \value NameAndValueOnly     makes toRawForm() return only the
-        "NAME=VALUE" part of the cookie, as suitable for sending back
-        to a server in a client request's "Cookie:" header. Multiple
-        cookies are separated by a semi-colon in the "Cookie:" header
-        field.
-
-    \value Full                 makes toRawForm() return the full
-        cookie contents, as suitable for sending to a client in a
-        server's "Set-Cookie:" header.
-
-    Note that only the Full form of the cookie can be parsed back into
-    its original contents.
-
-    \sa toRawForm(), parseCookies()
-*/
-
-/*!
-    Returns the raw form of this QNetworkCookie. The QByteArray
-    returned by this function is suitable for an HTTP header, either
-    in a server response (the Set-Cookie header) or the client request
-    (the Cookie header). You can choose from one of two formats, using
-    \a form.
-
-    \sa parseCookies()
-*/
 QByteArray QNetworkCookie::toRawForm(RawForm form) const
 {
    QByteArray result;

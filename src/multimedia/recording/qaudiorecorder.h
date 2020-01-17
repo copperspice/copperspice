@@ -26,7 +26,6 @@
 
 #include <qstring.h>
 #include <qpair.h>
-
 #include <qmediarecorder.h>
 #include <qmediaobject.h>
 #include <qmediaencodersettings.h>

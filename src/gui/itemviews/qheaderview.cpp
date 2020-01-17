@@ -1779,6 +1779,7 @@ void QHeaderView::paintEvent(QPaintEvent *e)
       }
       painter.save();
       logical = logicalIndex(i);
+
       if (d->orientation == Qt::Horizontal) {
          currentSectionRect.setRect(sectionViewportPosition(logical), 0, sectionSize(logical), height);
       } else {
@@ -1799,7 +1800,9 @@ void QHeaderView::paintEvent(QPaintEvent *e)
 
    QStyleOption opt;
    opt.init(this);
+
    // Paint the area beyond where there are indexes
+
    if (d->reverse()) {
       opt.state |= QStyle::State_Horizontal;
       if (currentSectionRect.left() > translatedEventRect.left()) {
@@ -1997,7 +2000,9 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
 void QHeaderView::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QHeaderView);
+
    int pos = d->orientation == Qt::Horizontal ? e->x() : e->y();
+
    switch (d->state) {
       case QHeaderViewPrivate::MoveSection:
          if (! d->sectionIndicator->isHidden()) {
@@ -2027,22 +2032,28 @@ void QHeaderView::mouseReleaseEvent(QMouseEvent *e)
       case QHeaderViewPrivate::NoState:
          if (d->clickableSections) {
             int section = logicalIndexAt(pos);
+
             if (section != -1 && section == d->pressed) {
                d->flipSortIndicator(section);
                emit sectionClicked(section);
             }
+
             if (d->pressed != -1) {
                updateSection(d->pressed);
             }
          }
+
          break;
+
       case QHeaderViewPrivate::ResizeSection:
          d->originalSize = -1;
          d->clearCascadingSections();
          break;
+
       default:
          break;
    }
+
    d->state = QHeaderViewPrivate::NoState;
    d->pressed = -1;
 }

@@ -27,7 +27,6 @@
 #include <qurl.h>
 #include <qstringlist.h>
 #include <qmetaobject.h>
-
 #include <qaudioformat.h>
 #include <qaudioinputselectorcontrol.h>
 #include <qmediaservice.h>

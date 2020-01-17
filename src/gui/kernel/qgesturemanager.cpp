@@ -43,7 +43,7 @@
 #ifndef QT_NO_GESTURES
 
 Q_DECLARE_METATYPE(Qt::GestureState);
-#if !  defined(Q_OS_DARWIN)
+#if ! defined(Q_OS_DARWIN)
 static inline int panTouchPoints()
 {
    // Override by environment variable for testing.
@@ -82,17 +82,18 @@ QGestureManager::QGestureManager(QObject *parent)
    registerGestureRecognizer(new QTapGestureRecognizer);
 #endif
 
-
    registerGestureRecognizer(new QTapAndHoldGestureRecognizer);
 }
 
 QGestureManager::~QGestureManager()
 {
    qDeleteAll(m_recognizers.values());
+
    for (QGestureRecognizer *recognizer : m_obsoleteGestures.keys()) {
       qDeleteAll(m_obsoleteGestures.value(recognizer));
       delete recognizer;
    }
+
    m_obsoleteGestures.clear();
 }
 

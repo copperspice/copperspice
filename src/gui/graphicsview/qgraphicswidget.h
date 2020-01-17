@@ -38,7 +38,7 @@ class QGraphicsSceneResizeEvent;
 class QStyle;
 class QStyleOption;
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsWidgetPrivate;
 

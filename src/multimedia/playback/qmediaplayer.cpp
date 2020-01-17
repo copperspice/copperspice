@@ -23,21 +23,6 @@
 
 #include <qmediaplayer.h>
 
-#include <qaudiorolecontrol.h>
-#include <qmediaservice.h>
-#include <qmediaplayercontrol.h>
-#include <qmediaplaylist.h>
-
-#include <qmediaobject_p.h>
-#include <qmediaserviceprovider_p.h>
-#include <qvideosurfaceoutput_p.h>
-#include <qmediaplaylistcontrol_p.h>
-#include <qmediaplaylistsourcecontrol_p.h>
-#include <qmedianetworkaccesscontrol.h>
-
-#include <qvideowidget.h>
-#include <qgraphicsvideoitem.h>
-
 #include <qcoreevent.h>
 #include <qmetaobject.h>
 #include <qtimer.h>
@@ -45,6 +30,19 @@
 #include <qpointer.h>
 #include <qfileinfo.h>
 #include <qtemporaryfile.h>
+#include <qaudiorolecontrol.h>
+#include <qmediaservice.h>
+#include <qmediaplayercontrol.h>
+#include <qmediaplaylist.h>
+#include <qmedianetworkaccesscontrol.h>
+#include <qvideowidget.h>
+#include <qgraphicsvideoitem.h>
+
+#include <qmediaobject_p.h>
+#include <qmediaserviceprovider_p.h>
+#include <qvideosurfaceoutput_p.h>
+#include <qmediaplaylistcontrol_p.h>
+#include <qmediaplaylistsourcecontrol_p.h>
 
 static int qRegisterMediaPlayerMetaTypes()
 {

@@ -24,11 +24,9 @@
 #ifndef QGRAPHICSLAYOUT_H
 #define QGRAPHICSLAYOUT_H
 
-#include <QtGui/qgraphicslayoutitem.h>
+#include <qgraphicslayoutitem.h>
 
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsLayoutPrivate;
 class QGraphicsLayoutItem;
@@ -69,8 +67,8 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 
 CS_DECLARE_INTERFACE(QGraphicsLayout, "com.copperspice.QGraphicsLayout")
 
-#endif
 
+#endif
 
 #endif
 

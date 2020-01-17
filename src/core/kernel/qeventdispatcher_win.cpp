@@ -849,7 +849,7 @@ void QEventDispatcherWin32::registerTimer(int timerId, int interval, Qt::TimerTy
       return;
 
    } else if (object->thread() != thread() || thread() != QThread::currentThread()) {
-      qWarning("QObject::startTimer: timers cannot be started from another thread");
+      qWarning("QObject::startTimer: timers can not be started from another thread");
       return;
    }
 #endif
@@ -860,11 +860,12 @@ void QEventDispatcherWin32::registerTimer(int timerId, int interval, Qt::TimerTy
    // (QCoreApplication::closingDown() is set too late to be used here)
    if (d->closingDown)
       return;
+
    WinTimerInfo *t = new WinTimerInfo;
    t->dispatcher   = this;
    t->timerId      = timerId;
    t->interval     = interval;
-   t->timerType   = timerType;
+   t->timerType    = timerType;
    t->obj          = object;
    t->inTimerEvent = false;
    t->fastTimerId  = 0;
@@ -899,7 +900,7 @@ bool QEventDispatcherWin32::unregisterTimer(int timerId)
    }
 
    WinTimerInfo *t = d->timerDict.value(timerId);
-   if (!t) {
+   if (! t) {
       return false;
    }
 
@@ -935,6 +936,7 @@ bool QEventDispatcherWin32::unregisterTimers(QObject *object)
 
    for (int i = 0; i < d->timerVec.size(); i++) {
       t = d->timerVec.at(i);
+
       if (t && t->obj == object) {                // object found
          d->timerDict.remove(t->timerId);
          d->timerVec.removeAt(i);
@@ -948,7 +950,7 @@ bool QEventDispatcherWin32::unregisterTimers(QObject *object)
 QList<QEventDispatcherWin32::TimerInfo>
 QEventDispatcherWin32::registeredTimers(QObject *object) const
 {
-   if (!object) {
+   if (! object) {
       qWarning("QEventDispatcherWin32:registeredTimers: invalid argument");
       return QList<TimerInfo>();
    }

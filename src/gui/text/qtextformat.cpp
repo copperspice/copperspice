@@ -573,13 +573,6 @@ int QTextFormat::intProperty(int propertyId) const
    return prop.toInt();
 }
 
-/*!
-    Returns the value of the property specified by \a propertyId. If the
-    property isn't of QVariant::Double or QMetaType::Float type, 0 is
-    returned instead.
-
-    \sa setProperty() boolProperty() intProperty() stringProperty() colorProperty() lengthProperty() lengthVectorProperty() Property
-*/
 qreal QTextFormat::doubleProperty(int propertyId) const
 {
    if (!d) {
@@ -592,13 +585,6 @@ qreal QTextFormat::doubleProperty(int propertyId) const
    return qvariant_cast<qreal>(prop);
 }
 
-/*!
-    Returns the value of the property given by \a propertyId; if the
-    property isn't of QVariant::String type, an empty string is
-    returned instead.
-
-    \sa setProperty() boolProperty() intProperty() doubleProperty() colorProperty() lengthProperty() lengthVectorProperty() Property
-*/
 QString QTextFormat::stringProperty(int propertyId) const
 {
    if (!d) {
@@ -611,33 +597,20 @@ QString QTextFormat::stringProperty(int propertyId) const
    return prop.toString();
 }
 
-/*!
-    Returns the value of the property given by \a propertyId; if the
-    property isn't of QVariant::Color type, an invalid color is
-    returned instead.
-
-    \sa setProperty(), boolProperty(), intProperty(), doubleProperty(),
-        stringProperty(), lengthProperty(), lengthVectorProperty(), Property
-*/
 QColor QTextFormat::colorProperty(int propertyId) const
 {
    if (!d) {
       return QColor();
    }
+
    const QVariant prop = d->property(propertyId);
    if (prop.userType() != QVariant::Color) {
       return QColor();
    }
+
    return qvariant_cast<QColor>(prop);
 }
 
-/*!
-    Returns the value of the property given by \a propertyId; if the
-    property isn't of QVariant::Pen type, Qt::NoPen is
-    returned instead.
-
-    \sa setProperty() boolProperty() intProperty() doubleProperty() stringProperty() lengthProperty() lengthVectorProperty() Property
-*/
 QPen QTextFormat::penProperty(int propertyId) const
 {
    if (!d) {
@@ -1084,14 +1057,14 @@ QList<QTextOption::Tab> QTextBlockFormat::tabPositions() const
    QList<QTextOption::Tab> answer;
    QList<QVariant> variantsList = qvariant_cast<QList<QVariant>>(variant);
    QList<QVariant>::iterator iter = variantsList.begin();
+
    while (iter != variantsList.end()) {
       answer.append( qvariant_cast<QTextOption::Tab>(*iter));
       ++iter;
    }
+
    return answer;
 }
-
-
 
 QTextListFormat::QTextListFormat()
    : QTextFormat(ListFormat)

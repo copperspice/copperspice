@@ -24,16 +24,14 @@
 #ifndef QGRAPHICSEFFECT_H
 #define QGRAPHICSEFFECT_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qrect.h>
-#include <QtGui/qcolor.h>
-#include <QtGui/qbrush.h>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qcolor.h>
+#include <qbrush.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_GRAPHICSEFFECT
-
-QT_BEGIN_NAMESPACE
 
 class QGraphicsItem;
 class QStyleOption;
@@ -116,7 +114,6 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsEffect::ChangeFlags)
-
 
 class Q_GUI_EXPORT QGraphicsColorizeEffect: public QGraphicsEffect
 {
@@ -341,7 +338,6 @@ inline void QGraphicsDropShadowEffect::cs_setOffset(const QPointF &ofs)
    setOffset(ofs);
 }
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_GRAPHICSEFFECT
 

@@ -113,8 +113,7 @@ bool QWin32PrintEngine::begin(QPaintDevice *pdev)
       d->reinit = false;
    }
 
-   // ### set default colors and stuff...
-
+   // set default colors, etc
    bool ok = d->state == QPrinter::Idle;
 
    if (! d->hdc) {

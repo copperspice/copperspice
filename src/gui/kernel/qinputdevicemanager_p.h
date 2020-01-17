@@ -27,7 +27,6 @@
 #include <qobject.h>
 #include <qpoint.h>
 
-
 class QInputDeviceManagerPrivate;
 
 class Q_GUI_EXPORT QInputDeviceManager : public QObject
@@ -57,7 +56,6 @@ class Q_GUI_EXPORT QInputDeviceManager : public QObject
 
  protected:
    QScopedPointer<QInputDeviceManagerPrivate> d_ptr;
-
 };
 
 class Q_GUI_EXPORT QInputDeviceManagerPrivate

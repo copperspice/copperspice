@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
+#include <qwidget.h>
+
 #include <qapplication.h>
-#include <qapplication_p.h>
+
 #include <qbrush.h>
 #include <qcursor.h>
-#include <qdesktopwidget_p.h>
 #include <qevent.h>
-
 #include <qlayout.h>
 #include <qmenu.h>
 #include <qmetaobject.h>
@@ -37,65 +37,52 @@
 #include <qstyle.h>
 #include <qstylefactory.h>
 #include <qvariant.h>
-#include <qwidget.h>
 #include <qstyleoption.h>
 #include <qstylehints.h>
+
+#include <qapplication_p.h>
+#include <qdesktopwidget_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>
 #endif
 
-
+#include <qbackingstore.h>
 #include <qplatform_window.h>
 #include <qplatform_backingstore.h>
-
-#include <qwidgetwindow_p.h>
 #include <qpainter.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qdebug.h>
-#include <qstylesheetstyle_p.h>
-#include <qstyle_p.h>
-
 #include <qfileinfo.h>
-#include <qhighdpiscaling_p.h>
-
 #include <qinputmethod.h>
 #include <qopenglcontext.h>
-#include <qopenglcontext_p.h>
-
 #include <qoffscreensurface.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsscene.h>
+#include <qabstractscrollarea.h>
 
+#include <platformheaders/qxcbwindowfunctions.h>
+
+#include <qstylesheetstyle_p.h>
+#include <qstyle_p.h>
+#include <qhighdpiscaling_p.h>
+#include <qopenglcontext_p.h>
+#include <qwidgetwindow_p.h>
 #include <qgraphicseffect_p.h>
-
-#include <qbackingstore.h>
 #include <qwidgetbackingstore_p.h>
-
-
 #include <qpaintengine_raster_p.h>
-
 #include <qwidget_p.h>
 #include <qwindow_p.h>
 #include <qaction_p.h>
 #include <qlayout_p.h>
-#include <qgraphicsproxywidget.h>
-#include <qgraphicsscene.h>
 #include <qgraphicsproxywidget_p.h>
-#include <QtGui/qabstractscrollarea.h>
 #include <qabstractscrollarea_p.h>
 #include <qevent_p.h>
-
-
 #include <qgesturemanager_p.h>
-
-
-
 #include <qwindowcontainer_p.h>
-#include <platformheaders/qxcbwindowfunctions.h>
 
 static bool qt_enable_backingstore = true;
-
-
 
 static inline bool qRectIntersects(const QRect &r1, const QRect &r2)
 {
@@ -219,23 +206,13 @@ QWidgetPrivate::QWidgetPrivate()
 #if defined(Q_OS_WIN)
    , noPaintOnScreen(0)
 #endif
-
-
-
-
-
-
 {
    if (! qApp) {
       qFatal("QWidget: Must construct a QApplication before a QWidget");
       return;
    }
 
-
-
    memset(high_attributes, 0, sizeof(high_attributes));
-
-
 
 #ifdef QWIDGET_EXTRA_DEBUG
    static int count = 0;
@@ -379,9 +356,8 @@ void QWidget::setAutoFillBackground(bool enabled)
    d->updateIsOpaque();
 }
 
-QWidgetMapper *QWidgetPrivate::mapper = 0;          // widget with wid
-QWidgetSet *QWidgetPrivate::allWidgets = 0;         // widgets with no wid
-
+QWidgetMapper *QWidgetPrivate::mapper  = nullptr;          // widget with wid
+QWidgetSet *QWidgetPrivate::allWidgets = nullptr;         // widgets with no wid
 
 QRegion qt_dirtyRegion(QWidget *widget)
 {
@@ -419,12 +395,12 @@ QWidget::QWidget(QWidget *parent, Qt::WindowFlags f)
    d_ptr->q_ptr = this;
    Q_D(QWidget);
 
-   QT_TRY {
+   try {
       d->init(parent, f);
 
-   } QT_CATCH(...) {
+   } catch(...) {
       QWidgetExceptionCleaner::cleanup(this, d_func());
-      QT_RETHROW;
+      throw;
    }
 }
 
@@ -435,12 +411,12 @@ QWidget::QWidget(QWidgetPrivate &dd, QWidget *parent, Qt::WindowFlags f)
    d_ptr->q_ptr = this;
    Q_D(QWidget);
 
-   QT_TRY {
+   try {
       d->init(parent, f);
 
-   } QT_CATCH(...) {
+   } catch(...) {
       QWidgetExceptionCleaner::cleanup(this, d_func());
-      QT_RETHROW;
+      throw;
    }
 }
 
@@ -522,7 +498,6 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
    if (w->testAttribute(Qt::WA_TransparentForMouseEvents)) {
       flags |= Qt::WindowTransparentForInput;
    }
-
 }
 
 void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
@@ -610,8 +585,6 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
 
    data.fnt = QFont(data.fnt, q);
 
-
-
    q->setAttribute(Qt::WA_PendingMoveEvent);
    q->setAttribute(Qt::WA_PendingResizeEvent);
 
@@ -629,7 +602,6 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
 
    extraPaintEngine = 0;
 }
-
 
 void QWidgetPrivate::createRecursively()
 {
@@ -759,6 +731,7 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
    // Note that this only helps on platforms that handle window creation synchronously.
    d->updateFrameStrut();
 }
+
 void q_createNativeChildrenAndSetParent(const QWidget *parentWidget)
 {
    QObjectList children = parentWidget->children();
@@ -910,6 +883,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
       win->setVisible(true);
    }
 }
+
 #ifdef Q_OS_WIN
 static const char activeXNativeParentHandleProperty[] = "_q_embedded_native_parent_handle";
 #endif
@@ -1283,7 +1257,6 @@ void QWidgetPrivate::deleteTLSysExtra()
 
    }
 }
-
 
 bool QWidgetPrivate::isOverlapped(const QRect &rect) const
 {
@@ -2103,13 +2076,12 @@ void QWidget::setStyle(QStyle *style)
 void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate, bool)
 {
    Q_Q(QWidget);
+
    QStyle *oldStyle  = q->style();
 
 #ifndef QT_NO_STYLE_STYLESHEET
    QPointer<QStyle> origStyle;
 #endif
-
-
 
    createExtra();
 
@@ -2124,10 +2096,7 @@ void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate, bool)
 
       if (polished) {
          oldStyle->unpolish(q);
-
          q->style()->polish(q);
-
-
       }
    }
 
@@ -2229,6 +2198,7 @@ void QWidget::setWindowModality(Qt::WindowModality windowModality)
 void QWidgetPrivate::setModal_sys()
 {
    Q_Q(QWidget);
+
    if (q->windowHandle()) {
       q->windowHandle()->setModality(q->windowModality());
    }
@@ -2259,7 +2229,6 @@ bool QWidget::isMaximized() const
 {
    return data->window_state & Qt::WindowMaximized;
 }
-
 
 Qt::WindowStates QWidget::windowState() const
 {
@@ -2487,6 +2456,7 @@ void QWidgetPrivate::setEnabled_helper(bool enable)
       cs_internal_set_cursor(q, false);
    }
 #endif
+
 #ifndef QT_NO_IM
    if (q->testAttribute(Qt::WA_InputMethodEnabled) && q->hasFocus()) {
       QWidget *focusWidget = effectiveFocusWidget();
@@ -2515,12 +2485,13 @@ bool QWidget::acceptDrops() const
 void QWidget::setAcceptDrops(bool on)
 {
    setAttribute(Qt::WA_AcceptDrops, on);
-
 }
 
 void QWidgetPrivate::registerDropSite(bool on)
 {
+   (void) on;
 }
+
 void QWidget::setDisabled(bool disable)
 {
    setEnabled(!disable);
@@ -2573,7 +2544,6 @@ QPoint QWidget::pos() const
       }
 
    return result;
-
 }
 
 QRect QWidget::normalGeometry() const
@@ -2621,6 +2591,7 @@ QRegion QWidget::childrenRegion() const
          }
       }
    }
+
    return r;
 }
 
@@ -2724,6 +2695,7 @@ void QWidget::setMinimumSize(int minw, int minh)
    if (isWindow()) {
       d->setConstraints_sys();
    }
+
    if (minw > width() || minh > height()) {
       bool resized = testAttribute(Qt::WA_Resized);
       bool maximized = isMaximized();
@@ -3058,13 +3030,13 @@ void QWidget::setForegroundRole(QPalette::ColorRole role)
 
 const QPalette &QWidget::palette() const
 {
-   if (!isEnabled()) {
+   if (! isEnabled()) {
       data->pal.setCurrentColorGroup(QPalette::Disabled);
 
-   } else if ((!isVisible() || isActiveWindow())
+   } else if ((! isVisible() || isActiveWindow())
 
 #if defined(Q_OS_WIN)
-      && !QApplicationPrivate::isBlockedByModal(const_cast<QWidget *>(this))
+      && ! QApplicationPrivate::isBlockedByModal(const_cast<QWidget *>(this))
 #endif
    ) {
       data->pal.setCurrentColorGroup(QPalette::Active);
@@ -3383,12 +3355,16 @@ void QWidget::setCursor(const QCursor &cursor)
 
 void QWidgetPrivate::setCursor_sys(const QCursor &cursor)
 {
+   (void) cursor;
+
    Q_Q(QWidget);
    cs_internal_set_cursor(q, false);
 }
+
 void QWidget::unsetCursor()
 {
    Q_D(QWidget);
+
    if (d->extra) {
       delete d->extra->curs;
       d->extra->curs = 0;
@@ -7178,7 +7154,6 @@ void QWidget::closeEvent(QCloseEvent *event)
 }
 
 #ifndef QT_NO_CONTEXTMENU
-
 void QWidget::contextMenuEvent(QContextMenuEvent *event)
 {
    event->ignore();
@@ -7239,7 +7214,6 @@ void QWidget::setInputMethodHints(Qt::InputMethodHints hints)
 #endif
 }
 
-
 #ifndef QT_NO_DRAGANDDROP
 
 void QWidget::dragEnterEvent(QDragEnterEvent *)
@@ -7260,7 +7234,6 @@ void QWidget::dropEvent(QDropEvent *)
 
 #endif // QT_NO_DRAGANDDROP
 
-
 void QWidget::showEvent(QShowEvent *)
 {
 }
@@ -7269,15 +7242,14 @@ void QWidget::hideEvent(QHideEvent *)
 {
 }
 
-
-
 bool QWidget::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
+   (void) eventType;
+   (void) message;
+   (void) result;
 
    return false;
 }
-
-
 
 void QWidget::ensurePolished() const
 {
@@ -9693,5 +9665,3 @@ QWidget *QWidgetPrivate::cs_getPublic(QWidgetPrivate *object)
 {
    return object->q_ptr;
 }
-
-

@@ -361,7 +361,9 @@ QDebug operator<<(QDebug dbg, const QGenericMatrix<N, M, T> &m)
       }
       dbg << endl;
    }
+
    dbg << qSetFieldWidth(0) << ')';
+
    return dbg.space();
 }
 
@@ -372,6 +374,7 @@ QDataStream &operator<<(QDataStream &stream, const QGenericMatrix<N, M, T> &matr
       for (int col = 0; col < N; ++col) {
          stream << double(matrix(row, col));
       }
+
    return stream;
 }
 

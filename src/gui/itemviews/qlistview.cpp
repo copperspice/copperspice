@@ -67,32 +67,10 @@ QListView::QListView(QListViewPrivate &dd, QWidget *parent)
    d->updateStyledFrameWidths(); // hence we have to force an update now that the object has been constructed
 }
 
-/*!
-  Destroys the view.
-*/
 QListView::~QListView()
 {
 }
 
-/*!
-    \property QListView::movement
-    \brief whether the items can be moved freely, are snapped to a
-    grid, or cannot be moved at all.
-
-    This property determines how the user can move the items in the
-    view. \l Static means that the items can't be moved the user. \l
-    Free means that the user can drag and drop the items to any
-    position in the view. \l Snap means that the user can drag and
-    drop the items, but only to the positions in a notional grid
-    signified by the gridSize property.
-
-    Setting this property when the view is visible will cause the
-    items to be laid out again.
-
-    By default, this property is set to \l Static.
-
-    \sa gridSize, resizeMode, viewMode
-*/
 void QListView::setMovement(Movement movement)
 {
    Q_D(QListView);
@@ -113,23 +91,6 @@ QListView::Movement QListView::movement() const
    return d->movement;
 }
 
-/*!
-    \property QListView::flow
-    \brief which direction the items layout should flow.
-
-    If this property is \l LeftToRight, the items will be laid out left
-    to right. If the \l isWrapping property is true, the layout will wrap
-    when it reaches the right side of the visible area. If this
-    property is \l TopToBottom, the items will be laid out from the top
-    of the visible area, wrapping when it reaches the bottom.
-
-    Setting this property when the view is visible will cause the
-    items to be laid out again.
-
-    By default, this property is set to \l TopToBottom.
-
-    \sa viewMode
-*/
 void QListView::setFlow(Flow flow)
 {
    Q_D(QListView);
@@ -144,21 +105,6 @@ QListView::Flow QListView::flow() const
    return d->flow;
 }
 
-/*!
-    \property QListView::isWrapping
-    \brief whether the items layout should wrap.
-
-    This property holds whether the layout should wrap when there is
-    no more space in the visible area. The point at which the layout wraps
-    depends on the \l flow property.
-
-    Setting this property when the view is visible will cause the
-    items to be laid out again.
-
-    By default, this property is false.
-
-    \sa viewMode
-*/
 void QListView::setWrapping(bool enable)
 {
    Q_D(QListView);
@@ -173,18 +119,6 @@ bool QListView::isWrapping() const
    return d->isWrapping();
 }
 
-/*!
-    \property QListView::resizeMode
-    \brief whether the items are laid out again when the view is resized.
-
-    If this property is \l Adjust, the items will be laid out again
-    when the view is resized. If the value is \l Fixed, the items will
-    not be laid out when the view is resized.
-
-    By default, this property is set to \l Fixed.
-
-    \sa movement, gridSize, viewMode
-*/
 void QListView::setResizeMode(ResizeMode mode)
 {
    Q_D(QListView);
@@ -198,19 +132,6 @@ QListView::ResizeMode QListView::resizeMode() const
    return d->resizeMode;
 }
 
-/*!
-    \property QListView::layoutMode
-    \brief determines whether the layout of items should happen immediately or be delayed.
-
-    This property holds the layout mode for the items. When the mode
-    is \l SinglePass (the default), the items are laid out all in one go.
-    When the mode is \l Batched, the items are laid out in batches of \l batchSize
-    items, while processing events. This makes it possible to
-    instantly view and interact with the visible items while the rest
-    are being laid out.
-
-    \sa viewMode
-*/
 void QListView::setLayoutMode(LayoutMode mode)
 {
    Q_D(QListView);
@@ -223,22 +144,7 @@ QListView::LayoutMode QListView::layoutMode() const
    return d->layoutMode;
 }
 
-/*!
-    \property QListView::spacing
-    \brief the space around the items in the layout
-
-    This property is the size of the empty space that is padded around
-    an item in the layout.
-
-    Setting this property when the view is visible will cause the
-    items to be laid out again.
-
-    By default, this property contains a value of 0.
-
-    \sa viewMode
-*/
-// ### Qt5/Use same semantic as layouts (spacing is the size of space
-// *between* items)
+// ### Qt5 - Use same semantic as layouts (spacing is the size of space *between* items)
 void QListView::setSpacing(int space)
 {
    Q_D(QListView);
@@ -252,16 +158,6 @@ int QListView::spacing() const
    Q_D(const QListView);
    return d->spacing();
 }
-
-/*!
-    \property QListView::batchSize
-    \brief the number of items laid out in each batch if \l layoutMode is
-    set to \l Batched
-
-    The default value is 100.
-
-    \since 4.2
-*/
 
 void QListView::setBatchSize(int batchSize)
 {
@@ -279,21 +175,6 @@ int QListView::batchSize() const
    return d->batchSize;
 }
 
-/*!
-    \property QListView::gridSize
-    \brief the size of the layout grid
-
-    This property is the size of the grid in which the items are laid
-    out. The default is an empty size which means that there is no
-    grid and the layout is not done in a grid. Setting this property
-    to a non-empty size switches on the grid layout. (When a grid
-    layout is in force the \l spacing property is ignored.)
-
-    Setting this property when the view is visible will cause the
-    items to be laid out again.
-
-    \sa viewMode
-*/
 void QListView::setGridSize(const QSize &size)
 {
    Q_D(QListView);
@@ -308,21 +189,6 @@ QSize QListView::gridSize() const
    return d->gridSize();
 }
 
-/*!
-    \property QListView::viewMode
-    \brief the view mode of the QListView.
-
-    This property will change the other unset properties to conform
-    with the set view mode. QListView-specific properties that have already been set
-    will not be changed, unless clearPropertyFlags() has been called.
-
-    Setting the view mode will enable or disable drag and drop based on the
-    selected movement. For ListMode, the default movement is \l Static
-    (drag and drop disabled); for IconMode, the default movement is
-    \l Free (drag and drop enabled).
-
-    \sa isWrapping, spacing, gridSize, flow, movement, resizeMode
-*/
 void QListView::setViewMode(ViewMode mode)
 {
    Q_D(QListView);
@@ -395,26 +261,18 @@ QListView::ViewMode QListView::viewMode() const
    return d->viewMode;
 }
 
-
 void QListView::clearPropertyFlags()
 {
    Q_D(QListView);
    d->modeProperties = 0;
 }
 
-/*!
-    Returns true if the \a row is hidden; otherwise returns false.
-*/
 bool QListView::isRowHidden(int row) const
 {
    Q_D(const QListView);
    return d->isHidden(row);
 }
 
-/*!
-    If \a hide is true, the given \a row will be hidden; otherwise
-    the \a row will be shown.
-*/
 void QListView::setRowHidden(int row, bool hide)
 {
    Q_D(QListView);
@@ -1042,7 +900,9 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
             intersectVector = d->intersectingSet(rect);
             d->removeCurrentAndDisabled(&intersectVector, current);
          }
+
          return d->closestIndex(initialRect, intersectVector);
+
       case MoveRight:
          while (intersectVector.isEmpty()) {
             rect.translate(rect.width(), 0);
@@ -1055,7 +915,9 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
             intersectVector = d->intersectingSet(rect);
             d->removeCurrentAndDisabled(&intersectVector, current);
          }
+
          return d->closestIndex(initialRect, intersectVector);
+
       case MovePageUp:
          // move current by (visibileRowCount - 1) items.
          // rect.translate(0, -rect.height()); will happen in the switch fallthrough for MoveUp.
@@ -1070,6 +932,7 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
       case MoveUp:
          while (intersectVector.isEmpty()) {
             rect.translate(0, -rect.height());
+
             if (rect.bottom() <= 0) {
 #ifdef QT_KEYPAD_NAVIGATION
                if (QApplication::keypadNavigationEnabled()) {
@@ -1090,7 +953,9 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
             intersectVector = d->intersectingSet(rect);
             d->removeCurrentAndDisabled(&intersectVector, current);
          }
+
          return d->closestIndex(initialRect, intersectVector);
+
       case MovePageDown:
          // move current by (visibileRowCount - 1) items.
          // rect.translate(0, rect.height()); will happen in the switch fallthrough for MoveDown.
@@ -1105,6 +970,7 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
       case MoveDown:
          while (intersectVector.isEmpty()) {
             rect.translate(0, rect.height());
+
             if (rect.top() >= contents.height()) {
 #ifdef QT_KEYPAD_NAVIGATION
                if (QApplication::keypadNavigationEnabled()) {
@@ -1120,13 +986,17 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
 #endif
                return current;
             }
+
             if (rect.bottom() > contents.height()) {
                rect.setBottom(contents.height());
             }
+
             intersectVector = d->intersectingSet(rect);
             d->removeCurrentAndDisabled(&intersectVector, current);
          }
+
          return d->closestIndex(initialRect, intersectVector);
+
       case MoveHome:
          return d->model->index(0, d->column, d->root);
       case MoveEnd:
@@ -1136,25 +1006,11 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
    return current;
 }
 
-/*!
-    Returns the rectangle of the item at position \a index in the
-    model. The rectangle is in contents coordinates.
-
-    \sa visualRect()
-*/
 QRect QListView::rectForIndex(const QModelIndex &index) const
 {
    return d_func()->rectForIndex(index);
 }
 
-/*!
-    \since 4.1
-
-    Sets the contents position of the item at \a index in the model to the given
-    \a position.
-    If the list view's movement mode is Static or its view mode is ListView,
-    this function will have no effect.
-*/
 void QListView::setPositionForIndex(const QPoint &position, const QModelIndex &index)
 {
    Q_D(QListView);

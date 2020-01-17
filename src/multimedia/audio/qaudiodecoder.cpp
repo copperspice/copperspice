@@ -28,11 +28,10 @@
 #include <qtimer.h>
 #include <qdebug.h>
 #include <qpointer.h>
-
 #include <qmediaservice.h>
+#include <qaudiodecodercontrol.h>
 
 #include <qmediaobject_p.h>
-#include <qaudiodecodercontrol.h>
 #include <qmediaserviceprovider_p.h>
 
 static int qRegisterAudioDecoderMetaTypes()

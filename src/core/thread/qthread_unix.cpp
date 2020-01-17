@@ -55,7 +55,7 @@
 # endif
 
 #if ! defined(Q_OS_IOS)
-# include <CoreServices/CoreServices.h> // emerald, may delete
+# include <CoreServices/CoreServices.h>    // emerald, may delete
 #endif
 
 # ifdef old_qDebug
@@ -227,7 +227,6 @@ void QAdoptedThread::init()
    Q_D(QThread);
    d->thread_id = pthread_self();
 }
-
 
 #if defined(Q_C_CALLBACKS)
 extern "C" {

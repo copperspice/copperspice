@@ -24,11 +24,9 @@
 #ifndef QTEXTCURSOR_H
 #define QTEXTCURSOR_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qshareddata.h>
-#include <QtGui/qtextformat.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qshareddata.h>
+#include <qtextformat.h>
 
 class QTextDocument;
 class QTextCursorPrivate;
@@ -50,6 +48,7 @@ class Q_GUI_EXPORT QTextCursor
 
  public:
    QTextCursor();
+
    explicit QTextCursor(QTextDocument *document);
    QTextCursor(QTextDocumentPrivate *p, int pos);
    explicit QTextCursor(QTextFrame *frame);
@@ -226,4 +225,4 @@ class Q_GUI_EXPORT QTextCursor
 };
 
 
-#endif // QTEXTCURSOR_H
+#endif

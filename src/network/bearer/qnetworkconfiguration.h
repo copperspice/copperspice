@@ -115,9 +115,10 @@ class Q_NETWORK_EXPORT QNetworkConfiguration
    friend class QNetworkConfigurationManager;
    friend class QNetworkConfigurationManagerPrivate;
    friend class QNetworkSessionPrivate;
+
    QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> d;
 };
 
 Q_DECLARE_METATYPE(QNetworkConfiguration)
 
-#endif // QNETWORKCONFIGURATION_H
+#endif

@@ -149,10 +149,8 @@ void QGraphicsVideoItemPrivate::_q_serviceDestroyed()
    surface->stop();
 }
 
-
 QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
-   : QGraphicsObject(parent)
-   , d_ptr(new QGraphicsVideoItemPrivate)
+   : QGraphicsObject(parent), d_ptr(new QGraphicsVideoItemPrivate)
 {
    d_ptr->q_ptr = this;
    d_ptr->surface = new QPainterVideoSurface;
@@ -164,9 +162,6 @@ QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
       this, SLOT(_q_updateNativeSize()), Qt::QueuedConnection);
 }
 
-/*!
-    Destroys a video graphics item.
-*/
 QGraphicsVideoItem::~QGraphicsVideoItem()
 {
    if (d_ptr->rendererControl) {
@@ -177,12 +172,6 @@ QGraphicsVideoItem::~QGraphicsVideoItem()
    delete d_ptr->surface;
    delete d_ptr;
 }
-
-/*!
-    \property QGraphicsVideoItem::mediaObject
-    \brief the media object which provides the video displayed by a graphics
-    item.
-*/
 
 QMediaObject *QGraphicsVideoItem::mediaObject() const
 {

@@ -21,20 +21,15 @@
 *
 ***********************************************************************/
 
+// keep these in order
 #include <qt_windows.h>
+#include <comutils.h>
+
+#include <qcolor.h>
+#include <qdatetime.h>
 
 #include <ocidl.h>
 #include <olectl.h>
-
-#include <comutils.h>
-#include <qdatetime.h>
-#include <qpixmap.h>
-#include <qfont.h>
-
-#include <qvariant.h>
-#include <qbytearray.h>
-#include <qcolor.h>
-
 static DATE QDateTimeToDATE(const QDateTime &dt)
 {
     if (!dt.isValid() || dt.isNull())

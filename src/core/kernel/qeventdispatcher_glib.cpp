@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qeventdispatcher_glib_p.h>
-#include <qeventdispatcher_unix_p.h>
 
 #include <qcoreapplication.h>
 #include <qsocketnotifier.h>
@@ -30,7 +29,7 @@
 #include <qlist.h>
 #include <qpair.h>
 
-
+#include <qeventdispatcher_unix_p.h>
 #include <qthread_p.h>
 
 
@@ -551,6 +550,7 @@ bool QEventDispatcherGlib::unregisterTimers(QObject *object)
    if (!object) {
       qWarning("QEventDispatcherGlib::unregisterTimers: invalid argument");
       return false;
+
    } else if (object->thread() != thread() || thread() != QThread::currentThread()) {
       qWarning("QObject::killTimers: timers cannot be stopped from another thread");
       return false;
@@ -563,7 +563,7 @@ bool QEventDispatcherGlib::unregisterTimers(QObject *object)
 
 QList<QEventDispatcherGlib::TimerInfo> QEventDispatcherGlib::registeredTimers(QObject *object) const
 {
-   if (!object) {
+   if (! object) {
       qWarning("QEventDispatcherUNIX:registeredTimers: invalid argument");
       return QList<TimerInfo>();
    }
@@ -593,6 +593,7 @@ void QEventDispatcherGlib::interrupt()
 void QEventDispatcherGlib::wakeUp()
 {
    Q_D(QEventDispatcherGlib);
+
    d->postEventSource->serialNumber.ref();
    g_main_context_wakeup(d->mainContext);
 }
@@ -603,7 +604,7 @@ void QEventDispatcherGlib::flush()
 
 bool QEventDispatcherGlib::versionSupported()
 {
-#if !defined(GLIB_MAJOR_VERSION) || !defined(GLIB_MINOR_VERSION) || !defined(GLIB_MICRO_VERSION)
+#if ! defined(GLIB_MAJOR_VERSION) || ! defined(GLIB_MINOR_VERSION) || ! defined(GLIB_MICRO_VERSION)
    return false;
 #else
    return ((GLIB_MAJOR_VERSION << 16) + (GLIB_MINOR_VERSION << 8) + GLIB_MICRO_VERSION) >= 0x020301;
@@ -614,4 +615,3 @@ QEventDispatcherGlib::QEventDispatcherGlib(QEventDispatcherGlibPrivate &dd, QObj
    : QAbstractEventDispatcher(dd, parent)
 {
 }
-

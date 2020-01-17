@@ -25,13 +25,19 @@
 #define QEVENTDISPATCHER_GLIB_P_H
 
 #include <qabstracteventdispatcher.h>
-#include <qabstracteventdispatcher_p.h>
 
 #include <qhash.h>
 
-typedef struct _GMainContext GMainContext;
+#include <qabstracteventdispatcher_p.h>
 
 class QEventDispatcherGlibPrivate;
+
+using GMainContext = _GMainContext
+
+struct GPostEventSource;
+struct GSocketNotifierSource;
+struct GTimerSource;
+struct GIdleTimerSource;
 
 class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
 {
@@ -65,11 +71,6 @@ class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
    QEventDispatcherGlib(QEventDispatcherGlibPrivate &dd, QObject *parent);
 };
 
-struct GPostEventSource;
-struct GSocketNotifierSource;
-struct GTimerSource;
-struct GIdleTimerSource;
-
 class Q_CORE_EXPORT QEventDispatcherGlibPrivate : public QAbstractEventDispatcherPrivate
 {
 
@@ -84,4 +85,4 @@ class Q_CORE_EXPORT QEventDispatcherGlibPrivate : public QAbstractEventDispatche
    void runTimersOnceWithNormalPriority();
 };
 
-#endif // QEVENTDISPATCHER_GLIB_P_H
+#endif

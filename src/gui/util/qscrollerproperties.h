@@ -24,9 +24,9 @@
 #ifndef QSCROLLERPROPERTIES_H
 #define QSCROLLERPROPERTIES_H
 
-#include <QtCore/QScopedPointer>
-#include <QtCore/QMetaType>
-#include <QtCore/QVariant>
+#include <qscopedpointer.h>
+#include <qmetatype.h>
+#include <qvariant.h>
 
 class QScroller;
 class QScrollerPrivate;

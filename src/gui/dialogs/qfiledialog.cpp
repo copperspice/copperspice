@@ -393,11 +393,14 @@ QDir QFileDialog::directory() const
 void QFileDialog::setDirectoryUrl(const QUrl &directory)
 {
    Q_D(QFileDialog);
+
    if (!directory.isValid()) {
       return;
    }
+
    QFileDialogPrivate::setLastVisitedDirectory(directory);
    d->options->setInitialDirectory(directory);
+
    if (d->nativeDialogInUse) {
       d->setDirectory_sys(directory);
    } else if (directory.isLocalFile()) {
@@ -410,6 +413,7 @@ void QFileDialog::setDirectoryUrl(const QUrl &directory)
 QUrl QFileDialog::directoryUrl() const
 {
    Q_D(const QFileDialog);
+
    if (d->nativeDialogInUse) {
       return d->directory_sys();
    } else {
@@ -427,6 +431,7 @@ static inline bool isCaseSensitiveFileSystem(const QString &path)
 #else
    return true;
 #endif
+
 }
 
 static inline QString fileFromPath(const QString &rootPath, QString path)
@@ -703,6 +708,7 @@ void QFileDialog::selectNameFilter(const QString &filter)
       d->selectNameFilter_sys(filter);
       return;
    }
+
    int i = -1;
    if (testOption(HideNameFilterDetails)) {
       const QStringList filters = qt_strip_filters(qt_make_filter_list(filter));
@@ -713,6 +719,7 @@ void QFileDialog::selectNameFilter(const QString &filter)
    } else {
       i = d->qFileDialogUi->fileTypeCombo->findText(filter);
    }
+
    if (i >= 0) {
       d->qFileDialogUi->fileTypeCombo->setCurrentIndex(i);
       d->_q_useNameFilter(d->qFileDialogUi->fileTypeCombo->currentIndex());
@@ -745,7 +752,7 @@ void QFileDialog::setFilter(QDir::Filters filters)
 
    d->options->setFilter(filters);
 
-   if (!d->usingWidgets()) {
+   if (! d->usingWidgets()) {
       d->setFilter_sys();
       return;
    }
@@ -782,10 +789,12 @@ static QString nameFilterForMime(const QString &mimeType)
 void QFileDialog::setMimeTypeFilters(const QStringList &filters)
 {
    Q_D(QFileDialog);
+
    QStringList nameFilters;
 
    for (const QString &mimeType : filters) {
       const QString text = nameFilterForMime(mimeType);
+
       if (!text.isEmpty()) {
          nameFilters.append(text);
       }

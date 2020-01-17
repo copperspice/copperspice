@@ -92,8 +92,8 @@ void QObject::dumpObjectInfo()
          if (obj) {
             const QMetaObject *receiverMetaObject = obj->metaObject();
 
-            // broom - ok to have on hold
-            // const QMetaMethod slotMetaMethod      = receiverMetaObject->method(*temp.slotMethod);
+            // emerald - hold, ok
+            // const QMetaMethod slotMetaMethod = receiverMetaObject->method(*temp.slotMethod);
 
             qDebug("          --> %s::%s", csPrintable(receiverMetaObject->className()),
                 obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()) );

@@ -1044,10 +1044,12 @@ bool QGraphicsWidget::event(QEvent *event)
 void QGraphicsWidget::changeEvent(QEvent *event)
 {
    Q_D(QGraphicsWidget);
+
    switch (event->type()) {
       case QEvent::StyleChange:
          // ### Don't unset if the margins are explicitly set.
          unsetWindowFrameMargins();
+
          if (d->layout) {
             d->layout->invalidate();
          }
@@ -1057,13 +1059,16 @@ void QGraphicsWidget::changeEvent(QEvent *event)
          update();
          updateGeometry();
          break;
+
       case QEvent::PaletteChange:
          update();
          break;
+
       case QEvent::ParentChange:
          d->resolveFont(d->inheritedFontResolveMask);
          d->resolvePalette(d->inheritedPaletteResolveMask);
          break;
+
       default:
          break;
    }

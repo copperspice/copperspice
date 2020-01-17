@@ -25,19 +25,18 @@
 
 #ifndef QT_NO_MDIAREA
 
-#include <QApplication>
-#include <QStyle>
-
-#include <QChildEvent>
-#include <QResizeEvent>
-#include <QScrollBar>
-#include <QMutableVectorIterator>
-#include <QPainter>
-#include <QFontMetrics>
-#include <QStyleOption>
-#include <QDesktopWidget>
-#include <QDebug>
+#include <qapplication.h>
+#include <qchildevent.h>
+#include <qdesktopwidget.h>
+#include <qdebug.h>
+#include <qfontmetrics.h>
+#include <qmutablevectoriterator.h>
 #include <qmath.h>
+#include <qpainter.h>
+#include <qresizeevent.h>
+#include <qstyle.h>
+#include <qscrollbar.h>
+#include <qstyleoption.h>
 
 #include <qlayoutengine_p.h>
 

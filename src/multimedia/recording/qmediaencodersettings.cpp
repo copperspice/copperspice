@@ -306,24 +306,11 @@ QVariant QAudioEncoderSettings::encodingOption(const QString &option) const
    return d->encodingOptions.value(option);
 }
 
-/*!
-    Returns the all the encoding options as QVariantMap.
-
-    \sa encodingOption(), setEncodingOptions()
-*/
 QVariantMap QAudioEncoderSettings::encodingOptions() const
 {
    return d->encodingOptions;
 }
 
-/*!
-    Set the encoding \a option to \a value.
-
-    The supported set and meaning of encoding options are
-    system and selected codec specific.
-
-    \sa encodingOption(), setEncodingOptions()
-*/
 void QAudioEncoderSettings::setEncodingOption(const QString &option, const QVariant &value)
 {
    d->isNull = false;
@@ -334,14 +321,6 @@ void QAudioEncoderSettings::setEncodingOption(const QString &option, const QVari
    }
 }
 
-/*!
-    Replace all the encoding options with \a options.
-
-    The supported set and meaning of encoding options are
-    system and selected codec specific.
-
-    \sa encodingOption(), setEncodingOption()
-*/
 void QAudioEncoderSettings::setEncodingOptions(const QVariantMap &options)
 {
    d->isNull = false;
@@ -637,24 +616,11 @@ QVariant QVideoEncoderSettings::encodingOption(const QString &option) const
    return d->encodingOptions.value(option);
 }
 
-/*!
-    Returns the all the encoding options as QVariantMap.
-
-    \sa encodingOption(), setEncodingOptions()
-*/
 QVariantMap QVideoEncoderSettings::encodingOptions() const
 {
    return d->encodingOptions;
 }
 
-/*!
-    Set the encoding \a option \a value.
-
-    The supported set and meaning of encoding options are
-    system and selected codec specific.
-
-    \sa encodingOption(), setEncodingOptions()
-*/
 void QVideoEncoderSettings::setEncodingOption(const QString &option, const QVariant &value)
 {
    d->isNull = false;
@@ -665,14 +631,6 @@ void QVideoEncoderSettings::setEncodingOption(const QString &option, const QVari
    }
 }
 
-/*!
-    Replace all the encoding options with \a options.
-
-    The supported set and meaning of encoding options are
-    system and selected codec specific.
-
-    \sa encodingOption(), setEncodingOption()
-*/
 void QVideoEncoderSettings::setEncodingOptions(const QVariantMap &options)
 {
    d->isNull = false;

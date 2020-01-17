@@ -55,7 +55,6 @@
 #include <qsettings.h>
 #include <qpixmapcache.h>
 
-
 #include <qcommonstylepixmaps_p.h>
 #include <qguiapplication_p.h>
 #include <qmath_p.h>
@@ -72,20 +71,17 @@ static QWindow *qt_getWindow(const QWidget *widget)
 {
    return widget ? widget->window()->windowHandle() : nullptr;
 }
+
 QCommonStyle::QCommonStyle()
    : QStyle(*new QCommonStylePrivate)
 { }
-
 
 QCommonStyle::QCommonStyle(QCommonStylePrivate &dd)
    : QStyle(dd)
 { }
 
-
 QCommonStyle::~QCommonStyle()
 { }
-
-
 
 void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
    const QWidget *widget) const
@@ -238,7 +234,6 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       break;
 #endif // QT_NO_PROGRESSBAR
 
-
       case PE_IndicatorBranch: {
          static const int decoration_size = 9;
 
@@ -288,6 +283,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       case PE_FrameStatusBarItem:
          qDrawShadeRect(p, opt->rect, opt->palette, true, 1, 0, 0);
          break;
+
       case PE_IndicatorHeaderArrow:
          if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             QPen oldPen = p->pen();
@@ -356,6 +352,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             p->restore();
          }
          break;
+
       case PE_IndicatorTabClose: {
          if (d->tabBarcloseButtonIcon.isNull()) {
             d->tabBarcloseButtonIcon.addPixmap(QPixmap(
@@ -4101,6 +4098,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
    SubControl sc, const QWidget *widget) const
 {
    QRect ret;
+
    switch (cc) {
 #ifndef QT_NO_SLIDER
       case CC_Slider:
@@ -4139,7 +4137,8 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
             ret = visualRect(slider->direction, slider->rect, ret);
          }
          break;
-#endif // QT_NO_SLIDER
+#endif
+
 #ifndef QT_NO_SCROLLBAR
       case CC_ScrollBar:
          if (const QStyleOptionSlider *scrollbar = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
@@ -4230,7 +4229,8 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
             ret = visualRect(scrollbar->direction, scrollBarRect, ret);
          }
          break;
-#endif // QT_NO_SCROLLBAR
+#endif
+
 #ifndef QT_NO_SPINBOX
       case CC_SpinBox:
          if (const QStyleOptionSpinBox *spinbox = qstyleoption_cast<const QStyleOptionSpinBox *>(opt)) {
@@ -4274,7 +4274,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
             ret = visualRect(spinbox->direction, spinbox->rect, ret);
          }
          break;
-#endif // Qt_NO_SPINBOX
+#endif
 
 #ifndef QT_NO_TOOLBUTTON
       case CC_ToolButton:
@@ -4302,17 +4302,15 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
             ret = visualRect(tb->direction, tb->rect, ret);
          }
          break;
-#endif // QT_NO_TOOLBUTTON
+#endif
+
 #ifndef QT_NO_COMBOBOX
       case CC_ComboBox:
          if (const QStyleOptionComboBox *cb = qstyleoption_cast<const QStyleOptionComboBox *>(opt)) {
-            int x = cb->rect.x(),
-                y = cb->rect.y(),
-                wi = cb->rect.width(),
-                he = cb->rect.height();
-            int xpos = x;
+            int x = cb->rect.x(), y = cb->rect.y(), wi = cb->rect.width(), he = cb->rect.height();
+            int xpos   = x;
             int margin = cb->frame ? 3 : 0;
-            int bmarg = cb->frame ? 2 : 0;
+            int bmarg  = cb->frame ? 2 : 0;
             xpos += wi - bmarg - 16;
 
 
@@ -4335,7 +4333,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
             ret = visualRect(cb->direction, cb->rect, ret);
          }
          break;
-#endif // QT_NO_COMBOBOX
+#endif
 
       case CC_TitleBar:
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
@@ -4423,24 +4421,28 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                   } else if (sc == SC_TitleBarCloseButton) {
                      break;
                   }
-                  ret.setRect(tb->rect.right() - offset, tb->rect.top() + controlMargin,
-                     controlHeight, controlHeight);
+
+                  ret.setRect(tb->rect.right() - offset, tb->rect.top() + controlMargin, controlHeight, controlHeight);
                   break;
+
                case SC_TitleBarSysMenu:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                      ret.setRect(tb->rect.left() + controlMargin, tb->rect.top() + controlMargin,
                         controlHeight, controlHeight);
                   }
                   break;
+
                default:
                   break;
             }
             ret = visualRect(tb->direction, tb->rect, ret);
          }
+
          break;
 
 #ifndef QT_NO_GROUPBOX
       case CC_GroupBox: {
+
          if (const QStyleOptionGroupBox *groupBox = qstyleoption_cast<const QStyleOptionGroupBox *>(opt)) {
             switch (sc) {
                case SC_GroupBoxFrame:
@@ -4448,6 +4450,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                   int topMargin = 0;
                   int topHeight = 0;
                   int verticalAlignment = proxy()->styleHint(SH_GroupBox_TextLabelVerticalAlignment, groupBox, widget);
+
                   if (groupBox->text.size() || (groupBox->subControls & QStyle::SC_GroupBoxCheckBox)) {
                      topHeight = groupBox->fontMetrics.height();
                      if (verticalAlignment & Qt::AlignVCenter) {
@@ -4527,12 +4530,15 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          if (opt->subControls & SC_MdiCloseButton) {
             ++numSubControls;
          }
+
          if (opt->subControls & SC_MdiMinButton) {
             ++numSubControls;
          }
+
          if (opt->subControls & SC_MdiNormalButton) {
             ++numSubControls;
          }
+
          if (numSubControls == 0) {
             break;
          }
@@ -4575,6 +4581,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
          break;
       }
 #endif // QT_NO_MDIAREA
+
       default:
          qWarning("QCommonStyle::subControlRect: Case %d not handled", cc);
    }
@@ -4591,19 +4598,24 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
       case PM_FocusFrameHMargin:
          ret = 2;
          break;
+
       case PM_MenuBarVMargin:
       case PM_MenuBarHMargin:
          ret = 0;
          break;
+
       case PM_DialogButtonsSeparator:
          ret = int(QStyleHelper::dpiScaled(5.));
          break;
+
       case PM_DialogButtonsButtonWidth:
          ret = int(QStyleHelper::dpiScaled(70.));
          break;
+
       case PM_DialogButtonsButtonHeight:
          ret = int(QStyleHelper::dpiScaled(30.));
          break;
+
       case PM_TitleBarHeight: {
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             if ((tb->titleBarFlags & Qt::WindowType_Mask) == Qt::Tool) {

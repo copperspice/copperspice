@@ -24,10 +24,9 @@
 #ifndef QVECTOR4D_H
 #define QVECTOR4D_H
 
-#include <QtCore/qpoint.h>
-#include <QtCore/qmetatype.h>
-
-QT_BEGIN_NAMESPACE
+#include <qpoint.h>
+#include <qmetatype.h>
+#include <qvariant.h>
 
 class QMatrix4x4;
 class QVector2D;
@@ -37,9 +36,9 @@ class QVector3D;
 
 class Q_GUI_EXPORT QVector4D
 {
-
  public:
    QVector4D();
+
    QVector4D(qreal xpos, qreal ypos, qreal zpos, qreal wpos);
    explicit QVector4D(const QPoint &point);
    explicit QVector4D(const QPointF &point);
@@ -114,24 +113,30 @@ class Q_GUI_EXPORT QVector4D
 
    friend class QVector2D;
    friend class QVector3D;
+
 #ifndef QT_NO_MATRIX4X4
    friend QVector4D operator*(const QVector4D &vector, const QMatrix4x4 &matrix);
    friend QVector4D operator*(const QMatrix4x4 &matrix, const QVector4D &vector);
 #endif
+
 };
 
 Q_DECLARE_TYPEINFO(QVector4D, Q_MOVABLE_TYPE);
 
-inline QVector4D::QVector4D() : xp(0.0f), yp(0.0f), zp(0.0f), wp(0.0f) {}
+inline QVector4D::QVector4D() : xp(0.0f), yp(0.0f), zp(0.0f), wp(0.0f)
+{}
 
-inline QVector4D::QVector4D(qreal xpos, qreal ypos, qreal zpos, qreal wpos) : xp(xpos), yp(ypos), zp(zpos), wp(wpos) {}
+inline QVector4D::QVector4D(qreal xpos, qreal ypos, qreal zpos, qreal wpos) : xp(xpos), yp(ypos), zp(zpos), wp(wpos)
+{}
 
-inline QVector4D::QVector4D(float xpos, float ypos, float zpos, float wpos, int) : xp(xpos), yp(ypos), zp(zpos),
-   wp(wpos) {}
+inline QVector4D::QVector4D(float xpos, float ypos, float zpos, float wpos, int) : xp(xpos), yp(ypos), zp(zpos), wp(wpos)
+{}
 
-inline QVector4D::QVector4D(const QPoint &point) : xp(point.x()), yp(point.y()), zp(0.0f), wp(0.0f) {}
+inline QVector4D::QVector4D(const QPoint &point) : xp(point.x()), yp(point.y()), zp(0.0f), wp(0.0f)
+{}
 
-inline QVector4D::QVector4D(const QPointF &point) : xp(point.x()), yp(point.y()), zp(0.0f), wp(0.0f) {}
+inline QVector4D::QVector4D(const QPointF &point) : xp(point.x()), yp(point.y()), zp(0.0f), wp(0.0f)
+{}
 
 inline bool QVector4D::isNull() const
 {
@@ -142,14 +147,17 @@ inline qreal QVector4D::x() const
 {
    return qreal(xp);
 }
+
 inline qreal QVector4D::y() const
 {
    return qreal(yp);
 }
+
 inline qreal QVector4D::z() const
 {
    return qreal(zp);
 }
+
 inline qreal QVector4D::w() const
 {
    return qreal(wp);
@@ -282,13 +290,9 @@ inline QPointF QVector4D::toPointF() const
 
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QVector4D &vector);
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QVector4D &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QVector4D &);
-#endif
 
 #endif
-
-QT_END_NAMESPACE
 
 #endif

@@ -151,4 +151,4 @@ Q_DECLARE_METATYPE(QNetworkSession::UsagePolicies)
 
 #endif // QT_NO_BEARERMANAGEMENT
 
-#endif // QNETWORKSESSION_H
+#endif

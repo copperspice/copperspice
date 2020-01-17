@@ -26,9 +26,9 @@
 #include "qwindowswindow.h"
 #include "qwindowsintegration.h"
 
-#include <QDebug>
-#include <QSysInfo>
-#include <QApplication>
+#include <qdebug.h>
+#include <qsysinfo.h>
+#include <qapplication.h>
 #include <qplatform_nativeinterface.h>
 #include <qwglnativecontext.h>
 
@@ -1132,17 +1132,10 @@ QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
    return result;
 }
 
-QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext,
-   QOpenGLContext *context) :
-   m_staticContext(staticContext),
-   m_context(context),
-   m_renderingContext(0),
-   m_pixelFormat(0),
-   m_extensionsUsed(false),
-   m_swapInterval(-1),
-   m_ownsContext(true),
-   m_getGraphicsResetStatus(0),
-   m_lost(false)
+QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenGLContext *context)
+   : m_staticContext(staticContext), m_context(context), m_renderingContext(0),
+     m_pixelFormat(0), m_extensionsUsed(false), m_swapInterval(-1), m_ownsContext(true),
+     m_getGraphicsResetStatus(0), m_lost(false)
 {
    if (!m_staticContext) { // Something went very wrong. Stop here, isValid() will return false.
       return;
@@ -1155,10 +1148,11 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext,
          qWarning("QWindowsGLContext: Requires a QWGLNativeContext");
          return;
       }
+
       QWGLNativeContext handle = nativeHandle.value<QWGLNativeContext>();
       HGLRC wglcontext = handle.context();
       HWND wnd = handle.window();
-      if (!wglcontext || !wnd) {
+      if (! wglcontext || !wnd) {
          qWarning("QWindowsGLContext: No context and window given");
          return;
       }
@@ -1171,6 +1165,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext,
       if (!ok) {
          qWarning("QWindowsGLContext: Failed to get pixel format");
       }
+
       ok = DescribePixelFormat(dc, m_pixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &m_obtainedPixelFormatDescriptor);
       if (!ok) {
          qWarning("QWindowsGLContext: Failed to describe pixel format");

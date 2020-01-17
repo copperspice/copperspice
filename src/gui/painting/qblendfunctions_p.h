@@ -27,8 +27,6 @@
 #include <qmath.h>
 #include <qdrawhelper_p.h>
 
-
-
 template <typename SRC, typename T>
 void qt_scale_image_16bit(uchar *destPixels, int dbpl,
    const uchar *srcPixels, int sbpl, int srch,
@@ -300,11 +298,13 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 
    int fromX, toX, x1, x2, u, v, i, ii;
    DestT *line;
+
    for (int y = fromY; y < toY; ++y) {
       line = reinterpret_cast<DestT *>(reinterpret_cast<uchar *>(destPixels) + y * dbpl);
 
       fromX = qMax(x_l >> 16, clip.left());
       toX = qMin(x_r >> 16, clip.left() + clip.width());
+
       if (fromX < toX) {
          // Because of rounding, we can get source coordinates outside the source image.
          // Clamp these coordinates to the source rect to avoid segmentation fault and
@@ -359,8 +359,9 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 
          // Middle of the scan line, without checks.
          // Manual loop unrolling.
-         i = x2 - x1;
+         i  = x2 - x1;
          ii = i >> 3;
+
          while (ii) {
             blender.write(&line[0], reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                   (v >> 16) * sbpl)[u >> 16]);
@@ -399,6 +400,7 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 
             --ii;
          }
+
          switch (i & 7) {
             case 7:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
@@ -464,6 +466,7 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 
          // End of the scan line, with per-pixel checks.
          i = toX - x2;
+
          while (i) {
             int uu = qBound(sourceRect.left(), u >> 16, sourceRect.left() + sourceRect.width() - 1);
             int vv = qBound(sourceRect.top(), v >> 16, sourceRect.top() + sourceRect.height() - 1);
@@ -476,6 +479,7 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 
          blender.flush(line);
       }
+
       x_l += dx_l;
       x_r += dx_r;
    }
@@ -596,7 +600,5 @@ void qt_transform_image(DestT *destPixels, int dbpl,
          v[2].y, dudx, dvdx, dudy, dvdy, u0, v0, blender);
    }
 }
-
-
 
 #endif

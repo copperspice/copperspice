@@ -47,7 +47,9 @@ Q_CONSTRUCTOR_FUNCTION(qRegisterRadioTunerMetaTypes)
 class QRadioTunerPrivate : public QMediaObjectPrivate
 {
 public:
-    QRadioTunerPrivate():provider(0), control(0), radioData(0) {}
+    QRadioTunerPrivate():provider(0), control(0), radioData(0)
+    {}
+
     QMediaServiceProvider *provider;
     QRadioTunerControl* control;
     QRadioData *radioData;
@@ -55,7 +57,7 @@ public:
 
 QRadioTuner::QRadioTuner(QObject *parent):
     QMediaObject(*new QRadioTunerPrivate, parent,
-                 QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_RADIO))
+                  QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_RADIO))
 {
     Q_D(QRadioTuner);
 

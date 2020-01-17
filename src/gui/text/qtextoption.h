@@ -24,11 +24,11 @@
 #ifndef QTEXTOPTION_H
 #define QTEXTOPTION_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qchar.h>
-#include <QtCore/qmetatype.h>
+#include <qchar.h>
+#include <qcontainerfwd.h>
+#include <qnamespace.h>
+#include <qvariant.h>
 
-template <typename T> class QList;
 struct QTextOptionPrivate;
 
 class Q_GUI_EXPORT QTextOption
@@ -42,9 +42,13 @@ class Q_GUI_EXPORT QTextOption
    };
 
    struct Q_GUI_EXPORT Tab {
-      inline Tab() : position(80), type(QTextOption::LeftTab) { }
+      inline Tab()
+         : position(80), type(QTextOption::LeftTab)
+      { }
+
       inline Tab(qreal pos, TabType tabType, QChar delim = QChar())
-         : position(pos), type(tabType), delimiter(delim) {}
+         : position(pos), type(tabType), delimiter(delim)
+      { }
 
       inline bool operator==(const Tab &other) const {
          return type == other.type
@@ -163,4 +167,4 @@ inline void QTextOption::setTabStop(qreal atabStop)
 
 Q_DECLARE_METATYPE( QTextOption::Tab )
 
-#endif // QTEXTOPTION_H
+#endif

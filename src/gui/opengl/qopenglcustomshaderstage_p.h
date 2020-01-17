@@ -28,14 +28,14 @@
 #include <QOpenGLShaderProgram>
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 class QPainter;
 class QOpenGLCustomShaderStagePrivate;
+
 class Q_GUI_EXPORT QOpenGLCustomShaderStage
 {
     Q_DECLARE_PRIVATE(QOpenGLCustomShaderStage)
-public:
+
+ public:
     QOpenGLCustomShaderStage();
     virtual ~QOpenGLCustomShaderStage();
     virtual void setUniforms(QOpenGLShaderProgram*) {}
@@ -47,17 +47,14 @@ public:
     QByteArray source() const;
 
     void setInactive();
-protected:
+
+ protected:
     void setSource(const QByteArray&);
 
-private:
+ private:
     QOpenGLCustomShaderStagePrivate* d_ptr;
 
     Q_DISABLE_COPY(QOpenGLCustomShaderStage)
 };
-
-
-QT_END_NAMESPACE
-
 
 #endif

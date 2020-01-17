@@ -25,7 +25,6 @@
 #define QRADIODATA_H
 
 #include <qobject.h>
-
 #include <qmediaobject.h>
 #include <qmediabindableinterface.h>
 #include <qmediaenumdebug.h>
@@ -61,9 +60,9 @@ class Q_MULTIMEDIA_EXPORT QRadioData : public QObject, public QMediaBindableInte
    CS_INTERFACES(QMediaBindableInterface)
 
 public:
-    enum Error { NoError, ResourceError, OpenError, OutOfRangeError };
+   enum Error { NoError, ResourceError, OpenError, OutOfRangeError };
 
-    enum ProgramType { Undefined = 0, News, CurrentAffairs, Information,
+   enum ProgramType { Undefined = 0, News, CurrentAffairs, Information,
         Sport, Education, Drama, Culture, Science, Varied,
         PopMusic, RockMusic, EasyListening, LightClassical,
         SeriousClassical, OtherMusic, Weather, Finance,
@@ -75,60 +74,60 @@ public:
         RhythmAndBlues, SoftRhythmAndBlues, Language,
         ReligiousMusic, ReligiousTalk, Personality, Public,
         College
-    };
+   };
 
-    explicit QRadioData(QMediaObject *mediaObject, QObject *parent = nullptr);
-    ~QRadioData();
+   explicit QRadioData(QMediaObject *mediaObject, QObject *parent = nullptr);
+   ~QRadioData();
 
-    QMultimedia::AvailabilityStatus availability() const;
+   QMultimedia::AvailabilityStatus availability() const;
 
-    QMediaObject *mediaObject() const override;
+   QMediaObject *mediaObject() const override;
 
-    QString stationId() const;
-    ProgramType programType() const;
-    QString programTypeName() const;
-    QString stationName() const;
-    QString radioText() const;
-    bool isAlternativeFrequenciesEnabled() const;
+   QString stationId() const;
+   ProgramType programType() const;
+   QString programTypeName() const;
+   QString stationName() const;
+   QString radioText() const;
+   bool isAlternativeFrequenciesEnabled() const;
 
-    Error error() const;
-    QString errorString() const;
+   Error error() const;
+   QString errorString() const;
 
-    MULTI_CS_SLOT_1(Public, void setAlternativeFrequenciesEnabled(bool enabled))
-    MULTI_CS_SLOT_2(setAlternativeFrequenciesEnabled)
+   MULTI_CS_SLOT_1(Public, void setAlternativeFrequenciesEnabled(bool enabled))
+   MULTI_CS_SLOT_2(setAlternativeFrequenciesEnabled)
 
-    MULTI_CS_SIGNAL_1(Public, void stationIdChanged(QString stationId))
-    MULTI_CS_SIGNAL_2(stationIdChanged,stationId)
+   MULTI_CS_SIGNAL_1(Public, void stationIdChanged(QString stationId))
+   MULTI_CS_SIGNAL_2(stationIdChanged,stationId)
 
-    MULTI_CS_SIGNAL_1(Public, void programTypeChanged(QRadioData::ProgramType programType))
-    MULTI_CS_SIGNAL_2(programTypeChanged,programType)
+   MULTI_CS_SIGNAL_1(Public, void programTypeChanged(QRadioData::ProgramType programType))
+   MULTI_CS_SIGNAL_2(programTypeChanged,programType)
 
-    MULTI_CS_SIGNAL_1(Public, void programTypeNameChanged(QString programTypeName))
-    MULTI_CS_SIGNAL_2(programTypeNameChanged,programTypeName)
+   MULTI_CS_SIGNAL_1(Public, void programTypeNameChanged(QString programTypeName))
+   MULTI_CS_SIGNAL_2(programTypeNameChanged,programTypeName)
 
-    MULTI_CS_SIGNAL_1(Public, void stationNameChanged(QString stationName))
-    MULTI_CS_SIGNAL_2(stationNameChanged,stationName)
+   MULTI_CS_SIGNAL_1(Public, void stationNameChanged(QString stationName))
+   MULTI_CS_SIGNAL_2(stationNameChanged,stationName)
 
-    MULTI_CS_SIGNAL_1(Public, void radioTextChanged(QString radioText))
-    MULTI_CS_SIGNAL_2(radioTextChanged,radioText)
+   MULTI_CS_SIGNAL_1(Public, void radioTextChanged(QString radioText))
+   MULTI_CS_SIGNAL_2(radioTextChanged,radioText)
 
-    MULTI_CS_SIGNAL_1(Public, void alternativeFrequenciesEnabledChanged(bool enabled))
-    MULTI_CS_SIGNAL_2(alternativeFrequenciesEnabledChanged,enabled)
+   MULTI_CS_SIGNAL_1(Public, void alternativeFrequenciesEnabledChanged(bool enabled))
+   MULTI_CS_SIGNAL_2(alternativeFrequenciesEnabledChanged,enabled)
 
-    MULTI_CS_SIGNAL_1(Public, void error(QRadioData::Error error))
-    MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioData::Error), error)
+   MULTI_CS_SIGNAL_1(Public, void error(QRadioData::Error error))
+   MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioData::Error), error)
 
 protected:
-    bool setMediaObject(QMediaObject *) override;
+   bool setMediaObject(QMediaObject *) override;
 
-    QRadioDataPrivate *d_ptr;
+   QRadioDataPrivate *d_ptr;
 
 private:
-    Q_DISABLE_COPY(QRadioData)
-    Q_DECLARE_PRIVATE(QRadioData)
+   Q_DISABLE_COPY(QRadioData)
+   Q_DECLARE_PRIVATE(QRadioData)
 
-    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
-    MULTI_CS_SLOT_2(_q_serviceDestroyed)
+   MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
+   MULTI_CS_SLOT_2(_q_serviceDestroyed)
 };
 
 Q_DECLARE_METATYPE(QRadioData::Error)
