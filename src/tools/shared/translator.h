@@ -118,7 +118,7 @@ class TMMKey
    }
    QString context, source, comment;
 };
-Q_DECLARE_TYPEINFO(TMMKey, Q_MOVABLE_TYPE);
+
 inline uint qHash(const TMMKey &key)
 {
    return qHash(key.context) ^ qHash(key.source) ^ qHash(key.comment);

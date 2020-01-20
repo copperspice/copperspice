@@ -127,7 +127,6 @@ struct QLocaleId {
 
    ushort language_id, script_id, country_id;
 };
-Q_DECLARE_TYPEINFO(QLocaleId, Q_PRIMITIVE_TYPE);
 
 struct QLocaleData {
  public:

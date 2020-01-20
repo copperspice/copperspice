@@ -389,8 +389,6 @@ struct QTtfTable {
    Tag tag;
    QByteArray data;
 };
-Q_DECLARE_TYPEINFO(QTtfTable, Q_MOVABLE_TYPE);
-
 
 struct qttf_head_table {
    qint32 font_revision;
@@ -435,7 +433,6 @@ struct qttf_name_table {
    QString postscript_name;
 };
 
-
 static QTtfTable generateHead(const qttf_head_table &head);
 static QTtfTable generateHhea(const qttf_hhea_table &hhea);
 static QTtfTable generateMaxp(const qttf_maxp_table &maxp);
@@ -446,7 +443,6 @@ struct qttf_font_tables {
    qttf_hhea_table hhea;
    qttf_maxp_table maxp;
 };
-
 
 struct QTtfGlyph {
    quint16 index;
@@ -460,14 +456,13 @@ struct QTtfGlyph {
    quint16 numPoints;
    QByteArray data;
 };
-Q_DECLARE_TYPEINFO(QTtfGlyph, Q_MOVABLE_TYPE);
 
 static QTtfGlyph generateGlyph(int index, const QPainterPath &path, qreal advance, qreal lsb, qreal ppem);
+
 // generates glyf, loca and hmtx
 static QVector<QTtfTable> generateGlyphTables(qttf_font_tables &tables, const QVector<QTtfGlyph> &_glyphs);
 
 static QByteArray bindFont(const QVector<QTtfTable> &_tables);
-
 
 static quint32 checksum(const QByteArray &table)
 {
@@ -766,7 +761,6 @@ struct TTF_POINT {
    qint16 y;
    quint8 flags;
 };
-Q_DECLARE_TYPEINFO(TTF_POINT, Q_PRIMITIVE_TYPE);
 
 static void convertPath(const QPainterPath &path, QVector<TTF_POINT> *points, QVector<int> *endPoints, qreal ppem)
 {

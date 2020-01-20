@@ -325,7 +325,6 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
    Q_DISABLE_COPY(QAbstractXmlNodeModel)
 };
 
-Q_DECLARE_TYPEINFO(QXmlNodeModelIndex, Q_MOVABLE_TYPE);
 
 template<typename T> class QAbstractXmlForwardIterator;
 class QVariant;
@@ -384,7 +383,6 @@ inline bool qIsForwardIteratorEnd(const QXmlItem &item)
    return item.isNull();
 }
 
-Q_DECLARE_TYPEINFO(QXmlItem, Q_MOVABLE_TYPE);
 
 QT_END_NAMESPACE
 

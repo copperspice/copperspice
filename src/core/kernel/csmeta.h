@@ -158,8 +158,6 @@ class Q_CORE_EXPORT QMetaMethod
    friend bool operator!=(const QMetaMethod &m1, const QMetaMethod &m2);
 };
 
-Q_DECLARE_TYPEINFO(QMetaMethod, Q_MOVABLE_TYPE);
-
 inline bool operator==(const QMetaMethod &m1, const QMetaMethod &m2)
 {
    if (m1.m_metaObject != m2.m_metaObject)  {

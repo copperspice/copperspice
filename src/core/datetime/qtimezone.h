@@ -133,12 +133,9 @@ class Q_CORE_EXPORT QTimeZone
    QSharedDataPointer<QTimeZonePrivate> d;
 };
 
-Q_DECLARE_TYPEINFO(QTimeZone::OffsetData, Q_MOVABLE_TYPE);
-
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &ds, QTimeZone &tz);
 
 Q_CORE_EXPORT QDebug operator<<(QDebug dbg, const QTimeZone &tz);
-
 
 #endif // QTIMEZONE_H

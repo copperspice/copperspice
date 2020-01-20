@@ -239,7 +239,6 @@ inline QBitRef QBitArray::operator[](uint i)
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &);
 
-Q_DECLARE_TYPEINFO(QBitArray, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QBitArray)
 
 #endif

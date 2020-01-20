@@ -144,8 +144,6 @@ class QTextUndoCommand
    bool tryMerge(const QTextUndoCommand &other);
 };
 
-Q_DECLARE_TYPEINFO(QTextUndoCommand, Q_PRIMITIVE_TYPE);
-
 class QTextDocumentPrivate
 {
    Q_DECLARE_PUBLIC(QTextDocument)

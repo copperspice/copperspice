@@ -232,7 +232,6 @@ class QLineEditPrivate : public QWidgetPrivate
    SideWidgetEntryList trailingSideWidgets;
    int lastTextSize;
 };
-Q_DECLARE_TYPEINFO(QLineEditPrivate::SideWidgetEntry, Q_PRIMITIVE_TYPE);
 
 static bool isSideWidgetVisible(const QLineEditPrivate::SideWidgetEntry &e)
 {

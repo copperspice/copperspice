@@ -106,7 +106,6 @@ struct Q_GUI_EXPORT glyph_metrics_t {
       return xoff - x - width;
    }
 };
-Q_DECLARE_TYPEINFO(glyph_metrics_t, Q_PRIMITIVE_TYPE);
 
 struct QScriptAnalysis {
    enum Flags {
@@ -131,7 +130,6 @@ struct QScriptAnalysis {
       return script == other.script && bidiLevel == other.bidiLevel && flags == other.flags;
    }
 };
-Q_DECLARE_TYPEINFO(QScriptAnalysis, Q_PRIMITIVE_TYPE);
 
 struct QGlyphJustification {
    inline QGlyphJustification()
@@ -148,7 +146,6 @@ struct QGlyphJustification {
    uint nKashidas : 6;       // more does not make sense
    uint space_18d6 : 24;
 };
-Q_DECLARE_TYPEINFO(QGlyphJustification, Q_PRIMITIVE_TYPE);
 
 struct QGlyphAttributes {
    uchar clusterStart  : 1;
@@ -339,8 +336,6 @@ struct QScriptItem {
    }
 };
 
-Q_DECLARE_TYPEINFO(QScriptItem, Q_MOVABLE_TYPE);
-
 struct QScriptLine {
    // created and filled in QTextLine::layout_helper
    QScriptLine()
@@ -375,9 +370,6 @@ struct QScriptLine {
    void setDefaultHeight(QTextEngine *eng);
    void operator+=(const QScriptLine &other);
 };
-
-Q_DECLARE_TYPEINFO(QScriptLine, Q_PRIMITIVE_TYPE);
-
 
 inline void QScriptLine::operator+=(const QScriptLine &other)
 {

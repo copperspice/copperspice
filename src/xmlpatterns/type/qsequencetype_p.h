@@ -85,7 +85,6 @@ class SequenceType : public virtual QSharedData
 };
 }
 
-Q_DECLARE_TYPEINFO(QPatternist::SequenceType::Ptr, Q_MOVABLE_TYPE);
 
 QT_END_NAMESPACE
 

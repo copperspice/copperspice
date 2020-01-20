@@ -84,8 +84,6 @@ class QPointer
    }
 };
 
-template <class T> Q_DECLARE_TYPEINFO_BODY(QPointer<T>, Q_MOVABLE_TYPE);
-
 template <class T>
 inline bool operator==(const T *o, const QPointer<T> &p)
 {

@@ -64,8 +64,6 @@ class Q_XMLPATTERNS_EXPORT QSourceLocation
 Q_XMLPATTERNS_EXPORT uint qHash(const QSourceLocation &location);
 Q_XMLPATTERNS_EXPORT QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation);
 
-Q_DECLARE_TYPEINFO(QSourceLocation, Q_MOVABLE_TYPE);
-
 QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QSourceLocation) /* This macro must appear after QT_END_NAMESPACE. */

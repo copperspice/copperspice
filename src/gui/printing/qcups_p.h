@@ -108,12 +108,6 @@ class Q_GUI_EXPORT QCUPSSupport
    static void setPageRange(QPrinter *printer, int pageFrom, int pageTo);
 };
 
-Q_DECLARE_TYPEINFO(QCUPSSupport::JobHoldUntil,        Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(QCUPSSupport::BannerPage,          Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(QCUPSSupport::PageSet,             Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(QCUPSSupport::PagesPerSheetLayout, Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(QCUPSSupport::PagesPerSheet,       Q_PRIMITIVE_TYPE);
-
 Q_DECLARE_METATYPE(QCUPSSupport::JobHoldUntil)
 Q_DECLARE_METATYPE(QCUPSSupport::BannerPage)
 Q_DECLARE_METATYPE(QCUPSSupport::PageSet)

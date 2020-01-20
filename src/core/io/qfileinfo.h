@@ -141,6 +141,5 @@ class Q_CORE_EXPORT QFileInfo
 };
 
 using QFileInfoList = QList<QFileInfo>;
-Q_DECLARE_TYPEINFO(QFileInfo, Q_MOVABLE_TYPE);
 
 #endif

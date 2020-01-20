@@ -59,11 +59,10 @@ class QMargins
    int m_top;
    int m_right;
    int m_bottom;
+
    friend inline bool operator==(const QMargins &, const QMargins &);
    friend inline bool operator!=(const QMargins &, const QMargins &);
 };
-
-Q_DECLARE_TYPEINFO(QMargins, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QMargins &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMargins &);
@@ -301,11 +300,8 @@ private:
     qreal m_bottom;
 };
 
-Q_DECLARE_TYPEINFO(QMarginsF, Q_MOVABLE_TYPE);
-
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QMarginsF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMarginsF &);
-
 
 inline QMarginsF::QMarginsF()
     : m_left(0), m_top(0), m_right(0), m_bottom(0) {}

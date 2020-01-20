@@ -110,7 +110,6 @@ struct QTzTransition {
    qint64 tz_time;        // Transition time
    quint8 tz_typeind;     // Type Index
 };
-Q_DECLARE_TYPEINFO(QTzTransition, Q_PRIMITIVE_TYPE);
 
 struct QTzType {
    int tz_gmtoff;        // UTC offset in seconds
@@ -119,8 +118,6 @@ struct QTzType {
    bool   tz_ttisgmt;    // Is in UTC time
    bool   tz_ttisstd;    // Is in Standard time
 };
-Q_DECLARE_TYPEINFO(QTzType, Q_PRIMITIVE_TYPE);
-
 
 // TZ File parsing
 

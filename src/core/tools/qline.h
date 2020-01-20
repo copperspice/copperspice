@@ -75,7 +75,6 @@ class Q_CORE_EXPORT QLine
  private:
    QPoint pt1, pt2;
 };
-Q_DECLARE_TYPEINFO(QLine, Q_MOVABLE_TYPE);
 
 inline bool QLine::isNull() const
 {
@@ -249,7 +248,6 @@ class Q_CORE_EXPORT QLineF
  private:
    QPointF pt1, pt2;
 };
-Q_DECLARE_TYPEINFO(QLineF, Q_MOVABLE_TYPE);
 
 inline qreal QLineF::x1() const
 {

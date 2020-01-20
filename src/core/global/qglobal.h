@@ -781,83 +781,6 @@ static inline bool qIsNull(float data)
    return tmp == 0u;
 }
 
-template <typename T>
-class QTypeInfo
-{
- public:
-   enum {
-      isPointer  = false,
-      isIntegral = std::is_integral<T>::value,
-      isComplex  = true,
-      isStatic   = true,
-      isLarge    = (sizeof(T) > sizeof(void *)),
-
-      sizeOf     = sizeof(T)
-    };
-};
-
-template<>
-class QTypeInfo<void>
-{
-public:
-    enum {
-        isPointer  = false,
-        isIntegral = false,
-        isComplex  = false,
-        isStatic   = false,
-        isLarge    = false,
-
-        sizeOf     = 0
-    };
-};
-
-template <typename T>
-class QTypeInfo<T *>
-{
- public:
-   enum {
-      isPointer  = true,
-      isIntegral = false,
-      isComplex  = false,
-      isStatic   = false,
-      isLarge    = false,
-      sizeOf     = sizeof(T*)
-   };
-};
-
-
-/*
-   Specialize a specific type with: Q_DECLARE_TYPEINFO(type, flags);
-
-   where 'type' is the name of the type to specialize and 'flags' is
-   logically-OR'ed combination of the flags below
-*/
-enum { /* TYPEINFO flags */
-   Q_COMPLEX_TYPE   = 0,
-   Q_PRIMITIVE_TYPE = 0x1,
-   Q_STATIC_TYPE    = 0,
-   Q_MOVABLE_TYPE   = 0x2,
-   Q_DUMMY_TYPE     = 0x4
-};
-
-#define Q_DECLARE_TYPEINFO_BODY(TYPE, FLAGS) \
-class QTypeInfo<TYPE> \
-{ \
-public: \
-   enum { \
-      isComplex  = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
-      isStatic   = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
-      isLarge    = (sizeof(TYPE)>sizeof(void*)), \
-      isPointer  = false, \
-      isIntegral = std::is_integral< TYPE >::value, \
-      sizeOf = sizeof(TYPE) \
-   }; \
-    static inline const char *name() { return #TYPE; } \
-}
-
-#define Q_DECLARE_TYPEINFO(TYPE, FLAGS) \
-template <> \
-Q_DECLARE_TYPEINFO_BODY(TYPE, FLAGS)
 
 
 template <typename T>
@@ -878,27 +801,6 @@ template <>                       \
 inline void qSwap<TYPE>(TYPE &value1, TYPE &value2) \
 { qSwap(value1.data_ptr(), value2.data_ptr()); } \
 Q_DECLARE_SHARED_STL(TYPE)
-
-
-//  QTypeInfo primitive specializations
-Q_DECLARE_TYPEINFO(signed char, Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(bool,        Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(char,        Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(uchar,       Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(short,       Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(ushort,      Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(int,         Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(uint,        Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(long,        Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(ulong,       Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(float,       Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(double,      Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(qint64,      Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(quint64,     Q_PRIMITIVE_TYPE);
-
-#ifndef Q_OS_DARWIN
-Q_DECLARE_TYPEINFO(long double, Q_PRIMITIVE_TYPE);
-#endif
 
 Q_CORE_EXPORT void *qMalloc(size_t size);
 Q_CORE_EXPORT void *qRealloc(void *ptr, size_t size);

@@ -63,8 +63,6 @@ class Q_GUI_EXPORT QTextItem
    QString text() const;
    QFont font() const;
 };
-Q_DECLARE_TYPEINFO(QTextItem, Q_PRIMITIVE_TYPE);
-
 
 class Q_GUI_EXPORT QPaintEngine
 {

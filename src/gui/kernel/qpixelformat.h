@@ -263,7 +263,6 @@ class QPixelFormat
 };
 
 static_assert(sizeof(QPixelFormat) == sizeof(quint64), "Type mismatch");
-Q_DECLARE_TYPEINFO(QPixelFormat, Q_PRIMITIVE_TYPE);
 
 namespace QtPrivate {
 

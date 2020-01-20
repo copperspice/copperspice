@@ -31,7 +31,6 @@
 #include <qstring.h>
 #include <qkeysequence.h>
 #include <qcoreevent.h>
-
 #include <qvariant.h>
 #include <qmap.h>
 #include <qset.h>
@@ -1219,7 +1218,6 @@ class Q_GUI_EXPORT QTouchEvent : public QInputEvent
    friend class QApplicationPrivate;
 };
 
-Q_DECLARE_TYPEINFO(QTouchEvent::TouchPoint, Q_MOVABLE_TYPE);
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTouchEvent::TouchPoint::InfoFlags)
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTouchEvent::TouchPoint &);

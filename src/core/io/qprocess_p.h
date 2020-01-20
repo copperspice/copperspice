@@ -130,10 +130,8 @@ class QProcEnvValue
    mutable QString stringValue;
 };
 
-Q_DECLARE_TYPEINFO(QProcEnvValue, Q_MOVABLE_TYPE);
 #endif
 
-Q_DECLARE_TYPEINFO(QProcEnvKey, Q_MOVABLE_TYPE);
 class QProcessEnvironmentPrivate: public QSharedData
 {
  public:

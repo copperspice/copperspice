@@ -239,7 +239,6 @@ struct QTextHtmlParserNode {
 
    friend class QTextHtmlParser;
 };
-Q_DECLARE_TYPEINFO(QTextHtmlParserNode, Q_MOVABLE_TYPE);
 
 class QTextHtmlParser
 {

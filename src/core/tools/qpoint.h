@@ -75,7 +75,6 @@ class Q_CORE_EXPORT QPoint
    friend class QTransform;
 };
 
-Q_DECLARE_TYPEINFO(QPoint, Q_MOVABLE_TYPE);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPoint &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPoint &);
 
@@ -272,8 +271,6 @@ class Q_CORE_EXPORT QPointF
    friend class QMatrix;
    friend class QTransform;
 };
-
-Q_DECLARE_TYPEINFO(QPointF, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPointF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPointF &);

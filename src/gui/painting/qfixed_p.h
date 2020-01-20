@@ -310,7 +310,6 @@ struct QFixed {
 
    int val;
 };
-Q_DECLARE_TYPEINFO(QFixed, Q_PRIMITIVE_TYPE);
 
 #define QFIXED_MAX (INT_MAX/256)
 
@@ -440,7 +439,6 @@ struct QFixedPoint {
       return QFixedPoint(QFixed::fromReal(p.x()), QFixed::fromReal(p.y()));
    }
 };
-Q_DECLARE_TYPEINFO(QFixedPoint, Q_PRIMITIVE_TYPE);
 
 inline QFixedPoint operator-(const QFixedPoint &p1, const QFixedPoint &p2)
 {
@@ -471,6 +469,5 @@ struct QFixedSize {
 
    }
 };
-Q_DECLARE_TYPEINFO(QFixedSize, Q_PRIMITIVE_TYPE);
 
 #endif

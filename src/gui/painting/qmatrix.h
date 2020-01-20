@@ -127,34 +127,40 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
    qreal _m21, _m22;
    qreal _dx, _dy;
 };
-Q_DECLARE_TYPEINFO(QMatrix, Q_MOVABLE_TYPE);
 
 Q_GUI_EXPORT uint qHash(const QMatrix &key, uint seed = 0);
+
 // mathematical semantics
 inline QPoint operator*(const QPoint &p, const QMatrix &m)
 {
    return m.map(p);
 }
+
 inline QPointF operator*(const QPointF &p, const QMatrix &m)
 {
    return m.map(p);
 }
+
 inline QLineF operator*(const QLineF &l, const QMatrix &m)
 {
    return m.map(l);
 }
+
 inline QLine operator*(const QLine &l, const QMatrix &m)
 {
    return m.map(l);
 }
+
 inline QPolygon operator *(const QPolygon &a, const QMatrix &m)
 {
    return m.map(a);
 }
+
 inline QPolygonF operator *(const QPolygonF &a, const QMatrix &m)
 {
    return m.map(a);
 }
+
 inline QRegion operator *(const QRegion &r, const QMatrix &m)
 {
    return m.map(r);

@@ -305,7 +305,6 @@ class AccelTree : public QAbstractXmlNodeModel
 };
 }
 
-Q_DECLARE_TYPEINFO(QPatternist::AccelTree::BasicNodeData, Q_MOVABLE_TYPE);
 
 QT_END_NAMESPACE
 

@@ -36,7 +36,6 @@ class QVector4D;
 
 class Q_GUI_EXPORT QVector3D
 {
-
  public:
    QVector3D();
    QVector3D(qreal xpos, qreal ypos, qreal zpos);
@@ -122,8 +121,6 @@ class Q_GUI_EXPORT QVector3D
    friend QVector3D operator*(const QMatrix4x4 &matrix, const QVector3D &vector);
 #endif
 };
-
-Q_DECLARE_TYPEINFO(QVector3D, Q_MOVABLE_TYPE);
 
 inline QVector3D::QVector3D() : xp(0.0f), yp(0.0f), zp(0.0f) {}
 

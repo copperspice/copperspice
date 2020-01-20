@@ -141,7 +141,6 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
  protected:
    QByteArray m_id;
 };
-Q_DECLARE_TYPEINFO(QTimeZonePrivate::Data, Q_MOVABLE_TYPE);
 
 template<>
 QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone();
@@ -209,14 +208,11 @@ struct QTzTransitionTime {
    quint8 ruleIndex;
 };
 
-Q_DECLARE_TYPEINFO(QTzTransitionTime, Q_PRIMITIVE_TYPE);
 struct QTzTransitionRule {
    int stdOffset;
    int dstOffset;
    quint8 abbreviationIndex;
 };
-
-Q_DECLARE_TYPEINFO(QTzTransitionRule, Q_PRIMITIVE_TYPE);
 
 inline bool operator==(const QTzTransitionRule &lhs, const QTzTransitionRule &rhs)
 {

@@ -462,7 +462,4 @@ class Cardinality
 };
 }
 
-Q_DECLARE_TYPEINFO(QPatternist::Cardinality, Q_MOVABLE_TYPE);
-
-
 #endif

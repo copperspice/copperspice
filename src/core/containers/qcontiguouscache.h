@@ -256,10 +256,10 @@ void QContiguousCache<T>::detach_helper()
    int oldcount = x.d->count;
 
    while (oldcount--) {
-      if (QTypeInfo<T>::isComplex) {
-         new (dest) T(*src);
-      } else {
+      if (std::is_trivially_constructible_v<T>) {
          *dest = *src;
+      } else {
+         new (dest) T(*src);
       }
 
       dest++;
@@ -306,10 +306,11 @@ void QContiguousCache<T>::setCapacity(int asize)
       T *src = p->array + (d->start + d->count - 1) % d->alloc;
 
       while (oldcount--) {
-         if (QTypeInfo<T>::isComplex) {
-            new (dest) T(*src);
-         } else {
+
+         if (std::is_trivially_constructible_v<T>) {
             *dest = *src;
+         } else {
+            new (dest) T(*src);
          }
 
          if (dest == x.p->array) {
@@ -332,7 +333,7 @@ template <typename T>
 void QContiguousCache<T>::clear()
 {
    if (d->ref.load() == 1) {
-      if (QTypeInfo<T>::isComplex) {
+      if (! std::is_trivially_destructible_v<T>) {
          int oldcount = d->count;
          T *i = p->array + d->start;
          T *e = p->array + d->alloc;
@@ -340,6 +341,7 @@ void QContiguousCache<T>::clear()
          while (oldcount--) {
             i->~T();
             i++;
+
             if (i == e) {
                i = p->array;
             }
@@ -418,7 +420,7 @@ bool QContiguousCache<T>::operator==(const QContiguousCache<T> &other) const
 template <typename T>
 void QContiguousCache<T>::free(Data *x)
 {
-   if (QTypeInfo<T>::isComplex) {
+   if (! std::is_trivially_destructible_v<T>) {
       int oldcount = d->count;
       T *i = p->array + d->start;
       T *e = p->array + d->alloc;
@@ -442,15 +444,15 @@ void QContiguousCache<T>::append(const T &value)
 
    detach();
 
-   if (QTypeInfo<T>::isComplex) {
+   if (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T>) {
+      p->array[(d->start + d->count) % d->alloc] = value;
+
+   } else {
       if (d->count == d->alloc) {
          (p->array + (d->start + d->count) % d->alloc)->~T();
       }
 
       new (p->array + (d->start + d->count) % d->alloc) T(value);
-
-   } else {
-      p->array[(d->start + d->count) % d->alloc] = value;
    }
 
    if (d->count == d->alloc) {
@@ -482,10 +484,10 @@ void QContiguousCache<T>::prepend(const T &value)
       (p->array + d->start)->~T();
    }
 
-   if (QTypeInfo<T>::isComplex) {
-      new (p->array + d->start) T(value);
-   } else {
+   if (std::is_trivially_constructible_v<T>) {
       p->array[d->start] = value;
+   } else {
+      new (p->array + d->start) T(value);
    }
 }
 
@@ -499,11 +501,12 @@ void QContiguousCache<T>::insert(int pos, const T &value)
 
    detach();
    if (containsIndex(pos)) {
-      if (QTypeInfo<T>::isComplex) {
+
+      if (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T>) {
+         p->array[pos % d->alloc] = value;
+      } else {
          (p->array + pos % d->alloc)->~T();
          new (p->array + pos % d->alloc) T(value);
-      } else {
-         p->array[pos % d->alloc] = value;
       }
 
    } else if (pos == d->offset - 1) {
@@ -519,10 +522,10 @@ void QContiguousCache<T>::insert(int pos, const T &value)
       d->start = pos % d->alloc;
       d->count = 1;
 
-      if (QTypeInfo<T>::isComplex) {
-         new (p->array + d->start) T(value);
-      } else {
+      if (std::is_trivially_constructible_v<T>) {
          p->array[d->start] = value;
+      } else {
+         new (p->array + d->start) T(value);
       }
    }
 }
@@ -557,9 +560,11 @@ inline void QContiguousCache<T>::removeFirst()
    Q_ASSERT(d->count > 0);
    detach();
    d->count--;
-   if (QTypeInfo<T>::isComplex) {
+
+   if (! std::is_trivially_destructible_v<T>) {
       (p->array + d->start)->~T();
    }
+
    d->start = (d->start + 1) % d->alloc;
    d->offset++;
 }
@@ -570,7 +575,8 @@ inline void QContiguousCache<T>::removeLast()
    Q_ASSERT(d->count > 0);
    detach();
    d->count--;
-   if (QTypeInfo<T>::isComplex) {
+
+   if (! std::is_trivially_destructible_v<T>) {
       (p->array + (d->start + d->count) % d->alloc)->~T();
    }
 }

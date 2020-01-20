@@ -497,8 +497,6 @@ struct TranslatorMessageIdPtr {
    const TranslatorMessage *ptr;
 };
 
-Q_DECLARE_TYPEINFO(TranslatorMessageIdPtr, Q_MOVABLE_TYPE);
-
 inline int qHash(TranslatorMessageIdPtr tmp)
 {
    return qHash(tmp->id());
@@ -520,8 +518,6 @@ struct TranslatorMessageContentPtr {
 
    const TranslatorMessage *ptr;
 };
-
-Q_DECLARE_TYPEINFO(TranslatorMessageContentPtr, Q_MOVABLE_TYPE);
 
 inline int qHash(TranslatorMessageContentPtr tmp)
 {

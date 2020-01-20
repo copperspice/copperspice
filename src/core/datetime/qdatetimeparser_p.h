@@ -247,12 +247,12 @@ class Q_CORE_EXPORT QDateTimeParser
       PossiblePM = 3,
       PossibleBoth = 4
    };
+
    AmPmFinder findAmPm(QString &str, int index, int *used = 0) const;
    bool potentialValue(const QString &str, int min, int max, int index,
       const QDateTime &currentValue, int insert) const;
 
 };
-Q_DECLARE_TYPEINFO(QDateTimeParser::SectionNode, Q_PRIMITIVE_TYPE);
 
 Q_CORE_EXPORT bool operator==(const QDateTimeParser::SectionNode &s1, const QDateTimeParser::SectionNode &s2);
 

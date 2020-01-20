@@ -232,11 +232,8 @@ class Q_GUI_EXPORT QPainterPath
 
 };
 
-Q_DECLARE_TYPEINFO(QPainterPath::Element, Q_PRIMITIVE_TYPE);
-
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
-
 
 class Q_GUI_EXPORT QPainterPathStroker
 {

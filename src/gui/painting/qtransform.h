@@ -158,9 +158,8 @@ class Q_GUI_EXPORT QTransform
    Private *d;
 };
 
-Q_DECLARE_TYPEINFO(QTransform, Q_MOVABLE_TYPE);
-
 Q_GUI_EXPORT uint qHash(const QTransform &key, uint seed = 0);
+
 inline QTransform::TransformationType QTransform::inline_type() const
 {
    if (m_dirty == TxNone) {

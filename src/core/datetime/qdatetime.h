@@ -159,7 +159,6 @@ class Q_CORE_EXPORT QDate
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
 };
-Q_DECLARE_TYPEINFO(QDate, Q_MOVABLE_TYPE);
 
 class Q_CORE_EXPORT QTime
 {
@@ -257,8 +256,6 @@ class Q_CORE_EXPORT QTime
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
 };
-Q_DECLARE_TYPEINFO(QTime, Q_MOVABLE_TYPE);
-
 
 class Q_CORE_EXPORT QDateTime
 {
@@ -385,8 +382,6 @@ class Q_CORE_EXPORT QDateTime
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
 };
-
-Q_DECLARE_TYPEINFO(QDateTime, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &);

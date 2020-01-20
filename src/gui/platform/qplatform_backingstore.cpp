@@ -111,8 +111,6 @@ struct QBackingstoreTextureInfo {
    QPlatformTextureList::Flags flags;
 };
 
-Q_DECLARE_TYPEINFO(QBackingstoreTextureInfo, Q_MOVABLE_TYPE);
-
 class QPlatformTextureListPrivate
 {
  public:

@@ -18,7 +18,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QLibraryInfo
    QLog
    QSysInfo
-   QTypeInfo
    QtCore
 )
 
@@ -50,7 +49,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qsysinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtypeinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qt_windows.h
 )
 

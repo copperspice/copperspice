@@ -79,7 +79,6 @@ class Q_CORE_EXPORT QSize
    friend inline const QSize operator/(const QSize &, qreal);
 };
 
-Q_DECLARE_TYPEINFO(QSize, Q_MOVABLE_TYPE);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
 
@@ -287,7 +286,6 @@ class Q_CORE_EXPORT QSizeF
    friend inline const QSizeF operator*(qreal, const QSizeF &);
    friend inline const QSizeF operator/(const QSizeF &, qreal);
 };
-Q_DECLARE_TYPEINFO(QSizeF, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSizeF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSizeF &);

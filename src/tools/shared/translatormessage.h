@@ -241,9 +241,6 @@ class TranslatorMessage
    bool m_plural;
 };
 
-Q_DECLARE_TYPEINFO(TranslatorMessage, Q_MOVABLE_TYPE);
-
-
 #endif // QT_NO_TRANSLATION
 
 #endif // TRANSLATORMESSAGE_H

@@ -118,8 +118,6 @@ class ByteTranslatorMessage
    QStringList m_translations;
 };
 
-Q_DECLARE_TYPEINFO(ByteTranslatorMessage, Q_MOVABLE_TYPE);
-
 bool ByteTranslatorMessage::operator<(const ByteTranslatorMessage &m) const
 {
    if (m_context != m.m_context) {

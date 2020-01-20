@@ -366,7 +366,4 @@ inline void swap(QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p1,
    p1.swap(p2);
 }
 }
-template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedDataPointer<T>, Q_MOVABLE_TYPE);
-template<typename T> Q_DECLARE_TYPEINFO_BODY(QExplicitlySharedDataPointer<T>, Q_MOVABLE_TYPE);
-
 #endif

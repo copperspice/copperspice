@@ -121,8 +121,6 @@ class Q_GUI_EXPORT QVector4D
 
 };
 
-Q_DECLARE_TYPEINFO(QVector4D, Q_MOVABLE_TYPE);
-
 inline QVector4D::QVector4D() : xp(0.0f), yp(0.0f), zp(0.0f), wp(0.0f)
 {}
 

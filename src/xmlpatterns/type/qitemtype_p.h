@@ -225,8 +225,6 @@ inline void operator|=(ItemType::Ptr &op1, const ItemType::Ptr &op2)
 
 }
 
-Q_DECLARE_TYPEINFO(QPatternist::ItemType::Ptr, Q_MOVABLE_TYPE);
-
 QT_END_NAMESPACE
 
 #endif

@@ -379,7 +379,6 @@ struct QCheckPoint {
    QFixed maximumWidth;
    QFixed contentsWidth;
 };
-Q_DECLARE_TYPEINFO(QCheckPoint, Q_PRIMITIVE_TYPE);
 
 static bool operator<(const QCheckPoint &checkPoint, QFixed y)
 {

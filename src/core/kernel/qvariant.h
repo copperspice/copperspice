@@ -325,7 +325,7 @@ class Q_CORE_EXPORT QVariant
 
    template<typename T>
    static inline QVariant fromValue(const T &value) {
-      return QVariant(qMetaTypeId<T>(static_cast<T *>(nullptr)), &value, QTypeInfo<T>::isPointer);
+      return QVariant(qMetaTypeId<T>(static_cast<T *>(nullptr)), &value, std::is_pointer_v<T>);
    }
 
    static inline QVariant fromValue(const QVariant &value) {
@@ -471,13 +471,13 @@ inline void QVariant::setValue(const T &v)
       d.is_null = false;
       T *old    = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
 
-      if (QTypeInfo<T>::isComplex) {
+      if (! std::is_trivially_destructible_v<T>) {
          old->~T();
       }
       new (old) T(v);  // call the copy constructor
 
    } else {
-      *this = QVariant(type, &v, QTypeInfo<T>::isPointer);
+       *this = QVariant(type, &v, std::is_pointer_v<T>);
    }
 
 }
@@ -549,7 +549,6 @@ inline QVariant qvariant_cast<QVariant>(const QVariant &v)
 }
 
 Q_DECLARE_SHARED(QVariant)
-Q_DECLARE_TYPEINFO(QVariant, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);

@@ -106,8 +106,6 @@ class Q_GUI_EXPORT QVector2D
    friend class QVector4D;
 };
 
-Q_DECLARE_TYPEINFO(QVector2D, Q_MOVABLE_TYPE);
-
 inline QVector2D::QVector2D() : xp(0.0f), yp(0.0f) {}
 
 inline QVector2D::QVector2D(float xpos, float ypos, int) : xp(xpos), yp(ypos) {}

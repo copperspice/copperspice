@@ -776,8 +776,6 @@ inline const Expression::Ptr &Expression::rewrite(const Expression::Ptr &to,
 }
 }
 
-Q_DECLARE_TYPEINFO(QPatternist::Expression::Ptr, Q_MOVABLE_TYPE);
-
 QT_END_NAMESPACE
 
 #endif

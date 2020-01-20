@@ -147,14 +147,12 @@ class Q_CORE_EXPORT QRect
    int y2;
 
 };
-Q_DECLARE_TYPEINFO(QRect, Q_MOVABLE_TYPE);
 
 inline bool operator==(const QRect &, const QRect &);
 inline bool operator!=(const QRect &, const QRect &);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QRect &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRect &);
-
 
 inline QRect::QRect(int aleft, int atop, int awidth, int aheight)
 {
@@ -697,7 +695,6 @@ class Q_CORE_EXPORT QRectF
    qreal w;
    qreal h;
 };
-Q_DECLARE_TYPEINFO(QRectF, Q_MOVABLE_TYPE);
 
 inline bool operator==(const QRectF &, const QRectF &);
 inline bool operator!=(const QRectF &, const QRectF &);

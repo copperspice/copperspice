@@ -120,8 +120,6 @@ class Q_CORE_EXPORT QModelIndex
    const QAbstractItemModel *m;
 };
 
-Q_DECLARE_TYPEINFO(QModelIndex, Q_MOVABLE_TYPE);
-
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QModelIndex &);
 uint qHash(const QPersistentModelIndex &index, uint seed = 0);
 
@@ -180,7 +178,6 @@ class Q_CORE_EXPORT QPersistentModelIndex
    friend uint qHash(const QPersistentModelIndex &, uint seed);
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
 };
-Q_DECLARE_TYPEINFO(QPersistentModelIndex, Q_MOVABLE_TYPE);
 
 inline uint qHash(const QPersistentModelIndex &index, uint seed)
 {

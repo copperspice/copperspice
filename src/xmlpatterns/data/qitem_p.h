@@ -438,8 +438,5 @@ inline QXmlItem::QXmlItem(const QPatternist::Item &i) : m_node(i.node)
    }
 }
 
-Q_DECLARE_TYPEINFO(QPatternist::Item::Iterator::Ptr, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(QPatternist::AtomicValue, Q_MOVABLE_TYPE);
-
 QT_END_NAMESPACE
 #endif

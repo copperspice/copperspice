@@ -55,7 +55,6 @@ class Q_CORE_EXPORT QBasicTimer
    void start(int msec, Qt::TimerType timerType, QObject *obj);
    void stop();
 };
-Q_DECLARE_TYPEINFO(QBasicTimer, Q_MOVABLE_TYPE);
 
 
 #endif

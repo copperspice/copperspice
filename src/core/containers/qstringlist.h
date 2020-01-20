@@ -92,8 +92,6 @@ class QStringList : public QList<QString>
    using QList<QString>::lastIndexOf;
 };
 
-Q_DECLARE_TYPEINFO(QStringList, Q_MOVABLE_TYPE);
-
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QStringList &list);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QStringList &list);
 

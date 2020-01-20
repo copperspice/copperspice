@@ -2895,8 +2895,6 @@ struct QRegionSpan {
    }
 };
 
-Q_DECLARE_TYPEINFO(QRegionSpan, Q_PRIMITIVE_TYPE);
-
 static inline void flushRow(const QRegionSpan *spans, int y, int numSpans, QRegionPrivate *reg, int *lastRow,
    int *extendTo, bool *needsExtend)
 {

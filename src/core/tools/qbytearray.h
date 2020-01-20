@@ -844,7 +844,6 @@ inline QByteArray qUncompress(const QByteArray &data)
    return qUncompress(reinterpret_cast<const uchar *>(data.constData()), data.size());
 }
 
-Q_DECLARE_TYPEINFO(QByteArray, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QByteArray)
 
 #endif
