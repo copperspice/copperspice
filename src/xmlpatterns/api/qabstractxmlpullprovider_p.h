@@ -28,13 +28,12 @@
 #include <qcontainerfwd.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlItem;
 class QXmlName;
 class QVariant;
 
 namespace QPatternist {
+
 class AbstractXmlPullProviderPrivate;
 
 class AbstractXmlPullProvider
@@ -67,13 +66,10 @@ class AbstractXmlPullProvider
    virtual QHash<QXmlName, QString> attributes() = 0;
    virtual QHash<QXmlName, QXmlItem> attributeItems() = 0;
 
-   /* *** The functions below are internal. */
  private:
    Q_DISABLE_COPY(AbstractXmlPullProvider)
    AbstractXmlPullProviderPrivate *d;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

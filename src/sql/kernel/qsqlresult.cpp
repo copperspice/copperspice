@@ -404,8 +404,10 @@ bool QSqlResult::exec()
       }
    } else {
       QString val;
-      int i = 0;
+
+      int i   = 0;
       int idx = 0;
+
       for (idx = 0; idx < d->values.count(); ++idx) {
          i = query.indexOf(QLatin1Char('?'), i);
          if (i == -1) {
@@ -418,6 +420,7 @@ bool QSqlResult::exec()
          } else {
             f.setValue(var);
          }
+
          val = driver()->formatValue(f);
          query = query.replace(i, 1, driver()->formatValue(f));
          i += val.length();
@@ -590,9 +593,9 @@ bool QSqlResult::hasOutValues() const
          return true;
       }
    }
+
    return false;
 }
-
 
 QSqlRecord QSqlResult::record() const
 {

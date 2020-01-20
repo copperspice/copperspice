@@ -29,10 +29,10 @@
 #include <qsharedpointer.h>
 #include <qobject.h>
 
-#include <QtScript/qscriptvalue.h>
-#include <QtScript/qscriptcontext.h>
-#include <QtScript/qscriptstring.h>
-#include <QtScript/qscriptprogram.h>
+#include <qscriptvalue.h>
+#include <qscriptcontext.h>
+#include <qscriptstring.h>
+#include <qscriptprogram.h>
 #include <qstringfwd.h>
 
 class QDateTime;

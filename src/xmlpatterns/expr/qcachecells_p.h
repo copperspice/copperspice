@@ -24,11 +24,9 @@
 #ifndef QCacheCells_P_H
 #define QCacheCells_P_H
 
-#include <QList>
-#include <QVector>
+#include <qlist.h>
+#include <qvector.h>
 #include <qitem_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 class ItemCacheCell
@@ -71,9 +69,5 @@ class ItemSequenceCacheCell
    bool                inUse;
 };
 }
-
-
-QT_END_NAMESPACE
-
 
 #endif

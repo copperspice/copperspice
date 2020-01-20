@@ -238,7 +238,7 @@ void QItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
    if (value.isValid()) {
       checkState = static_cast<Qt::CheckState>(value.toInt());
-      checkRect = doCheck(opt, opt.rect, value);
+      checkRect  = doCheck(opt, opt.rect, value);
    }
 
    // do the layout

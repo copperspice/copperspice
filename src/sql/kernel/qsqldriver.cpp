@@ -110,23 +110,10 @@ QStringList QSqlDriver::tables(QSql::TableType) const
    return QStringList();
 }
 
-/*!
-    Returns the primary index for table \a tableName. Returns an empty
-    QSqlIndex if the table doesn't have a primary index. The default
-    implementation returns an empty index.
-*/
-
 QSqlIndex QSqlDriver::primaryIndex(const QString &) const
 {
    return QSqlIndex();
 }
-
-
-/*!
-    Returns a QSqlRecord populated with the names of the fields in
-    table \a tableName. If no such table exists, an empty record is
-    returned. The default implementation returns an empty record.
-*/
 
 QSqlRecord QSqlDriver::record(const QString & /* tableName */) const
 {
@@ -150,16 +137,19 @@ bool QSqlDriver::isIdentifierEscaped(const QString &identifier, IdentifierType t
 QString QSqlDriver::stripDelimiters(const QString &identifier, IdentifierType type) const
 {
    QString ret;
+
    if (isIdentifierEscaped(identifier, type)) {
       ret = identifier.mid(1);
       ret.chop(1);
    } else {
       ret = identifier;
    }
+
    return ret;
 }
 
-QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, const QSqlRecord &rec, bool preparedStatement) const
+QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
+                  const QSqlRecord &rec, bool preparedStatement) const
 {
    int i;
    QString s;
@@ -207,7 +197,7 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
          s.append("UPDATE " + tableName + " SET ");
 
          for (i = 0; i < rec.count(); ++i) {
-            if (!rec.isGenerated(i)) {
+            if (! rec.isGenerated(i)) {
                continue;
             }
 
@@ -299,6 +289,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
                r = nullTxt;
             }
             break;
+
          case QVariant::DateTime:
             if (field.value().toDateTime().isValid())
                r = QChar('\'') + field.value().toDateTime().toString(Qt::ISODate) + QChar('\'');
@@ -307,6 +298,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
             }
             break;
 #endif
+
          case QVariant::String:
          case QVariant::Char: {
             QString result = field.value().toString();
@@ -355,6 +347,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
             break;
       }
    }
+
    return r;
 }
 

@@ -31,9 +31,8 @@
 #include <QString>
 #include <QVector>
 #include <QXmlName>
-#include <qprimitives_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qprimitives_p.h>
 
 namespace QPatternist {
 class NamePool : public QSharedData
@@ -437,8 +436,5 @@ inline QXmlName::QXmlName(const NamespaceCode uri,
    Q_ASSERT_X(uri <= MaximumNamespaces, "",
               qPrintable(QString("NamePool namespace limits: max is %1, therefore %2 exceeds.").formatArg(MaximumNamespaces).formatArg(uri)));
 }
-
-
-QT_END_NAMESPACE
 
 #endif

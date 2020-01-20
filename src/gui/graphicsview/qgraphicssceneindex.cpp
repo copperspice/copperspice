@@ -21,17 +21,20 @@
 *
 ***********************************************************************/
 
-#include <qdebug.h>
 #include <qgraphicsscene.h>
+
+#include <qdebug.h>
+#include <qgraphicswidget.h>
+
 #include <qgraphicsitem_p.h>
 #include <qgraphicsscene_p.h>
-#include <qgraphicswidget.h>
 #include <qgraphicssceneindex_p.h>
 #include <qgraphicsscenebsptreeindex_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
 namespace QtPrivate {
+
 static bool intersect_rect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *intersectData)
 {
@@ -45,6 +48,7 @@ static bool intersect_rect(const QGraphicsItem *item, const QRectF &exposeRect, 
 
    bool keep = true;
    const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
+
    if (itemd->itemIsUntransformable()) {
       // Untransformable items; map the scene rect to item coordinates.
       const QTransform transform = item->deviceTransform(deviceTransform);
@@ -85,7 +89,6 @@ static bool intersect_rect(const QGraphicsItem *item, const QRectF &exposeRect, 
    return keep;
 }
 
-
 static bool intersect_point(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *intersectData)
 {
@@ -100,6 +103,7 @@ static bool intersect_point(const QGraphicsItem *item, const QRectF &exposeRect,
 
    bool keep = false;
    const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
+
    if (itemd->itemIsUntransformable()) {
       // Untransformable items; map the scene point to item coordinates.
       const QTransform transform = item->deviceTransform(deviceTransform);
@@ -130,8 +134,6 @@ static bool intersect_point(const QGraphicsItem *item, const QRectF &exposeRect,
    return keep;
 }
 
-
-
 static bool intersect_path(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *intersectData)
 {
@@ -144,6 +146,7 @@ static bool intersect_path(const QGraphicsItem *item, const QRectF &exposeRect, 
 
    bool keep = true;
    const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
+
    if (itemd->itemIsUntransformable()) {
       // Untransformable items; map the scene rect to item coordinates.
       const QTransform transform = item->deviceTransform(deviceTransform);
@@ -389,6 +392,7 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPolygonF &polygon, Qt::
    QPainterPath path;
    path.addPolygon(polygon);
    d->items_helper(exposeRect, &QtPrivate::intersect_path, &itemList, deviceTransform, mode, order, &path);
+
    return itemList;
 }
 
@@ -400,9 +404,9 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPainterPath &path, Qt::
    QRectF exposeRect = path.controlPointRect();
    _q_adjustRect(&exposeRect);
    d->items_helper(exposeRect, &QtPrivate::intersect_path, &itemList, deviceTransform, mode, order, &path);
+
    return itemList;
 }
-
 
 QList<QGraphicsItem *> QGraphicsSceneIndex::estimateItems(const QPointF &point, Qt::SortOrder order) const
 {
@@ -426,6 +430,7 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::estimateTopLevelItems(const QRectF &
 
       return sorted;
    }
+
    return scened->topLevelItems;
 }
 
@@ -434,9 +439,6 @@ void QGraphicsSceneIndex::updateSceneRect(const QRectF &rect)
    Q_UNUSED(rect);
 }
 
-/*!
-    This virtual function removes all items in the scene index.
-*/
 void QGraphicsSceneIndex::clear()
 {
    const QList<QGraphicsItem *> allItems = items();
@@ -444,7 +446,6 @@ void QGraphicsSceneIndex::clear()
       removeItem(allItems.at(i));
    }
 }
-
 
 void QGraphicsSceneIndex::deleteItem(QGraphicsItem *item)
 {
@@ -457,11 +458,6 @@ void QGraphicsSceneIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::G
 
 }
 
-/*!
-    Notify the index for a geometry change of an \a item.
-
-    \sa QGraphicsItem::prepareGeometryChange()
-*/
 void QGraphicsSceneIndex::prepareBoundingRectChange(const QGraphicsItem *item)
 {
    Q_UNUSED(item);

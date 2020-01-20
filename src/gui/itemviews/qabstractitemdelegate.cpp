@@ -294,34 +294,41 @@ QString QAbstractItemDelegatePrivate::textForRole(Qt::ItemDataRole role, const Q
 {
    const QLocale::FormatType formatType = (role == Qt::DisplayRole) ? QLocale::ShortFormat : QLocale::LongFormat;
    QString text;
+
    switch (value.userType()) {
       case QMetaType::Float:
          text = locale.toString(value.toFloat());
          break;
+
       case QVariant::Double:
          text = locale.toString(value.toDouble(), 'g', precision);
          break;
+
       case QVariant::Int:
       case QVariant::LongLong:
          text = locale.toString(value.toLongLong());
          break;
+
       case QVariant::UInt:
       case QVariant::ULongLong:
          text = locale.toString(value.toULongLong());
          break;
+
       case QVariant::Date:
          text = locale.toString(value.toDate(), formatType);
          break;
+
       case QVariant::Time:
          text = locale.toString(value.toTime(), formatType);
          break;
+
       case QVariant::DateTime: {
          const QDateTime dateTime = value.toDateTime();
-         text = locale.toString(dateTime.date(), formatType)
-            + QLatin1Char(' ')
-            + locale.toString(dateTime.time(), formatType);
+         text = locale.toString(dateTime.date(), formatType) + QChar(' ')
+                  + locale.toString(dateTime.time(), formatType);
          break;
       }
+
       default:
          text = value.toString();
          if (role == Qt::DisplayRole) {
@@ -329,8 +336,10 @@ QString QAbstractItemDelegatePrivate::textForRole(Qt::ItemDataRole role, const Q
          }
          break;
    }
+
    return text;
 }
+
 void QAbstractItemDelegatePrivate::_q_commitDataAndCloseEditor(QWidget *editor)
 {
    Q_Q(QAbstractItemDelegate);

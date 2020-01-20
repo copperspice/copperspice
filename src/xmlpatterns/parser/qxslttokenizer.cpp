@@ -28,10 +28,7 @@
 #include "qquerytransformparser_p.h"
 #include "qxquerytokenizer_p.h"
 #include "qpatternistlocale_p.h"
-
 #include "qxslttokenizer_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -458,10 +455,10 @@ QHash<QString, int> XSLTTokenizer::createValidationAlternatives()
 {
    QHash<QString, int> retval;
 
-   retval.insert(QLatin1String("preserve"), 0);
-   retval.insert(QLatin1String("strip"), 1);
-   retval.insert(QLatin1String("strict"), 2);
-   retval.insert(QLatin1String("lax"), 3);
+   retval.insert(QString("preserve"), 0);
+   retval.insert(QString("strip"), 1);
+   retval.insert(QString("strict"), 2);
+   retval.insert(QString("lax"), 3);
 
    return retval;
 }
@@ -496,6 +493,7 @@ void XSLTTokenizer::unexpectedContent(const ReportContext::ErrorCode code) const
                    .formatArg(formatKeyword(name()));
          break;
       }
+
       case QXmlStreamReader::Characters: {
          if (whitespaceToSkip()) {
             return;
@@ -504,6 +502,7 @@ void XSLTTokenizer::unexpectedContent(const ReportContext::ErrorCode code) const
          message = QtXmlPatterns::tr("Text nodes are not allowed at this location.");
          break;
       }
+
       case QXmlStreamReader::Invalid: {
          /* It's an issue with well-formedness. */
          message = escape(errorString());
@@ -1928,8 +1927,9 @@ bool XSLTTokenizer::insideSequenceConstructor(TokenSource::Queue *const to,
           [[fallthrough]];
 
          case QXmlStreamReader::Comment:
-            /* We do nothing, we just ignore them. */
+            /* do nothing, just ignore them. */
             continue;
+
          case QXmlStreamReader::Characters: {
             if (whitespaceToSkip()) {
                continue;
@@ -1938,6 +1938,7 @@ bool XSLTTokenizer::insideSequenceConstructor(TokenSource::Queue *const to,
                continue;
             }
          }
+
          default:
             ;
       }
@@ -2398,18 +2399,17 @@ void XSLTTokenizer::queueSorting(const bool oneSortRequired, TokenSource::Queue 
                      queueToken(Token(NCNAME, QLatin1String("number")), to);
                   }
                }
+
                /* We queue these parantheses for the sake of the function
                 * call for attribute data-type. In the case we don't have
                 * such an attribute, the parantheses are just redundant. */
                queueToken(LPAREN, to);
-               queueSelectOrSequenceConstructor(ReportContext::XTSE1015,
-                                                true,
-                                                to,
-                                                0,
-                                                false);
+               queueSelectOrSequenceConstructor(ReportContext::XTSE1015, true, to, 0, false);
+
                /* If neither a select attribute or a sequence constructor is supplied,
                 * we're supposed to use the context item. */
                queueToken(RPAREN, to);
+
                if (before == to->count()) {
                   queueToken(DOT, to);
                }
@@ -2418,11 +2418,10 @@ void XSLTTokenizer::queueSorting(const bool oneSortRequired, TokenSource::Queue 
                // TODO lang
 
                // TODO This doesn't work as is. @order can be an AVT, and so can case-order and lang.
-               if (atts.hasAttribute(QLatin1String("order")) && readToggleAttribute(QLatin1String("order"),
-                     QLatin1String("descending"),
-                     QLatin1String("ascending"),
-                     &atts)) {
+               if (atts.hasAttribute(QString("order")) && readToggleAttribute(QString("order"),
+                     QString("descending"), QString("ascending"), &atts)) {
                   queueToken(DESCENDING, to);
+
                } else {
                   /* This is the default. */
                   queueToken(ASCENDING, to);
@@ -2436,10 +2435,12 @@ void XSLTTokenizer::queueSorting(const bool oneSortRequired, TokenSource::Queue 
 
                hasQueuedOneSort = true;
                continue;
+
             } else {
                break;
             }
          }
+
          case QXmlStreamReader::Characters: {
             if (speciallyTreatWhitespace && isWhitespace()) {
                continue;
@@ -2460,24 +2461,27 @@ void XSLTTokenizer::queueSorting(const bool oneSortRequired, TokenSource::Queue 
             unexpectedContent();
 
       };
-      if (oneSortRequired && !hasQueuedOneSort) {
+
+      if (oneSortRequired && ! hasQueuedOneSort) {
          error(QtXmlPatterns::tr("At least one %1 element must appear as child of %2.")
                .formatArgs(formatKeyword(QLatin1String("sort")), formatKeyword(toString(elementName))),
                ReportContext::XTSE0010);
+
       } else {
          return;
       }
    }
+
    checkForParseError();
 }
 
 void XSLTTokenizer::insideFunction()
 {
-   queueToken(DECLARE, &m_tokenSource);
+   queueToken(DECLARE,  &m_tokenSource);
    queueToken(FUNCTION, &m_tokenSource);
    queueToken(INTERNAL, &m_tokenSource);
-   queueToken(Token(QNAME, readAttribute(QLatin1String("name"))), &m_tokenSource);
-   queueToken(LPAREN, &m_tokenSource);
+   queueToken(Token(QNAME, readAttribute(QString("name"))), &m_tokenSource);
+   queueToken(LPAREN,  &m_tokenSource);
 
    const QString expectedType(hasAttribute(QLatin1String("as")) ? readAttribute(QLatin1String("as")) : QString());
 
@@ -2513,6 +2517,4 @@ YYLTYPE XSLTTokenizer::currentSourceLocator() const
    retval.first_column = columnNumber();
    return retval;
 }
-
-QT_END_NAMESPACE
 

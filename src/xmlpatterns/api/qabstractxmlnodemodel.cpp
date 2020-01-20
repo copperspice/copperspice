@@ -44,10 +44,10 @@ QXmlNodeModelIndexIteratorPointer;
 
 bool QAbstractXmlNodeModel::isIgnorableInDeepEqual(const QXmlNodeModelIndex &n)
 {
-   Q_ASSERT(!n.isNull());
+   Q_ASSERT(! n.isNull());
+
    const QXmlNodeModelIndex::NodeKind nk = n.kind();
-   return nk == QXmlNodeModelIndex::ProcessingInstruction ||
-          nk == QXmlNodeModelIndex::Comment;
+   return nk == QXmlNodeModelIndex::ProcessingInstruction || nk == QXmlNodeModelIndex::Comment;
 }
 
 using namespace QPatternist;
@@ -147,10 +147,10 @@ static inline QXmlNodeModelIndexIteratorPointer mergeIterators(const QXmlNodeMod
 }
 
 inline QAbstractXmlForwardIterator<QXmlNodeModelIndex>::Ptr
-QAbstractXmlNodeModel::mapToSequence(const QXmlNodeModelIndex &ni,
-                                     const DynamicContext::Ptr &) const
+QAbstractXmlNodeModel::mapToSequence(const QXmlNodeModelIndex &ni, const DynamicContext::Ptr &) const
 {
-   Q_ASSERT(!ni.isNull());
+   Q_ASSERT(! ni.isNull());
+
    /* Since we pass in this here, mapToSequence is used recursively. */
    return mergeIterators(ni, makeSequenceMappingIterator<QXmlNodeModelIndex>(this,
                          ni.iterate(QXmlNodeModelIndex::AxisChild),
@@ -210,9 +210,10 @@ QAbstractXmlNodeModel::mapToSequence(const QXmlNodeModelIndex &ni,
   \sa {http://www.w3.org/TR/xquery/#axes}{XQuery 1.0: An XML Query Language, 3.2.1.1 Axes}
   \sa {http://www.w3.org/TR/xpath-datamodel/}{W3CXQuery 1.0 and XPath 2.0 Data Model (XDM)}
  */
+
 QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> >
-QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni,
-                               QXmlNodeModelIndex::Axis axis) const
+
+QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const
 {
    /* Returns iterators that track state and calls nextFromSimpleAxis()
     * iteratively. Typically, when sub-classing QSimpleXmlNodeModel,
@@ -222,6 +223,7 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni,
    switch (axis) {
       case QXmlNodeModelIndex::AxisSelf:
          return makeSingletonIterator(ni);
+
       case QXmlNodeModelIndex::AxisParent: {
          if (kind(ni) == QXmlNodeModelIndex::Document) {
             return makeEmptyIterator<QXmlNodeModelIndex>();
@@ -229,19 +231,21 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni,
             return makeSingletonIterator(nextFromSimpleAxis(Parent, ni));
          }
       }
+
       case QXmlNodeModelIndex::AxisNamespace:
          return makeEmptyIterator<QXmlNodeModelIndex>();
       case QXmlNodeModelIndex::AxisAncestor: {
          QList<QXmlNodeModelIndex> ancestors;
          QXmlNodeModelIndex ancestor = nextFromSimpleAxis(Parent, ni);
 
-         while (!ancestor.isNull()) {
+         while (! ancestor.isNull()) {
             ancestors.append(ancestor);
             ancestor = nextFromSimpleAxis(Parent, ancestor);
          }
 
          return makeListIterator(ancestors);
       }
+
       case QXmlNodeModelIndex::AxisAncestorOrSelf: {
          QList<QXmlNodeModelIndex> ancestors;
          ancestors.append(ni);
@@ -526,9 +530,6 @@ bool QXmlItem::internalIsAtomicValue() const
    return m_node.model == reinterpret_cast<QAbstractXmlNodeModel *>(~0);
 }
 
-/*!
-  The copy constructor constructs a copy of \a other.
- */
 QXmlItem::QXmlItem(const QXmlItem &other) : m_node(other.m_node)
 {
    if (internalIsAtomicValue()) {
@@ -536,11 +537,6 @@ QXmlItem::QXmlItem(const QXmlItem &other) : m_node(other.m_node)
    }
 }
 
-/*!
-  Constructs an atomic value QXmlItem with \a atomicValue.
-
-  \sa isAtomicValue()
- */
 QXmlItem::QXmlItem(const QVariant &atomicValue)
 {
    m_node.reset();
@@ -550,7 +546,7 @@ QXmlItem::QXmlItem(const QVariant &atomicValue)
    }
 
    /*
-     We can't assign directly to m_atomicValue, because the
+     can not assign directly to m_atomicValue, because the
      temporary will self-destruct before we've ref'd it.
    */
    const QPatternist::Item temp(QPatternist::AtomicValue::toXDM(atomicValue));
@@ -559,6 +555,7 @@ QXmlItem::QXmlItem(const QVariant &atomicValue)
       temp.asAtomicValue()->ref.ref();
       m_node.model = reinterpret_cast<const QAbstractXmlNodeModel *>(~0);
       m_atomicValue = temp.asAtomicValue();
+
    } else {
       m_atomicValue = 0;
    }

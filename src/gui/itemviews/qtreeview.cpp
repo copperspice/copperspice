@@ -3394,29 +3394,34 @@ int QTreeViewPrivate::itemAtCoordinate(int coordinate) const
          }
       }
    }
+
    return -1;
 }
 
-int QTreeViewPrivate::viewIndex(const QModelIndex &_index) const
+int QTreeViewPrivate::viewIndex(const QModelIndex &tmpIndex) const
 {
-   if (!_index.isValid() || viewItems.isEmpty()) {
+   if (! tmpIndex.isValid() || viewItems.isEmpty()) {
       return -1;
    }
 
-   const int totalCount = viewItems.count();
-   const QModelIndex index = _index.sibling(_index.row(), 0);
-   const int row = index.row();
-   const quintptr internalId = index.internalId();
+   const int totalCount    = viewItems.count();
+   const QModelIndex index = tmpIndex.sibling(tmpIndex.row(), 0);
+   const int row           = index.row();
 
-   // We start nearest to the lastViewedItem
+   const qint64 internalId = index.internalId();
+
+   // start nearest to the lastViewedItem
    int localCount = qMin(lastViewedItem - 1, totalCount - lastViewedItem);
    for (int i = 0; i < localCount; ++i) {
       const QModelIndex &idx1 = viewItems.at(lastViewedItem + i).index;
+
       if (idx1.row() == row && idx1.internalId() == internalId) {
          lastViewedItem = lastViewedItem + i;
          return lastViewedItem;
       }
+
       const QModelIndex &idx2 = viewItems.at(lastViewedItem - i - 1).index;
+
       if (idx2.row() == row && idx2.internalId() == internalId) {
          lastViewedItem = lastViewedItem - i - 1;
          return lastViewedItem;
@@ -3475,6 +3480,7 @@ int QTreeViewPrivate::firstVisibleItem(int *offset) const
       }
       return value / defaultItemHeight;
    }
+
    int y = 0; // ### optimize (use spans ?)
    for (int i = 0; i < viewItems.count(); ++i) {
       y += itemHeight(i); // the height value is cached

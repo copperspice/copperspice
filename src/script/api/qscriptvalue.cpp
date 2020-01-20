@@ -42,7 +42,6 @@
 #include <qvarlengtharray.h>
 #include <qnumeric.h>
 
-
 void QScriptValuePrivate::detachFromEngine()
 {
    if (isJSC()) {
@@ -51,36 +50,21 @@ void QScriptValuePrivate::detachFromEngine()
    engine = 0;
 }
 
-/*!
-  \internal
-*/
+// internal
 QScriptValue::QScriptValue(QScriptValuePrivate *d)
    : d_ptr(d)
 {
 }
 
-/*!
-  Constructs an invalid QScriptValue.
-*/
 QScriptValue::QScriptValue()
    : d_ptr(0)
 {
 }
 
-/*!
-  Destroys this QScriptValue.
-*/
 QScriptValue::~QScriptValue()
 {
 }
 
-/*!
-  Constructs a new QScriptValue that is a copy of \a other.
-
-  Note that if \a other is an object (i.e., isObject() would return
-  true), then only a reference to the underlying object is copied into
-  the new script value (i.e., the object itself is not copied).
-*/
 QScriptValue::QScriptValue(const QScriptValue &other)
    : d_ptr(other.d_ptr)
 {
@@ -119,13 +103,6 @@ QScriptValue::QScriptValue(QScriptEngine *engine, bool val)
    d_ptr->initFrom(JSC::jsBoolean(val));
 }
 
-/*!
-  \fn QScriptValue::QScriptValue(QScriptEngine *engine, int value)
-  \obsolete
-
-  Constructs a new QScriptValue with the integer \a value and
-  registers it with the script \a engine.
-*/
 QScriptValue::QScriptValue(QScriptEngine *engine, int val)
    : d_ptr(new (QScriptEnginePrivate::get(engine))QScriptValuePrivate(QScriptEnginePrivate::get(engine)))
 {
@@ -208,22 +185,12 @@ QScriptValue::QScriptValue(SpecialValue value)
    }
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a boolean \a value.
-*/
 QScriptValue::QScriptValue(bool value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(JSC::jsBoolean(value));
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a number \a value.
-*/
 QScriptValue::QScriptValue(int value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
@@ -1317,14 +1284,6 @@ QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QString &name,
 
 }
 
-/*!
-  \since 4.4
-
-  Returns the flags of the property with the given \a name, using the
-  given \a mode to resolve the property.
-
-  \sa property()
-*/
 QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QScriptString &name,
    const ResolveFlags &mode) const
 {
@@ -1335,40 +1294,20 @@ QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QScriptString &nam
    return d->propertyFlags(name.d_ptr->identifier, mode);
 }
 
-/*!
-  Calls this QScriptValue as a function, using \a thisObject as
-  the `this' object in the function call, and passing \a args
-  as arguments to the function. Returns the value returned from
-  the function.
-
-  If this QScriptValue is not a function, call() does nothing
-  and returns an invalid QScriptValue.
-
-  Note that if \a thisObject is not an object, the global object
-  (see \l{QScriptEngine::globalObject()}) will be used as the
-  `this' object.
-
-  Calling call() can cause an exception to occur in the script engine;
-  in that case, call() returns the value that was thrown (typically an
-  \c{Error} object). You can call
-  QScriptEngine::hasUncaughtException() to determine if an exception
-  occurred.
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalue.cpp 2
-
-  \sa construct()
-*/
 QScriptValue QScriptValue::call(const QScriptValue &thisObject,
    const QScriptValueList &args)
 {
    Q_D(const QScriptValue);
+
    if (!d || !d->isObject()) {
       return QScriptValue();
    }
+
    QScript::APIShim shim(d->engine);
    JSC::JSValue callee = d->jscValue;
    JSC::CallData callData;
    JSC::CallType callType = callee.getCallData(callData);
+
    if (callType == JSC::CallTypeNone) {
       return QScriptValue();
    }
@@ -1416,33 +1355,11 @@ QScriptValue QScriptValue::call(const QScriptValue &thisObject,
    return d->engine->scriptValueFromJSCValue(result);
 }
 
-/*!
-  Calls this QScriptValue as a function, using \a thisObject as
-  the `this' object in the function call, and passing \a arguments
-  as arguments to the function. Returns the value returned from
-  the function.
-
-  If this QScriptValue is not a function, call() does nothing
-  and returns an invalid QScriptValue.
-
-  \a arguments can be an arguments object, an array, null or
-  undefined; any other type will cause a TypeError to be thrown.
-
-  Note that if \a thisObject is not an object, the global object
-  (see \l{QScriptEngine::globalObject()}) will be used as the
-  `this' object.
-
-  One common usage of this function is to forward native function
-  calls to another function:
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalue.cpp 3
-
-  \sa construct(), QScriptContext::argumentsObject()
-*/
 QScriptValue QScriptValue::call(const QScriptValue &thisObject,
    const QScriptValue &arguments)
 {
    Q_D(QScriptValue);
+
    if (!d || !d->isObject()) {
       return QScriptValue();
    }
@@ -1522,6 +1439,7 @@ QScriptValue QScriptValue::call(const QScriptValue &thisObject,
 QScriptValue QScriptValue::construct(const QScriptValueList &args)
 {
    Q_D(const QScriptValue);
+
    if (!d || !d->isObject()) {
       return QScriptValue();
    }
@@ -1890,14 +1808,6 @@ void QScriptValue::setData(const QScriptValue &data)
    }
 }
 
-/*!
-  \since 4.4
-
-  Returns the custom script class that this script object is an
-  instance of, or 0 if the object is not of a custom class.
-
-  \sa setScriptClass()
-*/
 QScriptClass *QScriptValue::scriptClass() const
 {
    Q_D(const QScriptValue);
@@ -1912,51 +1822,36 @@ QScriptClass *QScriptValue::scriptClass() const
    return static_cast<QScript::ClassObjectDelegate *>(delegate)->scriptClass();
 }
 
-/*!
-  \since 4.4
-
-  Sets the custom script class of this script object to \a scriptClass.
-  This can be used to "promote" a plain script object (e.g. created
-  by the "new" operator in a script, or by QScriptEngine::newObject() in C++)
-  to an object of a custom type.
-
-  If \a scriptClass is 0, the object will be demoted to a plain
-  script object.
-
-  \sa scriptClass(), setData()
-*/
 void QScriptValue::setScriptClass(QScriptClass *scriptClass)
 {
    Q_D(QScriptValue);
-   if (!d || !d->isObject()) {
+
+   if (! d || !d->isObject()) {
       return;
    }
-   if (!d->jscValue.inherits(&QScriptObject::info)) {
-      qWarning("QScriptValue::setScriptClass() failed: "
-         "cannot change class of non-QScriptObject");
+   if (! d->jscValue.inherits(&QScriptObject::info)) {
+      qWarning("QScriptValue::setScriptClass() failed, argument does not inherit from QScriptObject");
       return;
    }
+
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(d->jscValue));
-   if (!scriptClass) {
+
+   if (! scriptClass) {
       scriptObject->setDelegate(0);
+
    } else {
       QScriptObjectDelegate *delegate = scriptObject->delegate();
-      if (!delegate || (delegate->type() != QScriptObjectDelegate::ClassObject)) {
+
+      if (! delegate || (delegate->type() != QScriptObjectDelegate::ClassObject)) {
          delegate = new QScript::ClassObjectDelegate(scriptClass);
          scriptObject->setDelegate(delegate);
       }
+
       static_cast<QScript::ClassObjectDelegate *>(delegate)->setScriptClass(scriptClass);
    }
 }
 
-/*!
-  \internal
-
-  Returns the ID of this object, or -1 if this QScriptValue is not an
-  object.
-
-  \sa QScriptEngine::objectById()
-*/
+// internal - Returns the ID of this object, or -1 if this QScriptValue is not an object.
 qint64 QScriptValue::objectId() const
 {
    return d_ptr ? d_ptr->objectId() : -1;

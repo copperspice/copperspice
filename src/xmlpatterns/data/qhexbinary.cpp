@@ -29,9 +29,6 @@
 #include "qpatternistlocale_p.h"
 #include "qvalidationerror_p.h"
 
-
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 HexBinary::HexBinary(const QByteArray &val) : Base64Binary(val)
@@ -127,4 +124,3 @@ ItemType::Ptr HexBinary::type() const
    return BuiltinTypes::xsHexBinary;
 }
 
-QT_END_NAMESPACE

@@ -26,10 +26,7 @@
 
 #include "qbuiltintypes_p.h"
 #include "qvalidationerror_p.h"
-
 #include "qbase64binary_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -185,4 +182,3 @@ ItemType::Ptr Base64Binary::type() const
    return BuiltinTypes::xsBase64Binary;
 }
 
-QT_END_NAMESPACE

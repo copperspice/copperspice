@@ -82,11 +82,7 @@ QtRuntimeObject::QtRuntimeObject(ExecState* exec, JSGlobalObject* globalObject, 
 
 // QtInstance
 QtInstance::QtInstance(QObject* o, PassRefPtr<RootObject> rootObject, QScriptEngine::ValueOwnership ownership)
-    : Instance(rootObject)
-    , m_class(0)
-    , m_object(o)
-    , m_hashkey(o)
-    , m_ownership(ownership)
+    : Instance(rootObject), m_class(0), m_object(o), m_hashkey(o), m_ownership(ownership)
 {
     // good place to register Qt metatypes in QtWebKit, as this is class will initialize if we have a QObject bridge.
     qRegisterMetaType<QWebElement>();
@@ -381,7 +377,7 @@ JSValue QtField::valueFromInstance(ExecState* exec, const Instance* inst) const
 
 void QtField::setValueToInstance(ExecState* exec, const Instance* inst, JSValue aValue) const
 {
-    if (m_type == ChildObject) // QtScript doesn't allow setting to a named child
+    if (m_type == ChildObject) // unable to set to a named child
         return;
 
     const QtInstance* instance = static_cast<const QtInstance*>(inst);

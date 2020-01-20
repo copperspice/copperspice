@@ -137,13 +137,14 @@ class Q_GUI_EXPORT QTextOption
    }
 
  private:
-   uint align : 8;
-   uint wordWrap : 4;
-   uint design : 1;
+   uint align     : 8;
+   uint wordWrap  : 4;
+   uint design    : 1;
    uint direction : 2;
-   uint unused : 17;
+
    uint f;
    qreal tab;
+
    QTextOptionPrivate *d;
 };
 
@@ -163,7 +164,6 @@ inline void QTextOption::setTabStop(qreal atabStop)
 {
    tab = atabStop;
 }
-
 
 Q_DECLARE_METATYPE( QTextOption::Tab )
 

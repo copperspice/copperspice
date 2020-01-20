@@ -192,19 +192,6 @@ QScriptValue::PropertyFlags QScriptClass::propertyFlags(
    return 0;
 }
 
-/*!
-  Sets the property with the given \a name of the given \a object to
-  the given \a value.
-
-  The \a id argument is only useful if you assigned a value to it in
-  queryProperty().
-
-  The default implementation does nothing.
-
-  An invalid \a value represents a request to remove the property.
-
-  \sa property()
-*/
 void QScriptClass::setProperty(QScriptValue &object, const QScriptString &name,
    uint id, const QScriptValue &value)
 {
@@ -214,73 +201,18 @@ void QScriptClass::setProperty(QScriptValue &object, const QScriptString &name,
    Q_UNUSED(value);
 }
 
-/*!
-  Returns an iterator for traversing custom properties of the given \a
-  object.
-
-  The default implementation returns 0, meaning that there are no
-  custom properties to traverse.
-
-  Reimplement this function if objects of your script class can have
-  one or more custom properties (e.g. those reported to be handled by
-  queryProperty()) that you want to appear when an object's properties
-  are enumerated (e.g. by a for-in statement in a script).
-
-  Qt Script takes ownership of the new iterator object.
-
-  \sa QScriptValueIterator
-*/
 QScriptClassPropertyIterator *QScriptClass::newIterator(const QScriptValue &object)
 {
    Q_UNUSED(object);
    return 0;
 }
 
-/*!
-  Returns true if the QScriptClass supports the given \a extension;
-  otherwise, false is returned. By default, no extensions
-  are supported.
-
-  Reimplement this function to indicate which extensions your custom
-  class supports.
-
-  \sa extension()
-*/
 bool QScriptClass::supportsExtension(Extension extension) const
 {
    Q_UNUSED(extension);
    return false;
 }
 
-/*!
-  This virtual function can be reimplemented in a QScriptClass
-  subclass to provide support for extensions. The optional \a argument
-  can be provided as input to the \a extension; the result must be
-  returned in the form of a QVariant. You can call supportsExtension()
-  to check if an extension is supported by the QScriptClass.  By
-  default, no extensions are supported, and this function returns an
-  invalid QVariant.
-
-  If you implement the Callable extension, Qt Script will call this
-  function when an instance of your class is called as a function
-  (e.g. from a script or using QScriptValue::call()).  The \a argument
-  will contain a pointer to the QScriptContext that represents the
-  function call, and you should return a QVariant that holds the
-  result of the function call. In the following example the sum of the
-  arguments to the script function are added up and returned:
-
-  \snippet doc/src/snippets/code/src_script_qscriptclass.cpp 0
-
-  If you implement the HasInstance extension, Qt Script will call this
-  function as part of evaluating the \c{instanceof} operator, as
-  described in ECMA-262 Section 11.8.6. The \a argument is a
-  QScriptValueList containing two items: The first item is the object
-  that HasInstance is being applied to (an instance of your class),
-  and the second item can be any value. extension() should return true
-  if the value delegates behavior to the object, false otherwise.
-
-  \sa supportsExtension()
-*/
 QVariant QScriptClass::extension(Extension extension, const QVariant &argument)
 {
    Q_UNUSED(extension);

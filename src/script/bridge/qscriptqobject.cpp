@@ -22,17 +22,18 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptqobject_p.h"
+#include <qscriptqobject_p.h>
 
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qdebug.h>
-#include <QtScript/qscriptable.h>
-#include "qscriptengine_p.h"
-#include "qscriptable_p.h"
-#include "qscriptcontext_p.h"
-#include "qscriptfunction_p.h"
-#include "qscriptactivationobject_p.h"
+#include <qmetaobject.h>
+#include <qvarlengtharray.h>
+#include <qdebug.h>
+#include <qscriptable.h>
+
+#include <qscriptengine_p.h>
+#include <qscriptable_p.h>
+#include <qscriptcontext_p.h>
+#include <qscriptfunction_p.h>
+#include <qscriptactivationobject_p.h>
 
 #include "Error.h"
 #include "PrototypeFunction.h"
@@ -140,9 +141,6 @@ class QObjectConnectionManager: public QObject
    static const QMetaObject &staticMetaObject();
    virtual const QMetaObject *metaObject() const;
 
-   // qt_metacast()   removed 1/11/2014
-   // qt_metacall()   removed 1/11/2014
-
    void execute(int slotIndex, void **argv);
    void clearMarkBits();
    int mark(JSC::MarkStack &);
@@ -249,15 +247,9 @@ static int indexOfMetaEnum(const QMetaObject *meta, const QString &str)
    return -1;
 }
 
-static inline QScriptable *scriptableFromQObject(QObject *qobj)
+static inline QScriptable *scriptableFromQObject(QObject *qobject)
 {
-   /*  BROOM (script)
-       void *ptr = qobj->qt_metacast("QScriptable");
-   */
-
-   void *ptr = nullptr;   // temp code
-
-   return reinterpret_cast<QScriptable *>(ptr);
+   return dynamic_cast<QScriptable *>(qobject);
 }
 
 QtFunction::QtFunction(JSC::JSValue object, int initialIndex, bool maybeOverloaded,
@@ -1113,10 +1105,10 @@ struct QtMethodCaller {
 
 static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType callType,
    QObject *thisQObject, const JSC::ArgList &scriptArgs,
-   const QMetaObject *meta, int initialIndex,
-   bool maybeOverloaded)
+   const QMetaObject *meta, int initialIndex, bool maybeOverloaded)
 {
    QtMethodCaller caller(thisQObject);
+
    return delegateQtMethod<QtMethodCaller>(exec, callType, scriptArgs, meta,
          initialIndex, maybeOverloaded, caller);
 }
@@ -1260,32 +1252,33 @@ JSC::JSValue JSC_HOST_CALL QtPropertyFunction::call(
    return qfun->execute(exec, thisValue, args);
 }
 
-JSC::JSValue QtPropertyFunction::execute(JSC::ExecState *exec,
-   JSC::JSValue thisValue,
-   const JSC::ArgList &args)
+JSC::JSValue QtPropertyFunction::execute(JSC::ExecState *exec, JSC::JSValue thisValue, const JSC::ArgList &args)
 {
    JSC::JSValue result = JSC::jsUndefined();
 
-   QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
+   QScriptEnginePrivate *engine  = scriptEngineFromExec(exec);
    JSC::ExecState *previousFrame = engine->currentFrame;
    engine->currentFrame = exec;
 
    JSC::JSValue qobjectValue = engine->toUsableValue(thisValue);
    QObject *qobject = QScriptEnginePrivate::toQObject(exec, qobjectValue);
-   while ((!qobject || (qobject->metaObject() != data->meta))
+
+   while ((! qobject || (qobject->metaObject() != data->meta))
       && JSC::asObject(qobjectValue)->prototype().isObject()) {
       qobjectValue = JSC::asObject(qobjectValue)->prototype();
       qobject = QScriptEnginePrivate::toQObject(exec, qobjectValue);
    }
-   Q_ASSERT_X(qobject, Q_FUNC_INFO, "this-object must be a QObject");
+   Q_ASSERT_X(qobject, Q_FUNC_INFO, "This object must be a QObject");
 
    QMetaProperty prop = data->meta->property(data->index);
    Q_ASSERT(prop.isScriptable());
+
    if (args.size() == 0) {
       // get
       if (prop.isValid()) {
-         QScriptable *scriptable = scriptableFromQObject(qobject);
-         QScriptEngine *oldEngine = 0;
+         QScriptable *scriptable  = scriptableFromQObject(qobject);
+         QScriptEngine *oldEngine = nullptr;
+
          if (scriptable) {
             engine->pushContext(exec, thisValue, args, this);
             oldEngine = QScriptablePrivate::get(scriptable)->engine;
@@ -1301,23 +1294,23 @@ JSC::JSValue QtPropertyFunction::execute(JSC::ExecState *exec,
 
          result = QScriptEnginePrivate::jscValueFromVariant(exec, v);
       }
+
    } else {
       // set
       JSC::JSValue arg = args.at(0);
       QVariant v;
 
-      if (prop.isEnumType() && arg.isString()
-         && !engine->hasDemarshalFunction(prop.userType())) {
-         // give QMetaProperty::write() a chance to convert from
-         // string to enum value
+      if (prop.isEnumType() && arg.isString() && ! engine->hasDemarshalFunction(prop.userType())) {
+         // give QMetaProperty::write() a chance to convert from string to enum value
          v = (QString)arg.toString(exec);
 
       } else {
          v = variantFromValue(exec, prop.userType(), arg);
       }
 
-      QScriptable *scriptable = scriptableFromQObject(qobject);
-      QScriptEngine *oldEngine = 0;
+      QScriptable *scriptable  = scriptableFromQObject(qobject);
+      QScriptEngine *oldEngine = nullptr;
+
       if (scriptable) {
          engine->pushContext(exec, thisValue, args, this);
          oldEngine = QScriptablePrivate::get(scriptable)->engine;
@@ -1333,7 +1326,9 @@ JSC::JSValue QtPropertyFunction::execute(JSC::ExecState *exec,
 
       result = arg;
    }
+
    engine->currentFrame = previousFrame;
+
    return result;
 }
 
@@ -2334,10 +2329,8 @@ QMetaObjectPrototype::QMetaObjectPrototype(JSC::ExecState *exec, WTF::PassRefPtr
       JSC::DontEnum);
 }
 
-
 const QMetaObject &QObjectConnectionManager::staticMetaObject()
 {
-   // BROOM (script)
    return QObject::staticMetaObject();
 }
 
@@ -2494,8 +2487,8 @@ int QObjectConnectionManager::mark(JSC::MarkStack &markStack)
 
          if (!c.marked) {
             if (c.hasWeaklyReferencedSender()) {
-               // Don't mark the connection; we don't want the script-owned
-               // sender object to stay alive merely due to a connection.
+               // do not mark the connection, we do not want the script-owned
+               // sender object to stay alive merely due to a connection
             } else {
                c.mark(markStack);
                ++markedCount;
@@ -2503,6 +2496,7 @@ int QObjectConnectionManager::mark(JSC::MarkStack &markStack)
          }
       }
    }
+
    return markedCount;
 }
 
@@ -2517,7 +2511,8 @@ bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex
    int absSlotIndex = slotCounter + metaObject()->methodOffset();
 
 
-   /* BROOM (script)
+   /* emerald (script, hold)
+      int absSlotIndex = slotCounter + metaObject()->methodOffset();
       bool ok = QMetaObject::connect(sender, signalIndex, this, absSlotIndex, type);
    */
 
@@ -2545,7 +2540,7 @@ bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIn
 
       if (c.hasTarget(receiver, slot)) {
 
-         /* BROOM (script)
+         /* emerald (script, hold)
                      int absSlotIndex = c.slotIndex + metaObject()->methodOffset();
                      bool ok = QMetaObject::disconnect(sender, signalIndex, this, absSlotIndex);
          */

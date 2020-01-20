@@ -1260,28 +1260,36 @@ static bool setFontSizeFromValue(QCss::Value value, QFont *font, int *fontSizeAd
 {
    if (value.type == Value::KnownIdentifier) {
       bool valid = true;
+
       switch (value.variant.toInt()) {
          case Value_Small:
             *fontSizeAdjustment = -1;
             break;
+
          case Value_Medium:
             *fontSizeAdjustment = 0;
             break;
+
          case Value_Large:
             *fontSizeAdjustment = 1;
             break;
+
          case Value_XLarge:
             *fontSizeAdjustment = 2;
             break;
+
          case Value_XXLarge:
             *fontSizeAdjustment = 3;
             break;
+
          default:
             valid = false;
             break;
       }
+
       return valid;
    }
+
    if (value.type != Value::Length) {
       return false;
    }
@@ -1295,14 +1303,17 @@ static bool setFontSizeFromValue(QCss::Value value, QFont *font, int *fontSizeAd
          font->setPointSizeF(value.variant.toReal());
          valid = true;
       }
-   } else if (s.endsWith(QLatin1String("px"), Qt::CaseInsensitive)) {
+
+   } else if (s.endsWith("px", Qt::CaseInsensitive)) {
       s.chop(2);
       value.variant = s;
+
       if (value.variant.convert(QVariant::Int)) {
          font->setPixelSize(value.variant.toInt());
          valid = true;
       }
    }
+
    return valid;
 }
 
@@ -1315,12 +1326,15 @@ static bool setFontStyleFromValue(const QCss::Value &value, QFont *font)
       case Value_Normal:
          font->setStyle(QFont::StyleNormal);
          return true;
+
       case Value_Italic:
          font->setStyle(QFont::StyleItalic);
          return true;
+
       case Value_Oblique:
          font->setStyle(QFont::StyleOblique);
          return true;
+
       default:
          break;
    }
@@ -1334,9 +1348,11 @@ static bool setFontWeightFromValue(const QCss::Value &value, QFont *font)
          case Value_Normal:
             font->setWeight(QFont::Normal);
             return true;
+
          case Value_Bold:
             font->setWeight(QFont::Bold);
             return true;
+
          default:
             break;
       }

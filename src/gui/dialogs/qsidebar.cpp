@@ -48,7 +48,8 @@ void QSideBarDelegate::initStyleOption(QStyleOptionViewItem *option, const QMode
    }
 }
 
-QUrlModel::QUrlModel(QObject *parent) : QStandardItemModel(parent), showFullPath(false), fileSystemModel(0)
+QUrlModel::QUrlModel(QObject *parent)
+   : QStandardItemModel(parent), showFullPath(false), fileSystemModel(0)
 {
 }
 
@@ -66,6 +67,7 @@ QStringList QUrlModel::mimeTypes() const
 Qt::ItemFlags QUrlModel::flags(const QModelIndex &index) const
 {
    Qt::ItemFlags flags = QStandardItemModel::flags(index);
+
    if (index.isValid()) {
       flags &= ~Qt::ItemIsEditable;
       // ### some future version could support "moving" urls onto a folder

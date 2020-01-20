@@ -31,8 +31,8 @@
 
 #ifndef QT_NO_CUPS
 
-// emerald - Define these temporarily so they can be used in the dialogs without a 
-// circular reference to QCupsPrintEngine in the plugin.  
+// emerald - Define these temporarily so they can be used in the dialogs without a
+// circular reference to QCupsPrintEngine in the plugin.
 // Move back to qcupsprintengine_p.h in the plugin once all usage removed from the dialogs.
 
 #define PPK_CupsOptions QPrintEngine::PrintEnginePropertyKey(0xfe00)

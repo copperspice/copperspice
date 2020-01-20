@@ -567,34 +567,11 @@ bool QSqlTableModel::setData(const QModelIndex &index, const QVariant &value, in
    return true;
 }
 
-/*!
-    This function simply calls QSqlQueryModel::setQuery(\a query).
-    You should normally not call it on a QSqlTableModel. Instead, use
-    setTable(), setSort(), setFilter(), etc., to set up the query.
-
-    \sa selectStatement()
-*/
 void QSqlTableModel::setQuery(const QSqlQuery &query)
 {
    QSqlQueryModel::setQuery(query);
 }
 
-/*!
-    Updates the given \a row in the currently active database table
-    with the specified \a values. Returns true if successful; otherwise
-    returns false.
-
-    This is a low-level method that operates directly on the database
-    and should not be called directly. Use setData() to update values.
-    The model will decide depending on its edit strategy when to modify
-    the database.
-
-    Note that only values that have the generated-flag set are updated.
-    The generated-flag can be set with QSqlRecord::setGenerated() and
-    tested with QSqlRecord::isGenerated().
-
-    \sa QSqlRecord::isGenerated(), setData()
-*/
 bool QSqlTableModel::updateRowInTable(int row, const QSqlRecord &values)
 {
    Q_D(QSqlTableModel);
@@ -618,20 +595,6 @@ bool QSqlTableModel::updateRowInTable(int row, const QSqlRecord &values)
    return d->exec(Sql::concat(stmt, where), prepStatement, rec, whereValues);
 }
 
-
-/*!
-    Inserts the values \a values into the currently active database table.
-
-    This is a low-level method that operates directly on the database
-    and should not be called directly. Use insertRow() and setData()
-    to insert values. The model will decide depending on its edit strategy
-    when to modify the database.
-
-    Returns true if the values could be inserted, otherwise false.
-    Error information can be retrieved with \l lastError().
-
-    \sa lastError(), insertRow(), insertRows()
-*/
 bool QSqlTableModel::insertRowIntoTable(const QSqlRecord &values)
 {
    Q_D(QSqlTableModel);

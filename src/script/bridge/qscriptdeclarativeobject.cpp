@@ -22,26 +22,23 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptdeclarativeobject_p.h"
+#include <qscriptdeclarativeobject_p.h>
 
-#include "../api/qscriptengine.h"
-#include "../api/qscriptengine_p.h"
-#include "../api/qscriptcontext.h"
-#include "../api/qscriptcontext_p.h"
-#include "../api/qscriptclass.h"
-#include "../api/qscriptclasspropertyiterator.h"
+#include <qscriptengine.h>
+#include <qscriptcontext.h>
+#include <qscriptclass.h>
+#include <qscriptclasspropertyiterator.h>
+#include <qstringlist.h>
+
+#include <qscriptcontext_p.h>
+#include <qscriptengine_p.h>
 
 #include "Error.h"
 #include "PropertyNameArray.h"
 
-#include <QtCore/qstringlist.h>
-
 Q_DECLARE_METATYPE(QScriptContext *)
 Q_DECLARE_METATYPE(QScriptValue)
 Q_DECLARE_METATYPE(QScriptValueList)
-
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
 
 DeclarativeObjectDelegate::DeclarativeObjectDelegate(QScriptDeclarativeClass *c,
@@ -192,4 +189,4 @@ bool DeclarativeObjectDelegate::compareToObject(QScriptObject *o, JSC::ExecState
 
 } // namespace QScript
 
-QT_END_NAMESPACE
+

@@ -24,13 +24,10 @@
 #ifndef QItemType_P_H
 #define QItemType_P_H
 
-#include <QSharedData>
+#include <qshareddata.h>
+#include <qcontainerfwd.h>
+
 #include <qnamepool_p.h>
-
-QT_BEGIN_NAMESPACE
-
-template<typename T>
-class QList;
 
 namespace QPatternist {
 
@@ -224,7 +221,5 @@ inline void operator|=(ItemType::Ptr &op1, const ItemType::Ptr &op2)
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

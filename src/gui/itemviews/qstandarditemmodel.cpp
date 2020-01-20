@@ -1162,24 +1162,33 @@ bool QStandardItem::operator<(const QStandardItem &other) const
          ;
       case QVariant::Int:
          return l.toInt() < r.toInt();
+
       case QVariant::UInt:
          return l.toUInt() < r.toUInt();
+
       case QVariant::LongLong:
          return l.toLongLong() < r.toLongLong();
+
       case QVariant::ULongLong:
          return l.toULongLong() < r.toULongLong();
       case QMetaType::Float:
          return l.toFloat() < r.toFloat();
+
       case QVariant::Double:
          return l.toDouble() < r.toDouble();
+
       case QVariant::Char:
          return l.toChar() < r.toChar();
+
       case QVariant::Date:
          return l.toDate() < r.toDate();
+
       case QVariant::Time:
          return l.toTime() < r.toTime();
+
       case QVariant::DateTime:
          return l.toDateTime() < r.toDateTime();
+
       case QVariant::String:
       default:
          return l.toString().compare(r.toString()) < 0;
@@ -1189,6 +1198,7 @@ bool QStandardItem::operator<(const QStandardItem &other) const
 void QStandardItem::sortChildren(int column, Qt::SortOrder order)
 {
    Q_D(QStandardItem);
+
    if ((column < 0) || (rowCount() == 0)) {
       return;
    }

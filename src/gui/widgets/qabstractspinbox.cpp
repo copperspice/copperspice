@@ -1327,15 +1327,18 @@ QVariant QAbstractSpinBoxPrivate::bound(const QVariant &val, const QVariant &old
       if (variantCompare(v, minimum) < 0) {
          v = wrapping ? maximum : minimum;
       }
+
       if (variantCompare(v, maximum) > 0) {
          v = wrapping ? minimum : maximum;
       }
+
    } else {
-      const bool wasMin = old == minimum;
-      const bool wasMax = old == maximum;
-      const int oldcmp = variantCompare(v, old);
-      const int maxcmp = variantCompare(v, maximum);
-      const int mincmp = variantCompare(v, minimum);
+      const bool wasMin  = old == minimum;
+      const bool wasMax  = old == maximum;
+
+      const int oldcmp   = variantCompare(v, old);
+      const int maxcmp   = variantCompare(v, maximum);
+      const int mincmp   = variantCompare(v, minimum);
       const bool wrapped = (oldcmp > 0 && steps < 0) || (oldcmp < 0 && steps > 0);
       if (maxcmp > 0) {
          v = ((wasMax && !wrapped && steps > 0) || (steps < 0 && !wasMin && wrapped))

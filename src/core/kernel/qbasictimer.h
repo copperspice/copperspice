@@ -31,8 +31,6 @@ class QObject;
 
 class Q_CORE_EXPORT QBasicTimer
 {
-   int id;
-
  public:
    inline QBasicTimer() : id(0)
    {}
@@ -54,7 +52,9 @@ class Q_CORE_EXPORT QBasicTimer
    void start(int msec, QObject *obj);
    void start(int msec, Qt::TimerType timerType, QObject *obj);
    void stop();
-};
 
+ private:
+   int id;
+};
 
 #endif

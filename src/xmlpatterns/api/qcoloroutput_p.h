@@ -27,8 +27,6 @@
 #include <qglobal.h>
 #include <qhash.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ColorOutputPrivate;
 
@@ -92,7 +90,5 @@ class ColorOutput
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPatternist::ColorOutput::ColorCode)
-
-QT_END_NAMESPACE
 
 #endif

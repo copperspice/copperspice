@@ -306,7 +306,7 @@ QImage QtPixmapInstance::toImage()
 
 QVariant QtPixmapInstance::variantFromObject(JSObject* object, QMetaType::Type hint)
 {
-    if (!object)
+    if (! object)
         goto returnEmptyVariant;
 
     if (object->inherits(&JSHTMLImageElement::s_info)) {

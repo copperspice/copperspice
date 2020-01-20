@@ -29,12 +29,8 @@
 #include <qpatternistlocale_p.h>
 #include <qvalidationerror_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
-/**
- * @relates DerivedInteger
- */
+
 enum DerivedIntegerLimitsUsage {
    None            = 1,
    LimitUpwards    = 2,
@@ -554,10 +550,8 @@ class DerivedInteger : public Numeric
       }
       return 0;
    }
-
 };
-}
 
-QT_END_NAMESPACE
+}  // namespace
 
 #endif

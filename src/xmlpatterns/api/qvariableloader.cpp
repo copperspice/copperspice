@@ -35,8 +35,6 @@
 #include "qvariableloader_p.h"
 #include "qxmlquery_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class VariantListIterator : public ListIteratorPlatform<QVariant, Item, VariantListIterator>
@@ -67,12 +65,6 @@ class StringListIterator : public ListIteratorPlatform<QString, Item, StringList
    }
 };
 
-/**
- * Takes two DynamicContext instances, and redirects the storage of temporary trees
- * to one of them.
- *
- * @since 4.5
- */
 class TemporaryTreesRedirectingContext : public DelegatingDynamicContext
 {
  public:
@@ -88,7 +80,8 @@ class TemporaryTreesRedirectingContext : public DelegatingDynamicContext
  private:
    const DynamicContext::Ptr m_modelStorage;
 };
-}
+
+}  // namespace
 
 using namespace QPatternist;
 
@@ -135,8 +128,10 @@ Item::Iterator::Ptr VariableLoader::evaluateSequence(const QXmlName name,
    switch (v.type()) {
       case QVariant::StringList:
          return Item::Iterator::Ptr(new StringListIterator(v.toStringList()));
+
       case QVariant::List:
          return Item::Iterator::Ptr(new VariantListIterator(v.toList()));
+
       default:
          return makeSingletonIterator(itemForName(name));
    }
@@ -192,8 +187,10 @@ bool VariableLoader::isSameType(const QVariant &v1, const QVariant &v2) const
    if (i1.isNode()) {
       Q_ASSERT(false);
       return false;
+
    } else if (i2.isAtomicValue()) {
       return i1.toAtomicValue().type() == i2.toAtomicValue().type();
+
    } else {
       /* One is an atomic, the other is a node or they are null. */
       return false;
@@ -226,11 +223,9 @@ void VariableLoader::addBinding(const QXmlName &name, const QVariant &value)
    m_bindingHash.insert(name, value);
 }
 
-bool VariableLoader::invalidationRequired(const QXmlName &name,
-      const QVariant &variant) const
+bool VariableLoader::invalidationRequired(const QXmlName &name, const QVariant &variant) const
 {
    return hasBinding(name) && !isSameType(valueFor(name), variant);
 }
 
-QT_END_NAMESPACE
 

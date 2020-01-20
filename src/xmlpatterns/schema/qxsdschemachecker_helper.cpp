@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool XsdSchemaChecker::hasDuplicatedAttributeUses(const XsdAttributeUse::List &list,
@@ -311,7 +309,7 @@ bool XsdSchemaChecker::elementSequenceAccepted(const XsdModelGroup::Ptr &sequenc
             // 2.3.2
             if (element->scope() && element->scope()->variety() == XsdElement::Scope::Global) {
                if (!(element->disallowedSubstitutions() & NamedSchemaComponent::SubstitutionConstraint)) {
-                  //TODO: continue
+                  // TODO: continue
                }
             }
          }
@@ -321,4 +319,4 @@ bool XsdSchemaChecker::elementSequenceAccepted(const XsdModelGroup::Ptr &sequenc
    return true;
 }
 
-QT_END_NAMESPACE
+

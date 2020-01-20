@@ -771,7 +771,6 @@ static inline bool qIsNull(double d)
    return val.u == quint64(0);
 }
 
-
 // tests a float to see if all the bits are zero
 static inline bool qIsNull(float data)
 {
@@ -781,8 +780,7 @@ static inline bool qIsNull(float data)
    return tmp == 0u;
 }
 
-
-
+// used everywhere
 template <typename T>
 inline void qSwap(T &value1, T &value2)
 {

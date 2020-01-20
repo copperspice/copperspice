@@ -27,8 +27,6 @@
 #include <QtCore/QString>
 #include <QtCore/QMetaType>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlName;
 class QXmlNamePool;
 Q_XMLPATTERNS_EXPORT uint qHash(const QXmlName &name);
@@ -106,8 +104,6 @@ class Q_XMLPATTERNS_EXPORT QXmlName
 
    Code m_qNameCode;
 };
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QXmlName) /* This macro must appear after QT_END_NAMESPACE. */
 

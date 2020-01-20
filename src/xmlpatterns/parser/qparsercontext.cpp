@@ -28,9 +28,6 @@
 #include "qstaticcontext_p.h"
 #include "qtokenizer_p.h"
 
-
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ParserContext::ParserContext(const StaticContext::Ptr &context,
@@ -75,6 +72,4 @@ void ParserContext::finalizePushedVariable(const int amount,
       }
    }
 }
-
-QT_END_NAMESPACE
 

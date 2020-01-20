@@ -24,14 +24,11 @@
 #ifndef QSequenceType_P_H
 #define QSequenceType_P_H
 
-template<typename T>
-class QList;
+#include <qshareddata.h>
+#include <qcontainerfwd.h>
 
-#include <QSharedData>
 #include <qcardinality_p.h>
 #include <qitemtype_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 class ItemType;
@@ -84,8 +81,5 @@ class SequenceType : public virtual QSharedData
    Q_DISABLE_COPY(SequenceType)
 };
 }
-
-
-QT_END_NAMESPACE
 
 #endif

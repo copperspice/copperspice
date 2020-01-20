@@ -29,8 +29,6 @@
 #include <qurl.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 typedef qreal xsDouble;
 typedef xsDouble xsFloat;
@@ -100,7 +98,5 @@ typedef int ImportPrecedence;
 
 QString escape(const QString &input);
 }
-
-QT_END_NAMESPACE
 
 #endif

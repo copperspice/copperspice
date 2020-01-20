@@ -27,8 +27,6 @@
 #include <qshareddata.h>
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class SchemaComponent : public virtual QSharedData
 {
@@ -40,7 +38,5 @@ class SchemaComponent : public virtual QSharedData
    Q_DISABLE_COPY(SchemaComponent)
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -22,34 +22,24 @@
 ***********************************************************************/
 
 #include <qtextoption.h>
+
 #include <qapplication.h>
 #include <qlist.h>
-
 
 struct QTextOptionPrivate {
    QList<QTextOption::Tab> tabStops;
 };
 
 QTextOption::QTextOption()
-   : align(Qt::AlignLeft),
-     wordWrap(QTextOption::WordWrap),
-     design(false),
-     unused(0),
-     f(0),
-     tab(-1),
-     d(0)
+   : align(Qt::AlignLeft), wordWrap(QTextOption::WordWrap),
+     design(false), f(0), tab(-1), d(0)
 {
    direction = Qt::LayoutDirectionAuto;
 }
 
 QTextOption::QTextOption(Qt::Alignment alignment)
-   : align(alignment),
-     wordWrap(QTextOption::WordWrap),
-     design(false),
-     unused(0),
-     f(0),
-     tab(-1),
-     d(0)
+   : align(alignment), wordWrap(QTextOption::WordWrap),
+     design(false), f(0), tab(-1), d(0)
 {
    direction = QGuiApplication::layoutDirection();
 }
@@ -60,14 +50,8 @@ QTextOption::~QTextOption()
 }
 
 QTextOption::QTextOption(const QTextOption &o)
-   : align(o.align),
-     wordWrap(o.wordWrap),
-     design(o.design),
-     direction(o.direction),
-     unused(o.unused),
-     f(o.f),
-     tab(o.tab),
-     d(0)
+   : align(o.align), wordWrap(o.wordWrap), design(o.design),
+     direction(o.direction), f(o.f), tab(o.tab), d(0)
 {
    if (o.d) {
       d = new QTextOptionPrivate(*o.d);
@@ -84,27 +68,29 @@ QTextOption &QTextOption::operator=(const QTextOption &o)
    if (o.d) {
       dNew = new QTextOptionPrivate(*o.d);
    }
+
    delete d;
    d = dNew;
 
-   align = o.align;
-   wordWrap = o.wordWrap;
-   design = o.design;
+   align     = o.align;
+   wordWrap  = o.wordWrap;
+   design    = o.design;
    direction = o.direction;
-   unused = o.unused;
-   f = o.f;
-   tab = o.tab;
+   f         = o.f;
+   tab       = o.tab;
+
    return *this;
 }
 
 void QTextOption::setTabArray(const QList<qreal> &tabStops)
 {
-   if (!d) {
+   if (! d) {
       d = new QTextOptionPrivate;
    }
 
    QList<QTextOption::Tab> tabs;
    QTextOption::Tab tab;
+
    for (qreal pos : tabStops) {
       tab.position = pos;
       tabs.append(tab);
@@ -114,7 +100,7 @@ void QTextOption::setTabArray(const QList<qreal> &tabStops)
 
 void QTextOption::setTabs(const QList<QTextOption::Tab> &tabStops)
 {
-   if (!d) {
+   if (! d) {
       d = new QTextOptionPrivate;
    }
    d->tabStops = tabStops;
@@ -145,5 +131,3 @@ QList<QTextOption::Tab> QTextOption::tabs() const
 
    return d->tabStops;
 }
-
-

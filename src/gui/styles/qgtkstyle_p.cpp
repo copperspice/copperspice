@@ -192,10 +192,8 @@ Q_DECLARE_METATYPE(QGtkStylePrivate *);
 static void gtkStyleSetCallback(GtkWidget *)
 {
    qRegisterMetaType<QGtkStylePrivate *>();
-
    // We have to let this function return and complete the event
-   // loop to ensure that all gtk widgets have been styled before
-   // updating
+   // loop to ensure that all gtk widgets have been styled before updating
    QMetaObject::invokeMethod(styleScheduler(), "updateTheme", Qt::QueuedConnection);
 }
 
@@ -203,7 +201,9 @@ static void update_toolbar_style(GtkWidget *gtkToolBar, GParamSpec *, gpointer)
 {
    GtkToolbarStyle toolbar_style = GTK_TOOLBAR_ICONS;
    g_object_get(gtkToolBar, "toolbar-style", &toolbar_style, NULL);
+
    QWidgetList widgets = QApplication::allWidgets();
+
    for (int i = 0; i < widgets.size(); ++i) {
       QWidget *widget = widgets.at(i);
       if (qobject_cast<QToolButton *>(widget)) {

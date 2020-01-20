@@ -26,6 +26,8 @@
 
 #include <QFlags>
 #include <QSharedData>
+#include <qcontainerfwd.h>
+
 #include <qcppcastinghelper_p.h>
 #include <qxmlpatterns_debug_p.h>
 #include <qdynamiccontext_p.h>
@@ -35,12 +37,8 @@
 #include <qsourcelocationreflection_p.h>
 #include <qstaticcontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
-template<typename T> class QList;
-template<typename T> class QVector;
-
 namespace QPatternist {
+
 template<typename T, typename ListType> class ListIterator;
 class OptimizationPass;
 
@@ -775,7 +773,5 @@ inline const Expression::Ptr &Expression::rewrite(const Expression::Ptr &to,
    return to;
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

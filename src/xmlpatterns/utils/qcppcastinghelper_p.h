@@ -26,9 +26,8 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 template<typename TSubClass>
 class CppCastingHelper
 {
@@ -87,7 +86,5 @@ class CppCastingHelper
    inline CppCastingHelper() {}
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

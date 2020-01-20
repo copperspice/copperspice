@@ -24,11 +24,9 @@
 #ifndef QABSTRACTXMLNODEMODEL_H
 #define QABSTRACTXMLNODEMODEL_H
 
-#include <QtXmlPatterns/QXmlName>
-#include <QtCore/QSharedData>
-#include <QtCore/QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qxmlname.h>
+#include <qshareddata.h>
+#include <qscopedpointer.h>
 
 class QAbstractXmlNodeModel;
 class QAbstractXmlNodeModelPrivate;
@@ -325,8 +323,9 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
    Q_DISABLE_COPY(QAbstractXmlNodeModel)
 };
 
+template<typename T>
+class QAbstractXmlForwardIterator;
 
-template<typename T> class QAbstractXmlForwardIterator;
 class QVariant;
 class QXmlItemPrivate;
 
@@ -383,8 +382,6 @@ inline bool qIsForwardIteratorEnd(const QXmlItem &item)
    return item.isNull();
 }
 
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QXmlItem) /* This macro must appear after QT_END_NAMESPACE. */
 

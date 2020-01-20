@@ -111,12 +111,14 @@ public:
     virtual String getProperty(const String& name)
     {
 #ifdef QT_NO_SETTINGS
-        Q_UNUSED(name)
-        Q_UNUSED(value)
-        qWarning("QWebInspector: QSettings is not supported by Qt.");
+        (void) name;
+        (void) value;
+
+        qWarning("QWebInspector: QSettings is not supported.");
         return String();
 #else
         QSettings qsettings;
+
         if (qsettings.status() == QSettings::AccessError) {
             // QCoreApplication::setOrganizationName and QCoreApplication::setApplicationName haven't been called
             qWarning("QWebInspector: QSettings could not read configuration setting [%s].",
@@ -126,23 +128,24 @@ public:
 
         QString settingKey(settingStoragePrefix + QString(name));
         QString storedValueType = qsettings.value(settingKey + settingStorageTypeSuffix).toString();
-        QVariant storedValue = qsettings.value(settingKey);
+        QVariant storedValue    = qsettings.value(settingKey);
 
         storedValue.convert(QVariant::nameToType(storedValueType));
 
         return variantToSetting(storedValue);
 
-#endif // QT_NO_SETTINGS
+#endif
     }
 
     virtual void setProperty(const String& name, const String& value)
     {
 #ifdef QT_NO_SETTINGS
-        Q_UNUSED(name)
-        Q_UNUSED(value)
-        qWarning("QWebInspector: QSettings is not supported by Qt.");
+        (void) name;
+        (void) value;
+        qWarning("QWebInspector: QSettings is not supported.");
 #else
         QSettings qsettings;
+
         if (qsettings.status() == QSettings::AccessError) {
             qWarning("QWebInspector: QSettings couldn't persist configuration setting [%s].",
                      qPrintable(static_cast<QString>(name)));
@@ -153,7 +156,7 @@ public:
         QString settingKey(settingStoragePrefix + QString(name));
         qsettings.setValue(settingKey, valueToStore);
         qsettings.setValue(settingKey + settingStorageTypeSuffix, QLatin1String(QVariant::typeToName(valueToStore.type())));
-#endif // QT_NO_SETTINGS
+#endif
     }
 
 private:
@@ -210,9 +213,10 @@ void InspectorClientQt::inspectorDestroyed()
 #endif
 }
 
-
 void InspectorClientQt::openInspectorFrontend(WebCore::InspectorController* inspectorController)
 {
+   (void) inspectorController;
+
 #if ENABLE(INSPECTOR)
     QWebView* inspectorView = new QWebView;
     InspectorClientWebPage* inspectorPage = new InspectorClientWebPage(inspectorView);
@@ -228,17 +232,20 @@ void InspectorClientQt::openInspectorFrontend(WebCore::InspectorController* insp
     // around and don't remove it.
     // https://bugs.webkit.org/show_bug.cgi?id=35340
     QUrl inspectorUrl;
+
 #ifndef QT_NO_PROPERTIES
     inspectorUrl = inspector->property("_q_inspectorUrl").toUrl();
 #endif
-    if (!inspectorUrl.isValid())
-        inspectorUrl = QUrl(QLatin1String("qrc:/webkit/inspector/inspector.html"));
+
+    if (! inspectorUrl.isValid())
+        inspectorUrl = QUrl(QString("qrc:/webkit/inspector/inspector.html"));
 
 #ifndef QT_NO_PROPERTIES
     QVariant inspectorJavaScriptWindowObjects = inspector->property("_q_inspectorJavaScriptWindowObjects");
     if (inspectorJavaScriptWindowObjects.isValid())
         inspectorPage->setProperty("_q_inspectorJavaScriptWindowObjects", inspectorJavaScriptWindowObjects);
 #endif
+
     inspectorView->page()->mainFrame()->load(inspectorUrl);
     m_inspectedWebPage->d->inspectorFrontend = inspectorView;
     inspector->d->setFrontend(inspectorView);

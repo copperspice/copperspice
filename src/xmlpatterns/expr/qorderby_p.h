@@ -28,9 +28,8 @@
 #include <qcomparisonplatform_p.h>
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ReturnOrderBy;
 
 class OrderBy : public SingleContainer
@@ -125,7 +124,5 @@ class OrderBy : public SingleContainer
 };
 
 }
-
-QT_END_NAMESPACE
 
 #endif

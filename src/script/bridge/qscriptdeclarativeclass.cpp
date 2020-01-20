@@ -25,16 +25,14 @@
 #include <qscriptdeclarativeobject_p.h>
 #include <qscriptobject_p.h>
 #include <qscriptstaticscopeobject_p.h>
-#include <QtScript/qscriptstring.h>
-#include <QtScript/qscriptengine.h>
-#include <QtScript/qscriptengineagent.h>
+#include <qscriptstring.h>
+#include <qscriptengine.h>
+#include <qscriptengineagent.h>
 #include <qscriptengine_p.h>
 #include <qscriptvalue_p.h>
 #include <qscriptqobject_p.h>
 #include <qscriptactivationobject_p.h>
-#include <QtCore/qstringlist.h>
-
-
+#include <qstringlist.h>
 
 QScriptDeclarativeClass::Value::Value()
 {
