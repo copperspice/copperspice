@@ -865,6 +865,12 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return SP::toFloat(*this, ok);
       }
 
+      template <typename SP = QStringParser>
+      [[deprecated("Use toInteger<int> instead")]] int toInt(bool *ok = nullptr, int base = 10) const
+      {
+         return SP::template toInteger<int>(*this, ok, base);
+      }
+
       // iterators
       iterator begin() {
          return CsString::CsString::begin();
