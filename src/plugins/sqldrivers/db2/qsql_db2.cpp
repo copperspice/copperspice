@@ -217,7 +217,7 @@ static QSqlField qMakeFieldInfo(const QDB2ResultPrivate *d, int i)
          &nullable);
 
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeFieldInfo: Unable to describe column %1").fromatArg(i), d);
+      qSqlWarning(QString::fromLatin1("qMakeFieldInfo: Unable to describe column %1").formatArg(i), d);
       return QSqlField();
    }
    QSqlField f(qFromTChar(colName), qDecodeDB2Type(colType));
@@ -486,7 +486,7 @@ static bool qMakeStatement(QDB2ResultPrivate *d, bool forwardOnly, bool setForwa
 
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QString::fromLatin1("QDB2Result::reset: Unable to set %1 attribute.")
-         .fromatArg(forwardOnly ? QLatin1String("SQL_CURSOR_FORWARD_ONLY") : QLatin1String("SQL_CURSOR_STATIC")), d);
+         .formatArg(forwardOnly ? QString("SQL_CURSOR_FORWARD_ONLY") : QString("SQL_CURSOR_STATIC")), d);
 
       return false;
    }
@@ -875,7 +875,7 @@ bool QDB2Result::fetch(int i)
    }
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO && r != SQL_NO_DATA) {
       setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-               "Unable to fetch record %1").fromatArg(i), QSqlError::StatementError, d));
+               "Unable to fetch record %1").formatArg(i), QSqlError::StatementError, d));
       return false;
    } else if (r == SQL_NO_DATA) {
       return false;
@@ -1244,7 +1244,7 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
       }
       if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO)
          qSqlWarning(QString::fromLatin1("QDB2Driver::open: "
-               "Unable to set connection attribute '%1'").fromatArg(opt), d);
+               "Unable to set connection attribute '%1'").formatArg(opt), d);
    }
 
    if (protocol.isEmpty()) {

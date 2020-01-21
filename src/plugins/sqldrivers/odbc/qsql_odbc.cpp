@@ -614,7 +614,7 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
          &nullable);
 
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeField: Unable to describe column %1").fromatArg(i), p);
+      qSqlWarning(QString::fromLatin1("qMakeField: Unable to describe column %1").formatArg(i), p);
       return QSqlField();
    }
 
@@ -627,7 +627,7 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
          0,
          &unsignedFlag);
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeField: Unable to get column attributes for column %1").fromatArg(i), p);
+      qSqlWarning(QString::fromLatin1("qMakeField: Unable to get column attributes for column %1").formatArg(i), p);
    }
 
 #ifdef UNICODE
@@ -812,7 +812,7 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
          qWarning() << "QODBCDriver::open: Unknown connection attribute '" << opt << '\'';
       }
       if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
-         qSqlWarning(QString::fromLatin1("QODBCDriver::open: Unable to set connection attribute'%1'").fromatArg(opt), this);
+         qSqlWarning(QString::fromLatin1("QODBCDriver::open: Unable to set connection attribute'%1'").formatArg(opt), this);
       }
    }
    return true;
