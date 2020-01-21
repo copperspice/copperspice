@@ -3362,13 +3362,9 @@ QSizeF QTextDocumentLayout::documentSize() const
 
 void QTextDocumentLayoutPrivate::ensureLayouted(QFixed y) const
 {
-   Q_Q(const QTextDocumentLayout);
-
    if (currentLazyLayoutPosition == -1) {
       return;
    }
-
-   const QSizeF oldSize = q->dynamicDocumentSize();
 
    if (checkPoints.isEmpty()) {
       layoutStep();

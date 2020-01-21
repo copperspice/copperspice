@@ -474,6 +474,7 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
             affine._m21 = -sina;
             affine._m22 = cosa;
             break;
+
          case TxScale: {
             qreal tm11 = cosa * affine._m11;
             qreal tm12 = sina * affine._m22;
@@ -485,13 +486,15 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
             affine._m22 = tm22;
             break;
          }
+
          case TxProject: {
             qreal tm13 = cosa * m_13 + sina * m_23;
             qreal tm23 = -sina * m_13 + cosa * m_23;
             m_13 = tm13;
             m_23 = tm23;
-            // fall through
          }
+         [[fallthrough]];
+
          case TxRotate:
          case TxShear: {
             qreal tm11 = cosa * affine._m11 + sina * affine._m21;
@@ -508,6 +511,7 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
       if (m_dirty < TxRotate) {
          m_dirty = TxRotate;
       }
+
    } else {
       QTransform result;
       if (axis == Qt::YAxis) {
@@ -558,6 +562,7 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
             affine._m21 = -sina;
             affine._m22 = cosa;
             break;
+
          case TxScale: {
             qreal tm11 = cosa * affine._m11;
             qreal tm12 = sina * affine._m22;
@@ -569,13 +574,15 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
             affine._m22 = tm22;
             break;
          }
+
          case TxProject: {
             qreal tm13 = cosa * m_13 + sina * m_23;
             qreal tm23 = -sina * m_13 + cosa * m_23;
             m_13 = tm13;
             m_23 = tm23;
-            // fall through
          }
+         [[fallthrough]];
+
          case TxRotate:
          case TxShear: {
             qreal tm11 = cosa * affine._m11 + sina * affine._m21;
@@ -589,9 +596,11 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
             break;
          }
       }
+
       if (m_dirty < TxRotate) {
          m_dirty = TxRotate;
       }
+
    } else {
       QTransform result;
       if (axis == Qt::YAxis) {
@@ -1716,7 +1725,6 @@ void QTransform::map(qreal x, qreal y, qreal *tx, qreal *ty) const
    MAP(x, y, *tx, *ty);
 }
 
-
 void QTransform::map(int x, int y, int *tx, int *ty) const
 {
    TransformationType t = inline_type();
@@ -1743,6 +1751,8 @@ QTransform::TransformationType QTransform::type() const
             m_type = TxProject;
             break;
          }
+         [[fallthrough]];
+
       case TxShear:
       case TxRotate:
          if (!qFuzzyIsNull(affine._m12) || !qFuzzyIsNull(affine._m21)) {
@@ -1754,16 +1764,22 @@ QTransform::TransformationType QTransform::type() const
             }
             break;
          }
+         [[fallthrough]];
+
       case TxScale:
          if (!qFuzzyIsNull(affine._m11 - 1) || !qFuzzyIsNull(affine._m22 - 1)) {
             m_type = TxScale;
             break;
          }
+         [[fallthrough]];
+
       case TxTranslate:
          if (!qFuzzyIsNull(affine._dx) || !qFuzzyIsNull(affine._dy)) {
             m_type = TxTranslate;
             break;
          }
+         [[fallthrough]];
+
       case TxNone:
          m_type = TxNone;
          break;

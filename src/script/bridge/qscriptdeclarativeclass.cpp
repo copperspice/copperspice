@@ -100,6 +100,8 @@ QScriptDeclarativeClass::Value::Value(QScriptEngine *eng, uint value)
 
 QScriptDeclarativeClass::Value::Value(QScriptEngine *eng, bool value)
 {
+   (void) eng;
+
    if (value) {
       new (this) JSC::JSValue(JSC::JSValue::JSTrue);
    } else {

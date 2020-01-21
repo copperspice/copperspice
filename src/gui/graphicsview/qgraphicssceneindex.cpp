@@ -38,13 +38,12 @@ namespace QtPrivate {
 static bool intersect_rect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *intersectData)
 {
+   (void) exposeRect;
+
    const QRectF sceneRect = *static_cast<const QRectF *>(intersectData);
 
    QRectF brect = item->boundingRect();
    _q_adjustRect(&brect);
-
-   // ### Add test for this (without making things slower?)
-   Q_UNUSED(exposeRect);
 
    bool keep = true;
    const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
@@ -92,14 +91,12 @@ static bool intersect_rect(const QGraphicsItem *item, const QRectF &exposeRect, 
 static bool intersect_point(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *intersectData)
 {
-   const QPointF scenePoint = *static_cast<const QPointF *>(intersectData);
+   (void) exposeRect;
 
+   const QPointF scenePoint = *static_cast<const QPointF *>(intersectData);
 
    QRectF brect = item->boundingRect();
    _q_adjustRect(&brect);
-
-   // ### Add test for this (without making things slower?)
-   Q_UNUSED(exposeRect);
 
    bool keep = false;
    const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
@@ -137,12 +134,11 @@ static bool intersect_point(const QGraphicsItem *item, const QRectF &exposeRect,
 static bool intersect_path(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *intersectData)
 {
+   (void) exposeRect;
+
    const QPainterPath scenePath = *static_cast<const QPainterPath *>(intersectData);
    QRectF brect = item->boundingRect();
    _q_adjustRect(&brect);
-
-   // ### Add test for this (without making things slower?)
-   Q_UNUSED(exposeRect);
 
    bool keep = true;
    const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
@@ -415,8 +411,10 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::estimateItems(const QPointF &point, 
 
 QList<QGraphicsItem *> QGraphicsSceneIndex::estimateTopLevelItems(const QRectF &rect, Qt::SortOrder order) const
 {
+   (void) rect;
+
    Q_D(const QGraphicsSceneIndex);
-   Q_UNUSED(rect);
+
    QGraphicsScenePrivate *scened = d->scene->d_func();
    scened->ensureSortedTopLevelItems();
 
@@ -436,7 +434,7 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::estimateTopLevelItems(const QRectF &
 
 void QGraphicsSceneIndex::updateSceneRect(const QRectF &rect)
 {
-   Q_UNUSED(rect);
+   (void) rect;
 }
 
 void QGraphicsSceneIndex::clear()
@@ -455,12 +453,14 @@ void QGraphicsSceneIndex::deleteItem(QGraphicsItem *item)
 void QGraphicsSceneIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::GraphicsItemChange change,
    const void *const value)
 {
-
+   (void) item;
+   (void) change;
+   (void) value;
 }
 
 void QGraphicsSceneIndex::prepareBoundingRectChange(const QGraphicsItem *item)
 {
-   Q_UNUSED(item);
+   (void) item;
 }
 
 

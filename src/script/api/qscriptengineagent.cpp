@@ -49,9 +49,9 @@ void QScriptEngineAgentPrivate::detach()
 
 void QScriptEngineAgentPrivate::returnEvent(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, int lineno)
 {
-   Q_UNUSED(frame);
-   Q_UNUSED(lineno);
-   Q_UNUSED(sourceID);
+   (void) frame;
+   (void) lineno;
+   (void) sourceID;
 }
 
 void QScriptEngineAgentPrivate::exceptionThrow(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, bool hasHandler)
@@ -191,6 +191,10 @@ QScriptEngineAgent::~QScriptEngineAgent()
 void QScriptEngineAgent::scriptLoad(qint64 id, const QString &program,
    const QString &fileName, int baseLineNumber)
 {
+   (void) id;
+   (void) program;
+   (void) fileName;
+   (void) baseLineNumber;
 }
 
 /*!
@@ -206,7 +210,7 @@ void QScriptEngineAgent::scriptLoad(qint64 id, const QString &program,
 */
 void QScriptEngineAgent::scriptUnload(qint64 id)
 {
-   Q_UNUSED(id);
+   (void) id;
 }
 
 /*!
@@ -254,7 +258,7 @@ void QScriptEngineAgent::contextPop()
 */
 void QScriptEngineAgent::functionEntry(qint64 scriptId)
 {
-   Q_UNUSED(scriptId);
+   (void) scriptId;
 }
 
 /*!
@@ -283,8 +287,8 @@ void QScriptEngineAgent::functionEntry(qint64 scriptId)
 void QScriptEngineAgent::functionExit(qint64 scriptId,
    const QScriptValue &returnValue)
 {
-   Q_UNUSED(scriptId);
-   Q_UNUSED(returnValue);
+   (void) scriptId;
+   (void) returnValue;
 }
 
 /*!
@@ -304,11 +308,14 @@ void QScriptEngineAgent::functionExit(qint64 scriptId,
 
   \sa scriptLoad(), functionEntry()
 */
-void QScriptEngineAgent::positionChange(qint64 scriptId,
-   int lineNumber, int columnNumber)
+void QScriptEngineAgent::positionChange(qint64 scriptId, int lineNumber, int columnNumber)
 {
+   (void) scriptId;
+   (void) lineNumber;
+   (void) columnNumber;
 }
 
+void QScriptEngineAgent::exceptionThrow(qint64 scriptId, const QScriptValue &exception, bool hasHandler)
 /*!
   This function is called when the given \a exception has occurred in
   the engine, in the script identified by \a scriptId. If the
@@ -331,9 +338,9 @@ void QScriptEngineAgent::exceptionThrow(qint64 scriptId,
    const QScriptValue &exception,
    bool hasHandler)
 {
-   Q_UNUSED(scriptId);
-   Q_UNUSED(exception);
-   Q_UNUSED(hasHandler);
+   (void) scriptId;
+   (void) exception;
+   (void) hasHandler;
 }
 
 /*!
@@ -349,8 +356,8 @@ void QScriptEngineAgent::exceptionThrow(qint64 scriptId,
 void QScriptEngineAgent::exceptionCatch(qint64 scriptId,
    const QScriptValue &exception)
 {
-   Q_UNUSED(scriptId);
-   Q_UNUSED(exception);
+   (void) scriptId;
+   (void) exception;
 }
 
 
@@ -363,7 +370,8 @@ void QScriptEngineAgent::exceptionCatch(qint64 scriptId,
 */
 bool QScriptEngineAgent::supportsExtension(Extension extension) const
 {
-   Q_UNUSED(extension);
+   (void) extension;
+
    return false;
 }
 
@@ -385,11 +393,11 @@ bool QScriptEngineAgent::supportsExtension(Extension extension) const
 
   \sa supportsExtension()
 */
-QVariant QScriptEngineAgent::extension(Extension extension,
-   const QVariant &argument)
+QVariant QScriptEngineAgent::extension(Extension extension, const QVariant &argument)
 {
-   Q_UNUSED(extension);
-   Q_UNUSED(argument);
+   (void) extension;
+   (void) argument;
+
    return QVariant();
 }
 

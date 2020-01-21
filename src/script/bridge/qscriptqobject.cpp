@@ -1041,12 +1041,12 @@ struct QtMethodCaller {
          }
       }
 
-      QScriptable *scriptable = 0;
+      QScriptable *scriptable = nullptr;
       if (thisQObject) {
          scriptable = scriptableFromQObject(thisQObject);
       }
 
-      QScriptEngine *oldEngine = 0;
+      QScriptEngine *oldEngine = nullptr;
       QScriptEnginePrivate *engine = QScript::scriptEngineFromExec(exec);
 
       if (scriptable) {
@@ -1894,6 +1894,7 @@ void QObjectDelegate::markChildren(QScriptObject *object, JSC::MarkStack &markSt
 
 bool QObjectDelegate::compareToObject(QScriptObject *, JSC::ExecState *exec, JSC::JSObject *o2)
 {
+   (void) exec;
    if (!o2->inherits(&QScriptObject::info)) {
       return false;
    }
@@ -2510,6 +2511,8 @@ bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex
    QVector<QObjectConnection> &cs = connections[signalIndex];
    int absSlotIndex = slotCounter + metaObject()->methodOffset();
 
+   (void) sender;
+   (void) type;
 
    /* emerald (script, hold)
       int absSlotIndex = slotCounter + metaObject()->methodOffset();
@@ -2529,6 +2532,8 @@ bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex
 bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIndex, JSC::JSValue receiver,
    JSC::JSValue slot)
 {
+   (void) sender;
+
    if (connections.size() <= signalIndex) {
       return false;
    }

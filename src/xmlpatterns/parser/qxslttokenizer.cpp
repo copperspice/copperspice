@@ -2453,10 +2453,11 @@ void XSLTTokenizer::queueSorting(const bool oneSortRequired, TokenSource::Queue 
             /* We have an instruction which is a text node, we're done. */
             break;
          }
+
          case QXmlStreamReader::ProcessingInstruction:
-         /* Fallthrough. */
          case QXmlStreamReader::Comment:
             continue;
+
          default:
             unexpectedContent();
 
