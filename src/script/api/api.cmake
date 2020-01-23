@@ -14,7 +14,6 @@ list(APPEND SCRIPT_PUBLIC_INCLUDES
    QScriptValueIterator
    QScriptContextInfoList
    QScriptSyntaxCheckResult
-   QScriptValueList
    QtScript
 )
 
@@ -32,7 +31,6 @@ list(APPEND SCRIPT_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/api/qscriptprogram.h
    ${CMAKE_CURRENT_SOURCE_DIR}/api/qscriptstring.h
    ${CMAKE_CURRENT_SOURCE_DIR}/api/qscriptsyntaxcheckresult.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/api/qscriptvaluelist.h
    ${CMAKE_CURRENT_SOURCE_DIR}/api/qscriptvalue.h
    ${CMAKE_CURRENT_SOURCE_DIR}/api/qscriptvalueiterator.h
    ${CMAKE_CURRENT_SOURCE_DIR}/api/qtscript.h
