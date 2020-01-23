@@ -49,11 +49,17 @@ class Q_GUI_EXPORT QPlatformDialogHelper : public QObject
    GUI_CS_OBJECT(QPlatformDialogHelper)
 
    GUI_CS_ENUM(ButtonRole)
-   GUI_CS_ENUM(StandardButtons)
+   GUI_CS_ENUM(ButtonLayout)
+
+   GUI_CS_FLAG(StandardButton, StandardButtons)
 
  public:
    enum StyleHint { };
-   enum DialogCode { Rejected, Accepted };
+
+   enum DialogCode {
+      Rejected,
+      Accepted
+   };
 
    enum StandardButton {
       // keep this in sync with QDialogButtonBox::StandardButton and QMessageBox::StandardButton
@@ -77,7 +83,6 @@ class Q_GUI_EXPORT QPlatformDialogHelper : public QObject
       Reset              = 0x04000000,
       RestoreDefaults    = 0x08000000,
 
-
       FirstButton        = Ok,                // internal
       LastButton         = RestoreDefaults,   // internal
       LowestBit          = 10,                // internal: log2(FirstButton)
@@ -98,7 +103,6 @@ class Q_GUI_EXPORT QPlatformDialogHelper : public QObject
       NoRole,
       ResetRole,
       ApplyRole,
-
       NRoles,
 
       RoleMask        = 0x0FFFFFFF,
@@ -143,7 +147,7 @@ class Q_GUI_EXPORT QColorDialogOptions
 {
    GUI_CS_GADGET(QColorDialogOptions)
 
-   GUI_CS_ENUM(ColorDialogOptions)
+   GUI_CS_FLAG(ColorDialogOption, ColorDialogOptions)
 
  public:
    enum ColorDialogOption {
@@ -154,10 +158,10 @@ class Q_GUI_EXPORT QColorDialogOptions
 
    using ColorDialogOptions = QFlags<ColorDialogOption>;
 
-
    QColorDialogOptions();
    QColorDialogOptions(const QColorDialogOptions &rhs);
    QColorDialogOptions &operator=(const QColorDialogOptions &rhs);
+
    ~QColorDialogOptions();
 
    void swap(QColorDialogOptions &other) {
@@ -210,7 +214,7 @@ class Q_GUI_EXPORT QFontDialogOptions
 {
    GUI_CS_GADGET(QFontDialogOptions)
 
-   GUI_CS_ENUM(FontDialogOptions)
+   GUI_CS_FLAG(FontDialogOption, FontDialogOptions)
 
  public:
    enum FontDialogOption {
@@ -275,7 +279,8 @@ class Q_GUI_EXPORT QFileDialogOptions
    GUI_CS_ENUM(FileMode)
    GUI_CS_ENUM(AcceptMode)
    GUI_CS_ENUM(DialogLabel)
-   GUI_CS_ENUM(FileDialogOptions)
+
+   GUI_CS_FLAG(FileDialogOption, FileDialogOptions)
 
  public:
    enum ViewMode { Detail, List };
@@ -358,7 +363,6 @@ class Q_GUI_EXPORT QFileDialogOptions
  private:
    QSharedDataPointer<QFileDialogOptionsPrivate> d;
 };
-
 
 class Q_GUI_EXPORT QPlatformFileDialogHelper : public QPlatformDialogHelper
 {
