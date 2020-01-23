@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -586,9 +586,9 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return CsString::CsString_utf16::back();
       }
 
-      QString16 left(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QStringView16 leftView(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QString16 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 left(size_type numOfChars) const;
+      [[nodiscard]] QStringView16 leftView(size_type numOfChars) const;
+      [[nodiscard]] QString16 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
 
       size_type length() const {
          return CsString::CsString_utf16::size();
@@ -608,14 +608,14 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       static int localeAwareCompare(QStringView16 str1, QStringView16 str2);
 
-      QString16 mid(size_type indexStart, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
-      QString16 mid(const_iterator iter, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 mid(size_type indexStart, size_type numOfChars = -1) const;
+      [[nodiscard]] QString16 mid(const_iterator iter, size_type numOfChars = -1) const;
 
       QStringView16 midView (size_type indexStart, size_type numOfChars = -1) const;
       QStringView16 midView (const_iterator iter, size_type numOfChars = -1) const;
 
-      QString16 normalized(QString16::NormalizationForm mode, QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned)
-                  const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 normalized(QString16::NormalizationForm mode,
+                  QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned) const;
 
       QString16 &prepend(const QString16 &other) {
          CsString::CsString_utf16::insert(begin(), other);
@@ -658,7 +658,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          prepend(other);
       }
 
-      QString16 repeated(size_type count) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 repeated(size_type count) const;
 
       QString16 &remove(size_type indexStart, size_type numOfChars);
       QString16 &remove(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive);
@@ -721,12 +721,12 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return CsString::CsString_utf16::resize(numOfChars, c);
       }
 
-      QString16 right(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QStringView16 rightView(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QString16 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 right(size_type numOfChars) const;
+      [[nodiscard]] QStringView16 rightView(size_type numOfChars) const;
+      [[nodiscard]] QString16 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
 
-      QString16 simplified() const & Q_REQUIRED_RESULT;
-      QString16 simplified() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 simplified() const &;
+      [[nodiscard]] QString16 simplified() &&;
 
       size_type size() const {
          return CsString::CsString_utf16::size();
@@ -750,22 +750,22 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       QString16 toHtmlEscaped() const;
 
-      QString16 toCaseFolded() const & Q_REQUIRED_RESULT;
-      QString16 toCaseFolded() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 toCaseFolded() const &;
+      [[nodiscard]] QString16 toCaseFolded() &&;
 
-      QString16 toLower() const & Q_REQUIRED_RESULT;
-      QString16 toLower() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 toLower() const &;
+      [[nodiscard]] QString16 toLower() &&;
 
-      QString16 toUpper() const & Q_REQUIRED_RESULT;
-      QString16 toUpper() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 toUpper() const &;
+      [[nodiscard]] QString16 toUpper() &&;
 
-      QByteArray toLatin1() const Q_REQUIRED_RESULT;
-      QByteArray toUtf8() const Q_REQUIRED_RESULT;
+      [[nodiscard]] QByteArray toLatin1() const;
+      [[nodiscard]] QByteArray toUtf8() const;
 
       std::wstring toStdWString() const;
 
-      QString16 trimmed() const & Q_REQUIRED_RESULT;
-      QString16 trimmed() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString16 trimmed() const &;
+      [[nodiscard]] QString16 trimmed() &&;
 
       void truncate(size_type length);
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -23,8 +23,8 @@
 
 #include <qpaintdevicewindow_p.h>
 
-#include <QGuiApplication>
-#include <QScreen>
+#include <qguiapplication.h>
+#include <qscreen.h>
 
 void QPaintDeviceWindow::update()
 {
@@ -34,6 +34,7 @@ void QPaintDeviceWindow::update()
 void QPaintDeviceWindow::update(const QRect &rect)
 {
    Q_D(QPaintDeviceWindow);
+
    d->dirtyRegion += rect;
    if (isExposed()) {
       requestUpdate();
@@ -43,6 +44,7 @@ void QPaintDeviceWindow::update(const QRect &rect)
 void QPaintDeviceWindow::update(const QRegion &region)
 {
    Q_D(QPaintDeviceWindow);
+
    d->dirtyRegion += region;
    if (isExposed()) {
       requestUpdate();
@@ -51,7 +53,7 @@ void QPaintDeviceWindow::update(const QRegion &region)
 
 void QPaintDeviceWindow::paintEvent(QPaintEvent *event)
 {
-   // Do nothing
+   (void) event;
 }
 
 /*!
@@ -67,44 +69,54 @@ int QPaintDeviceWindow::metric(PaintDeviceMetric metric) const
    switch (metric) {
       case PdmWidth:
          return width();
+
       case PdmWidthMM:
          if (screen) {
             return width() * screen->physicalSize().width() / screen->geometry().width();
          }
          break;
+
       case PdmHeight:
          return height();
+
       case PdmHeightMM:
          if (screen) {
             return height() * screen->physicalSize().height() / screen->geometry().height();
          }
          break;
+
       case PdmDpiX:
          if (screen) {
             return qRound(screen->logicalDotsPerInchX());
          }
          break;
+
       case PdmDpiY:
          if (screen) {
             return qRound(screen->logicalDotsPerInchY());
          }
          break;
+
       case PdmPhysicalDpiX:
          if (screen) {
             return qRound(screen->physicalDotsPerInchX());
          }
          break;
+
       case PdmPhysicalDpiY:
          if (screen) {
             return qRound(screen->physicalDotsPerInchY());
          }
          break;
+
       case PdmDevicePixelRatio:
          return int(QWindow::devicePixelRatio());
          break;
+
       case PdmDevicePixelRatioScaled:
-         return int(QWindow::devicePixelRatio() * devicePixelRatioFScale());
-         break;
+        return int(QWindow::devicePixelRatio() * devicePixelRatioFScale());
+        break;
+
       default:
          break;
    }
@@ -115,6 +127,8 @@ int QPaintDeviceWindow::metric(PaintDeviceMetric metric) const
 // internal
 void QPaintDeviceWindow::exposeEvent(QExposeEvent *exposeEvent)
 {
+   (void) exposeEvent;
+
    Q_D(QPaintDeviceWindow);
 
    if (isExposed()) {

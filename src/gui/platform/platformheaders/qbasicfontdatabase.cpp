@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -26,11 +26,11 @@
 #if defined(QT_USE_FREETYPE)
 
 #include <qplatform_screen.h>
-#include <QDir>
-#include <QFile>
-#include <QLibraryInfo>
-#include <QtEndian>
-#include <QUuid>
+#include <qdir.h>
+#include <qfile.h>
+#include <qendian.h>
+#include <qlibraryinfo.h>
+#include <quuid.h>
 
 #include <qapplication_p.h>
 #include <qfontengine_ft_p.h>

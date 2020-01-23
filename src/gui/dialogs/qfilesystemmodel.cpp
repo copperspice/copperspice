@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -664,7 +664,7 @@ QString QFileSystemModelPrivate::size(const QModelIndex &index) const
    const QFileSystemNode *n = node(index);
    if (n->isDir()) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       return QLatin1String("--");
 #else
       return QLatin1String("");
@@ -876,7 +876,7 @@ QVariant QFileSystemModel::headerData(int section, Qt::Orientation orientation, 
 
       case 2:
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          returnValue = tr("Kind", "Match OS X Finder");
 #else
          returnValue = tr("Type", "All other platforms");
@@ -1041,7 +1041,7 @@ class QFileSystemModelSorter
       switch (sortColumn) {
          case 0: {
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
             // place directories before files
             bool left = l->isDir();
             bool right = r->isDir();

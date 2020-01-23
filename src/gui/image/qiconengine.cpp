@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -44,16 +44,23 @@ QPixmap QIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       QPainter p(&pm);
       paint(&p, QRect(QPoint(0, 0), size), mode, state);
    }
+
    return pm;
 }
 
-void QIconEngine::addPixmap(const QPixmap &/*pixmap*/, QIcon::Mode /*mode*/, QIcon::State /*state*/)
+void QIconEngine::addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state)
 {
+   (void) pixmap;
+   (void) mode;
+   (void) state;
 }
-
 
 void QIconEngine::addFile(const QString &fileName, const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
+   (void) fileName;
+   (void) size;
+   (void) mode;
+   (void) state;
 }
 
 QString QIconEngine::key() const
@@ -71,7 +78,6 @@ bool QIconEngine::write(QDataStream &) const
    return false;
 }
 
-
 void QIconEngine::virtual_hook(int id, void *data)
 {
    switch (id) {
@@ -81,6 +87,7 @@ void QIconEngine::virtual_hook(int id, void *data)
          arg.sizes.clear();
          break;
       }
+
       default:
          break;
    }
@@ -103,5 +110,3 @@ QString QIconEngine::iconName() const
 
    return name;
 }
-
-

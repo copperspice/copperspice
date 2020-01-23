@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -55,13 +55,13 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    QLineControl(const QString &txt = QString())
       : QInputControl(LineEdit),
         m_cursor(0), m_preeditCursor(0), m_cursorWidth(0), m_layoutDirection(Qt::LayoutDirectionAuto),
-        m_hideCursor(false), m_separator(0), m_readOnly(0),
-        m_dragEnabled(0), m_echoMode(0), m_textDirty(0), m_selDirty(0),
-        m_validInput(1), m_blinkStatus(0), m_blinkPeriod(0), m_blinkTimer(0), m_deleteAllTimer(0),
-        m_ascent(0), m_maxLength(32767), m_lastCursorPos(-1),
-        m_tripleClickTimer(0), m_maskData(0), m_modifiedState(0), m_undoState(0),
-        m_selstart(0), m_selend(0), m_passwordEchoEditing(false),
-        m_passwordEchoTimer(0), m_keyboardScheme(0), m_passwordMaskDelay(-1), m_accessibleObject(0)
+        m_hideCursor(false), m_separator(false), m_readOnly(false), m_dragEnabled(false),
+        m_echoMode(0), m_textDirty(false), m_selDirty(false),
+        m_validInput(true), m_blinkStatus(false), m_blinkPeriod(0), m_blinkTimer(0),
+        m_deleteAllTimer(0), m_ascent(0), m_maxLength(32767), m_lastCursorPos(-1),
+        m_tripleClickTimer(0), m_keyboardScheme(0), m_accessibleObject(nullptr),
+        m_maskData(nullptr), m_modifiedState(0), m_undoState(0), m_selstart(0), m_selend(0),
+        m_passwordEchoEditing(false), m_passwordEchoTimer(0),  m_passwordMaskDelay(-1)
    {
       init(txt);
    }
@@ -74,12 +74,14 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
       Q_ASSERT(object);
       m_accessibleObject = object;
    }
+
    QObject *accessibleObject() {
       if (m_accessibleObject) {
          return m_accessibleObject;
       }
       return parent();
    }
+
    int nextMaskBlank(int pos) {
       int c = findInMask(pos, true, false);
       m_separator |= (c != pos);

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -58,7 +58,7 @@
 #define comp_func_Clear_impl(dest, length, const_alpha)\
 {\
     if (const_alpha == 255) {\
-        QT_MEMFILL_UINT(dest, length, 0);\
+        qt_memfill<quint32>(dest, 0, length); \
     } else {\
         int ialpha = 255 - const_alpha;\
         PRELOAD_INIT(dest)\
@@ -110,11 +110,13 @@ void comp_func_Clear_rgb64(QRgba64 *dest, const QRgba64 *, int length, uint cons
 void comp_func_solid_Source(uint *dest, int length, uint color, uint const_alpha)
 {
     if (const_alpha == 255) {
-        QT_MEMFILL_UINT(dest, length, color);
+        qt_memfill<quint32>(dest, color, length);
+
     } else {
         int ialpha = 255 - const_alpha;
         color = BYTE_MUL(color, const_alpha);
         PRELOAD_INIT(dest)
+
         for (int i = 0; i < length; ++i) {
             PRELOAD_COND(dest)
             dest[i] = color + BYTE_MUL(dest[i], ialpha);
@@ -186,7 +188,8 @@ void comp_func_Destination_rgb64(QRgba64 *, const QRgba64 *, int, uint)
 void comp_func_solid_SourceOver(uint *dest, int length, uint color, uint const_alpha)
 {
     if ((const_alpha & qAlpha(color)) == 255) {
-        QT_MEMFILL_UINT(dest, length, color);
+        qt_memfill<quint32>(dest, color, length);
+
     } else {
         if (const_alpha != 255)
             color = BYTE_MUL(color, const_alpha);

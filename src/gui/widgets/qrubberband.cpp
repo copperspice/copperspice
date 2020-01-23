@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -64,7 +64,7 @@ void QRubberBand::initStyleOption(QStyleOptionRubberBand *option) const
    option->initFrom(this);
    option->shape = d_func()->shape;
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    option->opaque = true;
 #else
    option->opaque = windowFlags() & RUBBERBAND_WINDOW_TYPE;

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -41,9 +41,9 @@
 #  include <qfilesystemwatcher_inotify_p.h>
 #  include <qfilesystemwatcher_dnotify_p.h>
 
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
 
-#  if (defined Q_OS_MAC)
+#  if (defined Q_OS_DARWIN)
 #  include <qfilesystemwatcher_fsevents_p.h>
 #  endif
 
@@ -250,7 +250,7 @@ QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
    }
    return eng;
 
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
    return QKqueueFileSystemWatcherEngine::create();
 
 #else
@@ -277,6 +277,8 @@ void QFileSystemWatcherPrivate::init()
 
 void QFileSystemWatcherPrivate::initForcedEngine(const QString &forceName)
 {
+   (void) forceName;
+
    if (forced) {
       return;
    }

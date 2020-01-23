@@ -424,19 +424,9 @@
 #define WTF_OS_OPENBSD 1
 #endif
 
-/* OS(QNX) - QNX */
-#if defined(__QNXNTO__)
-#define WTF_OS_QNX 1
-#endif
-
 /* OS(SOLARIS) - Solaris */
 #if defined(sun) || defined(__sun)
 #define WTF_OS_SOLARIS 1
-#endif
-
-/* OS(WINCE) - Windows CE; note that for this platform OS(WINDOWS) is also defined */
-#if defined(_WIN32_WCE)
-#define WTF_OS_WINCE 1
 #endif
 
 /* OS(WINDOWS) - Any version of Windows */
@@ -457,14 +447,10 @@
     || OS(ANDROID)          \
     || OS(DARWIN)           \
     || OS(FREEBSD)          \
-    || OS(HAIKU)            \
-    || OS(HPUX)             \
     || OS(LINUX)            \
     || OS(NETBSD)           \
     || OS(OPENBSD)          \
-    || OS(QNX)              \
     || OS(SOLARIS)          \
-    || OS(SYMBIAN)          \
     || defined(unix)        \
     || defined(__unix)      \
     || defined(__unix__)
@@ -472,15 +458,6 @@
 #endif
 
 /* Operating environments */
-
-/* FIXME: these are all mixes of OS, operating environment and policy choices. */
-/* PLATFORM(CHROMIUM) */
-/* PLATFORM(QT) */
-/* PLATFORM(WX) */
-/* PLATFORM(GTK) */
-/* PLATFORM(HAIKU) */
-/* PLATFORM(MAC) */
-/* PLATFORM(WIN) */
 
 #if defined(BUILDING_CHROMIUM__)
 #define WTF_PLATFORM_CHROMIUM 1
@@ -550,35 +527,8 @@
 #define WTF_PLATFORM_CAIRO 1
 #endif
 
-
-/* OS(WINCE) && PLATFORM(QT)
-   We can not determine the endianess at compile time. For
-   Qt for Windows CE the endianess is specified in the
-   device specific makespec
-*/
-#if OS(WINCE) && PLATFORM(QT)
-#   include <QtGlobal>
-#   undef WTF_CPU_BIG_ENDIAN
-#   undef WTF_CPU_MIDDLE_ENDIAN
-#   if Q_BYTE_ORDER == Q_BIG_ENDIAN
-#       define WTF_CPU_BIG_ENDIAN 1
-#   endif
-
-#if (_WIN32_WCE >= 0x700)
-	// Windows Embedded Compact 7 is missing std::ptrdiff_t type and std::min and std::max.
-	// They are defined here to minimize the changes to JSCore
-	namespace std {
-		typedef ::ptrdiff_t ptrdiff_t;
-		template <class T> inline T max(const T& a, const T& b) { return (a > b) ? a : b; }
-		template <class T> inline T min(const T& a, const T& b) { return (a < b) ? a : b; }
-	}
-#endif
-
-// For localtime in Windows CE
-#   include <ce_time.h>
-#endif
-
-#if (PLATFORM(IPHONE) || PLATFORM(MAC) || PLATFORM(WIN) || (PLATFORM(QT) && OS(DARWIN) && !ENABLE(SINGLE_THREADED))) && !defined(ENABLE_JSC_MULTIPLE_THREADS)
+#if (PLATFORM(IPHONE) || PLATFORM(MAC) || PLATFORM(WIN) || (PLATFORM(QT) && \
+      OS(DARWIN) && ! ENABLE(SINGLE_THREADED))) && !defined(ENABLE_JSC_MULTIPLE_THREADS)
 #define ENABLE_JSC_MULTIPLE_THREADS 1
 #endif
 
@@ -587,37 +537,8 @@
 #define WTF_USE_QUERY_PERFORMANCE_COUNTER  1
 #endif
 
-#if OS(WINCE) && !PLATFORM(QT)
-#undef ENABLE_JSC_MULTIPLE_THREADS
-#define ENABLE_JSC_MULTIPLE_THREADS        0
-#define USE_SYSTEM_MALLOC                  0
-#define ENABLE_ICONDATABASE                0
-#define ENABLE_JAVASCRIPT_DEBUGGER         0
-#define ENABLE_FTPDIR                      0
-#define ENABLE_PAN_SCROLLING               0
-#define ENABLE_WML                         1
-#define HAVE_ACCESSIBILITY                 0
-
-#define NOMINMAX       /* Windows min and max conflict with standard macros */
-#define NOSHLWAPI      /* shlwapi.h not available on WinCe */
-
-/* MSDN documentation says these functions are provided with uspce.lib.  But we cannot find this file. */
-#define __usp10__      /* disable "usp10.h" */
-
-#define _INC_ASSERT    /* disable "assert.h" */
-#define assert(x)
-
-/* _countof is only included in CE6; for CE5 we need to define it ourself */
-#ifndef _countof
-#define _countof(x) (sizeof(x) / sizeof((x)[0]))
-#endif
-
-#endif  /* OS(WINCE) && !PLATFORM(QT) */
-
 #if PLATFORM(QT)
 #define WTF_USE_QT4_UNICODE 1
-#elif OS(WINCE)
-#define WTF_USE_WINCE_UNICODE 1
 #elif PLATFORM(GTK)
 /* The GTK+ Unicode backend is configurable */
 #else
@@ -714,15 +635,13 @@
 #if PLATFORM(IPHONE) || PLATFORM(MAC) || PLATFORM(WIN) || PLATFORM(GTK) || PLATFORM(CHROMIUM)
 #define HAVE_ACCESSIBILITY 1
 #endif
-#endif /* !defined(HAVE_ACCESSIBILITY) */
+#endif
 
-#if OS(UNIX) && !OS(SYMBIAN)
+#if OS(UNIX)
 #define HAVE_SIGNAL_H 1
 #endif
 
-#if !OS(WINDOWS) && !OS(SOLARIS) && !OS(QNX) \
-    && !OS(SYMBIAN) && !OS(HAIKU) && !OS(RVCT) \
-    && !OS(ANDROID) && !OS(AIX) && !OS(HPUX)
+#if !OS(WINDOWS) && !OS(SOLARIS) && !OS(RVCT) && !OS(ANDROID) && !OS(AIX)
 #define HAVE_TM_GMTOFF 1
 #define HAVE_TM_ZONE 1
 #define HAVE_TIMEGM 1
@@ -757,35 +676,12 @@
 #endif
 
 #elif OS(WINDOWS)
-
-#if OS(WINCE)
-#define HAVE_ERRNO_H 0
-#else
 #define HAVE_SYS_TIMEB_H 1
-#endif
 #define HAVE_VIRTUALALLOC 1
-
-#elif OS(SYMBIAN)
-
-#define HAVE_ERRNO_H 1
-#define HAVE_MMAP 0
-#define HAVE_SBRK 1
-
-#define HAVE_SYS_TIME_H 1
-#define HAVE_STRINGS_H 1
 
 #if !COMPILER(RVCT)
 #define HAVE_SYS_PARAM_H 1
 #endif
-
-#elif OS(QNX)
-
-#define HAVE_ERRNO_H 1
-#define HAVE_MMAP 1
-#define HAVE_SBRK 1
-#define HAVE_STRINGS_H 1
-#define HAVE_SYS_PARAM_H 1
-#define HAVE_SYS_TIME_H 1
 
 #elif OS(ANDROID)
 

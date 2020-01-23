@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -23,10 +23,11 @@
 
 #include <qsql_mysql.h>
 
-#include <qsqldriver_p.h>
+#include <qalgorithms.h>
 #include <qcoreapplication.h>
-#include <qvariant.h>
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qfile.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlindex.h>
@@ -34,10 +35,10 @@
 #include <qsqlrecord.h>
 #include <qstringlist.h>
 #include <qtextcodec.h>
+#include <qvariant.h>
 #include <qvector.h>
-#include <qfile.h>
 
-#include <qdebug.h>
+#include <qsqldriver_p.h>
 
 #ifdef Q_OS_WIN32
 // comment the next line out if you want to use MySQL/embedded on Win32 systems
@@ -128,21 +129,23 @@ static inline QVariant qDateTimeFromString(QString &val)
 #ifdef QT_NO_DATESTRING
    return QVariant(val);
 #else
+
    if (val.isEmpty()) {
       return QVariant(QDateTime());
    }
 
    if (val.length() == 14)
-      // TIMESTAMPS have the format yyyyMMddhhmmss
-      val.insert(4, QLatin1Char('-')).insert(7, QLatin1Char('-')).insert(10,
-         QLatin1Char('T')).insert(13, QLatin1Char(':')).insert(16, QLatin1Char(':'));
+      // timestamps have the format yyyyMMddhhmmss
+      val.insert(4, QChar('-')).insert(7, QChar('-'))
+                  .insert(10, QChar('T')).insert(13, QChar(':')).insert(16, QChar(':'));
+
    return QVariant(QDateTime::fromString(val, Qt::ISODate));
 #endif
 }
 
 class QMYSQLResultPrivate : public QObject
 {
-   SQL_CS_OBJECT(QMYSQLResultPrivate)
+   CS_OBJECT(QMYSQLResultPrivate)
 
  public:
    QMYSQLResultPrivate(const QMYSQLDriver *dp, const QMYSQLResult *d) : driver(dp), result(0), q(d),
@@ -1267,25 +1270,25 @@ bool QMYSQLDriver::hasFeature(DriverFeature f) const
 
 static void setOptionFlag(uint &optionFlags, const QString &opt)
 {
-   if (opt == QLatin1String("CLIENT_COMPRESS")) {
+   if (opt == QString("CLIENT_COMPRESS")) {
       optionFlags |= CLIENT_COMPRESS;
 
-   } else if (opt == QLatin1String("CLIENT_FOUND_ROWS")) {
+   } else if (opt == QString("CLIENT_FOUND_ROWS")) {
       optionFlags |= CLIENT_FOUND_ROWS;
 
-   } else if (opt == QLatin1String("CLIENT_IGNORE_SPACE")) {
+   } else if (opt == QString("CLIENT_IGNORE_SPACE")) {
       optionFlags |= CLIENT_IGNORE_SPACE;
 
-   } else if (opt == QLatin1String("CLIENT_INTERACTIVE")) {
+   } else if (opt == QString("CLIENT_INTERACTIVE")) {
       optionFlags |= CLIENT_INTERACTIVE;
 
-   } else if (opt == QLatin1String("CLIENT_NO_SCHEMA")) {
+   } else if (opt == QString("CLIENT_NO_SCHEMA")) {
       optionFlags |= CLIENT_NO_SCHEMA;
 
-   } else if (opt == QLatin1String("CLIENT_ODBC")) {
+   } else if (opt == QString("CLIENT_ODBC")) {
       optionFlags |= CLIENT_ODBC;
 
-   } else if (opt == QLatin1String("CLIENT_SSL")) {
+   } else if (opt == QString("CLIENT_SSL")) {
       qWarning("QMYSQLDriver: SSL_KEY, SSL_CERT and SSL_CA should be used instead of CLIENT_SSL.");
 
    } else {
@@ -1308,7 +1311,7 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
       stored procedure call will fail.
    */
    unsigned int optionFlags = Q_CLIENT_MULTI_STATEMENTS;
-   const QStringList opts(connOpts.split(QLatin1Char(';'), QStringParser::SkipEmptyParts));
+   const QStringList opts(connOpts.split(QChar(';'), QStringParser::SkipEmptyParts));
 
    QString unixSocket;
    QString sslCert;
@@ -1326,43 +1329,43 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
       QString tmp(opts.at(i).simplified());
 
       int idx;
-      if ((idx = tmp.indexOf(QLatin1Char('='))) != -1) {
+      if ((idx = tmp.indexOf(QChar('='))) != -1) {
          QString val = tmp.mid(idx + 1).simplified();
          QString opt = tmp.left(idx).simplified();
 
-         if (opt == QLatin1String("UNIX_SOCKET")) {
+         if (opt == QString("UNIX_SOCKET")) {
             unixSocket = val;
 
-         } else if (opt == QLatin1String("MYSQL_OPT_RECONNECT")) {
-            if (val == QLatin1String("TRUE") || val == QLatin1String("1") || val.isEmpty()) {
+         } else if (opt == QString("MYSQL_OPT_RECONNECT")) {
+            if (val == QString("TRUE") || val == QString("1") || val.isEmpty()) {
                reconnect = true;
             }
 
-         } else if (opt == QLatin1String("MYSQL_OPT_CONNECT_TIMEOUT")) {
+         } else if (opt == QString("MYSQL_OPT_CONNECT_TIMEOUT")) {
             connectTimeout = val.toInteger<int>();
 
-         } else if (opt == QLatin1String("MYSQL_OPT_READ_TIMEOUT")) {
+         } else if (opt == QString("MYSQL_OPT_READ_TIMEOUT")) {
             readTimeout = val.toInteger<int>();
 
-         } else if (opt == QLatin1String("MYSQL_OPT_WRITE_TIMEOUT")) {
+         } else if (opt == QString("MYSQL_OPT_WRITE_TIMEOUT")) {
             writeTimeout = val.toInteger<int>();
 
-         } else if (opt == QLatin1String("SSL_KEY")) {
+         } else if (opt == QString("SSL_KEY")) {
             sslKey = val;
 
-         } else if (opt == QLatin1String("SSL_CERT")) {
+         } else if (opt == QString("SSL_CERT")) {
             sslCert = val;
 
-         } else if (opt == QLatin1String("SSL_CA")) {
+         } else if (opt == QString("SSL_CA")) {
             sslCA = val;
 
-         } else if (opt == QLatin1String("SSL_CAPATH")) {
+         } else if (opt == QString("SSL_CAPATH")) {
             sslCAPath = val;
 
-         } else if (opt == QLatin1String("SSL_CIPHER")) {
+         } else if (opt == QString("SSL_CIPHER")) {
             sslCipher = val;
 
-         } else if (val == QLatin1String("TRUE") || val == QLatin1String("1")) {
+         } else if (val == QString("TRUE") || val == QString("1")) {
             setOptionFlag(optionFlags, tmp.left(idx).simplified());
 
          } else {
@@ -1664,7 +1667,7 @@ QString QMYSQLDriver::formatValue(const QSqlField &field, bool trimStrings) cons
          case QVariant::String:
             // Escape '\' characters
             r = QSqlDriver::formatValue(field, trimStrings);
-            r.replace(QLatin1String("\\"), QLatin1String("\\\\"));
+            r.replace(QString("\\"), QString("\\\\"));
             break;
 
          case QVariant::ByteArray:
@@ -1695,9 +1698,9 @@ QString QMYSQLDriver::escapeIdentifier(const QString &identifier, IdentifierType
 {
    QString res = identifier;
 
-   if (!identifier.isEmpty() && !identifier.startsWith(QLatin1Char('`')) && !identifier.endsWith(QLatin1Char('`')) ) {
-      res.prepend(QLatin1Char('`')).append(QLatin1Char('`'));
-      res.replace(QLatin1Char('.'), QLatin1String("`.`"));
+   if (! identifier.isEmpty() && ! identifier.startsWith(QChar('`')) && ! identifier.endsWith(QChar('`')) ) {
+      res.prepend(QChar('`')).append(QChar('`'));
+      res.replace(QChar('.'), QString("`.`"));
    }
 
    return res;

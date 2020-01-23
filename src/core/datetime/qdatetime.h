@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -31,8 +31,9 @@
 #include <limits>
 
 class QTimeZone;
+class QDateTimePrivate;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 using CFDateRef = const struct __CFDate *;
 
@@ -258,7 +259,6 @@ class Q_CORE_EXPORT QTime
 };
 Q_DECLARE_TYPEINFO(QTime, Q_MOVABLE_TYPE);
 
-class QDateTimePrivate;
 
 class Q_CORE_EXPORT QDateTime
 {
@@ -365,7 +365,7 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromMSecsSinceEpoch(qint64 msecs, const QTimeZone &timeZone);
    static qint64 currentMSecsSinceEpoch();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    static QDateTime fromCFDate(CFDateRef date);
    CFDateRef toCFDate() const;
 

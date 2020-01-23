@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -834,6 +834,7 @@ void QTreeModel::endRemoveItems()
 void QTreeModel::sortItems(QList<QTreeWidgetItem *> *items, int column, Qt::SortOrder order)
 {
    // see QTreeViewItem::operator<
+   (void) column;
 
    if (isChanging()) {
       return;
@@ -1332,7 +1333,8 @@ void QTreeWidgetItem::setData(int column, int role, const QVariant &value)
                }
             }
          }
-      // Don't break, but fall through
+         [[fallthrough]];
+
       default:
          if (column < values.count()) {
             bool found = false;
@@ -1388,7 +1390,7 @@ QVariant QTreeWidgetItem::data(int column, int role) const
          if (children.count() && (itemFlags & Qt::ItemIsAutoTristate)) {
             return childrenCheckState(column);
          }
-      // fallthrough intended
+         [[fallthrough]];
 
       default:
          if (column >= 0 && column < values.size()) {
@@ -2480,7 +2482,7 @@ Qt::DropActions QTreeWidget::supportedDropActions() const
 
 QList<QTreeWidgetItem *> QTreeWidget::items(const QMimeData *data) const
 {
-
+   (void) data;
    return QList<QTreeWidgetItem *>();
 }
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -343,7 +343,7 @@ after_loop:
 
 // see also qsettings_win.cpp and qsettings_mac.cpp
 
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+#if ! defined(Q_OS_WIN) && ! defined(Q_OS_DARWIN)
 QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format, QSettings::Scope scope,
       const QString &organization, const QString &application)
 {
@@ -1012,9 +1012,10 @@ QStringList QSettingsPrivate::splitArgs(const QString &s, int idx)
 void QConfFileSettingsPrivate::initFormat()
 {
    extension = (format == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini");
-   readFunc = 0;
+   readFunc  = 0;
    writeFunc = 0;
-#if defined(Q_OS_MAC)
+
+#if defined(Q_OS_DARWIN)
    caseSensitivity = (format == QSettings::NativeFormat) ? Qt::CaseSensitive : IniCaseSensitivity;
 #else
    caseSensitivity = IniCaseSensitivity;
@@ -1135,7 +1136,7 @@ static void initDefaultPaths(QMutexLocker *locker)
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::SystemScope), systemPath);
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
       pathHash->insert(pathHashKey(QSettings::NativeFormat, QSettings::UserScope), userPath);
       pathHash->insert(pathHashKey(QSettings::NativeFormat, QSettings::SystemScope), systemPath);
 #endif
@@ -1555,7 +1556,8 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
           because they don't exist) are treated as empty files.
       */
       if (file.isReadable() && fileInfo.size() != 0) {
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
          if (format == QSettings::NativeFormat) {
             ok = readPlistFile(confFile->name, &confFile->originalKeys);
          } else
@@ -1602,7 +1604,8 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       ParsedSettingsMap mergedKeys = confFile->mergedKeyMap();
 
       if (file.isWritable()) {
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
          if (format == QSettings::NativeFormat) {
             ok = writePlistFile(confFile->name, mergedKeys);
          } else
@@ -2196,7 +2199,7 @@ QSettings::QSettings(const QString &fileName, Format format, QObject *parent)
 QSettings::QSettings(QObject *parent)
    : QObject(parent), d_ptr(QSettingsPrivate::create(globalDefaultFormat, UserScope,
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                             QCoreApplication::organizationDomain().isEmpty() ? QCoreApplication::organizationName()
                             : QCoreApplication::organizationDomain(),
 #else
@@ -2209,15 +2212,6 @@ QSettings::QSettings(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-
-/*!
-    Destroys the QSettings object.
-
-    Any unsaved changes will eventually be written to permanent
-    storage.
-
-    \sa sync()
-*/
 QSettings::~QSettings()
 {
    Q_D(QSettings);
@@ -2230,17 +2224,6 @@ QSettings::~QSettings()
    }
 }
 
-/*!
-    Removes all entries in the primary location associated to this
-    QSettings object.
-
-    Entries in fallback locations are not removed.
-
-    If you only want to remove the entries in the current group(),
-    use remove("") instead.
-
-    \sa remove(), setFallbacksEnabled()
-*/
 void QSettings::clear()
 {
    Q_D(QSettings);
@@ -2862,7 +2845,8 @@ QSettings::Format QSettings::defaultFormat()
 void QSettings::setSystemIniPath(const QString &dir)
 {
    setPath(IniFormat, SystemScope, dir);
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+
+#if !defined(Q_OS_WIN) && ! defined(Q_OS_DARWIN)
    setPath(NativeFormat, SystemScope, dir);
 #endif
 }
@@ -2876,7 +2860,7 @@ void QSettings::setSystemIniPath(const QString &dir)
 void QSettings::setUserIniPath(const QString &dir)
 {
    setPath(IniFormat, UserScope, dir);
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+#if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN)
    setPath(NativeFormat, UserScope, dir);
 #endif
 }

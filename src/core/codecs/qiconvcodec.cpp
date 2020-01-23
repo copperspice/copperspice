@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -41,7 +41,7 @@
 #if defined(Q_OS_HPUX)
 #  define NO_BOM
 #  define UTF16 "ucs2"
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
 #  define NO_BOM
 #  if Q_BYTE_ORDER == Q_BIG_ENDIAN
 #    define UTF16 "UTF-16BE"
@@ -76,11 +76,13 @@ QIconvCodec::QIconvCodec()
    Q_ASSERT_X(utf16Codec != 0,
               "QIconvCodec::convertToUnicode",
               "internal error, UTF-16 codec not found");
-   if (!utf16Codec) {
+
+   if (! utf16Codec) {
       fprintf(stderr, "QIconvCodec::convertToUnicode: internal error, UTF-16 codec not found\n");
       utf16Codec = reinterpret_cast<QTextCodec *>(~0);
    }
-#if defined(Q_OS_MAC)
+
+#if defined(Q_OS_DARWIN)
    if (ptr_iconv_open == 0) {
       QLibrary libiconv("/usr/lib/libiconv");
       libiconv.setLoadHints(QLibrary::ExportExternalSymbolsHint);

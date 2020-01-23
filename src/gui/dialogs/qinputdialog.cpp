@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -32,13 +32,13 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qplaintextedit.h>
-
 #include <qlistwidget.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qstackedlayout.h>
 #include <qvalidator.h>
 #include <qevent.h>
+
 #include <qdialog_p.h>
 
 enum CandidateSignal {
@@ -56,15 +56,18 @@ static QString candidateSignal(int which)
    switch (CandidateSignal(which)) {
       case TextValueSelectedSignal:
          retval = "textValueSelected(QString)";
+         break;
 
       case IntValueSelectedSignal:
          retval = "intValueSelected(int)";
+         break;
 
       case DoubleValueSelectedSignal:
          retval = "doubleValueSelected(double)";
+         break;
 
       case NumCandidateSignals:
-      // fall through
+         [[fallthrough]];
 
       default:
          // error, may want to throw

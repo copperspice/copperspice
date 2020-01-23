@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -427,6 +427,9 @@ QString QMetaObject::normalizedSignature(const QString &method)
    // no return type was passed
    auto [signatures, typeReturn, paramNames] = getSignatures("void " + method);
    result = signatures[signatures.size() - 1];
+
+   (void) typeReturn;
+   (void) paramNames;
 
    return result;
 }
@@ -1816,7 +1819,7 @@ void QMetaObject_X::register_enum_data(const QString &args)
    }
 
    // save enum data in QMap
-   for (int i = 0; i < tempName.size(); ++i) {
+   for (uint i = 0; i < tempName.size(); ++i) {
       auto iter_enum = m_enums.find(tempName.at(i));
 
       if (iter_enum == m_enums.end()) {

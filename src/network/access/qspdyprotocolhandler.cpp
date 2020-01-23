@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qspdyprotocolhandler_p.h>
+
+#include <qendian.h>
+
 #include <qnoncontiguousbytedevice_p.h>
 #include <qhttpnetworkconnectionchannel_p.h>
-#include <QtEndian>
 
 #ifdef QT_SSL
 
@@ -1218,16 +1220,16 @@ void QSpdyProtocolHandler::handleDataFrame(const QByteArray &frameHeaders)
          && dataLeftInWindow < replyPrivate->windowSizeDownload / 2) {
 
       // socket read buffer size is 64K actually, hard coded in the channel
-      // We can read way more than 64K per socket, because the window size
-      // here is per stream.
+      // We can read way more than 64K per socket, because the window size here is per stream.
       if (replyPrivate->windowSizeDownload >= m_socket->readBufferSize()) {
          replyPrivate->windowSizeDownload = m_socket->readBufferSize();
       } else {
          replyPrivate->windowSizeDownload *= 1.5;
       }
+
       QMetaObject::invokeMethod(this, "sendWINDOW_UPDATE", Qt::QueuedConnection,
-                                Q_ARG(qint32, streamID),
-                                Q_ARG(quint32, replyPrivate->windowSizeDownload));
+                  Q_ARG(qint32, streamID), Q_ARG(quint32, static_cast<quint32>(replyPrivate->windowSizeDownload)));
+
       // setting the current data count to 0 is a race condition,
       // because we call sendWINDOW_UPDATE through the event loop.
       // But then again, the whole situation is a race condition because

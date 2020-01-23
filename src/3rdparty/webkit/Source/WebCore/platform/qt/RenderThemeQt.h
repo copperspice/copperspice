@@ -184,7 +184,7 @@ private:
 
     Page* m_page;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
     int m_buttonFontPixelSize;
 #endif
     QString m_buttonFontFamily;

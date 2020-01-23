@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -41,55 +41,10 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 #include <new>
 #include <stdlib.h>
 
-
-
-
-// Returns a human readable representation of the first \a len characters in \a data.
-static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
-{
-   if (! data) {
-      return "(null)";
-   }
-
-   QByteArray out;
-   for (int i = 0; i < len; ++i) {
-      char c = data[i];
-
-      if (isprint(int(uchar(c)))) {
-         out += c;
-
-      } else switch (c) {
-            case '\n':
-               out += "\\n";
-               break;
-
-            case '\r':
-               out += "\\r";
-               break;
-
-            case '\t':
-               out += "\\t";
-               break;
-
-            default:
-               QString tmp = QString("\\x%1").formatArg((unsigned int)c, 0, 16);
-               out += tmp.toLatin1();
-         }
-   }
-
-   if (len < maxSize) {
-      out += "...";
-   }
-
-   return out;
-}
-
-
-
-// A precondition macro
 #define Q_VOID
+
 #define CHECK_VALID_STREAM(x) do { \
-    if (!d->m_string && !d->device) { \
+    if (! d->m_string && ! d->device) { \
         qWarning("QTextStream: No device"); \
         return x; \
     } } while (0)
@@ -126,7 +81,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 
 class QDeviceClosedNotifier : public QObject
 {
-   CORE_CS_OBJECT(QDeviceClosedNotifier)
+  CORE_CS_OBJECT(QDeviceClosedNotifier)
 
  public:
    inline QDeviceClosedNotifier() {
@@ -161,6 +116,7 @@ class QTextStreamPrivate
  public:
    QTextStreamPrivate(QTextStream *q_ptr);
    ~QTextStreamPrivate();
+
    void reset();
 
    // device
@@ -376,31 +332,33 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    // On Windows there is no non-blocking stdin so we fall back to reading lines instead.
    // If there is no QOBJECT, we read lines for all sequential devices; otherwise, we read lines only for stdin.
 
-   QFile *file = 0;
-   Q_UNUSED(file);
+   QFile *file = nullptr;
 
-   if (device->isSequential() && (file = qobject_cast<QFile *>(device)) && file->handle() == 0 ) {
+   if (device->isSequential() && (file = dynamic_cast<QFile *>(device)) && file->handle() == 0 ) {
       if (maxBytes != -1) {
-         bytesRead = device->readLine(buf, qMin(sizeof(buf), maxBytes));
+         bytesRead = device->readLine(buf, qMin(static_cast<qint64>(sizeof(buf)), maxBytes));
       } else {
          bytesRead = device->readLine(buf, sizeof(buf));
       }
+
    } else
+
 #endif
    {
       if (maxBytes != -1) {
-         bytesRead = device->read(buf, qMin(sizeof(buf), maxBytes));
+         bytesRead = device->read(buf, qMin(static_cast<qint64>(sizeof(buf)), maxBytes));
       } else {
          bytesRead = device->read(buf, sizeof(buf));
       }
    }
 
-   // reset the Text flag.
-   if (textModeEnabled)
-        device->setTextModeEnabled(true);
+   // reset the Text flag
+   if (textModeEnabled) {
+      device->setTextModeEnabled(true);
+   }
 
    if (bytesRead <= 0)  {
-        return false;
+      return false;
    }
 
 #ifndef QT_NO_TEXTCODEC
@@ -418,10 +376,6 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    }
 #endif
 
-
-
-   int oldReadBufferSize = readBuffer.size();
-
    QString tmpBuffer;
 
 #ifndef QT_NO_TEXTCODEC
@@ -430,8 +384,6 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
 #else
    tmpBuffer = QString::fromUtf8(buf, bytesRead);
 #endif
-
-
 
    if (! tmpBuffer.isEmpty() && textModeEnabled) {
       tmpBuffer.replace("\r", "");
@@ -1047,38 +999,19 @@ qint64 QTextStream::pos() const
    return qint64(-1);
 }
 
-/*!
-    Reads and discards whitespace from the stream until either a
-    non-space character is detected, or until atEnd() returns
-    true. This function is useful when reading a stream character by
-    character.
-
-    Whitespace characters are all characters for which
-    QChar::isSpace() returns true.
-
-    \sa operator>>()
-*/
 void QTextStream::skipWhiteSpace()
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(Q_VOID);
+
    d->scan(nullptr, 0, QTextStreamPrivate::NotSpace);
    d->consumeLastToken();
 }
 
-/*!
-    Sets the current device to \a device. If a device has already been
-    assigned, QTextStream will call flush() before the old device is
-    replaced.
-
-    \note This function resets locale to the default locale ('C')
-    and codec to the default codec, QTextCodec::codecForLocale().
-
-    \sa device(), setString()
-*/
 void QTextStream::setDevice(QIODevice *device)
 {
    Q_D(QTextStream);
+
    flush();
    if (d->deleteDevice) {
 

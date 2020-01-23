@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -455,7 +455,7 @@ class Q_CORE_EXPORT QStringParser
          for (auto iter = begin; iter != end; ++iter) {
 
             if (*iter == QChar32('%')) {
-               std::pair<int, decltype(iter)> tmp = getEscape(iter, begin, end);
+               std::pair<int, decltype(iter)> tmp = getEscape(iter, end);
 
                int id = tmp.first;
                iter   = tmp.second;
@@ -489,7 +489,7 @@ class Q_CORE_EXPORT QStringParser
          for (auto iter = begin; iter != end; ++iter) {
 
             if (*iter == QChar32('%')) {
-               std::pair<int, decltype(iter)> tmp = getEscape(iter, begin, end, lastNumber);
+               std::pair<int, decltype(iter)> tmp = getEscape(iter, end, lastNumber);
                int id = tmp.first;
                iter   = tmp.second;
 
@@ -513,7 +513,7 @@ class Q_CORE_EXPORT QStringParser
       }
 
       template <typename Iterator>
-      static std::pair<int, Iterator> getEscape(Iterator current, Iterator begin, Iterator end, int maxNumber = 999)
+      static std::pair<int, Iterator> getEscape(Iterator current, Iterator end, int maxNumber = 999)
       {
          Iterator origCurrent = current;
          ++current;
@@ -820,7 +820,7 @@ T QStringParser::section(const T &str, const T &separator, int firstSection, int
       }
    }
 
-   if ( (flags & SectionFlag::SectionIncludeLeadingSep) && first_index) {
+   if ( (flags & SectionFlag::SectionIncludeLeadingSep) && first_index != 0) {
       retval.prepend(separator);
    }
 

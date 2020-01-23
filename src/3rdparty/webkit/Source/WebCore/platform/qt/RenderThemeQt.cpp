@@ -187,7 +187,7 @@ RenderThemeQt::RenderThemeQt(Page* page)
     QFont defaultButtonFont = QApplication::font(&button);
     QFontInfo fontInfo(defaultButtonFont);
     m_buttonFontFamily = defaultButtonFont.family();
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
     m_buttonFontPixelSize = fontInfo.pixelSize();
 #endif
 
@@ -560,7 +560,7 @@ void RenderThemeQt::adjustButtonStyle(CSSStyleSelector* selector, RenderStyle* s
     // Ditch the border.
     style->resetBorder();
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
     if (style->appearance() == PushButtonPart) {
         // The Mac ports ignore the specified height for <input type="button"> elements
         // unless a border and/or background CSS property is also specified.
@@ -571,7 +571,7 @@ void RenderThemeQt::adjustButtonStyle(CSSStyleSelector* selector, RenderStyle* s
     FontDescription fontDescription = style->fontDescription();
     fontDescription.setIsAbsoluteSize(true);
 
-#ifdef Q_OS_MAC // Use fixed font size and family on Mac (like Safari does)
+#ifdef Q_OS_DARWIN // Use fixed font size and family on Mac (like Safari does)
     fontDescription.setSpecifiedSize(m_buttonFontPixelSize);
     fontDescription.setComputedSize(m_buttonFontPixelSize);
 #else
@@ -770,7 +770,7 @@ bool RenderThemeQt::paintMenuList(RenderObject* o, const PaintInfo& i, const Int
 
     IntRect rect = r;
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     // QMacStyle makes the combo boxes a little bit smaller to leave space for the focus rectangle
     // Because of this the combo button is drawn at a point to the left of where it was expected to be and may end up
     // overlapped with the text. This change will force QMacStyle to draw the combo box with the correct width.

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -232,9 +232,9 @@ class QStringView : public CsString::CsBasicStringView<S>
 
       bool startsWith(QStringView<S> str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-      S toCaseFolded() const Q_REQUIRED_RESULT;
-      S toLower() const Q_REQUIRED_RESULT;
-      S toUpper() const Q_REQUIRED_RESULT;
+      [[nodiscard]] S toCaseFolded() const;
+      [[nodiscard]] S toLower() const;
+      [[nodiscard]] S toUpper() const;
 
       QByteArray toLatin1() const;
       QByteArray toUtf8() const;

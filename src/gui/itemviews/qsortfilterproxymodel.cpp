@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1361,7 +1361,10 @@ void QSortFilterProxyModelPrivate::_q_sourceReset()
 void QSortFilterProxyModelPrivate::_q_sourceLayoutAboutToBeChanged(const QList<QPersistentModelIndex> &sourceParents,
    QAbstractItemModel::LayoutChangeHint hint)
 {
+   (void) hint;
+
    Q_Q(QSortFilterProxyModel);
+
    saved_persistent_indexes.clear();
    QList<QPersistentModelIndex> parents;
 
@@ -1394,6 +1397,8 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutAboutToBeChanged(const QList<Q
 void QSortFilterProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersistentModelIndex> &sourceParents,
    QAbstractItemModel::LayoutChangeHint hint)
 {
+   (void) hint;
+
    Q_Q(QSortFilterProxyModel);
 
    qDeleteAll(source_index_mapping);
@@ -1430,8 +1435,11 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersisten
 void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeInserted(
    const QModelIndex &source_parent, int start, int end)
 {
-   //Force the creation of a mapping now, even if its empty.
-   //We need it because the proxy can be acessed at the moment it emits rowsAboutToBeInserted in insert_source_items
+   (void) start;
+   (void) end;
+
+   // Force the creation of a mapping now, even if its empty
+   // We need it because the proxy can be acessed at the moment it emits rowsAboutToBeInserted in insert_source_items
 
    if (can_create_mapping(source_parent)) {
       create_mapping(source_parent);
@@ -1466,6 +1474,8 @@ void QSortFilterProxyModelPrivate::_q_sourceRowsRemoved(
 void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart,
    int sourceEnd, const QModelIndex &destParent, int dest)
 {
+   (void) sourceStart;
+
    Q_Q(QSortFilterProxyModel);
 
    // Because rows which are contiguous in the source model might not be contiguous

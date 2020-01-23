@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -749,7 +749,7 @@ QFont QApplication::font(const QWidget *widget)
 
    if (widget && hash  && hash->size()) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       // short circuit for small and mini controls
 
       if (widget->testAttribute(Qt::WA_MacSmallSize)) {
@@ -2748,7 +2748,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
 
 #endif // QT_NO_GESTURES
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
          // Enable touch events on enter, disable on leave.
          typedef void (*RegisterTouchWindowFn)(QWindow *,  bool);
@@ -3447,7 +3447,7 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
 
       QWidget *targetWidget = static_cast<QWidget *>(target.data());
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       // Single-touch events are normally not sent unless WA_TouchPadAcceptSingleTouchEvents is set.
       // In Qt 4 this check was in OS X-only code. That behavior is preserved here by the #ifdef.
       if (touchPoints.count() == 1

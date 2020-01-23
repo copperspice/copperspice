@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -108,7 +108,7 @@ LiteralParser::TokenType LiteralParser::Lexer::lex(LiteralParserToken& token)
                 token.end = m_ptr;
                 return TokNull;
             }
-            break;    
+            break;
         case '-':
         case '0':
         case '1':
@@ -224,7 +224,7 @@ LiteralParser::TokenType LiteralParser::Lexer::lexNumber(LiteralParserToken& tok
 
     if (m_ptr < m_end && *m_ptr == '-') // -?
         ++m_ptr;
-    
+
     // (0 | [1-9][0-9]*)
     if (m_ptr < m_end && *m_ptr == '0') // 0
         ++m_ptr;
@@ -259,12 +259,12 @@ LiteralParser::TokenType LiteralParser::Lexer::lexNumber(LiteralParserToken& tok
         // [0-9]+
         if (m_ptr >= m_end || !isASCIIDigit(*m_ptr))
             return TokError;
-        
+
         ++m_ptr;
         while (m_ptr < m_end && isASCIIDigit(*m_ptr))
             ++m_ptr;
     }
-    
+
     token.type = TokNumber;
     token.end = m_ptr;
     Vector<char, 64> buffer(token.end - token.start + 1);
@@ -287,14 +287,16 @@ JSValue LiteralParser::parse(ParserState initialState)
     JSValue lastValue;
     Vector<ParserState, 16> stateStack;
     Vector<Identifier, 16> identifierStack;
+
     while (1) {
         switch(state) {
             startParseArray:
             case StartParseArray: {
                 JSArray* array = constructEmptyArray(m_exec);
                 objectStack.append(array);
-                // fallthrough
+                [[fallthrough]];
             }
+
             doParseArrayStartExpression:
             case DoParseArrayStartExpression: {
                 TokenType lastToken = m_lexer.currentToken().type;
@@ -310,15 +312,16 @@ JSValue LiteralParser::parse(ParserState initialState)
                 stateStack.append(DoParseArrayEndExpression);
                 goto startParseExpression;
             }
+
             case DoParseArrayEndExpression: {
                  asArray(objectStack.last())->push(m_exec, lastValue);
-                
+
                 if (m_lexer.currentToken().type == TokComma)
                     goto doParseArrayStartExpression;
 
                 if (m_lexer.currentToken().type != TokRBracket)
                     return JSValue();
-                
+
                 m_lexer.next();
                 lastValue = objectStack.last();
                 objectStack.removeLast();
@@ -336,12 +339,12 @@ JSValue LiteralParser::parse(ParserState initialState)
                     // Check for colon
                     if (m_lexer.next() != TokColon)
                         return JSValue();
-                    
+
                     m_lexer.next();
                     identifierStack.append(Identifier(m_exec, identifierToken.stringToken));
                     stateStack.append(DoParseObjectEndExpression);
                     goto startParseExpression;
-                } else if (type != TokRBrace) 
+                } else if (type != TokRBrace)
                     return JSValue();
                 m_lexer.next();
                 lastValue = objectStack.last();

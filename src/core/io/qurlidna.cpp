@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1427,6 +1427,8 @@ static const NameprepCaseFoldingEntry NameprepCaseFolding[] = {
 
 static void mapToLowerCase(QString &str, int from)
 {
+   (void) from;
+
    int arraySize = sizeof(NameprepCaseFolding) / sizeof(NameprepCaseFolding[0]);
 
    QString retval;
@@ -2254,7 +2256,7 @@ static void qt_punycodeEncoder(QStringView str, QString *output)
    }
 
    // while there are still unprocessed non-basic code points left in the input string
-   int strLen = str.size();
+   uint strLen = str.size();
 
    while (h < strLen) {
 

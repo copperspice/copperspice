@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -34,6 +34,8 @@
 
 #include <qrasterdefs_p.h>
 #include <qsimd_p.h>
+
+#include <algorithm>
 
 struct QSolidData;
 struct QTextureData;
@@ -784,31 +786,7 @@ template<> inline void qt_memfill(quint8 *dest, quint8 color, int count)
 template <class T>
 inline void qt_memfill(T *dest, T value, int count)
 {
-   if (! count) {
-      return;
-   }
-
-   int n = (count + 7) / 8;
-   switch (count & 0x07) {
-      case 0:
-         do {
-            *dest++ = value;
-         case 7:
-            *dest++ = value;
-         case 6:
-            *dest++ = value;
-         case 5:
-            *dest++ = value;
-         case 4:
-            *dest++ = value;
-         case 3:
-            *dest++ = value;
-         case 2:
-            *dest++ = value;
-         case 1:
-            *dest++ = value;
-         } while (--n > 0);
-   }
+   std::fill_n(dest, count, value);
 }
 
 template <class T>
@@ -827,12 +805,6 @@ static inline void qt_rectfill(T *dest, T value, int x, int y, int width, int he
       }
    }
 }
-
-#define QT_MEMFILL_UINT(dest, length, color)    \
-    qt_memfill<quint32>(dest, color, length);
-
-#define QT_MEMFILL_USHORT(dest, length, color)  \
-    qt_memfill<quint16>(dest, color, length);
 
 #define QT_MEMCPY_REV_UINT(dest, src, length)   \
 do {                                            \

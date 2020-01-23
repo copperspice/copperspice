@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -346,7 +346,9 @@ QString cs_tildeExpansion(const QString &path, bool *expanded = nullptr)
 
 QStringList QFileDialogPrivate::typedFiles() const
 {
+#ifdef Q_OS_UNIX
    Q_Q(const QFileDialog);
+#endif
 
    QStringList files;
    QString editText = lineEdit()->text();
@@ -378,6 +380,7 @@ QStringList QFileDialogPrivate::typedFiles() const
 #ifdef Q_OS_UNIX
          const QString token = tokens.at(i);
          const QString prefix = q->directory().absolutePath() + QDir::separator();
+
          if (QFile::exists(prefix + token)) {
             files << token;
          } else {

@@ -12,25 +12,14 @@ list(APPEND CORE_PUBLIC_INCLUDES
    Q_ULLONG
    Q_ULONG
    QAssert
-   QCOORD
    QFlag
    QFlags
    QGlobal
-   QGlobalStatic
-   QGlobalStaticDeleter
-   QIncompatibleFlag
-   QIntegerForSize
-   QInternal
    QLibraryInfo
    QLog
-   QNoImplicitBoolCast
    QSysInfo
    QTypeInfo
-   Qt
    QtCore
-   QtEndian
-   QtGlobal
-   QtNamespace
 )
 
 list(APPEND CORE_INCLUDES
@@ -47,31 +36,20 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ullong.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ulong.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qassert.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qcoord.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qendian.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qexport.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qfeatures.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qflag.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qflags.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobalstatic.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobalstaticdeleter.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qincompatibleflag.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qintegerforsize.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qinternal.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlog.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qnoimplicitboolcast.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformdefs.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qsysinfo.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qt.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtendian.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtglobal.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtnamespace.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtypeinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qt_windows.h
 )

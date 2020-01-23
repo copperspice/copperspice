@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -679,7 +679,7 @@ QSize QDateTimeEdit::sizeHint() const
 
       QSize hint(w, h);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       if (d->calendarPopupEnabled()) {
          QStyleOptionComboBox opt;
          d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, hint, this);
@@ -720,7 +720,7 @@ bool QDateTimeEdit::event(QEvent *event)
          break;
       case QEvent::StyleChange:
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       case QEvent::MacSizeChange:
 #endif
          d->setLayoutItemMargins(QStyle::SE_DateTimeEditLayoutItem);

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -262,7 +262,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
    QVBoxLayout *vboxLayout = new QVBoxLayout;
    vboxLayout->setContentsMargins(0, 0, 0, 0);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // We query the widgets about their size and then we fix the size.
    // This should do the trick for the laying out part...
    QSize pageNumEditSize, pageNumLabelSize;
@@ -274,7 +274,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
 
    QFormLayout *formLayout = new QFormLayout;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // We have to change the growth policy in Mac.
    formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 #endif
@@ -328,7 +328,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
 
    if (! printer->isValid()
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
       || printer->outputFormat() != QPrinter::NativeFormat
 #endif
 
@@ -577,7 +577,7 @@ void QPrintPreviewDialogPrivate::_q_print()
 {
    Q_Q(QPrintPreviewDialog);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
    if (printer->outputFormat() != QPrinter::NativeFormat) {
 
       QString title = QCoreApplication::translate("QPrintPreviewDialog", "Export to PDF");

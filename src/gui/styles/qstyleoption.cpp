@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,7 +24,7 @@
 #include <qstyleoption.h>
 #include <qapplication.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 # include <qmacstyle.h>
 #endif
 
@@ -65,7 +65,7 @@ void QStyleOption::init(const QWidget *widget)
    }
 
 
-#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
    switch (QMacStyle::widgetSizePolicy(widget)) {
       case QMacStyle::SizeSmall:
          state |= QStyle::State_Small;

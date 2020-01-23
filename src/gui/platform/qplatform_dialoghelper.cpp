@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -838,7 +838,7 @@ QPlatformDialogHelper::ButtonRole QPlatformDialogHelper::buttonRole(QPlatformDia
 const int *QPlatformDialogHelper::buttonLayout(Qt::Orientation orientation, ButtonLayout policy)
 {
    if (policy == UnknownLayout) {
-#if defined (Q_OS_MAC)
+#if defined (Q_OS_DARWIN)
       policy = MacLayout;
 #elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX)
       policy = KdeLayout;

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -4570,7 +4570,7 @@ void QWidget::setWindowFilePath(const QString &filePath)
 void QWidgetPrivate::setWindowFilePath_helper(const QString &filePath)
 {
    if (extra->topextra && extra->topextra->caption.isEmpty()) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       setWindowTitle_helper(QFileInfo(filePath).fileName());
 #else
       Q_Q(QWidget);
@@ -4578,7 +4578,7 @@ void QWidgetPrivate::setWindowFilePath_helper(const QString &filePath)
       setWindowTitle_helper(q->windowTitle());
 #endif
    }
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    setWindowFilePath_sys(filePath);
 #endif
 }
@@ -6694,7 +6694,7 @@ bool QWidget::event(QEvent *event)
                      0, this);
                   break;
                }
-               // fall through
+               [[fallthrough]];
 #endif
 
             default:
@@ -6985,7 +6985,7 @@ bool QWidget::event(QEvent *event)
 
          }
 
-         // fall through
+         [[fallthrough]];
       }
 #endif
 
@@ -7046,7 +7046,7 @@ void QWidget::changeEvent(QEvent *event)
             }
          }
          break;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       case QEvent::MacSizeChange:
          updateGeometry();
          break;
@@ -7715,7 +7715,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
       }
 
       //### already hidden above ---> must probably do something smart on the mac
-      // #ifdef Q_OS_MAC
+      // #ifdef Q_OS_DARWIN
       //             extern bool qt_mac_is_macdrawer(const QWidget *); //qwidget_mac.cpp
       //             if(!qt_mac_is_macdrawer(q)) //special case
       //                 q->setAttribute(Qt::WA_WState_Hidden);
@@ -8114,7 +8114,7 @@ static void setAttribute_internal(Qt::WidgetAttribute attribute, bool on, QWidge
    }
 }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 void QWidgetPrivate::macUpdateSizeAttribute()
 {
    Q_Q(QWidget);
@@ -8215,7 +8215,7 @@ void QWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
       case Qt::WA_MacSmallSize:
       case Qt::WA_MacMiniSize:
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       {
          // We can only have one of these set at a time
          const Qt::WidgetAttribute MacSizes[] = { Qt::WA_MacNormalSize, Qt::WA_MacSmallSize,

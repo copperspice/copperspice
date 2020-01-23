@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -68,7 +68,7 @@ class QFileSystemMetaData
       FileType            = 0x00020000,
       DirectoryType       = 0x00040000,
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
       BundleType          = 0x00080000,
       AliasType           = 0x08000000,
 #else
@@ -245,7 +245,7 @@ class QFileSystemMetaData
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFileSystemMetaData::MetaDataFlags)
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 inline bool QFileSystemMetaData::isBundle() const
 {
    return (entryFlags & BundleType);

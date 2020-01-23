@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -393,7 +393,7 @@ QVariant QDirModel::headerData(int section, Qt::Orientation orientation, int rol
             return tr("Size");
          case 2:
             return
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                tr("Kind", "Match OS X Finder");
 #else
                tr("Type", "All other platforms");
@@ -1297,7 +1297,7 @@ QString QDirModelPrivate::size(const QModelIndex &index) const
 {
    const QDirNode *n = node(index);
    if (n->info.isDir()) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       return QLatin1String("--");
 #else
       return QLatin1String("");

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -29,9 +29,9 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qstring8.h>
-#include <qvariant.h>
 #include <qstringfwd.h>
 #include <qsharedpointer.h>
+#include <qvariant.h>
 
 #include <utility>
 #include <tuple>
@@ -313,7 +313,7 @@ class Q_CORE_EXPORT cs_typeName_internal
    public:
       static const QString &typeName() {
          static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
-         static QString retval = QString("");     // prevents a compiler warning
+         static QString retval = QString("");
          return retval;
       }
 };

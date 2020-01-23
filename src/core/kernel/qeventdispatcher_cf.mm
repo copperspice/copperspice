@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -32,7 +32,7 @@
 
 #include <limits>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #  include <AppKit/NSApplication.h>
 #else
 #  include <UIKit/UIApplication.h>
@@ -54,11 +54,13 @@
             addObserver:self
             selector:@selector(receivedNotification:)
             name:nil
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
             object:[NSApplication sharedApplication]];
 #else
             object:[UIApplication sharedApplication]];
 #endif
+
     }
 
     return self;
@@ -110,9 +112,9 @@ static CFStringRef runLoopMode(NSDictionary *dictionary)
 
 class RunLoopDebugger : public QObject
 {
-    GUI_CS_OBJECT(RunLoopDebugger)
-    GUI_CS_ENUM(Activity)
-    GUI_CS_ENUM(Result)
+    CORE_CS_OBJECT(RunLoopDebugger)
+    CORE_CS_ENUM(Activity)
+    CORE_CS_ENUM(Result)
 
 public:
     #define Q_MIRROR_ENUM(name) name = name

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -164,7 +164,7 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
    }
    const HDC hdc = reinterpret_cast<HDC>(hdcV);
 
-   HBRUSH brush;
+   HBRUSH brush = nullptr;
    static int i = 0;
    switch (i) {
       case 0:
@@ -334,6 +334,8 @@ void QWidgetBackingStore::releaseBuffer()
 void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBackingStore *backingStore,
    BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates)
 {
+   (void) widget;
+   (void) toCleanIsInTopLevelCoordinates;
 
    // Always flush repainted areas.
    dirtyOnScreen += toClean;

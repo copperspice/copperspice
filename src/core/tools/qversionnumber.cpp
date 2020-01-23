@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -22,13 +22,12 @@
 ***********************************************************************/
 
 #include <qversionnumber.h>
+
 #include <qhash.h>
-#include <qlocale_tools_p.h>
-
 #include <qdatastream.h>
-
 #include <qdebug.h>
 
+#include <qlocale_tools_p.h>
 
 #include <algorithm>
 #include <limits>
@@ -36,7 +35,6 @@
 QVector<int> QVersionNumber::segments() const
 {
    return m_segments.pointer_segments;
-
 }
 
 QVersionNumber QVersionNumber::normalized() const
@@ -53,7 +51,6 @@ QVersionNumber QVersionNumber::normalized() const
 
    return result;
 }
-
 
 bool QVersionNumber::isPrefixOf(const QVersionNumber &other) const
 {
@@ -80,7 +77,6 @@ int QVersionNumber::compare(const QVersionNumber &v1, const QVersionNumber &v2)
       }
    }
 
-
    // ran out of segments in v1 and/or v2 and need to check the first trailing
    // segment to finish the compare
    if (v1.segmentCount() > commonlen) {
@@ -103,7 +99,6 @@ int QVersionNumber::compare(const QVersionNumber &v1, const QVersionNumber &v2)
    // the two version numbers are the same
    return 0;
 }
-
 
 QVersionNumber QVersionNumber::commonPrefix(const QVersionNumber &v1, const QVersionNumber &v2)
 {
@@ -136,13 +131,13 @@ QString QVersionNumber::toString() const
       if (! first) {
          version += QLatin1Char('.');
       }
+
       version += QString::number(segmentAt(i));
       first = false;
    }
 
    return version;
 }
-
 
 QVersionNumber QVersionNumber::fromString(const QString &string, int *suffixIndex)
 {
@@ -204,8 +199,6 @@ QDataStream &operator>>(QDataStream &in, QVersionNumber &version)
    return in;
 }
 
-
-
 QDebug operator<<(QDebug debug, const QVersionNumber &version)
 {
    QDebugStateSaver saver(debug);
@@ -214,10 +207,8 @@ QDebug operator<<(QDebug debug, const QVersionNumber &version)
    return debug;
 }
 
-
 uint qHash(const QVersionNumber &key, uint seed)
 {
-
    for (int i = 0; i < key.segmentCount(); ++i) {
       seed = qHash(key.segmentAt(i), seed);
    }

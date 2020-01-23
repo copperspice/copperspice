@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -31,7 +31,7 @@
 #include <qdebug.h>
 #include <qmath.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
 
@@ -345,7 +345,7 @@ static bool defaultWidgetAction(QToolBarItem *item)
 
 void QToolBarLayout::updateMacBorderMetrics()
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
    if (!tb) {
       return;

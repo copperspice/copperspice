@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -195,8 +195,11 @@ class Q_GUI_EXPORT QFontEngine
       return false;
    }
 
-   virtual glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition, const QTransform &matrix,
-      GlyphFormat format) {
+   virtual glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition,
+                  const QTransform &matrix, GlyphFormat format) {
+      (void) subPixelPosition;
+      (void) format;
+
       return boundingBox(glyph, matrix);
    }
 
@@ -234,6 +237,8 @@ class Q_GUI_EXPORT QFontEngine
    }
 
    virtual QFontEngine *cloneWithSize(qreal pixelSize) const {
+      (void) pixelSize;
+
       return nullptr;
    }
 

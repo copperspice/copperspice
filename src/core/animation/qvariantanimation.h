@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,13 +24,11 @@
 #ifndef QVariantAnimation_H
 #define QVariantAnimation_H
 
-#include <QtCore/qeasingcurve.h>
-#include <QtCore/qabstractanimation.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qpair.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractanimation.h>
+#include <qeasingcurve.h>
+#include <qpair.h>
+#include <qvector.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -109,6 +107,4 @@ void qRegisterAnimationInterpolator(QVariant (*func)(const T &from, const T &to,
 
 #endif //QT_NO_ANIMATION
 
-QT_END_NAMESPACE
-
-#endif //QANIMATION_H
+#endif

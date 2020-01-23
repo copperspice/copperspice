@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qurl.h>
+#include <qstring.h>
+
 #include <qutfcodec_p.h>
 #include <qtools_p.h>
-#include <qstring.h>
 
 // ### move to qurl_p.h
 enum EncodingAction {
@@ -278,6 +279,9 @@ void non_trivial ( QChar c, QString::const_iterator &iter, QString &retval, Enco
                    QString::const_iterator begin, QString::const_iterator end,
                    QUrl::FormattingOptions encoding, const uchar *actionTable)
 {
+   (void) begin;
+   (void) end;
+
    QChar decoded;
 
    if (c == '%') {

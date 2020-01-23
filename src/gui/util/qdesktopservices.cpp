@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -141,7 +141,7 @@ QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation t
       const QString compatAppName = qt_applicationName_noFallback();
       const QString baseDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
       QString result = baseDir;
       if (!QCoreApplication::organizationName().isEmpty()) {
          result += QLatin1Char('/') + QCoreApplication::organizationName();

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -27,7 +27,6 @@
 
 #include <qitemselectionmodel.h>
 #include <qabstractproxymodel_p.h>
-
 
 class QIdentityProxyModelPrivate : public QAbstractProxyModelPrivate
 {
@@ -506,6 +505,9 @@ void QIdentityProxyModelPrivate::_q_sourceRowsAboutToBeRemoved(const QModelIndex
 
 void QIdentityProxyModelPrivate::_q_sourceRowsInserted(const QModelIndex &parent, int start, int end)
 {
+   (void) start;
+   (void) end;
+
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
 
@@ -515,8 +517,12 @@ void QIdentityProxyModelPrivate::_q_sourceRowsInserted(const QModelIndex &parent
 void QIdentityProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
    const QModelIndex &destParent, int dest)
 {
+   (void) sourceStart;
+   (void) sourceEnd;
+
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
    Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
 
    q->endMoveRows();

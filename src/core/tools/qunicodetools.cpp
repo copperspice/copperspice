@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -543,7 +543,7 @@ static void getLineBreaks(const QString &str, QCharAttributes *attributes)
                for (int j = n_begin + 1; j < k; ++j) {
                   attributes[j].lineBreak = false;
                }
-               // fall through to next case
+               [[fallthrough]];
 
             case LB::NumAction::None:
                n_row = LB::NumClass::XX;    // reset state
@@ -551,7 +551,7 @@ static void getLineBreaks(const QString &str, QCharAttributes *attributes)
 
             case LB::NumAction::Start:
                n_begin = k;
-               // fall through to next case
+               [[fallthrough]];
 
             default:
                n_row = n_col;
@@ -663,10 +663,12 @@ static void getWhiteSpaces(const QString &str, QCharAttributes *attributes)
    }
 }
 
-static void resolveClusters(const QString &str, QCharAttributes *attributes)
+/*
+static void resolveClusters(const QString &, QCharAttributes *)
 {
-   // emerald
+   // emerald, passed parm names are "str, attributes"
 }
+*/
 
 Q_CORE_EXPORT void initCharAttributes(const QString &str, QVector<QUnicodeTools::ScriptItem> &items,
                   QCharAttributes *attributes, CharAttributeOptions options)
@@ -706,7 +708,7 @@ Q_CORE_EXPORT void initCharAttributes(const QString &str, QVector<QUnicodeTools:
    }
 
    // emerald - implement another function to resolve unicode clusters for Indic languages
-   // resolveClusters(Attributes(str, attributes);
+   // resolveClusters(Attributes(str, attributes));
 }
 
 Q_CORE_EXPORT void initScripts(const QString &str, QVector<QChar::Script> &items)

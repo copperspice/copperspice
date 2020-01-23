@@ -1,10 +1,10 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -305,7 +305,7 @@ QString OsTypeTerm::hostOs()
 #elif defined(Q_OS_LINUX)
     return QString("linux");
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
     return  QString("macosx");
 
 #elif defined(Q_OS_ANDROID)

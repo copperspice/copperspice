@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -480,12 +480,12 @@ QPixmap QDeclarativeTextPrivate::textLayoutImage(bool drawStyle)
    QPixmap img(size);
    if (!size.isEmpty()) {
       img.fill(Qt::transparent);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       bool oldSmooth = qt_applefontsmoothing_enabled;
       qt_applefontsmoothing_enabled = false;
 #endif
       QPainter p(&img);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       qt_applefontsmoothing_enabled = oldSmooth;
 #endif
       drawTextLayout(&p, QPointF(-layedOutTextRect.x(), 0), drawStyle);
@@ -522,12 +522,12 @@ QPixmap QDeclarativeTextPrivate::textDocumentImage(bool drawStyle)
    //paint text
    QPixmap img(size);
    img.fill(Qt::transparent);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    bool oldSmooth = qt_applefontsmoothing_enabled;
    qt_applefontsmoothing_enabled = false;
 #endif
    QPainter p(&img);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    qt_applefontsmoothing_enabled = oldSmooth;
 #endif
 

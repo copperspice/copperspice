@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -37,9 +37,6 @@ class QMetaObject_T;
 
 class Q_CORE_EXPORT Qt
 {
-   private:
-      ~Qt();
-
    public:
       using cs_parent = CSGadget_Fake_Parent;
       using cs_class  = Qt;
@@ -1382,18 +1379,18 @@ class Q_CORE_EXPORT Qt
    };
 
    enum FindChildOption {
-      FindDirectChildrenOnly = 0x0,
+      FindDirectChildrenOnly  = 0x0,
       FindChildrenRecursively = 0x1
    };
    using FindChildOptions = QFlags<FindChildOption>;
 
    enum DropAction {
-      CopyAction = 0x1,
-      MoveAction = 0x2,
-      LinkAction = 0x4,
-      ActionMask = 0xff,
+      CopyAction       = 0x1,
+      MoveAction       = 0x2,
+      LinkAction       = 0x4,
+      ActionMask       = 0xff,
       TargetMoveAction = 0x8002,
-      IgnoreAction = 0x0
+      IgnoreAction     = 0x0
    };
    using DropActions = QFlags<DropAction>;
 
@@ -1615,7 +1612,7 @@ class Q_CORE_EXPORT Qt
    using MouseEventFlags = QFlags<MouseEventFlag>;
 
 
-   // following enum and 3 methods declarations, moved from gui/text/qtextdocument.h 1/5/2014
+   // following enum and 3 methods declarations moved from gui/text/qtextdocument.h
    enum HitTestAccuracy { ExactHit, FuzzyHit };
 
    static bool mightBeRichText(const QString &);
@@ -1712,6 +1709,8 @@ class Q_CORE_EXPORT Qt
    CORE_CS_ENUM(GestureType)
 #endif
 
+   private:
+      ~Qt();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MouseButtons)

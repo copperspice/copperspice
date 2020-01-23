@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,15 +24,15 @@
 #ifndef QGRAPHICSSCENELINEARINDEX_P_H
 #define QGRAPHICSSCENELINEARINDEX_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 #include <qrect.h>
 #include <qlist.h>
 #include <qgraphicsitem.h>
-#include <qgraphicssceneindex_p.h>
 
+#include <qgraphicssceneindex_p.h>
 
 class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
 {
@@ -43,11 +43,13 @@ class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
    }
 
    QList<QGraphicsItem *> items(Qt::SortOrder order = Qt::DescendingOrder) const override {
-      Q_UNUSED(order);
+      (void) order;
       return m_items;
    }
 
    QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const override {
+      (void) rect;
+      (void) order;
 
       return m_items;
    }
@@ -83,6 +85,5 @@ class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
 };
 
 #endif // QT_NO_GRAPHICSVIEW
-
 
 #endif // QGRAPHICSSCENELINEARINDEX_H

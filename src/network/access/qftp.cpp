@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1228,10 +1228,12 @@ bool QFtpPI::processReply()
       case Begin:
          // should never happen
          break;
+
       case Success:
          // success handling
          state = Idle;
-      // no break!
+         [[fallthrough]];
+
       case Idle:
          if (dtp.hasError()) {
             emit error(QFtp::UnknownError, dtp.errorMessage());
@@ -1239,30 +1241,37 @@ bool QFtpPI::processReply()
          }
          startNextCmd();
          break;
+
       case Waiting:
-         // do nothing
          break;
+
       case Failure:
          // If the EPSV or EPRT commands fail, replace them with
          // the old PASV and PORT instead and try again.
          if (currentCmd.startsWith(QLatin1String("EPSV"))) {
             transferConnectionExtended = false;
             pendingCommands.prepend(QLatin1String("PASV\r\n"));
+
          } else if (currentCmd.startsWith(QLatin1String("EPRT"))) {
             transferConnectionExtended = false;
             pendingCommands.prepend(QLatin1String("PORT\r\n"));
+
          } else {
             emit error(QFtp::UnknownError, replyText);
          }
+
          if (state != Waiting) {
             state = Idle;
             startNextCmd();
          }
+
          break;
    }
+
 #if defined(QFTPPI_DEBUG)
    //    qDebug("QFtpPI state: %d [processReply() end]", state);
 #endif
+
    return true;
 }
 

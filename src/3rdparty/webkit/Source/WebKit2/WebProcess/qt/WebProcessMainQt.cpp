@@ -36,7 +36,7 @@
 #include <QString>
 #include <QStringList>
 #include <QUrl>
-#include <QtGlobal>
+#include <qglobal.h>
 
 #if USE(MEEGOTOUCH)
 #include <MComponentData>

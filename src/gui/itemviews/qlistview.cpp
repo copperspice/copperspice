@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1063,6 +1063,9 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
          if (rect.top() < rect.height()) {
             rect.moveTop(rect.height());
          }
+
+         [[fallthrough]];
+
       case MovePrevious:
       case MoveUp:
          while (intersectVector.isEmpty()) {
@@ -1095,6 +1098,9 @@ QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
          if (rect.bottom() > contents.height() - rect.height()) {
             rect.moveBottom(contents.height() - rect.height());
          }
+
+         [[fallthrough]];
+
       case MoveNext:
       case MoveDown:
          while (intersectVector.isEmpty()) {

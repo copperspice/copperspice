@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -23,10 +23,10 @@
 
 #include <qcoreapplication.h>
 #include <qcoreapplication_p.h>
+
 #include <qabstracteventdispatcher.h>
 #include <qcoreevent.h>
 #include <qeventloop.h>
-#include <qcorecmdlineargs_p.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qdir.h>
@@ -34,25 +34,25 @@
 #include <qfileinfo.h>
 #include <qhash.h>
 #include <qmutex.h>
-#include <qprocess_p.h>
 #include <qtextcodec.h>
 #include <qstandardpaths.h>
-
 #include <qthread.h>
 #include <qthreadpool.h>
 #include <qthreadstorage.h>
-#include <qthread_p.h>
-
 #include <qelapsedtimer.h>
 #include <qlibraryinfo.h>
 #include <qvarlengtharray.h>
+
+#include <qcorecmdlineargs_p.h>
+#include <qprocess_p.h>
+#include <qprocess_p.h>
+#include <qthread_p.h>
 #include <qfactoryloader_p.h>
 #include <qfunctions_p.h>
 #include <qlocale_p.h>
 
-
 #if defined(Q_OS_UNIX)
-#  if defined(Q_OS_MAC)
+#  if defined(Q_OS_DARWIN)
 #    include <qeventdispatcher_cf_p.h>
 #    include <qeventdispatcher_unix_p.h>
 #  else
@@ -65,12 +65,14 @@
 #endif
 
 #ifdef Q_OS_WIN
-#include "qeventdispatcher_win_p.h"
+#include <qeventdispatcher_win_p.h>
 
 #endif
-#ifdef Q_OS_MAC
+
+#ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #endif
+
 #ifdef Q_OS_UNIX
 #include <locale.h>
 #include <unistd.h>
@@ -104,15 +106,14 @@ class QMutexUnlocker
    QMutex *mtx;
 };
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
 extern QString qAppFileName();
 #endif
-
 
 bool QCoreApplicationPrivate::setuidAllowed = false;
 #if ! defined(Q_OS_WIN)
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 QString QCoreApplicationPrivate::macMenuBarName()
 {
    QString bundleName;
@@ -129,7 +130,7 @@ QString QCoreApplicationPrivate::appName() const
 {
    QString applicationName;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    applicationName = macMenuBarName();
 #endif
 
@@ -291,7 +292,7 @@ Q_CORE_EXPORT bool qt_locale_initialized = false;
 
 
 //  Create an instance of cs.conf. Ensures the settings will not be thrown out of QSetting's cache for unused settings.
-Q_GLOBAL_STATIC_WITH_ARGS(QSettings, static_CopperSpiceConf, (QSettings::UserScope, QLatin1String("CopperSpice")))
+Q_GLOBAL_STATIC_WITH_ARGS(QSettings, static_CopperSpiceConf, (QSettings::UserScope, QString("CopperSpice")))
 
 QSettings *QCoreApplicationPrivate::copperspiceConf()
 {
@@ -345,6 +346,8 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint 
    : argc(aargc), argv(aargv), application_type(QCoreApplicationPrivate::Tty),
      in_exec(false), aboutToQuitEmitted(false)
 {
+   (void) flags;
+
    static const char *const empty = "";
 
    if (argc == 0 || argv == 0) {
@@ -367,6 +370,7 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint 
 QCoreApplicationPrivate::~QCoreApplicationPrivate()
 {
    Q_Q(QCoreApplication);
+
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(q);
 
    if (threadData) {
@@ -643,18 +647,16 @@ bool QCoreApplication::testAttribute(Qt::ApplicationAttribute attribute)
    return QCoreApplicationPrivate::testAttribute(attribute);
 }
 
-
 bool QCoreApplication::isQuitLockEnabled()
 {
     return quitLockRefEnabled;
 }
 
-static bool doNotify(QObject *, QEvent *);
-
 void QCoreApplication::setQuitLockEnabled(bool enabled)
 {
     quitLockRefEnabled = enabled;
 }
+
 bool QCoreApplication::notifyInternal(QObject *receiver, QEvent *event)
 {
    // enforces the rule that events can only be sent to objects in
@@ -1332,12 +1334,14 @@ void QCoreApplication::installTranslator(QTranslator *translationFile)
 
 void QCoreApplication::removeTranslator(QTranslator *translationFile)
 {
-   if (!translationFile) {
+   if (! translationFile) {
       return;
    }
+
    if (!QCoreApplicationPrivate::checkInstance("removeTranslator")) {
       return;
    }
+
    QCoreApplicationPrivate *d = self->d_func();
    if (d->translators.removeAll(translationFile) && ! self->closingDown()) {
       QEvent ev(QEvent::LanguageChange);
@@ -1351,16 +1355,18 @@ static void replacePercentN(QString *result, int n)
       int percentPos = 0;
       int len = 0;
 
-      while ((percentPos = result->indexOf(QLatin1Char('%'), percentPos + len)) != -1) {
+      while ((percentPos = result->indexOf(QChar('%'), percentPos + len)) != -1) {
          len = 1;
          QString fmt;
-         if (result->at(percentPos + len) == QLatin1Char('L')) {
+
+         if (result->at(percentPos + len) == QChar('L')) {
             ++len;
-            fmt = QLatin1String("%L1");
+            fmt = QString("%L1");
          } else {
-            fmt = QLatin1String("%1");
+            fmt = QString("%1");
          }
-         if (result->at(percentPos + len) == QLatin1Char('n')) {
+
+         if (result->at(percentPos + len) == QChar('n')) {
             fmt = fmt.formatArg(n);
             ++len;
             result->replace(percentPos, len, fmt);
@@ -1462,8 +1468,9 @@ QString QCoreApplication::applicationFilePath()
    d->cachedApplicationFilePath = QFileInfo(qAppFileName()).filePath();
    return d->cachedApplicationFilePath;
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    QString qAppFileName_str = qAppFileName();
+
    if (!qAppFileName_str.isEmpty()) {
       QFileInfo fi(qAppFileName_str);
       d->cachedApplicationFilePath = fi.exists() ? fi.canonicalFilePath() : QString();
@@ -1472,6 +1479,7 @@ QString QCoreApplication::applicationFilePath()
 #endif
 
 #if defined( Q_OS_UNIX )
+
 #  ifdef Q_OS_LINUX
    // Try looking for a /proc/<pid>/exe symlink first which points to the absolute path of the executable
    QFileInfo pfi(QString::fromLatin1("/proc/%1/exe").formatArg(getpid()));
@@ -1482,14 +1490,15 @@ QString QCoreApplication::applicationFilePath()
    }
 #  endif
 
-   QString argv0 = QFile::decodeName(QByteArray(argv()[0]));
+   QString argv0 = arguments().at(0);
+
    QString absPath;
 
-   if (!argv0.isEmpty() && argv0.at(0) == QLatin1Char('/')) {
+   if (! argv0.isEmpty() && argv0.at(0) == QChar('/')) {
       // If argv0 starts with a slash, it is already an absolute file path.
       absPath = argv0;
 
-   } else if (argv0.contains(QLatin1Char('/'))) {
+   } else if (argv0.contains(QChar('/'))) {
       // If argv0 contains one or more slashes, it is a file path relative to the current directory.
       absPath = QDir::current().absoluteFilePath(argv0);
 
@@ -1497,14 +1506,14 @@ QString QCoreApplication::applicationFilePath()
       // Otherwise, the file path has to be determined using the PATH environment variable.
       QByteArray pEnv   = qgetenv("PATH");
       QDir currentDir   = QDir::current();
-      QStringList paths = QString::fromUtf8(pEnv.constData()).split(QLatin1Char(':'));
+      QStringList paths = QString::fromUtf8(pEnv.constData()).split(QChar(':'));
 
       for (QStringList::const_iterator p = paths.constBegin(); p != paths.constEnd(); ++p) {
          if ((*p).isEmpty()) {
             continue;
          }
 
-         QString candidate = currentDir.absoluteFilePath(*p + QLatin1Char('/') + argv0);
+         QString candidate = currentDir.absoluteFilePath(*p + QChar('/') + argv0);
          QFileInfo candidate_fi(candidate);
 
          if (candidate_fi.exists() && !candidate_fi.isDir()) {
@@ -1529,35 +1538,6 @@ qint64 QCoreApplication::applicationPid()
 #else
    return getpid();
 #endif
-}
-
-/*!
-    \obsolete
-    Use arguments().size() instead.
-*/
-int QCoreApplication::argc()
-{
-   if (! self) {
-      qWarning("QCoreApplication::argc: Please instantiate the QApplication object first");
-      return 0;
-   }
-   return self->d_func()->argc;
-}
-
-
-/*!
-    \obsolete
-
-    Use arguments() instead.
-*/
-char **QCoreApplication::argv()
-{
-   if (! self) {
-      qWarning("QCoreApplication::argv: Please instantiate the QApplication object first");
-      return nullptr;
-   }
-
-   return self->d_func()->argv;
 }
 
 QStringList QCoreApplication::arguments()
@@ -1803,4 +1783,3 @@ void QCoreApplication::setEventDispatcher(QAbstractEventDispatcher *eventDispatc
 
     mainThread->setEventDispatcher(eventDispatcher);
 }
-

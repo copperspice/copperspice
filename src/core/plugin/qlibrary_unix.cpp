@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -27,7 +27,7 @@
 #include <qcoreapplication.h>
 #include <qfilesystementry_p.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #  include <qcore_mac_p.h>
 #endif
 
@@ -61,7 +61,7 @@ QStringList QLibraryHandle::suffixes_sys(const QString &fullVersion)
       suffixes << QLatin1String(".so");
    }
 
-# ifdef Q_OS_MAC
+# ifdef Q_OS_DARWIN
    if (! fullVersion.isEmpty()) {
       suffixes << QString(".%1.bundle").formatArg(fullVersion);
       suffixes << QString(".%1.dylib").formatArg(fullVersion);
@@ -188,7 +188,7 @@ bool QLibraryHandle::load_sys()
       }
    }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (!pHnd) {
       QByteArray utf8Bundle = fileName.toUtf8();
       QCFType<CFURLRef> bundleUrl = CFURLCreateFromFileSystemRepresentation(NULL,
@@ -239,7 +239,7 @@ Q_CORE_EXPORT void *qt_linux_find_symbol_sys(const char *symbol)
 }
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 Q_CORE_EXPORT void *qt_mac_resolve_sys(void *handle, const char *symbol)
 {
    return dlsym(handle, symbol);

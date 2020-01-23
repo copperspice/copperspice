@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -39,7 +39,7 @@
 #include <qwidget_p.h>
 #include <qtoolbar_p.h>
 #include <qwidgetanimator_p.h>
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
 
@@ -50,7 +50,7 @@ class QMainWindowPrivate : public QWidgetPrivate
  public:
    inline QMainWindowPrivate()
       : layout(0), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       , useUnifiedToolBar(false)
 #endif
 
@@ -64,7 +64,7 @@ class QMainWindowPrivate : public QWidgetPrivate
    QSize iconSize;
    bool explicitIconSize;
    Qt::ToolButtonStyle toolButtonStyle;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    bool useUnifiedToolBar;
 #endif
 
@@ -1085,7 +1085,7 @@ bool QMainWindow::event(QEvent *event)
 
 void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    Q_D(QMainWindow);
 
    if (isWindow()) {
@@ -1112,7 +1112,7 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 
 bool QMainWindow::unifiedTitleAndToolBarOnMac() const
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    return d_func()->useUnifiedToolBar;
 #endif
 

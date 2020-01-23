@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -32,7 +32,7 @@
 
 #include <cmath>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #import <AppKit/AppKit.h>
 #endif
 
@@ -44,7 +44,7 @@
 // but they are not documented and are not in public headers so are private API and exposed
 // only through the NSFontWeightXXX and UIFontWeightXXX aliases in AppKit and UIKit (rdar://26109857)
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #define kCTFontWeightUltraLight NSFontWeightUltraLight
 #define kCTFontWeightThin NSFontWeightThin
 #define kCTFontWeightLight NSFontWeightLight

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -262,7 +262,7 @@ class Q_GUI_EXPORT QAction : public QObject
    friend class QMenuBar;
    friend class QToolButton;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    friend void qt_mac_clear_status_text(QAction *action);
 #endif
 

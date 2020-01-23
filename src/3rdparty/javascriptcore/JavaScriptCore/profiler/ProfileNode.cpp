@@ -44,7 +44,7 @@ namespace JSC {
 static double getCount()
 {
 #if OS(WINDOWS)
-    static LARGE_INTEGER frequency = {0};
+    static LARGE_INTEGER frequency = {};
     if (!frequency.QuadPart)
         QueryPerformanceFrequency(&frequency);
     LARGE_INTEGER counter;
@@ -141,7 +141,7 @@ void ProfileNode::removeChild(ProfileNode* node)
             break;
         }
     }
-    
+
     resetChildrensSiblings();
 }
 
@@ -293,9 +293,9 @@ void ProfileNode::debugPrintData(int indentLevel) const
         printf("  ");
 
     printf("Function Name %s %d SelfTime %.3fms/%.3f%% TotalTime %.3fms/%.3f%% VSelf %.3fms VTotal %.3fms Visible %s Next Sibling %s\n",
-        functionName().UTF8String().c_str(), 
+        functionName().UTF8String().c_str(),
         m_numberOfCalls, m_actualSelfTime, selfPercent(), m_actualTotalTime, totalPercent(),
-        m_visibleSelfTime, m_visibleTotalTime, 
+        m_visibleSelfTime, m_visibleTotalTime,
         (m_visible ? "True" : "False"),
         m_nextSibling ? m_nextSibling->functionName().UTF8String().c_str() : "");
 

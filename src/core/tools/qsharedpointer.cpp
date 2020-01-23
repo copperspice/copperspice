@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -23,13 +23,11 @@
 
 #include <qsharedpointer.h>
 
-// to be sure we are not causing a namespace clash:
+// ensure we are not causing a namespace clash
 #include <qshareddata.h>
 
 #include <qset.h>
 #include <qmutex.h>
-
-QT_BEGIN_NAMESPACE
 
 void QtSharedPointer::ExternalRefCountData::setQObjectShared(const QObject *, bool)
 {
@@ -74,37 +72,26 @@ QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::ge
    return x;
 }
 
-/**
-    \internal
-    Returns a QSharedPointer<QObject> if the variant contains
-    a QSharedPointer<T> where T inherits QObject. Otherwise the behaviour is undefined.
-*/
 QSharedPointer<QObject> QtSharedPointer::sharedPointerFromVariant_internal(const QVariant &variant)
 {
    return *reinterpret_cast<const QSharedPointer<QObject>*>(variant.constData());
 }
 
-/**
-    \internal
-    Returns a QWeakPointer<QObject> if the variant contains
-    a QWeakPointer<T> where T inherits QObject. Otherwise the behaviour is undefined.
-*/
 QWeakPointer<QObject> QtSharedPointer::weakPointerFromVariant_internal(const QVariant &variant)
 {
    return *reinterpret_cast<const QWeakPointer<QObject>*>(variant.constData());
 }
 
-QT_END_NAMESPACE
-
-
-
 //#  define QT_SHARED_POINTER_BACKTRACE_SUPPORT
 #ifdef QT_SHARED_POINTER_BACKTRACE_SUPPORT
-#if defined(__GLIBC__) && (__GLIBC__ >= 2) && !defined(__UCLIBC__) && !defined(QT_LINUXBASE)
+
+#if defined(__GLIBC__) && (__GLIBC__ >= 2) && ! defined(__UCLIBC__) && ! defined(QT_LINUXBASE)
 #      define BACKTRACE_SUPPORTED
-#elif defined(Q_OS_MAC)
+
+#elif defined(Q_OS_DARWIN)
 #      define BACKTRACE_SUPPORTED
 #endif
+
 #endif
 
 #if defined(BACKTRACE_SUPPORTED)
@@ -113,8 +100,6 @@ QT_END_NAMESPACE
 #    include <stdio.h>
 #    include <unistd.h>
 #    include <sys/wait.h>
-
-QT_BEGIN_NAMESPACE
 
 static inline QByteArray saveBacktrace() __attribute__((always_inline));
 static inline QByteArray saveBacktrace()
@@ -140,6 +125,7 @@ static void printBacktrace(QByteArray stacktrace)
    if (pipe(filter) != -1) {
       child = fork();
    }
+
    if (child == 0) {
       // child process
       dup2(fileno(stderr), fileno(stdout));
@@ -179,13 +165,10 @@ static void printBacktrace(QByteArray stacktrace)
    }
 }
 
-QT_END_NAMESPACE
-
 #endif  // BACKTRACE_SUPPORTED
 
 namespace {
 
-QT_USE_NAMESPACE
 struct Data {
    const volatile void *pointer;
 
@@ -205,19 +188,10 @@ class KnownPointers
 
 Q_GLOBAL_STATIC(KnownPointers, knownPointers)
 
-QT_BEGIN_NAMESPACE
-
-namespace QtSharedPointer {
-void internalSafetyCheckCleanCheck();
-}
-
-/*!
-    \internal
-*/
 void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile void *ptr)
 {
    KnownPointers *const kp = knownPointers();
-   if (!kp) {
+   if (! kp) {
       return;   // end-game: the application is being destroyed already
    }
 
@@ -249,9 +223,6 @@ void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile v
    Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
 }
 
-/*!
-    \internal
-*/
 void QtSharedPointer::internalSafetyCheckRemove(const void *d_ptr)
 {
    KnownPointers *const kp = knownPointers();
@@ -277,4 +248,3 @@ void QtSharedPointer::internalSafetyCheckRemove(const void *d_ptr)
    Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
 }
 
-QT_END_NAMESPACE

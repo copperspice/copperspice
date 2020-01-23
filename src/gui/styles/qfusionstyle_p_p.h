@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -57,7 +57,7 @@ class QFusionStylePrivate : public QCommonStylePrivate
    // On mac we want a standard blue color used when the system palette is used
    bool isMacSystemPalette(const QPalette &pal) const {
 
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_DARWIN)
       const QPalette *themePalette = QGuiApplicationPrivate::platformTheme()->palette();
       if (themePalette && themePalette->color(QPalette::Normal, QPalette::Highlight) ==
          pal.color(QPalette::Normal, QPalette::Highlight) &&

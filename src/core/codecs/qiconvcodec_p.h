@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -28,13 +28,11 @@
 
 #if defined(Q_OS_UNIX) && !defined(QT_NO_ICONV)
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 typedef void *iconv_t;
 #else
 #include <iconv.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QIconvCodec: public QTextCodec
 {
@@ -70,8 +68,6 @@ class QIconvCodec: public QTextCodec
       void saveChars(const char *c, int count);
    };
 };
-
-QT_END_NAMESPACE
 
 #endif // Q_OS_UNIX && !QT_NO_ICONV
 

@@ -1,10 +1,10 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -3196,7 +3196,7 @@ QOpenGLFunctionsPrivate::QOpenGLFunctionsPrivate(QOpenGLContext *)
         StencilFunc = ::glStencilFunc;
         StencilMask = ::glStencilMask;
         StencilOp = ::glStencilOp;
-#if defined(Q_OS_MAC) && MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
+#if defined(Q_OS_DARWIN) && MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
         TexImage2D = reinterpret_cast<void (*)(GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *)>(glTexImage2D);
 #else
         TexImage2D = glTexImage2D;

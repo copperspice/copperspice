@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -111,10 +111,14 @@ struct QLocaleId {
    }
 
    inline bool operator==(QLocaleId other) const
-   { return language_id == other.language_id && script_id == other.script_id && country_id == other.country_id; }
+   {
+      return language_id == other.language_id && script_id == other.script_id && country_id == other.country_id;
+   }
 
    inline bool operator!=(QLocaleId other) const
-   { return !operator==(other); }
+   {
+      return !operator==(other);
+   }
 
    QLocaleId withLikelySubtagsAdded() const;
    QLocaleId withLikelySubtagsRemoved() const;
@@ -304,11 +308,13 @@ class Q_CORE_EXPORT QLocalePrivate
 };
 
 #if ! defined (CS_DOXYPRESS)
+
 template <>
 inline QLocalePrivate *QSharedDataPointer<QLocalePrivate>::clone()
 {
    return QLocalePrivate::create(d->m_data, d->m_numberOptions);
 }
+
 #endif
 
 inline char QLocaleData::digitToCLocale(QChar in) const
@@ -344,26 +350,26 @@ inline char QLocaleData::digitToCLocale(QChar in) const
    }
 
    // In several languages group() is the char 0xA0, which looks like a space.
-   // People use a regular space instead of it and complain it doesn't work.
+   // People use a regular space instead of it and complain it does not work.
    if (m_group == 0xA0 && in.unicode() == ' ') {
       return ',';
    }
-
 
    return 0;
 }
 
 QString qt_readEscapedFormatString(const QString &format, int *idx);
 bool qt_splitLocaleName(const QString &name, QString &lang, QString &script, QString &cntry);
-int qt_repeatCount(const QString &s, int i);
+int  qt_repeatCount(const QString &s, int i);
 
-enum { AsciiSpaceMask = (1 << (' ' - 1)) |
-                        (1 << ('\t' - 1)) |   // 9: HT - horizontal tab
-                        (1 << ('\n' - 1)) |   // 10: LF - line feed
-                        (1 << ('\v' - 1)) |   // 11: VT - vertical tab
-                        (1 << ('\f' - 1)) |   // 12: FF - form feed
-                        (1 << ('\r' - 1))
-     };  // 13: CR - carriage return
+enum { AsciiSpaceMask =
+            (1 << (' ' - 1))  |
+            (1 << ('\t' - 1)) |      // 9: HT - horizontal tab
+            (1 << ('\n' - 1)) |      // 10: LF - line feed
+            (1 << ('\v' - 1)) |      // 11: VT - vertical tab
+            (1 << ('\f' - 1)) |      // 12: FF - form feed
+            (1 << ('\r' - 1))        // 13: CR - carriage return
+};
 
 constexpr inline bool ascii_isspace(uchar c)
 {
@@ -375,5 +381,4 @@ Q_DECLARE_METATYPE(QList<Qt::DayOfWeek>)
 Q_DECLARE_METATYPE(QSystemLocale::CurrencyToStringArgument)
 #endif
 
-
-#endif // QLOCALE_P_H
+#endif

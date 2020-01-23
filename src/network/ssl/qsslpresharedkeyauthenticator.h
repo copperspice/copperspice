@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,10 +24,10 @@
 #ifndef QSSLPRESHAREDKEYAUTHENTICATOR_H
 #define QSSLPRESHAREDKEYAUTHENTICATOR_H
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QString>
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QMetaType>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qshareddatapointer.h>
+#include <qmetatype.h>
 
 class QSslPreSharedKeyAuthenticatorPrivate;
 

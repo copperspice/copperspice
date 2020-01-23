@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -281,12 +281,12 @@ void QDeclarativePaintedItem::paint(QPainter *p, const QStyleOptionGraphicsItem 
          QRectF target(area.x(), area.y(), area.width(), area.height());
          if (!d->cachefrozen) {
             if (!d->imagecache[i]->dirty.isNull() && topaint.contains(d->imagecache[i]->dirty)) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                bool oldSmooth = qt_applefontsmoothing_enabled;
                qt_applefontsmoothing_enabled = false;
 #endif
                QPainter qp(&d->imagecache[i]->image);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                qt_applefontsmoothing_enabled = oldSmooth;
 #endif
                qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform,
@@ -352,12 +352,12 @@ void QDeclarativePaintedItem::paint(QPainter *p, const QStyleOptionGraphicsItem 
                img.fill(d->fillColor);
             }
             {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                bool oldSmooth = qt_applefontsmoothing_enabled;
                qt_applefontsmoothing_enabled = false;
 #endif
                QPainter qp(&img);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
                qt_applefontsmoothing_enabled = oldSmooth;
 #endif
                qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform,

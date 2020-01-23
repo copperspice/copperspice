@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -34,10 +34,8 @@
 #include "JSString.h"
 
 namespace JSC {
-QT_USE_NAMESPACE ASSERT_CLASS_FITS_IN_CELL(QScript::QVariantPrototype);
+ASSERT_CLASS_FITS_IN_CELL(QScript::QVariantPrototype);
 }
-
-QT_BEGIN_NAMESPACE
 
 namespace QScript {
 
@@ -155,5 +153,3 @@ QVariantPrototype::QVariantPrototype(JSC::ExecState *exec, WTF::PassRefPtr<JSC::
 
 
 } // namespace QScript
-
-QT_END_NAMESPACE

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -129,9 +129,11 @@ Item AtomicValue::toXDM(const QVariant &value)
       case QVariant::ByteArray:
          return HexBinary::fromValue(value.toByteArray());
       case QVariant::Int:
-      /* Fallthrough. */
+         [[fallthrough]];
+
       case QVariant::LongLong:
-      /* Fallthrough. */
+         [[fallthrough]];
+
       case QVariant::UInt:
          return Integer::fromValue(value.toInt());
       case QVariant::ULongLong:
@@ -180,17 +182,21 @@ ItemType::Ptr AtomicValue::qtToXDMType(const QXmlItem &item)
 
    switch (int(v.type())) {
       case QVariant::Char:
-      /* Fallthrough. */
+         [[fallthrough]];
+
       case QVariant::String:
-      /* Fallthrough. */
+         [[fallthrough]];
+
       case QVariant::Url:
          return BuiltinTypes::xsString;
       case QVariant::Bool:
          return BuiltinTypes::xsBoolean;
       case QVariant::ByteArray:
          return BuiltinTypes::xsBase64Binary;
+
       case QVariant::Int:
-      /* Fallthrough. */
+         [[fallthrough]];
+
       case QVariant::LongLong:
          return BuiltinTypes::xsInteger;
       case QVariant::ULongLong:
@@ -198,7 +204,8 @@ ItemType::Ptr AtomicValue::qtToXDMType(const QXmlItem &item)
       case QVariant::Date:
          return BuiltinTypes::xsDate;
       case QVariant::DateTime:
-      /* Fallthrough. */
+         [[fallthrough]];
+
       case QVariant::Time:
          return BuiltinTypes::xsDateTime;
       case QMetaType::Float:

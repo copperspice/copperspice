@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -21,17 +21,18 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qstatemachine.h>
+
+#include <algorithm>
 
 #ifndef QT_NO_STATEMACHINE
 
 #include <qstate.h>
-#include <qstate_p.h>
-#include <qstatemachine_p.h>
-
 #include <qabstracttransition.h>
+#include <qmetaobject.h>
+#include <qdebug.h>
+
+#include <qstate_p.h>
 #include <qabstracttransition_p.h>
 #include <qabstractstate.h>
 #include <qabstractstate_p.h>
@@ -39,11 +40,10 @@
 #include <qfinalstate.h>
 #include <qhistorystate.h>
 #include <qhistorystate_p.h>
+#include <qstatemachine_p.h>
 #include <qsignaltransition.h>
 #include <qsignaleventgenerator_p.h>
 #include <qthread_p.h>
-#include <qmetaobject.h>
-#include <qdebug.h>
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
 #include <qeventtransition.h>
@@ -91,6 +91,7 @@ QStateMachinePrivate *QStateMachinePrivate::get(QStateMachine *q)
    if (q) {
       return q->d_func();
    }
+
    return 0;
 }
 
@@ -1553,18 +1554,18 @@ void QStateMachinePrivate::unregisterSignalTransition(QSignalTransition *transit
 {
    // signal
    QObject *sender = transition->senderObject();
+
    if (! sender) {
       return;
    }
 
    Q_ASSERT(m_signalEventGenerator != 0);
 
+/*
    CsSignal::Internal::BentoAbstract *signalBento = transition->get_signalBento();
 
-/*
    // emerald (on hold, statemachine passed data missing)
    QObject::disconnect(sender, signalBento, m_signalEventGenerator, &QSignalEventGenerator::execute);
-
 */
 
 }
@@ -1794,9 +1795,6 @@ QString QStateMachine::errorString() const
    return d->errorString;
 }
 
-/*!
-  Clears the error string and error code of the state machine.
-*/
 void QStateMachine::clearError()
 {
    Q_D(QStateMachine);
@@ -1804,38 +1802,18 @@ void QStateMachine::clearError()
    d->error = NoError;
 }
 
-/*!
-   Returns the restore policy of the state machine.
-
-   \sa setGlobalRestorePolicy()
-*/
 QStateMachine::RestorePolicy QStateMachine::globalRestorePolicy() const
 {
    Q_D(const QStateMachine);
    return d->globalRestorePolicy;
 }
 
-/*!
-   Sets the restore policy of the state machine to \a restorePolicy. The default
-   restore policy is QAbstractState::DontRestoreProperties.
-
-   \sa globalRestorePolicy()
-*/
 void QStateMachine::setGlobalRestorePolicy(QStateMachine::RestorePolicy restorePolicy)
 {
    Q_D(QStateMachine);
    d->globalRestorePolicy = restorePolicy;
 }
 
-/*!
-  Adds the given \a state to this state machine. The state becomes a top-level
-  state.
-
-  If the state is already in a different machine, it will first be removed
-  from its old machine, and then added to this machine.
-
-  \sa removeState(), setInitialState()
-*/
 void QStateMachine::addState(QAbstractState *state)
 {
    if (!state) {
@@ -1849,12 +1827,6 @@ void QStateMachine::addState(QAbstractState *state)
    state->setParent(this);
 }
 
-/*!
-  Removes the given \a state from this state machine.  The state machine
-  releases ownership of the state.
-
-  \sa addState()
-*/
 void QStateMachine::removeState(QAbstractState *state)
 {
    if (!state) {
@@ -1870,28 +1842,12 @@ void QStateMachine::removeState(QAbstractState *state)
    state->setParent(0);
 }
 
-/*!
-  Returns whether this state machine is running.
-
-  start(), stop()
-*/
 bool QStateMachine::isRunning() const
 {
    Q_D(const QStateMachine);
    return (d->state == QStateMachinePrivate::Running);
 }
 
-/*!
-  Starts this state machine.  The machine will reset its configuration and
-  transition to the initial state.  When a final top-level state (QFinalState)
-  is entered, the machine will emit the finished() signal.
-
-  \note A state machine will not run without a running event loop, such as
-  the main application event loop started with QCoreApplication::exec() or
-  QApplication::exec().
-
-  \sa started(), finished(), stop(), initialState()
-*/
 void QStateMachine::start()
 {
    Q_D(QStateMachine);
@@ -1916,12 +1872,6 @@ void QStateMachine::start()
    }
 }
 
-/*!
-  Stops this state machine. The state machine will stop processing events and
-  then emit the stopped() signal.
-
-  \sa stopped(), start()
-*/
 void QStateMachine::stop()
 {
    Q_D(QStateMachine);
@@ -1939,20 +1889,6 @@ void QStateMachine::stop()
    }
 }
 
-/*!
-  \threadsafe
-
-  Posts the given \a event of the given \a priority for processing by this
-  state machine.
-
-  This function returns immediately. The event is added to the state machine's
-  event queue. Events are processed in the order posted. The state machine
-  takes ownership of the event and deletes it once it has been processed.
-
-  You can only post events when the state machine is running.
-
-  \sa postDelayedEvent()
-*/
 void QStateMachine::postEvent(QEvent *event, EventPriority priority)
 {
    Q_D(QStateMachine);
@@ -1960,13 +1896,16 @@ void QStateMachine::postEvent(QEvent *event, EventPriority priority)
       qWarning("QStateMachine::postEvent: cannot post event when the state machine is not running");
       return;
    }
-   if (!event) {
+
+   if (! event) {
       qWarning("QStateMachine::postEvent: cannot post null event");
       return;
    }
+
 #ifdef QSTATEMACHINE_DEBUG
    qDebug() << this << ": posting event" << event;
 #endif
+
    switch (priority) {
       case NormalPriority:
          d->postExternalEvent(event);
@@ -1978,22 +1917,6 @@ void QStateMachine::postEvent(QEvent *event, EventPriority priority)
    d->processEvents(QStateMachinePrivate::QueuedProcessing);
 }
 
-/*!
-  \threadsafe
-
-  Posts the given \a event for processing by this state machine, with the
-  given \a delay in milliseconds. Returns an identifier associated with the
-  delayed event, or -1 if the event could not be posted.
-
-  This function returns immediately. When the delay has expired, the event
-  will be added to the state machine's event queue for processing. The state
-  machine takes ownership of the event and deletes it once it has been
-  processed.
-
-  You can only post events when the state machine is running.
-
-  \sa cancelDelayedEvent(), postEvent()
-*/
 int QStateMachine::postDelayedEvent(QEvent *event, int delay)
 {
    Q_D(QStateMachine);
@@ -2009,24 +1932,18 @@ int QStateMachine::postDelayedEvent(QEvent *event, int delay)
       qWarning("QStateMachine::postDelayedEvent: delay cannot be negative");
       return -1;
    }
+
 #ifdef QSTATEMACHINE_DEBUG
    qDebug() << this << ": posting event" << event << "with delay" << delay;
 #endif
+
    QMutexLocker locker(&d->delayedEventsMutex);
    int tid = startTimer(delay);
    d->delayedEvents[tid] = event;
+
    return tid;
 }
 
-/*!
-  \threadsafe
-
-  Cancels the delayed event identified by the given \a id. The id should be a
-  value returned by a call to postDelayedEvent(). Returns true if the event
-  was successfully cancelled, otherwise returns false.
-
-  \sa postDelayedEvent()
-*/
 bool QStateMachine::cancelDelayedEvent(int id)
 {
    Q_D(QStateMachine);
@@ -2044,53 +1961,30 @@ bool QStateMachine::cancelDelayedEvent(int id)
    return true;
 }
 
-/*!
-   Returns the maximal consistent set of states (including parallel and final
-   states) that this state machine is currently in. If a state \c s is in the
-   configuration, it is always the case that the parent of \c s is also in
-   c. Note, however, that the machine itself is not an explicit member of the
-   configuration.
-*/
 QSet<QAbstractState *> QStateMachine::configuration() const
 {
    Q_D(const QStateMachine);
    return d->configuration;
 }
 
-/*!
-  \fn QStateMachine::started()
-
-  This signal is emitted when the state machine has entered its initial state
-  (QStateMachine::initialState).
-
-  \sa QStateMachine::finished(), QStateMachine::start()
-*/
-
-/*!
-  \fn QStateMachine::stopped()
-
-  This signal is emitted when the state machine has stopped.
-
-  \sa QStateMachine::stop(), QStateMachine::finished()
-*/
-
-/*!
-  \reimp
-*/
 bool QStateMachine::event(QEvent *e)
 {
    Q_D(QStateMachine);
+
    if (e->type() == QEvent::Timer) {
       QTimerEvent *te = static_cast<QTimerEvent *>(e);
       int tid = te->timerId();
+
       if (d->state != QStateMachinePrivate::Running) {
          // This event has been cancelled already
          QMutexLocker locker(&d->delayedEventsMutex);
          Q_ASSERT(!d->delayedEvents.contains(tid));
          return true;
       }
+
       d->delayedEventsMutex.lock();
       QEvent *ee = d->delayedEvents.take(tid);
+
       if (ee != 0) {
          killTimer(tid);
          d->delayedEventsMutex.unlock();
@@ -2101,70 +1995,38 @@ bool QStateMachine::event(QEvent *e)
          d->delayedEventsMutex.unlock();
       }
    }
+
    return QState::event(e);
 }
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
-/*!
-  \reimp
-*/
+
 bool QStateMachine::eventFilter(QObject *watched, QEvent *event)
 {
    Q_D(QStateMachine);
    d->handleFilteredEvent(watched, event);
+
    return false;
 }
 #endif
 
-/*!
-  \internal
-
-  This function is called when the state machine is about to select
-  transitions based on the given \a event.
-
-  The default implementation does nothing.
-*/
 void QStateMachine::beginSelectTransitions(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
-/*!
-  \internal
-
-  This function is called when the state machine has finished selecting
-  transitions based on the given \a event.
-
-  The default implementation does nothing.
-*/
 void QStateMachine::endSelectTransitions(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
-
-/*!
-  \internal
-
-  This function is called when the state machine is about to do a microstep.
-
-  The default implementation does nothing.
-*/
 void QStateMachine::beginMicrostep(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
-/*!
-  \internal
-
-  This function is called when the state machine has finished doing a
-  microstep.
-
-  The default implementation does nothing.
-*/
 void QStateMachine::endMicrostep(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 /*!
@@ -2177,11 +2039,6 @@ void QStateMachine::onEntry(QEvent *event)
    QState::onEntry(event);
 }
 
-/*!
-  \reimp
-    This function will call stop() to stop the state machine and
-    subsequently emit the stopped() signal.
-*/
 void QStateMachine::onExit(QEvent *event)
 {
    stop();
@@ -2190,45 +2047,30 @@ void QStateMachine::onExit(QEvent *event)
 
 #ifndef QT_NO_ANIMATION
 
-/*!
-  Returns whether animations are enabled for this state machine.
-*/
 bool QStateMachine::isAnimated() const
 {
    Q_D(const QStateMachine);
    return d->animated;
 }
 
-/*!
-  Sets whether animations are \a enabled for this state machine.
-*/
 void QStateMachine::setAnimated(bool enabled)
 {
    Q_D(QStateMachine);
    d->animated = enabled;
 }
 
-/*!
-    Adds a default \a animation to be considered for any transition.
-*/
 void QStateMachine::addDefaultAnimation(QAbstractAnimation *animation)
 {
    Q_D(QStateMachine);
    d->defaultAnimations.append(animation);
 }
 
-/*!
-    Returns the list of default animations that will be considered for any transition.
-*/
 QList<QAbstractAnimation *> QStateMachine::defaultAnimations() const
 {
    Q_D(const QStateMachine);
    return d->defaultAnimations;
 }
 
-/*!
-    Removes \a animation from the list of default animations.
-*/
 void QStateMachine::removeDefaultAnimation(QAbstractAnimation *animation)
 {
    Q_D(QStateMachine);
@@ -2243,47 +2085,24 @@ QSignalEventGenerator::QSignalEventGenerator(QStateMachine *parent)
 {
 }
 
-
-/*!
-  \internal
-
-  Constructs a new SignalEvent object with the given \a sender, \a
-  signalIndex and \a arguments.
-*/
 QStateMachine::SignalEvent::SignalEvent(QObject *sender, int signalIndex, const QList<QVariant> &arguments)
    : QEvent(QEvent::StateMachineSignal), m_sender(sender),
      m_signalIndex(signalIndex), m_arguments(arguments)
 {
 }
 
-/*!
-  Destroys this SignalEvent.
-*/
 QStateMachine::SignalEvent::~SignalEvent()
 {
 }
 
-
-/*!
-  \internal
-
-  Constructs a new WrappedEvent object with the given \a object
-  and \a event.
-
-  The WrappedEvent object takes ownership of \a event.
-*/
 QStateMachine::WrappedEvent::WrappedEvent(QObject *object, QEvent *event)
    : QEvent(QEvent::StateMachineWrapped), m_object(object), m_event(event)
 {
 }
 
-/*!
-  Destroys this WrappedEvent.
-*/
 QStateMachine::WrappedEvent::~WrappedEvent()
 {
    delete m_event;
 }
-
 
 #endif //QT_NO_STATEMACHINE

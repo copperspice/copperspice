@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,9 +24,9 @@
 #ifndef QSSLELLIPTICCURVE_H
 #define QSSLELLIPTICCURVE_H
 
-#include <QtGlobal>
-#include <QString>
-#include <QMetaType>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qmetatype.h>
 #include <qhashfunc.h>
 
 class QDebug;
@@ -46,8 +46,8 @@ public:
    static QSslEllipticCurve fromShortName(const QString &name);
    static QSslEllipticCurve fromLongName(const QString &name);
 
-   QString shortName() const Q_REQUIRED_RESULT;
-   QString longName() const Q_REQUIRED_RESULT;
+   [[nodiscard]] QString shortName() const;
+   [[nodiscard]] QString longName() const;
 
    constexpr bool isValid() const {
       return id != 0;

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,10 +24,8 @@
 #ifndef QBASICTIMER_H
 #define QBASICTIMER_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qnamespace.h>
-
-
+#include <qglobal.h>
+#include <qnamespace.h>
 
 class QObject;
 
@@ -60,5 +58,4 @@ class Q_CORE_EXPORT QBasicTimer
 Q_DECLARE_TYPEINFO(QBasicTimer, Q_MOVABLE_TYPE);
 
 
-
-#endif // QBASICTIMER_H
+#endif

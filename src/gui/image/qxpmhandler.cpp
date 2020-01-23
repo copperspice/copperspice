@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -32,18 +32,6 @@
 #include <qvariant.h>
 
 #include <algorithm>
-
-static quint64 xpmHash(const QString &str)
-{
-   unsigned int hashValue = 0;
-
-   for (int i = 0; i < str.size(); ++i) {
-      hashValue <<= 8;
-      hashValue += (unsigned int)str.at(i).unicode();
-   }
-
-   return hashValue;
-}
 
 static quint64 xpmHash(const char *str)
 {

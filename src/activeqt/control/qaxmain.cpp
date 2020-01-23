@@ -45,7 +45,6 @@
 
 int main(int argc, char **argv)
 {
-    QT_USE_NAMESPACE
     QAxFactory::startServer();
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);

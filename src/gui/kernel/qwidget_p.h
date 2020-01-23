@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -29,11 +29,9 @@
 #include <qlocale.h>
 #include <qset.h>
 #include <qregion.h>
-
-#include "qinputmethod.h"
-#include "qopengl.h"
-#include "qsurfaceformat.h"
-
+#include <qinputmethod.h>
+#include <qopengl.h>
+#include <qsurfaceformat.h>
 #include <qsizepolicy.h>
 #include <qstyle.h>
 #include <qapplication.h>
@@ -44,13 +42,9 @@
 #include <qgraphicsview.h>
 #include <qgesture_p.h>
 
-
-
-
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used
 //  - top-level widgets have extra extra data to reduce cost further
-
 
 class QPaintEngine;
 class QPixmap;
@@ -711,27 +705,8 @@ class Q_GUI_EXPORT QWidgetPrivate
    uint noPaintOnScreen : 1;    // see qwidget.cpp ::paintEngine()
 #endif
 
-
-
-
-
-
-
-
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    void macUpdateSizeAttribute();
-
-
-
-
-
-
-
-
-
-
-
-
 #endif
 
    void setNetWmWindowTypes(bool skipIfMissing = false);

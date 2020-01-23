@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1801,7 +1801,7 @@ bool QXmlStreamReaderPrivate::parse()
 
                      attributeStack.pop();
 
-                     if ( (namespacePrefix == "xml" ^ namespaceUri == "http://www.w3.org/XML/1998/namespace")
+                     if ( ((namespacePrefix == "xml") ^ (namespaceUri == "http://www.w3.org/XML/1998/namespace"))
                            || namespaceUri == "http://www.w3.org/2000/xmlns/" || namespaceUri.isEmpty() || namespacePrefix == "xmlns") {
 
                         raiseWellFormedError(QXmlStream::tr("Illegal namespace declaration."));

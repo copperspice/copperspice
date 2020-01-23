@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -27,9 +27,7 @@
 #ifndef QEVENTLOOP_H
 #define QEVENTLOOP_H
 
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qscopedpointer.h>
 
 class QEventLoopPrivate;
 
@@ -43,17 +41,14 @@ class Q_CORE_EXPORT QEventLoop : public QObject
    ~QEventLoop();
 
    enum ProcessEventsFlag {
-      AllEvents = 0x00,
+      AllEvents              = 0x00,
       ExcludeUserInputEvents = 0x01,
       ExcludeSocketNotifiers = 0x02,
-      WaitForMoreEvents = 0x04,
-      X11ExcludeTimers = 0x08,
-
-#ifdef QT_DEPRECATED
-      DeferredDeletion = 0x10,
-#endif
-      EventLoopExec = 0x20,
-      DialogExec = 0x40
+      WaitForMoreEvents      = 0x04,
+      X11ExcludeTimers       = 0x08,
+      DeferredDeletion       = 0x10,
+      EventLoopExec          = 0x20,
+      DialogExec             = 0x40
    };
    using ProcessEventsFlags = QFlags<ProcessEventsFlag>;
 
@@ -75,7 +70,5 @@ class Q_CORE_EXPORT QEventLoop : public QObject
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QEventLoop::ProcessEventsFlags)
-
-QT_END_NAMESPACE
 
 #endif // QEVENTLOOP_H

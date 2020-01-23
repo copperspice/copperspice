@@ -1,10 +1,10 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,14 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_4_1_CORE_H
 #define QOPENGLVERSIONFUNCTIONS_4_1_CORE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
 
-#include <QtGui/QOpenGLVersionFunctions>
-#include <QtGui/qopenglcontext.h>
-
-QT_BEGIN_NAMESPACE
+#include <QOpenGLVersionFunctions>
+#include <qopenglcontext.h>
 
 class Q_GUI_EXPORT QOpenGLFunctions_4_1_Core : public QAbstractOpenGLFunctions
 {
@@ -93,8 +91,6 @@ public:
     void glCullFace(GLenum mode);
 
     // OpenGL 1.1 core functions
-    void glIndexubv(const GLubyte *c);
-    void glIndexub(GLubyte c);
     GLboolean glIsTexture(GLuint texture);
     void glGenTextures(GLsizei n, GLuint *textures);
     void glDeleteTextures(GLsizei n, const GLuint *textures);
@@ -106,7 +102,6 @@ public:
     void glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
     void glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
     void glPolygonOffset(GLfloat factor, GLfloat units);
-    void glGetPointerv(GLenum pname, GLvoid* *params);
     void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices);
     void glDrawArrays(GLenum mode, GLint first, GLsizei count);
 
@@ -336,36 +331,7 @@ public:
     void glVertexAttribP2ui(GLuint index, GLenum type, GLboolean normalized, GLuint value);
     void glVertexAttribP1uiv(GLuint index, GLenum type, GLboolean normalized, const GLuint *value);
     void glVertexAttribP1ui(GLuint index, GLenum type, GLboolean normalized, GLuint value);
-    void glSecondaryColorP3uiv(GLenum type, const GLuint *color);
-    void glSecondaryColorP3ui(GLenum type, GLuint color);
-    void glColorP4uiv(GLenum type, const GLuint *color);
-    void glColorP4ui(GLenum type, GLuint color);
-    void glColorP3uiv(GLenum type, const GLuint *color);
-    void glColorP3ui(GLenum type, GLuint color);
-    void glNormalP3uiv(GLenum type, const GLuint *coords);
-    void glNormalP3ui(GLenum type, GLuint coords);
-    void glMultiTexCoordP4uiv(GLenum texture, GLenum type, const GLuint *coords);
-    void glMultiTexCoordP4ui(GLenum texture, GLenum type, GLuint coords);
-    void glMultiTexCoordP3uiv(GLenum texture, GLenum type, const GLuint *coords);
-    void glMultiTexCoordP3ui(GLenum texture, GLenum type, GLuint coords);
-    void glMultiTexCoordP2uiv(GLenum texture, GLenum type, const GLuint *coords);
-    void glMultiTexCoordP2ui(GLenum texture, GLenum type, GLuint coords);
-    void glMultiTexCoordP1uiv(GLenum texture, GLenum type, const GLuint *coords);
-    void glMultiTexCoordP1ui(GLenum texture, GLenum type, GLuint coords);
-    void glTexCoordP4uiv(GLenum type, const GLuint *coords);
-    void glTexCoordP4ui(GLenum type, GLuint coords);
-    void glTexCoordP3uiv(GLenum type, const GLuint *coords);
-    void glTexCoordP3ui(GLenum type, GLuint coords);
-    void glTexCoordP2uiv(GLenum type, const GLuint *coords);
-    void glTexCoordP2ui(GLenum type, GLuint coords);
-    void glTexCoordP1uiv(GLenum type, const GLuint *coords);
-    void glTexCoordP1ui(GLenum type, GLuint coords);
-    void glVertexP4uiv(GLenum type, const GLuint *value);
-    void glVertexP4ui(GLenum type, GLuint value);
-    void glVertexP3uiv(GLenum type, const GLuint *value);
-    void glVertexP3ui(GLenum type, GLuint value);
-    void glVertexP2uiv(GLenum type, const GLuint *value);
-    void glVertexP2ui(GLenum type, GLuint value);
+
     void glGetQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params);
     void glGetQueryObjecti64v(GLuint id, GLenum pname, GLint64 *params);
     void glQueryCounter(GLuint id, GLenum target);
@@ -790,18 +756,6 @@ inline void QOpenGLFunctions_4_1_Core::glCullFace(GLenum mode)
 
 
 // OpenGL 1.1 core functions
-inline void QOpenGLFunctions_4_1_Core::glIndexubv(const GLubyte *c)
-{
-    Q_UNUSED(c);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glIndexub(GLubyte c)
-{
-    Q_UNUSED(c);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
 inline GLboolean QOpenGLFunctions_4_1_Core::glIsTexture(GLuint texture)
 {
     return d_1_1_Core->IsTexture(texture);
@@ -855,13 +809,6 @@ inline void QOpenGLFunctions_4_1_Core::glCopyTexImage1D(GLenum target, GLint lev
 inline void QOpenGLFunctions_4_1_Core::glPolygonOffset(GLfloat factor, GLfloat units)
 {
     d_1_1_Core->PolygonOffset(factor, units);
-}
-
-inline void QOpenGLFunctions_4_1_Core::glGetPointerv(GLenum pname, GLvoid* *params)
-{
-    Q_UNUSED(pname);
-    Q_UNUSED(params);
-    QOPENGL_DEPRECATEDFUNCTION;
 }
 
 inline void QOpenGLFunctions_4_1_Core::glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
@@ -1929,224 +1876,6 @@ inline void QOpenGLFunctions_4_1_Core::glVertexAttribP1ui(GLuint index, GLenum t
     d_3_3_Core->VertexAttribP1ui(index, type, normalized, value);
 }
 
-inline void QOpenGLFunctions_4_1_Core::glSecondaryColorP3uiv(GLenum type, const GLuint *color)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(color);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glSecondaryColorP3ui(GLenum type, GLuint color)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(color);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glColorP4uiv(GLenum type, const GLuint *color)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(color);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glColorP4ui(GLenum type, GLuint color)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(color);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glColorP3uiv(GLenum type, const GLuint *color)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(color);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glColorP3ui(GLenum type, GLuint color)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(color);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glNormalP3uiv(GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glNormalP3ui(GLenum type, GLuint coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP4uiv(GLenum texture, GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP4ui(GLenum texture, GLenum type, GLuint coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP3uiv(GLenum texture, GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP3ui(GLenum texture, GLenum type, GLuint coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP2uiv(GLenum texture, GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP2ui(GLenum texture, GLenum type, GLuint coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP1uiv(GLenum texture, GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glMultiTexCoordP1ui(GLenum texture, GLenum type, GLuint coords)
-{
-    Q_UNUSED(texture);
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP4uiv(GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP4ui(GLenum type, GLuint coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP3uiv(GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP3ui(GLenum type, GLuint coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP2uiv(GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP2ui(GLenum type, GLuint coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP1uiv(GLenum type, const GLuint *coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glTexCoordP1ui(GLenum type, GLuint coords)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(coords);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glVertexP4uiv(GLenum type, const GLuint *value)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(value);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glVertexP4ui(GLenum type, GLuint value)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(value);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glVertexP3uiv(GLenum type, const GLuint *value)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(value);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glVertexP3ui(GLenum type, GLuint value)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(value);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glVertexP2uiv(GLenum type, const GLuint *value)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(value);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
-inline void QOpenGLFunctions_4_1_Core::glVertexP2ui(GLenum type, GLuint value)
-{
-    Q_UNUSED(type);
-    Q_UNUSED(value);
-    QOPENGL_DEPRECATEDFUNCTION;
-}
-
 inline void QOpenGLFunctions_4_1_Core::glGetQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params)
 {
     d_3_3_Core->GetQueryObjectui64v(id, pname, params);
@@ -2920,10 +2649,6 @@ inline void QOpenGLFunctions_4_1_Core::glReleaseShaderCompiler()
 {
     d_4_1_Core->ReleaseShaderCompiler();
 }
-
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_OPENGL && !QT_OPENGL_ES_2
 

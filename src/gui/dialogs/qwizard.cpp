@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -44,7 +44,7 @@
 #include <qvarlengtharray.h>
 #include <qwindow.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 
 #include <qplatform_nativeinterface.h>
 
@@ -148,24 +148,31 @@ static QString changed_signal(int which)
    switch (which) {
       case 0:
          retval = "toggled(bool)";
+         break;
 
       case 1:
          retval = "valueChanged(int)";
+         break;
 
       case 2:
          retval = "currentIndexChanged(int)";
+         break;
 
       case 3:
          retval = "dateTimeChanged(QDateTime)";
+         break;
 
       case 4:
          retval = "textChanged(QString)";
+         break;
 
       case 5:
          retval = "currentRowChanged(int)";
+         break;
 
       case 6:
          retval = "valueChanged(int)";
+         break;
    };
 
    static_assert(7 == NFallbackDefaultProperties, "Incorrect values");
@@ -304,6 +311,8 @@ class QWizardHeader : public QWidget
 
    inline QWizardHeader(RulerType ruler, QWidget *parent = nullptr)
       : QWidget(parent) {
+
+      (void) ruler;
       setFixedHeight(2);
    }
 
@@ -664,7 +673,7 @@ class QWizardPrivate : public QDialogPrivate
    void _q_handleFieldObjectDestroyed(QObject *);
    void setStyle(QStyle *style);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    static QPixmap findDefaultBackgroundPixmap();
 #endif
 
@@ -1526,7 +1535,7 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
       }
       pushButton->setObjectName(object_name_for_button(which));
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       pushButton->setAutoDefault(false);
 #endif
 
@@ -1895,7 +1904,7 @@ void QWizardPrivate::setStyle(QStyle *style)
    }
 }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
 QPixmap QWizardPrivate::findDefaultBackgroundPixmap()
 {
@@ -2549,7 +2558,7 @@ QPixmap QWizard::pixmap(WizardPixmap which) const
    Q_D(const QWizard);
    Q_ASSERT(uint(which) < NPixmaps);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (which == BackgroundPixmap && d->defaultPixmaps[BackgroundPixmap].isNull()) {
       d->defaultPixmaps[BackgroundPixmap] = d->findDefaultBackgroundPixmap();
    }

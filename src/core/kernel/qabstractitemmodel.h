@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,11 +24,11 @@
 #ifndef QABSTRACTITEMMODEL_H
 #define QABSTRACTITEMMODEL_H
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qobject.h>
+#include <qvariant.h>
+#include <qobject.h>
 #include <qmultihash.h>
 #include <qvector.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 #include <qcontainerfwd.h>
 
 class QAbstractItemModel;
@@ -442,25 +442,27 @@ inline QModelIndex QAbstractItemModel::createIndex(int arow, int acolumn, quintp
 
 class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
 {
-   CORE_CS_OBJECT(QAbstractTableModel)
+    CORE_CS_OBJECT(QAbstractTableModel)
 
  public:
-   explicit QAbstractTableModel(QObject *parent = nullptr);
-   ~QAbstractTableModel();
+    explicit QAbstractTableModel(QObject *parent = nullptr);
+    ~QAbstractTableModel();
 
-   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     using QObject::parent;
+
  protected:
-   QAbstractTableModel(QAbstractItemModelPrivate &dd, QObject *parent);
+    QAbstractTableModel(QAbstractItemModelPrivate &dd, QObject *parent);
 
  private:
-   Q_DISABLE_COPY(QAbstractTableModel)
-   QModelIndex parent(const QModelIndex &child) const override;
-   bool hasChildren(const QModelIndex &parent) const override;
+    Q_DISABLE_COPY(QAbstractTableModel)
+
+    QModelIndex parent(const QModelIndex &child) const override;
+    bool hasChildren(const QModelIndex &parent) const override;
 };
 
 class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
@@ -468,27 +470,25 @@ class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
    CORE_CS_OBJECT(QAbstractListModel)
 
  public:
-   explicit QAbstractListModel(QObject *parent = nullptr);
-   ~QAbstractListModel();
+    explicit QAbstractListModel(QObject *parent = nullptr);
+    ~QAbstractListModel();
 
-   QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
 
-   QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
-
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
-
-   Qt::ItemFlags flags(const QModelIndex &index) const override;
-   using QObject::parent;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    using QObject::parent;
 
  protected:
-   QAbstractListModel(QAbstractItemModelPrivate &dd, QObject *parent);
+    QAbstractListModel(QAbstractItemModelPrivate &dd, QObject *parent);
 
  private:
-   Q_DISABLE_COPY(QAbstractListModel)
-   QModelIndex parent(const QModelIndex &child) const override;
-   int columnCount(const QModelIndex &parent) const override;
-   bool hasChildren(const QModelIndex &parent) const override;
+    Q_DISABLE_COPY(QAbstractListModel)
+    QModelIndex parent(const QModelIndex &child) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    bool hasChildren(const QModelIndex &parent) const override;
 };
 
 // inline implementations

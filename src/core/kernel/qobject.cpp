@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -355,7 +355,7 @@ bool QObject::connect(const QObject *sender, const QString8 &signalMethod, const
    return QObject::connect(sender, signalMethod, this, slotMethod, type);
 }
 
-void QObject::connectNotify(const QMetaMethod &signalMethod) const
+void QObject::connectNotify(const QMetaMethod &) const
 {
    // no code is suppose to appear here
 }
@@ -575,7 +575,7 @@ bool QObject::disconnect(const QObject *receiver, const QString8 &slotMethod) co
    return QObject::disconnect(this, QString8(), receiver, slotMethod);
 }
 
-void QObject::disconnectNotify(const QMetaMethod &signalMethod) const
+void QObject::disconnectNotify(const QMetaMethod &) const
 {
    // no code is suppose to appear here
 }
@@ -798,7 +798,7 @@ void QObject::moveToThread(QThread *targetThread)
                "Can not move to target thread (%p)\n", currentData->thread.load(),
                threadData->thread.load(), targetData ? targetData->thread.load() : nullptr);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 
       qWarning("Multiple libraries might be loaded in the same process. Verify all plugins are "
                "linked with the correct binaries. Export DYLD_PRINT_LIBRARIES=1 and verify only one set of "

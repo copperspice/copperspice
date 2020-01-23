@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -24,10 +24,10 @@
 #include <qelapsedtimer.h>
 #include <qcoreapplication.h>
 
-#include "qcore_unix_p.h"
-#include "qtimerinfo_unix_p.h"
+#include <qcore_unix_p.h>
+#include <qtimerinfo_unix_p.h>
 
-#include "qabstracteventdispatcher_p.h"
+#include <qabstracteventdispatcher_p.h>
 
 #ifdef QTIMERINFO_DEBUG
 #  include <QDebug>
@@ -45,7 +45,7 @@ Q_CORE_EXPORT bool qt_disable_lowpriority_timers=false;
 
 QTimerInfoList::QTimerInfoList()
 {
-#if (_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_MAC) && !defined(Q_OS_NACL)
+#if (_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_DARWIN) && !defined(Q_OS_NACL)
     if (!QElapsedTimer::isMonotonic()) {
         // not using monotonic timers, initialize the timeChanged() machinery
         previousTime = qt_gettime();
@@ -72,7 +72,7 @@ timespec QTimerInfoList::updateCurrentTime()
     return (currentTime = qt_gettime());
 }
 
-#if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_MAC) && !defined(Q_OS_INTEGRITY)) || defined(QT_BOOTSTRAPPED)
+#if (_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_DARWIN)
 
 timespec qAbsTimespec(const timespec &t)
 {
@@ -87,19 +87,14 @@ timespec qAbsTimespec(const timespec &t)
     return normalizedTimespec(tmp);
 }
 
-/*
-  Returns \c true if the real time clock has changed by more than 10%
-  relative to the processor time since the last time this function was
-  called. This presumably means that the system time has been changed.
 
-  If /a delta is nonzero, delta is set to our best guess at how much the system clock was changed.
-*/
 bool QTimerInfoList::timeChanged(timespec *delta)
 {
 #ifdef Q_OS_NACL
-    Q_UNUSED(delta)
+    (void) delta
     return false; // Calling "times" crashes.
 #endif
+
     struct tms unused;
     clock_t currentTicks = times(&unused);
 
@@ -111,8 +106,10 @@ bool QTimerInfoList::timeChanged(timespec *delta)
     elapsedTimeTicks.tv_nsec = (((elapsedTicks * 1000) / ticksPerSecond) % 1000) * 1000 * 1000;
 
     timespec dummy;
-    if (!delta)
+    if (! delta) {
         delta = &dummy;
+    }
+
     *delta = elapsedTime - elapsedTimeTicks;
 
     previousTicks = currentTicks;
@@ -147,7 +144,7 @@ void QTimerInfoList::repairTimersIfNeeded()
         timerRepair(delta);
 }
 
-#else // !(_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(QT_BOOTSTRAPPED)
+#else
 
 void QTimerInfoList::repairTimersIfNeeded()
 {

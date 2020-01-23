@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1077,6 +1077,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
    pendingDownloadDataCopy.clear();
 
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
+
    if (preMigrationDownloaded != Q_INT64_C(-1)) {
       totalSize = totalSize.toLongLong() + preMigrationDownloaded;
    }
@@ -1088,8 +1089,10 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
    bytesDownloaded += bytesWritten;
 
    emit q->readyRead();
+
    // emit readyRead before downloadProgress incase this will cause events to be
-   // processed and we get into a recursive call (as in QProgressDialog).
+   // processed and we get into a recursive call (as in QProgressDialog)
+
    if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
       downloadProgressSignalChoke.restart();
       emit q->downloadProgress(bytesDownloaded,
@@ -1876,7 +1879,6 @@ void QNetworkReplyHttpImplPrivate::_q_cacheLoadReadyRead()
    // Needs to be done where sendCacheContents() (?) of HTTP is emitting
    // metaDataChanged ?
 
-
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
 
    // emit readyRead before downloadProgress incase this will cause events to be
@@ -2129,6 +2131,7 @@ void QNetworkReplyHttpImplPrivate::finished()
    }
 
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
+
    if (preMigrationDownloaded != Q_INT64_C(-1)) {
       totalSize = totalSize.toLongLong() + preMigrationDownloaded;
    }
@@ -2140,7 +2143,7 @@ void QNetworkReplyHttpImplPrivate::finished()
             state == Working && errorCode != QNetworkReply::OperationCanceledError) {
          // only content with a known size will fail with a temporary network failure error
          if (!totalSize.isNull()) {
-            if (bytesDownloaded != totalSize) {
+            if (bytesDownloaded != totalSize.toLongLong()) {
                if (migrateBackend()) {
                   // either we are migrating or the request is finished/aborted
                   if (state == Reconnecting || state == WaitingForSession) {

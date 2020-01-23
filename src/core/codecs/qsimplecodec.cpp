@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -781,7 +781,7 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
 
    QByteArray *rmap = reverseMap.load();
 
-   if (!rmap) {
+   if (! rmap) {
       rmap = buildReverseMap(this->forwardIndex);
 
       if (!reverseMap.testAndSetRelease(0, rmap)) {
@@ -791,7 +791,7 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
    }
 
    const unsigned char *rmp = (const unsigned char *)rmap->constData();
-   int rmsize = (int) rmap->size();
+   uint rmsize = rmap->size();
 
    QByteArray retval;
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -584,17 +584,22 @@ bool QVistaHelper::handleWinEvent(MSG *message, long *result)
 
 void QVistaHelper::resizeEvent(QResizeEvent *event)
 {
+   (void) event;
+
    rtTop = QRect (0, 0, wizard->width(), frameSize());
    int height = captionSize() + topOffset();
 
    if (vistaState() == VistaBasic) {
       height -= titleBarSize();
    }
+
    rtTitle = QRect (0, frameSize(), wizard->width(), height);
 }
 
 void QVistaHelper::paintEvent(QPaintEvent *event)
 {
+   (void) event;
+
    QPainter painter(wizard);
    drawTitleBar(&painter);
 }
@@ -767,37 +772,39 @@ HWND QVistaHelper::wizardHWND() const
 bool QVistaHelper::drawTitleText(QPainter *painter, const QString &text, const QRect &rect, HDC hdc)
 {
    bool value = false;
+
    if (vistaState() == VistaAero) {
       const QRect rectDp = QRect(rect.topLeft() * QVistaHelper::m_devicePixelRatio,
             rect.size() * QVistaHelper::m_devicePixelRatio);
 
-      HWND handle = QApplicationPrivate::getHWNDForWidget(QApplication::desktop());
+      HWND handle   = QApplicationPrivate::getHWNDForWidget(QApplication::desktop());
       HANDLE hTheme = pOpenThemeData(handle, L"WINDOW");
 
       if (! hTheme) {
          return false;
       }
+
       // Set up a memory DC and bitmap that we'll draw into
       HDC dcMem;
       HBITMAP bmp;
-      BITMAPINFO dib = {{0}};
+      BITMAPINFO dib = { };
       dcMem = CreateCompatibleDC(hdc);
 
-      dib.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-      dib.bmiHeader.biWidth = rectDp.width();
-      dib.bmiHeader.biHeight = -rectDp.height();
-      dib.bmiHeader.biPlanes = 1;
-      dib.bmiHeader.biBitCount = 32;
+      dib.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
+      dib.bmiHeader.biWidth       = rectDp.width();
+      dib.bmiHeader.biHeight      = -rectDp.height();
+      dib.bmiHeader.biPlanes      = 1;
+      dib.bmiHeader.biBitCount    = 32;
       dib.bmiHeader.biCompression = BI_RGB;
 
       bmp = CreateDIBSection(hdc, &dib, DIB_RGB_COLORS, NULL, NULL, 0);
 
       // Set up the DC
       const LOGFONT captionLogFont = getCaptionLogFont(hTheme);
-      const HFONT hCaptionFont = CreateFontIndirect(&captionLogFont);
+      const HFONT hCaptionFont     = CreateFontIndirect(&captionLogFont);
 
       HBITMAP hOldBmp = (HBITMAP)SelectObject(dcMem, (HGDIOBJ) bmp);
-      HFONT hOldFont = (HFONT)SelectObject(dcMem, (HGDIOBJ) hCaptionFont);
+      HFONT hOldFont  = (HFONT)SelectObject(dcMem, (HGDIOBJ) hCaptionFont);
 
       // Draw the text
       WIZ_DTTOPTS dto;
@@ -835,7 +842,7 @@ bool QVistaHelper::drawBlackRect(const QRect &rect, HDC hdc)
             rect.size() * QVistaHelper::m_devicePixelRatio);
       HDC dcMem;
       HBITMAP bmp;
-      BITMAPINFO dib = {{0}};
+      BITMAPINFO dib = { };
       dcMem = CreateCompatibleDC(hdc);
 
       dib.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);

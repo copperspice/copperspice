@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -52,7 +52,7 @@ class FontHandle
  private:
    const DomFont *m_domFont;
 
-#if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    friend uint qHash(const FontHandle &);
 #endif
 };
@@ -74,7 +74,7 @@ class IconHandle
    int compare(const IconHandle &) const;
  private:
    const DomResourceIcon *m_domIcon;
-#if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    friend uint qHash(const IconHandle &);
 #endif
 };
@@ -97,7 +97,7 @@ class SizePolicyHandle
  private:
    const DomSizePolicy *m_domSizePolicy;
 
-#if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    friend uint qHash(const SizePolicyHandle &);
 #endif
 };
@@ -107,7 +107,7 @@ inline bool operator ==(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
    return f1.compare(f2) == 0;
 }
 
-#if !(defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3))
+#if !(defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3))
 inline bool operator  <(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
 {
    return f1.compare(f2) < 0;
@@ -312,7 +312,7 @@ struct WriteInitialization : public TreeWalker {
    // Map from font properties to  font variable name for reuse
    // Map from size policy to  variable for reuse
 
-#if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    typedef QHash<FontHandle, QString> FontPropertiesNameMap;
    typedef QHash<IconHandle, QString> IconPropertiesNameMap;
    typedef QHash<SizePolicyHandle, QString> SizePolicyNameMap;

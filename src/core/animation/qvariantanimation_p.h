@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,14 +25,12 @@
 #define QVariantAnimation_P_H
 
 #include <qvariantanimation.h>
-#include <QtCore/qeasingcurve.h>
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qvector.h>
+#include <qeasingcurve.h>
+#include <qvector.h>
+
 #include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
-
-QT_BEGIN_NAMESPACE
 
 class QVariantAnimationPrivate : public QAbstractAnimationPrivate
 {
@@ -50,7 +48,7 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
    QVariant currentValue;
    QVariant defaultStartEndValue;
 
-   //this is used to keep track of the KeyValue interval in which we currently are
+   // used to keep track of the KeyValue interval in which we currently are
    struct {
       QVariantAnimation::KeyValue start, end;
    } currentInterval;
@@ -85,8 +83,6 @@ inline QVariant _q_interpolateVariant(const T &from, const T &to, qreal progress
    return _q_interpolate(from, to, progress);
 }
 
-QT_END_NAMESPACE
+#endif // QT_NO_ANIMATION
 
-#endif //QT_NO_ANIMATION
-
-#endif //QANIMATION_P_H
+#endif

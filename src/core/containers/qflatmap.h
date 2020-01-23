@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -118,7 +118,7 @@ class QFlatMap
          return *this;
       }
 
-      iterator operator++(int n) {
+      iterator operator++(int) {
          return m_iter++;
       }
 
@@ -216,7 +216,7 @@ class QFlatMap
          return *this;
       }
 
-      const_iterator operator++(int n) {
+      const_iterator operator++(int) {
          return m_iter++;
       }
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -267,17 +267,6 @@ template <class T> QScriptValue QScriptEngine::scriptValueFromQMetaObject()
          newFunction(reinterpret_cast<FunctionWithArgSignature>(cptr), 0));
 }
 
-#ifdef QT_DEPRECATED
-template <class T>
-inline QT_DEPRECATED QScriptValue qScriptValueFromQMetaObject(QScriptEngine *engine,
-   T * /* dummy */ = 0 )
-{
-   return engine->scriptValueFromQMetaObject<T>();
-}
-#endif
-
-
-
 inline QScriptValue qScriptValueFromValue_helper(QScriptEngine *engine, int type, const void *ptr)
 {
    if (!engine) {
@@ -325,29 +314,16 @@ inline QVariant qscriptvalue_cast<QVariant>(const QScriptValue &value)
    return value.toVariant();
 }
 
-#ifdef QT_DEPRECATED
-template <typename T>
-inline QT_DEPRECATED T qScriptValueToValue(const QScriptValue &value)
-{
-   return qscriptvalue_cast<T>(value);
-}
-#endif
-
-inline void qScriptRegisterMetaType_helper(QScriptEngine *eng, int type,
-   QScriptEngine::MarshalFunction mf,
-   QScriptEngine::DemarshalFunction df,
-   const QScriptValue &prototype)
+inline void qScriptRegisterMetaType_helper(QScriptEngine *eng, int type, QScriptEngine::MarshalFunction mf,
+      QScriptEngine::DemarshalFunction df, const QScriptValue &prototype)
 {
    eng->registerCustomType(type, mf, df, prototype);
 }
 
 template<typename T>
-int qScriptRegisterMetaType(
-   QScriptEngine *eng,
-   QScriptValue (*toScriptValue)(QScriptEngine *, const T &t),
+int qScriptRegisterMetaType(QScriptEngine *eng, QScriptValue (*toScriptValue)(QScriptEngine *, const T &t),
    void (*fromScriptValue)(const QScriptValue &, T &t),
-   const QScriptValue &prototype = QScriptValue()
-      , T * /* dummy */ = 0  )
+   const QScriptValue &prototype = QScriptValue(), T * /* dummy */ = 0  )
 {
    const int id = qRegisterMetaType<T>(); // make sure it's registered
 

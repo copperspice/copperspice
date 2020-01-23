@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -48,7 +48,6 @@
 
 #endif
 
-#define QT_USE_NAMESPACE
 #define QT_BEGIN_NAMESPACE
 #define QT_END_NAMESPACE
 
@@ -163,10 +162,7 @@
 
 #if defined(Q_OS_DARWIN)
 
-// backward compatibility
-#  define Q_OS_MAC
-
-// ensure IOS is not defined at this time
+// ensure it is not defined right now
 #  undef Q_OS_IOS
 
 #endif
@@ -243,22 +239,19 @@
 // ******
 #if defined(__clang__)
 
-#  if ( __clang_major__  < 3) || ( __clang_major__ == 3 && __clang_minor__ < 4 )
-#    error "CopperSpice requires Clang 3.4 or greater"
+#  if ( __clang_major__ < 6)
+#    error "CopperSpice requires Clang 6 or newer"
 #  endif
 
 #  define Q_CC_CLANG
 #  define Q_CC_GNU
 #  define Q_C_CALLBACKS
 
-#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
+#  define Q_FUNC_INFO       __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
 #  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
-#  define Q_PACKED          __attribute__ ((__packed__))
-
-#  define Q_NO_PACKED_REFERENCE
 
 #  ifndef __ARM_EABI__
 #     define QT_NO_ARM_EABI
@@ -266,10 +259,10 @@
 
 
 #elif defined(__GNUC__)
-//  **
+//  ****
 
-#  if (__GNUC__ < 5) || (__GNUC__ == 5 && __GNUC_MINOR__ < 4)
-#    error "CopperSpice requires GCC 5.4 or greater"
+#  if (__GNUC__ < 7) || (__GNUC__ == 7 && __GNUC_MINOR__ < 3)
+#    error "CopperSpice requires GCC 7.3 or newer"
 #  endif
 
 #  define Q_CC_GNU
@@ -291,8 +284,6 @@
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 
 #  if (defined(Q_CC_GNU) || defined(Q_CC_INTEL))
-#    define Q_PACKED __attribute__ ((__packed__))
-#    define Q_NO_PACKED_REFERENCE
 
 #    ifndef __ARM_EABI__
 #      define QT_NO_ARM_EABI
@@ -301,10 +292,10 @@
 
 
 #elif defined(_MSC_VER)
-//  **
+//  ****
 
 #  if _MSC_VER < 1914
-#    error "CopperSpice requires Visual Studio 2017 Version 15.8 or greater"
+#    error "CopperSpice requires Visual Studio 2017 Version 15.8 or newer"
 #  endif
 
 #  define Q_CC_MSVC         (_MSC_VER)
@@ -316,7 +307,7 @@
 
 
 #elif defined(__PGI)
-//  **
+//  ****
 
 #  define Q_CC_PGI
 
@@ -327,26 +318,14 @@
 #  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
 
 
-#elif ! defined(Q_OS_HPUX) && (defined(__EDG) || defined(__EDG__))
+#elif defined(__EDG) || defined(__EDG__)
 //  **
 
-#  define Q_CC_EDG
-
 #  if defined(__COMO__)
-#    define Q_CC_COMEAU
 #    define Q_C_CALLBACKS
-
-#  elif defined(__KCC)
-#    define Q_CC_KAI
 
 #  elif defined(__INTEL_COMPILER)
 #    define Q_CC_INTEL
-
-#  elif defined(CENTERLINE_CLPP) || defined(OBJECTCENTER)
-#    define Q_CC_OC
-
-#  elif defined(sinix)
-#    define Q_CC_CDS
 
 #  elif defined(__sgi)
 #    define Q_CC_MIPS
@@ -360,11 +339,6 @@
 
 #  error "CopperSpice has not been tested with this Compiler"
 
-#endif
-
-#ifndef Q_PACKED
-#  define Q_PACKED
-#  undef Q_NO_PACKED_REFERENCE
 #endif
 
 #ifndef Q_LIKELY
@@ -396,24 +370,13 @@
 # define Q_DESTRUCTOR_FUNCTION(AFUNC)      Q_DESTRUCTOR_FUNCTION0(AFUNC)
 #endif
 
-
-// *****
-#ifndef Q_REQUIRED_RESULT
-#  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
-#    define Q_REQUIRED_RESULT              __attribute__ ((warn_unused_result))
-#  else
-#    define Q_REQUIRED_RESULT
-#  endif
-#endif
-
-
 // *****
 #if defined(_WIN32_X11_)
 #  define Q_WS_X11
 
 #elif defined(Q_OS_UNIX)
 
-#  if ! defined(Q_OS_MAC)
+#  if ! defined(Q_OS_DARWIN)
 #    define Q_WS_X11
 #  endif
 
@@ -468,21 +431,6 @@ using ulong     = unsigned long;
 #  define FALSE false
 #endif
 
-// warnings for deprecated classes or methods
-#if defined(QT_DEPRECATED_WARNINGS)
-
-#  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
-#    define QT_DEPRECATED       __attribute__ ((__deprecated__))
-#  else
-#    define QT_DEPRECATED
-#  endif
-
-#else
-#  define QT_DEPRECATED
-
-#endif
-
-
 #if defined(__i386__) || defined(_WIN32)
 #  if defined(Q_CC_GNU)
 
@@ -514,20 +462,18 @@ using ulong     = unsigned long;
 #  define QT_WIN_CALLBACK CALLBACK             QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #endif
 
-typedef int QNoImplicitBoolCast;
-
 #if defined(QT_ARCH_ARM) || defined(QT_ARCH_ARMV6) || defined(QT_ARCH_AVR32) ||  \
      defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A) || (defined(QT_ARCH_MIPS))
 
 #define QT_NO_FPU
 #endif
 
-// must match both files:  qmetatype.h & qglobal.h
+// keep these files in sync: qmetatype.h & qglobal.h
 #if defined(QT_COORD_TYPE)
-   typedef QT_COORD_TYPE  qreal;
+   using qreal = QT_COORD_TYPE;
 
 #else
-   typedef double         qreal;
+   using qreal = double;
 
 #endif
 
@@ -579,13 +525,13 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
    return qMax(min, qMin(max, val));
 }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 
 #  ifndef QMAC_QMENUBAR_NO_EVENT
 #    define QMAC_QMENUBAR_NO_EVENT
 #  endif
 
-// Implemented in qcore_mac_objc.mm
+// implemented in qcore_mac_objc.mm
 class Q_CORE_EXPORT QMacAutoReleasePool
 {
    public:
@@ -669,11 +615,13 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_12 = 0x000E,
       MV_10_13 = 0x000F,
       MV_10_14 = 0x0010,
+      MV_10_15 = 0x0011,
 
       MV_EL_CAPITAN   = MV_10_11,                // supported from here
       MV_SIERRA       = MV_10_12,
       MV_HIGH_SIERRA  = MV_10_13,
       MV_MOJAVE       = MV_10_14,
+      MV_CATALINA     = MV_10_15,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
@@ -691,12 +639,10 @@ class Q_CORE_EXPORT QSysInfo
    static QString machineHostName();
 };
 
-
 Q_CORE_EXPORT const char *qVersion();
 
 // avoid "unused parameter" warnings
 #define Q_UNUSED(x) (void)x;
-
 
 // Debugging and error handling
 #if ! defined(QT_NO_DEBUG) && ! defined(QT_DEBUG)
@@ -715,7 +661,6 @@ inline T *q_check_ptr(T *p)
    return p;
 }
 
-
 // * *
 template <typename T>
 class QAtomicPointer;
@@ -733,62 +678,61 @@ template <typename T>
 class QGlobalStaticDeleter
 {
  public:
-   QGlobalStatic<T> &globalStatic;
    QGlobalStaticDeleter(QGlobalStatic<T> &_globalStatic)
       : globalStatic(_globalStatic) {
    }
 
    inline ~QGlobalStaticDeleter() {
       delete globalStatic.pointer.load();
-      globalStatic.pointer.store(0);
+      globalStatic.pointer.store(nullptr);
       globalStatic.destroyed = true;
    }
+
+   QGlobalStatic<T> &globalStatic;
 };
 
-#define Q_GLOBAL_STATIC_INIT(TYPE, NAME)   \
-   static QGlobalStatic<TYPE> this_ ## NAME = { QAtomicPointer<TYPE>(0), false }
+#define Q_GLOBAL_STATIC(TYPE, NAME)                                              \
+   static TYPE *NAME()                                                           \
+   {                                                                             \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
+         TYPE *x = new TYPE;                                                     \
+         if (! staticVar.pointer.testAndSetOrdered(nullptr, x)) {                \
+            delete x;                                                            \
+         } else {                                                                \
+            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
+         }                                                                       \
+      }                                                                          \
+      return staticVar.pointer.load();                                           \
+   }                                                                             \
 
-#define Q_GLOBAL_STATIC(TYPE, NAME)                                       \
-   static TYPE *NAME()                                                    \
-   {                                                                      \
-   Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                               \
-   if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) { \
-       TYPE *x = new TYPE;                                                \
-       if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))             \
-      delete x;                                                           \
-       else                                                               \
-      static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_);       \
-   }                                                                      \
-   return this__StaticVar_.pointer.load();                                \
+#define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                              \
+   static TYPE *NAME()                                                           \
+   {                                                                             \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
+         TYPE *x = new TYPE ARGS;                                                \
+         if (! staticVar.pointer.testAndSetOrdered(nullptr, x))                  \
+            delete x;                                                            \
+         else                                                                    \
+            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
+      }                                                                          \
+      return staticVar.pointer.load();                                           \
    }
 
-#define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                       \
-   static TYPE *NAME()                                                    \
-   {                                                                      \
-   Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                               \
-   if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) { \
-       TYPE *x = new TYPE ARGS;                                           \
-       if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))             \
-      delete x;                                                           \
-       else                                                               \
-      static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_);       \
-   }                                                                      \
-   return this__StaticVar_.pointer.load();                                \
-   }
-
-#define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)         \
-   static TYPE *NAME()                                                    \
-   {                                                                      \
-   Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                               \
-   if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) { \
-       QScopedPointer<TYPE > x(new TYPE);                                 \
-       INITIALIZER;                                                       \
-       if (this__StaticVar_.pointer.testAndSetOrdered(0, x.data())) {     \
-      static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_);       \
-      x.take();                                                           \
-       }                                                                  \
-   }                                                                      \
-   return this__StaticVar_.pointer.load();                                \
+#define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)                \
+   static TYPE *NAME()                                                           \
+   {                                                                             \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
+         QScopedPointer<TYPE > x(new TYPE);                                      \
+         INITIALIZER;                                                            \
+         if (staticVar.pointer.testAndSetOrdered(nullptr, x.data())) {           \
+            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
+            x.take();                                                            \
+         }                                                                       \
+      }                                                                          \
+      return staticVar.pointer.load();                                           \
    }
 
 constexpr inline bool qFuzzyCompare(double p1, double p2)
@@ -812,7 +756,6 @@ constexpr inline bool qFuzzyIsNull(float f)
 {
    return qAbs(f) <= 0.00001f;
 }
-
 
 // tests a double for a null value. It does not check whether the
 // actual value is 0 or close to 0, but whether it is binary 0.
@@ -990,21 +933,23 @@ class Q_CORE_EXPORT QIncompatibleFlag
 
 inline QIncompatibleFlag::QIncompatibleFlag(int ai) : i(ai) {}
 
-
 #ifndef Q_NO_TYPESAFE_FLAGS
 
-template<typename Enum>
+template<typename E>
 class QFlags
 {
    public:
-      using enum_type = Enum;
+      using enum_type = E;
+      using int_type  = std::underlying_type_t<E>;
+      using uint_type = std::make_unsigned_t<int_type>;
+      using sint_type = std::make_signed_t<int_type>;
 
       constexpr inline QFlags(const QFlags &other)
          : i(other.i)
       {}
 
-      constexpr inline QFlags(Enum value)
-         : i(static_cast<int>(value))
+      constexpr inline QFlags(E value)
+         : i(static_cast<int_type>(value))
       {}
 
       constexpr inline QFlags()
@@ -1024,12 +969,12 @@ class QFlags
          return *this;
       }
 
-      inline QFlags &operator&=(int mask)  {
+      inline QFlags &operator&=(sint_type mask)  {
          i &= mask;
          return *this;
       }
 
-      inline QFlags &operator&=(uint mask) {
+      inline QFlags &operator&=(uint_type mask)  {
          i &= mask;
          return *this;
       }
@@ -1039,8 +984,8 @@ class QFlags
          return *this;
       }
 
-      inline QFlags &operator|=(Enum value)    {
-         i |= static_cast<int>(value);
+      inline QFlags &operator|=(E value)    {
+         i |= static_cast<int_type>(value);
          return *this;
       }
 
@@ -1049,58 +994,58 @@ class QFlags
          return *this;
       }
 
-      inline QFlags &operator^=(Enum value)    {
-         i ^= static_cast<int>(value);
+      inline QFlags &operator^=(E value)    {
+         i ^= static_cast<int_type>(value);
          return *this;
       }
 
-      constexpr  inline operator int() const {
+      constexpr inline operator int_type() const {
          return i;
       }
 
       constexpr inline QFlags operator|(QFlags other) const {
-         return QFlags(Enum(i | other.i));
+         return QFlags(E(i | other.i));
       }
 
-      constexpr inline QFlags operator|(Enum value) const {
-         return QFlags(Enum(i | static_cast<int>(value)));
+      constexpr inline QFlags operator|(E value) const {
+         return QFlags(E(i | static_cast<int_type>(value)));
       }
 
       constexpr inline QFlags operator^(QFlags other) const {
-         return QFlags(Enum(i ^ other.i));
+         return QFlags(E(i ^ other.i));
       }
 
-      constexpr inline QFlags operator^(Enum value) const {
-         return QFlags(Enum(i ^ static_cast<int>(value)));
+      constexpr inline QFlags operator^(E value) const {
+         return QFlags(E(i ^ static_cast<int_type>(value)));
       }
 
-      constexpr inline QFlags operator&(int mask) const {
-         return QFlags(Enum(i & mask));
+      constexpr inline QFlags operator&(sint_type mask) const {
+         return QFlags(E(i & mask));
       }
 
-      constexpr inline QFlags operator&(uint mask) const {
-         return QFlags(Enum(i & mask));
+      constexpr inline QFlags operator&(uint_type mask) const {
+         return QFlags(E(i & mask));
       }
 
-      constexpr inline QFlags operator&(Enum value) const {
-         return QFlags(Enum(i & static_cast<int>(value)));
+      constexpr inline QFlags operator&(E value) const {
+         return QFlags(E(i & static_cast<int_type>(value)));
       }
 
       constexpr inline QFlags operator~() const {
-         return QFlags(Enum(~i));
+         return QFlags(E(~i));
       }
 
       constexpr inline bool operator!() const {
          return !i;
       }
 
-      inline bool testFlag(Enum value) const {
-         int tmp = static_cast<int>(value);
+      inline bool testFlag(E value) const {
+         int_type tmp = static_cast<int_type>(value);
          return (i & tmp) == tmp && (tmp != 0 || i == tmp);
       }
 
    private:
-      int i;
+      int_type i;
 };
 
 

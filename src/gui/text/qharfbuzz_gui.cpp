@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -311,7 +311,7 @@ static inline hb_font_t *internal_hb_font_create(QFontEngine *fe)
 
    hb_font_set_funcs(font, cs_get_font_funcs(), (void *)fe, NULL);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    hb_font_set_scale(font, QFixed(x_ppem).value(),  QFixed(y_ppem).value());
 #else
    hb_font_set_scale(font, QFixed(x_ppem).value(), -QFixed(y_ppem).value());

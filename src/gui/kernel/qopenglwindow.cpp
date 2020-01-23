@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -336,7 +336,7 @@ extern Q_GUI_EXPORT QImage qt_gl_read_framebuffer(const QSize &size, bool alpha_
 
 QImage QOpenGLWindow::grabFramebuffer()
 {
-   if (!isValid()) {
+   if (! isValid()) {
       return QImage();
    }
 
@@ -350,6 +350,8 @@ void QOpenGLWindow::initializeGL()
 
 void QOpenGLWindow::resizeGL(int w, int h)
 {
+   (void) w;
+   (void) h;
 }
 
 void QOpenGLWindow::paintGL()
@@ -366,12 +368,17 @@ void QOpenGLWindow::paintOverGL()
 
 void QOpenGLWindow::paintEvent(QPaintEvent *event)
 {
+   (void) event;
+
    paintGL();
 }
 
 void QOpenGLWindow::resizeEvent(QResizeEvent *event)
 {
+   (void) event;
+
    Q_D(QOpenGLWindow);
+
    d->initialize();
    resizeGL(width(), height());
 }

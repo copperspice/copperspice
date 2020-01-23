@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -63,6 +63,7 @@ void QSqlQueryModelPrivate::prefetch(int limit)
       q->beginInsertRows(QModelIndex(), bottom.row() + 1, newBottom.row());
       bottom = newBottom;
       q->endInsertRows();
+
    } else {
       bottom = newBottom;
    }
@@ -83,6 +84,7 @@ int QSqlQueryModelPrivate::columnInQuery(int modelColumn) const
    if (modelColumn < 0 || modelColumn >= rec.count() || !rec.isGenerated(modelColumn) || modelColumn >= colOffsets.size()) {
       return -1;
    }
+
    return modelColumn - colOffsets[modelColumn];
 }
 
@@ -100,41 +102,17 @@ QSqlQueryModel::~QSqlQueryModel()
 {
 }
 
-/*!
-    \since 4.1
-
-    Fetches more rows from a database.
-    This only affects databases that don't report back the size of a query
-    (see QSqlDriver::hasFeature()).
-
-    To force fetching of the entire result set, you can use the following:
-
-    \snippet doc/src/snippets/code/src_sql_models_qsqlquerymodel.cpp 0
-
-    \a parent should always be an invalid QModelIndex.
-
-    \sa canFetchMore()
-*/
 void QSqlQueryModel::fetchMore(const QModelIndex &parent)
 {
    Q_D(QSqlQueryModel);
+
    if (parent.isValid()) {
       return;
    }
+
    d->prefetch(qMax(d->bottom.row(), 0) + QSQL_PREFETCH);
 }
 
-/*!
-    \since 4.1
-
-    Returns true if it is possible to read more rows from the database.
-    This only affects databases that don't report back the size of a query
-    (see QSqlDriver::hasFeature()).
-
-    \a parent should always be an invalid QModelIndex.
-
-    \sa fetchMore()
- */
 bool QSqlQueryModel::canFetchMore(const QModelIndex &parent) const
 {
    Q_D(const QSqlQueryModel);
@@ -144,38 +122,47 @@ bool QSqlQueryModel::canFetchMore(const QModelIndex &parent) const
 void QSqlQueryModel::beginInsertRows(const QModelIndex &parent, int first, int last)
 {
    Q_D(QSqlQueryModel);
-   if (!d->nestedResetLevel) {
+
+   if (! d->nestedResetLevel) {
       QAbstractTableModel::beginInsertRows(parent, first, last);
    }
 }
+
 void QSqlQueryModel::endInsertRows()
 {
    Q_D(QSqlQueryModel);
+
    if (!d->nestedResetLevel) {
       QAbstractTableModel::endInsertRows();
    }
 }
+
 void QSqlQueryModel::beginRemoveRows(const QModelIndex &parent, int first, int last)
 {
    Q_D(QSqlQueryModel);
-   if (!d->nestedResetLevel) {
+
+   if (! d->nestedResetLevel) {
       QAbstractTableModel::beginRemoveRows(parent, first, last);
    }
 }
+
 void QSqlQueryModel::endRemoveRows()
 {
    Q_D(QSqlQueryModel);
-   if (!d->nestedResetLevel) {
+
+   if (! d->nestedResetLevel) {
       QAbstractTableModel::endRemoveRows();
    }
 }
 void QSqlQueryModel::beginInsertColumns(const QModelIndex &parent, int first, int last)
 {
    Q_D(QSqlQueryModel);
+
    if (!d->nestedResetLevel) {
       QAbstractTableModel::beginInsertColumns(parent, first, last);
    }
 }
+
 void QSqlQueryModel::endInsertColumns()
 {
    Q_D(QSqlQueryModel);
@@ -190,6 +177,7 @@ void QSqlQueryModel::beginRemoveColumns(const QModelIndex &parent, int first, in
       QAbstractTableModel::beginRemoveColumns(parent, first, last);
    }
 }
+
 void QSqlQueryModel::endRemoveColumns()
 {
    Q_D(QSqlQueryModel);
@@ -197,6 +185,7 @@ void QSqlQueryModel::endRemoveColumns()
       QAbstractTableModel::endRemoveColumns();
    }
 }
+
 void QSqlQueryModel::beginResetModel()
 {
    Q_D(QSqlQueryModel);
@@ -205,6 +194,7 @@ void QSqlQueryModel::beginResetModel()
    }
    ++d->nestedResetLevel;
 }
+
 void QSqlQueryModel::endResetModel()
 {
    Q_D(QSqlQueryModel);
@@ -214,18 +204,6 @@ void QSqlQueryModel::endResetModel()
    }
 }
 
-/*! \fn int QSqlQueryModel::rowCount(const QModelIndex &parent) const
-    \since 4.1
-
-    If the database supports returning the size of a query
-    (see QSqlDriver::hasFeature()), the number of rows of the current
-    query is returned. Otherwise, returns the number of rows
-    currently cached on the client.
-
-    \a parent should always be an invalid QModelIndex.
-
-    \sa canFetchMore(), QSqlDriver::hasFeature()
- */
 int QSqlQueryModel::rowCount(const QModelIndex &index) const
 {
    Q_D(const QSqlQueryModel);
@@ -270,10 +248,6 @@ QVariant QSqlQueryModel::data(const QModelIndex &item, int role) const
    return d->query.value(dItem.column());
 }
 
-/*!
-    Returns the header data for the given \a role in the \a section
-    of the header with the specified \a orientation.
-*/
 QVariant QSqlQueryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QSqlQueryModel);
@@ -292,31 +266,11 @@ QVariant QSqlQueryModel::headerData(int section, Qt::Orientation orientation, in
    return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-/*!
-    This virtual function is called whenever the query changes. The
-    default implementation does nothing.
-
-    query() returns the new query.
-
-    \sa query(), setQuery()
- */
 void QSqlQueryModel::queryChange()
 {
    // do nothing
 }
 
-/*!
-    Resets the model and sets the data provider to be the given \a
-    query. Note that the query must be active and must not be
-    isForwardOnly().
-
-    lastError() can be used to retrieve verbose information if there
-    was an error setting the query.
-
-    \note Calling setQuery() will remove any inserted columns.
-
-    \sa query(), QSqlQuery::isActive(), QSqlQuery::setForwardOnly(), lastError()
-*/
 void QSqlQueryModel::setQuery(const QSqlQuery &query)
 {
    Q_D(QSqlQueryModel);
@@ -364,28 +318,11 @@ void QSqlQueryModel::setQuery(const QSqlQuery &query)
    queryChange();
 }
 
-/*! \overload
-
-    Executes the query \a query for the given database connection \a
-    db. If no database (or an invalid database) is specified, the
-    default connection is used.
-
-    lastError() can be used to retrieve verbose information if there
-    was an error setting the query.
-
-    Example:
-    \snippet doc/src/snippets/code/src_sql_models_qsqlquerymodel.cpp 1
-
-    \sa query(), queryChange(), lastError()
-*/
 void QSqlQueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
    setQuery(QSqlQuery(query, db));
 }
 
-/*!
-    Clears the model and releases any acquired resource.
-*/
 void QSqlQueryModel::clear()
 {
    Q_D(QSqlQueryModel);
@@ -400,20 +337,6 @@ void QSqlQueryModel::clear()
    endResetModel();
 }
 
-/*!
-    Sets the caption for a horizontal header for the specified \a role to
-    \a value. This is useful if the model is used to
-    display data in a view (e.g., QTableView).
-
-    Returns true if \a orientation is Qt::Horizontal and
-    the \a section refers to a valid section; otherwise returns
-    false.
-
-    Note that this function cannot be used to modify values in the
-    database since the model is read-only.
-
-    \sa data()
- */
 bool QSqlQueryModel::setHeaderData(int section, Qt::Orientation orientation,
    const QVariant &value, int role)
 {
@@ -430,51 +353,25 @@ bool QSqlQueryModel::setHeaderData(int section, Qt::Orientation orientation,
    return true;
 }
 
-/*!
-    Returns the QSqlQuery associated with this model.
-
-    \sa setQuery()
-*/
 QSqlQuery QSqlQueryModel::query() const
 {
    Q_D(const QSqlQueryModel);
    return d->query;
 }
 
-/*!
-    Returns information about the last error that occurred on the
-    database.
-
-    \sa query()
-*/
 QSqlError QSqlQueryModel::lastError() const
 {
    Q_D(const QSqlQueryModel);
    return d->error;
 }
 
-/*!
-   Protected function which allows derived classes to set the value of
-   the last error that occurred on the database to \a error.
-
-   \sa lastError()
-*/
 void QSqlQueryModel::setLastError(const QSqlError &error)
 {
    Q_D(QSqlQueryModel);
    d->error = error;
 }
 
-/*!
-    Returns the record containing information about the fields of the
-    current query. If \a row is the index of a valid row, the record
-    will be populated with values from that row.
 
-    If the model is not initialized, an empty record will be
-    returned.
-
-    \sa QSqlRecord::isEmpty()
-*/
 QSqlRecord QSqlQueryModel::record(int row) const
 {
    Q_D(const QSqlQueryModel);

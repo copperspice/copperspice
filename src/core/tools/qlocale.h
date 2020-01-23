@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,20 +25,9 @@
 #define QLOCALE_H
 
 #include <qvariant.h>
-#include <qshareddata.h>
-
-// can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
-#include <qstring8.h>
-#include <qstringview.h>
 
 class QLocale;
 class QLocalePrivate;
-
-class QDataStream;
-class QDate;
-class QDateTime;
-class QTime;
-class QVariant;
 class QTextStream;
 class QTextStreamPrivate;
 
@@ -47,12 +36,6 @@ Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed = 0);
 class Q_CORE_EXPORT QLocale
 {
    CORE_CS_GADGET(QLocale)
-
-   friend class QByteArray;
-   friend class QIntValidator;
-   friend class QDoubleValidatorPrivate;
-   friend class QTextStream;
-   friend class QTextStreamPrivate;
 
  public:
    // GENERATED PART STARTS HERE
@@ -905,7 +888,7 @@ class Q_CORE_EXPORT QLocale
    QDateTime toDateTime(const QString &string, const QString &format) const;
 #endif
 
-   // ### Qt5/We need to return QString since unicode data contains several characters for these fields.
+   // ### Qt5 need to return QString since unicode data contains several characters for these fields.
    QChar decimalPoint() const;
    QChar groupSeparator() const;
    QChar percent() const;
@@ -976,6 +959,11 @@ class Q_CORE_EXPORT QLocale
 
    friend class QLocalePrivate;
    friend Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed);
+   friend class QByteArray;
+   friend class QIntValidator;
+   friend class QDoubleValidatorPrivate;
+   friend class QTextStream;
+   friend class QTextStreamPrivate;
 };
 
 Q_DECLARE_TYPEINFO(QLocale, Q_MOVABLE_TYPE);

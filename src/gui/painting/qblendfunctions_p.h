@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -406,36 +406,54 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
                u += dudx;
                v += dvdx;
                ++line;
+
+               [[fallthrough]];
+
             case 6:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                      (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
+
+               [[fallthrough]];
+
             case 5:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                      (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
+
+               [[fallthrough]];
+
             case 4:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                      (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
+
+               [[fallthrough]];
+
             case 3:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                      (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
+
+               [[fallthrough]];
+
             case 2:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                      (v >> 16) * sbpl)[u >> 16]);
                u += dudx;
                v += dvdx;
                ++line;
+
+               [[fallthrough]];
+
             case 1:
                blender.write(line, reinterpret_cast<const SrcT *>(reinterpret_cast<const uchar *>(srcPixels) +
                      (v >> 16) * sbpl)[u >> 16]);

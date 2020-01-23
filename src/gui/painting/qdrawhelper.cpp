@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -4170,11 +4170,14 @@ static void blend_color_argb(int count, const QSpan *spans, void *userData)
       // inline for performance
       while (count--) {
          uint *target = ((uint *)data->rasterBuffer->scanLine(spans->y)) + spans->x;
+
          if (spans->coverage == 255) {
-            QT_MEMFILL_UINT(target, spans->len, color);
+            qt_memfill<quint32>(target, color, spans->len);
+
          } else {
             uint c = BYTE_MUL(color, spans->coverage);
             int ialpha = 255 - spans->coverage;
+
             for (int i = 0; i < spans->len; ++i) {
                target[i] = c + BYTE_MUL(target[i], ialpha);
             }
@@ -4228,6 +4231,7 @@ static void blend_color_rgb16(int count, const QSpan *spans, void *userData)
        from qt_gradient_quint16 with minimal overhead.
     */
    QPainter::CompositionMode mode = data->rasterBuffer->compositionMode;
+
    if (mode == QPainter::CompositionMode_SourceOver && data->solid.color.isOpaque()) {
       mode = QPainter::CompositionMode_Source;
    }
@@ -4235,14 +4239,19 @@ static void blend_color_rgb16(int count, const QSpan *spans, void *userData)
    if (mode == QPainter::CompositionMode_Source) {
       // inline for performance
       ushort c = data->solid.color.toRgb16();
+
       while (count--) {
          ushort *target = ((ushort *)data->rasterBuffer->scanLine(spans->y)) + spans->x;
+
          if (spans->coverage == 255) {
-            QT_MEMFILL_USHORT(target, spans->len, c);
+            qt_memfill<quint16>(target, c, spans->len);
+
          } else {
             ushort color = BYTE_MUL_RGB16(c, spans->coverage);
-            int ialpha = 255 - spans->coverage;
+            int ialpha   = 255 - spans->coverage;
+
             const ushort *end = target + spans->len;
+
             while (target < end) {
                *target = color + BYTE_MUL_RGB16(*target, ialpha);
                ++target;
@@ -6647,20 +6656,34 @@ inline void qt_memfill_template(T *dest, T color, int count)
       case 0:
          do {
             *dest++ = color;
+            [[fallthrough]];
+
          case 7:
             *dest++ = color;
+            [[fallthrough]];
+
          case 6:
             *dest++ = color;
+            [[fallthrough]];
+
          case 5:
             *dest++ = color;
+            [[fallthrough]];
+
          case 4:
             *dest++ = color;
+            [[fallthrough]];
+
          case 3:
             *dest++ = color;
+            [[fallthrough]];
+
          case 2:
             *dest++ = color;
+            [[fallthrough]];
          case 1:
             *dest++ = color;
+
          } while (--n > 0);
    }
 }

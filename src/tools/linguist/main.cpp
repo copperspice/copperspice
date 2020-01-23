@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -36,14 +36,12 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QSplashScreen>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <QtCore/QUrl>
 #include <QtGui/QFileOpenEvent>
 #endif
 
-QT_USE_NAMESPACE
-
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 class ApplicationEventFilter : public QObject
 {
    Q_OBJECT
@@ -89,7 +87,7 @@ int main(int argc, char **argv)
    QApplication app(argc, argv);
    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    ApplicationEventFilter eventFilter;
    app.installEventFilter(&eventFilter);
 #endif
@@ -146,7 +144,7 @@ int main(int argc, char **argv)
 
    MainWindow mw;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    eventFilter.setMainWindow(&mw);
 #endif
 

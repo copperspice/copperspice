@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -35,7 +35,7 @@
 #include <qcoreapplication_p.h>
 #include <qplatformdefs.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #  include <qcore_mac_p.h>
 #endif
 
@@ -89,8 +89,6 @@ inline void QLibraryStore::cleanup()
    if (! data) {
       return;
    }
-
-   auto it = data->libraryMap.begin();
 
    for (auto lib : data->libraryMap) {
 
@@ -200,8 +198,8 @@ inline void QLibraryStore::releaseLibrary(QLibraryHandle *lib)
 }
 
 QLibraryHandle::QLibraryHandle(const QString &canonicalFileName, const QString &version, QLibrary::LoadHints loadHints)
-   : pHnd(0), fileName(canonicalFileName), fullVersion(version),
-     libraryRefCount(0), libraryUnloadCount(0), pluginState(MightBeAPlugin)
+   : pluginState(MightBeAPlugin), pHnd(0), fileName(canonicalFileName), fullVersion(version),
+     libraryRefCount(0), libraryUnloadCount(0)
 {
    loadHintsInt.store(loadHints);
 
@@ -420,7 +418,7 @@ void QLibraryHandle::updatePluginState()
 
    bool success = false;
 
-#if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
+#if defined(Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
    if (fileName.endsWith(".debug")) {
 
       // do not load a file which ends in .debug, these are the debug symbols from the libraries

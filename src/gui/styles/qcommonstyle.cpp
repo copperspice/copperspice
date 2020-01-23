@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -4911,7 +4911,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          ret = int(QStyleHelper::dpiScaled(13.));
          break;
       case PM_MessageBoxIconSize:
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          if (QApplication::desktopSettingsAware()) {
             ret = 64; // No DPI scaling, it's handled elsewhere.
          } else
@@ -6145,7 +6145,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
       return icon;
    }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    if (QApplication::desktopSettingsAware()) {
 
       switch (standardIcon) {
@@ -6220,7 +6220,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
             break;
       }
    }
-#endif // Q_OS_MAC
+#endif // Q_OS_DARWIN
 
    switch (standardIcon) {
 

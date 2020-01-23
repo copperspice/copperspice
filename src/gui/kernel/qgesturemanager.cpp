@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -36,14 +36,14 @@
 #include <qapplication_p.h>
 #include <qwidgetwindow_p.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qmacgesturerecognizer_p.h>
 #endif
 
 #ifndef QT_NO_GESTURES
 
 Q_DECLARE_METATYPE(Qt::GestureState);
-#if !  defined(Q_OS_MAC)
+#if !  defined(Q_OS_DARWIN)
 static inline int panTouchPoints()
 {
    // Override by environment variable for testing.
@@ -72,7 +72,7 @@ QGestureManager::QGestureManager(QObject *parent)
 {
    // emerald - qRegisterMetaType<Qt::GestureState>();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    registerGestureRecognizer(new QMacSwipeGestureRecognizer);
    registerGestureRecognizer(new QMacPinchGestureRecognizer);
    registerGestureRecognizer(new QMacPanGestureRecognizer);

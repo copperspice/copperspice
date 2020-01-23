@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -334,7 +334,7 @@ void QGridLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *
    int r = rightMargin;
    int b = bottomMargin;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    int leftMost = INT_MAX;
    int topMost = INT_MAX;
    int rightMost = 0;

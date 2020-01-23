@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1260,7 +1260,7 @@ QGLTemporaryContext::QGLTemporaryContext(bool, QWidget *)
    if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
       // On desktop, request latest released version
       QSurfaceFormat format;
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
       // OS X is limited to OpenGL 3.2 Core Profile at present
       // so set that here. If we use compatibility profile it
       // only reports 2.x contexts.

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -43,7 +43,7 @@
 #include <algorithm>
 
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #include <Carbon/Carbon.h>
 
@@ -645,7 +645,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
 
       if (gmodifs->isEmpty()) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          const bool dontSwap = qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta);
          if (dontSwap) {
             *gmodifs << QModifKeyName(Qt::META, QChar(kCommandUnicode));
@@ -695,7 +695,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
 
    QString sl = accel;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    for (int i = 0; i < modifs.size(); ++i) {
       const QModifKeyName &mkf = modifs.at(i);
       if (sl.contains(mkf.name)) {
@@ -756,7 +756,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
    int fnum = 0;
    if (accel.length() == 1) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       int qtKey = qtkeyForMacSymbol(accel[0]);
 
       if (qtKey != -1) {
@@ -831,7 +831,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
       return s;
    }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    if (nativeText) {
       // On Mac OS X the order (by default) is Meta, Alt, Shift, Control.
       // If the AA_MacDontSwapCtrlAndMeta is enabled, then the order
@@ -892,7 +892,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
 
    QString p = keyName(key, format);
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    if (nativeText) {
       s += p;
    } else
@@ -919,7 +919,7 @@ QString QKeySequencePrivate::keyName(int key, QKeySequence::SequenceFormat forma
    } else if (key) {
       int i = 0;
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
       if (nativeText) {
          QChar ch = qt_macSymbolForQtKey(key);
          if (!ch.isNull()) {
@@ -932,7 +932,7 @@ QString QKeySequencePrivate::keyName(int key, QKeySequence::SequenceFormat forma
 
       {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       NonSymbol:
 #endif
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -39,6 +39,7 @@
 QPersistentModelIndexData *QPersistentModelIndexData::create(const QModelIndex &index)
 {
    Q_ASSERT(index.isValid());          // we will _never_ insert an invalid index in the list
+
    QPersistentModelIndexData *d = 0;
    QAbstractItemModel *model = const_cast<QAbstractItemModel *>(index.model());
 
@@ -54,6 +55,7 @@ QPersistentModelIndexData *QPersistentModelIndexData::create(const QModelIndex &
    }
 
    Q_ASSERT(d);
+
    return d;
 }
 
@@ -70,6 +72,7 @@ void QPersistentModelIndexData::destroy(QPersistentModelIndexData *data)
       Q_ASSERT(p);
       p->removePersistentIndexData(data);
    }
+
    delete data;
 }
 
@@ -103,14 +106,6 @@ QPersistentModelIndex::~QPersistentModelIndex()
    }
 }
 
-/*!
-  Returns true if this persistent model index is equal to the \a other
-  persistent model index; otherwise returns false.
-
-  All values in the persistent model index are used when comparing
-  with another persistent model index.
-*/
-
 bool QPersistentModelIndex::operator==(const QPersistentModelIndex &other) const
 {
    if (d && other.d) {
@@ -118,16 +113,6 @@ bool QPersistentModelIndex::operator==(const QPersistentModelIndex &other) const
    }
    return d == other.d;
 }
-
-/*!
-    \since 4.1
-
-    Returns true if this persistent model index is smaller than the \a other
-    persistent model index; otherwise returns false.
-
-    All values in the persistent model index are used when comparing
-    with another persistent model index.
-*/
 
 bool QPersistentModelIndex::operator<(const QPersistentModelIndex &other) const
 {
@@ -137,19 +122,6 @@ bool QPersistentModelIndex::operator<(const QPersistentModelIndex &other) const
 
    return d < other.d;
 }
-
-/*!
-    \fn bool QPersistentModelIndex::operator!=(const QPersistentModelIndex &other) const
-    \since 4.2
-
-    Returns true if this persistent model index is not equal to the \a
-    other persistent model index; otherwise returns false.
-*/
-
-/*!
-    Sets the persistent model index to refer to the same item in a model
-    as the \a other persistent model index.
-*/
 
 QPersistentModelIndex &QPersistentModelIndex::operator=(const QPersistentModelIndex &other)
 {
@@ -165,13 +137,9 @@ QPersistentModelIndex &QPersistentModelIndex::operator=(const QPersistentModelIn
    if (d) {
       d->ref.ref();
    }
+
    return *this;
 }
-
-/*!
-    Sets the persistent model index to refer to the same item in a model
-    as the \a other model index.
-*/
 
 QPersistentModelIndex &QPersistentModelIndex::operator=(const QModelIndex &other)
 {
@@ -191,12 +159,6 @@ QPersistentModelIndex &QPersistentModelIndex::operator=(const QModelIndex &other
    return *this;
 }
 
-/*!
-  \fn QPersistentModelIndex::operator const QModelIndex&() const
-
-  Cast operator that returns a const QModelIndex&.
-*/
-
 QPersistentModelIndex::operator const QModelIndex &() const
 {
    static const QModelIndex invalid;
@@ -206,16 +168,6 @@ QPersistentModelIndex::operator const QModelIndex &() const
    return invalid;
 }
 
-/*!
-    \fn bool QPersistentModelIndex::operator==(const QModelIndex &other) const
-
-    Returns true if this persistent model index refers to the same location as
-    the \a other model index; otherwise returns false.
-
-    All values in the persistent model index are used when comparing with
-    another model index.
-*/
-
 bool QPersistentModelIndex::operator==(const QModelIndex &other) const
 {
    if (d) {
@@ -223,13 +175,6 @@ bool QPersistentModelIndex::operator==(const QModelIndex &other) const
    }
    return !other.isValid();
 }
-
-/*!
-    \fn bool QPersistentModelIndex::operator!=(const QModelIndex &other) const
-
-    Returns true if this persistent model index does not refer to the same
-    location as the \a other model index; otherwise returns false.
-*/
 
 bool QPersistentModelIndex::operator!=(const QModelIndex &other) const
 {
@@ -239,12 +184,6 @@ bool QPersistentModelIndex::operator!=(const QModelIndex &other) const
    return other.isValid();
 }
 
-/*!
-    \fn int QPersistentModelIndex::row() const
-
-    Returns the row this persistent model index refers to.
-*/
-
 int QPersistentModelIndex::row() const
 {
    if (d) {
@@ -252,12 +191,6 @@ int QPersistentModelIndex::row() const
    }
    return -1;
 }
-
-/*!
-    \fn int QPersistentModelIndex::column() const
-
-    Returns the column this persistent model index refers to.
-*/
 
 int QPersistentModelIndex::column() const
 {
@@ -267,15 +200,6 @@ int QPersistentModelIndex::column() const
    return -1;
 }
 
-/*!
-    \fn void *QPersistentModelIndex::internalPointer() const
-
-    \internal
-
-    Returns a \c{void} \c{*} pointer used by the model to associate the index with
-    the internal data structure.
-*/
-
 void *QPersistentModelIndex::internalPointer() const
 {
    if (d) {
@@ -283,15 +207,6 @@ void *QPersistentModelIndex::internalPointer() const
    }
    return 0;
 }
-
-/*!
-    \fn void *QPersistentModelIndex::internalId() const
-
-    \internal
-
-    Returns a \c{qint64} used by the model to associate the index with
-    the internal data structure.
-*/
 
 quintptr QPersistentModelIndex::internalId() const
 {
@@ -301,7 +216,6 @@ quintptr QPersistentModelIndex::internalId() const
 
    return 0;
 }
-
 
 QModelIndex QPersistentModelIndex::parent() const
 {
@@ -320,7 +234,6 @@ QModelIndex QPersistentModelIndex::sibling(int row, int column) const
    return QModelIndex();
 }
 
-
 QModelIndex QPersistentModelIndex::child(int row, int column) const
 {
    if (d) {
@@ -330,12 +243,6 @@ QModelIndex QPersistentModelIndex::child(int row, int column) const
    return QModelIndex();
 }
 
-/*!
-    Returns the data for the given \a role for the item referred to by the
-    index.
-
-    \sa Qt::ItemDataRole, QAbstractItemModel::setData()
-*/
 QVariant QPersistentModelIndex::data(int role) const
 {
    if (d) {
@@ -354,9 +261,6 @@ Qt::ItemFlags QPersistentModelIndex::flags() const
    return 0;
 }
 
-/*!
-    Returns the model that the index belongs to.
-*/
 const QAbstractItemModel *QPersistentModelIndex::model() const
 {
    if (d) {
@@ -791,9 +695,10 @@ void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
    }
 }
 
-void QAbstractItemModelPrivate::columnsAboutToBeInserted(const QModelIndex &parent,
-      int first, int last)
+void QAbstractItemModelPrivate::columnsAboutToBeInserted(const QModelIndex &parent, int first, int last)
 {
+   (void) last;
+
    Q_Q(QAbstractItemModel);
 
    QVector<QPersistentModelIndexData *> persistent_moved;
@@ -978,21 +883,12 @@ QMap<int, QVariant> QAbstractItemModel::itemData(const QModelIndex &index) const
    return roles;
 }
 
-/*!
-    Sets the \a role data for the item at \a index to \a value.
-
-    Returns true if successful; otherwise returns false.
-
-    The dataChanged() signal should be emitted if the data was successfully
-    set.
-
-    The base class implementation returns false. This function and data() must
-    be reimplemented for editable models.
-
-    \sa Qt::ItemDataRole, data(), itemData()
-*/
 bool QAbstractItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+   (void) index;
+   (void) value;
+   (void) role;
+
    return false;
 }
 
@@ -1033,17 +929,22 @@ QMimeData *QAbstractItemModel::mimeData(const QModelIndexList &indexes) const
 
    encodeData(indexes, stream);
    data->setData(format, encoded);
+
    return data;
 }
 
 bool QAbstractItemModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
             int row, int column, const QModelIndex &parent) const
 {
+   (void) row;
+   (void) column;
+   (void) parent;
 
     if (! (action & supportedDropActions()))
         return false;
 
     const QStringList modelTypes = mimeTypes();
+
     for (int i = 0; i < modelTypes.count(); ++i) {
         if (data->hasFormat(modelTypes.at(i)))
             return true;
@@ -1056,9 +957,10 @@ bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
                   int row, int column, const QModelIndex &parent)
 {
    // check if the action is supported
-   if (!data || !(action == Qt::CopyAction || action == Qt::MoveAction)) {
+   if (! data || !(action == Qt::CopyAction || action == Qt::MoveAction)) {
       return false;
    }
+
    // check if the format is supported
    QStringList types = mimeTypes();
    if (types.isEmpty()) {
@@ -1069,12 +971,15 @@ bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
    if (! data->hasFormat(format)) {
       return false;
    }
+
    if (row > rowCount(parent)) {
       row = rowCount(parent);
    }
+
    if (row == -1) {
       row = rowCount(parent);
    }
+
    if (column == -1) {
       column = 0;
    }
@@ -1085,7 +990,6 @@ bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
 
    return decodeData(row, column, parent, stream);
 }
-
 
 Qt::DropActions QAbstractItemModel::supportedDropActions() const
 {
@@ -1164,6 +1068,8 @@ Qt::ItemFlags QAbstractItemModel::flags(const QModelIndex &index) const
 
 void QAbstractItemModel::sort(int column, Qt::SortOrder order)
 {
+   (void) column;
+   (void) order;
 
    // do nothing
 }
@@ -1317,20 +1223,14 @@ bool QAbstractItemModel::submit()
    return true;
 }
 
-/*!
-    Lets the model know that it should discard cached information. This
-    function is typically used for row editing.
-
-    \sa submit()
-*/
-
 void QAbstractItemModel::revert()
 {
 }
 
 QVariant QAbstractItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-   Q_UNUSED(orientation);
+   (void) orientation;
+
    if (role == Qt::DisplayRole) {
       return section + 1;
    }
@@ -1339,13 +1239,14 @@ QVariant QAbstractItemModel::headerData(int section, Qt::Orientation orientation
 
 bool QAbstractItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
+   (void) section;
+   (void) orientation;
+   (void) value;
+   (void) role;
 
    return false;
 }
 
-/*!
-  \internal
-*/
 void QAbstractItemModel::encodeData(const QModelIndexList &indexes, QDataStream &stream) const
 {
    QModelIndexList::const_iterator it = indexes.begin();
@@ -1590,26 +1491,17 @@ void QAbstractItemModel::endMoveRows()
 
 }
 
-
 void QAbstractItemModel::beginInsertColumns(const QModelIndex &parent, int first, int last)
 {
    Q_ASSERT(first >= 0);
    Q_ASSERT(last >= first);
+
    Q_D(QAbstractItemModel);
    d->changes.push(QAbstractItemModelPrivate::Change(parent, first, last));
    emit columnsAboutToBeInserted(parent, first, last);
    d->columnsAboutToBeInserted(parent, first, last);
 }
 
-/*!
-    Ends a column insertion operation.
-
-    When reimplementing insertColumns() in a subclass, you must call this
-    function \e after inserting data into the model's underlying data
-    store.
-
-    \sa beginInsertColumns()
-*/
 void QAbstractItemModel::endInsertColumns()
 {
    Q_D(QAbstractItemModel);
@@ -1618,34 +1510,6 @@ void QAbstractItemModel::endInsertColumns()
    emit columnsInserted(change.parent, change.first, change.last);
 }
 
-/*!
-    Begins a column removal operation.
-
-    When reimplementing removeColumns() in a subclass, you must call this
-    function \e before removing data from the model's underlying data store.
-
-    The \a parent index corresponds to the parent from which the new columns
-    are removed; \a first and \a last are the column numbers of the first and
-    last columns to be removed.
-
-    \table 80%
-    \row
-        \o  \inlineimage modelview-begin-remove-columns.png Removing columns
-        \o  Specify the first and last column numbers for the span of columns
-            you want to remove from an item in a model.
-
-            For example, as shown in the diagram, we remove the three columns
-            from column 4 to column 6, so \a first is 4 and \a last is 6:
-
-            \snippet doc/src/snippets/code/src_corelib_kernel_qabstractitemmodel.cpp 5
-    \endtable
-
-    \note This function emits the columnsAboutToBeRemoved() signal which
-    connected views (or proxies) must handle before the data is removed.
-    Otherwise, the views may end up in an invalid state.
-
-    \sa endRemoveColumns()
-*/
 void QAbstractItemModel::beginRemoveColumns(const QModelIndex &parent, int first, int last)
 {
    Q_ASSERT(first >= 0);
@@ -1656,14 +1520,6 @@ void QAbstractItemModel::beginRemoveColumns(const QModelIndex &parent, int first
    d->columnsAboutToBeRemoved(parent, first, last);
 }
 
-/*!
-    Ends a column removal operation.
-
-    When reimplementing removeColumns() in a subclass, you must call this
-    function \e after removing data from the model's underlying data store.
-
-    \sa beginRemoveColumns()
-*/
 void QAbstractItemModel::endRemoveColumns()
 {
    Q_D(QAbstractItemModel);
@@ -1672,46 +1528,6 @@ void QAbstractItemModel::endRemoveColumns()
    emit columnsRemoved(change.parent, change.first, change.last);
 }
 
-/*!
-    Begins a column move operation.
-
-    When reimplementing a subclass, this method simplifies moving
-    entities in your model. This method is responsible for moving
-    persistent indexes in the model, which you would otherwise be
-    required to do yourself. Using beginMoveRows and endMoveRows
-    is an alternative to emitting layoutAboutToBeChanged and
-    layoutChanged directly along with changePersistentIndexes.
-    layoutAboutToBeChanged is emitted by this method for compatibility
-    reasons.
-
-    The \a sourceParent index corresponds to the parent from which the
-    columns are moved; \a sourceFirst and \a sourceLast are the first and last
-    column numbers of the columns to be moved. The \a destinationParent index
-    corresponds to the parent into which those columns are moved. The \a
-    destinationChild is the column to which the columns will be moved.  That
-    is, the index at column \a sourceFirst in \a sourceParent will become
-    column \a destinationChild in \a destinationParent, followed by all other
-    columns up to \a sourceLast.
-
-    However, when moving columns down in the same parent (\a sourceParent
-    and \a destinationParent are equal), the columnss will be placed before the
-    \a destinationChild index. That is, if you wish to move columns 0 and 1 so
-    they will become columns 1 and 2, \a destinationChild should be 3. In this
-    case, the new index for the source column \c i (which is between
-    \a sourceFirst and \a sourceLast) is equal to
-    \c {(destinationChild-sourceLast-1+i)}.
-
-    Note that if \a sourceParent and \a destinationParent are the same,
-    you must ensure that the \a destinationChild is not within the range
-    of \a sourceFirst and \a sourceLast + 1.  You must also ensure that you
-    do not attempt to move a column to one of its own children or ancestors.
-    This method returns false if either condition is true, in which case you
-    should abort your move operation.
-
-    \sa endMoveColumns()
-
-    \since 4.6
-*/
 bool QAbstractItemModel::beginMoveColumns(const QModelIndex &sourceParent, int sourceFirst, int sourceLast,
       const QModelIndex &destinationParent, int destinationChild)
 {
@@ -1860,13 +1676,11 @@ QModelIndexList QAbstractItemModel::persistentIndexList() const
 QAbstractTableModel::QAbstractTableModel(QObject *parent)
    : QAbstractItemModel(parent)
 {
-
 }
 
 QAbstractTableModel::QAbstractTableModel(QAbstractItemModelPrivate &dd, QObject *parent)
    : QAbstractItemModel(dd, parent)
 {
-
 }
 
 QAbstractTableModel::~QAbstractTableModel()
@@ -1892,15 +1706,19 @@ bool QAbstractTableModel::hasChildren(const QModelIndex &parent) const
    if (parent.model() == this || ! parent.isValid()) {
       return rowCount(parent) > 0 && columnCount(parent) > 0;
    }
+
    return false;
 }
 
 Qt::ItemFlags QAbstractTableModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags f = QAbstractItemModel::flags(index);
-    if (index.isValid())
-        f |= Qt::ItemNeverHasChildren;
-    return f;
+   Qt::ItemFlags f = QAbstractItemModel::flags(index);
+
+   if (index.isValid()) {
+     f |= Qt::ItemNeverHasChildren;
+   }
+
+   return f;
 }
 
 QAbstractListModel::QAbstractListModel(QObject *parent)
@@ -1934,12 +1752,13 @@ QModelIndex QAbstractListModel::sibling(int row, int column, const QModelIndex &
 
 Qt::ItemFlags QAbstractListModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags f = QAbstractItemModel::flags(index);
-    if (index.isValid())
-        f |= Qt::ItemNeverHasChildren;
-    return f;
-}
+   Qt::ItemFlags f = QAbstractItemModel::flags(index);
+   if (index.isValid()) {
+      f |= Qt::ItemNeverHasChildren;
+   }
 
+   return f;
+}
 
 int QAbstractListModel::columnCount(const QModelIndex &parent) const
 {
@@ -2074,5 +1893,3 @@ void QAbstractItemModelPrivate::Persistent::insertMultiAtEnd(const QModelIndex &
       ++it;
    }
 }
-
-

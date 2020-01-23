@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -431,12 +431,12 @@ inline void QUrlPrivate::appendAuthority(QString &appendTo, QUrl::FormattingOpti
 
 inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptions options, Section appendingTo) const
 {
-   if (Q_LIKELY(!hasUserInfo())) {
+   if (! hasUserInfo()) {
       return;
    }
 
-   const ushort *userNameActions;
-   const ushort *passwordActions;
+   const ushort *userNameActions = nullptr;
+   const ushort *passwordActions = nullptr;
 
    if (options & QUrl::EncodeDelimiters) {
       userNameActions = userNameInUrl;
@@ -460,7 +460,7 @@ inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptio
             break;
 
          default:
-            // ca not happen
+            // can not happen
             break;
       }
    }

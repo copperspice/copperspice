@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -455,7 +455,7 @@ QIconEngine *QPlatformTheme::createIconEngine(const QString &iconName) const
    return new QIconLoaderEngine(iconName);
 }
 
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_DARWIN)
 static inline int maybeSwapShortcut(int shortcut)
 {
    if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
@@ -514,11 +514,12 @@ QList<QKeySequence> QPlatformTheme::keyBindings(QKeySequence::StandardKey key) c
       }
 
       uint shortcut =
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_DARWIN)
          maybeSwapShortcut(it->shortcut);
 #else
          it->shortcut;
 #endif
+
       if (it->priority > 0) {
          list.prepend(QKeySequence(shortcut));
       } else {
@@ -528,13 +529,6 @@ QList<QKeySequence> QPlatformTheme::keyBindings(QKeySequence::StandardKey key) c
 
    return list;
 }
-
-/*!
-   Returns the text of a standard \a button.
-
-  \since 5.3
-  \sa QPlatformDialogHelper::StandardButton
- */
 
 QString QPlatformTheme::standardButtonText(int button) const
 {

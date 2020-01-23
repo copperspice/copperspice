@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -267,21 +267,36 @@ bool QNetmaskAddress::setAddress(const QHostAddress &address)
          // the rest always falls through
          case 254:
             ++netmask;
+            [[fallthrough]];
+
          case 252:
             ++netmask;
+            [[fallthrough]];
+
          case 248:
             ++netmask;
+            [[fallthrough]];
+
          case 240:
             ++netmask;
+            [[fallthrough]];
+
          case 224:
             ++netmask;
+            [[fallthrough]];
+
          case 192:
             ++netmask;
+            [[fallthrough]];
+
          case 128:
             ++netmask;
+            [[fallthrough]];
+
          case 0:
             break;
       }
+
       break;
    }
 
@@ -292,12 +307,14 @@ bool QNetmaskAddress::setAddress(const QHostAddress &address)
    }
 
    length = netmask;
+
    return true;
 }
 
 static void clearBits(quint8 *where, int start, int end)
 {
    Q_ASSERT(end == 32 || end == 128);
+
    if (start == end) {
       return;
    }

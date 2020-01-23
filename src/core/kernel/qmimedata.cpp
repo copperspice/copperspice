@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -128,22 +128,23 @@ QVariant QMimeDataPrivate::retrieveTypedData(const QString &format, QVariant::Ty
          }
 #endif
 
-         case QVariant::Color: {
-            QVariant newData = data;
-            newData.convert(QVariant::Color);
-            return newData;
-         }
+         case QVariant::Color:
+            {
+               QVariant newData = data;
+               newData.convert(QVariant::Color);
+               return newData;
+            }
+            [[fallthrough]];
 
-         case QVariant::List: {
+         case QVariant::List:
             if (format != "text/uri-list") {
                break;
             }
-
-            // fall through
-         }
+            [[fallthrough]];
 
          case QVariant::Url: {
             QByteArray ba = data.toByteArray();
+
             // Qt 3.x will send text/uri-list with a trailing
             // null-terminator (that is *not* sent for any other text mime-type, so chop it off
 

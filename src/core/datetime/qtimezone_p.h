@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -28,7 +28,7 @@
 #include <qlocale_p.h>
 #include <qvector.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #ifdef __OBJC__
 @class NSTimeZone;
 #else
@@ -203,7 +203,7 @@ class  QUtcTimeZonePrivate final : public QTimeZonePrivate
 };
 
 
-#if defined Q_OS_UNIX && !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if defined Q_OS_UNIX && !defined Q_OS_DARWIN && !defined Q_OS_ANDROID
 struct QTzTransitionTime {
    qint64 atMSecsSinceEpoch;
    quint8 ruleIndex;
@@ -282,7 +282,7 @@ class QTzTimeZonePrivate final : public QTimeZonePrivate
 };
 #endif // Q_OS_UNIX
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 class QMacTimeZonePrivate final : public QTimeZonePrivate
 {
  public:
@@ -323,7 +323,7 @@ class QMacTimeZonePrivate final : public QTimeZonePrivate
 
    NSTimeZone *m_nstz;
 };
-#endif // Q_OS_MAC
+#endif
 
 #ifdef Q_OS_WIN
 class QWinTimeZonePrivate final : public QTimeZonePrivate

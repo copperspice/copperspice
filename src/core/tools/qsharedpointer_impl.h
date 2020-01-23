@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -499,7 +499,6 @@ template <class T> class QSharedPointer
       qSwap(this->value, other.value);
    }
 
-
 #if ! defined (CS_DOXYPRESS)
    template <class X>
    friend class QSharedPointer;
@@ -511,7 +510,6 @@ template <class T> class QSharedPointer
    friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr,
          const QSharedPointer<Y> &src);
 #endif
-
 
    inline void ref() const {
       d->weakref.ref();
@@ -687,9 +685,6 @@ class QWeakPointer
 #endif
 
  private:
-   template <class X> friend class QSharedPointer;
-   template <class X> friend class QPointer;
-
    template <class X>
    inline QWeakPointer &assign(X *ptr) {
       return *this = QWeakPointer<X>(ptr, true);
@@ -715,6 +710,12 @@ class QWeakPointer
 
    Data *d;
    T *value;
+
+   template <class X>
+   friend class QSharedPointer;
+
+   template <class X>
+   friend class QPointer;
 };
 
 template <class T>
@@ -738,14 +739,15 @@ class QEnableSharedFromThis
    }
 
  private:
-   template <class X> friend class QSharedPointer;
-
    template <class X>
    void initializeFromSharedPointer(const QSharedPointer<X> &ptr) const {
       weakPointer = ptr;
    }
 
    mutable QWeakPointer<T> weakPointer;
+
+   template <class X>
+   friend class QSharedPointer;
 };
 
 //
@@ -972,8 +974,5 @@ qSharedPointerFromVariant(const QVariant &variant)
 
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QWeakPointer<T>, Q_MOVABLE_TYPE);
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedPointer<T>, Q_MOVABLE_TYPE);
-
-QT_END_NAMESPACE
-
 #endif
 

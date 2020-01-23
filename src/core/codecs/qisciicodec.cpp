@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,8 +25,6 @@
 #include <qlist.h>
 
 #ifndef QT_NO_CODECS
-
-QT_BEGIN_NAMESPACE
 
 struct Codecs {
    const char name[10];
@@ -187,9 +185,8 @@ QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *stat
 
          } else if (iscii) {
             const uchar *pair = uni_to_iscii_pairs + 2 * iscii;
-            char32_t tmp = (static_cast<char32_t>(pair[0]) - 0xD800) << 10 | static_cast<char32_t>(pair[1]) - 0xDC00;
+            char32_t tmp = (static_cast<char32_t>(pair[0]) - 0xD800) << 10 | (static_cast<char32_t>(pair[1]) - 0xDC00);
             retval.append(tmp);
-
 
          } else {
             retval.append(replacement);
@@ -273,6 +270,5 @@ QString QIsciiCodec::convertToUnicode(const char *chars, int len, ConverterState
    return result;
 }
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_CODECS
+

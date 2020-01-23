@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -869,13 +869,13 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
 
 QByteArray QIODevice::readLine(qint64 maxSize)
 {
-   Q_D(QIODevice);
-
    QByteArray result;
 
    CHECK_MAXLEN(readLine, result);
 
 #if defined QIODEVICE_DEBUG
+   Q_D(QIODevice);
+
    printf("%p QIODevice::readLine(%d), d->pos = %d, d->buffer.size() = %d\n",
           this, int(maxSize), int(d->pos), int(d->buffer.size()));
 #endif

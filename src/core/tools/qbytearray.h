@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -388,7 +388,7 @@ class Q_CORE_EXPORT QByteArray
    static QByteArray fromHex(const QByteArray &hexEncoded);
    static QByteArray fromPercentEncoding(const QByteArray &pctEncoded, char percent = '%');
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     static QByteArray fromCFData(CFDataRef data);
     static QByteArray fromRawCFData(CFDataRef data);
     CFDataRef toCFData() const;
@@ -404,12 +404,11 @@ class Q_CORE_EXPORT QByteArray
 #endif
 
  private:
-   operator QNoImplicitBoolCast() const;
-
-   Data *d;
    void reallocData(uint alloc, Data::AllocationOptions options);
    void expand(int i);
    QByteArray nulTerminated() const;
+
+   Data *d;
 
    friend class QByteRef;
    friend Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
@@ -492,22 +491,13 @@ inline void QByteArray::squeeze()
    if (d->ref.isShared() || uint(d->size) + 1u < d->alloc) {
       reallocData(uint(d->size) + 1u, d->detachFlags() & ~Data::CapacityReserved);
    } else {
-      // cannot set unconditionally, since d could be shared_null or
-      // otherwise static.
+      // cannot set unconditionally, since d could be shared_null or static
       d->capacityReserved = false;
    }
 }
 
 class Q_CORE_EXPORT QByteRef
 {
-   QByteArray &a;
-   int i;
-
-   inline QByteRef(QByteArray &array, int idx): a(array), i(idx) {
-   }
-
-   friend class QByteArray;
-
  public:
 
    inline operator char() const {
@@ -558,6 +548,16 @@ class Q_CORE_EXPORT QByteRef
    inline bool operator<=(char c) const {
       return a.d->data()[i] <= c;
    }
+
+ private:
+   inline QByteRef(QByteArray &array, int idx): a(array), i(idx) {
+   }
+
+   QByteArray &a;
+   int i;
+
+   friend class QByteArray;
+
 };
 
 inline QByteRef QByteArray::operator[](int i)
@@ -847,4 +847,4 @@ inline QByteArray qUncompress(const QByteArray &data)
 Q_DECLARE_TYPEINFO(QByteArray, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QByteArray)
 
-#endif // QBYTEARRAY_H
+#endif

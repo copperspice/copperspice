@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,7 +25,7 @@
 #include <qplatformdefs.h>
 #include <qcoreapplication_p.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #  include <qeventdispatcher_cf_p.h>
 #  include <qeventdispatcher_unix_p.h>
 #else
@@ -48,11 +48,7 @@
 #include <sys/sysctl.h>
 #endif
 
-#ifdef Q_OS_HPUX
-#include <sys/pstat.h>
-#endif
-
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 # ifdef qDebug
 #   define old_qDebug qDebug
 #   undef qDebug
@@ -90,7 +86,7 @@ enum { ThreadPriorityResetFlag = 0x80000000 };
 #endif
 
 #ifdef HAVE_TLS
-static __thread QThreadData *currentThreadData = 0;
+static __thread QThreadData *currentThreadData = nullptr;
 #endif
 
 static pthread_once_t current_thread_data_once = PTHREAD_ONCE_INIT;
@@ -115,7 +111,7 @@ static void destroy_current_thread_data(void *p)
    }
    data->deref();
 
-   // ... but we must reset it to zero before returning so we aren't
+   // reset it to zero before returning so we are not
    // called again (POSIX allows implementations to call destructor
    // functions repeatedly until all values are zero)
    pthread_setspecific(current_thread_data_key, 0);
@@ -200,16 +196,18 @@ QThreadData *QThreadData::current(bool createIfNecessary)
 {
    QThreadData *data = get_thread_data();
 
-   if (!data && createIfNecessary) {
+   if (! data && createIfNecessary) {
       data = new QThreadData;
-      QT_TRY {
+
+      try {
          set_thread_data(data);
          data->thread = new QAdoptedThread(data);
-      } QT_CATCH(...) {
+
+      } catch (...) {
          clear_thread_data();
          data->deref();
          data = 0;
-         QT_RETHROW;
+         throw;
       }
 
       data->deref();
@@ -244,7 +242,7 @@ extern "C" {
 
 void QThreadPrivate::createEventDispatcher(QThreadData *data)
 {
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     bool ok = false;
     int value = qgetenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION").toInt(&ok);
 
@@ -266,14 +264,14 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
    data->eventDispatcher.load()->startingUp();
 }
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#if defined(Q_OS_LINUX) || defined(Q_OS_DARWIN)
 
 static void setCurrentThreadName(pthread_t threadId, const QString &name)
 {
 #if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
    prctl(PR_SET_NAME, (unsigned long)name.constData(), 0, 0, 0);
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    pthread_setname_np(name.constData());
 
 #endif
@@ -308,7 +306,7 @@ void *QThreadPrivate::start(void *arg)
    else
       createEventDispatcher(data);
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#if defined(Q_OS_LINUX) || defined(Q_OS_DARWIN)
    // sets the name of the current thread.
    QString objectName = thr->objectName();
 

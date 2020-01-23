@@ -1,7 +1,8 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2017-2020 Barbara Geller
+* Copyright (c) 2017-2020 Ansel Sermersheim
+
 * Copyright (c) 1998-2009 John Maddock
 *
 * This file is part of CsString.
@@ -414,6 +415,7 @@ bool basic_regex_parser<charT, traits>::parse_extended()
 
             return true;
          }
+         [[fallthrough]];
 
       default:
          result = parse_literal();
@@ -734,35 +736,36 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
 
       case regex_constants::escape_type_not_class:
          negate = true;
+         [[fallthrough]];
 
       case regex_constants::escape_type_class: {
 
-      escape_type_class_jump:
-         using m_type = typename traits::char_class_type;
+         escape_type_class_jump:
+            using m_type = typename traits::char_class_type;
 
-         m_type m = this->m_traits.lookup_classname(m_position, m_position + 1);
+            m_type m = this->m_traits.lookup_classname(m_position, m_position + 1);
 
-         if (m != 0) {
-            basic_char_set<charT, traits> char_set;
+            if (m != 0) {
+               basic_char_set<charT, traits> char_set;
 
-            if (negate) {
-               char_set.negate();
+               if (negate) {
+                  char_set.negate();
+               }
+
+               char_set.add_class(m);
+
+               if (0 == this->append_set(char_set)) {
+                  fail(regex_constants::error_ctype, m_position - m_base);
+                  return false;
+               }
+               ++m_position;
+               return true;
             }
 
-            char_set.add_class(m);
-
-            if (0 == this->append_set(char_set)) {
-               fail(regex_constants::error_ctype, m_position - m_base);
-               return false;
-            }
-            ++m_position;
-            return true;
+            // not a class, just a regular unknown escape:
+            this->append_literal(unescape_character());
+            break;
          }
-
-         // not a class, just a regular unknown escape:
-         this->append_literal(unescape_character());
-         break;
-      }
 
       case regex_constants::syntax_digit:
          return parse_backref();
@@ -820,6 +823,7 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
 
       case regex_constants::escape_type_not_property:
          negate = true;
+         [[fallthrough]];
 
       case regex_constants::escape_type_property: {
          ++m_position;
@@ -997,10 +1001,12 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
             return true;
          }
          goto escape_type_class_jump;
+
       case regex_constants::escape_type_control_v:
          if (0 == (this->flags() & (regbase::main_option_type | regbase::no_perl_ex))) {
             goto escape_type_class_jump;
          }
+         [[fallthrough]];
 
       default:
          this->append_literal(unescape_character());
@@ -2143,6 +2149,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
 
       case regex_constants::syntax_or:
          m_mark_reset = m_mark_count;
+         [[fallthrough]];
 
       case regex_constants::syntax_colon:
          // a non-capturing mark:

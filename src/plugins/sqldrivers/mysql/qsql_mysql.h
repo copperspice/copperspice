@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -46,9 +46,6 @@ class QSqlRecordInfo;
 
 class QMYSQLResult : public QSqlResult
 {
-   friend class QMYSQLDriver;
-   friend class QMYSQLResultPrivate;
-
  public:
    explicit QMYSQLResult(const QMYSQLDriver *db);
    ~QMYSQLResult();
@@ -75,15 +72,18 @@ class QMYSQLResult : public QSqlResult
    bool exec() override;
 
  private:
+   friend class QMYSQLDriver;
+   friend class QMYSQLResultPrivate;
+
    QMYSQLResultPrivate *d;
 };
 
 class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 {
-   SQL_CS_OBJECT(QMYSQLDriver)
+   CS_OBJECT(QMYSQLDriver)
 
-   friend class QMYSQLResult;
    Q_DECLARE_PRIVATE(QMYSQLDriver)
+
  public:
    explicit QMYSQLDriver(QObject *parent = nullptr);
    explicit QMYSQLDriver(MYSQL *con, QObject *parent = nullptr);
@@ -105,14 +105,16 @@ class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
    QString escapeIdentifier(const QString &identifier, IdentifierType type) const override;
 
    bool isIdentifierEscaped(const QString &identifier, IdentifierType type) const override;
+
  protected:
    bool beginTransaction() override;
    bool commitTransaction() override;
    bool rollbackTransaction() override;
 
  private:
+   friend class QMYSQLResult;
+
    void init();
 };
-
 
 #endif

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QAccessibleCache : public QObject
    QAccessible::Id insert(QObject *object, QAccessibleInterface *iface) const;
    void deleteInterface(QAccessible::Id id, QObject *obj = 0);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    QMacAccessibilityElement *elementForId(QAccessible::Id axid) const;
    void insertElement(QAccessible::Id axid, QMacAccessibilityElement *element) const;
 #endif
@@ -66,7 +66,7 @@ class Q_GUI_EXPORT QAccessibleCache : public QObject
    mutable QHash<QAccessibleInterface *, QAccessible::Id> interfaceToId;
    mutable QHash<QObject *, QAccessible::Id> objectToId;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    void removeCocoaElement(QAccessible::Id axid);
    mutable QHash<QAccessible::Id, QMacAccessibilityElement *> cocoaElements;
 #endif

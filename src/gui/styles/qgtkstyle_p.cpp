@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -59,7 +59,7 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QToolButton>
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
 // X11 Includes:
 
 // the following is necessary to work around breakage in many versions
@@ -184,7 +184,7 @@ Ptr_gconf_client_get_bool QGtkStylePrivate::gconf_client_get_bool = 0;
 Ptr_gnome_icon_lookup_sync QGtkStylePrivate::gnome_icon_lookup_sync = 0;
 Ptr_gnome_vfs_init QGtkStylePrivate::gnome_vfs_init = 0;
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
 typedef int (*x11ErrorHandler)(Display *, XErrorEvent *);
 #endif
 
@@ -488,14 +488,14 @@ void QGtkStylePrivate::initGtkWidgets() const
    }
 
    if (QGtkStylePrivate::gtk_init) {
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
       // Gtk will set the Qt error handler so we have to reset it afterwards
       x11ErrorHandler qt_x_errhandler = XSetErrorHandler(0);
 #endif
 
       QGtkStylePrivate::gtk_init (NULL, NULL);
 
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
       XSetErrorHandler(qt_x_errhandler);
 #endif
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -38,7 +38,7 @@ static QTimeZonePrivate *newBackendTimeZone()
 
 #else
 
-#if defined Q_OS_MAC
+#if defined Q_OS_DARWIN
    return new QMacTimeZonePrivate();
 
 #elif defined Q_OS_ANDROID
@@ -67,7 +67,7 @@ static QTimeZonePrivate *newBackendTimeZone(const QByteArray &ianaId)
 
 #else
 
-#if defined Q_OS_MAC
+#if defined Q_OS_DARWIN
    return new QMacTimeZonePrivate(ianaId);
 
 #elif defined Q_OS_ANDROID

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -72,7 +72,7 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
 
 qreal dpiScaled(qreal value)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    // On mac the DPI is always 72 so we should not scale it
    return value;
 #else

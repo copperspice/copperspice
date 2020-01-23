@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -228,14 +228,24 @@ void qt_memfill32(quint32 *dest, quint32 value, int count)
       switch (count) {
          case 6:
             *dest++ = value;
+            [[fallthrough]];
+
          case 5:
             *dest++ = value;
+            [[fallthrough]];
+
          case 4:
             *dest++ = value;
+            [[fallthrough]];
+
          case 3:
             *dest++ = value;
+            [[fallthrough]];
+
          case 2:
             *dest++ = value;
+            [[fallthrough]];
+
          case 1:
             *dest   = value;
       }
@@ -247,9 +257,13 @@ void qt_memfill32(quint32 *dest, quint32 value, int count)
       case 4:
          *dest++ = value;
          --count;
+         [[fallthrough]];
+
       case 8:
          *dest++ = value;
          --count;
+         [[fallthrough]];
+
       case 12:
          *dest++ = value;
          --count;
@@ -260,8 +274,12 @@ void qt_memfill32(quint32 *dest, quint32 value, int count)
       switch (rest) {
          case 3:
             dest[count - 3] = value;
+            [[fallthrough]];
+
          case 2:
             dest[count - 2] = value;
+            [[fallthrough]];
+
          case 1:
             dest[count - 1] = value;
       }
@@ -283,8 +301,12 @@ void qt_memfill32(quint32 *dest, quint32 value, int count)
    switch (count128 & 0x3) {
       case 3:
          _mm_stream_si128(dst128++, value128);
+        [[fallthrough]];
+
       case 2:
          _mm_stream_si128(dst128++, value128);
+        [[fallthrough]];
+
       case 1:
          _mm_stream_si128(dst128++, value128);
    }
@@ -331,6 +353,8 @@ void qt_memfill16(quint16 *dest, quint16 value, int count)
       switch (count) {
          case 2:
             *dest++ = value;
+            [[fallthrough]];
+
          case 1:
             *dest = value;
       }

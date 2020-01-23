@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -39,7 +39,7 @@
 #include "TimeRanges.h"
 
 #if PLATFORM(QT)
-#include <QtGlobal>
+#include <qglobal.h>
 #endif
 
 #if USE(GSTREAMER)
@@ -83,7 +83,7 @@ public:
 
     virtual void prepareToPlay() { }
     virtual void play() { }
-    virtual void pause() { }    
+    virtual void pause() { }
 
     virtual PlatformMedia platformMedia() const { return NoPlatformMedia; }
 #if USE(ACCELERATED_COMPOSITING)
@@ -140,9 +140,9 @@ public:
     virtual bool hasSingleSecurityOrigin() const { return true; }
 };
 
-static PassOwnPtr<MediaPlayerPrivateInterface> createNullMediaPlayer(MediaPlayer* player) 
-{ 
-    return adoptPtr(new NullMediaPlayerPrivate(player)); 
+static PassOwnPtr<MediaPlayerPrivateInterface> createNullMediaPlayer(MediaPlayer* player)
+{
+    return adoptPtr(new NullMediaPlayerPrivate(player));
 }
 
 
@@ -152,7 +152,7 @@ struct MediaPlayerFactory {
     WTF_MAKE_NONCOPYABLE(MediaPlayerFactory); WTF_MAKE_FAST_ALLOCATED;
 public:
     MediaPlayerFactory(CreateMediaEnginePlayer constructor, MediaEngineSupportedTypes getSupportedTypes, MediaEngineSupportsType supportsTypeAndCodecs,
-        MediaEngineGetSitesInMediaCache getSitesInMediaCache, MediaEngineClearMediaCache clearMediaCache, MediaEngineClearMediaCacheForSite clearMediaCacheForSite) 
+        MediaEngineGetSitesInMediaCache getSitesInMediaCache, MediaEngineClearMediaCache clearMediaCache, MediaEngineClearMediaCacheForSite clearMediaCacheForSite)
         : constructor(constructor)
         , getSupportedTypes(getSupportedTypes)
         , supportsTypeAndCodecs(supportsTypeAndCodecs)
@@ -160,7 +160,7 @@ public:
         , clearMediaCache(clearMediaCache)
         , clearMediaCacheForSite(clearMediaCacheForSite)
 
-    { 
+    {
     }
 
     CreateMediaEnginePlayer constructor;
@@ -175,7 +175,7 @@ static void addMediaEngine(CreateMediaEnginePlayer, MediaEngineSupportedTypes, M
 static MediaPlayerFactory* bestMediaEngineForTypeAndCodecs(const String& type, const String& codecs, MediaPlayerFactory* current = 0);
 static MediaPlayerFactory* nextMediaEngine(MediaPlayerFactory* current);
 
-static Vector<MediaPlayerFactory*>& installedMediaEngines() 
+static Vector<MediaPlayerFactory*>& installedMediaEngines()
 {
     DEFINE_STATIC_LOCAL(Vector<MediaPlayerFactory*>, installedEngines, ());
     static bool enginesQueried = false;
@@ -237,8 +237,8 @@ static MediaPlayerFactory* bestMediaEngineForTypeAndCodecs(const String& type, c
     if (engines.isEmpty())
         return 0;
 
-    // 4.8.10.3 MIME types - In the absence of a specification to the contrary, the MIME type "application/octet-stream" 
-    // when used with parameters, e.g. "application/octet-stream;codecs=theora", is a type that the user agent knows 
+    // 4.8.10.3 MIME types - In the absence of a specification to the contrary, the MIME type "application/octet-stream"
+    // when used with parameters, e.g. "application/octet-stream;codecs=theora", is a type that the user agent knows
     // it cannot render.
     if (type == applicationOctetStream()) {
         if (!codecs.isEmpty())
@@ -270,11 +270,11 @@ static MediaPlayerFactory* nextMediaEngine(MediaPlayerFactory* current)
     if (engines.isEmpty())
         return 0;
 
-    if (!current) 
+    if (!current)
         return engines.first();
 
     size_t currentIndex = engines.find(current);
-    if (currentIndex == WTF::notFound || currentIndex + 1 >= engines.size()) 
+    if (currentIndex == WTF::notFound || currentIndex + 1 >= engines.size())
         return 0;
 
     return engines[currentIndex + 1];
@@ -378,7 +378,7 @@ void MediaPlayer::loadWithNextMediaEngine(MediaPlayerFactory* current)
         if (m_mediaPlayerClient)
             m_mediaPlayerClient->mediaPlayerEngineUpdated(this);
     }
-}    
+}
 
 bool MediaPlayer::hasAvailableVideoFrame() const
 {
@@ -399,12 +399,12 @@ bool MediaPlayer::canLoadPoster() const
 void MediaPlayer::setPoster(const String& url)
 {
     m_private->setPoster(url);
-}    
+}
 
 void MediaPlayer::cancelLoad()
 {
     m_private->cancelLoad();
-}    
+}
 
 void MediaPlayer::prepareToPlay()
 {
@@ -552,7 +552,7 @@ float MediaPlayer::rate() const
 void MediaPlayer::setRate(float rate)
 {
     m_rate = rate;
-    m_private->setRate(rate);   
+    m_private->setRate(rate);
 }
 
 bool MediaPlayer::preservesPitch() const
@@ -582,7 +582,7 @@ unsigned MediaPlayer::bytesLoaded()
 }
 
 void MediaPlayer::setSize(const IntSize& size)
-{ 
+{
     m_size = size;
     m_private->setSize(size);
 }
@@ -624,7 +624,7 @@ MediaPlayer::SupportsType MediaPlayer::supportsType(const ContentType& contentTy
     String type = contentType.type().lower();
     String typeCodecs = contentType.parameter(codecs());
 
-    // 4.8.10.3 MIME types - The canPlayType(type) method must return the empty string if type is a type that the 
+    // 4.8.10.3 MIME types - The canPlayType(type) method must return the empty string if type is a type that the
     // user agent knows it cannot render or is the type "application/octet-stream"
     if (type == applicationOctetStream())
         return IsNotSupported;
@@ -645,12 +645,12 @@ void MediaPlayer::getSupportedTypes(HashSet<String>& types)
     unsigned count = engines.size();
     for (unsigned ndx = 0; ndx < count; ndx++)
         engines[ndx]->getSupportedTypes(types);
-} 
+}
 
 bool MediaPlayer::isAvailable()
 {
     return !installedMediaEngines().isEmpty();
-} 
+}
 
 #if ENABLE(PLUGIN_PROXY_FOR_VIDEO)
 void MediaPlayer::deliverNotification(MediaPlayerProxyNotificationType notification)
@@ -667,17 +667,17 @@ void MediaPlayer::setMediaPlayerProxy(WebMediaPlayerProxy* proxy)
 void MediaPlayer::setControls(bool controls)
 {
     m_private->setControls(controls);
-}    
+}
 
 void MediaPlayer::enterFullscreen()
 {
     m_private->enterFullscreen();
-}    
+}
 
 void MediaPlayer::exitFullscreen()
 {
     m_private->exitFullscreen();
-}    
+}
 #endif
 
 #if USE(ACCELERATED_COMPOSITING)

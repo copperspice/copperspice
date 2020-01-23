@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -1023,38 +1023,49 @@ void QHttpNetworkConnectionChannel::_q_encrypted()
 {
    QSslSocket *sslSocket = qobject_cast<QSslSocket *>(socket);
    Q_ASSERT(sslSocket);
-   if (!protocolHandler) {
+
+   if (! protocolHandler) {
       switch (sslSocket->sslConfiguration().nextProtocolNegotiationStatus()) {
-         case QSslConfiguration::NextProtocolNegotiationNegotiated: /* fall through */
+
+         case QSslConfiguration::NextProtocolNegotiationNegotiated:
          case QSslConfiguration::NextProtocolNegotiationUnsupported: {
             QByteArray nextProtocol = sslSocket->sslConfiguration().nextNegotiatedProtocol();
+
             if (nextProtocol == QSslConfiguration::NextProtocolHttp1_1) {
+               // do nothing
+
             } else if (nextProtocol == QSslConfiguration::NextProtocolSpdy3_0) {
                protocolHandler.reset(new QSpdyProtocolHandler(this));
                connection->setConnectionType(QHttpNetworkConnection::ConnectionTypeSPDY);
                break;
+
             } else {
                emitFinishedWithError(QNetworkReply::SslHandshakeFailedError,
                                      "detected unknown Next Protocol Negotiation protocol");
                break;
             }
          }
+         [[fallthrough]];
+
          case QSslConfiguration::NextProtocolNegotiationNone:
             protocolHandler.reset(new QHttpProtocolHandler(this));
             connection->setConnectionType(QHttpNetworkConnection::ConnectionTypeHTTP);
             requeueSpdyRequests();
             break;
+
          default:
             emitFinishedWithError(QNetworkReply::SslHandshakeFailedError,
                                   "detected unknown Next Protocol Negotiation protocol");
       }
    }
+
    if (!socket) {
       return;   // ### error
    }
 
    state = QHttpNetworkConnectionChannel::IdleState;
    pendingEncrypt = false;
+
    if (connection->connectionType() == QHttpNetworkConnection::ConnectionTypeSPDY) {
       if (spdyRequestsToSend.count() > 0) {
          QMetaObject::invokeMethod(connection, "_q_startNextRequest", Qt::QueuedConnection);

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -127,7 +127,7 @@ bool qWidgetShortcutContextMatcher(QObject *object, Qt::ShortcutContext context)
 static bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window)
 {
    bool visible = w->isVisible();
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (!qApp->testAttribute(Qt::AA_DontUseNativeMenuBar) && qobject_cast<QMenuBar *>(w)) {
       visible = true;
    }
@@ -199,7 +199,7 @@ static bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidge
 static bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsWidget *w, QWidget *active_window)
 {
    bool visible = w->isVisible();
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (!qApp->testAttribute(Qt::AA_DontUseNativeMenuBar) && qobject_cast<QMenuBar *>(w)) {
       visible = true;
    }
@@ -279,7 +279,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 #ifndef QT_NO_MENU
       if (QMenu *menu = qobject_cast<QMenu *>(w)) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
          // On Mac, menu item shortcuts are processed before reaching any window.
          // That means that if a menu action shortcut has not been already processed
          // (and reaches this point), then the menu item itself has been disabled.

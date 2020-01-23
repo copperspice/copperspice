@@ -1,10 +1,10 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -50,7 +50,7 @@
 
 #if defined(QT_OPENGL_ES_2)
 
-# if defined(Q_OS_MAC) // iOS
+# if defined(Q_OS_DARWIN) // iOS
 #  if defined(QT_OPENGL_ES_3)
 #   include <OpenGLES/ES3/gl.h>
 #   include <OpenGLES/ES3/glext.h>
@@ -110,11 +110,11 @@ typedef void* GLeglImageOES;
 typedef char GLchar;
 
 #  include <qopengles2ext.h>
-# endif // Q_OS_MAC
+# endif // Q_OS_DARWIN
 
 #else // non-ES2 platforms
 
-# if defined(Q_OS_MAC)
+# if defined(Q_OS_DARWIN)
 #  include <OpenGL/gl.h>
 
 #  if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
@@ -135,7 +135,7 @@ typedef char GLchar;
 #   include <GL/gl.h>
 #  endif
 #  include <qopenglext.h>
-# endif // Q_OS_MAC
+# endif // Q_OS_DARWIN
 
 #endif // QT_OPENGL_ES_2
 
@@ -147,7 +147,7 @@ typedef char GLchar;
 #  define QT_OPENGL_3_2
 #  define QT_OPENGL_4
 
-# if ! defined(Q_OS_MAC)
+# if ! defined(Q_OS_DARWIN)
 #  define QT_OPENGL_4_3
 # endif
 #endif

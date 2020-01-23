@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -460,7 +460,7 @@ void QGraphicsWidget::initStyleOption(QStyleOption *option) const
    }
 
    /*
-   #ifdef Q_OS_MAC
+   #ifdef Q_OS_DARWIN
    extern bool qt_mac_can_clickThrough(const QGraphicsWidget *w); //qwidget_mac.cpp
    if (!(option->state & QStyle::State_Active) && !qt_mac_can_clickThrough(widget))
        option->state &= ~QStyle::State_Enabled;
@@ -1051,6 +1051,8 @@ void QGraphicsWidget::changeEvent(QEvent *event)
          if (d->layout) {
             d->layout->invalidate();
          }
+         [[fallthrough]];
+
       case QEvent::FontChange:
          update();
          updateGeometry();
@@ -1719,7 +1721,7 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
    const QPointF styleOrigin = this->windowFrameRect().topLeft();
    painter->translate(styleOrigin);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    const QSize pixmapSize = windowFrameRect.size();
    if (pixmapSize.width() <= 0 || pixmapSize.height() <= 0) {
       return;
@@ -1794,7 +1796,7 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
    frameOptions.midLineWidth = 1;
    style()->drawPrimitive(QStyle::PE_FrameWindow, &frameOptions, painter, widget);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    realPainter->drawPixmap(QPoint(), pm);
    delete painter;
 #endif

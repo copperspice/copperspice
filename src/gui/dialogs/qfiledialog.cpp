@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -418,10 +418,11 @@ QUrl QFileDialog::directoryUrl() const
 }
 static inline bool isCaseSensitiveFileSystem(const QString &path)
 {
+   (void) path;
 
 #if defined(Q_OS_WIN)
    return false;
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    return pathconf(QFile::encodeName(path).constData(), _PC_CASE_SENSITIVE);
 #else
    return true;
@@ -756,6 +757,7 @@ void QFileDialog::setFilter(QDir::Filters filters)
 #if ! defined(QT_NO_MIMETYPE)
 static QString nameFilterForMime(const QString &mimeType)
 {
+   (void) mimeType;
 
    /* emerald (mime types)
 

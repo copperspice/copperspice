@@ -20,8 +20,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
     QMetaObjectExtraData
     QMetaProperty
     QMetaType
-    QMetaTypeId
-    QMetaTypeId2
     QMimeData
     QModelIndex
     QModelIndexList
@@ -41,10 +39,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
     QTimerEvent
     QTranslator
     QVariant
-    QVariantComparisonHelper
-    QVariantList
-    QVariantHash
-    QVariantMap
     QWinEventNotifier
     QtCleanUpFunction
     QtMsgHandler
@@ -75,8 +69,6 @@ list(APPEND CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobjectextradata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaproperty.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatypeid.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatypeid2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmimedata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmodelindex.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmodelindexlist.h
@@ -98,10 +90,6 @@ list(APPEND CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantcomparisonhelper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantlist.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvarianthash.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantmap.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta.h

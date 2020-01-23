@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -45,7 +45,7 @@ class QToolBarPrivate : public QWidgetPrivate
         allowedAreas(Qt::AllToolBarAreas), orientation(Qt::Horizontal),
         toolButtonStyle(Qt::ToolButtonIconOnly),
         layout(0), state(0)
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       , macWindowDragging(false)
 #endif
    { }
@@ -77,7 +77,7 @@ class QToolBarPrivate : public QWidgetPrivate
    };
    DragState *state;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    bool macWindowDragging;
    QPoint macWindowDragPressPosition;
 #endif

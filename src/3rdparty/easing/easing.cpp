@@ -24,8 +24,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #define M_PI_2 (M_PI / 2)
 #endif
 
-QT_USE_NAMESPACE
-
 /**
  * Easing equation function for a simple linear tweening, with no easing.
  *

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
    int exec() override;
 
-#if defined (Q_OS_UNIX) && ! defined(Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
    void accept() override;
 #endif
 
@@ -73,7 +73,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
  private:
 
-#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_DARWIN)
 
    GUI_CS_SLOT_1(Private, void _q_togglePageSetCombo(bool arg1))
    GUI_CS_SLOT_2(_q_togglePageSetCombo)

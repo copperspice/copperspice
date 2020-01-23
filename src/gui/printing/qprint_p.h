@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -29,7 +29,7 @@
 #include <qstring.h>
 #include <qlist.h>
 
-#if (defined Q_OS_MAC && ! defined Q_OS_IOS) || (defined Q_OS_UNIX && ! defined QT_NO_CUPS)
+#if (defined Q_OS_DARWIN && ! defined Q_OS_IOS) || (defined Q_OS_UNIX && ! defined QT_NO_CUPS)
 #include <cups/ppd.h>  // Use for type defs only, do not want to actually link in main module
 #endif
 
@@ -217,7 +217,7 @@ public:
         return QByteArray();
     }
 
-#if (defined Q_OS_MAC && !defined Q_OS_IOS) || (defined Q_OS_UNIX && !defined QT_NO_CUPS)
+#if (defined Q_OS_DARWIN && !defined Q_OS_IOS) || (defined Q_OS_UNIX && !defined QT_NO_CUPS)
 
     // PPD utilities shared by CUPS and Mac plugins requiring CUPS headers
     // May turn into a proper internal QPpd class if enough shared between Mac and CUPS,

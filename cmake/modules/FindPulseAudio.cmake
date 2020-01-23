@@ -1,11 +1,24 @@
-#  Copyright (C) 2012-2019 Barbara Geller
-#  Copyright (C) 2012-2019 Ansel Sermersheim
+# ***********************************************************************
 #
-# Copyright (c) 2008, Matthias Kretz, <kretz@kde.org>
-# Copyright (c) 2009, Marcus Hufgard, <Marcus.Hufgard@hufgard.de>
+# Copyright (c) 2012-2020 Barbara Geller
+# Copyright (c) 2012-2020 Ansel Sermersheim
+# Copyright (c) 2015 Ivailo Monev, <xakepa10@gmail.com>
+# Copyright (c) 2009 Marcus Hufgard, <Marcus.Hufgard@hufgard.de>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
+# This file is part of CopperSpice.
 #
+# CopperSpice is free software. You can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# version 2.1 as published by the Free Software Foundation.
+#
+# CopperSpice is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# https://www.gnu.org/licenses/
+#
+# ***********************************************************************
+
 # PULSEAUDIO_FOUND            - system has the PulseAudio library
 # PULSEAUDIO_INCLUDE_DIR      - the PulseAudio include directory
 # PULSEAUDIO_LIBRARY          - the libraries needed to use PulseAudio

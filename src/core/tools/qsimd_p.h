@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -316,11 +316,8 @@ static inline quint64 qCpuFeatures()
     if (features == 0) {
         qDetectCpuFeatures();
         features = cs_cpu_features.load();
-
-
-
-
     }
+
     return features;
 }
 #define qCpuHasFeature(feature)     ((qCompilerCpuFeatures & (Q_UINT64_C(1) << CpuFeature ## feature)) \
@@ -331,12 +328,13 @@ static inline quint64 qCpuFeatures()
 
 #  if defined(Q_CC_MSVC)
 
-// MSVC calls it _BitScanReverse and returns the carry flag, which we don't need
+// MSVC calls it _BitScanReverse and returns the carry flag, which we do not need
 
 static __forceinline unsigned long _bit_scan_reverse(uint val)
 {
     unsigned long result;
     _BitScanReverse(&result, val);
+
     return result;
 }
 
@@ -344,11 +342,13 @@ static __forceinline unsigned long _bit_scan_forward(uint val)
 {
     unsigned long result;
     _BitScanForward(&result, val);
+
     return result;
 }
 
-#  elif defined(Q_CC_CLANG) && ! defined(Q_CC_INTEL)
-// Clang is missing the intrinsic for _bit_scan_reverse
+#  elif defined(Q_CC_CLANG) && ! defined(Q_CC_INTEL) && (__clang_major__  < 9)
+
+// since clang before vrsion 9 is missing the intrinsic function "_bit_scan_reverse", implement by hand
 
 static inline __attribute__((always_inline))
 unsigned _bit_scan_reverse(unsigned val)
@@ -368,6 +368,7 @@ unsigned _bit_scan_forward(unsigned val)
 #  endif
 
 #endif // Q_PROCESSOR_X86
+
 
 #define ALIGNMENT_PROLOGUE_16BYTES(ptr, i, length) \
     for (; i < static_cast<int>(qMin(static_cast<quintptr>(length), ((4 - ((reinterpret_cast<quintptr>(ptr) >> 2) & 0x3)) & 0x3))); ++i)

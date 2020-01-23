@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -125,21 +125,6 @@ void Uic::writeCopyrightHeader(DomUI *ui)
    out << "**\n";
    out << "** WARNING! Any changes made to this file will be lost when the UI file is recompiled\n";
    out << "********************************************************************************/\n\n";
-}
-
-// Check the version with a stream reader at the <ui> element.
-
-static double versionFromUiAttribute(QXmlStreamReader &reader)
-{
-   const QXmlStreamAttributes attributes = reader.attributes();
-   const QString versionAttribute = QLatin1String("version");
-
-   if (! attributes.hasAttribute(versionAttribute)) {
-      return 4.0;
-   }
-
-   const QString version = attributes.value(versionAttribute).toString();
-   return version.toDouble();
 }
 
 DomUI *Uic::parseUiFile(QXmlStreamReader &reader)

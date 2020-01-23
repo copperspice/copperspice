@@ -613,7 +613,6 @@ namespace WTF {
     };
 
 #if PLATFORM(QT)
-    QT_USE_NAMESPACE
     template<typename T>
     QDataStream& operator<<(QDataStream& stream, const Vector<T>& data)
     {

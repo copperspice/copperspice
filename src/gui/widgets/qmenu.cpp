@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -33,7 +33,7 @@
 #include <qpainter.h>
 #include <qplatform_theme.h>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
 #include <qmacnativewidget_mac.h>
 #endif
 
@@ -1413,7 +1413,7 @@ void QMenuPrivate::_q_platformMenuAboutToShow()
 {
    Q_Q(QMenu);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
    if (platformMenu)
 
       for (QAction *action : q->actions()) {
@@ -2563,7 +2563,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
          key = Qt::Key_Left;
       }
    }
-#ifndef Q_OS_MAC
+#ifndef Q_OS_DARWIN
    if (key == Qt::Key_Tab) { //means down
       key = Qt::Key_Down;
    }
@@ -3127,7 +3127,7 @@ void QMenu::actionEvent(QActionEvent *e)
       if (QWidgetAction *wa = qobject_cast<QWidgetAction *>(e->action())) {
          if (QWidget *widget = d->widgetItems.value(wa)) {
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
             QWidget *p = widget->parentWidget();
             if (p != this && qobject_cast<QMacNativeWidget *>(p)) {
                // This widget was reparented into a native Mac view

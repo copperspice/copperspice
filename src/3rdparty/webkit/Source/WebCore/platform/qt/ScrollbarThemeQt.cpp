@@ -152,7 +152,7 @@ bool ScrollbarThemeQt::paint(Scrollbar* scrollbar, GraphicsContext* graphicsCont
 
     p.painter->setClipRect(opt->rect.intersected(damageRect), Qt::IntersectClip);
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
     // need to check the widget style
     if (p.style->inherits("QMacStyle") ) {
         p.drawComplexControl(QStyle::CC_ScrollBar, *opt);

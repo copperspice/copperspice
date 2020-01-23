@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -2000,22 +2000,30 @@ void QHeaderView::mouseReleaseEvent(QMouseEvent *e)
    int pos = d->orientation == Qt::Horizontal ? e->x() : e->y();
    switch (d->state) {
       case QHeaderViewPrivate::MoveSection:
-         if (!d->sectionIndicator->isHidden()) { // moving
+         if (! d->sectionIndicator->isHidden()) {
+            // moving
             int from = visualIndex(d->section);
             Q_ASSERT(from != -1);
+
             int to = visualIndex(d->target);
             Q_ASSERT(to != -1);
+
             moveSection(from, to);
             d->section = d->target = -1;
             d->updateSectionIndicator(d->section, pos);
             break;
-         } // not moving
+         }
+
+         [[fallthrough]];
+
       case QHeaderViewPrivate::SelectSections:
          if (!d->clickableSections) {
             int section = logicalIndexAt(pos);
             updateSection(section);
          }
-      // fall through
+
+         [[fallthrough]];
+
       case QHeaderViewPrivate::NoState:
          if (d->clickableSections) {
             int section = logicalIndexAt(pos);

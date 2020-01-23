@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -31,7 +31,7 @@
 
 class Q_GUI_EXPORT  QBlittablePlatformPixmap : public QPlatformPixmap
 {
-   //     Q_DECLARE_PRIVATE(QBlittablePixmapData);
+   //  Q_DECLARE_PRIVATE(QBlittablePixmapData);
 
  public:
    QBlittablePlatformPixmap();
@@ -67,7 +67,6 @@ class Q_GUI_EXPORT  QBlittablePlatformPixmap : public QPlatformPixmap
    void mergeOverlay();
    void unmergeOverlay();
    QImage *overlay();
-
 #endif
 
  protected:
@@ -92,7 +91,8 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QRectF &rect)
 {
 #ifdef QT_BLITTER_RASTEROVERLAY
    markRasterOverlayImpl(rect);
-
+#else
+   (void) rect;
 #endif
 }
 
@@ -100,7 +100,8 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QVectorPath &path)
 {
 #ifdef QT_BLITTER_RASTEROVERLAY
    markRasterOverlayImpl(path.convertToPainterPath().boundingRect());
-
+#else
+   (void) path;
 #endif
 }
 
@@ -111,6 +112,9 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QPointF &pos, cons
    QRectF rect = fm.tightBoundingRect(ti.text());
    rect.moveBottomLeft(pos);
    markRasterOverlay(rect);
+#else
+   (void) pos;
+   (void) ti;
 #endif
 }
 
@@ -121,8 +125,8 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QRect *rects, int 
       markRasterOverlay(rects[i]);
    }
 #else
-   Q_UNUSED(rects)
-   Q_UNUSED(rectCount)
+   (void) rects;
+   (void) rectCount;
 #endif
 }
 
@@ -133,8 +137,8 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QRectF *rects, int
       markRasterOverlay(rects[i]);
    }
 #else
-   Q_UNUSED(rects)
-   Q_UNUSED(rectCount)
+   (void) rects;
+   (void) rectCount;
 #endif
 }
 
@@ -143,8 +147,8 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QPointF *points, i
 #ifdef QT_BLITTER_RASTEROVERLAY
 #error "not ported yet"
 #else
-   Q_UNUSED(points);
-   Q_UNUSED(pointCount);
+   (void) points;
+   (void) pointCount;
 #endif
 }
 
@@ -153,8 +157,8 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QPoint *points, in
 #ifdef QT_BLITTER_RASTEROVERLAY
 #error "not ported yet"
 #else
-   Q_UNUSED(points);
-   Q_UNUSED(pointCount);
+   (void) points;
+   (void) pointCount;
 #endif
 }
 
@@ -163,7 +167,7 @@ inline void QBlittablePlatformPixmap::markRasterOverlay(const QPainterPath &path
 #ifdef QT_BLITTER_RASTEROVERLAY
 #error "not ported yet"
 #else
-   Q_UNUSED(path);
+   (void) path;
 #endif
 }
 
@@ -172,11 +176,9 @@ inline void QBlittablePlatformPixmap::unmarkRasterOverlay(const QRectF &rect)
 #ifdef QT_BLITTER_RASTEROVERLAY
    unmarkRasterOverlayImpl(rect);
 #else
-   Q_UNUSED(rect)
+   (void) rect;
 #endif
 }
-
-
 
 #endif // QT_NO_BLITTABLE
 #endif // QPIXMAP_BLITTER_P_H

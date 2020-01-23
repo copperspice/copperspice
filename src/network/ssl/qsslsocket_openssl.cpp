@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -51,7 +51,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #define kSecTrustSettingsDomainSystem 2 // so we do not need to include the header file
 PtrSecCertificateCopyData QSslSocketPrivate::ptrSecCertificateCopyData = 0;
 PtrSecTrustSettingsCopyCertificates QSslSocketPrivate::ptrSecTrustSettingsCopyCertificates = 0;
@@ -514,7 +514,7 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
    resetDefaultEllipticCurves();
    //load symbols needed to receive certificates from system store
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    QLibrary securityLib("/System/Library/Frameworks/Security.framework/Versions/Current/Security");
 
    if (securityLib.load()) {
@@ -556,7 +556,7 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
       qWarning("could not load crypt32 library"); // should never happen
    }
 
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+#elif defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
    // check whether we can enable on-demand root-cert loading (i.e. check whether the sym links are there)
    QList<QByteArray> dirs = unixRootCertDirectories();
    QStringList symLinkFilter;
@@ -716,7 +716,7 @@ QList<QSslCertificate> QSslSocketPrivate::systemCaCertificates()
 
    QList<QSslCertificate> systemCerts;
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    CFArrayRef cfCerts;
    OSStatus status = 1;
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -71,11 +71,6 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    QCoreApplication(int &argc, char **argv, int = ApplicationFlags );
    ~QCoreApplication();
-
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED static int argc();
-   QT_DEPRECATED static char **argv();
-#endif
 
    static QStringList arguments();
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -103,7 +103,7 @@
 #include <qplatform_cursor.h>
 #endif
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #  include <qcore_mac_p.h>
 
 #elif defined(Q_OS_WIN)
@@ -1049,7 +1049,7 @@ void QGuiApplicationPrivate::createPlatformIntegration()
 #if defined(Q_OS_WIN)
    platformName = "windows";
 
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_DARWIN)
    platformName = "cocoa";
 
 #else
@@ -1220,7 +1220,7 @@ void QGuiApplicationPrivate::init()
       } else if (arg == "-reverse") {
          force_reverse = true;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       } else if (arg.startsWith("-psn_")) {
          // consume "-psn_xxxx" on Mac, which is passed when starting an app from Finder.
          // special hack to change working directory (for an app bundle) when running from finder
@@ -1743,7 +1743,7 @@ void QGuiApplicationPrivate::processKeyEvent(QWindowSystemInterfacePrivate::KeyE
       window = QGuiApplication::focusWindow();
    }
 
-#if ! defined(Q_OS_MAC)
+#if ! defined(Q_OS_DARWIN)
    // FIXME: Include OS X in this code path by passing the key event through
    // QPlatformInputContext::filterEvent().
    if (e->keyType == QEvent::KeyPress && window) {
@@ -3269,6 +3269,8 @@ void QApplication::setStyle(QStyle *style)
 
 QPixmap QGuiApplicationPrivate::getPixmapCursor(Qt::CursorShape cshape)
 {
+   (void) cshape;
+
    return QPixmap();
 }
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -74,6 +74,8 @@ QRect QAccessibleObject::rect() const
 
 void QAccessibleObject::setText(QAccessible::Text text, const QString &str)
 {
+   (void) text;
+   (void) str;
 }
 
 QAccessibleInterface *QAccessibleObject::childAt(int x, int y) const
@@ -85,12 +87,10 @@ QAccessibleInterface *QAccessibleObject::childAt(int x, int y) const
          return childIface;
       }
    }
+
    return 0;
 }
 
-/*!
-    Creates a QAccessibleApplication for the QApplication object referenced by qApp.
-*/
 QAccessibleApplication::QAccessibleApplication()
    : QAccessibleObject(qApp)
 {

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -35,6 +35,8 @@ class QByteArray;
 class QDateTime;
 class QUrl;
 class QNetworkCookiePrivate;
+
+class QDebug;
 
 class Q_NETWORK_EXPORT QNetworkCookie
 {
@@ -96,7 +98,6 @@ class Q_NETWORK_EXPORT QNetworkCookie
    friend class QNetworkCookiePrivate;
 };
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
 
 Q_DECLARE_METATYPE(QNetworkCookie)

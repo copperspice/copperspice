@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -47,8 +47,7 @@ struct Q_CORE_EXPORT QArrayData {
    }
 
    // This refers to array data mutability, not "header data" represented by
-   // data members in QArrayData. Shared data (array and header) must still
-   // follow COW principles.
+   // data members in QArrayData. Shared data (array and header) must still follow COW principles.
    bool isMutable() const {
       return alloc != 0;
    }
@@ -90,8 +89,8 @@ struct Q_CORE_EXPORT QArrayData {
       return result;
    }
 
-   static QArrayData *allocate(size_t objectSize, size_t alignment,
-                               size_t capacity, AllocationOptions options = Default) Q_REQUIRED_RESULT;
+   [[nodiscard]] static QArrayData *allocate(size_t objectSize, size_t alignment,
+                               size_t capacity, AllocationOptions options = Default);
 
    static void deallocate(QArrayData *data, size_t objectSize, size_t alignment);
 
@@ -115,12 +114,15 @@ struct QTypedArrayData : QArrayData {
    T *begin() {
       return data();
    }
+
    T *end() {
       return data() + size;
    }
+
    const T *begin() const {
       return data();
    }
+
    const T *end() const {
       return data() + size;
    }
@@ -131,7 +133,7 @@ struct QTypedArrayData : QArrayData {
       T data;
    };
 
-   static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) Q_REQUIRED_RESULT {
+   [[nodiscard]] static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) {
       return static_cast<QTypedArrayData *>(QArrayData::allocate(sizeof(T),
       Q_ALIGNOF(AlignmentDummy), capacity, options));
    }
@@ -183,4 +185,4 @@ struct QArrayDataPointerRef {
         & ~(Q_ALIGNOF(type) - 1) } \
     /**/
 
-#endif // include guard
+#endif

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -351,8 +351,6 @@ inline void qSwap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPoin
    p1.swap(p2);
 }
 
-
-QT_END_NAMESPACE
 namespace std {
 template <class T>
 inline void swap(QT_PREPEND_NAMESPACE(QSharedDataPointer)<T> &p1,
@@ -368,8 +366,6 @@ inline void swap(QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p1,
    p1.swap(p2);
 }
 }
-QT_BEGIN_NAMESPACE
-
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedDataPointer<T>, Q_MOVABLE_TYPE);
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QExplicitlySharedDataPointer<T>, Q_MOVABLE_TYPE);
 

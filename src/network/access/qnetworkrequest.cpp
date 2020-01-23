@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -26,11 +26,12 @@
 #include <qnetworkcookie.h>
 #include <qnetworkrequest_p.h>
 #include <qsslconfiguration.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qlocale.h>
-#include <QtCore/qdatetime.h>
+#include <qshareddata.h>
+#include <qlocale.h>
+#include <qdatetime.h>
 
 #include <ctype.h>
+
 #ifndef QT_NO_DATESTRING
 # include <stdio.h>
 #endif
@@ -75,7 +76,7 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
              rawHeaders == other.rawHeaders &&
              attributes == other.attributes &&
              maxRedirectsAllowed == other.maxRedirectsAllowed;
-      // don't compare cookedHeaders
+      // do not compare cookedHeaders
    }
 
    QUrl url;
@@ -84,9 +85,9 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 #ifdef QT_SSL
    mutable QSslConfiguration *sslConfiguration;
 #endif
+
    int maxRedirectsAllowed;
 };
-
 
 QNetworkRequest::QNetworkRequest(const QUrl &url)
    : d(new QNetworkRequestPrivate)
@@ -115,7 +116,6 @@ QNetworkRequest &QNetworkRequest::operator=(const QNetworkRequest &other)
    d = other.d;
    return *this;
 }
-
 
 QUrl QNetworkRequest::url() const
 {
@@ -291,7 +291,8 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
          }
 
       case QNetworkRequest::CookieHeader: {
-         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
+         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie>>(value);
+
          if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
             cookies << qvariant_cast<QNetworkCookie>(value);
          }
@@ -302,6 +303,7 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
             if (!first) {
                result += "; ";
             }
+
             first = false;
             result += cookie.toRawForm(QNetworkCookie::NameAndValueOnly);
          }
@@ -310,6 +312,7 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
       case QNetworkRequest::SetCookieHeader: {
          QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
+
          if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
             cookies << qvariant_cast<QNetworkCookie>(value);
          }

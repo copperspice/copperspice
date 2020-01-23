@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -29,15 +29,14 @@
 #include "qmediacontent.h"
 #include "qmediaplayercontrol.h"
 
-#include <QtCore/qcoreevent.h>
+#include <qcoreevent.h>
 
 #include "directshowplayerservice.h"
-
-QT_USE_NAMESPACE
 
 class DirectShowPlayerControl : public QMediaPlayerControl
 {
    CS_OBJECT(DirectShowPlayerControl)
+
  public:
    DirectShowPlayerControl(DirectShowPlayerService *service, QObject *parent = nullptr);
    ~DirectShowPlayerControl();

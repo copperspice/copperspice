@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -2657,12 +2657,12 @@ const QMetaObject *QDeclarativeEnginePrivate::metaObjectForType(int t) const
 
 bool QDeclarative_isFileCaseCorrect(const QString &fileName)
 {
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN32)
+#if defined(Q_OS_DARWIN) || defined(Q_OS_WIN32)
    QFileInfo info(fileName);
 
    QString absolute = info.absoluteFilePath();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    QString canonical = info.canonicalFilePath();
 #elif defined(Q_OS_WIN32)
    wchar_t buffer[1024];

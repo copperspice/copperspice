@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -140,9 +140,11 @@ QString QSqlDriver::escapeIdentifier(const QString &identifier, IdentifierType) 
 
 bool QSqlDriver::isIdentifierEscaped(const QString &identifier, IdentifierType type) const
 {
+   (void) type;
+
    return identifier.size() > 2
-      && identifier.startsWith(QLatin1Char('"')) //left delimited
-      && identifier.endsWith(QLatin1Char('"')); //right delimited
+      && identifier.startsWith(QChar('"'))     //left delimited
+      && identifier.endsWith(QChar('"'));      //right delimited
 }
 
 QString QSqlDriver::stripDelimiters(const QString &identifier, IdentifierType type) const
@@ -181,7 +183,7 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
       case WhereStatement: {
          const QString tableNamePrefix = tableName.isEmpty()
             ? QString()
-            : prepareIdentifier(tableName, QSqlDriver::TableName, this) + QLatin1Char('.');
+            : prepareIdentifier(tableName, QSqlDriver::TableName, this) + QChar('.');
 
          for (int i = 0; i < rec.count(); ++i) {
             s.append(i ? QString(" AND ") : QString("WHERE "));
@@ -189,32 +191,36 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
             s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this));
 
             if (rec.isNull(i)) {
-               s.append(QLatin1String(" IS NULL"));
+               s.append(QString(" IS NULL"));
+
             } else if (preparedStatement) {
-               s.append(QLatin1String(" = ?"));
+               s.append(QString(" = ?"));
+
             } else {
-               s.append(QLatin1String(" = ")).append(formatValue(rec.field(i)));
+               s.append(QString(" = ")).append(formatValue(rec.field(i)));
             }
          }
          break;
       }
 
       case UpdateStatement:
-         s.append(QLatin1String("UPDATE ")).append(tableName).append(
-            QLatin1String(" SET "));
+         s.append("UPDATE " + tableName + " SET ");
+
          for (i = 0; i < rec.count(); ++i) {
             if (!rec.isGenerated(i)) {
                continue;
             }
-            s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(QLatin1Char('='));
+
+            s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(QChar('='));
             if (preparedStatement) {
-               s.append(QLatin1Char('?'));
+               s.append(QChar('?'));
             } else {
                s.append(formatValue(rec.field(i)));
             }
-            s.append(QLatin1String(", "));
+            s.append(QString(", "));
          }
-         if (s.endsWith(QLatin1String(", "))) {
+
+         if (s.endsWith(QString(", "))) {
             s.chop(2);
          } else {
             s.clear();
@@ -222,11 +228,11 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
          break;
 
       case DeleteStatement:
-         s.append(QLatin1String("DELETE FROM ")).append(tableName);
+         s.append(QString("DELETE FROM ")).append(tableName);
          break;
 
       case InsertStatement: {
-         s.append(QLatin1String("INSERT INTO ")).append(tableName).append(QLatin1String(" ("));
+         s.append(QString("INSERT INTO ")).append(tableName).append(QString(" ("));
 
          QString vals;
 
@@ -234,13 +240,13 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
             if (! rec.isGenerated(i)) {
                continue;
             }
-            s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(QLatin1String(", "));
+            s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this)).append(QString(", "));
             if (preparedStatement) {
-               vals.append(QLatin1Char('?'));
+               vals.append(QChar('?'));
             } else {
                vals.append(formatValue(rec.field(i)));
             }
-            vals.append(QLatin1String(", "));
+            vals.append(QString(", "));
          }
 
          if (vals.isEmpty()) {
@@ -250,7 +256,7 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
             vals.chop(2);                // remove trailing comma
 
             s.chop(2);
-            s.append(") VALUES (").append(vals).append(QLatin1Char(')'));
+            s.append(") VALUES (").append(vals).append(QChar(')'));
          }
          break;
       }
@@ -260,7 +266,7 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, c
 
 QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
 {
-   const QLatin1String nullTxt("NULL");
+   const QString nullTxt("NULL");
 
    QString r;
    if (field.isNull()) {
@@ -271,7 +277,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
          case QVariant::Int:
          case QVariant::UInt:
             if (field.value().type() == QVariant::Bool) {
-               r = field.value().toBool() ? QLatin1String("1") : QLatin1String("0");
+               r = field.value().toBool() ? QString("1") : QString("0");
             } else {
                r = field.value().toString();
             }
@@ -280,23 +286,22 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
 #ifndef QT_NO_DATESTRING
          case QVariant::Date:
             if (field.value().toDate().isValid())
-               r = QLatin1Char('\'') + field.value().toDate().toString(Qt::ISODate) + QLatin1Char('\'');
+               r = QChar('\'') + field.value().toDate().toString(Qt::ISODate) + QChar('\'');
             else {
                r = nullTxt;
             }
             break;
+
          case QVariant::Time:
             if (field.value().toTime().isValid())
-               r =  QLatin1Char('\'') + field.value().toTime().toString(Qt::ISODate)
-                  + QLatin1Char('\'');
+               r =  QChar('\'') + field.value().toTime().toString(Qt::ISODate) + QChar('\'');
             else {
                r = nullTxt;
             }
             break;
          case QVariant::DateTime:
             if (field.value().toDateTime().isValid())
-               r = QLatin1Char('\'') +
-                  field.value().toDateTime().toString(Qt::ISODate) + QLatin1Char('\'');
+               r = QChar('\'') + field.value().toDateTime().toString(Qt::ISODate) + QChar('\'');
             else {
                r = nullTxt;
             }
@@ -341,7 +346,10 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
                r = QChar('\'') + res +  QChar('\'');
                break;
             }
+
+            [[fallthrough]];
          }
+
          default:
             r = field.value().toString();
             break;
@@ -357,11 +365,15 @@ QVariant QSqlDriver::handle() const
 
 bool QSqlDriver::subscribeToNotification(const QString &name)
 {
+   (void) name;
+
    return false;
 }
 
 bool QSqlDriver::unsubscribeFromNotification(const QString &name)
 {
+   (void) name;
+
    return false;
 }
 

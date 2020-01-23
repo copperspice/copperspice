@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,8 +25,6 @@
 #include <qnoncontiguousbytedevice_p.h>
 #include <qhttpnetworkconnectionchannel_p.h>
 
-
-
 QHttpProtocolHandler::QHttpProtocolHandler(QHttpNetworkConnectionChannel *channel)
    : QAbstractProtocolHandler(channel)
 {
@@ -41,13 +39,14 @@ void QHttpProtocolHandler::_q_receiveReply()
          qWarning() << "QAbstractProtocolHandler::_q_receiveReply() called without QHttpNetworkReply,"
                     << m_socket->bytesAvailable() << "bytes on socket.";
       m_channel->close();
+
       return;
    }
 
    // only run when the QHttpNetworkConnection is not currently being destructed, e.g.
    // this function is called from _q_disconnected which is called because
    // of ~QHttpNetworkConnectionPrivate
-   if (!qobject_cast<QHttpNetworkConnection *>(m_connection)) {
+   if (! qobject_cast<QHttpNetworkConnection *>(m_connection)) {
       return;
    }
 
@@ -61,10 +60,12 @@ void QHttpProtocolHandler::_q_receiveReply()
             m_reply->d_func()->state = QHttpNetworkReplyPrivate::AllDoneState;
             m_channel->allDone();
             return;
+
          } else {
             m_channel->handleUnexpectedEOF();
             return;
          }
+
       } else {
          // socket not connected but still bytes for reading.. just continue in this function
       }
@@ -73,35 +74,44 @@ void QHttpProtocolHandler::_q_receiveReply()
    // read loop for the response
    qint64 bytes = 0;
    qint64 lastBytes = bytes;
+
    do {
       lastBytes = bytes;
 
       QHttpNetworkReplyPrivate::ReplyState state = m_reply->d_func()->state;
+
       switch (state) {
-         case QHttpNetworkReplyPrivate::NothingDoneState: {
+         case QHttpNetworkReplyPrivate::NothingDoneState:
             m_reply->d_func()->state = QHttpNetworkReplyPrivate::ReadingStatusState;
-            // fallthrough
-         }
+
+            [[fallthrough]];
+
          case QHttpNetworkReplyPrivate::ReadingStatusState: {
             qint64 statusBytes = m_reply->d_func()->readStatus(m_socket);
+
             if (statusBytes == -1) {
                // connection broke while reading status. also handled if later _q_disconnected is called
                m_channel->handleUnexpectedEOF();
                return;
             }
+
             bytes += statusBytes;
             m_channel->lastStatus = m_reply->d_func()->statusCode;
             break;
          }
+
          case QHttpNetworkReplyPrivate::ReadingHeaderState: {
             QHttpNetworkReplyPrivate *replyPrivate = m_reply->d_func();
             qint64 headerBytes = replyPrivate->readHeader(m_socket);
+
             if (headerBytes == -1) {
                // connection broke while reading headers. also handled if later _q_disconnected is called
                m_channel->handleUnexpectedEOF();
                return;
             }
+
             bytes += headerBytes;
+
             // If headers were parsed successfully now it is the ReadingDataState
             if (replyPrivate->state == QHttpNetworkReplyPrivate::ReadingDataState) {
                if (replyPrivate->isCompressed() && replyPrivate->autoDecompress) {
@@ -110,11 +120,13 @@ void QHttpProtocolHandler::_q_receiveReply()
                } else {
                   replyPrivate->autoDecompress = false;
                }
+
                if (replyPrivate->statusCode == 100) {
                   replyPrivate->clearHttpLayerInformation();
                   replyPrivate->state = QHttpNetworkReplyPrivate::ReadingStatusState;
                   break; // ignore
                }
+
                if (replyPrivate->shouldEmitSignals()) {
                   emit m_reply->headerChanged();
                }
@@ -130,6 +142,7 @@ void QHttpProtocolHandler::_q_receiveReply()
             }
             break;
          }
+
          case QHttpNetworkReplyPrivate::ReadingDataState: {
             QHttpNetworkReplyPrivate *replyPrivate = m_reply->d_func();
             if (m_socket->state() == QAbstractSocket::ConnectedState &&
@@ -161,6 +174,7 @@ void QHttpProtocolHandler::_q_receiveReply()
                   m_connection->d_func()->emitReplyError(m_socket, m_reply, QNetworkReply::RemoteHostClosedError);
                   break;
                }
+
             } else if (!replyPrivate->isChunked() && !replyPrivate->autoDecompress
                        && replyPrivate->bodyLength > 0) {
                // bulk files like images should fulfill these properties and
@@ -172,6 +186,7 @@ void QHttpProtocolHandler::_q_receiveReply()
                   emit m_reply->readyRead();
                   emit m_reply->dataReadProgress(replyPrivate->totalProgress, replyPrivate->bodyLength);
                }
+
             } else {
                // use the traditional slower reading (for compressed encoding, chunked encoding,
                // no content-length etc)
@@ -179,26 +194,32 @@ void QHttpProtocolHandler::_q_receiveReply()
                if (haveRead > 0) {
                   bytes += haveRead;
                   replyPrivate->totalProgress += haveRead;
+
                   if (replyPrivate->shouldEmitSignals()) {
                      emit m_reply->readyRead();
                      emit m_reply->dataReadProgress(replyPrivate->totalProgress, replyPrivate->bodyLength);
                   }
+
                } else if (haveRead == -1) {
                   // Some error occurred
                   m_connection->d_func()->emitReplyError(m_socket, m_reply, QNetworkReply::ProtocolFailure);
                   break;
                }
             }
+
             // still in ReadingDataState? This function will be called again by the socket's readyRead
             if (replyPrivate->state == QHttpNetworkReplyPrivate::ReadingDataState) {
                break;
             }
 
-            // everything done, fall through
+            // everything done
          }
+         [[fallthrough]];
+
          case QHttpNetworkReplyPrivate::AllDoneState:
             m_channel->allDone();
             break;
+
          default:
             break;
       }
@@ -212,14 +233,17 @@ void QHttpProtocolHandler::_q_readyRead()
       // This happens for the Unbuffered QTcpSocket
       // Also check if socket is in ConnectedState since
       // this function may also be invoked via the event loop.
+
       char c;
       qint64  ret = m_socket->peek(&c, 1);
+
       if (ret < 0) {
          m_channel->_q_error(m_socket->error());
          // We still need to handle the reply so it emits its signals etc.
          if (m_reply) {
             _q_receiveReply();
          }
+
          return;
       }
    }

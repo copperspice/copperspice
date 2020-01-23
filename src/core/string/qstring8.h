@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -288,7 +288,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       ~QString8() = default;
 
-      using CsString::CsString::append;         // internal
+      using CsString::CsString::append;          // internal
       using CsString::CsString::operator=;      // internal
       using CsString::CsString::operator+=;     // internal
 
@@ -590,9 +590,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::back();
       }
 
-      QString8 left(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QStringView8 leftView(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 left(size_type numOfChars) const;
+      [[nodiscard]] QStringView8 leftView(size_type numOfChars) const;
+      [[nodiscard]] QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
 
       size_type length() const {
          return CsString::CsString::size();
@@ -612,14 +612,14 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       static int localeAwareCompare(QStringView8 str1, QStringView8 str2);
 
-      QString8 mid(size_type indexStart, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
-      QString8 mid(const_iterator iter, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 mid(size_type indexStart, size_type numOfChars = -1) const;
+      [[nodiscard]] QString8 mid(const_iterator iter, size_type numOfChars = -1) const;
 
       QStringView8 midView (size_type indexStart, size_type numOfChars = -1) const;
       QStringView8 midView (const_iterator iter, size_type numOfChars = -1) const;
 
-      QString8 normalized(QString8::NormalizationForm mode, QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned)
-                  const Q_REQUIRED_RESULT;
+      [[nodiscard]]QString8 normalized(QString8::NormalizationForm mode,
+                  QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned) const;
 
       QString8 &prepend(const QString8 &other) {
          CsString::CsString::insert(begin(), other);
@@ -662,12 +662,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          prepend(other);
       }
 
-      QString8 repeated(size_type count) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 repeated(size_type count) const;
 
       QString8 &remove(size_type indexStart, size_type numOfChars);
       QString8 &remove(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive);
       QString8 &remove(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-
 
       QString8 &remove(const QRegularExpression8 &regExp) {
          replace(regExp, QString8());
@@ -725,12 +724,12 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::resize(numOfChars, c);
       }
 
-      QString8 right(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QStringView8 rightView(size_type numOfChars) const Q_REQUIRED_RESULT;
-      QString8 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 right(size_type numOfChars) const;
+      [[nodiscard]] QStringView8 rightView(size_type numOfChars) const;
+      [[nodiscard]] QString8 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
 
-      QString8 simplified() const & Q_REQUIRED_RESULT;
-      QString8 simplified() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 simplified() const &;
+      [[nodiscard]] QString8 simplified() &&;
 
       size_type size() const {
          return CsString::CsString::size();
@@ -754,18 +753,18 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 toHtmlEscaped() const;
 
-      QString8 toCaseFolded() const & Q_REQUIRED_RESULT;
-      QString8 toCaseFolded() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 toCaseFolded() const &;
+      [[nodiscard]] QString8 toCaseFolded() &&;
 
-      QString8 toLower() const & Q_REQUIRED_RESULT;
-      QString8 toLower() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 toLower() const &;
+      [[nodiscard]] QString8 toLower() &&;
 
-      QString8 toUpper() const & Q_REQUIRED_RESULT;
-      QString8 toUpper() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 toUpper() const &;
+      [[nodiscard]] QString8 toUpper() &&;
 
-      QByteArray toLatin1() const Q_REQUIRED_RESULT;
-      QByteArray toUtf8() const Q_REQUIRED_RESULT;
-      QString16 toUtf16() const Q_REQUIRED_RESULT;
+      [[nodiscard]] QByteArray toLatin1() const;
+      [[nodiscard]] QByteArray toUtf8() const;
+      [[nodiscard]] QString16 toUtf16() const;
 
       std::wstring toStdWString() const;
 
@@ -773,8 +772,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return std::string(cbegin().codePointBegin(), cend().codePointBegin() );
       }
 
-      QString8 trimmed() const & Q_REQUIRED_RESULT;
-      QString8 trimmed() && Q_REQUIRED_RESULT;
+      [[nodiscard]] QString8 trimmed() const &;
+      [[nodiscard]] QString8 trimmed() &&;
 
       void truncate(size_type length);
 

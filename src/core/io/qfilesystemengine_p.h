@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -25,11 +25,10 @@
 #define QFILESYSTEMENGINE_P_H
 
 #include <qfile.h>
+
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qsystemerror_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QFileSystemEngine
 {
@@ -55,15 +54,17 @@ class QFileSystemEngine
    static QString resolveGroupName(uint groupId);
 #endif
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
    static QString bundleName(const QFileSystemEntry &entry);
 #else
    static QString bundleName(const QFileSystemEntry &entry) {
+      (void) entry;
       return QString();
    }
 #endif
 
    static bool fillMetaData(const QFileSystemEntry &entry, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what);
+
 #if defined(Q_OS_UNIX)
    static bool fillMetaData(int fd, QFileSystemMetaData &data); // what = PosixStatFlags
 #endif
@@ -107,6 +108,4 @@ class QFileSystemEngine
 #endif
 };
 
-QT_END_NAMESPACE
-
-#endif // include guard
+#endif

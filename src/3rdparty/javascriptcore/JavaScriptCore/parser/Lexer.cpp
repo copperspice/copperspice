@@ -875,7 +875,13 @@ doneIdentifierOrKeyword: {
     m_delimited = false;
     m_buffer16.resize(0);
     const HashEntry* entry = m_keywordTable.entry(m_globalData, *lvalp->ident);
-    token = entry ? entry->lexerValue() : IDENT;
+
+    if (entry) {
+       token = entry->lexerValue();
+    } else {
+       token = IDENT;
+    }
+
     goto returnToken;
 }
 

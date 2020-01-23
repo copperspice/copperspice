@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -29,9 +29,10 @@
 #include <qstring.h>
 #include <qhash.h>
 
+class QDataStream;
+class QUrl;
 class QUrlPrivate;
 class QUrlQuery;
-class QDataStream;
 
 #ifdef Q_OS_DARWIN
 using CFURLRef = const struct __CFURL *;
@@ -42,7 +43,6 @@ using CFURLRef = const struct __CFURL *;
 
 #endif
 
-class QUrl;
 Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed = 0);
 
 class Q_CORE_EXPORT QUrl
@@ -111,7 +111,7 @@ class Q_CORE_EXPORT QUrl
 
    ~QUrl();
 
-   QUrl adjusted(FormattingOptions options) const Q_REQUIRED_RESULT;
+   [[nodiscard]] QUrl adjusted(FormattingOptions options) const;
 
    void clear();
    void detach();
@@ -141,7 +141,7 @@ class Q_CORE_EXPORT QUrl
 
    bool matches(const QUrl &url, FormattingOptions options) const;
 
-   QUrl resolved(const QUrl &relative) const Q_REQUIRED_RESULT;
+   [[nodiscard]] QUrl resolved(const QUrl &relative) const;
 
    void swap(QUrl &other) {
       qSwap(d, other.d);
@@ -301,12 +301,12 @@ class Q_CORE_EXPORT QUrl
    }
 
  private:
+   friend class QUrlQuery;
+   friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed);
+
    static QString fromEncodedComponent_helper(const QByteArray &ba);
 
    QUrlPrivate *d;
-
-   friend class QUrlQuery;
-   friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed);
 };
 
 Q_DECLARE_TYPEINFO(QUrl, Q_MOVABLE_TYPE);

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -44,6 +44,8 @@ class QSslCertificateExtension;
 class QStringList;
 class QSslCertificatePrivate;
 class QSslCertificate;
+
+class QDebug;
 
 Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed = 0);
 
@@ -133,7 +135,6 @@ private:
    friend Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed);
 };
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCertificate &certificate);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info);
 

@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -56,6 +56,10 @@ class Q_CORE_EXPORT QPoint
 
    inline QPoint &operator/=(qreal c);
 
+ private:
+   int xp;
+   int yp;
+
    friend inline bool operator==(const QPoint &, const QPoint &);
    friend inline bool operator!=(const QPoint &, const QPoint &);
    friend inline const QPoint operator+(const QPoint &, const QPoint &);
@@ -68,16 +72,10 @@ class Q_CORE_EXPORT QPoint
    friend inline const QPoint operator*(int, const QPoint &);
    friend inline const QPoint operator-(const QPoint &);
    friend inline const QPoint operator/(const QPoint &, qreal);
-
- private:
    friend class QTransform;
-
-   int xp;
-   int yp;
 };
 
 Q_DECLARE_TYPEINFO(QPoint, Q_MOVABLE_TYPE);
-
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPoint &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPoint &);
 
@@ -256,6 +254,12 @@ class Q_CORE_EXPORT QPointF
    inline QPointF &operator*=(qreal c);
    inline QPointF &operator/=(qreal c);
 
+   inline QPoint toPoint() const;
+
+ private:
+   qreal xp;
+   qreal yp;
+
    friend inline bool operator==(const QPointF &, const QPointF &);
    friend inline bool operator!=(const QPointF &, const QPointF &);
    friend inline const QPointF operator+(const QPointF &, const QPointF &);
@@ -265,14 +269,8 @@ class Q_CORE_EXPORT QPointF
    friend inline const QPointF operator-(const QPointF &);
    friend inline const QPointF operator/(const QPointF &, qreal);
 
-   inline QPoint toPoint() const;
-
- private:
    friend class QMatrix;
    friend class QTransform;
-
-   qreal xp;
-   qreal yp;
 };
 
 Q_DECLARE_TYPEINFO(QPointF, Q_MOVABLE_TYPE);
@@ -280,11 +278,17 @@ Q_DECLARE_TYPEINFO(QPointF, Q_MOVABLE_TYPE);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPointF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPointF &);
 
-inline QPointF::QPointF() : xp(0), yp(0) { }
+inline QPointF::QPointF()
+   : xp(0), yp(0)
+{ }
 
-inline QPointF::QPointF(qreal xpos, qreal ypos) : xp(xpos), yp(ypos) { }
+inline QPointF::QPointF(qreal xpos, qreal ypos)
+   : xp(xpos), yp(ypos)
+{ }
 
-inline QPointF::QPointF(const QPoint &p) : xp(p.x()), yp(p.y()) { }
+inline QPointF::QPointF(const QPoint &p)
+   : xp(p.x()), yp(p.y())
+{ }
 
 inline bool QPointF::isNull() const
 {

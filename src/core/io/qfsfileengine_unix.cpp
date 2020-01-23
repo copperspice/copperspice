@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -35,17 +35,14 @@
 #include <qdatetime.h>
 #include <qvarlengtharray.h>
 
+#if defined(Q_OS_DARWIN)
+# include <qcore_mac_p.h>
+#endif
+
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
-
-#if ! defined(QWS) && defined(Q_OS_MAC)
-# include <qcore_mac_p.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
 
 /*!
     \internal
@@ -774,7 +771,5 @@ bool QFSFileEnginePrivate::unmap(uchar *ptr)
    return true;
 
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FSFILEENGINE

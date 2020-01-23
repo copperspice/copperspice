@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2020 Barbara Geller
+* Copyright (c) 2012-2020 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -39,11 +39,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 #ifdef Q_OS_WIN
 #  ifndef S_ISREG
@@ -841,129 +839,5 @@ bool QFSFileEngine::supportsExtension(Extension extension) const
    }
    return false;
 }
-
-/*! \fn bool QFSFileEngine::caseSensitive() const
-  Returns true for Windows, false for Unix.
-*/
-
-/*! \fn bool QFSFileEngine::copy(const QString &copyName)
-
-  For windows, copy the file to file \a copyName.
-
-  Not implemented for Unix.
-*/
-
-/*! \fn QString QFSFileEngine::currentPath(const QString &fileName)
-  For Unix, returns the current working directory for the file
-  engine.
-
-  For Windows, returns the canonicalized form of the current path used
-  by the file engine for the drive specified by \a fileName.  On
-  Windows, each drive has its own current directory, so a different
-  path is returned for file names that include different drive names
-  (e.g. A: or C:).
-
-  \sa setCurrentPath()
-*/
-
-/*! \fn QFileInfoList QFSFileEngine::drives()
-  For Windows, returns the list of drives in the file system as a list
-  of QFileInfo objects. On unix, Mac OS X and Windows CE, only the
-  root path is returned.  On Windows, this function returns all drives
-  (A:\, C:\, D:\, etc.).
-
-  For Unix, the list contains just the root path "/".
-*/
-
-/*! \fn QString QFSFileEngine::fileName(FileName file) const
-  \reimp
-*/
-
-/*! \fn QDateTime QFSFileEngine::fileTime(FileTime time) const
-  \reimp
-*/
-
-/*! \fn QString QFSFileEngine::homePath()
-  Returns the home path of the current user.
-
-  \sa rootPath()
-*/
-
-/*! \fn bool QFSFileEngine::isRelativePath() const
-  \reimp
-*/
-
-/*! \fn bool QFSFileEngine::link(const QString &newName)
-
-  Creates a link from the file currently specified by fileName() to
-  \a newName. What a link is depends on the underlying filesystem
-  (be it a shortcut on Windows or a symbolic link on Unix). Returns
-  true if successful; otherwise returns false.
-*/
-
-/*! \fn bool QFSFileEngine::mkdir(const QString &name, bool createParentDirectories) const
-  \reimp
-*/
-
-/*! \fn uint QFSFileEngine::ownerId(FileOwner own) const
-  In Unix, if stat() is successful, the \c uid is returned if
-  \a own is the owner. Otherwise the \c gid is returned. If stat()
-  is unsuccessful, -2 is reuturned.
-
-  For Windows, -2 is always returned.
-*/
-
-/*! \fn QString QFSFileEngine::owner(FileOwner own) const
-  \reimp
-*/
-
-/*! \fn bool QFSFileEngine::remove()
-  \reimp
-*/
-
-/*! \fn bool QFSFileEngine::rename(const QString &newName)
-  \reimp
-*/
-
-
-/*! \fn bool QFSFileEngine::renameOverwrite(const QString &newName)
-  \reimp
-*/
-
-/*! \fn bool QFSFileEngine::rmdir(const QString &name, bool recurseParentDirectories) const
-  \reimp
-*/
-
-/*! \fn QString QFSFileEngine::rootPath()
-  Returns the root path.
-
-  \sa homePath()
-*/
-
-/*! \fn bool QFSFileEngine::setCurrentPath(const QString &path)
-  Sets the current path (e.g., for QDir), to \a path. Returns true if the
-  new path exists; otherwise this function does nothing, and returns false.
-
-  \sa currentPath()
-*/
-
-/*! \fn bool QFSFileEngine::setPermissions(uint perms)
-  \reimp
-*/
-
-/*! \fn bool QFSFileEngine::setSize(qint64 size)
-  \reimp
-*/
-
-/*! \fn QString QFSFileEngine::tempPath()
-  Returns the temporary path (i.e., a path in which it is safe
-  to store temporary files).
-*/
-
-/*! \fn QAbstractFileEngine::FileFlags QFSFileEnginePrivate::getPermissions(QAbstractFileEngine::FileFlags type) const
-    \internal
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FSFILEENGINE
