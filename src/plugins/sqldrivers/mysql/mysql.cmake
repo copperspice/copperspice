@@ -28,8 +28,13 @@ if(WITH_MYSQL_PLUGIN AND MySQL_FOUND)
       CsCore
       CsSql
       ${MySQL_LIBRARIES}
-      ${ZLIB_LIBRARIES}
    )
+
+   if(ZLIB_FOUND)
+      target_link_libraries(CsSqlMySql
+         ${ZLIB_LIBRARIES}
+      )
+   endif()
 
    target_compile_definitions(CsSqlMySql
       PRIVATE
